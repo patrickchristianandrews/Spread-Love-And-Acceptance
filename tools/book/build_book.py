@@ -1398,7 +1398,8 @@ def page_rules(here, deep):
                 '@page %s:left{@bottom-left{%stext-align:left}@bottom-center{content:"";%s}@bottom-right{content:%s;%stext-align:right}%s}') % (
             nm, q(recto), head, edge, num, tab_r, nm, num, edge, q(verso), head, tab_l)
     # the book's name in the running head of every page that has no running head of its own
-    r = ['@page :right{@bottom-left{content:%s}}@page :left{@bottom-right{content:%s}}' % (q(SERIES_TITLE), q(SERIES_TITLE))]
+    # (then the pages without running heads again: these rules come after the stylesheet's own)
+    r = ['@page :right{@bottom-left{content:%s}}@page :left{@bottom-right{content:%s}}' % (q(SERIES_TITLE), q(SERIES_TITLE)) + '@page pe-front{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-blank{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-full{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}']
     for e in ORDER:
         if e[0] not in here:
             continue

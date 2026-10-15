@@ -324,6 +324,14 @@ def glossary_short(book, chs):
     return s + '</dl></section>'
 
 
+def notes_pages(book, n=2):
+    """two lined pages for the reader's own notes"""
+    s = ('<section class="pe-back ps-jot no-bubble" data-no-bubble id="jot" style="--pc:%s">%s<h1 class="pe-back-h">Your notes</h1>'
+         '<p class="pe-back-lede">For what you want to remember, try or ask about.</p><div class="ps-lines">%s</div></section>') % (book['color'], mark('jot'), '<div></div>' * 19)
+    s += ''.join('<section class="pe-back ps-jot ps-jot-more no-bubble" data-no-bubble><div class="ps-lines">%s</div></section>' % ('<div></div>' * 22) for _ in range(n - 1))
+    return s
+
+
 def series_page(book):
     s = '<section class="pe-back ps-series no-bubble" data-no-bubble id="series" style="--pc:%s">%s<h1 class="pe-back-h">The series</h1>' % (book['color'], mark('series'))
     s += '<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(SERIES_TITLE)
@@ -351,8 +359,7 @@ def free_page(book):
     for u, t, d in FREE_LINKS:
         s += '<li>%s<span><strong>%s</strong><span class="ps-free-d">%s</span><span class="ps-addr">%s</span></span></li>' % (
             qr(u), esc(t), esc(d), B.addr_html(B.short_address(u)))
-    s += ('</ul><p class="ps-free-note">Looking for a word? The online book has the long index’s job: every chapter can be searched there, and the '
-          'research page lists every source.</p></section>')
+    s += '</ul><p class="ps-free-note">Looking for a word? Every chapter can be searched online, and the research page lists every source.</p></section>'
     return s
 
 
@@ -367,7 +374,8 @@ def page_rules(book, here_order, back_keys):
         return ('@page %s:right{@bottom-left{content:%s;%s}@bottom-center{content:"";%s}@bottom-right{%stext-align:right}}'
                 '@page %s:left{@bottom-left{%stext-align:left}@bottom-center{content:"";%s}@bottom-right{content:%s;%stext-align:right}}') % (
             nm, q(recto), head, edge, num, nm, num, edge, q(verso), head)
-    r = ['@page :right{@bottom-left{content:%s}}@page :left{@bottom-right{content:%s}}' % (q(SERIES_TITLE), q(SERIES_TITLE))]
+    # (then the pages without running heads again: these rules come after the stylesheet's own)
+    r = ['@page :right{@bottom-left{content:%s}}@page :left{@bottom-right{content:%s}}' % (q(SERIES_TITLE), q(SERIES_TITLE)) + '@page pe-front{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-blank{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-full{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}']
     for slug in here_order:
         r.append('#%s{page:sc-%s}' % (slug, slug))
         r.append(rules('sc-' + slug, B.SHORT[slug]))
@@ -397,10 +405,9 @@ def build_book(book, where):
     here = set(book['chapters'])
     chs = book['chapters']
     hn_html, hn_toc = help_now(here)
-    toc = []
+    toc = [B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
     if hn_html:
         toc.append(B.toc_row('help-now', '', esc(hn_toc), 'is-front'))
-    toc.append(B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front'))
     body = []
     for i, slug in enumerate(chs):
         e = B.entry(slug)
@@ -420,7 +427,7 @@ def build_book(book, where):
             if x['key'] == 'numbers':
                 extra.append(('numbers', x['toc'], x['html']))
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs)))
-    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('series', 'The series'), ('free', 'Free on the site')]
+    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('series', 'The series'), ('free', 'Free on the site'), ('jot', 'Your notes')]
     for k, t in back:
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
@@ -428,8 +435,8 @@ def build_book(book, where):
     front += '\n' + meet_page(book) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
-    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book)
-    ol = ([[hn_toc, 'help-now', 0]] if hn_html else []) + [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]]
+    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book) + notes_pages(book)
+    ol = [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
     ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
     title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
@@ -460,7 +467,7 @@ def build_measure():
 # ---------- the workbook ----------
 # (key in hints.json, copies, when to use it, how long, who) — the order follows the books: on your own first, then together
 WB = [
-    ('wp02', 8, 'Before any hard talk, and on ordinary days too, so you can see your own pattern.', 'About 2 minutes', 'On your own, about yourself only'),
+    ('wp02', 12, 'Before any hard talk, and on ordinary days too, so you can see your own pattern.', 'About 2 minutes', 'On your own, about yourself only'),
     ('wp11', 2, 'On a calm day, before you need it. Look at it again after a heated moment.', 'About 10 minutes', 'On your own; the pause plan is made to share'),
     ('wp09', 6, 'Before you answer something that stung.', 'About 5 minutes', 'On your own, about your own side'),
     ('wp13', 6, 'Once a day, for a week at a time: one sheet a week.', 'About 90 seconds a day', 'Together; each person fills in only their own rows'),
@@ -468,9 +475,12 @@ WB = [
     ('wp14', 3, 'For one week in a hard stretch, a line each evening.', 'A minute a day, then 15 minutes', 'Together'),
     ('wp01', 4, 'For one ordinary week: one sheet a week.', 'A few minutes a day', 'Together; write only what you did or saw yourself'),
     ('wp03', 2, 'When jobs only get done after someone asks. Redo it when life changes.', 'About 10 minutes', 'Together'),
-    ('wp04', 3, 'Once a month, looking back over four weeks.', 'About 20 minutes', 'Together'),
+    ('wp04', 6, 'Once a month, looking back over four weeks.', 'About 20 minutes', 'Together'),
     ('wp15', 4, 'About every three months.', 'About 15 minutes', 'Together'),
 ]
+
+
+WB_ONE_PAGE = {'wp02', 'wp09', 'wp01'}
 
 
 def worksheets():
@@ -510,7 +520,9 @@ def build_workbook(where):
                 if lab not in ins:
                     ins.append(lab)
         fill = '/workpapers/fill/%s.html' % w['code'].lower()
-        s = '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">Workpaper %s</p><h1>%s</h1>' % (sid, wb['color'], mark(sid), esc(w['code']), esc(w['name']))
+        # each workpaper opens on a right-hand page, so a two-page sheet lies open across two facing pages
+        s = '<div class="pe-recto-pad pe-only" data-for="%s"></div>' % sid
+        s += '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">Workpaper %s</p><h1>%s</h1>' % (sid, wb['color'], mark(sid), esc(w['code']), esc(w['name']))
         s += '<dl class="wb-facts"><div><dt>When</dt><dd>%s</dd></div><div><dt>How long</dt><dd>%s</dd></div><div><dt>Who</dt><dd>%s</dd></div>' % (esc(when), esc(how_long), esc(who))
         if ins:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
@@ -519,7 +531,8 @@ def build_workbook(where):
               'own device: <span class="ps-addr">%s</span></p></div>') % (qr(fill), B.addr_html(B.short_address(fill)))
         s += '</section>'
         for c in range(1, copies + 1):
-            sh = sheet.replace('<section class="pe-ws-sheet', '<section class="pe-ws-sheet wb-sheet', 1)
+            # the short sheets fit one page; the long ones get more room and fill two facing pages
+            sh = sheet.replace('<section class="pe-ws-sheet', '<section class="pe-ws-sheet wb-sheet %s' % ('wb-one' if key in WB_ONE_PAGE else 'wb-two'), 1)
             sh = re.sub(r'(<div class="pe-ws-head"><h2>.*?</h2>)<span>.*?</span>', lambda m: m.group(1) + '<span>%s · copy %d of %d</span>' % (esc(w['code']), c, copies), sh, count=1, flags=re.S)
             s += sh
         secs.append(s)
@@ -568,7 +581,7 @@ def build_workbook(where):
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': wb['line']}, ensure_ascii=False).replace('</', '<\\/')
     page = head(title, WB_CSS).replace('<link rel="stylesheet" href="%s">' % WB_CSS, '<link rel="stylesheet" href="%s">\n<link rel="stylesheet" href="%s">' % (SERIES_CSS, WB_CSS))
     rh = ('%s · %s' % (SERIES_TITLE, wb['title'].split(':')[0])).replace('"', '\\"')
-    rules = '<style media="print">@page :right{@bottom-left{content:"%s"}}@page :left{@bottom-right{content:"%s"}}</style>' % (rh, rh)
+    rules = '<style media="print">@page :right{@bottom-left{content:"%s"}}@page :left{@bottom-right{content:"%s"}}@page pe-front{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-blank{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}</style>' % (rh, rh)
     page += '<body class="whole-book pe-book pe-series pe-workbook" data-pe="workbook">\n<main class="read whole" id="main">\n%s\n%s\n%s\n%s\n</main>\n%s\n%s\n%s\n</body>\n</html>\n' % (
         front, '\n'.join(secs), notes, sp, rules, outline, QR_SCRIPT)
     B.write(os.path.join(SRC, 'workbook.html'), page)
@@ -638,7 +651,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 <p class="cv-blurb">%(blurb)s</p>
 <p class="cv-q">“See it fairly. Say it kindly.”</p>
 <ul class="cv-series">%(others)s</ul>
-<div class="cv-free"><span class="pe-qr" data-qr="%(site)s/book/"></span><span><strong>Free to read online</strong>Every chapter, short and full, at spreadloveandacceptance.com/book<span class="cv-by-back" style="display:block">by %(author)s · Spread Love &amp; Acceptance</span></span></div>
+<div class="cv-free"><span class="pe-qr" data-qr="%(site)s/book/"></span><span><strong>Free to read online</strong>Every chapter, short and full, at spreadloveandacceptance.com/book<span class="cv-by-back" style="display:block">by %(author)s</span></span></div>
 </div><div class="cv-barcode" aria-hidden="true"></div></div></div>
 <div class="cv-spine"><p class="cv-spine-t">%(spine_t)s<em>%(author)s</em></p></div>
 <div class="cv-front"><div class="cv-front-trim" id="front">%(rules_f)s

@@ -102,3 +102,6 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-wp .pe-qr svg { width: 12mm; height: 12mm; }
 .ps-wp p { margin: 0; font-size: 8.8pt; line-height: 1.38; }
 .ps-wp .bh-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 7pt; color: var(--soft); }
+/* Your notes: two lined pages at the back */
+.ps-jot { break-before: page; page: sb-jot; }
+.ps-lines div { height: 8.2mm; border-bottom: .4pt solid #B8AE98; }

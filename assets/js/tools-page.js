@@ -169,7 +169,8 @@
     'lemon-quick': 'Tap who mostly does each job at home, then send it so the others can answer on their own.',
     wavelength: 'Twelve quick questions show how you think, talk and listen, and how people can best talk to you.',
     weather: 'A few taps tell you if you’re calm, revved up or running on empty, and whether now is a good time to talk.',
-    wiring: 'Make a one-page card that tells people how to reach you: what helps, what your silence means, what to avoid.'
+    wiring: 'Make a one-page card that tells people how to reach you: what helps, what your silence means, what to avoid.',
+    calm: 'Upset right now? Five minutes: a pause line with a time to come back, and a one-minute breathing pacer.'
   };
   var tour = $('[data-tl-tour]'), tourBtn = $('[data-tl-tour-open]'), tourI = 0, tourTimer = 0, playing = false;
   function slide(i) {
@@ -299,13 +300,17 @@
   function card(t) {
     var modes = t.modes && t.modes.length > 1 ? '<span class="tl-modes"><b>Modes:</b> ' + t.modes.map(function (m) { return '<a href="' + esc(m[1]) + '">' + esc(m[0]) + '</a>'; }).join(' · ') + '</span>' : '';
     var hasEx = !!(t.example || t.sample), exId = 'tl-ex-' + t.id;
+    // names12: the name and the line under it, then three plain answers (what it helps with, what you'll do and how long,
+    // what you'll leave with) and an honest "Based on" line (tools-registry.js BASIS)
+    var basis = window.TOLToolBasisHTML ? window.TOLToolBasisHTML(t) : '';
+    var qa = function (k, v) { return v ? '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>' : ''; };
     return '<li data-id="' + esc(t.id) + '">' +
       '<a class="tl-card" href="' + esc(t.href) + '"><span class="tl-name">' + esc(t.name) + '</span>' +
-      (t.brand ? '<span class="tl-brand">also called ' + esc(t.brand) + '</span>' : '') +
-      (t.bestFor ? '<span class="tl-best"><b>Best for:</b> ' + esc(t.bestFor) + '</span>' : '') +
-      '<span class="tl-does">' + esc(t.does) + '</span>' +
-      '<span class="tl-gets"><b>You get:</b> ' + esc(t.gets) + '</span></a>' + modes +
-      '<span class="tl-meta"><span class="tl-m tl-time">' + esc(t.time) + '</span><span class="tl-m' + (solo(t) ? ' tl-solo' : '') + '">' + esc(whoText(t)) + '</span>' +
+      (t.benefit ? '<span class="tl-tag">' + esc(t.benefit) + '</span>' : '') +
+      (t.brand ? '<span class="tl-brand">also called ' + esc(t.brand) + '</span>' : '') + '</a>' +
+      '<dl class="tl-qa">' + qa('Helps with', esc(t.bestFor)) + qa('What you’ll do', esc(t.does) + (t.time ? ' <span class="tl-dur">' + esc(t.time) + '</span>' : '')) +
+      qa('You’ll leave with', esc(t.gets)) + qa('Based on', basis) + '</dl>' + modes +
+      '<span class="tl-meta"><span class="tl-m' + (solo(t) ? ' tl-solo' : '') + '">' + esc(whoText(t)) + '</span>' +
       (t.es ? '<span class="tl-m tl-es" lang="es">También en español</span>' : '') + '</span>' +
       '<span class="tl-acts">' + (hasEx ? '<button type="button" class="tl-exbtn" aria-expanded="false" aria-controls="' + exId + '" data-ex="' + esc(t.id) + '">See an example</button>' : '') +
       '<a class="tl-open" href="' + esc(t.href) + '" tabindex="-1" aria-hidden="true">Open&nbsp;&rarr;</a></span>' +
@@ -383,6 +388,7 @@
     askNeeds();
     var shown = TOOLS.filter(match).sort(SORTS[S.sort]), a = active(), on = a.length > 0;
     var more = a.filter(function (x) { return x[0] !== 'type'; }).length, n = shown.length;
+    var inMore = a.filter(function (x) { return x[0] !== 'type' && x[0] !== 'q'; }).length;
     var nb = !!(S.q && NEED && NEED.best && window.TOLSearch);
     needBox.innerHTML = nb ? window.TOLSearch.bestHTML(NEED.best, S.q) : ''; needBox.hidden = !nb;
     var nn = !!(!shown.length && S.q && NEED && window.TOLSearch);
@@ -395,7 +401,7 @@
     if (txt !== lastCount) { countEl.textContent = txt; lastCount = txt; }
     pillsEl.innerHTML = pills(a);
     resetBtn.hidden = !on;
-    if (moreN) moreN.textContent = more ? '(' + more + ' on)' : '';
+    if (moreN) moreN.textContent = inMore ? '(' + inMore + ' on)' : '';
     topBox.hidden = on || !TOP.length;
     // one type on its own: the page is just that section, so the guide steps aside too
     if (guideBox) {
@@ -472,7 +478,7 @@
   $('[data-tl-empty-reset]').addEventListener('click', function () { clearAll(); typeSel.focus(); });
 
   var restricted = readUrl(); sync(); apply(false);
-  if (S.q || S.do.length || S.who.length || S.time.length || S.es) moreEl.open = true;
+  if (S.do.length || S.who.length || S.time.length || S.es) moreEl.open = true;
   // a link with ?type= or an old type #part opens on that section; any other #part (#workpapers, #start-here) works as usual
   // (again once the page has loaded, after the browser's own jump to the #part)
   if (restricted) {

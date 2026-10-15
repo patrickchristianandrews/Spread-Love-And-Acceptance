@@ -8,49 +8,49 @@
     6,
     9
    ],
-   "pages": 148,
+   "pages": 150,
    "blank_pages": 0,
-   "bytes": 2075948,
+   "bytes": 2089428,
    "pdf": "book-1-self-discovery.pdf",
    "cover_pdf": "cover-book-1-self-discovery.pdf",
    "front_jpg": "cover-book-1-self-discovery-front.jpg",
-   "spine_in": 0.3333,
-   "spine_mm": 8.47,
+   "spine_in": 0.3378,
+   "spine_mm": 8.58,
    "cover_in": [
-    12.5833,
+    12.5878,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.77,
-     "net": 4.22,
-     "pct": 28.2
+     "print": 4.82,
+     "net": 4.17,
+     "pct": 27.8
     },
     "kdp_expanded": {
-     "print": 4.77,
-     "net": 1.22,
-     "pct": 8.2
+     "print": 4.82,
+     "net": 1.17,
+     "pct": 7.8
     },
     "ingram_bookshops": {
-     "print": 4.85,
+     "print": 4.89,
      "discount": 0.4,
-     "net": 3.87,
-     "pct": 25.8
+     "net": 3.82,
+     "pct": 25.5
     },
     "direct_estimate": {
-     "print": 4.85,
+     "print": 4.89,
      "card_fee": 0.73,
-     "net": 9.41,
-     "pct": 62.8
+     "net": 9.36,
+     "pct": 62.4
     },
     "direct_with_fulfil_fee": {
-     "print": 4.85,
+     "print": 4.89,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.66,
-     "pct": 51.1
+     "net": 7.61,
+     "pct": 50.8
     }
    },
    "pagemap": {
@@ -70,7 +70,8 @@
     "glossary": 139,
     "notes": 142,
     "series": 147,
-    "free": 148
+    "free": 148,
+    "jot": 149
    }
   },
   "book-2-together": {
@@ -81,49 +82,49 @@
     6,
     9
    ],
-   "pages": 148,
+   "pages": 150,
    "blank_pages": 2,
-   "bytes": 2051660,
+   "bytes": 2066239,
    "pdf": "book-2-together.pdf",
    "cover_pdf": "cover-book-2-together.pdf",
    "front_jpg": "cover-book-2-together-front.jpg",
-   "spine_in": 0.3333,
-   "spine_mm": 8.47,
+   "spine_in": 0.3378,
+   "spine_mm": 8.58,
    "cover_in": [
-    12.5833,
+    12.5878,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.77,
-     "net": 4.22,
-     "pct": 28.2
+     "print": 4.82,
+     "net": 4.17,
+     "pct": 27.8
     },
     "kdp_expanded": {
-     "print": 4.77,
-     "net": 1.22,
-     "pct": 8.2
+     "print": 4.82,
+     "net": 1.17,
+     "pct": 7.8
     },
     "ingram_bookshops": {
-     "print": 4.85,
+     "print": 4.89,
      "discount": 0.4,
-     "net": 3.87,
-     "pct": 25.8
+     "net": 3.82,
+     "pct": 25.5
     },
     "direct_estimate": {
-     "print": 4.85,
+     "print": 4.89,
      "card_fee": 0.73,
-     "net": 9.41,
-     "pct": 62.8
+     "net": 9.36,
+     "pct": 62.4
     },
     "direct_with_fulfil_fee": {
-     "print": 4.85,
+     "print": 4.89,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.66,
-     "pct": 51.1
+     "net": 7.61,
+     "pct": 50.8
     }
    },
    "pagemap": {
@@ -142,7 +143,8 @@
     "glossary": 137,
     "notes": 140,
     "series": 147,
-    "free": 148
+    "free": 148,
+    "jot": 149
    }
   },
   "book-3-sharing-the-load": {
@@ -153,49 +155,49 @@
     6,
     9
    ],
-   "pages": 162,
+   "pages": 164,
    "blank_pages": 3,
-   "bytes": 2252114,
+   "bytes": 2267474,
    "pdf": "book-3-sharing-the-load.pdf",
    "cover_pdf": "cover-book-3-sharing-the-load.pdf",
    "front_jpg": "cover-book-3-sharing-the-load-front.jpg",
-   "spine_in": 0.3648,
-   "spine_mm": 9.27,
+   "spine_in": 0.3693,
+   "spine_mm": 9.38,
    "cover_in": [
-    12.6148,
+    12.6193,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 5.13,
-     "net": 3.86,
-     "pct": 25.8
+     "print": 5.18,
+     "net": 3.81,
+     "pct": 25.4
     },
     "kdp_expanded": {
-     "print": 5.13,
-     "net": 0.87,
-     "pct": 5.8
+     "print": 5.18,
+     "net": 0.81,
+     "pct": 5.4
     },
     "ingram_bookshops": {
-     "print": 5.19,
+     "print": 5.24,
      "discount": 0.4,
-     "net": 3.52,
-     "pct": 23.5
+     "net": 3.47,
+     "pct": 23.1
     },
     "direct_estimate": {
-     "print": 5.19,
+     "print": 5.24,
      "card_fee": 0.73,
-     "net": 9.06,
-     "pct": 60.5
+     "net": 9.01,
+     "pct": 60.1
     },
     "direct_with_fulfil_fee": {
-     "print": 5.19,
+     "print": 5.24,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.31,
-     "pct": 48.8
+     "net": 7.26,
+     "pct": 48.4
     }
    },
    "pagemap": {
@@ -221,7 +223,8 @@
     "glossary": 153,
     "notes": 156,
     "series": 160,
-    "free": 161
+    "free": 161,
+    "jot": 162
    }
   },
   "book-4-understanding-people": {
@@ -232,49 +235,49 @@
     6,
     9
    ],
-   "pages": 148,
+   "pages": 150,
    "blank_pages": 5,
-   "bytes": 2004926,
+   "bytes": 2017600,
    "pdf": "book-4-understanding-people.pdf",
    "cover_pdf": "cover-book-4-understanding-people.pdf",
    "front_jpg": "cover-book-4-understanding-people-front.jpg",
-   "spine_in": 0.3333,
-   "spine_mm": 8.47,
+   "spine_in": 0.3378,
+   "spine_mm": 8.58,
    "cover_in": [
-    12.5833,
+    12.5878,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.77,
-     "net": 4.22,
-     "pct": 28.2
+     "print": 4.82,
+     "net": 4.17,
+     "pct": 27.8
     },
     "kdp_expanded": {
-     "print": 4.77,
-     "net": 1.22,
-     "pct": 8.2
+     "print": 4.82,
+     "net": 1.17,
+     "pct": 7.8
     },
     "ingram_bookshops": {
-     "print": 4.85,
+     "print": 4.89,
      "discount": 0.4,
-     "net": 3.87,
-     "pct": 25.8
+     "net": 3.82,
+     "pct": 25.5
     },
     "direct_estimate": {
-     "print": 4.85,
+     "print": 4.89,
      "card_fee": 0.73,
-     "net": 9.41,
-     "pct": 62.8
+     "net": 9.36,
+     "pct": 62.4
     },
     "direct_with_fulfil_fee": {
-     "print": 4.85,
+     "print": 4.89,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.66,
-     "pct": 51.1
+     "net": 7.61,
+     "pct": 50.8
     }
    },
    "pagemap": {
@@ -294,7 +297,8 @@
     "glossary": 138,
     "notes": 141,
     "series": 147,
-    "free": 148
+    "free": 148,
+    "jot": 149
    }
   },
   "workbook": {
@@ -306,8 +310,8 @@
     11
    ],
    "pages": 102,
-   "blank_pages": 1,
-   "bytes": 765589,
+   "blank_pages": 10,
+   "bytes": 803220,
    "pdf": "workbook.pdf",
    "cover_pdf": "cover-workbook.pdf",
    "front_jpg": "cover-workbook-front.jpg",
@@ -319,35 +323,35 @@
    ],
    "spine_text": true,
    "costs": {
-    "list_price": 19.99,
+    "list_price": 14.99,
     "kdp_amazon": {
      "print": 5.1,
-     "net": 6.89,
-     "pct": 34.5
+     "net": 3.89,
+     "pct": 26
     },
     "kdp_expanded": {
      "print": 5.1,
-     "net": 2.9,
-     "pct": 14.5
+     "net": 0.9,
+     "pct": 6
     },
     "ingram_bookshops": {
      "print": 5.23,
      "discount": 0.4,
-     "net": 6.39,
-     "pct": 32
+     "net": 3.48,
+     "pct": 23.2
     },
     "direct_estimate": {
      "print": 5.23,
-     "card_fee": 0.88,
-     "net": 13.88,
-     "pct": 69.4
+     "card_fee": 0.73,
+     "net": 9.03,
+     "pct": 60.2
     },
     "direct_with_fulfil_fee": {
      "print": 5.23,
-     "card_fee": 0.88,
+     "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 12.13,
-     "pct": 60.7
+     "net": 7.28,
+     "pct": 48.5
     }
    },
    "pagemap": {
@@ -356,17 +360,17 @@
     "wb-how": 4,
     "wb-six": 5,
     "wb-wp02": 7,
-    "wb-wp11": 24,
-    "wb-wp09": 29,
-    "wb-wp13": 42,
-    "wb-wp12": 55,
-    "wb-wp14": 60,
-    "wb-wp01": 67,
-    "wb-wp03": 76,
-    "wb-wp04": 81,
-    "wb-wp15": 88,
-    "wb-notes": 97,
-    "series": 101
+    "wb-wp11": 21,
+    "wb-wp09": 27,
+    "wb-wp13": 35,
+    "wb-wp12": 49,
+    "wb-wp14": 55,
+    "wb-wp01": 63,
+    "wb-wp03": 69,
+    "wb-wp04": 75,
+    "wb-wp15": 89,
+    "wb-notes": 98,
+    "series": 102
    }
   }
  },

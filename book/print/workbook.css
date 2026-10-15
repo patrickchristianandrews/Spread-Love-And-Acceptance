@@ -29,7 +29,7 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-six-t th { text-align: left; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.4pt; letter-spacing: .08em; text-transform: uppercase; color: var(--pc); border-bottom: .9pt solid var(--pc); padding: 2mm; }
 .wb-six-t td { border-bottom: .5pt solid #8C8270; padding: 3.4mm 2mm; font-size: 10pt; vertical-align: top; }
 .wb-six-t td:nth-child(4) { width: 28mm; }
-.wb-tall { min-height: 34mm !important; }
+.wb-tall { min-height: 28mm !important; }
 .wb-open { height: 236mm; display: flex; flex-direction: column; justify-content: center; }
 .wb-code { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 10pt; letter-spacing: .2em; text-transform: uppercase; color: var(--pc); margin: 0 0 3mm;
   display: inline-block; align-self: flex-start; border: 1pt dashed var(--pc); padding: 1.6mm 3mm; border-radius: .6mm; }
@@ -52,17 +52,25 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-sheet h3 { font-size: 12pt !important; margin: 5mm 0 2mm !important; break-after: avoid; }
 .wb-sheet .pe-ws-opts { font-size: 9pt !important; }
 .wb-sheet .pe-ws-meta { gap: 2mm 7mm; margin: 0 0 3mm; }
-.wb-sheet .pe-ws-meta span { font-size: 9.4pt; padding-top: 8mm; border-bottom-color: #6E6556; }
+.wb-sheet .pe-ws-meta span { font-size: 9.4pt; padding-top: 7mm; border-bottom-color: #6E6556; }
 .wb-sheet .pe-ws-t { margin: 0 0 3mm; }
 .wb-sheet .pe-ws-t thead { display: table-header-group; }
 .wb-sheet .pe-ws-t tr { break-inside: avoid; }
 .wb-sheet .pe-ws-t th { font-size: 7.6pt; padding: 1.6mm 1.8mm; }
-.wb-sheet .pe-ws-t td { height: 11mm; font-size: 9pt; }
-.wb-sheet .pe-ws-t.is-short td { height: 10mm; }
-.wb-sheet .pe-ws-t.is-tall td { height: 15mm; }
-.wb-sheet .pe-ws-scale td { height: 12mm; }
-.wb-sheet .pe-ws-box { min-height: 32mm !important; padding: 2mm 3mm; margin: 0 0 3mm; break-inside: avoid; }
+.wb-sheet .pe-ws-t td { height: 10mm; font-size: 9pt; }
+.wb-sheet .pe-ws-t.is-short td { height: 9mm; }
+.wb-sheet .pe-ws-t.is-tall td { height: 13mm; }
+.wb-sheet .pe-ws-scale td { height: 10mm; }
+.wb-sheet .pe-ws-box { min-height: 26mm !important; padding: 2mm 3mm; margin: 0 0 3mm; break-inside: avoid; }
 .wb-sheet .pe-ws-box b { font-size: 9.6pt; }
 .wb-sheet .pe-ws-line { height: 12mm; }
 .wb-sheet .pe-ws-tick { width: 4mm; height: 4mm; }
 .wb-sheet .pe-ws-foot { font-size: 8.6pt !important; }
+/* one page for the short sheets; more room for the long ones, which lie open across two facing pages */
+.pe-ws-sheet.wb-one { zoom: .94 !important; }
+.wb-two .pe-ws-t td { height: 15mm; }
+.wb-two .pe-ws-t.is-short td { height: 14mm; }
+.wb-two .pe-ws-t.is-tall td { height: 20mm; }
+.wb-two .pe-ws-box { min-height: 46mm !important; }
+.wb-two .pe-ws-meta span { padding-top: 12mm; }
+.wb-two .pe-ws-line { height: 15mm; }

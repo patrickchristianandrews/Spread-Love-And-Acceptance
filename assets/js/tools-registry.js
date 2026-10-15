@@ -4,7 +4,7 @@
 
    Each tool:
      id      short, stable name
-     name    the plain name: says what it does ("Chat analyzer")
+     name    a short, warm name that still says what it is ("Chat analyzer", names12); benefit is the plain line under it
      brand   the tool's own name, kept as a small "also called" line ('' when it has none)
      href    where it opens (a #part when the tool sits inside a longer page)
      type    its main type (one of TOLToolTypes ids); also: other types it fits
@@ -12,7 +12,8 @@
      gets    what you get: the concrete thing you leave with
      mins    about how long, in minutes (for sorting and filters); time: the same in words
      who     'solo' (on your own), 'two' (with one other person), 'group' (three or more, a home or a team)
-     benefit the main reason to use it, in a few words
+     benefit the line under the name: what you get from it, benefit first, under about 110 characters
+     basis   what it is based on (BASIS below); window.TOLToolBasisHTML(t) says it as one line
      top     1–6 for the "Start here" strip on /tools.html: tools a person can use on their own (our picks), else 0
      kw      extra words people might search for
      modes   optional [[label, href], ...]: the ways in when one tool has more than one (tabs or parts of its page)
@@ -44,27 +45,27 @@
     // consol12: "Help me write it" (Say no kindly, and Flip it's complaint into a request) is its fourth mode: 'refusals', 'flip' -> 'signal'
     // modes: [label, href, group, short label for the page's mode switch, icon] (tools/places/build-places.js draws the switch)
     { id: 'signal', name: 'Chat analyzer', brand: 'the Signal Translator', href: '/signal-translator.html', type: 'talk', also: ['work', 'family'],
-      does: 'Reads one message you’re about to send, one you got, a whole conversation, or a screenshot of one. Or helps you write it: ask for a change, reply to something that stung, or say no kindly.',
-      gets: 'How it may land or what it might mean, where a conversation turned, and calm, clear words that keep your point.',
-      mins: 2, time: 'About 2 minutes for a message, 5 for a conversation', who: ['solo'], benefit: 'Send what you mean, and read a fight over text clearly', top: 1,
-      modes: [['A message I’m about to send', '/signal-translator.html'], ['A message I got', '/signal-translator.html?mode=got'], ['A whole conversation or screenshot', '/signal-translator.html#conversation'], ['Help me write it', '/signal-translator.html#write']],
-      kw: 'chat analyzer chat analyser text message checker tone checker message analyzer rewrite reply sms whatsapp email before i send conversation reader conversation analyzer thread fight over text group chat screenshot argument signal translator help me write it what to say say no kindly refuse decline boundary boundaries turn down script maker complaint request reframe flip it ask for a change' },
-    { id: 'write', name: 'Talk it through in writing', brand: '', href: '/write-it-through.html', type: 'talk', also: [],
-      does: 'Walks you through writing about one topic: facts, not verdicts, and one clear ask.',
-      gets: 'A message ready to send with a reply-by time, after a short wait to check it.',
-      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'Sort something out without a shouting match',
-      kw: 'letter write it down written disagreement email message slow talk' },
+      does: 'Paste a message you’re about to send, one you got, or a whole chat or screenshot. Or ask it to help you write one.',
+      gets: 'A plain read of how it may land, where a chat turned, and calm words that keep your point.',
+      mins: 2, time: 'About 2 minutes for a message, 5 for a conversation', who: ['solo'], benefit: 'See how a text will land, or read a whole chat clearly', top: 1,
+      modes: [['A message I’m about to send', '/signal-translator.html'], ['A message I got', '/signal-translator.html?mode=got'], ['A whole chat or screenshot', '/signal-translator.html#conversation'], ['Help me write it', '/signal-translator.html#write']],
+      kw: 'chat analyzer chat analyser text message checker tone checker message analyzer rewrite reply sms whatsapp email before i send conversation reader conversation analyzer thread fight over text group chat screenshot argument signal translator help me write it what to say say no kindly refuse decline boundary boundaries turn down script maker complaint request reframe flip it ask for a change chat analyzer the signal translator text message checker conversation reader' },
+    { id: 'write', name: 'Write it through', brand: '', href: '/write-it-through.html', type: 'talk', also: [],
+      does: 'Write about one topic, step by step: facts, not verdicts, one clear ask, and a short wait before you send.',
+      gets: 'A calm message ready to send, with a reply-by time.',
+      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'Sort out a big topic without a shouting match: one topic, in writing, at your own pace',
+      kw: 'letter write it down written disagreement email message slow talk talk it through in writing' },
     { id: 'sayit', name: 'Before you reply: say it so it lands', brand: '', href: '/workpapers/wp-09-say-it-so-it-lands.html', type: 'talk', also: ['self'],
       does: 'A quick self-check before you answer something that stung.',
       gets: 'Your reply as a fact, a feeling and one kind ask.',
       mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Answer the point, not the sting',
       kw: 'tone filter reply calmly what to say feelings i statement' },
-    { id: 'decoder', name: 'After a talk went wrong: a step-by-step reset', brand: 'the Carrier Wave Decoder, with See it from their side', href: '/carrier-wave-decoder.html', type: 'talk', also: ['calm', 'family'],
-      modes: [['Start a session', '/carrier-wave-decoder.html'], ['Their side', '/carrier-wave-decoder.html?tab=their-side'], ['Do it together', '/carrier-wave-decoder.html#together']],
-      does: 'A guided session for after a conversation went sideways: settle, work out what went out of sync, see their side, try again, then check your sentence.',
-      gets: 'Their side of the moment, questions to ask instead of guessing, a sentence to bridge the gap (checked in the Chat analyzer), and notes to look back on.',
-      mins: 15, time: 'About 15 minutes; Their side alone about 5', who: ['solo', 'two'], benefit: 'Learn from a bad moment instead of repeating it',
-      kw: 'conversation went wrong out of sync misunderstanding argument repair reset their point of view perspective perspective shifter empathy other side why did they see it from their side' },
+    { id: 'decoder', name: 'Rewind the talk', brand: 'the Carrier Wave Decoder, with See it from their side', href: '/carrier-wave-decoder.html', type: 'talk', also: ['calm', 'family'],
+      modes: [['Step by step', '/carrier-wave-decoder.html'], ['See their side', '/carrier-wave-decoder.html?tab=their-side'], ['Rewind it together', '/carrier-wave-decoder.html#together']],
+      does: 'Settle first, find where you went out of sync, look at their side, then shape one sentence to try again.',
+      gets: 'Questions to ask instead of guessing, and one bridging sentence, checked before you use it.',
+      mins: 15, time: 'About 15 minutes; Their side alone about 5', who: ['solo', 'two'], benefit: 'Turn a talk that went sideways into a better second try, with their side in view',
+      kw: 'conversation went wrong out of sync misunderstanding argument repair reset their point of view perspective perspective shifter empathy other side why did they see it from their side after a talk went wrong: a step-by-step reset the carrier wave decoder see it from their side' },
     { id: 'checkin90', name: '90-second daily check-in', brand: '', href: '/workpapers/wp-13-daily-check-in.html', type: 'talk', also: ['plan', 'load'],
       does: 'One sentence each, once a day: how you are doing and what is coming up. No debating.',
       gets: 'A tiny daily habit, and a fill-in sheet to keep track if you like.',
@@ -83,52 +84,52 @@
       gets: 'One ritual to restart in its smallest form, and maybe one to let go with thanks.', mins: 15, time: 'About 15 minutes, four times a year', who: ['two', 'group'],
       benefit: 'The small things that keep you close don’t quietly disappear', kw: 'rituals traditions habits routine date night walk drifted apart we used to closeness' },
     // consol12: the family plan card was always the same card's "Family" switch: 'familyplan' -> 'checkincard'
-    { id: 'checkincard', name: 'Check-in card: weekly, or a family plan', brand: '', href: '/check-ins.html#card', type: 'talk', also: ['plan', 'family'],
-      modes: [['Partners or housemates', '/check-ins.html#card'], ['Family plan', '/check-ins.html?for=family#card']],
-      does: 'A short, kind weekly talk: what went well, what felt heavy, and one small change. Or, with a parent or grown child, a short plan for visits, advice and routines.',
-      gets: 'A card to print, put on the fridge or send to each other’s phones.',
-      mins: 15, time: 'About 15 minutes a week; the family plan about 10', who: ['two', 'group'], benefit: 'A calm, regular time to raise things',
-      kw: 'weekly check in house meeting family meeting talk once a week family plan card grandparents grown up children visits advice boundaries' },
+    { id: 'checkincard', name: 'Kitchen-table check-in', brand: '', href: '/check-ins.html#card', type: 'talk', also: ['plan', 'family'],
+      modes: [['Weekly check-in', '/check-ins.html#card'], ['Family plan', '/check-ins.html?for=family#card']],
+      does: 'Once a week, go round: what went well, what felt heavy, one small change. Or agree visits, advice and routines as a family.',
+      gets: 'A check-in card to print, put on the fridge or send to each other’s phones.',
+      mins: 15, time: 'About 15 minutes a week; the family plan about 10', who: ['two', 'group'], benefit: 'Raise small things before they grow: a short, kind weekly talk, or a family plan',
+      kw: 'weekly check in house meeting family meeting talk once a week family plan card grandparents grown up children visits advice boundaries check-in card: weekly, or a family plan weekly check-in card family plan card' },
     // consol12: Stay close = the idea picker + the shared words list: 'touchstones' -> 'bonding'
-    { id: 'bonding', name: 'Stay close: one small idea, or your shared words', brand: 'the idea picker and touchstones', href: '/bonding.html#ideas', type: 'talk', also: ['family', 'play', 'plan'],
-      modes: [['One small idea', '/bonding.html#ideas', '', '', '💡'], ['Your shared words and rituals', '/touchstones.html#ts-card-h', '', 'Shared words and rituals', '🪢']],
-      does: 'Pick who it is with, how much time and how much energy you have, for one small idea. Or note the shared words, jokes and rituals that say “this is us”.',
-      gets: 'One small, doable idea at a time, or a list of your touchstones and one new one to try.',
-      mins: 1, time: 'About a minute; the list about 5', who: ['solo', 'two'], benefit: 'Closeness without a big plan',
-      kw: 'bonding ideas closeness quality time things to do together date idea rituals inside jokes traditions shared language touchstones' },
+    { id: 'bonding', name: 'Stay close', brand: 'the idea picker and touchstones', href: '/bonding.html#ideas', type: 'talk', also: ['family', 'play', 'plan'],
+      modes: [['One small idea', '/bonding.html#ideas', '', '', '💡'], ['Our shared words and rituals', '/touchstones.html#ts-card-h', '', 'Shared words', '🪢']],
+      does: 'Pick who it’s with, your time and your energy, for one small idea. Or list your inside jokes and little rituals.',
+      gets: 'One doable idea at a time, or your list of shared words and one new one to try.',
+      mins: 1, time: 'About a minute; the list about 5', who: ['solo', 'two'], benefit: 'Feel closer without a big plan: one small idea, or the words that say “this is us”',
+      kw: 'bonding ideas closeness quality time things to do together date idea rituals inside jokes traditions shared language touchstones stay close: one small idea, or your shared words get one small bonding idea your shared words and rituals list touchstones' },
 
     // ---------- Know yourself
     // consol12: three short cards about you, to share: 'wiring', 'carecard' -> 'wavelength'
-    { id: 'wavelength', name: 'Know how you connect: a quiz and two cards', brand: 'Wavelength, the Wiring Card and the care card', href: '/wavelength.html', type: 'self', also: ['talk', 'work'],
-      modes: [['Communication style quiz', '/wavelength.html', '', 'Style quiz', '🌊'], ['How I like to be spoken to: a card', '/wiring-card.html', '', 'How to talk to me', '🪪'], ['What feels like care to me: a card', '/love-languages.html#ll-card-h', '', 'What feels like care', '💛']],
-      does: 'Twelve quick questions about how you think, talk and listen. Then, if you like, a one-page card on how to reach you, and a short card on what feels like care right now.',
-      gets: 'Your four-letter Wave Code and type, cards to copy, print or share, and a side-by-side compare with someone else.',
-      mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'People stop having to guess how to talk to you', top: 4,
-      kw: 'communication quiz personality quiz wave code style test archetype compare wiring card neurodivergent adhd autistic how i communicate card love languages care card appreciation what i need' },
-    { id: 'roots', name: 'Where a reaction comes from', brand: 'Roots & Wings', href: '/growing-up.html#roots-h', type: 'self', also: [],
-      does: 'A gentle tap-through look at where a trait or reaction may have started.',
+    { id: 'wavelength', name: 'How you connect', brand: 'Wavelength, the Wiring Card and the care card', href: '/wavelength.html', type: 'self', also: ['talk', 'work'],
+      modes: [['The 2-minute style quiz', '/wavelength.html', '', 'Style quiz', '🌊'], ['How to talk to me: a card', '/wiring-card.html', '', 'How to talk to me', '🪪'], ['What feels like care: a card', '/love-languages.html#ll-card-h', '', 'What feels like care', '💛']],
+      does: 'Answer twelve quick either-or questions. Then, if you like, make a card on how to talk to you and one on what feels like care.',
+      gets: 'Your style in plain words, two cards to copy, print or share, and a side-by-side compare.',
+      mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share', top: 4,
+      kw: 'communication quiz personality quiz wave code style test archetype compare wiring card neurodivergent adhd autistic how i communicate card love languages care card appreciation what i need know how you connect: a quiz and two cards communication style quiz wavelength the wiring card how i like to be spoken to what feels like care to me care card' },
+    { id: 'roots', name: 'Old rules, new choices', brand: 'Roots & Wings', href: '/growing-up.html#roots-h', type: 'self', also: [],
+      does: 'Tap through one trait or reaction, and where it may have started, in a few gentle steps.',
       gets: 'A fairer, grown-up reading of an old rule, and small ways to work with it now.',
-      mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Choose which old rules to keep',
-      kw: 'childhood growing up why do i react old rules' },
-    { id: 'take-in', name: 'Make the site fit your mind', brand: '', href: '/how-you-take-things-in.html', type: 'self', also: ['health'],
-      does: 'Pick how your mind takes things in: ADHD, autistic, dyslexic, or just what helps.',
-      gets: 'Every page adapts: shorter steps, a calmer look, read-aloud and more. You can change it any time.',
-      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Pages that suit the way you read',
-      kw: 'adhd autism dyslexia neurodivergent accessibility settings reading' },
-    { id: 'rhythms', name: 'Compare your daily rhythms', brand: 'Frequency Calibration', href: '/tools/frequency-calibration.html', type: 'self', also: ['plan'],
-      does: 'Map your natural rhythms for money, rest, decisions, check-ins and recovery, next to one other person’s.',
-      gets: 'Where you are out of step, and one small agreement for each.',
-      mins: 15, time: 'About 15 minutes', who: ['two'], benefit: 'Different rhythms stop feeling like a fight',
-      kw: 'rhythm pace morning person night owl money style decisions' },
+      mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Choose which old rules to keep: look gently at where a reaction started',
+      kw: 'childhood growing up why do i react old rules where a reaction comes from roots & wings' },
+    { id: 'take-in', name: 'Read your way', brand: '', href: '/how-you-take-things-in.html', type: 'self', also: ['health'],
+      does: 'Pick what fits: ADHD, autistic, dyslexic, or just what helps. Change it any time.',
+      gets: 'A site that adapts on every page, set on this device only.',
+      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Make every page suit how your mind works: shorter steps, a calmer look, read-aloud',
+      kw: 'adhd autism dyslexia neurodivergent accessibility settings reading make the site fit your mind' },
+    { id: 'rhythms', name: 'Rhythms side by side', brand: 'Frequency Calibration', href: '/tools/frequency-calibration.html', type: 'self', also: ['plan'],
+      does: 'Each of you marks your natural pace for money, rest, decisions, check-ins and bouncing back.',
+      gets: 'Where you’re out of step, and one small agreement for each.',
+      mins: 15, time: 'About 15 minutes', who: ['two'], benefit: 'Stop different rhythms feeling like a fight: money, rest and decisions, side by side',
+      kw: 'rhythm pace morning person night owl money style decisions compare your daily rhythms frequency calibration' },
 
     // ---------- Share the load
     // consol12: one place for who does what at home: 'lemon-full', 'snapshot' -> 'lemon-quick'
-    { id: 'lemon-quick', name: 'Who does what at home', brand: 'the Lemonade Stand', href: '/lemonade-stand.html#quick', type: 'load', also: ['family', 'plan'],
+    { id: 'lemon-quick', name: 'Who does what?', brand: 'the Lemonade Stand', href: '/lemonade-stand.html#quick', type: 'load', also: ['family', 'plan'],
       modes: [['Quick look', '/lemonade-stand.html#quick', '', '', '🍋'], ['Count the hours and bills', '/lemonade-stand.html#stand', '', 'Hours and bills', '🧾'], ['Fridge list: who owns what', '/lemonade-stand.html#owners', '', 'Fridge list', '📌'], ['Not sure where to start? 2 minutes', '/snapshot/index.html', '', 'Where to start', '🧭']],
-      does: 'Tap who mostly does each job at home, the thinking work too, and send it so others answer on their own. Or count the hours and bills, or make a fridge list of who owns what.',
-      gets: 'A plain picture of the split, where you agree and differ, the hours and money if you want them, and a fridge list to print or send.',
-      mins: 2, time: '2 minutes for the quick look, 15 with hours and bills', who: ['solo', 'two', 'group'], benefit: 'Settle “who does more” with facts, not blame', top: 3,
-      kw: 'chore split chores who does more housework fair split roommates housemates mental load quick look bills money budget hours chores calculator who pays what rent snapshot where to start lemonade stand fridge list' },
+      does: 'Tap who mostly does each job at home, the thinking work too, then send it so others answer on their own.',
+      gets: 'A plain picture of the split, where you agree, the hours and bills if you want them, and a fridge list.',
+      mins: 2, time: '2 minutes for the quick look, 15 with hours and bills', who: ['solo', 'two', 'group'], benefit: 'Settle “who does more?” with facts, not blame: tap who does each job, then compare', top: 3,
+      kw: 'chore split chores who does more housework fair split roommates housemates mental load quick look bills money budget hours chores calculator who pays what rent snapshot where to start lemonade stand fridge list who does what at home the lemonade stand who does what: chore split check chores and bills: count the hours and money 2-minute load snapshot' },
     { id: 'owner', name: 'One owner per job: a who-owns-what list', brand: '', href: '/workpapers/wp-03-one-owner-per-job.html', type: 'load', also: ['family', 'work', 'plan'],
       does: 'Give every regular job one owner, a backup and what “done” means.',
       gets: 'A fridge list to print, save or send. Others add their version and you combine them.',
@@ -151,24 +152,24 @@
       kw: 'chore chart printable pdf fridge rota' },
     // consol12: the two fair-split calculators (CALC-01) and the two 30-day look-backs (CALC-02): the same people, the same
     // numbers, this week or over a month. 'fair-quick', 'fair-full', 'lookback-quick', 'lookback-full' -> 'split'
-    { id: 'split', name: 'Check the split: this week or over a month', brand: 'the fair-split calculator and the 30-Day Look-Back', href: '/workpapers/calculators/is-the-setup-working-quick.html', type: 'load', also: ['plan'],
+    { id: 'split', name: 'Fair split check', brand: 'the fair-split calculator and the 30-Day Look-Back', href: '/workpapers/calculators/is-the-setup-working-quick.html', type: 'load', also: ['plan'],
       modes: [['This week: a quick read', '/workpapers/calculators/is-the-setup-working-quick.html', 'This week', 'Quick read'], ['This week: every number', '/is-the-setup-working.html', 'This week', 'Every number'],
         ['Over a month: a quick read', '/workpapers/calculators/look-back-30-days-quick.html', 'Over a month', 'Quick read'], ['Over a month: every number', '/look-back-30-days.html', 'Over a month', 'Every number']],
-      does: 'Type in the totals from your worksheets, for 2 to 8 people: is this week’s split working? Or compare a month ago with this week: what shifted?',
-      gets: 'A plain-words read of whether the split can keep going, or what shifted and one next step. It reads the setup, never a person.',
-      mins: 5, time: '5 minutes for a quick read, 15 to 20 for every number', who: ['two', 'group'], benefit: 'Know if the split can last, and if what you changed is working',
-      kw: 'fair split calculator is it fair sustainable score calculator full detailed math hours 30 day month review look back progress rescues imbalance running imbalance trend four weeks calc-01 calc-02' },
+      does: 'Type in the totals from your worksheets, for 2 to 8 people: this week, or a month ago next to now.',
+      gets: 'A plain-words read of the setup, never of a person, and one next step.',
+      mins: 5, time: '5 minutes for a quick read, 15 to 20 for every number', who: ['two', 'group'], benefit: 'Know if your split can last, and whether what you changed is working, this week or over a month',
+      kw: 'fair split calculator is it fair sustainable score calculator full detailed math hours 30 day month review look back progress rescues imbalance running imbalance trend four weeks calc-01 calc-02 check the split: this week or over a month fair split calculator look back over 30 days the 30-day look-back is the setup working?' },
 
     // ---------- Calm and stress
     // consol12: one calm place. 'upset', 'garden', 'music', 'drift', 'soften', 'pause' -> 'calm'. Each mode keeps its own page.
-    { id: 'calm', name: 'Calm down: right now, or before the next time', brand: '', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
+    { id: 'calm', name: 'Cool-down corner', brand: '', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
       modes: [['Upset right now? A 5-minute calm-down', '/upset-right-now.html', 'Just me', 'Upset right now?', '🫧'], ['Breathing game', '/night-garden.html', 'Just me', '', '🌙'],
-        ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colours and tones to wind down', '/calm-visualizer.html', 'Just me', 'Slow colours', '🌀'],
-        ['Soften a tense moment', '/tools/soften-a-tense-moment.html', 'The two of us', '', '🤝'], ['Make a pause plan for arguments', '/pursue-withdraw.html#plan-h', 'The two of us', 'Pause plan', '⏸️']],
-      does: 'Right now: a pause line with a return time and a one-minute breathing pacer. Or settle with a breathing game, calm sounds or slow colours. With someone: soften a tense moment, or agree a pause plan on a calm day.',
-      gets: 'A calmer body, words to come back to the talk with, and a plan for next time.',
-      mins: 5, time: 'About 5 minutes; a pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse', top: 6,
-      kw: 'angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument' },
+        ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colours and tones', '/calm-visualizer.html', 'Just me', 'Slow colours', '🌀'],
+        ['Soften a tense moment', '/tools/soften-a-tense-moment.html', 'The two of us', '', '🤝'], ['Make a pause plan', '/pursue-withdraw.html#plan-h', 'The two of us', 'Pause plan', '⏸️']],
+      does: 'Right now: a pause line and a one-minute breathing pacer, or a breathing game, sounds or slow colours. Together: a pause plan.',
+      gets: 'A calmer body, words to come back to the talk with, and a pause plan for next time.',
+      mins: 5, time: 'About 5 minutes; a pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time', top: 6,
+      kw: 'angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument calm down: right now, or before the next time upset right now? a 5-minute calm-down breathing game calm sounds and music soften a tense moment make a pause plan for arguments' },
     { id: 'calmkit', name: 'Calm-down plan', brand: 'the Calm-Down Kit', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
       does: 'On a calm day, decide your early signs, a pause signal and what settles you.',
       gets: 'Your own plan for heated moments, to keep on your phone or print.',
@@ -178,31 +179,31 @@
     // ---------- Family and parenting
     // consol12: one template picker for the plans you fill in once and both keep (each form stays inside its guide, with its
     // own share links). 'festival', 'terms', 'deal', 'room', 'ourweek', 'handoff' -> 'plans'
-    { id: 'plans', name: 'Make a plan together', brand: '', href: '/make-a-plan.html', type: 'plan', also: ['family', 'load'],
+    { id: 'plans', name: 'Plan it once', brand: '', href: '/make-a-plan.html', type: 'plan', also: ['family', 'load'],
       modes: [['Our festival year', '/two-faiths.html#festival-year', '', 'Festival year', '🪔'], ['Set your terms for a family event', '/family-rifts.html#terms', '', 'Family event terms', '🕊️'],
         ['Time-together deal (games and phones)', '/gaming-and-time-together.html#deal-h', '', 'Time-together deal', '🎮'], ['Room agreement for roommates', '/sharing-a-room.html#agreement-h', '', 'Room agreement', '🛏️'],
         ['Our week on one page (different hours)', '/different-hours.html#our-week', '', 'Our week', '🗓️'], ['Handoff-bag checklist for two homes', '/co-parenting.html#handoff-bag', '', 'Handoff bag', '🎒']],
-      does: 'Pick a template: a festival year, your terms for a family event, a time-together deal, a room agreement, your week on one page, or a handoff-bag list.',
-      gets: 'A plan to copy, print or send. Most can go back and forth as a link, so either of you can change it.',
-      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'Settle it once, kindly, and both keep it',
-      kw: 'plan agreement template holidays interfaith christmas eid diwali hanukkah festivals in-laws family rift estranged wedding funeral event gaming phone screen time deal roommate dorm flatmate quiet hours guests shift work night shift schedule rota different hours co-parent handover bag checklist two homes' },
+      does: 'Pick a template, fill it in alone or together, and send it back and forth as a link if you like.',
+      gets: 'An agreement or plan to copy, print or send, that either of you can change.',
+      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'Settle it once, kindly, and both keep it: holidays, family days, screen time, rooms, shifts',
+      kw: 'plan agreement template holidays interfaith christmas eid diwali hanukkah festivals in-laws family rift estranged wedding funeral event gaming phone screen time deal roommate dorm flatmate quiet hours guests shift work night shift schedule rota different hours co-parent handover bag checklist two homes make a plan together' },
 
     // ---------- Work and teams
     // consol12: 'team-owner', 'team-checkin' -> 'team' (both on /work.html; the check-in reads the list's names)
-    { id: 'team', name: 'Team tools: a job list and a weekly check-in', brand: '', href: '/work.html#team-tools', type: 'work', also: ['load', 'talk'],
-      modes: [['Team job list: one owner and a backup', '/work.html#owner-list', '', 'Team job list', '📋'], ['10-minute team check-in', '/work.html#check-in', '', 'Weekly check-in', '🔄']],
-      does: 'List the jobs that come round again and again, with an owner, a backup and how often. Once a week, go round once: how full your week is, one thank-you, one thing that slipped.',
-      gets: 'A team list and a short weekly round, to print or share as one link, with a tally of who owns what.',
-      mins: 15, time: 'About 15 minutes; the check-in 10 a week', who: ['group'], benefit: 'No job lands on whoever notices first',
-      kw: 'team workload business partner co-founder raci responsibilities team meeting standup weekly workload owner backup' },
+    { id: 'team', name: 'Team job list', brand: '', href: '/work.html#team-tools', type: 'work', also: ['load', 'talk'],
+      modes: [['Owners and backups', '/work.html#owner-list', '', 'Job list', '📋'], ['The 10-minute weekly round', '/work.html#check-in', '', 'Weekly round', '🔄']],
+      does: 'List the jobs that keep coming round, each with an owner and a backup. Then, once a week, go round once.',
+      gets: 'A team list and a weekly round to print or share as one link, with a tally of who owns what.',
+      mins: 15, time: 'About 15 minutes; the check-in 10 a week', who: ['group'], benefit: 'No job lands on whoever notices first: owners, backups and a 10-minute weekly round',
+      kw: 'team workload business partner co-founder raci responsibilities team meeting standup weekly workload owner backup team tools: a job list and a weekly check-in team job list: one owner and a backup 10-minute team check-in' },
 
     // ---------- Health and body
-    { id: 'weather', name: 'How am I right now? A mood and energy check', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
+    { id: 'weather', name: 'My weather today', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
       modes: [['Quick: 4 taps', '/ladder.html'], ['Full forecast', '/quick-checks.html#today']],
-      does: 'Four quick taps on how you are right now, or one minute on your mood, sleep, body, pressure and what is coming up today.',
-      gets: 'Calm, revved up or running on empty, with what helps now and a pause line; or today’s full forecast, a good time to talk, and a private log if you want one.',
-      mins: 1, time: '20 seconds to a minute', who: ['solo'], benefit: 'Know if now is a good time to talk', top: 5,
-      kw: 'mood tracker mood check in energy sleep daily check today weather almanac nervous system ladder where am i right now state stressed shut down overwhelmed stress check battery burnout load how full load check' },
+      does: 'Tap four quick questions, or take a minute on your mood, sleep, body and what’s coming up.',
+      gets: 'Calm, revved up or running on empty, with what helps right now, and a private log if you want one.',
+      mins: 1, time: '20 seconds to a minute', who: ['solo'], benefit: 'Know if now is a good time to talk: four taps, or one minute on mood, sleep and energy', top: 5,
+      kw: 'mood tracker mood check in energy sleep daily check today weather almanac nervous system ladder where am i right now state stressed shut down overwhelmed stress check battery burnout load how full load check how am i right now? a mood and energy check todays weather the nervous system ladder where am i right now?' },
 
     // ---------- Plan together
     { id: 'suite', name: 'Your worksheets, in order, with a report', brand: 'the Workpaper Suite, and the package and report', href: '/workpapers/fill/suite.html', type: 'plan', also: ['load', 'self'],
@@ -223,36 +224,36 @@
       kw: 'report progress tracker weekly' },
 
     // ---------- Learn
-    { id: 'ask', name: 'Ask a question in your own words', brand: 'Professor Puddles', href: '/ask.html', type: 'learn', also: ['talk'],
-      does: 'Type what is going on, the way you would say it to a friend.',
-      gets: 'Kind next steps, words you could use and the right pages, made only from this site.',
-      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Help for your exact situation, privately', top: 2,
-      kw: 'chat chatbot ask question help puddles assistant' },
-    { id: 'start10', name: 'Start in 10 minutes', brand: '', href: '/start-in-10-minutes.html', type: 'learn', also: ['self'],
-      does: 'Four small steps, just for you or with someone: your weather, one short read, one pattern, one thing to try.',
+    { id: 'ask', name: 'Ask Professor Puddles', brand: 'Professor Puddles', href: '/ask.html', type: 'learn', also: ['talk'],
+      does: 'Type what’s going on in your own words, the way you’d say it to a friend.',
+      gets: 'Kind next steps, words you could use, and the right pages, made only from this site.',
+      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Get kind next steps for your exact situation: type it the way you’d tell a friend', top: 2,
+      kw: 'chat chatbot ask question help puddles assistant ask a question in your own words' },
+    { id: 'start10', name: 'Ten-minute start', brand: '', href: '/start-in-10-minutes.html', type: 'learn', also: ['self'],
+      does: 'Four small steps, alone or with someone: your weather, one short read, one pattern, one thing to try.',
       gets: 'A short “here’s what I got” summary to keep or screenshot.',
-      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'The quickest way in',
-      kw: 'start beginner first time new here quick start' },
+      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'The quickest way in: four small steps, and a “here’s what I got” to keep',
+      kw: 'start beginner first time new here quick start start in 10 minutes' },
     // consol12: 'playground', 'quest', 'sync', 'connect' -> 'explore'
-    { id: 'explore', name: 'Learn and explore', brand: 'the Workpaper Playground, the quest map and more', href: '/do/index.html', type: 'learn', also: ['load', 'play'],
+    { id: 'explore', name: 'Learn by doing', brand: 'the Workpaper Playground, the quest map and more', href: '/do/index.html', type: 'learn', also: ['load', 'play'],
       modes: [['Practise the worksheets on an example', '/do/index.html', '', 'Practise on an example', '🧪'], ['Your learning map', '/quest.html', '', 'Learning map', '🗺️'],
         ['Watch two rhythms fall into step', '/tools/frequency-sync-visualizer.html', '', 'Two rhythms in step', '〰️'], ['Connect two fields of study', '/polymath.html#connect', '', 'Connect two fields', '🔗']],
-      does: 'Try the core worksheets on a made-up household, see a map of the whole program light up as you learn, watch two rhythms fall into step, or link two fields of study.',
-      gets: 'A feel for how it all works before you use your own week, and how far you’ve come. Nothing to sign up for, and it never counts streaks.',
-      mins: 5, time: 'A few minutes each', who: ['solo'], benefit: 'Try it before you commit',
-      kw: 'example practice demo playground quest map progress learning visualizer waves rhythm sync animation polymath fields connections' },
+      does: 'Try the core worksheets on a made-up household, see your learning map fill in, or watch two rhythms fall into step.',
+      gets: 'A feel for how it all works before you use your own week. Nothing to sign up for, and no streaks.',
+      mins: 5, time: 'A few minutes each', who: ['solo'], benefit: 'Get a feel for it all first: practise on a made-up home, and watch ideas move',
+      kw: 'example practice demo playground quest map progress learning visualizer waves rhythm sync animation polymath fields connections learn and explore the workpaper playground the quest map' },
 
     // ---------- Play
     // consol12: every game is a mode of the games place, not a card of its own:
     // 'arcade', 'wordbloom', 'quietwords', 'crosswords', 'drive', 'dojo', 'mvmaker' -> 'pauseplay'
-    { id: 'pauseplay', name: 'Games: every calm game in one place', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
+    { id: 'pauseplay', name: 'Gentle games', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
       modes: [['All the games', '/pause-and-play.html', '', 'All games', '✨'], ['Five gentle arcade games', '/frequency-journey.html', '', 'Arcade', '🎵'], ['Word Bloom', '/word-bloom.html', '', 'Bloom', '🌼'],
         ['Quiet Words', '/quiet-words.html', '', 'Words', '🔍'], ['Crosswords: gentle levels', '/quiet-crossword.html', '', 'Crossword', '✏️'], ['Crosswords: newspaper daily', '/daily-ledger-crossword.html', '', 'Newspaper', '📰'],
         ['The Re-check Drive', '/recheck-drive.html', '', 'Re-check Drive', '🏈'], ['The Bears Dojo', '/bears-dojo.html', '', 'Bears Dojo', '🐻'], ['Make a cartoon music video', '/frequency-buddies-music-video-maker.html', '', 'Music video', '🎬']],
-      does: 'Five gentle arcade games, word games, crosswords, the Bears Dojo, the Re-check Drive and the music video maker, with your level and your garden. Or press “Pick one for me”.',
+      does: 'Pick a game, or press “Pick one for me”, and play as long as you like.',
       gets: 'A gentle break whenever you want one, with no timers and no way to lose.',
-      mins: 5, time: 'As long as you like', who: ['solo', 'two'], benefit: 'Settle your mind before you talk',
-      kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo music video maker cartoon create' },
+      mins: 5, time: 'As long as you like', who: ['solo', 'two'], benefit: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose',
+      kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo music video maker cartoon create games: every calm game in one place pause & play' },
   ];
 
   // ---------- What each tool helps with, and who it is for (used by /tools.html's filters and cards; tools11)
@@ -276,7 +277,7 @@
   };
   var MORE = {
     signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, one that stung, or a text argument you keep rereading', ex: 'ex-signal-zoe' },
-    write: { o: 'talk', p: 'partner family friends', best: 'a big topic that goes wrong when you say it out loud', ex: 'ex-write-carys-owen' },
+    write: { o: 'talk', p: 'partner family friends', best: 'a big topic that goes wrong every time you say it out loud', ex: 'ex-write-carys-owen' },
     sayit: { o: 'talk calm', p: 'partner family friends work', best: 'the moment before you answer something that stung', ex: 'ex-wp09-carla' },
     decoder: { o: 'talk other calm', p: 'partner family friends', best: 'the day after a talk went sideways', ex: 'ex-perspective-hana' },
     checkin90: { o: 'talk plan', p: 'partner family housemates', best: 'busy weeks when you barely cross paths', ex: 'ex-wp13-priya-dev' },
@@ -285,15 +286,15 @@
     static14: { o: 'other load', p: 'partner family housemates', best: 'a hard stretch when you keep snapping at each other',
       sample: 'The week’s pattern: four of five tense evenings came after a late work call. The plan: work phone off at 8.' },
     rituals15: { o: 'plan fun', p: 'partner family friends work', best: 'feeling like you’ve drifted into flatmates', ex: 'ex-b3-rituals-team' },
-    checkincard: { o: 'talk plan', p: 'partner family housemates', best: 'a calm, regular time to raise small things, or kind boundaries with parents or grown children', ex: 'ex-checkin-linda-jordan' },
+    checkincard: { o: 'talk plan', p: 'partner family housemates', best: 'small things that pile up, or kind limits with parents or grown children', ex: 'ex-checkin-linda-jordan' },
     bonding: { o: 'fun plan', p: 'partner family friends', best: 'wanting closeness with no energy for a big plan',
       sample: 'With a partner, 10 minutes, low energy: “Lie down and swap one high and one low from today.”' },
-    wavelength: { o: 'self other talk', p: 'partner friends family work housemates', best: 'working out why you and someone keep missing each other, and telling people how to reach you', ex: 'ex-wavelength-mo' },
+    wavelength: { o: 'self other talk', p: 'partner friends family work housemates', best: 'you and someone keep missing each other, or you want people to know how to reach you', ex: 'ex-wavelength-mo' },
     roots: { o: 'self', p: '', best: 'a reaction that feels bigger than the moment',
       sample: 'Trait: “I go quiet when someone raises their voice.” A grown-up reading: it kept me safe once; now I can say “give me ten minutes”.' },
     'take-in': { o: 'self learn', p: '', best: 'pages that feel like too much to read',
       sample: 'Picked: ADHD. Pages now show shorter steps, one thing at a time, with read-aloud on.' },
-    rhythms: { o: 'other plan', p: 'partner housemates', best: 'a morning person and a night owl under one roof',
+    rhythms: { o: 'other plan', p: 'partner housemates', best: 'a morning person and a night owl, or a saver and a spender, under one roof',
       sample: 'Money: one plans ahead, one spends as it comes. Agreement: a 10-minute money check every other Sunday.' },
     'lemon-quick': { o: 'load other plan', p: 'partner housemates family', best: 'the “who does more?” argument', ex: 'ex-lemonade-housemates', es: 1 },
     owner: { o: 'load plan', p: 'housemates partner family', best: 'jobs that only get done when someone nags', ex: 'ex-wp03-coparents' },
@@ -310,15 +311,44 @@
       sample: 'You type: “my partner never helps with bedtime”. You get: kind next steps, words you could use, and two pages to read.' },
     start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
       sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes’.”' },
-    pauseplay: { o: 'fun calm', p: 'family partner', best: 'a gentle break before you talk, or playing with kids with no way to lose' },
+    pauseplay: { o: 'fun calm', p: 'family partner', best: 'a gentle break before you talk, or playing with kids with no way to lose',
+      sample: 'Five minutes of Word Bloom before a hard talk: a few words found, a slower breath, nothing to win or lose.' },
     split: { o: 'load plan', p: 'partner housemates family', best: 'checking whether your split can last, and whether last month’s changes stuck', ex: 'ex-setup-rosemary-ken' },
     calm: { o: 'calm talk', p: 'partner family', best: 'right now, in the middle of an argument, or a calm day to plan the next pause', es: 1,
       sample: 'Pause line: “I’m getting too heated. I’m taking 20 minutes and I’ll come back at 8:15.”' },
     plans: { o: 'plan', p: 'partner family housemates', best: 'settling one thing once, kindly: holidays, a family event, gaming time, a shared room, shifts or a handover bag',
       sample: 'Room agreement: quiet after 11 on weeknights. Guests: a heads-up by the afternoon. Borrowing: ask first, every time.' },
-    team: { o: 'load talk plan', p: 'work', best: 'a team where jobs land on whoever notices first',
+    team: { o: 'load talk plan', p: 'work', best: 'a team or small business where jobs land on whoever notices first',
       sample: 'Payroll: Ade, backup Ben, monthly. Check-in: Ben’s week 80% full; slipped: the website update, new owner Ade.' },
-    explore: { o: 'learn fun', p: '', best: 'trying the worksheets before using your own week, and seeing how far you’ve come' }
+    explore: { o: 'learn fun', p: '', best: 'trying the worksheets before using your own week, and seeing how far you’ve come',
+      sample: 'A practice run on a made-up home: the worksheet shows most of the planning sits with one person, and suggests one shared list.' }
+  };
+  // ---------- names12: what each place is based on, said honestly (the card's and the "About this tool" panel's "Based on" line)
+  //   ['research', about, ref]  Built on research                        -> /research.html#ref-<ref>
+  //   ['own', about, ref]       Our own approach, built on research about <about> (linked to the ref)
+  //   ['idea']                  Our own idea, still being tried out
+  // Every format, wording and score here is this site's own and hasn't been tested as a tool, so no place says more than
+  // "own" today. The refs are on /research.html; each place's guide entry (tool-guide-data.js) lists the rest.
+  var BASIS = {
+    signal: ['own', 'how tone gets lost in text', 'kruger-epley-2005-email'],
+    write: ['own', 'writing things down, and a little distance before you reply', 'frattaroli-2006'],
+    decoder: ['own', 'asking, not guessing, what the other person thinks', 'eyal-steffel-epley-2018'],
+    checkincard: ['own', 'regular, structured talks between partners', 'markman-stanley-blumberg-1994'],
+    bonding: ['own', 'how small shared moments build closeness', 'aron-1997-closeness'],
+    wavelength: ['own', 'how even close people misread each other', 'savitsky-2011-closeness-communication'],
+    roots: ['own', 'how people can shift a habit with small, concrete plans', 'hudson-fraley-2015'],
+    'take-in': ['idea', '', ''],
+    rhythms: ['own', 'how different money habits play out between partners', 'rick-small-finkel-2011'],
+    weather: ['own', 'how naming a feeling can calm it a little', 'lieberman-2007'],
+    'lemon-quick': ['own', 'how each of us remembers more of our own share', 'ross-sicoly-1979'],
+    split: ['own', 'how uneven give-and-take turns into strain', 'adams-1965'],
+    calm: ['own', 'calming the body, not venting', 'kjaervik-bushman-2024'],
+    plans: ['own', 'making specific plans, with everyone having a say', 'gollwitzer-sheeran-2006'],
+    team: ['own', 'how clear roles cut stress at work', 'rizzo-house-lirtzman-1970'],
+    ask: ['idea', '', ''],
+    start10: ['idea', '', ''],
+    explore: ['idea', '', ''],
+    pauseplay: ['idea', '', '']
   };
   // ---------- Tools and workpapers are kept apart (owner: "Keep work papers and tools separate").
   // Every entry gets kind: 'tool' or 'workpaper'. A workpaper is one of the numbered fill-in worksheets (WP-01 to WP-15),
@@ -341,6 +371,7 @@
     if (x.ex) t.example = x.ex;
     if (x.sample) t.sample = x.sample;
     if (x.es) t.es = true;
+    if (BASIS[t.id]) t.basis = BASIS[t.id];
   });
 
   // Tools that were merged keep their old ids: each old id points at the tool it now lives in, so a link,
@@ -412,6 +443,16 @@
     for (var k in hit) if (Object.prototype.hasOwnProperty.call(hit, k)) v[k] = hit[k];
     v.href = m[1]; v.mode = m[0]; v.place = hit.id; v.name = hit.name.split(':')[0] + ' · ' + m[0];
     return v;
+  };
+  // names12: the "Based on" line for a tool, as HTML: "Built on research", "Our own approach, built on research about …"
+  // (linked to /research.html) or "Our own idea, still being tried out". '' when the tool has none.
+  window.TOLToolBasisHTML = function (t) {
+    var b = t && t.basis; if (!b) return '';
+    var e = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var link = function (txt) { return b[2] ? '<a href="/research.html#ref-' + e(b[2]) + '">' + e(txt) + '</a>' : e(txt); };
+    if (b[0] === 'research') return link('Built on research') + (b[1] ? ' about ' + e(b[1]) : '');
+    if (b[0] === 'own') return 'Our own approach, built on research about ' + link(b[1]);
+    return 'Our own idea, still being tried out';
   };
   // the place a page belongs to, and which of its modes it is (path, or path + #part): { tool, mode } or null
   window.TOLToolForPage = function (href) {

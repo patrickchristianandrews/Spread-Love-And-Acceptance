@@ -2,7 +2,7 @@
  "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. isbn fields stay empty until the owner buys ISBNs; an empty ISBN is simply not printed. examples: false leaves the filled-in examples out of the print books.",
  "series_title": "Spread Love & Acceptance",
  "price_usd": 14.99,
- "workbook_price_usd": 19.99,
+ "workbook_price_usd": 14.99,
  "trim_in": [
   6,
   9
