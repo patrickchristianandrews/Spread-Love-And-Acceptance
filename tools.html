@@ -85,7 +85,51 @@
 <body data-no-cheer data-no-pupvisits data-no-buddies data-no-fullpath data-no-private-note data-es-href="/en-espanol.html#herramientas">
 <main class="read" id="main">
 <header class="read-head"><p class="read-code">Start here · All tools</p><h1>All tools</h1></header>
-<p class="simple-lede tl-intro">Every free tool on this site. The ones you can use on your own come first, so you can try things for yourself and invite someone later if you want. What you type stays on your device. Looking for the workpapers (fill-in worksheets)? They&rsquo;re kept separate, <a href="#workpapers">at the end</a>.</p>
+<p class="simple-lede tl-intro">Every free tool on this site, in sections by type. The sections you can use on your own come first, so you can try things for yourself and invite someone later if you want. What you type stays on your device.</p>
+
+<section class="tl-box tl-show-box no-bubble" id="find" aria-labelledby="tl-find-h">
+  <h2 class="sr-only" id="tl-find-h">Pick a type of tool</h2>
+  <div class="tl-show" data-tl-show hidden>
+    <label class="tl-show-l" for="tl-type">Show me:</label>
+    <select class="tl-show-sel" id="tl-type">
+      <option value="">All tools</option>
+      <option value="self-discovery">Self-discovery</option>
+      <option value="communication">Communication</option>
+      <option value="calm-and-stress">Calm</option>
+      <option value="learn">Learn</option>
+      <option value="play">Play</option>
+      <option value="share-the-load">Sharing the load</option>
+      <option value="family-and-parenting">Family</option>
+      <option value="work-and-teams">Work</option>
+      <option value="plan-together">Plans</option>
+    </select>
+  </div>
+  <nav class="tl-jump" aria-labelledby="tl-jump-h" data-tl-jump>
+    <p class="tl-show-l" id="tl-jump-h">Show me:</p>
+    <ul>
+      <li><a href="#self-discovery">Self-discovery</a></li>
+      <li><a href="#communication">Communication</a></li>
+      <li><a href="#calm-and-stress">Calm</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#play">Play</a></li>
+      <li><a href="#share-the-load">Sharing the load</a></li>
+      <li><a href="#family-and-parenting">Family</a></li>
+      <li><a href="#work-and-teams">Work</a></li>
+      <li><a href="#plan-together">Plans</a></li>
+    </ul>
+  </nav>
+  <p class="tl-wplink"><a href="#workpapers">Looking for workpapers? They&rsquo;re kept separate &rarr;</a></p>
+  <details class="tl-more tl-filters" data-tl-filters hidden>
+    <summary>More filters <span class="tl-more-n" data-tl-more-n></span></summary>
+    <p class="tl-sub">What you want to do, who it&rsquo;s for, how long you have, Spanish, or a word to search for. Pick as many as you like.</p>
+    <label class="tl-k" for="tl-q">Search</label>
+    <input class="tl-q" id="tl-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Like &ldquo;text&rdquo;, &ldquo;chores&rdquo;, &ldquo;sleep&rdquo; or &ldquo;quiz&rdquo;">
+    <fieldset class="tl-fs"><legend class="tl-k">What do you want to do?</legend><div class="tl-chips" data-tl-do></div></fieldset>
+    <fieldset class="tl-fs"><legend class="tl-k">Who&rsquo;s it for?</legend><div class="tl-chips" data-tl-who></div></fieldset>
+    <fieldset class="tl-fs"><legend class="tl-k">How much time?</legend><div class="tl-chips" data-tl-time></div></fieldset>
+    <div class="tl-row"><label class="tl-check"><input type="checkbox" id="tl-es"> <span>Also works in Spanish <span lang="es">(también en español)</span></span></label></div>
+  </details>
+</section>
 
 <section class="tl-box tl-top no-bubble" id="start-here" aria-labelledby="tl-top-h" data-tl-top hidden>
   <h2 class="tl-h" id="tl-top-h">Start here: 6 tools you can use on your own</h2>
@@ -118,27 +162,12 @@
   <ul class="tl-paths" aria-labelledby="tl-paths-together-h" data-tl-paths-together></ul>
 </section>
 
-<section class="tl-box tl-filters no-bubble" id="find" aria-labelledby="tl-find-h" data-tl-filters hidden>
-  <h2 class="tl-h" id="tl-find-h">Find a tool</h2>
-  <p class="tl-sub">Pick as many as you like. The list below updates as you go.</p>
-  <label class="tl-k" for="tl-q">Search</label>
-  <input class="tl-q" id="tl-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Like &ldquo;text&rdquo;, &ldquo;chores&rdquo;, &ldquo;sleep&rdquo; or &ldquo;quiz&rdquo;">
-  <fieldset class="tl-fs"><legend class="tl-k">What do you want to do?</legend><div class="tl-chips" data-tl-do></div></fieldset>
-  <fieldset class="tl-fs"><legend class="tl-k">Who&rsquo;s it for?</legend><div class="tl-chips" data-tl-who></div></fieldset>
-  <fieldset class="tl-fs"><legend class="tl-k">How much time?</legend><div class="tl-chips" data-tl-time></div></fieldset>
-  <div class="tl-row">
-    <div><label class="tl-k" for="tl-type">Type</label>
-      <select class="tl-sel" id="tl-type"><option value="">Every type</option></select></div>
-    <div><label class="tl-check"><input type="checkbox" id="tl-es"> <span>Also works in Spanish <span lang="es">(también en español)</span></span></label></div>
-  </div>
-</section>
-
 <div class="tl-results no-bubble">
 <div class="tl-bar no-bubble" data-tl-bar hidden>
   <p class="tl-count" role="status" aria-live="polite" data-tl-count></p>
   <div class="tl-pills" data-tl-pills></div>
-  <button type="button" class="tl-reset" data-tl-reset hidden>Clear filters</button>
-  <a class="tl-edit" href="#find">Change filters</a>
+  <button type="button" class="tl-reset" data-tl-reset hidden>Show everything</button>
+  <a class="tl-edit" href="#find">Change</a>
   <label class="tl-sortl">Sort <select class="tl-sel" id="tl-sort">
     <option value="useful">Most useful first</option>
     <option value="quick">Quickest first</option>
@@ -146,7 +175,119 @@
   </select></label>
 </div>
 
-<div class="tl-list no-bubble no-onpage" data-tl-list></div>
+<!-- Sections by type. Each holds its heading and one-line intro; data-tl-types lists the registry types it shows
+     (tools-registry.js TOLToolTypes ids). The plain lists inside are for reading without JavaScript: tools-page.js
+     swaps them for cards. Rebuild them after a registry change with names12's static.js (see the lead's notes). -->
+<div class="tl-list no-bubble no-onpage" data-tl-list>
+<section class="tl-sec" id="self-discovery" data-tl-sec data-tl-types="self" aria-labelledby="tl-s-self-discovery">
+  <span class="tl-anchor" id="know-yourself" data-tl-alias></span>
+  <div class="tl-sec-top"><h2 id="tl-s-self-discovery">Self-discovery</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=self-discovery#self-discovery" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Just you, first: short quizzes and checks on how you think, feel and react.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/wavelength.html">Communication style quiz</a><span class="tl-plain-w">People stop having to guess how to talk to you.</span></li>
+    <li><a href="/wiring-card.html">How I like to be spoken to: a one-page card</a><span class="tl-plain-w">Hard talks start from how you each take things in.</span></li>
+    <li><a href="/how-you-take-things-in.html">Make the site fit your mind</a><span class="tl-plain-w">Pages that suit the way you read.</span></li>
+    <li><a href="/growing-up.html#roots-h">Where a reaction comes from</a><span class="tl-plain-w">Choose which old rules to keep.</span></li>
+    <li><a href="/tools/frequency-calibration.html">Compare your daily rhythms</a><span class="tl-plain-w">Different rhythms stop feeling like a fight.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="communication" data-tl-sec data-tl-types="talk" aria-labelledby="tl-s-communication">
+  <div class="tl-sec-top"><h2 id="tl-s-communication">Communication</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=communication#communication" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Say it so it lands, read what they really meant, and stay close.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/signal-translator.html">Chat analyzer</a><span class="tl-plain-w">Send what you mean, and read a fight over text clearly.</span></li>
+    <li><a href="/bonding.html#ideas">Get one small bonding idea</a><span class="tl-plain-w">Closeness without a big plan.</span></li>
+    <li><a href="/refusals.html#make">Say no kindly: script maker</a><span class="tl-plain-w">A clear no that keeps the friendship.</span></li>
+    <li><a href="/small-wins.html#flip-it">Turn a complaint into a request</a><span class="tl-plain-w">Turn a grumble into something you can ask for.</span></li>
+    <li><a href="/write-it-through.html">Talk it through in writing</a><span class="tl-plain-w">Sort something out without a shouting match.</span></li>
+    <li><a href="/carrier-wave-decoder.html">After a talk went wrong: a step-by-step reset</a><span class="tl-plain-w">Learn from a bad moment instead of repeating it.</span></li>
+    <li><a href="/pursue-withdraw.html#plan-h">Make a pause plan for arguments</a><span class="tl-plain-w">Breaks that calm things down instead of feeling like walking out.</span></li>
+    <li><a href="/check-ins.html#card">Weekly check-in card</a><span class="tl-plain-w">A calm, regular time to raise things.</span></li>
+    <li><a href="/love-languages.html#ll-card-h">What feels like care to me: a care card</a><span class="tl-plain-w">They stop having to guess.</span></li>
+    <li><a href="/touchstones.html#ts-card-h">Your shared words and rituals list</a><span class="tl-plain-w">Keep what makes you “us” fresh.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="calm-and-stress" data-tl-sec data-tl-types="calm health" aria-labelledby="tl-s-calm-and-stress">
+  <span class="tl-anchor" id="health-and-body" data-tl-alias></span>
+  <div class="tl-sec-top"><h2 id="tl-s-calm-and-stress">Calm</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=calm-and-stress#calm-and-stress" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Settle your body, check how you&rsquo;re doing, and find a few slow minutes.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/upset-right-now.html">Upset right now? A 5-minute calm-down</a><span class="tl-plain-w">Stop a fight getting worse.</span></li>
+    <li><a href="/quick-checks.html#today">How am I right now? A mood and energy check</a><span class="tl-plain-w">Know if now is a good time to talk.</span></li>
+    <li><a href="/tools/soften-a-tense-moment.html">Soften a tense moment</a><span class="tl-plain-w">Lower the heat without forced cheer.</span></li>
+    <li><a href="/night-garden.html">Breathing game</a><span class="tl-plain-w">Slower breathing that feels like play.</span></li>
+    <li><a href="/soundscapes.html">Calm sounds and music</a><span class="tl-plain-w">A real break, away from words.</span></li>
+    <li><a href="/calm-visualizer.html">Slow colours and tones to wind down</a><span class="tl-plain-w">A screen that slows you down.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="learn" data-tl-sec data-tl-types="learn" aria-labelledby="tl-s-learn">
+  <div class="tl-sec-top"><h2 id="tl-s-learn">Learn</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=learn#learn" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Ask in your own words, practise on an example, or watch an idea move.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/ask.html">Ask a question in your own words</a><span class="tl-plain-w">Help for your exact situation, privately.</span></li>
+    <li><a href="/start-in-10-minutes.html">Start in 10 minutes</a><span class="tl-plain-w">The quickest way in.</span></li>
+    <li><a href="/quest.html">Your learning map</a><span class="tl-plain-w">See how far you have come.</span></li>
+    <li><a href="/do/index.html">Practise the worksheets on an example</a><span class="tl-plain-w">Try it before you commit.</span></li>
+    <li><a href="/tools/frequency-sync-visualizer.html">Watch two rhythms fall into step</a><span class="tl-plain-w">The big idea, in one picture.</span></li>
+    <li><a href="/polymath.html#connect">Connect two fields of study</a><span class="tl-plain-w">See how ideas link up.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="play" data-tl-sec data-tl-types="play" aria-labelledby="tl-s-play">
+  <div class="tl-sec-top"><h2 id="tl-s-play">Play</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=play#play" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Calm games with no timers and no way to lose.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/pause-and-play.html">Games: every calm game in one place</a><span class="tl-plain-w">Settle your mind before you talk.</span></li>
+    <li><a href="/frequency-journey.html">Five gentle arcade games</a><span class="tl-plain-w">Fun with no pressure.</span></li>
+    <li><a href="/quiet-crossword.html">Crosswords</a><span class="tl-plain-w">A small puzzle you can finish.</span></li>
+    <li><a href="/word-bloom.html">Swipe-to-spell word game</a><span class="tl-plain-w">A calm word puzzle.</span></li>
+    <li><a href="/quiet-words.html">Calm word search</a><span class="tl-plain-w">Quiet focus.</span></li>
+    <li><a href="/recheck-drive.html">Calm football game for small kind acts</a><span class="tl-plain-w">Keeps “it’s fine” from going stale.</span></li>
+    <li><a href="/bears-dojo.html">A quiet temple garden to wander</a><span class="tl-plain-w">A soft place to land.</span></li>
+    <li><a href="/frequency-buddies-music-video-maker.html">Make a cartoon music video</a><span class="tl-plain-w">Something silly to make together with kids.</span></li>
+  </ul>
+</section>
+<p class="tl-divide" data-tl-divide><span>Ready to bring someone in? The next sections are mostly for two or more of you.</span></p>
+<section class="tl-sec" id="share-the-load" data-tl-sec data-tl-types="load" aria-labelledby="tl-s-share-the-load">
+  <div class="tl-sec-top"><h2 id="tl-s-share-the-load">Sharing the load</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=share-the-load#share-the-load" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">See who does what at home, check it&rsquo;s fair, and give every job an owner.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/lemonade-stand.html#quick">Who does what: chore split check</a><span class="tl-plain-w">Settle “who does more” with facts, not blame.</span></li>
+    <li><a href="/workpapers/calculators/is-the-setup-working-quick.html">Fair split check: is the setup working?</a><span class="tl-plain-w">Know if the split can last.</span></li>
+    <li><a href="/snapshot/index.html">2-minute load snapshot</a><span class="tl-plain-w">Know where to start.</span></li>
+    <li><a href="/lemonade-stand.html">Chores and bills: count the hours and money</a><span class="tl-plain-w">See the whole load, including bills.</span></li>
+    <li><a href="/workpapers/calculators/look-back-30-days-quick.html">Look back over 30 days</a><span class="tl-plain-w">See if what you changed is working.</span></li>
+    <li><a href="/look-back-30-days.html">Look back over 30 days: the long form</a><span class="tl-plain-w">The whole month, side by side.</span></li>
+    <li><a href="/is-the-setup-working.html">Fair split calculator: the long form</a><span class="tl-plain-w">Every number shown, nothing hidden.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="family-and-parenting" data-tl-sec data-tl-types="family" aria-labelledby="tl-s-family-and-parenting">
+  <div class="tl-sec-top"><h2 id="tl-s-family-and-parenting">Family</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=family-and-parenting#family-and-parenting" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Two homes, festivals, big family days, and a plan everyone can keep.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/family-rifts.html#terms">Set your terms for a family event</a><span class="tl-plain-w">Go, and still keep some things off the table.</span></li>
+    <li><a href="/check-ins.html?for=family#card">Family plan card</a><span class="tl-plain-w">Boundaries said once, kindly.</span></li>
+    <li><a href="/co-parenting.html#handoff-bag">Handoff-bag checklist for two homes</a><span class="tl-plain-w">No more “you forgot the inhaler”.</span></li>
+    <li><a href="/two-faiths.html#festival-year">Our festival year planner</a><span class="tl-plain-w">Both traditions get their place.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="work-and-teams" data-tl-sec data-tl-types="work" aria-labelledby="tl-s-work-and-teams">
+  <div class="tl-sec-top"><h2 id="tl-s-work-and-teams">Work</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=work-and-teams#work-and-teams" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">A fair workload and a short weekly round for a team or small business.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/work.html#check-in">10-minute team check-in</a><span class="tl-plain-w">Workload talked about early, without blame.</span></li>
+    <li><a href="/work.html#owner-list">Team job list: one owner and a backup</a><span class="tl-plain-w">No job lands on whoever notices first.</span></li>
+  </ul>
+</section>
+<section class="tl-sec" id="plan-together" data-tl-sec data-tl-types="plan" aria-labelledby="tl-s-plan-together">
+  <div class="tl-sec-top"><h2 id="tl-s-plan-together">Plans</h2><span class="tl-sec-n" data-tl-sec-n></span><a class="tl-only" href="?type=plan-together#plan-together" data-tl-only>Show only these</a></div>
+  <p class="tl-sec-b">Agreements you fill in once and both keep: time together, shared rooms, your week.</p>
+  <ul class="tl-plain" data-tl-sec-list>
+    <li><a href="/gaming-and-time-together.html#deal-h">Time-together deal (games and phones)</a><span class="tl-plain-w">Gaming and “us” time both fit.</span></li>
+    <li><a href="/sharing-a-room.html#agreement-h">Room agreement for roommates</a><span class="tl-plain-w">Small things settled before they get big.</span></li>
+    <li><a href="/different-hours.html#our-week">Our week on one page (different hours)</a><span class="tl-plain-w">Fewer crossed wires on opposite shifts.</span></li>
+  </ul>
+</section>
+</div>
 <div class="tl-empty no-bubble" data-tl-empty hidden>
   <p><strong>Nothing matches all of those yet.</strong> Try removing one filter:</p>
   <div class="tl-pills" data-tl-empty-pills></div>
@@ -155,16 +296,30 @@
 
 </div>
 
-<section class="tl-box tl-wp no-bubble" id="workpapers" aria-labelledby="tl-wp-h" data-tl-wp hidden>
+<section class="tl-box tl-wp no-bubble" id="workpapers" aria-labelledby="tl-wp-h" data-tl-wp>
   <h2 class="tl-h" id="tl-wp-h">Workpapers, kept separate</h2>
-  <p class="tl-sub">Workpapers are fill-in worksheets you print or fill in on screen (<span data-tl-wp-n></span> here). They aren&rsquo;t tools, so they aren&rsquo;t in the list, the filters or the order above. Each of you fills in your own, then you read them together.</p>
-  <ul class="tl-wp-list" data-tl-wp-list></ul>
+  <p class="tl-sub">Workpapers are fill-in worksheets you print or fill in on screen (<span data-tl-wp-n>13</span> here). They aren&rsquo;t tools, so they aren&rsquo;t in the sections, the filters or the order above. Each of you fills in your own, then you read them together.</p>
+  <ul class="tl-wp-list" data-tl-wp-list>
+    <li><a href="/workpapers/wp-01.html"><span class="tl-wp-c">WP-01</span> Who did what this week: a one-week log</a><span class="tl-wp-d">Log who did what at home for one week, the invisible jobs too.</span></li>
+    <li><a href="/workpapers/wp-03-one-owner-per-job.html"><span class="tl-wp-c">WP-03</span> One owner per job: a who-owns-what list</a><span class="tl-wp-d">Give every regular job one owner, a backup and what “done” means.</span></li>
+    <li><a href="/workpapers/wp-04-what-keeps-coming-back.html"><span class="tl-wp-c">WP-04</span> What keeps coming back? A monthly look-back</a><span class="tl-wp-d">Once a month, look back at four weeks together.</span></li>
+    <li><a href="/workpapers/wp-09-say-it-so-it-lands.html"><span class="tl-wp-c">WP-09</span> Before you reply: say it so it lands</a><span class="tl-wp-d">A quick self-check before you answer something that stung.</span></li>
+    <li><a href="/wp-11.html"><span class="tl-wp-c">WP-11</span> Calm-down plan</a><span class="tl-wp-d">On a calm day, decide your early signs, a pause signal and what settles you.</span></li>
+    <li><a href="/workpapers/wp-12-same-moment-different-speeds.html"><span class="tl-wp-c">WP-12</span> Same moment, different speeds</a><span class="tl-wp-d">For five everyday moments, each person marks how fast they want to move, how much they want to talk, and how urgent it feels.</span></li>
+    <li><a href="/workpapers/wp-13-daily-check-in.html"><span class="tl-wp-c">WP-13</span> 90-second daily check-in</a><span class="tl-wp-d">One sentence each, once a day: how you are doing and what is coming up. No debating.</span></li>
+    <li><a href="/workpapers/wp-14-is-it-us-or-everything-else.html"><span class="tl-wp-c">WP-14</span> Is it us, or is it everything else?</a><span class="tl-wp-d">For one week, a line each evening: outside pressure in one column, tense moments between you in the other.</span></li>
+    <li><a href="/workpapers/wp-15-keep-your-little-rituals-alive.html"><span class="tl-wp-c">WP-15</span> Keep your little rituals alive</a><span class="tl-wp-d">Every few months, list the small habits you share and mark which are alive, fading or stopped.</span></li>
+    <li><a href="/chore-chart-for-couples.html"><span class="tl-wp-c">Chart</span> Printable chore chart</a><span class="tl-wp-d">A chart for every job, including the invisible ones, with one owner each.</span></li>
+    <li><a href="/workpapers/fill/suite.html"><span class="tl-wp-c">Suite</span> Your worksheets, in order, with a report</a><span class="tl-wp-d">Choose your road (just me, a couple, a home, a family, a team). Fill its worksheets one at a time, or all of them in one PDF.</span></li>
+    <li><a href="/prog-01.html"><span class="tl-wp-c">PROG-01</span> Six gentle weeks</a><span class="tl-wp-d">One small step a week, in order, alone or with anyone you share a home with. Start with a five-minute week 0, and add a reminder for each week to your own calendar.</span></li>
+    <li><a href="/workpapers/report-01.html"><span class="tl-wp-c">REPORT-01</span> Your progress, week by week</a><span class="tl-wp-d">Type in what your worksheets produced each week.</span></li>
+  </ul>
   <div class="tl-ways tl-wp-ways"><a class="tl-btn is-main" href="/workpapers/fill/index.html">All workpapers, to fill in on screen</a><a class="tl-btn" href="/workpapers/fill/suite.html">Your workpapers, in order</a></div>
 </section>
 
-<p class="tl-how no-bubble" id="how-ordered"><strong>How &ldquo;Most useful first&rdquo; works.</strong> Tools you can use on your own come first, because most people try things for themselves before they bring anyone else in. Within each group, the tools that help the most people, the fastest, come first. Every tool is free, needs no account, and keeps what you type on your device.</p>
+<p class="tl-how no-bubble" id="how-ordered"><strong>How &ldquo;Most useful first&rdquo; works.</strong> The sections you can use on your own come first, because most people try things for themselves before they bring anyone else in. Within each section, the tools that help the most people, the fastest, come first. Every tool is free, needs no account, and keeps what you type on your device.</p>
 
-<noscript><p>This list needs JavaScript. You can still find every tool on <a href="/contents.html">the plain list of every page</a>.</p></noscript>
+<noscript><p>Without JavaScript you see a plain list of each section. The cards, the filters and the examples need JavaScript. Every page is also on <a href="/contents.html">the plain list of every page</a>.</p></noscript>
 <p class="tl-end">Looking for guides and reading as well? <a href="/explore.html">Everything on this site</a> lists every page with filters for who it&rsquo;s about and how long you have. To see or erase what the tools keep, open <a href="/on-this-device.html">What&rsquo;s stored on this device</a>.</p>
 </main>
 <script src="/assets/js/tools-registry.js"></script>

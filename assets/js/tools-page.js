@@ -1,14 +1,19 @@
 /* tools-page.js: /tools.html, "All tools".
    Built from /assets/js/tools-registry.js (window.TOLTools). Tools only: entries with kind 'workpaper' get their own
-   section at the end and are never ranked, filtered or mixed in with the tools. The tools a person can use on their own come first
-   ("Self-discovery"); tools that need someone else follow ("When you're ready to involve someone").
+   section at the end and are never ranked, filtered or mixed in with the tools.
+   - Sections by type (names12): tools.html holds each <section data-tl-sec data-tl-types="..."> with its heading, intro and
+     a plain list for reading without JavaScript; this script swaps the lists for cards. A tool sits in the section of its
+     main type. The sections you can use on your own come first.
+   - "Show me:" (a real <select>) restricts the page to one section, scrolls to it and puts it in the address
+     (?type=communication), so it can be linked. Each section's "Show only these" link does the same. Old links still work:
+     #communication, #self-discovery, #know-yourself, #health-and-body, and ?type=talk (a registry type id).
    - "Start here": the six most useful tools a person can use alone.
    - "Not sure where to start?": a 60-second tour, guided paths, the three questions and Professor Puddles.
-   - Filters (what you want to do, who it's for, how much time, type, works in Spanish, words) combine, and live
-     in the address (?do=calm,talk&who=me&time=2&type=talk&es=1&q=text&sort=quick), so a filtered list can be linked.
-     Old links still work: ?who=solo, ?who=together, #communication, #know-yourself.
+   - More filters (what you want to do, who it's for, how much time, works in Spanish, words) combine with the type, and
+     live in the address too (?do=calm,talk&who=me&time=2&es=1&q=text&sort=quick). Old ?who=solo and ?who=together work.
    - "Most useful first" is one plain score: the registry's `useful` (our judgement of how widely and quickly a tool
-     helps, and how often people look for it), plus our "Start here" picks. Never shown on the page.
+     helps, and how often people look for it), plus our "Start here" picks; on a tie, tools you can use alone first.
+     Never shown on the page.
    Nothing is stored or sent. */
 (function () {
   'use strict';
@@ -25,15 +30,37 @@
   function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
   function still() { return (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || document.documentElement.classList.contains('tol-still'); }
 
-  var TYPE = {}, SLUG = {};
-  TYPES.forEach(function (t) { TYPE[t.id] = t; SLUG[t.slug] = t.id; (t.oldSlugs || []).forEach(function (s) { SLUG[s] = t.id; }); });
+  var own = function (o, k) { return Object.prototype.hasOwnProperty.call(o, k); };
+  var TYPE = {};
+  TYPES.forEach(function (t) { TYPE[t.id] = t; });
+
+  // ---------- sections by type (their words live in tools.html)
+  var SECS = $$('[data-tl-sec]', list).map(function (el) {
+    return { key: el.id, el: el, name: ($('h2', el) || el).textContent.trim(), ul: $('[data-tl-sec-list]', el),
+      n: $('[data-tl-sec-n]', el), only: $('[data-tl-only]', el),
+      types: (el.getAttribute('data-tl-types') || '').split(/\s+/).filter(Boolean),
+      alias: $$('[data-tl-alias]', el).map(function (a) { return a.id; }) };
+  });
+  if (!SECS.length) return;
+  var SEC = {}, SEC_OF_TYPE = {}, SECNAME = {};
+  SECS.forEach(function (s) {
+    SEC[s.key] = s; SECNAME[s.key] = s.key;
+    s.types.forEach(function (ty) {
+      SEC_OF_TYPE[ty] = s.key; SECNAME[ty] = s.key;
+      if (TYPE[ty]) { SECNAME[TYPE[ty].slug] = s.key; (TYPE[ty].oldSlugs || []).forEach(function (o) { SECNAME[o] = s.key; }); }
+    });
+    s.alias.forEach(function (a) { SECNAME[a] = s.key; });
+  });
+  // a tool sits in the section of its main type; a type with no section falls back to one of its other types, else the last section
+  function secOf(t) { return SEC_OF_TYPE[t.type] || (t.also || []).map(function (a) { return SEC_OF_TYPE[a]; }).filter(Boolean)[0] || SECS[SECS.length - 1].key; }
+  // anything a section answers to in ?type= or a #part: its id, its type ids, their slugs and old slugs, and its old anchors
+  function secFor(name) { return name && own(SECNAME, name) ? SECNAME[name] : ''; }
 
   // ---------- the words for each filter
   var DO = [['calm', 'Calm down'], ['talk', 'Talk better'], ['self', 'Self-discovery'], ['other', 'Understand someone'],
     ['load', 'Share the load fairly'], ['plan', 'Plan together'], ['learn', 'Learn'], ['fun', 'Have fun']];
   var WHO = [['me', 'On my own'], ['partner', 'With a partner'], ['family', 'Family and kids'], ['housemates', 'Housemates'], ['work', 'Work or team'], ['friends', 'Friends']];
   var TIME = [['2', 'About 2 min'], ['10', 'About 10 min'], ['long', 'Longer']];
-  var GROUP_NAME = { partner: 'With a partner', family: 'With family and kids', housemates: 'With housemates', work: 'At work or in a team', friends: 'With friends' };
   var LABEL = {}; [DO, WHO, TIME].forEach(function (g) { g.forEach(function (x) { LABEL[x[0]] = x[1]; }); });
   function timeOf(t) { return t.mins <= 3 ? '2' : t.mins <= 12 ? '10' : 'long'; }
   function solo(t) { return t.who.indexOf('solo') !== -1; }
@@ -48,13 +75,13 @@
   function score(t) { return (t.useful || 3) * 3 + (t.top ? (7 - t.top) : 0); }
   var ORDER = {}; TOOLS.forEach(function (t, i) { ORDER[t.id] = i; });
   var SORTS = {
-    useful: function (a, b) { return score(b) - score(a) || (a.top || 9) - (b.top || 9) || a.mins - b.mins || ORDER[a.id] - ORDER[b.id]; },
+    useful: function (a, b) { return score(b) - score(a) || solo(b) - solo(a) || (a.top || 9) - (b.top || 9) || a.mins - b.mins || ORDER[a.id] - ORDER[b.id]; },
     quick: function (a, b) { return a.mins - b.mins || score(b) - score(a) || ORDER[a.id] - ORDER[b.id]; },
     az: function (a, b) { return a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }); }
   };
   TOOLS.forEach(function (t) {
     t.hay = fold([t.name, t.brand, t.does, t.gets, t.bestFor, t.kw, (t.modes || []).map(function (m) { return m[0]; }).join(' '),
-      TYPE[t.type] && TYPE[t.type].name].concat((t.also || []).map(function (a) { return TYPE[a] ? TYPE[a].name : ''; }))
+      TYPE[t.type] && TYPE[t.type].name, SEC[secOf(t)].name].concat((t.also || []).map(function (a) { return TYPE[a] ? TYPE[a].name : ''; }))
       .concat((t.outcomes || []).map(function (o) { return LABEL[o]; })).join(' '));
   });
 
@@ -194,12 +221,14 @@
   $('[data-tl-do]').innerHTML = chips('do', DO, countBy(function (t) { return t.outcomes || []; }));
   $('[data-tl-who]').innerHTML = chips('who', WHO, countBy(function (t) { return t.people || []; }));
   $('[data-tl-time]').innerHTML = chips('time', TIME, countBy(function (t) { return [timeOf(t)]; }));
-  var typeSel = $('#tl-type'), sortSel = $('#tl-sort'), qEl = $('#tl-q'), esEl = $('#tl-es');
-  TYPES.forEach(function (ty) {
-    var n = TOOLS.filter(function (t) { return t.type === ty.id || (t.also || []).indexOf(ty.id) !== -1; }).length;
-    if (n) typeSel.insertAdjacentHTML('beforeend', '<option value="' + ty.id + '">' + esc(ty.name) + ' (' + n + ')</option>');
-  });
-  $('[data-tl-filters]').hidden = false; $('[data-tl-bar]').hidden = false;
+  var typeSel = $('#tl-type'), sortSel = $('#tl-sort'), qEl = $('#tl-q'), esEl = $('#tl-es'), moreEl = $('[data-tl-filters]');
+  // "Show me:" one option per section, with how many tools it holds; a section with none (after a merge) is left out
+  var SEC_N = {}; TOOLS.forEach(function (t) { SEC_N[secOf(t)] = (SEC_N[secOf(t)] || 0) + 1; });
+  typeSel.innerHTML = '<option value="">All tools (' + TOOLS.length + ')</option>' + SECS.filter(function (s) { return SEC_N[s.key]; }).map(function (s) {
+    return '<option value="' + esc(s.key) + '">' + esc(s.name) + ' (' + SEC_N[s.key] + ')</option>';
+  }).join('');
+  $('[data-tl-show]').hidden = false; $('[data-tl-jump]').hidden = true;
+  moreEl.hidden = false; $('[data-tl-bar]').hidden = false;
 
   var S = { q: '', do: [], who: [], time: [], type: '', es: false, sort: 'useful' };
   var VALID = { do: DO.map(function (x) { return x[0]; }), who: WHO.map(function (x) { return x[0]; }), time: TIME.map(function (x) { return x[0]; }) };
@@ -212,13 +241,14 @@
         if (k === 'who') v = v.reduce(function (a, s) { return a.concat(s === 'solo' ? ['me'] : s === 'together' ? ['partner', 'family', 'housemates', 'work', 'friends'] : [s]); }, []);
         S[k] = v.filter(function (s, i) { return VALID[k].indexOf(s) !== -1 && v.indexOf(s) === i; });
       });
-      S.type = TYPE[u.get('type')] ? u.get('type') : '';
+      S.type = secFor(u.get('type') || '');
       S.es = u.get('es') === '1';
-      S.sort = SORTS[u.get('sort')] ? u.get('sort') : 'useful';
+      S.sort = own(SORTS, u.get('sort') || '') ? u.get('sort') : 'useful';
     } catch (e) {}
+    // an old link to a type's #part (/tools.html#calm-and-stress, #know-yourself) opens that section on its own
     var h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
-    if (SLUG[h]) { S.type = SLUG[h]; return true; }
-    return false;
+    if (secFor(h)) S.type = secFor(h);
+    return !!S.type;
   }
   function sync() {
     qEl.value = S.q; typeSel.value = S.type; sortSel.value = S.sort; esEl.checked = S.es;
@@ -229,7 +259,7 @@
     S.do.forEach(function (v) { a.push(['do', v, LABEL[v]]); });
     S.who.forEach(function (v) { a.push(['who', v, LABEL[v]]); });
     S.time.forEach(function (v) { a.push(['time', v, LABEL[v]]); });
-    if (S.type) a.push(['type', S.type, 'Type: ' + TYPE[S.type].name]);
+    if (S.type) a.push(['type', S.type, 'Only ' + SEC[S.type].name]);
     if (S.es) a.push(['es', '1', 'Works in Spanish']);
     if (S.q) a.push(['q', S.q, '“' + S.q + '”']);
     return a;
@@ -258,7 +288,7 @@
     if (S.do.length && !S.do.some(function (o) { return (t.outcomes || []).indexOf(o) !== -1; })) return false;
     if (S.who.length && !S.who.some(function (w) { return (t.people || []).indexOf(w) !== -1; })) return false;
     if (S.time.length && S.time.indexOf(timeOf(t)) === -1) return false;
-    if (S.type && t.type !== S.type && (t.also || []).indexOf(S.type) === -1) return false;
+    if (S.type && secOf(t) !== S.type) return false;
     if (S.es && !t.es) return false;
     if (S.q && !needHit(t)) { var words = fold(S.q).split(/\s+/).filter(Boolean); if (!words.every(function (w) { return t.hay.indexOf(w) !== -1; })) return false; }
     return true;
@@ -276,35 +306,32 @@
       '<span class="tl-does">' + esc(t.does) + '</span>' +
       '<span class="tl-gets"><b>You get:</b> ' + esc(t.gets) + '</span></a>' + modes +
       '<span class="tl-meta"><span class="tl-m tl-time">' + esc(t.time) + '</span><span class="tl-m' + (solo(t) ? ' tl-solo' : '') + '">' + esc(whoText(t)) + '</span>' +
-      (TYPE[t.type] ? '<span class="tl-m">' + esc(TYPE[t.type].name) + '</span>' : '') +
       (t.es ? '<span class="tl-m tl-es" lang="es">También en español</span>' : '') + '</span>' +
       '<span class="tl-acts">' + (hasEx ? '<button type="button" class="tl-exbtn" aria-expanded="false" aria-controls="' + exId + '" data-ex="' + esc(t.id) + '">See an example</button>' : '') +
       '<a class="tl-open" href="' + esc(t.href) + '" tabindex="-1" aria-hidden="true">Open&nbsp;&rarr;</a></span>' +
       (hasEx ? '<div class="tl-ex" id="' + exId + '" hidden></div>' : '') + '</li>';
   }
-  function grid(ts) { return '<ul class="tl-grid">' + ts.map(card).join('') + '</ul>'; }
+  // each section shows its matching tools as cards, in the chosen order; a section with none is hidden
+  var divideEl = $('[data-tl-divide]', list);
   function render(shown) {
-    var html = '';
-    if (S.sort === 'useful') {
-      var me = shown.filter(solo), others = shown.filter(function (t) { return !solo(t); });
-      if (me.length) html += '<section class="tl-part" id="self-discovery-tools" aria-labelledby="tl-p1"><h2 id="tl-p1">Self-discovery</h2>' +
-        '<p class="tl-part-b">Tools you can use on your own, right now. Some let you invite someone later, if and when you want.</p>' + grid(me) + '</section>';
-      if (others.length) {
-        var want = S.who.filter(function (w) { return w !== 'me'; }), groups = {};
-        others.forEach(function (t) {
-          var p = (t.people || []).filter(function (x) { return x !== 'me'; }), g = (want.length ? p.filter(function (x) { return want.indexOf(x) !== -1; })[0] : '') || p[0] || 'partner';
-          (groups[g] = groups[g] || []).push(t);
-        });
-        html += '<section class="tl-part" id="with-someone" aria-labelledby="tl-p2"><h2 id="tl-p2">When you’re ready to involve someone</h2>' +
-          '<p class="tl-part-b">These need someone else to join in. Each one says who it’s for.</p>' +
-          ['partner', 'family', 'housemates', 'work', 'friends'].filter(function (g) { return groups[g]; }).map(function (g) {
-            return '<h3 class="tl-gh">' + esc(GROUP_NAME[g]) + ' <span>' + groups[g].length + (groups[g].length === 1 ? ' tool' : ' tools') + '</span></h3>' + grid(groups[g]);
-          }).join('') + '</section>';
+    var by = {};
+    shown.forEach(function (t) { var k = secOf(t); (by[k] = by[k] || []).push(t); });
+    SECS.forEach(function (s) {
+      var ts = by[s.key] || [], mine = S.type === s.key;
+      s.el.hidden = !ts.length;
+      s.ul.className = 'tl-grid';
+      s.ul.innerHTML = ts.map(card).join('');
+      if (s.n) s.n.textContent = ts.length === 1 ? '1 tool' : ts.length + ' tools';
+      if (s.only) {
+        s.only.innerHTML = mine ? 'Show all tools' : 'Show only these<span class="sr-only"> ' + esc(s.name.toLowerCase()) + ' tools</span>';
+        s.only.setAttribute('href', mine ? location.pathname : '?type=' + encodeURIComponent(s.key) + '#' + s.key);
       }
-    } else if (shown.length) {
-      html = '<section class="tl-part" id="all-matching" aria-labelledby="tl-p3"><h2 id="tl-p3">' + (S.sort === 'quick' ? 'Quickest first' : 'A to Z') + '</h2>' + grid(shown) + '</section>';
+    });
+    if (divideEl) {
+      // "Ready to bring someone in?" only sits between sections that are both on show
+      var seen = SECS.filter(function (s) { return !s.el.hidden; }), pos = function (s) { return divideEl.compareDocumentPosition(s.el) & 4; };
+      divideEl.hidden = !!S.type || !seen.some(pos) || seen.every(pos);
     }
-    list.innerHTML = html;
     Object.keys(openEx).forEach(function (id) { var b = list.querySelector('[data-ex="' + id + '"]'); if (b) showEx(b, true); });
   }
   function exHtml(t) {
@@ -348,11 +375,14 @@
 
   // ---------- apply
   var countEl = $('[data-tl-count]'), pillsEl = $('[data-tl-pills]'), resetBtn = $('[data-tl-reset]'), emptyEl = $('[data-tl-empty]');
+  var guideBox = $('#not-sure'), moreN = $('[data-tl-more-n]'), results = $('.tl-results') || list;
   function pills(a) { return a.map(function (x) { return '<button type="button" class="tl-pill" data-k="' + x[0] + '" data-v="' + esc(x[1]) + '" aria-label="Remove filter: ' + esc(x[2]) + '">' + esc(x[2]) + '</button>'; }).join(''); }
   var lastCount = '';
-  function apply(write) {
+  // write: put the choices in the address; push: as a new step, so Back undoes a type pick
+  function apply(write, push) {
     askNeeds();
     var shown = TOOLS.filter(match).sort(SORTS[S.sort]), a = active(), on = a.length > 0;
+    var more = a.filter(function (x) { return x[0] !== 'type'; }).length, n = shown.length;
     var nb = !!(S.q && NEED && NEED.best && window.TOLSearch);
     needBox.innerHTML = nb ? window.TOLSearch.bestHTML(NEED.best, S.q) : ''; needBox.hidden = !nb;
     var nn = !!(!shown.length && S.q && NEED && window.TOLSearch);
@@ -360,28 +390,48 @@
     if (nn && !needNone.parentNode) emptyEl.parentNode.insertBefore(needNone, emptyEl.nextSibling);
     render(shown);
     var nSolo = shown.filter(solo).length;
-    var txt = on ? (shown.length === 1 ? '1 tool matches' : shown.length + ' tools match') + (shown.length ? ' (' + nSolo + ' you can use on your own)' : '')
-      : TOOLS.length + ' tools · ' + nSolo + ' you can use on your own';
+    var txt = (S.type ? SEC[S.type].name + ': ' : '') + (n === 1 ? '1 tool' : n + ' tools') + (more ? (n === 1 ? ' matches' : ' match') : '') +
+      (n ? ' · ' + nSolo + ' you can use on your own' : '');
     if (txt !== lastCount) { countEl.textContent = txt; lastCount = txt; }
     pillsEl.innerHTML = pills(a);
     resetBtn.hidden = !on;
+    if (moreN) moreN.textContent = more ? '(' + more + ' on)' : '';
     topBox.hidden = on || !TOP.length;
+    // one type on its own: the page is just that section, so the guide steps aside too
+    if (guideBox) {
+      guideBox.hidden = !!S.type;
+      if (S.type && tour && !tour.hidden) { setPlay(false); tour.hidden = true; if (tourBtn) tourBtn.setAttribute('aria-expanded', 'false'); }
+    }
     emptyEl.hidden = shown.length > 0;
     if (!shown.length) $('[data-tl-empty-pills]').innerHTML = pills(a);
     if (write) {
       try {
         var p = new URLSearchParams();
+        if (S.type) p.set('type', S.type);
         ['do', 'who', 'time'].forEach(function (k) { if (S[k].length) p.set(k, S[k].join(',')); });
-        if (S.type) p.set('type', S.type); if (S.es) p.set('es', '1'); if (S.q) p.set('q', S.q); if (S.sort !== 'useful') p.set('sort', S.sort);
-        var qs = p.toString().replace(/%2C/g, ','), h = location.hash; if (SLUG[h.slice(1)]) h = '';
-        history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + h);
+        if (S.es) p.set('es', '1'); if (S.q) p.set('q', S.q); if (S.sort !== 'useful') p.set('sort', S.sort);
+        var qs = p.toString().replace(/%2C/g, ','), h = location.hash, hn = '';
+        try { hn = decodeURIComponent(h.slice(1)); } catch (e) {}
+        if (push || secFor(hn)) h = '';
+        var url = location.pathname + (qs ? '?' + qs : '') + h;
+        if (push && url !== location.pathname + location.search + location.hash) history.pushState(null, '', url); else history.replaceState(null, '', url);
       } catch (e) {}
     }
+  }
+  // show one section on its own ('' for all of them) and bring it into view
+  function goTo(el) {
+    if (!el) return;
+    try { el.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); }
+  }
+  function setType(key, scrollTo) {
+    S.type = secFor(key); sync(); apply(true, true);
+    if (scrollTo === true) goTo(S.type && !SEC[S.type].el.hidden ? SEC[S.type].el : results);
+    else if (scrollTo) goTo(scrollTo.hidden ? results : scrollTo);
   }
   function remove(k, v) {
     if (k === 'type') S.type = ''; else if (k === 'es') S.es = false; else if (k === 'q') S.q = '';
     else S[k] = S[k].filter(function (x) { return x !== v; });
-    sync(); apply(true);
+    sync(); apply(true, k === 'type');
   }
   document.addEventListener('click', function (e) {
     var p = e.target.closest && e.target.closest('.tl-pill'); if (!p) return;
@@ -390,10 +440,18 @@
     var next = pillsEl.querySelector('.tl-pill'); if (!next || !next.offsetParent) next = resetBtn.hidden ? sortSel : resetBtn;
     try { next.focus({ preventScroll: true }); } catch (err) { next.focus(); }
   });
-  $('[data-tl-filters]').addEventListener('change', function (e) {
+  typeSel.addEventListener('change', function () { setType(typeSel.value, !!typeSel.value); });
+  // "Show only these" on a section heading (or "Show all tools" when it is the only one showing)
+  list.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-tl-only]');
+    if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button) return;
+    var sec = a.closest('[data-tl-sec]'); if (!sec) return;
+    e.preventDefault();
+    if (S.type === sec.id) setType('', sec); else setType(sec.id, true);
+  });
+  moreEl.addEventListener('change', function (e) {
     var i = e.target;
     if (i.name && VALID[i.name]) { S[i.name] = $$('.tl-filters input[name="' + i.name + '"]:checked').map(function (x) { return x.value; }); apply(true); }
-    else if (i === typeSel) { S.type = typeSel.value; apply(true); }
     else if (i === esEl) { S.es = esEl.checked; apply(true); }
   });
   sortSel.addEventListener('change', function () { S.sort = sortSel.value; apply(true); });
@@ -404,18 +462,21 @@
     clearTimeout(tmr); S.q = qEl.value.trim().slice(0, 80); apply(true);
     var first = list.querySelector('a.tl-card'); if (first && S.q) { e.preventDefault(); location.href = first.getAttribute('href'); }
   });
-  function clearAll() { S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; S.es = false; sync(); apply(true); }
-  resetBtn.addEventListener('click', function () { clearAll(); qEl.focus(); });
-  $('[data-tl-empty-reset]').addEventListener('click', function () { clearAll(); qEl.focus(); });
+  function clearAll() { var had = !!S.type; S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; S.es = false; sync(); apply(true, had); }
+  resetBtn.addEventListener('click', function () { clearAll(); typeSel.focus(); });
+  $('[data-tl-empty-reset]').addEventListener('click', function () { clearAll(); typeSel.focus(); });
 
-  var fromHash = readUrl(); sync(); apply(false);
-  // a link to a type (/tools.html#calm-and-stress, or the old #know-yourself) opens the list filtered to that type
-  if (fromHash) { var bar = $('[data-tl-bar]'); if (bar) bar.scrollIntoView(); }
-  else if (location.hash) { var target = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (target) target.scrollIntoView(); }
+  var restricted = readUrl(); sync(); apply(false);
+  if (S.q || S.do.length || S.who.length || S.time.length || S.es) moreEl.open = true;
+  // a link with ?type= or an old type #part opens on that section; any other #part (#workpapers, #start-here) works as usual
+  if (restricted) goTo(SEC[S.type].el.hidden ? results : SEC[S.type].el);
+  else if (location.hash) { var target = null; try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {} if (target) target.scrollIntoView(); }
+  // Back and Forward step through type picks
+  window.addEventListener('popstate', function () { readUrl(); sync(); apply(false); });
   // the menu's "All calm and stress tools" while already on this page only changes the #part
   window.addEventListener('hashchange', function () {
     var h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
-    if (!SLUG[h]) return;
-    S.type = SLUG[h]; sync(); apply(false); $('[data-tl-bar]').scrollIntoView();
+    if (!secFor(h)) return;
+    S.type = secFor(h); sync(); apply(false); goTo(SEC[S.type].el.hidden ? results : SEC[S.type].el);
   });
 })();
