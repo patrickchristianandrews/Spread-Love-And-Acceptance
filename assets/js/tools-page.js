@@ -479,7 +479,11 @@
     goTo(results, true);
     window.addEventListener('load', function () { setTimeout(function () { if (S.type) goTo(results, true); }, 0); }, { once: true });
   }
-  else if (location.hash) { var target = null; try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {} if (target) target.scrollIntoView(); }
+  else if (location.hash) {
+    // the cards are taller than the plain lists the browser first saw, so land on the #part again
+    var target = null; try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+    if (target) { goTo(target, true); window.addEventListener('load', function () { setTimeout(function () { goTo(target, true); }, 0); }, { once: true }); }
+  }
   // Back and Forward step through type picks
   window.addEventListener('popstate', function () { readUrl(); sync(); apply(false); });
   // the menu's "All calm and stress tools" while already on this page only changes the #part
