@@ -484,6 +484,15 @@
     var target = null; try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
     if (target) { goTo(target, true); window.addEventListener('load', function () { setTimeout(function () { goTo(target, true); }, 0); }, { once: true }); }
   }
+  // a link to a heading inside a section that is hidden by the type picker (the wide-screen "On this page" outline)
+  // shows every section again first, so the jump lands
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a || !S.type) return;
+    var id = ''; try { id = decodeURIComponent(a.getAttribute('href').slice(1)); } catch (er) {}
+    if (secFor(id)) return;
+    var t = id && document.getElementById(id), sec = t && t.closest && t.closest('[data-tl-sec]');
+    if (sec && sec.hidden) { S.type = ''; sync(); apply(true, true); }
+  }, true);
   // Back and Forward step through type picks
   window.addEventListener('popstate', function () { readUrl(); sync(); apply(false); });
   // the menu's "All calm and stress tools" while already on this page only changes the #part
