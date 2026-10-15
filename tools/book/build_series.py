@@ -280,6 +280,17 @@ def research_short(book, here):
     return s + '</section>'
 
 
+def glossary_short(book, chs):
+    """the book's own words, from the glossary, for the words its chapters use"""
+    text = ' '.join(B.strip_tags(B.main_inner(B.PAGES[(s_, False)])) for s_ in chs)
+    s = ('<section class="pe-back pe-gloss ps-gloss no-bubble no-cheer no-dive" data-no-bubble id="glossary" style="--pc:%s;--pt:%s">%s'
+         '<h1 class="pe-back-h">Words used in this book</h1><p class="pe-back-lede">The book’s own words, each in one plain sentence. All of them are at '
+         'spreadloveandacceptance.com/glossary.</p><dl class="pe-gloss-list">') % (book['color'], book['tint'], mark('glossary'))
+    for gid, nm, d, ex, _w in B.glossary_terms(text):
+        s += '<div class="pe-gl"><dt id="gl-%s">%s</dt><dd>%s</dd></div>' % (gid, esc(nm), d)
+    return s + '</dl></section>'
+
+
 def series_page(book):
     s = '<section class="pe-back ps-series no-bubble" data-no-bubble id="series" style="--pc:%s">%s<h1 class="pe-back-h">The series</h1>' % (book['color'], mark('series'))
     s += '<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(CFG['series'])
@@ -362,17 +373,29 @@ def build_book(book, where):
         e = B.entry(slug)
         num, lab = chapter_label(slug, book)
         toc.append(B.toc_row(slug, esc(num or 'After'), esc(B.TITLES[slug]), 'is-ch'))
+        # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
+        body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
         body.append(s_chapter(e, book, here, where))
-    back = [('notes', 'Research notes'), ('series', 'The series'), ('free', 'Free on the site')]
+    # the back of the book: built before finish_package, so their page references get markers
+    extra = []
+    found = hints.mentions(dict((s_, B.PAGES[(s_, False)]) for s_ in chs), chs)
+    wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT[s_]), pg(s_))
+    extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
+    if 'numbers' in book.get('extras', []):
+        ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add)
+        for x in front_back.back_sections(ctx):
+            if x['key'] == 'numbers':
+                extra.append(('numbers', x['toc'], x['html']))
+    extra.append(('glossary', 'Words used in this book', glossary_short(book, chs)))
+    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('series', 'The series'), ('free', 'Free on the site')]
     for k, t in back:
-        toc.append(B.toc_row(k, '', t, 'is-back'))
+        toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
     front += '\n<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
     front += '\n' + meet_page(book) + '\n' + hn_html
-    front += '\n<div class="pe-recto-pad pe-only" data-for="%s"></div>' % chs[0]
-    both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body))
-    front, body_html = both.split('\n<!--pe-split-->\n', 1)
-    backm = research_short(book, here) + series_page(book) + free_page(book)
+    both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
+    front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
+    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book)
     ol = ([[hn_toc, 'help-now', 0]] if hn_html else []) + [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]]
     ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]

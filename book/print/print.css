@@ -91,3 +91,7 @@ body { font-size: 10.6pt; line-height: 1.5; }
 
 /* the measuring copy (build_series.py --measure) */
 .pe-series section#notes { break-before: page; }
+/* the 6 x 9 column is narrower than the online PDFs': long addresses may break anywhere in the "Put it to use" boxes */
+.pe-use { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.pe-use-t, .pe-use-t a { min-width: 0; overflow-wrap: anywhere; }
+.pe-use-u .pe-nb, .ps-addr .pe-nb { white-space: normal; overflow-wrap: anywhere; }
