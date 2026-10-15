@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""build_series.py: the print series of "The Objective Ledger" (print12).
+"""build_series.py: the print series of the book (print12). Its name is series_title in tools/book/series.json.
 
 A series of short colour books for print on demand (6 x 9 in, KDP "regular" trim, standard colour, white
 paper), plus a separate workbook (8.5 x 11 in) with every workpaper in fill-in form. The books are made from the
@@ -44,6 +44,7 @@ ROOT = B.ROOT
 OUT = os.path.join(ROOT, 'book', 'print')
 SRC = os.path.join(OUT, 'src')
 CFG = series_site.config()
+SERIES_TITLE = CFG['series_title']  # the one name of the series (tools/book/series.json)
 SITE = B.SITE
 esc = B.esc
 mark = B.mark
@@ -178,6 +179,9 @@ def s_end(e, book, here, where):
         s += '</ul></div>'
     s += '<div class="pe-end-use"><h3 class="pe-end-k">Put it to use</h3><ul class="pe-use">'
     for t, u, d in B.uses(e[0]):
+        form = free_form(u)
+        if form:
+            u, d = form, 'Workpaper · free to print' + ((': ' + d) if d else '')
         s += '<li>%s<span class="pe-use-t"><a href="%s">%s</a>%s<span class="pe-use-u">%s</span></span></li>' % (
             qr(u), B.absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', B.addr_html(B.short_address(u)))
     s += '</ul></div>'
@@ -188,6 +192,32 @@ def s_end(e, book, here, where):
     return s
 
 
+FILL_RE = re.compile(r'(?:^|/)wp-(\d\d)(?=[-.#?]|$)')
+
+
+def free_form(url):
+    """the free printable form on the site for a workpaper link (/workpapers/fill/wp-NN.html), or None"""
+    path = re.sub(r'^https://spreadloveandacceptance\.com', '', url).split('#')[0].split('?')[0]
+    m = FILL_RE.search(path)
+    if not m or '/fill/' in path:
+        return None
+    f = '/workpapers/fill/wp-%s.html' % m.group(1)
+    return f if os.path.exists(os.path.join(ROOT, f.lstrip('/'))) else None
+
+
+WP_LINE_RE = re.compile(r'<p class="bh-ref bh-wp"><span class="bh-k">([^<]*)</span><span class="bh-c">: </span><a href="([^"]+)"[^>]*>(.*?)</a><span class="bh-u">.*?</span></p>', re.S)
+
+
+def wp_lines(body):
+    """Owner's rule: the books never reproduce a workpaper. Each one is named on one short line, "Workpaper: name ·
+    free to print", with a QR code to its free printable form on the site."""
+    def sub(m):
+        form = free_form(m.group(2)) or m.group(2)
+        return ('<div class="bh-ref bh-wp ps-wp">%s<p><span class="bh-k">%s</span><span class="bh-c">: </span><a href="%s">%s</a> · free to print'
+                '<span class="bh-u"> %s</span></p></div>') % (qr(form), m.group(1), B.absolute(form), m.group(3), B.addr_html(B.short_address(form)))
+    return WP_LINE_RE.sub(sub, body)
+
+
 def s_chapter(e, book, here, where):
     src = B.PAGES[(e[0], False)]
     body = B.clean_for_whole(B.main_inner(src), e[0], False, here)
@@ -195,6 +225,9 @@ def s_chapter(e, book, here, where):
     body = re.sub(r'<p class="simple-lede">.*?</p>', '', body, count=1, flags=re.S)
     body = B.print_links(body, e[0], here)
     body = B.tag_boxes(B.demote(body))
+    body = wp_lines(body)
+    if not CFG.get('examples', True):
+        body = re.sub(r'<div class="book-ex-wrap.*?</figure>\s*</div>', '', body, flags=re.S)
     return '<article class="whole-ch pe-ch" id="%s" data-part="%d" style="--pc:%s;--pt:%s">%s\n<div class="pe-body">%s</div>\n%s</article>' % (
         e[0], e[1], book['color'], book['tint'], s_open(e, book), body, s_end(e, book, here, where))
 
@@ -204,7 +237,7 @@ def title_page(book):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · Book %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
             '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>') % (
-        book['color'], mark('titlep'), esc(CFG['series']), book['n'], esc(book['title']), esc(book['sub']),
+        book['color'], mark('titlep'), esc(SERIES_TITLE), book['n'], esc(book['title']), esc(book['sub']),
         series_site.art(book['art']), B.AUTHOR)
 
 
@@ -212,12 +245,12 @@ def copyright_page(book, workbook=False):
     isbn = ('<p>ISBN %s (paperback)</p>' % esc(book['isbn'])) if book.get('isbn') else ''
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += '<p><em>%s</em>%s. %s.<br>By %s. Spread Love &amp; Acceptance, spreadloveandacceptance.com.</p>' % (
-        esc(CFG['series']), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
+    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by Spread Love &amp; Acceptance, spreadloveandacceptance.com.</p>' % (
+        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
     s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>%s' % (B.AUTHOR, B.UPDATED, isbn)
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
-          'for non-commercial teaching, with credit to “The Objective Ledger, spreadloveandacceptance.com”.</p>') % what
+          'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % (what, esc(SERIES_TITLE))
     s += ('<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a '
           'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>')
     s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
@@ -237,7 +270,7 @@ def meet_page(book_or_none):
     wb = CFG['workbook']['title']
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
     s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “Workpaper WP-03: '
-          'One owner per job”. Blank copies, with room to write, are in <em>%s</em>; you can also fill them in free on the website.</p>'
+          'One owner per job”. Every workpaper is free to print or fill in on the website: the book names it and gives a code to scan. <em>%s</em> has them all in one place, on big pages.</p>'
           '<p>%s <strong>A tool</strong> is a helper you use on the website, such as “Tool: Chat analyzer”. You use it and it gives you something back.</p>'
           '<p class="ps-meet-note">The book keeps the two apart: a workpaper and a tool never share a list. Both are free, need no account, and what you '
           'type stays on your device.</p></div>') % (hints.tag('wp', hints.WP.get('wp03')), esc(wb), hints.tag('tool'))
@@ -293,7 +326,7 @@ def glossary_short(book, chs):
 
 def series_page(book):
     s = '<section class="pe-back ps-series no-bubble" data-no-bubble id="series" style="--pc:%s">%s<h1 class="pe-back-h">The series</h1>' % (book['color'], mark('series'))
-    s += '<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(CFG['series'])
+    s += '<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(SERIES_TITLE)
     for b in books() + [CFG['workbook']]:
         this = b is book
         k = ('Book %d' % b['n']) if b.get('n') else 'Workbook'
@@ -328,13 +361,13 @@ def page_rules(book, here_order, back_keys):
     num = 'content:counter(page);font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:8.8pt;color:#2B2620;vertical-align:top;padding-top:2.6mm;border-top:.4pt solid #CDBF98;'
     edge = 'vertical-align:top;border-top:.4pt solid #CDBF98;'
     q = lambda t: '"%s"' % t.replace('\\', '').replace('"', '\\"')
-    verso = '%s · Book %d: %s' % (CFG['series'], book['n'], book['title'])
+    verso = '%s · Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
 
     def rules(nm, recto):
         return ('@page %s:right{@bottom-left{content:%s;%s}@bottom-center{content:"";%s}@bottom-right{%stext-align:right}}'
                 '@page %s:left{@bottom-left{%stext-align:left}@bottom-center{content:"";%s}@bottom-right{content:%s;%stext-align:right}}') % (
             nm, q(recto), head, edge, num, nm, num, edge, q(verso), head)
-    r = []
+    r = ['@page :right{@bottom-left{content:%s}}@page :left{@bottom-right{content:%s}}' % (q(SERIES_TITLE), q(SERIES_TITLE))]
     for slug in here_order:
         r.append('#%s{page:sc-%s}' % (slug, slug))
         r.append(rules('sc-' + slug, B.SHORT[slug]))
@@ -399,7 +432,7 @@ def build_book(book, where):
     ol = ([[hn_toc, 'help-now', 0]] if hn_html else []) + [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]]
     ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
-    title = '%s, Book %d: %s' % (CFG['series'], book['n'], book['title'])
+    title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': book['line']}, ensure_ascii=False).replace('</', '<\\/')
     rules = page_rules(book, [s_ for s_ in order if s_ in here], back)
@@ -481,7 +514,7 @@ def build_workbook(where):
         s += '<dl class="wb-facts"><div><dt>When</dt><dd>%s</dd></div><div><dt>How long</dt><dd>%s</dd></div><div><dt>Who</dt><dd>%s</dd></div>' % (esc(when), esc(how_long), esc(who))
         if ins:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
-        s += '<div><dt>Copies here</dt><dd>%d, one after the other. Need more? Print the free page, or fill it in on screen.</dd></div></dl>' % copies
+        s += '<div><dt>Copies here</dt><dd>%d, one after the other. Need more? Print the free form from the website, or fill it in on screen.</dd></div></dl>' % copies
         s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> The online version does the sums for you and keeps what you type on your '
               'own device: <span class="ps-addr">%s</span></p></div>') % (qr(fill), B.addr_html(B.short_address(fill)))
         s += '</section>'
@@ -497,7 +530,7 @@ def build_workbook(where):
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
              '<p class="ps-title-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>') % (
-        wb['color'], mark('titlep'), esc(CFG['series']), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
+        wb['color'], mark('titlep'), esc(SERIES_TITLE), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
     front += copyright_page(book, workbook=True)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
     front += ('<section class="wb-how pe-only" id="wb-how">%s<h1>How to use this workbook</h1>'
@@ -530,12 +563,14 @@ def build_workbook(where):
     notes = '<section class="wb-notes pe-only" id="wb-notes">%s<h1>Notes</h1><div class="wb-lines">%s</div></section>' % (mark('wb-notes'), '<div></div>' * 21)
     notes += ''.join('<section class="wb-notes pe-only"><div class="wb-lines">%s</div></section>' % ('<div></div>' * 24) for _ in range(3))
     sp = series_page(book).replace(' (this book)', '')
-    title = '%s: %s' % (CFG['series'], wb['title'])
+    title = '%s: %s' % (SERIES_TITLE, wb['title'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': wb['line']}, ensure_ascii=False).replace('</', '<\\/')
     page = head(title, WB_CSS).replace('<link rel="stylesheet" href="%s">' % WB_CSS, '<link rel="stylesheet" href="%s">\n<link rel="stylesheet" href="%s">' % (SERIES_CSS, WB_CSS))
-    page += '<body class="whole-book pe-book pe-series pe-workbook" data-pe="workbook">\n<main class="read whole" id="main">\n%s\n%s\n%s\n%s\n</main>\n%s\n%s\n</body>\n</html>\n' % (
-        front, '\n'.join(secs), notes, sp, outline, QR_SCRIPT)
+    rh = ('%s · %s' % (SERIES_TITLE, wb['title'].split(':')[0])).replace('"', '\\"')
+    rules = '<style media="print">@page :right{@bottom-left{content:"%s"}}@page :left{@bottom-right{content:"%s"}}</style>' % (rh, rh)
+    page += '<body class="whole-book pe-book pe-series pe-workbook" data-pe="workbook">\n<main class="read whole" id="main">\n%s\n%s\n%s\n%s\n</main>\n%s\n%s\n%s\n</body>\n</html>\n' % (
+        front, '\n'.join(secs), notes, sp, rules, outline, QR_SCRIPT)
     B.write(os.path.join(SRC, 'workbook.html'), page)
 
 
@@ -549,10 +584,10 @@ def cover_html(item, trim, pages_hint=0, workbook=False):
     """A full-wrap cover: bleed, back, spine, front, bleed. build_pdfs.js sets --spine (inches) from the final page
     count, the @page size, and turns the spine text on above 79 pages."""
     w, h = trim
-    kicker = CFG['series'] + (' · Book %d' % item['n'] if not workbook else '')
+    kicker = SERIES_TITLE + (' · Book %d' % item['n'] if not workbook else '')
     others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], ('Book %d' % b['n']) if b.get('n') else 'Workbook', esc(b['title']))
                      for b in books() + [CFG['workbook']])
-    spine_t = '%s · %s' % (CFG['series'], ('Book %d: %s' % (item['n'], item['title'])) if not workbook else item['title'])
+    spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not workbook else item['title'])
     return '''<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
 <style>
@@ -593,7 +628,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .cv-by-back { font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .06em; margin: 0.08in 0 0; opacity: .88; }
 /* KDP prints the barcode here: 2 x 1.2 in at the bottom right of the back cover. Nothing is drawn in it. */
 .cv-barcode { position: absolute; right: 0.25in; bottom: 0.25in; width: 2in; height: 1.2in; }
-.cv-spine-t { position: absolute; left: 50%%; top: 50%%; transform: translate(-50%%, -50%%) rotate(90deg); white-space: nowrap; font-family: "Fraunces", serif; font-weight: 600; font-size: 8.6pt; letter-spacing: .02em; display: none; }
+.cv-spine-t { position: absolute; left: 50%%; top: 50%%; transform: translate(-50%%, -50%%) rotate(90deg); white-space: nowrap; font-family: "Fraunces", serif; font-weight: 600; font-size: min(9pt, calc((var(--spine) - 0.125in) * 0.9)); line-height: 1; margin: 0; letter-spacing: .02em; display: none; }
 .cv-spine-t em { font-family: "Lora", serif; font-weight: 400; font-style: italic; margin-left: 0.18in; }
 .has-spine-text .cv-spine-t { display: block; }
 </style></head>
@@ -607,7 +642,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 </div><div class="cv-barcode" aria-hidden="true"></div></div></div>
 <div class="cv-spine"><p class="cv-spine-t">%(spine_t)s<em>%(author)s</em></p></div>
 <div class="cv-front"><div class="cv-front-trim" id="front">%(rules_f)s
-<div class="cv-band"><span>Spread Love &amp; Acceptance</span><span>See it fairly. Say it kindly.</span></div>
+<div class="cv-band"><span>spreadloveandacceptance.com</span><span>See it fairly. Say it kindly.</span></div>
 <div class="cv-text"><p class="cv-k">%(kicker)s</p><p class="cv-title">%(title)s</p><p class="cv-sub">%(sub)s</p></div>
 <div class="cv-art">%(art)s</div>
 <div class="cv-foot"><p class="cv-line">%(line)s</p><p class="cv-by">by %(author)s</p></div>

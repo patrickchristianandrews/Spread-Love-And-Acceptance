@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""hints.py: the character hints in "The Objective Ledger" (bookpals11), and the book's workpaper and tool lists.
+"""hints.py: the character hints in the book (bookpals11), and the book's workpaper and tool lists.
 
 tools/book/build_book.py imports this. Nothing here writes a file.
 

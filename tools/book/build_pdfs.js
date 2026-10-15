@@ -43,6 +43,8 @@ const SITE = 'https://spreadloveandacceptance.com';
 const FONTS = new Map();
 const PRINT_KIT = process.env.BOOK_PRINT_KIT !== '0';
 const PRINT_OUT = path.join(OUT, 'print');
+// the book's one name (print12): series_title in tools/book/series.json
+const SERIES_TITLE = JSON.parse(fs.readFileSync(path.join(__dirname, 'series.json'), 'utf8')).series_title;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tol-book-'));
 
 function pageTexts(buf) {
@@ -195,7 +197,7 @@ async function makeBook(ctx, file, opts = {}) {
     return n;
   });
   log('inlined ' + inlined + ' figures');
-  const prep = await page.evaluate(({ SITE, sample }) => {
+  const prep = await page.evaluate(({ SITE, SERIES_TITLE, sample }) => {
     if (sample) {
       // a short look at the design: the front matter, Part Two's opener, one chapter and the back matter
       const keep = new Set(['chapter-2']);
@@ -216,7 +218,7 @@ async function makeBook(ctx, file, opts = {}) {
           if ((el.classList.contains('pe-notes-h') || el.classList.contains('pe-refs')) && !on) el.remove();
         });
       }
-      document.title = 'The Objective Ledger: a sample';
+      document.title = SERIES_TITLE + ': a sample';
     }
     // links work from a PDF on any device
     document.querySelectorAll('a[href^="/"]').forEach(a => a.setAttribute('href', SITE + a.getAttribute('href')));
@@ -237,7 +239,7 @@ async function makeBook(ctx, file, opts = {}) {
     const parts = [...document.querySelectorAll('section.pe-part[id]')].map(p => p.id);
     const chapters = [...document.querySelectorAll('article.pe-ch[id]')].map(a => a.id);
     return { qr, missingQR, keys, terms, pads, parts, chapters };
-  }, { SITE, sample: !!opts.sample });
+  }, { SITE, SERIES_TITLE, sample: !!opts.sample });
   log('prepared');
   // anything wider than the text column makes Chromium shrink every page of the book (by up to a quarter): lay
   // the book out at the column's width (132 mm) for a moment and name whatever sticks out
@@ -367,7 +369,7 @@ function finish(file, r, kit) {
   const outline = (meta.outline || []).map(([t, k, l]) => [t, r.pagemap[k] || 0, l]);
   const job = {
     interior, cover: r.coverBuf ? cover : null, screen: path.join(OUT, file + '.pdf'),
-    title: meta.title || 'The Objective Ledger', author: meta.author || '', subject: meta.subject || '', outline,
+    title: meta.title || SERIES_TITLE, author: meta.author || '', subject: meta.subject || '', outline,
   };
   if (kit) {
     fs.mkdirSync(PRINT_OUT, { recursive: true });
@@ -514,9 +516,9 @@ async function runSeries(browser, ctx) {
   }
   if (!ONLY.length || ONLY.includes('sample')) {
     const r = await makeBook(ctx, 'whole', { sample: true });
-    r.meta = Object.assign({}, r.meta, { title: 'The Objective Ledger: a sample', outline: [] });
+    r.meta = Object.assign({}, r.meta, { title: SERIES_TITLE + ': a sample', outline: [] });
     const f = finish('sample', r, false);
-    manifest.sample = { pages: f.screen_pages, bytes: f.bytes, title: 'The Objective Ledger: a sample' };
+    manifest.sample = { pages: f.screen_pages, bytes: f.bytes, title: SERIES_TITLE + ': a sample' };
     console.log('sample', f.screen_pages, 'pages', (f.bytes / 1048576).toFixed(1) + ' MB');
   }
   fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 1) + '\n');

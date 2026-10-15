@@ -4,10 +4,10 @@
 @page { size: 8.5in 11in; margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
 @page :right { margin: 15.24mm 12.7mm 19.05mm 19.05mm;
   @bottom-right { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 9pt; color: #2B2620; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: right; }
-  @bottom-left { content: "The Objective Ledger · The Workbook"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.6pt; color: #6E6556; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; } }
+  @bottom-left { content: ""; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.6pt; color: #6E6556; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; } }
 @page :left { margin: 15.24mm 19.05mm 19.05mm 12.7mm;
   @bottom-left { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 9pt; color: #2B2620; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: left; }
-  @bottom-right { content: "The Objective Ledger · The Workbook"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.6pt; color: #6E6556; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: right; } }
+  @bottom-right { content: ""; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.6pt; color: #6E6556; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: right; } }
 
 body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .ps-title, .ps-copy { height: 236mm; }

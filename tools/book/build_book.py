@@ -37,12 +37,16 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import book_art  # noqa: E402
 import front_back  # noqa: E402  (bookfixB1: help-now page, Find it fast, If someone handed you this book, the appendices)
 import hints  # noqa: E402  (bookpals11: the character hints, "Workpapers, tools and three friends", the two lists at the back)
+import series_site  # noqa: E402  (print12: the book's one name, and the print series on /book/)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 BOOK = os.path.join(ROOT, 'book')
 SITE = 'https://spreadloveandacceptance.com'
 UPDATED = 'October 2026'
 AUTHOR = 'Christian'
+# the book's name: ONE value, series_title in tools/book/series.json (print12), used here and by build_series.py
+SERIES_TITLE = series_site.config()['series_title']
+ST_H = html.escape(SERIES_TITLE, quote=True)
 
 PARTS = {
     1: ('Part One', 'Self-discovery', 'Where you came from, who you are now and who you are becoming. You can read all of it on your own.'),
@@ -920,14 +924,14 @@ def mark(key):
 def cover(name, deep):
     acc, tint, label, line = COVER[name]
     ver = 'Full version' if deep else 'Short version'
-    return '''<section class="pe-cover pe-only" style="--acc:%s;--tint:%s">%s
-<div class="pe-cover-band"><span>Spread Love &amp; Acceptance</span><span>%s</span></div>
-<div class="pe-cover-text"><p class="pe-cover-title">The Objective Ledger</p>
+    return ('''<section class="pe-cover pe-only" style="--acc:%s;--tint:%s">%s
+<div class="pe-cover-band"><span>spreadloveandacceptance.com</span><span>%s</span></div>
+<div class="pe-cover-text"><p class="pe-cover-title">{ST}</p>
 <p class="pe-cover-sub">Understanding yourself and the people you share a life with</p></div>
 <div class="pe-cover-art">%s</div>
 <div class="pe-cover-foot"><p class="pe-cover-pkg">%s <span>· %s</span></p><p class="pe-cover-line">%s</p><p class="pe-cover-by">by %s</p></div>
 </section>''' % (acc, tint, book_art.ledger_rules(170, 240, '#E4D7B2', acc, top=22, step=7.5, left=17), 'See it fairly. Say it kindly.',
-                 book_art.illustration(name), label, ver, line, AUTHOR)
+                 book_art.illustration(name), label, ver, line, AUTHOR)).replace('{ST}', ST_H)
 
 
 def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
@@ -938,17 +942,17 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
     n_ch = sum(1 for e in ORDER if e[1] in parts)
     s = cover(name, deep)
     s += '''
-<section class="pe-half pe-only">%s<p class="pe-half-t">The Objective Ledger</p><p class="pe-half-s">%s · %s</p></section>
+<section class="pe-half pe-only">%s<p class="pe-half-t">{ST}</p><p class="pe-half-s">%s · %s</p></section>
 <div class="pe-recto-pad pe-only" data-for="titlep"></div>
-<section class="pe-titlep pe-only" style="--acc:%s">%s<div class="pe-titlep-top"><p class="pe-titlep-t">The Objective Ledger</p>
+<section class="pe-titlep pe-only" style="--acc:%s">%s<div class="pe-titlep-top"><p class="pe-titlep-t">{ST}</p>
 <p class="pe-titlep-s">Understanding yourself and the people you share a life with</p>
 <p class="pe-titlep-v">%s · %s</p></div>
 <div class="pe-titlep-art">%s</div>
 <div class="pe-titlep-by"><p class="pe-titlep-a">by %s</p><p class="pe-titlep-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>
 <section class="pe-copy pe-only"><div class="pe-copy-in">
-<p><em>The Objective Ledger</em>: %s, %s.<br>By %s. Spread Love &amp; Acceptance.</p>
+<p><em>{ST}</em>: %s, %s.<br>By %s. Published by Spread Love &amp; Acceptance.</p>
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
-<p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “The Objective Ledger, spreadloveandacceptance.com” and don’t change it or sell it.</p>
+<p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “{ST}, spreadloveandacceptance.com” and don’t change it or sell it.</p>
 <p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>
 <p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. If you are in danger now, call your local emergency number.</p>
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
@@ -979,7 +983,7 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
         s += '\n<section class="pe-glance pe-only" id="glance">%s<h1>The book in two pictures</h1><div class="pe-glance-figs">%s</div></section>' % (
             mark('glance'), ''.join(fig_html(f, False) for f in front))
     s += '\n<nav class="pe-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc_rows))
-    return s
+    return s.replace('{ST}', ST_H)
 
 
 def toc_row(key, label, title, cls='', sub=''):
@@ -1179,7 +1183,7 @@ GLOSS_EXTRA = [
     ('wave-code', 'Wave Code', 'Four letters from the Wavelength quiz, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
     ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?: a load score from 0 (empty) to 1 (full). Under 0.30 is low, 0.30 to 0.59 moderate, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
     ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. Today’s Weather calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
-    ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book’s title means just that: see what is really going on, without blame, then change one small thing.', r'ledger'),
+    ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book works the same way: see what is really going on, without blame, then change one small thing.', r'ledger'),
     ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),
     ('backstop', 'Backstop', 'The second name on a job: someone who notices if it slipped and checks in kindly. Not a supervisor. A job counts as owned once it has an owner; the backstop is a good habit on top.', r'backstops?'),
     ('second-arrow', 'Second arrow', 'The extra pain we add on top of a hard moment, such as being angry at ourselves for being sad. The first arrow is the event; the second is what we tell ourselves about it (a Buddhist image).', r'second arrow'),
@@ -1364,7 +1368,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     # back cover
     acc, tint = COVER[name][0], COVER[name][1]
     s += '''<section class="pe-backcover pe-only" style="--acc:%s;--tint:%s">%s<div class="pe-bc-in">
-<p class="pe-bc-k">The Objective Ledger · %s</p><p class="pe-bc-blurb">%s</p>
+<p class="pe-bc-k">{ST} · %s</p><p class="pe-bc-blurb">%s</p>
 <p class="pe-bc-q">“See it fairly. Say it kindly.”</p>
 <ul class="pe-bc-list"><li>Two sizes of every chapter: short and full</li><li>Everyday scenes, words you could use and one small thing to try</li><li>Free tools and worksheets that stay on your device</li><li>For every kind of relationship, and for people on their own</li></ul>
 <div class="pe-bc-art">%s</div>
@@ -1372,7 +1376,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
 <p class="pe-bc-by">by %s · Spread Love &amp; Acceptance</p></div></section>''' % (
         acc, tint, book_art.ledger_rules(170, 240, '#E4D7B2', acc, top=22, step=7.5, left=17), esc(COVER[name][2]), esc(BLURB[name]),
         book_art.part_mark(4), AUTHOR)
-    return s
+    return s.replace('{ST}', ST_H)
 
 
 def page_rules(here, deep):
@@ -1393,18 +1397,19 @@ def page_rules(here, deep):
         return ('@page %s:right{@bottom-left{content:%s;%s}@bottom-center{content:"";%s}@bottom-right{%stext-align:right}%s}'
                 '@page %s:left{@bottom-left{%stext-align:left}@bottom-center{content:"";%s}@bottom-right{content:%s;%stext-align:right}%s}') % (
             nm, q(recto), head, edge, num, tab_r, nm, num, edge, q(verso), head, tab_l)
-    r = []
+    # the book's name in the running head of every page that has no running head of its own
+    r = ['@page :right{@bottom-left{content:%s}}@page :left{@bottom-right{content:%s}}' % (q(SERIES_TITLE), q(SERIES_TITLE))]
     for e in ORDER:
         if e[0] not in here:
             continue
         nm = 'pc-' + e[0]
         r.append('#%s{page:%s}' % (e[0], nm))
-        r.append(rules(nm, SHORT[e[0]], 'The Objective Ledger · ' + chapter_name(e), e[1]))
+        r.append(rules(nm, SHORT[e[0]], SERIES_TITLE + ' · ' + chapter_name(e), e[1]))
     for sec, label in (('wp-tools', 'Workpapers and tools'), ('numbers', 'How the numbers work'), ('worksheets', 'Blank worksheets'), ('glossary', 'Words used in this book'), ('figures', 'List of figures'), ('examples', 'List of filled-in examples'),
                        ('notes', 'Research notes'), ('index', 'Index')):
         nm = 'pb-' + sec
         r.append('#%s{page:%s}' % (sec, nm))
-        r.append(rules(nm, label, 'The Objective Ledger · At the back of the book', 4))
+        r.append(rules(nm, label, SERIES_TITLE + ' · At the back of the book', 4))
     return '<style media="print">%s</style>' % '\n'.join(r)
 
 
@@ -1489,13 +1494,13 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
         ol.append(['List of filled-in examples', 'examples', 0])
     ol += [['Research notes', 'notes', 0], ['Index', 'index', 0]]
     outline_json = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
-        {'outline': ol, 'title': 'The Objective Ledger: %s (%s)' % (COVER[name][2][0].upper() + COVER[name][2][1:], 'full version' if deep else 'short version'),
+        {'outline': ol, 'title': SERIES_TITLE + ': %s (%s)' % (COVER[name][2][0].upper() + COVER[name][2][1:], 'full version' if deep else 'short version'),
          'author': AUTHOR, 'subject': COVER[name][3]}, ensure_ascii=False).replace('</', '<\\/')
     fname = name + ('-in-depth' if deep else '')
     other = '/book/%s.html' % (name if deep else name + '-in-depth')
     base = title or 'The Whole Book'
     title = base + (' on One Page' if name == 'whole' else '') + (' (Full Version)' if deep else '')
-    lede = ('%s<em>The Objective Ledger</em>, in order, on one page%s. Read straight through, use your browser’s find, or print it.'
+    lede = ('%s<em>{ST}</em>, in order, on one page%s. Read straight through, use your browser’s find, or print it.'
             % ((esc(who) + ' From ') if who else 'Every chapter of ', ', in the full versions' if deep else ', in the short versions'))
     head = HEAD_TMPL.replace('{TITLE}', title).replace('{DESC}', 'The book on one page.')
     # on screen the site's styles; on paper only the book's print stylesheet
@@ -1536,7 +1541,7 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
        ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs, fb, fb_back), UPDATED, page_rules(here, deep), outline_json)
     MISSING.extend(w for w in fb.warnings if w not in MISSING)
-    write(os.path.join(BOOK, fname + '.html'), page)
+    write(os.path.join(BOOK, fname + '.html'), page.replace('{ST}', ST_H))
 
 
 # ---------- 3b. the PDF downloads (made by tools/book/build_pdfs.js, which writes book/pdf/manifest.json) ----------
@@ -1560,7 +1565,7 @@ def build_download():
         # the whole book also has the afterword, which is not a chapter (the book's home says "26 chapters ... and an afterword")
         chs = '%d chapters%s' % (sum(1 for e in ORDER if e[1] in parts), ' and an afterword' if name == 'whole' else '')
         acc, tint = COVER[name][0], COVER[name][1]
-        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">The Objective Ledger</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h2>%s</h2><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
+        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">{ST}</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h2>%s</h2><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
             name, acc, tint, book_art.illustration(name), esc(COVER[name][2]), esc(title), esc(who), chs, ''.join(rows)))
     page = HEAD_TMPL.replace('{TITLE}', 'Download the Book as a PDF').replace('{DESC}', 'Download the book as a PDF.')
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
@@ -1587,7 +1592,7 @@ def build_download():
 </body>
 </html>
 ''' % ('\n'.join(cards), UPDATED)
-    write(os.path.join(BOOK, 'download.html'), page)
+    write(os.path.join(BOOK, 'download.html'), page.replace('{ST}', ST_H))
 
 
 # ---------- 4. the book's home ----------
@@ -1601,14 +1606,14 @@ def build_home():
         rows.append('</ol>%s</section>' % part_hint(part))
     e = entry('afterword')
     rows.append('<section class="bk-part" id="afterword" data-part="4"><h2><span>To finish</span> Afterword</h2><ol class="bk-list">%s</ol></section>' % home_row(e))
-    page = HEAD_TMPL.replace('{TITLE}', 'The Book: The Objective Ledger').replace('{DESC}', 'The book.')
+    page = HEAD_TMPL.replace('{TITLE}', 'The Book: ' + ST_H).replace('{DESC}', 'The book.')
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
 <main class="read bk-home" id="main">
-<div class="bk-cover no-bubble" data-no-bubble><div class="bk-cover-text"><p class="bk-cover-brand">Spread Love &amp; Acceptance</p>
+<div class="bk-cover no-bubble" data-no-bubble><div class="bk-cover-text"><p class="bk-cover-brand">spreadloveandacceptance.com</p>
 <p class="bk-cover-k">The book</p>
-<h1>The Objective Ledger</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">by %s</p></div>
+<h1>{ST}</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">by %s</p></div>
 <div class="bk-cover-art">%s</div></div>
-<p class="simple-lede">A ledger is just a notebook where you write down what happened, so you can look at it calmly later. That’s the whole idea of this book: see what is really going on, in yourself and between people, without blaming anyone, and then change one small thing.</p>
+<p class="simple-lede">The idea of this book is simple, like a ledger: a notebook where you write down what happened, so you can look at it calmly later. See what is really going on, in yourself and between people, without blaming anyone, and then change one small thing.</p>
 <div class="bk-start no-bubble" data-no-bubble>
 <a class="tol-btn bk-go" href="/book/self-1-then.html">Start reading: Part One, Then</a>
 <a class="tol-btn is-quiet" href="/book/whole.html">The whole book on one page</a>
@@ -1628,6 +1633,7 @@ def build_home():
 %s
 %s
 </nav>
+%s
 <section class="bk-wt no-bubble" data-no-bubble id="wp-tools"><h2>Workpapers and tools in this book</h2>
 <p>Two separate lists, with the chapters that mention each one. All free, with no account, and what you type stays on your device.</p>
 %s</section>
@@ -1644,8 +1650,8 @@ def build_home():
 </html>
 ''' % (AUTHOR, book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)), hints.meet_html(False),
        ''.join(fig_html(f, False).replace(' id="fig-front-parts"', ' id="how-the-parts-fit"') for f in FIGS if f['id'] == 'fig-front-parts'), '\n'.join(rows),
-       home_lists(), UPDATED)
-    write(os.path.join(BOOK, 'index.html'), hints.with_css(page))
+       series_site.home_html(), home_lists(), UPDATED)
+    write(os.path.join(BOOK, 'index.html'), hints.with_css(page).replace('{ST}', ST_H))
 
 
 def home_lists():

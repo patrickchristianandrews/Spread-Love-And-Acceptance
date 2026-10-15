@@ -1,11 +1,11 @@
-/* print.css: the print series of "The Objective Ledger" (print12), 6 x 9 in (152.4 x 228.6 mm), KDP "regular" trim,
+/* print.css: the print series of the book (print12; its name is series_title in tools/book/series.json), 6 x 9 in (152.4 x 228.6 mm), KDP "regular" trim,
    standard colour on white paper. Loaded after /assets/css/book-print.css by the pages in /book/print/src/, which
    tools/book/build_series.py writes and tools/book/build_pdfs.js (BOOK_SERIES=1) prints. It changes only the page,
    the paper and the parts the series adds; the type and the boxes are the book's own.
    - Plain white pages: no cream paper and no full-page tinted panels (heavy ink shows through 55# paper).
    - Colour for headings, the character hints, the Workpaper and Tool tags and the figures.
    - Margins: 0.75 in inside (KDP's minimum gutter at this length is 0.375 in), 0.5 in outside. No bleed.
-   - Body text 10.6 pt. */
+   - Body text 11 pt. */
 @page { size: 6in 9in; margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
 @page :right { margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
 @page :left { margin: 15.24mm 19.05mm 19.05mm 12.7mm; }
@@ -13,7 +13,7 @@
 
 :root { --paper: #fff; --line: #D9CBA3; }
 html, body { background: #fff !important; }
-body { font-size: 10.6pt; line-height: 1.5; }
+body { font-size: 11pt; line-height: 1.55; }
 
 /* ---------- front matter ---------- */
 .ps-title, .ps-copy, .ps-meet, .ps-toc { page: pe-front; break-before: page; }
@@ -95,3 +95,10 @@ body { font-size: 10.6pt; line-height: 1.5; }
 .pe-use { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .pe-use-t, .pe-use-t a { min-width: 0; overflow-wrap: anywhere; }
 .pe-use-u .pe-nb, .ps-addr .pe-nb { white-space: normal; overflow-wrap: anywhere; }
+/* a workpaper is named on one line, "Workpaper: name · free to print", with a code for its free printable form
+   (the books never reproduce the forms; the workbook holds them all) */
+.ps-wp { display: flex; gap: 2.6mm; align-items: center; margin: 1.6mm 0 0; break-inside: avoid; }
+.ps-wp .pe-qr { flex: 0 0 12mm; width: 12mm; height: 12mm; }
+.ps-wp .pe-qr svg { width: 12mm; height: 12mm; }
+.ps-wp p { margin: 0; font-size: 8.8pt; line-height: 1.38; }
+.ps-wp .bh-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 7pt; color: var(--soft); }

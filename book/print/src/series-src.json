@@ -11,7 +11,7 @@
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-1-self-discovery",
-   "title": "Self-discovery",
+   "title": "Know Yourself Kindly",
    "n": 1,
    "chapters": 7
   },
@@ -26,7 +26,7 @@
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-2-together",
-   "title": "Together",
+   "title": "Closer, Together",
    "n": 2,
    "chapters": 7
   },
@@ -41,7 +41,7 @@
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-3-sharing-the-load",
-   "title": "Sharing the load",
+   "title": "Share the Load",
    "n": 3,
    "chapters": 6
   },
@@ -56,7 +56,7 @@
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-4-understanding-people",
-   "title": "Understanding people",
+   "title": "Understanding People",
    "n": 4,
    "chapters": 7
   },
@@ -71,7 +71,7 @@
    "paper_in": 0.002252,
    "price": 19.99,
    "cover": "cover-workbook",
-   "title": "The Workbook",
+   "title": "The Workpapers: Free Forms, All in One",
    "n": 0
   },
   {

@@ -1,4 +1,4 @@
-/* book-print.css: the print edition of "The Objective Ledger".
+/* book-print.css: the print edition of the book (named by series_title in tools/book/series.json).
    Linked with media="print" by the book's one-page packages (/book/whole.html and the smaller books), which
    load the site's own styles for the screen only. tools/book/build_pdfs.js prints those pages to the PDFs in
    /book/pdf/; printing from the browser gives the same book.
@@ -75,15 +75,17 @@
   size: 170mm 240mm;
   margin: 19mm 17mm 21mm 21mm;
 }
+/* the running head's words on pages without their own (the book's name) are set by the page itself, from
+   series_title in tools/book/series.json (build_book.py page_rules) */
 @page :right { margin: 19mm 17mm 21mm 21mm;
-  @bottom-left { content: "The Objective Ledger"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; white-space: nowrap; }
+  @bottom-left { content: ""; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; white-space: nowrap; }
   @bottom-center { content: ""; vertical-align: top; border-top: .4pt solid #CDBF98; }
   @bottom-right { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; text-align: right; }
 }
 @page :left { margin: 19mm 21mm 21mm 17mm;
   @bottom-left { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; text-align: left; }
   @bottom-center { content: ""; vertical-align: top; border-top: .4pt solid #CDBF98; }
-  @bottom-right { content: "The Objective Ledger"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; white-space: nowrap; text-align: right; }
+  @bottom-right { content: ""; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; white-space: nowrap; text-align: right; }
 }
 @page pe-full { margin: 0;
   @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
