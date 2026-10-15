@@ -449,5 +449,259 @@
   ],
   "verified": true,
   "verified_by": "DOI 10.1037/0022-3514.78.2.273 shown in citing reference lists; cited in https://pubmed.ncbi.nlm.nih.gov/42193579/"
+ },
+ {
+  "id": "eastwick-2008-breakup",
+  "authors": "Eastwick, P. W., Finkel, E. J., Krishnamurti, T., & Loewenstein, G.",
+  "year": 2008,
+  "title": "Mispredicting distress following romantic breakup: Revealing the time course of the affective forecasting error",
+  "venue": "Journal of Experimental Social Psychology, 44(3), 800–807",
+  "doi": "10.1016/j.jesp.2007.07.001",
+  "url": "https://doi.org/10.1016/j.jesp.2007.07.001",
+  "kind": "study",
+  "finding": "Dating students who later broke up had predicted how upset they would feel; in the weeks after the breakup they felt less distress than they had forecast, and the people most in love overestimated it the most.",
+  "strength": "early — a small group (26 people who broke up) from a larger nine-month study of students",
+  "topics": [
+   "loss",
+   "breakups",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#waves",
+   "/after-a-breakup-in-depth.html#waves"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-15: citation, pages and DOI confirmed in the author-hosted PDF (https://www.cmu.edu/dietrich/sds/docs/loewenstein/MispredictingDistress.pdf) and the Kellogg/Northwestern research listing."
+ },
+ {
+  "id": "slotter-gardner-finkel-2010",
+  "authors": "Slotter, E. B., Gardner, W. L., & Finkel, E. J.",
+  "year": 2010,
+  "title": "Who am I without you? The influence of romantic breakup on the self-concept",
+  "venue": "Personality and Social Psychology Bulletin, 36(2), 147–160",
+  "doi": "10.1177/0146167209352250",
+  "url": "https://doi.org/10.1177/0146167209352250",
+  "kind": "study",
+  "finding": "In three studies, people's sense of who they are changed after a breakup, and feeling less clear about who they are went with more emotional distress afterwards.",
+  "strength": "moderate — three studies, mostly with students; much of it correlational",
+  "topics": [
+   "loss",
+   "breakups",
+   "identity"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#who-am-i",
+   "/after-a-breakup-in-depth.html#who-am-i"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-15: journal, volume, pages and DOI confirmed in the PubMed record (https://pubmed.ncbi.nlm.nih.gov/20008964) and the Kellogg research listing."
+ },
+ {
+  "id": "larson-sbarra-2015",
+  "authors": "Larson, G. M., & Sbarra, D. A.",
+  "year": 2015,
+  "title": "Participating in research on romantic breakups promotes emotional recovery via changes in self-concept clarity",
+  "venue": "Social Psychological and Personality Science, 6(4), 399–406",
+  "doi": "10.1177/1948550614563085",
+  "url": "https://doi.org/10.1177/1948550614563085",
+  "kind": "study",
+  "finding": "Recently separated young adults (210) who reflected on their breakup more often over nine weeks grew clearer about who they were, and that clearer sense of self went with less intrusive breakup feelings and less loneliness.",
+  "strength": "moderate — one randomised study with young adults; the 'reflection' was taking part in research visits, not a therapy",
+  "topics": [
+   "loss",
+   "breakups",
+   "identity"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#who-am-i",
+   "/after-a-breakup-in-depth.html#who-am-i"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-15: citation and DOI confirmed on the SAGE abstract page (https://journals.sagepub.com/doi/abs/10.1177/1948550614563085) and the University of Arizona research profile."
+ },
+ {
+  "id": "sbarra-smith-mehl-2012",
+  "authors": "Sbarra, D. A., Smith, H. L., & Mehl, M. R.",
+  "year": 2012,
+  "title": "When leaving your ex, love yourself: Observational ratings of self-compassion predict the course of emotional recovery following marital separation",
+  "venue": "Psychological Science, 23(3), 261–269",
+  "doi": "10.1177/0956797611429466",
+  "url": "https://doi.org/10.1177/0956797611429466",
+  "kind": "study",
+  "finding": "Divorcing adults (109) talked for four minutes about their separation; those who spoke about themselves with more self-compassion had less divorce-related distress in daily life, and the difference was still there nine months later.",
+  "strength": "moderate — one longitudinal study; it shows a link over time, not that self-compassion caused the recovery",
+  "topics": [
+   "self-compassion",
+   "breakups",
+   "divorce"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#kind-voice",
+   "/after-a-breakup-in-depth.html#kind-voice"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-15: title, journal and DOI confirmed on the SAGE page (https://journals.sagepub.com/doi/10.1177/0956797611429466), the Psychological Science listing and the University of Arizona research profile."
+ },
+ {
+  "id": "marshall-2012-facebook-ex",
+  "authors": "Marshall, T. C.",
+  "year": 2012,
+  "title": "Facebook surveillance of former romantic partners: Associations with postbreakup recovery and personal growth",
+  "venue": "Cyberpsychology, Behavior, and Social Networking, 15(10), 521–526",
+  "doi": "10.1089/cyber.2012.0125",
+  "url": "https://doi.org/10.1089/cyber.2012.0125",
+  "kind": "study",
+  "finding": "In a survey of 464 people, more checking of an ex's Facebook page went with more distress, more longing for the ex and less personal growth, even allowing for offline contact and personality.",
+  "strength": "early — one survey, mostly students; it shows a link, not cause and effect",
+  "topics": [
+   "loss",
+   "breakups",
+   "social-media"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#their-feed",
+   "/after-a-breakup-in-depth.html#their-feed"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-15: citation and DOI confirmed in the McMaster Experts record (https://experts.mcmaster.ca/scholarly-works/1591568) and the Brunel repository (https://bura.brunel.ac.uk/handle/2438/7014)."
+ },
+ {
+  "id": "langeslag-sanchez-2018",
+  "authors": "Langeslag, S. J. E., & Sanchez, M. E.",
+  "year": 2018,
+  "title": "Down-regulation of love feelings after a romantic break-up: Self-report and electrophysiological data",
+  "venue": "Journal of Experimental Psychology: General, 147(5), 720–733",
+  "doi": "10.1037/xge0000360",
+  "url": "https://doi.org/10.1037/xge0000360",
+  "kind": "study",
+  "finding": "After a breakup, thinking about an ex's less likeable sides lowered love feelings but also lowered mood for a while; distraction lifted mood without changing the feelings; all three ways reduced attention to the ex's photos.",
+  "strength": "early — a small lab study (24 people, mostly women), short-term effects only",
+  "topics": [
+   "loss",
+   "breakups",
+   "emotion-regulation"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#their-feed",
+   "/after-a-breakup-in-depth.html#their-feed"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-15: journal, volume, pages and DOI confirmed in the University of Missouri–St. Louis research profile (https://profiles.umsl.edu/en/publications/down-regulation-of-love-feelings-after-a-romantic-break-up-self-r/) and the UMSL news release."
+ },
+ {
+  "id": "frattaroli-2006",
+  "authors": "Frattaroli, J.",
+  "year": 2006,
+  "title": "Experimental disclosure and its moderators: A meta-analysis",
+  "venue": "Psychological Bulletin, 132(6), 823–865",
+  "doi": "10.1037/0033-2909.132.6.823",
+  "url": "https://doi.org/10.1037/0033-2909.132.6.823",
+  "kind": "meta-analysis",
+  "finding": "Pooling 146 randomized studies, experimental disclosure (such as expressive writing) had a small but significant positive average effect.",
+  "strength": "moderate: real but small effect that varies by person and outcome.",
+  "topics": [
+   "emotions",
+   "expressive-writing",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#write",
+   "/after-a-breakup-in-depth.html#write"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17073523/"
+ },
+ {
+  "id": "ben-simon-walker-2018",
+  "authors": "Ben Simon, E., & Walker, M. P.",
+  "year": 2018,
+  "title": "Sleep loss causes social withdrawal and loneliness",
+  "venue": "Nature Communications",
+  "doi": "10.1038/s41467-018-05377-0",
+  "url": "https://doi.org/10.1038/s41467-018-05377-0",
+  "kind": "study",
+  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
+  "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+  "topics": [
+   "sleep",
+   "stress",
+   "loneliness",
+   "connection"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#body",
+   "/after-a-breakup-in-depth.html#body"
+  ],
+  "verified": true,
+  "verified_by": "https://doaj.org/article/a67c34b95f3a473fbbe300fc81111391 ; https://news.berkeley.edu/2018/08/14/sleep-viral-loneliness"
+ },
+ {
+  "id": "singh-2023",
+  "authors": "Singh, B., et al.",
+  "year": 2023,
+  "title": "Effectiveness of physical activity interventions for improving depression, anxiety and distress: an overview of systematic reviews",
+  "venue": "British Journal of Sports Medicine",
+  "doi": "10.1136/bjsports-2022-106195",
+  "url": "https://doi.org/10.1136/bjsports-2022-106195",
+  "kind": "review",
+  "finding": "An overview of 97 reviews (1,039 trials, about 128,000 people) found physical activity reduced symptoms of depression, anxiety and distress compared with usual care, with medium-sized effects.",
+  "strength": "strong: a very large body of trials; the trials vary a lot in quality and type of exercise.",
+  "topics": [
+   "supplements",
+   "anxiety",
+   "stress",
+   "exercise"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#body",
+   "/after-a-breakup-in-depth.html#body"
+  ],
+  "verified": true,
+  "verified_by": "https://bjsm.bmj.com/content/bjsports/early/2023/07/11/bjsports-2022-106195.full.pdf ; https://www.unisa.edu.au/media-centre/Releases/2023/exercise-more-effective-than-medicines-to-manage-mental-health"
+ },
+ {
+  "id": "bonanno-2004",
+  "authors": "Bonanno, G. A.",
+  "year": 2004,
+  "title": "Loss, trauma, and human resilience: Have we underestimated the human capacity to thrive after extremely aversive events?",
+  "venue": "American Psychologist, 59(1), 20–28",
+  "doi": "10.1037/0003-066X.59.1.20",
+  "url": "https://doi.org/10.1037/0003-066X.59.1.20",
+  "kind": "review",
+  "finding": "Argued that resilience after loss or trauma is distinct from recovery, is more common than many theorists assumed, and can come about in several ways.",
+  "strength": "strong: supported by many later trajectory studies.",
+  "topics": [
+   "grief",
+   "resilience",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#waves",
+   "/after-a-breakup-in-depth.html#waves"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/14736317/"
+ },
+ {
+  "id": "neff-2003-definition",
+  "authors": "Neff, K. D.",
+  "year": 2003,
+  "title": "Self-compassion: An alternative conceptualization of a healthy attitude toward oneself",
+  "venue": "Self and Identity, 2(2), 85–101",
+  "doi": "10.1080/15298860309032",
+  "url": "https://doi.org/10.1080/15298860309032",
+  "kind": "theory",
+  "finding": "Defined self-compassion as three parts: self-kindness instead of harsh judgement, common humanity instead of isolation, and mindfulness instead of over-identifying with painful feelings.",
+  "strength": "moderate: widely studied and promising; much research is correlational and the scale's structure is debated.",
+  "topics": [
+   "self-compassion",
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/after-a-breakup.html#kind-voice",
+   "/after-a-breakup-in-depth.html#kind-voice"
+  ],
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/1969977883 ; https://aassjournal.com/article-1-823-fa.html (reference list gives DOI)"
  }
 ]
