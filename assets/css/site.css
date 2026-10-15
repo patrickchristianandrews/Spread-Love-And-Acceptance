@@ -3007,3 +3007,5 @@ html.tol-quiet .tol-related ul a{ background:var(--paper); }
 .tol-related-k{display:inline-block;margin-left:.35rem;}
 .tol-find-help[hidden],.tol-find-best[hidden],.tol-find-none[hidden]{display:none;}
 
+
+.tol-find-note:empty{display:none;}

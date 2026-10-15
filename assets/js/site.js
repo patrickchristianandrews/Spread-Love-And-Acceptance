@@ -2829,7 +2829,7 @@
     var box = el('div', { class: 'tol-find', role: 'search' },
       '<label for="tol-find-q">' + T('Search the site', 'Buscar en el sitio') + '</label>' +
       '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + T('Describe what’s going on, e.g. “we argue about chores”', 'Cuenta qué pasa, p. ej. “peleamos por las tareas”') + '" aria-describedby="tol-find-note">' +
-      '<p class="tol-find-note" id="tol-find-note" aria-live="polite">' + T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.') + '</p>' +
+      '<p class="tol-find-note" id="tol-find-note" aria-live="polite"></p>' +
       '<div class="tol-find-help" hidden></div><div class="tol-find-best" hidden></div><div class="tol-find-none" hidden></div>' +
       '<ol class="tol-find-results" hidden></ol>');
     needsCSS();
@@ -2848,7 +2848,7 @@
     runSearch = function (q, then) {
       q = String(q || '').trim();
       var idx = panel && panel.querySelector('.tol-index');
-      if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; bestEl.hidden = noneEl.hidden = true; if (document.activeElement === input) showHelp(); note.textContent = T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.'); if (idx) idx.hidden = false; return; }
+      if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; bestEl.hidden = noneEl.hidden = true; if (document.activeElement === input) showHelp(); note.textContent = ''; if (idx) idx.hidden = false; return; }
       helpEl.hidden = true;
       var M = { best: null, close: [] }, bestU = {};
       loadNeeds(function () {

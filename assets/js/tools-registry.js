@@ -147,8 +147,26 @@
       gets: 'A chart to print and put on the fridge.',
       mins: 10, time: 'About 10 minutes', who: ['two', 'group'], benefit: 'Everyone can see who owns what',
       kw: 'chore chart printable pdf fridge rota' },
+    // consol12: the two fair-split calculators (CALC-01) and the two 30-day look-backs (CALC-02): the same people, the same
+    // numbers, this week or over a month. 'fair-quick', 'fair-full', 'lookback-quick', 'lookback-full' -> 'split'
+    { id: 'split', name: 'Check the split: this week or over a month', brand: 'the fair-split calculator and the 30-Day Look-Back', href: '/workpapers/calculators/is-the-setup-working-quick.html', type: 'load', also: ['plan'],
+      modes: [['This week: a quick read', '/workpapers/calculators/is-the-setup-working-quick.html', 'This week', 'Quick read'], ['This week: every number', '/is-the-setup-working.html', 'This week', 'Every number'],
+        ['Over a month: a quick read', '/workpapers/calculators/look-back-30-days-quick.html', 'Over a month', 'Quick read'], ['Over a month: every number', '/look-back-30-days.html', 'Over a month', 'Every number']],
+      does: 'Type in the totals from your worksheets, for 2 to 8 people: is this week’s split working? Or compare a month ago with this week: what shifted?',
+      gets: 'A plain-words read of whether the split can keep going, or what shifted and one next step. It reads the setup, never a person.',
+      mins: 5, time: '5 minutes for a quick read, 15 to 20 for every number', who: ['two', 'group'], benefit: 'Know if the split can last, and if what you changed is working',
+      kw: 'fair split calculator is it fair sustainable score calculator full detailed math hours 30 day month review look back progress rescues imbalance running imbalance trend four weeks calc-01 calc-02' },
 
     // ---------- Calm and stress
+    // consol12: one calm place. 'upset', 'garden', 'music', 'drift', 'soften', 'pause' -> 'calm'. Each mode keeps its own page.
+    { id: 'calm', name: 'Calm down: right now, or before the next time', brand: '', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
+      modes: [['Upset right now? A 5-minute calm-down', '/upset-right-now.html', 'Just me', 'Upset right now?', '🫧'], ['Breathing game', '/night-garden.html', 'Just me', '', '🌙'],
+        ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colours and tones to wind down', '/calm-visualizer.html', 'Just me', 'Slow colours', '🌀'],
+        ['Soften a tense moment', '/tools/soften-a-tense-moment.html', 'The two of us', '', '🤝'], ['Make a pause plan for arguments', '/pursue-withdraw.html#plan-h', 'The two of us', 'Pause plan', '⏸️']],
+      does: 'Right now: a pause line with a return time and a one-minute breathing pacer. Or settle with a breathing game, calm sounds or slow colours. With someone: soften a tense moment, or agree a pause plan on a calm day.',
+      gets: 'A calmer body, words to come back to the talk with, and a plan for next time.',
+      mins: 5, time: 'About 5 minutes; a pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse', top: 6,
+      kw: 'angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument' },
     { id: 'calmkit', name: 'Calm-down plan', brand: 'the Calm-Down Kit', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
       does: 'On a calm day, decide your early signs, a pause signal and what settles you.',
       gets: 'Your own plan for heated moments, to keep on your phone or print.',
