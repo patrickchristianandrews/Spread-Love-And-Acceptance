@@ -7,8 +7,8 @@
    - Filters (what you want to do, who it's for, how much time, type, works in Spanish, words) combine, and live
      in the address (?do=calm,talk&who=me&time=2&type=talk&es=1&q=text&sort=quick), so a filtered list can be linked.
      Old links still work: ?who=solo, ?who=together, #communication, #know-yourself.
-   - "Most useful first" is one plain score: how often practice testers (made-up households run through the site)
-     named a tool among what they liked most, plus our "Start here" picks. Never shown as a rating.
+   - "Most useful first" is one plain score: the registry's `useful` (our judgement of how widely and quickly a tool
+     helps, and how often people look for it), plus our "Start here" picks. Never shown on the page.
    Nothing is stored or sent. */
 (function () {
   'use strict';
@@ -45,7 +45,7 @@
     if (two && g) return 'Two or more of you';
     return two ? 'With one other person' : 'With a group or team';
   }
-  function score(t) { return (t.liked || 0) + (t.top ? (7 - t.top) * 2 : 0); }
+  function score(t) { return (t.useful || 3) * 3 + (t.top ? (7 - t.top) : 0); }
   var ORDER = {}; TOOLS.forEach(function (t, i) { ORDER[t.id] = i; });
   var SORTS = {
     useful: function (a, b) { return score(b) - score(a) || (a.top || 9) - (b.top || 9) || a.mins - b.mins || ORDER[a.id] - ORDER[b.id]; },

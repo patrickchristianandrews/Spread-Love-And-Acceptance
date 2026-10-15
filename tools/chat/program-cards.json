@@ -13010,7 +13010,7 @@
     {
       "id": "signal",
       "kind": "tool",
-      "name": "the Chat analyzer (once the Signal Translator and the Text message checker)",
+      "name": "the Chat analyzer (also called the Signal Translator)",
       "keys": [
         "signal translator",
         "~translator",

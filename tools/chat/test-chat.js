@@ -1777,8 +1777,8 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
     'How are you, Professor?': { kind: 'chat', id: 'how_are_you' },
     'Let’s just chat': { kind: 'chat' },
     'Tell me a joke': { kind: 'fun' },
-    'Tell me a riddle': { kind: 'chat', id: 'riddle' },
-    'Tell me a fun fact': { kind: 'chat', id: 'fun_fact' },
+    'Tell me a riddle': { kind: 'fun', id: 'pz-riddle' },  // chat11: the answer comes on the next turn
+    'Tell me a fun fact': { kind: 'fun', id: 'pz-fact' },
     'Who are you?': { text: /Professor Puddles/ },
     '¿Hablas español?': { kind: 'lang', link: '/en-espanol.html', not: /1-800-799-7233/ },
     'What is love?': { kind: 'deep', id: 'what-is-love' },
@@ -1850,7 +1850,9 @@ if (PERSONA) {
     seasons: ['autumn is my favourite season', 'do you like winter?'],
     travel: ['I\'m going on a trip to the mountains', 'have you ever been to the beach?']
   };
-  Object.keys(TOPICS).forEach(id => TOPICS[id].forEach(q => t('chat11', 'topic ' + id + ': ' + q, { q, kind: 'chat', id: 'pz-' + id, text: PZ_RE(['topics.replies', 'topics.thing', 'dislike']), check: endsQ })));
+  // a question about one of his own favourites may keep the older small-talk answer (personality.json), now with a question back
+  const OLDST = '|fav_\\w+|coffee_tea|weather_talk|pets|hobbies|weekend_plans|sleep_q|my_birthday|your_birthday|sing|bread';
+  Object.keys(TOPICS).forEach(id => TOPICS[id].forEach(q => t('chat11', 'topic ' + id + ': ' + q, { q, kind: 'chat', id: new RegExp('^(pz-' + id + OLDST + ')$'), check: endsQ })));
   t('chat11', 'topic, in chit-chat: a bare word answer', { convo: ['let\'s just chat', 'pizza'], kind: 'chat', id: 'pz-food', check: endsQ });
   t('chat11', 'topic: a dislike is fine too', { q: 'I don\'t really like football', kind: 'chat', id: 'pz-sport', text: PZ_RE(['dislike']), check: endsQ });
   t('chat11', 'topic: "let\'s talk about music"', { q: 'let\'s talk about music', kind: 'chat', id: 'pz-music', check: endsQ });

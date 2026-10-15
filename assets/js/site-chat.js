@@ -3399,7 +3399,9 @@
     var gls = S0() && S0().greeting_lines;
     if (hit && hit.id === 'hello' && gls && gls.length && !state.greeted && !quietOn()) { state.greeted = 1; b.push({ k: 'p', x: gls[Math.floor(frand(state) * gls.length) % gls.length] + ' I can draw you an infographic, too.' }); }
     var noAsk = hit && /^(hello|bye|good_night|sorry|insult_mild)$/.test(hit.id);
-    var askBack = !noAsk && (!hit || /^(just_chat|small_talk|how_are_you|im_good|bored)$/.test(hit.id) || frand(state) < 0.4) && stPrompt(state);
+    var PZT = { fav_food: 'food', bread: 'food', coffee_tea: 'drinks', fav_song: 'music', sing: 'music', dance: 'music', fav_movie: 'films', fav_book: 'books', hobbies: 'hobbies', weather_talk: 'weather', fav_season: 'seasons', fav_holiday: 'holidays', fav_animal: 'pets', pets: 'pets', weekend_plans: 'weekend', sleep_q: 'sleep', my_birthday: 'birthday', your_birthday: 'birthday' };
+    var pzAsk = hit && PZT[hit.id] && PZ() && !/\?\s*$/.test(b[0].x) ? pzAskBack(state, PZT[hit.id]) : '';
+    var askBack = !noAsk && (pzAsk || ((!hit || /^(just_chat|small_talk|how_are_you|im_good|bored)$/.test(hit.id) || frand(state) < 0.4) && stPrompt(state)));
     if (askBack && !/\?\s*$/.test(b[0].x)) { b.push({ k: 'p', x: askBack }); state.stAsk = state.turn || 0; }
     else if (/\?\s*$/.test(b[0].x)) state.stAsk = state.turn || 0;
     if (!chips.length) chips = [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Ask about the site', q: 'What can I ask?' }];
@@ -3565,9 +3567,9 @@
 
   // ---- everyday topics: which one a message is about, and whether it's chit-chat at all
   var PZ_REL = /\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex|exes|mum|mom|mother|dad|father|parents?|son|daughter|kids?|children|child|baby|toddler|teen|teenager|brother|sister|siblings?|grandma|grandad|grandpa|gran|nan|nana|granny|grandparents?|aunt|uncle|in laws?|boss|manager|coworkers?|colleagues?|housemates?|roommates?|flatmates?|step\w+|co ?parent\w*|carer|carers|foster)\b/;
-  var PZ_NEG = /\b(never|always|too much|cant|can t|cannot|couldnt|couldn t|wont|won t|doesnt|doesn t|didnt|didn t|isnt|isn t|nobody|no one|hate|sick of|fed up|keeps?|without|stop|stopped|anymore|worried|worry|worrying|scared|afraid|alone|lonely|ignor\w*|argu\w*|fight\w*|fought|upset|angry|cry\w*|miss|missing|lost|fair|unfair|help|advice|how do i|how can i|should i)\b/;
+  var PZ_NEG = /\b(never|always|too much|cant|can t|cannot|couldnt|couldn t|wont|won t|doesnt|doesn t|didnt|didn t|isnt|isn t|nobody|no one|hate|sick of|fed up|keeps?|without|stop|stopped|anymore|worried|worry|worrying|scared|afraid|alone|lonely|ignor\w*|argu\w*|fight\w*|fought|upset|angry|cry\w*|miss|missing|lost|fair|unfair|help|advice|how do i|how can i|should i|meltdown|melt down|breakdown|burnout|burn out|burnt out|burned out|shut down|shutdown|tantrum|overwhelm\w*|anxious|anxiety|stress\w*|panic\w*|exhaust\w*)\b/;
   var PZ_DISLIKE = /^(?:(?:honestly|actually|well|um|nah|no|hmm|eh) )*(?:i|we) (?:dont|don t|do not|really dont|really don t) (?:really )?(?:like|love|enjoy|care for|get|watch|play|drink|eat|read) |^(?:i m|im|i am) not (?:really )?(?:a |that )?(?:big )?(?:fan of|into) |^not (?:a |really a |much of a |the biggest )(?:fan|\w+ person)\b/;
-  var PZ_SITEW = /\b(site|website|web page|this page|the page|tool|tools|app|workpapers?|worksheets?|chapter|chapters|ledger|your book|the book|this book|the program|lemonade|night garden|word bloom|quiet words|frequency|buddies|pause and play|crosswords?|arcade|soundscapes?|brain breakers?|puddles|professor|wavelength|wiring|battery|check in|check ins|signal translator|decoder|infographic)\b/;
+  var PZ_SITEW = /\b(work ?paper|wp|paper|site|website|web page|this page|the page|tool|tools|app|workpapers?|worksheets?|chapter|chapters|ledger|your book|the book|this book|the program|lemonade|night garden|word bloom|quiet words|frequency|buddies|pause and play|crosswords?|arcade|soundscapes?|brain breakers?|puddles|professor|wavelength|wiring|battery|check in|check ins|signal translator|decoder|infographic)\b/;
   var PZ_STMT = /^(?:(?:oh|well|so|yeah|yes|yep|ok|okay|haha|lol|hmm|honestly|actually|ah|um|umm|and|also|btw|guess what|today|tonight|yesterday|this morning|last night|this weekend|at the weekend|just|aww|ooh|wow|omg|hey|hi|hello) )*(?:i|im|i m|ive|i ve|i d|id|ill|i ll|we|were|we re|weve|we ve|we ll|me and|my|our|just|had|got|been|going|watching|watched|reading|playing|listening|eating|ate|cooking|made|baked|drinking|having|its|it s|it is|it was|there s|theres|so much|love|loving|currently|finally)\b/;
   var PZ_ASKHIM = /^(?:(?:so|and|hey|ok|okay|professor|puddles|but) )*(?:(?:do|did) (?:you|u|ya) (?:like|love|enjoy|play|watch|read|listen to|eat|drink|ever|prefer|go|sleep|dream|have a favourite|have a favorite|celebrate|get)|are (?:you|u) (?:into|a fan of|a (?:\w+ )?person)|what do you think (?:of|about)|(?:what|which)(?: s|s| is)? (?:your|ur) (?:favourite|favorite|fave|fav)|have you (?:ever )?(?:seen|read|played|watched|heard|tried|been)|how about you|what about you|can you (?:swim|dance|sing|cook|play))\b/;
   var PZ_POS = /^(?:(?:oh|well|so|yeah|yes|honestly|actually|today|tonight|yesterday|this morning|last night|just|guess what|and) )*(?:i|we|i m|im|i ve|ive|we re|were|we ve|weve|me and)\b.*\b(?:love|loved|like|liked|enjoy|enjoyed|adore|had a (?:lovely|great|nice|good|fun|brilliant|lazy|relaxing|wonderful)|watched|watching|played|playing|reading|listening|listened|went|going|planning|baked|made|cooked|started|having|had)\b/;
@@ -3594,7 +3596,7 @@
     P.topics.forEach(function (t) { var m = t._re.exec(fs); if (m && (!best || m.index < best.i)) best = { t: t, i: m.index, thing: m[1] }; });
     if (!best) return null;
     if (PZ_REL.test(fs) && !best.t.relOk) return null;
-    var strong = PZ_STMT.test(fs) || PZ_ASKHIM.test(fs) || PZ_OPEN.test(fs) || dislike || (n <= 6 && best.i === 0 && !/^(what|how|why|where|when|which|who|is|are|can|could|should|does|do)\b/.test(fs));
+    var strong = PZ_STMT.test(fs) || PZ_ASKHIM.test(fs) || PZ_OPEN.test(fs) || dislike || (!best.t.site && n <= 6 && best.i === 0 && !/^(what|how|why|where|when|which|who|is|are|can|could|should|does|do)\b/.test(fs));
     var bare = n <= 4;
     if (!strong && !(bare && (ctx || n <= 2))) return null;
     if (card0 && !strong && !ctx) return null;
@@ -3612,6 +3614,7 @@
     return pzR(state, b, pzChips(state, [{ label: 'Pretty good, thanks', q: 'Pretty good, thanks' }, { label: 'Not great, honestly', q: 'Not great, honestly' }]), 'chat', 'pz-day', 'day');
   }
   // in the small-talk slot (after safety, care cards and situations): topics, memory, and his day
+  var PZ_DEFER = /^(fav_\w+|coffee_tea|sing|dance|my_birthday|your_\w+|weather_talk|hobbies|weekend_plans|sleep_q|bread|partner_q|where_live|about_yourself|what_doing|friends_family|news_tease|good_news)$/;
   function pzTopic(state, q, f, q0, card0) {
     var P = PZ(); if (!P) return null;
     var S = pzS(state), fs = stNorm(q0 || q), raw = String(q0 || q);
@@ -3619,6 +3622,7 @@
     var hit = stIntent(f, fs);
     if ((hit && hit.id === 'how_are_you') || PZ_HOW.test(fs)) return pzHisDay(state);
     var got = pzRemember(state, raw);
+    if (!got && hit && PZ_DEFER.test(hit.id)) return null;
     var w = pzWhich(state, fs, card0);
     if (!got && !w) return null;
     var b = [], own = [];

@@ -13,10 +13,10 @@
      mins    about how long, in minutes (for sorting and filters); time: the same in words
      who     'solo' (on your own), 'two' (with one other person), 'group' (three or more, a home or a team)
      benefit the main reason to use it, in a few words
-     top     1–6 for the "Start here" strip on /tools.html: tools a person can use on their own (our picks, after what testers liked most), else 0
+     top     1–6 for the "Start here" strip on /tools.html: tools a person can use on their own (our picks), else 0
      kw      extra words people might search for
      modes   optional [[label, href], ...]: the ways in when one tool has more than one (tabs or parts of its page)
-     outcomes, people, bestFor, liked, example, sample, es: added below from MORE (what it helps with, who it is for)
+     outcomes, people, bestFor, useful, example, sample, es: added below from MORE (what it helps with, who it is for)
      kind    'tool' or 'workpaper' (added below; wp: a workpaper's short code). /tools.html shows tools only.
    Old ids of merged tools: window.TOLToolAliases (old id -> new id); window.TOLToolById(id) follows them.
    Nothing here is stored or sent. */
@@ -388,20 +388,30 @@
   //   p      who it is for besides yourself, the main one first: partner · family (family and kids) · housemates · work · friends
   //          ('me', on your own, comes from who: ['solo'])
   //   best   "Best for: …" in a few words
-  //   liked  how many practice testers (made-up households run through the site, $SP/reports13) named it among what
-  //          they liked most. A guide for ordering, never a rating from real users.
   //   ex     a filled-in example from the book (tools/book/examples/<ex>.html); sample: a two-line made-up result instead
   //   es     the tool also works in Spanish
   // A tool with no line here still works: the page falls back to its type.
+  // ---------- How useful each tool is likely to be (1–10), for "Most useful first" on /tools.html.
+  // Our judgement from everything the program covers: how many people face the need, how fast the tool helps,
+  // whether one person can use it alone, and how often people are likely to look for it. Never shown on the page.
+  var USEFUL = {
+    signal: 10, ask: 10, 'lemon-quick': 9, upset: 9, weather: 8, wavelength: 8,
+    wiring: 7, write: 7, refusals: 7, decoder: 7, pause: 7, checkincard: 7, flip: 7, bonding: 7, soften: 7, 'fair-quick': 7, start10: 7,
+    carecard: 6, roots: 6, 'take-in': 6, 'lemon-full': 6, 'lookback-quick': 6, snapshot: 6, music: 6, garden: 6,
+    familyplan: 6, terms: 6, deal: 6, room: 6,
+    touchstones: 5, rhythms: 5, drift: 5, handoff: 5, 'team-owner': 5, 'team-checkin': 5, ourweek: 5, pauseplay: 5,
+    'fair-full': 4, 'lookback-full': 4, festival: 4, playground: 4, quest: 4, arcade: 4, crosswords: 4,
+    sync: 3, connect: 3, wordbloom: 3, quietwords: 3, drive: 3, dojo: 3, mvmaker: 3
+  };
   var MORE = {
-    signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, one that stung, or a text argument you keep rereading', liked: 17, ex: 'ex-signal-zoe' },
+    signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, one that stung, or a text argument you keep rereading', ex: 'ex-signal-zoe' },
     write: { o: 'talk', p: 'partner family friends', best: 'a big topic that goes wrong when you say it out loud', ex: 'ex-write-carys-owen' },
     sayit: { o: 'talk calm', p: 'partner family friends work', best: 'the moment before you answer something that stung', ex: 'ex-wp09-carla' },
     refusals: { o: 'talk', p: 'family friends work', best: 'saying no without the guilt spiral',
       sample: 'Asked to cover a Saturday shift, plainer: “I can’t do this Saturday. I could swap for one next month if that helps.”' },
     decoder: { o: 'talk other calm', p: 'partner family friends', best: 'the day after a talk went sideways', ex: 'ex-perspective-hana' },
-    pause: { o: 'calm talk plan', p: 'partner', best: 'when one of you wants to talk now and the other needs space', liked: 1, ex: 'ex-pauseplan-imani-kwame' },
-    checkin90: { o: 'talk plan', p: 'partner family housemates', best: 'busy weeks when you barely cross paths', liked: 2, ex: 'ex-wp13-priya-dev' },
+    pause: { o: 'calm talk plan', p: 'partner', best: 'when one of you wants to talk now and the other needs space', ex: 'ex-pauseplan-imani-kwame' },
+    checkin90: { o: 'talk plan', p: 'partner family housemates', best: 'busy weeks when you barely cross paths', ex: 'ex-wp13-priya-dev' },
     pace12: { o: 'other plan', p: 'partner housemates family', best: 'when one of you decides fast and the other needs time',
       sample: 'Biggest gap: weekend plans (one wants to settle it tonight, one wants a day to think). Agreement: “We decide by Thursday lunch.”' },
     static14: { o: 'other load', p: 'partner family housemates', best: 'a hard stretch when you keep snapping at each other',
@@ -415,7 +425,7 @@
       sample: 'Right now, care looks like: one job taken off my list without being asked. Kind words come second.' },
     touchstones: { o: 'fun plan', p: 'partner family friends', best: 'keeping the “this is us” things alive',
       sample: '“Tea on the step”, the Tuesday call, the word “sproinged”. New one to try: Sunday pancakes.' },
-    wavelength: { o: 'self other', p: 'partner friends family work housemates', best: 'working out why you and someone keep missing each other', liked: 3, ex: 'ex-wavelength-mo' },
+    wavelength: { o: 'self other', p: 'partner friends family work housemates', best: 'working out why you and someone keep missing each other', ex: 'ex-wavelength-mo' },
     wiring: { o: 'self talk', p: 'partner work friends family', best: 'telling people how to reach you, without a long talk', ex: 'ex-wiring-ife' },
     roots: { o: 'self', p: '', best: 'a reaction that feels bigger than the moment',
       sample: 'Trait: “I go quiet when someone raises their voice.” A grown-up reading: it kept me safe once; now I can say “give me ten minutes”.' },
@@ -423,11 +433,11 @@
       sample: 'Picked: ADHD. Pages now show shorter steps, one thing at a time, with read-aloud on.' },
     rhythms: { o: 'other plan', p: 'partner housemates', best: 'a morning person and a night owl under one roof',
       sample: 'Money: one plans ahead, one spends as it comes. Agreement: a 10-minute money check every other Sunday.' },
-    'lemon-quick': { o: 'load other', p: 'partner housemates family', best: 'the “who does more?” argument', liked: 19, ex: 'ex-lemonade-housemates', es: 1 },
-    'lemon-full': { o: 'load plan', p: 'partner housemates family', best: 'seeing hours and bills together, not just chores', liked: 2, ex: 'ex-lemonade-money-grace-ruth', es: 1 },
-    owner: { o: 'load plan', p: 'housemates partner family', best: 'jobs that only get done when someone nags', liked: 16, ex: 'ex-wp03-coparents' },
+    'lemon-quick': { o: 'load other', p: 'partner housemates family', best: 'the “who does more?” argument', ex: 'ex-lemonade-housemates', es: 1 },
+    'lemon-full': { o: 'load plan', p: 'partner housemates family', best: 'seeing hours and bills together, not just chores', ex: 'ex-lemonade-money-grace-ruth', es: 1 },
+    owner: { o: 'load plan', p: 'housemates partner family', best: 'jobs that only get done when someone nags', ex: 'ex-wp03-coparents' },
     whodid: { o: 'load', p: 'partner housemates family', best: 'swapping “I do everything” for a real week', ex: 'ex-wp01-marcus-theo' },
-    keepscoming: { o: 'load plan', p: 'housemates partner family', best: 'the same argument coming back every month', liked: 1, ex: 'ex-wp04-triad' },
+    keepscoming: { o: 'load plan', p: 'housemates partner family', best: 'the same argument coming back every month', ex: 'ex-wp04-triad' },
     'fair-quick': { o: 'load', p: 'partner housemates family', best: 'checking whether your split can last', ex: 'ex-setup-rosemary-ken' },
     'fair-full': { o: 'load learn', p: 'partner housemates family', best: 'people who want to see every number',
       sample: 'Hours: 31 and 19 a week. Every job has a name. The read: workable for now, but one person carries most of the planning.' },
@@ -449,24 +459,24 @@
     garden: { o: 'calm fun', p: '', best: 'slowing your breathing without counting', es: 1 },
     handoff: { o: 'plan', p: 'family', best: 'co-parents handing over between two homes',
       sample: 'In the bag: the inhaler with a note of the last dose, the reading book, the charger, one comfort toy.' },
-    festival: { o: 'plan', p: 'partner family', best: 'two traditions and two sets of in-laws', liked: 2,
+    festival: { o: 'plan', p: 'partner family', best: 'two traditions and two sets of in-laws',
       sample: 'Diwali: at Asha’s parents. Christmas Day: at ours, both families invited, done by 6.' },
-    familyplan: { o: 'plan talk', p: 'family', best: 'kind boundaries with parents or grown children', liked: 1, ex: 'ex-familyplan-amaka' },
-    terms: { o: 'talk calm', p: 'family', best: 'a family event while some things are still raw', liked: 1,
+    familyplan: { o: 'plan talk', p: 'family', best: 'kind boundaries with parents or grown children', ex: 'ex-familyplan-amaka' },
+    terms: { o: 'talk calm', p: 'family', best: 'a family event while some things are still raw',
       sample: '“I’ll come for the meal and leave by 4. I’m not ready to talk about the house yet. One ask: can I sit near Gran?”' },
-    'team-owner': { o: 'load plan', p: 'work', best: 'a team where jobs land on whoever notices first', liked: 2,
+    'team-owner': { o: 'load plan', p: 'work', best: 'a team where jobs land on whoever notices first',
       sample: 'Payroll: Ade, backup Ben, monthly. Supplier orders: Ben, backup Ade, weekly.' },
     'team-checkin': { o: 'talk load', p: 'work', best: 'raising workload early, without blame',
       sample: 'Ben: week 80% full. Thanks to Ade for the VAT return. Slipped: the website update, new owner Ade.' },
-    weather: { o: 'self calm', p: '', best: 'deciding whether now is a good time to talk', liked: 1, ex: 'ex-weather-joel' },
-    deal: { o: 'plan fun', p: 'partner', best: 'gaming or phones versus time together', liked: 2, ex: 'ex-deal-jamal-tess' },
+    weather: { o: 'self calm', p: '', best: 'deciding whether now is a good time to talk', ex: 'ex-weather-joel' },
+    deal: { o: 'plan fun', p: 'partner', best: 'gaming or phones versus time together', ex: 'ex-deal-jamal-tess' },
     room: { o: 'plan load', p: 'housemates', best: 'roommates, before small things get big', ex: 'ex-room-kayla-bea' },
     ourweek: { o: 'plan', p: 'partner family', best: 'opposite shifts and crossed wires',
       sample: 'Overlap: Tuesday and Saturday mornings. Together time: Saturday breakfast, phones away.' },
     suite: { o: 'plan load learn', p: 'partner family housemates work', best: 'doing the whole program properly, in order' },
     sixweeks: { o: 'plan learn', p: 'partner family housemates', best: 'a guided start, one small step a week' },
     progress: { o: 'plan', p: 'partner family housemates', best: 'seeing whether things are actually getting better' },
-    ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box', liked: 28, es: 1,
+    ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box', es: 1,
       sample: 'You type: “my partner never helps with bedtime”. You get: kind next steps, words you could use, and two pages to read.' },
     start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
       sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes’.”' },
@@ -500,7 +510,7 @@
     t.outcomes = (x.o || TYPE_OUT[t.type] || '').split(/\s+/).filter(Boolean);
     t.people = (t.who.indexOf('solo') !== -1 ? ['me'] : []).concat(p);
     if (t.bestFor == null) t.bestFor = x.best || '';
-    t.liked = x.liked || 0;
+    t.useful = USEFUL[t.id] || 3;
     if (x.ex) t.example = x.ex;
     if (x.sample) t.sample = x.sample;
     if (x.es) t.es = true;
