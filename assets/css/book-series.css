@@ -1,0 +1,24 @@
+/* book-series.css: the book in print, on /book/ (print12; made by tools/book/series_site.py). Uses the site's own
+   colour tokens, so it follows light and dark themes. The shop buttons are shown by /assets/js/book-shop.js only when
+   a link is set there. */
+.bk-series { margin: 2.5rem 0; padding-top: 1.5rem; border-top: 3px double var(--ink); }
+.bk-series-note { font-style: italic; color: var(--ink-soft); }
+.bk-series-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: 1.1rem; }
+.bk-sb { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 1rem; align-items: start; margin: 0; padding: 0 0 1.1rem; border-bottom: 1px dotted var(--line); max-width: none; }
+.bk-sb-cover { display: block; width: 112px; height: auto; aspect-ratio: 2 / 3; border-radius: 4px; border: 1px solid var(--line); box-shadow: 0 2px 6px rgba(0, 0, 0, .12); background: var(--paper-deep, #F3EEE2); }
+.bk-sb-body { min-width: 0; }
+.bk-sb-k { margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--bc, var(--brass)); }
+:root[data-theme="dark"] .bk-sb-k { color: var(--ink-soft); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .bk-sb-k { color: var(--ink-soft); } }
+.read .bk-sb h3 { margin: .15rem 0 .3rem; font-size: 1.2rem; }
+.bk-sb-line { margin: 0 0 .25rem; }
+.bk-sb-meta { margin: 0 0 .6rem; font-size: .9rem; color: var(--ink-soft); }
+.bk-sb-links, .bk-sb-shop { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: 0 0 .5rem; }
+.bk-sb-shop[hidden], .bk-sb-shop a[hidden] { display: none !important; }
+.bk-sb-shop-k { font-size: .9rem; color: var(--ink-soft); }
+.bk-sb .tol-btn { min-height: 44px; }
+@media (max-width: 520px) {
+  .bk-sb { grid-template-columns: 84px minmax(0, 1fr); gap: .8rem; }
+  .bk-sb-cover { width: 84px; }
+  .bk-sb-links .tol-btn { flex: 1 1 auto; text-align: center; }
+}

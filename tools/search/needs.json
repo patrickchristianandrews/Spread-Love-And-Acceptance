@@ -50,7 +50,7 @@
     "old rules new choices": ["where a reaction comes from", "roots and wings"],
     "read your way": ["make the site fit your mind"],
     "rhythms side by side": ["compare your daily rhythms", "frequency calibration"],
-    "who does what": ["who does what at home", "lemonade stand", "chore split check"],
+    "who does what at home": ["who does what", "lemonade stand", "chore split check"],
     "fair split check": ["check the split"],
     "cool-down corner": ["cool down corner", "calm down right now or before the next time"],
     "plan it once": ["make a plan together"],
@@ -63,7 +63,7 @@
     "games": ["game", "calm games", "gentle games", "pause and play", "juegos"]
   },
   "needs": [
-    {"id": "chore-fights", "l": "Arguing about chores", "say": ["we keep fighting about dishes", "we argue about chores", "always fighting about housework", "who does the cleaning", "fights about laundry", "chores arguments", "who does what"], "go": [["/lemonade-stand.html#quick", "Tap who mostly does each job, so you can talk about the list, not about each other."], ["/share-the-load.html", "A calm, step-by-step way to split the jobs at home."], ["/workpapers/wp-03-one-owner-per-job.html", "Give each job one owner, so nothing falls between you."]]},
+    {"id": "chore-fights", "l": "Arguing about chores", "say": ["we keep fighting about dishes", "we argue about chores", "always fighting about housework", "who does the cleaning", "fights about laundry", "chores arguments", "who does what at home"], "go": [["/lemonade-stand.html#quick", "Tap who mostly does each job, so you can talk about the list, not about each other."], ["/share-the-load.html", "A calm, step-by-step way to split the jobs at home."], ["/workpapers/wp-03-one-owner-per-job.html", "Give each job one owner, so nothing falls between you."]]},
     {"id": "do-everything", "l": "I do everything at home", "say": ["i do everything around the house", "my partner doesnt help", "he never helps around the house", "she never lifts a finger", "i feel like the maid", "im the only one who cleans", "i do all the housework"], "go": [["/lemonade-stand.html#quick", "Two minutes to see who does what, the thinking work too, before you raise it."], ["/invisible-labor-mental-load.html", "Names the work nobody sees, with words to bring it up kindly."], ["/workpapers/wp-01.html", "Log one week of who did what, so the talk is about facts."]]},
     {"id": "mental-load", "l": "Carrying the mental load", "say": ["i have to remember everything", "mental load", "always the one who plans everything", "i have to ask him to do things", "i'm the household manager", "keeping track of everything for everyone", "invisible work nobody sees"], "go": [["/invisible-labor-mental-load.html", "Explains the mental load in plain words, with ways to share it."], ["/lemonade-stand.html#quick", "Counts the planning and remembering, not just the doing."], ["/workpapers/wp-03-one-owner-per-job.html", "One owner per job means someone else holds the whole job, not just a task."]]},
     {"id": "fair-split", "l": "Is our split fair?", "say": ["is our split fair", "how to split chores fairly", "who does more around the house", "fair share of housework", "count the hours we each do", "split chores 50 50"], "go": [["/lemonade-stand.html", "Count the hours and the money for each person, then see the split."], ["/workpapers/calculators/is-the-setup-working-quick.html", "Type in your totals and see if the setup works for everyone."], ["/is-the-setup-working.html", "The long form, for 2 to 8 people."]]},

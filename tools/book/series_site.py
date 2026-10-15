@@ -111,7 +111,7 @@ def home_html():
     rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                  '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/workpapers/fill/index.html">Fill them in free online</a></p>%s</div></li>') % (
         w['color'], cover_img(w['id'], 'Cover of %s' % w['title']), esc(w['title']), esc(w['line']), meta, shop_row(w['id'])))
-    return ('%s\n%s\n<section class="bk-series no-bubble" data-no-bubble id="print-series" aria-labelledby="series-h">'
+    return ('%s\n%s\n<section class="bk-series no-bubble no-dive no-cheer" data-no-bubble id="print-series" aria-labelledby="series-h">'
             '<h2 id="series-h">The book in print</h2>'
             '<p>The same chapters, as a series of short colour books that each stand on their own, plus a workbook with every workpaper. '
             'In print, each chapter is the short version, with a code to scan for the full one.</p>'
