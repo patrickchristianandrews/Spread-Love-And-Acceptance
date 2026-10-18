@@ -41,7 +41,7 @@ function list() {
     h += `<h3 id="cat-${c.id}">${esc(c.name)} <small>(${items.length})</small></h3>\n<p class="lg-cat-blurb">${esc(c.blurb)}</p>\n`;
     items.forEach(it => {
       h += `<details class="lg-item" id="l-${it.id}"><summary><span class="lg-sum-t">${esc(it.t)}</span><span class="lg-side">${esc(LIB.sides[it.side])}</span></summary>` +
-        `<article class="lg-card lg-static" aria-label="${esc(it.t)}">${body(it, '')}</article></details>\n`;
+        `<article class="lg-card lg-static tol-plain" aria-label="${esc(it.t)}">${body(it, '')}</article></details>\n`;
     });
   });
   return h;
@@ -54,7 +54,7 @@ PAGES.forEach(p => {
   let out = src.replace(/<!-- logic:list -->[\s\S]*?<!-- \/logic:list -->/, () => '<!-- logic:list -->' + list() + '<!-- /logic:list -->');
   out = out.replace(/<!-- logic:card ([a-z0-9-]+) -->[\s\S]*?<!-- \/logic:card -->/g, (all, id) => {
     if (!BY[id]) throw new Error(p + ': no situation "' + id + '" in the library');
-    return `<!-- logic:card ${id} --><article class="lg-card lg-static" id="ex-${id}">${body(BY[id], 'h3')}</article><!-- /logic:card -->`;
+    return `<!-- logic:card ${id} --><article class="lg-card lg-static tol-plain" id="ex-${id}">${body(BY[id], 'h3')}</article><!-- /logic:card -->`;
   });
   if (out !== src) { if (CHECK) stale.push(p); else fs.writeFileSync(f, out); }
 });

@@ -485,11 +485,14 @@ def book_docs(book, where):
     ebook_ref = lambda s_: (namer.ref(s_)[0], None)
     about = S.about_page(book, namer).replace('<section class="ps-about pe-only"', '<section class="ps-about"', 1)
     about = re.sub(r'<span class="ps-addr ps-about-u" data-full="([^"]+)">[^<]*</span>', r'<span class="ps-addr">\1</span>', about)
-    about = swap(about, 'The code at the end of each chapter opens the full version on your phone.', 'The link at the end of each chapter opens the full version.', 'about page')
+    about = swap(about, 'The code at the end of each chapter opens it on your phone.', 'The link at the end of each chapter opens it.', 'about page')
     about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?”', r'it gives the book and the chapter, as in “\1”', about)
     if not n_:
         warn('about page: text to change not found: it gives the book, the chapter and the page')
     docs.append(Doc('about.xhtml', 'About this book, and how to use it', about))
+    find = S.find_page(book, namer, epub=True).replace('<section class="ps-find pe-only"', '<section class="ps-find"', 1)
+    if find:
+        docs.append(Doc('find.xhtml', 'Find it fast', find))
     hn_html, hn_toc = S.help_now(here, type('EbookNamer', (), {'ref': staticmethod(ebook_ref)}))
     if hn_html:
         docs.append(Doc('help-now.xhtml', hn_toc, hn_html))

@@ -203,7 +203,7 @@ def s_end(e, book, here, where, remember=None):
                 ob = where[tgt]
                 lab = '<a href="%s">Book %d, %s</a>' % (online, ob['n'], chapter_label(tgt, ob)[1])
                 op = ST.PAGEMAPS.get(ob['id'], {}).get(tgt)
-                at = '<a href="%s">%s%s</a>' % (online, esc(ob['title']), (', page %d' % op) if op else '')
+                at = '<a href="%s">%s%s</a>' % (online, esc(ob['title']), ('<span class="pe-only">, page %d</span>' % op) if op else '')
             else:
                 lab = '<a href="%s">Online</a>' % online
                 at = '<a href="%s">read online</a>' % online
@@ -310,8 +310,10 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
         body = body[:m.start()] + body[m.end():]
     elif not m:
         remember = B.remember_html(slug, 'pe-end-list')
-    return '<article class="whole-ch pe-ch" id="%s" data-part="%d" style="--pc:%s;--pt:%s">%s\n<div class="pe-body">%s</div>\n%s</article>' % (
+    art = '<article class="whole-ch pe-ch" id="%s" data-part="%d" style="--pc:%s;--pt:%s">%s\n<div class="pe-body">%s</div>\n%s</article>' % (
         slug, e[1], book['color'], book['tint'], s_open(e, book), body, s_end(e, book, here, where, remember))
+    # printfix13: the chapter's own contents list names only the parts this book prints
+    return re.sub(r'<li><a href="#([^"]+)">[^<]*</a></li>', lambda m: m.group(0) if (not m.group(1).startswith(slug + '--') or ('id="%s"' % m.group(1)) in art) else '', art)
 
 
 # ---------- front and back of each book ----------
@@ -545,9 +547,23 @@ def jobs_page(book, namer, epub=False):
         book['color'], book['tint'], mark('jobs'), esc(j['title']), _series_html(h, book, namer, epub, 'jobs'), head, gs)
 
 
+def find_page(book, namer, epub=False):
+    """printfix13: "Find it fast", one page at the front: what is going on, and the chapter that helps most"""
+    rows = ST.TEXT.get('find', {}).get(str(book['n']))
+    if not rows:
+        return ''
+    li = ''
+    for sit, slug in rows:
+        where = '<a href="#%s">%s · %s</a>' % (slug, esc(namer.label(slug)), esc(B.SHORT[slug]))
+        li += '<li><span class="ps-find-s">%s</span><span class="ps-find-w">%s</span>%s</li>' % (
+            esc(sit), where, '' if epub else '<span class="ps-find-p">%s</span>' % pg(slug))
+    return ('<section class="ps-find pe-only" id="find" style="--pc:%s">%s<h1>Find it fast</h1><p class="ps-find-lede">%s</p>'
+            '<ul class="ps-find-l">%s</ul></section>') % (book['color'], mark('find'), esc(ST.TEXT['find_lede']), li)
+
+
 def words_page(book, epub=False):
-    w = ST.TEXT.get('words')
-    if not w or book['n'] != w.get('book'):
+    w = ST.TEXT.get('words', {}).get(str(book['n']))
+    if not w:
         return ''
     gs = ''.join('<div class="ps-words-g"><p class="ps-words-h">%s</p><ul class="ps-words-l">%s</ul></div>' % (esc(g), ''.join('<li>%s</li>' % esc(x) for x in xs))
                  for g, xs in w['groups'])
@@ -687,7 +703,8 @@ def build_book(book, where):
     chs = book['chapters']
     namer = namer_for(book)
     hn_html, hn_toc = help_now(here, namer)
-    toc = [B.toc_row('about', '', 'About this book, and how to use it', 'is-front'), B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
+    toc = [B.toc_row('about', '', 'About this book, and how to use it', 'is-front'), B.toc_row('find', '', 'Find it fast', 'is-front'),
+           B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
     if hn_html:
         toc.append(B.toc_row('help-now', '', esc(hn_toc), 'is-front'))
     body, arts = [], []
@@ -711,7 +728,7 @@ def build_book(book, where):
         extra.append(('month', ST.TEXT['first_month']['title'], month_page(book, namer)))
         extra.append(('jobs', ST.TEXT['jobs']['title'], jobs_page(book, namer)))
     if words_page(book):
-        extra.append(('words', ST.TEXT['words']['title'], words_page(book)))
+        extra.append(('words', ST.TEXT['words'][str(book['n'])]['title'], words_page(book)))
     if ST.TEXT.get('faq', {}).get(str(book['n'])):
         extra.append(('faq', 'Questions people ask', faq_page(book, namer)))
     extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
@@ -727,11 +744,11 @@ def build_book(book, where):
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
     front += '\n<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
-    front += '\n' + about_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
+    front += '\n' + about_page(book, namer) + '\n' + find_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
     backm = extra_html + research_short(book, here) + showcase(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
-    ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
+    ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Find it fast', 'find', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
     ol += [['%s: %s' % (chapter_label(s_, book)[1], ch_title(s_)), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
     title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])

@@ -293,50 +293,243 @@
   ]
  },
  "words": {
-  "book": 4,
-  "title": "Words for the talk",
-  "lede": "Some ways to say the hard parts, collected in one place. Change the words until they sound like you.",
-  "groups": [
-   [
-    "To begin",
+  "3": {
+   "title": "Words for hard moments",
+   "lede": "Some ways to say the hard parts, collected in one place. Change the words until they sound like you.",
+   "groups": [
     [
-     "“Can we look at how the week went, together? I’d like us both to see it.”",
-     "“I’ve written down what I did this week. Would you do the same, so we can compare?”",
-     "“Is now a good time, or would after dinner be better?”",
-     "“I think a lot of the remembering lands on me. Can we talk about that?”"
+     "To begin",
+     [
+      "“Is now a good time to talk about Saturday, or would tomorrow be better?”",
+      "“Something has been on my mind, and I’d rather tell you than let it grow.”",
+      "“I’d like to understand how it looked from your side.”"
+     ]
+    ],
+    [
+     "To check what they meant",
+     [
+      "“When you said ‘fine’, did you mean fine, or not really?”",
+      "“Can I check I’ve got this right?”",
+      "“What did you hear me say?”"
+     ]
+    ],
+    [
+     "To pause",
+     [
+      "“I need twenty minutes. I’ll come back at half past.”",
+      "“I’m not going anywhere. I just need some quiet.”"
+     ]
+    ],
+    [
+     "To put it right",
+     [
+      "“That came out wrong. Can I try again?”",
+      "“I think we both meant well, and it still went sideways.”",
+      "“I’m sorry I was sharp with you earlier.”"
+     ]
+    ],
+    [
+     "When someone is struggling",
+     [
+      "“Do you want ideas, or would you like me to just listen?”",
+      "“That sounds hard. Tell me more.”",
+      "“I can do Tuesday evenings. Who else could we ask?”"
+     ]
     ]
+   ]
+  },
+  "4": {
+   "title": "Words for the talk",
+   "lede": "Some ways to say the hard parts, collected in one place. Change the words until they sound like you.",
+   "groups": [
+    [
+     "To begin",
+     [
+      "“Can we look at how the week went, together? I’d like us both to see it.”",
+      "“I’ve written down what I did this week. Would you do the same, so we can compare?”",
+      "“Is now a good time, or would after dinner be better?”",
+      "“I think a lot of the remembering lands on me. Can we talk about that?”"
+     ]
+    ],
+    [
+     "When it gets tense",
+     [
+      "“I’m getting wound up. Can we stop for twenty minutes and come back at eight?”",
+      "“That came out sharper than I meant. Let me try again.”",
+      "“My tank is pretty full today, so I might sound crosser than I feel.”",
+      "“What did you hear me say?”"
+     ]
+    ],
+    [
+     "Handing over a job",
+     [
+      "“Could you own the bins from now on, from noticing they’re full to putting them out?”",
+      "“It’s yours now, so do it your way. I’ll only step in if you ask.”",
+      "“I’ll be the backstop this month. If it slips, I’ll mention it once, gently.”"
+     ]
+    ],
+    [
+     "Saying no kindly",
+     [
+      "“That’s a fair ask. I can’t take it on this week, but I could do Saturday’s shop instead.”",
+      "“I’m at my limit. Can we look at what else could drop?”"
+     ]
+    ],
+    [
+     "Thanks and checking in",
+     [
+      "“Thanks for sorting the dentist. I noticed.”",
+      "“What’s one thing that felt easier this month?”",
+      "“Is anything from last week still sitting with you?”"
+     ]
+    ]
+   ]
+  }
+ },
+ "find_lede": "Start with what is going on. Each line points to the chapter that helps most, and you can read that chapter on its own.",
+ "find": {
+  "1": [
+   [
+    "An old rule from home keeps steering you",
+    "self-1-then"
    ],
    [
-    "When it gets tense",
-    [
-     "“I’m getting wound up. Can we stop for twenty minutes and come back at eight?”",
-     "“That came out sharper than I meant. Let me try again.”",
-     "“My tank is pretty full today, so I might sound crosser than I feel.”",
-     "“What did you hear me say?”"
-    ]
+    "Mornings, noise or crowds wear you out faster than other people",
+    "self-2-now"
    ],
    [
-    "Handing over a job",
-    [
-     "“Could you own the bins from now on, from noticing they’re full to putting them out?”",
-     "“It’s yours now, so do it your way. I’ll only step in if you ask.”",
-     "“I’ll be the backstop this month. If it slips, I’ll mention it once, gently.”"
-    ]
+    "You want to change one habit or one part you play",
+    "self-3-next"
    ],
    [
-    "Saying no kindly",
-    [
-     "“That’s a fair ask. I can’t take it on this week, but I could do Saturday’s shop instead.”",
-     "“I’m at my limit. Can we look at what else could drop?”"
-    ]
+    "Feelings arrive in your body before you can name them",
+    "understanding-1-feelings"
    ],
    [
-    "Thanks and checking in",
-    [
-     "“Thanks for sorting the dentist. I noticed.”",
-     "“What’s one thing that felt easier this month?”",
-     "“Is anything from last week still sitting with you?”"
-    ]
+    "A mistake turns into “I’m useless”",
+    "understanding-7-worth"
+   ],
+   [
+    "Your inner critic is loud",
+    "understanding-7-worth"
+   ],
+   [
+    "You and someone close are built very differently",
+    "understanding-14-personality"
+   ],
+   [
+    "You wonder whether your mind works differently",
+    "understanding-9-minds"
+   ],
+   [
+    "Fitting in all day leaves you drained",
+    "understanding-9-minds"
+   ]
+  ],
+  "2": [
+   [
+    "You feel flooded and can’t think straight",
+    "understanding-2-stress"
+   ],
+   [
+    "Small things make you snap",
+    "understanding-13-anger"
+   ],
+   [
+    "Worry keeps you awake",
+    "understanding-16-worry"
+   ],
+   [
+    "Your mood has been low for weeks",
+    "understanding-16-worry"
+   ],
+   [
+    "Something frightening happened and it hasn’t left you",
+    "understanding-16-worry"
+   ],
+   [
+    "Someone has died, or life changed all at once",
+    "understanding-8-loss"
+   ],
+   [
+    "You hurt someone, or someone hurt you",
+    "understanding-11-healing"
+   ],
+   [
+    "You keep starting good habits and dropping them",
+    "understanding-6-change"
+   ],
+   [
+    "You’ve lost sight of what matters to you",
+    "understanding-10-values"
+   ]
+  ],
+  "3": [
+   [
+    "The same argument keeps coming back",
+    "chapter-1"
+   ],
+   [
+    "Your messages keep landing wrong",
+    "understanding-4-communication"
+   ],
+   [
+    "You remember the same day very differently",
+    "understanding-3-seeing"
+   ],
+   [
+    "Trust feels shaky, or you fear being left",
+    "understanding-5-belonging"
+   ],
+   [
+    "Closeness has faded",
+    "understanding-15-love"
+   ],
+   [
+    "A group pulls you along",
+    "understanding-17-groups"
+   ],
+   [
+    "Someone you love is struggling",
+    "understanding-12-helping"
+   ],
+   [
+    "You are running on empty from caring",
+    "understanding-12-helping"
+   ]
+  ],
+  "4": [
+   [
+    "One of you feels they do everything",
+    "preface"
+   ],
+   [
+    "You want a fair check of how the work is shared",
+    "chapter-2"
+   ],
+   [
+    "A new baby or small children have changed everything",
+    "chapter-2"
+   ],
+   [
+    "Small things turn into big rows",
+    "chapter-3"
+   ],
+   [
+    "You disagree about what fair means",
+    "chapter-4"
+   ],
+   [
+    "Money is a sore point between you",
+    "chapter-4"
+   ],
+   [
+    "The same problem keeps coming back",
+    "chapter-5"
+   ],
+   [
+    "Only one of you wants to try",
+    "chapter-2"
    ]
   ]
  }

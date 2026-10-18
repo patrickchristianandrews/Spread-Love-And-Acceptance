@@ -8,71 +8,73 @@
     6,
     9
    ],
-   "pages": 154,
-   "blank_pages": 5,
-   "bytes": 2479027,
+   "pages": 160,
+   "blank_pages": 4,
+   "bytes": 2651067,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
-   "spine_in": 0.3468,
-   "spine_mm": 8.81,
+   "spine_in": 0.3603,
+   "spine_mm": 9.15,
    "cover_in": [
-    12.5968,
+    12.6103,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.93,
-     "net": 4.07,
-     "pct": 27.1
+     "print": 5.08,
+     "net": 3.91,
+     "pct": 26.1
     },
     "kdp_expanded": {
-     "print": 4.93,
-     "net": 1.07,
-     "pct": 7.1
+     "print": 5.08,
+     "net": 0.92,
+     "pct": 6.1
     },
     "ingram_bookshops": {
-     "print": 4.99,
+     "print": 5.14,
      "discount": 0.4,
-     "net": 3.72,
-     "pct": 24.8
+     "net": 3.57,
+     "pct": 23.8
     },
     "direct_estimate": {
-     "print": 4.99,
+     "print": 5.14,
      "card_fee": 0.73,
-     "net": 9.26,
-     "pct": 61.8
+     "net": 9.11,
+     "pct": 60.8
     },
     "direct_with_fulfil_fee": {
-     "print": 4.99,
+     "print": 5.14,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.51,
-     "pct": 50.1
+     "net": 7.36,
+     "pct": 49.1
     }
    },
    "pagemap": {
     "titlep": 1,
     "contents": 3,
     "about": 4,
-    "meet": 5,
-    "help-now": 6,
+    "find": 5,
+    "meet": 6,
+    "help-now": 7,
     "self-1-then": 9,
     "self-2-now": 25,
+    "a-self-2-now--hard-to-name": 31,
     "self-3-next": 45,
     "understanding-1-feelings": 61,
-    "understanding-7-worth": 79,
-    "understanding-14-personality": 93,
-    "understanding-9-minds": 111,
-    "faq": 137,
-    "wp-tools": 139,
-    "glossary": 141,
-    "notes": 144,
-    "free": 150,
-    "series": 152,
-    "jot": 153
+    "understanding-7-worth": 81,
+    "understanding-14-personality": 97,
+    "understanding-9-minds": 115,
+    "faq": 143,
+    "wp-tools": 145,
+    "glossary": 147,
+    "notes": 150,
+    "free": 156,
+    "series": 158,
+    "jot": 159
    }
   },
   "book-2-heal-and-steady": {
@@ -83,12 +85,89 @@
     6,
     9
    ],
-   "pages": 154,
-   "blank_pages": 3,
-   "bytes": 2256534,
+   "pages": 160,
+   "blank_pages": 4,
+   "bytes": 2493639,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
+   "spine_in": 0.3603,
+   "spine_mm": 9.15,
+   "cover_in": [
+    12.6103,
+    9.25
+   ],
+   "spine_text": true,
+   "costs": {
+    "list_price": 14.99,
+    "kdp_amazon": {
+     "print": 5.08,
+     "net": 3.91,
+     "pct": 26.1
+    },
+    "kdp_expanded": {
+     "print": 5.08,
+     "net": 0.92,
+     "pct": 6.1
+    },
+    "ingram_bookshops": {
+     "print": 5.14,
+     "discount": 0.4,
+     "net": 3.57,
+     "pct": 23.8
+    },
+    "direct_estimate": {
+     "print": 5.14,
+     "card_fee": 0.73,
+     "net": 9.11,
+     "pct": 60.8
+    },
+    "direct_with_fulfil_fee": {
+     "print": 5.14,
+     "card_fee": 0.73,
+     "fulfil_fee": 1.75,
+     "net": 7.36,
+     "pct": 49.1
+    }
+   },
+   "pagemap": {
+    "titlep": 1,
+    "contents": 3,
+    "about": 4,
+    "find": 5,
+    "meet": 6,
+    "help-now": 7,
+    "understanding-2-stress": 9,
+    "understanding-13-anger": 31,
+    "understanding-16-worry": 51,
+    "a-understanding-16-worry--more-help": 67,
+    "understanding-8-loss": 73,
+    "understanding-11-healing": 89,
+    "understanding-6-change": 107,
+    "understanding-10-values": 125,
+    "faq": 140,
+    "wp-tools": 142,
+    "glossary": 144,
+    "notes": 146,
+    "free": 154,
+    "series": 156,
+    "jot": 157
+   }
+  },
+  "book-3-understanding-each-other": {
+   "n": 3,
+   "title": "Understanding Each Other",
+   "kind": "book",
+   "trim_in": [
+    6,
+    9
+   ],
+   "pages": 154,
+   "blank_pages": 4,
+   "bytes": 2551062,
+   "pdf": "book-3-understanding-each-other.pdf",
+   "cover_pdf": "cover-book-3-understanding-each-other.pdf",
+   "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
    "spine_in": 0.3468,
    "spine_mm": 8.81,
    "cover_in": [
@@ -132,16 +211,17 @@
     "titlep": 1,
     "contents": 3,
     "about": 4,
-    "meet": 5,
-    "help-now": 6,
-    "understanding-2-stress": 9,
-    "understanding-13-anger": 31,
-    "understanding-16-worry": 51,
-    "a-understanding-16-worry--more-help": 67,
-    "understanding-8-loss": 71,
-    "understanding-11-healing": 87,
-    "understanding-6-change": 105,
-    "understanding-10-values": 121,
+    "find": 5,
+    "meet": 6,
+    "help-now": 7,
+    "chapter-1": 9,
+    "understanding-4-communication": 27,
+    "understanding-3-seeing": 47,
+    "understanding-5-belonging": 63,
+    "understanding-15-love": 81,
+    "understanding-17-groups": 97,
+    "understanding-12-helping": 115,
+    "words": 134,
     "faq": 135,
     "wp-tools": 137,
     "glossary": 139,
@@ -149,81 +229,6 @@
     "free": 148,
     "series": 150,
     "jot": 151
-   }
-  },
-  "book-3-understanding-each-other": {
-   "n": 3,
-   "title": "Understanding Each Other",
-   "kind": "book",
-   "trim_in": [
-    6,
-    9
-   ],
-   "pages": 150,
-   "blank_pages": 6,
-   "bytes": 2336951,
-   "pdf": "book-3-understanding-each-other.pdf",
-   "cover_pdf": "cover-book-3-understanding-each-other.pdf",
-   "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
-   "spine_in": 0.3378,
-   "spine_mm": 8.58,
-   "cover_in": [
-    12.5878,
-    9.25
-   ],
-   "spine_text": true,
-   "costs": {
-    "list_price": 14.99,
-    "kdp_amazon": {
-     "print": 4.82,
-     "net": 4.17,
-     "pct": 27.8
-    },
-    "kdp_expanded": {
-     "print": 4.82,
-     "net": 1.17,
-     "pct": 7.8
-    },
-    "ingram_bookshops": {
-     "print": 4.89,
-     "discount": 0.4,
-     "net": 3.82,
-     "pct": 25.5
-    },
-    "direct_estimate": {
-     "print": 4.89,
-     "card_fee": 0.73,
-     "net": 9.36,
-     "pct": 62.4
-    },
-    "direct_with_fulfil_fee": {
-     "print": 4.89,
-     "card_fee": 0.73,
-     "fulfil_fee": 1.75,
-     "net": 7.61,
-     "pct": 50.8
-    }
-   },
-   "pagemap": {
-    "titlep": 1,
-    "contents": 3,
-    "about": 4,
-    "meet": 5,
-    "help-now": 6,
-    "chapter-1": 9,
-    "understanding-4-communication": 27,
-    "understanding-3-seeing": 45,
-    "understanding-5-belonging": 61,
-    "understanding-15-love": 79,
-    "understanding-17-groups": 95,
-    "understanding-12-helping": 113,
-    "faq": 131,
-    "wp-tools": 133,
-    "glossary": 135,
-    "notes": 137,
-    "free": 144,
-    "series": 146,
-    "jot": 147
    }
   },
   "book-4-share-the-load": {
@@ -235,8 +240,8 @@
     9
    ],
    "pages": 150,
-   "blank_pages": 5,
-   "bytes": 2526688,
+   "blank_pages": 2,
+   "bytes": 2626995,
    "pdf": "book-4-share-the-load.pdf",
    "cover_pdf": "cover-book-4-share-the-load.pdf",
    "front_jpg": "cover-book-4-share-the-load-front.jpg",
@@ -283,30 +288,31 @@
     "titlep": 1,
     "contents": 3,
     "about": 4,
-    "meet": 5,
-    "help-now": 6,
+    "find": 5,
+    "meet": 6,
+    "help-now": 7,
     "preface": 9,
     "a-preface--mental-load": 19,
     "chapter-2": 27,
-    "a-chapter-2--small-children": 43,
-    "chapter-3": 49,
-    "a-chapter-3--two-homes": 65,
-    "chapter-4": 69,
-    "a-chapter-4--money": 85,
+    "a-chapter-2--small-children": 42,
+    "chapter-3": 51,
+    "a-chapter-3--two-homes": 66,
+    "chapter-4": 71,
+    "a-chapter-4--money": 86,
     "chapter-5": 93,
-    "a-chapter-5--moving-in": 108,
-    "afterword": 115,
-    "month": 121,
-    "jobs": 123,
-    "words": 126,
-    "faq": 127,
-    "wp-tools": 129,
-    "numbers": 131,
-    "glossary": 138,
-    "notes": 141,
-    "free": 146,
-    "series": 148,
-    "jot": 149
+    "a-chapter-5--moving-in": 107,
+    "afterword": 113,
+    "month": 119,
+    "jobs": 121,
+    "words": 124,
+    "faq": 125,
+    "wp-tools": 127,
+    "numbers": 129,
+    "glossary": 136,
+    "notes": 139,
+    "free": 144,
+    "series": 146,
+    "jot": 147
    }
   },
   "workbook": {

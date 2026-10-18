@@ -343,6 +343,55 @@ async function makeBook(ctx, file, opts = {}) {
       const pushed = await page.evaluate(ns => ns.filter(n => { const w = document.querySelector('.book-ex-wrap[data-ex-n="' + n + '"]'); if (!w || w.classList.contains('pe-ex-push')) return false; w.classList.add('pe-ex-push'); return true; }).length, strand);
       if (pushed) { padsChanged = true; log('moved ' + pushed + ' examples to the next page'); }
     }
+    // printfix13 (print series): a figure or filled-in example that didn't fit at the foot of a page left most of that
+    // page empty. Move it after the next two blocks of text, so the text fills the gap and the picture follows.
+    if (opts.fillGaps && pass <= 5) {
+      const defer = [];
+      const starts = new Set(prep.chapters.map(k => found[k]).filter(Boolean));
+      pages.forEach((t, i) => {
+        if (i === 0 || starts.has(i + 1) || starts.has(i)) return;
+        // the markers sit outside the flow, so pdftotext can't say where on the page they are: take the first
+        // picture on a page that follows a mostly empty one
+        const m = /zq(fig|ex)x(\d+)qz/.exec(t);
+        const prev = pages[i - 1].split('\n').filter(l => l.trim() && !/zq\w*qz/.test(l)).length;
+        if (m && prev < 20) defer.push([m[1], m[2]]);
+      });
+      if (defer.length) {
+        const moved = await page.evaluate(list => {
+          let n = 0;
+          for (const [kind, num] of list) {
+            let el = kind === 'ex' ? document.querySelector('.book-ex-wrap[data-ex-n="' + num + '"]')
+              : [...document.querySelectorAll('figure.book-fig')].find(f => [...f.querySelectorAll('.pe-mark')].some(x => x.textContent === 'zqfigx' + num + 'qz'));
+            if (!el) continue;
+            // a figure in its own wrapper moves with the wrapper
+            while (el.parentElement && el.parentElement.children.length === 1 && !el.parentElement.matches('li, article, main, section, .pe-body')) el = el.parentElement;
+            const k = +(el.dataset.peDefer || 0);
+            if (k >= 2) continue;
+            // the next blocks of text in the same flow (never past a heading, so the picture stays in its section)
+            let after = el, taken = 0;
+            while (taken < 2 && after.nextElementSibling && !/^H[1-6]$/.test(after.nextElementSibling.tagName)
+                   && !after.nextElementSibling.matches('figure, .book-ex-wrap, .ps-scan, aside')) { after = after.nextElementSibling; taken++; }
+            if (!taken) {
+              // the picture ends its idea: let it follow the first lines of the next idea instead
+              const nx = el.parentElement && el.parentElement.tagName === 'LI' ? el.parentElement.nextElementSibling : null;
+              if (!nx) continue;
+              const kids = [...nx.children];
+              let j = 0;
+              while (j < kids.length && (/^H[1-6]$/.test(kids[j].tagName) || kids[j].matches('.pe-mark, .idea-n, .ideas-n'))) j++;
+              let last = null;
+              while (j < kids.length && taken < 2 && kids[j].matches('p, ul, ol') ) { last = kids[j]; j++; taken++; }
+              if (!last) continue;
+              after = last;
+            }
+            after.after(el);
+            el.dataset.peDefer = k + 1;
+            n++;
+          }
+          return n;
+        }, defer);
+        if (moved) { padsChanged = true; log('moved ' + moved + ' pictures after the text that follows them'); }
+      }
+    }
     // the index covers the chapters only: from the first chapter to the glossary, without the part openers
     const chapterPages = prep.chapters.map(k => found[k]).filter(Boolean);
     const from = chapterPages.length ? Math.min(...chapterPages) : 1;
@@ -474,7 +523,7 @@ async function runSeries(browser, ctx) {
   const jobs = src.jobs.filter(j => ONLY.length ? ONLY.includes(j.id) : !j.only_when_named);
   for (const job of jobs) {
     const t0 = Date.now();
-    const r = await makeBook(ctx, 'print/src/' + job.id, { colPx: job.colPx });
+    const r = await makeBook(ctx, 'print/src/' + job.id, { colPx: job.colPx, fillGaps: job.kind === 'book' });
     if (job.kind === 'measure') {
       fs.writeFileSync(path.join(SERIES_OUT, 'src', 'measure.json'), JSON.stringify({ pages: r.pages, pagemap: r.pagemap }, null, 1) + '\n');
       console.log('measure', r.pages, 'pages');

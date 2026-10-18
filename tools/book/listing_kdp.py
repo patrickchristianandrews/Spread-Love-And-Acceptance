@@ -283,9 +283,9 @@ The answers are seen by Amazon, not printed on the product page.
 Keep every image free of prices, review quotes and claims like "bestseller". [OWNER]
 ''')
     md.append('## "Look inside" tips\n')
-    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, one page on the workpapers, tools and characters, the help page), so a browser reaches Chapter 1 early.
+    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast”, one page on the workpapers, tools and characters, the help page), so a browser reaches Chapter 1 early.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, the help page, then the three friends, so Chapter 1 comes early.
+- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, the help page, then the three friends, so Chapter 1 comes early.
 ''')
     md.append('## Author Central bio (short, warm and true)\n')
     md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. He brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.

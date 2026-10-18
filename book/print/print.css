@@ -132,7 +132,8 @@ body { font-size: 11pt; line-height: 1.55; }
 .pe-use li { display: flex; gap: 3mm; align-items: center; background: #fff; }
 
 /* Scan to open: the codes for one idea or section, each with its address underneath */
-.ps-scan { margin: 2.4mm 0 3.4mm; padding: 1.8mm 0 0; border-top: .5pt dashed var(--pc); break-inside: avoid; background: #fff; }
+.ps-scan { margin: 2.4mm 0 3.4mm; padding: 1.8mm 0 0; border-top: .5pt dashed var(--pc); break-inside: auto; background: #fff; }
+.ps-scan-k { break-after: avoid; }
 .ps-scan-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.6pt; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.4mm; }
 .ps-scan-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2mm 2.6mm; }
 .ps-scan-list li { margin: 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; break-inside: avoid; }
@@ -202,3 +203,17 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-words-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.2mm; }
 .ps-words-l { list-style: none; margin: 0; padding: 0 0 0 3mm; border-left: 2pt solid var(--pt, #F3EEE2); }
 .ps-words-l li { font-size: 9.2pt; line-height: 1.42; margin: 0 0 1.2mm; }
+
+/* printfix13: the end of a chapter may run on across a page break (whole rows stay together), so a long
+   "This connects to" or "Put it to use" list no longer leaves most of a page empty */
+.pe-series .pe-end-links, .pe-series .pe-end-use { break-inside: auto; break-before: auto; }
+.pe-series .pe-use li, .pe-series .pe-end-conn li { break-inside: avoid; }
+.ps-find { page: pe-front; break-before: page; }
+.ps-find h1 { font-size: 17pt; padding-bottom: 2mm; border-bottom: .6pt solid var(--brass); margin: 0 0 2.4mm; }
+.ps-find-lede { font-size: 9pt; line-height: 1.42; margin: 0 0 3mm; }
+.ps-find-l { list-style: none; margin: 0; padding: 0; }
+.ps-find-l li { display: flex; gap: 4mm; justify-content: space-between; align-items: baseline; padding: 2mm 0; border-bottom: .4pt solid #E2D6B6; break-inside: avoid; }
+.ps-find-s { font-size: 9.2pt; line-height: 1.35; flex: 1 1 55%; }
+.ps-find-w { font-size: 8pt; line-height: 1.35; color: var(--pc); flex: 0 1 42%; }
+.ps-find-p { font-family: "Fraunces", serif; font-size: 9pt; flex: 0 0 7mm; text-align: right; }
+.ps-find-w a { color: inherit; text-decoration: none; }

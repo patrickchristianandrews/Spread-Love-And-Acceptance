@@ -259,7 +259,7 @@ def check_text(text, book, books, label):
 
 
 # ---------- what the print series leaves out of a chapter, and the "Scan to open" panels ----------
-DROP_IDS = ('more', 'pillars', 'nine-fields', 'polymath-way', 'program', 'part-three', 'real-life-old')
+DROP_IDS = ('pillars', 'nine-fields', 'polymath-way', 'program', 'part-three', 'real-life-old')
 
 
 def drop_sections(body, B):
@@ -273,6 +273,10 @@ def drop_sections(body, B):
                 break
             end = B.section_end(body, m.start())
             body = body[:m.start()] + body[end:]
+    # "More for your situation" stays (each page in it gets its code): its pointers to the online book's parts are named
+    # the series way instead
+    body = body.replace('<strong>More in Part Three:</strong>', '<strong>Related chapters:</strong>')
+    body = re.sub(r'(<a href="/book/self-2-now\.html"[^>]*>)Part One: who you are today(</a>)', r'\1Your wiring, weather and words\2', body)
     body = B.drop_element(body, r'<[a-z0-9]+\b[^>]*\bclass="[^"]*\bps-omit\b')
     body = B.drop_element(body, r'<h3 class="kind-h kind-h-reading"')
     body = B.drop_element(body, r'<ul class="kind-list kind-reading"')
@@ -287,7 +291,11 @@ def strip_inline_addresses(body):
     except after the safety links, whose wording stays exactly as it is, with its address beside it."""
     def sub(m):
         return m.group(1) if '/safety' not in m.group(2) else m.group(0)
-    return re.sub(r'(<a\b[^>]*\bhref="([^"]*)"[^>]*>.*?</a>)' + INLINE_ADDR.pattern, sub, body, flags=re.S)
+    body = re.sub(r'(<a\b[^>]*\bhref="([^"]*)"[^>]*>(?:(?!</a>).)*</a>)' + INLINE_ADDR.pattern, sub, body, flags=re.S)
+    # a safety link keeps its words exactly and always shows its address beside them
+    addr = '<span class="pe-only pe-u"> (<span class="pe-nb">spreadloveandacceptance.com</span>/<wbr><span class="pe-nb">safety</span>)</span>'
+    return re.sub(r'(<a\b[^>]*\bhref="(?:https://spreadloveandacceptance\.com)?/safety\.html"[^>]*>((?:(?!</a>).)*)</a>)(?!<span class="pe-only pe-u">)',
+                  lambda m: m.group(1) if 'spreadloveandacceptance.com' in m.group(2) else m.group(1) + addr, body, flags=re.S)
 
 
 SKIP_LINK = re.compile(r'class="(?:dig|book-fig-zoom)|data-u="series"')
