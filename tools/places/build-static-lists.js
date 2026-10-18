@@ -1,10 +1,10 @@
 // names12: fill the plain (no-JavaScript) lists on /tools.html from the registry.
 // Each <section data-tl-sec data-tl-types="..."> gets its tools as plain links, most useful first, the same order
 // tools-page.js uses; the workpapers section gets its list too. tools-page.js replaces all of it with cards.
-// Run from anywhere: node static.js [/path/to/repo]
+// Run: node tools/places/build-static-lists.js (after any rename in the registry)
 'use strict';
 var fs = require('fs'), path = require('path');
-var repo = process.argv[2] || '/home/user/Spread-Love-And-Acceptance';
+var repo = process.argv[2] || path.join(__dirname, '..', '..');
 global.window = {};
 eval(fs.readFileSync(path.join(repo, 'assets/js/tools-registry.js'), 'utf8'));
 var ALL = window.TOLTools;

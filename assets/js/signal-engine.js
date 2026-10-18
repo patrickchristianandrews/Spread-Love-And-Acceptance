@@ -3860,12 +3860,15 @@ function harmRewrite(an, log, W){
     const raw = String(se.raw||"").trim(); if(!raw) return;
     const hit = se.s < h.end && h.start < se.e || (SHARED && SHARED.harm && SHARED.harm(raw));
     if(!hit){ if(!FILLER_ONLY.test(raw.replace(/[.!?,\s]+$/,""))) parts.push(endP(raw)); return; }
+    // "If you're late again, I'm going to slap you" -> "If you're late again, I'll be really upset. It matters to me."
+    const cm = raw.match(/^(?:but |and |so |also |honestly,? )?(if you\b[^,]{2,70}?)(?:,\s*|\s+)(?:then\s+)?(?:i'll|i will|i'm|i am|im|ill|i'd|i swear)\b/i);
+    if(feelAt < 0 && cm && !(SHARED && SHARED.harm && SHARED.harm(cm[1]))){ feelAt = parts.length; parts.push(capFirst(cm[1].trim())+", I'll be really upset. It matters to me."); return; }
     if(feelAt < 0){ feelAt = parts.length; parts.push(HARM_FEEL); }
     // "Clean your room or I'll smack you", "Get home now or I'll beat you": the order before "or" is the ask
     const pre = raw.replace(/,?\s*(?:\bor\b|\botherwise\b|\band\b|\bbefore\b)\s+(?:else\s+)?(?:i\b|i'll|i'm|i will|i am|i'd|im|ill|you'll|you're|you will|you are|you'd)[\s\S]*$/i, "").trim();
     const w0 = (pre.match(/^\w+/)||[""])[0].toLowerCase();
-    if(pre && pre!==raw && !(SHARED && SHARED.harm && SHARED.harm(pre)) && (VERBSET.has(w0) || VERBSET.has(baseVerb(w0))) && pre.split(/\s+/).length<=10 && !/\b(?:now|right now|immediately)\b/i.test(pre.replace(/\b(?:now|right now|immediately)\s*$/i,""))){
-      asked = "Could you "+lowerFirst(pre.replace(/[,.!?\s]+$/,"").replace(/\s+(?:right now|now|immediately)$/i,""))+"?";
+    if(pre && pre!==raw && !(SHARED && SHARED.harm && SHARED.harm(pre)) && (VERBSET.has(w0) || VERBSET.has(baseVerb(w0))) && pre.split(/\s+/).length<=10){
+      asked = "Could you "+lowerFirst(pre.replace(/[,.!?\s]+$/,""))+"?";
       parts.push(asked);
     }
   });
