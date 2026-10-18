@@ -234,9 +234,10 @@ body { font-size: 11pt; line-height: 1.55; }
 .lg-l { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.4pt; letter-spacing: .1em; text-transform: uppercase; color: var(--pc); margin-right: 1.2mm; white-space: nowrap; }
 .lg-arr { color: var(--pc); }
 .lg-say em { font-style: italic; }
-.lg-box-end { display: flex; gap: 3mm; align-items: center; margin: 2mm 0 0; padding: 1.8mm 0 0; border-top: .5pt dashed var(--pc); break-inside: avoid; }
-.lg-box-end p { margin: 0; font-size: 8pt; line-height: 1.38; color: var(--soft); }
-.lg-box-end .ps-addr { display: block; margin-top: .6mm; font-size: 6.8pt; overflow-wrap: anywhere; }
+.lg-box-qr { float: right; width: 23mm; margin: 0 0 1.4mm 3.4mm; }
+.lg-box-qr .pe-qr { display: block; }
+.lg-box-end { clear: both; margin: 2mm 0 0 !important; padding: 1.6mm 0 0; border-top: .5pt dashed var(--pc); font-size: 7.8pt; line-height: 1.38; color: var(--soft); break-inside: avoid; }
+.lg-box-end .ps-addr { margin-left: .6mm; font-size: 6.8pt; overflow-wrap: anywhere; }
 .lg-box-end .ps-addr .pe-nb { white-space: normal; }
 /* The Logic Behind It: more examples, free online (one page near the end of each book) */
 .ps-logic { page: sb-logic; break-before: page; }

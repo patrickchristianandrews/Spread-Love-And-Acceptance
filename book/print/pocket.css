@@ -95,7 +95,7 @@
 .pk-card-line { flex: 1 1 auto; border-bottom: .5pt solid #8C826F; height: 5mm; }
 .pk-card-row { margin: 0 0 2.2mm; }
 .pk-card-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.4pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 !important; }
-.pk-card-lines div { height: 7mm; border-bottom: .4pt solid #B8AE98; }
+.pk-card-lines div { height: 6.4mm; border-bottom: .4pt solid #B8AE98; }
 .pk-find-l { list-style: none; padding: 0; margin: 0; }
 .pk-find-l a { display: flex; align-items: baseline; padding: .55mm 0; }
 .pk-find-t { flex: 0 1 auto; font-size: 8.6pt; line-height: 1.28; }
@@ -109,6 +109,7 @@
 .pk-online-l li { font-size: 9pt; margin: 0 0 1.8mm; }
 .pk-refs { font-size: 7.4pt !important; }
 .pk-ref-w { color: var(--soft); font-style: italic; }
+.pk-ref-w .pe-pg { font-style: normal; font-family: inherit; font-size: inherit; }
 .pk-book .ps-series { break-before: page; }
 .pk-book .ps-series-t strong { font-size: 10pt; }
 .pk-book .ps-series-l { font-size: 8pt; }

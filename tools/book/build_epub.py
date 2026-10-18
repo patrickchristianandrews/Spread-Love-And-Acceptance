@@ -22,11 +22,17 @@ back of the book). Then, for a reflowable ebook:
     (book/print/cover-<id>-front.jpg) marked properties="cover-image", simple CSS that suits Kindle (no fixed
     positions, no page sizes, no colours on text or backgrounds, relative sizes), no scripts.
 The workbook has no ebook: its forms are made to be written in, and are free to print online (see listing_kdp.py).
+logicbook14: it also makes the pocket guide's ebook (book/print/epub/pocket-the-logic-behind-it.epub, from tools/book/pocket.py)
+and the Kindle box set (book/print/epub/boxset-complete-series.epub): Books 1 to 4 and the pocket guide in one EPUB, each
+book's own pages under a prefix (b1-, b2-, b3-, b4-, pg-), a combined contents page and the box set's own cover
+(book/print/cover-boxset-complete-series-front.jpg, from build_pdfs.js). "Another way to see it" boxes keep a link in
+place of their code.
 
 Every build checks itself: each XHTML file parses as XML, every manifest item exists, every link inside the book
 resolves, every link to the site points at a real page (and #id), the nav matches the chapters, and the mimetype
 file comes first, uncompressed. Standard library only (plus Node + Playwright for the pictures, as the PDFs use).
 """
+import copy
 import html
 import json
 import os
@@ -65,10 +71,12 @@ STORE_LINKS = {
     'book-3-understanding-each-other': {'kindle': '', 'paperback': ''},
     'book-4-share-the-load': {'kindle': '', 'paperback': ''},
     'workbook': {'kindle': '', 'paperback': ''},
+    'pocket-the-logic-behind-it': {'kindle': '', 'paperback': ''},
 }
 
 # alt text for the drawings on the title pages (book_art.illustration kinds)
 ART_ALT = {
+    'logic': 'Two smiling round friends fit two jigsaw pieces together, with a heart above them.',
     'for-yourself': 'A smiling round friend holds an open book, next to a small sprout and a heart.',
     'steady': 'A calm, smiling round friend rests inside a big heart, with two small sprouts beside it.',
     'together': 'Three smiling round friends read an open book together, with a heart above them.',
@@ -228,7 +236,7 @@ def unwrap(el):
 
 
 # ---------- what print shows and an ebook doesn't ----------
-DROP_CLASSES = {'pe-qr', 'pe-mark', 'pe-recto-pad', 'no-print', 'dig', 'pillar-line', 'depth-bar', 'pe-noprint', 'nine-more', 'pe-th-opt',
+DROP_CLASSES = {'pe-qr', 'pe-mark', 'pk-puzzle', 'pk-sec-art', 'lg-box-qr', 'pe-recto-pad', 'no-print', 'dig', 'pillar-line', 'depth-bar', 'pe-noprint', 'nine-more', 'pe-th-opt',
                 'gl-dive', 'bt-switch', 'book-end', 'book-open', 'ch-num', 'bh-u', 'wt-u', 'pe-use-u', 'pe-u', 'pe-xref', 'tsk-line', 'tsk-line-btn'}
 DROP_TAGS = {'script', 'style', 'button', 'form', 'input', 'select', 'textarea', 'noscript', 'iframe', 'object', 'video', 'audio', 'canvas', 'template'}
 KEEP_ATTRS = {'id', 'class', 'href', 'src', 'alt', 'title', 'lang', 'scope', 'colspan', 'rowspan', 'start', 'reversed', 'role', 'width', 'height',
@@ -527,8 +535,9 @@ def book_docs(book, where):
     docs.append(Doc('glossary.xhtml', 'Words used in this book', S.glossary_short(book, chs).replace('<section class="pe-back pe-gloss', '<section epub:type="glossary" class="pe-back pe-gloss', 1)))
     docs.append(Doc('notes.xhtml', 'Research notes', S.research_short(book, here).replace('<section class="pe-back ps-notes', '<section epub:type="bibliography" class="pe-back ps-notes', 1)))
     docs.append(Doc('series.xhtml', 'The series', series_page(book)))
-    # printfix13: the "Free on the website" spread, with links in place of the codes
+    # logicbook14: "The Logic Behind It: more examples, free online", then printfix13's "Free on the website", with links
     docs.append(Doc('free.xhtml', 'Free on the website', S.showcase(book, epub=True)))
+    docs.append(Doc('logic.xhtml', 'The Logic Behind It: more examples', S.logic_free_page(book, epub=True)))
     return docs, figs, exs
 
 
@@ -536,11 +545,12 @@ def series_page(book):
     s = '<section class="pe-back ps-series" id="series"><h1 class="pe-back-h">The series</h1>'
     s += ('<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order. Every chapter is also free to read '
           'online, in a short and a full version.</p><ol class="ps-series-list">') % B.esc(SERIES_TITLE)
-    for b in S.books() + [CFG['workbook']]:
-        this = b is book
-        k = ('Book %d' % b['n']) if b.get('n') else 'Workbook'
-        online = ('%s/book/%s.html' % (SITE, b['chapters'][0])) if b.get('chapters') else SITE + '/workpapers/fill/index.html'
-        links = ['<a href="%s">%s</a>' % (online, 'Read it free online' if b.get('chapters') else 'Print or fill in the forms free online')]
+    for b in S.series_items():
+        this = b.get('id') == book.get('id')
+        pocket_ = b.get('id') == S.POCKET['id']
+        k = ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if pocket_ else 'Workbook')
+        online = ('%s/book/%s.html' % (SITE, b['chapters'][0])) if b.get('chapters') else (SITE + S.LOGIC_PAGE if pocket_ else SITE + '/workpapers/fill/index.html')
+        links = ['<a href="%s">%s</a>' % (online, 'Read it free online' if b.get('chapters') else ('Every situation, free online' if pocket_ else 'Print or fill in the forms free online'))]
         st = STORE_LINKS.get(b['id'], {})
         if st.get('kindle'):
             links.append('<a href="%s">Kindle edition</a>' % B.esc(st['kindle']))
@@ -710,6 +720,40 @@ figcaption { text-align: left; font-size: .88em; margin-top: .5em; }
 .ps-free-list li { margin: 0 0 .9em; }
 .ps-free-list li p { margin: 0 0 .15em; }
 .ps-free-d { font-size: .92em; }
+
+/* logicbook14: "Another way to see it" boxes, the free-examples page, and the pocket guide's situations */
+.lg-box { border: 1px solid %(acc)s; border-left-width: 4px; padding: .6em .8em .2em; margin: 1.3em 0; page-break-inside: avoid; break-inside: avoid; }
+.lg-box-k { font-size: .75em; letter-spacing: .1em; text-transform: uppercase; font-weight: bold; margin: 0 0 .3em; }
+.lg-box-t { font-weight: bold; font-size: 1.08em; margin: 0 0 .5em; }
+.lg-row { margin: 0 0 .45em; }
+.lg-l, .pk-h, .pk-step b, .pk-care b { font-size: .74em; letter-spacing: .07em; text-transform: uppercase; font-weight: bold; margin-right: .35em; }
+.lg-box-end { border-top: 1px dashed %(acc)s; margin-top: .6em; padding-top: .45em; font-size: .9em; }
+.pk-sec { page-break-before: always; break-before: page; }
+.pk-sec-k, .pk-sit-k, .pk-front-k { font-size: .74em; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 .3em; }
+.pk-sec-b, .pk-like p { font-style: italic; }
+.pk-sec-l { list-style: none; padding-left: 0; }
+.pk-sit { page-break-before: always; break-before: page; margin: 0 0 1.5em; }
+.pk-sit-head { border-bottom: 2px solid %(acc)s; margin: 0 0 .7em; padding-bottom: .3em; }
+.pk-sit-n { font-weight: bold; margin-right: .5em; }
+.pk-sit-t { font-size: 1.35em; margin: .1em 0 .2em; }
+.pk-h { display: block; margin: .7em 0 .15em; font-size: .78em; }
+.pk-part p { margin: 0 0 .3em; }
+.pk-chain { padding-left: 1.6em; margin: 0 0 .3em; }
+.pk-say { border-left: 4px solid %(acc)s; padding: .3em 0 .2em .8em; margin: .9em 0; }
+.pk-say-q { font-size: 1.05em; }
+.pk-care { border-top: 1px dotted #9A9283; padding-top: .35em; }
+.pk-online { border-top: 1px dashed %(acc)s; margin-top: .8em; padding-top: .4em; font-size: .9em; }
+.pk-online strong { margin-right: .35em; }
+.pk-addr { display: block; }
+.pk-side { font-weight: bold; }
+.pk-tags { list-style: none; padding-left: 0; }
+.pk-tags li { margin: 0 0 .7em; }
+.pk-tags .pk-side { display: block; font-size: .78em; letter-spacing: .06em; text-transform: uppercase; }
+.pk-find-l { list-style: none; padding-left: 0; }
+.pk-ref-w { font-style: italic; }
+.bx-part { text-align: center; page-break-before: always; }
+.bx-part img { width: 60%%; max-width: 18em; }
+.bx-toc ol ol { list-style: none; padding-left: 1.2em; font-size: .94em; }
 '''
 
 
@@ -724,16 +768,21 @@ def xhtml(title, body, body_type='', lang='en-GB'):
 def nav_xhtml(book, docs):
     """the contents page (also Kindle's table of contents) and the landmarks"""
     rows = []
-    front = [d for d in docs if d.fname in ('help-now.xhtml', 'meet.xhtml')]
     chs = [d for d in docs if d.body_type == 'bodymatter']
-    back = [d for d in docs if d.fname in ('wp-tools.xhtml', 'numbers.xhtml', 'glossary.xhtml', 'notes.xhtml', 'series.xhtml', 'free.xhtml')]
+    i0, i1 = docs.index(chs[0]), docs.index(chs[-1])
+    skip = ('cover.xhtml', 'title.xhtml', 'copyright.xhtml')
+    front = [d for d in docs[:i0] if d.fname not in skip]
+    back = docs[i1 + 1:]
     li = lambda d: '<li><a href="%s">%s</a></li>' % (d.fname, xesc(d.title))
     rows.append('<li><a href="title.xhtml">Title page</a></li><li><a href="copyright.xhtml">Copyright and notes</a></li>')
     rows += [li(d) for d in front]
     for d in chs:
         slug = d.fname[:-6]
-        num, lab = S.chapter_label(slug, book)
-        rows.append('<li><a href="%s">%s: %s</a></li>' % (d.fname, lab, xesc(B.TITLES[slug])))
+        if slug in B.TITLES:
+            num, lab = S.chapter_label(slug, book)
+            rows.append('<li><a href="%s">%s: %s</a></li>' % (d.fname, lab, xesc(B.TITLES[slug])))
+        else:
+            rows.append(li(d))
     rows += [li(d) for d in back]
     first = chs[0].fname
     body = ('<nav epub:type="toc" id="toc" class="toc" role="doc-toc"><h1>Contents</h1><ol>%s</ol></nav>\n'
@@ -743,8 +792,9 @@ def nav_xhtml(book, docs):
             '<li><a epub:type="copyright-page" href="copyright.xhtml">Copyright</a></li>'
             '<li><a epub:type="toc" href="nav.xhtml#toc">Contents</a></li>'
             '<li><a epub:type="bodymatter" href="%s">%s</a></li>'
-            '<li><a epub:type="glossary" href="glossary.xhtml">Words used in this book</a></li>'
-            '</ol></nav>') % (''.join(rows), first, xesc(chs[0].title))
+            '%s'
+            '</ol></nav>') % (''.join(rows), first, xesc(chs[0].title),
+                              '<li><a epub:type="glossary" href="glossary.xhtml">Words used in this book</a></li>' if any(d.fname == 'glossary.xhtml' for d in docs) else '')
     return xhtml('Contents', body)
 
 
@@ -760,7 +810,8 @@ def opf(book, items, spine, modified, ident):
     md.append('<meta refines="#subtitle" property="title-type">subtitle</meta>')
     md.append('<meta property="belongs-to-collection" id="series">%s</meta>' % xesc(SERIES_TITLE))
     md.append('<meta refines="#series" property="collection-type">series</meta>')
-    md.append('<meta refines="#series" property="group-position">%d</meta>' % n)
+    if n:
+        md.append('<meta refines="#series" property="group-position">%d</meta>' % n)
     md.append('<dc:creator id="author">%s</dc:creator>' % xesc(B.AUTHOR))
     md.append('<meta refines="#author" property="role" scheme="marc:relators">aut</meta>')
     md.append('<meta refines="#author" property="file-as">%s</meta>' % xesc(B.AUTHOR))
@@ -772,7 +823,7 @@ def opf(book, items, spine, modified, ident):
     md.append('<dc:rights>Text and pictures © 2026 %s. Every chapter is also free to read at spreadloveandacceptance.com.</dc:rights>' % xesc(B.AUTHOR))
     md.append('<dc:description>%s</dc:description>' % xesc(book.get('blurb', book['line'])))
     md.append('<dc:subject>Self-help</dc:subject><dc:subject>Relationships</dc:subject>')
-    md.append('<dc:source>%s/book/</dc:source>' % SITE)
+    md.append('<dc:source>%s%s</dc:source>' % (SITE, book.get('source', '/book/')))
     md.append('<meta property="dcterms:modified">%s</meta>' % modified)
     md.append('<meta name="cover" content="cover-image"/>')
     # accessibility (schema.org), as EPUB Accessibility 1.1 asks
@@ -784,7 +835,7 @@ def opf(book, items, spine, modified, ident):
               'The figures are also described in their captions. No sound, video or flashing content.</meta>')
     man = ''.join('<item id="%s" href="%s" media-type="%s"%s/>' % (i, h, t, (' properties="%s"' % p) if p else '') for i, h, t, p in items)
     sp = ''.join('<itemref idref="%s"%s/>' % (i, '' if lin else ' linear="no"') for i, lin in spine)
-    guide = '<guide><reference type="cover" title="Cover" href="cover.xhtml"/><reference type="toc" title="Contents" href="nav.xhtml"/><reference type="text" title="Start" href="%s.xhtml"/></guide>' % book['chapters'][0]
+    guide = '<guide><reference type="cover" title="Cover" href="cover.xhtml"/><reference type="toc" title="Contents" href="nav.xhtml"/><reference type="text" title="Start" href="%s.xhtml"/></guide>' % book.get('start', book['chapters'][0])
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-GB" '
             'prefix="schema: http://schema.org/">\n<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">\n%s\n</metadata>\n<manifest>\n%s\n</manifest>\n'
             '<spine>\n%s\n</spine>\n%s\n</package>\n') % ('\n'.join(md), man.replace('/><', '/>\n<'), sp.replace('/><', '/>\n<'), guide)
@@ -854,7 +905,7 @@ def site_link_ok(url, cache={}):
     return ok
 
 
-def write_epub(book, docs, nav_at, used, pics, path):
+def write_epub(book, docs, nav_at, used, pics, path, extra_files=None, nav_html=None):
     acc = book['color']
     ident = 'urn:uuid:%s' % uuid.uuid5(uuid.NAMESPACE_URL, '%s/book/%s#ebook' % (SITE, book['id']))
     epoch = os.environ.get('SOURCE_DATE_EPOCH')
@@ -864,7 +915,7 @@ def write_epub(book, docs, nav_at, used, pics, path):
     items, spine = [], []
     for k, d in enumerate(docs):
         if k == nav_at:
-            files['nav.xhtml'] = nav_xhtml(book, docs).encode('utf-8')
+            files['nav.xhtml'] = (nav_html or nav_xhtml(book, docs)).encode('utf-8')
             items.append(('nav', 'nav.xhtml', 'application/xhtml+xml', 'nav'))
             spine.append(('nav', True))
         body = serialize(d.root)
@@ -877,7 +928,10 @@ def write_epub(book, docs, nav_at, used, pics, path):
     cover = os.path.join(ROOT, 'book', 'print', 'cover-%s-front.jpg' % book['id'])
     files['images/cover.jpg'] = open(cover, 'rb').read()
     items.append(('cover-image', 'images/cover.jpg', 'image/jpeg', 'cover-image'))
-    for name in sorted(used | {'art-' + book['art']}):
+    for k, (name, src) in enumerate(sorted((extra_files or {}).items())):
+        files[name] = open(src, 'rb').read()
+        items.append(('extra-%d' % k, name, 'image/jpeg' if name.endswith('.jpg') else 'image/png', ''))
+    for name in sorted(used | ({'art-' + book['art']} if book.get('art') else set())):
         if name not in pics:
             warn('%s: picture not made: %s' % (book['id'], name))
             continue
@@ -941,6 +995,8 @@ def check_epub(path, book):
         md = pkg.find('opf:metadata', NS)
         txt = ET.tostring(md, encoding='unicode')
         for need in ('belongs-to-collection', 'group-position', 'dcterms:modified', 'title-type', 'dc:language', 'dc:creator', 'dc:publisher', 'dc:identifier'):
+            if need == 'group-position' and not book.get('n'):
+                continue  # the pocket guide and the box set carry the series name without a number
             if need.split(':')[-1] not in txt:
                 bad.append('metadata lacks ' + need)
         # every XHTML file parses as XML; collect ids and links
@@ -1016,6 +1072,110 @@ def epubcheck(jar, path):
     return r.returncode == 0, out
 
 
+def build_pocket(images):
+    """the pocket guide's ebook: the same pages as print (tools/book/pocket.py), links in place of codes"""
+    import pocket
+    p, docs, chapters = pocket.epub_docs(S, Doc, B)
+    book = {'id': p['id'], 'kind': 'pocket', 'title': p['title'], 'sub': p['sub'], 'color': p['color'], 'art': p['art'], 'chapters': chapters, 'n': 0,
+            'blurb': p['blurb'], 'line': p['line'], 'isbn_ebook': p.get('isbn_ebook'), 'source': S.LOGIC_PAGE}
+    docs.append(Doc('series.xhtml', 'The series', series_page(book)))
+    nav_at = docs.index(None)
+    docs = [d for d in docs if d is not None]
+    used = set()
+    for d in docs:
+        d.root = transform(parse(pre(d.html)), images, used, d.heading_shift)
+    return book, docs, nav_at, used
+
+
+BOX_PREFIX = lambda b: ('b%d-' % b['n']) if b.get('n') else 'pg-'
+
+
+def build_boxset(built, images):
+    """the Kindle box set: every book's own pages (already linked inside themselves) under a prefix, one contents page,
+    the box set's own cover, title and copyright pages"""
+    bx = S.BOXSET
+    book = {'id': bx['id'], 'kind': 'boxset', 'title': bx['title'], 'sub': bx['sub'], 'color': bx['color'], 'art': bx['art'], 'n': 0, 'blurb': bx['blurb'],
+            'line': bx['line'], 'isbn_ebook': bx.get('isbn_ebook'), 'source': '/book/'}
+    docs = [Doc('cover.xhtml', 'Cover', '<section class="cv" epub:type="cover"><img class="cv-img" src="images/cover.jpg" alt="%s"/></section>' % html.escape(
+        'Cover: %s, %s, by %s' % (bx['title'], bx['sub'], B.AUTHOR), quote=True), body_type='cover')]
+    docs.append(Doc('title.xhtml', bx['title'], (
+        '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s</p><h1 class="ps-title-t">%s</h1><p class="ps-title-s">%s</p>'
+        '<p class="ps-title-art"><img src="images/art-%s.png" alt="Five books on a shelf in the series’ colours, with two smiling round friends and a heart."/></p>'
+        '<p class="ps-title-a">by %s</p><p class="ps-title-p">%s<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        B.esc(SERIES_TITLE), B.esc(bx['short_title']), B.esc(bx['sub']), bx['art'], B.AUTHOR, B.esc(PUBLISHER), SITE)))
+    cp = ('<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>'
+          '<p><em>%s</em>. %s, in one ebook.<br/>By %s. Published by %s, spreadloveandacceptance.com.</p>'
+          '<p>Text and pictures © 2026 %s. First ebook edition, %s.</p>%s'
+          '<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, and every situation in '
+          '<em>%s</em> at spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print books and ebooks are optional.</p>'
+          '<p><strong>Not therapy.</strong> These books are general education about people and relationships. They are not a diagnosis, treatment or a '
+          'replacement for help from a doctor, counsellor or other trained professional, and they can’t know your situation.</p>'
+          '<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
+          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
+          'If you are in danger now, call your local emergency number.</p>'
+          '<p><strong>The examples are made up.</strong> The people in these books’ examples are made up; any likeness to real people is coincidence. None of them is a testimonial.</p>'
+          '<p>Each book that follows keeps its own title page and copyright page.</p></section>') % (
+        B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.esc(PUBLISHER), B.AUTHOR, B.UPDATED,
+        ('<p>ISBN %s (ebook)</p>' % B.esc(bx['isbn_ebook'])) if bx.get('isbn_ebook') else '', B.esc(S.POCKET['title']), SITE)
+    docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
+    for d in docs:
+        d.root = transform(parse(pre(d.html)), images, set(), d.heading_shift)
+    nav_at = len(docs)
+    used, chapters, groups, extra = {'art-' + bx['art']}, [], [], {}
+    for b, bdocs, _nav, bused, _f, _x in built:
+        pre_ = BOX_PREFIX(b)
+        used |= bused | {'art-' + b['art']}
+        small = os.path.join(ROOT, 'book', 'print', 'cover-%s-front-small.jpg' % b['id'])
+        extra['images/cover-%s.jpg' % pre_[:-1]] = small
+        label = ('Book %d: %s' % (b['n'], b['title'])) if b.get('n') else '%s (a pocket guide)' % b['title']
+        rows = []
+        for d in bdocs:
+            if d.fname == 'cover.xhtml':
+                nd = Doc(pre_ + 'cover.xhtml', label, '<section class="bx-part"><p><img src="images/cover-%s.jpg" alt="%s"/></p><h1>%s</h1></section>' % (
+                    pre_[:-1], html.escape('Cover: ' + label, quote=True), B.esc(label)))
+                nd.root = transform(parse(nd.html), images, set(), 0)
+                docs.append(nd)
+                continue
+            nd = Doc(pre_ + d.fname, d.title, '', heading_shift=d.heading_shift, body_type=d.body_type)
+            nd.root = copy.deepcopy(d.root)  # the book's own ebook keeps its own links
+            for el in nd.root.walk():
+                for att in ('href', 'src'):
+                    h = el.attrs.get(att)
+                    if not h or re.match(r'^(?:[a-z]+:|#|images/)', h):
+                        continue
+                    base, sep, frag = h.partition('#')
+                    if base.endswith('.xhtml') and base != 'nav.xhtml':
+                        el.attrs[att] = pre_ + base + sep + frag
+                    elif base == 'nav.xhtml':
+                        el.attrs[att] = 'nav.xhtml'
+            docs.append(nd)
+            slug = d.fname[:-6]
+            if d.body_type == 'bodymatter':
+                chapters.append(pre_ + slug)
+                if slug in B.TITLES:
+                    rows.append((nd.fname, '%s: %s' % (S.chapter_label(slug, b)[1], B.TITLES[slug])))
+                else:
+                    rows.append((nd.fname, d.title))
+            elif d.fname not in ('title.xhtml',):
+                rows.append((nd.fname, d.title))
+        groups.append((pre_ + 'cover.xhtml', label, rows))
+    book['chapters'] = chapters
+    book['start'] = BOX_PREFIX(built[0][0]) + 'cover'
+    toc = ''.join('<li><a href="%s">%s</a><ol>%s</ol></li>' % (f, xesc(lab), ''.join('<li><a href="%s">%s</a></li>' % (ff, xesc(t)) for ff, t in rows))
+                  for f, lab, rows in groups)
+    body = ('<nav epub:type="toc" id="toc" class="toc bx-toc" role="doc-toc"><h1>Contents</h1><ol>'
+            '<li><a href="title.xhtml">Title page</a></li><li><a href="copyright.xhtml">Copyright and notes</a></li>%s</ol></nav>\n'
+            '<nav epub:type="landmarks" id="landmarks" hidden=""><h2>Landmarks</h2><ol>'
+            '<li><a epub:type="cover" href="cover.xhtml">Cover</a></li>'
+            '<li><a epub:type="titlepage" href="title.xhtml">Title page</a></li>'
+            '<li><a epub:type="copyright-page" href="copyright.xhtml">Copyright</a></li>'
+            '<li><a epub:type="toc" href="nav.xhtml#toc">Contents</a></li>'
+            '<li><a epub:type="bodymatter" href="%s.xhtml">%s</a></li></ol></nav>') % (toc, chapters[0], xesc(groups[0][1]))
+    book['nav_html'] = xhtml('Contents', body)
+    book['extra_files'] = extra
+    return book, docs, nav_at, used, [], []
+
+
 def main():
     args = [a for a in sys.argv[1:]]
     jar = None
@@ -1027,12 +1187,21 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     where = S.where_map()
     books = [b for b in S.books() if not want or b['id'] in want]
+    if want and (S.POCKET['id'] in want or S.BOXSET['id'] in want):
+        books = S.books()  # the box set needs every book's pages
     tmp = tempfile.mkdtemp(prefix='epub-pics-')
     images = Images(tmp)
     for key, svg, _alt in FRIENDS:
         images.svg_string(key, svg, 64, 'circle', scale=3)
     for b in books:
         images.svg_string('art-' + b['art'], book_art.illustration(b['art']), 400, 'white', scale=2)
+    # logicbook14: the pocket guide's ebook and the box set are made with the books, unless only some books were named
+    extras = not want or S.POCKET['id'] in want or S.BOXSET['id'] in want
+    if extras:
+        for b in S.books():
+            images.svg_string('art-' + b['art'], book_art.illustration(b['art']), 400, 'white', scale=2)
+        images.svg_string('art-' + S.POCKET['art'], book_art.illustration(S.POCKET['art']), 400, 'white', scale=2)
+        images.svg_string('art-' + S.BOXSET['art'], book_art.illustration(S.BOXSET['art']), 400, 'white', scale=2)
     built = []
     for b in books:
         docs, nav_at, used, figs, exs = build(b, where, images, None)
@@ -1040,6 +1209,11 @@ def main():
         for x in bad_links:
             warn('%s: link inside the book has no target (sent to the chapter): %s' % (b['id'], x))
         built.append((b, docs, nav_at, used, figs, exs))
+    if extras:
+        pb, pdocs, pnav, pused = build_pocket(images)
+        for x in resolve_links(pdocs):
+            warn('%s: link inside the book has no target (sent to the chapter): %s' % (pb['id'], x))
+        built.append((pb, pdocs, pnav, pused, [], []))
     pics = images.render()
     report = {}
     try:
@@ -1047,12 +1221,15 @@ def main():
     except Exception:
         report = {}
     report.setdefault('books', {})
-    report['about'] = ('Made by tools/book/build_epub.py (epub13): the Kindle ebooks (EPUB 3) of the print series. Upload <id>.epub as the Kindle '
-                       'manuscript and cover-<id>-front.jpg as the Kindle cover. The workbook has no ebook (print only).')
+    report['about'] = ('Made by tools/book/build_epub.py (epub13, logicbook14): the Kindle ebooks (EPUB 3) of the print series, the pocket guide and the box set. '
+                       'Upload <id>.epub as the Kindle manuscript and cover-<id>-front.jpg as the Kindle cover. The workbook has no ebook (print only).')
     fails = 0
-    for b, docs, nav_at, used, figs, exs in built:
+    jobs = list(built)
+    if extras:
+        jobs.append(build_boxset(built, images))
+    for b, docs, nav_at, used, figs, exs in jobs:
         path = os.path.join(OUT, b['id'] + '.epub')
-        ident = write_epub(b, docs, nav_at, used, pics, path)
+        ident = write_epub(b, docs, nav_at, used, pics, path, b.get('extra_files'), b.get('nav_html'))
         bad, facts = check_epub(path, b)
         ec = None
         if jar:
@@ -1062,7 +1239,7 @@ def main():
                 print(out)
                 fails += 1
         size = os.path.getsize(path)
-        report['books'][b['id']] = {'file': 'book/print/epub/%s.epub' % b['id'], 'bytes': size, 'mb': round(size / 1048576, 2), 'identifier': ident,
+        report['books'][b['id']] = {'file': 'book/print/epub/%s.epub' % b['id'], 'kind': b.get('kind', 'book'), 'bytes': size, 'mb': round(size / 1048576, 2), 'identifier': ident,
                                     'chapters': len(b['chapters']), 'figures': len(figs), 'examples': len(exs), 'images': facts.get('images'),
                                     'links_out': facts.get('links_out'), 'links_inside': facts.get('links_inside'), 'checks': 'pass' if not bad else bad,
                                     'epubcheck': ec}

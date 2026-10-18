@@ -316,12 +316,14 @@ def logic_box(b):
     row = lambda k, v, cls='': '<p class="lg-row%s"><span class="lg-l">%s</span> %s</p>' % (cls, esc(lab[k]), v)
     steps = '<span class="lg-arr" aria-hidden="true"> → </span>'.join('<span class="lg-step">%s</span>' % esc(x) for x in b['logic'])
     s = '<aside class="lg-box no-bubble no-cheer no-dive" data-no-bubble aria-label="%s" id="lg-%s">' % (esc(LOGIC['kicker']), b['id'])
+    # the code sits at the top right, so the box can run on across a page break between any two parts
+    s += '<div class="lg-box-qr">%s</div>' % qr(url)
     s += '<p class="lg-box-k">%s<span>%s</span></p><p class="lg-box-t">%s</p>' % (pocket.puzzle_svg(), esc(LOGIC['kicker']), esc(b['title']))
     s += row('looks', esc(b['looks'])) + row('logic', steps, ' lg-logic') + row('like', esc(b['like'])) + row('fits', esc(b['fits']))
     s += row('other', esc(b['other'])) + row('say', '<em>%s</em>' % esc(b['say']), ' lg-say') + row('step', esc(b['step']))
-    s += ('<div class="lg-box-end">%s<p>More situations like this one, each in the same six parts, are free online. '
-          '<a href="%s%s"><span class="ps-addr">%s</span></a></p></div></aside>') % (
-        qr(url), SITE, esc(url), B.addr_html(pocket.item_addr(b['id'])).replace('?', '?<wbr>'))
+    s += ('<p class="lg-box-end">More situations like this one, each in the same six parts, are free online. '
+          '<a href="%s%s"><span class="ps-addr">%s</span></a></p></aside>') % (
+        SITE, esc(url), B.addr_html(pocket.item_addr(b['id'])).replace('?', '?<wbr>'))
     return s
 
 
@@ -833,7 +835,7 @@ def build_book(book, where):
             if x['key'] == 'numbers':
                 extra.append(('numbers', x['toc'], x['html']))
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
-    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('logic', 'The Logic Behind It: more examples'), ('free', 'Free on the website'),
+    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('logic', 'The Logic Behind It: more examples'),
                                              ('series', 'The series'), ('jot', 'Your notes')]
     for k, t in back:
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
@@ -842,7 +844,7 @@ def build_book(book, where):
     front += '\n' + about_page(book, namer) + '\n' + find_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
-    backm = extra_html + research_short(book, here) + logic_free_page(book) + showcase(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
+    backm = extra_html + research_short(book, here) + showcase(book) + logic_free_page(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
     ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Find it fast', 'find', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
     ol += [['%s: %s' % (chapter_label(s_, book)[1], ch_title(s_)), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
@@ -1095,8 +1097,8 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     title = item.get('short_title') or item['title']
     free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.com/the-logic-behind-it') if pocket else (
         '%s/book/' % SITE, 'Free to read online', 'Every chapter, short and full, at spreadloveandacceptance.com/book')
-    extra_css = ('.cv-text { top: .92in; left: .5in; right: .4in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .5in; right: .4in; } '
-                 '.cv-foot { left: .5in; right: .4in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
+    extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
+                 '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
                  '.cv-free { max-width: 2.6in; font-size: 7.8pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
     return '''<!doctype html>

@@ -17,8 +17,8 @@
   "kindle_price_usd": 2.99,
   "isbn": "",
   "isbn_ebook": "",
-  "notes_pages": 3,
-  "build_cards": 3,
+  "notes_pages": 4,
+  "build_cards": 4,
   "include_fits": true,
   "items": [
    "plan-changed",

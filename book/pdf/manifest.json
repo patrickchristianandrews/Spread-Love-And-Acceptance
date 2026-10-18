@@ -3,7 +3,7 @@
   "pages": 146,
   "interior_pages": 144,
   "blank_pages": 2,
-  "bytes": 2128943,
+  "bytes": 2129456,
   "title": "Spread Love & Acceptance: For two or more (short version)",
   "pagemap": {
    "half": 1,
@@ -156,7 +156,7 @@
    "ix-parents": "26–27, 29, 39, 42, 52, 57, 60–61, 67, 69, 73–74, 86, 94–95, 103, 107, 110",
    "ix-partners": "23, 25–26, 30, 35, 44, 48, 53, 69, 73–74, 80, 85, 89–90, 93, 98–99, 102, 104, 110–111",
    "ix-pause-taking-a": "30, 32, 36–38, 42–44, 52–53, 61, 71, 73–74, 83, 90, 100, 102, 108, 117, 120–121",
-   "ix-perspective": "61, 67, 70",
+   "ix-perspective": "61",
    "ix-pressure": "63–68, 108–109, 117, 121, 124",
    "ix-pursue-withdraw": "102",
    "ix-repair": "91, 105",
@@ -179,8 +179,8 @@
    "ix-small-steps": "18, 26, 36, 39, 50, 86",
    "ix-static": "36–37",
    "ix-step-parents": "29, 73, 81",
-   "ix-stress": "32, 36, 39, 44–47, 50, 53, 56, 60–64, 67–68, 71–72, 74–75, 93, 108–109, 112, 117, 121",
-   "ix-stress-tank": "45, 47, 50, 53, 56, 59–65, 67, 69, 71–75, 93, 106–113, 117, 121",
+   "ix-stress": "32, 36, 39, 44–47, 50, 53, 56, 60–64, 66–68, 71–72, 74–75, 93, 108–109, 112, 117, 121",
+   "ix-stress-tank": "45, 50, 53, 60–64, 66, 71–75, 106–108, 111–113, 117",
    "ix-support": "82",
    "ix-teenagers": "26, 36, 59, 62, 69, 83, 100",
    "ix-tone": "19, 32–35, 42–44, 69–70",
@@ -198,7 +198,7 @@
   },
   "print": {
    "interior": "print/together-interior.pdf",
-   "interior_bytes": 2051778,
+   "interior_bytes": 2052291,
    "cover": "print/together-cover.pdf",
    "cover_bytes": 77460
   }
@@ -207,7 +207,7 @@
   "pages": 262,
   "interior_pages": 260,
   "blank_pages": 1,
-  "bytes": 3586396,
+  "bytes": 3586512,
   "title": "Spread Love & Acceptance: For two or more (full version)",
   "pagemap": {
    "half": 1,
@@ -413,7 +413,7 @@
    "ix-partners": "23, 30–31, 36, 41, 58, 60, 62, 86, 91, 104, 115–116, 138, 142, 149, 156, 158, 180, 183, 214",
    "ix-pause-taking-a": "55, 61–62, 64, 71, 119, 130–131, 149, 168, 174, 203, 207–208, 235",
    "ix-personality": "24",
-   "ix-perspective": "118, 131, 136",
+   "ix-perspective": "118, 131",
    "ix-plato": "20, 45",
    "ix-praise": "167",
    "ix-pressure": "93, 123, 126–128, 132, 134, 137–139, 211, 222–223, 231, 235, 238",
@@ -445,7 +445,7 @@
    "ix-static": "52, 57, 61–62, 76–77",
    "ix-step-parents": "42, 142",
    "ix-stress": "37–39, 50–51, 79, 82, 84, 86, 93–95, 98–100, 103, 113, 117–120, 126, 128, 132, 138, 146–147, 150, 188",
-   "ix-stress-tank": "38, 69, 84, 93–95, 110, 117–121, 123, 125–126, 129–131, 138–139, 141, 143–150, 188, 219–222, 225–227, 231",
+   "ix-stress-tank": "38, 69, 84, 93–95, 110, 117–121, 123, 125–126, 128–131, 138–139, 141, 143–150, 188, 219–222, 225–227, 231",
    "ix-support": "58, 73–74, 163, 166, 211–212",
    "ix-teenagers": "30, 41, 48, 56, 66, 78, 87, 94, 121, 135, 138, 148, 158, 189, 204, 210",
    "ix-tone": "51, 53–57, 60, 75–76, 78–79, 82, 115, 132, 135–136, 168, 174",
@@ -464,7 +464,7 @@
   },
   "print": {
    "interior": "print/together-in-depth-interior.pdf",
-   "interior_bytes": 3508506,
+   "interior_bytes": 3508622,
    "cover": "print/together-in-depth-cover.pdf",
    "cover_bytes": 77477
   }
@@ -473,7 +473,7 @@
   "pages": 494,
   "interior_pages": 492,
   "blank_pages": 5,
-  "bytes": 6567469,
+  "bytes": 6572359,
   "title": "Spread Love & Acceptance: The whole book (short version)",
   "pagemap": {
    "half": 1,
@@ -771,7 +771,7 @@
    "ix-pause-taking-a": "55, 83–84, 89–90, 146, 148, 176, 180–181, 219–220, 333, 339, 424",
    "ix-perception": "185",
    "ix-personality": "34, 240, 285, 343–345, 347, 349–351, 353–355, 357, 401, 409–410",
-   "ix-perspective": "107, 113, 116, 196–197",
+   "ix-perspective": "107, 196–197",
    "ix-praise": "32, 247",
    "ix-pressure": "39, 109–114, 158, 168, 170, 174, 177, 216, 225, 235, 270, 278, 370, 379, 382, 394–398, 411–412, 420, 424, 427",
    "ix-prolonged-grief": "259",
@@ -810,8 +810,8 @@
    "ix-small-steps": "52, 54, 58, 228, 232, 235, 239–240, 381, 400",
    "ix-static": "82–83",
    "ix-step-parents": "75, 119, 127",
-   "ix-stress": "32, 49, 90–91, 96, 99, 106–110, 118, 167–171, 175, 177, 179–184, 325–326, 346, 379, 385–386, 401, 407, 409",
-   "ix-stress-tank": "39, 49, 91, 96, 99, 106–110, 117–121, 168, 170, 177, 184, 407, 409–411, 414–416, 420",
+   "ix-stress": "32, 49, 90–91, 96, 99, 106–110, 112, 118, 167–171, 175, 177, 179–184, 325–326, 346, 379, 385–386, 401, 407, 409",
+   "ix-stress-tank": "39, 49, 91, 96, 99, 106–110, 112, 117–121, 168, 170, 177, 184, 407, 409–411, 414–416, 420",
    "ix-suicide": "313, 319, 323–324, 371, 383–384, 397",
    "ix-support": "50, 228, 239, 253, 315, 325, 380",
    "ix-tajfel-henri": "390",
@@ -838,7 +838,7 @@
   },
   "print": {
    "interior": "print/whole-interior.pdf",
-   "interior_bytes": 6492425,
+   "interior_bytes": 6497315,
    "cover": "print/whole-cover.pdf",
    "cover_bytes": 73591
   }
@@ -847,7 +847,7 @@
   "pages": 842,
   "interior_pages": 840,
   "blank_pages": 2,
-  "bytes": 9368101,
+  "bytes": 9372822,
   "title": "Spread Love & Acceptance: The whole book (full version)",
   "pagemap": {
    "half": 1,
@@ -1227,7 +1227,7 @@
    "ix-pennebaker-james": "39, 324, 333, 502, 585",
    "ix-perception": "366, 368–369, 378, 380, 383, 385–386, 456, 518",
    "ix-personality": "26, 51, 58, 118, 374, 460, 464, 545, 650–653, 655–657, 659–665, 667–669, 730, 746, 755, 757",
-   "ix-perspective": "212, 225, 230, 316, 342, 367, 378, 380, 387–388, 390, 418, 443, 466, 489, 512, 547, 569, 573, 598, 601, 623, 626, 651, 672",
+   "ix-perspective": "212, 225, 316, 342, 367, 378, 380, 387–388, 390, 418, 443, 466, 489, 512, 547, 569, 573, 598, 601, 623, 626, 651, 672",
    "ix-plato": "29, 48, 114, 139, 351, 368, 383, 404, 454, 551, 679",
    "ix-pluralistic-ignorance": "727",
    "ix-praise": "24, 34, 47–48, 261, 357, 401, 480, 484, 528",
@@ -1276,7 +1276,7 @@
    "ix-stereotypes": "330, 376–377, 516, 601, 609",
    "ix-stoics": "45, 78, 104, 317, 326, 329, 333, 335, 345, 360, 379, 455, 457, 472, 491, 502, 548, 555, 574, 615, 631, 636, 660, 696, 700",
    "ix-stress": "59–60, 85, 131–133, 144–145, 173, 176, 178, 180, 187–189, 192–194, 197, 207, 211–214, 220, 222, 226, 232, 240–241, 244, 282, 340–344, 350–353, 355, 357, 359, 361, 363–365, 429, 437, 554, 606, 612, 620, 624, 628, 654, 681, 693, 695, 709, 717–718, 753, 756–757",
-   "ix-stress-tank": "61, 85, 132, 163, 178, 187–189, 204, 211–215, 217, 219–220, 223–225, 232–233, 235, 237–244, 282, 340, 342, 352–354, 362, 365, 488, 753–758, 761–763, 767",
+   "ix-stress-tank": "61, 85, 132, 163, 178, 187–189, 204, 211–215, 217, 219–220, 222–225, 232–233, 235, 237–244, 282, 340, 342, 352–354, 362, 365, 488, 753–758, 761–763, 767",
    "ix-suicide": "494, 508, 600, 613–615, 622–624, 694, 702, 714, 716–717, 743, 750",
    "ix-support": "86, 99, 305–306, 344, 374, 442, 457–458, 463, 487, 501–502, 505, 509, 513, 543, 602, 604, 606, 609, 617, 619–620, 623, 708, 714",
    "ix-tajfel-henri": "379, 430, 726",
@@ -1306,21 +1306,21 @@
   },
   "print": {
    "interior": "print/whole-in-depth-interior.pdf",
-   "interior_bytes": 9291365,
+   "interior_bytes": 9296086,
    "cover": "print/whole-in-depth-cover.pdf",
    "cover_bytes": 73602
   }
  },
  "sample": {
   "pages": 72,
-  "bytes": 1037685,
+  "bytes": 1037711,
   "title": "Spread Love & Acceptance: a sample"
  },
  "for-yourself": {
   "pages": 368,
   "interior_pages": 366,
   "blank_pages": 3,
-  "bytes": 4921123,
+  "bytes": 4925836,
   "title": "Spread Love & Acceptance: For one person (short version)",
   "pagemap": {
    "half": 1,
@@ -1622,7 +1622,7 @@
   },
   "print": {
    "interior": "print/for-yourself-interior.pdf",
-   "interior_bytes": 4850543,
+   "interior_bytes": 4855256,
    "cover": "print/for-yourself-cover.pdf",
    "cover_bytes": 70054
   }
@@ -1631,7 +1631,7 @@
   "pages": 604,
   "interior_pages": 602,
   "blank_pages": 1,
-  "bytes": 6327472,
+  "bytes": 6332160,
   "title": "Spread Love & Acceptance: For one person (full version)",
   "pagemap": {
    "half": 1,
@@ -2013,7 +2013,7 @@
   },
   "print": {
    "interior": "print/for-yourself-in-depth-interior.pdf",
-   "interior_bytes": 6255781,
+   "interior_bytes": 6260469,
    "cover": "print/for-yourself-in-depth-cover.pdf",
    "cover_bytes": 70066
   }
@@ -2022,7 +2022,7 @@
   "pages": 322,
   "interior_pages": 320,
   "blank_pages": 2,
-  "bytes": 4273902,
+  "bytes": 4278621,
   "title": "Spread Love & Acceptance: Understanding people (short version)",
   "pagemap": {
    "half": 1,
@@ -2297,7 +2297,7 @@
   },
   "print": {
    "interior": "print/understanding-interior.pdf",
-   "interior_bytes": 4200065,
+   "interior_bytes": 4204784,
    "cover": "print/understanding-cover.pdf",
    "cover_bytes": 73384
   }
@@ -2306,7 +2306,7 @@
   "pages": 508,
   "interior_pages": 506,
   "blank_pages": 1,
-  "bytes": 5135537,
+  "bytes": 5140211,
   "title": "Spread Love & Acceptance: Understanding people (full version)",
   "pagemap": {
    "half": 1,
@@ -2657,7 +2657,7 @@
   },
   "print": {
    "interior": "print/understanding-in-depth-interior.pdf",
-   "interior_bytes": 5060843,
+   "interior_bytes": 5065517,
    "cover": "print/understanding-in-depth-cover.pdf",
    "cover_bytes": 73397
   }

@@ -5,9 +5,10 @@ Used by tools/book/build_series.py (which also patches book/index.html in place)
 tools/book/build_book.py's build_home (so a full rebuild of the book keeps the block). Reads
 tools/book/series.json (the books) and book/print/series.json (page counts, written by build_pdfs.js).
 
-The shop buttons come from /assets/js/book-shop.js: { direct, amazon, ingram } per book. A button whose link is
-empty stays hidden, and so does the whole "Get it in print" row while all three are empty. No store address is
-ever written here.
+The shop button comes from /assets/js/book-shop.js: { amazon } per book (logicbook14: the owner sells on Amazon only, so
+there is no "from this site" or bookshop button). A button whose link is empty stays hidden, and so does the whole
+"Get it in print" row while it is empty. No store address is ever written here. The pocket guide (tools/book/series-extras.json)
+has its own row, with the free situations online.
 """
 import html
 import json
@@ -76,18 +77,16 @@ def check_blurbs():
     return out
 
 
-def cover_img(item_id, alt):
+def cover_img(item_id, alt, h=720):
     small = 'book/print/cover-%s-front-small.jpg' % item_id
     if os.path.exists(os.path.join(ROOT, small)):
-        return '<img class="bk-sb-cover" src="/%s" alt="%s" width="480" height="720" loading="lazy" decoding="async">' % (small, esc(alt))
+        return '<img class="bk-sb-cover" src="/%s" alt="%s" width="480" height="%d" loading="lazy" decoding="async">' % (small, esc(alt), h)
     return '<span class="bk-sb-cover is-empty" aria-hidden="true"></span>'
 
 
 def shop_row(item_id):
     return ('<p class="bk-sb-shop" data-shop-book="%s" hidden><span class="bk-sb-shop-k">Get it in print:</span> '
-            '<a class="tol-btn is-quiet" data-shop="direct" hidden>From this site</a> '
-            '<a class="tol-btn is-quiet" data-shop="amazon" hidden>Amazon</a> '
-            '<a class="tol-btn is-quiet" data-shop="ingram" hidden>Bookshops and libraries</a></p>') % esc(item_id)
+            '<a class="tol-btn is-quiet" data-shop="amazon" hidden>Amazon</a></p>') % esc(item_id)
 
 
 def home_html():
@@ -111,9 +110,20 @@ def home_html():
     rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                  '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/workpapers/fill/index.html">Fill them in free online</a></p>%s</div></li>') % (
         w['color'], cover_img(w['id'], 'Cover of %s' % w['title']), esc(w['title']), esc(w['line']), meta, shop_row(w['id'])))
+    try:
+        with open(os.path.join(HERE, 'series-extras.json'), encoding='utf-8') as f:
+            pk = json.load(f)['pocket']
+    except (OSError, ValueError, KeyError):
+        pk = None
+    if pk:
+        m = made.get(pk['id'], {})
+        meta = '%d everyday reactions, one to a page' % len(pk['items']) + (' · %d small pages' % m['pages'] if m.get('pages') else '')
+        rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+                     '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/the-logic-behind-it.html">Every situation, free online</a></p>%s</div></li>') % (
+            pk['color'], cover_img(pk['id'], 'Cover of %s' % pk['title'], 768), esc(pk['title']), esc(pk['line']), meta, shop_row(pk['id'])))
     return ('%s\n%s\n<section class="bk-series no-bubble no-dive no-cheer" data-no-bubble id="print-series" aria-labelledby="series-h">'
             '<h2 id="series-h">The book in print</h2>'
-            '<p>The same chapters, as a series of short colour books that each stand on their own, plus a workbook with every workpaper. '
+            '<p>The same chapters, as a series of short colour books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
             'In print, each chapter is the short version, with a code to scan for the full one.</p>'
             '<p class="bk-series-note">The print books are optional; everything stays free online.</p>'
             '<ol class="bk-series-list">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), JS, END)

@@ -190,7 +190,7 @@ def sit_html(it, n, S, include_fits=True):
             '<div class="pk-part pk-other"><h3 class="pk-h">The other side</h3><p>%(other)s</p></div>'
             '<div class="pk-say"><p class="pk-say-q">%(say)s</p><p class="pk-step"><b>One small step</b> %(step)s</p>%(care)s</div>'
             '<div class="pk-online">%(qr)s<p><strong>This one online</strong>Free, with more pictures to choose from.'
-            '<a class="ps-addr pk-addr" href="https://spreadloveandacceptance.com%(url)s">%(addr)s</a></p></div></article>') % {
+            '<a href="https://spreadloveandacceptance.com%(url)s"><span class="ps-addr pk-addr">%(addr)s</span></a></p></div></article>') % {
         'cat': it['cat'], 'id': it['id'], 'mark': S.mark('sit-' + it['id']), 'n': n, 'cat_name': esc(c['name']), 'side': it['side'],
         'side_t': esc(SIDE_TAG[it['side']]), 't': esc(it['t']), 'looks': esc(it['looks']), 'chain': chain, 'an': esc(it['an'][0]), 'fits': fits,
         'other': esc(it['other']), 'say': esc(it['say']), 'step': esc(it['step']), 'care': care, 'qr': S.qr(item_url(it['id'])),
@@ -282,7 +282,7 @@ def build_html(p, S):
          'Nothing you type is sent anywhere.</p></section>') % (S.mark('build'), ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), esc(d)) for t, d in BUILD_PROMPTS))
     for k in range(p.get('build_cards', 3)):
         rows = ''.join('<div class="pk-card-row"><p class="pk-card-k">%s</p><div class="pk-card-lines">%s</div></div>' % (
-            esc(t), '<div></div>' * (3 if t == 'The logic' else 2)) for t, _d in BUILD_PROMPTS)
+            esc(t), '<div></div>' * (4 if t == 'The logic' else 3)) for t, _d in BUILD_PROMPTS)
         s += ('<section class="pk-back pk-card"><p class="pk-card-top"><span>Build your own</span><span>Card %d</span></p>'
               '<p class="pk-card-name">The reaction <span class="pk-card-line"></span></p>%s</section>') % (k + 1, rows)
     return s

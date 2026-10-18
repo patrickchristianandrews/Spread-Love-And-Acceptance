@@ -454,21 +454,31 @@ const SERIES_OUT = path.join(ROOT, 'book', 'print');
 const r2 = x => Math.round(x * 100) / 100;
 
 function seriesCosts(job, pages, C) {
+  // logicbook14: Amazon only. KDP pays 60% of the list price at $9.99 and up, 50% below it, minus printing
   const large = job.kind === 'workbook';
-  const kdp = large ? C.kdp_large : C.kdp, ing = large ? C.ingram_large : C.ingram, d = C.direct;
+  const kdp = large ? C.kdp_large : C.kdp;
   const P = job.price;
   const kdpPrint = kdp.fixed + kdp.per_page * pages;
-  const ingPrint = ing.fixed + ing.per_page * pages;
-  const card = d.card_pct * P + d.card_fixed;
+  const royalty = P >= (kdp.threshold || 0) ? kdp.royalty : (kdp.royalty_low || kdp.royalty);
   const row = net => ({ net: r2(net), pct: Math.round(net / P * 1000) / 10 });
   return {
     list_price: P,
-    kdp_amazon: Object.assign({ print: r2(kdpPrint) }, row(kdp.royalty * P - kdpPrint)),
+    kdp_amazon: Object.assign({ print: r2(kdpPrint), royalty_rate: royalty, how: `${Math.round(royalty * 100)}% x $${P.toFixed(2)} - ($${kdp.fixed.toFixed(2)} + ${pages} x $${kdp.per_page})` }, row(royalty * P - kdpPrint)),
     kdp_expanded: Object.assign({ print: r2(kdpPrint) }, row(kdp.expanded * P - kdpPrint)),
-    ingram_bookshops: Object.assign({ print: r2(ingPrint), discount: ing.discount }, row(P * (1 - ing.discount) - ing.market_fee * P - ingPrint)),
-    direct_estimate: Object.assign({ print: r2(ingPrint), card_fee: r2(card) }, row(P - ingPrint - card)),
-    direct_with_fulfil_fee: Object.assign({ print: r2(ingPrint), card_fee: r2(card), fulfil_fee: d.fulfil_fee }, row(P - ingPrint - card - d.fulfil_fee)),
   };
+}
+
+async function shootFront(browser, job, dsf) {
+  const W = 2 * 0.125 + 2 * job.trim[0] + 0.36, H = job.trim[1] + 0.25;
+  const c = await browser.newContext({ deviceScaleFactor: dsf, viewport: { width: Math.ceil(W * 96) + 2, height: Math.ceil(H * 96) + 2 } });
+  const page = await c.newPage();
+  page.on('pageerror', e => console.log('  page error:', e.message));
+  await routeSite(page);
+  await page.goto(`http://127.0.0.1:${PORT}/book/print/src/${job.cover}.html`, { waitUntil: 'load', timeout: 120000 });
+  await page.evaluate(async () => { await Promise.all([...document.fonts].map(f => f.load().catch(() => null))); await document.fonts.ready; });
+  const out = await page.locator('#front').screenshot({ type: 'jpeg', quality: 90 });
+  await c.close();
+  return out;
 }
 
 async function makeCover(browser, job, pages) {
@@ -523,6 +533,16 @@ async function runSeries(browser, ctx) {
   const jobs = src.jobs.filter(j => ONLY.length ? ONLY.includes(j.id) : !j.only_when_named);
   for (const job of jobs) {
     const t0 = Date.now();
+    if (job.kind === 'front') {
+      // logicbook14: a front cover only (the Kindle box set): the JPG, no interior and no full wrap
+      const big = path.join(SERIES_OUT, job.cover + '-front.jpg');
+      fs.writeFileSync(big, await shootFront(browser, job, 1600 / (job.trim[0] * 96)));
+      execFileSync('python3', ['-c', 'import sys\nfrom PIL import Image\nim = Image.open(sys.argv[1]); w = 480; h = round(im.height * w / im.width)\nim.convert("RGB").resize((w, h), Image.LANCZOS).save(sys.argv[2], quality=84, optimize=True, progressive=True)', big, path.join(SERIES_OUT, job.cover + '-front-small.jpg')]);
+      made.fronts = made.fronts || {};
+      made.fronts[job.id] = { title: job.title, kind: 'front', front_jpg: job.cover + '-front.jpg', front_small_jpg: job.cover + '-front-small.jpg' };
+      console.log(job.id, 'front cover only', ((Date.now() - t0) / 1000).toFixed(0) + 's');
+      continue;
+    }
     const r = await makeBook(ctx, 'print/src/' + job.id, { colPx: job.colPx, fillGaps: job.kind === 'book' });
     if (job.kind === 'measure') {
       fs.writeFileSync(path.join(SERIES_OUT, 'src', 'measure.json'), JSON.stringify({ pages: r.pages, pagemap: r.pagemap }, null, 1) + '\n');
@@ -543,6 +563,7 @@ async function runSeries(browser, ctx) {
       bytes: fs.statSync(out).size, pdf: job.id + '.pdf', cover_pdf: job.cover + '.pdf', front_jpg: job.cover + '-front.jpg' }, cov,
       { costs: seriesCosts(job, pages, src.costs), pagemap: r.pagemap });
     console.log(job.id, pages, 'pages,', 'spine', cov.spine_in, 'in,', (made.books[job.id].bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');
+    if ((job.min_pages && pages < job.min_pages) || (job.max_pages && pages > job.max_pages)) console.log('  WARNING: %s has %d pages; it should have %d to %d', job.id, pages, job.min_pages, job.max_pages);
   }
   made.generated = new Date().toISOString().slice(0, 10);
   made.paper_in = src.paper_in;
