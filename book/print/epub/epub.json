@@ -2,7 +2,7 @@
  "books": {
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
-   "bytes": 1236903,
+   "bytes": 1236895,
    "mb": 1.18,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
@@ -19,7 +19,7 @@
   },
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
-   "bytes": 1094748,
+   "bytes": 1094749,
    "mb": 1.04,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
@@ -36,7 +36,7 @@
   },
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
-   "bytes": 1100479,
+   "bytes": 1100465,
    "mb": 1.05,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
@@ -53,7 +53,7 @@
   },
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
-   "bytes": 1073067,
+   "bytes": 1073055,
    "mb": 1.02,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,

@@ -1075,46 +1075,29 @@ def images_of(path, body, image):
 
 
 ROBOTS = """# Welcome, people and machines. Spread Love & Acceptance is free and open to every search engine
-# and AI assistant: please read, index and cite anything here.
+# and AI assistant: please read, index and cite anything here, except the private folders below.
+
 User-agent: *
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+User-agent: DuckAssistBot
+User-agent: CCBot
+User-agent: meta-externalagent
+User-agent: MistralAI-User
 Allow: /
 Disallow: /manuscript/
 Disallow: /notes/
 Disallow: /infrastructure/
-
-# AI assistants and their crawlers are explicitly welcome.
-User-agent: GPTBot
-Allow: /
-User-agent: OAI-SearchBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-User-agent: Claude-User
-Allow: /
-User-agent: Claude-SearchBot
-Allow: /
-User-agent: anthropic-ai
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: Perplexity-User
-Allow: /
-User-agent: Google-Extended
-Allow: /
-User-agent: Applebot-Extended
-Allow: /
-User-agent: Bingbot
-Allow: /
-User-agent: DuckAssistBot
-Allow: /
-User-agent: CCBot
-Allow: /
-User-agent: meta-externalagent
-Allow: /
-User-agent: MistralAI-User
-Allow: /
 
 Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 """
