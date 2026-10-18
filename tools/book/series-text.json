@@ -291,5 +291,53 @@
     "<a href=\"/book/chapter-5.html\">The monthly look-back</a>"
    ]
   ]
+ },
+ "words": {
+  "book": 4,
+  "title": "Words for the talk",
+  "lede": "Some ways to say the hard parts, collected in one place. Change the words until they sound like you.",
+  "groups": [
+   [
+    "To begin",
+    [
+     "“Can we look at how the week went, together? I’d like us both to see it.”",
+     "“I’ve written down what I did this week. Would you do the same, so we can compare?”",
+     "“Is now a good time, or would after dinner be better?”",
+     "“I think a lot of the remembering lands on me. Can we talk about that?”"
+    ]
+   ],
+   [
+    "When it gets tense",
+    [
+     "“I’m getting wound up. Can we stop for twenty minutes and come back at eight?”",
+     "“That came out sharper than I meant. Let me try again.”",
+     "“My tank is pretty full today, so I might sound crosser than I feel.”",
+     "“What did you hear me say?”"
+    ]
+   ],
+   [
+    "Handing over a job",
+    [
+     "“Could you own the bins from now on, from noticing they’re full to putting them out?”",
+     "“It’s yours now, so do it your way. I’ll only step in if you ask.”",
+     "“I’ll be the backstop this month. If it slips, I’ll mention it once, gently.”"
+    ]
+   ],
+   [
+    "Saying no kindly",
+    [
+     "“That’s a fair ask. I can’t take it on this week, but I could do Saturday’s shop instead.”",
+     "“I’m at my limit. Can we look at what else could drop?”"
+    ]
+   ],
+   [
+    "Thanks and checking in",
+    [
+     "“Thanks for sorting the dentist. I noticed.”",
+     "“What’s one thing that felt easier this month?”",
+     "“Is anything from last week still sitting with you?”"
+    ]
+   ]
+  ]
  }
 }

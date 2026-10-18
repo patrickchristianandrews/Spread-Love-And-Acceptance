@@ -484,6 +484,7 @@ def book_docs(book, where):
     namer = S.namer_for(book)
     ebook_ref = lambda s_: (namer.ref(s_)[0], None)
     about = S.about_page(book, namer).replace('<section class="ps-about pe-only"', '<section class="ps-about"', 1)
+    about = re.sub(r'<span class="ps-addr ps-about-u" data-full="([^"]+)">[^<]*</span>', r'<span class="ps-addr">\1</span>', about)
     about = swap(about, 'The code at the end of each chapter opens the full version on your phone.', 'The link at the end of each chapter opens the full version.', 'about page')
     about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?”', r'it gives the book and the chapter, as in “\1”', about)
     if not n_:
@@ -504,7 +505,13 @@ def book_docs(book, where):
         num, lab = S.chapter_label(slug, book)
         h = h.replace('<article class="whole-ch pe-ch"', '<article epub:type="chapter" class="whole-ch pe-ch"', 1)
         docs.append(Doc(slug + '.xhtml', '%s: %s' % (lab, B.TITLES[slug]), h, heading_shift=1, body_type='bodymatter'))
-    # the back of the book
+    # the back of the book (printfix13: Book 4's first month, job list and words, then questions people ask, as in print)
+    for fname, title, h in [('month.xhtml', 'Your first month, week by week', S.month_page(book, namer, epub=True)),
+                            ('jobs.xhtml', 'A list of jobs to start from', S.jobs_page(book, namer, epub=True)),
+                            ('words.xhtml', 'Words for the talk', S.words_page(book, epub=True)),
+                            ('faq.xhtml', 'Questions people ask', S.faq_page(book, namer, epub=True))]:
+        if h:
+            docs.append(Doc(fname, title, h))
     found = hints.mentions(dict((s_, B.PAGES[(s_, False)]) for s_ in chs), chs)
     wt_ref = lambda s_: '<a href="#%s">%s</a>' % (s_, B.esc(B.SHORT[s_]))
     docs.append(Doc('wp-tools.xhtml', 'Workpapers and tools in this book', hints.back_section(S.mark, found, wt_ref, book['color'])))

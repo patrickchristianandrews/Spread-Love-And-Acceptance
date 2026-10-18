@@ -404,9 +404,10 @@ def about_page(book, namer):
     rows = ''
     for slug in book['chapters']:
         num, lab = chapter_label(slug, book)
-        rows += '<tr><td>%s</td><td>%s</td><td><span class="ps-addr">%s</span></td></tr>' % (
-            esc(lab), esc(B.SHORT[slug]), B.addr_html(B.short_address(B.href(slug))))
-    s += ('<table class="ps-about-t"><thead><tr><th scope="col">In this book</th><th scope="col">About</th><th scope="col">Free online, short and full</th></tr></thead>'
+        tail = B.short_address(B.href(slug)).split('/book/', 1)[-1]
+        rows += '<tr><td>%s</td><td>%s</td><td><span class="ps-addr ps-about-u" data-full="%s">…/book/%s</span></td></tr>' % (
+            esc(lab), esc(B.SHORT[slug]), esc(B.short_address(B.href(slug))), esc(tail))
+    s += ('<table class="ps-about-t"><thead><tr><th scope="col">Here</th><th scope="col">About</th><th scope="col">Free online at spreadloveandacceptance.com/book</th></tr></thead>'
           '<tbody>%s</tbody></table>') % rows
     others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
                        for b in books() if b is not book)
@@ -542,6 +543,16 @@ def jobs_page(book, namer, epub=False):
     return ('<section class="pe-back ps-jobs no-bubble" data-no-bubble id="jobs" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>%s%s'
             '<div class="ps-jobs-cols">%s</div></section>') % (
         book['color'], book['tint'], mark('jobs'), esc(j['title']), _series_html(h, book, namer, epub, 'jobs'), head, gs)
+
+
+def words_page(book, epub=False):
+    w = ST.TEXT.get('words')
+    if not w or book['n'] != w.get('book'):
+        return ''
+    gs = ''.join('<div class="ps-words-g"><p class="ps-words-h">%s</p><ul class="ps-words-l">%s</ul></div>' % (esc(g), ''.join('<li>%s</li>' % esc(x) for x in xs))
+                 for g, xs in w['groups'])
+    return ('<section class="pe-back ps-words no-bubble" data-no-bubble id="words" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>'
+            '<p class="pe-back-lede">%s</p>%s</section>') % (book['color'], book['tint'], mark('words'), esc(w['title']), esc(w['lede']), gs)
 
 
 # ---------- "Free on the website": a two-page showcase (printfix13) ----------
@@ -699,6 +710,8 @@ def build_book(book, where):
     if book['n'] == 4:
         extra.append(('month', ST.TEXT['first_month']['title'], month_page(book, namer)))
         extra.append(('jobs', ST.TEXT['jobs']['title'], jobs_page(book, namer)))
+    if words_page(book):
+        extra.append(('words', ST.TEXT['words']['title'], words_page(book)))
     if ST.TEXT.get('faq', {}).get(str(book['n'])):
         extra.append(('faq', 'Questions people ask', faq_page(book, namer)))
     extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))

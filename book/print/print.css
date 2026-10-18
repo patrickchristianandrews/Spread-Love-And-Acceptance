@@ -116,7 +116,9 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-about-t th { text-align: left; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.6pt; letter-spacing: .08em; text-transform: uppercase; color: var(--pc); border-bottom: .6pt solid var(--pc); padding: 0 1.4mm .8mm 0; }
 .ps-about-t td { border-bottom: .3pt solid #E2D6B6; padding: .7mm 1.4mm .7mm 0; vertical-align: top; }
 .ps-about-t td:first-child { white-space: nowrap; color: var(--pc); }
-.ps-about-t .ps-addr { font-size: 6.6pt; }
+.ps-about-t .ps-addr { font-size: 6.6pt; white-space: nowrap; }
+.ps-about-t th:first-child { white-space: nowrap; }
+.ps-about-t td:nth-child(2) { white-space: nowrap; }
 .ps-about-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt !important; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin: 2mm 0 1mm !important; }
 .ps-about-ideas { margin: 0 0 1.6mm; padding-left: 4mm; }
 .ps-about-ideas li { margin: 0 0 .8mm; }
@@ -196,3 +198,7 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-jobs-n { flex: 0 1 auto; }
 .ps-jobs-o { flex: 1 1 12mm; min-width: 12mm; border-bottom: .5pt dotted #8C826F; height: 3mm; display: inline-block; }
 .ps-jobs-key .ps-jobs-o { width: 12mm; vertical-align: -0.6mm; }
+.ps-words-g { break-inside: avoid; margin: 0 0 3mm; }
+.ps-words-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.2mm; }
+.ps-words-l { list-style: none; margin: 0; padding: 0 0 0 3mm; border-left: 2pt solid var(--pt, #F3EEE2); }
+.ps-words-l li { font-size: 9.2pt; line-height: 1.42; margin: 0 0 1.2mm; }
