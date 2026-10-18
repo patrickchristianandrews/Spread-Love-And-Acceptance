@@ -6,8 +6,7 @@ Made by tools/book/listing_kdp.py (print12) from tools/book/series.json and the 
 - **One account, your own ISBNs.** Use your own Bowker ISBN for each paperback (one per book and format). The Kindle edition needs no ISBN; Amazon gives it an ASIN. [OWNER]
 - **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol the Kindle editions in KDP Select** (see "Kindle extras").
-- **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
-- **The workbook is print only.** Its forms are made to be written in, and every one is already free to print or fill in on the website, so a Kindle edition would only repeat links (and KDP can turn away ebooks that are mostly links or freely available content). Each Kindle book already links every workpaper to its free form. The workbook has no Kindle row to fill in.
+- **The Kindle editions need their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. A reflowable EPUB of each book still has to be made (the same chapters, without page numbers, with live links instead of QR codes). [OWNER: ask for it]
 - **The same answers every time:** British English text on the Amazon.com store is fine; mark the language as English.
 
 
@@ -107,10 +106,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-1-know-yourself-kindly.epub** (EPUB 3, reflowable, 1.17 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
-| Kindle cover file | book/print/cover-book-1-know-yourself-kindly-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.02 a copy after delivery (1.17 MB × $0.15 = $0.18). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $3.74 a copy after delivery (≈ 3 MB × $0.15). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -217,10 +213,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.03 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
-| Kindle cover file | book/print/cover-book-2-heal-and-steady-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.03 MB × $0.15 = $0.15). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $3.74 a copy after delivery (≈ 3 MB × $0.15). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -327,10 +320,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-3-understanding-each-other.epub** (EPUB 3, reflowable, 1.05 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
-| Kindle cover file | book/print/cover-book-3-understanding-each-other-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.05 MB × $0.15 = $0.16). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $3.74 a copy after delivery (≈ 3 MB × $0.15). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -437,10 +427,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.09 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
-| Kindle cover file | book/print/cover-book-4-share-the-load-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.03 a copy after delivery (1.09 MB × $0.15 = $0.16). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $3.74 a copy after delivery (≈ 3 MB × $0.15). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -462,7 +449,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Language | English | English |
 | Book title | The Workpapers: Free Forms, All in One | The Workpapers: Free Forms, All in One |
 | Subtitle | Every workpaper from the series, on big pages, to fill in by hand | Every workpaper from the series, on big pages, to fill in by hand |
-| Series | Spread Love & Acceptance, number 5 [OWNER: or leave the workbook out of the numbered series] (use "Add to series" so all books show together) | no Kindle edition (print only) |
+| Series | Spread Love & Acceptance, number 5 [OWNER: or leave the workbook out of the numbered series] (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
@@ -544,7 +531,7 @@ The answers are seen by Amazon, not printed on the product page.
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
 ### Kindle
-**No Kindle edition: the workbook is print only.** It is made to be written in, and every form is already free to print or fill in at spreadloveandacceptance.com/workpapers/fill. A companion ebook would only repeat those links, so there is no file to upload. On the paperback's page, leave the Kindle edition empty. Each Kindle book in the series links every workpaper to its free form instead.
+No Kindle edition: the workbook is made to be written in. (Its forms are free to print online.)
 
 ### Taglines for ads (short and true)
 
@@ -568,7 +555,7 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 
 - Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page on the characters, the help page), so a browser reaches Chapter 1 within 7 pages.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, the help page right after the contents, then the three friends, so Chapter 1 comes early.
+- For Kindle, KDP shows about the first 10%: keep the same short front matter in the EPUB, and put the help page right after the contents.
 
 ## Author Central bio (short, warm and true)
 

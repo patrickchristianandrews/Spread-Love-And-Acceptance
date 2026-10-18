@@ -39,12 +39,6 @@ import book_art  # noqa: E402
 import front_back  # noqa: E402
 import hints  # noqa: E402
 import series_site  # noqa: E402
-import series_text as ST  # noqa: E402  (printfix13: series cross-references, print-only wording, checks)
-
-# printfix13: in the series the afterword looks back over four books, and its short name (running heads, contents) says so
-for _slug, _t in ST.TEXT.get('titles', {}).items():
-    if _slug in B.SHORT:
-        B.SHORT[_slug] = _t
 
 ROOT = B.ROOT
 OUT = os.path.join(ROOT, 'book', 'print')
@@ -151,46 +145,21 @@ def online_name(slug):
     return B.chapter_name(B.entry(slug))
 
 
-def lede(slug):
-    """the chapter's opening line; series-text.json "ledes" has the print wording where the online one names the online book"""
-    return ST.TEXT.get('ledes', {}).get(slug) or B.LEDES[slug]
-
-
-def ch_title(slug):
-    return ST.TEXT.get('titles', {}).get(slug) or B.TITLES[slug]
-
-
-def summary_at_end(slug):
-    """printfix13: a chapter keeps either its "In short" box at the top or "What to remember" at the end, never both.
-    series.json "summary_at_end" lists the chapters that keep the end version."""
-    return slug in CFG.get('summary_at_end', [])
-
-
-def override(slug):
-    """a print-only version of a whole chapter body (series-<slug>.html, such as the series afterword), or None"""
-    f = os.path.join(HERE, 'series-%s.html' % slug)
-    return B.read(f) if os.path.exists(f) else None
-
-
 def s_open(e, book):
     hs = B.headings(e[0], False)
-    ov = override(e[0])
-    if ov:
-        hs = [(m.group(1), B.strip_tags(m.group(2)).strip().rstrip('.')) for m in re.finditer(r'<h2 id="([^"]+)">(.*?)</h2>', ov, re.S)]
     lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(t)) if i else esc(t)) for i, t in hs)
     num, lab = chapter_label(e[0], book)
     kicker = 'Book %d · %s' % (book['n'], lab)
     return ('<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble>%s<p class="ch-num" aria-hidden="true">%s</p>'
-            '<p class="ch-kicker">%s</p>'
+            '<p class="ch-kicker">%s<span class="ps-online"> · online: %s</span></p>'
             '<h2 class="ch-title">%s</h2><p class="ch-intro">%s</p>'
             '<div class="ch-in"><p class="ch-in-k">In this chapter</p><ol class="ch-in-list">%s</ol></div></header>') % (
-        mark(e[0]), esc(num), esc(kicker), esc(ch_title(e[0])), lede(e[0]), lis)
+        mark(e[0]), esc(num), esc(kicker), esc(online_name(e[0])), esc(B.TITLES[e[0]]), B.LEDES[e[0]], lis)
 
 
-def s_end(e, book, here, where, remember=None):
+def s_end(e, book, here, where):
     s = '<aside class="pe-end no-bubble no-cheer no-dive" data-no-bubble aria-label="End of chapter">'
-    if remember:
-        s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % remember
+    s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % B.remember_html(e[0], 'pe-end-list')
     links = B.CONNECT.get(e[0], [])
     if links:
         s += '<div class="pe-end-links"><h3 class="pe-end-k">This connects to</h3><ul class="pe-end-conn">'
@@ -200,10 +169,8 @@ def s_end(e, book, here, where, remember=None):
                 lab = '<a href="#%s">%s</a>' % (tgt, chapter_label(tgt, book)[1])
                 at = '<a href="#%s">page %s</a>' % (tgt, pg(tgt))
             elif tgt in where:
-                ob = where[tgt]
-                lab = '<a href="%s">Book %d, %s</a>' % (online, ob['n'], chapter_label(tgt, ob)[1])
-                op = ST.PAGEMAPS.get(ob['id'], {}).get(tgt)
-                at = '<a href="%s">%s%s</a>' % (online, esc(ob['title']), (', page %d' % op) if op else '')
+                lab = '<a href="%s">Book %d</a>' % (online, where[tgt]['n'])
+                at = '<a href="%s">%s</a>' % (online, esc(where[tgt]['title']))
             else:
                 lab = '<a href="%s">Online</a>' % online
                 at = '<a href="%s">read online</a>' % online
@@ -212,8 +179,6 @@ def s_end(e, book, here, where, remember=None):
         s += '</ul></div>'
     s += '<div class="pe-end-use"><h3 class="pe-end-k">Put it to use</h3><ul class="pe-use">'
     for t, u, d in B.uses(e[0]):
-        if re.match(r'^/book/', u):
-            continue  # a chapter of the series: the connections above name it with its book and page
         form = free_form(u)
         if form:
             u, d = form, 'Workpaper · free to print' + ((': ' + d) if d else '')
@@ -243,93 +208,45 @@ def free_form(url):
 WP_LINE_RE = re.compile(r'<p class="bh-ref bh-wp"><span class="bh-k">([^<]*)</span><span class="bh-c">: </span><a href="([^"]+)"[^>]*>(.*?)</a><span class="bh-u">.*?</span></p>', re.S)
 
 
-def wp_lines(body, with_qr=True):
+def wp_lines(body):
     """Owner's rule: the books never reproduce a workpaper. Each one is named on one short line, "Workpaper: name ·
     free to print", with a QR code to its free printable form on the site."""
     def sub(m):
         form = free_form(m.group(2)) or m.group(2)
         return ('<div class="bh-ref bh-wp ps-wp">%s<p><span class="bh-k">%s</span><span class="bh-c">: </span><a href="%s">%s</a> · free to print'
-                '<span class="bh-u"> %s</span></p></div>') % (qr(form) if with_qr else '', m.group(1), B.absolute(form), m.group(3), B.addr_html(B.short_address(form)))
+                '<span class="bh-u"> %s</span></p></div>') % (qr(form), m.group(1), B.absolute(form), m.group(3), B.addr_html(B.short_address(form)))
     return WP_LINE_RE.sub(sub, body)
 
 
-IN_SHORT_RE = re.compile(r'<div class="try-this" data-in-short>(.*?)</div>', re.S)
-MADE_UP_RE = re.compile(r'\s*(?:A made-up example\. Names and details are invented\.|Made-up example\.)\s*')
-ERRORS = []
-
-
-def namer_for(book):
-    return ST.Namer(book, books(), pg)
-
-
-def classify(path, text):
-    """(where the code goes, its label) for a link to the website: a workpaper's free printable form, a tool (its
-    registry name), or a page"""
-    k = hints._match(path)
-    if k and k[0] == 'wp':
-        w = hints.WP[k[1]]
-        return free_form(path) or path, '<b>Workpaper %s</b> · free to print<br>%s' % (esc(w['code']), esc(w['name']))
-    if k and k[0] == 'tool':
-        return path, '<b>Tool</b><br>%s' % esc(hints.TL[k[1]]['name'])
-    return path, '<b>Online</b><br>%s' % esc(text[:60])
-
-
-SCAN_COUNT = {}
-
-
-def s_chapter(e, book, here, where, namer=None, panels=False):
-    """one chapter as the series prints it; panels=True adds the "Scan to open" codes (print only; the ebooks keep links)"""
-    slug = e[0]
-    namer = namer or namer_for(book)
-    src = override(slug) or B.main_inner(B.PAGES[(slug, False)])
-    body = B.clean_for_whole(src, slug, False, here)
+def s_chapter(e, book, here, where):
+    src = B.PAGES[(e[0], False)]
+    body = B.clean_for_whole(B.main_inner(src), e[0], False, here)
     body = B.drop_element(body, r'<header class="read-head', 'header')
     body = re.sub(r'<p class="simple-lede">.*?</p>', '', body, count=1, flags=re.S)
-    body, errs = ST.apply_swaps(body, slug, pg, lambda s_: namer.label(s_) or s_)
-    ERRORS.extend(errs)
-    body = ST.drop_sections(body, B)
-    body = ST.drop_nav_rows(body)
-    body = ST.series_links(body, slug, namer, B.XREFS.add)
-    body = B.print_links(body, slug, here)
+    body = B.print_links(body, e[0], here)
     body = B.tag_boxes(B.demote(body))
-    body = wp_lines(body, with_qr=not panels)
-    if panels:
-        body = ST.strip_inline_addresses(body)
-        body, n = ST.scan_panels(body, qr, classify, B.short_address, B.addr_html, esc)
-        SCAN_COUNT[(book['id'], slug)] = n
+    body = wp_lines(body)
     if not CFG.get('examples', True):
         body = re.sub(r'<div class="book-ex-wrap.*?</figure>\s*</div>', '', body, flags=re.S)
-    # the made-up note is said once, at the front of the book (copyright page and "About this book")
-    body = re.sub(r'<p class="bk-ex-note">(.*?)</p>', lambda m: (lambda t: ('<p class="bk-ex-note">%s</p>' % t) if t.strip() else '')(MADE_UP_RE.sub('', m.group(1))), body, flags=re.S)
-    # "In short" at the top, or "What to remember" at the end: never both
-    m = IN_SHORT_RE.search(body)
-    remember = None
-    if m and summary_at_end(slug):
-        items = re.findall(r'<li>(.*?)</li>', m.group(1), re.S)
-        remember = '<ul class="pe-end-list">%s</ul>' % ''.join('<li>%s</li>' % re.sub(r'</?a\b[^>]*>|<span class="pe-only[^"]*">.*?</span>', '', x).strip() for x in items[:5])
-        body = body[:m.start()] + body[m.end():]
-    elif not m:
-        remember = B.remember_html(slug, 'pe-end-list')
     return '<article class="whole-ch pe-ch" id="%s" data-part="%d" style="--pc:%s;--pt:%s">%s\n<div class="pe-body">%s</div>\n%s</article>' % (
-        slug, e[1], book['color'], book['tint'], s_open(e, book), body, s_end(e, book, here, where, remember))
+        e[0], e[1], book['color'], book['tint'], s_open(e, book), body, s_end(e, book, here, where))
 
 
 # ---------- front and back of each book ----------
 def title_page(book):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · Book %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
-            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>') % (
         book['color'], mark('titlep'), esc(SERIES_TITLE), book['n'], esc(book['title']), esc(book['sub']),
         series_site.art(book['art']), B.AUTHOR)
 
 
 def copyright_page(book, workbook=False):
-    # printfix13: the ISBN line is always there; until the owner buys ISBNs it carries the placeholder from series.json
-    isbn = '<p>ISBN: %s (paperback)</p>' % esc(book.get('isbn') or CFG.get('isbn_placeholder', '[to be added]'))
+    isbn = ('<p>ISBN %s (paperback)</p>' % esc(book['isbn'])) if book.get('isbn') else ''
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>' % (
-        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR, esc(CFG.get('publisher', "Christian's Lab").replace("'", '’')))
+    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by Spread Love &amp; Acceptance, spreadloveandacceptance.com.</p>' % (
+        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
     s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>%s' % (B.AUTHOR, B.UPDATED, isbn)
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
@@ -339,7 +256,8 @@ def copyright_page(book, workbook=False):
     s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
           'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
           'If you are in danger now, call your local emergency number.</p>') % SITE
-    s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
+    s += ('<p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them '
+          'is a real person or a testimonial.</p>')
     if not workbook:
         s += ('<p>The research the chapters mention is listed in short at the back. The full list, with what each study found and links, is at '
               '<a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>') % SITE
@@ -347,23 +265,15 @@ def copyright_page(book, workbook=False):
     return s
 
 
-MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
-
-
-def meet_page(book, found=()):
-    """"Workpapers, tools and three friends", on one page. Its two samples are a workpaper and a tool this book uses."""
+def meet_page(book_or_none):
+    """"Workpapers, tools and three friends", on one page"""
     wb = CFG['workbook']['title']
-    wp = next((hints.WP[k] for (kind, k) in found if kind == 'wp' and k in hints.WP), hints.WP.get('wp03'))
-    tl = next((hints.TL[k] for (kind, k) in found if kind == 'tool' and k in hints.TL), None)
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
-    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s”. '
-          'Every workpaper is free to print or to fill in on the website, and the book gives a code to scan for each one. '
-          '<em>%s</em> has them all in one place, on big pages.</p>'
-          '<p>%s <strong>A tool</strong> is a helper you use on the website%s. You use it and it gives you something back.</p>'
-          '<p class="ps-meet-note">Workpapers and tools are kept in separate lists. Both are free and need no account, and what you '
-          'type stays on your own device.</p></div>') % (
-        hints.tag('wp', wp), esc(hints.wp_label(wp)), esc(wp['name']), esc(wb), hints.tag('tool'),
-        (', such as “Tool: %s”' % esc(tl['name'])) if tl else '')
+    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “Workpaper WP-03: '
+          'One owner per job”. Every workpaper is free to print or fill in on the website: the book names it and gives a code to scan. <em>%s</em> has them all in one place, on big pages.</p>'
+          '<p>%s <strong>A tool</strong> is a helper you use on the website, such as “Tool: Chat analyzer”. You use it and it gives you something back.</p>'
+          '<p class="ps-meet-note">The book keeps the two apart: a workpaper and a tool never share a list. Both are free, need no account, and what you '
+          'type stays on your device.</p></div>') % (hints.tag('wp', hints.WP.get('wp03')), esc(wb), hints.tag('tool'))
     s += '<p class="ps-meet-h">Three friends who give hints</p><ul class="bh-friends ps-friends">'
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Professor Puddles</strong>, the cheerful raindrop professor, gives most of the hints.</span></li>' % hints.SVG_PUDDLES
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Tidbit</strong>, the quick, curious pup, bounds in with a playful tip.</span></li>' % hints.SVG_TIDBIT
@@ -372,59 +282,8 @@ def meet_page(book, found=()):
     return s
 
 
-CALLOUT_RES = [
-    re.compile(r'<(?:p|div) class="bh-ref[^"]*"[^>]*>.*?</(?:p|div)>', re.S),                 # hint callouts and "Workpaper WP-NN" lines
-    re.compile(r'<ul class="kind-list kind-(?:workpaper|tool)">.*?</ul>', re.S),              # the chapter's own Workpapers / Tools lists
-    re.compile(r'<ul class="pe-use">.*?</ul>', re.S),                                          # "Put it to use"
-]
-
-
-def printed_mentions(articles):
-    """{('wp'|'tool', key): [slug, ...]} from the WORKPAPER and TOOL callouts each printed chapter really shows (printfix13:
-    not from every link on the page, which credited chapters with tools they never name)."""
-    out = {}
-    for slug, art in articles:
-        for rx in CALLOUT_RES:
-            for blk in rx.findall(art):
-                for h in re.findall(r'<a\b[^>]*\bhref="([^"]+)"', blk):
-                    k = hints._match(re.sub(r'^https://spreadloveandacceptance\.com', '', h))
-                    if k and slug not in out.setdefault(k, []):
-                        out[k].append(slug)
-    return out
-
-
-def about_page(book, namer):
-    """printfix13: "About this book, and how to use it", one page before Chapter 1: what the book is for and who it is for,
-    how its chapters sit beside the other books and the free online versions, and the five big ideas."""
-    ab = ST.TEXT['about']
-    mine = ab['books'][str(book['n'])]
-    s = '<section class="ps-about pe-only" id="about" style="--pc:%s">%s<h1>About this book, and how to use it</h1>' % (book['color'], mark('about'))
-    s += '<p class="ps-about-lede">%s</p><p>%s</p>' % (mine['what'], mine['who'])
-    s += '<p>%s</p>' % ab['how']
-    rows = ''
-    for slug in book['chapters']:
-        num, lab = chapter_label(slug, book)
-        tail = B.short_address(B.href(slug)).split('/book/', 1)[-1]
-        rows += '<tr><td>%s</td><td>%s</td><td><span class="ps-addr ps-about-u" data-full="%s">…/book/%s</span></td></tr>' % (
-            esc(lab), esc(B.SHORT[slug]), esc(B.short_address(B.href(slug))), esc(tail))
-    s += ('<table class="ps-about-t"><thead><tr><th scope="col">Here</th><th scope="col">About</th><th scope="col">Free online at spreadloveandacceptance.com/book</th></tr></thead>'
-          '<tbody>%s</tbody></table>') % rows
-    others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
-                       for b in books() if b is not book)
-    # a real example of a reference to another book: its first chapter and the page it starts on
-    eb = next(b for b in books() if b['n'] == (2 if book['n'] != 2 else 1))
-    epage = namer.other_page(eb['chapters'][0])
-    example = 'Book %d, Chapter 1%s' % (eb['n'], (' (page %s)' % epage) if epage else '')
-    s += '<p>%s %s. %s.</p>' % (ab['series_lead'], others, ab['refs'].replace('{example}', example))
-    s += '<p class="ps-about-h">Five big ideas</p><p class="ps-about-small">%s</p><ul class="ps-about-ideas">%s</ul>' % (
-        ab['ideas_lead'], ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), d) for t, d in ab['ideas']))
-    s += '<p class="ps-about-small">%s %s</p></section>' % (ab['program'], esc(MADE_UP))
-    return s
-
-
-def help_now(here, namer=None):
-    ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
-                         series_ref=namer.ref if namer else None)
+def help_now(here):
+    ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add)
     for x in front_back.front_sections(ctx):
         if x['key'] == 'help-now':
             return x['html'], x['toc']
@@ -454,10 +313,9 @@ def research_short(book, here):
     return s + '</section>'
 
 
-def glossary_short(book, chs, printed=None):
-    """the book's own words, from the glossary, for the words its chapters use (printfix13: as printed, so words that only
-    appear online don't make the list)"""
-    text = ST.printed_text(printed) if printed else ' '.join(B.strip_tags(B.main_inner(B.PAGES[(s_, False)])) for s_ in chs)
+def glossary_short(book, chs):
+    """the book's own words, from the glossary, for the words its chapters use"""
+    text = ' '.join(B.strip_tags(B.main_inner(B.PAGES[(s_, False)])) for s_ in chs)
     s = ('<section class="pe-back pe-gloss ps-gloss no-bubble no-cheer no-dive" data-no-bubble id="glossary" style="--pc:%s;--pt:%s">%s'
          '<h1 class="pe-back-h">Words used in this book</h1><p class="pe-back-lede">The book’s own words, each in one plain sentence. All of them are at '
          'spreadloveandacceptance.com/glossary.</p><dl class="pe-gloss-list">') % (book['color'], book['tint'], mark('glossary'))
@@ -492,140 +350,6 @@ FREE_LINKS = [
     ('/glossary.html', 'Words used in the book', 'Each of the book’s own words, in one plain sentence.'),
     ('/workpapers/fill/index.html', 'Fill in the workpapers', 'Every workpaper on screen. It does the sums, and what you type stays on your device.'),
 ]
-
-
-# ---------- printfix13: questions people ask, and (Book 4) a first month and a job list ----------
-def _series_html(h, book, namer, epub, key):
-    """links in a back page named the series way; in print every website reference gets its code"""
-    if epub:
-        h = re.sub(r'\s*\(page \{page:[^}]+\}\)', '', h)
-    h = re.sub(r'\{page:([^}]+)\}', lambda m: pg(m.group(1)), h)
-    h = ST.series_links(h, key, namer, B.XREFS.add)
-    if not epub:
-        h, n = ST.scan_panels(h, qr, classify, B.short_address, B.addr_html, esc)
-        SCAN_COUNT[(book['id'], key)] = n
-    return h
-
-
-def faq_page(book, namer, epub=False):
-    items = ST.TEXT.get('faq', {}).get(str(book['n']))
-    if not items:
-        return ''
-    h = ''.join('<h2 class="ps-faq-q">%s</h2>%s' % (esc(q), a) for q, a in items)
-    return ('<section class="pe-back ps-faq no-bubble" data-no-bubble id="faq" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Questions people ask</h1>'
-            '<p class="pe-back-lede">%s</p>%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
-                                                           _series_html(h, book, namer, epub, 'faq'))
-
-
-def month_page(book, namer, epub=False):
-    m = ST.TEXT.get('first_month')
-    if not m or book['n'] != 4:
-        return ''
-    rows = ''.join('<tr><th scope="row">%s</th><td>%s</td><td>%s</td><td><span class="pe-ws-tick"></span></td></tr>' % (esc(w), d, r) for w, d, r in m['weeks'])
-    h = ('<p class="pe-back-lede">%s</p><table class="ps-month-t"><thead><tr><th scope="col">When</th><th scope="col">What to do</th>'
-         '<th scope="col">Read more</th><th scope="col">Done</th></tr></thead><tbody>%s</tbody></table>') % (m['lede'], rows)
-    return ('<section class="pe-back ps-month no-bubble" data-no-bubble id="month" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>%s</section>') % (
-        book['color'], book['tint'], mark('month'), esc(m['title']), _series_html(h, book, namer, epub, 'month'))
-
-
-def jobs_page(book, namer, epub=False):
-    j = ST.TEXT.get('jobs')
-    if not j or book['n'] != 4:
-        return ''
-    tick = '' if epub else '<span class="pe-ws-tick"></span>'
-    line = '' if epub else '<span class="ps-jobs-o"></span>'
-    gs = ''
-    for g, jobs in j['groups'] + ([['Your own', [''] * 6]] if not epub else []):
-        gs += '<div class="ps-jobs-g"><p class="ps-jobs-h">%s</p><ul class="ps-jobs-l">%s</ul></div>' % (
-            esc(g), ''.join('<li>%s<span class="ps-jobs-n">%s</span>%s</li>' % (tick, esc(x), line) for x in jobs))
-    head = '' if epub else '<p class="ps-jobs-key"><span class="pe-ws-tick"></span> happens in our home <span class="ps-jobs-o"></span> owner</p>'
-    h = '<p class="pe-back-lede">%s</p>' % j['lede']
-    return ('<section class="pe-back ps-jobs no-bubble" data-no-bubble id="jobs" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>%s%s'
-            '<div class="ps-jobs-cols">%s</div></section>') % (
-        book['color'], book['tint'], mark('jobs'), esc(j['title']), _series_html(h, book, namer, epub, 'jobs'), head, gs)
-
-
-def words_page(book, epub=False):
-    w = ST.TEXT.get('words')
-    if not w or book['n'] != w.get('book'):
-        return ''
-    gs = ''.join('<div class="ps-words-g"><p class="ps-words-h">%s</p><ul class="ps-words-l">%s</ul></div>' % (esc(g), ''.join('<li>%s</li>' % esc(x) for x in xs))
-                 for g, xs in w['groups'])
-    return ('<section class="pe-back ps-words no-bubble" data-no-bubble id="words" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>'
-            '<p class="pe-back-lede">%s</p>%s</section>') % (book['color'], book['tint'], mark('words'), esc(w['title']), esc(w['lede']), gs)
-
-
-# ---------- "Free on the website": a two-page showcase (printfix13) ----------
-def _icon(kind, c):
-    """small line drawings in the book's own style, one per panel"""
-    st = 'fill="none" stroke="%s" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"' % c
-    d = {
-        'chat': '<path d="M6 8h22a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4H16l-6 5v-5H6a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4z" %s/><path d="M36 16h4a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-2v4l-5-4h-7" %s/><path d="M9 15h16M9 19h10" %s/>' % (st, st, st),
-        'journey': '<circle cx="7" cy="34" r="3" %s/><path d="M10 33c8-2 6-10 14-12s10 4 16-2" %s stroke-dasharray="2 4"/><path d="M40 6v14M40 6h-2M40 6l8 3-8 3" %s/>' % (st, st, st),
-        'form': '<rect x="9" y="4" width="28" height="36" rx="3" %s/><path d="M15 13h16M15 19h16M15 25h10" %s/><path d="M15 31l3 3 6-6" %s/>' % (st, st, st),
-        'tools': '<circle cx="17" cy="22" r="10" %s/><circle cx="31" cy="22" r="10" %s/>' % (st, st),
-        'book': '<path d="M4 10c7-3 13-3 20 1 7-4 13-4 20-1v26c-7-3-13-3-20 1-7-4-13-4-20-1z" %s/><path d="M24 11v26" %s/>' % (st, st),
-        'coin': '<circle cx="24" cy="22" r="15" %s/><path d="M24 30c-6-4-9-7-9-10a4 4 0 0 1 9-2 4 4 0 0 1 9 2c0 3-3 6-9 10z" %s/>' % (st, st),
-        'garden': '<path d="M24 40V22" %s/><path d="M24 22c-6 0-9-4-9-9 5 0 9 3 9 9zM24 22c6 0 9-4 9-9-5 0-9 3-9 9z" %s/><path d="M38 5a6 6 0 1 0 5 9 5 5 0 0 1-5-9z" %s/><path d="M14 40h20" %s/>' % (st, st, st, st),
-        'phone': '<rect x="14" y="3" width="20" height="38" rx="4" %s/><path d="M21 35h6" %s/><path d="M19 15l4 4 7-8" %s/>' % (st, st, st),
-        'lock': '<rect x="11" y="19" width="26" height="20" rx="3" %s/><path d="M17 19v-6a7 7 0 0 1 14 0v6" %s/><circle cx="24" cy="29" r="2.5" %s/>' % (st, st, st),
-    }[kind]
-    return '<svg class="ps-sc-ico" viewBox="0 0 48 44" aria-hidden="true">%s</svg>' % d
-
-
-SHOWCASE = [
-    # (key, title, words, link, art)
-    ('ask', 'Ask Professor Puddles', 'Tell a cheerful raindrop professor what’s going on and get kind next steps and words to say. His answers are written in advance, never made up on the spot.', '/ask.html', 'puddles'),
-    ('chat', 'The Chat analyzer', 'Check how a text may land before you send it, read one you got, or look at a whole chat to see where it turned.', '/signal-translator.html', 'chat'),
-    ('journeys', 'Guided journeys', 'Three to six small steps for what’s going on, from the same argument again to a new blended family.', '/journeys.html', 'journey'),
-    ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill in on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
-    ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
-    ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
-    ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Five calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
-    ('coins', 'Kindness Coin Pusher', 'A cosy 3D coin pusher where every coin that drops brings a short, useful tip.', '/coin-pusher.html', 'coin'),
-    ('garden', 'The Night Garden', 'A breathing game. Breathe slowly and the flowers bloom and the fireflies gather.', '/night-garden.html', 'garden'),
-    ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
-]
-
-
-def _sc_art(kind, c):
-    if kind == 'puddles':
-        return '<span class="ps-sc-badge">%s</span>' % hints.SVG_PUDDLES
-    if kind == 'pups':
-        return '<span class="ps-sc-badge ps-sc-two">%s%s</span>' % (hints.SVG_TIDBIT, hints.SVG_SUGARFOOT)
-    return _icon(kind, c)
-
-
-def showcase(book, epub=False):
-    """"Free on the website": a two-page spread at the back, left page then right page. Every item has its own code in
-    print (and a link in the ebook)."""
-    c = book['color']
-    head = ('<p class="ps-sc-k">Free on the website</p><h1 class="ps-sc-h">Your book has a home online</h1>'
-            '<p class="ps-sc-lede">Everything in this book is free at spreadloveandacceptance.com, along with tools that do the sums for you, '
-            'guided journeys, a raindrop professor with kind answers and a few cosy games. There is no account and no paid version.</p>')
-    home = ('<div class="ps-sc-home">%s<p><strong>Start here</strong>Scan with your phone’s camera to open the home page.'
-            '<span class="ps-addr">spreadloveandacceptance.com</span></p></div>') % ('' if epub else qr('/'))
-
-    def panel(item):
-        key, t, words, link, artk = item
-        q = '' if epub else qr(link)
-        t_html = ('<a href="%s%s">%s</a>' % (SITE, link, esc(t))) if epub else esc(t)
-        return ('<div class="ps-sc-card ps-sc-%s">%s<div class="ps-sc-txt">%s<p class="ps-sc-t">%s</p><p class="ps-sc-d">%s</p>'
-                '<p class="ps-addr">%s</p></div></div>') % (key, q, _sc_art(artk, c) if not epub or artk in ('puddles', 'pups') else '', t_html, esc(words),
-                                                            B.addr_html(B.short_address(link)))
-    left = ''.join(panel(x) for x in SHOWCASE[:4])
-    right = ''.join(panel(x) for x in SHOWCASE[4:])
-    promise = ('<div class="ps-sc-promise">%s<p><strong>Everything stays on your device.</strong> No sign-up and no account. What you type in the tools, '
-               'the workpapers and the games is kept in your own browser or app, and nothing is sent to us.</p></div>') % ('' if epub else _icon('lock', c))
-    if epub:
-        return ('<section class="pe-back ps-showcase" id="free">%s%s<p><a href="%s/">spreadloveandacceptance.com</a></p>%s%s%s</section>') % (
-            head, '', SITE, left, right, promise)
-    s = '<div class="pe-verso-pad pe-only" data-for="free"></div>'
-    s += ('<section class="pe-back ps-showcase ps-sc-left no-bubble" data-no-bubble id="free" style="--pc:%s;--pt:%s">%s%s%s'
-          '<div class="ps-sc-grid">%s</div></section>') % (c, book['tint'], mark('free'), head, home, left)
-    s += ('<section class="pe-back ps-showcase ps-sc-right no-bubble" data-no-bubble style="--pc:%s;--pt:%s"><p class="ps-sc-k">Cosy, calm and free</p>'
-          '<div class="ps-sc-grid">%s</div>%s</section>') % (c, book['tint'], right, promise)
-    return s
 
 
 def free_page(book):
@@ -685,62 +409,45 @@ def build_book(book, where):
     order = [e[0] for e in B.ORDER]
     here = set(book['chapters'])
     chs = book['chapters']
-    namer = namer_for(book)
-    hn_html, hn_toc = help_now(here, namer)
-    toc = [B.toc_row('about', '', 'About this book, and how to use it', 'is-front'), B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
+    hn_html, hn_toc = help_now(here)
+    toc = [B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
     if hn_html:
         toc.append(B.toc_row('help-now', '', esc(hn_toc), 'is-front'))
-    body, arts = [], []
+    body = []
     for i, slug in enumerate(chs):
         e = B.entry(slug)
         num, lab = chapter_label(slug, book)
-        toc.append(B.toc_row(slug, esc(num or 'After'), esc(ch_title(slug)), 'is-ch'))
+        toc.append(B.toc_row(slug, esc(num or 'After'), esc(B.TITLES[slug]), 'is-ch'))
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
-        art = s_chapter(e, book, here, where, namer, panels=True)
-        arts.append((slug, art))
-        body.append(art)
+        body.append(s_chapter(e, book, here, where))
     # the back of the book: built before finish_package, so their page references get markers
     extra = []
-    found = printed_mentions(arts)
-    for k_, v_ in found.items():
-        ALL_FOUND.setdefault(k_, [])
-        ALL_FOUND[k_] += [x for x in v_ if x not in ALL_FOUND[k_]]
+    found = hints.mentions(dict((s_, B.PAGES[(s_, False)]) for s_ in chs), chs)
     wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT[s_]), pg(s_))
-    if book['n'] == 4:
-        extra.append(('month', ST.TEXT['first_month']['title'], month_page(book, namer)))
-        extra.append(('jobs', ST.TEXT['jobs']['title'], jobs_page(book, namer)))
-    if words_page(book):
-        extra.append(('words', ST.TEXT['words']['title'], words_page(book)))
-    if ST.TEXT.get('faq', {}).get(str(book['n'])):
-        extra.append(('faq', 'Questions people ask', faq_page(book, namer)))
     extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
     if 'numbers' in book.get('extras', []):
-        ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
-                             series_ref=namer.ref)
+        ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add)
         for x in front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 extra.append(('numbers', x['toc'], x['html']))
-    extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
-    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('series', 'The series'), ('jot', 'Your notes')]
+    extra.append(('glossary', 'Words used in this book', glossary_short(book, chs)))
+    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('series', 'The series'), ('free', 'Free on the site'), ('jot', 'Your notes')]
     for k, t in back:
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
     front += '\n<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
-    front += '\n' + about_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
+    front += '\n' + meet_page(book) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
-    backm = extra_html + research_short(book, here) + showcase(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
-    ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
-    ol += [['%s: %s' % (chapter_label(s_, book)[1], ch_title(s_)), s_, 0] for s_ in chs]
+    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book) + notes_pages(book, book.get("notes_pages", 2))
+    ol = [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
+    ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
     title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': book['line']}, ensure_ascii=False).replace('</', '<\\/')
     rules = page_rules(book, [s_ for s_ in order if s_ in here], back)
-    # printfix13: no reference in this book may point to a chapter or a page that isn't there
-    for err in ST.check_text(ST.printed_text(front + body_html + extra_html), book, books(), 'Book %d' % book['n']):
-        ERRORS.append(err)
     page = head(title, SERIES_CSS)
     page += '<body class="whole-book pe-book pe-series" data-pe="%s">\n<main class="read whole" id="main">\n%s\n%s\n%s\n</main>\n%s\n%s\n%s\n</body>\n</html>\n' % (
         book['id'], front, body_html, backm, rules, outline, QR_SCRIPT)
@@ -765,34 +472,20 @@ def build_measure():
 # ---------- the workbook ----------
 # (key in hints.json, copies, when to use it, how long, who) — the order follows the books: on your own first, then together
 WB = [
-    ('wp02', 4, 'Before any hard talk, and on ordinary days too, so you can see your own pattern.', 'About 2 minutes', 'On your own, about yourself only'),
+    ('wp02', 12, 'Before any hard talk, and on ordinary days too, so you can see your own pattern.', 'About 2 minutes', 'On your own, about yourself only'),
     ('wp11', 2, 'On a calm day, before you need it. Look at it again after a heated moment.', 'About 10 minutes', 'On your own; the pause plan is made to share'),
-    ('wp09', 3, 'Before you answer something that stung.', 'About 5 minutes', 'On your own, about your own side'),
-    ('wp13', 4, 'Once a day, for a week at a time: one sheet a week.', 'About 90 seconds a day', 'Together; each person fills in only their own rows. Three or more of you: use two sheets'),
+    ('wp09', 6, 'Before you answer something that stung.', 'About 5 minutes', 'On your own, about your own side'),
+    ('wp13', 6, 'Once a day, for a week at a time: one sheet a week.', 'About 90 seconds a day', 'Together; each person fills in only their own rows'),
     ('wp12', 2, 'Once, then again every few months or after a big change.', 'About 20 minutes', 'Together; each person fills in their own rows first'),
-    ('wp14', 2, 'For one week in a hard stretch, a line each evening.', 'A minute a day, then 15 minutes', 'Together'),
-    ('wp01', 3, 'For one ordinary week: one sheet a week.', 'A few minutes a day', 'Together; write only what you did or saw yourself'),
+    ('wp14', 3, 'For one week in a hard stretch, a line each evening.', 'A minute a day, then 15 minutes', 'Together'),
+    ('wp01', 4, 'For one ordinary week: one sheet a week.', 'A few minutes a day', 'Together; write only what you did or saw yourself'),
     ('wp03', 2, 'When jobs only get done after someone asks. Redo it when life changes.', 'About 10 minutes', 'Together'),
-    ('setup', 3, 'About once a month, with a week of Who did what, your job list and each person’s stress tank.', 'About 15 minutes', 'Together; each person scores only their own tank'),
-    ('wp04', 3, 'Once a month, looking back over four weeks.', 'About 20 minutes', 'Together'),
-    ('wp15', 2, 'About every three months.', 'About 15 minutes', 'Together'),
+    ('wp04', 6, 'Once a month, looking back over four weeks.', 'About 20 minutes', 'Together'),
+    ('wp15', 4, 'About every three months.', 'About 15 minutes', 'Together'),
 ]
 
 
-WB_ONE_PAGE = {'wp02', 'wp09', 'setup'}
-WB_SUMS = {'wp01', 'wp02', 'wp03', 'wp04', 'setup'}
-# printfix13: what each sheet's opening page says where no book chapter teaches it, and how to read the answers
-WB_EXPLAINED = {
-    'wp12': ('Book 3, Chapter 1 (Why we get out of tune), and in full, free online at spreadloveandacceptance.com/workpapers/wp-12-same-moment-different-speeds',
-             'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so choose that moment for Part C. '
-             'A gap in speed is about pace and says nothing about how much either of you cares. If your answers barely differ, the friction may come '
-             'from somewhere else, such as tiredness or pressure from outside.'),
-    'wp14': ('Book 4, Chapter 3 (Full tanks and different angles), and in full, free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
-             'In Part B, count the tense moments that fell on heavy days. If most of them did, outside pressure is doing much of the damage, and a plan for '
-             'the pressure (Part D) will help more than talking about each other. If most came on light days, the friction really does start between you, '
-             'and Say it so it lands or the monthly look-back is a good next step.'),
-}
-ALL_FOUND = {}
+WB_ONE_PAGE = {'wp02', 'wp09', 'wp01'}
 
 
 def worksheets():
@@ -805,52 +498,6 @@ def worksheets():
     return out
 
 
-def wb_sheet_fix(key, sh):
-    """printfix13: the workbook's own changes to the blank sheets"""
-    if key == 'wp01':
-        row = '<tr><td></td><td></td><td></td><td></td><td></td></tr>'
-        sh = re.sub(r'(<table class="pe-ws-t">.*?<tbody>)(?:<tr><td></td><td></td><td></td><td></td><td></td></tr>)+(</tbody>)',
-                    lambda m: m.group(1) + row * 25 + m.group(2), sh, count=1, flags=re.S)
-        sh = sh.replace('<p class="pe-ws-opts">Part B (optional), Kind ways to say no: say why the request is fair, say honestly what you have left, and offer something instead.</p>',
-                        '<h3>Part B (optional): Kind ways to say no</h3><p class="pe-ws-opts">For a request you can’t take on this week: say why the request is fair, '
-                        'say honestly what you have left, and offer something instead.</p><div class="wb-lines">%s</div>' % ('<div></div>' * 6))
-        sh = sh.replace('How the score works: “How the numbers work”, at the back.', 'How the score works: “How the numbers work”, page %s of this workbook.' % pg('numbers'))
-    if key == 'wp15':
-        sh = sh.replace('<h3>Part C: One to restart, or start</h3>',
-                        '<h3>Part B: Count them</h3><div class="pe-ws-meta"><span>Alive ____</span><span>Fading ____</span><span>Stopped ____</span><span>New idea ____</span></div>'
-                        '<h3>Part C: One to restart, or start</h3>')
-    if key == 'wp12':
-        sh = sh.replace('<p class="pe-ws-opts">For each moment, count how many steps apart your answers are on each list. Start with the biggest gap: a difference in pace, not in how much anyone cares.</p>',
-                        '<p class="pe-ws-opts">For each moment, count how many steps apart your answers are on each list. Start with the biggest gap: a difference in pace, not in how much anyone cares.</p>'
-                        '<table class="pe-ws-t is-short"><thead><tr><th scope="col">Moment</th><th scope="col">Speed gap</th><th scope="col">Talk gap</th><th scope="col">Urgency gap</th></tr></thead>'
-                        '<tbody>%s</tbody></table>' % ('<tr><td></td><td></td><td></td><td></td></tr>' * 5))
-    return sh
-
-
-SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the setup working? On paper</h2><span>Online: spreadloveandacceptance.com/is-the-setup-working</span></div>'
-               '<p>The setup score from Book 4, Chapter 2, worked out with a pencil. You need one week of Who did what, your job list from One owner per job, '
-               'and each person’s How much are you carrying? score from the same day. Each person scores only their own tank.</p>'
-               '<div class="pe-ws-meta"><span>Date</span><span>Who is filling this in</span></div>'
-               '<h3>Part A: Balance (how the hours split)</h3>'
-               '<div class="pe-ws-meta"><span>Hours, person A ____</span><span>Hours, person B ____</span><span>Total ____</span></div>'
-               '<div class="pe-ws-meta"><span>A’s share: hours ÷ total × 100 = ____ %</span><span>B’s share = ____ %</span></div>'
-               '<div class="pe-ws-meta"><span>Balance = 1 − (the gap between the two shares) ÷ 100 = ____</span></div>'
-               '<p class="pe-ws-opts">Three or more of you, or an uneven split you agreed on purpose: see “How the numbers work”.</p>'
-               '<h3>Part B: Ownership (does each job have a name?)</h3>'
-               '<div class="pe-ws-meta"><span>Jobs with an owner ____</span><span>All jobs on the list ____</span><span>Ownership = owned ÷ all = ____</span></div>'
-               '<h3>Part C: Stress tanks</h3>'
-               '<div class="pe-ws-meta"><span>Person A’s tank ____</span><span>Person B’s tank ____</span><span>Average ____</span></div>'
-               '<p class="pe-ws-opts">If anyone’s tank is 0.60 or more, talk about that first, whatever the score says.</p>'
-               '<h3>Part D: The setup score</h3>'
-               '<div class="pe-ws-meta"><span>Balance × 0.40 = ____</span><span>Ownership × 0.35 = ____</span><span>(1 − average tank) × 0.25 = ____</span></div>'
-               '<div class="pe-ws-meta"><span>Add the three: setup score = ____</span></div>'
-               '<p class="pe-ws-opts">0.70 or more: working well. 0.40 up to 0.70: needs a look. Below 0.40: needs a rethink, together.</p>'
-               '<h3>Part E: The biggest shortfall</h3>'
-               '<div class="pe-ws-meta"><span>Balance: 0.40 − ____ = ____</span><span>Ownership: 0.35 − ____ = ____</span><span>Tank: 0.25 − ____ = ____</span></div>'
-               '<div class="pe-ws-meta"><span>The biggest one is ____________</span><span>One small change we’ll try ____________</span><span>Look again on ____</span></div>'
-               '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work”, at the back of this workbook.</p></section>')
-
-
 def build_workbook(where):
     wb = CFG['workbook']
     sheets = worksheets()
@@ -861,44 +508,32 @@ def build_workbook(where):
     toc.append(B.toc_row('wb-six', '', 'Your six weeks: a planner', 'is-front'))
     ol.append(['Your six weeks: a planner', 'wb-six', 0])
     for key, copies, when, how_long, who in WB:
-        w = hints.WP[key] if key != 'setup' else {'code': 'Setup', 'name': 'Is the setup working? On paper'}
-        sheet = sheets.get(w['name']) if key != 'setup' else SETUP_SHEET
-        if sheet:
-            sheet = wb_sheet_fix(key, sheet)
+        w = hints.WP[key]
+        sheet = sheets.get(w['name'])
         if not sheet:
             print('series: WARNING no blank sheet for', w['name'])
             continue
         sid = 'wb-' + key
-        toc.append(B.toc_row(sid, esc(w['code'] if key != 'setup' else ''), esc(w['name']), 'is-ch'))
-        ol.append(['%s: %s' % (w['code'], w['name']) if key != 'setup' else w['name'], sid, 0])
-        # which books explain it (from the callouts the books really print)
+        toc.append(B.toc_row(sid, esc(w['code']), esc(w['name']), 'is-ch'))
+        ol.append(['%s: %s' % (w['code'], w['name']), sid, 0])
+        # which books explain it
         ins = []
-        for s_ in ALL_FOUND.get(('wp', key), []):
+        for s_ in found.get(('wp', key), []):
             b = where.get(s_)
             if b:
                 lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].lower().replace('afterword', 'the afterword'), B.SHORT[s_])
                 if lab not in ins:
                     ins.append(lab)
-        fill = ('/workpapers/fill/%s.html' % w['code'].lower()) if key != 'setup' else '/is-the-setup-working.html'
+        fill = '/workpapers/fill/%s.html' % w['code'].lower()
         # each workpaper opens on a right-hand page, so a two-page sheet lies open across two facing pages
         s = '<div class="pe-recto-pad pe-only" data-for="%s"></div>' % sid
-        s += '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">%s</p><h1>%s</h1>' % (
-            sid, wb['color'], mark(sid), esc(('Workpaper ' + w['code']) if key != 'setup' else 'A paper version of the setup score'), esc(w['name']))
+        s += '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">Workpaper %s</p><h1>%s</h1>' % (sid, wb['color'], mark(sid), esc(w['code']), esc(w['name']))
         s += '<dl class="wb-facts"><div><dt>When</dt><dd>%s</dd></div><div><dt>How long</dt><dd>%s</dd></div><div><dt>Who</dt><dd>%s</dd></div>' % (esc(when), esc(how_long), esc(who))
-        if key == 'setup':
-            ins = ['Book 4, Chapter 2 (Is the split working?)']
-        if key in WB_EXPLAINED:
-            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(WB_EXPLAINED[key][0])
-        elif ins:
+        if ins:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
-        s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
-              'where you can also fill the form in on screen.</dd></div></dl>') % copies
-        if key in WB_EXPLAINED:
-            s += '<p class="wb-read"><strong>How to read your answers.</strong> %s</p>' % esc(WB_EXPLAINED[key][1])
-        s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> %s '
-              '<span class="ps-addr">%s</span></p></div>') % (
-            qr(fill), 'The online version does the sums for you and keeps what you type on your own device.' if key in WB_SUMS
-            else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(B.short_address(fill)))
+        s += '<div><dt>Copies here</dt><dd>%d, one after the other. Need more? Print the free form from the website, or fill it in on screen.</dd></div></dl>' % copies
+        s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> The online version does the sums for you and keeps what you type on your '
+              'own device: <span class="ps-addr">%s</span></p></div>') % (qr(fill), B.addr_html(B.short_address(fill)))
         s += '</section>'
         for c in range(1, copies + 1):
             # the short sheets fit one page; the long ones get more room and fill two facing pages
@@ -906,21 +541,13 @@ def build_workbook(where):
             sh = re.sub(r'(<div class="pe-ws-head"><h2>.*?</h2>)<span>.*?</span>', lambda m: m.group(1) + '<span>%s · copy %d of %d</span>' % (esc(w['code']), c, copies), sh, count=1, flags=re.S)
             s += sh
         secs.append(s)
-    # printfix13: the sums behind the scores, on paper (the same pages as at the back of Book 4)
-    book = dict(wb, n=0, chapters=[])
-    ctx = front_back.Ctx('series', False, (1, 2, 3), set(), B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, None,
-                         series_ref=namer_for(book).ref)
-    for x in front_back.back_sections(ctx):
-        if x['key'] == 'numbers':
-            secs.append('<div class="pe-recto-pad pe-only" data-for="numbers"></div>' + front_back.add_section_marks(x['html'], mark))
-            toc.append(B.toc_row('numbers', '', esc(x['toc']), 'is-back'))
-            ol.append([x['toc'], 'numbers', 0])
     toc.append(B.toc_row('wb-notes', '', 'Notes', 'is-back'))
     toc.append(B.toc_row('series', '', 'The series', 'is-back'))
     ol += [['Notes', 'wb-notes', 0], ['The series', 'series', 0]]
+    book = dict(wb, n=0)
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
-             '<p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+             '<p class="ps-title-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>') % (
         wb['color'], mark('titlep'), esc(SERIES_TITLE), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
     front += copyright_page(book, workbook=True)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
@@ -1085,17 +712,9 @@ def main():
     warn += [m for m in B.MISSING]
     for w in warn:
         print('series: WARNING', w)
-    if ST.MISSING_PAGES:
-        print('series: NOTE no page yet from the last print run for %d references in other books (print the series, then run this again): %s' % (
-            len(set(ST.MISSING_PAGES)), ', '.join(sorted(set(ST.MISSING_PAGES))[:6])))
     for b in books():
         print('series: Book %d %s: %d chapters, %d figures, %d filled-in examples' % (b['n'], b['title'], len(b['chapters']), stats[b['id']]['figures'], stats[b['id']]['examples']))
     print('series: %d QR codes, all checked against a page' % len(set(QRS)))
-    if ERRORS:
-        for err in ERRORS:
-            print('series: ERROR', err)
-        print('series: %d reference errors: fix them before printing' % len(ERRORS))
-        sys.exit(1)
 
 
 if __name__ == '__main__':

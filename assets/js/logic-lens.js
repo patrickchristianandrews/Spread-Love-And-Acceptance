@@ -245,7 +245,7 @@
       mk('p', { cls: 'lg-say', text: unq(d.say) ? '“' + unq(d.say) + '”' : '' }),
       mk('p', { cls: 'lg-step' }, [mk('strong', { text: 'One small step: ' }), d.step || ''])
     ]);
-    var c = mk('article', { cls: 'lg-card' + (d.mine ? ' is-mine' : ''), 'aria-labelledby': id + '-t', 'data-item': d.id || null }, [
+    var c = mk('article', { cls: 'lg-card tol-plain' + (d.mine ? ' is-mine' : ''), 'aria-labelledby': id + '-t', 'data-item': d.id || null }, [
       head,
       part(1, 'What it looks like from outside', mk('p', { text: d.looks })),
       part(2, 'The logic behind it', chain),

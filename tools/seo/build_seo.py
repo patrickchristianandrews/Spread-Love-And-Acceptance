@@ -147,6 +147,8 @@ SEARCH = {
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style crossword with fair, friendly clues. Play in your browser on any device, at your own pace.'),
  'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Six Calm Classic Games', 'Play as Tidbit or Sugarfoot in six gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catching game and a Home Run Derby. Easy touch controls, a relaxed pace and no game over.'),
  'coin-pusher.html': ('Kindness Coin Pusher: A Cozy Arcade With a Kind Tip Every Few Coins', 'A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride along. Free, nothing to buy.'),
+ 'the-logic-behind-it.html': ('The Logic Behind It: Why a Reaction Makes Sense', 'Why a reaction that looks odd, rude or over the top can make sense: the logic, an analogy, the other side, and one kind step. Both ways, free and private.'),
+ 'the-logic-behind-it-in-depth.html': ('The Logic Behind It, in Depth: Reactions, Rulebooks and Research', 'The full guide to seeing the logic behind a reaction: the double empathy problem, prediction and uncertainty, energy, social habits, different rulebooks, and when logic is not an excuse.'),
  'frequency-buddies.html': ('Frequency Buddies: A Cartoon About Feelings, for All Ages', 'Gentle animated episodes for all ages: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: Drop In Anytime', 'A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
@@ -249,6 +251,8 @@ SEARCH.update({
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style daily crossword with fair, friendly clues, from a quick 5x5 mini to a big Sunday grid. Play in your browser on any device, at your pace.'),
  'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Six Calm Classic Games', 'Play as Tidbit or Sugarfoot in six gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catching game and a Home Run Derby. Easy touch controls, a relaxed pace and no game over.'),
  'coin-pusher.html': ('Kindness Coin Pusher: A Cozy Arcade With a Kind Tip Every Few Coins', 'A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride along. Free, nothing to buy.'),
+ 'the-logic-behind-it.html': ('The Logic Behind It: Why a Reaction Makes Sense', 'Why a reaction that looks odd, rude or over the top can make sense: the logic, an analogy, the other side, and one kind step. Both ways, free and private.'),
+ 'the-logic-behind-it-in-depth.html': ('The Logic Behind It, in Depth: Reactions, Rulebooks and Research', 'The full guide to seeing the logic behind a reaction: the double empathy problem, prediction and uncertainty, energy, social habits, different rulebooks, and when logic is not an excuse.'),
  'frequency-buddies.html': ('Frequency Buddies: A Cartoon About Feelings, for All Ages', 'Free animated episodes for all ages: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. With captions.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song: a free cartoon about feelings for all ages, plus each episode to download.'),
  'frequency-buddies-music-video-maker.html': ('Make Your Own Frequency Buddies Music Video', 'Make your own Frequency Buddies theme song music video: pick the stage, lights, effects, dance moves, costumes and who’s on stage, then play it and share the link.'),
@@ -1071,46 +1075,29 @@ def images_of(path, body, image):
 
 
 ROBOTS = """# Welcome, people and machines. Spread Love & Acceptance is free and open to every search engine
-# and AI assistant: please read, index and cite anything here.
+# and AI assistant: please read, index and cite anything here, except the private folders below.
+
 User-agent: *
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+User-agent: DuckAssistBot
+User-agent: CCBot
+User-agent: meta-externalagent
+User-agent: MistralAI-User
 Allow: /
 Disallow: /manuscript/
 Disallow: /notes/
 Disallow: /infrastructure/
-
-# AI assistants and their crawlers are explicitly welcome.
-User-agent: GPTBot
-Allow: /
-User-agent: OAI-SearchBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-User-agent: Claude-User
-Allow: /
-User-agent: Claude-SearchBot
-Allow: /
-User-agent: anthropic-ai
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: Perplexity-User
-Allow: /
-User-agent: Google-Extended
-Allow: /
-User-agent: Applebot-Extended
-Allow: /
-User-agent: Bingbot
-Allow: /
-User-agent: DuckAssistBot
-Allow: /
-User-agent: CCBot
-Allow: /
-User-agent: meta-externalagent
-Allow: /
-User-agent: MistralAI-User
-Allow: /
 
 Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 """

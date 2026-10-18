@@ -6,8 +6,7 @@
 Reads tools/book/series.json (titles, back-cover words) and book/print/series.json (page counts, spine widths and
 costs, written by build_pdfs.js with BOOK_SERIES=1), so run it after the print books are built. Everything the owner
 must decide or confirm is marked [OWNER]. Facts about KDP were looked up in October 2026; the sources are listed at
-the end of the .md file. The Kindle rows name the EPUB files made by tools/book/build_epub.py (epub13) and read their real
-sizes from book/print/epub/epub.json, so run it after build_epub.py too.
+the end of the .md file.
 """
 import csv
 import json
@@ -19,25 +18,13 @@ OUT = os.path.join(ROOT, 'book', 'print')
 CFG = json.load(open(os.path.join(HERE, 'series.json'), encoding='utf-8'))
 MADE = json.load(open(os.path.join(OUT, 'series.json'), encoding='utf-8')).get('books', {})
 SERIES = CFG['series_title']
-# printfix13: the publisher and imprint, as on every copyright page (tools/book/series.json)
-PUBLISHER = CFG.get('publisher', "Christian's Lab").replace("'", '’')
-IMPRINT = CFG.get('imprint', PUBLISHER).replace("'", '’')
 import sys  # noqa: E402
 sys.path.insert(0, HERE)
 from build_series import WB  # noqa: E402  (the workbook's sheets and how many copies of each)
 
 # Kindle: the 70% band on Amazon.com is $2.99 to $12.99 since 7 July 2026; delivery is $0.15 a megabyte
 KINDLE_PRICE = 5.99
-KINDLE_MB = 3.0  # used only when an EPUB has not been built yet; KDP shows the real file size [OWNER]
-try:
-    EPUB = json.load(open(os.path.join(OUT, 'epub', 'epub.json'), encoding='utf-8')).get('books', {})
-except Exception:
-    EPUB = {}
-
-
-def kindle_mb(bid):
-    """the EPUB's own size in MB (KDP charges delivery on its converted file, which can differ a little)"""
-    return EPUB.get(bid, {}).get('mb') or KINDLE_MB
+KINDLE_MB = 3.0  # an estimate for a chapter book with colour figures; KDP shows the real file size [OWNER]
 UK_PRICE, EU_PRICE, CA_PRICE, AU_PRICE = '£11.99', '€13.99', 'CA$19.99', 'AU$23.99'
 UK_FIXED, UK_PER_PAGE = 0.85, 0.020  # standard colour, regular trim, Amazon.co.uk (third-party figure, not confirmed)
 
@@ -96,12 +83,12 @@ L = {
                'household management for working parents', 'roommates and co-parenting chores', 'resentment in relationships over housework'],
     },
     'workbook': {
-        'hook': 'Every form in the series is free to print or fill in online. This is the bound edition, on big pages with room to write.',
+        'hook': 'Every workpaper from the series, on big pages with room to write.',
         'body': [
-            'Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.',
-            'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes. The same forms are free to print or fill in on screen at spreadloveandacceptance.com; this bound edition is for anyone who would rather have them all in one book, with a pencil.',
+            'Inside are blank copies of all ten: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more.',
+            'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program and pages for your own notes. The same forms are free to print or fill in online; this book simply puts them all in one place.',
         ],
-        'inside': ['10 workpapers and a paper setup score, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page; longer sheets open across two facing pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
+        'inside': ['10 workpapers, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page; longer sheets open across two facing pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
         'cats': ['Books › Self-Help › Relationships', 'Books › Parenting & Relationships › Marriage & Adult Relationships', 'Books › Self-Help › Communication & Social Skills'],
         'alt': ['Books › Self-Help › Stress Management', 'Books › Parenting & Relationships › Family Relationships', 'Books › Self-Help › Personal Transformation'],
         'kw': ['communication workbook for couples', 'relationship worksheets for couples', 'chore chart for couples and families', 'self help workbook for adults',
@@ -153,8 +140,7 @@ def main():
 - **One account, your own ISBNs.** Use your own Bowker ISBN for each paperback (one per book and format). The Kindle edition needs no ISBN; Amazon gives it an ASIN. [OWNER]
 - **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol the Kindle editions in KDP Select** (see "Kindle extras").
-- **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
-- **The workbook is print only.** Its forms are made to be written in, and every one is already free to print or fill in on the website, so a Kindle edition would only repeat links (and KDP can turn away ebooks that are mostly links or freely available content). Each Kindle book already links every workpaper to its free form. The workbook has no Kindle row to fill in.
+- **The Kindle editions need their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. A reflowable EPUB of each book still has to be made (the same chapters, without page numbers, with live links instead of QR codes). [OWNER: ask for it]
 - **The same answers every time:** British English text on the Amazon.com store is fine; mark the language as English.
 ''')
     for item in items:
@@ -171,8 +157,7 @@ def main():
         kdp = c.get('kdp_amazon', {})
         uk_print = UK_FIXED + UK_PER_PAGE * pages if not wb else None
         uk_net = (0.6 * 11.99 - uk_print) if uk_print else None
-        k_mb = kindle_mb(bid)
-        k_del = 0.15 * k_mb
+        k_del = 0.15 * KINDLE_MB
         k_net = 0.70 * KINDLE_PRICE - k_del
         md.append('\n---\n\n## %s%s\n' % (('Book %d: ' % num) if num else '', title))
         md.append('### Basic details (paperback and Kindle)\n')
@@ -180,11 +165,9 @@ def main():
         md.append('| Language | English | English |')
         md.append('| Book title | %s | %s |' % (title, title))
         md.append('| Subtitle | %s | %s |' % (sub, sub))
-        md.append('| Series | %s, number %s (use "Add to series" so all books show together) | %s |' % (SERIES, num if num else '5 [OWNER: or leave the workbook out of the numbered series]', 'no Kindle edition (print only)' if wb else 'the same series, the same number'))
+        md.append('| Series | %s, number %s (use "Add to series" so all books show together) | the same series, the same number |' % (SERIES, num if num else '5 [OWNER: or leave the workbook out of the numbered series]'))
         md.append('| Edition number | 1 | 1 |')
         md.append('| Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |')
-        md.append('| Publisher | %s | %s |' % (PUBLISHER, PUBLISHER))
-        md.append('| Imprint | %s (KDP asks for it beside your own ISBN; it also prints on the copyright page) | %s |' % (IMPRINT, IMPRINT))
         md.append('| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |')
         md.append('| Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |')
         md.append('| Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |')
@@ -243,21 +226,16 @@ The answers are seen by Amazon, not printed on the product page.
         if not wb:
             md.append('### Kindle extras\n')
             md.append('| Field | Answer |\n|---|---|')
-            ep = EPUB.get(bid, {})
-            md.append('| Manuscript (ebook) file | **book/print/epub/%s.epub** (EPUB 3, reflowable, %.2f MB, %d chapters%s). Made by tools/book/build_epub.py. |' % (
-                bid, k_mb, len(item['chapters']), ('; EPUBCheck: ' + ep['epubcheck']['summary']) if (ep.get('epubcheck') or {}).get('summary') else ''))
-            md.append('| Kindle cover file | book/print/cover-%s-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |' % bid)
-            md.append('| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |')
-            md.append('| Kindle price | **$%.2f** with the **70%%** royalty (the 70%% band is $2.99 to $12.99 since 7 July 2026). About %s a copy after delivery (%.2f MB × $0.15 = %s). [OWNER] |' % (KINDLE_PRICE, money(k_net), k_mb, money(k_del)))
+            md.append('| Kindle price | **$%.2f** with the **70%%** royalty (the 70%% band is $2.99 to $12.99 since 7 July 2026). About %s a copy after delivery (≈ %.0f MB × $0.15). [OWNER] |' % (KINDLE_PRICE, money(k_net), KINDLE_MB))
             md.append('| KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |')
             md.append('| DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers\' way. (KDP doesn\'t let you change this after publishing.) [OWNER] |')
             md.append('| Kindle categories and keywords | the same as the paperback |')
         else:
-            md.append('### Kindle\n**No Kindle edition: the workbook is print only.** It is made to be written in, and every form is already free to print or fill in at spreadloveandacceptance.com/workpapers/fill. A companion ebook would only repeat those links, so there is no file to upload. On the paperback\'s page, leave the Kindle edition empty. Each Kindle book in the series links every workpaper to its free form instead.\n')
+            md.append('### Kindle\nNo Kindle edition: the workbook is made to be written in. (Its forms are free to print online.)\n')
         md.append('### Taglines for ads (short and true)\n')
         md.append('\n'.join('- %s' % t for t in TAGLINES[bid]))
         rows.append({
-            'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or '', 'edition': 1, 'author': 'Christian', 'publisher': PUBLISHER, 'imprint': IMPRINT,
+            'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or '', 'edition': 1, 'author': 'Christian',
             'description_html': desc, 'category_1': d['cats'][0], 'category_2': d['cats'][1], 'category_3': d['cats'][2],
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
             **{'keyword_%d' % (i + 1): k for i, k in enumerate(d['kw'])},
@@ -268,12 +246,9 @@ The answers are seen by Amazon, not printed on the product page.
             'expanded_distribution': 'No', 'printing_cost_usd': kdp.get('print', ''), 'royalty_usd': kdp.get('net', ''), 'kdp_select': '', 'drm': '',
         })
         if not wb:
-            rows.append(dict(rows[-1], format='kindle', isbn='(none: ASIN)', ink_paper='', trim='', bleed='', cover_finish='', pages='', interior_file='book/print/epub/%s.epub' % bid,
+            rows.append(dict(rows[-1], format='kindle', isbn='(none: ASIN)', ink_paper='', trim='', bleed='', cover_finish='', pages='', interior_file='EPUB to make [OWNER]',
                              cover_file='book/print/cover-%s-front.jpg' % bid, low_content='', price_usd='%.2f' % KINDLE_PRICE, price_gbp='', price_eur='', price_cad='', price_aud='',
                              expanded_distribution='', printing_cost_usd='', royalty_usd='%.2f' % k_net, kdp_select='No', drm='No'))
-        else:
-            rows.append(dict({k: '' for k in rows[-1]}, id=bid, format='kindle', title=title, subtitle=sub, series=SERIES,
-                             interior_file='None: print only (the forms are free to print online)', cover_file='', isbn='', price_usd=''))
     md.append('\n---\n\n## A+ content ideas (for each book\'s product page)\n')
     md.append('''- **Module 1, the series banner:** the five front covers side by side, with one line under each ("Start with yourself", "For the heavy days", "Between people", "The work nobody sees", "Every form, all in one").
 - **Module 2, what a chapter looks like:** three panels: a short made-up scene, "Words you could use", and "Try this", each as a cropped page image.
@@ -283,9 +258,9 @@ The answers are seen by Amazon, not printed on the product page.
 Keep every image free of prices, review quotes and claims like "bestseller". [OWNER]
 ''')
     md.append('## "Look inside" tips\n')
-    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, one page on the workpapers, tools and characters, the help page), so a browser reaches Chapter 1 early.
+    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page on the characters, the help page), so a browser reaches Chapter 1 within 7 pages.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, the help page, then the three friends, so Chapter 1 comes early.
+- For Kindle, KDP shows about the first 10%: keep the same short front matter in the EPUB, and put the help page right after the contents.
 ''')
     md.append('## Author Central bio (short, warm and true)\n')
     md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. He brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.

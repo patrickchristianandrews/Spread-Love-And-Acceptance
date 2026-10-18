@@ -2,7 +2,6 @@
 """Finish one printed book (called by tools/book/build_pdfs.js; needs pypdf).
 
     python3 tools/book/pdf_finish.py job.json
-    python3 tools/book/pdf_finish.py --tag file.pdf "Title" ["Author" ["Subject"]]   (a cover: document information only)
 
 job.json holds:
   interior   the interior as Chromium printed it (page 1 = the half-title, a right-hand page)
@@ -23,29 +22,14 @@ from pypdf import PdfReader, PdfWriter
 from pypdf.constants import PageLabelStyle
 
 
-# printfix13: the publisher's name only, no tool names or build paths, in every PDF
-CREATOR = 'Christian’s Lab'
-PRODUCER = 'Spread Love & Acceptance'
-
-
 def info(w, job):
     w.add_metadata({
         '/Title': job['title'],
         '/Author': job.get('author', ''),
         '/Subject': job.get('subject', ''),
-        '/Creator': CREATOR,
-        '/Producer': PRODUCER,
+        '/Creator': 'spreadloveandacceptance.com (tools/book/build_pdfs.js)',
+        '/Producer': 'Chromium and pypdf',
     })
-
-
-def tag(path, title, author='', subject=''):
-    """rewrite a PDF made straight by Chromium (a cover) with the same document information as the books"""
-    r = PdfReader(path)
-    w = PdfWriter()
-    w.append(r, import_outline=False)
-    info(w, {'title': title, 'author': author, 'subject': subject})
-    with open(path, 'wb') as f:
-        w.write(f)
 
 
 def outline(w, items, offset):
@@ -64,11 +48,6 @@ def outline(w, items, offset):
 
 
 def main():
-    if sys.argv[1] == '--tag':
-        # python3 tools/book/pdf_finish.py --tag file.pdf "Title" ["Author" ["Subject"]]
-        tag(*sys.argv[2:6])
-        print(json.dumps({'tagged': sys.argv[2]}))
-        return
     job = json.load(open(sys.argv[1], encoding='utf-8'))
     interior = PdfReader(job['interior'])
     cover = PdfReader(job['cover']) if job.get('cover') else None
