@@ -6,10 +6,10 @@
    While a link is empty, its button stays hidden, and so does the "Get it in print" row when all three are empty.
    Never put an address here that you haven't checked yourself. */
 window.TOLBookShop = {
-  'book-1-self-discovery':       { direct: '', amazon: '', ingram: '' },
-  'book-2-together':             { direct: '', amazon: '', ingram: '' },
-  'book-3-sharing-the-load':     { direct: '', amazon: '', ingram: '' },
-  'book-4-understanding-people': { direct: '', amazon: '', ingram: '' },
+  'book-1-know-yourself-kindly': { direct: '', amazon: '', ingram: '' },
+  'book-2-heal-and-steady':      { direct: '', amazon: '', ingram: '' },
+  'book-3-understanding-each-other': { direct: '', amazon: '', ingram: '' },
+  'book-4-share-the-load':       { direct: '', amazon: '', ingram: '' },
   'workbook':                    { direct: '', amazon: '', ingram: '' }
 };
 (function () {

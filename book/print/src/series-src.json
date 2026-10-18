@@ -1,7 +1,7 @@
 {
  "jobs": [
   {
-   "id": "book-1-self-discovery",
+   "id": "book-1-know-yourself-kindly",
    "kind": "book",
    "trim": [
     6,
@@ -10,13 +10,13 @@
    "colPx": 456,
    "paper_in": 0.002252,
    "price": 14.99,
-   "cover": "cover-book-1-self-discovery",
+   "cover": "cover-book-1-know-yourself-kindly",
    "title": "Know Yourself Kindly",
    "n": 1,
    "chapters": 7
   },
   {
-   "id": "book-2-together",
+   "id": "book-2-heal-and-steady",
    "kind": "book",
    "trim": [
     6,
@@ -25,13 +25,13 @@
    "colPx": 456,
    "paper_in": 0.002252,
    "price": 14.99,
-   "cover": "cover-book-2-together",
-   "title": "Closer, Together",
+   "cover": "cover-book-2-heal-and-steady",
+   "title": "Heal and Steady",
    "n": 2,
    "chapters": 7
   },
   {
-   "id": "book-3-sharing-the-load",
+   "id": "book-3-understanding-each-other",
    "kind": "book",
    "trim": [
     6,
@@ -40,13 +40,13 @@
    "colPx": 456,
    "paper_in": 0.002252,
    "price": 14.99,
-   "cover": "cover-book-3-sharing-the-load",
-   "title": "Share the Load",
+   "cover": "cover-book-3-understanding-each-other",
+   "title": "Understanding Each Other",
    "n": 3,
-   "chapters": 6
+   "chapters": 7
   },
   {
-   "id": "book-4-understanding-people",
+   "id": "book-4-share-the-load",
    "kind": "book",
    "trim": [
     6,
@@ -55,10 +55,10 @@
    "colPx": 456,
    "paper_in": 0.002252,
    "price": 14.99,
-   "cover": "cover-book-4-understanding-people",
-   "title": "Understanding People",
+   "cover": "cover-book-4-share-the-load",
+   "title": "Share the Load",
    "n": 4,
-   "chapters": 7
+   "chapters": 6
   },
   {
    "id": "workbook",

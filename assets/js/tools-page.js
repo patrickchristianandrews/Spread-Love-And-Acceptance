@@ -488,7 +488,17 @@
   else if (location.hash) {
     // the cards are taller than the plain lists the browser first saw, so land on the #part again
     var target = null; try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
-    if (target) { goTo(target, true); window.addEventListener('load', function () { setTimeout(function () { goTo(target, true); }, 0); }, { once: true }); }
+    // (and once more a moment later if late layout moved it, unless the reader has scrolled away themselves)
+    if (target) {
+      goTo(target, true);
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          goTo(target, true);
+          var y0 = window.pageYOffset, want = target.getBoundingClientRect().top;
+          setTimeout(function () { if (Math.abs(window.pageYOffset - y0) < 4 && Math.abs(target.getBoundingClientRect().top - want) > 24) goTo(target, true); }, 400);
+        }, 0);
+      }, { once: true });
+    }
   }
   // a link to a heading inside a section that is hidden by the type picker (the wide-screen "On this page" outline)
   // shows every section again first, so the jump lands

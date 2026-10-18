@@ -27,6 +27,14 @@
      book/pdf/print/<book>-interior.pdf     the interior on its own, for a print shop (BOOK_PRINT_KIT=0 skips)
      book/pdf/print/<book>-cover.pdf        the front and back cover on their own
    The figures are inlined as SVG before printing, so their text is set in the book's own fonts.
+
+   The print series (print12): BOOK_SERIES=1 prints the books that tools/book/build_series.py lays out in
+   book/print/src/ (6 x 9 in books and an 8.5 x 11 in workbook) into book/print/, with their full-wrap covers, front-cover
+   JPGs and book/print/series.json (pages, spine widths, costs). It never touches book/pdf/. Name ids to print just those.
+     python3 tools/book/build_series.py
+     BOOK_SERIES=1 NODE_PATH=$(npm root -g) node tools/book/build_pdfs.js 8142
+     python3 tools/book/build_series.py && python3 tools/book/listing_kdp.py     (page counts onto /book/, the KDP listing)
+   The book's name everywhere is series_title in tools/book/series.json.
 */
 const fs = require('fs');
 const os = require('os');
@@ -455,7 +463,8 @@ async function runSeries(browser, ctx) {
   const src = JSON.parse(fs.readFileSync(path.join(SERIES_OUT, 'src', 'series-src.json'), 'utf8'));
   let made = {};
   try { made = JSON.parse(fs.readFileSync(path.join(SERIES_OUT, 'series.json'), 'utf8')); } catch (e) {}
-  made.books = made.books || {};
+  // a full run starts the list afresh (books renamed or dropped don't linger); a named run updates just those
+  made.books = ONLY.length ? (made.books || {}) : {};
   const jobs = src.jobs.filter(j => ONLY.length ? ONLY.includes(j.id) : !j.only_when_named);
   for (const job of jobs) {
     const t0 = Date.now();

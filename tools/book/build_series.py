@@ -440,7 +440,7 @@ def build_book(book, where):
     front += '\n' + meet_page(book) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
-    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book) + notes_pages(book)
+    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book) + notes_pages(book, book.get("notes_pages", 2))
     ol = [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
     ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]

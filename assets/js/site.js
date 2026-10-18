@@ -124,7 +124,7 @@
       { href: '/tools.html', code: 'All', title: 'All tools', note: 'Every tool in one place, the ones you can use on your own first, with filters by what you want to do' },
       { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and put your results side by side. Tools and workpapers are listed apart' },
       { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of an article or an AI chat?', note: 'What’s different here, and where it falls short' },
-      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'A short, straight path: check your weather, read the Preface, try one card and log one thing' },
+      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Ten-minute start', note: 'A short, straight path: check your weather, read the Preface, try one card and log one thing' },
       { href: '/someone-sent-you-this.html', code: '', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
       { href: '/sent-this.html', code: '', title: 'Sent this by someone?', note: 'What they see, what stays yours, doing your side privately, and saying no kindly' },
       { href: '/share-the-load.html', code: '', title: 'Share the load, step by step', note: 'Which tool to use first for splitting the work at home, and what comes next. Roommates included' },
@@ -153,7 +153,7 @@
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, asks that land, timing, hard talks, repair, and talking in every kind of relationship' },
-      { href: '/write-it-through.html', code: 'New', title: 'Talk it through in writing', note: 'A calm, private way to sort something out in writing: one topic, facts not verdicts, one clear ask and a reply-by time' },
+      { href: '/write-it-through.html', code: 'New', title: 'Write it through', note: 'A calm, private way to sort something out in writing: one topic, facts not verdicts, one clear ask and a reply-by time' },
       { href: '/new-relationship.html', deep: true, code: 'New', title: 'Early days: dating and new relationships', note: 'Dating at any age: texting and pace, telling a difference from a real concern, the big questions, meeting family, and ending it kindly' },
       { href: '/stepfamily.html', deep: true, code: 'New', title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money and holidays' },
       { href: '/bonding.html', code: 'Guide', title: 'Bonding: how closeness grows', note: 'What research says about closeness, with small ideas for partners, kids, friends, family, coworkers and you' },
@@ -188,6 +188,7 @@
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your garden' },
       { href: '/recheck-drive.html', code: 'New', title: 'The Re-check Drive', note: 'A calm football game: do the small, kind things from the complacency playbook, and the ball moves toward a field goal. No clock, no way to lose' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'Wander a temple garden while Tidbit and Sugarfoot tend it, build your own bear, then step inside for something gentle and always different' },
+      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cozy 3D coin pusher: every five coins bring a short, useful tip, and medallions of every character on the site ride along. Nothing to buy' },
       { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games with Tidbit and Sugarfoot: a maze chase, a crossing, a wagon-trail journey, a brick breaker and a catch game' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
@@ -311,7 +312,7 @@
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
       { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'A communication style guide: your wiring, your Wave Code, the 9 inputs of learning, a personal statement and a way to compare with someone' },
-      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'After a talk went wrong: a step-by-step reset', note: 'Settle, work out what went out of sync, see it from their side, and try again. Also called the Carrier Wave Decoder' },
+      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'Rewind the talk', note: 'After a talk went wrong: settle, work out what went out of sync, see it from their side, and try again. Also called the Carrier Wave Decoder' },
       { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your worksheet numbers and see whether the way you share the load is working' },
       { href: '/is-the-setup-working.html', code: 'CALC-01', title: 'Is the setup working for everyone? The long form', note: 'Enter hours and jobs for 2–8 people and see the math step by step', menu: false },
       { href: '/workpapers/calculators/look-back-30-days-quick.html', code: 'CALC-02', title: 'Look back over 30 days', note: 'Then and now: what shifted this month, what didn’t, and one next step' },
@@ -322,7 +323,7 @@
       { href: '/tools/frequency-calibration.html', code: '', title: 'Find your natural rhythms', note: 'Compare your rhythms across five areas of daily life', paid: true },
       { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Watch two rhythms sync', note: 'A moving picture of how the daily check-in keeps two people in step', paid: true },
       { href: '/snapshot/index.html', code: '', title: 'A quick snapshot', note: 'A two-minute look at how things are right now' },
-      { href: '/make-a-plan.html', code: 'Tool', title: 'Make a plan together', note: 'Six templates: festival year, family event terms, time-together deal, room agreement, our week, handoff bag' }
+      { href: '/make-a-plan.html', code: 'Tool', title: 'Plan it once', note: 'Make a plan together. Six templates: festival year, family event terms, time-together deal, room agreement, our week, handoff bag' }
     ]},
     { id: 'media', title: 'Media', blurb: 'Tidbit and Sugarfoot’s movies and live pal cam, music and audio for settling first (Pillar III), and conversations about all five pillars.', items: [
       { href: '/frequency-buddies.html', code: 'Movies', title: 'Tidbit & Sugarfoot: Frequency Buddies', note: 'Five animated adventures with the two pals, with voices, music and captions, about 16 minutes each' },
@@ -404,7 +405,7 @@
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
       { href: '#settings', code: 'New', title: 'High contrast', note: 'A new switch in Settings' },
       { sub: 'More ways in' },
-      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
+      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Ten-minute start', note: 'Today’s weather, the Preface, one card and one thing logged' },
       { href: '/someone-sent-you-this.html', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
       { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of an article or an AI chat?', note: 'What’s different here, and where it falls short' },
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
@@ -563,7 +564,7 @@
       { href: '/family-obligations.html', code: 'Guide', title: 'Family, money and in-laws', note: 'Supporting parents, money home, long visits: plan it together' },
       { sub: 'Talk it through', area: 'talk', all: '/explore.html?need=talk', allLabel: 'Everything on talking it through' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, timing, hard talks and repair' },
-      { href: '/write-it-through.html', code: 'New', title: 'Talk it through in writing', note: 'One topic, facts not verdicts, one clear ask: write it, wait, then send' },
+      { href: '/write-it-through.html', code: 'New', title: 'Write it through', note: 'One topic, facts not verdicts, one clear ask: write it, wait, then send' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
       { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'A pause plan you agree' },
       { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
@@ -573,7 +574,7 @@
       { href: '/book/topic-talk-it-through.html', code: 'Book', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
       { sub: 'Tools for a message or a moment', area: 'talk', all: '/tools.html#communication', allLabel: 'All communication tools' },
       { href: '/signal-translator.html', code: 'Tool', title: 'Chat analyzer', note: 'How one message might land, or where a whole chat turned' },
-      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'After a talk went wrong: a step-by-step reset', note: 'Settle, see it from their side, and try again' },
+      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'Rewind the talk', note: 'After a talk went wrong: settle, see it from their side, and try again' },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { sub: 'Love, sorry and thanks', area: 'talk' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness, with an idea picker' },
@@ -620,6 +621,7 @@
       { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels' },
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
+      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cozy 3D coin pusher: a kind tip every few coins, and every character on the site to collect' },
       { sub: 'Breathe & quiet', tt: 'calm', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/ladder.html', code: 'Now', title: 'How am I right now? (4 taps)', note: 'Find where you are right now, and a next step that fits' },
@@ -859,7 +861,7 @@
     'housemates': 'sharing-a-room share-the-load workpapers/calculators/look-back-30-days-quick look-back-30-days chore-chart-for-couples relationships lemonade-stand workpapers/wp-03-one-owner-per-job workpapers/calculators/is-the-setup-working-quick is-the-setup-working',
     'work': 'work appreciation-at-work workpapers/wp-09-say-it-so-it-lands library/teams coming-out different-hours groups for-counselors wiring-card',
     'life-changes': 'new-parent living-alone grown-up-children money-together coming-home when-one-is-ill caregivers empty-nest retired-together grief on-my-own coming-out library/life',
-    'play': 'frequency-journey word-bloom quiet-crossword daily-ledger-crossword quiet-words recheck-drive pause-and-play keepsakes surprise night-garden bears-dojo',
+    'play': 'frequency-journey word-bloom quiet-crossword daily-ledger-crossword quiet-words recheck-drive pause-and-play keepsakes surprise night-garden bears-dojo coin-pusher',
     'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
   };
   // pages that are never "outside your focus": the start, safety, help and the site's own pages
@@ -1029,6 +1031,7 @@
     '/daily-ledger-crossword.html': 'Gentle games: crosswords, newspaper daily (Daily Ledger Crossword)',
     '/recheck-drive.html': 'Gentle games: calm football for small kind acts (Re-check Drive)',
     '/bears-dojo.html': 'Gentle games: a quiet temple garden to wander (Bears Dojo)',
+    '/coin-pusher.html': 'Gentle games: a cozy coin pusher with kind tips (Kindness Coin Pusher)',
     '/frequency-buddies-music-video-maker.html': 'Gentle games: make a cartoon music video (Frequency Buddies video maker)',
     '/surprise.html': 'Surprise me',
     '/quick-checks.html': 'How am I right now? (Today’s Weather)',
@@ -2289,7 +2292,7 @@
    ['/start-here.html#three-questions', 'Not sure where to start? Three quick questions', 'Who it’s about, what’s going on and how much time you have. You get one thing to try first.', 'Tool'],
    ['/workpapers/fill/suite.html#full-path', 'All your worksheets as one PDF, with a report', 'Every worksheet in order, printed or saved as one PDF, with a report at the end.', 'Tool'],
    ['/soundscapes.html#background', 'Background sounds: brown noise, a low hum and more', 'Calm-down sounds to play while you settle or fall asleep.', 'Tool'],
-   ['/carrier-wave-decoder.html?tab=their-side', 'See it from their side', 'The Their side step of After a talk went wrong: look at the moment the way they saw it.', 'Tool']
+   ['/carrier-wave-decoder.html?tab=their-side', 'See it from their side', 'The Their side step of Rewind the talk: look at the moment the way they saw it.', 'Tool']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // a grandparent asking about support groups means the kinship support section first
   PRE.push([/\bgrand(parent|parents|ma|pa|mother|father|kids?|child|children|son|daughter)s?\b.*\b(support|group|groups|help|benefits?|allowance|money)\b|\bkinship (support|carers?|group)\b/, 'r13kin']);
@@ -2306,10 +2309,10 @@
   var FRESH = {
     '/new-relationship.html': ['Early days: dating and new relationships', 'Dating at any age: texting and pace, telling a difference from a real concern, the big questions, meeting family, moving in, and ending it kindly.'],
     '/stepfamily.html': ['Blended families and stepfamilies', 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money, holidays and adult stepchildren.'],
-    '/write-it-through.html': ['Talk it through in writing', 'One topic, facts not verdicts, one clear ask and a reply-by time. Write it, wait, then send.'],
-    '/how-you-take-things-in.html': ['How you take things in', 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts.'],
+    '/write-it-through.html': ['Write it through', 'Also called Talk it through in writing. One topic, facts not verdicts, one clear ask and a reply-by time. Write it, wait, then send.'],
+    '/how-you-take-things-in.html': ['Read your way: how you take things in', 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts.'],
     '/explore.html': ['Everything on this site', 'Every page and tool on one page, with filters by need, relationship, time and kind of page.'],
-    '/ladder.html': ['How am I right now? (quick, 4 taps)', 'Four quick taps on how you are right now, and a next step that fits.'],
+    '/ladder.html': ['My weather today: how am I right now? (quick, 4 taps)', 'Four quick taps on how you are right now, and a next step that fits.'],
     '/refusals.html': ['Say no kindly', 'Kind, clear ways to turn something down, with words you could use.'],
     '/friends.html': ['Friends: when a friendship drifts', 'When you’re always the one reaching out, a friend never texts back, or life changes pull you apart: kind words to say, and low-energy ways to stay close.'],
     '/more-than-two.html': ['More than two partners at home', 'For polyamorous families, triads and throuples: sharing the load between three or more, and joining a home without feeling like a guest.'],
@@ -2335,9 +2338,9 @@
     '/workpapers/wp-12-same-moment-different-speeds.html': ['WP-12: Same moment, different speeds', 'When one of you wants to sort it now and the other needs time: five everyday moments, your gaps in plain words, and one small agreement.'],
     '/workpapers/wp-14-is-it-us-or-everything-else.html': ['WP-14: Is it us, or is it everything else?', 'A one-week log: outside pressure in one column, tense moments between you in the other, so outside strain stops getting blamed on each other.'],
     '/workpapers/wp-15-keep-your-little-rituals-alive.html': ['WP-15: Keep your little rituals alive', 'Every few months, list the small habits you share and mark which are alive, fading or stopped. Restart one in its smallest form.'],
-    '/workpapers/calculators/look-back-30-days-quick.html': ['Look back over 30 days (the 30-Day Look-Back)', 'Type in how things were a month ago and how they are this week: what shifted, what didn’t, and one next step. It reads the setup, never a person.'],
-    '/look-back-30-days.html': ['Look back over 30 days: the long form', 'Four weeks of hours, rescues, load and jobs side by side, with the running imbalance and one next step.'],
-    '/make-a-plan.html': ['Make a plan together', 'Pick a template: a festival year, your terms for a family event, a time-together deal, a room agreement, your week on one page, or a handoff-bag list. Fill it in together, then send it.'],
+    '/workpapers/calculators/look-back-30-days-quick.html': ['Fair split check: look back over 30 days', 'Type in how things were a month ago and how they are this week: what shifted, what didn’t, and one next step. It reads the setup, never a person.'],
+    '/look-back-30-days.html': ['Fair split check: look back over 30 days, every number', 'Four weeks of hours, rescues, load and jobs side by side, with the running imbalance and one next step.'],
+    '/make-a-plan.html': ['Plan it once', 'Make a plan together. Pick a template: a festival year, your terms for a family event, a time-together deal, a room agreement, your week on one page, or a handoff-bag list. Fill it in together, then send it.'],
     '/tools.html': ['All tools', 'Every tool on the site with a plain name, the ones you can use on your own first, with filters: communication, self-discovery, share the load, calm and stress, family, work, health, plans, learning and play.'],
     '/why-this-site.html': ['Why use this instead of an article or an AI chat?', 'What is different here: tools that use your own situation, plain words, research shown openly, and nothing you type leaving your device. And where it falls short.'],
     '/nervous-system.html': ['Your nervous system, in plain words', 'Fight, flight and freeze, the vagus nerve and polyvagal theory explained honestly, and what helps your body settle.'],
@@ -3001,7 +3004,7 @@
     var withNeeds = function () { var done = false, t = setTimeout(function () { if (!done) { done = true; draw(); } }, 2500); loadNeeds(function () { if (!done) { done = true; clearTimeout(t); draw(); } }); };
     if (window.TOLTools) withNeeds(); else loadScript('/assets/js/tools-registry.js').then(withNeeds, withNeeds);
   }
-  var GAME_PAGE = /^\/(frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|night-garden|calm-visualizer|frequency-buddies-music-video-maker)\.html$/;
+  var GAME_PAGE = /^\/(frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|coin-pusher|night-garden|calm-visualizer|frequency-buddies-music-video-maker)\.html$/;
   function buildRelated(main, pl) {
     var tools = window.TOLTools || [], types = window.TOLToolTypes || [], picks = [], seen = {}, more = null;
     var me = current.replace(/-in-depth\.html$/, '.html');

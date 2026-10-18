@@ -247,13 +247,13 @@
     // consol12: every game is a mode of the games place, not a card of its own:
     // 'arcade', 'wordbloom', 'quietwords', 'crosswords', 'drive', 'dojo', 'mvmaker' -> 'pauseplay'
     { id: 'pauseplay', name: 'Gentle games', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
-      modes: [['All the games', '/pause-and-play.html', '', 'All games', '✨'], ['Five gentle arcade games', '/frequency-journey.html', '', 'Arcade', '🎵'], ['Word Bloom', '/word-bloom.html', '', 'Bloom', '🌼'],
+      modes: [['All the games', '/pause-and-play.html', '', 'All games', '✨'], ['Six gentle arcade games, with a Home Run Derby', '/frequency-journey.html', '', 'Arcade', '🎵'], ['Word Bloom', '/word-bloom.html', '', 'Bloom', '🌼'],
         ['Quiet Words', '/quiet-words.html', '', 'Words', '🔍'], ['Crosswords: gentle levels', '/quiet-crossword.html', '', 'Crossword', '✏️'], ['Crosswords: newspaper daily', '/daily-ledger-crossword.html', '', 'Newspaper', '📰'],
-        ['The Re-check Drive', '/recheck-drive.html', '', 'Re-check Drive', '🏈'], ['The Bears Dojo', '/bears-dojo.html', '', 'Bears Dojo', '🐻'], ['Make a cartoon music video', '/frequency-buddies-music-video-maker.html', '', 'Music video', '🎬']],
+        ['The Re-check Drive', '/recheck-drive.html', '', 'Re-check Drive', '🏈'], ['The Bears Dojo', '/bears-dojo.html', '', 'Bears Dojo', '🐻'], ['Kindness Coin Pusher', '/coin-pusher.html', '', 'Coin Pusher', '🪙'], ['Make a cartoon music video', '/frequency-buddies-music-video-maker.html', '', 'Music video', '🎬']],
       does: 'Pick a game, or press “Pick one for me”, and play as long as you like.',
       gets: 'A gentle break whenever you want one, with no timers and no way to lose.',
       mins: 5, time: 'As long as you like', who: ['solo', 'two'], benefit: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose',
-      kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo music video maker cartoon create games: every calm game in one place pause & play' },
+      kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout baseball home run derby batting kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo coin pusher coins arcade machine tips collect characters music video maker cartoon create games: every calm game in one place pause & play' },
   ];
 
   // ---------- What each tool helps with, and who it is for (used by /tools.html's filters and cards; tools11)

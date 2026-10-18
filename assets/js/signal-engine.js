@@ -420,6 +420,9 @@ const F = [
   {id:"violent", name:"Violent figure of speech (\"I'll kill you\")", kind:"static", re:null,
    what:"\"I'll kill you if…\" is almost always an exaggeration, but in writing there's no smile or tone to show that. Some listeners take it literally, and it can read as a real threat.",
    fix:"Say the true size of it: \"I'll be really upset if you're late. It matters to me.\""},
+  {id:"harm", name:"Could read as a threat", kind:"static", re:null,
+   what:"Words about hurting someone (\"I'm going to slap you\", \"you're dead\") or a veiled warning (\"I know where you live\", \"keep talking and see what happens\") can frighten the person reading, whatever was meant. In writing there's no smile or tone to show it's a joke.",
+   fix:"Leave the threat out. Say the feeling underneath it: \"I'm really frustrated with you right now.\" If it's a joke you both share, say so, or save it for when you're together."},
   {id:"selfput", name:"Putting yourself down", kind:"static",
    re:/\bi(?:'m| am) (?:so |such an? |a |an |really |just |the |an absolute |a total |a complete |literally )*(?:stupid|an idiot|idiot|dumb|useless|hopeless|pathetic|worthless|a failure|failure|the worst|a terrible person|an awful person|a bad person|a mess|garbage|trash)\b/gi,
    what:"Calling yourself stupid or useless can pull the listener into reassuring you, and the apology or the point gets lost. It's also hard on you.",
@@ -1493,6 +1496,12 @@ function analyze(textIn, opts){
   // an ultimatum without "then I'll": "if you don't come for Thanksgiving, don't bother coming at Christmas"
   { const ULT = /\bif you (?:don't|do not|won't|can't|ever) [^.!?]{1,70}?,?\s*(?:then )?(?:don't (?:bother|come|call|talk|expect)|forget (?:about )?(?:it|me|us)|we're (?:done|through|over)|i'm (?:done|gone|out)|you can forget|you'll (?:regret|be sorry)|don't ever)\b/i;
     const um = low.match(ULT); if(um && !has("threat")) push("threat", um.index, um.index+um[0].length); }
+  // "If you go to that party, don't bother coming back", "Either she goes or I go": an ultimatum, even without "don't"
+  { const U2 = /\bif you [^.!?]{1,70}?,?\s*(?:then )?(?:don't|do not) (?:bother )?(?:coming back|come back|ever come back|coming home|calling me|ever (?:call|talk to|speak to) me)\b|\beither (?:she|he|they|it|that|you|your \w+) goes,? or i (?:go|leave|do)\b|\b(?:it's|its) (?:either )?(?:me or (?:her|him|them|your \w+|the \w+))\b|\bchoose:? (?:me or|between me and)\b/i;
+    const um = low.match(U2); if(um && !has("threat") && !has("menace")) push("threat", um.index, um.index+um[0].length); }
+  // "You have 5 minutes to call me back": a deadline on a reply is pressure
+  { const dm = low.match(/\byou have (?:\d+|one|two|five|ten|until \w+(?: \w+)?) (?:minutes?|mins?|seconds?|hours?)?\s*(?:to|before you) (?:call|answer|reply|text|get back|respond|come home|explain)\b/i);
+    if(dm && !has("demand")) push("demand", dm.index, dm.index+dm[0].length); }
   // a threat that would frighten or control ("you'll regret it", "or else", "if you tell anyone…"): not a tone problem
   { const mm = low.match(MENACE_RE);
     const cm0 = SHARED && SHARED.control ? SHARED.control(low) : null;
@@ -1526,6 +1535,12 @@ function analyze(textIn, opts){
   { const bm = low.match(BOUNDARY_RE);
     if(bm && !has("menace") && !["swear","hostile","label","contempt","violent","legal","dxlabel"].some(has) && (BOUNDARY_CARE.test(low) || /\b(?:step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|hang up|end (?:the|this) (?:call|visit|conversation|chat)|leave the (?:room|conversation|call))\b/i.test(bm[0]))){
       drop("threat"); push("boundary", bm.index, bm.index+bm[0].replace(/[\s,.]+$/,"").length); } }
+  // "I'm going to slap you", "ima beat ur butt", "I know where you live", "keep talking and see what happens": read flatly,
+  // a threat. A game or a "lol" around it makes it hard to tell (playful), never fine. A threat that would frighten or
+  // control ("you'll regret it") is read above as menace and wins.
+  let harm = null;
+  if(SHARED && SHARED.harm && !has("menace")){ const hm = SHARED.harm(raw);
+    if(hm){ harm = hm; drop("violent", h=>h.s<hm.end && hm.start<h.e); drop("boundary"); drop("impera", h=>h.s<hm.end && hm.start<h.e); push("harm", hm.start, hm.end); } }
   // coming out, or sharing a diagnosis: brave and caring, never "might hurt"
   { const dm = low.match(DISCLOSE_RE); if(dm){ push("disclose", dm.index, dm.index+dm[0].length); drop("ominous"); } }
   // blame said as a dig, or keeping score
@@ -1768,9 +1783,11 @@ function analyze(textIn, opts){
   const SEVERE = /\b(?:worthless|useless|pathetic|disgusting|failure|disappointment|waste of|terrible|awful|horrible|disgrace|liar|lazy|selfish|ungrateful|toxic|psycho|narcissist|heartless|cruel|ugly|fat|retard\w*|nothing without)\b/;
   const REAL_HURT = ["contempt","sarcasm","passiveag","guilt","withdraw","stonewall","brushoff","minimal","dxlabel","menace","control","legal","kidsfirst","sorrybut","jab","compare","heat","invalid","calm","madefeel","shouldhave","past","count","motive","blameq","tone","olddays","pointed","swear"];
   const TEASE = ["label","hostile","hyper","violent","threat","joke","shout","intens","idiom","impera","critic","absolute","again"];
-  let banter = false, banterPoint = false;
+  let banter = false, banterPoint = false, banterSet = [];
+  if(harm && playMark) harm.playful = true;
   if(playMark && !REAL_HURT.some(has) && !SEVERE.test(lc) && !selfHarm && !control){
     banter = true;
+    banterSet = ["label","hostile","violent","threat"].filter(has);
     // "you never text back lol": a joke with a real point inside it stays a little sharp
     banterPoint = ["absolute","again"].some(has) || (has("critic") && !/\b(?:annoying|annoy)\b/.test(lc));
     ["label","hostile","hyper","violent","threat","joke","shout","intens","idiom"].forEach(id=>drop(id));
@@ -1800,7 +1817,7 @@ function analyze(textIn, opts){
   const feelingM = low.match(new RegExp("\\bi(?:'m| am| was| felt| feel| get| got|'ve been| have been| am feeling|'m feeling)(?: so| really| a bit| a little| kind of| pretty| very| quite)? ("+FEELINGS+")\\b","i"));
   askSentEs.forEach(i=>{ if(!asks.some(a=>a.sentence===i)) asks.push({text: sentences[i].text.replace(/^[\s¿¡]+|[\s.?!]+$/g,""), kind:"es", sentence:i}); });
   return {
-    banter, banterPoint, warm, lang,
+    banter, banterPoint, banterSet, warm, lang, harm,
     text: raw, typed, readAs: sp.fixes, norm: text, channel: ch, words: wc, allCaps,
     sentences, hits, found, spans, staticIds, goodIds,
     asks, segs,
@@ -1870,7 +1887,7 @@ function readings(an, ids, ch){
 
 // gaps and loose wording that, alone, never make a message sound sharp (a literal listener still gets the note)
 const SMALL_GAPS = ["nowhen","idiom","hedge","period","vtime","reassure"];
-const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst","menace","control"];
+const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst","menace","control","harm"];
 /* a static score: sum of the loudest reading per feature, minus a little for what's worth keeping */
 const NOT_PARENT_RE = /\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b/i;
 function score(an, ids, ch, state){
@@ -1954,6 +1971,7 @@ const CHANGE_WHY = {
   defend:{g:"\"I said…\" defends you before anyone has blamed you. Saying the fact on its own keeps it information, not a counter-argument."},
   brushoff:{g:"\"Whatever\" or \"I don't care\" can mean \"either is fine\" or \"I'm upset.\" Saying which one you mean stops the listener guessing, usually wrong.", anxiety:"A brush-off is often heard as anger or pulling away.", autistic:"A brush-off may be taken at its word."},
   dxlabel:{g:"A diagnosis used as a put-down is an insult, and it lands on everyone who has that diagnosis. The rewrite leaves it out and keeps what you actually want to say."},
+  harm:{g:"Words about hurting someone, or a veiled warning, can frighten the person reading, whatever was meant. The threat is left out completely, and the feeling underneath it is said instead, with anything else you asked for kept.", trauma:"Threatening words can register as danger straight away, even as a joke.", autistic:"A threat may be taken literally."},
   violent:{g:"\"I'll kill you\" is an exaggeration, but in writing it can read as a real threat. The rewrite says the true size of it and keeps what you want.", autistic:"An exaggerated threat may be taken literally.", trauma:"Violent words can set off alarm even when they're clearly not meant."},
   selfput:{g:"Calling yourself stupid pulls the listener into reassuring you. The rewrite keeps the apology and what happened, and leaves the put-down out."},
   overhedge:{g:"A stack of softeners hides the ask. One softener is enough to keep it kind, and the ask stays clear."},
@@ -2183,6 +2201,16 @@ function rewriteBase(an, opts){
       : k==="isolate" ? "I feel [one feeling word] about [the plan]. Can we talk about what's worrying me? Who you see is your choice."
       : "I'm really hurt and angry right now. I'm going to take a break, and come back to this when I can say it kindly.";
     return finish(out, "", log, an, W, Object.assign({}, opts, {reframed:true}));
+  }
+  // "I'm going to slap you", "Clean your room or I'll smack you": no rewrite keeps a threat, however polite. The threat goes,
+  // the feeling underneath it is said instead, and everything else (the ask, the facts) stays in the writer's own words.
+  // "I'll beat you at Mario Kart lol": a joke stays theirs; the checker only says it's hard to tell
+  if(an.harm && has("harm")){
+    if(an.harm.playful && !["label","contempt","swear","hostile","dxlabel","control","legal"].some(has)){
+      const v0 = {id:"main", label:"Your words", why:"This reads as a joke between you, and only you know if they'll take it that way. If you're not sure, say it's a joke, or keep it for when you're together.", text: an.text.trim()};
+      return {main:v0.text, primary:v0, variants:[v0], changes:[], ask:null, list:"", unchanged:true, playful:true, harm:true};
+    }
+    return harmRewrite(an, log, W);
   }
   // whole-message shapes testers met most ("I managed fine without you", "stop policing what I spend",
   // "you can't just turn up whenever you want"): the jab goes, the real ask stays
@@ -3522,7 +3550,7 @@ const RECEIVE_MEANS = [
   [["tic"], "They're asking you to stop something. If it's a stim or a tic, you can say so: it isn't a message to them."]
 ];
 const RECEIVE_GOOD = {boundary:"They're setting a calm limit, with care in it. It's about what they need, not a threat to you.", disclose:"They're trusting you with something important about who they are. That's a reach toward you.", repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
-const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal","menace"];
+const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal","menace","harm"];
 /* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
 function turnAround(t){
   const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",myself:"yourself",yourself:"myself",i:"you","i'm":"you're","i've":"you've","i'll":"you'll","i'd":"you'd","you're":"I'm","you've":"I've","you'll":"I'll","you'd":"I'd"};
@@ -3568,6 +3596,21 @@ function receiveBase(an, opts){
     meanings:["They may be thinking about ending their life. Take it seriously: ask them directly, stay with them or keep talking if you can, and call or text 988 (US), or your local emergency number if they might act on it now.",
       "You don't have to handle this alone, and it isn't your fault."],
     literal:[], replies:[{label:"Reach out now", text:"I'm really glad you told me. Are you safe right now? I'm here, and I'd like us to call or text 988 together."}], found};
+  // "I'm going to slap you", "I know where you live": read flatly, a threat. "I'll beat you at Mario Kart lol": hard to tell.
+  // Either way it isn't theirs to decode alone, and "it's probably fine" is never the headline
+  if(an.harm && has("harm") && !["label","contempt","swear","hostile","dxlabel","legal"].some(has)){
+    const pl = !!an.harm.playful, idiom = an.harm.kind==="idiom";
+    if(pl || idiom) return {crossed:false, threat:true, unsure:true, playful:pl, addContext:true,
+      head:["unsure", pl ? "Probably playful, but hard to tell from the words alone." : "Hard to tell from the words alone. Read flatly, this could be a threat."],
+      meanings:[pl ? "It may well be a joke between you: the game or the laugh around it points that way." : "It may be a figure of speech, or a joke. The words alone can't show which.",
+        "If it didn't feel like a joke, or it frightened you, that matters. It's okay to ask what they meant, or to say it didn't land well.",
+        "Text loses the grin and the voice, so a joke like this can land harder in writing than it was meant."],
+      literal:[], replies:[{label:"Check what they meant", text:"Ha, I hope that's a joke? It didn't quite read like one."}, {label:"If it worried you", text:"That came across as a threat, and it worried me. Can you tell me what you meant?"}], found};
+    return {crossed:true, threat:true, harm:true, addContext:true, head:["fight","Read flatly, this is a threat. If it frightened you, that matters, whatever was meant."],
+      meanings:["Words like this can frighten, whatever was meant. It isn't your job to work out whether they meant it.",
+        "You don't have to answer it, and you don't have to do what it asks to keep the peace."],
+      literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}, {label:"Say how it landed", text:"That came across as a threat. I'm not going to talk while it's like this."}], found};
+  }
   const crossed = CROSSED.some(has);
   // teasing: say so, and leave room for the day it stings
   if(an.banter && !crossed) return {crossed:false, banter:true, head:["ok", an.banterPoint ? "This reads as teasing, with a real point inside it." : "This reads as playful teasing."],
@@ -3723,7 +3766,7 @@ function simpler(text){
 /* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
 const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
-const ATTACK_IDS = ["withdraw","olddays","menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
+const ATTACK_IDS = ["harm","withdraw","olddays","menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
 function fairConcern(an){ return !!(an && an.safety && !ATTACK_IDS.some(id=>an.found && an.found[id])); }
@@ -3753,6 +3796,9 @@ function verdictBase(an, sc, rw, opts){
   if(an.control) return {id:"fight", control:true, text: an.control.kind==="degrade" ? "This line would hurt badly. Telling someone they're worth nothing, or that nobody else would want them, cuts deep, whatever was meant."
     : an.control.kind==="isolate" ? "This may come across as deciding who they can see, which is their choice. Saying what worries you, and asking, usually works better."
     : "This may come across as checking up on them, even if it comes from worry. Saying the worry itself usually works better."};
+  // "I'm going to slap you", "I know where you live": read flatly, a threat. The effect, and a calmer way to say it.
+  // "I'll beat your butt at Mario Kart lol": hard to tell from the words alone, never "okay"
+  { const hv = harmVerdict(an); if(hv) return hv; }
   const attack = ATTACK_IDS.concat(["swear","hostile","legal","kidsfirst","violent","threat","dxlabel"]).some(id=>an.found && an.found[id]);
   // a calm boundary, or coming out: caring, never "a threat" or "might hurt"
   if((an.found.boundary || an.found.disclose) && !attack && lvl!=="heavy")
@@ -3763,6 +3809,8 @@ function verdictBase(an, sc, rw, opts){
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
   const work = !!(opts && (opts.work || WORK_REL.includes(opts.rel)));
   // teasing between people who joke like this: fine, with a note about the days it isn't
+  if(an.banter && !attack && lvl!=="heavy" && an.banterSet && an.banterSet.length && !an.banterPoint)
+    return {id:"unsure", banter:true, playful:true, text:"Probably teasing, but the words alone can't show the grin. With someone who jokes with you like this, it usually lands fine. Read flatly, or on a hard day, it could sting, so add a kind word if you're not sure."};
   if(an.banter && !attack && lvl!=="heavy")
     return {id: an.banterPoint ? "hurt" : "ok", banter:true, mild: !!an.banterPoint, text: an.banterPoint
       ? "This reads as teasing with a real point inside it. If the point matters to you, say it plainly too, so it doesn't get lost in the joke."
@@ -3796,9 +3844,65 @@ function verdictBase(an, sc, rw, opts){
     return {id:"hurt", mild, text: (an.safety ? "Your worry is fair, but this might hurt. " : mild ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (mild ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")}; }
   if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
     return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
+  // "okay" needs positive evidence: nothing risky fired, and nothing the checker can't read with confidence
+  { const lc = lowConfidence(an); if(lc) return lc; }
   if(an.staticIds && an.staticIds.length)
-    return {id:"ok", text: (an.warm && lvl==="clear" ? "This reads as warm and clear." : "This will probably land okay.")+(soft ? " A small change below could make it even clearer." : "")};
-  return {id:"ok", warm: !!an.warm, text: an.warm ? "This reads as warm and clear. It will probably land well." : "This will probably land okay."};
+    return {id:"ok", text: soft ? (an.warm && lvl==="clear" ? "This reads as warm and clear." : "Nothing here stood out as harsh.")+" A small change below could make it even clearer." : (an.warm && lvl==="clear" ? "This reads as warm and clear. Nothing here stood out as harsh." : OK_TEXT)};
+  return {id:"ok", warm: !!an.warm, text: an.warm ? "This reads as warm and clear. Nothing here stood out as harsh." : OK_TEXT};
+}
+/* The threat sentence goes. An ask hiding in it ("Clean your room or I'll smack you") is kept as a request; the other
+   sentences stay as they were. Nothing is invented: what happened and what's needed are blanks for the writer. */
+const HARM_FEEL = "I'm really frustrated with you right now.";
+function harmRewrite(an, log, W){
+  log.push({id:"harm", from:[(an.found.harm||[""])[0]], to:[HARM_FEEL], extra:""});
+  const h = an.harm, parts = []; let asked = "", feelAt = -1;
+  (an.sentences.length ? an.sentences : [{s:0, e:an.text.length, raw:an.text}]).forEach(se=>{
+    const raw = String(se.raw||"").trim(); if(!raw) return;
+    const hit = se.s < h.end && h.start < se.e || (SHARED && SHARED.harm && SHARED.harm(raw));
+    if(!hit){ if(!FILLER_ONLY.test(raw.replace(/[.!?,\s]+$/,""))) parts.push(endP(raw)); return; }
+    if(feelAt < 0){ feelAt = parts.length; parts.push(HARM_FEEL); }
+    // "Clean your room or I'll smack you", "Get home now or I'll beat you": the order before "or" is the ask
+    const pre = raw.replace(/,?\s*(?:\bor\b|\botherwise\b|\band\b|\bbefore\b)\s+(?:else\s+)?(?:i\b|i'll|i'm|i will|i am|i'd|im|ill|you'll|you're|you will|you are|you'd)[\s\S]*$/i, "").trim();
+    const w0 = (pre.match(/^\w+/)||[""])[0].toLowerCase();
+    if(pre && pre!==raw && !(SHARED && SHARED.harm && SHARED.harm(pre)) && (VERBSET.has(w0) || VERBSET.has(baseVerb(w0))) && pre.split(/\s+/).length<=10 && !/\b(?:now|right now|immediately)\b/i.test(pre.replace(/\b(?:now|right now|immediately)\s*$/i,""))){
+      asked = "Could you "+lowerFirst(pre.replace(/[,.!?\s]+$/,"").replace(/\s+(?:right now|now|immediately)$/i,""))+"?";
+      parts.push(asked);
+    }
+  });
+  if(feelAt < 0) parts.unshift(HARM_FEEL);
+  const main = parts.join(" ").replace(/\s+/g," ").trim();
+  const need = "I'm really angry about [what happened]. What I need is [one thing]. Can we talk about it when we're both calm?";
+  const pause = "I'm too angry to talk well right now. I'm going to take a break, and come back to this at [a time].";
+  const variants = [{id:"main", label:"Say the feeling, not the threat", why:"Threats frighten people, whatever was meant. The feeling underneath it can be heard and answered.", text:main},
+    {id:"need", label:"Say what you need", why:"Your feeling and your need, in your own words. No threat, no condition.", text:need},
+    {id:"pause", label:"Take a break first", why:"If you're too angry to say it calmly, a break is the safest thing you can send.", text:pause}];
+  return {main, primary:variants[0], variants, changes:log.map(c=>explainChange(c, W)), ask: asked ? {text:asked} : null, list:"", unchanged:false, harm:true};
+}
+/* "okay" never sounds like a guarantee: the words looked fine, and the rest is theirs to judge */
+const OK_TEXT = "Nothing here stood out as harsh. Tone and history still matter.";
+const UNSURE_TEXT = "Hard to tell from the words alone. Read flatly, this could sound like a threat. If it's a joke you both share, it may be fine; if not, it could frighten or upset them.";
+/* A threat of harm or a veiled warning: what it may do, and a calmer way to say what's meant.
+   A game, "lol" or an emoji makes it "probably playful", and still not "okay". */
+function harmVerdict(an){
+  const h = an && an.harm; if(!h || !an.found || !an.found.harm) return null;
+  const others = ["label","contempt","swear","hostile","dxlabel","control","legal"].some(id=>an.found[id]);
+  if(h.playful && !others) return {id:"unsure", threat:true, playful:true, addContext:true, text:"Probably playful, but hard to tell from the words alone. Read flatly, this could sound like a threat. If it's a joke you both share, it's likely fine; if not, it could frighten or upset them."};
+  if(h.kind==="idiom" && !others) return {id:"unsure", threat:true, addContext:true, text: UNSURE_TEXT};
+  return {id:"fight", threat:true, harm:true, addContext:true, text: h.kind==="veiled"
+    ? "Read flatly, this sounds like a warning, or a threat. Even if you don't mean it that way, it could feel frightening. If you're angry, say that instead: \u201cI'm really frustrated with you right now.\u201d"
+    : "Read flatly, this sounds like a threat to hurt them. Even as a joke or in anger, it could feel frightening. If you're angry, say that instead: \u201cI'm really frustrated with you right now.\u201d"};
+}
+/* Words about harm aimed at a person that no pattern explained ("I'll bash you", "your kids won't be safe"):
+   the checker can't read them with confidence, so it says so instead of guessing "okay" */
+const RISK_AT_YOU = /\b(?:beat|hit|punch|slap+|smack|kick|hurt|choke|strangle|stab|shoot|kill|murder|destroy|wreck|smash|crush|break|knock|whack|bash|burn|bury|drown|bleed|ruin|fight|batter|thump|throttle|stomp|maul|slit|cut|warn)(?:s|ed|ing)?\s+(?:\w+\s+)?(?:you|u|ya|yourself|urself)\b|\b(?:you|u|ya)(?:'re|re| are| r|'ll| will)?\s+(?:\w+\s+)?(?:dead|bleed|suffer|get hurt|be hurt|won't be safe|not be safe)\b|\b(?:revenge|payback|get even|consequences)\b|(?:🔪|🗡|🔫|💣|🪓|☠|⚰)/i;
+const RISK_OK = /\b(?:(?:felt|feel|feeling|was|am|i'm|got|get|been) hurt|never|not|n't|no|sorry|apologi[sz]e|didn't|don't|wouldn't|won't|love|miss|proud|thank\w*|congrat\w*|hope|safe(?:ly)? (?:home|trip|travels|flight|journey|drive)|drive safe|stay safe|be safe|keep (?:you|u) safe|hit (?:you|u) up|hit me up|shoot (?:you|u|me) (?:a|an|the|over)|watch (?:you|u) (?:play|win|grow|perform|sing|dance)|can't wait to watch|beat (?:you|u) (?:there|home|to)|killing it|kill(?:ed)? it|dead tired|phone|battery)\b/i;
+function lowConfidence(an){
+  if(!an || !an.norm || an.lang==="es") return null;
+  const t = an.norm.toLowerCase();
+  if(!RISK_AT_YOU.test(t)) return null;
+  const m = t.match(RISK_AT_YOU), clause = t.slice(Math.max(0, m.index-30), m.index+m[0].length+20);
+  if(RISK_OK.test(clause) && !/[🔪🗡🔫💣🪓☠⚰]/u.test(m[0])) return null;
+  return {id:"unsure", lowConfidence:true, addContext:true, text:"Hard to tell from the words alone. Some of this could read as harsh, or as a threat. If you're sure how they'll take it, it may be fine; if not, say plainly what you mean."};
 }
 
 /* "It's my money too, stop policing what I spend": a money fight, and sometimes a sign of control.
@@ -3830,7 +3934,7 @@ const CARE_GOT = {
 };
 /* "Stop gaslighting me", "you're so toxic": a label for a person. The checker describes the words, never the person */
 const LABEL_ACCUSE_RE = /\b(?:gaslight\w*|manipulat\w*|narcissis\w*|toxic|abusive|psycho\w*|guilt[- ]?trip\w*)\b/i;
-const HOT_CTX = ["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","threat"];
+const HOT_CTX = ["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","threat","harm"];
 function ctxRead(an, opts, mode){
   const C = CTXM(); const ctx = (opts && opts.ctx) || (an && an.ctx);
   if(!C || !ctx || C.isEmpty(ctx)) return null;
@@ -3854,13 +3958,21 @@ function verdict(an, sc, rw, opts){
   }
   if(LABEL_ACCUSE_RE.test(an.norm) && v.id==="ok" && !an.banter)
     v = Object.assign({}, v, {id:"hurt", labelWord:true, text:"A word like that is a label for the person, so it may land as an accusation. "+(soft ? "Here's a way to say what happened and how it felt." : "Saying what happened, and how it felt, can be answered.")});
-  if(an.ultOwn && v.id==="fight" && !["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst"].some(id=>f[id]))
+  if(an.ultOwn && v.id==="fight" && !["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","harm"].some(id=>f[id]))
     v = Object.assign({}, v, {ult:true, text:"This is an ultimatum about your own choice, and it may land as pressure. "+(soft ? "Try the version below, and say your limit once, calmly." : "Make the ask on its own, and say your limit once, calmly.")});
   if(!r0) return v;
   const r = r0, F = r.flags;
   v = Object.assign({}, v, {context: r});
   if(r.safety) v.ctxSafety = r.safety;
   if(v.id==="danger" || v.control || an.selfHarm) return v;
+  // a threat stays a threat whatever the context says. "We tease, we play games together" can make a playful one
+  // "probably playful", and never "okay"
+  if(v.threat || f.harm){
+    if(F.teaseRoom && an.harm && (an.harm.playful || an.harm.kind==="idiom") && v.id!=="fight")
+      v = Object.assign(v, {id:"unsure", probablyPlayful:true, teaseOk:true, text:"Given how you two tease, this is probably the playful kind. Read flatly it could still sound like a threat, so on a hard day, say it's a joke."});
+    if(F.themLow && F.themLow.length) v.text += " They may be running on empty today, so if it can wait, a calmer moment may help.";
+    return v;
+  }
   const mildOnly = an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
   // a parent's limit for a child or teen
   if(F.parentLimit && !hot && (an.parentLimit || an.care || f.oblig || f.impera || f.should || f.cannot))
@@ -3872,9 +3984,11 @@ function verdict(an, sc, rw, opts){
   else if(F.teaseRoom && (an.banter || f.sarcasm || f.jab) && !hot)
     v = Object.assign(v, {id: (an.banterPoint || f.jab || f.absolute) ? "hurt" : "ok", mild:true, teaseOk:true, text: (an.banterPoint || f.jab || f.absolute) ? "Given how you two tease, this has room to be a joke. If there's a real point in it, say that part plainly too, so it isn't lost." : "Given how you two tease, this will probably land as the joke you mean. On a hard day, a kind word helps."});
   if(F.literal && (f.hint || f.sarcasm || f.idiom || f.passiveag) && !/literally/.test(v.text)) v.text += " They take things literally, so say the ask plainly.";
-  if(F.toneSensitive && v.id==="ok" && an.staticIds.length && soft) v.text = "This will probably land okay. They're sensitive to tone, so the small change below may be worth it.";
+  if(F.toneSensitive && v.id==="ok" && an.staticIds.length && soft) v.text = "Nothing here stood out as harsh. They're sensitive to tone, so the small change below may be worth it.";
   if(F.themLow && F.themLow.length && (v.id==="hurt" || v.id==="fight")) v.text += " They may be running on empty today, so if it can wait, a calmer moment may help.";
   if(F.recurring) v.recurring = true;
+  // context can soften the wording; it can't turn something the checker couldn't read into "okay"
+  if(v.id==="ok" && (f.harm || lowConfidence(an))) v = Object.assign(v, lowConfidence(an) || {id:"unsure", text: UNSURE_TEXT});
   return v;
 }
 function receive(an, opts){
@@ -3954,7 +4068,7 @@ function rewrite(an, opts){
     else if(!opts.rel && r.rel) opts = Object.assign({}, opts, {rel: r.rel});
   }
   const rw = rewriteBase(an, opts);
-  if(!r || rw.danger || rw.gibberish) return rw;
+  if(!r || rw.danger || rw.gibberish || rw.harm) return rw;
   const F = r.flags;
   const base = String(rw.unchanged ? an.text : (rw.variants[0] ? rw.variants[0].text : rw.main)).trim();
   const endDot = t=>t.replace(/[\s.!]*$/,"").replace(/([^?])$/,"$1.");

@@ -353,8 +353,8 @@ TESTER.forEach(c=>{
 { const r=E.rewrite(E.analyze("You left the stove on again.",{channel:"text"}),{wirings:[]});
   ok(/again/.test(r.main), `without a criticism-sensitive listener the fact is kept as said: "${r.main}"`); }
 // a one-line plain verdict that agrees with the level
-[["I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?","ok",/probably land okay/],
- ["Can you grab milk on your way home","ok",/probably land okay/],
+[["I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?","ok",/Nothing here stood out as harsh/],
+ ["Can you grab milk on your way home","ok",/Nothing here stood out as harsh/],
  ["You need to clean your room.","hurt",/might hurt/],
  ["You left the stove on again. That's dangerous.","hurt",/^Your worry is fair and worth saying plainly\. Here's a version that keeps your words direct and lands easier for them\.$/],
  ["You're so lazy and you never help.","fight",/start a fight/],

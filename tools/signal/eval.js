@@ -112,6 +112,9 @@ CORPUS.forEach(c => {
     const r = E.receive(an, {rel: c.rel});
     const head = r.head[0];
     const want2 = [].concat(c.lvl).map(l => (want.has('control') || want.has('threat') || want.has('crisis')) ? ['danger', 'fight'] : l === 'kind' || l === 'clear' ? ['ok'] : l === 'a little sharp' ? ['ok', 'hurt'] : l === 'sharp' ? ['hurt', 'fight'] : ['fight', 'danger', 'hurt']);
+    // a threat-shaped line ("I'm going to kill you if you spoil the finale 😂"): "hard to tell" is the honest headline,
+    // never "probably fine" (accuracy12: the old "ok" expectation for these was unsafe)
+    if(an.harm) want2.push(['unsure']);
     gotN++; if(want2.some(a => a.includes(head))) gotOk++; else why.push('read-mode headline "' + head + '" (' + r.head[1] + ')');
   }
   const concern = !!(an.control || an.danger || an.selfHarm), wantsConcern = ['control', 'threat', 'crisis'].some(k => want.has(k) || maybe.has(k));

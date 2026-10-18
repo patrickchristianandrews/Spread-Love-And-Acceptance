@@ -14,10 +14,10 @@
  "books": [
   {
    "n": 1,
-   "id": "book-1-self-discovery",
+   "id": "book-1-know-yourself-kindly",
    "title": "Know Yourself Kindly",
    "sub": "Where your lens came from, who you are now, and who you are becoming",
-   "line": "Start with yourself: your history, your wiring, your feelings, your worth and what matters to you.",
+   "line": "Start with yourself: your history, your wiring, your feelings, your worth and how your mind works.",
    "color": "#3E6B4C",
    "tint": "#E2F0E6",
    "art": "for-yourself",
@@ -28,37 +28,61 @@
     "understanding-1-feelings",
     "understanding-7-worth",
     "understanding-14-personality",
+    "understanding-9-minds"
+   ],
+   "isbn": "",
+   "isbn_ebook": "",
+   "blurb": "Before you can share a life well, it helps to know your own. This short book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time? Along the way it explains how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how minds work differently, from ADHD and autism to sensory and learning differences, with ways to meet in the middle. Every chapter has everyday scenes, words you could use and one small thing to try this week. Nothing here is a test. Read it on your own, at your own pace."
+  },
+  {
+   "n": 2,
+   "id": "book-2-heal-and-steady",
+   "title": "Heal and Steady",
+   "sub": "Stress, anger, worry, loss and repair, and finding your footing again",
+   "line": "For the heavy days: stress, anger, worry and low mood, grief, repair, change and what matters to you.",
+   "color": "#6A52A0",
+   "tint": "#EEE8F7",
+   "art": "steady",
+   "chapters": [
+    "understanding-2-stress",
+    "understanding-13-anger",
+    "understanding-16-worry",
+    "understanding-8-loss",
+    "understanding-11-healing",
+    "understanding-6-change",
     "understanding-10-values"
    ],
    "isbn": "",
    "isbn_ebook": "",
-   "blurb": "Before you can share a life well, it helps to know your own. This short book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time? Along the way it explains how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how to find what matters to you. Every chapter has everyday scenes, words you could use and one small thing to try this week. Nothing here is a test. Read it on your own, at your own pace."
-  },
-  {
-   "n": 2,
-   "id": "book-2-together",
-   "title": "Closer, Together",
-   "sub": "Staying in tune, talking it through and mending what goes wrong",
-   "line": "For any two people who share a life: pace and tone, stress, how words land, anger and repair.",
-   "color": "#94671F",
-   "tint": "#F6ECD2",
-   "art": "together",
-   "chapters": [
-    "chapter-1",
-    "understanding-2-stress",
-    "understanding-4-communication",
-    "understanding-3-seeing",
-    "understanding-13-anger",
-    "understanding-11-healing",
-    "understanding-15-love"
-   ],
-   "isbn": "",
-   "isbn_ebook": "",
-   "blurb": "Two people can care about each other and still fall out of tune. One wants to talk now; the other needs an hour. A comment meant lightly lands hard. A long day at work turns into a row about the dishes. This book is about the space between people, at home, in families, with friends or at work. It explains how pace and tone pull people apart, how stress changes what we hear, how communication really works, and why two people can see the same moment so differently. Then it turns to the hot minutes of anger, to repair and apologies that land, and to love in its many forms. Each chapter has everyday scenes, words you could use and one small thing to try. No blame and no verdicts: just a clearer view and a kinder next step."
+   "notes_pages": 4,
+   "blurb": "Some days are heavy. Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book is about steadying yourself through all of it, gently and without blame. It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, how worry, low mood and trauma work, and when and where to get help. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change, one small step at a time. It ends with what matters to you, and what a good life can mean. Each chapter has words you could use and one small thing to try. Where a chapter touches hard things, it says where to find help. Go at your own pace."
   },
   {
    "n": 3,
-   "id": "book-3-sharing-the-load",
+   "id": "book-3-understanding-each-other",
+   "title": "Understanding Each Other",
+   "sub": "How we hear, see and belong to each other, at home and in every group",
+   "line": "Pace and tone, how words land, how we see each other, belonging, love, groups and helping well.",
+   "color": "#2B5B8C",
+   "tint": "#E1ECF7",
+   "art": "together",
+   "chapters": [
+    "chapter-1",
+    "understanding-4-communication",
+    "understanding-3-seeing",
+    "understanding-5-belonging",
+    "understanding-15-love",
+    "understanding-17-groups",
+    "understanding-12-helping"
+   ],
+   "isbn": "",
+   "isbn_ebook": "",
+   "notes_pages": 4,
+   "blurb": "Two people can care about each other and still fall out of tune. One wants to talk now; the other needs an hour. A comment meant lightly lands hard. This book is about understanding the people around you: at home, in families, with friends, at work and in every group you belong to. It explains how pace and tone pull people apart, how communication really works, and why two people can see the same moment so differently. It looks at why we need to belong, how trust grows and is rebuilt, how love takes many forms, and the quiet pull of the groups we are part of. It ends with helping others well, with kind limits and without burning out. Each chapter has everyday scenes, words you could use and one small thing to try. No blame and no verdicts: just a clearer view and a kinder next step."
+  },
+  {
+   "n": 4,
+   "id": "book-4-share-the-load",
    "title": "Share the Load",
    "sub": "The work nobody sees, and a fair, kind way to share it",
    "line": "For homes, families and teams: seeing the unseen work, one owner per job, and two kinds of fair.",
@@ -71,36 +95,14 @@
     "chapter-3",
     "chapter-4",
     "chapter-5",
-    "understanding-12-helping"
+    "afterword"
    ],
    "isbn": "",
    "isbn_ebook": "",
    "extras": [
     "numbers"
    ],
-   "blurb": "Every shared home, family or team runs on work that nobody sees: noticing the shoes are too small, booking the appointment, remembering bin day. When that work isn’t counted, someone ends up carrying more than anyone realises, and resentment grows quietly. This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It ends with helping others well without burning out. Each chapter points to a workpaper that puts it to use, free to print from the website. It looks at the setup, never at the person."
-  },
-  {
-   "n": 4,
-   "id": "book-4-understanding-people",
-   "title": "Understanding People",
-   "sub": "How trust, change, loss, minds and groups work, for anyone",
-   "line": "How people work: belonging, change, grief, minds that work differently, worry and groups.",
-   "color": "#2B5B8C",
-   "tint": "#E1ECF7",
-   "art": "understanding",
-   "chapters": [
-    "understanding-5-belonging",
-    "understanding-6-change",
-    "understanding-8-loss",
-    "understanding-9-minds",
-    "understanding-16-worry",
-    "understanding-17-groups",
-    "afterword"
-   ],
-   "isbn": "",
-   "isbn_ebook": "",
-   "blurb": "Why do we need each other so much? Why is change so hard, even when we want it? How does grief move, and what helps? This book explains how people work, in plain words and with everyday examples. It covers belonging and trust, habits and change, loss and big life changes, minds that work differently (autism, ADHD, sensory and learning differences), worry and low mood, and the pull of the groups we belong to. It ends with an afterword that draws the threads of the whole series together. Each chapter has words you could use, common mix-ups and something small to try, for anyone, in any kind of relationship. Where a chapter touches hard things, it says where to find help. Read it in order, or start wherever you need it today."
+   "blurb": "Every shared home, family or team runs on work that nobody sees: noticing the shoes are too small, booking the appointment, remembering bin day. When that work isn’t counted, someone ends up carrying more than anyone realises, and resentment grows quietly. This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. Each chapter points to a workpaper that puts it to use, free to print from the website. It ends with an afterword that draws the threads of the whole series together. It looks at the setup, never at the person."
   }
  ],
  "workbook": {

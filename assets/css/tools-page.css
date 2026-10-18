@@ -152,7 +152,8 @@
 .read a.tl-card:hover .tl-name{ text-decoration-color:#7F66AE; }
 .tl-tag{ font-size:.97rem; line-height:1.4; color:#3C2F58; font-weight:600; }
 .read .tl-qa{ display:grid; gap:.35rem; margin:.15rem 0 0 !important; padding:0 !important; }
-.read .tl-qa > div{ display:block; }
+.read .tl-qa > div{ display:block; font-size:.93rem; line-height:1.45; }
+.read .tl-qa :is(dt, dd){ line-height:1.45 !important; }
 .read .tl-qa dt{ display:inline; margin:0 !important; padding:0 !important; font-weight:600; font-size:.93rem; color:var(--ink, #2B2620); }
 .read .tl-qa dt::after{ content:": "; }
 .read .tl-qa dd{ display:inline; margin:0 !important; padding:0 !important; font-size:.93rem; line-height:1.45; color:var(--ink-soft, #5A5346); }
