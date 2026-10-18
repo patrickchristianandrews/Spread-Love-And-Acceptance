@@ -2051,7 +2051,7 @@ if (PERSONA) {
   t('chat11', 'How am I right now?', { q: 'how am i right now check', id: 'weather', text: /My weather today/, link: '/quick-checks.html' });
   t('chat11', 'Self-discovery: know your own wiring', { q: 'what is self-discovery', link: ['/know-yourself.html', '/self-path.html'], text: /Self-discovery/ });
   t('chat11', 'the Crosswords', { q: 'tell me about the crosswords', id: /quietcross|dailycross/, text: /Crosswords/ });
-  t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /every calm game in one place/ });
+  t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /Gentle games/ });
   t('chat11', 'find your starting point is now on Start here', { q: 'find your starting point', id: 'start', link: '/start-here.html' });
   t('chat11', 'calendar reminders live in Six gentle weeks', { q: 'can i add reminders to my calendar', id: 'prog01', link: '/prog-01.html#calendar' });
   t('chat11', 'the Text message checker is the Chat analyzer', { q: 'what is the text message checker', id: 'signal', text: /Chat analyzer/, link: '/signal-translator.html' });
@@ -2085,6 +2085,8 @@ if (PERSONA) {
     else for (const q of qs) { r = await chat.ask(q); rs.push(r); }
     const text = replyText(r), links = replyLinks(r);
     if (x.check) { const w = x.check(r, rs, text); if (w) why.push(w); }
+    // the old name of the site and the book is never in a reply (it may stay in input keys, so people who type it are understood)
+    if (rs.some(y => /Objective Ledger/i.test(replyText(y)))) why.push('a reply names “The Objective Ledger”');
     const idOf = r.id || '';
     if (x.kind && r.kind !== x.kind) why.push('kind ' + r.kind + ' ≠ ' + x.kind);
     if (x.id && !(x.id instanceof RegExp ? x.id.test(idOf) : idOf === x.id)) why.push('id ' + idOf + ' ≠ ' + x.id);

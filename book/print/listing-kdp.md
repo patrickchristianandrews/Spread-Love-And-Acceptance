@@ -24,7 +24,7 @@ Made by tools/book/listing_kdp.py (print12) from tools/book/series.json and the 
 | Series | Spread Love & Acceptance, number 1 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Contributors | None. The pictures are the author's own (see "AI disclosure"). [OWNER] | None |
+| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
@@ -131,7 +131,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 2 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Contributors | None. The pictures are the author's own (see "AI disclosure"). [OWNER] | None |
+| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
@@ -238,7 +238,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 3 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Contributors | None. The pictures are the author's own (see "AI disclosure"). [OWNER] | None |
+| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
@@ -345,7 +345,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 4 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Contributors | None. The pictures are the author's own (see "AI disclosure"). [OWNER] | None |
+| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
@@ -452,7 +452,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 5 [OWNER: or leave the workbook out of the numbered series] (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Contributors | None. The pictures are the author's own (see "AI disclosure"). [OWNER] | None |
+| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |

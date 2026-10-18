@@ -206,12 +206,11 @@ class PageParser(HTMLParser):
 
 def clean_title(t):
     t = norm_space(unescape(t))
-    t = re.sub(r'\s*[—|–·-]\s*The Objective Ledger.*$', '', t)
     # the site name added for search engines ("Our Logo · Spread Love & Acceptance") is not part of a page's name
     t = re.sub(r'\s*[—|–·-]\s*Spread Love (&|and) Acceptance\b.*$', '', t)
     t = re.sub(r'^Spread Love (&|and) Acceptance\s*[—|–·:-]\s*', '', t) if not re.match(r'^Spread Love (&|and) Acceptance\s*$', t) else t
     t = re.sub(r'\s+—\s+.*$', '', t) if len(t) > 48 else t
-    return t or 'The Objective Ledger'
+    return t or 'Spread Love & Acceptance'
 
 
 def words(s):

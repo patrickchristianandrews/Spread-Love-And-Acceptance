@@ -168,7 +168,7 @@ def main():
         md.append('| Series | %s, number %s (use "Add to series" so all books show together) | the same series, the same number |' % (SERIES, num if num else '5 [OWNER: or leave the workbook out of the numbered series]'))
         md.append('| Edition number | 1 | 1 |')
         md.append('| Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |')
-        md.append('| Contributors | None. The pictures are the author\'s own (see "AI disclosure"). [OWNER] | None |')
+        md.append('| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |')
         md.append('| Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |')
         md.append('| Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |')
         md.append('| Primary marketplace | Amazon.com | Amazon.com |')

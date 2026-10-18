@@ -3156,8 +3156,10 @@ function ctxExtra(v, an, mode){
   else if(v && (v.ctxSafety==="fear" || v.ctxSafety==="threat")) h += SAFETY_GOT;
   if(v && v.careNote) h += '<p class="small st-care"><b>'+esc(v.careNote)+'</b></p>';
   // threat-shaped, or hard to read: "Add context" is the obvious next step (who they are, whether you joke like this)
-  if(v && v.addContext && !(v.context && v.context.flags && v.context.flags.teaseRoom)) h += '<p class="small st-addctx"><a href="#add-context" class="st-ctx-open">Add context</a> for a fairer reading: who they are, and whether you joke like this. The words alone can\u2019t show a joke.</p>';
-  h += TOLContext.usedHTML(r, {skip: [v && v.limit ? 'limit' : '', v && v.shortOk ? 'short' : ''].concat(v && v.head && /parent setting a limit/.test(v.head[1]) ? ['limit'] : []).concat(v && v.head && /usually write short/.test(v.head[1]) ? ['short'] : [])});
+  const askCtx = v && v.addContext && !(v.context && v.context.flags && v.context.flags.teaseRoom);
+  if(askCtx) h += '<p class="small st-addctx"><a href="#add-context" class="st-ctx-open">Add context</a> for a fairer reading: who they are, and whether you joke like this. The words alone can\u2019t show a joke.</p>';
+  // (with no context yet, that line already says "Add context", so the general "no context added" note isn't repeated)
+  if(!(askCtx && !r)) h += TOLContext.usedHTML(r, {skip: [v && v.limit ? 'limit' : '', v && v.shortOk ? 'short' : ''].concat(v && v.head && /parent setting a limit/.test(v.head[1]) ? ['limit'] : []).concat(v && v.head && /usually write short/.test(v.head[1]) ? ['short'] : [])});
   if(mode==="send") h += '<div class="tol-clar" id="stClar" hidden></div>';
   return h;
 }

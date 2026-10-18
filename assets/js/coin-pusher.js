@@ -586,15 +586,21 @@
     }
 
     var M = new THREE.Matrix4(), Q = new THREE.Quaternion(), E = new THREE.Euler(), P = new THREE.Vector3(), S1 = new THREE.Vector3(1, 1, 1), V = new THREE.Vector3();
-    var camBase = new THREE.Vector3(), camLook = new THREE.Vector3(0, 0.1, 0.2), W = 0, H = 0;
+    var camBase = new THREE.Vector3(), camLook = new THREE.Vector3(0, 0.9, -0.4), W = 0, H = 0;
     function resize() {
       var w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
       W = w; H = h; renderer.setSize(w, h, false); cam.aspect = w / h;
-      // keep the whole machine in view, phone or desktop
-      var want = 12.6, vf = 2 * Math.atan(Math.tan(21 * Math.PI / 180) * Math.max(1, 1.25 / cam.aspect));
-      cam.fov = vf * 180 / Math.PI; cam.updateProjectionMatrix();
-      var dist = (want / 2) / (Math.tan(vf / 2) * cam.aspect); dist = Math.max(dist, 11.5);
-      camBase.set(0, dist * 0.62, dist * 0.78).add(camLook);
+      // keep the whole machine in view, phone or desktop: move back until the sign, the sides and the tray all fit
+      cam.fov = cam.aspect < 1 ? 50 : 40; cam.updateProjectionMatrix();
+      var pts = [[-5.1, 4.35, ZB], [5.1, 4.35, ZB], [-5.1, 0, ZE], [5.1, 0, ZE], [-4.8, -1.3, ZE + 1.8], [4.8, -1.3, ZE + 1.8]];
+      var lo = 6, hi = 40, dir = new THREE.Vector3(0, 0.62, 0.78).normalize();
+      for (var k = 0; k < 18; k++) {
+        var mid = (lo + hi) / 2, fits = true;
+        cam.position.copy(dir).multiplyScalar(mid).add(camLook); cam.lookAt(camLook); cam.updateMatrixWorld();
+        for (var q = 0; q < pts.length && fits; q++) { V.set(pts[q][0], pts[q][1], pts[q][2]).project(cam); if (Math.abs(V.x) > 0.97 || Math.abs(V.y) > 0.95) fits = false; }
+        if (fits) hi = mid; else lo = mid;
+      }
+      camBase.copy(dir).multiplyScalar(hi).add(camLook);
       sizeFx();
     }
     function render(dt) {

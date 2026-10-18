@@ -4110,7 +4110,9 @@
       // a term, unless a tool or page with its own card has that name ("Drift, the calm visualizer", "the Lemonade Stand")
       // or the term was only found by another name ("WP-11" is the Calm-Down Kit card); "carrier wave" is the idea, not the Decoder
       var tc = tf && matchCard(norm(tq.target));
-      if (tf && (!tc || (tf.own && termKey(String(tc.name || '').split(',')[0]) !== termKey(tf.t.t)))) return termReply(state, tf.t, tq.noEx);
+      // a card named "Who does what? (the Lemonade Stand)" is the Lemonade Stand too: its name, the part before the brackets, or the part inside
+      var tcNames = tc ? (function (n) { var m = /^(.*?)\s*\((?:once |also called |a step of )?(.*?)\)\s*$/.exec(n); return [n, m && m[1], m && m[2]].filter(Boolean).map(termKey); })(String(tc.name || '').split(',')[0]) : [];
+      if (tf && (!tc || (tf.own && tcNames.indexOf(termKey(tf.t.t)) === -1))) return termReply(state, tf.t, tq.noEx);
       var bgForce = f.match(/^(?:(?:your |the )?(?:background )?notes (?:on|about)|(?:tell me )?more about|go deeper (?:on|into)|deeper on)\s+(.+)$/);
       var defn = definitionTarget(q);
       var target = bgForce ? bgForce[1] : defn;

@@ -61,7 +61,9 @@ html[data-theme="dark"] .cp{
 .cp.is-wild .cp-stage{ animation:cp-glow .5s ease-in-out infinite alternate; }
 @keyframes cp-glow{ to{ box-shadow:0 0 0 2px #F3D891, 0 12px 32px rgba(60,30,10,.22), 0 0 70px rgba(255,200,120,.75); } }
 .cp-controls{ margin:.7rem 0 .4rem; }
-.cp-controls .cp-go{ min-width:11rem; }
+.cp-controls{ flex-wrap:nowrap; }
+.cp-controls .cp-go{ min-width:10rem; }
+@media (max-width:400px){ .cp-controls{ gap:.35rem; } .cp-controls .cp-go{ min-width:0; flex:1; padding:.6rem .8rem; } .cp-controls .cp-aim{ padding:.45rem .7rem; } }
 .cp-empty{ text-align:center; margin:.3rem auto; max-width:34rem; padding:.5rem .9rem; border-radius:14px; background:var(--card2); border:1px solid var(--edge); font-size:.95rem; }
 .cp-empty.is-pulse{ animation:cp-pulse .6s ease 2; }
 @keyframes cp-pulse{ 50%{ transform:scale(1.03); } }
