@@ -174,3 +174,25 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-sc-promise .ps-sc-ico { flex: 0 0 11mm; width: 11mm; height: 10mm; }
 .ps-sc-promise p { margin: 0; font-size: 8.6pt; line-height: 1.4; }
 .ps-sc-promise strong { color: var(--pc); }
+
+/* printfix13: Questions people ask; Book 4's first month and job list */
+.ps-faq h2.ps-faq-q { font-family: "Fraunces", serif; font-weight: 600; font-size: 10.6pt; line-height: 1.25; margin: 3.4mm 0 1.2mm; color: var(--ink); break-after: avoid; }
+.ps-faq p { font-size: 9pt; line-height: 1.45; margin: 0 0 1.6mm; }
+.ps-faq .ps-scan { margin: 1.4mm 0 2mm; }
+.ps-month-t { width: 100%; border-collapse: collapse; font-size: 8.8pt; line-height: 1.4; margin: 2mm 0 3mm; }
+.ps-month-t th, .ps-month-t td { text-align: left; vertical-align: top; padding: 2mm 2mm 2mm 0; border-bottom: .4pt solid #E2D6B6; }
+.ps-month-t thead th { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.6pt; letter-spacing: .08em; text-transform: uppercase; color: var(--pc); border-bottom: .6pt solid var(--pc); padding-bottom: 1mm; }
+.ps-month-t tbody th { font-family: "Fraunces", serif; font-weight: 600; white-space: nowrap; color: var(--pc); }
+.ps-month-t td:nth-child(3) { width: 26%; font-size: 8pt; }
+.ps-month-t td:last-child { width: 8mm; }
+.ps-jobs { break-before: page; }
+.ps-jobs-key { font-size: 7.8pt; color: var(--soft); margin: 0 0 2mm; }
+.ps-jobs-cols { column-count: 2; column-gap: 6mm; }
+.ps-jobs-g { break-inside: avoid; margin: 0 0 2.6mm; }
+.ps-jobs-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 0 1mm; border-bottom: .6pt solid var(--pc); padding-bottom: .6mm; }
+.ps-jobs-l { list-style: none; margin: 0; padding: 0; }
+.ps-jobs-l li { display: flex; align-items: flex-end; gap: 1.2mm; font-size: 8.2pt; line-height: 1.3; margin: 0; padding: 1mm 0 .4mm; }
+.ps-jobs-l .pe-ws-tick { flex: 0 0 3mm; margin: 0 0 .6mm; }
+.ps-jobs-n { flex: 0 1 auto; }
+.ps-jobs-o { flex: 1 1 12mm; min-width: 12mm; border-bottom: .5pt dotted #8C826F; height: 3mm; display: inline-block; }
+.ps-jobs-key .ps-jobs-o { width: 12mm; vertical-align: -0.6mm; }

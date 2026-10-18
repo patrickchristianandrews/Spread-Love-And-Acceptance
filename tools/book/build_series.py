@@ -41,6 +41,11 @@ import hints  # noqa: E402
 import series_site  # noqa: E402
 import series_text as ST  # noqa: E402  (printfix13: series cross-references, print-only wording, checks)
 
+# printfix13: in the series the afterword looks back over four books, and its short name (running heads, contents) says so
+for _slug, _t in ST.TEXT.get('titles', {}).items():
+    if _slug in B.SHORT:
+        B.SHORT[_slug] = _t
+
 ROOT = B.ROOT
 OUT = os.path.join(ROOT, 'book', 'print')
 SRC = os.path.join(OUT, 'src')
@@ -488,6 +493,57 @@ FREE_LINKS = [
 ]
 
 
+# ---------- printfix13: questions people ask, and (Book 4) a first month and a job list ----------
+def _series_html(h, book, namer, epub, key):
+    """links in a back page named the series way; in print every website reference gets its code"""
+    if epub:
+        h = re.sub(r'\s*\(page \{page:[^}]+\}\)', '', h)
+    h = re.sub(r'\{page:([^}]+)\}', lambda m: pg(m.group(1)), h)
+    h = ST.series_links(h, key, namer, B.XREFS.add)
+    if not epub:
+        h, n = ST.scan_panels(h, qr, classify, B.short_address, B.addr_html, esc)
+        SCAN_COUNT[(book['id'], key)] = n
+    return h
+
+
+def faq_page(book, namer, epub=False):
+    items = ST.TEXT.get('faq', {}).get(str(book['n']))
+    if not items:
+        return ''
+    h = ''.join('<h2 class="ps-faq-q">%s</h2>%s' % (esc(q), a) for q, a in items)
+    return ('<section class="pe-back ps-faq no-bubble" data-no-bubble id="faq" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Questions people ask</h1>'
+            '<p class="pe-back-lede">%s</p>%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
+                                                           _series_html(h, book, namer, epub, 'faq'))
+
+
+def month_page(book, namer, epub=False):
+    m = ST.TEXT.get('first_month')
+    if not m or book['n'] != 4:
+        return ''
+    rows = ''.join('<tr><th scope="row">%s</th><td>%s</td><td>%s</td><td><span class="pe-ws-tick"></span></td></tr>' % (esc(w), d, r) for w, d, r in m['weeks'])
+    h = ('<p class="pe-back-lede">%s</p><table class="ps-month-t"><thead><tr><th scope="col">When</th><th scope="col">What to do</th>'
+         '<th scope="col">Read more</th><th scope="col">Done</th></tr></thead><tbody>%s</tbody></table>') % (m['lede'], rows)
+    return ('<section class="pe-back ps-month no-bubble" data-no-bubble id="month" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>%s</section>') % (
+        book['color'], book['tint'], mark('month'), esc(m['title']), _series_html(h, book, namer, epub, 'month'))
+
+
+def jobs_page(book, namer, epub=False):
+    j = ST.TEXT.get('jobs')
+    if not j or book['n'] != 4:
+        return ''
+    tick = '' if epub else '<span class="pe-ws-tick"></span>'
+    line = '' if epub else '<span class="ps-jobs-o"></span>'
+    gs = ''
+    for g, jobs in j['groups'] + ([['Your own', [''] * 6]] if not epub else []):
+        gs += '<div class="ps-jobs-g"><p class="ps-jobs-h">%s</p><ul class="ps-jobs-l">%s</ul></div>' % (
+            esc(g), ''.join('<li>%s<span class="ps-jobs-n">%s</span>%s</li>' % (tick, esc(x), line) for x in jobs))
+    head = '' if epub else '<p class="ps-jobs-key"><span class="pe-ws-tick"></span> happens in our home <span class="ps-jobs-o"></span> owner</p>'
+    h = '<p class="pe-back-lede">%s</p>' % j['lede']
+    return ('<section class="pe-back ps-jobs no-bubble" data-no-bubble id="jobs" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">%s</h1>%s%s'
+            '<div class="ps-jobs-cols">%s</div></section>') % (
+        book['color'], book['tint'], mark('jobs'), esc(j['title']), _series_html(h, book, namer, epub, 'jobs'), head, gs)
+
+
 # ---------- "Free on the website": a two-page showcase (printfix13) ----------
 def _icon(kind, c):
     """small line drawings in the book's own style, one per panel"""
@@ -640,6 +696,11 @@ def build_book(book, where):
         ALL_FOUND.setdefault(k_, [])
         ALL_FOUND[k_] += [x for x in v_ if x not in ALL_FOUND[k_]]
     wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT[s_]), pg(s_))
+    if book['n'] == 4:
+        extra.append(('month', ST.TEXT['first_month']['title'], month_page(book, namer)))
+        extra.append(('jobs', ST.TEXT['jobs']['title'], jobs_page(book, namer)))
+    if ST.TEXT.get('faq', {}).get(str(book['n'])):
+        extra.append(('faq', 'Questions people ask', faq_page(book, namer)))
     extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
     if 'numbers' in book.get('extras', []):
         ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,

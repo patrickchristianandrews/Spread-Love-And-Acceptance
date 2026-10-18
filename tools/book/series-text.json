@@ -66,5 +66,230 @@
  ],
  "titles": {
   "afterword": "What the series adds up to"
+ },
+ "faq_lede": "Some questions this book tends to raise, with short answers and where to read more.",
+ "faq": {
+  "1": [
+   [
+    "Do I need to remember my childhood clearly for the first chapter to help?",
+    "<p>Most people remember a handful of scenes and a general feeling, and that is plenty. The first chapter asks about the rules your home ran on, such as how feelings were handled or who did the worrying. Those rules tend to show up in how you react today more than in any one memory, so start with one rule you can name. <a href=\"/book/self-1-then.html\">Where your lens came from</a> walks you through it.</p>"
+   ],
+   [
+    "What if looking back brings up something painful?",
+    "<p>Stop there, and come back another day if you want to. Nobody has to finish a page. If old memories keep pulling you under, or you find yourself avoiding more and more of everyday life, talk to a doctor or counsellor. <a href=\"/book/understanding-16-worry.html\">Worry, low mood and trauma</a> describes the kinds of help there are, and the help page at the front of this book (page {page:help-now}) lists free places to start.</p>"
+   ],
+   [
+    "I think I might be autistic or have ADHD. Can this book tell me?",
+    "<p>It can’t, and nothing in it is a test. <a href=\"/book/understanding-9-minds.html\">Minds that work differently</a> describes how some minds work, so that you might recognise yourself or someone you love, and it says who can talk you through an assessment if you want one. Plenty of people find the descriptions useful whether or not they ever look for a diagnosis.</p>"
+   ],
+   [
+    "Can a grown-up really change their personality?",
+    "<p>A little, slowly, and mostly by practising the thing you want to be more like. <a href=\"/book/understanding-14-personality.html\">Personality, temperament and change</a> treats traits as dials that move a few notches over the years. Every setting has its gifts and its costs, so the aim is a better fit with your life more than a new you.</p>"
+   ],
+   [
+    "My partner isn’t interested in any of this. Is it still worth reading?",
+    "<p>Yes. This book is about you, and it works if you are the only person in your home who ever opens it. Knowing your own wiring and weather makes it easier to say what you need, and the people around you often notice the change before they notice the book. If you later want to look at things together, Book 3 and Book 4 are written for that.</p>"
+   ],
+   [
+    "How do I know when a book isn’t enough?",
+    "<p>Most chapters have a short part called “When to get more help”, with the signs to look out for. If you need someone now, the help page at the front of this book (page {page:help-now}) has numbers to call. <a href=\"/outside-help.html\">Help beyond this book</a> lists counsellors, helplines and support groups, and most of them are free.</p>"
+   ]
+  ],
+  "2": [
+   [
+    "How do I tell ordinary stress from something that needs help?",
+    "<p>Stress that comes and goes with what is happening, and eases when the pressure lifts, is part of life. When it hangs on after the pressure has gone, or sleep, appetite and mood stay off for weeks, it is worth a word with your doctor. Every chapter in this book has a short part called “When to get more help”, and <a href=\"/book/understanding-2-stress.html\">Stress and the nervous system</a> is a good place to begin.</p>"
+   ],
+   [
+    "I lost my temper and said something I regret. Is it too late to put it right?",
+    "<p>It rarely is. A short apology that names what you did, without a “but”, and a plan for next time go a long way, even days later. <a href=\"/book/understanding-11-healing.html\">Healing after hurt</a> shows how a repair goes, and <a href=\"/book/understanding-13-anger.html\">Anger</a> has a pause plan for the next time the heat rises.</p>"
+   ],
+   [
+    "Someone I love is grieving. What should I say?",
+    "<p>Something simple and true, such as “I don’t know what to say, but I’m here.” Saying the name of the person who died is usually a kindness. Practical help, like a meal, a lift or a walk, often means more than the right words, and so does still being there a few months on. <a href=\"/book/understanding-8-loss.html\">Loss, grief and big life changes</a> has more.</p>"
+   ],
+   [
+    "I keep starting good habits and dropping them. What am I doing wrong?",
+    "<p>Probably nothing, except starting too big. Habits stick when the first step is tiny, tied to something you already do and easy to restart after a missed day. <a href=\"/book/understanding-6-change.html\">Habits and change</a> shows how to shrink a step until it takes two minutes or less.</p>"
+   ],
+   [
+    "Do I have to forgive someone who hurt me?",
+    "<p>No. Forgiveness, trust and going back are all yours to choose, in your own time, and you can heal even if the other person never says sorry. <a href=\"/book/understanding-11-healing.html\">Healing after hurt</a> explains what forgiving means and what it doesn’t.</p>"
+   ],
+   [
+    "Where can I find help quickly?",
+    "<p>The help page at the front of this book (page {page:help-now}) has the numbers to call, including in an emergency. For everything else, <a href=\"/outside-help.html\">Help beyond this book</a> lists counsellors, helplines and support groups, and most of them are free.</p>"
+   ]
+  ],
+  "3": [
+   [
+    "We care about each other but keep falling out. Where do we start?",
+    "<p>Start with pace. Two people who both care can still run at different speeds, talk things through at different times and feel urgency about different things. <a href=\"/book/chapter-1.html\">Why we get out of tune</a> helps you spot which one is catching you, and the workpaper <a href=\"/workpapers/wp-12-same-moment-different-speeds.html\">Same moment, different speeds</a> lets you compare your answers side by side.</p>"
+   ],
+   [
+    "Our messages keep going wrong. Any quick fixes?",
+    "<p>Read a message twice before you reply, and assume the warmest tone that fits the words. Short texts lose their tone on the way, so a quick “Do you mean…?” saves a lot. <a href=\"/book/understanding-4-communication.html\">How communication works</a> covers this, and the <a href=\"/signal-translator.html\">Chat analyzer</a> on the website lets you check how a message may land before you send it.</p>"
+   ],
+   [
+    "My family remember things completely differently from me. Who is right?",
+    "<p>Often both of you, a little. Memory keeps what mattered to each person and quietly fills in the rest. <a href=\"/book/understanding-3-seeing.html\">How we see each other</a> explains why, and suggests asking “What do you remember about that day?” before you share your own version.</p>"
+   ],
+   [
+    "How do I help someone without wearing myself out?",
+    "<p>Ask what kind of help they want, do the part you can keep doing, and say plainly where your limit is. Help that lasts usually comes from more than one person. <a href=\"/book/understanding-12-helping.html\">Helping others well</a> has a part on noticing when you are running on empty.</p>"
+   ],
+   [
+    "I feel like I don’t quite belong anywhere. Is something wrong with me?",
+    "<p>No. Feeling on the edge of a group is common, especially after a move, a breakup or a change of job. Belonging tends to grow from small, repeated contact with the same few people. <a href=\"/book/understanding-5-belonging.html\">Attachment, trust and belonging</a> and <a href=\"/book/understanding-17-groups.html\">Groups, influence and culture</a> both have ideas to try.</p>"
+   ]
+  ],
+  "4": [
+   [
+    "My partner thinks the split is already fair. Where do we start?",
+    "<p>With a week of facts. Fill in <a href=\"/workpapers/wp-01.html\">Who did what</a> for one ordinary week, each of you writing only what you did yourself, and look at it together over a cup of tea. The planning and remembering often surprises both people. <a href=\"/book/preface.html\">The work nobody sees</a> explains why, and <a href=\"/book/chapter-2.html\">Is the split working?</a> has a part for when only one of you wants to try.</p>"
+   ],
+   [
+    "There are three or more of us. Does any of this still work?",
+    "<p>Yes. Housemates, families with older children and teams can all use the same pages. Compare each person’s share with an even share, which is 100 divided by the number of people, or with the split you agreed. “How the numbers work” at the back of this book (page {page:numbers}) shows the sums.</p>"
+   ],
+   [
+    "One of us works much longer paid hours. Is it fair to count only housework?",
+    "<p>It isn’t, and the book doesn’t. If you have agreed an uneven split at home because one of you works longer hours outside it, the setup score compares against that agreement instead of an even split. <a href=\"/book/chapter-4.html\">Two kinds of fair</a> explains the difference between fair by results and fair by promises.</p>"
+   ],
+   [
+    "Can children have jobs with an owner too?",
+    "<p>They can own jobs that suit their age, with an adult as the backstop who notices if it slips. Owning one small job from start to finish, such as feeding the cat or packing a school bag, is a good first step. Keep the planning and remembering with the adults until a child is ready for a piece of it, and say thank you out loud.</p>"
+   ],
+   [
+    "Talking about chores always turns into a row. What can we do?",
+    "<p>Pick a calm time, never the moment something has been left undone. Check how full each of your stress tanks is first, because a full tank makes every word land harder. <a href=\"/book/chapter-3.html\">Full tanks and different angles</a> shows how, and <a href=\"/book/chapter-5.html\">The monthly look-back</a> gives you a short, regular time to talk so that nothing has to wait for an argument.</p>"
+   ],
+   [
+    "Does this work at work, in a team?",
+    "<p>Yes. The same quiet jobs exist at work, such as booking the room, chasing the late reply and noticing that the printer is out of paper, and a named owner and a real thank-you help there too. Most of the pages in this book work for a team with the word “home” swapped for “work”.</p>"
+   ]
+  ]
+ },
+ "jobs": {
+  "title": "A list of jobs to start from",
+  "lede": "Most homes share some of these. Tick the ones that happen in yours, cross out the rest and add your own at the bottom. Then give each ticked job one owner and, if you like, a backstop who notices if it slips, as in <a href=\"/book/chapter-2.html\">Is the split working?</a> The same list is in the Quick look tool on the website, under <a href=\"/lemonade-stand.html#quick\">Who does what? Quick look</a>, and the workpaper <a href=\"/workpapers/wp-03-one-owner-per-job.html\">One owner per job</a> has room for the names.",
+  "groups": [
+   [
+    "Home and food",
+    [
+     "Dishes and the kitchen reset",
+     "Washing and drying",
+     "Folding and putting away",
+     "Changing the sheets",
+     "Cleaning the bathroom",
+     "Vacuuming and floors",
+     "Tidying up",
+     "Bins and recycling",
+     "Cooking dinner",
+     "Meal planning",
+     "Grocery shopping",
+     "Packing lunches",
+     "Restocking soap, paper and supplies",
+     "Small fixes around the home",
+     "Plants and the garden"
+    ]
+   ],
+   [
+    "Money and admin",
+    [
+     "Paying bills",
+     "Budget and checking accounts",
+     "Taxes and receipts",
+     "Post and home email",
+     "Phone calls and customer service",
+     "Insurance and documents",
+     "Renewals and switching plans",
+     "The car"
+    ]
+   ],
+   [
+    "Children",
+    [
+     "Getting the kids up and ready",
+     "School or nursery runs",
+     "Homework help",
+     "Bath time",
+     "Bedtime",
+     "Driving to activities",
+     "School forms and sign-ups",
+     "Playdates and parties",
+     "Night wakings",
+     "Childcare and backup plans"
+    ]
+   ],
+   [
+    "Care and health",
+    [
+     "Booking appointments",
+     "Medicines and refills",
+     "Health appointments and calls",
+     "Being on call for someone who is unwell",
+     "Personal care (washing, dressing)"
+    ]
+   ],
+   [
+    "Pets",
+    [
+     "Feeding the pets",
+     "Dog walks",
+     "Litter, cage or tank",
+     "Vet visits and pet supplies"
+    ]
+   ],
+   [
+    "Family and friends",
+    [
+     "Keeping up with both families",
+     "Birthdays and holidays",
+     "Gifts and cards",
+     "Hosting visitors",
+     "Planning time with friends",
+     "Planning trips and holidays"
+    ]
+   ],
+   [
+    "The thinking work",
+    [
+     "Noticing what’s running low",
+     "Planning the week",
+     "Remembering dates and appointments",
+     "Keeping the family calendar",
+     "Keeping track of the kids’ stuff",
+     "Checking that things got done",
+     "Checking in on how people are"
+    ]
+   ]
+  ]
+ },
+ "first_month": {
+  "title": "Your first month, week by week",
+  "lede": "If you would like an order to follow, here is one. Each week takes a few minutes a day at most, and a missed week is fine. The <a href=\"/prog-01.html\">six-week program</a> on the website does the same at a gentler pace.",
+  "weeks": [
+   [
+    "Week 1",
+    "See the work. Each of you fills in <a href=\"/workpapers/wp-01.html\">Who did what</a> for one ordinary week, writing only what you did yourself.",
+    "<a href=\"/book/preface.html\">The work nobody sees</a>"
+   ],
+   [
+    "Week 2",
+    "Give every job a name. Go through the job list on the next pages together and use <a href=\"/workpapers/wp-03-one-owner-per-job.html\">One owner per job</a> to agree an owner for each.",
+    "<a href=\"/book/chapter-2.html\">Is the split working?</a>"
+   ],
+   [
+    "Week 3",
+    "Check the tanks. Each of you fills in <a href=\"/workpapers/wp-02-how-much-are-you-carrying.html\">How much are you carrying?</a> on two or three days, then work out the setup score with the <a href=\"/is-the-setup-working.html\">setup calculator</a> or on paper.",
+    "<a href=\"/book/chapter-3.html\">Full tanks and different angles</a>"
+   ],
+   [
+    "Week 4",
+    "Look back together. Sit down for twenty minutes with <a href=\"/workpapers/wp-04-what-keeps-coming-back.html\">What keeps coming back?</a>, choose one small change, and put the next look-back in the diary.",
+    "<a href=\"/book/chapter-5.html\">The monthly look-back</a>"
+   ]
+  ]
  }
 }
