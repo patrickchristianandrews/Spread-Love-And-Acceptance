@@ -2069,6 +2069,14 @@ if (PERSONA) {
   t('chat11', 'Who does what?', { q: 'what is the lemonade stand', id: 'lemonade', link: '/lemonade-stand.html', check: r => replyLinks(r).length && /Who does what\?/.test(JSON.stringify(r.blocks)) ? '' : 'no new name in the links' });
   t('chat11', 'the book is Spread Love & Acceptance', { q: 'what is the book', id: 'book', text: /Spread Love & Acceptance/, not: /Objective Ledger/ });
   t('chat11', 'what is this site: never the old name', { q: 'what is the objective ledger', not: /Objective Ledger/ });
+  // accuracy12: one question first, when a short line aimed at "you" can't be settled by the words alone
+  const NOT_FINE = /wouldn’t change much|Nothing here stood out as harsh|reads clearly|fine to send/;
+  t('chat11', 'check: the owner\'s example gets the question', { q: 'is this ok to send: You know what I\'m going to beat your butt', id: 'checkmsg-ask', text: /joke you both share, or are you upset with them/, chip: /A joke we both share/, not: NOT_FINE });
+  c('chat11', ['can you check a message for me?', 'You know what I\'m going to beat your butt'], { id: 'checkmsg-ask', text: /joke you both share/ });
+  ['A joke we both share', 'I\'m upset with them', 'Neither, just show me'].forEach(a => c('chat11', ['is this ok to send: You know what I\'m going to beat your butt', a], { id: 'checkmsg', not: NOT_FINE, text: /could sound like|warning|threat|frighten/i }));
+  t('chat11', 'check: a clear threat is answered straight, no question', { q: 'is this ok to send: If you do that again I\'ll hurt you', id: 'checkmsg', text: /threat/, not: new RegExp('joke you both share|' + NOT_FINE.source) });
+  t('chat11', 'check: a thank-you gets no question', { q: 'is this ok to send: thank you so much for dinner last night, it was lovely', id: 'checkmsg', not: /joke you both share/ });
+  t('chat11', 'check: a veiled line gets the question', { q: 'is this ok to send: You won\'t get away with this', id: 'checkmsg-ask', not: NOT_FINE });
   t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html|conversation-reader/.test(u)) ? 'an old URL' : '' });
 }
 

@@ -60,10 +60,11 @@ function makeChat(page, opts) {
     window.localStorage = { getItem: k => (k in local ? local[k] : null), setItem: (k, v) => { local[k] = String(v); }, removeItem: k => { delete local[k]; } };
   }
   window.window = window;
-  const ctx = vm.createContext({
-    window, document, sessionStorage: window.sessionStorage, location: window.location,
-    setTimeout, clearTimeout, setImmediate, console, Math, JSON, Date
-  });
+  // the window is the global object, as in a browser: a script that registers itself on `this` (message-patterns.js)
+  // is then visible as window.TOLPatterns to the next one (signal-engine.js)
+  Object.assign(window, { document, sessionStorage: window.sessionStorage, location: window.location,
+    setTimeout, clearTimeout, setImmediate, console, Math, JSON, Date });
+  const ctx = vm.createContext(window);
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'assets/js/site-chat.js'), 'utf8'), ctx, { filename: 'site-chat.js' });
   const api = window.TOLChat;
   const session = api._session(page ? { path: page.path || '', about: page.about || '' } : null);

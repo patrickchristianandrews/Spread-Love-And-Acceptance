@@ -2677,10 +2677,20 @@
   // "can you check a message to my mum?", then the message; or a pasted "Mum, we'll decide about baptism ourselves."
   var CHECK_ASK = /\b(can|could|would|will) you (please )?(check|read|look at|look over|proofread|review|have a look at)\b.{0,25}\b(message|text|email|letter|note|reply|this)\b|^(please )?(check|read over|look over) (this|my) (message|text|email|reply)\b|\bis (this|it) (ok|okay|alright|fine|too much|too harsh) to send( this| it)?\s*[:?]?$|\bis (this|it) (ok|okay|alright|fine|too much|too harsh) to send\s*:|\bhow (does|will|would) this (sound|land|come across)\b/;
   var PASTED = /^(hi |hey |dear |hello )?(mum|mom|mam|mummy|mother|dad|daddy|father|nan|gran|grandma|grandad|babe|love|darling|[A-Z][a-z]{1,14})\s*,\s+\S+(\s+\S+){2,}/;
+  // the answer to "one question first" ("A joke we both share" / "I'm upset with them" / "Neither, just show me")
+  function checkAnswerOf(f) {
+    return /\b(joke|joking|jokes|tease|teasing|banter|both share|we share)\b/.test(f) ? 'joke' : /\b(upset|angry|mad|annoyed|cross|furious|hurt)\b/.test(f) ? 'upset' : /\b(neither|skip|just show|not sure|show me|dunno|don t know)\b/.test(f) ? 'skip' : '';
+  }
   function checkMsgTurn(state, q0, vf) {
-    var t = String(q0 || '').trim(), m = /^[^:]{3,80}:\s*(.{8,})$/.exec(t), text = '';
+    var t = String(q0 || '').trim(), m = /^[^:]{3,80}:\s*(.{8,})$/.exec(t), text = '', answer = '';
     var pre = m ? t.slice(0, t.indexOf(':')) : '';
-    if (CHECK_ASK.test(vf) || (m && /\b(is (this|it) (ok|okay|alright|fine|too much|too harsh) to send|check (this|my) (message|text)|how does this (sound|land))\b/i.test(pre))) {
+    // the one question was asked last turn: read the message again with the answer
+    if (state.checkAsk && (state.turn || 0) - state.checkAsk.turn === 1) {
+      var ca = state.checkAsk; state.checkAsk = null;
+      answer = checkAnswerOf(vf);
+      if (answer) text = ca.text;
+    }
+    if (text) { /* answered */ } else if (CHECK_ASK.test(vf) || (m && /\b(is (this|it) (ok|okay|alright|fine|too much|too harsh) to send|check (this|my) (message|text)|how does this (sound|land))\b/i.test(pre))) {
       if (m && (CHECK_ASK.test(norm(pre)) || /\bto send\b|\b(message|text)\b|\bsound|land\b/i.test(pre))) text = m[1];
       else { state.checkWait = state.turn; return { blocks: [{ k: 'p', x: 'Yes. Paste or type the message here, just as you’d send it, and I’ll show how it may land and a warmer version, using the Chat analyzer’s rules. Nothing leaves this device.' }], chips: [], kind: 'care', id: 'checkask' }; }
     } else if ((state.checkWait && state.turn - state.checkWait === 1 && t.split(/\s+/).length >= 3 && !/^(no|nevermind|never mind|cancel|start over)\b/i.test(t)) || (PASTED.test(t) && !/^(hi |hey |hello )?(ok|okay|so|well|yes|yeah|no|nope|honestly|anyway|sorry|thanks|thank you|please|also|right|um|hmm|actually|basically|btw|lol|oh|ah|wait|look|listen|professor|puddles|again|then|now|and|but|because|like|ugh|great|fine|sure|hello|hi|hey)\s*,/i.test(t) && !/\?\s*$/.test(t) && !/\b(how|what|why|should) (do|can|should|would) i\b/i.test(t))) text = t;
@@ -2690,16 +2700,25 @@
     if (!E) { if (seTried) return null; return { needSE: true }; }
     state.checkWait = 0;
     var an, rw, v;
-    try { an = E.analyze(text, { channel: 'text' }); rw = E.rewrite(an, { wirings: ['general'], channel: 'text' }); v = E.verdict ? E.verdict(an, E.score(an, ['general'], 'text', 'v'), rw, {}) : null; } catch (e) { return null; }
+    var actx = answer && E.answerCtx ? E.answerCtx(answer, {}) : null, aopt = answer ? { ctx: actx, answer: answer } : {};
+    try { an = E.analyze(text, { channel: 'text' }); rw = E.rewrite(an, Object.assign({ wirings: ['general'], channel: 'text' }, aopt)); v = E.verdict ? E.verdict(an, E.score(an, ['general'], 'text', 'v'), rw, aopt) : null; } catch (e) { return null; }
     if (!an || an.danger || an.selfHarm || (v && v.id === 'danger')) return null;
-    var b = [{ k: 'p', x: 'Here’s how it may land, using the Chat analyzer’s rules: ' + ((v && v.text) || 'it reads clearly.') }];
+    // one question first (accuracy12): a short line aimed at "you" that the words alone can't settle ("You know what, I'm going to
+    // beat your butt"): is it a joke you share, or are you upset with them? A clear threat never gets here: it's answered straight.
+    var askq = !answer && E.askFirst ? (function () { try { return E.askFirst(an, { mode: 'send' }); } catch (e) { return null; } })() : null;
+    if (askq) {
+      state.checkAsk = { text: text, turn: state.turn || 0 };
+      return { blocks: [{ k: 'p', x: askq.q }], chips: askq.answers.map(function (a) { return { label: a.label, q: a.label }; }), kind: 'care', id: 'checkmsg-ask' };
+    }
+    var b = [{ k: 'p', x: 'Here’s how it may land, using the Chat analyzer’s rules: ' + ((v && v.text) || 'nothing stood out as harsh.') }];
     if (rw && !rw.unchanged && rw.main && norm(rw.main) !== norm(text)) {
       b.push({ k: 'script', l: 'A warmer way to say it', x: rw.main });
       var why = (rw.changes || []).map(function (c) { return c && c.why; }).filter(Boolean)[0];
       if (why) b.push({ k: 'p', x: why.replace(/"([^"]*)"/g, '“$1”') });
       if (/\[[^\]]+\]/.test(rw.main)) b.push({ k: 'note', x: 'Words in [brackets] are optional: keep them only if they’re true for you.' });
-    } else b.push({ k: 'p', x: 'I wouldn’t change much. Read it once more as if you were them, on a bad day, then send it when you’re calm.' });
-    b.push({ k: 'links', x: [['Open it in the Chat analyzer for more options', '/signal-translator.html']] });
+    } else b.push({ k: 'p', x: v && v.id !== 'ok' ? 'Only you know if they’ll take it as a joke. If you’re not sure, say plainly what you mean.'
+      : 'I wouldn’t change much. Read it once more as if you were them, on a bad day, then send it when you’re calm.' });
+    b.push({ k: 'links', x: [['Open it in the Chat analyzer for more options', '/signal-translator.html']].concat(v && v.addContext ? [['Add context in the Chat analyzer (who they are, whether you joke like this)', '/signal-translator.html#add-context']] : []) });
     return { blocks: b, chips: [{ label: 'Check another message', q: 'Can you check a message for me?' }], kind: 'care', id: 'checkmsg' };
   }
   function handoffReply(f, kid) {
@@ -3966,6 +3985,7 @@
   }
   function pzEarly(state, q0, vf) {
     var P = PZ(); if (!P) return null;
+    if (state.checkAsk && (state.turn || 0) - state.checkAsk.turn === 1) return null;   // the answer to the message checker's one question
     var S = pzS(state), t = state.turn || 0, raw = String(q0 || '').trim(), fs = stNorm(raw), f = vf;
     // anything that may be about danger, fear or harm: no games, no jokes, no offers carried over
     if (pzBlocked(state) || pzSerious(f) || pzSerious(fs)) { S.game = null; S.offer = null; return null; }
