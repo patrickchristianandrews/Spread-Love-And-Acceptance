@@ -1,5 +1,5 @@
 /*
-  calc01-core.js — The Objective Ledger, CALC-01 "Is the setup working for everyone?"
+  calc01-core.js — Spread Love & Acceptance, CALC-01 "Is the setup working for everyone?"
   (also called the solvency read)
   The one place the CALC-01 arithmetic lives. Loaded by:
     /is-the-setup-working.html                       (the full calculator)

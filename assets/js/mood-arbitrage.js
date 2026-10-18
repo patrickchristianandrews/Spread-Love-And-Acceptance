@@ -122,7 +122,7 @@
       t += '\n' + s.h + '\n' + (s.list ? s.list.map(function (x) { return '- ' + strip(x); }).join('\n') : strip(s.html)) + '\n';
     });
     if (withPractice) t += '\nFour weeks to build the skill\n' + PRACTICE.map(function (w) { return '[ ] ' + w[0] + ': ' + w[1]; }).join('\n') + '\n';
-    return t + '\nFrom Soften a tense moment, The Objective Ledger. A rule of thumb, not a clinical tool.';
+    return t + '\nFrom Soften a tense moment, Spread Love & Acceptance. A rule of thumb, not a clinical tool.';
   }
 
   function copy(text, done) {

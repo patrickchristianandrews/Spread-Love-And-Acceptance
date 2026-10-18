@@ -1,6 +1,6 @@
 /*
   lemonade-calc.js
-  The Objective Ledger — Lemonade Stand calculator (just me, or 2 to 8 people)
+  Spread Love & Acceptance — Lemonade Stand calculator (just me, or 2 to 8 people)
 
   First step, "Who is this for?":
     - Just me ('solo'): your own week as a ledger. Where your time and attention go, the thinking

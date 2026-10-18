@@ -1,5 +1,5 @@
 /*
-  tol-suite-paths.js — The Objective Ledger (TOL-OS)
+  tol-suite-paths.js — Spread Love & Acceptance
   The roads through the workpapers, one for each way in: yourself, each kind
   of relationship, and the 6-week program. Taken from the relationship map
   (relationships-in-depth.html) and PROG-01. The Workpaper Suite builds its

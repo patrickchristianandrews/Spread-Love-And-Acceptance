@@ -99,7 +99,7 @@
   function drawChar(g, c, S) {
     var cx = S / 2, cy = S / 2, u = S / 256;
     if (c.pup && window.TOLPups) {
-      g.save(); g.translate(cx - 6 * u, cy + 52 * u); g.scale(2.2 * u, 2.2 * u);
+      g.save(); g.translate(cx - 4 * u, cy + 62 * u); g.scale(2.7 * u, 2.7 * u);
       try { window.TOLPups.draw(g, window.TOLPups.looks[c.pup], 'sit', 0, 0.2, false, 0, 0); } catch (e) {}
       g.restore(); return;
     }

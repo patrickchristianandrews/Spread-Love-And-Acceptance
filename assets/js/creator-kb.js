@@ -16,17 +16,17 @@ window.TOL_CREATOR_KB = {
   starters: ['Who is Christian?', 'Is Christian a polymath?', 'Which fields did Christian study?', 'How does Christian think differently?', 'How did the program come from Christian’s life?'],
   entries: [
     { id: 'tide', k: ['who are you', 'what are you', 'what is tide', 'why tide', 'your name', 'are you a person', 'are you real', 'are you ai', 'are you a bot', 'what can you do', 'what do you know', 'help'],
-      a: ['I’m Tide, a small helper that only knows about Christian, the creator of Spread Love & Acceptance and The Objective Ledger. I answer from what Christian has shared on the About pages and the polymath page, and nothing else.', 'I work entirely on your device: what you type isn’t sent anywhere, and it’s gone when you leave the page. For questions about the tools, the book or a situation you’re in, Professor Puddles on the Ask page is the one to talk to.'],
+      a: ['I’m Tide, a small helper that only knows about Christian, the creator of Spread Love & Acceptance. I answer from what Christian has shared on the About pages and the polymath page, and nothing else.', 'I work entirely on your device: what you type isn’t sent anywhere, and it’s gone when you leave the page. For questions about the tools, the book or a situation you’re in, Professor Puddles on the Ask page is the one to talk to.'],
       l: [['Ask Professor Puddles about the program', '/ask.html']],
       f: ['Who is Christian?', 'Is Christian a polymath?'] },
 
     { id: 'who', k: ['who is christian', 'who made', 'who created', 'who built', 'who wrote', 'who is the creator', 'who is the founder', 'the creator', 'the founder', 'the author', 'about christian', 'tell me about christian', 'who is behind', 'who runs', 'who are they', 'creator', 'founder', 'christian'],
-      a: ['Christian is the founder of Spread Love & Acceptance and the creator of The Objective Ledger. Christian worked as a government auditor and audit manager, and has spent a lifetime trying to understand how people work. The program grew out of both.', 'Christian is a polymath: someone who has studied many fields deeply (psychology, philosophy, behavioral science, neurobiology, economics, business, finance, holistic therapies, aromatherapy, the art of debating, politics, music and the healing power of laughter) and looks for the places where they meet. Christian is also autistic, with OCD, ADHD and anxiety, and has built the site around what that wiring taught them.'],
+      a: ['Christian is the founder and creator of Spread Love & Acceptance. Christian worked as a government auditor and audit manager, and has spent a lifetime trying to understand how people work. The program grew out of both.', 'Christian is a polymath: someone who has studied many fields deeply (psychology, philosophy, behavioral science, neurobiology, economics, business, finance, holistic therapies, aromatherapy, the art of debating, politics, music and the healing power of laughter) and looks for the places where they meet. Christian is also autistic, with OCD, ADHD and anxiety, and has built the site around what that wiring taught them.'],
       l: [['About Christian', '/about.html'], ['The full story', '/about.html']],
       f: ['What did Christian do for work?', 'Is Christian a polymath?', 'Why did Christian make this site?'] },
 
     { id: 'career', k: ['job', 'work', 'for work', 'do for work', 'what did christian do', 'what does christian do', 'what did they do', 'what do they do', 'career', 'auditor', 'audit', 'audits', 'auditing', 'government', 'tax', 'internal controls', 'compliance', 'profession', 'what do they do', 'for a living', 'audit manager', 'background', 'experience'],
-      a: ['Christian built a career as a government auditor and audit manager, specializing in tax enforcement, internal controls and compliance. In Christian’s words, the work “came down to one job: finding the objective truth inside complex systems that are hard to see into.”', 'That audit lens is the thread through the whole program. An audit doesn’t ask whether people are good. It asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the premise of The Objective Ledger.'],
+      a: ['Christian built a career as a government auditor and audit manager, specializing in tax enforcement, internal controls and compliance. In Christian’s words, the work “came down to one job: finding the objective truth inside complex systems that are hard to see into.”', 'That audit lens is the thread through the whole program. An audit doesn’t ask whether people are good. It asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the premise of the program.'],
       l: [['Where it started', '/about.html#the-mandate']],
       f: ['How did audit shape the tools?', 'Which fields did Christian study?'] },
 
@@ -41,7 +41,7 @@ window.TOL_CREATOR_KB = {
       f: ['What does “a new dimension” mean?', 'How did the fields become the Five Pillars?'] },
 
     { id: 'dimension', k: ['new dimension', 'dimension', 'elevation', 'elevate', 'transform', 'transformation', 'higher', 'bigger picture', 'zoom out', 'whole picture'],
-      a: ['It’s Christian’s way of describing what happens when fields meet. One field on its own is like a line: you can go back and forth along it. Two fields together make a flat map. Many fields together give you depth, a space you can move around in and see from new angles.', 'The Objective Ledger is built in that third dimension. An accounting idea (a ledger) meets nervous-system science (a battery) and communication (a signal), and something appears that none of them had alone: a way to see the whole load, read your state first and say it kindly. Elevation here doesn’t mean more information. It means a higher place to stand, where you can see how the pieces connect.'],
+      a: ['It’s Christian’s way of describing what happens when fields meet. One field on its own is like a line: you can go back and forth along it. Two fields together make a flat map. Many fields together give you depth, a space you can move around in and see from new angles.', 'The program is built in that third dimension. An accounting idea (a ledger) meets nervous-system science (a battery) and communication (a signal), and something appears that none of them had alone: a way to see the whole load, read your state first and say it kindly. Elevation here doesn’t mean more information. It means a higher place to stand, where you can see how the pieces connect.'],
       l: [['The polymath way', '/polymath.html#dimension']],
       f: ['How do the fields connect?', 'What are the Five Pillars?'] },
 
@@ -74,7 +74,7 @@ window.TOL_CREATOR_KB = {
       a: ['Audit work taught Christian that most operational failure isn’t incompetence. It’s unclear ownership. Work that belongs to everyone belongs to no one, and it quietly lands on whoever notices first. Christian watched this happen in departments, and lived it at home.', 'It became “One owner per job” (WP-03), lifted almost directly from internal controls practice: one named person per recurring task, with ownership changed on purpose and in writing, never by silent default.'],
       l: [['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html']], f: ['How did finance shape the program?'] },
 
-    { id: 'finance', k: ['finance', 'bookkeeping', 'double entry', 'double-entry', 'ledger', 'solvency', 'accounting', 'why a ledger', 'objective ledger name', 'why is it called'],
+    { id: 'finance', k: ['finance', 'bookkeeping', 'double entry', 'double-entry', 'ledger', 'solvency', 'accounting', 'why a ledger', 'why is it called'],
       a: ['Finance is Christian’s professional native language. Double-entry bookkeeping carries a quiet philosophical claim: every entry has two sides, and a book that only balances from one direction isn’t balanced at all.', 'It became the ledger framing of the whole program, and the setup score in Chapter II (Is the split working?). Both carry the caveat that took Christian longest to learn: the number describes the arrangement, never the people inside it.'],
       l: [['The full story', '/about.html#curriculum']], f: ['How did holistic practice shape the program?'] },
 
@@ -120,11 +120,11 @@ window.TOL_CREATOR_KB = {
       l: [['Dropping the mask', '/about.html#dropping-the-mask']], f: ['Why did Christian make this site?'] },
 
     { id: 'mission', k: ['why did christian make', 'why make', 'why build', 'why create', 'why this site', 'why does this exist', 'mission', 'purpose', 'goal', 'why', 'spread love and acceptance', 'what is the point'],
-      a: ['Christian built Spread Love & Acceptance and The Objective Ledger to use their lived experience to help others map their own realities. In Christian’s words: “I stopped trying to force my brain to run like someone else’s. Instead, I built a life where my true wiring could thrive. My mission is to help you do the same.”'],
+      a: ['Christian built Spread Love & Acceptance to use their lived experience to help others map their own realities. In Christian’s words: “I stopped trying to force my brain to run like someone else’s. Instead, I built a life where my true wiring could thrive. My mission is to help you do the same.”'],
       l: [['The mission', '/about.html#the-mission'], ['Start here', '/start-here.html']],
       f: ['How did the program come from Christian’s life?', 'What are the Five Pillars?'] },
 
-    { id: 'program', k: ['program', 'objective ledger', 'framework', 'how did the program', 'tie into', 'ties into', 'come from', 'came from', 'based on', 'how does the site relate', 'tools come from', 'where did the ideas'],
+    { id: 'program', k: ['program', 'framework', 'how did the program', 'tie into', 'ties into', 'come from', 'came from', 'based on', 'how does the site relate', 'tools come from', 'where did the ideas'],
       a: ['The program is Christian’s own life, laid out as tools. Each of the thirteen fields Christian studied held a piece of a problem Christian was living inside, and each piece became a tool: Say it so it lands from psychology, the check-in from behavioral science, How much are you carrying? from neurobiology, What keeps coming back? from economics, “One owner per job” from business and audit, the ledger itself from finance, and “calm down first” from holistic practice. Debating, politics, music and laughter added the habits of hearing the other side first, deciding fairly together, setting a gentle tempo and repairing with a shared laugh.', 'Audit work holds it all together: look at the system, not the person, and go by what the evidence supports.'],
       l: [['The thirteen inputs', '/about.html#curriculum'], ['Program overview', '/program-overview.html']],
       f: ['What are the Five Pillars?', 'How did audit shape the tools?'] },
@@ -135,7 +135,7 @@ window.TOL_CREATOR_KB = {
       f: ['How do the fields connect?'] },
 
     { id: 'auditlens', k: ['how did audit shape', 'audit shape', 'audit lens', 'audit thread', 'holds them together', 'thread', 'objective truth', 'evidence'],
-      a: ['In Christian’s words: “An audit doesn’t ask whether people are good. It asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the entire premise of The Objective Ledger. The thirteen fields are where the evidence came from. The audit is what holds them together.”'],
+      a: ['In Christian’s words: “An audit doesn’t ask whether people are good. It asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the entire premise of the program. The thirteen fields are where the evidence came from. The audit is what holds them together.”'],
       l: [['The full story', '/about.html']], f: ['Is Christian a polymath?'] },
 
     { id: 'faith', k: ['god', 'faith', 'religious', 'religion', 'spiritual', 'spirituality', 'angels', 'pray', 'prayer', 'believe', 'blessed'],

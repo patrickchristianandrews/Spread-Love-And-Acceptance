@@ -8,7 +8,11 @@
 
    The set (tools/signal/accuracy-set.json) is 800+ short made-up messages, each with the landing a careful reader
    would expect and the alternatives that are also fair: ok, unsure, might-hurt, fight, concern.
-   "holdout" messages were written before the engine was changed and are never tuned against.
+   "holdout" messages were written before the engine was changed. Its first run showed gaps, so the fixes that followed
+   saw it; "holdout2" was written after that run and before those fixes, and is never tuned against.
+   A third check runs every threat-shaped message through eight kinds of context ("we tease, we play games together",
+   a parent, a coworker, short and direct writers, earlier warm messages…), as a message to send and as one you got:
+   none may come out "okay".
 
    Each message is read exactly the way the pocket checker (message-check-mini.js) and Professor Puddles read it:
    analyze -> score (general reading, text) -> rewrite -> verdict. */
@@ -17,7 +21,7 @@ const path = require('path');
 const E = require(path.join(__dirname, '../../assets/js/signal-engine.js'));
 const SET = require(path.join(__dirname, 'accuracy-set.json'));
 const args = process.argv.slice(2);
-const ONLY = args.includes('--split') ? args[args.indexOf('--split') + 1] : '';
+const ONLY = args.includes('--split') ? args[args.indexOf('--split') + 1] : '';  // tune, holdout or context
 const MISSES = args.includes('--misses'), JSON_OUT = args.includes('--json');
 
 const LBL = ['ok', 'unsure', 'might-hurt', 'fight', 'concern', 'none'];
@@ -40,7 +44,7 @@ function read(t){
 const pct = (a, b) => b ? Math.round(1000 * a / b) / 10 : 0;
 const report = {};
 let failed = false;
-['tune', 'holdout'].forEach(split => {
+['tune', 'holdout', 'holdout2', 'holdout3'].forEach(split => {
   if(ONLY && ONLY !== split) return;
   const rows = SET.filter(c => c.split === split);
   const M = {}; LBL.forEach(a => { M[a] = {}; LBL.forEach(b => M[a][b] = 0); });
@@ -73,6 +77,42 @@ let failed = false;
   });
   if(MISSES) { console.log('-- outside labels:'); misses.forEach(m => console.log('  ' + m)); }
 });
+// Context (the "Add context" panel) and the reading of a message you got: no context may turn a threat into "okay".
+// "We tease, we play games together" may make a playful one "probably playful" (still not "okay").
+const CTXS = [
+  {usual: ['tease'], other: "we're joking, we play games together"},
+  {usual: ['tease'], rel: 'friend', other: 'we always banter'},
+  {usual: ['short', 'direct']},
+  {rel: 'partner', goal: 'calm', earlier: 'A: love you\nB: love you too'},
+  {rel: 'child', age: 'teen', usual: ['direct']},
+  {rel: 'coworker', usual: ['formal']},
+  {culture: 'my family is loud and blunt, we tease a lot', them: ['tired']},
+  {rel: 'family', other: 'they take things literally'}
+];
+{
+  // the tuning split by default; --context-split holdout runs it on the held-out messages too
+  const CTX_SPLIT = args.includes('--context-split') ? args[args.indexOf('--context-split') + 1] : 'tune';
+  if(!ONLY || ONLY === 'context'){
+    let n = 0, okBad = [], playN = 0, playSoft = 0;
+    SET.filter(c => THREAT.includes(c.cat) && c.split === CTX_SPLIT).forEach(c => CTXS.forEach(ctx => {
+      const an = E.analyze(c.t, {channel: 'text', ctx}), sc = E.score(an, ['general'], 'text');
+      const rw = E.rewrite(an, {wirings: ['general'], channel: 'text', ctx});
+      const v = E.verdict(an, sc, rw, {ctx}), rv = E.receive(E.analyze(c.t, {channel: 'text', ctx, mode: 'read'}), {ctx});
+      n += 2;
+      if(v.id === 'ok') okBad.push('send ' + JSON.stringify(ctx).slice(0, 40) + ' ' + JSON.stringify(c.t));
+      if(rv.head[0] === 'ok') okBad.push('read ' + JSON.stringify(ctx).slice(0, 40) + ' ' + JSON.stringify(c.t));
+      if(c.cat === 'playful' && ctx.usual && ctx.usual.includes('tease')){ playN++; if(v.probablyPlayful) playSoft++; }
+    }));
+    const pass = okBad.length === 0; if(!pass) failed = true;
+    report.context = {cases: n, okBad: okBad.length, playfulWithTease: playN, probablyPlayful: playSoft, pass};
+    if(!JSON_OUT){
+      console.log('\n== context, ' + CTX_SPLIT + ' split (' + (n / 2) + ' threat messages x contexts, send and read)');
+      console.log((pass ? 'PASS ' : 'FAIL ') + 'no context turns a threat into "okay": ' + okBad.length + ' of ' + n);
+      okBad.slice(0, 20).forEach(x => console.log('      ' + x));
+      console.log('     (playful lines with a "we tease" context read as "probably playful": ' + playSoft + ' of ' + playN + ')');
+    }
+  }
+}
 if(JSON_OUT) console.log(JSON.stringify(report, null, 1));
 else console.log(failed ? '\nA release gate failed.' : '\nAll release gates pass.');
 process.exit(failed ? 1 : 0);

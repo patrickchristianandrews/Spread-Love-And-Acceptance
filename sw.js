@@ -31,7 +31,8 @@ var CORE = [
   '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
   '/wavelength.html', '/assets/js/wavelength.js', '/assets/js/come-back.js', '/assets/css/come-back.css', '/assets/js/share-clip.js', '/assets/js/pick-up.js', '/growing-up.html', '/assets/js/roots.js', '/assets/js/lemonade-calc.js',
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js', '/assets/js/buddies-suggest.js',
-  '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/assets/icons/icon-maskable-192.png', '/assets/icons/icon-maskable-512.png', '/assets/icons/apple-touch-icon-180.png', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/manifest.webmanifest'
+  '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/assets/icons/icon-maskable-192.png', '/assets/icons/icon-maskable-512.png', '/assets/icons/apple-touch-icon-180.png', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/manifest.webmanifest',
+  '/assets/css/book-series.css', '/assets/js/book-shop.js', '/workpapers/fill/wpf-print.js',
 ];
 
 self.addEventListener('install', function (e) {

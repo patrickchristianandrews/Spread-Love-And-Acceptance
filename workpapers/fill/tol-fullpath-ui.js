@@ -1,5 +1,5 @@
 /*
-  tol-fullpath-ui.js — The Objective Ledger (TOL-OS)
+  tol-fullpath-ui.js — Spread Love & Acceptance
   The "Full path package" part of the Workpaper Suite page:
 
     1. Download the full path PDF for a road (and 2 to 8 people, or just you).

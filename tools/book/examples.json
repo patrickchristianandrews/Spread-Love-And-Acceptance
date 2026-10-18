@@ -25,7 +25,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-weather-joel.html",
   "tool": "/quick-checks.html#today",
-  "title": "Today’s Weather",
+  "title": "My weather today",
   "who": "Joel, on his own, after a short night",
   "relationship": "someone on their own",
   "versions": [
@@ -42,7 +42,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wiring-ife.html",
   "tool": "/wiring-card.html",
-  "title": "Wiring Card",
+  "title": "“How to talk to me” card",
   "who": "Ife, made on her own to give to a friend",
   "relationship": "someone on their own",
   "versions": [
@@ -144,7 +144,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-lemonade-housemates.html",
   "tool": "/lemonade-stand.html#quick-h",
-  "title": "The Lemonade Stand: quick look",
+  "title": "Who does what? Quick look",
   "who": "Wren, Josh and Mei, housemates (Wren’s view)",
   "relationship": "housemates (three)",
   "versions": [
@@ -195,7 +195,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-perspective-hana.html",
   "tool": "/perspective-shifter.html",
-  "title": "See it from their side (the Perspective Shifter)",
+  "title": "Rewind the talk: see their side",
   "who": "Hana, about her friend Lou",
   "relationship": "friends",
   "versions": [
@@ -229,7 +229,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-lemonade-money-grace-ruth.html",
   "tool": "/lemonade-stand.html",
-  "title": "The Lemonade Stand: the Money tab",
+  "title": "Who does what? The Money tab",
   "who": "Grace and Ruth, a couple with different incomes",
   "relationship": "a couple (two women)",
   "versions": [
@@ -297,7 +297,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-checkin-linda-jordan.html",
   "tool": "/check-ins.html#card",
-  "title": "This week’s check-in card",
+  "title": "Kitchen-table check-in: this week",
   "who": "Linda and her grown-up son Jordan, who live together",
   "relationship": "a parent and adult child",
   "versions": [
@@ -314,7 +314,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-ladder-mike.html",
   "tool": "/quick-checks.html#ladder",
-  "title": "The ladder (the sky, in Today’s Weather)",
+  "title": "The ladder (the sky, in My weather today)",
   "who": "Mike, who cares for his wife, Ann",
   "relationship": "a partner caring for a partner",
   "versions": [
@@ -399,7 +399,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wiring-tom.html",
   "tool": "/wiring-card.html",
-  "title": "Wiring Card for work",
+  "title": "“How to talk to me” card, for work",
   "who": "Tom, autistic, for his new manager",
   "relationship": "a coworker and his manager",
   "versions": [
@@ -416,7 +416,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-write-carys-owen.html",
   "tool": "/write-it-through.html#write",
-  "title": "Talk it through in writing",
+  "title": "Write it through",
   "who": "Carys, writing to her brother Owen",
   "relationship": "adult siblings",
   "versions": [
@@ -467,7 +467,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wavelength-mo.html",
   "tool": "/wavelength.html",
-  "title": "Wavelength",
+  "title": "How you connect: the style quiz",
   "who": "Mo, before moving in with his friend Callum",
   "relationship": "friends moving in together",
   "versions": [
@@ -518,7 +518,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-familyplan-amaka.html",
   "tool": "/check-ins.html?for=family#card",
-  "title": "Family plan card",
+  "title": "Kitchen-table check-in: family plan",
   "who": "Amaka and Chris, new parents, with Chris’s parents",
   "relationship": "new parents and grandparents",
   "versions": [
@@ -552,7 +552,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-b3-weather-esme.html",
   "tool": "/quick-checks.html#today",
-  "title": "Today’s Weather",
+  "title": "My weather today",
   "who": "Esme, 29, after a worrying message from her manager",
   "relationship": "coworkers",
   "versions": [
@@ -586,7 +586,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-b3-write-edith.html",
   "tool": "/write-it-through.html#write",
-  "title": "Talk it through in writing",
+  "title": "Write it through",
   "who": "Edith, 74, widowed, writing to her grown-up son and daughter",
   "relationship": "a parent and grown-up children",
   "versions": [

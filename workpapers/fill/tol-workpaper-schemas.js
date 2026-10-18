@@ -1,5 +1,5 @@
 /*
-  tol-workpaper-schemas.js — The Objective Ledger (TOL-OS)
+  tol-workpaper-schemas.js — Spread Love & Acceptance
   Field-by-field definitions of the fill-in workpapers, taken from the
   manuscript source files. The engine in tol-workpaper.js renders the form
   and the PDF from these definitions.

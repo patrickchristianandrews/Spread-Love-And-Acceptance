@@ -53,7 +53,7 @@ HEAD = '''<!DOCTYPE html>
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>%(title)s — The Objective Ledger</title>
+<title>%(title)s · Spread Love &amp; Acceptance</title>
 <meta name="description" content="%(desc)s">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -276,7 +276,7 @@ def main():
                  'desc': 'The science behind the program: %d plain-language entries on relationships, conflict, '
                          'fairness, stress, emotions, thinking traps, wiring, habits and connection.' % total}]
     o.append('<header class="read-head"><p class="read-code">The Professor’s Library</p><h1>The science behind the program</h1></header>')
-    o.append('<p class="simple-lede">The Objective Ledger borrows from a lot of fields: relationship research, '
+    o.append('<p class="simple-lede">The program borrows from a lot of fields: relationship research, '
              'conflict resolution, psychology, behavioural science, even project management. This library is where '
              'those ideas are laid out properly, in plain words, with who found what, how strong the evidence is, and '
              'where it is still argued about. Each entry ends with questions to talk over together, and links back to '

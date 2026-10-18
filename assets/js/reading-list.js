@@ -1,4 +1,4 @@
-/* reading-list.js — the Further Reading list for The Objective Ledger.
+/* reading-list.js — the Further Reading list for Spread Love & Acceptance.
    Articles hand-picked to go with the program's pages, from Psychology Today, Greater Good Magazine
    (UC Berkeley), The Gottman Institute, Harvard Health, ADDitude, CHADD and the National Autistic Society.
    Summaries are our own one-line descriptions; the articles live on the publishers' sites.

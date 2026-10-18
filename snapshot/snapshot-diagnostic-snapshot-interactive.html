@@ -120,7 +120,7 @@ fieldset.q legend + *{ clear:both; }
 <body>
 <div class="frame">
 <aside class="sidebar">
-<div class="mark">2-Minute Snapshot<small>THE OBJECTIVE LEDGER &middot; QUICK CHECK</small></div>
+<div class="mark">2-Minute Snapshot<small>SPREAD LOVE &amp; ACCEPTANCE &middot; QUICK CHECK</small></div>
 <p class="tagline">A quick, honest look at where things are.</p>
 <a class="back-link" href="index.html">&larr; Back to the snapshot</a>
 <div class="sidebar-foot">spreadloveandacceptance.com</div>
@@ -180,7 +180,7 @@ fieldset.q legend + *{ clear:both; }
 </div>
 
 <footer>
-The Objective Ledger &middot; spreadloveandacceptance.com
+Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com
 <div class="footer-links">
 <a href="/index.html">Home</a> | <a href="index.html">Back</a> | <a href="/learn/index.html">Learn</a> | <a href="/do/index.html">Try the workpapers</a>
 </div>
@@ -322,7 +322,7 @@ $("snapshot-form").addEventListener("submit", function(e){
   if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: key !== "steady" });
   $("result-links").innerHTML = A.links.map(function(l){ return '<li><a href="' + l[1] + '">' + esc(l[0]) + '</a></li>'; }).join("") +
     '<li><a href="/five-pillars.html">The Five Pillars, in plain words</a></li><li><a href="/do/workpaper-playground.html">Practice in the Workpaper Playground</a></li>';
-  var L = ["My 2-minute snapshot (The Objective Ledger)", "About: " + $("group").options[$("group").selectedIndex].text, "", "Area: " + A.name, A.desc(g), "",
+  var L = ["My 2-minute snapshot (Spread Love & Acceptance)", "About: " + $("group").options[$("group").selectedIndex].text, "", "Area: " + A.name, A.desc(g), "",
     "The setup: " + setup + " of 6. How it bends: " + flex + " of 6.", "My word: " + picks.word[0], "", "My answers:"];
   QUESTIONS.forEach(function(q){ L.push("- " + q.q + " " + picks[q.id][0]); });
   L.push("", "One thing to try this week: " + A.action, "", "A snapshot of one moment from one point of view, not a verdict.");

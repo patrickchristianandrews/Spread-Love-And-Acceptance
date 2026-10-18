@@ -359,6 +359,10 @@ details.st-acc summary{cursor:pointer;padding:10px 14px;font-family:var(--displa
 .verdict .vplain{font-family:var(--display);font-size:1.18rem;font-weight:600;line-height:1.35;margin:0 0 10px;padding:8px 12px;border-radius:8px;border-left:4px solid #3E6B48;background:rgba(62,107,72,.09);overflow-wrap:anywhere}
 .verdict .vplain.v-hurt{border-left-color:#8A6116;background:rgba(138,97,22,.10)}.verdict .vplain.v-fight{border-left-color:#9A3B2E;background:rgba(154,59,46,.09)}
 .verdict .vplain.v-danger{border-left:6px solid #9A3B2E;background:rgba(154,59,46,.14)}
+/* "hard to tell from the words alone": neutral, never the green of "okay" (accuracy12) */
+.verdict .vplain.v-unsure{border-left-color:#6E675C;background:rgba(110,103,92,.12)}
+.verdict .st-addctx{margin:-4px 0 10px}
+.verdict .st-addctx a{font-weight:600}
 .verdict.danger-card{border-left:5px solid #9A3B2E}
 .verdict .vhelp{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:var(--sheet);border:1px solid var(--line);font-size:.98rem;line-height:1.5}
 #results[data-no-reward] ~ .cb-end{display:none!important}
@@ -2719,7 +2723,7 @@ function run(){
 
   const why1 = (()=>{ const c = rw.changes.find(x=>x.why); const w = plain && plain.fair ? plain.text.split(/(?<=\.)\s/)[0] : c ? c.why.split(/(?<=[.!?])\s/)[0] : (plain ? plain.text : ""); return w; })();
   const brief = '<div class="verdict st-brief st-brief-keep">'+(rw.unchanged
-      ? '<p class="vk">Your words</p><p class="vbest">'+esc(text)+'</p><p class="why1">'+esc(plain ? plain.text : "This will probably land okay.")+'</p>'
+      ? '<p class="vk">Your words</p><p class="vbest">'+esc(text)+'</p><p class="why1">'+esc(plain ? plain.text : "Nothing here stood out as harsh. Tone and history still matter.")+'</p>'
       : '<p class="vk">Say it like this</p><p class="vbest">'+phHTML(opts[0].say)+'</p>'+simpleLine(opts[0].say)+(why1?'<p class="why1"><b>Why:</b> '+esc(why1)+'</p>':'')+'<div class="actions" style="margin:0"><button class="go" type="button" id="copyBrief" data-say="'+esc(opts[0].say)+'">Copy this</button></div>')+'</div>';
   let h = '<h2 id="rTitle" class="sr-only st-brief-keep" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + briefRow() + vtop + brief + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
   h += '<p class="drops-h">The full read. Open any part.</p>';
@@ -3151,6 +3155,8 @@ function ctxExtra(v, an, mode){
   if(v && v.ctxSafety==="crisis") h += CRISIS_SELF;
   else if(v && (v.ctxSafety==="fear" || v.ctxSafety==="threat")) h += SAFETY_GOT;
   if(v && v.careNote) h += '<p class="small st-care"><b>'+esc(v.careNote)+'</b></p>';
+  // threat-shaped, or hard to read: "Add context" is the obvious next step (who they are, whether you joke like this)
+  if(v && v.addContext && !(v.context && v.context.flags && v.context.flags.teaseRoom)) h += '<p class="small st-addctx"><a href="#add-context" class="st-ctx-open">Add context</a> for a fairer reading: who they are, and whether you joke like this. The words alone can\u2019t show a joke.</p>';
   h += TOLContext.usedHTML(r, {skip: [v && v.limit ? 'limit' : '', v && v.shortOk ? 'short' : ''].concat(v && v.head && /parent setting a limit/.test(v.head[1]) ? ['limit'] : []).concat(v && v.head && /usually write short/.test(v.head[1]) ? ['short'] : [])});
   if(mode==="send") h += '<div class="tol-clar" id="stClar" hidden></div>';
   return h;
@@ -3172,6 +3178,8 @@ if(window.TOLContext) stCtx = TOLContext.mount(document.getElementById("stCtx"),
 });
 // the mini checker's "Add context" link opens the panel
 if(stCtx && location.hash==="#add-context") stCtx.open(false);
+// "Add context" next to a threat-shaped result opens the panel too
+document.addEventListener("click", e=>{ const a = e.target.closest && e.target.closest("a.st-ctx-open"); if(!a || !stCtx) return; e.preventDefault(); stCtx.open(false); const el = document.getElementById("add-context") || document.getElementById("stCtx"); if(el && el.scrollIntoView) el.scrollIntoView({block:"start"}); });
 // context handed over from another page (WP-09) waits in this tab's sessionStorage ('tol-st-ctx'), never in the address
 try{ const sc = sessionStorage.getItem("tol-st-ctx"); if(sc!=null){ sessionStorage.removeItem("tol-st-ctx"); if(stCtx){ stCtx.set(JSON.parse(sc)); stCtx.open(false); } } }catch(e){}
 /* "Try an example": one tap picks the right mode, fills the box and reads it */

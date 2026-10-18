@@ -1372,7 +1372,7 @@
   var BOOK_CH = /^\/book\/(preface|chapter-\d+|self-\d-[a-z]+|understanding-\d+-[a-z-]+|afterword|for-yourself|together|understanding|whole|topic-[a-z-]+)(-in-depth)?\.html$/;
   function bookButton() {
     return shareBtn(T('Share the book', 'Compartir el libro'), {
-      title: 'The Objective Ledger',
+      title: 'Spread Love & Acceptance: the free book',
       text: T('A free, kind book about yourself, the people you share a life with, and how people work. Read it online or as free PDFs.', 'Un libro gratis y amable sobre ti, las personas con quienes compartes la vida y cómo funcionamos. Léelo en línea o en PDF gratis.'),
       url: '/book/index.html', pin: true
     });
@@ -1386,7 +1386,7 @@
     var isDownload = path === '/book/download.html';
     var opts = function () {
       return isDownload
-        ? { title: 'The Objective Ledger', text: T('The whole book, free, as PDFs. No account.', 'El libro entero, gratis, en PDF. Sin cuenta.'), url: '/book/download.html', pin: true }
+        ? { title: 'Spread Love & Acceptance: the free book', text: T('The whole book, free, as PDFs. No account.', 'El libro entero, gratis, en PDF. Sin cuenta.'), url: '/book/download.html', pin: true }
         : { title: title, text: line, pin: true };
     };
     // 1. a small Share button under the title

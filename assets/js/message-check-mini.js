@@ -61,6 +61,10 @@
     '.mcm-v.ok{border-left:4px solid var(--credit,#3E6B4C);padding-left:10px}' +
     '.mcm-v.hurt{border-left:4px solid var(--brass,#A8792F);padding-left:10px}' +
     '.mcm-v.fight,.mcm-v.danger{border-left:4px solid var(--debit,#96412B);padding-left:10px}' +
+    // "hard to tell from the words alone": neutral, never the green of "okay"
+    '.mcm-v.unsure{border-left:4px solid var(--ink-soft,#5A5346);padding-left:10px}' +
+    '.mcm-addctx{margin:0 0 .5rem;font-size:.92rem}' +
+    '.mcm-addctx a{font-weight:600;color:inherit}' +
     '.mcm-k{margin:.4rem 0 .15rem;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
     '.mcm-say{margin:0;padding:8px 11px;border-radius:8px;background:var(--paper,#F5EFDE);border:1px solid var(--line,#D9CBA3);line-height:1.5;overflow-wrap:anywhere}' +
     '.mcm-ph{border:1.5px dashed var(--brass,#A8792F);border-radius:4px;padding:0 4px}' +
@@ -113,6 +117,8 @@
         var rw = E.rewrite(an, { wirings: ['general'], channel: 'text', rel: rel });
         var v = E.verdict ? E.verdict(an, sc, rw, { rel: rel }) : { id: 'ok', text: '' };
         var h = '<p class="mcm-v no-bubble ' + esc(v.id) + '">' + esc(v.text) + '</p>';
+        // threat-shaped, or hard to read: "Add context" is the obvious next step
+        if (v.addContext && !an.selfHarm) h += '<p class="mcm-addctx no-bubble"><a class="mcm-ctx2" href="' + full + '#add-context">Add context</a>: who they are, and whether you joke like this. The words alone can&rsquo;t show a joke.</p>';
         if (an.selfHarm) {
           h += '<p class="mcm-note no-bubble">In the US, call or text 988. In the UK and Ireland, Samaritans: 116 123. If someone may act on it now, call your local emergency number.</p>';
         } else if (!an.danger && !an.control && rw && !rw.unchanged && rw.main && !rw.danger) {
@@ -122,6 +128,7 @@
         }
         h += '<p class="mcm-note no-bubble">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The Chat analyzer shows why, and more ways to say it.</p>';
         out.innerHTML = h;
+        var c2 = out.querySelector('.mcm-ctx2'); if (c2) c2.addEventListener('click', hand);
         var cp = out.querySelector('.mcm-copy');
         if (cp) cp.addEventListener('click', function () {
           (navigator.clipboard ? navigator.clipboard.writeText(rw.main) : Promise.reject()).then(function () { cp.textContent = 'Copied'; }, function () { cp.textContent = 'Select and copy manually'; });

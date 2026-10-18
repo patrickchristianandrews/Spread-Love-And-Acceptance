@@ -10,7 +10,7 @@
    ],
    "pages": 158,
    "blank_pages": 0,
-   "bytes": 2141963,
+   "bytes": 2140507,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
@@ -82,8 +82,8 @@
     9
    ],
    "pages": 154,
-   "blank_pages": 4,
-   "bytes": 2035117,
+   "blank_pages": 3,
+   "bytes": 2037373,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
@@ -141,10 +141,10 @@
     "understanding-10-values": 119,
     "wp-tools": 136,
     "glossary": 139,
-    "notes": 141,
-    "series": 148,
-    "free": 149,
-    "jot": 150
+    "notes": 142,
+    "series": 149,
+    "free": 150,
+    "jot": 151
    }
   },
   "book-3-understanding-each-other": {
@@ -155,49 +155,49 @@
     6,
     9
    ],
-   "pages": 152,
-   "blank_pages": 4,
-   "bytes": 2092185,
+   "pages": 150,
+   "blank_pages": 3,
+   "bytes": 2086741,
    "pdf": "book-3-understanding-each-other.pdf",
    "cover_pdf": "cover-book-3-understanding-each-other.pdf",
    "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
-   "spine_in": 0.3423,
-   "spine_mm": 8.69,
+   "spine_in": 0.3378,
+   "spine_mm": 8.58,
    "cover_in": [
-    12.5923,
+    12.5878,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.88,
-     "net": 4.12,
-     "pct": 27.5
+     "print": 4.82,
+     "net": 4.17,
+     "pct": 27.8
     },
     "kdp_expanded": {
-     "print": 4.88,
-     "net": 1.12,
-     "pct": 7.5
+     "print": 4.82,
+     "net": 1.17,
+     "pct": 7.8
     },
     "ingram_bookshops": {
-     "print": 4.94,
+     "print": 4.89,
      "discount": 0.4,
-     "net": 3.77,
-     "pct": 25.1
+     "net": 3.82,
+     "pct": 25.5
     },
     "direct_estimate": {
-     "print": 4.94,
+     "print": 4.89,
      "card_fee": 0.73,
-     "net": 9.31,
-     "pct": 62.1
+     "net": 9.36,
+     "pct": 62.4
     },
     "direct_with_fulfil_fee": {
-     "print": 4.94,
+     "print": 4.89,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.56,
-     "pct": 50.4
+     "net": 7.61,
+     "pct": 50.8
     }
    },
    "pagemap": {
@@ -209,15 +209,15 @@
     "understanding-4-communication": 25,
     "understanding-3-seeing": 45,
     "understanding-5-belonging": 61,
-    "understanding-15-love": 79,
-    "understanding-17-groups": 97,
-    "understanding-12-helping": 117,
-    "wp-tools": 135,
-    "glossary": 138,
-    "notes": 141,
-    "series": 147,
-    "free": 148,
-    "jot": 149
+    "understanding-15-love": 77,
+    "understanding-17-groups": 95,
+    "understanding-12-helping": 115,
+    "wp-tools": 133,
+    "glossary": 136,
+    "notes": 139,
+    "series": 145,
+    "free": 146,
+    "jot": 147
    }
   },
   "book-4-share-the-load": {
@@ -230,7 +230,7 @@
    ],
    "pages": 154,
    "blank_pages": 3,
-   "bytes": 2124072,
+   "bytes": 2124706,
    "pdf": "book-4-share-the-load.pdf",
    "cover_pdf": "cover-book-4-share-the-load.pdf",
    "front_jpg": "cover-book-4-share-the-load-front.jpg",

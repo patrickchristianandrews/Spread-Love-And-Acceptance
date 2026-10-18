@@ -309,12 +309,12 @@ INDEX_TERMS = [
     ('separation', r'separat(?:e|ed|ing|ion)'), ('shift work', r'shift work(?:ers?)?|night shifts?|late shifts?|on shifts'), ('suicide', r'suicid(?:e|al)|ending (?:your|their|my) life'),
     # tools and the book's own words
     ('Calm-Down Kit', r'Calm-Down Kit', 1), ('daily check-in (90 seconds)', r'90-second'), ('How much are you carrying?', r'How much are you carrying', 1),
-    ('Lemonade Stand', r'Lemonade Stand', 1), ('monthly look-back', r'look-backs?'), ('One owner per job', r'One owner per job', 1),
+    ('Who does what? (the page)', r'Who does what\?', 1), ('monthly look-back', r'look-backs?'), ('One owner per job', r'One owner per job', 1),
     # (no "Professor Puddles" entry: he signs a hint on most pages now, so the list of pages would say nothing)
-    ('Say it so it lands', r'Say it so it lands', 1), ('See it from their side', r'See it from their side', 1),
-    ('self path', r'self path', 1), ('six-week program', r'six-week program'), ('Today’s Weather', r'Today’s Weather', 1),
-    ('Wavelength, Wave Code', r'Wavelength|Wave Code', 1), ('What keeps coming back?', r'What keeps coming back', 1),
-    ('Who did what', r'Who did what', 1), ('Wiring Card', r'Wiring Card', 1), ('rulebook from home', r'rulebook'),
+    ('Say it so it lands', r'Say it so it lands', 1), ('Rewind the talk', r'Rewind the talk', 1),
+    ('self path', r'self path', 1), ('six-week program', r'six-week program'), ('My weather today', r'My weather today', 1),
+    ('How you connect, Wave Code', r'How you connect|Wave Code', 1), ('What keeps coming back?', r'What keeps coming back', 1),
+    ('Who did what', r'Who did what', 1), ('“How to talk to me” card', r'How to talk to me', 1), ('rulebook from home', r'rulebook'),
     ('ledger', r'ledgers?'), ('five big ideas', r'big ideas?'), ('Is the setup working for everyone?', r'Is the setup working', 1),
     # researchers and thinkers
     ('Ainsworth, Mary', r'Ainsworth', 1), ('Aristotle', r'Aristotle', 1), ('Arendt, Hannah', r'Arendt', 1), ('Asch, Solomon', r'Asch', 1),
@@ -1155,8 +1155,8 @@ def glossary_terms(text):
         words_ = [name.split(' (')[0]] + [a.strip() for a in (also or '').split(',') if len(a.strip()) > 3]
         hits = sum(len(re.findall(r'\b%s\b' % re.escape(w), text, re.I)) for w in words_[:4])
         if hits >= 2:
-            out.append((gid, name, uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else '')),
-                        uk(gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1)))) if ex else '', words_[0]))
+            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))),
+                        tool_names(uk(gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1))))) if ex else '', words_[0]))
     have = {x[1].lower() for x in out}
     for gid, name, d, rx in GLOSS_EXTRA:
         if name.lower() not in have and re.search(r'\b(?:%s)\b' % rx, text, re.I):
@@ -1167,7 +1167,7 @@ def glossary_terms(text):
 
 # Definitions the book needs in its own words (the site's glossary.html has the web versions).
 GLOSS_OVERRIDE = {
-    'pressure': 'Pressure, in Today’s Weather, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
+    'pressure': 'Pressure, in My weather today, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
 }
 # Words from the chapters (Part Three above all) that the site's glossary doesn't define: (id, word, definition,
 # what to look for in the text). Each is printed only in a book whose chapters use it.
@@ -1180,9 +1180,9 @@ GLOSS_EXTRA = [
     ('psychological-safety', 'Psychological safety', 'A shared sense in a group or team that you can speak up, ask a question or admit a mistake without being punished or embarrassed (Amy Edmondson).', r'psychological safety'),
     ('groupthink', 'Groupthink', 'When a close group wants agreement so much that doubts go unsaid and a poor decision goes ahead. Irving Janis named it in 1972.', r'groupthink'),
     ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (usually a year or more for adults). It is treatable; a GP or doctor is a good first step.', r'prolonged grief'),
-    ('wave-code', 'Wave Code', 'Four letters from the Wavelength quiz, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
+    ('wave-code', 'Wave Code', 'Four letters from the style quiz in How you connect, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
     ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?: a load score from 0 (empty) to 1 (full). Under 0.30 is low, 0.30 to 0.59 moderate, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
-    ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. Today’s Weather calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
+    ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. My weather today calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
     ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book works the same way: see what is really going on, without blame, then change one small thing.', r'ledger'),
     ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),
     ('backstop', 'Backstop', 'The second name on a job: someone who notices if it slipped and checks in kindly. Not a supervisor. A job counts as owned once it has an owner; the backstop is a good habit on top.', r'backstops?'),
@@ -1203,6 +1203,18 @@ GLOSS_PLAIN = [
     ('WP-01 is a week’s log of who did what.', 'Who did what is a one-week log of the jobs each person did.'),
     ('a higher WP-02 score', 'a higher score there'),
 ]
+
+
+# print12: the site's tools were renamed (names12); the site glossary may still use an old name for a while
+TOOL_RENAMES = [('Today’s Weather', 'My weather today'), ('the Lemonade Stand', 'the “Who does what?” page'), ('The Lemonade Stand', 'The “Who does what?” page'),
+                ('Wiring Card', '“How to talk to me” card'), ('Wavelength', 'How you connect'), ('the step-by-step reset', 'Rewind the talk'),
+                ('Talk it through in writing', 'Write it through')]
+
+
+def tool_names(s):
+    for a, b in TOOL_RENAMES:
+        s = s.replace(a, b)
+    return s
 
 
 def gloss_plain(s):

@@ -1,5 +1,5 @@
 -- =====================================================================
--- The Objective Ledger (TOL-OS) — Household Dashboard schema
+-- Spread Love & Acceptance — Household Dashboard schema
 -- Run once in the Supabase SQL Editor (Dashboard → SQL Editor → New query).
 --
 -- Design rules this schema enforces, taken from the framework docs:

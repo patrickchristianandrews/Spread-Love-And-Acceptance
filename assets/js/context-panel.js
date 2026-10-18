@@ -73,7 +73,7 @@
   var ESL_RE = /\b(?:english (?:is|isn't|is not) (?:their|his|her|my|our) (?:second|third|first)|(?:second|2nd|other) language|not (?:their|his|her) first language|not a native (?:speaker|english speaker)|non-native|learning english|translat(?:e|es|ing|or|ion)|english isn't (?:their|his|her))\b/i;
   var LOUD_RE = /\b(?:(?:we're|we are|my family is|our family is|they're|they are|in my family|in our family|in their family)[^.]{0,30}\b(?:loud|blunt|direct|shout|yell|teas|sarcastic|swear))|\b(?:loud|blunt|direct) (?:family|culture|household)\b/i;
   var SHORT_RE = /\b(?:always|usually|normally|just) (?:writes?|texts?|replies|types?|answers?) (?:short|brief|one word|in one word)|\b(?:short|brief|one-word) (?:texts?|replies|messages)\b|\bnot (?:a|much of a) texter\b|\bhates texting\b/i;
-  var TEASE_RE = /\b(?:we|they|he|she) (?:always |often |)(?:tease|joke|banter|take the mick|take the piss|wind each other up|rib)\b|\bbanter\b|\bin-?jokes?\b/i;
+  var TEASE_RE = /\b(?:we|they|he|she) (?:always |often |)(?:tease|joke|banter|take the mick|take the piss|wind each other up|rib)\b|\bbanter\b|\bin-?jokes?\b|\b(?:we're|we are|we were|i'm|i was|they're|he's|she's) (?:just |only )?(?:joking|kidding|teasing|messing around)\b|\b(?:we|they) (?:always |often |)play (?:games|video games|board games|cards|chess|mario ?kart|\w+) together\b|\btrash[- ]talk/i;
   var KEEPS_RE = /\b(?:keeps? (?:coming|happening) (?:back|up)|again and again|same (?:fight|argument|thing) (?:again|every)|every (?:week|time|weekend)|for (?:months|years|ages)|we always (?:fight|argue) about)\b/i;
   var DEPL_RE = /\b(?:tired|exhausted|knackered|wiped|stressed|overwhelmed|ill|sick|unwell|poorly|migraine|long day|bad day|rough day|night shift|hasn't slept|no sleep|grieving|in pain)\b/i;
   var FIGHT_RE = /\b(?:argu(?:e|ed|ing|ment)|fight|fought|row(?:ed)?|yell(?:ed|ing)?|shout(?:ed|ing)?|snapp?ed|blew up|fell out)\b/i;
@@ -104,12 +104,12 @@
       words: words,
       short: words > 0 && (words <= 5 || hasF(['minimal', 'period'])),
       emoji: /[\u{1F300}-\u{1FAFF}☀-➿]/u.test(t),
-      tease: !!(an && an.banter) || hasF(['sarcasm', 'jab']) || (!an && /\b(?:lol|haha|jk|lmao)\b|😂|🤣|😜/i.test(t)),
+      tease: !!(an && an.banter) || !!(an && an.harm && an.harm.playful) || hasF(['sarcasm', 'jab']) || (!an && /\b(?:lol|haha|jk|lmao)\b|😂|🤣|😜/i.test(t)),
       point: !!(an && an.banterPoint) || hasF(['absolute', 'again', 'critic', 'blameq', 'jab']),
       direct: hasF(['oblig', 'impera', 'blunt', 'critic', 'should', 'minimal', 'period', 'urgent', 'cannot', 'closer']) || (!an && /^(?:do|send|call|stop|don't|get|bring|fix|tell|no)\b|\b(?:need to|have to|must)\b/i.test(t.trim())),
       hint: hasF(['hint', 'sarcasm', 'idiom', 'passiveag']) || (!!P() && P().idioms && P().idioms(t).length > 0),
       sharp: !!(an && an.staticIds && an.staticIds.length) || (!an && /\b(?:always|never|why can't you|whatever|fine\.)\b|!{2,}/i.test(t)),
-      hot: hasF(['swear', 'hostile', 'label', 'contempt', 'menace', 'control', 'violent', 'dxlabel']),
+      hot: hasF(['swear', 'hostile', 'label', 'contempt', 'menace', 'control', 'violent', 'dxlabel']) || !!(an && an.harm && !an.harm.playful && an.harm.kind !== 'idiom'),
       limit: !!(an && (an.care && ['no', 'rule'].indexOf(an.care.kind) !== -1 || an.parentLimit)) || hasF(['oblig', 'impera']) || /\b(?:not allowed|you can't|no,|home by|bed ?time|until your|grounded)\b/i.test(low),
       ask: !!(an && an.asks && an.asks.length) || /\?|\b(?:can you|could you|would you|please)\b/i.test(low)
     };
@@ -516,6 +516,8 @@
     var has = function (ids) { return ids.some(function (id) { return !!f[id]; }); };
     if (an && an.control && an.control.kind === 'fear') return 'afraid';
     if (an && an.danger) return '';
+    // a line that reads as a threat: the checker already says so, and the questions could only make it sound smaller
+    if (f.harm) return '';
     if (/\b(?:my money|our money|spend|spending|purchase|bills?|rent|account|card)\b/.test(t) && (has(['jab', 'blameq', 'absolute', 'control', 'oblig']) || (an && an.control))) return 'money';
     if (an && an.control && an.control.kind === 'degrade') return 'respect';
     if ((an && (an.control || an.ultOwn || (an.care && an.care.kind === 'no'))) || has(['threat', 'closer'])) return 'limits';

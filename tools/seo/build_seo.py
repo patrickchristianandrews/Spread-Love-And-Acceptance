@@ -20,7 +20,7 @@ import html, json, os, re, subprocess, sys, datetime
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 SITE = 'https://spreadloveandacceptance.com'
 BRAND = 'Spread Love & Acceptance'
-PROGRAM = 'The Objective Ledger'
+BOOK_NAME = BRAND   # the book series has the site's name
 EMAIL = 'patrick.christian.andrews@gmail.com'
 OG_IMAGE = SITE + '/assets/img/og-image.png'
 LOGO = SITE + '/assets/img/logo-stacked.png'
@@ -33,7 +33,7 @@ SITE_VERIFY = {'google-site-verification': '', 'msvalidate.01': ''}
 SKIP_DIRS = ('.claude', '.git', 'node_modules', 'tools', 'manuscript', 'notes', 'infrastructure', 'data', 'assets', '.well-known')
 SKIP_FILES = {'404.html', 'offline.html'}
 
-ABOUT_ORG = ('Spread Love & Acceptance is a young, independent start-up building The Objective Ledger: a free, '
+ABOUT_ORG = ('Spread Love & Acceptance is a young, independent start-up building a free, '
              'growing suite of self-help tools for understanding yourself and sharing life kindly with the people '
              'around you. It brings together practical relationship tools, gentle games, calm breathing and sound '
              'spaces, and a plain-language library, with new tools and content added all the time. Everything you '
@@ -70,10 +70,10 @@ OVERRIDE = {
         'New here? Start with the one idea behind Spread Love & Acceptance: understand yourself first, then share the load '
         'kindly. The best first steps, free tools and a six-week path for calmer, kinder relationships.'),
     'five-pillars.html': (None,
-        'The five simple ideas behind The Objective Ledger: see the whole load, fix the setup not the person, read your '
+        'The five simple ideas behind the program: see the whole load, fix the setup not the person, read your '
         'state first, tune how you send and receive, and notice the quiet incentives. Kindness and fairness, made practical.'),
     'relationships.html': (None,
-        'How The Objective Ledger helps every kind of relationship: partners, family, co-parents, friends, roommates, '
+        'How the program helps every kind of relationship: partners, family, co-parents, friends, roommates, '
         'coworkers and caregivers. Fair ways to share the load, kinder words and calmer check-ins.'),
     'turning-toward.html': (None,
         'Connection is built in small, everyday moments. Seven simple practices for love and appreciation: noticing when '
@@ -115,13 +115,13 @@ OVERRIDE = {
         'Someone sent you Spread Love & Acceptance? Here is what they can and can’t see, what stays yours, and kind ways '
         'to say yes, not yet or no. Nothing is entered about you without you.'),
     'about.html': (None,
-        'The story behind Spread Love & Acceptance and The Objective Ledger: a career auditing complex systems, a '
+        'The story behind Spread Love & Acceptance: a career auditing complex systems, a '
         'lifetime of wondering how people work, and a free, growing suite of tools for kinder relationships.'),
     'legal/privacy-policy.html': ('Privacy Policy', 'How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.'),
-    'legal/terms-of-service.html': ('Terms of Service', 'The terms for using Spread Love & Acceptance and The Objective Ledger.'),
+    'legal/terms-of-service.html': ('Terms of Service', 'The terms for using Spread Love & Acceptance.'),
     'legal/refund-policy.html': ('Refund Policy: Nothing Is Sold, Nothing to Refund', 'Everything on Spread Love & Acceptance is free, with no paid version, so there is nothing to refund. What to do if anyone charged you.'),
-    'architecture/architecture.html': ('The site’s architecture, in detail', 'The full technical picture of how The Objective Ledger is put together: pages, tools, privacy and how it all connects.'),
-    'architecture/index.html': ('How the site is built', 'How The Objective Ledger is designed and built, and why.'),
+    'architecture/architecture.html': ('The site’s architecture, in detail', 'The full technical picture of how the site is put together: pages, tools, privacy and how it all connects.'),
+    'architecture/index.html': ('How the site is built', 'How the site is designed and built, and why.'),
 }
 
 # search-led titles and descriptions: what people type, in plain words (title without the site name)
@@ -166,7 +166,7 @@ SEARCH = {
  'wavelength.html': ('Wavelength: Free Communication Style Quiz and Self-Discovery Guide', 'A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.'),
  'perspective-shifter.html': ('The Perspective Shifter: See It From Their Side', 'A simple tool for seeing a moment from someone else’s side: their state, wiring, surroundings and history, and what each of you could and couldn’t see.'),
  'polymath.html': ('The Polymath Way: How Every Field Connects', 'How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined thirteen fields into one program you can learn.'),
- 'about.html': ('About Spread Love & Acceptance', 'The story behind Spread Love & Acceptance and The Objective Ledger: a free, growing suite of tools for kinder, fairer relationships.'),
+ 'about.html': ('About Spread Love & Acceptance', 'The story behind Spread Love & Acceptance: a free, growing suite of tools for kinder, fairer relationships.'),
  'book/preface.html': ('Preface: The work nobody sees', 'The preface: the planning, remembering and noticing that keeps a home running, why it goes unseen, and how seeing it changes everything.'),
  'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in what we see and expect add up over time.'),
  'book/chapter-2.html': ('Chapter II: Is the split working?', 'Chapter II: a fair way to ask whether the household split is working for everyone, counting time, effort and the invisible jobs.'),
@@ -201,7 +201,7 @@ SEARCH.update({
  'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole mental load, fix the setup instead of the person, read your stress first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Families and Roommates', 'Free ways to share chores fairly, use kinder words and hold calmer check-ins, for couples, families, co-parents, friends, roommates, coworkers and caregivers.'),
- 'about.html': ('About Spread Love & Acceptance and Its Creator', 'Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: a career auditing systems, and a free, growing suite of kindness tools.'),
+ 'about.html': ('About Spread Love & Acceptance and Its Creator', 'Meet Christian, the creator of Spread Love & Acceptance: a career auditing systems, and a free, growing suite of kindness tools.'),
  'how-it-works.html': ('How It Works: An Outside Look at Yourself', 'How the program works: a calm, outside view of your life situation, your wiring and what you notice, like an honest auditor with no verdict on your worth.'),
  'contents.html': ('Contents: Every Free Tool, Guide and Chapter', 'Everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.'),
  'is-this-for-you.html': ('Is This Right for You? What It Is and Isn’t', 'A free self-help program for your own stress and reactions, and a fair way for two people to see what each carries at home. Education, not counseling.'),
@@ -255,9 +255,9 @@ SEARCH.update({
  'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the two-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
- 'book/index.html': ('The Book: The Objective Ledger, Free to Read Online', 'Read the whole free book in order, like any book: 24 chapters in three parts on yourself, sharing a life, and understanding people. Short and full versions, or all of it on one page to print.'),
- 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of The Objective Ledger, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
- 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of The Objective Ledger in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
+ 'book/index.html': ('The Book: Free to Read Online', 'Read the whole free book in order, like any book: 24 chapters in three parts on yourself, sharing a life, and understanding people. Short and full versions, or all of it on one page to print.'),
+ 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
+ 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/preface.html': ('Preface: The work nobody sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
  'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in pace, tone and what we expect add up, plus how to get back in tune.'),
  'book/chapter-2.html': ('Chapter II: Is the split working?', 'Chapter II: a fair way to ask whether the division of labor at home is working for everyone, counting time, effort and the invisible jobs, never blame.'),
@@ -293,8 +293,8 @@ SEARCH.update({
  # cut-off descriptions
  'complacency-in-depth.html': (None, 'Why good things fade into the background, the quiet signs of complacency, how it shows up in yourself and in every kind of relationship, and the small, kind re-checks that keep things alive.'),
  'check-ins-in-depth.html': (None, 'How to hold a hard conversation kindly: a calm time and place, listening before any reply, a reply that does not erase what was heard, and a plan for both.'),
- 'contents-in-depth.html': (None, 'Everything in The Objective Ledger, in three parts: self-discovery tools, relationship tools for any two people, and where to start in each relationship.'),
- 'how-it-works-in-depth.html': (None, 'How The Objective Ledger works in full: an outside look at your life situation, your wiring and what you discover, and why the technical layer is optional.'),
+ 'contents-in-depth.html': (None, 'Everything in the program, in three parts: self-discovery tools, relationship tools for any two people, and where to start in each relationship.'),
+ 'how-it-works-in-depth.html': (None, 'How the program works in full: an outside look at your life situation, your wiring and what you discover, and why the technical layer is optional.'),
  'learn/index-in-depth.html': (None, 'Twelve real stories from philosophy on knowing yourself and living well with others, retold in plain language and linked to the chapters and worksheets.'),
  'wired-differently-in-depth.html': (None, 'How autistic, ADHD, dyslexic, anxious, highly sensitive and neurotypical people can hear the same sentence in very different ways, with examples and research.'),
  'growing-up-in-depth.html': (None, 'A plain-language guide to the stages of growing up and the lens each one leaves: the big question at each stage, why timing matters, and family and culture.'),
@@ -304,7 +304,7 @@ SEARCH.update({
  'workpapers/wp-13-daily-check-in-in-depth.html': (None, 'The full 90-second daily check-in for couples and housemates: a short, easy daily talk that keeps two people in step with small, steady corrections.'),
  'infographic.html': ('The Whole Idea on One Printable Page', 'The whole idea on one printable page: the Five Pillars, how an unowned chore turns into resentment, the Lemonade Stand chore tracker, and three kind phrases.'),
  'frequency-framework.html': ('The Frequency Framework: Getting Back in Step', 'Two people can each run on their own rhythm for money, rest, decisions, talking and values. Why kind people fall out of step, and how to find the beat again.'),
- 'suite-index-in-depth.html': (None, 'An honest index of everything that is live today in The Objective Ledger Workpaper Suite: each chapter, worksheet and calculator you can use right now.'),
+ 'suite-index-in-depth.html': (None, 'An honest index of everything that is live today in the Workpaper Suite: each chapter, worksheet and calculator you can use right now.'),
  'program-overview.html': (None, 'How the program fits together: the chapters explain the ideas and the worksheets put them to use. It also says plainly what is built today and what is not yet.'),
  # new guides
  'invisible-labor-mental-load.html': ('Invisible Labor and the Mental Load: How to Share It', 'What invisible labor and the mental load are, real examples from everyday home life, and five calm steps couples and families can use to share it fairly.'),
@@ -400,7 +400,7 @@ SEARCH.update({
  'how-you-take-things-in.html': ('How You Take Things In: Make the Site Fit Your Mind', 'Pick how your mind takes things in, by neurotype (ADHD, autistic, dyslexic and more) or plain preferences, and every page adapts. Optional, on your device.'),
  'someone-sent-you-this.html': ('Someone Sent You This Link? No Pressure, Here’s What It Is', 'Someone sent you a link to Spread Love & Acceptance? What it is in three lines. You don’t have to do anything, and nothing you type leaves your phone.'),
  'roadmap.html': ('Content Roadmap: What’s Live and What’s Next', 'Everything live today, all free: the whole book (26 chapters and an afterword), ten workpapers, two calculators, the tools, the guides and the calm corner.'),
- 'telemetry.html': ('Rollout Status: What Is Live Today', 'What is live today in The Objective Ledger, as plain counts: the whole book, the workpapers, the calculators, the tools and the six-week program.'),
+ 'telemetry.html': ('Rollout Status: What Is Live Today', 'What is live today on the site, as plain counts: the whole book, the workpapers, the calculators, the tools and the six-week program.'),
  'method-and-limits.html': ('Method and Limits: How the Scores Work', 'The main scores on the site written out: how each one is worked out, the cut-offs, and what it cannot tell you.'),
  'membership.html': ('Email Updates (Optional)', 'Everything on spreadloveandacceptance.com is free and open to everyone, with no account and no paid version. Email updates are optional.'),
  # chores, the mental load and fairness at home
@@ -455,10 +455,10 @@ SEARCH.update({
  'nervous-system.html': ('How to Calm Your Nervous System, in Plain Words', 'How your nervous system works: the stress response, fight, flight and freeze, the window of tolerance, the vagus nerve, and what helps you settle.'),
  'calming-supplements.html': ('Calming Supplements for Anxiety: What Research Says', 'Supplements, herbs, foods and practices for anxiety, stress, sleep and mood, graded honestly, with side effects, interactions and when to get help.'),
  # the book
- 'book/index.html': ('Free Self-Help Book Online: The Objective Ledger', 'Read the whole self-help book free online: 26 chapters in three parts on yourself, sharing a life fairly and understanding people. No sign-up, no account.'),
- 'book/download.html': ('The Objective Ledger: The Book as Free PDFs', 'Free PDFs of the book, sent for an email address: the whole book, the book for one person, for two or more, or Understanding People, short or full.'),
- 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of The Objective Ledger, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
- 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of The Objective Ledger in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
+ 'book/index.html': ('Free Self-Help Book Online: Spread Love & Acceptance', 'Read the whole self-help book free online: 26 chapters in three parts on yourself, sharing a life fairly and understanding people. No sign-up, no account.'),
+ 'book/download.html': ('The Book as Free PDFs', 'Free PDFs of the book, sent for an email address: the whole book, the book for one person, for two or more, or Understanding People, short or full.'),
+ 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
+ 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/for-yourself.html': ('The Book for One Person: Know Yourself, Understand People', 'Part One (yourself) and Part Three (understanding people) of the free book on one page: everything you can read and use on your own. No sign-up.'),
  'book/for-yourself-in-depth.html': ('The Book for One Person (Full Versions)', 'Part One and Part Three of the free book in their full versions, on one page: the research, more examples and more to try on your own. No sign-up.'),
  'book/together.html': ('The Book for Two or More: Sharing a Home Fairly', 'Part Two of the free book on one page: sharing a home, work or care fairly with partners, family, housemates, co-parents or coworkers. No sign-up.'),
@@ -700,7 +700,6 @@ def text_of(s):
 def clean_title(t, path):
     t = text_of(t)
     t = re.sub(r'\s*[\(\[]?TOL-OS[\)\]]?', '', t).strip(' —·|-')
-    t = re.sub(r'\s*[—·|]\s*The Objective Ledger\s*$', '', t).strip()
     t = re.sub(r'\s*[—·|]\s*$', '', t)
     if BRAND in t:
         return t
@@ -820,7 +819,7 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
     graph = []
     if path in ('index.html', 'about.html'):
         graph.append({'@type': 'Organization', '@id': SITE + '/#org', 'name': BRAND,
-                      'alternateName': [PROGRAM, 'Spread Love and Acceptance', 'spreadloveandacceptance'],
+                      'alternateName': ['Spread Love and Acceptance', 'spreadloveandacceptance'],
                       'url': SITE + '/', 'logo': {'@type': 'ImageObject', '@id': SITE + '/#logo', 'url': LOGO, 'contentUrl': LOGO, 'caption': BRAND},
                       'image': {'@id': SITE + '/#logo'}, 'email': EMAIL, 'slogan': TAGLINE, 'description': ABOUT_ORG,
                       'founder': AUTHOR,
@@ -828,9 +827,9 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
                                      'mental load', 'invisible labor', 'division of labor at home', 'household chores for couples', 'calm',
                                      'breathing exercises', 'mindfulness', 'neurodiversity', 'neurodivergent relationships', 'self-discovery']})
         graph.append(dict(AUTHOR, **{'jobTitle': 'Creator of ' + BRAND, 'worksFor': {'@id': SITE + '/#org'},
-                                     'description': 'Christian (they/them) created ' + BRAND + ' and ' + PROGRAM + ' after working as a government auditor.'}))
+                                     'description': 'Christian (they/them) created ' + BRAND + ' after working as a government auditor.'}))
     if path == 'index.html':
-        graph.append({'@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'alternateName': [PROGRAM, 'Spread Love and Acceptance'],
+        graph.append({'@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'alternateName': ['Spread Love and Acceptance'],
                       'url': SITE + '/', 'description': desc, 'inLanguage': 'en-US', 'publisher': {'@id': SITE + '/#org'}, 'keywords': ', '.join(kw),
                       # explore.html reads ?q= and searches every page on the site
                       'potentialAction': {'@type': 'SearchAction', 'target': {'@type': 'EntryPoint', 'urlTemplate': SITE + '/explore.html?q={search_term_string}'},
@@ -849,12 +848,12 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
     elif re.search(ARTICLES, path):
         art = dict(common, **{'@type': 'Article', 'author': AUTHOR, 'mainEntityOfPage': {'@type': 'WebPage', '@id': url}})
         if path.startswith('book/'):
-            art['isPartOf'] = {'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'url': SITE + '/book/', 'author': AUTHOR, 'publisher': publisher}
+            art['isPartOf'] = {'@type': 'Book', '@id': BOOK_ID, 'name': BOOK_NAME, 'url': SITE + '/book/', 'author': AUTHOR, 'publisher': publisher}
         graph.append(art)
     else:
         graph.append(dict(common, **{'@type': 'WebPage'}))
     if path in ('book/index.html', 'book/download.html'):
-        book = {'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'alternateName': 'The Objective Ledger: a free self-help book on knowing yourself, sharing the load and understanding people',
+        book = {'@type': 'Book', '@id': BOOK_ID, 'name': BOOK_NAME, 'alternateName': BOOK_NAME + ': a free self-help book on knowing yourself, sharing the load and understanding people',
                 'description': BOOK_DESC, 'url': SITE + '/book/', 'author': AUTHOR, 'publisher': publisher, 'inLanguage': 'en-US',
                 'bookFormat': 'https://schema.org/EBook', 'isAccessibleForFree': True, 'image': OG_IMAGE, 'genre': ['Self-help', 'Psychology', 'Relationships'],
                 # the free PDF editions (book/download.html asks for an email address before the files download)
@@ -1153,7 +1152,7 @@ GROUPS = [
 
 def write_llms(report):
     by = {p: (t, d) for p, t, d, _ in report}
-    intro = ['# ' + BRAND + ' (' + PROGRAM + ')', '',
+    intro = ['# ' + BRAND, '',
              '> ' + ABOUT_ORG, '',
              'Key facts:',
              '- Website: ' + SITE + '/ . Free to use: every page, tool and chapter is open to everyone, with no sign-up, no account and no paid version. Email updates are optional.',

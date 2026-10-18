@@ -1,5 +1,5 @@
 /*
-  tol-fullpath-pdf.js — The Objective Ledger (TOL-OS)
+  tol-fullpath-pdf.js — Spread Love & Acceptance
   The Full path package as PDFs, all made and read on this device:
 
     packagePdf(data)  One fillable PDF for a whole road: cover and how-to,

@@ -428,7 +428,7 @@
   }
   // a page's name without the site name search engines see ("Our Logo · Spread Love & Acceptance" → "Our Logo")
   function pageName(t) {
-    var s = String(t || '').replace(/\s*[—|–·-]\s*(Spread Love (&|and) Acceptance|The Objective Ledger)\b.*$/, '').trim();
+    var s = String(t || '').replace(/\s*[—|–·-]\s*(Spread Love (&|and) Acceptance)\b.*$/, '').trim();
     return s || String(t || '');
   }
   // page furniture that slips into a passage ("Then test your ask in the Signal Translator →", "What’s this?") reads as noise in a chat
@@ -491,7 +491,7 @@
       'know your own wiring three layers of why I react this way wiring shaped patterns today s conditions where is this feeling coming from', ['/know-yourself-in-depth.html#layers', '/know-yourself-in-depth.html#source', '/know-yourself.html', '/know-yourself-in-depth.html']],
     [/\bwho (made|makes|created|built|wrote|writes|runs|is behind|started)\b|\bwho are you guys\b|\b(the )?(author|creator|founder)\b/, 'Christian auditor creator', '/about'],
     [/^(is (it|this|the site|everything) free|how much (does it|is it|does this) cost|what does it cost|is there a (fee|charge|subscription))/, 'free no account no paid version', '/ways-in'],
-    [/^what is (this|this site|the objective ledger|tol)$|^what s this( site)?$/, 'The Objective Ledger shared ledger what it is', '/start-here.html'],
+    [/^what is (this|this site)$|^what s this( site)?$/, 'Spread Love and Acceptance shared ledger what it is', '/start-here.html'],
     [/\b(we|they|you) (each|both|all) think (we|they|you|i) do (more|most)|\bwho (really )?does more\b|\b(why )?(do|does) (everyone|we both|we each) (think|feel) (they|we) do more/, 'why we each think we do more egocentric bias own share', '/library/fairness.html'],
     [/\bi (do|handle|carry|remember) (everything|it all|all of it|all the \w+|most of the \w+)|\bnobody (sees|notices|thanks me for) (what|how much) i do|\bi m the only one who\b/, 'invisible work nobody sees unbilled debt', '/book/preface'],
     // work and teams: "my team of seven", "my staff", "Slack", "my manager"
@@ -756,7 +756,7 @@
         if (top.length) blocks.push({ k: 'p', x: 'If you answered in the page’s order, the heaviest part right now is ' + top.join(' and ') + '. That’s worth naming, even just to yourself.' });
         blocks.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
         blocks.push({ k: 'links', x: safeLinks([['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html'],
-          v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['How am I right now? (Today’s Weather)', '/quick-checks.html#today']]) });
+          v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['My weather today (Today’s Weather)', '/quick-checks.html#today']]) });
         return { blocks: blocks, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How does this feed CALC-01?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'battery score' };
       }
       var one = n.filter(function (x) { return x <= 1; });
@@ -833,7 +833,7 @@
           { k: 'p', x: 'Out of ' + (a + b) + ' hours, that’s ' + Math.round(pa) + '% and ' + Math.round(pb) + '%. Workload balance is 1 − |' + Math.round(pa) + ' − ' + Math.round(pb) + '| ÷ 100 = ' + r2(wbv) + ' (1.00 means perfectly even, 0.00 means completely one-sided).' },
           { k: 'p', x: 'The math doesn’t care who carries more, only that the load isn’t shared. For three or more people, the Lemonade Stand and CALC-01 work it out from everyone’s hours for you.' },
           { k: 'note', x: 'Pillar I, See the whole load. ' + NOT_VERDICT },
-          { k: 'links', x: [['The Lemonade Stand', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html']] }],
+          { k: 'links', x: [['Who does what? (the Lemonade Stand)', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html']] }],
           chips: [{ label: 'What do I do with this?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'workload balance' };
       }
     }
@@ -1663,7 +1663,7 @@
   }
   function leftOff(state) {
     var L = state.last;
-    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: How am I right now? (Today’s Weather) keeps an almanac of the readings you save, After a talk went wrong (the Carrier Wave Decoder) keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
+    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: My weather today (Today’s Weather) keeps an almanac of the readings you save, Rewind the talk (the Carrier Wave Decoder) keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
     if (L && (L.topic || L.q)) {
       var what = L.topic || '“' + String(L.q).slice(0, 60) + '”';
       return { blocks: [{ k: 'p', x: 'We were last talking about ' + what + '. Want to carry on with that, or start something new?' }, tail],

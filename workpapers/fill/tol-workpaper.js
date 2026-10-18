@@ -1,5 +1,5 @@
 /*
-  tol-workpaper.js — The Objective Ledger (TOL-OS)
+  tol-workpaper.js — Spread Love & Acceptance
   Renders a fill-in workpaper from tol-workpaper-schemas.js and turns the
   entries into a PDF with tol-pdf.js.
 

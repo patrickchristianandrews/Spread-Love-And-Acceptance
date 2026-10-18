@@ -1,5 +1,5 @@
 /*
-  tol-suite.js — The Objective Ledger (TOL-OS)
+  tol-suite.js — Spread Love & Acceptance
   The Workpaper Suite: choose your road (just you, a kind of relationship, or
   the 6-week program), fill in its workpapers in order, bring in drafts and
   filled-in PDFs, and make one PDF you can fill in or print, plus a report

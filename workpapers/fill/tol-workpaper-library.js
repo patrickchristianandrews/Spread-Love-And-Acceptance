@@ -1,5 +1,5 @@
 /*
-  tol-workpaper-library.js — The Objective Ledger (TOL-OS)
+  tol-workpaper-library.js — Spread Love & Acceptance
   Ready-made content for the fill-in workpapers, so nobody starts from a blank page:
 
   - TOL_TASK_LIBRARY(road, kind): 60 to 100 common jobs for each road, grouped, including

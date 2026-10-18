@@ -56,7 +56,8 @@
       var off = (rows++ % 2) ? gap / 2 : 0;
       for (var x = -HX + R + off; x <= HX - R; x += gap) if (Math.random() < 0.96) items.push(mk(x + (Math.random() - 0.5) * 0.04, z - Math.random() * 0.05, 'coin'));
     }
-    st.pending.forEach(function (id, i) { items.push(mk(-2 + i * 2 + Math.random(), 0.4 + Math.random(), 'prize', id)); });
+    st.pending = st.pending.filter(function (id, i, a) { return a.indexOf(id) === i && charById(id); }).slice(0, 3);
+    st.pending.forEach(function (id, i) { items.push(mk(-2.5 + i * 2.5 + Math.random() * 0.5, ZE - 2.2 + Math.random() * 0.4, 'prize', id)); });
     for (var k = 0; k < 90; k++) step(1 / 60, true);
   }
   function fieldCount() { var n = 0; for (var i = 0; i < items.length; i++) if (items[i].st !== 'gone') n++; return n; }
@@ -133,12 +134,12 @@
     clink(1.3, 0.35);
     return true;
   }
-  // prizes: a fair chance with every coin, and never more than 8 coins without one
+  // prizes: a fair chance with every coin, and never more than 6 coins without one
   function maybePrize(x) {
     var onField = items.filter(function (q) { return q.kind === 'prize' && q.st !== 'gone'; }).length;
     var all = D.chars.length, have = Object.keys(st.found).length;
-    if (onField >= 2) return;
-    var chance = have >= all ? 0.04 : st.since >= 8 ? 1 : 0.11;
+    if (onField >= 3) return;
+    var chance = have >= all ? 0.04 : st.since >= 6 ? 1 : 0.14;
     if (Math.random() >= chance) return;
     var pend = st.pending, open = D.chars.filter(function (c) { return !st.found[c.id] && pend.indexOf(c.id) < 0; });
     var pick;
@@ -146,19 +147,21 @@
     else { var any = D.chars.filter(function (c) { return pend.indexOf(c.id) < 0; }); pick = any[Math.floor(Math.random() * any.length)]; }
     if (!pick) return;
     st.since = 0; st.pending.push(pick.id);
-    var p = mk(Math.max(-HX + RP, Math.min(HX - RP, x + (Math.random() - 0.5) * 1.2)), Math.max(pf, PF_MID - PF_AMP) + RP + 0.2, 'prize', pick.id);
+    // a medallion bounces in and lands toward the front, so it reaches the edge in a few dozen coins, not hundreds
+    var p = mk(Math.max(-HX + RP, Math.min(HX - RP, x + (Math.random() - 0.5) * 1.6)), ZE - 1.3 - Math.random() * 0.7, 'prize', pick.id);
     p.st = 'drop'; p.y = 2.8; items.push(p);
     say('A medallion dropped in with your coin. Push it over the edge to meet who is on it.');
     if (view && view.prizeAdded) view.prizeAdded(p);
   }
 
   // ---------- what falls off the edge
-  var burst = [], burstTimer = 0;
+  var burst = [], burstTimer = 0, burstAge = 0;
   function landed(a) {
     if (a.kind === 'prize') { gotPrize(a.pid); return; }
     st.meter++;
     if (st.meter % 3 === 0 && st.cup < CUPMAX) st.cup++;
-    burst.push(st.meter); burstTimer = 1.1;
+    if (!burst.length) burstAge = 0;
+    burst.push(st.meter); burstTimer = 0.8;
     trayAdd();
     chime(burst.length);
     sparkleAt(a.x, ZE + 0.6);
@@ -166,10 +169,10 @@
   }
   function endBurst() {
     var n = burst.length, first = burst[0] - 1, last = burst[n - 1]; burst = [];
-    if (n >= 4) { shake(Math.min(1, n / 8)); lights('sparkle', 1.6); dropJingle(n); }
+    if (n >= 5) { shake(Math.min(1, n / 10)); lights('sparkle', 1.6); dropJingle(n); }
     var crossed5 = Math.floor(last / 5) > Math.floor(first / 5);
-    if (!crossed5 && n < 4) return;
-    var tier = n >= 7 ? 3 : n >= 4 ? 2 : 1;
+    if (!crossed5 && n < 5) return;
+    var tier = n >= 9 ? 3 : n >= 5 ? 2 : 1;
     if (Math.floor(last / 100) > Math.floor(first / 100)) tier = 3;
     else if (Math.floor(last / 25) > Math.floor(first / 25)) tier = Math.max(tier, 2);
     if (crossed5 || tier > 1) showTip(tier, n);
@@ -195,7 +198,7 @@
     if (st.tips.indexOf(tip.id) < 0) st.tips.push(tip.id);
     save(); tipsList();
     var L = toolLink(tip);
-    card('tip t' + tip.tier, (n >= 4 ? 'A big push of ' + n + ' coins · ' : '') + TIER_NAME[tip.tier], tip.t,
+    card('tip t' + tip.tier, (n >= 5 ? 'A big push of ' + n + ' coins · ' : '') + TIER_NAME[tip.tier], tip.t,
       '<p>' + esc(tip.b) + '</p><p class="cp-card-go"><a href="' + esc(L.href) + '">Read more: ' + esc(L.name) + ' <span aria-hidden="true">→</span></a></p>');
     bell(tip.tier);
   }
@@ -207,7 +210,7 @@
     if (!c) { save(); return; }
     var isNew = !st.found[c.id];
     if (isNew) { st.found[c.id] = Date.now(); st.dup = 0; }
-    else { st.dup++; st.cup = Math.min(CUPMAX + 5, st.cup + 3); }
+    else { st.dup++; st.cup = Math.max(st.cup, Math.min(CUPMAX + 5, st.cup + 3)); }
     save(); hud(); shelf();
     var have = Object.keys(st.found).length, all = D.chars.length;
     var img = '<img class="cp-card-med" alt="" src="' + medURL(c, true) + '" width="88" height="88">';
@@ -491,6 +494,7 @@
     var wood = new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.62, metalness: 0.05 });
     var woodDark = new THREE.MeshStandardMaterial({ map: woodTex, color: 0x8A6A58, roughness: 0.7 });
     var brass = new THREE.MeshStandardMaterial({ color: 0xD4A94E, metalness: 0.85, roughness: 0.3 });
+    var trayMat = new THREE.MeshStandardMaterial({ color: 0x9C7330, metalness: 0.7, roughness: 0.45 });
     var felt = new THREE.MeshStandardMaterial({ map: feltTex, roughness: 0.95 });
     var glass = new THREE.MeshStandardMaterial({ color: 0xDDEEFF, transparent: true, opacity: 0.16, roughness: 0.05, metalness: 0.1, depthWrite: false });
     function box(w, h, d, mat, x, y, z) { var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); scene.add(m); return m; }
@@ -541,7 +545,7 @@
     box(HX * 2, 0.08, 0.08, brass, 0, 2.55 - 0.9, -3.55);
     // the tray
     var trayZ = ZE + 1.0, trayY = -1.2;
-    box(HX * 2 + 0.2, 0.1, 1.6, brass, 0, trayY - 0.05, trayZ);
+    box(HX * 2 + 0.2, 0.1, 1.6, trayMat, 0, trayY - 0.05, trayZ);
     box(HX * 2 + 0.2, 0.36, 0.1, brass, 0, trayY + 0.13, trayZ + 0.8);
     box(HX * 2 + 1.9, 3, 0.4, wood, 0, trayY - 1.6, trayZ + 1.0);
     box(HX * 2 + 1.9, 0.12, 0.5, brass, 0, trayY + 0.0, trayZ + 1.05);
@@ -619,7 +623,7 @@
         dancers.forEach(function (s, j) {
           s.visible = on; if (!on) return;
           var col = j % 11, row = Math.floor(j / 11);
-          s.position.set(-4.2 + col * 0.84, 4.7 + row * 0.9 + Math.abs(Math.sin(t * 6 + j)) * 0.35, ZB - 0.1 + row * 0.2);
+          s.position.set(-4.2 + col * 0.84, 4.25 - row * 0.95 + Math.abs(Math.sin(t * 6 + j)) * 0.22, ZB + 0.5);
           s.material.rotation = Math.sin(t * 5 + j) * 0.3;
         });
       }
@@ -760,15 +764,17 @@
   new MutationObserver(function () { view && view.theme(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
   // ---------- the loop (stops while the tab is hidden)
-  var raf = 0, last = 0, acc = 0, resting = false, humTick = 0, frames = [];
+  var raf = 0, last = 0, acc = 0, resting = false, humTick = 0, frames = [], simMs = 0;
   function frame(now) {
     raf = requestAnimationFrame(frame);
     var dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60; last = now;
     frames.push(dt); if (frames.length > 120) frames.shift();
-    acc += dt; var steps = 0;
+    acc += dt; var steps = 0, c0 = performance.now();
     while (acc >= 1 / 60 && steps < 6) { step(1 / 60); acc -= 1 / 60; steps++; }
     if (steps === 6) acc = 0;
-    if (burstTimer > 0) { burstTimer -= dt; if (burstTimer <= 0) endBurst(); }
+    simMs = simMs * 0.95 + (performance.now() - c0) * 0.05;
+    // a push ends after a quiet moment, or after 2.5 seconds of coins, so a long trickle isn't one giant push
+    if (burstTimer > 0) { burstTimer -= dt; burstAge += dt; if (burstTimer <= 0 || burstAge > 2.5) { burstTimer = 0; endBurst(); } }
     if ((humTick += dt) > 0.12) { humTick = 0; hum((pf - pfPrev) * 60 / 6); }
     view.render(dt); drawFx(dt);
   }
@@ -782,8 +788,10 @@
 
   // for checks: window.TOLCoinPusher.stats()
   window.TOLCoinPusher = {
-    stats: function () { var s = frames.slice().sort(function (a, b) { return a - b; }); return { view: view && view.kind, calm: calm, coins: fieldCount(), meter: st.meter, cup: st.cup, found: Object.keys(st.found).length, tips: st.tips.length, p50: s[Math.floor(s.length / 2)] * 1000, p95: s[Math.floor(s.length * 0.95)] * 1000 }; },
-    drop: function (x) { return dropCoin(x == null ? aimX : x); }
+    stats: function () { var s = frames.slice().sort(function (a, b) { return a - b; }); return { view: view && view.kind, calm: calm, coins: fieldCount(), meter: st.meter, cup: st.cup, found: Object.keys(st.found).length, tips: st.tips.length, p50: s[Math.floor(s.length / 2)] * 1000, p95: s[Math.floor(s.length * 0.95)] * 1000, simMs: simMs }; },
+    drop: function (x) { return dropCoin(x == null ? aimX : x); },
+    // run the machine for a while without drawing (for checks)
+    run: function (secs) { for (var i = 0; i < Math.round(secs * 60); i++) { step(1 / 60); if (burstTimer > 0) { burstTimer -= 1 / 60; burstAge += 1 / 60; if (burstTimer <= 0 || burstAge > 2.5) { burstTimer = 0; endBurst(); } } } return this.stats(); }
   };
 
   // ---------- go

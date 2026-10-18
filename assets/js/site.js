@@ -1024,7 +1024,7 @@
     '/polymath.html#connect': 'Learn by doing: connect two fields of study',
     '/quest.html': 'Learn by doing: your learning map (quest map)',
     '/pause-and-play.html': 'Gentle games: every calm game in one place (Pause & Play)',
-    '/frequency-journey.html': 'Gentle games: five arcade games (Tidbit and Sugarfoot’s Arcade)',
+    '/frequency-journey.html': 'Gentle games: six arcade games (Tidbit and Sugarfoot’s Arcade)',
     '/word-bloom.html': 'Gentle games: swipe-to-spell word game (Word Bloom)',
     '/quiet-words.html': 'Gentle games: calm word search (Quiet Words)',
     '/quiet-crossword.html': 'Gentle games: crosswords, gentle levels (Quiet Crossword)',
@@ -1249,7 +1249,7 @@
   function rememberPage(body) {
     if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
-    var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*(Spread Love|The Objective Ledger).*$/, '');
+    var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*Spread Love.*$/, '');
     if (!t) return;
     if (inDepth) t += ' (full version)';
     var u = location.pathname, list = [];
@@ -5168,7 +5168,7 @@
   // ---- where a "Share" button sits on its own: content pages, the tools (the link only), kids' pages and games ----
   var SHARE_BLURB = 'Free, kind tools for sharing the load at home.';
   var SHARE_PAGES = [
-    [/^\/book\/(preface|chapter-\d|self-\d-[a-z]+|understanding-\d+-[a-z-]+)(-in-depth)?\.html$/, 'Share this chapter', 'A chapter from The Objective Ledger, a free, kind book about yourself, the people you share a life with, and how people work.'],
+    [/^\/book\/(preface|chapter-\d|self-\d-[a-z]+|understanding-\d+-[a-z-]+)(-in-depth)?\.html$/, 'Share this chapter', 'A chapter from Spread Love & Acceptance, a free, kind book about yourself, the people you share a life with, and how people work.'],
     [/^\/communication\.html$/, 'Share this guide', 'A free, practical guide to listening and saying hard things kindly.'],
     [/^\/for-teachers\.html$/, 'Share this page', 'Free lessons on feelings and communication, with printable handouts and permission to use them in class.'],
     [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],

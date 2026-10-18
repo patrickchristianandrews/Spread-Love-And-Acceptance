@@ -1,5 +1,5 @@
 /*
-  tol-workpaper.css — fill-in workpapers, The Objective Ledger (TOL-OS)
+  tol-workpaper.css — fill-in workpapers, Spread Love & Acceptance
   Loads after /assets/css/site.css and /assets/css/reading.css. The page
   itself (type, column, header) comes from those; this file only styles the
   form. It sets no global variables, and every colour has a fallback.
@@ -912,3 +912,19 @@ select.wpf-tap-sel{ position: absolute !important; width: 1px !important; height
 .wpf-share-raw > summary{ cursor: pointer; min-height: 40px; display: inline-flex; align-items: center; color: #2F6FB0; text-decoration: underline; }
 .wpf-share-raw[open] > summary{ margin-bottom: 6px; }
 .wpf-safe{ margin: 4px 0 10px; color: #5B4A6E; }
+
+/* ---------- "Print this form" (wpf-print.js): the printout is the form and nothing else ---------- */
+@media print{
+  /* a single workpaper: the title and the form; no menus, notes, privacy box, tool guide or save bar */
+  body[data-wp] > *:not(main){ display: none !important; }
+  body[data-wp] main.read > *:not(.read-head):not(#wpf-root){ display: none !important; }
+  /* suggestions are for the screen: word chips, the task library and the filled-in examples */
+  .wpf-chips, .wpf-lib, .wpf-example, .wpf-print-btn{ display: none !important; }
+  /* the Workpaper Suite: with a sheet open, print just that sheet */
+  body:has(#ws-sheet:not([hidden])) > *:not(#ws-sheet){ display: none !important; }
+  .ws-sheet:not([hidden]){ position: static !important; inset: auto !important; background: none !important; }
+  .ws-sheet:not([hidden]) .ws-sheet-panel{ position: static !important; inset: auto !important; transform: none !important; max-height: none !important; height: auto !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; display: block !important; }
+  .ws-sheet:not([hidden]) .ws-sheet-scroll{ overflow: visible !important; padding: 0 !important; }
+  .ws-sheet:not([hidden]) .ws-sheet-top{ padding: 0 0 8px !important; }
+  .ws-sheet-x, .ws-sheet-foot, .ws-sheet-status:empty{ display: none !important; }
+}

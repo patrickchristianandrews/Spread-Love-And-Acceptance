@@ -48,32 +48,20 @@
         ]
       },
       "path": [
-        [
-          "The Lemonade Stand",
-          "/lemonade-stand.html"
-        ],
-        [
-          "Who did what (WP-01)",
-          "/workpapers/wp-01.html"
-        ],
-        [
-          "Preface: The work nobody sees",
-          "/book/preface.html"
-        ]
+        ["Who does what? (the Lemonade Stand)",
+          "/lemonade-stand.html"],
+        ["Who did what (WP-01)",
+          "/workpapers/wp-01.html"],
+        ["Preface: The work nobody sees",
+          "/book/preface.html"]
       ],
       "path_self": [
-        [
-          "Who did what (WP-01)",
-          "/workpapers/wp-01.html"
-        ],
-        [
-          "How much are you carrying? (WP-02)",
-          "/workpapers/wp-02-how-much-are-you-carrying.html"
-        ],
-        [
-          "Preface: The work nobody sees",
-          "/book/preface.html"
-        ]
+        ["Who did what (WP-01)",
+          "/workpapers/wp-01.html"],
+        ["How much are you carrying? (WP-02)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"],
+        ["Preface: The work nobody sees",
+          "/book/preface.html"]
       ],
       "deeper": [
         "the mental load",
@@ -122,18 +110,12 @@
         ]
       },
       "path": [
-        [
-          "The Lemonade Stand",
-          "/lemonade-stand.html"
-        ],
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "Chapter II: Is the split working?",
-          "/book/chapter-2.html"
-        ]
+        ["Who does what? (the Lemonade Stand)",
+          "/lemonade-stand.html"],
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Chapter II: Is the split working?",
+          "/book/chapter-2.html"]
       ],
       "deeper": [
         "why we each think we do more",
@@ -174,18 +156,12 @@
         ]
       },
       "path": [
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "The Lemonade Stand",
-          "/lemonade-stand.html"
-        ],
-        [
-          "RACI in plain words (Library)",
-          "/library/teams.html#raci"
-        ]
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Who does what? (the Lemonade Stand)",
+          "/lemonade-stand.html"],
+        ["RACI in plain words (Library)",
+          "/library/teams.html#raci"]
       ],
       "deeper": [
         "one owner per job",
@@ -225,18 +201,12 @@
         ]
       },
       "path": [
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "The Lemonade Stand",
-          "/lemonade-stand.html"
-        ],
-        [
-          "Why whoever notices first does it (Library)",
-          "/library/fairness.html#anticipation-and-noticing"
-        ]
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Who does what? (the Lemonade Stand)",
+          "/lemonade-stand.html"],
+        ["Why whoever notices first does it (Library)",
+          "/library/fairness.html#anticipation-and-noticing"]
       ],
       "deeper": [
         "noticing thresholds",
@@ -277,18 +247,12 @@
         ]
       },
       "path": [
-        [
-          "The Lemonade Stand (money side)",
-          "/lemonade-stand.html"
-        ],
-        [
-          "Say it so it lands (WP-09)",
-          "/workpapers/wp-09-say-it-so-it-lands.html"
-        ],
-        [
-          "Money disagreements (Library)",
-          "/library/conflict.html#money-disagreements"
-        ]
+        ["Who does what? (the Lemonade Stand): money side",
+          "/lemonade-stand.html"],
+        ["Say it so it lands (WP-09)",
+          "/workpapers/wp-09-say-it-so-it-lands.html"],
+        ["Money disagreements (Library)",
+          "/library/conflict.html#money-disagreements"]
       ],
       "deeper": [
         "money styles and limits",
@@ -332,18 +296,12 @@
         ]
       },
       "path": [
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "Say it so it lands (WP-09)",
-          "/workpapers/wp-09-say-it-so-it-lands.html"
-        ],
-        [
-          "The planning fallacy (Library)",
-          "/library/thinking.html#planning-fallacy"
-        ]
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Say it so it lands (WP-09)",
+          "/workpapers/wp-09-say-it-so-it-lands.html"],
+        ["The planning fallacy (Library)",
+          "/library/thinking.html#planning-fallacy"]
       ],
       "deeper": [
         "why plans slip",
@@ -384,18 +342,12 @@
         ]
       },
       "path": [
-        [
-          "Turning Toward (say one specific thank-you)",
-          "/turning-toward.html"
-        ],
-        [
-          "The 90-second daily check-in (WP-13)",
-          "/workpapers/wp-13-daily-check-in.html"
-        ],
-        [
-          "Appreciation and recognition (Library)",
-          "/library/fairness.html#appreciation-and-recognition"
-        ]
+        ["Turning Toward (say one specific thank-you)",
+          "/turning-toward.html"],
+        ["The 90-second daily check-in (WP-13)",
+          "/workpapers/wp-13-daily-check-in.html"],
+        ["Appreciation and recognition (Library)",
+          "/library/fairness.html#appreciation-and-recognition"]
       ],
       "deeper": [
         "why specific thanks works",
@@ -445,18 +397,12 @@
         ]
       },
       "path": [
-        [
-          "The Lemonade Stand (2 to 8 people)",
-          "/lemonade-stand.html"
-        ],
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "Diffusion of responsibility (Library)",
-          "/library/teams.html#diffusion-of-responsibility"
-        ]
+        ["Who does what? (the Lemonade Stand): 2 to 8 people",
+          "/lemonade-stand.html"],
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Diffusion of responsibility (Library)",
+          "/library/teams.html#diffusion-of-responsibility"]
       ],
       "deeper": [
         "why groups drop the ball",
@@ -493,18 +439,12 @@
         ]
       },
       "path": [
-        [
-          "One owner per job (WP-03, who handles what)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "Say it so it lands (WP-09)",
-          "/workpapers/wp-09-say-it-so-it-lands.html"
-        ],
-        [
-          "Where co-parents start",
-          "/relationships-in-depth.html#co-parents"
-        ]
+        ["One owner per job (WP-03, who handles what)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Say it so it lands (WP-09)",
+          "/workpapers/wp-09-say-it-so-it-lands.html"],
+        ["Where co-parents start",
+          "/relationships-in-depth.html#co-parents"]
       ],
       "deeper": [
         "co-parenting logistics",
@@ -560,18 +500,12 @@
         ]
       },
       "path": [
-        [
-          "How much are you carrying? (WP-02)",
-          "/workpapers/wp-02-how-much-are-you-carrying.html"
-        ],
-        [
-          "One owner per job (WP-03, share the care tasks)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "Where caregivers start",
-          "/relationships-in-depth.html#caregivers"
-        ]
+        ["How much are you carrying? (WP-02)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"],
+        ["One owner per job (WP-03, share the care tasks)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Where caregivers start",
+          "/relationships-in-depth.html#caregivers"]
       ],
       "deeper": [
         "caregiving logistics",
@@ -623,14 +557,10 @@
         "I know it’s not that you don’t care. What would help you remember the laundry, without me having to nag?"
       ],
       "path": [
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "The Wiring Card",
-          "/wiring-card.html"
-        ],
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["The Wiring Card",
+          "/wiring-card.html"],
         ["Self-discovery: know your own wiring",
           "/know-yourself.html"]
       ],
@@ -679,12 +609,10 @@
         "For Friday’s dinner, could we agree you’ll leave by 6:30? That gives us some buffer."
       ],
       "path": [
-        ["How am I right now? (Today’s Weather)",
+        ["My weather today (Today’s Weather)",
           "/quick-checks.html#today"],
-        [
-          "The planning fallacy (Library)",
-          "/library/thinking.html#planning-fallacy"
-        ],
+        ["The planning fallacy (Library)",
+          "/library/thinking.html#planning-fallacy"],
         ["Self-discovery: know your own wiring",
           "/know-yourself.html"]
       ],
@@ -733,14 +661,10 @@
         "Thanks for starting the dishes. Could we agree they’re done when the counter’s wiped too?"
       ],
       "path": [
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "The Chat analyzer",
-          "/signal-translator.html"
-        ],
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["The Chat analyzer",
+          "/signal-translator.html"],
         ["Self-discovery: know your own wiring",
           "/know-yourself.html"]
       ],

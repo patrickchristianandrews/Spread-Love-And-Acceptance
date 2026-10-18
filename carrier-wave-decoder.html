@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
 <!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
-<title>Rewind the Talk: A Step-by-Step Reset When a Talk Goes Wrong</title>
+<title>Carrier Wave Decoder: When a Talk Starts to Go Wrong</title>
 <meta name="description" content="A guided, step-by-step tool for the moment a conversation starts going sideways: check your state, get back in tune, and look back on the week together.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -456,7 +456,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 <body>
 <div class="wrap" role="main">
   <div class="sitebar">
-    <a class="mark" href="index.html">The Objective Ledger<small>TOOLS</small></a>
+    <a class="mark" href="index.html">Spread Love &amp; Acceptance<small>TOOLS</small></a>
     <a class="back" href="/check-ins.html">&larr; Read: Check-ins</a>
   </div>
   <header>
@@ -1082,7 +1082,7 @@ function renderDecode(){
 function decodeText(){
   const lines=CHANNELS.filter(done).map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}.${readFor(c)?" "+readFor(c):" No gap."}`);
   const note=$("decnote").value.trim();
-  return `Decoded moment: ${$("verdict").textContent}\n${note?"What happened: "+note+"\n":""}\n${lines.join("\n")}\n\nA way to name it without blame: ${decodeSentence()}\n\nFrom the Carrier Wave Decoder, The Objective Ledger.`;
+  return `Decoded moment: ${$("verdict").textContent}\n${note?"What happened: "+note+"\n":""}\n${lines.join("\n")}\n\nA way to name it without blame: ${decodeSentence()}\n\nFrom the Carrier Wave Decoder, Spread Love & Acceptance.`;
 }
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{
   const ex=EX[+b.dataset.ex]; dec={pace:[...ex.set.pace],reg:[...ex.set.reg],urg:[...ex.set.urg]};
@@ -1675,7 +1675,7 @@ function renderLetter(r){
   }
   parts.push(`<h2>An invitation</h2><p>${r.reconciled?"Could we keep closing the books together once a week? Twenty minutes, starting with what went right.":"Could we find twenty minutes this week to look at this together? No verdicts, just a look at where our signals crossed and one small change to try."}</p>`);
   parts.push(`<p class="sig">${me?`With care,<br>${esc(me)}`:"With care"}</p>`);
-  parts.push(`<p class="fine">Made with the Carrier Wave Decoder from The Objective Ledger, spreadloveandacceptance.com. It isn't therapy or a clinical assessment, and it measures nothing about either person's worth.</p>`);
+  parts.push(`<p class="fine">Made with the Carrier Wave Decoder from Spread Love &amp; Acceptance, spreadloveandacceptance.com. It isn't therapy or a clinical assessment, and it measures nothing about either person's worth.</p>`);
   $("printout").innerHTML=parts.join("");
 }
 $("printbtn").onclick=()=>{try{window.print();}catch(e){}};

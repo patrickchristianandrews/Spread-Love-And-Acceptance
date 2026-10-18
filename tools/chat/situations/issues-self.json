@@ -29,16 +29,12 @@
       },
       "scriptLabel": "Something to tell yourself",
       "path": [
-        ["How am I right now? What is today good for?",
+        ["My weather today (Today’s Weather): what is today good for?",
           "/quick-checks.html#today"],
-        [
-          "How much are you carrying? (WP-02)",
-          "/workpapers/wp-02-how-much-are-you-carrying.html"
-        ],
-        [
-          "Procrastination (Library)",
-          "/library/motivation.html#procrastination"
-        ]
+        ["How much are you carrying? (WP-02)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"],
+        ["Procrastination (Library)",
+          "/library/motivation.html#procrastination"]
       ],
       "deeper": [
         "procrastination",
@@ -85,14 +81,10 @@
         ]
       },
       "path": [
-        [
-          "How much are you carrying? (WP-02)",
-          "/workpapers/wp-02-how-much-are-you-carrying.html"
-        ],
-        [
-          "The Calm-Down Kit (WP-11)",
-          "/wp-11.html"
-        ],
+        ["How much are you carrying? (WP-02)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"],
+        ["The Calm-Down Kit (WP-11)",
+          "/wp-11.html"],
         ["Self-discovery: know your own wiring",
           "/know-yourself.html"]
       ],
@@ -144,18 +136,12 @@
         ]
       },
       "path": [
-        [
-          "How much are you carrying? (WP-02)",
-          "/workpapers/wp-02-how-much-are-you-carrying.html"
-        ],
-        [
-          "The Lemonade Stand (see the whole load)",
-          "/lemonade-stand.html"
-        ],
-        [
-          "The Night Garden",
-          "/night-garden.html"
-        ]
+        ["How much are you carrying? (WP-02)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"],
+        ["Who does what? (the Lemonade Stand): see the whole load",
+          "/lemonade-stand.html"],
+        ["Cool-down corner: The Night Garden",
+          "/night-garden.html"]
       ],
       "deeper": [
         "burnout and recovery",
@@ -203,18 +189,12 @@
       },
       "scriptLabel": "Something to tell yourself",
       "path": [
-        [
-          "The Night Garden (box breathing)",
-          "/night-garden.html"
-        ],
-        [
-          "The Calm-Down Kit (WP-11)",
-          "/wp-11.html"
-        ],
-        [
-          "Rumination (Library)",
-          "/library/emotions.html#rumination"
-        ]
+        ["Cool-down corner: The Night Garden (box breathing)",
+          "/night-garden.html"],
+        ["The Calm-Down Kit (WP-11)",
+          "/wp-11.html"],
+        ["Rumination (Library)",
+          "/library/emotions.html#rumination"]
       ],
       "deeper": [
         "rumination",
@@ -264,12 +244,10 @@
       "path": [
         ["Self-discovery: know your own wiring",
           "/know-yourself.html"],
-        ["How am I right now? (Today’s Weather)",
+        ["My weather today (Today’s Weather)",
           "/quick-checks.html#today"],
-        [
-          "Self-compassion (Library)",
-          "/library/connection.html#self-compassion"
-        ]
+        ["Self-compassion (Library)",
+          "/library/connection.html#self-compassion"]
       ],
       "deeper": [
         "self-compassion",
@@ -321,18 +299,12 @@
         ]
       },
       "path": [
-        [
-          "Kind ways to say no (WP-01)",
-          "/workpapers/wp-01.html"
-        ],
-        [
-          "How much are you carrying? (WP-02)",
-          "/workpapers/wp-02-how-much-are-you-carrying.html"
-        ],
-        [
-          "Saying no (Library)",
-          "/library/communication.html#saying-no"
-        ]
+        ["Kind ways to say no (WP-01)",
+          "/workpapers/wp-01.html"],
+        ["How much are you carrying? (WP-02)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"],
+        ["Saying no (Library)",
+          "/library/communication.html#saying-no"]
       ],
       "deeper": [
         "saying no kindly",
@@ -380,18 +352,12 @@
         ]
       },
       "path": [
-        [
-          "The Chat analyzer",
-          "/signal-translator.html"
-        ],
-        [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
-        ],
-        [
-          "Where coworkers and teams start",
-          "/relationships-in-depth.html#coworkers"
-        ]
+        ["The Chat analyzer",
+          "/signal-translator.html"],
+        ["One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"],
+        ["Where coworkers and teams start",
+          "/relationships-in-depth.html#coworkers"]
       ],
       "deeper": [
         "workplace communication",

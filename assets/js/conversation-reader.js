@@ -271,6 +271,10 @@
       short: ''
     }[r.trend];
     parts.push('<p>' + story + '</p>');
+    // a line that reads as a threat is named first: it matters more than how the rest of the chat went
+    var hReal = (r.harm || []).filter(function (h) { return !h.playful; })[0], hPlay = (r.harm || []).filter(function (h) { return h.playful; })[0];
+    if (hReal) parts.push('<p class="cr-note cr-threat"><strong>Message ' + (hReal.at + 1) + ' could read as a threat:</strong> “' + esc(snip(hReal.text, 80)) + '”. Read flatly, words like that can frighten someone, whatever was meant. That matters more than how the rest of the chat went. <a class="cr-ctx-open" href="#cr-ctx">Add context</a> if you know more.</p>');
+    else if (hPlay) parts.push('<p class="cr-note"><strong>Message ' + (hPlay.at + 1) + ' could read as a threat if it isn’t a shared joke:</strong> “' + esc(snip(hPlay.text, 80)) + '”. The words alone can’t show the grin.</p>');
     if (r.crossedThem) parts.push('<p class="cr-note">A put-down isn’t the same as a disagreement. You can take their real point seriously and still say the put-down wasn’t okay.</p>');
     else if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
     return '<h2>What happened</h2>' + parts.join('');
@@ -426,6 +430,8 @@
 
   $('cr-go').addEventListener('click', function () { start(input.value); });
   // Add context: closed by default; "Done" reads the conversation again with it
+  // "Add context" next to a line that reads as a threat opens the panel
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a.cr-ctx-open'); if (a && ctxPanel && ctxPanel.open) { e.preventDefault(); ctxPanel.open(false); var el = $('cr-ctx'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start' }); } });
   if (window.TOLContext && $('cr-ctx')) ctxPanel = TOLContext.mount($('cr-ctx'), { mode: 'read', earlier: false, onChange: function (c, o) { if (o && o.again && state && state.me) render(false); } });
   // the screenshot reader hands over the checked text, and who "you" are, so there's nothing to ask twice
   window.TOLReaderPage = {

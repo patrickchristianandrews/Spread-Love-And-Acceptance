@@ -195,6 +195,14 @@
                 hear: '“Not now,” “forget it” or a silent “…” can mean someone is flooded: too overwhelmed to keep going. It can also mean they’re hurt and want the other person to keep trying. Without a time to come back, the other person may hear “this is over.”',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
     contempt: { label: 'Eye-roll or put-down', heat: 3, tone: 'hot' },
+    // "I'm going to slap you", "I know where you live": read flatly, a threat (message-patterns.js harm()).
+    // With a game or a "lol" around it, probably a joke, and still worth a second look
+    harm:     { label: 'Could read as a threat', heat: 4, tone: 'hot',
+                hear: 'Words about hurting someone, or a veiled warning (“I know where you live”, “keep talking and see what happens”), can frighten the person reading, whatever was meant. In writing there’s no smile to show it’s a joke.',
+                instead: 'Leave the threat out and say the feeling underneath it: “I’m really frustrated with you right now.”' },
+    harmplay: { label: 'Could read as a threat, if it isn’t a shared joke', heat: 1.5, tone: 'tense',
+                hear: 'This is probably a joke between you (a game, or a laugh around it). The words alone can’t show the grin, so on a hard day it could land as a real threat.',
+                instead: 'If you’re not sure it’s a shared joke, say so: “Kidding! Rematch Friday?”' },
     dig:      { label: 'Blame or a dig', heat: 2.5, tone: 'hot',
                 hear: 'Keeping score (“I managed fine without you”), a dig (“when it suits you”) or a label (“you treat me like the help”) says the hurt as blame. The other person defends themselves instead of hearing the need.',
                 instead: 'Say the hurt and the real ask: “I’ve been feeling left out. Could we find ten minutes this week?”' },
@@ -333,6 +341,14 @@
     marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) { m.pattern = true; m.kind = 'need'; } });
     // threats and controlling lines the shared list knows ("if you tell anyone, you'll be sorry"), and digs or scorecards
     if (P && P.threats) P.threats(text).forEach(function (x) { marks.push({ kind: 'threat', start: x.start, end: x.end, text: x.text }); });
+    if (P && P.harm) {
+      var hm = P.harm(text), danger = P.THREAT_RE && P.THREAT_RE.test(P.prep(text));
+      // the single-message checker's reading wins for these two: "I'm going to kill you if you spoil it lol" is probably a
+      // joke (still named), and "I know where you live, so I'll drop the cake off" is a plan, not a warning
+      if (hm && hm.playful && !danger) marks.forEach(function (m) { if (m.kind === 'threat') m.kind = 'harmplay'; });
+      if (!hm && !danger) marks = marks.filter(function (m) { return !(m.kind === 'threat' && /\bknow where you\b/i.test(m.text)); });
+      if (hm && !marks.some(function (m) { return (m.kind === 'threat' || m.kind === 'harmplay') && m.start < hm.end && hm.start < m.end; })) marks.push({ kind: hm.playful ? 'harmplay' : 'harm', start: hm.start, end: hm.end, text: hm.text, idiom: hm.kind === 'idiom' });
+    }
     if (P && P.digs) P.digs(text).forEach(function (x) { marks.push({ kind: 'dig', start: x.start, end: x.end, text: x.text }); });
     // the shared reading of control (cutting someone off from people generally, checking up as a demand, put-downs that
     // say they're worth nothing, someone saying they're afraid): the same bar as the Text message checker
@@ -461,6 +477,12 @@
     out.edgeEarly = early; out.edgeLate = late;
     out.edgeRise = n >= 4 && late >= 2 && late > early;
     if (out.edgeRise && out.level === 'calm') out.level = 'warm';
+    // a line that reads as a threat, anywhere in the chat: never "calm", whatever came after it, and it's named
+    out.harm = [];
+    out.turns.forEach(function (t, i) { t.marks.forEach(function (m) { if (m.kind === 'harm' || m.kind === 'harmplay' || m.kind === 'threat') out.harm.push({ at: i, mine: t.mine, text: m.text, playful: m.kind === 'harmplay' }); }); });
+    out.harmReal = out.harm.some(function (h) { return !h.playful; });
+    if (out.harmReal && out.level === 'calm') out.level = 'warm';
+    if (out.harm.some(function (h) { return !h.playful && h.at >= n - 2; }) && out.level !== 'hot') out.level = 'hot';
     var lastKinds = n ? out.turns[n - 1].marks.map(function (m) { return m.kind; }) : [];
     var doors = out.turns.filter(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); }).length;
     var lastTwo = out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); });
@@ -534,7 +556,7 @@
     });
 
     // put-downs, name-calling and fed-up lines: a line was crossed, whatever else was going on
-    var CROSS = ['verdict', 'contempt', 'hostile', 'swear'];
+    var CROSS = ['verdict', 'contempt', 'hostile', 'swear', 'harm'];
     out.crossed = [];
     out.turns.forEach(function (t, i) { var m = t.marks.filter(function (x) { return CROSS.indexOf(x.kind) !== -1; }).sort(function (a, b) { return b.text.length - a.text.length; })[0]; if (m) out.crossed.push({ at: i, mine: t.mine, text: m.text }); });
     out.crossedThem = out.crossed.some(function (c) { return !c.mine; });

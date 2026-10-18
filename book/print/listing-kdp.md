@@ -296,10 +296,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also add it to tools/book/series.json so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 152 (KDP reads it from the file) |
-| Spine width | 0.3423 in (8.69 mm): 152 pages × 0.002252 in. Spine text: yes (over 79 pages) |
+| Page count | 150 (KDP reads it from the file) |
+| Spine width | 0.3378 in (8.58 mm): 150 pages × 0.002252 in. Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-3-understanding-each-other.pdf |
-| Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.592 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.588 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -307,12 +307,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.88 | $4.12 (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.89 (estimate) | about £3.30 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $4.82 | $4.17 (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £3.85 (estimate) | about £3.34 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** | $4.88 | would be $1.12 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.77 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
+| Expanded distribution | **No** | $4.82 | would be $1.17 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.82 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 

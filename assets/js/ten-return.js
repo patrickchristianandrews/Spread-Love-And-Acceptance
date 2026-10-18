@@ -1,5 +1,5 @@
 /*
-  ten-return.js — The Objective Ledger
+  ten-return.js — Spread Love & Acceptance
   "Start in 10 minutes" sends you to another page for a step. This shows a small bar at the top of
   that page, "Step 1 of 4 · Back to step 2", so the way back never depends on the Back button.
   It only reads a note this tab left a moment ago (sessionStorage, gone when the tab closes).

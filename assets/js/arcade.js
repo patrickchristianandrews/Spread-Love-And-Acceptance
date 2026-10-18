@@ -644,8 +644,8 @@
         speed: lerp(0.75, 1.9, d) * (first ? 1 : rnd(0.88, 1.12)), n: 3 };
       if (!first && d > 0.5 && Math.random() < 0.4) L.n = 4;
       // two lanes side by side going the same way must not keep pace with each other, or the pup could wait forever
-      if (below && below.dir === L.dir && Math.abs(below.speed - L.speed) < 0.5) L.speed = below.speed + (L.speed >= below.speed ? 0.5 : -0.5);
-      if (L.speed < 0.6) { L.speed = 0.6; if (below && below.dir === L.dir && Math.abs(below.speed - L.speed) < 0.5) L.dir = -L.dir; }
+      if (below && below.dir === L.dir && Math.abs(below.speed - L.speed) < 0.8) L.speed = below.speed + (L.speed >= below.speed ? 0.8 : -0.8);
+      if (L.speed < 0.6) { L.speed = 0.6; if (below && below.dir === L.dir && Math.abs(below.speed - L.speed) < 0.8) L.dir = -L.dir; }
       // the check: a pad that dips needs a spare; then more logs or pads, then longer ones, until the wait is short enough
       function rel() { return !below ? L.speed : below.dir === L.dir ? Math.abs(L.speed - below.speed) : L.speed + below.speed; }
       var wait = riverWait(d) * (L.dive ? 0.75 : 1);
@@ -673,6 +673,7 @@
   };
   // after a bump or a splash: on the early levels (and always in Relaxed pace) the pup starts again from the nearest
   // safe grass, the middle bank for the river and the grass by the road for the road, instead of all the way back
+  Cross.prototype.bayTol = function () { return lerp(1.5, 0.5, this.d || 0); };
   Cross.prototype.soft = function () { return this.level <= 3 || S.relaxed; };
   Cross.prototype.respawn = function () {
     var me = this, p = me.pup, keep = p.maxRow;
@@ -692,7 +693,7 @@
     return x;
   };
   Cross.prototype.diving = function (L, i) {
-    if (!L.dive || S.relaxed) return 0;   // in relaxed pace the lily pads never dip
+    if (!L.dive || S.relaxed || i === 0) return 0;   // in relaxed pace the lily pads never dip, and one pad in each lane never does
     var cyc = 9, ph = ((this.t + i * 2.3 + L.row) % cyc);
     if (ph > 5.2 && ph < 6.8) return 2; // under
     if (ph > 4.0 && ph <= 5.2) return 1; // warning wobble
@@ -710,8 +711,8 @@
     var nx = Math.round(p.x * 1) + dx, ny = p.y + dy;
     if (dx) nx = p.x + dx; else nx = p.x;
     if (ny < 0 || ny >= ROWS || nx < -0.5 || nx > COLS - 0.5) return;
-    if (ny === 0) { // the doghouse row: only into an empty doghouse
-      var bay = -1; BAYS.forEach(function (b, k) { if (Math.abs(nx - b) <= 0.5 && this.filled.indexOf(k) < 0) bay = k; }, this);
+    if (ny === 0) { // the doghouse row: only into an empty doghouse (the nearest one, and on the early levels it can be a little way off)
+      var bay = -1, tol = this.bayTol(), bd = 1e9; BAYS.forEach(function (b, k) { var dd = Math.abs(nx - b); if (dd <= tol && dd < bd && this.filled.indexOf(k) < 0) { bay = k; bd = dd; } }, this);
       if (bay < 0) { SFX.oof(); return; }
       nx = BAYS[bay];
     }
@@ -1267,11 +1268,11 @@
     var me = this; me.phase = 'done'; me.level = 10; recordBest(); hud();
     var fk = 'derby-ft:' + me.who; if (me.best > (+S.best[fk] || 0)) { S.best[fk] = me.best; save(); }
     var hr = me.score, s = hr === 1 ? '' : 's';
-    var head = hr >= 7 ? 'What a show! The crowd is still cheering.' : hr >= 4 ? 'Lovely swings, and some real moon shots.' : hr >= 1 ? 'You found the timing, and it only gets easier.' : 'Every swing was practice, and the pals had a ball.';
+    var title = hr >= 7 ? 'What a show!' : hr >= 4 ? 'Lovely swings!' : 'Derby done!';
     var gift = rewardLevel('Home Run Derby · ' + hr + ' home run' + s);
-    paused = true;
-    overlay('Derby done!', hr + ' home run' + s + ' out of 10. Longest hit: ' + (me.best ? me.best + ' ft' : 'none this time') + '. ' + head + ' ' + nextLesson(), '↻ Play again', function () { derbyAgain(false); },
-      'Best on this device for ' + me.P.name + ': ' + (+S.best['derby:' + me.who] || 0) + ' home runs, longest ' + (+S.best[fk] || 0) + ' ft' + (gift ? ' · ' + gift : ''),
+    paused = true; say('Derby done: ' + hr + ' home run' + s + ' out of 10.');
+    overlay(title, (hr ? hr + ' home run' + s + ' out of 10. ' : 'No home runs this time, and every swing was good practice. ') + (me.best ? 'Longest hit: ' + me.best + ' ft. ' : '') + nextLesson(), '↻ Play again', function () { derbyAgain(false); },
+      'Best with ' + me.P.name + ': ' + (+S.best['derby:' + me.who] || 0) + ' home runs, ' + (+S.best[fk] || 0) + ' ft' + (gift ? ' · ' + gift : ''),
       { label: '⇄ Swap roles: ' + PUPS[me.pit].name + ' bats', fn: function () { derbyAgain(true); } });
   };
   Derby.prototype.update = function (dt) {
@@ -1416,7 +1417,7 @@
   Derby.prototype.drawPitcher = function (t) {
     var me = this, px = MOUND.x + 8, py = MOUND.y + 6, sc = 0.95, pose = 'sit', rot = 0, lift = 0, hold = false;
     if (me.phase === 'intro' || me.phase === 'ready') { hold = true; if (me.phase === 'ready' && me.pt > 0.9) { rot = (me.pt - 0.9) * 0.6; } }
-    else if (me.phase === 'windup') { var k = me.pt / 0.85; hold = k < 0.75; if (k < 0.65) { rot = 0.15 + k * 0.45; lift = Math.sin(k / 0.65 * Math.PI / 2) * 8; } else { pose = 'bow'; rot = -0.1; } }
+    else if (me.phase === 'windup') { var k = me.pt / 0.85; hold = k < 0.75; if (k < 0.65) { rot = 0.1 + k * 0.3; lift = Math.sin(k / 0.65 * Math.PI / 2) * 8; } else { pose = 'bow'; rot = -0.1; } }
     else if (me.phase === 'flight' && me.pt < 0.3) pose = 'bow';
     else if (me.dance > 0 || (me.phase === 'result' && me.res === 'hr')) pose = me.calm ? 'sit' : 'wiggle';
     g.save(); g.translate(px, py - lift); g.rotate(rot);

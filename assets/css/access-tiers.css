@@ -1,6 +1,6 @@
 /*
   access-tiers.css
-  The Objective Ledger (TOL-OS) — Access Levels
+  Spread Love & Acceptance — Access Levels
   Load after book-layout.css; uses its :root tokens.
   Levels stack as ledger rows rather than side-by-side columns:
   the main column is 780px max, too narrow for three readable cards.

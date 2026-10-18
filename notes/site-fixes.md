@@ -114,7 +114,7 @@ On the homepage, the "Who built this, and why?" block currently sits above the P
 
 ```html
 <div class="draft-notice">
-  <strong>New here?</strong> Relationships rarely come apart because people stop caring. They come apart when invisible work, overloaded nervous systems, unclear ownership and crossed signals pile up faster than two people can sort them out. The Objective Ledger gives two people a structured way to see those patterns together, without making either person the problem. <a href="start-here.html">See how it works and where to start.</a>
+  <strong>New here?</strong> Relationships rarely come apart because people stop caring. They come apart when invisible work, overloaded nervous systems, unclear ownership and crossed signals pile up faster than two people can sort them out. Spread Love & Acceptance gives two people a structured way to see those patterns together, without making either person the problem. <a href="start-here.html">See how it works and where to start.</a>
 </div>
 ```
 
@@ -182,7 +182,7 @@ Replace with:
 
 ## 6. Use the names consistently
 
-`start-here.html` defines the hierarchy once: Spread Love & Acceptance (the site) → The Objective Ledger / TOL-OS (the framework) → the Survival Kit (the paid membership) → workpapers, calculators and the 6-Week Program (the tools).
+`start-here.html` defines the hierarchy once: Spread Love & Acceptance (the site and the program) → the Survival Kit (the paid membership) → workpapers, calculators and the 6-Week Program (the tools).
 
 On the homepage and Roadmap, "Workpaper Suite" and "Full Program membership" are used for the Survival Kit. Standardize on **the Survival Kit**.
 
@@ -288,7 +288,7 @@ And on the homepage, "how nine separate fields of study became the workpapers" �
 
 Keep it as it is. If you want to make clear the framework doesn't depend on it, add one sentence directly after:
 
-> My faith is part of my story. It isn't part of the method, and nothing in TOL-OS asks you to share it.
+> My faith is part of my story. It isn't part of the method, and nothing in the program asks you to share it.
 
 ---
 

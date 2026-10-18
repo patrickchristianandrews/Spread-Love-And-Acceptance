@@ -1,5 +1,5 @@
 /*
-  tol-pdf.js — The Objective Ledger (TOL-OS)
+  tol-pdf.js — Spread Love & Acceptance
   A small, dependency-free PDF writer used by the fill-in workpapers.
   Runs entirely in the browser. It makes no network requests and stores nothing.
   Uses the 14 standard PDF fonts (Helvetica, Times), so no font files are embedded.

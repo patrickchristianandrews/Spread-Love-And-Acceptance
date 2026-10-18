@@ -30,7 +30,7 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 LIST = os.path.normpath(os.path.join(HERE, '..', '..', 'assets', 'js', 'reading-list.js'))
 UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-      'Chrome/124.0 Safari/537.36 (The Objective Ledger reading-list link check)')
+      'Chrome/124.0 Safari/537.36 (Spread Love & Acceptance reading-list link check)')
 STOP = set('a an and the of to in for on with your you is are it its how what why when do does be at by or as from that this'.split())
 
 

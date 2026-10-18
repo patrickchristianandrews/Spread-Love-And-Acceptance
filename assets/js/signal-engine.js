@@ -1497,7 +1497,7 @@ function analyze(textIn, opts){
   { const ULT = /\bif you (?:don't|do not|won't|can't|ever) [^.!?]{1,70}?,?\s*(?:then )?(?:don't (?:bother|come|call|talk|expect)|forget (?:about )?(?:it|me|us)|we're (?:done|through|over)|i'm (?:done|gone|out)|you can forget|you'll (?:regret|be sorry)|don't ever)\b/i;
     const um = low.match(ULT); if(um && !has("threat")) push("threat", um.index, um.index+um[0].length); }
   // "If you go to that party, don't bother coming back", "Either she goes or I go": an ultimatum, even without "don't"
-  { const U2 = /\bif you [^.!?]{1,70}?,?\s*(?:then )?(?:don't|do not) (?:bother )?(?:coming back|come back|ever come back|coming home|calling me|ever (?:call|talk to|speak to) me)\b|\beither (?:she|he|they|it|that|you|your \w+) goes,? or i (?:go|leave|do)\b|\b(?:it's|its) (?:either )?(?:me or (?:her|him|them|your \w+|the \w+))\b|\bchoose:? (?:me or|between me and)\b/i;
+  { const U2 = /\bif you [^.!?]{1,70}?,?\s*(?:then )?(?:we're|we are|we'll be|it's) (?:done|finished|over|through)\b|\bif you [^.!?]{1,70}?,?\s*(?:then )?(?:don't|do not) (?:bother )?(?:coming back|come back|ever come back|coming home|calling me|ever (?:call|talk to|speak to) me)\b|\beither (?:she|he|they|it|that|you|your \w+) goes,? or i (?:go|leave|do)\b|\b(?:it's|its) (?:either )?(?:me or (?:her|him|them|your \w+|the \w+))\b|\bchoose:? (?:me or|between me and)\b/i;
     const um = low.match(U2); if(um && !has("threat") && !has("menace")) push("threat", um.index, um.index+um[0].length); }
   // "You have 5 minutes to call me back": a deadline on a reply is pressure
   { const dm = low.match(/\byou have (?:\d+|one|two|five|ten|until \w+(?: \w+)?) (?:minutes?|mins?|seconds?|hours?)?\s*(?:to|before you) (?:call|answer|reply|text|get back|respond|come home|explain)\b/i);
@@ -3729,7 +3729,7 @@ const PLAIN_TITLE = {again:"Words that point at a pattern", should:"Telling them
 /* Plain-word gloss for a pattern, or "" when the name already says it */
 function gloss(id){ return GLOSS[id] || ""; }
 /* One plain sentence at the top of a result. It agrees with the score and the flags:
-   ok = will probably land okay, hurt = might hurt, fight = will likely start a fight. */
+   ok = nothing stood out as harsh, unsure = hard to tell from the words alone, hurt = might hurt, fight = will likely start a fight. */
 /* "Say it in simpler English": the suggested words again, in short sentences with common words, for a reader
    in a second language. It only re-says what the rewrite says: no new facts, and blanks in [brackets] stay as they are.
    "Lately it's felt like you're correcting me with the baby a lot. It doesn't feel respectful to me as her mother.
@@ -3862,7 +3862,7 @@ function harmRewrite(an, log, W){
     if(!hit){ if(!FILLER_ONLY.test(raw.replace(/[.!?,\s]+$/,""))) parts.push(endP(raw)); return; }
     // "If you're late again, I'm going to slap you" -> "If you're late again, I'll be really upset. It matters to me."
     const cm = raw.match(/^(?:but |and |so |also |honestly,? )?(if you\b[^,]{2,70}?)(?:,\s*|\s+)(?:then\s+)?(?:i'll|i will|i'm|i am|im|ill|i'd|i swear)\b/i);
-    if(feelAt < 0 && cm && !(SHARED && SHARED.harm && SHARED.harm(cm[1]))){ feelAt = parts.length; parts.push(capFirst(cm[1].trim())+", I'll be really upset. It matters to me."); return; }
+    if(feelAt < 0 && cm && !(SHARED && SHARED.harm && SHARED.harm(cm[1]+", I'll be really upset."))){ feelAt = parts.length; parts.push(capFirst(cm[1].trim())+", I'll be really upset. It matters to me."); return; }
     if(feelAt < 0){ feelAt = parts.length; parts.push(HARM_FEEL); }
     // "Clean your room or I'll smack you", "Get home now or I'll beat you": the order before "or" is the ask
     const pre = raw.replace(/,?\s*(?:\bor\b|\botherwise\b|\band\b|\bbefore\b)\s+(?:else\s+)?(?:i\b|i'll|i'm|i will|i am|i'd|im|ill|you'll|you're|you will|you are|you'd)[\s\S]*$/i, "").trim();
@@ -3897,12 +3897,37 @@ function harmVerdict(an){
 }
 /* Words about harm aimed at a person that no pattern explained ("I'll bash you", "your kids won't be safe"):
    the checker can't read them with confidence, so it says so instead of guessing "okay" */
-const RISK_AT_YOU = /\b(?:beat|hit|punch|slap+|smack|kick|hurt|choke|strangle|stab|shoot|kill|murder|destroy|wreck|smash|crush|break|knock|whack|bash|burn|bury|drown|bleed|ruin|fight|batter|thump|throttle|stomp|maul|slit|cut|warn)(?:s|ed|ing)?\s+(?:\w+\s+)?(?:you|u|ya|yourself|urself)\b|\b(?:you|u|ya)(?:'re|re| are| r|'ll| will)?\s+(?:\w+\s+)?(?:dead|bleed|suffer|get hurt|be hurt|won't be safe|not be safe)\b|\b(?:revenge|payback|get even|consequences)\b|(?:🔪|🗡|🔫|💣|🪓|☠|⚰)/i;
+const RISK_AT_YOU = /\b(?:beat|hit|punch|slap+|smack|kick|hurt|choke|strangle|stab|shoot|kill|murder|destroy|wreck|smash|crush|break|knock|whack|bash|burn|bury|drown|bleed|ruin|fight|batter|thump|throttle|stomp|maul|slit|cut|warn|drag|clock|bust|slam)(?:s|ed|ing)?\s+(?:\w+\s+)?(?:you|u|ya|yourself|urself)\b|\b(?:get|getting|be|being) (?:hit|hurt|slapped|punched|smacked|beaten|beat up|stabbed|shot|killed|knocked out)\b|^\s*(?:be )?careful(?: now| then| there)?[.!]*\s*$|\b(?:and|n) see[.!]*\s*$|\b(?:you|u|ya)(?:'re|re| are| r|'ll| will)?\s+(?:\w+\s+)?(?:dead|bleed|suffer|get hurt|be hurt|won't be safe|not be safe)\b|\b(?:revenge|payback|get even|consequences)\b|(?:🔪|🗡|🔫|💣|🪓|☠|⚰)/i;
 const RISK_OK = /\b(?:(?:felt|feel|feeling|was|am|i'm|got|get|been) hurt|never|not|n't|no|sorry|apologi[sz]e|didn't|don't|wouldn't|won't|love|miss|proud|thank\w*|congrat\w*|hope|safe(?:ly)? (?:home|trip|travels|flight|journey|drive)|drive safe|stay safe|be safe|keep (?:you|u) safe|hit (?:you|u) up|hit me up|shoot (?:you|u|me) (?:a|an|the|over)|watch (?:you|u) (?:play|win|grow|perform|sing|dance)|can't wait to watch|beat (?:you|u) (?:there|home|to)|killing it|kill(?:ed)? it|dead tired|phone|battery)\b/i;
+/* "Okay" needs positive evidence. A line aimed at "you" with nothing that shows how it's meant (no thanks, no ask, no
+   time or plan, not a question) and the shape of a warning ("you won't get away with this", "you'll be hearing from me"),
+   a verdict on them ("you're beneath me") or a show of power ("I know which bus you take") can't be read with
+   confidence from the words alone, even when no pattern names it. */
+const EV_YOU = /\b(?:you|u|ya|your|ur|yours|yourself|urself|you're|youre|y'all)\b/i;
+const EV_FRIENDLY = /\b(?:see (?:you|u|ya)|thank (?:you|u)|thanks|love (?:you|u|ya)|miss (?:you|u|ya)|you're welcome|good luck|well done|congrat\w*|(?:you(?:'ve)?|u) got this|take care|proud of|glad|happy|hope|enjoy|have (?:a|fun)|please|sorry|lovely|great|amazing|brilliant|best|sweet\w*|kind|beautiful|awesome|nice|cheer\w*)\b/i;
+const EV_FUT = /\b(?:you|u)(?:'ll|ll| will| won't| wont| are going to|'re going to|'re gonna|re gonna| gonna| r gonna|'d better|d better| better| had better| best| should be| would be| could be| might want)\b(?! (?:love|like|enjoy|be (?:fine|ok|okay|great|amazing|brilliant|glad|happy|pleased|surprised|proud)|do (?:great|well|brilliant)|smash it|nail it|have (?:fun|a)|need|want|get there|make it|see|find|never guess|not believe|won't believe|believe)\b)|\b(?:could|will|might|is going to|are going to|gonna) get (?:\w+ )?(?:bad|ugly|worse|messy|nasty)\b/i;
+const EV_FUT_OK = /\b(?:if|when|whether|in case|let me know|tell me|text me)\b[^.!?]{0,12}$/i;
+const EV_JUDGE = /\b(?:you(?:'re| are|re| r)|ur|youre)\s+(?:so |such an? |a |an |the |just |really |completely |totally |nothing but )*([a-z]+)/i;
+const EV_JUDGE_OK = /^(?:welcome|right|home|here|back|up|in|on|out|ok|okay|fine|sweet\w*|lovely|kind|amazing|best|brilliant|great|good|beautiful|star|legend|gem|my|our|going|gonna|invited|coming|late|early|next|done|safe|always|not|still|doing|being|getting|making|having|taking|working|meant|supposed|allowed|free|busy|off|away|around|there|correct|absolutely|totally|probably|definitely|funny|hilarious|cute|smart|clever|gorgeous|stunning|wonderful|incredible|awesome|superstar|hero|angel|life|lucky|first|last|one|all|both|too|very|already|also|only|right|asleep|awake|sick|ill|tired|hungry|cold|warm|hot|wet|leaving|staying|driving|picking|bringing|cooking|hosting|joking|kidding|teasing|missing|needed|wanted|loved)$/;
+function noEvidence(an){
+  const t = an.norm.toLowerCase();
+  if(an.banter || an.warm || an.found.appreciation || an.apology || an.found.repair || an.care || an.found.boundary || an.found.disclose) return "";
+  if(an.asks && an.asks.length) return "";
+  if(SHARED && SHARED.hasTime && SHARED.hasTime(t)) return "";
+  if(/\?\s*$/.test(t) || !EV_YOU.test(t) || EV_FRIENDLY.test(t)) return "";
+  const fm = t.match(EV_FUT); if(fm && !EV_FUT_OK.test(t.slice(0, fm.index))) return "warning";
+  const j = t.match(EV_JUDGE); if(j && !EV_JUDGE_OK.test(j[1])) return "verdict";
+  if(/\bi (?:know|have|got|'ve got|can|could) (?:where|which|what|who|people|friends|ways)\b/.test(t)) return "power";
+  if(/^\s*(?:go on|go ahead|(?:u|you) better|better)\b/.test(t)) return "dare";
+  return "";
+}
 function lowConfidence(an){
   if(!an || !an.norm || an.lang==="es") return null;
   const t = an.norm.toLowerCase();
-  if(!RISK_AT_YOU.test(t)) return null;
+  if(!RISK_AT_YOU.test(t)){
+    const ne = noEvidence(an);
+    return ne ? {id:"unsure", lowConfidence:true, noEvidence:ne, addContext:true, text:"Hard to tell from the words alone. Nothing here is clearly harsh, but nothing shows how it's meant either, so it could read as a warning or a dig. If that isn't what you mean, say what you mean plainly."} : null;
+  }
   const m = t.match(RISK_AT_YOU), clause = t.slice(Math.max(0, m.index-30), m.index+m[0].length+20);
   if(RISK_OK.test(clause) && !/[🔪🗡🔫💣🪓☠⚰]/u.test(m[0])) return null;
   return {id:"unsure", lowConfidence:true, addContext:true, text:"Hard to tell from the words alone. Some of this could read as harsh, or as a threat. If you're sure how they'll take it, it may be fine; if not, say plainly what you mean."};
@@ -4017,11 +4042,18 @@ function receive(an, opts){
   // one message can't tell you what a relationship is like
   if(!rv.danger && ["guilt","sarcasm","withdraw","jab","brushoff","stonewall","passiveag","label","hostile","contempt"].some(has)) rv.oneMessage = true;
   const r = ctxRead(an, opts, "read");
-  if(!r) return rv;
+  if(!r) return unsureNet(rv, an);
   const F = r.flags;
   rv = Object.assign({}, rv, {context: r});
   if(r.safety) rv.ctxSafety = r.safety;
   if(rv.danger || rv.control || rv.selfHarm) return rv;
+  // a line that reads as a threat stays that way whatever the context says; "we tease, we play games together" can
+  // make a playful one "probably a joke", never "okay"
+  if(rv.threat){
+    if(F.teaseRoom && an.harm && (an.harm.playful || an.harm.kind==="idiom") && !rv.crossed)
+      rv.head = ["unsure", "Given how you two tease, this is probably a joke. If it didn't feel like one, it's okay to say so."];
+    return rv;
+  }
   const crossedOnly = ["label","hostile","swear","contempt","violent","threat","legal","menace","dxlabel"].filter(has);
   const hot = crossedOnly.length > 0;
   const DIRECT = ["oblig","impera","should","urgent","blunt","critic","minimal","period","cannot","closer","nowhen"];
@@ -4051,6 +4083,13 @@ function receive(an, opts){
   if(F.goal && GOAL_REPLY[F.goal]) extra.push(GOAL_REPLY[F.goal]);
   if(F.recurring) extra.push({label:"Suggest a calm time", text:"This keeps coming up, and I'd like to sort it properly. Can we talk at [a calm time], not over text?"});
   if(extra.length) rv.replies = extra.concat(rv.replies.filter(x=>!extra.some(e=>e.text===x.text))).slice(0,4);
+  return unsureNet(rv, an);
+}
+/* "This reads as a plain message" needs positive evidence too: harm words aimed at "you" that no pattern explained
+   make the headline "hard to tell", with or without context */
+function unsureNet(rv, an){
+  if(rv && rv.head && rv.head[0]==="ok" && (an.found.harm || lowConfidence(an)))
+    rv.head = ["unsure", "Hard to tell from the words alone. Some of this could read as harsh, or as a threat. If it worried you, it's okay to ask what they meant."];
   return rv;
 }
 const GOAL_LABEL = {limit:"Aimed at setting a limit", plan:"Aimed at fixing the plan", repair:"Aimed at repair", calm:"Aimed at calming things", understood:"Aimed at being understood", check:"Just checking"};

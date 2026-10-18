@@ -1,6 +1,6 @@
 # spreadloveandacceptance.com
 
-Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: GitHub Pages serves it as-is, so a file's path is its URL (`workpapers/wp-01.html` → `spreadloveandacceptance.com/workpapers/wp-01.html`). Every file in the repo is public, including `.md` files and this README.
+Source for the Spread Love & Acceptance site. The repo root is the site root: GitHub Pages serves it as-is, so a file's path is its URL (`workpapers/wp-01.html` → `spreadloveandacceptance.com/workpapers/wp-01.html`). Every file in the repo is public, including `.md` files and this README.
 
 ## How the site fits together
 

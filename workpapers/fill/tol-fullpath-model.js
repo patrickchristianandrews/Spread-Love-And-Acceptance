@@ -1,5 +1,5 @@
 /*
-  tol-fullpath-model.js — The Objective Ledger (TOL-OS)
+  tol-fullpath-model.js — Spread Love & Acceptance
   The Full path package: one road, every workpaper on it, the CALC-01 inputs,
   optional self-notes and a "Ready for your report" page, all in one list of
   fields. That one list drives everything:

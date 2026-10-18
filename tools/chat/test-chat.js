@@ -2045,10 +2045,10 @@ if (PERSONA) {
   t('chat11', 'how do I use the lemonade stand: the card', { q: 'how do I use the lemonade stand', kind: 'card', id: 'lemonade' });
 
   // ---- 11. merged tools and "Self-discovery" (mergeA, mergeB)
-  t('chat11', 'the Perspective Shifter is now a step of After a talk went wrong', { q: 'what is the perspective shifter', id: 'pshift', link: '/carrier-wave-decoder.html?tab=their-side', text: /Their side/ });
-  t('chat11', 'After a talk went wrong', { q: 'after a talk went wrong', id: 'decoder', text: /After a talk went wrong/, link: '/carrier-wave-decoder.html' });
+  t('chat11', 'the Perspective Shifter is now a step of After a talk went wrong', { q: 'what is the perspective shifter', id: 'pshift', link: '/carrier-wave-decoder.html?tab=their-side', text: /See their side|Their side/ });
+  t('chat11', 'After a talk went wrong', { q: 'after a talk went wrong', id: 'decoder', text: /Rewind the talk/, link: '/carrier-wave-decoder.html' });
   t('chat11', 'the Sound Toolkit is now Calm sounds and music', { q: 'what is the sound toolkit', id: 'soundscapes', link: '/soundscapes.html', text: /Calm sounds and music/ });
-  t('chat11', 'How am I right now?', { q: 'how am i right now check', id: 'weather', text: /How am I right now\?/, link: '/quick-checks.html' });
+  t('chat11', 'How am I right now?', { q: 'how am i right now check', id: 'weather', text: /My weather today/, link: '/quick-checks.html' });
   t('chat11', 'Self-discovery: know your own wiring', { q: 'what is self-discovery', link: ['/know-yourself.html', '/self-path.html'], text: /Self-discovery/ });
   t('chat11', 'the Crosswords', { q: 'tell me about the crosswords', id: /quietcross|dailycross/, text: /Crosswords/ });
   t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /every calm game in one place/ });
@@ -2061,6 +2061,14 @@ if (PERSONA) {
   t('chat11', 'help me write a message', { q: 'help me write a message', id: 'signal', link: '/signal-translator.html' });
   t('chat11', 'a template for an agreement', { q: 'is there a template for an agreement', id: 'makeplan', link: '/make-a-plan.html' });
   t('chat11', 'make a plan together', { q: 'make a plan together', id: 'makeplan', link: '/make-a-plan.html' });
+  // names12: the 19 places' new names; the book is "Spread Love & Acceptance"
+  t('chat11', 'Rewind the talk', { q: 'what is rewind the talk', id: 'decoder', text: /Rewind the talk/ });
+  t('chat11', 'My weather today', { q: 'what is my weather today', id: 'weather', text: /My weather today/ });
+  t('chat11', 'Gentle games', { q: 'what are the gentle games', id: 'pauseplay', text: /Gentle games/ });
+  t('chat11', 'Plan it once', { q: 'what is plan it once', id: 'makeplan', text: /Plan it once/ });
+  t('chat11', 'Who does what?', { q: 'what is the lemonade stand', id: 'lemonade', link: '/lemonade-stand.html', check: r => replyLinks(r).length && /Who does what\?/.test(JSON.stringify(r.blocks)) ? '' : 'no new name in the links' });
+  t('chat11', 'the book is Spread Love & Acceptance', { q: 'what is the book', id: 'book', text: /Spread Love & Acceptance/, not: /Objective Ledger/ });
+  t('chat11', 'what is this site: never the old name', { q: 'what is the objective ledger', not: /Objective Ledger/ });
   t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html|conversation-reader/.test(u)) ? 'an old URL' : '' });
 }
 
