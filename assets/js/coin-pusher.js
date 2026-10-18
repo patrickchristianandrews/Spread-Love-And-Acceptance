@@ -50,10 +50,11 @@
   function pusherAt(tt) { return PF_MID + PF_AMP * Math.sin(tt * 2 * Math.PI / PERIOD - Math.PI / 2); }
   function mk(x, z, kind, pid) { return { x: x, z: z, px: x, pz: z, r: kind === 'prize' ? RP : R, kind: kind, pid: pid || '', st: 'field', y: 0, vy: 0, vz: 0, tilt: 0, spin: Math.random() * 6, age: 0 }; }
   function prefill() {
-    var gap = 2 * R + 0.035, rows = 0;
-    for (var z = PF_MID + PF_AMP + R + 0.05; z < ZE - 0.25; z += gap * 0.87) {
+    // a full bed, packed right up to the edge, so the first few coins already nudge some over (like a real machine)
+    var gap = 2 * R + 0.02, rows = 0;
+    for (var z = ZE - 0.04; z > PF_MID + PF_AMP + R; z -= gap * 0.87) {
       var off = (rows++ % 2) ? gap / 2 : 0;
-      for (var x = -HX + R + off; x <= HX - R; x += gap) if (Math.random() < 0.86) items.push(mk(x + (Math.random() - 0.5) * 0.04, z, 'coin'));
+      for (var x = -HX + R + off; x <= HX - R; x += gap) if (Math.random() < 0.96) items.push(mk(x + (Math.random() - 0.5) * 0.04, z - Math.random() * 0.05, 'coin'));
     }
     st.pending.forEach(function (id, i) { items.push(mk(-2 + i * 2 + Math.random(), 0.4 + Math.random(), 'prize', id)); });
     for (var k = 0; k < 90; k++) step(1 / 60, true);
@@ -765,8 +766,8 @@
     var dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60; last = now;
     frames.push(dt); if (frames.length > 120) frames.shift();
     acc += dt; var steps = 0;
-    while (acc >= 1 / 60 && steps < 3) { step(1 / 60); acc -= 1 / 60; steps++; }
-    if (steps === 3) acc = 0;
+    while (acc >= 1 / 60 && steps < 6) { step(1 / 60); acc -= 1 / 60; steps++; }
+    if (steps === 6) acc = 0;
     if (burstTimer > 0) { burstTimer -= dt; if (burstTimer <= 0) endBurst(); }
     if ((humTick += dt) > 0.12) { humTick = 0; hum((pf - pfPrev) * 60 / 6); }
     view.render(dt); drawFx(dt);

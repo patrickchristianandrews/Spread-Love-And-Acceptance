@@ -92,6 +92,24 @@
   var DANGER = /\b(hits? me|hitting me|shoved me|pushed me|chok\w+ me|threaten\w*|scared of (him|her|them)|afraid of (him|her|them)|(won'?t|doesn'?t|don'?t|never) lets? me (see|go|leave|have|out)|checks? my phone|takes? my money|controls? (my|me|everything))\b/i;
   var LABELS = /\b(stupid|an idiot|idiot|useless|a failure|failure|lazy|hopeless|pathetic|worthless|a mess|a loser|loser|terrible|awful|not good enough|a burden|a bad (mum|mom|dad|mother|father|parent|partner|friend|person|wife|husband|boss|son|daughter))\b/i;
 
+  // a threat of harm ("…or I'll slap you", "I know where you live"): never polished into a nicer-sounding threat.
+  // The shared reading (message-patterns.js) when it's on the page, and a short fallback when it isn't.
+  var HARM_LITE = /\b(?:i'?ll|i will|i'?m (?:going to|gonna)|ima|imma|gonna)\s+(?:\w+\s+)?(?:beat|hit|punch|slap|smack|kick|hurt|choke|strangle|stab|shoot|kill|murder|end|destroy|smash|break|knock|whack)\s+(?:you|u|ya|your|ur)\b|\b(?:you'?re|ur) (?:so )?dead\b(?! (?:tired|right|to me))|\bi know where (?:you|u) live\b|\bsee what happens\b|\b(?:watch|wach) (?:yourself|urself|your back)\b|\btry me\b|\byou(?:'ve| have)? been warned\b/i;
+  function patterns() {
+    if (root.TOLPatterns) return root.TOLPatterns;
+    try { if (typeof module !== 'undefined' && typeof require === 'function') return require('./message-patterns.js'); } catch (e) {}
+    return null;
+  }
+  function threatIn(s) {
+    var P = patterns(), t = String(s || '');
+    if (P && P.harm) { var h = P.harm(t); return !!(h && !h.playful) || (P.THREAT_RE ? P.THREAT_RE.test(P.prep(t)) : false); }
+    return HARM_LITE.test(t);
+  }
+  var HARM_SEND = 'I’m really angry about [what happened]. What I need is [one specific thing]. Can we talk about it at [a calm time]?';
+  function threatFlip(t) {
+    return { text: ['The threat is left out. Words like that frighten people, whatever was meant, and a politer version is still a threat.', '', 'What you could say:', '“' + HARM_SEND + '”', '', 'Fill in the gaps when you’re calmer: what happened, and the one thing you need.'].join('\n'),
+      send: HARM_SEND, threat: true, why: 'Anger is information about something that matters to you. Said as a feeling and a need, it can be heard and answered. Said as a threat, it can’t.' };
+  }
   function tidy(s) { return String(s || '').replace(/\s+/g, ' ').trim().replace(/[.!?…]+$/, '').trim(); }
   function unthird(verb) {
     var v = verb.toLowerCase();
@@ -203,6 +221,16 @@
     if (!t) return null;
     if (CRISIS.test(raw)) return { alert: CRISIS_HTML };
     if (DANGER.test(raw)) return { alert: DANGER_HTML };
+    if (kind !== 'worry' && kind !== 'self' && threatIn(raw)) {
+      // the complaint around the threat ("You never listen") still gets its request; the threat part is dropped
+      var rest = t.split(/(?:[.!?]+|,)\s*|\s+(?:and|or)\s+(?=i\b|i'|you'll|see\b|watch\b)/i).filter(function (x) { return x && !threatIn(x) && !/^(?:keep (?:it up|going|talking|pushing)|or else|and|or|i swear|you know what|try me|go on then|i'?m warning you)\b/i.test(x.trim()); }).join(', ');
+      if (kind === 'complaint' && /\b(?:you|he|she|they)\b/i.test(rest) && rest.split(/\s+/).length >= 3) {
+        var r = complaintFlip(tidy(rest));
+        r.text = 'The threat is left out. Words like that frighten people, whatever was meant.\n\n' + r.text; r.threat = true;
+        return r;
+      }
+      return threatFlip(t);
+    }
     return kind === 'worry' ? worryFlip(t) : kind === 'self' ? selfFlip(t) : kind === 'anger' ? angerFlip(t) : complaintFlip(t);
   }
 
@@ -229,6 +257,10 @@
   var FEELINGS = ['hurt', 'worried', 'frustrated', 'left out', 'embarrassed', 'tired', 'confused'];
   function lower1(s) { return /^(I\b|I[’']|[A-Z]{2,})/.test(s) ? s : s.charAt(0).toLowerCase() + s.slice(1); }
   function stingLine(fact, feel, ask) {
+    // a threat typed into a box is left out (a blank instead), never turned into a polite-sounding request
+    if (threatIn(fact)) fact = '';
+    if (threatIn(feel)) feel = '';
+    if (threatIn(ask)) ask = '';
     fact = tidy(fact).replace(/^when\s+/i, '');
     feel = tidy(feel).replace(/^i\s+(?:felt|feel|was|am)\s+/i, '');
     ask = tidy(ask).replace(/^(?:please\s+)?(?:could|can|would|will)\s+you\s+/i, '').replace(/^please\s+/i, '');

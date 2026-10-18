@@ -686,7 +686,9 @@
   Cross.prototype.lvlMul = function () { return 1; };
   Cross.prototype.objX = function (L, i) {
     var raw = L.off + i * L.period + L.dir * L.speed * this.t;
-    var x = ((raw % LOOP) + LOOP) % LOOP - 2.5; // loop of LOOP tiles, starting just off the left edge
+    // a loop of LOOP (18) tiles: 5 off the left edge, the 13 on screen; nothing longer than 5 tiles, so a log or a bus
+    // always wraps round fully out of sight instead of popping in or out at the edge
+    var x = ((raw % LOOP) + LOOP) % LOOP - 5;
     return x;
   };
   Cross.prototype.diving = function (L, i) {
