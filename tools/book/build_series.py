@@ -313,15 +313,20 @@ def copyright_page(book, workbook=False):
 MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
 
 
-def meet_page(book_or_none):
-    """"Workpapers, tools and three friends", on one page"""
+def meet_page(book, found):
+    """"Workpapers, tools and three friends", on one page. Its two samples are a workpaper and a tool this book uses."""
     wb = CFG['workbook']['title']
+    wp = next((hints.WP[k] for (kind, k) in found if kind == 'wp' and k in hints.WP), hints.WP.get('wp03'))
+    tl = next((hints.TL[k] for (kind, k) in found if kind == 'tool' and k in hints.TL), None)
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
-    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “Workpaper WP-03: '
-          'One owner per job”. Every workpaper is free to print or fill in on the website: the book names it and gives a code to scan. <em>%s</em> has them all in one place, on big pages.</p>'
-          '<p>%s <strong>A tool</strong> is a helper you use on the website, such as “Tool: Chat analyzer”. You use it and it gives you something back.</p>'
-          '<p class="ps-meet-note">The book keeps the two apart: a workpaper and a tool never share a list. Both are free, need no account, and what you '
-          'type stays on your device.</p></div>') % (hints.tag('wp', hints.WP.get('wp03')), esc(wb), hints.tag('tool'))
+    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s”. '
+          'Every workpaper is free to print or to fill in on the website, and the book gives a code to scan for each one. '
+          '<em>%s</em> has them all in one place, on big pages.</p>'
+          '<p>%s <strong>A tool</strong> is a helper you use on the website%s. You use it and it gives you something back.</p>'
+          '<p class="ps-meet-note">Workpapers and tools are kept in separate lists. Both are free and need no account, and what you '
+          'type stays on your own device.</p></div>') % (
+        hints.tag('wp', wp), esc(hints.wp_label(wp)), esc(wp['name']), esc(wb), hints.tag('tool'),
+        (', such as “Tool: %s”' % esc(tl['name'])) if tl else '')
     s += '<p class="ps-meet-h">Three friends who give hints</p><ul class="bh-friends ps-friends">'
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Professor Puddles</strong>, the cheerful raindrop professor, gives most of the hints.</span></li>' % hints.SVG_PUDDLES
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Tidbit</strong>, the quick, curious pup, bounds in with a playful tip.</span></li>' % hints.SVG_TIDBIT
@@ -330,8 +335,33 @@ def meet_page(book_or_none):
     return s
 
 
-def help_now(here):
-    ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add)
+def about_page(book, namer):
+    """printfix13: "About this book, and how to use it", one page before Chapter 1: what the book is for and who it is for,
+    how its chapters sit beside the other books and the free online versions, and the five big ideas."""
+    ab = ST.TEXT['about']
+    mine = ab['books'][str(book['n'])]
+    s = '<section class="ps-about pe-only" id="about" style="--pc:%s">%s<h1>About this book, and how to use it</h1>' % (book['color'], mark('about'))
+    s += '<p class="ps-about-lede">%s</p><p>%s</p>' % (mine['what'], mine['who'])
+    s += '<p>%s</p>' % ab['how']
+    rows = ''
+    for slug in book['chapters']:
+        num, lab = chapter_label(slug, book)
+        rows += '<tr><td>%s</td><td>%s</td><td><span class="ps-addr">%s</span></td></tr>' % (
+            esc(lab), esc(B.SHORT[slug]), B.addr_html(B.short_address(B.href(slug))))
+    s += ('<table class="ps-about-t"><thead><tr><th scope="col">In this book</th><th scope="col">About</th><th scope="col">Free online, short and full</th></tr></thead>'
+          '<tbody>%s</tbody></table>') % rows
+    others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
+                       for b in books() if b is not book)
+    s += '<p>%s %s. %s</p>' % (ab['series_lead'], others, ab['refs'])
+    s += '<p class="ps-about-h">Five big ideas</p><p class="ps-about-small">%s</p><ul class="ps-about-ideas">%s</ul>' % (
+        ab['ideas_lead'], ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), d) for t, d in ab['ideas']))
+    s += '<p class="ps-about-small">%s %s</p></section>' % (ab['program'], esc(MADE_UP))
+    return s
+
+
+def help_now(here, namer):
+    ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
+                         series_ref=namer.ref)
     for x in front_back.front_sections(ctx):
         if x['key'] == 'help-now':
             return x['html'], x['toc']

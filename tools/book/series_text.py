@@ -24,7 +24,14 @@ import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
-TEXT = json.load(open(os.path.join(HERE, 'series-text.json'), encoding='utf-8'))
+def _text():
+    try:
+        return json.load(open(os.path.join(HERE, 'series-text.json'), encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+
+
+TEXT = _text()
 
 
 def printed_pagemaps():
