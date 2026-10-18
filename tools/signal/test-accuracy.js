@@ -22,7 +22,7 @@ const path = require('path');
 const E = require(path.join(__dirname, '../../assets/js/signal-engine.js'));
 const SET = require(path.join(__dirname, 'accuracy-set.json'));
 const args = process.argv.slice(2);
-const ONLY = args.includes('--split') ? args[args.indexOf('--split') + 1] : '';  // tune, holdout or context
+const ONLY = args.includes('--split') ? args[args.indexOf('--split') + 1] : '';  // tune, holdout, holdout2-4, context or question
 const MISSES = args.includes('--misses'), JSON_OUT = args.includes('--json');
 // holdout2 and holdout3 are fresh-phrasing checks: their gates are printed, and only fail the run with --strict
 const STRICT = args.includes('--strict');
@@ -114,6 +114,43 @@ const CTXS = [
       okBad.slice(0, 20).forEach(x => console.log('      ' + x));
       console.log('     (playful lines with a "we tease" context read as "probably playful": ' + playSoft + ' of ' + playN + ')');
     }
+  }
+}
+// One question first (askFirst): every threat-shaped line, in every split, is either flagged (not "ok") or gets the
+// question before any answer; no answer to the question turns a flagged threat into "ok"; and the question stays rare
+// on warm and neutral messages.
+if(!ONLY || ONLY === 'question'){
+  const ANS = {send: ['joke', 'upset', 'skip'], read: ['joke', 'worried', 'skip']};
+  let netN = 0, netBad = [], ansN = 0, ansBad = [], negN = 0, negAsk = [], threatAsk = 0;
+  const readOf = (t, ctx, answer) => E.receive(E.analyze(t, {channel: 'text', ctx, mode: 'read'}), {ctx, answer}).head[0];
+  const sendOf = (t, ctx, answer) => { const an = E.analyze(t, {channel: 'text', ctx}); return E.verdict(an, E.score(an, ['general'], 'text'), E.rewrite(an, {wirings: ['general'], channel: 'text', ctx, answer}), {ctx, answer}).id; };
+  SET.forEach(c => {
+    const an = E.analyze(c.t, {channel: 'text'}), anR = E.analyze(c.t, {channel: 'text', mode: 'read'});
+    const qS = E.askFirst(an, {mode: 'send'}), qR = E.askFirst(anR, {mode: 'read'});
+    if(THREAT.includes(c.cat)){
+      const vS = sendOf(c.t, null), vR = readOf(c.t, null);
+      netN += 2;
+      if(vS === 'ok' && !qS) netBad.push('send ' + c.split + ' ' + JSON.stringify(c.t));
+      if(vR === 'ok' && !qR) netBad.push('read ' + c.split + ' ' + JSON.stringify(c.t));
+      if(qS) threatAsk++;
+      ['send', 'read'].forEach(mode => {
+        const base = mode === 'send' ? vS : vR; if(base === 'ok') return;
+        ANS[mode].forEach(a => { ansN++; const ctx = E.answerCtx(a, null); const got = mode === 'send' ? sendOf(c.t, ctx, a) : readOf(c.t, ctx, a); if(got === 'ok') ansBad.push(mode + ' "' + a + '" ' + JSON.stringify(c.t)); });
+      });
+    }
+    if(NEG.includes(c.cat)){ negN++; if(qS) negAsk.push(c.split + ' ' + JSON.stringify(c.t)); }
+  });
+  const g1 = netBad.length === 0, g2 = ansBad.length === 0, g3 = negAsk.length / negN < 0.15;
+  if(!g2) failed = true;
+  report.question = {threatLines: netN / 2, netMisses: netBad.length, answerChecks: ansN, answerOk: ansBad.length, negN, negAsked: negAsk.length, threatAsked: threatAsk};
+  if(!JSON_OUT){
+    console.log('\n== one question first (all splits)');
+    console.log((g1 ? 'PASS ' : 'NOTE ') + 'every threat-shaped line is flagged or gets the question first: ' + (netN - netBad.length) + '/' + netN + ' (send and read)');
+    netBad.forEach(x => console.log('      ' + x));
+    console.log((g2 ? 'PASS ' : 'FAIL ') + 'no answer turns a flagged threat into "okay": ' + ansBad.length + ' of ' + ansN);
+    ansBad.slice(0, 20).forEach(x => console.log('      ' + x));
+    console.log((g3 ? 'PASS ' : 'FAIL ') + 'the question on warm/neutral messages (under 15%): ' + negAsk.length + ' of ' + negN + ' (' + pct(negAsk.length, negN) + '%)');
+    if(MISSES) negAsk.forEach(x => console.log('      ' + x));
   }
 }
 if(JSON_OUT) console.log(JSON.stringify(report, null, 1));

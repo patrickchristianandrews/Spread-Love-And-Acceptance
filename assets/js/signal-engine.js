@@ -3993,7 +3993,7 @@ function verdict(an, sc, rw, opts){
     v = Object.assign({}, v, {id:"hurt", labelWord:true, text:"A word like that is a label for the person, so it may land as an accusation. "+(soft ? "Here's a way to say what happened and how it felt." : "Saying what happened, and how it felt, can be answered.")});
   if(an.ultOwn && v.id==="fight" && !["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","harm"].some(id=>f[id]))
     v = Object.assign({}, v, {ult:true, text:"This is an ultimatum about your own choice, and it may land as pressure. "+(soft ? "Try the version below, and say your limit once, calmly." : "Make the ask on its own, and say your limit once, calmly.")});
-  if(!r0) return v;
+  if(!r0) return answered(v, an, opts);
   const r = r0, F = r.flags;
   v = Object.assign({}, v, {context: r});
   if(r.safety) v.ctxSafety = r.safety;
@@ -4004,6 +4004,7 @@ function verdict(an, sc, rw, opts){
     if(F.teaseRoom && an.harm && (an.harm.playful || an.harm.kind==="idiom") && v.id!=="fight")
       v = Object.assign(v, {id:"unsure", probablyPlayful:true, teaseOk:true, text:"Given how you two tease, this is probably the playful kind. Read flatly it could still sound like a threat, so on a hard day, say it's a joke."});
     if(F.themLow && F.themLow.length) v.text += " They may be running on empty today, so if it can wait, a calmer moment may help.";
+    if(opts.answer==="upset" && v.id==="unsure") v = Object.assign(v, {id:"fight", upset:true, answer:"upset", text:"If you're upset with them, this will likely read as a threat, not as how you feel. If you're angry, say that instead: \u201cI'm really frustrated with you right now.\u201d"});
     return v;
   }
   const mildOnly = an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
@@ -4022,7 +4023,17 @@ function verdict(an, sc, rw, opts){
   if(F.recurring) v.recurring = true;
   // context can soften the wording; it can't turn something the checker couldn't read into "okay"
   if(v.id==="ok" && (f.harm || lowConfidence(an))) v = Object.assign(v, lowConfidence(an) || {id:"unsure", text: UNSURE_TEXT});
-  return v;
+  return answered(v, an, opts);
+}
+/* The one-tap answer to askFirst(): "a joke we share" can make it "probably playful", "I'm upset with them" says the
+   feeling may not come through. Neither ever makes a threat, or a line the words can't settle, "okay". */
+function answered(v, an, opts){
+  const a = opts && opts.answer; if(!a || !v || v.id==="danger" || v.control) return v;
+  if(a==="joke" && v.id==="unsure" && !v.probablyPlayful)
+    return Object.assign({}, v, {answer:a, text:"You know it's a joke between you, so it may well land as one. Read flatly, by anyone else or on a hard day, it could sound like a warning."});
+  if(a==="upset" && (v.id==="ok" || v.id==="unsure"))
+    return Object.assign({}, v, {id:"hurt", answer:a, upset:true, text:"If you're upset with them, this may come across as a warning or a dig, not as how you feel. Saying the feeling plainly is easier to answer."});
+  return Object.assign({}, v, {answer:a});
 }
 function receive(an, opts){
   opts = opts||{};
@@ -4047,7 +4058,7 @@ function receive(an, opts){
   // one message can't tell you what a relationship is like
   if(!rv.danger && ["guilt","sarcasm","withdraw","jab","brushoff","stonewall","passiveag","label","hostile","contempt"].some(has)) rv.oneMessage = true;
   const r = ctxRead(an, opts, "read");
-  if(!r) return unsureNet(rv, an);
+  if(!r) return unsureNet(rv, an, opts);
   const F = r.flags;
   rv = Object.assign({}, rv, {context: r});
   if(r.safety) rv.ctxSafety = r.safety;
@@ -4088,15 +4099,63 @@ function receive(an, opts){
   if(F.goal && GOAL_REPLY[F.goal]) extra.push(GOAL_REPLY[F.goal]);
   if(F.recurring) extra.push({label:"Suggest a calm time", text:"This keeps coming up, and I'd like to sort it properly. Can we talk at [a calm time], not over text?"});
   if(extra.length) rv.replies = extra.concat(rv.replies.filter(x=>!extra.some(e=>e.text===x.text))).slice(0,4);
-  return unsureNet(rv, an);
+  return unsureNet(rv, an, opts);
 }
 /* "This reads as a plain message" needs positive evidence too: harm words aimed at "you" that no pattern explained
    make the headline "hard to tell", with or without context */
-function unsureNet(rv, an){
+function unsureNet(rv, an, opts){
+  if(opts && opts.answer==="worried" && rv && rv.head && (rv.head[0]==="ok" || rv.head[0]==="unsure"))
+    rv.head = ["unsure", "It worried you, and that matters. The words alone can't show what they meant, so it's okay to ask, or to step back for now."];
   const lc = rv && rv.head && rv.head[0]==="ok" ? (an.found.harm ? {} : lowConfidence(an)) : null;
   if(lc) rv.head = ["unsure", lc.noEvidence ? "Hard to tell from the words alone. Nothing here is clearly harsh, but it could be meant as a warning or a dig. If it worried you, it's okay to ask what they meant."
     : "Hard to tell from the words alone. Some of this could read as harsh, or as a threat. If it worried you, it's okay to ask what they meant."];
   return rv;
+}
+/* ============================================================
+   ONE QUESTION FIRST
+   A short line aimed at "you", with no ask, no thanks and no warmth ("You won't get away with this", "See you around."),
+   or anything the checker can't read with confidence: before answering, one tap ("Is this a joke you both share, or are
+   you upset with them?"). The answer feeds the context logic. It can make a playful line "probably playful"; it can never
+   turn a threat, or a line the words alone can't settle, into "okay".
+   askFirst(an, {mode, ctx}) -> null, or {q, answers:[{id, label}]}; answerCtx(id, ctx) -> the context to read it with.
+   ============================================================ */
+const ASK_Q = {
+  send:{q:"One quick question first: is this a joke you both share, or are you upset with them?",
+    answers:[{id:"joke", label:"A joke we both share"}, {id:"upset", label:"I'm upset with them"}, {id:"skip", label:"Neither, just show me"}]},
+  read:{q:"One quick question first: do you two joke like this, or did it worry you?",
+    answers:[{id:"joke", label:"We joke like this"}, {id:"worried", label:"It worried me"}, {id:"skip", label:"Not sure, just show me"}]}
+};
+const ASK_INFO_Q = /^(?:did|do|does|are|have|has|can|could|will|would|how|when|what time|where are|where's|wanna|want to|is it|shall|you around|you free|you up|you home|you coming|you ok|you okay)\b[^?]*\?\s*$/;
+// warm or caring words, a request to keep in touch, a "what/where" question, plain news ("your mum called"), everyday things
+const ASK_WARM = /\b(?:good|fun|lucky|favou?rite|wonderful|miss\w*|without you|lov\w+|proud|star|killed it|worried|okay\?|ok\?|safe|made it|got home|landed|well done|great job)\b/i;
+const ASK_PLAIN = /\b(?:let me know|text me|call me|ring me|shoot me|hit me up|message me|ping me|i'll (?:call|text|ring|message|email) (?:you|u)|don't forget|what|where|when|how|why)\b[^.!]*\?|\b(?:let me know|text me|call me|ring me|shoot me|hit me up|message me|ping me|i'll (?:call|text|ring|message|email) (?:you|u)|don't forget)\b|\byou(?:'ve| have)? (?:left|forgot|got|won|missed|dropped)\b|\byour \w+ (?:called|came|arrived|rang|phoned|is here|is ready|was great|went well)\b|\b(?:dinner|lunch|breakfast|takeout|keys|parcel|package|umbrella|mail|meeting|work|traffic|trains?|bus|weather|freezing|cold|raining|forms?|receipt|card|presentation|photos|chilli|cousin|slide|olives|party|game)\b/i;
+function askFirst(an, opts){
+  opts = opts || {};
+  if(!an || !an.norm || !an.norm.trim() || an.danger || an.selfHarm || an.control || an.lang==="es") return null;
+  const mode = opts.mode==="read" ? "read" : "send";
+  const C = CTXM(), ctx = opts.ctx || an.ctx;
+  if(C && ctx && !C.isEmpty(ctx)) return null;            // they've already said who it's for and how you write
+  const ch = an.channel || "text";
+  let id;
+  if(mode==="read") id = (receive(an, {}).head || ["ok"])[0];
+  else { const rw = rewrite(an, {wirings:["general"], channel:ch}); id = verdict(an, score(an, ["general"], ch), rw, {}).id; }
+  const q = ASK_Q[mode];
+  if(id==="unsure") return q;
+  if(id!=="ok") return null;
+  const t = an.norm.toLowerCase();
+  if(an.words > 14 || !EV_YOU.test(t)) return null;
+  if(an.warm || an.found.appreciation || an.apology || an.found.repair || an.care || an.found.boundary || an.banter || an.found.disclose) return null;
+  if((an.asks && an.asks.length) || EV_FRIENDLY.test(t) || ASK_INFO_Q.test(t) || ASK_WARM.test(t) || ASK_PLAIN.test(t)) return null;
+  if(SHARED && SHARED.hasTime && SHARED.hasTime(t) && !/\bi (?:saw|watched|noticed|know|followed)\b/.test(t)) return null;
+  return q;
+}
+function answerCtx(id, ctx){
+  const c = Object.assign({}, ctx || {});
+  const add = (k, v)=>{ c[k] = (c[k] ? String(c[k])+". " : "")+v; };
+  if(id==="joke"){ c.usual = [].concat(c.usual || []).filter(x=>x!=="tease").concat(["tease"]); add("other", "we're joking, we joke like this"); }
+  else if(id==="upset"){ if(!c.goal) c.goal = "calm"; add("other", "I'm upset with them"); }
+  else if(id==="worried") add("other", "it worried me");
+  return c;
 }
 const GOAL_LABEL = {limit:"Aimed at setting a limit", plan:"Aimed at fixing the plan", repair:"Aimed at repair", calm:"Aimed at calming things", understood:"Aimed at being understood", check:"Just checking"};
 const GOAL_WHY = {
@@ -4115,7 +4174,13 @@ function rewrite(an, opts){
     if(r.flags.work && !opts.work) opts = Object.assign({}, opts, {work:true, rel: opts.rel && WORK_REL.includes(opts.rel) ? opts.rel : "coworker"});
     else if(!opts.rel && r.rel) opts = Object.assign({}, opts, {rel: r.rel});
   }
-  const rw = rewriteBase(an, opts);
+  let rw = rewriteBase(an, opts);
+  if(opts.answer==="upset" && !rw.danger && !rw.harm && !an.control && (rw.unchanged || noEvidence(an))){
+    const main = "I'm upset with you right now. [What happened, and what you need.]";
+    const v0 = {id:"main", label:"Say the feeling", why:"You said you're upset with them. Saying that plainly can be heard and answered; a line that sounds like a warning can't.", text:main};
+    rw = {main, primary:v0, variants:[v0, {id:"pause", label:"Take a break first", why:"If you're too upset to say it calmly, a break is the safest thing you can send.", text:"I'm too upset to talk well right now. I'm going to take a break, and come back to this at [a time]."}], changes:[], ask:null, list:"", unchanged:false, upset:true};
+    return rw;
+  }
   if(!r || rw.danger || rw.gibberish || rw.harm) return rw;
   const F = r.flags;
   const base = String(rw.unchanged ? an.text : (rw.variants[0] ? rw.variants[0].text : rw.main)).trim();
@@ -4139,6 +4204,6 @@ function rewrite(an, opts){
   return rw;
 }
 
-const api = {CARE_SEND, CARE_GOT, verdictBase, receiveBase, rewriteBase, moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+const api = {askFirst, answerCtx, ASK_Q, CARE_SEND, CARE_GOT, verdictBase, receiveBase, rewriteBase, moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

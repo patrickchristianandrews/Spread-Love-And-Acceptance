@@ -104,7 +104,7 @@
       words: words,
       short: words > 0 && (words <= 5 || hasF(['minimal', 'period'])),
       emoji: /[\u{1F300}-\u{1FAFF}☀-➿]/u.test(t),
-      tease: !!(an && an.banter) || !!(an && an.harm && an.harm.playful) || hasF(['sarcasm', 'jab']) || (!an && /\b(?:lol|haha|jk|lmao)\b|😂|🤣|😜/i.test(t)),
+      tease: !!(an && an.banter) || !!(an && an.harm && (an.harm.playful || an.harm.kind === 'idiom')) || hasF(['sarcasm', 'jab']) || (!an && /\b(?:lol|haha|jk|lmao)\b|😂|🤣|😜/i.test(t)),
       point: !!(an && an.banterPoint) || hasF(['absolute', 'again', 'critic', 'blameq', 'jab']),
       direct: hasF(['oblig', 'impera', 'blunt', 'critic', 'should', 'minimal', 'period', 'urgent', 'cannot', 'closer']) || (!an && /^(?:do|send|call|stop|don't|get|bring|fix|tell|no)\b|\b(?:need to|have to|must)\b/i.test(t.trim())),
       hint: hasF(['hint', 'sarcasm', 'idiom', 'passiveag']) || (!!P() && P().idioms && P().idioms(t).length > 0),
