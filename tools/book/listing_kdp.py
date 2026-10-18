@@ -19,6 +19,9 @@ OUT = os.path.join(ROOT, 'book', 'print')
 CFG = json.load(open(os.path.join(HERE, 'series.json'), encoding='utf-8'))
 MADE = json.load(open(os.path.join(OUT, 'series.json'), encoding='utf-8')).get('books', {})
 SERIES = CFG['series_title']
+# printfix13: the publisher and imprint, as on every copyright page (tools/book/series.json)
+PUBLISHER = CFG.get('publisher', "Christian's Lab").replace("'", '’')
+IMPRINT = CFG.get('imprint', PUBLISHER).replace("'", '’')
 import sys  # noqa: E402
 sys.path.insert(0, HERE)
 from build_series import WB  # noqa: E402  (the workbook's sheets and how many copies of each)
@@ -93,12 +96,12 @@ L = {
                'household management for working parents', 'roommates and co-parenting chores', 'resentment in relationships over housework'],
     },
     'workbook': {
-        'hook': 'Every workpaper from the series, on big pages with room to write.',
+        'hook': 'Every form in the series is free to print or fill in online. This is the bound edition, on big pages with room to write.',
         'body': [
-            'Inside are blank copies of all ten: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more.',
-            'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program and pages for your own notes. The same forms are free to print or fill in online; this book simply puts them all in one place.',
+            'Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.',
+            'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes. The same forms are free to print or fill in on screen at spreadloveandacceptance.com; this bound edition is for anyone who would rather have them all in one book, with a pencil.',
         ],
-        'inside': ['10 workpapers, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page; longer sheets open across two facing pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
+        'inside': ['10 workpapers and a paper setup score, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page; longer sheets open across two facing pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
         'cats': ['Books › Self-Help › Relationships', 'Books › Parenting & Relationships › Marriage & Adult Relationships', 'Books › Self-Help › Communication & Social Skills'],
         'alt': ['Books › Self-Help › Stress Management', 'Books › Parenting & Relationships › Family Relationships', 'Books › Self-Help › Personal Transformation'],
         'kw': ['communication workbook for couples', 'relationship worksheets for couples', 'chore chart for couples and families', 'self help workbook for adults',
@@ -180,6 +183,8 @@ def main():
         md.append('| Series | %s, number %s (use "Add to series" so all books show together) | %s |' % (SERIES, num if num else '5 [OWNER: or leave the workbook out of the numbered series]', 'no Kindle edition (print only)' if wb else 'the same series, the same number'))
         md.append('| Edition number | 1 | 1 |')
         md.append('| Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |')
+        md.append('| Publisher | %s | %s |' % (PUBLISHER, PUBLISHER))
+        md.append('| Imprint | %s (KDP asks for it beside your own ISBN; it also prints on the copyright page) | %s |' % (IMPRINT, IMPRINT))
         md.append('| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |')
         md.append('| Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |')
         md.append('| Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |')
@@ -252,7 +257,7 @@ The answers are seen by Amazon, not printed on the product page.
         md.append('### Taglines for ads (short and true)\n')
         md.append('\n'.join('- %s' % t for t in TAGLINES[bid]))
         rows.append({
-            'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or '', 'edition': 1, 'author': 'Christian',
+            'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or '', 'edition': 1, 'author': 'Christian', 'publisher': PUBLISHER, 'imprint': IMPRINT,
             'description_html': desc, 'category_1': d['cats'][0], 'category_2': d['cats'][1], 'category_3': d['cats'][2],
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
             **{'keyword_%d' % (i + 1): k for i, k in enumerate(d['kw'])},
@@ -278,9 +283,9 @@ The answers are seen by Amazon, not printed on the product page.
 Keep every image free of prices, review quotes and claims like "bestseller". [OWNER]
 ''')
     md.append('## "Look inside" tips\n')
-    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page on the characters, the help page), so a browser reaches Chapter 1 within 7 pages.
+    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, one page on the workpapers, tools and characters, the help page), so a browser reaches Chapter 1 early.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, the help page right after the contents, then the three friends, so Chapter 1 comes early.
+- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, the help page, then the three friends, so Chapter 1 comes early.
 ''')
     md.append('## Author Central bio (short, warm and true)\n')
     md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. He brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.

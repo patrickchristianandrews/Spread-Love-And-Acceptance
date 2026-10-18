@@ -53,6 +53,7 @@ const PRINT_KIT = process.env.BOOK_PRINT_KIT !== '0';
 const PRINT_OUT = path.join(OUT, 'print');
 // the book's one name (print12): series_title in tools/book/series.json
 const SERIES_TITLE = JSON.parse(fs.readFileSync(path.join(__dirname, 'series.json'), 'utf8')).series_title;
+const AUTHOR_NAME = 'Christian';
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tol-book-'));
 
 function pageTexts(buf) {
@@ -455,6 +456,9 @@ async function makeCover(browser, job, pages) {
   };
   const pdf = await shoot(1, 'pdf');
   fs.writeFileSync(path.join(SERIES_OUT, job.cover + '.pdf'), pdf);
+  // printfix13: the same document information as the books (Chromium's own names would be left in otherwise)
+  execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), '--tag', path.join(SERIES_OUT, job.cover + '.pdf'),
+    SERIES_TITLE + ': ' + job.title + ' (cover)', AUTHOR_NAME, 'Full-wrap cover: back, spine, front']);
   const big = path.join(SERIES_OUT, job.cover + '-front.jpg');
   fs.writeFileSync(big, await shoot(1600 / (job.trim[0] * 96), 'jpg'));
   execFileSync('python3', ['-c', 'import sys\nfrom PIL import Image\nim = Image.open(sys.argv[1]); w = 480; h = round(im.height * w / im.width)\nim.convert("RGB").resize((w, h), Image.LANCZOS).save(sys.argv[2], quality=84, optimize=True, progressive=True)', big, path.join(SERIES_OUT, job.cover + '-front-small.jpg')]);

@@ -160,6 +160,9 @@ def ref(ctx, key, label):
         lab, page = ctx.series_ref(slug)
         if inside:
             return '<a href="%s">%s</a>, page %s' % (href, esc(lab), ctx.pg(pkey))
+        if page is None:
+            # an ebook: no page numbers for the other books
+            return esc(lab)
         return '%s, page %s' % (esc(lab), page) if page else '%s (online)' % esc(lab)
     if inside:
         return '<a href="%s">%s</a>, page %s' % (href, label, ctx.pg(pkey))

@@ -55,9 +55,9 @@ SERIES_TITLE = S.SERIES_TITLE
 OUT = os.path.join(ROOT, 'book', 'print', 'epub')
 
 # [OWNER] Publisher and imprint, as they go into each ebook's metadata (KDP's own form sets what the store shows).
-# The print copyright page says "Published by Spread Love & Acceptance"; change both here if that changes.
-PUBLISHER = 'Spread Love & Acceptance'
-IMPRINT = ''  # e.g. the imprint name you register with your ISBNs; empty leaves it out
+# The print copyright page says "Published by Christian’s Lab" (publisher in tools/book/series.json); change both if that changes.
+PUBLISHER = 'Christian’s Lab'
+IMPRINT = 'Christian’s Lab'  # the imprint name you register with your ISBNs; empty leaves it out
 # [OWNER] Store links for "The series" page in each ebook, once the books are live. Empty links are left out.
 STORE_LINKS = {
     'book-1-know-yourself-kindly': {'kindle': '', 'paperback': ''},
@@ -480,10 +480,19 @@ def book_docs(book, where):
     # contents: nav.xhtml (added later, after the title and copyright pages)
     docs.append(None)
     # help now (kept word for word), then the three friends
-    hn_html, hn_toc = S.help_now(here)
+    # printfix13: "About this book, and how to use it", as in print but with links in place of page numbers and codes
+    namer = S.namer_for(book)
+    ebook_ref = lambda s_: (namer.ref(s_)[0], None)
+    about = S.about_page(book, namer).replace('<section class="ps-about pe-only"', '<section class="ps-about"', 1)
+    about = swap(about, 'The code at the end of each chapter opens the full version on your phone.', 'The link at the end of each chapter opens the full version.', 'about page')
+    about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?”', r'it gives the book and the chapter, as in “\1”', about)
+    if not n_:
+        warn('about page: text to change not found: it gives the book, the chapter and the page')
+    docs.append(Doc('about.xhtml', 'About this book, and how to use it', about))
+    hn_html, hn_toc = S.help_now(here, type('EbookNamer', (), {'ref': staticmethod(ebook_ref)}))
     if hn_html:
         docs.append(Doc('help-now.xhtml', hn_toc, hn_html))
-    meet = swap(S.meet_page(book), 'the book names it and gives a code to scan.', 'the book names it and links to it.', 'meet page')
+    meet = swap(S.meet_page(book), 'and the book gives a code to scan for each one.', 'and the book links to each one.', 'meet page')
     docs.append(Doc('meet.xhtml', 'Workpapers, tools and three friends', meet))
     # the chapters, numbered (figures, filled-in examples) as in print
     parts = []
@@ -500,14 +509,16 @@ def book_docs(book, where):
     wt_ref = lambda s_: '<a href="#%s">%s</a>' % (s_, B.esc(B.SHORT[s_]))
     docs.append(Doc('wp-tools.xhtml', 'Workpapers and tools in this book', hints.back_section(S.mark, found, wt_ref, book['color'])))
     if 'numbers' in book.get('extras', []):
-        ctx = S.front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, S.pg, S.mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add)
+        ctx = S.front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, S.pg, S.mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
+                               series_ref=ebook_ref)
         for x in S.front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 docs.append(Doc('numbers.xhtml', x['toc'], x['html']))
     docs.append(Doc('glossary.xhtml', 'Words used in this book', S.glossary_short(book, chs).replace('<section class="pe-back pe-gloss', '<section epub:type="glossary" class="pe-back pe-gloss', 1)))
     docs.append(Doc('notes.xhtml', 'Research notes', S.research_short(book, here).replace('<section class="pe-back ps-notes', '<section epub:type="bibliography" class="pe-back ps-notes', 1)))
     docs.append(Doc('series.xhtml', 'The series', series_page(book)))
-    docs.append(Doc('free.xhtml', 'Free on the site', free_page(book)))
+    # printfix13: the "Free on the website" spread, with links in place of the codes
+    docs.append(Doc('free.xhtml', 'Free on the website', S.showcase(book, epub=True)))
     return docs, figs, exs
 
 
@@ -544,7 +555,7 @@ def free_page(book):
 
 
 # ---------- CSS: plain, relative, and kind to Kindle's own settings ----------
-CSS = '''/* Spread Love & Acceptance ebooks (made by tools/book/build_epub.py). Kindle-friendly on purpose: no fixed
+CSS = '''/* Spread Love & Acceptance ebooks. Kindle-friendly on purpose: no fixed
    positions, no page sizes, no text or background colours (so the reader's own light, sepia or dark page works),
    relative sizes, colour only in thin rules (the book's colour: %(acc)s). */
 html, body { margin: 0; padding: 0; }
@@ -744,7 +755,6 @@ def opf(book, items, spine, modified, ident):
     md.append('<meta refines="#author" property="role" scheme="marc:relators">aut</meta>')
     md.append('<meta refines="#author" property="file-as">%s</meta>' % xesc(B.AUTHOR))
     md.append('<dc:language>en-GB</dc:language>')
-    md.append('<!-- [OWNER] placeholder: publisher and imprint (PUBLISHER and IMPRINT in tools/book/build_epub.py) -->')
     md.append('<dc:publisher id="publisher">%s</dc:publisher>' % xesc(PUBLISHER))
     if IMPRINT:
         md.append('<meta refines="#publisher" property="display-seq">1</meta><dc:contributor id="imprint">%s</dc:contributor>' % xesc(IMPRINT))

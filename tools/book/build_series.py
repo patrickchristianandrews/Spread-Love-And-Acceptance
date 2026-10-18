@@ -405,7 +405,11 @@ def about_page(book, namer):
           '<tbody>%s</tbody></table>') % rows
     others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
                        for b in books() if b is not book)
-    s += '<p>%s %s. %s.</p>' % (ab['series_lead'], others, ab['refs'])
+    # a real example of a reference to another book: its first chapter and the page it starts on
+    eb = next(b for b in books() if b['n'] == (2 if book['n'] != 2 else 1))
+    epage = namer.other_page(eb['chapters'][0])
+    example = 'Book %d, Chapter 1%s' % (eb['n'], (' (page %s)' % epage) if epage else '')
+    s += '<p>%s %s. %s.</p>' % (ab['series_lead'], others, ab['refs'].replace('{example}', example))
     s += '<p class="ps-about-h">Five big ideas</p><p class="ps-about-small">%s</p><ul class="ps-about-ideas">%s</ul>' % (
         ab['ideas_lead'], ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), d) for t, d in ab['ideas']))
     s += '<p class="ps-about-small">%s %s</p></section>' % (ab['program'], esc(MADE_UP))
@@ -540,11 +544,12 @@ def showcase(book, epub=False):
         q = '' if epub else qr(link)
         t_html = ('<a href="%s%s">%s</a>' % (SITE, link, esc(t))) if epub else esc(t)
         return ('<div class="ps-sc-card ps-sc-%s">%s<div class="ps-sc-txt">%s<p class="ps-sc-t">%s</p><p class="ps-sc-d">%s</p>'
-                '<p class="ps-addr">%s</p></div></div>') % (key, q, _sc_art(artk, c), t_html, esc(words), B.addr_html(B.short_address(link)))
+                '<p class="ps-addr">%s</p></div></div>') % (key, q, _sc_art(artk, c) if not epub or artk in ('puddles', 'pups') else '', t_html, esc(words),
+                                                            B.addr_html(B.short_address(link)))
     left = ''.join(panel(x) for x in SHOWCASE[:4])
     right = ''.join(panel(x) for x in SHOWCASE[4:])
     promise = ('<div class="ps-sc-promise">%s<p><strong>Everything stays on your device.</strong> No sign-up and no account. What you type in the tools, '
-               'the workpapers and the games is kept in your own browser or app, and nothing is sent to us.</p></div>') % _icon('lock', c)
+               'the workpapers and the games is kept in your own browser or app, and nothing is sent to us.</p></div>') % ('' if epub else _icon('lock', c))
     if epub:
         return ('<section class="pe-back ps-showcase" id="free">%s%s<p><a href="%s/">spreadloveandacceptance.com</a></p>%s%s%s</section>') % (
             head, '', SITE, left, right, promise)
@@ -631,6 +636,9 @@ def build_book(book, where):
     # the back of the book: built before finish_package, so their page references get markers
     extra = []
     found = printed_mentions(arts)
+    for k_, v_ in found.items():
+        ALL_FOUND.setdefault(k_, [])
+        ALL_FOUND[k_] += [x for x in v_ if x not in ALL_FOUND[k_]]
     wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT[s_]), pg(s_))
     extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
     if 'numbers' in book.get('extras', []):
@@ -683,20 +691,34 @@ def build_measure():
 # ---------- the workbook ----------
 # (key in hints.json, copies, when to use it, how long, who) — the order follows the books: on your own first, then together
 WB = [
-    ('wp02', 12, 'Before any hard talk, and on ordinary days too, so you can see your own pattern.', 'About 2 minutes', 'On your own, about yourself only'),
+    ('wp02', 4, 'Before any hard talk, and on ordinary days too, so you can see your own pattern.', 'About 2 minutes', 'On your own, about yourself only'),
     ('wp11', 2, 'On a calm day, before you need it. Look at it again after a heated moment.', 'About 10 minutes', 'On your own; the pause plan is made to share'),
-    ('wp09', 6, 'Before you answer something that stung.', 'About 5 minutes', 'On your own, about your own side'),
-    ('wp13', 6, 'Once a day, for a week at a time: one sheet a week.', 'About 90 seconds a day', 'Together; each person fills in only their own rows'),
+    ('wp09', 3, 'Before you answer something that stung.', 'About 5 minutes', 'On your own, about your own side'),
+    ('wp13', 4, 'Once a day, for a week at a time: one sheet a week.', 'About 90 seconds a day', 'Together; each person fills in only their own rows. Three or more of you: use two sheets'),
     ('wp12', 2, 'Once, then again every few months or after a big change.', 'About 20 minutes', 'Together; each person fills in their own rows first'),
-    ('wp14', 3, 'For one week in a hard stretch, a line each evening.', 'A minute a day, then 15 minutes', 'Together'),
-    ('wp01', 4, 'For one ordinary week: one sheet a week.', 'A few minutes a day', 'Together; write only what you did or saw yourself'),
+    ('wp14', 2, 'For one week in a hard stretch, a line each evening.', 'A minute a day, then 15 minutes', 'Together'),
+    ('wp01', 3, 'For one ordinary week: one sheet a week.', 'A few minutes a day', 'Together; write only what you did or saw yourself'),
     ('wp03', 2, 'When jobs only get done after someone asks. Redo it when life changes.', 'About 10 minutes', 'Together'),
-    ('wp04', 6, 'Once a month, looking back over four weeks.', 'About 20 minutes', 'Together'),
-    ('wp15', 4, 'About every three months.', 'About 15 minutes', 'Together'),
+    ('setup', 3, 'About once a month, with a week of Who did what, your job list and each person’s stress tank.', 'About 15 minutes', 'Together; each person scores only their own tank'),
+    ('wp04', 3, 'Once a month, looking back over four weeks.', 'About 20 minutes', 'Together'),
+    ('wp15', 2, 'About every three months.', 'About 15 minutes', 'Together'),
 ]
 
 
-WB_ONE_PAGE = {'wp02', 'wp09', 'wp01'}
+WB_ONE_PAGE = {'wp02', 'wp09', 'setup'}
+WB_SUMS = {'wp01', 'wp02', 'wp03', 'wp04', 'setup'}
+# printfix13: what each sheet's opening page says where no book chapter teaches it, and how to read the answers
+WB_EXPLAINED = {
+    'wp12': ('Book 3, Chapter 1 (Why we get out of tune), and in full, free online at spreadloveandacceptance.com/workpapers/wp-12-same-moment-different-speeds',
+             'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so choose that moment for Part C. '
+             'A gap in speed is about pace and says nothing about how much either of you cares. If your answers barely differ, the friction may come '
+             'from somewhere else, such as tiredness or pressure from outside.'),
+    'wp14': ('Book 4, Chapter 3 (Full tanks and different angles), and in full, free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
+             'In Part B, count the tense moments that fell on heavy days. If most of them did, outside pressure is doing much of the damage, and a plan for '
+             'the pressure (Part D) will help more than talking about each other. If most came on light days, the friction really does start between you, '
+             'and Say it so it lands or the monthly look-back is a good next step.'),
+}
+ALL_FOUND = {}
 
 
 def worksheets():
@@ -709,6 +731,52 @@ def worksheets():
     return out
 
 
+def wb_sheet_fix(key, sh):
+    """printfix13: the workbook's own changes to the blank sheets"""
+    if key == 'wp01':
+        row = '<tr><td></td><td></td><td></td><td></td><td></td></tr>'
+        sh = re.sub(r'(<table class="pe-ws-t">.*?<tbody>)(?:<tr><td></td><td></td><td></td><td></td><td></td></tr>)+(</tbody>)',
+                    lambda m: m.group(1) + row * 25 + m.group(2), sh, count=1, flags=re.S)
+        sh = sh.replace('<p class="pe-ws-opts">Part B (optional), Kind ways to say no: say why the request is fair, say honestly what you have left, and offer something instead.</p>',
+                        '<h3>Part B (optional): Kind ways to say no</h3><p class="pe-ws-opts">For a request you can’t take on this week: say why the request is fair, '
+                        'say honestly what you have left, and offer something instead.</p><div class="wb-lines">%s</div>' % ('<div></div>' * 6))
+        sh = sh.replace('How the score works: “How the numbers work”, at the back.', 'How the score works: “How the numbers work”, page %s of this workbook.' % pg('numbers'))
+    if key == 'wp15':
+        sh = sh.replace('<h3>Part C: One to restart, or start</h3>',
+                        '<h3>Part B: Count them</h3><div class="pe-ws-meta"><span>Alive ____</span><span>Fading ____</span><span>Stopped ____</span><span>New idea ____</span></div>'
+                        '<h3>Part C: One to restart, or start</h3>')
+    if key == 'wp12':
+        sh = sh.replace('<p class="pe-ws-opts">For each moment, count how many steps apart your answers are on each list. Start with the biggest gap: a difference in pace, not in how much anyone cares.</p>',
+                        '<p class="pe-ws-opts">For each moment, count how many steps apart your answers are on each list. Start with the biggest gap: a difference in pace, not in how much anyone cares.</p>'
+                        '<table class="pe-ws-t is-short"><thead><tr><th scope="col">Moment</th><th scope="col">Speed gap</th><th scope="col">Talk gap</th><th scope="col">Urgency gap</th></tr></thead>'
+                        '<tbody>%s</tbody></table>' % ('<tr><td></td><td></td><td></td><td></td></tr>' * 5))
+    return sh
+
+
+SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the setup working? On paper</h2><span>Online: spreadloveandacceptance.com/is-the-setup-working</span></div>'
+               '<p>The setup score from Book 4, Chapter 2, worked out with a pencil. You need one week of Who did what, your job list from One owner per job, '
+               'and each person’s How much are you carrying? score from the same day. Each person scores only their own tank.</p>'
+               '<div class="pe-ws-meta"><span>Date</span><span>Who is filling this in</span></div>'
+               '<h3>Part A: Balance (how the hours split)</h3>'
+               '<div class="pe-ws-meta"><span>Hours, person A ____</span><span>Hours, person B ____</span><span>Total ____</span></div>'
+               '<div class="pe-ws-meta"><span>A’s share: hours ÷ total × 100 = ____ %</span><span>B’s share = ____ %</span></div>'
+               '<div class="pe-ws-meta"><span>Balance = 1 − (the gap between the two shares) ÷ 100 = ____</span></div>'
+               '<p class="pe-ws-opts">Three or more of you, or an uneven split you agreed on purpose: see “How the numbers work”.</p>'
+               '<h3>Part B: Ownership (does each job have a name?)</h3>'
+               '<div class="pe-ws-meta"><span>Jobs with an owner ____</span><span>All jobs on the list ____</span><span>Ownership = owned ÷ all = ____</span></div>'
+               '<h3>Part C: Stress tanks</h3>'
+               '<div class="pe-ws-meta"><span>Person A’s tank ____</span><span>Person B’s tank ____</span><span>Average ____</span></div>'
+               '<p class="pe-ws-opts">If anyone’s tank is 0.60 or more, talk about that first, whatever the score says.</p>'
+               '<h3>Part D: The setup score</h3>'
+               '<div class="pe-ws-meta"><span>Balance × 0.40 = ____</span><span>Ownership × 0.35 = ____</span><span>(1 − average tank) × 0.25 = ____</span></div>'
+               '<div class="pe-ws-meta"><span>Add the three: setup score = ____</span></div>'
+               '<p class="pe-ws-opts">0.70 or more: working well. 0.40 up to 0.70: needs a look. Below 0.40: needs a rethink, together.</p>'
+               '<h3>Part E: The biggest shortfall</h3>'
+               '<div class="pe-ws-meta"><span>Balance: 0.40 − ____ = ____</span><span>Ownership: 0.35 − ____ = ____</span><span>Tank: 0.25 − ____ = ____</span></div>'
+               '<div class="pe-ws-meta"><span>The biggest one is ____________</span><span>One small change we’ll try ____________</span><span>Look again on ____</span></div>'
+               '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work”, at the back of this workbook.</p></section>')
+
+
 def build_workbook(where):
     wb = CFG['workbook']
     sheets = worksheets()
@@ -719,32 +787,44 @@ def build_workbook(where):
     toc.append(B.toc_row('wb-six', '', 'Your six weeks: a planner', 'is-front'))
     ol.append(['Your six weeks: a planner', 'wb-six', 0])
     for key, copies, when, how_long, who in WB:
-        w = hints.WP[key]
-        sheet = sheets.get(w['name'])
+        w = hints.WP[key] if key != 'setup' else {'code': 'Setup', 'name': 'Is the setup working? On paper'}
+        sheet = sheets.get(w['name']) if key != 'setup' else SETUP_SHEET
+        if sheet:
+            sheet = wb_sheet_fix(key, sheet)
         if not sheet:
             print('series: WARNING no blank sheet for', w['name'])
             continue
         sid = 'wb-' + key
-        toc.append(B.toc_row(sid, esc(w['code']), esc(w['name']), 'is-ch'))
-        ol.append(['%s: %s' % (w['code'], w['name']), sid, 0])
-        # which books explain it
+        toc.append(B.toc_row(sid, esc(w['code'] if key != 'setup' else ''), esc(w['name']), 'is-ch'))
+        ol.append(['%s: %s' % (w['code'], w['name']) if key != 'setup' else w['name'], sid, 0])
+        # which books explain it (from the callouts the books really print)
         ins = []
-        for s_ in found.get(('wp', key), []):
+        for s_ in ALL_FOUND.get(('wp', key), []):
             b = where.get(s_)
             if b:
                 lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].lower().replace('afterword', 'the afterword'), B.SHORT[s_])
                 if lab not in ins:
                     ins.append(lab)
-        fill = '/workpapers/fill/%s.html' % w['code'].lower()
+        fill = ('/workpapers/fill/%s.html' % w['code'].lower()) if key != 'setup' else '/is-the-setup-working.html'
         # each workpaper opens on a right-hand page, so a two-page sheet lies open across two facing pages
         s = '<div class="pe-recto-pad pe-only" data-for="%s"></div>' % sid
-        s += '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">Workpaper %s</p><h1>%s</h1>' % (sid, wb['color'], mark(sid), esc(w['code']), esc(w['name']))
+        s += '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">%s</p><h1>%s</h1>' % (
+            sid, wb['color'], mark(sid), esc(('Workpaper ' + w['code']) if key != 'setup' else 'A paper version of the setup score'), esc(w['name']))
         s += '<dl class="wb-facts"><div><dt>When</dt><dd>%s</dd></div><div><dt>How long</dt><dd>%s</dd></div><div><dt>Who</dt><dd>%s</dd></div>' % (esc(when), esc(how_long), esc(who))
-        if ins:
+        if key == 'setup':
+            ins = ['Book 4, Chapter 2 (Is the split working?)']
+        if key in WB_EXPLAINED:
+            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(WB_EXPLAINED[key][0])
+        elif ins:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
-        s += '<div><dt>Copies here</dt><dd>%d, one after the other. Need more? Print the free form from the website, or fill it in on screen.</dd></div></dl>' % copies
-        s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> The online version does the sums for you and keeps what you type on your '
-              'own device: <span class="ps-addr">%s</span></p></div>') % (qr(fill), B.addr_html(B.short_address(fill)))
+        s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
+              'where you can also fill the form in on screen.</dd></div></dl>') % copies
+        if key in WB_EXPLAINED:
+            s += '<p class="wb-read"><strong>How to read your answers.</strong> %s</p>' % esc(WB_EXPLAINED[key][1])
+        s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> %s '
+              '<span class="ps-addr">%s</span></p></div>') % (
+            qr(fill), 'The online version does the sums for you and keeps what you type on your own device.' if key in WB_SUMS
+            else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(B.short_address(fill)))
         s += '</section>'
         for c in range(1, copies + 1):
             # the short sheets fit one page; the long ones get more room and fill two facing pages
@@ -752,10 +832,18 @@ def build_workbook(where):
             sh = re.sub(r'(<div class="pe-ws-head"><h2>.*?</h2>)<span>.*?</span>', lambda m: m.group(1) + '<span>%s · copy %d of %d</span>' % (esc(w['code']), c, copies), sh, count=1, flags=re.S)
             s += sh
         secs.append(s)
+    # printfix13: the sums behind the scores, on paper (the same pages as at the back of Book 4)
+    book = dict(wb, n=0, chapters=[])
+    ctx = front_back.Ctx('series', False, (1, 2, 3), set(), B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, None,
+                         series_ref=namer_for(book).ref)
+    for x in front_back.back_sections(ctx):
+        if x['key'] == 'numbers':
+            secs.append('<div class="pe-recto-pad pe-only" data-for="numbers"></div>' + front_back.add_section_marks(x['html'], mark))
+            toc.append(B.toc_row('numbers', '', esc(x['toc']), 'is-back'))
+            ol.append([x['toc'], 'numbers', 0])
     toc.append(B.toc_row('wb-notes', '', 'Notes', 'is-back'))
     toc.append(B.toc_row('series', '', 'The series', 'is-back'))
     ol += [['Notes', 'wb-notes', 0], ['The series', 'series', 0]]
-    book = dict(wb, n=0)
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
              '<p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
