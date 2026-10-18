@@ -149,18 +149,46 @@ def series_links(body, slug, namer, xref_add):
             # in print this goes to the chapter in this book or in another book of the series
             new_attrs = re.sub(r'\bhref="[^"]*"', 'href="#%s"' % tgt if in_here else 'href="https://spreadloveandacceptance.com/book/%s.html"' % tgt, attrs)
         new_attrs += ' data-u="series"'
+        # proof16: inside brackets already, the note is ", page 9", not a second pair: "(Chapter 1, page 9)", with a
+        # closing comma when the sentence in the brackets goes on: "(Chapter 1, page 9, has more)"
+        inner = in_open_paren(m.string, m.end())
+        tail = ',' if inner and words_follow(m.string, m.end()) else ''
         if rm:
             start, end = rm.start(), rm.end()
             new_text = text[:start] + (lab if start else lab[0].upper() + lab[1:]) + text[end:]
-            note = ('<span class="pe-only pe-xref"> (page %s)</span>' % page) if (in_here or page) else ''
+            note = ('<span class="pe-only pe-xref">%s</span>' % ((', page %s' + tail if inner else ' (page %s)') % page)) if (in_here or page) else ''
             return '<a%s>%s</a>%s' % (new_attrs, new_text, note)
         # a link that names the chapter by its title: add where it is (an ebook keeps the name, without the page)
         if in_here:
-            note = '<span class="pe-only pe-xref"> (%s, page %s)</span>' % (lab, page)
+            note = '<span class="pe-only pe-xref">%s</span>' % ((', %s, page %s' + tail if inner else ' (%s, page %s)') % (lab, page))
         else:
-            note = ' (%s%s)' % (lab, ('<span class="pe-only">, page %s</span>' % page) if page else '')
+            note = (', %s%s' + tail if inner else ' (%s%s)') % (lab, ('<span class="pe-only">, page %s</span>' % page) if page else '')
         return '<a%s>%s</a>%s' % (new_attrs, text, note)
     return LINK_RE.sub(sub, body)
+
+
+_BLOCK_START = re.compile(r'<(?:p|li|div|td|th|dd|dt|h[1-6]|figcaption|blockquote|caption)\b[^>]*>')
+_PE_ONLY = re.compile(r'<span class="pe-only[^"]*">(?:[^<]|<span[^>]*>[^<]*</span>)*</span>')
+
+
+def in_open_paren(s, end):
+    """proof16: True when position `end` of the HTML `s` sits inside a bracket opened earlier in the same paragraph
+    (print-only notes left out), so a page note there is added as ", page N" instead of a nested "(page N)"."""
+    pre = s[max(0, end - 1200):end]
+    starts = [b.end() for b in _BLOCK_START.finditer(pre)]
+    if starts:
+        pre = pre[starts[-1]:]
+    t = html.unescape(re.sub(r'<[^>]+>', '', _PE_ONLY.sub('', pre)))
+    if t.rstrip()[-1:] in ('?', '!'):
+        return False  # "Not safe at home? (…/safety)" keeps its own brackets: "home?, …" would read badly
+    return t.count('(') > t.count(')')
+
+
+def words_follow(s, end):
+    """proof16: True when the text right after position `end` goes on with a word (not a bracket or punctuation),
+    so a ", page N" note inside brackets needs a closing comma."""
+    rest = html.unescape(re.sub(r'<[^>]+>', '', _PE_ONLY.sub('', s[end:end + 400]))).lstrip()
+    return bool(rest) and rest[0] not in ').,;:!?”’"\''
 
 
 NAV_ROW = re.compile(r'<(p|li)\b[^>]*>((?:(?!</?(?:p|li)\b).)*?)</\1>', re.S)

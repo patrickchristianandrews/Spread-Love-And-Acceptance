@@ -7,7 +7,7 @@
 (function () {
   'use strict';
   var KEY_TAB = 'tol-roots-tab', KEY_DEVICE = 'tol-roots-v1';
-  var HEAVY = 'If a memory feels heavy, it’s okay to stop here. Talking it through with a trained counselor can help, on your own or with someone you trust.';
+  var HEAVY = 'If a memory feels heavy, it’s okay to stop here. Talking it through with a trained counsellor can help, on your own or with someone you trust.';
   var NOBLAME = 'Most families were doing their best with what they had; noticing where a rule came from isn’t blaming anyone. If that doesn’t fit your story, that’s okay too.';
 
   /* ---------------------------------------------------------------- the life stages */
@@ -35,7 +35,7 @@
     ['helper', 'The helper', 'the helper'], ['peace', 'The peacekeeper', 'the peacekeeper'], ['responsible', 'The responsible one', 'the responsible one'],
     ['quiet', 'The quiet one', 'the quiet one'], ['funny', 'The funny one', 'the funny one'], ['achiever', 'The achiever', 'the achiever'],
     ['carer', 'The one who looked after a parent or siblings', 'the one who looked after others'], ['invisible', 'The invisible one', 'the invisible one'],
-    ['strong', 'The strong one', 'the strong one'], ['planner', 'The planner', 'the one who planned and organized'], ['none', 'None of these', '']];
+    ['strong', 'The strong one', 'the strong one'], ['planner', 'The planner', 'the one who planned and organised'], ['none', 'None of these', '']];
   var CHANGES_CHILD = [
     ['move', 'Moving home', 'you moved'], ['sibling', 'A new sibling', 'a new sibling arrived'], ['split', 'Parents splitting up', 'your parents split up'],
     ['away', 'A parent away a lot', 'a parent was away a lot'], ['money', 'Money worries', 'there were money worries'], ['ill', 'Illness in the family', 'someone in the family was ill'],
@@ -109,7 +109,7 @@
       text: 'Your alarm may have learned to stay on, because once it needed to.', tryit: 'When calm feels uneasy, put both feet on the floor and make your out-breath slower than your in-breath. Check your battery with Today’s Weather.', links: ['weather', 'calm'] },
     { id: 'back', q: 'Do some tones of voice, sounds, smells or places bring an old feeling right back?', name: 'Old feelings coming right back',
       text: 'The feeling may be older than the moment. Chapter III calls this leftover stress.', tryit: 'Say to yourself, “This feeling is from then. I’m here now,” and step away for a minute if you can.', links: ['ch3'] },
-    { id: 'bigger', q: 'Do you react more strongly than a moment seems to deserve, and only realize it later?', name: 'Reacting bigger than the moment',
+    { id: 'bigger', q: 'Do you react more strongly than a moment seems to deserve, and only realise it later?', name: 'Reacting bigger than the moment',
       text: 'Part of the reaction may belong to an older moment.', tryit: 'Once you’ve settled, try the one-minute lens check, and if it helps, a repair: “That was bigger than what you did. Part of it is older than us.”', links: ['lenscheck'] },
     { id: 'rest', q: 'Is it hard to rest, slow down or let others help?', name: 'Finding it hard to rest or be helped',
       text: 'Staying busy and self-reliant may once have kept things steady.', tryit: 'Take one short rest on purpose before the list is done, and accept one offer of help.', links: ['weather', 'rulebook'] },
@@ -144,15 +144,15 @@
   /* ---------------------------------------------------------------- traits: where they often start, and what helps
      roots: r: role, u: rule, p: praised for, t: trouble for, c: change, m: mood */
   var TRAITS = [
-    { id: 'apologize', label: 'I over-apologize',
+    { id: 'apologize', label: 'I over-apologise',
       roots: 'r:peace r:quiet r:invisible r:helper u:fuss u:good u:peace u:mistakes t:mistakes t:loud t:asking p:easy m:tense m:unpredict c:split',
       typical: 'It often grows in homes where keeping things calm mattered a lot, or where mistakes or big feelings brought trouble.',
       protect: 'Saying sorry first may have calmed things down fast, or kept trouble from starting.',
       cost: 'Now it can shrink your space, make small things feel like your fault, and leave people unsure when you really mean it.',
       notice: '“Sorry” comes out before you’ve had a thought, often with a quick tight feeling in your chest or a smile you don’t feel.',
       tryit: ['Swap one “sorry” a day for “thank you”: “Thanks for waiting” instead of “Sorry I’m late.”'],
-      say: 'I’m not going to apologize for asking. I’d just like to know.',
-      rule: ['If something’s wrong, it’s probably my fault.', 'I apologize when I’ve done something, not to make a moment smaller.'],
+      say: 'I’m not going to apologise for asking. I’d just like to know.',
+      rule: ['If something’s wrong, it’s probably my fault.', 'I apologise when I’ve done something, not to make a moment smaller.'],
       links: ['signal', 'rulebook', 'lenscheck'] },
     { id: 'rest', label: 'I can’t rest until everything’s done',
       roots: 'r:responsible r:helper r:achiever r:carer u:work u:rest u:notice u:best p:helpful p:results t:rest c:money c:ill c:pressure c:away m:busy',
@@ -547,7 +547,7 @@
       return h + '</div></div>';
     }
     h = '<h3 class="rw-h" tabindex="-1">Hard times, in general: how it may show up now</h3>' +
-      '<p>These are signs to notice, not a diagnosis. Many people recognize one or two.</p>' +
+      '<p>These are signs to notice, not a diagnosis. Many people recognise one or two.</p>' +
       '<p class="rw-heavy">' + HEAVY + '</p>';
     SIGNS.forEach(function (g) { h += answerGroup(g.id, g.q); });
     return h;
@@ -557,7 +557,7 @@
     var who = hYes('who'), helped = S.h.helped.map(function (id) { return find(HELPED, id)[1].toLowerCase(); });
     if (!felt.length && !signs.length && !who && !helped.length) return '';
     var h = '<div class="rw-card"><h4>Hard times, and how they may show up now</h4>';
-    if (signs.length >= 3) h += '<p class="rw-heavy">These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counselor, on your own or with someone you trust. You’re not alone in this.</p>';
+    if (signs.length >= 3) h += '<p class="rw-heavy">These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counsellor, on your own or with someone you trust. You’re not alone in this.</p>';
     if (who || helped.length) {
       h += '<h5>What helped you get through</h5>';
       if (who) h += '<p>You had someone you could go to. This is part of how you got through, and steady people are still worth leaning on.</p>';
@@ -583,7 +583,7 @@
     if (helped.length) out.push('- ' + cap(and(helped)) + ' helped me get through.');
     felt.forEach(function (f) { out.push('- ' + cap(f.phrase) + ': ' + f.grow + ' ' + f.then + ' ' + f.now + ' Notice: ' + f.notice + ' Try: ' + f.tryit); });
     signs.forEach(function (g) { out.push('- ' + g.name + ': ' + g.text + ' Try: ' + g.tryit); });
-    if (signs.length >= 3) out.push('These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counselor, on your own or with someone you trust.');
+    if (signs.length >= 3) out.push('These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counsellor, on your own or with someone you trust.');
     out.push('');
     return out;
   }

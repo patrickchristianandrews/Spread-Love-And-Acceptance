@@ -224,7 +224,7 @@
       kw: 'report progress tracker weekly' },
 
     // ---------- Learn
-    { id: 'ask', name: 'Ask Professor Puddles', brand: 'Professor Puddles', href: '/ask.html', type: 'learn', also: ['talk'],
+    { id: 'ask', name: 'Ask Professor Puddles', brand: '', href: '/ask.html', type: 'learn', also: ['talk'],
       does: 'Type what’s going on in your own words, the way you’d say it to a friend.',
       gets: 'Kind next steps, words you could use, and the right pages, made only from this site.',
       mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Get kind next steps for your exact situation: type it the way you’d tell a friend', top: 2,

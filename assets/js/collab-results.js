@@ -70,7 +70,7 @@
         next: function () { return T('Pick the line where you differ most, and each say one thing that helps you there.', 'Elijan la línea donde más difieren, y digan cada uno algo que les ayude ahí.'); } },
       open: function (d, n, id) { return C.link(C.envelope({ tool: 'wavelength', id: id, name: n, d: { c: d.c } }), '/wavelength.html'); },
       openLabel: ['Open the full comparison in Wavelength', 'Abrir la comparación completa en Wavelength'] },
-    { id: 'wiring', title: ['Your Wiring Card', 'Tu Tarjeta de cableado'], v: 1,
+    { id: 'wiring', title: ['Your “how to talk to me” card', 'Tu Tarjeta de cableado'], v: 1,
       get: function (store) {
         var s = J(store.ss('tol-wiring-draft')) || J(store.ls('tol-wiring-card')), a = s && s.A;
         if (!a) return null;
@@ -87,7 +87,7 @@
       sub: function (d) { return T((d.count || 0) + ((d.count || 0) === 1 ? ' thing that helps you' : ' things that help you') + (d.wave ? ' · Wave Code ' + d.wave : ''), (d.count || 0) + ' cosas que te ayudan' + (d.wave ? ' · código ' + d.wave : '')); },
       view: { kind: 'fields', fields: [{ k: 'wave', en: 'Wave Code', es: 'Código Wave' }, { k: 'count', en: 'Things that help, on the card', es: 'Cosas que ayudan, en la tarjeta' }],
         shape: function (d) { return { wave: d.wave || '', count: d.count != null ? String(d.count) : '' }; },
-        next: function () { return T('Open the cards side by side on the Wiring Card page, and each read the other’s “what helps” out loud.', 'Abran las tarjetas lado a lado en la página de la Tarjeta, y lea cada uno en voz alta lo que ayuda al otro.'); } },
+        next: function () { return T('Open the cards side by side on the “how to talk to me” card page, and each read the other’s “what helps” out loud.', 'Abran las tarjetas lado a lado en la página de la Tarjeta, y lea cada uno en voz alta lo que ayuda al otro.'); } },
       open: function (d) { return (W ? W.location.origin : 'https://spreadloveandacceptance.com') + '/wiring-card.html#card=' + encodeURIComponent(d.code); },
       openLabel: ['Open both cards side by side', 'Abrir las dos tarjetas lado a lado'] },
     { id: 'care', title: ['Your care card (what feels like care right now)', 'Tu tarjeta de cuidado'], v: 1,
@@ -114,7 +114,7 @@
       view: { kind: 'score', k: 's', scoreLabel: '', next: function () { return T('If one load reads higher, look together at one thing that could move off that plate this week.', 'Si una carga está más alta, miren juntos una cosa que podría salir de ese plato esta semana.'); } },
       open: function (d, n) { return C.wrap('workpaper', { t: 'tol-list', v: 1, wp: 'WP-02', p: [n || 'Someone'], m: {}, tb: {}, vals: {}, s: d.s }, { page: '/workpapers/fill/wp-02.html', name: n }); },
       openLabel: ['Add it beside yours on How much are you carrying?', 'Ponerlo junto al tuyo en ¿Cuánto estás cargando?'] },
-    { id: 'chores', title: ['Your quick look at who does what (Lemonade Stand)', 'Tu vistazo a quién hace qué (Lemonade Stand)'], v: 1,
+    { id: 'chores', title: ['Your quick look at who does what', 'Tu vistazo a quién hace qué (Lemonade Stand)'], v: 1,
       get: function (store) {
         var q = J(store.ls('tol-lemonade-quick')); if (!q || !Array.isArray(q.people) || !Array.isArray(q.list)) return null;
         var me = typeof q.me === 'number' ? q.me : 0, a = q.ans && q.ans[me]; if (!a) return null;
@@ -125,9 +125,9 @@
       },
       sub: function (d) { return T(d.n + ' jobs answered', d.n + ' tareas respondidas'); },
       view: { kind: 'fields', fields: [{ k: 'n', en: 'Jobs answered', es: 'Tareas respondidas' }], shape: function (d) { return { n: String(d.n) }; },
-        next: function () { return T('Open the Lemonade Stand to see each job side by side, with the ones you see differently picked out.', 'Abran el Lemonade Stand para ver cada tarea lado a lado, con las que ven distinto marcadas.'); } },
+        next: function () { return T('Open Who does what? to see each job side by side, with the ones you see differently picked out.', 'Abran el Lemonade Stand para ver cada tarea lado a lado, con las que ven distinto marcadas.'); } },
       open: function (d, n) { return C.wrap('lemonade-quick', d.x, { page: '/lemonade-stand.html', name: n }); },
-      openLabel: ['Compare in the Lemonade Stand', 'Comparar en el Lemonade Stand'] },
+      openLabel: ['Compare in Who does what?', 'Comparar en el Lemonade Stand'] },
     { id: 'checkin', title: ['This week’s check-in card', 'La tarjeta de esta semana'], v: 1,
       get: function (store) { var c = J(store.ss('tol-checkin-card')); if (!c) return null; var o = {}; ['well', 'heavy', 'try', 'next'].forEach(function (k) { if (str(c[k])) o[k] = str(c[k]); }); if (Array.isArray(c.jobs) && c.jobs.length) o.jobs = c.jobs.slice(0, 12).map(function (x) { return str(x, 60); }); return Object.keys(o).length ? o : null; },
       sub: function (d) { return d.well ? '“' + d.well.slice(0, 50) + (d.well.length > 50 ? '…' : '') + '”' : T('Filled in this week', 'Completada esta semana'); },
@@ -139,7 +139,7 @@
       view: { kind: 'fields', fields: [{ k: 'd', en: 'Day', es: 'Día' }, { k: 'sky', en: 'Weather', es: 'Clima' }, { k: 'load', en: 'Load', es: 'Carga' }, { k: 'sleep', en: 'Sleep', es: 'Sueño' }],
         format: function (k, v) { return k === 'sky' ? SKY[v] || '' : null; },
         next: function () { return T('If either of you is fogged in, keep today light and pick a better time for anything big.', 'Si alguno está nublado, que hoy sea liviano y busquen otro momento para lo importante.'); } } },
-    { id: 'letter', private: true, title: ['Your latest message from “Talk it through in writing”', 'Tu último mensaje de «Háblalo por escrito»'], v: 1,
+    { id: 'letter', private: true, title: ['Your latest message from “Write it through”', 'Tu último mensaje de «Háblalo por escrito»'], v: 1,
       get: function (store) {
         var s = J(store.ls('tol-letters')), c = s && s.convos && s.cur && s.convos[s.cur], t = c && Array.isArray(c.turns) ? c.turns.filter(function (x) { return x && x.who === 'me'; }).slice(-1)[0] : null;
         return t && (str(t.f) || str(t.a)) ? { f: str(t.f, 500), a: str(t.a, 500) } : null;

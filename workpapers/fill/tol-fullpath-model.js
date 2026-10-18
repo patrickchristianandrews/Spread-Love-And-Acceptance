@@ -233,7 +233,7 @@
     var R = ctx.road, fields = [];
     for (var i = 0; i < ctx.n; i++) {
       fields.push(f('who.p' + (i + 1), R.solo ? 'Your name or initials' : roleOf(ctx.roadId, i) + ': name or initials', 'text', { def: trim(ctx.names[i]), half: true, max: 40 }));
-      // Family and Co-parents: a child isn't asked for a load score, and the shared numbers don't wait for them
+      // Family and Co-parents: a child isn't asked for a stress tank score, and the shared numbers don't wait for them
       if (KID_ROADS[ctx.roadId]) fields.push(f('who.p' + (i + 1) + '.child', (roleOf(ctx.roadId, i)) + ' is a child', 'check', { optional: true, half: true }));
     }
     var more = [f('who.started', 'Date you started', 'date', { half: true })];
@@ -299,9 +299,9 @@
       items.forEach(function (it, k) { fl.push(f(p + 'q' + (k + 1), it.label, 'radio', { options: scale, scale: true })); });
       if (ctx.n > 1) fl.push(f(p + 'score', 'Or just your score (0 to 1), if you’d rather not share the five answers', 'number', { min: 0, max: 1, optional: true }));
       fl.push(f(p + 'note', ctx.road.solo ? 'Anything else on your mind right now (optional)' : 'Anything you want to name before talking (optional)', 'textarea', { small: true, optional: true }));
-      blocks.push({ kind: 'scale', title: ctx.labels[i] + (ctx.n > 1 ? '’s load score' : ''), person: i, turn: ctx.n > 1, fields: fl });
+      blocks.push({ kind: 'scale', title: ctx.labels[i] + (ctx.n > 1 ? '’s stress tank score' : ''), person: i, turn: ctx.n > 1, fields: fl });
     }
-    blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Each load score = the five numbers added up, divided by 20. Under 0.30 is a low load, 0.30 to 0.59 is medium, 0.60 and up is high.', ctx.n > 1 ? 'The average across everyone becomes the stress input to CALC-01. It waits until everyone\u2019s load score is in; it is never worked out for someone else.' : 'On this road it is your own reading, week by week.'] });
+    blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Each stress tank score = the five numbers added up, divided by 20. Under 0.30 is light, 0.30 to 0.59 is medium, 0.60 and up is high.', ctx.n > 1 ? 'The average across everyone becomes the stress input to CALC-01. It waits until everyone\u2019s stress tank score is in; it is never worked out for someone else.' : 'On this road it is your own reading, week by week.'] });
     return { id: 'wp02', code: 'WP-02', title: sc.title, blocks: blocks };
   }
 
@@ -404,7 +404,7 @@
     var re = [];
     for (i = 0; i < Math.max(3, ctx.sizes.reentry || 0); i++) {
       var p = 'wp11.reentry.r' + (i + 1) + '.';
-      re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Load score before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Load score after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
+      re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Stress tank score before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Stress tank score after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
     blocks.push({ kind: 'fields', title: ctx.road.solo ? 'My pause plan (yours to share, if you like)' : 'Our pause plan (agree it together, and share it)', intro: (ctx.road.solo ? 'This part is made to be shared with someone close, if you want to.' : 'Unlike the rest of the kit, this part is meant to be agreed together and shared, so a pause is never mistaken for walking out.') + ' A few words in each box is plenty.', fields: [
       f('wp11.plan.word', ctx.road.solo ? 'My pause word or signal' : 'Our pause word or signal', 'text', { half: true, optional: true, placeholder: 'e.g. Timeout, or a hand on the table' }),
@@ -470,7 +470,7 @@
       blocks.push({ kind: 'derived', title: 'Worked out for you when you bring this back', lines: [
         'Workload balance (WB), from WP-01: how close the logged minutes come to an even split. 1 = even. With two people it is 1 minus the gap between the two shares; with more, 1 minus the share of time that would have to change hands, out of the most it could be.',
         'Ownership clarity (OC), from WP-03: jobs with an owner, divided by all jobs (starter examples nobody filled in are left out).',
-        'Stress (AS), from WP-02: the average load score across everyone. It waits until every person\u2019s load score is in.',
+        'Stress (AS), from WP-02: the average stress tank score across everyone. It waits until every person\u2019s stress tank score is in.',
         'Setup score = WB × 0.40 + OC × 0.35 + (1 − AS) × 0.25. 0.70 and up: working well. 0.40 to 0.69: needs a look. Under 0.40: needs a rethink, together. Higher means the setup is working better.',
         'Overall score = WB × 0.35 + OC × 0.30 + (1 − AS) × 0.20 + RF × 0.15, where RF = retunes ÷ friction moments (below).'
       ] });
@@ -503,7 +503,7 @@
       var p = base + 'weather.w' + (i + 1) + '.';
       cards.push({ label: 'Week ' + (i + 1), fields: [
         f(p + 'date', 'Date', 'date', { half: true, optional: true, person: who }),
-        f(p + 'battery', 'Load score that day (0 to 1, from WP-02)', 'number', { min: 0, max: 1, half: true, optional: true, person: who }),
+        f(p + 'battery', 'Stress tank score that day (0 to 1, from WP-02)', 'number', { min: 0, max: 1, half: true, optional: true, person: who }),
         f(p + 'sky', 'The sky (Clear = calm and connected, Gusty = revved up, Fogged in = running on empty)', 'radio', { options: sky, optional: true, person: who }),
         f(p + 'pressure', 'The pressure: what you were already carrying', 'radio', { options: press, optional: true, person: who }),
         f(p + 'sleep', 'Last night\u2019s sleep', 'radio', { options: sleep, optional: true, person: who }),
@@ -1091,7 +1091,7 @@
     return res;
   }
 
-  // A copy to share: the same answers without the private pages, so nobody's load score, self-notes,
+  // A copy to share: the same answers without the private pages, so nobody's stress tank score, self-notes,
   // raw reaction or calm-down triggers travel further than they meant them to.
   var PRIVATE_RE = /^tol\.v1\.(wp02\.|self\.|wp09\.raw|wp11\.(triggers|reentry)\.)/;
   function shareCopy(data) {
@@ -1224,7 +1224,7 @@
   function batteryBand(s) {
     if (s == null) return null;
     var k = C1().wp02Band(s).key;
-    return k === 'low' ? { key: 'low', label: 'Low load' } : k === 'mid' ? { key: 'medium', label: 'Medium load' } : { key: 'high', label: 'High load' };
+    return k === 'low' ? { key: 'low', label: 'Light' } : k === 'mid' ? { key: 'medium', label: 'Medium' } : { key: 'high', label: 'High' };
   }
   // Bands are read from the score rounded to two decimals (calc01-core.js).
   function calcBand(v) {
@@ -1296,7 +1296,7 @@
       if (bal.error && out.target) bal = C1().balance(mins);
       var total = bal.total, wb = bal.value, shares = bal.shares ? bal.shares.map(function (x) { return x * 100; }) : null;
       // Someone on the road with no rows at all hasn't added their side yet. Their week is missing, not
-      // zero (as with a load score nobody has filled in), so the split, the balance and any hand-over wait.
+      // zero (as with a stress tank score nobody has filled in), so the split, the balance and any hand-over wait.
       var oneSided = null;
       if (n >= 2 && rowsUsed > 0) {
         var none = P.list.filter(function (p) { return !seen[p.i] && !kidAt[p.i]; }); // a child is never waited for
@@ -1454,7 +1454,7 @@
       if (oc == null) calc.missing.push('ownership clarity (WP-03 tasks with owners)');
       var waiting = adultsB.filter(function (b) { return b.score == null; }).map(function (b) { return b.label; });
       calc.waiting = waiting;
-      if (as == null) calc.missing.push('everyone\u2019s load score (WP-02; still waiting on ' + list(waiting) + '; it is never worked out while anyone\u2019s is missing)');
+      if (as == null) calc.missing.push('everyone\u2019s stress tank score (WP-02; still waiting on ' + list(waiting) + '; it is never worked out while anyone\u2019s is missing)');
       if (!calc.missing.length) {
         calc.sol = C1().solvency(wb, oc, as).value;
         var ax = C1().apex(wb, oc, as, rf);
@@ -1465,7 +1465,7 @@
         calc.estimated = data.estimated01 === true && wbSrc === 'WP-01';
         if (calc.estimated && calc.sol >= 0.7) calc.solBand = { key: 'drift', label: 'Owners agreed: check again after a week is logged' };
         if (calc.estimated && calc.apex >= 0.7) calc.apexBand = { key: 'drift', label: 'Check again after a week is logged' };
-        var FIX = { wb: ['WB', 'how the load is split (WP-01, then WP-03)'], oc: ['OC', 'ownership clarity (the unowned rows on WP-03)'], as: ['AS', 'how full everyone\u2019s load score is (WP-02, and what is driving it)'] };
+        var FIX = { wb: ['WB', 'how the load is split (WP-01, then WP-03)'], oc: ['OC', 'ownership clarity (the unowned rows on WP-03)'], as: ['AS', 'how full everyone\u2019s stress tank score is (WP-02, and what is driving it)'] };
         var terms = C1().shortfalls(wb, oc, as).map(function (t) { return { key: FIX[t.key][0], value: t.key === 'wb' ? wb : t.key === 'oc' ? oc : as, short: t.short, fix: FIX[t.key][1] }; });
         calc.terms = terms;
         calc.worst = terms.slice().sort(function (a, b) { return b.short - a.short; })[0];
@@ -1563,9 +1563,9 @@
       var co = c.conc && (c.conc.owned && c.conc.owned.flag ? c.conc.owned : c.conc.minutes && c.conc.minutes.flag ? c.conc.minutes : null);
       if (co) tiles.push({ k: 'Who’s carrying more right now', v: P.label(co.top), band: c.conc.lines[0], tone: 'drift', note: 'About ' + pct(co.share) + '; an even share would be ' + pct(1 / c.n) + '. Noted at half or more, and 20 points over even.' });
     }
-    // load scores are asked of the adults only: no tile for anyone marked as a child
+    // stress tank scores are asked of the adults only: no tile for anyone marked as a child
     c.battery.filter(function (b) { return !b.child; }).forEach(function (b) {
-      tiles.push({ k: R.solo ? 'How much you’re carrying' : 'How much ' + b.label + ' is carrying', v: b.score != null ? b.band.label : 'Not filled in', band: b.score != null ? 'From WP-02' + (b.source === 'shared' ? ' (score shared)' : '') : (b.answered ? b.answered + ' of 5 answered' : 'WP-02 blank'), tone: b.score == null ? 'none' : b.band.key === 'low' ? 'good' : b.band.key === 'medium' ? 'drift' : 'low', person: true, note: b.score != null ? 'Load score ' + fmt(b.score) + ' of 1, higher = heavier (under 0.30 low, 0.30 to 0.59 medium, 0.60+ high).' : '' });
+      tiles.push({ k: R.solo ? 'How much you’re carrying' : 'How much ' + b.label + ' is carrying', v: b.score != null ? b.band.label : 'Not filled in', band: b.score != null ? 'From WP-02' + (b.source === 'shared' ? ' (score shared)' : '') : (b.answered ? b.answered + ' of 5 answered' : 'WP-02 blank'), tone: b.score == null ? 'none' : b.band.key === 'low' ? 'good' : b.band.key === 'medium' ? 'drift' : 'low', person: true, note: b.score != null ? 'Stress tank score ' + fmt(b.score) + ' of 1, higher = heavier (under 0.30 low, 0.30 to 0.59 medium, 0.60+ high).' : '' });
     });
     if (c.calc.rf != null) tiles.push({ k: 'Repair after friction', v: c.calc.rf >= 0.5 ? 'A working habit' : 'Room to grow', band: c.calc.retunes + ' of ' + c.calc.friction + ' friction moments retuned' + (c.calc.capped ? ' (capped at 1.00)' : ''), tone: c.calc.rf >= 0.5 ? 'good' : 'drift', note: 'Retuning ' + fmt(c.calc.rf) + ' of 1 (0.50+ is a working habit).' });
     model.tiles = tiles;
@@ -1641,7 +1641,7 @@
     function add(pri, text) { out.push({ p: pri, t: text }); }
     if (!c.anything) {
       return ['Nothing is filled in yet, so there is nothing to read. That is fine: start with one page, and the report grows with you.',
-        R.solo ? 'A good first page is WP-02, your load score. One minute, about the last day or two.' : 'A good first page is ' + (R.wps[0]) + ', ' + NAMES[R.wps[0]] + '.',
+        R.solo ? 'A good first page is WP-02, your stress tank score. One minute, about the last day or two.' : 'A good first page is ' + (R.wps[0]) + ', ' + NAMES[R.wps[0]] + '.',
         'Everything stays on this device. Nothing you type or choose is sent anywhere.'];
     }
     if (calc.sol != null) {
@@ -1659,13 +1659,13 @@
     var scored = c.battery.filter(function (b) { return b.score != null; });
     if (R.solo) {
       var b0 = c.battery[0];
-      if (b0.score != null) add(9, 'Your load reads ' + fmt(b0.score) + ': ' + b0.band.label.toLowerCase() + '. ' + (b0.band.key === 'high' ? 'Put off what doesn’t need deciding today, and reach for your settling defaults first.' : b0.band.key === 'medium' ? 'Worth saying out loud before a hard conversation: “Heads up, I’m carrying more than usual today.”' : 'Whatever comes up today is probably about the thing itself, not leftover load.'));
+      if (b0.score != null) add(9, 'Your stress tank reads ' + fmt(b0.score) + ': ' + b0.band.label.toLowerCase() + '. ' + (b0.band.key === 'high' ? 'Put off what doesn’t need deciding today, and reach for your settling defaults first.' : b0.band.key === 'medium' ? 'Worth saying out loud before a hard conversation: “Heads up, I’m carrying more than usual today.”' : 'Whatever comes up today is probably about the thing itself, not leftover load.'));
       var top = topFactors(c);
       if (top.length) add(6, 'What’s adding most to your load: ' + list(top.map(function (t) { return t.toLowerCase(); })) + '. Those are conditions, not character, and some are in your control this week.');
     } else if (high.length) {
-      add(9, (high.length === 1 ? high[0].label + '’s load reads ' + fmt(high[0].score) : list(high.map(function (b) { return b.label; })) + ' have load scores at 0.60 or above') + '. That is a high load. Protect it: put off anything that doesn’t need deciding this week, and say your number before any hard talk.');
+      add(9, (high.length === 1 ? high[0].label + '’s stress tank reads ' + fmt(high[0].score) : list(high.map(function (b) { return b.label; })) + ' have stress tank scores at 0.60 or above') + '. That is high. Protect it: put off anything that doesn’t need deciding this week, and say your number before any hard talk.');
     } else if (scored.length >= 2) {
-      add(4, 'Every load score that was filled in reads under 0.60 (' + scored.map(function (b) { return b.label + ' ' + fmt(b.score); }).join(', ') + '). Good conditions for the harder conversations.');
+      add(4, 'Every stress tank score that was filled in reads under 0.60 (' + scored.map(function (b) { return b.label + ' ' + fmt(b.score); }).join(', ') + '). Good conditions for the harder conversations.');
     }
     if (c.wp03 && c.wp03.filled && c.wp03.unowned.concat(c.wp03.half).length) {
       var gaps = c.wp03.unowned.concat(c.wp03.half);
@@ -1767,9 +1767,9 @@
       c.battery.forEach(function (b) {
         s.entered.push([R.solo ? 'Your answers' : b.label, b.score != null ? (b.source === 'shared' ? 'Score shared: ' + fmt(b.score) : b.answers.join(' + ') + ' = ' + b.sum + ', ÷ 20 = ' + fmt(b.score)) : (b.answered ? b.answered + ' of 5 answered (a score needs all five)' : 'Not filled in')]);
       });
-      c.battery.forEach(function (b) { if (b.score != null) s.shows.push((R.solo ? 'Your load score' : b.label) + ': ' + fmt(b.score) + ', ' + b.band.label.toLowerCase() + '. ' + (b.band.key === 'high' ? 'A way to press pause, not a way out: “let’s come back to this tomorrow.”' : b.band.key === 'medium' ? 'Worth a heads-up before a hard conversation.' : 'Whatever comes up is probably about the thing itself.')); });
+      c.battery.forEach(function (b) { if (b.score != null) s.shows.push((R.solo ? 'Your stress tank score' : b.label) + ': ' + fmt(b.score) + ', ' + b.band.label.toLowerCase() + '. ' + (b.band.key === 'high' ? 'A way to press pause, not a way out: “let’s come back to this tomorrow.”' : b.band.key === 'medium' ? 'Worth a heads-up before a hard conversation.' : 'Whatever comes up is probably about the thing itself.')); });
       if (!R.solo && c.calc.asSrc === 'WP-02') s.shows.push('Average across ' + (c.calc.asPeople < c.n ? 'the ' + c.calc.asPeople + ' adults' : 'all ' + c.n + ' people') + ': ' + fmt(c.calc.as) + '. This is the stress input to CALC-01.');
-      else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null && !b.child; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s load score is missing.');
+      else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null && !b.child; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s stress tank score is missing.');
       if (R.solo) { var tf = topFactors(c); if (tf.length) s.shows.push('Scored 3 or 4: ' + list(tf.map(function (x) { return x.toLowerCase(); })) + '.'); }
       var hi = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
       s.next = hi.length ? (R.solo ? 'This week, before any hard conversation, reach for your first settling default and say your number out loud.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (R.focus === 'apart' ? ' Living apart, say it with a time: “Not today, and I’ll call you at [time].” Then keep that call.' : '')) : 'Keep it to one minute a day for a week. Patterns show up fast.';
@@ -1827,7 +1827,7 @@
       else if (m.advice === 'name') s.shows.push('Name the specific task or event first. A message about a pattern is much harder to hear than one about a single thing.');
       else if (m.advice === 'clear' && m.checks < 4) s.shows.push('The checks answered so far look fine; ' + plural(4 - m.checks, 'check') + ' still ' + (4 - m.checks === 1 ? 'needs' : 'need') + ' an answer before you respond.');
       else if (m.advice === 'clear') s.shows.push('The checks say you’re clear to respond. Build the reply from the fact, the feeling and the ask.');
-      s.next = m.advice === 'pause' ? 'Wait until your load score reads lower, then send the version built from fact, feeling and ask.' : 'Use fact, feeling and ask on one more message this week, and notice how it lands.';
+      s.next = m.advice === 'pause' ? 'Wait until your stress tank score reads lower, then send the version built from fact, feeling and ask.' : 'Use fact, feeling and ask on one more message this week, and notice how it lands.';
       return s;
     }
     if (code === 'WP-11') {
@@ -1885,7 +1885,7 @@
       }
       out.lines.push('Bands: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Higher means the setup is working better. Round numbers, not hard lines.');
     } else {
-      out.lines.push('On this road CALC-01’s full read isn’t worked out: it reads how a workload is shared between people. Your load score and your retuning count are the numbers that fit.');
+      out.lines.push('On this road CALC-01’s full read isn’t worked out: it reads how a workload is shared between people. Your stress tank score and your retuning count are the numbers that fit.');
     }
     return out;
   }
@@ -1899,7 +1899,7 @@
       out.paras.push('This road is about you: how full your battery runs, how you’re wired, the patterns in your weeks, what is in your control, and, if you ever want to, how to explain yourself to the people around you. It is for you first; share any page only if you want to.');
       var b = c.battery[0];
       out.blocks = [];
-      out.blocks.push(['Your load score', b.score != null ? 'It reads ' + fmt(b.score) + ' (' + b.band.label.toLowerCase() + ').' + (topFactors(c).length ? ' The biggest contributors right now: ' + list(topFactors(c).map(function (x) { return x.toLowerCase(); })) + '.' : '') : 'Not filled in yet. One minute with WP-02 is the best first step.']);
+      out.blocks.push(['Your stress tank score', b.score != null ? 'It reads ' + fmt(b.score) + ' (' + b.band.label.toLowerCase() + ').' + (topFactors(c).length ? ' The biggest contributors right now: ' + list(topFactors(c).map(function (x) { return x.toLowerCase(); })) + '.' : '') : 'Not filled in yet. One minute with WP-02 is the best first step.']);
       var wired = c.notes.wiring.filter(function (l) { return l.picked.length; });
       out.blocks.push(['Your wiring', wired.length ? wired.map(function (l) { return l.q + ': ' + l.picked.join(', ').replace(/\.$/, ''); }).join('. ') + '.' : 'Not filled in yet. The Wiring Card (or the self-notes page of your package) takes five minutes.']);
       var wx = c.notes.weather;
@@ -1920,13 +1920,13 @@
       if (c.wp11 && (c.wp11.first || c.wp11.second)) ctrl.push('your settling defaults (' + list([c.wp11.first, c.wp11.second].filter(Boolean).map(function (x) { return x.toLowerCase(); })) + ')');
       if (c.wp11 && c.wp11.lines[0]) ctrl.push('your pause line');
       if (c.refusals && c.refusals.length) ctrl.push('your kind no’s');
-      ctrl.push('when you have a hard conversation (after reading your load score, not before)');
+      ctrl.push('when you have a hard conversation (after reading your stress tank score, not before)');
       ctrl.push('how you phrase it: fact, feeling, ask');
       out.blocks.push(['What’s in your control', 'Not how anyone else feels or answers. But ' + list(ctrl) + '.']);
       var card = explainCard(c);
       out.blocks.push(['Putting yourself into words', card ? 'A few lines you could share' + (c.who.others ? ' (you named: ' + c.who.others + ')' : '') + ', in your own words: ' + card : 'Once your Wiring Card has a few lines, the report turns them into a short note you can share, in your own words.']);
       out.links = [['Know yourself', '/know-yourself.html'], ['Make a Wiring Card', '/wiring-card.html'], ['Today’s Weather', '/quick-checks.html#today'], ['The Five Pillars', '/five-pillars.html']];
-      if (b.score != null && b.band.key === 'high') sug('Your load score is high. This week, protect it: one kind no, one early night, and no big decisions that can wait.');
+      if (b.score != null && b.band.key === 'high') sug('Your stress tank score is high. This week, protect it: one kind no, one early night, and no big decisions that can wait.');
       if (!c.notes.wiringLines) sug('Fill in the Wiring Card. It is the fastest way to explain yourself without having to explain everything.');
       if (c.wp09 && c.wp09.advice === 'pause') sug('Hold that message for now. Come back to it when your load is lower.');
       if (!(c.wp11 && c.wp11.first)) sug('Pick your two settling defaults on a calm day, so they are ready on a hard one.');
@@ -1943,7 +1943,7 @@
       if (t && t.filled && (t.unowned.length || t.half.length)) sug('Bring the unowned team tasks (' + list(t.unowned.concat(t.half).slice(0, 4)) + ') to the next retrospective and ask for one volunteer owner each. An owner is a team role, not a rating.');
       if (t && t.filled && c.road === 'coworkers') sug('The helper, Consulted and Informed can be a group, like "the whole team". Only the owner needs to be one name.');
       if (c.wp13 && c.wp13.filled) sug('Keep the 90-second stand-up: load, one thanks, one ask. Anything bigger goes to the weekly catch-up, not the stand-up.');
-      sug('Load score pages are private on this road. Share a number only if you want to, and never use one to rate a teammate.');
+      sug('Stress tank score pages are private on this road. Share a number only if you want to, and never use one to rate a teammate.');
       if (c.wp09 && c.wp09.filled) sug('Before a charged chat or email goes out, run it through fact, feeling and ask. Would it read calmly to someone having a hard day?');
     } else if (c.road === 'partners') {
       if (k.wb != null && k.wb < 0.7) sug('Ask each other: which job would you most like to hand over, and what would make that fair? Then change one owner, not ten.');
@@ -1976,7 +1976,7 @@
     } else if (c.road === 'friends') {
       sug('Choose one thing that went unseen, and say it once, lightly, in one sentence.');
       if (c.wp09 && c.wp09.parts === 3) sug('Your fact, feeling and ask are ready. Could you say it over coffee? If so, it is the right size.');
-      sug('Check your own load score first. Sometimes it was the week, not the friendship.');
+      sug('Check your own stress tank score first. Sometimes it was the week, not the friendship.');
       sug('This isn’t a ledger of favors. A good friendship can hold one honest sentence.');
     } else if (c.road === 'roommates') {
       sug('Bring the at-a-glance page to the next house meeting. One thanks each, then one chore to rebalance.');
@@ -2023,7 +2023,7 @@
     var from = {
       I: R.solo ? 'WP-02 and your weather log' : 'workload balance (WP-01)',
       II: R.solo ? 'your Calm-Down Kit defaults and kind no’s' : 'ownership clarity (WP-03)' + (c.wp04 ? ' and What keeps coming back? (WP-04)' : ''),
-      III: 'load scores (WP-02)' + (c.wp11 ? ' and coming back after settling (WP-11)' : ''),
+      III: 'stress tank scores (WP-02)' + (c.wp11 ? ' and coming back after settling (WP-11)' : ''),
       IV: 'fact, feeling and ask (WP-09), your retuning count' + (c.notes.wiringLines ? ' and your Wiring Card' : ''),
       V: R.solo ? 'what keeps slipping' : 'appreciations (WP-13), repeat slips (WP-04) and unclaimed ' + v.tasks
     };
@@ -2216,7 +2216,7 @@
         var bh = C1().balance(c.wp01.minutes.map(function (m) { return m / 60; }), tp0);
         if (bh.error && tp0) bh = C1().balance(c.wp01.minutes.map(function (m) { return m / 60; }));
         // The one handoff that helps most: from the adult furthest over their share to the adult furthest
-        // under it. Never toward someone marked as a child, and never toward someone whose load score is
+        // under it. Never toward someone marked as a child, and never toward someone whose stress tank score is
         // higher than the giver's. It must really raise the balance.
         var ho = null;
         if (bh.value != null && bh.gaps) {
@@ -2541,9 +2541,9 @@
         var h = heaviest(F), b = highestBat(F);
         return F.n >= 2 && h && b && h.i === b.i && b.battery.score >= 0.5 && F.c.wp01.wb != null && F.c.wp01.wb < 0.85 && F.bat.scored.length >= 2 ? { p: h } : null;
       },
-      find: function (d) { return d.p.label + ' logged the most minutes (' + pc(d.p.share) + ') and has the highest load (' + fmt(d.p.battery.score) + '). The hours and the load scores line up.'; },
+      find: function (d) { return d.p.label + ' logged the most minutes (' + pc(d.p.share) + ') and has the highest load (' + fmt(d.p.battery.score) + '). The hours and the stress tank scores line up.'; },
       why: 'When the same person logs the most and also carries the highest load, a small handoff helps twice: less work, and more room to recover.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Take something off ' + d.p.label + '’s plate this week', first: 'Ask ' + d.p.label + ' for one ' + v.task + ' they would happily hand over for two weeks.', script: '“What’s one thing I could take off your plate this week, no strings?”', link: linkOf('WP-02'), working: d.p.label + '’s load reads lower next week.' }; },
+      rec: function (d, F, v) { return { h: 'now', title: 'Take something off ' + d.p.label + '’s plate this week', first: 'Ask ' + d.p.label + ' for one ' + v.task + ' they would happily hand over for two weeks.', script: '“What’s one thing I could take off your plate this week, no strings?”', link: linkOf('WP-02'), working: d.p.label + '’s stress tank reads lower next week.' }; },
       q: function (d) { return 'What would make next week lighter for ' + d.p.label + ', even a little?'; } },
     { id: 'battery-beyond-list', pillar: 'III', src: ['WP-01', 'WP-02'], pri: 5, title: 'A heavy load that the list doesn’t explain',
       when: function (F) {
@@ -2551,8 +2551,8 @@
         return F.n >= 2 && l && b && l.i === b.i && b.battery.score >= 0.6 && F.bat.scored.length >= 2 ? { p: l } : null;
       },
       find: function (d) { return d.p.label + ' logged the fewest minutes here but has the highest load (' + fmt(d.p.battery.score) + '). Something outside this list is filling it.'; },
-      why: 'A load score reads the whole of life, not only these ' + 'jobs. Knowing that stops anyone from reading a light log as a light week.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Ask what else ' + d.p.label + ' is carrying', first: 'Ask, once and gently, what is filling ' + d.p.label + '’s load score this week, and accept any answer, including "not now".', script: '“You’re carrying a lot this week. Is there anything I can’t see that I could help with?”', link: linkOf('WP-02'), working: d.p.label + ' feels asked about, not assessed.' }; } },
+      why: 'A stress tank score reads the whole of life, not only these ' + 'jobs. Knowing that stops anyone from reading a light log as a light week.',
+      rec: function (d, F, v) { return { h: 'now', title: 'Ask what else ' + d.p.label + ' is carrying', first: 'Ask, once and gently, what is filling ' + d.p.label + '’s stress tank score this week, and accept any answer, including "not now".', script: '“You’re carrying a lot this week. Is there anything I can’t see that I could help with?”', link: linkOf('WP-02'), working: d.p.label + ' feels asked about, not assessed.' }; } },
 
     /* --- Pillar II: fix the setup (WP-03, WP-04) --- */
     { id: 'own-gaps', pillar: 'II', src: ['WP-03'], pri: 8, title: 'Some jobs still need a clear owner',
@@ -2644,9 +2644,9 @@
       rec: function (d, F, v) { return { h: 'week', title: 'Fix the structural gaps in one sitting', first: 'Take each structural gap to WP-03 and give it an owner before you close the look-back.', script: '', link: linkOf('WP-04'), working: 'Fewer structural gaps next month.' }; } },
     { id: 'capacity-highbat', pillar: 'III', src: ['WP-04', 'WP-02'], pri: 6, title: 'Capacity issues while loads run high',
       when: function (F) { var d = F.c.wp04; return d && d.capacity >= 1 && F.bat.high.length ? { cap: d.capacity, who: F.bat.high } : null; },
-      find: function (d) { return plural(d.cap, 'slip') + ' sorted as a capacity issue, while ' + list(lbl(d.who)) + (d.who.length === 1 ? ' reads' : ' read') + ' 0.60 or above on the load score.'; },
+      find: function (d) { return plural(d.cap, 'slip') + ' sorted as a capacity issue, while ' + list(lbl(d.who)) + (d.who.length === 1 ? ' reads' : ' read') + ' 0.60 or above on the stress tank score.'; },
       why: 'A capacity issue means the owner can’t keep up, not that they don’t care. When someone is carrying a lot, adding reminders makes it worse.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Lower the load before raising the bar', first: 'For each capacity issue, ask what could be dropped, simplified or shared, before asking for more effort.', script: '“This isn’t about trying harder. What could come off the list so this one fits?”', link: linkOf('WP-04'), working: 'The same job isn’t ticked next month, and the load reads lower.' }; } },
+      rec: function (d, F, v) { return { h: 'week', title: 'Lower the load before raising the bar', first: 'For each capacity issue, ask what could be dropped, simplified or shared, before asking for more effort.', script: '“This isn’t about trying harder. What could come off the list so this one fits?”', link: linkOf('WP-04'), working: 'The same job isn’t ticked next month, and the stress tank reads lower.' }; } },
     { id: 'clear-but-slips', pillar: 'II', src: ['WP-03', 'WP-04'], pri: 6, title: 'Clear on paper, still slipping',
       when: function (F) { return F.c.wp03 && F.c.wp03.oc != null && F.c.wp03.oc >= 0.8 && F.c.wp04 && F.c.wp04.patterns.length ? F.c.wp04.patterns : null; },
       find: function (p) { return 'Ownership is clear on paper (0.80 or above), yet ' + list(p.slice(0, 3).map(function (x) { return x.task; })) + ' still slipped 3 or 4 weeks out of 4.'; },
@@ -2664,21 +2664,21 @@
       rec: function (d, F, v) { return { h: 'month', title: 'Add a second pair of eyes to the key jobs', first: 'Choose the two ' + v.tasks + ' that matter most and ask someone else to be the helper.', script: '', link: linkOf('WP-03'), working: 'Slips on those jobs are caught within a day or two.' }; } },
 
     /* --- Pillar III: read your state (WP-02, WP-11, weather) --- */
-    { id: 'bat-high', pillar: 'III', src: ['WP-02'], pri: 9, title: function (d, F) { return F.solo ? 'Your load score is running high' : 'A load score is running high'; },
+    { id: 'bat-high', pillar: 'III', src: ['WP-02'], pri: 9, title: function (d, F) { return F.solo ? 'Your stress tank score is running high' : 'A stress tank score is running high'; },
       when: function (F) { return F.bat.high.length ? { who: F.bat.high } : null; },
-      find: function (d, F) { return F.solo ? 'Your load reads ' + fmt(d.who[0].score) + ': a high load right now.' : list(d.who.map(function (b) { return b.label + ' (' + fmt(b.score) + ')'; })) + (d.who.length === 1 ? ' is' : ' are') + ' at 0.60 or above: a high load right now.'; },
-      why: 'At a high load, words land harder and decisions come out worse. It is a reason to pick the timing, not a reason to avoid the talk.',
+      find: function (d, F) { return F.solo ? 'Your stress tank reads ' + fmt(d.who[0].score) + ': high right now.' : list(d.who.map(function (b) { return b.label + ' (' + fmt(b.score) + ')'; })) + (d.who.length === 1 ? ' is' : ' are') + ' at 0.60 or above: high right now.'; },
+      why: 'When the stress tank is high, words land harder and decisions come out worse. It is a reason to pick the timing, not a reason to avoid the talk.',
       rec: function (d, F, v) { return { h: F.reach && !F.solo ? 'week' : 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the highest loads this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (isApart(F) ? ' Living apart, say it with a time: “Not today, and I’ll call you at [time].” Then keep that call.' : ''), script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a heavy-load day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
       q: function (d, F) { return F.solo ? 'What would a slightly lighter week look like for you, and what is one thing you could put down?' : 'When someone is running high, what is the kindest way for them to say "not today"?'; } },
     { id: 'bat-low-all', pillar: 'III', src: ['WP-02'], pri: 3, strength: true, title: 'Loads are light',
       when: function (F) { return F.bat.scored.length && F.bat.scored.every(function (b) { return b.score < 0.3; }) && (F.solo || F.bat.scored.length >= 2) ? F.bat : null; },
-      find: function (b, F) { return F.solo ? 'Your load reads ' + fmt(b.scored[0].score) + ': a low load. Good conditions to look at harder things.' : 'Every load score that was filled in reads under 0.30 (' + b.scored.map(function (x) { return x.label + ' ' + fmt(x.score); }).join(', ') + '). Good conditions for the harder conversations.'; },
+      find: function (b, F) { return F.solo ? 'Your stress tank reads ' + fmt(b.scored[0].score) + ': light. Good conditions to look at harder things.' : 'Every stress tank score that was filled in reads under 0.30 (' + b.scored.map(function (x) { return x.label + ' ' + fmt(x.score); }).join(', ') + '). Good conditions for the harder conversations.'; },
       why: 'Light loads mean what comes up is probably about the thing itself, not leftover load. It is the best time to talk about setup changes.' },
-    { id: 'bat-spread', pillar: 'III', src: ['WP-02'], pri: 5, title: 'Load scores are far apart',
+    { id: 'bat-spread', pillar: 'III', src: ['WP-02'], pri: 5, title: 'Stress tank scores are far apart',
       when: function (F) { return F.bat.spread != null && F.bat.spread >= 0.35 ? { hi: F.bat.max, lo: F.bat.min, d: F.bat.spread } : null; },
-      find: function (d) { return 'Load scores are ' + fmt(d.d) + ' apart: ' + d.hi.label + ' at ' + fmt(d.hi.score) + ', ' + d.lo.label + ' at ' + fmt(d.lo.score) + '.'; },
+      find: function (d) { return 'Stress tank scores are ' + fmt(d.d) + ' apart: ' + d.hi.label + ' at ' + fmt(d.hi.score) + ', ' + d.lo.label + ' at ' + fmt(d.lo.score) + '.'; },
       why: 'People having very different weeks can hear the same sentence very differently. It is nobody’s fault; it is worth knowing before a conversation.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Say your numbers before you start', first: 'Open the next conversation with everyone’s load score number, and pick a time that works for both of you.', script: '“I’m at ' + fmt(d.lo.score) + ', you’re at ' + fmt(d.hi.score) + '. You pick when we talk.”', link: linkOf('WP-02'), working: 'Hard talks happen on days when everyone reads under 0.60.' }; } },
+      rec: function (d, F, v) { return { h: 'now', title: 'Say your numbers before you start', first: 'Open the next conversation with everyone’s stress tank score number, and pick a time that works for both of you.', script: '“I’m at ' + fmt(d.lo.score) + ', you’re at ' + fmt(d.hi.score) + '. You pick when we talk.”', link: linkOf('WP-02'), working: 'Hard talks happen on days when everyone reads under 0.60.' }; } },
     { id: 'stressor-shared', pillar: 'III', src: ['WP-02'], pri: 6, title: 'The same thing is weighing on several people',
       when: function (F) {
         if (!(F.n >= 2 && F.bat.full.length >= 2)) return null;
@@ -2702,12 +2702,12 @@
         var who = F.factorHigh[0] || [];
         return who.length || F.wx.short >= 2 ? { who: who, weeks: F.wx.short } : null;
       },
-      find: function (d, F) { return [d.who.length ? (F.solo ? 'Sleep debt scored 3 or 4 on your load score' : 'Sleep debt scored 3 or 4 for ' + list(d.who)) : '', d.weeks >= 2 ? plural(d.weeks, 'week') + ' of the weather log started on short sleep' : ''].filter(Boolean).join(', and ') + '.'; },
+      find: function (d, F) { return [d.who.length ? (F.solo ? 'Sleep debt scored 3 or 4 on your stress tank score' : 'Sleep debt scored 3 or 4 for ' + list(d.who)) : '', d.weeks >= 2 ? plural(d.weeks, 'week') + ' of the weather log started on short sleep' : ''].filter(Boolean).join(', and ') + '.'; },
       why: 'Sleep is the strongest single signal in the weather check. A short night makes everything else read heavier, including other people.',
       rec: function (d, F, v) { return { h: 'week', title: 'Protect sleep before the hard talks', first: 'Don’t schedule a hard conversation after a short night. Move it by a day.', script: '“I slept badly. Can we do this tomorrow instead? I want to be fair to it.”', link: linkOf('weather'), working: 'Fewer weeks start on a short night.' }; } },
     { id: 'conflict-driver', pillar: 'IV', src: ['WP-02', 'WP-09'], pri: 5, title: 'Something unresolved is weighing on someone',
       when: function (F) { var who = F.factorHigh[2] || []; return who.length ? { who: who } : null; },
-      find: function (d, F) { return (F.solo ? 'Unresolved conflict scored 3 or 4 on your load score' : 'Unresolved conflict scored 3 or 4 for ' + list(d.who)) + '. It doesn’t say with whom, and it doesn’t need to.'; },
+      find: function (d, F) { return (F.solo ? 'Unresolved conflict scored 3 or 4 on your stress tank score' : 'Unresolved conflict scored 3 or 4 for ' + list(d.who)) + '. It doesn’t say with whom, and it doesn’t need to.'; },
       why: 'An open conflict anywhere adds to everyone’s load. Settling one, even a small one, often lowers the whole number.',
       rec: function (d, F, v) { return { h: 'week', title: 'Settle one open thing, gently', first: 'Write the fact, the feeling and the ask for the open thing, then choose a calm time to say it.', script: '“Can we find twenty minutes this week to sort out the thing from last week? No rush today.”', link: linkOf('WP-09'), working: 'That line reads 2 or less next week.' }; } },
     { id: 'high-days', pillar: 'III', src: ['WP-13'], pri: 6, title: 'Several high-load days in a row of check-ins',
@@ -2732,12 +2732,12 @@
       why: 'Something helped. Naming it makes it easier to keep doing on purpose.' },
     { id: 'weather-sleep', pillar: 'III', src: ['NOTES'], pri: 5, title: 'Short-sleep weeks run heavier',
       when: function (F) { var w = F.wx; return w.shortAvg != null && w.restAvg != null && w.shortAvg - w.restAvg >= 0.15 ? w : null; },
-      find: function (w) { return 'Weeks that started on short sleep averaged ' + fmt(w.shortAvg) + ' on the load score, against ' + fmt(w.restAvg) + ' after enough sleep.'; },
+      find: function (w) { return 'Weeks that started on short sleep averaged ' + fmt(w.shortAvg) + ' on the stress tank score, against ' + fmt(w.restAvg) + ' after enough sleep.'; },
       why: 'That is a link in your own numbers, not a rule for everyone. It suggests sleep is one of the levers that works for you.',
       rec: function (w, F, v) { return { h: 'month', title: 'Use sleep as a lever', first: 'Pick one night a week to protect, and see if that week reads lighter.', script: '', link: linkOf('weather'), working: 'The protected-sleep weeks read lower.' }; } },
     { id: 'weather-pressure', pillar: 'III', src: ['NOTES'], pri: 4, title: 'Heavy-pressure weeks run heavier',
       when: function (F) { var w = F.wx; return w.heavyAvg != null && w.lightAvg != null && w.heavyAvg - w.lightAvg >= 0.15 ? w : null; },
-      find: function (w) { return 'Weeks that already felt heavy averaged ' + fmt(w.heavyAvg) + ' on the load score, against ' + fmt(w.lightAvg) + ' in lighter weeks.'; },
+      find: function (w) { return 'Weeks that already felt heavy averaged ' + fmt(w.heavyAvg) + ' on the stress tank score, against ' + fmt(w.lightAvg) + ' in lighter weeks.'; },
       why: 'What you were already carrying shapes how the week reads. It is a reason to plan fewer extras into heavy weeks.',
       rec: function (w, F, v) { return { h: 'month', title: 'Plan lighter weeks around heavy ones', first: 'When a week starts heavy, drop one optional thing on day one.', script: '', link: linkOf('weather'), working: 'Heavy weeks read closer to the others.' }; } },
     { id: 'weather-checkin-week', pillar: 'III', src: ['NOTES', 'WP-13'], pri: 5, title: 'The friction week was a stormy week',
@@ -2746,7 +2746,7 @@
         var start = F.w13.weekOf.getTime(), hit = F.wx.weeks.filter(function (w) { var d = parseISO(w.date); return d && Math.abs(d.getTime() - start) <= 6 * 864e5 && (w.sky === 'Gusty' || w.sky === 'Fogged in' || (w.battery != null && w.battery >= 0.6)); })[0];
         return hit ? { w: hit, fr: F.w13.frictionRows.length } : null;
       },
-      find: function (d) { return 'The check-in week had ' + d.fr + ' friction notes, and the weather log for that week reads ' + (d.w.sky ? lc(d.w.sky) : 'a load score of ' + fmt(d.w.battery)) + '.'; },
+      find: function (d) { return 'The check-in week had ' + d.fr + ' friction notes, and the weather log for that week reads ' + (d.w.sky ? lc(d.w.sky) : 'a stress tank score of ' + fmt(d.w.battery)) + '.'; },
       why: 'Friction in a low-weather week says as much about the weather as about anyone. It is worth reading the two side by side.',
       rec: null },
     { id: 'settle-works', pillar: 'III', src: ['WP-11'], pri: 3, strength: true, title: 'Settling works',
@@ -2778,7 +2778,7 @@
       when: function (F) { return F.c.wp09 && F.c.wp09.advice === 'pause' ? F.c.wp09 : null; },
       find: function (m) { return 'The four checks on WP-09 suggest pausing before answering' + (m.pattern ? ': it may be answering an older pattern, not just these words' : m.satNo ? ': you might read it differently with a lighter load' : '') + '.'; },
       why: 'A reply sent while carrying a lot, or at an old pattern, lands on the wrong target. Waiting a day costs little.',
-      rec: function (m, F, v) { return { h: 'now', title: 'Hold that message for now', first: 'Save the draft and come back to it when your load reads lower.', script: '“I want to answer this properly. Can I come back to you tomorrow?”', link: linkOf('WP-09'), working: 'The version you send is built from fact, feeling and ask.' }; } },
+      rec: function (m, F, v) { return { h: 'now', title: 'Hold that message for now', first: 'Save the draft and come back to it when your stress tank reads lower.', script: '“I want to answer this properly. Can I come back to you tomorrow?”', link: linkOf('WP-09'), working: 'The version you send is built from fact, feeling and ask.' }; } },
     { id: 'wp09-absolutes', pillar: 'IV', src: ['WP-09'], pri: 4, title: 'Always and never in the message',
       when: function (F) { return F.w9 && (F.w9.absolutes || F.w9.blame) ? F.w9 : null; },
       find: function (w) { return 'The WP-09 draft uses ' + (w.absolutes ? '"always" or "never"' : '') + (w.absolutes && w.blame ? ' and ' : '') + (w.blame ? 'a "you made me" shape in the feeling' : '') + '.'; },
@@ -2812,7 +2812,7 @@
         var b = i != null ? F.c.battery[i] : null;
         return (W.indexOf('load') >= 0 || W.indexOf('space') >= 0 || W.indexOf('upset') >= 0) && b && b.score != null && b.score >= 0.5 ? { who: F.notesLabel, what: (F.wiring.quiet || [])[0], b: b } : null;
       },
-      find: function (d) { return 'The Wiring Card says going quiet means ' + q(lc(d.what)) + ', and ' + d.who + '’s load reads ' + fmt(d.b.score) + ' this week.'; },
+      find: function (d) { return 'The Wiring Card says going quiet means ' + q(lc(d.what)) + ', and ' + d.who + '’s stress tank reads ' + fmt(d.b.score) + ' this week.'; },
       why: 'Silence is easy to misread as sulking or not caring. Saying what it means ahead of time turns it into information.',
       rec: function (d, F, v) { return { h: 'now', title: 'Say what quiet means, ahead of time', first: 'Share the quiet line from the Wiring Card before the next busy day.', script: '“If I go quiet this week, it means ' + lc(d.what).replace(/^i’m/, 'I’m') + '. It isn’t about you.”', link: linkOf('wiring'), working: 'Nobody reads the next quiet spell as a problem.' }; } },
 
@@ -2988,7 +2988,7 @@
       fix: 'Add an initial to one of them (for example "Sam B").' },
     { id: 'person-empty', where: 'All pages', level: 'note',
       when: function (F) { if (F.n < 2) return null; var e = F.pp.filter(function (p) { return !p.anything; }), some = F.pp.some(function (p) { return p.anything; }); return some && e.length ? e : null; },
-      text: function (e) { return list(lbl(e)) + (e.length === 1 ? ' has' : ' have') + ' no entries anywhere yet (no minutes, load score, check-ins or owned jobs). The report can’t say anything about ' + (e.length === 1 ? 'them' : 'their weeks') + ', and that is not the same as "nothing to say".'; },
+      text: function (e) { return list(lbl(e)) + (e.length === 1 ? ' has' : ' have') + ' no entries anywhere yet (no minutes, stress tank score, check-ins or owned jobs). The report can’t say anything about ' + (e.length === 1 ? 'them' : 'their weeks') + ', and that is not the same as "nothing to say".'; },
       fix: 'Only if they want to: their own battery page (WP-02) is the easiest place to start.' },
     { id: 'wp02-extreme', where: 'WP-02', level: 'note',
       when: function (F) { var e = F.bat.full.filter(function (b) { return b.sum === 0 || b.sum === 20; }); return e.length ? e : null; },
@@ -3006,7 +3006,7 @@
       fix: 'Each person fills in their own, about themselves.' },
     { id: 'wp02-partial', where: 'WP-02', level: 'check',
       when: function (F) { var p = F.c.battery.filter(function (b) { return b.answered > 0 && b.answered < 5 && b.source !== 'shared'; }); return p.length ? p : null; },
-      text: function (p) { return list(p.map(function (b) { return b.label + ' (' + b.answered + ' of 5)'; })) + ': a load score needs all five answers, so ' + (p.length === 1 ? 'this one isn’t' : 'these aren’t') + ' worked out yet.'; },
+      text: function (p) { return list(p.map(function (b) { return b.label + ' (' + b.answered + ' of 5)'; })) + ': a stress tank score needs all five answers, so ' + (p.length === 1 ? 'this one isn’t' : 'these aren’t') + ' worked out yet.'; },
       fix: 'Fill in the missing lines, or write just the score in the last box.' },
     { id: 'wp02-shared-conflict', where: 'WP-02', level: 'check',
       when: function (F) {
@@ -3022,7 +3022,7 @@
         var hit = texts.filter(function (t) { return t[1] && FINE_RE.test(t[1]); })[0];
         return hit ? { hi: hi[0], where: hit[0], text: hit[1] } : null;
       },
-      text: function (d) { return d.hi.label + '’s load reads ' + fmt(d.hi.score) + ', and ' + d.where + ' says ' + q(short(d.text, 60)) + '. Both can be true on different days; it may be worth checking which one is today.'; },
+      text: function (d) { return d.hi.label + '’s stress tank reads ' + fmt(d.hi.score) + ', and ' + d.where + ' says ' + q(short(d.text, 60)) + '. Both can be true on different days; it may be worth checking which one is today.'; },
       fix: 'No need to change anything. Just say your number out loud before a hard talk.' },
     { id: 'contradiction-state', where: 'CALC-01, WP-02', level: 'note',
       when: function (F) {
@@ -3033,7 +3033,7 @@
         if (s === 'Running on empty' && val < 0.3) return { s: s, v: val, dir: 'low' };
         return null;
       },
-      text: function (d) { return 'Step zero says ' + q(lc(d.s)) + ', while the load reads ' + fmt(d.v) + '. They were probably filled in on different days, which is fine; the state on the day you read the report matters most.'; },
+      text: function (d) { return 'Step zero says ' + q(lc(d.s)) + ', while the stress tank reads ' + fmt(d.v) + '. They were probably filled in on different days, which is fine; the state on the day you read the report matters most.'; },
       fix: 'Check your state again before reading on.' },
     { id: 'wp03-everyone', where: 'WP-03', level: 'note',
       when: function (F) { return F.w3 && F.w3.multi.length ? F.w3.multi : null; },
@@ -3107,7 +3107,7 @@
     { id: 'numbers-out-of-range', where: 'Several pages', level: 'check',
       when: function (F) { var iss = readReport(F.data).issues.filter(function (i) { return /isn’t a number|is outside|is below|is above/.test(i.msg); }); return iss.length ? iss : null; },
       text: function (i) { return plural(i.length, 'number') + ' couldn’t be used: ' + i.slice(0, 3).map(function (x) { return x.msg.replace(/, so it is left out\.$/, ''); }).join('; ') + '.'; },
-      fix: 'Load score and CALC numbers run from 0 to 1 (for example 0.45).' },
+      fix: 'Stress tank score and CALC numbers run from 0 to 1 (for example 0.45).' },
     { id: 'dates-odd', where: 'Dates', level: 'note',
       when: function (F) {
         var now = F.now.getTime() + 864e5, out = [];
@@ -3122,7 +3122,7 @@
       fix: 'If it was real, the note for that week is worth reading again.' },
     { id: 'weather-sky-odd', where: 'Weather log', level: 'note',
       when: function (F) { return F.wx.skyOdd.length ? F.wx.skyOdd : null; },
-      text: function (w) { return 'Week ' + w[0].w + ' says the sky was ' + lc(w[0].sky) + ' with a load score of ' + fmt(w[0].battery) + '. Those usually point the other way; it may be real, or one of them may be a slip.'; },
+      text: function (w) { return 'Week ' + w[0].w + ' says the sky was ' + lc(w[0].sky) + ' with a stress tank score of ' + fmt(w[0].battery) + '. Those usually point the other way; it may be real, or one of them may be a slip.'; },
       fix: 'Check that week’s entry.' },
     { id: 'weather-order', where: 'Weather log', level: 'note',
       when: function (F) { return F.wx.outOfOrder ? true : null; },
@@ -3134,7 +3134,7 @@
       fix: 'Fill it in from memory if you can, or leave it: a missed week is normal.' },
     { id: 'wp11-rose', where: 'WP-11', level: 'note',
       when: function (F) { return F.w11 && F.w11.rose.length ? F.w11.rose : null; },
-      text: function (r) { return 'In ' + plural(r.length, 'settling round') + ', the load reads higher after (' + fmt(r[0].after) + ') than before (' + fmt(r[0].before) + '). The two boxes may be swapped, or that round just didn’t help, which happens.'; },
+      text: function (r) { return 'In ' + plural(r.length, 'settling round') + ', the stress tank reads higher after (' + fmt(r[0].after) + ') than before (' + fmt(r[0].before) + '). The two boxes may be swapped, or that round just didn’t help, which happens.'; },
       fix: 'Check which box is "before".' },
     { id: 'wp11-same-default', where: 'WP-11', level: 'note',
       when: function (F) { return F.w11 && F.w11.same ? F.c.wp11.first : null; },
@@ -3191,12 +3191,12 @@
     }
     if (code === 'WP-02') {
       var sc = F.bat.scored;
-      if (sc.length) s.bars.push(bars(F.solo ? 'Your load score' : 'Load score by person (0 to 1)', sc.map(function (b) { return { label: b.label, value: b.score, max: 1, text: fmt(b.score) + ', ' + b.band.label.toLowerCase() }; }), 'Under 0.30 low load · 0.30 to 0.59 medium · 0.60 and up high.'));
+      if (sc.length) s.bars.push(bars(F.solo ? 'Your stress tank score' : 'Stress tank score by person (0 to 1)', sc.map(function (b) { return { label: b.label, value: b.score, max: 1, text: fmt(b.score) + ', ' + b.band.label.toLowerCase() }; }), 'Under 0.30 light · 0.30 to 0.59 medium · 0.60 and up high.'));
       if (F.bat.full.length) s.tables.push(tbl('What is adding to the ' + (F.solo ? 'load' : 'loads'), ['What fills it', F.solo ? 'Your answer (0 to 4)' : 'Average (0 to 4)', F.solo ? 'Level' : 'Scored 3 or 4 by'],
         F.factors.map(function (l, k) { var a = F.factorAvg[k]; return [l, a == null ? '—' : C1().f1(a), F.solo ? (a == null ? '—' : a >= 3 ? 'High' : a >= 2 ? 'Some' : 'Low') : (F.factorHigh[k].length ? F.factorHigh[k].join(', ') : 'No one')]; }), [2.4, 1.1, 1.8]));
       var best = -1; F.factorAvg.forEach(function (a, i) { if (a != null && (best < 0 || a > F.factorAvg[best])) best = i; });
       if (best >= 0) s.more.push('Highest-scoring stressor: ' + lc(F.factors[best]) + ' (' + C1().f1(F.factorAvg[best]) + ' of 4' + (F.solo ? '' : ' on average') + ').');
-      if (!F.solo && sc.length) s.more.push(F.bat.all ? 'The ' + (n === 2 ? 'pair' : F.road === 'coworkers' ? 'team' : 'group') + ' average is ' + fmt(F.bat.avg) + '.' : 'Of the ' + sc.length + ' load scores filled in, the average is ' + fmt(F.bat.avg) + '. The full average waits for everyone.');
+      if (!F.solo && sc.length) s.more.push(F.bat.all ? 'The ' + (n === 2 ? 'pair' : F.road === 'coworkers' ? 'team' : 'group') + ' average is ' + fmt(F.bat.avg) + '.' : 'Of the ' + sc.length + ' stress tank scores filled in, the average is ' + fmt(F.bat.avg) + '. The full average waits for everyone.');
       if (F.bat.spread != null) s.more.push('The spread between the highest and the lowest load is ' + fmt(F.bat.spread) + (F.bat.spread >= 0.35 ? ': very different weeks.' : '.'));
       var shared = sc.filter(function (b) { return b.source === 'shared'; });
       if (shared.length) s.more.push(list(lbl(shared)) + ' shared a score rather than the five answers. That is fine; it just means the stressor table can’t include them.');
@@ -3278,7 +3278,7 @@
     });
     if (n.weather.length) {
       s.tables.unshift(tbl(F.solo ? 'The weather log' : F.notesLabel + '\u2019s weather log', ['Week', 'Battery', 'Sky', 'Pressure', 'Sleep'], n.weather.map(function (w) { return ['Week ' + w.w + (w.date ? ' (' + w.date + ')' : ''), w.battery != null ? fmt(w.battery) : '—', w.sky || '—', w.pressure || '—', w.sleep || '—']; }), [1.6, 0.8, 1, 1, 1.2]));
-      if (F.wx.bat.length) s.bars.push(bars(F.solo ? 'Load score, week by week' : F.notesLabel + '\u2019s load score, week by week', F.wx.bat.map(function (w) { return { label: 'Week ' + w.w, value: w.battery, max: 1, text: fmt(w.battery) }; })));
+      if (F.wx.bat.length) s.bars.push(bars(F.solo ? 'Stress tank score, week by week' : F.notesLabel + '\u2019s stress tank score, week by week', F.wx.bat.map(function (w) { return { label: 'Week ' + w.w, value: w.battery, max: 1, text: fmt(w.battery) }; })));
       if (F.wx.trend != null) s.shows.push('Across ' + whose + ' weather log, the load went from ' + fmt(F.wx.first.battery) + ' to ' + fmt(F.wx.last.battery) + (Math.abs(F.wx.trend) < 0.05 ? ': holding steady.' : F.wx.trend < 0 ? ': lighter.' : ': heavier.'));
       var skies = {}; n.weather.forEach(function (w) { if (w.sky) skies[w.sky] = (skies[w.sky] || 0) + 1; });
       if (Object.keys(skies).length) s.shows.push('Sky: ' + Object.keys(skies).map(function (k) { return lc(k) + ' ' + skies[k]; }).join(', ') + '.');
@@ -3311,7 +3311,7 @@
     if (r.going) s.shows.push('Start from this: ' + q(short(r.going, 140)) + ' It belongs in the "strengths to protect" list.');
     if (r.focus) s.shows.push('Your question for the report: ' + q(short(r.focus, 140)));
     if (!r.fair && s.status === 'filled') s.shows.push('The "not a verdict" box isn’t ticked. Worth agreeing on out loud before reading together.');
-    s.suggests.push(r.when ? 'You’ve picked a time to read it. Keep it, and check your load scores first.' : 'Pick a calm time to read it, ' + (F.solo ? 'on your own' : 'together') + '.');
+    s.suggests.push(r.when ? 'You’ve picked a time to read it. Keep it, and check your stress tank scores first.' : 'Pick a calm time to read it, ' + (F.solo ? 'on your own' : 'together') + '.');
     s.next = r.focus ? 'Read the sections that speak to your question first, then stop.' : 'Before reading, write one question you want the report to help with.';
     if (s.status === 'blank') s.suggests = ['Nothing written here yet. ' + s.next];
     return s;
@@ -3446,7 +3446,7 @@
         rows.push(['Jobs on their own side of the log (WP-01)', !F.w1 ? 'WP-01 not filled in' : waitingP ? 'Not added yet' : String(uniq(F.w1.rows.filter(function (r) { return r.who === p.i && r.task; }).map(function (r) { return r.task.toLowerCase().replace(/\s*\(.*\)$/, ''); })).length)]);
       }
       if (c.nights && c.nights[p.i] != null) rows.push(['Lives here', c.nights[p.i] === 7 ? 'Half the time' : c.nights[p.i] + ' of 14 nights (what is asked of them is counted for those nights)']);
-      rows.push(['Load score (WP-02)', b.score != null ? fmt(b.score) + ', ' + b.band.label.toLowerCase() + (p.top.length ? '. Scored highest: ' + list(p.top.slice(0, 2).map(function (x) { return lc(x.l); })) : '') : b.answered ? b.answered + ' of 5 answered' : 'Not filled in']);
+      rows.push(['Stress tank score (WP-02)', b.score != null ? fmt(b.score) + ', ' + b.band.label.toLowerCase() + (p.top.length ? '. Scored highest: ' + list(p.top.slice(0, 2).map(function (x) { return lc(x.l); })) : '') : b.answered ? b.answered + ' of 5 answered' : 'Not filled in']);
       if (c.on['WP-03']) rows.push([F.road === 'coworkers' ? 'Team roles (WP-03)' : 'Owns (WP-03)', F.w3 ? 'Owns ' + p.r + ', helps with ' + p.a + (p.recurR ? ' (' + p.recurR + ' daily or weekly)' : '') : 'WP-03 not filled in']);
       // two people's own lists: how each list sees this person
       if (c.wp03 && c.wp03.views) rows.push(['Owns, on each list (WP-03)', c.wp03.views.lists.map(function (L) { return 'on ' + L.whose + '\u2019s list, ' + (L.owns[p.label] || 0) + ' of ' + L.total; }).join('; ')]);
@@ -3475,7 +3475,7 @@
       if (b.score != null && b.band.key === 'low') strengths.push('Load in the low band: steady ground for the harder talks this week.');
       if (p.checkins >= 5) strengths.push('Checked in on ' + p.checkins + ' of 7 days.');
       if (p.pause) strengths.push('Has a pause line ready.');
-      if (b.source === 'shared') strengths.push('Shared a load score, which helps everyone pick the timing.');
+      if (b.source === 'shared') strengths.push('Shared a stress tank score, which helps everyone pick the timing.');
       if (F.reacher === p.i) strengths.unshift('Keeps reaching out: starting the calls and messages that keep you close.');
       if (p.minutes > 0 && !strengths.length) strengths.push('Logged ' + minText(p.minutes) + ' of the week\u2019s work.');
       if (!strengths.length) strengths.push(p.anything ? 'Took part in the pages. That is where it starts.' : 'Is on this road. Their pages are theirs to fill in, when and if they want to.');
@@ -3513,7 +3513,7 @@
     if (F.wx.weeks.length) { var skies = {}; F.wx.weeks.forEach(function (w) { if (w.sky) skies[w.sky] = (skies[w.sky] || 0) + 1; }); var top = Object.keys(skies).sort(function (a, b2) { return skies[b2] - skies[a]; })[0]; if (top && skies[top] >= 2) patterns.push('The sky read ' + lc(top) + ' in ' + skies[top] + ' of ' + F.wx.weeks.length + ' logged weeks.'); }
     if (F.refusals && F.refusals.length) patterns.push('Your kind no’s are mostly ' + lc(F.refusals[0].kind || 'unsorted') + ': that is the request you most need words for.');
     if (!patterns.length) patterns.push('Not enough logged yet to see a pattern. Four weekly weather check-ins and one WP-09 are plenty.');
-    if (b.score != null) conditions.push('Load score ' + fmt(b.score) + ' (' + b.band.label.toLowerCase() + ')' + (F.pp[0].top.length ? ', driven most by ' + list(F.pp[0].top.slice(0, 2).map(function (x) { return lc(x.l); })) : '') + '.');
+    if (b.score != null) conditions.push('Stress tank score ' + fmt(b.score) + ' (' + b.band.label.toLowerCase() + ')' + (F.pp[0].top.length ? ', driven most by ' + list(F.pp[0].top.slice(0, 2).map(function (x) { return lc(x.l); })) : '') + '.');
     if (F.wx.last) conditions.push('Latest weather: ' + [F.wx.last.sky && 'sky ' + lc(F.wx.last.sky), F.wx.last.pressure && 'pressure ' + lc(F.wx.last.pressure), F.wx.last.sleep && lc(F.wx.last.sleep)].filter(Boolean).join(', ') + '.');
     if (F.wx.shortAvg != null && F.wx.restAvg != null) conditions.push('Short-sleep weeks read ' + fmt(F.wx.shortAvg) + ' against ' + fmt(F.wx.restAvg) + ' when rested.');
     if (c.calc.state) conditions.push('Step zero today: ' + lc(c.calc.state) + '.');
@@ -3525,10 +3525,10 @@
     if (W.quiet && W.quiet.length) scripts.push('“If I go quiet, it usually means ' + lc(W.quiet[0]).replace(/^i’m/, 'I’m') + '. It isn’t about you.”');
     if (W.ask && W.ask.length) scripts.push('“Things land best for me as ' + lc(W.ask[0]) + '.”');
     if (W.time && W.time.length) scripts.push('“Can I have ' + lc(W.time[0]) + ' to answer? I want to answer properly.”');
-    scripts.push('“I’m at about ' + (b.score != null ? fmt(b.score) : 'a medium load') + ' today. Can we pick this up at a set time?”');
+    scripts.push('“I’m at about ' + (b.score != null ? fmt(b.score) : 'halfway on my stress tank') + ' today. Can we pick this up at a set time?”');
     if (c.wp11 && c.wp11.lines[0]) scripts.push(q(c.wp11.lines[0]));
     return {
-      intro: 'Three layers help sort out what is going on inside you. Wiring is how you are built to send and receive: it stays fairly steady. Patterns are what repeats: the same trigger, the same reaction. Conditions are this week’s weather: load score, sleep and pressure. Most hard moments are a mix, and naming the layer tells you what to do about it.',
+      intro: 'Three layers help sort out what is going on inside you. Wiring is how you are built to send and receive: it stays fairly steady. Patterns are what repeats: the same trigger, the same reaction. Conditions are this week’s weather: stress tank score, sleep and pressure. Most hard moments are a mix, and naming the layer tells you what to do about it.',
       layers: [['Wiring (steady)', wiring], ['Patterns (repeat)', patterns], ['Conditions (this week)', conditions]],
       sorting: sorting,
       explain: { to: c.who.others, card: explainCard(c), scripts: scripts.slice(0, 5) },
@@ -3543,7 +3543,7 @@
     fired.forEach(function (r) { (byP[r.pillar] = byP[r.pillar] || []).push(r); });
     var hb = highestBat(F), heavy = heaviest(F);
     var D = {
-      I: { shows: F.w1 && F.w1.total ? minText(F.w1.total) + ' logged across ' + plural(F.n, 'person', 'people') + '; balance ' + (c.wp01.wb != null ? fmt(c.wp01.wb) : 'not worked out') + '; ' + plural(F.w1.mentalRows.length, 'planning item') + '.' : F.solo ? (c.battery[0].score != null ? 'Load score ' + fmt(c.battery[0].score) + '; ' : '') + plural(F.wx.weeks.length, 'week') + ' of the weather log.' : 'WP-01 isn’t filled in, so the load isn’t on the page yet.',
+      I: { shows: F.w1 && F.w1.total ? minText(F.w1.total) + ' logged across ' + plural(F.n, 'person', 'people') + '; balance ' + (c.wp01.wb != null ? fmt(c.wp01.wb) : 'not worked out') + '; ' + plural(F.w1.mentalRows.length, 'planning item') + '.' : F.solo ? (c.battery[0].score != null ? 'Stress tank score ' + fmt(c.battery[0].score) + '; ' : '') + plural(F.wx.weeks.length, 'week') + ' of the weather log.' : 'WP-01 isn’t filled in, so the load isn’t on the page yet.',
         inYou: F.w1 && F.w1.mentalRows.length ? 'Notice the planning and remembering you carry. It counts, even when it only takes two minutes to do.' : F.solo ? 'Write down everything you carried this week, including the parts nobody sees. It is usually more than you think.' : null,
         between: heavy && c.wp01 && c.wp01.wb != null && c.wp01.wb < 0.7 ? 'Read the log together, without discussing it until the week is done. ' + heavy.label + '’s ' + pc(heavy.share) + ' is a fact about the week, not about anyone.' : null,
         practice: F.solo ? 'Once a week, list what you carried, and circle one thing you could put down.' : 'Log one ordinary week on WP-01 every month, and read it together.' },
@@ -3551,7 +3551,7 @@
         inYou: F.solo ? 'When something slips, ask "what would make this easier next time?" before "what is wrong with me?"' : 'When a job slips, treat it as a setup question first: who owns it, and when is the handoff?',
         between: F.w3 && F.w3.gaps.length ? 'Give ' + q(F.w3.gaps[0].task) + ' one owner. One owner per job does more than any reminder.' : null,
         practice: F.solo ? 'Redesign one routine this month instead of trying harder at it.' : 'One owner per job, written down, and checked once a month on WP-04.' },
-      III: { shows: F.bat.scored.length ? (F.solo ? 'Load score ' + fmt(F.bat.scored[0].score) : 'Load scores: ' + F.bat.scored.map(function (b) { return b.label + ' ' + fmt(b.score); }).join(', ')) + (F.w11 && F.w11.avgDrop != null ? '; settling moved it by ' + fmt(F.w11.avgDrop) + ' on average' : '') + (F.wx.trend != null ? '; weather trend ' + (F.wx.trend > 0 ? '+' : '') + fmt(F.wx.trend) : '') + '.' : 'No load scores yet.',
+      III: { shows: F.bat.scored.length ? (F.solo ? 'Stress tank score ' + fmt(F.bat.scored[0].score) : 'Stress tank scores: ' + F.bat.scored.map(function (b) { return b.label + ' ' + fmt(b.score); }).join(', ')) + (F.w11 && F.w11.avgDrop != null ? '; settling moved it by ' + fmt(F.w11.avgDrop) + ' on average' : '') + (F.wx.trend != null ? '; weather trend ' + (F.wx.trend > 0 ? '+' : '') + fmt(F.wx.trend) : '') + '.' : 'No stress tank scores yet.',
         inYou: F.pp[0] && F.solo && F.pp[0].top.length ? 'Your load comes most from ' + lc(F.pp[0].top[0].l) + '. Check it before you judge a moment.' : 'Check your number before you judge a moment, yours or anyone else’s.',
         between: hb && !F.solo && hb.battery.score >= 0.5 ? 'With ' + hb.label + ' at ' + fmt(hb.battery.score) + ', pick a time for the next hard talk that works for ' + (F.n === 2 ? 'both of you' : 'everyone') + ', not just the first free moment.' : null,
         practice: 'Say your number before any hard talk. At 0.60 or above, name a time instead.' },
@@ -3607,14 +3607,14 @@
     while (qs.length < 8) qs.push('What is one small thing we could try this week?');
     var rules = F.solo ? [
       'Read it like a letter from a friend, not a school report. It describes your conditions, never your worth.',
-      'Check your load score first. At 0.60 or above, read the summary only and come back another day.',
+      'Check your stress tank score first. At 0.60 or above, read the summary only and come back another day.',
       'One section per sitting is plenty.',
       'Timing: a calm, unhurried moment on your own, not late at night or right after a hard conversation.',
       'Start with the strengths to protect before the things to work on.',
       'If you share a page, share the page, not a complaint: let the report be the third voice.'
     ] : [
       'Let the report be a third voice in the conversation (in the room or on the call): point at the page, not at each other.',
-      'Check everyone’s load score first. If anyone reads 0.60 or above, pick another time.',
+      'Check everyone’s stress tank score first. If anyone reads 0.60 or above, pick another time.',
       'Timing: ' + v.meeting + ', unhurried' + (F.road === 'coworkers' ? '; not in a busy chat thread or a hallway.' : F.road === 'coparents' || F.road === 'family' ? '; never in front of children.' : '; not late at night, and by voice (in person or on a call), not over text.'),
       'One topic per sitting. Pick it from the "top 3" list, and let the rest wait.',
       'Start with what is working, then the one thing to change.',
@@ -3625,7 +3625,7 @@
     var hard = [
       'Stop reading. You can close it and come back another day; it will say the same thing tomorrow.',
       F.solo ? 'Say it simply to yourself: "That landed harder than I expected. I’ll come back to it on Sunday."' : 'Name it simply: “This landed harder than I expected. Can we pause and come back on Sunday?”',
-      'Use a settling default from WP-11, then check your load score again before deciding anything.',
+      'Use a settling default from WP-11, then check your stress tank score again before deciding anything.',
       'Next time, read the "strengths to protect" first.',
       'Remember what this is: a picture of the setup and what was written down, not a verdict on anyone.',
       'If a section feels unfair, say so. The report only knows what was entered, and it can be wrong.'
@@ -3677,10 +3677,10 @@
 
   var GLOSSARY = [
     ['Battery', 'A quick self-check (WP-02) of how full you are right now: five answers from 0 to 4, added up and divided by 20. Higher means more load.'],
-    ['Band', 'A rough range a number falls in, such as low, medium or high load. Round numbers chosen to be easy to read, not hard lines.'],
+    ['Band', 'A rough range a number falls in, such as light, medium or high. Round numbers chosen to be easy to read, not hard lines.'],
     ['Workload balance (WB)', 'How close the logged minutes come to an even split. 1.00 is even.'],
     ['Ownership clarity (OC)', 'The share of jobs with an owner.'],
-    ['Average load (AS)', 'Everyone’s load score averaged. Only worked out when every load score is in.'],
+    ['Average load (AS)', 'Everyone’s stress tank score averaged. Only worked out when every stress tank score is in.'],
     ['Setup score', 'The CALC-01 read of whether the way the load is shared can keep going.'],
     ['Overall score', 'The setup score with repair after friction (retuning) added in.'],
     ['Retuning (RF)', 'Friction moments you ran through fact, feeling and ask before answering, divided by all friction moments.'],
@@ -3706,7 +3706,7 @@
 
   function method(F) {
     var out = [
-      'Load score (WP-02): the five answers added up and divided by 20. Under 0.30 is a low load, 0.30 to 0.59 medium, 0.60 and up high.',
+      'Stress tank score (WP-02): the five answers added up and divided by 20. Under 0.30 is light, 0.30 to 0.59 medium, 0.60 and up high.',
       'Workload balance (WP-01): each person’s share of the logged minutes is compared with an even split. Balance is 1 minus the part of the time that would have to change hands, out of the most it could be. With two people this is 1 minus the gap between the two shares.',
       'Ownership clarity (WP-03): jobs with an owner, divided by all jobs listed.',
       'Setup score (CALC-01): balance × 0.40 + ownership × 0.35 + (1 − average load) × 0.25. The overall score adds retuning: × 0.35, × 0.30, × 0.20 and retuning × 0.15. With no friction counted, the overall score uses the first three, rebalanced.',
@@ -3721,7 +3721,7 @@
     if (F.solo) {
       out = out.filter(function (t) { return !/^(Workload balance|Ownership clarity|Setup score|Bands for the setup score|Patterns \(WP-04\))/.test(t); });
       out.splice(1, 0, 'Retuning (CALC-01): friction moments you ran through fact, feeling and ask before answering, divided by all friction moments. On this road CALC-01 only looks at you, so there is no shared-workload score.',
-        'Weather log: your load score week by week, read next to your sky, pressure and sleep to show what tends to make a week heavier or lighter.');
+        'Weather log: your stress tank score week by week, read next to your sky, pressure and sleep to show what tends to make a week heavier or lighter.');
     }
     return out;
   }
@@ -3747,7 +3747,7 @@
     var fixes = checks.filter(function (x) { return x.level === 'check'; }).length;
     var text = 'Based on ' + filled.length + ' of ' + secs.length + ' sections; ' + (blankS.length ? list(blankS.map(function (s) { return s[0]; })) + (blankS.length === 1 ? ' was' : ' were') + ' blank.' : 'nothing was left blank.');
     var weight = level === 'Fuller picture' ? 'Enough is filled in to take the patterns seriously' : level === 'Partial picture' ? 'Treat it as a first sketch: the patterns are real, and a few more pages would make them firmer' : 'Treat it as a starting point: most pages are still blank, so read the findings as hints';
-    weight += core ? '.' : (F.solo ? ', and your load score isn’t in yet.' : c.calc.applies && !c.R.focus ? ', and the overall CALC-01 read isn’t worked out yet.' : '.');
+    weight += core ? '.' : (F.solo ? ', and your stress tank score isn’t in yet.' : c.calc.applies && !c.R.focus ? ', and the overall CALC-01 read isn’t worked out yet.' : '.');
     if (fixes) weight += ' ' + plural(fixes, 'entry', 'entries') + ' may be typos (see "Worth a second look"), so treat the numbers they touch as rough.';
     return { level: level, text: text, weight: weight, filled: filled.length, of: secs.length, blank: blankS.map(function (s) { return s[0]; }), sections: secs };
   }
@@ -3775,8 +3775,8 @@
     }
     if (k.sol != null) bits.push('Overall, the setup reads ' + fmt(k.sol) + ' on CALC-01 (' + k.solBand.label.toLowerCase() + '), and the part losing the most points is ' + k.worst.fix.replace(/ \(.*\)$/, '') + '.');
     else if (k.applies && !R.focus && !early) bits.push('The overall CALC-01 read isn’t worked out yet, because ' + (k.missing.length === 1 ? 'one input is' : k.missing.length + ' inputs are') + ' still missing.');
-    if (F.solo && c.battery[0].score != null) bits.push('Your load reads ' + fmt(c.battery[0].score) + ', a ' + c.battery[0].band.label.toLowerCase() + '.');
-    else if (!F.solo && F.bat.scored.length) bits.push(F.bat.high.length ? list(lbl(F.bat.high)) + (F.bat.high.length === 1 ? ' is' : ' are') + ' running at a high load, so timing matters this week.' : 'No one’s load score is in the high band, so conditions are workable.');
+    if (F.solo && c.battery[0].score != null) bits.push('Your stress tank reads ' + fmt(c.battery[0].score) + ', ' + c.battery[0].band.label.toLowerCase() + '.');
+    else if (!F.solo && F.bat.scored.length) bits.push(F.bat.high.length ? list(lbl(F.bat.high)) + (F.bat.high.length === 1 ? ' is' : ' are') + ' running high on the stress tank, so timing matters this week.' : 'No one’s stress tank score is in the high band, so conditions are workable.');
     var work = fired.filter(function (r) { return !r.strength && r.rec && r.id !== 'state-not-now'; });
     var good = fired.filter(function (r) { return r.strength; });
     if (k.sol != null && k.sol >= 0.7 && leanReasons(c).length) bits.push('The score holds, but ' + list(leanReasons(c)) + ', so read it together with that.');
@@ -3814,8 +3814,8 @@
     var guideBands = [];
     if (k.applies) guideBands.push('Setup score and overall score: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Here higher means working better.');
     if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job has an owner; 0.70 and up reads well.');
-    guideBands.push('How much you’re carrying (the WP-02 load score): under 0.30 low load, 0.30 to 0.59 medium, 0.60 and up high. Higher means heavier, not a worse person.');
-    if (c.wp11 && c.wp11.readings) guideBands.push('Coming back after settling (WP-11) uses the same WP-02 load score with one line of its own: under 0.50, return to the conversation. It sits inside the medium range on purpose: you don’t need a light load to come back, just less than half.');
+    guideBands.push('How much you’re carrying (the WP-02 stress tank score): under 0.30 light, 0.30 to 0.59 medium, 0.60 and up high. Higher means heavier, not a worse person.');
+    if (c.wp11 && c.wp11.readings) guideBands.push('Coming back after settling (WP-11) uses the same WP-02 stress tank score with one line of its own: under 0.50, return to the conversation. It sits inside the medium range on purpose: you don’t need a light load to come back, just less than half.');
     if (c.conc && c.conc.lines.length) guideBands.push('Who’s carrying more right now: noted when one person holds half or more of the jobs or minutes, and at least 20 points over an even share. It sits beside the scores; it isn’t part of them.');
     if (k.rf != null) guideBands.push('Retuning (RF): the share of friction moments repaired before answering. 0.50 and up is a working habit.');
     return { para: bits.join(' '), strengths: strengths, top: top, bands: guideBands };

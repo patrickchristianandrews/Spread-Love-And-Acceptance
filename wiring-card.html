@@ -212,8 +212,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   <details class="aboutcard" id="aboutcard">
     <summary>More about this card</summary>
     <p class="privacy">Your card updates as you go: beside the form on a wide screen, and below it on a phone. Give it to the people you live and work with.</p>
-    <p class="privacy">Runs in your browser. Nothing you type is sent anywhere. A draft is kept in this tab only until you close it (Clear removes it sooner), and nothing is kept longer unless you tick &ldquo;Keep my card on this device&rdquo; (Erase removes it). &ldquo;Fill from my Wavelength answers&rdquo; only reads what Wavelength already keeps in this browser. This is not a diagnosis and not a label: it describes what helps words reach you. When you are running low, every line applies more strictly.</p>
-    <p class="privacy">See also: <a href="/know-yourself.html">Know your own wiring</a>, which helps you tell lasting wiring from learned patterns and today’s conditions, and <a href="/wavelength.html">Wavelength: how you talk and listen</a>, which finds your four-letter Wave Code.</p>
+    <p class="privacy">Runs in your browser. Nothing you type is sent anywhere. A draft is kept in this tab only until you close it (Clear removes it sooner), and nothing is kept longer unless you tick &ldquo;Keep my card on this device&rdquo; (Erase removes it). &ldquo;Fill from my style quiz answers&rdquo; only reads what the style quiz already keeps in this browser. This is not a diagnosis and not a label: it describes what helps words reach you. When you are running low, every line applies more strictly.</p>
+    <p class="privacy">See also: <a href="/know-yourself.html">Know your own wiring</a>, which helps you tell lasting wiring from learned patterns and today’s conditions, and <a href="/wavelength.html">the 2-minute style quiz</a>, which finds your four-letter Wave Code.</p>
   </details>
 
   <div class="layout">
@@ -229,7 +229,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   <div class="wallet" id="wallet" aria-hidden="true"></div>
 
   <div class="note">
-    <b>What this is for.</b> A card is a simple note about how you take in words. It is not a label, not permission to criticize, and not proof of bad intent. It tells someone how to send a request so it gets through. It doesn't make them responsible for managing you, and it doesn't mean you have to be available no matter how you feel. Stick to one topic at a time. The <a href="check-ins.html#ground">ground rules</a> explain how to use what you wrote here in a conversation. Pair the card with the <a href="signal-translator.html">Chat analyzer</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic needs a calm, safe space. <a href="wired-differently.html">Wired Differently</a> explains the ideas behind it.
+    <b>What this is for.</b> A card is a simple note about how you take in words. It is not a label, not permission to criticise, and not proof of bad intent. It tells someone how to send a request so it gets through. It doesn't make them responsible for managing you, and it doesn't mean you have to be available no matter how you feel. Stick to one topic at a time. The <a href="check-ins.html#ground">ground rules</a> explain how to use what you wrote here in a conversation. Pair the card with the <a href="signal-translator.html">Chat analyzer</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic needs a calm, safe space. <a href="wired-differently.html">Wired Differently</a> explains the ideas behind it.
   </div>
 <div data-tool-guide="wiring-card"></div>
 <script src="/assets/js/tool-guide.js" defer></script>
@@ -292,7 +292,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       "easy|longtext": "Keep important messages short, with the ask in the first line. The long version can wait, if it’s needed at all."},
       any: "Each of you name the one line on the other card that surprised you most. Then send important things the way the other one takes them in, not the way you would."},
     receive: {pairs: {
-      "writing|face": "For anything big, talk face to face, then send a short written summary afterward, so each of you gets it your way.",
+      "writing|face": "For anything big, talk face to face, then send a short written summary afterwards, so each of you gets it your way.",
       "voice|writing": "Send the voice note, and add a one-line text with the key point, so it can be heard and found again."},
       any: "For anything that matters, use both: send it your way, then a quick follow-up the way they take things in best."},
     words: {pairs: {
@@ -523,19 +523,19 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     st.wave = okWave(r.code);
     let added = 0; picksFromWl(r).forEach(x=>{ if(addPick(who, x[0], x[1])) added++; });
     const whose = r.main ? "your" : (r.name ? r.name + "’s" : "the");
-    undoMsg = "Brought in " + whose + " Wavelength answers: the Wave Code " + st.wave + (named ? ", the name" : "") + (added ? " and " + added + " pick" + (added===1 ? "" : "s") : "") + ". Nothing you picked was taken off. Read it through and change anything that isn’t quite you.";
+    undoMsg = "Brought in " + whose + " style quiz answers: the Wave Code " + st.wave + (named ? ", the name" : "") + (added ? " and " + added + " pick" + (added===1 ? "" : "s") : "") + ". Nothing you picked was taken off. Read it through and change anything that isn’t quite you.";
     lastSwap = ""; lastSwapAt = "";
   }
   function waveBox(who){
     const st = state[who], res = wlResults();
     let h = '';
     if(!res.length){
-      if(who==="A") h += '<a class="ghost" href="/wavelength.html">Fill from my Wavelength answers</a><p class="hint">There’s no Wavelength result in this browser yet. <a href="/wavelength.html">Wavelength</a> takes about ten minutes; come back afterward and this fills in your card from your answers.</p>';
+      if(who==="A") h += '<a class="ghost" href="/wavelength.html">Fill from my style quiz answers</a><p class="hint">There’s no style quiz result in this browser yet. <a href="/wavelength.html">The quiz</a> takes about two minutes; come back afterwards and this fills in your card from your answers.</p>';
     } else if(who==="A" || res.length > 1){
       // one result: it's yours. Several (people taking turns on one device): each is offered by name, on either card
-      const label = r=>res.length===1 ? 'Fill from my Wavelength answers' : r.name ? 'Fill from '+esc(r.name)+'’s Wavelength answers' : (r.main ? 'Fill from my Wavelength answers' : 'Fill from another Wavelength result');
-      h += '<div class="chips" role="group" aria-label="Fill from Wavelength">' + res.map((r,i)=>'<button type="button" data-wlfill="'+i+'" data-who="'+who+'">'+label(r)+' <span class="how">('+esc(r.code)+')</span></button>').join('') + '</div>';
-      h += '<p class="hint">Brings in the name, the Wave Code, pace, how words land, and the &ldquo;what helps me&rdquo; answers from Wavelength in this browser. It only adds picks, and you can undo it.</p>';
+      const label = r=>res.length===1 ? 'Fill from my style quiz answers' : r.name ? 'Fill from '+esc(r.name)+'’s style quiz answers' : (r.main ? 'Fill from my style quiz answers' : 'Fill from another style quiz result');
+      h += '<div class="chips" role="group" aria-label="Fill from the style quiz">' + res.map((r,i)=>'<button type="button" data-wlfill="'+i+'" data-who="'+who+'">'+label(r)+' <span class="how">('+esc(r.code)+')</span></button>').join('') + '</div>';
+      h += '<p class="hint">Brings in the name, the Wave Code, pace, how words land, and the &ldquo;what helps me&rdquo; answers from the style quiz in this browser. It only adds picks, and you can undo it.</p>';
     }
     if(st.wave) h += '<p class="hint">Wave Code on this card: <strong>'+esc(waveLabel(st.wave))+'</strong>. <button type="button" class="linkish" data-waveoff="'+who+'">Take it off the card</button></p>';
     return h ? '<div class="wlfill">'+h+'</div>' : '';
@@ -668,7 +668,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
         doc.text(L, y + 8, enc("WIRING CARD  ·  NOT A DIAGNOSIS"), "Helvetica-Bold", 7.5, "#8A5E1E"); y += 16;
         doc.text(L, y + 20, enc(name), "Times-Bold", 22, "#211D17"); y += 32;
         const wire = wiringLabel(who);
-        if(st.wave){ para("Wave Code " + waveLabel(st.wave) + ", from Wavelength", "Helvetica-Bold", 9.5, "#2B5B8C"); y += 2; }
+        if(st.wave){ para("Wave Code " + waveLabel(st.wave) + ", from the style quiz", "Helvetica-Bold", 9.5, "#2B5B8C"); y += 2; }
         if(wire){ para("How words reach me: " + wire, "Helvetica", 9.5, "#524B3E"); y += 4; }
         LINES.forEach(line=>{
           const t = lineText(who, line);
@@ -707,7 +707,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const nm = st.name.trim();
     const lines = [nm ? "Wiring card: "+nm : (who==="A"?"Wiring card":"Second wiring card")];
     const wire = wiringLabel(who);
-    if(st.wave) lines.push("Wave Code: "+waveLabel(st.wave)+" (from Wavelength)");
+    if(st.wave) lines.push("Wave Code: "+waveLabel(st.wave)+" (from the style quiz)");
     if(wire) lines.push("How words reach me: "+wire);
     LINES.forEach(line=>{
       const t = lineText(who, line);
@@ -1019,7 +1019,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(t.dataset.clear){ state[t.dataset.clear]=fresh(); paintForms(); paint(); return; }
     if(t.dataset.example){
       const who0 = t.dataset.example;
-      if(hasContent(who0)){ pending = {who: who0, text: "The guide’s example replaces the picks on this card. Replace them? You can undo it afterward.", yes: "Replace with the example", run: ()=>example(who0)}; paintForms(); const y = $("#confirm-yes"); if(y) y.focus(); return; }
+      if(hasContent(who0)){ pending = {who: who0, text: "The guide’s example replaces the picks on this card. Replace them? You can undo it afterwards.", yes: "Replace with the example", run: ()=>example(who0)}; paintForms(); const y = $("#confirm-yes"); if(y) y.focus(); return; }
       undoSnap = Object.assign({who: who0}, JSON.parse(JSON.stringify(snapshot()))); undoMsg = "The guide’s example is in. Changed your mind?";
       example(who0); paintForms(); paint();
     }

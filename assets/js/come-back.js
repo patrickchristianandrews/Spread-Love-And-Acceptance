@@ -81,7 +81,7 @@
     { u: '/book/self-2-now.html', code: 'Now', t: 'Who you are today', n: 'your wiring, your weather and your words',
       gain: 'You now know one way to read yourself before you speak: your wiring, how today is going, and one clear sentence about what helps.' },
     { u: '/book/self-3-next.html', code: 'Next', t: 'Who you are becoming', n: 'what matters to you, one small goal and a kind monthly look',
-      gain: 'You now know one way to grow toward something: pick what matters, one small step, a plan for the tired day, and a gentle look back.' },
+      gain: 'You now know one way to grow towards something: pick what matters, one small step, a plan for the tired day, and a gentle look back.' },
     { u: '/book/preface.html', code: 'Preface', t: 'The work nobody sees', n: 'why the unseen work at home deserves to be noticed',
       gain: 'You now know why the unseen work of a home is worth writing down: once both of you can see it, it can be shared and thanked.' },
     { u: '/book/chapter-1.html', code: 'Chapter I', t: 'Why we get out of tune', n: 'how pace, tone and urgency nudge two people out of step',
@@ -108,16 +108,16 @@
         var c = doc.getElementById('cr-out');
         return c && !c.querySelector('.cr-safety') && c.textContent.trim().length > 20 ? c : null;
       } },
-    '/carrier-wave-decoder.html': { t: 'Carrier Wave Decoder', gain: 'You just worked out what slipped in a talk, not who started it.',
+    '/carrier-wave-decoder.html': { t: 'Rewind the talk', gain: 'You just worked out what slipped in a talk, not who started it.',
       result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
-    '/lemonade-stand.html': { t: 'Lemonade Stand', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
+    '/lemonade-stand.html': { t: 'Who does what?', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
       result: function () { var r = doc.getElementById('balance-line'); return r && (r.hasAttribute('data-ls-result') || (r.textContent.trim() && !/^(Add some hours|Waiting for)/i.test(r.textContent.trim()) && !/\bWaiting for\b/.test(r.textContent))) && !/\bWaiting for\b/.test(r.textContent) ? (doc.querySelector('.ls-tools') || r) : null; } },
-    '/quick-checks.html': { t: 'Today’s Weather', gain: 'You just checked in with yourself first. Knowing your weather makes the rest of the day easier to plan.',
+    '/quick-checks.html': { t: 'My weather today', gain: 'You just checked in with yourself first. Knowing your weather makes the rest of the day easier to plan.',
       result: function () {
         var a = json('tol-weather-v1'), e = Array.isArray(a) && a[a.length - 1]; return e && e.d === today() ? doc.getElementById('today') : null; } },
-    '/wavelength.html': { t: 'Wavelength', gain: 'You just learned something about how you take things in, and how to say it to the people you love.',
+    '/wavelength.html': { t: 'How you connect', gain: 'You just learned something about how you take things in, and how to say it to the people you love.',
       result: function () { return lsGet('tol-wavelength-v1') ? doc.querySelector('main') : null; }, atEnd: true },
-    '/wiring-card.html': { t: 'Wiring Card', gain: 'You just put how you work into words someone else can read.',
+    '/wiring-card.html': { t: 'How I like to be spoken to', gain: 'You just put how you work into words someone else can read.',
       result: function () { return lsGet('tol-wiring-card') ? doc.querySelector('main') : null; }, atEnd: true }
   };
   function toolTried(u) {
@@ -229,14 +229,14 @@
       ],
       10: [
         { t: 'Read the first half of ' + nc.code + ': ' + nc.t, u: nc.u, m: 6, why: nc.n, tag: 'book' },
-        { t: 'Plan your early signs in the Calm-Down Kit', u: '/wp-11.html', m: 6, why: 'what you notice first, and what settles you', tag: 'calm' },
+        { t: 'Plan your early signs in a calm-down plan', u: '/wp-11.html', m: 6, why: 'what you notice first, and what settles you', tag: 'calm' },
         { t: 'Say one message so it lands', u: '/workpapers/wp-09-say-it-so-it-lands.html', m: 6, why: 'a fact, a feeling and a kind ask', tag: 'talk' },
         { t: 'Play a calm game level', u: '/pause-and-play.html', m: 8, why: 'no timers and no way to lose', tag: 'calm' }
       ],
       15: [
         { t: 'Read all of ' + nc.code + ': ' + nc.t, u: nc.u, m: 12, why: nc.n, tag: 'book' },
-        { t: 'Find your Wavelength', u: '/wavelength.html', m: 12, why: 'how you think, talk and listen', tag: 'self' },
-        { t: (mode() === 'me' ? 'List your own jobs in the Lemonade Stand' : 'Fill in the Lemonade Stand together'), u: '/lemonade-stand.html', m: 10, why: mode() === 'me' ? 'see your own load, with no blame' : 'jobs and hours side by side, together', tag: 'load' },
+        { t: 'See how you connect', u: '/wavelength.html', m: 12, why: 'how you think, talk and listen', tag: 'self' },
+        { t: (mode() === 'me' ? 'List your own jobs in Who does what?' : 'Fill in Who does what? together'), u: '/lemonade-stand.html', m: 10, why: mode() === 'me' ? 'see your own load, with no blame' : 'jobs and hours side by side, together', tag: 'load' },
         { t: 'Play a calm game level', u: '/pause-and-play.html', m: 8, why: 'no timers and no way to lose', tag: 'calm' }
       ],
       30: [
@@ -469,21 +469,21 @@
     ten: ['/start-in-10-minutes.html', 'Start in 10 minutes', 'four small steps, one at a time'],
     weather: ['/quick-checks.html#today', 'Check today’s weather', 'one minute on how you are doing'],
     almanac: ['/quick-checks.html#almanac', 'Your weather over time', 'a few days in, your own pattern starts to show'],
-    wiring: ['/wiring-card.html', 'Your Wiring Card', 'how you work, in words someone else can read'],
-    wavelength: ['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen'],
+    wiring: ['/wiring-card.html', 'How I like to be spoken to', 'how you work, in words someone else can read'],
+    wavelength: ['/wavelength.html', 'How you connect', 'how you think, talk and listen'],
     selfpath: ['/self-path.html', 'Your self path', 'six small steps on your own, at your own pace'],
     signal: ['/signal-translator.html', 'The Chat analyzer', 'test one message before you send it'],
     notes: ['/signal-translator.html#notes', 'Your talking notes', 'write down what you want to say, before the talk'],
-    decoder: ['/carrier-wave-decoder.html', 'The Carrier Wave Decoder', 'work out what slipped, not who started it'],
+    decoder: ['/carrier-wave-decoder.html', 'Rewind the talk', 'work out what slipped, not who started it'],
     checkins: ['/check-ins.html', 'Check-ins', 'raise one thing at a calm, set time'],
-    lemon: ['/lemonade-stand.html', 'The Lemonade Stand', 'every job and its hours, where everyone can see them'],
-    setup: ['/is-the-setup-working.html', 'Is the setup working for everyone?', 'a fair look at the split, never at a person'],
+    lemon: ['/lemonade-stand.html', 'Who does what?', 'every job and its hours, where everyone can see them'],
+    setup: ['/is-the-setup-working.html', 'Fair split check', 'a fair look at the split, never at a person'],
     wp01: ['/workpapers/wp-01.html', 'Who did what', 'write down the jobs that keep a home running'],
-    wp02: ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a quick look at how full your battery is'],
+    wp02: ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a quick look at how full your stress tank is'],
     wp03: ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'so nothing falls between you'],
     wp04: ['/workpapers/wp-04-what-keeps-coming-back.html', 'What keeps coming back?', 'one short page, once a month'],
     wp09: ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'a fact, a feeling and a kind ask'],
-    kit: ['/wp-11.html', 'The Calm-Down Kit', 'what you notice first, and what settles you'],
+    kit: ['/wp-11.html', 'Calm-down plan', 'what you notice first, and what settles you'],
     daily: ['/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in', 'a tiny daily habit to share'],
     six: ['/week-0.html', 'Six gentle weeks, starting with week 0', 'five minutes on what the six weeks are, alone or with anyone'],
     examples: ['/examples.html', 'Made-up examples', 'small changes in different kinds of relationships'],
@@ -631,7 +631,7 @@
     var a = json('tol-weather-v1'), e = Array.isArray(a) && a[a.length - 1];
     if (e && e.d === today()) out.push('Checked your weather' + (SKY_WORD[e.sky] ? ': ' + SKY_WORD[e.sky] : ''));
     BOOK.forEach(function (b) { if (isToday(S.read[b.u])) out.push('Read ' + b.code + ': ' + b.t); });
-    Object.keys(S.did || {}).forEach(function (u) { if (isToday(S.did[u]) && TOOLS[u]) out.push('Tried the ' + TOOLS[u].t); });
+    Object.keys(S.did || {}).forEach(function (u) { if (isToday(S.did[u]) && TOOLS[u]) out.push('Tried: ' + TOOLS[u].t); });
     Object.keys(S.fin || {}).forEach(function (u) { var f = S.fin[u]; if (f && isToday(f.at) && f.t) out.push('Read to the end: ' + f.t); });
     if (S.tiny && S.tiny[today()]) out.push('Tried today’s tiny thing');
     return out.filter(function (x, i) { return out.indexOf(x) === i; }).slice(0, 8);
@@ -808,7 +808,7 @@
         fillEnd(box, T.gain, null, '');
         nextUnder(box);
         if (!S.did[path]) { S.did[path] = Date.now(); save(); }
-        celebrate('tool:' + path, 'You tried the ' + T.t, true);
+        celebrate('tool:' + path, 'You tried ' + T.t, true);
       }
     }
     check();

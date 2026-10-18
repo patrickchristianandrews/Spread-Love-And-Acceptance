@@ -818,12 +818,12 @@
     <h2 class="hh-map-h" id="hh-map-h">What&rsquo;s here</h2>
     <ul class="hh-map-doors">
     <li><a href="/start-here.html#three-questions"><span class="hh-map-i" aria-hidden="true">&#129517;</span><span class="hh-map-t">Start here</span><span class="hh-map-c">3 questions</span><span class="hh-map-n">Not sure? Three quick questions, then one first step.</span></a></li>
-    <li><a href="/tools.html"><span class="hh-map-i" aria-hidden="true">&#129520;</span><span class="hh-map-t">All tools</span><span class="hh-map-c" data-hh-count="tools">51 tools</span><span class="hh-map-n">Start on your own: Chat analyzer, chore split, quizzes and more.</span></a></li>
+    <li><a href="/tools.html"><span class="hh-map-i" aria-hidden="true">&#129520;</span><span class="hh-map-t">All tools</span><span class="hh-map-c" data-hh-count="tools">19 tools</span><span class="hh-map-n">Start on your own: Chat analyzer, chore split, quizzes and more.</span></a></li>
     <li><a href="/by-relationship.html"><span class="hh-map-i" aria-hidden="true">&#128101;</span><span class="hh-map-t">Guides by relationship</span><span class="hh-map-c">8 groups</span><span class="hh-map-n">Couples, friends, family, co-parents, housemates, work, you.</span></a></li>
     <li><a href="/book/index.html"><span class="hh-map-i" aria-hidden="true">&#128214;</span><span class="hh-map-t">The book</span><span class="hh-map-c" data-hh-count="chapters">27 chapters</span><span class="hh-map-n">Yourself, between us, and understanding people.</span></a></li>
-    <li><a href="/ladder.html"><span class="hh-map-i" aria-hidden="true">&#127807;</span><span class="hh-map-t">Calm right now</span><span class="hh-map-c" data-hh-count="calm">7 calm tools</span><span class="hh-map-n">A one-minute check, then one calm step that fits.</span></a></li>
-    <li><a href="/explore.html?need=read"><span class="hh-map-i" aria-hidden="true">&#128218;</span><span class="hh-map-t">Learn and research</span><span class="hh-map-c" data-hh-count="read">56 pages</span><span class="hh-map-n">The library, the research behind the site, a glossary.</span></a></li>
-    <li><a href="/pause-and-play.html"><span class="hh-map-i" aria-hidden="true">&#127922;</span><span class="hh-map-t">Games and play</span><span class="hh-map-c" data-hh-count="play">10 games</span><span class="hh-map-n">Calm games, the pups&rsquo; cartoon and music. No way to lose.</span></a></li>
+    <li><a href="/ladder.html"><span class="hh-map-i" aria-hidden="true">&#127807;</span><span class="hh-map-t">Calm right now</span><span class="hh-map-c" data-hh-count="calm">4 calm tools</span><span class="hh-map-n">A one-minute check, then one calm step that fits.</span></a></li>
+    <li><a href="/explore.html?need=read"><span class="hh-map-i" aria-hidden="true">&#128218;</span><span class="hh-map-t">Learn and research</span><span class="hh-map-c" data-hh-count="read">73 pages</span><span class="hh-map-n">The library, the research behind the site, a glossary.</span></a></li>
+    <li><a href="/pause-and-play.html"><span class="hh-map-i" aria-hidden="true">&#127922;</span><span class="hh-map-t">Games and play</span><span class="hh-map-c" data-hh-count="play">9 ways to play</span><span class="hh-map-n">Calm games, the pups&rsquo; cartoon and music. No way to lose.</span></a></li>
     <li><a href="/ask.html" data-ask-puddles><span class="hh-map-i" aria-hidden="true">&#128167;</span><span class="hh-map-t">Ask Professor Puddles</span><span class="hh-map-c">Private</span><span class="hh-map-n">Ask in your own words. Answers come from this site only.</span></a></li>
     </ul>
     <p class="hh-map-all"><a href="/explore.html">Everything on this site, with filters<span data-hh-count="pages"></span> &rarr;</a></p>
@@ -1027,8 +1027,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!sc) { sc = document.createElement('script'); sc.src = '/assets/js/tools-registry.js'; }
     function counts() {
       var T = (window.TOLTools || []).filter(function (x) { return x.kind !== 'workpaper'; }); if (!T.length) return;
-      function n(t) { return T.filter(function (x) { return x.type === t; }).length; }
-      set('tools', T.length + ' tools'); set('calm', n('calm') + ' calm tools'); set('play', n('play') + ' games');
+      // a tool counts for a door when it is its main type or one it also fits; the games door counts the ways in to Gentle games
+      function n(t) { return T.filter(function (x) { return x.type === t || (x.also || []).indexOf(t) >= 0; }).length; }
+      function pl(k, one, many) { return k + ' ' + (k === 1 ? one : many); }
+      var games = T.filter(function (x) { return x.id === 'pauseplay'; })[0], g = games && games.modes ? games.modes.length - 1 : 0;
+      set('tools', pl(T.length, 'tool', 'tools')); set('calm', pl(n('calm'), 'calm tool', 'calm tools'));
+      if (g > 0) set('play', pl(g, 'way to play', 'ways to play'));
     }
     if (window.TOLTools) { counts(); return; }
     sc.addEventListener('load', counts);

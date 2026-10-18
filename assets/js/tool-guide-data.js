@@ -41,7 +41,7 @@ window.TOLToolGuideData = {
       name: 'Chat analyzer',
       reg: 'signal',
       pages: ['/signal-translator.html'],
-      when: 'Before you send a text, email or work message that matters. Or when a message you got stung or confused you and you want a calmer reading of it. For a whole conversation or a screenshot, choose “A whole conversation or screenshot” at the top.',
+      when: 'Before you send a text, email or work message that matters. Or when a message you got stung or confused you and you want a calmer reading of it. For a whole conversation or a screenshot, choose “A whole chat or screenshot” at the top.',
       notWhen: 'Not in the middle of a heated exchange: take a break first with <a href="/pursue-withdraw.html">a pause plan</a>. Not for working out what someone “really” meant; only they can tell you that.',
       time: 'About 2 minutes a message.',
       result: 'A plain reading of how the words may land (for example “a little sharp: the ask is clear, but ‘you always’ may sound like blame”) and a calmer version that keeps your ask and adds no promises.',
@@ -229,7 +229,7 @@ window.TOLToolGuideData = {
         ['/pursue-withdraw.html', 'Agree a pause plan', 'in case it heats up']
       ],
       research: [
-        ['markman-stanley-blumberg-1994', 'Couples programs that teach structured, safer talks have shown some benefit in trials (Markman, Stanley and Blumberg; the PREP program).'],
+        ['markman-stanley-blumberg-1994', 'Couples programmes that teach structured, safer talks have shown some benefit in trials (Markman, Stanley and Blumberg; the PREP programme).'],
         ['gollwitzer-sheeran-2006', 'Deciding “when and where” in advance makes people much more likely to follow through (Gollwitzer and Sheeran, 2006).'],
         ['carrere-gottman-1999', 'How a talk starts shapes how it goes (Carrère and Gottman, 1999).']
       ],
@@ -296,7 +296,7 @@ window.TOLToolGuideData = {
       time: 'About 2 minutes for your code; 10 more for the optional extras.',
       result: 'A four-letter code for your pace, big picture or details, how you say things and how you take things in, with plain sentences like “Give me the headline first, then the details.”',
       next: [
-        ['/wiring-card.html', 'Make your Wiring Card', 'one page you can hand to someone'],
+        ['/wiring-card.html', 'Make a “how to talk to me” card', 'one page you can hand to someone'],
         ['/self-path.html', 'Your self path', 'small steps on your own'],
         ['/check-ins.html', 'Share one thing you learned', 'in a short, calm talk']
       ],
@@ -308,7 +308,7 @@ window.TOLToolGuideData = {
       idea: 'The four lines, the questions and the scoring are this site’s own; the scoring is written out on <a href="/method-and-limits.html">Method and limits</a>.',
       limits: 'A way to describe what you prefer, not a validated test. Your answers can change with mood and setting.',
       fair: ['Use it to tell others how you work, not to tell them how they are.'],
-      privacy: 'Your answers are kept in this browser only if you tick “Keep my answers and journal on this device.” Nothing is sent anywhere.'
+      privacy: 'Your answers are kept in this browser only if you tick “Keep my answers and journal on this device”. Nothing is sent anywhere.'
     },
 
     'wiring-card': {
@@ -345,7 +345,7 @@ window.TOLToolGuideData = {
       when: 'Before something hard, when you can’t tell if now is a good time to talk (the quick 4 taps), or once a day to see what today has room for (the full forecast).',
       notWhen: 'Not a way to rate someone else’s mood. Not a measure of your mental health.',
       time: 'About 20 seconds for the quick check; about 1 minute for the full forecast.',
-      result: 'Quick: calm and connected, revved up or running on empty, with what helps now and a pause line. Full: a “forecast” in words, such as “Gusty: not much room today. Keep the big talk for the weekend,” plus one thing that would help.',
+      result: 'Quick: calm and connected, revved up or running on empty, with what helps now and a pause line. Full: a “forecast” in words, such as “Gusty: not much room today. Keep the big talk for the weekend”, plus one thing that would help.',
       next: [
         ['/quick-checks.html#almanac', 'Your weather over time', 'a few days in, your own pattern starts to show'],
         ['/wp-11.html', 'Make a calm-down plan', 'for the gusty days'],
@@ -393,7 +393,7 @@ window.TOLToolGuideData = {
       result: 'A few small things you now know about yourself in your own words, for example “I take things in best in writing” or “my battery is lowest on Sunday nights.”',
       next: [
         ['/wavelength.html', 'Find your communication style', 'how you think, talk and listen'],
-        ['/wiring-card.html', 'Make your Wiring Card', 'to share when you’re ready'],
+        ['/wiring-card.html', 'Make a “how to talk to me” card', 'to share when you’re ready'],
         ['/book/topic-know-yourself.html', 'The book on knowing yourself', 'the reading that goes with it']
       ],
       research: [
@@ -486,12 +486,12 @@ window.TOLToolGuideData = {
       reg: 'calmkit',
       pages: ['/wp-11.html', '/workpapers/fill/wp-11.html'],
       when: 'On a calm day, to decide ahead of time what you notice first when you’re getting heated, the signal you’ll use, and what settles you.',
-      notWhen: 'Not while you’re upset: use <a href="/upset-right-now.html">Upset right now?</a> first and make the kit later.',
+      notWhen: 'Not while you’re upset: use <a href="/upset-right-now.html">Upset right now?</a> first and make the plan later.',
       time: 'About 10 minutes.',
       result: 'A small plan in three parts: your early signs (“jaw tight, talking faster”), a pause signal everyone knows, and two or three things that settle you (“walk round the block, cold water, then text when I’m back”).',
       next: [
         ['/pursue-withdraw.html', 'Agree a pause plan together', 'so a break feels safe for both'],
-        ['/quick-checks.html', 'Today’s weather', 'notice the gusty days early'],
+        ['/quick-checks.html', 'My weather today', 'notice the gusty days early'],
         ['/check-ins.html', 'Share your plan at a calm time', 'so others know your signal']
       ],
       research: [
@@ -499,7 +499,7 @@ window.TOLToolGuideData = {
         ['kjaervik-bushman-2024', 'Activities that calm the body reduce anger; ones that rev it up don’t (Kjærvik and Bushman, 2024, 154 studies).'],
         ['zaccaro-2018', 'Slow breathing is linked with feeling calmer and less anxious (Zaccaro and colleagues, 2018).']
       ],
-      idea: 'The kit’s three parts and the “come back” check are this site’s own; the rule of thumb is on <a href="/method-and-limits.html">Method and limits</a>.',
+      idea: 'The plan’s three parts and the “come back” check are this site’s own; the rule of thumb is on <a href="/method-and-limits.html">Method and limits</a>.',
       limits: 'A personal plan, not a treatment. If anger or panic is often hard to manage, a doctor or counsellor can help.',
       privacy: 'The fill-in sheet keeps a draft in this browser only while “Keep a draft on this device” is ticked. Nothing is sent anywhere.'
     },
@@ -542,8 +542,8 @@ window.TOLToolGuideData = {
       time: 'As long as you like; two minutes is enough to feel a difference for many people.',
       result: 'A few slow breaths, a flower or two bloomed, and a calmer body.',
       next: [
-        ['/wp-11.html', 'Make a calm-down plan', 'put breathing in your kit'],
-        ['/quick-checks.html', 'Today’s weather', 'a one-minute daily read'],
+        ['/wp-11.html', 'Make a calm-down plan', 'put breathing in your plan'],
+        ['/quick-checks.html', 'My weather today', 'a one-minute daily read'],
         ['/pause-and-play.html', 'More calm games', 'no timers, no way to lose']
       ],
       research: [
@@ -567,7 +567,7 @@ window.TOLToolGuideData = {
       two: true,
       when: 'When the work at home or the bills feel uneven and you want to see the whole list plainly, with no blame. Works for two people or a whole house.',
       notWhen: 'Not as a scorecard to win an argument. Not mid-fight: make the list on a calm day.',
-      time: 'About 2 minutes for the quick look; 20 to 30 for the full stand.',
+      time: 'About 2 minutes for the quick look; 20 to 30 for the full version.',
       result: 'Every job and bill on one list with an owner, each person’s share of the hours shown in plain words (“fairly close” or “leaning one way”), and a fridge list you can print.',
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'Give every job one owner', 'so nobody has to keep asking'],
@@ -597,7 +597,7 @@ window.TOLToolGuideData = {
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'turn the log into a plan'],
         ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a two-minute load check'],
-        ['/lemonade-stand.html', 'See the split plainly', 'in the Lemonade Stand']
+        ['/lemonade-stand.html', 'See the split plainly', 'in Who does what?']
       ],
       research: [
         ['ross-sicoly-1979', 'We each over-remember our own share of shared work (Ross and Sicoly, 1979).'],
@@ -695,7 +695,7 @@ window.TOLToolGuideData = {
       when: 'When you’ve listed the jobs and want a plain read on whether the way you share the work can keep going for everyone, for 2 to 8 people.',
       notWhen: 'Not as a verdict on a person or the relationship. Not as a reason to stop speaking up when the score looks fine.',
       time: 'About 5 minutes for the quick read; 20 for the full one.',
-      result: 'A plain sentence, like “Needs a look: one person is carrying most of the planning,” and the one part of the setup to change first.',
+      result: 'A plain sentence, like “Needs a look: one person is carrying most of the planning”, and the one part of the setup to change first.',
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'to fix gaps in ownership'],
         ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'if stress is the weak spot'],
@@ -875,7 +875,7 @@ window.TOLToolGuideData = {
       when: 'When you’d like one small, low-cost idea to grow closeness with someone (a partner, child, friend, parent, housemate or coworker), sized to your time and energy.',
       notWhen: 'Not a fix for a hurt that needs talking about first; try <a href="/check-ins.html">a check-in</a> for that.',
       time: 'About 1 minute to pick; the idea takes from 1 minute to a weekend.',
-      result: 'One idea that fits who it’s with, how long you have and how much energy, for example “Ten minutes tonight with no to-do list,” ready to copy or send.',
+      result: 'One idea that fits who it’s with, how long you have and how much energy, for example “Ten minutes tonight with no to-do list”, ready to copy or send.',
       next: [
         ['/turning-toward.html', 'Turning toward', 'seven small daily habits'],
         ['/touchstones.html', 'Your shared language', 'the jokes and rituals that say “us”'],
@@ -974,7 +974,7 @@ window.TOLToolGuideData = {
       when: 'When a reaction of yours feels bigger or older than the moment (always fixing things, going quiet, needing to be useful) and you want to see where it may have started.',
       notWhen: 'Not for diagnosing anyone in your family, or for deciding who is to blame. Stop any time if it brings up too much.',
       time: 'About 5 minutes.',
-      result: 'An old rule in your own words and a fairer, grown-up reading of it, for example “I’m only okay when I’m useful” becomes “Helping is something I do, not the price of being loved,” plus one small way to work with it now.',
+      result: 'An old rule in your own words and a fairer, grown-up reading of it, for example “I’m only okay when I’m useful” becomes “Helping is something I do, not the price of being loved”, plus one small way to work with it now.',
       next: [
         ['/know-yourself.html', 'Know your own wiring', 'what’s you, what life taught you, and what’s just today'],
         ['/wiring-card.html', 'Make a one-page card', 'so others know what helps'],
@@ -987,7 +987,7 @@ window.TOLToolGuideData = {
       ],
       idea: 'The tap-through and the example rules are this site’s own.',
       limits: 'A gentle look back, not therapy. If old memories are painful, <a href="/outside-help.html">Help beyond this site</a> lists people to talk to.',
-      privacy: 'Your answers stay until you close the tab, or are kept in this browser only if you tick “Keep my answers on this device.” Nothing is sent anywhere.'
+      privacy: 'Your answers stay until you close the tab, or are kept in this browser only if you tick “Keep my answers on this device”. Nothing is sent anywhere.'
     },
 
     'snapshot': {
@@ -1002,7 +1002,7 @@ window.TOLToolGuideData = {
       time: 'About 2 minutes.',
       result: 'Which of four areas to look at first (for example “who notices what needs doing”), with the scoring shown openly.',
       next: [
-        ['/lemonade-stand.html#quick', 'Who does what: chore split check', 'see the jobs on one list'],
+        ['/lemonade-stand.html#quick', 'Who does what? Quick look', 'see the jobs on one list'],
         ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'fix the area that came up'],
         ['/share-the-load.html', 'Share the load, step by step', 'which tool to use next']
       ],
@@ -1077,7 +1077,7 @@ window.TOLToolGuideData = {
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html?for=coparents', 'One owner per job, for two homes', 'who handles what'],
         ['/signal-translator.html', 'Check a message to the other parent', 'brief, friendly, firm'],
-        ['/write-it-through.html', 'Talk it through in writing', 'for bigger topics']
+        ['/write-it-through.html', 'Write it through', 'for bigger topics']
       ],
       research: [
         ['haynes-et-al-2009', 'Simple checklists cut serious mistakes in hospitals (Haynes and colleagues, 2009).'],
@@ -1168,7 +1168,7 @@ window.TOLToolGuideData = {
       next: [
         ['/prog-01.html', 'Six gentle weeks: week 1', 'one small step'],
         ['/workpapers/wp-01.html', 'Who did what this week', 'the week 1 sheet'],
-        ['/start-in-10-minutes.html', 'Start in 10 minutes', 'if you’d rather just try one thing']
+        ['/start-in-10-minutes.html', 'Ten-minute start', 'if you’d rather just try one thing']
       ],
       research: [
         ['gollwitzer-sheeran-2006', 'A set time and place makes follow-through more likely (Gollwitzer and Sheeran, 2006).']

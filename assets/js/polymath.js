@@ -7,10 +7,10 @@
   if (!box) return;
 
   var ROOTS = {
-    balance: { name: 'Balance', ico: '⚖️', idea: 'what flows in has to match what flows out, or something runs dry', tool: ['The Lemonade Stand: see the whole load together', '/lemonade-stand.html'], pillar: 'Pillar I, See the whole load' },
+    balance: { name: 'Balance', ico: '⚖️', idea: 'what flows in has to match what flows out, or something runs dry', tool: ['Who does what? See the whole load together', '/lemonade-stand.html'], pillar: 'Pillar I, See the whole load' },
     signal: { name: 'Signal and noise', ico: '📡', idea: 'what’s sent isn’t always what arrives', tool: ['The Chat analyzer: how a message may land', '/signal-translator.html'], pillar: 'Pillar IV, Tune how you send and receive' },
     loops: { name: 'Feedback loops', ico: '🔁', idea: 'small things repeated, with a check each time, shape the whole system', tool: ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html'], pillar: 'Pillar V, Notice the quiet incentives' },
-    capacity: { name: 'Limited capacity', ico: '🔋', idea: 'everything has a limit, and a system with no spare room breaks on an ordinary bad day', tool: ['Today’s Weather: a one-minute check on yourself', '/quick-checks.html#today'], pillar: 'Pillar III, Read your state first' },
+    capacity: { name: 'Limited capacity', ico: '🔋', idea: 'everything has a limit, and a system with no spare room breaks on an ordinary bad day', tool: ['My weather today: a one-minute check on yourself', '/quick-checks.html#today'], pillar: 'Pillar III, Read your state first' },
     ownership: { name: 'Ownership and structure', ico: '🗂️', idea: 'work that belongs to everyone belongs to no one', tool: ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'], pillar: 'Pillar II, Fix the setup, not the person' },
     incentives: { name: 'Quiet incentives', ico: '🧲', idea: 'things drift toward whatever the setup quietly rewards', tool: ['What keeps coming back? (WP-04)', '/workpapers/wp-04-what-keeps-coming-back.html'], pillar: 'Pillar V, Notice the quiet incentives' },
     state: { name: 'State and setting', ico: '🌤️', idea: 'the same message lands differently depending on your state and the place you’re in', tool: ['The Night Garden: a calm place to settle first', '/night-garden.html'], pillar: 'Pillar III, Read your state first' }
@@ -18,9 +18,9 @@
   // each field: how it sees each root it shares
   var FIELDS = {
     audit: { name: 'Accounting and audit', r: { balance: 'every entry has two sides, and books have to balance', ownership: 'every control needs one named owner', signal: 'separating what’s claimed from what the evidence supports', loops: 'regular reconciliations catch small errors before they grow' } },
-    psychology: { name: 'Psychology', r: { signal: 'the gap between intent and impact', capacity: 'masking and stress use up a limited supply', state: 'mood colors how everything is heard', loops: 'habits of thought repeat until something interrupts them' } },
+    psychology: { name: 'Psychology', r: { signal: 'the gap between intent and impact', capacity: 'masking and stress use up a limited supply', state: 'mood colours how everything is heard', loops: 'habits of thought repeat until something interrupts them' } },
     philosophy: { name: 'Philosophy', r: { signal: 'how we know what we claim to know, and what’s only a guess', ownership: 'duties: who owes what to whom', balance: 'fairness: each person’s needs carry equal weight' } },
-    behavioral: { name: 'Behavioral science', r: { loops: 'small, frequent habits beat big, rare efforts', incentives: 'people follow what the setup makes easy', ownership: 'structure that doesn’t need willpower to run', capacity: 'willpower runs out when you’re depleted' } },
+    behavioral: { name: 'Behavioural science', r: { loops: 'small, frequent habits beat big, rare efforts', incentives: 'people follow what the setup makes easy', ownership: 'structure that doesn’t need willpower to run', capacity: 'willpower runs out when you’re depleted' } },
     neuro: { name: 'Neurobiology', r: { state: 'the nervous system sets whether you’re calm, revved up or shut down', capacity: 'stress left over from earlier fills the battery', signal: 'nerves carry signals that can be drowned out', loops: 'the body keeps adjusting to stay in balance', balance: 'rest has to match effort' } },
     economics: { name: 'Economics', r: { capacity: 'every resource is limited, and using it has a cost', incentives: 'choices follow what gets rewarded', balance: 'a household at 95% has no safety margin for a bad week', loops: 'markets settle by constant small adjustments' } },
     business: { name: 'Business', r: { ownership: 'unclear ownership causes most failures', incentives: 'what gets measured gets done', loops: 'teams improve by reviewing and adjusting', capacity: 'a team stretched too thin drops things' } },

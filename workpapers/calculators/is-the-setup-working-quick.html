@@ -148,7 +148,7 @@
     <p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> you type in the totals from your worksheets, for 2 to 8 people. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain-words read of whether the split can keep going. It scores the setup, never a person. <span aria-hidden="true">&middot;</span> About 5 minutes</p>
     <p style="font-size:0.9rem;color:var(--ink-soft);">Works for 2 to 8 people.</p>
     <p>Type in the totals from your worksheets and see, in plain words, whether the way you share the load right now is working for everyone. It scores the <strong>setup</strong>, never a person, and never the relationship as a whole.</p>
-    <p style="font-size:0.9rem;">Want each input worked out from your raw entries, the overall score and a trend log? Use <a href="/is-the-setup-working.html">the full CALC-01</a>. The math is the same on both pages.</p>
+    <p style="font-size:0.9rem;">Want each input worked out from your raw entries, the overall score and a trend log? Use <a href="/is-the-setup-working.html">the full CALC-01</a>. The maths is the same on both pages.</p>
 
     <div class="step">
       <h2><label for="people-count">Who's sharing the load?</label></h2>
@@ -167,7 +167,7 @@
       <p class="hint" id="weights-note">Three steps, each counted by how much it matters to the read: balance counts for 40%, ownership for 35% and stress for 25% (the “weights” 0.40, 0.35 and 0.25 you see beside each step).</p>
       <h2>1. How the hours split</h2>
       <p class="code-note">Balance (workload balance) &middot; counts for 40% (weight 0.40)</p>
-      <p class="hint">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>: each person's total hours (or minutes) for the week.</p>
+      <p class="hint">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a> or <a href="/lemonade-stand.html">Who does what?</a>: each person's total hours (or minutes) for the week.</p>
       <fieldset>
         <legend>I have&hellip;</legend>
         <label class="check"><input type="radio" name="wb-mode" value="hours" checked> Each person's hours</label>
@@ -194,7 +194,7 @@
 
     <div class="step" id="s-as">
       <h2>3. How much each person is carrying</h2>
-      <p class="code-note">Stress (average load) &middot; counts for 25% (weight 0.25)</p>
+      <p class="code-note">Stress (the average stress tank score) &middot; counts for 25% (weight 0.25)</p>
       <p class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a>: each person's own score, their five 0&ndash;4 answers added up and divided by 20. It runs from 0 to 1, and higher means heavier. Everyone fills in their own; nobody guesses for someone else.</p>
       <div class="grid" id="batteries"></div>
       <div class="work" id="as-work" aria-live="polite"></div>
@@ -208,7 +208,7 @@
       <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
       <div id="details" hidden>
         <div class="nums-only">
-        <h3 style="font-size:1rem;margin:14px 0 0;">The math, step by step</h3>
+        <h3 style="font-size:1rem;margin:14px 0 0;">The maths, step by step</h3>
         <div class="math" id="math" tabindex="0" role="region" aria-label="The math, step by step"></div>
         <table>
           <thead><tr><th>Part</th><th class="num">Could earn</th><th class="num">Earned</th><th class="num">Shortfall</th></tr></thead>
@@ -262,7 +262,7 @@
     $("names").innerHTML = names.map(function(v, i){ return '<div><label for="nm-' + i + '">Person ' + (i + 1) + ' (optional)</label><input type="text" id="nm-' + i + '" data-k="names" data-i="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(v) + '"></div>'; }).join("");
     $("hours").innerHTML = hours.map(function(v, i){ return '<div><label for="h-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', hours</label><input type="number" id="h-' + i + '" data-k="hours" data-i="' + i + '" min="0" step="0.5" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
     $("targets").innerHTML = targets.map(function(v, i){ return '<div><label for="t-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', agreed %</label><input type="number" id="t-' + i + '" data-k="targets" data-i="' + i + '" min="0" max="100" step="1" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
-    $("batteries").innerHTML = bats.map(function(v, i){ return '<div><label for="b-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', load (0 to 1)</label><input type="number" id="b-' + i + '" data-k="bats" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    $("batteries").innerHTML = bats.map(function(v, i){ return '<div><label for="b-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', stress tank (0 to 1)</label><input type="number" id="b-' + i + '" data-k="bats" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
   }
 
   function relabel(){
@@ -324,7 +324,7 @@
       var asBad = s.error && s.error.indexOf("runs from") >= 0;
       if (wb === null) (wbBad ? chk : miss).push("balance");
       if (oc === null) (ocBad ? chk : miss).push("ownership");
-      if (as === null) (asBad ? chk : miss).push("everyone's load score");
+      if (as === null) (asBad ? chk : miss).push("everyone's stress tank score");
       setText("No read yet. " + (chk.length ? "Check this number: " + chk.join(", ") + " (see the note under it). " : "") + (miss.length ? "Still needed: " + miss.join(", ") + "." : ""));
       return;
     }

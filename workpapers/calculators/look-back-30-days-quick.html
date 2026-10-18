@@ -28,7 +28,7 @@
   .card{ max-width:720px; width:100%; min-width:0; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:28px; }
   .kicker{ font-family:"IBM Plex Mono", monospace; font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--brass-ink); }
   .card h1{ font-size:1.7rem; margin:4px 0 2px; }
-  .card h1 small{ display:block; font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.7rem; letter-spacing:0.06em; color:var(--brass-ink); margin-top:6px; }
+  .card h1 small, .card .h1-aka{ display:block; font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.7rem; letter-spacing:0.06em; color:var(--brass-ink); margin-top:6px; }
   .step{ background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin:18px 0; }
   .step h2{ font-size:1.1rem; margin:0 0 4px; }
   .hint{ color:var(--ink-soft); font-size:0.86rem; margin:4px 0 10px; }
@@ -136,7 +136,8 @@
 <!-- place:split --><nav class="ps no-print no-bubble" aria-label="Fair split check: every way in"><p class="ps-k"><b>Fair split check</b> <span>· 4 ways in</span></p><div class="ps-row"><span class="ps-g">This week</span><a class="ps-b" href="/workpapers/calculators/is-the-setup-working-quick.html">Quick read</a><a class="ps-b" href="/is-the-setup-working.html">Every number</a><span class="ps-g">Over a month</span><a class="ps-b" href="/workpapers/calculators/look-back-30-days-quick.html" aria-current="page">Quick read</a><a class="ps-b" href="/look-back-30-days.html">Every number</a></div></nav><!-- /place:split -->
   <div class="card">
     <div class="kicker">CALC-02 &middot; The quick look-back</div>
-    <h1>Look back over 30 days<small>The 30-Day Look-Back</small></h1>
+    <h1>Fair split check: look back over 30 days</h1>
+    <p class="h1-aka">Also called the 30-Day Look-Back</p>
     <p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> you type in how things were about a month ago, and how they are this week. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain read of what shifted, what didn't, and one next step. It reads the setup, never a person. <span aria-hidden="true">&middot;</span> About 5 minutes</p>
     <p>Fill in what you have, for 2 to 8 people. Leave out anything you didn't track: each part is read on its own. The numbers can come from your worksheets, or be your best honest guess together.</p>
     <p style="font-size:0.9rem;">Kept a few weeks of numbers? <a href="/look-back-30-days.html">The full look-back</a> takes all four weeks, adds up the running imbalance, and can fill itself in from the worksheets kept on this device.</p>
@@ -155,7 +156,7 @@
 
     <div class="step">
       <h2>1. Who did what</h2>
-      <p class="hint">Each person's hours for one week, from <a href="/workpapers/fill/wp-01.html">Who did what (WP-01)</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>. Count the planning and remembering too. Rough is fine: the split is what matters.</p>
+      <p class="hint">Each person's hours for one week, from <a href="/workpapers/fill/wp-01.html">Who did what (WP-01)</a> or <a href="/lemonade-stand.html">Who does what?</a>. Count the planning and remembering too. Rough is fine: the split is what matters.</p>
       <div class="tn" id="hours"></div>
       <div class="work" id="hours-work" aria-live="polite"></div>
     </div>
@@ -216,7 +217,7 @@
       <textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Summary text to copy"></textarea>
     </div>
 
-    <p class="disclaimer"><strong>How it decides what shifted:</strong> a part counts as shifted when it moved by at least 0.10 on its 0 to 1 scale (how evenly the hours split, jobs with an owner, load), or by at least 1 rescue a week. Smaller moves count as no shift: one week can be a fluke. The next step goes to whatever moved the wrong way; if nothing did, to the first part still worth a look (jobs without an owner, then uneven hours, then rescues, then a high load). This is a rule-of-thumb worksheet, not a tested model. It only reflects what you enter. Nothing you type here is saved or sent.</p>
+    <p class="disclaimer"><strong>How it decides what shifted:</strong> a part counts as shifted when it moved by at least 0.10 on its 0 to 1 scale (how evenly the hours split, jobs with an owner, stress tank scores), or by at least 1 rescue a week. Smaller moves count as no shift: one week can be a fluke. The next step goes to whatever moved the wrong way; if nothing did, to the first part still worth a look (jobs without an owner, then uneven hours, then rescues, then a high stress tank score). This is a rule-of-thumb worksheet, not a tested model. It only reflects what you enter. Nothing you type here is saved or sent.</p>
     <p class="disclaimer pillar-note"><small>CALC-02 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work over a month instead of a week. In you: you see whether what you tried is changing anything. Between you and others: you get one calm picture of the month, never a score on anyone.</small></p>
     <p class="disclaimer">It goes with week four of the <a href="/prog-01-in-depth.html">6-week program</a>, <a href="/workpapers/report-01.html">Your progress, week by week (REPORT-01)</a> and <a href="/workpapers/calculators/is-the-setup-working-quick.html">Is the setup working for everyone? (CALC-01)</a>.</p>
   </div>
@@ -258,12 +259,12 @@
     names = fit(names, ""); T = T.map(function(w){ return K.fitWeek(w, n); });
     $("names").innerHTML = names.map(function(v, i){ return '<div><label for="nm-' + i + '">Person ' + (i + 1) + ' (optional)</label><input type="text" id="nm-' + i + '" data-name="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(v) + '"></div>'; }).join("");
     $("hours").innerHTML = pairRows("hours", "0.5", "hours");
-    $("loads").innerHTML = pairRows("loads", "0.05", "load score");
+    $("loads").innerHTML = pairRows("loads", "0.05", "stress tank score");
     Array.prototype.forEach.call(document.querySelectorAll('.tn input[data-f="rescues"], .tn input[data-f^="jobs"]'), function(el){ el.value = T[+el.dataset.w][el.dataset.f]; });
   }
   function relabel(){
     Array.prototype.forEach.call(document.querySelectorAll("[data-lab]"), function(l){ l.textContent = nameOf(+l.dataset.lab); });
-    Array.prototype.forEach.call(document.querySelectorAll(".tn input[data-i]"), function(el){ var unit = el.dataset.f === "hours" ? "hours" : "load score"; el.setAttribute("aria-label", nameOf(+el.dataset.i) + ", " + unit + ", " + SIDE[+el.dataset.w].toLowerCase()); });
+    Array.prototype.forEach.call(document.querySelectorAll(".tn input[data-i]"), function(el){ var unit = el.dataset.f === "hours" ? "hours" : "stress tank score"; el.setAttribute("aria-label", nameOf(+el.dataset.i) + ", " + unit + ", " + SIDE[+el.dataset.w].toLowerCase()); });
   }
   function mark(field, w, bad){ Array.prototype.forEach.call(document.querySelectorAll('.tn input[data-f="' + field + '"][data-w="' + w + '"]'), function(el){ if (bad) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid"); }); }
 
@@ -342,7 +343,7 @@
     if (names.every(function(x){ return !String(x).trim(); }) && d.names.length >= 2){ n = Math.max(2, Math.min(8, d.names.length)); names = d.names.slice(0, n); }
     var weeks = [0, 1, 2, 3].map(function(){ return K.blankWeek(n); });
     K.apply(weeks, d.facts, n, names);
-    var got = [], LABEL = { rescues: "rescues", jobsTotal: "jobs on the list", jobsOwned: "jobs with an owner", hours: "hours", loads: "load scores" };
+    var got = [], LABEL = { rescues: "rescues", jobsTotal: "jobs on the list", jobsOwned: "jobs with an owner", hours: "hours", loads: "stress tank scores" };
     function take(w, side, order){
       ["rescues", "jobsTotal", "jobsOwned"].forEach(function(f){ if (T[side][f] !== "") return; order.some(function(s){ if (weeks[s][f] !== ""){ T[side][f] = weeks[s][f]; got.push(SIDE[side].toLowerCase() + ": " + LABEL[f]); return true; } return false; }); });
       ["hours", "loads"].forEach(function(f){

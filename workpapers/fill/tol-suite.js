@@ -196,7 +196,7 @@
     return null;
   }
   function whoLabel(i) { return String(S.names[i] || '').trim() || roleLabel(i); }
-  // Children on the road (Family, Co-parents): the sheets about yourself (load scores, calm-down kits)
+  // Children on the road (Family, Co-parents): the sheets about yourself (stress tank scores, calm-down kits)
   // and the shared average wait only for the adults. "Never ask a child to keep track of what a parent does."
   var KID_ROADS = { family: true, coparents: true };
   function kidsOn() { return !!S.path && !!KID_ROADS[S.path.id]; }
@@ -437,7 +437,7 @@
         kidsFit();
         var kb = h('input', { type: 'checkbox', id: 'ws-kid-' + i, 'data-kid': String(i), autocomplete: 'off' });
         kb.checked = !!S.kids[i];
-        cell.appendChild(h('label', { className: 'ws-kid', for: 'ws-kid-' + i, title: 'Children aren\u2019t asked to fill in a load score or a calm-down kit, and the shared numbers don\u2019t wait for them.' }, [kb, ' Child']));
+        cell.appendChild(h('label', { className: 'ws-kid', for: 'ws-kid-' + i, title: 'Children aren\u2019t asked to fill in a stress tank score or a calm-down kit, and the shared numbers don\u2019t wait for them.' }, [kb, ' Child']));
         // lives here part of the time (a child who lives in two homes, a partner who works away):
         // the nights out of 14, kept by name, so the report reads a fair share for the nights they're here
         var nightsNow = nightsOf(nm), sel = h('select', { id: 'ws-nights-' + i, 'data-nights': String(i), autocomplete: 'off' });
@@ -808,10 +808,10 @@
   }
 
   // On a phone, plain words instead of codes and decimals in what is shown ("Who owns which job", not
-  // "WP-03"; "high load (0.75)", not "0.75"). The codes stay on wider screens, in the PDFs and the files.
+  // "WP-03"; "high (0.75)", not "0.75"). The codes stay on wider screens, in the PDFs and the files.
   function phone() { return !!(global.matchMedia && global.matchMedia('(max-width: 640px)').matches); }
   function codeWord(code) { return phone() ? SP.nameOf(code) : code; }
-  function loadWords(x) { x = Math.round(x * 100 + 1e-7) / 100; return x >= 0.8 ? 'very high load' : x >= 0.6 ? 'high load' : x >= 0.45 ? 'medium load, on the heavier side' : x >= 0.3 ? 'medium load, on the lighter side' : x >= 0.15 ? 'light load' : 'very light load'; }
+  function loadWords(x) { x = Math.round(x * 100 + 1e-7) / 100; return x >= 0.8 ? 'very high' : x >= 0.6 ? 'high' : x >= 0.45 ? 'medium, on the heavier side' : x >= 0.3 ? 'medium, on the lighter side' : x >= 0.15 ? 'light' : 'very light'; }
   /* ------------------------------------------------------------ the whole road as a link (#suite=…) */
   // "Send it to the others as a link": the progress file, squeezed (deflate) where the browser can, after
   // the "#" of a link to this page. A browser never sends that part to any website. Opening the link
@@ -1140,7 +1140,7 @@
 
   /* ------------------------------------------------------------ keep a draft on this device (opt-in) */
 
-  // Whose file this is, when the sheets show it: the one person whose own sheets (a load score, a kit)
+  // Whose file this is, when the sheets show it: the one person whose own sheets (a stress tank score, a kit)
   // were filled in on this device rather than brought in. Used only for "from Diego's file" in the report.
   function deviceOwner() {
     var mine = {};
@@ -1430,7 +1430,7 @@
     if (missing.length === who.length) return 'The shared average appears here once everyone has filled in their own.';
     if (missing.length) return 'Shared average: waiting on ' + missing.map(whoLabel).join(', ') + '. It is never worked out while anyone\u2019s is missing.';
     var avg = latest.reduce(function (a, b) { return a + b; }, 0) / latest.length;
-    return 'Shared average of everyone\u2019s latest: ' + loadWords(avg) + ' (' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + (latest.length === 2 ? ', both in)' : ', all ' + latest.length + ' in)') + '.';
+    return 'Shared average of everyone\u2019s latest stress tank score: ' + loadWords(avg) + ' (' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + (latest.length === 2 ? ', both in)' : ', all ' + latest.length + ' in)') + '.';
   }
 
   // Week by week: this road's own plan, with its workpapers, reading and a small practice
@@ -1740,7 +1740,7 @@
     $('ws-sheet-title').focus();
   }
 
-  // Someone else's own sheet (a load score, a calm-down kit) that came in from their file or link: it is
+  // Someone else's own sheet (a stress tank score, a calm-down kit) that came in from their file or link: it is
   // theirs to change, so it opens read-only here. "This is mine" unlocks it (the same person's other device).
   function othersOwn(en) {
     if (!perPerson(en.workpaper) || !en.from || !en.from.by) return false;
@@ -1789,7 +1789,7 @@
   /* ------------------------------------------------------------ a shared link, and removing a sheet */
 
   var sharedFor = null, sharedWait = null;
-  // A load score shared by someone else on the road goes onto their own sheet (made if they haven't one),
+  // A stress tank score shared by someone else on the road goes onto their own sheet (made if they haven't one),
   // never into the sheet that happens to be open. Everything else is combined into the sheet that is open.
   function suiteTakeShared(d, replace, a) {
     if (!editing || !d || d.wp !== editing.entry.workpaper || !perPerson(d.wp)) return '';
@@ -1930,7 +1930,7 @@
   var held = null;
   function roadHasWork() { return S.stops.some(function (st) { return st.entries.some(filled); }); }
   function differentRoad(id) { return id && pathById(id) && S.path && S.path.id !== id && roadHasWork(); }
-  // A one-person sheet (a load score, a calm-down kit) saved on another device says which place it had
+  // A one-person sheet (a stress tank score, a calm-down kit) saved on another device says which place it had
   // there (person 0, 1 …). Each device can list the same people in a different order (Diego's: A = Diego;
   // Lena's: A = Lena), so the place is turned back into the name it had there, and matched by name here.
   function personByName(en, there, names) {
@@ -2277,7 +2277,7 @@
       if (k != null) {
         kidsFit(); S.kids[+k] = e.target.checked;
         syncRoadPeople(); changed(); renderRoad();
-        say(whoLabel(+k) + (e.target.checked ? ' is marked as a child: no load score or calm-down kit is asked of them, and the shared numbers don\u2019t wait for them.' : ' is marked as an adult.'));
+        say(whoLabel(+k) + (e.target.checked ? ' is marked as a child: no stress tank score or calm-down kit is asked of them, and the shared numbers don\u2019t wait for them.' : ' is marked as an adult.'));
         return;
       }
       // (after this event has run its course: on a phone the tap that blurred the box comes right after it)

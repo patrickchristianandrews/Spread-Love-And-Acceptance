@@ -114,7 +114,7 @@
 
   // ---------- the Choose panel (full screen) ----------
   var ovl = document.getElementById('sn-ovl'), optBtn = document.getElementById('sn-opt'), trkEl = document.getElementById('sn-trk'), findEl = document.getElementById('sn-ovl-find'), ctlEl = document.getElementById('sn-ovl-ctl');
-  var BLURB = { 'Shooting Star': 'Soft and floating · quiets a busy mind', 'Thunderous Shimmer': 'Textured and curious · a little spark', 'Bouncy Bedroom': 'Cozy and playful · a light bounce', 'Watching a Shooting Star': 'Big and cinematic · gets you moving' };
+  var BLURB = { 'Shooting Star': 'Soft and floating · quiets a busy mind', 'Thunderous Shimmer': 'Textured and curious · a little spark', 'Bouncy Bedroom': 'Cosy and playful · a light bounce', 'Watching a Shooting Star': 'Big and cinematic · gets you moving' };
   var finder = null, moved = [];
   function cards() { return Array.prototype.slice.call(document.querySelectorAll('.track-card')).filter(function (c) { return c.querySelector('.track-player'); }); }
   function cardName(c) { var h = c.querySelector('.track-title'); return h ? h.textContent.replace(/^\d+\.\s*/, '') : 'Track'; }

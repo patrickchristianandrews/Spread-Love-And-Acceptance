@@ -100,9 +100,9 @@
     // Workpapers
     '/workpapers/wp-01.html': { p: [1, 4], n: {
       1: ['Log a week of what you do.', 'Compare two logs as facts, not a fight.'],
-      4: ['Practice a kind, neutral no.', 'Say no in a way that lands without a fight.'] } },
+      4: ['Practise a kind, neutral no.', 'Say no in a way that lands without a fight.'] } },
     '/workpapers/wp-02-how-much-are-you-carrying.html': { p: [3], n: {
-      3: ['Five questions: how full is your battery?', 'Know when to talk and when to wait.'] } },
+      3: ['Five questions: how full is your stress tank?', 'Know when to talk and when to wait.'] } },
     '/workpapers/wp-03-one-owner-per-job.html': { p: [2, 5], n: {
       2: ['See which jobs you hold without saying so.', 'One owner per job, so nobody keeps asking.'],
       5: ['Notice what you pick up because nobody else does.', 'Name owners before a job drifts to one person.'] } },

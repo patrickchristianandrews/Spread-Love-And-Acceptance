@@ -91,7 +91,7 @@
   .sheet-header{ text-align:center; border-bottom:2px solid var(--brass); padding-bottom:16px; margin-bottom:24px; }
   .wp-num{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--brass-ink, #7A5620); letter-spacing:.08em; margin:0 0 4px; }
   .sheet-mark{ font-size:1.5rem; margin:0; }
-  .sheet-mark small{ display:block; font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:.62rem; letter-spacing:.1em; color:var(--brass-ink, #7A5620); margin-top:6px; }
+  .sheet-mark small, .sheet-mark-sub{ display:block; font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:.62rem; letter-spacing:.1em; color:var(--brass-ink, #7A5620); margin-top:6px; }
   .sheet-tagline{ font-size:.9rem; color:var(--ink-soft); margin:10px auto 0; max-width:66ch; }
 
   .intro-note{ border-left:4px solid var(--focus); background:#E7EEF4; border-radius:var(--radius); padding:16px 20px; margin:22px 0; }
@@ -231,11 +231,10 @@
 
   <header class="sheet-header">
     <p class="wp-num">REPORT-01</p>
-    <h1 class="sheet-mark">The Full Read
-      <small>WHERE ALL YOUR WORKSHEETS COME TOGETHER</small>
-    </h1>
+    <h1 class="sheet-mark">The Full Read</h1>
+    <p class="sheet-mark-sub">WHERE ALL YOUR WORKSHEETS COME TOGETHER</p>
     <p class="sheet-tagline">One place to record what your worksheets produced, and a report that reads them side by side instead of one at a time.</p>
-      <p class="sheet-tagline pillar-note">This report brings all <a href="/five-pillars.html">Five Pillars</a> together: the load (I), how the setup is holding (II), your load scores (III), how repair is going (IV), and the jobs that quietly slip back (V). In you: you see your own patterns over time. Between you and others: you get one shared picture of the setup, never a verdict on either person.</p>
+      <p class="sheet-tagline pillar-note">This report brings all <a href="/five-pillars.html">Five Pillars</a> together: the load (I), how the setup is holding (II), your stress tank scores (III), how repair is going (IV), and the jobs that quietly slip back (V). In you: you see your own patterns over time. Between you and others: you get one shared picture of the setup, never a verdict on either person.</p>
   </header>
     <p class="depth-bar" style="margin:0 0 28px;"><span>Full version</span><a href="/workpapers/report-01.html">&larr; Back to the simple version</a></p>
     <p class="no-print" style="margin:0 0 28px;font-size:.9rem;">Where the numbers come from: <a href="/workpapers/fill/">the fill-in workpapers</a> &middot; <a href="/workpapers/calculators/is-the-setup-working-quick.html">CALC-01</a> &middot; <a href="/workpapers/fill/suite.html">Build your Workpaper Suite</a></p>
@@ -306,19 +305,19 @@
           <div class="sub">Count, either person</div>
         </div>
         <div class="field">
-          <label for="w-as-a">WP-02 battery &middot; A</label>
+          <label for="w-as-a">WP-02 stress tank &middot; A</label>
           <input type="number" id="w-as-a" min="0" max="1" step="0.05" placeholder="0.00–1.00">
           <div class="sub">Five scores added, &divide; 20</div>
         </div>
         <div class="field">
-          <label for="w-as-b">WP-02 battery &middot; B</label>
+          <label for="w-as-b">WP-02 stress tank &middot; B</label>
           <input type="number" id="w-as-b" min="0" max="1" step="0.05" placeholder="0.00–1.00">
           <div class="sub">Five scores added, &divide; 20</div>
         </div>
         <div class="field">
           <label for="w-oc-owned">WP-03 tasks owned</label>
           <input type="number" id="w-oc-owned" min="0" step="1" placeholder="—">
-          <div class="sub">Both R and A named</div>
+          <div class="sub">Jobs with an owner</div>
         </div>
         <div class="field">
           <label for="w-oc-total">WP-03 tasks listed</label>
@@ -750,7 +749,7 @@
 
     if(!last || last.sol===null){
       v.textContent="Waiting on data.";
-      vb.textContent = ds.length ? "Weeks are recorded, but none has all three yet: workload, ownership, and both load scores. The report needs all three." : "Add at least one week above and this writes itself.";
+      vb.textContent = ds.length ? "Weeks are recorded, but none has all three yet: workload, ownership, and both stress tank scores. The report needs all three." : "Add at least one week above and this writes itself.";
     } else {
       var band = r2(last.sol)>=0.70 ? "The arrangement is carrying its own weight."
                : r2(last.sol)>=0.40 ? "Something is drifting."

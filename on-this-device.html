@@ -442,7 +442,7 @@
     return null;
   }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function size(k, s) { var v = ''; try { v = store(s).getItem(k) || ''; } catch (e) {} var n = v.length; return n < 1000 ? n + ' characters' : Math.round(n / 100) / 10 + 'k characters'; }
+  function size(k, s) { var v = ''; try { v = store(s).getItem(k) || ''; } catch (e) {} var n = v.length; return n === 1 ? '1 character' : n < 1000 ? n + ' characters' : Math.round(n / 100) / 10 + 'k characters'; }
   var msg = document.querySelector('.od-msg');
   function render() {
     [['local', 'od-found', KNOWN], ['session', 'od-session', SESSION]].forEach(function (g) {

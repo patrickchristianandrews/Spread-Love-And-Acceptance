@@ -261,7 +261,7 @@
     c.appendChild(radioGroup('face', 'Expression', OPTS.face));
     c.appendChild(radioGroup('ears', 'Ears', OPTS.ears));
     c.appendChild(radioGroup('shape', 'Shape', OPTS.shape));
-    c.appendChild(radioGroup('robe', 'Robe color', ROBE, true));
+    c.appendChild(radioGroup('robe', 'Robe colour', ROBE, true));
     c.appendChild(radioGroup('style', 'Robe style', OPTS.style));
     c.appendChild(radioGroup('acc', 'Accessory', OPTS.acc));
     var row = el('div', { class: 'bd-row' });

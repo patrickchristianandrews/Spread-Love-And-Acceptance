@@ -27,11 +27,11 @@
       note: 'The most expansive and cinematic one, with a journey-like arc.',
       why: { stuck: 'It builds a sense of expansion and forward motion that can lift a stuck or low mood.', walk: 'It keeps a relaxed baseline with a light current of energy, so it feels purposeful.', big: 'Full orchestral writing with math-rock drive: the biggest of the four.' } },
     { id: 'bedroom', name: 'Bouncy Bedroom', m: 1.55, e: .4, n: .1, tags: ['lift', 'cozy'],
-      note: 'Short, warm and playful. A cozy little bounce.',
-      why: { lift: 'It gently lifts low energy or mild boredom without asking for deep focus.', cozy: 'Pure calm can feel flat. This is close-up and cozy, with a light bounce that stays relaxed.' } }
+      note: 'Short, warm and playful. A cosy little bounce.',
+      why: { lift: 'It gently lifts low energy or mild boredom without asking for deep focus.', cozy: 'Pure calm can feel flat. This is close-up and cosy, with a light bounce that stays relaxed.' } }
   ];
   var BYID = {}; S.forEach(function (x) { BYID[x.id] = x; });
-  var NEEDS = [['quiet', 'Quiet my busy mind'], ['anxious', 'Calm anxious or restless energy'], ['sleep', 'Wind down before sleep'], ['spark', 'Recover, but I need a spark'], ['curious', 'Get curious and alert'], ['stuck', 'I feel stuck or low on energy'], ['walk', 'A walk or light planning'], ['big', 'Feel something big'], ['lift', 'Lift low energy or boredom'], ['cozy', 'Something cozy and playful']];
+  var NEEDS = [['quiet', 'Quiet my busy mind'], ['anxious', 'Calm anxious or restless energy'], ['sleep', 'Wind down before sleep'], ['spark', 'Recover, but I need a spark'], ['curious', 'Get curious and alert'], ['stuck', 'I feel stuck or low on energy'], ['walk', 'A walk or light planning'], ['big', 'Feel something big'], ['lift', 'Lift low energy or boredom'], ['cozy', 'Something cosy and playful']];
   var BODY = [['', 'No idea'], ['fine', 'Fine'], ['tired', 'Tired'], ['wired', 'Wired or restless'], ['over', 'Anxious or overwhelmed']];
   var PREFS = [['steady', 'Nothing sudden'], ['soft', 'Soft and floaty'], ['big', 'Big and cinematic'], ['feelit', 'I want to feel the low end'], ['textured', 'Something textured and surprising'], ['short', 'Under three minutes']];
   var NEEDNAME = {}; NEEDS.forEach(function (n) { NEEDNAME[n[0]] = n[1]; });

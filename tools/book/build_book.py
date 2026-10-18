@@ -38,6 +38,7 @@ import book_art  # noqa: E402
 import front_back  # noqa: E402  (bookfixB1: help-now page, Find it fast, If someone handed you this book, the appendices)
 import hints  # noqa: E402  (bookpals11: the character hints, "Workpapers, tools and three friends", the two lists at the back)
 import series_site  # noqa: E402  (print12: the book's one name, and the print series on /book/)
+from series_text import in_open_paren, words_follow  # noqa: E402  (proof16: "(Chapter V, page 138)", not "(Chapter V (page 138))")
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 BOOK = os.path.join(ROOT, 'book')
@@ -1084,6 +1085,10 @@ PRINT_SWAPS = [
     ('helpers you use on the site', 'helpers you use on the website'), ('pages to read on the site', 'pages to read on the website'),
     ('This site’s idea', 'This book’s idea'), ('this site’s idea', 'this book’s idea'),
     ('this site’s own', 'this book’s own'), ('This site uses', 'This book uses'), ('this site uses', 'this book uses'),
+    # proof16: the sentences that explain the label say "the book’s own" too
+    ('the site’s own way of putting ideas into practice', 'the book’s own way of putting ideas into practice'),
+    ('the site’s own ways of putting things into practice', 'the book’s own ways of putting things into practice'),
+    ('The site’s own ideas are marked', 'The book’s own ideas are marked'),
     ('runs through this site', 'runs through this book'),
     ('Research notes on this page', 'Research notes in this chapter'),
     ('The cards above say', 'The sections above say'), ('read one card and stop', 'read one section and stop'),
@@ -1146,7 +1151,8 @@ def print_links(body, slug, here):
                 XREFS.add(tgt)
             else:
                 key = tgt
-            return m.group(0) + '<span class="pe-only pe-xref"> (page %s)</span>' % pg(key)
+            note = (', page %s' + (',' if words_follow(m.string, m.end()) else '')) if in_open_paren(m.string, m.end()) else ' (page %s)'
+            return m.group(0) + '<span class="pe-only pe-xref">%s</span>' % (note % pg(key))
         if h.startswith('/') and (NO_ADDRESS.match(h) or h.startswith('/assets/')):
             return m.group(0)
         if not (h.startswith('/') or h.startswith('http')):
@@ -1158,7 +1164,8 @@ def print_links(body, slug, here):
         if not addr or addr in seen or addr.lower() in plain or plain.startswith('spreadloveandacceptance.com'):
             return m.group(0)
         seen.add(addr)
-        return m.group(0) + '<span class="pe-only pe-u"> (%s)</span>' % addr_html(addr)
+        note = (', %s' + (',' if words_follow(m.string, m.end()) else '')) if in_open_paren(m.string, m.end()) else ' (%s)'
+        return m.group(0) + '<span class="pe-only pe-u">%s</span>' % (note % addr_html(addr))
     return re.sub(r'<a\b([^>]*)>(.*?)</a>', sub, body, flags=re.S)
 
 

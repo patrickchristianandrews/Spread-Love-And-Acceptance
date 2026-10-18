@@ -379,10 +379,10 @@
       var h = H(); out.innerHTML = '';
       if (!h || !h.jobLog) return;
       var weeks = h.jobLog(), all = h.comingBack({ owned: true });
-      if (!h.logOn()) { out.appendChild(mk('p', 'tfs-lb-note', 'The jobs log is off on this device. You can turn it back on from the weekly check-in card.')); return; }
+      if (!h.logOn()) { out.appendChild(mk('p', 'tfs-lb-note', 'The jobs log is off on this device. You can turn it back on from the Kitchen-table check-in.')); return; }
       if (!weeks.length) {
         var p = mk('p', 'tfs-lb-note', 'Tap the jobs that slipped on your ');
-        var a = mk('a', '', 'weekly check-in card'); a.href = '/check-ins.html#card'; p.appendChild(a);
+        var a = mk('a', '', 'weekly Kitchen-table check-in'); a.href = '/check-ins.html#card'; p.appendChild(a);
         p.appendChild(doc.createTextNode('. After a few weeks, the ones that keep coming back show up here by themselves. Only the job names and the week are kept, on this device.'));
         out.appendChild(p); return;
       }

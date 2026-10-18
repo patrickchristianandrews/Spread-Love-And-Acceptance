@@ -163,10 +163,10 @@
       send: 'Give the reason and the facts. A clear “because” and real numbers land better than feelings alone.',
       intro: ['For logic-first people, something isn’t fully learned until it makes sense. They want the why, the rule and the steps that connect A to B.', 'In relationships, this input can look cold from the outside, but it’s often care in disguise. Solving the problem is how many logic-first people say “I love you.”'],
       prompts: ['When something upsets you, do you need to understand it before you can feel it? What happens if you can’t?', 'When has a clear number or fact calmed a disagreement for you?', 'Where might someone read your problem-solving as not caring, when you meant the opposite?'],
-      tryThis: 'Write down who did what at home for one week with the Lemonade Stand. Notice whether seeing real numbers changes how the topic feels.', link: ['The Lemonade Stand', '/lemonade-stand.html'],
+      tryThis: 'Write down who did what at home for one week with Who does what? Notice whether seeing real numbers changes how the topic feels.', link: ['Who does what?', '/lemonade-stand.html'],
       fit: { autistic: 'Many Autistic people think in systems and rules. Knowing the exact reasons can turn worry into calm.', adhd: 'Many ADHD folks love solving a puzzle but stall on repetitive steps. Turning a chore into a system or a game can help.' } },
-    { id: 'pictures', icon: '🖼️', name: 'Pictures and space', g: 'Visual-spatial', short: 'Images, diagrams, color, maps and where things are.',
-      how: 'You think in pictures. Diagrams, colors, maps and seeing where things are make ideas click.',
+    { id: 'pictures', icon: '🖼️', name: 'Pictures and space', g: 'Visual-spatial', short: 'Images, diagrams, colour, maps and where things are.',
+      how: 'You think in pictures. Diagrams, colours, maps and seeing where things are make ideas click.',
       send: 'Show it. Sketch it, map it, or use a picture or visible list instead of a long explanation.',
       intro: ['Visual-spatial people often see an idea before they can explain it. A messy explanation turns clear the moment someone draws a box and an arrow.', 'In relationships, this input notices a lot: a tidy room, a new haircut, a face that doesn’t match the words. It also means visual clutter can be genuinely draining.'],
       prompts: ['What’s something you only understood once you saw it drawn or shown?', 'How does the look of your home affect your mood?', 'If you drew your week as a picture, what would it look like?'],
@@ -290,7 +290,7 @@
     });
   }
   // connections you might not have noticed: every [step, choice] in `when` must be picked ('*' = anything in that step)
-  const F = { ps: 'Psychology', ph: 'Philosophy', bs: 'Behavioral science', nb: 'Neurobiology', ec: 'Economics', bu: 'Business', fi: 'Finance', ht: 'Holistic practice', ar: 'The senses' };
+  const F = { ps: 'Psychology', ph: 'Philosophy', bs: 'Behavioural science', nb: 'Neurobiology', ec: 'Economics', bu: 'Business', fi: 'Finance', ht: 'Holistic practice', ar: 'The senses' };
   const PIL = { 1: ['Pillar I, See the whole load', 'see-the-load'], 2: ['Pillar II, Fix the setup, not the person', 'fix-the-setup'], 3: ['Pillar III, Read your state first', 'read-your-state'],
     4: ['Pillar IV, Tune how you send and receive', 'tune-signals'], 5: ['Pillar V, Notice the quiet incentives', 'quiet-incentives'] };
   const INSIGHTS = [
@@ -299,7 +299,7 @@
     { when: [['wired', 'hint']], f: 'ps', p: 4, t: 'Hints can go unheard, then turn into disappointment.', d: 'If you tend to hint, a literal listener may miss it completely, and you may feel let down by someone who never knew. Try saying one plain ask, out loud, once.', l: ['Say it so it lands (WP-09)', '/workpapers/wp-09-say-it-so-it-lands.html'] },
     { when: [['wired', 'thinkfirst'], ['drains', 'openconflict']], f: 'bs', p: 3, t: 'You need time to answer, and you hate leaving things open.', d: 'Those two pull against each other. The answer is a named time: “Can I think about it and come back to you at eight?” It gives you room without leaving the disagreement hanging.', l: ['Chapter III: later, not never', '/book/chapter-3.html'] },
     { when: [['wired', 'thinkloud']], f: 'ps', p: 4, t: 'Thinking out loud can sound like deciding.', d: 'When you process by talking, others may take a half-formed idea as a firm plan, or as criticism. A quick “I’m thinking out loud here” changes how every sentence after it is heard.', l: ['Chapter I: what was meant and what was heard', '/book/chapter-1.html'] },
-    { when: [['wired', 'plans'], ['drains', 'change']], f: 'nb', p: 3, t: 'A heads-up can turn a change from a jolt into a shrug.', d: 'For a planner, a sudden change isn’t just inconvenient; it lands in the body first. Asking for even ten minutes’ warning, by name, is a small request with a big effect.', l: ['Today’s Weather', '/quick-checks.html#today'] },
+    { when: [['wired', 'plans'], ['drains', 'change']], f: 'nb', p: 3, t: 'A heads-up can turn a change from a jolt into a shrug.', d: 'For a planner, a sudden change isn’t just inconvenient; it lands in the body first. Asking for even ten minutes’ warning, by name, is a small request with a big effect.', l: ['My weather today', '/quick-checks.html#today'] },
     { when: [['wired', 'senses']], f: 'ar', p: 3, t: 'Where and when you talk is part of the conversation.', d: 'If noise, light or crowds wear you out, a hard talk in a busy room starts with your energy already low. Suggest a quiet place and a calm time for anything important.', l: ['Chapter IV: giving a comment time to land', '/book/chapter-4.html'] },
     { when: [['drains', 'noise']], f: 'ar', p: 3, t: 'Busy places use up your energy before anyone says a word.', d: 'Leaving room to settle after a crowded day (even ten quiet minutes) can make the evening feel completely different.', l: ['Breathe or the Night Garden', '/night-garden.html'] },
     { when: [['stretched', 'short'], ['now', 'busy']], f: 'nb', p: 3, t: 'Some of the snap may be leftover stress, not this moment.', d: 'A busy season fills your stress tank before you get home. A reaction three sizes too big is often leftover stress meeting a small moment. Saying “Heads up, I’m carrying a lot today” changes how everything after it lands.', l: ['Chapter III: full tanks', '/book/chapter-3.html'] },
@@ -310,11 +310,11 @@
     { when: [['unseen', 'dates']], f: 'fi', p: 1, t: 'That’s unbilled debt.', d: 'Remembering dates and appointments is work that gets done but never written down. Over months, it builds up like a debt only one person can see. Writing down one week of it with Who did what (WP-01) often surprises everyone.', l: ['Who did what (WP-01)', '/workpapers/wp-01.html'] },
     { when: [['unseen', 'lowon']], f: 'bu', p: 5, t: 'Jobs drift to whoever notices first.', d: 'If you’re the one who notices what’s running low, the job of noticing has probably become yours by default, without anyone deciding it. Giving it a named owner (even if that’s still you) makes it visible.', l: ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'] },
     { when: [['unseen', 'peace']], f: 'ps', p: 1, t: 'Keeping the peace is work, too.', d: 'Smoothing things over and steering conversations somewhere calmer takes real energy, and it usually goes unthanked because when it works, nothing seems to happen.', l: ['The kinds of unseen work', '/book/preface-in-depth.html'] },
-    { when: [['unseen', 'mood']], f: 'nb', p: 3, t: 'Reading the room all day can fill your stress tank quietly.', d: 'If you’re always tracking how everyone else feels, your own state can slip off the list. Checking in with yourself first isn’t selfish; it’s how you keep reading the room well.', l: ['Today’s Weather', '/quick-checks.html#today'] },
-    { when: [['values', 'fair'], ['unseen', '*']], f: 'ec', p: 1, t: 'Fairness starts with seeing the whole load.', d: 'If fairness matters to you and some of your work goes unseen, a shared page of who does what is the kindest first step. Facts on one page calm this conversation down fast.', l: ['The Lemonade Stand', '/lemonade-stand.html'] },
+    { when: [['unseen', 'mood']], f: 'nb', p: 3, t: 'Reading the room all day can fill your stress tank quietly.', d: 'If you’re always tracking how everyone else feels, your own state can slip off the list. Checking in with yourself first isn’t selfish; it’s how you keep reading the room well.', l: ['My weather today', '/quick-checks.html#today'] },
+    { when: [['values', 'fair'], ['unseen', '*']], f: 'ec', p: 1, t: 'Fairness starts with seeing the whole load.', d: 'If fairness matters to you and some of your work goes unseen, a shared page of who does what is the kindest first step. Facts on one page calm this conversation down fast.', l: ['Who does what?', '/lemonade-stand.html'] },
     { when: [['now', 'caring']], f: 'ht', p: 3, t: 'People who care for others often stop counting their own needs.', d: 'Pick one thing from “What fills me up” and give it a real time this week, written down like any other appointment.', l: ['Caring for someone', '/relationships-in-depth.html'] },
     { when: [['now', 'kids'], ['unseen', '*']], f: 'bu', p: 2, t: 'Family logistics run like a small business.', d: 'School forms, lunches and birthday gifts are recurring jobs. Each one runs better with one named owner than with “whoever remembers.”', l: ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'] },
-    { when: [['helps', 'spacetime']], f: 'bs', p: 3, t: 'Space works best with a time to come back.', d: '“I need a break” can sound like leaving. “I need twenty minutes, then let’s talk at eight” sounds like caring about the conversation. The time is what makes space feel safe for both of you.', l: ['The Calm-Down Kit (WP-11)', '/wp-11.html'] },
+    { when: [['helps', 'spacetime']], f: 'bs', p: 3, t: 'Space works best with a time to come back.', d: '“I need a break” can sound like leaving. “I need twenty minutes, then let’s talk at eight” sounds like caring about the conversation. The time is what makes space feel safe for both of you.', l: ['Calm-down plan (WP-11)', '/wp-11.html'] },
     { when: [['helps', 'written']], f: 'ps', p: 4, t: 'Writing can say what a face-to-face talk can’t.', d: 'Some people find hard things easier to say and hear in writing: there’s time to think, and no tone of voice to misread. Saying so in your statement lets people offer it.', l: ['The Chat analyzer', '/signal-translator.html'] },
     { when: [['wired', 'fast'], ['wired', 'slow']], f: 'ph', p: 4, t: 'You move fast and slow.', d: 'Many people do: fast at some things, slow at others. Naming which is which helps others match your pace, instead of guessing.', l: ['Chapter I: what sets the frequency', '/book/chapter-1-in-depth.html'] },
     { when: [['fills', 'quiet'], ['now', 'kids']], f: 'ht', p: 3, t: 'Quiet may be the rarest thing in your week.', d: 'With kids at home, quiet doesn’t happen by accident. Agreeing on even fifteen protected minutes, and swapping turns, is a setup fix, not a luxury.', l: ['Fix the setup, not the person', '/five-pillars.html#fix-the-setup'] },
@@ -327,12 +327,12 @@
   const NT_ENERGY = {
     adhd: 'Many ADHD folks recharge through novelty, movement and interest, and drain fast on boring-but-necessary tasks. Low energy for chores isn’t laziness. It’s a brain that runs on interest.',
     autistic: 'Many Autistic people drain from social demands, noise and unpredictability, and recharge through time alone, routine and special interests. Long stretches of pushing through can leave you running on empty.',
-    dyslexic: 'Many Dyslexic folks spend extra effort on reading and writing all day, so they can be more tired by evening than anyone realizes.',
+    dyslexic: 'Many Dyslexic folks spend extra effort on reading and writing all day, so they can be more tired by evening than anyone realises.',
     sensitive: 'Highly sensitive people take in more of everything, so busy, loud days cost more and need real recovery.',
-    general: 'Every brain has its own pattern of what fills it up and what drains it, labeled or not. Learning yours stops you from treating tiredness like a moral failing.'
+    general: 'Every brain has its own pattern of what fills it up and what drains it, labelled or not. Learning yours stops you from treating tiredness like a moral failing.'
   };
   const NT_MASK = {
-    adhd: 'ADHD masking often looks like over-preparing, over-apologizing, or working twice as hard to look “together.”',
+    adhd: 'ADHD masking often looks like over-preparing, over-apologising, or working twice as hard to look “together.”',
     autistic: 'Autistic masking can include scripting conversations, copying other people’s expressions and hiding stims. Unmasking slowly, in safe places, is part of self-discovery for many.',
     dyslexic: 'Many Dyslexic people learned to hide reading struggles, dodge reading aloud, or carry old school labels that never fit.',
     sensitive: 'Sensitive people often learn to hide how much they feel so they’ll seem easygoing.',
@@ -345,7 +345,7 @@
         ? 'As a Quick Spark, your thinking often happens out loud and in motion. The risk isn’t that you’re too much. It’s that others may treat your brainstorms as decisions, or that you commit before the slower parts of you catch up.'
         : 'As a Slow Simmer, your best thoughts often arrive after the conversation ends. The risk isn’t that you’re behind. It’s agreeing to things in the moment just to fill the silence, then quietly disagreeing later.',
       prompts: () => ['When were you last told to speed up or slow down? How did it feel?', 'When does thinking feel easiest for you: what time of day, place or situation?', 'What’s one decision you’d like more room for, whether that’s more time or more talking it out?'],
-      tryThis: c => c[0] === 'Q' ? 'Label your ideas out loud this week: “just brainstorming” or “I’ve decided.” Notice how people respond.' : 'Practice one sentence this week: “Let me think and get back to you by ___.” Then come back with your answer when you said you would.',
+      tryThis: c => c[0] === 'Q' ? 'Label your ideas out loud this week: “just brainstorming” or “I’ve decided.” Notice how people respond.' : 'Practise one sentence this week: “Let me think and get back to you by ___.” Then come back with your answer when you said you would.',
       link: ['Find your natural rhythms', '/tools/frequency-calibration.html'] },
     { id: 'lens', title: 'How you make sense of things', sub: 'Your lens: the whole picture or the pieces',
       intro: ['Your lens is the first thing your mind reaches for when something new arrives: the shape of the whole, or the pieces right in front of you.', 'Knowing your lens helps you ask for information the way you actually take it in, instead of blaming yourself when it doesn’t stick.'],
@@ -388,7 +388,7 @@
       yours: () => { const w = chosenWords('helps'); return w.length ? 'You said these help you: ' + w.map(x => x.charAt(0).toLowerCase() + x.slice(1)).join('; ') + '. Pick one to ask for out loud this week.' : 'You didn’t pick anything in the “What helps me” part yet. Use Change answers on your results to add a few, then come back here.'; },
       prompts: () => ['Finish this sentence: “I work best when ___.”', 'Finish this sentence: “When I’m overwhelmed, it helps if you ___.”', 'Finish this sentence: “Something I need that I’ve never asked for is ___.”'],
       tryThis: () => 'Share your Wave Code and one of these sentences with someone you trust. Keep the shape simple: say what’s going on, state the need, and offer one specific way they can help.',
-      link: ['Make a Wiring Card', '/wiring-card.html'] }
+      link: ['Make a “how to talk to me” card', '/wiring-card.html'] }
   ];
   CHAPTERS.forEach(c => { c.group = 'code'; });
   INPUTS.forEach(x => CHAPTERS.push({
@@ -409,7 +409,7 @@
   ];
   const CONNECTIONS = [
     ['words', 'people', 1, 'Conversation', 'Talking it through is both at once. Words are the main road between people.'],
-    ['pictures', 'nature', 1, 'Noticing the world', 'Both are about seeing what’s around you: shapes, colors and patterns.'],
+    ['pictures', 'nature', 1, 'Noticing the world', 'Both are about seeing what’s around you: shapes, colours and patterns.'],
     ['logic', 'pictures', 1, 'Charts and maps', 'A diagram is logic you can see.'],
     ['sound', 'body', 1, 'Rhythm', 'Rhythm lives in the body: dancing, tapping, walking in step to music.'],
     ['self', 'meaning', 1, 'Finding your why', 'Reflection leads to purpose. You find what matters by looking inward.'],
@@ -420,22 +420,22 @@
     ['people', 'self', 2, 'Empathy starts inside', 'Understanding others depends on understanding yourself first.'],
     ['words', 'sound', 2, 'The music of speech', 'Speech has rhythm, pitch and pauses. Poetry and storytelling live here.'],
     ['words', 'self', 2, 'Journaling', 'Writing is how many people discover what they actually feel.'],
-    ['body', 'self', 3, 'Your body knows first', 'A tight chest or clenched jaw often shows up before you can name the feeling. Today’s Weather checks exactly this link.'],
+    ['body', 'self', 3, 'Your body knows first', 'A tight chest or clenched jaw often shows up before you can name the feeling. My weather today checks exactly this link.'],
     ['sound', 'people', 3, 'Tone carries mood', 'Tone moves feelings between people. Two tones slightly out of sync make the squeal that Chapter I describes.'],
     ['nature', 'people', 3, 'Reading the room', 'A household works like an ecosystem: everyone affects the whole.'],
     ['meaning', 'logic', 3, 'Values become rules', 'Fairness by promises versus fairness by outcome is a meaning question dressed as logic.'],
     ['words', 'body', 3, 'Hands help talking', 'Gesturing helps people find words, and fidgeting helps many people, especially with ADHD, listen better.'],
     ['self', 'nature', 3, 'Thinking outdoors', 'Many people reflect best outside, where quieter surroundings let inner thoughts surface.'],
     ['words', 'nature', 3, 'Naming things', 'Knowing the names of things helps you notice more of them.'],
-    ['sound', 'pictures', 3, 'Seeing sound', 'Many people picture music as shapes or colors, and good design has rhythm too.'],
+    ['sound', 'pictures', 3, 'Seeing sound', 'Many people picture music as shapes or colours, and good design has rhythm too.'],
     ['pictures', 'self', 4, 'Inner pictures differ', 'Some people see vivid images in their mind; others see none at all, which is called aphantasia. Memory and imagination feel very different from the inside.'],
     ['sound', 'self', 4, 'Not everyone has an inner voice', 'Some people think in words they hear inside; others think in images, feelings or nothing word-like. Two partners may literally think in different formats.'],
     ['nature', 'meaning', 4, 'Awe', 'A big sky or an old tree can make people feel part of something larger. Noticing leads to meaning.'],
-    ['logic', 'people', 4, 'Numbers protect people', 'Putting chores into minutes takes blame out of the conversation. That’s why the Lemonade Stand works.'],
+    ['logic', 'people', 4, 'Numbers protect people', 'Putting chores into minutes takes blame out of the conversation. That’s why Who does what? works.'],
     ['body', 'meaning', 4, 'Rituals', 'A goodnight kiss or a Sunday walk is a small action, but the agreement behind it gives it meaning.'],
     ['words', 'pictures', 4, 'Metaphor', 'A metaphor is a picture made of words. The radio, the ledger and the lemonade stand in this program are all drawings in language.'],
     ['sound', 'meaning', 4, 'Songs hold moments', 'Music carries meaning words can’t, which is why songs mark weddings, farewells and memories.'],
-    ['logic', 'body', 4, 'Routines become muscle memory', 'Once a routine is practiced, it runs without thinking. A good chore system turns into habit and frees the mind.'],
+    ['logic', 'body', 4, 'Routines become muscle memory', 'Once a routine is practised, it runs without thinking. A good chore system turns into habit and frees the mind.'],
     ['body', 'people', 5, 'Unseen care', 'Care sent through actions, like cooking, fixing or noticing, often goes unreceived by a words-first partner. Much unseen work is love sent on a channel the other person isn’t tuned to.'],
     ['sound', 'nature', 5, 'Static drains everything', 'Hums, beeps and clutter quietly tax the nervous system, which narrows every other input. Fixing the room fixes the signal.'],
     ['meaning', 'people', 5, 'An “us”', 'Shared meaning turns two separate lives into an us. People who name what they’re building together can weather far more daily friction.'],
@@ -455,9 +455,9 @@
     ['Neurotypical', 'Any mix is possible. Your own picks tell you more than your wiring does.']
   ];
   const TOOL_LINKS = [
-    ['The Lemonade Stand', '/lemonade-stand.html', 'logic,self', 'Numbers replace blame.'],
-    ['Today’s Weather', '/quick-checks.html#today', 'body,self', 'Check in with your body before you talk.'],
-    ['The Calm-Down Kit (WP-11)', '/wp-11.html', 'body,sound,nature', 'Settle your body and the room first.'],
+    ['Who does what?', '/lemonade-stand.html', 'logic,self', 'Numbers replace blame.'],
+    ['My weather today', '/quick-checks.html#today', 'body,self', 'Check in with your body before you talk.'],
+    ['Calm-down plan (WP-11)', '/wp-11.html', 'body,sound,nature', 'Settle your body and the room first.'],
     ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html', 'logic,words,pictures', 'Ownership you can see.'],
     ['Say it so it lands (WP-09)', '/workpapers/wp-09-say-it-so-it-lands.html', 'words,self,people', 'Turn a reaction into a fact, a feeling and an ask.'],
     ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html', 'people,sound,self', 'Small, frequent tuning.'],
@@ -718,9 +718,9 @@
         '<p>Find out how you think, how you share and how you take things in. Then share your Wave Code so the people close to you can tune in.</p>' +
         (ARRIVE.quick && !codeDone() ? '<div class="wl-nav wl-quickrow"><span></span><button type="button" class="wl-btn" id="wl-quick">Just my Wave Code (about 2 minutes)</button></div>' +
           '<p class="wl-small">Twelve either/or taps for your four letters. The rest stays optional, and you can add it after your result.</p>' : '') +
-        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, a short note about you, is optional. Your Wave Code is four letters: a simple way to describe what you prefer, not a test that measures you. Afterward there are short chapters to read about your answers, if you like.</p>' +
+        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, a short note about you, is optional. Your Wave Code is four letters: a simple way to describe what you prefer, not a test that measures you. Afterwards there are short chapters to read about your answers, if you like.</p>' +
         '<p class="wl-small">Fill it in about yourself. If you want to understand someone else, ask them to take it too, then compare.</p>' +
-        (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of Wavelength. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
+        (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of this quiz. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
         (NOTICE ? '<p class="wl-mine" role="status">' + NOTICE + '</p>' : '') +
         (S.their && !codeDone() ? '<p class="wl-combo">When you finish, you’ll see how your Wave Code compares with ' + (S.their.from ? esc(S.their.from) + '’s' : 'theirs') + ' (' + S.their.code + ', ' + lower(ARCHETYPES[S.their.code][0]) + ').</p>' : '') +
         '<label class="wl-field" for="wl-nm">Your first name (optional)</label>' +
@@ -917,13 +917,13 @@
   function eraseAll() {
     const n = OTHERS.length;
     S = fresh(); OTHERS = []; lsDel(KEY); OLD_KEYS.forEach(lsDel); lsDel(PEOPLE_KEY); ssDel(PEOPLE_TAB_KEY); render(); ssDel(TAB_KEY); toTop();
-    const note = $('.wl-note'); if (note) note.textContent = 'Everything is erased. Nothing from Wavelength is kept on this device now.';
+    const note = $('.wl-note'); if (note) note.textContent = 'Everything is erased. Nothing from the style quiz is kept on this device now.';
   }
 
   /* ---------- comparing two Wave Codes ---------- */
   let MORE_OPEN = false; // "More you can do" on the results: folded until someone opens it (kept while this page is open)
   const COUNT_WORDS = ['none', 'one', 'two', 'three', 'all four'];
-  const CMP_NEXT = 'Each of you makes a one-page card about what helps words reach you (it can start from your Wavelength answers), copies it and sends it to the other. Pasting each other’s shows your two cards side by side, with a bridge to try wherever they differ. It all stays on your own devices.';
+  const CMP_NEXT = 'Each of you makes a one-page card about what helps words reach you (it can start from your style quiz answers), copies it and sends it to the other. Pasting each other’s shows your two cards side by side, with a bridge to try wherever they differ. It all stays on your own devices.';
   const CMP_FRAME = ARRIVE.friends
     ? 'Different letters mean different defaults, nothing more. Most friends differ on at least one or two lines, and knowing where saves a lot of guessing.'
     : 'Different letters mean different defaults, not a bad match. Most couples and close pairs differ on at least one or two lines, and knowing where saves a lot of guessing.';
@@ -947,7 +947,7 @@
       '<p><strong>' + esc(n.me) + ': ' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '. <strong>' + esc(n.them) + ': ' + theirs + '</strong>, ' + lower(ARCHETYPES[theirs][0]) + '.</p>' +
       '<p>' + countLine(mine, theirs) + '</p>' +
       AXES.map((ax, i) => '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '</strong><br>' + pairTip(mine, theirs, i) + '</div>').join('') +
-      '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your Wiring Cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
+      '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your “how to talk to me” cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
       (ARRIVE.friends
         ? '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> agree one small ritual, like a monthly call or a voice note on Sundays. <a href="/friends.html#both">Ideas for friends</a>.</p>'
         : '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second daily check-in together</a>, or pick one small habit from <a href="/turning-toward.html">Turning Toward</a>.</p>') +
@@ -958,7 +958,7 @@
     const n = who2(myName, theirName);
     return ['Our Wave Codes, side by side', n.me + ': ' + mine + ', ' + lower(ARCHETYPES[mine][0]), n.them + ': ' + theirs + ', ' + lower(ARCHETYPES[theirs][0]), '', CMP_FRAME, countLine(mine, theirs), '']
       .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i)))
-      .concat(['', 'Next: make your Wiring Cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT,
+      .concat(['', 'Next: make your “how to talk to me” cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT,
         (ARRIVE.friends ? 'One small thing to try together: agree one small ritual, like a monthly call or a voice note on Sundays (spreadloveandacceptance.com/friends.html).'
           : 'One small thing to try together: the 90-second daily check-in (spreadloveandacceptance.com/workpapers/fill/wp-13.html), or one small habit from Turning Toward (spreadloveandacceptance.com/turning-toward.html).')]).join('\n');
   }
@@ -1002,7 +1002,7 @@
   }
   function removeOther(i) {
     const o = OTHERS[i]; if (!o) return false;
-    if (!window.confirm('Remove ' + (o.name || 'this person') + '’s Wavelength results from this device?')) return false;
+    if (!window.confirm('Remove ' + (o.name || 'this person') + '’s style quiz results from this device?')) return false;
     OTHERS.splice(i, 1); saveOthers(); return true;
   }
   function othersList(compare) {
@@ -1102,7 +1102,7 @@
               '<input type="text" id="wl-rname" maxlength="30" autocomplete="given-name">' +
               '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
             (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button><button type="button" class="wl-btn ghost" id="wl-codeqr">Show a QR code</button></div><div id="wl-namenudge" role="status"></div>' : '') +
-            '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your Wiring Card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>' +
+            '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your “how to talk to me” card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>' +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
@@ -1111,7 +1111,7 @@
           '<div class="wl-wavebox">' + waveSVG(code, true) +
             '<p class="wl-wavecap">Your waveform: faster waves for Quick Spark, slower for Slow Simmer; sharp edges for Trees, smooth for Forest; taller for Direct, softer for Nuanced; echoes for Attuned, one clean line for Explicit.</p></div>' +
           '<div class="wl-sect"><h3>What each letter means</h3><p class="wl-small">Tap a letter to open it. Each one is a preference on a line between two ends, and everyone uses both ends sometimes.</p>' + letters + '</div>' + twoWays(code, scores)
-          : '<div class="wl-result-top"><p class="wl-who">' + (S.name ? esc(S.name) + '’s Wavelength' : 'Your Wavelength') + '</p></div>' + unlock) +
+          : '<div class="wl-result-top"><p class="wl-who">' + (S.name ? esc(S.name) + '’s Wave Code' : 'Your Wave Code') + '</p></div>' + unlock) +
         (groups ? '<div class="wl-sect"><h3>In my own words</h3>' + groups + '</div>' : '') +
         '<div class="wl-sect" id="wl-inputs-sect"><h3>How I take things in</h3>' +
           (S.inputs.length ? '<p>' + (S.topInput ? '<strong>Strongest:</strong> ' + IN[S.topInput].icon + ' ' + IN[S.topInput].name + '. ' : '') + '<strong>All my inputs:</strong> ' + esc(inputsLabel()) + '.</p>' + (S.topInput ? '<p class="wl-tune"><strong>To reach me:</strong> ' + IN[S.topInput].send + '</p>' : '') : '<p>You skipped the learning inputs. You can add them with Change answers, or explore all nine below.</p>') +
@@ -1126,7 +1126,7 @@
         '<details class="wl-moredo" id="wl-moredo"' + (MORE_OPEN ? ' open' : '') + '><summary>More you can do <span>' + (done ? 'compare, share this device, chapters' : 'share this device') + '</span></summary>' +
         (done ?
           '<div class="wl-sect" id="wl-compare"><h3>' + (S.their && S.their.from ? 'Compare with ' + esc(S.their.from) : 'Compare with someone') + '</h3>' +
-            '<div id="wl-pcbox"' + (S.their ? ' hidden' : '') + '><p class="wl-small">Have them take Wavelength too, then enter their Wave Code, or paste the message they sent you, to see where you’ll want to tune in on purpose.</p>' +
+            '<div id="wl-pcbox"' + (S.their ? ' hidden' : '') + '><p class="wl-small">Have them take the quiz too, then enter their Wave Code, or paste the message they sent you, to see where you’ll want to tune in on purpose.</p>' +
             '<div class="wl-pairbox"><label class="wl-sr" for="wl-pc">Their Wave Code</label><input type="text" id="wl-pc" class="wl-codein" placeholder="e.g. SFNA, or paste their message" autocomplete="off" autocapitalize="characters" spellcheck="false" value=""><button type="button" class="wl-btn ghost" id="wl-cmp">Compare</button></div></div>' +
             '<div class="wl-pairout" id="wl-pout" aria-live="polite">' + (S.their ? compareHTML(code, S.their.code, S.name, S.their.from) : '') + '</div>' +
             (S.their ? '<p class="wl-small"><button type="button" class="wl-linkbtn" id="wl-cmpother" aria-controls="wl-pcbox" aria-expanded="false">Compare with someone else</button></p>' : '') + '</div>' : '') +
@@ -1142,9 +1142,9 @@
             '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-copyj">Copy my journal</button></div><p class="wl-toast" id="wl-jtoast" role="status"></p></div>' : '') +
         '</details>' +
         '<div class="wl-sect"><h3>Keep, share or start again</h3>' +
-          '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-share">Share my profile</button>' : '') : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase" data-clear-confirm="everything in Wavelength: your wiring, Wave Code answers, statement and journal, and anyone else saved here" data-clear-keys="tol-wavelength-v1 tol-wavelength-people-v1">Erase everything</button></div>' +
+          '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-share">Share my profile</button>' : '') : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase" data-clear-confirm="everything in the style quiz: your wiring, Wave Code answers, statement and journal, and anyone else saved here" data-clear-keys="tol-wavelength-v1 tol-wavelength-people-v1">Erase everything</button></div>' +
           '<p class="wl-toast" id="wl-toast" role="status"></p>' + keepBox('wl-keep-res') + '</div>' +
-        '<p class="wl-note">Wavelength is a reflection tool, not a diagnosis or a test that measures you. The options shown for each wiring type are common experiences, not rules, and every person is their own mix. Nothing you type or choose is sent anywhere.</p>' +
+        '<p class="wl-note">This quiz is a reflection tool, not a diagnosis or a test that measures you. The options shown for each wiring type are common experiences, not rules, and every person is their own mix. Nothing you type or choose is sent anywhere.</p>' +
       '</section>';
 
     const p = root.querySelector('path.wl-draw');
@@ -1343,7 +1343,7 @@
         (mine.length ? '<p class="wl-mine"><strong>Your inputs:</strong> ' + mine.map(nm).join(', ') + '.' + (top ? ' Your strongest is ' + nm(top.id) + '.' : '') + (myPairs.length ? ' They link to each other in ' + myPairs.length + ' way' + (myPairs.length > 1 ? 's' : '') + ', listed under “Your connections” further down.' : '') + '</p>'
           : '<p class="wl-mine">You haven’t picked your inputs yet. You can still explore everything here, or go back and choose them with Change answers.</p>') +
         '<h3>The connection map</h3>' +
-        '<p>Each line is a connection, colored by level. Tap an input to see only its links, or pick a level. Inputs you chose have a green ring.</p>' +
+        '<p>Each line is a connection, coloured by level. Tap an input to see only its links, or pick a level. Inputs you chose have a green ring.</p>' +
         '<div class="wl-chips" role="group" aria-label="Filter by level"><button type="button" class="wl-chip" data-lv="0" aria-pressed="' + !lv + '">All levels</button>' + LEVELS.map(L => '<button type="button" class="wl-chip" data-lv="' + L.n + '" aria-pressed="' + (lv === L.n) + '"><span class="wl-sw" style="background:' + L.color + '"></span>' + L.n + '. ' + L.name + '</button>').join('') + '</div>' +
         '<div class="wl-mapbox">' + connMap() + '</div>' +
         '<div class="wl-chips" role="group" aria-label="Focus on one input"><button type="button" class="wl-chip" data-focus="" aria-pressed="' + !f + '">Every input</button>' + INPUTS.map(x => '<button type="button" class="wl-chip" data-focus="' + x.id + '" aria-pressed="' + (f === x.id) + '">' + x.icon + ' ' + x.name + '</button>').join('') + '</div>' +

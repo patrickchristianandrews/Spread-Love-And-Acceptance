@@ -480,7 +480,7 @@
   // At every download with answers in it: who will see what, and a way to leave the private parts out.
   function shareChoice(id) {
     return h('div', { className: 'fp-share' }, [
-      h('p', { className: 'fp-private-note', text: (S.data && S.data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see every page if you share the file, including each person\u2019s load score answers, self-notes, raw reaction and calm-down triggers.' }),
+      h('p', { className: 'fp-private-note', text: (S.data && S.data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see every page if you share the file, including each person\u2019s stress tank score answers, self-notes, raw reaction and calm-down triggers.' }),
       h('label', { className: 'fp-check', for: id }, [h('input', { type: 'checkbox', id: id, 'data-fp-share': '1', checked: S.shareOnly ? 'checked' : null }), h('span', { text: 'Leave the private parts out of what I download (a copy to share)' })])
     ]);
   }
@@ -794,7 +794,7 @@
   function reportPdf() {
     if (!S.data) return;
     var share = S.shareOnly && !FP.ROADS[S.data.road].solo;
-    try { download(FPP.reportPdf(share ? FP.report(FP.shareCopy(S.data)) : (S.model || FP.report(S.data))), fileBase(S.data) + (share ? '-report-to-share.pdf' : '-report.pdf'), 'application/pdf'); say(share ? 'A copy of your report to share is in your Downloads. It leaves out the load scores, self-notes, raw reaction and calm-down triggers.' : 'Your report is in your Downloads. Keep it somewhere private; ' + (FP.ROADS[S.data.road].solo ? 'it is yours.' : 'anyone you share it with will see every page.')); }
+    try { download(FPP.reportPdf(share ? FP.report(FP.shareCopy(S.data)) : (S.model || FP.report(S.data))), fileBase(S.data) + (share ? '-report-to-share.pdf' : '-report.pdf'), 'application/pdf'); say(share ? 'A copy of your report to share is in your Downloads. It leaves out the stress tank scores, self-notes, raw reaction and calm-down triggers.' : 'Your report is in your Downloads. Keep it somewhere private; ' + (FP.ROADS[S.data.road].solo ? 'it is yours.' : 'anyone you share it with will see every page.')); }
     catch (err) { say('The report PDF could not be made. Save a backup so nothing is lost, then try again.'); if (global.console) console.error(err); }
   }
   function saveJson() {

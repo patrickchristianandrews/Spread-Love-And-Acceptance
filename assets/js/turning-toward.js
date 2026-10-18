@@ -6,7 +6,7 @@
 
   var WHO = [['partner', 'Partner'], ['family', 'Family'], ['friend', 'Friend'], ['roommate', 'Roommate'],
              ['coparent', 'Co-parent'], ['coworker', 'Coworker'], ['caregiver', 'Someone I care for'],
-             ['grandchild', 'Grown child or grandchild'], ['neighbor', 'Neighbor']];
+             ['grandchild', 'Grown child or grandchild'], ['neighbor', 'Neighbour']];
 
   // One small moment per day. msg: a message to send, by relationship (default covers the rest).
   var SPARKS = [
@@ -77,7 +77,7 @@
     { key: 'thanks', title: 'Thank them in front of someone',
       todo: 'Mention something they did well while someone else is listening: a friend, the kids, a team.', msg: null },
     { key: 'thanks', title: 'Thank them for who they are',
-      todo: 'Not for a task this time. Thank them for a quality: their patience, their humor, their loyalty.',
+      todo: 'Not for a task this time. Thank them for a quality: their patience, their humour, their loyalty.',
       msg: { default: 'Thanks for being so [patient / funny / steady]. It makes life with you better.',
              friend: 'Thanks for being the kind of friend who [always shows up / makes me laugh / tells me the truth].' } },
     { key: 'good-news', title: 'Make a fuss about a small win',
@@ -103,7 +103,7 @@
     { key: 'their-world', title: 'Ask about a dream',
       todo: 'Ask about something they’d love to do one day. Get curious about why it matters to them.',
       msg: { default: 'If you could do anything next year, what would it be?' } },
-    { key: 'their-world', title: 'Learn their favorite right now',
+    { key: 'their-world', title: 'Learn their favourite right now',
       todo: 'Ask what they’re loving at the moment: a song, a show, a food. Try it yourself.',
       msg: { default: 'What are you loving right now? Song, show, snack, anything. I need a recommendation.' } },
     { key: 'their-world', title: 'Ask about their people',
@@ -112,7 +112,7 @@
     { key: 'fondness', title: 'Remember a good memory together',
       todo: 'Bring up a moment you both loved. Ask what they remember about it.',
       msg: { default: 'Randomly thought about [the memory] today and smiled. Do you remember [a detail]?',
-             friend: 'Remember [the trip / that night / that dumb joke]? Still one of my favorite memories.',
+             friend: 'Remember [the trip / that night / that dumb joke]? Still one of my favourite memories.',
              grandchild: 'I was remembering when you were little and [the memory]. It still makes me smile.' } },
     { key: 'fondness', title: 'Tell them how they helped you',
       todo: 'Think of a time they made something easier for you. Tell them what it meant.',
@@ -168,7 +168,7 @@
       msg: { default: 'Small good news: [the doctor’s appointment went well / the tomatoes finally came up]. What’s your good thing this week?',
              grandchild: 'Lovely to hear from you. My good thing this week: [one small thing]. What’s yours?' } },
     { key: 'rituals', title: 'Make the call they’d love to get',
-      todo: 'Ring a grandchild, an old friend or a neighbor just to hear their news. Ask about one thing they mentioned last time.',
+      todo: 'Ring a grandchild, an old friend or a neighbour just to hear their news. Ask about one thing they mentioned last time.',
       msg: { default: 'Just calling to hear your news. How did [the thing you mentioned] go?',
              grandchild: 'Thinking of you! How did [the match / the exam / the new job] go? Call me when you have a minute.' } },
     { key: 'bids', title: 'Turn toward a reach you missed',

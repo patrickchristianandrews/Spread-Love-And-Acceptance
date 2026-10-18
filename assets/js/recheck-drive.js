@@ -20,7 +20,7 @@
   var WHO = [
     ['self', 'Myself'], ['us', 'Us, together'], ['partner', 'A partner'], ['relative', 'A parent or relative'], ['young', 'A child or teen'],
     ['friend', 'A friend'], ['housemate', 'A housemate'], ['coworker', 'A coworker'],
-    ['grown', 'A grown child or grandchild'], ['neighbor', 'A neighbor']
+    ['grown', 'A grown child or grandchild'], ['neighbor', 'A neighbour']
   ];
   // the newer choices borrow the closest set of words when a play has none of its own
   var LIKE = { grown: 'relative', neighbor: 'friend' };
@@ -49,7 +49,7 @@
       say: 'Try asking', lines: {
         self: 'What do I want more of this month, and what have I been putting up with?',
         grown: 'What’s the best thing that happened to you this week? I’d love to hear all about it.',
-        neighbor: 'How have you been keeping? I realize I never asked how your summer went.',
+        neighbor: 'How have you been keeping? I realise I never asked how your summer went.',
         partner: 'What’s on your mind this week that I don’t know about?',
         us: 'Take turns: what’s on your mind this week that the other one doesn’t know about?',
         relative: 'What’s something about your life now that I don’t know much about?',
@@ -110,7 +110,7 @@
         self: 'I’ve noticed I’ve stopped checking on ___. I’d like to take a kind look at it this month.',
         partner: 'Nothing’s wrong. I’ve noticed we haven’t asked each other much lately, and part of that is me. What’s it been like for you?',
         us: 'Nothing’s wrong. We’ve both stopped asking each other much lately. What has each of us noticed?',
-        relative: 'I realized we mostly talk about logistics. I’d like to hear how you’re really doing.',
+        relative: 'I realised we mostly talk about logistics. I’d like to hear how you’re really doing.',
         young: 'I might be picturing you as you were a year ago. I’d like to catch up.',
         friend: 'It’s been a while, and I’ve let it slide. I’d love to catch up.',
         housemate: 'The way we do this hasn’t changed in a while. Could we check whether it still works for everyone?',

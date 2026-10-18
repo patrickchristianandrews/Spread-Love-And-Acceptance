@@ -203,7 +203,7 @@ window.TOLLearnPlayData = {
           zones: [[20, 'A tiny gap', 'Barely any static. A quick “give me five” covers it.', '📻'],
                   [60, 'A medium gap', 'Some crackle: one wants to talk now, the other needs a bit of quiet.', '〰️'],
                   [100, 'A big gap', 'Loud static: one feels left alone, the other feels rushed. Nobody is wrong. The rhythms just don’t match.', '⚡']] },
-        { at: 'change your speed', k: 'wyr', q: 'Saturday morning. You want to decide about the vacation now. They want a few days. Would you rather…',
+        { at: 'change your speed', k: 'wyr', q: 'Saturday morning. You want to decide about the holiday now. They want a few days. Would you rather…',
           o: [['Push to decide now', 'The gap stays loud, and one of you feels rushed.'],
               ['Agree: “We’ll decide on Sunday.”', 'You both keep your speed and agree when you’ll meet. The static goes.']] }
       ]
@@ -385,7 +385,7 @@ window.TOLLearnPlayData = {
       m: [
         { at: 'left over from earlier', k: 'sort', q: 'This-moment stress, or leftover stress?', bins: ['This-moment stress', 'Leftover stress'],
           items: [['“I’m upset about the dishes.”', 0], ['“I’m exhausted, and the dishes are what I noticed.”', 1], ['A poor night’s sleep, carried into dinner', 1], ['The thing right in front of you', 0]] },
-        { at: 'Check your stress tank', k: 'slider', q: 'Score five things from 0 to 4, add them up and divide by 20. Drag to see what each score says.', label: 'Battery score (what you’re carrying)',
+        { at: 'Check your stress tank', k: 'slider', q: 'Score five things from 0 to 4, add them up and divide by 20. Drag to see what each score says.', label: 'Stress tank score (what you’re carrying)',
           min: 0, max: 1, step: 0.05, start: 0.2, fmt: 'dec2',
           zones: [[0.3, 'Low load', 'Whatever comes up is probably about the thing itself.', '🌤️'],
                   [0.6, 'Moderate', 'Say it out loud first: “Heads up, I’m carrying more than usual today.”', '⛅'],
@@ -482,7 +482,7 @@ window.TOLLearnPlayData = {
               ['An echo', false, 'Not quite. It’s a heterodyne, a brand-new tone from the two signals mixing.'],
               ['Feedback', false, 'Not quite. It’s called a heterodyne, or a beat.']] },
         { at: 'What sets the frequency', k: 'match', q: 'What was said, and how it was heard. Match them up.',
-          pairs: [['“The sink’s full again.”', 'Meant as an update, heard as “You never wash up.”'], ['“Can we talk about the vacation?”', 'Meant as this week, heard as right now'],
+          pairs: [['“The sink’s full again.”', 'Meant as an update, heard as “You never wash up.”'], ['“Can we talk about the holiday?”', 'Meant as this week, heard as right now'],
                   ['“I’ll do it later.”', 'Meant as this evening, heard as maybe never']] },
         { at: 'How stress changes', k: 'sort', q: 'Which everyday state is this?', bins: ['Calm and connected', 'Revved up', 'Running on empty'],
           items: [['You can hear something hard without getting defensive', 0], ['Small things feel urgent or personal', 1], ['Words are hard to find, and replies get short', 2], ['Pace speeds up, tone gets sharper', 1]] },
@@ -625,7 +625,7 @@ window.TOLLearnPlayData = {
         { at: 'log the small jobs', k: 'gap', q: 'Fill the gap with the sheet’s own word.',
           s: 'For every task, note the day, what it was, who did it, roughly how many ___, and whether someone asked for it.', o: ['minutes', 'feelings', 'complaints'], a: 0,
           say: 'Yes! Those minutes go into the Lemonade Stand and Is the setup working for everyone? (CALC-01).' },
-        { at: 'Log what happened', k: 'quiz', q: 'You noticed the full trash can three times before taking it out. How many rows?',
+        { at: 'Log what happened', k: 'quiz', q: 'You noticed the full bin three times before taking it out. How many rows?',
           o: [['One honest row', true, 'Yes! One honest row, not three rows of resentment.'],
               ['Three rows', false, 'Not quite. Log what happened, once.']] },
         { at: 'Say no in three', k: 'flip', q: 'Say no in three calm steps. Tap each one.',
@@ -648,7 +648,7 @@ window.TOLLearnPlayData = {
           cards: [['Sleep', 'Less rested than usual?', '0 means not at all, 4 means very true.'], ['Workload elsewhere', 'Work, study or caring for someone.', 'Think about the last day or two.'],
                   ['Unresolved conflict', 'From any part of life.', 'A small one still counts.'], ['How your body feels', 'Hungry, unwell or in pain?', 'Eating first can help.'],
                   ['Time pressure', 'Today in particular.', 'Rushed days count.']] },
-        { at: 'divide by 20', k: 'slider', q: 'Drag the score and see what it suggests.', label: 'Battery score',
+        { at: 'divide by 20', k: 'slider', q: 'Drag the score and see what it suggests.', label: 'Stress tank score',
           min: 0, max: 1, step: 0.05, start: 0.15, fmt: 'dec2',
           zones: [[0.3, 'Under 0.3', 'Whatever comes up is probably about the thing itself.', '🌤️'],
                   [0.6, '0.3 to 0.6', 'Say out loud: “Heads up, I’m carrying more than usual today.”', '⛅'],
@@ -664,8 +664,8 @@ window.TOLLearnPlayData = {
       m: [
         { at: 'Every job gets one owner', k: 'match', q: 'Match each name to its job.',
           pairs: [['Owner', 'Does the job and sees it through'], ['Helper', 'Optional: pitches in, or notices if it slips'], ['Agreeing', 'You both know who owns what, as written']] },
-        { at: 'Change it on purpose', k: 'wyr', q: 'Life changed, and the trash no longer fit your week. Would you rather…',
-          o: [['Let the other person quietly pick them up', 'That’s drift: one person quietly doing more.'],
+        { at: 'Change it on purpose', k: 'wyr', q: 'Life changed, and your job of taking out the bins no longer fits your week. Would you rather…',
+          o: [['Let the other person quietly pick it up', 'That’s drift: one person quietly doing more.'],
               ['Raise it at the weekly closing and agree on the change', 'Changed on purpose, not by drift.']] },
         { at: 'Agreeing means', k: 'quiz', q: 'Agreeing on the list says…',
           o: [['We agree who owns what, as written', true, 'Yes! Clear, not perfect.'],
@@ -703,13 +703,13 @@ window.TOLLearnPlayData = {
           o: [['Your own next message', true, 'Yes! Each of you uses it on yourself.'],
               ['The other person’s texts', false, 'Not quite. Nothing is recorded, and nobody else’s voice is analyzed.']] },
         { at: 'find three things', k: 'sort', q: 'Fact, feeling or ask?', bins: ['Fact', 'Feeling', 'Ask'],
-          items: [['The bin wasn’t out before pickup.', 0], ['I feel a bit unseen.', 1], ['Can we pick a fixed day for it?', 2], ['Tired.', 1]] },
+          items: [['The bin wasn’t out before collection.', 0], ['I feel a bit unseen.', 1], ['Can we pick a fixed day for it?', 2], ['Tired.', 1]] },
         { at: 'weigh what you heard', k: 'flip', q: 'Four quick questions before you react. Tap each one.',
           cards: [['About a task?', 'Is it about a specific task?', 'If not, an old argument may be talking.'], ['Stretched?', 'Would it read the same if you weren’t already stretched?', 'Check your battery first.'],
                   ['Neutral?', 'Could a neutral meaning fit?', 'Read it again in a calm voice.'], ['Old argument?', 'Are you answering their words, or an old argument?', 'Answer just today’s words.']] },
         { at: 'See it in action', k: 'wyr', q: 'Would you rather send…',
           o: [['“You never think about anyone but yourself.”', 'A judgment on the person. It will probably get argued with.'],
-              ['“The bin wasn’t out before pickup. I feel a bit unseen. Can we pick a fixed day for it?”', 'One fact, one feeling, one ask: something they can actually hear.']] }
+              ['“The bin wasn’t out before collection. I feel a bit unseen. Can we pick a fixed day for it?”', 'One fact, one feeling, one ask: something they can actually hear.']] }
       ]
     },
 

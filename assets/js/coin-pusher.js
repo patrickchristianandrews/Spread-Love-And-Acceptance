@@ -529,7 +529,7 @@
       g.strokeStyle = '#E9C46F'; g.lineWidth = 8; g.strokeRect(14, 14, w - 28, h - 28);
       g.fillStyle = '#FFE7B0'; g.textAlign = 'center'; g.textBaseline = 'middle';
       g.font = '500 92px Fraunces, Georgia, serif'; g.fillText('Kindness Coin Pusher', w / 2, h / 2 - 14);
-      g.font = '500 34px "IBM Plex Mono", monospace'; g.fillStyle = '#E9C46F'; g.fillText('A COZY ARCADE · EVERY COIN, A KIND IDEA', w / 2, h / 2 + 62);
+      g.font = '500 34px "IBM Plex Mono", monospace'; g.fillStyle = '#E9C46F'; g.fillText('A COSY ARCADE · EVERY COIN, A KIND IDEA', w / 2, h / 2 + 62);
       signTex.needsUpdate = true;
     }
     paintSign(); if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(paintSign);

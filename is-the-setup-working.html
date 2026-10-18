@@ -287,7 +287,7 @@
       <summary>More about this calculator</summary>
       <p class="sheet-tagline">It works for any group that shares a load: partners, families, roommates, co-carers, a small team at work. The idea is borrowed from accounting: can the setup carry its own weight?</p>
       <p class="sheet-tagline pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work. Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and the retuning count uses <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
-      <p class="sheet-tagline">The math comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
+      <p class="sheet-tagline">The maths comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
     </details>
     <nav class="toc no-print" aria-label="On this page">
       <a href="#state">Check your state</a>
@@ -406,9 +406,9 @@
 
   <!-- ================= AS ================= -->
   <section id="as" aria-labelledby="as-h">
-    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Stress</p><h2 id="as-h">How much each person is carrying</h2><p class="code-note">Average load (AS in the formulas)</p></div>
+    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Stress</p><h2 id="as-h">How much each person is carrying</h2><p class="code-note">Average stress tank (AS in the formulas)</p></div>
     <div class="panel">
-      <div class="panel-head"><h3>Everyone's load score</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
+      <div class="panel-head"><h3>Everyone's stress-tank score</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
       <p class="panel-note">Each person fills in their own card, about themselves, for the last 24 to 48 hours. 0 = not at all, 4 = very true. Guessing for someone else turns a reflection tool into a way of watching them, so the read waits until every card is complete.</p>
       <div class="bat-grid" id="bat-grid"></div>
       <div class="derive" id="as-derive" aria-live="polite"></div>
@@ -443,7 +443,7 @@
       </div>
 
       <div class="nums-only">
-      <h3 style="font-size:1rem;">The math, step by step</h3>
+      <h3 style="font-size:1rem;">The maths, step by step</h3>
       <div class="math" id="math" tabindex="0" role="region" aria-label="The math, step by step">No read yet.</div>
       </div>
 
@@ -469,13 +469,13 @@
 
     <details class="no-print">
       <summary>Optional: push scores toward the ends of the scale</summary>
-      <p style="font-size:0.9rem;">This runs the same total through an S-shaped curve centered at 0.5: <code>1 / (1 + e^(&minus;6 &times; (raw &minus; 0.5)))</code>. Middling reads move further from the middle. It doesn't make the score more accurate, and reads taken with it can't be compared with reads taken without it. It's off by default.</p>
+      <p style="font-size:0.9rem;">This runs the same total through an S-shaped curve centred at 0.5: <code>1 / (1 + e^(&minus;6 &times; (raw &minus; 0.5)))</code>. Middling reads move further from the middle. It doesn't make the score more accurate, and reads taken with it can't be compared with reads taken without it. It's off by default.</p>
       <label class="check"><input type="checkbox" id="sigmoid"> Use the S-curve</label>
     </details>
 
     <details class="no-print">
       <summary>Advanced: change the weights</summary>
-      <p style="font-size:0.9rem;">These weights are a judgment, not a research finding. They say an uneven load matters a little more than unclear ownership, and both matter more than everyday stress. If you change them, new reads can't be compared with old ones.</p>
+      <p style="font-size:0.9rem;">These weights are a judgement, not a research finding. They say an uneven load matters a little more than unclear ownership, and both matter more than everyday stress. If you change them, new reads can't be compared with old ones.</p>
       <div class="scroll-x">
       <table>
         <thead><tr><th>Part</th><th class="num">Setup score</th><th class="num">Overall score</th></tr></thead>
@@ -549,11 +549,11 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     <div class="spec-block" id="multi">
       <h3>Balance for more than two people, worked through</h3>
       <p><strong>Three roommates</strong> log 12, 6 and 2 hours: 20 hours in all. An even share is a third each, about 6.67 hours. Jordan is 5.33 hours over, Priya is 0.67 hours under, Lee is 4.67 hours under. So 5.33 hours would have to change hands to make it even: that's <code>moved = 5.33 &divide; 20 = 0.267</code>. The most that could ever need to move, if one person did all 20 hours, is 13.33 hours, or <code>most = 1 &minus; 1/3 = 0.667</code>. Balance = <code>1 &minus; 0.267 &divide; 0.667 = 1 &minus; 0.40 = 0.60</code>.</p>
-      <p>With 6 of 8 jobs owned (0.75) and batteries of 8, 12 and 4 points (0.40, 0.60 and 0.20, average 0.40):</p>
+      <p>With 6 of 8 jobs owned (0.75) and stress-tank scores of 8, 12 and 4 points (0.40, 0.60 and 0.20, average 0.40):</p>
 <pre>(0.60 &times; 0.40) + (0.75 &times; 0.35) + ((1 &minus; 0.40) &times; 0.25)
 =    0.24      +     0.2625     +        0.15
 =    0.6525  &rarr;  0.65, needs a look</pre>
-      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average load of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
+      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average stress-tank score of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
       <p><strong>An agreed split.</strong> If two people agree on 60/40 (say one works longer hours outside the home) and log 6 and 4 hours, nothing needs to move, so balance is 1.00. Against an even split the same week would score 0.80. Use the agreed split only if everyone really agreed to it, and say so when you share the read.</p>
     </div>
 
@@ -593,7 +593,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
         <li><strong>Both high:</strong> the load is shared and owned, and rough moments get repaired. Keep going.</li>
         <li><strong>Setup score high, overall score lower (by 0.08 or more):</strong> the setup is fine, but repair isn't happening. Work on <a href="/workpapers/fill/wp-09.html">WP-09</a>, not the job list.</li>
         <li><strong>Overall score high, setup score lower (by 0.08 or more):</strong> you repair well, but the setup keeps creating the friction. Work on the <a href="/workpapers/fill/wp-03.html">job list</a>.</li>
-        <li><strong>Both below 0.40:</strong> the setup and the repair are both struggling. Another worksheet may not be what helps most; outside support, like a counselor or a trusted mediator, is worth considering.</li>
+        <li><strong>Both below 0.40:</strong> the setup and the repair are both struggling. Another worksheet may not be what helps most; outside support, like a counsellor or a trusted mediator, is worth considering.</li>
       </ul>
     </div>
 
@@ -602,7 +602,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
       <ul class="plain">
         <li><strong>No hours logged:</strong> balance has no value, rather than 1.00. An empty week isn't an even week.</li>
         <li><strong>No jobs listed:</strong> ownership has no value, rather than 0.00.</li>
-        <li><strong>Anyone's battery incomplete:</strong> no read at all. A score is never worked out from some people's answers standing in for everyone's.</li>
+        <li><strong>Anyone's stress-tank card incomplete:</strong> no read at all. A score is never worked out from some people's answers standing in for everyone's.</li>
         <li><strong>No rough moments:</strong> retuning has no value. The overall score uses the other three weights divided by 0.85, so they still add up to 1.00, and the read says so.</li>
         <li><strong>More retunes than rough moments:</strong> retuning stops at 1.00.</li>
         <li><strong>Agreed shares that don't add up to 100%:</strong> no balance until they do.</li>
@@ -887,10 +887,10 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     var d = $("as-derive");
     if (s.value === null){
       var who = s.missing.map(nameOf);
-      d.innerHTML = '<div class="formula">Stress = the average of everyone’s load score</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">—</span></div>';
+      d.innerHTML = '<div class="formula">Stress = the average of everyone’s stress-tank score</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">—</span></div>';
       return s;
     }
-    d.innerHTML = '<div class="formula">Stress = the average of everyone’s load score</div><div>(' + scores.map(f2).join(" + ") + ') ÷ ' + scores.length + ' = ' + (C.sum(scores) / scores.length).toFixed(3) + '</div>' +
+    d.innerHTML = '<div class="formula">Stress = the average of everyone’s stress-tank score</div><div>(' + scores.map(f2).join(" + ") + ') ÷ ' + scores.length + ' = ' + (C.sum(scores) / scores.length).toFixed(3) + '</div>' +
       '<div><span class="out' + (s.value > 0.6 ? " warn" : "") + '">' + f2(s.value) + '</span> <span class="formula">stress (counted as 1 − ' + f2(s.value) + ' = ' + f2(1 - s.value) + ')</span></div>';
     return s;
   }
@@ -943,7 +943,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     var missing = [];
     if (wb === null) missing.push("hours for balance");
     if (oc === null) missing.push("a job list");
-    if (as === null) missing.push("everyone's load score");
+    if (as === null) missing.push("everyone's stress-tank score");
     var derived = [wb, oc, as, rf].filter(function(v){ return v !== null; }).length;
     $("completeness").innerHTML = "Inputs worked out: " + derived + " of 4" + (derived ? " (" + [wb !== null && "balance", oc !== null && "ownership", as !== null && "stress", rf !== null && "retuning"].filter(Boolean).join(", ") + ")." : ".") + (missing.length ? " Still needed: <b>" + esc(missing.join(", ")) + "</b>." : "") +
       (rf === null ? " Retuning has no value (no rough moments logged)." : "") + (b.mode === "agreed" && wb !== null ? " Balance is read against your agreed split." : "") + (custom ? " Custom weights in use." : "");
@@ -1065,7 +1065,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     L.push("");
     L.push("Balance: " + f2(b.value) + " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + "). Hours: " + b.hours.map(function(h, i){ return nameOf(i) + " " + f1(h); }).join(", ") + ". About " + f1(b.movedHours) + " hours would have to change hands.");
     L.push("Ownership: " + f2(o.value) + " (" + o.owned + " of " + o.total + " jobs have an owner).");
-    L.push("Stress: " + f2(s.value) + " (average load of " + s.scores.length + " people). Counted as 1 - stress.");
+    L.push("Stress: " + f2(s.value) + " (average stress-tank score of " + s.scores.length + " people). Counted as 1 - stress.");
     L.push("Retuning: " + (r.value === null ? "no value (no rough moments)" : f2(r.value) + " (" + r.retunes + " of " + r.friction + ")"));
     L.push("");
     L.push("Math: " + f2(b.value) + " x " + sol.weights.wb.toFixed(2) + " + " + f2(o.value) + " x " + sol.weights.oc.toFixed(2) + " + (1 - " + f2(s.value) + ") x " + sol.weights.as.toFixed(2) + " = " + sol.value.toFixed(4) + (useSig ? " (S-curve on)" : "") + (custom ? " (custom weights)" : ""));

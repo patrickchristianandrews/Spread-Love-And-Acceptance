@@ -1875,7 +1875,7 @@
     var onlyEx = empty && this.schema.sections.some(function (s) { return s.examples && (self.state.tables[s.id] || []).some(function (r) { return isExampleRow(s, r); }); });
     var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
     if (!this.schema.people) {
-      box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Load score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
+      box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Stress tank score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
       var myS = this.schema.share && this.schema.share.score ? this.schema.share.score(this.ctx()) : null;
       box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It has your name on it, so adding it fills in what is empty here.' : 'Adding it puts ' + (names[0] ? names[0] + '\u2019s' : 'their') + ' score beside yours' + (myS != null && d.s != null ? ' (you: ' + myS.toFixed(2) + ' \u00b7 ' + (names[0] || 'them') + ': ' + d.s.toFixed(2) + ')' : '') + '. Your own answers stay as they are, and nothing of theirs is ticked for you.' }));
       var their = d.vals && typeof d.vals.note === 'string' ? d.vals.note.trim().slice(0, 600) : '';
@@ -1990,7 +1990,7 @@
     this.changed();
     var said = d.vals && typeof d.vals.note === 'string' ? d.vals.note.trim().slice(0, 300) : '';
     this.sharedNote = said ? { who: who, note: said } : this.sharedNote;
-    return 'Added ' + who + '\u2019s load score (' + txt + ') to \u201cSomeone else\u2019s score\u201d. Your own answers are as they were.' + (said ? ' ' + who + ' wanted to name: \u201c' + said + '\u201d' : '') + ' Nothing was sent anywhere.';
+    return 'Added ' + who + '\u2019s stress tank score (' + txt + ') to \u201cSomeone else\u2019s score\u201d. Your own answers are as they were.' + (said ? ' ' + who + ' wanted to name: \u201c' + said + '\u201d' : '') + ' Nothing was sent anywhere.';
   };
   A.takeShared = function (d, replace) {
     var self = this, sc = this.schema, what = this.shareWhat();
@@ -2219,7 +2219,7 @@
       var ft = b.getAttribute('data-table'); this.fansOn = this.fansOn || {};
       var fsec = this.schema.sections.filter(function (x) { return x.id === ft; })[0], frows = this.state.tables[ft] || [];
       var has = fsec && frows.some(function (r) { return r && fsec.columns.some(function (c) { return c.fans && c.type !== 'computed' && !isBlank(r[c.id]); }); });
-      if (has && this.fansOn[ft] !== false && b.getAttribute('aria-expanded') === 'true') { this.status('The load scores you wrote stay. Clear them from the rows to hide these columns.'); return; }
+      if (has && this.fansOn[ft] !== false && b.getAttribute('aria-expanded') === 'true') { this.status('The stress tank scores you wrote stay. Clear them from the rows to hide these columns.'); return; }
       this.fansOn[ft] = b.getAttribute('aria-expanded') !== 'true';
       var y0 = global.scrollY; this.render(); global.scrollTo(0, y0);
       var again0 = this.root.querySelector('[data-action="fans"][data-table="' + ft + '"]'); if (again0) again0.focus();

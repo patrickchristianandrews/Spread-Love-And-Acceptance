@@ -166,12 +166,12 @@
   };
   var EX03 = {
     apart: [['Arrange our call', 'Weekly', 0, 1], ['Good-morning / good-night text', 'Daily', 1, 0], ['Plan or book a visit', 'Monthly', 0, 1], ['Time-zone juggling', 'Weekly', 1, 0], ['Shared bills', 'Monthly', 0, 0]],
-    partners: [['Groceries', 'Weekly', 0, 1], ['Cooking', 'Daily', 1, 1], ['Bills', 'Monthly', 0, 0], ['School forms', 'As needed', 1, 0], ['Family calendar', 'Ongoing', 0, 1]],
-    family: [['Meals', 'Daily', 2, 0], ['Rides and school runs', 'Daily', 1, 1], ['Birthday planning', 'As needed', 0, 2], ['Laundry', 'Weekly', 1, 0]],
-    coparents: [['School forms', 'As needed', 0, 0], ['Dentist visits', 'As needed', 1, 1], ['Pack the bag for handoff', 'Weekly', 0, 1], ['Activity fees', 'As needed', 1, 0]],
-    roommates: [['Rent: collecting and paying', 'Monthly', 1, 1], ['Cleaning: kitchen', 'Weekly', 0, 2], ['Shared supplies', 'As needed', 2, 0], ['Trash and recycling', 'Weekly', 2, 1]],
-    coworkers: [['Meeting notes', 'Each meeting', 0, 1], ['Follow-ups after meetings', 'Each meeting', 1, 1], ['Status report', 'Weekly', 2, 0], ['Onboarding a new teammate', 'As needed', 1, 2]],
-    caregivers: [['Appointments: booking and notes', 'As needed', 0, 1], ['Pharmacy pickups', 'Weekly', 1, 1], ['Insurance paperwork', 'Monthly', 0, 2], ['Weekly visit', 'Weekly', 2, 0]]
+    partners: [['Groceries', 'Weekly', 0, 1], ['Cooking', 'Daily', 1, 0], ['Bills', 'Monthly', 0, 1], ['School forms', 'As needed', 1, 0], ['Family calendar', 'Ongoing', 0, 1]],
+    family: [['Meals', 'Daily', 2, 0], ['Rides and school runs', 'Daily', 1, 0], ['Birthday planning', 'As needed', 0, 2], ['Laundry', 'Weekly', 1, 0]],
+    coparents: [['School forms', 'As needed', 0, 1], ['Dentist visits', 'As needed', 1, 0], ['Pack the bag for handoff', 'Weekly', 0, 1], ['Activity fees', 'As needed', 1, 0]],
+    roommates: [['Rent: collecting and paying', 'Monthly', 1, 0], ['Cleaning: kitchen', 'Weekly', 0, 2], ['Shared supplies', 'As needed', 2, 0], ['Trash and recycling', 'Weekly', 2, 1]],
+    coworkers: [['Meeting notes', 'Each meeting', 0, 1], ['Follow-ups after meetings', 'Each meeting', 1, 0], ['Status report', 'Weekly', 2, 0], ['Onboarding a new teammate', 'As needed', 1, 2]],
+    caregivers: [['Appointments: booking and notes', 'As needed', 0, 1], ['Pharmacy pickups', 'Weekly', 1, 0], ['Insurance paperwork', 'Monthly', 0, 2], ['Weekly visit', 'Weekly', 2, 0]]
   };
   function example(code, road) {
     road = road || 'partners';
@@ -191,14 +191,14 @@
       var r3 = (EX03[road] || EX03.partners).map(function (r) { return [r[0], r[1], who(r[2]), who(r[3])]; });
       return { intro: 'Part of a list where every job has one owner, and sometimes a helper.', parts: [{ head: ['Job', 'How often', 'Owner', 'Helper or backup (optional)'], rows: r3 }, { title: 'Ways to hand a job over', lines: SCRIPTS.handover.slice(0, 4) }], note: 'Watch the spread, not only the names: if one person holds most of the list, the sheet says so.' };
     }
-    if (code === 'WP-04') return { intro: 'A month where one thing kept coming back.', parts: [{ head: ['Task', 'Weeks it slipped', 'Kind of gap', 'Action'], rows: [['Trash out on time', '1, 2, 3', 'Structural gap', 'One owner, with a Sunday reminder'], ['Birthday card for Grandma', '2', 'One-off', 'None'], ['Grocery list', '1, 3', 'Capacity issue', 'Talk on Sunday about what comes off the list']] }, { title: 'Pillar V: thanked, or only noticed when missed?', lines: PILLAR_V.slice(0, 3) }], note: 'A job with no owner is a gap in the setup, not a verdict on the person who kept covering it.' };
+    if (code === 'WP-04') return { intro: 'A month where one thing kept coming back.', parts: [{ head: ['Task', 'Weeks it slipped', 'Kind of gap', 'Action'], rows: [['Bins out on time', '1, 2, 3', 'Structural gap', 'One owner, with a Sunday reminder'], ['Birthday card for Grandma', '2', 'One-off', 'None'], ['Grocery list', '1, 3', 'Capacity issue', 'Talk on Sunday about what comes off the list']] }, { title: 'Pillar V: thanked, or only noticed when missed?', lines: PILLAR_V.slice(0, 3) }], note: 'A job with no owner is a gap in the setup, not a verdict on the person who kept covering it.' };
     if (code === 'WP-09') return { intro: 'Worked examples: the raw reaction, then the same thing as fact, feeling and ask.',
-      parts: [{ title: 'Example 1', lines: ['Raw: “You NEVER take the trash out.”', 'Fact: The trash went out late on Tuesday and Thursday.', 'Feeling: I felt tired and a bit alone with it.', 'Ask: Could you own trash night from now on?'] },
+      parts: [{ title: 'Example 1', lines: ['Raw: “You NEVER take the bins out.”', 'Fact: The bins went out late on Tuesday and Thursday.', 'Feeling: I felt tired and a bit alone with it.', 'Ask: Could you own bin night from now on?'] },
         { title: 'Example 2', lines: ['Raw: “Great, another meeting nobody took notes in.”', 'Fact: Nobody had the notes from Monday’s meeting.', 'Feeling: I felt rushed trying to remember what we agreed.', 'Ask: Could we pick a note-taker at the start of each meeting?'] },
         { title: 'Example 3', lines: ['Raw: “Forget it, I’ll do it myself.”', 'Fact: The forms were due Friday and they weren’t done Thursday night.', 'Feeling: I felt worried we’d miss it.', 'Ask: Could one of us own school forms, start to finish?'] }],
       note: 'One event, no “always” or “never”, and an ask the other person can say yes to.' };
     if (code === 'WP-11') return { intro: two ? 'One person’s kit, filled in on a calm Sunday. Everyone makes their own.' : 'A kit filled in on a calm Sunday.',
-      parts: [{ head: ['What tends to start it', 'Where I feel it first'], rows: [['Being interrupted mid-task', 'Jaw'], ['Plans changed last minute', 'Shoulders']] }, { lines: ['First default: Walking it out. Second: Breathing 4 in, 6 out.', 'Pause line: “I’m at capacity. I need ten minutes. I’ll be back at quarter past.”', 'Coming back: load 0.65 before, 0.45 after, so under 0.50: go back in, starting with one small task.'] }] };
+      parts: [{ head: ['What tends to start it', 'Where I feel it first'], rows: [['Being interrupted mid-task', 'Jaw'], ['Plans changed last minute', 'Shoulders']] }, { lines: ['First default: Walking it out. Second: Breathing 4 in, 6 out.', 'Pause line: “I’m at capacity. I need ten minutes. I’ll be back at quarter past.”', 'Coming back: stress tank 0.65 before, 0.45 after, so under 0.50: go back in, starting with one small task.'] }] };
     if (code === 'WP-13') return { intro: 'Two days of a 90-second daily check-in. One sentence each, no debating.', parts: [{ head: ['Day', 'Who', 'Load', 'Appreciated', 'Small friction', 'Would help tomorrow'], rows: [['Mon', who(0), 'High', 'Thanks for making dinner', 'Dishes left out', 'Quiet morning'], ['Mon', who(1), 'Low', 'You fixed the printer', '', ''], ['Tue', who(0), 'Medium', 'The note you left', '', 'Early night']] }], note: 'Anything bigger than one sentence waits for the weekly catch-up.' };
     return null;
   }

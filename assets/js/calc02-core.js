@@ -126,9 +126,9 @@
     // loads: an average only when everyone's own score is there (never worked out for someone else)
     var bad = false;
     r.loads = w.loads.map(function (x) { if (blankish(x)) return null; var v = inRange01(x); if (v === null) bad = true; return v; });
-    if (bad) r.problems.push({ key: 'loads', msg: 'A load score runs from 0 to 1 (the five answers added up, then divided by 20).' });
+    if (bad) r.problems.push({ key: 'loads', msg: 'A stress tank score runs from 0 to 1 (the five answers added up, then divided by 20).' });
     if (r.loads.length && r.loads.every(function (x) { return x !== null; })) r.as = avg(r.loads);
-    if (r.as === null && !blankish(w.asScore)) { var as = inRange01(w.asScore); if (as === null) r.problems.push({ key: 'asScore', msg: 'An average load runs from 0 to 1.' }); else r.as = as; }
+    if (r.as === null && !blankish(w.asScore)) { var as = inRange01(w.asScore); if (as === null) r.problems.push({ key: 'asScore', msg: 'An average stress tank score runs from 0 to 1.' }); else r.as = as; }
     r.filled = r.wb !== null || r.oc !== null || r.as !== null || r.rescues !== null || r.loads.some(function (x) { return x !== null; });
     return r;
   }
@@ -210,9 +210,9 @@
       var heavy = people.filter(function (p) { return p.high; });
       items.push({ key: 'as', label: 'How much each person is carrying', status: sa, start: start.as, end: end.as, change: da, people: people,
         watch: heavy.length > 0, heavy: heavy,
-        text: (sa === 'better' ? 'Load came down on average: from a ' + loadWords(start.as) + nb(start.as) + ' to a ' + loadWords(end.as) + nb(end.as) + '.'
-          : sa === 'worse' ? 'Load went up on average: from a ' + loadWords(start.as) + nb(start.as) + ' to a ' + loadWords(end.as) + nb(end.as) + '.'
-          : 'Load stayed about the same on average, at a ' + loadWords(end.as) + nb(end.as) + '.') +
+        text: (sa === 'better' ? 'The stress tank came down on average: from a ' + loadWords(start.as) + nb(start.as) + ' to a ' + loadWords(end.as) + nb(end.as) + '.'
+          : sa === 'worse' ? 'The stress tank went up on average: from a ' + loadWords(start.as) + nb(start.as) + ' to a ' + loadWords(end.as) + nb(end.as) + '.'
+          : 'The stress tank stayed about the same on average, at a ' + loadWords(end.as) + nb(end.as) + '.') +
           (people.length ? ' ' + people.map(function (p) { return p.name + ': ' + (p.status === 'better' ? 'lighter' : p.status === 'worse' ? 'heavier' : 'about the same') + ', now at a ' + loadWords(p.end) + nb(p.end); }).join('; ') + '.' : '') });
     } else items.push({ key: 'as', label: 'How much each person is carrying', status: 'na', people: people });
 
@@ -242,7 +242,7 @@
     oc: { text: 'Give the jobs that still have no owner a name this week, one at a time. Start with the one that needed rescuing most.', link: ['One owner per job (WP-03)', '/workpapers/fill/wp-03.html'] },
     wb: { text: 'Move one regular job from the person doing more to the person doing less, for the next two weeks, and write the change on the job list.', link: ['One owner per job (WP-03)', '/workpapers/fill/wp-03.html'] },
     rescues: { text: 'Look at what got rescued. A job that needed rescuing twice needs one owner and a set time, not a third rescue.', link: ['What keeps coming back? (WP-04)', '/workpapers/wp-04-what-keeps-coming-back.html'] },
-    as: { text: 'A job list can’t fix load on its own. Pick the heaviest day in the week ahead and take one thing off it, and use the daily check-in to catch heavy days early.', link: ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html'] }
+    as: { text: 'A job list can’t lower a full stress tank on its own. Pick the heaviest day in the week ahead and take one thing off it, and use the daily check-in to catch heavy days early.', link: ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html'] }
   };
   var ORDER = ['oc', 'wb', 'rescues', 'as'];
   function nextStep(items, end, names, setup) {
@@ -415,13 +415,13 @@
       list.filter(function (f) { return f.kind === 'load'; }).forEach(function (f) {
         var i = typeof f.person === 'number' ? f.person : -1;
         if (i < 0 && f.name) (nameList || []).forEach(function (nm, k) { if (fold(nm) && fold(nm) === fold(f.name)) i = k; });
-        if (i >= 0 && i < n && blankish(w.loads[i])) { w.loads[i] = String(C.r2(f.value)); if (bits.indexOf('load scores') < 0) bits.push('load scores'); }
+        if (i >= 0 && i < n && blankish(w.loads[i])) { w.loads[i] = String(C.r2(f.value)); if (bits.indexOf('stress tank scores') < 0) bits.push('stress tank scores'); }
       });
       var sf = list.filter(function (f) { return f.kind === 'scores'; }).pop();
       if (sf) {
         if (hoursEmpty && !hf && blankish(w.wbScore) && sf.wb !== null) { w.wbScore = String(C.r2(sf.wb)); bits.push('balance score'); }
         if (blankish(w.jobsTotal) && blankish(w.ocScore) && sf.oc !== null) { w.ocScore = String(C.r2(sf.oc)); bits.push('ownership score'); }
-        if (w.loads.every(blankish) && blankish(w.asScore) && sf.as !== null) { w.asScore = String(C.r2(sf.as)); bits.push('average load'); }
+        if (w.loads.every(blankish) && blankish(w.asScore) && sf.as !== null) { w.asScore = String(C.r2(sf.as)); bits.push('average stress tank score'); }
       }
       var jf = list.filter(function (f) { return f.kind === 'slipped'; }).pop();
       if (jf && blankish(w.rescues)) { w.rescues = String(jf.count); bits.push('rescues (' + jf.jobs.join(', ') + ')'); }

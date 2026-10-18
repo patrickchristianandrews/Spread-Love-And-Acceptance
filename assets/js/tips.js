@@ -110,7 +110,7 @@ window.TOL_TIPS = {
     // Kindness
     ['kindness', 'Hold the door.', 'A small courtesy, like holding a door or letting someone go first, can brighten both your days.'],
     ['kindness', 'Offer to carry something.', 'If someone is struggling with bags or a pushchair, offering a hand can be a welcome kindness.'],
-    ['kindness', 'Learn someone’s name.', 'Ask the name of someone you see often, like a neighbor or café worker, and use it next time.'],
+    ['kindness', 'Learn someone’s name.', 'Ask the name of someone you see often, like a neighbour or café worker, and use it next time.'],
     ['kindness', 'Praise a local business.', 'If a local shop or tradesperson did a good job, a few kind words can mean a lot to them.'],
     ['kindness', 'Pass on a compliment.', 'If someone says something nice about a friend, pass it on. People love hearing they’re appreciated.'],
     ['kindness', 'Give specific praise.', 'Instead of “nice work”, try “the way you explained that really helped me”. Specific praise lands warmly.'],

@@ -264,7 +264,7 @@
     <p>Fill in what you tracked. Blank is fine: each part is read from the weeks that have it. Week 1 is the first 10 days, so the four weeks cover all 30.</p>
     <ul class="plain" style="font-size:0.88rem;color:var(--ink-soft);">
       <li><strong>Hours:</strong> each person's hours that week, from <a href="/workpapers/fill/wp-01.html">Who did what (WP-01)</a>. Count planning and remembering too.</li>
-      <li><strong>Load:</strong> each person's own score from <a href="/workpapers/fill/wp-02.html">How much are you carrying? (WP-02)</a>, 0 to 1, higher is heavier. Everyone fills in their own.</li>
+      <li><strong>Stress tank:</strong> each person's own score from <a href="/workpapers/fill/wp-02.html">How much are you carrying? (WP-02)</a>, 0 to 1, higher is heavier. Everyone fills in their own.</li>
       <li><strong>Rescues:</strong> times that week a job was caught at the last minute, or slipped. For the whole household, not by person.</li>
       <li><strong>Jobs:</strong> the regular jobs on your <a href="/workpapers/fill/wp-03.html">One owner per job (WP-03)</a> list, and how many have an owner.</li>
     </ul>
@@ -319,7 +319,7 @@
   <!-- ================= OWN DAYS ================= -->
   <section id="own-days" aria-labelledby="days-h">
     <div class="section-head"><p class="part-label">Just you &middot; optional</p><h2 id="days-h">Your own days</h2></div>
-    <p>If you save <a href="/quick-checks.html">Today's Weather</a> check-ins, or keep a <a href="/workpapers/fill/wp-13.html">daily check-in</a> draft, on this device, this part reads them for the same 30 days. It's about how the days felt, so it sits beside the read and never changes it.</p>
+    <p>If you save <a href="/quick-checks.html">My weather today</a> check-ins, or keep a <a href="/workpapers/fill/wp-13.html">daily check-in</a> draft, on this device, this part reads them for the same 30 days. It's about how the days felt, so it sits beside the read and never changes it.</p>
     <div class="panel" id="days-panel"><p class="panel-note" id="days-text" style="margin:0;">Nothing from this device has been read. Press “Fill in from this device” above, if it shows.</p></div>
     <div class="keep no-print">
       <label class="check"><input type="checkbox" id="keep"> Keep my entries on this device</label>
@@ -373,7 +373,7 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
     </div>
 
     <div class="warn-box">
-      <p><strong>What this look-back will never use.</strong> Tone of voice, messages, how fast someone replies, or anything about a person that they didn't help enter themselves. A load score is never filled in for someone else.</p>
+      <p><strong>What this look-back will never use.</strong> Tone of voice, messages, how fast someone replies, or anything about a person that they didn't help enter themselves. A stress-tank score is never filled in for someone else.</p>
     </div>
 
     <div class="spec-block">
@@ -436,11 +436,11 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
     var sl = K.slots(endDate());
     $("week-cards").innerHTML = S.weeks.map(function(w, k){
       var h = '<div class="week" id="week-' + k + '"><h3>' + sl[k].label + '</h3><p class="dates">' + esc(sl[k].dates) + '</p>' +
-        '<div class="pp"><span class="hd">Person</span><span class="hd">Hours</span><span class="hd">Load (0&ndash;1)</span>';
+        '<div class="pp"><span class="hd">Person</span><span class="hd">Hours</span><span class="hd">Stress tank (0&ndash;1)</span>';
       for (var i = 0; i < n(); i++){
         h += '<span class="rl" data-lab="' + i + '" data-suffix="">' + esc(nameOf(i)) + '</span>' +
           '<input type="number" data-w="' + k + '" data-f="hours" data-i="' + i + '" min="0" step="0.5" inputmode="decimal" value="' + esc(w.hours[i]) + '" aria-label="' + esc(nameOf(i)) + ', hours, week ' + (k + 1) + '">' +
-          '<input type="number" data-w="' + k + '" data-f="loads" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(w.loads[i]) + '" aria-label="' + esc(nameOf(i)) + ', load score, week ' + (k + 1) + '">';
+          '<input type="number" data-w="' + k + '" data-f="loads" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(w.loads[i]) + '" aria-label="' + esc(nameOf(i)) + ', stress-tank score, week ' + (k + 1) + '">';
       }
       h += '</div><div class="row-grid">' +
         '<div><label for="r-' + k + '">Rescues</label><input type="number" id="r-' + k + '" data-w="' + k + '" data-f="rescues" min="0" step="1" inputmode="numeric" value="' + esc(w.rescues) + '"></div>' +
@@ -450,14 +450,14 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
         '<p class="panel-note" style="font-size:0.8rem;">Used only where the boxes above are blank. Each runs from 0 to 1, as <a href="/is-the-setup-working.html#trend">its trend log</a> keeps them.</p><div class="row-grid" style="margin-top:0;margin-bottom:10px;">' +
         '<div><label for="ws-' + k + '">Balance score</label><input type="number" id="ws-' + k + '" data-w="' + k + '" data-f="wbScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.wbScore) + '"></div>' +
         '<div><label for="os-' + k + '">Ownership score</label><input type="number" id="os-' + k + '" data-w="' + k + '" data-f="ocScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.ocScore) + '"></div>' +
-        '<div><label for="as-' + k + '">Average load</label><input type="number" id="as-' + k + '" data-w="' + k + '" data-f="asScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.asScore) + '"></div></div></details>' +
+        '<div><label for="as-' + k + '">Average stress tank</label><input type="number" id="as-' + k + '" data-w="' + k + '" data-f="asScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.asScore) + '"></div></div></details>' +
         '<div class="wk-work" id="wk-work-' + k + '" aria-live="polite"></div></div>';
       return h;
     }).join("");
   }
   function relabel(){
     Array.prototype.forEach.call(document.querySelectorAll("[data-lab]"), function(l){ l.textContent = nameOf(+l.dataset.lab) + (l.dataset.suffix || ""); });
-    Array.prototype.forEach.call(document.querySelectorAll("input[data-i]"), function(el){ el.setAttribute("aria-label", nameOf(+el.dataset.i) + ", " + (el.dataset.f === "hours" ? "hours" : "load score") + ", week " + (+el.dataset.w + 1)); });
+    Array.prototype.forEach.call(document.querySelectorAll("input[data-i]"), function(el){ el.setAttribute("aria-label", nameOf(+el.dataset.i) + ", " + (el.dataset.f === "hours" ? "hours" : "stress-tank score") + ", week " + (+el.dataset.w + 1)); });
   }
 
   /* ---------- the read ---------- */
@@ -474,7 +474,7 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
         Array.prototype.forEach.call(document.querySelectorAll('#week-' + k + ' input' + sel.split(",").join(',#week-' + k + ' input')), function(el){ el.setAttribute("aria-invalid", "true"); });
       });
       if (r.wb !== null) bits.push((r.bal ? r.bal.shares.map(function(s, i){ return esc(nm[i]) + " " + C.pct(s); }).join(", ") + ": " : "Balance: ") + C.shareWords(r.wb) + (nums ? " (" + f2(r.wb) + ")" : ""));
-      if (r.loads.some(function(x){ return x !== null; }) && r.as === null) bits.push("The average load waits for everyone's own score.");
+      if (r.loads.some(function(x){ return x !== null; }) && r.as === null) bits.push("The average stress-tank score waits for everyone's own score.");
       $("wk-work-" + k).innerHTML = bits.join("<br>");
     });
 

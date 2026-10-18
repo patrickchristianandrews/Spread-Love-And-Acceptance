@@ -407,7 +407,7 @@
     doc.heart(R - 42, 86, 32, '#FFFFFF');
     doc.text(L + 20, 78, enc('SPREAD LOVE & ACCEPTANCE  ·  FULL PATH PACKAGE  ·  VERSION ' + FP.VERSION), 'Helvetica-Bold', 7.8, C.ink);
     doc.text(L + 20, 112, enc('My full path: ' + roadName), 'Times-Bold', 24, C.ink);
-    wrap(road.solo ? 'Every page for understanding yourself, in one place: your load score, your calm-down kit, how words reach you, and kind ways to say no.'
+    wrap(road.solo ? 'Every page for understanding yourself, in one place: your stress tank score, your calm-down kit, how words reach you, and kind ways to say no.'
       : 'Every workpaper for this road, in one place, plus the CALC-01 inputs and a page to get ready for your report.', 'Times-Italic', 11, W - 110).slice(0, 3).forEach(function (ln, k) { doc.text(L + 20, 134 + k * 13.5, ln, 'Times-Italic', 11, C.ink); });
     var names = FP.namesOf(data).filter(Boolean);
     doc.text(L, 190, enc((names.length ? 'For ' + (names.length > 1 ? names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1] : names[0]) + '  ·  ' : '') + (road.solo ? 'Just me' : data.people + ' people') + '  ·  made ' + niceDate()), 'Helvetica', 9.5, C.soft);
@@ -416,10 +416,10 @@
     lay.bullets([
       'Tap any box to type, in Adobe Acrobat Reader, Apple Preview or Files, Chrome, Edge or another PDF app. Round buttons pick one answer; square boxes are ticks. Or print it and write by hand.',
       'Go in order, or start anywhere. Each page says what it is for. Blank pages are fine: the report says "not filled in" rather than guessing.',
-      road.solo ? 'Everything is about you, written by you.' : 'Wherever a page asks "who", write a name from page 3, an initial, or "Everyone". Pages about one person (the load score, the pause line) are filled in by that person, about themselves.',
+      road.solo ? 'Everything is about you, written by you.' : 'Wherever a page asks "who", write a name from page 3, an initial, or "Everyone". Pages about one person (the stress tank score, the pause line) are filled in by that person, about themselves.',
       'When you’re done, save the PDF and bring it back to the Workpaper Suite on the website. It reads your answers on your own device, shows you what it found, lets you fix anything, and makes your report.'
     ], { size: 9.2 });
-    lay.callout('Private by design', ['Nothing you type in this PDF is sent anywhere. The website reads it in your browser, on your device, and never uploads it. Keep the file somewhere private, like any personal notes.'].concat(road.solo ? [] : [data.shared ? 'This is a copy to share: the private parts (load score answers, self-notes, raw reaction and calm-down triggers) were left out.' : 'Some pages are personal: each person\u2019s load score, self-notes, raw reaction and calm-down triggers. ' + (data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see them if you share this file. To share without them, make a copy on the website with \u201cLeave the private parts out\u201d ticked.']), C.creditSoft, { size: 9 });
+    lay.callout('Private by design', ['Nothing you type in this PDF is sent anywhere. The website reads it in your browser, on your device, and never uploads it. Keep the file somewhere private, like any personal notes.'].concat(road.solo ? [] : [data.shared ? 'This is a copy to share: the private parts (stress tank score answers, self-notes, raw reaction and calm-down triggers) were left out.' : 'Some pages are personal: each person\u2019s stress tank score, self-notes, raw reaction and calm-down triggers. ' + (data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see them if you share this file. To share without them, make a copy on the website with \u201cLeave the private parts out\u201d ticked.']), C.creditSoft, { size: 9 });
     lay.callout('A fair read, never a verdict', [road.solo ? 'These pages describe your conditions and your setup, never your worth. They are not a diagnosis and not a health tool.' : 'These pages describe the setup between you, never any one person. They are not a diagnosis, not a health tool, and never evidence or a performance record.'], C.lav, { size: 9, titleColor: C.ink });
     // hidden fields: which package this is
     doc.field({ name: reg.meta.version, kind: 'text', value: FP.VERSION, x: 1, y: 1, w: 1, h: 1, hidden: true });
@@ -803,7 +803,7 @@
     if (persons.length) {
       section('A page for each person', '6  A page for each person');
       lay.kicker('Each person');
-      lay.h1('A page for each person', 'Their load, their load score, what they bring and what might help');
+      lay.h1('A page for each person', 'Their load, their stress tank score, what they bring and what might help');
       lay.para('These are not scorecards and not a ranking. Each one is written to that person about their own week, and it only knows what was entered. Read your own first; share it if you want to.' + (persons.some(function (p) { return p.note; }) ? ' A person\u2019s own note from WP-02 shows on their page only; anyone you share this report with will see it.' : ''), { size: 9.3, color: C.soft, font: 'Times-Italic' });
       persons.forEach(function (p, i) {
         if (i) lay.room(260);

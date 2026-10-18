@@ -165,10 +165,10 @@
     scores.forEach(function (s, i) {
       var v = num(s);
       if (v === null) res.missing.push(i);
-      else if (v < 0 || v > 1) res.error = 'A load score runs from 0 to 1 (the five answers added up, then divided by 20).';
+      else if (v < 0 || v > 1) res.error = 'A stress tank score runs from 0 to 1 (the five answers added up, then divided by 20).';
     });
     if (res.error) return res;
-    if (res.missing.length) { res.error = 'Waiting on ' + res.missing.length + ' load score' + (res.missing.length === 1 ? '' : 's') + '. Each person fills in their own; it is never worked out for someone else.'; return res; }
+    if (res.missing.length) { res.error = 'Waiting on ' + res.missing.length + ' stress tank score' + (res.missing.length === 1 ? '' : 's') + '. Each person fills in their own; it is never worked out for someone else.'; return res; }
     var v = scores.map(num);
     res.value = sum(v) / v.length;
     return res;
@@ -238,7 +238,7 @@
     if (o.as !== null && o.as > 0) {
       var drop = Math.min(0.10, o.as);
       out.push({ key: 'as', gain: drop * w.as,
-        text: 'If the average load came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
+        text: 'If the average stress tank score came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
         link: ['How much are you carrying? (WP-02)', '/workpapers/fill/wp-02.html'] });
     }
     out.sort(function (a, b) { return (a.full ? 1 : 0) - (b.full ? 1 : 0) || b.gain - a.gain; });
