@@ -232,13 +232,13 @@ def free_form(url):
 WP_LINE_RE = re.compile(r'<p class="bh-ref bh-wp"><span class="bh-k">([^<]*)</span><span class="bh-c">: </span><a href="([^"]+)"[^>]*>(.*?)</a><span class="bh-u">.*?</span></p>', re.S)
 
 
-def wp_lines(body):
+def wp_lines(body, with_qr=True):
     """Owner's rule: the books never reproduce a workpaper. Each one is named on one short line, "Workpaper: name ·
     free to print", with a QR code to its free printable form on the site."""
     def sub(m):
         form = free_form(m.group(2)) or m.group(2)
         return ('<div class="bh-ref bh-wp ps-wp">%s<p><span class="bh-k">%s</span><span class="bh-c">: </span><a href="%s">%s</a> · free to print'
-                '<span class="bh-u"> %s</span></p></div>') % (qr(form), m.group(1), B.absolute(form), m.group(3), B.addr_html(B.short_address(form)))
+                '<span class="bh-u"> %s</span></p></div>') % (qr(form) if with_qr else '', m.group(1), B.absolute(form), m.group(3), B.addr_html(B.short_address(form)))
     return WP_LINE_RE.sub(sub, body)
 
 
@@ -251,7 +251,23 @@ def namer_for(book):
     return ST.Namer(book, books(), pg)
 
 
-def s_chapter(e, book, here, where, namer=None):
+def classify(path, text):
+    """(where the code goes, its label) for a link to the website: a workpaper's free printable form, a tool (its
+    registry name), or a page"""
+    k = hints._match(path)
+    if k and k[0] == 'wp':
+        w = hints.WP[k[1]]
+        return free_form(path) or path, '<b>Workpaper %s</b> · free to print<br>%s' % (esc(w['code']), esc(w['name']))
+    if k and k[0] == 'tool':
+        return path, '<b>Tool</b><br>%s' % esc(hints.TL[k[1]]['name'])
+    return path, '<b>Online</b><br>%s' % esc(text[:60])
+
+
+SCAN_COUNT = {}
+
+
+def s_chapter(e, book, here, where, namer=None, panels=False):
+    """one chapter as the series prints it; panels=True adds the "Scan to open" codes (print only; the ebooks keep links)"""
     slug = e[0]
     namer = namer or namer_for(book)
     src = override(slug) or B.main_inner(B.PAGES[(slug, False)])
@@ -260,11 +276,16 @@ def s_chapter(e, book, here, where, namer=None):
     body = re.sub(r'<p class="simple-lede">.*?</p>', '', body, count=1, flags=re.S)
     body, errs = ST.apply_swaps(body, slug, pg, lambda s_: namer.label(s_) or s_)
     ERRORS.extend(errs)
+    body = ST.drop_sections(body, B)
     body = ST.drop_nav_rows(body)
     body = ST.series_links(body, slug, namer, B.XREFS.add)
     body = B.print_links(body, slug, here)
     body = B.tag_boxes(B.demote(body))
-    body = wp_lines(body)
+    body = wp_lines(body, with_qr=not panels)
+    if panels:
+        body = ST.strip_inline_addresses(body)
+        body, n = ST.scan_panels(body, qr, classify, B.short_address, B.addr_html, esc)
+        SCAN_COUNT[(book['id'], slug)] = n
     if not CFG.get('examples', True):
         body = re.sub(r'<div class="book-ex-wrap.*?</figure>\s*</div>', '', body, flags=re.S)
     # the made-up note is said once, at the front of the book (copyright page and "About this book")
@@ -525,7 +546,7 @@ def build_book(book, where):
         toc.append(B.toc_row(slug, esc(num or 'After'), esc(B.TITLES[slug]), 'is-ch'))
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
-        art = s_chapter(e, book, here, where, namer)
+        art = s_chapter(e, book, here, where, namer, panels=True)
         arts.append((slug, art))
         body.append(art)
     # the back of the book: built before finish_package, so their page references get markers

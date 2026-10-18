@@ -256,3 +256,122 @@ def check_text(text, book, books, label):
         if not b or k < 1 or k > len([s for s in b['chapters'] if s != 'afterword']):
             out.append('%s: no %s in the series: …%s…' % (label, m.group(0), text[max(0, m.start() - 50):m.end() + 30]))
     return out
+
+
+# ---------- what the print series leaves out of a chapter, and the "Scan to open" panels ----------
+DROP_IDS = ('more', 'pillars', 'nine-fields', 'polymath-way', 'program', 'part-three', 'real-life-old')
+
+
+def drop_sections(body, B):
+    """Sections that belong on the website only: "More for your situation" (a list of site pages, each now reached by a
+    code), "Inside you, and between you", "The fields behind this chapter", the online book's own navigation. Elements
+    marked ps-omit, and the "Reading" lists (library pages; the chapter's "Go deeper" code leads to them all), go too."""
+    for sid in DROP_IDS:
+        while True:
+            m = re.search(r'<h([23])\b[^>]*\bid="(?:[a-z0-9-]+--)?%s"[^>]*>' % re.escape(sid), body)
+            if not m:
+                break
+            end = B.section_end(body, m.start())
+            body = body[:m.start()] + body[end:]
+    body = B.drop_element(body, r'<[a-z0-9]+\b[^>]*\bclass="[^"]*\bps-omit\b')
+    body = B.drop_element(body, r'<h3 class="kind-h kind-h-reading"')
+    body = B.drop_element(body, r'<ul class="kind-list kind-reading"')
+    return body
+
+
+INLINE_ADDR = re.compile(r'<span class="pe-only pe-u"> \((?:<span class="pe-nb">[^<]*</span>|/|<wbr>)*\)</span>')
+
+
+def strip_inline_addresses(body):
+    """The panels carry each address under its code, so the inline "(spreadloveandacceptance.com/…)" after a link goes,
+    except after the safety links, whose wording stays exactly as it is, with its address beside it."""
+    def sub(m):
+        return m.group(1) if '/safety' not in m.group(2) else m.group(0)
+    return re.sub(r'(<a\b[^>]*\bhref="([^"]*)"[^>]*>.*?</a>)' + INLINE_ADDR.pattern, sub, body, flags=re.S)
+
+
+SKIP_LINK = re.compile(r'class="(?:dig|book-fig-zoom)|data-u="series"')
+NO_QR_PATH = re.compile(r'^/(?:research\.html|five-pillars\.html|glossary\.html|assets/|book/[a-z0-9-]+\.html)')
+QR_HOLDERS = ('pe-use', 'ps-deeper', 'pe-noprint', 'no-print', 'pe-xref')
+
+
+def site_path(h):
+    h = html.unescape(h)
+    if h.startswith('https://spreadloveandacceptance.com'):
+        h = h[len('https://spreadloveandacceptance.com'):] or '/'
+    return h if h.startswith('/') else None
+
+
+def _blocks(body):
+    """(start, end, insert_at) for each place a panel goes: each big idea (<li> of ol.ideas, panel at its end) and each
+    stretch between top-level headings outside the ideas list (panel at the end of the stretch)."""
+    import build_book as B  # noqa
+    out = []
+    taken = []
+    for m in re.finditer(r'<ol class="ideas"[^>]*>', body):
+        olend = B.element_end(body, m.start())
+        k = m.end()
+        while True:
+            j = body.find('<li', k)
+            if j < 0 or j >= olend:
+                break
+            e = B.element_end(body, j)
+            out.append((j, e, e - len('</li>')))
+            k = e
+        taken.append((m.start(), olend))
+    # the rest: split at headings (h2 to h4 after demote), outside the ideas lists
+    cuts = [0]
+    for m in re.finditer(r'<h[2-4]\b', body):
+        if not any(a <= m.start() < b for a, b in taken):
+            cuts.append(m.start())
+    for a, b in taken:
+        cuts += [a, b]
+    cuts = sorted(set(cuts + [len(body)]))
+    for a, b in zip(cuts, cuts[1:]):
+        if any(x <= a < y for x, y in taken):
+            continue
+        out.append((a, b, b))
+    return sorted(out)
+
+
+def scan_panels(body, qrfn, classify, short_address, addr_html, esc):
+    """Every reference to a tool, workpaper or page on the website gets its own code, collected into a small "Scan to
+    open" panel at the end of its idea or section (one code per address in each panel)."""
+    blocks = _blocks(body)
+    inserts = []
+    count = 0
+    for start, end, at in blocks:
+        seg = body[start:end]
+        # links inside elements that already carry their own code are left alone
+        holders = []
+        for cls in QR_HOLDERS:
+            for m in re.finditer(r'<([a-z0-9]+)\b[^>]*\bclass="[^"]*\b%s\b[^"]*"' % cls, seg):
+                import build_book as B  # noqa
+                holders.append((m.start(), B.element_end(seg, m.start())))
+        seen, items = set(), []
+        for m in LINK_RE.finditer(seg):
+            if any(a <= m.start() < b for a, b in holders):
+                continue
+            attrs, text = m.group(1), m.group(2)
+            if SKIP_LINK.search(attrs):
+                continue
+            hm = re.search(r'\bhref="([^"]+)"', attrs)
+            if not hm:
+                continue
+            p = site_path(hm.group(1))
+            if not p or NO_QR_PATH.match(p):
+                continue
+            target, label = classify(p, re.sub(r'<[^>]+>', '', text).strip())
+            if target in seen:
+                continue
+            seen.add(target)
+            items.append((target, label))
+        if not items:
+            continue
+        lis = ''.join('<li>%s<span class="ps-scan-t">%s</span><span class="ps-scan-u">%s</span></li>' % (
+            qrfn(t), lab, addr_html(short_address(t))) for t, lab in items)
+        count += len(items)
+        inserts.append((at, '<div class="ps-scan pe-only"><p class="ps-scan-k">Scan to open</p><ul class="ps-scan-list">%s</ul></div>' % lis))
+    for at, h in sorted(inserts, reverse=True):
+        body = body[:at] + h + body[at:]
+    return body, count
