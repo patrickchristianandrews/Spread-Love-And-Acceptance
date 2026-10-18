@@ -42,15 +42,16 @@
         { k: 'read', t: 'Living on your own: weekends and evenings', f: '/living-alone.html#weekends', mins: 10, do: 'Plan one or two anchors for the evenings and weekends.', leave: 'One regular thing that’s just yours' }
       ] },
     { id: 'know', who: 'solo', title: 'Know yourself in a week', len: 'One week, about 10 minutes a day',
-      intro: 'Five short looks at how you work. Nothing here needs anyone else.',
-      leave: 'your communication style, a care card, a one-page “how to talk to me” card and one pattern you understand better',
+      intro: 'Six short looks at how you work. Nothing here needs anyone else.',
+      leave: 'your communication style, a care card, a one-page “how to talk to me” card, one pattern you understand better and the logic behind one of your reactions',
       back: { q: 'A week on: which result surprised you most? Share one with someone you trust, if you like.', href: '/together.html#share', go: 'Share a result' },
       steps: [
         { k: 'tool', id: 'weather', f: '/quick-checks.html#today', mins: 1, do: 'Check your mood and energy today, in four taps.', leave: 'Today’s reading, and what tends to help on days like it' },
         { k: 'tool', id: 'wavelength', f: '/wavelength.html', mins: 10, do: 'Answer short questions about how you talk and listen.', leave: 'Your communication style, in plain words' },
         { k: 'tool', id: 'carecard', f: '/love-languages.html#ll-card-h', mins: 5, do: 'Pick what feels like care to you.', leave: 'A care card to keep or share' },
         { k: 'tool', id: 'roots', f: '/growing-up.html#roots-h', mins: 10, do: 'Look at one reaction of yours and where it may come from.', leave: 'One pattern you understand a little better' },
-        { k: 'tool', id: 'wiring', f: '/wiring-card.html', mins: 10, do: 'Make a one-page card on how you like to be spoken to.', leave: 'A card that tells people what helps you' }
+        { k: 'tool', id: 'wiring', f: '/wiring-card.html', mins: 10, do: 'Make a one-page card on how you like to be spoken to.', leave: 'A card that tells people what helps you' },
+        { k: 'tool', id: 'logic', f: '/the-logic-behind-it.html', mins: 10, do: 'Pick one reaction of yours that people misread, and lay out the logic behind it in six short parts.', leave: 'A card that shows why your reaction makes sense, with one kind step' }
       ] },
     { id: 'busy', who: 'solo', title: 'Busy? Five minutes that help', len: 'Pick any one: each takes five minutes or less',
       intro: 'No time? Each step stands on its own. Do one today, another tomorrow.',
@@ -83,7 +84,8 @@
         { k: 'tool', id: 'decoder', f: '/carrier-wave-decoder.html', mins: 15, do: 'Do the step-by-step reset: settle, see their side, try again.', leave: 'Their side of the moment, and one sentence to bridge the gap' },
         { k: 'tool', id: 'pause', f: '/pursue-withdraw.html#plan-h', mins: 10, do: 'On a calm day, agree how either of you can pause, and when you come back.', leave: 'A pause word, a return time and the first sentence back' },
         { k: 'tool', id: 'checkincard', f: '/check-ins.html#card', mins: 10, do: 'Write down one agreement you both keep, and when you will check it.', leave: 'One agreement, written down, with a check-in date' },
-        { k: 'wp', id: 'keepscoming', f: '/workpapers/wp-04-what-keeps-coming-back.html', mins: 15, do: 'Once a month: spot what keeps coming back, and fix one thing.', leave: 'A monthly look-back sheet' }
+        { k: 'wp', id: 'keepscoming', f: '/workpapers/wp-04-what-keeps-coming-back.html', mins: 15, do: 'Once a month: spot what keeps coming back, and fix one thing.', leave: 'A monthly look-back sheet' },
+        { k: 'tool', id: 'logic', f: '/the-logic-behind-it.html#find', mins: 5, do: 'When their reaction (or yours) still puzzles you, type what happened and see the logic behind it, with their side too.', leave: 'One sentence to explain it, and one small step for both of you' }
       ] },
     { id: 'space', who: 'two', title: 'One wants to talk now, one needs space', len: 'A few days; the plan takes ten minutes',
       intro: 'When one of you chases and the other pulls away. A way to pause that doesn’t feel like walking out, and a way back.',

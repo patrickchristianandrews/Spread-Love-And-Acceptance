@@ -599,6 +599,7 @@
       { sub: 'Know your own wiring', area: 'self' },
       { href: '/know-yourself.html', deep: true, title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today' },
       { href: '/growing-up.html', deep: true, title: 'Where your lens came from', note: 'How growing up shapes what you expect, and which rules to keep' },
+      { href: '/the-logic-behind-it.html', deep: true, title: 'The logic behind it', note: 'Why a reaction that looks odd or rude makes sense, both ways, with analogies' },
       { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'What the Wavelength quiz looks at, and how to use your result' },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your rhythms for money, decisions, check-ins and rest' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD, autistic and AuDHD readers' },

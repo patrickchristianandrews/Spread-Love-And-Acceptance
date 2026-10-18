@@ -33,6 +33,7 @@ var CORE = [
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js', '/assets/js/buddies-suggest.js',
   '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/assets/icons/icon-maskable-192.png', '/assets/icons/icon-maskable-512.png', '/assets/icons/apple-touch-icon-180.png', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/manifest.webmanifest',
   '/assets/css/book-series.css', '/assets/js/book-shop.js', '/workpapers/fill/wpf-print.js',
+  '/the-logic-behind-it.html', '/assets/js/logic-library.js', '/assets/js/logic-lens.js', '/assets/css/logic-lens.css',
 ];
 
 self.addEventListener('install', function (e) {
