@@ -2,8 +2,8 @@
  "books": {
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
-   "bytes": 2733670,
-   "mb": 2.61,
+   "bytes": 1228188,
+   "mb": 1.17,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
    "figures": 10,
@@ -13,14 +13,14 @@
    "links_inside": 206,
    "checks": "pass",
    "epubcheck": {
-    "ok": false,
-    "summary": "Messages: 0 fatals / 3 errors / 0 warnings / 0 infos"
+    "ok": true,
+    "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
    }
   },
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
-   "bytes": 2337308,
-   "mb": 2.23,
+   "bytes": 1083340,
+   "mb": 1.03,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
    "figures": 9,
@@ -30,14 +30,14 @@
    "links_inside": 177,
    "checks": "pass",
    "epubcheck": {
-    "ok": false,
-    "summary": "Messages: 0 fatals / 3 errors / 0 warnings / 0 infos"
+    "ok": true,
+    "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
    }
   },
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
-   "bytes": 2352186,
-   "mb": 2.24,
+   "bytes": 1102837,
+   "mb": 1.05,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
    "figures": 9,
@@ -47,14 +47,14 @@
    "links_inside": 195,
    "checks": "pass",
    "epubcheck": {
-    "ok": false,
-    "summary": "Messages: 0 fatals / 3 errors / 0 warnings / 0 infos"
+    "ok": true,
+    "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
    }
   },
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
-   "bytes": 2554053,
-   "mb": 2.44,
+   "bytes": 1144882,
+   "mb": 1.09,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,
    "figures": 9,
@@ -64,8 +64,8 @@
    "links_inside": 187,
    "checks": "pass",
    "epubcheck": {
-    "ok": false,
-    "summary": "Messages: 0 fatals / 3 errors / 0 warnings / 0 infos"
+    "ok": true,
+    "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
    }
   }
  },

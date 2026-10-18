@@ -1283,9 +1283,9 @@ if (PERS) {
     t('puddles', 'hi', { kind: 'chat' });
     t('puddles', 'what can you do (still the full help)', { q: 'what can you do', text: /talk deep/ });
     t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', text: /chore|job|split|share|Lemonade/i });
-    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from this site’s own pages, set down in advance, never made up on the spot/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
+    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match; I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
     t('puddles', 'do you hallucinate', { kind: 'about', text: /I don’t make things up[\s\S]*that’s not it[\s\S]*not a therapist and can’t diagnose/ });
-    t('puddles', 'are you AI?', { kind: 'about', text: /set down in advance, never made up on the spot/, not: /written (and checked )?by people|checked by people/ });
+    t('puddles', 'are you AI?', { kind: 'about', text: /what’s already written on this site\. I pick the best match; I don’t invent new answers/, not: /written (and checked )?by people|checked by people/ });
     t('puddles', 'who are you (says where answers come from)', { q: 'who are you', text: /I don’t make things up/ });
   }
   // deep talk (deep.json): three lenses, put together; safety, care and someone's own situation always first; no jokes
@@ -1389,7 +1389,7 @@ if (PERS) {
     t('chat4', 'make an infographic about small wins', { kind: 'info', info: true, link: '/small-wins.html' });
     t('chat4', 'make me a poster about the ladder', { kind: 'info', info: true, link: '/ladder.html' });
     // the honest answer: rule-based, from the site's own checked pages, can pick the wrong topic, not a therapist
-    const HONEST = /I don’t make things up[\s\S]*set down in advance[\s\S]*wrong topic[\s\S]*not a therapist[\s\S]*rule-based/;
+    const HONEST = /I don’t make things up[\s\S]*already written on this site[\s\S]*wrong topic[\s\S]*not a therapist[\s\S]*rule-based/;
     ['do you make things up', 'are you an AI', 'can i trust you', 'do you hallucinate', 'are you chatgpt', 'is this real advice', 'do you make mistakes'].forEach(q =>
       t('chat4', q, { kind: 'about', id: 'honest', text: HONEST, link: '/ask.html#how-he-answers' }));
     t('chat4', 'can i trust your answers (research link)', { q: 'can i trust your answers', link: '/research.html' });

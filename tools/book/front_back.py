@@ -44,10 +44,14 @@ BACK_KEYS = ('numbers', 'worksheets')
 
 
 class Ctx(object):
-    def __init__(self, name, deep, parts, here, pages, pg, mark, chapter_name, short, site, xref=None):
+    def __init__(self, name, deep, parts, here, pages, pg, mark, chapter_name, short, site, xref=None, series_ref=None):
         # xref: build_book's way of asking for a page marker at a section (add the target to XREFS); the page
         # key is then 'a-' + target, as print_links uses. Without it, add_section_marks() places the markers.
+        # series_ref (printfix13): the print series' way of naming a chapter, slug -> (label, page html or ''):
+        # "Chapter 3" and its page slot in this book, or "Book 2, Chapter 3" and that book's page number. It replaces
+        # the template's own label (which uses the online book's Part/Chapter numbering).
         self.xref = xref
+        self.series_ref = series_ref
         self.name, self.deep, self.parts, self.here = name, deep, tuple(parts), set(here)
         self.pages, self.pg, self.mark, self.chapter_name, self.short = pages, pg, mark, chapter_name, short
         self.site = site.rstrip('/')
@@ -151,6 +155,12 @@ def resolve(ctx, key):
 
 def ref(ctx, key, label):
     href, pkey, inside = resolve(ctx, key)
+    slug = key.partition('#')[0]
+    if ctx.series_ref and slug in ctx.short:
+        lab, page = ctx.series_ref(slug)
+        if inside:
+            return '<a href="%s">%s</a>, page %s' % (href, esc(lab), ctx.pg(pkey))
+        return '%s, page %s' % (esc(lab), page) if page else '%s (online)' % esc(lab)
     if inside:
         return '<a href="%s">%s</a>, page %s' % (href, label, ctx.pg(pkey))
     if href:

@@ -70,11 +70,11 @@ STORE_LINKS = {
 
 # alt text for the drawings on the title pages (book_art.illustration kinds)
 ART_ALT = {
-    'for-yourself': 'A small drawing: a sprout and a heart, for growing and kindness.',
-    'steady': 'A small drawing: a calm, steady heart.',
-    'together': 'A small drawing: two friendly figures side by side.',
-    'load': 'A small drawing: hands sharing a load.',
-    'workbook': 'A small drawing: a page and a pencil.',
+    'for-yourself': 'A smiling round friend holds an open book, next to a small sprout and a heart.',
+    'steady': 'A calm, smiling round friend rests inside a big heart, with two small sprouts beside it.',
+    'together': 'Three smiling round friends read an open book together, with a heart above them.',
+    'load': 'Two smiling round friends share an open book, with a heart above them.',
+    'workbook': 'A small drawing of an open workbook.',
 }
 FRIENDS = [('puddles', hints.SVG_PUDDLES, 'Professor Puddles, a cheerful raindrop in round glasses'),
            ('tidbit', hints.SVG_TIDBIT, 'Tidbit, a small, curious pup'),
@@ -311,6 +311,7 @@ class Images:
         for j in jobs:
             n = os.path.splitext(os.path.basename(j['out']))[0]
             if ok and os.path.isfile(j['out']):
+                shrink_png(j['out'])
                 out[n] = (j['out'], 'image/png', '.png')
             else:
                 # fallback: the SVG itself (valid EPUB 3)
@@ -324,6 +325,19 @@ class Images:
         if not ok:
             warn('pictures: PNG rendering failed (%s); the SVGs went in instead' % msg[:200])
         return out
+
+
+def shrink_png(path):
+    """256 colours, no dithering: the flat drawings look the same at about a third of the size (Kindle charges
+    delivery by the megabyte). Uses Pillow when it is installed; without it the PNG stays as it is."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+    im = Image.open(path)
+    im.load()
+    method = Image.Quantize.FASTOCTREE if im.mode == 'RGBA' else Image.Quantize.MEDIANCUT
+    im.quantize(colors=256, method=method, dither=Image.Dither.NONE).save(path, optimize=True)
 
 
 # ---------- turning the print pages into ebook pages ----------
@@ -551,6 +565,7 @@ dl { margin: 0 0 .8em; }
 dt { font-weight: bold; }
 dd { margin: 0 0 .5em; }
 a { text-decoration: underline; }
+pre { white-space: pre-wrap; word-wrap: break-word; font-family: inherit; font-size: .95em; margin: 0 0 .8em; }
 strong { font-weight: bold; }
 .small, .pe-fb-small { font-size: .88em; }
 
@@ -698,7 +713,7 @@ def nav_xhtml(book, docs):
     for d in chs:
         slug = d.fname[:-6]
         num, lab = S.chapter_label(slug, book)
-        rows.append('<li><a href="%s">%s%s</a></li>' % (d.fname, ('%s: ' % lab) if num else '', xesc(B.TITLES[slug])))
+        rows.append('<li><a href="%s">%s: %s</a></li>' % (d.fname, lab, xesc(B.TITLES[slug])))
     rows += [li(d) for d in back]
     first = chs[0].fname
     body = ('<nav epub:type="toc" id="toc" class="toc" role="doc-toc"><h1>Contents</h1><ol>%s</ol></nav>\n'
