@@ -220,7 +220,8 @@ details.fits > summary .step{display:inline;margin-right:8px}
 .meter .track{height:10px;background:var(--sheet);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .meter .fill{height:100%;width:0;border-radius:10px;transition:width .5s}
 .meter .why{grid-column:1/-1;font-size:.9rem;color:var(--muted);margin:0}
-.lvl-clear{color:var(--v)} .fill.lvl-clear{background:var(--v)}
+/* no result is ever green, so "clear" never reads as a promise (accuracy12) */
+.lvl-clear{color:var(--ink)} .fill.lvl-clear{background:var(--muted)}
 .lvl-some{color:var(--s)} .fill.lvl-some{background:var(--s)}
 .lvl-heavy{color:var(--a)} .fill.lvl-heavy{background:var(--a)}
 .box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0 0 14px}
@@ -354,13 +355,17 @@ details.st-acc summary{cursor:pointer;padding:10px 14px;font-family:var(--displa
 .verdict .replies li{margin:0 0 12px}
 .verdict .replies .vbest{margin:4px 0 6px}
 .verdict .vlvl{font-family:var(--display);font-size:1.35rem;font-weight:600;margin:0 0 6px}
-.verdict .vlvl.lvl-heavy{color:#9A3B2E}.verdict .vlvl.lvl-some{color:#8A6116}.verdict .vlvl.lvl-clear{color:#3E6B48}
+.verdict .vlvl.lvl-heavy{color:#9A3B2E}.verdict .vlvl.lvl-some{color:#8A6116}.verdict .vlvl.lvl-clear{color:var(--ink)}
 .verdict .vfound{margin:0 0 10px;font-size:.95rem}
-.verdict .vplain{font-family:var(--display);font-size:1.18rem;font-weight:600;line-height:1.35;margin:0 0 10px;padding:8px 12px;border-radius:8px;border-left:4px solid #3E6B48;background:rgba(62,107,72,.09);overflow-wrap:anywhere}
+.verdict .vplain{font-family:var(--display);font-size:1.18rem;font-weight:600;line-height:1.35;margin:0 0 10px;padding:8px 12px;border-radius:8px;border-left:4px solid #6E675C;background:rgba(110,103,92,.12);overflow-wrap:anywhere}
 .verdict .vplain.v-hurt{border-left-color:#8A6116;background:rgba(138,97,22,.10)}.verdict .vplain.v-fight{border-left-color:#9A3B2E;background:rgba(154,59,46,.09)}
 .verdict .vplain.v-danger{border-left:6px solid #9A3B2E;background:rgba(154,59,46,.14)}
-/* "hard to tell from the words alone": neutral, never the green of "okay" (accuracy12) */
-.verdict .vplain.v-unsure{border-left-color:#6E675C;background:rgba(110,103,92,.12)}
+/* "okay" and "hard to tell from the words alone" share one neutral style: no result is ever green (accuracy12) */
+.verdict .vplain.v-ok,.verdict .vplain.v-unsure,.verdict .vplain.v-none{border-left-color:#6E675C;background:rgba(110,103,92,.12)}
+/* one quick question before the reading */
+.verdict.st-ask .st-ask-row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 8px}
+.verdict.st-ask .st-ask-row button{min-height:44px;padding:8px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--sheet);color:inherit;font:inherit;cursor:pointer}
+.verdict.st-ask .st-ask-row button:focus-visible{outline:3px solid var(--focus,#2B5B8C);outline-offset:2px}
 .verdict .st-addctx{margin:-4px 0 10px}
 .verdict .st-addctx a{font-weight:600}
 .verdict.danger-card{border-left:5px solid #9A3B2E}
@@ -533,7 +538,7 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 #conversation .cr-summary h2{margin:0 0 .5rem !important;}
 #conversation .cr-summary p{margin:0 0 .6rem !important;}
 #conversation .cr-temp{display:inline-block; padding:.1rem .55rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; vertical-align:.1em;}
-#conversation .cr-temp.calm{background:#DCE8DF; color:#2F5A3C;}
+#conversation .cr-temp.calm{background:rgba(110,103,92,.16); color:var(--ink);}
 #conversation .cr-temp.warm, #conversation .cr-temp.tense{background:#F1E2C2; color:#7A5520;}
 #conversation .cr-temp.hot{background:#F2D6CC; color:#7E3421;}
 #conversation .cr-chart{margin:1rem 0 .3rem;}
@@ -2471,6 +2476,9 @@ function run(){
   $("#results").removeAttribute("data-no-reward");
   if(an.danger){ runDanger(text, an, B); return; }
   if(an.selfHarm){ runCrisis(text); return; }
+  // a short line aimed at "you", with nothing that shows how it's meant: one quick question before the reading
+  const askAns = stAsked["send|"+text];
+  if(!askAns && askFirstHere(an, "send", "send|"+text)) return;
   const fids = Object.keys(found);
   const Bids = sel.B.size ? [...sel.B] : ["general"], Aids=[...sel.A];
   const general = !sel.B.size;
@@ -2478,7 +2486,7 @@ function run(){
   const lvl = sc.level, pct = sc.pct;
   const strongest = sc.top;                       // readings with weight >= 1, loudest first
   const perB = E.readings(an, Bids, channel);
-  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, work:isWork(), bond: needB==="bond"||sitId==="bond", facts:$("#facts").value.trim()}));
+  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, work:isWork(), bond: needB==="bond"||sitId==="bond", facts:$("#facts").value.trim(), answer: askAns}));
   lastChanged = !rw.unchanged;
 
   const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat",group:"in a group channel",email:"by email or long note"}[channel];
@@ -2648,7 +2656,7 @@ function run(){
     const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0, id==="jab" ? 1 : 2));
   });
   // one plain line first, for anyone who just wants to know: is my sentence okay?
-  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() || /^[A-Z]/.test(nm("B")) && nm("B")!=="You" ? nm("B") : ""), work:isWork(), replyTo: replyCtx}) : null;
+  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() || /^[A-Z]/.test(nm("B")) && nm("B")!=="You" ? nm("B") : ""), work:isWork(), replyTo: replyCtx, answer: askAns}) : null;
   // a family message after a long silence or a rift: kind words still meet the history, so no big green all-clear
   const riftOpener = lvl[0]==="clear" && (relId==="family" || (!relId && RIFT.test(text))) && (LONG_GAP.test(text) || RIFT.test(text));
   if(riftOpener && plain && plain.id==="ok") plain.text = "Your words are kind and clear. History can change how any message lands after a long silence, so go gently, and make it easy for them to take their time.";
@@ -2933,9 +2941,31 @@ function fitReceived(an, rv){
   }
   return rv;
 }
+/* One quick question first (E.askFirst): one tap, never a form. The answer fills in the matching part of "Add context"
+   (so the reading says what it used) and is remembered for this sentence on this page view only. No answer can turn a
+   threat, or a line the words alone can't settle, into "okay". */
+const stAsked = {};
+function askFirstHere(an, mode, key){
+  if(!E.askFirst) return false;
+  const q = E.askFirst(an, {mode, ctx: ctxNow()}); if(!q) return false;
+  const R = $("#results");
+  R.innerHTML = '<div class="verdict st-ask" id="verdict"><p class="vplain v-unsure" id="vplain">'+esc(q.q)+'</p><div class="st-ask-row" role="group" aria-label="Your answer">'+
+    q.answers.map(a=>'<button type="button" data-st-ans="'+esc(a.id)+'">'+esc(a.label)+'</button>').join('')+'</div>'+
+    '<p class="small">One tap. It only changes this reading, and it fills in the matching part of Add context so you can see what was used. Nothing is saved.</p></div>';
+  R.hidden = false; R.classList.remove("is-brief"); noReward(R);
+  R.querySelectorAll("[data-st-ans]").forEach(b=>b.addEventListener("click", ()=>{
+    const id = b.getAttribute("data-st-ans"); stAsked[key] = id;
+    if(id!=="skip" && stCtx){ try{ stCtx.set(E.answerCtx(id, ctxNow())); }catch(e){} }
+    run();
+    const v = document.getElementById("vplain"); if(v){ v.setAttribute("tabindex","-1"); try{ v.focus({preventScroll:true}); }catch(e){} }
+  }));
+  return true;
+}
 function runReceived(text){
   const an = E.analyze(text, {channel, ctx: ctxNow(), mode:"read"});
-  const rv = fitReceived(an, E.receive(an, {rel:relId}));
+  const askAns = stAsked["read|"+text];
+  if(!askAns && !an.danger && !an.selfHarm && askFirstHere(an, "read", "read|"+text)) return;
+  const rv = fitReceived(an, E.receive(an, {rel:relId, answer: askAns}));
   $("#results").removeAttribute("data-no-reward");
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Reading it kindly</h2>';
   const recvPlain = rv.head ? rv.head : rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]

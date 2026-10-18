@@ -58,11 +58,13 @@
     '.mcm-out{margin-top:10px}' +
     '.mcm-out:empty{display:none}' +
     '.mcm-v{margin:0 0 .5rem;font-weight:600;line-height:1.45}' +
-    '.mcm-v.ok{border-left:4px solid var(--credit,#3E6B4C);padding-left:10px}' +
+    // no result is ever green, so "okay" never reads as a promise: okay and "hard to tell" share one neutral style
+    '.mcm-v.ok,.mcm-v.unsure,.mcm-v.none{border-left:4px solid var(--ink-soft,#5A5346);padding-left:10px}' +
     '.mcm-v.hurt{border-left:4px solid var(--brass,#A8792F);padding-left:10px}' +
     '.mcm-v.fight,.mcm-v.danger{border-left:4px solid var(--debit,#96412B);padding-left:10px}' +
-    // "hard to tell from the words alone": neutral, never the green of "okay"
-    '.mcm-v.unsure{border-left:4px solid var(--ink-soft,#5A5346);padding-left:10px}' +
+    '.mcm-ask{margin:.2rem 0 .4rem;font-weight:600;line-height:1.45}' +
+    '.mcm-ask-row{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 .4rem}' +
+    '.mcm-ask-row button{min-height:44px;padding:8px 14px;border:1.5px solid var(--line,#D9CBA3);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:.95rem;cursor:pointer}' +
     '.mcm-addctx{margin:0 0 .5rem;font-size:.92rem}' +
     '.mcm-addctx a{font-weight:600;color:inherit}' +
     '.mcm-k{margin:.4rem 0 .15rem;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
@@ -103,19 +105,35 @@
     // only load the engine when someone shows they want it
     box.addEventListener('focus', function () { engine().catch(function () {}); }, { once: true });
     // the full checker gets the words, without putting them in the address
-    function hand() { try { if (box.value.trim()) sessionStorage.setItem('tol-st-text', box.value.trim().slice(0, 1500)); } catch (e) {} }
+    // the one-tap answer ("a joke we both share") goes along as context, through the same tab-only key the Chat analyzer reads
+    var answer = null, answeredFor = '', answerCtx = null;
+    function hand() { try { if (box.value.trim()) sessionStorage.setItem('tol-st-text', box.value.trim().slice(0, 1500)); if (answerCtx && answeredFor === box.value.trim()) sessionStorage.setItem('tol-st-ctx', JSON.stringify(answerCtx)); } catch (e) {} }
     link.addEventListener('click', hand);
     ctxLink.addEventListener('click', hand);
 
     function check() {
       var text = box.value.trim();
       if (!text) { out.innerHTML = '<p class="mcm-note no-bubble">Type a message first.</p>'; box.focus(); return; }
+      if (answeredFor !== text) { answer = null; answerCtx = null; }
       go.disabled = true; go.textContent = 'Checking…';
       engine().then(function (E) {
-        var an = E.analyze(text, { channel: 'text' });
+        var ctx = answerCtx;
+        var an = E.analyze(text, { channel: 'text', ctx: ctx });
+        // a short line aimed at "you", with nothing that shows how it's meant: one quick question before answering
+        var q = !answer && E.askFirst ? E.askFirst(an, { mode: 'send' }) : null;
+        if (q) {
+          out.innerHTML = '<p class="mcm-ask no-bubble">' + esc(q.q) + '</p><div class="mcm-ask-row" role="group" aria-label="Your answer">' +
+            q.answers.map(function (a) { return '<button type="button" data-ans="' + esc(a.id) + '">' + esc(a.label) + '</button>'; }).join('') + '</div>' +
+            '<p class="mcm-note no-bubble">One tap. It only changes this reading, and nothing is saved.</p>';
+          Array.prototype.forEach.call(out.querySelectorAll('[data-ans]'), function (b) {
+            b.addEventListener('click', function () { answer = b.getAttribute('data-ans'); answeredFor = text; answerCtx = answer === 'skip' ? null : E.answerCtx(answer, null); check(); });
+          });
+          var f = out.querySelector('[data-ans]'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
+          return;
+        }
         var sc = E.score(an, ['general'], 'text');
-        var rw = E.rewrite(an, { wirings: ['general'], channel: 'text', rel: rel });
-        var v = E.verdict ? E.verdict(an, sc, rw, { rel: rel }) : { id: 'ok', text: '' };
+        var rw = E.rewrite(an, { wirings: ['general'], channel: 'text', rel: rel, ctx: ctx, answer: answer });
+        var v = E.verdict ? E.verdict(an, sc, rw, { rel: rel, ctx: ctx, answer: answer }) : { id: 'ok', text: '' };
         var h = '<p class="mcm-v no-bubble ' + esc(v.id) + '">' + esc(v.text) + '</p>';
         // threat-shaped, or hard to read: "Add context" is the obvious next step
         if (v.addContext && !an.selfHarm) h += '<p class="mcm-addctx no-bubble"><a class="mcm-ctx2" href="' + full + '#add-context">Add context</a>: who they are, and whether you joke like this. The words alone can&rsquo;t show a joke.</p>';

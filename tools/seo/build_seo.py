@@ -145,7 +145,8 @@ SEARCH = {
  'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly crosswords with gentle clues, from easy to tricky. Free, calm and no timers: a peaceful puzzle for a few quiet minutes.'),
  'quiet-words.html': ('Quiet Words: A Calm, Free Word Search', 'A calming word search with soft themes, levels from easy to tricky and no timers. Free to play on your phone or computer.'),
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style crossword with fair, friendly clues. Play in your browser on any device, at your own pace.'),
- 'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Five Calm Classic Games', 'Play as Tidbit or Sugarfoot in five gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker and a catching game. Easy touch controls, a relaxed pace and no game over.'),
+ 'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Six Calm Classic Games', 'Play as Tidbit or Sugarfoot in six gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catching game and a Home Run Derby. Easy touch controls, a relaxed pace and no game over.'),
+ 'coin-pusher.html': ('Kindness Coin Pusher: A Cozy Arcade With a Kind Tip Every Few Coins', 'A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride along. Free, nothing to buy.'),
  'frequency-buddies.html': ('Frequency Buddies: A Cartoon About Feelings, for All Ages', 'Gentle animated episodes for all ages: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: Drop In Anytime', 'A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
@@ -246,7 +247,8 @@ SEARCH.update({
  'quiet-words.html': ('Calm Word Search, No Timer: Quiet Words (Free)', 'A calm, free word search with soft themes, levels from easy to tricky and no timer. Every word you find leaves a kind thought behind. Play on phone or computer.'),
  'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly mini crosswords with gentle clues in five levels from easy to tricky. Free and calm with no timer: a peaceful puzzle for a few quiet minutes.'),
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style daily crossword with fair, friendly clues, from a quick 5x5 mini to a big Sunday grid. Play in your browser on any device, at your pace.'),
- 'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Five Calm Classic Games', 'Play as Tidbit or Sugarfoot in five gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker and a catching game. Easy touch controls, a relaxed pace and no game over.'),
+ 'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Six Calm Classic Games', 'Play as Tidbit or Sugarfoot in six gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catching game and a Home Run Derby. Easy touch controls, a relaxed pace and no game over.'),
+ 'coin-pusher.html': ('Kindness Coin Pusher: A Cozy Arcade With a Kind Tip Every Few Coins', 'A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride along. Free, nothing to buy.'),
  'frequency-buddies.html': ('Frequency Buddies: A Cartoon About Feelings, for All Ages', 'Free animated episodes for all ages: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. With captions.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song: a free cartoon about feelings for all ages, plus each episode to download.'),
  'frequency-buddies-music-video-maker.html': ('Make Your Own Frequency Buddies Music Video', 'Make your own Frequency Buddies theme song music video: pick the stage, lights, effects, dance moves, costumes and who’s on stage, then play it and share the link.'),
@@ -626,7 +628,7 @@ CRUMB_PARENTS = [
     (r'^library/', 'The Professor’s Library', 'library.html'),
     (r'^learn/index-in-depth', 'Stories from Philosophy', 'learn/index.html'),
     (r'^(workpapers/|wp-\d|prog-01-in)', 'Which part of the program to use', 'program.html'),
-    (r'^(night-garden|bears-dojo|word-bloom|quiet-crossword|quiet-words|daily-ledger|frequency-journey|calm-visualizer|keepsakes)', 'Calm games', 'pause-and-play.html'),
+    (r'^(coin-pusher|night-garden|bears-dojo|word-bloom|quiet-crossword|quiet-words|daily-ledger|frequency-journey|calm-visualizer|keepsakes)', 'Calm games', 'pause-and-play.html'),
     (r'^frequency-buddies-', 'Frequency Buddies', 'frequency-buddies.html'),
 ]
 
@@ -653,7 +655,7 @@ TOOLS = (r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|l
          r'|perspective-shifter|ladder|refusals|wavelength|write-it-through|look-back-30-days|find-your-start|how-you-take-things-in)')
 # Pages that list other pages (marked as a collection, with the site search on explore.html)
 HUBS = r'^(book/index\.html|tools\.html|explore\.html|by-relationship\.html|contents\.html|pause-and-play\.html)$'
-GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
+GAMES = r'^(coin-pusher|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
 ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|outside-help|research\.html|en-espanol)'
 
 
@@ -1117,7 +1119,7 @@ Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 def priority(path):
     if path == 'index.html': return '1.0'
     if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|complacency|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|conversation-reader|check-ins|tools\.html|explore|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting|neurodivergent-relationships|communication\.html|share-the-load|nervous-system|calming-supplements|love-languages\.html|apology-languages|co-parenting|living-alone\.html|book/index|lemonade-stand)', path): return '0.9'
-    if re.search(r'^(book/|library/|workpapers/fill/suite|frequency-journey|soundscapes|calm-visualizer|word-bloom|quiet-words|quiet-crossword|daily-ledger)', path): return '0.8'
+    if re.search(r'^(book/|library/|workpapers/fill/suite|coin-pusher|frequency-journey|soundscapes|calm-visualizer|word-bloom|quiet-words|quiet-crossword|daily-ledger)', path): return '0.8'
     return '0.6'
 
 
