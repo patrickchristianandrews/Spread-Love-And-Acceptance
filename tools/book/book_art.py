@@ -90,6 +90,15 @@ def heart_book(cx, cy, width):
         cx, cy, k, BRASS, BRASS, BRASS)
 
 
+def puzzle_piece(cx, cy, size, tone, knob_right=True):
+    """a jigsaw piece, centred on (cx, cy): a knob on its right side, or a socket on its left"""
+    fill, stroke = TONES[tone]
+    k = size / 30.0
+    d = ('M-15 -15H15V-5C21 -6 24 -3 24 0S21 6 15 5V15H-15Z' if knob_right else
+         'M-15 -15H15V15H-15V5C-11 6 -8 3 -8 0S-11 -6 -15 -5Z')
+    return '<path transform="translate(%.2f %.2f) scale(%.4f)" d="%s" fill="%s" stroke="%s" stroke-width="2.4" stroke-linejoin="round"/>' % (cx, cy, k, d, fill, stroke)
+
+
 def illustration(kind):
     """The cover picture for each package, in a 200 x 150 box."""
     g = []
@@ -131,6 +140,23 @@ def illustration(kind):
         g.append(hands([(58, 76, 4.6)], 'sky'))
         g.append(sprout(164, 70, 30))
         g.append(heart(150, 22, 18) + spark(30, 18, 10) + spark(116, 16, 8))
+    elif kind == 'logic':  # logicbook14: the pocket guide (two buddies fitting two jigsaw pieces together)
+        g.append(buddy(52, 64, 62, 'rose', -7, 1))
+        g.append(buddy(148, 64, 62, 'sky', 7, -1))
+        g.append(puzzle_piece(84, 104, 34, 'rose', True))
+        g.append(puzzle_piece(119, 104, 34, 'sky', False))
+        g.append(hands([(66, 97, 4.6), (134, 97, 4.6)], 'peach'))
+        g.append(heart(100, 30, 22) + spark(24, 26, 11) + spark(178, 28, 9) + spark(100, 8, 6, '#EE8FA6'))
+    elif kind == 'boxset':  # logicbook14: the Kindle box set (five books on a shelf, in the series' colours, two buddies)
+        cols = ['#3E6B4C', '#6A52A0', '#2B5B8C', '#96412B', '#9C3D5A']
+        for i, c in enumerate(cols):
+            x = 52 + i * 20
+            hgt = 62 if i < 4 else 46
+            g.append('<rect x="%d" y="%d" width="17" height="%d" rx="2.4" fill="%s" stroke="%s" stroke-width="1.4"/>' % (x, 112 - hgt, hgt, c, INK))
+            g.append('<path d="M%d %dh9M%d %dh9" stroke="#FFF8EC" stroke-width="1.6" stroke-linecap="round"/>' % (x + 4, 112 - hgt + 9, x + 4, 112 - hgt + 13))
+        g.append('<path d="M30 113H170" stroke="%s" stroke-width="2.6" stroke-linecap="round"/>' % BRASS)
+        g.append(buddy(26, 92, 40, 'peach', -8, 1) + buddy(176, 92, 40, 'mint', 8, -1))
+        g.append(heart(100, 24, 22) + spark(36, 30, 11) + spark(166, 30, 9) + spark(150, 12, 6, '#EE8FA6'))
     else:  # understanding
         g.append(buddy(36, 82, 60, 'sky', -6, 1))
         g.append(buddy(164, 82, 60, 'butter', 6, -1))

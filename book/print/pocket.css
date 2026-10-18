@@ -1,0 +1,119 @@
+/* pocket.css: "The Logic Behind It", the series' pocket guide (logicbook14), 5 x 8 in (127 x 203.2 mm), KDP regular trim,
+   standard colour on white paper. Loaded after /assets/css/book-print.css and /book/print/print.css by the page
+   tools/book/pocket.py writes into /book/print/src/, which tools/book/build_pdfs.js (BOOK_SERIES=1) prints.
+   - One situation to a page: each one is an article that starts a page and fills it, with its code at the foot.
+   - Margins: 15 mm inside (KDP's minimum gutter at this length is 0.375 in, 9.5 mm), 11 mm outside, no bleed.
+   - White pages; colour only in rules, labels and the side tags. Codes are dark on white. */
+@page { size: 5in 8in; margin: 12mm 11mm 16mm 15mm; }
+@page :right { margin: 12mm 11mm 16mm 15mm; }
+@page :left { margin: 12mm 15mm 16mm 11mm; }
+
+.pk-book { font-size: 9.4pt; line-height: 1.45; }
+.pk-book p { margin: 0 0 1.8mm; }
+.pk-book a { color: inherit; text-decoration: none; }
+
+/* front matter, at this size */
+.pk-book .ps-title { height: 172mm; padding: 7mm 0; }
+.pk-book .ps-title-t { font-size: 25pt; }
+.pk-book .ps-title-s { font-size: 10.4pt; max-width: 84mm; }
+.pk-book .ps-title-art .pe-art { width: 58mm; height: 44mm; }
+.pk-book .ps-copy { height: 172mm; }
+.pk-book .ps-copy-in { font-size: 7.1pt; line-height: 1.42; }
+.pk-book .ps-copy-in p { margin: 0 0 1.7mm; }
+.pk-toc h1 { font-size: 17pt !important; margin: 0 0 3mm; }
+.pk-toc .pe-toc-row a { padding: .7mm 0; }
+.pk-toc .pe-toc-t { font-size: 9pt; }
+.pk-toc .pe-toc-s { font-size: 7.4pt; color: var(--soft); font-style: italic; }
+.pk-toc .pe-toc-l { flex-basis: 9mm; }
+.pk-toc .pe-toc-row.is-ch .pe-toc-l { color: var(--pc); }
+
+.pk-front, .pk-back { break-before: page; }
+.pk-front, .pk-how { page: pe-front; }
+.pk-front h1, .pk-back h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 17pt; line-height: 1.1; margin: 0 0 3mm; padding-bottom: 2mm; border-bottom: .6pt solid var(--pc); color: var(--ink); }
+.pk-front-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.6pt; letter-spacing: .16em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.4mm !important; }
+.pk-lede { font-size: 10pt; line-height: 1.45; }
+.pk-small { font-size: 8.6pt; color: var(--soft); }
+.pk-how-l, .pk-parts, .pk-tags { margin: 2mm 0 3mm; padding-left: 4.4mm; }
+.pk-how-l li, .pk-parts li { margin: 0 0 2mm; }
+.pk-tags { list-style: none; padding: 0; }
+.pk-tags li { margin: 0 0 2.4mm; }
+
+/* the three tags, everywhere they appear */
+.pk-side { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.4pt; letter-spacing: .06em; text-transform: uppercase; color: var(--pc); white-space: nowrap; }
+.pk-tags .pk-side { display: block; margin-bottom: .4mm; }
+.pk-side-nd { color: #5A4A93; }
+.pk-side-nt { color: #2B5B8C; }
+.pk-side-all { color: #3E6B4C; }
+
+/* ---------- a section's opening page ---------- */
+.pk-sec { break-before: page; min-height: 170mm; display: flex; flex-direction: column; }
+.pk-sec-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .18em; text-transform: uppercase; color: var(--pc); margin: 6mm 0 1.6mm !important; }
+.pk-sec-h { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-height: 1.05; margin: 0 0 2.6mm; color: var(--ink); }
+.pk-sec-b { font-style: italic; font-size: 10pt; color: var(--soft); margin: 0 0 3mm !important; padding-bottom: 3mm; border-bottom: .6pt solid var(--pc); }
+.pk-sec-i { font-size: 9.6pt; line-height: 1.5; }
+.pk-sec-l { list-style: none; padding: 0; margin: 2mm 0 0; }
+.pk-sec-l li { margin: 0; }
+.pk-sec-l a { display: flex; align-items: baseline; padding: 1mm 0; }
+.pk-sec-n { flex: 0 0 7mm; font-family: "Fraunces", serif; font-size: 8.6pt; color: var(--pc); }
+.pk-sec-t { flex: 0 1 auto; font-size: 9pt; line-height: 1.3; }
+.pk-sec-art { margin-top: auto; text-align: right; color: var(--pc); }
+.pk-sec-art .pk-puzzle { width: 22mm; height: auto; }
+
+/* ---------- one situation, one page ---------- */
+.pk-sit { break-before: page; height: 174mm; display: flex; flex-direction: column; overflow: hidden; }
+.pk-sit-head { margin: 0 0 2.4mm; padding-bottom: 2mm; border-bottom: .7pt solid var(--pc); }
+.pk-sit-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.3pt; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); margin: 0 0 1.2mm !important; }
+.pk-sit-n { display: inline-block; min-width: 5mm; margin-right: 1.6mm; padding: .3mm 1mm; border-radius: 1mm; background: var(--pc); color: #fff; text-align: center; letter-spacing: 0; font-size: 6.8pt; }
+.pk-sit-k .pk-side { font-size: 6.3pt; }
+.pk-dot { color: #B5A77F; }
+.pk-sit-t { font-family: "Fraunces", serif; font-weight: 600; font-size: 13.4pt; line-height: 1.12; margin: 0; color: var(--ink); text-wrap: balance; }
+.pk-part { margin: 0 0 1.7mm; }
+.pk-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.2pt; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin: 0 0 .5mm; }
+.pk-part p { font-size: 8.7pt; line-height: 1.38; margin: 0 !important; }
+.pk-chain { list-style: none; margin: 0; padding: 0; counter-reset: pk; }
+.pk-chain li { counter-increment: pk; position: relative; padding-left: 5mm; font-size: 8.7pt; line-height: 1.34; margin: 0 0 .5mm; }
+.pk-chain li::before { content: counter(pk); position: absolute; left: 0; top: .3mm; width: 3.4mm; height: 3.4mm; border-radius: 50%; border: .6pt solid var(--pc); color: var(--pc);
+  font-family: "Fraunces", serif; font-size: 6.4pt; line-height: 3.4mm; text-align: center; }
+.pk-like p { font-style: italic; }
+.pk-say { margin: .6mm 0 0; padding: 2mm 2.6mm; border-left: 2.4pt solid var(--pc); background: #fff; }
+.pk-say-q { font-family: "Fraunces", serif; font-size: 9.6pt; line-height: 1.3; margin: 0 0 1.4mm !important; color: var(--ink); }
+.pk-step, .pk-care { font-size: 8.5pt; line-height: 1.36; margin: 0 !important; }
+.pk-step b, .pk-care b { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.2pt; letter-spacing: .1em; text-transform: uppercase; color: var(--pc); margin-right: 1mm; }
+.pk-care { margin-top: 1.2mm !important; padding-top: 1.2mm; border-top: .4pt dotted #B5A77F; }
+.pk-online { margin-top: auto; display: flex; gap: 3mm; align-items: center; padding-top: 2mm; border-top: .5pt dashed var(--pc); }
+.pk-online .pe-qr, .pk-online-big .pe-qr, .ps-logic-code .pe-qr { flex: 0 0 20mm; width: 20mm; height: 20mm; background: #fff; }
+.pk-online .pe-qr svg { width: 20mm; height: 20mm; }
+.pk-online p { margin: 0 !important; font-size: 7.8pt; line-height: 1.35; color: var(--soft); }
+.pk-online strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: 9pt; color: var(--ink); }
+.pk-addr { display: block; margin-top: .6mm; font-size: 6.4pt !important; overflow-wrap: anywhere; }
+.pk-addr .pe-nb { white-space: normal; }
+
+/* ---------- the back ---------- */
+.pk-card { page: pk-cards; }
+.pk-card-top { display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.6pt; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); border-bottom: .7pt solid var(--pc); padding-bottom: 1.6mm; margin: 0 0 3mm !important; }
+.pk-card-name { display: flex; align-items: flex-end; gap: 2mm; font-family: "Fraunces", serif; font-weight: 600; font-size: 10pt; margin: 0 0 3mm !important; }
+.pk-card-line { flex: 1 1 auto; border-bottom: .5pt solid #8C826F; height: 5mm; }
+.pk-card-row { margin: 0 0 2.2mm; }
+.pk-card-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.4pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 !important; }
+.pk-card-lines div { height: 7mm; border-bottom: .4pt solid #B8AE98; }
+.pk-find-l { list-style: none; padding: 0; margin: 0; }
+.pk-find-l a { display: flex; align-items: baseline; padding: .55mm 0; }
+.pk-find-t { flex: 0 1 auto; font-size: 8.6pt; line-height: 1.28; }
+.pk-find-l .pe-pg { font-family: "Fraunces", serif; font-size: 8.4pt; }
+.pk-online-big { display: flex; gap: 4mm; align-items: center; border: 1pt solid var(--pc); border-radius: 2mm; padding: 3mm; margin: 0 0 4mm; }
+.pk-online-big .pe-qr, .pk-online-big .pe-qr svg, .ps-logic-code .pe-qr, .ps-logic-code .pe-qr svg { width: 26mm; height: 26mm; flex-basis: 26mm; }
+.pk-online-big p { margin: 0 !important; font-size: 8.6pt; }
+.pk-online-big strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: 11pt; color: var(--pc); }
+.pk-online-big .ps-addr { display: block; margin-top: 1mm; font-size: 7pt; }
+.pk-online-l { padding-left: 4mm; }
+.pk-online-l li { font-size: 9pt; margin: 0 0 1.8mm; }
+.pk-refs { font-size: 7.4pt !important; }
+.pk-ref-w { color: var(--soft); font-style: italic; }
+.pk-book .ps-series { break-before: page; }
+.pk-book .ps-series-t strong { font-size: 10pt; }
+.pk-book .ps-series-l { font-size: 8pt; }
+.pk-book .ps-series-k { flex-basis: 15mm; }
+.pk-lines div { height: 8.2mm; border-bottom: .4pt solid #B8AE98; }
+
+/* the code-and-page links are print-only furniture; the ebook keeps plain links */
+.pk-book .pe-pg:empty::after { content: ""; }

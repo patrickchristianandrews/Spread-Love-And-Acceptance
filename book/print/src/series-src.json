@@ -75,6 +75,33 @@
    "n": 0
   },
   {
+   "id": "pocket-the-logic-behind-it",
+   "kind": "pocket",
+   "trim": [
+    5,
+    8
+   ],
+   "colPx": 382,
+   "paper_in": 0.002252,
+   "price": 8.99,
+   "cover": "cover-pocket-the-logic-behind-it",
+   "title": "The Logic Behind It",
+   "n": 0,
+   "min_pages": 72,
+   "max_pages": 80
+  },
+  {
+   "id": "boxset-complete-series",
+   "kind": "front",
+   "trim": [
+    6,
+    9
+   ],
+   "cover": "cover-boxset-complete-series",
+   "title": "Spread Love & Acceptance: The Complete Series",
+   "n": 0
+  },
+  {
    "id": "measure",
    "kind": "measure",
    "trim": [
@@ -90,35 +117,19 @@
    "fixed": 1.0,
    "per_page": 0.0255,
    "royalty": 0.6,
+   "royalty_low": 0.5,
+   "threshold": 9.99,
    "expanded": 0.4,
-   "note": "KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; 60% royalty at $9.99 and up, 40% expanded distribution"
+   "note": "KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)"
   },
   "kdp_large": {
    "fixed": 1.0,
    "per_page": 0.0402,
    "royalty": 0.6,
+   "royalty_low": 0.5,
+   "threshold": 9.99,
    "expanded": 0.4,
    "note": "KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page"
-  },
-  "ingram": {
-   "fixed": 1.16,
-   "per_page": 0.0249,
-   "discount": 0.4,
-   "market_fee": 0.01875,
-   "note": "IngramSpark rate card from 1 Feb 2026, standard colour 50lb, small trim: $1.16 + $0.0249 a page; 1.875% market access fee; 40% wholesale discount assumed"
-  },
-  "ingram_large": {
-   "fixed": 1.23,
-   "per_page": 0.0392,
-   "discount": 0.4,
-   "market_fee": 0.01875,
-   "note": "IngramSpark, standard colour 50lb, large trim: $1.23 + $0.0392 a page"
-  },
-  "direct": {
-   "card_pct": 0.029,
-   "card_fixed": 0.3,
-   "fulfil_fee": 1.75,
-   "note": "Direct sale through a print-on-demand fulfilment service (Lulu Direct or BookVault): print cost estimated at the IngramSpark rate (Lulu and BookVault quote per title only); card fee 2.9% + $0.30 (Shopify Payments basic); Lulu Direct example fulfilment fee $1.75 an order; the buyer pays shipping"
   }
  },
  "paper_in": 0.002252,

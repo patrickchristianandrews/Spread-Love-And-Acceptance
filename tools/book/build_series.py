@@ -60,21 +60,25 @@ pg = B.pg
 # calculator / spine width": kdp.amazon.com/help/topic/G201953020). The same factor for the 8.5 x 11 workbook.
 PAPER_IN = 0.002252
 # column widths in CSS pixels (96 a inch), for build_pdfs.js's "wider than the text column" check
-COL_PX = {'book': round((6 - 0.75 - 0.5) * 96), 'workbook': round((8.5 - 0.75 - 0.5) * 96)}
+COL_PX = {'book': round((6 - 0.75 - 0.5) * 96), 'workbook': round((8.5 - 0.75 - 0.5) * 96), 'pocket': round((5 - 15 / 25.4 - 11 / 25.4) * 96)}
 
-# printing cost and channel terms (US, looked up October 2026; see $SP/print-publishing-guide.md for the sources)
+# printing cost and royalty on Amazon (US, looked up October 2026). logicbook14: the owner sells on Amazon only, so the
+# cost model has Amazon's own channel and nothing else. KDP pays 60% at a list price of $9.99 and up and 50% below it
+# (since 10 June 2025), minus printing.
 COSTS = {
-    'kdp': {'fixed': 1.00, 'per_page': 0.0255, 'royalty': 0.60, 'expanded': 0.40,
-            'note': 'KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; 60% royalty at $9.99 and up, 40% expanded distribution'},
-    'kdp_large': {'fixed': 1.00, 'per_page': 0.0402, 'royalty': 0.60, 'expanded': 0.40,
+    'kdp': {'fixed': 1.00, 'per_page': 0.0255, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
+            'note': 'KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)'},
+    'kdp_large': {'fixed': 1.00, 'per_page': 0.0402, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
                   'note': 'KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page'},
-    'ingram': {'fixed': 1.16, 'per_page': 0.0249, 'discount': 0.40, 'market_fee': 0.01875,
-               'note': 'IngramSpark rate card from 1 Feb 2026, standard colour 50lb, small trim: $1.16 + $0.0249 a page; 1.875% market access fee; 40% wholesale discount assumed'},
-    'ingram_large': {'fixed': 1.23, 'per_page': 0.0392, 'discount': 0.40, 'market_fee': 0.01875,
-                     'note': 'IngramSpark, standard colour 50lb, large trim: $1.23 + $0.0392 a page'},
-    'direct': {'card_pct': 0.029, 'card_fixed': 0.30, 'fulfil_fee': 1.75,
-               'note': 'Direct sale through a print-on-demand fulfilment service (Lulu Direct or BookVault): print cost estimated at the IngramSpark rate (Lulu and BookVault quote per title only); card fee 2.9% + $0.30 (Shopify Payments basic); Lulu Direct example fulfilment fee $1.75 an order; the buyer pays shipping'},
 }
+
+# logicbook14: "Another way to see it" boxes (tools/book/logic-boxes.json), the pocket guide and the box set
+# (tools/book/series-extras.json, tools/book/pocket.py)
+LOGIC = json.load(open(os.path.join(HERE, 'logic-boxes.json'), encoding='utf-8'))
+EXTRAS = json.load(open(os.path.join(HERE, 'series-extras.json'), encoding='utf-8'))
+POCKET = EXTRAS['pocket']
+BOXSET = EXTRAS['boxset']
+LOGIC_PAGE = '/the-logic-behind-it.html'
 
 SERIES_CSS = '/book/print/print.css'
 WB_CSS = '/book/print/workbook.css'
@@ -299,6 +303,42 @@ def classify(path, text):
 SCAN_COUNT = {}
 
 
+def logic_boxes(slug):
+    return [b for b in LOGIC['boxes'] if b['slug'] == slug]
+
+
+def logic_box(b):
+    """logicbook14: one "Another way to see it" box: a situation from /the-logic-behind-it.html in the lens's six parts,
+    ending with a code to it online (print) or a link (ebook: the code goes and the link stays)"""
+    import pocket
+    lab = LOGIC['labels']
+    url = '%s?item=%s#find' % (LOGIC_PAGE, b['id'])
+    row = lambda k, v, cls='': '<p class="lg-row%s"><span class="lg-l">%s</span> %s</p>' % (cls, esc(lab[k]), v)
+    steps = '<span class="lg-arr" aria-hidden="true"> → </span>'.join('<span class="lg-step">%s</span>' % esc(x) for x in b['logic'])
+    s = '<aside class="lg-box no-bubble no-cheer no-dive" data-no-bubble aria-label="%s" id="lg-%s">' % (esc(LOGIC['kicker']), b['id'])
+    s += '<p class="lg-box-k">%s<span>%s</span></p><p class="lg-box-t">%s</p>' % (pocket.puzzle_svg(), esc(LOGIC['kicker']), esc(b['title']))
+    s += row('looks', esc(b['looks'])) + row('logic', steps, ' lg-logic') + row('like', esc(b['like'])) + row('fits', esc(b['fits']))
+    s += row('other', esc(b['other'])) + row('say', '<em>%s</em>' % esc(b['say']), ' lg-say') + row('step', esc(b['step']))
+    s += ('<div class="lg-box-end">%s<p>More situations like this one, each in the same six parts, are free online. '
+          '<a href="%s%s"><span class="ps-addr">%s</span></a></p></div></aside>') % (
+        qr(url), SITE, esc(url), B.addr_html(pocket.item_addr(b['id'])).replace('?', '?<wbr>'))
+    return s
+
+
+LOGIC_BEFORE = re.compile(r'<h[234]\b[^>]*\bid="(?:[a-z0-9-]+--)?(?:everyday|all-relationships|mix-ups)"')
+
+
+def add_logic_boxes(body, slug):
+    """each box goes before the chapter's "In everyday life" (or "You, in all your relationships", or "Common mix-ups"),
+    or at the end of the chapter when it has none of them"""
+    boxes = logic_boxes(slug)
+    if not boxes:
+        return body
+    h = ''.join(logic_box(b) for b in boxes)
+    m = LOGIC_BEFORE.search(body)
+    return (body[:m.start()] + h + body[m.start():]) if m else body + h
+
+
 def s_chapter(e, book, here, where, namer=None, panels=False):
     """one chapter as the series prints it; panels=True adds the "Scan to open" codes (print only; the ebooks keep links)"""
     slug = e[0]
@@ -319,6 +359,7 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
         body = ST.strip_inline_addresses(body)
         body, n = ST.scan_panels(body, qr, classify, B.short_address, B.addr_html, esc)
         SCAN_COUNT[(book['id'], slug)] = n
+    body = add_logic_boxes(body, slug)
     if not CFG.get('examples', True):
         body = re.sub(r'<div class="book-ex-wrap.*?</figure>\s*</div>', '', body, flags=re.S)
     # the made-up note is said once, at the front of the book (copyright page and "About this book")
@@ -457,6 +498,15 @@ def help_now(here, namer=None):
 
 def research_short(book, here):
     notes = B.research_notes(here)
+    # logicbook14: the studies an "Another way to see it" box leans on join its chapter's notes
+    import pocket
+    R = pocket.refs_index()
+    for slug in book['chapters']:
+        for bx in logic_boxes(slug):
+            for rid in bx.get('refs', []):
+                have = notes.setdefault(slug, {})
+                if rid in R and not any((r.get('title') or '').strip().lower() == (R[rid].get('title') or '').strip().lower() for r in have.values()):
+                    have[rid] = R[rid]
     n = sum(len(v) for v in notes.values())
     s = '<section class="pe-back ps-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (
         book['color'], book['tint'], mark('notes'))
@@ -498,12 +548,34 @@ def notes_pages(book, n=2):
     return s
 
 
+def series_items():
+    """every book of the series in print, in order: the four books, the workbook, the pocket guide (logicbook14)"""
+    return books() + [CFG['workbook'], POCKET]
+
+
+def logic_free_page(book, epub=False):
+    """logicbook14: one short page near the end of each book: the free situations online, and the pocket guide"""
+    n = len(POCKET['items'])
+    words = ('<p class="pe-back-lede">The “Another way to see it” boxes in this book come from a free page on the website. It has more than seventy everyday '
+             'reactions that can look odd, rude or over the top from outside, each laid out in the same six parts, with the other person’s side and one small step.</p>'
+             '<p>You can type what happened in your own words and see the closest situations, pick another picture when the first doesn’t click, and build a card of '
+             'your own. It is free, with no account, and what you type stays on your device.</p>'
+             '<p>The pocket guide in this series, <em>%s</em>, collects %d of them in print, one to a page.</p>') % (esc(POCKET['title']), n)
+    if epub:
+        return ('<section class="pe-back ps-logic" id="logic"><h1 class="pe-back-h">The Logic Behind It: more examples, free online</h1>%s'
+                '<p><a href="%s%s">spreadloveandacceptance.com/the-logic-behind-it</a></p></section>') % (words, SITE, LOGIC_PAGE)
+    return ('<section class="pe-back ps-logic no-bubble" data-no-bubble id="logic" style="--pc:%s;--pt:%s">%s<p class="lg-box-k">%s<span>Free online</span></p>'
+            '<h1 class="pe-back-h">The Logic Behind It: more examples, free online</h1>%s'
+            '<div class="ps-logic-code">%s<p><strong>Scan to open</strong>Or type the address.<span class="ps-addr">spreadloveandacceptance.com/the-logic-behind-it</span></p></div>'
+            '</section>') % (book['color'], book['tint'], mark('logic'), __import__('pocket').puzzle_svg(), words, qr(LOGIC_PAGE))
+
+
 def series_page(book):
     s = '<section class="pe-back ps-series no-bubble" data-no-bubble id="series" style="--pc:%s">%s<h1 class="pe-back-h">The series</h1>' % (book['color'], mark('series'))
     s += '<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(SERIES_TITLE)
-    for b in books() + [CFG['workbook']]:
-        this = b is book
-        k = ('Book %d' % b['n']) if b.get('n') else 'Workbook'
+    for b in series_items():
+        this = b.get('id') == book.get('id')
+        k = ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if b.get('id') == POCKET['id'] else 'Workbook')
         s += '<li class="%s" style="--bc:%s"><span class="ps-series-k">%s</span><span class="ps-series-t"><strong>%s</strong>%s<span class="ps-series-l">%s</span></span></li>' % (
             'is-this' if this else '', b['color'], k, esc(b['title']), ' <em>(this book)</em>' if this else '', esc(b['line']))
     s += '</ol><p class="ps-series-note">The print books are optional; everything stays free online at spreadloveandacceptance.com/book.</p></section>'
@@ -619,9 +691,9 @@ SHOWCASE = [
     ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill in on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
     ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
-    ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Five calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
-    ('coins', 'Kindness Coin Pusher', 'A cosy 3D coin pusher where every coin that drops brings a short, useful tip.', '/coin-pusher.html', 'coin'),
-    ('garden', 'The Night Garden', 'A breathing game. Breathe slowly and the flowers bloom and the fireflies gather.', '/night-garden.html', 'garden'),
+    ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
+    ('coins', 'Kindness Coin Pusher', 'A cosy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
+    ('garden', 'The Night Garden', 'A calm breathing game. A flower blooms with every slow breath, and there are fireflies to guide and a lily pond to fill.', '/night-garden.html', 'garden'),
     ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
 ]
 
@@ -761,7 +833,8 @@ def build_book(book, where):
             if x['key'] == 'numbers':
                 extra.append(('numbers', x['toc'], x['html']))
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
-    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('series', 'The series'), ('jot', 'Your notes')]
+    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('logic', 'The Logic Behind It: more examples'), ('free', 'Free on the website'),
+                                             ('series', 'The series'), ('jot', 'Your notes')]
     for k, t in back:
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
@@ -769,7 +842,7 @@ def build_book(book, where):
     front += '\n' + about_page(book, namer) + '\n' + find_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
-    backm = extra_html + research_short(book, here) + showcase(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
+    backm = extra_html + research_short(book, here) + logic_free_page(book) + showcase(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
     ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Find it fast', 'find', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
     ol += [['%s: %s' % (chapter_label(s_, book)[1], ch_title(s_)), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
@@ -1010,14 +1083,22 @@ def font_faces():
     return '\n'.join(re.findall(r'@font-face\s*\{[^}]*\}', css))
 
 
-def cover_html(item, trim, pages_hint=0, workbook=False):
+def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=False):
     """A full-wrap cover: bleed, back, spine, front, bleed. build_pdfs.js sets --spine (inches) from the final page
-    count, the @page size, and turns the spine text on above 79 pages."""
+    count, the @page size, and turns the spine text on above 79 pages. logicbook14: pocket=True is the 5 x 8 in pocket
+    guide (its back code opens the situations online); boxset=True is the Kindle box set, whose front alone is used."""
     w, h = trim
-    kicker = SERIES_TITLE + (' · Book %d' % item['n'] if not workbook else '')
-    others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], ('Book %d' % b['n']) if b.get('n') else 'Workbook', esc(b['title']))
-                     for b in books() + [CFG['workbook']])
-    spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not workbook else item['title'])
+    kicker = SERIES_TITLE + (' · Book %d' % item['n'] if not (workbook or pocket or boxset) else (' · ' + item['kicker'] if pocket else ''))
+    label = lambda b: ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if b.get('id') == POCKET['id'] else 'Workbook')
+    others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], label(b), esc(b['title'])) for b in series_items())
+    spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
+    title = item.get('short_title') or item['title']
+    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.com/the-logic-behind-it') if pocket else (
+        '%s/book/' % SITE, 'Free to read online', 'Every chapter, short and full, at spreadloveandacceptance.com/book')
+    extra_css = ('.cv-text { top: .92in; left: .5in; right: .4in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .5in; right: .4in; } '
+                 '.cv-foot { left: .5in; right: .4in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
+                 '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
+                 '.cv-free { max-width: 2.6in; font-size: 7.8pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
     return '''<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
 %(gfonts)s
@@ -1062,6 +1143,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .cv-spine-t { position: absolute; left: 50%%; top: 50%%; transform: translate(-50%%, -50%%) rotate(90deg); white-space: nowrap; font-family: "Fraunces", serif; font-weight: 600; font-size: min(9pt, calc((var(--spine) - 0.125in) * 0.9)); line-height: 1; margin: 0; letter-spacing: .02em; display: none; }
 .cv-spine-t em { font-family: "Lora", serif; font-weight: 400; font-style: italic; margin-left: 0.18in; }
 .has-spine-text .cv-spine-t { display: block; }
+%(extra_css)s
 </style></head>
 <body><div class="cv" id="cover">
 <div class="cv-back"><div class="cv-back-trim">%(rules_b)s<div class="cv-back-in">
@@ -1069,7 +1151,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 <p class="cv-blurb">%(blurb)s</p>
 <p class="cv-q">“See it fairly. Say it kindly.”</p>
 <ul class="cv-series">%(others)s</ul>
-<div class="cv-free"><span class="pe-qr" data-qr="%(site)s/book/"></span><span><strong>Free to read online</strong>Every chapter, short and full, at spreadloveandacceptance.com/book<span class="cv-by-back" style="display:block">by %(author)s</span></span></div>
+<div class="cv-free"><span class="pe-qr" data-qr="%(free_url)s"></span><span><strong>%(free_t)s</strong>%(free_l)s<span class="cv-by-back" style="display:block">by %(author)s</span></span></div>
 </div><div class="cv-barcode" aria-hidden="true"></div></div></div>
 <div class="cv-spine"><p class="cv-spine-t">%(spine_t)s<em>%(author)s</em></p></div>
 <div class="cv-front"><div class="cv-front-trim" id="front">%(rules_f)s
@@ -1082,10 +1164,11 @@ html, body { margin: 0; padding: 0; background: #fff; }
 %(qrscript)s
 </body></html>
 ''' % {
-        'title': esc(item['title']), 'fonts': font_faces(), 'gfonts': google_fonts(), 'acc': item['color'], 'tint': item['tint'], 'w': w, 'h': h,
-        'tsize': 44 if not workbook else 54, 'bsize': 11.6 if not workbook else 13.5,
-        'arttop': 3.35 if not workbook else 4.1, 'arth': 3.7 if not workbook else 4.6, 'circ': 3.5 if not workbook else 4.4,
-        'artw': 4.1 if not workbook else 5.2,
+        'title': esc(title), 'fonts': font_faces(), 'gfonts': google_fonts(), 'acc': item['color'], 'tint': item['tint'], 'w': w, 'h': h,
+        'tsize': 54 if workbook else (36 if pocket else 44), 'bsize': 13.5 if workbook else (9.4 if pocket else 11.6),
+        'arttop': 4.1 if workbook else (3.0 if pocket else 3.35), 'arth': 4.6 if workbook else (3.0 if pocket else 3.7),
+        'circ': 4.4 if workbook else (2.8 if pocket else 3.5), 'artw': 5.2 if workbook else (3.25 if pocket else 4.1),
+        'free_url': free_url, 'free_t': free_t, 'free_l': free_l, 'extra_css': extra_css,
         'rules_b': '', 'rules_f': book_art.ledger_rules(round(w * 25.4), round(h * 25.4), '#E8DDBE', item['color'], top=22, step=7.5, left=12).replace('class="pe-rules"', 'class="cv-rules"'),
         'kicker': esc(kicker), 'blurb': esc(item.get('blurb', '')), 'others': others, 'site': SITE, 'author': B.AUTHOR,
         'spine_t': esc(spine_t), 'sub': esc(item['sub']), 'art': series_site.art(item['art']), 'line': esc(item['line']), 'qrscript': QR_SCRIPT,
@@ -1100,6 +1183,10 @@ def jobs():
     wb = CFG['workbook']
     j.append({'id': wb['id'], 'kind': 'workbook', 'trim': CFG['workbook_trim_in'], 'colPx': COL_PX['workbook'], 'paper_in': PAPER_IN,
               'price': CFG['workbook_price_usd'], 'cover': 'cover-' + wb['id'], 'title': wb['title'], 'n': 0})
+    # logicbook14: the pocket guide (5 x 8 in) and the box set's front cover (a Kindle cover only)
+    j.append({'id': POCKET['id'], 'kind': 'pocket', 'trim': POCKET['trim_in'], 'colPx': COL_PX['pocket'], 'paper_in': PAPER_IN, 'price': POCKET['price_usd'],
+              'cover': 'cover-' + POCKET['id'], 'title': POCKET['title'], 'n': 0, 'min_pages': 72, 'max_pages': 80})
+    j.append({'id': BOXSET['id'], 'kind': 'front', 'trim': CFG['trim_in'], 'cover': 'cover-' + BOXSET['id'], 'title': BOXSET['title'], 'n': 0})
     j.append({'id': 'measure', 'kind': 'measure', 'trim': CFG['trim_in'], 'colPx': COL_PX['book'], 'only_when_named': True})
     return j
 
@@ -1116,6 +1203,20 @@ def main():
         B.write(os.path.join(SRC, 'cover-%s.html' % b['id']), cover_html(b, CFG['trim_in']))
     build_workbook(where)
     B.write(os.path.join(SRC, 'cover-workbook.html'), cover_html(CFG['workbook'], CFG['workbook_trim_in'], workbook=True))
+    # logicbook14: the pocket guide and the box set's cover
+    import pocket
+    pstats = pocket.build(sys.modules[__name__])
+    B.write(os.path.join(SRC, 'cover-%s.html' % BOXSET['id']), cover_html(dict(BOXSET, n=0), CFG['trim_in'], boxset=True))
+    nb = series_site.words(POCKET['blurb'])
+    if not 120 <= nb <= 160:
+        warn.append('back-cover words for %s: %d (want 120 to 160)' % (POCKET['title'], nb))
+    boxes = [b['id'] for b in LOGIC['boxes']]
+    for bx in LOGIC['boxes']:
+        bk = next((b for b in books() if b['n'] == bx['book']), None)
+        if not bk or bx['slug'] not in bk['chapters']:
+            ERRORS.append('logic box %s: %s is not a chapter of Book %s' % (bx['id'], bx['slug'], bx['book']))
+    if 'tailgating' in boxes:
+        ERRORS.append('the road-rage tip is for the website only (logic-boxes.json)')
     B.write(os.path.join(SRC, 'series-src.json'), json.dumps({'jobs': jobs(), 'costs': COSTS, 'paper_in': PAPER_IN,
                                                                'paper_note': 'KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)'}, indent=1) + '\n')
     # the series on /book/ (also made by build_book.py's build_home, so a full rebuild keeps it)
@@ -1129,6 +1230,9 @@ def main():
             len(set(ST.MISSING_PAGES)), ', '.join(sorted(set(ST.MISSING_PAGES))[:6])))
     for b in books():
         print('series: Book %d %s: %d chapters, %d figures, %d filled-in examples' % (b['n'], b['title'], len(b['chapters']), stats[b['id']]['figures'], stats[b['id']]['examples']))
+    print('series: %s, the pocket guide: %d situations in %d sections (neurodivergent logic %d, common social habits %d, anyone %d; different rulebooks %d)' % (
+        POCKET['title'], pstats['situations'], pstats['sections'], pstats['sides']['nd'], pstats['sides']['nt'], pstats['sides']['all'], pstats['rulebooks']))
+    print('series: %d "Another way to see it" boxes (%s)' % (len(LOGIC['boxes']), ', '.join('Book %d: %d' % (b['n'], len([x for x in LOGIC['boxes'] if x['book'] == b['n']])) for b in books())))
     print('series: %d QR codes, all checked against a page' % len(set(QRS)))
     if ERRORS:
         for err in ERRORS:

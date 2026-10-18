@@ -1,0 +1,212 @@
+{
+ "about": "logicbook14: the series' extra editions, built the same way as the books (tools/book/build_series.py, then BOOK_SERIES=1 build_pdfs.js, then build_epub.py and listing_kdp.py). pocket: \"The Logic Behind It\", a 5 x 8 in standard-colour paperback (72 to 80 pages, KDP's minimum for standard colour is 72) and a Kindle ebook, made from assets/js/logic-library.js (items, in this order, one per page; the words are the library's own) and tools/book/pocket.py (the pages around them). It is sold on Amazon only and is not in KDP Select. notes_pages tunes the page count. boxset: one Kindle ebook with Books 1 to 4 and the pocket guide, its own front cover (a JPG only: there is no print box set). isbn fields stay empty until the owner buys ISBNs.",
+ "pocket": {
+  "id": "pocket-the-logic-behind-it",
+  "title": "The Logic Behind It",
+  "sub": "A Pocket Guide to Why People React the Way They Do",
+  "kicker": "A pocket guide",
+  "line": "Thirty-eight everyday reactions, one to a page, with the logic behind each one and a kind next step.",
+  "color": "#9C3D5A",
+  "tint": "#F7E3EA",
+  "art": "logic",
+  "trim_in": [
+   5,
+   8
+  ],
+  "price_usd": 8.99,
+  "kindle_price_usd": 2.99,
+  "isbn": "",
+  "isbn_ebook": "",
+  "notes_pages": 3,
+  "build_cards": 3,
+  "include_fits": true,
+  "items": [
+   "plan-changed",
+   "late-again",
+   "coffee-sometime",
+   "maybe-means-no",
+   "left-party",
+   "headphones",
+   "hungry-tired-snap",
+   "cancel-tired",
+   "alone-after-people",
+   "blunt",
+   "im-fine",
+   "hints",
+   "teasing",
+   "no-eye-contact",
+   "small-talk",
+   "white-lie",
+   "how-are-you",
+   "long-goodbye",
+   "mask-crash",
+   "written-please",
+   "last-minute",
+   "disagree-later",
+   "feedback-sandwich",
+   "love-in-deeds",
+   "quiet-in-fight",
+   "reassurance",
+   "you-should-know",
+   "unasked-advice",
+   "meltdown",
+   "shutdown",
+   "dont-know-feeling",
+   "last-straw",
+   "same-food",
+   "info-dump",
+   "on-time-means",
+   "loud-family",
+   "direct-culture",
+   "text-generations"
+  ],
+  "never": [
+   "tailgating"
+  ],
+  "blurb": "A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. Most reactions that look odd, rude or over the top from outside have a logic behind them, and it makes sense once you can see it. This pocket guide lays that logic out for thirty-eight everyday situations, one to a page. Each page shows what the reaction looks like from outside, the reasoning step by step, an everyday picture that works the same way, the other person’s side, and one sentence and one small step that help you both. It runs both ways. Some pages explain neurodivergent logic, some explain common social habits like small talk and hints, and many cover things anyone does. Every page has a code to its free online version, and blank cards at the back help you work out your own.",
+  "overrides_about": "Print and ebook wording only (the online library keeps its own): field, or field.N for one step of the chain or one analogy. They bring each page to at most one \"X, not Y\" and fewer colons, as the series style asks. \"care\" lines are never changed.",
+  "overrides": {
+   "plan-changed": {
+    "an.0": "A sat nav recalculating while you’re already on the motorway. For a moment it has no route at all."
+   },
+   "late-again": {
+    "chain.0": "For some minds, time has only two settings, “now” and “not now”",
+    "an.0": "A watch with only two settings, “plenty of time” and “too late”.",
+    "fits": "For many people with ADHD, sensing time passing is genuinely harder. Researchers describe it as part of how attention and self-control work. It says nothing about how much someone cares.",
+    "say": "“I misjudge time. You matter to me, and I’m working on it.”",
+    "step": "Set an alarm for the time to leave rather than the time to arrive, and text “Leaving now” when you go. The waiting person can agree a time to start without them."
+   },
+   "coffee-sometime": {
+    "chain.0": "The phrase is a friendly signal rather than a booking",
+    "an.0": "A wave across the street. It means “hello, I see you”, not “come over”.",
+    "step": "If you want it to happen, ask “Shall we pick a day?” If you said “sometime” and don’t mean it yet, don’t worry. The other person can ask too."
+   },
+   "maybe-means-no": {
+    "chain.2": "Both people keep their dignity, because nobody was refused out loud",
+    "an.0": "A dimmer switch instead of a light switch. The light still goes off, just gently.",
+    "step": "It’s fair to ask kindly, “Is that a maybe-yes or a maybe-no?” And a clear “No, but thank you” is kinder than it sounds."
+   },
+   "left-party": {
+    "fits": "A long goodbye costs energy too, with a round of hugs and small talk at the door. For people who find social time draining, including many autistic people, the quiet exit still leaves them able to get home safely.",
+    "step": "Send a short text afterwards, such as “Thanks for tonight, I had to go when my battery ran out.” Hosts can say up front, “Slip out whenever you need to.”"
+   },
+   "headphones": {
+    "an.0": "Sunglasses on a bright day. You still see everything, just without squinting.",
+    "say": "“These help me stay at the table. Tap my arm and I’m all yours.”",
+    "step": "Agree a signal, such as a tap or a wave, that means “I’m talking to you.” Where you can, lower the noise for everyone, with the music down and one conversation at a time."
+   },
+   "cancel-tired": {
+    "looks": "On Friday afternoon a text arrives. “So sorry, I can’t make tonight.”",
+    "fits": "Rest is what makes good company possible. Sometimes the kindest thing a tired person can offer is a better evening later.",
+    "say": "“I’m empty, not uninterested. Can we pick a new day now?”"
+   },
+   "blunt": {
+    "looks": "You ask for an opinion and get it straight. “The second half doesn’t work.”",
+    "fits": "For many autistic people, saying what they mean plainly is the honest, respectful option. Research on the “double empathy problem” suggests mix-ups between differently wired people run both ways, so the plain speaker isn’t the only one missing signals.",
+    "step": "Add one warm line before the fact, such as “There’s a lot here I like.” The listener can ask for it too. “Start with one thing that works, then tell me straight.”"
+   },
+   "im-fine": {
+    "chain.2": "It protects the moment in the queue, the meeting or the school run",
+    "chain.3": "It often means “not here, not now” rather than “never”",
+    "an.0": "A “Back in 10 minutes” sign, closed for now and open again later."
+   },
+   "hints": {
+    "fits": "Researchers who study indirect speech argue that hints let people make requests while leaving everyone room to decline without embarrassment. It is a way of being polite.",
+    "other": "Hints get missed by many people, and not only by autistic people. The hinter then feels ignored, and the other person feels blamed for something nobody actually asked.",
+    "step": "Add the ask to the hint. “It’s cold. Could you close the window?” The listener can check, “Would you like me to close it?”"
+   },
+   "teasing": {
+    "an.0": "Puppies play-fighting. The teeth never close.",
+    "step": "Check now and then with “Was that okay?” Agree what is off limits, and stop any joke that keeps landing as hurt."
+   },
+   "no-eye-contact": {
+    "step": "Check understanding with words instead of eyes, with the listener summing up one line of what they heard. Hard talks can happen side by side, on a walk or in the car."
+   },
+   "small-talk": {
+    "an.0": "Musicians tuning up before the concert. There’s no tune yet, but it makes the tune possible."
+   },
+   "white-lie": {
+    "chain.0": "The gift is a message that says “I thought of you”",
+    "step": "Find something true and kind to say, like “You remembered I like blue. Thank you.” Honest people can use this too, and nobody has to lie."
+   },
+   "how-are-you": {
+    "step": "Answer the ritual with the ritual. “Good, thanks, you?” Save the real answer for people who stop, sit down or ask twice."
+   },
+   "mask-crash": {
+    "chain.1": "The effort is held in until it is safe to stop",
+    "fits": "Research with autistic adults describes “camouflaging”, working hard to appear like everyone else, often followed by exhaustion. Long stretches of it are linked with autistic burnout. Children and adults who aren’t autistic can do a version of this too."
+   },
+   "written-please": {
+    "say": "“I ask for it in writing so I get it right first time. I trust what we agreed.”",
+    "step": "After a chat, the person can send a two-line summary, such as “So I’m doing X by Friday. Right?” The manager just replies “Yes.”"
+   },
+   "last-minute": {
+    "fits": "For many people with ADHD, getting started depends on interest, novelty or urgency more than importance. Researchers link this to how motivation and self-control work in ADHD. It has nothing to do with laziness."
+   },
+   "disagree-later": {
+    "chain.3": "It’s a strategy for being heard",
+    "say": "“I raised it afterwards so it would be heard. I wasn’t going behind anyone’s back.”",
+    "step": "Teams can offer both routes. “Say it now, or message me after.” Quiet disagreers can say “I’ve a different view, I’ll send it after.”"
+   },
+   "feedback-sandwich": {
+    "step": "Ask straight out, “What’s the one thing I should change?” Givers can say the fix clearly, then one true good thing."
+   },
+   "love-in-deeds": {
+    "step": "Agree one word and one deed. The doer says “I love you” on the way out, and the talker notices the deeds out loud."
+   },
+   "quiet-in-fight": {
+    "step": "Say a return time. “I need twenty minutes. I’ll come back at eight.” Then come back at eight."
+   },
+   "reassurance": {
+    "step": "Agree a kind limit together. Answer once clearly, then “I said it, and I meant it,” plus something calming to do together. If the worry runs your days, a GP or therapist can help."
+   },
+   "you-should-know": {
+    "step": "Agree that saying it out loud is allowed and still counts as being loved. The guesser can ask, “I can see something’s up. Tell me?”"
+   },
+   "meltdown": {
+    "chain.0": "Input keeps coming, with noise, demands and change",
+    "fits": "Autistic young people describe meltdowns as different from tantrums. They come from overload rather than from wanting something, and they are not chosen. Children and adults can both have them.",
+    "step": "During one, use fewer words, less noise and more space, with safety first. Afterwards, rest, then have a calm talk about early warning signs."
+   },
+   "dont-know-feeling": {
+    "say": "“I really don’t know yet. Ask me about my body. Am I tired, tense or hungry?”",
+    "step": "Ask simpler questions about the body, such as “More tired or more annoyed?” and “Space or company?” Give it time and come back later."
+   },
+   "last-straw": {
+    "fits": "Stress builds up and makes small things feel bigger. The reaction belongs to the whole day.",
+    "step": "Name the full glass early, with “I’m nearly full today.” Afterwards, apologise for the size and talk about the cup separately."
+   },
+   "same-food": {
+    "an.0": "A favourite mug. Any mug holds tea, but this one is right.",
+    "say": "“I eat this because it’s safe and easy for me. It says nothing about your cooking.”"
+   },
+   "on-time-means": {
+    "an.0": "A recipe that says “a pinch”, when everyone’s pinch is different.",
+    "step": "Say which kind of time you mean, such as “Seven sharp, the table is booked” or “Any time after seven.”"
+   },
+   "loud-family": {
+    "chain.2": "Loud can mean warm and lively"
+   },
+   "direct-culture": {
+    "step": "Ask early, “How do you like feedback, straight or with some cushioning?” Agree a style for the team."
+   },
+   "text-generations": {
+    "an.0": "Handwriting, neat or messy. It isn’t about how they feel about you.",
+    "step": "Talk about it once, on a calm day. What does “OK.” mean to each of you? Agree when to call and when to text."
+   }
+  }
+ },
+ "boxset": {
+  "id": "boxset-complete-series",
+  "title": "Spread Love & Acceptance: The Complete Series",
+  "short_title": "The Complete Series",
+  "sub": "Books 1–4 and The Logic Behind It",
+  "line": "Five books in one Kindle edition: know yourself, steady yourself, understand each other, share the load, and see the logic behind a reaction.",
+  "color": "#2B2620",
+  "tint": "#F3EEE2",
+  "art": "boxset",
+  "kindle_price_usd": 12.99,
+  "isbn_ebook": "",
+  "blurb": "The whole Spread Love & Acceptance series in one Kindle edition. Book 1, Know Yourself Kindly, starts with you: where your way of seeing things came from, your wiring, your feelings and your worth. Book 2, Heal and Steady, is for the heavy days of stress, anger, worry, grief and repair. Book 3, Understanding Each Other, looks at how we hear, see and belong to each other. Book 4, Share the Load, makes the unseen work at home visible and offers a fair, kind way to share it. The Logic Behind It, a pocket guide, lays out the reasoning behind thirty-eight everyday reactions that can look odd or rude from outside. Every chapter is also free to read online."
+ }
+}

@@ -237,24 +237,24 @@
     return answered === WP02_FACTORS.length ? sum / 20 : null;
   }
   // Six readings inside the three bands (light under 0.30, medium 0.30 to 0.59, high 0.60 and up),
-  // so the words move with the number. Higher always means more load.
+  // so the words move with the number. Higher always means a fuller stress tank (logicbook14: the books' words; ids and sums unchanged).
   // [the band in plain words, one line of what to do]
   function wp02Words(sb, solo) {
-    if (sb < 0.15) return ['Very light load', 'Not much is left over from before today, so whatever comes up is probably about the thing itself.'];
-    if (sb < 0.30) return ['Light load', 'Whatever is coming up is probably about the thing itself.'];
-    if (sb < 0.45) return ['Medium load, on the lighter side', 'You\'re carrying a bit more than usual. Fine for most things; go gently with anything big.'];
-    if (sb < 0.60) return ['Medium load, on the heavier side', solo ? 'Go gently, and leave big decisions for when you have more room.' : 'Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'];
-    if (sb < 0.80) return ['High load', 'Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.'];
-    return ['Very high load', solo ? 'Today is for looking after yourself and the basics. Let anything that can wait, wait, and pick a time to come back to it.' : 'Today is for looking after yourself and the basics. Say "not today" to anything that can wait, and name a time instead.'];
+    if (sb < 0.15) return ['Very light', 'Not much is left over from before today, so whatever comes up is probably about the thing itself.'];
+    if (sb < 0.30) return ['Light', 'Whatever is coming up is probably about the thing itself.'];
+    if (sb < 0.45) return ['Medium, on the lighter side', 'You\'re carrying a bit more than usual. Fine for most things; go gently with anything big.'];
+    if (sb < 0.60) return ['Medium, on the heavier side', solo ? 'Go gently, and leave big decisions for when you have more room.' : 'Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'];
+    if (sb < 0.80) return ['High', 'Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.'];
+    return ['Very high', solo ? 'Today is for looking after yourself and the basics. Let anything that can wait, wait, and pick a time to come back to it.' : 'Today is for looking after yourself and the basics. Say "not today" to anything that can wait, and name a time instead.'];
   }
   // solo: worded for one person on their own, with no shared average
   function wp02Reading(solo) {
     return function (ctx) {
       var s = wp02Score(ctx);
-      if (s === null) return [{ label: 'Your load today', value: 'Answer all five rows to see it.' }];
+      if (s === null) return [{ label: 'Your stress tank today', value: 'Answer all five rows to see it.' }];
       var sb = r2(s), w = wp02Words(sb, solo), points = Math.round(s * 20);
       // plain words first; the number and how it is worked out come after, folded away on screen
-      var out = [{ label: 'Your load today', value: w[0] + ' (' + points + ' out of 20 points)', num: s }, { label: 'What to do', value: w[1] }];
+      var out = [{ label: 'Your stress tank today', value: w[0] + ' (' + points + ' out of 20 points)', num: s }, { label: 'What to do', value: w[1] }];
       var top = WP02_FACTORS.filter(function (f) { return Number(ctx.value('factors.' + f.id)) >= 3; }).map(function (f) { return f.label.replace(/\s*\(.*\)$/, '').replace(/ specifically$/, '').toLowerCase(); });
       // In the high band, putting things off isn't always possible: caring for someone who is ill can't wait.
       // Only when caring is part of it (the tick, or the note says so), not for a work deadline.
@@ -263,7 +263,7 @@
       // a long-term illness keeps the physical row high: that is load, not a mood
       if (Number(ctx.value('factors.physical')) >= 3) out.push({ label: 'If it\u2019s a long-term illness', value: 'Your physical row may always be high. That is load, not a mood.', note: 'When one of you is ill: spreadloveandacceptance.com/when-one-is-ill.html', link: ['When one of you is ill', '/when-one-is-ill.html'] });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
-      out.push({ label: 'Load score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a heavier load (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.) These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
+      out.push({ label: 'Stress tank score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a fuller stress tank (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.) These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
       if (solo) return out;
       // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone on the road, or waits
       var raw = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean), others = raw.map(parseFloat);
@@ -276,7 +276,7 @@
         out.push({ label: 'Side by side', value: 'You: ' + fmt(s, 2) + ' (' + Math.round(s * 20) + ' of 20) \u00b7 ' + others.map(function (x, i) { return (String(whoL[i] || '').trim() || 'Someone') + ': ' + fmt(x, 2) + ' (' + Math.round(x * 20) + ' of 20)'; }).join(' \u00b7 ') + '.', note: 'Each score is only about the person who filled it in. Neither is a verdict on anyone.' });
         // the gap, in kind words: no "winner", and no one's fault
         var hiS = Math.max.apply(null, [s].concat(others)), loS = Math.min.apply(null, [s].concat(others)), gap = r2(hiS - loS);
-        out.push({ label: 'The gap', value: gap < 0.10 ? 'Your loads are close (a gap of ' + fmt(gap, 2) + '). Nobody is carrying much more than the others right now.' : 'A gap of ' + fmt(gap, 2) + ': ' + (hiS === s ? 'yours reads higher' : 'one of the others reads higher') + ' right now. That isn\u2019t a contest or anyone\u2019s fault. It\u2019s a reason to look together at one thing that could come off the fuller plate this week.', note: 'The gap is the highest score take away the lowest.' });
+        out.push({ label: 'The gap', value: gap < 0.10 ? 'Your tanks are close (a gap of ' + fmt(gap, 2) + '). Nobody is carrying much more than the others right now.' : 'A gap of ' + fmt(gap, 2) + ': ' + (hiS === s ? 'yours reads higher' : 'one of the others reads higher') + ' right now. That isn\u2019t a contest or anyone\u2019s fault. It\u2019s a reason to look together at one thing that could come off the fuller plate this week.', note: 'The gap is the highest score take away the lowest.' });
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
         if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
         else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and you said ' + road + ' people are doing this.', note: 'Check the list of scores: one may be in twice.' });
@@ -295,7 +295,7 @@
     title: 'How much are you carrying?',
     plain: 'How much are you carrying?',
     slug: 'How-much-are-you-carrying',
-    purpose: 'A one-minute check that each person fills in about themselves. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean more load. It is not a clinical test, just a structured gut-check.',
+    purpose: 'A one-minute check that each person fills in about themselves. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean a fuller stress tank. It is not a clinical test, just a structured gut-check.',
     people: false,
     // your own answers stay on this device (with "Erase" and "Forget it"), so opening someone's shared score
     // in a new tab never loses them
@@ -319,7 +319,7 @@
         items: WP02_FACTORS
       },
       {
-        id: 'reading', type: 'computed', title: 'Your load score',
+        id: 'reading', type: 'computed', title: 'Your stress tank',
         compute: wp02Reading(false)
       },
       {
@@ -1346,7 +1346,7 @@
       }
     },
     'wp-02': {
-      purpose: 'A one-minute check on how much you\'re carrying right now. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean more load. It is not a clinical test, just a structured gut-check.',
+      purpose: 'A one-minute check on how much you\'re carrying right now. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean a fuller stress tank. It is not a clinical test, just a structured gut-check.',
       sections: {
         note: { text: 'Answer about yourself, based on the last 24 to 48 hours.' },
         reading: { compute: wp02Reading(true) },
