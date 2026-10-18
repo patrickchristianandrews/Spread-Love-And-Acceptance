@@ -30,14 +30,41 @@
   "refs": "When a chapter mentions another book, it gives the book, the chapter and the page in that book, as in “Book 2, Chapter 1 (page 7)”. The workbook, The Workpapers, has every form from the series on big pages",
   "ideas_lead": "Five ideas run under the whole series. The small boxes in the chapters name them.",
   "ideas": [
-   ["See the whole load", "Count the unseen work too, the noticing, remembering and planning, yours and other people’s."],
-   ["Fix the setup, not the person", "When something keeps going wrong, change the arrangement around it before you blame anyone."],
-   ["Read your state first", "How full your day already is changes how every word sounds, so check yourself before you react."],
-   ["Tune how you send and receive", "People differ in pace, tone and wiring, and a mismatch is something to translate, never a fault."],
-   ["Notice the quiet incentives", "Jobs nobody owns drift to whoever notices first, and a named owner and a real thank-you stop the drift."]
+   [
+    "See the whole load",
+    "Count the unseen work too, the noticing, remembering and planning, yours and other people’s."
+   ],
+   [
+    "Fix the setup, not the person",
+    "When something keeps going wrong, change the arrangement around it before you blame anyone."
+   ],
+   [
+    "Read your state first",
+    "How full your day already is changes how every word sounds, so check yourself before you react."
+   ],
+   [
+    "Tune how you send and receive",
+    "People differ in pace, tone and wiring, and a mismatch is something to translate, never a fault."
+   ],
+   [
+    "Notice the quiet incentives",
+    "Jobs nobody owns drift to whoever notices first, and a named owner and a real thank-you stop the drift."
+   ]
   ],
   "program": "Some chapters mention the six-week program. It is a free plan on the website that takes one small step a week, at spreadloveandacceptance.com/prog-01, and the workbook has a planner for it."
  },
- "ledes": {},
- "swaps": []
+ "ledes": {
+  "preface": "Running a shared life takes a lot of work that nobody sees. This opening chapter helps you make that work visible, to yourself and to anyone you share it with, so that you can talk about it fairly and kindly.",
+  "afterword": "A short look back over the whole series: what each of the four books was for, the few ideas that run through all of them, and where to go next."
+ },
+ "swaps": [
+  {
+   "slug": "chapter-2",
+   "find": "Put the three numbers into <a href=\"/is-the-setup-working.html\">the calculator</a>, look first at the biggest shortfall",
+   "replace": "Put the three numbers into <a href=\"/is-the-setup-working.html\">the calculator</a>, or work it out on paper with “How the numbers work” at the back of this book (page {page:numbers}). Look first at the biggest shortfall"
+  }
+ ],
+ "titles": {
+  "afterword": "What the series adds up to"
+ }
 }

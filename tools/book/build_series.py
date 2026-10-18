@@ -151,6 +151,10 @@ def lede(slug):
     return ST.TEXT.get('ledes', {}).get(slug) or B.LEDES[slug]
 
 
+def ch_title(slug):
+    return ST.TEXT.get('titles', {}).get(slug) or B.TITLES[slug]
+
+
 def summary_at_end(slug):
     """printfix13: a chapter keeps either its "In short" box at the top or "What to remember" at the end, never both.
     series.json "summary_at_end" lists the chapters that keep the end version."""
@@ -175,7 +179,7 @@ def s_open(e, book):
             '<p class="ch-kicker">%s</p>'
             '<h2 class="ch-title">%s</h2><p class="ch-intro">%s</p>'
             '<div class="ch-in"><p class="ch-in-k">In this chapter</p><ol class="ch-in-list">%s</ol></div></header>') % (
-        mark(e[0]), esc(num), esc(kicker), esc(B.TITLES[e[0]]), lede(e[0]), lis)
+        mark(e[0]), esc(num), esc(kicker), esc(ch_title(e[0])), lede(e[0]), lis)
 
 
 def s_end(e, book, here, where, remember=None):
@@ -203,6 +207,8 @@ def s_end(e, book, here, where, remember=None):
         s += '</ul></div>'
     s += '<div class="pe-end-use"><h3 class="pe-end-k">Put it to use</h3><ul class="pe-use">'
     for t, u, d in B.uses(e[0]):
+        if re.match(r'^/book/', u):
+            continue  # a chapter of the series: the connections above name it with its book and page
         form = free_form(u)
         if form:
             u, d = form, 'Workpaper · free to print' + ((': ' + d) if d else '')
@@ -243,7 +249,7 @@ def wp_lines(body, with_qr=True):
 
 
 IN_SHORT_RE = re.compile(r'<div class="try-this" data-in-short>(.*?)</div>', re.S)
-MADE_UP_RE = re.compile(r'\s*A made-up example\. Names and details are invented\.\s*')
+MADE_UP_RE = re.compile(r'\s*(?:A made-up example\. Names and details are invented\.|Made-up example\.)\s*')
 ERRORS = []
 
 
@@ -307,7 +313,7 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
 def title_page(book):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · Book %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
-            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>') % (
+            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
         book['color'], mark('titlep'), esc(SERIES_TITLE), book['n'], esc(book['title']), esc(book['sub']),
         series_site.art(book['art']), B.AUTHOR)
 
@@ -317,8 +323,8 @@ def copyright_page(book, workbook=False):
     isbn = '<p>ISBN: %s (paperback)</p>' % esc(book.get('isbn') or CFG.get('isbn_placeholder', '[to be added]'))
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by Spread Love &amp; Acceptance, spreadloveandacceptance.com.</p>' % (
-        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
+    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>' % (
+        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR, esc(CFG.get('publisher', "Christian's Lab").replace("'", '’')))
     s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>%s' % (B.AUTHOR, B.UPDATED, isbn)
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
@@ -438,9 +444,10 @@ def research_short(book, here):
     return s + '</section>'
 
 
-def glossary_short(book, chs):
-    """the book's own words, from the glossary, for the words its chapters use"""
-    text = ' '.join(B.strip_tags(B.main_inner(B.PAGES[(s_, False)])) for s_ in chs)
+def glossary_short(book, chs, printed=None):
+    """the book's own words, from the glossary, for the words its chapters use (printfix13: as printed, so words that only
+    appear online don't make the list)"""
+    text = ST.printed_text(printed) if printed else ' '.join(B.strip_tags(B.main_inner(B.PAGES[(s_, False)])) for s_ in chs)
     s = ('<section class="pe-back pe-gloss ps-gloss no-bubble no-cheer no-dive" data-no-bubble id="glossary" style="--pc:%s;--pt:%s">%s'
          '<h1 class="pe-back-h">Words used in this book</h1><p class="pe-back-lede">The book’s own words, each in one plain sentence. All of them are at '
          'spreadloveandacceptance.com/glossary.</p><dl class="pe-gloss-list">') % (book['color'], book['tint'], mark('glossary'))
@@ -475,6 +482,78 @@ FREE_LINKS = [
     ('/glossary.html', 'Words used in the book', 'Each of the book’s own words, in one plain sentence.'),
     ('/workpapers/fill/index.html', 'Fill in the workpapers', 'Every workpaper on screen. It does the sums, and what you type stays on your device.'),
 ]
+
+
+# ---------- "Free on the website": a two-page showcase (printfix13) ----------
+def _icon(kind, c):
+    """small line drawings in the book's own style, one per panel"""
+    st = 'fill="none" stroke="%s" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"' % c
+    d = {
+        'chat': '<path d="M6 8h22a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4H16l-6 5v-5H6a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4z" %s/><path d="M36 16h4a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-2v4l-5-4h-7" %s/><path d="M9 15h16M9 19h10" %s/>' % (st, st, st),
+        'journey': '<circle cx="7" cy="34" r="3" %s/><path d="M10 33c8-2 6-10 14-12s10 4 16-2" %s stroke-dasharray="2 4"/><path d="M40 6v14M40 6h-2M40 6l8 3-8 3" %s/>' % (st, st, st),
+        'form': '<rect x="9" y="4" width="28" height="36" rx="3" %s/><path d="M15 13h16M15 19h16M15 25h10" %s/><path d="M15 31l3 3 6-6" %s/>' % (st, st, st),
+        'tools': '<circle cx="17" cy="22" r="10" %s/><circle cx="31" cy="22" r="10" %s/>' % (st, st),
+        'book': '<path d="M4 10c7-3 13-3 20 1 7-4 13-4 20-1v26c-7-3-13-3-20 1-7-4-13-4-20-1z" %s/><path d="M24 11v26" %s/>' % (st, st),
+        'coin': '<circle cx="24" cy="22" r="15" %s/><path d="M24 30c-6-4-9-7-9-10a4 4 0 0 1 9-2 4 4 0 0 1 9 2c0 3-3 6-9 10z" %s/>' % (st, st),
+        'garden': '<path d="M24 40V22" %s/><path d="M24 22c-6 0-9-4-9-9 5 0 9 3 9 9zM24 22c6 0 9-4 9-9-5 0-9 3-9 9z" %s/><path d="M38 5a6 6 0 1 0 5 9 5 5 0 0 1-5-9z" %s/><path d="M14 40h20" %s/>' % (st, st, st, st),
+        'phone': '<rect x="14" y="3" width="20" height="38" rx="4" %s/><path d="M21 35h6" %s/><path d="M19 15l4 4 7-8" %s/>' % (st, st, st),
+        'lock': '<rect x="11" y="19" width="26" height="20" rx="3" %s/><path d="M17 19v-6a7 7 0 0 1 14 0v6" %s/><circle cx="24" cy="29" r="2.5" %s/>' % (st, st, st),
+    }[kind]
+    return '<svg class="ps-sc-ico" viewBox="0 0 48 44" aria-hidden="true">%s</svg>' % d
+
+
+SHOWCASE = [
+    # (key, title, words, link, art)
+    ('ask', 'Ask Professor Puddles', 'Tell a cheerful raindrop professor what’s going on and get kind next steps and words to say. His answers are written in advance, never made up on the spot.', '/ask.html', 'puddles'),
+    ('chat', 'The Chat analyzer', 'Check how a text may land before you send it, read one you got, or look at a whole chat to see where it turned.', '/signal-translator.html', 'chat'),
+    ('journeys', 'Guided journeys', 'Three to six small steps for what’s going on, from the same argument again to a new blended family.', '/journeys.html', 'journey'),
+    ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill in on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
+    ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
+    ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
+    ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Five calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
+    ('coins', 'Kindness Coin Pusher', 'A cosy 3D coin pusher where every coin that drops brings a short, useful tip.', '/coin-pusher.html', 'coin'),
+    ('garden', 'The Night Garden', 'A breathing game. Breathe slowly and the flowers bloom and the fireflies gather.', '/night-garden.html', 'garden'),
+    ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
+]
+
+
+def _sc_art(kind, c):
+    if kind == 'puddles':
+        return '<span class="ps-sc-badge">%s</span>' % hints.SVG_PUDDLES
+    if kind == 'pups':
+        return '<span class="ps-sc-badge ps-sc-two">%s%s</span>' % (hints.SVG_TIDBIT, hints.SVG_SUGARFOOT)
+    return _icon(kind, c)
+
+
+def showcase(book, epub=False):
+    """"Free on the website": a two-page spread at the back, left page then right page. Every item has its own code in
+    print (and a link in the ebook)."""
+    c = book['color']
+    head = ('<p class="ps-sc-k">Free on the website</p><h1 class="ps-sc-h">Your book has a home online</h1>'
+            '<p class="ps-sc-lede">Everything in this book is free at spreadloveandacceptance.com, along with tools that do the sums for you, '
+            'guided journeys, a raindrop professor with kind answers and a few cosy games. There is no account and no paid version.</p>')
+    home = ('<div class="ps-sc-home">%s<p><strong>Start here</strong>Scan with your phone’s camera to open the home page.'
+            '<span class="ps-addr">spreadloveandacceptance.com</span></p></div>') % ('' if epub else qr('/'))
+
+    def panel(item):
+        key, t, words, link, artk = item
+        q = '' if epub else qr(link)
+        t_html = ('<a href="%s%s">%s</a>' % (SITE, link, esc(t))) if epub else esc(t)
+        return ('<div class="ps-sc-card ps-sc-%s">%s<div class="ps-sc-txt">%s<p class="ps-sc-t">%s</p><p class="ps-sc-d">%s</p>'
+                '<p class="ps-addr">%s</p></div></div>') % (key, q, _sc_art(artk, c), t_html, esc(words), B.addr_html(B.short_address(link)))
+    left = ''.join(panel(x) for x in SHOWCASE[:4])
+    right = ''.join(panel(x) for x in SHOWCASE[4:])
+    promise = ('<div class="ps-sc-promise">%s<p><strong>Everything stays on your device.</strong> No sign-up and no account. What you type in the tools, '
+               'the workpapers and the games is kept in your own browser or app, and nothing is sent to us.</p></div>') % _icon('lock', c)
+    if epub:
+        return ('<section class="pe-back ps-showcase" id="free">%s%s<p><a href="%s/">spreadloveandacceptance.com</a></p>%s%s%s</section>') % (
+            head, '', SITE, left, right, promise)
+    s = '<div class="pe-verso-pad pe-only" data-for="free"></div>'
+    s += ('<section class="pe-back ps-showcase ps-sc-left no-bubble" data-no-bubble id="free" style="--pc:%s;--pt:%s">%s%s%s'
+          '<div class="ps-sc-grid">%s</div></section>') % (c, book['tint'], mark('free'), head, home, left)
+    s += ('<section class="pe-back ps-showcase ps-sc-right no-bubble" data-no-bubble style="--pc:%s;--pt:%s"><p class="ps-sc-k">Cosy, calm and free</p>'
+          '<div class="ps-sc-grid">%s</div>%s</section>') % (c, book['tint'], right, promise)
+    return s
 
 
 def free_page(book):
@@ -543,7 +622,7 @@ def build_book(book, where):
     for i, slug in enumerate(chs):
         e = B.entry(slug)
         num, lab = chapter_label(slug, book)
-        toc.append(B.toc_row(slug, esc(num or 'After'), esc(B.TITLES[slug]), 'is-ch'))
+        toc.append(B.toc_row(slug, esc(num or 'After'), esc(ch_title(slug)), 'is-ch'))
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
         art = s_chapter(e, book, here, where, namer, panels=True)
@@ -560,8 +639,8 @@ def build_book(book, where):
         for x in front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 extra.append(('numbers', x['toc'], x['html']))
-    extra.append(('glossary', 'Words used in this book', glossary_short(book, chs)))
-    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('series', 'The series'), ('free', 'Free on the site'), ('jot', 'Your notes')]
+    extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
+    back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('series', 'The series'), ('jot', 'Your notes')]
     for k, t in back:
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
@@ -569,9 +648,9 @@ def build_book(book, where):
     front += '\n' + about_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
-    backm = extra_html + research_short(book, here) + series_page(book) + free_page(book) + notes_pages(book, book.get("notes_pages", 2))
+    backm = extra_html + research_short(book, here) + showcase(book) + series_page(book) + notes_pages(book, book.get("notes_pages", 2))
     ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
-    ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
+    ol += [['%s: %s' % (chapter_label(s_, book)[1], ch_title(s_)), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
     title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
@@ -679,7 +758,7 @@ def build_workbook(where):
     book = dict(wb, n=0)
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
-             '<p class="ps-title-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>') % (
+             '<p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
         wb['color'], mark('titlep'), esc(SERIES_TITLE), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
     front += copyright_page(book, workbook=True)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))

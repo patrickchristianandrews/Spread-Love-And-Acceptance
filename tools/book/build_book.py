@@ -477,6 +477,10 @@ for _e in ORDER:
             LEDES[_e[0]] = _m.group(1).strip() if _m else ''
 
 
+def has_in_short(slug):
+    return bool(re.search(r'<div class="try-this" data-in-short>', PAGES[(slug, False)]))
+
+
 def remember(slug):
     """3 to 5 points for "What to remember": the chapter's own In short list, or its big ideas."""
     pg = PAGES[(slug, False)]
@@ -724,7 +728,25 @@ def insert_generated(s, slug, deep):
             MISSING.append('example %s: %s not found in %s%s' % (x['id'], aid, slug, '-in-depth' if deep else ''))
     # the character hints (tools/book/hints.json), placed last so they sit after a figure or example at the same spot
     s = hints.insert(s, slug, deep, place, place_idea, place_heading, MISSING.append)
-    return s
+    return made_up_once(s)
+
+
+MADE_UP_LONG = 'A made-up example. Names and details are invented.'
+
+
+def made_up_once(s):
+    """printfix13: the made-up label once per page, short ("Made-up example."), on the first filled-in example only"""
+    n = [0]
+
+    def sub(m):
+        n[0] += 1
+        t = m.group(1)
+        if MADE_UP_LONG not in t:
+            return m.group(0)
+        rest = t.replace(MADE_UP_LONG, '').strip()
+        t = ('Made-up example. ' + rest).strip() if n[0] == 1 else rest
+        return ('<p class="bk-ex-note">%s</p>' % t) if t else ''
+    return re.sub(r'<p class="bk-ex-note">(.*?)</p>', sub, s, flags=re.S)
 
 
 def ex_where(x, deep):
@@ -759,7 +781,9 @@ def end_block(i, deep):
            4: 'Pick a path: on your own, or with someone.'}[e[1]]
     s = '<!-- book-end:start -->\n<aside class="book-end no-bubble" data-no-bubble data-part="%d" aria-label="The book">\n' % e[1]
     s += '<div class="book-end-grid">'
-    s += '<section class="book-end-rem"><h2 class="book-end-k">What to remember</h2>%s</section>' % remember_html(e[0], 'book-end-list')
+    if deep or not has_in_short(e[0]):
+        # printfix13: a simple page with an "In short" box at the top doesn't repeat it as "What to remember"
+        s += '<section class="book-end-rem"><h2 class="book-end-k">What to remember</h2>%s</section>' % remember_html(e[0], 'book-end-list')
     s += '<section class="book-end-links"><h2 class="book-end-k">This connects to</h2><ul class="book-end-list">'
     for tgt, w in CONNECT.get(e[0], []):
         te = entry(tgt)
@@ -825,8 +849,8 @@ def patch_chapter(i, deep):
 
 # ---------- 3. the packages: one page each, and the print edition inside it ----------
 LEAD_CLASSES = [
-    (r'Words you could use[^<]*|Thoughts you could try[^<]*', 'pe-words'),
-    (r'Try this[:.]|Practice:|Your next step:', 'pe-try'),
+    (r'Words you could use[^<]*|Thoughts you could try[^<]*|You could say|Ways to say it|Words to try|Things to tell yourself', 'pe-words'),
+    (r'Try this[:.]|Practice:|Your next step:|This week\.|One small step\.|Something to try\.', 'pe-try'),
     (r'For example:', 'pe-ex'),
     (r'A note on safety:|A note on care:', 'pe-safe'),
     (r'Research note[:.]|The reasoning\.', 'pe-note'),
@@ -1027,7 +1051,8 @@ def qr_slot(url):
 
 def chapter_end(e, deep, here):
     s = '<aside class="pe-end no-bubble no-cheer no-dive" data-no-bubble data-part="%d" aria-label="End of chapter">' % e[1]
-    s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % remember_html(e[0], 'pe-end-list')
+    if deep or not has_in_short(e[0]):
+        s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % remember_html(e[0], 'pe-end-list')
     links = CONNECT.get(e[0], [])
     if links:
         s += '<div class="pe-end-links"><h3 class="pe-end-k">This connects to</h3><ul class="pe-end-conn">'
@@ -1122,6 +1147,8 @@ def print_links(body, slug, here):
         if not (h.startswith('/') or h.startswith('http')):
             return m.group(0)
         addr = short_address(h)
+        if addr in seen and '#' in h and h.startswith('/'):
+            addr = addr + '#' + h.split('#', 1)[1]
         plain = strip_tags(text).strip().lower()
         if not addr or addr in seen or addr.lower() in plain or plain.startswith('spreadloveandacceptance.com'):
             return m.group(0)
@@ -1167,6 +1194,7 @@ def glossary_terms(text):
 
 # Definitions the book needs in its own words (the site's glossary.html has the web versions).
 GLOSS_OVERRIDE = {
+    'workpaper': 'A page you fill in, on your own or with someone, about your own week or your own side. Every workpaper is free to print or to fill in on the website.',
     'pressure': 'Pressure, in My weather today, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
 }
 # Words from the chapters (Part Three above all) that the site's glossary doesn't define: (id, word, definition,
@@ -1179,9 +1207,9 @@ GLOSS_EXTRA = [
     ('window-of-tolerance', 'Window of tolerance', 'The range in which you can feel strong feelings and still think and talk. Above it you are flooded or revved up; below it you shut down. A phrase from the psychiatrist Dan Siegel.', r'window of tolerance'),
     ('psychological-safety', 'Psychological safety', 'A shared sense in a group or team that you can speak up, ask a question or admit a mistake without being punished or embarrassed (Amy Edmondson).', r'psychological safety'),
     ('groupthink', 'Groupthink', 'When a close group wants agreement so much that doubts go unsaid and a poor decision goes ahead. Irving Janis named it in 1972.', r'groupthink'),
-    ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (usually a year or more for adults). It is treatable; a GP or doctor is a good first step.', r'prolonged grief'),
+    ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (6 to 12 months or more, depending on the guideline). It is treatable; a GP or doctor is a good first step.', r'prolonged grief'),
     ('wave-code', 'Wave Code', 'Four letters from the style quiz in How you connect, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
-    ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?: a load score from 0 (empty) to 1 (full). Under 0.30 is low, 0.30 to 0.59 moderate, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
+    ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?, scored from 0 (empty) to 1 (full). Under 0.30 is low, 0.30 to 0.59 moderate, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
     ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. My weather today calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
     ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book works the same way: see what is really going on, without blame, then change one small thing.', r'ledger'),
     ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),

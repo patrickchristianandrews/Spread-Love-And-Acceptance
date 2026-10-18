@@ -1,5 +1,5 @@
 {
- "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. isbn fields stay empty until the owner buys ISBNs; an empty ISBN is simply not printed. examples: false leaves the filled-in examples out of the print books.",
+ "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. isbn fields stay empty until the owner buys ISBNs; until then the copyright page prints \"ISBN: \" + isbn_placeholder. publisher and imprint go on every copyright page, in the PDF metadata and in the KDP listing. summary_at_end: chapters that print \"What to remember\" at the end in place of \"In short\" at the top (never both). examples: false leaves the filled-in examples out of the print books.",
  "series_title": "Spread Love & Acceptance",
  "price_usd": 14.99,
  "workbook_price_usd": 14.99,
@@ -116,5 +116,18 @@
   "isbn": "",
   "blurb": "Every workpaper from the Spread Love & Acceptance books, on big pages with room to write. Inside are blank copies of all ten: a quick check of how much you’re carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more. Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program and pages for your own notes. The sheets describe what happened, never who someone is. Every form is also free to print or fill in online; this book simply puts them all in one place."
  },
- "examples": true
+ "examples": true,
+ "summary_at_end": [
+  "self-2-now",
+  "understanding-1-feelings",
+  "understanding-13-anger",
+  "understanding-6-change",
+  "understanding-4-communication",
+  "understanding-5-belonging",
+  "chapter-2",
+  "chapter-4"
+ ],
+ "isbn_placeholder": "[to be added]",
+ "publisher": "Christian's Lab",
+ "imprint": "Christian's Lab"
 }

@@ -243,7 +243,7 @@ async function makeBook(ctx, file, opts = {}) {
     const missingQR = [...document.querySelectorAll('.pe-qr')].filter(q => !q.querySelector('svg')).length;
     const keys = [...new Set([...document.querySelectorAll('.pe-pg[data-pg]')].map(e => e.getAttribute('data-pg')))];
     const terms = [...document.querySelectorAll('.pe-ix li[data-ix]')].map(li => [li.getAttribute('data-ix'), li.getAttribute('data-ix-re'), li.hasAttribute('data-ix-cs')]);
-    const pads = [...document.querySelectorAll('.pe-recto-pad[data-for]')].map(p => p.getAttribute('data-for'));
+    const pads = [...document.querySelectorAll('.pe-recto-pad[data-for], .pe-verso-pad[data-for]')].map(p => p.getAttribute('data-for'));
     const parts = [...document.querySelectorAll('section.pe-part[id]')].map(p => p.id);
     const chapters = [...document.querySelectorAll('article.pe-ch[id]')].map(a => a.id);
     return { qr, missingQR, keys, terms, pads, parts, chapters };
@@ -310,10 +310,12 @@ async function makeBook(ctx, file, opts = {}) {
   const setPads = async found => page.evaluate(({ found, pads }) => {
     let shift = 0, changed = false;
     for (const k of pads) {
-      const el = document.querySelector('.pe-recto-pad[data-for="' + k + '"]');
+      const el = document.querySelector('.pe-recto-pad[data-for="' + k + '"], .pe-verso-pad[data-for="' + k + '"]');
       if (!el || !found[k]) continue;
       const at = found[k] + shift;
-      if (at % 2 === 0) { const on = el.classList.toggle('is-on'); shift += on ? 1 : -1; changed = true; }
+      // a recto pad puts what follows on a right-hand (odd) page; a verso pad (printfix13: a two-page spread) on a left-hand one
+      const verso = el.classList.contains('pe-verso-pad');
+      if (verso ? (at % 2 === 1) : (at % 2 === 0)) { const on = el.classList.toggle('is-on'); shift += on ? 1 : -1; changed = true; }
     }
     return changed;
   }, { found, pads: prep.pads });
@@ -359,7 +361,7 @@ async function makeBook(ctx, file, opts = {}) {
   buf = await render(page);
   const pages = pageCount(buf);
   if (pages !== before) console.log('  warning: page count moved from %d to %d after removing markers', before, pages);
-  const blanks = await page.evaluate(() => document.querySelectorAll('.pe-recto-pad.is-on').length);
+  const blanks = await page.evaluate(() => document.querySelectorAll('.pe-recto-pad.is-on, .pe-verso-pad.is-on').length);
   // the covers, on their own: front, then back
   await page.evaluate(html => { const m = document.querySelector('main'); m.innerHTML = html.join('\n'); }, covers.html);
   const coverBuf = covers.html.length ? await render(page) : null;
