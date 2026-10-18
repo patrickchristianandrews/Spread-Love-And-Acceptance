@@ -74,3 +74,8 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-two .pe-ws-box { min-height: 46mm !important; }
 .wb-two .pe-ws-meta span { padding-top: 12mm; }
 .wb-two .pe-ws-line { height: 15mm; }
+
+/* printfix13: Who did what has 25 rows, so its rows are shorter and the totals and Part B still fit on the second page */
+.wb-two.wb-k-wp01 .pe-ws-t td { height: 8.6mm; }
+/* the paper setup score lies open across two facing pages */
+.wb-k-setup h3 { margin-top: 5mm; }

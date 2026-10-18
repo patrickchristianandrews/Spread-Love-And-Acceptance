@@ -10,7 +10,7 @@
    ],
    "pages": 160,
    "blank_pages": 4,
-   "bytes": 2654697,
+   "bytes": 2663728,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
@@ -87,7 +87,7 @@
    ],
    "pages": 160,
    "blank_pages": 4,
-   "bytes": 2507257,
+   "bytes": 2518135,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
@@ -164,7 +164,7 @@
    ],
    "pages": 154,
    "blank_pages": 4,
-   "bytes": 2552610,
+   "bytes": 2571107,
    "pdf": "book-3-understanding-each-other.pdf",
    "cover_pdf": "cover-book-3-understanding-each-other.pdf",
    "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
@@ -241,7 +241,7 @@
    ],
    "pages": 150,
    "blank_pages": 4,
-   "bytes": 2629999,
+   "bytes": 2642261,
    "pdf": "book-4-share-the-load.pdf",
    "cover_pdf": "cover-book-4-share-the-load.pdf",
    "front_jpg": "cover-book-4-share-the-load-front.jpg",
@@ -323,49 +323,49 @@
     8.5,
     11
    ],
-   "pages": 92,
-   "blank_pages": 10,
-   "bytes": 760499,
+   "pages": 90,
+   "blank_pages": 11,
+   "bytes": 752948,
    "pdf": "workbook.pdf",
    "cover_pdf": "cover-workbook.pdf",
    "front_jpg": "cover-workbook-front.jpg",
-   "spine_in": 0.2072,
-   "spine_mm": 5.26,
+   "spine_in": 0.2027,
+   "spine_mm": 5.15,
    "cover_in": [
-    17.4572,
+    17.4527,
     11.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.7,
-     "net": 4.3,
-     "pct": 28.7
+     "print": 4.62,
+     "net": 4.38,
+     "pct": 29.2
     },
     "kdp_expanded": {
-     "print": 4.7,
-     "net": 1.3,
-     "pct": 8.7
+     "print": 4.62,
+     "net": 1.38,
+     "pct": 9.2
     },
     "ingram_bookshops": {
-     "print": 4.84,
+     "print": 4.76,
      "discount": 0.4,
-     "net": 3.88,
-     "pct": 25.9
+     "net": 3.95,
+     "pct": 26.4
     },
     "direct_estimate": {
-     "print": 4.84,
+     "print": 4.76,
      "card_fee": 0.73,
-     "net": 9.42,
-     "pct": 62.8
+     "net": 9.5,
+     "pct": 63.4
     },
     "direct_with_fulfil_fee": {
-     "print": 4.84,
+     "print": 4.76,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.67,
-     "pct": 51.2
+     "net": 7.75,
+     "pct": 51.7
     }
    },
    "pagemap": {
@@ -380,13 +380,13 @@
     "wb-wp12": 33,
     "wb-wp14": 39,
     "wb-wp01": 45,
-    "wb-wp03": 55,
-    "wb-setup": 61,
-    "wb-wp04": 69,
-    "wb-wp15": 77,
-    "numbers": 83,
-    "wb-notes": 88,
-    "series": 92
+    "wb-wp03": 53,
+    "wb-setup": 59,
+    "wb-wp04": 67,
+    "wb-wp15": 75,
+    "numbers": 81,
+    "wb-notes": 86,
+    "series": 90
    }
   }
  },

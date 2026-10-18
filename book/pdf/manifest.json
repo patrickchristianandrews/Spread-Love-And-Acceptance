@@ -3,7 +3,7 @@
   "pages": 146,
   "interior_pages": 144,
   "blank_pages": 2,
-  "bytes": 2128898,
+  "bytes": 2128904,
   "title": "Spread Love & Acceptance: For two or more (short version)",
   "pagemap": {
    "half": 1,
@@ -198,7 +198,7 @@
   },
   "print": {
    "interior": "print/together-interior.pdf",
-   "interior_bytes": 2051733,
+   "interior_bytes": 2051739,
    "cover": "print/together-cover.pdf",
    "cover_bytes": 77460
   }
@@ -207,7 +207,7 @@
   "pages": 262,
   "interior_pages": 260,
   "blank_pages": 1,
-  "bytes": 3586346,
+  "bytes": 3586353,
   "title": "Spread Love & Acceptance: For two or more (full version)",
   "pagemap": {
    "half": 1,
@@ -464,7 +464,7 @@
   },
   "print": {
    "interior": "print/together-in-depth-interior.pdf",
-   "interior_bytes": 3508456,
+   "interior_bytes": 3508463,
    "cover": "print/together-in-depth-cover.pdf",
    "cover_bytes": 77477
   }
@@ -473,7 +473,7 @@
   "pages": 494,
   "interior_pages": 492,
   "blank_pages": 5,
-  "bytes": 6567432,
+  "bytes": 6567440,
   "title": "Spread Love & Acceptance: The whole book (short version)",
   "pagemap": {
    "half": 1,
@@ -838,7 +838,7 @@
   },
   "print": {
    "interior": "print/whole-interior.pdf",
-   "interior_bytes": 6492388,
+   "interior_bytes": 6492396,
    "cover": "print/whole-cover.pdf",
    "cover_bytes": 73591
   }
@@ -847,7 +847,7 @@
   "pages": 842,
   "interior_pages": 840,
   "blank_pages": 2,
-  "bytes": 9368063,
+  "bytes": 9368069,
   "title": "Spread Love & Acceptance: The whole book (full version)",
   "pagemap": {
    "half": 1,
@@ -1306,21 +1306,21 @@
   },
   "print": {
    "interior": "print/whole-in-depth-interior.pdf",
-   "interior_bytes": 9291327,
+   "interior_bytes": 9291333,
    "cover": "print/whole-in-depth-cover.pdf",
    "cover_bytes": 73602
   }
  },
  "sample": {
   "pages": 72,
-  "bytes": 1037661,
+  "bytes": 1037650,
   "title": "Spread Love & Acceptance: a sample"
  },
  "for-yourself": {
   "pages": 368,
   "interior_pages": 366,
   "blank_pages": 3,
-  "bytes": 4921158,
+  "bytes": 4921098,
   "title": "Spread Love & Acceptance: For one person (short version)",
   "pagemap": {
    "half": 1,
@@ -1622,7 +1622,7 @@
   },
   "print": {
    "interior": "print/for-yourself-interior.pdf",
-   "interior_bytes": 4850578,
+   "interior_bytes": 4850518,
    "cover": "print/for-yourself-cover.pdf",
    "cover_bytes": 70054
   }
@@ -1631,7 +1631,7 @@
   "pages": 604,
   "interior_pages": 602,
   "blank_pages": 1,
-  "bytes": 6327487,
+  "bytes": 6327427,
   "title": "Spread Love & Acceptance: For one person (full version)",
   "pagemap": {
    "half": 1,
@@ -2013,7 +2013,7 @@
   },
   "print": {
    "interior": "print/for-yourself-in-depth-interior.pdf",
-   "interior_bytes": 6255796,
+   "interior_bytes": 6255736,
    "cover": "print/for-yourself-in-depth-cover.pdf",
    "cover_bytes": 70066
   }

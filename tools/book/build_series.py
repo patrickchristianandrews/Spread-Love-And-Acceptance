@@ -112,7 +112,25 @@ def check_config():
 QRS = []
 
 
+STUB_RE = re.compile(r'<meta http-equiv="refresh" content="\d+;\s*url=([^"]+)"', re.I)
+
+
+def unstub(url):
+    """printfix13: a code never opens a page that only forwards to another one: follow the forward"""
+    p = re.sub(r'^https://spreadloveandacceptance\.com', '', url)
+    if not p.startswith('/'):
+        return url
+    path = p.split('#')[0].split('?')[0]
+    f = os.path.join(ROOT, path.lstrip('/'))
+    if os.path.isfile(f) and f.endswith('.html'):
+        m = STUB_RE.search(B.read(f)[:4000])
+        if m:
+            return (SITE if url.startswith('http') else '') + m.group(1)
+    return url
+
+
 def qr(url):
+    url = unstub(url)
     QRS.append(url)
     return B.qr_slot(url)
 
@@ -135,6 +153,8 @@ def check_qrs():
             bad.append('QR to a missing page: ' + u)
         elif frag and not re.search(r'\bid="%s"' % re.escape(frag), B.read(f)):
             bad.append('QR to a missing #%s: %s' % (frag, u))
+        elif STUB_RE.search(B.read(f)[:4000]):
+            bad.append('QR to a page that only forwards: ' + u)
     return bad
 
 
@@ -214,6 +234,7 @@ def s_end(e, book, here, where, remember=None):
     for t, u, d in B.uses(e[0]):
         if re.match(r'^/book/', u):
             continue  # a chapter of the series: the connections above name it with its book and page
+        u = unstub(u)
         form = free_form(u)
         if form:
             u, d = form, 'Workpaper · free to print' + ((': ' + d) if d else '')
@@ -266,6 +287,7 @@ def classify(path, text):
     """(where the code goes, its label) for a link to the website: a workpaper's free printable form, a tool (its
     registry name), or a page"""
     k = hints._match(path)
+    path = unstub(path)
     if k and k[0] == 'wp':
         w = hints.WP[k[1]]
         return free_form(path) or path, '<b>Workpaper %s</b> · free to print<br>%s' % (esc(w['code']), esc(w['name']))
@@ -627,7 +649,7 @@ def showcase(book, epub=False):
         q = '' if epub else qr(link)
         t_html = ('<a href="%s%s">%s</a>' % (SITE, link, esc(t))) if epub else esc(t)
         return ('<div class="ps-sc-card ps-sc-%s">%s<div class="ps-sc-txt">%s<p class="ps-sc-t">%s</p><p class="ps-sc-d">%s</p>'
-                '<p class="ps-addr">%s</p></div></div>') % (key, q, _sc_art(artk, c) if not epub or artk in ('puddles', 'pups') else '', t_html, esc(words),
+                '</div><p class="ps-addr">%s</p></div>') % (key, q, _sc_art(artk, c) if not epub or artk in ('puddles', 'pups') else '', t_html, esc(words),
                                                             B.addr_html(B.short_address(link)))
     left = ''.join(panel(x) for x in SHOWCASE[:4])
     right = ''.join(panel(x) for x in SHOWCASE[4:])
@@ -796,7 +818,7 @@ WB = [
 ]
 
 
-WB_ONE_PAGE = {'wp02', 'wp09', 'setup'}
+WB_ONE_PAGE = {'wp02', 'wp09'}
 WB_SUMS = {'wp01', 'wp02', 'wp03', 'wp04', 'setup'}
 # printfix13: what each sheet's opening page says where no book chapter teaches it, and how to read the answers
 WB_EXPLAINED = {
@@ -919,7 +941,7 @@ def build_workbook(where):
         s += '</section>'
         for c in range(1, copies + 1):
             # the short sheets fit one page; the long ones get more room and fill two facing pages
-            sh = sheet.replace('<section class="pe-ws-sheet', '<section class="pe-ws-sheet wb-sheet %s' % ('wb-one' if key in WB_ONE_PAGE else 'wb-two'), 1)
+            sh = sheet.replace('<section class="pe-ws-sheet', '<section class="pe-ws-sheet wb-sheet wb-k-%s %s' % (key, 'wb-one' if key in WB_ONE_PAGE else 'wb-two'), 1)
             sh = re.sub(r'(<div class="pe-ws-head"><h2>.*?</h2>)<span>.*?</span>', lambda m: m.group(1) + '<span>%s · copy %d of %d</span>' % (esc(w['code']), c, copies), sh, count=1, flags=re.S)
             s += sh
         secs.append(s)

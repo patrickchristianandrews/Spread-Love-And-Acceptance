@@ -1194,6 +1194,8 @@ def glossary_terms(text):
 
 # Definitions the book needs in its own words (the site's glossary.html has the web versions).
 GLOSS_OVERRIDE = {
+    # printfix13: "load" means the shared work only; the personal score is the stress tank
+    'battery': 'Your battery is how much energy you have left today. Full means you have room to spare; low means you’re running on empty. “How much are you carrying?” measures the other side of it, how full your stress tank is: a fuller tank means a lower battery.',
     'workpaper': 'A page you fill in, on your own or with someone, about your own week or your own side. Every workpaper is free to print or to fill in on the website.',
     'pressure': 'Pressure, in My weather today, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
 }

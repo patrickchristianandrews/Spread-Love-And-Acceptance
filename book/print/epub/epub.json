@@ -2,24 +2,16 @@
  "books": {
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
-   "bytes": 1225557,
-   "mb": 1.17,
+   "bytes": 1236903,
+   "mb": 1.18,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
    "figures": 10,
    "examples": 9,
    "images": 32,
-   "links_out": 242,
-   "links_inside": 208,
-   "checks": [
-    "a page number left in OEBPS/self-1-then.xhtml: ther people   Understanding Each Other, page 45      Book 3, Chapter 4  · Attachment, t",
-    "a page number left in OEBPS/self-2-now.xhtml: how you hear things   Heal and Steady, page 9      Book 4, Chapter 3  · Full tanks an",
-    "a page number left in OEBPS/self-3-next.xhtml: what matters to you   Heal and Steady, page 121      Book 2, Chapter 6  · Habits and ch",
-    "a page number left in OEBPS/understanding-1-feelings.xhtml: a stress tank is full   Share the Load, page 49      Book 2, Chapter 1  · Stress and th",
-    "a page number left in OEBPS/understanding-7-worth.xhtml: logy and forgiveness   Heal and Steady, page 87      Book 2, Chapter 3  · Worry, low mo",
-    "a page number left in OEBPS/understanding-14-personality.xhtml: hange really happens   Heal and Steady, page 105       Put it to use     How you connect",
-    "a page number left in OEBPS/understanding-9-minds.xhtml: the middle   Understanding Each Other, page 9      Chapter 6  · Personality, temperam"
-   ],
+   "links_out": 279,
+   "links_inside": 226,
+   "checks": "pass",
    "epubcheck": {
     "ok": true,
     "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
@@ -27,24 +19,16 @@
   },
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
-   "bytes": 1082271,
-   "mb": 1.03,
+   "bytes": 1094748,
+   "mb": 1.04,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
    "figures": 9,
    "examples": 7,
    "images": 28,
-   "links_out": 270,
-   "links_inside": 173,
-   "checks": [
-    "a page number left in OEBPS/understanding-2-stress.xhtml: tank in a shared home   Share the Load, page 49      Book 1, Chapter 2  · Your wiring,",
-    "a page number left in OEBPS/understanding-13-anger.xhtml: ess behind a reaction   Share the Load, page 49      Book 1, Chapter 4  · How feelings",
-    "a page number left in OEBPS/understanding-16-worry.xhtml: der inner voice   Know Yourself Kindly, page 79      Book 3, Chapter 7  · Helping other",
-    "a page number left in OEBPS/understanding-8-loss.xhtml: rts so much   Understanding Each Other, page 61      Book 3, Chapter 7  · Helping other",
-    "a page number left in OEBPS/understanding-11-healing.xhtml: nd saying it out loud   Share the Load, page 69      Book 3, Chapter 2  · How communica",
-    "a page number left in OEBPS/understanding-6-change.xhtml: and tiny steps   Know Yourself Kindly, page 45      Book 4, Chapter 5  · The monthly l",
-    "a page number left in OEBPS/understanding-10-values.xhtml: one small goal   Know Yourself Kindly, page 45      Book 4, Chapter 4  · Two kinds of"
-   ],
+   "links_out": 338,
+   "links_inside": 185,
+   "checks": "pass",
    "epubcheck": {
     "ok": true,
     "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
@@ -52,24 +36,16 @@
   },
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
-   "bytes": 1099322,
+   "bytes": 1100479,
    "mb": 1.05,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
    "figures": 9,
    "examples": 8,
    "images": 30,
-   "links_out": 250,
-   "links_inside": 185,
-   "checks": [
-    "a page number left in OEBPS/chapter-1.xhtml: p or shuts them down   Heal and Steady, page 9      Book 1, Chapter 2  · Your wiring,",
-    "a page number left in OEBPS/understanding-4-communication.xhtml: etting a comment land   Share the Load, page 69      Book 2, Chapter 5  · Healing after",
-    "a page number left in OEBPS/understanding-3-seeing.xhtml: lens came from   Know Yourself Kindly, page 9      Book 4, Chapter 1  · The work nobo",
-    "a page number left in OEBPS/understanding-5-belonging.xhtml: rules from home   Know Yourself Kindly, page 9      Chapter 5  · Closeness and love  B",
-    "a page number left in OEBPS/understanding-15-love.xhtml: ng the work love does   Share the Load, page 9      Book 1, Chapter 3  · Who you are b",
-    "a page number left in OEBPS/understanding-17-groups.xhtml: n to your own values   Heal and Steady, page 121      Book 4, Chapter 4  · Two kinds of",
-    "a page number left in OEBPS/understanding-12-helping.xhtml: care work nobody sees   Share the Load, page 9      Book 4, Chapter 2  · Is the split"
-   ],
+   "links_out": 306,
+   "links_inside": 198,
+   "checks": "pass",
    "epubcheck": {
     "ok": true,
     "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"
@@ -77,23 +53,16 @@
   },
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
-   "bytes": 1071702,
+   "bytes": 1073067,
    "mb": 1.02,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,
    "figures": 8,
    "examples": 13,
    "images": 26,
-   "links_out": 250,
-   "links_inside": 168,
-   "checks": [
-    "a page number left in OEBPS/preface.xhtml: work first   Understanding Each Other, page 45      Book 3, Chapter 7  · Helping other",
-    "a page number left in OEBPS/chapter-2.xhtml: small, kind changes   Heal and Steady, page 105      Book 3, Chapter 7  · Helping other",
-    "a page number left in OEBPS/chapter-3.xhtml: r, flooding and rest   Heal and Steady, page 9      Book 3, Chapter 3  · How we see ea",
-    "a page number left in OEBPS/chapter-4.xhtml: apologies that land   Heal and Steady, page 87      Book 3, Chapter 2  · How communica",
-    "a page number left in OEBPS/chapter-5.xhtml: ok, on your own   Know Yourself Kindly, page 45      Book 2, Chapter 6  · Habits and ch",
-    "a page number left in OEBPS/afterword.xhtml: ng, on your own   Know Yourself Kindly, page 9      Chapter 1  · The work nobody sees"
-   ],
+   "links_out": 274,
+   "links_inside": 177,
+   "checks": "pass",
    "epubcheck": {
     "ok": true,
     "summary": "Messages: 0 fatals / 0 errors / 0 warnings / 0 infos"

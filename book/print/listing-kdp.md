@@ -25,6 +25,8 @@ Made by tools/book/listing_kdp.py (print12) from tools/book/series.json and the 
 | Series | Spread Love & Acceptance, number 1 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
+| Publisher | Christian’s Lab | Christian’s Lab |
+| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
@@ -83,10 +85,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also add it to tools/book/series.json so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 158 (KDP reads it from the file) |
-| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in. Spine text: yes (over 79 pages) |
+| Page count | 160 (KDP reads it from the file) |
+| Spine width | 0.3603 in (9.15 mm): 160 pages × 0.002252 in. Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-1-know-yourself-kindly.pdf |
-| Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.606 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.610 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -94,12 +96,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $5.03 | $3.97 (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £4.01 (estimate) | about £3.18 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.08 | $3.91 (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.05 (estimate) | about £3.14 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** | $5.03 | would be $0.97 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.62 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
+| Expanded distribution | **No** | $5.08 | would be $0.92 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.57 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -107,10 +109,10 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-1-know-yourself-kindly.epub** (EPUB 3, reflowable, 1.17 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-1-know-yourself-kindly.epub** (EPUB 3, reflowable, 1.18 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-1-know-yourself-kindly-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
 | ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.02 a copy after delivery (1.17 MB × $0.15 = $0.18). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.02 a copy after delivery (1.18 MB × $0.15 = $0.18). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -135,6 +137,8 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 2 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
+| Publisher | Christian’s Lab | Christian’s Lab |
+| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
@@ -193,10 +197,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also add it to tools/book/series.json so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 154 (KDP reads it from the file) |
-| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in. Spine text: yes (over 79 pages) |
+| Page count | 160 (KDP reads it from the file) |
+| Spine width | 0.3603 in (9.15 mm): 160 pages × 0.002252 in. Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-2-heal-and-steady.pdf |
-| Cover file | book/print/cover-book-2-heal-and-steady.pdf (full wrap 12.597 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-2-heal-and-steady.pdf (full wrap 12.610 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -204,12 +208,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.93 | $4.07 (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.93 (estimate) | about £3.26 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.08 | $3.91 (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.05 (estimate) | about £3.14 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** | $4.93 | would be $1.07 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.72 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
+| Expanded distribution | **No** | $5.08 | would be $0.92 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.57 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -217,10 +221,10 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.03 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.04 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-2-heal-and-steady-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
 | ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.03 MB × $0.15 = $0.15). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.04 MB × $0.15 = $0.16). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -245,6 +249,8 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 3 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
+| Publisher | Christian’s Lab | Christian’s Lab |
+| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
@@ -303,10 +309,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also add it to tools/book/series.json so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 150 (KDP reads it from the file) |
-| Spine width | 0.3378 in (8.58 mm): 150 pages × 0.002252 in. Spine text: yes (over 79 pages) |
+| Page count | 154 (KDP reads it from the file) |
+| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in. Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-3-understanding-each-other.pdf |
-| Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.588 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.597 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -314,12 +320,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.82 | $4.17 (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.85 (estimate) | about £3.34 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $4.93 | $4.07 (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £3.93 (estimate) | about £3.26 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** | $4.82 | would be $1.17 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.82 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
+| Expanded distribution | **No** | $4.93 | would be $1.07 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.72 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -355,6 +361,8 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 4 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
+| Publisher | Christian’s Lab | Christian’s Lab |
+| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
@@ -413,10 +421,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also add it to tools/book/series.json so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 154 (KDP reads it from the file) |
-| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in. Spine text: yes (over 79 pages) |
+| Page count | 150 (KDP reads it from the file) |
+| Spine width | 0.3378 in (8.58 mm): 150 pages × 0.002252 in. Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-4-share-the-load.pdf |
-| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.597 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.588 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -424,12 +432,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.93 | $4.07 (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.93 (estimate) | about £3.26 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $4.82 | $4.17 (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £3.85 (estimate) | about £3.34 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** | $4.93 | would be $1.07 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.72 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
+| Expanded distribution | **No** | $4.82 | would be $1.17 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.82 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -437,10 +445,10 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.09 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.02 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-4-share-the-load-front.jpg (1603 × 2400 px, the paperback front without bleed; also inside the EPUB) |
 | ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.03 a copy after delivery (1.09 MB × $0.15 = $0.16). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.02 MB × $0.15 = $0.15). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. (KDP doesn't let you change this after publishing.) [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -453,28 +461,30 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 ---
 
-## The Workpapers: Free Forms, All in One
+## The Workpapers: The Bound Edition
 
 ### Basic details (paperback and Kindle)
 
 | Field | Paperback | Kindle |
 |---|---|---|
 | Language | English | English |
-| Book title | The Workpapers: Free Forms, All in One | The Workpapers: Free Forms, All in One |
-| Subtitle | Every workpaper from the series, on big pages, to fill in by hand | Every workpaper from the series, on big pages, to fill in by hand |
+| Book title | The Workpapers: The Bound Edition | The Workpapers: The Bound Edition |
+| Subtitle | Every form from the series in one book, on big pages, with room to write | Every form from the series in one book, on big pages, with room to write |
 | Series | Spread Love & Acceptance, number 5 [OWNER: or leave the workbook out of the numbered series] (use "Add to series" so all books show together) | no Kindle edition (print only) |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
+| Publisher | Christian’s Lab | Christian’s Lab |
+| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1401 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same chapters." |
+| Description | below (1660 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same chapters." |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Every workpaper from the series, on big pages with room to write.</b></p><p>Inside are blank copies of all ten: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program and pages for your own notes. The same forms are free to print or fill in online; this book simply puts them all in one place.</p><p><b>Inside</b></p><ul><li>10 workpapers, 47 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets open across two facing pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every form in the series is free to print or fill in online. This is the bound edition, on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes. The same forms are free to print or fill in on screen at spreadloveandacceptance.com; this bound edition is for anyone who would rather have them all in one book, with a pencil.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets open across two facing pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -523,10 +533,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also add it to tools/book/series.json so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **8.5 × 11 in (21.59 × 27.94 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 102 (KDP reads it from the file) |
-| Spine width | 0.2297 in (5.83 mm): 102 pages × 0.002252 in. Spine text: yes (over 79 pages) |
+| Page count | 90 (KDP reads it from the file) |
+| Spine width | 0.2027 in (5.15 mm): 90 pages × 0.002252 in. Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/workbook.pdf |
-| Cover file | book/print/cover-workbook.pdf (full wrap 17.480 × 11.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-workbook.pdf (full wrap 17.453 × 11.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -534,12 +544,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $5.10 | $3.89 (60% × $14.99 − printing) |
+| Amazon.com (primary) | $14.99 | $4.62 | $4.38 (60% × $14.99 − printing) |
 | Amazon.co.uk | £11.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** | $5.10 | would be $0.90 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.48 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
+| Expanded distribution | **No** | $4.62 | would be $1.38 (40% × $14.99 − printing). Use IngramSpark for bookshops and libraries instead (about $3.95 a copy at a 40% discount), and with your own ISBN the two can't both be on. |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -566,9 +576,9 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 
 ## "Look inside" tips
 
-- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page on the characters, the help page), so a browser reaches Chapter 1 within 7 pages.
+- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast”, one page on the workpapers, tools and characters, the help page), so a browser reaches Chapter 1 early.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, the help page right after the contents, then the three friends, so Chapter 1 comes early.
+- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, the help page, then the three friends, so Chapter 1 comes early.
 
 ## Author Central bio (short, warm and true)
 

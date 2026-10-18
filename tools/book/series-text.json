@@ -61,7 +61,7 @@
   {
    "slug": "chapter-2",
    "find": "Put the three numbers into <a href=\"/is-the-setup-working.html\">the calculator</a>, look first at the biggest shortfall",
-   "replace": "Put the three numbers into <a href=\"/is-the-setup-working.html\">the calculator</a>, or work it out on paper with “How the numbers work” at the back of this book (page {page:numbers}). Look first at the biggest shortfall"
+   "replace": "Put the three numbers into <a href=\"/is-the-setup-working.html\">the calculator</a>, or work it out on paper with “How the numbers work” at the back of this book<span class=\"pe-only pe-xref\"> (page {page:numbers})</span>. Look first at the biggest shortfall"
   }
  ],
  "titles": {
