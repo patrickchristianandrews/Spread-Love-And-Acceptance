@@ -75,6 +75,23 @@
    "n": 0
   },
   {
+   "id": "workbook-bw",
+   "kind": "workbook",
+   "edition": "bw",
+   "gray": true,
+   "cost": "kdp_bw_large",
+   "trim": [
+    8.5,
+    11
+   ],
+   "colPx": 696,
+   "paper_in": 0.002252,
+   "price": 9.99,
+   "cover": "cover-workbook-bw",
+   "title": "The Workpapers: The Bound Edition (black-and-white edition)",
+   "n": 0
+  },
+  {
    "id": "pocket-the-logic-behind-it",
    "kind": "pocket",
    "trim": [
@@ -83,7 +100,7 @@
    ],
    "colPx": 382,
    "paper_in": 0.002252,
-   "price": 8.99,
+   "price": 9.99,
    "cover": "cover-pocket-the-logic-behind-it",
    "title": "The Logic Behind It",
    "n": 0,
@@ -130,6 +147,16 @@
    "threshold": 9.99,
    "expanded": 0.4,
    "note": "KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page"
+  },
+  "kdp_bw_large": {
+   "fixed": 2.84,
+   "per_page": 0.0,
+   "max_pages": 110,
+   "royalty": 0.6,
+   "royalty_low": 0.5,
+   "threshold": 9.99,
+   "expanded": 0.4,
+   "note": "KDP Amazon.com, black ink, large trim (8.5 x 11), 24 to 110 pages: $2.84 a book (kdp.amazon.com/help/topic/G201834340)"
   }
  },
  "paper_in": 0.002252,

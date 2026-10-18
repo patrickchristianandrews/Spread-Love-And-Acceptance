@@ -155,7 +155,7 @@
   }
   function wp02Band(v) {
     var x = r2(v);
-    if (x < WP02.low) return { key: 'low', label: 'low load' };
+    if (x < WP02.low) return { key: 'low', label: 'light load' };
     if (x < WP02.high) return { key: 'mid', label: 'medium load' };
     return { key: 'high', label: 'high load' };
   }

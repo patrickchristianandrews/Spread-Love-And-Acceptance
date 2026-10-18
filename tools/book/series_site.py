@@ -29,7 +29,26 @@ def esc(s):
 
 def config():
     with open(os.path.join(HERE, 'series.json'), encoding='utf-8') as f:
-        return json.load(f)
+        cfg = json.load(f)
+    for b in cfg['books']:
+        put_isbns(cfg, b)
+    put_isbns(cfg, cfg['workbook'])
+    return cfg
+
+
+def isbn(cfg, item_id, fmt):
+    """finalfix15: the ISBN for one book and format, from the one "isbn" block in tools/book/series.json ('' until bought)"""
+    return ((cfg.get('isbn') or {}).get(item_id) or {}).get(fmt, '').strip()
+
+
+def put_isbns(cfg, item):
+    """copies an item's ISBNs from the "isbn" block onto it, as the builders read them: isbn (the paperback; the workbook's
+    colour edition), isbn_bw (the workbook's black-and-white edition) and isbn_ebook"""
+    i = item['id']
+    item['isbn'] = isbn(cfg, i, 'paperback') or isbn(cfg, i, 'paperback-colour')
+    item['isbn_bw'] = isbn(cfg, i, 'paperback-bw')
+    item['isbn_ebook'] = isbn(cfg, i, 'kindle')
+    return item
 
 
 def built():

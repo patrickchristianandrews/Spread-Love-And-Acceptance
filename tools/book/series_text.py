@@ -342,12 +342,50 @@ def _blocks(body):
     return sorted(out)
 
 
+WIDE_PIECE = 24  # characters of an address piece that fit one column of a "Scan to open" panel (print.css: 5.4 pt mono)
+NEAR = 1500  # characters of printed text: closer than this, two codes are on the same page or facing pages
+
+
+def _text_len(body, a, b):
+    return len(re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', body[a:b])))
+
+
+def merge_same_page(items):
+    """finalfix15: items [(target, label html)] of one panel, with at most one code per page address"""
+    path = lambda t: t.split('#')[0].split('?')[0]
+    kind = lambda lab: 'online' if lab.startswith('<b>Online</b>') else 'named'
+    out = []
+    for t, lab in items:
+        same = [i for i, (t2, l2) in enumerate(out) if path(t2) == path(t)]
+        if not same:
+            out.append((t, lab))
+            continue
+        if kind(lab) == 'online' and any(kind(out[i][1]) == 'named' for i in same):
+            continue  # the tool or workpaper on that page already has a code
+        if kind(lab) == 'named':
+            if any(out[i][1] == lab for i in same):
+                continue  # the same form or tool again, with another ?option: it prints the same, so one code is enough
+            # a named tool replaces a plain link to the same page; two different tools on one page keep a code each
+            ons = [i for i in same if kind(out[i][1]) == 'online']
+            if ons:
+                out[ons[0]] = (t, lab)
+                continue
+            out.append((t, lab))
+            continue
+        i = same[0]
+        t0, l0 = out[i]
+        out[i] = (path(t0), l0 + ' · ' + lab[len('<b>Online</b><br>'):])
+    return out
+
+
 def scan_panels(body, qrfn, classify, short_address, addr_html, esc):
     """Every reference to a tool, workpaper or page on the website gets its own code, collected into a small "Scan to
     open" panel at the end of its idea or section (one code per address in each panel)."""
     blocks = _blocks(body)
     inserts = []
     count = 0
+    # the codes the page already has (workpaper lines, "Put it to use", "Go deeper"), where they are
+    recent = [(m.start(), html.unescape(m.group(1)).replace('https://spreadloveandacceptance.com', ''), None) for m in re.finditer(r'\bdata-qr="([^"]+)"', body)]
     for start, end, at in blocks:
         seg = body[start:end]
         # links inside elements that already carry their own code are left alone
@@ -383,10 +421,23 @@ def scan_panels(body, qrfn, classify, short_address, addr_html, esc):
             elif '#' in t and '#' not in keep[twin][0]:
                 keep[twin] = (t, lab)
         items = keep
+        # finalfix15: one code per address on a page. Two links to the same page in one panel share a code: a tool or
+        # workpaper keeps its own code and a plain "Online" link to the same page goes; two plain links are named
+        # together under one code to the page.
+        items = merge_same_page(items)
+        # and a code that the same address already has a little earlier (or just after, in a workpaper line) is not
+        # printed again: it would be on the same page or the facing one
+        # (the same form or tool under the same name, with another ?option, counts as the same address: it prints the same)
+        pth = lambda x: x.split('#')[0].split('?')[0]
+        same = lambda t, lab, u, l2: u == t or (pth(u) == pth(t) and (l2 == lab or '/workpapers/fill/' in pth(t)))
+        items = [(t, lab) for t, lab in items if not any(same(t, lab, u, l2) and _text_len(body, min(p, at), max(p, at)) < NEAR for p, u, l2 in recent)]
+        recent.extend((at, t, lab) for t, lab in items)
         if not items:
             continue
-        lis = ''.join('<li>%s<span class="ps-scan-t">%s</span><span class="ps-scan-u">%s</span></li>' % (
-            qrfn(t), lab, addr_html(short_address(t))) for t, lab in items)
+        # finalfix15: an address with a piece too long for one column (it can break only after "/" or ".") gets two columns
+        wide = lambda t: max(len(x) for x in re.findall(r'[^/.?&=]+[/.?&=]?', short_address(t))) > WIDE_PIECE
+        lis = ''.join('<li%s>%s<span class="ps-scan-t">%s</span><span class="ps-scan-u">%s</span></li>' % (
+            ' class="ps-wide"' if wide(t) else '', qrfn(t), lab, addr_html(short_address(t))) for t, lab in items)
         count += len(items)
         inserts.append((at, '<div class="ps-scan pe-only"><p class="ps-scan-k">Scan to open</p><ul class="ps-scan-list">%s</ul></div>' % lis))
     for at, h in sorted(inserts, reverse=True):

@@ -13,10 +13,8 @@
    5,
    8
   ],
-  "price_usd": 8.99,
+  "price_usd": 9.99,
   "kindle_price_usd": 2.99,
-  "isbn": "",
-  "isbn_ebook": "",
   "notes_pages": 4,
   "build_cards": 4,
   "include_fits": true,
@@ -206,7 +204,6 @@
   "tint": "#F3EEE2",
   "art": "boxset",
   "kindle_price_usd": 12.99,
-  "isbn_ebook": "",
   "blurb": "The whole Spread Love & Acceptance series in one Kindle edition. Book 1, Know Yourself Kindly, starts with you: where your way of seeing things came from, your wiring, your feelings and your worth. Book 2, Heal and Steady, is for the heavy days of stress, anger, worry, grief and repair. Book 3, Understanding Each Other, looks at how we hear, see and belong to each other. Book 4, Share the Load, makes the unseen work at home visible and offers a fair, kind way to share it. The Logic Behind It, a pocket guide, lays out the reasoning behind thirty-eight everyday reactions that can look odd or rude from outside. Every chapter is also free to read online."
  }
 }

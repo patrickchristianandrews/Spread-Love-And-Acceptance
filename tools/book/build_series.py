@@ -70,14 +70,18 @@ COSTS = {
             'note': 'KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)'},
     'kdp_large': {'fixed': 1.00, 'per_page': 0.0402, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
                   'note': 'KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page'},
+    # finalfix15: black ink, large trim, 24 to 110 pages: a flat $2.84 a book on Amazon.com (KDP help G201834340, looked up
+    # 18 October 2026). Above 110 pages KDP adds a per-page charge, so the build warns if the workbook ever gets that long.
+    'kdp_bw_large': {'fixed': 2.84, 'per_page': 0.0, 'max_pages': 110, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
+                     'note': 'KDP Amazon.com, black ink, large trim (8.5 x 11), 24 to 110 pages: $2.84 a book (kdp.amazon.com/help/topic/G201834340)'},
 }
 
 # logicbook14: "Another way to see it" boxes (tools/book/logic-boxes.json), the pocket guide and the box set
 # (tools/book/series-extras.json, tools/book/pocket.py)
 LOGIC = json.load(open(os.path.join(HERE, 'logic-boxes.json'), encoding='utf-8'))
 EXTRAS = json.load(open(os.path.join(HERE, 'series-extras.json'), encoding='utf-8'))
-POCKET = EXTRAS['pocket']
-BOXSET = EXTRAS['boxset']
+POCKET = series_site.put_isbns(CFG, EXTRAS['pocket'])  # finalfix15: ISBNs come from the one "isbn" block in series.json
+BOXSET = series_site.put_isbns(CFG, EXTRAS['boxset'])
 LOGIC_PAGE = '/the-logic-behind-it.html'
 
 SERIES_CSS = '/book/print/print.css'
@@ -242,6 +246,12 @@ def s_end(e, book, here, where, remember=None):
         form = free_form(u)
         if form:
             u, d = form, 'Workpaper · free to print' + ((': ' + d) if d else '')
+        else:
+            # finalfix15: a tool is named as the site names it, so the words under its code say exactly what it opens
+            k = hints._match(u)
+            tl = hints.TL.get(k[1]) if k and k[0] == 'tool' else None
+            if tl and tl['href'].split('#')[0] == u.split('#')[0] and ('#' not in tl['href'] or tl['href'] == u):
+                t = tl['name']
         s += '<li>%s<span class="pe-use-t"><a href="%s">%s</a>%s<span class="pe-use-u">%s</span></span></li>' % (
             qr(u), B.absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', B.addr_html(B.short_address(u)))
     s += '</ul></div>'
@@ -296,11 +306,29 @@ def classify(path, text):
         w = hints.WP[k[1]]
         return free_form(path) or path, '<b>Workpaper %s</b> · free to print<br>%s' % (esc(w['code']), esc(w['name']))
     if k and k[0] == 'tool':
-        return path, '<b>Tool</b><br>%s' % esc(hints.TL[k[1]]['name'])
-    return path, '<b>Online</b><br>%s' % esc(text[:60])
+        t = hints.TL[k[1]]
+        # finalfix15: the code opens exactly what its caption names: a tool that sits at a #part of its page opens there
+        if '#' in t['href'] and '#' not in path and '?' not in path and path == t['href'].split('#')[0]:
+            path = t['href']
+        return path, '<b>Tool</b><br>%s' % esc(t['name'])
+    # finalfix15: the link text comes from the page source, entities and all ("Roots &amp; Wings"): decode it first, so
+    # esc() writes each character once (it printed "Roots &amp; Wings")
+    import html as _html
+    t = _html.unescape(text)
+    if re.match(r'^(?:https?://)?(?:www\.)?spreadloveandacceptance\.com\S*$', t.strip()):
+        # a link whose words are the address itself: set like an address, so it breaks only after "/" or "."
+        return path, '<b>Online</b><br><span class="ps-scan-a">%s</span>' % B.addr_html(t.strip())
+    return path, '<b>Online</b><br>%s' % esc(t[:60])
 
 
 SCAN_COUNT = {}
+DOUBLE_ESC = re.compile(r'&amp;(?:amp|lt|gt|quot|#\d+|#x[0-9a-fA-F]+|[a-zA-Z]{2,8});')
+
+
+def check_escapes(label, page):
+    """finalfix15: an entity escaped twice prints as code ("&amp;" on paper). Stop the build if any page has one."""
+    for m in DOUBLE_ESC.finditer(page):
+        ERRORS.append('%s: an entity is escaped twice, so it would print as code: …%s…' % (label, page[max(0, m.start() - 60):m.end() + 20]))
 
 
 def logic_boxes(slug):
@@ -390,14 +418,17 @@ def title_page(book):
         series_site.art(book['art']), B.AUTHOR)
 
 
-def copyright_page(book, workbook=False):
+def copyright_page(book, workbook=False, bw=False):
     # printfix13: the ISBN line is always there; until the owner buys ISBNs it carries the placeholder from series.json
-    isbn = '<p>ISBN: %s (paperback)</p>' % esc(book.get('isbn') or CFG.get('isbn_placeholder', '[to be added]'))
+    # (finalfix15: from the one "isbn" block there; the workbook's black-and-white edition has its own)
+    isbn = '<p>ISBN: %s (paperback%s)</p>' % (esc((book.get('isbn_bw') if bw else book.get('isbn')) or CFG.get('isbn_placeholder', '[to be added]')),
+                                             ', black-and-white edition' if bw else '')
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
     s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>' % (
         esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR, esc(CFG.get('publisher', "Christian's Lab").replace("'", '’')))
-    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>%s' % (B.AUTHOR, B.UPDATED, isbn)
+    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>%s' % (
+        B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '', isbn)
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
           'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % (what, esc(SERIES_TITLE))
@@ -457,7 +488,18 @@ def printed_mentions(articles):
                     k = hints._match(re.sub(r'^https://spreadloveandacceptance\.com', '', h))
                     if k and slug not in out.setdefault(k, []):
                         out[k].append(slug)
+        # finalfix15: and every code the page prints ("Scan to open" panels, workpaper lines), so the list at the back
+        # names every workpaper and tool the book sends a reader to (Book 2 left out WP-13 and WP-15, which only had codes)
+        for u in re.findall(r'\bdata-qr="([^"]+)"', art):
+            k = hints._match(re.sub(r'^https://spreadloveandacceptance\.com', '', html_unescape(u)))
+            if k and slug not in out.setdefault(k, []):
+                out[k].append(slug)
     return out
+
+
+def html_unescape(x):
+    import html as _h
+    return _h.unescape(x)
 
 
 def about_page(book, namer):
@@ -819,7 +861,10 @@ def build_book(book, where):
     for k_, v_ in found.items():
         ALL_FOUND.setdefault(k_, [])
         ALL_FOUND[k_] += [x for x in v_ if x not in ALL_FOUND[k_]]
-    wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT[s_]), pg(s_))
+    # finalfix15: the back pages that send a reader to a workpaper or a tool are named in the list too (Book 3's
+    # "Questions people ask" pointed to WP-12)
+    back_names = {}
+    wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT.get(s_) or back_names.get(s_, s_)), pg(s_))
     if book['n'] == 4:
         extra.append(('month', ST.TEXT['first_month']['title'], month_page(book, namer)))
         extra.append(('jobs', ST.TEXT['jobs']['title'], jobs_page(book, namer)))
@@ -827,20 +872,36 @@ def build_book(book, where):
         extra.append(('words', ST.TEXT['words'][str(book['n'])]['title'], words_page(book)))
     if ST.TEXT.get('faq', {}).get(str(book['n'])):
         extra.append(('faq', 'Questions people ask', faq_page(book, namer)))
-    extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
+    numbers = []
     if 'numbers' in book.get('extras', []):
         ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
                              series_ref=namer.ref)
         for x in front_back.back_sections(ctx):
             if x['key'] == 'numbers':
-                extra.append(('numbers', x['toc'], x['html']))
+                numbers.append(('numbers', x['toc'], x['html']))
+    for k_, t_, h_ in extra + numbers:
+        back_names[k_] = t_
+        for kk, vv in printed_mentions([(k_, h_)]).items():
+            if k_ not in found.setdefault(kk, []):
+                found[kk].append(k_)
+    # every workpaper and tool a code or a callout in this book opens is in the list: checked, so it can't drift
+    wt_html = hints.back_section(mark, found, wt_ref, book['color'])
+    every = printed_mentions(arts + [(k_, h_) for k_, _t, h_ in extra + numbers])
+    for kk in every:
+        nm = (hints.WP if kk[0] == 'wp' else hints.TL)[kk[1]]['name']
+        if ('>%s</a>' % esc(nm)) not in wt_html:
+            ERRORS.append('Book %d: "Workpapers and tools in this book" leaves out %s, which the book points to' % (book['n'], nm))
+    extra.append(('wp-tools', 'Workpapers and tools in this book', wt_html))
+    extra += numbers
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
     back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('logic', 'The Logic Behind It: more examples'),
                                              ('series', 'The series'), ('jot', 'Your notes')]
     for k, t in back:
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
-    front += '\n<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
+    # finalfix15: a long list (Book 4 has 23 rows) is set a little tighter, so the contents stay on one page
+    front += '\n<nav class="pe-toc ps-toc pe-only%s" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (
+        ' is-long' if len(toc) >= 22 else '', mark('contents'), ''.join(toc))
     front += '\n' + about_page(book, namer) + '\n' + find_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
@@ -965,7 +1026,11 @@ SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the 
                '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work”, at the back of this workbook.</p></section>')
 
 
-def build_workbook(where):
+def build_workbook(where, bw=False):
+    """the workbook (8.5 x 11 in). finalfix15: two editions from the same pages. The colour edition (workbook.html) and a
+    black-and-white interior (workbook-bw.html, bw=True), printed in shades of grey for KDP's cheaper black ink. Neither
+    has blank pages: each workpaper's opening page follows the last sheet of the one before, so a two-page sheet that
+    starts on a right-hand page runs on overleaf."""
     wb = CFG['workbook']
     sheets = worksheets()
     slugs = [e[0] for e in B.ORDER]
@@ -994,9 +1059,8 @@ def build_workbook(where):
                 if lab not in ins:
                     ins.append(lab)
         fill = ('/workpapers/fill/%s.html' % w['code'].lower()) if key != 'setup' else '/is-the-setup-working.html'
-        # each workpaper opens on a right-hand page, so a two-page sheet lies open across two facing pages
-        s = '<div class="pe-recto-pad pe-only" data-for="%s"></div>' % sid
-        s += '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">%s</p><h1>%s</h1>' % (
+        # finalfix15: no blank page before an opening page (the panel counted 11 blank pages)
+        s = '<section class="wb-open pe-only" id="%s" style="--pc:%s">%s<p class="wb-code">%s</p><h1>%s</h1>' % (
             sid, wb['color'], mark(sid), esc(('Workpaper ' + w['code']) if key != 'setup' else 'A paper version of the setup score'), esc(w['name']))
         s += '<dl class="wb-facts"><div><dt>When</dt><dd>%s</dd></div><div><dt>How long</dt><dd>%s</dd></div><div><dt>Who</dt><dd>%s</dd></div>' % (esc(when), esc(how_long), esc(who))
         if key == 'setup':
@@ -1026,7 +1090,7 @@ def build_workbook(where):
                          series_ref=namer_for(book).ref)
     for x in front_back.back_sections(ctx):
         if x['key'] == 'numbers':
-            secs.append('<div class="pe-recto-pad pe-only" data-for="numbers"></div>' + front_back.add_section_marks(x['html'], mark))
+            secs.append(front_back.add_section_marks(x['html'], mark))
             toc.append(B.toc_row('numbers', '', esc(x['toc']), 'is-back'))
             ol.append([x['toc'], 'numbers', 0])
     toc.append(B.toc_row('wb-notes', '', 'Notes', 'is-back'))
@@ -1036,7 +1100,7 @@ def build_workbook(where):
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
              '<p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
         wb['color'], mark('titlep'), esc(SERIES_TITLE), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
-    front += copyright_page(book, workbook=True)
+    front += copyright_page(book, workbook=True, bw=bw)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
     front += ('<section class="wb-how pe-only" id="wb-how">%s<h1>How to use this workbook</h1>'
               '<p class="wb-lede">Every workpaper from the books, on big pages with room to write. Write in pencil if you like. There are no right answers, '
@@ -1066,17 +1130,52 @@ def build_workbook(where):
               '<div class="pe-ws-box wb-tall"><b>One thing to keep an eye on</b></div></section>') % (
         mark('wb-six'), ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td></td><td><span class="pe-ws-tick"></span></td></tr>' % (esc(a), esc(b_), esc(c)) for a, b_, c in weeks))
     notes = '<section class="wb-notes pe-only" id="wb-notes">%s<h1>Notes</h1><div class="wb-lines">%s</div></section>' % (mark('wb-notes'), '<div></div>' * 21)
-    notes += ''.join('<section class="wb-notes pe-only"><div class="wb-lines">%s</div></section>' % ('<div></div>' * 24) for _ in range(3))
+    # the notes pages make the page count even, so no blank page is added at the end (series.json "notes_pages")
+    notes += ''.join('<section class="wb-notes pe-only"><div class="wb-lines">%s</div></section>' % ('<div></div>' * 24) for _ in range(wb.get('notes_pages', 4) - 1))
     sp = series_page(book).replace(' (this book)', '')
-    title = '%s: %s' % (SERIES_TITLE, wb['title'])
+    title = '%s: %s%s' % (SERIES_TITLE, wb['title'], ' (black-and-white edition)' if bw else '')
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': wb['line']}, ensure_ascii=False).replace('</', '<\\/')
     page = head(title, WB_CSS).replace('<link rel="stylesheet" href="%s">' % WB_CSS, '<link rel="stylesheet" href="%s">\n<link rel="stylesheet" href="%s">' % (SERIES_CSS, WB_CSS))
     rh = ('%s · %s' % (SERIES_TITLE, wb['title'].split(':')[0])).replace('"', '\\"')
     rules = '<style media="print">@page :right{@bottom-left{content:"%s"}}@page :left{@bottom-right{content:"%s"}}@page pe-front{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-blank{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}</style>' % (rh, rh)
-    page += '<body class="whole-book pe-book pe-series pe-workbook" data-pe="workbook">\n<main class="read whole" id="main">\n%s\n%s\n%s\n%s\n</main>\n%s\n%s\n%s\n</body>\n</html>\n' % (
-        front, '\n'.join(secs), notes, sp, rules, outline, QR_SCRIPT)
-    B.write(os.path.join(SRC, 'workbook.html'), page)
+    page += '<body class="whole-book pe-book pe-series pe-workbook%s" data-pe="workbook">\n<main class="read whole" id="main">\n%s\n%s\n%s\n%s\n</main>\n%s\n%s\n%s%s\n</body>\n</html>\n' % (
+        ' wb-bw' if bw else '', front, '\n'.join(secs), notes, sp, rules, outline, QR_SCRIPT, GRAY_SCRIPT if bw else '')
+    B.write(os.path.join(SRC, 'workbook-bw.html' if bw else 'workbook.html'), page)
+
+
+# finalfix15: the black-and-white interior. Every colour on the page (text, rules, tints, the drawings, the running heads)
+# becomes the grey of the same lightness, so nothing is left for KDP's black-ink press to convert. build_pdfs.js calls
+# peGray() before it prints; the check in the README run proves every page is grey.
+GRAY_SCRIPT = '''<style media="print">@page{@bottom-left{color:#5c5c5c!important;border-color:#c4c4c4!important}@bottom-center{border-color:#c4c4c4!important}@bottom-right{color:#5c5c5c!important;border-color:#c4c4c4!important}}
+@page :left{@bottom-left{color:#5c5c5c!important;border-color:#c4c4c4!important}@bottom-center{border-color:#c4c4c4!important}@bottom-right{color:#5c5c5c!important;border-color:#c4c4c4!important}}
+@page :right{@bottom-left{color:#5c5c5c!important;border-color:#c4c4c4!important}@bottom-center{border-color:#c4c4c4!important}@bottom-right{color:#5c5c5c!important;border-color:#c4c4c4!important}}
+.wb-bw *::before, .wb-bw *::after { filter: grayscale(1); }</style>
+<script>
+window.peGray = function () {
+  var P = ['color', 'background-color', 'border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color', 'outline-color',
+           'text-decoration-color', 'column-rule-color', 'fill', 'stroke', 'stop-color', 'flood-color', 'lighting-color', 'caret-color'];
+  var grey = function (v) {
+    return v.replace(/rgba?\\(\\s*([\\d.]+)[ ,]+([\\d.]+)[ ,]+([\\d.]+)(?:\\s*[,/]\\s*([\\d.]+%?))?\\s*\\)/g, function (m, r, g, b, a) {
+      var y = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+      return a === undefined ? 'rgb(' + y + ', ' + y + ', ' + y + ')' : 'rgba(' + y + ', ' + y + ', ' + y + ', ' + a + ')';
+    });
+  };
+  var n = 0;
+  document.querySelectorAll('*').forEach(function (el) {
+    var cs = getComputedStyle(el);
+    P.forEach(function (p) {
+      var v = cs.getPropertyValue(p);
+      if (!v || v.indexOf('rgb') < 0) return;
+      var g = grey(v);
+      if (g !== v) { el.style.setProperty(p, g, 'important'); n++; }
+    });
+    var bi = cs.getPropertyValue('background-image');
+    if (bi && bi.indexOf('rgb') >= 0) { var g2 = grey(bi); if (g2 !== bi) { el.style.setProperty('background-image', g2, 'important'); n++; } }
+  });
+  return n;
+};
+</script>'''
 
 
 # ---------- covers ----------
@@ -1185,6 +1284,10 @@ def jobs():
     wb = CFG['workbook']
     j.append({'id': wb['id'], 'kind': 'workbook', 'trim': CFG['workbook_trim_in'], 'colPx': COL_PX['workbook'], 'paper_in': PAPER_IN,
               'price': CFG['workbook_price_usd'], 'cover': 'cover-' + wb['id'], 'title': wb['title'], 'n': 0})
+    # finalfix15: the same workbook with a black-and-white interior (KDP black ink, large trim), printed in greys
+    j.append({'id': wb['id'] + '-bw', 'kind': 'workbook', 'edition': 'bw', 'gray': True, 'cost': 'kdp_bw_large', 'trim': CFG['workbook_trim_in'],
+              'colPx': COL_PX['workbook'], 'paper_in': PAPER_IN, 'price': CFG['workbook_bw_price_usd'], 'cover': 'cover-' + wb['id'] + '-bw',
+              'title': wb['title'] + ' (black-and-white edition)', 'n': 0})
     # logicbook14: the pocket guide (5 x 8 in) and the box set's front cover (a Kindle cover only)
     j.append({'id': POCKET['id'], 'kind': 'pocket', 'trim': POCKET['trim_in'], 'colPx': COL_PX['pocket'], 'paper_in': PAPER_IN, 'price': POCKET['price_usd'],
               'cover': 'cover-' + POCKET['id'], 'title': POCKET['title'], 'n': 0, 'min_pages': 72, 'max_pages': 80})
@@ -1205,6 +1308,9 @@ def main():
         B.write(os.path.join(SRC, 'cover-%s.html' % b['id']), cover_html(b, CFG['trim_in']))
     build_workbook(where)
     B.write(os.path.join(SRC, 'cover-workbook.html'), cover_html(CFG['workbook'], CFG['workbook_trim_in'], workbook=True))
+    # finalfix15: the black-and-white interior edition (its cover is the same colour cover; its spine follows its own pages)
+    build_workbook(where, bw=True)
+    B.write(os.path.join(SRC, 'cover-workbook-bw.html'), cover_html(CFG['workbook'], CFG['workbook_trim_in'], workbook=True))
     # logicbook14: the pocket guide and the box set's cover
     import pocket
     pstats = pocket.build(sys.modules[__name__])
@@ -1225,6 +1331,10 @@ def main():
     series_site.patch_home(os.path.join(ROOT, 'book', 'index.html'))
     warn += check_qrs() + series_site.check_blurbs()
     warn += [m for m in B.MISSING]
+    # finalfix15: no entity escaped twice on any print page or cover
+    for fn in sorted(os.listdir(SRC)):
+        if fn.endswith('.html'):
+            check_escapes(fn, B.read(os.path.join(SRC, fn)))
     for w in warn:
         print('series: WARNING', w)
     if ST.MISSING_PAGES:

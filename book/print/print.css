@@ -248,3 +248,22 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-logic-code p { margin: 0; font-size: 9pt; }
 .ps-logic-code strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: 12pt; color: var(--pc); }
 .ps-logic-code .ps-addr { display: block; margin-top: 1mm; font-size: 7.6pt; }
+
+/* ---------- finalfix15 ---------- */
+/* a web address breaks only after a "/" or a "." (build_book.addr_html puts a <wbr> there and keeps each piece whole),
+   never inside a word: "spreadloveandacceptanc / e.com" printed when a code's column was narrower than the name.
+   The codes' columns are wide enough for "spreadloveandacceptance." at this size (4 columns of 28.7 mm). */
+.ps-scan-u, .pe-use-u, .ps-addr, .bh-u, .wt-u, .pe-u, .pk-addr { overflow-wrap: normal !important; word-break: normal !important; }
+.ps-scan-u .pe-nb, .pe-use-u .pe-nb, .ps-addr .pe-nb, .bh-u .pe-nb, .wt-u .pe-nb, .pe-u .pe-nb, .pk-addr .pe-nb { white-space: nowrap !important; overflow-wrap: normal !important; }
+.ps-scan-list { column-gap: 2mm; }
+.ps-scan-u { font-size: 5.4pt; }
+/* an address piece longer than 24 characters ("neurodivergent-relationships") takes two columns (series_text.WIDE_PIECE) */
+.ps-scan-list li.ps-wide { grid-column: span 2; }
+/* a link whose words are an address is set like one */
+.ps-scan-a { font-family: "IBM Plex Mono", monospace; font-size: 5.4pt; }
+.ps-scan-a .pe-nb { white-space: nowrap; }
+/* an "Another way to see it" box never splits over a page turn: the builder lets it move to the next page whole */
+.lg-box { break-inside: avoid; }
+/* a long contents list (Book 4) stays on one page */
+.ps-toc.is-long .pe-toc-row a { padding: .45mm 0; }
+.ps-toc.is-long h1 { margin-bottom: 2mm; }

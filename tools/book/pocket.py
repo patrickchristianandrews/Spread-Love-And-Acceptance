@@ -131,6 +131,7 @@ LENS = [
     ('lens-ways', 'It runs both ways', [
         'Every situation carries one of three small tags.',
         None,
+        'The tag says where a reaction is common. It never tells you what the person in front of you is.',
         'The pages about common social habits matter as much as the others. If you have ever been told you “should have known” what someone meant, it can be a relief to see that there was a system all along, and that it can be learned or simply asked about. And if you use those habits without thinking, seeing their logic written down shows where someone else might miss the signal.',
         'The last section, “Different rulebooks”, is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
     ]),
@@ -165,7 +166,8 @@ def esc(s):
     return (s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 
 
-SIDE_TAG = {'nd': 'Neurodivergent logic, explained', 'nt': 'A common social habit, explained', 'all': 'Something anyone can do'}
+# finalfix15: softer tags. A tag says where a reaction is common, never what a person is ("No page labels anyone")
+SIDE_TAG = {'nd': 'Common for many neurodivergent people', 'nt': 'A common social habit', 'all': 'Something anyone can do'}
 
 
 def side_words():

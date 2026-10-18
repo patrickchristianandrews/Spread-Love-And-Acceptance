@@ -479,6 +479,8 @@ def book_docs(book, where):
     # copyright page: the print words, for an ebook
     cp = S.copyright_page(book)
     cp = swap(cp, 'First print edition, %s. Printed on demand.' % B.UPDATED, 'First ebook edition, %s.' % B.UPDATED, 'copyright')
+    # finalfix15: the ebook doesn't print the paperback's placeholder ("ISBN: [to be added] (paperback)"); a real paperback ISBN stays
+    cp = cp.replace('<p>ISBN: %s (paperback)</p>' % B.esc(S.CFG.get('isbn_placeholder', '[to be added]')), '')
     if book.get('isbn_ebook'):
         cp = swap(cp, 'First ebook edition, %s.</p>' % B.UPDATED, 'First ebook edition, %s.</p><p>ISBN %s (ebook)</p>' % (B.UPDATED, B.esc(book['isbn_ebook'])), 'copyright')
     cp = swap(cp, 'The print books are optional.', 'The print books and ebooks are optional.', 'copyright')

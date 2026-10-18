@@ -118,3 +118,7 @@
 
 /* the code-and-page links are print-only furniture; the ebook keeps plain links */
 .pk-book .pe-pg:empty::after { content: ""; }
+
+/* finalfix15: an address breaks only after a "/" or a "." (see print.css) */
+.pk-addr { overflow-wrap: normal !important; }
+.pk-addr .pe-nb { white-space: nowrap !important; }

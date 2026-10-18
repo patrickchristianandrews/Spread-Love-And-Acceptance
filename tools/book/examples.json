@@ -331,7 +331,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-signal-zoe.html",
   "tool": "/signal-translator.html",
-  "title": "Chat analyzer (also called the Signal Translator)",
+  "title": "Chat analyzer",
   "who": "Zoe, texting her oldest friend, who moved abroad",
   "relationship": "long-distance friends",
   "versions": [
@@ -348,7 +348,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-reader-dana-raj.html",
   "tool": "/signal-translator.html#conversation",
-  "title": "Chat analyzer: a whole conversation (once called the Conversation Reader)",
+  "title": "Chat analyzer: a whole conversation",
   "who": "Dana and Raj, coworkers on the same project",
   "relationship": "coworkers",
   "versions": [

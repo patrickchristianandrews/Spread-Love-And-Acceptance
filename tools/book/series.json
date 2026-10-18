@@ -1,8 +1,9 @@
 {
- "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. isbn fields stay empty until the owner buys ISBNs; until then the copyright page prints \"ISBN: \" + isbn_placeholder. publisher and imprint go on every copyright page, in the PDF metadata and in the KDP listing. summary_at_end: chapters that print \"What to remember\" at the end in place of \"In short\" at the top (never both). examples: false leaves the filled-in examples out of the print books.",
+ "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. ISBNs live in one place, \"isbn\" (one value per book and format); until the owner buys them, the copyright page prints \"ISBN: \" + isbn_placeholder. publisher and imprint go on every copyright page, in the PDF metadata and in the KDP listing. summary_at_end: chapters that print \"What to remember\" at the end in place of \"In short\" at the top (never both). examples: false leaves the filled-in examples out of the print books.",
  "series_title": "Spread Love & Acceptance",
  "price_usd": 14.99,
  "workbook_price_usd": 14.99,
+ "workbook_bw_price_usd": 9.99,
  "trim_in": [
   6,
   9
@@ -30,8 +31,6 @@
     "understanding-14-personality",
     "understanding-9-minds"
    ],
-   "isbn": "",
-   "isbn_ebook": "",
    "blurb": "Before you can share a life well, it helps to know your own. This short book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time? Along the way it explains how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how minds work differently, from ADHD and autism to sensory and learning differences, with ways to meet in the middle. Every chapter has everyday scenes, words you could use and one small thing to try this week. Nothing here is a test. Read it on your own, at your own pace."
   },
   {
@@ -52,8 +51,6 @@
     "understanding-6-change",
     "understanding-10-values"
    ],
-   "isbn": "",
-   "isbn_ebook": "",
    "notes_pages": 4,
    "blurb": "Some days are heavy. Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book is about steadying yourself through all of it, gently and without blame. It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, how worry, low mood and trauma work, and when and where to get help. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change, one small step at a time. It ends with what matters to you, and what a good life can mean. Each chapter has words you could use and one small thing to try. Where a chapter touches hard things, it says where to find help. Go at your own pace."
   },
@@ -75,8 +72,6 @@
     "understanding-17-groups",
     "understanding-12-helping"
    ],
-   "isbn": "",
-   "isbn_ebook": "",
    "notes_pages": 4,
    "blurb": "Two people can care about each other and still fall out of tune. One wants to talk now; the other needs an hour. A comment meant lightly lands hard. This book is about understanding the people around you: at home, in families, with friends, at work and in every group you belong to. It explains how pace and tone pull people apart, how communication really works, and why two people can see the same moment so differently. It looks at why we need to belong, how trust grows and is rebuilt, how love takes many forms, and the quiet pull of the groups we are part of. It ends with helping others well, with kind limits and without burning out. Each chapter has everyday scenes, words you could use and one small thing to try. No blame and no verdicts: just a clearer view and a kinder next step."
   },
@@ -97,8 +92,6 @@
     "chapter-5",
     "afterword"
    ],
-   "isbn": "",
-   "isbn_ebook": "",
    "extras": [
     "numbers"
    ],
@@ -114,8 +107,8 @@
   "color": "#2E6E6A",
   "tint": "#DDEFEC",
   "art": "workbook",
-  "isbn": "",
-  "blurb": "Every workpaper from the Spread Love & Acceptance books is free to print or fill in on screen at spreadloveandacceptance.com. This is the bound edition, for anyone who would rather have them all in one place, on big pages, with a pencil. Inside are blank copies of all ten: a quick check of how much you’re carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a monthly look-back and more, plus a paper version of the setup score. Each one starts with a short page on when to use it, how long it takes and which book explains it. Then come spare copies, a six-week planner and pages for your own notes. The sheets describe what happened, never who someone is."
+  "blurb": "Every workpaper from the Spread Love & Acceptance books is free to print or fill in on screen at spreadloveandacceptance.com. This is the bound edition, for anyone who would rather have them all in one place, on big pages, with a pencil. Inside are blank copies of all ten: a quick check of how much you’re carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a monthly look-back and more, plus a paper version of the setup score. Each one starts with a short page on when to use it, how long it takes and which book explains it. Then come spare copies, a six-week planner and pages for your own notes. The sheets describe what happened, never who someone is.",
+  "notes_pages": 3
  },
  "examples": true,
  "summary_at_end": [
@@ -129,6 +122,36 @@
   "chapter-4"
  ],
  "isbn_placeholder": "[to be added]",
+ "isbn": {
+  "how": "finalfix15: THE ONE PLACE for ISBNs: one value per book and format. Paste each 13-digit ISBN from Bowker (myidentifiers.com) between the quotes, then rebuild (see README). An empty value prints \"ISBN: \" + isbn_placeholder on that paperback's copyright page. Every paperback needs its own ISBN, and the workbook's colour and black-and-white editions are two different books to KDP, so each has one. Kindle editions and the box set need none (Amazon gives them an ASIN); fill \"kindle\" only if you buy an ebook ISBN.",
+  "book-1-know-yourself-kindly": {
+   "paperback": "",
+   "kindle": ""
+  },
+  "book-2-heal-and-steady": {
+   "paperback": "",
+   "kindle": ""
+  },
+  "book-3-understanding-each-other": {
+   "paperback": "",
+   "kindle": ""
+  },
+  "book-4-share-the-load": {
+   "paperback": "",
+   "kindle": ""
+  },
+  "workbook": {
+   "paperback-colour": "",
+   "paperback-bw": ""
+  },
+  "pocket-the-logic-behind-it": {
+   "paperback": "",
+   "kindle": ""
+  },
+  "boxset-complete-series": {
+   "kindle": ""
+  }
+ },
  "publisher": "Christian's Lab",
  "imprint": "Christian's Lab"
 }

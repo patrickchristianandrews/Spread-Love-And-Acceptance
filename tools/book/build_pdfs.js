@@ -250,6 +250,8 @@ async function makeBook(ctx, file, opts = {}) {
     return { qr, missingQR, keys, terms, pads, parts, chapters };
   }, { SITE, SERIES_TITLE, sample: !!opts.sample });
   log('prepared');
+  // finalfix15: a black-and-white interior: every colour on the page becomes its grey (window.peGray, in the page)
+  if (opts.gray) { const n = await page.evaluate(() => window.peGray ? window.peGray() : -1); log('greyed ' + n); if (n < 0) console.log('  WARNING: no peGray() in this page'); }
   // anything wider than the text column makes Chromium shrink every page of the book (by up to a quarter): lay
   // the book out at the column's width (132 mm) for a moment and name whatever sticks out
   const vp = page.viewportSize();
@@ -408,6 +410,7 @@ async function makeBook(ctx, file, opts = {}) {
   // the final copy, without the markers (they sit outside the flow, so nothing moves)
   const before = pageCount(buf);
   await page.evaluate(() => document.querySelectorAll('.pe-mark').forEach(m => m.remove()));
+  if (opts.gray) await page.evaluate(() => window.peGray && window.peGray());
   buf = await render(page);
   const pages = pageCount(buf);
   if (pages !== before) console.log('  warning: page count moved from %d to %d after removing markers', before, pages);
@@ -456,15 +459,19 @@ const r2 = x => Math.round(x * 100) / 100;
 function seriesCosts(job, pages, C) {
   // logicbook14: Amazon only. KDP pays 60% of the list price at $9.99 and up, 50% below it, minus printing
   const large = job.kind === 'workbook';
-  const kdp = large ? C.kdp_large : C.kdp;
+  // finalfix15: a job can name its own cost model (the workbook's black-and-white edition: black ink, large trim)
+  const kdp = (job.cost && C[job.cost]) || (large ? C.kdp_large : C.kdp);
+  if (kdp.max_pages && pages > kdp.max_pages) console.log('  WARNING: %s has %d pages; the %s printing cost is for up to %d pages', job.id, pages, job.cost, kdp.max_pages);
   const P = job.price;
   const kdpPrint = kdp.fixed + kdp.per_page * pages;
   const royalty = P >= (kdp.threshold || 0) ? kdp.royalty : (kdp.royalty_low || kdp.royalty);
   const row = net => ({ net: r2(net), pct: Math.round(net / P * 1000) / 10 });
+  // finalfix15: the royalty and the printing cost are each rounded to the cent first, as KDP shows them, so the printed sum
+  // reads right ("$5.99 - $2.89 = $3.10")
   return {
     list_price: P,
-    kdp_amazon: Object.assign({ print: r2(kdpPrint), royalty_rate: royalty, how: `${Math.round(royalty * 100)}% x $${P.toFixed(2)} - ($${kdp.fixed.toFixed(2)} + ${pages} x $${kdp.per_page})` }, row(royalty * P - kdpPrint)),
-    kdp_expanded: Object.assign({ print: r2(kdpPrint) }, row(kdp.expanded * P - kdpPrint)),
+    kdp_amazon: Object.assign({ print: r2(kdpPrint), royalty_rate: royalty, how: `${Math.round(royalty * 100)}% x $${P.toFixed(2)} - ($${kdp.fixed.toFixed(2)} + ${pages} x $${kdp.per_page})` }, row(r2(royalty * P) - r2(kdpPrint))),
+    kdp_expanded: Object.assign({ print: r2(kdpPrint) }, row(r2(kdp.expanded * P) - r2(kdpPrint))),
   };
 }
 
@@ -543,7 +550,7 @@ async function runSeries(browser, ctx) {
       console.log(job.id, 'front cover only', ((Date.now() - t0) / 1000).toFixed(0) + 's');
       continue;
     }
-    const r = await makeBook(ctx, 'print/src/' + job.id, { colPx: job.colPx, fillGaps: job.kind === 'book' });
+    const r = await makeBook(ctx, 'print/src/' + job.id, { colPx: job.colPx, fillGaps: job.kind === 'book', gray: !!job.gray });
     if (job.kind === 'measure') {
       fs.writeFileSync(path.join(SERIES_OUT, 'src', 'measure.json'), JSON.stringify({ pages: r.pages, pagemap: r.pagemap }, null, 1) + '\n');
       console.log('measure', r.pages, 'pages');
@@ -559,7 +566,7 @@ async function runSeries(browser, ctx) {
     const f = JSON.parse(execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), jf]).toString().trim().split('\n').pop());
     const pages = f.interior_pages;
     const cov = job.cover ? await makeCover(browser, job, pages) : {};
-    made.books[job.id] = Object.assign({ n: job.n, title: job.title, kind: job.kind, trim_in: job.trim, pages, blank_pages: r.blanks + f.padded,
+    made.books[job.id] = Object.assign({ n: job.n, title: job.title, kind: job.kind, edition: job.edition || '', ink: job.gray ? 'black' : 'standard colour', trim_in: job.trim, pages, blank_pages: r.blanks + f.padded,
       bytes: fs.statSync(out).size, pdf: job.id + '.pdf', cover_pdf: job.cover + '.pdf', front_jpg: job.cover + '-front.jpg' }, cov,
       { costs: seriesCosts(job, pages, src.costs), pagemap: r.pagemap });
     console.log(job.id, pages, 'pages,', 'spine', cov.spine_in, 'in,', (made.books[job.id].bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');

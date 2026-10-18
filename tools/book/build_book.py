@@ -1108,9 +1108,14 @@ def short_address(url):
     return m.group(1) if m else ''
 
 
+ADDR_PART = re.compile(r'[^/.?&=]+[/.?&=]?|[/.?&=]')
+
+
 def addr_html(addr):
-    """An address that may wrap after a slash but never at its own hyphens."""
-    return '/<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in addr.split('/'))
+    """An address that may wrap only after a "/" or a "." (or the "?" of a query), never inside a word or at its own
+    hyphens (finalfix15: "spreadloveandacceptanc / e.com" printed when a column was narrower than the name). Each piece
+    keeps its separator at its end and can't break; a <wbr> after it is the only place a line may end."""
+    return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in ADDR_PART.findall(addr))
 
 
 def print_links(body, slug, here):
@@ -1211,7 +1216,7 @@ GLOSS_EXTRA = [
     ('groupthink', 'Groupthink', 'When a close group wants agreement so much that doubts go unsaid and a poor decision goes ahead. Irving Janis named it in 1972.', r'groupthink'),
     ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (6 to 12 months or more, depending on the guideline). It is treatable; a GP or doctor is a good first step.', r'prolonged grief'),
     ('wave-code', 'Wave Code', 'Four letters from the style quiz in How you connect, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
-    ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?, scored from 0 (empty) to 1 (full). Under 0.30 is low, 0.30 to 0.59 moderate, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
+    ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?, scored from 0 (empty) to 1 (full). Under 0.30 is light, 0.30 to 0.59 medium, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
     ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. My weather today calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
     ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book works the same way: see what is really going on, without blame, then change one small thing.', r'ledger'),
     ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),

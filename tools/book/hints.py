@@ -183,8 +183,8 @@ def short_address(item):
 
 
 def addr_html(addr):
-    """An address that may wrap after a slash but never at its own hyphens."""
-    return '/<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in addr.split('/'))
+    """An address that may wrap only after a "/" or a "." (finalfix15: the same rule as build_book.addr_html)."""
+    return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in re.findall(r'[^/.?&=]+[/.?&=]?|[/.?&=]', addr))
 
 
 def wp_label(w):
@@ -411,8 +411,8 @@ def lists_html(found, chapter_ref, h='h2'):
 
 def back_section(mark, found, chapter_ref, pc):
     """For the packages: a back-matter section (on screen and on paper), placed with the other back sections."""
-    body = ('<p class="pe-fb-lede">Every workpaper and tool the chapters point to, in two separate lists, with the chapters that '
-            'mention each one. All of them are free at %s, with no account, and what you type stays on your device.</p>') % SITE_SHORT
+    body = ('<p class="pe-fb-lede">Every workpaper and tool this book points to, in two separate lists, with the chapters and '
+            'pages that mention each one. All of them are free at %s, with no account, and what you type stays on your device.</p>') % SITE_SHORT
     body += lists_html(found, chapter_ref)
     return ('<section class="pe-fb pe-fb-back pe-back pe-fb-wt no-bubble no-cheer no-dive" data-no-bubble id="wp-tools" style="--pc:%s">%s'
             '<h1 class="pe-fb-title">Workpapers and tools in this book</h1>\n%s\n</section>') % (pc, mark('wp-tools'), body)
