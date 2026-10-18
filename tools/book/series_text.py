@@ -366,6 +366,15 @@ def scan_panels(body, qrfn, classify, short_address, addr_html, esc):
                 continue
             seen.add(target)
             items.append((target, label))
+        # the same tool twice under one name (the page and one of its modes): keep the deeper link only
+        keep = []
+        for t, lab in items:
+            twin = next((i for i, (t2, l2) in enumerate(keep) if l2 == lab and t2.split('#')[0] == t.split('#')[0]), None)
+            if twin is None:
+                keep.append((t, lab))
+            elif '#' in t and '#' not in keep[twin][0]:
+                keep[twin] = (t, lab)
+        items = keep
         if not items:
             continue
         lis = ''.join('<li>%s<span class="ps-scan-t">%s</span><span class="ps-scan-u">%s</span></li>' % (

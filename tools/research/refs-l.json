@@ -1,0 +1,598 @@
+[
+ {
+  "id": "pinker-2008-indirect-speech",
+  "authors": "Pinker, S., Nowak, M. A., & Lee, J. J.",
+  "year": 2008,
+  "title": "The logic of indirect speech",
+  "venue": "Proceedings of the National Academy of Sciences, 105(3), 833–838",
+  "doi": "10.1073/pnas.0707192105",
+  "url": "https://doi.org/10.1073/pnas.0707192105",
+  "kind": "theory",
+  "finding": "Argued, with a game-theory model, that hints and other indirect requests let a speaker make a request or offer while keeping plausible deniability, so both people can avoid an open refusal and the relationship stays safe.",
+  "strength": "theory: a model and argument, not a large experiment; a later paper by Lee and Pinker (2010) developed it further and others have debated it",
+  "topics": [
+   "indirect speech",
+   "hints",
+   "politeness",
+   "communication"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-18: citation, volume/issue/pages and DOI confirmed in the PubMed Central record (PMC2242675) and the Harvard-hosted PDF (https://scholar.harvard.edu/sites/scholar.harvard.edu/files/pinker/files/pnas_logic_of_indirect_speech.pdf)."
+ },
+ {
+  "id": "pellicano-burr-2012",
+  "authors": "Pellicano, E., & Burr, D.",
+  "year": 2012,
+  "title": "When the world becomes ‘too real’: a Bayesian explanation of autistic perception",
+  "venue": "Trends in Cognitive Sciences, 16(10), 504–510",
+  "doi": "10.1016/j.tics.2012.08.009",
+  "url": "https://doi.org/10.1016/j.tics.2012.08.009",
+  "kind": "theory",
+  "finding": "Proposed that autistic perception may lean less on prior expectations (“hypo-priors”) and more on the raw sensory input, which could help explain sensory differences and why an unpredictable world can feel overwhelming.",
+  "strength": "theory: an influential predictive-processing account; commentaries question how precisely it is specified, and testing is ongoing",
+  "topics": [
+   "predictive processing",
+   "autism",
+   "sensory differences",
+   "perception"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-18: citation and DOI confirmed in the PubMed record (22959875), the Macquarie University research record and the UCL Discovery manuscript."
+ },
+ {
+  "id": "jenkinson-2020-iu",
+  "authors": "Jenkinson, R., Milne, E., & Thompson, A.",
+  "year": 2020,
+  "title": "The relationship between intolerance of uncertainty and anxiety in autism: A systematic literature review and meta-analysis",
+  "venue": "Autism, 24(8), 1933–1944",
+  "doi": "10.1177/1362361320932437",
+  "url": "https://doi.org/10.1177/1362361320932437",
+  "kind": "meta-analysis",
+  "finding": "Across 10 studies pooled in a meta-analysis (12 reviewed), finding uncertainty hard to bear was strongly linked with anxiety in autistic people (r = 0.62), a link of similar size to that found in non-autistic people.",
+  "strength": "moderate: a meta-analysis, but of a small number of studies with methodological concerns; correlational",
+  "topics": [
+   "intolerance of uncertainty",
+   "autism",
+   "anxiety",
+   "change"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-18: authors, title, volume/issue/pages, DOI and results confirmed in the PubMed Central full text (PMC7539603) and the Cardiff University ORCA record (https://orca.cardiff.ac.uk/id/eprint/140692/)."
+ },
+ {
+  "id": "sandstrom-dunn-2014",
+  "authors": "Sandstrom, G. M., & Dunn, E. W.",
+  "year": 2014,
+  "title": "Social interactions and well-being: The surprising power of weak ties",
+  "venue": "Personality and Social Psychology Bulletin, 40(7), 910–922",
+  "doi": "10.1177/0146167214529799",
+  "url": "https://doi.org/10.1177/0146167214529799",
+  "kind": "study",
+  "finding": "In studies tracking everyday interactions, people were happier and felt more belonging on days when they had more interactions with acquaintances (weak ties), not only with close friends and family.",
+  "strength": "moderate: diary-style studies with consistent results; correlational, so happier people may simply chat more",
+  "topics": [
+   "small talk",
+   "weak ties",
+   "belonging",
+   "wellbeing"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-18: citation, volume/issue/pages and DOI confirmed in the University of Essex repository record (https://repository.essex.ac.uk/15300/) and the World Database of Happiness entry."
+ },
+ {
+  "id": "levine-schweitzer-2015",
+  "authors": "Levine, E. E., & Schweitzer, M. E.",
+  "year": 2015,
+  "title": "Prosocial lies: When deception breeds trust",
+  "venue": "Organizational Behavior and Human Decision Processes, 126, 88–106",
+  "doi": "10.1016/j.obhdp.2014.10.007",
+  "url": "https://doi.org/10.1016/j.obhdp.2014.10.007",
+  "kind": "study",
+  "finding": "In four experiments, lies told to benefit the other person increased trust in the liar’s kindness (benevolence-based trust) but reduced trust in their honesty (integrity-based trust).",
+  "strength": "moderate: four controlled experiments with consistent results, mostly in economic games",
+  "topics": [
+   "white lies",
+   "honesty",
+   "trust",
+   "politeness"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-18: citation, pages and DOI confirmed on RePEc/IDEAS (https://ideas.repec.org/a/eee/jobhdp/v126y2015icp88-106.html), the Penn repository and the Wharton-hosted manuscript."
+ },
+ {
+  "id": "miserandino-2003",
+  "authors": "Miserandino, C.",
+  "year": 2003,
+  "title": "The spoon theory",
+  "venue": "ButYouDontLookSick.com (essay)",
+  "doi": null,
+  "url": "https://butyoudontlooksick.com/articles/written-by-christine/the-spoon-theory/",
+  "kind": "theory",
+  "finding": "A personal essay in which Christine Miserandino, who has lupus, used a handful of spoons to show a friend that each daily task costs some of a limited supply of energy.",
+  "strength": "theory: a community metaphor, not a research finding",
+  "topics": [
+   "energy"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://www.sbs.com.au/voices/article/how-spoons-became-a-powerful-symbol-for-invisible-disability/jewma0upd",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "barkley-1997",
+  "authors": "Barkley, R. A.",
+  "year": 1997,
+  "title": "Behavioral inhibition, sustained attention, and executive functions: Constructing a unifying theory of ADHD",
+  "venue": "Psychological Bulletin, 121(1), 65–94",
+  "doi": "10.1037/0033-2909.121.1.65",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/9000892/",
+  "kind": "theory",
+  "finding": "A theoretical review proposing that ADHD centres on a difficulty with behavioural inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
+  "strength": "moderate: highly influential theory; executive function difficulties are common in ADHD but not universal.",
+  "topics": [
+   "neurodiversity",
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9000892/ ; https://sciences.ucf.edu/psychology/childrenslearningclinic/wp-content/uploads/sites/24/2013/08/Barkley-1997-Psych-Bulletin.pdf"
+ },
+ {
+  "id": "raymaker-2020",
+  "authors": "Raymaker, D. M., Teo, A. R., Steckler, N. A., et al.",
+  "year": 2020,
+  "title": "\"Having all of your internal resources exhausted beyond measure and being left with no clean-up crew\": Defining autistic burnout",
+  "venue": "Autism in Adulthood, 2(2), 132–143",
+  "doi": "10.1089/aut.2019.0079",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/32851204/",
+  "kind": "study",
+  "finding": "From 19 interviews and 19 public online accounts, analysed with autistic co-researchers, autistic burnout was defined as long-term exhaustion, loss of function and reduced tolerance to stimulus, arising from chronic life stress and a mismatch between expectations and abilities without enough support.",
+  "strength": "early: the first formal definition, from a qualitative community-based study; distinct from occupational burnout and depression in participants' accounts.",
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/32851204/ ; https://pdxscholar.library.pdx.edu/socwork_fac/378"
+ },
+ {
+  "id": "dunn-1997",
+  "authors": "Dunn, W.",
+  "year": 1997,
+  "title": "The impact of sensory processing abilities on the daily lives of young children and their families: A conceptual model",
+  "venue": "Infants & Young Children, 9(4), 23–35",
+  "doi": "10.1097/00001163-199704000-00005",
+  "url": "https://doi.org/10.1097/00001163-199704000-00005",
+  "kind": "theory",
+  "finding": "Proposed a model of sensory processing in which people differ in their neurological thresholds (high or low) and in how they respond (going along with them or acting against them), giving four patterns that affect daily life.",
+  "strength": "theory: a widely used clinical model and the basis of the Sensory Profile measures.",
+  "topics": [
+   "neurodiversity",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://ouci.dntb.gov.ua/works/4082G0p4 (reference list with DOI)"
+ },
+ {
+  "id": "gordon-chen-2014",
+  "authors": "Gordon, A. M., & Chen, S.",
+  "year": 2014,
+  "title": "The role of sleep in interpersonal conflict: Do sleepless nights mean worse fights?",
+  "venue": "Social Psychological and Personality Science, 5(2), 168–175",
+  "doi": "10.1177/1948550613488952",
+  "url": "https://doi.org/10.1177/1948550613488952",
+  "kind": "study",
+  "finding": "In a 14-day daily study, people reported more conflict with their partner after poor nights of sleep, and conflicts were resolved best when both partners were well rested.",
+  "strength": "moderate: diary and lab evidence; correlational in part.",
+  "topics": [
+   "stress",
+   "sleep",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/1948550613488952 ; https://news.fit.edu/?p=36479"
+ },
+ {
+  "id": "maccormack-lindquist-2019",
+  "authors": "MacCormack, J. K., & Lindquist, K. A.",
+  "year": 2018,
+  "title": "Feeling hangry? When hunger is conceptualized as emotion",
+  "venue": "Emotion (advance online publication, June 2018; DOI 10.1037/emo0000422)",
+  "doi": "10.1037/emo0000422",
+  "url": "https://doi.org/10.1037/emo0000422",
+  "kind": "study",
+  "finding": "Hunger made people judge things more negatively in negative situations, and in the lab hungry people felt worse and judged a researcher more harshly, but mainly when they were not paying attention to their own feelings.",
+  "strength": "early: a few experiments; the authors argue hunger alone is not enough to cause \"hangriness\".",
+  "topics": [
+   "stress",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://collegearchive.unc.edu/?p=25108 ; https://www.carolinaaffectivescience.com/s/MacCormackLindquist_inpress_Emotion-938x.pdf",
+  "note": "Year given as the online publication year (June 2018), which the search confirmed; the print issue year could not be confirmed."
+ },
+ {
+  "id": "milton-2012",
+  "authors": "Milton, D. E. M.",
+  "year": 2012,
+  "title": "On the ontological status of autism: The “double empathy problem”",
+  "venue": "Disability & Society, 27(6), 883–887",
+  "doi": null,
+  "url": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
+  "kind": "theory",
+  "finding": "A short conceptual paper arguing that misunderstanding between autistic and non-autistic people runs both ways: each side finds the other hard to read, so the problem lies between them, not only in the autistic person.",
+  "strength": "theory: no data in the paper itself; later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
+  "topics": [
+   "autism",
+   "neurodiversity",
+   "communication"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy ; https://reframingautism.org.au/miltons-double-empathy-problem-a-summary-for-non-academics/",
+  "note": "Citation checked against reference lists; the DOI could not be confirmed, so none is given."
+ },
+ {
+  "id": "crompton-2020",
+  "authors": "Crompton, C. J., Ropar, D., Evans-Williams, C. V. M., Flynn, E. G., & Fletcher-Watson, S.",
+  "year": 2020,
+  "title": "Autistic peer-to-peer information transfer is highly effective",
+  "venue": "Autism, 24(7), 1704–1712",
+  "doi": "10.1177/1362361320919286",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/",
+  "kind": "study",
+  "finding": "In \"diffusion chains\" where a story was passed along eight people (72 adults), all-autistic chains passed on as much detail as all-non-autistic chains, while mixed chains lost detail faster and reported lower rapport.",
+  "strength": "moderate: a careful experiment that supports the double empathy idea; modest sample and a single task.",
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "double-empathy"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656 ; https://nottingham-repository.worktribe.com/output/5141376 ; https://pure.qub.ac.uk/en/publications/autistic-peer-to-peer-information-transfer-is-highly-effective/"
+ },
+ {
+  "id": "sasson-2017",
+  "authors": "Sasson, N. J., Faso, D. J., Nugent, J., Lovell, S., Kennedy, D. P., & Grossman, R. B.",
+  "year": 2017,
+  "title": "Neurotypical peers are less willing to interact with those with autism based on thin slice judgments",
+  "venue": "Scientific Reports, 7, 40700",
+  "doi": "10.1038/srep40700",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5286449/",
+  "kind": "study",
+  "finding": "Across three studies, non-autistic observers formed less favourable first impressions of autistic children and adults from a few seconds of video, and were less willing to interact with them; the bias disappeared when they judged only transcripts of what was said.",
+  "strength": "moderate: three studies with consistent results; suggests style, not substance, drives the bias.",
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "double-empathy"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5286449/ ; https://brainlab.sitehost.iu.edu/doc/srep40700.pdf"
+ },
+ {
+  "id": "boothby-2018-liking-gap",
+  "authors": "Boothby, E. J., Cooney, G., Sandstrom, G. M., & Clark, M. S.",
+  "year": 2018,
+  "title": "The liking gap in conversations: Do people like us more than we think?",
+  "venue": "Psychological Science, 29(11), 1742–1756",
+  "doi": "10.1177/0956797618783714",
+  "url": "https://doi.org/10.1177/0956797618783714",
+  "kind": "study",
+  "finding": "Across five studies, people underestimated how much their conversation partners liked them after first conversations; in first-year university roommates the gap lasted for most of the year.",
+  "strength": "moderate — five studies including lab and field samples; mostly students and adults in the US and UK",
+  "topics": [
+   "friendship",
+   "first impressions",
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-13: citation and DOI confirmed in the University of Essex repository (https://repository.essex.ac.uk/23025/) and the APS news release; the authors' PDF is at https://faculty.wharton.upenn.edu/wp-content/uploads/2020/05/The-Liking-Gap-in-Conversations.pdf"
+ },
+ {
+  "id": "hull-2017",
+  "authors": "Hull, L., Petrides, K. V., Allison, C., Smith, P., Baron-Cohen, S., Lai, M.-C., & Mandy, W.",
+  "year": 2017,
+  "title": "\"Putting on my best normal\": Social camouflaging in adults with autism spectrum conditions",
+  "venue": "Journal of Autism and Developmental Disorders, 47(8), 2519–2534",
+  "doi": "10.1007/s10803-017-3166-5",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/",
+  "kind": "study",
+  "finding": "Interviews with 92 autistic adults described camouflaging as motivated by wanting to fit in and connect, done through masking and compensating techniques, and often followed by exhaustion and threats to self-perception.",
+  "strength": "moderate: a qualitative study that shaped later measurement work.",
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "masking"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/ ; https://discovery.ucl.ac.uk/id/eprint/10056287/"
+ },
+ {
+  "id": "demetriou-2018-ef",
+  "authors": "Demetriou, E. A., Lampit, A., Quintana, D. S., et al.",
+  "year": 2018,
+  "title": "Autism spectrum disorders: A meta-analysis of executive function",
+  "venue": "Molecular Psychiatry, 23, 1198–1204",
+  "doi": "10.1038/mp.2017.75",
+  "url": "https://doi.org/10.1038/mp.2017.75",
+  "kind": "meta-analysis",
+  "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
+  "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
+  "topics": [
+   "autism",
+   "neurodiversity",
+   "executive-function"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://minerva-access.unimelb.edu.au/server/api/core/bitstreams/9a9656b4-d19c-5cf5-83fb-20b878427c7b/content ; https://findanexpert.unimelb.edu.au/scholarlywork/1304533-autism-spectrum-disorders--a-meta-analysis-of-executive-function"
+ },
+ {
+  "id": "murray-lesser-lawson-2005",
+  "authors": "Murray, D., Lesser, M., & Lawson, W.",
+  "year": 2005,
+  "title": "Attention, monotropism and the diagnostic criteria for autism",
+  "venue": "Autism, 9(2), 139–156",
+  "doi": "10.1177/1362361305051398",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/15857859/",
+  "kind": "theory",
+  "finding": "Proposed \"monotropism\": autistic attention tends to be pulled strongly into a few interests at a time, and the authors argued this can explain the other diagnostic features of autism.",
+  "strength": "theory: an influential, autistic-led account; empirical testing is still limited.",
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "monotropism"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15857859/ ; https://monotropism.org/murray-lesser-lawson/"
+ },
+ {
+  "id": "gottman-levenson-1992",
+  "authors": "Gottman, J. M., & Levenson, R. W.",
+  "year": 1992,
+  "title": "Marital processes predictive of later dissolution: Behavior, physiology, and health",
+  "venue": "Journal of Personality and Social Psychology, 63(2), 221–233",
+  "doi": "10.1037/0022-3514.63.2.221",
+  "url": "https://doi.org/10.1037/0022-3514.63.2.221",
+  "kind": "study",
+  "finding": "Following 73 couples from 1983 to 1987, couples whose conflict interactions were more negative than positive had more marital problems, lower satisfaction, poorer health and greater risk of separation; physiological arousal was measured alongside behavior.",
+  "strength": "moderate — influential longitudinal lab study with a small sample",
+  "topics": [
+   "four-horsemen",
+   "flooding",
+   "gottman"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/1403613/"
+ },
+ {
+  "id": "phung-2021-bims",
+  "authors": "Phung, J., Penner, M., Pirlot, C., & Welch, C.",
+  "year": 2021,
+  "title": "What I wish you knew: Insights on burnout, inertia, meltdown, and shutdown from autistic youth",
+  "venue": "Frontiers in Psychology, 12, 741421",
+  "doi": "10.3389/fpsyg.2021.741421",
+  "url": "https://doi.org/10.3389/fpsyg.2021.741421",
+  "kind": "study",
+  "finding": "Interviews with eight autistic children and young people explored burnout, inertia, meltdown and shutdown as separate experiences, what they feel like, and what others do that helps or makes them worse.",
+  "strength": "early — small qualitative study; builds on earlier work with autistic adults",
+  "topics": [
+   "autism",
+   "meltdown",
+   "shutdown",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8595127/ ; https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.741421/pdf"
+ },
+ {
+  "id": "kinnaird-2019",
+  "authors": "Kinnaird, E., Stewart, C., & Tchanturia, K.",
+  "year": 2019,
+  "title": "Investigating alexithymia in autism: A systematic review and meta-analysis",
+  "venue": "European Psychiatry, 55, 80–89",
+  "doi": "10.1016/j.eurpsy.2018.09.004",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
+  "kind": "meta-analysis",
+  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+  "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
+  "topics": [
+   "alexithymia",
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6331035/"
+ },
+ {
+  "id": "craig-2002",
+  "authors": "Craig, A. D.",
+  "year": 2002,
+  "title": "How do you feel? Interoception: the sense of the physiological condition of the body",
+  "venue": "Nature Reviews Neuroscience, 3(8), 655–666",
+  "doi": "10.1038/nrn894",
+  "url": "https://doi.org/10.1038/nrn894",
+  "kind": "review",
+  "finding": "Described a pathway that carries signals about the body's internal state to the brain (including the insula), and proposed it underlies subjective feelings, emotion and self-awareness.",
+  "strength": "strong: a foundational, widely cited review; some proposals remain theoretical.",
+  "topics": [
+   "interoception",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12154366/"
+ },
+ {
+  "id": "downey-feldman-1996",
+  "authors": "Downey, G., & Feldman, S. I.",
+  "year": 1996,
+  "title": "Implications of rejection sensitivity for intimate relationships",
+  "venue": "Journal of Personality and Social Psychology, 70(6), 1327–1343",
+  "doi": "10.1037/0022-3514.70.6.1327",
+  "url": "https://doi.org/10.1037/0022-3514.70.6.1327",
+  "kind": "study",
+  "finding": "Three studies described rejection sensitivity: people who anxiously expect rejection read rejection into ambiguous behaviour, and in new couples this was linked with more relationship difficulty and less partner satisfaction.",
+  "strength": "strong: a well-established construct with a large later literature.",
+  "topics": [
+   "neurodiversity",
+   "adhd",
+   "rejection-sensitivity"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubpeer.com/publications/BB346A21EA4867F1634B58516C64E8 ; https://psychology.columbia.edu/sites/default/files/2016-11/merp.pdf"
+ },
+ {
+  "id": "shaw-2014-emotion-dysregulation-adhd",
+  "authors": "Shaw, P., Stringaris, A., Nigg, J., & Leibenluft, E.",
+  "year": 2014,
+  "title": "Emotion dysregulation in attention deficit hyperactivity disorder",
+  "venue": "American Journal of Psychiatry, 171(3), 276-293",
+  "doi": "10.1176/appi.ajp.2013.13070966",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/24480998/",
+  "kind": "review",
+  "finding": "A literature review found that trouble regulating emotions (quick, strong feelings that are hard to bring back down) is common in ADHD across the lifespan, with clinic studies of young people putting it at roughly a quarter to a half, and that it adds a lot to the day-to-day difficulty ADHD brings.",
+  "strength": "moderate: a widely cited review; the estimates come mostly from clinic samples, and how emotion dysregulation fits into ADHD is still debated.",
+  "topics": [
+   "adhd",
+   "emotions",
+   "anger"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24480998/ and https://pmc.ncbi.nlm.nih.gov/articles/PMC4282137 (search result, Oct 2026)"
+ },
+ {
+  "id": "grove-2018-special-interests",
+  "authors": "Grove, R., Hoekstra, R. A., Wierda, M., & Begeer, S.",
+  "year": 2018,
+  "title": "Special interests and subjective wellbeing in autistic adults",
+  "venue": "Autism Research, 11(5), 766–775",
+  "doi": null,
+  "url": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/",
+  "kind": "study",
+  "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest; greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
+  "strength": "moderate — large survey, cross-sectional and self-report",
+  "topics": [
+   "autism",
+   "special-interests",
+   "wellbeing",
+   "monotropism"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/ ; https://opus.lib.uts.edu.au/handle/10453/128415",
+  "note": "DOI (likely 10.1002/aur.1931) given by one secondary source only, so not used."
+ },
+ {
+  "id": "buckle-2021",
+  "authors": "Buckle, K. L., Leadbitter, K., Poliakoff, E., & Gowen, E.",
+  "year": 2021,
+  "title": "\"No way out except from external intervention\": First-hand accounts of autistic inertia",
+  "venue": "Frontiers in Psychology, 12, 631596",
+  "doi": "10.3389/fpsyg.2021.631596",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008/",
+  "kind": "study",
+  "finding": "Focus groups with autistic adults described \"autistic inertia\", difficulty starting and stopping tasks in everyday life despite wanting to, shaped by both inner and outside factors and with broad effects on daily life and wellbeing.",
+  "strength": "early: the first study of its kind, led by an autistic researcher; qualitative.",
+  "topics": [
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008 ; https://www.frontiersin.org/articles/10.3389/fpsyg.2021.631596/text"
+ },
+ {
+  "id": "fiese-2002-rituals",
+  "authors": "Fiese, B. H., Tomcho, T. J., Douglas, M., Josephs, K., Poltrock, S., & Baker, T.",
+  "year": 2002,
+  "title": "A review of 50 years of research on naturally occurring family routines and rituals: Cause for celebration?",
+  "venue": "Journal of Family Psychology, 16(4), 381–390",
+  "doi": "10.1037/0893-3200.16.4.381",
+  "url": "https://doi.org/10.1037/0893-3200.16.4.381",
+  "kind": "review",
+  "finding": "A review of 32 publications found family routines and rituals were related to parenting competence, children's adjustment and marital satisfaction, while noting weak measurement and convenience samples.",
+  "strength": "moderate — qualitative review of mostly correlational studies",
+  "topics": [
+   "rituals"
+  ],
+  "mentioned_on": [
+   "/the-logic-behind-it-in-depth.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12561283/"
+ }
+]
