@@ -250,7 +250,9 @@
     box.hidden = false;
     var row = $('#cp-cel-friends');
     if (row && !row.childNodes.length) D.chars.forEach(function (c, i) { var im = doc.createElement('img'); im.src = medURL(c, true); im.alt = ''; im.width = 48; im.height = 48; im.style.animationDelay = (i * 0.07) + 's'; row.appendChild(im); });
-    var h = $('#cp-cel-h'); if (h) h.focus();
+    // focus the message without jumping away from the machine mid-celebration; bring it into view once the dancing ends
+    var h = $('#cp-cel-h'); if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } }
+    setTimeout(function () { try { box.scrollIntoView({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' }); } catch (e) {} }, calm ? 0 : 5200);
   }
   function share() {
     var o = { title: 'Kindness Coin Pusher', text: 'I found every friend on Spread Love & Acceptance in the Kindness Coin Pusher: Professor Puddles, Tidbit, Sugarfoot and the whole gang. A cozy arcade with a kind tip every few coins. Free, nothing to buy.', url: location.origin + '/coin-pusher.html', heading: 'Share the coin pusher' };

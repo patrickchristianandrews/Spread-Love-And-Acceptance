@@ -55,7 +55,7 @@ window.TOLToolGuideData = {
         ['gunraj-2016-texting-period', 'Small things in short texts, like a full stop, can change how sincere a reply seems (one early study, 2016).'],
         ['crompton-2020', 'People who are wired differently can miss each other’s meaning more than people wired alike (Crompton and colleagues, 2020).']
       ],
-      idea: 'The levels (from kind to very sharp), the patterns it looks for and the rewrite rules are this site’s own, written by hand.',
+      idea: 'The levels (from kind to very sharp), the patterns it looks for and the rewrite rules are this site’s own, set down as fixed rules (nothing is generated on the spot).',
       limits: 'It reads the words only, not tone of voice, emoji habits or your history together. In our tests it read 92 of 101 held-out everyday messages the way people expected. Adding context (who they are, how they usually write, what you want) helps, and it still can\u2019t know everything. It is rule-based and will sometimes be wrong. Check its reading against what you know about the person. Not a test of anyone.',
       privacy: 'The checking happens on this device. What you type is not sent anywhere. Only your view settings are kept in this browser.'
     },

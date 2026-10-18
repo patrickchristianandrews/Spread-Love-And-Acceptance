@@ -47,7 +47,7 @@ function read(t){
 const pct = (a, b) => b ? Math.round(1000 * a / b) / 10 : 0;
 const report = {};
 let failed = false;
-['tune', 'holdout', 'holdout2', 'holdout3'].forEach(split => {
+['tune', 'holdout', 'holdout2', 'holdout3', 'holdout4'].forEach(split => {
   if(ONLY && ONLY !== split) return;
   const rows = SET.filter(c => c.split === split);
   const M = {}; LBL.forEach(a => { M[a] = {}; LBL.forEach(b => M[a][b] = 0); });
@@ -71,7 +71,7 @@ let failed = false;
   if(gates.some(x => !x.pass) && (STRICT || split === 'tune' || split === 'holdout')) failed = true;
   report[split] = {cases: rows.length, right, rate: pct(right, rows.length), matrix: M, gates: gates.map(x => ({name: x.name, got: x.got, of: x.of, pct: pct(x.got, x.of), pass: x.pass}))};
   if(JSON_OUT) return;
-  console.log('\n== ' + split + (split === 'holdout2' || split === 'holdout3' ? ' (fresh phrasings, written to find gaps; ' : ' (') + rows.length + ' messages): ' + right + ' read within their labels (' + pct(right, rows.length) + '%)');
+  console.log('\n== ' + split + (/^holdout[234]$/.test(split) ? ' (fresh phrasings, written to find gaps; ' : ' (') + rows.length + ' messages): ' + right + ' read within their labels (' + pct(right, rows.length) + '%)');
   console.log('expected \\ got  ' + LBL.slice(0, 5).map(x => x.padStart(11)).join(''));
   LBL.slice(0, 5).forEach(a => console.log(a.padEnd(16) + LBL.slice(0, 5).map(b => String(M[a][b] || 0).padStart(11)).join('')));
   gates.forEach(x => {
@@ -118,7 +118,7 @@ const CTXS = [
 }
 if(JSON_OUT) console.log(JSON.stringify(report, null, 1));
 else {
-  const fresh = ['holdout2', 'holdout3'].filter(k => report[k] && report[k].gates.some(g => !g.pass));
+  const fresh = ['holdout2', 'holdout3', 'holdout4'].filter(k => report[k] && report[k].gates.some(g => !g.pass));
   console.log(failed ? '\nA release gate failed.' : '\nRelease gates (tune, holdout, context) pass.' + (fresh.length ? ' The fresh-phrasing checks (' + fresh.join(', ') + ') still find lines the words alone can\'t read: see above.' : ''));
 }
 process.exit(failed ? 1 : 0);
