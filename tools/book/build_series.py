@@ -247,8 +247,13 @@ MADE_UP_RE = re.compile(r'\s*A made-up example\. Names and details are invented\
 ERRORS = []
 
 
-def s_chapter(e, book, here, where, namer):
+def namer_for(book):
+    return ST.Namer(book, books(), pg)
+
+
+def s_chapter(e, book, here, where, namer=None):
     slug = e[0]
+    namer = namer or namer_for(book)
     src = override(slug) or B.main_inner(B.PAGES[(slug, False)])
     body = B.clean_for_whole(src, slug, False, here)
     body = B.drop_element(body, r'<header class="read-head', 'header')
@@ -313,7 +318,7 @@ def copyright_page(book, workbook=False):
 MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
 
 
-def meet_page(book, found):
+def meet_page(book, found=()):
     """"Workpapers, tools and three friends", on one page. Its two samples are a workpaper and a tool this book uses."""
     wb = CFG['workbook']['title']
     wp = next((hints.WP[k] for (kind, k) in found if kind == 'wp' and k in hints.WP), hints.WP.get('wp03'))
@@ -335,6 +340,27 @@ def meet_page(book, found):
     return s
 
 
+CALLOUT_RES = [
+    re.compile(r'<(?:p|div) class="bh-ref[^"]*"[^>]*>.*?</(?:p|div)>', re.S),                 # hint callouts and "Workpaper WP-NN" lines
+    re.compile(r'<ul class="kind-list kind-(?:workpaper|tool)">.*?</ul>', re.S),              # the chapter's own Workpapers / Tools lists
+    re.compile(r'<ul class="pe-use">.*?</ul>', re.S),                                          # "Put it to use"
+]
+
+
+def printed_mentions(articles):
+    """{('wp'|'tool', key): [slug, ...]} from the WORKPAPER and TOOL callouts each printed chapter really shows (printfix13:
+    not from every link on the page, which credited chapters with tools they never name)."""
+    out = {}
+    for slug, art in articles:
+        for rx in CALLOUT_RES:
+            for blk in rx.findall(art):
+                for h in re.findall(r'<a\b[^>]*\bhref="([^"]+)"', blk):
+                    k = hints._match(re.sub(r'^https://spreadloveandacceptance\.com', '', h))
+                    if k and slug not in out.setdefault(k, []):
+                        out[k].append(slug)
+    return out
+
+
 def about_page(book, namer):
     """printfix13: "About this book, and how to use it", one page before Chapter 1: what the book is for and who it is for,
     how its chapters sit beside the other books and the free online versions, and the five big ideas."""
@@ -352,16 +378,16 @@ def about_page(book, namer):
           '<tbody>%s</tbody></table>') % rows
     others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
                        for b in books() if b is not book)
-    s += '<p>%s %s. %s</p>' % (ab['series_lead'], others, ab['refs'])
+    s += '<p>%s %s. %s.</p>' % (ab['series_lead'], others, ab['refs'])
     s += '<p class="ps-about-h">Five big ideas</p><p class="ps-about-small">%s</p><ul class="ps-about-ideas">%s</ul>' % (
         ab['ideas_lead'], ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), d) for t, d in ab['ideas']))
     s += '<p class="ps-about-small">%s %s</p></section>' % (ab['program'], esc(MADE_UP))
     return s
 
 
-def help_now(here, namer):
+def help_now(here, namer=None):
     ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
-                         series_ref=namer.ref)
+                         series_ref=namer.ref if namer else None)
     for x in front_back.front_sections(ctx):
         if x['key'] == 'help-now':
             return x['html'], x['toc']
@@ -487,25 +513,29 @@ def build_book(book, where):
     order = [e[0] for e in B.ORDER]
     here = set(book['chapters'])
     chs = book['chapters']
-    hn_html, hn_toc = help_now(here)
-    toc = [B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
+    namer = namer_for(book)
+    hn_html, hn_toc = help_now(here, namer)
+    toc = [B.toc_row('about', '', 'About this book, and how to use it', 'is-front'), B.toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front')]
     if hn_html:
         toc.append(B.toc_row('help-now', '', esc(hn_toc), 'is-front'))
-    body = []
+    body, arts = [], []
     for i, slug in enumerate(chs):
         e = B.entry(slug)
         num, lab = chapter_label(slug, book)
         toc.append(B.toc_row(slug, esc(num or 'After'), esc(B.TITLES[slug]), 'is-ch'))
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
-        body.append(s_chapter(e, book, here, where))
+        art = s_chapter(e, book, here, where, namer)
+        arts.append((slug, art))
+        body.append(art)
     # the back of the book: built before finish_package, so their page references get markers
     extra = []
-    found = hints.mentions(dict((s_, B.PAGES[(s_, False)]) for s_ in chs), chs)
+    found = printed_mentions(arts)
     wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(B.SHORT[s_]), pg(s_))
     extra.append(('wp-tools', 'Workpapers and tools in this book', hints.back_section(mark, found, wt_ref, book['color'])))
     if 'numbers' in book.get('extras', []):
-        ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add)
+        ctx = front_back.Ctx('series', False, (1, 2, 3), here, B.PAGES, pg, mark, lambda s_: B.chapter_name(B.entry(s_)), B.SHORT, SITE, B.XREFS.add,
+                             series_ref=namer.ref)
         for x in front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 extra.append(('numbers', x['toc'], x['html']))
@@ -515,17 +545,20 @@ def build_book(book, where):
         toc.append(B.toc_row(k, '', esc(t), 'is-back'))
     front = title_page(book) + copyright_page(book)
     front += '\n<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
-    front += '\n' + meet_page(book) + '\n' + hn_html
+    front += '\n' + about_page(book, namer) + '\n' + meet_page(book, list(found)) + '\n' + hn_html
     both, figs, exs = B.finish_package(front + '\n<!--pe-split-->\n' + '\n'.join(body) + '\n<!--pe-split-->\n' + ''.join(h for _k, _t, h in extra))
     front, body_html, extra_html = both.split('\n<!--pe-split-->\n', 2)
     backm = extra_html + research_short(book, here) + series_page(book) + free_page(book) + notes_pages(book, book.get("notes_pages", 2))
-    ol = [['Contents', 'contents', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
+    ol = [['Contents', 'contents', 0], ['About this book, and how to use it', 'about', 0], ['Workpapers, tools and three friends', 'meet', 0]] + ([[hn_toc, 'help-now', 0]] if hn_html else [])
     ol += [['%s: %s' % (chapter_label(s_, book)[1], B.TITLES[s_]), s_, 0] for s_ in chs]
     ol += [[t, k, 0] for k, t in back]
     title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': book['line']}, ensure_ascii=False).replace('</', '<\\/')
     rules = page_rules(book, [s_ for s_ in order if s_ in here], back)
+    # printfix13: no reference in this book may point to a chapter or a page that isn't there
+    for err in ST.check_text(ST.printed_text(front + body_html + extra_html), book, books(), 'Book %d' % book['n']):
+        ERRORS.append(err)
     page = head(title, SERIES_CSS)
     page += '<body class="whole-book pe-book pe-series" data-pe="%s">\n<main class="read whole" id="main">\n%s\n%s\n%s\n</main>\n%s\n%s\n%s\n</body>\n</html>\n' % (
         book['id'], front, body_html, backm, rules, outline, QR_SCRIPT)
@@ -790,9 +823,17 @@ def main():
     warn += [m for m in B.MISSING]
     for w in warn:
         print('series: WARNING', w)
+    if ST.MISSING_PAGES:
+        print('series: NOTE no page yet from the last print run for %d references in other books (print the series, then run this again): %s' % (
+            len(set(ST.MISSING_PAGES)), ', '.join(sorted(set(ST.MISSING_PAGES))[:6])))
     for b in books():
         print('series: Book %d %s: %d chapters, %d figures, %d filled-in examples' % (b['n'], b['title'], len(b['chapters']), stats[b['id']]['figures'], stats[b['id']]['examples']))
     print('series: %d QR codes, all checked against a page' % len(set(QRS)))
+    if ERRORS:
+        for err in ERRORS:
+            print('series: ERROR', err)
+        print('series: %d reference errors: fix them before printing' % len(ERRORS))
+        sys.exit(1)
 
 
 if __name__ == '__main__':

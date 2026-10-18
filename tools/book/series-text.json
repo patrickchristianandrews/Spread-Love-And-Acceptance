@@ -1,0 +1,43 @@
+{
+ "about_this_file": "printfix13: print-only wording for the print series (tools/book/series_text.py). 'about' is the one-page 'About this book, and how to use it' at the front of each book. 'ledes' replace a chapter's opening line in print. 'swaps' are exact find/replace pairs on a chapter's printed HTML (each must match exactly once, or build_series.py stops); {page:KEY} becomes a page slot in this book and {ref:SLUG} the series name of a chapter. The online pages are not changed by anything here.",
+ "about": {
+  "books": {
+   "1": {
+    "what": "This book starts with you. It looks at where your way of seeing things came from, how you are wired today, how feelings work, why your worth was never a score, how personality works and how minds can work differently.",
+    "who": "It is for anyone who wants to understand themselves a little better, at their own pace. You don’t need a partner, a problem or a diagnosis to read it, and nothing in it is a test."
+   },
+   "2": {
+    "what": "This book is for the heavy days. It covers stress, sleep and rest, anger, worry, low mood and trauma, grief, repair after hurt, the slow work of change, and what matters to you.",
+    "who": "It is for anyone going through a hard stretch, and for anyone standing beside someone who is. Each chapter says plainly when it is time to get help from a doctor, counsellor or helpline, and how to find one."
+   },
+   "3": {
+    "what": "This book is about the people around you. It looks at how pace and tone pull people out of step, how words land, why two people remember the same moment differently, belonging and trust, love in its many forms, the pull of groups, and how to help someone without burning out.",
+    "who": "It is for partners, families, friends, housemates and teams, and for anyone who has wondered why a kind conversation went wrong."
+   },
+   "4": {
+    "what": "This book is about the work of sharing a life: the jobs nobody sees, a simple check of whether the way you share them can last, how much of a reaction is leftover stress, two kinds of fair, and a gentle monthly look back.",
+    "who": "It is for anyone who shares a home, a family or a job, whether that is a couple, a family, housemates, co-parents or coworkers. Most of it also works if you are the only one reading."
+   }
+  },
+  "how": "Read the chapters in any order. Each one is a short version of a chapter that is free to read online, where the full version has more research, more examples and more to try. The code at the end of each chapter opens the full version on your phone.",
+  "others": {
+   "1": "about yourself",
+   "2": "about the heavy days",
+   "3": "about understanding the people around you",
+   "4": "about sharing the work of a shared life"
+  },
+  "series_lead": "There are four books in the series, and each stands on its own. The others are",
+  "refs": "When a chapter mentions another book, it gives the book, the chapter and the page in that book, as in “Book 2, Chapter 1 (page 7)”. The workbook, The Workpapers, has every form from the series on big pages",
+  "ideas_lead": "Five ideas run under the whole series. The small boxes in the chapters name them.",
+  "ideas": [
+   ["See the whole load", "Count the unseen work too, the noticing, remembering and planning, yours and other people’s."],
+   ["Fix the setup, not the person", "When something keeps going wrong, change the arrangement around it before you blame anyone."],
+   ["Read your state first", "How full your day already is changes how every word sounds, so check yourself before you react."],
+   ["Tune how you send and receive", "People differ in pace, tone and wiring, and a mismatch is something to translate, never a fault."],
+   ["Notice the quiet incentives", "Jobs nobody owns drift to whoever notices first, and a named owner and a real thank-you stop the drift."]
+  ],
+  "program": "Some chapters mention the six-week program. It is a free plan on the website that takes one small step a week, at spreadloveandacceptance.com/prog-01, and the workbook has a planner for it."
+ },
+ "ledes": {},
+ "swaps": []
+}
