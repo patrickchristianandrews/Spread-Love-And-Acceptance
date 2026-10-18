@@ -27,7 +27,6 @@ Every build checks itself: each XHTML file parses as XML, every manifest item ex
 resolves, every link to the site points at a real page (and #id), the nav matches the chapters, and the mimetype
 file comes first, uncompressed. Standard library only (plus Node + Playwright for the pictures, as the PDFs use).
 """
-import hashlib
 import html
 import json
 import os

@@ -39,6 +39,7 @@ import book_art  # noqa: E402
 import front_back  # noqa: E402
 import hints  # noqa: E402
 import series_site  # noqa: E402
+import series_text as ST  # noqa: E402  (printfix13: series cross-references, print-only wording, checks)
 
 ROOT = B.ROOT
 OUT = os.path.join(ROOT, 'book', 'print')
@@ -145,21 +146,42 @@ def online_name(slug):
     return B.chapter_name(B.entry(slug))
 
 
+def lede(slug):
+    """the chapter's opening line; series-text.json "ledes" has the print wording where the online one names the online book"""
+    return ST.TEXT.get('ledes', {}).get(slug) or B.LEDES[slug]
+
+
+def summary_at_end(slug):
+    """printfix13: a chapter keeps either its "In short" box at the top or "What to remember" at the end, never both.
+    series.json "summary_at_end" lists the chapters that keep the end version."""
+    return slug in CFG.get('summary_at_end', [])
+
+
+def override(slug):
+    """a print-only version of a whole chapter body (series-<slug>.html, such as the series afterword), or None"""
+    f = os.path.join(HERE, 'series-%s.html' % slug)
+    return B.read(f) if os.path.exists(f) else None
+
+
 def s_open(e, book):
     hs = B.headings(e[0], False)
+    ov = override(e[0])
+    if ov:
+        hs = [(m.group(1), B.strip_tags(m.group(2)).strip().rstrip('.')) for m in re.finditer(r'<h2 id="([^"]+)">(.*?)</h2>', ov, re.S)]
     lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(t)) if i else esc(t)) for i, t in hs)
     num, lab = chapter_label(e[0], book)
     kicker = 'Book %d · %s' % (book['n'], lab)
     return ('<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble>%s<p class="ch-num" aria-hidden="true">%s</p>'
-            '<p class="ch-kicker">%s<span class="ps-online"> · online: %s</span></p>'
+            '<p class="ch-kicker">%s</p>'
             '<h2 class="ch-title">%s</h2><p class="ch-intro">%s</p>'
             '<div class="ch-in"><p class="ch-in-k">In this chapter</p><ol class="ch-in-list">%s</ol></div></header>') % (
-        mark(e[0]), esc(num), esc(kicker), esc(online_name(e[0])), esc(B.TITLES[e[0]]), B.LEDES[e[0]], lis)
+        mark(e[0]), esc(num), esc(kicker), esc(B.TITLES[e[0]]), lede(e[0]), lis)
 
 
-def s_end(e, book, here, where):
+def s_end(e, book, here, where, remember=None):
     s = '<aside class="pe-end no-bubble no-cheer no-dive" data-no-bubble aria-label="End of chapter">'
-    s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % B.remember_html(e[0], 'pe-end-list')
+    if remember:
+        s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % remember
     links = B.CONNECT.get(e[0], [])
     if links:
         s += '<div class="pe-end-links"><h3 class="pe-end-k">This connects to</h3><ul class="pe-end-conn">'
@@ -169,8 +191,10 @@ def s_end(e, book, here, where):
                 lab = '<a href="#%s">%s</a>' % (tgt, chapter_label(tgt, book)[1])
                 at = '<a href="#%s">page %s</a>' % (tgt, pg(tgt))
             elif tgt in where:
-                lab = '<a href="%s">Book %d</a>' % (online, where[tgt]['n'])
-                at = '<a href="%s">%s</a>' % (online, esc(where[tgt]['title']))
+                ob = where[tgt]
+                lab = '<a href="%s">Book %d, %s</a>' % (online, ob['n'], chapter_label(tgt, ob)[1])
+                op = ST.PAGEMAPS.get(ob['id'], {}).get(tgt)
+                at = '<a href="%s">%s%s</a>' % (online, esc(ob['title']), (', page %d' % op) if op else '')
             else:
                 lab = '<a href="%s">Online</a>' % online
                 at = '<a href="%s">read online</a>' % online
@@ -218,18 +242,39 @@ def wp_lines(body):
     return WP_LINE_RE.sub(sub, body)
 
 
-def s_chapter(e, book, here, where):
-    src = B.PAGES[(e[0], False)]
-    body = B.clean_for_whole(B.main_inner(src), e[0], False, here)
+IN_SHORT_RE = re.compile(r'<div class="try-this" data-in-short>(.*?)</div>', re.S)
+MADE_UP_RE = re.compile(r'\s*A made-up example\. Names and details are invented\.\s*')
+ERRORS = []
+
+
+def s_chapter(e, book, here, where, namer):
+    slug = e[0]
+    src = override(slug) or B.main_inner(B.PAGES[(slug, False)])
+    body = B.clean_for_whole(src, slug, False, here)
     body = B.drop_element(body, r'<header class="read-head', 'header')
     body = re.sub(r'<p class="simple-lede">.*?</p>', '', body, count=1, flags=re.S)
-    body = B.print_links(body, e[0], here)
+    body, errs = ST.apply_swaps(body, slug, pg, lambda s_: namer.label(s_) or s_)
+    ERRORS.extend(errs)
+    body = ST.drop_nav_rows(body)
+    body = ST.series_links(body, slug, namer, B.XREFS.add)
+    body = B.print_links(body, slug, here)
     body = B.tag_boxes(B.demote(body))
     body = wp_lines(body)
     if not CFG.get('examples', True):
         body = re.sub(r'<div class="book-ex-wrap.*?</figure>\s*</div>', '', body, flags=re.S)
+    # the made-up note is said once, at the front of the book (copyright page and "About this book")
+    body = re.sub(r'<p class="bk-ex-note">(.*?)</p>', lambda m: (lambda t: ('<p class="bk-ex-note">%s</p>' % t) if t.strip() else '')(MADE_UP_RE.sub('', m.group(1))), body, flags=re.S)
+    # "In short" at the top, or "What to remember" at the end: never both
+    m = IN_SHORT_RE.search(body)
+    remember = None
+    if m and summary_at_end(slug):
+        items = re.findall(r'<li>(.*?)</li>', m.group(1), re.S)
+        remember = '<ul class="pe-end-list">%s</ul>' % ''.join('<li>%s</li>' % re.sub(r'</?a\b[^>]*>|<span class="pe-only[^"]*">.*?</span>', '', x).strip() for x in items[:5])
+        body = body[:m.start()] + body[m.end():]
+    elif not m:
+        remember = B.remember_html(slug, 'pe-end-list')
     return '<article class="whole-ch pe-ch" id="%s" data-part="%d" style="--pc:%s;--pt:%s">%s\n<div class="pe-body">%s</div>\n%s</article>' % (
-        e[0], e[1], book['color'], book['tint'], s_open(e, book), body, s_end(e, book, here, where))
+        slug, e[1], book['color'], book['tint'], s_open(e, book), body, s_end(e, book, here, where, remember))
 
 
 # ---------- front and back of each book ----------
@@ -242,7 +287,8 @@ def title_page(book):
 
 
 def copyright_page(book, workbook=False):
-    isbn = ('<p>ISBN %s (paperback)</p>' % esc(book['isbn'])) if book.get('isbn') else ''
+    # printfix13: the ISBN line is always there; until the owner buys ISBNs it carries the placeholder from series.json
+    isbn = '<p>ISBN: %s (paperback)</p>' % esc(book.get('isbn') or CFG.get('isbn_placeholder', '[to be added]'))
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
     s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by Spread Love &amp; Acceptance, spreadloveandacceptance.com.</p>' % (
@@ -256,13 +302,15 @@ def copyright_page(book, workbook=False):
     s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
           'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
           'If you are in danger now, call your local emergency number.</p>') % SITE
-    s += ('<p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them '
-          'is a real person or a testimonial.</p>')
+    s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
         s += ('<p>The research the chapters mention is listed in short at the back. The full list, with what each study found and links, is at '
               '<a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>') % SITE
     s += '<p>Set in Lora, Fraunces and IBM Plex Mono.</p></div></section>'
     return s
+
+
+MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
 
 
 def meet_page(book_or_none):
