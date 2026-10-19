@@ -2261,6 +2261,67 @@ if (PERSONA) {
   t(G, 'a therapist asking in general still gets the usual answer', { q: 'i\'m a therapist, can i use this with my clients?', id: 'forcounselors' });
 }
 
+// ---------------------------------------------------------------- crude (puddles16, the owner's finding): crude words, insults
+// and frustration get a calm, short, non-shaming answer; profanity is never "corrected" into other words; safety always first;
+// a real topic under the swearing gets the normal answer
+{
+  const G = 'crude';
+  const MIRROR = /\b(fuck\w*|shit\w*|penis|boobs?|dick|bitch\w*|piss\w*|cunt|ass|prick|twat|wank\w*|mierda|puta\w*)\b/i;
+  const NOFIX = /I think you mean/;
+  const LECTURE = /language|rude|inappropriate|offensive|swear|polite|respect(ful)?|not ok(ay)? to|shame/i;
+  const calm = (r, rs, text) => (MIRROR.test(text) ? 'mirrored a crude word' : '') || (LECTURE.test(text) ? 'a lecture' : '') || (NOFIX.test(text) ? 'a spelling “fix”' : '');
+  const SAFE = (r, rs, text) => /988|116 123|1-800-799-7233|safety\.html|Childline/.test(text + replyLinks(r).join(' ')) ? '' : 'no safety line';
+  // the owner's message, and crude-only, sexual and insulting messages
+  ['Are you kidding me? You big penis?', 'fuck off', 'fuck you', 'piss off', 'shut up you dick', 'show me your boobs', 'send me nudes', 'you\'re a useless piece of shit',
+   'what the fuck', 'wtf', 'shit', 'eat shit', 'you\'re a dick', 'suck my dick', 'are you horny', 'let\'s have sex', 'you stupid bitch', 'fuck this shit', 'f*ck off', 'go fuck yourself', 'you\'re a retard', 'show me your tits']
+    .forEach(q => t(G, q, { kind: 'crude', link: '/outside-help.html#talk', chip: /Chores|arguing|calm/, check: calm }));
+  t(G, 'crude chips include the help page and the main areas', { q: 'fuck off', check: r => (r.chips || []).length >= 3 ? '' : 'too few chips' });
+  // the wording varies, and 3+ in a row gets one line
+  c(G, ['fuck off', 'piss off'], { kind: 'crude', check: (r, rs) => replyText(rs[0]) === replyText(rs[1]) ? 'the same words twice' : '' });
+  c(G, ['fuck off', 'piss off', 'fuck you'], { id: 'crude-repeat', text: /^I’m here when you want help with something\.$/m, chip: /calm/ });
+  c(G, ['fuck off', 'piss off', 'fuck you', 'fuck off again'], { id: 'crude-repeat', check: calm });
+  c(G, ['fuck off', 'what is the lemonade stand'], { kind: 'card', id: 'lemonade' });
+  // frustration: a real apology that names the miss, and the next-best matches for the previous question
+  ['are you kidding me', 'this is stupid', 'lol you\'re dumb', 'you\'re useless', 'wrong answer', 'that\'s not it', 'not helpful', 'you\'re not listening', 'that\'s not what i asked', 'this is a joke', 'stupid bot', 'you don\'t understand'].forEach(q =>
+    t(G, q, { kind: 'frust', text: /^Sorry/, link: '/by-relationship.html', check: (r, rs, text) => calm(r, rs, text) || (replyLinks(r).includes('/outside-help.html#talk') ? '' : 'no person to talk to') }));
+  c(G, ['what is the lemonade stand', 'that\'s not it'], { kind: 'frust', text: /what is the lemonade stand/, check: r => (r.chips || []).some(ch => ch.doc != null) ? '' : 'no next-best matches' });
+  c(G, ['what is the lemonade stand', 'you\'re not listening'], { kind: 'frust', text: /next closest/ });
+  c(G, ['how do i say sorry so it lands', 'are you kidding me, this is useless'], { kind: 'frust', text: /how do i say sorry so it lands/ });
+  c(G, ['My partner never does the dishes', 'that didn’t help'], { kind: 'nohelp', text: /another side/ });
+  c(G, ['im 15 and gay and scared to come out', 'that\'s not it, i\'m an adult not a teen'], { id: 'lgbtadult' });
+  // swearing never "corrected" into other words
+  ['fuck off', 'show me your boobs', 'I\'m so fucking tired of fighting with my wife', 'my ex is a fucking nightmare about pickups', 'I want to die, fuck this', 'my husband calls me a stupid bitch', 'this shit is so hard, my mum needs care every day'].forEach(q =>
+    t(G, 'no spelling fix: ' + q, { q, not: /I think you mean|face off|facing|books|batch/ }));
+  // distress with swearing: the normal topic answer
+  t(G, 'I\'m so fucking tired of fighting with my wife', { id: 'partner+pattern', not: NOFIX });
+  t(G, 'my ex is a fucking nightmare about pickups', { id: /^coparent/, not: NOFIX });
+  t(G, 'my flatmate never does the fucking dishes', { id: /^roommate\+/, not: NOFIX });
+  t(G, 'my boss is a total dick and takes credit for my work', { id: /^coworker\+/, not: NOFIX });
+  t(G, 'how the hell do i stop texting my ex, i miss him so damn much', { id: 'exstoptext' });
+  t(G, 'my wife died and every fucking evening is the worst', { id: /^grief/, not: NOFIX });
+  t(G, 'ugh my teenager won\'t do a damn thing around the house', { not: /crude|I’ll skip that/ , check: r => r.kind === 'crude' || r.kind === 'frust' ? 'treated as crude' : '' });
+  // safety (and swearing) still gets the safety answer, never the crude one
+  t(G, 'I want to die, fuck this', { kind: 'safety', check: SAFE });
+  t(G, 'i want to fucking kill myself', { kind: 'safety', check: SAFE });
+  t(G, 'my husband calls me a stupid bitch', { kind: 'safety', check: SAFE });
+  t(G, 'he hit me again, the fucking bastard', { kind: 'safety', check: SAFE });
+  t(G, 'my boyfriend checks my phone, it\'s fucked up', { kind: 'safety', check: SAFE });
+  t(G, 'shit, he threatened to hurt me', { kind: 'safety', check: SAFE });
+  c(G, ['fuck off', 'i want to die'], { kind: 'safety', check: SAFE });
+  // the chit-chat answers for "you're sexy" and "a dirty joke" are unchanged
+  t(G, 'you\'re sexy', { id: 'pz-adult' });
+  t(G, 'tell me a dirty joke', { id: 'pz-adult' });
+  // Spanish
+  t(G, 'vete a la mierda', { id: 'es-crude', link: '/outside-help.html#talk', not: /puddle|didn’t catch/, check: calm });
+  t(G, 'eres inútil', { id: 'es-frust', text: /^Perdón/ });
+  t(G, 'eres un idiota', { id: 'es-frust' });
+  t(G, 'no me sirves para nada', { id: 'es-frust' });
+  t(G, 'pinche pendejo', { id: 'es-crude', check: calm });
+  t(G, 'chinga tu madre', { id: 'es-crude', check: calm });
+  t(G, 'Spanish safety with swearing', { q: 'joder, no quiero vivir', id: 'es-988', text: /988/ });
+  t(G, 'Spanish carer with swearing', { q: 'estoy hasta la madre, mis hermanos no me ayudan con mi mamá', id: /^es-hermanos/ });
+}
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];

@@ -186,8 +186,11 @@
     var bar = document.createElement('div'); bar.className = 'tol-prog'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
     var top = document.createElement('button'); top.type = 'button'; top.className = 'tol-top'; top.setAttribute('aria-label', T('Back to top', 'Volver arriba')); top.innerHTML = '&uarr;'; document.body.appendChild(top);
     top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); var h = main.querySelector('h1'); if (h) { h.setAttribute('tabindex', '-1'); try { h.focus({ preventScroll: true }); } catch (e) {} } });
+    // integ16: on a phone (under 480px) the corner can't stay clear of the words, so "Back to top" shows only at the very
+    // end of the page, where the footer leaves empty room for it
+    var narrowMq = window.matchMedia ? matchMedia('(max-width: 479px)') : null;
     var tick = 0;
-    function onScroll() { if (tick) return; tick = requestAnimationFrame(function () { tick = 0; var de = document.documentElement, max = de.scrollHeight - innerHeight, y = window.pageYOffset; bar.style.width = max > 200 ? Math.min(100, y / max * 100).toFixed(1) + '%' : '0'; top.classList.toggle('on', y > innerHeight * 1.2); }); }
+    function onScroll() { if (tick) return; tick = requestAnimationFrame(function () { tick = 0; var de = document.documentElement, max = de.scrollHeight - innerHeight, y = window.pageYOffset; bar.style.width = max > 200 ? Math.min(100, y / max * 100).toFixed(1) + '%' : '0'; top.classList.toggle('on', y > innerHeight * 1.2 && (!narrowMq || !narrowMq.matches || y >= max - 40)); }); }
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
     // a small "copy link to this section" mark after each section heading that has an id
     if (fine) Array.prototype.forEach.call(main.querySelectorAll('h2[id]'), function (h) {
