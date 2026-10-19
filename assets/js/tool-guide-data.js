@@ -172,7 +172,7 @@ window.TOLToolGuideData = {
       time: 'About 5 minutes to learn; a few seconds to use.',
       result: 'You name the state they seem to be in, pick one matching move (for example “offer company or space”), and have one sentence ready: “Want company while we deal with it, or do you need ten minutes first?”',
       next: [
-        ['/tools/frequency-calibration.html', 'Compare your everyday rhythms', 'the slow patterns underneath tense moments'],
+        ['/tools/frequency-calibration.html', 'Rhythms side by side', 'the slow patterns underneath tense moments'],
         ['/wp-11.html', 'Make your own calm-down plan', 'what settles you'],
         ['/turning-toward.html', 'Turning toward', 'small daily ways to stay close']
       ],
@@ -251,7 +251,7 @@ window.TOLToolGuideData = {
       result: 'Three ready-to-send ways to say no in your situation (“I’m full today”, “Not me, but let’s find who”, “Yes, just later”), one changed into your own words.',
       next: [
         ['/signal-translator.html', 'Check how your no may land', 'before you send it'],
-        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'See how much you’re carrying', 'a two-minute load check'],
+        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'See how much you’re carrying', 'a two-minute stress tank check'],
         ['/workpapers/wp-03-one-owner-per-job.html', 'Sort out who owns what', 'so the same asks stop landing on you']
       ],
       research: [
@@ -362,7 +362,7 @@ window.TOLToolGuideData = {
     },
 
     'how-much-carrying': {
-      name: 'Load check: how much are you carrying?',
+      name: 'How much are you carrying? A quick stress check',
       pages: ['/workpapers/wp-02-how-much-are-you-carrying.html', '/workpapers/fill/wp-02.html'],
       when: 'Before a hard conversation, or when a small thing stings more than it should, to tell apart what you’re already carrying from the thing in front of you.',
       notWhen: 'Not about anyone else: fill it in only about yourself. Not a reason to skip a talk forever; a high score means “later”, not “never”.',
@@ -596,7 +596,7 @@ window.TOLToolGuideData = {
       result: 'One week of jobs written down, each person’s own side, and a short list of the jobs that surprised you, plus kind words for saying “not right now”.',
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'turn the log into a plan'],
-        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a two-minute load check'],
+        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a two-minute stress tank check'],
         ['/lemonade-stand.html', 'See the split plainly', 'in Who does what?']
       ],
       research: [
@@ -1214,7 +1214,7 @@ window.TOLToolGuideData = {
       result: 'Your gaps in plain words, for example “bills: Tom right away, Rosa after a night’s sleep”, and one small agreement for the biggest gap that gives the faster person a way to start and the slower person a time to land.',
       next: [
         ['/pursue-withdraw.html', 'A pause plan', 'when one of you needs space in the middle of a hard talk'],
-        ['/tools/frequency-calibration.html', 'Compare your daily rhythms', 'for pace across the whole week, not just five moments'],
+        ['/tools/frequency-calibration.html', 'Rhythms side by side', 'for pace across the whole week, not just five moments'],
         ['/check-ins.html', 'Check-ins', 'to look at how the agreement is going, at a set time']
       ],
       idea: 'The five moments, the three questions (speed, talk, urgency) and how the gaps are counted are this site’s own. No study is behind these questions.',
