@@ -1336,6 +1336,8 @@ def main():
                                                                'paper_note': 'KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)'}, indent=1) + '\n')
     # the series on /book/ (also made by build_book.py's build_home, so a full rebuild keeps it)
     series_site.patch_home(os.path.join(ROOT, 'book', 'index.html'))
+    # owner17: and the four books on /book/download.html (page counts from book/print/series.json; run again after build_pdfs.js)
+    series_site.patch_download(os.path.join(ROOT, 'book', 'download.html'))
     warn += check_qrs() + series_site.check_blurbs()
     warn += [m for m in B.MISSING]
     # finalfix15: no entity escaped twice on any print page or cover

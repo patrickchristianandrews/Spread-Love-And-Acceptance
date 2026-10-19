@@ -192,6 +192,8 @@
     var tick = 0;
     function onScroll() { if (tick) return; tick = requestAnimationFrame(function () { tick = 0; var de = document.documentElement, max = de.scrollHeight - innerHeight, y = window.pageYOffset; bar.style.width = max > 200 ? Math.min(100, y / max * 100).toFixed(1) + '%' : '0'; top.classList.toggle('on', y > innerHeight * 1.2 && (!narrowMq || !narrowMq.matches || y >= max - 40)); }); }
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    // integ16: when the page grows or shrinks under a still reader (a fold opens, a card loads), "at the end" changes too
+    if (window.ResizeObserver) { try { new ResizeObserver(onScroll).observe(document.body); } catch (e) {} }
     // a small "copy link to this section" mark after each section heading that has an id
     if (fine) Array.prototype.forEach.call(main.querySelectorAll('h2[id]'), function (h) {
       if (h.closest('aside, nav, .tol-keys, .tol-outline, .appad') || h.querySelector('.tol-hl')) return;

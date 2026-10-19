@@ -1600,37 +1600,17 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 
 
 # ---------- 3b. the PDF downloads (made by tools/book/build_pdfs.js, which writes book/pdf/manifest.json) ----------
-def build_download():
-    cards = []
-    for name, parts, title, who in PACKAGES:
-        rows = []
-        for deep in (False, True):
-            fname = name + ('-in-depth' if deep else '')
-            m = MANIFEST.get(fname, {})
-            meta = ''
-            if m:
-                meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
-            kit = ''
-            pk = m.get('print') or {}
-            if pk and all(os.path.exists(os.path.join(BOOK, 'pdf', pk[k])) for k in ('interior', 'cover')):
-                kit = ' <span class="bk-dl-kit">For a print shop: <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-interior" download>the inside pages</a> (%d pages, %.1f MB) and <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-cover" download>the cover</a>.</span>' % (
-                    pk['interior'], fname, m.get('interior_pages', 0), pk.get('interior_bytes', 0) / 1048576.0, pk['cover'], fname)
-            rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a>%s</li>' % (
-                fname, fname, 'Full version' if deep else 'Short version', meta, fname, kit))
-        # the whole book also has the afterword, which is not a chapter (the book's home says "26 chapters ... and an afterword")
-        chs = '%d chapters%s' % (sum(1 for e in ORDER if e[1] in parts), ' and an afterword' if name == 'whole' else '')
-        acc, tint = COVER[name][0], COVER[name][1]
-        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">{ST}</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h2>%s</h2><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
-            name, acc, tint, book_art.illustration(name), esc(COVER[name][2]), esc(title), esc(who), chs, ''.join(rows)))
-    page = HEAD_TMPL.replace('{TITLE}', 'Download the Book as a PDF').replace('{DESC}', 'Download the book as a PDF.')
-    page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
+# owner17: the main downloads are the four print books (and the workbook and pocket guide), from series_site.download_html();
+# the four big collections (book/pdf/<name>.pdf, short and full) stay below them, folded away as "Everything in one PDF (long)".
+# The books and the collections ask for an email (book-download.js); the workbook and the pocket guide do not.
+DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
 <main class="read bk-home bk-dl" id="main">
-<header class="read-head"><p class="read-code">The book</p><h1>Download the book as a PDF</h1></header>
-<p class="simple-lede">Keep the book on your phone, tablet or computer, or print it. Pick the whole book or a smaller book that fits you, in the short or the full version. Each one is a designed book: a cover, contents with page numbers, part and chapter openers, “What to remember” and “This connects to” at the end of every chapter, a glossary, research notes and an index.</p>
-<p>Reading the book on this site is always free, with no account and no email. Only these PDF files ask for an email address.</p>
+<header class="read-head"><p class="read-code">The book</p><h1>Download the books as PDFs</h1></header>
+<p class="simple-lede">{EMAIL} {FREE}</p>
+<p>Pick one of the four short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
-<p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
+<p>To download a book, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
 <form class="bk-dl-form" novalidate>
 <label for="bk-dl-email">Email address</label>
 <div class="bk-dl-row"><input type="email" id="bk-dl-email" name="email" autocomplete="email" placeholder="name@example.com" required><button type="submit" class="tol-btn">Show the downloads</button></div>
@@ -1638,17 +1618,58 @@ def build_download():
 </form>
 <p class="bk-dl-small">This device remembers only that you’ve given an email here (not the address itself), so you won’t be asked again on it. <a href="/legal/privacy-policy.html">Privacy policy</a>.</p>
 </div>
-<p class="bk-dl-series">Looking for one of the four print books? There isn’t a PDF for each one. Book 1, Know Yourself Kindly, is in <a href="#for-yourself">The Book for One Person</a>. Book 2, Heal and Steady, is in <a href="#understanding">Understanding People</a>. Book 3, Understanding Each Other, is in <a href="#whole">the whole book</a>. Book 4, Share the Load, is in <a href="#together">The Book for Two or More</a> (its short afterword is in the whole book).</p>
+{BOOKS}
+<details class="bk-dl-long no-bubble" data-no-bubble id="everything">
+<summary><h2>Everything in one PDF (long)</h2></summary>
+<p>The book also comes as four big collections: the whole book, the book for one person, the book for two or more, and Understanding People. Each has a short version and a full version (the full one adds the research, more examples and more to try). They are long, {SPAN}, so most people find one of the four books above easier. These ask for your email too.</p>
 <div class="bk-dl-cards no-bubble" data-no-bubble>
-%s
+{CARDS}
 </div>
+</details>
 <p>Prefer to read online? <a href="/book/">The book’s home</a> has every chapter, free, with no email.</p>
-<p class="last-updated no-bubble">Last updated: %s</p>
+<p class="last-updated no-bubble">Last updated: {UPDATED}</p>
 </main>
 <script src="/assets/js/book-download.js" defer></script>
 </body>
 </html>
-''' % ('\n'.join(cards), UPDATED)
+'''
+
+
+def download_cards(manifest):
+    """the four big collections (short and full), and their page span ("146 to 842 pages")"""
+    cards, sizes = [], []
+    for name, parts, title, who in PACKAGES:
+        rows = []
+        for deep in (False, True):
+            fname = name + ('-in-depth' if deep else '')
+            m = manifest.get(fname, {})
+            meta = ''
+            if m:
+                meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
+                if m.get('pages'):
+                    sizes.append(m['pages'])
+            kit = ''
+            pk = m.get('print') or {}
+            if pk and all(os.path.exists(os.path.join(BOOK, 'pdf', pk[k])) for k in ('interior', 'cover')):
+                kit = ' <span class="bk-dl-kit">For a print shop: <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-interior" data-name="%s (%s), the inside pages" download>the inside pages</a> (%d pages, %.1f MB) and <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-cover" data-name="%s (%s), the cover" download>the cover</a>.</span>' % (
+                    pk['interior'], fname, esc(title), 'full version' if deep else 'short version', m.get('interior_pages', 0), pk.get('interior_bytes', 0) / 1048576.0,
+                    pk['cover'], fname, esc(title), 'full version' if deep else 'short version')
+            rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" data-name="%s (%s)" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a>%s</li>' % (
+                fname, fname, esc(title), 'full version' if deep else 'short version', 'Full version' if deep else 'Short version', meta, fname, kit))
+        # the whole book also has the afterword, which is not a chapter (the book's home says "26 chapters ... and an afterword")
+        chs = '%d chapters%s' % (sum(1 for e in ORDER if e[1] in parts), ' and an afterword' if name == 'whole' else '')
+        acc, tint = COVER[name][0], COVER[name][1]
+        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">{ST}</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h3>%s</h3><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
+            name, acc, tint, book_art.illustration(name), esc(COVER[name][2]), esc(title), esc(who), chs, ''.join(rows)))
+    span = ('%d to %d pages' % (min(sizes), max(sizes))) if sizes else 'hundreds of pages'
+    return cards, span
+
+
+def build_download():
+    cards, span = download_cards(MANIFEST)
+    page = HEAD_TMPL.replace('{TITLE}', 'Download the Book as a PDF').replace('{DESC}', 'Download the book as a PDF.')
+    page += (DOWNLOAD_TMPL.replace('{EMAIL}', series_site.EMAIL_LINE).replace('{FREE}', series_site.FREE_LINE)
+             .replace('{BOOKS}', series_site.download_html()).replace('{SPAN}', span).replace('{CARDS}', '\n'.join(cards)).replace('{UPDATED}', UPDATED))
     write(os.path.join(BOOK, 'download.html'), page.replace('{ST}', ST_H))
 
 
@@ -1679,7 +1700,7 @@ def build_home():
 <ul class="bk-how no-bubble" data-no-bubble>
 <li><strong>Read it in order, like any book.</strong> %d chapters in three parts, and an afterword. Every chapter ends with what to remember, the chapters it connects to, and the next one.</li>
 <li><strong>Two sizes of every chapter.</strong> The short version takes about 10 to 15 minutes. The full version adds the research, more examples and more to try.</li>
-<li><strong>Free, with nothing to sign up for.</strong> No account and no paid version. Read on a phone, a computer or on paper.</li>
+<li><strong>Free to read, with no account.</strong> No paid version, and it works on a phone, a computer or on paper. Read every chapter free online. To download a book as a PDF, we’ll ask for your email.</li>
 <li><strong>Or use it with the program.</strong> Each chapter ends with the steps and workpapers that go with it, if you want to put it to work.</li>
 </ul>
 <section class="bk-meet no-bubble" data-no-bubble aria-labelledby="meet-h"><h2 id="meet-h">Workpapers, tools and three friends</h2>

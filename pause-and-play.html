@@ -110,6 +110,24 @@
   .pp-card.is-coin{ --c1:rgba(250,240,220,.88); --c2:rgba(244,232,214,.84); }
   .pp-card.is-video{ --c1:rgba(253,238,242,.86); --c2:rgba(255,243,214,.82); }
   .pp-card.is-keep{ --c1:rgba(255,248,222,.84); --c2:rgba(253,238,242,.8); }
+  /* owner17: Relax and reset, the calm tools in one place (above the games) */
+  .pp-relax{ margin:0 0 1.8rem; }
+  .pp-relax h2{ margin:0 0 .3rem; }
+  .pp-relax-sub{ margin:0 0 .9rem; max-width:40rem; }
+  .pp-relax .pp-games{ margin-bottom:1rem; }
+  .pp-anchor{ display:block; position:relative; top:-80px; visibility:hidden; height:0; }
+  .pp-card.is-night{ --c1:rgba(226,224,246,.86); --c2:rgba(238,244,250,.82); cursor:pointer; font:inherit; text-align:left; width:100%; color:inherit; }
+  .pp-card.is-music{ --c1:rgba(236,232,250,.86); --c2:rgba(253,238,242,.8); }
+  .pp-card.is-cool{ --c1:rgba(232,244,250,.86); --c2:rgba(241,249,236,.82); }
+  .pp-card .pp-meta:empty{ display:none; }
+  .pp-relax-h3{ margin:.4rem 0 .5rem; font-size:1.08rem; }
+  .pp-quiet{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr; gap:.5rem; }
+  @media (min-width:640px){ .pp-quiet{ grid-template-columns:repeat(3, 1fr); } }
+  .pp-quiet li{ margin:0; padding:0; }
+  .pp-quiet li::before{ content:none !important; }
+  .read .pp-quiet a{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.15rem .4rem; box-sizing:border-box; min-height:48px; height:100%; padding:.65rem .9rem; border-radius:18px; border:1px solid #E6D6EE; background:rgba(255,253,249,.88); color:var(--ink); text-decoration:none; }
+  .read .pp-quiet a:hover{ background:#F6EEFC; }
+  .pp-quiet a > span:last-child{ flex-basis:100%; font-size:.88rem; color:#5A5346; }
   .pp-why{ background:rgba(255,253,247,.82) !important; }
   .pp-why{ margin-top:.4rem; }
   .pp-what{ margin:0 0 1.2rem; }
@@ -182,7 +200,7 @@
 </head>
 <body class="pp-page is-game">
 <main class="read">
-<header class="read-head pp-head"><h1>Gentle games: calm games with no timers</h1><p class="pp-sub">Calm games for a busy mind. Also called Pause &amp; Play</p></header>
+<header class="read-head pp-head"><h1>Relax and play: calm tools and gentle games</h1><p class="pp-sub">Relax and reset with a breathing break, slow colours or calm music, or play a calm game with no timers. Also called Pause &amp; Play.</p></header>
 
 <section class="pp-quick" aria-labelledby="pp-quick-h">
   <h2 id="pp-quick-h">Only have a moment?</h2>
@@ -209,27 +227,72 @@
   </div>
 </div>
 
+<section class="pp-relax" id="relax" aria-labelledby="pp-relax-h">
+<span class="pp-anchor" id="relax-and-reset"></span>
+<h2 id="pp-relax-h">Relax and reset</h2>
+<p class="pp-relax-sub">Calm tools for your body and a busy mind, gathered in one place. None of them is a game: there is nothing to win and nothing to keep up with. One tap starts each one, and you can stop at any time.</p>
+<div class="pp-games pp-relax-grid">
+  <button type="button" class="pp-card is-breathe" data-breathe aria-labelledby="pp-t8" aria-describedby="pp-d8 pp-m8">
+    <span class="pp-ico" aria-hidden="true">&#129767;</span>
+    <h3 id="pp-t8">A breathing break</h3>
+    <p id="pp-d8">Box breathing with a soft light and gentle sound, right here on this page.</p>
+    <span id="pp-m8" class="pp-meta">1, 3 or 5 minutes</span>
+    <span class="pp-meta" data-meta="breathe"></span>
+  </button>
+  <button type="button" class="pp-card is-night" data-pp-tonight aria-labelledby="pp-t20" aria-describedby="pp-d20 pp-m20">
+    <span class="pp-ico" aria-hidden="true">&#127769;</span>
+    <h3 id="pp-t20">A silent wind-down</h3>
+    <p id="pp-d20">One minute of slow breathing, one minute with a quiet picture, and one kind sentence. No sound.</p>
+    <span id="pp-m20" class="pp-meta">3 minutes</span>
+  </button>
+  <a class="pp-card is-garden" href="/calm-visualizer.html" aria-labelledby="pp-t1" aria-describedby="pp-d1 pp-m1">
+    <span class="pp-ico" aria-hidden="true">&#127744;</span>
+    <h3 id="pp-t1">Drift: the calm visualizer</h3>
+    <p id="pp-d1">Tell it how you feel, then float through slow, deep colours with soft, low tones and a light that breathes with you.</p>
+    <span id="pp-m1" class="pp-meta">5 to 20 minutes · nothing to do</span>
+  </a>
+  <a class="pp-card is-garden" href="/night-garden.html" aria-labelledby="pp-t2" aria-describedby="pp-d2 pp-m2">
+    <span class="pp-ico" aria-hidden="true">&#127803;</span>
+    <h3 id="pp-t2">The Night Garden</h3>
+    <p id="pp-d2">Breathe with a glowing light in a moonlit garden. Fireflies sing into constellations, and it grows as you visit.</p>
+    <span id="pp-m2" class="pp-meta">A few minutes, or as long as you like</span>
+    <span class="pp-meta" data-meta="garden"></span>
+  </a>
+  <a class="pp-card is-music" href="/soundscapes.html#brain-breakers" aria-labelledby="pp-t21" aria-describedby="pp-d21 pp-m21">
+    <span class="pp-ico" aria-hidden="true">&#127911;</span>
+    <h3 id="pp-t21">Brain Breakers music</h3>
+    <p id="pp-d21">Four short instrumental pieces for a real break, with a music visualizer you can see and feel.</p>
+    <span id="pp-m21" class="pp-meta">About 2 to 4 minutes a piece</span>
+  </a>
+  <a class="pp-card is-music" href="/soundscapes.html#background" aria-labelledby="pp-t22" aria-describedby="pp-d22 pp-m22">
+    <span class="pp-ico" aria-hidden="true">&#127754;</span>
+    <h3 id="pp-t22">Calm sounds</h3>
+    <p id="pp-d22">Brown noise, a low hum or a soft flutter in the background while you rest, read or fall asleep.</p>
+    <span id="pp-m22" class="pp-meta">As long as you like</span>
+  </a>
+  <a class="pp-card is-cool" href="/upset-right-now.html" aria-labelledby="pp-t23" aria-describedby="pp-d23 pp-m23">
+    <span class="pp-ico" aria-hidden="true">&#129707;</span>
+    <h3 id="pp-t23">Cool-down corner</h3>
+    <p id="pp-d23">Upset right now? Settle your body first, step by step, then find words for when you go back to the talk.</p>
+    <span id="pp-m23" class="pp-meta">About 5 minutes</span>
+  </a>
+</div>
+<h3 class="pp-relax-h3" id="pp-quiet-h">Quiet games, when your hands want something to do</h3>
+<ul class="pp-quiet" aria-labelledby="pp-quiet-h">
+  <li><a href="/quiet-words.html"><span aria-hidden="true">&#128269;</span> <strong>Quiet Words</strong> <span>a gentle word search · 5 minutes</span></a></li>
+  <li><a href="/word-bloom.html"><span aria-hidden="true">&#127804;</span> <strong>Word Bloom</strong> <span>spell words from a wheel · 2 to 5 minutes</span></a></li>
+  <li><a href="/quiet-crossword.html"><span aria-hidden="true">&#9999;&#65039;</span> <strong>Quiet Crossword</strong> <span>a small, friendly crossword · 5 to 10 minutes</span></a></li>
+</ul>
+</section>
+
 <div class="try-this pp-why pp-what">
-  <p><strong>What are Gentle games?</strong> They’re the calm corner of the site, and every game on it is here: gentle games for when your mind needs a rest. Breathe in the Night Garden, play Tidbit and Sugarfoot’s Arcade, wander the Bears Dojo, move the ball in the Re-check Drive, spell words in Word Bloom, solve a crossword, find words in a quiet word search, or make a cartoon music video. There are no timers and no way to lose.</p>
+  <p><strong>What are Gentle games?</strong> They’re the playful half of the site’s calm corner, and every game on it is here: gentle games for when your mind needs a rest. Play Tidbit and Sugarfoot’s Arcade, wander the Bears Dojo, move the ball in the Re-check Drive, spell words in Word Bloom, solve a crossword, find words in a quiet word search, or make a cartoon music video. There are no timers and no way to lose.</p>
   <p>Every level you finish counts, and now and then something new appears in the living garden behind every page and joins the animals playing there. <a href="/keepsakes.html">My garden</a> keeps a list of everything that has arrived. A few minutes here is a lovely way to settle before a hard conversation, or to wind down at night. Nothing you type or choose is sent anywhere.</p>
 </div>
 
 
 <h2 id="pp-games-h">The games</h2>
 <section class="pp-games" aria-labelledby="pp-games-h">
-  <a class="pp-card is-garden is-wide" href="/calm-visualizer.html" aria-labelledby="pp-t1" aria-describedby="pp-n1 pp-d1 pp-m1">
-    <span class="pp-tag" id="pp-n1">New</span>
-    <span class="pp-ico" aria-hidden="true">&#127744;</span>
-    <h3 id="pp-t1">Drift: the calm visualizer</h3>
-    <p id="pp-d1">Tell it how you feel, pop on headphones, and float through slow, deep 3D colours with soft, low tones and a light that breathes with you.</p>
-    <span id="pp-m1" class="pp-meta">5 to 20 minutes, nothing to do</span>
-  </a>
-  <a class="pp-card is-garden is-wide" href="/night-garden.html" aria-labelledby="pp-t2" aria-describedby="pp-d2 pp-m2">
-    <span class="pp-ico" aria-hidden="true">&#127769;</span>
-    <h3 id="pp-t2">The Night Garden</h3>
-    <p id="pp-d2">Box breathing with a glowing light, fireflies that sing into constellations, and a slow lily-pond puzzle. It grows as you play.</p>
-    <span id="pp-m2" class="pp-meta" data-meta="garden">A moonlit place to settle</span>
-  </a>
   <a class="pp-card is-journey is-wide" href="/frequency-journey.html" aria-labelledby="pp-t3" aria-describedby="pp-n3 pp-d3 pp-m3">
     <span class="pp-tag" id="pp-n3">New</span>
     <span class="pp-ico" aria-hidden="true">&#127925;</span>
@@ -281,12 +344,6 @@
     <p id="pp-d12">Pick the stage, lights, costumes, moves and who is on stage, then play your own music video.</p>
     <span id="pp-m12" class="pp-meta">About 5 minutes · fun with kids</span>
   </a>
-  <button type="button" class="pp-card is-breathe" data-breathe aria-labelledby="pp-t8" aria-describedby="pp-d8 pp-m8">
-    <span class="pp-ico" aria-hidden="true">&#129767;</span>
-    <h3 id="pp-t8">A breathing break</h3>
-    <p id="pp-d8">One, three or five minutes of box breathing with soft sound, right here.</p>
-    <span id="pp-m8" class="pp-meta" data-meta="breathe">Headphones are lovely</span>
-  </button>
   <a class="pp-card is-keep" href="/keepsakes.html" aria-labelledby="pp-t9" aria-describedby="pp-d9 pp-m9">
     <span class="pp-ico" aria-hidden="true">&#127795;</span>
     <h3 id="pp-t9">My garden</h3>
@@ -296,5 +353,9 @@
 </section>
 
 </main>
+<script>
+// owner17: the "A silent wind-down" card in Relax and reset opens the same wind-down as the button at the top
+document.addEventListener('click', function (e) { var c = e.target.closest && e.target.closest('[data-pp-tonight]'); var b = c && document.getElementById('pp-tonight'); if (b) b.click(); });
+</script>
 </body>
 </html>
