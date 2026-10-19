@@ -142,11 +142,22 @@
     // the full checker gets the words, without putting them in the address
     // the one-tap answer ("a joke we both share") goes along as context, through the same tab-only key the Chat analyzer reads
     var answer = null, answeredFor = '', answerCtx = null;
-    function hand() { try { if (box.value.trim()) sessionStorage.setItem('tol-st-text', box.value.trim().slice(0, 1500)); if (answerCtx && answeredFor === box.value.trim()) sessionStorage.setItem('tol-st-ctx', JSON.stringify(answerCtx)); } catch (e) {} }
+    // land16: data-rel may change after the card is built (a page's one-tap "Who's it for?" row), so it is read again
+    // at each check and before the links hand over. A page that never changes it behaves exactly as before.
+    function syncRel() {
+      var r = (host.getAttribute('data-rel') || '').replace(/[^a-z-]/g, '');
+      if (r === rel) return;
+      rel = r; full = '/signal-translator.html' + (rel ? '?rel=' + encodeURIComponent(rel) : '');
+      link.href = full; ctxLink.href = full + '#add-context';
+      var sl = host.querySelector('.mcm-shotl'); if (sl) sl.href = full + '#conversation';
+      answer = null; answeredFor = ''; answerCtx = null;
+    }
+    function hand() { syncRel(); try { if (box.value.trim()) sessionStorage.setItem('tol-st-text', box.value.trim().slice(0, 1500)); if (answerCtx && answeredFor === box.value.trim()) sessionStorage.setItem('tol-st-ctx', JSON.stringify(answerCtx)); } catch (e) {} }
     link.addEventListener('click', hand);
     ctxLink.addEventListener('click', hand);
 
     function check() {
+      syncRel();
       var text = box.value.trim();
       if (!text) { out.innerHTML = '<p class="mcm-note no-bubble">Type a message first.</p>'; box.focus(); return; }
       if (answeredFor !== text) { answer = null; answerCtx = null; }

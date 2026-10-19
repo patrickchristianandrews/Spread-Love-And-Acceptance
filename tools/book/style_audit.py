@@ -177,6 +177,31 @@ def sentences(t):
 
 
 TRIAD = re.compile(r'(?<![,\w] )(?<!, )\b([\w’\'-]+(?: [\w’\'-]+){0,3}), ([\w’\'-]+(?: [\w’\'-]+){0,3}),? (?:and|or) ([\w’\'-]+)')
+NOT_ITEM = re.compile(r'^(?:which|who|whose|so|but|because|when|while|if|and|or|then|though|although|as|where|that|even|until|before|after|since|for example|such as|perhaps|maybe|say|I|you|he|she|we|they|it|there|this|his|her|their|my|your|our|“|")\b', re.I)
+NOT_LAST = re.compile(r'^(?:I|you|he|she|we|they|it|there|this|that|not|then|so|both|never|always|also)\b|^[“"]', re.I)
+
+
+def triads(text):
+    """lists of exactly three items, "A, B and C" or "A, B, or C": the item before "and/or" and the one after are short
+    (four words or fewer), and exactly one short item sits between the first comma and the "and/or"."""
+    out = []
+    for sent in re.split(r'(?<=[.!?;:])\s+|\n', text):
+        for m in re.finditer(r',? (and|or) ', sent):
+            before = sent[:m.start()]
+            after = re.split(r'[,.;:!?()]', sent[m.end():])[0].strip()
+            segs = [x.strip() for x in before.split(',')]
+            if len(segs) < 2 or not after or len(after.split()) > 4 or NOT_LAST.match(after):
+                continue
+            k = 0
+            for seg in reversed(segs[1:]):
+                if seg and len(seg.split()) <= 4 and not NOT_ITEM.match(seg):
+                    k += 1
+                else:
+                    break
+            if k == 1 and len(segs) >= 2 and segs[-1] and segs[-2]:
+                first_items = segs[-2].split()
+                out.append(' '.join(first_items[-4:]) + ', ' + segs[-1] + ' ' + m.group(1) + ' ' + after)
+    return out
 NOTBUT = [
     re.compile(r'\bnot\b[^.;:!?]{1,60}?,?\s+but\s', re.I),
     re.compile(r',\s+not\s+(?!only\b|just\b|even\b|yet\b|always\b|to\b|at all\b)[a-z]'),
@@ -215,13 +240,38 @@ def is_moral(sent):
     return True
 
 
+# voice17: "editable prose" = the chapter text minus the parts that must stay word for word or are lists of links:
+# the "When to get more help" sections, the tool and reading lists, "More for your situation", safety and crisis
+# sentences, and sentences that cite a study (author lists such as "Kashdan, Barrett and McKnight (2015)").
+FIXED_SECTIONS = re.compile(r'<h2 id="(?:more-help|tools|more|your-situation|in-this-part|limits)".*?(?=<h2 id="(?!more-help|tools|more\b|your-situation|in-this-part|limits)|<!-- book-end|<div data-research-box|$)', re.S)
+FIXED_SENT = re.compile(r'/safety|Not safe at home|crisis|emergency|988|116 123|Samaritans|helpline|harming yourself|hurting yourself|ending your life|afraid of|\(\d{4}\)|\d{4}\)|general education|In short', re.I)
+
+
+def prose_counts(h):
+    """triads and not-but frames in the editable prose of one chapter source"""
+    h = FIXED_SECTIONS.sub('', h)
+    h = re.sub(r'<div class="try-this" data-in-short>.*?</div>', '', h, flags=re.S)
+    p = parse(h)
+    tri = nb = words_n = 0
+    for b in p.blocks:
+        if b['kind'] == 'h':
+            continue
+        for sent in re.split(r'(?<=[.!?])\s+(?=[“A-Z(])', b['text']):
+            if FIXED_SENT.search(sent):
+                continue
+            words_n += len(words(sent))
+            tri += len(triads(sent))
+            nb += sum(len(r.findall(sent)) for r in NOTBUT)
+    return {'prose_words': words_n, 'prose_triads': tri, 'prose_notbut': nb}
+
+
 def text_metrics(t):
     """phrase and density counts for any text"""
     t2 = TIME_URL.sub(' ', t)
     nw = max(len(words(t)), 1)
     k = 1000.0 / nw
     nb = sum(len(r.findall(t)) for r in NOTBUT)
-    tri = len(TRIAD.findall(t))
+    tri = len(triads(t))
     out = {
         'words': len(words(t)),
         'triads_per_1k': round(tri * k, 2),
@@ -420,11 +470,16 @@ def audit_src():
                     continue
                 p = parse(h)
                 per[s] = block_metrics(p.blocks, p.lists)
+                per[s].update(prose_counts(h))
                 allb += [dict(b, sec=(s, b['sec']) if b['sec'] else 0) for b in p.blocks]
                 alll += p.lists
             tot = block_metrics(allb, alll)
             tot['sd_by_chapter'] = {k: v['sd_sentence'] for k, v in per.items()}
             tot['skeleton_same_pct_mean'] = round(statistics.mean([v['skeleton_same_pct'] for v in per.values()]), 1) if per else 0
+            for k in ('prose_words', 'prose_triads', 'prose_notbut'):
+                tot[k] = sum(v.get(k, 0) for v in per.values())
+            tot['prose_triads_per_1k'] = round(tot['prose_triads'] * 1000.0 / max(tot['prose_words'], 1), 2)
+            tot['prose_notbut_per_1k'] = round(tot['prose_notbut'] * 1000.0 / max(tot['prose_words'], 1), 2)
             res[key] = {'book': tot, 'chapters': per}
     return res
 
@@ -437,7 +492,9 @@ KEYS = [('words', 'Words'), ('mean_sentence', 'Mean sentence'), ('sd_sentence', 
         ('hedges_wide_per_1k', 'Hedges, wide /1k'), ('moral_end_pct', '% paragraphs ending on a moral'),
         ('skeleton_same_pct_mean', '% sections with the same skeleton'), ('full_kit_pct', '% sections with say-box + try-step'), ('claim_list_line', 'Claim-list-line sections'),
         ('bullets_per_1k', 'Bullets /1k'), ('bullets_per_page', 'Bullets a page'), ('opener_top3_pct', '% sentences opening with top-3 words'),
-        ('para_opener_repeats', 'Repeated paragraph openers')]
+        ('para_opener_repeats', 'Repeated paragraph openers'), ('prose_triads', 'Lists of three in editable prose'),
+        ('prose_triads_per_1k', 'Lists of three in editable prose /1k'), ('prose_notbut', '"not X but Y" in editable prose'),
+        ('prose_notbut_per_1k', '"not X but Y" in editable prose /1k')]
 
 
 def md(res):

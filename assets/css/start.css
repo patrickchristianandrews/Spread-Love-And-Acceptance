@@ -4,14 +4,15 @@
    around and turns pictures and canvases back (site.css), so shadows are softened there. Quiet mode drops the
    art, the gradient and the glow; reduced motion and "Keep the page still" stop every transition. */
 
-.read .st{ --st-ink:#2B2620; --st-soft:#5A5346; --st-blue:#2B5B8C; --st-plum:#6B4F8A; --st-rose:#A23E63; --st-green:#2F5E3E;
+main.st{ --st-ink:#2B2620; --st-soft:#5A5346; --st-blue:#2B5B8C; --st-plum:#6B4F8A; --st-rose:#A23E63; --st-green:#2F5E3E;
   --st-card:#FFFDF8; --st-line:#E8DDEF; --st-r:22px; --st-shadow:0 18px 40px -28px rgba(78,63,107,.5), 0 2px 6px rgba(78,63,107,.07); }
-.read .st, .read .st *{ box-sizing:border-box; }
-.read .st :is(p, h1, h2, h3, ul, ol, li, fieldset, legend, details, summary){ max-width:none; }
-.read .st ul, .read .st ol{ margin:0; padding:0; list-style:none; }
-.read .st li{ margin:0; padding:0; }
-.read .st li::before{ content:none; }
-.read .st a:focus-visible, .read .st button:focus-visible, .read .st summary:focus-visible, .read .st input:focus-visible + span, .read .st textarea:focus-visible{
+main.st, main.st *{ box-sizing:border-box; }
+main.st :is(p, h1, h2, h3, ul, ol, li, fieldset, legend, details, summary){ max-width:none; }
+main.st ul, main.st ol{ margin:0; padding:0 !important; list-style:none !important; }
+main.st li::marker{ content:none; }
+main.st li:not(.js-step){ margin:0; padding:0; }
+main.st li:not(.js-step)::before{ content:none; }
+main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-visible, main.st textarea:focus-visible{
   outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
 
 /* ---------- the hero: a warm band, the headline, one small character, the tool ---------- */
@@ -32,6 +33,10 @@
 .read .st-kick a.st-es{ display:inline-flex; align-items:center; min-height:28px; padding:.12rem .65rem; border-radius:999px; font-size:.82rem; font-weight:600;
   color:var(--st-blue); background:#FFFFFF; border:1px solid #BFD2E6; text-decoration:none; }
 .read .st-kick a.st-es::after{ content:"\a0\2192"; }
+/* a 44px tap area around the small chip */
+.read .st-kick a.st-es{ position:relative; }
+.read .st-kick a.st-es::before{ content:""; position:absolute; inset:-6px -4px; }
+.read .st-tool .mcm-full{ display:inline-flex; align-items:center; min-height:44px; }
 
 .read .st-art{ position:absolute; top:clamp(.7rem, .5rem + 1vw, 1.4rem); right:clamp(.7rem, .5rem + 1vw, 1.6rem); width:76px; height:68px; display:grid; place-items:center;
   border-radius:20px; background:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.95); box-shadow:0 8px 18px -12px rgba(78,63,107,.45); pointer-events:none; }
@@ -117,6 +122,7 @@
 .read .st-tool .mcm-out .mcm-say{ background:#FFFFFF; }
 .read .st-tool .mcm-out .mcm-sleep{ background:#FFFFFF; }
 .read .st-share-row{ display:flex; flex-wrap:wrap; gap:.4rem .6rem; margin:.5rem 0 0; }
+.read .st-share-row .mcm-copy{ margin:0; }
 
 /* ---------- sections under the hero ---------- */
 .read .st-sec{ margin:0 0 1.1rem; padding:1rem 1.1rem 1.05rem; border-radius:var(--st-r); background:rgba(255,251,244,.96); border:1px solid #EFE4F6; box-shadow:var(--st-shadow); }
@@ -130,6 +136,7 @@
 .read .st-back-i{ grid-row:span 2; display:grid; place-items:center; width:2.1rem; height:2.1rem; border-radius:12px; background:#F1EAFB; font-size:1.05rem; line-height:1; }
 .read .st-back-t{ margin:0; font-weight:600; line-height:1.35; }
 .read .st-back-d{ margin:0; font-size:.93rem; line-height:1.45; color:var(--st-soft); }
+.read .st-back-d p{ margin:0 0 .2rem; line-height:1.45; }
 .read .st-back-d .st-quiet-btn, .read .st-back-d .st-link{ margin-top:.25rem; }
 .read .st-slot:empty{ display:none; }
 .read .st-slot{ margin:.4rem 0 0; padding:.6rem .7rem; border-radius:14px; background:#FFFFFF; border:1px solid var(--st-line); }
@@ -147,7 +154,6 @@
 .read .st-back .jr .js-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem 1rem; }
 .read .st-back .jr .js-tick{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; }
 .read .st-back .jr .js-tick input{ width:22px; height:22px; }
-.read .st-back .jr .js-step{ padding:.45rem 0; border-top:1px solid #F0E8F6; }
 .read .st-back .jr p{ margin:.15rem 0; font-size:.92rem; }
 .read .st-back .jr .jr-btn{ min-height:44px; padding:.3rem .9rem; border-radius:999px; border:1.5px solid #D9C8F0; background:#FFFFFF; font:inherit; font-size:.9rem; cursor:pointer; }
 /* the email line */
@@ -155,7 +161,8 @@
 .read .st-mail > summary{ display:flex; align-items:center; min-height:44px; cursor:pointer; list-style:none; font-size:.93rem; color:var(--st-soft); }
 .read .st-mail > summary::-webkit-details-marker{ display:none; }
 .read .st-mail > summary::before{ content:"\2709"; margin-right:.45rem; color:var(--st-plum); }
-.read .st-mail > summary b{ color:var(--st-blue); font-weight:600; text-decoration:underline; text-underline-offset:3px; margin-left:.3rem; }
+.read .st-mail > summary b{ color:var(--st-blue); font-weight:600; text-decoration:underline; text-underline-offset:3px; margin-left:.3rem; white-space:nowrap; }
+.read .st-mail > summary{ flex-wrap:wrap; line-height:1.4; padding:.2rem 0; }
 .read .st-mail form{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.3rem 0 0; }
 .read .st-mail label{ flex:1 0 100%; font-size:.88rem; font-weight:600; }
 .read .st-mail input[type=email]{ flex:1 1 12rem; min-height:44px; padding:.35rem .7rem; border-radius:12px; border:1.5px solid #D9C8F0; background:#FFFFFF; color:var(--st-ink); font:inherit; }

@@ -2623,7 +2623,7 @@
       // the simple page comes before its in-depth twin: most people want the short way in first
       // when nobody else is named, a tool one person can use alone edges ahead of a two-person one
       if (score && needsPrep && needsPrep.solo[p.u] === 0 && !together) score -= 3;
-      if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) - (/-in-depth\.html/.test(p.u) ? 10 : 0) - (/^\/(telemetry|suite-index|roadmap|architecture|legal\/)/.test(p.u) ? 15 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
+      if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) - (/-in-depth\.html/.test(p.u) ? 10 : 0) - (/^\/(telemetry|suite-index|roadmap|architecture|legal\/|start\/)/.test(p.u) ? 15 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
     });
     // a section of a page (or the breathing break) named first for a word leads; further down it sits with the pages
     Object.keys(EXTRA).forEach(function (u) { if (boost[u]) out.push({ p: EXTRA[u], score: boost[u] + (first[u] ? 20 : 2) }); });

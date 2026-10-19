@@ -234,7 +234,8 @@ The answers are seen by Amazon, not printed on the product page.
 SELECT_NO = ('**No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: '
              'Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take '
              'the free online book down.')
-DRM_NO = '**No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers\' way. (KDP doesn\'t let you change this after publishing.) [OWNER]'
+DRM_NO = ('**No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers\' way. KDP\'s help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, '
+          'checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER]')
 
 
 def workbook_choice():

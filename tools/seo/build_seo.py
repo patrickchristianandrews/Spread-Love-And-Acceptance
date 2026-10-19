@@ -522,6 +522,14 @@ SEARCH.update({
  'signal-translator.html': ('Chat Analyzer: Check a Text, a Reply or a Whole Chat', 'Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.'),
 })
 
+# land16 (Oct 2026): three campaign front doors under /start/, one per audience and ad. Each has its own sharing image
+# (IMAGE_INFO below), a lower sitemap priority than the main tools (priority()) and is left out of the main menu.
+SEARCH.update({
+ 'start/chores.html': ('Who Does What at Home? A 2-Minute Chore Check for Two', 'Arguing about housework and the mental load? Each of you taps who mostly does each job, then see where you agree. Free, private, no sign-up.'),
+ 'start/text-check.html': ('Check a Text Before You Send It: Free Tone Checker', 'About to send a tense text? See how it may land and get a clearer version that keeps your point. Free, private: nothing you type leaves your device.'),
+ 'start/breakup.html': ('Want to Text Your Ex? Start Here, Before You Send', 'In the first weeks after a breakup: check a message before you send it, three steps for tonight, and gentle next steps. Free and private, on your device.'),
+})
+
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results
 TITLE_MAX, DESC_MAX = 60, 155
 
@@ -582,8 +590,13 @@ IMAGE_INFO = {
     OG_IMAGE: (1200, 630, 'image/png', 'Two friends sharing one heart, with two happy pups: Spread Love & Acceptance'),
     SEASON_VIDEO['thumb']: (1280, 720, 'image/jpeg', 'Tidbit and Sugarfoot, the two pups of the Frequency Buddies cartoon'),
     SITE + '/assets/img/frequency-buddies-season-2-teaser.jpg': (1280, 720, 'image/jpeg', 'Frequency Buddies Season 2: Tidbit and Sugarfoot under a starry sky'),
+    # land16: the /start/ front doors' own sharing images (rendered from a small HTML template; the headline as text)
+    SITE + '/assets/img/og/start-chores.png': (1200, 630, 'image/png', 'Who really does what at home? Find out in 2 minutes, together. With Tidbit and Sugarfoot, two friendly pups.'),
+    SITE + '/assets/img/og/start-text-check.png': (1200, 630, 'image/png', 'Check a text before you send it. With Professor Puddles, a cheerful raindrop in a graduation cap.'),
+    SITE + '/assets/img/og/start-breakup.png': (1200, 630, 'image/png', 'When you want to text them, start here. A sleepy pup under a crescent moon.'),
 }
 PAGE_IMAGE = {p: SEASON_VIDEO['thumb'] for p in ('frequency-buddies.html', 'frequency-buddies-shuffle.html', 'frequency-buddies-live.html', 'frequency-buddies-music-video.html', 'frequency-buddies-music-video-maker.html')}
+PAGE_IMAGE.update({'start/%s.html' % n: SITE + '/assets/img/og/start-%s.png' % n for n in ('chores', 'text-check', 'breakup')})
 
 AUTHOR_NAME = 'Christian'
 AUTHOR = {'@type': 'Person', '@id': SITE + '/about.html#christian', 'name': AUTHOR_NAME, 'url': SITE + '/about.html'}
@@ -1105,6 +1118,7 @@ Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 
 def priority(path):
     if path == 'index.html': return '1.0'
+    if path.startswith('start/'): return '0.5'   # land16: the campaign front doors stay below the tools they lead to
     if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|complacency|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|conversation-reader|check-ins|tools\.html|explore|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting|neurodivergent-relationships|communication\.html|share-the-load|nervous-system|calming-supplements|love-languages\.html|apology-languages|co-parenting|living-alone\.html|book/index|lemonade-stand)', path): return '0.9'
     if re.search(r'^(book/|library/|workpapers/fill/suite|coin-pusher|frequency-journey|soundscapes|calm-visualizer|word-bloom|quiet-words|quiet-crossword|daily-ledger)', path): return '0.8'
     return '0.6'

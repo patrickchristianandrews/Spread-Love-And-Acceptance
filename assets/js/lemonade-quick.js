@@ -2025,6 +2025,22 @@
       lede.parentNode.insertBefore(lp, lede.nextSibling);
       $('lq-lang').addEventListener('click', function () { q.lang = isEs() ? 'en' : 'es'; save(); renderAll(); var b = $('lq-lang'); if (b) b.focus({ preventScroll: true }); status(L('Back to English.', 'Ahora en español. Los nombres de las tareas, el resultado y el mensaje para compartir.')); });
     }
+    // land16: taps carried over from a front door (/start/chores.html's three-job preview), through this tab only:
+    // sessionStorage 'tol-lemonade-pre' = { a: { <job id>: 'me' | 'b' | 'them' } }, read once and removed. Only known
+    // jobs, and only where this device has no answer yet; nothing else changes.
+    (function () {
+      var pre = null;
+      try { pre = JSON.parse(ssGet('tol-lemonade-pre') || 'null'); sessionStorage.removeItem('tol-lemonade-pre'); } catch (e) { pre = null; }
+      if (!pre || !pre.a || typeof pre.a !== 'object') return;
+      var mine = view(q.me), other = q.people.length === 2 ? 1 - q.me : -1, got = 0;
+      Object.keys(pre.a).forEach(function (id) {
+        var v = pre.a[id], x = v === 'b' ? 'b' : v === 'me' ? q.me : v === 'them' && other >= 0 ? other : null;
+        if (!JOB[id] || x == null || mine[id] != null) return;
+        if (q.list.indexOf(id) < 0) q.list.push(id);
+        mine[id] = x; got++;
+      });
+      if (got) save();
+    })();
     ready = true;
     renderAll();
     // arriving at #quick (the home page's "Quick look"): the site's top bar lands after the first paint and pushes the
