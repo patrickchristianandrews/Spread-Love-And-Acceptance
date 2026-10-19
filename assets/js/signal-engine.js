@@ -1366,6 +1366,21 @@ function parentLimitOf(opts, cm, low){
   if(cm.kind==="isolate") return (kid && mode==="send" || fromParent) && ends.test(low) && !/\b(?:anymore|ever again|for good|don't bother coming home|or me)\b/.test(low);
   return false;
 }
+/* ============================================================
+   THE SITE'S OWN ADVICE
+   Openers and scripts the site's pages suggest (sharing-a-room, co-parenting, after-a-breakup, communication…), kept as
+   short hashes of their normalised words. Built by tools/signal/build-site-advice.js from tools/signal/site-advice.json;
+   tested by tools/signal/test-site-advice.js. Don't edit the list by hand.
+   ============================================================ */
+function adviceKey(t){
+  const n = String(t||"").replace(/[’‘`´]/g,"'").replace(/[“”]/g,'"').toLowerCase().replace(/^[\s"']+|[\s"'.!?,;:]+$/g,"").replace(/\s+/g," ");
+  let h = 0x811c9dc5; for(let i=0;i<n.length;i++){ h ^= n.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(36);
+}
+/* site-advice:start */
+const SITE_ADVICE = new Set([]);
+/* site-advice:end */
+function found0Danger(hits){ return hits.some(h=>["menace","harm","control","violent","threat","legal","kidsfirst"].includes(h.id)); }
 function analyze(textIn, opts){
   opts = opts||{};
   const ch = opts.channel||"person";
@@ -1834,6 +1849,18 @@ function analyze(textIn, opts){
     // a Spanish request ("¿Puedes recoger a los niños el viernes?", "Llámame cuando llegues, por favor") is still an ask
     sentences.forEach((se,i)=>{ const st = lc.slice(se.s, se.e); if(/(?:^|[\s¿¡])(?:puedes|podr[ií]as|podemos|me ayudas)\b|\bpor favor\b|^\s*[¿¡]?(?:ll[aá]mame|llama|trae|compra|recoge|saca|limpia|ven)\b/.test(st) && !askSentEs.includes(i)) askSentEs.push(i); });
   }
+  // the site's own suggested openers and scripts (copied from a page with its Copy button, or typed out): never flagged.
+  // A whole message that is one of them keeps no static marks; a sentence of one, inside a longer message, keeps none of
+  // its own. Threats, danger, self-harm and control are read above and never come from this list.
+  let siteAdvice = "";
+  if(!opts.noSiteAdvice && SITE_ADVICE.size && !found0Danger(hits)){
+    if(SITE_ADVICE.has(adviceKey(raw))) siteAdvice = "all";
+    else {
+      const gs = sentences.filter(se=>SITE_ADVICE.has(adviceKey(raw.slice(se.s, se.e))));
+      if(gs.length){ siteAdvice = "some"; for(let i=hits.length-1;i>=0;i--){ const h=hits[i]; if(h.s>=0 && FBY[h.id] && FBY[h.id].kind==="static" && gs.some(se=>h.s>=se.s && h.s<se.e)) hits.splice(i,1); } }
+    }
+    if(siteAdvice==="all") for(let i=hits.length-1;i>=0;i--){ if(FBY[hits[i].id] && FBY[hits[i].id].kind==="static") hits.splice(i,1); }
+  }
   // assemble
   const found={}; const spans=[];
   hits.forEach(h=>{
@@ -1868,6 +1895,7 @@ function analyze(textIn, opts){
     ctx: opts.ctx || null,
     ctxMode: opts.mode || "",
     selfHarm,
+    siteAdvice,
     danger: !!found.menace,
     apology: apology >= 0 && !found.menace
   };
@@ -3890,6 +3918,8 @@ function verdictBase(an, sc, rw, opts){
   // "I'm going to slap you", "I know where you live": read flatly, a threat. The effect, and a calmer way to say it.
   // "I'll beat your butt at Mario Kart lol": hard to tell from the words alone, never "okay"
   { const hv = harmVerdict(an); if(hv) return hv; }
+  // one of the site's own suggested openers, word for word: it says so, and it's never flagged
+  if(an.siteAdvice==="all" && !an.staticIds.length) return {id:"ok", siteAdvice:true, warm: !!an.warm, text:"This is one of this site's own suggested openers. Nothing here stood out as harsh. Tone and history still matter."};
   const attack = ATTACK_IDS.concat(["swear","hostile","legal","kidsfirst","violent","threat","dxlabel"]).some(id=>an.found && an.found[id]);
   // a calm boundary, or coming out: caring, never "a threat" or "might hurt"
   if((an.found.boundary || an.found.disclose) && !attack && lvl!=="heavy")
@@ -4220,6 +4250,7 @@ const ASK_INFO_Q = /^(?:did|do|does|are|have|has|can|could|will|would|how|when|w
 // warm or caring words, a request to keep in touch, a "what/where" question, plain news ("your mum called"), everyday things
 const ASK_WARM = /\b(?:good|fun|lucky|favou?rite|wonderful|miss\w*|without you|lov\w+|proud|star|killed it|worried|okay\?|ok\?|safe|made it|got home|landed|well done|great job)\b/i;
 const ASK_PLAIN = /\b(?:let me know|text me|call me|ring me|shoot me|hit me up|message me|ping me|i'll (?:call|text|ring|message|email) (?:you|u)|don't forget|what|where|when|how|why)\b[^.!]*\?|\b(?:let me know|text me|call me|ring me|shoot me|hit me up|message me|ping me|i'll (?:call|text|ring|message|email) (?:you|u)|don't forget)\b|\byou(?:'ve| have)? (?:left|forgot|got|won|missed|dropped)\b|\byour \w+ (?:called|came|arrived|rang|phoned|is here|is ready|was great|went well)\b|\b(?:dinner|lunch|breakfast|takeout|keys|parcel|package|umbrella|mail|meeting|work|traffic|trains?|bus|weather|freezing|cold|raining|forms?|receipt|card|presentation|photos|chilli|cousin|slide|olives|party|game)\b/i;
+const ASK_KIND = /\b(?:i(?:'m| am) not (?:upset|angry|mad|cross|against|trying|choosing|going anywhere)|(?:i am |i'm )?not against you|(?:you're|you are) not (?:in trouble|a burden|alone|the problem)|not (?:in trouble|a burden)|i (?:really )?like you|wish you well|i want to (?:understand|know|hear)|it hurts|i(?:'d| would) (?:just )?(?:like|love) (?:us|to)|have i got (?:that|it) right|did i get that|thought of you|enjoyed|recommend|i(?:'m| am) (?:sad|okay|ok|back|here|worried|proud)|our way|your way|your room|is yours|helps me|it helps|either is (?:good|fine)|you(?:'ll| will) (?:always|be the first)|still the same|felt rushed|you look (?:really |so )?(?:frustrated|tired|upset|sad|worried))\b/i;
 function askFirst(an, opts){
   opts = opts || {};
   if(!an || !an.norm || !an.norm.trim() || an.danger || an.selfHarm || an.control || an.lang==="es") return null;
@@ -4234,7 +4265,10 @@ function askFirst(an, opts){
   if(id!=="ok") return null;
   const t = an.norm.toLowerCase();
   if(an.words > 14 || !EV_YOU.test(t)) return null;
-  if(an.warm || an.found.appreciation || an.apology || an.found.repair || an.care || an.found.boundary || an.banter || an.found.disclose) return null;
+  if(an.warm || an.found.appreciation || an.apology || an.found.repair || an.care || an.found.boundary || an.banter || an.found.disclose || an.siteAdvice==="all") return null;
+  // a line that says plainly it isn't against them ("I'm not upset with you", "You're not in trouble", "I like you"),
+  // checks it heard them, or names your own feeling: nothing to ask about
+  if(ASK_KIND.test(t)) return null;
   if((an.asks && an.asks.length) || EV_FRIENDLY.test(t) || ASK_INFO_Q.test(t) || ASK_WARM.test(t) || ASK_PLAIN.test(t)) return null;
   if(SHARED && SHARED.hasTime && SHARED.hasTime(t) && !/\bi (?:saw|watched|noticed|know|followed)\b/.test(t)) return null;
   return q;
