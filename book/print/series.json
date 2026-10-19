@@ -75,7 +75,7 @@
    ],
    "pages": 164,
    "blank_pages": 4,
-   "bytes": 2593736,
+   "bytes": 2594624,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
@@ -201,7 +201,7 @@
    ],
    "pages": 152,
    "blank_pages": 2,
-   "bytes": 2741224,
+   "bytes": 2740174,
    "pdf": "book-4-share-the-load.pdf",
    "cover_pdf": "cover-book-4-share-the-load.pdf",
    "front_jpg": "cover-book-4-share-the-load-front.jpg",
@@ -479,7 +479,7 @@
    }
   }
  },
- "generated": "2026-10-18",
+ "generated": "2026-10-19",
  "paper_in": 0.002252,
  "paper_note": "KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)",
  "cost_notes": {

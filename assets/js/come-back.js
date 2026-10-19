@@ -132,7 +132,7 @@
   function toolsTried() { return Object.keys(TOOLS).filter(toolTried); }
 
   var GAMES = [['words', 'Quiet Words', '/quiet-words.html'], ['bloom', 'Word Bloom', '/word-bloom.html'], ['crossword', 'Quiet Crossword', '/quiet-crossword.html'],
-    ['journey', 'The Frequency Journey', '/frequency-journey.html'], ['pond', 'The Night Garden', '/night-garden.html'], ['fireflies', 'The Night Garden', '/night-garden.html']];
+    ['journey', 'Tidbit and Sugarfoot’s Arcade', '/frequency-journey.html'], ['pond', 'The Night Garden', '/night-garden.html'], ['fireflies', 'The Night Garden', '/night-garden.html']];
   var GAME_PAGES = /^\/(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey-play)\.html$/;
   function rewardsRaw() { var o = json('tol-rewards-v1'); return o && typeof o === 'object' ? o : {}; }
   function gamesPlayed() {
@@ -240,9 +240,9 @@
         { t: 'Play a calm game level', u: '/pause-and-play.html', m: 8, why: 'no timers and no way to lose', tag: 'calm' }
       ],
       30: [
-        { t: 'Walk one road of the Workpaper Suite', u: '/workpapers/fill/suite.html', m: 25, why: 'one fillable path, at your own pace', tag: 'load' },
+        { t: 'Walk one road through your worksheets, in order', u: '/workpapers/fill/suite.html', m: 25, why: 'one fillable path, at your own pace', tag: 'load' },
         { t: 'Start (or continue) Six gentle weeks', u: '/prog-01.html', m: 20, why: 'one small session a week', tag: 'book' },
-        { t: 'All the Wavelength chapters', u: '/wavelength.html', m: 25, why: 'the full picture of how you take things in', tag: 'self' },
+        { t: 'All the How you connect chapters', u: '/wavelength.html', m: 25, why: 'the full picture of how you take things in', tag: 'self' },
         { t: 'Watch an episode together: ' + ne[1], u: '/frequency-buddies.html?ep=' + ne[0], m: 16, why: 'Tidbit and Sugarfoot, for the whole family', tag: 'kids' },
         { t: nc.code + ' in full, with the longer version', u: nc.u.replace(/\.html$/, '-in-depth.html'), m: 20, why: nc.n, tag: 'book' }
       ]
@@ -443,8 +443,8 @@
     var nc = nextChapter(), ne = nextEpisode(), tools = toolsTried(), w = wanted(), c = [];
     if (w.kids && ne) c.push(['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
     if (nc && chaptersRead()) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
-    if (tools.indexOf('/quick-checks.html') === -1) c.push(['/quick-checks.html#today', 'Today’s Weather', 'one minute on how you are doing']);
-    if (tools.indexOf('/wavelength.html') === -1) c.push(['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen']);
+    if (tools.indexOf('/quick-checks.html') === -1) c.push(['/quick-checks.html#today', 'My weather today', 'one minute on how you are doing']);
+    if (tools.indexOf('/wavelength.html') === -1) c.push(['/wavelength.html', 'Find your Wave Code', 'how you think, talk and listen']);
     if (nc) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
     if (ne) c.push(['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
     c.push(['/prog-01.html', 'Six gentle weeks', 'one small session a week']);
@@ -496,7 +496,7 @@
     '/ladder.html': { me: 'kit', with: ['kit', 'plan what settles each of you, before the next hard moment'], alt: 'weather' },
     '/signal-translator.html': { me: 'wp09', with: 'checkins' },
     '/carrier-wave-decoder.html': { me: 'wp04', with: ['checkins', 'how to raise it once, calmly, at a good time'] },
-    '/lemonade-stand.html': { me: ['wp02', 'see how full your own battery is'], with: ['wp03', 'give every job one owner, together'], alt: 'setup' },
+    '/lemonade-stand.html': { me: ['wp02', 'see how full your own stress tank is'], with: ['wp03', 'give every job one owner, together'], alt: 'setup' },
     '/wavelength.html': { me: 'wiring', with: ['wiring', 'one page you can hand to someone, and swap'] },
     '/wiring-card.html': { me: 'selfpath', with: ['checkins', 'swap cards in a short, calm talk'], alt: 'wavelength' },
     '/wp-11.html': { me: 'weather', with: ['checkins', 'share your plan at a calm time'] },
@@ -608,7 +608,7 @@
   function keysLS() { var out = []; try { for (var i = 0; i < localStorage.length; i++) out.push(localStorage.key(i)); } catch (e) {} return out; }
   // what the tools keep on this device, by name
   var WP_TITLES = { 'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job', 'WP-04': 'What keeps coming back?',
-    'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in' };
+    'WP-09': 'Say it so it lands', 'WP-11': 'Calm-down plan', 'WP-13': 'The 90-second daily check-in' };
   function kept() {
     var out = [];
     keysLS().forEach(function (k) {
@@ -618,9 +618,9 @@
       else if (id === 'fullpath') out.push('The workpaper package');
       else { var code = id.split(':')[0].toUpperCase(); out.push(WP_TITLES[code] || 'A workpaper'); }
     });
-    if (lsGet('tol-wiring-card')) out.push('Your Wiring Card');
-    if (lsGet('tol-wavelength-v1') || lsGet('tol-heartprint-v1')) out.push('Your Wavelength');
-    var lem = json('tol-lemonade-stand-v2'); if (lem && !lem.example && lem.jobs && lem.jobs.some(function (j) { return j && j.name; })) out.push('Your Lemonade Stand list');
+    if (lsGet('tol-wiring-card')) out.push('Your “how to talk to me” card');
+    if (lsGet('tol-wavelength-v1') || lsGet('tol-heartprint-v1')) out.push('Your Wave Code');
+    var lem = json('tol-lemonade-stand-v2'); if (lem && !lem.example && lem.jobs && lem.jobs.some(function (j) { return j && j.name; })) out.push('Your Who does what? list');
     if (lsGet('tol-ten-log-v1')) out.push('Your list of things you did');
     if (lsGet('tol-calc01-full-v2')) out.push('Is the setup working for everyone?');
     return out.filter(function (x, i) { return out.indexOf(x) === i; });
@@ -842,7 +842,7 @@
       w.forEach(function (e) { if (e[0] === lastId) ep = e; });
       ep = ep || w[w.length - 1];
       var ne = nextEpisode();
-      var next = ne ? ['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], ''] : ['/frequency-buddies-shuffle.html', 'Frequency Buddies Shuffle', '— your favorite moments, mixed up'];
+      var next = ne ? ['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], ''] : ['/frequency-buddies-shuffle.html', 'Frequency Buddies Shuffle', '— your favourite moments, mixed up'];
       if (!box) { box = endCard('What you got from Frequency Buddies'); var after = main.querySelector('[data-buddies-script]') || main.querySelector('.fbp-player'); if (after) after.after(box); else main.appendChild(box); }
       fillEnd(box, ep[2], next, '<span>' + w.length + ' of ' + EPISODES.length + ' episodes watched.</span> ');
       if (fresh) celebrate('ep:' + ep[0], 'An episode with the pals', false);

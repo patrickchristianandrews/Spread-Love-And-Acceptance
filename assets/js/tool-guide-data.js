@@ -390,7 +390,7 @@ window.TOLToolGuideData = {
       when: 'When you want to work on yourself, on your own, at your own pace: what you’re carrying, your rhythms and reactions, and kind words for them.',
       notWhen: 'Not a test you can fail or a course to finish. Skip any step that doesn’t feel right yet.',
       time: 'A minute or two a step; as many or few steps as you like.',
-      result: 'A few small things you now know about yourself in your own words, for example “I take things in best in writing” or “my battery is lowest on Sunday nights.”',
+      result: 'A few small things you now know about yourself in your own words, for example “I take things in best in writing” or “my stress tank is fullest on Sunday nights.”',
       next: [
         ['/wavelength.html', 'Find your communication style', 'how you think, talk and listen'],
         ['/wiring-card.html', 'Make a “how to talk to me” card', 'to share when you’re ready'],
@@ -572,7 +572,7 @@ window.TOLToolGuideData = {
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'Give every job one owner', 'so nobody has to keep asking'],
         ['/is-the-setup-working.html', 'Is the setup working for everyone?', 'a fair look at the split, never at a person'],
-        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'if you’re running low']
+        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'if your stress tank feels full']
       ],
       research: [
         ['ross-sicoly-1979', 'Each person tends to remember more of their own share of joint work (Ross and Sicoly, 1979). Writing it down helps.'],
@@ -1020,7 +1020,7 @@ window.TOLToolGuideData = {
       name: 'Cool-down corner · Calm sounds and music',
       reg: 'music',
       problem: 'A few minutes away from words',
-      'do': 'Two ways to press play while you settle: four instrumental pieces with a visualizer, or a plain background sound (a low hum, a soft flutter or brown noise).',
+      'do': 'Two ways to press play while you settle: four instrumental pieces with a visualiser, or a plain background sound (a low hum, a soft flutter or brown noise).',
       leave: 'A short break for your mind, or something steady in the background. A matter of taste, not a treatment.',
       pages: ['/soundscapes.html', '/wp-11-sound-toolkit.html'],
       when: 'While you settle after a hard moment, to cover background noise when you need to calm down or focus, or for a short real break. Music for a break; a plain background sound for something steady.',
@@ -1271,7 +1271,7 @@ window.TOLToolGuideData = {
     },
 
     'look-back': {
-      name: 'Fair split check · Over a month: a quick read',
+      name: 'Fair split check · A quick read over a month',
       reg: 'lookback-quick',
       problem: 'Checking whether last month’s changes stuck',
       'do': 'Type in how things were about a month ago and how they are this week.',
