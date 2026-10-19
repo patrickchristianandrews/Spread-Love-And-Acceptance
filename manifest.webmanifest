@@ -47,7 +47,7 @@
   ],
   "shortcuts": [
     {
-      "name": "Today’s Weather",
+      "name": "My weather today",
       "short_name": "Weather",
       "url": "/quick-checks.html",
       "icons": [
@@ -133,7 +133,7 @@
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "The Conversation Reader"
+      "label": "The Chat analyzer, reading a whole chat"
     },
     {
       "src": "/store/google-play/screenshots/wide-night-garden.png",

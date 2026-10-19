@@ -594,5 +594,89 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12561283/"
+ },
+ {
+  "id": "saxbe-repetti-2010",
+  "authors": "Saxbe, D. E., & Repetti, R. L.",
+  "year": 2010,
+  "title": "No place like home: Home tours correlate with daily patterns of mood and cortisol",
+  "venue": "Personality and Social Psychology Bulletin, 36(1), 71–81",
+  "doi": "10.1177/0146167209352864",
+  "url": "https://doi.org/10.1177/0146167209352864",
+  "kind": "study",
+  "finding": "In 60 spouses from dual-earner couples, wives who described their homes in more stressful terms (clutter, unfinished projects) had flatter daily cortisol slopes and rising depressed mood across the day; wives whose descriptions were more restful had steeper slopes and falling depressed mood.",
+  "strength": "moderate — one small study of dual-earner couples; correlational",
+  "topics": [
+   "stress",
+   "environment"
+  ],
+  "mentioned_on": [
+   "/library/calm.html#environment-and-mood"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/19934011/ ; https://journals.sagepub.com/doi/10.1177/0146167209352864"
+ },
+ {
+  "id": "baumeister-2001-bad-stronger",
+  "authors": "Baumeister, R. F., Bratslavsky, E., Finkenauer, C., & Vohs, K. D.",
+  "year": 2001,
+  "title": "Bad is stronger than good",
+  "venue": "Review of General Psychology, 5(4), 323–370",
+  "doi": "10.1037/1089-2680.5.4.323",
+  "url": "https://doi.org/10.1037/1089-2680.5.4.323",
+  "kind": "review",
+  "finding": "A wide review concluding that bad events, feedback, emotions and relationship behaviours usually have a bigger and longer-lasting effect than equally good ones.",
+  "strength": "strong — a widely cited review; the general pattern is accepted, with known exceptions",
+  "topics": [
+   "negativity-bias",
+   "thinking"
+  ],
+  "mentioned_on": [
+   "/library/thinking.html#negativity-bias"
+  ],
+  "verified": true,
+  "verified_by": "https://fbaum.unc.edu/teaching/articles/Baumeister_2001.pdf ; https://www.citedrive.com/en/discovery/bad-is-stronger-than-good"
+ },
+ {
+  "id": "rozin-royzman-2001",
+  "authors": "Rozin, P., & Royzman, E. B.",
+  "year": 2001,
+  "title": "Negativity bias, negativity dominance, and contagion",
+  "venue": "Personality and Social Psychology Review, 5(4), 296–320",
+  "doi": "10.1207/S15327957PSPR0504_2",
+  "url": "https://doi.org/10.1207/S15327957PSPR0504_2",
+  "kind": "review",
+  "finding": "A review proposing that people give negative events more weight than positive ones in several ways (negative potency, steeper negative gradients, negativity dominance and negative differentiation).",
+  "strength": "strong — an influential theoretical review",
+  "topics": [
+   "negativity-bias",
+   "thinking"
+  ],
+  "mentioned_on": [
+   "/library/thinking.html#negativity-bias"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1207/S15327957PSPR0504_2 ; https://pdodds.w3.uvm.edu/files/papers/others/2001/rozin2001a.pdf"
+ },
+ {
+  "id": "ross-greene-house-1977",
+  "authors": "Ross, L., Greene, D., & House, P.",
+  "year": 1977,
+  "title": "The “false consensus effect”: An egocentric bias in social perception and attribution processes",
+  "venue": "Journal of Experimental Social Psychology, 13(3), 279–301",
+  "doi": "10.1016/0022-1031(77)90049-X",
+  "url": "https://doi.org/10.1016/0022-1031(77)90049-X",
+  "kind": "study",
+  "finding": "In questionnaire studies and a sandwich-board study with students, people overestimated how many others would make the same choice they made, and saw the other choice as more unusual.",
+  "strength": "strong — the founding studies, replicated many times, though the size of the effect varies",
+  "topics": [
+   "false-consensus",
+   "thinking"
+  ],
+  "mentioned_on": [
+   "/library/thinking.html#false-consensus"
+  ],
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Lee_Ross ; https://www.simplypsychology.org/false-consensus-effect.html"
  }
 ]

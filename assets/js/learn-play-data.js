@@ -34,7 +34,7 @@ window.TOLLearnPlayData = {
               ['Because nobody else cares', false, 'Not quite. Nobody is the villain. People usually just can’t see it yet.']] },
         { at: 'Fix the setup, not the person', k: 'wyr', q: 'The trash gets missed every week. Would you rather…',
           o: [['Say “you never remember”', 'That starts a round about someone’s character. The trash still has no owner, so next week looks the same.'],
-              ['Give the trash one owner and a Tuesday reminder', 'That’s Pillar II: the setup changes, nobody gets blamed, and the trash start going out.']] },
+              ['Give the trash one owner and a Tuesday reminder', 'That’s Pillar II: the setup changes, nobody gets blamed, and the trash starts going out.']] },
         { at: 'Read your state first', k: 'slider', q: 'Drag your energy level and see how “What’s for dinner?” lands.', label: 'Energy left in your battery',
           min: 0, max: 100, step: 5, start: 85, fmt: 'pct',
           zones: [[30, 'Running on empty', '“What’s for dinner?” sounds like criticism. Try “give me twenty minutes,” then come back.', '🪫'],
@@ -76,7 +76,7 @@ window.TOLLearnPlayData = {
                   ['Instead of both half-doing the groceries, one person owns the list and the other owns the shopping.', 2, 'Yes, Pillar II, Fix the setup. Clear owners fix the gap, and nobody has to be the bad guy.'],
                   ['A friend texts back “fine.” You’re exhausted, it reads as annoyed, so you wait before replying.', 3, 'Yes, Pillar III, Read your state first. When your battery is empty, short replies feel colder than they are.'],
                   ['Before jumping in with advice, you ask, “Do you want ideas, or do you just want me to listen?”', 4, 'Yes, Pillar IV, Tune how you send and receive. You checked what kind of reply they want before sending one.'],
-                  ['A sibling ended up driving Mom to every appointment. It started with one “I’ll just do it.”', 5, 'Yes, Pillar V, Notice the quiet incentives. One kind offer quietly turned into a permanent job.']] },
+                  ['A sibling ended up driving Mum to every appointment. It started with one “I’ll just do it.”', 5, 'Yes, Pillar V, Notice the quiet incentives. One kind offer quietly turned into a permanent job.']] },
         { at: 'How they lean on each other', k: 'match', q: 'Match each pairing to what it means.',
           pairs: [['I → II', 'You can’t redesign what you can’t see'], ['II ↔ V', 'A named owner removes the quiet pull'],
                   ['III → IV', 'State comes before signal'], ['V → I', 'Thanks keeps the unseen work visible']] },
@@ -89,7 +89,7 @@ window.TOLLearnPlayData = {
         { f: 'A ledger does one thing well', s: 'A ledger is just a shared list of what really happened, with no judging.', x: 'Two roommates each list a week of chores, then read both lists together.' },
         { f: 'Systems thinking looks at how a result is produced', s: 'When the same problem keeps happening, look at how things are set up before looking at the people.', x: 'The recycling keeps getting forgotten because the trash can lives in the garage, not because anyone is careless.' },
         { f: 'Signal theory describes what happens', s: 'Two people running at slightly different speeds make “static,” even when nobody did anything wrong.', x: 'One of you wants to decide tonight, the other needs until Sunday. Agreeing on Sunday clears it.' },
-        { f: 'Behavioral economics studies how defaults', s: 'Small defaults quietly decide things for us, like whoever notices a job first keeping it forever.', x: 'You bought the coffee filters once. Now everyone assumes it’s your job.' }
+        { f: 'Behavioural economics studies how defaults', s: 'Small defaults quietly decide things for us, like whoever notices a job first keeping it forever.', x: 'You bought the coffee filters once. Now everyone assumes it’s your job.' }
       ]
     },
 
@@ -98,10 +98,10 @@ window.TOLLearnPlayData = {
       m: [
         { at: 'Four questions', k: 'sort', q: 'Which of the four questions does this answer?', bins: ['What happened?', 'What state?', 'Who was responsible?', 'What was meant?'],
           items: [['“I did the dishes four nights this week.”', 0], ['“I was running on empty before you even spoke.”', 1],
-                  ['“The trash is mine on the job list.”', 2], ['“I meant it as a reminder, not a complaint.”', 3]] },
+                  ['“The bins are mine on the job list.”', 2], ['“I meant it as a reminder, not a complaint.”', 3]] },
         { at: 'How it works, in order', k: 'quiz', q: 'One of you is running hot. Which step comes first?',
-          o: [['Regulate first, with the Calm-Down Kit', true, 'Yes! Nobody solves a relationship problem while overloaded. Calm first, then owners and words.'],
-              ['Sort out who owns what, one owner per job', false, 'Not quite. The Calm-Down Kit comes before agreeing owners and choosing words.'],
+          o: [['Regulate first, with your calm-down plan', true, 'Yes! Nobody solves a relationship problem while overloaded. Calm first, then owners and words.'],
+              ['Sort out who owns what, one owner per job', false, 'Not quite. Your calm-down plan comes before agreeing owners and choosing words.'],
               ['Check whether the load can last', false, 'Not quite. Measuring comes once there are numbers. When someone is running hot, calming down comes first.']] },
         { at: 'How it works, in order', k: 'match', q: 'Match each worksheet to the question it answers.',
           pairs: [['Who did what (WP-01)', 'What is actually happening?'], ['How much are you carrying? (WP-02)', 'What is each of us bringing?'],
@@ -182,7 +182,7 @@ window.TOLLearnPlayData = {
               ['Sort it out now, in the group chat', false, 'Not quite. A group chat or a 1 a.m. text can’t hold a hard talk.'],
               ['Whoever needs space just goes', false, 'Not quite. Going without a time can feel like a door closing. Name when you’ll be back.']] },
         { at: 'how you’re built', k: 'gap', q: 'Fill the gap with the page’s own words.',
-          s: 'Swap Wiring Cards on ___, not in the middle of an argument.', o: ['an ordinary day', 'your worst day', 'a group chat'], a: 0,
+          s: 'Swap cards on ___, not in the middle of an argument.', o: ['an ordinary day', 'your worst day', 'a group chat'], a: 0,
           say: 'Yes! An ordinary day, when you both have room to listen.' }
       ]
     },
@@ -271,7 +271,7 @@ window.TOLLearnPlayData = {
           s: 'A ritual that only happens when things are good isn’t a ___ yet.', o: ['ritual', 'habit', 'holiday'], a: 0,
           say: 'Yes! Keep rituals small enough to survive a bad week.' },
         { at: 'wired differently', k: 'quiz', q: 'Bids and warmth look different for different wiring. What’s the fix?',
-          o: [['Ask each other, and write the answers down', true, 'Yes! The Wiring Card is a good place to keep them.'],
+          o: [['Ask each other, and write the answers down', true, 'Yes! A How to talk to me card is a good place to keep them.'],
               ['Assume the quiet one doesn’t care', false, 'Not quite. Someone may show care through practical help or shared interests instead of small talk.'],
               ['Stop making bids', false, 'Not quite. Keep reaching. Just learn what counts as a bid for each of you.']] }
       ],
@@ -361,7 +361,7 @@ window.TOLLearnPlayData = {
       t: 'Chapter II: Is the split working?', g: 'p1', n: '/book/chapter-3.html',
       m: [
         { at: 'Three things go in', k: 'match', q: 'Match each input to what it measures.',
-          pairs: [['Balance', 'How evenly the hours are shared'], ['Ownership', 'Whether each regular job has a clear owner'], ['Stress', 'How full each battery already is']] },
+          pairs: [['Balance', 'How evenly the hours are shared'], ['Ownership', 'Whether each regular job has a clear owner'], ['Stress', 'How full each stress tank already is']] },
         { at: 'Balance: how the hours split', k: 'slider', q: 'Drag the split of hours and watch the balance score.', label: 'Your share of the hours',
           min: 0, max: 100, step: 5, start: 70, fmt: 'balance',
           zones: [[15, 'Very lopsided', 'One person doing nearly everything scores close to 0.', '⚖️'],
@@ -398,7 +398,7 @@ window.TOLLearnPlayData = {
               ['“Why can’t you see it?”', false, 'Not quite. They can see it, from a different angle.']] },
         { at: 'A full tank means', k: 'gap', q: 'Fill the gap with the book’s own word.',
           s: 'A full tank means “___,” not “never.”', o: ['later', 'right now', 'whatever'], a: 0,
-          say: 'Yes! Say when you’ll come back. The Calm-Down Kit can help in the meantime.' }
+          say: 'Yes! Say when you’ll come back. Your calm-down plan can help in the meantime.' }
       ]
     },
 
@@ -434,7 +434,7 @@ window.TOLLearnPlayData = {
                   [4, 'A real pattern', 'Three or four ticks in a month is a real pattern, not a fluke.', '🔁']] },
         { at: 'Sort each repeat', k: 'sort', q: 'Which kind of repeat is it?', bins: ['No clear owner', 'Owner can’t keep up', 'Short-term cause'],
           items: [['Everyone thought someone else was taking the recycling down', 0], ['The owner is swamped this term', 1],
-                  ['It slipped while one of you was traveling', 2], ['Nobody ever agreed who would call the landlord', 0]] },
+                  ['It slipped while one of you was travelling', 2], ['Nobody ever agreed who would call the landlord', 0]] },
         { at: 'Count the gaps', k: 'gap', q: 'Fill the gap with the book’s own word.',
           s: 'Write down how many jobs had no clear owner. If that number ___ month by month, the setup is working.', o: ['falls', 'rises', 'doubles'], a: 0,
           say: 'Yes! If it rises, something bigger has changed, and it’s worth a talk.' },
@@ -550,7 +550,7 @@ window.TOLLearnPlayData = {
           o: [['Each thinks his part is the whole animal', true, 'Yes! Each describes his part honestly. Naming the angle helps.'],
               ['One of them is lying', false, 'Not quite. Each one describes what he touches honestly.'],
               ['The elephant keeps moving', false, 'Not quite. Each thinks his part is the whole.']] },
-        { at: 'What a high reading asks', k: 'quiz', q: 'After a round of calming steps, your battery reads 0.45. Now what?',
+        { at: 'What a high reading asks', k: 'quiz', q: 'After a round of calming steps, your stress tank reads 0.45. Now what?',
           o: [['Go back at the time you said', true, 'Yes! Under 0.50, you go back as planned.'],
               ['Do another round', false, 'Not quite. Another round is for 0.50 to 0.60.'],
               ['Skip the talk for good', false, 'Not quite. A high reading means later, never never.']] }
@@ -558,7 +558,7 @@ window.TOLLearnPlayData = {
       e: [
         { f: 'whose main claims are still debated', s: 'The three states are handy everyday labels, not medical facts.', x: '“I’m running on empty” is enough. No science words needed.' },
         { f: 'the angle you might be looking at a moment from', s: 'The seven angles are seven different spots you might be looking at a moment from.', x: 'You see the pile of mail as a to-do list. They see it as “I’m always the one who opens it.”' },
-        { f: 'The average of both people', s: 'Your two battery scores get averaged and used in Chapter II’s check, where more stress lowers the result.', x: '0.55 and 0.25 average to 0.40.' },
+        { f: 'The average of both people', s: 'Your two stress-tank scores get averaged and used in Chapter II’s check, where more stress lowers the result.', x: '0.55 and 0.25 average to 0.40.' },
         { f: 'The stress-tank check asks', s: 'One tool asks how charged the room is. The other asks what each person thinks it’s really about.', x: '“I’m at 0.55 and seeing this from time pressure.” “I’m at 0.25, and for me it’s history.”' }
       ]
     },
@@ -576,13 +576,13 @@ window.TOLLearnPlayData = {
               ['Proof the owner doesn’t care', false, 'Not quite. It’s a fact about the job, never a verdict on the person.']] },
         { at: 'notice, name, decide', k: 'gap', q: 'Fill the gap with the book’s own word.',
           s: 'Letting a comment land isn’t bottling things up. It’s about ___: letting the spike pass before deciding how much weight a comment deserves.', o: ['timing', 'winning', 'forgetting'], a: 0,
-          say: 'Yes! Timing. The Calm-Down Kit helps the spike pass, and Say it so it lands (WP-09) helps with the reply.' },
+          say: 'Yes! Timing. A calm-down plan helps the spike pass, and Say it so it lands (WP-09) helps with the reply.' },
         { at: 'flat thank-you', k: 'wyr', q: '“Thanks for taking out the trash,” said flatly. Would you rather…',
           o: [['Snap back: “I do them every week, you know.”', 'Now there’s an argument about tone, and nobody remembers it started with a thank-you.'],
               ['“That landed a bit oddly for me. Give me a second.”', 'After a breath: “Did you mean that as a thank-you?” “Yes, sorry, I’m worn out.” Over in ten seconds.']] }
       ],
       e: [
-        { f: 'Philosophers call this deontological', s: 'Fair by promises means asking: did each person do the jobs they said they would?', x: 'You said you’d take Tuesday’s trash, so Tuesday’s trash are yours.' },
+        { f: 'Philosophers call this deontological', s: 'Fair by promises means asking: did each person do the jobs they said they would?', x: 'You said you’d take Tuesday’s bins, so Tuesday’s bins are yours.' },
         { f: 'This book calls the agreement being fair by the rules', s: 'Once a job has an owner, you judge the job by whether that owner did it.', x: 'If someone quietly covered for you, the job still has a question mark next to your name.' },
         { f: 'The idea is borrowed loosely from brain science', s: 'Not every comment needs a full-volume reaction. Let it settle first.', x: 'Say “give me a second” before answering a remark that stung.' }
       ]
@@ -624,7 +624,7 @@ window.TOLLearnPlayData = {
               ['Whoever does more fills in both', false, 'Not quite. Nobody fills in the other person’s side.']] },
         { at: 'log the small jobs', k: 'gap', q: 'Fill the gap with the sheet’s own word.',
           s: 'For every task, note the day, what it was, who did it, roughly how many ___, and whether someone asked for it.', o: ['minutes', 'feelings', 'complaints'], a: 0,
-          say: 'Yes! Those minutes go into the Lemonade Stand and Is the setup working for everyone? (CALC-01).' },
+          say: 'Yes! Those minutes go into Who does what? and Is the setup working for everyone? (CALC-01).' },
         { at: 'Log what happened', k: 'quiz', q: 'You noticed the full bin three times before taking it out. How many rows?',
           o: [['One honest row', true, 'Yes! One honest row, not three rows of resentment.'],
               ['Three rows', false, 'Not quite. Log what happened, once.']] },
@@ -691,7 +691,7 @@ window.TOLLearnPlayData = {
         { at: 'Sort each repeat', k: 'sort', q: 'Which kind of repeat is it?', bins: ['Update the job list', 'Kind, honest talk', 'Note it and move on'],
           items: [['The named owner isn’t the one doing it', 0], ['The owner can’t keep up', 1], ['It slipped during a week of illness', 2]] },
         { at: 'Nobody owes anything', k: 'quiz', q: 'A job with no owner is…',
-          o: [['A gap in the list', true, 'Yes! Not a judgment on whoever kept covering it.'],
+          o: [['A gap in the list', true, 'Yes! Not a judgement on whoever kept covering it.'],
               ['Someone’s fault', false, 'Not quite. Nobody owes anything. It’s a gap in the list.']] }
       ]
     },
@@ -701,14 +701,14 @@ window.TOLLearnPlayData = {
       m: [
         { at: 'own next message', k: 'quiz', q: 'Whose messages does Say it so it lands check?',
           o: [['Your own next message', true, 'Yes! Each of you uses it on yourself.'],
-              ['The other person’s texts', false, 'Not quite. Nothing is recorded, and nobody else’s voice is analyzed.']] },
+              ['The other person’s texts', false, 'Not quite. Nothing is recorded, and nobody else’s voice is analysed.']] },
         { at: 'find three things', k: 'sort', q: 'Fact, feeling or ask?', bins: ['Fact', 'Feeling', 'Ask'],
           items: [['The bin wasn’t out before collection.', 0], ['I feel a bit unseen.', 1], ['Can we pick a fixed day for it?', 2], ['Tired.', 1]] },
         { at: 'weigh what you heard', k: 'flip', q: 'Four quick questions before you react. Tap each one.',
           cards: [['About a task?', 'Is it about a specific task?', 'If not, an old argument may be talking.'], ['Stretched?', 'Would it read the same if you weren’t already stretched?', 'Check your battery first.'],
                   ['Neutral?', 'Could a neutral meaning fit?', 'Read it again in a calm voice.'], ['Old argument?', 'Are you answering their words, or an old argument?', 'Answer just today’s words.']] },
         { at: 'See it in action', k: 'wyr', q: 'Would you rather send…',
-          o: [['“You never think about anyone but yourself.”', 'A judgment on the person. It will probably get argued with.'],
+          o: [['“You never think about anyone but yourself.”', 'A judgement on the person. It will probably get argued with.'],
               ['“The bin wasn’t out before collection. I feel a bit unseen. Can we pick a fixed day for it?”', 'One fact, one feeling, one ask: something they can actually hear.']] }
       ]
     },
@@ -769,7 +769,7 @@ window.TOLLearnPlayData = {
         { at: 'Where everything is', k: 'quiz', q: 'The workpapers work best in an order. Where do you start?',
           o: [['Who did what (WP-01), the week’s log', true, 'Yes! Who did what, then How much are you carrying?, One owner per job, Say it so it lands and the 90-second daily check-in, with What keeps coming back? once a month.'],
               ['What keeps coming back? (WP-04), the monthly look-back', false, 'Not quite. That one comes once a month, after the others have had time to work.'],
-              ['Any of them, all at once', false, 'Not quite. One at a time, in order. If things feel urgent, start with the Calm-Down Kit or How much are you carrying?']] }
+              ['Any of them, all at once', false, 'Not quite. One at a time, in order. If things feel urgent, start with your calm-down plan or How much are you carrying?']] }
       ]
     },
 
@@ -817,7 +817,7 @@ window.TOLLearnPlayData = {
       t: 'Ways in', g: 'harbor', n: '/start-here.html',
       m: [
         { at: 'open to anyone', k: 'sort', q: 'Open to anyone, or optional extra?', bins: ['Open to anyone, no sign-up', 'Optional, only if you want it'],
-          items: [['The Chat analyzer and the Wiring Card', 0], ['All seven workpapers', 0], ['A short email when something new goes live', 1, 'Yes. Email updates are optional, and you don’t need them to use anything.'], ['Every chapter of the book', 0], ['The Carrier Wave Decoder', 0]] },
+          items: [['The Chat analyzer and How you connect', 0], ['All ten workpapers', 0], ['A short email when something new goes live', 1, 'Yes. Email updates are optional, and you don’t need them to use anything.'], ['Every chapter of the book', 0], ['Rewind the talk', 0]] },
         { at: 'Email updates are optional', k: 'quiz', q: 'What do you need to use everything here?',
           o: [['Nothing. It’s all open already', true, 'Yes! No sign-up, no account and no password. Your email is only for updates, if you want them.'],
               ['Your email address', false, 'Not quite. Email is optional. It only gets you a short note when something new goes live.'],
@@ -888,8 +888,8 @@ window.TOLLearnPlayData = {
               ['“Could you clear the counter and run the dishwasher before 8 tonight?”', 'That’s the page’s clearer version: what, and by when. Almost every wiring gets it.']] },
         { at: 'Ten rules', k: 'sort', q: 'Does this follow the ten rules?', bins: ['Follows the rules', 'Doesn’t'],
           items: [['“Could you pay the bill by Friday?”', 0], ['“It would be nice if someone paid the bill.”', 1, 'Say the request as a request, with a real time.'],
-                  ['“You’re so irresponsible.”', 1, 'Describe the behavior, never the person.'], ['“What did you take from that?”', 0], ['A sarcastic joke in a serious talk', 1, 'Leave sarcasm out of anything serious.']] },
-        { at: 'Make a Wiring Card', k: 'quiz', q: 'When is the best time to share a Wiring Card?',
+                  ['“You’re so irresponsible.”', 1, 'Describe the behaviour, never the person.'], ['“What did you take from that?”', 0], ['A sarcastic joke in a serious talk', 1, 'Leave sarcasm out of anything serious.']] },
+        { at: 'Make a Wiring Card', k: 'quiz', q: 'When is the best time to share a “how to talk to me” card?',
           o: [['On an ordinary day, before a hard conversation', true, 'Yes! Tell each other how you’re built before a hard talk, not during one.'],
               ['In the middle of an argument, to prove your point', false, 'Not quite. It isn’t a contract or evidence. Share it on a calm day.'],
               ['Only once, and never update it', false, 'Not quite. It changes with your state. When you’re depleted, every line gets stricter.']] }
@@ -900,7 +900,7 @@ window.TOLLearnPlayData = {
       t: 'Check-ins (full)', g: 'p3', n: '/turning-toward-in-depth.html',
       m: [
         { at: 'Ground rules', k: 'sort', q: 'Before a check-in, sort your list into three piles.', bins: ['Today', 'A system problem', 'Can wait'],
-          items: [['Something that will still be wrong tomorrow if you don’t touch it', 0], ['The trash has no owner and keep getting missed', 1, 'That goes to the job list (One owner per job, WP-03) or the weekly review, not into a speech.'],
+          items: [['Something that will still be wrong tomorrow if you don’t touch it', 0], ['The bins have no owner and keep getting missed', 1, 'That goes to the job list (One owner per job, WP-03) or the weekly review, not into a speech.'],
                   ['A real worry about the holidays, with a date to look at it', 2], ['A task with no owner', 1]] },
         { at: 'The setting has to be right', k: 'quiz', q: 'Which of these is a check-in, not an ambush?',
           o: [['“Can we use twenty minutes at 8, after dinner, for the kitchen thing?”', true, 'Yes! Named in advance, one topic, and a time when nobody is rushing out.'],
@@ -983,7 +983,7 @@ window.TOLLearnPlayData = {
       t: 'Talking and listening', g: 'p4', n: '/library/conflict.html',
       m: [
         { at: 'I-statements', k: 'sort', q: 'A real I-statement, or a you-statement in disguise?', bins: ['A real I-statement', 'A you-statement in disguise'],
-          items: [['“I felt worried when you were late and didn’t text.”', 0], ['“I feel that you are selfish.”', 1, 'It starts with “I,” but it’s a judgment about the person.'],
+          items: [['“I felt worried when you were late and didn’t text.”', 0], ['“I feel that you are selfish.”', 1, 'It starts with “I,” but it’s a judgement about the person.'],
                   ['“Here’s how it landed for me.”', 0], ['“I feel like you never think about me.”', 1]] },
         { at: 'Validation', k: 'quiz', q: '“It makes sense you’re frustrated; you were expecting help and it didn’t come.” Is that agreeing?',
           o: [['No. It says the reaction is understandable, and you can still have your own view', true, 'Yes! Validation isn’t agreement. It lowers the temperature fast.'],
@@ -993,7 +993,7 @@ window.TOLLearnPlayData = {
           o: [['Assume they’re annoyed and reply coldly too', 'The reader fills the gaps with their own mood. That’s where misunderstandings begin.'],
               ['Ask: “Did you mean that as a joke?”', 'That’s the page’s tip: hold interpretations lightly, and asking is kinder than assuming.']] },
         { at: 'Complaints versus criticism', k: 'sort', q: 'Complaint or criticism?', bins: ['Complaint', 'Criticism'],
-          items: [['“I was frustrated the trash weren’t taken out last night.”', 0], ['“You never take responsibility for anything.”', 1, '“Never” turns one event into a verdict.'],
+          items: [['“I was frustrated the bins weren’t taken out last night.”', 0], ['“You never take responsibility for anything.”', 1, '“Never” turns one event into a verdict.'],
                   ['“What kind of person forgets that?”', 1], ['“The sink was full this morning. Could we sort it by 9?”', 0]] },
         { at: 'Advice or support', k: 'quiz', q: 'A friend tells you about a rough day. What’s the simple, powerful habit?',
           o: [['Ask whether they want solutions or to be heard', true, 'Yes! Offering the wrong one can feel like not being listened to.'],
@@ -1012,10 +1012,10 @@ window.TOLLearnPlayData = {
               ['Deal with everything now, while you’re at it', false, 'Not quite. That’s kitchen-sinking. Each extra item widens the argument until nothing can be settled.'],
               ['Pretend it never came up', false, 'Not quite. Park it with a plan to come back, so it doesn’t keep flooding in.']] },
         { at: 'Intent and impact', k: 'wyr', q: 'Something you said came across as dismissive. Would you rather open with…',
-          o: [['“I didn’t mean it that way.”', 'Leading with intent tends to sound like a defense, and the hurt can feel denied.'],
+          o: [['“I didn’t mean it that way.”', 'Leading with intent tends to sound like a defence, and the hurt can feel denied.'],
               ['“I can see that came across as dismissive, and I’m sorry it hurt.”', 'Impact first, then intent if needed. Both can be true.']] },
         { at: 'What makes an apology work', k: 'sort', q: 'Does this help an apology, or undo it?', bins: ['Helps', 'Undoes it'],
-          items: [['Owning what you did', 0], ['Offering to put it right', 0], ['“I’m sorry if you were offended.”', 1, 'That focuses on their reaction, not on what you did.'], ['“I’m sorry, but…”', 1], ['Listening first, then apologizing', 0]] }
+          items: [['Owning what you did', 0], ['Offering to put it right', 0], ['“I’m sorry if you were offended.”', 1, 'That focuses on their reaction, not on what you did.'], ['“I’m sorry, but…”', 1], ['Listening first, then apologising', 0]] }
       ]
     },
 

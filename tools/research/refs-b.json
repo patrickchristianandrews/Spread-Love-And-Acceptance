@@ -751,7 +751,6 @@
       "love-languages"
     ],
     "mentioned_on": [
-      "/library/connection.html#capitalization",
       "/library/relationships.html#love-languages",
       "/love-languages-in-depth.html#honest"
     ],
@@ -920,8 +919,7 @@
     "mentioned_on": [
       "/book/preface-in-depth.html#unbilled-debt",
       "/library/connection.html#find-remind-bind",
-      "/library/fairness.html#appreciation-and-recognition",
-      "/library/stress.html#sleep-and-mood"
+      "/library/fairness.html#appreciation-and-recognition"
     ],
     "verified": true,
     "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22642482/"
@@ -1667,7 +1665,6 @@
       "/book/understanding-1-feelings-in-depth.html#spread",
       "/book/understanding-5-belonging-in-depth.html#belonging",
       "/library/connection.html#loneliness",
-      "/library/emotions.html#emotional-contagion",
       "/tools/chat/deep.json"
     ],
     "verified": true,

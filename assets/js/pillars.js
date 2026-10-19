@@ -1,4 +1,4 @@
-/* pillars.js — "Pillars in this page": a small strip under a page's title showing which of the
+/* pillars.js — "Pillars on this page": a small strip under a page's title showing which of the
    Five Pillars (see /five-pillars.html) the page puts to work, for you and with others.
    site.js loads this on content pages. Pages with no line in PAGES below get no strip.
    To add a page: add one line to PAGES. Numbers are pillars 1–5; each line under n is
@@ -22,7 +22,7 @@
     { id: 'tune-signals', roman: 'IV', name: 'Tune how you send and receive', short: 'Tune the signal', field: 'Signal theory',
       you: 'Know your own wiring, pace and how you hear things.',
       us: 'Translate across different wiring and tone. A mismatch is tuning, not a failing.' },
-    { id: 'quiet-incentives', roman: 'V', name: 'Notice the quiet incentives', short: 'Quiet incentives', field: 'Behavioral economics',
+    { id: 'quiet-incentives', roman: 'V', name: 'Notice the quiet incentives', short: 'Quiet incentives', field: 'Behavioural economics',
       you: 'Spot the defaults and shortcuts that steer your own choices.',
       us: 'See how unclaimed jobs drift to one person, and how fairness and thanks keep things steady.' }
   ];
@@ -228,8 +228,8 @@
 
   var nav = document.createElement('nav');
   nav.className = 'tol-pillars';
-  nav.setAttribute('aria-label', 'Pillars in this page, this site’s own framework');
-  nav.innerHTML = '<span class="tol-pillars-label"><span class="tp-kicker">This site’s framework</span> Pillars in this page · <a href="/five-pillars.html">the Five Pillars</a></span>' +
+  nav.setAttribute('aria-label', 'Pillars on this page, this site’s own framework');
+  nav.innerHTML = '<span class="tol-pillars-label"><span class="tp-kicker">This site’s framework</span> Pillars on this page · <a href="/five-pillars.html">the Five Pillars</a></span>' +
     '<ul>' + chips + '</ul>' +
     '<details><summary>How this page uses ' + (entry.p.length === 1 ? 'it' : 'them') + '</summary><dl>' + how + '</dl></details>';
 

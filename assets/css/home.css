@@ -1,0 +1,184 @@
+/* home.css: the home page's sections under the first card (home16).
+   Try it in 10 seconds, Meet the friends, Why it's different, The series, What's here, the logic behind it,
+   and Come back gently. Light colours only: the site's dark theme inverts the page, and images and canvases
+   are turned back by site.css. Quiet mode drops the art, glows and motion. */
+
+/* ---------- shared bits ---------- */
+.read .hm{ position:relative; margin:0 0 1.4rem; padding:1.1rem 1.15rem 1.2rem; border-radius:24px; box-sizing:border-box;
+  background:rgba(255,251,244,.94); border:1px solid #EFE4F6; box-shadow:0 18px 44px -30px rgba(78,63,107,.5), 0 1px 3px rgba(78,63,107,.06); }
+.read .hm > *{ max-width:none; }
+.read .hm .hm-k{ margin:0 0 .2rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:#6B4F8A; }
+.read .hm h2.hm-h{ margin:0 0 .35rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.3rem, 1.1rem + .9vw, 1.6rem); line-height:1.2; color:var(--ink, #2B2620); max-width:none; }
+.read .hm .hm-sub{ margin:0 0 .8rem; font-size:.95rem; line-height:1.5; color:var(--ink-soft, #5A5346); }
+.read .hm ul{ margin:0; padding:0; list-style:none; }
+.read .hm li{ margin:0; padding:0; max-width:none; }
+.read .hm li::before{ content:none; }
+.read .hm a:focus-visible, .read .hm button:focus-visible, .read .hm summary:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:8px; }
+.read .hm .hm-go{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+.read .hm .hm-go::after{ content:"\a0\2192"; }
+.read .hm .hm-links{ display:flex; flex-wrap:wrap; gap:0 1.2rem; margin:.4rem 0 0; font-size:.95rem; }
+
+/* ---------- Pick up where you left off (returning visitors only; reads keys the site already keeps) ---------- */
+.read .hh .hh-back{ margin:0 0 1rem; padding:.7rem .9rem .75rem; border-radius:16px; background:rgba(232,243,253,.92); border:1px solid #CFE0F3; }
+.read .hh .hh-back[hidden]{ display:none; }
+.read .hh .hh-back-h{ margin:0 0 .2rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; line-height:1.3; color:var(--ink, #2B2620); }
+.read .hh .hh-back ul{ display:flex; flex-direction:column; margin:0; padding:0; list-style:none; }
+.read .hh .hh-back li{ margin:0; padding:0; max-width:none; }
+.read .hh .hh-back li::before{ content:none; }
+.read .hh .hh-back a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+.read .hh .hh-back small{ display:block; margin:-.35rem 0 .2rem; font-size:.85rem; color:var(--ink-soft, #5A5346); }
+
+/* ---------- the switch inside "What's going on?" ---------- */
+.read .hh-wgo .hh-mode{ margin:.25rem 0 .55rem; }
+.read .hh-wgo .hh-mode-opts{ display:inline-flex; flex-wrap:wrap; gap:4px; padding:4px; border-radius:999px; background:rgba(255,253,247,.16); border:1px solid rgba(255,253,247,.35); }
+.read .hh .hh-wgo .hh-mode-opts button{ min-height:44px; padding:.3rem 1.05rem; border-radius:999px; border:0; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:#FFFDF7; background:transparent; }
+.read .hh .hh-wgo .hh-mode-opts button:hover{ background:rgba(255,253,247,.14); }
+.read .hh .hh-wgo .hh-mode-opts button[aria-pressed="true"]{ background:#FFE9A8; color:#2B2620; }
+.read .hh .hh-wgo .hh-mode-opts button[aria-pressed="true"]::before{ content:"\2713\a0"; }
+.read .hh .hh-wgo .hh-mode-opts button:focus-visible{ outline:3px solid #FFE9A8; outline-offset:2px; }
+.read .hh .hh-wgo .wgo-opts a.wgo-opt::after{ content:"\a0\2192"; }
+html.tol-quiet .read .hh-wgo .hh-mode-opts{ background:none; border-color:var(--ink, #2B2620); }
+html.tol-quiet .read .hh .hh-wgo .hh-mode-opts button{ color:var(--ink, #2B2620); }
+html.tol-quiet .read .hh .hh-wgo .hh-mode-opts button[aria-pressed="true"]{ background:var(--ink, #2B2620); color:#FFFDF7; }
+
+/* ---------- Try it in 10 seconds ---------- */
+.read .hm-try .mcm{ margin:0; padding:0; border:0; background:none; max-width:none; }
+.read .hm-try .mcm h2{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.3rem, 1.1rem + .9vw, 1.6rem); line-height:1.2; }
+.read .hm-try .mcm textarea{ background:#FFFFFF; }
+.read .hm-try .mcm-full, .read .hm-try .mcm-shotl, .read .hm-try .mcm-ctx{ display:inline-flex; align-items:center; min-height:44px; }
+/* "Add context" still shows with a result that needs it; the full checker has it too */
+.read .hm-try .mcm-ctx-l{ display:none; }
+.read .hm-try .mcm-shot{ margin:0; }
+.read .hm-try .hm-ex{ min-height:44px; padding:8px 16px; border-radius:999px; cursor:pointer; font:inherit; font-weight:600; color:#4E3F6B; background:#F4ECFB; border:1.5px solid #D9C8F0; }
+.read .hm-try .hm-ex:hover{ border-color:#9A80C8; }
+.read .hm-try .hm-ex-note{ margin:.3rem 0 0; font-size:.85rem; color:var(--ink-soft, #5A5346); }
+.read .hm-try .hm-ex-note[hidden]{ display:none; }
+
+/* ---------- Meet the friends ---------- */
+.read .hm-fr{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.7rem; margin:.4rem 0 0; }
+.read .hm-fr > li{ display:flex; }
+.read a.hm-fr-card{ display:flex; flex-direction:column; align-items:flex-start; gap:.35rem; width:100%; box-sizing:border-box; padding:.85rem .85rem .7rem; border-radius:20px;
+  text-decoration:none; color:var(--ink, #2B2620); background:#FFFFFF; border:1px solid #E6DAF3; box-shadow:0 10px 24px -18px rgba(78,63,107,.6); }
+.read a.hm-fr-card:hover{ border-color:#B9A2DD; }
+.read .hm-fr-art{ display:grid; place-items:center; width:72px; height:60px; border-radius:18px; background:#EAF3FC; }
+.read .hm-fr li:nth-child(2) .hm-fr-art{ width:100px; background:#E8F3E9; }
+.read .hm-fr li:nth-child(3) .hm-fr-art{ background:#FFF1D6; }
+.read .hm-fr-art svg{ display:block; width:52px; height:52px; }
+.read .hm-fr-art canvas{ display:block; width:96px; height:58px; }
+.read .hm-fr-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; line-height:1.2; }
+.read .hm-fr-n{ font-size:.9rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+.read .hm-fr-go{ display:inline-flex; align-items:center; min-height:44px; margin-top:auto; font-weight:600; font-size:.95rem; color:#2B5B8C; }
+.read .hm-fr-go::after{ content:"\a0\2192"; }
+@media (prefers-reduced-motion: no-preference){
+  html:not(.tol-still) .read a.hm-fr-card{ transition:transform .2s ease, border-color .15s ease; }
+  html:not(.tol-still) .read a.hm-fr-card:hover{ transform:translateY(-2px); }
+  html:not(.tol-still) .read a.hm-fr-card:hover .hm-fr-art svg{ animation:hm-bob .9s ease-in-out 1; }
+}
+@keyframes hm-bob{ 50%{ transform:translateY(-4px) rotate(-3deg); } }
+
+/* ---------- Why it's different ---------- */
+.read .hm-why-l{ display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.6rem; }
+.read .hm-why-l > li{ display:grid; grid-template-columns:auto 1fr; gap:.15rem .7rem; align-content:start; padding:.7rem .8rem .75rem; border-radius:18px; background:#FFFFFF; border:1px solid #EFE4F6; }
+.read .hm-why-i{ grid-row:span 2; display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:12px; font-size:1.25rem; line-height:1; background:#F4ECFB; }
+.read .hm-why-l > li:nth-child(1) .hm-why-i{ background:#FFF0D9; }
+.read .hm-why-l > li:nth-child(2) .hm-why-i{ background:#E3F2E7; }
+.read .hm-why-l > li:nth-child(3) .hm-why-i{ background:#FCE4EA; }
+.read .hm-why-l > li:nth-child(4) .hm-why-i{ background:#E8F0FB; }
+.read .hm-why-t{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; line-height:1.25; }
+.read .hm-why-n{ margin:0; font-size:.9rem; line-height:1.45; color:var(--ink-soft, #5A5346); }
+.read .hm-why-t a{ color:var(--ink, #2B2620); text-decoration:underline; text-decoration-color:#CDB8EA; text-decoration-thickness:1.5px; text-underline-offset:3px; }
+.read .hm-why-t a::after{ content:"\a0\2192"; font-family:"Lora", Georgia, serif; font-weight:400; }
+.read .hm-why-t a:hover{ text-decoration-color:currentColor; }
+.read .hm-why-n a{ color:#2B5B8C; font-weight:600; text-underline-offset:3px; }
+.read .hm .hm-made{ margin:.7rem 0 0; font-size:.92rem; line-height:1.5; color:var(--ink-soft, #5A5346); }
+.read .hm-made a{ font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+/* the icons keep their real colours when the page is shown dark */
+@media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) .read .hm-why-i{ filter:invert(1) hue-rotate(180deg); } }
+html[data-theme="dark"]:not(.tol-nodark) .read .hm-why-i{ filter:invert(1) hue-rotate(180deg); }
+
+/* ---------- The series ---------- */
+.read .hm-bk{ display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:.6rem; margin:.3rem 0 .4rem; }
+.read .hm-bk > li{ display:flex; flex-direction:column; min-width:0; }
+.read .hm-bk a.hm-bk-a{ display:flex; flex-direction:column; gap:.3rem; text-decoration:none; color:var(--ink, #2B2620); }
+.read .hm-bk img{ display:block; width:100%; height:auto; aspect-ratio:240 / 359; object-fit:cover; border-radius:5px; border:1px solid #E1D6BE; box-shadow:0 6px 14px -8px rgba(43,38,32,.45); background:#F3EEE2; }
+.read .hm-bk li:last-child img{ aspect-ratio:240 / 383; }
+.read .hm-bk-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:#6B4F8A; }
+.read .hm-bk-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.88rem; line-height:1.2; text-decoration:underline; text-decoration-color:#CDB8EA; text-underline-offset:3px; }
+.read .hm-bk a.hm-bk-a:hover .hm-bk-t{ text-decoration-color:currentColor; }
+.read .hm-bk-shop{ margin:.25rem 0 0; }
+.read .hm-bk-shop[hidden], .read .hm-bk-shop a[hidden]{ display:none !important; }
+.read .hm-bk-shop a{ display:inline-flex; align-items:center; min-height:44px; font-size:.85rem; font-weight:600; color:#2B5B8C; }
+.read .hm-bk-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .9rem; margin:.5rem 0 0; }
+.read a.hm-btn{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.35rem 1.1rem; border-radius:999px; font-weight:600; text-decoration:none; color:#FFFDF7; background:#4E3F6B; }
+.read a.hm-btn:hover{ background:#3C2F58; }
+.read a.hm-btn.is-quiet{ color:#4E3F6B; background:#FFFFFF; border:1.5px solid #D9C8F0; }
+
+/* ---------- What's here (the old "eight doors", kept with their class names: site.js adds "You might also like" here) ---------- */
+.read .hm .hh-map-h{ margin:0 0 .5rem; }
+.read .hm .hh-map-doors{ grid-template-columns:repeat(auto-fill, minmax(12.5rem, 1fr)); }
+.read .hm .hh-map-doors > li{ display:flex; width:100% !important; }
+.read .hm .hh-map-doors a{ width:100%; }
+.read .hm .hh-map-all{ margin:.55rem 0 0; font-size:.95rem; }
+.read .hm .tol-find-also{ margin:.6rem 0 0; font-size:.92rem; }
+.read .hm-fold{ margin:.8rem 0 0; border-top:1px solid #E6DAF3; }
+.read .hm-fold > summary{ display:flex; align-items:center; gap:.6rem; min-height:48px; box-sizing:border-box; padding:.5rem 0; cursor:pointer; list-style:none; }
+.read .hm-fold > summary::-webkit-details-marker{ display:none; }
+.read .hm-fold > summary::before{ content:"+"; flex:0 0 auto; display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; border-radius:50%; background:#F4ECFB; color:#4E3F6B; font-weight:700; }
+.read .hm-fold[open] > summary::before{ content:"\2212"; }
+.read .hm-fold > summary h2, .read .hm-fold > summary .hm-fold-t{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; line-height:1.3; color:var(--ink, #2B2620); }
+.read .hm-fold .lede{ margin:.2rem 0 .7rem; font-size:.95rem; }
+
+/* ---------- The logic behind it ---------- */
+.read .hm-logic-out{ margin:.1rem 0 .5rem; font-size:.95rem; line-height:1.5; }
+.read .hm .hm-chain{ margin:0 0 .35rem; padding:.55rem .75rem; border-radius:14px; background:#FFFFFF; border:1px solid #E6DAF3; font-size:.95rem; line-height:1.55; }
+.read .hm-chain span + span::before{ content:"\a0\2192\a0"; color:#8A3F72; font-weight:700; }
+.read .hm-chain span:last-child{ font-weight:600; color:#2F5E3E; }
+.read .hm .hm-note{ margin:.2rem 0 0; font-size:.85rem; color:var(--ink-soft, #5A5346); }
+
+/* ---------- Come back gently ---------- */
+.read .hm-back .home-new{ margin:.2rem 0 .3rem; }
+.read .hm-back .home-new a{ display:inline-flex; align-items:center; min-height:44px; }
+.read .hm-back .home-fold{ margin:.5rem 0; }
+.read .hm-back .home-fold > summary{ font-size:.98rem; }
+.read .hm-back .home-explore-links{ display:flex; flex-wrap:wrap; gap:0 1.2rem; margin:.4rem 0 0; padding:0; list-style:none; }
+.read .hm-back .home-explore-links li{ margin:0; }
+.read .hm-back .home-explore-links li::before{ content:none; }
+.read .hm-back .home-explore-links a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+.read .hm-back .pc-launch-row{ margin:.2rem 0 .6rem; }
+
+/* ---------- phones ---------- */
+@media (max-width:640px){
+  .read .hm{ margin-left:-6px; margin-right:-6px; padding:1rem .95rem 1.05rem; border-radius:22px; }
+  .read .hm-fr{ grid-template-columns:1fr; gap:.5rem; }
+  .read a.hm-fr-card{ display:grid; grid-template-columns:auto 1fr; grid-template-areas:"a t" "a n" "a g"; align-items:center; gap:0 .8rem; padding:.6rem .8rem .3rem; }
+  .read .hm-fr-art{ grid-area:a; width:64px; height:56px; }
+  .read .hm-fr li:nth-child(2) .hm-fr-art{ width:64px; }
+  .read .hm-fr-art canvas{ width:64px; height:39px; }
+  .read .hm-fr-t{ grid-area:t; }
+  .read .hm-fr-n{ grid-area:n; font-size:.86rem; line-height:1.35; }
+  .read .hm-fr-go{ grid-area:g; min-height:0; margin:.1rem 0 .3rem; }
+  .read a.hm-fr-card{ min-height:76px; }
+  .read .hm-why-l{ grid-template-columns:1fr; gap:.45rem; }
+  .read .hm-why-l > li{ padding:.6rem .75rem .15rem; }
+  /* the five covers in one row you can swipe along */
+  .read .hm-bk{ display:flex; gap:.6rem; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x proximity; margin:.3rem -.95rem .3rem; padding:0 .95rem .4rem; scrollbar-width:thin; }
+  .read .hm-bk > li{ flex:0 0 86px; scroll-snap-align:start; }
+  .read .hm-bk-t{ font-size:.82rem; }
+  .read a.hm-btn{ padding:.35rem .95rem; }
+  /* What's going on?: two columns of choices, so all of them fit on the first screens */
+  .read .hh .hh-wgo .wgo-opts{ display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.4rem; }
+  .read .hh .hh-wgo .wgo-opts :is(a, button){ min-height:54px; padding:.4rem .65rem; font-size:.9rem; line-height:1.25; border-radius:12px; }
+  .read .hh .hh-wgo .wgo-ten{ gap:0 1rem; font-size:.92rem; }
+  .read .hh-wgo .hh-mode{ margin:.2rem 0 .4rem; }
+  .read .hm .hh-map-doors{ grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.45rem; }
+  .read .hm .hh-map-n{ display:none; }
+  .read .hm .hh-map-doors a{ grid-template-areas:"i t" "c c"; }
+}
+
+/* ---------- Quiet mode: no art, glows or shadows ---------- */
+html.tol-quiet .read .hm{ background:#FFFBF2; border-color:var(--line, #D9CBA3); box-shadow:none; border-radius:12px; }
+html.tol-quiet .read :is(.hm-fr-art, .hm-why-i){ display:none; }
+html.tol-quiet .read a.hm-fr-card{ display:flex; box-shadow:none; border-color:var(--line, #D9CBA3); background:#FFFDF7; border-radius:10px; }
+html.tol-quiet .read .hm-why-l > li{ grid-template-columns:1fr; background:#FFFDF7; border-color:var(--line, #D9CBA3); }
+html.tol-quiet .read .hm-bk img{ box-shadow:none; }
+html.tol-quiet .read .hh .hh-back{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }

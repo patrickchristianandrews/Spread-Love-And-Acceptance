@@ -279,10 +279,14 @@
       p.className = 'tol-rsrc';
       var k = document.createElement('span'); k.className = 'tol-rsrc-k'; k.textContent = 'Sources: ';
       p.appendChild(k);
+      // two different works with the same authors and year read as "Neff (2003a) and Neff (2003b)", not a repeat
+      var same = {}, seenSame = {};
+      list.forEach(function (id) { var b = IDX.refs[id].a + '|' + IDX.refs[id].y; same[b] = (same[b] || 0) + 1; });
       list.forEach(function (id, n) {
-        var r = IDX.refs[id];
+        var r = IDX.refs[id], b = r.a + '|' + r.y, suf = '';
+        if (r.y && same[b] > 1) { seenSame[b] = (seenSame[b] || 0) + 1; suf = 'abcdefghij'.charAt(seenSame[b] - 1); }
         if (n) p.appendChild(document.createTextNode(n === list.length - 1 ? ' and ' : ', '));
-        p.appendChild(linkFor(id, r.a + (r.y ? ' (' + r.y + ')' : '')));
+        p.appendChild(linkFor(id, r.a + (r.y ? ' (' + r.y + suf + ')' : '')));
       });
       p.appendChild(document.createTextNode('.'));
       last.parentNode.insertBefore(p, last.nextSibling);
