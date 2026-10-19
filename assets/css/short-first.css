@@ -3,8 +3,10 @@
    a fold when a link points inside it, in "Show me only the steps" mode and for printing. Colours are the site's tokens,
    so light, dark and high contrast follow the Settings. */
 .sf-two{ margin:1rem 0 1.5rem; padding:.9rem 1.15rem 1rem; border-radius:var(--radius, 12px); border:1px solid var(--line); border-left:5px solid var(--credit); background:var(--paper-deep); }
+.sf-two .sf-kick{ margin:0 !important; font:500 .78rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-ink); }
 .sf-two .sf-two-h{ margin:.1rem 0 .5rem !important; font-size:1.2rem !important; }
 .sf-two p, .sf-two ol, .sf-two ul{ max-width:none !important; }
+.sf-two :is(p, li){ font-size:1rem; line-height:1.5; }
 .sf-two ol.sf-steps{ margin:.2rem 0 .6rem !important; padding-left:1.4rem !important; }
 .sf-two ol.sf-steps li{ margin:.3rem 0; }
 .sf-two .sf-say{ margin:.5rem 0 .6rem; padding:.2rem 0 .2rem .9rem; border-left:3px solid var(--brass); }
@@ -22,7 +24,7 @@ details.sf-more[open] > summary::before{ content:"\2212"; }
 details.sf-more > summary:hover{ border-color:var(--credit); }
 details.sf-more > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 details.sf-more > summary .sf-min{ font-weight:400; color:var(--ink-soft); font-size:.9rem; }
-details.sf-more[open] > summary .sf-open-t, details.sf-more:not([open]) > summary .sf-shut-t{ display:none; }
+details.sf-more[open] > summary .sf-shut-t, details.sf-more:not([open]) > summary .sf-open-t{ display:none; }
 details.sf-more[open] > summary{ margin-bottom:.7rem; }
 html.tol-only-steps main details.sf-more.sf-more{ display:block !important; }
 @media print{ details.sf-more > summary{ display:none; } }

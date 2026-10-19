@@ -764,6 +764,14 @@
   var inDepth = /-in-depth\.html$/.test(current);
   if (inDepth) current = current.replace(/-in-depth\.html$/, '.html');
   function deepHref(it) { return it.href.replace(/\.html(?=#|$)/, '-in-depth.html'); }
+  // home16b: Spanish is remembered. After a visit to the Spanish page, coming back to the home page from outside the
+  // site opens the Spanish page (localStorage 'tol-lang': 'es' or 'en'); its "English" link, or any ?lang=en, switches back.
+  try {
+    if (current === '/en-espanol.html' && !/[?&]lang=en\b/.test(location.search)) localStorage.setItem('tol-lang', 'es');
+    if (/[?&]lang=en\b/.test(location.search)) localStorage.setItem('tol-lang', 'en');
+    if (current === '/index.html' && localStorage.getItem('tol-lang') === 'es' && !/[?&]lang=en\b/.test(location.search) && !location.hash &&
+        document.referrer.indexOf(location.origin) !== 0 && !/[?&](utm_|ref=)/.test(location.search)) location.replace('/en-espanol.html');
+  } catch (e) {}
   // Tender reading pages (growing up, knowing yourself, and any page marked data-sensitive): no pop-ups,
   // no cheering buddies or pup visits, no Professor Puddles cards and no learning-trail score on them.
   // home16b: and the grief pages, as the book promises ("where a chapter talks about … deep grief, the pages stay quiet
@@ -1568,7 +1576,8 @@
     function gardenOk() {
       var mm = window.matchMedia;
       if (mm && mm('(prefers-reduced-motion: reduce)').matches && lsGet(STILL_KEY) !== '0') return false;
-      return lsGet(STILL_KEY) !== '1' && !workMode() && !WORKSPACE.test(current);
+      // home16b: and not on the tender and grief pages, or with Larger text or "Plain and literal"
+      return lsGet(STILL_KEY) !== '1' && !workMode() && !WORKSPACE.test(current) && !sensitivePage() && !calmExtras();
     }
     function makeGarden() {
       if (gardenParts || !gardenOk()) return;
@@ -1576,6 +1585,8 @@
       var SCENES = { start: 'garden', about: 'garden', self: 'beach', media: 'beach', relationships: 'lake', book: 'meadow', workpapers: 'river', program: 'forest', tools: 'forest' };
       var secId = (current === '/relationships.html' && 'relationships') || (hereSection && hereSection.id) || (/^\/book\//.test(current) ? 'book' : /^\/workpapers\//.test(current) ? 'workpapers' : /^\/(learn|legal)\//.test(current) ? 'about' : ''), sceneQ = secId === 'play' || body.classList.contains('is-game') ? '?scene=garden&tod=night' : '?scene=' + (SCENES[secId] || 'garden');
       if (body.hasAttribute('data-garden-nopals')) sceneQ += (sceneQ ? '&' : '?') + 'pals=off'; // the page has its own pals running about
+      // home16b: the scenery stays, but the animals running about in it only where play is the point (home, play pages)
+      else if (!ambientOk()) sceneQ += (sceneQ ? '&' : '?') + 'pals=off';
       var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: T('The Night Garden, softly in the background', 'El Jardín de noche, suave, de fondo'), 'aria-hidden': 'true', tabindex: '-1' });
       var veil = el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' });
       body.insertBefore(veil, body.firstChild);
@@ -1646,7 +1657,7 @@
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
     // (not on the tender pages, and not on Frequency Buddies, where they'd sit over the episode)
-    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && ambientOk() && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && ambientOk() && lsGet('tol-comfort-offer') && promptFree('pups') && !/#together=|[?&]together=/.test(location.href) && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         !/^\/(frequency-journey(-play)?|frequency-buddies|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
       var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
     }
@@ -1709,6 +1720,7 @@
     buildPuddlesCards(body);
     buildPuddlesPop(body);
     buildOneFab(body);
+    toolFirst(body);
     comfortOffer(body);
     rememberPage(body);
     progNote();
@@ -1752,6 +1764,11 @@
       if (wm) wm.insertBefore(wk, wm.firstChild); else bar.after(wk);
     }
     spanishHint(bar);
+    // home16b: the Spanish page has an easy way back to English (and forgets the Spanish choice)
+    if (current === '/en-espanol.html') {
+      var em = document.querySelector('main'), en = el('p', { class: 'tol-en-switch tol-plain no-bubble' }, '<a href="/index.html?lang=en" hreflang="en" lang="en">English</a>');
+      if (em) em.insertBefore(en, em.firstChild);
+    }
     applyFocus(); renderFocusPill();
     if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
     // Big text or zoom: nothing in the bar is ever pushed off the side. Step by step, the section
@@ -3566,6 +3583,32 @@
     if (main && pal) pal.parentNode.insertBefore(hi, pal);
     else if (main) main.insertBefore(hi, intro ? intro.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
+  }
+
+  // ---------- home16b: on a phone, a tool comes first ----------
+  // On a page that is a tool, the bits this site adds above it (Listen · Read from where I am · Share, "What's on this
+  // page", the privacy note, the Simple / Full chooser, the calmer-page offer, "How this fits") move to just after the
+  // tool, so its first box or button is on the first screen. Run again as the later bits arrive.
+  function toolFirst(body) {
+    if (!window.matchMedia || !matchMedia('(max-width: 640px)').matches) return;
+    if (!(TOOL_PAGES.test(current) || WORKSPACE.test(current) || body.hasAttribute('data-tool') || /^\/(the-logic-behind-it|check-ins|wavelength)\.html$/.test(current)) || body.classList.contains('is-game')) return;
+    var main = document.querySelector('main'); if (!main) return;
+    var MOV = '.tol-offer, .tol-onpage, .tsk-top-row, .tol-private, .tol-pillars-fold, .depth-bar.tol-depth';
+    var SKIP = MOV + ', .read-head, .tol-where, .tol-es-hint, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras, .ask-exit, [data-tol-exit]';
+    function run() {
+      var ctrl = Array.prototype.filter.call(main.querySelectorAll('input:not([type=hidden]), textarea, select, button'), function (n) {
+        return n.getClientRects().length && !n.closest(SKIP);
+      })[0];
+      if (!ctrl) return;
+      var block = ctrl; while (block.parentNode && block.parentNode !== main) block = block.parentNode;
+      if (block.parentNode !== main) return;
+      var after = block;
+      Array.prototype.forEach.call(main.querySelectorAll(':scope > :is(' + MOV + ')'), function (n) {
+        if (!(n.compareDocumentPosition(block) & Node.DOCUMENT_POSITION_FOLLOWING)) return;   // already after the tool
+        after.after(n); after = n;
+      });
+    }
+    run(); setTimeout(run, 1200); setTimeout(run, 3000);
   }
 
   // ---------- home16b: one small corner button for the floating helpers ----------

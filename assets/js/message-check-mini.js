@@ -98,7 +98,7 @@
     '.mcm-k{margin:.4rem 0 .15rem;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
     '.mcm-say{margin:0;padding:8px 11px;border-radius:8px;background:var(--paper,#F5EFDE);border:1px solid var(--line,#D9CBA3);line-height:1.5;overflow-wrap:anywhere}' +
     '.mcm-ph{border:1.5px dashed var(--brass,#A8792F);border-radius:4px;padding:0 4px}' +
-    '.mcm-copy{min-height:40px;margin-top:6px;padding:6px 14px;border:1.5px solid var(--line,#D9CBA3);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:.9rem;cursor:pointer}' +
+    '.mcm-copy{min-height:44px;margin-top:6px;padding:6px 14px;border:1.5px solid var(--line,#D9CBA3);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:.9rem;cursor:pointer}' +
     '.mcm-note{margin:.55rem 0 0;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
     // what stood out, and what the clearer version left out: short, so it fits a phone
     '.mcm-why{margin:0 0 .45rem;padding:0;list-style:none;font-size:.9rem;line-height:1.45}' +
@@ -106,7 +106,7 @@
     '.mcm-why b{font-weight:600}' +
     '.mcm-sleep{margin:.2rem 0 .5rem;padding:8px 11px;border-left:4px solid var(--ink-soft,#5A5346);border-radius:6px;background:var(--paper,#F5EFDE)}' +
     '.mcm-sleep p{margin:0 0 .35rem;line-height:1.45}' +
-    '.mcm-sleep a{color:inherit;font-weight:600}';
+    '.mcm-sleep a{color:inherit;font-weight:600;display:inline-flex;align-items:center;min-height:44px}';
 
   function addCSS() {
     if (document.getElementById('mcm-css')) return;

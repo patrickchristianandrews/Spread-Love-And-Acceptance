@@ -3105,3 +3105,21 @@ html.tol-quiet .tol-help-fab{ box-shadow:none; background:#FFFDF7; border-color:
 html.tol-quiet .tol-help-art{ display:none; }
 html.tol-quiet .tol-help-fab{ padding:.25rem .9rem; }
 @media print{ .tol-help{ display:none !important; } }
+
+/* home16b, visual polish: the bar is solid (no words showing through it on an anchor jump), anchors land clear of it,
+   pop-overs use the page's serif, and focus rings stay visible on the site's own controls */
+html.has-garden .tol-bar{ background:var(--paper, #F5EFDE); backdrop-filter:none; -webkit-backdrop-filter:none; }
+html{ scroll-padding-top:calc(var(--tol-bar-h, 60px) + 1rem); }
+:is(.tol-offer, .tol-invite, .tcol-rules, .tol-install-card, .tp-card-pop, .tol-help-menu) :is(p, li, button, a, strong){ font-family:"Lora", Georgia, serif; }
+:is(.tol-offer, .tol-invite, .tcol-rules, .tol-help, .tol-outline) :is(button, a):focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+/* home16b: "English" on the Spanish page */
+main .tol-en-switch{ margin:0 0 .4rem !important; text-align:right; max-width:none !important; }
+main .tol-en-switch a{ display:inline-flex; align-items:center; min-height:44px; padding:0 .4rem; font-weight:600; }
+/* home16b: on a phone the corner button is just Professor Puddles' round face (its name stays for screen readers) */
+@media (max-width:640px){
+  html:not(.tol-quiet) .tol-help-fab{ padding:.2rem; min-width:48px; justify-content:center; }
+  html:not(.tol-quiet) .tol-help-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+}
+/* home16b: the "On your own?" card's links on /is-this-for-you.html are full-size tap targets */
+.read .ideas .fit-links{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .6rem; }
+.read .ideas .fit-links a{ display:inline-flex; align-items:center; min-height:44px; }

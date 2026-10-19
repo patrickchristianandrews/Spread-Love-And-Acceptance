@@ -1435,7 +1435,7 @@
   // "I'm scared it'll be awkward"; a flatmate's or co-parent's follow-up can have a card of its own
   var SAYS_NO = /\b(if|what if|and if|but if|what happens if|what do i do if|what should i do if|what (do|can) i do if) (she|he|they|my \w+|it|the answer|the answers) (says?|said|is|s) no\b|\b(if|what if) (she|he|they) (refuses?|wont|won t|doesnt want to|does not want to|dont want to|isnt interested|says not now)\b|\b(she|he|they) (said|says) no\b|^(and |but )?(if|what if) (she|he|they) (says|said) no\b/;
   var SIT_FOLLOW = {
-    roommate: [[/\b(awkward|scared|nervous|anxious|confront\w*|hate me|bring it up|raise it|bring this up)\b/, 'flatbringup'], [/\b(gets?|got|goes|get) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\b|\b(react\w*|takes? it) (badly|the wrong way)\b/, 'roommad']],
+    roommate: [[/\b(awkward|scared|nervous|anxious|confront\w*|hate me|bring it up|raise it|bring this up)\b/, 'flatbringup'], [/\b(gets?|got|goes|get) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\b|\b(react\w*|takes? it) (badly|the wrong way)\b/, 'flatmad']],
     coparent: [[/\b(late|lateness|waiting|waits|waited)\b/, 'coparentpickuplate'], [/\b(ignores?|ignoring|doesnt (reply|answer)|no (reply|answer)|wont (reply|answer|agree))\b/, 'coparentnoreply']]
   };
   function sitFollow(state, L, f) {
@@ -1443,7 +1443,7 @@
     if (!I || n > 18) return null;
     var sw = detectSituation(f);
     if (sw.score >= 5 && sw.who && sw.who !== L.who && sw.who !== 'other') return null;  // a clearly new story
-    var rules = (SIT_FOLLOW[L.who] || []).concat(L.who === 'roommate' ? [[SAYS_NO, 'roommad']] : L.who === 'coparent' ? [[SAYS_NO, 'coparentnoreply']] : []);
+    var rules = (SIT_FOLLOW[L.who] || []).concat(L.who === 'roommate' ? [[SAYS_NO, 'flatmad']] : L.who === 'coparent' ? [[SAYS_NO, 'coparentnoreply']] : []);
     for (var i = 0; i < rules.length; i++) {
       var fc = rules[i][0].test(f) && cardById(rules[i][1]);
       if (fc) { var rc = cardReply(state, fc, 'about'); rc.kind = 'care'; state.care = { id: fc.id, turn: state.turn || 0, f: f }; if (CV_PERSONAL[fc.id] || fc.topic) setTopic(state, fc, fc.id); return rc; }

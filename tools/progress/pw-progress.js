@@ -278,8 +278,8 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
       const c = await ctx(browser, Object.assign({ colorScheme: scheme }, v.o));
       const p = await c.newPage();
       await p.goto(BASE + '/on-this-device.html');
-      // (home16b: one prompt a visit; the calmer-page offer is answered, so the phone tip is this visit's one)
-      await p.evaluate((q) => { localStorage.setItem('tol-lemonade-quick', q); localStorage.setItem('tol-comfort-offer', 'done'); if (innerWidth > 1000) localStorage.setItem('tol-save-mode-v1', 'own'); }, QUICK);
+      // (home16b: one prompt a visit; the calmer-page offer is answered and the free-app line closed, so the phone tip is this visit's one)
+      await p.evaluate((q) => { localStorage.setItem('tol-lemonade-quick', q); localStorage.setItem('tol-comfort-offer', 'done'); localStorage.setItem('tol-appbar-off', new Date().toISOString().slice(0, 10)); if (innerWidth > 1000) localStorage.setItem('tol-save-mode-v1', 'own'); }, QUICK);
       await p.reload(); await p.waitForSelector('#tp-what .tp-list');
       const lvl = await p.textContent('#tp-level');
       ok(v.n === '390' ? /Phone or tablet/.test(lvl) && /Install the free app to keep a history/.test(lvl) : /own computer/.test(lvl), v.n + ' ' + scheme + ': the right level and perk line');
@@ -287,7 +287,8 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
       await anchorsResolve(p, v.n + ' ' + scheme);
       await p.screenshot({ path: path.join(OUT, 'progress-' + v.n + '-' + scheme + '.png'), fullPage: true });
       if (v.n === '390') {
-        await p.goto(BASE + '/lemonade-stand.html');
+        // (home16b: not on a tool page, where the cards never show; a guide instead)
+        await p.goto(BASE + '/empty-nest.html');
         await p.waitForSelector('.tp-card-pop', { timeout: 25000 });
         ok(/7 days/.test(await p.textContent('.tp-card-pop')), '390 ' + scheme + ': the one-time iPhone tip');
         await noSideways(p, '390 ' + scheme + ' tip');

@@ -2170,7 +2170,8 @@ if (PERSONA) {
   const FLAT = 'my flatmate leaves her dishes everywhere and i do all the cleaning';
   c(G, [FLAT, 'what do i actually say to her'], { id: 'flatbringup', link: '/sharing-a-room.html#bring-it-up', script: true, not: new RegExp('flight attendant|' + CODES.source) });
   c(G, [FLAT, 'what should i text her'], { id: 'flatbringup', script: true, not: CODES });
-  c(G, [FLAT, 'and if she says no'], { id: 'roommad', not: CODES });
+  c(G, [FLAT, 'and if she says no'], { id: 'flatmad', not: new RegExp('guests|room to myself|' + CODES.source) });
+  c(G, ['i\'m scared she\'ll hate me and it\'ll be awkward in the kitchen', 'what if she gets annoyed'], { id: 'flatmad' });
   c(G, [FLAT, 'is there research on this'], { id: 'source', not: /Huang|question-asking/ });
   c(G, ['my husband never helps with the chores', 'what do i say to him'], { kind: 'sit-more', script: true, not: CODES });
   c(G, ['my husband never helps with the chores', 'and if he says no'], { text: /answer, not a door closing/, link: '/book/preface-in-depth.html#faq' });

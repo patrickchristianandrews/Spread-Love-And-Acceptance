@@ -841,10 +841,10 @@
       ? 'About 90 seconds. Each of you answers about your own day, in a sentence. Then just listen: no debating, no solving.' + (fw.tonightNote ? ' ' + fw.tonightNote : '') + ' Kept with today (' + day + ') in the week below.'
       : 'About 90 seconds. Each person says how full today was (low, medium or high), then answers in a sentence, about their own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
     // the same questions for a team (a short stand-up) or for housemates
+    var oth = null;
     if (sec.others && sec.others.length) {
-      var oth = h('details', { className: 'wpf-tonight-others' }, [h('summary', { text: 'Doing this as a team, or with housemates?' })]);
+      oth = h('details', { className: 'wpf-tonight-others' }, [h('summary', { text: 'Doing this as a team, or with housemates?' })]);
       sec.others.forEach(function (o) { oth.appendChild(h('p', { className: 'wpf-help' }, [h('strong', { text: o[0] + ': ' }), o[1]])); });
-      box.appendChild(oth);
     }
     var grid = h('div', { className: 'wpf-tonight-people' });
     ctx.people().forEach(function (code) {
@@ -872,6 +872,8 @@
       grid.appendChild(fs);
     });
     box.appendChild(grid);
+    // tools16: "Doing this as a team, or with housemates?" comes after the boxes, so the first box is higher up
+    if (oth) box.appendChild(oth);
     if (three) box.appendChild(h('div', { className: 'wpf-share-btns' }, [h('button', { type: 'button', className: 'wpf-add', 'data-action': 'tonight-copy', 'data-table': sec.id, text: 'Copy tonight\u2019s answers' })]));
     return box;
   };

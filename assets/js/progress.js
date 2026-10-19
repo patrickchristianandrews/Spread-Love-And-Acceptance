@@ -80,7 +80,7 @@
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
     'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-es-hint', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
@@ -971,14 +971,18 @@
     if (startSig === null || level() !== 'unasked') return;
     if (saveSig() !== startSig && hasMeaningful(local())) { try { sess().setItem(ASK_DUE, '1'); } catch (e) {} }
   }
-  function promptOk(name) {
+  function promptOk(name, bump) {
     var P = W.TOLPrompt, touched = P && P.touched ? P.touched() : 0;
     if (touched) return false;
     if (/#together=|[?&]together=|TOL-TOGETHER:/i.test(W.location.href)) return false;
     if (HTML.classList.contains('ti-nosurprise')) return false;
     // a tool page is for doing the tool: no cards there
     if (/^\/(ask|conversation-reader|signal-translator|carrier-wave-decoder|lemonade-stand|wiring-card|quick-checks|wavelength|the-logic-behind-it|check-ins|start-in-10-minutes|is-the-setup-working|calc01-solvency|recheck-drive|coin-pusher|frequency-journey|night-garden|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword)\.html$|^\/(workpapers\/(fill|calculators)|tools)\//.test(path)) return false;
-    return !P || P.free(name);
+    if (!P || P.free(name)) return true;
+    // "Your own computer, or shared?" matters more than the free-app line: it takes the line's place this visit
+    var cur = null; try { cur = sess().getItem('tol-prompt'); } catch (e) {}
+    if (bump && cur === 'appbar') { var ab = D.querySelector('aside.tol-appbar'); if (ab) ab.remove(); return true; }
+    return false;
   }
   function maybeCard() {
     var lv = level(); if (lv === 'shared' || card || lockEl) return;
@@ -986,7 +990,7 @@
     if (!hasMeaningful(local())) return;
     if (lv === 'unasked') {
       var due = false; try { due = sess().getItem(ASK_DUE) === '1'; } catch (e) {}
-      if (due && !inFrame && !PAGE && !(D.body && D.body.hasAttribute('data-no-tip')) && !/^\/(safety|upset-right-now)\.html$/.test(path) && promptOk('progress')) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
+      if (due && !inFrame && !PAGE && !(D.body && D.body.hasAttribute('data-no-tip')) && !/^\/(safety|upset-right-now)\.html$/.test(path) && promptOk('progress', true)) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
       return;
     }
     if (quietPage()) return;

@@ -128,6 +128,16 @@ per turn, the answers as chips (plus Not sure, Skip this one, Skip all), then `e
 level 0–3, or the safety answer with its hotlines. Isolation from people in general, checking without agreement,
 money kept back, threats and fear keep the safety answers. Tests: the `care10` group.
 
+Panel 16 (puddles16): `KB.logic` holds The Logic Behind It cards (from `assets/js/logic-library.js`, one passage each,
+linked to `#l-<id>`); "why did she react like that?" gets the matching card in full (`logicMatch`/`logicReply`), and its
+follow-ups ("is there research on this?", "what could I say?") stay with that card. "What does the research say about X?"
+answers from the Library's "what the research says" passage and the studies behind it, with their evidence labels
+(`researchReply`). A card's `after` list names the next card to give instead of "I've shared the main steps already"
+(grief never hears that). After a playbook, "what do I actually say?", "and if she says no?" stay with it (`sitFollow`).
+A counsellor asking about a client gets a "for counsellors" lead before the safety reply (`proReply`, every safety line kept).
+In Spanish (the Spanish page, a Spanish browser, or once someone writes Spanish) the chat's own buttons, footer and
+screen-reader lines are Spanish too (`applyEs`). Tests: the `panel16` group.
+
 ## Adding a situation playbook
 
 `situations/who.json` lists the kinds of relationship (`nouns` are captured, so "my sister" becomes

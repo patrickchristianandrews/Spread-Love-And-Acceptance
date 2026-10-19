@@ -8052,6 +8052,58 @@
       ]
     },
     {
+      "id": "flatmad",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "if a flatmate reacts badly or says no",
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "what": [
+        "If they get annoyed when you bring it up, or say no, that doesn’t mean you were wrong to ask. A bit of defensiveness at first is common, and it often settles after a day."
+      ],
+      "how": [
+        "Stay calm and repeat your one ask. You don’t have to argue every point.",
+        "Say you’re not attacking them: it’s about the kitchen, not about them as a person.",
+        "If it gets heated, pause and pick it up tomorrow: “Let’s leave it for tonight and talk tomorrow.”",
+        "If nothing changes, the people who run your halls or flat (an RA, a warden or the housing office) can help you agree a few house rules together."
+      ],
+      "links": [
+        [
+          "How to bring it up if you hate confrontation",
+          "/sharing-a-room.html#bring-it-up"
+        ],
+        [
+          "Talking to your RA or housing office",
+          "/sharing-a-room.html#ra"
+        ]
+      ],
+      "script": [
+        "I’m not saying you’re a bad flatmate. I just think we never agreed how we do the kitchen. Can we find something that works for both of us?"
+      ],
+      "scriptLabels": [
+        "If they get defensive"
+      ],
+      "plain": [
+        "It’s fine that you asked.",
+        "Repeat your one ask, calmly.",
+        "Pause and try again tomorrow.",
+        "Ask your halls or housing office for help if it stays stuck."
+      ],
+      "follow": [
+        [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got|says?|said) (mad|angry|upset|annoyed|cross|defensive|offended|weird|no)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(if|what if) (she|he|they) (says?|said) no\\b|\\b(refuses?|wont do it|won t do it)\\b",
+          "flatmad"
+        ],
+        [
+          "\\b(ra|r a|resident (assistant|advisor)|housing office|residence (staff|life)|warden)\\b",
+          "rahelp"
+        ]
+      ]
+    },
+    {
       "kind": "intent",
       "first": true,
       "newTopic": true,
@@ -8169,7 +8221,7 @@
       "follow": [
         [
           "\\bwhat if (she|he|they) (gets?|is|are|goes?|got|says?|said) (mad|angry|upset|annoyed|cross|defensive|offended|weird|no)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(if|what if) (she|he|they) (says?|said) no\\b|\\b(refuses?|wont do it|won t do it)\\b",
-          "roommad"
+          "flatmad"
         ],
         [
           "\\b(ra|r a|resident (assistant|advisor)|housing office|residence (staff|life)|warden)\\b",

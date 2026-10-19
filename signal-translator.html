@@ -157,9 +157,9 @@ textarea{width:100%;min-height:96px;margin-top:4px;border:1px solid var(--line);
 .presets button{border:1px dashed var(--muted);background:none;border-radius:var(--radius);padding:4px 10px;font-size:.82rem;font-family:var(--body);font-style:italic}
 .presets button:hover{background:var(--bg)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
-.go{background:var(--ink);color:var(--bg);border:none;border-radius:var(--radius);padding:11px 24px;font-family:var(--display);font-weight:600;font-size:1rem}
+.go{background:var(--ink);color:var(--bg);border:none;border-radius:var(--radius);padding:11px 24px;min-height:44px;font-family:var(--display);font-weight:600;font-size:1rem}
 .go:hover{background:var(--v)}
-.ghost{background:none;border:1.5px solid var(--line);border-radius:var(--radius);padding:9px 16px;font-family:var(--display);font-size:.9rem}
+.ghost{background:none;border:1.5px solid var(--line);border-radius:var(--radius);padding:9px 16px;min-height:44px;font-family:var(--display);font-size:.9rem}
 .ghost:hover{border-color:var(--ink)}
 .msg{font-size:.88rem;color:var(--a)}
 /* Drop-downs */
@@ -185,7 +185,7 @@ textarea[aria-invalid="true"]{border-color:var(--a)!important;box-shadow:0 0 0 2
 .wrow{display:flex;flex-direction:column;gap:4px}
 .wrow + .wrow{margin-top:2px}
 .wrow select{width:100%;min-height:44px;padding:8px 36px 8px 10px;border:1.5px solid var(--line);border-radius:var(--radius);background-color:var(--sheet);font-size:1rem;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--brass) 50%),linear-gradient(135deg,var(--brass) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
-.linkbtn{align-self:flex-start;background:none;border:0;padding:6px 0;min-height:36px;font-family:var(--display);font-size:.9rem;color:var(--b);text-decoration:underline;text-underline-offset:3px}
+.linkbtn{align-self:flex-start;background:none;border:0;padding:6px 0;min-height:44px;font-family:var(--display);font-size:.9rem;color:var(--b);text-decoration:underline;text-underline-offset:3px}
 .wfield .picked{margin:0}
 details.fine{margin-top:18px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet)}
 details.fine > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 14px;font-family:var(--display);font-weight:600;font-size:1.02rem}
@@ -224,6 +224,8 @@ details.fits > summary .step{display:inline;margin-right:8px}
 .relchips .relchips-more{background:none;border-style:dashed}
 .st-sleep{margin:10px 0;padding:10px 12px;border-left:4px solid var(--muted);background:color-mix(in srgb,var(--sheet) 70%,transparent);border-radius:6px}
 .st-sleep .actions{margin:8px 0 0}
+.st-sleep a,.st-left a{display:inline-flex;align-items:center;min-height:44px}
+#verdict .tol-ctx-change{min-height:44px}
 .st-left{margin:6px 0 0;font-size:.92rem}
 .box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0 0 14px}
 .box.tone-b{border-left:4px solid var(--b)}
@@ -496,7 +498,7 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 .cr-mock .m{width:52%;background:#2B5B8C;align-self:flex-end;color:#fff;font-size:.7rem;line-height:14px;padding:0 6px;height:auto}
 .cr-mock.is-left .t{align-self:flex-end}.cr-mock.is-left .m{align-self:flex-start}
 #conversation .cr-side-line{font-size:.92rem;margin:.3rem 0}
-#conversation .linkbtn{background:none;border:0;padding:0 2px;min-height:32px;color:var(--b);text-decoration:underline;font:inherit;cursor:pointer}
+#conversation .linkbtn{background:none;border:0;padding:0 2px;min-height:44px;color:var(--b);text-decoration:underline;font:inherit;cursor:pointer}
 #conversation .cr-ask1{margin:1rem 0;padding:.9rem 1rem;border:1.5px solid var(--b);border-radius:14px;background:var(--sheet)}
 #conversation .cr-ask1 q{display:block;margin:.4rem 0 .6rem;font-style:italic;overflow-wrap:anywhere}
 #conversation .cr-read{margin:1rem 0 0;border:1.5px solid var(--line);border-radius:14px;background:var(--sheet)}
@@ -521,7 +523,11 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 #conversation .cr-btn:hover{background:var(--credit); border-color:var(--credit);}
 #conversation .cr-btn.is-quiet{background:none; color:var(--ink);}
 #conversation .cr-btn.is-quiet:hover{background:var(--paper-deep); color:var(--ink); border-color:var(--ink);}
-#conversation .cr-btn.is-small{font-size:.85rem; padding:.35rem .7rem; font-weight:500;}
+#conversation .cr-btn.is-small{font-size:.85rem; padding:.35rem .7rem; font-weight:500; min-height:44px;}
+/* sig16: every control at least 44px tall */
+.st-wd a,#conversation a.dig{display:inline-flex;align-items:center;min-height:44px}
+.cr-formats>summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
+.tol-ctx-change{min-height:44px}
 #conversation .cr-btn:focus-visible, #conversation .cr-chip:focus-within, #conversation .cr-who button:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
 #conversation .cr-formats{margin:.6rem 0 0; font-size:.9rem;}
 #conversation .cr-formats summary{cursor:pointer; color:var(--ink-soft);}
@@ -575,7 +581,10 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 #conversation .cr-bubble mark.t-good{background:rgba(62,107,76,.15); box-shadow:inset 0 -2px 0 var(--credit);}
 #conversation .cr-bubble mark.t-alarm{background:rgba(150,65,43,.3); box-shadow:inset 0 -2px 0 var(--debit);}
 #conversation .cr-why{margin:.35rem 0 0; font-size:.9rem;}
-#conversation .cr-why summary{cursor:pointer; color:var(--ink-soft); font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem;}
+#conversation .cr-why summary{cursor:pointer; color:var(--ink-soft); font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; min-height:44px; display:flex; align-items:center;}
+#conversation .cr-who [data-flip]{min-height:44px;}
+#conversation .tol-ctx-change{min-height:44px;}
+#conversation details>summary{min-height:44px;}
 #conversation .cr-why ul{margin:.4rem 0 0; padding-left:1.1rem;}
 #conversation .cr-why li{margin:.3rem 0;}
 #conversation .cr-msg.is-me .cr-why{text-align:left;}
@@ -3600,8 +3609,9 @@ sync();
 /* The "Pillars in this page" strip (pillars.js puts it under the title) lives in the More fold here,
    so the sentence box and the answer come first, in plain words. */
 (function tuckPillars(){
-  const move = ()=>{ const n=document.querySelector("nav.tol-pillars"), more=$("#stMore"); if(n && more && !more.contains(n)){ more.appendChild(n); return true; } return !!(n && more); };
-  if(move()) return;
+  // (site.js may wrap the strip in its own "How this fits" fold: then the fold moves, with the strip inside it)
+  const move = ()=>{ const nav=document.querySelector("nav.tol-pillars"), n = nav && (nav.closest(".tol-pillars-fold") || nav), more=$("#stMore"); if(n && more && !more.contains(n)){ more.appendChild(n); } return !!(nav && more && more.contains(nav) && nav.closest(".tol-pillars-fold")); };
+  move();
   try { const mo = new MutationObserver(()=>{ if(move()) mo.disconnect(); }); mo.observe(document.querySelector("main")||document.body, {childList:true, subtree:true}); setTimeout(()=>mo.disconnect(), 15000); } catch(e) {}
 })();
 })();
