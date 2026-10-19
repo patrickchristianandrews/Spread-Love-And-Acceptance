@@ -1443,7 +1443,13 @@
        ['/ask.html', '&#128167;', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles')],
        ['/calming-supplements.html', '&#127793;', T('Calming herbs and supplements', 'Hierbas y suplementos')],
        ['/start-here.html#three-questions', '&#10067;', T('Not sure? Three questions', 'No sé por dónde empezar')]
-      ].map(function (q) { return '<li><a href="' + q[0] + '"><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
+      ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === '/ladder.html' ? ' data-panel-breathe' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
+    // home16b: "Calm down now" opens the one-minute Breathe break right here first (the 4-tap check is one tap on, in Topics)
+    panel.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-panel-breathe]'), b = document.querySelector('.tol-breathe-btn');
+      if (!a || !b || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      e.preventDefault(); closePanel(); b.click();
+    });
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
     panel.appendChild(buildIndex({ accordion: true }));
     panel.appendChild(el('div', { class: 'tol-panel-focus' }));
