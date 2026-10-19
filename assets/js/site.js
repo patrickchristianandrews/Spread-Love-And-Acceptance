@@ -951,6 +951,8 @@
   function label(it) {
     if (!it.code) return it.title;
     var code = /^[IVX]+$/.test(it.code) ? 'Chapter ' + it.code : it.code;
+    // no doubled prefix when the title already starts with its code ("Week 0: Week 0: a gentle start")
+    if (it.title.toLowerCase().indexOf(code.toLowerCase()) === 0) return it.title;
     return code + ': ' + it.title;
   }
 
@@ -3552,11 +3554,23 @@
     if (/^\/(ask|offline|404)\.html$/.test(current) || body.hasAttribute('data-no-puddles') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || document.querySelector('.pc-ov.is-tv')) return;
     var main = document.querySelector('main'); if (!main) return;
-    var h1 = main.querySelector('h1'), title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title.split('·')[0].trim();
+    // the page's own title: the h1 without any <small> subtitle tucked inside it (so "Look back over 30 days" doesn't run into "The 30-Day Look-Back")
+    var h1 = main.querySelector('h1'), title = '';
+    if (h1) { var h1c = h1.cloneNode(true); Array.prototype.forEach.call(h1c.querySelectorAll('small, .sub, .tol-sub, [aria-hidden="true"]'), function (n) { n.remove(); }); title = h1c.textContent.replace(/\s+/g, ' ').trim(); }
+    if (!title) title = document.title.split('·')[0].trim();
+    // a short form for the "Ask him about" button: cut long titles at a word, never mid-word
+    function shortTitle(t, max) {
+      t = t.replace(/[?.!:]+$/, '');
+      if (t.length <= max) return t;
+      var head = t.split(':')[0];
+      if (head.length >= 12 && head.length <= max) return head;
+      var cut = t.slice(0, max + 1), sp = cut.lastIndexOf(' ');
+      return (sp > 20 ? cut.slice(0, sp) : t.slice(0, max)).replace(/[\s,:;·–—-]+$/, '') + '…';
+    }
     function opts(topic) {
       return { name: PUDDLES.name, svg: PUDDLES.svg, color: PUDDLES.color, topic: topic || '',
         greeting: esPage() ? '¡Hola! Soy el Profesor Puddles. Escríbeme en español y te respondo con lo esencial de este sitio. Lo que escribes se queda en tu dispositivo.' :
-          'Hello! I’m Professor Puddles. Curious about something on “' + title.slice(0, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.' };
+          'Hello! I’m Professor Puddles. Curious about something on “' + shortTitle(title, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.' };
     }
     var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': T('Ask Professor Puddles about this page', 'Pregúntale al Profesor Puddles (escríbele en español)'), title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles (escríbele en español)') },
       '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + T('Ask Professor Puddles', '¿Hablamos?') + '</span>');
@@ -3579,7 +3593,7 @@
         (esPage() ? '<p><strong>¿Quieres saber más?</strong> Pregúntale al Profesor Puddles. Escríbele en español: te responde en español con lo esencial, con palabras sencillas y desde las páginas de este sitio. Lo que escribes no sale de tu dispositivo.</p>' +
         '<button type="button" class="tol-pud-card-go">💧 Pregúntale al Profesor Puddles</button>' :
         '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
-        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(title.replace(/[?.!:]+$/, '').slice(0, 60)) + '”' : 'Ask Professor Puddles') + '</button>'));
+        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(shortTitle(title, 60)) + '”' : 'Ask Professor Puddles') + '</button>'));
       endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title && current !== '/index.html' ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); /* the home page's headline isn't a topic: just say hello */ });
       main.appendChild(endBox);
     }
@@ -3959,7 +3973,7 @@
       // the two things people look for first: bigger words and stronger contrast
       '<h3 class="tol-set-k tol-set-k1">' + T('Text and contrast', 'Letra y contraste') + '</h3>' +
       '<fieldset class="tol-set-sizes"><legend>' + T('Text size', 'Tamaño de letra') + ' <small>' + T('(smallest to biggest)', '(de menor a mayor)') + '</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
-      sw('contrast', T('High contrast', 'Alto contraste'), T('Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colors or shapes behind the words.', 'Letra negra sobre blanco (blanca sobre negro en modo oscuro), bordes claros y un marco fuerte en lo que eliges. Sin colores suaves ni formas detrás del texto.')) +
+      sw('contrast', T('High contrast', 'Alto contraste'), T('Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colours or shapes behind the words.', 'Letra negra sobre blanco (blanca sobre negro en modo oscuro), bordes claros y un marco fuerte en lo que eliges. Sin colores suaves ni formas detrás del texto.')) +
       '<fieldset><legend>' + T('Colors (dark mode)', 'Colores (modo oscuro)') + '</legend>' + radio('theme', 'data-theme-opt', 'auto', T('Follow my device', 'Como mi dispositivo')) + radio('theme', 'data-theme-opt', 'light', T('Light', 'Claro')) + radio('theme', 'data-theme-opt', 'dark', T('Dark', 'Oscuro')) + '</fieldset>' +
       '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">' + T('Listen to this page', 'Escuchar esta página') + '</button> <small>' + T('Your device reads the page aloud, with a speed control and “Read from where I am”.', 'Tu dispositivo lee la página en voz alta, con control de velocidad y “Leer desde aquí”.') + '</small></p>' +
       '<div class="tol-set-presets">' +
