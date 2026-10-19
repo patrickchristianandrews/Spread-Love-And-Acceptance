@@ -3587,7 +3587,8 @@
       e.preventDefault(); openPud(opts(''));
     });
     // and at the end of every page: "Want to know more? Ask Professor Puddles!", which opens him already talking about this page
-    if (!main.querySelector('.tol-pud-end')) {
+    // (not on the home page, which already has his card in "Meet the friends")
+    if (!main.querySelector('.tol-pud-end') && current !== '/index.html') {
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
         (esPage() ? '<p><strong>¿Quieres saber más?</strong> Pregúntale al Profesor Puddles. Escríbele en español: te responde en español con lo esencial, con palabras sencillas y desde las páginas de este sitio. Lo que escribes no sale de tu dispositivo.</p>' +

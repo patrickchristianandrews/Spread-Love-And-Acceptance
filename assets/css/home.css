@@ -18,15 +18,6 @@
 .read .hm .hm-go::after{ content:"\a0\2192"; }
 .read .hm .hm-links{ display:flex; flex-wrap:wrap; gap:0 1.2rem; margin:.4rem 0 0; font-size:.95rem; }
 
-/* ---------- Pick up where you left off (returning visitors only; reads keys the site already keeps) ---------- */
-.read .hh .hh-back{ margin:0 0 1rem; padding:.7rem .9rem .75rem; border-radius:16px; background:rgba(232,243,253,.92); border:1px solid #CFE0F3; }
-.read .hh .hh-back[hidden]{ display:none; }
-.read .hh .hh-back-h{ margin:0 0 .2rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; line-height:1.3; color:var(--ink, #2B2620); }
-.read .hh .hh-back ul{ display:flex; flex-direction:column; margin:0; padding:0; list-style:none; }
-.read .hh .hh-back li{ margin:0; padding:0; max-width:none; }
-.read .hh .hh-back li::before{ content:none; }
-.read .hh .hh-back a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
-.read .hh .hh-back small{ display:block; margin:-.35rem 0 .2rem; font-size:.85rem; color:var(--ink-soft, #5A5346); }
 
 /* ---------- the switch inside "What's going on?" ---------- */
 .read .hh-wgo .hh-mode{ margin:.25rem 0 .55rem; }
@@ -149,6 +140,8 @@ html[data-theme="dark"]:not(.tol-nodark) .read .hm-why-i{ filter:invert(1) hue-r
 /* ---------- phones ---------- */
 @media (max-width:640px){
   .read .hm{ margin-left:-6px; margin-right:-6px; padding:1rem .95rem 1.05rem; border-radius:22px; }
+  /* the mouse-only "#" copy-link button (wide-screens.js) would push short headings onto a second line */
+  .read .hm .tol-hl, .read .hh-wgo .tol-hl{ display:none; }
   .read .hm-fr{ grid-template-columns:1fr; gap:.5rem; }
   .read a.hm-fr-card{ display:grid; grid-template-columns:auto 1fr; grid-template-areas:"a t" "a n" "a g"; align-items:center; gap:0 .8rem; padding:.6rem .8rem .3rem; }
   .read .hm-fr-art{ grid-area:a; width:64px; height:56px; }
@@ -181,4 +174,3 @@ html.tol-quiet .read :is(.hm-fr-art, .hm-why-i){ display:none; }
 html.tol-quiet .read a.hm-fr-card{ display:flex; box-shadow:none; border-color:var(--line, #D9CBA3); background:#FFFDF7; border-radius:10px; }
 html.tol-quiet .read .hm-why-l > li{ grid-template-columns:1fr; background:#FFFDF7; border-color:var(--line, #D9CBA3); }
 html.tol-quiet .read .hm-bk img{ box-shadow:none; }
-html.tol-quiet .read .hh .hh-back{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }

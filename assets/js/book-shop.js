@@ -10,7 +10,8 @@ window.TOLBookShop = {
   'book-2-heal-and-steady':      { direct: '', amazon: '', ingram: '' },
   'book-3-understanding-each-other': { direct: '', amazon: '', ingram: '' },
   'book-4-share-the-load':       { direct: '', amazon: '', ingram: '' },
-  'workbook':                    { direct: '', amazon: '', ingram: '' }
+  'workbook':                    { direct: '', amazon: '', ingram: '' },
+  'pocket-the-logic-behind-it':  { direct: '', amazon: '', ingram: '' }
 };
 (function () {
   function ok(u) { return typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u); }

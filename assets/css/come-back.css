@@ -41,8 +41,9 @@ p.cb-k{ display:block; margin:0 0 .25rem !important; }
 .cb-tiny{ background:#F3F7F1; border-color:#CFE0C6; }
 .cb-tiny-t strong{ font-weight:600; }
 .cb-tiny-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .8rem; }
-.cb-tiny-row button{ min-height:40px; padding:.3rem .95rem; border-radius:999px; cursor:pointer; font:600 .92rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #B9D3AE; }
+.cb-tiny-row button{ min-height:44px; padding:.3rem .95rem; border-radius:999px; cursor:pointer; font:600 .92rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #B9D3AE; }
 .cb-tiny-row button:disabled{ cursor:default; color:var(--credit, #3E6B4C); background:transparent; border-color:transparent; padding-left:0; }
+.cb-tiny-row a{ display:inline-flex; align-items:center; min-height:44px; }
 .cb-tiny-say{ color:var(--credit, #3E6B4C); font-size:.92rem; }
 .cb-home{ max-width:40rem; }
 .cb-home .cb-tiny, .cb-home .cb-path{ margin:.6rem 0 .9rem; }
