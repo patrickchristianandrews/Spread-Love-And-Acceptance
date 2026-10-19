@@ -1594,7 +1594,10 @@ function paintRelSet(){
   if(!ch){ ch = document.createElement("div"); ch.id = "relChips"; ch.className = "relchips no-bubble"; ch.setAttribute("role","group"); ch.setAttribute("aria-label","Who it's for"); const ph = $("#phrase"); if(ph && ph.parentNode) ph.parentNode.insertBefore(ch, ph.nextSibling); }
   ch.hidden = got;
   const CHIPS = [["partner","Partner"],["ex","An ex"],["coparent","Co-parent"],["roommate","Flatmate"],["family","Family"],["coworker","Coworker"]];
-  ch.innerHTML = '<span class="relchips-k">Who&rsquo;s it for?</span>'+CHIPS.map(c=>'<button type="button" data-relq="'+c[0]+'" aria-pressed="'+(relId===c[0])+'">'+c[1]+'</button>').join('')+'<button type="button" class="relchips-more" id="relChipsMore">More&hellip;</button>';
+  // one Tab stop for the whole row (arrow keys move along it), so Translate stays close to the box
+  const onIdx = Math.max(0, CHIPS.findIndex(c=>c[0]===relId));
+  ch.innerHTML = '<span class="relchips-k" id="relChipsK">Who&rsquo;s it for?</span>'+CHIPS.map((c,i)=>'<button type="button" data-relq="'+c[0]+'" aria-pressed="'+(relId===c[0])+'" tabindex="'+(i===onIdx?0:-1)+'">'+c[1]+'</button>').join('')+'<button type="button" class="relchips-more" id="relChipsMore" tabindex="-1">More&hellip;</button>';
+  ch.setAttribute("aria-labelledby","relChipsK");
   // a work message: coworkers, a manager, or a business partner, one tap each
   let q = $("#relQuick");
   if(!q){ q = document.createElement("span"); q.id = "relQuick"; q.className = "relquick"; box.appendChild(q); }
@@ -1605,6 +1608,10 @@ function paintRelSet(){
 // "Choose who" / "Change" goes to the one-tap row under the box; "More…" opens the full list
 document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relSetChange")){ const f = document.querySelector("#relChips button"); if(f && !$("#relChips").hidden){ f.focus(); } else { $("#fine").open = true; $("#relSel").focus(); } } });
 document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relChipsMore")){ $("#fine").open = true; $("#relSel").focus(); } });
+document.addEventListener("keydown", e=>{ const b = e.target.closest && e.target.closest("#relChips button"); if(!b || !["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","Home","End"].includes(e.key)) return;
+  const all = [...document.querySelectorAll("#relChips button")], i = all.indexOf(b);
+  const j = e.key==="Home" ? 0 : e.key==="End" ? all.length-1 : (i + (e.key==="ArrowRight"||e.key==="ArrowDown" ? 1 : -1) + all.length) % all.length;
+  e.preventDefault(); all.forEach((x,k)=>x.tabIndex = k===j ? 0 : -1); all[j].focus(); });
 document.addEventListener("click", e=>{ const b = e.target.closest && e.target.closest("[data-relq]"); if(!b) return; const sel=$("#relSel"); const v = b.getAttribute("data-relq"); sel.value = (b.getAttribute("aria-pressed")==="true" && b.closest("#relChips")) ? "" : v; sel.dispatchEvent(new Event("change", {bubbles:true})); const again = document.querySelector('#relChips [data-relq="'+v+'"]'); if(again && b.closest("#relChips")) again.focus(); });
 function rerun(){ paintNotesRel(); if(!$("#results").hidden && $("#phrase").value.trim()) run(); }
 /* the talking notes fit the relationship: co-parents get notes about the children and the plan */

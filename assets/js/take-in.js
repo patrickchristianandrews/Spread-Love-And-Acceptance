@@ -427,10 +427,16 @@
     var words = (clone.textContent || '').split(/\s+/).filter(Boolean).length;
     if (words < 250) return;
     var mins = Math.max(1, Math.round(words / 200));
+    // a page that names its own honest reading time (data-simple-time / data-full-time on its version bar) is believed,
+    // so this line and the "Simple version · about N min" label never disagree
+    var own = m.querySelector('.depth-bar[data-simple-time], .depth-bar[data-full-time]'), ownT = '';
+    if (own) ownT = own.getAttribute(/-in-depth\.html$/.test(location.pathname) ? 'data-full-time' : 'data-simple-time') || '';
+    var ownM = /(\d+)\s*min/.exec(ownT);
+    if (ownM) mins = +ownM[1];
     var hs = Array.prototype.filter.call(m.querySelectorAll('h2'), function (h) { return !inOwn(h) && !h.closest('.tol-pud-card, .lp-card, .tol-read-host, .tol-fp-note, aside') && (h.textContent || '').trim(); });
     var p = el('div', { class: 'ti-time' });
-    p.innerHTML = '<p><strong>About ' + mins + (mins === 1 ? ' minute' : ' minutes') + ' to read</strong> (' + words.toLocaleString('en-US') + ' words' +
-      (hs.length ? ', in ' + hs.length + (hs.length === 1 ? ' part' : ' parts') : '') + ')' + (skipNote ? ', plus ' + esc(skipNote) : '') + '. You can stop and come back any time.</p>' +
+    p.innerHTML = '<p><strong>About ' + mins + (mins === 1 ? ' minute' : ' minutes') + ' to read</strong>' + (ownM ? (hs.length ? ' (' : '') : ' (' + words.toLocaleString('en-US') + ' words') +
+      (hs.length ? (ownM ? 'in ' : ', in ') + hs.length + (hs.length === 1 ? ' part' : ' parts') : '') + (ownM && !hs.length ? '' : ')') + (skipNote ? ', plus ' + esc(skipNote) : '') + '. You can stop and come back any time.</p>' +
       (hs.length > 1 ? '<details><summary>What’s on this page</summary><ol>' + hs.map(function (h) {
         var t = esc((h.textContent || '').replace(/\s+/g, ' ').trim());
         return '<li>' + (h.id ? '<a href="#' + esc(h.id) + '">' + t + '</a>' : t) + '</li>';

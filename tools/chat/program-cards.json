@@ -2,6 +2,189 @@
   "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first); pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
   "cards": [
     {
+      "id": "bookprint",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [],
+      "name": "the book in print",
+      "pat": "\\b(paperback|paper back|hardback|hard copy|printed (book|books|copy|copies|version|edition)|print (edition|version|copy|copies)|physical (book|books|copy|copies)|book in print|books in print|kindle|e ?book)\\b|\\bbuy (the|a|this|your|these) (book|books)\\b|\\border (the|a) (book|copy)\\b|\\b(book|books) on amazon\\b",
+      "what": [
+        "Every chapter is free to read online, with no account, and each book has a free PDF. The book page also shows the series in print: the same chapters as short colour books, plus a bound workbook and a pocket guide. “The book in print” there has the latest on getting a printed copy."
+      ],
+      "how": [
+        "Read free online: every chapter, any time.",
+        "Free PDF: each book’s button opens the collection its chapters are in.",
+        "To print one chapter or guide yourself, use the Print this page button at the bottom of the page."
+      ],
+      "links": [
+        [
+          "The book in print",
+          "/book/index.html#print-series"
+        ],
+        [
+          "The book, free to read online",
+          "/book/index.html"
+        ]
+      ],
+      "plain": [
+        "The book is free to read online.",
+        "Each book has a free PDF.",
+        "The book page shows the print series."
+      ]
+    },
+    {
+      "id": "stepchores",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "chores in a blended family",
+      "pat": "\\b(blended|step ?famil\\w*|stepkids|step ?kids|step ?children|stepchildren|stepsons?|stepdaughters?|(her|his|my wife s|my husband s|my partner s) (kids|children)|every other weekend|part ?time (son|daughter|kid|child)|only visits|visits (every|on))\\b.{0,90}\\b(chores|jobs|housework|tasks|rota|split|fair\\w*)\\b|\\b(chores|jobs|housework|tasks|rota|split)\\b.{0,90}\\b(blended|step ?famil\\w*|stepkids|step ?kids|step ?children|stepchildren|stepsons?|stepdaughters?|(her|his|my wife s|my husband s|my partner s) (kids|children)|every other weekend|part ?time (son|daughter|kid|child)|only visits|visits (every|on))\\b",
+      "what": [
+        "In a blended family, fair doesn’t always mean the same. A child who is here every other weekend is part of the house too, and can have jobs: fewer than someone who lives here every day. What matters is saying out loud how you decide."
+      ],
+      "how": [
+        "Give a child who visits a place that stays theirs, even a drawer or a shelf. Being part of the house can include a small job or two.",
+        "Agree the few house rules as a couple, in private first, with each parent leading on their own children.",
+        "Deal with things the same way for every child, whoever’s child they are.",
+        "Who does what? can set the nights someone is here out of 14, so a child who is here part of the time gets a smaller, fair share."
+      ],
+      "links": [
+        [
+          "Split chores when a child lives here part-time",
+          "/lemonade-stand.html#quick"
+        ],
+        [
+          "Step-siblings and half-siblings",
+          "/stepfamily.html#siblings"
+        ],
+        [
+          "Different rules in two homes",
+          "/stepfamily.html#two-homes"
+        ]
+      ],
+      "script": [
+        "Can we agree the jobs for all the kids together, so nobody feels left out?",
+        "When you’re here, this is your home too."
+      ],
+      "scriptLabels": [
+        "For the couple",
+        "To a child who visits"
+      ],
+      "plain": [
+        "Fair is not always the same.",
+        "A child who visits can have a small job.",
+        "Agree the rules as a couple first.",
+        "Treat every child the same way."
+      ],
+      "follow": [
+        [
+          "\\b(harder|stricter|tougher|softer|easier|favou?r\\w*)\\b",
+          "stepfair"
+        ],
+        [
+          "\\b(chores|jobs|split|rota|visits|every other weekend|part ?time)\\b",
+          "stepchores"
+        ]
+      ]
+    },
+    {
+      "id": "stepfair",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "treating all the children fairly in a stepfamily",
+      "pat": "\\b(harder|stricter|tougher|softer|easier|nicer|meaner|different|more strict|less strict) (on|with|to|towards) (her|his|my|their|your|our)( own)? (kids|children|sons?|daughters?|boys|girls)\\b|\\bfavou?r\\w* (my|his|her|their) (own )?(kids|children)\\b",
+      "what": [
+        "That’s a common sore spot in blended families, and it’s worth talking through calmly rather than arguing about. Children notice differences quickly, and so do partners."
+      ],
+      "how": [
+        "Deal with things the same way for every child, whoever’s child they are.",
+        "At first, each parent leads on rules with their own children, and the stepparent backs them up without being the enforcer.",
+        "Agree the few house rules as a couple, in private first, and explain them once, calmly, with the parent leading.",
+        "Fair doesn’t always mean the same: ages and needs differ. But explain how you decide."
+      ],
+      "links": [
+        [
+          "The stepparent role: warm adult first",
+          "/stepfamily.html#stepparent"
+        ],
+        [
+          "Step-siblings and half-siblings",
+          "/stepfamily.html#siblings"
+        ],
+        [
+          "Different rules in two homes",
+          "/stepfamily.html#two-homes"
+        ]
+      ],
+      "script": [
+        "Can you take the lead on rules with your kids, and I’ll back you up?",
+        "Can we agree the house rules for all the kids together, in private first, so it feels the same for everyone?"
+      ],
+      "scriptLabels": [
+        "For the couple",
+        "Or"
+      ],
+      "plain": [
+        "Treat every child the same way.",
+        "Each parent leads with their own kids at first.",
+        "Agree rules as a couple first."
+      ],
+      "follow": [
+        [
+          "\\b(harder|stricter|tougher|softer|easier|favou?r\\w*)\\b",
+          "stepfair"
+        ],
+        [
+          "\\b(chores|jobs|split|rota|visits|every other weekend|part ?time)\\b",
+          "stepchores"
+        ]
+      ]
+    },
+    {
+      "id": "procontrol",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [],
+      "name": "a client in a relationship with control",
+      "pat": "\\b(my|a|our) (clients?|patients?|counsell?ees?|service users?)\\b.{0,80}\\b(checks? (her|his|their) (phone|messages|texts)|tracks? (her|his|their) (location|phone)|controls? (the|all the|her|his|their) money|controlling|coercive|afraid of (him|her|them)|scared of (him|her|them)|monitors?|reads? (her|his|their) (texts|messages))\\b",
+      "what": [
+        "No. What you describe sounds like control, and the shared tools here aren’t for relationships with control. The site’s note for counsellors says: if you suspect coercive control or violence in a couple you see, please do not assign the shared tools. A shared chore list or pause plan can become one more thing to be checked on."
+      ],
+      "how": [
+        "Point the person to the safety page, or to support of their own. Not safe at home? says plainly that fear, control and threats are not a communication problem, lists free and private helplines, and explains how to leave the site quickly.",
+        "If your client might be checked, the same page explains how to clear what this site keeps on a device."
+      ],
+      "links": [
+        [
+          "For counsellors: the safety screen",
+          "/for-counselors.html#safety"
+        ],
+        [
+          "Not safe at home? People to talk to, and leaving this site quickly",
+          "/safety.html"
+        ]
+      ],
+      "safety": true,
+      "plain": [
+        "Do not assign the shared tools.",
+        "Point them to Not safe at home?",
+        "Or to support of their own."
+      ]
+    },
+    {
       "id": "forwhom",
       "kind": "intent",
       "first": true,
@@ -23,7 +206,7 @@
         ]
       ],
       "name": "who this site is for",
-      "pat": "\\b(is|are) (this|the|these) (site|website|app|place|program|programme|thing|tools?|stuff|all this)( only| just| mainly| mostly)? (just |only |mainly |mostly )?(for|about) (couples|partners|married (people|couples)|people in (a )?relationships?|relationships|lovers)\\b|\\b(only|just|mainly|mostly) for couples\\b|\\bdo (i|you) (need|have) to (have|be in) (a )?(partner|relationship|couple)\\b|\\b(i m|im|i am) (single|widowed|a widow\\w*|on my own|not in a relationship)\\b.{0,40}\\b(is this|is (it|the site)|can i use|for me)\\b|\\bwhat if i (dont|don t|do not) have a (partner|boyfriend|girlfriend|husband|wife)\\b",
+      "pat": "\\b(is|are) (this|the|these) (site|website|app|place|program|programme|thing|tools?|stuff|all this)( only| just| mainly| mostly)? (just |only |mainly |mostly )?(for|about) (couples|partners|married (people|couples)|people in (a )?relationships?|relationships|lovers)\\b|\\b(only|just|mainly|mostly) for couples\\b|\\bdo (i|you) (need|have) to (have|be in) (a )?(partner|relationship|couple)\\b|\\b(i m|im|i am) (single|widowed|a widow\\w*|on my own|not in a relationship)\\b.{0,40}\\b(is this|is (it|the site)|can i use|for me)\\b|\\bwhat if i (dont|don t|do not) have a (partner|boyfriend|girlfriend|husband|wife)\\b|\\bdo (i|you) (need|have to have) (a )?(partner|relationship|boyfriend|girlfriend|husband|wife)\\b",
       "what": [
         "No. Couples are only one part of it. The site is for anyone sharing a life with other people, and for anyone working on things on their own."
       ],
@@ -1170,7 +1353,8 @@
           "/method-and-limits.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "notPat": "\\b(checks? (her|his|their) (phone|messages|texts)|tracks? (her|his|their) (location|phone)|controls? (the|all the|her|his|their) money|controlling|coercive|afraid of (him|her|them)|scared of (him|her|them)|hits?|violen\\w*|abus\\w*)\\b"
     },
     {
       "id": "deployhealth",
@@ -1684,7 +1868,8 @@
           "He sleeps all day",
           "My husband sleeps all day and I do everything for the dog"
         ]
-      ]
+      ],
+      "notPat": "\\b(never notices?|doesnt notice|does not notice|remembers? everything|the one who remembers|have to ask|just have to ask|mental load|tired of being the one|carrying (it all|everything)|i do (it )?all|i do everything)\\b"
     },
     {
       "id": "gamingchores",
@@ -1722,6 +1907,14 @@
       "chips": [],
       "pat": "\\b(zzqx_never_matches)\\b",
       "follow": [
+        [
+          "\\b(is (she|he|they) right|(she|he|they) (s|is|are) right|whos right|who is right|am i wrong|am i the problem|is it me)\\b",
+          "gamingwho"
+        ],
+        [
+          "\\b(play (with me|together)|get (her|him|them) to play|co ?op|game together|games? (we|for) (both|two|us))\\b",
+          "gamingplay"
+        ],
         [
           "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
           "gamingchores"
@@ -1772,6 +1965,14 @@
       "keys": [],
       "chips": [],
       "follow": [
+        [
+          "\\b(is (she|he|they) right|(she|he|they) (s|is|are) right|whos right|who is right|am i wrong|am i the problem|is it me)\\b",
+          "gamingwho"
+        ],
+        [
+          "\\b(play (with me|together)|get (her|him|them) to play|co ?op|game together|games? (we|for) (both|two|us))\\b",
+          "gamingplay"
+        ],
         [
           "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
           "gamingchores"
@@ -1824,6 +2025,14 @@
       "chips": [],
       "pat": "\\b(zzqx_never_matches)\\b",
       "follow": [
+        [
+          "\\b(is (she|he|they) right|(she|he|they) (s|is|are) right|whos right|who is right|am i wrong|am i the problem|is it me)\\b",
+          "gamingwho"
+        ],
+        [
+          "\\b(play (with me|together)|get (her|him|them) to play|co ?op|game together|games? (we|for) (both|two|us))\\b",
+          "gamingplay"
+        ],
         [
           "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
           "gamingchores"
@@ -1960,6 +2169,14 @@
       ],
       "follow": [
         [
+          "\\b(is (she|he|they) right|(she|he|they) (s|is|are) right|whos right|who is right|am i wrong|am i the problem|is it me)\\b",
+          "gamingwho"
+        ],
+        [
+          "\\b(play (with me|together)|get (her|him|them) to play|co ?op|game together|games? (we|for) (both|two|us))\\b",
+          "gamingplay"
+        ],
+        [
           "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
           "gamingchores"
         ],
@@ -1970,6 +2187,97 @@
         [
           "\\b(defensive|getting (mad|angry|upset|annoyed)|without (a |it turning into a |starting a |it becoming a )?(fight|row|argument)|good time to (talk|bring)|when (should|do) i (bring|raise|say)|bring it up|raise it)\\b",
           "gamingtalk"
+        ]
+      ]
+    },
+    {
+      "id": "gamingplay",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "playing together",
+      "pat": "\\b(get|ask) (her|him|them|my (girlfriend|boyfriend|gf|bf|wife|husband|partner)) to (play|game) (with me|together)\\b|\\b(co ?op|couch co ?op|two player|2 player) games?\\b.{0,30}\\b(for|with) (us|my (girlfriend|boyfriend|gf|bf|wife|husband|partner)|a couple)\\b",
+      "what": [
+        "Play something together, and pick one the less-keen player can enjoy too. Being curious about each other’s world says “I’m interested in you”."
+      ],
+      "how": [
+        "A couch co-op game (like Overcooked, It Takes Two or Stardew Valley), a two-player puzzle game, or a card game at the table. Let the less-keen player choose this time.",
+        "Teach each other: you show your game, they show their hobby. Being the beginner for a bit is a nice way to laugh together.",
+        "Or play “How well do you know me?”: one asks, the other guesses, then the real answer. No points, just stories."
+      ],
+      "links": [
+        [
+          "Play something together tonight",
+          "/gaming-and-time-together.html#play-together"
+        ],
+        [
+          "Bonding tips: games and phones can bring you closer",
+          "/gaming-and-time-together.html#bonding"
+        ]
+      ],
+      "script": [
+        "Want to play something together tonight? You pick the game, and I’ll teach you mine another night."
+      ],
+      "plain": [
+        "Pick a game you can both enjoy.",
+        "Let the less-keen one choose.",
+        "Teach each other."
+      ],
+      "follow": [
+        [
+          "\\b(is (she|he|they) right|(she|he|they) (s|is|are) right|whos right|who is right|am i wrong|am i the problem|is it me)\\b",
+          "gamingwho"
+        ],
+        [
+          "\\b(play (with me|together)|get (her|him|them) to play|co ?op|game together|games? (we|for) (both|two|us))\\b",
+          "gamingplay"
+        ]
+      ]
+    },
+    {
+      "id": "gamingwho",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "who’s right about gaming",
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "what": [
+        "Probably you both have a point. Gaming is a real way to rest and to see friends, and wanting time together is real too. The goal isn’t less gaming. It’s both of you feeling chosen."
+      ],
+      "how": [
+        "Talk about the need underneath: rest and friends for one of you, feeling chosen for the other.",
+        "If one of you always has to ask, that’s usually the part that stings. Agree a heads-up rule and which evenings are yours together.",
+        "Try a small time-together deal for two weeks, then look again."
+      ],
+      "links": [
+        [
+          "Gaming, phones and time together",
+          "/gaming-and-time-together.html"
+        ],
+        [
+          "Our time-together deal",
+          "/gaming-and-time-together.html#deal-h"
+        ]
+      ],
+      "plain": [
+        "You both have a point.",
+        "Gaming is rest. Time together matters too.",
+        "Make a small deal and try it."
+      ],
+      "follow": [
+        [
+          "\\b(is (she|he|they) right|(she|he|they) (s|is|are) right|whos right|who is right|am i wrong|am i the problem|is it me)\\b",
+          "gamingwho"
+        ],
+        [
+          "\\b(play (with me|together)|get (her|him|them) to play|co ?op|game together|games? (we|for) (both|two|us))\\b",
+          "gamingplay"
         ]
       ]
     },
@@ -2921,6 +3229,14 @@
       "chips": [],
       "follow": [
         [
+          "\\b(show|show up|turn up|come|visit|visits|cancel\\w*|in and out)\\b",
+          "kinshipvisit"
+        ],
+        [
+          "\\b(fun|play|games?|tonight|bored|do together)\\b",
+          "kinshiptonight"
+        ],
+        [
           "\\b(phone|phones|screen|screens|tablet|ipad|gaming|games|up all night|wont sleep|doesnt sleep)\\b",
           "teenphone"
         ],
@@ -2934,6 +3250,92 @@
         ]
       ],
       "teenAlt": "teenkinship"
+    },
+    {
+      "id": "kinshiptonight",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [],
+      "name": "something to do with a child tonight",
+      "pat": "\\b(something|anything|ideas?|things?) (fun|nice|to do)\\b.{0,50}\\b(he s|she s|hes|shes|he is|she is|they re) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(fun|games?|things to do|something to do)\\b.{0,40}\\b(with|for) (a |my |an |our )?(\\d+ year old|grandson|granddaughter|grandkids?|grandchild\\w*)\\b",
+      "what": [
+        "Here are a few free things on this site that work for a child and a grown-up side by side, with nothing to sign up for:"
+      ],
+      "how": [
+        "Home Run Derby: a calm little arcade game. Ten pitches, swing as the ring closes. Take turns and cheer each other on.",
+        "Frequency Buddies, the cartoon: short episodes for all ages, with captions. Two pups face tough times and talk it through. Watch one together.",
+        "Make a music video: pick the stage, lights, dance moves and costumes for your own Frequency Buddies theme-song video."
+      ],
+      "links": [
+        [
+          "Home Run Derby",
+          "/frequency-journey.html#derby"
+        ],
+        [
+          "Frequency Buddies, the cartoon",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Make a music video",
+          "/frequency-buddies-music-video-maker.html"
+        ]
+      ],
+      "plain": [
+        "Play Home Run Derby together.",
+        "Watch a Frequency Buddies cartoon.",
+        "Make a music video."
+      ]
+    },
+    {
+      "id": "kinshipvisit",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "when a parent misses a visit",
+      "pat": "\\b(tell|say to) (him|her|them|my grandson|my granddaughter|the kids?)\\b.{0,40}(\\b(mom|mum|mother|dad|father|parent)\\b.{0,30}\\b(doesnt|didnt|does not|did not|wont|never|not|wouldnt) (show|show up|turn up|come|visit|call)\\b|\\b(cancel\\w*|missed|misses|no ?show)\\b.{0,20}\\b(visit|visits|contact)\\b|\\bin and out of (his|her|their) li(fe|ves)\\b)|\\b(grandson|granddaughter|grandkids?|grandchild\\w*)\\b.{0,80}(\\b(mom|mum|mother|dad|father|parent)\\b.{0,30}\\b(doesnt|didnt|does not|did not|wont|never|not|wouldnt) (show|show up|turn up|come|visit|call)\\b|\\b(cancel\\w*|missed|misses|no ?show)\\b.{0,20}\\b(visit|visits|contact)\\b|\\bin and out of (his|her|their) li(fe|ves)\\b)",
+      "what": [
+        "Waiting for a parent who doesn’t come can bring up love, hope, anger and disappointment all at once. You don’t need perfect words. Plain and kind is enough."
+      ],
+      "how": [
+        "If a visit is cancelled, say it plainly and kindly, and don’t promise the next one will happen.",
+        "Keep that evening light: a favourite meal, a film, no big talks and no new rules.",
+        "Never criticise his parent, even when you’re upset about what happened. He may hear it as criticism of him.",
+        "Don’t ask for a full report. Let him tell you if and when he wants to."
+      ],
+      "links": [
+        [
+          "Contact visits and the evening after",
+          "/foster-and-kinship.html#contact"
+        ],
+        [
+          "Raising a grandchild: talking about a parent who can’t be there",
+          "/foster-and-kinship.html#kinship"
+        ],
+        [
+          "Things to do together tonight",
+          "/foster-and-kinship.html#tonight"
+        ]
+      ],
+      "script": [
+        "Your mom can’t come today. I know that’s really disappointing. I’m here, and we’ll have a nice evening.",
+        "Visits can bring up a lot. You don’t have to talk about it. I’m around if you want to."
+      ],
+      "scriptLabels": [
+        "When a visit is cancelled",
+        "The evening after"
+      ],
+      "plain": [
+        "Say it plainly and kindly.",
+        "Don’t promise the next visit.",
+        "Keep the evening light.",
+        "Never criticise their parent."
+      ]
     },
     {
       "id": "teennotgetme",
@@ -7024,38 +7426,6 @@
       ]
     },
     {
-      "id": "feelsfine",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "when they feel distant and you feel fine",
-      "pat": "\\b(says|thinks|feels|told me) (we re|were|we are|we have|weve) (not close|distant|drifting|drifted|disconnected|grown apart|like roommates|not connected)\\b.{0,40}\\b(fine|ok|okay|good|happy|great)\\b|\\b(she|he|they|my \\w+) (says|thinks|feels)\\b.{0,50}\\bbut (i think |to me )?(everything|it|things|we) (is|s|are|seems?|seem|feel|feels)? ?(fine|ok|okay|good|great)\\b",
-      "keys": [],
-      "what": [
-        "It’s common for one partner to feel close and the other to feel far, at the same time. Her feeling is real information, even if things feel fine to you, and you don’t have to agree to listen."
-      ],
-      "how": [
-        "Ask before you explain: “What would feeling close look like for you this week?”",
-        "Listen for small, specific things (a question about her day, ten minutes without phones), not a big overhaul.",
-        "Try one turning-toward habit for a week: answer her small reaches for attention, a comment, a look, a question.",
-        "Check back in a week: “Has anything felt different?”"
-      ],
-      "script": [
-        "Things feel fine to me, and I don’t want to brush off how you feel. Can you tell me what would help you feel closer?"
-      ],
-      "links": [
-        [
-          "Turning Toward: seven small ways to connect",
-          "/turning-toward.html"
-        ],
-        [
-          "Check-ins",
-          "/check-ins.html"
-        ]
-      ],
-      "chips": []
-    },
-    {
       "kind": "intent",
       "first": true,
       "newTopic": true,
@@ -8052,6 +8422,105 @@
       "chips": []
     },
     {
+      "id": "nightsplit",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "splitting the nights with a baby",
+      "pat": "\\b(night feeds?|night feeding|night wakings?|the nights|nights)\\b.{0,60}\\b(split|share|fair\\w*|help|take turns|swap)\\b.{0,40}\\b(baby|newborn|infant|month old|months old|weeks old)\\b|\\b(baby|newborn|infant|month old|months old|weeks old)\\b.{0,80}\\b(night feeds?|night feeding|nights)\\b.{0,60}\\b(split|share|fair\\w*|help|take turns|swap|all)\\b|\\b(new )?(dads?|fathers?|partners?|moms?|mums?|mothers?) help (at night|with (the )?(night\\w*|night feeds?|baby at night))\\b|\\bhow (do|can|should) (new )?(dads?|fathers?|partners?) help at night\\b|\\b(doing|do|did) all the night feeds\\b|\\bsplit (the )?nights\\b",
+      "what": [
+        "With a baby, the nights are a real job. Many couples split the night into blocks, so each of you gets one long stretch of sleep, rather than both waking for every feed."
+      ],
+      "how": [
+        "Split the night in two blocks, for example 9 pm to 2 am and 2 am to 7 am, and swap now and then. Count night feeds inside the on-call block, not on top of a full day.",
+        "Ask for one thing, clearly: “Can you take the 5 a.m. feed?” works better than “I never get any sleep.”",
+        "No big talks in the night. If one starts at 3 a.m., park it and say when you’ll come back to it, like nap time tomorrow.",
+        "Put the night blocks on your list of jobs, each with an owner. The Who does what? quick look has new-baby jobs, and you can add your own."
+      ],
+      "links": [
+        [
+          "New baby: when you are both tired",
+          "/new-parent.html#tired"
+        ],
+        [
+          "Who does what? quick look",
+          "/lemonade-stand.html#quick"
+        ],
+        [
+          "New baby, sharing the load",
+          "/new-parent.html"
+        ]
+      ],
+      "script": [
+        "I’m tired, not cross. Could we split the nights into two blocks, so we each get one long sleep?",
+        "Can you take the 5 a.m. feed?"
+      ],
+      "scriptLabels": [
+        "Words you could use",
+        "One clear ask"
+      ],
+      "follow": [
+        [
+          "\\b(bad guy|the villain|cant win|can t win|nothing i do|no matter what i do|never good enough|cant do anything right|always wrong)\\b",
+          "notcontest"
+        ]
+      ],
+      "plain": [
+        "Split the night into two blocks.",
+        "Each of you gets one long sleep.",
+        "Ask for one clear thing.",
+        "No big talks at 3 a.m."
+      ]
+    },
+    {
+      "id": "notcontest",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "feeling like the bad guy when you’re both tired",
+      "pat": "\\b(feel|feeling|felt) like the bad guy\\b.{0,60}\\b(baby|newborn|nights?|feeds?|tired|exhausted)\\b|\\b(baby|newborn|nights?|feeds?)\\b.{0,60}\\b(feel|feeling|felt) like the bad guy\\b",
+      "what": [
+        "Feeling like the bad guy is common when you’re both this tired. Tired is not a contest: “I did more” is usually a sign that nobody can see the other person’s work. Nobody is doing it wrong. You are two very tired people."
+      ],
+      "how": [
+        "Say your state first. “I’m tired, not cross” helps the other person hear your words, not just your tone.",
+        "Say what you did and ask what they did. Start with the numbers, not the blame.",
+        "Listen before you swap stories.",
+        "Thank each other out loud for one thing a day, even a small one."
+      ],
+      "links": [
+        [
+          "New baby: when you are both tired",
+          "/new-parent.html#tired"
+        ],
+        [
+          "Talking about it when you’re both running on empty",
+          "/new-parent.html#talking"
+        ]
+      ],
+      "script": [
+        "I’m tired, not cross. Can we each say what we did today, and then pick one thing for tonight?"
+      ],
+      "follow": [
+        [
+          "\\b(split|share|nights?|feeds?|blocks?)\\b",
+          "nightsplit"
+        ]
+      ],
+      "plain": [
+        "Tired is not a contest.",
+        "Say “I’m tired, not cross”.",
+        "Say what you did, ask what they did.",
+        "Say thank you for one thing a day."
+      ]
+    },
+    {
       "id": "paidwork",
       "kind": "intent",
       "first": true,
@@ -8445,7 +8914,17 @@
           "/retired-together.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "follow": [
+        [
+          "\\b(do with (my|our) (days|time|self|myself)|my days|all day|purpose|useful|useless|bored|in the way|what (should|do|can) i (actually )?do)\\b",
+          "retirepurpose"
+        ],
+        [
+          "\\b(kitchen|reorganis\\w*|reorganiz\\w*|rearrang\\w*|moves? (my|the) (things|stuff)|takes? over|territory|cupboards?|my way|under (my|her|his) feet)\\b",
+          "retiredterritory"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -8528,7 +9007,7 @@
       "id": "angerstop",
       "name": "stopping losing your temper",
       "safety": true,
-      "pat": "\\bhow (do|can|could) i (stop|quit) (losing|lose) (my temper|it|my cool|my rag)\\b|\\bi (keep|always|still) (losing|lose|lost) (it|my temper|my cool|my rag)\\b|^(i (keep )?(losing|lose|lost) (it|my temper))$|^my temper$|\\b(i have|i ve got|ive got|got) (a |an )?(bad |terrible |short |quick )?(temper|anger (problem|issue|issues)|anger management (problem|issue))\\b|^(an )?anger (problem|issue|issues)$|\\bmy anger (problem|issue|issues|is out of control|scares me)\\b|\\b(control|manage) my (temper|anger)\\b|\\bshort fuse\\b",
+      "pat": "\\bhow (do|can|could) i (stop|quit) (losing|lose) (my temper|it|my cool|my rag)\\b|\\bi (keep|always|still) (losing|lose|lost) (it|my temper|my cool|my rag)\\b|^(i (keep )?(losing|lose|lost) (it|my temper))$|^my temper$|\\b(i have|i ve got|ive got|got) (a |an )?(bad |terrible |short |quick )?(temper|anger (problem|issue|issues)|anger management (problem|issue))\\b|^(an )?anger (problem|issue|issues)$|\\bmy anger (problem|issue|issues|is out of control|scares me)\\b|\\b(control|manage) my (temper|anger)\\b|\\bshort fuse\\b|\\bi (keep |always |ve been |have been |m |am |still )?(snapping|snap|snapped|shouting|yelling|being short|getting short|blowing up) (at|with) (my )?(wife|husband|partner|kids|children|family|son|daughter|everyone|them|the kids)\\b",
       "notPat": "\\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|dad|mum|mom|son|daughter|boss))\\b.{0,15}\\b(temper|anger|loses it)\\b",
       "what": [
         "Wanting to change it is the biggest step, and it can change."
@@ -9140,7 +9619,7 @@
       "first": true,
       "newTopic": true,
       "name": "is this backed by research",
-      "pat": "\\b(is|are) (this|it|the site|these|that|the wave code|wavelength|the program) (backed|based|grounded|supported) (by|on|in) (research|science|evidence|studies)\\b|\\b(where|what) are (the|your) (sources|references|citations)\\b|\\bwhat (evidence|research|science) is (this|it|the site) based on\\b|\\b(scientifically|clinically) (valid|proven|tested)\\b|\\bjust myers ?briggs\\b|\\bevidence based\\b|\\b(any|is there|what|where is the) (evidence|research|proof|studies)\\b.{0,40}\\b(works?|effective|helps?|program|site)\\b|\\bdoes (this|the program|the site|it) (actually |really )?work\\b$|\\b(clinically|scientifically) (tested|proven)\\b",
+      "pat": "\\b(is|are) (this|it|the site|these|that|the wave code|wavelength|the program) (backed|based|grounded|supported) (by|on|in) (research|science|evidence|studies)\\b|\\b(where|what) are (the|your) (sources|references|citations)\\b|\\bwhat (evidence|research|science) is (this|it|the site) based on\\b|\\b(scientifically|clinically) (valid|proven|tested)\\b|\\bjust myers ?briggs\\b|\\bevidence based\\b|\\b(any|is there|what|where is the) (evidence|research|proof|studies)\\b.{0,40}\\b(works?|effective|helps?|program|site)\\b|\\bdoes (this|the program|the site|it) (actually |really )?work\\b$|\\b(clinically|scientifically) (tested|proven)\\b|\\b(backed|based|grounded|supported) (up )?(by|on|in) (real |actual |proper |any |good )?(research|science|evidence|studies)\\b|\\b(one|some|a) (guy|guys|person|man|woman) s? opinion\\b|\\bjust (an |someone s |somebody s |your |his )?opinions?\\b",
       "notPat": "",
       "keys": [],
       "what": [
@@ -9771,16 +10250,101 @@
       "notPat": "\\bused against\\b|\\bagainst me\\b|\\bspy\\w*\\b|\\bsee what i\\b"
     },
     {
+      "id": "dotogether",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "doing something together, not a chore",
+      "pat": "\\b(do (something|things|stuff|anything)( fun| nice| new)? (with me|together)|spend (more )?time (with me|together)|go out (with me|together)|make time for (me|us))\\b.{0,60}\\b(without it (feeling|being|turning into|becoming) (like )?a chore|without (nagging|begging|forcing|having to ask))\\b|\\bwithout it (feeling|being) like a chore\\b",
+      "what": [
+        "Wanting to do something together, just because, is a lovely thing to ask for. It tends to feel less like a chore when the ask is small and clear, and when doing it counts more than talking about it."
+      ],
+      "how": [
+        "Ask for one clear, small thing. Hints can be easy to miss: “Can we walk together on Sunday morning?” is easier to say yes to than “We never spend time together.”",
+        "Keep it small: a walk, a meal, a short drive, a film. Put it in the calendar. Then do it.",
+        "Try something new for the two of you now and then. New things together tend to bring back some of the early spark.",
+        "Notice and say thank you when they do say yes. That makes the next yes easier."
+      ],
+      "links": [
+        [
+          "If one of you feels “everything is fine”",
+          "/empty-nest.html#fine"
+        ],
+        [
+          "Bonding tips: new things for the two of you",
+          "/empty-nest.html#bonding"
+        ],
+        [
+          "Turning toward: small daily moments",
+          "/turning-toward.html"
+        ]
+      ],
+      "script": [
+        "Can we walk together on Sunday morning?",
+        "What is one small thing we could do together this week?"
+      ],
+      "scriptLabels": [
+        "One clear, small ask",
+        "Or let them choose"
+      ],
+      "plain": [
+        "Ask for one small, clear thing.",
+        "Put it in the calendar.",
+        "Then do it."
+      ]
+    },
+    {
+      "id": "feelsfine",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "when one feels distant and the other thinks it’s fine",
+      "pat": "\\b(says|thinks|feels|told me) (that )?(we|we ve|we have|we re|were) (drifted|grown|growing|drifting) apart\\b.{0,70}\\b(i think|but|i feel) (we re|were|we are|everything is|everything s|its|it s|things are) (fine|ok|okay|good|great|alright)\\b|\\b(i think|but) (we re|were|we are|everything is|everything s) (fine|ok|okay)\\b.{0,70}\\b(drifted|distant|not close|apart|far apart|lonely)\\b|\\b(says|thinks) (we re|were|we are) not close\\b.{0,60}\\b(fine|ok|okay)\\b",
+      "what": [
+        "Often one partner feels distance and the other doesn’t. One says “We’re not close.” The other thinks “But everything is fine. We don’t fight.” Both can be true. “We’re not close” usually doesn’t mean “You did something wrong.” It often means “I miss you, and I want more time with you.”"
+      ],
+      "how": [
+        "Ask: “What is one small thing we could do together this week?” Then do it.",
+        "Put it in the calendar: a walk, a meal, a short drive. No big talk needed.",
+        "Say one thank-you a day, out loud, for something specific."
+      ],
+      "links": [
+        [
+          "For the partner who thinks everything is fine: 3 small things",
+          "/empty-nest.html#en-fine-h"
+        ],
+        [
+          "If one of you feels “everything is fine”",
+          "/empty-nest.html#fine"
+        ]
+      ],
+      "script": [
+        "What is one small thing we could do together this week?"
+      ],
+      "plain": [
+        "Both can be true.",
+        "Ask what small thing you could do together.",
+        "Put it in the calendar.",
+        "Say thank you each day."
+      ]
+    },
+    {
       "id": "reconnect",
       "kind": "intent",
       "first": true,
       "newTopic": true,
       "name": "something light to reconnect",
       "pat": "\\breconnect\\w*\\b|\\b(something|anything|ideas?) (light|fun|small|nice) (to do )?(together|for (the )?two of us|for us)\\b|\\b(fun|light) (for|with) (two|2) people\\b|\\b(feel|get) close again\\b|\\bafter a (rough|hard|bad) (week|patch)\\b.{0,40}\\b(fun|light|reconnect|together)\\b|\\b(something|anything|ideas?|things?) (fun|light|nice|new)\\b.{0,25}\\btogether\\b|\\bfun (for|with) (the )?two of us\\b",
-      "notPat": "\\b(grief|died|passed away|widow\\w*|sister|brother|mom|mum|dad|father|mother|son|daughter|friend|estranged|years|cousin|aunt|uncle)\\b",
+      "notPat": "\\b(grief|died|passed away|widow\\w*|sister|brother|mom|mum|dad|father|mother|son|daughter|friend|estranged|years|cousin|aunt|uncle)\\b|\\b(he s|she s|hes|shes|he is|she is) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(\\d+ year old|years old|grandson|granddaughter|grandkids?|grandchild\\w*|kids?|child|children)\\b|\\bwithout it (feeling|being) like a chore\\b",
       "keys": [],
       "what": [
-        "After a rough patch, small and often beats big and rare. A few seconds of turning toward each other each day rebuilds warmth faster than one big night out."
+        "If things have felt flat lately, small and often beats big and rare. A few seconds of turning toward each other each day rebuilds warmth faster than one big night out."
       ],
       "how": [
         "Turning toward: one small moment a day for a week, like a question you send or a thing you notice. You can share today’s moment straight to their phone.",
@@ -10004,6 +10568,120 @@
         "Plan some time apart and some time together each day.",
         "Give each person whole jobs.",
         "The person who just retired may need something to do outside the house."
+      ],
+      "follow": [
+        [
+          "\\b(do with (my|our) (days|time|self|myself)|my days|all day|purpose|useful|useless|bored|in the way|what (should|do|can) i (actually )?do)\\b",
+          "retirepurpose"
+        ],
+        [
+          "\\b(kitchen|reorganis\\w*|reorganiz\\w*|rearrang\\w*|moves? (my|the) (things|stuff)|takes? over|territory|cupboards?|my way|under (my|her|his) feet)\\b",
+          "retiredterritory"
+        ]
+      ]
+    },
+    {
+      "id": "retiredterritory",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "two people, one house, all day",
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "what": [
+        "When one of you has run the house for years, the house has a way of working. The partner who has just retired walks into a system that already works, without a map of it. The one who has run it can feel invaded; the one who has just arrived can feel like a guest in their own home. Both feelings are fair."
+      ],
+      "how": [
+        "Say what each of you needs to keep: a quiet morning, a room or a corner that is yours, the kitchen to yourself at certain hours. Say it as your need, not as a rule for the other person.",
+        "Agree a loose shape for the day, so neither of you is guessing.",
+        "Re-divide whole jobs rather than “helping”. If a job changes hands, agree what “done” means, then let the new owner do it their way.",
+        "Expect a settling-in time. It usually settles as new routines form."
+      ],
+      "links": [
+        [
+          "Two people, one house, all day",
+          "/retired-together.html#territory"
+        ],
+        [
+          "Handing over a job without “you’re doing it wrong”",
+          "/retired-together.html#handover"
+        ]
+      ],
+      "plain": [
+        "Say what you each need to keep.",
+        "Agree a loose shape for the day.",
+        "Own whole jobs.",
+        "It takes time to settle."
+      ],
+      "follow": [
+        [
+          "\\b(do with (my|our) (days|time|self|myself)|my days|all day|purpose|useful|useless|bored|in the way|what (should|do|can) i (actually )?do)\\b",
+          "retirepurpose"
+        ],
+        [
+          "\\b(kitchen|reorganis\\w*|reorganiz\\w*|rearrang\\w*|moves? (my|the) (things|stuff)|takes? over|territory|cupboards?|my way|under (my|her|his) feet)\\b",
+          "retiredterritory"
+        ]
+      ]
+    },
+    {
+      "id": "ldtimezones",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "time zones in a long-distance relationship",
+      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(\\d+|five|six|seven|eight|nine|ten|eleven|twelve) hours? (ahead|behind|apart|difference)\\b|\\b(what|which) time (should|do|can|could|would) (we|i) (call|facetime|video ?call|talk|ring|speak)\\b.{0,80}\\b(in [a-z]+|ahead|behind|abroad|apart|away|different)\\b|\\b(i m|im|i am|we re|were) in [a-z]+( [a-z]+)? and (she|he|they|my \\w+) (s|is|are|re) in [a-z]+\\b",
+      "what": [
+        "Different time zones squeeze the moments you have, so the hours you’re both awake and free are precious. Here’s how the long-distance page suggests finding them:"
+      ],
+      "how": [
+        "Write down both days side by side: when each of you wakes, works, eats and sleeps, in your own time.",
+        "Mark the hours when you are both awake and free. That overlap is precious, so protect it.",
+        "Say whose time you mean. “Call at eight, your time” saves a lot of missed calls, and a second clock on your phone helps.",
+        "Take turns with the awkward hours, or at least say thank you out loud. And watch for the tired call: the end of one person’s long day is not the time for a hard topic.",
+        "Doing it together, each on your own phone? Work on it together has “our week” on one page, and check-ins you can share by link: you each fill in your own part, and nobody’s answers overwrite the other’s."
+      ],
+      "links": [
+        [
+          "Time zones: find your overlap",
+          "/long-distance.html#time-zones"
+        ],
+        [
+          "Work on it together, on two phones",
+          "/together.html"
+        ],
+        [
+          "Who calls, and how often: agree it",
+          "/long-distance.html#rhythm"
+        ]
+      ],
+      "notPat": "\\b(kids?|children|son|daughter|baby|toddler|child|handoffs?|hand ?overs?|custody|pick ?ups?|pickups?|drop ?offs?|co ?parent\\w*|school)\\b",
+      "script": [
+        "Can we each write down our week and find the hours we’re both awake and free? Then we can pick our call times together."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "plain": [
+        "Write down both your days.",
+        "Find the hours you are both free.",
+        "Say whose time you mean.",
+        "Take turns with late calls."
+      ],
+      "follow": [
+        [
+          "\\btime ?zones?\\b|\\btime difference\\b|\\bwhat time (should|do|can) we\\b|\\bhours? (ahead|behind|apart)\\b|\\btwo phones\\b",
+          "ldtimezones"
+        ],
+        [
+          "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
+          "shorttexts"
+        ]
       ]
     },
     {
@@ -10015,7 +10693,7 @@
       "keys": [],
       "chips": [],
       "name": "short texts like “fine” or “ok”",
-      "pat": "\\b(texts?|texted|replies|replied|answers?|says|said|writes|wrote|messages?|sends?|sent)( me)?( back)?( just)? (fine|ok|okay|k|kk|fine go sleep)\\b.{0,60}\\b(mad|upset|angry|annoyed|cross|hurt|means?|meant|know|tell|sure)\\b|\\b(one word|short|dry|cold|blunt) (texts?|replies|answers|messages)\\b.{0,50}\\b(mad|upset|angry|annoyed|cross|hurt|means?|meant|know|tell)\\b|\\bwhat does (fine|ok|okay|k) mean\\b",
+      "pat": "\\b(texts?|texted|replies|replied|answers?|says|said|writes|wrote|messages?|sends?|sent)( me)?( back)?( just)? (fine|ok|okay|k|kk|fine go sleep)\\b.{0,60}\\b(mad|upset|angry|annoyed|cross|hurt|means?|meant|know|tell|sure)\\b|\\b(one word|short|dry|cold|blunt) (texts?|replies|answers|messages)\\b.{0,50}\\b(mad|upset|angry|annoyed|cross|hurt|means?|meant|know|tell)\\b|\\bwhat does (fine|ok|okay|k) mean\\b|\\bwhat does (it|that) mean when (someone|somebody|she|he|they|my \\w+) (texts?|says|replies|sends?|writes|answers) (just )?(k|kk|ok|okay|fine)\\b|\\bwhat does (k|kk|ok|okay|fine)( with a full stop)? mean\\b|\\b(texts?|replies|replied|sends?|sent|writes|wrote) (me )?(just )?(k|kk)\\b",
       "what": [
         "Over text, “Fine.” can mean “Fine, go ahead” or “I’m upset and I don’t want to say so.” “Ok” can be relaxed or cold. Without a face or a voice, each of you fills in the tone yourself, and a tired or lonely mind tends to fill it in badly."
       ],
@@ -10062,6 +10740,40 @@
           "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
           "shorttexts"
         ]
+      ]
+    },
+    {
+      "id": "signalfair",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [],
+      "name": "does the Chat analyzer take sides?",
+      "pat": "\\b(chat analy[sz]er|signal translator|analy[sz]er|this tool|the tool|text checker|message checker|this thing|it)\\b.{0,30}\\b(biased|bias|take sides|takes sides|pick sides|on (her|his|my|their) side|blame (me|the guy|guys|men|women|him|her))\\b|\\b(is|will|does) (it|this|this thing|the chat analy[sz]er|the tool|the site) (just )?(going to |gonna )?(say|blame|decide|assume) (its|it s|that its|that it s|it is) (the guys|the guy s|my|his|her|their|the man s|the woman s|always the) ?(fault)?\\b|\\bwhose side (is it|are you|does it take)\\b",
+      "what": [
+        "It doesn’t take sides. It reads words, not names: swap the names and you get the same read. Every message is read by the same rules, whoever sent it, and when it reads a whole chat it gives each side its own part to own."
+      ],
+      "how": [
+        "To compare, each of you can paste the chat on your own phone.",
+        "It can still get things wrong. It reads the words, not your history or a tone of voice, so add context when something matters.",
+        "Every rule and cut-off it uses is written out on Method and honest limits."
+      ],
+      "links": [
+        [
+          "The Chat analyzer: a whole chat",
+          "/signal-translator.html#conversation"
+        ],
+        [
+          "Method and honest limits",
+          "/method-and-limits.html"
+        ]
+      ],
+      "plain": [
+        "It does not take sides.",
+        "It reads words, not names.",
+        "Swap the names and the read is the same."
       ]
     },
     {
@@ -10117,64 +10829,6 @@
         "If you usually reach out",
         "If you call less",
         "After a short text"
-      ],
-      "follow": [
-        [
-          "\\btime ?zones?\\b|\\btime difference\\b|\\bwhat time (should|do|can) we\\b|\\bhours? (ahead|behind|apart)\\b|\\btwo phones\\b",
-          "ldtimezones"
-        ],
-        [
-          "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
-          "shorttexts"
-        ]
-      ]
-    },
-    {
-      "id": "ldtimezones",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "topic": true,
-      "keys": [],
-      "chips": [],
-      "name": "time zones in a long-distance relationship",
-      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(\\d+|five|six|seven|eight|nine|ten|eleven|twelve) hours? (ahead|behind|apart|difference)\\b|\\b(what|which) time (should|do|can|could|would) (we|i) (call|facetime|video ?call|talk|ring|speak)\\b.{0,80}\\b(in [a-z]+|ahead|behind|abroad|apart|away|different)\\b|\\b(i m|im|i am|we re|were) in [a-z]+( [a-z]+)? and (she|he|they|my \\w+) (s|is|are|re) in [a-z]+\\b",
-      "what": [
-        "Different time zones squeeze the moments you have, so the hours you’re both awake and free are precious. Here’s how the long-distance page suggests finding them:"
-      ],
-      "how": [
-        "Write down both days side by side: when each of you wakes, works, eats and sleeps, in your own time.",
-        "Mark the hours when you are both awake and free. That overlap is precious, so protect it.",
-        "Say whose time you mean. “Call at eight, your time” saves a lot of missed calls, and a second clock on your phone helps.",
-        "Take turns with the awkward hours, or at least say thank you out loud. And watch for the tired call: the end of one person’s long day is not the time for a hard topic.",
-        "Doing it together, each on your own phone? Work on it together has “our week” on one page, and check-ins you can share by link: you each fill in your own part, and nobody’s answers overwrite the other’s."
-      ],
-      "links": [
-        [
-          "Time zones: find your overlap",
-          "/long-distance.html#time-zones"
-        ],
-        [
-          "Work on it together, on two phones",
-          "/together.html"
-        ],
-        [
-          "Who calls, and how often: agree it",
-          "/long-distance.html#rhythm"
-        ]
-      ],
-      "notPat": "\\b(kids?|children|son|daughter|baby|toddler|child|handoffs?|hand ?overs?|custody|pick ?ups?|pickups?|drop ?offs?|co ?parent\\w*|school)\\b",
-      "script": [
-        "Can we each write down our week and find the hours we’re both awake and free? Then we can pick our call times together."
-      ],
-      "scriptLabels": [
-        "Words you could use"
-      ],
-      "plain": [
-        "Write down both your days.",
-        "Find the hours you are both free.",
-        "Say whose time you mean.",
-        "Take turns with late calls."
       ],
       "follow": [
         [
@@ -11311,6 +11965,59 @@
       ]
     },
     {
+      "id": "griefwaves",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "crying and waves of grief",
+      "pat": "\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b.{0,80}\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b.{0,60}\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b",
+      "what": [
+        "Crying, weeks or months on, is part of grieving, not a sign you’re stuck. Grieving people tend to swing between facing the loss (remembering, missing them, crying) and getting on with daily life. Both are healthy. A good morning followed by a hard afternoon is not going backwards."
+      ],
+      "how": [
+        "There’s no schedule you should be keeping to. The path grief takes varies widely from person to person.",
+        "Staying connected to the person who died is healthy: talking to them, keeping a few of their things, marking their birthday.",
+        "Enjoying something is not a betrayal of the person you lost.",
+        "If the weight doesn’t lift at all over many months, or you can’t manage daily life, talk to your doctor or a grief counsellor. Asking for help doesn’t mean you loved them any less."
+      ],
+      "links": [
+        [
+          "Grief has no timetable",
+          "/grief.html#grief"
+        ],
+        [
+          "For a hard evening",
+          "/grief.html#hard-evening"
+        ],
+        [
+          "When to get more help",
+          "/grief.html#help"
+        ]
+      ],
+      "plain": [
+        "Crying is part of grief.",
+        "Good and hard hours both come.",
+        "There is no timetable.",
+        "If it does not lift for months, see a doctor."
+      ],
+      "follow": [
+        [
+          "\\b(evenings?|nights?|night time|after dark|weekends?|sundays?|the house is (so )?quiet|quiet house|empty house|house feels (so )?(empty|quiet))\\b|\\bthe worst (time|part)\\b|\\b(lonely|so quiet|on my own|by myself|alone)\\b",
+          "griefevening"
+        ],
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "griefwaves"
+        ]
+      ],
+      "after": [
+        "griefevening"
+      ]
+    },
+    {
       "id": "griefevening",
       "kind": "intent",
       "first": true,
@@ -11369,59 +12076,6 @@
       ],
       "after": [
         "griefwaves"
-      ]
-    },
-    {
-      "id": "griefwaves",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "topic": true,
-      "keys": [],
-      "chips": [],
-      "name": "crying and waves of grief",
-      "pat": "\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b.{0,80}\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b.{0,60}\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b",
-      "what": [
-        "Crying, weeks or months on, is part of grieving, not a sign you’re stuck. Grieving people tend to swing between facing the loss (remembering, missing them, crying) and getting on with daily life. Both are healthy. A good morning followed by a hard afternoon is not going backwards."
-      ],
-      "how": [
-        "There’s no schedule you should be keeping to. The path grief takes varies widely from person to person.",
-        "Staying connected to the person who died is healthy: talking to them, keeping a few of their things, marking their birthday.",
-        "Enjoying something is not a betrayal of the person you lost.",
-        "If the weight doesn’t lift at all over many months, or you can’t manage daily life, talk to your doctor or a grief counsellor. Asking for help doesn’t mean you loved them any less."
-      ],
-      "links": [
-        [
-          "Grief has no timetable",
-          "/grief.html#grief"
-        ],
-        [
-          "For a hard evening",
-          "/grief.html#hard-evening"
-        ],
-        [
-          "When to get more help",
-          "/grief.html#help"
-        ]
-      ],
-      "plain": [
-        "Crying is part of grief.",
-        "Good and hard hours both come.",
-        "There is no timetable.",
-        "If it does not lift for months, see a doctor."
-      ],
-      "follow": [
-        [
-          "\\b(evenings?|nights?|night time|after dark|weekends?|sundays?|the house is (so )?quiet|quiet house|empty house|house feels (so )?(empty|quiet))\\b|\\bthe worst (time|part)\\b|\\b(lonely|so quiet|on my own|by myself|alone)\\b",
-          "griefevening"
-        ],
-        [
-          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
-          "griefwaves"
-        ]
-      ],
-      "after": [
-        "griefevening"
       ]
     },
     {

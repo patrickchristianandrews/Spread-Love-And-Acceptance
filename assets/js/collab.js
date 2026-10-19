@@ -62,6 +62,7 @@
   // ============================================================== words (English or Spanish)
   function esPage() { try { if (W && W.TOLLang && W.TOLLang.es) return !!W.TOLLang.es(); } catch (e) {} return !!D && /^es\b/i.test(D.documentElement.lang || ''); }
   function T(en, es) { return esPage() && es ? es : en; }
+  var T0 = T;   // the page's language, for functions that pick their own (rulesCard)
 
   // ============================================================== bytes
   function utf8(s) {
@@ -454,14 +455,15 @@
   var RULES_KEY = 'tol-collab-rules', RULES_SKIP = 'tol-collab-rules-skip', RECEIVED = 'tol-collab-received', rulesN = 0, rulesWired = false;
   function markReceived() { try { W.sessionStorage.setItem(RECEIVED, '1'); } catch (e) {} }
   if (W && W.location && /#together=1\.|TOL-TOGETHER:/i.test(W.location.hash || '')) markReceived();
-  function rulesDone() {
+  // (where: 'send' is the person sending something themselves, so the card still shows there, even after receiving)
+  function rulesDone(where) {
     if (!W) return true;
-    try { if (W.sessionStorage.getItem(RECEIVED)) return true; } catch (e) {}
+    try { if (where !== 'send' && W.sessionStorage.getItem(RECEIVED)) return true; } catch (e) {}
     try { if (W.localStorage.getItem(RULES_KEY)) return true; } catch (e) {}
     try { if (W.sessionStorage.getItem(RULES_SKIP)) return true; } catch (e) {}
     return false;
   }
-  function rulesLines() {
+  function rulesLines(T) {
     return [T('This is for understanding each other, not for scoring points.', 'Esto es para entenderse, no para ganar puntos.'),
       T('Either of you can stop at any time.', 'Cualquiera de los dos puede parar cuando quiera.'),
       T('Nothing here is a verdict about a person.', 'Nada de esto es un veredicto sobre una persona.'),
@@ -473,8 +475,10 @@
     Array.prototype.forEach.call(all, function (n) { if (n.contains(D.activeElement)) had = n; n.parentNode.removeChild(n); });
     return had;
   }
-  function rulesCard(where) {
-    if (!D || rulesDone()) return null;
+  // lang: the sending tool's own language ('es' / 'en'), when it has its own switch; otherwise the page's
+  function rulesCard(where, lang) {
+    if (!D || rulesDone(where)) return null;
+    var T = lang ? function (en, es) { return lang === 'es' && es ? es : en; } : T0;
     css();
     if (!rulesWired) {
       rulesWired = true;
@@ -488,7 +492,7 @@
     }
     var id = 'tcol-rules-h' + (++rulesN);
     var ul = mk('ul', { cls: 'tcol-rules-l' });
-    rulesLines().forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
+    rulesLines(T).forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
     return mk('div', { cls: 'tcol-rules tol-plain no-bubble' + (where === 'float' ? ' is-float' : ''), role: 'group', 'aria-labelledby': id }, [
       mk('p', { cls: 'tcol-rules-h', id: id, text: T('Before you share', 'Antes de compartir') }),
       ul,
@@ -518,7 +522,7 @@
     // the page's language, or the tool's own choice (a tool with its own English/Spanish switch)
     function T(en, es) { return (opts.lang ? opts.lang === 'es' : esPage()) && es ? es : en; }
     var box = mk('div', { cls: 'tcol-send' });
-    var rules = rulesCard('send'); if (rules) box.appendChild(rules);
+    var rules = rulesCard('send', opts.lang); if (rules) box.appendChild(rules);
     var head = mk('p', { cls: 'tcol-send-h', text: opts.heading || T('Send it by', 'Envíalo por') });
     var acts = mk('div', { cls: 'tcol-acts', role: 'group', 'aria-label': opts.heading || T('Send it by', 'Envíalo por') });
     var qr = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'qr', text: T('QR code', 'Código QR') });

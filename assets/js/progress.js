@@ -984,7 +984,7 @@
     if (!hasMeaningful(local())) return;
     if (lv === 'unasked') {
       var due = false; try { due = sess().getItem(ASK_DUE) === '1'; } catch (e) {}
-      if (due && !inFrame && !PAGE && !/^\/(safety|upset-right-now)\.html$/.test(path) && promptOk('progress')) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
+      if (due && !inFrame && !PAGE && !(D.body && D.body.hasAttribute('data-no-tip')) && !/^\/(safety|upset-right-now)\.html$/.test(path) && promptOk('progress')) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
       return;
     }
     if (quietPage()) return;

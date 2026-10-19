@@ -2206,6 +2206,54 @@ if (PERSONA) {
   // and small things from the same reports
   t(G, 'im bored: an arcade line links the arcade', { q: 'im bored', check: (r, rs, text) => /arcade/i.test(text.split('\n')[0]) && !replyLinks(r).some(u => /frequency-journey|pause-and-play/.test(u)) ? 'arcade promised, not linked' : '' });
   t(G, '"pls" is never corrected', { convo: ['how do i say sorry so it lands', 'something shorter pls'], not: /I think you mean/ });
+
+  // ---- the second wave of reports (the same panel, more visitors)
+  // Spanish stepfamilies, and the Spanish page never answers in English
+  ['familia ensamblada', 'padrastro', 'Somos una familia nueva. Mis dos hijos (9 y 13) y el hijo de mi esposo que viene cada dos fines de semana. Hay mucha tension'].forEach(q =>
+    t(G, q, Object.assign({ id: /^es-ensamblada/, link: ES + '#ensamblada', not: /puddle|didn’t catch|Here’s/ }, ESP)));
+  ['mi hija de 13 no acepta a mi esposo, no le hace caso', 'el hijo de mi esposo no me respeta'].forEach(q =>
+    t(G, q, Object.assign({ id: 'es-ensamblada-rol', link: ES + '#ensamblada', not: /¿De qué se trata/ }, ESP)));
+  t(G, 'the siblings answer links the Spanish page’s own section', Object.assign({ q: 'mis hermanos no ayudan con mi mamá', link: ES + '#hermanos' }, ESP));
+  // blended-family chores, and fairness between the children
+  t(G, 'how do we split chores fairly in a blended family? my wife has 2 kids 9 and 13, my son is with us every other weekend', { id: 'stepchores', link: '/lemonade-stand.html#quick', not: /Pillar I/ });
+  t(G, 'should my stepkids have chores if my son only visits?', { id: 'stepchores' });
+  t(G, 'my wife thinks i am harder on her kids than on mine', { id: 'stepfair', link: '/stepfamily.html' });
+  // books in print, and "is this backed by research?"
+  ['Can I buy a paperback copy of the books?', 'where can I get the printed book', 'is the book on amazon'].forEach(q =>
+    t(G, q, { id: 'bookprint', link: '/book/index.html#print-series', not: /Ctrl\+P|Is it closest/ }));
+  t(G, 'is any of this backed by real research or is it just one guy\'s opinion', { id: 'evidence', link: '/research.html', not: /professors shouldn’t guess/ });
+  // snapping at the family; a new baby's nights
+  t(G, 'I keep snapping at my wife and kids', { id: 'angerstop', not: /when old roles come back/ });
+  ['how do new dads help at night', 'baby is 4 months, im exhausted and doing all the night feeds. how do we split nights fairly'].forEach(q =>
+    t(G, q, { id: 'nightsplit', link: '/new-parent.html', text: /blocks/, not: /self-expansion|grief|stings when you also work full time/i }));
+  c(G, ['baby is 4 months, im exhausted and doing all the night feeds. how do we split nights fairly', 'i feel like the bad guy no matter what i do'], { id: 'notcontest', not: /gaming|six parts/i });
+  // the one who remembers everything (and works nights): the mental load, not night-shift guilt
+  t(G, 'my husband never notices when stuff needs doing and then says i just have to ask. i work nights and im tired of being the one who remembers everything', { id: /\+load$/, not: /Feeling guilty is common|while I sleep/ });
+  // raising a grandchild: a parent who misses a visit; something to do together tonight; mom, not mum
+  const GP = 'i\'m raising my 11 year old grandson because my daughter can\'t look after him';
+  c(G, [GP, 'what do I tell him when his mom doesn\'t show up for a visit again'], { id: 'kinshipvisit', link: '/foster-and-kinship.html#contact', not: /in-law|your partner, to their own parent/i });
+  c(G, [GP, 'something fun we can do together tonight, he\'s 11'], { id: 'kinshiptonight', link: '/frequency-journey.html', not: /rough patch/ });
+  t(G, 'something fun we can do together tonight, he\'s 11', { id: 'kinshiptonight' });
+  c(G, ['my grandson\'s mom never shows up for visits', 'i\'m raising my grandson'], { not: /\bMum\b/ });
+  // retirement: no "touch, feel", and follow-ups stay on retirement
+  const RET = 'Since I retired my wife says I\'m always in the way. I want practical advice, nothing touchy-feely.';
+  t(G, RET, { not: /I think you mean/ });
+  c(G, [RET, 'What should I actually do with my days?'], { id: 'retirepurpose', not: new RegExp('Lowering the temperature|mugs|' + CODES.source) });
+  c(G, [RET, 'He keeps reorganising my kitchen'], { id: 'retiredterritory', link: '/retired-together.html#territory', nochip: /roommates|same fight/i });
+  // "do something with me, not a chore"; "she says we drifted apart, I think we're fine"
+  t(G, 'how do I get my husband to actually do something with me without it feeling like a chore', { id: 'dotogether', not: /log one week|Lemonade/ });
+  t(G, 'my wife says we drifted apart. i think we\'re fine. what does she actually want', { id: 'feelsfine', link: '/empty-nest.html#en-fine-h' });
+  t(G, 'never "after a rough patch" unless they said so', { q: 'ideas for something fun to do together', not: /After a rough patch/ });
+  // "texts k", and "is the Chat analyzer biased?"
+  t(G, 'what does it mean when someone texts k', { id: 'shorttexts', not: /Grief/ });
+  ['is the chat analyzer biased', 'is this thing just going to say its the guys fault'].forEach(q => t(G, q, { id: 'signalfair', text: /words, not names/ }));
+  // gaming follow-ups stay on gaming
+  const GAME = 'my gf thinks i game too much and we keep fighting about it';
+  c(G, [GAME, 'is she right tho'], { id: 'gamingwho', link: '/gaming-and-time-together.html', nochip: /same fight/ });
+  c(G, [GAME, 'how do i get her to play with me'], { id: 'gamingplay', link: '/gaming-and-time-together.html#play-together' });
+  // a therapist describing control: never "yes, you're welcome to use the tools"
+  t(G, 'a therapist describing control in a client\'s relationship', { q: 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', id: 'procontrol', text: /do not assign the shared tools/, link: '/safety.html', not: /you’re welcome to/ });
+  t(G, 'a therapist asking in general still gets the usual answer', { q: 'i\'m a therapist, can i use this with my clients?', id: 'forcounselors' });
 }
 
 // ---------------------------------------------------------------- run

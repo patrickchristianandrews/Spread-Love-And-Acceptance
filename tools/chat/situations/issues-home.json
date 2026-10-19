@@ -4,7 +4,7 @@
       "label": "carrying the invisible load",
       "match": [
         [
-          "i do everything|i do it all|i do all of it|i do all the|i do most of the|i handle everything|i carry everything|i carry it all|i remember everything|nobody sees what i do|nobody notices what i do|no one notices what i do|no one sees what i do|nobody sees how much i do|i m the only one who|im the only one who|doing everything|do everything at home|all on me|all falls on me|falls on me",
+          "(the one|the only one) who (remembers|notices|keeps track of) everything|tired of being the one who|(never|doesnt|does not|dont|don t) (notice|notices|see|sees) (when|what) (stuff|things|anything|it) (needs?|need) (doing|done)|(says|tells me) i (just )?(have|need) to ask|i do everything|i do it all|i do all of it|i do all the|i do most of the|i handle everything|i carry everything|i carry it all|i remember everything|nobody sees what i do|nobody notices what i do|no one notices what i do|no one sees what i do|nobody sees how much i do|i m the only one who|im the only one who|doing everything|do everything at home|all on me|all falls on me|falls on me",
           4
         ],
         [

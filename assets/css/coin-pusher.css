@@ -40,7 +40,7 @@ html[data-theme="dark"] .cp{
 .cp-how{ margin:.3rem auto 0; max-width:40rem; }
 .cp-how summary{ display:inline-flex; align-items:center; min-height:44px; padding:0 .4rem; cursor:pointer; color:var(--ink); font-weight:600; text-decoration:underline; text-underline-offset:3px; }
 .cp-how[open] summary{ margin-bottom:.3rem; }
-.cp-gaming a{ display:inline-block; padding:.6rem 0; font-weight:600; }
+.cp-gaming a{ display:inline-block; min-height:44px; box-sizing:border-box; padding:.6rem 0; font-weight:600; }
 @media (max-width:640px){
   .cp{ padding-top:.5rem; }
   .cp-head{ margin-bottom:.4rem; }

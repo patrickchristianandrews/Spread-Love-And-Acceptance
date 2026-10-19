@@ -49,6 +49,15 @@
   .hm-mode:hover{ border-color:var(--credit); }
   .hm-mode[aria-current="page"], .hm-mode[aria-pressed="true"]{ border:2px solid var(--credit); background:var(--paper-deep, var(--paper)); }
   .hm-mode:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+  /* tools16: calming down comes first: one minute of breathing, then the four taps if you want them */
+  .ld-now{ margin:1rem 0 1.2rem; padding:.9rem 1rem 1rem; border:2px solid var(--credit); border-radius:16px; background:var(--paper-deep, var(--paper)); }
+  .ld-now p{ margin:0 0 .6rem !important; max-width:none !important; }
+  .ld-now-row{ display:flex; flex-wrap:wrap; gap:.6rem; margin:0 !important; }
+  .ld-now-row a{ display:inline-flex; align-items:center; min-height:48px; box-sizing:border-box; padding:.55rem 1.2rem; border-radius:999px; text-decoration:none; font-weight:600; }
+  .ld-now-go{ background:var(--credit); color:var(--paper) !important; border:1px solid var(--credit); font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
+  .ld-now-alt{ border:1px solid var(--line); background:var(--paper); color:var(--ink) !important; }
+  .ld-now-row a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 
 <!-- seo:start -->
@@ -114,6 +123,10 @@
 <main class="read" id="main">
 <header class="read-head"><p class="read-code">My weather today · Quick check · The Nervous System Ladder</p><h1>Where am I right now?</h1><p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">The quick mode of My weather today, next to the full forecast (also called Today’s Weather)</p><p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> four quick taps about your body, your thoughts and what you feel like doing. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> calm, revved up or running on empty, with what helps right now and a pause line to say. <span aria-hidden="true">&middot;</span> About 20 seconds</p></header>
 
+<div class="ld-now no-bubble" id="breathe-now">
+  <p><strong>Need to calm down right now?</strong> Start with your breath. The four taps can wait.</p>
+  <p class="ld-now-row"><a class="ld-now-go" href="/night-garden.html" data-breathe data-breathe-min="1">Breathe for one minute</a> <a class="ld-now-alt" href="#check">Check where I am (4 taps)</a></p>
+</div>
 <p class="simple-lede">Four quick taps about your body, your thoughts and what you feel like doing. They place you on the Nervous System Ladder: calm and connected, revved up, or running on empty. Then you get what helps on that rung right now, words to say, and when to come back to a talk. It’s a best guess, not a reading. Nothing you tap leaves this device.</p>
 
 <div class="try-this" data-in-short>
@@ -193,6 +206,14 @@ document.addEventListener('click', function (e) {
   if (!b) return;
   e.preventDefault();
   var had = null; try { had = localStorage.getItem('tol-br-method'); } catch (x) {}
+  // tools16: "Breathe for one minute" starts on one minute; the usual length comes back once the break is open
+  if (a.hasAttribute('data-breathe-min')) {
+    var minWas = null; try { minWas = localStorage.getItem('tol-br-min'); localStorage.setItem('tol-br-min', a.getAttribute('data-breathe-min')); } catch (x) {}
+    var tm = 0, back = setInterval(function () {
+      var ov = document.querySelector('.tol-breathe:not([hidden])');
+      if (ov || ++tm > 50) { clearInterval(back); setTimeout(function () { try { if (minWas === null) localStorage.removeItem('tol-br-min'); else localStorage.setItem('tol-br-min', minWas); } catch (x) {} }, 300); }
+    }, 100);
+  }
   b.click();
   if (had !== null) return;
   var tries = 0;
@@ -201,6 +222,19 @@ document.addEventListener('click', function (e) {
     if (m && m.offsetParent !== null) m.click(); else if (++tries < 40) setTimeout(pick, 100);
   })();
 });
+</script>
+<script>
+/* tools16: /ladder.html#breathe-now (for a "Calm down now" link) opens the one-minute Breathe break straight away. */
+(function () {
+  'use strict';
+  if (location.hash !== '#breathe-now') return;
+  var tries = 0;
+  (function go() {
+    var a = document.querySelector('#breathe-now a[data-breathe]'), b = document.querySelector('.tol-breathe-btn');
+    if (a && b) { a.click(); return; }
+    if (++tries < 40) setTimeout(go, 100);
+  })();
+})();
 </script>
 </body>
 </html>

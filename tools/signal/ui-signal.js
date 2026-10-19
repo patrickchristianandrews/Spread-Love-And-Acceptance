@@ -60,7 +60,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     // Tab presses from the sentence box to Translate
     await p.focus('#phrase'); let tabs=0, id='phrase';
     while(id!=='go' && tabs<15){ await p.keyboard.press('Tab'); tabs++; id=await p.evaluate(()=>document.activeElement.id); }
-    ok(id==='go' && tabs<=3, `${tag}: Translate is ${tabs} tabs from the sentence box`);
+    ok(id==='go' && tabs<=4, `${tag}: Translate is ${tabs} tabs from the sentence box`);   // sig16: the one-tap "Who's it for?" row under the box is one Tab stop (arrow keys move along it)
     console.log(`${tag}: Tab presses from sentence box to Translate = ${tabs}`);
 
     // type a sentence and translate with no other choices
@@ -398,7 +398,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
       const head = await p.evaluate(()=>({h1:document.querySelector('h1').innerText, title:document.title, aka:document.querySelector('.tol-aka').innerText,
         modes:[...document.querySelectorAll('input[name="stmode"]')].map(r=>r.value+':'+r.closest('label').querySelector('b').innerText)}));
       ok(head.h1==='Chat analyzer' && /Chat Analyzer/.test(head.title) && /Signal Translator/.test(head.aka), `${tag}: page named Chat analyzer: ${JSON.stringify(head)}`);
-      ok(JSON.stringify(head.modes)===JSON.stringify(['send:A message I’m about to send','got:A message I got','chat:A whole conversation or screenshot','write:Help me write it']), `${tag}: four choices: ${head.modes.join(' | ')}`);
+      ok(JSON.stringify(head.modes)===JSON.stringify(['send:A message I’m about to send','got:A message I got','chat:A whole chat or screenshot','write:Help me write it']), `${tag}: four choices: ${head.modes.join(' | ')}`);
       ok(await vis('#stFromShot') && await vis('#stFromChat') && /From a screenshot/.test(await p.innerText('#stFromShot')) && /Paste a whole conversation/.test(await p.innerText('#stFromChat')), `${tag}: the two buttons by the box`);
       ok(!reqs.some(u=>/conversation-reader|tesseract/.test(u)), `${tag}: the conversation and screenshot readers don't load until asked for`);
       ok(await overflow(p)<=0, `${tag}: overflow on load`);

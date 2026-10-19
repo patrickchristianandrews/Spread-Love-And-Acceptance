@@ -3079,3 +3079,7 @@ html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .ti-literal) .tpv{ display:no
 .tol-pillars-fold nav.tol-pillars{ margin-bottom:0; }
 html.tol-quiet-plain .tol-pillars-fold{ display:none !important; }
 @media print{ .tol-pillars-fold{ display:none !important; } }
+
+/* home16b: keep the top bar's room from the first paint, so the page doesn't jump down when site.js puts the bar in
+   (the spacer goes the moment the bar is there) */
+@media screen{ body:not(:has(> .tol-bar))::before{ content:""; display:block; height:64px; } }

@@ -146,3 +146,6 @@ html:not(.tol-still):not(.tol-quiet) .tp-card-pop{ animation:tp-rise .35s ease-o
   .tcc-acts{ justify-content:stretch; }
   .tcc-acts .tp-btn{ flex:1 1 auto; }
 }
+/* home16b: the cards use the page's own serif, like the rest of the site */
+.tp-card-pop, .tp-card-pop :is(p, button, a){ font-family:"Lora", Georgia, serif; }
+.tp-card-pop .tp-pop-h{ font-family:"Fraunces", Georgia, serif; }

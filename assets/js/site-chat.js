@@ -931,6 +931,7 @@
     var slot = /\b(?:signed|signs?|enrol(?:l?ed|s)?|registered|booked|put|took|takes?|picked|picks?|dropped|drops?|brought|brings?|sent|sends?|told|tells?|asked|asks?|let|lets|with|named|called|front of|son|daughter|kid|child|boy|girl|baby|brother|sister|ex|husband|wife|partner|boyfriend|girlfriend|friend|mum|mom|dad|nan|carer)\s+([a-z]{3,})(?=\s+(?:up|in|into|for|off|to|from|at|and|about|is|was|has|had|s|keeps|said|says|wants|doesnt|dont|won|wont|never|always|on|over|home|back)\b|\s*$)/g, sm;
     var lowQ = String(q).toLowerCase().replace(/[’‘`´']/g, '');
     while ((sm = slot.exec(lowQ))) { if (!STOP[sm[1]] && !ROLE[stem(sm[1])] && !/^(the|them|him|her|his|their|our|your|my|all|this|that|it|me|us|everything|anything|nothing|money|work|school|football|swimming|dance|clubs?|camp|piano|lessons?|dinner|food|stuff|things|time|kids|children|someone|people)$/.test(sm[1])) NAMES[sm[1]] = 1; }
+    String(q).toLowerCase().replace(/([a-z]+)-([a-z]+)/g, function (m, a, b) { NAMES[a] = 1; NAMES[b] = 1; return m; });  // "touchy-feely" (puddles16)
     var low = String(q).replace(/[’‘`´]/g, "'").toLowerCase(), fixes = [], known = 0, unknown = 0;
     (KB.spellp || []).forEach(function (p) {
       var rx; try { rx = new RegExp(p[0], 'g'); } catch (e) { return; }
@@ -2163,6 +2164,16 @@
     return { blocks: b, chips: [{ label: 'What are the evidence labels?', q: 'What do the evidence labels on the research page mean?' }], kind: 'research', id: 'research' };
   }
 
+  // ---------- "mom" or "mum": the scripts use the word the person used
+  function momMum(state, q, r) {
+    var f = norm(q), mom = /\b(mom|moms|mommy|momma)\b/.test(f), mum = /\b(mum|mums|mummy|mam)\b/.test(f);
+    if (mom !== mum) state.momWord = mom ? 'mom' : 'mum';  // remembered for the rest of the chat
+    else if (state.momWord) { mom = state.momWord === 'mom'; mum = !mom; }
+    if (!r || !r.blocks || mom === mum) return r;
+    var sw = mom ? function (t) { return String(t).replace(/\bMum\b/g, 'Mom').replace(/\bmum\b/g, 'mom').replace(/\bMummy\b/g, 'Mommy'); } : function (t) { return String(t).replace(/\bMom\b/g, 'Mum').replace(/\bmom\b/g, 'mum').replace(/\bMommy\b/g, 'Mummy'); };
+    r.blocks.forEach(function (b) { if (b.k === 'script' || b.k === 'p' || b.k === 'note') b.x = sw(b.x); else if (b.k === 'list') b.x = b.x.map(sw); });
+    return r;
+  }
   // ---------- someone asking about a client (a counsellor, a coach) gets an answer for them, with every safety line kept
   var PRO_ASKER = /\b(my|a|our) (clients?|patients?|counsell?ees?|service users?|mentees?|caseload)\b|\b(i m|im|i am|as) (a |an )?(couples |family |marriage |licensed |school |relationship )?(therapist|counsell?or|coach|social worker|psychologist|mediator|clinician|caseworker|case worker)\b/;
   function proReply(q, r) {
@@ -2798,8 +2809,10 @@
     'ayudan cuidadora cuidador enfermo enferma demencia quehaceres tareas platos ropa limpiar novio novia familia abuela abuelo suegra hermanos hermano hermana ' +
     'necesitamos podemos quieres tienes puedes sabes soy eres somos estamos estan dias semana fin mañana manana hoy siempre vez veces llorar lloro sueño sueno ' +
     'tiene tienen parkinson alzheimer paciencia pierdo culpable culpa dice entiendo cansancio esta él ella ' +
-    'resentido resentida rabia coraje repartir cuidado lejos vive viven dicen ayuden ayude peleando hago hermana hermanas cunado cunada').split(' ');
+    'resentido resentida rabia coraje repartir cuidado lejos vive viven dicen ayuden ayude peleando hago hermana hermanas cunado cunada ' +
+    'familia ensamblada padrastro madrastra hijastro hijastra hijastros nueva acepta respeta caso tension viene cada fines').split(' ');
   var ES_SET = {}; ES_WORDS.forEach(function (w) { ES_SET[w] = 1; });
+  var STEP_ES = /\b(ensamblad[ao]s?|reconstituid[ao]s?|padrastro|madrastra|hijastr[oa]s?|(el|la|los|las) (hij[oa]s?) de mi (esposo|esposa|marido|pareja|mujer|novio|novia)|no acepta a mi (esposo|esposa|marido|pareja|novio|novia)|familia nueva|viene cada dos fines de semana|cada dos fines de semana)\b/;
   var EN_SET = {}; 'the and my is are i you he she it to of in with what how do does can not but on at this that we they am was have has'.split(' ').forEach(function (w) { EN_SET[w] = 1; });
   function esFold(s) { return String(s || '').toLowerCase().replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e').replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o').replace(/[úùü]/g, 'u').replace(/ñ/g, 'n').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
   function isSpanish(q) {
@@ -2814,12 +2827,15 @@
     var hablas = /\bhabl\w*\b.{0,20}\bespanol\b|^(en )?espanol$|\b(se puede|puedo|hay algo|tienes algo|tienen algo|hay una pagina|hay)\b.{0,30}\bespanol\b|\bin spanish\b.{0,10}$/.test(f) && !/\b(for my|para mi)\b.{0,15}\b(wife|husband|mum|mom)\b/.test(f);
     // once we're talking in Spanish, a short Spanish reply ("tiene parkinson") stays in Spanish
     var shortEs = state.es && f.split(' ').length <= 6 && f.split(' ').some(function (w) { return ES_SET[w]; }) && !/\b(the|and|my|is|are|you|what|how|i)\b/.test(f);
+    // on the Spanish page, a message with no English in it is Spanish ("padrastro", "familia ensamblada"): never an English fallback (puddles16)
+    var esPage = state.pageCtx && /\/en-espanol(\.html)?$/.test(state.pageCtx.path || '');
+    if (esPage && !shortEs && f && !/\b(the|and|my|is|are|you|what|how|i|it|to|of|with|do|can|me|we|he|she|they|this|that|help|hi|hello)\b/.test(f) && /[a-z]{3,}/.test(f)) shortEs = true;
     var hola = /^(hola|buenas|buenos dias|buenas tardes|buenas noches)$/.test(f);
     var esc = !hablas && !hola && pzEsWhich(f);
     // "no quiero vivir" is Spanish, and a safety answer, however few other Spanish words it has
     var esSafe = /\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|me quiero morir|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f);
-    if (!hablas && !hola && !esc && !esSafe && !isSpanish(q) && !shortEs) return null;
-    if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1) return null;
+    if (!hablas && !hola && !esc && !esSafe && !isSpanish(q) && !shortEs && !STEP_ES.test(f)) return null;
+    if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1 && !STEP_ES.test(f)) return null;
     var first = !state.es;
     state.es = 1; state.last = null;
     var L = '/en-espanol.html', chips = state.esTopic === 'cuidar' ? ES_CARE_CHIPS : ES_CHIPS;
@@ -2843,6 +2859,17 @@
       return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     // a little chit-chat in Spanish, after the safety answers: "¿cómo estás?", "cuéntame un chiste", "gracias"
     if (esc) { var esr0 = pzEs(state, esc, q); if (esr0) return esr0; }
+    // a stepfamily ("familia ensamblada", "padrastro", "el hijo de mi esposo"): the Spanish page's own section (#ensamblada)
+    if (STEP_ES.test(f)) {
+      var ENS = [['Cuando somos una familia ensamblada', L + '#ensamblada'], ['La guía completa, en inglés: Blended families and stepfamilies', '/stepfamily.html']];
+      if (/\b(no (me )?(acepta|respeta|hace caso|quiere)|no le hace caso|me ignora|me odia|no me habla|reglas|castig\w*|disciplina|mand\w*)\b/.test(f))
+        return ans('ensamblada-rol', 'Sentirse familia toma años, no meses, y es normal que un niño tarde en aceptar al adulto nuevo. Al principio, el papá o la mamá pone las reglas. Quien llega nuevo, el padrastro o la madrastra, empieza como un adulto cariñoso y de confianza, no como un nuevo jefe.',
+          ['Apoya las reglas de la casa sin ser quien castiga. Con el tiempo, si hay confianza, puede tomar más.', 'El niño no tiene que elegir. Díganle en voz alta que no tiene que escoger, y nunca critiquen a la otra casa delante de los niños.', 'Tiempo a solas: cada papá o mamá con sus propios hijos, y un rato para la pareja.'],
+          '¿Puedes poner tú las reglas con tus hijos, y yo te apoyo?', ENS);
+      return ans('ensamblada', 'Una familia ensamblada empieza cuando dos adultos se juntan y al menos uno ya tiene hijos. Sentirse familia toma años, no meses. Ir despacio es normal.',
+        ['Al principio, el papá o la mamá pone las reglas. El padrastro o la madrastra empieza como un adulto cariñoso y de confianza, no como un nuevo jefe.', 'Dos casas, dos reglas, y está bien. Pónganse de acuerdo en pareja, en privado, en pocas reglas claras.', 'Un niño que viene cada dos fines de semana también es de la casa. Dale un lugar que sea suyo, aunque sea un cajón o una repisa. Puede tener tareas, menos que quien vive aquí todos los días.'],
+        'Cuando estás aquí, esta también es tu casa. Este cajón es tuyo.', ENS);
+    }
     // a carer's brothers and sisters, a parent, anger and guilt: the caregiver's answers (#cuidar, #resentimiento) and the
     // Spanish care list, never the couple's "si tienes miedo de tu pareja" (puddles16)
     var SIB_ES = /\b(herman[oa]s?|cunad[oa]s?)\b/.test(f), PAR_ES = /\b(mama|mami|papa|madre|padre|suegra|suegro|abuela|abuelo|viejita|viejito)\b/.test(f);
@@ -2859,18 +2886,18 @@
     }
     if ((SIB_ES && (CARE_ES || ((PAR_ES || state.esTopic === 'cuidar') && !/\b(pelean|se pelean|se pegan|discuten)\b/.test(f)))) || /\brepart\w*\b.{0,30}\bcuidado\b|\bcuidado\b.{0,30}\brepart\w*\b/.test(f)) {
       state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS;
-      var links3 = [CARE_LIST, ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Enojo, resentimiento y culpa', L + '#resentimiento']];
+      var links3 = [['Cuando mis hermanos no ayudan con mamá o papá', L + '#hermanos'], CARE_LIST, ['Enojo, resentimiento y culpa', L + '#resentimiento']];
       if (/\b(dicen que no|dice que no|no quieren|no quiere|se niega\w*|no ayudan|no ayuda|no hacen nada|no hace nada)\b/.test(f))
         return ans('hermanos-no', 'Si tus hermanos dicen que no, no quiere decir que tengas que cargar con todo tú solo.',
           ['Pide algo más pequeño y concreto, con día y hora: una llamada al seguro, una cita, una llamada fija cada domingo. Es más fácil decir que sí a algo claro que a “ayúdame más”.', 'Busca descanso para ti: centros de día, cuidadores por horas, grupos de apoyo para cuidadores. Eldercare Locator (1-800-677-1116) te ayuda a encontrar servicios cerca de ti.', 'El resentimiento muchas veces quiere decir que el cuidado se tiene que repartir entre más personas. Una lista de quién se encarga de cada cosa les deja hablar de hechos, no de culpas.'],
-          '¿Podrías encargarte de una sola cosa, las llamadas al seguro? Y si no puedes, dime qué parte sí puedes tomar.', links3);
+          'Así estuvo ' + parW + ' esta semana. Necesito una sola cosa de ti: ¿puedes encargarte de ir a la farmacia los viernes?', links3);
       if (/\b(lejos|otra ciudad|otro pais|otro estado|no puede venir|no pueden venir)\b/.test(f))
         return ans('hermanos-lejos', 'Vivir lejos no quiere decir que no pueda ayudar. Los que viven lejos también pueden ayudar, con tareas que se hacen desde cualquier lugar:',
           ['Las llamadas al seguro, los papeles y pedir las citas.', 'Una llamada fija a ' + parW + ' cada domingo.', 'Pagar unas horas de cuidado, o venir unos días para que tú descanses.'],
-          '¿Podrías encargarte de las llamadas al seguro y llamar a ' + parW + ' cada domingo a las seis?', links3);
-      return ans('hermanos', 'Pedir ayuda a tus hermanos no es quejarse: es repartir algo que es de todos. Funciona mejor con algo concreto, con día y hora, y con una lista que todos puedan ver.',
-        ['Hagan una lista de todo lo que lleva el cuidado: medicinas, citas, seguro y papeles, las noches. Así hablan de hechos, no de quién hace menos.', 'Un encargado para cada tarea, de principio a fin.', 'Los que viven lejos también pueden ayudar: llamadas al seguro, papeles, citas, pagar unas horas de cuidado, o venir unos días.'],
-        'Ya no puedo con todo solo. ¿Podemos repartir el cuidado de ' + parW + '? Hice una lista: ¿qué parte puedes tomar tú?', links3);
+          'Así estuvo ' + parW + ' esta semana. Necesito una sola cosa de ti: ¿puedes encargarte de las llamadas al seguro?', links3);
+      return ans('hermanos', 'Muchas veces un hijo o una hija carga con casi todo el cuidado de mamá o de papá, y sus hermanos ayudan poco o nada. Eso cansa y duele, y es normal sentir enojo. Antes de reclamar, sirve tener en cuenta dos cosas:',
+        ['Alejarse puede parecer que no le importa, cuando en realidad es miedo o culpa. A algunos les cuesta mucho ver a su mamá o a su papá enfermos.', 'Tus hermanos quizá no ven todo lo que haces. Muéstrales la lista antes de reclamar: cuando cada tarea está escrita, con un nombre al lado, es más fácil que alguien diga “esa la tomo yo”.', 'Cuéntales cómo va y pide una sola cosa, con día y hora. Un mensaje corto cada semana ayuda a que todos vean lo mismo.'],
+        'No te estoy reclamando. Hice una lista de todo lo que hay que hacer por ' + parW + '. ¿Cuál de estas cosas puedes tomar tú?', links3);
     }
     if (/\b(hijos|ninos|hermanos|hijas)\b.{0,30}\b(pelean|peleas|pelear|se pegan|discuten)\b/.test(f))
       return ans('hijos-pelean', 'Casi todas las peleas entre hermanos son por las mismas cosas: los turnos, el espacio, lo que es justo y la atención de los adultos. Si las reglas son claras, hay menos motivos para pelear.', ['Fíjate cuándo pelean: el mismo juguete, el mismo asiento, la misma hora.', 'Pon una regla sencilla para eso, como un reloj para los turnos de la tableta.', 'No busques quién empezó. Habla de lo que pasa ahora.'], 'Veo a dos niños que quieren lo mismo. ¿Qué podemos hacer para que los dos tengan su turno?', [['Cuando los hijos pelean', L + '#hijos-pelean']]);
@@ -2893,7 +2920,7 @@
     if (/\b(triste|tristeza|cansad[oa]s?|agotad[oa]s?|noche dificil|dificil|calma|calmarme|tranquil\w*|no puedo mas|llor\w*|nervios\w*|ansiedad|cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f))
       return ans('cuidar', 'Lo siento, suena muy pesado. Vamos paso a paso. Primero, un momento de calma:', ['Respira despacio: toma aire contando hasta 4 y suéltalo contando hasta 6. Hazlo cinco veces.', 'Toma un vaso de agua y siéntate unos minutos en un lugar tranquilo.', 'Si cuidas a alguien, estar agotado o triste es normal. No es un fallo tuyo: es una señal de que necesitas más apoyo. Mañana pide una ayuda concreta, con día y hora.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['El Jardín de noche, para respirar despacio', '/night-garden.html']], 'Si la tristeza no se va, o piensas en hacerte daño, llama o escribe al 988 y marca el 2 para hablar en español.');
     var menu = state.esTopic === 'cuidar' ? [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Enojo, resentimiento y culpa', L + '#resentimiento'], CARE_LIST, ['Si no estás a salvo en casa', L + '#seguro']]
-      : [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Si no estás a salvo en casa', L + '#seguro']];
+      : [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Cuando somos una familia ensamblada', L + '#ensamblada'], ['Si no estás a salvo en casa', L + '#seguro']];
     return { blocks: [{ k: 'p', x: (first ? 'Hola. Te respondo en español con lo esencial. ' : '') + '¿De qué se trata? Cuéntame un poco más en tus palabras, o mira una de estas partes:' },
       { k: 'links', x: menu }], chips: chips, kind: 'lang', id: 'es-menu' };
   }
@@ -4738,7 +4765,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = proReply(q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }

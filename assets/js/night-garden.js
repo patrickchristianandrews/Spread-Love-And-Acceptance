@@ -826,7 +826,7 @@
   function chooseBreath() {
     if (BREATH) return BREATH;
     BREATH = seenList('b').length || AMBIENT ? pickFresh(BREATHS, 'b', function (x) { return x.id; }, 4) : BREATHS[0];
-    markSeen('b', BREATH.id, 20);
+    if (!AMBIENT) markSeen('b', BREATH.id, 20);   // tools16: the garden behind other pages never uses up the first visit
     return BREATH;
   }
   var BOX_SAY = ES ? { in: 'Toma aire…', top: 'Aguanta…', out: 'Suelta el aire…', bottom: 'Descansa…' } : { in: 'Breathe in…', top: 'Hold…', out: 'Breathe out…', bottom: 'Rest…' };
@@ -2825,6 +2825,14 @@
   else if (plantedLine) document.getElementById('ng-welcome-p').textContent = plantedLine + L('Your garden has ' + save.flowers.length + ' flowers to start with. Stay as long as you like.', 'Tu jardín empieza con ' + save.flowers.length + ' flores. Quédate todo lo que quieras.');
   var wp = document.getElementById('ng-welcome-p');
   if (wp && !AMBIENT) wp.textContent += ' ' + TONIGHT.line;
+  // tools16: the Breathe choice names the pattern this visit will actually run (the help card and the light use the
+  // same one), instead of always promising box breathing
+  (function () {
+    var eb = document.querySelector('[data-enter="breathe"] small'); if (!eb || AMBIENT) return;
+    var bp = chooseBreath();
+    eb.textContent = L('The easiest. Breathe with a glowing light. This visit: ' + bName(bp) + ' (' + breathDesc(bp) + '), with a little star going round ' + breathShape(bp) + '. Other visits bring other calm patterns. A flower blooms with every round.',
+      'Lo más fácil. Respira con una luz que crece y se suaviza. Esta vez: ' + bName(bp).charAt(0).toLowerCase() + bName(bp).slice(1) + ' (' + breathDesc(bp) + '), con una estrellita que recorre ' + breathShape(bp) + '. Otras veces trae otros ritmos tranquilos. Con cada vuelta se abre una flor.');
+  })();
   document.querySelectorAll('[data-enter]').forEach(function (b) {
     b.addEventListener('click', function () {
       welcome.hidden = true;

@@ -227,7 +227,9 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     const c = await ctx(browser);
     const p = await c.newPage();
     // home16b: asked only after something is first saved, on the next page opened (never over the page where it was saved)
+    // (the first-visit "Would a calmer page help?" is the one prompt of a visit: answered here, so this visit has room)
     await p.goto(BASE + '/index.html');
+    await p.evaluate(() => { localStorage.setItem('tol-comfort-offer', 'done'); sessionStorage.removeItem('tol-prompt'); });
     await p.goto(BASE + '/quick-checks.html');
     await p.waitForFunction(() => window.TOLProgress && window.TOLProgress.collect, null, { timeout: 15000 });
     await p.waitForTimeout(500);
@@ -276,7 +278,8 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
       const c = await ctx(browser, Object.assign({ colorScheme: scheme }, v.o));
       const p = await c.newPage();
       await p.goto(BASE + '/on-this-device.html');
-      await p.evaluate((q) => { localStorage.setItem('tol-lemonade-quick', q); if (innerWidth > 1000) localStorage.setItem('tol-save-mode-v1', 'own'); }, QUICK);
+      // (home16b: one prompt a visit; the calmer-page offer is answered, so the phone tip is this visit's one)
+      await p.evaluate((q) => { localStorage.setItem('tol-lemonade-quick', q); localStorage.setItem('tol-comfort-offer', 'done'); if (innerWidth > 1000) localStorage.setItem('tol-save-mode-v1', 'own'); }, QUICK);
       await p.reload(); await p.waitForSelector('#tp-what .tp-list');
       const lvl = await p.textContent('#tp-level');
       ok(v.n === '390' ? /Phone or tablet/.test(lvl) && /Install the free app to keep a history/.test(lvl) : /own computer/.test(lvl), v.n + ' ' + scheme + ': the right level and perk line');

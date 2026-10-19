@@ -1418,6 +1418,23 @@
     bar.appendChild(mob);
     memberLink = joinLink('tol-member');
     bar.appendChild(memberLink);
+    // home16b: a tool that turns Spanish after the page opened (the shared quick look sets lang="es" on its own parts):
+    // the bar's own words follow (Quiet, Settings, Search, Menu)
+    if (!esPage() && 'MutationObserver' in window) {
+      var esDone = false, esMain = document.querySelector('main');
+      var esCheck = function () {
+        if (esDone || !esMain || !esMain.querySelector('.read-head[lang="es"], #quick[lang="es"], [data-ls-lang="es"]')) return;
+        esDone = true; esMo.disconnect();
+        var q = bar.querySelector('.tol-quiet-name'); if (q) q.textContent = 'Tranquilo';
+        var sn = bar.querySelector('.tol-set-name'); if (sn) sn.textContent = 'Ajustes';
+        var fs = find.querySelector('span'); if (fs) fs.textContent = 'Buscar';
+        mob.textContent = 'Menú';
+        var ak = bar.querySelector('.tol-ask-link'); if (ak) ak.textContent = 'Pregúntale';
+      };
+      var esMo = new MutationObserver(esCheck);
+      if (esMain) esMo.observe(esMain, { subtree: true, attributes: true, attributeFilter: ['lang', 'data-ls-lang'] });
+      esCheck();
+    }
 
     scrim = el('div', { class: 'tol-scrim', hidden: '' });
     scrim.addEventListener('click', closePanel);
@@ -2775,6 +2792,7 @@
         // the same order the list shows: each kind (tools, workpapers, pages) together
         var hits = R ? [].concat.apply([], groupByKind(R.hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); }).map(function (G) { return G.items; })).map(function (h) { return h.p.u; }) : [];
         var bp = {}; urls.forEach(function (u) { bp[u.split(/[?#]/)[0]] = 1; });
+        if (R) R.hits.forEach(function (h) { var u = h.p.u; if (/[?#]/.test(u) && u.charAt(0) === '/' && kindOf(u, h.p.k) === 'Tool') bp[u.split(/[?#]/)[0]] = 1; });
         hits.forEach(function (u) { if (urls.indexOf(u) === -1 && !(u.indexOf('#') === -1 && u.indexOf('?') === -1 && bp[u])) urls.push(u); });
         cb({ urls: urls, best: M.best, close: M.close, pages: hits.length, fallback: !urls.length });
       });
@@ -2951,6 +2969,8 @@
         if (namedPage(R, M.best)) { M.best = null; bestU = {}; bestEl.hidden = true; bestEl.innerHTML = ''; }
         var bestP = {}; Object.keys(bestU).forEach(function (u) { bestP[u.split(/[?#]/)[0]] = 1; });
         // a page the best match already opens (at one of its parts) isn't listed again under another name
+        // and a tool's own entry (its address with #quick, #today…) stands for its page, so the page isn't listed again
+        R.hits.forEach(function (h) { var u = h.p.u; if (/[?#]/.test(u) && u.charAt(0) === '/' && kindOf(u, h.p.k) === 'Tool') bestP[u.split(/[?#]/)[0]] = 1; });
         var hits = R.hits.filter(function (h) { return !bestU[h.p.u] && !(h.p.u.indexOf('#') === -1 && h.p.u.indexOf('?') === -1 && bestP[h.p.u]); }), used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
         // Focus mode: pages in your areas (and the start, safety and help pages, which are never hidden) first;
         // the rest wait behind "Show everything"
@@ -3900,7 +3920,8 @@
   var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
   // the Spanish page gets the Settings panel in Spanish: T('English', 'Español')
   // (a function, so the bar and menu can use it too, wherever they're built)
-  function esPage() { return /^es\b/i.test(document.documentElement.lang || ''); }
+  // (home16b: a tool opened in Spanish with ?lang=es counts too, so its bar, menu and footer are in Spanish)
+  function esPage() { return /^es\b/i.test(document.documentElement.lang || '') || /[?&]lang=es\b/i.test(location.search); }
   function T(en, es) { return esPage() ? es : en; }
   // for the other scripts: TOLLang.es() is true on a Spanish page, TOLLang.T('Close', 'Cerrar') picks the words
   window.TOLLang = { es: esPage, T: T };

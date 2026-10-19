@@ -162,6 +162,7 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .bk-dl .bk-dl-cards{ display:grid; gap:1rem; }
 /* panel16: one card per row; two side by side left 2-3 words a line beside each cover at 1366 */
 .bk-dl .bk-dl-series{ font-size:.95rem; padding:.6rem .9rem; border-left:3px solid var(--brass); }
+.bk-dl .bk-dl-kit{ display:block; margin-top:.35rem; font-size:.9rem; color:var(--ink-soft); }
 .bk-dl .bk-dl-card{ padding:.9rem 1.1rem; border:1px solid var(--line); border-radius:16px; background:var(--paper); }
 .bk-dl .bk-dl-card h2{ margin:.1rem 0 .3rem; font-size:1.25rem; }
 .bk-dl ul.bk-dl-list{ list-style:none; padding:0 !important; margin:.5rem 0 0; display:grid; gap:.5rem; }
