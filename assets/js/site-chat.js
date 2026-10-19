@@ -2076,7 +2076,7 @@
     LOGIC_IX = { items: items, df: df, n: items.length };
     return LOGIC_IX;
   }
-  function logicMatch(q) {
+  function logicMatch(q, min) {
     var X = logicIndex(); if (!X) return null;
     var qs = {}; words(q).forEach(function (x) { if (!STOP[x] && !LOGIC_GENERIC.test(x)) qs[logicCanon(x)] = 1; });
     var qt = Object.keys(qs); if (!qt.length) return null;
@@ -2086,7 +2086,7 @@
       return { o: o, s: s, hits: hits };
     }).sort(function (a, b2) { return b2.s - a.s; });
     var top = scored[0];
-    if (!top || top.s < 7 || top.hits < 2 || (scored[1] && scored[1].s > top.s * 0.85)) return null;
+    if (!top || top.s < (min || 7) || top.hits < 2 || (scored[1] && scored[1].s > top.s * 0.85)) return null;
     // "she says she'll do things and then forgets": no card here is about forgetting, so it isn't this one
     if (/\b(forget|forgets|forgot|forgetting|forgetful)\b/.test(fold(q)) && !/forget/i.test(JSON.stringify(top.o.it))) return null;
     return top.o.it;
@@ -4429,6 +4429,8 @@
       var asksAbout = /^(what|whats|how|hows|where|which|when|why|is|are|does|do|can|could|should|tell me|explain|show me|define|who)\b/.test(f) && !/\b(when|if) (my|our|i|we|he|she|they)\b|\b(my|our) (partner|husband|wife|boyfriend|girlfriend|spouse|roommates?|housemates?|coworkers?|colleagues?|boss|manager|team|sister|brother|mom|mum|dad|mother|father|parents?|kids?|son|daughter|teen|teenager|friends?|ex)\b.*\b(keeps?|always|never|wont|doesnt|wont|wants?|says?|makes?|leaves?|forgets?)\b/.test(f);
       var road = /\b(path|road|which (tools?|workpapers?|pages?)|what (tools?|workpapers?|pages?)|where (do|should|can) (we|i) (start|begin)|start with|best tool|good tool|tool for|tools for)\b/.test(f);
       if (road && sit.who && sit.who !== 'self' && sit.who !== 'other' && !card && (!sit.issue || sit.score < 3 || /^(which|what|where)\b/.test(f))) return roadReply(state, sit.who, sit.noun);
+      // "why did she get so upset?" about something a Logic card explains clearly (a present, a correction): that card, before a playbook
+      if (LOGIC_CUE.test(f) && !card && !DANGER.test(f) && !state.unsafe && !VERBAL.test(f) && !HARD.test(f)) { var lgE = logicMatch(q, 11); if (lgE) return logicReply(state, lgE); }
       var sitOk = sit.issue && sit.score >= 2 && sit.personal && !(defn && !/\b(my|our|i|we|me)\b/.test(norm(defn)));
       if (card && (!sitOk || asksAbout || sit.score < 3)) return cardReply(state, card, cardAspect(f));
       if (sitOk) {

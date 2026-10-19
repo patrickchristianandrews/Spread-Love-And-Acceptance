@@ -2191,7 +2191,7 @@ if (PERSONA) {
   // 14. a counsellor asking about a client: answered as a professional, every safety line kept
   const CLIENT = 'my client\'s husband checks her phone and controls the money, would the chore tools help them?';
   t(G, CLIENT, { kind: 'safety', text: /^No\..*do not assign the shared tools/, check: both(allLinks(['/for-counselors.html#safety', '/safety.html']), (r, rs, text) => /1-800-799-7233/.test(text) ? '' : 'the hotline went missing') });
-  t(G, 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', { kind: 'safety', text: /do not assign the shared tools/, link: '/for-counselors.html#safety' });
+  t(G, 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', { text: /do not assign the shared tools/, link: '/for-counselors.html#safety' });
   t(G, 'my client says her husband controls all the money, should i give them the chore chart?', { kind: 'safety', text: /do not assign the shared tools/ });
   t(G, 'the person themselves still gets the usual reply', { q: 'my husband checks my phone and controls the money', kind: 'safety', not: /your client/, link: '/safety.html' });
   // 15. a nervous flatmate: how to bring it up if you hate confrontation

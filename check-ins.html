@@ -117,10 +117,39 @@
 <main class="read">
 <header class="read-head"><p class="read-code">Guide</p><h1>Check-ins: a kind weekly check-in for couples, families and housemates</h1></header>
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/check-ins-in-depth.html">Read the full guide</a></p>
-<p class="ci-jump no-bubble"><a href="#card">Kitchen-table check-in: this week&rsquo;s card &darr;</a> <a href="?for=family#card">Family plan card &darr;</a></p>
 
 <p class="simple-lede">A check-in is a short, agreed talk about one hard topic, at a time that works for everyone taking part: a couple, a family, housemates or a team. The topic can wait for that time, and it goes much better when it gets one.</p>
 <p class="ci-safe">For relationships where everyone feels safe. If anyone is afraid or controlled, see <a href="/safety.html">Not safe at home?</a></p>
+<!-- tools16: the card comes first, right under the opening lines; how a check-in works follows it -->
+<section class="tfs-home tol-plain no-bubble" id="card" aria-labelledby="card-h">
+  <h2 id="card-h">Kitchen-table check-in: this week&rsquo;s card</h2>
+  <fieldset class="ci-pick" id="ci-pick" hidden>
+    <legend>Who is checking in?</legend>
+    <label><input type="radio" name="ci-who" value="home" checked> <span>Partners or housemates</span></label>
+    <label><input type="radio" name="ci-who" value="family"> <span>Family</span></label>
+  </fieldset>
+  <div id="ci-home">
+  <p>Jot a line or two together, then put it on the fridge or send it to each other. Anything you leave blank prints with room to write by hand.</p>
+  <p class="ci-send">Apart, or on two phones? Each of you can fill in your own part and pass it back and forth with <strong>Work on this together</strong>, under the card. Or tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
+  <p class="ci-small">Three or more of you? Go round in turn: each person says one fact and how it landed, the next person says back what they heard, then it moves on. Everyone gets a turn before anyone answers.</p>
+  <div data-tfs-mount="checkin"></div>
+  <div class="tcl-slot" id="clarify-slot" hidden></div>
+  </div>
+  <div id="ci-family" class="ci-fam" hidden>
+    <p>A plan for the family, not a list of chores: visits, advice, the little one’s routines and a regular job for a grandparent. Fill in what fits, skip the rest, then send it to each other.</p>
+    <p class="ci-from" id="cf-from" role="status" hidden></p>
+    <label class="ci-f"><span>Who’s in this plan (optional)</span><input type="text" id="cf-names" maxlength="80" autocomplete="off" placeholder="Amy, Mum and Dad"></label>
+    <label class="ci-f"><span>Visits</span><textarea id="cf-visits" rows="2" maxlength="300" placeholder="Sunday lunch every other week, 12 to 3. Text the day before."></textarea></label>
+    <label class="ci-f"><span>Advice</span><textarea id="cf-advice" rows="2" maxlength="300" placeholder="Ask first: “Do you want ideas, or just to talk?”"></textarea></label>
+    <label class="ci-f"><span>The baby’s or children’s routines</span><textarea id="cf-baby" rows="2" maxlength="300" placeholder="Nap at 1. No sweets before dinner. Ask us before anything new."></textarea></label>
+    <label class="ci-f"><span>A regular job for a grandparent or relative</span><textarea id="cf-job" rows="2" maxlength="300" placeholder="Grandma does Tuesday pickup and tea."></textarea></label>
+    <label class="ci-f"><span>We’ll look at this again on</span><input type="text" id="cf-review" maxlength="80" autocomplete="off" placeholder="The first Sunday of next month"></label>
+    <p class="ci-row"><button type="button" class="ci-btn" id="cf-link">Send as a link</button> <button type="button" class="ci-btn is-quiet" id="cf-copy">Copy as text</button> <span id="cf-note" role="status"></span></p>
+    <div id="cf-fridge"></div>
+    <p class="ci-small">Kept on this device so it’s here next time, and never sent anywhere unless you send it yourself. A link opens this card, filled in, on their phone, where they can change it and send it back. <button type="button" class="ci-linkbtn" id="cf-forget" data-clear-confirm="the family plan card" data-clear-keys="tol-family-plan">Forget it on this device</button></p>
+  </div>
+</section>
+<p class="ci-jump no-bubble"><a href="#ground">How to do a check-in that goes well &darr;</a> <a href="?for=family#card">Family plan card</a></p>
 <p class="pillar-note" data-ci-not-family><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> check how full your battery is before a hard talk. <strong>Between you and others:</strong> agree on the timing, pause and come back when you need to, and say it so it lands.</p>
 
 <div class="scene">
@@ -162,34 +191,6 @@
   </li>
 </ol>
 
-<section class="tfs-home tol-plain no-bubble" id="card" aria-labelledby="card-h">
-  <h2 id="card-h">Kitchen-table check-in: this week&rsquo;s card</h2>
-  <fieldset class="ci-pick" id="ci-pick" hidden>
-    <legend>Who is checking in?</legend>
-    <label><input type="radio" name="ci-who" value="home" checked> <span>Partners or housemates</span></label>
-    <label><input type="radio" name="ci-who" value="family"> <span>Family</span></label>
-  </fieldset>
-  <div id="ci-home">
-  <p>Jot a line or two together, then put it on the fridge or send it to each other. Anything you leave blank prints with room to write by hand.</p>
-  <p class="ci-send">Apart, or on two phones? Each of you can fill in your own part and pass it back and forth with <strong>Work on this together</strong>, under the card. Or tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
-  <p class="ci-small">Three or more of you? Go round in turn: each person says one fact and how it landed, the next person says back what they heard, then it moves on. Everyone gets a turn before anyone answers.</p>
-  <div data-tfs-mount="checkin"></div>
-  <div class="tcl-slot" id="clarify-slot" hidden></div>
-  </div>
-  <div id="ci-family" class="ci-fam" hidden>
-    <p>A plan for the family, not a list of chores: visits, advice, the little one’s routines and a regular job for a grandparent. Fill in what fits, skip the rest, then send it to each other.</p>
-    <p class="ci-from" id="cf-from" role="status" hidden></p>
-    <label class="ci-f"><span>Who’s in this plan (optional)</span><input type="text" id="cf-names" maxlength="80" autocomplete="off" placeholder="Amy, Mum and Dad"></label>
-    <label class="ci-f"><span>Visits</span><textarea id="cf-visits" rows="2" maxlength="300" placeholder="Sunday lunch every other week, 12 to 3. Text the day before."></textarea></label>
-    <label class="ci-f"><span>Advice</span><textarea id="cf-advice" rows="2" maxlength="300" placeholder="Ask first: “Do you want ideas, or just to talk?”"></textarea></label>
-    <label class="ci-f"><span>The baby’s or children’s routines</span><textarea id="cf-baby" rows="2" maxlength="300" placeholder="Nap at 1. No sweets before dinner. Ask us before anything new."></textarea></label>
-    <label class="ci-f"><span>A regular job for a grandparent or relative</span><textarea id="cf-job" rows="2" maxlength="300" placeholder="Grandma does Tuesday pickup and tea."></textarea></label>
-    <label class="ci-f"><span>We’ll look at this again on</span><input type="text" id="cf-review" maxlength="80" autocomplete="off" placeholder="The first Sunday of next month"></label>
-    <p class="ci-row"><button type="button" class="ci-btn" id="cf-link">Send as a link</button> <button type="button" class="ci-btn is-quiet" id="cf-copy">Copy as text</button> <span id="cf-note" role="status"></span></p>
-    <div id="cf-fridge"></div>
-    <p class="ci-small">Kept on this device so it’s here next time, and never sent anywhere unless you send it yourself. A link opens this card, filled in, on their phone, where they can change it and send it back. <button type="button" class="ci-linkbtn" id="cf-forget" data-clear-confirm="the family plan card" data-clear-keys="tol-family-plan">Forget it on this device</button></p>
-  </div>
-</section>
 
 <section class="ci-card no-bubble" id="different-hours" aria-labelledby="different-hours-h">
   <h2 id="different-hours-h">When you work different hours</h2>

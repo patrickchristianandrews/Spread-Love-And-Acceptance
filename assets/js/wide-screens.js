@@ -35,6 +35,13 @@
     '.tol-outline{ position:fixed; top:6.2rem; left:calc(50% + 21rem + 2rem); width:14.5rem; max-height:calc(100vh - 8.5rem); overflow:auto; z-index:20; display:none; ' +
       'padding:.8rem .9rem .9rem; border-radius:18px; background:rgba(255,253,248,.92); border:1px solid rgba(217,200,240,.8); box-shadow:0 10px 26px -14px rgba(60,40,90,.3); font:500 .84rem/1.3 "Lora",Georgia,serif; }' +
     '.tol-outline.is-on{ display:block; }' +
+    '.tol-outline:not(.is-open){ width:auto; padding:0; background:none; border:0; box-shadow:none; }' +
+    '.tol-outline-t{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.3rem .9rem; border-radius:999px; border:1px solid rgba(185,160,224,.9); background:rgba(255,253,248,.96); cursor:pointer; font:600 .82rem/1.2 "Lora",Georgia,serif; color:#3B2A55; box-shadow:0 6px 16px -10px rgba(60,40,90,.35); }' +
+    '.tol-outline-t::after{ content:"\\25BE"; font-size:.8em; }' +
+    '.tol-outline.is-open .tol-outline-t{ box-shadow:none; margin:0 0 .4rem; }' +
+    '.tol-outline.is-open .tol-outline-t::after{ content:"\\25B4"; }' +
+    '.tol-outline-t:focus-visible{ outline:2px solid #3B2A55; outline-offset:2px; }' +
+    '.tol-outline-b[hidden]{ display:none; }' +
     '.tol-outline h2{ margin:0 0 .4rem !important; font:600 .7rem "IBM Plex Mono",monospace !important; letter-spacing:.1em; text-transform:uppercase; color:#6B4F8A !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; }' +
     '.tol-outline ol{ list-style:none; margin:0 !important; padding:0 !important; }' +
     '.tol-outline li{ margin:0 !important; padding:0 !important; max-width:none !important; background:none !important; box-shadow:none !important; border:0 !important; }' +
@@ -81,7 +88,10 @@
     if (hs.length < 4 || main.textContent.length < 3500) return;
     var used = {}, items = hs.slice(0, 18).map(function (h) { if (!h.id) h.id = slug(h.textContent, used); return { h: h, id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, '') }; });
     var nav = document.createElement('nav'); nav.className = 'tol-outline no-bubble'; nav.setAttribute('aria-label', T('On this page', 'En esta página'));
-    nav.innerHTML = '<h2>' + T('On this page', 'En esta página') + '</h2><ol>' + items.map(function (i) { return '<li><a href="#' + i.id + '">' + i.t.replace(/</g, '&lt;') + '</a></li>'; }).join('') + '</ol><label class="tol-outline-wide"><input type="checkbox" id="tol-wide-cb"> ' + T('Wide page', 'Página ancha') + '</label>';
+    // home16b: a small "On this page" button by default; it opens to the list (and stays open on this page once opened)
+    nav.innerHTML = '<button type="button" class="tol-outline-t" aria-expanded="false" aria-controls="tol-outline-b">' + T('On this page', 'En esta página') + '</button><div class="tol-outline-b" id="tol-outline-b" hidden><ol>' + items.map(function (i) { return '<li><a href="#' + i.id + '">' + i.t.replace(/</g, '&lt;') + '</a></li>'; }).join('') + '</ol><label class="tol-outline-wide"><input type="checkbox" id="tol-wide-cb"> ' + T('Wide page', 'Página ancha') + '</label></div>';
+    var otb = nav.querySelector('.tol-outline-t'), obd = nav.querySelector('.tol-outline-b');
+    otb.addEventListener('click', function () { var open = obd.hidden; obd.hidden = !open; otb.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); });
     document.body.appendChild(nav);
     var wcb = nav.querySelector('#tol-wide-cb'), wideOn = false; try { wideOn = localStorage.getItem('tol-wide') === '1'; } catch (er) {}
     document.documentElement.classList.toggle('tol-wide', wideOn); wcb.checked = wideOn;

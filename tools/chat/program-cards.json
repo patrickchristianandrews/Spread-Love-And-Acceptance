@@ -3260,7 +3260,7 @@
       "keys": [],
       "chips": [],
       "name": "something to do with a child tonight",
-      "pat": "\\b(something|anything|ideas?|things?) (fun|nice|to do)\\b.{0,50}\\b(he s|she s|hes|shes|he is|she is|they re) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(fun|games?|things to do|something to do)\\b.{0,40}\\b(with|for) (a |my |an |our )?(\\d+ year old|grandson|granddaughter|grandkids?|grandchild\\w*)\\b",
+      "pat": "\\b(something|anything|ideas?|things?) (fun|nice|to do)\\b.{0,50}\\b(he|she|he s|she s|hes|shes|he is|she is|they re) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(fun|games?|things to do|something to do)\\b.{0,40}\\b(with|for) (a |my |an |our )?(\\d+ year old|grandson|granddaughter|grandkids?|grandchild\\w*)\\b",
       "what": [
         "Here are a few free things on this site that work for a child and a grown-up side by side, with nothing to sign up for:"
       ],
@@ -10341,7 +10341,7 @@
       "newTopic": true,
       "name": "something light to reconnect",
       "pat": "\\breconnect\\w*\\b|\\b(something|anything|ideas?) (light|fun|small|nice) (to do )?(together|for (the )?two of us|for us)\\b|\\b(fun|light) (for|with) (two|2) people\\b|\\b(feel|get) close again\\b|\\bafter a (rough|hard|bad) (week|patch)\\b.{0,40}\\b(fun|light|reconnect|together)\\b|\\b(something|anything|ideas?|things?) (fun|light|nice|new)\\b.{0,25}\\btogether\\b|\\bfun (for|with) (the )?two of us\\b",
-      "notPat": "\\b(grief|died|passed away|widow\\w*|sister|brother|mom|mum|dad|father|mother|son|daughter|friend|estranged|years|cousin|aunt|uncle)\\b|\\b(he s|she s|hes|shes|he is|she is) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(\\d+ year old|years old|grandson|granddaughter|grandkids?|grandchild\\w*|kids?|child|children)\\b|\\bwithout it (feeling|being) like a chore\\b",
+      "notPat": "\\b(grief|died|passed away|widow\\w*|sister|brother|mom|mum|dad|father|mother|son|daughter|friend|estranged|years|cousin|aunt|uncle)\\b|\\b(he s|she s|hes|shes|he is|she is) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(\\d+ year old|years old|grandson|granddaughter|grandkids?|grandchild\\w*|kids?|child|children)\\b|\\bwithout it (feeling|being) like a chore\\b|\\b(he|she|he s|she s|hes|shes|he is|she is) (\\d+|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\b(\\d+ year old|years old|grandson|granddaughter|grandkids?|grandchild\\w*|kids?|child|children)\\b|\\bwithout it (feeling|being) like a chore\\b",
       "keys": [],
       "what": [
         "If things have felt flat lately, small and often beats big and rare. A few seconds of turning toward each other each day rebuilds warmth faster than one big night out."
