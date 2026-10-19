@@ -26,6 +26,10 @@
    One button downloads a desktop shortcut made right in the browser (Windows .url, Mac .webloc, Linux .desktop); then a
    small drawing says to drag it to the desktop. Safari 17+ also gets File > Add to Dock; Firefox a line about Chrome or Edge.
 
+   IN THE APP (owner17). The installed app has no address bar or browser Share menu, so every page there gets a Share
+   button in the site's bar (left of Menu) and "Share this page" / "Copy link or show a QR code" at the top of the menu.
+   See appShare() below. share-kit.js loads this file inside the app.
+
    AFTER INSTALL. Opened from the Home Screen (navigator.standalone), one small "Installed. Welcome to the app"
    note shows once (localStorage 'tol-ios-welcome'). site.js loads this file in the app only until then.
    Spanish pages get Spanish words (TOLLang from site.js). Nothing is sent anywhere. */
@@ -423,9 +427,119 @@
     });
   }
 
+  // ---------------------------------------------------------------- inside the installed app: Share, always in reach
+  // owner17: the installed app has no address bar and no browser Share menu, so a page was hard to pass on. In the app
+  // (display-mode standalone, or navigator.standalone on iPhone and iPad) every page gets a Share button in the site's
+  // bar, just left of Menu, and the menu gets "Share this page" and "Copy link or show a QR code". Share opens the
+  // device's own share menu (navigator.share) with the page's clean address: its canonical link, never a ?query or a
+  // #part, so nothing typed into a tool travels with it. Where the device has no share menu (or it fails), the site's
+  // own share sheet opens instead (site.js TOLShare, with share-kit.js: Copy link, Text message, Email, WhatsApp, a QR
+  // code and more). share-kit.js loads this file in the app; nothing is stored and nothing is sent.
+  var G_APPSHARE = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+  function inFrame() { try { return window.self !== window.top; } catch (e) { return true; } }
+  // the page's own clean address: the canonical link when it is this site's, else this address without ?query or #part
+  function cleanUrl() {
+    var here = location.origin + location.pathname, c = document.querySelector('link[rel="canonical"]');
+    var href = c && c.getAttribute('href');
+    if (href) {
+      try {
+        var u = new URL(href, location.href);
+        if (/(^|\.)spreadloveandacceptance\.com$/.test(u.hostname) || u.origin === location.origin) return u.origin + u.pathname;
+      } catch (e) {}
+    }
+    return here;
+  }
+  function pageTitle() {
+    var h = document.querySelector('main h1, [role="main"] h1, h1');
+    var t = h ? (h.textContent || '').replace(/\s+/g, ' ').trim() : '';
+    if (!t) t = (document.title || '').replace(/\s*[|·–-]\s*Spread Love.*$/i, '').trim();
+    return t || 'Spread Love & Acceptance';
+  }
+  function pageText() {
+    var m = document.querySelector('meta[name="description"]'), d = m ? (m.getAttribute('content') || '').trim() : '';
+    if (d.length > 200) d = d.slice(0, 197).replace(/\s+\S*$/, '') + '…';
+    return d || T('Free, kind tools for yourself and the people you share a life with.', 'Herramientas gratis y amables para ti y para quienes comparten tu vida.');
+  }
+  function pageShare() { return { title: pageTitle(), text: pageText(), url: cleanUrl() }; }
+  // the site's own share sheet (the fallback, and "Copy link or show a QR code")
+  function sheet(d) {
+    if (window.TOLShare && window.TOLShare.open) { window.TOLShare.open({ title: d.title, text: d.text, url: d.url }); return true; }
+    return false;
+  }
+  var sharing = false;
+  function appShareNow(from) {
+    var d = pageShare(), data = { title: d.title, text: d.text, url: d.url };
+    if (sharing) return Promise.resolve(null);
+    var can = typeof navigator.share === 'function';
+    try { if (can && navigator.canShare) can = navigator.canShare(data); } catch (e) { can = true; }
+    if (!can) { sheet(d); return Promise.resolve({ method: 'sheet' }); }
+    sharing = true;
+    var p;
+    try { p = Promise.resolve(navigator.share(data)); } catch (e) { p = Promise.reject(e); }
+    return p.then(function () {
+      sharing = false;
+      ['tol:shared', 'tol-shared'].forEach(function (n) { try { document.dispatchEvent(new CustomEvent(n, { detail: { url: d.url, method: 'native', how: 'native' } })); } catch (e) {} });
+      return { method: 'native' };
+    }, function (err) {
+      sharing = false;
+      if (err && err.name === 'AbortError') { if (from && from.focus && document.contains(from)) from.focus(); return null; }   // they closed their share menu
+      sheet(d); return { method: 'sheet' };
+    });
+  }
+  function shareBarButton() {
+    var bar = document.querySelector('.tol-bar');
+    if (!bar || bar.querySelector('.tol-app-share')) return !!bar;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'tol-app-share no-bubble';
+    b.setAttribute('aria-label', T('Share this page', 'Compartir esta página'));
+    b.setAttribute('title', T('Share this page', 'Compartir esta página'));
+    b.innerHTML = G_APPSHARE + '<span class="tol-app-share-t">' + T('Share', 'Compartir') + '</span>';
+    b.addEventListener('click', function () { appShareNow(b); });
+    var menu = bar.querySelector('.tol-contents-btn');
+    bar.insertBefore(b, menu && menu.parentNode === bar ? menu : null);
+    // the bar fits itself to the room it has (site.js listens for resize)
+    try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+    return true;
+  }
+  function shareMenuRow() {
+    var panel = document.getElementById('tol-panel');
+    if (!panel || panel.querySelector('.tol-app-share-row')) return !!panel;
+    var row = document.createElement('div');
+    row.className = 'tol-app-share-row no-bubble';
+    row.innerHTML = '<button type="button" class="tol-btn tol-app-share-go" data-app-share="device">' + G_APPSHARE + '<span>' + T('Share this page', 'Compartir esta página') + '</span></button>' +
+      '<button type="button" class="tol-btn is-quiet tol-app-share-more" data-app-share="sheet">' + T('Copy link or show a QR code', 'Copiar el enlace o mostrar un código QR') + '</button>';
+    function shut() { var c = panel.querySelector('.tol-panel-head .tol-close'); if (c && !panel.hidden) c.click(); }
+    row.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-app-share]'); if (!b) return;
+      var how = b.getAttribute('data-app-share');
+      shut();
+      // after the menu has closed, so the share menu or the sheet takes the focus
+      setTimeout(function () {
+        var from = document.querySelector('.tol-bar .tol-app-share') || document.querySelector('.tol-bar .tol-contents-btn');
+        if (how === 'sheet') { if (!sheet(pageShare())) appShareNow(from); } else appShareNow(from);
+      }, 60);
+    });
+    var head = panel.querySelector('.tol-panel-head');
+    panel.insertBefore(row, head && head.parentNode === panel ? head.nextSibling : panel.firstChild);
+    return true;
+  }
+  function appShare() {
+    if (!standalone() || inFrame()) return;
+    document.documentElement.classList.add('tol-in-app');
+    css(function () {
+      var tries = 0;
+      (function place() {
+        var a = shareBarButton(), b = shareMenuRow();
+        if ((!a || !b) && ++tries < 40) setTimeout(place, 250);   // the bar and menu are built by site.js; wait a little for them
+      })();
+    });
+  }
+
   function mount() {
     iosHead();
     welcome();
+    appShare();
     // the same sheet, still, wherever a page asks for it (the install page's Apple steps)
     var hosts = document.querySelectorAll('[data-iosg-inline]');
     if (hosts.length) { css(); Array.prototype.forEach.call(hosts, inline); }
@@ -440,6 +554,6 @@
     document.addEventListener('tol-app-installed', again);
   }
 
-  window.TOLAppBar = { guide: guide, where: where, ios: IOS, browser: iosBrowser, desk: desk, computer: DESK };
+  window.TOLAppBar = { guide: guide, where: where, ios: IOS, browser: iosBrowser, desk: desk, computer: DESK, share: appShareNow, shareData: pageShare };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 })();

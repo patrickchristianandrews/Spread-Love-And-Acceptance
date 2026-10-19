@@ -1652,7 +1652,17 @@
     });
     return n;
   }
+  // owner17: inside the installed app (no address bar, no browser Share menu) app-bar.js puts a Share button in the bar
+  // and "Share this page" in the menu. site.js loads app-bar.js in a browser tab only, so the kit brings it in the app.
+  function appShare() {
+    var app = false; try { app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; } catch (e) {}
+    var top = true; try { top = window.self === window.top; } catch (e) { top = false; }
+    if (!app || !top || window.TOLAppBar || document.querySelector('script[src="/assets/js/app-bar.js"]')) return;   // already there (its own mount adds Share)
+    var s = document.createElement('script'); s.src = '/assets/js/app-bar.js'; s.async = true;
+    document.head.appendChild(s);
+  }
   function start() {
+    try { appShare(); } catch (e) {}
     try { startWatch(); } catch (e) {}
     cssReady.then(function (good) {
       if (good === false) return;

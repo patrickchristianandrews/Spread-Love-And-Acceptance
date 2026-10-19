@@ -43,7 +43,7 @@ HELP = [
     ('Paperback printing cost (black ink, large trim)', 'https://kdp.amazon.com/help/topic/G201834340'),
 ]
 
-UNVERIFIED = ('Not confirmed: I could not open KDP to check this box, and the help pages found by search did not mention it. '
+UNVERIFIED = ('Not confirmed: KDP’s own screens could not be opened from the build machine, and the help pages found by search did not mention this box. '
               'If KDP shows it, the answer here is the safe one.')
 
 
@@ -204,7 +204,7 @@ def ai_section():
         'KDP asks, on the Content screen of every book, whether you used AI-based tools to create the book’s **texts**, **images** or **translations**. You answer each one separately. The answer is for Amazon and is not shown on the product page.',
         '**What the words mean (KDP’s definitions, as reported in October 2026):** “AI-generated” means an AI tool created the actual words or pictures, even if you then edited them heavily. That must be disclosed. “AI-assisted” means you created the work yourself and used AI only to brainstorm, edit, check or improve it. That does not need to be disclosed.',
         '**The choices for each question** (as reported; check the screen): “None”, “Some sections, with minimal or no editing”, “Some sections, with extensive editing”, “Entire work, with minimal or no editing”, “Entire work, with extensive editing”.',
-        '**[OWNER] Only you can answer, because only you know how each book was made.** Answer truthfully. For your own reference, the build notes (listing-kdp.md) record that these chapters were drafted with AI writing tools and then reviewed and edited many times, and that the covers, characters and figures are drawn by code written with an AI tool. If that is still how you would describe your process, that matches “Entire work, with extensive editing” for texts and for images, and “None” for translations. If you wrote a book yourself and used AI only to edit it, a different answer is right for that book. Never answer “No” to make a book look more human-made.',
+        '**[OWNER] Only you can answer, because only you know how each book was made.** Answer truthfully. For your own reference, the build notes (listing-kdp.md) record that these chapters were drafted with AI writing tools and then reviewed and edited many times, and that the covers, characters and figures are drawn by code written with an AI tool. If that is still how you would describe your process, that matches “Entire work, with extensive editing” for texts and for images, and “None” for translations. If you wrote a book yourself and used AI only to edit it, a different answer is right for that book. Never pick “None” (or answer “No”) to make a book look more human-made than it is.',
     ]
 
 

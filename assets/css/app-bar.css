@@ -248,3 +248,24 @@ html.tol-quiet .tol-appbar-ic, html.tol-work .tol-appbar-ic{ box-shadow:none; }
 @keyframes tol-iosw-in{ from{ opacity:0; transform:translateY(-16px); } to{ opacity:1; transform:none; } }
 .tol-iosw.is-still, .tol-iosw.is-still.is-out{ animation:none; transition:none; }
 @media (prefers-reduced-motion: reduce){ .tol-iosw{ animation:none; } }
+
+/* ---------- In the installed app: Share in the bar and at the top of the menu (owner17; app-bar.js appShare) ----------
+   The app has no address bar and no browser Share menu. The bar button is 44px square on a phone (a picture, with
+   "Share this page" for screen readers) and says "Share" where there is room. */
+.tol-bar button.tol-app-share{
+  display:inline-flex; align-items:center; justify-content:center; gap:.35rem; flex:none; white-space:nowrap;
+  min-width:44px; min-height:44px; padding:.4rem .7rem; border-radius:999px; border-color:var(--line, #D9CBA3);
+}
+.tol-bar button.tol-app-share svg{ flex:none; display:block; }
+.tol-app-share-t{ font-weight:600; }
+@media (max-width:560px){
+  .tol-bar button.tol-app-share{ padding:.4rem .55rem; }
+  .tol-bar .tol-app-share-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+}
+.tol-bar:is(.is-narrow, .is-tight, .is-snug, .is-tightest) .tol-app-share-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.tol-bar button.tol-app-share:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tol-app-share-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .6rem; margin:.8rem 0 .2rem; }
+.tol-app-share-row .tol-btn{ display:inline-flex; align-items:center; gap:.45rem; min-height:48px; padding:.55rem 1.1rem; border-radius:999px; font-size:.98rem; }
+.tol-app-share-row .tol-btn svg{ flex:none; }
+.tol-app-share-row .tol-btn.is-quiet{ border-color:var(--line, #D9CBA3); font-weight:500; }
+@media print{ .tol-app-share, .tol-app-share-row{ display:none !important; } }
