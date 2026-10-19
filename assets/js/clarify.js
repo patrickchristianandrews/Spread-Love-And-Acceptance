@@ -52,6 +52,8 @@
   var W = {
     offerT: ['A few quick questions so the read is fair', 'Unas preguntas rápidas para que la lectura sea justa'],
     optional: ['(optional)', '(opcional)'],
+    // integ16 (sig16): for a tool that shows answers or a picture, not a number (check-ins, the quick look): opts.number === false
+    offerW: ['These answers alone can’t tell an ordinary rough patch, or a setup you both chose, from something worth more time. A few taps help. About a minute.', 'Estas respuestas solas no distinguen una mala racha normal, o un arreglo que eligieron los dos, de algo que merece más tiempo. Unos toques ayudan. Un minuto, más o menos.'],
     offerD: ['A number alone can’t tell an ordinary rough patch, or a setup you both chose, from something worth more time. A few taps help. About a minute.', 'Un número solo no distingue una mala racha normal, o un arreglo que eligieron los dos, de algo que merece más tiempo. Unos toques ayudan. Un minuto, más o menos.'],
     ask: ['Answer a few questions', 'Responder unas preguntas'],
     notNow: ['Not now', 'Ahora no'],
@@ -282,7 +284,7 @@
     var box = el('div', 'tcl-offer tol-plain no-bubble no-print');
     var t = el('p', 'tcl-offer-t'); t.appendChild(el('strong', null, w('offerT', lang))); t.appendChild(document.createTextNode(' ' + w('optional', lang)));
     box.appendChild(t);
-    box.appendChild(el('p', 'tcl-offer-d', o.why || w('offerD', lang)));
+    box.appendChild(el('p', 'tcl-offer-d', o.why || w(o.number === false ? 'offerW' : 'offerD', lang)));
     var row = el('div', 'tcl-row');
     row.appendChild(btn('tcl-btn', w('ask', lang), function () { start(slot); }));
     row.appendChild(btn('tcl-link', w('notNow', lang), function () { st.dismissed = true; slot.hidden = true; }));

@@ -3,8 +3,8 @@
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
    "kind": "book",
-   "bytes": 1232448,
-   "mb": 1.18,
+   "bytes": 1231741,
+   "mb": 1.17,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
    "figures": 10,
@@ -21,8 +21,8 @@
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
    "kind": "book",
-   "bytes": 1087838,
-   "mb": 1.04,
+   "bytes": 1100016,
+   "mb": 1.05,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
    "figures": 9,
@@ -39,8 +39,8 @@
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
    "kind": "book",
-   "bytes": 1105039,
-   "mb": 1.05,
+   "bytes": 1117209,
+   "mb": 1.07,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
    "figures": 9,
@@ -57,8 +57,8 @@
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
    "kind": "book",
-   "bytes": 1075675,
-   "mb": 1.03,
+   "bytes": 1088383,
+   "mb": 1.04,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,
    "figures": 8,
@@ -75,7 +75,7 @@
   "pocket-the-logic-behind-it": {
    "file": "book/print/epub/pocket-the-logic-behind-it.epub",
    "kind": "pocket",
-   "bytes": 313785,
+   "bytes": 313784,
    "mb": 0.3,
    "identifier": "urn:uuid:33b0bed3-99e8-53b0-8a56-024abff9a832",
    "chapters": 9,
@@ -93,7 +93,7 @@
   "boxset-complete-series": {
    "file": "book/print/epub/boxset-complete-series.epub",
    "kind": "boxset",
-   "bytes": 3939035,
+   "bytes": 3943159,
    "mb": 3.76,
    "identifier": "urn:uuid:53207083-e866-53c9-a95c-fc8c179971bd",
    "chapters": 36,

@@ -2123,6 +2123,9 @@
     ndwork: ['/work.html#autistic-at-work', '/work.html#neurodiversity', '/wiring-card.html', '/work.html'], rude: ['/work.html', '/wiring-card.html', '/signal-translator.html', '/wired-differently.html'], blunt: 'rude', abrupt: 'rude', curt: 'rude',
     toddler: ['/new-parent.html', '/parents.html', '/share-the-load.html'], toddlers: 'toddler', twins: 'toddler', twin: 'toddler', triplets: 'toddler', preschooler: 'toddler', baby: ['/new-parent.html', '/share-the-load.html', '/chore-chart-for-couples.html', '/invisible-labor-mental-load.html'], newborn: 'baby', infant: 'baby', postpartum: 'baby', newparent: 'baby', sleepless: 'baby',
     espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol', ayuda: 'espanol', pareja: 'espanol', esposa: 'espanol', esposo: 'espanol', marido: 'espanol', cuidador: 'espanol', cuidadora: 'espanol', cuidadores: 'espanol', cuidar: 'espanol', gemelos: 'espanol', gemelas: 'espanol', hijos: 'espanol', hijo: 'espanol', hija: 'espanol', hijas: 'espanol', ninos: 'espanol', nino: 'espanol', bebe: 'espanol', pelea: 'espanol', peleas: 'espanol', pelean: 'espanol', peleamos: 'espanol', enojado: 'espanol', enojada: 'espanol', enojo: 'espanol', miedo: 'espanol', familia: 'espanol', divorcio: 'espanol', separados: 'espanol', suegra: 'espanol', suegro: 'espanol', abuela: 'espanol', abuelo: 'espanol', abuelos: 'espanol', trabajo: 'espanol', dinero: 'espanol', tareas: 'espanol', quehaceres: 'espanol', casa: 'espanol', ayudame: 'espanol', necesito: 'espanol', violencia: 'espanol', seguridad: 'espanol', calma: 'espanol', tranquilo: 'espanol', cansado: 'espanol', cansada: 'espanol', madre: 'espanol', padre: 'espanol', novio: 'espanol', novia: 'espanol', amor: 'espanol', relacion: 'espanol', matrimonio: 'espanol', discutir: 'espanol', gritar: 'espanol', grita: 'espanol', gritos: 'espanol', castellano: 'espanol', latino: 'espanol', latina: 'espanol',
+    // integ16 (pages16): the Spanish sections for siblings who don't help, and stepfamilies
+    hermanos: ['/en-espanol.html#hermanos', '/workpapers/fill/wp-03.html?for=care&lang=es', '/en-espanol.html'], hermano: 'hermanos', hermana: 'hermanos', hermanas: 'hermanos',
+    ensamblada: ['/en-espanol.html#ensamblada', '/stepfamily.html'], ensambladas: 'ensamblada', reconstituida: 'ensamblada', padrastro: 'ensamblada', madrastra: 'ensamblada', hijastro: 'ensamblada', hijastros: 'ensamblada', hijastra: 'ensamblada', hijastras: 'ensamblada',
     angerhelp: ['/parents.html#anger-help', '/upset-right-now.html', '/parents.html', '/wp-11.html'], temper: 'angerhelp',
     whenill: ['/when-one-is-ill.html', '/caregivers.html', '/share-the-load.html'], chronic: 'whenill', illness: 'whenill', ill: 'whenill', disability: 'whenill', disabled: 'whenill', disabilities: 'whenill', cfs: 'whenill', fibromyalgia: 'whenill', fibro: 'whenill', spoons: 'whenill', spoonie: 'whenill', burden: 'whenill', mecfs: 'whenill', lupus: 'whenill', 'ms': 'whenill', arthritis: 'whenill', cancer: 'whenill', chemo: 'whenill',
     caregiving: ['/caregivers.html', '/when-one-is-ill.html', '/library/stress.html'], carer: 'caregiving', carers: 'caregiving', caregiver: 'caregiving', caregivers: 'caregiving', caring: 'caregiving', respite: 'caregiving', parkinson: 'caregiving', parkinsons: 'caregiving', dementia: 'caregiving', alzheimers: 'caregiving', alzheimer: 'caregiving', stroke: 'caregiving', eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare',
@@ -3936,7 +3939,12 @@
     var here = location.pathname, other = link.getAttribute('href');
     var simpleHref = isFull ? other : here, fullHref = isFull ? here : other;
     var main = document.querySelector('main');
-    var words = ((main && main.textContent) || '').split(/\s+/).length;
+    // a page can name its own honest times (data-simple-time / data-full-time on its .depth-bar), and a
+    // library to dip into ([data-readtime-skip], e.g. the 73 situations on The logic behind it) isn't counted
+    var simpleT = bar.getAttribute('data-simple-time'), fullT = bar.getAttribute('data-full-time');
+    var wclone = main ? main.cloneNode(true) : null;
+    if (wclone) Array.prototype.forEach.call(wclone.querySelectorAll('[data-readtime-skip]'), function (n) { n.remove(); });
+    var words = ((wclone && wclone.textContent) || '').split(/\s+/).length;
     var mins = Math.max(1, Math.round(words / 230));
     var pref = lsGet('tol-depth-pref');
     function opt(kind, href, icon, name, what, who, time) {
@@ -3951,8 +3959,8 @@
     var box = el('div', { class: 'depth-bar tol-depth', role: 'group', 'aria-label': 'Choose how deep to read' },
       '<p class="tol-depth-q">This page comes in two versions. Pick the one that suits you right now:' + (chip ? ' ' + chip.outerHTML : '') + '</p>' +
       '<div class="tol-depth-opts">' +
-        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards and one small thing to try. Tap a word with a water drop <span aria-hidden="true">💧</span> to dive deeper right here.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
-        opt('full', fullHref, '🌊', 'Full version', bar.getAttribute('data-full-what') ? esc(bar.getAttribute('data-full-what')) : 'The whole idea: real-life examples, the reasoning behind it, worked numbers and answers to questions. Technical names appear here, in small print.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
+        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards and one small thing to try. Tap a word with a water drop <span aria-hidden="true">💧</span> to dive deeper right here.', 'Good if you’re new, short on time, or tired.', simpleT ? esc(simpleT) : isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
+        opt('full', fullHref, '🌊', 'Full version', bar.getAttribute('data-full-what') ? esc(bar.getAttribute('data-full-what')) : 'The whole idea: real-life examples, the reasoning behind it, worked numbers and answers to questions. Technical names appear here, in small print.', 'Good if you want the why, or you’re using it for a real situation.', fullT ? esc(fullT) : isFull ? 'about ' + mins + ' min read' : 'a longer read') +
       '</div>' +
       (pref && (pref === 'full') !== isFull ? '<p class="tol-depth-pref">Last time you chose the ' + (pref === 'full' ? 'full' : 'simple') + ' version. It’s one tap away above.</p>' : '') +
       '<details class="tol-depth-more"><summary>How the two versions, “Dig deeper” links and mini dives fit together</summary>' +
@@ -3962,14 +3970,16 @@
         '<p>Stuck on anything, in either version? <a href="/ask.html">Ask Professor Puddles</a>.</p>' +
       '</details>' +
       '<p class="tol-gentle' + (isFull ? ' is-deep' : '') + '"><span aria-hidden="true">' + (isFull ? '🌿' : '🌱') + '</span> Take what helps and leave the rest. Nothing here grades you.</p>');
+    if (simpleT) box.setAttribute('data-simple-time', simpleT);   // take-in.js's "About N minutes to read" reads these too
+    if (fullT) box.setAttribute('data-full-time', fullT);
     bar.parentNode.replaceChild(box, bar);
     // some pages fill in their cards after this runs, so count again once everything is on the page
     window.addEventListener('load', function () {
       setTimeout(function () {
         // the page's own words only: not the cards, tips, breaks and helpers the site adds around them
-        var clone = main.cloneNode(true); Array.prototype.forEach.call(clone.querySelectorAll('.tol-depth, script, style, nav, .tol-trail, [aria-hidden="true"], .bkb, .tol-pud-card, .tol-tip, .tol-read, .tol-read-host, .tol-fbs, .tol-fp-note, .lp-card, .tol-cheer, .tol-listen, .tol-offer, .tol-private, .tol-pickup, .tol-inshort, .tol-pillars, .tol-work-note'), function (n) { n.remove(); });
+        var clone = main.cloneNode(true); Array.prototype.forEach.call(clone.querySelectorAll('.tol-depth, script, style, nav, .tol-trail, [aria-hidden="true"], .bkb, .tol-pud-card, .tol-tip, .tol-read, .tol-read-host, .tol-fbs, .tol-fp-note, .lp-card, .tol-cheer, .tol-listen, .tol-offer, .tol-private, .tol-pickup, .tol-inshort, .tol-pillars, .tol-work-note, [data-readtime-skip]'), function (n) { n.remove(); });
         var n = Math.max(1, Math.round((clone.textContent || '').split(/\s+/).filter(Boolean).length / 230)), t = box.querySelector('.is-here .tol-depth-time');
-        if (t && n > mins && /min read/.test(t.textContent)) t.textContent = 'about ' + n + ' min read';
+        if (t && n > mins && /min read/.test(t.textContent) && !(isFull ? fullT : simpleT)) t.textContent = 'about ' + n + ' min read';
       }, 1200);
     });
     Array.prototype.forEach.call(box.querySelectorAll('a[data-depth]'), function (a) {
@@ -4570,7 +4580,7 @@
       T('<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>',
         '<p><strong>¿Te ayudaría una página más tranquila?</strong> El modo tranquilo deja todo quieto, en silencio y sencillo, sin ventanas que aparecen. La lectura fácil usa una letra clara y más espacio entre líneas. Puedes cambiarlo cuando quieras en <em>Ajustes</em>, arriba.</p>') +
       '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">' + T('Quiet mode', 'Modo tranquilo') + '</button><button type="button" data-offer="easy">' + T('Easy reading', 'Lectura fácil') + '</button><button type="button" data-offer="large">' + T('Larger text', 'Letra más grande') + '</button><button type="button" data-offer="biggest">' + T('Biggest text, and keep still', 'La letra más grande, y la página quieta') + '</button><button type="button" data-offer="no" class="is-quiet">' + T('No thanks', 'No, gracias') + '</button></p>' +
-      (esPage() ? '' : '<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Pick how you take things in &rarr;</a></p>'));
+      (esPage() ? '' : '<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Read your way: pick how you take things in &rarr;</a></p>'));
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-offer]'); if (!b) return;
       var what = b.getAttribute('data-offer');

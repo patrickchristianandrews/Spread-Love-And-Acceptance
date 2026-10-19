@@ -964,7 +964,7 @@
     var slot = $('lq-clarify'); if (!slot || !window.TOLClarify) return;
     var r = all.n >= 4 && !q.away ? homeShares() : null, k = q.people.length;
     var lop = !!r && Math.max.apply(null, r) >= (k === 2 ? 65 : Math.round(160 / k));
-    window.TOLClarify.offer(slot, { type: 'load', show: lop, lang: isEs() ? 'es' : 'en', onResult: function (res) { cxRes = res && !res.skipped && Array.isArray(res.took) ? res : null; renderCx(); } });
+    window.TOLClarify.offer(slot, { type: 'load', number: false, show: lop, lang: isEs() ? 'es' : 'en', onResult: function (res) { cxRes = res && !res.skipped && Array.isArray(res.took) ? res : null; renderCx(); } });
     renderCx();
   }
   // "Include my context": the answers to those questions go in the link you send, only if you tick it. They are

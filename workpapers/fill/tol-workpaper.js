@@ -2709,7 +2709,7 @@
         // the same, in Spanish, for a carer who reads Spanish (from /en-espanol.html, ?lang=es, or a Spanish browser)
         es: {
           h1: 'Una persona a cargo de cada tarea: repartir el cuidado', title: 'Repartir el cuidado: una persona a cargo de cada tarea',
-          lede: 'Quién se encarga de cada parte del cuidado: medicinas, citas, papeles, las noches y un descanso para quien cuida. Cada tarea tiene una persona a cargo, que la hace o se asegura de que se haga (los hijos mayores y los amigos también pueden encargarse de alguna). Así nadie tiene que volver a pedirlo.',
+          lede: 'Quién se encarga de cada parte del cuidado: medicinas, citas, papeles, las noches y un descanso para quien cuida. Cada tarea tiene una persona a cargo, que la hace o se asegura de que se haga (los hijos mayores, los hermanos y los amigos también pueden encargarse de alguna). Así nadie tiene que volver a pedirlo.',
           note: 'Llénenla juntos, con quienes comparten el cuidado. Esto no es consejo médico: para medicinas y salud, sigan al equipo médico. Las tareas de ejemplo no cuentan hasta que les pongan una persona a cargo o las cambien. \u201cCompartir esta lista\u201d la env\u00eda a otro tel\u00e9fono y \u201cPonerla en el refri\u201d la imprime.',
           fridge: 'Qui\u00e9n se encarga de qu\u00e9', share: 'Nuestra lista para repartir el cuidado',
           rows: [['Medicinas y pastillero (seg\u00fan indique el equipo m\u00e9dico)', Wk], ['Pedir citas m\u00e9dicas y acompa\u00f1ar', AN], ['Seguro y papeles', Mo], ['Cuidado de noche y llamadas nocturnas', D], ['Llamada del domingo con la familia', Wk], ['Pedir un descanso (relevo) para quien cuida', Mo], ['Recoger recetas en la farmacia', AN], ['Compras y comidas', Wk]]

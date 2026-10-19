@@ -35,6 +35,8 @@ var CORE = [
   '/assets/css/book-series.css', '/assets/js/book-shop.js', '/workpapers/fill/wpf-print.js',
   '/assets/css/home.css', '/assets/js/home.js', '/assets/img/home/cover-book-1-240.webp', '/assets/img/home/cover-book-2-240.webp', '/assets/img/home/cover-book-3-240.webp', '/assets/img/home/cover-book-4-240.webp', '/assets/img/home/cover-pocket-240.webp',
   '/the-logic-behind-it.html', '/assets/js/logic-library.js', '/assets/js/logic-lens.js', '/assets/css/logic-lens.css',
+  '/assets/css/short-first.css', '/assets/js/short-first.js',
+  '/assets/css/start.css', '/assets/js/start.js', '/start/chores.html', '/start/text-check.html', '/start/breakup.html',
 ];
 
 self.addEventListener('install', function (e) {
