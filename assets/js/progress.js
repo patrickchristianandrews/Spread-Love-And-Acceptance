@@ -976,6 +976,8 @@
     if (touched) return false;
     if (/#together=|[?&]together=|TOL-TOGETHER:/i.test(W.location.href)) return false;
     if (HTML.classList.contains('ti-nosurprise')) return false;
+    // a tool page is for doing the tool: no cards there
+    if (/^\/(ask|conversation-reader|signal-translator|carrier-wave-decoder|lemonade-stand|wiring-card|quick-checks|wavelength|the-logic-behind-it|check-ins|start-in-10-minutes|is-the-setup-working|calc01-solvency|recheck-drive|coin-pusher|frequency-journey|night-garden|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword)\.html$|^\/(workpapers\/(fill|calculators)|tools)\//.test(path)) return false;
     return !P || P.free(name);
   }
   function maybeCard() {

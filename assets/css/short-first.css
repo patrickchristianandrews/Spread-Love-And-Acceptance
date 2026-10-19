@@ -1,0 +1,28 @@
+/* short-first.css (panel16, pages16): long guide pages open with a short "In two minutes" card (.sf-two), and their
+   long sections fold behind "Read more" (details.sf-more). Every word stays on the page; assets/js/short-first.js opens
+   a fold when a link points inside it, in "Show me only the steps" mode and for printing. Colours are the site's tokens,
+   so light, dark and high contrast follow the Settings. */
+.sf-two{ margin:1rem 0 1.5rem; padding:.9rem 1.15rem 1rem; border-radius:var(--radius, 12px); border:1px solid var(--line); border-left:5px solid var(--credit); background:var(--paper-deep); }
+.sf-two .sf-two-h{ margin:.1rem 0 .5rem !important; font-size:1.2rem !important; }
+.sf-two p, .sf-two ol, .sf-two ul{ max-width:none !important; }
+.sf-two ol.sf-steps{ margin:.2rem 0 .6rem !important; padding-left:1.4rem !important; }
+.sf-two ol.sf-steps li{ margin:.3rem 0; }
+.sf-two .sf-say{ margin:.5rem 0 .6rem; padding:.2rem 0 .2rem .9rem; border-left:3px solid var(--brass); }
+.sf-two .sf-say p{ margin:.3rem 0 !important; font-style:italic; }
+.sf-two .sf-say p.sf-say-k{ font-style:normal; font-weight:600; font-size:.95rem; }
+.sf-two .sf-go{ display:flex; flex-wrap:wrap; gap:.5rem .8rem; align-items:center; margin:.6rem 0 0 !important; }
+.sf-two .sf-go a{ display:inline-flex; align-items:center; min-height:44px; padding:.35rem 1.05rem; border-radius:999px; border:1px solid var(--credit); text-decoration:none; font-weight:600; }
+.sf-two .sf-go a.is-main{ background:var(--credit); color:var(--paper) !important; }
+.sf-two .sf-note{ margin:.5rem 0 0 !important; font-size:.92rem; color:var(--ink-soft); }
+details.sf-more{ margin:.3rem 0 1.4rem; }
+details.sf-more > summary{ list-style:none; display:inline-flex; align-items:center; gap:.45rem; min-height:44px; box-sizing:border-box; padding:.35rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); color:var(--ink); cursor:pointer; font-weight:600; }
+details.sf-more > summary::-webkit-details-marker{ display:none; }
+details.sf-more > summary::before{ content:"+"; font-weight:700; color:var(--credit); }
+details.sf-more[open] > summary::before{ content:"\2212"; }
+details.sf-more > summary:hover{ border-color:var(--credit); }
+details.sf-more > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+details.sf-more > summary .sf-min{ font-weight:400; color:var(--ink-soft); font-size:.9rem; }
+details.sf-more[open] > summary .sf-open-t, details.sf-more:not([open]) > summary .sf-shut-t{ display:none; }
+details.sf-more[open] > summary{ margin-bottom:.7rem; }
+html.tol-only-steps main details.sf-more.sf-more{ display:block !important; }
+@media print{ details.sf-more > summary{ display:none; } }

@@ -1571,7 +1571,11 @@
     refreshBest();
   }
   // the Start button names the chosen game, and comes into view as soon as a game is picked
-  function startLabel() { var b = $('ar-start'); if (b && GAMES[S.game]) b.textContent = '▶ Start ' + GAMES[S.game].name; }
+  function startLabel() {
+    var b = $('ar-start'); if (b && GAMES[S.game]) b.textContent = '▶ Start ' + GAMES[S.game].name;
+    // tools16: the Start at the top of the picker says the pup too, since the cards below may be off screen
+    var t = $('ar-start-top'); if (t && GAMES[S.game] && PUPS[S.pup]) t.textContent = '▶ Start ' + GAMES[S.game].name + ' as ' + PUPS[S.pup].name;
+  }
   function revealStart() {
     var row = $('ar-go-row'), b = $('ar-start'); if (!row || !b) return;
     var r = b.getBoundingClientRect(), vh = window.innerHeight || 0, stuck = getComputedStyle(row).position === 'sticky';
@@ -1617,13 +1621,14 @@
     // restore choices
     var pr = D.querySelector('input[name="ar-pup"][value="' + S.pup + '"]'); if (pr) pr.checked = true;
     var gr = D.querySelector('input[name="ar-game"][value="' + S.game + '"]'); if (gr) gr.checked = true;
-    Array.prototype.forEach.call(D.querySelectorAll('input[name="ar-pup"]'), function (i) { i.addEventListener('change', function () { S.pup = i.value; save(); }); });
+    Array.prototype.forEach.call(D.querySelectorAll('input[name="ar-pup"]'), function (i) { i.addEventListener('change', function () { S.pup = i.value; save(); startLabel(); }); });
     Array.prototype.forEach.call(D.querySelectorAll('input[name="ar-game"]'), function (i) { i.addEventListener('change', function () { S.game = i.value; save(); startLabel(); }); i.addEventListener('click', function () { setTimeout(revealStart, 0); }); });
     startLabel();
     var sr = $('ar-sel-relaxed'), ss = $('ar-sel-sound');
     if (sr) sr.addEventListener('change', function () { S.relaxed = sr.checked; save(); syncToggles(); });
     if (ss) ss.addEventListener('change', function () { S.sound = ss.checked; save(); syncToggles(); });
     $('ar-start').addEventListener('click', start);
+    var st0 = $('ar-start-top'); if (st0) st0.addEventListener('click', start);
     $('ar-pause').addEventListener('click', function () { togglePause(); });
     $('ar-restart').addEventListener('click', restart);
     $('ar-menu').addEventListener('click', backToMenu);

@@ -1348,18 +1348,30 @@
   }
   // home16b: how many bubbles and hearts drift behind the page. None on the work pages, the tender and grief pages, or with
   // Larger text or "Plain and literal" (Read your way); a few on a laptop or desktop, kept to the margins (site.css)
+  // Ambient decoration (bubbles, hearts, the pups' visits, the cheering friends) only where play is the point: the home
+  // page's opening and "Meet the friends", and the play pages. Not on tools, guides, the book, workpapers or the serious
+  // pages, and nowhere with Larger text, Quiet mode, Keep the page still, "Plain and literal" or reduced motion.
+  var PLAY_PAGE = /^\/(index|pause-and-play|frequency-journey(-play)?|coin-pusher|night-garden|bears-dojo|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|frequency-buddies[a-z0-9-]*|calm-visualizer|soundscapes|echoes-of-gold|pal-cam[a-z0-9-]*)\.html$/;
+  function ambientOk() {
+    return !!(PLAY_PAGE.test(current) || (document.body && document.body.classList.contains('is-game'))) && !sensitivePage() && !calmExtras();
+  }
   function floatCount() {
-    if (WORKSPACE.test(current) || sensitivePage() || calmExtras()) return 0;
-    return window.matchMedia && matchMedia('(min-width: 900px)').matches ? 8 : 16;
+    if (WORKSPACE.test(current) || !ambientOk()) return 0;
+    if (current === '/index.html') return 6;   // the opening and "Meet the friends" only (the first six sit at the top)
+    return window.matchMedia && matchMedia('(min-width: 900px)').matches ? 8 : 12;
   }
   function calmExtras() {
     var h = document.documentElement.classList;
+    if (lsGet('tol-quiet') === '1' || lsGet('tol-still') === '1' || h.contains('tol-still') || h.contains('tol-quiet')) return true;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
     if (/^(lg|xl|xxl)$/.test(lsGet('tol-text-size') || '') || h.contains('ti-literal')) return true;
     try { if ((JSON.parse(lsGet('tol-take-in') || '{}').prefs || []).indexOf('literal') !== -1) return true; } catch (e) {}
     return false;
   }
   function appBarSkip() {
     if (lsGet('tol-quiet') === '1') return true;
+    // one prompt a visit: a first visit gets "Would a calmer page help?" instead; never on a shared link's arrival
+    if (!lsGet('tol-comfort-offer') || !promptFree('appbar') || /#together=|[?&]together=/.test(location.href)) return true;
     try { if ((JSON.parse(lsGet('tol-take-in') || '{}').prefs || []).indexOf('nosurprise') !== -1) return true; } catch (e) {}
     var d = lsGet('tol-appbar-off');
     return !!(d && /^\d{4}-\d\d-\d\d$/.test(d) && Date.now() - Date.parse(d) < 30 * 86400000);
@@ -1594,7 +1606,7 @@
     }
 
     // little buddies who cheer you on between the sections of a reading page (cheer.js)
-    if (!body.hasAttribute('data-no-cheer') && !helpersHidden() && !busyPage() && !sensitivePage() && current !== '/index.html' && current !== '/' &&
+    if (!body.hasAttribute('data-no-cheer') && !helpersHidden() && !busyPage() && !sensitivePage() && ambientOk() && current !== '/index.html' && current !== '/' &&
         (document.querySelector('main.read') || body.classList.contains('tol-deep')) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var cw = document.createElement('script'); cw.src = '/assets/js/cheer-words.js';
       cw.onload = cw.onerror = function () { var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; document.head.appendChild(ch); };
@@ -1634,7 +1646,7 @@
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
     // (not on the tender pages, and not on Frequency Buddies, where they'd sit over the episode)
-    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && !calmExtras() && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && ambientOk() && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         !/^\/(frequency-journey(-play)?|frequency-buddies|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
       var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
     }
@@ -1696,6 +1708,7 @@
     buildPuddles(body);
     buildPuddlesCards(body);
     buildPuddlesPop(body);
+    buildOneFab(body);
     comfortOffer(body);
     rememberPage(body);
     progNote();
@@ -1723,6 +1736,7 @@
       appBar.style.height = '36px'; appBar.style.margin = (-pt) + 'px ' + (-pr) + 'px 0 ' + (-pl) + 'px';
       body.insertBefore(appBar, body.firstChild);
       bar.style.marginTop = '0px';
+      promptTake('appbar');
       loadScript('/assets/js/app-bar.js').catch(function () { appBar.remove(); });
     } else if (window.navigator.standalone === true && !inFrame && lsGet('tol-ios-welcome') !== '1') {
       // just added to an iPhone or iPad Home Screen: app-bar.js says "Installed. Welcome to the app", once
@@ -3552,6 +3566,73 @@
     if (main && pal) pal.parentNode.insertBefore(hi, pal);
     else if (main) main.insertBefore(hi, intro ? intro.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
+  }
+
+  // ---------- home16b: one small corner button for the floating helpers ----------
+  // Professor Puddles' floating button and the Breathe button were two things floating over the words. Now one small
+  // round button sits in the bottom corner and opens a tiny menu: Ask Professor Puddles · Breathe for a minute (just
+  // the one that's on this page, straight away, if there's only one). It steps aside while someone types in a form or
+  // scrolls down through the reading (it comes back when they stop near the end, scroll up, or reach the top), and it
+  // is never half off the screen. The two original buttons stay in the page, hidden, for the shortcuts that use them.
+  function buildOneFab(body) {
+    var pud = document.querySelector('.tol-pud-fab'), br = document.querySelector('.tol-breathe-btn');
+    if (!pud && !br) return;
+    var html = document.documentElement;
+    html.classList.add('tol-one-fab');
+    var wrap = el('div', { class: 'tol-help no-bubble no-print' });
+    var btn = el('button', { type: 'button', class: 'tol-help-fab', 'aria-expanded': 'false', 'aria-haspopup': 'true' },
+      '<span class="tol-help-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-help-t">' + T('Help', 'Ayuda') + '</span>');
+    var menu = el('div', { class: 'tol-help-menu', role: 'menu', hidden: '' });
+    function item(label, target) {
+      var b = el('button', { type: 'button', role: 'menuitem', class: 'tol-help-item' }, label);
+      b.addEventListener('click', function () { close(); target.click(); });
+      return b;
+    }
+    function avail() { return { pud: pud && !html.classList.contains('tol-no-helpers') && document.contains(pud), br: br && document.contains(br) }; }
+    function fill() {
+      var a = avail(); menu.textContent = '';
+      if (a.pud) menu.appendChild(item(T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'), pud));
+      if (a.br) menu.appendChild(item(T('Breathe for a minute', 'Respirar un minuto'), br));
+      btn.setAttribute('aria-label', a.pud && a.br ? T('Help: ask Professor Puddles, or breathe for a minute', 'Ayuda: pregúntale al Profesor Puddles, o respira un minuto')
+        : a.pud ? T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') : T('Breathe: a one-minute calm break', 'Respirar: una pausa de un minuto'));
+      wrap.hidden = !a.pud && !a.br;
+      var t = btn.querySelector('.tol-help-t'); if (t) t.textContent = a.pud && a.br ? T('Help', 'Ayuda') : a.pud ? T('Ask Puddles', 'Pregúntale') : T('Breathe', 'Respirar');
+      return a;
+    }
+    function close(focus) { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); if (focus) btn.focus(); }
+    btn.addEventListener('click', function () {
+      var a = fill();
+      if (a.pud && !a.br) { pud.click(); return; }
+      if (a.br && !a.pud) { br.click(); return; }
+      var open = menu.hidden; menu.hidden = !open; btn.setAttribute('aria-expanded', String(open));
+      if (open) { var f = menu.querySelector('button'); if (f) f.focus(); }
+    });
+    menu.addEventListener('keydown', function (e) {
+      var items = Array.prototype.slice.call(menu.querySelectorAll('button')), i = items.indexOf(document.activeElement);
+      if (e.key === 'Escape') { e.preventDefault(); close(true); }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); var n = items[(i + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length]; if (n) n.focus(); }
+    });
+    document.addEventListener('click', function (e) { if (!menu.hidden && !wrap.contains(e.target)) close(); });
+    wrap.appendChild(menu); wrap.appendChild(btn);
+    body.appendChild(wrap);
+    fill();
+    document.addEventListener('tol-quiet', fill);
+    // out of the way: while typing in a form, and while scrolling down through the page on a phone or tablet
+    var FIELD = 'input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), textarea, select, [contenteditable="true"]';
+    document.addEventListener('focusin', function (e) { if (e.target.matches && e.target.matches(FIELD) && !wrap.contains(e.target)) wrap.classList.add('is-away'); });
+    document.addEventListener('focusout', function (e) { if (e.target.matches && e.target.matches(FIELD)) setTimeout(function () { var a = document.activeElement; if (!(a && a.matches && a.matches(FIELD))) wrap.classList.remove('is-away'); }, 50); });
+    var lastY = window.scrollY, ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var y = window.scrollY, nearEnd = y + window.innerHeight >= document.documentElement.scrollHeight - 120;
+        var wide = window.innerWidth >= 1180;   // on a wide screen it sits in the margin, beside the words
+        if (!wide && y > lastY + 4 && y > 200 && !nearEnd && menu.hidden) wrap.classList.add('is-tucked');
+        else if (y < lastY - 4 || y < 200 || nearEnd || wide) wrap.classList.remove('is-tucked');
+        lastY = y;
+      });
+    }, { passive: true });
   }
 
   // ---------- Professor Puddles, on every page ----------

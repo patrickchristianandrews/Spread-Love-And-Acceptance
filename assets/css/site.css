@@ -3083,3 +3083,25 @@ html.tol-quiet-plain .tol-pillars-fold{ display:none !important; }
 /* home16b: keep the top bar's room from the first paint, so the page doesn't jump down when site.js puts the bar in
    (the spacer goes the moment the bar is there) */
 @media screen{ body:not(:has(> .tol-bar))::before{ content:""; display:block; height:64px; } }
+
+/* home16b: one small corner button for the floating helpers (site.js buildOneFab): Ask Professor Puddles · Breathe */
+html.tol-one-fab .tol-pud-fab, html.tol-one-fab .tol-breathe-btn{ display:none !important; }
+.tol-help{ position:fixed; right:max(.75rem, env(safe-area-inset-right)); bottom:max(.75rem, env(safe-area-inset-bottom)); z-index:885;
+  display:flex; flex-direction:column; align-items:flex-end; gap:.4rem; transition:transform .25s ease, opacity .25s ease; }
+.tol-help[hidden]{ display:none; }
+.tol-help.is-away, .tol-help.is-tucked{ transform:translateY(calc(100% + 1.5rem)); opacity:0; pointer-events:none; }
+html.tol-still .tol-help, html.tol-quiet .tol-help{ transition:none; }
+.tol-help-fab{ display:inline-flex; align-items:center; gap:.35rem; min-height:48px; padding:.25rem .9rem .25rem .3rem; border-radius:999px; cursor:pointer;
+  font:600 .92rem/1 "Lora", Georgia, serif; color:#2F3A5C; background:rgba(234,242,251,.97); border:1px solid #A9CBE8; box-shadow:0 6px 18px rgba(47,58,92,.16); }
+.tol-help-fab:hover{ background:#DCEBF8; }
+.tol-help-fab:focus-visible, .tol-help-item:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tol-help-art{ display:grid; place-items:center; width:40px; height:40px; border-radius:50%; background:#fff; flex:none; }
+.tol-help-art svg{ width:32px; height:32px; }
+.tol-help-menu{ display:flex; flex-direction:column; min-width:13.5rem; padding:.35rem; border-radius:16px; background:var(--paper, #FFFDF7); border:1px solid #A9CBE8; box-shadow:0 12px 30px -10px rgba(47,58,92,.35); }
+.tol-help-menu[hidden]{ display:none; }
+.tol-help-item{ min-height:44px; padding:.45rem .8rem; border:0; border-radius:10px; background:none; text-align:left; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:var(--ink, #2B2620); }
+.tol-help-item:hover{ background:#EAF2FB; }
+html.tol-quiet .tol-help-fab{ box-shadow:none; background:#FFFDF7; border-color:var(--ink, #2B2620); }
+html.tol-quiet .tol-help-art{ display:none; }
+html.tol-quiet .tol-help-fab{ padding:.25rem .9rem; }
+@media print{ .tol-help{ display:none !important; } }

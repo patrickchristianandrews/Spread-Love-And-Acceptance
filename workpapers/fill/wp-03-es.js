@@ -71,6 +71,7 @@
     'Your list shows here as you add jobs below. Or print a blank one and fill it in together.': 'Tu lista aparece aquí a medida que añades tareas abajo. O imprime una en blanco y llénenla juntos.',
     'One clean page of the list on this page: each job, its owner and a box to tick. Fits A4 and US Letter. With no list yet, it prints a blank one.': 'Una página limpia con la lista: cada tarea, quién se encarga y una casilla para marcar. Cabe en A4 y en tamaño carta. Si todavía no hay lista, imprime una en blanco.',
     'How saving works': 'Cómo se guarda',
+    'How it works': 'Cómo funciona', 'and how saving works: it stays on this device': 'y cómo se guarda: se queda en este dispositivo',
     'Saved on this device once you start': 'Se guarda en este dispositivo en cuanto empiezas',
     'Saved on this phone once you start': 'Se guarda en este teléfono en cuanto empiezas',
     'Saved on this phone': 'Guardado en este teléfono', 'Saved on this device': 'Guardado en este dispositivo',
@@ -123,7 +124,7 @@
   };
   function word(k) { return MAP[k] || k; }
   var RX = [
-    [/^Saved on this (phone|device) as you type, so it’s here when you come back\. To remove it: “Erase”, under How saving works\.$/, function (m) { return 'Se guarda en ' + (m[1] === 'phone' ? 'este teléfono' : 'este dispositivo') + ' mientras escribes, así que estará aquí cuando vuelvas. Para quitarlo: “Borrar todo”, en Cómo se guarda.'; }],
+    [/^Saved on this (phone|device) as you type, so it’s here when you come back\. To remove it: “Erase”, under How (?:saving|it) works\.$/, function (m) { return 'Se guarda en ' + (m[1] === 'phone' ? 'este teléfono' : 'este dispositivo') + ' mientras escribes, así que estará aquí cuando vuelvas. Para quitarlo: “Borrar todo”, en Cómo funciona.'; }],
     [/^(\d+) of (\d+)\. Every job you’ve set has an owner\. (\d+) example (?:job is|jobs are) still on the list: give (?:it|them) an owner, or remove (?:it|them) if you don’t need (?:it|them)\.$/, function (m) { var one = m[3] === '1'; return m[1] + ' de ' + m[2] + '. Cada tarea que pusieron tiene a alguien a cargo. ' + (one ? 'Todavía queda 1 tarea de ejemplo en la lista: pónganle a alguien a cargo, o quítenla si no la necesitan.' : 'Todavía quedan ' + m[3] + ' tareas de ejemplo en la lista: pónganles a alguien a cargo, o quítenlas si no las necesitan.'); }],
     [/^Saved on this (phone|device) as you type \(the box below\), so closing the tab won’t lose it\. On a shared device, untick it or press Erase when you’re done\.$/, function (m) { return 'Se guarda en ' + (m[1] === 'phone' ? 'este teléfono' : 'este dispositivo') + ' mientras escribes (la casilla de abajo), así que no se pierde si cierras la pestaña. En un dispositivo compartido, desmárcala o pulsa “Borrar todo” cuando termines.'; }],
     [/^Kept in this tab until you close it, so a reload or Back won’t lose your answers\.$/, function () { return 'Se guarda en esta pestaña hasta que la cierres, así que no se pierde si recargas la página o vas hacia atrás.'; }],

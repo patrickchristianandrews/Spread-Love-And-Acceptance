@@ -126,6 +126,25 @@
   .ar-swing:active{ transform:translateY(3px); box-shadow:0 3px 0 #C9A94F; }
   .ar-swing:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
   .ar-swing[hidden]{ display:none; }
+  /* tools16: fewer words before the first tap. A one-line intro ("How it works" holds the rest), a Start button at the
+     top of the picker, and on a phone the hero and the cards are compact, so the picker is on the first screen. */
+  .jl-howto{ margin:-.6rem auto 1rem; max-width:34rem; text-align:left; }
+  .jl-howto summary{ display:inline-flex; align-items:center; min-height:44px; cursor:pointer; font-weight:600; color:#4E3F6B; text-decoration:underline; text-underline-offset:3px; }
+  .jl-howto p{ margin:.2rem 0 0; color:#4E3F6B; }
+  .ar-go-row.ar-go-top{ position:static; margin:.2rem 0 .4rem; }
+  @media (max-width:640px){
+    .jl-hero{ margin:.2rem 0 1rem; padding:1rem 1rem 1rem; border-radius:22px; }
+    .jl-sun, .jl-hero .jl-k, .jl-hero .jl-actions{ display:none; }
+    .jl-hero h1{ font-size:1.65rem; margin:0 0 .3rem; }
+    .jl-hero .jl-sub{ font-size:1rem; margin-bottom:.8rem; }
+    .jl-howto{ margin:-.4rem auto 0; }
+    .ar-select{ padding-top:1rem !important; }
+    .ar-fs .ar-row{ grid-template-columns:1fr 1fr; gap:.5rem; }
+    .ar-card{ grid-template-columns:1fr; padding:.6rem .6rem .7rem; text-align:center; justify-items:center; gap:.15rem; }
+    .ar-card canvas{ grid-row:auto; width:72px; height:58px; }
+    .ar-card h3{ font-size:1.02rem; }
+    .ar-card p, .ar-card .ar-ctl{ display:none; }
+  }
   /* tools16: before "Play ball", the Swing button says to tap Play ball first */
   .ar-swing.is-wait{ background:#EDE6F7; color:#3C3350; box-shadow:0 4px 0 #BFB3D6; font-size:1.1rem; cursor:default; }
   .ar-ov-btns .ar-btn.is-nudge{ animation:arNudge .7s ease-out; }
@@ -231,7 +250,8 @@
 <!-- pal cam hook (pals-cam.js): check in on Tidbit & Sugarfoot -->
 <div class="pc-launch-row" data-palcam-row hidden><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
 <!-- /pal cam hook -->
-  <p class="jl-sub">Six classic arcade games, made gentle: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby. Play as Tidbit or Sugarfoot. Every level is new, there’s no game over, and the controls are as easy as we could make them.</p>
+  <p class="jl-sub">Six gentle classic games. Pick a pup and a game, then press Start.</p>
+  <details class="jl-howto no-bubble"><summary>How it works</summary><p>Six classic arcade games, made gentle: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby. Play as Tidbit or Sugarfoot. Every level is new, there’s no game over, and the controls are as easy as we could make them. Your pup, your settings and your best scores stay in this browser.</p></details>
   <div class="jl-actions">
     <a class="jl-go" href="#ar-select">&#9654; Choose and play</a>
     <a class="jl-go is-soft" href="#buddies">Watch Frequency Buddies</a>
@@ -241,6 +261,7 @@
 <section class="jl-sec ar-select" id="ar-select" aria-labelledby="ar-h">
   <h2 id="ar-h" class="no-bubble">Press start</h2>
   <p class="jl-intro no-bubble">Two pups, six games. Pick what you like. You can change your mind any time.</p>
+  <div class="ar-go-row ar-go-top"><button type="button" class="jl-go" id="ar-start-top">&#9654; Start</button></div>
 
   <fieldset class="ar-fs">
     <legend class="no-bubble">1 · Choose your pup</legend>

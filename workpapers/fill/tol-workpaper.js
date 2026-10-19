@@ -838,7 +838,7 @@
     var box = h('section', { className: 'wpf-tonight no-print tol-plain', 'aria-labelledby': hid });
     box.appendChild(h('h2', { id: hid, text: three ? (fw.tonight || 'Just tonight: 3 questions') : 'Just tonight’s check-in' }));
     box.appendChild(h('p', { className: 'wpf-help', text: three
-      ? 'About 90 seconds, and nothing else on the page is needed. Each person says how full today was, one thing they appreciated, and one thing that would help tomorrow, in a sentence, about their own day. Then just listen: no debating, no solving.' + (fw.tonightNote ? ' ' + fw.tonightNote : '') + ' It\u2019s kept with today (' + day + ') in the week, folded away below.'
+      ? 'About 90 seconds. Each of you answers about your own day, in a sentence. Then just listen: no debating, no solving.' + (fw.tonightNote ? ' ' + fw.tonightNote : '') + ' Kept with today (' + day + ') in the week below.'
       : 'About 90 seconds. Each person says how full today was (low, medium or high), then answers in a sentence, about their own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
     // the same questions for a team (a short stand-up) or for housemates
     if (sec.others && sec.others.length) {
@@ -1371,7 +1371,7 @@
   A.startKeep = function () {
     this.keep = true;
     var box = document.getElementById('wpf-keep'); if (box) box.checked = true;
-    if (this.keepNow()) this.status('Saved on ' + deviceWord() + ' as you type, so it\u2019s here when you come back. To remove it: \u201cErase\u201d, under How saving works.');
+    if (this.keepNow()) this.status('Saved on ' + deviceWord() + ' as you type, so it\u2019s here when you come back. To remove it: \u201cErase\u201d, under How it works.');
     else this.keep = false;
     this.savedNote();
   };
@@ -2208,7 +2208,7 @@
     this.savedNote();
     if (this.afterChange) this.afterChange();
     if (on) {
-      if (this.keepNow()) this.status('Kept on this device for next time. To remove it: “Erase”, under How saving works.');
+      if (this.keepNow()) this.status('Kept on this device for next time. To remove it: “Erase”, under How it works.');
     } else {
       clearTimeout(this.keepTimer);
       try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
@@ -2591,8 +2591,15 @@
     var priv = document.querySelector('main .wpf-privacy');
     if (!priv || priv.closest('.wpf-how')) return;
     var det = h('details', { className: 'wpf-how no-bubble', id: 'wpf-how' }, [
-      h('summary', null, [h('span', { className: 'wpf-how-t', text: 'How saving works' }), h('span', { className: 'wpf-how-s', text: 'It stays on this device' })])]);
+      h('summary', null, [h('span', { className: 'wpf-how-t', text: 'How it works' }), h('span', { className: 'wpf-how-s', text: 'and how saving works: it stays on this device' })])]);
     priv.parentNode.insertBefore(det, priv);
+    // tools16: fewer words before the first box. The opening paragraph keeps its first sentence; the rest moves
+    // into "How it works", just below (only plain text is moved, never a link)
+    var lede = document.querySelector('main > .wpf-lede:not(.pillar-note):not(.wpf-partb-note)');
+    if (lede && !lede.children.length) {
+      var m = /^([\s\S]{20,}?[.?!])\s+([\s\S]{20,})$/.exec(lede.textContent.trim());
+      if (m) { lede.textContent = m[1]; det.appendChild(h('p', { className: 'wpf-lede-more', text: m[2] })); }
+    }
     det.appendChild(priv);
     var idea = document.querySelector('main > .pillar-note');
     if (idea) det.appendChild(idea);
@@ -2915,7 +2922,7 @@
       onKeep: function (auto) {
         if (keepBox) keepBox.checked = true;
         app.setKeep(true);
-        if (auto && app.keep) app.status('Kept on this device, like your other worksheets. To remove it: \u201cErase\u201d, under How saving works.');
+        if (auto && app.keep) app.status('Kept on this device, like your other worksheets. To remove it: \u201cErase\u201d, under How it works.');
       }
     });
     app.afterChange = ask.check;
@@ -2954,7 +2961,7 @@
     });
     if (sharedSay()) { /* said */ }
     else if (app.cfRestored) app.status('You still have ' + (app.conflicts.length === 1 ? '1 choice' : app.conflicts.length + ' choices') + ' to make about the shared list, at the top of the sheet.');
-    else if (kept) app.status('Picked up what you saved on ' + deviceWord() + '. To remove it: “Erase”, under How saving works.');
+    else if (kept) app.status('Picked up what you saved on ' + deviceWord() + '. To remove it: “Erase”, under How it works.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
     else if (namesMsg) app.status(namesMsg);
     window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });
