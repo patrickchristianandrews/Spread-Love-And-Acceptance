@@ -192,7 +192,9 @@ div.tol-gate p{ max-width:60ch; }
   .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
 }
 
-.tol-panel{ width:min(38rem, 100vw); padding-top:0; }
+/* home16b: border-box, so the padding sits inside 100vw on every page (a page without a global box-sizing, like the
+   coin pusher, had a 425px panel at x=-35 on a 390 phone); max-width keeps it on screen whatever the page sets */
+.tol-panel{ width:min(38rem, 100vw); max-width:100vw; box-sizing:border-box; padding-top:0; }
 .tol-panel-head{ position:sticky; top:0; z-index:1; background:var(--paper); padding:1.1rem 0 .75rem; margin:0; border-bottom:1px solid var(--line); }
 .tol-panel-intro{ margin:.9rem 0 0; font-size:.95rem; color:var(--ink-soft); line-height:1.55; }
 .tol-panel-safe{ margin:.6rem 0 0; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.4rem .9rem; align-items:center; }
@@ -337,6 +339,9 @@ div.tol-gate p{ max-width:60ch; }
 .read .ideas .dig{ margin-top:auto; }
 /* The whole card opens its Dig deeper link */
 .read .ideas .dig::after{ content:""; position:absolute; inset:0; }
+/* home16b: any other link or control inside the card sits above that stretched link, so an inline link
+   ("Kids grown and gone" on /complacency.html) opens its own page, not the card's Dig deeper */
+.read .ideas > li :is(a[href], button, summary, input, select, textarea, label):not(.dig){ position:relative; z-index:1; }
 .read .ideas .dig:focus-visible{ outline:none; }
 .read .ideas > li:focus-within{ outline:2px solid var(--focus); outline-offset:-3px; }
 .read .ideas > li:target{ background:var(--paper-deep); box-shadow:inset 4px 0 0 var(--brass); }
@@ -1837,6 +1842,7 @@ html.tol-still .pc-launch .pc-dot{ animation:none; }
 .tol-depth-opt{ position:relative; }
 .tol-depth-opt a.tol-depth-name{ color:inherit; text-decoration:none; }
 .tol-depth-opt a.tol-depth-name::after{ content:""; position:absolute; inset:0; border-radius:18px; }
+.tol-depth-opt :is(a[href], button, summary):not(.tol-depth-name){ position:relative; z-index:1; }
 .tol-depth-opt a.tol-depth-name:focus-visible{ outline:none; }
 .tol-depth-opt:focus-within{ outline:3px solid var(--focus, #2F5F8A); outline-offset:2px; }
 
@@ -2343,6 +2349,10 @@ html.tol-still .tol-breathe-btn{ transition:none; }
 }
 body.has-pud-fab .tol-wx{ bottom:calc(4.6rem + env(safe-area-inset-bottom, 0px)) !important; }
 html.tol-no-helpers .tol-pud-fab{ display:none !important; }
+/* home16b: the plain "Ask Puddles" link in the bar, only while the floating button is tucked away */
+.tol-bar .tol-ask-link{ display:none; }
+html.tol-no-helpers:not(.tol-work) .tol-bar .tol-ask-link{ display:inline-flex; align-items:center; min-height:44px; padding:0 .55rem; color:var(--ink); font:600 .92rem/1.1 "Lora", Georgia, serif; text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+@media print{ .tol-bar .tol-ask-link{ display:none !important; } }
 @media print{ .tol-pud-fab{ display:none !important; } }
 /* the time and weather note never sits under Professor Puddles: on wider screens it rides just above him */
 body.has-pud-fab:not(.is-home-pud) .tol-cw{ bottom:calc(max(1rem, env(safe-area-inset-bottom)) + 58px) !important; }
@@ -2513,6 +2523,10 @@ html.tol-bubbles:not(.tol-nobubbles) main table:where(:not(.no-bubble, .tol-plai
 }
 .tol-drop li.tol-sub{ margin:.45rem 0 .1rem; padding:.45rem .5rem .1rem; }
 .tol-drop{ max-height:calc(100vh - var(--tol-bar-h, 58px) - 1.5rem); overflow-y:auto; overscroll-behavior:contain; }
+/* home16b: "More below" at the foot of a dropdown that scrolls (zoom or a short screen) */
+.tol-drop .tol-drop-more{ position:sticky; bottom:-.55rem; display:block; width:calc(100% + 1rem); margin:.3rem -.5rem -.55rem; padding:.55rem .5rem .6rem; border:0; border-top:1px solid var(--line, #d9cdb4);
+  background:var(--paper); color:var(--ink); font:600 .88rem/1.2 "Lora", Georgia, serif; text-align:center; cursor:pointer; min-height:40px; }
+.tol-drop .tol-drop-more[hidden]{ display:none; }
 /* The polymath way: the last row of every menu group, set apart */
 .tol-drop li.tol-foot-row, .tol-index li.tol-foot-row{ margin-top:.4rem; padding-top:.4rem; border-top:1px solid var(--line, #d9cdb4); }
 .tol-foot-polymath{ margin:0 0 .75rem; font-size:.92rem; text-align:center; }
@@ -3039,3 +3053,29 @@ html.tol-quiet .tol-related ul a{ background:var(--paper); }
 .gm-switch .gm-chip{ margin-left:auto; }
 .gm-switch .gm-chip .tr-chip{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; }
 @media (max-width:420px){ .gm-switch a.gm-tab{ padding:.3rem .6rem; font-size:.82rem; } }
+
+/* home16b: Quiet mode and "No surprises" (Read your way) have no free-app line, even when turned on after the page opened */
+html:is(.tol-quiet, .ti-nosurprise) .tol-appbar{ display:none !important; }
+
+/* home16b: desktop calm. On a laptop or desktop the few bubbles and hearts drift slowly in the side margins, never behind
+   the words; Larger text and "Plain and literal" (Read your way) put them and the pups' visits away (site.js) */
+@media (min-width:900px){
+  .tol-wash b{ --d:52s !important; --s:26px !important; opacity:.4 !important; }
+  .tol-wash b.tol-heart{ animation-duration:64s, 64s !important; }
+  .tol-wash b:nth-of-type(4n+1){ left:2.5% !important; right:auto !important; }
+  .tol-wash b:nth-of-type(4n+2){ left:auto !important; right:3% !important; }
+  .tol-wash b:nth-of-type(4n+3){ left:7% !important; right:auto !important; }
+  .tol-wash b:nth-of-type(4n){ left:auto !important; right:7.5% !important; }
+}
+@media (min-width:900px) and (max-width:1180px){ .tol-wash b{ display:none !important; } }
+html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .ti-literal) .tol-wash b,
+html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .ti-literal) .tpv{ display:none !important; }
+
+/* home16b: "How this fits" (the Pillars box, folded to one line at the end of the page) */
+.tol-pillars-fold{ margin:1.8rem 0 1rem; max-width:none; }
+.tol-pillars-fold > summary{ display:inline-flex; align-items:center; min-height:44px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:var(--ink-soft, #5A5346); text-decoration:underline; text-underline-offset:3px; }
+.tol-pillars-fold > summary:focus-visible{ outline:2px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:6px; }
+.tol-pillars-fold[open] > summary{ margin-bottom:.5rem; }
+.tol-pillars-fold nav.tol-pillars{ margin-bottom:0; }
+html.tol-quiet-plain .tol-pillars-fold{ display:none !important; }
+@media print{ .tol-pillars-fold{ display:none !important; } }

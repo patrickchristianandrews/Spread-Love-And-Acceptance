@@ -421,14 +421,16 @@
     if (m.querySelector('#ask-chat') || Array.prototype.some.call(m.querySelectorAll('textarea, input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range]), select'), function (n) { return !within(n, '[class*="tol-"], [data-mini-player]'); })) return;
     var slot = topSlot(); if (!slot || slot.querySelector('.ti-time')) return;
     var clone = m.cloneNode(true);
-    Array.prototype.forEach.call(clone.querySelectorAll('nav, script, style, .ti-top, .tol-pud-card, .tol-cheer, .lp-card, .tol-read-host, .tol-fp-note, .tol-offer, [aria-hidden="true"], .sr-only'), function (n) { n.remove(); });
+    // a library to dip into (data-readtime-skip, e.g. the 73 situations on The logic behind it) is named, not counted as reading time
+    var skip = m.querySelector('[data-readtime-skip]'), skipNote = skip ? (skip.getAttribute('data-readtime-skip') || 'a library to dip into') : '';
+    Array.prototype.forEach.call(clone.querySelectorAll('nav, script, style, .ti-top, .tol-pud-card, .tol-cheer, .lp-card, .tol-read-host, .tol-fp-note, .tol-offer, [aria-hidden="true"], .sr-only, [data-readtime-skip]'), function (n) { n.remove(); });
     var words = (clone.textContent || '').split(/\s+/).filter(Boolean).length;
     if (words < 250) return;
     var mins = Math.max(1, Math.round(words / 200));
     var hs = Array.prototype.filter.call(m.querySelectorAll('h2'), function (h) { return !inOwn(h) && !h.closest('.tol-pud-card, .lp-card, .tol-read-host, .tol-fp-note, aside') && (h.textContent || '').trim(); });
     var p = el('div', { class: 'ti-time' });
     p.innerHTML = '<p><strong>About ' + mins + (mins === 1 ? ' minute' : ' minutes') + ' to read</strong> (' + words.toLocaleString('en-US') + ' words' +
-      (hs.length ? ', in ' + hs.length + (hs.length === 1 ? ' part' : ' parts') : '') + '). You can stop and come back any time.</p>' +
+      (hs.length ? ', in ' + hs.length + (hs.length === 1 ? ' part' : ' parts') : '') + ')' + (skipNote ? ', plus ' + esc(skipNote) : '') + '. You can stop and come back any time.</p>' +
       (hs.length > 1 ? '<details><summary>What’s on this page</summary><ol>' + hs.map(function (h) {
         var t = esc((h.textContent || '').replace(/\s+/g, ' ').trim());
         return '<li>' + (h.id ? '<a href="#' + esc(h.id) + '">' + t + '</a>' : t) + '</li>';

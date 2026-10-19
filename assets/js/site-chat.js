@@ -20,12 +20,13 @@
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var HONEST_LINE = 'I don’t make things up: every answer comes from what’s already written on this site. I pick the best match; I don’t invent new answers. I can still pick the wrong topic, so if I miss, tell me “that’s not it”. I’m not a therapist and can’t diagnose.';
   // "can I trust your answers?", "do you hallucinate?", "are you AI?": where the answers come from, honestly
-  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you (say|tell me|tell|write)|anything you (say|tell me)|this chat|puddles|the professor)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real))\b/;
+  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you (say|tell me|tell|write)|anything you (say|tell me)|this chat|puddles|the professor)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real)|(is|are) (this|this thing|it|you|puddles|he|the professor|this chat|this bot|your answers) (actually |really |just |even |only )?(an? )?(real )?(ai|a i|bot|chatbot|chat ?gpt|gpt|robot|canned|scripted|real ai|real person|generative)|canned (answers|responses|replies|stuff)|(just|only) (canned|scripted|pre ?written|preset|pre ?set|copy ?paste)( answers| responses| replies)?|actually (an? )?ai|ai or (just |only )?(canned|scripted|a script|a person|real)|is (this|it) (a )?(real )?(ai|a i) or|(are|is) (these|the|your|his) (answers|replies|responses) (just |all |actually )?(scripted|canned|pre ?written|ai|generated|made by ai))\b/;
   // "what modes do you have?", "what is deep mode?": light and deep, explained
   var MODES_Q = /\b(what|which) (modes?|ways (to|of) (chat|talk)\w*) (do you have|have you got|are there|can (i|we) (use|pick|choose))\b|^(what|which) modes( are there)?$|\bwhat (is|s|are) (the )?(deep mode|talk deep|deep talk|light mode|small talk mode)\b|\bdifference between (small talk|light mode|light talk|light) and (deep|talk deep|deep talk|deep mode)\b|\bhow (do|does) (talk deep|deep mode|deep talk|small talk mode) work\b|\b(explain|tell me about) (your|the) modes\b/;
   // internal or structural headings never offered as a likely topic
   var HIDE_TITLE = /\b(carrier wave vs\.? payload|architecture|pillar [ivx]+|in detail|sources?|references?|footnotes?)\b/i;
   var PRIVACY_LINE = 'Answers come from this site’s pages and the Professor’s notes. What you type stays on this device.';
+  var PRIVACY_LINE_ES = 'Las respuestas vienen de las páginas de este sitio y de las notas del Profesor. Lo que escribes se queda en este dispositivo.';
 
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
@@ -1005,6 +1006,12 @@
           .filter(function (o) { return o.sc > 0; }).sort(function (a2, b2) { return b2.sc - a2.sc || a2.i - b2.i; });
         var SH = state.shown || {}, fresh2 = fit.filter(function (o) { return !SH[norm(o.x)]; }), rest2 = c.how.filter(function (x) { return !SH[norm(x)]; });
         var pickL = fresh2.length ? fresh2.slice(0, 2).map(function (o) { return o.x; }) : rest2.slice(0, 2);
+        if (!pickL.length && c.after && c.after.length) {
+          // a grieving person never hears "I won't repeat them": the next most relevant thing instead (puddles16)
+          var SC = state.shownCards || (state.shownCards = {});
+          var nxt = c.after.map(cardById).filter(function (x) { return x && !SC[x.id]; })[0] || cardById(c.after[0]);
+          if (nxt) { SC[nxt.id] = 1; return cardReply(state, nxt, 'about'); }
+        }
         if (!pickL.length) {
           var lk0 = safeLinks(c.links).slice(0, 2), pages0 = lk0.map(function (l) { return l[1]; }), rs0 = search(state.curF || ''), al0 = null;
           rs0.hits.some(function (h) { var d = KB.docs[h.i]; if (!d.tip && !d.g && pages0.some(function (pu) { return pu.indexOf('#') > 0 ? d.u === pu : d.u.split('#')[0] === pu; }) && !SH['#doc' + h.i] && h.cov >= ((rs0.base || []).length <= 3 ? 0.99 : 0.6)) { al0 = h.i; return true; } return false; });
@@ -1423,9 +1430,46 @@
     }
     return null;
   }
+  // after a playbook, a short follow-up stays with it (puddles16): "what do I actually say to her?", "and if she says no?",
+  // "I'm scared it'll be awkward"; a flatmate's or co-parent's follow-up can have a card of its own
+  var SAYS_NO = /\b(if|what if|and if|but if|what happens if|what do i do if|what should i do if|what (do|can) i do if) (she|he|they|my \w+|it|the answer|the answers) (says?|said|is|s) no\b|\b(if|what if) (she|he|they) (refuses?|wont|won t|doesnt want to|does not want to|dont want to|isnt interested|says not now)\b|\b(she|he|they) (said|says) no\b|^(and |but )?(if|what if) (she|he|they) (says|said) no\b/;
+  var SIT_FOLLOW = {
+    roommate: [[/\b(awkward|scared|nervous|anxious|confront\w*|hate me|bring it up|raise it|bring this up)\b/, 'flatbringup'], [/\b(gets?|got|goes|get) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\b|\b(react\w*|takes? it) (badly|the wrong way)\b/, 'roommad']],
+    coparent: [[/\b(late|lateness|waiting|waits|waited)\b/, 'coparentpickuplate'], [/\b(ignores?|ignoring|doesnt (reply|answer)|no (reply|answer)|wont (reply|answer|agree))\b/, 'coparentnoreply']]
+  };
+  function sitFollow(state, L, f) {
+    var n = f.split(' ').length, I = IDX.sit.issues[L.issue];
+    if (!I || n > 18) return null;
+    var sw = detectSituation(f);
+    if (sw.score >= 5 && sw.who && sw.who !== L.who && sw.who !== 'other') return null;  // a clearly new story
+    var rules = (SIT_FOLLOW[L.who] || []).concat(L.who === 'roommate' ? [[SAYS_NO, 'roommad']] : L.who === 'coparent' ? [[SAYS_NO, 'coparentnoreply']] : []);
+    for (var i = 0; i < rules.length; i++) {
+      var fc = rules[i][0].test(f) && cardById(rules[i][1]);
+      if (fc) { var rc = cardReply(state, fc, 'about'); rc.kind = 'care'; state.care = { id: fc.id, turn: state.turn || 0, f: f }; if (CV_PERSONAL[fc.id] || fc.topic) setTopic(state, fc, fc.id); return rc; }
+    }
+    var P = sitParts(L.issue, L.who, L.noun, L.actor), cx = P.ctx, v = (L.v || 0) + 1;
+    if (L.who === 'roommate' && TF_SAY.test(f) && cardById('flatbringup')) { var rb = cardReply(state, cardById('flatbringup'), 'about'); rb.kind = 'care'; setTopic(state, cardById('flatbringup'), 'flatbringup'); return rb; }
+    if (TF_SAY.test(f) && P.scripts.length) {
+      var sb = [{ k: 'p', x: fill(L.who && L.who !== 'self' && L.who !== 'other' ? 'Here are some words you could use with {them}. Change any of them so they sound like you.' : 'Here are some words you could use. Change any of them so they sound like you.', cx) }];
+      [0, 1].forEach(function (j) { if (j < P.scripts.length) sb.push({ k: 'script', l: j ? 'Or' : 'Words you could use', x: fill(P.scripts[(v + j) % P.scripts.length], cx) }); });
+      if (P.path[0]) sb.push({ k: 'links', x: [P.path[0]] });
+      state.last = Object.assign({}, L, { v: v + 1 });
+      return { blocks: sb, chips: [{ label: 'What can I do tonight?', q: 'What can I do tonight?' }, { label: 'And if they say no?', q: 'And what if they say no?' }], kind: 'sit-more', id: L.who + '+' + L.issue };
+    }
+    if (SAYS_NO.test(f)) {
+      var nb = [{ k: 'p', x: fill('If {they} say no, or not yet, that’s an answer, not a door closing. Invite them, and let the answer be theirs. Keep it out of the middle of a disagreement, and come back to it at a calm time.', cx) },
+        { k: 'p', x: 'You can still start on your own side: what you write down stays useful for your own clarity, and everything on this site also works for one person.' }];
+      if (P.scripts.length) nb.push({ k: 'script', l: 'A smaller ask, another day', x: fill(P.scripts[v % P.scripts.length], cx) });
+      nb.push({ k: 'links', x: [['What if the other person doesn’t want to do this?', '/book/preface-in-depth.html#faq']].concat(P.path.slice(0, 1)) });
+      state.last = Object.assign({}, L, { v: v });
+      return { blocks: nb, chips: [{ label: 'What can I do tonight?', q: 'What can I do tonight?' }], kind: 'sit-more', id: L.who + '+' + L.issue };
+    }
+    return null;
+  }
   function followUp(state, f, q) {
     var L = state.last;
     if (!L) return null;
+    if (L.kind === 'sit' && IDX.sit.issues[L.issue]) { var sfu = sitFollow(state, L, f); if (sfu) return sfu; }
     if (L.kind === 'sit' && FU_TONIGHT.test(f)) {
       var PT = sitParts(L.issue, L.who, L.noun, L.actor);
       var step = PT.tonight || PT.steps[0] || '';
@@ -1551,8 +1595,17 @@
       c.blocks[0].x = fill('Thanks for telling me. I’d like to help with the right thing with {them}. Is it closest to one of these? Or say a bit more in your own words.', whoCtx(sit.who, sit.noun));
       return c;
     }
-    // the chips fit the person: on your own, after a loss, or older, never a list of couple fights
-    var solo = /\b(alone|on my own|by myself|lonely|widow\w*|lost my (wife|husband|partner)|(wife|husband|partner) (died|passed)|retired|my age|older|(i m|im|i am) (5|6|7|8|9)\d|single|divorced|live alone)\b/.test(f) || (state.page && /^\/(grief|on-my-own|empty-nest|grandparents)\.html$/.test(state.page.u || ''));
+    // the chips fit the person: a flatmate or a carer gets their own, never a list of couple fights (puddles16)
+    var pu = (state.page && state.page.u) || '';
+    var kind = /\b(kitchen|flat|flatmates?|housemates?|roommates?|room ?mates?|dorm|halls|shared house|house ?share|student house)\b/.test(f) || /^\/(sharing-a-room|roommates)\.html$/.test(pu) ? 'roommate'
+      : /\b(caring for|care for|carer|caregiv\w*|look(ing)? after (my )?(mum|mom|dad|mother|father|parents?|nan|gran))\b/.test(f) || /^\/caregivers\.html$/.test(pu) ? 'caregiving' : '';
+    if (kind && IDX.sit.who[kind]) {
+      var ck = clarifyWho(state, kind, '');
+      ck.blocks[0].x = 'Thanks for telling me. I want to make sure I help with the right thing. Is it closest to one of these? Or say a bit more in your own words.';
+      return ck;
+    }
+    // on your own, after a loss, or older: never a list of couple fights
+    var solo =/\b(alone|on my own|by myself|lonely|widow\w*|lost my (wife|husband|partner)|(wife|husband|partner) (died|passed)|retired|my age|older|(i m|im|i am) (5|6|7|8|9)\d|single|divorced|live alone)\b/.test(f) || (state.page && /^\/(grief|on-my-own|empty-nest|grandparents)\.html$/.test(state.page.u || ''));
     return { blocks: [{ k: 'p', x: 'Thanks for telling me. I want to make sure I help with the right thing. Is it closest to one of these? Or tell me a little more in your own words, like who it’s with and what happened.' }],
       chips: solo ? [{ label: 'Building a life on my own', q: 'Building a life on my own' }, { label: 'I lost someone', q: 'I lost my partner and the house is so quiet' }, { label: 'I feel lonely', q: 'I feel lonely' }, { label: 'Tell me something calming', q: 'Tell me something calming' }]
         : [{ label: 'We keep having the same fight', q: 'We keep having the same fight again' }, { label: 'Making up after a fight', q: 'How do we make up after a fight?' },
@@ -1563,7 +1616,7 @@
   // Asked plainly, answered plainly: who can see this chat, "is it my fault?", "tell me something calming",
   // "I just had a fight and I have 5 minutes", bigger text, reading out loud. These answer before anything else,
   // and they don't change the topic we were on.
-  var SHORTER = /^(ok |so |can you |could you |please |pls )*(tl ?dr|tldr|too long( didnt read)?|make (it|that|this) (shorter|simpler|short)|shorter|shorten (it|that|this)|summari[sz]e( (it|that|this))?|(give me )?(the )?(short|shorter|quick|simple|simpler) version|sum (it|that) up|(say|put) (it|that) (shorter|simpler|more simply|in fewer words|in plain words)|simpler|simplify( (it|that|this))?|too many words|too much text|in short|less words|fewer words)( please| pls)?$/;
+  var SHORTER = /^(ok |so |can you |could you |please |pls )*(tl ?dr|tldr|too long( didnt read)?|make (it|that|this) (shorter|simpler|short)|shorter|shorten (it|that|this)|summari[sz]e( (it|that|this))?|(give me )?(the )?(short|shorter|quick|simple|simpler) version|sum (it|that) up|(say|put) (it|that) (shorter|simpler|more simply|in fewer words|in plain words)|simpler|simplify( (it|that|this))?|too many words|too much text|in short|less words|fewer words|(something|anything|a|one|got anything|have you got (something|anything)) (quicker|shorter|faster|simpler|smaller)( (one|version|thing|to do))?|quicker|(a )?quicker (one|version|way))( please| pls| plz)?$/;
   var LEFT_OFF = /^(so |ok |okay |um |hey )*(where (did|was|were) (i|we) (leave|left|leaving) off|where (was|were) (i|we)|what were we (talking about|saying|doing|on)|(pick up|carry on|continue|keep going) (from )?where (i|we) left off|where did we get to|what was i (asking|doing|saying)|remind me what we were (talking about|doing))( please)?$/;
   // A short version of a reply: one line, up to three bullets (two when there are words to use), the words, one link.
   function shortBlocks(blocks, keepScript) {
@@ -1899,7 +1952,9 @@
     var L = state.last, n = f.split(' ').length;
     // after the long-distance answer, "how do I bring it up without nagging?" or "how do I make her stop being mad?"
     // stays about calls and distance, not chores
-    if (L && (L.card === 'longdistance' || (L.kind === 'sit' && L.issue === 'longdistance')) && /\b(bring (it|this) up|nag\w*|stop being (mad|upset|angry)|make (her|him|them) (stop|less)|(she|he|they) (s|is|are) (mad|upset|angry)|without (sounding|starting))\b/.test(f)) {
+    // (but "she texts 'fine' and I never know if she is mad" is a new question, about short texts: puddles16)
+    if (L && (L.card === 'longdistance' || (L.kind === 'sit' && L.issue === 'longdistance')) && /\b(bring (it|this) up|nag\w*|stop being (mad|upset|angry)|make (her|him|them) (stop|less)|(she|he|they) (s|is|are) (mad|upset|angry)|without (sounding|starting))\b/.test(f) &&
+      !/\b(fine|ok|okay|k|one word|short (text|texts|reply|replies)|time ?zones?|time difference)\b/.test(f)) {
       var ld = cardById('longdistance');
       return { blocks: [{ k: 'p', x: 'Keep it about the rhythm, not the scorecard: one example, how it felt, and one ask for a plan you both choose.' },
         { k: 'list', x: ['If you usually reach out: “I’ve been the one starting most of our calls, and I miss feeling chosen. Can we agree a rhythm, so it isn’t always on me?”',
@@ -1990,8 +2045,143 @@
     if (TF_SOURCE.test(f) && n <= 18 && (state.last || state.lastQ) && /\b(that|this|it|cite|source|sources)\b/.test(f)) return sourceReply(state);
     return null;
   }
+  // ---------- The logic behind it (KB.logic, from assets/js/logic-library.js; puddles16): "Why did my coworker say I
+  // embarrassed my manager? I only corrected a wrong number on his slide", "my mother asked if I liked the sweater she
+  // gave me, I said no…". The matching card in full, both sides, and its research when it leans on one.
+  var LOGIC_CUE = /\b(why (did|does|do|would|was|were|is|are|has|have|might|could|cant|wont|didnt|doesnt|isnt) |whats the logic|what is the logic|logic (behind|of)|the reason (he|she|they|people)|react(ed|s|ing|ion)? (like|that|so|badly|that way)|(get|got|gets|getting|was|is) (so |really |very )?(upset|angry|mad|hurt|annoyed|offended|weird|cross)|took it (badly|personally|the wrong way)|takes it (badly|personally)|offended|embarrass\w*|(is|was) (it|that|i) (rude|wrong|weird|odd))/;
+  var LOGIC_CANON = { corrected: 'correct', correcting: 'correct', corrects: 'correct', correction: 'correct', corrections: 'correct', correct: 'correct',
+    gift: 'present', gifts: 'present', gave: 'present', given: 'present', present: 'present', presents: 'present', unwraps: 'present', unwrapped: 'present',
+    sweater: 'jumper', sweaters: 'jumper', jumper: 'jumper', jumpers: 'jumper', cardigan: 'jumper', scarf: 'jumper',
+    honest: 'honest', honesty: 'honest', truth: 'honest', truthful: 'honest', truthfully: 'honest', untruth: 'lie', lie: 'lie', lied: 'lie', lies: 'lie', lying: 'lie',
+    coworker: 'colleague', coworkers: 'colleague', colleague: 'colleague', colleagues: 'colleague', workmate: 'colleague',
+    boss: 'manager', manager: 'manager', managers: 'manager', supervisor: 'manager', mistake: 'mistake', mistakes: 'mistake', error: 'mistake',
+    errors: 'mistake', typo: 'mistake', wrong: 'mistake', meeting: 'meeting', meetings: 'meeting', public: 'public', publicly: 'public',
+    embarrassed: 'embarrass', embarrass: 'embarrass', embarrassing: 'embarrass', humiliated: 'embarrass', silly: 'embarrass' };
+  var LOGIC_GENERIC = /^(why|react|reacted|reaction|reacts|upset|say|said|says|did|does|do|like|liked|likes|logic|behind|reason|happen|happened|really|now|just|only|then|ask|asked|asks|think|thought|mean|means|get|got|gets|was|were|make|made|so|very|act|acted|way|thing|things|something|someone|people|person|one|time|still|even|tell|told|other|after|before)$/;
+  var LOGIC_IX = null;
+  function logicCanon(w) { return LOGIC_CANON[w] || stem(w); }
+  function logicIndex() {
+    if (LOGIC_IX || !KB || !KB.logic) return LOGIC_IX;
+    var df = {}, items = KB.logic.map(function (it) {
+      var w = {};
+      function add(text, wt) { words(text).forEach(function (x) { if (STOP[x] || LOGIC_GENERIC.test(x)) return; var c = logicCanon(x); if ((w[c] || 0) < wt) w[c] = wt; }); }
+      add(it.chain.join(' ') + ' ' + it.fits + ' ' + it.other + ' ' + it.say + ' ' + it.step + ' ' + it.an, 0.7);
+      add(it.looks + ' ' + (it.care || ''), 1.5);
+      add(it.s.join(' '), 2.5);
+      add(it.t, 3);
+      Object.keys(w).forEach(function (c) { df[c] = (df[c] || 0) + 1; });
+      return { it: it, w: w };
+    });
+    LOGIC_IX = { items: items, df: df, n: items.length };
+    return LOGIC_IX;
+  }
+  function logicMatch(q) {
+    var X = logicIndex(); if (!X) return null;
+    var qs = {}; words(q).forEach(function (x) { if (!STOP[x] && !LOGIC_GENERIC.test(x)) qs[logicCanon(x)] = 1; });
+    var qt = Object.keys(qs); if (!qt.length) return null;
+    var scored = X.items.map(function (o) {
+      var s = 0, hits = 0;
+      qt.forEach(function (c) { if (o.w[c]) { s += o.w[c] * Math.log(1 + X.n / X.df[c]) * (ROLE[c] ? 0.3 : 1); hits++; } });
+      return { o: o, s: s, hits: hits };
+    }).sort(function (a, b2) { return b2.s - a.s; });
+    var top = scored[0];
+    if (!top || top.s < 7 || top.hits < 2 || (scored[1] && scored[1].s > top.s * 0.85)) return null;
+    // "she says she'll do things and then forgets": no card here is about forgetting, so it isn't this one
+    if (/\b(forget|forgets|forgot|forgetting|forgetful)\b/.test(fold(q)) && !/forget/i.test(JSON.stringify(top.o.it))) return null;
+    return top.o.it;
+  }
+  function logicReply(state, it, lead) {
+    var b = [{ k: 'p', x: lead || 'There’s a logic to that reaction, and it runs both ways. Here’s how The Logic Behind It explains it:' }, { k: 'h', x: it.t }];
+    b.push({ k: 'p', x: 'What it looks like from outside: ' + it.looks });
+    b.push({ k: 'p', x: 'The logic behind it:' });
+    b.push({ k: 'list', x: it.chain });
+    if (it.an) b.push({ k: 'p', x: 'It works like this: ' + lc1(it.an) });
+    b.push({ k: 'p', x: 'Why the reaction fits: ' + it.fits });
+    b.push({ k: 'p', x: 'The other side: ' + it.other });
+    b.push({ k: 'script', l: 'One sentence to explain it', x: it.say });
+    b.push({ k: 'p', x: 'One small step: ' + it.step });
+    if (it.care) b.push({ k: 'note', x: 'With care: ' + it.care });
+    if (it.refs && it.refs.length) b.push({ k: 'note', x: 'Research it leans on: ' + it.refs.map(function (r) { return r[0] + ', ' + r[1].toLowerCase(); }).join('; ') + '.' });
+    b.push({ k: 'links', x: [['The logic behind it: ' + it.t, '/the-logic-behind-it.html#l-' + it.id]].concat((it.refs || []).slice(0, 1).map(function (r) { return [r[0] + ' (the research behind this site)', r[2]]; })) });
+    state.last = { kind: 'logic', logic: it.id, q: it.t, topic: it.t, u: '/the-logic-behind-it.html#l-' + it.id };
+    return { blocks: b, chips: [{ label: 'Is there research on this?', q: 'Is there research on this?' }, { label: 'What could I say?', q: 'What could I say?' }], kind: 'logic', id: it.id };
+  }
+  function logicById(id) { return (KB.logic || []).filter(function (x) { return x.id === id; })[0] || null; }
+  // a follow-up after a Logic card stays with that card: research, what to say, an example
+  function logicFollow(state, f) {
+    var L = state.last, it = L && L.kind === 'logic' && logicById(L.logic);
+    if (!it || f.split(' ').length > 16) return null;
+    if (TF_SOURCE.test(f) || /\b(guess|guessing|made up|making (this|it) up|proof|science)\b/.test(f)) {
+      var b = [];
+      if (it.refs && it.refs.length) {
+        b.push({ k: 'p', x: 'Not a guess. This card leans on research, named on The research behind this site with an honest label for how strong it is:' });
+        b.push({ k: 'list', x: it.refs.map(function (r) { return r[0] + ' (' + r[1].toLowerCase() + ')' + (r[3] ? ': ' + r[3] : '.'); }) });
+        b.push({ k: 'links', x: it.refs.map(function (r) { return [r[0], r[2]]; }).concat([['The research behind this site', '/research.html']]) });
+      } else {
+        b.push({ k: 'p', x: 'This card doesn’t lean on one particular study. The Logic Behind It cards explain everyday reasoning in plain words, and where a card does rest on research, it names it and says how strong it is. Every source the site uses is on The research behind this site.' });
+        b.push({ k: 'links', x: [['The logic behind it: ' + it.t, '/the-logic-behind-it.html#l-' + it.id], ['The research behind this site', '/research.html']] });
+      }
+      return { blocks: b, chips: [{ label: 'What could I say?', q: 'What could I say?' }], kind: 'logic', id: it.id + '-research' };
+    }
+    if (TF_SAY.test(f) || FU_EX.test(f) || /^(what (could|can|should) i say|words)\b/.test(f)) {
+      return { blocks: [{ k: 'p', x: 'One sentence that explains it, from the card:' }, { k: 'script', l: 'Words you could use', x: it.say }, { k: 'p', x: 'And one small step that helps both of you: ' + lc1(it.step) }, { k: 'links', x: [['The logic behind it: ' + it.t, '/the-logic-behind-it.html#l-' + it.id]] }],
+        chips: [{ label: 'Is there research on this?', q: 'Is there research on this?' }], kind: 'logic', id: it.id + '-say' };
+    }
+    return null;
+  }
+
+  // ---------- "what does the research say about contempt in couples?": the Library's research summary for that topic
+  // and the studies behind it, each with the evidence label shown on The research behind this site (puddles16)
+  var RESEARCH_Q = /^(?:so |and |ok |okay |hi |hey )?(?:what|whats|what s) (?:does|do|is|did) (?:the )?(?:research|science|evidence|studies|study|data)(?: really| actually)? (?:say|show|tell(?: us)?|find|found|says|shows|suggest)(?: us)? (?:about|on|regarding|for)\s+(.+)$|^(?:is there|are there|any|got any) (?:good )?(?:research|studies|evidence|science) (?:on|about|into|for|behind)\s+(.+)$|^(?:research|studies|evidence) (?:on|about)\s+(.+)$/;
+  function researchReply(state, f) {
+    var m = RESEARCH_Q.exec(f); if (!m) return null;
+    var topic = (m[1] || m[2] || m[3] || '').replace(/\b(in|between|for|among) (couples|relationships?|partners|marriages?|families|people)\b/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!topic || /^(this|that|it|these|those|any of this|all this|the site|this site|what you said|what you just said)\b/.test(topic) || topic.split(' ').length > 8) return null;
+    var res = search(topic), tt = tokens(topic).filter(function (t) { return !ROLE[t]; });
+    if (!tt.length) return null;
+    var lib = null, refs = [];
+    res.hits.forEach(function (h) {
+      var d = KB.docs[h.i];
+      if (!lib && /what the research says/i.test(d.h) && h.cov >= 0.6) lib = h;
+      if (/^\/research\.html#ref-/.test(d.u) && h.cov >= 0.6 && refs.length < 2) refs.push(h);
+    });
+    if (lib) {
+      // the studies behind that Library entry: the reference list names where each one shows up on the site
+      var head = KB.docs[lib.i].h.split(':')[0].trim(), behind = [];
+      KB.docs.forEach(function (d, i) { if (behind.length < 2 && /^\/research\.html#ref-/.test(d.u) && d.x.indexOf(head) !== -1) behind.push({ i: i }); });
+      if (behind.length) refs = behind.concat(refs.filter(function (h) { return !behind.some(function (x) { return x.i === h.i; }); })).slice(0, 2);
+    }
+    if (!lib && !refs.length) return null;
+    var b = [{ k: 'p', x: 'Here’s what the research says about ' + topic + ', as the site sums it up, with how strong each source is:' }];
+    if (lib) b.push(passageBlock(lib.i, res.terms));
+    refs.forEach(function (h) { b.push(passageBlock(h.i, res.terms)); });
+    var lk = [['The research behind this site: every source, with its evidence label', '/research.html']];
+    if (lib) lk.push([pageName(KB.docs[lib.i].h.split(':')[0]) + ' (the Library)', KB.docs[lib.i].u]);
+    b.push({ k: 'links', x: lk });
+    state.last = { kind: 'search', q: topic, res: { hits: res.hits, terms: res.terms }, shown: {} };
+    if (lib) state.last.shown[lib.i] = 1;
+    return { blocks: b, chips: [{ label: 'What are the evidence labels?', q: 'What do the evidence labels on the research page mean?' }], kind: 'research', id: 'research' };
+  }
+
+  // ---------- someone asking about a client (a counsellor, a coach) gets an answer for them, with every safety line kept
+  var PRO_ASKER = /\b(my|a|our) (clients?|patients?|counsell?ees?|service users?|mentees?|caseload)\b|\b(i m|im|i am|as) (a |an )?(couples |family |marriage |licensed |school |relationship )?(therapist|counsell?or|coach|social worker|psychologist|mediator|clinician|caseworker|case worker)\b/;
+  function proReply(q, r) {
+    var f = norm(q);
+    if (!r || !r.blocks || !/^(safety|redflag)$/.test(r.kind || '') || !PRO_ASKER.test(f)) return r;
+    var asksTools = /\b(tools?|chore|chores|lemonade|workpapers?|chart|app|this site|the site|exercises?|homework|worksheets?|assign|use (this|these|it))\b/.test(f);
+    var lead = [{ k: 'p', x: (asksTools ? 'No. ' : '') + 'What you describe sounds like control, and the shared tools here aren’t for relationships with control. The site’s note for counsellors says: if you suspect coercive control or violence in a couple you see, please do not assign the shared tools. A shared chore list or pause plan can become one more thing to be checked on. Point the person to the safety page, or to support of their own.' },
+      { k: 'p', x: 'Here is what I’d say to your client, if they asked me themselves:' }];
+    r.blocks = lead.concat(r.blocks);
+    var lb = r.blocks.filter(function (x) { return x.k === 'links'; })[0];
+    var pro = [['For counsellors: the safety screen', '/for-counselors.html#safety']];
+    if (lb) lb.x = pro.concat(lb.x); else r.blocks.push({ k: 'links', x: pro });
+    return r;
+  }
+
   function sourceReply(state) {
     var lq = (state.last && state.last.q) || state.lastQ || '', b = [], links = [];
+    var lgf = state.last && state.last.kind === 'logic' && logicFollow(state, 'is there research on this');
+    if (lgf) return lgf;
     var refs = lq ? search(lq).hits.filter(function (h) { return /^\/research\.html#ref-/.test(KB.docs[h.i].u); }) : [];
     var top = refs[0] && refs[0].cov >= 0.3 ? refs.filter(function (h) { return h.s >= refs[0].s * 0.7; }).slice(0, 2) : [];
     if (top.length) {
@@ -2056,6 +2246,8 @@
     if (!r || !r.blocks || !sp || !sp.fixes.length || r.kind === 'unclear') return r;
     // "whats" for "what's", "im" for "I'm": not worth correcting anyone over
     if (sp.fixes.every(function (x) { return String(x[0]).toLowerCase().replace(/[^a-z0-9]/g, '') === String(x[1]).toLowerCase().replace(/[^a-z0-9]/g, ''); })) return r;
+    // chat shorthand ("pls", "u", "thx") is fine as it is: never "I think you mean …" over it (puddles16)
+    if (sp.fixes.every(function (x) { return /^(pls|plz|plss|u|ur|thx|ty|tho|cuz|cos|coz|bc|rn|idk|tbh|ngl|lol|ok|k|kk|ya|yea|yeah|gonna|wanna|gotta|dunno|bf|gf|ppl|abt|msg|txt)$/i.test(String(x[0]).replace(/[^a-z]/gi, '')); })) return r;
     var fixed = String(sp.q).replace(/[?!.,\s]+$/, '').trim().replace(/'/g, '’').replace(/\bi\b/g, 'I'), shown = fixed.split(/\s+/).length <= 10 ? fixed : sp.fixes.map(function (x) { return x[1]; }).join(', ');
     r.blocks.unshift({ k: 'p', x: 'I think you mean “' + shown + '”.', mean: 1 });
     return r;
@@ -2554,6 +2746,10 @@
       if (nr0) return meant(nr0, sp);
       var aq0 = KB && !DANGER.test(nf0) && artQuery(state, nf0), ar0 = aq0 && artReply(state, aq0);
       if (ar0) return meant(ar0, sp);
+      var rsr = !DANGER.test(nf0) && !state.unsafe && researchReply(state, nf0);
+      if (rsr) return meant(rsr, sp);
+      var lgf0 = !DANGER.test(nf0) && logicFollow(state, nf0);
+      if (lgf0) return meant(lgf0, sp);
       var cf = careFirst(state, q);
       if (cf) return meant(cf, sp);
       var sf = norm(q);
@@ -2601,7 +2797,8 @@
     'mama papa madre padre discutimos discusion gritos grita grito sola hola gracias quiero puedo siento cuando donde porque pero tambien nunca siempre espanol hablas habla ' +
     'ayudan cuidadora cuidador enfermo enferma demencia quehaceres tareas platos ropa limpiar novio novia familia abuela abuelo suegra hermanos hermano hermana ' +
     'necesitamos podemos quieres tienes puedes sabes soy eres somos estamos estan dias semana fin mañana manana hoy siempre vez veces llorar lloro sueño sueno ' +
-    'tiene tienen parkinson alzheimer paciencia pierdo culpable culpa dice entiendo cansancio esta él ella').split(' ');
+    'tiene tienen parkinson alzheimer paciencia pierdo culpable culpa dice entiendo cansancio esta él ella ' +
+    'resentido resentida rabia coraje repartir cuidado lejos vive viven dicen ayuden ayude peleando hago hermana hermanas cunado cunada').split(' ');
   var ES_SET = {}; ES_WORDS.forEach(function (w) { ES_SET[w] = 1; });
   var EN_SET = {}; 'the and my is are i you he she it to of in with what how do does can not but on at this that we they am was have has'.split(' ').forEach(function (w) { EN_SET[w] = 1; });
   function esFold(s) { return String(s || '').toLowerCase().replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e').replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o').replace(/[úùü]/g, 'u').replace(/ñ/g, 'n').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
@@ -2625,7 +2822,7 @@
     if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1) return null;
     var first = !state.es;
     state.es = 1; state.last = null;
-    var L = '/en-espanol.html', chips = ES_CHIPS;
+    var L = '/en-espanol.html', chips = state.esTopic === 'cuidar' ? ES_CARE_CHIPS : ES_CHIPS;
     function ans(id, lead, list, script, links, note) {
       var b = [{ k: 'p', x: lead }];
       if (list && list.length) b.push({ k: 'list', x: list });
@@ -2646,6 +2843,35 @@
       return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     // a little chit-chat in Spanish, after the safety answers: "¿cómo estás?", "cuéntame un chiste", "gracias"
     if (esc) { var esr0 = pzEs(state, esc, q); if (esr0) return esr0; }
+    // a carer's brothers and sisters, a parent, anger and guilt: the caregiver's answers (#cuidar, #resentimiento) and the
+    // Spanish care list, never the couple's "si tienes miedo de tu pareja" (puddles16)
+    var SIB_ES = /\b(herman[oa]s?|cunad[oa]s?)\b/.test(f), PAR_ES = /\b(mama|mami|papa|madre|padre|suegra|suegro|abuela|abuelo|viejita|viejito)\b/.test(f);
+    var CARE_ES = /\b(cuid\w*|repartir|reparto|turnar\w*|turnos?|ayud\w*|encarg\w*|visit\w*|lejos|no puede|no pueden|dicen que no|dice que no|no quiere|no quieren|se niega\w*)\b/.test(f);
+    var RES_ES = /\b(rabia|coraje|enoj\w*|enfad\w*|resentid[oa]s?|resentimiento|rencor|culpa|culpable|hart[oa]|frustrad[oa]|me molesta)\b/.test(f);
+    var PAREJA_ES = /\b(pareja|esposo|esposa|marido|mi mujer|novio|novia)\b/.test(f);
+    var parW = /\b(papa|padre|abuelo|suegro|viejito)\b/.test(f) && !/\b(mama|mami|madre|abuela|suegra|viejita)\b/.test(f) ? 'papá' : 'mamá';
+    var CARE_LIST = ['Una lista para repartir el cuidado', '/workpapers/fill/wp-03.html?for=care&lang=es'];
+    if (RES_ES && (SIB_ES || PAR_ES || state.esTopic === 'cuidar') && !PAREJA_ES && !/\b(miedo|me pega|golpe\w*|amenaz\w*)\b/.test(f)) {
+      state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS;
+      return ans('resentimiento', 'Muchos cuidadores a veces sienten enojo o resentimiento: contra la enfermedad, contra la familia que no ayuda, y hasta contra la persona que cuidan. Luego sienten culpa por sentirlo. Es normal. No te hace mala persona. Casi siempre quiere decir que llevas demasiado peso por demasiado tiempo.',
+        ['Dilo en voz alta a alguien de confianza: una amiga, un grupo de apoyo o un consejero. Decirlo lo hace más ligero.', 'Toma descansos de verdad, no solo dormir. Algo solo para ti, aunque sea una hora a la semana.', 'Pide un ayudante más. El resentimiento muchas veces quiere decir que el cuidado se tiene que repartir entre más personas.'].concat(SIB_ES ? ['Con tus hermanos, pide algo concreto, con día y hora. Una lista de quién se encarga de cada cosa les deja hablar de hechos, no de culpas.'] : []),
+        'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Enojo, resentimiento y culpa', L + '#resentimiento'], CARE_LIST, ['Cuando cuido a alguien que quiero', L + '#cuidar']]);
+    }
+    if ((SIB_ES && (CARE_ES || ((PAR_ES || state.esTopic === 'cuidar') && !/\b(pelean|se pelean|se pegan|discuten)\b/.test(f)))) || /\brepart\w*\b.{0,30}\bcuidado\b|\bcuidado\b.{0,30}\brepart\w*\b/.test(f)) {
+      state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS;
+      var links3 = [CARE_LIST, ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Enojo, resentimiento y culpa', L + '#resentimiento']];
+      if (/\b(dicen que no|dice que no|no quieren|no quiere|se niega\w*|no ayudan|no ayuda|no hacen nada|no hace nada)\b/.test(f))
+        return ans('hermanos-no', 'Si tus hermanos dicen que no, no quiere decir que tengas que cargar con todo tú solo.',
+          ['Pide algo más pequeño y concreto, con día y hora: una llamada al seguro, una cita, una llamada fija cada domingo. Es más fácil decir que sí a algo claro que a “ayúdame más”.', 'Busca descanso para ti: centros de día, cuidadores por horas, grupos de apoyo para cuidadores. Eldercare Locator (1-800-677-1116) te ayuda a encontrar servicios cerca de ti.', 'El resentimiento muchas veces quiere decir que el cuidado se tiene que repartir entre más personas. Una lista de quién se encarga de cada cosa les deja hablar de hechos, no de culpas.'],
+          '¿Podrías encargarte de una sola cosa, las llamadas al seguro? Y si no puedes, dime qué parte sí puedes tomar.', links3);
+      if (/\b(lejos|otra ciudad|otro pais|otro estado|no puede venir|no pueden venir)\b/.test(f))
+        return ans('hermanos-lejos', 'Vivir lejos no quiere decir que no pueda ayudar. Los que viven lejos también pueden ayudar, con tareas que se hacen desde cualquier lugar:',
+          ['Las llamadas al seguro, los papeles y pedir las citas.', 'Una llamada fija a ' + parW + ' cada domingo.', 'Pagar unas horas de cuidado, o venir unos días para que tú descanses.'],
+          '¿Podrías encargarte de las llamadas al seguro y llamar a ' + parW + ' cada domingo a las seis?', links3);
+      return ans('hermanos', 'Pedir ayuda a tus hermanos no es quejarse: es repartir algo que es de todos. Funciona mejor con algo concreto, con día y hora, y con una lista que todos puedan ver.',
+        ['Hagan una lista de todo lo que lleva el cuidado: medicinas, citas, seguro y papeles, las noches. Así hablan de hechos, no de quién hace menos.', 'Un encargado para cada tarea, de principio a fin.', 'Los que viven lejos también pueden ayudar: llamadas al seguro, papeles, citas, pagar unas horas de cuidado, o venir unos días.'],
+        'Ya no puedo con todo solo. ¿Podemos repartir el cuidado de ' + parW + '? Hice una lista: ¿qué parte puedes tomar tú?', links3);
+    }
     if (/\b(hijos|ninos|hermanos|hijas)\b.{0,30}\b(pelean|peleas|pelear|se pegan|discuten)\b/.test(f))
       return ans('hijos-pelean', 'Casi todas las peleas entre hermanos son por las mismas cosas: los turnos, el espacio, lo que es justo y la atención de los adultos. Si las reglas son claras, hay menos motivos para pelear.', ['Fíjate cuándo pelean: el mismo juguete, el mismo asiento, la misma hora.', 'Pon una regla sencilla para eso, como un reloj para los turnos de la tableta.', 'No busques quién empezó. Habla de lo que pasa ahora.'], 'Veo a dos niños que quieren lo mismo. ¿Qué podemos hacer para que los dos tengan su turno?', [['Cuando los hijos pelean', L + '#hijos-pelean']]);
     if (/\b(gemel[oa]s|bebes?|ninos pequenos|nino pequeno|panal\w*|siestas?|no dormimos|no duermo|no dormimos nada|recien nacido)\b/.test(f))
@@ -2663,10 +2889,13 @@
     // "él dice que yo no entiendo lo cansado que está": a tired partner, not caregiving
     if (/\b(dice|dices|dijo)\b.{0,30}\b(cansad[oa]|agotad[oa])\b|\b(el|ella|mi (esposo|esposa|marido|mujer|pareja))\b.{0,20}\b(esta|anda|llega) (muy )?(cansad[oa]|agotad[oa])\b/.test(f) && !/\b(cuid\w*|enferm\w*|parkinson|alzheimer|demencia)\b/.test(f))
       return ans('horas', 'Los dos trabajos cuentan, y los dos cansan. Cuando uno llega agotado, es fácil que el otro sienta que nadie ve lo que hace en casa, y al revés.', ['Escucha primero cómo está: “¿Qué fue lo más pesado de hoy?”', 'Cuenten las horas de los dos: el trabajo pagado y el viaje, y también las horas con los niños y la casa.', 'Lo justo no tiene que ser mitad y mitad. Elijan juntos una cosa que alivie al que esté más cansado esta semana.'], 'Veo que estás muy cansado. Yo también lo estoy. ¿Podemos mirar juntos la semana y ver qué nos alivia a los dos?', [['Cuando uno trabaja muchas horas', L + '#horas']]);
+    if (/\b(cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f)) { state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS; }
     if (/\b(triste|tristeza|cansad[oa]s?|agotad[oa]s?|noche dificil|dificil|calma|calmarme|tranquil\w*|no puedo mas|llor\w*|nervios\w*|ansiedad|cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f))
       return ans('cuidar', 'Lo siento, suena muy pesado. Vamos paso a paso. Primero, un momento de calma:', ['Respira despacio: toma aire contando hasta 4 y suéltalo contando hasta 6. Hazlo cinco veces.', 'Toma un vaso de agua y siéntate unos minutos en un lugar tranquilo.', 'Si cuidas a alguien, estar agotado o triste es normal. No es un fallo tuyo: es una señal de que necesitas más apoyo. Mañana pide una ayuda concreta, con día y hora.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['El Jardín de noche, para respirar despacio', '/night-garden.html']], 'Si la tristeza no se va, o piensas en hacerte daño, llama o escribe al 988 y marca el 2 para hablar en español.');
+    var menu = state.esTopic === 'cuidar' ? [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Enojo, resentimiento y culpa', L + '#resentimiento'], CARE_LIST, ['Si no estás a salvo en casa', L + '#seguro']]
+      : [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Si no estás a salvo en casa', L + '#seguro']];
     return { blocks: [{ k: 'p', x: (first ? 'Hola. Te respondo en español con lo esencial. ' : '') + '¿De qué se trata? Cuéntame un poco más en tus palabras, o mira una de estas partes:' },
-      { k: 'links', x: [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Si no estás a salvo en casa', L + '#seguro']] }], chips: chips, kind: 'lang', id: 'es-menu' };
+      { k: 'links', x: menu }], chips: chips, kind: 'lang', id: 'es-menu' };
   }
   // Once someone has told us about control or danger, later questions in the same chat never get couples tips
   // ("you're on the same side", talk it through calmly, conflict is normal): those could put them at risk.
@@ -3819,9 +4048,12 @@
     return pzR(state, [{ k: 'p', x: x }, { k: 'p', x: extra }], [{ label: 'Another one', q: 'Cheer me up' }, { label: 'Tell me a tiny story', q: 'Tell me a tiny story' }, { label: 'Something’s getting me down', q: 'Something’s getting me down' }], 'fun', 'pz-cheer', 'cheer');
   }
   function pzBored(state) {
-    var P = PZ(), L = pzPick(state, P.bored_links || []);
-    var b = [{ k: 'p', x: pzPick(state, P.bored) }];
-    if (L && L.length === 2) b.push({ k: 'links', x: [L] });
+    var P = PZ(), L = pzPick(state, P.bored_links || []), line = pzPick(state, P.bored);
+    var b = [{ k: 'p', x: line }];
+    // a line that promises the arcade links the arcade (and the calm games), never only the Night Garden (puddles16)
+    var arc = /\barcade\b/i.test(line) && (P.bored_links || []).filter(function (x) { return /arcade|pause-and-play/i.test(x[0] + ' ' + x[1]); });
+    if (arc && arc.length) b.push({ k: 'links', x: arc.slice(0, 2) });
+    else if (L && L.length === 2) b.push({ k: 'links', x: [L] });
     return pzR(state, b, [{ label: 'Rock, paper, scissors', q: 'Rock paper scissors' }, { label: 'Quiz me', q: 'Quiz me' }, { label: 'Would you rather…', q: 'Would you rather' }, { label: 'Tell me a riddle', q: 'Tell me a riddle' }], 'fun', 'pz-bored', 'bored');
   }
   function pzRpsStart(state) {
@@ -4188,6 +4420,7 @@
           chips: [{ label: 'Who does what', q: 'A few questions about who does what' }].concat(PICK_CHIPS), kind: 'clarify', id: 'unfairpick' };
       }
     }
+    if (chipDoc == null && LOGIC_CUE.test(f) && !DANGER.test(f) && !state.unsafe && !VERBAL.test(f) && !HARD.test(f)) { var lgm = logicMatch(q); if (lgm) return logicReply(state, lgm); }
     return respondSite(state, q, chipDoc);
   }
 
@@ -4488,6 +4721,8 @@
       return String(t).replace(/\s*\((?:that’s|that's|this is|see) Pillars? [IVX]+[^)]*\)/g, '')
         .replace(/(^|\s)This (?:is|touches|is part of) Pillars? [IVX]+[^.]*\.(?=\s|$)/g, '$1')
         .replace(/\s*\((?:(?:WP|CALC|REPORT|PROG)-\d+(?:,\s*|\s+and\s+)?)+\)/g, '')
+        // a bare code from a page's table ("Say it so it lands WP-09. How do I…") and a heading run into itself (puddles16)
+        .replace(/\s(?:WP|CALC|REPORT|PROG)-\d+\.?\s+(?=[A-Z])/g, '. ').replace(/(^|\s)(?:WP|CALC|REPORT|PROG)-\d+\.?(?=\s|$)/g, '$1').replace(/\b((?:[A-Za-z’']+\s+){1,6}[A-Za-z’']+)\s+\1\b/g, '$1').replace(/([?!.])\. /g, '$1 ')
         .replace(/\bPerson A\b/g, 'one person').replace(/\bPerson B\b/g, 'the other person')
         .replace(/[ \t]{2,}/g, ' ').replace(/\s+([.,;:])/g, '$1').trim();
     }
@@ -4503,7 +4738,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = proReply(q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -4625,7 +4860,10 @@
     '.tolc-bgcard{background:#FFFDF6;border-left-style:dashed}',
     '.tolc-chips{display:flex;flex-wrap:wrap;gap:.45rem;padding:.2rem .9rem .5rem}',
     '.tolc-chips:empty{display:none}',
-    '@media (max-width:719px){.tolc-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:.6rem}.tolc-chips::-webkit-scrollbar{display:none}.tolc-chip{flex:0 0 auto;white-space:nowrap}}',
+    // phones: chips wrap onto more lines, never cut off at the edge (puddles16); in the pop-up the row can scroll down if it's tall
+    '@media (max-width:719px){.tolc-chips{padding-bottom:.6rem}.tolc-chip{flex:0 1 auto;max-width:100%;white-space:normal}.tolc.is-modal .tolc-chips{max-height:32vh;max-height:32dvh;overflow-y:auto}}',
+    // short laptop screens (1366x768 at 125%, Larger text): the pop-up uses the full height, so an answer has room to show
+    '@media (min-width:720px) and (max-height:700px){.tolc.is-modal{bottom:8px;height:calc(100vh - 16px);height:calc(100dvh - 16px)}.tolc.is-modal .tolc-note{padding:.2rem 1rem .35rem}.tolc.is-modal .tolc-chips{max-height:6.5rem;overflow-y:auto}.tolc.is-modal .tolc-head{padding-top:.5rem;padding-bottom:.45rem}}',
     '.tolc-chip{min-height:44px;padding:.45rem .9rem;border-radius:22px;border:1px solid var(--c);background:#fff;color:var(--ink);font:inherit;font-size:.88rem;line-height:1.25;cursor:pointer;text-align:left}',
     '.tolc-chip:hover{background:var(--c-soft)}',
     '.tolc-typing{align-self:flex-start;display:flex;gap:5px;padding:.85rem 1rem;background:#fff;border:1px solid var(--line);border-radius:18px;border-bottom-left-radius:6px}',
@@ -4703,6 +4941,7 @@
     try { return /^es\b/i.test(document.documentElement.getAttribute('lang') || '') || (/^es\b/i.test(navigator.language || '') && !/^en\b/i.test((navigator.languages || [])[0] || '')); } catch (e) { return false; }
   }
   var ES_GREETING = 'Hola, soy el Profesor Puddles. Cuéntame qué pasa, en tus palabras. Te respondo en español con lo esencial y te llevo a la página en español; casi todo lo demás del sitio está en inglés.';
+  var ES_CARE_CHIPS = [{ label: 'Mis hermanos no ayudan', q: 'Mis hermanos no me ayudan a cuidar a mi mamá' }, { label: 'Repartir el cuidado', q: 'Quiero repartir el cuidado con mis hermanos' }, { label: 'Me siento culpable', q: 'Me da rabia y luego me siento culpable' }, { label: 'Necesito calma', q: 'Es una noche difícil, necesito calma' }];
   var ES_CHIPS = [{ label: 'Hago todo en la casa', q: 'Siento que hago todo en la casa' }, { label: 'Estoy agotado/a', q: 'Estoy agotado/a, cuido a mi pareja' }, { label: 'Peleamos mucho', q: 'Peleamos mucho' }, { label: 'Necesito calma', q: 'Es una noche difícil, necesito calma' }];
   function Chat(mode, host) {
     var me = this;
@@ -4792,20 +5031,37 @@
     this.input.placeholder = 'Ask ' + c.name + ' something…';
   };
 
+  // the chat's own buttons and lines in Spanish (from the Spanish page, a Spanish browser, or once someone writes in
+  // Spanish): "Empezar de nuevo", "Salir rápido", the footer, and what a screen reader hears (puddles16)
+  Chat.prototype.applyEs = function () {
+    var R = this.root, q = function (sel) { return R.querySelector(sel); }, x;
+    this.esChrome = true;
+    if ((x = q('.tolc-reset'))) x.textContent = 'Empezar de nuevo';
+    if ((x = q('.tolc-leave'))) { x.textContent = 'Salir rápido'; x.title = 'Salir rápido de este sitio'; }
+    if ((x = q('.tolc-x'))) x.setAttribute('aria-label', 'Cerrar el chat');
+    if ((x = q('.tolc-sub'))) { x.textContent = 'Guía del programa'; x.title = 'Tu guía de todo el programa'; }
+    if ((x = q('.tolc-log'))) x.setAttribute('aria-label', 'Conversación');
+    if ((x = q('.tolc-chips'))) x.setAttribute('aria-label', 'Sugerencias');
+    if ((x = q('.tolc-send'))) x.setAttribute('aria-label', 'Enviar');
+    if ((x = q('.tolc-note'))) x.textContent = PRIVACY_LINE_ES;
+    if ((x = q('label'))) x.textContent = 'Pregúntale al Profesor Puddles';
+    this.input.placeholder = 'Escribe aquí, en español…';
+  };
+
   Chat.prototype.render = function (m, isNew) {
     var el = document.createElement('div');
     if (m.r === 'c') {
       el.className = 'tolc-ctx' + (isNew ? ' is-new' : '');
-      var pc = document.createElement('p'); pc.textContent = 'Talking about: ' + (m.l || m.x); el.appendChild(pc);
+      var pc = document.createElement('p'); pc.textContent = (this.esChrome ? 'Hablamos de: ' : 'Talking about: ') + (m.l || m.x); el.appendChild(pc);
       this.log.appendChild(el);
       return el;
     }
     el.className = 'tolc-msg ' + (m.r === 'u' ? 'tolc-me' : 'tolc-bot') + (isNew ? ' is-new' : '');
     if (m.r === 'u') {
       var p = document.createElement('p'); p.textContent = m.x; el.appendChild(p);
-      var sr = document.createElement('span'); sr.className = 'tolc-sr'; sr.textContent = 'You said: '; el.insertBefore(sr, p);
+      var sr = document.createElement('span'); sr.className = 'tolc-sr'; sr.textContent = this.esChrome ? 'Tú dijiste: ' : 'You said: '; el.insertBefore(sr, p);
     } else {
-      var sr2 = document.createElement('span'); sr2.className = 'tolc-sr'; sr2.textContent = (m.n || 'Buddy') + ' says: '; el.appendChild(sr2);
+      var sr2 = document.createElement('span'); sr2.className = 'tolc-sr'; sr2.textContent = this.esChrome ? (m.n === DEFAULT_CHAR.name ? 'El Profesor Puddles' : (m.n || 'Buddy')) + ' dice: ' : (m.n || 'Buddy') + ' says: '; el.appendChild(sr2);
       (m.b || []).forEach(function (b) {
         if (b.k === 'p') { var p2 = document.createElement('p'); p2.textContent = b.x; el.appendChild(p2); return; }
         if (b.k === 'info') {
@@ -4944,6 +5200,7 @@
     loadKB(function (ok) {
       if (!ok) { me.say([{ k: 'p', x: 'Sorry, I couldn’t open the site’s pages just now. Please try again in a moment.' }], [], 300); return; }
       reply(me.state, text, doc, function (r) {
+        if (me.state.es && !me.esChrome && me.char && /Professor Puddles/.test(me.char.name)) me.applyEs();
         var len = r.blocks.reduce(function (n, b) { return n + (b.k === 'info' ? 20 : wc(b.x && b.x.join ? b.x.join(' ') : b.x || '')); }, 0);
         me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6), r.think);
       });
@@ -4984,8 +5241,8 @@
     // the home page's headline isn't a page topic: the usual hello there
     if (/^\/(index\.html)?$/.test(pageCtxNow().path) && /Curious about something on/.test(this.char.greeting || '')) this.char.greeting = DEFAULT_CHAR.greeting;
     if (this.es && this.char.name === DEFAULT_CHAR.name || this.es && /Professor Puddles/.test(this.char.name)) {
-      this.char.greeting = ES_GREETING; this.input.placeholder = 'Escribe aquí, en español…';
-      var lb = this.root.querySelector('label'); if (lb) lb.textContent = 'Pregúntale al Profesor Puddles';
+      this.char.greeting = ES_GREETING;
+      this.applyEs();
     }
     if (!this.started) {
       this.started = true;

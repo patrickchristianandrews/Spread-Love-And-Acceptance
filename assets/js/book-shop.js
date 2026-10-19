@@ -16,7 +16,7 @@ window.TOLBookShop = {
 (function () {
   function ok(u) { return typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u); }
   function apply() {
-    var shop = window.TOLBookShop || {};
+    var shop = window.TOLBookShop || {}, live = false;
     document.querySelectorAll('[data-shop-book]').forEach(function (row) {
       var links = shop[row.getAttribute('data-shop-book')] || {}, any = false;
       row.querySelectorAll('a[data-shop]').forEach(function (a) {
@@ -24,7 +24,10 @@ window.TOLBookShop = {
         if (ok(u)) { a.href = u; a.rel = 'noopener'; a.hidden = false; any = true; } else { a.removeAttribute('href'); a.hidden = true; }
       });
       row.hidden = !any;
+      if (any) live = true;
     });
+    // "Paperbacks: coming to Amazon soon" holds only until the first shop link is filled in
+    if (live) document.querySelectorAll('[data-shop-soon]').forEach(function (p) { p.textContent = 'The paperbacks are optional. Everything here stays free to read online.'; });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply); else apply();
 })();

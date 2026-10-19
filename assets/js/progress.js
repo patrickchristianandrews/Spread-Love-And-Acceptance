@@ -958,12 +958,38 @@
     placeCard(c);
     var p = {}; p[kind] = Date.now(); setState(p);
   }
+  // home16b, the pop-up rules: these cards ask only as a page opens, before the person has touched anything (so never
+  // over a result or a form they just opened), never on a link someone sent them, and only if nothing else has asked this
+  // visit (window.TOLPrompt, site.js). "Your own computer, or shared?" waits for the first page after they first save
+  // something here (sessionStorage 'tol-ask-due'), instead of turning up over the page a few seconds after it loads.
+  var ASK_DUE = 'tol-ask-due', startSig = null;
+  function saveSig() {
+    var st = local(); if (!st) return '';
+    return progressKeys(st).filter(meaningful).map(function (k) { var v = sget(st, k) || ''; return k + ':' + v.length + ':' + v.slice(-24); }).sort().join('|');
+  }
+  function noteSave() {
+    if (startSig === null || level() !== 'unasked') return;
+    if (saveSig() !== startSig && hasMeaningful(local())) { try { sess().setItem(ASK_DUE, '1'); } catch (e) {} }
+  }
+  function promptOk(name) {
+    var P = W.TOLPrompt, touched = P && P.touched ? P.touched() : 0;
+    if (touched) return false;
+    if (/#together=|[?&]together=|TOL-TOGETHER:/i.test(W.location.href)) return false;
+    if (HTML.classList.contains('ti-nosurprise')) return false;
+    return !P || P.free(name);
+  }
   function maybeCard() {
     var lv = level(); if (lv === 'shared' || card || lockEl) return;
     var inFrame = true; try { inFrame = W.self !== W.top; } catch (e) {}
     if (!hasMeaningful(local())) return;
-    if (lv === 'unasked') { if (!inFrame && !PAGE && !/^\/(safety|upset-right-now)\.html$/.test(path)) askCard(); return; }
+    if (lv === 'unasked') {
+      var due = false; try { due = sess().getItem(ASK_DUE) === '1'; } catch (e) {}
+      if (due && !inFrame && !PAGE && !/^\/(safety|upset-right-now)\.html$/.test(path) && promptOk('progress')) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
+      return;
+    }
     if (quietPage()) return;
+    if (!promptOk('progress')) return;
+    if (W.TOLPrompt) W.TOLPrompt.take('progress');
     var s = state(), now = Date.now();
     if (lv === 'phone' && isIOS() && !s.tip) { infoCard('tip'); return; }
     if (lv === 'phone' && !isIOS() && !s.perk) { infoCard('perk'); return; }
@@ -981,7 +1007,13 @@
     D.addEventListener('visibilitychange', function () { if (D.visibilityState === 'hidden') tick(); });
     W.addEventListener('pagehide', function () { tick(); });
     setTimeout(maybeCard, 3000);
-    if (lv === 'unasked') { var iv = setInterval(function () { if (level() !== 'unasked') { clearInterval(iv); return; } if (!card && hasMeaningful(local())) maybeCard(); }, 15000); }
+    // a save on this page (for "Your own computer, or shared?" on the next page they open)
+    if (lv === 'unasked') {
+      startSig = saveSig();
+      var iv = setInterval(function () { if (level() !== 'unasked') { clearInterval(iv); return; } noteSave(); }, 5000);
+      W.addEventListener('pagehide', noteSave);
+      D.addEventListener('visibilitychange', function () { if (D.visibilityState === 'hidden') noteSave(); });
+    }
   }
 
   // ---------------------------------------------------------------- one-tap "Save as an entry" for tools (and a backup for confirm-clear.js)

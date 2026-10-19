@@ -449,9 +449,14 @@
   // ============================================================== "Before you share": the ground rules, once
   // A short, skippable card the first time someone sends or opens a together link on this device. "Got it"
   // keeps the date in 'tol-collab-rules' so it never shows again; "Skip" hides it for this visit only.
-  var RULES_KEY = 'tol-collab-rules', RULES_SKIP = 'tol-collab-rules-skip', rulesN = 0, rulesWired = false;
+  // home16b: never for the person who opened a link someone sent (they aren't sharing anything yet): the panel's own
+  // banner says it in one line instead. sessionStorage 'tol-collab-received' marks this visit as theirs.
+  var RULES_KEY = 'tol-collab-rules', RULES_SKIP = 'tol-collab-rules-skip', RECEIVED = 'tol-collab-received', rulesN = 0, rulesWired = false;
+  function markReceived() { try { W.sessionStorage.setItem(RECEIVED, '1'); } catch (e) {} }
+  if (W && W.location && /#together=1\.|TOL-TOGETHER:/i.test(W.location.hash || '')) markReceived();
   function rulesDone() {
     if (!W) return true;
+    try { if (W.sessionStorage.getItem(RECEIVED)) return true; } catch (e) {}
     try { if (W.localStorage.getItem(RULES_KEY)) return true; } catch (e) {}
     try { if (W.sessionStorage.getItem(RULES_SKIP)) return true; } catch (e) {}
     return false;
@@ -844,6 +849,7 @@
           : T(from + ' sent you their part of ' + title() + '. ', from + ' te envió su parte de ' + title() + '. ') }),
           reply ? T('It’s below, beside yours. Change anything, then send it back.', 'Está abajo, junto a la tuya. Cambia lo que quieras y envíala de vuelta.') : T('Add yours, then send it back.', 'Agrega la tuya y envíala de vuelta.')]);
         banner.appendChild(lead);
+        if (!reply) banner.appendChild(mk('p', { cls: 'tcol-welcome', text: T('This is for understanding each other, not for scoring points. Your answers stay on this device until you send them back.', 'Esto es para entenderse, no para ganar puntos. Tus respuestas se quedan en este aparato hasta que las envíes de vuelta.') }));
         var lines = [];
         info.changes.forEach(function (c) {
           if (c.id === myId()) return;
@@ -881,10 +887,8 @@
       // the latest part from each person wins, and "Clear what you received" starts afresh)
       var me = getMe(), fresh = !st.env;
       // the first link ever opened here: the ground rules, at the top of this panel
-      if (how === 'link' || how === 'code') {
-        var rc = panel.querySelector('.tcol-rules') || rulesCard('open');
-        if (rc) panel.insertBefore(rc, panel.firstChild);
-      }
+      // (home16b: no "Before you share" card for whoever opens a link; the banner has a one-line welcome)
+      if (how === 'link' || how === 'code') { markReceived(); Array.prototype.forEach.call(panel.querySelectorAll('.tcol-rules'), function (n) { n.parentNode.removeChild(n); }); }
       var res = merge(st.env, env);
       if (!res) { info = { bad: true }; render(); return false; }
       var ids = Object.keys(res.env.p);

@@ -84,7 +84,9 @@
   }
 
   function render(scroll) {
-    var r = R.read(state.turns, state.me, state.form);
+    // what was typed into "Add context" helps name a tentative topic ("he missed our call")
+    var ctxText = ''; try { ctxText = ctxPanel && ctxPanel.get ? JSON.stringify(ctxPanel.get()) : ''; } catch (e) {}
+    var r = R.read(state.turns, state.me, state.form, { ctxText: ctxText });
     var others = state.speakers.filter(function (s) { return s !== state.me; });
     var them = others.length === 1 ? others[0] : (others.length ? 'the others' : 'them');
     var html = '';
@@ -162,7 +164,7 @@
 
     // Patterns on each side
     var pt = r.safety ? '' : patterns(r, them);
-    if (pt) html += drop('Patterns on each side', pt, false);
+    if (pt) html += drop('Patterns in the chat', pt, false);
 
     // Other things worth noticing
     var notes = [];
@@ -254,7 +256,7 @@
     var endsCalm = r.level === 'calm' && r.trend !== 'shutdown';
     parts.push('<p>' + chip +
       plural(t.length, 'message') + ': ' + r.mine + ' from you, ' + r.theirs + ' from ' + esc(them) + '.' +
-      (r.topic ? ' It seems to be about <strong>' + esc(r.topic) + '</strong>.' : r.topicUnsure ? ' The words don’t make it clear what it’s mostly about, so the Reader won’t guess.' : '') + '</p>');
+      (r.topicGuess ? ' It looks like it’s about <strong>' + esc(r.topicGuess) + '</strong>. Right? If not, the read still holds.' : r.topic ? ' It seems to be about <strong>' + esc(r.topic) + '</strong>.' : r.topicUnsure ? ' The words don’t make it clear what it’s mostly about, so the Reader won’t guess.' : '') + '</p>');
     var startWarm = t[0].heat >= 1.2;
     var story = 'It starts ' + (startWarm ? 'already tense' : 'calm') + '. ';
     if (r.turned > 0) story += 'It turns at <strong>message ' + (r.turned + 1) + '</strong>, from ' + (t[r.turned].mine ? 'you' : esc(t[r.turned].who)) + ': “' + esc(snip(t[r.turned].text, 70)) + '”. ';
@@ -350,9 +352,9 @@
     var rows = [];
     ORDER.forEach(function (k) { if (k === 'dismiss') { if (rMe || rThem) rows.push('dismiss:resigned'); } if (cnt('me', k) || cnt('them', k)) rows.push(k); });
     if (!rows.length) return '';
-    var hint = r.crossedThem && !r.crossedMe ? 'How often each pattern shows up. Some lines from ' + esc(them) + ' were put-downs. Whatever else was going on, that isn’t okay, and it isn’t yours to fix.'
-      : r.crossedMe && !r.crossedThem ? 'How often each pattern shows up. Some of your lines were put-downs. Owning those, plainly, is the fastest way back.'
-      : 'How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.';
+    var hint = r.crossedThem && !r.crossedMe ? 'Patterns in the chat, not a score. Some lines from ' + esc(them) + ' were put-downs. Whatever else was going on, that isn’t okay, and it isn’t yours to fix.'
+      : r.crossedMe && !r.crossedThem ? 'Patterns in the chat, not a score. Some of your lines were put-downs. Owning those, plainly, is the fastest way back.'
+      : 'Patterns in the chat, not a score. These count words, not people, and the same words count the same way on both sides: both of you are doing your best with what you were carrying.';
     var h = '<p class="cr-hint">' + hint + '</p>' +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {

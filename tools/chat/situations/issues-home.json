@@ -517,7 +517,7 @@
       "label": "forgotten tasks",
       "match": [
         [
-          "i (keep |always |often |sometimes |constantly )?(forget|forgot)( to| about| the| my)?|(forgets|forgot|forgetting|keeps forgetting|always forgets|kept forgetting) (to|the|about|chores|things|stuff|what i asked|jobs|tasks)|slips? (my|his|her|their) mind|slipped (my|his|her|their) mind|out of sight out of mind|(lose|loses|lost|losing) track of (chores|tasks|things|jobs)",
+          "(says|said|promises?|promised|tells me) ((she|he|they) (will|would|is going to)|shell|theyll) .. (and|but) (then )?(forgets?|forgot|doesnt|never does)|i (keep |always |often |sometimes |constantly )?(forget|forgot)( to| about| the| my)?|(forgets|forgot|forgetting|keeps forgetting|always forgets|kept forgetting) (to|the|about|chores|things|stuff|what i asked|jobs|tasks)|slips? (my|his|her|their) mind|slipped (my|his|her|their) mind|out of sight out of mind|(lose|loses|lost|losing) track of (chores|tasks|things|jobs)",
           5
         ],
         [

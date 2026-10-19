@@ -330,7 +330,7 @@ const chk = (c, m) => { if (c) pass++; else { fail++; errs.push(m); } };
   ['Fine. Whatever works for you.', 'Whatever works for you.', 'Fine. Whatever.', 'Sure. Do what you want.', 'Whatever you think is best.', 'k.'].forEach(t => {
     const a = an(t), g = E.receive(a);
     chk(a.found.brushoff || a.found.minimal, '“' + t + '” is flagged as a possible brush-off');
-    chk(!g.meanings.some(m => /plain message/.test(m)) && g.replies.some(r => /really okay, or are you upset/.test(r.text)), '“' + t + '” received: a calm check question, not “plain message”');
+    chk(!g.meanings.some(m => /plain message/.test(m)) && g.replies.some(r => /really okay, or are you upset|as in (?:good|all good|either is fine|really fine)/.test(r.text)), '“' + t + '” received: a calm check question, not “plain message”');
     chk(!a.asks.length && !a.found.impera, '“' + t + '” is not an order or an ask');
   });
   chk(sc('Fine. Whatever works for you.') >= sc('Fine.'), '“Fine. Whatever works for you.” is at least as loud as “Fine.”');

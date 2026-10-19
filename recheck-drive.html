@@ -48,6 +48,10 @@
   .rd-mark{ transition:transform .9s cubic-bezier(.3,.1,.2,1); }
   .rd-status{ margin:.7rem 0 .2rem; font-weight:600; }
   .rd-sub{ margin:0 0 .6rem; font-size:.92rem; color:var(--g-soft) !important; }
+  /* tools16: the small grey-purple lines were about 4:1 on the lavender board; nudge them toward the ink colour (4.5:1 or more) */
+  .rd-gaming{ margin:1rem 0 0; }
+  .rd-gaming a{ display:inline-block; padding:.6rem 0; font-weight:600; }
+  .rd-sub, .rd-honest, .rd-total{ color:color-mix(in srgb, var(--g-ink) 45%, var(--g-soft)) !important; }
   .rd-badges{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.2rem 0 .8rem; }
   .rd-badge{ display:inline-flex; gap:.35rem; align-items:center; padding:.2rem .7rem; border-radius:999px; font-size:.82rem; border:1px dashed var(--g-edge); color:var(--g-soft); background:transparent; }
   .rd-badge.is-on{ border-style:solid; background:var(--g-found); color:#244634; }
@@ -240,6 +244,7 @@
   <p><strong>How it works:</strong> Call a play, do it in real life, then tell the game you did. The ball moves only when you say so. Nobody checks but you, and nothing you type is sent anywhere. Your drive is saved only in this browser, and “Start over” erases it.</p>
   <p><a href="/complacency.html">Read the Complacency guide &rarr;</a> <a href="/check-ins.html">Check-ins</a> <a href="/turning-toward.html">Turning Toward</a></p>
 </div>
+<p class="rd-gaming"><a href="/gaming-and-time-together.html">Arguing about gaming at home? A no-blame guide for both of you <span aria-hidden="true">&rarr;</span></a></p>
 </main>
 <script>
 /* "Something to read" fits who the drive is for. The site picks the article from this page's words,

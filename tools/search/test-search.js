@@ -184,6 +184,31 @@ const CASES = [
   ['mis hijos pelean', ['/en-espanol.html#hijos-pelean']],
   ['necesito ayuda', ['/en-espanol.html']],
   ['no puedo dormir', ['/upset-right-now.html#es', '/night-garden.html']],
+  // home16b (panel16): an ex without kids is a breakup; clinical words; adult ADHD; exams and halls; retirement;
+  // kinship; the print books; Spanish family words; the mental load in his words
+  ['how do i stop texting my ex', ['/after-a-breakup.html']],
+  ['no contact', ['/after-a-breakup.html']],
+  ['miss him', ['/after-a-breakup.html']],
+  ['contempt', ['/library/relationships.html#four-horsemen']],
+  ['four horsemen', ['/library/relationships.html#four-horsemen']],
+  ['stonewalling', ['/pursue-withdraw.html', '/library/relationships.html#four-horsemen']],
+  ['adhd forgetting', ['/neurodivergent-relationships.html', '/wiring-card.html']],
+  ['i forget plans and she feels like i dont care', ['/neurodivergent-relationships.html', '/wiring-card.html']],
+  ['anxious before exam', ['/upset-right-now.html', '/night-garden.html', '/nervous-system.html']],
+  ['flatmate loud at night', ['/sharing-a-room.html']],
+  ['uni halls', ['/sharing-a-room.html']],
+  ['university', ['/sharing-a-room.html']],
+  ['wife says I am in the way', ['/retired-together.html']],
+  ['under my feet', ['/retired-together.html']],
+  ['my daughter is in and out of his life', ['/foster-and-kinship.html#kinship', '/foster-and-kinship.html']],
+  ["mom doesn't show up", ['/foster-and-kinship.html#kinship', '/foster-and-kinship.html#contact']],
+  ['paperback', ['/book/index.html#print-series']],
+  ['buy the book', ['/book/index.html#print-series']],
+  ['hermanos', ['/en-espanol.html#hermanos', '/en-espanol.html#cuidar']],
+  ['cuidar a mi madre', ['/en-espanol.html#cuidar']],
+  ['hijastros', ['/en-espanol.html#ensamblada', '/stepfamily.html']],
+  ['familia ensamblada', ['/en-espanol.html#ensamblada', '/stepfamily.html']],
+  ["she says I don't notice things", ['/invisible-labor-mental-load.html', '/lemonade-stand.html#quick']],
   // page names still find the page
   ['night garden', ['/night-garden.html']],
   ['wavelength', ['/wavelength.html']],
@@ -228,6 +253,24 @@ async function waitUp(url, n) { for (let i = 0; i < (n || 50); i++) { try { cons
       ok(hit(R.urls, exp), JSON.stringify(q) + ' top 3: ' + R.urls.slice(0, 3).join(' ') + '  (wanted ' + exp.join(' or ') + ')');
     }
     const ms = (Date.now() - t0) / CASES.length;
+    // home16b: what must NOT come up
+    const NOT = [
+      ['husband retired and always under my feet', '/grief.html', 3],
+      ['how do i stop texting my ex', '/co-parenting.html', 3],
+      ['adhd forgetting', '/adhd-kids.html', 2],
+      ['anxious before exam', '/invisible-labor-mental-load.html', 5],
+      ["she says I don't notice things", '/love-languages.html', 1]
+    ];
+    for (const [q, u, n] of NOT) {
+      const R = await rank(q);
+      ok(!R.urls.slice(0, n).some(x => x.split(/[?#]/)[0] === u), JSON.stringify(q) + ' should not have ' + u + ' in the top ' + n + ': ' + R.urls.slice(0, n).join(' '));
+    }
+    // one tool, one entry: the best match's page isn't listed again under its old name
+    for (const q of ['night feeds', 'exhausted']) {
+      const R = await rank(q), paths = R.urls.map(u => u.split(/[?#]/)[0]);
+      const dup = R.urls.filter(u => !/[?#]/.test(u) && R.urls.some(v => v !== u && /[?#]/.test(v) && v.split(/[?#]/)[0] === u && R.best && R.best.g.some(g => g[0] === v)));
+      ok(!dup.length, JSON.stringify(q) + ' lists a best-match tool twice: ' + dup.join(' ') + ' (' + paths.slice(0, 6).join(' ') + ')');
+    }
     for (const q of SAFETY) {
       const R = await rank(q);
       ok(/^\/safety\.html/.test(R.urls[0] || '') && !R.best, 'safety ' + JSON.stringify(q) + ' -> ' + R.urls.slice(0, 2).join(' ') + (R.best ? ' (best match shown: ' + R.best.id + ')' : ''));
@@ -300,6 +343,19 @@ async function waitUp(url, n) { for (let i = 0; i < (n || 50); i++) { try { cons
           });
           ok(!K.length, tag + ' "' + words + '" workpapers vs tools: ' + K.join('; '));
         }
+        // home16b: "exam" doesn't mark "example", and Enter opens the top result
+        await input.fill('anxious before exam');
+        await p.waitForFunction(() => { const b = document.querySelector('.tol-find-best'); return b && !b.hidden && /upset-right-now/.test(b.innerHTML); }, null, { timeout: 8000 });
+        await p.waitForTimeout(400);
+        ok(!(await p.evaluate(() => [].some.call(document.querySelectorAll('.tol-find-results mark'), m => /^exam$/i.test(m.textContent) && /^ple/i.test((m.nextSibling && m.nextSibling.textContent) || '')))), tag + ' "exam" is not marked inside "example"');
+        // the panel says Search when it was opened from the search button (Menu from the Menu button)
+        ok(await p.evaluate(() => { const h = document.querySelector('#tol-panel .tol-panel-head h2'); return !!h && (/^Search$/.test(h.textContent) || !document.querySelector('.tol-search-btn').offsetParent); }), tag + ' panel opened from Search is titled Search');
+        await Promise.all([p.waitForURL(/upset-right-now\.html/, { timeout: 8000 }), input.press('Enter')]);
+        ok(true, tag + ' Enter opens the top result');
+        await p.goto(BASE + '/index.html');
+        await p.waitForFunction(() => [].some.call(document.querySelectorAll('[aria-controls="tol-panel"]'), b => b.offsetParent), null, { timeout: 8000 });
+        await p.evaluate(() => { const b = document.querySelector('.tol-search-btn'); (b && b.offsetParent ? b : document.querySelector('.tol-contents-btn')).click(); });
+        await input.waitFor({ state: 'visible' });
         // nothing found: the fallback
         await input.fill('xyzzy blorf');
         await p.waitForSelector('.tol-find-none:not([hidden])', { timeout: 8000 });

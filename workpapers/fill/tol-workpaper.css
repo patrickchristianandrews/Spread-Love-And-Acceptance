@@ -709,6 +709,12 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 .wpf-tonight-one{ margin: 0; padding: .4em .8em .8em; border: 1px solid var(--line, #D9CBA3); border-radius: 12px; background: #FFFDF7; min-width: 0; }
 .wpf-tonight-one legend{ font-weight: 700; padding: 0 .3em; }
 .wpf-tonight-one .wpf-field + .wpf-field{ margin-top: .5em; }
+/* tools16: the other person's newest answers, labelled with their own day (a partner in another time zone) */
+.wpf-tonight-latest{ margin: .2em 0 .7em; padding: .5em .7em; border-radius: 10px; background: #F3F7EC; border: 1px solid #C9DDB6; }
+.wpf-tonight-latest .wpf-tonight-when{ margin: 0 0 .2em; }
+.wpf-tonight-latest ul{ margin: 0 0 .3em; padding-left: 1.1em; }
+.wpf-tonight-latest li{ margin: .1em 0; overflow-wrap: anywhere; }
+.wpf-tonight-latest .wpf-help{ margin: 0; font-size: .88rem; }
 
 /* the "×" that removes a row, on a phone: inside the row, with room for its focus ring */
 @media (max-width: 720px){
@@ -777,10 +783,11 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
   .wpf-bar{ margin-top: 2em; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); }
   .wpf-bar-inner{ gap: 5px 8px; }
   .wpf-bar button{ font-size: .86rem; padding: 6px 10px; min-height: 40px; }
-  #wpf-status{ flex: 1 1 100%; font-size: .8rem; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+  /* tools16: never cut off mid-sentence; a long message (after combining a shared week) scrolls inside the bar */
+  #wpf-status{ flex: 1 1 100%; font-size: .8rem; line-height: 1.3; max-height: 5.3em; overflow-y: auto; overscroll-behavior: contain; }
   .wpf-keepask-q{ font-size: .8rem; }
   /* while the keep question is showing, the status gets one line, so the bar stays small */
-  .wpf-bar-inner:has(.wpf-keepask) #wpf-status{ -webkit-line-clamp: 1; line-clamp: 1; }
+  .wpf-bar-inner:has(.wpf-keepask) #wpf-status{ max-height: 2.65em; }
   .wpf-bar .wpf-keepask button{ min-height: 32px; padding: 3px 10px; font-size: .8rem; }
 }
 /* the "Use these names" box under the names: its message gets a line of its own */
@@ -927,4 +934,24 @@ select.wpf-tap-sel{ position: absolute !important; width: 1px !important; height
   .ws-sheet:not([hidden]) .ws-sheet-scroll{ overflow: visible !important; padding: 0 !important; }
   .ws-sheet:not([hidden]) .ws-sheet-top{ padding: 0 0 8px !important; }
   .ws-sheet-x, .ws-sheet-foot, .ws-sheet-status:empty{ display: none !important; }
+}
+/* tools16: "Breathe for a minute now" in a high stress-tank result */
+.wpf-breathe-row{ display: block; margin: .5em 0 .2em; }
+.wpf-breathe-now{ min-height: 44px; font-weight: 600; border-style: solid; }
+/* tools16: "Print this form" prints a clean worksheet. wpf-print.js puts a plain copy of each box's words next to it
+   just before printing (.wpf-pv); on paper the boxes themselves step aside, so there are no drop-down arrows, no grey
+   example text and nothing cut off. An empty box is a line to write on. */
+.wpf-pv{ display: none; }
+@media print{
+  .wpf-pv-src{ display: none !important; }
+  .wpf-pv{ display: block; min-height: 1.45em; padding: 1px 2px 2px; border-bottom: 1px solid #8C826F; font-size: 10.5pt; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; color: #000; }
+  .wpf-pv.is-long.is-blank{ min-height: 3em; }
+  .wpf-table td .wpf-pv{ min-height: 1.35em; }
+  .wpf-tap{ display: none !important; }
+  .wpf-table-box{ overflow: visible !important; }
+  .wpf-range, .wpf-date-say, .wpf-ex-tag, .wpf-breathe-row{ display: none !important; }
+  .wpf-help{ font-size: 9pt !important; }
+  .wpf-section{ break-inside: auto; margin-top: 1em !important; }
+  .wpf-section h2{ break-after: avoid; }
+  body[data-wp] main.read > header.read-head{ margin-bottom: .4rem !important; padding-top: 0 !important; }
 }

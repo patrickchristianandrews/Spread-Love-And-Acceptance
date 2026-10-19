@@ -858,6 +858,7 @@
         rows.splice(at, 0, { day: day, who: code }); i = at;
       }
       var fs = h('fieldset', { className: 'wpf-tonight-one' }, [h('legend', { 'data-name-of': code, text: ctx.name(code) })]);
+      if (!cols.some(function (q) { return !isBlank(rows[i][q[0]]); })) { var late = self.latestTonightEl(sec, code, day, cols); if (late) fs.appendChild(late); }
       // no name yet: a box for it right here, so the card works without the rest of the page
       if (three && !String(self.state.values['partner' + code] || '').trim()) {
         var nc = self.control({ type: 'text', placeholder: 'First name' }, '', { key: 'partner' + code });
@@ -872,6 +873,36 @@
     });
     box.appendChild(grid);
     if (three) box.appendChild(h('div', { className: 'wpf-share-btns' }, [h('button', { type: 'button', className: 'wpf-add', 'data-action': 'tonight-copy', 'data-table': sec.id, text: 'Copy tonight\u2019s answers' })]));
+    return box;
+  };
+  // tools16: a daily check-in shared across time zones. When someone answers today's row, the page notes their own
+  // local day and hour (values.tonightAtA = "Tue|5|<time>"), and the shared week carries it. On the other phone,
+  // where it may already (or still) be a different day, that person's newest answers are shown in their "Just
+  // tonight" box, labelled with their own day ("Hiba · Tue morning, Hiba's time"), instead of an empty box.
+  var DAY_FULL = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
+  function partOfDay(hr) { return hr >= 5 && hr < 12 ? 'morning' : hr >= 12 && hr < 17 ? 'afternoon' : hr >= 17 && hr < 22 ? 'evening' : 'night'; }
+  function readAt(x) { var m = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\|(\d{1,2})\|(\d{1,15})$/.exec(String(x || '')); return m ? { day: m[1], hr: +m[2], t: +m[3] } : null; }
+  A.markTonight = function (tbl, row) {
+    var sec = this.schema.sections.filter(function (x) { return x.id === tbl; })[0];
+    if (!sec || !sec.personDays || !row || !row.who || CODES.indexOf(row.who) < 0 || row.day !== todayIn(sec.personDays)) return;
+    var now = new Date();
+    this.state.values['tonightAt' + row.who] = row.day + '|' + now.getHours() + '|' + now.getTime();
+  };
+  A.latestTonightEl = function (sec, code, day, cols) {
+    var rows = this.state.tables[sec.id] || [], ctx = this.ctx(), at = readAt(this.state.values['tonightAt' + code]);
+    function filled(r) { return r && r.who === code && r.day !== day && cols.some(function (q) { return !isBlank(r[q[0]]); }); }
+    var cand = rows.filter(filled), pick = null, di = sec.personDays.indexOf(day);
+    if (at) pick = cand.filter(function (r) { return r.day === at.day; })[0] || null;
+    // without a note of when, only the day next to today counts (a partner a few hours ahead or behind)
+    if (!pick) pick = cand.filter(function (r) { return Math.abs(sec.personDays.indexOf(r.day) - di) === 1; }).sort(function (a, b) { return sec.personDays.indexOf(b.day) - sec.personDays.indexOf(a.day); })[0] || null;
+    if (!pick) return null;
+    var nm = String(this.state.values['partner' + code] || '').trim(), when = (DAY_FULL[pick.day] || pick.day) + (at && at.day === pick.day ? ' ' + partOfDay(at.hr) : '');
+    var box = h('div', { className: 'wpf-tonight-latest', role: 'group', 'aria-label': (nm || ctx.name(code)) + '’s newest answers' });
+    box.appendChild(h('p', { className: 'wpf-tonight-when' }, [h('strong', { text: (nm || ctx.name(code)) + ' · ' + when + ', ' + (nm ? nm + '’s' : 'their') + ' time' })]));
+    var ul = h('ul', {});
+    cols.forEach(function (q) { var x = pick[q[0]]; if (isBlank(x)) return; ul.appendChild(h('li', { text: q[0] === 'load' ? 'How full the day was: ' + (x === 'Low' ? 'light' : String(x).toLowerCase()) : q[1] + ': ' + x })); });
+    box.appendChild(ul);
+    box.appendChild(h('p', { className: 'wpf-help', text: 'Their newest answers, from their own day. It may be a different day where they are. Their boxes for ' + (DAY_FULL[day] || day) + ' are below, for next time.' }));
     return box;
   };
   // Tonight's answers as a few plain lines, for a message to someone in the next room or across town
@@ -1154,6 +1185,8 @@
           dd = h('dd', null, [det]);
         } else {
           dd = h('dd', { text: it.value });
+          // tools16: a one-tap breathing minute, right in the result (the site's Breathe break, over this page)
+          if (it.breathe) dd.appendChild(h('span', { className: 'wpf-breathe-row no-print' }, [h('button', { type: 'button', className: 'wpf-add wpf-breathe-now', 'data-action': 'breathe-now', text: it.breathe })]));
           // a link on screen stands in for the address written out in the PDF's note
           if (it.link) dd.appendChild(h('span', { className: 'wpf-help' }, [h('a', { href: it.link[1], text: it.link[0] + ' \u2192' })]));
           else if (it.note) dd.appendChild(h('span', { className: 'wpf-help', text: it.note }));
@@ -1277,6 +1310,7 @@
     if (tbl && t.getAttribute('data-col')) {
       var row0 = this.state.tables[tbl][+t.getAttribute('data-row')], col0 = t.getAttribute('data-col');
       row0[col0] = val;
+      this.markTonight(tbl, row0);
       // the owner is now the person who was the helper or backup: that place is empty again, and says so
       var sec0 = this.schema.sections.filter(function (x) { return x.id === tbl; })[0], self1 = this, same = '';
       (sec0 && sec0.columns || []).forEach(function (c) {
@@ -1652,6 +1686,11 @@
       if (out.length) d.tb[s.id] = out;
     });
     if (!rows) return { error: (this.schema.share && this.schema.share.empty) || (this.shareWhat() === 'week' ? 'Write something on the sheet first, then share it.' : 'Add a job (or give an example job an owner) first, then share the list.') };
+    // tools16: when each person last answered "Just tonight", in their own day and hour (see markTonight)
+    if (this.schema.sections.some(function (s) { return s.personDays; })) {
+      var at = {}; CODES.slice(0, n).forEach(function (c, i) { if (names[i] && readAt(v['tonightAt' + c])) at[names[i]] = v['tonightAt' + c]; });
+      if (Object.keys(at).length) d.at = at;
+    }
     return d;
   };
   // A sheet one person fills in about themselves (How much are you carrying?): their name, the date,
@@ -2018,6 +2057,11 @@
     });
     if (replace) v.peopleCount = Math.max(minPeople, d.p.filter(Boolean).length);
     syncPeople(sc, st);
+    // tools16: each person's own day and hour for their newest "Just tonight" answers; the newer note wins
+    if (d.at && typeof d.at === 'object') Object.keys(d.at).forEach(function (nm) {
+      var code = map[fold(nm)], inc = readAt(d.at[nm]), here = code ? readAt(v['tonightAt' + code]) : null;
+      if (code && inc && (!here || inc.t > here.t)) v['tonightAt' + code] = d.at[nm];
+    });
     // the boxes at the top
     (sc.meta || []).forEach(function (f) { var x = d.m[f.id]; if (x != null && typeof x !== 'object' && isBlank(v[f.id])) v[f.id] = x; });
     function personVal(x) { return x === '*' ? 'Both' : map[fold(x)] || ''; }
@@ -2191,6 +2235,20 @@
     var b = e.target.closest('button[data-action]');
     if (!b) return;
     var act = b.getAttribute('data-action');
+    // tools16: "Breathe for a minute now": the site's Breathe break, calm breathing for one minute (the person's
+    // own usual choices are put back once it has opened). Without it, the Night Garden's breathing.
+    if (act === 'breathe-now') {
+      var bb = document.querySelector('.tol-breathe-btn');
+      if (!bb) { global.location.href = '/night-garden.html'; return; }
+      var ls = global.localStorage, was = {};
+      try { ['tol-br-method', 'tol-br-min'].forEach(function (k) { was[k] = ls.getItem(k); }); ls.setItem('tol-br-method', 'calm'); ls.setItem('tol-br-min', '1'); } catch (er) {}
+      bb.click();
+      var tries = 0, tm = setInterval(function () {
+        var ov = document.querySelector('.tol-breathe:not([hidden])');
+        if (ov || ++tries > 50) { clearInterval(tm); setTimeout(function () { try { Object.keys(was).forEach(function (k) { if (was[k] == null) ls.removeItem(k); else ls.setItem(k, was[k]); }); } catch (er) {} }, 300); }
+      }, 100);
+      return;
+    }
     if (act === 'share-fresh') {
       // the link, made now from what is on the sheet, handed to the site's share sheet (site.js reads
       // data-share-url when this click reaches the page); a sheet that can't be shared yet says why instead

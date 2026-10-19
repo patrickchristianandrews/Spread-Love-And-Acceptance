@@ -36,25 +36,30 @@ const HARMFUL = ['threat', 'veiled', 'conditional', 'slang', 'insult', 'contempt
 // warm or neutral: under 5% fight or concern, under 15% unsure
 const NEG = ['warm', 'neutral', 'tricky', 'care'];
 
-function read(t){
-  const an = E.analyze(t, {channel: 'text'});
+// a message can carry the relationship ("rel": "coparent", "ex"), the one-tap answer ("answer": "upset"), or be one you got
+// ("mode": "read": the headline of "A message I got")
+function read(t, c){
+  c = c || {};
+  if(c.mode === 'read'){ const an = E.analyze(t, {channel: 'text', mode: 'read'}); const rv = E.receive(an, {rel: c.rel}); return {got: OF[rv.head[0]] || rv.head[0], v: {id: rv.head[0], text: rv.head[1]}, rw: null, an, rv}; }
+  const ctx = c.answer ? E.answerCtx(c.answer, null) : null;
+  const an = E.analyze(t, {channel: 'text', ctx});
   const sc = E.score(an, ['general'], 'text');
-  const rw = E.rewrite(an, {wirings: ['general'], channel: 'text'});
-  const v = E.verdict(an, sc, rw, {});
+  const rw = E.rewrite(an, {wirings: ['general'], channel: 'text', rel: c.rel, ctx, answer: c.answer});
+  const v = E.verdict(an, sc, rw, {rel: c.rel, ctx, answer: c.answer});
   return {got: OF[v.id] || v.id, v, rw, an};
 }
 
 const pct = (a, b) => b ? Math.round(1000 * a / b) / 10 : 0;
 const report = {};
 let failed = false;
-['tune', 'holdout', 'holdout2', 'holdout3', 'holdout4'].forEach(split => {
+['tune', 'holdout', 'holdout2', 'holdout3', 'holdout4', 'sig16', 'sig16h', 'sig16h2'].forEach(split => {
   if(ONLY && ONLY !== split) return;
   const rows = SET.filter(c => c.split === split);
   const M = {}; LBL.forEach(a => { M[a] = {}; LBL.forEach(b => M[a][b] = 0); });
   let right = 0; const misses = [];
   const g = {threatN: 0, threatOk: [], harmN: 0, harmOk: [], negN: 0, negHot: [], negUnsure: []};
   rows.forEach(c => {
-    const r = read(c.t);
+    const r = read(c.t, c);
     M[c.exp][r.got] = (M[c.exp][r.got] || 0) + 1;
     const fine = r.got === c.exp || (c.alt || []).includes(r.got);
     if(fine) right++; else misses.push(c.cat.padEnd(11) + ' want ' + [c.exp].concat(c.alt || []).join('/').padEnd(26) + ' got ' + r.got.padEnd(10) + ' ' + JSON.stringify(c.t));
@@ -68,10 +73,10 @@ let failed = false;
     {name: 'warm/neutral flagged fight or concern (under 5%)', got: g.negHot.length, of: g.negN, max: '<5%', pass: pct(g.negHot.length, g.negN) < 5, list: g.negHot},
     {name: 'warm/neutral flagged unsure (under 15%)', got: g.negUnsure.length, of: g.negN, max: '<15%', pass: pct(g.negUnsure.length, g.negN) < 15, list: g.negUnsure}
   ];
-  if(gates.some(x => !x.pass) && (STRICT || split === 'tune' || split === 'holdout')) failed = true;
+  if(gates.some(x => !x.pass) && (STRICT || split === 'tune' || split === 'holdout' || split === 'sig16')) failed = true;
   report[split] = {cases: rows.length, right, rate: pct(right, rows.length), matrix: M, gates: gates.map(x => ({name: x.name, got: x.got, of: x.of, pct: pct(x.got, x.of), pass: x.pass}))};
   if(JSON_OUT) return;
-  console.log('\n== ' + split + (/^holdout[234]$/.test(split) ? ' (fresh phrasings, written to find gaps; ' : ' (') + rows.length + ' messages): ' + right + ' read within their labels (' + pct(right, rows.length) + '%)');
+  console.log('\n== ' + split + (/^holdout[234]$/.test(split) ? ' (fresh phrasings, written to find gaps; ' : split === 'sig16' ? ' (the round-16 reviewers\' cases and variations, tuned on; ' : split === 'sig16h' ? ' (round 16 held out: written before any run; its first run led to fixes, so it is now seen; ' : split === 'sig16h2' ? ' (round 16 second held-out set: written after those fixes, never tuned on; ' : ' (') + rows.length + ' messages): ' + right + ' read within their labels (' + pct(right, rows.length) + '%)');
   console.log('expected \\ got  ' + LBL.slice(0, 5).map(x => x.padStart(11)).join(''));
   LBL.slice(0, 5).forEach(a => console.log(a.padEnd(16) + LBL.slice(0, 5).map(b => String(M[a][b] || 0).padStart(11)).join('')));
   gates.forEach(x => {

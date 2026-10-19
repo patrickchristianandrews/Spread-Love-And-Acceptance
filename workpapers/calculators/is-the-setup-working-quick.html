@@ -73,6 +73,9 @@
   .status{ font-size:0.86rem; color:var(--credit); min-height:1.4em; margin:6px 0 0; }
   .copy-out{ width:100%; min-height:160px; font-family:"IBM Plex Mono", monospace; font-size:0.78rem; margin-top:8px; padding:8px; }
   .disclaimer{ font-size:0.84rem; color:var(--ink-soft); margin-top:20px; border-top:1px solid var(--line); padding-top:14px; }
+  .how-scored{ margin-top:20px; border-top:1px solid var(--line); padding-top:10px; font-size:0.9rem; }
+  .how-scored > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; color:var(--focus); }
+  .ql-offer{ margin-top:10px; }
   @media (max-width:600px){ .card{ padding:18px 14px; } .step{ padding:14px 12px; } .pair{ grid-template-columns:1fr; } }
   @media print{ .no-print, .tol-bar, .tol-breathe-btn{ display:none !important; } body{ background:#fff; } .card{ border:0; } input, select{ border:0; min-height:0; } }
 </style>
@@ -143,12 +146,12 @@
 <main class="calc-wrap" id="main">
 <!-- place:split --><nav class="ps no-print no-bubble" aria-label="Fair split check: every way in"><p class="ps-k"><b>Fair split check</b> <span>· 4 ways in</span></p><div class="ps-row"><span class="ps-g">This week</span><a class="ps-b" href="/workpapers/calculators/is-the-setup-working-quick.html" aria-current="page">Quick read</a><a class="ps-b" href="/is-the-setup-working.html">Every number</a><span class="ps-g">Over a month</span><a class="ps-b" href="/workpapers/calculators/look-back-30-days-quick.html">Quick read</a><a class="ps-b" href="/look-back-30-days.html">Every number</a></div></nav><!-- /place:split -->
   <div class="card">
-    <div class="kicker">CALC-01 &middot; The quick read</div>
+    <div class="kicker">The quick read</div>
     <h1>Fair split check: is the setup working for everyone?</h1>
     <p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> you type in the totals from your worksheets, for 2 to 8 people. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain-words read of whether the split can keep going. It scores the setup, never a person. <span aria-hidden="true">&middot;</span> About 5 minutes</p>
     <p style="font-size:0.9rem;color:var(--ink-soft);">Works for 2 to 8 people.</p>
     <p>Type in the totals from your worksheets and see, in plain words, whether the way you share the load right now is working for everyone. It scores the <strong>setup</strong>, never a person, and never the relationship as a whole.</p>
-    <p style="font-size:0.9rem;">Want each input worked out from your raw entries, the overall score and a trend log? Use <a href="/is-the-setup-working.html">the full CALC-01</a>. The maths is the same on both pages.</p>
+    <p style="font-size:0.9rem;">Want each input worked out from your raw entries, the overall score and a trend log? Use <a href="/is-the-setup-working.html">the full calculator</a>. The maths is the same on both pages.</p>
 
     <div class="step">
       <h2><label for="people-count">Who's sharing the load?</label></h2>
@@ -161,30 +164,32 @@
         <button type="button" class="btn btn-solid" id="load-suite" hidden>Load from my suite</button>
       </div>
       <p class="hint" id="suite-status" role="status" style="margin-top:6px;"></p>
+      <div class="ql-offer no-print" id="ql-offer" hidden>
+        <button type="button" class="btn btn-solid" id="use-quick"></button>
+        <p class="hint" id="ql-note"></p>
+      </div>
     </div>
 
     <div class="step" id="s-wb">
-      <p class="hint" id="weights-note">Three steps, each counted by how much it matters to the read: balance counts for 40%, ownership for 35% and stress for 25% (the “weights” 0.40, 0.35 and 0.25 you see beside each step).</p>
       <h2>1. How the hours split</h2>
-      <p class="code-note">Balance (workload balance) &middot; counts for 40% (weight 0.40)</p>
-      <p class="hint">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a> or <a href="/lemonade-stand.html">Who does what?</a>: each person's total hours (or minutes) for the week.</p>
+      <p class="hint">From a week of <a href="/workpapers/fill/wp-01.html">Who did what</a>, or the full <a href="/lemonade-stand.html#stand">Who does what?</a>: the hours each of you spent on home jobs this week. Rough is fine.</p>
+      <p class="hint" id="ql-paid" hidden></p>
       <fieldset>
         <legend>I have&hellip;</legend>
         <label class="check"><input type="radio" name="wb-mode" value="hours" checked> Each person's hours</label>
-        <label class="check"><input type="radio" name="wb-mode" value="score"> A balance score already worked out (0 to 1)</label>
+        <label class="check"><input type="radio" name="wb-mode" value="score"> A balance number already worked out (0 to 1)</label>
       </fieldset>
       <div id="wb-hours"><div class="grid" id="hours"></div>
         <label class="check"><input type="checkbox" id="agreed"> Compare with a split we agreed on, instead of an even share</label>
         <div class="grid" id="targets" hidden></div>
       </div>
-      <div id="wb-score" hidden><div class="pair"><div><label for="wb-direct">Balance score</label><input type="number" id="wb-direct" min="0" max="1" step="0.01" inputmode="decimal"></div></div></div>
+      <div id="wb-score" hidden><div class="pair"><div><label for="wb-direct">Balance number</label><input type="number" id="wb-direct" min="0" max="1" step="0.01" inputmode="decimal"></div></div></div>
       <div class="work" id="wb-work" aria-live="polite"></div>
     </div>
 
     <div class="step" id="s-oc">
       <h2>2. Does each job have a name?</h2>
-      <p class="code-note">Ownership (ownership clarity) &middot; counts for 35% (weight 0.35)</p>
-      <p class="hint">From <a href="/workpapers/fill/wp-03.html">WP-03, One owner per job</a>: count every regular job you listed yourself, including the ones nobody owns yet, and how many of them have an owner. Starter examples you never filled in don’t count.</p>
+      <p class="hint">From <a href="/workpapers/fill/wp-03.html">One owner per job</a>, or your fridge list: count every regular job you listed yourself, including the ones nobody owns yet, and how many of them have an owner. Starter examples you never filled in don’t count.</p>
       <div class="pair">
         <div><label for="jobs-total">Jobs on the list</label><input type="number" id="jobs-total" min="0" step="1" inputmode="numeric"></div>
         <div><label for="jobs-owned">Jobs with an owner</label><input type="number" id="jobs-owned" min="0" step="1" inputmode="numeric"></div>
@@ -194,8 +199,7 @@
 
     <div class="step" id="s-as">
       <h2>3. How much each person is carrying</h2>
-      <p class="code-note">Stress (the average stress tank score) &middot; counts for 25% (weight 0.25)</p>
-      <p class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a>: each person's own score, their five 0&ndash;4 answers added up and divided by 20. It runs from 0 to 1, and higher means heavier. Everyone fills in their own; nobody guesses for someone else.</p>
+      <p class="hint">From <a href="/workpapers/fill/wp-02.html">How much are you carrying?</a>: each person's own score, their five 0&ndash;4 answers added up and divided by 20. It runs from 0 to 1, and higher means heavier. Everyone fills in their own; nobody guesses for someone else.</p>
       <div class="grid" id="batteries"></div>
       <div class="work" id="as-work" aria-live="polite"></div>
     </div>
@@ -228,9 +232,18 @@
       <textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Summary text to copy"></textarea>
     </div>
 
+    <details class="how-scored no-print-closed" id="how-scored">
+      <summary>How it&rsquo;s scored</summary>
+      <p>Three steps, each counted by how much it matters to the read: balance counts for 40%, ownership for 35% and stress for 25% (weights 0.40, 0.35 and 0.25).</p>
+<pre class="mono" style="white-space:pre-wrap;font-size:.8rem;">setup   = (balance &times; 0.40) + (ownership &times; 0.35) + ((1 &minus; stress) &times; 0.25)
+balance = 1 &minus; moved &divide; most   (moved: the share of hours that would have to change hands; most: the most it could ever be)
+ownership = jobs with an owner &divide; jobs on the list
+stress  = the average of everyone&rsquo;s own score (five 0&ndash;4 answers &divide; 20)</pre>
+      <p>Tick &ldquo;Show the numbers&rdquo; under the read to see the maths for your own answers, step by step.</p>
     <p class="disclaimer"><strong>The words and their cut-offs:</strong> 0.70 or more, working well. 0.40 up to 0.70, needs a look. Below 0.40, needs a rethink, together. Here higher means the setup is working better. Read from the score rounded to two decimals, so the number and the words always agree. This is a rule-of-thumb worksheet, not a tested model or a compatibility test. It only reflects what you enter, and it can't decide whether a relationship is worth continuing. Nothing you type is saved or sent.</p>
-    <p class="disclaimer pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work, with a battery check from <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you see the whole load you carry as one number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
-    <p class="disclaimer">Read the reasoning in <a href="/book/chapter-2-in-depth.html">Chapter II</a>. Keep the numbers week by week in <a href="/workpapers/report-01.html">REPORT-01</a>, or <a href="/workpapers/fill/suite.html">build your Workpaper Suite</a>.</p>
+    <p class="disclaimer pillar-note"><small>This calculator puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work, with a battery check from <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you see the whole load you carry as one number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
+    </details>
+    <p class="disclaimer">Read the reasoning in <a href="/book/chapter-2-in-depth.html">Chapter II</a>. Keep the numbers week by week in <a href="/workpapers/report-01.html">your weekly record</a>, or <a href="/workpapers/fill/suite.html">build your Workpaper Suite</a>.</p>
   </div>
 <div data-tool-guide="setup-check"></div>
 <script src="/assets/js/tool-guide.js" defer></script>
@@ -260,15 +273,14 @@
     sel.value = String(n);
     names = fit(names, ""); hours = fit(hours, ""); targets = fit(targets, ""); bats = fit(bats, "");
     $("names").innerHTML = names.map(function(v, i){ return '<div><label for="nm-' + i + '">Person ' + (i + 1) + ' (optional)</label><input type="text" id="nm-' + i + '" data-k="names" data-i="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(v) + '"></div>'; }).join("");
-    $("hours").innerHTML = hours.map(function(v, i){ return '<div><label for="h-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', hours</label><input type="number" id="h-' + i + '" data-k="hours" data-i="' + i + '" min="0" step="0.5" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
-    $("targets").innerHTML = targets.map(function(v, i){ return '<div><label for="t-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', agreed %</label><input type="number" id="t-' + i + '" data-k="targets" data-i="' + i + '" min="0" max="100" step="1" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
-    $("batteries").innerHTML = bats.map(function(v, i){ return '<div><label for="b-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', stress tank (0 to 1)</label><input type="number" id="b-' + i + '" data-k="bats" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    $("hours").innerHTML = hours.map(function(v, i){ return '<div><label for="h-' + i + '" data-lab="' + i + '" data-tpl="Hours {n} spent on home jobs this week">' + esc("Hours " + nameOf(i) + " spent on home jobs this week") + '</label><input type="number" id="h-' + i + '" data-k="hours" data-i="' + i + '" min="0" step="0.5" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    $("targets").innerHTML = targets.map(function(v, i){ return '<div><label for="t-' + i + '" data-lab="' + i + '" data-tpl="{n}’s agreed share (%)">' + esc(nameOf(i) + "’s agreed share (%)") + '</label><input type="number" id="t-' + i + '" data-k="targets" data-i="' + i + '" min="0" max="100" step="1" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    $("batteries").innerHTML = bats.map(function(v, i){ return '<div><label for="b-' + i + '" data-lab="' + i + '" data-tpl="How much {n} is carrying (0 light, 1 very heavy)">' + esc("How much " + nameOf(i) + " is carrying (0 light, 1 very heavy)") + '</label><input type="number" id="b-' + i + '" data-k="bats" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
   }
 
   function relabel(){
     Array.prototype.forEach.call(document.querySelectorAll("[data-lab]"), function(l){
-      var i = +l.dataset.lab, suffix = l.textContent.slice(l.textContent.lastIndexOf(","));
-      l.textContent = nameOf(i) + suffix;
+      l.textContent = l.dataset.tpl.replace("{n}", nameOf(+l.dataset.lab));
     });
   }
 
@@ -287,9 +299,9 @@
       if (wb === null) w.innerHTML = '<span class="err">' + esc(b.error) + '</span>';
       else w.innerHTML = "Shares: " + b.shares.map(function(s, i){ return esc(nameOf(i)) + " " + C.pct(s); }).join(", ") +
         ". Target: " + (b.mode === "agreed" ? "your agreed split" : "an even share, " + C.pct(1 / n) + " each") +
-        ". About " + f1(b.movedHours) + " of " + f1(b.total) + " hours would have to change hands (moved = " + b.moved.toFixed(3) + "; most = " + b.most.toFixed(3) + ")." +
-        "<br>Balance = 1 − " + b.moved.toFixed(3) + " ÷ " + b.most.toFixed(3) + " = <b>" + f2(wb) + "</b>" +
-        (n === 2 && !agreed ? " (the book's 1 − |" + C.pct(b.shares[0]) + " − " + C.pct(b.shares[1]) + "| ÷ 100)" : "");
+        ". About " + f1(b.movedHours) + " of " + f1(b.total) + " hours would have to change hands to match it." +
+        '<span class="nums-only"><br>Balance = 1 − ' + b.moved.toFixed(3) + " ÷ " + b.most.toFixed(3) + " = <b>" + f2(wb) + "</b>" +
+        (n === 2 && !agreed ? " (the book's 1 − |" + C.pct(b.shares[0]) + " − " + C.pct(b.shares[1]) + "| ÷ 100)" : "") + "</span>";
     } else {
       var d = C.num($("wb-direct").value);
       if (d === null) w.textContent = "Type the balance score from Who did what (WP-01).";
@@ -301,7 +313,7 @@
     var ownedBlank = $("jobs-owned").value === "";
     var o = C.ownership(ownedBlank ? null : $("jobs-owned").value, $("jobs-total").value), oc = ownedBlank ? null : o.value;
     $("oc-work").innerHTML = oc === null ? ($("jobs-total").value === "" ? "Type how many jobs are on the list." : ownedBlank ? "Type how many of them have an owner (0 is fine)." : '<span class="err">Check this number: ' + esc(o.error) + '</span>')
-      : "Ownership = " + o.owned + " ÷ " + o.total + " = <b>" + f2(oc) + "</b>" + (o.total - o.owned ? " (" + (o.total - o.owned) + " job" + (o.total - o.owned === 1 ? "" : "s") + " still without an owner)" : "");
+      : o.owned + " of " + o.total + " jobs have an owner" + (o.total - o.owned ? " (" + (o.total - o.owned) + " still without one)" : "") + '.<span class="nums-only"> Ownership = ' + o.owned + " ÷ " + o.total + " = <b>" + f2(oc) + "</b></span>";
 
     // 3. stress
     var s = C.stress(bats), as = s.value;
@@ -310,8 +322,8 @@
       $("as-work").innerHTML = bad ? '<span class="err">Check this number: ' + esc(s.error) + '</span>' : "Waiting on " + s.missing.map(nameOf).map(esc).join(", ") + ".";
       bats.forEach(function(x, i){ var el = $("b-" + i), v = C.num(x); if (el){ if (v !== null && (v < 0 || v > 1)) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid"); } });
     } else {
-      $("as-work").innerHTML = "Stress = (" + bats.map(function(x){ return f2(C.num(x)); }).join(" + ") + ") ÷ " + n + " = <b>" + f2(as) + "</b>, counted as 1 − " + f2(as) + " = " + f2(1 - as) +
-        "<br>" + bats.map(function(x, i){ return esc(nameOf(i)) + ": " + C.wp02Band(C.num(x)).label; }).join(" · ");
+      $("as-work").innerHTML = bats.map(function(x, i){ return esc(nameOf(i)) + ": " + C.wp02Band(C.num(x)).label; }).join(" · ") +
+        '<span class="nums-only"><br>Stress = (' + bats.map(function(x){ return f2(C.num(x)); }).join(" + ") + ") ÷ " + n + " = <b>" + f2(as) + "</b>, counted as 1 − " + f2(as) + " = " + f2(1 - as) + "</span>";
     }
 
     var sc = $("score"), txt = $("score-text");
@@ -353,7 +365,7 @@
       ? "<strong>Next:</strong> nothing in the setup needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a>."
       : "<strong>Next:</strong> start with the biggest shortfall, <strong>" + esc(worst.name.toLowerCase()) + "</strong>, not with whatever happened most recently. Bring the first suggestion above to the others as a question, not a ruling." +
         (bd.key === "low" ? " A calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together will do more than another one-off fix." : "");
-    var L = ["Is the setup working for everyone? Quick read (CALC-01, Spread Love & Acceptance)", "People: " + names.map(function(_, i){ return nameOf(i); }).join(", "), "",
+    var L = ["Is the setup working for everyone? Quick read (Spread Love & Acceptance)", "People: " + names.map(function(_, i){ return nameOf(i); }).join(", "), "",
       "How the setup is working: " + bd.short + " (" + f2(sol.value) + " of 1; 0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together)",
       "Balance " + f2(wb) + (b ? " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + ")" : " (from Who did what)") + " x 0.40 = " + fg(sol.parts.wb),
       "Ownership " + f2(oc) + " (" + o.owned + " of " + o.total + " jobs) x 0.35 = " + fg(sol.parts.oc),
@@ -409,6 +421,29 @@
   try { if (sessionStorage.getItem("tol-calc-nums") === "1"){ $("show-nums").checked = true; $("main").classList.add("show-nums"); } } catch (err) {}
   render(); recalc();
   if (C.suiteDraft && C.suiteDraft()) $("load-suite").hidden = false;
+
+  // The Who does what? quick look on this device (journey step 3 comes right after it): one tap fills in the
+  // names and the job count, and shows the paid hours typed there. Only offered; nothing fills in by itself.
+  var QL = C.quickLook ? C.quickLook() : null;
+  function qlName(i){ return QL.names[i] || ("Person " + (i + 1)); }
+  function qlJoin(a){ return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
+  if (QL){
+    var typedN = QL.names.filter(Boolean);
+    $("use-quick").textContent = "Use our quick look: " + (typedN.length >= 2 ? qlJoin(typedN) + ", " : "") + QL.jobs.length + " job" + (QL.jobs.length === 1 ? "" : "s");
+    $("ql-note").textContent = "From Who does what? on this device: your names, the jobs on it and how many have one name on them. The hours at home and how much each of you is carrying are yours to fill in.";
+    $("ql-offer").hidden = false;
+    $("use-quick").addEventListener("click", function(){
+      n = Math.max(C.MIN_PEOPLE, Math.min(C.MAX_PEOPLE, QL.names.length));
+      names = QL.names.slice(0, n); hours = fit(hours, ""); targets = names.map(function(){ return ""; });
+      $("jobs-total").value = QL.jobs.length; $("jobs-owned").value = QL.owned;
+      render(); recalc();
+      var paidBits = QL.paid.map(function(h, i){ return h ? qlName(i) + " " + h + " h" : ""; }).filter(Boolean);
+      var pp = $("ql-paid");
+      if (paidBits.length){ pp.textContent = "Paid work from your quick look: " + paidBits.join(", ") + " a week. This step counts only the hours at home; paid work is the other side of the week."; pp.hidden = false; }
+      $("ql-note").textContent = "Filled in from your quick look: " + n + " names and " + QL.jobs.length + " jobs (" + QL.owned + " with one name on them). Next: the hours each of you spent at home this week, just below.";
+      var h0 = $("h-0"); if (h0) h0.focus();
+    });
+  }
 
   // The household kept on this device (household.js, only if someone ticked "Use these names in the other
   // tools" elsewhere): offer its names, one tap, so nobody types them again. Never fills in by itself.

@@ -98,7 +98,7 @@ details.more > summary{cursor:pointer;font-weight:600;min-height:44px;display:fl
 .cmp th{font-family:var(--mono);font-size:.7rem;color:var(--brass-ink,#7A5620);font-weight:500}
 .cmp tr.diff td{background:#F6E8C4}
 .cmp tr.same td{background:#E4EFE3}
-.cmp .tag{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:1px 6px;border-radius:99px;background:var(--sheet);border:1px solid var(--line);margin-top:4px}
+.cmp .tag{display:inline-block;max-width:100%;box-sizing:border-box;font-family:var(--mono);font-size:.68rem;line-height:1.35;padding:2px 8px;border-radius:10px;background:var(--sheet);border:1px solid var(--line);margin-top:4px}  /* tools16: a soft corner, not a full pill, so a label that wraps never touches the edge */
 .cmp-wrap{overflow-x:auto}
 .cmp tr.bridge td{background:#FFF8E6;border-left:3px solid var(--brass);font-size:.9rem;padding:6px 10px 10px}
 .cmp tr.diff th,.cmp tr.diff td{border-bottom:0}
@@ -791,7 +791,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(!people.includes("B")) people.push("B");
     state.B = theirs; showCmp = true; pasteOpen = false; pasteDraft = ""; pasteMsg = "";
     lastSwapAt = "";
-    lastSwap = (nm ? nm + "’s card" : "Their card") + " is filled in below yours, and the two cards are side by side further down.";
+    lastSwap = (nm ? nm + "’s card" : "Their card") + " is filled in below yours, and the two cards are side by side further down. To see the same side-by-side on their device, send yours back: tap “Copy a link to my card” under your card.";
+    swapKeep();
     return "";
   }
 
@@ -834,19 +835,31 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const work = forWho === "work", code = codeOn();
     copyText((work ? MANAGER_LINE + "\n\n" : "") + people.map(plain).join("\n\n") + (code ? "\n\nTo compare on your own device: open spreadloveandacceptance.com/wiring-card.html and tap “Paste someone’s card”." : ""), $("#copy"),
       work ? "Copied as plain text, starting with a short line you can send with it. Change anything you like before you send it." :
-      code ? "Copied as plain text. The other person can paste it into their Wiring Card with “Paste someone’s card” to compare." : "Copied as plain text, ready to send.");
+      code ? "Copied as plain text. The other person can paste it into their Wiring Card with “Paste someone’s card” to compare. Ask them to send theirs back the same way, so you both see the side-by-side." : "Copied as plain text, ready to send.");
+    if(code && !work) swapKeep();
   }
   // A link that carries your card after the #, the way Wavelength's ?compare= link carries a Wave Code. The part after
   // the # stays in the browser: it is never sent to the website when the link is opened.
   function cardLink(who){ return location.origin + location.pathname + "#card=" + cardCode(who || "A"); }
+  // tools16: swapping cards keeps yours on this device (it says so, and the box below can undo it), so when their card
+  // comes back in another tab or later, yours is still here and the two show side by side
+  let swapKept = false;
+  function swapKeep(){
+    if(keep) return;
+    keep = true; swapKept = true; keepNow();
+    const box = $("#keepcard"); if(box) box.checked = true;
+    const m = $("#keepmsg"); if(m) m.textContent = "Kept on this device, so when you swap cards both stay here and show side by side. Untick the box or press Erase to remove it.";
+  }
   function copyLink(){
     if(!hasContent("A") && !state.A.name.trim()){ const m = $("#copymsg"); if(m) m.textContent = "Fill in a line or two on your card first, then copy the link."; return; }
-    copyText(cardLink("A"), $("#copylink"), "Link copied. Send it to them: it opens this page with your card next to theirs. Your card travels inside the link itself; nothing is stored or sent anywhere else.");
+    swapKeep();
+    copyText(cardLink("A"), $("#copylink"), "Link copied. Send it to them: it opens this page with your card next to theirs. Ask them to send theirs back the same way, so you both see the side-by-side. Your card travels inside the link itself, and it’s kept on this device so it’s here when theirs comes back (untick “Keep my card on this device” to stop that).");
   }
   // "Show a QR code": the same link drawn big, so the other phone in the room can scan it (share-kit.js, loaded at the tap if needed)
   function showLinkQR(){
     if(!hasContent("A") && !state.A.name.trim()){ const m = $("#copymsg"); if(m) m.textContent = "Fill in a line or two on your card first, then show the QR code."; return; }
-    const url = cardLink("A"), o = { title: "Scan with the other phone", note: "It opens this page on their phone with your card next to theirs. Your card travels inside the link; nothing is uploaded." };
+    swapKeep();
+    const url = cardLink("A"), o = { title: "Scan with the other phone", note: "It opens this page on their phone with your card next to theirs. Then they show you theirs the same way, so you both see the side-by-side. Your card travels inside the link; nothing is uploaded." };
     const go = ()=>{ if(window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(url, o); };
     if(window.TOLShareKit && window.TOLShareKit.showQR){ go(); return; }
     const sc = document.createElement("script"); sc.src = "/assets/js/share-kit.js"; sc.onload = go; document.head.appendChild(sc);
@@ -863,8 +876,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     bringIn(decodeURIComponent(hsh.slice(6)));
     if(!hasContent("A")) showCmp = false;
     lastSwap = hasContent("A")
-      ? (nm ? nm + "’s card" : "Their card") + " came in with the link. It’s filled in below yours, and the two cards are side by side further down."
-      : (nm ? nm + "’s card" : "Their card") + " came in with the link, and it’s filled in below. Fill in your own card above, and the two show side by side further down.";
+      ? (nm ? nm + "’s card" : "Their card") + " came in with the link. It’s filled in below yours, and the two cards are side by side further down. To see the same side-by-side on their device, send yours back: tap “Copy a link to my card” under your card."
+      : (nm ? nm + "’s card" : "Their card") + " came in with the link, and it’s filled in below. Your own card isn’t in this tab (unless it’s kept on this device, a card stays only in the tab where it was made). Rebuild yours in a few taps with “A quick start” above, and the two show side by side further down. To see the same side-by-side on their device, send yours back: tap “Copy a link to my card” under your card.";
     return true;
   }
   function copyMarkdown(){
@@ -1085,7 +1098,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   paintForms();
   paint();
   if(fromLink) toCompareOrB();
-  if(keep){ const m = $("#keepmsg"); if(m) m.textContent = "Picked up the card kept on this device. Press Erase to remove it."; }
+  if(keep){ const m = $("#keepmsg"); if(m) m.textContent = swapKept ? "Kept on this device, so when you swap cards both stay here and show side by side. Untick the box or press Erase to remove it." : "Picked up the card kept on this device. Press Erase to remove it."; }
 })();
 </script>
 </body>

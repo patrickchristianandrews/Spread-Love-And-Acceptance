@@ -89,17 +89,13 @@
   <header class="cp-head">
     <p class="cp-kicker">A cosy arcade</p>
     <h1>Kindness Coin Pusher</h1>
-    <p class="cp-intro">Tap the machine where you want a coin to drop. The pusher slides back and forth, and every coin that falls off the front edge fills the kindness meter. Every five coins, a short, useful tip slides up, and bigger pushes bring deeper ones. Now and then a medallion with one of the site’s friends rides in with your coins: push it over the edge to put them on your shelf. There’s no money here and nothing to buy. Your coins refill by themselves, and everything stays on this device.</p>
+    <p class="cp-intro cp-intro-short">Tap the machine to drop a coin. Every five coins that fall brings a short, useful tip.</p>
+    <details class="cp-how">
+      <summary>How it works</summary>
+      <p class="cp-intro">Tap the machine where you want a coin to drop, or use Left, Right and Drop a coin. The pusher slides back and forth, and every coin that falls off the front edge fills the kindness meter. Every five coins, a short, useful tip slides up for a few seconds, and bigger pushes bring deeper ones. Every tip you find is kept in “Tips you’ve found” below the machine. Now and then a medallion with one of the site’s friends rides in with your coins: push it over the edge to put them on your shelf. There’s no money here and nothing to buy. Your coins refill by themselves, and everything stays on this device.</p>
+    </details>
   </header>
 <!-- place:pauseplay style=gm --><nav class="gm-switch no-print no-bubble" aria-label="Gentle games: every game"><a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Gentle games">✨</a><a class="gm-tab" href="/frequency-journey.html">🎵 Arcade</a><a class="gm-tab" href="/word-bloom.html">🌼 Bloom</a><a class="gm-tab" href="/quiet-words.html">🔍 Words</a><a class="gm-tab" href="/quiet-crossword.html">✏️ Crossword</a><a class="gm-tab" href="/daily-ledger-crossword.html">📰 Newspaper</a><a class="gm-tab" href="/recheck-drive.html">🏈 Re-check Drive</a><a class="gm-tab" href="/bears-dojo.html">🐻 Bears Dojo</a><a class="gm-tab" href="/coin-pusher.html" aria-current="page">🪙 Coin Pusher</a><a class="gm-tab" href="/frequency-buddies-music-video-maker.html">🎬 Music video</a></nav><!-- /place:pauseplay -->
-
-  <div class="cp-bar" role="group" aria-label="Machine options">
-    <button type="button" class="cp-pill" id="cp-sound" aria-pressed="false">Sound: <b>off</b></button>
-    <button type="button" class="cp-pill" id="cp-music" aria-pressed="false">Music: <b>off</b></button>
-    <button type="button" class="cp-pill" id="cp-view" aria-pressed="false">View: <b>3D</b></button>
-  </div>
-  <p class="cp-note cp-center" id="cp-quiet-note" hidden>Quiet mode is on, or site sounds are off in Settings, so the machine stays silent.</p>
-  <p class="cp-note cp-center" id="cp-calm-note" hidden>“Keep the page still” is on, so you’re seeing the calm, flat view: no shaking, no confetti, and the pusher only moves after you drop a coin.</p>
 
   <noscript><p class="cp-intro">The coin pusher needs JavaScript to draw the machine. Everything it does happens on your device.</p></noscript>
 
@@ -123,12 +119,19 @@
       <button type="button" class="cp-go" id="cp-drop">Drop a coin</button>
       <button type="button" class="cp-pill cp-aim" id="cp-right" aria-label="Aim right">Right <span aria-hidden="true">▶</span></button>
     </div>
-    <p class="cp-empty" id="cp-empty" hidden>Your cup is empty for now. It refills by itself, one coin every 15 seconds: a nice moment to stretch or look out of a window.</p>
+    <p class="cp-empty" id="cp-empty" hidden>Your cup is empty for now. It refills by itself, one coin every 8 seconds: a nice moment to stretch or look out of a window.</p>
     <div class="cp-meter-box">
       <p class="cp-meter-label"><b>Kindness meter</b> <span id="cp-next">5 more coins to the next tip</span></p>
       <div class="cp-meter" role="progressbar" aria-label="Coins toward the next tip" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><span id="cp-meter-bar"></span></div>
       <p class="cp-note"><span id="cp-refill">Your cup is full.</span> Friends found: <b id="cp-found">0</b>. Tips found: <b id="cp-tips-n">0</b>.</p>
     </div>
+    <div class="cp-bar" role="group" aria-label="Machine options">
+      <button type="button" class="cp-pill" id="cp-sound" aria-pressed="false">Sound: <b>off</b></button>
+      <button type="button" class="cp-pill" id="cp-music" aria-pressed="false">Music: <b>off</b></button>
+      <button type="button" class="cp-pill" id="cp-view" aria-pressed="false">View: <b>3D</b></button>
+    </div>
+    <p class="cp-note cp-center" id="cp-quiet-note" hidden>Quiet mode is on, or site sounds are off in Settings, so the machine stays silent.</p>
+    <p class="cp-note cp-center" id="cp-calm-note" hidden>“Keep the page still” is on, so you’re seeing the calm, flat view: no shaking, no confetti, and the pusher only moves after you drop a coin.</p>
     <p class="sr-only" id="cp-live" aria-live="polite"></p>
   </section>
 
@@ -150,16 +153,18 @@
     <div class="cp-row"><button type="button" class="cp-go tol-share-btn" id="cp-share">Share the coin pusher</button><button type="button" class="cp-pill" id="cp-cel-close">Back to the machine</button></div>
   </section>
 
-  <section class="cp-shelf-box-wrap" aria-labelledby="cp-shelf-h">
-    <h2 id="cp-shelf-h">Your shelf of friends</h2>
-    <p class="cp-note">Every character on the site is in the machine somewhere. Tap a friend you’ve found to visit where they live. Medallions turn up at random, but never more than a few coins apart, so everyone can find them all.</p>
-    <ul class="cp-shelf" id="cp-shelf"></ul>
-  </section>
+  <p class="cp-note cp-center cp-gaming"><a href="/gaming-and-time-together.html">Arguing about gaming at home? A no-blame guide for both of you <span aria-hidden="true">→</span></a></p>
 
   <section class="cp-tips-wrap" aria-labelledby="cp-tips-h">
     <h2 id="cp-tips-h">Tips you’ve found</h2>
     <p class="cp-note" id="cp-tips-none">None yet. The first one arrives after five coins.</p>
     <ul class="cp-tips" id="cp-tips"></ul>
+  </section>
+
+  <section class="cp-shelf-box-wrap" aria-labelledby="cp-shelf-h">
+    <h2 id="cp-shelf-h">Your shelf of friends</h2>
+    <p class="cp-note">Every character on the site is in the machine somewhere. Tap a friend you’ve found to visit where they live. Medallions turn up at random, but never more than a few coins apart, so everyone can find them all.</p>
+    <ul class="cp-shelf" id="cp-shelf"></ul>
   </section>
 
   <p class="cp-note cp-center">A cosy arcade, not a casino: no real money, nothing to buy, no prizes worth anything but a smile. Your coins, friends and tips are kept only in this browser, on this device.</p>

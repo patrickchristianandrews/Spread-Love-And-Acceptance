@@ -462,7 +462,12 @@
     // the quick look's jobs, offered as fridge-list chips (name, and the owner it had there)
     state.qchips = (Array.isArray(state.qchips) ? state.qchips : []).filter(function (c) { return c && typeof c.n === 'string' && c.n.trim(); }).slice(0, 80)
       .map(function (c) { return { n: String(c.n).slice(0, 60), w: typeof c.w === 'number' && c.w >= 0 && c.w < n ? c.w : -1 }; });
-    state.owners.forEach(function (o) { if (typeof o.alt !== 'number' || o.alt >= n) { delete o.alt; delete o.altBy; } if (typeof o.bk !== 'number' || o.bk >= n) o.bk = -1; o.dn = typeof o.dn === 'string' ? o.dn.slice(0, 80) : ''; });
+    state.owners.forEach(function (o) {
+      if (typeof o.alt !== 'number' || o.alt >= n) { delete o.alt; delete o.altBy; } if (typeof o.bk !== 'number' || o.bk >= n) o.bk = -1; o.dn = typeof o.dn === 'string' ? o.dn.slice(0, 80) : '';
+      // "Split by time": two blocks of the night, an owner each (still one job on the list)
+      if (Array.isArray(o.sp) && o.sp.length === 2) o.sp = o.sp.map(function (b) { b = b || {}; return { t: String(b.t == null ? '' : b.t).slice(0, 24), w: typeof b.w === 'number' && b.w >= 0 && b.w < n ? b.w : -1 }; });
+      else delete o.sp;
+    });
     if (state.path !== 'fridge' && state.path !== 'count' && state.path !== 'money') delete state.path;
     if (!state.goal || typeof state.goal !== 'object') state.goal = { a: '', f: '' };
     state.goal = { a: String(state.goal.a == null ? '' : state.goal.a).slice(0, 12), f: String(state.goal.f || '').slice(0, 40) };
@@ -2472,6 +2477,13 @@
     }
     renderOwners(); save();
   }
+  // night feeds and being on call at night can be split by time: two blocks, an owner each, still one job (so the
+  // list's ten-job limit isn't used up by the halves)
+  var SPLITTABLE = /night feed|on call at night|night wak|night block|tomas de noche|de guardia de noche|despertares de noche/i;
+  function canSplit(o) { return SPLITTABLE.test(o.name || ''); }
+  function splitWords(o) { return o.sp.map(function (b) { return (b.t || '…') + ' ' + (b.w >= 0 && b.w < state.people.length ? nameOf(b.w) : (esq() ? '(sin dueño)' : '(no owner yet)')); }).join(' · '); }
+  function ownerWords(o) { return o.sp ? splitWords(o) : o.who >= 0 ? nameOf(o.who) : ''; }
+  function isOwned(o) { return o.sp ? o.sp.every(function (b) { return b.w >= 0 && b.w < state.people.length; }) : o.who >= 0 && o.who < state.people.length; }
   function renderOwners() {
     var ol = $('own-list'); if (!ol) return;
     renderPicks();
@@ -2485,7 +2497,7 @@
       var li = document.createElement('li'); li.className = 'ls-own';
       var h = document.createElement('p'); h.className = 'ls-own-job'; h.textContent = o.name;
       var g = document.createElement('div'); g.className = 'ls-own-who'; g.setAttribute('role', 'group'); g.setAttribute('aria-label', 'Who owns ' + o.name);
-      state.people.forEach(function (p, i) {
+      if (!o.sp) state.people.forEach(function (p, i) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
         b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'ow' + idx + '_' + i);
         b.setAttribute('aria-pressed', String(o.who === i)); b.textContent = nameOf(i);
@@ -2496,6 +2508,37 @@
       rm.setAttribute('aria-label', 'Take ' + o.name + ' off the list');
       rm.addEventListener('click', function () { toggleOwn(o.name); });
       li.appendChild(h); li.appendChild(g); li.appendChild(rm);
+      if (o.sp) {
+        // two blocks of the night, each with its own owner and its own times (change them to fit your nights)
+        o.sp.forEach(function (bl, k) {
+          var row = document.createElement('div'); row.className = 'ls-own-blk'; row.setAttribute('role', 'group');
+          var tl = document.createElement('label'); tl.className = 'ls-own-blkt';
+          var ts = document.createElement('span'); ts.className = 'sr-only'; ts.textContent = (esq() ? 'Horas del bloque ' : 'Times for block ') + (k + 1) + ' of ' + o.name;
+          var ti = document.createElement('input'); ti.type = 'text'; ti.maxLength = 24; ti.autocomplete = 'off'; ti.value = bl.t; ti.setAttribute('data-fk', 'osp' + idx + '_' + k);
+          ti.addEventListener('input', function () { bl.t = ti.value.slice(0, 24); var fl0 = $('fridge'); if (fl0) fl0.textContent = fridgeText(); save(); });
+          tl.appendChild(ts); tl.appendChild(ti); row.appendChild(tl);
+          row.setAttribute('aria-label', (esq() ? 'Quién se encarga de ' : 'Who owns ') + o.name + ', ' + (bl.t || (k + 1)));
+          state.people.forEach(function (p, i) {
+            var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
+            b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'osb' + idx + '_' + k + '_' + i);
+            b.setAttribute('aria-pressed', String(bl.w === i)); b.textContent = nameOf(i);
+            b.addEventListener('click', function () { bl.w = bl.w === i ? -1 : i; renderOwners(); save(); status(bl.w === i ? nameOf(i) + ' owns “' + o.name + '”, ' + (bl.t || 'that block') + '.' : 'No owner for ' + (bl.t || 'that block') + ' yet.'); });
+            row.appendChild(b);
+          });
+          li.appendChild(row);
+        });
+      }
+      if (canSplit(o) && !solo()) {
+        var sb = document.createElement('button'); sb.type = 'button'; sb.className = 'ls-link-btn ls-own-split'; sb.setAttribute('data-fk', 'osplit' + idx);
+        sb.textContent = o.sp ? (esq() ? 'Volver a un solo dueño' : 'Back to one owner') : (esq() ? 'Dividir por horario' : 'Split by time');
+        sb.addEventListener('click', function () {
+          if (o.sp) { var w0 = o.sp[0].w === o.sp[1].w ? o.sp[0].w : -1; delete o.sp; o.who = w0; status('“' + o.name + '” has one owner again.'); }
+          else { o.sp = [{ t: '9pm–2am', w: o.who >= 0 ? o.who : -1 }, { t: '2am–7am', w: -1 }]; o.who = -1; delete o.alt; delete o.altBy; status('“' + o.name + '” is split in two blocks, 9pm–2am and 2am–7am. Give each one an owner, and change the times to fit your nights. It still counts as one job on the list.'); }
+          renderOwners(); save();
+          var f = document.querySelector('[data-fk="osplit' + idx + '"]'); if (f) f.focus({ preventScroll: true });
+        });
+        li.appendChild(sb);
+      }
       if (typeof o.alt === 'number' && o.alt >= 0 && o.alt < state.people.length && o.alt !== o.who) {
         var al = document.createElement('p'); al.className = 'ls-mini ls-own-alt';
         al.appendChild(document.createTextNode((o.altBy ? o.altBy + '’s device' : 'The other device') + ' says ' + nameOf(o.alt) + '. '));
@@ -2551,7 +2594,7 @@
     'pagado o guardado antes de la fecha', 'el piso despejado en todos los cuartos', 'reservada y en el calendario de todos', 'platos llenos, agua fresca', 'dos paseos, bolsas repuestas', 'regado y ordenado', 'hecho, y lo de mañana listo', 'repuestos en el armario', 'reservado o arreglado, y avisado'];
   function donePh(name) { var l = low(name), es = esq(); for (var k = 0; k < DONE_PH.length; k++) if (DONE_PH[k][0].test(l)) return es ? DONE_ES[k] : DONE_PH[k][1]; return es ? 'cómo se ve cuando está terminado' : 'what it looks like when it’s finished'; }
   // jobs on the list with nobody's name yet: said before anyone shares, prints or copies it
-  function unowned() { return ownersList().filter(function (o) { return !(o.who >= 0 && o.who < state.people.length); }).map(function (o) { return o.name; }); }
+  function unowned() { return ownersList().filter(function (o) { return !isOwned(o); }).map(function (o) { return o.name; }); }
   // the fridge list in Spanish, when it was made from the quick look in Spanish
   function esq() { return document.body.getAttribute('data-ls-lang') === 'es'; }
   function unownedText() {
@@ -2578,6 +2621,8 @@
       var es = esq();
       if (to.length > 1) html += '<button type="button" data-own-send="-1">' + (es ? 'Enviar a todos (un mensaje)' : 'Send to everyone (one message)') + '</button>';
       to.forEach(function (i) { html += '<button type="button" data-own-send="' + i + '">' + (es ? 'Enviar a ' : 'Send to ') + esc(nameOf(i)) + '</button>'; });
+      var QL = window.TOLLemonadeQuick;
+      if (QL && QL.carries && QL.carries(named.map(function (i) { return state.people[i].trim(); }))) html += '<p class="ls-mini ls-own-one">' + (es ? 'Un solo enlace lleva las dos cosas: las respuestas de su vistazo y esta lista.' : 'One link carries both: your quick-look answers and this fridge list, so it’s always the latest.') + '</p>';
     }
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
     box.hidden = !html;
@@ -2588,16 +2633,18 @@
     var d = { app: 'lemonade', v: 1, fridge: 1, people: idx.map(nm), jobs: [], bills: [] };
     if (state.me >= 0 && !placeholder(state.people[state.me])) d.by = nm(state.me);
     if (to >= 0 && idx.indexOf(to) >= 0) d.to = nm(to);
-    d.own = ownersList().map(function (o) { var x = { n: o.name }; if (o.who >= 0 && idx.indexOf(o.who) >= 0) x.w = nm(o.who); if (o.bk >= 0 && idx.indexOf(o.bk) >= 0) x.b = nm(o.bk); if (o.dn && o.dn.trim()) x.d = clean(o.dn, 80); return x; });
+    d.own = ownersList().map(function (o) { var x = { n: o.name }; if (o.who >= 0 && idx.indexOf(o.who) >= 0) x.w = nm(o.who); if (o.sp) x.s = o.sp.map(function (b) { return [b.t, b.w >= 0 && idx.indexOf(b.w) >= 0 ? nm(b.w) : '']; }); if (o.bk >= 0 && idx.indexOf(o.bk) >= 0) x.b = nm(o.bk); if (o.dn && o.dn.trim()) x.d = clean(o.dn, 80); return x; });
     return packSide(JSON.stringify(d)).then(sideLink);
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('[data-own-send]'); if (!b) return;
     var to = +b.getAttribute('data-own-send'), by = state.me >= 0 && !placeholder(state.people[state.me]) ? nameOf(state.me) : '';
     var ut = unownedText();
-    fridgeLink(to).then(function (url) {
+    var QL = window.TOLLemonadeQuick, named = state.people.filter(function (p) { return !placeholder(p); }).map(function (p) { return p.trim(); });
+    var one = !!(QL && QL.carries && QL.carries(named));
+    (one ? Promise.resolve(QL.link(to >= 0 ? nameOf(to) : '')) : fridgeLink(to)).then(function (url) {
       var line = (by ? 'From ' + by + ': ' : '') + 'our fridge list, who owns what (' + ownersList().length + (ownersList().length === 1 ? ' job' : ' jobs') + (unowned().length ? ', ' + unowned().length + ' still to pick an owner' : '') + '). ' +
-        'Open it to see your jobs, change an owner if it isn’t right, then send it back. Nothing is uploaded.';
+        'Open it to see your jobs, change an owner if it isn’t right, then send it back. Nothing is uploaded.' + (one ? ' Our quick look rides in the same link, so it’s the latest of both.' : '');
       if (to >= 0) line = (by ? 'From ' + by + ', for ' + nameOf(to) + ': ' : 'For ' + nameOf(to) + ': ') + line.replace(/^From [^:]+: /, '');
       if (esq()) line = (by ? 'De ' + by + (to >= 0 ? ', para ' + nameOf(to) : '') + ': ' : to >= 0 ? 'Para ' + nameOf(to) + ': ' : '') + 'nuestra lista para el refri, quién se encarga de qué (' + ownersList().length + (ownersList().length === 1 ? ' tarea' : ' tareas') + '). Ábrela para ver tus tareas, cambia un dueño si no está bien y envíala de vuelta. No se sube nada.';
       if (window.TOLShare && window.TOLShare.share) window.TOLShare.share({ title: 'Our fridge list', text: line, url: url, result: true });
@@ -2629,7 +2676,7 @@
     var list = ownersList();
     if (!list.length) return '';
     var lines = ['Who owns what (our fridge list)', ''];
-    list.forEach(function (o) { var x = ownExtra(o); lines.push('• ' + o.name + ': ' + (o.who >= 0 ? nameOf(o.who) : '(no owner yet)') + (x.length ? ' (' + x.join('; ') + ')' : '')); });
+    list.forEach(function (o) { var x = ownExtra(o); lines.push('• ' + o.name + ': ' + (ownerWords(o) || '(no owner yet)') + (x.length ? ' (' + x.join('; ') + ')' : '')); });
     lines.push('', 'Owning a job means you do it, or you make sure it gets done. Swap by asking, not by quietly dropping it.');
     return lines.join('\n');
   }
@@ -2913,7 +2960,7 @@
     var items = list.map(function (o) {
       var j = state.jobs.filter(function (x) { return !x.ex && low(x.name) === low(o.name); })[0];
       var x = ownExtra(o);
-      return { job: o.name + (o.dn && o.dn.trim() ? ' (done: ' + o.dn.trim() + ')' : ''), who: (o.who >= 0 ? nameOf(o.who) : '') + (o.bk >= 0 && o.bk < state.people.length ? ' · bad days: ' + nameOf(o.bk) : ''), when: j && F ? F.freqLabel(j.freq) : '' };
+      return { job: o.name + (o.dn && o.dn.trim() ? ' (done: ' + o.dn.trim() + ')' : ''), who: ownerWords(o) + (o.bk >= 0 && o.bk < state.people.length ? ' · bad days: ' + nameOf(o.bk) : ''), when: j && F ? F.freqLabel(j.freq) : '' };
     });
     items.push({ blank: list.length ? 2 : 8 });
     var names = state.people.filter(function (p) { return !placeholder(p); }).map(function (p) { return p.trim(); });
@@ -3394,7 +3441,11 @@
     var bills = list(raw.bills, 100).map(function (b) {
       return { n: clean(b.n, 120), k: BILL_KIND[b.k] ? b.k : 'shared', w: low(b.w), v: vals(b.v, 1e9) };
     }).filter(function (b) { return b.n || Object.keys(b.v).length; });
-    var own = list(raw.own, MAX_OWN_ANY).map(function (o) { return { n: clean(o.n, 60), w: low(o.w), b: low(o.b), d: clean(o.d, 80) }; }).filter(function (o) { return o.n; });
+    var own = list(raw.own, MAX_OWN_ANY).map(function (o) {
+      var x = { n: clean(o.n, 60), w: low(o.w), b: low(o.b), d: clean(o.d, 80) };
+      if (Array.isArray(o.s) && o.s.length === 2) x.s = o.s.map(function (b) { b = Array.isArray(b) ? b : []; return [clean(b[0], 24), low(b[1])]; });
+      return x;
+    }).filter(function (o) { return o.n; });
     if (!people.length && !jobs.length && !bills.length) return null;
     // "Money to my mum" typed on Amara's phone reads "Money to Amara’s mum" here: a "my" in a line's name
     // means the person who typed it (the sender, or else the one person with numbers on that line).
@@ -3600,8 +3651,9 @@
         // the two devices name different owners: the one here stays, and the other is shown beside it to pick
         else if (have.who >= 0 && w >= 0 && w !== have.who) { have.alt = w; have.altBy = d.by || ''; out.ownDiff = (out.ownDiff || []).concat([have.name]); }
         if (!(have.bk >= 0) && bk >= 0) have.bk = bk; if (!have.dn && o.d) have.dn = o.d;
+        if (o.s && (!have.sp || have.sp.every(function (b) { return b.w < 0; }))) { have.sp = spIn(o.s, map); have.who = -1; }
       }
-      else if (state.owners.length < maxOwn()) { state.owners.push({ name: o.n, who: w, bk: bk, dn: o.d || '' }); out.own = (out.own || 0) + 1; }
+      else if (state.owners.length < maxOwn()) { var no = { name: o.n, who: w, bk: bk, dn: o.d || '' }; if (o.s) { no.sp = spIn(o.s, map); no.who = -1; } state.owners.push(no); out.own = (out.own || 0) + 1; }
       if ((bk >= 0 || o.d) && !state.ownMore) state.ownMore = true;
     });
     // their own side has arrived: a number typed in for them here (from the quick look) now counts as theirs
@@ -3626,6 +3678,8 @@
       (out.both ? ' Both lines count until you remove one, so talk it through and keep the one that’s right.' : '');
   }
 
+  // two night blocks from a link: [["9pm–2am", "andre"], …] with the names as this stand has them
+  function spIn(s, map) { return s.map(function (b) { var k = b[1] && map[low(b[1])] != null ? map[low(b[1])] : -1; return { t: String(b[0] || '').slice(0, 24), w: typeof k === 'number' && k < state.people.length ? k : -1 }; }); }
   // the two boxes: send, and add
   var pending = null, PENDING = 'tol-lemonade-pending';
   function dropPending() { try { sessionStorage.removeItem(PENDING); } catch (e) {} }
@@ -4631,6 +4685,11 @@
       if (sk.freq !== 'week' || sk.unit !== 'h' || sk.fq) { state.people.forEach(function (_, i) { var h0 = rawH(sk, i); sk.v[i] = h0 ? Math.round(h0 * 10) / 10 : 0; }); sk.freq = 'week'; sk.unit = 'h'; delete sk.fq; }
       q.solo.forEach(function (x, qi) { var k = map[qi], h = num(x); if (k == null || k < 0 || !h || h > 168) return; sk.v[k] = h; if (k !== me) { sk.qv = fit(sk.qv, state.people.length, 0); sk.qv[k] = h; } });
     }
+    // someone here part of the time (nights here out of 14), set beside their name in the quick look
+    if (Array.isArray(q.part)) q.part.forEach(function (x, qi) {
+      var k = map[qi], v = +x; if (k == null || k < 0 || !(v > 0 && v < 1)) return;
+      if (state.part[k] === 1) { var was = state.part[k]; state.part[k] = Math.round(v * 14) / 14; eowRows(k, was); }
+    });
     // a fair split picked in the quick look, when none is set here
     if (Array.isArray(q.split) && q.split.length === 2 && !state.agreed.on) {
       var sp = zeros().map(function () { return ''; });
@@ -4673,5 +4732,43 @@
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,
     sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); },
     renderOwners: function () { try { renderOwners(); } catch (e) {} },
+    // the quick look took a job off: it comes off the fridge list too (and out of the chips)
+    dropOwn: function (names) {
+      var ks = (names || []).map(chipKey).filter(Boolean), n0 = ownersList().length;
+      state.owners = ownersList().filter(function (o) { return ks.indexOf(chipKey(o.name)) < 0; });
+      state.qchips = (state.qchips || []).filter(function (c) { return ks.indexOf(chipKey(c.n)) < 0; });
+      var gone = n0 - state.owners.length;
+      if (gone || ks.length) { try { renderOwners(); } catch (e) {} save(); }
+      return gone;
+    },
+    // the fridge list as names (for the quick look's one link): [{ n, w, s: [[times, name], …] }]
+    ownersOut: function () {
+      if (!state) return [];
+      var nmOf = function (i) { return i >= 0 && i < state.people.length && !placeholder(state.people[i]) ? state.people[i].trim() : ''; };
+      return ownersList().map(function (o) { var x = { n: o.name, w: nmOf(o.who) }; if (o.sp) x.s = o.sp.map(function (b) { return [b.t, nmOf(b.w)]; }); return x; });
+    },
+    // a fridge list that came inside a quick-look link: merged by job name, people by name; a different owner
+    // is shown beside the one here to pick (never quietly replaced). Returns how many jobs it holds now.
+    ownersIn: function (o) {
+      o = o || {};
+      var map = quickPeople(o.people || []), byName = {};
+      (o.people || []).forEach(function (nm, qi) { if (nm && map[qi] != null && map[qi] >= 0) byName[low(nm)] = map[qi]; });
+      var who = function (nm) { var k = nm ? byName[low(nm)] : null; return typeof k === 'number' ? k : -1; };
+      var list = ownersList(), by = String(o.by || '');
+      (o.list || []).forEach(function (x) {
+        var nm = String(x.n || '').trim().slice(0, 60); if (!nm) return;
+        var w = who(x.w), sp = Array.isArray(x.s) && x.s.length === 2 ? x.s.map(function (b) { return { t: String(b[0] || '').slice(0, 24), w: who(b[1]) }; }) : null;
+        var have = list.filter(function (y) { return chipKey(y.name) === chipKey(nm); })[0];
+        if (!have) { if (list.length >= maxOwn()) return; var no = { name: nm, who: sp ? -1 : w }; if (sp) no.sp = sp; list.push(no); return; }
+        if (sp) { if (!have.sp || have.sp.every(function (b) { return b.w < 0; })) { have.sp = sp; have.who = -1; } else have.sp.forEach(function (b, k) { if (b.w < 0 && sp[k].w >= 0) b.w = sp[k].w; }); return; }
+        if (have.sp) return;
+        if (have.who < 0 && w >= 0) have.who = w;
+        else if (have.who >= 0 && w >= 0 && w !== have.who) { have.alt = w; have.altBy = by; }
+      });
+      if (o.me != null && map[o.me] != null && map[o.me] >= 0) state.me = map[o.me];
+      if (list.length && !keep) { keep = true; var kd = $('keep-device'); if (kd) kd.checked = true; }
+      renderAll(); save();
+      return list.length;
+    },
     fromQuick: fromQuick, quickNames: function (names) { try { return hhAutoLink(names); } catch (e) { return false; } }, hasStand: function () { return !!state && !state.example && (realJobs().length > 0 || realBills().length > 0); } };
 })();

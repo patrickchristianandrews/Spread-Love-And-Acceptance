@@ -1627,16 +1627,18 @@ def build_download():
 <main class="read bk-home bk-dl" id="main">
 <header class="read-head"><p class="read-code">The book</p><h1>Download the book as a PDF</h1></header>
 <p class="simple-lede">Keep the book on your phone, tablet or computer, or print it. Pick the whole book or a smaller book that fits you, in the short or the full version. Each one is a designed book: a cover, contents with page numbers, part and chapter openers, “What to remember” and “This connects to” at the end of every chapter, a glossary, research notes and an index.</p>
+<p>Reading the book on this site is always free, with no account and no email. Only these PDF files ask for an email address.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
 <p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
 <form class="bk-dl-form" novalidate>
 <label for="bk-dl-email">Email address</label>
-<div class="bk-dl-row"><input type="email" id="bk-dl-email" name="email" autocomplete="email" placeholder="name@example.com" required><button type="submit" class="tol-btn">Unlock the downloads</button></div>
+<div class="bk-dl-row"><input type="email" id="bk-dl-email" name="email" autocomplete="email" placeholder="name@example.com" required><button type="submit" class="tol-btn">Show the downloads</button></div>
 <p class="bk-dl-msg" role="status" aria-live="polite"></p>
 </form>
-<p class="bk-dl-small">This device remembers that you unlocked the downloads (not your address), so you won’t be asked again here. <a href="/legal/privacy-policy.html">Privacy policy</a>.</p>
+<p class="bk-dl-small">This device remembers only that you’ve given an email here (not the address itself), so you won’t be asked again on it. <a href="/legal/privacy-policy.html">Privacy policy</a>.</p>
 </div>
+<p class="bk-dl-series">Looking for one of the four print books? There isn’t a PDF for each one. Book 1, Know Yourself Kindly, is in <a href="#for-yourself">The Book for One Person</a>. Book 2, Heal and Steady, is in <a href="#understanding">Understanding People</a>. Book 3, Understanding Each Other, is in <a href="#whole">the whole book</a>. Book 4, Share the Load, is in <a href="#together">The Book for Two or More</a> (its short afterword is in the whole book).</p>
 <div class="bk-dl-cards no-bubble" data-no-bubble>
 %s
 </div>

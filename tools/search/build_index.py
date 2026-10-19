@@ -39,6 +39,8 @@ christen christened christening christenings baptise baptised baptize baptized a
 boyfriend boyfriends girlfriend girlfriends befriend gf bf bff hubby wifey fiances fiancees inhaler inhalers handover handovers mediator mediators inheritance probate executor
 wont dont cant didnt doesnt isnt wasnt arent werent wouldnt couldnt shouldnt havent hasnt hadnt youre theyre thats whats
 construccion construcción obra horas trabaja trabajamos cansadas turnos turno noches
+repartir reparto hermanos hermana hermano hermanas hijastros hijastro hijastra hijastras padrastro madrastra ensamblada ensambladas resentido resentida culpa rabia
+contempt contemptuous horsemen stonewalling paperback paperbacks hardback exam exams halls flatmate
 ayuda ayudar pareja parejas esposa esposo marido mujer hombre hijos hijo hija hijas ninos nino nina ninas bebe bebes gemelos gemelas cuidador cuidadora cuidadores cuidar cuidado familia casa trabajo dinero tareas quehaceres pelea peleas pelean peleamos discutir discusion enojado enojada enojo miedo calma tranquilo tranquila cansado cansada divorcio separados separacion suegra suegro suegros abuela abuelo abuelos abuelita madre padre mama papa novio novia amor relacion matrimonio gritar grita gritos violencia seguridad necesito tengo tiene somos estoy esta como que por para con sin mas muy bien mal ayudame hablar hablamos escuchar tiempo noche dia semana escuela salud enfermedad enferma enfermo parkinson demencia hogar juntos solo sola soltero soltera mudanza boda dinero ahorro gasto deuda dios iglesia fe navidad pascua bautizo espanol castellano latino latina hispano gracias hola donde cuando porque quien puedo quiero siento triste feliz celoso celosa respeto confianza
 '''
 

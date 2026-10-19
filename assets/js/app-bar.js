@@ -8,8 +8,9 @@
      - Safari on a Mac, or Firefox on a computer (no install offer): the same words open the computer sheet below.
      - Android without that offer: "Get the free app" goes to /install.html#chrome.
      - anything else: "Get the free app" goes to /install.html.
-   Never inside the installed app, never on /install.html, never on paper. Its × hides it for this visit only
-   (sessionStorage 'tol-appbar-off'); it is back on the next visit. Quiet mode: plain and still (app-bar.css).
+   Never inside the installed app, never on /install.html, never on paper. Its × hides it on later pages and visits
+   too, for 30 days (localStorage 'tol-appbar-off': the date it was closed; sessionStorage too, for this visit). Quiet
+   mode and "No surprises" leave it out (site.js and site.css). Quiet mode: plain and still (app-bar.css).
 
    THE INSTALL SHEET. Apple lets no website install itself in one tap (Safari has no install prompt), so
    window.TOLAppBar.guide() opens the nearest thing: an iOS-style sheet with the app's icon and name and a blue
@@ -38,6 +39,8 @@
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  // closed with its × in the last 30 days (localStorage 'tol-appbar-off' holds the date)
+  function closedLately() { var d = lsGet(OFF); if (!d || !/^\d{4}-\d\d-\d\d$/.test(d)) return false; return Date.now() - Date.parse(d) < 30 * 86400000; }
   function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
   // the sheet slides and the arrow bounces like iOS, even with the page kept still (phones start still): the arrow is how
   // it shows where to tap. Quiet mode and the device's "reduce motion" keep both still.
@@ -390,7 +393,7 @@
     }
     var had = bar.contains(document.activeElement);
     bar.innerHTML = '<span class="tol-appbar-in">' + ICON + html + '</span>' +
-      '<button type="button" class="tol-appbar-x" aria-label="' + T('Hide the app line for this visit', 'Ocultar la línea de la app en esta visita') + '" title="' + T('Hide for this visit', 'Ocultar en esta visita') + '">&times;</button>';
+      '<button type="button" class="tol-appbar-x" aria-label="' + T('Hide the app line', 'Ocultar la línea de la app') + '" title="' + T('Hide it (it stays hidden for a month)', 'Ocultarla (queda oculta un mes)') + '">&times;</button>';
     var go = bar.querySelector('[data-appbar]');
     if (go && go.getAttribute('data-appbar') === 'install') go.addEventListener('click', function () {
       window.TOLInstall.ask().then(function (r) { if (r === 'unavailable' || r === 'error') location.href = '/install.html'; else render(bar); });
@@ -398,7 +401,8 @@
     if (go && go.getAttribute('data-appbar') === 'ios') go.addEventListener('click', function () { guide(go); });
     if (go && go.getAttribute('data-appbar') === 'desk') go.addEventListener('click', function () { desk(go); });
     bar.querySelector('.tol-appbar-x').addEventListener('click', function () {
-      ssSet(OFF, '1');
+      // home16b: once closed it stays closed on later pages and visits (localStorage, the date it was closed), for a month
+      ssSet(OFF, '1'); lsSet(OFF, new Date().toISOString().slice(0, 10));
       var next = document.querySelector('.tol-bar a, .tol-bar button');
       bar.remove();
       if (next) next.focus();
@@ -427,7 +431,7 @@
     if (hosts.length) { css(); Array.prototype.forEach.call(hosts, inline); }
     var bar = document.querySelector('aside.tol-appbar');
     if (!bar) return;
-    if (standalone() || /\/install\.html$/.test(location.pathname) || ssGet(OFF) === '1') { bar.remove(); return; }
+    if (standalone() || /\/install\.html$/.test(location.pathname) || ssGet(OFF) === '1' || closedLately()) { bar.remove(); return; }
     css(function () { render(bar); });
     // Chrome or Edge may offer the install a moment later (site.js keeps the offer), or the app may get installed
     function again() { setTimeout(function () { css(function () { render(bar); }); }, 0); }

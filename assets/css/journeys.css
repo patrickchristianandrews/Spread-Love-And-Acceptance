@@ -53,6 +53,28 @@ html.tol-quiet .read .hh-wgo .wgo-opts :is(a, button){ border-color:var(--ink, #
   .read .hh-wgo{ padding:.9rem .9rem .95rem; }
   .read .wgo{ padding:.9rem .85rem 1rem; }
 }
+/* home16b: a choice's small second line ("(retired, kids left, illness)"), and the "Which is closest?" list */
+.read .wgo-opts .wgo-opt-n{ display:block; margin-top:.1rem; font-weight:400; font-size:.86em; opacity:.85; }
+.read .wgo-opts :is(a, button):has(.wgo-opt-n){ flex-direction:column; align-items:flex-start; justify-content:center; }
+.read .hh .hh-wgo .wgo-opts a.wgo-opt:has(.wgo-opt-n)::after{ content:none; }
+.read .wgo-res .wgo-choose-l{ list-style:none; margin:.2rem 0 0 !important; padding:0 !important; display:grid; gap:.15rem; }
+.read .wgo-res .wgo-choose-l li{ margin:0 !important; max-width:none; }
+.read .wgo-res .wgo-choose-l li::before{ content:none; }
+.read .wgo-res .wgo-choose-l a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+.read .wgo-res .wgo-choose-l span{ display:block; margin:-.35rem 0 .3rem; font-size:.92rem; color:#5A5346; }
+/* dark mode turns the card's deep purple into a bright lavender: give it a soft light colour that turns into a calm dark one */
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]):not(.tol-nodark):not(.tol-quiet) .read .hh-wgo{ background:linear-gradient(140deg, #D6CCE4 0%, #CAD8E6 100%); color:#2B2620; box-shadow:none; }
+  html:not([data-theme="light"]):not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo :is(h2.hh-start-t, .hh-start-n, .hh-start-k, .wgo-ten, .wgo-ten a){ color:#2B2620; text-decoration-color:rgba(43,38,32,.5); }
+  html:not([data-theme="light"]):not(.tol-nodark):not(.tol-quiet) .read .hh-wgo .hh-mode-opts{ background:rgba(255,253,247,.5); border-color:rgba(43,38,32,.35); }
+  html:not([data-theme="light"]):not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo .hh-mode-opts button{ color:#2B2620; }
+  html:not([data-theme="light"]):not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo .hh-mode-opts button[aria-pressed="true"]{ background:#2B2620; color:#FFFDF7; }
+}
+html[data-theme="dark"]:not(.tol-nodark):not(.tol-quiet) .read .hh-wgo{ background:linear-gradient(140deg, #D6CCE4 0%, #CAD8E6 100%); color:#2B2620; box-shadow:none; }
+html[data-theme="dark"]:not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo :is(h2.hh-start-t, .hh-start-n, .hh-start-k, .wgo-ten, .wgo-ten a){ color:#2B2620; text-decoration-color:rgba(43,38,32,.5); }
+html[data-theme="dark"]:not(.tol-nodark):not(.tol-quiet) .read .hh-wgo .hh-mode-opts{ background:rgba(255,253,247,.5); border-color:rgba(43,38,32,.35); }
+html[data-theme="dark"]:not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo .hh-mode-opts button{ color:#2B2620; }
+html[data-theme="dark"]:not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo .hh-mode-opts button[aria-pressed="true"]{ background:#2B2620; color:#FFFDF7; }
 
 /* ---------- the follow-up ("Did the agreement hold?") ---------- */
 .jb[hidden]{ display:none !important; }

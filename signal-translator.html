@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
-</script>
+<!-- No visit counting on this page: people paste their own messages and chats here, so Google Analytics is left off (listed in /legal/privacy-policy.html) -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
@@ -224,6 +216,15 @@ details.fits > summary .step{display:inline;margin-right:8px}
 .lvl-clear{color:var(--ink)} .fill.lvl-clear{background:var(--muted)}
 .lvl-some{color:var(--s)} .fill.lvl-some{background:var(--s)}
 .lvl-heavy{color:var(--a)} .fill.lvl-heavy{background:var(--a)}
+.lvl-unsure,.lvl-ex{color:var(--ink)} .fill.lvl-unsure,.fill.lvl-ex{background:var(--muted)}
+.relchips{display:flex;flex-wrap:wrap;gap:6px 8px;margin:8px 0 4px;align-items:center}
+.relchips .relchips-k{font-size:.92rem;margin-right:2px}
+.relchips button{min-height:44px;padding:6px 13px;border:1.5px solid var(--line);border-radius:999px;background:var(--sheet);color:inherit;font-family:var(--display);font-size:.92rem;cursor:pointer}
+.relchips button[aria-pressed="true"]{border-color:var(--b);box-shadow:inset 0 0 0 1.5px var(--b);font-weight:600}
+.relchips .relchips-more{background:none;border-style:dashed}
+.st-sleep{margin:10px 0;padding:10px 12px;border-left:4px solid var(--muted);background:color-mix(in srgb,var(--sheet) 70%,transparent);border-radius:6px}
+.st-sleep .actions{margin:8px 0 0}
+.st-left{margin:6px 0 0;font-size:.92rem}
 .box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0 0 14px}
 .box.tone-b{border-left:4px solid var(--b)}
 .box.tone-a{border-left:4px solid var(--a)}
@@ -756,11 +757,6 @@ body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
   <!-- A WHOLE CONVERSATION OR SCREENSHOT (the Conversation Reader, moved in from /conversation-reader.html) -->
   <section id="conversation" class="crpane" aria-labelledby="cr-s1" hidden>
     <p class="tol-safe-line no-bubble" style="font-size:.88rem;color:var(--ink-soft,#5A5346)">Made for everyday disagreements between people who feel safe with each other. If anyone feels afraid or controlled, <a href="/safety.html">private help is here</a>.</p>
-    <p class="tol-device-note"><span aria-hidden="true">💻</span> <span>A long thread is easier to paste on a laptop or desktop, where you can select a whole conversation at once. On a phone, copying a few messages at a time works fine, and so does a screenshot.</span></p>
-    <div class="cr-private">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--credit)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
-      <p style="margin:0;"><strong>Private by design.</strong> The Chat analyzer runs entirely in your browser. What you paste, and any screenshot, is never saved, collected or sent anywhere, and nobody sees it but you. Close the tab and it&rsquo;s gone.</p>
-    </div>
     <div class="cr-step cr-input-step">
       <h2 id="cr-s1"><span>01</span>Paste the conversation</h2>
       <p class="cr-hint">Copy the messages from your phone, a chat app or an email, and paste them here. Names at the start of each line help (&ldquo;Sam: &hellip;&rdquo;), but they&rsquo;re not required. If there are names, it will ask which one is you.</p>
@@ -773,6 +769,13 @@ body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
         <button type="button" class="cr-btn is-quiet" id="cr-clear">Clear</button>
       </div>
       <p class="cr-hint" id="cr-loading" role="status" aria-live="polite"></p>
+      <p class="cr-hint cr-fair no-bubble">It reads words, not names: swap the names and you get the same read. To compare, each of you can paste it on your own phone.</p>
+    <p class="tol-device-note"><span aria-hidden="true">💻</span> <span>A long thread is easier to paste on a laptop or desktop, where you can select a whole conversation at once. On a phone, copying a few messages at a time works fine, and so does a screenshot.</span></p>
+      <div class="cr-private">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--credit)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+        <p style="margin:0;"><strong>Private by design.</strong> The Chat analyzer runs entirely in your browser. What you paste, and any screenshot, is never saved, collected or sent anywhere, and nobody sees it but you. Close the tab and it&rsquo;s gone. No visit counting on this page either.</p>
+      </div>
+
       <details class="cr-formats">
         <summary>What can I paste?</summary>
         <ul>
@@ -831,7 +834,8 @@ body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
       <select id="gotRelSel">
         <option value="">Not sure / skip</option>
         <option value="partner">My partner</option>
-        <option value="coparent">My co-parent, or my ex</option>
+        <option value="coparent">My co-parent</option>
+        <option value="ex">An ex</option>
         <option value="family">Family</option>
         <option value="friend">A friend</option>
         <option value="roommate">A roommate</option>
@@ -1585,6 +1589,12 @@ function paintRelSet(){
   // nothing chosen yet: a plain default, never a blank ("Reading it for: . Change")
   $("#relSetName").textContent = REL[relId] && REL[relId].label ? REL[relId].label : "someone close";
   $("#relSetChange").textContent = REL[relId] ? "Change" : "Choose who";
+  // one tap, right under the box: who it's for. No jump into the long More options form
+  let ch = $("#relChips");
+  if(!ch){ ch = document.createElement("div"); ch.id = "relChips"; ch.className = "relchips no-bubble"; ch.setAttribute("role","group"); ch.setAttribute("aria-label","Who it's for"); const ph = $("#phrase"); if(ph && ph.parentNode) ph.parentNode.insertBefore(ch, ph.nextSibling); }
+  ch.hidden = got;
+  const CHIPS = [["partner","Partner"],["ex","An ex"],["coparent","Co-parent"],["roommate","Flatmate"],["family","Family"],["coworker","Coworker"]];
+  ch.innerHTML = '<span class="relchips-k">Who&rsquo;s it for?</span>'+CHIPS.map(c=>'<button type="button" data-relq="'+c[0]+'" aria-pressed="'+(relId===c[0])+'">'+c[1]+'</button>').join('')+'<button type="button" class="relchips-more" id="relChipsMore">More&hellip;</button>';
   // a work message: coworkers, a manager, or a business partner, one tap each
   let q = $("#relQuick");
   if(!q){ q = document.createElement("span"); q.id = "relQuick"; q.className = "relquick"; box.appendChild(q); }
@@ -1592,8 +1602,10 @@ function paintRelSet(){
   q.hidden = !work;
   if(work) q.innerHTML = ' Or: '+["coworker","manager","business"].filter(k=>k!==relId).map(k=>'<button type="button" class="linkbtn" data-relq="'+k+'">'+esc(REL[k].label)+'</button>').join(' &middot; ');
 }
-document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relSetChange")){ $("#fine").open = true; $("#relSel").focus(); } });
-document.addEventListener("click", e=>{ const b = e.target.closest && e.target.closest("[data-relq]"); if(!b) return; const sel=$("#relSel"); sel.value = b.getAttribute("data-relq"); sel.dispatchEvent(new Event("change", {bubbles:true})); });
+// "Choose who" / "Change" goes to the one-tap row under the box; "More…" opens the full list
+document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relSetChange")){ const f = document.querySelector("#relChips button"); if(f && !$("#relChips").hidden){ f.focus(); } else { $("#fine").open = true; $("#relSel").focus(); } } });
+document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relChipsMore")){ $("#fine").open = true; $("#relSel").focus(); } });
+document.addEventListener("click", e=>{ const b = e.target.closest && e.target.closest("[data-relq]"); if(!b) return; const sel=$("#relSel"); const v = b.getAttribute("data-relq"); sel.value = (b.getAttribute("aria-pressed")==="true" && b.closest("#relChips")) ? "" : v; sel.dispatchEvent(new Event("change", {bubbles:true})); const again = document.querySelector('#relChips [data-relq="'+v+'"]'); if(again && b.closest("#relChips")) again.focus(); });
 function rerun(){ paintNotesRel(); if(!$("#results").hidden && $("#phrase").value.trim()) run(); }
 /* the talking notes fit the relationship: co-parents get notes about the children and the plan */
 /* which talking notes fit: co-parents, work, apart (long distance: by phone or text), or one home */
@@ -1701,6 +1713,14 @@ const REL = {
     fallback:"A neutral update can still land as a parenting verdict. In this dynamic, silence and brevity are often read as the other house not doing its share.",
     say:"Lead with the child's need, then the ask, then the time. Keep the other parent out of the character judgment.",
     care:"If there is a court order or parenting plan, it comes first. This is for the day-to-day, never for building a case against the other parent."
+  },
+  ex:{
+    label:"An ex", anchor:"partners",
+    what:"Someone you were with and aren't any more: no children together, or none at home. There may still be feelings, hurt, shared friends or a box of their things.",
+    why:"This dynamic exists because a relationship ended but the feelings didn't stop on the same day. A message can reopen what both of you were trying to close, and it often lands on a bad night, late, after a memory pulls. Whatever the words, the reader hears \u201cthey're reaching back\u201d.",
+    fallback:"To an ex, even a kind sentence carries the whole history, and the timing says as much as the words. A message sent late at night is often read as a hard night, not as the words.",
+    say:"If it's practical (keys, a bill, their things), keep it short and about that one thing. If it's about the two of you, sleep on it first, and send it only if it still feels right in the morning.",
+    care:"After a breakup, the urge to reach out comes in waves, and it passes. Not sending is a choice too. If you share children, choose Co-parents instead: brief, about the plan."
   },
   friend:{
     label:"Friends", anchor:"friends",
@@ -2340,16 +2360,27 @@ function fLabel(id, ws, tag){
   return '<'+t+(t==="span"?' class="fname"':'')+'>'+esc(name)+'</'+t+'>'+(ws && ws.length && !OWN_TITLE.includes(id) && !["multi","long","questions","nowhen"].includes(id) && !/^The word /.test(name) ? ' '+quoteWords(ws) : '')+(g && name!==fTitle(id, ws) ? '' : fGloss(id));
 }
 /* the static level in plain words */
-const LVL_PLAIN = {clear:"It will likely be understood the way you mean it.", mild:"A word or two may come across sharper than you mean. The notes below show which.", rift:"The words are gentle. After a long silence, old hurt can colour any message, so a slow, no-pressure reply is normal.", some:"A few words may hurt or be misread. The notes below show which.", heavy:"Several parts may hurt, or start an argument. The notes below show which."};
+const LVL_PLAIN = {unsure:"Nothing settles how this is meant, so the reading stays open. Saying plainly what you mean is the safest way.", ex:"The words aren't harsh. The question is whether you want to send them tonight.", clear:"It will likely be understood the way you mean it.", mild:"A word or two may come across sharper than you mean. The notes below show which.", rift:"The words are gentle. After a long silence, old hurt can colour any message, so a slow, no-pressure reply is normal.", some:"A few words may hurt or be misread. The notes below show which.", heavy:"Several parts may hurt, or start an argument. The notes below show which."};
 /* the main line in plain words; the technical label ("Some static") stays as small print */
 /* the level, in plain words: "How it may sound: a little sharp" (never "Signal check: Some static") */
-const SOUND_WORDS = {clear:"clear", little:"mostly clear", mild:"a little sharp", some:"sharp in places", heavy:"very sharp"};
+const SOUND_WORDS = {clear:"clear", little:"mostly clear", mild:"a little sharp", some:"sharp in places", heavy:"very sharp", unsure:"hard to tell from the words alone", ex:"gentle, and worth a night's sleep"};
+/* the meter and "How it may land" follow the plain verdict, never the other way round: no "clear" under a "may hurt" */
+function agreeLevel(lvl, pct, v){
+  if(!v) return [lvl, pct];
+  const id = v.id, l0 = lvl[0];
+  if(v.exReach && id==="unsure") return [["ex","Worth a night's sleep"], Math.min(pct, 20)];
+  if(id==="fight" || id==="danger") return [l0==="heavy" ? lvl : ["heavy","Heavy static"], Math.max(pct, 72)];
+  if(id==="hurt") return [l0==="clear" ? ["some", v.mild ? "A little static" : "Some static"] : l0==="heavy" && v.mild ? ["some","Some static"] : lvl, l0==="clear" ? Math.max(pct, v.mild ? 25 : 45) : pct];
+  if(id==="unsure") return [["unsure","Hard to tell"], Math.max(pct, 35)];
+  if(id==="ok" && l0!=="clear") return [["some","A little static"], Math.min(pct, 25)];
+  return [lvl, pct];
+}
 const soundOf = (l, mild)=>SOUND_WORDS[/little/i.test(l[1]) ? "little" : (mild && l[0]==="some") ? "mild" : l[0]] || l[1];
 /* Easy reading (the site's setting) is on: the simpler English comes first */
 const easyOn = ()=>document.documentElement.classList.contains("tol-easy");
 /* a phone-width screen: the answer and Copy first, the rest folded */
 const phoneW = ()=>{ try { return matchMedia("(max-width: 640px)").matches; } catch(e) { return false; } };
-const LVL_WORDS = {clear:"Likely to land the way you mean it", little:"One small part may get in the way", mild:"A little sharp in places", some:"Some words may hurt", heavy:"Many words here may hurt", rift:"Kind words. History can change how they land"};
+const LVL_WORDS = {unsure:"Hard to tell from the words alone", ex:"Before you send: want to sleep on it?", clear:"Likely to land the way you mean it", little:"One small part may get in the way", mild:"A little sharp in places", some:"Some words may hurt", heavy:"Many words here may hurt", rift:"Kind words. History can change how they land"};
 /* "Say it in simpler English": short sentences, for anyone reading in a second language */
 const SIMPLE = {
   oblig:"“Need to” or “must” can sound like an order. “Could you…?” is a request.",
@@ -2484,10 +2515,13 @@ function run(){
   const Bids = sel.B.size ? [...sel.B] : ["general"], Aids=[...sel.A];
   const general = !sel.B.size;
   const sc = E.score(an, Bids, channel, bstate);
-  const lvl = sc.level, pct = sc.pct;
+  let lvl = sc.level, pct = sc.pct;
   const strongest = sc.top;                       // readings with weight >= 1, loudest first
   const perB = E.readings(an, Bids, channel);
   const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, work:isWork(), bond: needB==="bond"||sitId==="bond", facts:$("#facts").value.trim(), answer: askAns}));
+  // one verdict source: the plain line comes first, and the meter, "How it may land" and every panel below agree with it
+  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() || /^[A-Z]/.test(nm("B")) && nm("B")!=="You" ? nm("B") : ""), work:isWork(), replyTo: replyCtx, answer: askAns, rel: relId}) : null;
+  [lvl, pct] = agreeLevel(lvl, pct, plain);
   lastChanged = !rw.unchanged;
 
   const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat",group:"in a group channel",email:"by email or long note"}[channel];
@@ -2543,7 +2577,7 @@ function run(){
     if(list.length){
       p2+='<ul class="land">'+list.slice(0,7).map(e=>'<li class="w'+e.w+'"><span class="fx">'+esc((OWN_TITLE.includes(e.fid)?fTitle(e.fid, e.words):e.name).toUpperCase())+(e.words&&e.words.length&&!["multi","long","questions","nowhen"].includes(e.fid)&&!OWN_TITLE.includes(e.fid)?' &middot; &ldquo;'+esc(e.words[0])+'&rdquo;':'')+(e.w===0?' &middot; LIKELY LANDS AS MEANT':e.w===3?' &middot; HEAVY STATIC':e.w===2?' &middot; SOME STATIC':'')+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
     } else {
-      p2+='<p class="small">Nothing in these words is a known trouble spot for this wiring. '+esc(NT[b].sum)+'</p>';
+      p2+= plain && plain.id!=="ok" ? '<p class="small">No single word here is a known trouble spot for this wiring, but the reading above still stands: '+esc(plain.text)+'</p>' : '<p class="small">Nothing in these words is a known trouble spot for this wiring. '+esc(NT[b].sum)+'</p>';
     }
     const chKey = E.chBase(channel);
     if(NT[b].ch && NT[b].ch[chKey]) p2+='<p class="small"><b>About the channel:</b> '+esc(NT[b].ch[chKey])+'</p>';
@@ -2566,9 +2600,9 @@ function run(){
       c.forWiring.forEach(n=>{ h+='<p class="small"><b>If '+esc(B)+' is '+esc(WIRING_SHORT(n.wiring))+':</b> '+esc(n.text)+'</p>'; });
       return h+'</li>';
     }).join("")+'</ol>';
-    p3 += '<p class="small">Words in <span class="ph">dashed boxes</span> are blanks. Fill them in your own words before you say it. The rewrite keeps your ask and never adds a promise. Where your words could mean two things, it gives both in brackets so you can keep the true one. If it names a feeling, like "frustrated," swap in your real one. Change anything that isn\'t true for you.</p>';
+    p3 += '<p class="small">'+(/\[[^\]]+\]/.test(rw.main+" "+(rw.variants||[]).map(v=>v.text).join(" ")) ? 'Words in <span class="ph">dashed boxes</span> are blanks. Fill them in your own words before you say it. ' : '')+'The rewrite keeps your ask and never adds a promise. Where your words could mean two things, it gives both in brackets so you can keep the true one. If it names a feeling, like "frustrated," swap in your real one. Change anything that isn\'t true for you.</p>';
   } else {
-    p3 += staticIds.length ? '<p>No automatic changes. Some parts may still land hard (they\'re listed above), so try the plain version of what you mean, in your own words.</p>' : '<p>No changes. By these rules the structure already works: '+(goodIds.length?esc(goodIds.map(id=>FBY[id].name.toLowerCase()).join(", "))+'.':'nothing here is a known trouble spot.')+'</p>';
+    p3 += rw.exReach ? '<p>No changes, on purpose. A message to an ex isn\'t something to polish: the question is whether to send it tonight.</p>' : !rw.unchanged ? '<p>The version above says the feeling plainly instead, so it can be answered. Nothing else was changed.</p>' : plain && plain.id!=="ok" ? '<p>No automatic changes. The reading above still stands: '+esc(plain.text)+' Try the plain version of what you mean, in your own words.</p>' : staticIds.length ? '<p>No automatic changes. Some parts may still land hard (they\'re listed above), so try the plain version of what you mean, in your own words.</p>' : '<p>No changes. By these rules the structure already works: '+(goodIds.length?esc(goodIds.map(id=>FBY[id].name.toLowerCase()).join(", "))+'.':'nothing here is a known trouble spot.')+'</p>';
   }
 
   /* ---------- 4. what A may have meant ---------- */
@@ -2657,7 +2691,6 @@ function run(){
     const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0, id==="jab" ? 1 : 2));
   });
   // one plain line first, for anyone who just wants to know: is my sentence okay?
-  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() || /^[A-Z]/.test(nm("B")) && nm("B")!=="You" ? nm("B") : ""), work:isWork(), replyTo: replyCtx, answer: askAns}) : null;
   // a family message after a long silence or a rift: kind words still meet the history, so no big green all-clear
   const riftOpener = lvl[0]==="clear" && (relId==="family" || (!relId && RIFT.test(text))) && (LONG_GAP.test(text) || RIFT.test(text));
   if(riftOpener && plain && plain.id==="ok") plain.text = "Your words are kind and clear. History can change how any message lands after a long silence, so go gently, and make it easy for them to take their time.";
@@ -2671,7 +2704,16 @@ function run(){
   else vtop+='<p class="vlvl lvl-'+(riftOpener ? "little" : lvl[0])+'">'+esc(LVL_WORDS[lvlKey]||lvl[1])+'<span class="gloss">'+esc(little ? "One small part may get in the way of what you mean." : LVL_PLAIN[lvlKey]||"")+'</span><span class="vtech">How it may sound: '+esc(soundOf(lvl, mildLvl))+'</span></p>';
   // an apology with "but you…" after it: that clause is the part most likely to sting, so it comes first
   const sting = found.sorrybut ? '<span class="vsting">Most likely to sting:</span> '+fLabel("sorrybut", found.sorrybut.slice(0,1))+'.'+(foundList.length ? ' Also worth a look: '+foundList.join(' &middot; ')+'.' : '') : '';
-  vtop+='<p class="vfound">'+(sting ? sting : foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(fTitle(staticIds[0], found[staticIds[0]]).toLowerCase())+fGloss(staticIds[0])+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
+  // what stands out always agrees with the plain line: never "nothing here" under a "may hurt", never a list under "sleep on it"
+  const vfoundTxt = plain && plain.exReach && plain.id==="unsure" ? 'Nothing in the words is harsh. It\'s the timing that\'s worth a second thought.'
+    : sting ? sting : foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(fTitle(staticIds[0], found[staticIds[0]]).toLowerCase())+fGloss(staticIds[0])+'.'
+    : plain && plain.id!=="ok" ? (plain.upset ? 'What stands out: you said you\'re upset, and the words don\'t say so. They may read as a dig instead.' : 'No single word is a known trouble spot, but the whole line can still read the way the line above says.')
+    : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.';
+  vtop+='<p class="vfound">'+vfoundTxt+'</p>';
+  // a message to an ex: before you send, sleep on it. No polish and no praise, just a way to keep the words for the morning
+  if(plain && plain.exReach){
+    vtop+='<div class="st-sleep"><p><b>Before you send: want to sleep on it?</b> If it still feels right in the morning, it will still be yours to send. You could copy it into your notes for now.</p><div class="actions"><button class="go" type="button" id="copyBest">Copy it for later</button></div><p class="small">'+(plain.link ? '<a href="'+esc(plain.link[0])+'">'+esc(plain.link[1])+'</a>' : '')+'</p></div>';
+  }
   if(found.legal || found.kidsfirst){
     vtop+='<p class="vwarn"><b>Likely to escalate.</b> '+(found.legal?'A threat about court, a lawyer or custody':'Telling the children first')+(found.legal&&found.kidsfirst?', and telling the children first,':'')+' usually turns a disagreement into a fight about the kids. The versions below leave '+(found.legal&&found.kidsfirst?'them':'it')+' out.'+(relId==="coparent"?' Between co-parents, messages like this are often saved and shown later. If there is a real legal step, take it through the proper channel. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.':'')+'</p>';
   }
@@ -2695,12 +2737,12 @@ function run(){
   if((easyOn() || phoneW()) && !rw.unchanged){ const cut = vtop.indexOf('<p class="vk">How it may land'); vdetail = vtop.slice(cut); vtop = vtop.slice(0, cut); }
   if(!rw.unchanged){
     const sm1 = simpleLine(opts[0].say);
-    vtop+='<p class="vk">A clearer way to say it</p>'+(easyOn() ? sm1.replace('class="st-simple-only"','class="st-simple-only st-simple-first"') : '')+'<p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>'+(easyOn() ? '' : sm1)+'<button class="ghost vbest-copy" type="button" data-say="'+esc(opts[0].say)+'">Copy</button>';
+    vtop+='<p class="vk">A clearer way to say it</p>'+(easyOn() ? sm1.replace('class="st-simple-only"','class="st-simple-only st-simple-first"') : '')+'<p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>'+(easyOn() ? '' : sm1);
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
     // the original right beside it, and one tap to keep it
     vtop+='<div class="vmine"><p class="vk">Your words</p><p class="vmine-t">'+esc(text)+'</p><button class="ghost" type="button" id="keepMine">Keep mine</button><span class="small" id="keepMineMsg" role="status"></span></div>';
     vtop+=vdetail;
-  } else if(staticIds.length){
+  } else if(staticIds.length && !rw.exReach){
     vtop+='<p class="vk">Your words, with the part to look at marked</p><p class="vbest marked">'+markup(an.text, spans)+'</p>';
     vtop+='<p class="small">There\'s no safe automatic rewrite for this one. The marked part may land hard; the notes below say why.</p>';
   }
@@ -2753,7 +2795,8 @@ function run(){
 
   const R=$("#results"); R.innerHTML=listenerFix(teamFix(youFix(h))); R.hidden=false;
   clarifyFor(an, text);
-  if(an.control || an.danger) noReward(R);
+  // no reward card over a message to an ex ("you found a kinder way to say it" is the wrong note there)
+  if(an.control || an.danger || (plain && plain.exReach)) noReward(R);
   else quietGarden(R, lvl[0]!=="clear" && (["family","coparent","caregiver"].includes(relId) || E.moneyControl(text) || found.withdraw || found.olddays || E.notReady(text) || RIFT.test(text)));
   paintSimple(); paintBrief();
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
@@ -2948,7 +2991,7 @@ function fitReceived(an, rv){
 const stAsked = {};
 function askFirstHere(an, mode, key){
   if(!E.askFirst) return false;
-  const q = E.askFirst(an, {mode, ctx: ctxNow()}); if(!q) return false;
+  const q = E.askFirst(an, {mode, ctx: ctxNow(), rel: relId}); if(!q) return false;
   const R = $("#results");
   R.innerHTML = '<div class="verdict st-ask" id="verdict"><p class="vplain v-unsure" id="vplain">'+esc(q.q)+'</p><div class="st-ask-row" role="group" aria-label="Your answer">'+
     q.answers.map(a=>'<button type="button" data-st-ans="'+esc(a.id)+'">'+esc(a.label)+'</button>').join('')+'</div>'+
@@ -3190,13 +3233,18 @@ function ctxExtra(v, an, mode){
   const askCtx = v && v.addContext && !(v.context && v.context.flags && v.context.flags.teaseRoom);
   if(askCtx) h += '<p class="small st-addctx"><a href="#add-context" class="st-ctx-open">Add context</a> for a fairer reading: who they are, and whether you joke like this. The words alone can\u2019t show a joke.</p>';
   // (with no context yet, that line already says "Add context", so the general "no context added" note isn't repeated)
-  if(!(askCtx && !r)) h += TOLContext.usedHTML(r, {skip: [v && v.limit ? 'limit' : '', v && v.shortOk ? 'short' : ''].concat(v && v.head && /parent setting a limit/.test(v.head[1]) ? ['limit'] : []).concat(v && v.head && /usually write short/.test(v.head[1]) ? ['short'] : [])});
+  // a relationship chosen counts as context: never "No context added" next to "In this relationship: co-parents"
+  const relNm = relId && REL[relId] ? REL[relId].label.toLowerCase() : "";
+  if(relNm && (!r || r.empty) && !(askCtx && !r)) h += '<p class="tol-ctx-used tol-ctx-none tol-plain no-bubble">Read for: '+esc(relNm)+'. Nothing else added. <button type="button" class="tol-ctx-change">Add context</button> (how they usually write, what you want) to make it fairer still.</p>';
+  else if(!(askCtx && !r)) h += TOLContext.usedHTML(r, {skip: [v && v.limit ? 'limit' : '', v && v.shortOk ? 'short' : ''].concat(v && v.head && /parent setting a limit/.test(v.head[1]) ? ['limit'] : []).concat(v && v.head && /usually write short/.test(v.head[1]) ? ['short'] : [])});
   if(mode==="send") h += '<div class="tol-clar" id="stClar" hidden></div>';
   return h;
 }
 /* "A few quick questions so the read is fair (optional)": only when the reading is about possible unfairness or pressure */
 function clarifyFor(an, text){
   const slot = document.getElementById("stClar"); if(!slot || !window.TOLContext) return;
+  // the Clarify card's "A number alone can't tell…" needs a number on screen; this page shows none, so it says "The words alone"
+  try { new MutationObserver((ms, mo)=>{ const d = slot.querySelector(".tcl-offer-d"); if(d && /^A number alone/.test(d.textContent)){ d.textContent = d.textContent.replace(/^A number alone/, "The words alone"); mo.disconnect(); } }).observe(slot, {childList:true, subtree:true}); } catch(e) {}
   TOLContext.offerClarify(slot, {an, text, ctx: ctxNow(), onResult: res=>{
     const line = TOLContext.clarifyLine(res); if(!line) return;
     let p = document.getElementById("stClarLine");
@@ -3558,7 +3606,7 @@ sync();
   // ?rel=co-parents (also family, friends, partners, coworkers, roommates, business): start with that relationship chosen, and show it
   (function () { try {
     var r = (new URLSearchParams(location.search).get('rel') || '').toLowerCase().replace(/[^a-z-]/g, '');
-    var MAP = { 'co-parents': 'coparent', 'coparents': 'coparent', 'co-parent': 'coparent', 'coparent': 'coparent', 'family': 'family', 'friends': 'friend', 'friend': 'friend', 'partners': 'partner', 'partner': 'partner', 'couples': 'partner', 'coworkers': 'coworker', 'co-workers': 'coworker', 'coworker': 'coworker', 'work': 'coworker', 'roommates': 'roommate', 'roommate': 'roommate', 'housemates': 'roommate', 'managers': 'manager', 'manager': 'manager', 'caregivers': 'caregiver', 'caregiver': 'caregiver', 'carers': 'caregiver', 'business': 'business', 'business-partners': 'business', 'co-owners': 'business', 'cofounders': 'business', 'co-founders': 'business' };
+    var MAP = { 'ex': 'ex', 'an-ex': 'ex', 'exes': 'ex', 'my-ex': 'ex', 'co-parents': 'coparent', 'coparents': 'coparent', 'co-parent': 'coparent', 'coparent': 'coparent', 'family': 'family', 'friends': 'friend', 'friend': 'friend', 'partners': 'partner', 'partner': 'partner', 'couples': 'partner', 'coworkers': 'coworker', 'co-workers': 'coworker', 'coworker': 'coworker', 'work': 'coworker', 'roommates': 'roommate', 'roommate': 'roommate', 'housemates': 'roommate', 'managers': 'manager', 'manager': 'manager', 'caregivers': 'caregiver', 'caregiver': 'caregiver', 'carers': 'caregiver', 'business': 'business', 'business-partners': 'business', 'co-owners': 'business', 'cofounders': 'business', 'co-founders': 'business' };
     var v = MAP[r], sel = document.getElementById('relSel');
     if (v && sel && [].some.call(sel.options, function (o) { return o.value === v; })) { sel.value = v; sel.dispatchEvent(new Event('change', { bubbles: true })); }
   } catch (e) {} })();

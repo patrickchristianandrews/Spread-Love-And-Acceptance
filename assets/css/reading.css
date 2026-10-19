@@ -160,7 +160,8 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .bk-dl .bk-dl-msg.is-error{ color:#8B2B1E; } .bk-dl .bk-dl-msg.is-warn{ color:#7A5620; } .bk-dl .bk-dl-msg.is-ok{ color:var(--credit); }
 .bk-dl .bk-dl-small{ font-size:.88rem; color:var(--ink-soft); }
 .bk-dl .bk-dl-cards{ display:grid; gap:1rem; }
-@media (min-width:760px){ .bk-dl .bk-dl-cards{ grid-template-columns:1fr 1fr; } }
+/* panel16: one card per row; two side by side left 2-3 words a line beside each cover at 1366 */
+.bk-dl .bk-dl-series{ font-size:.95rem; padding:.6rem .9rem; border-left:3px solid var(--brass); }
 .bk-dl .bk-dl-card{ padding:.9rem 1.1rem; border:1px solid var(--line); border-radius:16px; background:var(--paper); }
 .bk-dl .bk-dl-card h2{ margin:.1rem 0 .3rem; font-size:1.25rem; }
 .bk-dl ul.bk-dl-list{ list-style:none; padding:0 !important; margin:.5rem 0 0; display:grid; gap:.5rem; }
@@ -194,6 +195,21 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
   /* the figure takes the phone's whole width (16px each side), even inside an idea card */
   .read figure.book-fig{ width:calc(100vw - 32px); margin-left:calc((100% - (100vw - 32px)) / 2); margin-right:0; }
   .read figure.book-fig figcaption{ padding:0 .2rem; }
+}
+
+/* panel16: chapters read in one column on tablets and phones (two narrow columns of idea cards left people unsure
+   which card came next, and shrank the figures inside them), a card with a figure always takes the full width, and
+   figure captions are at least 15px. The 26 chapter buttons sit behind "Contents" (the book's home lists every
+   chapter); Previous, Contents and Next stay. Screen only: the PDFs and print are untouched. */
+@media screen{
+  .read .tol-chbar ol{ display:none !important; }
+  main.read:has(.book-open) .ideas > li:has(figure.book-fig){ grid-column:1 / -1; }
+  .read figure.book-fig figcaption{ font-size:max(1rem, 15px); }
+  .read .book-fig-n{ font-size:max(.8rem, 13px); }
+  html.tol-bookview .tol-pillars{ display:none !important; }
+}
+@media screen and (max-width:899px){
+  main.read:has(.book-open) .ideas{ grid-template-columns:1fr; }
 }
 
 /* the end of every chapter: what to remember, and what it connects to */

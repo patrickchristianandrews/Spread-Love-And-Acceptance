@@ -24,6 +24,16 @@
   .ld-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
   .ld-say p{ margin:.35rem 0 !important; font-style:italic; }
   .ld-say p .ld-who{ font-style:normal; font-weight:600; }
+  .ld-two{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .7rem; padding:.7rem 1rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper-deep); }
+  .ld-two > span:first-child{ font-weight:600; }
+  .ld-two-go{ display:inline-flex; align-items:center; min-height:44px; padding:.3rem 1rem; border-radius:999px; background:var(--credit); color:var(--paper) !important; font-weight:600; text-decoration:none; }
+  .ld-two-n{ flex-basis:100%; font-size:.95rem; color:var(--ink-soft); }
+  .ld-tz{ margin:.6rem 0 1.6rem; padding:.8rem 1rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper); }
+  .ld-tz p{ max-width:none !important; margin:.3rem 0 !important; }
+  .ld-tz-row{ display:flex; flex-wrap:wrap; gap:.6rem 1.2rem; margin:.5rem 0; }
+  .ld-tz-row label{ display:flex; flex-direction:column; gap:.2rem; font-weight:600; font-size:.95rem; flex:1 1 12rem; }
+  .ld-tz-row select{ min-height:44px; font:inherit; font-weight:400; padding:.3rem .5rem; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink); max-width:100%; }
+  .ld-tz-out{ font-size:1rem; }
   main.read > ul.ld-jump.ld-jump.ld-jump{ --bb-pl:var(--bb-px); padding-left:var(--bb-px) !important; } /* the list cards sit evenly inside their bubble */
   .fo-who{ font-style:normal; font-weight:600; }
 </style>
@@ -115,6 +125,14 @@
   <li><strong>Take turns with the awkward hours.</strong> If one of you is always up late or early for the call, swap now and then, or at least say thank you out loud.</li>
   <li><strong>Watch for the tired call.</strong> The end of one person’s long day and the start of the other’s is not the time for a hard topic.</li>
 </ul>
+<div class="ld-tz no-bubble" data-ld-tz hidden>
+  <p class="ld-tz-k"><strong>Find your overlap:</strong> pick both cities, and see the hours when you’re both awake (8am to 10pm, each in your own time). It uses today’s clocks, summer time included. Nothing is saved or sent.</p>
+  <div class="ld-tz-row">
+    <label>Your city <select id="ld-tz-a"></select></label>
+    <label>Their city <select id="ld-tz-b"></select></label>
+  </div>
+  <p class="ld-tz-out" id="ld-tz-out" role="status" aria-live="polite"></p>
+</div>
 
 <h2 id="calls">Check-ins on a video call</h2>
 <p>A <a href="/check-ins.html">check-in</a> works over video too. A few changes help:</p>
@@ -127,6 +145,7 @@
   <li><strong>End on purpose.</strong> Say when you’ll talk next before you hang up, so the call doesn’t just fade out.</li>
 </ul>
 <p>On busy days, the <a href="/workpapers/wp-13-daily-check-in.html">90-second daily check-in</a> works well as a short call or a voice note.</p>
+<p class="ld-two"><span>Do it together on two phones:</span> <a class="ld-two-go" href="/together.html">Work on it together →</a> <span class="ld-two-n">Fill in a tool on your own phone, pass it across by link or text, and see your answers side by side.</span></p>
 
 <h2 id="rhythm">Who calls, and how often: agree it</h2>
 <p>When you live apart, calls can quietly turn into a scorecard. One of you notices who always calls first, who cut the last call short, who forgot to text good morning. If one of you is doing most of the reaching out, that’s real information, not scorekeeping. And if one of you calls less, it’s usually about the hours, not the love.</p>
@@ -224,5 +243,50 @@
 <p>This page shares general ideas, not counselling or therapy.</p>
 <p class="tol-safe-line no-bubble" style="font-size:.88rem;color:var(--ink-soft,#5A5346)">Made for everyday disagreements between people who feel safe with each other. If anyone feels afraid or controlled, <a href="/safety.html">private help is here</a>.</p>
 </main>
+<script>
+/* Find your overlap (panel16): two cities, today's real offsets from the browser's own time-zone data (Intl), and the
+   hours when both are between 8am and 10pm. Nothing is stored or sent. Hidden where Intl time zones aren't supported. */
+(function () {
+  'use strict';
+  var box = document.querySelector('[data-ld-tz]'); if (!box) return;
+  try { new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', hour: 'numeric' }).format(new Date()); } catch (e) { return; }
+  var CITIES = [['Los Angeles', 'America/Los_Angeles'], ['Vancouver', 'America/Vancouver'], ['Denver', 'America/Denver'], ['Chicago', 'America/Chicago'], ['Mexico City', 'America/Mexico_City'],
+    ['New York', 'America/New_York'], ['Toronto', 'America/Toronto'], ['Bogotá', 'America/Bogota'], ['São Paulo', 'America/Sao_Paulo'], ['Buenos Aires', 'America/Argentina/Buenos_Aires'],
+    ['London', 'Europe/London'], ['Dublin', 'Europe/Dublin'], ['Lisbon', 'Europe/Lisbon'], ['Madrid', 'Europe/Madrid'], ['Paris', 'Europe/Paris'], ['Berlin', 'Europe/Berlin'], ['Rome', 'Europe/Rome'],
+    ['Warsaw', 'Europe/Warsaw'], ['Athens', 'Europe/Athens'], ['Istanbul', 'Europe/Istanbul'], ['Cairo', 'Africa/Cairo'], ['Lagos', 'Africa/Lagos'], ['Nairobi', 'Africa/Nairobi'], ['Johannesburg', 'Africa/Johannesburg'],
+    ['Moscow', 'Europe/Moscow'], ['Dubai', 'Asia/Dubai'], ['Karachi', 'Asia/Karachi'], ['Delhi / Mumbai', 'Asia/Kolkata'], ['Dhaka', 'Asia/Dhaka'], ['Bangkok', 'Asia/Bangkok'], ['Manila', 'Asia/Manila'],
+    ['Singapore', 'Asia/Singapore'], ['Hong Kong', 'Asia/Hong_Kong'], ['Shanghai', 'Asia/Shanghai'], ['Seoul', 'Asia/Seoul'], ['Tokyo', 'Asia/Tokyo'], ['Perth', 'Australia/Perth'],
+    ['Sydney', 'Australia/Sydney'], ['Auckland', 'Pacific/Auckland'], ['Honolulu', 'Pacific/Honolulu']];
+  var here = ''; try { here = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+  var a = document.getElementById('ld-tz-a'), b = document.getElementById('ld-tz-b'), out = document.getElementById('ld-tz-out');
+  function fill(sel, pick) {
+    var list = CITIES.slice();
+    if (here && !list.some(function (c) { return c[1] === here; })) list.unshift(['This device’s time zone (' + here.replace(/_/g, ' ') + ')', here]);
+    list.forEach(function (c) { var o = document.createElement('option'); o.value = c[1]; o.textContent = c[0]; if (c[1] === pick) o.selected = true; sel.appendChild(o); });
+  }
+  fill(a, here || 'America/Toronto'); fill(b, (here === 'Asia/Dubai') ? 'America/Toronto' : 'Asia/Dubai');
+  function hourIn(tz, d) { return parseInt(new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: 'numeric', hourCycle: 'h23' }).format(d), 10) % 24; }
+  function clock(tz, d) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: '2-digit' }).format(d).replace(':00', '').replace(/\s?([AP])M/, function (m, x) { return x.toLowerCase() + 'm'; }); }
+  function day(tz, d) { return new Intl.DateTimeFormat('en-GB', { timeZone: tz, weekday: 'short' }).format(d); }
+  function name(sel) { return sel.options[sel.selectedIndex].textContent.replace(/^This device’s time zone.*$/, 'your time zone'); }
+  function run() {
+    var ta = a.value, tb = b.value, start = new Date(), runs = [], cur = null;
+    start.setMinutes(0, 0, 0);
+    for (var i = 0; i < 24; i++) {
+      var d = new Date(start.getTime() + i * 3600000), ok = function (tz) { var h = hourIn(tz, d); return h >= 8 && h < 22; };
+      if (ok(ta) && ok(tb)) { if (!cur) { cur = { from: d, to: d }; runs.push(cur); } else cur.to = d; } else cur = null;
+    }
+    if (runs.length > 1 && runs[runs.length - 1].to.getTime() - start.getTime() === 23 * 3600000 && runs[0].from.getTime() === start.getTime()) { runs[runs.length - 1].to = runs[0].to; runs.shift(); }
+    if (ta === tb) { out.textContent = 'Same time zone: any time you’re both free works.'; return; }
+    if (!runs.length) { out.textContent = 'There are no hours today when you’re both between 8am and 10pm. Take turns with an early or late call, and say thank you for it.'; return; }
+    out.textContent = 'You’re both awake: ' + runs.map(function (r) {
+      var end = new Date(r.to.getTime() + 3600000);
+      return clock(ta, r.from) + ' to ' + clock(ta, end) + ' ' + day(ta, r.from) + ' in ' + name(a) + ' (' + clock(tb, r.from) + ' to ' + clock(tb, end) + ' ' + day(tb, r.from) + ' in ' + name(b) + ')';
+    }).join('; and ') + '.';
+  }
+  a.addEventListener('change', run); b.addEventListener('change', run);
+  box.hidden = false; run();
+})();
+</script>
 </body>
 </html>

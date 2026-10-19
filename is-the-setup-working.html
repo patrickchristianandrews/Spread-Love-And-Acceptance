@@ -277,7 +277,7 @@
 <!-- place:split --><nav class="ps no-print no-bubble" aria-label="Fair split check: every way in"><p class="ps-k"><b>Fair split check</b> <span>· 4 ways in</span></p><div class="ps-row"><span class="ps-g">This week</span><a class="ps-b" href="/workpapers/calculators/is-the-setup-working-quick.html">Quick read</a><a class="ps-b" href="/is-the-setup-working.html" aria-current="page">Every number</a><span class="ps-g">Over a month</span><a class="ps-b" href="/workpapers/calculators/look-back-30-days-quick.html">Quick read</a><a class="ps-b" href="/look-back-30-days.html">Every number</a></div></nav><!-- /place:split -->
 
   <header class="sheet-header">
-    <p class="wp-num">CALC-01 &middot; THE FULL CALCULATOR</p>
+    <p class="wp-num">THE FULL CALCULATOR</p>
     <h1 class="sheet-mark">Fair split calculator: is the setup working for everyone?
       <small>For 2 to 8 people</small>
     </h1>
@@ -320,7 +320,8 @@
   <!-- ================= PEOPLE ================= -->
   <section id="people" aria-labelledby="people-h">
     <div class="section-head"><p class="part-label">Set up</p><h2 id="people-h">Who's sharing the load?</h2></div>
-    <p>List the people who share this set of jobs and can each fill in their own WP-02 (How much are you carrying?). Two to eight people. Names stay on this page.</p>
+    <p>List the people who share this set of jobs and can each fill in their own <a href="/workpapers/fill/wp-02.html">How much are you carrying?</a>. Two to eight people. Names stay on this page.</p>
+    <div class="no-print" id="ql-offer" hidden style="margin:0 0 10px;"><button type="button" class="btn btn-solid" id="use-quick"></button> <span class="panel-note" id="ql-note"></span></div>
     <div class="panel">
       <label for="people-count" style="font-weight:600;">How many people?</label>
       <select id="people-count" style="max-width:120px;display:block;margin-top:6px;"></select>
@@ -1246,6 +1247,25 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     hhHost = document.createElement("div");
     hhHost.className = "no-print";
     hhPanel.insertBefore(hhHost, hhPanel.firstChild);
+  }
+
+  /* ---------- "Use our quick look" (Who does what? on this device): names, and its jobs as rows to fill in ---------- */
+  var QL = C.quickLook ? C.quickLook() : null;
+  if (QL){
+    var qlTyped = QL.names.filter(Boolean), qlJ = function(a){ return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; };
+    $("use-quick").textContent = "Use our quick look: " + (qlTyped.length >= 2 ? qlJ(qlTyped) + ", " : "") + QL.jobs.length + " job" + (QL.jobs.length === 1 ? "" : "s");
+    $("ql-offer").hidden = false;
+    $("use-quick").addEventListener("click", function(){
+      var nn = Math.max(C.MIN_PEOPLE, Math.min(C.MAX_PEOPLE, QL.names.length));
+      S.people = QL.names.slice(0, nn);
+      S.targets = S.people.map(function(){ return ""; });
+      while (S.bat.length < nn) S.bat.push(["","","","",""]); S.bat.length = nn;
+      S.ledger = QL.jobs.map(function(j){ return { name: j.name, hours: S.people.map(function(){ return 0; }) }; });
+      S.raci = QL.jobs.map(function(j){ return { name: j.name, r: j.owner >= 0 && j.owner < nn ? String(j.owner) : "", a: "" }; });
+      renderAll(); recalc();
+      $("ql-note").textContent = "Filled in from your quick look: the names, and " + QL.jobs.length + " jobs in the hours table and the job list (with the owner where you both named the same person). The hours are yours to fill in.";
+      var f = document.querySelector('[data-l-name="0"]'); if (f) f.focus();
+    });
   }
 
   /* ---------- start ---------- */

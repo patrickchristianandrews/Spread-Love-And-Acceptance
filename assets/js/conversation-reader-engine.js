@@ -194,7 +194,7 @@
     withdraw: { label: 'Shutting the door', heat: 2, tone: 'hot',
                 hear: '“Not now,” “forget it” or a silent “…” can mean someone is flooded: too overwhelmed to keep going. It can also mean they’re hurt and want the other person to keep trying. Without a time to come back, the other person may hear “this is over.”',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
-    contempt: { label: 'Eye-roll or put-down', heat: 3, tone: 'hot' },
+    contempt: { label: 'Contempt: mockery or looking down on them', heat: 3, tone: 'hot' },
     // "I'm going to slap you", "I know where you live": read flatly, a threat (message-patterns.js harm()).
     // With a game or a "lol" around it, probably a joke, and still worth a second look
     harm:     { label: 'Could read as a threat', heat: 4, tone: 'hot',
@@ -303,7 +303,7 @@
     brushaside: [words(["i said maybe", "i said (?:i(?:[’']?d| would) (?:try|see|think about it))", "i (?:already )?told you,? i(?:[’']?m| am) busy", "i said i(?:[’']?m| am) busy", "i(?:[’']?m| am) busy,? ok(?:ay)?", "we(?:[’']?ll| will) see(?! (?:you|them|him|her|the|it|each|y[’']?all|everyone)\\b)", "i don[’']?t know,? maybe"])],
     history: [words(["last time", "remember when", "like (?:the )?(?:last|other) time", "just like when", "you did the same", "same thing (?:as|with)", "and another thing", "while we[’']?re at it", "not to mention", "this is (?:just )?like", "again\\?", "for the (?:hundredth|millionth|thousandth) time", "back when"])],
     vague: [words(["later", "soon", "at some point", "when you get a chance", "when you can", "whenever", "in a bit", "in a minute", "sometime", "one of these days", "eventually"])],
-    repair: [words(["sorry", "i apologi[sz]e", "my bad", "my fault", "you[’']?re right", "that[’']?s fair", "fair point", "i hear you", "i get it", "i understand", "i didn[’']?t mean", "i shouldn[’']?t have", "can we (?:start over|talk|pause|take a break|try again)", "let[’']?s (?:pause|take a break|talk later|start over|try again)", "i need a (?:minute|moment|break)", "thanks for (?:telling|saying|listening|understanding)", "i want to (?:fix|sort|work on) this", "we[’']?re on the same (?:side|team)", "i[’']?m not against you", "good point", "i[’']?m not trying to (?:start|fight|argue|blame)", "i[’']?m not (?:mad|angry) at you"]), /🙏/g],
+    repair: [words(["sorry", "i apologi[sz]e", "my bad", "my fault", "you[’']?re right", "that[’']?s fair", "fair point", "i hear you", "i get it", "i understand", "i didn[’']?t mean", "i shouldn[’']?t have", "can we (?:start over|talk|pause|take a break|try again)", "let[’']?s (?:pause|take a break|talk later|start over|try again)", "i need a (?:minute|moment|break)", "thanks for (?:telling|saying|listening|understanding)", "i want to (?:fix|sort|work on) this", "we[’']?re on the same (?:side|team)", "i[’']?m not against you", "good point", "i[’']?m not trying to (?:start|fight|argue|blame)", "i[’']?m not (?:mad|angry) at you", "i (?:just |really )?want (?:to feel like|to know) you (?:actually |really )?(?:want|care|miss|like)", "i (?:just |really )?(?:want|miss) (?:us|to feel close|to be close|talking to you|you)", "i (?:just |really )?want us to (?:be okay|be ok|talk|be close|feel close)", "i miss (?:you|us|talking)"]), /🙏/g],
     feeling: [words(["i feel", "i[’']?m feeling", "i felt", "i[’']?m (?:so |really |just |very |a bit |a little |kind of |pretty )?(?:hurt|sad|worried|tired|exhausted|frustrated|scared|overwhelmed|anxious|upset|lonely|stressed|disappointed|embarrassed)", "it hurt(?:s)? (?:me|when)", "that hurt", "makes me feel"])],
     ask: [words(["can you", "could you", "would you", "will you", "i need you to", "i[’']?d like", "i would like", "please", "would it help if", "can we", "how about", "what if we"])]
   };
@@ -339,6 +339,16 @@
     marks.forEach(function (m) { if (m.kind === 'dismiss' && /^(?:(?:fine|ok(?:ay)?|sure)[.,!]?\s*)?(?:whatever(?: works for you| works| you want| you like| you think| you say)?|i don['’]t care|do what you want)[.!…]*$/i.test(String(m.text).trim()) && /^\s*(?:fine|ok(?:ay)?|sure)?[.,!]?\s*(?:whatever|i don['’]t care|do what you want)/i.test(text)) m.resigned = true; });
     // "I'm always the one who reaches out": a pattern the speaker has noticed on their own side, not a verdict on the other person
     marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) { m.pattern = true; m.kind = 'need'; } });
+    // "I don't always do anything" (a denial) and "I can't write essays every time" (about yourself): not aimed at them
+    marks = marks.filter(function (m) {
+      if (m.kind !== 'absolute' || m.whole) return true;
+      var pre = text.slice(Math.max(0, m.start - 30), m.start).toLowerCase().replace(/[’]/g, "'");
+      var sent = text.slice(Math.max(0, text.lastIndexOf('.', m.start - 1) + 1), m.end + 40).toLowerCase().replace(/[’]/g, "'");
+      if (/\b(?:don't|doesn't|didn't|isn't|wasn't|not|never said)\s+(?:\w+\s+)?$/.test(pre) && /^(?:always|every|all the time)/i.test(m.text)) return false;
+      var sm = pre.match(/(?:^|[^\w'])(?:i|i'm|i've|i'll|i can't|i cannot|i don't|we)\b([^.!?]*)$/);
+      if (sm && !/\b(?:you|your|u|ur)\b/.test(sm[1]) && !/\b(?:have to|end up|left to|everything|always me|the one\b|on my own|by myself|alone|get (?:any|no)|nobody|no one|anymore|any more|help)/.test(sent)) return false;
+      return true;
+    });
     // threats and controlling lines the shared list knows ("if you tell anyone, you'll be sorry"), and digs or scorecards
     if (P && P.threats) P.threats(text).forEach(function (x) { marks.push({ kind: 'threat', start: x.start, end: x.end, text: x.text }); });
     if (P && P.harm) {
@@ -399,9 +409,10 @@
     return (t.toLowerCase().replace(/[’']/g, '').match(/[a-z]{3,}/g) || []).filter(function (w) { return STOP.indexOf(w) === -1; });
   }
 
-  function read(turns, me, form) {
+  function read(turns, me, form, opts) {
     var n = turns.length;
     var out = { turns: [], form: form, me: me, mine: 0, theirs: 0 };
+    var ctxText = opts && opts.ctxText ? String(opts.ctxText) : '';
     var prevLen = 0;
     turns.forEach(function (t, i) {
       // "you allways do this" reads as "you always do this": the shared list of common misspellings
@@ -526,6 +537,13 @@
       if (!qs.length) return;
       var reply = nextFrom(i, !t.mine);
       if (reply === -1) { if (i >= n - 2 && !t.mine) out.unanswered.push({ at: i, q: trim(qs[qs.length - 1]), open: true }); return; }
+      // the answer can come a line or two later ("k." … "what do you want me to say. yes I'm coming"): look ahead first
+      var qW = contentWords(qs.join(' '));
+      for (var la = reply; la < Math.min(n, reply + 4); la++) {
+        if (out.turns[la].mine === t.mine) continue;
+        var lt = trim(out.turns[la].text), lw = contentWords(lt);
+        if (/(?:^|[.!?,]\s*)(?:yes|yeah|yep|no|nope|sure|i(?:[’']m| am) coming|i(?:[’']ll| will) be there|i can|i can[’']t|i will|i won[’']t|of course)\b/i.test(lt) || qW.some(function (w) { return lw.indexOf(w) !== -1; }) && !(P && P.isFlat(lt))) return;
+      }
       var r = out.turns[reply].text;
       if (P && P.isFlat(r)) { out.unanswered.push({ at: i, q: trim(qs[qs.length - 1]), reply: reply, flat: trim(r) }); return; }
       var yesNo = /^(?:yes|yeah|yep|no|nope|sure|ok|okay|maybe|not really|i think|i will|i can|i did|i didn|because|since|it was|it[’']s|that[’']s)/i.test(trim(r));
@@ -543,6 +561,9 @@
     // What it's about, and where new topics came in
     var tp = findTopic(out.turns);
     out.topic = tp.topic; out.topicUnsure = tp.unsure;
+    // a tentative topic from what happened, in the chat or in the context typed in: said as a guess, to check
+    out.event = findEvent(out.turns.map(function (t) { return t.text; }).concat([ctxText]));
+    if (out.event && (!out.topic || out.topicUnsure || /staying in touch/.test(out.topic))) { out.topicGuess = out.event.topic; }
     out.drift = [];
     out.turns.forEach(function (t, i) { if (t.marks.some(function (m) { return m.kind === 'history'; })) out.drift.push(i); });
 
@@ -596,6 +617,19 @@
     ['money', /\b(?:money|bills?|rent|budget|spen(?:d|t|ding)|paid|pay(?:ing)?|venmo|owe[sd]?|afford|savings|debt)\b/g],
     ['the chores', /\b(?:dishes|laundry|trash|garbage|bins|recycling|chores|cleaning|clean(?:ed)?|vacuum(?:ed)?|tidy|mess)\b/g]
   ];
+  // What happened, when the words say it plainly: "he missed our call", "I waited up till 2am", "you were late again".
+  // Used for a tentative topic ("Looks like it's about a missed call. Right?") and to fill the reply blanks
+  var EVENTS = [
+    { re: /\b(?:miss(?:ed)? (?:our|the|my|your|a|this) (?:call|facetime|video call|phone call)|waited up\b|(?:didn'?t|never|forgot to) (?:call|ring|facetime)\b|no call\b|stood me up on the call)/i, topic: 'the missed call', fact: 'When our call didn’t happen', ask: 'Could we agree a time for our calls, and text if it has to move?' },
+    { re: /\b(?:(?:you(?:'re| are| were)|ur|she was|he was|they were) (?:\w+ )?late|late again|running late|waited (?:for )?(?:\d+|forty|thirty|twenty|an hour|ages))\b/i, topic: 'being late', fact: 'When you were late', ask: 'Could you text me if you’re running late?' },
+    { re: /\b(?:cancel(?:l?ed|led|ling|s)?|bailed|flaked)\b/i, topic: 'the cancelled plan', fact: 'When the plan got cancelled', ask: 'Could we pick a new time and keep it?' },
+    { re: /\b(?:(?:didn'?t|never|don'?t) (?:text|reply|answer|write)(?:ed)?(?: me)?(?: back)?|left me on read|ignor(?:ed|ing) my (?:texts|messages|calls))\b/i, topic: 'not hearing back', fact: 'When I didn’t hear back', ask: 'Could you send a quick text when you’re busy, so I know?' },
+    { re: /\bforgot (?:my|our|the) (?:birthday|anniversary)\b/i, topic: 'the forgotten day', fact: 'When the day was forgotten', ask: 'Could we put the dates we care about in a shared calendar?' }
+  ];
+  function findEvent(texts) {
+    for (var i = 0; i < EVENTS.length; i++) for (var j = 0; j < texts.length; j++) if (EVENTS[i].re.test(String(texts[j] || '').replace(/[’]/g, "'"))) return EVENTS[i];
+    return null;
+  }
   function findTopic(turns) {
     var lex = {}, lexOrder = [], lexTurns = {};
     turns.forEach(function (t, ti) {
@@ -661,7 +695,7 @@
     var last = r.turns[n - 1];
     var lastTheirs = null;
     for (var i = n - 1; i >= 0; i--) if (!r.turns[i].mine) { lastTheirs = r.turns[i]; break; }
-    var topic = r.topic || 'this';
+    var topic = r.topic || r.topicGuess || 'this';
     var has = function (t, k) { return t && t.marks.some(function (m) { return m.kind === k; }); };
     var feelingWord = lastTheirs && (lastTheirs.text.match(/i(?:[’']m| am| feel| felt)(?: so| really| just)? (hurt|sad|worried|tired|exhausted|frustrated|scared|overwhelmed|anxious|upset|lonely|stressed|disappointed|embarrassed|ignored|alone|angry)/i) || [])[1];
     var moves = [];
@@ -698,6 +732,16 @@
         say: 'It’s too hot to settle anything right now. A pause isn’t giving up if you say when you’ll return.' + (r.form === 'text' ? ' Text strips out tone, so a call or talking in person later will go better.' : ''),
         script: 'I want to get this right, and I don’t think we can right now. Can we talk about ' + topic + ' at [time]?' + stay,
         dig: ['/check-ins-in-depth.html#regroup', 'How to pause and come back'] });
+    }
+    // "ok", "nothing. its fine", "fine. go sleep": short replies from them, more than once or at the end, may be hurt, not done
+    var shortT = r.turns.filter(function (t) { return !t.mine && (has(t, 'short') || has(t, 'brief')) && t.words <= 5; });
+    if (lastTheirs && shortT.length && (shortT.length >= 2 || shortT[shortT.length - 1] === lastTheirs) && r.trend !== 'shutdown') {
+      var sw = (trim(shortT[shortT.length - 1].text).toLowerCase().replace(/[’]/g, "'").match(/^(?:nothing|ok(?:ay)?|kk?|fine|whatever|sure|it'?s fine|its fine|i'?m fine|all good)/) || ['fine'])[0].replace(/^its\b/, "it's");
+      var two = /^(?:k|kk|ok|okay)$/.test(sw) ? cap(sw) + ' as in all good, or ' + sw + ' as in not really?' : sw === 'nothing' ? 'Nothing as in nothing, or something I should hear?' : sw === 'whatever' ? 'Whatever as in either is fine, or whatever as in you’re upset?' : /fine|good/.test(sw) && sw !== 'fine' ? cap(sw) + ' as in really fine, or not really?' : cap(sw) + ' as in good, or ' + sw + ' as in not really?';
+      moves.push({ key: 'short', title: 'Short replies may mean hurt, not done',
+        say: (shortT.length >= 2 ? shortT.length + ' very short replies (' + shortT.slice(-3).map(function (t) { return '“' + snippet(t.text) + '”'; }).join(', ') + ')' : '“' + snippet(shortT[0].text) + '”') + ' can mean “it’s really fine” or “I’m hurt and done for now.” If something just happened between you, the second is more likely. Asking gently is kinder than guessing, or than taking “go sleep” at its word.',
+        script: two + ' I’d like to hear it. Can I call you at [time]?',
+        dig: ['/check-ins-in-depth.html#regroup', 'Coming back after it went wrong'] });
     }
     if (lastTheirs && has(lastTheirs, 'repair') && lastTheirs === last && r.peak >= 2.5) {
       moves.push({ key: 'take', title: 'They reached out. Take it.',
@@ -755,8 +799,10 @@
     if (!n) return out;
     var theirs = r.turns.filter(function (t) { return !t.mine; }), mineT = r.turns.filter(function (t) { return t.mine; });
     var last = theirs[theirs.length - 1];
-    var topic = r.topic || 'this';
+    var topic = r.topic || r.topicGuess || 'this';
     var allText = r.turns.map(function (t) { return t.text; }).join(' \n');
+    // a time only from a line about talking or meeting up, never from something unrelated ("Mia's birthday at 7")
+    allText = r.turns.map(function (t) { return t.text; }).filter(function (x) { return /\b(?:talk|call|ring|facetime|chat|meet|catch up|sort (?:it|this) out|speak)\b/i.test(x); }).join(' \n');
     var when = (allText.match(/\b(?:tonight|tomorrow(?: (?:morning|night|evening))?|this (?:weekend|evening|afternoon)|(?:on )?(?:mon|tues|wednes|thurs|fri|satur|sun)day|after (?:dinner|work|school)|at \d{1,2}(?::\d{2})?\s*(?:am|pm)?|by \d{1,2}(?::\d{2})?\s*(?:am|pm)?)\b/i) || [])[0];
     // "Friday" → "on Friday", "tonight" stays "tonight", "at 7" stays "at 7"
     var whenTxt = when ? when.replace(/^on /i, '').toLowerCase().replace(/\b(mon|tues|wednes|thurs|fri|satur|sun)day\b/, function (d) { return d.charAt(0).toUpperCase() + d.slice(1); }) : '';
@@ -790,6 +836,16 @@
     // 3. slow it down, or say back how they feel
     if (feel) out.push({ label: 'Say back what you heard', text: 'It sounds like you’re feeling ' + feel.toLowerCase() + ' about ' + topic + '. Did I get that right?' });
     if (hot && out.length < 3) out.push({ label: 'Pause, with a time to come back', text: 'I don’t want to keep going back and forth by text. Can we talk about ' + topic + ' ' + (whenTxt ? whenTxt : 'tonight at [time]') + '?' + (left ? ' I’m stepping away until then.' : ' I’m not going anywhere.') });
+    // the blanks filled from the chat where it says what happened ("he missed our call" -> "When our call didn't happen")
+    var myFeel = (mineT.map(function (t) { return t.text; }).join(' ').match(/i(?:[’']m| am| feel| felt| was)(?: so| really| just)? (hurt|sad|worried|tired|exhausted|frustrated|scared|overwhelmed|anxious|upset|lonely|stressed|disappointed|ignored|alone|angry)/i) || [])[1];
+    var shortMove = (r.next || []).filter(function (m) { return m.key === 'short'; })[0];
+    if (shortMove && out.length < 3) out.push({ label: 'Ask what the short reply means', text: shortMove.script });
+    if (out.length < 3 && r.event) {
+      // who said what happened: if they did ("I waited up till 2am for your call"), the reply owns it; if you did, it asks
+      var evTheirs = theirs.some(function (t) { return r.event.re.test(t.text.replace(/[’]/g, "'")); }) && !mineT.some(function (t) { return r.event.re.test(t.text.replace(/[’]/g, "'")); });
+      out.push(evTheirs ? { label: 'Own what happened', text: 'I’m sorry about ' + r.event.topic + '. I know it mattered. [What you’ll do so it doesn’t happen again.] Can I call you at [time]?' }
+        : { label: 'One fact, one feeling, one ask', text: r.event.fact + ', I felt ' + (myFeel ? myFeel.toLowerCase() : '[one feeling]') + '. ' + r.event.ask });
+    }
     if (out.length < 2) out.push({ label: 'One fact, one feeling, one ask', text: (topic !== 'this' ? 'About ' + topic + ': ' : '') + '[what happened, one specific time]. I felt [one feeling]. Could you [one specific thing] ' + (whenTxt ? (/^(?:on|at|by|tonight|tomorrow|this)\b/i.test(whenTxt) ? whenTxt.replace(/^on /, 'by ') : whenTxt) : 'by [time]') + '?' });
     return out.slice(0, 3);
   }
@@ -836,6 +892,7 @@
       return o; });
   }
 
+  function cap(t) { return String(t).charAt(0).toUpperCase() + String(t).slice(1); }
   function snippet(t) { t = trim(t).replace(/\s+/g, ' '); return t.length > 70 ? t.slice(0, 67).replace(/\s\S*$/, '') + '…' : t; }
 
   // ---------- A reply someone is about to send ----------

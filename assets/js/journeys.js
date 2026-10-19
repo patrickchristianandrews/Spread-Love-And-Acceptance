@@ -64,6 +64,17 @@
         { k: 'tool', id: 'bonding', f: '/bonding.html#ideas', mins: 1, do: 'Get one small idea to do with someone today.', leave: 'One small thing to do today' },
         { k: 'wp', id: 'checkin90', f: '/workpapers/wp-13-daily-check-in.html', mins: 2, do: 'If you live with someone: one sentence each, once a day.', leave: 'A tiny daily habit' }
       ] },
+    // home16b: "I need to calm down" for someone on their own (or who hasn't said) starts here, not with a two-person journey
+    { id: 'settle', who: 'solo', title: 'Calm down, on your own', len: 'A few minutes now, and ten on a calm day',
+      intro: 'For when your body is wound up and nobody else needs to be part of it. Settle first; think it through later.',
+      leave: 'a calmer body now, a pause you can use anywhere, and your own plan for next time',
+      back: { q: 'A week on: when it got hard, what helped you settle? Add it to your plan.', id: 'calmkit', f: '/wp-11.html', go: 'Open your calm-down plan' },
+      steps: [
+        { k: 'read', t: 'Breathe: a one-minute breathing break', f: '/night-garden.html', breathe: true, mins: 1, do: 'Breathe out a little longer than you breathe in, for one minute. It opens right here, on top of the page.', leave: 'A calmer body, in one minute' },
+        { k: 'tool', id: 'calm', f: '/upset-right-now.html', mins: 5, do: 'Still wound up? A five-minute pause with a slow breathing pacer.', leave: 'A pause you can use anywhere' },
+        { k: 'tool', id: 'weather', f: '/quick-checks.html#today', mins: 1, do: 'Once you’ve settled a little, check how you are, in four taps.', leave: 'Today’s reading, and what tends to help on days like it' },
+        { k: 'wp', id: 'calmkit', f: '/wp-11.html', mins: 10, do: 'On a calm day, write down your early signs and what settles you.', leave: 'Your own calm-down plan for next time' }
+      ] },
     { id: 'family', who: 'solo', title: 'Family conflict: your terms, kindly', len: 'About a week, before a family event or a hard visit', heavy: true,
       intro: 'For grown-up families: siblings, parents, in-laws. Start on your own; bring others in only if they’re willing.',
       leave: 'your terms for the next event, kind ways to say no, and a family plan if others want one',
@@ -108,6 +119,18 @@
         { k: 'tool', id: 'fair-quick', f: '/workpapers/calculators/is-the-setup-working-quick.html', mins: 5, do: 'Check whether the setup works for everyone.', leave: 'A plain answer: fair, or what to change' },
         { k: 'wp', id: 'owner', f: '/workpapers/wp-03-one-owner-per-job.html', mins: 15, do: 'Give each job one owner and a backup.', leave: 'A who-owns-what list' },
         { k: 'tool', id: 'checkincard', f: '/check-ins.html#card', mins: 10, do: 'Agree to try the new split for one week, and when you’ll look at it.', leave: 'A one-week agreement with a check-in date' }
+      ] },
+    // home16b: "I only have five minutes" with someone gets five minutes for two, not a "Just you" journey
+    { id: 'busy2', who: 'two', title: 'Busy? Five minutes together', len: 'Pick any one: each takes five minutes or less',
+      intro: 'No time for a big talk? Each step stands on its own, and either of you can start it. Do one today, another tomorrow.',
+      leave: 'one small shared thing a day: an idea to do together, a fair look at the jobs, a clear request or a kinder message',
+      back: { q: 'A week on: which five minutes helped you both most? Do that one again this week.', href: '/journeys.html#busy2', go: 'See the five minutes' },
+      steps: [
+        { k: 'tool', id: 'bonding', f: '/bonding.html#ideas', mins: 1, do: 'Get one small idea to do together today.', leave: 'One small thing to do together today' },
+        { k: 'tool', id: 'lemon-quick', f: '/lemonade-stand.html#quick', mins: 3, do: 'Each tap who mostly does each job at home, then compare.', leave: 'Where you agree about the jobs, and where you don’t' },
+        { k: 'tool', id: 'flip', f: '/small-wins.html#flip-it', mins: 2, do: 'Turn one complaint into a clear, kind request.', leave: 'A request to say instead of a complaint' },
+        { k: 'tool', id: 'signal', f: '/signal-translator.html', mins: 2, do: 'Check one message before you send it.', leave: 'Words that keep your point and land kindly' },
+        { k: 'wp', id: 'checkin90', f: '/workpapers/wp-13-daily-check-in.html', mins: 2, do: 'If you live together: one sentence each, once a day.', leave: 'A tiny daily habit' }
       ] },
     { id: 'close', who: 'two', title: 'Feel close again', len: 'Two weeks, a little each day',
       intro: 'For long-term couples who have drifted into “fine”. Small things, often, rather than one big gesture.',
@@ -162,10 +185,20 @@
     { id: 'breakup', label: 'I’m going through a breakup', j: 'steady', now: { t: 'The first days', f: '/after-a-breakup.html#first-days', do: 'Read the three basics for this week.' } },
     { id: 'myself', label: 'I want to understand myself', j: 'know', now: { id: 'weather', f: '/quick-checks.html#today', do: 'Check how you are right now, in four taps.' } },
     { id: 'chores', label: 'Chores feel unfair', j: 'fair', now: { id: 'lemon-quick', f: '/lemonade-stand.html#quick', do: 'Tap who mostly does each job at home.' } },
-    { id: 'calm', label: 'I need to calm down', j: 'space', now: { id: 'garden', f: '/night-garden.html', do: 'Two slow minutes of breathing, with a calm game.' }, why: 'When you’re calm again, this journey makes the next heated moment easier.' },
+    // home16b: a pick can depend on "With someone" / "Just me" (tol-mode-v1): modes.with / modes.me replace its fields.
+    // Nothing picked, or "Just me": a calm step for one person, right now (the Breathe break opens on top of the page).
+    { id: 'calm', label: 'I need to calm down', j: 'settle', now: { breathe: true, t: 'Breathe for one minute', f: '/night-garden.html', do: 'One minute of slow breathing, right here.' }, also: ['space', 'Two of you, and one needs space?'],
+      modes: { with: { j: 'space', now: { id: 'calm', f: '/upset-right-now.html', do: 'A five-minute pause: slow breathing, then a time to come back.' }, why: 'When you’re calm again, this journey makes the next heated moment easier.', also: ['settle', 'Just you right now?'] } } },
     { id: 'drift', label: 'We’ve drifted apart', j: 'close', now: { id: 'bonding', f: '/bonding.html#ideas', do: 'Get one small idea to do together today.' }, also: ['keep', 'Doing fine and want to keep it that way?'] },
     { id: 'family', label: 'Family stuff', j: 'family', now: { id: 'refusals', f: '/refusals.html#make', do: 'Find a kind, clear way to say no.' }, also: ['blended', 'A stepfamily or two homes?'] },
-    { id: 'busy', label: 'I only have five minutes', j: 'busy', now: { id: 'signal', f: '/signal-translator.html', do: 'Check one message before you send it.' }, also: ['apart', 'Far apart from someone you love?'] }
+    { id: 'busy', label: 'I only have five minutes', j: 'busy', now: { id: 'weather', f: '/quick-checks.html#today', do: 'Know where you are today, in four taps.' },
+      modes: { with: { j: 'busy2', now: { id: 'bonding', f: '/bonding.html#ideas', do: 'Get one small idea to do together today.' }, also: ['busy', 'Just you today?'] } } },
+    // not a journey: a short "which is closest?" list of pages
+    { id: 'life', label: 'Our life has changed', choose: [
+      ['Retired, and both home now', '/retired-together.html', 'Routines, handing over whole jobs, and time apart'],
+      ['The kids have left home', '/empty-nest.html', 'Finding each other again in a quieter house'],
+      ['One of us is ill', '/when-one-is-ill.html', 'Sharing the load when one of you has less energy'],
+      ['Caring for someone we love', '/caregivers.html', 'When they can’t share the load back']] }
   ];
 
   var API = { journeys: J, picks: PICKS, key: KEY, heavy: HEAVY };
@@ -177,6 +210,21 @@
   // ---------------------------------------------------------------- helpers
   function byId(id) { for (var i = 0; i < J.length; i++) if (J[i].id === id) return J[i]; return null; }
   function pick(id) { for (var i = 0; i < PICKS.length; i++) if (PICKS[i].id === id) return PICKS[i]; return null; }
+  // "With someone" / "Just me", as picked on the home page (tol-mode-v1); '' when nothing is picked
+  function modeNow() { try { var m = W.localStorage.getItem('tol-mode-v1'); return m === 'me' || m === 'with' ? m : ''; } catch (e) { return ''; } }
+  // a pick as it reads for this mode: its modes.<mode> fields replace the plain ones
+  function pickFor(id, mode) {
+    var p = pick(id); if (!p) return null;
+    var o = p.modes && p.modes[mode == null ? modeNow() : mode]; if (!o) return p;
+    var r = {}; Object.keys(p).forEach(function (k) { r[k] = p[k]; }); Object.keys(o).forEach(function (k) { r[k] = o[k]; });
+    return r;
+  }
+  // the Breathe break opens on top of the page (site.js's button); the link's own address is the fallback
+  function openBreathe(e) {
+    var b = D.querySelector('.tol-breathe-btn'); if (!b) return;
+    if (e) e.preventDefault();
+    b.click();
+  }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function today() { return ymd(new Date()); }
@@ -226,10 +274,10 @@
     return { name: t.name, href: t.id === id ? (f && path(f) === path(t.href) ? f : t.href) : (f || t.href) };
   }
   function stepLink(s) {
-    if (s.k === 'read') return { name: s.t, href: s.f };
+    if (s.k === 'read') return { name: s.t, href: s.f, breathe: !!s.breathe };
     return tool(s.id, s.f);
   }
-  function kindLabel(s) { return s.k === 'tool' ? 'Tool' : s.k === 'wp' ? 'Workpaper' : 'Read'; }
+  function kindLabel(s) { return s.breathe ? 'Breathe' : s.k === 'tool' ? 'Tool' : s.k === 'wp' ? 'Workpaper' : 'Read'; }
   function mins(n) { return n <= 1 ? 'About 1 minute' : 'About ' + n + ' minutes'; }
   function whoLabel(j) { return j.who === 'solo' ? 'Just you' : 'Two of you (either can start alone)'; }
   // where you are: the first unticked step that isn't optional
@@ -269,11 +317,29 @@
     out.setAttribute('aria-live', 'polite');
     // the plain links become buttons that answer right here
     Array.prototype.forEach.call(host.querySelectorAll('a[data-wgo]'), function (a) {
-      var b = mk('button', { type: 'button', cls: a.className || 'wgo-opt', 'data-wgo': a.getAttribute('data-wgo'), 'aria-pressed': 'false', 'aria-controls': out.id || null, text: a.textContent });
+      var b = mk('button', { type: 'button', cls: a.className || 'wgo-opt', 'data-wgo': a.getAttribute('data-wgo'), 'aria-pressed': 'false', 'aria-controls': out.id || null });
+      while (a.firstChild) b.appendChild(a.firstChild);   // keeps a small "(retired, kids left…)" line as it is
       a.parentNode.replaceChild(b, a);
     });
+    // "Which is closest?": a short list of pages instead of a journey (Our life has changed)
+    function showChoose(p, focus) {
+      out.textContent = '';
+      var box = mk('div', { cls: 'wgo-res wgo-choose', tabindex: '-1' });
+      box.appendChild(mk('p', { cls: 'wgo-res-k', text: 'Which is closest?' }));
+      var ul = mk('ul', { cls: 'wgo-choose-l' });
+      p.choose.forEach(function (c) { ul.appendChild(mk('li', null, [mk('a', { href: c[1] }, [mk('strong', { text: c[0] + ' →' })]), mk('span', { text: c[2] })])); });
+      box.appendChild(ul);
+      out.appendChild(box);
+      out.hidden = false;
+      if (focus) { try { box.focus({ preventScroll: true }); box.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {} }
+    }
     function show(id, focus) {
-      var p = pick(id), j = p && byId(p.j); if (!j) return;
+      var p = pickFor(id);
+      if (p && p.choose) {
+        Array.prototype.forEach.call(host.querySelectorAll('[data-wgo]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-wgo') === id)); });
+        showChoose(p, focus); return;
+      }
+      var j = p && byId(p.j); if (!j) return;
       Array.prototype.forEach.call(host.querySelectorAll('[data-wgo]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-wgo') === id)); });
       withRegistry(function () {
         out.textContent = '';
@@ -285,7 +351,7 @@
         box.appendChild(mk('p', { cls: 'wgo-res-m', text: whoLabel(j) + ' · ' + required(j) + ' steps · ' + j.len }));
         if (p.why) box.appendChild(mk('p', { cls: 'wgo-res-n', text: p.why }));
         var nowP = mk('p', { cls: 'wgo-now' }, [mk('strong', { text: 'Right now, in 2 minutes: ' }), p.now.do + ' ']);
-        nowP.appendChild(mk('a', { href: now.href, text: now.name ? now.name + ' →' : 'Open it →' }));
+        nowP.appendChild(mk('a', { href: now.href, 'data-breathe': p.now.breathe ? 'calm breathing' : null, text: now.name ? now.name + ' →' : 'Open it →' }));
         box.appendChild(nowP);
         box.appendChild(mk('p', { cls: 'wgo-leave' }, [mk('strong', { text: 'You’ll leave with: ' }), j.leave + '.']));
         var go = mk('p', { cls: 'wgo-go' }, [mk('a', { cls: 'wgo-btn', href: jHref, 'data-open-journey': j.id, text: 'Start this journey' })]);
@@ -297,8 +363,17 @@
       });
     }
     host.addEventListener('click', function (e) {
+      var br = e.target.closest && e.target.closest('a[data-breathe]');
+      if (br) { openBreathe(e); return; }
       var b = e.target.closest && e.target.closest('button[data-wgo]'); if (!b) return;
       show(b.getAttribute('data-wgo'), true);
+    });
+    // "With someone" / "Just me" changed: an open suggestion is redrawn for the new choice (or closes with its button)
+    D.addEventListener('tol-mode', function () {
+      var on = host.querySelector('button[data-wgo][aria-pressed="true"]'); if (!on || out.hidden) return;
+      var li = on.closest('li');
+      if (li && li.hidden) { out.hidden = true; on.setAttribute('aria-pressed', 'false'); return; }
+      show(on.getAttribute('data-wgo'), false);
     });
     // arriving with ?for=<choice> (the no-JavaScript links, or a shared link): answer straight away
     if (!home) { var m = /[?&]for=([a-z-]+)/.exec(W.location.search || ''); if (m && pick(m[1])) show(m[1], false); }
@@ -350,7 +425,7 @@
       li.appendChild(mk('p', { cls: 'js-do', text: s.do }));
       li.appendChild(mk('p', { cls: 'js-leave' }, [mk('strong', { text: 'You’ll leave with: ' }), s.leave + '.']));
       var row = mk('p', { cls: 'js-row' });
-      row.appendChild(mk('a', { cls: 'js-open', href: L.href, text: (L.name || 'Open it') + ' →' }));
+      row.appendChild(mk('a', { cls: 'js-open', href: L.href, 'data-breathe': L.breathe ? 'calm breathing' : null, text: (L.name || 'Open it') + ' →' }));
       var lab = mk('label', { cls: 'js-tick', 'for': cid });
       var cb = mk('input', { type: 'checkbox', id: cid, 'data-j': j.id, 'data-i': i });
       cb.checked = done;
@@ -417,6 +492,8 @@
       var st = det && det.querySelector('.jr-sum-step'); if (st) st.textContent = rr.s || rr.d.length ? stepWord(j, rr) : required(j) + ' steps';
     });
     host.addEventListener('click', function (e) {
+      var br = e.target.closest && e.target.closest('a[data-breathe]');
+      if (br) { openBreathe(e); return; }
       var b = e.target.closest && e.target.closest('[data-jr]'); if (!b) return;
       var id = b.getAttribute('data-j'), k = b.getAttribute('data-jr'), j = byId(id); if (!j) return;
       if (k === 'remind') {

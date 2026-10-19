@@ -22,7 +22,7 @@
   // ---------- the world (units: one coin is 0.84 across)
   var HX = 4.6, ZB = -5.5, ZE = 3.6, R = 0.42, RP = 0.6, COIN_H = 0.16, PRIZE_H = 0.22;
   var PF_MID = -2.6, PF_AMP = 1.0, PERIOD = 4.2, MAXC = 128;
-  var CUPMAX = 30, REFILL = 15000, KEY = 'tol-coin-v1';
+  var CUPMAX = 40, REFILL = 8000, KEY = 'tol-coin-v1';  // tools16: a bigger cup that refills faster (was 30 coins, one every 15 s)
   var DEBUG_ALL = /#debug-all\b/.test(location.hash);
   var mm = window.matchMedia ? function (q) { return window.matchMedia(q).matches; } : function () { return false; };
   var PHONE = mm('(pointer: coarse)') || mm('(max-width: 700px)');
@@ -32,7 +32,10 @@
   var st = load() || {};
   st.cup = typeof st.cup === 'number' ? st.cup : CUPMAX; st.t = st.t || Date.now(); st.meter = st.meter || 0;
   st.found = st.found || {}; st.tips = st.tips || []; st.pending = st.pending || []; st.since = st.since || 0; st.dup = st.dup || 0;
-  if (st.snd == null) st.snd = 1; if (st.mus == null) st.mus = 1;
+  // sound and music start on, except for someone who has Quiet mode (or site sounds off) on: then they start off and stay
+  // off until they're switched on here, even after Quiet mode is turned off (tools16)
+  var quietAtStart = window.TOLQuiet ? !window.TOLQuiet.sound() : root.classList.contains('tol-quiet');
+  if (st.snd == null) st.snd = quietAtStart ? 0 : 1; if (st.mus == null) st.mus = quietAtStart ? 0 : 1;
   var noSave = DEBUG_ALL;
   function save() { if (noSave) return; try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
   // coins that came back while you were away
@@ -310,16 +313,35 @@
     var none = $('#cp-tips-none'); if (none) none.hidden = st.tips.length > 0;
     hud();
   }
-  var cardQ = [], cardOpen = false;
-  function card(kind, kicker, title, html) { cardQ.push([kind, kicker, title, html]); if (!cardOpen) nextCard(); }
+  // tools16: the card shows the newest tip. A card that arrives while one is up waits a moment (so the first can be read),
+  // then takes its place; each card goes away by itself after a few seconds, unless you're pointing at it or reading it
+  // with the keyboard. Every tip is also kept in "Tips you've found", so nothing is lost when a card goes.
+  var cardQ = [], cardOpen = false, cardShownAt = 0, cardTimer = 0, cardHold = false;
+  var CARD_MIN = 2500, CARD_STAY = 8000;
+  function card(kind, kicker, title, html) {
+    cardQ.push([kind, kicker, title, html]);
+    if (!cardOpen) { nextCard(); return; }
+    clearTimeout(cardTimer);
+    cardTimer = setTimeout(nextCard, Math.max(0, CARD_MIN - (Date.now() - cardShownAt)));
+  }
+  function cardLater() { clearTimeout(cardTimer); if (cardOpen && !cardHold) cardTimer = setTimeout(nextCard, cardQ.length ? CARD_MIN : CARD_STAY); }
   function nextCard() {
     var box = $('#cp-card'); if (!box) return;
+    clearTimeout(cardTimer);
     var c = cardQ.shift(); if (!c) { cardOpen = false; box.classList.remove('is-up'); setTimeout(function () { if (!cardOpen) box.hidden = true; }, calm ? 0 : 300); return; }
-    cardOpen = true;
+    cardOpen = true; cardShownAt = Date.now();
     box.className = 'cp-card cp-' + c[0].split(' ').join(' cp-');
     $('#cp-card-k').textContent = c[1]; $('#cp-card-t').textContent = c[2]; $('#cp-card-b').innerHTML = c[3];
     box.hidden = false; void box.offsetWidth; box.classList.add('is-up');
+    cardLater();
   }
+  (function () {
+    var box = $('#cp-card'); if (!box) return;
+    function hold() { cardHold = true; clearTimeout(cardTimer); }
+    function let_() { cardHold = box.matches(':hover') || box.contains(doc.activeElement); if (!cardHold) cardLater(); }
+    box.addEventListener('mouseenter', hold); box.addEventListener('mouseleave', let_);
+    box.addEventListener('focusin', hold); box.addEventListener('focusout', function () { setTimeout(let_, 0); });
+  })();
   function nudgeEmpty() { var e = $('#cp-empty'); if (e) { e.hidden = false; e.classList.remove('is-pulse'); void e.offsetWidth; if (!calm) e.classList.add('is-pulse'); } }
 
   // the refill clock and the "take a break" nudge
@@ -766,7 +788,8 @@
     try { localStorage.removeItem(KEY); } catch (e) {}
     location.hash = ''; location.reload();
   });
-  window.addEventListener('tol-quiet', syncBar);
+  // Quiet mode switched on here: sound and music go off and stay off until switched on again (tools16)
+  window.addEventListener('tol-quiet', function () { if (!soundAllowed()) { st.snd = 0; st.mus = 0; save(); } syncBar(); });
   doc.addEventListener('tol-still', function () { var c = stillChosen(); if (c !== calm) { calm = c; if (calm) { parts = []; shakeAmt = 0; } mount(); } });
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { view && view.theme(); }); } catch (e) {} }
   new MutationObserver(function () { view && view.theme(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
@@ -804,6 +827,17 @@
 
   // ---------- go
   prefill(); mount(); shelf(); tipsList(); syncBar(); hud(); startLoop();
+  // tools16: the row of games starts at the beginning, so the Arcade (and the others) show on a phone, not only this one
+  // (the shared "show the tab you're on" helpers run later too, so this runs again after load, unless you've swiped the row)
+  (function () {
+    var row = doc.querySelector('.gm-switch'); if (!row) return;
+    var touched = false;
+    ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (ev) { row.addEventListener(ev, function () { touched = true; }, { passive: true }); });
+    function start() { if (!touched && row.scrollWidth > row.clientWidth + 1) row.scrollLeft = 0; }
+    start();
+    function later() { setTimeout(start, 0); setTimeout(start, 900); setTimeout(start, 2500); }
+    if (doc.readyState === 'complete') later(); else window.addEventListener('load', later);
+  })();
   main.classList.add('is-ready');
   if (DEBUG_ALL) setTimeout(wild, 900);
 })();

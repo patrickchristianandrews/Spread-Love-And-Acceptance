@@ -20,7 +20,9 @@
     let q = null, ref = ''; try { q = new URLSearchParams(location.search); } catch (e) {}
     try { ref = document.referrer ? new URL(document.referrer).pathname : ''; } catch (e) {}
     const rel = q ? (q.get('rel') || '').toLowerCase() : '';
-    return { friends: rel === 'friends' || rel === 'friend' || ref === '/friends.html',
+    // tools16: arrived from a couples or family page (or ?rel=partner): the "Next:" links are about the two of you, not work
+    const couple = /^(partner|couple|couples|family)$/.test(rel) || /^\/(empty-nest|relationships|journeys|turning-toward|complacency|long-distance|retired-together|new-relationship|neurodivergent-relationships|how-to-stop-fighting-with-your-partner|check-ins|together|wired-differently|love-languages|languages-of-connection)\.html$/.test(ref);
+    return { friends: rel === 'friends' || rel === 'friend' || ref === '/friends.html', couple: couple,
       quick: !!(q && q.get('quick') === '1') || /^\/(friends|empty-nest)\.html$/.test(ref) || rel === 'friends' || rel === 'friend' };
   })();
   const TAB_KEY = 'tol-wavelength-tab-v1', PEOPLE_KEY = 'tol-wavelength-people-v1', PEOPLE_TAB_KEY = 'tol-wavelength-people-tab-v1', MAX_OTHERS = 3;
@@ -940,6 +942,12 @@
     return 'Same wavelength here, so this usually runs smoothly. ' + LETTERS[mine[i]].tune;
   }
   function who2(myName, theirName) { return { me: myName ? myName : 'You', them: theirName ? theirName : 'Them' }; }
+  // tools16: after a comparison with someone (or arriving from a couples or friends page) the next steps are ones for two people
+  function nextLine() {
+    if (ARRIVE.friends) return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html">Swap “how to talk to me” cards</a> · <a href="/friends.html#both">Small rituals for friends</a> · <a href="/signal-translator.html">Check a message</a></p>';
+    if (S.their || ARRIVE.couple) return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second check-in together</a> · <a href="/wiring-card.html">Swap “how to talk to me” cards</a> · <a href="/recheck-drive.html">Something light together: the Re-check Drive (Us, together)</a></p>';
+    return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your “how to talk to me” card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>';
+  }
   function compareHTML(mine, theirs, myName, theirName) {
     const n = who2(myName, theirName);
     return '<div class="wl-cmpout">' +
@@ -1102,7 +1110,7 @@
               '<input type="text" id="wl-rname" maxlength="30" autocomplete="given-name">' +
               '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
             (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button><button type="button" class="wl-btn ghost" id="wl-codeqr">Show a QR code</button></div><div id="wl-namenudge" role="status"></div>' : '') +
-            '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your “how to talk to me” card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>' +
+            nextLine() +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
@@ -1179,12 +1187,14 @@
     if (done && S.their) wireCompare(code, S.their.code, S.name, S.their.from);
     const md = $('#wl-moredo'); if (md) md.addEventListener('toggle', () => { MORE_OPEN = md.open; });
     on('#wl-tocmp', () => { if (md) { md.open = true; MORE_OPEN = true; } const el = $('#wl-compare'); if (el) { el.scrollIntoView({ block: 'start' }); const h = el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } } });
-    // after sharing: offer to keep the result on this device, so the comparison link they send back opens ready
+    // after sharing: the result is kept on this device, so the comparison link they send back opens ready, with no
+    // code to type again (tools16). It says so, and one tap undoes it.
     const offerKeep = () => {
       if (S.keep) return;
+      S.keep = true; save(); keepChanged();
       const nn = $('#wl-namenudge'); if (!nn) return;
-      nn.innerHTML = '<p class="wl-mine wl-small" id="wl-keepoffer">Keep your result on this device, so when they send their Wave Code back it opens ready to compare? <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>';
-      on('#wl-keepnow', () => { S.keep = true; save(); keepChanged(); });
+      nn.innerHTML = '<p class="wl-mine wl-small" id="wl-keepoffer">Your result is now kept on this device, so when they send their Wave Code back it opens ready to compare. <button type="button" class="wl-linkbtn" id="wl-keepundo">Don’t keep it</button></p>';
+      on('#wl-keepundo', () => { S.keep = false; save(); keepChanged(); nn.innerHTML = '<p class="wl-small">Not kept on this device. It stays in this tab until you close it.</p>'; });
     };
     const rn = $('#wl-rname');
     if (rn) rn.oninput = () => {

@@ -109,7 +109,7 @@
       { href: '/two-faiths.html', code: 'New', title: 'Two faiths, one family', note: 'Two faiths or cultures under one roof: holidays, naming the baby and family expectations' },
       { href: '/more-than-two.html', code: 'New', title: 'More than two partners', note: 'Polyamorous homes and triads: sharing the load, and joining a home without feeling like a guest' },
       { href: '/empty-nest.html', code: 'New', title: 'When the kids have left home', note: 'An empty nest and a quiet house: finding each other again' },
-      { href: '/foster-and-kinship.html', code: 'New', title: 'Foster, adoptive and kinship families', note: 'Including grandparents raising grandchildren' },
+      { href: '/foster-and-kinship.html', code: 'New', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
       { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents: routines, kind words and looking after yourselves' },
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love: visits, advice and the new baby' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
@@ -225,7 +225,7 @@
       { href: '/coming-home.html', code: 'New', title: 'Coming home after time apart', note: 'After deployment, work away or a hospital stay: a handover week and finding your place again' },
       { href: '/different-hours.html', code: 'New', title: 'Different hours', note: 'Night shifts, shift work, or one of you works from home and seems always available' },
       { href: '/two-faiths.html', code: 'New', title: 'Two faiths, one family', note: 'Two faiths or cultures under one roof: holidays, naming the baby and family expectations' },
-      { href: '/foster-and-kinship.html', code: 'New', title: 'Foster, adoptive and kinship families', note: 'Including grandparents raising grandchildren' },
+      { href: '/foster-and-kinship.html', code: 'New', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
       { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents: routines, kind words and looking after yourselves' },
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love: visits, advice and the new baby' },
       { href: '/family-rifts.html', code: 'New', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, a favourite child, years of silence' },
@@ -399,7 +399,7 @@
       { href: '/two-faiths.html', code: 'New', title: 'Two faiths, one family', note: 'Holidays, naming the baby and family expectations' },
       { href: '/more-than-two.html', code: 'New', title: 'More than two partners', note: 'Polyamorous homes and triads, sharing the load' },
       { href: '/empty-nest.html', code: 'New', title: 'When the kids have left home', note: 'Finding each other again in a quiet house' },
-      { href: '/foster-and-kinship.html', code: 'New', title: 'Foster, adoptive and kinship families', note: 'Including grandparents raising grandchildren' },
+      { href: '/foster-and-kinship.html', code: 'New', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
       { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents' },
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
@@ -504,7 +504,7 @@
       { href: '/teens.html', title: 'For teens', note: 'Written for you: home, family, friends and feelings' },
       { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules' },
       { href: '/adhd-kids.html', title: 'When a child has ADHD', note: 'For parents and grandparents' },
-      { href: '/foster-and-kinship.html', title: 'Foster, adoptive and kinship families', note: 'Including grandparents raising grandchildren' },
+      { href: '/foster-and-kinship.html', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
       { href: '/grandparents.html', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
       { sub: 'Wider family', all: '/by-relationship.html#family', allLabel: 'All for families' },
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
@@ -534,6 +534,7 @@
       { href: '/coming-home.html', title: 'Coming home after time apart', note: 'After deployment or time away' },
       { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To family, at work or with a partner' },
       { href: '/empty-nest.html', title: 'When the kids have left home', note: 'Finding each other again' },
+      { href: '/retired-together.html', title: 'Retired and both home now', note: 'Sharing the house all day: routines and whole jobs' },
       { href: '/grief.html', title: 'Grief and loss', note: 'Loss, and a new chapter' },
       { href: '/living-alone.html', deep: true, title: 'Living on your own', note: 'Any age, any reason: a home for one' },
       { sub: 'Stories', all: '/examples.html', allLabel: 'All the stories' },
@@ -765,7 +766,9 @@
   function deepHref(it) { return it.href.replace(/\.html(?=#|$)/, '-in-depth.html'); }
   // Tender reading pages (growing up, knowing yourself, and any page marked data-sensitive): no pop-ups,
   // no cheering buddies or pup visits, no Professor Puddles cards and no learning-trail score on them.
-  var SENSITIVE = /^\/(growing-up|know-yourself)\.html$/;
+  // home16b: and the grief pages, as the book promises ("where a chapter talks about … deep grief, the pages stay quiet
+  // and plain"): no pop-ins, tips or drifting bubbles and hearts there (current is already the simple page's address)
+  var SENSITIVE = /^\/(growing-up|know-yourself|grief|book\/understanding-8-loss)\.html$/;
   function sensitivePage() { return SENSITIVE.test(current) || !!(document.body && document.body.hasAttribute('data-sensitive')); }
   if (SENSITIVE.test(current)) document.documentElement.classList.add('tol-sensitive');
   // Work mode: a plain version to share at work, with no mascots, cartoons, garden or games. A link with
@@ -1208,6 +1211,18 @@
     openDrop = null;
   }
 
+  // home16b: a list taller than the screen (zoom, a short laptop) says there's more below, and a tap scrolls it
+  function dropCue(menu) {
+    var cue = menu.querySelector('.tol-drop-more');
+    if (!cue) {
+      cue = el('button', { type: 'button', class: 'tol-drop-more', tabindex: '-1', 'aria-hidden': 'true' }, T('More below', 'Más abajo') + ' &darr;');
+      cue.addEventListener('click', function () { menu.scrollBy({ top: Math.round(menu.clientHeight * 0.7), behavior: 'smooth' }); });
+      menu.appendChild(cue);
+      menu.addEventListener('scroll', function () { sync(); }, { passive: true });
+    }
+    function sync() { cue.hidden = menu.scrollTop + menu.clientHeight >= menu.scrollHeight - 6; }
+    sync();
+  }
   function buildDrop(id, name, alignRight) {
     var s = menuGroup(MENU.filter(function (x) { return x.id === id; })[0]);
     var item = el('div', { class: 'tol-nav-item' });
@@ -1220,6 +1235,7 @@
       if (wasOpen) return;
       btn.setAttribute('aria-expanded', 'true'); menu.hidden = false;
       openDrop = { btn: btn, menu: menu };
+      dropCue(menu);
     });
     item.addEventListener('focusout', function (e) {
       if (openDrop && openDrop.btn === btn && !item.contains(e.relatedTarget) && !(e.relatedTarget === null && item.contains(document.activeElement))) {
@@ -1269,6 +1285,10 @@
     closeDrop();
     panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId, full: !!full }));
     renderPanelFocus();
+    // opened from the magnifying glass it says Search; from Menu it says Menu (it is the same panel)
+    var ph = panel.querySelector('.tol-panel-head h2'), pt = toSearch ? T('Search', 'Buscar') : T('Menu', 'Menú');
+    if (ph) ph.textContent = pt;
+    panel.setAttribute('aria-label', pt);
     if (!toSearch) { var q0 = panel.querySelector('.tol-find input'); if (q0 && q0.value) { q0.value = ''; runSearch(''); } }
     else { var q1 = panel.querySelector('.tol-find input'); if (q1 && q1.value) runSearch(q1.value); }
     scrim.hidden = false; panel.hidden = false;
@@ -1301,6 +1321,8 @@
   function spanishHint(bar) {
     var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
     if (!/^es\b/i.test(String(langs[0] || '')) || current === '/en-espanol.html' || /^\/(404|offline|pal-cam-tv|garden-backdrop)\.html$/.test(current)) return;
+    // home16b: not on a page that is already in Spanish (a tool opened with ?lang=es, or a Spanish page)
+    if (esPage() || /[?&]lang=es\b/i.test(location.search)) return;
     if (document.body.classList.contains('is-game') || lsGet('tol-es-hint') === 'no') return;
     try { if (sessionStorage.getItem('tol-es-hint-seen') === '1') return; sessionStorage.setItem('tol-es-hint-seen', '1'); } catch (e) {}
     var esHref = document.body.getAttribute('data-es-href') || '/en-espanol.html';
@@ -1312,6 +1334,35 @@
     line.querySelector('a').addEventListener('click', function () { lsSet('tol-es-hint', 'no'); });
     var m = document.querySelector('main');
     if (m) m.insertBefore(line, m.firstChild); else bar.after(line);
+  }
+  // home16b: the free-app line is left out in Quiet mode and with "No surprises" (Read your way), and for 30 days after
+  // its × (app-bar.js keeps the date in localStorage 'tol-appbar-off'); site.css hides it if either is turned on later
+  // home16b: the "Pillars on this page" box (pillars.js) filled a phone screen above games and guides. It now waits at the
+  // end of the page as one line, "How this fits", that opens to the same box.
+  function foldPillars() {
+    var nav = document.querySelector('nav.tol-pillars'), main = document.querySelector('main');
+    if (!nav || !main || nav.closest('.tol-pillars-fold')) return;
+    var det = el('details', { class: 'tol-pillars-fold no-bubble no-cheer no-dive' }, '<summary>' + T('How this fits: the site’s framework', 'Cómo encaja: el marco del sitio') + '</summary>');
+    det.appendChild(nav);
+    main.appendChild(det);
+  }
+  // home16b: how many bubbles and hearts drift behind the page. None on the work pages, the tender and grief pages, or with
+  // Larger text or "Plain and literal" (Read your way); a few on a laptop or desktop, kept to the margins (site.css)
+  function floatCount() {
+    if (WORKSPACE.test(current) || sensitivePage() || calmExtras()) return 0;
+    return window.matchMedia && matchMedia('(min-width: 900px)').matches ? 8 : 16;
+  }
+  function calmExtras() {
+    var h = document.documentElement.classList;
+    if (/^(lg|xl|xxl)$/.test(lsGet('tol-text-size') || '') || h.contains('ti-literal')) return true;
+    try { if ((JSON.parse(lsGet('tol-take-in') || '{}').prefs || []).indexOf('literal') !== -1) return true; } catch (e) {}
+    return false;
+  }
+  function appBarSkip() {
+    if (lsGet('tol-quiet') === '1') return true;
+    try { if ((JSON.parse(lsGet('tol-take-in') || '{}').prefs || []).indexOf('nosurprise') !== -1) return true; } catch (e) {}
+    var d = lsGet('tol-appbar-off');
+    return !!(d && /^\d{4}-\d\d-\d\d$/.test(d) && Date.now() - Date.parse(d) < 30 * 86400000);
   }
   function buildChrome() {
     var body = document.body;
@@ -1358,6 +1409,9 @@
     var find = el('button', { type: 'button', class: 'tol-search-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' },
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>' + T('Search', 'Buscar') + '</span>');
     find.addEventListener('click', function () { openPanel(null, true); });
+    // home16b: when the helpers are tucked away (Quiet mode, No surprises, Hide the helpers), Professor Puddles' floating
+    // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
+    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask Puddles', 'Pregúntale')));
     bar.appendChild(find);
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, T('Menu', 'Menú'));
     mob.addEventListener('click', function () { openPanel(null); });
@@ -1550,13 +1604,14 @@
     // which of the Five Pillars this page puts to work, as a small strip under the title (pillars.js)
     if (!body.hasAttribute('data-no-pillars') && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var pj = document.createElement('script'); pj.src = '/assets/js/pillars.js';
-      pj.onload = pj.onerror = loadBuddies;
+      pj.onload = function () { foldPillars(); loadBuddies(); };
+      pj.onerror = loadBuddies;
       document.head.appendChild(pj);
     } else loadBuddies();
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
     // (not on the tender pages, and not on Frequency Buddies, where they'd sit over the episode)
-    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && !calmExtras() && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         !/^\/(frequency-journey(-play)?|frequency-buddies|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
       var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
     }
@@ -1628,7 +1683,7 @@
     if (!body.hasAttribute('data-no-wash')) {
       // plus a few pastel bubbles and hearts drifting slowly upward
       var floaters = '';
-      for (var f = 0; f < (WORKSPACE.test(current) ? 0 : 34); f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
+      for (var f = 0; f < floatCount(); f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
       var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' + floaters);
       document.documentElement.appendChild(wash);
     }
@@ -1639,7 +1694,7 @@
     // the free app, in one slim line above the bar (app-bar.js fills it in; its 36px are kept from the start so nothing jumps).
     // Not in the installed app, not on the install page, not inside a frame, and not after its × this visit.
     var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
-    if (!isApp() && current !== '/install.html' && !inFrame && ssGet('tol-appbar-off') !== '1') {
+    if (!isApp() && current !== '/install.html' && !inFrame && ssGet('tol-appbar-off') !== '1' && !appBarSkip()) {
       var appBar = el('aside', { class: 'tol-appbar no-bubble', 'aria-label': T('The free app', 'La app gratis') });
       // set through the DOM, not a style="" attribute, so pages with a strict Content-Security-Policy accept it too
       appBar.style.height = '36px'; appBar.style.margin = (-pt) + 'px ' + (-pr) + 'px 0 ' + (-pl) + 'px';
@@ -1776,6 +1831,8 @@
       '<span class="tol-foot-links">' +
         '<a href="/explore.html"' + hl + '>' + T('Everything on this site', 'Todo el sitio') + '</a>' +
         '<a href="/contents.html"' + hl + '>' + T('All pages', 'Todas las páginas') + '</a>' +
+        '<a href="/for-teachers.html"' + hl + '>' + T('For teachers', 'Para maestros') + '</a>' +
+        '<a href="/for-counselors.html"' + hl + '>' + T('For counsellors and coaches', 'Para terapeutas y coaches') + '</a>' +
         '<a href="/membership.html"' + hl + '>' + (CONFIG.openAll ? T('Email updates', 'Novedades por correo') : 'Membership') + '</a>' +
         '<a href="/roadmap.html"' + hl + '>' + T('Roadmap', 'Lo que viene') + '</a>' +
         '<a href="/legal/privacy-policy.html"' + hl + '>' + T('Privacy', 'Privacidad') + '</a>' +
@@ -1893,7 +1950,7 @@
     teens: ['/teens.html', '/library/life.html'], crush: 'teens', dating: 'teens', bullied: 'teens', bullying: 'teens', school: 'teens', grounded: 'teens', curfew: 'teens',
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
-    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/retired-together.html', '/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/turning-toward.html', '/recheck-drive.html', '/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
+    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/retired-together.html', '/lemonade-stand.html#quick', '/empty-nest.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/turning-toward.html', '/recheck-drive.html', '/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
     yelling: ['/parents.html', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', screaming: 'yelling',
     dementia: ['/caregivers.html', '/library/stress.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], alzheimers: 'dementia', alzheimer: 'dementia', respite: 'dementia', carer: 'dementia', carers: 'dementia', caregiver: 'dementia', caregivers: 'dementia', caregiving: 'dementia',
     pronouns: ['/teens.html', '/safety.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
@@ -1918,7 +1975,7 @@
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
     minutes: ['/start-in-10-minutes.html', '/quick-checks.html'], start: ['/start-here.html', '/start-in-10-minutes.html'],
     chat: ['/ask.html'], ask: ['/ask.html'], question: ['/ask.html'], professor: ['/ask.html'],
-    divorce: ['/co-parenting.html', '/relationships.html', '/library/life.html', '/check-ins.html', '/signal-translator.html'], separated: 'divorce', separation: 'divorce', ex: 'divorce', coparent: 'divorce',
+    divorce: ['/co-parenting.html', '/relationships.html', '/library/life.html', '/check-ins.html', '/signal-translator.html'], separated: 'divorce', separation: 'divorce', ex: 'exbreak', coparent: 'divorce',
     arcade: ['/frequency-journey.html'], maze: 'arcade', chase: 'arcade', crossing: 'arcade',
     complacent: ['/complacency.html', '/complacency-in-depth.html', '/turning-toward.html', '/workpapers/wp-13-daily-check-in.html'], touchstone: ['/touchstones.html', '/complacency.html#touchstones', '/library/connection.html#shared-language', '/turning-toward.html#rituals'], touchstones: 'touchstone', idiom: 'touchstone', idioms: 'touchstone', petname: 'touchstone', nickname: 'touchstone', nicknames: 'touchstone', petname: 'touchstone', joke: 'touchstone', jokes: 'touchstone', catchphrase: 'touchstone', codeword: 'touchstone', complacency: 'complacent', stale: 'complacent', boring: 'complacent', bored: 'complacent', rut: 'complacent', drifting: 'complacent', drift: 'complacent', granted: 'complacent', coasting: 'complacent', autopilot: 'complacent', spark: 'complacent',
     sorry: ['/apology-languages.html', '/library/conflict.html', '/signal-translator.html', '/carrier-wave-decoder.html', '/workpapers/wp-09-say-it-so-it-lands.html'], apology: 'sorry', apologize: 'sorry', repair: 'sorry', forgive: 'sorry',
@@ -1945,7 +2002,9 @@
   // phrases first (JOIN turns each into one search word), then that word's pages, best first (ACT)
   [
     ['games all night|gaming all night|plays games all night|video games|video game|screen time|phone all night|on his phone|on her phone|on their phone|always on his phone|always on her phone|ignores me|ignoring me', 'gaming'],
-    ['co parenting|co parent|co parents|shared custody|joint custody|every other weekend|my ex|my ex-husband|my ex-wife|ex husband|ex wife|holiday handover', 'coparenting'],
+    ['co parenting|co parent|co parents|shared custody|joint custody|every other weekend|holiday handover', 'coparenting'],
+    // home16b: an ex on its own is usually a breakup; co-parenting comes up when kids, handoffs or custody are named
+    ['my ex|my ex-husband|my ex-wife|ex husband|ex wife|ex boyfriend|ex girlfriend|my ex boyfriend|my ex girlfriend|no contact|text my ex|texting my ex', 'exbreak'],
     ['break up|broke up|broken up|breaking up|on my own|single dad|single mum|single mom|single parent|single father|single mother|part time dad|part time mum|part time mom|part time parent|part-time parent|after divorce|after my divorce|after the divorce', 'onmyown'],
     ['best friend|best friends|one sided friendship|one-sided friendship|one sided|friend never texts back|never texts back|doesnt text back|doesn\'t text back|never texts me back|always the one reaching out|always reaching out|friendship drifted|friend drifted', 'friendship'],
     ['non monogamous|non-monogamous|ethically non monogamous|my two partners|both my partners|my other partner|both of my partners|feel like a guest|feels like a guest|like a guest in my own home|like a guest', 'polyamory'],
@@ -1985,7 +2044,8 @@
   var ACT_MORE = {
     supplement: ['/calming-supplements.html', '/outside-help.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', nintendo: 'gaming', fortnite: 'gaming', minecraft: 'gaming', esports: 'gaming', screentime: 'gaming', tiktok: 'gaming', scrolling: 'gaming', doomscrolling: 'gaming',
-    coparenting: ['/co-parenting.html', '/on-my-own.html', '/parents.html#stepfamilies'], 'co-parenting': 'coparenting', 'co-parent': 'coparenting', 'co-parents': 'coparenting', coparent: 'coparenting', coparents: 'coparenting', custody: 'coparenting', handoff: 'coparenting', handoffs: 'coparenting', 'ex-husband': 'coparenting', 'ex-wife': 'coparenting', 'ex-partner': 'coparenting', ex: 'coparenting', exes: 'coparenting', holidayschedule: 'coparenting', separated: 'coparenting', separation: 'coparenting',
+    coparenting: ['/co-parenting.html', '/on-my-own.html', '/parents.html#stepfamilies'], 'co-parenting': 'coparenting', 'co-parent': 'coparenting', 'co-parents': 'coparenting', coparent: 'coparenting', coparents: 'coparenting', custody: 'coparenting', handoff: 'coparenting', handoffs: 'coparenting', 'ex-husband': 'exbreak', 'ex-wife': 'exbreak', 'ex-partner': 'exbreak', ex: 'exbreak', exes: 'exbreak',
+    exbreak: ['/after-a-breakup.html', '/on-my-own.html', '/co-parenting.html'], holidayschedule: 'coparenting', separated: 'coparenting', separation: 'coparenting',
     onmyown: ['/on-my-own.html', '/after-a-breakup.html', '/co-parenting.html', '/grief.html'], divorce: 'onmyown', divorced: 'onmyown', divorcing: 'onmyown', 'break-up': 'onmyown', single: 'onmyown', 'part-time': 'onmyown',
     breakup: ['/after-a-breakup.html', '/on-my-own.html', '/journeys.html#steady'], breakups: 'breakup', heartbreak: 'breakup', heartbroken: 'breakup', dumped: 'breakup',
     journeys: ['/journeys.html', '/start-here.html'], journey: 'journeys', guided: 'journeys',
@@ -2003,7 +2063,7 @@
     outsidehelp: ['/outside-help.html', '/safety.html'], weekzero: ['/week-0.html', '/prog-01.html'],
     examples: ['/examples.html', '/by-relationship.html'], example: 'examples',
     research: ['/research.html'], studies: 'research', study: 'research', evidence: 'research', science: 'research', therapist: 'counselors', therapists: 'counselors', counsellor: 'counselors', counselor: 'counselors', counsellors: 'counselors', client: 'counselors', clients: 'counselors', professional: 'counselors', professionals: 'counselors', practitioner: 'counselors', practitioners: 'counselors', coach: 'counselors', coaches: 'counselors', therapy: 'counselors', counselling: 'counselors', counseling: 'counselors', psychologist: 'counselors', 'social-worker': 'counselors',
-    sharedroom: ['/sharing-a-room.html', '/share-the-load.html#roommates', '/upset-right-now.html'], dorm: 'sharedroom', dorms: 'sharedroom', dormitory: 'sharedroom', college: 'sharedroom', university: 'sharedroom', uni: 'sharedroom', campus: 'sharedroom', freshman: 'sharedroom', ra: 'sharedroom', bunk: 'sharedroom',
+    sharedroom: ['/sharing-a-room.html', '/share-the-load.html#roommates', '/upset-right-now.html'], dorm: 'sharedroom', dorms: 'sharedroom', halls: 'sharedroom', dormitory: 'sharedroom', college: 'sharedroom', university: 'sharedroom', uni: 'sharedroom', campus: 'sharedroom', freshman: 'sharedroom', ra: 'sharedroom', bunk: 'sharedroom',
     roommate: ['/sharing-a-room.html', '/share-the-load.html#roommates', '/share-the-load.html', '/lemonade-stand.html'], roommates: 'roommate', housemate: 'roommate', housemates: 'roommate', flatmate: 'roommate', flatmates: 'roommate', roomie: 'roommate',
     bizpartner: ['/work.html#business-partners', '/work.html#owner-list', '/work.html'], cofounder: 'bizpartner', cofounders: 'bizpartner', 'co-founder': 'bizpartner', 'co-founders': 'bizpartner', 'co-owner': 'bizpartner', 'co-owners': 'bizpartner', coowner: 'bizpartner', business: 'bizpartner', startup: 'bizpartner', bakery: 'bizpartner', shop: 'bizpartner',
     ndwork: ['/work.html#autistic-at-work', '/work.html#neurodiversity', '/wiring-card.html', '/work.html'], rude: ['/work.html', '/wiring-card.html', '/signal-translator.html', '/wired-differently.html'], blunt: 'rude', abrupt: 'rude', curt: 'rude',
@@ -2307,7 +2367,11 @@
     [/^\/podcast-index\.html$/, /^(podcasts?|episodes?|listen|listening|audio|talks?)$/]
   ];
   // how the check-ins page reads in the results (it's for anyone who shares a home)
-  var RETITLE = { '/check-ins.html': ['Check-ins: for couples, families and housemates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and housemates. How to raise a thing once, properly.'] };
+  // home16b: the tools' current names, not the old SEO titles ("Chore and Bill Tracker…", "Daily Mood Check-In…"), so a
+  // search doesn't show one tool twice under two names (tools/seo/build_seo.py has the same titles for the next build)
+  var RETITLE = { '/lemonade-stand.html': ['Who does what? Chores and bills at home (the Lemonade Stand)', 'Tap who does each job and who pays for what, for one person or a whole home, then compare without blame.'],
+    '/quick-checks.html': ['My weather today: a daily mood and stress check', 'How you are today in four quick taps, or a one-minute forecast, with a calm next step that fits.'],
+    '/check-ins.html': ['Check-ins: for couples, families and housemates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and housemates. How to raise a thing once, properly.'] };
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
     '/new-relationship.html': ['Early days: dating and new relationships', 'Dating at any age: texting and pace, telling a difference from a real concern, the big questions, meeting family, moving in, and ending it kindly.'],
@@ -2321,7 +2385,7 @@
     '/more-than-two.html': ['More than two partners at home', 'For polyamorous families, triads and throuples: sharing the load between three or more, and joining a home without feeling like a guest.'],
     '/gaming-and-time-together.html': ['Gaming, phones and time together', 'When one of you games or scrolls all night: a calm talk with no blame, and a small “time together deal” to fill in.'],
     '/money-together.html': ['Money together', 'Saver and spender, moving in together, wedding costs and family expectations, and how to tell normal limits from control.'],
-    '/foster-and-kinship.html': ['Foster, adoptive and kinship families', 'For foster carers, adoptive parents and grandparents raising grandchildren: sharing the load, the social worker, and the children’s own story.'],
+    '/foster-and-kinship.html': ['Raising a grandchild, foster or adopted child', 'For foster carers, adoptive parents and grandparents raising grandchildren: sharing the load, the social worker, and the children’s own story.'],
     '/adhd-kids.html': ['When a child has ADHD', 'For parents and grandparents: routines that help, what to say when they can’t sit still or forget everything, and looking after yourselves.'],
     '/grown-up-children.html': ['Grown-up children and parents', 'Boundaries with a parent you love: visits, drop-ins, unsolicited advice and the new baby, with words you could use.'],
     '/coming-home.html': ['Coming home after time apart', 'After deployment, work away or a hospital stay: a handover week, finding your place again, and where to get support.'],
@@ -2400,6 +2464,8 @@
   function known(t) {
     if (!vocab) return true;
     if (vocab[t] || ACT[t] || SAME[t]) return true;
+    // a word the "what's going on" phrasings use is a real word ("contempt", "hijastros"), never "corrected"
+    try { if (needsPrep && (needsPrep.raw[t] || needsPrep.df[nCanon(t)])) return true; } catch (e) {}
     if (t.length >= 3) for (var w in vocab) if (w.indexOf(t) === 0) return true;
     return realWord(t);
   }
@@ -2437,11 +2503,23 @@
   }
   // how well one word matches a piece of text: the whole word (or its start) counts fully, the middle of
   // another word ("static" inside "allostatic") only a little
+  // home16b: a word counts fully as itself or a plain form of it ("exam", "exams"; "calm", "calming"), never as the start
+  // of another word: "exam" in "example" counts only a little, like a word found inside another
+  var wholeRe = {};
+  function wholeBody(t) {
+    var b = reEsc(t), alt = '';
+    if (/e$/.test(t) && t.length > 3) alt += '|' + reEsc(t.slice(0, -1)) + '(?:ing|ings|ed|er|ers|able)';
+    if (/y$/.test(t) && t.length > 3) alt += '|' + reEsc(t.slice(0, -1)) + '(?:ies|ied|ier|iest|ily|iness)';
+    if (/[aeiou][bdfgklmnprt]$/.test(t)) alt += '|' + b + t.slice(-1) + '(?:ing|ed|er|ers|y)';
+    return '(?:' + b + "(?:s|es|ed|d|ing|ings|er|ers|ly|al|ally|ion|ions|ness|ful|ment|ments|y|'s)?" + alt + ')';
+  }
+  function wholeWord(t) { return wholeRe[t] || (wholeRe[t] = new RegExp('(^|[^a-z0-9])' + wholeBody(t) + '($|[^a-z0-9])')); }
   function hitIn(text, t) {
     var at = text.indexOf(t); if (at === -1) return 0;
     // a short word only counts as itself: "he" isn't in "here", "ex" isn't in "next"
     if (t.length <= 3) return new RegExp('(^|[^a-z0-9])' + reEsc(t) + '(s|es)?($|[^a-z0-9])').test(text) ? 1 : 0;
-    return new RegExp('(^|[^a-z0-9])' + reEsc(t)).test(text) ? 1 : 0.25;
+    if (wholeWord(t).test(text)) return 1;
+    return new RegExp('(^|[^a-z0-9])' + reEsc(t)).test(text) ? 0.3 : 0.15;
   }
   function termScore(p, t) {
     var s = 0, h;
@@ -2451,6 +2529,8 @@
     if ((h = hitIn(p._text, t))) s += (1 + Math.min(3, p._text.split(t).length - 2)) * h;
     return s;
   }
+  var GRIEF_PAGE = /^\/(grief(-in-depth)?\.html|book\/understanding-8-loss\.html)$/;
+  var LOSS_WORD = /^(die|died|dies|dying|death|deaths|dead|grief|grieve|grieving|griev\w*|loss|losses|lost|lose|losing|bereave\w*|widow\w*|funeral|funerals|passed|passing|mourn\w*|miscarr\w*|stillb\w*|perdida|perdi|duelo|murio|fallecio|anniversary|memorial)$/;
   function searchPages(list, q, termsIn) {
     var terms = termsIn || searchTerms(q);
     if (!terms.length) return [];
@@ -2464,6 +2544,8 @@
     });
     // a situation word (from a phrase like "my ex" or "games all night") points to pages; it isn't in their text
     var need = terms.filter(function (t) { return !(actFor(t) && !(vocab && vocab[t])); }).length;
+    // home16b: the grief pages only come up near the top when the words are about a loss ("husband retired…" is not)
+    var loss = terms.some(function (t) { return LOSS_WORD.test(t); });
     list.forEach(function (p) {
       var score = 0, hits = 0;
       terms.forEach(function (t) {
@@ -2474,6 +2556,7 @@
         score += s;
       });
       var b = boost[p.u] || 0;
+      if (!loss && GRIEF_PAGE.test(p.u)) { b = 0; score = Math.min(score, 4); }
       // the site's own pages about itself only show when asked for: the logo page, and the policies (refunds, terms)
       if (ONLY_ASKED.some(function (o) { return o[0].test(p.u) && !terms.some(function (t) { return o[1].test(t); }); })) return;
       if (/^\/brand\.html$/.test(p.u) && !terms.some(function (t) { return /^(brand|branding|logo|logos|colou?rs?|palette|fonts?|typeface|mascot)$/.test(t); })) return;
@@ -2508,7 +2591,8 @@
   }
   function markTerms(text, terms) {
     var h = esc(text);
-    terms.forEach(function (t) { if (t.length > 1) h = h.replace(new RegExp('(^|[^a-z0-9&;])(' + reEsc(t) + ')', 'ig'), '$1<mark>$2</mark>'); });
+    // whole words only: "exam" marks "exams", not the start of "example"
+    terms.forEach(function (t) { if (t.length > 1) h = h.replace(new RegExp('(^|[^a-z0-9&;])(' + (t.length <= 3 ? reEsc(t) + '(?:s|es)?' : wholeBody(t)) + ')(?![a-z0-9])', 'ig'), '$1<mark>$2</mark>'); });
     return h;
   }
   function smartSearch(data, q) {
@@ -2684,7 +2768,8 @@
         if (namedPage(R, M.best)) { M.best = null; urls = []; }
         // the same order the list shows: each kind (tools, workpapers, pages) together
         var hits = R ? [].concat.apply([], groupByKind(R.hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); }).map(function (G) { return G.items; })).map(function (h) { return h.p.u; }) : [];
-        hits.forEach(function (u) { if (urls.indexOf(u) === -1) urls.push(u); });
+        var bp = {}; urls.forEach(function (u) { bp[u.split(/[?#]/)[0]] = 1; });
+        hits.forEach(function (u) { if (urls.indexOf(u) === -1 && !(u.indexOf('#') === -1 && u.indexOf('?') === -1 && bp[u])) urls.push(u); });
         cb({ urls: urls, best: M.best, close: M.close, pages: hits.length, fallback: !urls.length });
       });
     });
@@ -2733,14 +2818,17 @@
       '<li><a href="/explore.html' + (opts.exploreQ && q ? '?q=' + encodeURIComponent(q) : '') + '">' + T('See everything', 'Ver todo') + '</a></li></ul>';
   }
   // the empty box: "What's going on?" (things one person can start alone lead), the 3-question finder, everything
+  // on the Spanish page, the chips are in Spanish too (each searches words the needs understand)
+  var ES_CHIPS = [['Peleamos mucho', 'peleamos mucho'], ['Hago todo en la casa', 'hago todo en la casa'], ['Mis hijos pelean', 'mis hijos pelean'],
+    ['Cuido a alguien', 'cuido a mi mama'], ['Mis hermanos no ayudan', 'mis hermanos no ayudan'], ['Familia ensamblada', 'familia ensamblada'], ['No puedo dormir', 'no puedo dormir'], ['Necesito ayuda', 'necesito ayuda']];
   function needsEmptyHTML() {
-    var chips = (needsData && needsData.chips) || [];
+    var chips = esPage() ? ES_CHIPS : (needsData && needsData.chips) || [];
     return '<h3>' + T('What’s going on?', '¿Qué está pasando?') + '</h3>' + (chips.length ? chipsHTML(chips) : '') + moreHTML('', {});
   }
   // nothing matched: the closest needs, the finder, Professor Puddles with their own words, and everything
   function needsFallbackHTML(q, M) {
     var close = (M && M.close) || [];
-    var chips = close.length ? close.map(function (c) { return [c.l, c.q]; }) : ((needsData && needsData.chips) || []).slice(0, 5);
+    var chips = close.length ? close.map(function (c) { return [c.l, c.q]; }) : (esPage() ? ES_CHIPS : (needsData && needsData.chips) || []).slice(0, 5);
     return '<h3>' + (close.length ? T('Closest to what you described', 'Lo más parecido a lo que describes') : T('Try one of these', 'Prueba una de estas')) + '</h3>' +
       (chips.length ? chipsHTML(chips) : '') + moreHTML(q, { ask: true });
   }
@@ -2855,7 +2943,9 @@
           return;
         }
         if (namedPage(R, M.best)) { M.best = null; bestU = {}; bestEl.hidden = true; bestEl.innerHTML = ''; }
-        var hits = R.hits.filter(function (h) { return !bestU[h.p.u]; }), used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
+        var bestP = {}; Object.keys(bestU).forEach(function (u) { bestP[u.split(/[?#]/)[0]] = 1; });
+        // a page the best match already opens (at one of its parts) isn't listed again under another name
+        var hits = R.hits.filter(function (h) { return !bestU[h.p.u] && !(h.p.u.indexOf('#') === -1 && h.p.u.indexOf('?') === -1 && bestP[h.p.u]); }), used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
         // Focus mode: pages in your areas (and the start, safety and help pages, which are never hidden) first;
         // the rest wait behind "Show everything"
         var outside = 0, focusNone = false;
@@ -3728,6 +3818,17 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  // ---- home16b: pop-up rules, site-wide ----
+  // At most one prompt a visit ("Would a calmer page help?", the home-screen invitation, "Is this your own computer?",
+  // "The free app keeps more"): the first one to show takes the visit (sessionStorage 'tol-prompt'). A prompt that
+  // floats over the page waits until the person hasn't touched anything for a while, so it never lands on a result or
+  // a form they just opened. Other scripts use window.TOLPrompt: free(name), take(name), quietFor(ms).
+  var lastTouch = 0;
+  ['pointerdown', 'keydown', 'input', 'change', 'wheel', 'touchstart'].forEach(function (t) { document.addEventListener(t, function () { lastTouch = Date.now(); }, { capture: true, passive: true }); });
+  function promptFree(name) { var p = ssGet('tol-prompt'); return !p || p === name; }
+  function promptTake(name) { ssSet('tol-prompt', name); }
+  function quietFor(ms) { return Date.now() - lastTouch >= ms; }
+  window.TOLPrompt = { free: promptFree, take: promptTake, quietFor: quietFor, touched: function () { return lastTouch; } };
 
   // ---------- Keep the page still ----------
   // One switch (in the menu panel and in the footer) that takes away the moving garden behind the
@@ -4295,10 +4396,11 @@
   function comfortOffer(body) {
     var seenBefore = lsGet('tol-comfort-offer') || '', seenHere = ssGet('tol-offer-seen');
     var again = seenHere && seenHere === location.pathname;   // the same page, reloaded this visit
-    if (seenBefore === 'done' || (seenBefore && !again) || workMode() || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
+    if (seenBefore === 'done' || (seenBefore && !again) || !promptFree('offer') || workMode() || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') || /#together=|[?&]together=/.test(location.href) || document.documentElement.classList.contains('ti-nosurprise') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     lsSet('tol-comfort-offer', 'shown:1'); ssSet('tol-offer-seen', location.pathname); // once on this device; Settings at the top is always there
+    promptTake('offer');
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': T('Make the site calmer or easier to read', 'Una página más tranquila o más fácil de leer') },
       T('<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>',
         '<p><strong>¿Te ayudaría una página más tranquila?</strong> El modo tranquilo deja todo quieto, en silencio y sencillo, sin ventanas que aparecen. La lectura fácil usa una letra clara y más espacio entre líneas. Puedes cambiarlo cuando quieras en <em>Ajustes</em>, arriba.</p>') +
@@ -4407,10 +4509,14 @@
     if (days.indexOf(today) === -1 && !lsGet('tol-recent-off')) { days.push(today); lsSet('tol-visit-days', JSON.stringify(days.slice(-30))); }
     if (isApp() || lsGet('tol-install-asked') || days.length < 2 || window.innerWidth > 760) return;
     if (document.body.hasAttribute('data-no-breathe') || location.pathname === '/offline.html') return; // not over the garden
-    if (ssGet('tol-invite-seen')) return; // at most once a visit
-    setTimeout(function () {
-      if (lsGet('tol-install-asked') || ssGet('tol-invite-seen') || document.querySelector('.tol-breathe:not([hidden]), .tol-install, .tol-wx')) return;
-      lsSet('tol-install-asked', '1'); ssSet('tol-invite-seen', '1');
+    if (ssGet('tol-invite-seen') || !promptFree('invite')) return; // at most once a visit, and only if nothing else asked this visit
+    var tries = 0;
+    setTimeout(function invite() {
+      if (lsGet('tol-install-asked') || ssGet('tol-invite-seen') || !promptFree('invite') || document.querySelector('.tol-breathe:not([hidden]), .tol-install, .tol-wx, .tcol-rules, .tp-card-pop')) return;
+      if (document.documentElement.classList.contains('tol-no-helpers') || document.documentElement.classList.contains('ti-nosurprise')) return;
+      // never on something they're in the middle of: wait for a quiet half-minute (a few tries, then not this visit)
+      if (!quietFor(30000)) { if (++tries < 6) setTimeout(invite, 30000); return; }
+      lsSet('tol-install-asked', '1'); ssSet('tol-invite-seen', '1'); promptTake('invite');
       var t = el('div', { class: 'tol-invite', role: 'status' },
         '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>' + T('Want us on your home screen? It opens like an app, and nothing you type leaves your phone.', '¿Nos quieres en tu pantalla de inicio? Se abre como una app, y nada de lo que escribes sale de tu teléfono.') + '</p>' +
         '<span><button type="button" class="tol-invite-yes">' + T('Show me how', 'Muéstrame cómo') + '</button><button type="button" class="tol-invite-no">' + T('Not now', 'Ahora no') + '</button></span>');
@@ -4659,6 +4765,13 @@
       }, 100);
     }
   }, true);
+
+  // A link that also picks "With someone" / "Just me" for the home page's "What's going on?" (tol-mode-v1),
+  // like "Start with Just me" on /is-this-for-you.html
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-pick-mode]'); if (!a) return;
+    var m = a.getAttribute('data-pick-mode'); if (m === 'me' || m === 'with') lsSet('tol-mode-v1', m);
+  });
 
   // ---------- Breathe ----------
   // The button is on every page; the break itself (methods, guidance and soundscapes) lives in

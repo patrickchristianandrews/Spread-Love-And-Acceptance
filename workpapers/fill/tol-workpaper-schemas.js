@@ -255,6 +255,8 @@
       var sb = r2(s), w = wp02Words(sb, solo), points = Math.round(s * 20);
       // plain words first; the number and how it is worked out come after, folded away on screen
       var out = [{ label: 'Your stress tank today', value: w[0] + ' (' + points + ' out of 20 points)', num: s }, { label: 'What to do', value: w[1] }];
+      // tools16: high or very high: one tap to a breathing minute, right here (on screen only; the PDF keeps the words)
+      if (sb >= 0.60) out[1].breathe = 'Breathe for a minute now';
       var top = WP02_FACTORS.filter(function (f) { return Number(ctx.value('factors.' + f.id)) >= 3; }).map(function (f) { return f.label.replace(/\s*\(.*\)$/, '').replace(/ specifically$/, '').toLowerCase(); });
       // In the high band, putting things off isn't always possible: caring for someone who is ill can't wait.
       // Only when caring is part of it (the tick, or the note says so), not for a work deadline.
@@ -276,7 +278,7 @@
         out.push({ label: 'Side by side', value: 'You: ' + fmt(s, 2) + ' (' + Math.round(s * 20) + ' of 20) \u00b7 ' + others.map(function (x, i) { return (String(whoL[i] || '').trim() || 'Someone') + ': ' + fmt(x, 2) + ' (' + Math.round(x * 20) + ' of 20)'; }).join(' \u00b7 ') + '.', note: 'Each score is only about the person who filled it in. Neither is a verdict on anyone.' });
         // the gap, in kind words: no "winner", and no one's fault
         var hiS = Math.max.apply(null, [s].concat(others)), loS = Math.min.apply(null, [s].concat(others)), gap = r2(hiS - loS);
-        out.push({ label: 'The gap', value: gap < 0.10 ? 'Your tanks are close (a gap of ' + fmt(gap, 2) + '). Nobody is carrying much more than the others right now.' : 'A gap of ' + fmt(gap, 2) + ': ' + (hiS === s ? 'yours reads higher' : 'one of the others reads higher') + ' right now. That isn\u2019t a contest or anyone\u2019s fault. It\u2019s a reason to look together at one thing that could come off the fuller plate this week.', note: 'The gap is the highest score take away the lowest.' });
+        out.push({ label: 'The gap', value: gap < 0.10 ? 'Your tanks are close (a gap of ' + fmt(gap, 2) + '). Nobody is carrying much more than ' + (others.length === 1 ? 'the other' : 'the others') + ' right now.' : 'A gap of ' + fmt(gap, 2) + ': ' + (hiS === s ? 'yours reads higher' : others.length === 1 ? ((String(whoL[0] || '').trim() || 'the other person') + '\u2019s reads higher') : (function () { var hi = others.indexOf(hiS), nm = hi >= 0 ? String(whoL[hi] || '').trim() : ''; return nm ? nm + '\u2019s reads higher' : 'one of the others reads higher'; })()) + ' right now. That isn\u2019t a contest or anyone\u2019s fault. It\u2019s a reason to look together at one thing that could come off the fuller plate this week.', note: 'The gap is the highest score take away the lowest.' });
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
         if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
         else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and you said ' + road + ' people are doing this.', note: 'Check the list of scores: one may be in twice.' });

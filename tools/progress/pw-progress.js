@@ -226,8 +226,14 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
   {
     const c = await ctx(browser);
     const p = await c.newPage();
+    // home16b: asked only after something is first saved, on the next page opened (never over the page where it was saved)
+    await p.goto(BASE + '/index.html');
     await p.goto(BASE + '/quick-checks.html');
+    await p.waitForFunction(() => window.TOLProgress && window.TOLProgress.collect, null, { timeout: 15000 });
+    await p.waitForTimeout(500);
     await p.evaluate((w) => localStorage.setItem('tol-weather-v1', w), WEATHER);
+    await p.waitForTimeout(6000);
+    ok(!(await p.$('.tp-card-pop')), 'computer: not asked over the page where the first save happened');
     await p.goto(BASE + '/index.html');
     await p.waitForSelector('.tp-card-pop', { timeout: 25000 });
     ok(/own computer or a shared one/.test(await p.textContent('.tp-card-pop')), 'computer: asked once, own or shared');

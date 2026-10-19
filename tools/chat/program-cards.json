@@ -2,6 +2,59 @@
   "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first); pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
   "cards": [
     {
+      "id": "forwhom",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [
+        [
+          "I’m on my own",
+          "Building a life on my own"
+        ],
+        [
+          "I share a flat",
+          "My flatmate and I need to split the chores"
+        ],
+        [
+          "I care for a parent",
+          "I care for my mum and I’m worn out"
+        ]
+      ],
+      "name": "who this site is for",
+      "pat": "\\b(is|are) (this|the|these) (site|website|app|place|program|programme|thing|tools?|stuff|all this)( only| just| mainly| mostly)? (just |only |mainly |mostly )?(for|about) (couples|partners|married (people|couples)|people in (a )?relationships?|relationships|lovers)\\b|\\b(only|just|mainly|mostly) for couples\\b|\\bdo (i|you) (need|have) to (have|be in) (a )?(partner|relationship|couple)\\b|\\b(i m|im|i am) (single|widowed|a widow\\w*|on my own|not in a relationship)\\b.{0,40}\\b(is this|is (it|the site)|can i use|for me)\\b|\\bwhat if i (dont|don t|do not) have a (partner|boyfriend|girlfriend|husband|wife)\\b",
+      "what": [
+        "No. Couples are only one part of it. The site is for anyone sharing a life with other people, and for anyone working on things on their own."
+      ],
+      "how": [
+        "On your own: tap “Just me” on the home page and the choices change for you, and the self-discovery path goes step by step, at your own pace.",
+        "After a loss: grief and later life, and living on your own.",
+        "Sharing a home: flatmates, housemates and sharing a room.",
+        "Family: parents and teenagers, grown children, brothers and sisters, and caring for someone you love.",
+        "Friends, co-parents and work each have their own pages too."
+      ],
+      "links": [
+        [
+          "Find it by relationship: every page, sorted by who it’s for",
+          "/by-relationship.html"
+        ],
+        [
+          "Your self-discovery path",
+          "/self-path.html"
+        ],
+        [
+          "Grief and later life",
+          "/grief.html"
+        ]
+      ],
+      "plain": [
+        "No. It is not only for couples.",
+        "It is for people on their own too.",
+        "It is for flatmates, family, friends and work."
+      ]
+    },
+    {
       "id": "wl-letters",
       "kind": "intent",
       "first": true,
@@ -3700,6 +3753,108 @@
       ]
     },
     {
+      "id": "coparentpickuplate",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "a co-parent who is late for pick-ups",
+      "pat": "\\b(ex|co ?parent\\w*|other parent|their (dad|mum|mom|father|mother)|his (dad|mum|mom)|her (dad|mum|mom))\\b.{0,60}\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b.{0,40}\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b|\\b(ex|co ?parent\\w*|other parent|their (dad|mum|mom|father|mother)|his (dad|mum|mom)|her (dad|mum|mom))\\b.{0,60}\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b.{0,40}\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b|\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b.{0,40}\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b.{0,60}\\b(ex|co ?parent\\w*|other parent|their (dad|mum|mom|father|mother)|his (dad|mum|mom)|her (dad|mum|mom))\\b",
+      "what": [
+        "Lateness at pick-up is worth raising, for your child’s sake: waiting at the door is hard on a kid. Keep it to one clear, firm ask about the time, not a verdict on the other parent. Firm and friendly can go together."
+      ],
+      "how": [
+        "Make one clear ask: what, when, and by when. Put it in writing, in your one channel for logistics, never at the door in front of your child.",
+        "Talk about your child’s needs, not the other parent’s character: “She waited forty minutes” lands; “You’re always late” starts a war.",
+        "Keep it Brief, Informative, Friendly and Firm, as many family professionals suggest. Answer only the question asked, and skip the history.",
+        "If nothing changes, send one reminder with a date, then do what you said, calmly, and keep the message thread as your record."
+      ],
+      "links": [
+        [
+          "Talking between two homes: one clear ask",
+          "/co-parenting.html#talking"
+        ],
+        [
+          "When the other parent won’t cooperate (Brief, Informative, Friendly, Firm)",
+          "/co-parenting.html#parallel"
+        ],
+        [
+          "Check a message first (Chat analyzer, co-parents)",
+          "/signal-translator.html?rel=co-parents"
+        ]
+      ],
+      "script": [
+        "Pick-up is at five. On Friday she waited forty minutes. From now on, if you’re going to be late, please text me by four so I can plan.",
+        "Just checking you saw my message about pick-up times. Can you confirm by Friday that you’ll text me if you’re running late?"
+      ],
+      "scriptLabels": [
+        "A firm ask, about the time",
+        "One reminder, with a date"
+      ],
+      "plain": [
+        "Ask once, clearly, in writing.",
+        "Say what your child needs.",
+        "Say the time, and by when to tell you.",
+        "Keep it short and calm."
+      ],
+      "follow": [
+        [
+          "\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b.{0,40}\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b|\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b.{0,40}\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b",
+          "coparentpickuplate"
+        ],
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
+          "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
+          "coparentdecide"
+        ],
+        [
+          "\\b(last minute|night before|day before|short notice|on the day|told me late|tells me late|at the last)\\b",
+          "coparentlate"
+        ],
+        [
+          "\\b(shut out|left out|visitor|as a (dad|father|mum|mom|mother))\\b",
+          "coparentshutout"
+        ],
+        [
+          "\\b(useless|does nothing|do nothing|never (remembers|helps|does)|forgets everything|i do (all|everything|it all))\\b",
+          "coparentuseless"
+        ],
+        [
+          "\\b(word|wording|phrase|text|texts|texting|message|messages|email)\\b",
+          "coparenttext"
+        ],
+        [
+          "\\b(inhaler|bag|kit|medicine|medication|school (shoes|uniform|bag)|sends? (him|her|them) back)\\b",
+          "handoffkit"
+        ],
+        [
+          "\\b(books?|booked|plans?) (things|stuff|trips?|activities)?\\b.{0,20}\\bmy (weekend|weekends|time|days)\\b",
+          "exweekends"
+        ],
+        [
+          "\\b(holiday|holidays|christmas|summer|schedule|rota)\\b",
+          "exschedule"
+        ]
+      ]
+    },
+    {
       "kind": "intent",
       "first": true,
       "keys": [],
@@ -4172,6 +4327,10 @@
         ]
       ],
       "follow": [
+        [
+          "\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b.{0,40}\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b|\\b(pick ?ups?|pickups?|drop ?offs?|dropoffs?|hand ?overs?|handovers?|hand ?offs?|handoffs?|exchanges?|collect\\w*|changeovers?)\\b.{0,40}\\b(late|lateness|no ?show|turn(s|ing)? up late|show(s|ing)? up late|keeps? (us|me|her|him|them|the kids?|my (kid|son|daughter)) waiting|never on time|not on time)\\b",
+          "coparentpickuplate"
+        ],
         [
           "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
           "coparentnoreply"
@@ -7594,6 +7753,67 @@
       ]
     },
     {
+      "id": "flatbringup",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "bringing something up with a flatmate",
+      "pat": "^(?=.*\\b(kitchen|flat|flatmates?|housemates?|roommates?|room ?mates?|dorm|halls|shared house|house ?share|student house)\\b).*\\b(scared|afraid|nervous|worried|anxious|dread\\w*|terrified|hate confrontation|hate conflict)\\b.{0,60}\\b(hate me|awkward|weird|fall out|make it worse|cross with me|mad at me|angry with me|angry at me|upset with me|bring (it |this |that )?up|say something|confront\\w*)\\b|\\b(how|what) (do|should|can|could) i (say|bring (it|this) up|raise (it|this)|tell|text|word)\\b.{0,30}\\b(my )?(flatmates?|housemates?|roommates?|room ?mates?)\\b",
+      "what": [
+        "Lots of people would rather put up with something for months than have one awkward talk. But a small, calm talk early is much kinder, to both of you, than a big one later. Asking isn’t an attack, and it isn’t snitching."
+      ],
+      "how": [
+        "Pick a calm time: not when they’re rushing out, and not late at night. A text is fine to start.",
+        "One topic, and one clear ask. Say what you need, and ask what works for them.",
+        "Talk about the kitchen, not the person: “The sink keeps filling up” lands better than “You’re so messy.”",
+        "When they answer, listen first and say back what you heard before you explain."
+      ],
+      "links": [
+        [
+          "How to bring it up if you hate confrontation",
+          "/sharing-a-room.html#bring-it-up"
+        ],
+        [
+          "Cleaning: one owner for each shared job",
+          "/sharing-a-room.html#cleaning"
+        ],
+        [
+          "Check a message first (Chat analyzer, roommates)",
+          "/signal-translator.html?rel=roommates"
+        ]
+      ],
+      "notPat": "\\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|kids?|son|daughter)\\b",
+      "script": [
+        "Can we talk about something small tonight?",
+        "Hey, can we find ten minutes this week to sort out a couple of kitchen things? Nothing’s wrong, I’d just rather we sort it early than let it get awkward.",
+        "I’m not upset with you. I just think we never talked about this."
+      ],
+      "scriptLabels": [
+        "A calm first text",
+        "A calm opener, in full",
+        "If you’re worried it sounds like an attack"
+      ],
+      "follow": [
+        [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got|says?|said) (mad|angry|upset|annoyed|cross|defensive|offended|weird|no)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(if|what if) (she|he|they) (says?|said) no\\b|\\b(refuses?|wont do it|won t do it)\\b",
+          "roommad"
+        ],
+        [
+          "\\b(ra|r a|resident (assistant|advisor)|housing office|residence (staff|life)|warden)\\b",
+          "rahelp"
+        ]
+      ],
+      "plain": [
+        "A small talk early is kinder than a big one later.",
+        "Pick a calm time.",
+        "Ask for one thing.",
+        "Talk about the kitchen, not the person."
+      ]
+    },
+    {
       "id": "sharingroom",
       "kind": "intent",
       "first": true,
@@ -9787,6 +10007,64 @@
       ]
     },
     {
+      "id": "shorttexts",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "short texts like “fine” or “ok”",
+      "pat": "\\b(texts?|texted|replies|replied|answers?|says|said|writes|wrote|messages?|sends?|sent)( me)?( back)?( just)? (fine|ok|okay|k|kk|fine go sleep)\\b.{0,60}\\b(mad|upset|angry|annoyed|cross|hurt|means?|meant|know|tell|sure)\\b|\\b(one word|short|dry|cold|blunt) (texts?|replies|answers|messages)\\b.{0,50}\\b(mad|upset|angry|annoyed|cross|hurt|means?|meant|know|tell)\\b|\\bwhat does (fine|ok|okay|k) mean\\b",
+      "what": [
+        "Over text, “Fine.” can mean “Fine, go ahead” or “I’m upset and I don’t want to say so.” “Ok” can be relaxed or cold. Without a face or a voice, each of you fills in the tone yourself, and a tired or lonely mind tends to fill it in badly."
+      ],
+      "how": [
+        "Ask, don’t assume. “Fine as in good, or fine as in not really?” is a kind question.",
+        "Say your own tone out loud when it matters: “Short reply because I’m on the bus. All good.”",
+        "Agree it once, on a calm day: “No reply means busy, never mad. If I’m upset, I’ll say so in words.”",
+        "Move hard things to a call: “Can we talk about this on the phone tonight?”"
+      ],
+      "links": [
+        [
+          "Reading short texts carefully",
+          "/long-distance.html#texts"
+        ],
+        [
+          "Anxiety and a slow texter",
+          "/wired-differently-in-depth.html#pairs"
+        ],
+        [
+          "Chat analyzer: check a short text",
+          "/signal-translator.html"
+        ]
+      ],
+      "script": [
+        "Fine as in good, or fine as in not really?",
+        "Can we talk about this on the phone tonight?"
+      ],
+      "scriptLabels": [
+        "A kind question",
+        "If it’s getting tense"
+      ],
+      "plain": [
+        "“Fine” can mean many things.",
+        "Ask, don’t guess.",
+        "Say your own tone out loud.",
+        "Move hard talks to a call."
+      ],
+      "follow": [
+        [
+          "\\btime ?zones?\\b|\\btime difference\\b|\\bwhat time (should|do|can) we\\b|\\bhours? (ahead|behind|apart)\\b|\\btwo phones\\b",
+          "ldtimezones"
+        ],
+        [
+          "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
+          "shorttexts"
+        ]
+      ]
+    },
+    {
       "id": "longdistance",
       "kind": "intent",
       "first": true,
@@ -9839,34 +10117,37 @@
         "If you usually reach out",
         "If you call less",
         "After a short text"
+      ],
+      "follow": [
+        [
+          "\\btime ?zones?\\b|\\btime difference\\b|\\bwhat time (should|do|can) we\\b|\\bhours? (ahead|behind|apart)\\b|\\btwo phones\\b",
+          "ldtimezones"
+        ],
+        [
+          "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
+          "shorttexts"
+        ]
       ]
     },
     {
       "id": "ldtimezones",
       "kind": "intent",
       "first": true,
-      "newTopic": false,
-      "name": "time zones when you live apart",
-      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(hours?|\\d+ ?h(ours)?) (ahead|behind)\\b",
-      "notPat": "",
+      "newTopic": true,
+      "topic": true,
       "keys": [],
+      "chips": [],
+      "name": "time zones in a long-distance relationship",
+      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(\\d+|five|six|seven|eight|nine|ten|eleven|twelve) hours? (ahead|behind|apart|difference)\\b|\\b(what|which) time (should|do|can|could|would) (we|i) (call|facetime|video ?call|talk|ring|speak)\\b.{0,80}\\b(in [a-z]+|ahead|behind|abroad|apart|away|different)\\b|\\b(i m|im|i am|we re|were) in [a-z]+( [a-z]+)? and (she|he|they|my \\w+) (s|is|are|re) in [a-z]+\\b",
       "what": [
-        "Time zones squeeze the moments you have, so it helps to find your overlap on purpose and protect it."
+        "Different time zones squeeze the moments you have, so the hours you’re both awake and free are precious. Here’s how the long-distance page suggests finding them:"
       ],
       "how": [
-        "Write both days side by side: when each of you wakes, works, eats and sleeps, in your own time. Mark the hours you’re both awake and free.",
-        "Say whose time you mean: “Call at eight, your time.” A second clock on your phone helps.",
-        "Take turns with the awkward hours, or at least say thank you out loud to whoever stays up late or gets up early.",
-        "Keep hard topics away from the tired call: the end of one person’s long day and the start of the other’s."
-      ],
-      "script": [
-        "Can we find the hours we’re both free and keep two of them for us each week? I’ll take the early one this time."
-      ],
-      "plain": [
-        "Find the hours you are both free.",
-        "Say whose time you mean.",
-        "Take turns with late or early calls.",
-        "Don’t start hard talks when one of you is tired."
+        "Write down both days side by side: when each of you wakes, works, eats and sleeps, in your own time.",
+        "Mark the hours when you are both awake and free. That overlap is precious, so protect it.",
+        "Say whose time you mean. “Call at eight, your time” saves a lot of missed calls, and a second clock on your phone helps.",
+        "Take turns with the awkward hours, or at least say thank you out loud. And watch for the tired call: the end of one person’s long day is not the time for a hard topic.",
+        "Doing it together, each on your own phone? Work on it together has “our week” on one page, and check-ins you can share by link: you each fill in your own part, and nobody’s answers overwrite the other’s."
       ],
       "links": [
         [
@@ -9874,11 +10155,37 @@
           "/long-distance.html#time-zones"
         ],
         [
-          "Who calls, and how often",
+          "Work on it together, on two phones",
+          "/together.html"
+        ],
+        [
+          "Who calls, and how often: agree it",
           "/long-distance.html#rhythm"
         ]
       ],
-      "chips": []
+      "notPat": "\\b(kids?|children|son|daughter|baby|toddler|child|handoffs?|hand ?overs?|custody|pick ?ups?|pickups?|drop ?offs?|co ?parent\\w*|school)\\b",
+      "script": [
+        "Can we each write down our week and find the hours we’re both awake and free? Then we can pick our call times together."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "plain": [
+        "Write down both your days.",
+        "Find the hours you are both free.",
+        "Say whose time you mean.",
+        "Take turns with late calls."
+      ],
+      "follow": [
+        [
+          "\\btime ?zones?\\b|\\btime difference\\b|\\bwhat time (should|do|can) we\\b|\\bhours? (ahead|behind|apart)\\b|\\btwo phones\\b",
+          "ldtimezones"
+        ],
+        [
+          "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
+          "shorttexts"
+        ]
+      ]
     },
     {
       "id": "judged",
@@ -10886,6 +11193,238 @@
       ]
     },
     {
+      "id": "exstoptext",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "wanting to text an ex",
+      "pat": "\\b(stop|quit|not|avoid|resist) (texting|messaging|calling|ringing|contacting|dming|snapchatting|stalking|checking) (my|an|the|our) ex\\b|\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm|snap|contact|reach out to) (my )?ex\\b|\\b(texting|messaging|text|message|call|calling|ringing) my ex\\b|\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm) (him|her|them)\\b.{0,50}\\b(ex|broke up|break ?up|split up|dumped|we split)\\b|\\b(ex|broke up|break ?up|split up|dumped|we split)\\b.{0,60}\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm) (him|her|them)\\b|\\b(\\d ?am|\\d+ in the morning|midnight|middle of the night|late at night|its late|so late|cant sleep|can t sleep)\\b.{0,60}\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm) (him|her|them|my ex)\\b|\\b(want|wanna|urge|tempted|itching|dying|keep wanting) to (text|message|call|ring|dm) (him|her|them|my ex)\\b.{0,40}\\b(\\d ?am|midnight|middle of the night|late at night|cant sleep|can t sleep)\\b|\\b(miss|missing) my ex\\b|\\bcheck(ing)? (my )?ex (profile|insta|instagram|stories|posts|socials|page)\\b",
+      "what": [
+        "Wanting to text an ex is very common, especially late at night, and the pull can feel urgent. It’s a feeling, not an instruction: you don’t have to act on it tonight."
+      ],
+      "how": [
+        "Go easy on late-night messages to your ex, as the breakup page puts it. Waiting until morning costs nothing, and you can still decide then.",
+        "If the words won’t leave you alone, write them out somewhere private instead of in the chat. Nobody needs to read it.",
+        "Put the phone out of reach for the night. In a made-up example on the breakup page, Tom muted his ex and put his phone on the other side of the room after 10 pm, and his nights got calmer.",
+        "Muting or archiving their posts is a kind choice for you, not a statement to them. You don’t have to unfriend or block anyone.",
+        "Text a friend instead, even one line. If you can’t sleep, a few minutes of slow breathing in the Night Garden can help."
+      ],
+      "links": [
+        [
+          "After a breakup: the first days",
+          "/after-a-breakup.html#first-days"
+        ],
+        [
+          "Their posts and photos",
+          "/after-a-breakup.html#their-feed"
+        ],
+        [
+          "Cool-down corner: Night Garden, breathe",
+          "/night-garden.html"
+        ]
+      ],
+      "notPat": "\\b(kids?|children|son|daughter|baby|toddler|child|handoffs?|hand ?overs?|custody|pick ?ups?|pickups?|drop ?offs?|co ?parent\\w*|school|hopeless|cant go on|can t go on|no point|kill|hurt (myself|me))\\b",
+      "script": [
+        "We’ve split up. I don’t need advice yet. Could you text me in the evenings this week?",
+        "Today I only need to get through today."
+      ],
+      "scriptLabels": [
+        "To a friend",
+        "To yourself"
+      ],
+      "plain": [
+        "Wanting to text an ex is very common.",
+        "Wait until morning.",
+        "Write the words down instead.",
+        "Put the phone away for the night.",
+        "Text a friend."
+      ],
+      "follow": [
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "breakupwave"
+        ],
+        [
+          "\\b(text|texting|message|messaging|call|calling|ring|dm|contact|reach out to) (him|her|them|my ex|the ex)\\b|\\b(miss|missing) (him|her|them)\\b",
+          "exstoptext"
+        ]
+      ]
+    },
+    {
+      "id": "breakupwave",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "crying a lot after a breakup",
+      "pat": "\\b(cry|crying|cried|in tears|tearing up|sobbing)\\b.{0,30}\\b(every day|everyday|all the time|every night|each day|so much|non ?stop|constantly|daily|every morning)\\b|\\b(cant|can t|cannot) stop crying\\b|\\bis it normal to (still )?(cry|be crying|feel this sad|miss (him|her|them|my ex))\\b",
+      "what": [
+        "Yes, it’s common. After a loss, and a breakup is a real loss, feelings tend to come in waves: a hard hour, then an ordinary one. Over weeks, the hard waves usually come less often, and many people recover faster than they expected. As someone on the breakup page put it: “That’s a wave, not a slide.”"
+      ],
+      "how": [
+        "Keep three basics going: some sleep, a proper meal, and daylight every day.",
+        "Once a day, take a one-minute reading of how you are. My weather today keeps it on this device, so you can see the waves get smaller.",
+        "Tell one or two people what would help: company, a walk, or a message each evening.",
+        "If the heaviness doesn’t lift over a few weeks, if you can’t sleep or eat, or if you feel hopeless, please tell someone today: a friend, your doctor, or a helpline."
+      ],
+      "links": [
+        [
+          "Feelings come in waves (after a breakup)",
+          "/after-a-breakup.html#waves"
+        ],
+        [
+          "When it feels heavy",
+          "/after-a-breakup.html#heavy"
+        ],
+        [
+          "Help beyond this site: someone to talk to",
+          "/outside-help.html#talk"
+        ]
+      ],
+      "notPat": "\\b(died|passed|passed away|funeral|death|widow\\w*|grief|griev\\w*|bereave\\w*|lost (my|our)|kids?|children|son|daughter|baby|toddler|child)\\b",
+      "script": [
+        "This really hurts, and it makes sense that it hurts."
+      ],
+      "scriptLabels": [
+        "To yourself"
+      ],
+      "plain": [
+        "Crying a lot after a breakup is common.",
+        "Feelings come in waves.",
+        "The waves get smaller over weeks.",
+        "If it stays very heavy, tell someone."
+      ],
+      "follow": [
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "breakupwave"
+        ],
+        [
+          "\\b(text|texting|message|messaging|call|calling|ring|dm|contact|reach out to) (him|her|them|my ex|the ex)\\b|\\b(miss|missing) (him|her|them)\\b",
+          "exstoptext"
+        ]
+      ]
+    },
+    {
+      "id": "griefevening",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "a hard evening after a loss",
+      "pat": "\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b.{0,80}\\b(evenings?|nights?|night time|after dark|weekends?|sundays?)\\b|\\b(evenings?|nights?|night time|after dark|weekends?|sundays?)\\b.{0,60}\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b",
+      "what": [
+        "I’m so sorry. Evenings can be the longest part of the day, especially after losing someone you shared them with. You don’t have to fill them. Here are a few quiet things from the grief page, nothing you have to finish:"
+      ],
+      "how": [
+        "The Night Garden: breathe slowly with a glowing light, and watch a flower bloom with each breath.",
+        "Calm music (Brain Breakers): soft background music to settle with, at a low volume.",
+        "Loneliness: what helps when the house feels too quiet, in plain words.",
+        "A simple shape to the day helps the hard hours: a walk, regular meals, and getting up at about the same time.",
+        "See people, a little: a short call, a neighbour, a club. Ten minutes every Sunday is easier to keep than a long call now and then."
+      ],
+      "links": [
+        [
+          "For a hard evening",
+          "/grief.html#hard-evening"
+        ],
+        [
+          "Living on your own after a loss",
+          "/living-alone.html#your-situation"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ],
+      "script": [
+        "Could you help me with something? I’d also just like the company."
+      ],
+      "scriptLabels": [
+        "To a grown child or a friend"
+      ],
+      "plain": [
+        "I’m so sorry.",
+        "Evenings can be the hardest time.",
+        "Breathe slowly in the Night Garden.",
+        "Play some calm music.",
+        "Call someone, even for ten minutes."
+      ],
+      "follow": [
+        [
+          "\\b(evenings?|nights?|night time|after dark|weekends?|sundays?|the house is (so )?quiet|quiet house|empty house|house feels (so )?(empty|quiet))\\b|\\bthe worst (time|part)\\b|\\b(lonely|so quiet|on my own|by myself|alone)\\b",
+          "griefevening"
+        ],
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "griefwaves"
+        ]
+      ],
+      "after": [
+        "griefwaves"
+      ]
+    },
+    {
+      "id": "griefwaves",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "crying and waves of grief",
+      "pat": "\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b.{0,80}\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b.{0,60}\\b(lost (my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend)|(my|our) (wife|husband|partner|spouse|mum|mom|mother|dad|father|son|daughter|child|baby|brother|sister) (died|passed|passed away|is gone)|widow\\w*|bereave\\w*|griev\\w*|grief|since (she|he|they) (died|passed))\\b",
+      "what": [
+        "Crying, weeks or months on, is part of grieving, not a sign you’re stuck. Grieving people tend to swing between facing the loss (remembering, missing them, crying) and getting on with daily life. Both are healthy. A good morning followed by a hard afternoon is not going backwards."
+      ],
+      "how": [
+        "There’s no schedule you should be keeping to. The path grief takes varies widely from person to person.",
+        "Staying connected to the person who died is healthy: talking to them, keeping a few of their things, marking their birthday.",
+        "Enjoying something is not a betrayal of the person you lost.",
+        "If the weight doesn’t lift at all over many months, or you can’t manage daily life, talk to your doctor or a grief counsellor. Asking for help doesn’t mean you loved them any less."
+      ],
+      "links": [
+        [
+          "Grief has no timetable",
+          "/grief.html#grief"
+        ],
+        [
+          "For a hard evening",
+          "/grief.html#hard-evening"
+        ],
+        [
+          "When to get more help",
+          "/grief.html#help"
+        ]
+      ],
+      "plain": [
+        "Crying is part of grief.",
+        "Good and hard hours both come.",
+        "There is no timetable.",
+        "If it does not lift for months, see a doctor."
+      ],
+      "follow": [
+        [
+          "\\b(evenings?|nights?|night time|after dark|weekends?|sundays?|the house is (so )?quiet|quiet house|empty house|house feels (so )?(empty|quiet))\\b|\\bthe worst (time|part)\\b|\\b(lonely|so quiet|on my own|by myself|alone)\\b",
+          "griefevening"
+        ],
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "griefwaves"
+        ]
+      ],
+      "after": [
+        "griefevening"
+      ]
+    },
+    {
       "id": "grief",
       "kind": "intent",
       "first": true,
@@ -10921,6 +11460,20 @@
           "How do I reconnect with my grown kids?",
           "How do I reconnect with my grown children?"
         ]
+      ],
+      "follow": [
+        [
+          "\\b(evenings?|nights?|night time|after dark|weekends?|sundays?|the house is (so )?quiet|quiet house|empty house|house feels (so )?(empty|quiet))\\b|\\bthe worst (time|part)\\b|\\b(lonely|so quiet|on my own|by myself|alone)\\b",
+          "griefevening"
+        ],
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "griefwaves"
+        ]
+      ],
+      "after": [
+        "griefevening",
+        "griefwaves"
       ]
     },
     {
@@ -11212,6 +11765,50 @@
           "/upset-right-now.html"
         ],
         [
+          "Help beyond this site: someone to talk to, free",
+          "/outside-help.html#talk"
+        ],
+        [
+          "Loneliness: what the research says",
+          "/library/connection.html#loneliness"
+        ],
+        [
+          "Turning toward: small ways to connect",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Something small for today",
+          "Give me one thing to do"
+        ]
+      ],
+      "safety": true,
+      "teenAlt": "lonelyteen"
+    },
+    {
+      "id": "lonelyteen",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling lonely",
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "keys": [],
+      "what": [
+        "That sounds really heavy, and I’m glad you said it. Is it more than a bad day? Feeling lonely is really common, and it isn’t a flaw in you. It’s a signal, a bit like hunger, that you need more connection, and it tends to ease with small, regular contact rather than one big fix."
+      ],
+      "how": [
+        "Pick one person and send one easy message today, like “Saw this and thought of you”. Small, low-pressure contact counts.",
+        "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
+        "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor. If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
+      ],
+      "links": [
+        [
+          "Cool-down corner: Upset right now? A few minutes to settle",
+          "/upset-right-now.html"
+        ],
+        [
           "For teens: when it’s more than a bad day",
           "/teens.html#help"
         ],
@@ -11270,6 +11867,65 @@
         ]
       ],
       "safety": true
+    },
+    {
+      "id": "breakup",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "after a breakup",
+      "pat": "\\b(i|we) (just |recently |finally )?(broke up|split up|separated)\\b|\\b(he|she|they|my (boyfriend|girlfriend|partner|bf|gf|fiance\\w*)) (broke up with me|dumped me|left me|ended (it|things))\\b|\\b(got|been|was|just got) dumped\\b|\\bmy (break ?up|breakup)\\b|\\b(after|since) (the|my|our) (break ?up|breakup)\\b|\\bbroke up with (my|him|her|them)\\b|\\bgoing through a (break ?up|breakup)\\b",
+      "what": [
+        "I’m sorry. A breakup is a real loss, even when you wanted it. In the first days the job is small: get through each one. You don’t have to understand what happened yet, or be “over it.”"
+      ],
+      "how": [
+        "Keep three basics going: some sleep, a proper meal, and daylight every day.",
+        "Tell one or two people what has happened, and what would help: company, a walk, or just a message each evening.",
+        "Hold off on big decisions you don’t have to make this week.",
+        "Go easy on late-night messages to your ex, alcohol, and scrolling their profiles. Muting is a kind choice for you, not a statement to them."
+      ],
+      "links": [
+        [
+          "After a breakup: steady again",
+          "/after-a-breakup.html"
+        ],
+        [
+          "Feelings come in waves",
+          "/after-a-breakup.html#waves"
+        ],
+        [
+          "A gentle two-week path",
+          "/after-a-breakup.html#path"
+        ]
+      ],
+      "notPat": "\\b(kids?|children|son|daughter|custody|co ?parent\\w*|handoffs?|divorc\\w*|should (i|we)|thinking (about|of)|considering|want to|wants to)\\b",
+      "script": [
+        "We’ve split up. I don’t need advice yet. Could you text me in the evenings this week?",
+        "Today I only need to get through today."
+      ],
+      "scriptLabels": [
+        "To a friend",
+        "To yourself"
+      ],
+      "plain": [
+        "A breakup is a real loss.",
+        "Sleep, eat and go outside each day.",
+        "Tell a friend what would help.",
+        "Go easy on late-night texts to your ex."
+      ],
+      "follow": [
+        [
+          "\\b(cry|crying|cried|in tears|tearing up|sobbing|waves?|going backwards|not over (it|her|him)|still (so )?sad)\\b|\\bis it normal\\b",
+          "breakupwave"
+        ],
+        [
+          "\\b(text|texting|message|messaging|call|calling|ring|dm|contact|reach out to) (him|her|them|my ex|the ex)\\b|\\b(miss|missing) (him|her|them)\\b",
+          "exstoptext"
+        ]
+      ]
     },
     {
       "id": "bioparent",
@@ -17587,6 +18243,52 @@
       "name": "a sad or heavy day",
       "pat": "\\b(i|im|i m|i am) (feel|feeling|am feeling|m feeling)? ?(so |really |very |a bit |kind of |kinda )?(sad|low|blue|miserable|hopeless|empty)( today| tonight| lately| right now| again)?$|^(im|i m|i am|feeling) (so |really |very |a bit )?(sad|miserable|hopeless)\\b|\\b(tired|sick|exhausted) of (everything|it all|life|all of it)\\b|\\b(having|had) (a|such a) (bad|awful|horrible|rough|terrible|sad) day\\b|\\bnothing (feels|seems) (worth it|good anymore)\\b|\\b(low|down|sad|empty|flat) and (alone|lonely)\\b|\\b(alone|lonely) and (low|down|sad|empty)\\b|^(i feel like )?(nobody|no one|noone) (really )?(gets|understands|gets|cares about|listens to|likes) me\\b|\\bi (feel|m|am) (like )?(nobody|no one|noone) (really )?(gets|understands|cares about) me\\b|^(i|im|i m|i am) (feel|feeling|am feeling|m feeling)? ?(so |really |very |pretty |kind of |kinda )?(low|down)\\b",
       "notPat": "\\b(died|passed away|funeral|baby|retir\\w*|ex|breakup|broke up)\\b",
+      "keys": [],
+      "what": [
+        "That sounds really heavy. Is it more than a bad day? Either way, you don’t need a reason, or to have it all worked out, to deserve some kindness."
+      ],
+      "how": [
+        "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
+        "Tell one person you trust, even in one line: “I’m having a hard day.”",
+        "Make the day smaller: pick one small thing to do, and let the rest wait.",
+        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step.",
+        "If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
+      ],
+      "script": [
+        "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
+      ],
+      "plain": [
+        "I’m sorry you feel this way.",
+        "Drink some water and eat something.",
+        "Tell one person you trust.",
+        "If it lasts more than two weeks, see your doctor.",
+        "If you feel you can’t go on, call or text 988 (US) or 116 123 (UK). Under 18 in the UK: Childline, 0800 1111."
+      ],
+      "links": [
+        [
+          "Cool-down corner: Upset right now? A few minutes to settle",
+          "/upset-right-now.html"
+        ],
+        [
+          "Help beyond this site: someone to talk to, free",
+          "/outside-help.html#talk"
+        ],
+        [
+          "Your self path",
+          "/self-path.html"
+        ]
+      ],
+      "chips": [],
+      "safety": true,
+      "teenAlt": "feelinglowteen"
+    },
+    {
+      "id": "feelinglowteen",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a sad or heavy day",
+      "pat": "\\b(zzqx_never_matches)\\b",
       "keys": [],
       "what": [
         "That sounds really heavy. Is it more than a bad day? Either way, you don’t need a reason, or to have it all worked out, to deserve some kindness."

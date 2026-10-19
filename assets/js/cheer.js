@@ -124,9 +124,22 @@
   }
 
   // ---------- where they sit ----------
-  var blocks = [], kids = main.children;
+  // home16b: never inside a serious section: one marked data-sensitive, or one whose heading is about loss, safety, a
+  // crisis, or a parent who can't be there (in prison, in treatment, ill). From such a heading to the next one at the
+  // same level, no friend sits between the paragraphs.
+  var SERIOUS_H = /\b(grie(f|ving)|bereave|loss|lost (a|my|your|someone)|died|death|dying|funeral|safe(ty)?\b|not safe|abuse|violen|afraid|danger|crisis|suicid|self-harm|harm\b|hurt\b|prison|jail|treatment|rehab|addict|overdose|can.t be there|cannot be there|away from (him|her|them|home)|hospital|seriously ill|when it.s more|control(ling)?\b|coercive|emergency|helpline|hotline)/i;
+  function seriousEl(k) { return !!(k.matches('[data-sensitive]') || k.querySelector('[data-sensitive]') || k.closest('[data-sensitive]')); }
+  var blocks = [], kids = main.children, zone = 0;
   for (var i = 0; i < kids.length; i++) {
     var k = kids[i], tag = k.tagName;
+    var lvl = /^H[23]$/.test(tag) ? +tag.charAt(1) : (/^(SECTION|ARTICLE)$/.test(tag) ? 1 : 0);
+    if (lvl) {
+      var hd = lvl === 1 ? k.querySelector('h2, h3') : k;
+      var serious = seriousEl(k) || !!(hd && SERIOUS_H.test(hd.textContent || ''));
+      if (serious) zone = lvl; else if (zone && lvl <= zone) zone = 0;
+      if (lvl === 1 && serious) { zone = 0; continue; }   // a serious <section> is skipped whole
+    }
+    if (zone || seriousEl(k)) continue;
     if (k.matches('.read-head, .depth-bar, .tol-gentle, .tol-private, .tol-tip, .tol-welcome, nav, script, style, .tol-cheer, [hidden], .no-cheer, .tol-gate, .locked-section') || !k.getClientRects().length) continue;
     if (/^(P|DIV|OL|UL|H2|H3|SECTION|BLOCKQUOTE|FIGURE|ASIDE|TABLE|DETAILS)$/.test(tag)) blocks.push(k);
   }

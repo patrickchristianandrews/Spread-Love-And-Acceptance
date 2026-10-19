@@ -1185,10 +1185,10 @@
     me.level = k + 1;
   };
   Derby.prototype.intro = function () {
-    var me = this; paused = true;
+    var me = this; paused = true; swingWait(true);
     overlay('Home Run Derby', me.P.name + ' bats and ' + PUPS[me.pit].name + ' pitches. Ten pitches. Swing as the ring closes on the plate: tap the field, press the big Swing button, or press space.', '⚾ Play ball', function () { paused = false; last = 0; me.begin(); }, 'Want the other pup to bat? Swap roles.', { label: '⇄ Swap roles', fn: function () { derbyAgain(true); } });
   };
-  Derby.prototype.begin = function () { var me = this; me.phase = 'ready'; me.pt = 0; me.talk(); SFX.charge(); me.hype = 0.6; };
+  Derby.prototype.begin = function () { var me = this; swingWait(false); me.phase = 'ready'; me.pt = 0; me.talk(); SFX.charge(); me.hype = 0.6; };
   Derby.prototype.talk = function () {
     var me = this, pool = Math.random() < 0.3 ? DLINES.cheeky : DLINES[me.kind];
     me.bubble = { text: pick(pool), t: 0 };
@@ -1510,6 +1510,19 @@
     showStage();
     if (game.intro) game.intro();
   }
+  // tools16: while the Derby's "Play ball" card is up, the big Swing button says so (it does nothing until then)
+  function swingWait(on) {
+    var sw = $('ar-swing'); if (!sw) return;
+    sw.classList.toggle('is-wait', !!on);
+    if (on) sw.setAttribute('aria-disabled', 'true'); else sw.removeAttribute('aria-disabled');
+    sw.innerHTML = on ? '&#9918; Tap “Play ball” first' : '&#9918; Swing!';
+  }
+  function swingNudge() {
+    say('Tap Play ball to start. Then swing.');
+    var go = $('ar-ov-go'); if (!go || $('ar-overlay').hidden) return;
+    try { go.focus({ preventScroll: true }); } catch (e) { go.focus(); }
+    if (!reduced) { go.classList.remove('is-nudge'); void go.offsetWidth; go.classList.add('is-nudge'); }
+  }
   // game mode: the site's floating pills step aside while a game is on (site.css, body.tol-gaming)
   function gaming(on) { if (D.body) D.body.classList.toggle('tol-gaming', !!on); }
   // only the on-screen arrows this game uses, and its own short how-to
@@ -1576,8 +1589,8 @@
     Object.keys(GAMES).forEach(function (gm) {
       var el = $('ar-best-' + gm); if (!el) return; var a = +S.best[gm + ':tidbit'] || 0, b = +S.best[gm + ':sugarfoot'] || 0;
       if (gm === 'derby') { var fa = +S.best['derby-ft:tidbit'] || 0, fb = +S.best['derby-ft:sugarfoot'] || 0;
-        el.textContent = (fa || fb) ? 'Most home runs: Tidbit ' + a + (fa ? ' (' + fa + ' ft)' : '') + ', Sugarfoot ' + b + (fb ? ' (' + fb + ' ft)' : '') : 'No score yet. Be the first.'; return; }
-      el.textContent = (a || b) ? 'Best so far: Tidbit ' + a + ', Sugarfoot ' + b : 'No score yet. Be the first.';
+        el.textContent = (fa || fb) ? 'Most home runs: Tidbit ' + a + (fa ? ' (' + fa + ' ft)' : '') + ', Sugarfoot ' + b + (fb ? ' (' + fb + ' ft)' : '') : 'Your best: none yet'; return; }
+      el.textContent = (a || b) ? 'Best so far: Tidbit ' + a + ', Sugarfoot ' + b : 'Your best: none yet';
     });
   }
   function previews() {
@@ -1626,8 +1639,8 @@
     });
     var sw = $('ar-swing');
     if (sw) {   // the big Swing button: it swings the moment it's pressed (a keyboard press arrives as a click)
-      sw.addEventListener('pointerdown', function (e) { if (!running || paused || !game || !game.swing) return; e.preventDefault(); game.swing(); });
-      sw.addEventListener('click', function (e) { if (e.detail === 0 && running && !paused && game && game.swing) game.swing(); });
+      sw.addEventListener('pointerdown', function (e) { if (sw.classList.contains('is-wait')) { e.preventDefault(); swingNudge(); return; } if (!running || paused || !game || !game.swing) return; e.preventDefault(); game.swing(); });
+      sw.addEventListener('click', function (e) { if (e.detail === 0 && sw.classList.contains('is-wait')) { swingNudge(); return; } if (e.detail === 0 && running && !paused && game && game.swing) game.swing(); });
     }
     // /frequency-journey.html#derby opens the menu with the Home Run Derby picked
     if (location.hash === '#derby') { S.game = 'derby'; var dr = D.querySelector('input[name="ar-game"][value="derby"]'); if (dr) dr.checked = true; startLabel(); }
@@ -1635,6 +1648,14 @@
     window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize);
     var wrap = $('ar-wrap'); wrap.addEventListener('pointerdown', onPointerDown); wrap.addEventListener('pointermove', onPointerMove); wrap.addEventListener('pointerup', onPointerUp); wrap.addEventListener('pointercancel', function () { ptr = null; });
     syncToggles(); refreshBest();
+    // tools16: someone who came here from another game's row of tabs lands on the game picker, not the page's opening
+    try {
+      var ref = D.referrer ? new URL(D.referrer) : null;
+      if (!location.hash && ref && ref.origin === location.origin && /^\/(pause-and-play|coin-pusher|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|frequency-buddies-music-video-maker|night-garden)\.html$/.test(ref.pathname)) {
+        var toPicker = function () { var sel = $('ar-select'); if (!sel || sel.hidden) return; var top = sel.getBoundingClientRect().top + (window.pageYOffset || 0) - headerH() - 6; window.scrollTo(0, Math.max(0, top)); };
+        toPicker(); setTimeout(toPicker, 300);
+      }
+    } catch (e) { /* ignore */ }
     var go = function () { previews(); };
     if (window.TOLPups) go(); else window.addEventListener('load', go);
   }

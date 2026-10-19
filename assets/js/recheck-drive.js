@@ -148,6 +148,31 @@
       why: 'One kept change is worth more than a list.' }
   ];
 
+  // tools16: for "A child or teen", the cards use words a child would use too (the drive is something you can play
+  // together). Only what's listed changes; the yards and the rest stay the same.
+  var KID = {
+    state: { cat: 'Check how you feel', title: 'Check how you feel first', how: 'Before a real talk, take a breath. Are you tired, cross or in a hurry? Then wait for a calmer moment. Waiting is part of the play.', why: 'How you feel changes how your words come out.' },
+    notice: { cat: 'Notice', title: 'Notice one small thing', how: 'Pick one small thing you’ve noticed lately, like you’ve both been busy, or you haven’t laughed together much. Just notice it. You don’t have to fix it yet.', why: 'Noticing is the first step.' },
+    ask: { cat: 'Ask', title: 'Ask a question you don’t know the answer to', how: 'Ask it, then listen to the whole answer. No fixing and no “when I was your age”. People keep changing, kids most of all.', why: 'A real question helps you know them as they are now.' },
+    thank: { cat: 'Thank', title: 'Say one thank-you, and say what for', how: 'Say exactly what they did, like “you fed the cat without being asked”. Saying what for shows you really noticed.', why: 'Kind things we’re used to get noticed again.' },
+    share: { cat: 'Your side', title: 'Tell them how your week has been', how: 'Say one true thing about how your week has been, and how that might have made you busy or grumpy. They can’t know unless you tell them.', why: 'Now they don’t have to guess how you’re doing.' },
+    theirs: { cat: 'Their side', title: 'Ask how things have been for them', how: 'Ask how things have been for them, then listen to all of it. Try not to argue or explain. Their side is the other half of the story.', why: 'You need both sides to understand each other.' },
+    listen: { cat: 'Listen', title: 'Say back what you heard', how: 'When they answer, say back what you heard before you reply, and check you got it right.', why: 'Feeling heard comes before getting an answer.' },
+    raise: { cat: 'Bring it up kindly', title: 'Bring something up kindly', how: 'Pick a calm time. Say what you’ve noticed, your own part, and ask a question. No “you always” or “you never”. You’re on the same team.', why: 'Kind words open the door without a fight.' },
+    touchstone: { cat: 'Shared joke', title: 'Bring back a shared joke', how: 'Use a silly word, a joke, a song or a story that only the two of you share. A few words can say “we’re a team”.', why: 'Shared jokes say “we’re us”.' },
+    recheck: { cat: 'Catch-up', title: 'Plan a regular catch-up', how: 'Pick a day and a small, easy thing, like a walk or a snack together. Put it on the calendar now.', why: 'A regular catch-up keeps you close.' },
+    change: { cat: 'Try one thing', title: 'Agree one small thing to try', how: 'Pick one small thing you’ll both try, say who does what, and pick a day to see how it went.', why: 'One small thing you keep is better than a big list.' }
+  };
+  var KID_LINES = {
+    notice: 'We’ve both been busy lately, and I miss our time together.',
+    raise: 'Nothing’s wrong. I’ve noticed we haven’t talked much lately, and that’s partly me. How are you doing?',
+    listen: 'So you mean ___? Did I get that right?',
+    change: 'Let’s try ___ this week, and see how it went on ___.'
+  };
+  function view(p) {
+    if (S.who !== 'young' || !KID[p.id]) return p;
+    var v = {}, k; for (k in p) v[k] = p[k]; for (k in KID[p.id]) v[k] = KID[p.id][k]; return v;
+  }
   var byId = {};
   PLAYS.forEach(function (p) { byId[p.id] = p; });
 
@@ -168,6 +193,7 @@
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function whoName(k) { for (var i = 0; i < WHO.length; i++) if (WHO[i][0] === k) return WHO[i][1]; return ''; }
   function lineFor(p, who) {
+    if (who === 'young' && KID_LINES[p.id]) return KID_LINES[p.id];
     var l = p.lines[who] || (LIKE[who] && p.lines[LIKE[who]]) || p.lines.all || '';
     return Array.isArray(l) ? l[Math.floor(Math.random() * l.length)] : l; // a few examples: one of them each time
   }
@@ -176,13 +202,14 @@
   function badgeWords(who) {
     if (who === 'us') return ['You each shared your side', 'You each heard the other’s side'];
     if (who === 'self') return ['Your own side named', 'Someone else’s view asked for'];
+    if (who === 'young') return ['You told them how your week has been', 'You asked how theirs has been'];
     return ['Your context shared', 'Their context asked for'];
   }
   function lineLabel(y) { return y < 50 ? 'your ' + y : (y === 50 ? 'the 50' : 'their ' + (100 - y)); }
   function xOf(y) { return X0 + y * PX; }
 
   /* ---------- saved state (this browser only) ---------- */
-  var S = { who: '', yards: START, done: [], hand: [], kicked: false, total: 0, started: false, flags: { mine: false, theirs: false } };
+  var S = { who: '', yards: START, down: 1, done: [], hand: [], kicked: false, total: 0, started: false, flags: { mine: false, theirs: false } };
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
@@ -191,6 +218,7 @@
       if (d && typeof d === 'object') {
         S.who = typeof d.who === 'string' ? d.who : '';
         S.yards = typeof d.yards === 'number' ? Math.max(START, Math.min(TOP, d.yards)) : START;
+        S.down = typeof d.down === 'number' ? Math.max(1, Math.min(4, Math.round(d.down))) : 1;
         S.done = Array.isArray(d.done) ? d.done.filter(function (i) { return byId[i]; }) : [];
         S.hand = Array.isArray(d.hand) ? d.hand.filter(function (i) { return byId[i]; }) : [];
         S.kicked = !!d.kicked;
@@ -276,6 +304,9 @@
     ball.appendChild(b);
     f.appendChild(ball);
   }
+  // the down: 1st after every first down, then 2nd, 3rd, 4th for each play that doesn't reach the line (tools16).
+  // Every play gains at least 3 yards, so a 4th down always gets there: there is no way to lose the ball.
+  var DOWNS = ['1st', '2nd', '3rd', '4th'];
   function nextFirst(y) { return START + 10 * (Math.floor((y - START) / 10) + 1); }
   function place(y) {
     var yy = Math.min(y, TOP);
@@ -290,7 +321,7 @@
     var h = $('rd-hand');
     while (h.firstChild) h.removeChild(h.firstChild);
     S.hand.forEach(function (id) {
-      var p = byId[id];
+      var p = view(byId[id]);
       var b = el('button', { type: 'button', 'class': 'rd-card', 'data-play': id });
       b.appendChild(el('span', { 'class': 'rd-cat' }, p.cat));
       b.appendChild(el('strong', null, p.title));
@@ -330,7 +361,7 @@
     var shf = $('rd-shuffle'); if (shf) shf.textContent = pl ? 'Show me other ideas' : 'Show me different plays';
     var fill = $('rd-path-fill'); if (fill) fill.style.width = (S.kicked ? 100 : Math.max(4, Math.min(96, (y - START) / (KICK - START) * 92))) + '%';
     $('rd-us').textContent = S.kicked ? '3' : '0';
-    $('rd-down').textContent = S.kicked ? 'FIELD GOAL' : (y >= KICK ? 'FIELD-GOAL RANGE' : '1st & ' + Math.max(1, nf - y));
+    $('rd-down').textContent = S.kicked ? 'FIELD GOAL' : (y >= KICK ? 'FIELD-GOAL RANGE' : DOWNS[(S.down || 1) - 1] + ' & ' + Math.max(1, nf - y));
     $('rd-status').textContent = pl ? (S.kicked ? 'Round finished.' : S.done.length ? 'Small kind things done: ' + S.done.length + '.' : 'Pick one small, kind thing to do.') : S.kicked ? 'The kick is good.' : 'The ball is on ' + lineLabel(y) + '.';
     $('rd-sub').textContent = S.kicked ? '' : (y >= KICK
       ? 'You’re in field-goal range. Kick now, or call another play for extra yards.'
@@ -342,7 +373,7 @@
     var bw = badgeWords(S.who);
     mine.className = 'rd-badge' + (S.flags.mine ? ' is-on' : ''); mine.textContent = (S.flags.mine ? '●' : '○') + ' ' + bw[0];
     theirs.className = 'rd-badge' + (S.flags.theirs ? ' is-on' : ''); theirs.textContent = (S.flags.theirs ? '●' : '○') + ' ' + bw[1];
-    var bwrap = mine.parentNode; if (bwrap) bwrap.setAttribute('aria-label', S.who === 'us' ? 'Both of your sides' : 'Both sides’ context');
+    var bwrap = mine.parentNode; if (bwrap) bwrap.setAttribute('aria-label', S.who === 'us' || S.who === 'young' ? 'Both of your sides' : 'Both sides’ context');
     $('rd-kick').hidden = !(y >= KICK && !S.kicked);
     $('rd-handwrap').hidden = !!S.kicked;
     $('rd-done').hidden = !S.kicked;
@@ -350,7 +381,7 @@
     // the log
     var ol = $('rd-log-list');
     while (ol.firstChild) ol.removeChild(ol.firstChild);
-    S.done.forEach(function (id) { ol.appendChild(el('li', null, byId[id].title + (pl ? '' : ' (+' + byId[id].yards + ')'))); });
+    S.done.forEach(function (id) { ol.appendChild(el('li', null, view(byId[id]).title + (pl ? '' : ' (+' + byId[id].yards + ')'))); });
     $('rd-log').hidden = !S.done.length;
   }
   function renderAll() {
@@ -363,7 +394,7 @@
   }
 
   function openPlay(id) {
-    var p = byId[id], sheet = $('rd-sheet');
+    var p = view(byId[id]), sheet = $('rd-sheet');
     while (sheet.firstChild) sheet.removeChild(sheet.firstChild);
     sheet.appendChild(el('p', { 'class': 'rd-cat' }, plainOn() ? p.cat : p.cat + ' · +' + p.yards + ' yards'));
     sheet.appendChild(el('h3', null, p.title));
@@ -389,13 +420,14 @@
   }
 
   function finishPlay(id) {
-    var p = byId[id], before = S.yards;
+    var p = view(byId[id]), before = S.yards;
     S.yards = Math.min(TOP, S.yards + p.yards);
     if (S.done.indexOf(id) < 0) S.done.push(id);
     if (p.flag) S.flags[p.flag] = true;
     // together, a turn each means both of you shared and both of you listened
     if (S.who === 'us' && (p.flag || id === 'listen')) { S.flags.theirs = true; if (p.flag) S.flags.mine = true; }
     var crossed = nextFirst(before) <= S.yards && nextFirst(before) <= 100;
+    S.down = crossed ? 1 : Math.min(4, (S.down || 1) + 1);
     dealHand();
     $('rd-sheet').hidden = true;
     renderAll();
@@ -432,6 +464,14 @@
           ? (S.who === 'us' ? 'You each shared your side and heard the other’s. That is what lets two people understand each other.' : 'You shared your side and asked for theirs. That is what lets two people understand each other.')
           : (S.who === 'us' ? 'Next round, try taking turns to share your side and hear the other’s.' : 'Next round, try sharing your own side and asking for theirs.'));
         $('rd-done-h').textContent = 'Well done!';
+        renderStatus(); save(); celebrate(); $('rd-again').focus(); btn.disabled = false;
+        return;
+      }
+      if (S.who === 'young') {
+        p.textContent = both
+          ? 'The kick is good! You told them how your week has been and asked how theirs has been. That’s how two people understand each other. Us 3, the Rut 0.'
+          : 'The kick is good! Us 3, the Rut 0. Next drive, try telling them how your week has been and asking how theirs has been: both sides is how two people understand each other.';
+        $('rd-done-h').textContent = 'It’s good!';
         renderStatus(); save(); celebrate(); $('rd-again').focus(); btn.disabled = false;
         return;
       }
@@ -480,14 +520,14 @@
 
   function driveText() {
     var lines = [S.who === 'us' ? 'Our Re-check Drive, together:' : 'My Re-check Drive, for ' + whoName(S.who).toLowerCase() + ':'];
-    S.done.forEach(function (id) { lines.push('✓ ' + byId[id].title); });
+    S.done.forEach(function (id) { lines.push('✓ ' + view(byId[id]).title); });
     lines.push(plainOn() ? (S.kicked ? 'Round finished.' : 'Still on the path.') : S.kicked ? 'Field goal: good.' : 'Ball on ' + lineLabel(S.yards) + '.');
     lines.push('From spreadloveandacceptance.com/recheck-drive.html');
     return lines.join('\n');
   }
 
   function newDrive(keepWho) {
-    S.yards = START; S.done = []; S.hand = []; S.kicked = false; S.flags = { mine: false, theirs: false };
+    S.yards = START; S.down = 1; S.done = []; S.hand = []; S.kicked = false; S.flags = { mine: false, theirs: false };
     S.started = !!(keepWho && S.who);
     if (S.started) dealHand();
     ball.style.transition = '';
@@ -515,7 +555,7 @@
     $('rd-start').addEventListener('click', function () {
       var r = document.querySelector('input[name="rd-who"]:checked');
       S.who = r ? r.value : 'self';
-      S.started = true; S.yards = START; S.done = []; S.kicked = false; S.flags = { mine: false, theirs: false };
+      S.started = true; S.yards = START; S.down = 1; S.done = []; S.kicked = false; S.flags = { mine: false, theirs: false };
       dealHand(); save(); renderAll();
       $('rd-hand').querySelector('.rd-card').focus();
     });

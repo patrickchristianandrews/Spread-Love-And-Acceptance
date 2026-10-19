@@ -1748,6 +1748,17 @@ function analyze(textIn, opts){
       if(/\b(?:have to|has to|got to|end up|ends up|left to|left with|stuck|everything|always me|the one\b|on my own|by myself|alone|get (?:any|no)|nobody|no one|help(?:s|ed)?|anymore|any more|see (?:you|them|him|her|the)|hear from|invited|included|asked|thanked|told|chosen|picked|listened)\b/.test(st)) return false;
       return true;
     });
+    // "I never mind driving": never minding is generous, not a door shut
+    drop("stonewall", h=>/^never ?mind/i.test(h.match) && /\b(?:i|we|you|they|he|she|honestly i|really)\s+$/.test(lc.slice(Math.max(0,h.s-14), h.s)));
+    // "Not a big deal at all, I'll grab milk on the way": generous about your own errand, not brushing off their feeling
+    drop("brushoff", h=>/big deal/i.test(h.match) && /\b(?:i'll|i will|i can|happy to|no trouble|i don't mind|don't worry)\b/.test(sentText(h)));
+    drop("invalid", h=>/big deal/i.test(h.match) && /\b(?:i'll|i will|i can|happy to|no trouble|i don't mind|don't worry)\b/.test(sentText(h)));
+    // "do you ever think we gave up too soon?": a real question, not blame
+    drop("blameq", h=>/^\s*(?:think|wonder|miss|feel|remember|want|dream)\b/.test(lc.slice(h.e, h.e+12)) || /\bdo you ever (?:think|wonder|miss|feel|remember|want)\b/.test(lc.slice(h.s, h.s+30)));
+    // "I just want to feel close to you again": a wish to get back to something good, not "again" as a jab
+    drop("again", h=>/\b(?:want to|wanna|would love to|'d love to|can't wait to|hope (?:we|to)|let's|i'd like to|like to)\b[^.!?]{0,40}$/.test(lc.slice(Math.max(0,h.s-60), h.s)) && /\b(?:feel|be|get|see|hear|hold|hug|meet|hang out|laugh|talk|go|do this|have)\b/.test(lc.slice(Math.max(0,h.s-40), h.s)));
+    // "I just want to feel like you actually want to talk to me": a wish, said with the feeling. A bid, not a demand
+    drop("demand", h=>/\b(?:want|wants|wanted|like|love|need|would|'d|wish you'd|wish you would)\s+(?:to\s+)?(?:actually\s+|just\s+|really\s+)?$/.test(lc.slice(Math.max(0,h.s-24), h.s)));
     // "I'm spending it on my own, on purpose": about yourself, not a guess at their motive
     drop("motive", h=>!YOU.test(sentText(h)));
     // "do you just want to chill for a bit?": an offer, not "calm down"
@@ -1855,6 +1866,10 @@ function analyze(textIn, opts){
     // a Spanish request ("¿Puedes recoger a los niños el viernes?", "Llámame cuando llegues, por favor") is still an ask
     sentences.forEach((se,i)=>{ const st = lc.slice(se.s, se.e); if(/(?:^|[\s¿¡])(?:puedes|podr[ií]as|podemos|me ayudas)\b|\bpor favor\b|^\s*[¿¡]?(?:ll[aá]mame|llama|trae|compra|recoge|saca|limpia|ven)\b/.test(st) && !askSentEs.includes(i)) askSentEs.push(i); });
   }
+  // "Sure. Do what you want, you will anyway.": curt pieces with a jab on the end are a brush-off, whatever the punctuation
+  if(CURT_JAB.test(low.trim()) && !hits.some(h=>h.id==="brushoff" || h.id==="minimal")) push("brushoff", 0, raw.trim().length);
+  // "Your post came here again": "again" about a thing that keeps happening, not a jab at anyone
+  for(let i=hits.length-1;i>=0;i--){ const h=hits[i]; if(h.id==="again" && /\b(?:post|mail|parcel|package|letter|bill|wifi|internet|boiler|car|it|this|that)\s+(?:came|arrived|turned up|showed up|happened|broke|stopped|went off|is down|was down)\b[^.!?]{0,24}$/i.test(low.slice(Math.max(0,h.s-50), h.s))) hits.splice(i,1); }
   // a shutdown reply: "fine. go sleep", "ok", "its fine", "nothing. its fine", "k", "whatever": often hurt, not done.
   // "go sleep" in one isn't an order with a missing time, so it isn't read as one
   let shutdown = null;
@@ -1924,6 +1939,8 @@ function APOLOGY_AT(low){
     if(/\bnot\s+$|\bno\s+$/.test(before)) continue;
     if(/\b(?:scared|afraid|worried|think|thought|feel like|hope|in case)\s+(?:that\s+)?(?:i\s+)?$/.test(before)) continue;
     if(/^\s*(?:not sorry|you feel|you're|you are|if you|that you|for you\b|but you're|,?\s*but\b)/.test(after)) continue;
+    // "sorry to bother you", "sorry, I don't want to be annoying": politeness before an ask, not an apology for anything
+    if(/^\s*,?\s*(?:to (?:bother|ask|be a pain|be annoying|annoy|disturb|interrupt|nag|message|text|chase|hassle|keep (?:asking|on)|bring (?:this|it) up)|(?:but\s+)?i (?:don't|do not|dont) (?:want|mean) to (?:be|bother|nag|annoy)|if i'm being (?:annoying|a pain)|for the (?:long|late|early) (?:message|text|reply))\b/i.test(after)) continue;
     return m.index;
   }
   return -1;
@@ -2261,6 +2278,14 @@ function rewriteBase(an, opts){
     log.push({id:"brushoff", from:[text], to:["say which one you mean"], extra:""});
     return finish(out, out, log, an, W, opts);
   }
+  // "fine. go sleep", "nothing. its fine": say which one you mean, never "Could you go sleep by [a time]?"
+  if(an.shutdown && !MINIMAL_FIX[low]){
+    const out = /sleep|bed|night/i.test(text)
+      ? "[If you're really okay:] All good, sleep well. [If you're not:] I'm a bit hurt, and I'm too tired to talk well right now. Can we talk at [a time]?"
+      : "[If it's really fine:] It's fine, honestly. [If it isn't:] I'm a bit hurt, and I'm not ready to talk yet. Can we talk at [a time]?";
+    log.push({id:"minimal", from:[text], to:["say which one you mean"], extra:""});
+    return finish(out, out, log, an, W, opts);
+  }
   if(has("minimal") && MINIMAL_FIX[low]){
     const out = MINIMAL_FIX[low];
     log.push({id:"minimal", from:[text], to:[out], extra:""});
@@ -2521,8 +2546,9 @@ function rewriteBase(an, opts){
                .replace(/\b(you|could you|can you|didn't|don't|can't|couldn't|won't|not) even\b/gi, (mm,w)=>{ note("again","even",""); return w; });
   }
   // an absolute that slipped through a rewrite ("always", "never") becomes "often" / "rarely"
-  if(has("absolute") && /\b(?:always|never)\b/i.test(main)){
-    main = main.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; });
+  if(has("absolute") && /\b(?:always|never)\b/i.test(main.replace(/\u201c[^\u201d]*\u201d/g,""))){
+    // (what they said, in quotes, stays as they said it)
+    main = main.split(/(\u201c[^\u201d]*\u201d)/).map((seg, si)=>si % 2 ? seg : seg.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; })).join("");
   }
   if(laterLine) main = endP(main.replace(/\s+$/,""))+" "+laterLine;
   // the plain facts, when given ("His inhaler wasn't in the bag on Sunday."), say what happened better than "Lately it's felt like you…"
@@ -2662,6 +2688,12 @@ function calmSentence(s0, ctx, note){
 function ingBase(w){ const l=w.toLowerCase().replace(/ing$/,""); if(/([^aeiouls])\1$/.test(l)) return l.slice(0,-1); if(VERBSET.has(l)) return l; if(VERBSET.has(l+"e")) return l+"e"; return l; }
 function rewriteSentence(s, ctx, note, an, W){
   let t = s.trim(), m;
+  // "I don't get why you keep saying I never notice anything": the defence goes; what stung is said, and one shared ask
+  m = t.match(/^(?:but |and |honestly,? )?i (?:don't|do not|dont|really don't) (?:get|understand|see) why you (?:keep|always|still) (?:saying|telling me|say|tell me|acting like|act like|making out|make out)(?: that)? (.{3,80}?)[.!?]*$/i);
+  if(m){ const said = m[1].replace(/[.!?\s]+$/,"").replace(/\b(i'm|i am|i|my|me|myself|mine)\b/gi, w=>({"i'm":"you're","i am":"you are",i:"you",my:"your",me:"you",myself:"yourself",mine:"yours"})[w.toLowerCase()]);
+    // (their words aren't repeated: "you're lazy" said back is still a label)
+    const rep = (said ? "It stings when I hear that about me." : "It stings when I hear that.")+" Can we look at it together at [a time]?";
+    note("defend", t.replace(/[.!?]+$/,""), rep); ctx.noAsk = true; ctx.critical = true; return rep; }
   // "Can you read the room?": say what you noticed and what you'd like, not a figure of speech with a deadline
   if(/^(?:(?:hey|so|ok(?:ay)?),?\s+)?(?:can|could) you (?:please |just |maybe )?(?:try to )?read the room\b[^.!?]*[?.!]*$/i.test(t)){
     const rep = "[Say what you noticed, like \"Sam seems tired.\"] Could we [what you'd like instead, like \"wrap this up\"]?";
@@ -2974,7 +3006,7 @@ function rewriteSentence(s, ctx, note, an, W){
 
   // --- openers with no topic
   const OMIN = [
-    [/^(?:we (?:need|have) to (?:have a )?(?:talk|chat|conversation)|we need to have a (?:talk|conversation|chat)|we should talk|i need to (?:talk|speak) (?:to|with) you|can we talk|can i talk to you)(?! about)\b(?:\s+(?:later|tonight|soon|when you get home|when you can))?[.!?]*$/i, "Can we talk about [the topic] at [a time]? [Say how big it is, like \"Nothing's wrong\" or \"It's important, and we're okay.\"]"],
+    [/^(?:we (?:need|have) to (?:have a )?(?:talk|chat|conversation)|we need to have a (?:talk|conversation|chat)|we should talk|i need to (?:talk|speak) (?:to|with) you|can we talk|can i talk to you)(?! about)\b(?:\s+(later|tonight|soon|when you get home|when you can))?[.!?]*$/i, m=>"Can we talk about [the topic] "+(m[1] && !/^(?:later|soon|when you can)$/i.test(m[1]) ? m[1] : "at [a time]")+"? [Say how big it is, like \"Nothing's wrong\" or \"It's important, and we're okay.\"]"],
     [/^call me(?:\s+(?:when you can|asap|now|when you get this))?[.!?]*$/i, "Could you call me about [the topic] by [a time]? [Say whether it's urgent.]"],
     [/^don't be mad,?(?:\s*but)?\s*/i, "I'm a little nervous to tell you this: "],
     [/^don't freak out,?(?:\s*but)?\s*/i, "Everyone's okay. There's something I want to tell you: "],
@@ -2990,7 +3022,10 @@ function rewriteSentence(s, ctx, note, an, W){
       m=>"Could you come to my "+m[1].toLowerCase()+(m[2]&&m[2].trim()?" "+m[2].trim():" at [a time]")+" to talk about [the topic]? [Say how serious it is, like \"Nothing's wrong, it's a quick question.\"]"],
     [/^(?:(?:hey|hi|so)\b,?\s+)?(?:can i (?:grab|borrow|steal) you(?: for a (?:minute|sec|second|moment))?|do you have (?:a )?(?:minute|sec|second|moment))[?.!]*$/i, "Do you have a few minutes at [a time] to talk about [the topic]? [Say how serious it is.]"]
   ];
-  for(const [re,rep] of OMIN){ if(re.test(t)){ const mm=t.match(re); const r = typeof rep==="function" ? rep(mm) : rep; t=t.replace(re,r); note("ominous", mm[0].replace(/[\s:]+$/,""), r.replace(/\s+$/,"")); break; } }
+  // "I felt hurt when you said k. Can we talk tonight?": the topic is already said and the time is theirs. A time or topic
+  // the writer gave is never swapped for a blank, and a clear message isn't made longer
+  const omSkip = ctx.nSents>1 && /^(?:can we talk|can i talk to you|we should talk)\b/i.test(t) && (WHEN_REAL.test(t) || an.goodIds.includes("feeling") || an.found.istate);
+  if(!omSkip) for(const [re,rep] of OMIN){ if(re.test(t)){ const mm=t.match(re); const r = typeof rep==="function" ? rep(mm) : rep; t=t.replace(re,r); note("ominous", mm[0].replace(/[\s:]+$/,""), r.replace(/\s+$/,"")); break; } }
 
   // --- telling someone how to feel, invalidation, tone, demands (kept from the first version)
   const OLD = [
@@ -3036,7 +3071,7 @@ function rewriteSentence(s, ctx, note, an, W){
     ["softno",/\bi'll think about it\b/gi, "I'll think about it [and tell you by when]"],
     ["urgent",/\bhurry(?: up)?\b[.!]*/gi, "Could we leave by [a time]?"]
   ];
-  OLD.forEach(([id,re,rep])=>{ re.lastIndex=0; if(re.test(t)){ re.lastIndex=0; const mm=(t.match(re)||[""])[0]; t=t.replace(re,rep); note(id, mm.replace(/[.!?]+$/,""), rep); if(["tone","vemo","calm","invalid"].includes(id)) ctx.critical = ctx.critical || id==="vemo"; } });
+  OLD.forEach(([id,re,rep])=>{ if(id==="demand" && !an.found.demand) return; re.lastIndex=0; if(re.test(t)){ re.lastIndex=0; const mm=(t.match(re)||[""])[0]; t=t.replace(re,rep); note(id, mm.replace(/[.!?]+$/,""), rep); if(["tone","vemo","calm","invalid"].includes(id)) ctx.critical = ctx.critical || id==="vemo"; } });
 
   // --- criticism questions
   const CQ = [
@@ -3199,14 +3234,14 @@ function rewriteSentence(s, ctx, note, an, W){
   if(m){ const c=oneClause(m[2]+m[3]); t = c.ok ? lately(m[1], "Lately it's felt like you "+c.head+"."+c.rest, "always") : plainBlank(m[1], "always"); }
   m = t.match(/^(.*?)\byou never (\w+)(.*?)([.!?]*)$/i);
   if(m){ const v=m[2].toLowerCase(); const neg = PAST[v]||/ed$/.test(v) ? "didn't "+baseVerb(v) : "don't "+v; const c=oneClause(neg+m[3]); t = c.ok ? lately(m[1], "Lately it's felt like you "+c.head+"."+c.rest, "never") : plainBlank(m[1], "never"); }
-  m = t.match(/^every (?:single )?time (.+?)([.!?]*)$/i);
+  m = !an.found.absolute ? null : t.match(/^every (?:single )?time (.+?)([.!?]*)$/i);
   if(m){ t = "Lately, when "+m[1]+"."; note("absolute","every time","lately, when"); ctx.critical=true; }
   m = t.match(/^(nobody|no one|nothing|everyone|everybody)(?: else)? ever (.+?)([.!?]*)$/i) || t.match(/^(nobody|no one)(?: else)? (cares|helps|listens|does|thinks)(.*?)([.!?]*)$/i);
   if(m){ t = "It feels like "+m[1].toLowerCase()+" "+m[2]+(m[3]&&!/^[.!?]*$/.test(m[3])?m[3]:"")+"."; note("absolute", m[1]+(/ever/.test(orig)?" ever":""), "it feels like…"); ctx.critical=true; }
-  t = t.replace(/\b(?:constantly|all the time)\b/gi, mm=>{ note("absolute", mm.toLowerCase(), "a lot lately"); ctx.critical=true; return "a lot lately"; });
-  t = t.replace(/\bevery (?:single )?time\b/gi, mm=>{ note("absolute", mm.toLowerCase(), "a few times lately"); ctx.critical=true; return "a few times lately"; });
+  if(an.found.absolute) t = t.replace(/\b(?:constantly|all the time)\b/gi, mm=>{ note("absolute", mm.toLowerCase(), "a lot lately"); ctx.critical=true; return "a lot lately"; });
+  if(an.found.absolute) t = t.replace(/\bevery (?:single )?time\b/gi, mm=>{ note("absolute", mm.toLowerCase(), "a few times lately"); ctx.critical=true; return "a few times lately"; });
   t = t.replace(/\b(you|you're|he|she|they|he's|she's|they're) always\b/gi, (mm,a)=>{ note("absolute","always","often"); ctx.critical=true; return a+" often"; });
-  t = t.replace(/\b(do|doing|does|did) everything\b(?! (?:i|we|you) can\b)/gi, (mm,v)=>{ note("absolute","everything","most of the work"); ctx.critical=true; return v+" most of the work"; });
+  if(an.found.absolute) t = t.replace(/\b(do|doing|does|did) everything\b(?! (?:i|we|you) can\b)/gi, (mm,v)=>{ note("absolute","everything","most of the work"); ctx.critical=true; return v+" most of the work"; });
 
   // --- past-bringing
   t = t.replace(/,?\s*\b(?:just )?like (?:the )?last time\b/gi, mm=>{ note("past", mm.replace(/^[,\s]+/,""), ""); return ""; });

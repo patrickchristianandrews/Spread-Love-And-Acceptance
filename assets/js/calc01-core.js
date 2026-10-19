@@ -221,7 +221,7 @@
         out.push({ key: 'wb', gain: (h.after - o.wb) * w.wb,
           text: 'Hand about ' + f1(h.hours) + ' hour' + (h.hours === 1 ? '' : 's') + ' a week from ' + nm(h.from) + ' to ' + nm(h.to) +
             '. Balance would go from ' + f2(o.wb) + ' to ' + f2(h.after) + '.',
-          link: ['Who did what, and kind ways to say no (WP-01)', '/workpapers/fill/wp-01.html'] });
+          link: ['Who did what, and kind ways to say no', '/workpapers/fill/wp-01.html'] });
       }
       out.push({ key: 'wb-all', gain: (1 - o.wb) * w.wb, full: true,
         text: 'A split that fully matches your ' + (o.balance && o.balance.mode === 'agreed' ? 'agreed shares' : 'even shares') + ' would add up to ' + fg((1 - o.wb) * w.wb) + '.' +
@@ -231,7 +231,7 @@
       var t = o.ownership.total, own = o.ownership.owned;
       out.push({ key: 'oc', gain: w.oc / t,
         text: 'Give one more job an owner (the person who does it and sees it through). Ownership would go from ' + f2(o.oc) + ' to ' + f2((own + 1) / t) + '.',
-        link: ['One owner per job (WP-03)', '/workpapers/fill/wp-03.html'] });
+        link: ['One owner per job', '/workpapers/fill/wp-03.html'] });
       if (t - own > 1) out.push({ key: 'oc-all', gain: (1 - o.oc) * w.oc, full: true,
         text: 'Naming owners for all ' + (t - own) + ' unowned jobs would add ' + fg((1 - o.oc) * w.oc) + '. Keep them on the list until they have names; deleting them only hides them.' });
     }
@@ -239,7 +239,7 @@
       var drop = Math.min(0.10, o.as);
       out.push({ key: 'as', gain: drop * w.as,
         text: 'If the average stress tank score came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
-        link: ['How much are you carrying? (WP-02)', '/workpapers/fill/wp-02.html'] });
+        link: ['How much are you carrying?', '/workpapers/fill/wp-02.html'] });
     }
     out.sort(function (a, b) { return (a.full ? 1 : 0) - (b.full ? 1 : 0) || b.gain - a.gain; });
     return out;
@@ -329,11 +329,38 @@
     return out.found.length ? out : null;
   }
 
+  /* ---------- "Use our quick look" ---------- */
+  // The Who does what? quick look kept on this device ('tol-lemonade-quick', only read, never changed): the names,
+  // the home jobs someone answered (each with its one owner where everyone who answered names the same person),
+  // and the paid hours typed there. null when there's nothing to use.
+  function quickLook() {
+    var q = null;
+    try { var raw = global.localStorage && global.localStorage.getItem('tol-lemonade-quick'); q = raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+    if (!q || !Array.isArray(q.people) || !Array.isArray(q.list) || !q.ans || typeof q.ans !== 'object') return null;
+    var n = Math.max(MIN_PEOPLE, Math.min(MAX_PEOPLE, q.people.length));
+    var names = []; for (var i = 0; i < n; i++) names.push(String(q.people[i] || '').trim().slice(0, 40));
+    var lx = Array.isArray(q.lx) ? q.lx : [];
+    var jobs = [];
+    q.list.forEach(function (id, k) {
+      if (typeof id !== 'string') return;
+      var x = lx[k] && lx[k].length === 2 ? lx[k] : null, kind = x ? x[1] : 'home';
+      if (kind === 'work') return;
+      var vals = [];
+      for (var p = 0; p < n; p++) { var a = q.ans[p] && q.ans[p][id]; if (a === 'b' || (typeof a === 'number' && a >= 0 && a < n)) vals.push(a); }
+      if (!vals.length) return;
+      var nm = x ? String(x[0]) : /^c:/.test(id) ? id.slice(2) : id.charAt(0).toUpperCase() + id.slice(1);
+      jobs.push({ name: nm.slice(0, 60), owner: typeof vals[0] === 'number' && vals.every(function (v) { return v === vals[0]; }) ? vals[0] : -1 });
+    });
+    if (!jobs.length) return null;
+    var paid = names.map(function (_, k) { var h = q.hrs && +q.hrs[k]; return h > 0 && h <= 168 ? h : 0; });
+    return { names: names, jobs: jobs, owned: jobs.filter(function (j) { return j.owner >= 0; }).length, paid: paid };
+  }
+
   global.TOLCalc01 = {
     W: W, BANDS: BANDS, WP02: WP02, MIN_PEOPLE: MIN_PEOPLE, MAX_PEOPLE: MAX_PEOPLE,
     r2: r2, f2: f2, f1: f1, fg: fg, pct: pct, num: num, sum: sum,
     balance: balance, balanceHandoff: balanceHandoff, ownership: ownership, concentration: concentration,
     battery: battery, wp02Band: wp02Band, stress: stress, retuning: retuning,
-    solvency: solvency, apex: apex, band: band, BAND_NOTE: BAND_NOTE, shareWords: shareWords, suggestions: suggestions, shortfalls: shortfalls, suiteDraft: suiteDraft, hoursProblem: hoursProblem
+    solvency: solvency, apex: apex, band: band, BAND_NOTE: BAND_NOTE, shareWords: shareWords, suggestions: suggestions, shortfalls: shortfalls, suiteDraft: suiteDraft, quickLook: quickLook, hoursProblem: hoursProblem
   };
 })(window);

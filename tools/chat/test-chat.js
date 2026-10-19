@@ -2080,6 +2080,134 @@ if (PERSONA) {
   t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html|conversation-reader/.test(u)) ? 'an old URL' : '' });
 }
 
+// ---------------------------------------------------------------- panel16 (puddles16): the review panel's own words, and paraphrases
+{
+  const G = 'panel16';
+  const noLink = re => r => replyLinks(r).some(u => re.test(u)) ? 'a link it shouldn’t have: ' + replyLinks(r).filter(u => re.test(u)).join(', ') : '';
+  const allLinks = list => r => list.filter(u => !replyLinks(r).some(x => x.indexOf(u) === 0)).map(u => 'no link to ' + u).join('; ');
+  const both = (...fs) => (r, rs, text) => fs.map(f => f(r, rs, text)).filter(Boolean).join('; ');
+  const CODES = /\b(WP|CALC|REPORT|PROG)-\d+\b|Say it so it lands Say it so it lands/;
+  const ES = '/en-espanol.html', CARE_ES = '/workpapers/fill/wp-03.html?for=care&lang=es';
+
+  // 1. "how do i stop texting my ex": the breakup page, never co-parenting handoffs (unless kids or handoffs come up)
+  ['how do i stop texting my ex', 'how can I stop messaging my ex', 'i keep wanting to text my ex, how do i stop', 'how do i stop calling my ex all the time'].forEach(q =>
+    t(G, q, { id: 'exstoptext', link: '/after-a-breakup.html', not: /handoff|Pick-up is Sunday|reading folder/i, check: noLink(/co-parenting/) }));
+  t(G, 'texting an ex about the kids is co-parenting', { q: 'how do i stop texting my ex so much about the kids at pick-up', not: /Wanting to text an ex is very common/, check: r => r.id === 'exstoptext' ? 'the breakup card for a co-parent' : '' });
+  // 2. crying every day weeks after a breakup: "a wave, not a slide", never the same-argument playbook
+  c(G, ['i broke up with my boyfriend 3 weeks ago', 'is it normal to still cry every day after 3 weeks'], { id: 'breakupwave', link: '/after-a-breakup.html#waves', text: /wave, not a slide/, not: /same argument/ });
+  t(G, 'is it normal to still cry every day after 3 weeks', { id: 'breakupwave', link: '/after-a-breakup.html', not: /same argument|chores/i });
+  t(G, 'we split up a month ago and i cry every night', { id: 'breakupwave', text: /waves/ });
+  t(G, 'i cant stop crying since the breakup', { id: 'breakupwave', link: '/after-a-breakup.html#waves' });
+  c(G, ['my girlfriend dumped me', 'is it normal that i still cry all the time'], { id: 'breakupwave', not: /same argument/ });
+  t(G, 'i broke up with my boyfriend 3 weeks ago', { id: 'breakup', link: '/after-a-breakup.html', nochip: /chores|Things said the wrong way/ });
+  // 3. 2am and wanting to text him: the urge to text an ex, not only sleep
+  t(G, 'its almost 2am… i really want to text him', { id: 'exstoptext', link: '/after-a-breakup.html', text: /late-night messages/ });
+  t(G, 'it\'s 3am and I can\'t sleep, I want to text my ex', { id: 'exstoptext', link: '/after-a-breakup.html#first-days' });
+  c(G, ['i broke up with him last week', 'its late and i really want to text him'], { id: 'exstoptext', text: /late-night messages/ });
+  t(G, 'midnight and i\'m tempted to message her even though we broke up', { id: 'exstoptext' });
+  // 4. feeling hopeless: the safety reply as it was, with the adult help page (the teen page only for a teen)
+  ['honestly i feel kind of hopeless tonight', 'i feel so hopeless', 'im feeling really low tonight'].forEach(q =>
+    t(G, q, { id: 'feelinglow', link: '/outside-help.html#talk', text: /988/, check: noLink(/teens\.html/) }));
+  t(G, 'a teen feeling hopeless gets the teen page', { q: 'i\'m 15 and honestly i feel kind of hopeless tonight', id: 'feelinglowteen', link: '/teens.html#help', text: /988/ });
+  t(G, 'a crisis line is still the crisis reply', { q: 'i feel hopeless and i want to die', kind: 'safety', text: /988/ });
+  // 5. grief: evenings get the grief page's hard-evening list, and a grieving person is never told "I won't repeat them"
+  const NOREP = /won’t repeat|I’ve shared the main steps/;
+  c(G, ['my wife died in february and the house is so quiet', 'what do i do in the evenings, they are the worst'], { id: 'griefevening', link: '/grief.html#hard-evening', not: /catastroph|traffic|attribution/i, check: allLinks(['/living-alone.html', '/night-garden.html']) });
+  c(G, ['my wife died in february', 'i lost my wife. evenings are the hardest'], { id: 'griefevening', link: '/grief.html#hard-evening', not: NOREP });
+  t(G, 'i lost my wife. evenings are the hardest', { id: 'griefevening', link: '/grief.html#hard-evening', text: /sorry/ });
+  c(G, ['my husband passed away last year', 'the nights are so long and lonely'], { id: 'griefevening', not: NOREP });
+  c(G, ['my husband died', 'my husband died'], { link: '/grief.html', not: NOREP });
+  c(G, ['my husband died', 'my husband died', 'my husband died'], { link: '/grief.html', not: NOREP });
+  c(G, ['my mum passed away', 'is it normal to still cry every day'], { id: 'griefwaves', link: '/grief.html', not: /breakup|wave, not a slide/ });
+  t(G, 'my wife died and i cry every night', { id: 'griefwaves', not: /breakup/ });
+  // 6. "is this site just for couples?": no, it's for anyone
+  ['is this site just for couples?', 'is this only for couples', 'do i need a partner to use this site', 'i\'m single, is this for me?'].forEach(q =>
+    t(G, q, { id: 'forwhom', link: '/by-relationship.html', text: /^No\./, not: /Gratitude|find-remind-bind/ }));
+  // 7. "is this AI?": how Professor Puddles answers (rule-based, from the site's pages)
+  ['is this thing actually AI or just canned answers', 'are you an ai?', 'are these answers scripted?', 'is this just canned responses'].forEach(q =>
+    t(G, q, { id: 'honest', link: '/ask.html#how-he-answers', text: /rule-based|not a generative AI/, not: /don’t have a page/ }));
+  // 8. Spanish: a carer's brothers and sisters, anger and guilt at a parent; the caregiving answers and the Spanish care list
+  const ESP = { page: ES };
+  t(G, '¿Cómo le pido a mis hermanos que me ayuden con mi mamá sin que acabemos peleando?', Object.assign({ id: 'es-hermanos', link: CARE_ES, not: /pareja|Peleamos/, nochip: /gemelos/i }, ESP));
+  c(G, ['¿Cómo le pido a mis hermanos que me ayuden con mi mamá sin que acabemos peleando?', 'mi hermana dice que ella no puede porque vive lejos'], Object.assign({ id: 'es-hermanos-lejos', link: CARE_ES, text: /lejos también pueden ayudar/ }, ESP));
+  c(G, ['¿Cómo le pido a mis hermanos que me ayuden con mi mamá sin que acabemos peleando?', 'que hago si mis hermanos dicen que no'], Object.assign({ id: 'es-hermanos-no', link: CARE_ES }, ESP));
+  t(G, 'que hago si mis hermanos dicen que no', Object.assign({ id: 'es-hermanos-no', not: /¿De qué se trata/ }, ESP));
+  t(G, 'estoy resentido con mis hermanos', Object.assign({ id: 'es-resentimiento', link: ES + '#resentimiento', not: /¿De qué se trata/ }, ESP));
+  t(G, 'quiero repartir el cuidado de mi mamá con mis hermanos', Object.assign({ id: 'es-hermanos', link: CARE_ES, not: /Respira despacio/ }, ESP));
+  t(G, 'A veces me da rabia con mi madre y luego me siento culpable', Object.assign({ id: 'es-resentimiento', link: ES + '#resentimiento', not: /pareja/ }, ESP));
+  t(G, 'A veces me da rabia con mi madre y luego me siento culpable (not on the Spanish page)', { q: 'A veces me da rabia con mi madre y luego me siento culpable', id: 'es-resentimiento', not: /pareja/ });
+  c(G, ['¿Cómo le pido a mis hermanos que me ayuden con mi mamá sin que acabemos peleando?', 'mi hermana dice que ella no puede porque vive lejos', 'que hago si mis hermanos dicen que no', 'estoy resentido con mis hermanos', 'quiero repartir el cuidado de mi mamá con mis hermanos', 'A veces me da rabia con mi madre y luego me siento culpable'],
+    Object.assign({ id: 'es-resentimiento', not: /pareja/, nochip: /gemelos|Peleamos/i, check: (r, rs) => rs.some(x => x.id === 'es-menu' || /Respira despacio/.test(replyText(x))) ? 'a menu or the breathing reply on the way' : '' }, ESP));
+  t(G, 'mis hermanos no me ayudan con mi papá', Object.assign({ id: /^es-hermanos/, link: CARE_ES }, ESP));
+  t(G, 'me siento culpable porque me enojo con mi mamá', Object.assign({ id: 'es-resentimiento', not: /pareja/ }, ESP));
+  t(G, 'mi hermano vive en otra ciudad y no ayuda a cuidar a mi madre', Object.assign({ id: /^es-hermanos/, link: CARE_ES }, ESP));
+  t(G, 'tengo coraje con mis hermanas porque yo cuido sola a mi abuela', Object.assign({ id: 'es-resentimiento' }, ESP));
+  t(G, 'mis hijos pelean por la tableta (still the kids-fighting answer)', Object.assign({ q: 'mis hijos pelean por la tableta', id: 'es-hijos-pelean' }, ESP));
+  t(G, 'Spanish safety unchanged: mi pareja me pega', Object.assign({ q: 'mi pareja me pega', id: 'es-seguro', text: /1-800-799-7233/ }, ESP));
+  t(G, 'Spanish safety unchanged: tengo miedo de mi papá', Object.assign({ q: 'tengo miedo de mi papá', id: 'es-seguro' }, ESP));
+  t(G, 'Spanish safety unchanged: no quiero vivir', Object.assign({ q: 'no quiero vivir', id: 'es-988', text: /988/ }, ESP));
+  // 9. a co-parent who's late for pick-ups: a firm, time-based ask (reply-by, one reminder with a date, BIFF)
+  const LATEQ = 'my ex keeps showing up late for pickups and my kid waits. how do i tell her to knock it off without it turning into a war';
+  t(G, 'late for pickups, from the co-parenting page', { q: LATEQ, about: 'Co-parenting after a separation', id: 'coparentpickuplate', script: true, text: /text me by four|Firm/, not: /Keep the handoff itself short/ });
+  t(G, LATEQ, { id: 'coparentpickuplate', link: '/co-parenting.html', text: /one reminder with a date/ });
+  t(G, 'my ex is always late for drop-offs and the kids are left waiting', { id: 'coparentpickuplate' });
+  t(G, 'how do i get my co-parent to stop being late at handovers', { id: 'coparentpickuplate' });
+  c(G, ['we are separated co-parents', 'she is always late for pickups and he waits at the window'], { id: 'coparentpickuplate' });
+  // 10. "why did they react like that?": the matching card from The Logic Behind It
+  t(G, 'Why did my coworker say I embarrassed my manager? I only corrected a wrong number on his slide in the meeting.', { kind: 'logic', id: 'correcting', link: '/the-logic-behind-it.html#l-correcting', not: /RACI|Lemonade/, text: /Correcting in public/ });
+  t(G, 'why was my boss upset that i corrected his mistake in front of everyone', { id: 'correcting' });
+  t(G, 'my colleague says i embarrassed the manager by correcting an error on his slide, why?', { id: 'correcting' });
+  const GIFT = 'My mother asked if I liked the sweater she gave me. I said no and now she is upset. Why did she react like that?';
+  t(G, GIFT, { kind: 'logic', id: 'white-lie', link: '/the-logic-behind-it.html#l-white-lie', not: /absent parent/i });
+  t(G, 'my mum gave me a jumper for christmas and i told her the truth that i didnt like it. why did she get so upset?', { id: 'white-lie' });
+  t(G, 'why did my aunt get offended when i honestly said i didnt like her present', { id: 'white-lie' });
+  c(G, [GIFT, 'Is there research on this or are you just guessing?'], { id: 'white-lie-research', text: /Levine/, link: '/research.html#ref-levine-schweitzer-2015', not: /Huang|question-asking/ });
+  c(G, [GIFT, 'what could i say'], { id: 'white-lie-say', script: true });
+  t(G, 'My girlfriend says she will do things and then forgets. I take what she says literally. What is the logic behind that?', { not: /Talking and literal meaning \(\d+\)|Giving blunt/, text: /memory|forget/i });
+  c(G, ['My girlfriend says she will do things and then forgets. I take what she says literally. What is the logic behind that?', 'something quicker pls'], { kind: 'short', not: /I think you mean|not something I know/ });
+  t(G, 'a logic card is never a category run together', { q: 'why does my partner answer the literal question', check: r => (r.blocks || []).some(b => b.k === 'passage' && /\(\d+\)$/.test(b.h || '')) ? 'a category heading' : '' });
+  // 11. follow-ups stay on the topic just answered, with no raw codes or run-together headings
+  const FLAT = 'my flatmate leaves her dishes everywhere and i do all the cleaning';
+  c(G, [FLAT, 'what do i actually say to her'], { id: 'flatbringup', link: '/sharing-a-room.html#bring-it-up', script: true, not: new RegExp('flight attendant|' + CODES.source) });
+  c(G, [FLAT, 'what should i text her'], { id: 'flatbringup', script: true, not: CODES });
+  c(G, [FLAT, 'and if she says no'], { id: 'roommad', not: CODES });
+  c(G, [FLAT, 'is there research on this'], { id: 'source', not: /Huang|question-asking/ });
+  c(G, ['my husband never helps with the chores', 'what do i say to him'], { kind: 'sit-more', script: true, not: CODES });
+  c(G, ['my husband never helps with the chores', 'and if he says no'], { text: /answer, not a door closing/, link: '/book/preface-in-depth.html#faq' });
+  c(G, ['long distance relationship, we fight about who calls', 'she texts \'fine\' and I never know if she is mad'], { id: 'shorttexts', link: '/long-distance.html#texts', not: /scorecard|If you usually reach out/ });
+  t(G, 'she texts \'fine\' and I never know if she is mad', { id: 'shorttexts' });
+  c(G, ['long distance relationship, we fight about who calls', 'how do i bring it up without nagging'], { id: 'longdistance', text: /scorecard/ });
+  t(G, 'no raw codes in an everyday answer', { convo: [FLAT, 'how do we share it fairly'], not: CODES });
+  // 12. long distance and time zones: the time-zones section, and doing it together on two phones
+  t(G, 'what time should we call? I am in Toronto and she is in Dubai', { id: 'ldtimezones', link: '/long-distance.html#time-zones', check: allLinks(['/together.html']), nochip: /same fight|worn out/ });
+  t(G, 'we live in different time zones, when should we call?', { id: 'ldtimezones', link: '/long-distance.html#time-zones' });
+  t(G, 'she\'s 8 hours ahead of me, how do we find time to talk', { id: 'ldtimezones' });
+  c(G, ['long distance relationship, we fight about who calls', 'what time should we call with the time difference'], { id: 'ldtimezones', check: allLinks(['/together.html']) });
+  // 13. "what does the research say about …": the Library's research summary and the studies, with their evidence labels
+  t(G, 'what does the research say about contempt in couples', { id: 'research', link: '/library/relationships.html#four-horsemen', text: /evidence/i, check: allLinks(['/research.html']), not: /Fondness and admiration/ });
+  t(G, 'is there research on stonewalling', { id: 'research', link: '/library/relationships.html#four-horsemen' });
+  t(G, 'what does the research say about the four horsemen', { id: 'research', link: '/library/relationships.html#four-horsemen' });
+  t(G, 'what does the science say about contempt', { id: 'research', text: /Gottman/ });
+  // 14. a counsellor asking about a client: answered as a professional, every safety line kept
+  const CLIENT = 'my client\'s husband checks her phone and controls the money, would the chore tools help them?';
+  t(G, CLIENT, { kind: 'safety', text: /^No\..*do not assign the shared tools/, check: both(allLinks(['/for-counselors.html#safety', '/safety.html']), (r, rs, text) => /1-800-799-7233/.test(text) ? '' : 'the hotline went missing') });
+  t(G, 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', { kind: 'safety', text: /do not assign the shared tools/, link: '/for-counselors.html#safety' });
+  t(G, 'my client says her husband controls all the money, should i give them the chore chart?', { kind: 'safety', text: /do not assign the shared tools/ });
+  t(G, 'the person themselves still gets the usual reply', { q: 'my husband checks my phone and controls the money', kind: 'safety', not: /your client/, link: '/safety.html' });
+  // 15. a nervous flatmate: how to bring it up if you hate confrontation
+  t(G, 'i\'m scared she\'ll hate me and it\'ll be awkward in the kitchen', { id: 'flatbringup', link: '/sharing-a-room.html#bring-it-up', nochip: /same fight|Making up/ });
+  t(G, 'i\'m nervous my flatmate will think i\'m annoying if i bring up the dishes', { id: 'flatbringup' });
+  t(G, 'my housemate never cleans but i\'m scared it\'ll get awkward if i say something', { id: 'flatbringup' });
+  t(G, 'how do i tell my roommate to clean the kitchen without it being awkward', { id: 'flatbringup' });
+  // 16. clarify chips fit the person (no couple chips for a flatmate or a widower, no twins for a carer)
+  t(G, 'ugh it feels so tense in the flat lately', { nochip: /same fight|Making up after a fight/ });
+  t(G, 'everything feels wrong since my wife passed', { nochip: /same fight|Making up after a fight|chores/ });
+  t(G, 'the chips for a carer in Spanish', Object.assign({ q: 'quiero repartir el cuidado de mi mamá con mis hermanos', chip: /hermanos|Repartir/i, nochip: /gemelos|Hago todo en la casa/i }, ESP));
+  // and small things from the same reports
+  t(G, 'im bored: an arcade line links the arcade', { q: 'im bored', check: (r, rs, text) => /arcade/i.test(text.split('\n')[0]) && !replyLinks(r).some(u => /frequency-journey|pause-and-play/.test(u)) ? 'arcade promised, not linked' : '' });
+  t(G, '"pls" is never corrected', { convo: ['how do i say sorry so it lands', 'something shorter pls'], not: /I think you mean/ });
+}
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];

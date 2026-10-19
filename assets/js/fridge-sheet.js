@@ -541,6 +541,20 @@
           { k: 'try', en: FIELDS[2][1], es: 'Algo pequeño para probar la semana que viene' }, { k: 'next', en: FIELDS[3][1], es: 'Nuestra próxima conversación' },
           { k: 'jobs', en: 'Jobs that slipped or came up again', es: 'Tareas que se quedaron sin hacer o volvieron' }],
         mine: function () { return { well: str(st.well, 300), heavy: str(st.heavy, 300), try: str(st.try, 300), next: str(st.next, 80), jobs: st.jobs.slice(0, 12) }; },
+        // tools16: the sender's name is the panel's own name box, or else "Who's checking in" on the card,
+        // so the other phone reads "What Hannah and Ben sent", not "What Someone sent"
+        name: function () { var i = cm.querySelector('.tcol-name'); return (i && String(i.value || '').trim()) || str(st.names, 40); },
+        // tools16: a part that came in (a link, or a pasted code) is shown first: the panel moves above the card's
+        // empty form and comes into view, so on a phone what they sent isn't hidden below the form
+        onMerge: function (env) {
+          if (!env || !env.p || !Object.keys(env.p).length) return;
+          if (cm.parentNode === host && form.parentNode === host && cm.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_PRECEDING) host.insertBefore(cm, form);
+          var moved = false, stop = function () { moved = true; };
+          ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stop, { once: true, passive: true }); });
+          var go = function () { if (moved) return; try { cm.scrollIntoView({ block: 'start' }); } catch (e) {} };
+          setTimeout(go, 150);
+          if (doc.readyState !== 'complete') window.addEventListener('load', function () { setTimeout(go, 50); }, { once: true });
+        },
         fill: function (d) {
           FIELDS.forEach(function (f) { if (typeof d[f[0]] === 'string') { st[f[0]] = d[f[0]].slice(0, f[0] === 'next' ? 80 : 300); boxes[f[0]].value = st[f[0]]; } });
           if (Array.isArray(d.jobs)) { st.jobs = d.jobs.map(function (n) { return str(n, 60); }).filter(Boolean).slice(0, 12); drawChips(); }

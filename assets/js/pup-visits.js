@@ -122,8 +122,24 @@
     if (n.hidden || !n.getClientRects().length) return false;
     var cs = getComputedStyle(n); return cs.visibility !== 'hidden' && cs.display !== 'none' && parseFloat(cs.opacity || '1') > 0.05;
   }
+  // a message checker's result on screen (the pocket checker, the Chat analyzer): the pups wait, and for a minute after
+  // it was shown, so no tip ever covers a result (message-check-mini.js marks the time; the Chat analyzer has #results)
+  var RESULT = '.mcm-out:not(:empty), #results:not([hidden]) .verdict, #cr-out .cr-summary';
+  function resultUp() {
+    var at = +(H.getAttribute('data-checker-result') || 0) || +(window.TOLCheckerShownAt || 0);
+    if (at && Date.now() - at < 60000) return true;
+    var list = D.querySelectorAll(RESULT);
+    for (var i = 0; i < list.length; i++) { if (!shown(list[i])) continue; var r = list[i].getBoundingClientRect(); if (r.bottom > 0 && r.top < window.innerHeight) return true; }
+    return false;
+  }
+  // after someone checked a message, or after a breakup: never a "send a message" tip
+  var checkedOnce = false;
+  D.addEventListener('tol:checker-result', function () { checkedOnce = true; });
+  var NO_SEND_PAGE = /^\/after-a-breakup\.html$/.test(path);
+  var SEND_TIP = /\bsend (?:a|an|them|him|her|someone|one)\b|thinking of you|\b(?:text|message|call|ring) (?:them|someone|a friend|him|her)\b|reach out|\bdrop (?:them|someone) a\b/i;
   function busy() {
     if (D.hidden) return true;
+    if (resultUp()) return true;
     // a menu open in the header (sub-menus inside a closed menu say "expanded" too, but can't be seen)
     var ex = D.querySelectorAll('.tol-bar [aria-expanded="true"]');
     for (var j = 0; j < ex.length; j++) if (shown(ex[j])) return true;
@@ -236,6 +252,12 @@
   }
   // one line for one pup; returns a promise of {text, href, label}
   function lineFor(who, kind, ctx) {
+    return lineFor0(who, kind, ctx).then(function (o) {
+      if (o && o.text && SEND_TIP.test(o.text) && (NO_SEND_PAGE || checkedOnce || resultUp())) return choose(window.TOL_PUP_LINES.love[who].filter(function (x) { return !SEND_TIP.test(x.text || x); })) || choose(window.TOL_PUP_LINES.love[who]);
+      return o;
+    });
+  }
+  function lineFor0(who, kind, ctx) {
     var W = window.TOL_PUP_LINES, sec = B.getAttribute('data-sec') || '', o = null;
     if (kind === 'hello') return Promise.resolve(choose(Math.random() < 0.55 ? W.hi[who] : W.love[who]));
     if (kind === 'love') return Promise.resolve(choose(W.love[who]));

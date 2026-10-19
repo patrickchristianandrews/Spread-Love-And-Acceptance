@@ -91,7 +91,7 @@
   .ls-own-alt{ grid-column:1 / -1; margin:.2rem 0 0 !important; }
   .ls-own-send{ margin-top:.8rem; }
   .ls-own{ display:grid; grid-template-columns:1fr auto; gap:.3rem .6rem; align-items:start; padding:.7rem .4rem; border-bottom:1px dotted #EFD27A; }
-  .ls-own-addp{ margin-left:.4rem; min-height:36px; }
+  .ls-own-addp{ margin-left:.4rem; min-height:44px; }
   .ls-own-unowned{ margin:.6rem 0 0 !important; padding:.5rem .7rem; border-radius:10px; background:#FFF6D8; border:1px dashed #E2B94B; }
   .ls-own-unowned[hidden]{ display:none !important; }
   .ls-own-job{ margin:0 !important; font-weight:600; overflow-wrap:break-word; hyphens:auto; -webkit-hyphens:auto; }
@@ -452,7 +452,7 @@
   .lq-name-in{ display:flex; align-items:center; gap:.25rem; }
   .lq-name-in .dot{ width:.75rem; height:.75rem; border-radius:50%; background:var(--pc); flex:none; }
   .lq-name input{ min-height:44px; }
-  .lq-name .remove{ width:2.2rem !important; height:2.2rem !important; font-size:.95rem !important; }
+  .lq-name .remove{ width:2.75rem !important; height:2.75rem !important; font-size:.95rem !important; }
   .lq-btn-link{ font:inherit; font-size:.95rem; min-height:44px; padding:.2rem .4rem; background:none; border:0; color:var(--focus); text-decoration:underline; cursor:pointer; }
   .lq-from{ margin:.6rem 0 .8rem !important; padding:.7rem .8rem; border-radius:14px; background:#EEF3FA; border:2px solid #C9D8EC; font-size:.97rem; }
   .lq-from p{ margin:0 !important; }
@@ -472,7 +472,8 @@
   }
   .lq-mini-sum{ position:sticky; top:calc(var(--tol-bar-h, 58px) + .3rem); z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; margin:0 0 .5rem; padding:.4rem .7rem; border-radius:12px; background:#FFFDF6; border:2px solid var(--ink); box-shadow:0 3px 10px rgba(43,38,32,.12); font-size:.9rem; }
   .lq-mini-sum .lq-mini-t{ flex:1 1 12rem; min-width:0; }
-  .lq-mini-sum a{ font-size:.9rem; color:var(--focus); min-height:36px; display:inline-flex; align-items:center; }
+  .lq-mini-sum a{ font-size:.9rem; color:var(--focus); min-height:44px; display:inline-flex; align-items:center; }
+  .ls-link-btn[data-keep-forget], .ls-link-btn[data-keep-yes]{ min-height:44px; }
   .lq-group{ margin:.2rem 0 .6rem; }
   .lq-group-h{ margin:.6rem 0 .1rem !important; padding:.15rem .1rem; font-size:.98rem !important; font-weight:600; border-bottom:2px solid #EFD27A; }
   .lq-group-h small{ font-weight:400; color:var(--ink-soft); font-size:.82rem; }
@@ -480,7 +481,7 @@
   .lq-row.is-on{ background:rgba(248,224,138,.18); border-radius:10px; }
   .lq-row-top{ display:flex; align-items:center; gap:.4rem; min-width:0; }
   .lq-job{ margin:0 !important; flex:1 1 auto; min-width:0; font-size:.98rem; line-height:1.3; overflow-wrap:break-word; hyphens:auto; -webkit-hyphens:auto; }
-  .lq-row .remove{ width:2.2rem !important; height:2.2rem !important; font-size:.95rem !important; }
+  .lq-row .remove{ width:2.75rem !important; height:2.75rem !important; font-size:.95rem !important; flex:none; }
   .lq-who{ display:grid; grid-template-columns:repeat(auto-fit, minmax(3.6rem, 1fr)); gap:.3rem; }
   .lq-w{ font:inherit; font-size:.9rem; min-height:44px; padding:.25rem .4rem; border-radius:999px; border:2px solid var(--pc, #EAD9A0); background:#FFFDF6; color:var(--ink); cursor:pointer; overflow-wrap:break-word; line-height:1.15; }
   .lq-w:hover{ background:#FFF3C4; }
@@ -495,15 +496,40 @@
     #lq-list:not(.is-two) .lq-row{ grid-template-columns:minmax(0, .8fr) minmax(0, 1.7fr); }
     .lq-cmp{ grid-column:1 / -1; }
   }
-  /* two people on a phone: the job and its three buttons on one line, so the list stays short */
+  /* on a phone: the job name on its own full-width line, its buttons in a row underneath, so names never break
+     mid-word ("Rememberi/ng") and a picked name never gets cut off ("✓Kei…") */
   @media (max-width:639px){
-    #lq-list.is-two .lq-row{ grid-template-columns:minmax(0, 1fr) auto; gap:.2rem .4rem; padding:.3rem .1rem; }
-    #lq-list.is-two .lq-who{ grid-template-columns:repeat(3, 3.75rem); gap:.25rem; }
-    #lq-list.is-two .lq-w{ padding:.2rem .25rem; font-size:.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    #lq-list.is-two .lq-w[aria-pressed="true"]::before{ content:"\2713"; }
-    #lq-list.is-two .lq-job{ font-size:.92rem; }
-    #lq-list.is-two .lq-cmp{ grid-column:1 / -1; }
+    #lq-list .lq-row{ grid-template-columns:minmax(0, 1fr); gap:.25rem; padding:.4rem .1rem; }
+    #lq-list.is-two .lq-who{ grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.3rem; }
+    #lq-list .lq-job{ font-size:.95rem; overflow-wrap:normal; word-break:normal; hyphens:manual; -webkit-hyphens:manual; }
+    #lq-list .lq-cmp{ grid-column:1 / -1; }
   }
+  /* each button keeps whole words: a long name wraps at its spaces, never inside a word ("Comp/artido") */
+  #lq-list .lq-w{ overflow-wrap:normal; word-break:normal; hyphens:manual; -webkit-hyphens:manual; white-space:normal; }
+  #lq-list:not(.is-two) .lq-who{ grid-template-columns:repeat(auto-fill, minmax(min(100%, 6rem), 1fr)); }
+  .lq-job{ overflow-wrap:normal !important; hyphens:manual !important; -webkit-hyphens:manual !important; }
+  #quick{ scroll-margin-top:calc(var(--tol-bar-h, 58px) + .5rem); }
+  .lq-anchor{ position:relative; top:calc(-1 * var(--tol-bar-h, 58px) - .6rem); height:0; }
+  .lq-pt{ display:block; width:100%; min-height:44px; margin:.25rem 0 0; font:inherit; font-size:.88rem; }
+  .lq-lh{ margin:.6rem 0 0 !important; font-size:.93rem !important; }
+  .lq-work{ margin:.25rem 0 0 !important; font-size:.93rem !important; }
+  .lq-rec{ color:var(--ink-soft); }
+  .lq-lhrow{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .6rem; margin:.25rem 0; }
+  .lq-lhname{ min-width:5rem; font-weight:600; }
+  .lq-cx{ margin:.4rem 0 0; font-size:.93rem; }
+  .lq-cx[hidden]{ display:none !important; }
+  .lq-cxl{ display:flex; align-items:center; gap:.5rem; min-height:44px; cursor:pointer; }
+  .lq-cxl input{ width:1.3rem; height:1.3rem; }
+  .lq-cx-in ul{ margin:.2rem 0 0 !important; }
+  .lq-cmp-next{ list-style:none; margin:.6rem 0 0 !important; padding:0 !important; display:grid; gap:.35rem; }
+  .lq-cmp-next li{ margin:0; }
+  .lq-cmp-next a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:var(--focus); }
+  .lq-cmp-next span{ display:block; font-size:.85rem; color:var(--ink-soft); }
+  .lq-chg{ margin:.4rem 0 0 !important; }
+  .lq-carries{ flex:1 1 100%; margin:.1rem 0 0 !important; }
+  .ls-own-blk{ grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.15rem 0 0 1rem; }
+  .ls-own-blkt input{ width:8.5rem; min-height:44px; }
+  .ls-own-split{ grid-column:1 / -1; justify-self:start; min-height:44px; }
   body[data-ls-view="quick"] .ls-tag{ display:none !important; }
   .lq-add{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0 0; }
   .lq-add input{ flex:1 1 11rem; min-height:44px; }
@@ -700,6 +726,7 @@
   <p class="lq-lede">Tap who mostly does each job. The picture builds as you go, the thinking work too. About two minutes, and nothing leaves this device.</p>
   <p class="lq-kept" id="lq-kept" hidden>Your full stand, with hours and bills, is kept on this device. <button type="button" class="lq-btn-link" id="lq-open-deep">Open it</button></p>
   <div class="lq-from" id="lq-from" role="status" aria-live="polite" hidden></div>
+  <div id="part-time" class="lq-anchor"></div>
   <p class="lq-mini" id="lq-names-h">Your names (optional)</p>
   <div class="lq-names" id="lq-names" role="group" aria-labelledby="lq-names-h"></div>
   <div class="lq-asrow" id="lq-asrow" role="group" aria-label="Whose view is this?" hidden></div>
@@ -722,7 +749,9 @@
       <p class="lq-print-only" id="lq-print-head">Spread Love &amp; Acceptance &middot; The Lemonade Stand, quick look</p>
       <h3 id="lq-res-h">How it looks</h3>
       <div id="lq-out" aria-live="polite"></div>
+      <div class="lq-extra lq-paid" id="lq-paid" hidden></div>
       <div class="tcl-slot" id="lq-clarify" hidden></div>
+      <div class="lq-cx" id="lq-cx" hidden></div>
       <div class="lq-toggles"><button type="button" class="lq-toggle" id="lq-ill" aria-pressed="false">Someone works long hours or is ill</button> <button type="button" class="lq-toggle" id="lq-away" aria-pressed="false">One of us has been away (deployment, work away, hospital)</button></div>
       <div class="lq-extra" id="lq-extra" hidden></div>
       <div id="lq-cmp"></div>
@@ -738,6 +767,7 @@
         <ul>
           <li><button type="button" id="lq-fridge"><span class="t">Make a fridge list (one owner per job)</span><span class="d">Every job from your quick look is there to pick. Choose the ones to give an owner, then print it, save a PDF or send it as text.</span></button></li>
           <li><button type="button" id="lq-deeper"><span class="t">Go deeper: count the hours</span><span class="d">The full stand, with times, bills and each person&rsquo;s own side. Your names and jobs come with you.</span></button></li>
+          <li id="lq-baby-next" hidden><a href="/new-parent.html"><span class="t">New baby: when you&rsquo;re both running on empty</span><span class="d">Splitting the nights, and one clear ask at 3am.</span></a></li>
           <li><a href="/check-ins.html"><span class="t">Talk about it</span><span class="d" id="lq-talk-d">A calm way to bring it up, when you&rsquo;re both rested.</span></a></li>
         </ul>
       </div>

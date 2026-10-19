@@ -21,8 +21,16 @@
   function labelText(sel, text) { var l = $(sel); if (!l) return; var t = l.lastChild; if (t && t.nodeType === 3) t.textContent = ' ' + text; }
   function run() {
     put('main .read-head .read-code', 'WP-03 · Hoja para llenar');
-    // the safety line stays exactly as it is, in English
-    var safe = $('main .wpf-safe'); if (safe) safe.setAttribute('lang', 'en');
+    // the safety line in Spanish (tools16), with the same link to Not safe at home? (that page is in English)
+    var safe = $('main .wpf-safe small'), sl = safe && safe.querySelector('a[href="/safety.html"]');
+    if (safe && sl && !safe.hasAttribute('data-es')) {
+      safe.setAttribute('data-es', '1');
+      sl.setAttribute('hreflang', 'en'); sl.setAttribute('lang', 'en');
+      while (safe.firstChild) safe.removeChild(safe.firstChild);
+      safe.appendChild(document.createTextNode('Para relaciones en las que todos se sienten seguros. Si alguien tiene miedo o se siente controlado, mira '));
+      safe.appendChild(sl);
+      safe.appendChild(document.createTextNode(' (en inglés).'));
+    }
     put('main .wpf-lede.pillar-note', '<small>Las ideas detrás de esta lista (en inglés): <a href="/five-pillars.html#fix-the-setup" hreflang="en">arreglar el sistema, no a la persona</a> (una tarea que se olvida una y otra vez es un problema del sistema, no un defecto de alguien) y <a href="/five-pillars.html#quiet-incentives" hreflang="en">fijarse en los incentivos callados</a>. Son dos de los <a href="/five-pillars.html" hreflang="en">Cinco Pilares</a> del sitio, las grandes ideas en las que se basa todo.</small>');
     var priv = document.querySelectorAll('main .wpf-privacy > p:not(.wpf-keep)');
     if (priv[0]) priv[0].innerHTML = '<strong>Lo que escribes se queda en este dispositivo.</strong> Nada de lo que pones en esta hoja se envía a ningún lado. Para que no lo pierdas, se guarda en este navegador mientras escribes (la casilla “Guardar un borrador en este dispositivo”, más abajo, ya está marcada). En un dispositivo compartido, desmárcala, o pulsa “Borrar todo” cuando termines, y no se volverá a marcar sola. Además, cuando escribes nombres, se marca “Usar estos nombres en las otras herramientas”, que guarda solo los nombres y las tareas con quién se encarga, solo en este navegador, para que las otras hojas del sitio puedan ofrecerlos. Desmárcala para olvidarlos, y no se volverá a marcar sola.';
@@ -51,6 +59,9 @@
     put('#wpf-open', 'Abrir');
     put('#wpf-fillable', 'PDF para llenar');
     put('#wpf-pdf', 'Descargar PDF');
+    put('#wpf-print', 'Imprimir esta hoja');
+    // "About this tool" is in English for every tool: its heading says so in Spanish (tools16)
+    var tgs = $('main [data-tool-guide] .tg-sum-t'); if (tgs && !tgs.hasAttribute('data-es')) { tgs.setAttribute('data-es', '1'); tgs.setAttribute('lang', 'es'); tgs.textContent = 'Sobre esta herramienta (en inglés)'; }
   }
   // The sheet's other words (tol-workpaper.js turns its own labels and buttons into Spanish; these are the rest).
   // Exact matches only: what someone types (names, jobs) is never touched. The sheet redraws as it is filled in,
@@ -61,6 +72,11 @@
     'One clean page of the list on this page: each job, its owner and a box to tick. Fits A4 and US Letter. With no list yet, it prints a blank one.': 'Una página limpia con la lista: cada tarea, quién se encarga y una casilla para marcar. Cabe en A4 y en tamaño carta. Si todavía no hay lista, imprime una en blanco.',
     'How saving works': 'Cómo se guarda',
     'Saved on this device once you start': 'Se guarda en este dispositivo en cuanto empiezas',
+    'Saved on this phone once you start': 'Se guarda en este teléfono en cuanto empiezas',
+    'Saved on this phone': 'Guardado en este teléfono', 'Saved on this device': 'Guardado en este dispositivo',
+    'Remove': 'Quitar', 'First name': 'Nombre', 'Print this form': 'Imprimir esta hoja',
+    'Both (decide together)': 'Ambos (lo deciden juntos)', 'Everyone (decide together)': 'Todos (lo deciden juntos)',
+    'Ticked for you: the names are kept only on this device, so your other worksheets can offer them. Nothing is sent anywhere. Untick to forget them.': 'Marcada por ti: los nombres se guardan solo en este dispositivo, para que tus otras hojas puedan ofrecerlos. No se envía nada a ningún lado. Desmárcala para olvidarlos.',
     'Saved on this device as you type (the box below), so closing the tab won’t lose it. On a shared device, untick it or press Erase when you’re done.': 'Se guarda en este dispositivo mientras escribes (la casilla de abajo), así que no se pierde si cierras la pestaña. En un dispositivo compartido, desmárcala o pulsa “Borrar todo” cuando termines.',
     'Person A': 'Persona A', 'Person B': 'Persona B', 'Person C': 'Persona C', 'Person D': 'Persona D',
     'Two to eight people. Every name shows up in the drop-downs below.': 'De dos a ocho personas. Cada nombre aparece en las listas de abajo.',
@@ -127,6 +143,41 @@
     for (var i = 0; i < RX.length; i++) { var m = RX[i][0].exec(k); if (m) { var v = RX[i][1](m); if (v) return v; } }
     return null;
   }
+  // tools16: the result under "Who's carrying more right now" / "How the jobs are spread" and the note under the score,
+  // translated phrase by phrase (names, numbers and what someone typed stay as they are)
+  function freqEs(n, f) {
+    var one = n === '1', W = { daily: ['diaria', 'diarias'], weekly: ['semanal', 'semanales'], monthly: ['mensual', 'mensuales'], ongoing: ['continua', 'continuas'], 'as needed': ['cuando haga falta', 'cuando haga falta'], 'each meeting': ['de cada reunión', 'de cada reunión'] };
+    return n + ' ' + (W[f] ? W[f][one ? 0 : 1] : f);
+  }
+  var PHR = [
+    [/Counted by how often each job comes round \(a daily job about five times a weekly one, a monthly one a quarter\)/g, 'Contado según cada cuánto toca cada tarea (una tarea diaria cuenta unas cinco veces lo que una semanal, y una mensual, la cuarta parte)'],
+    [/, and by size or time where you gave it/g, ', y según el tamaño o el tiempo donde lo pusieron'],
+    [/ owns (\d+) of the (\d+) jobs with one owner/g, ' se encarga de $1 de las $2 tareas que tienen una sola persona a cargo'],
+    [/\b(\d+) (daily|weekly|monthly|ongoing|as needed|each meeting)\b/g, function (m, n, f) { return freqEs(n, f); }],
+    [/ (\d+) decided together\./g, ' $1 se deciden juntos.'],
+    [/ \(a job you decide together counts the same for each of you\)/g, ' (una tarea que deciden juntos cuenta igual para cada uno)'],
+    [/, both together (\d+)/g, ', ambos juntos $1'], [/, everyone together (\d+)/g, ', todos juntos $1'],
+    [/ \(jobs owned\)\./g, ' (tareas a cargo).'],
+    [/ (\d+) house rules? on the list (?:isn’t|aren’t) counted here: a rule needs someone who keeps to it, but it isn’t load\./g, ' $1 regla(s) de la casa en la lista no cuentan aquí: una regla necesita a alguien que la cumpla, pero no es carga.'],
+    [/Does this match what you agreed\? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair\./g, '¿Coincide con lo que acordaron? Repartir a partes iguales no siempre es la meta: dos casas, entre semana y fines de semana, u horarios muy distintos pueden hacer justo otro reparto.'],
+    [/You wrote down the split you agreed: “([^”]*)”\. Does this match it\?/g, 'Escribieron el reparto que acordaron: “$1”. ¿Coincide con esto?'],
+    [/ The split you agreed elsewhere on this site gives (.+?) about (\d+)%\./g, ' El reparto que acordaron en otra parte del sitio le da a $1 alrededor del $2%.'],
+    [/ If it doesn’t match, ask which job could move first\. /g, ' Si no coincide, pregúntense qué tarea podría cambiar de manos primero. '],
+    [/Counting how often each job comes round changes the picture: a few daily jobs can outweigh many monthly ones\. /g, 'Contar cada cuánto toca cada tarea cambia el panorama: unas pocas tareas diarias pueden pesar más que muchas mensuales. '],
+    [/Give a job a size, or the hours it takes each time, and this counts a big one for more than a quick one\./g, 'Pongan a una tarea un tamaño, o las horas que lleva cada vez, y esto cuenta más una grande que una rápida.'],
+    [/Some jobs come round more often, or are bigger, than others\. Give each job how often it comes round \(and a size, if you like\), and this counts a daily job for more than a monthly one\./g, 'Algunas tareas tocan más seguido, o son más grandes, que otras. Pongan a cada tarea cada cuánto toca (y un tamaño, si quieren), y esto cuenta más una tarea diaria que una mensual.'],
+    [/ Counting jobs isn’t counting the work: a daily job comes round far more often than a monthly one\. It’s a starting point for a talk, not a scorecard\./g, ' Contar tareas no es contar el trabajo: una tarea diaria toca mucho más seguido que una mensual. Es un punto de partida para hablar, no un marcador.'],
+    [/As a share, (\d+) of (\d+) is ([\d.]+) out of 1\.00\. It only asks whether each job has a name next to it, not whether the split feels fair\. “(Both|Everyone) \(decide together\)” counts as an owner: use it for decisions, and give jobs one name\. If you use the calculator Is the setup working for everyone\? \(CALC-01\), this is the number for its jobs-with-an-owner box\./g, function (m, a, b, c, w) { return 'Como proporción, ' + a + ' de ' + b + ' es ' + c + ' de 1.00. Solo mira si cada tarea tiene un nombre al lado, no si el reparto se siente justo. “' + (w === 'Both' ? 'Ambos' : 'Todos') + ' (lo deciden juntos)” cuenta como alguien a cargo: úsenlo para las decisiones, y pongan un solo nombre en las tareas. Si usan la calculadora “Is the setup working for everyone?” (CALC-01, en inglés), este es el número para su casilla de tareas con alguien a cargo.'; }],
+    [/ Read it next to “Who’s carrying more right now” below\./g, ' Léanlo junto a “¿Quién carga más ahora?”, más abajo.'],
+    [/ 1 example job from the starter list isn’t counted until you give it an owner or change it\./g, ' 1 tarea de ejemplo de la lista inicial no cuenta hasta que le pongan a alguien a cargo o la cambien.'],
+    [/ (\d+) example jobs from the starter list aren’t counted until you give them an owner or change them\./g, ' $1 tareas de ejemplo de la lista inicial no cuentan hasta que les pongan a alguien a cargo o las cambien.'],
+    [/(\S+)’s home\b/g, 'la casa de $1'], [/ · Together (\d+)%/g, ' · Juntos $1%'], [/ · Together (\d+)/g, ' · Juntos $1']
+  ];
+  function phr(t) {
+    if (!/Counted by how often|owns \d+ of the|\(jobs owned\)|Does this match|You wrote down the split|As a share, |Counting jobs isn’t|Some jobs come round/.test(t)) return null;
+    var o = t; PHR.forEach(function (p) { o = o.replace(p[0], p[1]); });
+    return o === t ? null : o;
+  }
   var EN_LEFT = /\b(the|and|you|your|with|this|is|are|isn’t|aren’t|job|jobs|owner|each|what|who|how)\b/i;
   function pass() {
     var roots = [document.querySelector('main'), document.querySelector('.wpf-bar')];
@@ -138,7 +189,8 @@
         var pe = n.parentElement; if (!pe || pe.closest('script, style, textarea, .tg-wrap, [data-tool-guide]')) return;
         // an <option> with no value of its own is its value: leave it
         if (pe.tagName === 'OPTION' && !pe.hasAttribute('value')) return;
-        var v = tr(n.textContent); if (v == null) return;
+        var v = tr(n.textContent);
+        if (v == null) { var pv = phr(n.textContent); if (pv != null) { n.textContent = pv; var l0 = pe.closest('[lang]'); if (l0 && /^en/i.test(l0.getAttribute('lang'))) l0.removeAttribute('lang'); } return; }
         n.textContent = n.textContent.replace(n.textContent.trim(), v);
         var l = pe.closest('[lang]'); if (l && /^en/i.test(l.getAttribute('lang'))) pe.setAttribute('lang', 'es');
       });

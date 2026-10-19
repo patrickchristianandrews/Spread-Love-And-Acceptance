@@ -129,7 +129,22 @@
     if (who === 'they') out = out.replace(/\btheir\b/gi, 'your').replace(/\bthemselves\b/gi, 'yourselves');
     return out;
   }
+  // everyday topics, and an ask that uses the writer's own words for each ("dishes", "guests after 2am"), one per message
+  var TOPIC_ASKS = [
+    [/\b(?:dishes|washing[- ]up|the sink|plates|pans|mugs)\b/i, 'dishes', function () { return 'Could you wash your dishes the same day, so the sink is clear by bedtime?'; }],
+    [/\b(?:guests?|friends? over|people over|boyfriend|girlfriend|partner) (?:\w+ ){0,4}?(?:over|stay(?:ing)?|round|until|till|after|past|at)\b|\bguests?\b/i, 'guests', function (t) { var tm = (t.match(/\b(?:until|till|after|past|at)\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?|midnight)/i) || [])[1]; return 'Could we agree a time guests leave on weeknights, like [midnight]?' + (tm ? ' ' + tm.replace(/\s+/g, '') + ' is too late for me when I have to be up.' : ''); }],
+    [/\b(?:noise|noisy|loud|music|tv|telly|shouting|gaming)\b/i, 'noise', function (t) { var tm = (t.match(/\b(?:after|past|until|till|at)\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?|midnight)/i) || [])[1]; return 'Could you keep the noise down after ' + (tm ? tm.replace(/\s+/g, '') : '[a time]') + ' on weeknights?'; }],
+    [/\b(?:bins?|trash|rubbish|garbage|recycling)\b/i, 'the bins', function () { return 'Could you take the bins out on [bin day]?'; }],
+    [/\b(?:bathroom|shower|toilet|loo)\b/i, 'the bathroom', function () { return 'Could we take turns cleaning the bathroom, starting with you on [a day]?'; }],
+    [/\b(?:laundry|washing machine|dryer|clothes)\b/i, 'laundry', function () { return 'Could you move your laundry out when it’s done, by [a time]?'; }],
+    [/\b(?:rent|bills?|money|owe[sd]?|pay(?:ing)? (?:me )?back)\b/i, 'money', function () { return 'Could you pay your share of [the bill] by [the date]?'; }],
+    [/\b(?:late|running late|kept me waiting|waited)\b/i, 'being late', function () { return 'Could you text me if you’re running late?'; }],
+    [/\b(?:my food|my stuff|my things|borrow(?:s|ed|ing)?|took my)\b/i, 'my things', function () { return 'Could you ask before you borrow my things?'; }]
+  ];
+  function topicsIn(t) { return TOPIC_ASKS.filter(function (x) { return x[0].test(t); }); }
+  function oneTopicNote(tops) { return tops.length > 1 ? ['', 'There are ' + (tops.length === 2 ? 'two things' : tops.length + ' things') + ' here (' + tops.map(function (x) { return x[1]; }).join(', ') + '). One topic per message lands better: this is the first. Save the next one for another day:', '“' + tops[1][2](arguments[1] || '') + '”'] : []; }
   function complaintFlip(t) {
+    var tops = topicsIn(t);
     var neg = t.match(/\b(you|he|she|they)\s+(?:never(?:\s+ever)?|don'?t\s+ever|doesn'?t\s+ever|won'?t\s+ever|don'?t|do not|doesn'?t|does not|won'?t|will not|can'?t be bothered to|can'?t even|never even|didn'?t|did not)\s+(.+)$/i);
     var alw = t.match(/\b(you|he|she|they)\s+(always|keeps?|constantly|forever)\s+(.+)$/i);
     var lines, send;
@@ -144,10 +159,15 @@
       if (keep) act2 = 'keep ' + act2;
       send = 'When you ' + act2 + ', I feel [one feeling word]. Could you [what you’d like instead] by [when]? It would help me [what it gives you].';
       lines = ['What you could say:', '“' + send + '”', '', 'Think of the one time that bothered you most, not every time. Then ask for what you’d like instead, not what you want them to stop.'];
+    } else if (tops.length) {
+      // their own words fill the blanks: "dishes in the sink", "guests after 2am"
+      send = tops[0][2](t) + ' It would help me [what it gives you' + (/^(?:noise|guests)$/.test(tops[0][1]) ? ', like a good night’s sleep' : '') + '].';
+      lines = ['What you could say:', '“' + send + '”'].concat(oneTopicNote(tops, t)).concat(['', 'Fill in the gaps in your own words, then check how it may land.']);
     } else {
       send = 'I’d like to ask for one thing. Could you [one specific thing] by [when]? It would help me [what it gives you].';
       lines = ['What happened, in plain words:', '“' + t + '”', '', 'What you could say:', '“' + send + '”', '', 'Ask yourself: what do I want to happen next time? Put that in the gap.'];
     }
+    if ((neg || alw) && tops.length > 1) lines = lines.concat(oneTopicNote(tops, t));
     return { text: lines.join('\n'), send: send, why: 'Under most complaints is a request. One clear ask, with a time and a reason, is easier to say yes to than “you never”. (From John Gottman’s research on complaints versus criticism.)' };
   }
   function worryFlip(t) {

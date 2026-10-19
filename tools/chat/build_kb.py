@@ -1468,7 +1468,7 @@ def load_reading():
 def load_logic():
     """The Logic Behind It library (assets/js/logic-library.js, the same list /the-logic-behind-it.html draws), one entry
     per reaction, so Professor Puddles can answer "why did she react like that?" with the matching card in full
-    (puddles16). Research ids become [short name, the evidence label shown on /research.html, the link]."""
+    (puddles16). Research ids become [short name, the evidence label shown on /research.html, the link, what it found]."""
     import subprocess
     src = os.path.join(ROOT, 'assets', 'js', 'logic-library.js')
     out = subprocess.run(['node', '-e', "process.stdout.write(JSON.stringify(require(process.argv[1])))", src],
@@ -1492,7 +1492,7 @@ def load_logic():
         for rid in it.get('refs') or []:
             r, m = refs.get(rid), re.search(r'id="ref-%s"[\s\S]{0,4000}?class="rs-badge[^"]*">([^<]+)<' % re.escape(rid), research)
             if r and m:
-                rs.append([short(r), unescape(m.group(1)).strip(), '/research.html#ref-' + rid])
+                rs.append([short(r), unescape(m.group(1)).strip(), '/research.html#ref-' + rid, (r.get('finding') or '').strip()])
         items.append({'id': it['id'], 'c': cats.get(it['cat'], ''), 'sd': it.get('side', 'all'), 't': it['t'],
                       'looks': it.get('looks', ''), 'chain': it.get('chain', []), 'an': (it.get('an') or [''])[0],
                       'fits': it.get('fits', ''), 'other': it.get('other', ''), 'say': it.get('say', ''),

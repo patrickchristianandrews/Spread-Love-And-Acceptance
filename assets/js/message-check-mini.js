@@ -39,6 +39,34 @@
     return loading;
   }
 
+  // why something was left out of the clearer version, in a few words
+  var LEFT_WHY = { legal: 'sounds like a threat to go to court', kidsfirst: 'puts the children in the middle', again: 'keeping score', count: 'keeping score',
+    contempt: 'mockery or looking down on them', sarcasm: 'sarcasm', insult: 'name-calling', label: 'name-calling', hostile: 'a fed-up line', swear: 'swearing',
+    harm: 'could read as a threat', menace: 'a threat', caps: 'reads as shouting', motive: 'guesses their motive', brushoff: 'a brush-off', minimal: 'a brush-off',
+    absolute: 'always or never', past: 'brings up the past', compare: 'a comparison', dxlabel: 'a diagnosis used as an insult', jab: 'a dig', passiveag: 'a dig',
+    madefeel: 'blames them for a feeling', calm: 'tells them how to feel', invalid: 'brushes their feeling aside', minim: 'makes it sound small', intens: 'turns the heat up' };
+  function quote(t) { t = String(t || '').replace(/\s+/g, ' ').trim(); return '\u201c' + (t.length > 42 ? t.slice(0, 40).replace(/\s\S*$/, '') + '\u2026' : t) + '\u201d'; }
+  function whyList(E, an, rw) {
+    var stood = (an.staticIds || []).filter(function (id) { return ['nowhen', 'long', 'period', 'multi', 'questions'].indexOf(id) === -1 && E.FBY && E.FBY[id]; }).slice(0, 3).map(function (id) {
+      var w = (an.found[id] || []).filter(Boolean)[0];
+      return esc(E.FBY[id].name.replace(/\s*\(.*\)$/, '').toLowerCase().replace(/^contempt:/, 'contempt:')) + (w && id !== 'harm' && String(w).length < 60 ? ' (' + esc(quote(w)) + ')' : '');
+    });
+    var left = [];
+    ((rw && rw.changes) || []).forEach(function (c) {
+      if (left.length >= 3 || !c.from || !c.from.length || (c.to && c.to.filter(Boolean).length) || !LEFT_WHY[c.id]) return;
+      var f = c.from.filter(function (x) { return x && !/^\(/.test(x); })[0]; if (!f) return;
+      if (left.some(function (x) { return x.indexOf(quote(f)) !== -1; })) return;
+      left.push(esc(quote(f)) + ' (' + LEFT_WHY[c.id] + ')');
+    });
+    var h = '';
+    if (stood.length) h += '<li><b>What stood out:</b> ' + stood.join('; ') + '</li>';
+    if (left.length) h += '<li><b>Left out below:</b> ' + left.join('; ') + '</li>';
+    return h ? '<ul class="mcm-why no-bubble">' + h + '</ul>' : '';
+  }
+  // a result is on screen: pet tips wait (pup-visits.js listens), so nothing covers it
+  function resultShown() {
+    try { window.TOLCheckerShownAt = Date.now(); document.documentElement.setAttribute('data-checker-result', String(window.TOLCheckerShownAt)); document.dispatchEvent(new CustomEvent('tol:checker-result')); } catch (e) {}
+  }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   // "[a time]" is a blank for the writer's own words
   function blanks(s) { return esc(s).replace(/\[([^\]]+)\]/g, '<span class="mcm-ph">$1</span>'); }
@@ -71,7 +99,14 @@
     '.mcm-say{margin:0;padding:8px 11px;border-radius:8px;background:var(--paper,#F5EFDE);border:1px solid var(--line,#D9CBA3);line-height:1.5;overflow-wrap:anywhere}' +
     '.mcm-ph{border:1.5px dashed var(--brass,#A8792F);border-radius:4px;padding:0 4px}' +
     '.mcm-copy{min-height:40px;margin-top:6px;padding:6px 14px;border:1.5px solid var(--line,#D9CBA3);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:.9rem;cursor:pointer}' +
-    '.mcm-note{margin:.55rem 0 0;font-size:.85rem;color:var(--ink-soft,#5A5346)}';
+    '.mcm-note{margin:.55rem 0 0;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
+    // what stood out, and what the clearer version left out: short, so it fits a phone
+    '.mcm-why{margin:0 0 .45rem;padding:0;list-style:none;font-size:.9rem;line-height:1.45}' +
+    '.mcm-why li{margin:0 0 .2rem}' +
+    '.mcm-why b{font-weight:600}' +
+    '.mcm-sleep{margin:.2rem 0 .5rem;padding:8px 11px;border-left:4px solid var(--ink-soft,#5A5346);border-radius:6px;background:var(--paper,#F5EFDE)}' +
+    '.mcm-sleep p{margin:0 0 .35rem;line-height:1.45}' +
+    '.mcm-sleep a{color:inherit;font-weight:600}';
 
   function addCSS() {
     if (document.getElementById('mcm-css')) return;
@@ -120,7 +155,7 @@
         var ctx = answerCtx;
         var an = E.analyze(text, { channel: 'text', ctx: ctx });
         // a short line aimed at "you", with nothing that shows how it's meant: one quick question before answering
-        var q = !answer && E.askFirst ? E.askFirst(an, { mode: 'send' }) : null;
+        var q = !answer && E.askFirst ? E.askFirst(an, { mode: 'send', rel: rel }) : null;
         if (q) {
           out.innerHTML = '<p class="mcm-ask no-bubble">' + esc(q.q) + '</p><div class="mcm-ask-row" role="group" aria-label="Your answer">' +
             q.answers.map(function (a) { return '<button type="button" data-ans="' + esc(a.id) + '">' + esc(a.label) + '</button>'; }).join('') + '</div>' +
@@ -134,7 +169,21 @@
         var sc = E.score(an, ['general'], 'text');
         var rw = E.rewrite(an, { wirings: ['general'], channel: 'text', rel: rel, ctx: ctx, answer: answer });
         var v = E.verdict ? E.verdict(an, sc, rw, { rel: rel, ctx: ctx, answer: answer }) : { id: 'ok', text: '' };
+        an.found = an.found || {};
         var h = '<p class="mcm-v no-bubble ' + esc(v.id) + '">' + esc(v.text) + '</p>';
+        // a message to an ex: no polish and no praise. Sleep on it, and keep the words for the morning
+        if (v.exReach && v.id === 'unsure') {
+          h += '<div class="mcm-sleep no-bubble"><p>If it still feels right in the morning, it will still be yours to send. You could copy it into your notes for now.</p>' +
+            '<button type="button" class="mcm-copy mcm-keep">Copy it for later</button>' +
+            (v.link ? '<p style="margin:.4rem 0 0"><a href="' + esc(v.link[0]) + '">' + esc(v.link[1]) + '</a></p>' : '') + '</div>';
+          out.innerHTML = h + '<p class="mcm-note no-bubble">It reads the words only, so it&rsquo;s a second opinion, not a verdict.</p>';
+          var kp = out.querySelector('.mcm-keep');
+          if (kp) kp.addEventListener('click', function () { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { kp.textContent = 'Copied'; }, function () { kp.textContent = 'Select and copy manually'; }); });
+          resultShown();
+          return;
+        }
+        // what stood out, and what the clearer version leaves out, with a short reason
+        if (!an.selfHarm && !an.danger) h += whyList(E, an, rw);
         // threat-shaped, or hard to read: "Add context" is the obvious next step
         if (v.addContext && !an.selfHarm) h += '<p class="mcm-addctx no-bubble"><a class="mcm-ctx2" href="' + full + '#add-context">Add context</a>: who they are, and whether you joke like this. The words alone can&rsquo;t show a joke.</p>';
         if (an.selfHarm) {
@@ -146,6 +195,7 @@
         }
         h += '<p class="mcm-note no-bubble">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The Chat analyzer shows why, and more ways to say it.</p>';
         out.innerHTML = h;
+        resultShown();
         var c2 = out.querySelector('.mcm-ctx2'); if (c2) c2.addEventListener('click', hand);
         var cp = out.querySelector('.mcm-copy');
         if (cp) cp.addEventListener('click', function () {

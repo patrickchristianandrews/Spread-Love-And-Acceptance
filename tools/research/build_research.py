@@ -465,6 +465,12 @@ HEAD = '''<!DOCTYPE html>
   .rs-find-box p{ margin:.5rem 0 0 !important; font-size:.92rem; color:var(--ink-soft); }
   .rs-group{ margin:0 0 2rem; }
   .rs-group > p.rs-blurb{ color:var(--ink-soft); margin-top:.2rem !important; }
+  .rs-group > h2 .rs-n{ margin-left:.5rem; font:500 .85rem/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+  .rs-fold{ margin:.4rem 0 0; }
+  .rs-fold > summary{ display:inline-flex; align-items:center; min-height:44px; padding:.35rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); cursor:pointer; font-weight:600; }
+  .rs-fold > summary:hover{ border-color:var(--credit); }
+  .rs-fold[open] > summary{ margin-bottom:.8rem; }
+  .rs-fold[open] > summary .rs-show{ display:none; } .rs-fold:not([open]) > summary .rs-hide{ display:none; }
   .rs-entry{ margin:0 0 1rem; padding:.85rem 1rem .6rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); box-sizing:border-box; max-width:100%%; overflow-wrap:anywhere; scroll-margin-top:5.5rem; }
   .rs-entry:target{ border-color:var(--credit); box-shadow:0 0 0 2px var(--credit); }
   .read .rs-entry p{ margin:.35rem 0 !important; max-width:none; }
@@ -573,25 +579,44 @@ FILTER_JS = r'''<script>
     var w = it.querySelector('.rs-where'), txt = (it.textContent || '').replace(w ? w.textContent : '', ' ');
     keys.set(it, norm(txt));
   });
+  // each topic is folded (panel16): a search opens the topics it finds something in, and closes them again when cleared
+  function fold(g) { return g.querySelector('details.rs-fold'); }
   function run() {
     var words = norm(q.value || '').split(' ').filter(Boolean), shown = 0;
     items.forEach(function (it) {
       var k = keys.get(it), ok = words.every(function (w) { return k.indexOf(w) !== -1; });
       it.hidden = !ok; if (ok) shown++;
     });
-    groups.forEach(function (g) { g.hidden = !g.querySelector('.rs-entry:not([hidden])'); });
+    groups.forEach(function (g) {
+      g.hidden = !g.querySelector('.rs-entry:not([hidden])');
+      var d = fold(g); if (!d) return;
+      if (words.length && !g.hidden && !d.open) { d.open = true; d.setAttribute('data-rs-searched', ''); }
+      else if (!words.length && d.hasAttribute('data-rs-searched')) { d.open = false; d.removeAttribute('data-rs-searched'); }
+    });
     if (none) none.hidden = shown !== 0;
     out.textContent = words.length ? 'Showing ' + shown + ' of ' + total + ' entries.' : 'All ' + total + ' entries are shown.';
   }
   q.addEventListener('input', function () { clearTimeout(t); t = setTimeout(run, 120); });
   q.addEventListener('search', run);
-  // a link to one entry (#ref-...) always shows it, even if a search had hidden it
+  // a link to one entry (#ref-...) always shows it, even if a search had hidden it or its topic is folded;
+  // a link to a topic (#t-...) opens that topic
   function showTarget() {
     var id = decodeURIComponent((location.hash || '').slice(1)), el = id && document.getElementById(id);
-    if (!el || !el.classList.contains('rs-entry') || !el.hidden) return;
-    q.value = ''; run(); el.scrollIntoView();
+    if (!el) return;
+    var d = el.closest('details.rs-fold') || (/^t-/.test(id) && el.closest('.rs-group') ? fold(el.closest('.rs-group')) : null);
+    var wasShut = d && !d.open;
+    if (d) d.open = true;
+    if (el.classList.contains('rs-entry') && el.hidden) { q.value = ''; run(); el.scrollIntoView(); }
+    else if (wasShut && el.closest('details.rs-fold')) el.scrollIntoView();
   }
   window.addEventListener('hashchange', showTarget);
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#t-"], a[href^="#ref-"]');
+    if (a && a.getAttribute('href') === location.hash) setTimeout(showTarget, 0);   // the same link again: no hashchange
+  });
+  showTarget();
+  // printing: every topic open, so the printout has every entry
+  window.addEventListener('beforeprint', function () { [].forEach.call(document.querySelectorAll('details.rs-fold'), function (d) { d.open = true; }); });
   // arriving from a link to one entry: the site adds a few things near the top as it loads, which can push the
   // entry down, so put it back in view once, unless the reader has already started scrolling
   var moved = false;
@@ -696,15 +721,18 @@ def build_page(refs, missing):
         items = grouped[key]
         if not items:
             continue
+        # panel16: each topic folds, with its count, so the page opens as a short list of topics (all entries stay here)
         body.append('<section class="rs-group no-bubble" aria-labelledby="t-%s">' % key)
-        body.append('<h2 id="t-%s">%s</h2>' % (key, esc(name)))
+        body.append('<h2 id="t-%s">%s<span class="rs-n">%d</span></h2>' % (key, esc(name), len(items)))
         body.append('<p class="rs-blurb">%s</p>' % esc(blurb))
+        body.append('<details class="rs-fold no-bubble"><summary><span class="rs-show">Show the %d entries</span><span class="rs-hide">Hide the %d entries</span></summary>' % (len(items), len(items)))
         for r in items:
             wl = where_links(r, missing)
             for m, _, _ in wl:
                 pages_linked.add(m.split('#')[0])
             body.append(entry_html(r, wl))
         body.append('<p class="rs-top"><a href="#find">Back to the search and topics</a></p>')
+        body.append('</details>')
         body.append('</section>')
 
     body.append('''

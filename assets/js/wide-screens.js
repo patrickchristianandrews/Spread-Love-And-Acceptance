@@ -92,15 +92,29 @@
       e.preventDefault(); t.scrollIntoView({ block: 'start', behavior: RM ? 'auto' : 'smooth' }); try { history.replaceState(null, '', '#' + t.id); } catch (er) {}
       t.setAttribute('tabindex', '-1'); try { t.focus({ preventScroll: true }); } catch (er) {}
     });
-    function place() { var r = main.getBoundingClientRect(); nav.style.left = Math.round(r.right + 28) + 'px'; nav.classList.toggle('is-on', innerWidth >= 1260 && r.right + 28 + 232 < innerWidth); }
+    // home16b: only sections that are on show are listed (Quiet mode hides some on the home page); the list follows
+    // Quiet mode, "Show everything" and the like, and steps aside when fewer than four sections are left
+    var lis = Array.prototype.slice.call(nav.querySelectorAll('ol > li')), enough = true;
+    function seen(i) { return !!i.h.getClientRects().length; }
+    function refresh() {
+      var n = 0;
+      items.forEach(function (i, k) { var v = seen(i); lis[k].hidden = !v; if (v) n++; });
+      enough = n >= 4; nav.hidden = !enough;
+    }
+    function place() { var r = main.getBoundingClientRect(); nav.style.left = Math.round(r.right + 28) + 'px'; nav.classList.toggle('is-on', enough && innerWidth >= 1260 && r.right + 28 + 232 < innerWidth); }
     function here() {
-      var y = innerHeight * 0.3, cur = items[0];
-      items.forEach(function (i) { if (i.h.getBoundingClientRect().top <= y) cur = i; });
+      var vis = items.filter(seen), y = innerHeight * 0.3, cur = vis[0];
+      if (!cur) return;
+      vis.forEach(function (i) { if (i.h.getBoundingClientRect().top <= y) cur = i; });
       links.forEach(function (a) { var on = a.getAttribute('href') === '#' + cur.id; a.classList.toggle('is-here', on); if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
       if (nav.classList.contains('is-on')) { var on = nav.querySelector('.is-here'); if (on) { var nr = nav.getBoundingClientRect(), ar = on.getBoundingClientRect(); if (ar.top < nr.top + 30 || ar.bottom > nr.bottom - 10) nav.scrollTop += ar.top - nr.top - nr.height / 2; } }
     }
     var tick = 0; function onScroll() { if (tick) return; tick = requestAnimationFrame(function () { tick = 0; here(); }); }
-    window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', function () { place(); here(); }); place(); here();
+    window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', function () { place(); here(); });
+    function again() { refresh(); place(); here(); }
+    document.addEventListener('tol-quiet', again);
+    if ('MutationObserver' in window) new MutationObserver(function () { setTimeout(again, 0); }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    refresh(); place(); here();
   }
 
   // ---------- the keyboard

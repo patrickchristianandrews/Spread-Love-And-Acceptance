@@ -45,7 +45,7 @@
    'what how why when where which can could would should will shall may might must just really very quite too also still even ever ' +
    'get got gets getting keep keeps kept one some any all each every much many more most lot lots thing things stuff something anything ' +
    'dont doesnt didnt cant cannot wont isnt arent wasnt werent havent hasnt hadnt wouldnt couldnt shouldnt aint not no ' +
-   'youre theyre hes shes thats whats theres lets ok okay please like want need ' +
+   'youre theyre hes shes thats whats theres lets ok okay please like liked likes liking want need ' +
    'someone somebody person people react reacted reacts reaction reactions act acted acting behave behaves behaved behaviour behavior ' +
    'always never again every time times then than if because cause did does make makes made seem seems seemed think thinks thought ' +
    'explain understand logic behind sense mean means meant go goes going gone went').split(' ').forEach(function (w) { STOP[w] = 1; });
@@ -98,6 +98,10 @@
     'criticise criticize criticism criticised criticized critic feedback',
     'refuse refused refuses decline declined turned',
     'gift gifts present presents',
+    'jumper jumpers sweater sweaters cardigan cardigans pullover',
+    'honest honestly honesty truth truthful truthfully',
+    'forget forgot forgets forgetting forgotten forgetful',
+    'correct corrected corrects correcting correction corrections',
     'late lateness',
     'argue argument arguments arguing argued fight fights fighting row rows',
     'upset hurt sad distressed'
@@ -199,15 +203,17 @@
       var bagCov = bm / qW;
       return { it: it, score: 0.75 * best + 0.25 * bagCov, covQ: Math.max(bestCov, bagCov * 0.9) };
     }).filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
-    var out = [], top = scored[0];
+    var out = [], top = scored[0], near1 = null;
     if (top && top.score >= 0.3 && top.covQ >= 0.34) {
       out.push(top.it);
       var two = scored[1];
       if (two && two.score >= Math.max(0.3, top.score * 0.75) && two.covQ >= 0.34) out.push(two.it);
     }
+    // nothing sure enough: still the closest one, shown in full, when it shares a real word with what was typed
+    if (!out.length && top && top.score >= 0.2) near1 = top.it;
     return {
-      best: out, tokens: Q,
-      close: scored.filter(function (x) { return out.indexOf(x.it) === -1 && x.score >= 0.1; }).slice(0, 3).map(function (x) { return x.it; }),
+      best: out, tokens: Q, nearest: near1,
+      close: scored.filter(function (x) { return out.indexOf(x.it) === -1 && x.it !== near1 && x.score >= 0.1; }).slice(0, 3).map(function (x) { return x.it; }),
       scores: scored.slice(0, 5).map(function (x) { return [x.it.id, Math.round(x.score * 100) / 100]; })
     };
   }
@@ -290,17 +296,32 @@
     try { var t = mk('textarea', { cls: 'lg-offscreen', 'aria-hidden': 'true' }); t.value = text; D.body.appendChild(t); t.select(); var r = D.execCommand('copy'); t.remove(); if (r) ok(); else no(); } catch (e2) { no(); }
   }
   // "Save to My saved entries": only where the device keeps them (the app, or someone's own computer)
+  function lsMode(k) { try { return W.localStorage.getItem(k); } catch (e) { return null; } }
   function saveRow(acts, d, status) {
     var Pg = W.TOLProgress, perks = false;
     try { perks = !!(Pg && typeof Pg.perks === 'function' && Pg.perks()); } catch (e) { perks = false; }
+    var computer = false;
+    try { computer = !!(W.matchMedia && W.matchMedia('(pointer: fine)').matches) && !/Android|Mobi|iPad|iPhone|iPod/i.test(W.navigator.userAgent) && !(W.navigator.platform === 'MacIntel' && W.navigator.maxTouchPoints > 1); } catch (e) { computer = false; }
     if (Pg && typeof Pg.saveEntry === 'function' && perks) {
       acts.appendChild(btn('Save to My saved entries', 'lg-quiet', function () {
         var r = false;
         try { r = Pg.saveEntry({ tool: 'logic', title: 'The logic behind it: ' + d.t, text: cardText(d), data: { t: d.t, looks: d.looks, chain: d.chain, an: d.an, fits: d.fits, other: d.other, say: d.say, step: d.step } }); } catch (e) { r = false; }
         status.textContent = r ? 'Saved in My saved entries, on this device only.' : 'Couldn’t save it here. “Copy the words” still works.';
       }));
+    } else if (computer && Pg && Pg.KEYS && Pg.KEYS.mode && lsMode(Pg.KEYS.mode) === 'shared') {
+      acts.appendChild(mk('p', { cls: 'lg-perk' }, ['This computer is set as shared, so cards aren’t kept here. Use “Copy the words” or a picture of the card, or change it on ', mk('a', { href: '/on-this-device.html', text: 'On this device' }), ' if it’s really yours.']));
+    } else if (computer && Pg && typeof Pg.saveEntry === 'function' && Pg.KEYS && Pg.KEYS.mode && !lsMode(Pg.KEYS.mode)) {
+      // a computer the site hasn't been told is yours: saving waits for a yes, so nothing is left behind on a shared one
+      var note = mk('p', { cls: 'lg-perk' }, ['My saved entries keeps cards only on a computer you’ve said is your own, so nothing is left behind on a shared one. Nothing is sent anywhere either way.']);
+      var mine = btn('This is my own computer: save it', 'lg-quiet', function () {
+        try { W.localStorage.setItem(Pg.KEYS.mode, 'own'); } catch (e) {}
+        var ok = false; try { ok = !!(Pg.perks() && Pg.saveEntry({ tool: 'logic', title: 'The logic behind it: ' + d.t, text: cardText(d), data: { t: d.t, looks: d.looks, chain: d.chain, an: d.an, fits: d.fits, other: d.other, say: d.say, step: d.step } })); } catch (e2) { ok = false; }
+        note.remove(); mine.remove();
+        status.textContent = ok ? 'Saved in My saved entries, on this computer only. You can change “own or shared” any time on On this device.' : 'Couldn’t save it here. “Copy the words” still works.';
+      });
+      acts.appendChild(mine); acts.appendChild(note);
     } else {
-      acts.appendChild(mk('p', { cls: 'lg-perk' }, ['To keep cards in My saved entries, ', mk('a', { href: '/install.html', text: 'install the free app' }), ' or use your own computer. Nothing is sent anywhere either way.']));
+      acts.appendChild(mk('p', { cls: 'lg-perk' }, ['On a phone or tablet, My saved entries lives in the ', mk('a', { href: '/install.html', text: 'free app' }), '. In the browser, “Copy the words” or a picture of the card keeps it. Nothing is sent anywhere either way.']));
     }
   }
 
@@ -332,6 +353,12 @@
       if (M.close.length) out.appendChild(pickList(M.close, 'Or one of these:'));
       return;
     }
+    if (M.nearest) {
+      showCards([M.nearest], mk('p', { cls: 'lg-found', text: 'This is the closest situation in the library. It may not fit exactly:' }));
+      if (M.close.length) out.appendChild(pickList(M.close, 'Or one of these:'));
+      out.appendChild(mk('p', { cls: 'lg-note' }, ['Not it? Pick a kind of situation above, or ', mk('a', { href: '#build', text: 'build your own card' }), ' with the same six parts.']));
+      return;
+    }
     out.textContent = '';
     out.appendChild(mk('p', { cls: 'lg-note', text: 'Nothing in the library matches that closely yet.' }));
     if (M.close.length) out.appendChild(pickList(M.close, 'These are the nearest:'));
@@ -357,6 +384,7 @@
         var b = e.currentTarget, on = b.getAttribute('aria-pressed') === 'true';
         catRow.querySelectorAll('[aria-pressed]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
         catList.textContent = '';
+        out.textContent = '';   // an earlier "fits best" belongs to what was typed, not to this kind of situation
         if (on) return;
         b.setAttribute('aria-pressed', 'true');
         catList.appendChild(mk('p', { cls: 'lg-hint', text: c.blurb }));

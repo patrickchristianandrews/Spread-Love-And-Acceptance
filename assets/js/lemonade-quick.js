@@ -221,6 +221,7 @@
     body.setAttribute('data-ls-view', v);
     ssSet(VIEW, v);
     var m = document.querySelector('main.read'); if (m) m.classList.toggle('is-wide', v === 'quick');
+    if (q && ready) { try { headLang(isEs()); } catch (e) {} }
     // the "Who does what at home" switch at the top (consol12): mark the view you're in
     [].forEach.call(document.querySelectorAll('.ps a.ps-b[href^="/lemonade-stand.html#"]'), function (a) {
       var h = a.getAttribute('href');
@@ -246,7 +247,7 @@
       standOnly = !qAny && !!st && !st.example && (real(st.jobs) || real(st.bills));
     } catch (e) {}
     // #quick (the "Quick look" way in, from the switch at the top or the tools list) always opens the quick look (consol12)
-    var quickAsk = /^#quick(-h|-baby)?$/.test(h);
+    var quickAsk = /^#(quick(-h|-baby)?|part-time)$/.test(h);
     var deep = DEEP_HASH.test(h) || tside || (!qlink && !fridge && !quickAsk && (pend || ssGet(VIEW) === 'deep' || (!ssGet(VIEW) && standOnly)));
     setView(deep ? 'deep' : 'quick');
     if (fridge) body.setAttribute('data-ls-fridge', '');
@@ -255,6 +256,7 @@
   window.addEventListener('hashchange', function () {
     var h = location.hash || '';
     if (DEEP_HASH.test(h) || togetherTool(h) === 'lemonade-side') setView('deep');
+    else if (h === '#part-time') { setView('quick'); if (ready) partLink(); }
     else if (/^#quick(-h|-baby)?$/.test(h)) { setView('quick'); if (h === '#quick-baby' && ready) babyLink(); var qs = document.getElementById('quick'); if (qs) qs.scrollIntoView({ block: 'start' }); }
     else if (/^#owners(-h)?$/.test(h)) body.setAttribute('data-ls-fridge', '');
     else if (isQuickLink(h) && ready) receive(h);
@@ -295,7 +297,7 @@
     ['garden', 'home', 'Plants & garden', 'The garden'],
     ['budget', 'admin', 'Budget & checking accounts', 'Budget and checking accounts'],
     ['taxes', 'admin', 'Taxes & receipts', 'Taxes and receipts'],
-    ['mail', 'admin', 'Mail & home email', 'Post and home email'],
+    ['mail', 'admin', 'Mail & home email', 'Post and paperwork'],
     ['calls', 'admin', 'Calls & customer service', 'Phone calls and customer service'],
     ['insurance', 'admin', 'Insurance & documents', 'Insurance and documents'],
     ['renewals', 'admin', 'Comparing plans & renewals', 'Renewals and switching plans'],
@@ -359,7 +361,7 @@
     lowstock: 'Quién se acuerda de lo que falta', planweek: 'Planear la semana', dates: 'Acordarse de fechas y citas', kidstuff: 'Estar pendiente de las cosas de los niños',
     tidy: 'Ordenar', floors: 'Aspirar y limpiar pisos', bins: 'Sacar la basura y el reciclaje', sheets: 'Cambiar las sábanas', folding: 'Doblar y guardar la ropa', mealplan: 'Planear las comidas',
     lunches: 'Preparar almuerzos', supplies: 'Reponer jabón, papel y cosas de la casa', fixes: 'Arreglos pequeños en casa', garden: 'Plantas y jardín', budget: 'Presupuesto y cuentas del banco',
-    taxes: 'Impuestos y recibos', mail: 'Correo y emails de la casa', calls: 'Llamadas y servicio al cliente', insurance: 'Seguros y documentos', renewals: 'Renovar y cambiar planes',
+    taxes: 'Impuestos y recibos', mail: 'Correo y papeleo', calls: 'Llamadas y servicio al cliente', insurance: 'Seguros y documentos', renewals: 'Renovar y cambiar planes',
     car: 'El carro', gifts: 'Regalos y tarjetas', kidsup: 'Levantar y alistar a los niños', homework: 'Ayudar con la tarea', bath: 'La hora del baño', activities: 'Llevar a actividades',
     nightwake: 'Despertares de noche', forms: 'Formularios e inscripciones de la escuela', solokids: 'Cuidar a los niños a solas (mientras el otro trabaja)', parties: 'Juegos y fiestas de los niños',
     nightfeeds: 'Tomas de noche', oncall: 'De guardia de noche (quien escucha al bebé)', nappies: 'Pañales', bottles: 'Biberones y esterilizar', solobaby: 'Cuidar al bebé a solas (mientras el otro trabaja)',
@@ -423,6 +425,12 @@
     if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var v = String(o[k] || ''); if (/^\d$/.test(k) && +k < n && /^(h|i|hi)$/.test(v)) out[k] = v; });
     return out;
   }
+  // who is here part of the time, as nights here out of 14 (the full stand's own way): { "3": 4 } every other weekend
+  function cleanPt(o, n) {
+    var out = {};
+    if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var v = +o[k]; if (/^\d$/.test(k) && +k < n && v >= 1 && v <= 13 && v % 1 === 0) out[k] = v; });
+    return out;
+  }
   // a few lines of someone's own context ("A few quick questions so the read is fair"), only ever sent when they chose to
   function cleanCx(a) { return (Array.isArray(a) ? a : []).slice(0, 8).map(function (x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, 160); }).filter(Boolean); }
   var q = null;
@@ -459,6 +467,8 @@
     if (typeof o.st === 'number' && o.st >= 0 && o.st < n) t.st = o.st;
     if (o.peek && typeof o.peek === 'object') Object.keys(o.peek).forEach(function (k) { if (/^\d>\d$/.test(k)) t.peek[k] = 1; });
     var lh = cleanLh(o.lh, n); if (Object.keys(lh).length) t.lh = lh;
+    var pt = cleanPt(o.pt, n); if (Object.keys(pt).length) t.pt = pt;
+    if (Array.isArray(o.sl)) t.sl = o.sl.filter(known).slice(0, 120);
     if (o.cx && typeof o.cx === 'object') Object.keys(o.cx).forEach(function (k) { var c = cleanCx(o.cx[k]); if (/^\d$/.test(k) && +k < n && c.length) { t.cx = t.cx || {}; t.cx[k] = c; } });
     if (o.from && typeof o.from === 'object') t.from = { by: String(o.from.by || '').slice(0, 40), reply: !!o.from.reply, f: typeof o.from.f === 'number' ? o.from.f : -1, t: typeof o.from.t === 'number' ? o.from.t : -1, replaced: !!o.from.replaced };
     if (t.from && o.from && o.from.chg && typeof o.from.chg === 'object') t.from.chg = { add: (Array.isArray(o.from.chg.add) ? o.from.chg.add : []).filter(known).slice(0, 20), rm: (Array.isArray(o.from.chg.rm) ? o.from.chg.rm : []).filter(known).slice(0, 20) };
@@ -532,7 +542,18 @@
         rm.addEventListener('click', function () { removePerson(i); });
         row.appendChild(rm);
       }
-      l.appendChild(sp); l.appendChild(row); box.appendChild(l);
+      l.appendChild(sp); l.appendChild(row);
+      // someone added who lives here part of the time (a child here every other weekend, say): a smaller fair share,
+      // counted the full stand's way, as nights here out of 14
+      if (i >= 2) {
+        var ps = document.createElement('select'); ps.className = 'lq-pt'; ps.setAttribute('data-lq-pt', String(i)); ps.setAttribute('data-x', 'pt' + i);
+        ps.setAttribute('aria-label', L('How often ' + nm(i) + ' is here', 'Cuánto está ' + nm(i) + ' aquí'));
+        [[14, L('Here every night', 'Aquí todas las noches')], [7, L('Here half the time', 'Aquí la mitad del tiempo')], [4, L('Here every other weekend', 'Aquí un fin de semana sí y otro no')], [2, L('Here now and then', 'Aquí de vez en cuando')]].forEach(function (o) {
+          var op = document.createElement('option'); op.value = String(o[0]); op.textContent = o[1]; if (ptOf(i) === o[0]) op.selected = true; ps.appendChild(op);
+        });
+        l.appendChild(ps);
+      }
+      box.appendChild(l);
     });
     if (q.people.length < MAX_P) {
       var add = document.createElement('button'); add.type = 'button'; add.className = 'lq-btn-link'; add.id = 'lq-add-person'; add.textContent = L('+ Add a person', '+ Añadir a una persona');
@@ -554,8 +575,30 @@
       if (api && api.quickNames && real.length >= 2 && !q.hhNo) api.quickNames(real);
     }, 900);
   }
+  function ptOf(i) { var v = q.pt && q.pt[i]; return v >= 1 && v <= 13 ? v : 14; }
+  function ptWord(n) { return n === 7 ? L('half the time', 'la mitad del tiempo') : n === 4 ? L('every other weekend', 'un fin de semana sí y otro no') : n === 2 ? L('now and then', 'de vez en cuando') : L(n + ' of 14 nights', n + ' de 14 noches'); }
+  // "Leo is here every other weekend, so a smaller share is fair: …" (nights here out of 14, the full stand's way)
+  function ptLine() {
+    var who = q.people.map(function (_, i) { return i; }).filter(function (i) { return ptOf(i) < 14; });
+    if (!who.length) return '';
+    var tot = q.people.reduce(function (a, _, i) { return a + ptOf(i); }, 0);
+    var raw = q.people.map(function (_, i) { return ptOf(i) / tot * 100; }), r = raw.map(Math.floor), left = 100 - r.reduce(function (a, b) { return a + b; }, 0);
+    raw.map(function (x, i) { return { i: i, f: x - Math.floor(x) }; }).sort(function (a, b) { return b.f - a.f; }).forEach(function (o) { if (left > 0) { r[o.i]++; left--; } });
+    return L(joinA(who.map(function (i) { return nm(i) + ' is here ' + ptWord(ptOf(i)); })) + ', so a smaller share is fair. A fair share of the home jobs, counting the nights each of you is here: ' + q.people.map(function (_, i) { return nm(i) + ' ' + r[i] + '%'; }).join(' · ') + '.',
+      who.map(function (i) { return nm(i) + ' está aquí ' + ptWord(ptOf(i)); }).join(', ') + ', así que una parte más pequeña es justa. Una parte justa de la casa, contando las noches que cada uno está aquí: ' + q.people.map(function (_, i) { return nm(i) + ' ' + r[i] + '%'; }).join(' · ') + '.');
+  }
+  document.addEventListener('change', function (e) {
+    var t = e.target.closest && e.target.closest('[data-lq-pt]'); if (!t) return;
+    var i = +t.getAttribute('data-lq-pt'), v = +t.value;
+    q.pt = q.pt || {}; if (v >= 1 && v <= 13) q.pt[i] = v; else delete q.pt[i];
+    if (!Object.keys(q.pt).length) delete q.pt;
+    save(); renderResult();
+    status(v < 14 ? L(nm(i) + ' is here ' + ptWord(v) + ': a smaller fair share, beside the picture.', nm(i) + ' está aquí ' + ptWord(v) + ': una parte justa más pequeña, junto a la imagen.') : L(nm(i) + ' counts as here every night again.', nm(i) + ' cuenta como aquí todas las noches otra vez.'));
+  });
   function removePerson(k) {
     q.people.splice(k, 1);
+    if (q.pt) { var pt = {}; Object.keys(q.pt).forEach(function (x) { x = +x; if (x !== k) pt[x > k ? x - 1 : x] = q.pt[x]; }); q.pt = pt; if (!Object.keys(pt).length) delete q.pt; }
+    if (q.lh) { var lh = {}; Object.keys(q.lh).forEach(function (x) { x = +x; if (x !== k) lh[x > k ? x - 1 : x] = q.lh[x]; }); q.lh = lh; if (!Object.keys(lh).length) delete q.lh; }
     var ans = {};
     Object.keys(q.ans).forEach(function (p) {
       p = +p; if (p === k) return;
@@ -892,6 +935,8 @@
       });
       var lhn = lhNote();
       if (lhn) html += '<p class="lq-lh">' + esc(lhn) + '</p>';
+      var ptl = ptLine();
+      if (ptl) html += '<p class="lq-lh">' + esc(ptl) + '</p>';
       var th = lines.filter(function (x) { return x.k === 'think'; })[0], hm = lines.filter(function (x) { return x.k === 'home'; })[0];
       var words = [];
       if (th && th.l.one != null && th.t.n >= 2) words.push(L('The thinking work is easy to miss, because nobody sees it happen. Saying it out loud is a good start.', 'El trabajo de pensar es fácil de pasar por alto, porque nadie lo ve. Decirlo en voz alta es un buen comienzo.'));
@@ -905,6 +950,7 @@
     if (out.getAttribute('data-h') !== html) { out.setAttribute('data-h', html); out.innerHTML = html; }
     var ill = $('lq-ill'); if (ill) ill.setAttribute('aria-pressed', String(!!q.ill));
     var aw = $('lq-away'); if (aw) aw.setAttribute('aria-pressed', String(!!q.away));
+    var bn = $('lq-baby-next'); if (bn) bn.hidden = !babyOn();
     renderExtra(); renderCompare(); renderSend(); renderMini(); renderClarify(all);
     if (cardP) { if (!all.n && cardP.open) cardP.show(false); else cardP.later(); }
     document.querySelectorAll('#lq-list .lq-row').forEach(paintRow);
@@ -1232,7 +1278,7 @@
   }
   function stText(o, diff) {
     var n = diff.length, who = typed(o) || '';
-    return L('Can we look at the ' + (n === 1 ? 'job' : n + ' jobs') + ' we see differently' + (n <= 4 ? ' (' + joinA(diff.map(function (id) { return lc(label(id)); })) + ')' : '') + '? I’d like to hear how you see ' + (n === 1 ? 'it' : 'them') + (who ? ', ' + who : '') + '.',
+    return L('Can we look at the ' + (n === 1 ? 'job' : n + ' jobs') + ' we see differently' + (n <= 4 ? ' (' + joinA(diff.map(function (id) { return lc(label(id)).replace(/\s*\([^)]*\)/g, ''); })) + ')' : '') + '? I’d like to hear how you see ' + (n === 1 ? 'it' : 'them') + (who ? ', ' + who : '') + '.',
       '¿Podemos mirar ' + (n === 1 ? 'la tarea' : 'las ' + n + ' tareas') + ' que vemos distinto? Me gustaría saber cómo lo ves tú.');
   }
   function babyOn() { return q.list.some(function (id) { return groupOf(id) === 'baby'; }); }
@@ -1297,15 +1343,29 @@
     // how often / how long, where someone set it (so both devices weigh the jobs the same way)
     if (q.jw && ids.some(function (id) { return q.jw[id]; })) d.w = ids.map(function (id) { var o = q.jw[id]; return o ? (o.f || '') + (o.h ? ':' + o.h : '') : ''; }).join('|');
     var cs = {}; q.people.forEach(function (_, i) { if (q.solo && q.solo[i]) cs[i] = q.solo[i]; }); if (Object.keys(cs).length) d.c = cs;
+    if (q.baby) d.bb = 1;
+    if (q.lh && Object.keys(q.lh).length) d.lh = q.lh;
+    if (q.pt && Object.keys(q.pt).length) d.pt = q.pt;
+    // your own context, only when you ticked "Include my context"
+    var cx = q.cxOn ? myCx() : []; if (cx.length) d.cx = { p: q.me, t: cx };
+    // the fridge list made from this quick look rides along, so one link is the latest of both
+    var fr = fridgeOut(); if (fr.length) d.fr = fr;
     return d;
   }
-  function packed(to) { return b64u(JSON.stringify(packObj(to))); }
+  function fridgeOut() {
+    var api = window.TOLLemonade;
+    if (!api || !api.ownersOut) return [];
+    try { return api.ownersOut() || []; } catch (e) { return []; }
+  }
+  // the list as it was last sent from here (so a reply can say what the other person took off)
+  function noteSent(d) { q.sl = d.l.slice(); save(); }
+  function packed(to, mark) { var d = packObj(to); if (mark) noteSent(d); return b64u(JSON.stringify(d)); }
   // "#together=…" (collab.js: squeezed, the site's shared format for two-person tools) where it's loaded;
   // the older "#q=…" otherwise. Both open here.
-  function linkFor(to) {
+  function linkFor(to, mark) {
     var C = window.TOLCollab;
-    if (C && C.wrap) { try { return C.wrap('lemonade-quick', packObj(to), { page: '/lemonade-stand.html', name: typed(q.me), lang: isEs() ? 'es' : undefined }); } catch (e) {} }
-    return location.origin + '/lemonade-stand.html#q=' + packed(to);
+    if (C && C.wrap) { try { var d0 = packObj(to); if (mark) noteSent(d0); return C.wrap('lemonade-quick', d0, { page: '/lemonade-stand.html', name: typed(q.me), lang: isEs() ? 'es' : undefined }); } catch (e) {} }
+    return location.origin + '/lemonade-stand.html#q=' + packed(to, mark);
   }
   function touchy() { try { return window.matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } }
   // One main way to send (to everyone in one message with three or more, or to the other person), and the rest
@@ -1335,6 +1395,8 @@
       // "Pass this phone" on a phone or tablet; on a computer, "Hand over"
       if (next >= 0) more += '<button type="button" data-lq-turn="' + next + '">' + esc(touchy() ? L('Pass this phone to ', 'Pasarle el teléfono a ') + nn : L('Hand over to ', 'Ahora le toca a ') + nn + L(' (same device)', ' (mismo aparato)')) + '</button>';
     }
+    // the fridge list made from this quick look goes in the same link, so there's one latest version
+    if (main && fridgeOut().length) main += '<p class="lq-mini lq-carries">' + esc(L('This link carries your fridge list too, so it’s the latest of both.', 'Este enlace lleva también la lista del refri, así que es lo más reciente de las dos.')) + '</p>';
     var html = main ? main + '<details class="lq-moreshare"' + (sendOpen ? ' open' : '') + '><summary>' + esc(L('Other ways to share', 'Otras formas de compartir')) + '</summary><div class="lq-tools">' + more + '</div></details>' : '';
     if (box.getAttribute('data-h') !== html) {
       var a = document.activeElement, key = null;
@@ -1353,6 +1415,7 @@
     var box = $('lq-linkbox'), inp = $('lq-link');
     if (url && box && inp) { box.hidden = false; inp.value = url; }
     // the "Send by" buttons the site's other two-person tools use: QR code, text message, email, apps, copy
+    rulesBack();
     if (url && window.TOLCollab && window.TOLCollab.sendSheet) {
       window.TOLCollab.sendSheet({ heading: who ? L('Send to ', 'Enviar a ') + who : L('Send it', 'Envíalo'), url: url, title: title, text: text, who: who, subject: title, lang: isEs() ? 'es' : 'en', blockHeading: L('Send by', 'Enviar por'),
         qrNote: L('It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs.', 'Abre su vistazo con las mismas tareas. Tus respuestas quedan ocultas hasta que haga las suyas.') });
@@ -1371,7 +1434,7 @@
   document.addEventListener('click', function (e) {
     var s = e.target.closest && e.target.closest('[data-lq-send]');
     if (s) {
-      var o = +s.getAttribute('data-lq-send'), url = linkFor(o), me = q.me;
+      var o = +s.getAttribute('data-lq-send'), url = linkFor(o, true), me = q.me;
       var reply = hasAny(o);
       var text = reply ? L('Here’s my side of our quick look at who does what at home. Tap the link to see where we agree, and where we see it differently.', 'Aquí está mi lado de nuestro vistazo a quién hace qué en casa. Toca el enlace para ver en qué coincidimos y en qué no.')
         : L('Here’s my quick look at who does what at home. Tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.', 'Aquí está mi vistazo a quién hace qué en casa. Toca quién hace casi siempre cada tarea, como tú lo ves. Mis respuestas quedan ocultas hasta que hagas las tuyas. No se sube nada.');
@@ -1390,7 +1453,7 @@
         joinA(todo.map(function (o) { return typed(o) || personN(o); })).replace(/ and /g, ' y ') + ': toquen su propio enlace y marquen quién hace casi siempre cada tarea, como lo ven. Las respuestas que ya están quedan ocultas hasta que hagan las suyas.'));
       if (inN.length > 1) ls.push(L('Already in: tap your link to see where we all agree.', 'Ya respondieron: toquen su enlace para ver en qué coincidimos.'));
       ls.push(L('Nothing is uploaded.', 'No se sube nada.'), '');
-      q.people.forEach(function (_, o) { if (o !== q.me) ls.push((typed(o) || personN(o)) + (hasAny(o) ? L(' (your answers are in)', ' (tus respuestas ya están)') : '') + ': ' + linkFor(o)); });
+      q.people.forEach(function (_, o) { if (o !== q.me) ls.push((typed(o) || personN(o)) + (hasAny(o) ? L(' (your answers are in)', ' (tus respuestas ya están)') : '') + ': ' + linkFor(o, true)); });
       var all = ls.join('\n');
       if (window.TOLShare && window.TOLShare.share) { try { window.TOLShare.share({ title: L('Our quick look', 'Nuestro vistazo'), text: all, url: false, result: true }); } catch (err) { copy(all); } }
       else copy(all).then(function (ok) { status(ok ? L('Copied one message with a link for each person. Paste it into your group chat.', 'Se copió un mensaje con un enlace para cada persona. Pégalo en el chat del grupo.') : L('Couldn’t copy here.', 'No se pudo copiar aquí.')); });
@@ -1399,7 +1462,7 @@
     }
     var qb = e.target.closest && e.target.closest('[data-lq-qr]');
     if (qb) {
-      var qo = +qb.getAttribute('data-lq-qr'), qurl = linkFor(qo), qo2 = { title: L('Scan with ' + (typed(qo) ? typed(qo) + '’s' : 'the other') + ' phone', 'Escanéalo con el teléfono de ' + (typed(qo) || 'la otra persona')), note: L('It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs. On a laptop? Use “Send” to copy the link instead.', 'Abre su vistazo con las mismas tareas. Tus respuestas quedan ocultas hasta que haga las suyas.') };
+      var qo = +qb.getAttribute('data-lq-qr'), qurl = linkFor(qo, true), qo2 = { title: L('Scan with ' + (typed(qo) ? typed(qo) + '’s' : 'the other') + ' phone', 'Escanéalo con el teléfono de ' + (typed(qo) || 'la otra persona')), note: L('It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs. On a laptop? Use “Send” to copy the link instead.', 'Abre su vistazo con las mismas tareas. Tus respuestas quedan ocultas hasta que haga las suyas.') };
       if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(qurl, qo2);
       else { var sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = function () { if (window.TOLShareKit) window.TOLShareKit.showQR(qurl, qo2); }; document.head.appendChild(sc); }
       return;
@@ -1439,6 +1502,7 @@
       lines.push('• ' + secName(s) + ': ' + parts.join(', ') + '.');
     });
     if (lhNote()) lines.push('• ' + lhNote());
+    if (ptLine()) lines.push('• ' + ptLine());
     if (q.ill && q.split && q.people.length === 2) lines.push('• ' + L('The split we’re aiming for at home: ', 'El reparto que buscamos en casa: ') + chatName(0) + ' ' + q.split + ' · ' + chatName(1) + ' ' + (100 - +q.split) + '.');
     others().filter(shown).forEach(function (o) {
       var mine = q.ans[q.me] || {}, th = q.ans[o] || {}, same = 0, diff = [];
@@ -1534,7 +1598,17 @@
     if (typeof d.w === 'string') d.w.split('|').forEach(function (x, j) { var id = ids[j]; if (!known(id) || !x) return; var pr = x.split(':'), y = {}; if (OFTEN_W[pr[0]]) y.f = pr[0]; if (+pr[1] > 0 && +pr[1] <= 80) y.h = +pr[1]; if (Object.keys(y).length) jw[id] = y; });
     var solo = {};
     if (d.c && typeof d.c === 'object') Object.keys(d.c).forEach(function (k) { var x = +d.c[k]; if (+k >= 0 && +k < n && x > 0 && x <= 168) solo[k] = x; });
-    return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i, away: !!d.aw, kids: !!d.k || list.some(isKidJob), hrs: hrs, split: split, jw: jw, solo: solo, st: st0 };
+    var cx = d.cx && typeof d.cx === 'object' && typeof d.cx.p === 'number' && d.cx.p >= 0 && d.cx.p < n ? { p: d.cx.p, t: cleanCx(d.cx.t) } : null;
+    var fr = (Array.isArray(d.fr) ? d.fr : []).slice(0, 16).map(function (o) {
+      if (!o || typeof o !== 'object') return null;
+      var nn = String(o.n == null ? '' : o.n).replace(/\s+/g, ' ').trim().slice(0, 60); if (!nn) return null;
+      var x = { n: nn, w: String(o.w == null ? '' : o.w).trim().slice(0, 40) };
+      if (Array.isArray(o.s)) x.s = o.s.slice(0, 2).map(function (b) { return Array.isArray(b) ? [String(b[0] == null ? '' : b[0]).slice(0, 24), String(b[1] == null ? '' : b[1]).trim().slice(0, 40)] : null; }).filter(Boolean);
+      if (x.s && x.s.length !== 2) delete x.s;
+      return x;
+    }).filter(Boolean);
+    return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i, away: !!d.aw, kids: !!d.k || list.some(isKidJob), hrs: hrs, split: split, jw: jw, solo: solo, st: st0,
+      baby: !!d.bb, lh: cleanLh(d.lh, n), pt: cleanPt(d.pt, n), cx: cx && cx.t.length ? cx : null, fr: fr };
   }
   function receive(h) {
     var d = decode(h);
@@ -1548,8 +1622,14 @@
     var me = d.t >= 0 ? d.t : -1;
     if (me < 0) { for (var i = 0; i < d.people.length; i++) if (i !== d.f && !(d.ans[i] && Object.keys(d.ans[i]).length)) { me = i; break; } }
     if (me < 0) me = d.f === 0 ? 1 : 0;
-    var replaced = false, conf = [];
+    var replaced = false, conf = [], chg = null;
     if (localAny && same) {
+      // what the other person changed in the list: jobs they added, and ones they took off (the list last sent from
+      // here, or a job they had answered before). A job they took off stays here, to talk about.
+      var theirs0 = q.ans[d.f] || {};
+      var addI = d.list.filter(function (id) { return q.list.indexOf(id) < 0; });
+      var rmI = d.f >= 0 && d.ans[d.f] && Object.keys(d.ans[d.f]).length ? q.list.filter(function (id) { return d.list.indexOf(id) < 0 && ((q.sl && q.sl.indexOf(id) >= 0) || theirs0[id] != null); }) : [];
+      if (addI.length || rmI.length) chg = { add: addI.slice(0, 20), rm: rmI.slice(0, 20) };
       q.people = q.people.map(function (p, i) { return String(p || '').trim() ? p : d.people[i]; });
       d.list.forEach(function (id) { if (q.list.indexOf(id) < 0) q.list.push(id); });
       Object.keys(d.ans).forEach(function (p) {
@@ -1560,6 +1640,9 @@
       if (d.ill) q.ill = true;
       if (d.away) q.away = true;
       if (d.kids) q.kids = true;
+      if (d.baby) q.baby = true;
+      if (Object.keys(d.lh).length) { q.lh = q.lh || {}; Object.keys(d.lh).forEach(function (k) { q.lh[k] = d.lh[k]; }); }
+      if (Object.keys(d.pt).length) { q.pt = q.pt || {}; Object.keys(d.pt).forEach(function (k) { q.pt[k] = d.pt[k]; }); }
       // where the two devices disagree (paid hours, the split), say so and let them pick, never quietly keep one
       q.hrs = q.hrs || {}; Object.keys(d.hrs).forEach(function (k) { if (!q.hrs[k]) q.hrs[k] = d.hrs[k]; else if (Math.abs(q.hrs[k] - d.hrs[k]) >= 0.5) conf.push({ k: 'h' + k, a: q.hrs[k], b: d.hrs[k] }); });
       if (!q.split && d.split) q.split = d.split; else if (q.split && d.split && q.split !== d.split) conf.push({ k: 's', a: q.split, b: d.split });
@@ -1570,6 +1653,9 @@
       if (localAny) { undoQ = JSON.parse(JSON.stringify(q)); replaced = true; }
       var lang0 = q.lang;
       q = { v: 1, people: d.people, list: d.list.length ? d.list : starters(d.kids), ans: d.ans, me: me, ill: d.ill, away: d.away, kids: d.kids, hrs: d.hrs, split: d.split, peek: {}, jw: d.jw, solo: d.solo, soloAuto: 1 };
+      if (d.baby) q.baby = true;
+      if (Object.keys(d.lh).length) q.lh = d.lh;
+      if (Object.keys(d.pt).length) q.pt = d.pt;
       if (lang0) q.lang = lang0;
       if (!q.ans[me]) q.ans[me] = {};
     }
@@ -1580,10 +1666,33 @@
     delete q.askMe;
     if (d.st >= 0 && typeof q.st !== 'number') q.st = d.st;
     if (conf.length) q.from.conf = conf;
+    if (chg) q.from.chg = chg;
+    // their context, sent on purpose: shown beside their view once you've answered
+    if (d.cx && d.cx.p !== me) { q.cx = q.cx || {}; q.cx[d.cx.p] = d.cx.t; }
+    // a link someone sent you: no "Before you share" card over the list (a one-line welcome says it instead; the
+    // card still shows when you send one yourself), and no other pop-up while you answer and compare
+    rulesQuiet();
     save(); renderAll();
+    // the fridge list that came with it: owners merged in (a different owner is shown beside yours to pick)
+    if (d.fr.length) {
+      var api = window.TOLLemonade;
+      if (api && api.ownersIn) { try { if (api.ownersIn({ people: namesOut(), me: q.me, list: d.fr, by: by })) body.setAttribute('data-ls-fridge', ''); } catch (e) {} }
+    }
     var fr = $('lq-from');
     if (q.from.reply) { var c = $('lq-cmp'); goTo($('lq-res')); if (c) { c.setAttribute('tabindex', '-1'); c.focus({ preventScroll: true }); } }
     else if (fr) { goTo($('quick')); fr.setAttribute('tabindex', '-1'); fr.focus({ preventScroll: true }); }
+  }
+  var rulesSkipped = false;
+  function rulesQuiet() {
+    body.setAttribute('data-no-tip', '');
+    var C = window.TOLCollab;
+    try { if (C && C.rulesDone && !C.rulesDone()) { sessionStorage.setItem('tol-collab-rules-skip', '1'); rulesSkipped = true; } } catch (e) {}
+    [].forEach.call(document.querySelectorAll('.tcol-rules.is-float'), function (n) { n.remove(); });
+  }
+  function rulesBack() {
+    if (!rulesSkipped) return;
+    rulesSkipped = false;
+    try { sessionStorage.removeItem('tol-collab-rules-skip'); } catch (e) {}
   }
   function renderFrom() {
     var box = $('lq-from'); if (!box) return;
@@ -1593,10 +1702,11 @@
     // once you've answered and the comparison shows, the "stays hidden until you've done yours" note has done its job
     var answered = !f.reply && f.f >= 0 && f.f !== q.me && hasAny(q.me) && shown(f.f);
     var conf = (f.conf || []).filter(function (c) { return c.k === 's' ? q.people.length === 2 : +c.k.slice(1) < q.people.length; });
-    if (answered && !f.replaced && !conf.length) { box.hidden = true; box.innerHTML = ''; box.removeAttribute('data-h'); return; }
+    var chg = f.chg && (f.chg.add.length || f.chg.rm.length) ? f.chg : null;
+    if (answered && !f.replaced && !conf.length && !chg) { box.hidden = true; box.innerHTML = ''; box.removeAttribute('data-h'); return; }
     var html = answered ? '' : '<p>' + esc(f.reply
       ? L(by + '’s view is in. Below: where you agree, and where you see it differently.', 'Llegó la vista de ' + by + '. Abajo: en qué coinciden y en qué lo ven distinto.')
-      : L(by + ' sent you their quick look. Tap who mostly does each job, as you see it. ' + (f.by ? f.by + '’s' : 'Their') + ' answers stay hidden until you’ve done yours, so you’re not swayed.',
+      : L(by + ' sent this. Your answers stay on your ' + (touchy() ? 'phone' : 'device') + '. Start tapping: ' + (f.by ? f.by + '’s' : 'their') + ' answers stay hidden until you’ve done yours, so you’re not swayed.',
         by + ' te envió su vistazo. Toca quién hace casi siempre cada tarea, como tú lo ves. Sus respuestas quedan ocultas hasta que hagas las tuyas, para que no te influyan.')) + '</p>';
     if (!answered && (q.people.length > 2 || f.t < 0)) {
       html += '<p class="lq-mini">' + esc(L('Which one are you?', '¿Quién eres?')) + '</p><div class="lq-pick" role="group" aria-label="' + esc(L('Which one are you?', '¿Quién eres?')) + '">' + q.people.map(function (_, i) {
@@ -1611,6 +1721,13 @@
         return '<li>' + esc(what + ': ' + w(c.a) + L(' here, ', ' aquí, ') + w(c.b) + L(' on ', ' en ') + dev + '.') +
           ' <button type="button" class="lq-btn-link" data-lq-conf="' + x + '" data-use="b">' + esc(L('Use ', 'Usar ') + w(c.b)) + '</button> · <button type="button" class="lq-btn-link" data-lq-conf="' + x + '" data-use="a">' + esc(L('Keep ', 'Dejar ') + w(c.a)) + '</button></li>';
       }).join('') + '</ul></div>';
+    }
+    if (chg) {
+      var bits = [], who0 = f.by || (f.f >= 0 && typed(f.f)) || L('They', 'La otra persona');
+      if (chg.add.length) bits.push(L('added ' + (chg.add.length === 1 ? '1 job' : chg.add.length + ' jobs') + ' (' + joinA(chg.add.map(function (id) { return label(id); })) + ')', 'añadió ' + chg.add.length + (chg.add.length === 1 ? ' tarea' : ' tareas') + ' (' + chg.add.map(label).join(', ') + ')'));
+      var still = chg.rm.filter(function (id) { return q.list.indexOf(id) >= 0; });
+      if (chg.rm.length) bits.push(L('took off ' + joinA(chg.rm.map(function (id) { return label(id); })), 'quitó ' + chg.rm.map(label).join(', ')));
+      html += '<p class="lq-chg">' + esc(who0 + ' ' + bits.join(L(' and ', ' y ')) + '.') + (still.length ? ' ' + esc(L((still.length === 1 ? 'It’s' : 'They’re') + ' still on your list here, to talk about.', 'Sigue en tu lista aquí, para conversarlo.')) + ' <button type="button" class="lq-btn-link" data-lq-rmtoo>' + esc(L('Take ' + (still.length === 1 ? 'it' : 'them') + ' off here too', 'Quitarla aquí también')) + '</button>' : '') + '</p>';
     }
     if (f.replaced) html += '<p class="lq-mini">' + esc(L('The quick look that was on this device before was set aside.', 'El vistazo que había antes en este aparato quedó guardado aparte.')) + ' <button type="button" class="lq-btn-link" data-lq-undo>' + esc(L('Bring it back', 'Recuperarlo')) + '</button></p>';
     html += '<p class="lq-mini"><button type="button" class="lq-btn-link" data-lq-from-ok>' + esc(L('Okay, hide this', 'Listo, ocultar esto')) + '</button></p>';
@@ -1644,6 +1761,11 @@
       var f0 = document.querySelector('#lq-names [data-lq-name="' + ai + '"]'); if (f0) f0.focus({ preventScroll: true });
       return;
     }
+    if (e.target.closest && e.target.closest('[data-lq-rmtoo]') && q.from && q.from.chg) {
+      q.from.chg.rm.slice().forEach(function (id) { if (q.list.indexOf(id) >= 0) dropJob(id); });
+      q.from.chg.rm = []; save(); renderFrom();
+      return;
+    }
     var t = e.target.closest && e.target.closest('[data-lq-iam], [data-lq-undo], [data-lq-from-ok]'); if (!t) return;
     if (t.hasAttribute('data-lq-iam')) { setMe(+t.getAttribute('data-lq-iam'), true); return; }
     if (t.hasAttribute('data-lq-undo')) {
@@ -1674,10 +1796,12 @@
       var vs = [q.me].concat(so).map(function (p) { return (q.ans[p] || {})[id]; }).filter(function (x) { return x != null; });
       var who = vs.length && typeof vs[0] === 'number' && vs.every(function (x) { return x === vs[0]; }) ? vs[0] : -1;
       if (who >= 0) known0++;
-      return { name: label(id), who: who };
+      return { name: label(id), who: who, night: kindOf(id) === 'night' };
     });
-    // owned jobs first, so a long list keeps the settled ones
-    owners.sort(function (a, b) { return (b.who >= 0) - (a.who >= 0); });
+    // the nights first (they can be split by time, an owner for each block), then owned jobs, so a long list keeps
+    // the settled ones
+    owners.sort(function (a, b) { return (b.night - a.night) || ((b.who >= 0) - (a.who >= 0)); });
+    owners.forEach(function (o) { delete o.night; });
     var r = api.fromQuick({ people: namesOut(), me: q.me, chips: chipList(), owners: owners.slice(0, cap) });
     body.setAttribute('data-ls-fridge', '');
     var o = $('owners'), h = $('owners-h'), st = $('own-status');
@@ -1708,7 +1832,8 @@
     });
     var work = q.people.map(function (_, i) { return hrsOf(i); });
     var soloH = q.ill && q.kids && q.solo ? q.people.map(function (_, i) { return q.solo[i] || 0; }) : null;
-    var r = api.fromQuick({ people: namesOut(), me: q.me, jobs: jobs, work: work && work.some(Boolean) ? work : null, solo: soloH && soloH.some(Boolean) ? soloH : null, split: q.ill && q.split && q.people.length === 2 ? [+q.split, 100 - +q.split] : null });
+    var part = q.people.map(function (_, i) { return ptOf(i) / 14; });
+    var r = api.fromQuick({ people: namesOut(), me: q.me, jobs: jobs, part: part.some(function (x) { return x < 1; }) ? part : null, work: work && work.some(Boolean) ? work : null, solo: soloH && soloH.some(Boolean) ? soloH : null, split: q.ill && q.split && q.people.length === 2 ? [+q.split, 100 - +q.split] : null });
     setView('deep');
     var bar = $('ls-deep-bar'), msg = $('ls-deep-msg');
     goTo(bar);
@@ -1766,6 +1891,22 @@
       'Se añadieron las tomas de noche, estar de guardia de noche, biberones y pañales.' + (tookSchool ? ' Llevar a la escuela salió de la lista: está en «Mostrar más tareas» si también tienen hijos mayores.' : '') + ' Las noches tienen su propia barra.')
       : L('The baby jobs nobody has answered are off the list.', 'Las tareas del bebé sin respuesta salieron de la lista.'));
   }
+  function settleQuick() {
+    var moved = false, stop = function () { moved = true; };
+    ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stop, { once: true, passive: true }); });
+    var go = function () { if (moved) return; var el = $('quick'); if (el) el.scrollIntoView({ block: 'start', behavior: 'auto' }); };
+    go(); requestAnimationFrame(go); setTimeout(go, 120);
+    if (document.readyState === 'complete') setTimeout(go, 300); else window.addEventListener('load', function () { setTimeout(go, 30); }, { once: true });
+  }
+  // "/lemonade-stand.html#part-time" (from the stepfamily page): the names, with a place for someone here part of the time
+  function partLink() {
+    if (q.people.length < 3 && q.people.length < MAX_P) { q.people.push(''); save(); renderAll(); }
+    var a = $('part-time'); if (a) goTo(a);
+    var sel = document.querySelectorAll('#lq-names [data-lq-pt]'), last = sel[sel.length - 1];
+    var inp = last && last.closest('.lq-name').querySelector('input');
+    if (inp && !inp.value) inp.focus({ preventScroll: true }); else if (last) last.focus({ preventScroll: true });
+    status(L('Type the name of whoever lives here part of the time, then pick “Here every other weekend” (or half the time) under it. They get a smaller fair share; no hours needed.', 'Escribe el nombre de quien vive aquí parte del tiempo y elige «Aquí un fin de semana sí y otro no» debajo. Le toca una parte justa más pequeña, sin contar horas.'));
+  }
   // "/lemonade-stand.html#quick-baby" (from the New baby page): the quick look with the baby jobs already on
   function babyLink() {
     if (!q.baby) setBaby(true, true);
@@ -1805,12 +1946,28 @@
       var tn = ownText(el);
       if (tn.textContent !== t && !(k === 'lq-erase' && el.dataset && el.dataset.armed)) tn.textContent = t;
     });
+    headLang(es);
     var inp = $('lq-new'); if (inp) inp.placeholder = es ? '+ añadir una tarea' : '+ add a job';
     var lb = $('lq-lang'); if (lb) { lb.textContent = es ? 'In English' : 'En español'; lb.setAttribute('lang', es ? 'en' : 'es'); }
     var sec = $('quick'); if (sec) { if (es) sec.setAttribute('lang', 'es'); else sec.removeAttribute('lang'); }
     // "Talk about it": in Spanish, the words to use on the Spanish page
     var talkA = $('lq-talk-d') && $('lq-talk-d').closest('a'); if (talkA) talkA.setAttribute('href', es ? '/en-espanol.html#casa' : '/check-ins.html');
     fridgeLang(es);
+  }
+  // The page's own title and intro follow the quick look's language too (a shared link opened in Spanish)
+  var HEAD0 = null;
+  var HEAD_ES = { h1: '¿Quién hace qué? Tareas y cuentas en casa ',
+    what: '<strong>Qué hace:</strong> toca quién hace casi siempre cada tarea, o anota las horas y las cuentas de una persona o de toda la casa. <span aria-hidden="true">&middot;</span> <strong>Qué obtienes:</strong> una imagen sencilla del reparto, en qué coinciden y en qué no, y una lista para el refri. <span aria-hidden="true">&middot;</span> Unos 2 minutos el vistazo rápido, 15 la versión completa',
+    aka: 'También se llama el Puesto de Limonada' };
+  function headLang(es) {
+    es = es && body.getAttribute('data-ls-view') === 'quick';
+    var h1 = document.querySelector('.read-head h1'), what = document.querySelector('.read-head .tol-what'), akas = document.querySelectorAll('.read-head .tol-aka');
+    if (!h1 || !what) return;
+    if (!HEAD0) HEAD0 = { h1: ownText(h1).textContent, what: what.innerHTML, aka: [].map.call(akas, function (a) { return a.textContent; }) };
+    var head = h1.closest('.read-head'); if (head) { if (es) head.setAttribute('lang', 'es'); else head.removeAttribute('lang'); }
+    var t = es ? HEAD_ES.h1 : HEAD0.h1; if (ownText(h1).textContent !== t) ownText(h1).textContent = t;
+    var w = es ? HEAD_ES.what : HEAD0.what; if (what.innerHTML !== w) what.innerHTML = w;
+    [].forEach.call(akas, function (a, k) { var x = es ? (k ? '' : HEAD_ES.aka) : HEAD0.aka[k]; if (a.textContent !== x) a.textContent = x; a.hidden = es && k > 0; });
   }
   // The fridge list, made from the quick look in Spanish, speaks Spanish too (its own words and its buttons)
   var FR0 = null;
@@ -1870,7 +2027,12 @@
     }
     ready = true;
     renderAll();
+    // arriving at #quick (the home page's "Quick look"): the site's top bar lands after the first paint and pushes the
+    // page down, which showed as a blank band above the quick look. Put the quick look back at the top once the bar is
+    // in, unless the person has already started scrolling.
+    if (/^#quick(-h|-baby)?$/.test(location.hash || '')) settleQuick();
     if (location.hash === '#quick-baby') babyLink();
+    if (location.hash === '#part-time') setTimeout(partLink, 30);
     if (isQuickLink(location.hash || '')) receive(location.hash);
     else if (/^#owners(-h)?$/.test(location.hash || '')) {
       // the fridge list from another page (like the check-in card): the names typed here come along, and every job here is a chip
@@ -1921,5 +2083,17 @@
       var a = e.target.closest && e.target.closest('a[href="#owners-h"], a[href="#owners"]'); if (a) body.setAttribute('data-ls-fridge', '');
     });
   }
+  // for the fridge list: one link for both (its "Send to" uses the quick look's link when the names match)
+  window.TOLLemonadeQuick = {
+    carries: function (names) {
+      if (!ready || !q || !hasAny(q.me)) return false;
+      var mine = q.people.map(function (_, i) { return low(typed(i)); }).filter(Boolean);
+      return (names || []).every(function (n) { return mine.indexOf(low(n)) >= 0; });
+    },
+    link: function (toName) {
+      var to = -1; q.people.forEach(function (_, i) { if (to < 0 && low(typed(i)) && low(typed(i)) === low(toName)) to = i; });
+      return linkFor(to, true);
+    }
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

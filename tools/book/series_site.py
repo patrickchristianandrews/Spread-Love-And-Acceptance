@@ -21,6 +21,8 @@ START, END = '<!-- book-series:start -->', '<!-- book-series:end -->'
 CSS = '<link rel="stylesheet" href="/assets/css/book-series.css">'
 JS = '<script src="/assets/js/book-shop.js" defer></script>'
 PDF_FOR = {(3,): 'understanding', (2,): 'together', (1, 3): 'for-yourself', (1,): 'for-yourself'}
+# panel16: no PDF is made for each print book on its own, so the button says which free PDF holds that book's chapters
+PDF_NAME = {'understanding': 'Understanding People', 'together': 'The Book for Two or More', 'for-yourself': 'The Book for One Person', 'whole': 'the whole book'}
 
 
 def esc(s):
@@ -120,9 +122,9 @@ def home_html():
         first = '/book/%s.html' % b['chapters'][0]
         rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Book %d</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                      '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="%s">Read free online</a> '
-                     '<a class="tol-btn is-quiet" href="/book/download.html#%s">Free PDF</a></p>%s</div></li>') % (
+                     '<a class="tol-btn is-quiet" href="/book/download.html#%s">Free PDF: in %s</a></p>%s</div></li>') % (
             b['color'], cover_img(b['id'], 'Cover of Book %d, %s' % (b['n'], b['title'])), b['n'], esc(b['title']), esc(b['line']), meta, first,
-            pdf_anchor(b['chapters']), shop_row(b['id'])))
+            pdf_anchor(b['chapters']), esc(PDF_NAME[pdf_anchor(b['chapters'])]), shop_row(b['id'])))
     w = c['workbook']
     m = made.get(w['id'], {})
     meta = 'Every workpaper, to fill in by hand' + (' · %d large pages' % m['pages'] if m.get('pages') else '')
@@ -144,7 +146,8 @@ def home_html():
             '<h2 id="series-h">The book in print</h2>'
             '<p>The same chapters, as a series of short colour books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
             'In print, each chapter is the short version, with a code to scan for the full one.</p>'
-            '<p class="bk-series-note">The print books are optional; everything stays free online.</p>'
+            '<p class="bk-series-note" data-shop-soon>Paperbacks: coming to Amazon soon. Everything here stays free to read online.</p>'
+            '<p class="bk-series-note">The PDFs come as four collections, not one per book. Each book’s “Free PDF” button opens the collection its chapters are in (Book 4’s short afterword is in the whole book).</p>'
             '<ol class="bk-series-list">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), JS, END)
 
 

@@ -326,7 +326,16 @@
     var fail = function () { if (fallbackCopy(text)) done(); else say('Copying didn’t work here. Select the words and copy them by hand.'); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail); else fail();
   }
-  function shareUrl() { return location.origin + location.pathname + '#ideas'; }
+  // tools16: the link carries the idea that was sent (after the #, so it never reaches a server): a short fingerprint
+  // of the idea's words, so it still finds the right one if the list is reordered, plus who it was picked for.
+  function ideaId(text) { var h = 5381; for (var i = 0; i < text.length; i++) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0; return h.toString(36); }
+  function shareUrl() { return location.origin + location.pathname + (current ? '#idea=' + ideaId(current.text) + '.' + radioVal('bd-who', 'fr') : '#ideas'); }
+  // opened from a sent link: show that idea first, with a line saying it was sent
+  function sentIdea() {
+    var m = /^#idea=([a-z0-9]+)(?:\.([a-z]{2}))?$/.exec(location.hash || ''); if (!m) return null;
+    var d = null; data.forEach(function (x) { if (!d && ideaId(x.text) === m[1]) d = x; });
+    return d ? { d: d, who: WHO[m[2]] ? m[2] : '' } : { d: null, who: '' };
+  }
 
   btnNext.addEventListener('click', function () { next(choices()); });
   btnCopy.addEventListener('click', function () { if (current) copy(current.text, btnCopy); });
@@ -347,6 +356,29 @@
   });
 
   load();
-  refresh();
+  // tools16: arriving from a two-person journey (Feel close again, Keep a good thing good, Five minutes together,
+  // Long-distance), "Who with?" starts on Partner. A ?who= in the link still wins (bonding.html's own script).
+  (function () {
+    if (/[?&]who=/.test(location.search)) return;
+    var ref = ''; try { ref = document.referrer ? new URL(document.referrer).pathname : ''; } catch (e) {}
+    if (!/^\/(journeys\.html|index\.html)?$/.test(ref)) return;
+    var two = false; try { var j = JSON.parse(localStorage.getItem('tol-journeys-v1') || 'null'); two = !!(j && j.j && ['close', 'keep', 'busy2', 'apart'].some(function (k) { return j.j[k]; })); } catch (e) {}
+    if (two) setRadio('bd-who', 'pa');
+  })();
+  var sent = sentIdea();
+  if (sent && sent.d) {
+    if (sent.who) setRadio('bd-who', sent.who);
+    var c0 = choices();
+    deck = buildDeck(c0); pos = 0;
+    show({ d: sent.d, exact: true }, c0);
+    metaEl.textContent = 'The idea that was sent to you: ' + describe(sent.d) + '. Tap “Another idea” for more.';
+    try { history.replaceState(history.state, '', location.pathname + location.search + '#ideas'); } catch (e) {}
+    var h2 = document.getElementById('ideas');
+    var toIdea = function () { if (h2) h2.scrollIntoView({ block: 'start' }); };
+    toIdea(); window.addEventListener('load', function () { setTimeout(toIdea, 0); }, { once: true });
+  } else {
+    if (sent) say('That idea isn’t in the list any more, so here’s another one.');
+    refresh();
+  }
   root.classList.add('is-ready');
 })();
