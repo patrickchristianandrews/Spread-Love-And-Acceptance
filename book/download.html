@@ -56,7 +56,11 @@
 .bk-dl a.bk-dl-nomail{ display:inline-flex; flex-direction:column; min-height:44px; padding:.45rem .9rem; border:2px solid var(--line); border-radius:12px; text-decoration:none; color:var(--ink); font-weight:600; }
 .bk-dl a.bk-dl-nomail .bk-dl-m{ font-weight:400; font-size:.85rem; color:var(--ink-soft); }
 .bk-dl details.bk-dl-long{ margin:1.6rem 0 1rem; padding:.2rem 0; border-top:1px solid var(--line); }
-.bk-dl details.bk-dl-long > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font:600 1.15rem/1.3 "Fraunces", Georgia, serif; padding:.5rem 0; }
+.bk-dl details.bk-dl-long > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; gap:.5rem; list-style:none; padding:.5rem 0; }
+.bk-dl details.bk-dl-long > summary::-webkit-details-marker{ display:none; }
+.bk-dl details.bk-dl-long > summary::before{ content:""; flex:none; width:.55em; height:.55em; border-right:2.5px solid currentColor; border-bottom:2.5px solid currentColor; transform:rotate(-45deg); transition:transform .2s; }
+.bk-dl details.bk-dl-long[open] > summary::before{ transform:rotate(45deg); }
+.bk-dl details.bk-dl-long > summary h2{ margin:0; font-size:1.3rem; }
 .bk-dl details.bk-dl-long > p{ margin:.2rem 0 .8rem; }
 @media (max-width:420px){ .bk-dl .bk-dl-book{ grid-template-columns:4.6rem minmax(0,1fr); gap:.8rem; padding:.8rem; } }
 </style>
