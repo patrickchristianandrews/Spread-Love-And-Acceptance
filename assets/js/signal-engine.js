@@ -1724,11 +1724,11 @@ function analyze(textIn, opts){
     drop("absolute", h=>{
       const st = sentText(h), pre = lc.slice(Math.max(0, h.s-30), h.s), after = lc.slice(h.e, h.e+30);
       if(/\b(?:don't|doesn't|didn't|isn't|wasn't|aren't|not|won't)\s+(?:\w+\s+)?$/.test(pre) && /^(?:always|every (?:single )?time|all the time)$/i.test(h.match)) return true;
-      if(/\bthank(?:s| you)\b[^.!?]*$/.test(pre) || /^\s*(?:have|be (?:loved|welcome|my|our|your|there|family)|love|will(?:\s|$))/.test(after)) return true;
+      if(/\bthank(?:s| you)\b[^.!?]*$/.test(pre) || /^\s*(?:love\b|will(?:\s|$)|be (?:loved|welcome|grateful|thankful|proud))/.test(after) || /\b(?:you'll|you will|i'll|i will|we'll|we will)\s+$/.test(pre) && /^\s*(?:have (?:me|us|your|a home|a place|a bed|my|our|family)|be (?:my|our|your|there|family|loved|welcome)|tell you)\b/.test(after)) return true;
       if(/^(?:what|which|how|is there)\b/.test(st.trim()) && /\?\s*$/.test(st) && /\byou\b/.test(st) && /\b(?:want|like|love|enjoy|remember)\b/.test(st)) return true;
       const sm = pre.match(/(?:^|[^\w'])(i|i'm|i am|i've|i'll|i'd|we|we've|we'll|we're|i can't|i cannot|i don't)\b([^.!?]*)$/);
       if(!sm || /\b(?:you|your|u|ur|y'all)\b/.test(sm[2])) return false;
-      if(/\b(?:have to|has to|got to|end up|ends up|left to|left with|stuck|everything|always me|the one who|on my own|by myself|alone|get (?:any|no)|nobody|no one|help(?:s|ed)?)\b/.test(st)) return false;
+      if(/\b(?:have to|has to|got to|end up|ends up|left to|left with|stuck|everything|always me|the one\b|on my own|by myself|alone|get (?:any|no)|nobody|no one|help(?:s|ed)?|anymore|any more|see (?:you|them|him|her|the)|hear from|invited|included|asked|thanked|told|chosen|picked|listened)\b/.test(st)) return false;
       return true;
     });
     // "it isn't because I don't care", "not because I don't care": the opposite of a brush-off
@@ -2041,7 +2041,7 @@ const MINIMAL_FIX = {
   "k thx":"Okay, got it. Thanks.", "k thanks":"Okay, got it. Thanks.", "kk thx":"Okay, got it. Thanks.", "ok thx":"Okay, got it. Thanks.", "ok thanks":"Okay, got it. Thanks.", "ok, thanks":"Okay, got it. Thanks.", "okay thanks":"Okay, got it. Thanks.", "okay, thanks":"Okay, got it. Thanks.", "ok ty":"Okay, got it. Thanks.", "ok thank you":"Okay, got it. Thank you.", "okay, thank you":"Okay, got it. Thank you.", "okay thank you":"Okay, got it. Thank you.", "ok, thank you":"Okay, got it. Thank you.",
   "sure":"Sure, I can do that.", "noted":"Noted, thanks.", "cool":"Cool, got it.", "great":"Great, got it.",
   "good":"Good, got it.", "yep":"Yes, got it.", "yeah":"Yes, got it.", "mhm":"Yes, got it.", "right":"Right, I understand.",
-  "whatever":"[If it's really okay:] Okay, that works for me. [If it isn't:] I'm not ready to talk about this well right now. Can we come back to it at [a time]?",
+  "whatever":"[If it's really okay:] Okay, that works for me. [If it isn't:] I'm upset, and I'm not ready to talk about this well right now. Can we come back to it at [a time]?",
   "nothing":"I'm not ready to talk yet. Can we talk at [a time]?",
   "nvm":"It's okay, it can wait until [a time].", "never mind":"It's okay, it can wait until [a time].", "nevermind":"It's okay, it can wait until [a time].",
   "if you say so":"I see it differently, but I'm okay going with that.",
@@ -2214,7 +2214,7 @@ function rewriteBase(an, opts){
   if(CURT_ONLY.test(text) && /whatev|care\b|do what(?:ever)? you want|if you say so|suit yourself|your call/i.test(text)){
     const out = /care/i.test(text)
       ? "[If you don't mind either way:] Either is fine with me. [If you're upset:] I'm too upset to decide this well right now. Can we come back to it at [a time]?"
-      : "[If it's really okay:] Okay, that works for me. [If it isn't:] I'm not ready to talk about this well right now. Can we come back to it at [a time]?";
+      : "[If it's really okay:] Okay, that works for me. [If it isn't:] I'm upset, and I'm not ready to talk about this well right now. Can we come back to it at [a time]?";
     log.push({id:"brushoff", from:[text], to:["say which one you mean"], extra:""});
     return finish(out, out, log, an, W, opts);
   }
