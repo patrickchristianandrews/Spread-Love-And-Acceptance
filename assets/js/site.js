@@ -624,7 +624,8 @@
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
       { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cosy 3D coin pusher: a kind tip every few coins, and every character on the site to collect' },
-      { sub: 'Breathe & quiet', tt: 'calm', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
+      { sub: 'Relax and reset', tt: 'calm', all: '/pause-and-play.html#relax', allLabel: 'Every calm tool in one place' },
+      { href: '/pause-and-play.html#relax', code: 'Relax', title: 'Relax and reset: every calm tool in one place', note: 'A breathing break, a silent wind-down, slow colours, calm music and sounds, and quiet games' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/ladder.html', code: 'Now', title: 'My weather today: quick, 4 taps', note: 'Find where you are right now, and a next step that fits' },
       { href: '/wp-11.html', code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
@@ -1433,6 +1434,8 @@
     // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
     if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask Puddles', 'Pregúntale')));
     bar.appendChild(find);
+    // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)
+    if (isApp()) loadScript('/assets/js/app-bar.js').catch(function () {});
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, T('Menu', 'Menú'));
     mob.addEventListener('click', function () { openPanel(null); });
     bar.appendChild(mob);

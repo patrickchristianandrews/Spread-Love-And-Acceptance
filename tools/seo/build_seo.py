@@ -137,7 +137,7 @@ SEARCH = {
  'quick-checks.html': ('My Weather Today: Daily Mood and Stress Check-In', 'A 60-second check-in on how you’re doing today, with a gentle forecast for hard talks and a calm pause with something soothing to do.'),
  'ask.html': ('Ask Professor Puddles: Free, Private Relationship Help Chat', 'Tell a cheerful raindrop professor what’s going on: kind next steps, words to say, deep talks and infographics. Free, and nothing you type leaves your device.'),
  'library.html': ('Relationship Psychology Library, in Plain English', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
- 'pause-and-play.html': ('Calm Games for a Busy Mind: Free, No Timers', 'Free calm games with no timers and no way to lose: the Night Garden, the Frequency Journey, Word Bloom, crosswords and a word search, with two friendly pups.'),
+ 'pause-and-play.html': ('Relax and Play: Calm Tools and Gentle Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colours, calm music and sounds, or play a calm game with no timers and no way to lose.'),
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Game', 'A peaceful garden at night: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. A free, calm game.'),
  'calm-visualizer.html': ('Drift: A Calm Visualizer With Soft Tones', 'Tell Drift how you feel, put on headphones and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes.'),
@@ -240,7 +240,7 @@ SEARCH.update({
  'tools/frequency-calibration.html': ('Are Your Rhythms in Step? Frequency Calibration', 'A worksheet for two people to map their rhythms for money, rest, decisions, check-ins and recovery, and see where they match and where they drift apart.'),
  'snapshot/index.html': ('A 2-Minute Snapshot of How Your Household Shares the Load', 'A gentle two-minute look at how the shared load is set up at home and how it bends, for couples, families, roommates and teams. Not a test or a diagnosis.'),
  # calm, games and media
- 'pause-and-play.html': ('Calm Games for a Busy Mind: Free, No Timers', 'Free calm games with no timers and no way to lose: the Night Garden breathing game, the Frequency Journey, Word Bloom, crosswords and a cozy word search.'),
+ 'pause-and-play.html': ('Relax and Play: Calm Tools and Gentle Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colours, calm music and sounds, or play a calm game with no timers and no way to lose.'),
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Exercise Game', 'A breathing exercise you can play: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. Free, calm, no timers.'),
  'calm-visualizer.html': ('Drift: Calm Visuals and Soft Tones to Unwind', 'Tell Drift how you feel, put on headphones, and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes of calm.'),
@@ -262,7 +262,7 @@ SEARCH.update({
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
  'book/index.html': ('The Book: Free to Read Online', 'Read the whole free book in order, like any book: 24 chapters in three parts on yourself, sharing a life, and understanding people. Short and full versions, or all of it on one page to print.'),
- 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
+ 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
  'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/preface.html': ('Preface: The work nobody sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
  'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in pace, tone and what we expect add up, plus how to get back in tune.'),
@@ -462,8 +462,8 @@ SEARCH.update({
  'calming-supplements.html': ('Calming Supplements for Anxiety: What Research Says', 'Supplements, herbs, foods and practices for anxiety, stress, sleep and mood, graded honestly, with side effects, interactions and when to get help.'),
  # the book
  'book/index.html': ('Free Self-Help Book Online: Spread Love & Acceptance', 'Read the whole self-help book free online: 26 chapters in three parts on yourself, sharing a life fairly and understanding people. No sign-up, no account.'),
- 'book/download.html': ('The Book as Free PDFs', 'Free PDFs of the book, sent for an email address: the whole book, the book for one person, for two or more, or Understanding People, short or full.'),
- 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
+ 'book/download.html': ('The Books as Free PDFs', 'Get the four books as free PDFs. Read every chapter free online; to download a book, we’ll ask for your email. The workbook and pocket guide need none.'),
+ 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
  'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/for-yourself.html': ('The Book for One Person: Know Yourself, Understand People', 'Part One (yourself) and Part Three (understanding people) of the free book on one page: everything you can read and use on your own. No sign-up.'),
  'book/for-yourself-in-depth.html': ('The Book for One Person (Full Versions)', 'Part One and Part Three of the free book in their full versions, on one page: the research, more examples and more to try on your own. No sign-up.'),
@@ -875,10 +875,10 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
         book = {'@type': 'Book', '@id': BOOK_ID, 'name': BOOK_NAME, 'alternateName': BOOK_NAME + ': a free self-help book on knowing yourself, sharing the load and understanding people',
                 'description': BOOK_DESC, 'url': SITE + '/book/', 'author': AUTHOR, 'publisher': publisher, 'inLanguage': 'en-US',
                 'bookFormat': 'https://schema.org/EBook', 'isAccessibleForFree': True, 'image': OG_IMAGE, 'genre': ['Self-help', 'Psychology', 'Relationships'],
-                # the free PDF editions (book/download.html asks for an email address before the files download)
-                'workExample': [{'@type': 'Book', 'name': '%s (%s version, PDF)' % (n, v), 'bookFormat': 'https://schema.org/EBook', 'encodingFormat': 'application/pdf',
-                                 'url': SITE + '/book/pdf/%s%s.pdf' % (f, sfx), 'inLanguage': 'en-US', 'isAccessibleForFree': True}
-                                for n, f in BOOK_PDFS for v, sfx in (('short', ''), ('full', '-in-depth'))]}
+                # the free PDFs: the four books (book/download.html asks for an email address before a book downloads)
+                'workExample': [{'@type': 'Book', 'name': 'Book %d: %s (PDF)' % (n, t), 'bookFormat': 'https://schema.org/EBook', 'encodingFormat': 'application/pdf',
+                                 'url': SITE + '/book/download.html#book-%d' % n, 'inLanguage': 'en-US', 'isAccessibleForFree': True}
+                                for n, t in ((1, 'Know Yourself Kindly'), (2, 'Heal and Steady'), (3, 'Understanding Each Other'), (4, 'Share the Load'))]}
         if path == 'book/index.html':
             book['hasPart'] = [{'@type': 'Chapter', 'position': i + 1, 'name': n, 'url': SITE + rel_url(p)} for i, (n, p) in enumerate(BOOK_PARTS)]
         graph.append(book)

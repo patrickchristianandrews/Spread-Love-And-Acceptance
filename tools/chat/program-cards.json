@@ -12,11 +12,11 @@
       "name": "the book in print",
       "pat": "\\b(paperback|paper back|hardback|hard copy|printed (book|books|copy|copies|version|edition)|print (edition|version|copy|copies)|physical (book|books|copy|copies)|book in print|books in print|kindle|e ?book)\\b|\\bbuy (the|a|this|your|these) (book|books)\\b|\\border (the|a) (book|copy)\\b|\\b(book|books) on amazon\\b",
       "what": [
-        "Every chapter is free to read online, with no account, and each book has a free PDF. The book page also shows the series in print: the same chapters as short colour books, plus a bound workbook and a pocket guide. “The book in print” there has the latest on getting a printed copy."
+        "Every chapter is free to read online, with no account. Each of the four books is also a free PDF (we ask for your email to download a book; the workbook and the pocket guide need none). The book page also shows the series in print: the same chapters as short colour books (162, 160, 156 and 156 pages), plus a bound workbook and a pocket guide. Paperbacks are coming to Amazon; “The book in print” there has the latest."
       ],
       "how": [
         "Read free online: every chapter, any time.",
-        "Free PDF: each book’s button opens the collection its chapters are in.",
+        "Free PDF: each book’s button opens its own PDF on the download page.",
         "To print one chapter or guide yourself, use the Print this page button at the bottom of the page."
       ],
       "links": [
@@ -25,13 +25,17 @@
           "/book/index.html#print-series"
         ],
         [
+          "Download a book as a PDF",
+          "/book/download.html"
+        ],
+        [
           "The book, free to read online",
           "/book/index.html"
         ]
       ],
       "plain": [
         "The book is free to read online.",
-        "Each book has a free PDF.",
+        "Each book is a free PDF.",
         "The book page shows the print series."
       ]
     },
@@ -15551,8 +15555,8 @@
         "pdf of the book"
       ],
       "what": [
-        "Yes. The book is a free PDF, in a short or a full version: the whole book, the book for one person, the book for two or more, or Understanding People.",
-        "To download, you enter an email address. It goes to Buttondown, the site’s email service, so you can get a short note when something new is added; you can unsubscribe in one tap. Reading the book here on the site never needs an email."
+        "Yes. Each of the four books is a free PDF: Know Yourself Kindly, Heal and Steady, Understanding Each Other and Share the Load. The long collections (the whole book, short or full) are there too.",
+        "Read every chapter free online. To download a book as a PDF, we’ll ask for your email. It goes to Buttondown, the site’s email service; you can unsubscribe in one tap. The workbook and the pocket guide download without an email."
       ],
       "links": [
         [

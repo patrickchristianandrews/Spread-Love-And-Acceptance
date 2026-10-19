@@ -1744,7 +1744,7 @@ t('chat10', 'WP-14', { q: 'what is WP-14', kind: 'card', id: 'wp14', link: '/wor
 t('chat10', 'WP-15', { q: 'what is WP-15', kind: 'card', id: 'wp15', link: '/workpapers/wp-15-keep-your-little-rituals-alive.html' });
 t('chat10', 'WP-12 by its old name', { q: 'what is the carrier frequency audit', kind: 'card', id: 'wp12' });
 t('chat10', 'the book: three parts, free', { q: 'tell me about the book', kind: 'card', id: 'book', text: /26 chapters in three parts[\s\S]*free|free[\s\S]*26 chapters/, link: '/book/index.html', not: /five chapters|with your email/ });
-t('chat10', 'download the book', { q: 'can I download the book', id: 'bookdownload', link: '/book/download.html', text: /free PDF[\s\S]*never needs an email/ });
+t('chat10', 'download the book', { q: 'can I download the book', id: 'bookdownload', link: '/book/download.html', text: /free PDF[\s\S]*ask for your email[\s\S]*without an email/ });
 t('chat10', 'the app: free, no App Store', { q: 'is there an app', kind: 'card', id: 'app', link: '/install.html', text: /free[\s\S]*Android[\s\S]*iPhone/, not: /coming soon|App Store version is coming/i });
 t('chat10', 'the app on iPhone', { q: 'how do I install the app on my iphone', kind: 'card', id: 'app', text: /Add to Home Screen/, not: /coming soon/i });
 t('chat10', 'no podcast', { q: 'is there a podcast', kind: 'card', id: 'podcast', text: /no podcast[\s\S]*Listen to this chapter/, not: /Kane and Christian Experience explores|Episode 1|coming soon/ });
@@ -2221,7 +2221,7 @@ if (PERSONA) {
   t(G, 'my wife thinks i am harder on her kids than on mine', { id: 'stepfair', link: '/stepfamily.html' });
   // books in print, and "is this backed by research?"
   ['Can I buy a paperback copy of the books?', 'where can I get the printed book', 'is the book on amazon'].forEach(q =>
-    t(G, q, { id: 'bookprint', link: '/book/index.html#print-series', not: /Ctrl\+P|Is it closest/ }));
+    t(G, q, { id: 'bookprint', link: '/book/index.html#print-series', text: /162, 160, 156 and 156[\s\S]*Amazon/, not: /Ctrl\+P|Is it closest/ }));
   t(G, 'is any of this backed by real research or is it just one guy\'s opinion', { id: 'evidence', link: '/research.html', not: /professors shouldn’t guess/ });
   // snapping at the family; a new baby's nights
   t(G, 'I keep snapping at my wife and kids', { id: 'angerstop', not: /when old roles come back/ });
