@@ -730,7 +730,7 @@
       var dsec = s.sections.filter(function (x) { return x.personDays; })[0], tday = dsec ? todayIn(dsec.personDays) : '';
       var more = dsec && (st.tables[dsec.id] || []).some(function (r) { return r && r.day !== tday && !rowIsEmpty(dsec, r); });
       if (this.weekFold == null) this.weekFold = !!more;
-      fold = h('details', { className: 'wpf-weekfold', open: this.weekFold ? 'open' : null }, [h('summary', null, [h('span', { className: 'wpf-weekfold-t', text: 'The whole week (optional)' }), h('span', { className: 'wpf-weekfold-s', text: 'Every day\u2019s rows, the load this week, the weekly catch-up, and more people' })])]);
+      fold = h('details', { className: 'wpf-weekfold', open: this.weekFold ? 'open' : null }, [h('summary', null, [h('span', { className: 'wpf-weekfold-t', text: 'The whole week (optional)' }), h('span', { className: 'wpf-weekfold-s', text: 'Every day\u2019s rows, the stress tank this week, the weekly catch-up, and more people' })])]);
       fold.addEventListener('toggle', function () { self.weekFold = fold.open; });
       realRoot.appendChild(fold);
       this.root = fold;
@@ -819,7 +819,7 @@
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
   var TONIGHT = [
-    ['load', 'How full was today?', { type: 'select', options: ['Low', 'Medium', 'High'] }],
+    ['load', 'How full was today?', { type: 'select', options: ['Low', 'Medium', 'High'], labels: { Low: 'Light' } }],
     ['thanks', 'Something I appreciated today'],
     ['friction', 'Something that didn’t feel great'],
     ['ask', 'Something that would help tomorrow']
