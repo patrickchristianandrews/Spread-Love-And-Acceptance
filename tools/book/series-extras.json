@@ -65,132 +65,253 @@
   "overrides_about": "Print and ebook wording only (the online library keeps its own): field, or field.N for one step of the chain or one analogy. They bring each page to at most one \"X, not Y\" and fewer colons, as the series style asks. \"care\" lines are never changed.",
   "overrides": {
    "plan-changed": {
-    "an.0": "A sat nav recalculating while you’re already on the motorway. For a moment it has no route at all."
+    "an.0": "A sat nav recalculating while you’re already on the motorway. For a moment it has no route at all.",
+    "looks": "An hour before you leave, the plan changes. A different café, or friends joining. The person goes quiet and tense, even though the new plan sounds perfectly nice.",
+    "chain.3": "So the upset is the price of redrawing, and says nothing about the new plan",
+    "other": "To the person who changed it, it was a small change, maybe even a treat. They can feel their good intention was missed, and start to worry they can never change anything."
    },
    "late-again": {
     "chain.0": "For some minds, time has only two settings, “now” and “not now”",
     "an.0": "A watch with only two settings, “plenty of time” and “too late”.",
     "fits": "For many people with ADHD, sensing time passing is genuinely harder. Researchers describe it as part of how attention and self-control work. It says nothing about how much someone cares.",
     "say": "“I misjudge time. You matter to me, and I’m working on it.”",
-    "step": "Set an alarm for the time to leave rather than the time to arrive, and text “Leaving now” when you go. The waiting person can agree a time to start without them."
+    "step": "Set an alarm for the time to leave rather than the time to arrive, and text “Leaving now” when you go. The waiting person can agree a time to start without them.",
+    "looks": "Twenty past, a breathless apology, and it’s the third time this month. They clearly care. They are still late.",
+    "chain.3": "The lateness comes from the clock in their head, and their care is a separate matter",
+    "other": "Waiting tells the waiting person they matter less, whatever was meant. It costs them real time, sometimes a cold dinner or a missed film, and over months it wears down trust."
    },
    "coffee-sometime": {
     "chain.0": "The phrase is a friendly signal rather than a booking",
     "an.0": "A wave across the street. It means “hello, I see you”, not “come over”.",
-    "step": "If you want it to happen, ask “Shall we pick a day?” If you said “sometime” and don’t mean it yet, don’t worry. The other person can ask too."
+    "step": "If you want it to happen, ask “Shall we pick a day?” If you said “sometime” and don’t mean it yet, don’t worry. The other person can ask too.",
+    "looks": "“We should get coffee sometime!” Then nothing. No day, no message, for months.",
+    "chain.3": "Leaving it vague keeps it warm and low-pressure for both of you",
+    "other": "If you take words at face value, you heard a plan. You wait for it, and when nothing comes it feels like a small broken promise."
    },
    "maybe-means-no": {
     "chain.2": "Both people keep their dignity, because nobody was refused out loud",
     "an.0": "A dimmer switch instead of a light switch. The light still goes off, just gently.",
-    "step": "It’s fair to ask kindly, “Is that a maybe-yes or a maybe-no?” And a clear “No, but thank you” is kinder than it sounds."
+    "step": "It’s fair to ask kindly, “Is that a maybe-yes or a maybe-no?” And a clear “No, but thank you” is kinder than it sounds.",
+    "looks": "“Maybe, I’ll see how I feel.” Everyone else at the table seems to know that means no.",
+    "other": "For someone who takes words at face value, the question is still open. They keep a seat, wait for an answer, and later feel quietly misled."
    },
    "left-party": {
     "fits": "A long goodbye costs energy too, with a round of hugs and small talk at the door. For people who find social time draining, including many autistic people, the quiet exit still leaves them able to get home safely.",
-    "step": "Send a short text afterwards, such as “Thanks for tonight, I had to go when my battery ran out.” Hosts can say up front, “Slip out whenever you need to.”"
+    "step": "Send a short text afterwards, such as “Thanks for tonight, I had to go when my battery ran out.” Hosts can say up front, “Slip out whenever you need to.”",
+    "looks": "Halfway through the party you look round and they’ve gone. A wave from the door, at most.",
+    "chain.3": "A quiet exit protects the evening and the friendship",
+    "an.0": "A phone on 3% that shuts everything down except the call you’re on.",
+    "other": "The host is left wondering whether something went wrong, and friends aren’t sure whether to text and ask."
    },
    "headphones": {
     "an.0": "Sunglasses on a bright day. You still see everything, just without squinting.",
     "say": "“These help me stay at the table. Tap my arm and I’m all yours.”",
-    "step": "Agree a signal, such as a tap or a wave, that means “I’m talking to you.” Where you can, lower the noise for everyone, with the music down and one conversation at a time."
+    "step": "Agree a signal, such as a tap or a wave, that means “I’m talking to you.” Where you can, lower the noise for everyone, with the music down and one conversation at a time.",
+    "looks": "Sunday lunch, or the open-plan office, and one person has earbuds in.",
+    "other": "Everyone else can feel shut out, or assume the person doesn’t want to talk to them at all."
    },
    "cancel-tired": {
     "looks": "On Friday afternoon a text arrives. “So sorry, I can’t make tonight.”",
     "fits": "Rest is what makes good company possible. Sometimes the kindest thing a tired person can offer is a better evening later.",
-    "say": "“I’m empty, not uninterested. Can we pick a new day now?”"
+    "say": "“I’m empty, not uninterested. Can we pick a new day now?”",
+    "chain.3": "Cancelling spares the friendship a flat, half-there evening",
+    "an.0": "Pulling into the services when you’re too tired to drive safely.",
+    "other": "The friend may have cleared their evening, booked the table or simply been looking forward to it. A late cancel can feel like coming last."
    },
    "blunt": {
     "looks": "You ask for an opinion and get it straight. “The second half doesn’t work.”",
     "fits": "For many autistic people, saying what they mean plainly is the honest, respectful option. Research on the “double empathy problem” suggests mix-ups between differently wired people run both ways, so the plain speaker isn’t the only one missing signals.",
-    "step": "Add one warm line before the fact, such as “There’s a lot here I like.” The listener can ask for it too. “Start with one thing that works, then tell me straight.”"
+    "step": "Add one warm line before the fact, such as “There’s a lot here I like.” The listener can ask for it too. “Start with one thing that works, then tell me straight.”",
+    "chain.3": "Saying it straight is a way of respecting your time",
+    "other": "Words land on feelings as well as facts. Someone who put a fortnight into the work can hear “the second half doesn’t work” as “you don’t work”."
    },
    "im-fine": {
     "chain.2": "It protects the moment in the queue, the meeting or the school run",
-    "chain.3": "It often means “not here, not now” rather than “never”",
-    "an.0": "A “Back in 10 minutes” sign, closed for now and open again later."
+    "chain.3": "Often it means “not here, not now” and leaves later open",
+    "an.0": "A “Back in 10 minutes” sign on a shop door.",
+    "looks": "A rough day is written all over their face, and every question gets the same answer. “I’m fine.”",
+    "other": "People who take words at face value believe it, then get blamed for not noticing. Others feel shut out, or keep asking and seem nosy."
    },
    "hints": {
     "fits": "Researchers who study indirect speech argue that hints let people make requests while leaving everyone room to decline without embarrassment. It is a way of being polite.",
-    "other": "Hints get missed by many people, and not only by autistic people. The hinter then feels ignored, and the other person feels blamed for something nobody actually asked.",
-    "step": "Add the ask to the hint. “It’s cold. Could you close the window?” The listener can check, “Would you like me to close it?”"
+    "other": "Hints get missed by lots of people, autistic or not. Then the hinter feels ignored, and the other person is blamed for something nobody actually asked.",
+    "step": "Add the ask to the hint. “It’s cold. Could you close the window?” The listener can check, “Would you like me to close it?”",
+    "looks": "“It’s a bit chilly in here, isn’t it?” Later they’re annoyed that nobody shut the window."
    },
    "teasing": {
     "an.0": "Puppies play-fighting. The teeth never close.",
-    "step": "Check now and then with “Was that okay?” Agree what is off limits, and stop any joke that keeps landing as hurt."
+    "step": "Check now and then with “Was that okay?” Agree what is off limits, and stop any joke that keeps landing as hurt.",
+    "looks": "Two old friends call each other terrible names across the pub table and both look delighted.",
+    "chain.3": "Both of them pass the test of closeness together",
+    "other": "Someone who takes words literally, or who was teased cruelly at school, may hear only the insult. It stings, and they may not feel able to say so."
    },
    "no-eye-contact": {
-    "step": "Check understanding with words instead of eyes, with the listener summing up one line of what they heard. Hard talks can happen side by side, on a walk or in the car."
+    "step": "Check understanding with words instead of eyes, with the listener summing up one line of what they heard. Hard talks can happen side by side, on a walk or in the car.",
+    "looks": "While you talk, they look at the table, the window, their own hands. Anywhere but you.",
+    "chain.3": "So looking away can be how someone listens harder",
+    "other": "Most of us were taught that eye contact means “I’m with you”. Without it, it’s easy to feel ignored, or to think they’re bored or hiding something."
    },
    "small-talk": {
-    "an.0": "Musicians tuning up before the concert. There’s no tune yet, but it makes the tune possible."
+    "an.0": "Musicians tuning up before the concert. There’s no tune yet, but it makes the tune possible.",
+    "looks": "Two people who hardly know each other spend five whole minutes on the rain and the roadworks.",
+    "other": "If you find it pointless or tiring, and many autistic people do, it costs energy and gives back no new information. Why is everyone so interested in rain?"
    },
    "white-lie": {
     "chain.0": "The gift is a message that says “I thought of you”",
-    "step": "Find something true and kind to say, like “You remembered I like blue. Thank you.” Honest people can use this too, and nobody has to lie."
+    "step": "Find something true and kind to say, like “You remembered I like blue. Thank you.” Honest people can use this too, and nobody has to lie.",
+    "looks": "A jumper in an orange nobody has ever worn on purpose. “Oh, I love it!”",
+    "chain.3": "That small untruth protects the bond",
+    "an.0": "Praising a five-year-old’s drawing of you that is mostly a triangle.",
+    "other": "If you value plain honesty, and many autistic people do, it simply feels like a lie, and you may wonder what else isn’t true."
    },
    "how-are-you": {
-    "step": "Answer the ritual with the ritual. “Good, thanks, you?” Save the real answer for people who stop, sit down or ask twice."
+    "step": "Answer the ritual with the ritual. “Good, thanks, you?” Save the real answer for people who stop, sit down or ask twice.",
+    "looks": "“All right? How are you?” says a colleague, still walking, already halfway down the corridor.",
+    "an.0": "A nod across a busy room.",
+    "other": "A literal listener answers properly and then feels brushed off. And for someone going through something hard, the ritual can feel very lonely."
    },
    "mask-crash": {
     "chain.1": "The effort is held in until it is safe to stop",
-    "fits": "Research with autistic adults describes “camouflaging”, working hard to appear like everyone else, often followed by exhaustion. Long stretches of it are linked with autistic burnout. Children and adults who aren’t autistic can do a version of this too."
+    "fits": "Research with autistic adults describes “camouflaging”, working hard to appear like everyone else, often followed by exhaustion. Long stretches of it are linked with autistic burnout. Children and adults who aren’t autistic can do a version of this too.",
+    "looks": "Teachers say she’s a delight. At home she slams the door, or goes silent, or falls apart over the wrong cup.",
+    "chain.3": "So the crash at home shows home is trusted",
+    "an.0": "Swimming a length underwater and gasping at the far end.",
+    "other": "The family gets the hardest hour of the day, which feels unfair and confusing, especially when school or work sees none of it."
    },
    "written-please": {
     "say": "“I ask for it in writing so I get it right first time. I trust what we agreed.”",
-    "step": "After a chat, the person can send a two-line summary, such as “So I’m doing X by Friday. Right?” The manager just replies “Yes.”"
+    "step": "After a chat, the person can send a two-line summary, such as “So I’m doing X by Friday. Right?” The manager just replies “Yes.”",
+    "looks": "At the end of a ten-minute briefing: “Sorry, could you pop that in an email?”",
+    "other": "The manager may feel it’s extra work, or hear it as “I don’t trust what you said.”"
    },
    "last-minute": {
-    "fits": "For many people with ADHD, getting started depends on interest, novelty or urgency more than importance. Researchers link this to how motivation and self-control work in ADHD. It has nothing to do with laziness."
+    "fits": "For many people with ADHD, getting started depends on interest, novelty or urgency more than importance. Researchers link this to how motivation and self-control work in ADHD. It has nothing to do with laziness.",
+    "looks": "The report had a month. It gets written between ten at night and two in the morning.",
+    "chain.3": "Late work is often a starting problem, and the caring is there all along",
+    "an.0": "An old car that only starts on a downhill.",
+    "other": "Colleagues or family carry the stress of not knowing whether it will be done, and sometimes end up covering for it."
    },
    "disagree-later": {
-    "chain.3": "It’s a strategy for being heard",
+    "chain.3": "It’s a way of getting heard",
     "say": "“I raised it afterwards so it would be heard. I wasn’t going behind anyone’s back.”",
-    "step": "Teams can offer both routes. “Say it now, or message me after.” Quiet disagreers can say “I’ve a different view, I’ll send it after.”"
+    "step": "Teams can offer both routes. “Say it now, or message me after.” Quiet disagreers can say “I’ve a different view, I’ll send it after.”",
+    "looks": "Nods all through the meeting. Then, by the lifts: “Between you and me, I don’t think it’ll work.”",
+    "other": "To someone who values saying things openly, it can look two-faced, and the meeting starts to feel like theatre."
    },
    "feedback-sandwich": {
-    "step": "Ask straight out, “What’s the one thing I should change?” Givers can say the fix clearly, then one true good thing."
+    "step": "Ask straight out, “What’s the one thing I should change?” Givers can say the fix clearly, then one true good thing.",
+    "looks": "“Great energy! The report needs a full rewrite. Lovely formatting!”",
+    "an.0": "Hiding a tablet in a dog’s dinner.",
+    "other": "A literal listener may miss the middle entirely, or learn to distrust praise because it always seems to come before bad news."
    },
    "love-in-deeds": {
-    "step": "Agree one word and one deed. The doer says “I love you” on the way out, and the talker notices the deeds out loud."
+    "step": "Agree one word and one deed. The doer says “I love you” on the way out, and the talker notices the deeds out loud.",
+    "looks": "He hardly ever says “I love you”. He does fix the bike, fill the car and make the packed lunches every morning at seven.",
+    "chain.3": "The words are in the action",
+    "other": "A partner who hears love mainly in words can feel unloved while surrounded by kind acts, which is a strange and lonely feeling."
    },
    "quiet-in-fight": {
-    "step": "Say a return time. “I need twenty minutes. I’ll come back at eight.” Then come back at eight."
+    "step": "Say a return time. “I need twenty minutes. I’ll come back at eight.” Then come back at eight.",
+    "looks": "Mid-row, one person stops answering and looks at the floor.",
+    "chain.3": "Going quiet works like braking, and isn’t meant as punishment",
+    "other": "Silence can feel like being shut out, or punished. For someone who needs to settle things before they can calm down, it can be frightening."
    },
    "reassurance": {
-    "step": "Agree a kind limit together. Answer once clearly, then “I said it, and I meant it,” plus something calming to do together. If the worry runs your days, a GP or therapist can help."
+    "step": "Agree a kind limit together. Answer once clearly, then “I said it, and I meant it,” plus something calming to do together. If the worry runs your days, a GP or therapist can help.",
+    "looks": "“Are you sure you’re not cross with me?” It’s the fourth time tonight.",
+    "an.0": "Going back for the third time to check the front door is locked.",
+    "other": "The person answering can feel worn out, or that their word isn’t trusted. And answering again and again can keep the loop going."
    },
    "you-should-know": {
-    "step": "Agree that saying it out loud is allowed and still counts as being loved. The guesser can ask, “I can see something’s up. Tell me?”"
+    "step": "Agree that saying it out loud is allowed and still counts as being loved. The guesser can ask, “I can see something’s up. Tell me?”",
+    "looks": "Something is clearly wrong, they won’t say what, and what seems to hurt most is that their partner hasn’t guessed.",
+    "chain.3": "It’s a hope, and nobody meant it as a trap",
+    "other": "For a lot of people, autistic or not, mind-reading simply isn’t on offer. The guesser feels tested and set up to fail."
    },
    "meltdown": {
     "chain.0": "Input keeps coming, with noise, demands and change",
     "fits": "Autistic young people describe meltdowns as different from tantrums. They come from overload rather than from wanting something, and they are not chosen. Children and adults can both have them.",
-    "step": "During one, use fewer words, less noise and more space, with safety first. Afterwards, rest, then have a calm talk about early warning signs."
+    "step": "During one, use fewer words, less noise and more space, with safety first. Afterwards, rest, then have a calm talk about early warning signs.",
+    "looks": "Suddenly they’re shouting, crying, throwing or running, and it looks far bigger than whatever just happened.",
+    "chain.3": "A meltdown is an overflow, and nobody is using it to get something",
+    "an.0": "A bath overflowing because the tap was never turned off.",
+    "other": "People nearby can feel frightened, embarrassed or blamed, and often don’t know what to do."
    },
    "dont-know-feeling": {
     "say": "“I really don’t know yet. Ask me about my body. Am I tired, tense or hungry?”",
-    "step": "Ask simpler questions about the body, such as “More tired or more annoyed?” and “Space or company?” Give it time and come back later."
+    "step": "Ask simpler questions about the body, such as “More tired or more annoyed?” and “Space or company?” Give it time and come back later.",
+    "looks": "“How are you feeling about it?” “I don’t know.” And they genuinely seem stuck.",
+    "an.0": "A radio caught between two stations, all hiss.",
+    "other": "The person asking can feel shut out, or suspect something is being kept from them."
    },
    "last-straw": {
     "fits": "Stress builds up and makes small things feel bigger. The reaction belongs to the whole day.",
-    "step": "Name the full glass early, with “I’m nearly full today.” Afterwards, apologise for the size and talk about the cup separately."
+    "step": "Name the full glass early, with “I’m nearly full today.” Afterwards, apologise for the size and talk about the cup separately.",
+    "looks": "After a long day, one mug left on the side sets off an outburst.",
+    "chain.3": "What spills is the whole glass, and only the last drop was the mug",
+    "an.0": "The last drop of rain that makes the gutter overflow.",
+    "other": "The person who left the mug gets the whole day poured over them, and it feels unfair."
    },
    "same-food": {
-    "an.0": "A favourite mug. Any mug holds tea, but this one is right.",
-    "say": "“I eat this because it’s safe and easy for me. It says nothing about your cooking.”"
+    "an.0": "A favourite mug. Any mug holds tea; this one is right.",
+    "say": "“I eat this because it’s safe and easy for me. It says nothing about your cooking.”",
+    "looks": "Cheese sandwich, every lunchtime, for three years. Anything new is politely refused.",
+    "chain.3": "Sameness saves energy",
+    "other": "The cook can feel their effort is being refused, and families worry about health, or about meals out."
    },
    "on-time-means": {
     "an.0": "A recipe that says “a pinch”, when everyone’s pinch is different.",
-    "step": "Say which kind of time you mean, such as “Seven sharp, the table is booked” or “Any time after seven.”"
+    "step": "Say which kind of time you mean, such as “Seven sharp, the table is booked” or “Any time after seven.”",
+    "chain.3": "Neither is being careless; they read the same words through different rules",
+    "other": "The person who came at seven sharp may have waited, felt less important, or watched the food go cold."
    },
    "loud-family": {
-    "chain.2": "Loud can mean warm and lively"
+    "chain.2": "Loud can mean warm and lively",
+    "looks": "At a partner’s family dinner everyone talks at once, at full volume, and to a newcomer it sounds like a row.",
+    "chain.3": "The noise is their normal, and nobody is fighting",
+    "an.0": "A Saturday market, where the shouting is how business gets done.",
+    "other": "Someone from a quieter home can feel swamped, unable to get a word in, or sure that everyone is cross."
    },
    "direct-culture": {
-    "step": "Ask early, “How do you like feedback, straight or with some cushioning?” Agree a style for the team."
+    "step": "Ask early, “How do you like feedback, straight or with some cushioning?” Agree a style for the team.",
+    "other": "The softer speaker can feel attacked by plain words. The plainer speaker can feel misled when soft words were hiding a real problem."
    },
    "text-generations": {
-    "an.0": "Handwriting, neat or messy. It isn’t about how they feel about you.",
-    "step": "Talk about it once, on a calm day. What does “OK.” mean to each of you? Agree when to call and when to text."
+    "an.0": "Handwriting, neat or scrawly. It says nothing about how they feel about you.",
+    "step": "Talk about it once, on a calm day. What does “OK.” mean to each of you? Agree when to call and when to text.",
+    "looks": "Mum replies “OK.” with a full stop, and her teenager reads fury. Or Grandad rings about something a text would have covered.",
+    "other": "The reader can feel snubbed, told off or interrupted, and worry about what was meant."
+   },
+   "hungry-tired-snap": {
+    "looks": "Six o’clock, nothing eaten since a biscuit at eleven. “Have you seen the scissors?” gets a sharp “No.”",
+    "chain.3": "That snap is the fuel gauge talking, and it says nothing about you",
+    "an.0": "A car running on fumes, jerking at every junction.",
+    "other": "The person who asked did nothing wrong, and the sharp tone still lands on them. Often enough, and they start to tiptoe."
+   },
+   "alone-after-people": {
+    "looks": "The visitors’ car has barely left the drive when the person heads upstairs and shuts the door.",
+    "an.0": "Wringing out a sponge so it can hold water again.",
+    "other": "A partner who wanted to chew over the day together can feel shut out right when they wanted company, and wonder what they did."
+   },
+   "long-goodbye": {
+    "looks": "“Right, we’d better be off,” and then another half hour on the doorstep, coats on.",
+    "chain.3": "It’s a gentle landing for a good evening",
+    "other": "For someone whose energy ran out an hour ago, every minute on the doorstep costs. Children may be asleep in the car."
+   },
+   "unasked-advice": {
+    "looks": "You’re settling the baby and your mother-in-law says, “In my day we just let them cry.”",
+    "chain.3": "It’s love, in an awkward wrapper",
+    "other": "The person on the receiving end can hear “You’re doing it wrong”, and feel undermined, especially at three in the morning."
+   },
+   "shutdown": {
+    "looks": "They stop talking. They stare. Questions get nothing back.",
+    "an.0": "A computer restarting in safe mode.",
+    "other": "People nearby can feel ignored, or frightened, or sure they caused it."
+   },
+   "info-dump": {
+    "looks": "One question about the 1950s railway timetable, and twenty minutes later they’re still going.",
+    "an.0": "Showing someone round your allotment, bed by bed.",
+    "other": "The listener can feel lost, or trapped, or unable to get a word in."
    }
   }
  },

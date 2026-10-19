@@ -463,10 +463,17 @@ def meet_page(book, found=()):
         hints.tag('wp', wp), esc(hints.wp_label(wp)), esc(wp['name']), esc(wb), hints.tag('tool'),
         (', such as “Tool: %s”' % esc(tl['name'])) if tl else '')
     s += '<p class="ps-meet-h">Three friends who give hints</p><ul class="bh-friends ps-friends">'
-    s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Professor Puddles</strong>, the cheerful raindrop professor, gives most of the hints.</span></li>' % hints.SVG_PUDDLES
-    s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Tidbit</strong>, the quick, curious pup, bounds in with a playful tip.</span></li>' % hints.SVG_TIDBIT
-    s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Sugarfoot</strong>, the steady, gentle pup, turns up with a calm, slow tip.</span></li>' % hints.SVG_SUGARFOOT
-    s += '</ul><p class="ps-meet-note">They keep to the lighter pages. Where a chapter talks about crisis, deep grief or being hurt, the pages stay quiet and plain.</p></section>'
+    s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Professor Puddles</strong>, a raindrop in a mortarboard, gives most of the hints, and answers questions on the website.</span></li>' % hints.SVG_PUDDLES
+    s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Tidbit</strong>, the quick, curious pup, points you at something to try.</span></li>' % hints.SVG_TIDBIT
+    s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Sugarfoot</strong>, the slower, steadier pup, turns up when a page needs a calmer pace.</span></li>' % hints.SVG_SUGARFOOT
+    s += '</ul><p class="ps-meet-note">They keep to the lighter pages. Where a chapter talks about crisis, deep grief or being hurt, the pages stay quiet and plain.</p>'
+    # voice17: the maker's own words, quoted exactly from /about.html (nothing here is written for him)
+    s += ('<div class="ps-maker"><p class="ps-meet-h">From the person who made this</p>'
+          '<blockquote><p>“I spent my career as a government auditor and audit manager in tax enforcement, internal controls and compliance.” '
+          '“Everyone else seemed to have been handed a set of instructions about being human that nobody ever gave me, so I went looking for them myself.” '
+          '“Everything here exists so that you can do the same thing in far less time than it took me.”</p></blockquote>'
+          '<p class="ps-meet-note">Christian, quoted from the About page at spreadloveandacceptance.com/about, where the whole story is. '
+          'Where the chapters say “I”, they speak for the website and these books, and any fact about Christian in them comes from that page.</p></div></section>')
     return s
 
 

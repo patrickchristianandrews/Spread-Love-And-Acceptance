@@ -38,6 +38,11 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-meet .bh-tag { margin-right: 1mm; }
 .ps-meet-note { font-style: italic; color: var(--soft); font-size: 9pt !important; }
 .ps-meet-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.4pt; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); margin: 4mm 0 2mm; }
+
+/* voice17: the maker's own words on the "Workpapers, tools and three friends" page, quoted from /about.html */
+.ps-maker { margin-top: 5mm; padding-top: 1mm; border-top: .5pt solid var(--rule, #d9d2c3); break-inside: avoid; }
+.ps-maker blockquote { margin: 0 0 1.5mm; padding: 0 0 0 3.5mm; border-left: 1.4pt solid var(--brass); }
+.ps-maker blockquote p { font-family: Lora, Georgia, serif; font-style: italic; font-size: 9.4pt; line-height: 1.5; margin: 0; }
 .ps-friends { list-style: none; padding: 0; margin: 0 0 3mm; }
 .ps-friends li { display: flex; gap: 3mm; align-items: center; margin: 0 0 2.4mm; }
 .ps-friends .bh-badge { flex: 0 0 12mm; width: 12mm; height: 12mm; }

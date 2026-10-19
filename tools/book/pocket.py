@@ -124,7 +124,7 @@ LENS = [
     ('lens-why', 'Why a reaction can look odd', [
         'A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. Seen from outside, each of these can look odd, rude or over the top.',
         'Most of them have a logic behind them. It makes sense once you can see it, and it is usually a sensible answer to how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so other people fill the gap with a guess, and the guess is often unkind.',
-        'This guide puts the logic into words, one step at a time, so the reaction can be understood. It also gives the other person a fair way to respond, because every page includes their side too.',
+        'This guide puts the logic into words, one step at a time, so the reaction can be understood. It also gives the other person a fair way to respond, because every page includes their side too. I’m autistic myself, and as the About page on the website puts it, the social rules most people absorb without noticing had to be learned on purpose.',
         'No page is a diagnosis or a label. People differ, and no group always does anything. The pages say “many people” or “some people” on purpose.',
     ]),
     ('lens-parts', 'The six parts', None),
