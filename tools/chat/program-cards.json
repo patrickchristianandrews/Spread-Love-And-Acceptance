@@ -57,7 +57,7 @@
       "links": [
         [
           "Split chores when a child lives here part-time",
-          "/lemonade-stand.html#quick"
+          "/lemonade-stand.html#part-time"
         ],
         [
           "Step-siblings and half-siblings",
@@ -2210,12 +2210,12 @@
       ],
       "links": [
         [
-          "Play something together tonight",
-          "/gaming-and-time-together.html#play-together"
+          "A game for two",
+          "/gaming-and-time-together.html#game-for-two"
         ],
         [
-          "Bonding tips: games and phones can bring you closer",
-          "/gaming-and-time-together.html#bonding"
+          "Play something together (co-op, and teaching each other)",
+          "/gaming-and-time-together.html#co-op"
         ]
       ],
       "script": [
@@ -4168,15 +4168,15 @@
         "Lateness at pick-up is worth raising, for your child’s sake: waiting at the door is hard on a kid. Keep it to one clear, firm ask about the time, not a verdict on the other parent. Firm and friendly can go together."
       ],
       "how": [
-        "Make one clear ask: what, when, and by when. Put it in writing, in your one channel for logistics, never at the door in front of your child.",
+        "Say it once, in writing, about the child: the time, and what you need. A plain statement is fine; it doesn’t have to be a question. Never at the door in front of your child.",
         "Talk about your child’s needs, not the other parent’s character: “She waited forty minutes” lands; “You’re always late” starts a war.",
         "Keep it Brief, Informative, Friendly and Firm, as many family professionals suggest. Answer only the question asked, and skip the history.",
         "If nothing changes, send one reminder with a date, then do what you said, calmly, and keep the message thread as your record."
       ],
       "links": [
         [
-          "Talking between two homes: one clear ask",
-          "/co-parenting.html#talking"
+          "If pick-ups keep running late",
+          "/co-parenting.html#late"
         ],
         [
           "When the other parent won’t cooperate (Brief, Informative, Friendly, Firm)",
@@ -4188,7 +4188,7 @@
         ]
       ],
       "script": [
-        "Pick-up is at five. On Friday she waited forty minutes. From now on, if you’re going to be late, please text me by four so I can plan.",
+        "Pick-up has been after 5:30 three times this month, and she waits at the window. If you’re running more than 15 minutes late, text me by 4:30 so I can tell her.",
         "Just checking you saw my message about pick-up times. Can you confirm by Friday that you’ll text me if you’re running late?"
       ],
       "scriptLabels": [
@@ -10369,7 +10369,7 @@
       "links": [
         [
           "For the partner who thinks everything is fine: 3 small things",
-          "/empty-nest.html#en-fine-h"
+          "/empty-nest.html#en-fine"
         ],
         [
           "If one of you feels “everything is fine”",
@@ -10693,7 +10693,7 @@
       ],
       "how": [
         "Write down both days side by side: when each of you wakes, works, eats and sleeps, in your own time.",
-        "Mark the hours when you are both awake and free. That overlap is precious, so protect it.",
+        "Mark the hours when you are both awake and free. The Time zones section has a small helper: pick both cities and it shows the hours you’re both awake, with today’s clocks, summer time included.",
         "Say whose time you mean. “Call at eight, your time” saves a lot of missed calls, and a second clock on your phone helps.",
         "Take turns with the awkward hours, or at least say thank you out loud. And watch for the tired call: the end of one person’s long day is not the time for a hard topic.",
         "Doing it together, each on your own phone? Work on it together has “our week” on one page, and check-ins you can share by link: you each fill in your own part, and nobody’s answers overwrite the other’s."
@@ -11909,23 +11909,23 @@
       "name": "wanting to text an ex",
       "pat": "\\b(stop|quit|not|avoid|resist) (texting|messaging|calling|ringing|contacting|dming|snapchatting|stalking|checking) (my|an|the|our) ex\\b|\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm|snap|contact|reach out to) (my )?ex\\b|\\b(texting|messaging|text|message|call|calling|ringing) my ex\\b|\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm) (him|her|them)\\b.{0,50}\\b(ex|broke up|break ?up|split up|dumped|we split)\\b|\\b(ex|broke up|break ?up|split up|dumped|we split)\\b.{0,60}\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm) (him|her|them)\\b|\\b(\\d ?am|\\d+ in the morning|midnight|middle of the night|late at night|its late|so late|cant sleep|can t sleep)\\b.{0,60}\\b(want|wanna|urge|tempted|itching|dying|need|keep wanting) to (text|message|call|ring|dm) (him|her|them|my ex)\\b|\\b(want|wanna|urge|tempted|itching|dying|keep wanting) to (text|message|call|ring|dm) (him|her|them|my ex)\\b.{0,40}\\b(\\d ?am|midnight|middle of the night|late at night|cant sleep|can t sleep)\\b|\\b(miss|missing) my ex\\b|\\bcheck(ing)? (my )?ex (profile|insta|instagram|stories|posts|socials|page)\\b",
       "what": [
-        "Wanting to text an ex is very common, especially late at night, and the pull can feel urgent. It’s a feeling, not an instruction: you don’t have to act on it tonight."
+        "Wanting to message an ex is very common, especially late at night. It usually means you miss them. It doesn’t mean you have to send it."
       ],
       "how": [
-        "Go easy on late-night messages to your ex, as the breakup page puts it. Waiting until morning costs nothing, and you can still decide then.",
-        "If the words won’t leave you alone, write them out somewhere private instead of in the chat. Nobody needs to read it.",
-        "Put the phone out of reach for the night. In a made-up example on the breakup page, Tom muted his ex and put his phone on the other side of the room after 10 pm, and his nights got calmer.",
-        "Muting or archiving their posts is a kind choice for you, not a statement to them. You don’t have to unfriend or block anyone.",
-        "Text a friend instead, even one line. If you can’t sleep, a few minutes of slow breathing in the Night Garden can help."
+        "Write it, don’t send it. Type it in your notes, not in your chat with them, and read it again in the morning.",
+        "Sleep on it. If you still want to send it after a night’s sleep and a talk with a friend, you’re choosing, not reacting.",
+        "If you agreed on no contact, you made that choice on a clearer day. You can lean on it tonight.",
+        "Text a friend instead, and mute or archive the chat with your ex so it isn’t the first thing you see. Muting is a kind choice for you, not a statement to them.",
+        "If you can’t sleep, a few minutes of slow breathing in the Night Garden can help."
       ],
       "links": [
         [
-          "After a breakup: the first days",
-          "/after-a-breakup.html#first-days"
+          "When you want to text them",
+          "/after-a-breakup.html#texting"
         ],
         [
-          "Their posts and photos",
-          "/after-a-breakup.html#their-feed"
+          "After a breakup: the first days",
+          "/after-a-breakup.html#first-days"
         ],
         [
           "Cool-down corner: Night Garden, breathe",
@@ -12095,8 +12095,8 @@
           "/grief.html#hard-evening"
         ],
         [
-          "Living on your own after a loss",
-          "/living-alone.html#your-situation"
+          "Later in life, after a loss (living on your own)",
+          "/living-alone.html#after-loss"
         ],
         [
           "The Night Garden",

@@ -2101,9 +2101,9 @@ if (PERSONA) {
   c(G, ['my girlfriend dumped me', 'is it normal that i still cry all the time'], { id: 'breakupwave', not: /same argument/ });
   t(G, 'i broke up with my boyfriend 3 weeks ago', { id: 'breakup', link: '/after-a-breakup.html', nochip: /chores|Things said the wrong way/ });
   // 3. 2am and wanting to text him: the urge to text an ex, not only sleep
-  t(G, 'its almost 2am… i really want to text him', { id: 'exstoptext', link: '/after-a-breakup.html', text: /late-night messages/ });
-  t(G, 'it\'s 3am and I can\'t sleep, I want to text my ex', { id: 'exstoptext', link: '/after-a-breakup.html#first-days' });
-  c(G, ['i broke up with him last week', 'its late and i really want to text him'], { id: 'exstoptext', text: /late-night messages/ });
+  t(G, 'its almost 2am… i really want to text him', { id: 'exstoptext', link: '/after-a-breakup.html', text: /late at night/ });
+  t(G, 'it\'s 3am and I can\'t sleep, I want to text my ex', { id: 'exstoptext', link: '/after-a-breakup.html#texting' });
+  c(G, ['i broke up with him last week', 'its late and i really want to text him'], { id: 'exstoptext', text: /late at night/ });
   t(G, 'midnight and i\'m tempted to message her even though we broke up', { id: 'exstoptext' });
   // 4. feeling hopeless: the safety reply as it was, with the adult help page (the teen page only for a teen)
   ['honestly i feel kind of hopeless tonight', 'i feel so hopeless', 'im feeling really low tonight'].forEach(q =>
@@ -2148,8 +2148,8 @@ if (PERSONA) {
   t(G, 'Spanish safety unchanged: no quiero vivir', Object.assign({ q: 'no quiero vivir', id: 'es-988', text: /988/ }, ESP));
   // 9. a co-parent who's late for pick-ups: a firm, time-based ask (reply-by, one reminder with a date, BIFF)
   const LATEQ = 'my ex keeps showing up late for pickups and my kid waits. how do i tell her to knock it off without it turning into a war';
-  t(G, 'late for pickups, from the co-parenting page', { q: LATEQ, about: 'Co-parenting after a separation', id: 'coparentpickuplate', script: true, text: /text me by four|Firm/, not: /Keep the handoff itself short/ });
-  t(G, LATEQ, { id: 'coparentpickuplate', link: '/co-parenting.html', text: /one reminder with a date/ });
+  t(G, 'late for pickups, from the co-parenting page', { q: LATEQ, about: 'Co-parenting after a separation', id: 'coparentpickuplate', script: true, text: /text me by|Firm/, not: /Keep the handoff itself short/ });
+  t(G, LATEQ, { id: 'coparentpickuplate', link: '/co-parenting.html#late', text: /one reminder with a date/ });
   t(G, 'my ex is always late for drop-offs and the kids are left waiting', { id: 'coparentpickuplate' });
   t(G, 'how do i get my co-parent to stop being late at handovers', { id: 'coparentpickuplate' });
   c(G, ['we are separated co-parents', 'she is always late for pickups and he waits at the window'], { id: 'coparentpickuplate' });
@@ -2216,7 +2216,7 @@ if (PERSONA) {
     t(G, q, Object.assign({ id: 'es-ensamblada-rol', link: ES + '#ensamblada', not: /¿De qué se trata/ }, ESP)));
   t(G, 'the siblings answer links the Spanish page’s own section', Object.assign({ q: 'mis hermanos no ayudan con mi mamá', link: ES + '#hermanos' }, ESP));
   // blended-family chores, and fairness between the children
-  t(G, 'how do we split chores fairly in a blended family? my wife has 2 kids 9 and 13, my son is with us every other weekend', { id: 'stepchores', link: '/lemonade-stand.html#quick', not: /Pillar I/ });
+  t(G, 'how do we split chores fairly in a blended family? my wife has 2 kids 9 and 13, my son is with us every other weekend', { id: 'stepchores', link: '/lemonade-stand.html#part-time', not: /Pillar I/ });
   t(G, 'should my stepkids have chores if my son only visits?', { id: 'stepchores' });
   t(G, 'my wife thinks i am harder on her kids than on mine', { id: 'stepfair', link: '/stepfamily.html' });
   // books in print, and "is this backed by research?"
@@ -2251,7 +2251,7 @@ if (PERSONA) {
   // gaming follow-ups stay on gaming
   const GAME = 'my gf thinks i game too much and we keep fighting about it';
   c(G, [GAME, 'is she right tho'], { id: 'gamingwho', link: '/gaming-and-time-together.html', nochip: /same fight/ });
-  c(G, [GAME, 'how do i get her to play with me'], { id: 'gamingplay', link: '/gaming-and-time-together.html#play-together' });
+  c(G, [GAME, 'how do i get her to play with me'], { id: 'gamingplay', link: '/gaming-and-time-together.html#game-for-two' });
   // a therapist describing control: never "yes, you're welcome to use the tools"
   t(G, 'a therapist describing control in a client\'s relationship', { q: 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', id: 'procontrol', text: /do not assign the shared tools/, link: '/safety.html', not: /you’re welcome to/ });
   t(G, 'a therapist asking in general still gets the usual answer', { q: 'i\'m a therapist, can i use this with my clients?', id: 'forcounselors' });
