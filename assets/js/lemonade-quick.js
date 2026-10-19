@@ -918,8 +918,27 @@
     var slot = $('lq-clarify'); if (!slot || !window.TOLClarify) return;
     var r = all.n >= 4 && !q.away ? homeShares() : null, k = q.people.length;
     var lop = !!r && Math.max.apply(null, r) >= (k === 2 ? 65 : Math.round(160 / k));
-    window.TOLClarify.offer(slot, { type: 'load', show: lop, lang: isEs() ? 'es' : 'en' });
+    window.TOLClarify.offer(slot, { type: 'load', show: lop, lang: isEs() ? 'es' : 'en', onResult: function (res) { cxRes = res && !res.skipped && Array.isArray(res.took) ? res : null; renderCx(); } });
+    renderCx();
   }
+  // "Include my context": the answers to those questions go in the link you send, only if you tick it. They are
+  // never kept on this device (only the tick is); after a reload there is nothing to include until you answer again.
+  var cxRes = null;
+  function myCx() { return cxRes && !q.askMe ? cleanCx(cxRes.took) : []; }
+  function renderCx() {
+    var box = $('lq-cx'); if (!box) return;
+    var c = myCx(), slot = $('lq-clarify');
+    box.hidden = !c.length || (slot && slot.hidden);
+    if (box.hidden) return;
+    var html = '<label class="lq-cxl"><input type="checkbox" id="lq-cx-on"' + (q.cxOn ? ' checked' : '') + '> ' + esc(L('Include my context in what I send', 'Incluir mi contexto en lo que envío')) + '</label>' +
+      '<p class="lq-mini">' + esc(L('Your answers to these questions go inside the link, so ' + (q.people.length === 2 && typed(q.me === 0 ? 1 : 0) ? typed(q.me === 0 ? 1 : 0) : 'the others') + ' can see them once they’ve answered. They aren’t kept on this device.', 'Tus respuestas a estas preguntas van dentro del enlace, para que los demás las vean después de responder. No se guardan en este aparato.')) + '</p>';
+    if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
+  }
+  document.addEventListener('change', function (e) {
+    if (!e.target || e.target.id !== 'lq-cx-on') return;
+    q.cxOn = !!e.target.checked; if (!q.cxOn) delete q.cxOn; save(); renderSend();
+    status(q.cxOn ? L('Your context will go with the link you send.', 'Tu contexto irá con el enlace que envíes.') : L('Your context stays out of the link.', 'Tu contexto queda fuera del enlace.'));
+  });
 
   /* ---------- long hours or illness: paid work beside the picture, nights, and a fair split ---------- */
   function hrsOf(i) { var x = q.hrs && q.hrs[i]; return typeof x === 'number' && x > 0 ? x : 0; }
@@ -1157,7 +1176,7 @@
         if (diff.length) {
           html += '<p><strong>' + esc(L('You see these differently:', 'Esto lo ven distinto:')) + '</strong></p><ul>' + diff.map(function (id) {
             return '<li>' + esc(label(id) + ': ' + L('you say ', 'tú dices ') + ansWords(mine[id]) + ', ' + says(o) + ' ' + ansWords(th[id]) + '.') + '</li>';
-          }).join('') + '</ul><p class="lq-mini">' + esc(L('These are the good ones to talk about. Not to settle who’s right: each of you may see work the other misses.', 'Estas son las buenas para conversar. No para decidir quién tiene razón: cada uno puede ver trabajo que el otro no ve.')) + '</p>';
+          }).join('') + '</ul><p class="lq-mini">' + esc(L('These are the good ones to talk about. Not to settle who’s right: each of you may see work the other misses.', 'Estas son las buenas para conversar. No para decidir quién tiene razón: cada uno puede ver trabajo que el otro no ve.')) + '</p>' + cmpNext(o, diff);
         }
       }
       // their whole picture in one line
@@ -1202,6 +1221,38 @@
       html = top + grid + '</div><details class="lq-cmpdet"><summary>' + esc(L('Show details', 'Ver detalles')) + '</summary>' + html + '</details>';
     }
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
+  }
+  /* ---------- next steps under "Where you agree, and where you don't" ---------- */
+  // The jobs you see differently, for a week of "Who did what" (WP-01): a shared-week link with those rows ready,
+  // opened on this device (nothing is uploaded; it rides after the "#")
+  function wp01Link(ids) {
+    var names = q.people.map(function (_, i) { return typed(i) || nm(i); });
+    var d = { t: 'tol-list', v: 1, wp: 'WP-01', p: names, m: {}, tb: { audit: ids.slice(0, 20).map(function (id) { return { task: labelEn(id) }; }) } };
+    return '/workpapers/fill/wp-01.html#list=' + b64u(JSON.stringify(d));
+  }
+  function stText(o, diff) {
+    var n = diff.length, who = typed(o) || '';
+    return L('Can we look at the ' + (n === 1 ? 'job' : n + ' jobs') + ' we see differently' + (n <= 4 ? ' (' + joinA(diff.map(function (id) { return lc(label(id)); })) + ')' : '') + '? I’d like to hear how you see ' + (n === 1 ? 'it' : 'them') + (who ? ', ' + who : '') + '.',
+      '¿Podemos mirar ' + (n === 1 ? 'la tarea' : 'las ' + n + ' tareas') + ' que vemos distinto? Me gustaría saber cómo lo ves tú.');
+  }
+  function babyOn() { return q.list.some(function (id) { return groupOf(id) === 'baby'; }); }
+  function cmpNext(o, diff) {
+    var n = diff.length;
+    return '<ul class="lq-cmp-next">' +
+      '<li><a href="' + esc(wp01Link(diff)) + '">' + esc(L('Next: log the ' + (n === 1 ? 'job' : n + ' jobs') + ' you see differently for a week', 'Siguiente: anoten durante una semana ' + (n === 1 ? 'la tarea' : 'las ' + n + ' tareas') + ' que ven distinto') + ' →') + '</a><span>' + esc(L('“Who did what”, with ' + (n === 1 ? 'that job' : 'those jobs') + ' already on it.', '«Quién hizo qué», con esas tareas ya puestas (en inglés).')) + '</span></li>' +
+      '<li><a href="/signal-translator.html?rel=partner" data-lq-st="' + esc(stText(o, diff)) + '">' + esc(L('Check how you’ll bring it up', 'Revisa cómo lo vas a decir') + ' →') + '</a><span>' + esc(L('The Chat analyzer, with a first line ready to change.', 'El analizador de mensajes, con una primera frase lista para cambiar (en inglés).')) + '</span></li>' +
+      (babyOn() ? '<li><a href="/new-parent.html">' + esc(L('New baby: when you’re both running on empty', 'Bebé nuevo: cuando los dos están agotados') + ' →') + '</a><span>' + esc(L('Splitting the nights, and one clear ask at 3am.', 'Repartir las noches, y un pedido claro a las 3 de la mañana.')) + '</span></li>' : '') + '</ul>';
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-lq-st]'); if (!a) return;
+    // the first line waits in this tab for the Chat analyzer (its own way in), so it never sits in the address
+    try { sessionStorage.setItem('tol-st-text', a.getAttribute('data-lq-st')); } catch (er) {}
+  });
+  // someone's own context, sent by them on purpose ("Include my context")
+  function cxHtml(o) {
+    var c = q.cx && q.cx[o]; if (!c || !c.length) return '';
+    return '<div class="lq-cx-in"><p class="lq-mini"><strong>' + esc(L((typed(o) || 'Their') + (typed(o) ? '’s' : '') + ' context, shared by ' + (typed(o) || 'them') + ':', 'El contexto de ' + (typed(o) || 'la otra persona') + ', compartido por ' + (typed(o) ? typed(o) : 'esa persona') + ':')) + '</strong></p><ul>' +
+      c.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('[data-lq-peek]'); if (!b) return;
