@@ -321,7 +321,7 @@ const F = [
   {id:"idiom", name:"Figure of speech", kind:"static", re:new RegExp("\\b(?:"+IDIOMS.concat(SHARED && SHARED.IDIOMS ? SHARED.IDIOMS.filter(x=>!/kill|murder|strangle/.test(x[0])).map(x=>x[0]) : []).join("|")+")\\b","gi"),
    what:"A figure of speech says one thing and means another. Most listeners translate it without effort, but some take it literally, especially under stress.",
    fix:"Swap the figure of speech for what you mean in plain words (the plain meaning is shown above)."},
-  {id:"contempt", name:"Eye-roll or put-down", kind:"static", re:null,
+  {id:"contempt", name:"Contempt: mockery or looking down on them", kind:"static", re:null,
    what:"An eye-roll, mocking or a put-down says \"I look down on you,\" which hurts more than a complaint and is very hard to answer calmly.",
    fix:"Drop the jab and say the complaint underneath it, about the thing, not the person."},
   {id:"passiveag", name:"Passive-aggressive edge", kind:"static", re:null,
@@ -1703,6 +1703,36 @@ function analyze(textIn, opts){
     const INTENSE = /^\s+(?:good|talented|fast|smart|lucky|cute|funny|strong|busy|tired|hungry|happy|excited|proud|beautiful|clever|rich|brave)\b/;
     drop("label", h=>INTENSE.test(lc.slice(h.e, h.e+16)));
     drop("selfput", h=>INTENSE.test(lc.slice(h.e, h.e+16)));
+    // negation and self-reference: "Nothing's wrong", "I don't want to be annoying", "I took that the wrong way", "not your
+    // fault", "I don't think either of us is wrong", "what went wrong", "you look really frustrated" (noticing their feeling).
+    // None of these finds fault with them. "Don't be annoying" and "you're always wrong" still do
+    const NEG_CRIT = /\b(?:nothing(?:'s| is| was)?|there's nothing|not|isn't|wasn't|aren't|weren't|no one(?:'s| is| was| did anything)?|nobody(?:'s| is| was| did anything)?|never|doesn't|didn't|won't|wouldn't|either of us (?:is|was)|neither of us (?:is|was)|without (?:anything|something) (?:going )?|what (?:went|goes|had gone|might go|could go)|nothing went|nothing has gone|if (?:i|i've|i have) (?:done|said) (?:something|anything))\s+(?:\w+\s+){0,2}$/;
+    const SELF_CRIT = /\b(?:i|i'm|i am|i've|i'd|i was|i feel|i felt|me|myself)\s+((?:[\w']+\s+){0,4})$/;
+    const FEEL_THEM = /\byou (?:look|seem|sound|must be|might be|may be|probably feel|feel|felt)(?: (?:really|so|a bit|a little|quite|pretty|very))?\s+$/;
+    drop("critic", h=>{
+      const pre = lc.slice(Math.max(0, h.s-40), h.s);
+      if(/\b(?:don't|do not|dont|stop) (?:be|being)\s+(?:so\s+)?$/.test(pre)) return false;
+      if(/^you\b/i.test(h.match)) return false;
+      if(NEG_CRIT.test(pre)) return true;
+      const sm = pre.match(SELF_CRIT); if(sm && !/\b(?:you|your|u|ur)\b/.test(sm[1])) return true;
+      return FEEL_THEM.test(pre) && /^(?:frustrat|annoy|disappoint|tired|fed up|sick of)/i.test(h.match);
+    });
+    // "always / never / every time" about yourself ("I can't write essays every time", "I'm tired all the time", "I've never
+    // done the tax return", "I'll always tell you why"), negated ("I don't always do anything", "so it isn't always on me"),
+    // in thanks ("thank you for always being…"), or a promise ("you'll always have your mum"): not aimed at them.
+    // Keeping score about yourself ("I always have to do everything", "it's always me") still counts
+    drop("absolute", h=>{
+      const st = sentText(h), pre = lc.slice(Math.max(0, h.s-30), h.s), after = lc.slice(h.e, h.e+30);
+      if(/\b(?:don't|doesn't|didn't|isn't|wasn't|aren't|not|won't)\s+(?:\w+\s+)?$/.test(pre) && /^(?:always|every (?:single )?time|all the time)$/i.test(h.match)) return true;
+      if(/\bthank(?:s| you)\b[^.!?]*$/.test(pre) || /^\s*(?:have|be (?:loved|welcome|my|our|your|there|family)|love|will(?:\s|$))/.test(after)) return true;
+      if(/^(?:what|which|how|is there)\b/.test(st.trim()) && /\?\s*$/.test(st) && /\byou\b/.test(st) && /\b(?:want|like|love|enjoy|remember)\b/.test(st)) return true;
+      const sm = pre.match(/(?:^|[^\w'])(i|i'm|i am|i've|i'll|i'd|we|we've|we'll|we're|i can't|i cannot|i don't)\b([^.!?]*)$/);
+      if(!sm || /\b(?:you|your|u|ur|y'all)\b/.test(sm[2])) return false;
+      if(/\b(?:have to|has to|got to|end up|ends up|left to|left with|stuck|everything|always me|the one who|on my own|by myself|alone|get (?:any|no)|nobody|no one|help(?:s|ed)?)\b/.test(st)) return false;
+      return true;
+    });
+    // "it isn't because I don't care", "not because I don't care": the opposite of a brush-off
+    drop("brushoff", h=>/\b(?:not|isn't|wasn't|it's not) (?:that|because) (?:i|we)\s+$|\bnot because\s+$/.test(lc.slice(Math.max(0,h.s-24), h.s)));
     // "I know it's annoying": owning that a rule is a pain is not criticism
     drop("critic", h=>/\bi know (?:it's|this is|that's|it is|this|it)\s+(?:a bit |really |so |very )?$/.test(lc.slice(Math.max(0,h.s-22), h.s)));
     // a dig said as politeness already explains the hint or the criticism inside it
@@ -2021,8 +2051,10 @@ const PP_TO_PAST = {gone:"went",done:"did",taken:"took",seen:"saw",eaten:"ate",w
 const BE_ADJ = /^be (?:normal|nicer|nice|better|more \w+|less \w+|like \w+|a (?:\w+ )?(?:person|adult|grown-?up|partner|parent)|an adult|different|reasonable|mature|responsible|considerate|supportive|present|there for me|on my side)\b/i;
 
 /* a message made only of curt pieces: "Fine. Whatever works for you.", "Sure. Do what you want.", "whatever." */
-const CURT_PIECE = "(?:fine|ok(?:ay)?|k+|sure|yeah|yep|alright|all right|whatever|whatevs|whatev|whatever (?:works|suits) (?:for you|you|best)|whatever you (?:want|like|say|think)|whatever you think is (?:best|right)|do what you (?:want|like)|i (?:really )?(?:don't|do not) care|i could(?:n't| not) care less|if you say so|suit yourself|your call)";
+const CURT_PIECE = "(?:fine|ok(?:ay)?|k+|sure|yeah|yep|alright|all right|wow|wow,? ok(?:ay)?|whatever|whatevs|whatev|whatever (?:works|suits) (?:for you|you|best)|whatever you (?:want|like|say|think)|whatever you think is (?:best|right)|do what(?:ever)? you (?:want|like)|i (?:really )?(?:don't|do not) care|i could(?:n't| not) care less|if you say so|suit yourself|your call)";
 const CURT_ONLY = new RegExp("^\\s*"+CURT_PIECE+"(?:[\\s.,!…]+"+CURT_PIECE+")*[\\s.!…🙄😒]*$", "i");
+/* the same curt pieces with a jab at the end: "Fine. Whatever. Do what you want, you always do." */
+const CURT_JAB = new RegExp("^\\s*"+CURT_PIECE+"(?:[\\s.,!…]+"+CURT_PIECE+")*[\\s.,!…]*(?:like |as )?(?:you always do(?: anyway| whatever you want)?|you (?:always|will) anyway|as usual|you never listen anyway|you never ask me anyway|like always)[\\s.!…🙄😒]*$", "i");
 const FILLER_ONLY = /^(?:(?:ok(?:ay)?|hey|so|and|also|now|look|listen|um|uh|well|right|alright|honestly|seriously|guys|babe|honey|please|and also|but)[\s,]*)+$/i;
 /* "come to the party, it'll be fun" -> ["come to the party", "It'll be fun."] */
 function splitTail(act){
@@ -2171,7 +2203,15 @@ function rewriteBase(an, opts){
   }
   // a brush-off on its own, or a few curt pieces in a row ("fine. whatever", "Fine. Whatever works for you.",
   // "Sure. Do what you want.", "i don't care"): say which one you mean
-  if(CURT_ONLY.test(text) && /whatev|care\b|do what you want|if you say so|suit yourself|your call/i.test(text)){
+  // "Fine. Whatever. Do what you want, you always do.": the brush-off and the jab both go (never repunctuated into a
+  // question); what's left is the feeling underneath it, and a time to talk
+  if(CURT_JAB.test(text)){
+    const out = "I'm upset, and I don't want to fight about it over text. It feels like what I want doesn't count for much here. Can we talk about it at [a time]?";
+    log.push({id:"brushoff", from:[(text.match(/^[^,]*?(?:whatever|do what(?:ever)? you (?:want|like)|fine)[^.,]*/i)||[text])[0].trim()], to:["the feeling, said plainly"], extra:""});
+    if(has("absolute")) log.push({id:"absolute", from:(an.found.absolute||[]).filter(Boolean).slice(0,1), to:[], extra:""});
+    return finish(out, "", log, an, W, Object.assign({}, opts, {reframed:true}));
+  }
+  if(CURT_ONLY.test(text) && /whatev|care\b|do what(?:ever)? you want|if you say so|suit yourself|your call/i.test(text)){
     const out = /care/i.test(text)
       ? "[If you don't mind either way:] Either is fine with me. [If you're upset:] I'm too upset to decide this well right now. Can we come back to it at [a time]?"
       : "[If it's really okay:] Okay, that works for me. [If it isn't:] I'm not ready to talk about this well right now. Can we come back to it at [a time]?";
@@ -2262,6 +2302,14 @@ function rewriteBase(an, opts){
   let sents = splitSentences(text).map(x=>calmSentence(x.text, ctx, note)).filter(Boolean);
   // "Wow. Amazing." after a sarcastic line is more sarcasm: it goes, the point stays
   if(has("sarcasm")||has("contempt")) sents = sents.filter(x=>{ if(sents.length>1 && /^(?:oh,?\s*)?(?:wow|amazing|great|perfect|wonderful|fantastic|brilliant|awesome|lovely|nice|super|terrific|marvelous|splendid|classic|typical|figures|shocker|bravo|just great|just perfect)(?:\s+(?:job|work|one))?[\s.!…🙄😒🙃]*$/i.test(x.trim())){ note("sarcasm", x.trim().replace(/[.!…\s]+$/,""), ""); return false; } return true; });
+  // contempt (mockery, disgust, looking down on them, "everyone can see it") and a sarcastic opener ("Oh wow,", "Sure,
+  // because…"): no rewrite keeps them. The clause goes whole, never leaving a fragment; what's left is the event, the
+  // feeling and the ask. Curt pieces next to it ("Fine.", "Whatever.") go too: they keep the sting
+  if(has("contempt") || has("sarcasm") || has("brushoff") || has("minimal")){
+    const before = sents.length;
+    sents = sents.map(x=>dropContempt(x, an, ctx, note, before)).filter(Boolean);
+    if(sents.length>1 || before>1) sents = sents.filter(x=>{ if(before>1 && CURT_ONLY.test(x.trim()) && sents.length>1){ note("brushoff", x.trim().replace(/[.!…\s]+$/,""), ""); ctx.curtDropped = true; return false; } return true; });
+  }
   ctx.nSents = sents.length;
   const pairs = [];
   ctx.safety = an.safety;
@@ -2284,6 +2332,11 @@ function rewriteBase(an, opts){
   // say the feeling once, plainly, instead of the heat: "I'm really frustrated right now."
   if(!/[A-Za-z\[]/.test(main)) main = "";  // only punctuation was left
   if(ctx.swore && !ctx.hostile && !ctx.insult && main.trim() && !/\b(?:could you|would you|can you|can we|could we|will you)\b/i.test(main)) main = "I'm frustrated. "+main;
+  if(ctx.contempt){
+    if(!/[A-Za-z]/.test(main.replace(/\[[^\]]*\]/g,""))) main = "[What happened, plainly.]";
+    if(!/\b(?:hurt|upset|sad|frustrated|disappointed|angry|let down|worried|feel|felt|feeling)\b/i.test(main)) main = beforeAsk(main, "I'm really hurt.");
+    if(!ctx.hostile && !ctx.insult && !/\?/.test(main)) main = endP(main)+" Can we talk about it at [a time], once I've had a few minutes?";
+  }
   if(ctx.hostile || ctx.insult){
     const hasAsk = /\b(?:could you|would you|can you|can we|could we|will you)\b/i.test(main);
     const lead = ctx.hostile ? "I'm really frustrated right now." : (ctx.swore || has("swear")) ? "I'm frustrated about [what happened]." : "";
@@ -2480,6 +2533,44 @@ function inferAsk(text){
    on my last nerve", "you idiot", "I'm the only adult here") goes; swear words inside a clause that carries
    a real point ("can you f*cking clean the kitchen") go, and the point stays. Returns the calmer sentence. */
 function sharedRe(id){ return SHARED && SHARED.BY && SHARED.BY[id] && SHARED.BY[id].re ? new RegExp(SHARED.BY[id].re.source, "i") : null; }
+/* a line goes in just before the first question ("You forgot [the thing]. I'm really hurt. Can we talk…?") */
+function beforeAsk(main, line){
+  const ss = splitSentences(main).map(x=>x.text.trim()).filter(Boolean);
+  const at = ss.findIndex(x=>/\?\s*$/.test(x));
+  if(at<0) return (main.trim() ? endP(main.trim())+" " : "")+line;
+  ss.splice(at, 0, line); return ss.join(" ");
+}
+/* contempt in a sentence: the clause carrying it goes whole. "Oh wow, you forgot again?" keeps the fact; "Honestly I don't
+   know why I expected anything from you." and "…, and everyone can see it." go. A sentence that's nothing but contempt, in a
+   one-line message, is left to the fuller replacements in rewriteSentence ("Grow up." -> the feeling and a time). */
+const CONTEMPT_RX = ()=> SHARED && SHARED.BY && SHARED.BY.contempt ? new RegExp(SHARED.BY.contempt.re.source, "i") : null;
+const SARC_OPEN = /^(?:oh,?\s*)?wow,?\s+(?=(?:you|u|so|really|ok(?:ay)?|just)\b)|^(?:oh,?\s*)?(?:great|perfect|wonderful|lovely|brilliant|fantastic|nice),\s+(?=(?:you|u|so|now|another|again)\b)/i;
+const SARC_JAB = /^(?:sure|right|yeah|oh sure|of course),?\s+because\b/i;
+function dropContempt(s0, an, ctx, note, nAll){
+  const CX = CONTEMPT_RX(); const lowf = x=>norm(x).toLowerCase();
+  let s = s0.trim();
+  const marks = [].concat(an.found.contempt||[]).filter(Boolean).map(x=>lowf(x).replace(/^(?:and|but|so)\s+/,"").replace(/[\s.!?,…]+$/,"")).filter(x=>x.length>2);
+  // "Sure, because you're SO busy.": agreement said as a jab, the whole sentence is the jab
+  if(SARC_JAB.test(s)){ note("sarcasm", s.replace(/[.!?…\s]+$/,""), ""); ctx.contempt = true; return ""; }
+  const om = s.match(SARC_OPEN);
+  if(om && (an.found.sarcasm || an.found.contempt || an.found.critic || an.found.again || an.found.label)){ note("sarcasm", om[0].replace(/[,\s]+$/,""), ""); s = capFirst(s.slice(om[0].length)); ctx.contempt = true;
+    // "You forgot again?" said as mockery: the plain fact, with a blank for what it was
+    const rq = s.match(/^(you (?:forgot|missed|lost|broke|left|skipped|cancell?ed|did it))( again)?\?+$/i);
+    if(rq) s = capFirst(rq[1])+(/forgot|missed|lost|broke|left|skipped|cancel/i.test(rq[1]) ? " [the thing]" : "")+(rq[2]||"")+"."; }
+  const hitC = c=>{ const l = lowf(c).replace(/[\s.!?,…]+$/,""); return marks.some(m=>l.includes(m) || (m.includes(l) && l.split(/\s+/).length>=3)) || (CX && CX.test(lowf(c))); };
+  if(!marks.length && !(CX && CX.test(lowf(s)))) return s;
+  const end = (s.match(/[.!?]+["')\]]*\s*$/)||[""])[0];
+  const body = s.slice(0, s.length-end.length);
+  const parts = body.split(/\s*(?:[,;:]|\s[-–—]\s)\s*/);
+  if(nAll===1 && parts.length===1 && hitC(body)) return s;
+  const kept = []; let cut = false;
+  parts.forEach(c=>{ if(!c.trim()) return; if(hitC(c)){ note("contempt", c.trim().replace(/^(?:and|but|so)\s+/i,""), ""); cut = true; return; } kept.push(c.trim()); });
+  if(!cut) return s;
+  ctx.contempt = true;
+  let r = kept.join(", ").replace(/^(?:and|but|so|or|because|honestly|seriously)\s+/i,"").trim();
+  if((r.match(/[A-Za-z']+/g)||[]).length < 2 || FILLER_ONLY.test(r)) return "";
+  return capFirst(r) + (end || ".");
+}
 function calmSentence(s0, ctx, note){
   const HOST = sharedRe("hostile"), INS = sharedRe("label"), SW = SHARED && SHARED.BY && SHARED.BY.swear ? new RegExp(SHARED.BY.swear.re.source, "gi") : null;
   const low = x=>x.toLowerCase().replace(/[’‘]/g,"'");
