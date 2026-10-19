@@ -628,7 +628,7 @@ t('connections', 'how is laughter therapy related to psychology', { kind: 'card'
 t('connections', 'what do debating and politics have in common', { kind: 'card', id: 'polymath', text: /decision attached/ });
 t('connections', 'why did christian study aromatherapy', { kind: 'card', id: 'polymath', text: /Aromatherapy, one of the thirteen fields/, link: '/polymath.html#field-ar' });
 t('connections', 'how does music connect?', { kind: 'card', id: 'polymath', text: /How it connects to the other twelve/ });
-t('connections', 'what does behavioral science have to do with relationships', { kind: 'card', id: 'polymath', text: /Behavioral science, one of the thirteen fields/ });
+t('connections', 'what does behavioral science have to do with relationships', { kind: 'card', id: 'polymath', text: /Behaviou?ral science, one of the thirteen fields/ });
 t('connections', 'tell me about the art of debating field', { kind: 'card', id: 'polymath', text: /The art of debating, one of the thirteen fields/ });
 t('connections', 'where do all thirteen fields meet at once', { id: 'connections-deepest', text: /The money conversation.*A new baby in the house/s });
 t('connections', 'my partner and I debate about money and it is hurting our relationship', { not: /one of the thirteen fields/ });
@@ -2243,7 +2243,7 @@ if (PERSONA) {
   c(G, [RET, 'He keeps reorganising my kitchen'], { id: 'retiredterritory', link: '/retired-together.html#territory', nochip: /roommates|same fight/i });
   // "do something with me, not a chore"; "she says we drifted apart, I think we're fine"
   t(G, 'how do I get my husband to actually do something with me without it feeling like a chore', { id: 'dotogether', not: /log one week|Lemonade/ });
-  t(G, 'my wife says we drifted apart. i think we\'re fine. what does she actually want', { id: 'feelsfine', link: '/empty-nest.html#en-fine-h' });
+  t(G, 'my wife says we drifted apart. i think we\'re fine. what does she actually want', { id: 'feelsfine', link: '/empty-nest.html#en-fine' });
   t(G, 'never "after a rough patch" unless they said so', { q: 'ideas for something fun to do together', not: /After a rough patch/ });
   // "texts k", and "is the Chat analyzer biased?"
   t(G, 'what does it mean when someone texts k', { id: 'shorttexts', not: /Grief/ });
@@ -2254,6 +2254,10 @@ if (PERSONA) {
   c(G, [GAME, 'how do i get her to play with me'], { id: 'gamingplay', link: '/gaming-and-time-together.html#game-for-two' });
   // a therapist describing control: never "yes, you're welcome to use the tools"
   t(G, 'a therapist describing control in a client\'s relationship', { q: 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', id: 'procontrol', text: /do not assign the shared tools/, link: '/safety.html', not: /you’re welcome to/ });
+  // snippets from other helpers: 988 in Spanish (text AYUDA), a message to an ex gets "sleep on it?", not a rewrite (sig16)
+  t(G, 'Spanish 988: call and press 2, or text AYUDA', Object.assign({ q: 'no quiero vivir', id: 'es-988', text: /AYUDA al 988/, not: /llama o escribe al 988/i }, ESP));
+  c(G, ['i broke up with him', 'is this ok to send: i know we said no contact but i miss you. can we just talk?'], { id: 'checkmsg-ex', text: /sleep on it/, link: '/after-a-breakup.html#texting', not: /warmer way/ });
+  t(G, 'a message to my ex, fresh', { q: 'is this ok to send to my ex: i miss you, can we just talk?', id: 'checkmsg-ex' });
   t(G, 'a therapist asking in general still gets the usual answer', { q: 'i\'m a therapist, can i use this with my clients?', id: 'forcounselors' });
 }
 

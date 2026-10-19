@@ -1016,6 +1016,8 @@
         if (!pickL.length) {
           var lk0 = safeLinks(c.links).slice(0, 2), pages0 = lk0.map(function (l) { return l[1]; }), rs0 = search(state.curF || ''), al0 = null;
           rs0.hits.some(function (h) { var d = KB.docs[h.i]; if (!d.tip && !d.g && pages0.some(function (pu) { return pu.indexOf('#') > 0 ? d.u === pu : d.u.split('#')[0] === pu; }) && !SH['#doc' + h.i] && h.cov >= ((rs0.base || []).length <= 3 ? 0.99 : 0.6)) { al0 = h.i; return true; } return false; });
+          // nothing that close: the best part of those pages that shares something with what was said, rather than a refusal (puddles16)
+          if (al0 == null && (rs0.base || []).length >= 2) rs0.hits.some(function (h) { var d = KB.docs[h.i]; if (!d.tip && !d.g && pages0.some(function (pu) { return d.u.split('#')[0] === pu.split('#')[0]; }) && !SH['#doc' + h.i] && !/#(main|more)$/.test(d.u) && h.cov >= ((rs0.base || []).length <= 3 ? 0.6 : 0.3)) { al0 = h.i; return true; } return false; });
           if (al0 != null) { state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: KB.docs[al0].u }; return { blocks: [{ k: 'p', x: 'Staying with that, here’s the part of the page that fits:' }, passageBlock(al0, rs0.terms)], chips: [{ label: 'Something else', q: 'Start over' }], kind: 'card', id: c.id, side: c.side }; }
           state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: lk0[0] && lk0[0][1] };
           return { blocks: [{ k: 'p', x: 'I’ve shared the main steps for this already, so I won’t repeat them. The page has the rest, or tell me a bit more about what’s happening and I’ll look for the part that fits.' }, { k: 'links', x: lk0 }], chips: [{ label: 'Something else', q: 'Start over' }], kind: 'card', id: c.id, side: c.side };
@@ -1768,6 +1770,9 @@
       }
       // an older name for the page (a page's heading changed, an old ?about= link): a card's link label still finds it
       for (var j = 0; j < (KB.cards || []).length && !best; j++) (KB.cards[j].links || []).forEach(function (l) { if (!best && l && l[1] && l[1].indexOf('#') < 0 && /\.html$/.test(l[1]) && stNorm(l[0]) === a) best = l[1]; });
+      // the same words with "a"/"the" dropped ("Co-parenting after a separation" is "Co-Parenting After Separation: …")
+      var noArt = function (x) { return x.replace(/\b(a|an|the)\b/g, ' ').replace(/\s+/g, ' ').trim(); }, a2 = noArt(a);
+      for (var k = 0; k < KB.docs.length && !best && a2.length > 12; k++) { var dk = KB.docs[k]; if (!dk.tip && !dk.g && noArt(stNorm(pageName(dk.t))).indexOf(a2) === 0) best = dk.u.split('#')[0]; }
       if (best) path = best;
     }
     function cardFor(u) { return (KB.cards || []).filter(function (c) { return c.page === u && c.first; })[0] || null; }
@@ -2854,7 +2859,7 @@
       { k: 'links', x: [['Ayuda para tu familia, en español', L]] }], chips: chips, kind: 'lang', id: 'es-hola' };
     // safety first, as everywhere
     if (/\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f))
-      return ans('988', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', ['Llama o escribe al 988 (EE. UU.). Cuando oigas “Presione 2”, marca el 2 para hablar en español.', 'Si estás en peligro ahora, llama al 911.', 'Fuera de EE. UU.: findahelpline.com tiene líneas de ayuda gratis en tu país.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
+      return ans('988', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', ['Llama al 988 (EE. UU.) y marca el 2 para hablar en español, o envía un mensaje de texto con la palabra AYUDA al 988.', 'Si estás en peligro ahora, llama al 911.', 'Fuera de EE. UU.: findahelpline.com tiene líneas de ayuda gratis en tu país.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me controla|me grita y tengo miedo)\b/.test(f))
       return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     // a little chit-chat in Spanish, after the safety answers: "¿cómo estás?", "cuéntame un chiste", "gracias"
@@ -2918,7 +2923,7 @@
       return ans('horas', 'Los dos trabajos cuentan, y los dos cansan. Cuando uno llega agotado, es fácil que el otro sienta que nadie ve lo que hace en casa, y al revés.', ['Escucha primero cómo está: “¿Qué fue lo más pesado de hoy?”', 'Cuenten las horas de los dos: el trabajo pagado y el viaje, y también las horas con los niños y la casa.', 'Lo justo no tiene que ser mitad y mitad. Elijan juntos una cosa que alivie al que esté más cansado esta semana.'], 'Veo que estás muy cansado. Yo también lo estoy. ¿Podemos mirar juntos la semana y ver qué nos alivia a los dos?', [['Cuando uno trabaja muchas horas', L + '#horas']]);
     if (/\b(cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f)) { state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS; }
     if (/\b(triste|tristeza|cansad[oa]s?|agotad[oa]s?|noche dificil|dificil|calma|calmarme|tranquil\w*|no puedo mas|llor\w*|nervios\w*|ansiedad|cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f))
-      return ans('cuidar', 'Lo siento, suena muy pesado. Vamos paso a paso. Primero, un momento de calma:', ['Respira despacio: toma aire contando hasta 4 y suéltalo contando hasta 6. Hazlo cinco veces.', 'Toma un vaso de agua y siéntate unos minutos en un lugar tranquilo.', 'Si cuidas a alguien, estar agotado o triste es normal. No es un fallo tuyo: es una señal de que necesitas más apoyo. Mañana pide una ayuda concreta, con día y hora.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['El Jardín de noche, para respirar despacio', '/night-garden.html']], 'Si la tristeza no se va, o piensas en hacerte daño, llama o escribe al 988 y marca el 2 para hablar en español.');
+      return ans('cuidar', 'Lo siento, suena muy pesado. Vamos paso a paso. Primero, un momento de calma:', ['Respira despacio: toma aire contando hasta 4 y suéltalo contando hasta 6. Hazlo cinco veces.', 'Toma un vaso de agua y siéntate unos minutos en un lugar tranquilo.', 'Si cuidas a alguien, estar agotado o triste es normal. No es un fallo tuyo: es una señal de que necesitas más apoyo. Mañana pide una ayuda concreta, con día y hora.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['El Jardín de noche, para respirar despacio', '/night-garden.html']], 'Si la tristeza no se va, o piensas en hacerte daño, llama al 988 y marca el 2 para hablar en español, o envía un mensaje de texto con la palabra AYUDA al 988.');
     var menu = state.esTopic === 'cuidar' ? [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Enojo, resentimiento y culpa', L + '#resentimiento'], CARE_LIST, ['Si no estás a salvo en casa', L + '#seguro']]
       : [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Cuando somos una familia ensamblada', L + '#ensamblada'], ['Si no estás a salvo en casa', L + '#seguro']];
     return { blocks: [{ k: 'p', x: (first ? 'Hola. Te respondo en español con lo esencial. ' : '') + '¿De qué se trata? Cuéntame un poco más en tus palabras, o mira una de estas partes:' },
@@ -2957,11 +2962,20 @@
     state.checkWait = 0;
     var an, rw, v;
     var actx = answer && E.answerCtx ? E.answerCtx(answer, {}) : null, aopt = answer ? { ctx: actx, answer: answer } : {};
+    // who it's for, when Puddles knows (sig16): "to my ex", or the topic we're on (a breakup, co-parenting, a partner)
+    var rel = checkRel(state, q0);
+    if (rel) aopt.rel = rel;
     try { an = E.analyze(text, { channel: 'text' }); rw = E.rewrite(an, Object.assign({ wirings: ['general'], channel: 'text' }, aopt)); v = E.verdict ? E.verdict(an, E.score(an, ['general'], 'text', 'v'), rw, aopt) : null; } catch (e) { return null; }
     if (!an || an.danger || an.selfHarm || (v && v.id === 'danger')) return null;
+    // a message reaching out to an ex: a gentle "sleep on it?", never a polished rewrite (sig16)
+    if (v && v.exReach) {
+      var el = v.link ? [[v.link[1], v.link[0]]] : [];
+      return { blocks: [{ k: 'p', x: v.text }, { k: 'links', x: el.concat([['When you want to text them', '/after-a-breakup.html#texting']]) }],
+        chips: [{ label: 'Check another message', q: 'Can you check a message for me?' }], kind: 'care', id: 'checkmsg-ex' };
+    }
     // one question first (accuracy12): a short line aimed at "you" that the words alone can't settle ("You know what, I'm going to
     // beat your butt"): is it a joke you share, or are you upset with them? A clear threat never gets here: it's answered straight.
-    var askq = !answer && E.askFirst ? (function () { try { return E.askFirst(an, { mode: 'send' }); } catch (e) { return null; } })() : null;
+    var askq = !answer && E.askFirst ? (function () { try { return E.askFirst(an, { mode: 'send', rel: rel }); } catch (e) { return null; } })() : null;
     if (askq) {
       state.checkAsk = { text: text, turn: state.turn || 0 };
       return { blocks: [{ k: 'p', x: askq.q }], chips: askq.answers.map(function (a) { return { label: a.label, q: a.label }; }), kind: 'care', id: 'checkmsg-ask' };
@@ -2976,6 +2990,14 @@
       : 'I wouldn’t change much. Read it once more as if you were them, on a bad day, then send it when you’re calm.' });
     b.push({ k: 'links', x: [['Open it in the Chat analyzer for more options', '/signal-translator.html']].concat(v && v.addContext ? [['Add context in the Chat analyzer (who they are, whether you joke like this)', '/signal-translator.html#add-context']] : []) });
     return { blocks: b, chips: [{ label: 'Check another message', q: 'Can you check a message for me?' }], kind: 'care', id: 'checkmsg' };
+  }
+  function checkRel(state, q0) {
+    var f = norm(q0 || '') + ' ' + norm(state.lastQ || ''), T = state.topic && state.topic.id, tc = topicRoot(state) || topicCard(state), r = tc && relOf(tc.id);
+    if (/\b(my ex|to my ex|an ex|the ex|ex boyfriend|ex girlfriend|ex husband|ex wife)\b/.test(norm(q0 || '')) && !/\b(kids?|children|son|daughter|pick ?ups?|handovers?|custody)\b/.test(f)) return 'ex';
+    if (/^(exstoptext|breakup|breakupwave)$/.test(T || '')) return 'ex';
+    if (r === 'coparent' || /\bco ?parent\w*\b/.test(f)) return 'coparent';
+    if (r === 'partner') return 'partner';
+    return '';
   }
   function handoffReply(f, kid) {
     var k = kid || 'your child';

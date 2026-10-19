@@ -1869,7 +1869,7 @@
           "My husband sleeps all day and I do everything for the dog"
         ]
       ],
-      "notPat": "\\b(never notices?|doesnt notice|does not notice|remembers? everything|the one who remembers|have to ask|just have to ask|mental load|tired of being the one|carrying (it all|everything)|i do (it )?all|i do everything)\\b"
+      "notPat": "\\b(never notices?|doesnt notice|does not notice|remembers? everything|the one who remembers|just have to ask|mental load|tired of being the one)\\b"
     },
     {
       "id": "gamingchores",
@@ -9059,7 +9059,7 @@
       "id": "angerstop",
       "name": "stopping losing your temper",
       "safety": true,
-      "pat": "\\bhow (do|can|could) i (stop|quit) (losing|lose) (my temper|it|my cool|my rag)\\b|\\bi (keep|always|still) (losing|lose|lost) (it|my temper|my cool|my rag)\\b|^(i (keep )?(losing|lose|lost) (it|my temper))$|^my temper$|\\b(i have|i ve got|ive got|got) (a |an )?(bad |terrible |short |quick )?(temper|anger (problem|issue|issues)|anger management (problem|issue))\\b|^(an )?anger (problem|issue|issues)$|\\bmy anger (problem|issue|issues|is out of control|scares me)\\b|\\b(control|manage) my (temper|anger)\\b|\\bshort fuse\\b|\\bi (keep |always |ve been |have been |m |am |still )?(snapping|snap|snapped|shouting|yelling|being short|getting short|blowing up) (at|with) (my )?(wife|husband|partner|kids|children|family|son|daughter|everyone|them|the kids)\\b",
+      "pat": "\\bhow (do|can|could) i (stop|quit) (losing|lose) (my temper|it|my cool|my rag)\\b|\\bi (keep|always|still) (losing|lose|lost) (it|my temper|my cool|my rag)\\b|^(i (keep )?(losing|lose|lost) (it|my temper))$|^my temper$|\\b(i have|i ve got|ive got|got) (a |an )?(bad |terrible |short |quick )?(temper|anger (problem|issue|issues)|anger management (problem|issue))\\b|^(an )?anger (problem|issue|issues)$|\\bmy anger (problem|issue|issues|is out of control|scares me)\\b|\\b(control|manage) my (temper|anger)\\b|\\bshort fuse\\b|\\bi (keep|always|ve been|have been|m always|am always|still|constantly) (snapping|snap|shouting|yelling|being short|getting short|blowing up) (at|with) (my )?(wife|husband|partner|kids|children|family|son|daughter|everyone|them|the kids)\\b",
       "notPat": "\\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|dad|mum|mom|son|daughter|boss))\\b.{0,15}\\b(temper|anger|loses it)\\b",
       "what": [
         "Wanting to change it is the biggest step, and it can change."
@@ -10356,15 +10356,16 @@
       "topic": true,
       "keys": [],
       "chips": [],
-      "name": "when one feels distant and the other thinks it’s fine",
-      "pat": "\\b(says|thinks|feels|told me) (that )?(we|we ve|we have|we re|were) (drifted|grown|growing|drifting) apart\\b.{0,70}\\b(i think|but|i feel) (we re|were|we are|everything is|everything s|its|it s|things are) (fine|ok|okay|good|great|alright)\\b|\\b(i think|but) (we re|were|we are|everything is|everything s) (fine|ok|okay)\\b.{0,70}\\b(drifted|distant|not close|apart|far apart|lonely)\\b|\\b(says|thinks) (we re|were|we are) not close\\b.{0,60}\\b(fine|ok|okay)\\b",
+      "name": "when they feel distant and you feel fine",
+      "pat": "\\b(says|thinks|feels|told me) (we re|were|we are|we have|weve) (not close|distant|drifting|drifted|disconnected|grown apart|like roommates|not connected)\\b.{0,40}\\b(fine|ok|okay|good|happy|great)\\b|\\b(she|he|they|my \\w+) (says|thinks|feels)\\b.{0,50}\\bbut (i think |to me )?(everything|it|things|we) (is|s|are|seems?|seem|feel|feels)? ?(fine|ok|okay|good|great)\\b|\\b(says|thinks|feels|told me) (that )?(we|we ve|we have|we re|were) (drifted|grown|growing|drifting) apart\\b.{0,70}\\b(i think|but|i feel) (we re|were|we are|everything is|everything s|its|it s|things are) (fine|ok|okay|good|great|alright)\\b|\\b(i think|but) (we re|were|we are|everything is|everything s) (fine|ok|okay)\\b.{0,70}\\b(drifted|distant|not close|apart|far apart|lonely)\\b|\\b(says|thinks) (we re|were|we are) not close\\b.{0,60}\\b(fine|ok|okay)\\b",
       "what": [
-        "Often one partner feels distance and the other doesn’t. One says “We’re not close.” The other thinks “But everything is fine. We don’t fight.” Both can be true. “We’re not close” usually doesn’t mean “You did something wrong.” It often means “I miss you, and I want more time with you.”"
+        "It’s common for one partner to feel close and the other to feel far, at the same time. Her feeling is real information, even if things feel fine to you, and you don’t have to agree to listen. “We’re not close” usually doesn’t mean “You did something wrong.” It often means “I miss you, and I want more time with you.”"
       ],
       "how": [
-        "Ask: “What is one small thing we could do together this week?” Then do it.",
-        "Put it in the calendar: a walk, a meal, a short drive. No big talk needed.",
-        "Say one thank-you a day, out loud, for something specific."
+        "Ask before you explain: “What would feeling close look like for you this week?”",
+        "Or ask: “What is one small thing we could do together this week?” Then do it, and put it in the calendar: a walk, a meal, a short drive. No big talk needed.",
+        "Say one thank-you a day, out loud, for something specific.",
+        "Check back in a week: “Has anything felt different?”"
       ],
       "links": [
         [
@@ -10372,11 +10373,16 @@
           "/empty-nest.html#en-fine"
         ],
         [
-          "If one of you feels “everything is fine”",
-          "/empty-nest.html#fine"
+          "Turning Toward: seven small ways to connect",
+          "/turning-toward.html"
+        ],
+        [
+          "Check-ins",
+          "/check-ins.html"
         ]
       ],
       "script": [
+        "Things feel fine to me, and I don’t want to brush off how you feel. Can you tell me what would help you feel closer?",
         "What is one small thing we could do together this week?"
       ],
       "plain": [
@@ -10384,6 +10390,10 @@
         "Ask what small thing you could do together.",
         "Put it in the calendar.",
         "Say thank you each day."
+      ],
+      "scriptLabels": [
+        "Words you could use",
+        "Or, one small thing"
       ]
     },
     {
@@ -10682,12 +10692,12 @@
       "id": "ldtimezones",
       "kind": "intent",
       "first": true,
-      "newTopic": true,
+      "newTopic": false,
       "topic": true,
       "keys": [],
       "chips": [],
       "name": "time zones in a long-distance relationship",
-      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(\\d+|five|six|seven|eight|nine|ten|eleven|twelve) hours? (ahead|behind|apart|difference)\\b|\\b(what|which) time (should|do|can|could|would) (we|i) (call|facetime|video ?call|talk|ring|speak)\\b.{0,80}\\b(in [a-z]+|ahead|behind|abroad|apart|away|different)\\b|\\b(i m|im|i am|we re|were) in [a-z]+( [a-z]+)? and (she|he|they|my \\w+) (s|is|are|re) in [a-z]+\\b",
+      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(hours?|\\d+ ?h(ours)?) (ahead|behind)\\b|\\btime ?zones?\\b|\\btime difference\\b|\\b(\\d+|five|six|seven|eight|nine|ten|eleven|twelve) hours? (ahead|behind|apart|difference)\\b|\\b(what|which) time (should|do|can|could|would) (we|i) (call|facetime|video ?call|talk|ring|speak)\\b.{0,80}\\b(in [a-z]+|ahead|behind|abroad|apart|away|different)\\b|\\b(i m|im|i am|we re|were) in [a-z]+( [a-z]+)? and (she|he|they|my \\w+) (s|is|are|re) in [a-z]+\\b",
       "what": [
         "Different time zones squeeze the moments you have, so the hours you’re both awake and free are precious. Here’s how the long-distance page suggests finding them:"
       ],
@@ -10714,7 +10724,7 @@
       ],
       "notPat": "\\b(kids?|children|son|daughter|baby|toddler|child|handoffs?|hand ?overs?|custody|pick ?ups?|pickups?|drop ?offs?|co ?parent\\w*|school)\\b",
       "script": [
-        "Can we each write down our week and find the hours we’re both awake and free? Then we can pick our call times together."
+        "Can we find the hours we’re both free and keep two of them for us each week? I’ll take the early one this time."
       ],
       "scriptLabels": [
         "Words you could use"
@@ -10792,7 +10802,8 @@
           "\\b(fine|ok|okay|one word|short (text|reply|replies|texts)|dry texts?)\\b",
           "shorttexts"
         ]
-      ]
+      ],
+      "notPat": "\\bmy (partner|husband|wife|boyfriend|girlfriend|bf|gf|fiance\\w*)\\b"
     },
     {
       "id": "signalfair",
@@ -11992,7 +12003,7 @@
           "/outside-help.html#talk"
         ]
       ],
-      "notPat": "\\b(died|passed|passed away|funeral|death|widow\\w*|grief|griev\\w*|bereave\\w*|lost (my|our)|kids?|children|son|daughter|baby|toddler|child)\\b",
+      "notPat": "\\b(died|passed|passed away|funeral|death|widow\\w*|grief|griev\\w*|bereave\\w*|lost (my|our)|kids?|children|son|daughter|baby|toddler|child)\\b|\\b(snapped|shouted|yelled|screamed|called me|insulted|criticis\\w*|criticiz\\w*|mean to me|hurt me|said)\\b",
       "script": [
         "This really hurts, and it makes sense that it hurts."
       ],
