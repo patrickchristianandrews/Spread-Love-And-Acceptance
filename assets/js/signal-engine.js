@@ -4195,6 +4195,24 @@ function ctxRead(an, opts, mode){
   return C.read(ctx, {an, text: an.text, mode, engine: api});
 }
 function lastLine(t){ const ls = String(t||"").split(/\n+/).map(x=>x.replace(/^[^:\n]{1,24}:\s*/,"").trim()).filter(Boolean); return ls[ls.length-1] || ""; }
+/* integ16 (Marcus, panel16): a message about effort that isn't being seen ("I do the dishes every night… you keep
+   saying I never notice anything", "nobody notices", "you don't even say thanks") gets one acknowledging line first,
+   before "This might hurt". Only when the words are about effort or being unseen, and never next to a threat, control,
+   contempt or a safety reading. */
+const EFFORT_RE = /\b(?:(?:you|nobody|no one|no-one|noone)\s+(?:never|don't|doesn't|dont|doesnt|didn't|didnt|even|ever|just|won't|wont)?\s*(?:even\s+)?(?:notice|notices|noticed|see|sees|appreciate|appreciates|thank|thanks|acknowledge|acknowledges|say thanks|say thank you)\b[^.!?]{0,40}\b(?:i do|i did|i've done|i have done|i make|i work|i put in|i'm doing|effort)|(?:don't|doesn't|dont|doesnt|never)\s+(?:even\s+)?(?:say|said)\s+(?:thanks|thank you)|keep(?:s)? saying i (?:never|don't|dont) (?:notice|help|do|see|care)|after (?:all|everything) (?:that )?i(?:'ve| have)? (?:do|did|done)|nothing i do is (?:ever )?(?:enough|good enough|noticed|seen)|i do (?:everything|so much|all of it|all the \w+)\b[^.!?]{0,40}\b(?:nobody|no one|no-one|you don't|you never|never notice|not noticed|unnoticed|thanks)|(?:nobody|no one|no-one) (?:ever )?(?:notices|sees|appreciates)|i (?:literally |already |always )?do the \w+ every (?:night|day|morning|evening|time|week)|goes unnoticed|feel (?:invisible|unseen|unappreciated|taken for granted))/i;
+const EFFORT_ACK = "It sounds like you feel your effort isn't being seen. ";
+function effortSeen(v, an){
+  if(!v || !an || !an.norm || !(v.id==="hurt" || v.id==="fight") || v.contempt || v.control || v.threat || v.exReach || v.selfHarm || an.selfHarm || an.danger) return v;
+  const f = an.found||{};
+  if(["harm","menace","threat","violent","legal","kidsfirst","contempt","sarcasm","swear","hostile","label","control","dxlabel"].some(id=>f[id])) return v;
+  if(!EFFORT_RE.test(an.norm) || v.text.indexOf(EFFORT_ACK)===0) return v;
+  // kept to two sentences: "This might hurt. Here's a softer way to say it." -> "This might hurt, so here's a softer way…"
+  const parts = v.text.trim().split(/(?<=[.!?])\s+/);
+  let rest = parts[0];
+  if(parts.length===2){ const b = parts[1]; rest = parts[0].replace(/[.!?]$/,"") + (/^(?:Here's|Try)\b/.test(b) ? ", so " : ": ") + b.charAt(0).toLowerCase() + b.slice(1); }
+  else if(parts.length>2) return v;
+  return Object.assign({}, v, {effortSeen:true, text: EFFORT_ACK + rest});
+}
 function verdict(an, sc, rw, opts){
   opts = opts||{};
   const r0 = ctxRead(an, opts, "send");
@@ -4220,6 +4238,7 @@ function verdict(an, sc, rw, opts){
     v = Object.assign({}, v, {id:"hurt", labelWord:true, text:"A word like that is a label for the person, so it may land as an accusation. "+(soft ? "Here's a way to say what happened and how it felt." : "Saying what happened, and how it felt, can be answered.")});
   if(an.ultOwn && v.id==="fight" && !["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","harm"].some(id=>f[id]))
     v = Object.assign({}, v, {ult:true, text:"This is an ultimatum about your own choice, and it may land as pressure. "+(soft ? "Try the version below, and say your limit once, calmly." : "Make the ask on its own, and say your limit once, calmly.")});
+  v = effortSeen(v, an);
   if(!r0) return answered(v, an, opts);
   const r = r0, F = r.flags;
   v = Object.assign({}, v, {context: r});

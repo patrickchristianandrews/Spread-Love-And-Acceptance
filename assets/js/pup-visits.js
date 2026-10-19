@@ -11,7 +11,10 @@
      and the gap carries over when you move to the next page;
    - never while something else is up: the weather pill, the pal cam invitation, the join pop-up,
      the Breathe break, the menus, or any dialog. If one opens mid-visit, the pups wrap up at once;
-   - the × on the bubble ("Shoo, pups") sends them off for the rest of this visit (sessionStorage).
+   - the × on the bubble ("Shoo, pups") sends them off for the rest of this visit (sessionStorage);
+   - one prompt a visit (site.js window.TOLPrompt): they come only while the visit's prompt is free, and take it;
+   - never in a serious section (data-sensitive, or a heading about loss, safety, a crisis…), never over a link,
+     button or field (they head off if the page scrolls one under them), and the bubble stays 12px inside the screen.
    "Keep the page still" and the system's reduce-motion setting: the pups don't run or do tricks.
    They fade in sitting quietly beside the section, say their line, and fade out, at most twice a
    page. Nothing keeps moving: there's no animation loop at all in that mode.
@@ -79,7 +82,7 @@
     '.tpv-bub{position:absolute;box-sizing:border-box;pointer-events:auto;margin:0;padding:.55rem 2.9rem .6rem .8rem;border-radius:18px;' +
       'background:#FFFDF8;border:2px solid #EBCFDB;box-shadow:0 8px 24px rgba(60,40,90,.16);color:#3C3350;' +
       'font:500 15px/1.45 Lora,Georgia,serif;text-align:left;opacity:0;transform:translateY(6px) scale(.97);transform-origin:var(--tx,50%) 100%;' +
-      'transition:opacity .28s ease,transform .38s cubic-bezier(.2,1.3,.4,1);overflow-wrap:break-word}' +
+      'transition:opacity .28s ease,transform .38s cubic-bezier(.2,1.3,.4,1);overflow-wrap:break-word;max-width:calc(100vw - 24px)}' +
     '.tpv-bub.is-in{opacity:1;transform:none}' +
     '.tpv-bub[data-who=sugarfoot]{border-color:#D6CCEF}' +
     '.tpv-bub::after{content:"";position:absolute;left:var(--tx,50%);bottom:-9px;width:14px;height:14px;margin-left:-7px;background:#FFFDF8;' +
@@ -147,7 +150,45 @@
     if (window.TOLSite && (window.TOLSite.busy() || (window.TOLSite.sensitive && window.TOLSite.sensitive()))) return true;
     var list = D.querySelectorAll(BUSY);
     for (var i = 0; i < list.length; i++) if (!list[i].closest('.tpv') && shown(list[i])) return true;
+    if (seriousInView()) return true;
     return coversWork();
+  }
+  // integ16: one prompt a visit (site.js window.TOLPrompt): the pups only come if this visit's prompt is still free
+  function promptOk() { return !window.TOLPrompt || window.TOLPrompt.free('pups'); }
+  // integ16: never in a serious section: one marked data-sensitive, or one whose heading is about loss, safety, a crisis,
+  // or a parent who can't be there (the same words cheer.js uses), from that heading to the next one at its level
+  var SERIOUS_H = /\b(grie(f|ving)|bereave|loss|lost (a|my|your|someone)|died|death|dying|funeral|safe(ty)?\b|not safe|abuse|violen|afraid|danger|crisis|suicid|self-harm|harm\b|hurt\b|prison|jail|treatment|rehab|addict|overdose|can.t be there|cannot be there|away from (him|her|them|home)|hospital|seriously ill|when it.s more|control(ling)?\b|coercive|emergency|helpline|hotline)/i;
+  function seriousHeading(h) { return !!(h.closest('[data-sensitive]') || SERIOUS_H.test(h.textContent || '')); }
+  function seriousInView() {
+    var vh = window.innerHeight, sens = D.querySelectorAll('main [data-sensitive]'), i, r;
+    for (i = 0; i < sens.length; i++) { r = sens[i].getBoundingClientRect(); if (r.height && r.bottom > 0 && r.top < vh) return true; }
+    // the heading that owns the middle of the screen: the last h2/h3 above it (an h3 inside a serious h2 counts as serious)
+    var hs = main.querySelectorAll('h2, h3'), mid = vh * 0.55, h2 = null, h3 = null;
+    for (i = 0; i < hs.length; i++) {
+      r = hs[i].getBoundingClientRect(); if (!r.height) continue;
+      if (r.top > mid) break;
+      if (hs[i].tagName === 'H2') { h2 = hs[i]; h3 = null; } else h3 = hs[i];
+    }
+    return !!((h2 && seriousHeading(h2)) || (h3 && seriousHeading(h3)));
+  }
+  // integ16: never over a link, button or field: sample the area the pups and their bubble take up
+  var HIT = 'a[href], button, input, select, textarea, summary, label, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])';
+  function overControls(rects) {
+    if (!D.elementsFromPoint) return false;
+    for (var k = 0; k < rects.length; k++) {
+      var r = rects[k]; if (!r || r.width < 1 || r.height < 1) continue;
+      for (var gx = 0; gx <= 5; gx++) for (var gy = 0; gy <= 3; gy++) {
+        var x = r.left + (r.width - 2) * gx / 5 + 1, y = r.top + (r.height - 2) * gy / 3 + 1;
+        if (x < 0 || y < 0 || x >= window.innerWidth || y >= window.innerHeight) continue;
+        var els = D.elementsFromPoint(x, y);
+        for (var e = 0; e < els.length; e++) {
+          var n = els[e]; if (n.closest('.tpv')) continue;
+          if (n.closest(HIT)) return true;
+          break;   // the first thing under the pups that isn't theirs: plain text or background, fine
+        }
+      }
+    }
+    return false;
   }
   // On a phone the pups float just above the bottom edge, over the page. They stay away (or head off)
   // while something you'd type in, open or read closely sits in that strip: a field, a "Why this works"
@@ -175,7 +216,7 @@
   }
   function cap() { return calmNow() ? Math.min(2, PAGE_CAP) : PAGE_CAP; }
   function canVisit() {
-    return !active && !shooed && pageCount < cap() && (TEST || sessN < SESS_CAP) && readMs >= nextAt;
+    return !active && !shooed && promptOk() && pageCount < cap() && (TEST || sessN < SESS_CAP) && readMs >= nextAt;
   }
   setInterval(function () {
     var now = Date.now(), dt = Math.min(now - lastTick, 2000); lastTick = now;
@@ -206,7 +247,7 @@
     if (active || qp('pupkind') === 'hello') return;
     var vh = window.innerHeight, hs = headings();
     for (var i = 0; i < hs.length; i++) {
-      var h = hs[i]; if (isUsed(h)) continue;
+      var h = hs[i]; if (isUsed(h) || seriousHeading(h)) continue;
       var r = h.getBoundingClientRect(); if (!r.height) continue;
       if (r.top > vh * 0.12 && r.top < vh * 0.6) {
         markUsed(h);
@@ -305,7 +346,7 @@
 
   // ---------- one visit ----------
   function begin(opts) {
-    if (active || shooed) return;
+    if (active || shooed || !promptOk()) return;
     var who = qp('pupwho') || (opts.who) || wpick([['tidbit', 35], ['sugarfoot', 30], ['both', 35]]);
     active = { pending: true };
     pageCount++; sessN++; ssSet('n', String(sessN)); ssSet('last', String(Date.now()));
@@ -435,6 +476,13 @@
       bub.style.left = left + 'px';
       bub.style.top = (GY - 64 * sc - 14 - bh) + 'px';
       bub.style.setProperty('--tx', clamp(cx - left, 22, bw - 22) + 'px');
+      // integ16: whatever the fonts did, the whole bubble stays on screen (12px from each edge)
+      var sl = stage.getBoundingClientRect().left, bwNow = bub.getBoundingClientRect().width, vwNow = H.clientWidth;
+      var fit = clamp(sl + left, 12, Math.max(12, vwNow - 12 - bwNow)) - sl;
+      if (fit !== left) { left = fit; bub.style.left = left + 'px'; bub.style.setProperty('--tx', clamp(cx - left, 22, bw - 22) + 'px'); }
+      // integ16: never over a link or a button, and only if this visit's one prompt is still free
+      if (overControls(coverRects()) || !promptOk()) { bub.remove(); bub = null; hurry(); return; }
+      if (window.TOLPrompt) window.TOLPrompt.take('pups');
       bub.style.visibility = '';
       void bub.offsetWidth; bub.classList.add('is-in');
       say(PER[who].name + ' says: ' + line.text + (line.href ? ' (' + (line.label || 'link') + ')' : ''));
@@ -442,6 +490,15 @@
       bubDur = clamp(2600 + line.text.length * 48, 4800, 10500) * (FAST ? 0.5 : 1);
       if (p) { p.face = 1; }
     }
+    // the part of the screen the pups and their bubble take up
+    function coverRects() {
+      var sr = stage.getBoundingClientRect(), xs = pups.map(function (p) { return X(p.tx); });
+      var lo = Math.min.apply(null, xs) - 40 * sc, hi = Math.max.apply(null, xs) + 40 * sc;
+      var out = [{ left: sr.left + Math.max(0, lo), top: sr.top + GY - 80 * sc, width: Math.min(W, hi) - Math.max(0, lo), height: 80 * sc + 4 }];
+      if (bub) out.push(bub.getBoundingClientRect());
+      return out;
+    }
+    V.coverRects = coverRects;
     function hideBubble() {
       if (!bub) return; var b = bub; bub = null; b.classList.remove('is-in');
       setTimeout(function () { b.remove(); }, 320);
@@ -700,7 +757,7 @@
       if (shooed) { hurry(); return; }
       if (clock < nextBusyCheck) return;              // a light look around, four times a second, not every frame
       nextBusyCheck = clock + 250;
-      if (busy()) hurry();
+      if (busy() || (phase !== 'in' && overControls(coverRects()))) hurry();
     }
     function onVis() {
       if (V.done) return;

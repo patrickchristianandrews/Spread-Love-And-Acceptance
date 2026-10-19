@@ -10,8 +10,8 @@ main.st, main.st *{ box-sizing:border-box; }
 main.st :is(p, h1, h2, h3, ul, ol, li, fieldset, legend, details, summary){ max-width:none; }
 main.st ul, main.st ol{ margin:0; padding:0 !important; list-style:none !important; }
 main.st li::marker{ content:none; }
-main.st li:not(.js-step){ margin:0; padding:0; }
-main.st li:not(.js-step)::before{ content:none; }
+main.st :where(li:not(.js-step)){ margin:0; padding:0; }
+main.st :where(li:not(.js-step))::before{ content:none; }
 main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-visible, main.st textarea:focus-visible{
   outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
 
@@ -35,7 +35,7 @@ main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-vis
 .read .st-kick a.st-es::after{ content:"\a0\2192"; }
 /* a 44px tap area around the small chip */
 .read .st-kick a.st-es{ position:relative; }
-.read .st-kick a.st-es::before{ content:""; position:absolute; inset:-6px -4px; }
+.read .st-kick a.st-es::before{ content:""; position:absolute; inset:-8px -4px; }
 .read .st-tool .mcm-full{ display:inline-flex; align-items:center; min-height:44px; }
 
 .read .st-art{ position:absolute; top:clamp(.7rem, .5rem + 1vw, 1.4rem); right:clamp(.7rem, .5rem + 1vw, 1.6rem); width:76px; height:68px; display:grid; place-items:center;
@@ -171,19 +171,19 @@ main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-vis
 
 /* why it helps */
 .read .st-why{ display:grid; gap:.5rem; counter-reset:stw; }
-.read .st-why li{ position:relative; padding-left:2.2rem; line-height:1.5; counter-increment:stw; }
-.read .st-why li::before{ content:counter(stw); position:absolute; left:0; top:.05rem; display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%;
+.read.st .st-why > li{ position:relative; padding-left:2.2rem; line-height:1.5; counter-increment:stw; }
+.read.st .st-why > li::before{ content:counter(stw); position:absolute; left:0; top:.05rem; display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%;
   background:#FCE4EA; color:var(--st-rose); font-weight:700; font-size:.85rem; font-family:"IBM Plex Mono", ui-monospace, monospace; }
 .read .st-why b{ font-weight:600; }
 .read .st-steps{ display:grid; gap:.45rem; counter-reset:sts; }
-.read .st-steps li{ position:relative; padding-left:2.2rem; line-height:1.5; counter-increment:sts; }
-.read .st-steps li::before{ content:counter(sts); position:absolute; left:0; top:.05rem; display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%;
+.read.st .st-steps > li{ position:relative; padding-left:2.2rem; line-height:1.5; counter-increment:sts; }
+.read.st .st-steps > li::before{ content:counter(sts); position:absolute; left:0; top:.05rem; display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%;
   background:#E9E2F7; color:#4E3F6B; font-weight:700; font-size:.85rem; font-family:"IBM Plex Mono", ui-monospace, monospace; }
 
 /* trust facts, in plain words */
 .read .st-trust{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap:.4rem .9rem; margin:.1rem 0 0; }
 .read .st-trust li{ display:flex; gap:.45rem; align-items:baseline; font-size:.93rem; line-height:1.45; }
-.read .st-trust li::before{ content:"\2713"; flex:none; color:var(--st-green); font-weight:700; }
+.read.st .st-trust > li::before{ content:"\2713"; flex:none; color:var(--st-green); font-weight:700; }
 .read .st-trust a{ color:var(--st-blue); }
 
 /* more you can do here: three illustrated cards */
@@ -202,6 +202,8 @@ main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-vis
 
 /* plain lists of next steps */
 .read .st-next{ display:grid; gap:.35rem; }
+.read .st-next > li{ width:100%; max-width:none; }
+.read .st-next a{ width:100%; }
 .read .st-next a{ display:flex; flex-direction:column; justify-content:center; min-height:48px; padding:.5rem .8rem; border-radius:14px; background:#FFFFFF; border:1px solid #EFE4F6; color:var(--st-ink); text-decoration:none; }
 .read .st-next a:hover{ border-color:#B9A2DD; }
 .read .st-next a b{ font-weight:600; color:var(--st-blue); text-decoration:underline; text-underline-offset:3px; }
@@ -214,6 +216,19 @@ main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-vis
 .read .st-safe a{ color:var(--st-blue); }
 .read .st-end{ margin:0 0 1rem; font-size:.9rem; color:var(--st-soft); }
 .read .st-end a{ color:var(--st-blue); }
+
+/* no drifting colour washes behind these pages: one calm background */
+html:has(main.st) .tol-wash{ display:none !important; }
+
+/* ---------- wide screens: one calm column ---------- */
+@media (min-width:900px){
+  .read :is(.st-hero, .st-sec, .st-safe, .st-end){ max-width:880px; margin-left:auto !important; margin-right:auto !important; }
+  .read .st-hero{ padding:2rem 2.2rem 2.1rem; }
+  .read .st-art{ width:96px; height:84px; }
+  .read .st-art canvas{ width:88px; height:55px; }
+  .read .st-art svg{ width:70px; height:70px; }
+  .read .st-kick{ padding-right:110px; }
+}
 
 /* ---------- phones ---------- */
 @media (max-width:640px){

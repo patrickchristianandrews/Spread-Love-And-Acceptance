@@ -1,6 +1,6 @@
 /* home.js: small extras for the home page (home16). Nothing here is sent anywhere, and it adds no storage keys.
    - "Get the paperback" under the covers shows only once a book has a shop link in book-shop.js.
-   - "Try an example" in "Check a text before you send it": fills in one made-up, neutral message and checks it.
+   - "Try an example" in "Check a text before you send it": fills in a made-up message (four take turns) and checks it.
    - Tidbit and Sugarfoot, drawn still (pups.js) on the arcade card in "Meet the friends".
    - "Every situation" opens when a link or the address points at #start-where.
    - While the first card's chooser is on a phone screen, and while Professor Puddles' card is in view, the round
@@ -10,7 +10,9 @@
   var D = document, root = D.documentElement;
 
   /* ---------------------------------------------------------------- Try an example */
-  var EXAMPLE = 'Why didn’t you do the dishes again?';
+  // integ16 (sig16 item 24): a different made-up example on each tap, so it doesn't look like the checker only knows one
+  var EXAMPLES = ['Why didn’t you do the dishes again?', 'Can you pick the kids up at 5? I’m stuck at work.',
+    'You never text me back.', 'Thanks for sorting dinner tonight, it was lovely.'], exI = 0;
   function tryExample() {
     var box = D.querySelector('.hm-try [data-message-check-mini]'); if (!box) return;
     function add() {
@@ -22,7 +24,7 @@
       note.textContent = 'A made-up example. Type your own any time: it stays on your device.';
       row.after(note);
       b.addEventListener('click', function () {
-        ta.value = EXAMPLE;
+        ta.value = EXAMPLES[exI++ % EXAMPLES.length];
         note.hidden = false;
         go.click();
       });

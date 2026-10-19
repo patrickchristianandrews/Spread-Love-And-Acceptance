@@ -126,5 +126,14 @@ const DANGLING = /(?:^|[.!?]\s+)(?:and|but|so|or)\b[^.!?]{0,30}[.!?]/i;
   chk(r.topicGuess === 'the missed call', 'a tentative topic from the chat and context: ' + r.topicGuess);
   chk((r.next || []).some(m => m.key === 'short') && (r.drafts || []).some(d => /as in good, or fine as in not really/.test(d.text)), 'short replies: "hurt, not done", with a gentle question'); }
 
+// integ16 (Marcus): a message about effort that isn't seen gets one acknowledging line first; nothing else does
+{ const ACK = /^It sounds like you feel your effort isn't being seen\. /;
+  ["I literally do the dishes every night you're on shift. I don't get why you keep saying I never notice anything.",
+   'I do everything around here and nobody notices.', "I work all day and you don't even say thanks.", 'After everything I do for you, you can\'t even do this.']
+    .forEach(t => { const r = send(t); chk(ACK.test(r.v.text) && r.v.text.split(/(?<=\.)\s/).length <= 2, 'effort unseen, acknowledged first: ' + t + ' => ' + r.v.text); });
+  ['Why didn’t you do the dishes again?', 'You never text me back.', 'You need to clean your room.', "You're useless, you never notice anything I do.",
+   'Thanks for doing the dishes every night, I noticed.', "Oh wow, you forgot AGAIN? Of course you did. Nobody notices what I do."]
+    .forEach(t => { const r = send(t); chk(!ACK.test(r.v.text), 'no effort line: ' + t + ' => ' + r.v.text); }); }
+
 console.log('sig16 gates: ' + (n - fails) + ' passed, ' + fails + ' failed');
 process.exit(fails ? 1 : 0);

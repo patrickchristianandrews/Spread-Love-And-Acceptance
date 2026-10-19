@@ -3120,6 +3120,17 @@ main .tol-en-switch a{ display:inline-flex; align-items:center; min-height:44px;
   html:not(.tol-quiet) .tol-help-fab{ padding:.2rem; min-width:48px; justify-content:center; }
   html:not(.tol-quiet) .tol-help-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 }
+/* integ16: on a phone (under 480px) the corner button sits in the top bar, before Menu (site.js buildOneFab, dock()),
+   so it is never over the words; its menu drops down from the bar */
+.tol-bar .tol-help.is-docked{ position:relative; right:auto; bottom:auto; z-index:auto; display:inline-flex; flex:none; gap:0;
+  transform:none !important; opacity:1 !important; pointer-events:auto !important; transition:none; }
+.tol-bar .tol-help.is-docked[hidden]{ display:none; }
+.tol-bar .tol-help.is-docked .tol-help-fab{ min-height:44px; min-width:44px; padding:.1rem !important; justify-content:center; box-shadow:none; border-radius:999px; }
+.tol-bar .tol-help.is-docked .tol-help-art{ width:36px; height:36px; }
+.tol-bar .tol-help.is-docked .tol-help-art svg{ width:29px; height:29px; }
+html.tol-quiet .tol-bar .tol-help.is-docked .tol-help-fab{ padding:.3rem .6rem !important; }
+.tol-bar .tol-help.is-docked .tol-help-menu{ position:absolute; top:calc(100% + .45rem); right:0; z-index:901; }
+.tol-bar .tol-help.is-docked .tol-help-item{ padding:.45rem .8rem !important; font-size:.95rem !important; white-space:normal; border:0; }
 /* home16b: the "On your own?" card's links on /is-this-for-you.html are full-size tap targets */
 .read .ideas .fit-links{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .6rem; }
 .read .ideas .fit-links a{ display:inline-flex; align-items:center; min-height:44px; }

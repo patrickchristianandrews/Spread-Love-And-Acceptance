@@ -126,7 +126,7 @@
       leave: 'one small shared thing a day: an idea to do together, a fair look at the jobs, a clear request or a kinder message',
       back: { q: 'A week on: which five minutes helped you both most? Do that one again this week.', href: '/journeys.html#busy2', go: 'See the five minutes' },
       steps: [
-        { k: 'tool', id: 'bonding', f: '/bonding.html#ideas', mins: 1, do: 'Get one small idea to do together today.', leave: 'One small thing to do together today' },
+        { k: 'tool', id: 'bonding', f: '/bonding.html?who=partner#ideas', mins: 1, do: 'Get one small idea to do together today.', leave: 'One small thing to do together today' },
         { k: 'tool', id: 'lemon-quick', f: '/lemonade-stand.html#quick', mins: 3, do: 'Each tap who mostly does each job at home, then compare.', leave: 'Where you agree about the jobs, and where you don’t' },
         { k: 'tool', id: 'flip', f: '/small-wins.html#flip-it', mins: 2, do: 'Turn one complaint into a clear, kind request.', leave: 'A request to say instead of a complaint' },
         { k: 'tool', id: 'signal', f: '/signal-translator.html', mins: 2, do: 'Check one message before you send it.', leave: 'Words that keep your point and land kindly' },
@@ -135,14 +135,16 @@
     { id: 'close', who: 'two', title: 'Feel close again', len: 'Two weeks, a little each day',
       intro: 'For long-term couples who have drifted into “fine”. Small things, often, rather than one big gesture.',
       leave: 'one small idea a week, your shared words and rituals, a time-together deal and one daily habit',
-      back: { q: 'Did you do the small thing? Pick the next one.', id: 'bonding', f: '/bonding.html#ideas', go: 'Pick the next small thing' },
+      back: { q: 'Did you do the small thing? Pick the next one.', id: 'bonding', f: '/bonding.html?who=partner#ideas', go: 'Pick the next small thing' },
       steps: [
         { k: 'read', t: 'When “fine” goes unchecked', f: '/complacency.html#try-today', mins: 5, do: 'Notice what has slipped into “fine”.', leave: 'One thing you’d like back' },
-        { k: 'tool', id: 'bonding', f: '/bonding.html#ideas', mins: 2, do: 'Get one small idea that fits your time and energy.', leave: 'One small thing to do together this week' },
+        { k: 'tool', id: 'bonding', f: '/bonding.html?who=partner#ideas', mins: 2, do: 'Get one small idea that fits your time and energy.', leave: 'One small thing to do together this week' },
         { k: 'tool', id: 'touchstones', f: '/touchstones.html#ts-card-h', mins: 10, do: 'Write down your shared words, jokes and rituals.', leave: 'Your touchstones list' },
         { k: 'tool', id: 'deal', f: '/gaming-and-time-together.html#deal-h', mins: 10, do: 'Agree a small time-together deal, phones and games included.', leave: 'A time-together deal you both chose' },
         { k: 'read', t: 'Turning toward each other', f: '/turning-toward.html', mins: 5, do: 'Pick one small daily habit for turning toward each other.', leave: 'One daily habit' },
-        { k: 'wp', id: 'rituals15', f: '/workpapers/wp-15-keep-your-little-rituals-alive.html', mins: 10, do: 'Keep your little rituals alive.', leave: 'A sheet of your rituals, and one to bring back' }
+        { k: 'wp', id: 'rituals15', f: '/workpapers/wp-15-keep-your-little-rituals-alive.html', mins: 10, do: 'Keep your little rituals alive.', leave: 'A sheet of your rituals, and one to bring back' },
+        // integ16 (pages16): added at the end, not as step 2, so the step numbers people have already ticked stay right
+        { k: 'read', t: 'When the kids have left home', f: '/empty-nest.html#en-fine', mins: 5, do: 'If one of you feels far away and the other thinks it’s fine: three small things.', leave: 'One small thing to do together this week' }
       ] },
     { id: 'keep', who: 'two', title: 'Keep a good thing good', len: 'A light monthly rhythm, about 30 minutes a month',
       intro: 'For couples who are doing fine and want to stay that way. A small routine that keeps small things small.',
@@ -151,7 +153,7 @@
       steps: [
         { k: 'tool', id: 'checkincard', f: '/check-ins.html#card', mins: 10, do: 'Once a week, a short check-in card, even when all is well.', leave: 'A weekly rhythm that catches small things early' },
         { k: 'tool', id: 'touchstones', f: '/touchstones.html#ts-card-h', mins: 10, do: 'Once a month, refresh your list of shared words, jokes and rituals.', leave: 'An up-to-date touchstones list' },
-        { k: 'tool', id: 'bonding', f: '/bonding.html#ideas', mins: 2, do: 'Once a month, pick one new small thing to try together.', leave: 'Something new on the calendar' },
+        { k: 'tool', id: 'bonding', f: '/bonding.html?who=partner#ideas', mins: 2, do: 'Once a month, pick one new small thing to try together.', leave: 'Something new on the calendar' },
         { k: 'wp', id: 'keepscoming', f: '/workpapers/wp-04-what-keeps-coming-back.html', mins: 15, do: 'Once a month, look back at what keeps coming back, and fix one thing.', leave: 'A monthly look-back' }
       ] },
     { id: 'apart', who: 'two', title: 'Long-distance: close while apart', len: 'About two weeks, on your own time',
@@ -189,10 +191,10 @@
     // Nothing picked, or "Just me": a calm step for one person, right now (the Breathe break opens on top of the page).
     { id: 'calm', label: 'I need to calm down', j: 'settle', now: { breathe: true, t: 'Breathe for one minute', f: '/night-garden.html', do: 'One minute of slow breathing, right here.' }, also: ['space', 'Two of you, and one needs space?'],
       modes: { with: { j: 'space', now: { id: 'calm', f: '/upset-right-now.html', do: 'A five-minute pause: slow breathing, then a time to come back.' }, why: 'When you’re calm again, this journey makes the next heated moment easier.', also: ['settle', 'Just you right now?'] } } },
-    { id: 'drift', label: 'We’ve drifted apart', j: 'close', now: { id: 'bonding', f: '/bonding.html#ideas', do: 'Get one small idea to do together today.' }, also: ['keep', 'Doing fine and want to keep it that way?'] },
+    { id: 'drift', label: 'We’ve drifted apart', j: 'close', now: { id: 'bonding', f: '/bonding.html?who=partner#ideas', do: 'Get one small idea to do together today.' }, also: ['keep', 'Doing fine and want to keep it that way?'] },
     { id: 'family', label: 'Family stuff', j: 'family', now: { id: 'refusals', f: '/refusals.html#make', do: 'Find a kind, clear way to say no.' }, also: ['blended', 'A stepfamily or two homes?'] },
     { id: 'busy', label: 'I only have five minutes', j: 'busy', now: { id: 'weather', f: '/quick-checks.html#today', do: 'Know where you are today, in four taps.' },
-      modes: { with: { j: 'busy2', now: { id: 'bonding', f: '/bonding.html#ideas', do: 'Get one small idea to do together today.' }, also: ['busy', 'Just you today?'] } } },
+      modes: { with: { j: 'busy2', now: { id: 'bonding', f: '/bonding.html?who=partner#ideas', do: 'Get one small idea to do together today.' }, also: ['busy', 'Just you today?'] } } },
     // not a journey: a short "which is closest?" list of pages
     { id: 'life', label: 'Our life has changed', choose: [
       ['Retired, and both home now', '/retired-together.html', 'Routines, handing over whole jobs, and time apart'],

@@ -3660,9 +3660,23 @@
     body.appendChild(wrap);
     fill();
     document.addEventListener('tol-quiet', fill);
+    // integ16: on a phone (under 480px wide) the button lives in the top bar, just before Menu, so it never sits over
+    // the words; its little menu drops down from there. Wider screens keep it in the corner.
+    var dockMq = window.matchMedia ? matchMedia('(max-width: 479px)') : null;
+    function dock() {
+      var bar = document.querySelector('.tol-bar'), mb = bar && bar.querySelector('.tol-contents-btn');
+      var want = !!(dockMq && dockMq.matches && mb);
+      if (want && wrap.parentNode !== bar) { close(); bar.insertBefore(wrap, mb); wrap.classList.add('is-docked'); wrap.classList.remove('is-away', 'is-tucked'); }
+      else if (!want && wrap.parentNode !== body) { close(); body.appendChild(wrap); wrap.classList.remove('is-docked'); }
+      else return;
+      if (typeof barHeightHook === 'function') barHeightHook();
+    }
+    dock(); setTimeout(dock, 0);   // the bar goes into the page just after this runs
+    if (dockMq) { if (dockMq.addEventListener) dockMq.addEventListener('change', dock); else if (dockMq.addListener) dockMq.addListener(dock); }
+    function docked() { return wrap.classList.contains('is-docked'); }
     // out of the way: while typing in a form, and while scrolling down through the page on a phone or tablet
     var FIELD = 'input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), textarea, select, [contenteditable="true"]';
-    document.addEventListener('focusin', function (e) { if (e.target.matches && e.target.matches(FIELD) && !wrap.contains(e.target)) wrap.classList.add('is-away'); });
+    document.addEventListener('focusin', function (e) { if (!docked() && e.target.matches && e.target.matches(FIELD) && !wrap.contains(e.target)) wrap.classList.add('is-away'); });
     document.addEventListener('focusout', function (e) { if (e.target.matches && e.target.matches(FIELD)) setTimeout(function () { var a = document.activeElement; if (!(a && a.matches && a.matches(FIELD))) wrap.classList.remove('is-away'); }, 50); });
     var lastY = window.scrollY, ticking = false;
     window.addEventListener('scroll', function () {
@@ -3670,7 +3684,7 @@
       requestAnimationFrame(function () {
         ticking = false;
         var y = window.scrollY, nearEnd = y + window.innerHeight >= document.documentElement.scrollHeight - 120;
-        var wide = window.innerWidth >= 1180;   // on a wide screen it sits in the margin, beside the words
+        var wide = window.innerWidth >= 1180 || docked();   // on a wide screen it sits in the margin, beside the words; on a phone, in the bar
         if (!wide && y > lastY + 4 && y > 200 && !nearEnd && menu.hidden) wrap.classList.add('is-tucked');
         else if (y < lastY - 4 || y < 200 || nearEnd || wide) wrap.classList.remove('is-tucked');
         lastY = y;
