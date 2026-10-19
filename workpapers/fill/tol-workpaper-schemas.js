@@ -261,9 +261,9 @@
       var caring = ctx.value('caring') === true || CARE_WORDS.test(String(ctx.value('note') || ''));
       if (sb >= 0.60 && caring) out.push({ label: 'If it can\u2019t wait', value: 'If what you\u2019re carrying can\u2019t wait, like caring for someone who is ill, that\u2019s a sign to get more help, not to try harder: ask one person for one specific thing this week, and look into respite care.', note: 'For people caring for someone: spreadloveandacceptance.com/caregivers.html', link: ['Help for caregivers', '/caregivers.html'] });
       // a long-term illness keeps the physical row high: that is load, not a mood
-      if (Number(ctx.value('factors.physical')) >= 3) out.push({ label: 'If it\u2019s a long-term illness', value: 'Your physical row may always be high. That is load, not a mood.', note: 'When one of you is ill: spreadloveandacceptance.com/when-one-is-ill.html', link: ['When one of you is ill', '/when-one-is-ill.html'] });
+      if (Number(ctx.value('factors.physical')) >= 3) out.push({ label: 'If it\u2019s a long-term illness', value: 'Your physical row may always be high. That fills the tank; it isn\u2019t a mood.', note: 'When one of you is ill: spreadloveandacceptance.com/when-one-is-ill.html', link: ['When one of you is ill', '/when-one-is-ill.html'] });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
-      out.push({ label: 'Stress tank score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a fuller stress tank (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.) These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
+      out.push({ label: 'Stress tank score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a fuller stress tank (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 light, 0.30 to 0.59 medium, 0.60 and up high.) These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
       if (solo) return out;
       // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone on the road, or waits
       var raw = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean), others = raw.map(parseFloat);
@@ -282,7 +282,7 @@
         else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and you said ' + road + ' people are doing this.', note: 'Check the list of scores: one may be in twice.' });
         else {
           // plain words: "Your average: 0.55, medium. Go gently with each other today."
-          var ra = r2(avg), band = ra < 0.30 ? 'low' : ra < 0.60 ? 'medium' : 'high';
+          var ra = r2(avg), band = ra < 0.30 ? 'light' : ra < 0.60 ? 'medium' : 'high';
           var doNow = ra < 0.30 ? 'A fair day to talk things through.' : ra < 0.60 ? 'Go gently with each other today.' : 'Keep today light, and pick a time for anything big.';
           out.push({ label: 'Your average', value: 'Your average: ' + fmt(avg, 2) + ', ' + band + ' (' + all.length + ' people). ' + doNow, note: (road > 1 ? '' : 'Make sure everyone\'s score is in: an average from only some of you can mislead. ') + 'These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
         }
@@ -314,7 +314,7 @@
       },
       {
         id: 'factors', type: 'scale', title: 'The checklist',
-        intro: 'Score each row based on how the last 24–48 hours have actually gone. Living with a long-term illness? Your physical row may always be high. That is load, not a mood.',
+        intro: 'Score each row based on how the last 24–48 hours have actually gone. Living with a long-term illness? Your physical row may always be high. That fills the tank; it isn\u2019t a mood.',
         min: 0, max: 4, anchors: ['Not at all', 'Very true'],
         items: WP02_FACTORS
       },
@@ -636,7 +636,7 @@
       var sat = ctx.value('filter.saturation'), neu = ctx.value('filter.neutral'), pat = ctx.value('filter.pattern'), spec = ctx.value('filter.specific');
       var answered = [spec, sat, neu, pat].filter(Boolean).length, tips = [];
       if (spec === 'No') tips.push(solo ? 'Name one specific task or event first. One thing is much easier to work with than a whole pattern.' : 'Name one specific task or event first. A message about a pattern is much harder to hear than one about a single thing.');
-      if (sat === 'No' || sat === 'Not sure') tips.push('Your own load is part of how this reads. Check it with WP-02, and come back when the number is lower. A few hours, or a night\'s sleep, often changes how it reads.');
+      if (sat === 'No' || sat === 'Not sure') tips.push('Your own stress tank is part of how this reads. Check it with WP-02, and come back when the number is lower. A few hours, or a night\'s sleep, often changes how it reads.');
       if (neu === 'Yes') tips.push(solo ? 'There\'s a kinder reading that also fits. Hold both for a moment before you decide which one is true.' : 'There\'s a kinder reading that also fits. Try asking about it first: "Did you mean ___, or ___?"');
       if (pat === 'A past pattern') tips.push(solo ? 'This may be touching an old pattern, not just what happened now. Name the one event, and leave the history for another day.' : 'This may be touching an older pattern, not just these words. Name the one event, and leave the history for another day.');
       if (!answered) out.push({ label: 'Before you send', value: 'Answer the four checks to see a suggestion.' });
@@ -657,7 +657,7 @@
     var BACK = solo ? 'pick things back up' : 'go back to the conversation';
     return function (ctx) {
       var all = ctx.rows('reentry'), bad = all.filter(function (r) { return outOfRange(r.before, 0, 1) || outOfRange(r.after, 0, 1); });
-      var left = bad.length ? [{ label: 'Left out', value: plural(bad.length, 'reading') + ' with a number outside 0 to 1.', note: 'These are WP-02 load scores: the five answers added up and divided by 20, so they run from 0 to 1 (for example 0.45).' }] : [];
+      var left = bad.length ? [{ label: 'Left out', value: plural(bad.length, 'reading') + ' with a number outside 0 to 1.', note: 'These are WP-02 stress tank scores: the five answers added up and divided by 20, so they run from 0 to 1 (for example 0.45).' }] : [];
       var come = 'When you come back, start with one small, simple task, like putting the dishes away.';
       // the plain rule first: how you feel now. "Still hot? Another round. Twice? Name a new time."
       var felt = all.filter(function (r) { return r.feel; });
@@ -670,15 +670,15 @@
       }
       var rows = all.filter(function (r) { return inRange(r.after, 0, 1) !== null && !outOfRange(r.before, 0, 1); });
       if (!rows.length) return [{ label: 'Coming back', value: 'After a round, pick how you feel now (still hot, or settled enough) to see what comes next.' }].concat(left);
-      // for number fans: the load score as a second opinion
+      // for number fans: the stress tank score as a second opinion
       var last = rows[rows.length - 1], a = inRange(last.after, 0, 1), b = inRange(last.before, 0, 1);
       var band = a < 0.5 ? 'Settled enough: ' + BACK + ', at the time you named. (Under 0.50.)'
         : a < 0.6 ? 'If you still feel hot, take another round, with the same calming step or the other one. (0.50 to 0.59.)'
           : (rows.length >= 2 ? 'Still hot after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not. (0.60 or above.)' : 'Still hot: take another round first. (0.60 or above.)');
       var out = [{ label: 'Latest reading', value: fmt(a, 2) }];
       // a reading that went up is worth saying out loud, kindly
-      if (b !== null && r2(a) > r2(b)) out.push({ label: 'It went up', value: 'Your load went from ' + fmt(b, 2) + ' to ' + fmt(a, 2) + '. That happens, and it is useful to know. Try your other calming step, or put it off to a named time.' });
-      out.push({ label: 'Next', value: band, note: come + ' (0.50 is the come-back line for settling: you don\'t need a light load to come back, just less than half.)' + RT });
+      if (b !== null && r2(a) > r2(b)) out.push({ label: 'It went up', value: 'Your stress tank went from ' + fmt(b, 2) + ' to ' + fmt(a, 2) + '. That happens, and it is useful to know. Try your other calming step, or put it off to a named time.' });
+      out.push({ label: 'Next', value: band, note: come + ' (0.50 is the come-back line for settling: you don\'t need a light stress tank to come back, just one under half full.)' + RT });
       return out.concat(left);
     };
   }
@@ -770,15 +770,15 @@
       {
         id: 'reentry', type: 'table', title: 'Part C: Coming back',
         intro: 'Still hot? Another round. Twice? Name a new time. Settled enough to listen? Go back at the time you named. After each round, write what you did and how you feel now. Putting it off to a named time is a plan, not giving up.',
-        fans: { label: 'For number fans: add load scores', note: 'If you like numbers, the load score (WP-02, 0 to 1) is a second opinion: under 0.50 go back, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. ' + 'These bands are this site\u2019s rule of thumb, not a validated clinical scale.' },
+        fans: { label: 'For number fans: add stress tank scores', note: 'If you like numbers, the stress tank score (WP-02, 0 to 1) is a second opinion: under 0.50 go back, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. ' + 'These bands are this site\u2019s rule of thumb, not a validated clinical scale.' },
         addLabel: 'Add a reading',
         rangeCols: true,
         columns: [
           { id: 'time', label: 'Time', type: 'text', w: 1, placeholder: 'e.g. 7:40pm' },
           { id: 'tactic', label: 'What I did', type: 'select', options: WP11_TACTICS, labels: WP11_TACTIC_LABELS, w: 2.2 },
           { id: 'feel', label: 'How I feel now', type: 'select', options: ['Still hot', 'Settled enough'], w: 1.3 },
-          { id: 'before', label: 'Load before (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
-          { id: 'after', label: 'Load after (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
+          { id: 'before', label: 'Stress tank before (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 stress tank score runs from 0 to 1 (for example 0.45).' },
+          { id: 'after', label: 'Stress tank after (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 stress tank score runs from 0 to 1 (for example 0.45).' },
           { id: 'change', label: 'Change', type: 'computed', fans: true, w: 0.9, compute: function (r) {
             var b = inRange(r.before, 0, 1), a = inRange(r.after, 0, 1);
             if (outOfRange(r.before, 0, 1) || outOfRange(r.after, 0, 1)) return 'Check 0–1';
@@ -823,18 +823,18 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'Each day',
-        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a housemate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. When you can, do it face to face or on a call (in the evening, or at the shift change), and kindly.',
+        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Stress tank: "Today my stress tank was about light / medium / high." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a housemate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. When you can, do it face to face or on a call (in the evening, or at the shift change), and kindly.',
         addLabel: 'Add a row',
         personDays: DAYS,
         // shown under "Just tonight's check-in": the same questions, for a team or for housemates
         others: [
-          ['A team', 'Make it a 5-minute stand-up, at the start or end of the day. Go round once, one sentence each, with the same questions: how full is your load (low, medium or high), one thank-you to someone on the team, one thing that got in the way (a process, not a person), and one thing that would help tomorrow. Anything bigger goes to a follow-up, not the stand-up. A \u201chigh\u201d is useful information, never a complaint.'],
+          ['A team', 'Make it a 5-minute stand-up, at the start or end of the day. Go round once, one sentence each, with the same questions: how full is your stress tank (light, medium or high), one thank-you to someone on the team, one thing that got in the way (a process, not a person), and one thing that would help tomorrow. Anything bigger goes to a follow-up, not the stand-up. A \u201chigh\u201d is useful information, never a complaint.'],
           ['Housemates', 'Once or twice a week is plenty, at a time you\u2019re all home, like Sunday evening. Same questions, one sentence each. Keep the thing that didn\u2019t feel great about a shared thing (the bins, the noise, the bills), never someone\u2019s character. Jobs that keep slipping go on One owner per job (WP-03).']
         ],
         columns: [
           { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
           { id: 'who', label: 'Person', type: 'person', w: 1.1, prefill: true },
-          { id: 'load', label: 'Load', type: 'select', options: ['Low', 'Medium', 'High'], w: 0.9 },
+          { id: 'load', label: 'Stress tank', type: 'select', options: ['Low', 'Medium', 'High'], labels: { Low: 'Light' }, w: 0.9 },
           { id: 'thanks', label: 'One thing I appreciated today', type: 'text', w: 2 },
           { id: 'friction', label: 'One small thing that didn\'t feel great', type: 'text', w: 2 },
           { id: 'ask', label: 'One thing that would help tomorrow', type: 'text', w: 2 }
@@ -842,15 +842,15 @@
         defaultRows: WP13_ROWS
       },
       {
-        id: 'loads', type: 'computed', title: 'Load this week',
+        id: 'loads', type: 'computed', title: 'Stress tank this week',
         compute: function (ctx) {
           var c = {};
           ctx.people().forEach(function (p) { c[p] = { Low: 0, Medium: 0, High: 0 }; });
           var any = false;
           ctx.rows('daily').forEach(function (r) { if (c[r.who] && c[r.who].hasOwnProperty(r.load)) { c[r.who][r.load]++; any = true; } });
-          if (!any) return [{ label: 'Load', value: 'Record a load level to see the week at a glance.' }];
+          if (!any) return [{ label: 'Stress tank', value: 'Record a stress tank level to see the week at a glance.' }];
           return ctx.people().map(function (p) {
-            return { label: ctx.name(p), value: c[p].High + ' high, ' + c[p].Medium + ' medium, ' + c[p].Low + ' low' };
+            return { label: ctx.name(p), value: c[p].High + ' high, ' + c[p].Medium + ' medium, ' + c[p].Low + ' light' };
           });
         }
       },
@@ -1146,7 +1146,7 @@
   // filled-in example"). The rest of the examples live in tol-workpaper-library.js, which loads after
   // this file; its TOL_WORKPAPER_EXAMPLE is wrapped so these three are answered here.
   function exNames(road) {
-    return { apart: ['Diego', 'Lena'], family: ['Dana', 'Chris'], coparents: ['Mom', 'Dad'], roommates: ['Ana', 'Ben'], coworkers: ['Sam', 'Priya'], caregivers: ['Maya', 'Leo'], friends: ['You', 'Kim'], self: ['You', 'Sam'] }[road] || ['Alex', 'Jordan'];
+    return { apart: ['Diego', 'Lena'], family: ['Dana', 'Chris'], coparents: ['Mum', 'Dad'], roommates: ['Ana', 'Ben'], coworkers: ['Sam', 'Priya'], caregivers: ['Maya', 'Leo'], friends: ['You', 'Kim'], self: ['You', 'Sam'] }[road] || ['Alex', 'Jordan'];
   }
   var EXTRA_EX = {
     'WP-12': function (road) {
@@ -1389,7 +1389,7 @@
           { id: 'planBack', label: 'How I set the time to come back', type: 'text', placeholder: 'e.g. I name a time, within the day' },
           { id: 'planFirst', label: 'The first sentence when I come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready now.' }
         ], intro: 'The one part of the kit you might share with someone close: the word you\'ll use, how long a break you take, and how you come back. A few words in each box is plenty.' },
-        reentry: { intro: 'Still hot? Another round. Twice? Name a new time. Settled? Pick things back up. After each round, write what you did and how you feel now.', fans: { label: 'For number fans: add load scores', note: 'If you like numbers, the load score (WP-02, 0 to 1) is a second opinion: under 0.50 pick things back up, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. These bands are this site\u2019s rule of thumb, not a validated clinical scale.' } },
+        reentry: { intro: 'Still hot? Another round. Twice? Name a new time. Settled? Pick things back up. After each round, write what you did and how you feel now.', fans: { label: 'For number fans: add stress tank scores', note: 'If you like numbers, the stress tank score (WP-02, 0 to 1) is a second opinion: under 0.50 pick things back up, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. These bands are this site\u2019s rule of thumb, not a validated clinical scale.' } },
         next: { compute: wp11Next(true) },
         after: {
           fields: [

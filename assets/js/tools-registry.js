@@ -140,6 +140,13 @@
       gets: 'A week’s record to compare, plus three kind ways to say “not right now”.',
       mins: 5, time: 'A few minutes a day for a week', who: ['two', 'group'], benefit: 'Real numbers instead of memory',
       kw: 'chore log diary tracker week record' },
+    // the WP-02 worksheet: its tool card went into My weather today ('load-check' -> 'weather'), but the worksheet
+    // itself stays, so it is listed with the other workpapers
+    { id: 'wp02', name: 'How much are you carrying? A quick stress check', brand: '', href: '/workpapers/wp-02-how-much-are-you-carrying.html', type: 'self', also: ['load'],
+      does: 'Five quick questions that separate what you already carry from today’s upset.',
+      gets: 'A stress tank score from 0 to 1, with what it means and one next step.',
+      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Know whether it’s this one thing, or everything at once',
+      kw: 'stress check stress tank how much are you carrying load battery wp-02 workpaper' },
     { id: 'keepscoming', name: 'What keeps coming back? A monthly look-back', brand: '', href: '/workpapers/wp-04-what-keeps-coming-back.html', type: 'load', also: ['plan'],
       does: 'Once a month, look back at four weeks together.',
       gets: 'The jobs and arguments that keep returning, and one setup fix for each.',
@@ -153,8 +160,8 @@
     // consol12: the two fair-split calculators (CALC-01) and the two 30-day look-backs (CALC-02): the same people, the same
     // numbers, this week or over a month. 'fair-quick', 'fair-full', 'lookback-quick', 'lookback-full' -> 'split'
     { id: 'split', name: 'Fair split check', brand: 'the fair-split calculator and the 30-Day Look-Back', href: '/workpapers/calculators/is-the-setup-working-quick.html', type: 'load', also: ['plan'],
-      modes: [['This week: a quick read', '/workpapers/calculators/is-the-setup-working-quick.html', 'This week', 'Quick read'], ['This week: every number', '/is-the-setup-working.html', 'This week', 'Every number'],
-        ['Over a month: a quick read', '/workpapers/calculators/look-back-30-days-quick.html', 'Over a month', 'Quick read'], ['Over a month: every number', '/look-back-30-days.html', 'Over a month', 'Every number']],
+      modes: [['A quick read of this week', '/workpapers/calculators/is-the-setup-working-quick.html', 'This week', 'Quick read'], ['Every number for this week', '/is-the-setup-working.html', 'This week', 'Every number'],
+        ['A quick read over a month', '/workpapers/calculators/look-back-30-days-quick.html', 'Over a month', 'Quick read'], ['Every number over a month', '/look-back-30-days.html', 'Over a month', 'Every number']],
       does: 'Type in the totals from your worksheets, for 2 to 8 people: this week, or a month ago next to now.',
       gets: 'A plain-words read of the setup, never of a person, and one next step.',
       mins: 5, time: '5 minutes for a quick read, 15 to 20 for every number', who: ['two', 'group'], benefit: 'Know if your split can last, and whether what you changed is working, this week or over a month',
@@ -252,7 +259,7 @@
         ['The Re-check Drive', '/recheck-drive.html', '', 'Re-check Drive', '🏈'], ['The Bears Dojo', '/bears-dojo.html', '', 'Bears Dojo', '🐻'], ['Kindness Coin Pusher', '/coin-pusher.html', '', 'Coin Pusher', '🪙'], ['Make a cartoon music video', '/frequency-buddies-music-video-maker.html', '', 'Music video', '🎬']],
       does: 'Pick a game, or press “Pick one for me”, and play as long as you like.',
       gets: 'A gentle break whenever you want one, with no timers and no way to lose.',
-      mins: 5, time: 'As long as you like', who: ['solo', 'two'], benefit: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose',
+      mins: 5, time: 'Any length', who: ['solo', 'two'], benefit: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose',
       kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout baseball home run derby batting kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo coin pusher coins arcade machine tips collect characters music video maker cartoon create games: every calm game in one place pause & play' },
   ];
 
@@ -289,7 +296,7 @@
     checkincard: { o: 'talk plan', p: 'partner family housemates', best: 'small things that pile up, or kind limits with parents or grown children', ex: 'ex-checkin-linda-jordan' },
     bonding: { o: 'fun plan', p: 'partner family friends', best: 'wanting closeness with no energy for a big plan',
       sample: 'With a partner, 10 minutes, low energy: “Lie down and swap one high and one low from today.”' },
-    wavelength: { o: 'self other talk', p: 'partner friends family work housemates', best: 'you and someone keep missing each other, or you want people to know how to reach you', ex: 'ex-wavelength-mo' },
+    wavelength: { o: 'self other talk', p: 'partner friends family work housemates', best: 'missing each other, or wanting people to know how to reach you', ex: 'ex-wavelength-mo' },
     roots: { o: 'self', p: '', best: 'a reaction that feels bigger than the moment',
       sample: 'Trait: “I go quiet when someone raises their voice.” A grown-up reading: it kept me safe once; now I can say “give me ten minutes”.' },
     'take-in': { o: 'self learn', p: '', best: 'pages that feel like too much to read',
@@ -314,7 +321,7 @@
     pauseplay: { o: 'fun calm', p: 'family partner', best: 'a gentle break before you talk, or playing with kids with no way to lose',
       sample: 'Five minutes of Word Bloom before a hard talk: a few words found, a slower breath, nothing to win or lose.' },
     split: { o: 'load plan', p: 'partner housemates family', best: 'checking whether your split can last, and whether last month’s changes stuck', ex: 'ex-setup-rosemary-ken' },
-    calm: { o: 'calm talk', p: 'partner family', best: 'right now, in the middle of an argument, or a calm day to plan the next pause', es: 1,
+    calm: { o: 'calm talk', p: 'partner family', best: 'a fight that’s getting worse, now or next time', es: 1,
       sample: 'Pause line: “I’m getting too heated. I’m taking 20 minutes and I’ll come back at 8:15.”' },
     plans: { o: 'plan', p: 'partner family housemates', best: 'settling one thing once, kindly: holidays, a family event, gaming time, a shared room, shifts or a handover bag',
       sample: 'Room agreement: quiet after 11 on weeknights. Guests: a heads-up by the afternoon. Borrowing: ask first, every time.' },
@@ -355,7 +362,7 @@
   // the printable chore chart, the suite that runs them in order, the six-week program and the progress report. The same
   // split as the menu's Workpapers group (menu11): the calculators (CALC-01, CALC-02) and the Workpaper Playground stay tools.
   // /tools.html lists tools only and links the workpapers in their own section. wp: the short code shown next to a workpaper.
-  var WORKPAPERS = { whodid: 'WP-01', owner: 'WP-03', keepscoming: 'WP-04', sayit: 'WP-09', calmkit: 'WP-11', pace12: 'WP-12',
+  var WORKPAPERS = { whodid: 'WP-01', wp02: 'WP-02', owner: 'WP-03', keepscoming: 'WP-04', sayit: 'WP-09', calmkit: 'WP-11', pace12: 'WP-12',
     checkin90: 'WP-13', static14: 'WP-14', rituals15: 'WP-15', chart: 'Chart', suite: 'Suite', sixweeks: 'PROG-01', progress: 'REPORT-01' };
   T.forEach(function (t) {
     if (!t.kind) t.kind = WORKPAPERS[t.id] || (/^\/(workpapers\/|wp-\d)/.test(t.href) && !/^\/workpapers\/calculators\//.test(t.href)) ? 'workpaper' : 'tool';

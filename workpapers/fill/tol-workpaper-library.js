@@ -151,7 +151,7 @@
 
   function roadWords(road) {
     return {
-      partners: ['Alex', 'Jordan'], apart: ['Diego', 'Lena'], family: ['Dana', 'Chris', 'Nana'], coparents: ['Mom', 'Dad'], roommates: ['Ana', 'Ben', 'Cal'],
+      partners: ['Alex', 'Jordan'], apart: ['Diego', 'Lena'], family: ['Dana', 'Chris', 'Nana'], coparents: ['Mum', 'Dad'], roommates: ['Ana', 'Ben', 'Cal'],
       coworkers: ['Sam', 'Priya', 'Lee'], caregivers: ['Maya', 'Leo', 'Priya'], friends: ['You', 'Kim'], program: ['Alex', 'Jordan'], self: ['You']
     }[road] || ['Alex', 'Jordan'];
   }
@@ -185,7 +185,7 @@
         parts: [{ title: 'Part A: who did what', head: ['Day', 'Task', 'Who', 'Minutes', 'Asked or noticed'], rows: rows }, { title: 'Part B: kind no’s to borrow', lines: SCRIPTS.no.slice(0, 4).map(function (s) { return s[0] + ': “' + s[1] + '”'; }) }],
         note: 'The totals then show each person’s share, how much was noticed without being asked, and the busiest person.' };
     }
-    if (code === 'WP-02') return { intro: 'One person’s check, about themselves, on a busy Tuesday.', parts: [{ head: ['What fills it', 'Score (0 to 4)'], rows: [['Sleep debt', '3'], ['Workload elsewhere', '3'], ['Unresolved conflict', '1'], ['Physical state', '1'], ['Time pressure today', '2']] }, { lines: ['Added up: 10. Divided by 20: 0.50, a medium load, on the heavier side.', 'What it means: say it out loud before a hard talk. “Heads up, I’m carrying more than usual today.”'] }], note: 'Higher means more load. Everyone fills in their own; nobody scores someone else.' };
+    if (code === 'WP-02') return { intro: 'One person’s check, about themselves, on a busy Tuesday.', parts: [{ head: ['What fills it', 'Score (0 to 4)'], rows: [['Sleep debt', '3'], ['Workload elsewhere', '3'], ['Unresolved conflict', '1'], ['Physical state', '1'], ['Time pressure today', '2']] }, { lines: ['Added up: 10. Divided by 20: 0.50, medium, on the heavier side.', 'What it means: say it out loud before a hard talk. “Heads up, I’m carrying more than usual today.”'] }], note: 'Higher means a fuller stress tank. Everyone fills in their own; nobody scores someone else.' };
     if (code === 'WP-03') {
       if (road === 'self' || road === 'friends') return null;
       var r3 = (EX03[road] || EX03.partners).map(function (r) { return [r[0], r[1], who(r[2]), who(r[3])]; });
@@ -199,7 +199,7 @@
       note: 'One event, no “always” or “never”, and an ask the other person can say yes to.' };
     if (code === 'WP-11') return { intro: two ? 'One person’s kit, filled in on a calm Sunday. Everyone makes their own.' : 'A kit filled in on a calm Sunday.',
       parts: [{ head: ['What tends to start it', 'Where I feel it first'], rows: [['Being interrupted mid-task', 'Jaw'], ['Plans changed last minute', 'Shoulders']] }, { lines: ['First default: Walking it out. Second: Breathing 4 in, 6 out.', 'Pause line: “I’m at capacity. I need ten minutes. I’ll be back at quarter past.”', 'Coming back: stress tank 0.65 before, 0.45 after, so under 0.50: go back in, starting with one small task.'] }] };
-    if (code === 'WP-13') return { intro: 'Two days of a 90-second daily check-in. One sentence each, no debating.', parts: [{ head: ['Day', 'Who', 'Load', 'Appreciated', 'Small friction', 'Would help tomorrow'], rows: [['Mon', who(0), 'High', 'Thanks for making dinner', 'Dishes left out', 'Quiet morning'], ['Mon', who(1), 'Low', 'You fixed the printer', '', ''], ['Tue', who(0), 'Medium', 'The note you left', '', 'Early night']] }], note: 'Anything bigger than one sentence waits for the weekly catch-up.' };
+    if (code === 'WP-13') return { intro: 'Two days of a 90-second daily check-in. One sentence each, no debating.', parts: [{ head: ['Day', 'Who', 'Stress tank', 'Appreciated', 'Small friction', 'Would help tomorrow'], rows: [['Mon', who(0), 'High', 'Thanks for making dinner', 'Dishes left out', 'Quiet morning'], ['Mon', who(1), 'Light', 'You fixed the printer', '', ''], ['Tue', who(0), 'Medium', 'The note you left', '', 'Early night']] }], note: 'Anything bigger than one sentence waits for the weekly catch-up.' };
     return null;
   }
 
