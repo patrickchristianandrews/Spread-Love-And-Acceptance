@@ -116,7 +116,7 @@
       html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Step away from this one</h2>' +
         '<p>Something here may be more than a wording problem: a threat, or checking up on someone or cutting them off, or someone feeling afraid. Better wording can’t fix that, and the Reader can’t judge it properly. One conversation can’t tell you what a relationship is like. It’s okay to step away.</p>' +
         '<p>If someone is hurting, threatening, watching or controlling you, it isn’t your fault. If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.</p>' +
-        '<p><button type="button" class="cr-btn is-quiet is-small" data-tol-exit>Leave this site quickly</button></p></section>';
+        '</section>';
     }
 
     // 03 The read

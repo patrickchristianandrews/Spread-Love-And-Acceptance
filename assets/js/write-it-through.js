@@ -178,10 +178,10 @@
       box.appendChild(el('p', { text: receiving
         ? 'You don’t have to reply, and you don’t have to do what it asks to keep the peace. Threats, checking up on you, controlling money or cutting you off from people are not a communication problem.'
         : 'If you’re afraid of them, or they control your money, your phone or who you see, a well-worded message isn’t the fix, and it isn’t your job to talk them round. Your safety is what matters.' }));
-      box.appendChild(el('p', null, ['Free, private people can help, any time: ', el('a', { href: '/safety.html', text: 'Not safe at home?' }), ' (it has a quick-exit button).']));
     }
     if (s.self) {
-      box.appendChild(el('p', null, [el('strong', { text: 'If someone may hurt themselves, that comes before any message. ' }), 'Call or text 988 (US), or your local emergency number if it’s happening now. You don’t have to handle it alone.']));
+      // nohot18: the one safety line, no numbers or names
+      box.appendChild(el('p', { text: 'If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.' }));
     }
     return box;
   }

@@ -3830,8 +3830,7 @@ function receiveBase(an, opts){
   // No "kinder way to read it", and no reply that does what it demands.
   if(an.control && an.control.kind==="fear") return {crossed:false, danger:true, control:true, fear:true, head:["danger","They may be telling you they feel afraid or controlled."],
     meanings:["Take it seriously. This is about how safe they feel, not about the wording.",
-      "Listen first, and ask what they need from you right now. Arguing with it, or explaining it away, can make it harder for them to say more.",
-      SAFE_ONE],
+      "Listen first, and ask what they need from you right now. Arguing with it, or explaining it away, can make it harder for them to say more."],
     literal:[], replies:[{label:"A first answer", text:"Thank you for telling me. I believe you. What would help most right now?"}], found};
   if(an.control) return {crossed:true, danger:true, control:true, oneMessage:true, head:["danger", an.control.kind==="degrade" ? "This line is a put-down. It says nothing true about you." : an.control.kind==="isolate" ? "This tells you who you can see. That choice is yours." : "This line checks up on you. What you share, and when, is your choice."],
     meanings:[an.control.kind==="degrade" ? "Telling someone they're worth nothing, or that nobody else would want them, isn't okay, whatever was meant. It isn't true, and it isn't yours to fix."
@@ -3840,7 +3839,6 @@ function receiveBase(an, opts){
       an.control.kind==="degrade" ? "You don't have to answer it, or argue with it. A put-down like this says nothing true about you."
       : an.control.kind==="isolate" ? "You don't have to give up your friends or family to keep the peace, and you don't have to answer right away."
       : "You don't have to share your location, your phone or your passwords to prove anything, and you don't have to answer right away.",
-      SAFE_ONE,
       "One message can't tell you what a relationship is like. Look at the whole picture, and trust what you know."],
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   // "I want to kill myself": not a tone question. Their safety comes first, and so does yours
@@ -4205,7 +4203,7 @@ function lowConfidence(an){
 }
 
 /* "It's my money too, stop policing what I spend": a money fight, and sometimes a sign of control.
-   The page adds a short note and a link (money-together.html#control, safety.html#signs) */
+   The page adds a short note and a link (money-together.html#control) */
 const MONEY_CONTROL_RE = /\bstop (?:policing|monitoring|checking|controlling|questioning|tracking) (?:what i spend|my spending|how i spend|my money|every (?:purchase|penny|pound|dollar|thing i buy)|my (?:card|account|bank))|\b(?:account for|explain|justify|ask (?:you )?(?:about|before)) every (?:purchase|penny|pound|dollar|coffee|thing i buy|receipt)\b|\bit's my money too\b|\b(?:won't|doesn't|don't|will not) let me (?:have|see|use|touch) (?:my own |any |the |our )?(?:money|card|cards|account|bank)\b/i;
 function moneyControl(text){ return MONEY_CONTROL_RE.test(norm(text)); }
 /* "So now you want to talk? After you took everything?": an answer from the side that isn't ready yet */
