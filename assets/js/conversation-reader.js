@@ -111,12 +111,12 @@
     // Threats or control: no rewording makes those okay
     // context typed into "Add context" is read for crisis and fear too, and never ignored
     var cx = ctxRead(r, them);
-    if (cx && cx.safety === 'crisis') html += '<section class="cr-safety" role="alert"><p><strong>' + esc(cx.notes[0].text) + '</strong> <a href="/outside-help.html">Help beyond this site</a></p></section>';
+    if (cx && cx.safety === 'crisis') html += '<section class="cr-safety" role="alert"><p><strong>' + esc(cx.notes[0].text) + '</strong></p></section>';
     if (r.safety || (cx && (cx.safety === 'fear' || cx.safety === 'threat'))) {
       html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Step away from this one</h2>' +
-        '<p>Something here may be more than a wording problem: a threat, or checking up on someone or cutting them off, or someone feeling afraid. Better wording can’t fix that, and the Reader can’t judge it properly. One conversation can’t tell you what a relationship is like. If messages like this leave you feeling afraid or cut off, free and private support is there. It’s okay to step away.</p>' +
-        '<p>If someone is hurting, threatening, watching or controlling you, it isn’t your fault. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233 or text START to 88788. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.</p>' +
-        '<p><a href="/safety.html">Not safe at home?</a> <button type="button" class="cr-btn is-quiet is-small" data-tol-exit>Leave this site quickly</button></p></section>';
+        '<p>Something here may be more than a wording problem: a threat, or checking up on someone or cutting them off, or someone feeling afraid. Better wording can’t fix that, and the Reader can’t judge it properly. One conversation can’t tell you what a relationship is like. It’s okay to step away.</p>' +
+        '<p>If someone is hurting, threatening, watching or controlling you, it isn’t your fault. If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.</p>' +
+        '<p><button type="button" class="cr-btn is-quiet is-small" data-tol-exit>Leave this site quickly</button></p></section>';
     }
 
     // 03 The read

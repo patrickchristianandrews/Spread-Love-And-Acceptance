@@ -294,7 +294,7 @@
         // threat-shaped, or hard to read: "Add context" is the obvious next step
         if (v.addContext && !an.selfHarm) h += '<p class="mcm-addctx no-bubble"><a class="mcm-ctx2" href="' + full + '#add-context">Add context</a>: who they are, and whether you joke like this. The words alone can&rsquo;t show a joke.</p>';
         if (an.selfHarm) {
-          h += '<p class="mcm-note no-bubble">In the US, call or text 988. In the UK and Ireland, Samaritans: 116 123. If someone may act on it now, call your local emergency number.</p>';
+          // nohot18: the verdict line above is the one safety line (no numbers, no names); nothing more here
         } else if (v.sleepOn && !an.danger && !an.control) {
           // sig17: a message to an ex (every message on /start/breakup.html): sleep on it first, never "can we talk"
           h += sleepBox(v, false);

@@ -3312,6 +3312,14 @@ html.tol-home .tol-outline{ display:none !important; }
 @media (max-width:374px){
   html body .tol-bar .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 }
+/* longer words (Spanish) or bigger text: Quiet shows just its moon and Ask just its word, so Menu always fits */
+@media (max-width:479px){
+  html:is([lang="es"], .tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  html:is([lang="es"], .tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-art{ display:none; }
+  html:is([lang="es"], .tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-fab{ padding:.2rem .7rem !important; }
+  html:is(.tol-text-xl, .tol-text-xxl) body .tol-bar .tol-contents-btn svg{ display:none; }
+  html:is(.tol-text-xl, .tol-text-xxl) body .tol-bar{ gap:.2rem !important; padding-left:10px !important; padding-right:10px !important; }
+}
 
 /* Share and "Show me only the steps" sit side by side in one row, not stacked */
 html body main.read > :is(.tsk-top-row, .tol-steps-toggle):has(+ :is(.tsk-top-row, .tol-steps-toggle)),

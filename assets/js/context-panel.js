@@ -292,12 +292,12 @@
     // safety notes go first, and are never softened by anything above
     if (out.safety) {
       var S = {
-        crisis: 'Something you added sounds like someone may be thinking about ending their life. That matters more than any message. If it’s you, or them, please talk to someone now: in the US, call or text 988, any time. Elsewhere, call your local emergency number.',
+        crisis: 'Something you added sounds like someone may be thinking about ending their life. That matters more than any message. If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.',
         fear: 'Something you added says someone feels afraid or controlled. That matters much more than the wording, and it isn’t something a better wording can fix.',
         threat: 'Something you added sounds like a threat. That matters more than the wording of this message.',
-        control: 'Something you added sounds like someone’s choices may be being taken away (who they see, their phone or money). If messages like that leave anyone feeling afraid or cut off, free and private support is there.'
+        control: 'Something you added sounds like someone’s choices may be being taken away (who they see, their phone or money). If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.'
       };
-      out.notes.unshift({ id: 'safety', text: S[out.safety], href: out.safety === 'crisis' ? '/outside-help.html' : '/safety.html', link: out.safety === 'crisis' ? 'Help beyond this site' : 'Not safe at home?' });
+      out.notes.unshift({ id: 'safety', text: S[out.safety], href: '', link: '' });   // nohot18: no link to a list of lines
       F.parentLimit = false; F.teaseRoom = false;
     }
     return out;
