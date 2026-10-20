@@ -80,19 +80,21 @@ So Pete, an hour later and wanting the evening back, says, "Sorry I didn't ring 
 
 Neither of them is being unreasonable. The apology was for the top layer, and the hurt was two layers down.
 
-**Said:** "Sorry I didn't ring her. I'll do it now."
-**Heard:** *I'll make tonight's problem go away so we can stop talking about it.*
-**Meant:** *I didn't realise this was such a big deal, and I want us to be all right.*
-**A better way:** "I've been leaving Mum to you, haven't I? Every time I say later, she rings you. That's not fair on you. I'll ring her now, and from now on I'll tell her to call me instead of you."
+| Said | "Sorry I didn't ring her. I'll do it now." |
+|---|---|
+| Heard | *I'll make tonight's problem go away so we can stop talking about it.* |
+| Meant | *I didn't realise this was such a big deal, and I want us to be all right.* |
+| A better way | "I've been leaving Mum to you, haven't I? Every time I say later, she rings you. That's not fair on you. I'll ring her now, and from now on I'll tell her to call me instead of you." |
 
 The better version isn't longer because longer is better. It's longer because it reaches the layer where the hurt actually is: the pattern ("every time"), the cost ("she rings you") and a fix that changes the setup rather than tonight.
 
 The same gap opens at work, often in writing. Dawn, who manages a small team at a housing association, emails Bryn on a Friday afternoon: "As per my email on Tuesday, can you send the figures by Monday?" Bryn reads it on his phone at the bus stop and feels his face go hot.
 
-**Said:** "As per my email on Tuesday, can you send the figures by Monday?"
-**Heard:** *You ignored me, and now I'm putting it in writing.*
-**Meant:** *I need the figures for a board paper, I'm anxious about Monday, and I can't remember whether I was clear on Tuesday.*
-**A better way:** "Hi Bryn, I need the figures for the board paper on Tuesday. Could you get them to me by Monday lunchtime? I'm not sure I made the deadline clear last time, so flagging it now."
+| Said | "As per my email on Tuesday, can you send the figures by Monday?" |
+|---|---|
+| Heard | *You ignored me, and now I'm putting it in writing.* |
+| Meant | *I need the figures for a board paper, I'm anxious about Monday, and I can't remember whether I was clear on Tuesday.* |
+| A better way | "Hi Bryn, I need the figures for the board paper on Tuesday. Could you get them to me by Monday lunchtime? I'm not sure I made the deadline clear last time, so flagging it now." |
 
 On the surface, a reasonable request. One layer down, three words ("as per my") that, in a lot of offices, have come to carry a sharp edge. Below that, Dawn's own worry, and a genuine doubt about whether her earlier email said enough. Nobody meant anything unkind, and Bryn spends his weekend feeling told off.
 
@@ -104,7 +106,7 @@ On the website's About page I take an eight-word sentence apart: "don't worry ab
 
 You don't need to see everything at once. You need a habit of asking, after the surface, "and underneath that?" two or three times. The answers usually come quicker than you'd expect, and they're usually less dramatic than you feared.
 
-> **Two ways to read this: "Fine."**
+> **Two ways to read "Fine."**
 >
 > Some people's wiring takes a word at its word. "Fine" means fine. If it didn't, surely the person would have said so; that's what words are for. To a brain that works like this, Lorraine's "fine" was information, and Pete acted on it correctly. The banging pans came out of nowhere.
 >

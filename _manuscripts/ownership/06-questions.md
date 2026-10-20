@@ -69,7 +69,7 @@ So ask, and then stop. Count, silently, if it helps. The answer that comes after
 
 The same pattern runs through anything that corrects itself over time: a thermostat checks the room and adjusts, a choir listens and retunes. Each answer you get shapes the next question you ask. That's a feedback loop, and it only works if the signal is allowed to come back.
 
-> **Two ways to read this: "I don't know. Can I tell you tomorrow?"**
+> **Two ways to read "I don't know. Can I tell you tomorrow?"**
 >
 > Some people's wiring needs processing time before it can answer a question about their own behaviour. The honest answer isn't available yet. It's being assembled, slowly and carefully, and anything they said right now would be a guess, or whatever would end the conversation fastest. For a brain like this, "I don't know yet" is the truthful answer, and "let me think" is a promise to come back with a real one.
 >
@@ -112,10 +112,11 @@ Don't pounce. If Dele had said "I suppose I do correct you quite a lot," and Fra
 
 Instead, say back what you heard, and leave room for more. "So it's like a crooked picture. You fix it before you've thought about whether it matters to anyone. That makes sense of a lot, actually." That tells him the answer arrived, and it invites the next one.
 
-**Said:** "Why do you always have to correct me?"
-**Heard:** *There's something wrong with you and I'm sick of it.*
-**Meant:** *I want to understand why this keeps happening, because I don't think you mean to hurt me.*
-**A better way:** "Can I ask you about the barbecue? No rush. When you corrected the year, what was going on for you?" Then stop, and wait.
+| Said | "Why do you always have to correct me?" |
+|---|---|
+| Heard | *There's something wrong with you and I'm sick of it.* |
+| Meant | *I want to understand why this keeps happening, because I don't think you mean to hurt me.* |
+| A better way | "Can I ask you about the barbecue? No rush. When you corrected the year, what was going on for you?" Then stop, and wait. |
 
 > **Say it**
 >

@@ -55,10 +55,11 @@ It isn't only flatmates. In an office, it often sounds more polite and works the
 
 Nadine, a project manager at an engineering firm in Derby, raises with her colleague Gil that he's missed the last three deadlines for his section of the monthly report. Gil listens, nods, and says: "Fair enough. Though to be honest, I'd have got it in on time if your templates weren't always late going out."
 
-**Said:** "Fair enough. Though I'd have got it in on time if your templates weren't always late going out."
-**Heard:** *This is your fault, really.*
-**Meant:** *I'm embarrassed about the deadlines, and there is a real problem with the templates that nobody has fixed.*
-**A better way (from Gil):** "You're right, I've missed three. That's on me, and I'll get the next one in by the fifth. Separately, can we look at when the templates go out? I think it's making it harder for a few of us."
+| Said | "Fair enough. Though I'd have got it in on time if your templates weren't always late going out." |
+|---|---|
+| Heard | *This is your fault, really.* |
+| Meant | *I'm embarrassed about the deadlines, and there is a real problem with the templates that nobody has fixed.* |
+| A better way (from Gil) | "You're right, I've missed three. That's on me, and I'll get the next one in by the fifth. Separately, can we look at when the templates go out? I think it's making it harder for a few of us." |
 
 Notice that the template problem may be completely real. In the better version, it doesn't disappear. It gets its own line, its own conversation and, with luck, its own fix. What changes is that it stops being used to cancel the first issue.
 
@@ -70,14 +71,15 @@ When the counter-list arrives, the instinct is to answer each item as it comes, 
 
 That isn't a way of dodging your own part. It only works if you mean it: if you really will come back to the washing, and really will own the parts that are yours. Said honestly, it's often a relief to the other person, because they've just learned that their complaints will get a proper hearing instead of being swatted away.
 
-**Said:** "OK, well, since we're doing this. You leave your washing in the machine for days."
-**Heard:** *Your complaint doesn't count, because you're worse.*
-**Meant:** *I feel ambushed, and I've been sitting on some things too.*
-**A better way (from Tegan, once she's caught her breath):** "That's fair. Some of those are real, especially Ruairidh staying without asking. I want to talk about all of them, and I'll own my part. Can we finish the late nights first? Then yours, properly, as its own conversation. Tonight after tea?"
+| Said | "OK, well, since we're doing this. You leave your washing in the machine for days." |
+|---|---|
+| Heard | *Your complaint doesn't count, because you're worse.* |
+| Meant | *I feel ambushed, and I've been sitting on some things too.* |
+| A better way (from Tegan, once she's caught her breath) | "That's fair. Some of those are real, especially Ruairidh staying without asking. I want to talk about all of them, and I'll own my part. Can we finish the late nights first? Then yours, properly, as its own conversation. Tonight after tea?" |
 
 And if Joss can find it in himself, a better way from him: "Sorry. That came out as a counterattack. You're right about last night. Can I say the Ruairidh thing too, after we've sorted the noise? It's been bothering me."
 
-> **Two ways to read this: bringing in something else.**
+> **Two ways to read bringing in something else.**
 >
 > Some people's wiring holds several threads at once and sees how they connect. To a mind like this, the washing machine and the late nights genuinely are part of the same picture, which is how the two of you share the flat, and raising one while talking about the other isn't a comeback. It's the bigger view. Leaving a connected thread unsaid can feel like losing it, and some people worry, with reason, that if they don't say it now they'll forget it entirely.
 >

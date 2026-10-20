@@ -89,14 +89,15 @@ One more idea from finance. A business keeps a reserve: money set aside for the 
 
 Every unacknowledged hurt is a small withdrawal from that reserve. Each one on its own is affordable. A run of them, especially with deflections or partial apologies that leave the books unbalanced, can empty it, and then one ordinary bad evening is enough to cause real damage. A genuine apology, with a real repair, is a deposit. It doesn't erase the withdrawal. It tops the reserve back up, and often a little beyond where it started, because both people now know the friendship can survive a mistake and talk about it.
 
-**Said:** "OK, I'm sorry I was late. But you know what work's like at the moment."
-**Heard:** *I'll say the word, and your hurt is still your problem.*
-**Meant:** *I really am sorry, and I need you to know I wasn't being careless; I was drowning.*
-**A better way:** "I was late, and I was on my phone, and it was your birthday. That's on me. Can I tell you what was going on at work? Not as an excuse. I just don't want you thinking I didn't care."
+| Said | "OK, I'm sorry I was late. But you know what work's like at the moment." |
+|---|---|
+| Heard | *I'll say the word, and your hurt is still your problem.* |
+| Meant | *I really am sorry, and I need you to know I wasn't being careless; I was drowning.* |
+| A better way | "I was late, and I was on my phone, and it was your birthday. That's on me. Can I tell you what was going on at work? Not as an excuse. I just don't want you thinking I didn't care." |
 
 That last version keeps the explanation (which Nell needs to say, and which Karin may well want to hear), and moves it to after the ownership, as an offer.
 
-> **Two ways to read this: the explanation.**
+> **Two ways to read the explanation.**
 >
 > Some people's wiring treats a full explanation as part of honesty. If they leave out *why* it happened, they feel they're hiding something, or giving a false picture of their own motives. Explaining is how they show they've thought it through and how they make sense of it themselves.
 >

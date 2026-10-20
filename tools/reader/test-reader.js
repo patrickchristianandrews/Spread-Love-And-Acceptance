@@ -357,7 +357,7 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
   // the safety move describes lines, not people, and offers support as an option
   const s = readOf('Sam: hi\nAlex: Give me your phone.\nSam: no', 'Sam');
   // nohot18: the pointer to support lines is gone; the move still names it without a label, and offers stepping away
-  ok(s.safety && s.next[0] && /Stepping away for now is okay/.test(s.next[0].say) && !/controlling|abusive|toxic|red flag|988|hotline|helpline|support is there/i.test(s.next[0].say), 'the safety move is worded as an option: ' + (s.next[0] && s.next[0].say));
+  ok(s.safety && s.next[0] && /Stepping away for now is okay/.test(s.next[0].say) && !/controlling|abusive|toxic|red flag|support is there/i.test(s.next[0].say) && !require('../checks/no-removed-content.js').PATTERNS.some(p => p[1].test(s.next[0].say)), 'the safety move is worded as an option: ' + (s.next[0] && s.next[0].say));
 }
 
 console.log(`${pass} passed, ${fail} failed`);

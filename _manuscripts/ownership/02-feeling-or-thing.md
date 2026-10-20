@@ -44,7 +44,7 @@ He is, honestly, sorry that Fran is upset. He doesn't yet understand what he did
 
 That's the gap this book keeps returning to. The same nine words can be a dodge from one person and a careful, truthful statement from another, and the listener usually can't tell which from the words alone.
 
-> **Two ways to read this: "I'm sorry it made you feel that way."**
+> **Two ways to read "I'm sorry it made you feel that way."**
 >
 > Some people's wiring is very literal about apologies. Saying sorry for something you don't think was wrong feels like lying, and lying feels worse than the argument. If you aren't sure what you did, the only honest sorry is a sorry about the feeling. To a brain that works like this, "I'm sorry it made you feel that way" is a sincere and careful answer.
 >
@@ -78,10 +78,11 @@ Regret, on its own, was the part that does least of the heavy lifting. It isn't 
 
 So when Fran tries again, two days later, she doesn't argue about whether she should have been upset. That argument is unwinnable, and it's also beside the point. She goes back to the specific thing.
 
-**Said:** "I'm sorry it made you feel that way."
-**Heard:** *Your feelings are the problem here, and I'm sorry you have them.*
-**Meant:** *I'm sorry you're hurt. I don't yet see what I did.*
-**A better way (from Dele, once he understood):** "I corrected you twice in front of your family, and the second time your sister made a joke of it. The details didn't matter to the story. I can see it made you look like you didn't know your own life. I'm sorry I did that. If something's wrong in a story you're telling, I'll leave it, and if it matters I'll tell you afterwards."
+| Said | "I'm sorry it made you feel that way." |
+|---|---|
+| Heard | *Your feelings are the problem here, and I'm sorry you have them.* |
+| Meant | *I'm sorry you're hurt. I don't yet see what I did.* |
+| A better way (from Dele, once he understood) | "I corrected you twice in front of your family, and the second time your sister made a joke of it. The details didn't matter to the story. I can see it made you look like you didn't know your own life. I'm sorry I did that. If something's wrong in a story you're telling, I'll leave it, and if it matters I'll tell you afterwards." |
 
 The better version is still accurate, which matters to Dele, and it no longer asks him to apologise for being accurate. It apologises for the timing and the setting, which were his choices.
 

@@ -58,7 +58,7 @@ So the useful conversation between Gregor and Lewis isn't about sorry. It's abou
 
 This isn't Gregor running Lewis's life. Lewis designs it; Gregor agrees to the backstop. And nobody has to be a worse person for needing it.
 
-> **Two ways to read this: sorry, and late again.**
+> **Two ways to read sorry, and late again.**
 >
 > Some people's wiring keeps track of time loosely. An hour can feel like twenty minutes when they're absorbed, and "I'll leave in a minute" can genuinely become forty without them noticing it pass. They often care intensely about the thing they're late for, and are mortified each time. More effort and more sincerity don't fix it, because the problem isn't caring; it's a clock that runs differently inside.
 >
@@ -87,10 +87,11 @@ None of this means the words are pointless. The words come first. They tell the 
 
 The words open the account. The behaviour pays into it. And the follow-up, a month later, is how both people find out whether it worked.
 
-**Said:** "I'm so sorry. I'm really, really sorry. I completely lost track."
-**Heard:** *The same apology as last time, and nothing will change.*
-**Meant:** *I hate letting you down and I don't know how to stop.*
-**A better way:** "I'm sorry. That's four times, and I know my sorry is starting to sound cheap. I don't think trying harder is going to fix it. Can we sort out a setup? I'll do a leave-by alarm, and if I'm not here by twenty-five to, start without me. Shall we check in a month whether it's working?"
+| Said | "I'm so sorry. I'm really, really sorry. I completely lost track." |
+|---|---|
+| Heard | *The same apology as last time, and nothing will change.* |
+| Meant | *I hate letting you down and I don't know how to stop.* |
+| A better way | "I'm sorry. That's four times, and I know my sorry is starting to sound cheap. I don't think trying harder is going to fix it. Can we sort out a setup? I'll do a leave-by alarm, and if I'm not here by twenty-five to, start without me. Shall we check in a month whether it's working?" |
 
 And from Gregor, his side of the same moment: "I believe you're sorry. I don't want any more sorries. I want us to make it work. And thank you for the satsumas."
 

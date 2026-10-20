@@ -29,7 +29,7 @@ Start with the body, because it comes first. The science of the nervous system h
 
 When Corinne put the letter down, Rafe's body did what bodies do when they sense a threat. That's not an excuse for the transfer. It's an explanation of the next ten minutes. Nobody owns anything well while their body is shouting at them to get out of the room, and pushing harder ("Can you at least say something?") turns the volume up further.
 
-> **Two ways to read this: going silent.**
+> **Two ways to read going silent.**
 >
 > Some people's wiring, when overloaded, shuts down. Words go first, and sometimes movement and expression too. Their face can look blank or cold. They may leave the room, or sit very still. From the inside, it's often closer to a fuse tripping than a choice: the system protecting itself. Many people who experience it are distressed by how it looks to others, and want to explain, and can't, until it passes.
 >
@@ -117,10 +117,11 @@ What you can't do is the looking for them. The moment where a person sees what t
 
 That's no failure on your part. It's where your part ends.
 
-**Said:** "Rafe? Can you at least say something?"
-**Heard:** *You're failing at this conversation, too.*
-**Meant:** *I'm frightened you don't care.*
-**A better way:** "I can see this has hit you hard. I'm not going anywhere. Take the time you need, and come and find me when you can talk."
+| Said | "Rafe? Can you at least say something?" |
+|---|---|
+| Heard | *You're failing at this conversation, too.* |
+| Meant | *I'm frightened you don't care.* |
+| A better way | "I can see this has hit you hard. I'm not going anywhere. Take the time you need, and come and find me when you can talk." |
 
 > **Say it**
 >

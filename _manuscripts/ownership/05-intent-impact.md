@@ -60,10 +60,11 @@ A few weeks after the curry night, Fran texts Dele from work: "Mum's asked if we
 
 Fran reads it four times on the bus. To her, "Noted." with a full stop is what a manager sends when they're annoyed with you and have decided not to say so. She spends the evening braced for an argument about her mother.
 
-**Said:** "Noted."
-**Heard:** *I'm not happy about this, and I'm being curt so you know.*
-**Meant:** *I've read it and added it to my calendar. Sunday is fine.*
-**A better way:** "Sunday's fine, I've put it in the calendar. Busy now, talk later x"
+| Said | "Noted." |
+|---|---|
+| Heard | *I'm not happy about this, and I'm being curt so you know.* |
+| Meant | *I've read it and added it to my calendar. Sunday is fine.* |
+| A better way | "Sunday's fine, I've put it in the calendar. Busy now, talk later x" |
 
 Nothing about Dele's reply was unkind, and nothing about Fran's reading was unreasonable. One word, without a voice, gave her mind a gap to fill, and she filled it with the version she was most worried about. Researchers who study written messages have a plain name for the speaker's half of this: egocentrism, meaning that we hear our own tone so clearly in our heads that we forget the reader can't.
 
@@ -73,10 +74,11 @@ There are two fixes, one for each side. The sender can spend five more words. Th
 
 **If you caused the impact,** take the impact first and the intent second. You don't have to give up your intent. You just have to put it in the right place. "I can see that came out as 'just the numbers person', in front of the client, after you'd done the core of the work. I don't see you that way. It's still what I said." Then, if it helps, say what you meant.
 
-**Said:** "I didn't mean it like that at all."
-**Heard:** *Your reaction is a misunderstanding, and you should drop it.*
-**Meant:** *I respect your work, and I'm horrified you think I don't.*
-**A better way:** "I can see how 'just the numbers side' landed, especially in front of the client. You did the work this proposal stands on and I made it sound like a footnote. I'm sorry. I'll put it right with them on Friday's call, and I'd like you to present the model."
+| Said | "I didn't mean it like that at all." |
+|---|---|
+| Heard | *Your reaction is a misunderstanding, and you should drop it.* |
+| Meant | *I respect your work, and I'm horrified you think I don't.* |
+| A better way | "I can see how 'just the numbers side' landed, especially in front of the client. You did the work this proposal stands on and I made it sound like a footnote. I'm sorry. I'll put it right with them on Friday's call, and I'd like you to present the model." |
 
 That last sentence is the part that changes something. Osman doesn't need to beat himself up for a careless word. He needs to see it, own it and put it right where it happened.
 
@@ -84,7 +86,7 @@ That last sentence is the part that changes something. Osman doesn't need to bea
 
 And if you catch yourself sure of someone's motive from how something felt, try holding it as a question: "When you said that, it came across as if you were putting me down. Was that what you meant?" Most of the time, the answer surprises you.
 
-> **Two ways to read this: "I said exactly what I meant."**
+> **Two ways to read "I said exactly what I meant."**
 >
 > Some people's wiring chooses words for what they literally say. If they said "you're the numbers person", they meant exactly that: you're the person who knows the numbers. They didn't put "only" or "less important" in the sentence, so they're baffled when someone finds it there. Some also speak directly, with fewer softeners, and are told they sound harsh when they meant to sound clear.
 >

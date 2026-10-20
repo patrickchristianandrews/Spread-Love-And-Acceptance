@@ -232,8 +232,9 @@ ok(/where they stand/.test(got('You\'re not allowed to go to that party.').all),
 ok(!E.analyze('I\'m watching what you do on your laptop, so don\'t even think about slacking.', {channel: 'chat', rel: 'manager'}).control, 'a manager and a work laptop: not relationship control');
 // one message can't tell you what a relationship is like
 ok(got('Oh great, late again.').r.oneMessage && got('Give me your phone.').r.oneMessage, 'the one-message reminder is offered on sharp and concern reads');
-// (nohot18: the pointer to support lines is gone; the options stay, and no line or number appears)
-ok(got('Give me your phone.').r.meanings.some(m => /You don't have to/.test(m)) && !got('Give me your phone.').r.meanings.some(m => /988|hotline|helpline|free and private support|safety\.html/i.test(m)), 'concern is worded as an option, not a verdict, with no lines');
+// (purge19: no support lines, numbers or links; the options stay)
+const GONE = require('../checks/no-removed-content.js').PATTERNS;
+ok(got('Give me your phone.').r.meanings.some(m => /You don't have to/.test(m)) && !got('Give me your phone.').r.meanings.some(m => GONE.some(p => p[1].test(m)) || /free and private support/i.test(m)), 'concern is worded as an option, not a verdict, with no lines');
 
 /* ---------- 11. words, never people ---------- */
 const LABELS_RE = /\b(?:red flags?|toxic|manipulative|manipulator|narcissist\w*|gaslight\w*|abusive|abuser|controlling (?:partner|person|man|woman|behaviou?r))\b/i;

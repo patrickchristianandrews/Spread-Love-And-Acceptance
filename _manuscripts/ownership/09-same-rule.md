@@ -57,10 +57,11 @@ But the question is most useful turned on yourself first, quietly, before the co
 
 So that's what she says, about two minutes after "sorry you took it that way".
 
-**Said:** "I'm sorry you took it that way. I didn't mean anything by it."
-**Heard:** *Your reaction is the problem, the same as always.*
-**Meant:** *I'm embarrassed, and I don't want this to be a big deal.*
-**A better way:** "No, scrap that. That's exactly what I can't stand when you do it. I said 'you know what he's like' to your mum. It made you look bad to her, and it's the very thing I said I didn't want to be part of. I'm sorry. I won't discuss you with her again."
+| Said | "I'm sorry you took it that way. I didn't mean anything by it." |
+|---|---|
+| Heard | *Your reaction is the problem, the same as always.* |
+| Meant | *I'm embarrassed, and I don't want this to be a big deal.* |
+| A better way | "No, scrap that. That's exactly what I can't stand when you do it. I said 'you know what he's like' to your mum. It made you look bad to her, and it's the very thing I said I didn't want to be part of. I'm sorry. I won't discuss you with her again." |
 
 Notice what happens when she does this. Pete's shoulders come down. And six weeks of Lorraine asking Pete to own his part suddenly look fair, because she's just shown him she'll do the same.
 
@@ -89,7 +90,7 @@ It took her about twenty seconds. It made the rest of the evening twice as easy,
 
 None of these cancels what they did. Chapter 7 still holds: two people can both be responsible for different things. But owning yours, first and plainly, is the fastest way to make it safe for them to own theirs.
 
-> **Two ways to read this: a rule, applied.**
+> **Two ways to read a rule, applied.**
 >
 > Some people's wiring applies a rule the same way every time. If "we don't discuss each other with family" is a rule, it's a rule on Friday as much as on Monday, for you as much as for me. People wired like this notice inconsistencies quickly and say so plainly, and are often told they're being rigid, or keeping score.
 >

@@ -563,17 +563,18 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   chk(/send you my location when I get there/.test(ask) && !/\bme to Send\b|when me get/.test(ask), 'the ask is turned round cleanly: ' + ask);
   const ask2 = E.receive(an('Send me your notes.'), {}).replies.map(r => r.text).join(' ');
   chk(/you'd like me to send you my notes/.test(ask2), 'the ask starts in lower case: ' + ask2);
-  // a threat to self-harm used as leverage: still a threat, the one safety line (nohot18: no numbers, no names), and it's not their job to stay
-  const HOT = /988|116 ?123|1-?800|hotline|helpline|Samaritans|Lifeline|safety\.html|Not safe at home/i, ONE = E.SAFE_ONE;
+  // a threat to self-harm used as leverage: still a threat, and it's not their job to stay; no numbers, services or links (purge19)
+  const GONE = require('../checks/no-removed-content.js').PATTERNS, HOT = { test: s => GONE.some(p => p[1].test(s)) }, ONE = E.SAFE_ONE;
+  chk(/^That sounds really hard\./.test(ONE) && !HOT.test(ONE), 'the danger line is the short neutral reply: ' + ONE);
   ['If you leave me I’ll kill myself and it’ll be your fault.', 'I’ll kill myself if you leave.', 'If you break up with me I will hurt myself.'].forEach(t => {
     const a = an(t), g = E.receive(a, {});
     chk(a.danger && a.selfHarm, '“' + t + '”: a threat, and a self-harm worry');
-    chk(g.threat && g.meanings.includes(ONE) && g.meanings.some(m => /not your job to stay/.test(m)) && !HOT.test(g.meanings.join(' ')), '“' + t + '” received: the one safety line, not your job to stay, no numbers: ' + g.meanings.join(' / '));
+    chk(g.threat && g.meanings.some(m => /not your job to stay/.test(m)) && !HOT.test(g.meanings.join(' ')), '“' + t + '” received: a threat, not your job to stay, no numbers or services: ' + g.meanings.join(' / '));
   });
   // "I want to kill myself": not a tone question in either direction
   { const a = an('I want to kill myself'), g = E.receive(a, {}), v = vd('I want to kill myself');
-    chk(a.selfHarm && !a.danger && g.selfHarm && g.danger && g.meanings.includes(ONE) && !HOT.test(g.meanings.join(' ') + ' ' + g.replies.map(r => r.text).join(' ')), 'a crisis message received: the one safety line, no numbers');
-    chk(v.id === 'danger' && v.text === ONE, 'a crisis message sent: the one safety line only: ' + v.text); }
+    chk(a.selfHarm && !a.danger && g.selfHarm && g.danger && !HOT.test(g.meanings.join(' ') + ' ' + g.replies.map(r => r.text).join(' ')), 'a crisis message received: read plainly, no numbers or services');
+    chk(v.id === 'danger' && v.text === ONE, 'a crisis message sent: the short neutral reply only: ' + v.text); }
 }
 // ---------- re-test round 12: co-parents get BIFF, facts beat "Lately it's felt like", notes tell the truth ----------
 {

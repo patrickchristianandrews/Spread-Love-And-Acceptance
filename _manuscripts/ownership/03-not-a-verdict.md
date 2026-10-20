@@ -71,10 +71,11 @@ And if you're on the receiving end, you're allowed to bring it back, kindly: "I 
 
 **If you're the one raising it,** frame it as an act and keep your sentence away from their character. Use the camera's words ("you told Kirsty about my job") and leave the verdict ("you can't keep anything to yourself") unsaid. Avoid "always" and "never", which turn one event into a personality. And it helps more than you'd expect to say out loud what you are *not* saying, because shame is listening for it.
 
-**Said:** "You told Kirsty about my job. I asked you not to."
-**Heard:** *You're a bad mother who can't be trusted.*
-**Meant:** *That one thing hurt, and I'd like you to see it.*
-**A better way:** "Mum, I'm not saying you're a bad mum. You're not. I'm saying one thing hurt: I asked you to keep my job news to yourself and you told Kirsty. I'd like you to see why that mattered to me."
+| Said | "You told Kirsty about my job. I asked you not to." |
+|---|---|
+| Heard | *You're a bad mother who can't be trusted.* |
+| Meant | *That one thing hurt, and I'd like you to see it.* |
+| A better way | "Mum, I'm not saying you're a bad mum. You're not. I'm saying one thing hurt: I asked you to keep my job news to yourself and you told Kirsty. I'd like you to see why that mattered to me." |
 
 It isn't Euan's job to manage his mother's shame. But a sentence that leaves her self out of the dock makes it easier for her to look at the act, which is what he wants.
 
@@ -84,7 +85,7 @@ It isn't Euan's job to manage his mother's shame. But a sentence that leaves her
 
 Notice that her explanation is still in there: she was worried. It's allowed in, after the ownership, as context. It just isn't standing in for it.
 
-> **Two ways to read this: a single sentence of criticism.**
+> **Two ways to read a single sentence of criticism.**
 >
 > Some people's wiring meets criticism with a sharp, almost physical sting. It arrives fast and it arrives whole: a passing comment about one thing can land as rejection of the entire person, and the first few minutes are about getting through the feeling rather than hearing the content. People who experience this often describe it as something that happens *to* them rather than something they choose, and they can be mortified afterwards by how strongly they reacted.
 >
