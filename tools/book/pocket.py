@@ -232,9 +232,6 @@ def copyright_html(p, S):
           'for personal use and for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % esc(p['title'])
     s += ('<p><strong>Not therapy.</strong> This guide is general education about people and relationships. It is not a diagnosis, treatment or a '
           'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation. No page labels anyone.</p>')
-    s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
-          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
-          'If you are in danger now, call your local emergency number.</p>') % S.SITE
     s += ('<p><strong>The examples are made up.</strong> The situations in this guide are drawn from common patterns, and nobody in them is a real person; '
           'any likeness is coincidence. None of them is a testimonial.</p>')
     s += '<p>The research the pages lean on is listed in short at the back, and in full at spreadloveandacceptance.com/research.</p>'

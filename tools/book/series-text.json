@@ -8,7 +8,7 @@
    },
    "2": {
     "what": "This book is for the heavy days. It covers stress, sleep and rest, anger, worry, low mood and trauma, grief, repair after hurt, the slow work of change, and what matters to you.",
-    "who": "It is for anyone going through a hard stretch, and for anyone standing beside someone who is. Each chapter says plainly when it is time to get help from a doctor, counsellor or helpline, and how to find one."
+    "who": "It is for anyone going through a hard stretch, and for anyone standing beside someone who is. Each chapter says plainly when it is time to get help from a doctor or counsellor."
    },
    "3": {
     "what": "This book is about the people around you. It looks at how pace and tone pull people out of step, how words land, why two people remember the same moment differently, belonging and trust, love in its many forms, the pull of groups, and how to help someone without burning out.",
@@ -76,7 +76,7 @@
    ],
    [
     "What if looking back brings up something painful?",
-    "<p>Stop there, and come back another day if you want to. Nobody has to finish a page. If old memories keep pulling you under, or you find yourself avoiding more and more of everyday life, talk to a doctor or counsellor. <a href=\"/book/understanding-16-worry.html\">Worry, low mood and trauma</a> describes the kinds of help there are, and the help page at the front of this book (page {page:help-now}) lists free places to start.</p>"
+    "<p>Stop there, and come back another day if you want to. Nobody has to finish a page. If old memories keep pulling you under, or you find yourself avoiding more and more of everyday life, talk to a doctor or counsellor. <a href=\"/book/understanding-16-worry.html\">Worry, low mood and trauma</a> describes the kinds of help there are.</p>"
    ],
    [
     "I think I might be autistic or have ADHD. Can this book tell me?",
@@ -92,7 +92,7 @@
    ],
    [
     "How do I know when a book isn’t enough?",
-    "<p>Most chapters have a short part called “When to get more help”, with the signs to look out for. If you need someone now, the help page at the front of this book (page {page:help-now}) has numbers to call. <a href=\"/outside-help.html\">Help beyond this book</a> lists counsellors, helplines and support groups, and most of them are free.</p>"
+    "<p>Most chapters have a short part called “When to get more help”, with the signs to look out for, and what kind of help to ask a doctor or counsellor about.</p>"
    ]
   ],
   "2": [
@@ -115,10 +115,6 @@
    [
     "Do I have to forgive someone who hurt me?",
     "<p>No. Forgiveness, trust and going back are all yours to choose, in your own time, and you can heal even if the other person never says sorry. <a href=\"/book/understanding-11-healing.html\">Healing after hurt</a> explains what forgiving means and what it doesn’t.</p>"
-   ],
-   [
-    "Where can I find help quickly?",
-    "<p>The help page at the front of this book (page {page:help-now}) has the numbers to call, including in an emergency. For everything else, <a href=\"/outside-help.html\">Help beyond this book</a> lists counsellors, helplines and support groups, and most of them are free.</p>"
    ]
   ],
   "3": [

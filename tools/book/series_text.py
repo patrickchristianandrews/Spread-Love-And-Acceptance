@@ -180,7 +180,7 @@ def in_open_paren(s, end):
         pre = pre[starts[-1]:]
     t = html.unescape(re.sub(r'<[^>]+>', '', _PE_ONLY.sub('', pre)))
     if t.rstrip()[-1:] in ('?', '!'):
-        return False  # "Not safe at home? (…/safety)" keeps its own brackets: "home?, …" would read badly
+        return False  # a link ending in "?" keeps its own brackets: "…?, …" would read badly
     return t.count('(') > t.count(')')
 
 

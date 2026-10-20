@@ -841,16 +841,6 @@
       "How much are you carrying?",
       "/workpapers/wp-02-how-much-are-you-carrying.html"
      ]
-    },
-    {
-     "problem": "I’m thinking about ending my life, or I’m worried someone is.",
-     "refs": [
-      {
-       "front": "help-now",
-       "label": "If you need help now"
-      }
-     ],
-     "tool": null
     }
    ]
   }

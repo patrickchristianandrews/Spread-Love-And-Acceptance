@@ -785,33 +785,7 @@
     // someone else's own sheet, shown to read (the Workpaper Suite): nothing on it can be changed here
     this.root.classList.toggle('is-readonly', !!this.opts.readOnly);
     if (this.opts.readOnly) Array.prototype.forEach.call(this.root.querySelectorAll('input, select, textarea, button'), function (el) { el.disabled = true; });
-    if (this.es) esPass(this.root);
   };
-  // The sheet in Spanish (?for=care&lang=es, or from the Spanish page): its own words are already Spanish;
-  // this turns the sheet's labels, choices and buttons into Spanish too, by exact match (anything not
-  // listed stays as it is). The PDF keeps the same answers.
-  var ES_W = {
-    'Job': 'Tarea', 'How often': 'Cada cuánto', 'Owner': 'Quién se encarga', 'Helper or backup (optional)': 'Ayuda o respaldo (opcional)', 'Size (optional)': 'Tamaño (opcional)', 'Notes': 'Notas',
-    'Roughly how long? (hours each time, optional)': '¿Cuánto tarda? (horas cada vez, opcional)', 'Daily': 'Cada día', 'Weekly': 'Cada semana', 'Monthly': 'Cada mes', 'As needed': 'Cuando haga falta', 'Ongoing': 'Siempre',
-    'Small': 'Pequeña', 'Medium': 'Mediana', 'Big': 'Grande', 'Add a job': 'Añadir una tarea', 'Remove the example jobs': 'Quitar las tareas de ejemplo', 'Who owns each job': 'Quién se encarga de cada tarea',
-    'Does every job have an owner?': '¿Cada tarea tiene a alguien a cargo?', 'Changes to the list': 'Cambios en la lista', 'Add a change': 'Añadir un cambio', 'Date': 'Fecha', 'What changed': 'Qué cambió', 'Who': 'Quién',
-    'How to fill it in': 'Cómo llenarla', 'Share this list': 'Compartir esta lista', 'Open a shared list': 'Abrir una lista compartida', 'Keeping this list together?': '¿Llevan esta lista entre varios?',
-    'Combine with what’s here': 'Juntarla con lo que hay aquí', 'Replace what’s here': 'Reemplazar lo que hay aquí', 'Not now': 'Ahora no', 'Show a QR code': 'Mostrar un código QR',
-    'Copy the link': 'Copiar el enlace', 'Copy it as a code instead': 'Copiarlo como código', 'Other ways: copy the link or a code': 'Otras formas: copiar el enlace o un código',
-    'Your names': 'Sus nombres', 'Add a person': 'Añadir a una persona', 'Jobs with an owner': 'Tareas con alguien a cargo', 'Still needs an owner': 'Todavía sin nadie a cargo', 'What’s this number?': '¿Qué es este número?',
-    'Date of this list': 'Fecha de esta lista', 'The split you agreed (optional)': 'El reparto que acordaron (opcional)', 'Download PDF': 'Descargar PDF', 'Save': 'Guardar', 'Open': 'Abrir', 'Draft file': 'Archivo borrador',
-    '+ Add a person': '+ Añadir a una persona', 'Remove': 'Quitar', 'Undo': 'Deshacer', 'Add it here': 'Añadirla aquí', 'Send my changes back': 'Enviar mis cambios de vuelta', 'Keep everything as it is here': 'Dejar todo como está aquí',
-    'Fillable PDF': 'PDF para llenar', 'More ▾': 'Más ▾', 'Less ▴': 'Menos ▴', 'Put it on the fridge': 'Ponerla en el refri', 'Clear': 'Borrar', 'Erase': 'Borrar todo'
-  };
-  function esPass(root) {
-    if (!root || !root.querySelectorAll) return;
-    Array.prototype.forEach.call(root.querySelectorAll('th, button, summary, label, option, dt, .wpf-share-h, .wpf-lib-h, h2, h3'), function (el) {
-      if (el.children.length) { var t0 = el.firstChild; if (t0 && t0.nodeType === 3 && ES_W[t0.textContent.trim()]) t0.textContent = t0.textContent.replace(t0.textContent.trim(), ES_W[t0.textContent.trim()]); return; }
-      var t = el.textContent.trim(); if (ES_W[t]) el.textContent = ES_W[t];
-    });
-    Array.prototype.forEach.call(root.querySelectorAll('[data-label]'), function (el) { var t = el.getAttribute('data-label'); if (ES_W[t]) el.setAttribute('data-label', ES_W[t]); });
-  }
-
   // Today's name in a day-by-day table ("Thu"), and the Monday of this week (2026-10-05)
   function todayIn(days) { return days[(new Date().getDay() + 6) % 7]; }
   function thisMonday() {
@@ -2266,10 +2240,9 @@
       if (CS && CS.sendSheet) {
         e.stopPropagation(); e.preventDefault();
         var wt = this.shareWhat(), ttl = b.getAttribute('data-share-title') || 'Our sheet', lk = this.shareMade.link;
-        var es = /^es\b/i.test(document.documentElement.lang || '');
-        CS.sendSheet({ heading: es ? 'Enviar la lista' : 'Send the ' + wt, url: lk, title: ttl, subject: ttl, text: b.getAttribute('data-share-text') || '',
-          note: es ? 'La abren en esta misma página y eligen combinarla con la suya. Cada cambio necesita un enlace nuevo.' : this.schema.people ? 'They open it on this same page and choose to combine it with theirs. Each change needs a new link.' : 'It opens on this same page on their device. Their own answers stay as they are.',
-          qrNote: es ? 'Se abre en ese teléfono, en esta misma página.' : 'The ' + wt + ' opens on that phone, on this same page.' });
+        CS.sendSheet({ heading: 'Send the ' + wt, url: lk, title: ttl, subject: ttl, text: b.getAttribute('data-share-text') || '',
+          note: this.schema.people ? 'They open it on this same page and choose to combine it with theirs. Each change needs a new link.' : 'It opens on this same page on their device. Their own answers stay as they are.',
+          qrNote: 'The ' + wt + ' opens on that phone, on this same page.' });
       }
       if (this.nudge) this.nudge();
       var out = this.root.querySelector('[data-share-out]'); if (out) out.value = this.shareMade.link;
@@ -2658,7 +2631,7 @@
   // The guides link here with ?for=…, so the sheet starts in the right words with the right example jobs.
   // Only words and starter examples change: the saved list, the share links and the PDF are the same sheet.
   // Without ?for=, a link from one of those guides on this site does the same.
-  var FOR_REF = { '/co-parenting.html': 'coparents', '/foster-and-kinship.html': 'foster', '/when-one-is-ill.html': 'ill', '/different-hours.html': 'shifts', '/caregivers.html': 'care', '/en-espanol.html': 'care' };
+  var FOR_REF = { '/co-parenting.html': 'coparents', '/foster-and-kinship.html': 'foster', '/when-one-is-ill.html': 'ill', '/different-hours.html': 'shifts', '/caregivers.html': 'care' };
   // other names the guides use for the same situations
   var FOR_ALIAS = { 'good-bad-days': 'ill', 'two-homes': 'coparents', 'co-parents': 'coparents', 'shift': 'shifts', 'carers': 'care', 'kinship': 'foster' };
   var D = 'Daily', Wk = 'Weekly', Mo = 'Monthly', AN = 'As needed';
@@ -2706,14 +2679,6 @@
         note: 'Fill it in together with whoever shares the care. This is about who owns each job, not medical advice: for medicines and health, follow the care team. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Caring for a husband, wife or partner.',
         fridge: 'Who owns what in the care', hrsCol: true,
         rows: [['Medicines and the pill box (as the care team directs)', Wk], ['Book and go along to medical appointments', AN], ['Insurance and paperwork', Mo], ['Night care and night-time calls', D], ['Sunday call with the family', Wk], ['Book respite: a break for the main carer', Mo], ['Pick up prescriptions', AN], ['Groceries and meals', Wk]],
-        // the same, in Spanish, for a carer who reads Spanish (from /en-espanol.html, ?lang=es, or a Spanish browser)
-        es: {
-          h1: 'Una persona a cargo de cada tarea: repartir el cuidado', title: 'Repartir el cuidado: una persona a cargo de cada tarea',
-          lede: 'Quién se encarga de cada parte del cuidado: medicinas, citas, papeles, las noches y un descanso para quien cuida. Cada tarea tiene una persona a cargo, que la hace o se asegura de que se haga (los hijos mayores, los hermanos y los amigos también pueden encargarse de alguna). Así nadie tiene que volver a pedirlo.',
-          note: 'Llénenla juntos, con quienes comparten el cuidado. Esto no es consejo médico: para medicinas y salud, sigan al equipo médico. Las tareas de ejemplo no cuentan hasta que les pongan una persona a cargo o las cambien. \u201cCompartir esta lista\u201d la env\u00eda a otro tel\u00e9fono y \u201cPonerla en el refri\u201d la imprime.',
-          fridge: 'Qui\u00e9n se encarga de qu\u00e9', share: 'Nuestra lista para repartir el cuidado',
-          rows: [['Medicinas y pastillero (seg\u00fan indique el equipo m\u00e9dico)', Wk], ['Pedir citas m\u00e9dicas y acompa\u00f1ar', AN], ['Seguro y papeles', Mo], ['Cuidado de noche y llamadas nocturnas', D], ['Llamada del domingo con la familia', Wk], ['Pedir un descanso (relevo) para quien cuida', Mo], ['Recoger recetas en la farmacia', AN], ['Compras y comidas', Wk]]
-        }
       },
       ill: {
         h1: 'One owner per job, with a bad-day backup', title: 'One owner per job, with a bad-day backup',
@@ -2735,19 +2700,9 @@
     return f;
   }
   // The sheet in that situation's words: a copy of the schema, and the page's title and opening line
-  function wantsSpanish() {
-    try {
-      if (/[?&]lang=es\b/.test(global.location.search || '')) return true;
-      var r = document.referrer ? new URL(document.referrer) : null;
-      if (r && r.origin === global.location.origin && r.pathname === '/en-espanol.html') return true;
-      return /^es\b/i.test((global.navigator && (global.navigator.language || '')) || '');
-    } catch (e) { return false; }
-  }
   function applyFor(schema, wp, which, app) {
     var o = FOR[wp] && FOR[wp][which];
     if (!o) return schema;
-    var es = !!(o.es && wantsSpanish());
-    if (es) { var o2 = {}; Object.keys(o).forEach(function (k) { o2[k] = o[k]; }); Object.keys(o.es).forEach(function (k) { o2[k] = o.es[k]; }); o = o2; }
     var pre = ((global.location && global.location.search || '').match(/[?&]preset=([a-z-]+)/) || [])[1] || '';
     if (pre && o.presets && o.presets[pre]) { var o3 = {}; Object.keys(o).forEach(function (k) { o3[k] = o[k]; }); Object.keys(o.presets[pre]).forEach(function (k) { o3[k] = o.presets[pre][k]; }); o = o3; }
     if (o.lede2) o = Object.assign({}, o, { lede: o.lede2 });
@@ -2779,13 +2734,6 @@
       if (o.title) document.title = o.title + ' \u00b7 Spread Love & Acceptance';
       var h1 = document.querySelector('main .read-head h1'); if (h1 && o.h1) h1.textContent = o.h1;
       var lede = document.querySelector('main > .wpf-lede:not(.pillar-note)'); if (lede && o.lede) lede.textContent = o.lede;
-      if (es) {
-        if (h1) h1.setAttribute('lang', 'es'); if (lede) lede.setAttribute('lang', 'es');
-        app.es = true;
-        var rootEl = document.getElementById('wpf-root'); if (rootEl) rootEl.setAttribute('lang', 'es');
-        // the save bar and the fridge button too
-        setTimeout(function () { esPass(document.querySelector('.wpf-bar')); esPass(document.getElementById('wpf-fridge')); var fr = document.getElementById('wpf-fridge'); if (fr) fr.setAttribute('lang', 'es'); try { document.dispatchEvent(new CustomEvent('tol-lang')); } catch (e) {} }, 0);
-      }
     } catch (e) {}
     return out;
   }

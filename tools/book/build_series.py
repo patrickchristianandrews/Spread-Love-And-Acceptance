@@ -436,9 +436,6 @@ def copyright_page(book, workbook=False, bw=False):
           'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % (what, esc(SERIES_TITLE))
     s += ('<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a '
           'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>')
-    s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
-          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
-          'If you are in danger now, call your local emergency number.</p>') % SITE
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
         s += ('<p>The research the chapters mention is listed in short at the back. The full list, with what each study found and links, is at '

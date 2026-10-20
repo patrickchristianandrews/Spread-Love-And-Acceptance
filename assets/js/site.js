@@ -62,25 +62,16 @@
     } catch (e) {}
   })();
 
-  // En español: a page with its own Spanish words says so with <html data-es>. Opened with ?lang=es (or #es),
-  // it becomes a Spanish page: lang="es" on <html>, so the bar, menu, footer and Settings below come in
-  // Spanish (T() and esPage(), further down, read that lang). A page can also set lang="es" itself before
-  // this runs (the Night Garden does, for a visitor arriving from /en-espanol.html).
-  try {
-    var de0 = document.documentElement;
-    if (de0.hasAttribute('data-es') && (/[?&]lang=es\b/.test(location.search) || location.hash === '#es')) de0.setAttribute('lang', 'es');
-  } catch (e) {}
-
   // The installed app opens with Tidbit and Sugarfoot running up and down the screen while the first page loads
   // (launch-pups.js and launch-pups.css), once per app launch ('tol-launch-seen' in sessionStorage), never in a
-  // browser tab, and not on the safety pages. Each page's head starts it (a plain cover in the app's colour, class
+  // browser tab, and not on the upset-right-now page. Each page's head starts it (a plain cover in the app's colour, class
   // "lp-boot", and the two files; from tools/seo/build_seo.py); a page whose head doesn't is started here.
   (function () {
     var d = document.documentElement;
     if (d.classList.contains('lp-boot') || document.getElementById('lp-boot-css')) return;   // the head has it in hand
     try {
       var app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-      if (!app || window.top !== window || sessionStorage.getItem('tol-launch-seen') || /^\/(safety|upset-right-now)\.html$/.test(location.pathname)) return;
+      if (!app || window.top !== window || sessionStorage.getItem('tol-launch-seen') || /^\/(upset-right-now)\.html$/.test(location.pathname)) return;
       sessionStorage.setItem('tol-launch-seen', '1');
       var bs;
       if (document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
@@ -133,7 +124,6 @@
       { href: '/week-0.html', code: 'New', title: 'Week 0, and the six weeks in your calendar', note: 'Five minutes before the six gentle weeks, and a reminder for each week in your own calendar' },
       { href: '/someone-sent-you-this.html', code: 'New', title: 'Someone sent you this?', note: 'What the site is in three lines, with no pressure, and messages to send someone else' },
       { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, housemates, siblings, co-parents, friends and more' },
-      { href: '/outside-help.html', code: 'New', title: 'Help beyond this site', note: 'Finding a counsellor, support groups and books' },
       { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies and books behind the pages, in plain words' },
       { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '17 chapters on how people work: feelings, stress, trust, change, grief, healing, helping, anger, love, worry and groups' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
@@ -177,7 +167,6 @@
       { href: '/new-parent.html', code: '', title: 'New baby, sharing the load', note: 'A three-step way for new parents to split the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check, parallel parenting, and a safety note' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
-      { href: '/outside-help.html', code: '', title: 'Help beyond this site', note: 'Finding a counsellor, support groups and books' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/install.html', code: '', title: 'Get the app', note: 'Android now; on iPhone, add it to your Home Screen from Safari. Its own icon, full screen, works offline' },
       { href: '/program.html', code: '', title: 'Which part of the program to use', note: 'Six weeks, the Workpaper Suite, the package and report, and the indexes: which to use when' },
@@ -287,8 +276,7 @@
       { href: '/long-distance.html', code: '', title: 'Long-distance and apart', note: 'Time zones, check-ins on video, a call rhythm you agree, and reading short texts' },
       { href: '/retired-together.html', code: '', title: 'Retired and both home now', note: 'Sharing the house all day: routines, whole jobs, handing over kindly, and finding purpose' },
       { href: '/family-obligations.html', code: '', title: 'Supporting family and money home', note: 'When supporting parents is a duty: agree an amount together, and save alongside it' },
-      { href: '/caregivers.html', code: '', title: 'Caring for someone you love', note: 'When they can’t share the load back, who else can help, and where to find respite' },
-      { href: '/en-espanol.html', code: '', title: 'En español', note: 'Pasos cortos para cuando los hijos pelean, cuando estás muy enojado, y si no estás a salvo en casa' }
+      { href: '/caregivers.html', code: '', title: 'Caring for someone you love', note: 'When they can’t share the load back, who else can help, and where to find respite' }
     ]},
     { id: 'book', title: 'The book', blurb: 'Three parts. Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use. Part Three is understanding people: how feelings, stress, trust, change and healing work, for anyone, anywhere.', items: [
       { href: '/book/index.html', code: 'Book', title: 'The book: contents and start reading', note: 'Read it like any book, from the first page: every chapter in order, the whole book on one page, and a printable copy' },
@@ -414,11 +402,9 @@
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/journeys.html', code: 'Steps', title: 'Guided journeys', note: 'Tell us what’s going on and follow 3 to 6 small steps, ticked off on this device' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
-      { href: '/outside-help.html', code: 'Help', title: 'Help beyond this site', note: 'Finding a counsellor, support groups and books' },
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and see your results side by side' },
       { href: '/on-this-device.html#progress', code: 'Yours', title: 'Your progress', note: 'Back it up, move it to the app, lock it with a PIN, or clear it' },
-      { href: '/en-espanol.html', code: 'ES', title: 'En español', note: 'Una página corta en español', lang: 'es' },
       { sub: 'What’s new', all: '/whats-new.html', allLabel: 'Everything new, with dates' },
       { href: '/together.html', code: 'New', title: 'Work on it together', note: 'Share your results by link, QR code or text' },
       { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
@@ -815,14 +801,6 @@
   var inDepth = /-in-depth\.html$/.test(current);
   if (inDepth) current = current.replace(/-in-depth\.html$/, '.html');
   function deepHref(it) { return it.href.replace(/\.html(?=#|$)/, '-in-depth.html'); }
-  // home16b: Spanish is remembered. After a visit to the Spanish page, coming back to the home page from outside the
-  // site opens the Spanish page (localStorage 'tol-lang': 'es' or 'en'); its "English" link, or any ?lang=en, switches back.
-  try {
-    if (current === '/en-espanol.html' && !/[?&]lang=en\b/.test(location.search)) localStorage.setItem('tol-lang', 'es');
-    if (/[?&]lang=en\b/.test(location.search)) localStorage.setItem('tol-lang', 'en');
-    if (current === '/index.html' && localStorage.getItem('tol-lang') === 'es' && !/[?&]lang=en\b/.test(location.search) && !location.hash &&
-        document.referrer.indexOf(location.origin) !== 0 && !/[?&](utm_|ref=)/.test(location.search)) location.replace('/en-espanol.html');
-  } catch (e) {}
   // Tender reading pages (growing up, knowing yourself, and any page marked data-sensitive): no pop-ups,
   // no cheering buddies or pup visits, no Professor Puddles cards and no learning-trail score on them.
   // home16b: and the grief pages, as the book promises ("where a chapter talks about … deep grief, the pages stay quiet
@@ -845,7 +823,7 @@
   function workKept() { try { return localStorage.getItem('tol-work-keep') === '1'; } catch (e) { return false; } }
   // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
   // the honest limits, "is this for you?" and the page for someone who was sent a link.
-  var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|outside-help|calming-supplements|nervous-system|for-counselors)\.html$/;
+  var PLAIN = /^\/(grief|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|calming-supplements|nervous-system|for-counselors)\.html$/;
   // Working pages (the tools and worksheets) are a calm workspace: no moving garden, pups or drifting bubbles beside a form.
   // The soft colour wash stays. Calm and play pages keep their garden.
   var WORKSPACE = /^\/(lemonade-stand|signal-translator|conversation-reader|carrier-wave-decoder|wiring-card|wavelength|quick-checks|chore-chart-for-couples|pursue-withdraw|family-obligations)\.html$|^\/workpapers\/|^\/wp-11(-in-depth)?\.html$|^\/tools\//;
@@ -890,8 +868,8 @@
       if (score > best) { best = score; hereGroup = g; }
     });
     // a few pages belong to one section whatever else lists them: the work page is By relationship > Work,
-    // "Someone sent you this?" is Start here, and the Spanish page sits outside the English sections
-    var HERE_FIX = { '/work.html': 'rel', '/someone-sent-you-this.html': 'start', '/sent-this.html': 'start', '/en-espanol.html': '' };
+    // "Someone sent you this?" is Start here
+    var HERE_FIX = { '/work.html': 'rel', '/someone-sent-you-this.html': 'start', '/sent-this.html': 'start' };
     if (Object.prototype.hasOwnProperty.call(HERE_FIX, current)) hereGroup = MENU.filter(function (g) { return g.id === HERE_FIX[current]; })[0] || null;
     // a page that is a tool in its own right (listed in Tools without a #part) belongs to Tools, under its type
     // (the games stay in Calm & play)
@@ -928,7 +906,7 @@
     'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
   };
   // pages that are never "outside your focus": the start, help and the site's own pages
-  var FOCUS_NEUTRAL = /^\/(index|start-here|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|someone-sent-you-this|outside-help|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
+  var FOCUS_NEUTRAL = /^\/(index|start-here|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|about|membership|install|sent-this|someone-sent-you-this|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
   var AREA_OF = {};
   function fpath(u) {
     var p = String(u || '').split(/[?#]/)[0];
@@ -1194,7 +1172,6 @@
   // ---------- Index (panel + home page) ----------
   function buildIndex(opts) {
     var wrap = el('div', { class: 'tol-index' + (opts.page ? ' is-page' : '') + (isMember ? ' is-member' : '') });
-    if (opts.accordion && esPage()) wrap.setAttribute('lang', 'en');   // the section and page names stay English (they lead to English pages)
     // the menu panel shows the grouped MENU; the Contents page lists every page in SECTIONS
     (opts.accordion ? menuNow() : SECTIONS).forEach(function (s) {
       if (opts.page && s.id === 'about' && !opts.all) return;
@@ -1274,7 +1251,7 @@
   function dropCue(menu) {
     var cue = menu.querySelector('.tol-drop-more');
     if (!cue) {
-      cue = el('button', { type: 'button', class: 'tol-drop-more', tabindex: '-1', 'aria-hidden': 'true' }, T('More below', 'Más abajo') + ' &darr;');
+      cue = el('button', { type: 'button', class: 'tol-drop-more', tabindex: '-1', 'aria-hidden': 'true' }, 'More below' + ' &darr;');
       cue.addEventListener('click', function () { menu.scrollBy({ top: Math.round(menu.clientHeight * 0.7), behavior: 'smooth' }); });
       menu.appendChild(cue);
       menu.addEventListener('scroll', function () { sync(); }, { passive: true });
@@ -1325,7 +1302,7 @@
   }
   // the last few pages opened here, so the time picker and progress line can suggest something new (this browser only; it can be switched off or erased)
   function rememberPage(body) {
-    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*Spread Love.*$/, '');
     if (!t) return;
@@ -1340,12 +1317,12 @@
   function openPanel(sectionId, toSearch, full) {
     lastFocus = document.activeElement;
     var pu = panel.querySelector('[data-pickup="menu"]');
-    if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); if (esPage()) pu.setAttribute('lang', 'en'); });   // its ideas lead to English pages
+    if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); });
     closeDrop();
     panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId, full: !!full }));
     renderPanelFocus();
     // opened from the magnifying glass it says Search; from Menu it says Menu (it is the same panel)
-    var ph = panel.querySelector('.tol-panel-head h2'), pt = toSearch ? T('Search', 'Buscar') : T('Menu', 'Menú');
+    var ph = panel.querySelector('.tol-panel-head h2'), pt = toSearch ? 'Search' : 'Menu';
     if (ph) ph.textContent = pt;
     panel.setAttribute('aria-label', pt);
     if (!toSearch) { var q0 = panel.querySelector('.tol-find input'); if (q0 && q0.value) { q0.value = ''; runSearch(''); } }
@@ -1375,25 +1352,6 @@
     if (lastFocus) lastFocus.focus();
   }
 
-  // A browser set to Spanish gets one quiet line pointing to the Spanish page, once per visit until it's
-  // closed (then never again on this device). Nothing is sent anywhere; the choice is kept in this browser.
-  function spanishHint(bar) {
-    var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
-    if (!/^es\b/i.test(String(langs[0] || '')) || current === '/en-espanol.html' || /^\/(404|offline|pal-cam-tv|garden-backdrop)\.html$/.test(current)) return;
-    // home16b: not on a page that is already in Spanish (a tool opened with ?lang=es, or a Spanish page)
-    if (esPage() || /[?&]lang=es\b/i.test(location.search)) return;
-    if (document.body.classList.contains('is-game') || lsGet('tol-es-hint') === 'no') return;
-    try { if (sessionStorage.getItem('tol-es-hint-seen') === '1') return; sessionStorage.setItem('tol-es-hint-seen', '1'); } catch (e) {}
-    var esHref = document.body.getAttribute('data-es-href') || '/en-espanol.html';
-    if (!/^\/[^\/]/.test(esHref)) esHref = '/en-espanol.html';
-    var line = el('p', { class: 'tol-es-hint tol-plain no-bubble', lang: 'es', role: 'note' },
-      '<span>¿Prefieres español?</span> <a href="' + esc(esHref).replace(/"/g, '&quot;') + '" hreflang="es">Ver la página en español →</a>' +
-      '<button type="button" aria-label="Cerrar: no volver a mostrar">Cerrar</button>');
-    line.querySelector('button').addEventListener('click', function () { lsSet('tol-es-hint', 'no'); line.remove(); });
-    line.querySelector('a').addEventListener('click', function () { lsSet('tol-es-hint', 'no'); });
-    var m = document.querySelector('main');
-    if (m) m.insertBefore(line, m.firstChild); else bar.after(line);
-  }
   // home16b: the free-app line is left out in Quiet mode and with "No surprises" (Read your way), and for 30 days after
   // its × (app-bar.js keeps the date in localStorage 'tol-appbar-off'); site.css hides it if either is turned on later
   // home16b: the "Pillars on this page" box (pillars.js) filled a phone screen above games and guides. It now waits at the
@@ -1401,7 +1359,7 @@
   function foldPillars() {
     var nav = document.querySelector('nav.tol-pillars'), main = document.querySelector('main');
     if (!nav || !main || nav.closest('.tol-pillars-fold')) return;
-    var det = el('details', { class: 'tol-pillars-fold no-bubble no-cheer no-dive' }, '<summary>' + T('How this fits: the site’s framework', 'Cómo encaja: el marco del sitio') + '</summary>');
+    var det = el('details', { class: 'tol-pillars-fold no-bubble no-cheer no-dive' }, '<summary>' + 'How this fits: the site’s framework' + '</summary>');
     det.appendChild(nav);
     main.appendChild(det);
   }
@@ -1445,7 +1403,7 @@
     var pt = parseFloat(cs.paddingTop) || 0, pr = parseFloat(cs.paddingRight) || 0,
         pb = parseFloat(cs.paddingBottom) || 0, pl = parseFloat(cs.paddingLeft) || 0;
 
-    var skip = el('a', { class: 'tol-skip', href: '#tol-main' }, T('Skip to content', 'Ir al contenido'));
+    var skip = el('a', { class: 'tol-skip', href: '#tol-main' }, 'Skip to content');
     if (workMode()) document.documentElement.classList.add('tol-work');
     // the "At work" page is plain itself, but that isn't choosing work mode: Calm & play stays in the menu,
     // and the pages it links to keep their usual look. Work mode (?work=1, or "Keep it on") hides them.
@@ -1454,24 +1412,20 @@
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
-    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html', 'aria-label': T('Spread Love & Acceptance: home', 'Spread Love & Acceptance: inicio') },
+    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html', 'aria-label': 'Spread Love & Acceptance: home' },
       '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>Spread Love &amp; Acceptance</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
-    if (esPage()) nav.setAttribute('lang', 'en');   // the section names stay English (they lead to English pages)
     // on a smaller laptop the less-used sections fold into Menu one by one, before all of them do
     var FOLD = { read: 1, play: 2, workpapers: 3, topics: 3, rel: 4 };
-    // the Spanish page, in its own words, at the top level (it steps aside first if the bar gets crowded)
-    var esLink = el('a', { class: 'tol-es-link', href: '/en-espanol.html', lang: 'es', hreflang: 'es' }, 'En español');
     // the book, one tap from every page: on a laptop the less-used sections fold into Menu before it goes
-    var bookLink = el('a', { class: 'tol-es-link tol-book-link', href: '/book/index.html' }, T('Read the book', 'Leer el libro'));
-    if (esPage()) bookLink.setAttribute('lang', 'es');
+    var bookLink = el('a', { class: 'tol-es-link tol-book-link', href: '/book/index.html' }, 'Read the book');
+
     nav.appendChild(bookLink);
     // design17 (flow17's ask): "Relax and reset" one tap from every page on a laptop; it steps aside before the book does
-    var relaxLink = el('a', { class: 'tol-es-link tol-relax-link', href: '/relax.html' }, T('Relax and reset', 'Relajarte'));
+    var relaxLink = el('a', { class: 'tol-es-link tol-relax-link', href: '/relax.html' }, 'Relax and reset');
     if (current === '/pause-and-play.html' || current === '/relax.html') relaxLink.setAttribute('aria-current', 'page');
     nav.appendChild(relaxLink);
-    nav.appendChild(esLink);
     // the section buttons (built again when Focus mode changes)
     ribbonHook = function () {
       closeDrop();
@@ -1486,63 +1440,46 @@
     bar.appendChild(quietButton('bar'));
     bar.appendChild(settingsButton('tol-bar-set'));
     var find = el('button', { type: 'button', class: 'tol-search-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' },
-      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>' + T('Search', 'Buscar') + '</span>');
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>' + 'Search' + '</span>');
     find.addEventListener('click', function () { openPanel(null, true); });
     // home16b: when the helpers are tucked away (Quiet mode, No surprises, Hide the helpers), Professor Puddles' floating
     // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
-    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'), 'aria-label': T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask<span class="tol-ask-more"> Puddles</span>', 'Pregunta')));
+    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: 'Ask Professor Puddles', 'aria-label': 'Ask Professor Puddles' }, 'Ask<span class="tol-ask-more"> Puddles</span>'));
     bar.appendChild(find);
     // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)
     if (isApp()) loadScript('/assets/js/app-bar.js').catch(function () {});
-    var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, T('Menu', 'Menú'));
+    var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Menu');
     mob.addEventListener('click', function () { openPanel(null); });
     bar.appendChild(mob);
     memberLink = joinLink('tol-member');
     bar.appendChild(memberLink);
-    // home16b: a tool that turns Spanish after the page opened (the shared quick look sets lang="es" on its own parts):
-    // the bar's own words follow (Quiet, Settings, Search, Menu)
-    if (!esPage() && 'MutationObserver' in window) {
-      var esDone = false, esMain = document.querySelector('main');
-      var esCheck = function () {
-        if (esDone || !esMain || !esMain.querySelector('.read-head[lang="es"], #quick[lang="es"], [data-ls-lang="es"]')) return;
-        esDone = true; esMo.disconnect();
-        var q = bar.querySelector('.tol-quiet-name'); if (q) q.textContent = 'Tranquilo';
-        var sn = bar.querySelector('.tol-set-name'); if (sn) sn.textContent = 'Ajustes';
-        var fs = find.querySelector('span'); if (fs) fs.textContent = 'Buscar';
-        mob.textContent = 'Menú';
-        var ak = bar.querySelector('.tol-ask-link'); if (ak) ak.textContent = 'Pregunta';
-      };
-      var esMo = new MutationObserver(esCheck);
-      if (esMain) esMo.observe(esMain, { subtree: true, attributes: true, attributeFilter: ['lang', 'data-ls-lang'] });
-      esCheck();
-    }
 
     scrim = el('div', { class: 'tol-scrim', hidden: '' });
     scrim.addEventListener('click', closePanel);
-    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': T('Menu', 'Menú'), hidden: '' });
+    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Menu', hidden: '' });
     var head = el('div', { class: 'tol-panel-head' });
-    head.appendChild(el('h2', null, T('Menu', 'Menú')));
-    var close = el('button', { type: 'button', class: 'tol-close' }, T('Close', 'Cerrar'));
+    head.appendChild(el('h2', null, 'Menu'));
+    var close = el('button', { type: 'button', class: 'tol-close' }, 'Close');
     close.addEventListener('click', closePanel);
     head.appendChild(close);
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     // the most used tool, one tap away, right under search (the Chat analyzer: one message or a whole chat)
-    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + T('Chat analyzer', 'Analizar una conversación') + '</a>'));
+    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + 'Chat analyzer' + '</a>'));
     // the whole site at a glance, one tap each: the directories first, then what most people come for
     // (the sections below hold everything else)
-    panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': T('The whole site at a glance', 'Todo el sitio de un vistazo') },
-      '<p class="tol-panel-quick-h">' + T('The whole site at a glance', 'Todo el sitio de un vistazo') + '</p><ul>' +
-      [['/explore.html', '&#129517;', T('Everything on this site', 'Todo el sitio (en inglés)')],
-       ['/tools.html', '&#129520;', T('All tools', 'Todas las herramientas')],
-       ['/by-relationship.html', '&#128101;', T('Guides by relationship', 'Guías por relación')],
-       ['/book/index.html', '&#128214;', T('Read the book', 'Leer el libro')],
-       ['/ladder.html', '&#127807;', T('Calm down now', 'Calmarte ahora')],
-       ['/relax.html', '&#127769;', T('Relax and reset', 'Relajarte (en inglés)')],
-       ['/teens.html', '&#127890;', T('For teens', 'Para adolescentes (en inglés)')],
-       ['/ask.html', '&#128167;', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles')],
-       ['/calming-supplements.html', '&#127793;', T('Calming herbs and supplements', 'Hierbas y suplementos')],
-       ['/start-here.html#three-questions', '&#10067;', T('Not sure? Three questions', 'No sé por dónde empezar')]
+    panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': 'The whole site at a glance' },
+      '<p class="tol-panel-quick-h">' + 'The whole site at a glance' + '</p><ul>' +
+      [['/explore.html', '&#129517;', 'Everything on this site'],
+       ['/tools.html', '&#129520;', 'All tools'],
+       ['/by-relationship.html', '&#128101;', 'Guides by relationship'],
+       ['/book/index.html', '&#128214;', 'Read the book'],
+       ['/ladder.html', '&#127807;', 'Calm down now'],
+       ['/relax.html', '&#127769;', 'Relax and reset'],
+       ['/teens.html', '&#127890;', 'For teens'],
+       ['/ask.html', '&#128167;', 'Ask Professor Puddles'],
+       ['/calming-supplements.html', '&#127793;', 'Calming herbs and supplements'],
+       ['/start-here.html#three-questions', '&#10067;', 'Not sure? Three questions']
       ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === '/ladder.html' ? ' data-panel-breathe' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
     // home16b: "Calm down now" opens the one-minute Breathe break right here first (the 4-tap check is one tap on, in Topics)
     panel.addEventListener('click', function (e) {
@@ -1550,7 +1487,6 @@
       if (!a || !b || e.ctrlKey || e.metaKey || e.shiftKey) return;
       e.preventDefault(); closePanel(); b.click();
     });
-    panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
     panel.appendChild(buildIndex({ accordion: true }));
     panel.appendChild(el('div', { class: 'tol-panel-focus' }));
     // after the sections: where you left off, then settings in one button (Quiet mode, dark mode and the rest live there)
@@ -1618,7 +1554,7 @@
     if (qMain && !body.classList.contains('is-game')) {
       var qx = el('p', { class: 'tol-quiet-extras no-bubble' }, '<button type="button" aria-pressed="false"></button>');
       var qb = qx.querySelector('button');
-      var qSync = function () { var on = ssGet('tol-quiet-extras') === '1'; qb.setAttribute('aria-pressed', String(on)); qb.textContent = on ? T('Hide the extras again', 'Ocultar los extras') : T('Quiet mode: extras are tucked away. Show extras', 'Modo tranquilo: los extras están ocultos. Mostrar extras'); };
+      var qSync = function () { var on = ssGet('tol-quiet-extras') === '1'; qb.setAttribute('aria-pressed', String(on)); qb.textContent = on ? 'Hide the extras again' : 'Quiet mode: extras are tucked away. Show extras'; };
       qb.addEventListener('click', function () { ssSet('tol-quiet-extras', ssGet('tol-quiet-extras') === '1' ? '' : '1'); applyReading(); qSync(); });
       qSync();
       var qHead = qMain.querySelector('.read-head');
@@ -1630,7 +1566,7 @@
     loadScript('/assets/js/share-kit.js').catch(function () {}); // more places, QR, save as image, share this line
     // Kip stays away from careful reading: not with Easy reading, larger text, a still page, hidden helpers or on the working pages
     var kipOk = !helpersHidden() && !WORKSPACE.test(current) && !/\btol-(easy|still|text-(lg|xl|xxl))\b/.test(document.documentElement.className);
-    if (kipOk && !esPage() && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
+    if (kipOk && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
     revealOnScroll();
 
     // The Night Garden, softly alive behind every page, under a see-through veil.
@@ -1656,7 +1592,7 @@
       if (body.hasAttribute('data-garden-nopals')) sceneQ += (sceneQ ? '&' : '?') + 'pals=off'; // the page has its own pals running about
       // home16b: the scenery stays, but the animals running about in it only where play is the point (home, play pages)
       else if (!ambientOk()) sceneQ += (sceneQ ? '&' : '?') + 'pals=off';
-      var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: T('The Night Garden, softly in the background', 'El Jardín de noche, suave, de fondo'), 'aria-hidden': 'true', tabindex: '-1' });
+      var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
       var veil = el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' });
       body.insertBefore(veil, body.firstChild);
       body.insertBefore(gf, body.firstChild);
@@ -1735,7 +1671,7 @@
     // workpaper and program pages, just above the end of the reading
     var fpMain = document.querySelector('main.read');
     if (fpMain && hereSection && !body.hasAttribute('data-no-fullpath') && /^(self|relationships|workpapers|program|book)$/.test(hereSection.id) && !/^\/(full-path|self-path)\.html$|^\/workpapers\/fill\//.test(current) &&
-        !WORKSPACE.test(current) && !/^\/(teens|sharing-a-room|gaming-and-time-together|en-espanol|friends|grief|coming-out|check-ins|foster-and-kinship|family-rifts|co-parenting|on-my-own)\.html$/.test(current) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+        !WORKSPACE.test(current) && !/^\/(teens|sharing-a-room|gaming-and-time-together|friends|grief|coming-out|check-ins|foster-and-kinship|family-rifts|co-parenting|on-my-own)\.html$/.test(current) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var solo = hereSection.id === 'self';
       var fpBox = el('aside', { class: 'tol-fp-note', 'aria-label': 'The full path package' },
         '<p class="tol-fp-k">Put it all together</p>' +
@@ -1759,7 +1695,7 @@
 
     // "Something to read": one hand-picked article that fits this reading page, near the end (reading-suggest.js)
     var readMain = document.querySelector('main.read');
-    if (readMain && !body.hasAttribute('data-no-reading') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline|safety|groups|frequency-buddies[a-z0-9-]*|pal-cam-tv|frequency-journey(-play)?|bears-dojo|pause-and-play)\.html$|^\/legal\//.test(current)) {   // kids' pages and the safety page get no grown-up articles
+    if (readMain && !body.hasAttribute('data-no-reading') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline|groups|frequency-buddies[a-z0-9-]*|pal-cam-tv|frequency-journey(-play)?|bears-dojo|pause-and-play)\.html$|^\/legal\//.test(current)) {   // kids' pages and the safety page get no grown-up articles
       var rl = document.createElement('script'); rl.src = '/assets/js/reading-list.js';
       rl.onload = function () {
         var rs = document.createElement('script'); rs.src = '/assets/js/reading-suggest.js';
@@ -1812,7 +1748,7 @@
     // Not in the installed app, not on the install page, not inside a frame, and not after its × this visit.
     var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
     if (!isApp() && current !== '/install.html' && !inFrame && ssGet('tol-appbar-off') !== '1' && !appBarSkip()) {
-      var appBar = el('aside', { class: 'tol-appbar no-bubble', 'aria-label': T('The free app', 'La app gratis') });
+      var appBar = el('aside', { class: 'tol-appbar no-bubble', 'aria-label': 'The free app' });
       // set through the DOM, not a style="" attribute, so pages with a strict Content-Security-Policy accept it too
       appBar.style.height = '36px'; appBar.style.margin = (-pt) + 'px ' + (-pr) + 'px 0 ' + (-pl) + 'px';
       body.insertBefore(appBar, body.firstChild);
@@ -1831,12 +1767,6 @@
         '<a href="' + location.pathname + '?work=0">Turn it off</a>');
       var wm = document.querySelector('main');
       if (wm) wm.insertBefore(wk, wm.firstChild); else bar.after(wk);
-    }
-    spanishHint(bar);
-    // home16b: the Spanish page has an easy way back to English (and forgets the Spanish choice)
-    if (current === '/en-espanol.html') {
-      var em = document.querySelector('main'), en = el('p', { class: 'tol-en-switch tol-plain no-bubble' }, '<a href="/index.html?lang=en" hreflang="en" lang="en">English</a>');
-      if (em) em.insertBefore(en, em.firstChild);
     }
     applyFocus(); renderFocusPill();
     if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
@@ -1864,11 +1794,9 @@
       }
       // is-snug: Search folds into Menu (the menu panel opens with its own search box), so Settings keeps its word
       // is-tightest (only on the very smallest screens at the biggest text): Settings shows just its picture
-      var es = bar.querySelector('.tol-es-link:not(.tol-book-link):not(.tol-relax-link)');
       var bk = bar.querySelector('.tol-book-link'), rx = bar.querySelector('.tol-relax-link');
       if (bk) bk.hidden = false;
       if (rx) rx.hidden = false;
-      if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
       // then "Read & learn" and "Calm & play" fold into Menu to make room for "Relax and reset" (the calm corner, one tap
       // away); only if that isn't enough does Relax step aside
       var tight = function () { return bar.scrollWidth > bar.clientWidth || crowded(); };   // not even 1px over the edge
@@ -1887,7 +1815,7 @@
         bar.classList.add(c);
         if (c === 'is-shortname' && name) name.textContent = 'Spread Love';
       });
-      if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', T('Menu and search', 'Menú y búsqueda')); else mob.removeAttribute('aria-label');
+      if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', 'Menu and search'); else mob.removeAttribute('aria-label');
     }
     // where the bar's bottom edge is on screen right now: the free-app line above it scrolls away, so at the very top the
     // bar sits 36px lower. Fixed toasts and the listen bar use this (--tol-bar-bottom) so they never cover the bar.
@@ -1924,14 +1852,14 @@
       var idx = list.indexOf(here);
       var prev = list[idx - 1], next = list[idx + 1];
       if (prev || next) {
-        var pager = el('div', { class: 'tol-pager', role: 'navigation', 'aria-label': T('Previous and next', 'Anterior y siguiente') });
+        var pager = el('div', { class: 'tol-pager', role: 'navigation', 'aria-label': 'Previous and next' });
         if (pl || pr) { pager.style.marginLeft = (-pl) + 'px'; pager.style.marginRight = (-pr) + 'px'; pager.style.maxWidth = 'none'; }
         // Reading in depth? Stay in depth where the next page has a full version too.
         var pagerHref = function (it) { return inDepth && it.deep ? deepHref(it) : it.href; };
         if (prev) pager.appendChild(el('a', { href: pagerHref(prev), class: 'is-prev' },
-          '<span class="tol-pager-dir">' + T('Previous', 'Anterior') + '</span><span class="tol-pager-title">' + esc(label(prev)) + '</span>'));
+          '<span class="tol-pager-dir">' + 'Previous' + '</span><span class="tol-pager-title">' + esc(label(prev)) + '</span>'));
         if (next) pager.appendChild(el('a', { href: pagerHref(next), class: 'is-next' },
-          '<span class="tol-pager-dir">' + T('Next', 'Siguiente') + '</span><span class="tol-pager-title">' + esc(label(next)) + '</span>'));
+          '<span class="tol-pager-dir">' + 'Next' + '</span><span class="tol-pager-title">' + esc(label(next)) + '</span>'));
         body.insertBefore(pager, scrim);
       }
     }
@@ -1942,35 +1870,34 @@
     var foot = el('div', { class: 'tol-foot', role: 'contentinfo' });
     foot.style.margin = '2rem ' + (-pr) + 'px ' + (-pb) + 'px ' + (-pl) + 'px';
     // The privacy promise, on every page except the dashboard (which saves entries by design)
-    // (on a Spanish page the footer is in Spanish too; its links lead to English pages, so they carry hreflang="en")
-    var es = esPage(), hl = es ? ' hreflang="en"' : '';
+    var hl = '';
     var promise = current === '/dashboard.html' ? '' :
-      '<p class="tol-promise">' + T('What you type into the tools and worksheets stays on your device. It is never collected or sent to us.', 'Lo que escribes en las herramientas y las hojas de trabajo se queda en tu dispositivo. Nunca se recoge ni se nos envía.') + ' <a href="/legal/privacy-policy.html#your-entries"' + hl + '>' + T('How we handle your information', 'Cómo cuidamos tu información (en inglés)') + '</a></p>';
+      '<p class="tol-promise">' + 'What you type into the tools and worksheets stays on your device. It is never collected or sent to us.' + ' <a href="/legal/privacy-policy.html#your-entries"' + hl + '>' + 'How we handle your information' + '</a></p>';
     foot.innerHTML = promise +
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
- (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">' + T('Every part of this program grows from the same few roots, seen across thirteen fields.', 'Todo este programa crece de unas pocas raíces, que se repiten en trece campos de estudio.') + ' <a href="/polymath.html"' + hl + '>' + T('The polymath way', 'Cómo se unen esos campos (en inglés)') + ' &rarr;</a></p>') +
-      '<nav class="tol-foot-guides" aria-label="' + T('Guides', 'Guías en inglés') + '">' +
+ (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">' + 'Every part of this program grows from the same few roots, seen across thirteen fields.' + ' <a href="/polymath.html"' + hl + '>' + 'The polymath way' + ' &rarr;</a></p>') +
+      '<nav class="tol-foot-guides" aria-label="' + 'Guides' + '">' +
         (es ? '<span class="tol-foot-guides-k">Guías en inglés:</span>' : '') +
-        '<a href="/invisible-labor-mental-load.html"' + hl + '>' + T('The mental load', 'La carga mental') + '</a>' +
-        '<a href="/chore-chart-for-couples.html"' + hl + '>' + T('Fair chore chart', 'Repartir las tareas de la casa') + '</a>' +
-        '<a href="/how-to-stop-fighting-with-your-partner.html"' + hl + '>' + T('How to stop fighting', 'Cómo dejar de pelear') + '</a>' +
-        '<a href="/neurodivergent-relationships.html"' + hl + '>' + T('Neurodivergent relationships', 'Parejas neurodivergentes') + '</a>' +
-        '<a href="/communication-style-quiz.html"' + hl + '>' + T('Communication style quiz', 'Tu estilo para comunicarte') + '</a>' +
-        '<a href="/frequency-buddies.html" data-work-hide' + hl + '>' + T('Cartoon for all ages', 'Dibujos animados para todas las edades') + '</a>' +
+        '<a href="/invisible-labor-mental-load.html"' + hl + '>' + 'The mental load' + '</a>' +
+        '<a href="/chore-chart-for-couples.html"' + hl + '>' + 'Fair chore chart' + '</a>' +
+        '<a href="/how-to-stop-fighting-with-your-partner.html"' + hl + '>' + 'How to stop fighting' + '</a>' +
+        '<a href="/neurodivergent-relationships.html"' + hl + '>' + 'Neurodivergent relationships' + '</a>' +
+        '<a href="/communication-style-quiz.html"' + hl + '>' + 'Communication style quiz' + '</a>' +
+        '<a href="/frequency-buddies.html" data-work-hide' + hl + '>' + 'Cartoon for all ages' + '</a>' +
       '</nav>' +
       (es ? '<p class="tol-foot-es-note">Estos enlaces llevan a páginas en inglés:</p>' : '') +
       '<span class="tol-foot-links">' +
-        '<a href="/explore.html"' + hl + '>' + T('Everything on this site', 'Todo el sitio') + '</a>' +
-        '<a href="/contents.html"' + hl + '>' + T('All pages', 'Todas las páginas') + '</a>' +
-        '<a href="/for-teachers.html"' + hl + '>' + T('For teachers', 'Para maestros') + '</a>' +
-        '<a href="/for-counselors.html"' + hl + '>' + T('For counsellors and coaches', 'Para terapeutas y coaches') + '</a>' +
-        '<a href="/membership.html"' + hl + '>' + (CONFIG.openAll ? T('Email updates', 'Novedades por correo') : 'Membership') + '</a>' +
-        '<a href="/roadmap.html"' + hl + '>' + T('Roadmap', 'Lo que viene') + '</a>' +
-        '<a href="/legal/privacy-policy.html"' + hl + '>' + T('Privacy', 'Privacidad') + '</a>' +
-        '<a href="/on-this-device.html"' + hl + '>' + T('Stored on this device', 'Lo que se guarda en este dispositivo') + '</a>' +
-        '<a href="/legal/terms-of-service.html"' + hl + '>' + T('Terms', 'Términos') + '</a>' +
-        '<a href="mailto:' + CONFIG.supportEmail + '">' + T('Contact', 'Contacto') + '</a>' +
-        (isApp() ? '' : '<button type="button" class="tol-install-link">' + T('Add to your home screen', 'Añadir a tu pantalla de inicio') + '</button>') +
+        '<a href="/explore.html"' + hl + '>' + 'Everything on this site' + '</a>' +
+        '<a href="/contents.html"' + hl + '>' + 'All pages' + '</a>' +
+        '<a href="/for-teachers.html"' + hl + '>' + 'For teachers' + '</a>' +
+        '<a href="/for-counselors.html"' + hl + '>' + 'For counsellors and coaches' + '</a>' +
+        '<a href="/membership.html"' + hl + '>' + (CONFIG.openAll ? 'Email updates' : 'Membership') + '</a>' +
+        '<a href="/roadmap.html"' + hl + '>' + 'Roadmap' + '</a>' +
+        '<a href="/legal/privacy-policy.html"' + hl + '>' + 'Privacy' + '</a>' +
+        '<a href="/on-this-device.html"' + hl + '>' + 'Stored on this device' + '</a>' +
+        '<a href="/legal/terms-of-service.html"' + hl + '>' + 'Terms' + '</a>' +
+        '<a href="mailto:' + CONFIG.supportEmail + '">' + 'Contact' + '</a>' +
+        (isApp() ? '' : '<button type="button" class="tol-install-link">' + 'Add to your home screen' + '</button>') +
       '</span>';
     foot.querySelector('.tol-foot-links').appendChild(quietButton('switch'));
     foot.querySelector('.tol-foot-links').appendChild(stillButton());
@@ -2073,7 +2000,7 @@
     autism: ['/wired-differently.html', '/wavelength.html', '/wiring-card.html', '/know-yourself.html'], autistic: 'autism', adhd: 'autism', neurodivergent: 'autism', wiring: 'autism', sensory: 'autism',
     personality: ['/wavelength.html', '/know-yourself.html'], quiz: 'personality', archetype: 'personality', wavelength: 'personality', heartprint: 'personality', neurotype: 'personality', audhd: 'autism',
     dyslexia: ['#settings', '/wired-differently.html'], listen: ['#settings'], aloud: ['#settings'], read: null, larger: ['#settings'], size: ['#settings'], bigger: ['#settings'], font: ['#settings'], quiet: ['#settings'], dark: ['#settings'], settings: ['#settings'], contrast: ['#settings'], lowvision: ['#settings'],
-    safe: ['/outside-help.html', '/on-this-device.html', '/upset-right-now.html'], safety: 'safe', unsafe: 'safe', abuse: 'safe', abused: 'safe', abusive: 'safe', abuser: 'safe', violence: 'safe', violent: 'safe',
+    safe: ['/on-this-device.html', '/upset-right-now.html'], safety: 'safe', unsafe: 'safe', abuse: 'safe', abused: 'safe', abusive: 'safe', abuser: 'safe', violence: 'safe', violent: 'safe',
     danger: 'safe', dangerous: 'safe', scared: 'safe', afraid: 'safe', threat: 'safe', threatened: 'safe', threatens: 'safe', controlling: 'safe', coercive: 'safe', hide: 'safe', escape: 'safe', dv: 'safe', hurts: 'safe', hit: 'safe', hits: 'safe', stalking: 'safe',
     boundaries: ['/book/self-2-now-in-depth.html', '/self-path.html', '/workpapers/wp-01.html', '/library/connection.html'], boundary: 'boundaries', overgiving: 'boundaries', 'over-giving': 'boundaries', giving: 'boundaries', control: 'boundaries', pleaser: 'boundaries', pleasing: 'boundaries', energy: 'boundaries', resentment: 'boundaries',
     kids: ['/parents.html', '/frequency-buddies.html', '/library/life.html', '/growing-up.html'], kid: 'kids', child: 'kids', children: 'kids', parenting: 'kids', siblings: 'kids', sibling: 'kids', brothers: 'kids', sisters: 'kids', tantrum: 'kids', tantrums: 'kids',
@@ -2085,8 +2012,7 @@
     yelling: ['/parents.html', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', screaming: 'yelling',
     dementia: ['/caregivers.html', '/library/stress.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], alzheimers: 'dementia', alzheimer: 'dementia', respite: 'dementia', carer: 'dementia', carers: 'dementia', caregiver: 'dementia', caregivers: 'dementia', caregiving: 'dementia',
     pronouns: ['/teens.html', '/coming-out.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
-    harassment: ['/outside-help.html', '/co-parenting.html'], harassing: 'harassment', harass: 'harassment', cutting: ['/teens.html', '/outside-help.html'], selfharm: 'cutting',
-    espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol',
+    harassment: ['/co-parenting.html'], harassing: 'harassment', harass: 'harassment', cutting: ['/teens.html'], selfharm: 'cutting',
     flat: ['/complacency.html', '/turning-toward.html', '/recheck-drive.html'], routine: 'flat',
     stepmom: ['/stepfamily.html', '/stepfamily-in-depth.html#stepparent', '/parents.html#stepfamilies', '/co-parenting.html'], halfsibling: 'stepmom', halfsiblings: 'stepmom', stepsibling: 'stepmom', stepsiblings: 'stepmom', stepgrandparent: 'stepmom', 'step-grandparent': 'stepmom', bonusmom: 'stepmom', bonusdad: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom', stepkids: 'stepmom', stepchild: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', stepmother: 'stepmom', stepdad: 'stepmom', stepfather: 'stepmom', stepparent: 'stepmom', stepparents: 'stepmom', stepkids: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom',
     lonely: ['/library/connection.html', '/grief.html', '/turning-toward.html'], loneliness: 'lonely', alone: 'lonely', isolated: 'lonely',
@@ -2100,7 +2026,7 @@
     eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare', dementia: 'eldercare', alzheimers: 'eldercare', dad: ['/caregivers.html', '/parents.html', '/teens.html'], mum: 'dad', mom: 'dad', father: 'dad', mother: 'dad',
     rentlate: ['/share-the-load.html#roommates', '/lemonade-stand.html'], housemates: 'rentlate', flatmates: 'rentlate', housemate: 'rentlate', flatmate: 'rentlate',
     ndcouple: ['/neurodivergent-relationships.html', '/wiring-card.html', '/wavelength.html'],
-    controlsafe: ['/outside-help.html', '/ask.html'], punched: 'controlsafe', threw: 'controlsafe', smashed: 'controlsafe', datenight: ['/turning-toward.html', '/recheck-drive.html', '/check-ins.html'], controlling: 'controlsafe', coercive: 'controlsafe', template: 'workpapersuite', templates: 'workpapersuite', handover: ['/work.html', '/workpapers/wp-03-one-owner-per-job.html'], handovers: 'handover',
+    controlsafe: ['/ask.html'], punched: 'controlsafe', threw: 'controlsafe', smashed: 'controlsafe', datenight: ['/turning-toward.html', '/recheck-drive.html', '/check-ins.html'], controlling: 'controlsafe', coercive: 'controlsafe', template: 'workpapersuite', templates: 'workpapersuite', handover: ['/work.html', '/workpapers/wp-03-one-owner-per-job.html'], handovers: 'handover',
     longdistance: ['/long-distance.html', '/turning-toward.html', '/check-ins.html'], calling: ['/long-distance.html#rhythm', '/long-distance.html', '/turning-toward.html'], calls: 'calling', phonecalls: 'calling', reachout: 'calling', ldr: 'longdistance', timezone: 'longdistance', timezones: 'longdistance', apart: 'longdistance',
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
@@ -2173,7 +2099,7 @@
     ['print this|print the page|print this page|printable|printing', 'print']
   ].forEach(function (r) { r[0].split('|').forEach(function (k) { JOIN[k] = r[1]; }); });
   var ACT_MORE = {
-    supplement: ['/calming-supplements.html', '/outside-help.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
+    supplement: ['/calming-supplements.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', nintendo: 'gaming', fortnite: 'gaming', minecraft: 'gaming', esports: 'gaming', screentime: 'gaming', tiktok: 'gaming', scrolling: 'gaming', doomscrolling: 'gaming',
     coparenting: ['/co-parenting.html', '/on-my-own.html', '/parents.html#stepfamilies'], 'co-parenting': 'coparenting', 'co-parent': 'coparenting', 'co-parents': 'coparenting', coparent: 'coparenting', coparents: 'coparenting', custody: 'coparenting', handoff: 'coparenting', handoffs: 'coparenting', 'ex-husband': 'exbreak', 'ex-wife': 'exbreak', 'ex-partner': 'exbreak', ex: 'exbreak', exes: 'exbreak',
     exbreak: ['/after-a-breakup.html', '/on-my-own.html', '/co-parenting.html'], holidayschedule: 'coparenting', separated: 'coparenting', separation: 'coparenting',
@@ -2190,8 +2116,8 @@
     grownkids: ['/grown-up-children.html', '/family-obligations.html#visits', '/grandparents.html'], oversteps: 'grownkids', overstep: 'grownkids', overstepping: 'grownkids', unannounced: 'grownkids', meddling: 'grownkids', interfering: 'grownkids',
     moneytogether: ['/money-together.html', '/lemonade-stand.html', '/family-obligations.html'], saver: 'moneytogether', savers: 'moneytogether', spender: 'moneytogether', spenders: 'moneytogether', spending: 'moneytogether', wedding: 'moneytogether', weddings: 'moneytogether', prenup: 'moneytogether', prenuptial: 'moneytogether', budget: 'moneytogether', budgeting: 'moneytogether', debt: 'moneytogether', debts: 'moneytogether', fiance: 'moneytogether', fiancee: 'moneytogether', engaged: 'moneytogether', engagement: 'moneytogether', money: ['/money-together.html', '/lemonade-stand.html', '/family-obligations.html'],
     comingout: ['/coming-out.html', '/teens.html'], gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', bi: 'comingout', queer: 'comingout', lgbt: 'comingout', lgbtq: 'comingout', 'lgbtq+': 'comingout', lgbtqia: 'comingout', homosexual: 'comingout', sexuality: 'comingout', closeted: 'comingout', closet: 'comingout',
-    counselors: ['/outside-help.html', '/for-counselors.html', '/groups.html', '/check-ins.html'],
-    outsidehelp: ['/outside-help.html'], weekzero: ['/week-0.html', '/prog-01.html'],
+    counselors: ['/for-counselors.html', '/groups.html', '/check-ins.html'],
+    weekzero: ['/week-0.html', '/prog-01.html'],
     examples: ['/examples.html', '/by-relationship.html'], example: 'examples',
     research: ['/research.html'], studies: 'research', study: 'research', evidence: 'research', science: 'research', therapist: 'counselors', therapists: 'counselors', counsellor: 'counselors', counselor: 'counselors', counsellors: 'counselors', client: 'counselors', clients: 'counselors', professional: 'counselors', professionals: 'counselors', practitioner: 'counselors', practitioners: 'counselors', coach: 'counselors', coaches: 'counselors', therapy: 'counselors', counselling: 'counselors', counseling: 'counselors', psychologist: 'counselors', 'social-worker': 'counselors',
     sharedroom: ['/sharing-a-room.html', '/share-the-load.html#roommates', '/upset-right-now.html'], dorm: 'sharedroom', dorms: 'sharedroom', halls: 'sharedroom', dormitory: 'sharedroom', college: 'sharedroom', university: 'sharedroom', uni: 'sharedroom', campus: 'sharedroom', freshman: 'sharedroom', ra: 'sharedroom', bunk: 'sharedroom',
@@ -2199,18 +2125,14 @@
     bizpartner: ['/work.html#business-partners', '/work.html#owner-list', '/work.html'], cofounder: 'bizpartner', cofounders: 'bizpartner', 'co-founder': 'bizpartner', 'co-founders': 'bizpartner', 'co-owner': 'bizpartner', 'co-owners': 'bizpartner', coowner: 'bizpartner', business: 'bizpartner', startup: 'bizpartner', bakery: 'bizpartner', shop: 'bizpartner',
     ndwork: ['/work.html#autistic-at-work', '/work.html#neurodiversity', '/wiring-card.html', '/work.html'], rude: ['/work.html', '/wiring-card.html', '/signal-translator.html', '/wired-differently.html'], blunt: 'rude', abrupt: 'rude', curt: 'rude',
     toddler: ['/new-parent.html', '/parents.html', '/share-the-load.html'], toddlers: 'toddler', twins: 'toddler', twin: 'toddler', triplets: 'toddler', preschooler: 'toddler', baby: ['/new-parent.html', '/share-the-load.html', '/chore-chart-for-couples.html', '/invisible-labor-mental-load.html'], newborn: 'baby', infant: 'baby', postpartum: 'baby', newparent: 'baby', sleepless: 'baby',
-    espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol', ayuda: 'espanol', pareja: 'espanol', esposa: 'espanol', esposo: 'espanol', marido: 'espanol', cuidador: 'espanol', cuidadora: 'espanol', cuidadores: 'espanol', cuidar: 'espanol', gemelos: 'espanol', gemelas: 'espanol', hijos: 'espanol', hijo: 'espanol', hija: 'espanol', hijas: 'espanol', ninos: 'espanol', nino: 'espanol', bebe: 'espanol', pelea: 'espanol', peleas: 'espanol', pelean: 'espanol', peleamos: 'espanol', enojado: 'espanol', enojada: 'espanol', enojo: 'espanol', miedo: 'espanol', familia: 'espanol', divorcio: 'espanol', separados: 'espanol', suegra: 'espanol', suegro: 'espanol', abuela: 'espanol', abuelo: 'espanol', abuelos: 'espanol', trabajo: 'espanol', dinero: 'espanol', tareas: 'espanol', quehaceres: 'espanol', casa: 'espanol', ayudame: 'espanol', necesito: 'espanol', violencia: 'espanol', seguridad: 'espanol', calma: 'espanol', tranquilo: 'espanol', cansado: 'espanol', cansada: 'espanol', madre: 'espanol', padre: 'espanol', novio: 'espanol', novia: 'espanol', amor: 'espanol', relacion: 'espanol', matrimonio: 'espanol', discutir: 'espanol', gritar: 'espanol', grita: 'espanol', gritos: 'espanol', castellano: 'espanol', latino: 'espanol', latina: 'espanol',
-    // integ16 (pages16): the Spanish sections for siblings who don't help, and stepfamilies
-    hermanos: ['/en-espanol.html#hermanos', '/workpapers/fill/wp-03.html?for=care&lang=es', '/en-espanol.html'], hermano: 'hermanos', hermana: 'hermanos', hermanas: 'hermanos',
-    ensamblada: ['/en-espanol.html#ensamblada', '/stepfamily.html'], ensambladas: 'ensamblada', reconstituida: 'ensamblada', padrastro: 'ensamblada', madrastra: 'ensamblada', hijastro: 'ensamblada', hijastros: 'ensamblada', hijastra: 'ensamblada', hijastras: 'ensamblada',
     angerhelp: ['/parents.html#anger-help', '/upset-right-now.html', '/parents.html', '/wp-11.html'], temper: 'angerhelp',
     whenill: ['/when-one-is-ill.html', '/caregivers.html', '/share-the-load.html'], chronic: 'whenill', illness: 'whenill', ill: 'whenill', disability: 'whenill', disabled: 'whenill', disabilities: 'whenill', cfs: 'whenill', fibromyalgia: 'whenill', fibro: 'whenill', spoons: 'whenill', spoonie: 'whenill', burden: 'whenill', mecfs: 'whenill', lupus: 'whenill', 'ms': 'whenill', arthritis: 'whenill', cancer: 'whenill', chemo: 'whenill',
     caregiving: ['/caregivers.html', '/when-one-is-ill.html', '/library/stress.html'], carer: 'caregiving', carers: 'caregiving', caregiver: 'caregiving', caregivers: 'caregiving', caring: 'caregiving', respite: 'caregiving', parkinson: 'caregiving', parkinsons: 'caregiving', dementia: 'caregiving', alzheimers: 'caregiving', alzheimer: 'caregiving', stroke: 'caregiving', eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare',
     emptynest: ['/empty-nest.html', '/retired-together.html', '/turning-toward.html'], nest: 'emptynest',
     familyrift: ['/family-rifts.html', '/grief.html', '/teens.html#siblings'], brother: 'familyrift', sister: 'familyrift', brothers: 'familyrift', sisters: 'familyrift', sibling: 'familyrift', siblings: 'familyrift', estranged: 'familyrift', estrangement: 'familyrift', rift: 'familyrift', rifts: 'familyrift', feud: 'familyrift', feuding: 'familyrift', inheritance: 'familyrift', inherit: 'familyrift', inherited: 'familyrift', estate: 'familyrift', executor: 'familyrift', favourite: 'familyrift', favorite: 'familyrift', favouritism: 'familyrift', favoritism: 'familyrift', reconcile: 'familyrift', reconciliation: 'familyrift', reconciling: 'familyrift', reconnect: ['/family-rifts.html', '/turning-toward.html', '/recheck-drive.html', '/grief.html'],
-    grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandparents: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather', grandchild: 'grandfather', nan: 'grandfather', nana: 'grandfather', nanna: 'grandfather', gran: 'grandfather', granny: 'grandfather', grandad: 'grandfather', granddad: 'grandfather', gramps: 'grandfather', abuelita: 'espanol',
+    grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandparents: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather', grandchild: 'grandfather', nan: 'grandfather', nana: 'grandfather', nanna: 'grandfather', gran: 'grandfather', granny: 'grandfather', grandad: 'grandfather', granddad: 'grandfather', gramps: 'grandfather',
     askeachother: ['/turning-toward-in-depth.html#their-world', '/turning-toward.html', '/check-ins.html'],
-    moneycontrol: ['/money-together.html#control', '/money-together.html', '/outside-help.html'],
+    moneycontrol: ['/money-together.html#control', '/money-together.html'],
     polyguest: ['/more-than-two.html#joining', '/more-than-two.html', '/check-ins.html'],
     friendbaby: ['/friends.html#after-baby', '/friends.html', '/new-parent.html'],
     parttime: ['/on-my-own.html#part-time-parent', '/on-my-own.html', '/co-parenting.html'],
@@ -2251,7 +2173,7 @@
     handover: ['/co-parenting.html#handoff-bag', '/co-parenting.html', '/coming-home.html', '/work.html'], handovers: 'handover', handoff: 'handover', handoffs: 'handover', changeover: 'handover', changeovers: 'handover',
     parentdied: ['/family-rifts.html#money', '/grief.html', '/family-rifts.html'],
     inheritance: ['/family-rifts.html#money', '/family-rifts.html', '/grief.html'], inherit: 'inheritance', inherited: 'inheritance', estate: 'inheritance', executor: 'inheritance', probate: 'inheritance', wills: 'inheritance',
-    mediator: ['/family-rifts.html', '/co-parenting.html', '/outside-help.html'], mediators: 'mediator', mediation: 'mediator',
+    mediator: ['/family-rifts.html', '/co-parenting.html'], mediators: 'mediator', mediation: 'mediator',
     forgive: ['/family-rifts.html#not-ready', '/family-rifts.html', '/apology-languages.html', '/library/conflict.html'], forgiving: 'forgive', forgiveness: 'forgive', forgiven: 'forgive', reconcile: 'forgive', reconciling: 'forgive', reconciliation: 'forgive',
     grandaccess: ['/grandparents.html', '/grown-up-children.html', '/family-rifts.html'],
     grandfather: ['/grandparents.html', '/grown-up-children.html', '/teens.html#family-care'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandparents: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather', grandchild: 'grandfather', grandson: 'grandfather', granddaughter: 'grandfather', grandad: 'grandfather', granddad: 'grandfather',
@@ -2270,11 +2192,7 @@
     anger: 'angerhelp', angerhelp: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'],
     yelling: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', shout: 'yelling', screaming: 'yelling',
     dad: ['/teens.html', '/grown-up-children.html', '/parents.html', '/caregivers.html'],
-    eshoras: ['/en-espanol.html#horas', '/en-espanol.html'], trabaja: 'eshoras', trabajo: 'eshoras', trabajamos: 'eshoras', horas: 'eshoras', turno: 'eshoras', turnos: 'eshoras', construccion: 'eshoras', 'construcción': 'eshoras',
     teacher: ['/for-teachers.html', '/groups.html#handouts', '/book/understanding-1-feelings.html'], teachers: 'teacher', teaching: 'teacher', classroom: 'teacher', lesson: 'teacher', lessons: 'teacher', students: 'teacher', pupils: 'teacher', pshe: 'teacher',
-    escasa: ['/en-espanol.html#casa', '/en-espanol.html'], tareas: 'escasa', quehaceres: 'escasa', ayuda: 'escasa',
-    espequenos: ['/en-espanol.html#pequenos', '/en-espanol.html'], gemelos: 'espequenos', gemelas: 'espequenos', bebe: 'espequenos', dormimos: 'espequenos',
-    esenojado: ['/en-espanol.html#enojado', '/en-espanol.html'], peleamos: 'esenojado', peleas: 'esenojado', pelea: 'esenojado', enojado: 'esenojado', enojada: 'esenojado', gritos: 'esenojado',
     comingout: ['/coming-out.html', '/teens.html#lgbtq'], bi: 'comingout', gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', queer: 'comingout', trans: 'comingout', closeted: 'comingout', closet: 'comingout',
     christening: 'twofaiths', christened: 'twofaiths', christen: 'twofaiths', baptism: 'twofaiths', baptised: 'twofaiths', baptized: 'twofaiths', ramadan: 'twofaiths', eid: 'twofaiths', diwali: 'twofaiths', hanukkah: 'twofaiths'
   };
@@ -2323,10 +2241,6 @@
    ['/sharing-a-room.html#guests', 'Sharing a room: guests and overnight guests', 'When a roommate’s partner is always staying over: how often, how much notice, and how to say it kindly.', 'Guide'],
    ['/sharing-a-room.html#bring-it-up', 'How to bring it up if you hate confrontation', 'Words for raising a guest, noise or sleep problem with a roommate, calmly and once.', 'Guide'],
    ['/on-my-own.html#lonely', 'Loneliness and friends, after a breakup', 'Feeling lonely after a divorce or breakup, and small ways to rebuild friends and a week that feels like yours.', 'Guide'],
-   ['/en-espanol.html#horas', 'En español: cuando uno trabaja muchas horas', 'Pasos cortos, en español, para cuando uno de los dos trabaja muchas horas y el otro lleva la casa.', 'Español'],
-   ['/en-espanol.html#casa', 'En español: las tareas de la casa', 'Pasos cortos, en español, para repartir el trabajo de la casa sin pelear.', 'Español'],
-   ['/en-espanol.html#pequenos', 'En español: con niños pequeños', 'Pasos cortos, en español, para las noches sin dormir y los niños pequeños.', 'Español'],
-   ['/en-espanol.html#enojado', 'En español: cuando estás muy enojado', 'Pasos cortos, en español, para calmarse antes de hablar.', 'Español'],
    ['/parents.html#is-yelling-abuse', 'Is yelling abuse?', 'Yelling now and then, followed by a real repair, is not abuse. When it becomes a safety issue, and getting support.', 'Guide']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // ---- round 13: whole questions people typed. Each rule reads the whole query first (before the word joins),
@@ -2373,7 +2287,7 @@
     [/\b(mov(e|ing) in together|should we move in|move in with (him|her|them|my)|ready to move in)\b/, 'r13movein'],
     [/\b(step ?(mum|mom|dad|mother|father|parent|kids?|children|child|son|daughter|siblings?|family|families|grand\w*)|blended famil\w*|half ?(brother|sister|siblings?)|bonus (mum|mom|dad|kids?))\b/, 'stepmom'],
     [/\b(yell\w*|shout\w*|scream\w*)\b.*\babus\w*|\babus\w*\b.*\b(yell\w*|shout\w*|scream\w*)\b/, 'r13yellabuse'],
-    // control, fear and abuse: help beyond this site first, never a dead end
+    // control, fear and abuse
     [/\b(gaslight\w*|coercive|coercion|narciss\w*|controlling|abus\w*|domestic violence|dv|intimate partner violence|manipulat\w*|isolat\w* me|threaten\w*|stalk\w*|walking on eggshells|afraid of (him|her|them|my)|scared of (him|her|them|my))\b/, 'r13abuse']
   ];
   var ACT_13 = {
@@ -2400,8 +2314,8 @@
     r13dating: ['/new-relationship.html', '/new-relationship-in-depth.html#flags', '/teens.html#dating', '/on-my-own.html'],
     datingapp: 'r13dating', newrelationship: 'r13dating', exclusive: 'r13dating', exclusivity: 'r13dating', ghosting: 'r13dating', ghosted: 'r13dating', redflag: 'r13dating', redflags: 'r13dating', lovebombing: 'r13dating', cohabit: 'r13dating', cohabiting: 'r13dating',
     r13movein: ['/new-relationship.html#moving-in', '/money-together.html', '/new-relationship.html'],
-    r13yellabuse: ['/parents.html#is-yelling-abuse', '/parents.html#anger-help', '/outside-help.html'],
-    r13abuse: ['/outside-help.html', '/money-together.html#control'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
+    r13yellabuse: ['/parents.html#is-yelling-abuse', '/parents.html#anger-help'],
+    r13abuse: ['/money-together.html#control'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
     r13smalltalk: ['/book/understanding-4-communication.html#small-talk', '/book/understanding-4-communication.html', '/refusals.html'],
     emotions: ['/book/understanding-1-feelings.html', '/library/emotions.html', '/communication.html'], emotion: 'emotions', emotional: 'emotions'
   };
@@ -2491,7 +2405,7 @@
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // a grandparent asking about support groups means the kinship support section first
   PRE.push([/\bgrand(parent|parents|ma|pa|mother|father|kids?|child|children|son|daughter)s?\b.*\b(support|group|groups|help|benefits?|allowance|money)\b|\bkinship (support|carers?|group)\b/, 'r13kin']);
-  ACT.r13kin = ['/foster-and-kinship.html#support', '/foster-and-kinship.html#kinship', '/grandparents.html', '/outside-help.html'];
+  ACT.r13kin = ['/foster-and-kinship.html#support', '/foster-and-kinship.html#kinship', '/grandparents.html'];
   // these pages only show when they're asked for: the album, the crossword, the podcast
   var ONLY_ASKED = [
     [/^\/echoes-of-gold\.html$/, /^(album|albums|music|song|songs|echoes|gold|listen|listening|track|tracks)$/],
@@ -2531,7 +2445,6 @@
     '/family-rifts.html': ['Family rifts and estrangement', 'Adult brothers and sisters, a will, a favourite child, years of silence: reaching out, or deciding you’re not ready.'],
     '/when-one-is-ill.html': ['When one of you is ill', 'Chronic illness, disability, long Covid or ME/CFS: sharing the load when one of you has fewer spoons, without either of you feeling a burden.'],
     '/someone-sent-you-this.html': ['Someone sent you this?', 'What this site is in three lines. You don’t have to do anything, nothing you type leaves your phone, and there are messages to send someone else.'],
-    '/outside-help.html': ['Help beyond this site', 'Finding a counsellor in the US and UK, support groups for families and carers, and a few well-known books.'],
     '/examples.html': ['What small changes look like', 'Made-up examples built from common patterns: a couple, housemates, siblings, co-parents, friends, co-founders, a poly home, a kinship carer and someone on their own.'],
     '/week-0.html': ['Week 0: a gentle start', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'],
     '/workpapers/wp-12-same-moment-different-speeds.html': ['WP-12: Same moment, different speeds', 'When one of you wants to sort it now and the other needs time: five everyday moments, your gaps in plain words, and one small agreement.'],
@@ -2546,7 +2459,7 @@
     '/living-alone.html': ['Living on your own, living well', 'Any age, any reason: alone is not lonely, a home that runs itself, making friends as an adult, asking for help, and safety basics.'],
     '/research.html': ['The research behind this site', 'The studies, books and reviews behind the site: what each found, in plain words, and how strong the evidence is.']
   };
-  var TOOL_URL = /^\/(safety|upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device|make-a-plan)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
+  var TOOL_URL = /^\/(upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device|make-a-plan)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
 
   // the words the site uses, with how often, for "Did you mean"
   var REAL = null, indexed = {};
@@ -2624,7 +2537,7 @@
     // the site's own words, and the everyday words its search understands ("polyamorous", "inheritance")
     var pool = Object.create(null);
     for (var v in vocab) pool[v] = vocab[v];
-    Object.keys(ACT).forEach(function (k) { if (!pool[k] && /^[a-z]+$/.test(k) && k.length > 3 && !/^(coparenting|onmyown|friendship|cominghome|diffhours|twofaiths|fostering|adhdkid|grownkids|moneytogether|comingout|sharedroom|bizpartner|ndwork|angerhelp|whenill|emptynest|familyrift|askeachother|eldercare|controlsafe|teenmiddle|rentlate|ndcouple|sentthis|lowvision|weekzero|outsidehelp|holidayschedule|workpapersuite|fulltime|nightfeeds|longdistance|datenight|reachout|phonecalls|caregiving)$/.test(k)) pool[k] = 4; });
+    Object.keys(ACT).forEach(function (k) { if (!pool[k] && /^[a-z]+$/.test(k) && k.length > 3 && !/^(coparenting|onmyown|friendship|cominghome|diffhours|twofaiths|fostering|adhdkid|grownkids|moneytogether|comingout|sharedroom|bizpartner|ndwork|angerhelp|whenill|emptynest|familyrift|askeachother|eldercare|controlsafe|teenmiddle|rentlate|ndcouple|sentthis|lowvision|weekzero|holidayschedule|workpapersuite|fulltime|nightfeeds|longdistance|datenight|reachout|phonecalls|caregiving)$/.test(k)) pool[k] = 4; });
     for (var w in pool) {
       if (Math.abs(w.length - t.length) > max) continue;
       var dist = editDist(t, w, max); if (dist > max) continue;
@@ -2924,7 +2837,7 @@
     if (TOOL_URL.test(p) || k === 'Tool') return 'Tool';
     return '';
   }
-  function kindTag(kind) { return kind ? ' <small class="tol-find-kind' + (kind === 'Workpaper' ? ' is-wp' : '') + '">' + escA(T(kind, kind === 'Workpaper' ? 'Hoja de trabajo' : 'Herramienta')) + '</small>' : ''; }
+  function kindTag(kind) { return kind ? ' <small class="tol-find-kind' + (kind === 'Workpaper' ? ' is-wp' : '') + '">' + escA(kind) + '</small>' : ''; }
   // keep each kind together, in the order the kinds first appear (so the best one still leads)
   function groupByKind(items, kindFn) {
     var order = [], by = {};
@@ -2935,7 +2848,7 @@
   function needsBestHTML(best, q, head) {
     if (!best) return '';
     var groups = groupByKind(best.g, function (g) { return g[4] === 'w' ? 'Workpaper' : g[4] === 't' ? 'Tool' : kindOf(g[0]); });
-    return '<h3>' + escA(head || T('Best match for what you described', 'Lo que mejor encaja con lo que describes')) + '</h3>' +
+    return '<h3>' + escA(head || 'Best match for what you described') + '</h3>' +
       '<p class="tol-find-for">' + escA(best.l) + '</p><ol>' + groups.map(function (G) { return G.items.map(function (g) {
         return '<li><a href="' + escA(g[0]) + '" data-find-best data-kind="' + escA(G.kind || 'page') + '"><span class="tol-find-bt">' + escA(g[1]) + kindTag(G.kind) + '</span><span class="tol-find-bw">' + escA(g[2]) + '</span></a></li>';
       }).join(''); }).join('') + '</ol>';
@@ -2946,23 +2859,20 @@
   function moreHTML(q, opts) {
     opts = opts || {};
     return '<ul class="tol-find-more">' +
-      '<li><a href="' + FINDER + '">' + T('Not sure? Answer 3 questions', '¿No sabes? Responde 3 preguntas') + '</a></li>' +
-      (opts.ask ? '<li><a href="/ask.html' + (q ? '?q=' + encodeURIComponent(q) : '') + '" data-find-ask="' + escA(q || '') + '">' + T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') + (q ? T(' in your words', ' con tus palabras') : '') + '</a></li>' : '') +
-      '<li><a href="/explore.html' + (opts.exploreQ && q ? '?q=' + encodeURIComponent(q) : '') + '">' + T('See everything', 'Ver todo') + '</a></li></ul>';
+      '<li><a href="' + FINDER + '">' + 'Not sure? Answer 3 questions' + '</a></li>' +
+      (opts.ask ? '<li><a href="/ask.html' + (q ? '?q=' + encodeURIComponent(q) : '') + '" data-find-ask="' + escA(q || '') + '">' + 'Ask Professor Puddles' + (q ? ' in your words' : '') + '</a></li>' : '') +
+      '<li><a href="/explore.html' + (opts.exploreQ && q ? '?q=' + encodeURIComponent(q) : '') + '">' + 'See everything' + '</a></li></ul>';
   }
   // the empty box: "What's going on?" (things one person can start alone lead), the 3-question finder, everything
-  // on the Spanish page, the chips are in Spanish too (each searches words the needs understand)
-  var ES_CHIPS = [['Peleamos mucho', 'peleamos mucho'], ['Hago todo en la casa', 'hago todo en la casa'], ['Mis hijos pelean', 'mis hijos pelean'],
-    ['Cuido a alguien', 'cuido a mi mama'], ['Mis hermanos no ayudan', 'mis hermanos no ayudan'], ['Familia ensamblada', 'familia ensamblada'], ['No puedo dormir', 'no puedo dormir'], ['Necesito ayuda', 'necesito ayuda']];
   function needsEmptyHTML() {
-    var chips = esPage() ? ES_CHIPS : (needsData && needsData.chips) || [];
-    return '<h3>' + T('What’s going on?', '¿Qué está pasando?') + '</h3>' + (chips.length ? chipsHTML(chips) : '') + moreHTML('', {});
+    var chips = ((needsData && needsData.chips) || []);
+    return '<h3>' + 'What’s going on?' + '</h3>' + (chips.length ? chipsHTML(chips) : '') + moreHTML('', {});
   }
   // nothing matched: the closest needs, the finder, Professor Puddles with their own words, and everything
   function needsFallbackHTML(q, M) {
     var close = (M && M.close) || [];
-    var chips = close.length ? close.map(function (c) { return [c.l, c.q]; }) : (esPage() ? ES_CHIPS : (needsData && needsData.chips) || []).slice(0, 5);
-    return '<h3>' + (close.length ? T('Closest to what you described', 'Lo más parecido a lo que describes') : T('Try one of these', 'Prueba una de estas')) + '</h3>' +
+    var chips = close.length ? close.map(function (c) { return [c.l, c.q]; }) : (((needsData && needsData.chips) || [])).slice(0, 5);
+    return '<h3>' + (close.length ? 'Closest to what you described' : 'Try one of these') + '</h3>' +
       (chips.length ? chipsHTML(chips) : '') + moreHTML(q, { ask: true });
   }
   function askPuddles(q) {
@@ -3001,14 +2911,14 @@
       recent.forEach(function (r) { seen[String(r.u).split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html')] = 1; });
       recent.some(function (r) {
         var nx = needsNext(String(r.u).split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html'), false, seen);
-        if (nx && !/^\/(safety|upset-right-now)\.html/.test(nx[0])) { seen[nx[0].split(/[?#]/)[0]] = 1; picks.push(nx); }
+        if (nx && !/^\/(upset-right-now)\.html/.test(nx[0])) { seen[nx[0].split(/[?#]/)[0]] = 1; picks.push(nx); }
         return picks.length >= 2;
       });
       if (!picks.length || map.querySelector('.tol-find-also')) return;
       needsCSS();
       picks = [].concat.apply([], groupByKind(picks, function (x) { return kindOf(x[0]); }).map(function (G) { return G.items; }));
-      var p = el('p', { class: 'tol-find-also' }, T('You might also like: ', 'Quizá te guste: ') + picks.map(function (x) { return '<a href="' + escA(x[0]) + '" title="' + escA(x[2]) + '">' + escA(x[1]) + '</a>' + kindTag(kindOf(x[0])); }).join(' <span aria-hidden="true">&middot;</span> ') +
-        ' <small>' + T('(from pages you opened on this device)', '(según las páginas que abriste en este dispositivo)') + '</small>');
+      var p = el('p', { class: 'tol-find-also' }, 'You might also like: ' + picks.map(function (x) { return '<a href="' + escA(x[0]) + '" title="' + escA(x[2]) + '">' + escA(x[1]) + '</a>' + kindTag(kindOf(x[0])); }).join(' <span aria-hidden="true">&middot;</span> ') +
+        ' <small>' + '(from pages you opened on this device)' + '</small>');
       var all = map.querySelector('.hh-map-all');
       if (all) map.insertBefore(p, all); else map.appendChild(p);
     });
@@ -3017,8 +2927,8 @@
   var runSearch = function () {};
   function buildSearch() {
     var box = el('div', { class: 'tol-find', role: 'search' },
-      '<label for="tol-find-q">' + T('Search the site', 'Buscar en el sitio') + '</label>' +
-      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + T('Describe what’s going on, e.g. “we argue about chores”', 'Cuenta qué pasa, p. ej. “peleamos por las tareas”') + '" aria-describedby="tol-find-note">' +
+      '<label for="tol-find-q">' + 'Search the site' + '</label>' +
+      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + 'Describe what’s going on, e.g. “we argue about chores”' + '" aria-describedby="tol-find-note">' +
       '<p class="tol-find-note" id="tol-find-note" aria-live="polite"></p>' +
       '<div class="tol-find-help" hidden></div><div class="tol-find-best" hidden></div><div class="tol-find-none" hidden></div>' +
       '<ol class="tol-find-results" hidden></ol>');
@@ -3049,7 +2959,7 @@
       if (M.best) M.best.g.forEach(function (g) { bestU[g[0]] = 1; });
       loadSearch(function (data) {
         if (input.value.trim() !== q) return;
-        if (!data) { note.textContent = T('Search isn’t available just now. The full list of pages is below.', 'La búsqueda no está disponible ahora. Abajo está la lista de páginas.'); if (idx) idx.hidden = false; return; }
+        if (!data) { note.textContent = 'Search isn’t available just now. The full list of pages is below.'; if (idx) idx.hidden = false; return; }
         var R;
         try { R = smartSearch(data, q); } catch (err) {
           // never a blank box: say so, and keep the full list of pages in view
@@ -3080,7 +2990,7 @@
         noneEl.innerHTML = !hits.length && !M.best ? needsFallbackHTML(q, M) : ''; noneEl.hidden = !!(hits.length || M.best);
         // tools, workpapers and pages to read each sit together (in the order they first appear), each labelled
         var groups = groupByKind(hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); });
-        var GH = { Tool: T('Tools', 'Herramientas'), Workpaper: T('Workpapers', 'Hojas de trabajo'), '': T('Guides and pages', 'Guías y páginas') };
+        var GH = { Tool: 'Tools', Workpaper: 'Workpapers', '': 'Guides and pages' };
         list.innerHTML = groups.map(function (G) {
           return (groups.length > 1 ? '<li class="tol-find-gh" role="presentation">' + esc(GH[G.kind]) + '</li>' : '') + G.items.map(function (h) {
             var p = h.p, act = p.u.charAt(0) === '#';
@@ -3091,13 +3001,13 @@
           }).join('');
         }).join('');
         var said = '“' + (auto ? R.said : q) + '”';
-        var head = !hits.length && M.best ? T('The best match is above.', 'Lo que mejor encaja está arriba.') : hits.length ? (M.best ? T('More pages: ', 'Más páginas: ') : '') + (hits.length === 25 ? T('The 25 best matches for ', 'Los 25 mejores resultados para ') + said + '.' : hits.length + (hits.length === 1 ? T(' result for ', ' resultado para ') : T(' results for ', ' resultados para ')) + said + '.')
-          : T('Nothing matches “' + q + '” yet. Here are the closest things, or try other words.', 'Nada coincide con “' + q + '” todavía. Aquí está lo más parecido, o prueba otras palabras.');
+        var head = !hits.length && M.best ? 'The best match is above.' : hits.length ? (M.best ? 'More pages: ' : '') + (hits.length === 25 ? 'The 25 best matches for ' + said + '.' : hits.length + (hits.length === 1 ? ' result for ' : ' results for ') + said + '.')
+          : ('Nothing matches “' + q + '” yet. Here are the closest things, or try other words.');
         note.innerHTML = '';
-        if (auto) note.appendChild(document.createTextNode(T('Showing results for “' + R.said + '” (you typed “' + q + '”). ', 'Resultados para “' + R.said + '” (escribiste “' + q + '”). ')));
-        note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? T('The 25 best matches.', 'Los 25 mejores resultados.') : hits.length + (hits.length === 1 ? T(' result.', ' resultado.') : T(' results.', ' resultados.'))) : head));
-        if (hits.length && esPage()) note.appendChild(document.createTextNode(' La mayoría de las páginas están en inglés.'));
-        if ((hits.length || M.best) && hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'))); }
+        if (auto) note.appendChild(document.createTextNode(('Showing results for “' + R.said + '” (you typed “' + q + '”). ')));
+        note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? 'The 25 best matches.' : hits.length + (hits.length === 1 ? ' result.' : ' results.')) : head));
+
+        if ((hits.length || M.best) && hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, 'Ask Professor Puddles')); }
         if (outside) {
           note.appendChild(document.createTextNode(focusNone ? ' Nothing in your focus matches, so here is everything. ' : searchAll ? ' Your focus first, then everything else. ' : ' Showing your focus (' + focusList() + '). '));
           if (!focusNone) {
@@ -3107,7 +3017,7 @@
           }
         }
         if (changed && !auto) {
-          var dym = el('button', { type: 'button', class: 'tol-find-dym' }, T('Did you mean “', '¿Quisiste decir “') + esc(R.said) + '”?');
+          var dym = el('button', { type: 'button', class: 'tol-find-dym' }, 'Did you mean “' + esc(R.said) + '”?');
           dym.addEventListener('click', function () { input.value = R.said; runSearch(input.value); input.focus(); });
           note.appendChild(document.createTextNode(' ')); note.appendChild(dym);
         }
@@ -3158,7 +3068,7 @@
   // pages in the same sub-menu (or, for a tool, the next tools of the same type), plus one tool that fits.
   // Picked in menu order, never at random. Not on the home page, directory pages, book chapters (they have the
   // chapter bar) or games. <body data-no-where> leaves out the trail; <body data-no-related> leaves out the strip.
-  var WHERE_SKIP = /^\/(index|404|offline|garden-backdrop|explore|tools|contents|by-relationship|pal-cam-tv|frequency-journey-play|en-espanol)\.html$/;
+  var WHERE_SKIP = /^\/(index|404|offline|garden-backdrop|explore|tools|contents|by-relationship|pal-cam-tv|frequency-journey-play)\.html$/;
   var GROUP_HOME = { start: '/start-here.html', tools: '/tools.html', workpapers: '/workpapers/fill/suite.html', rel: '/by-relationship.html', topics: '/explore.html', play: '/explore.html?need=calm', read: '/explore.html?need=read', about: '/contents.html' };
   // a menu area (or a By relationship sub-menu) and the tool type that goes with it
   var AREA_TOOLTYPE = { load: 'load', talk: 'talk', self: 'self', play: 'calm', media: 'calm', read: 'learn', 'just-me': 'self', couples: 'talk', friends: 'talk', family: 'family', 'co-parents': 'family', housemates: 'load', work: 'work', 'life-changes': 'plan' };
@@ -3198,7 +3108,7 @@
   }
   function buildWhere(body) {
     var main = document.querySelector('main');
-    if (!main || esPage() || WHERE_SKIP.test(current) || isChapter({ href: current }) || body.classList.contains('is-game') || GAME_PAGE.test(current)) return;
+    if ((!main) || WHERE_SKIP.test(current) || isChapter({ href: current }) || body.classList.contains('is-game') || GAME_PAGE.test(current)) return;
     var pl = wherePlace();
     if (!body.hasAttribute('data-no-where')) {
       var crumbs = whereCrumbs(pl);
@@ -3209,7 +3119,7 @@
         if (head) main.insertBefore(nav, head); else main.insertBefore(nav, main.firstChild);
       }
     }
-    if (body.hasAttribute('data-no-related') || sensitivePage() || /^\/(safety|upset-right-now|ask|start-here|find-your-start|someone-sent-you-this|sent-this|whats-new|on-this-device|install)\.html$|^\/legal\//.test(current)) return;
+    if (body.hasAttribute('data-no-related') || sensitivePage() || /^\/(upset-right-now|ask|start-here|find-your-start|someone-sent-you-this|sent-this|whats-new|on-this-device|install)\.html$|^\/legal\//.test(current)) return;
     var draw = function () { try { buildRelated(main, pl); } catch (e) {} };
     // the needs map (search-needs.js) suggests the next most useful page; the strip still shows without it
     var withNeeds = function () { var done = false, t = setTimeout(function () { if (!done) { done = true; draw(); } }, 2500); loadNeeds(function () { if (!done) { done = true; clearTimeout(t); draw(); } }); };
@@ -3297,13 +3207,13 @@
     var syncX = function () {
       root.classList.toggle('tol-bookview', !extrasOn());
       xb.setAttribute('aria-pressed', String(extrasOn()));
-      xb.textContent = extrasOn() ? T('Just the text', 'Solo el texto') : T('Show the extras', 'Mostrar los extras');
-      xb.title = extrasOn() ? T('Hide the music, cartoons, quizzes and tips so the chapter reads like a book', 'Ocultar música, dibujos y juegos') : T('Bring back the music, cartoons, quizzes and tips', 'Volver a mostrar los extras');
+      xb.textContent = extrasOn() ? 'Just the text' : 'Show the extras';
+      xb.title = extrasOn() ? 'Hide the music, cartoons, quizzes and tips so the chapter reads like a book' : 'Bring back the music, cartoons, quizzes and tips';
     };
     xb.addEventListener('click', function () { lsSet('tol-book-extras', extrasOn() ? '' : '1'); syncX(); });
     syncX();
     if (here.deep) nav.querySelector('.tol-chbar-nav').appendChild(el('a', { class: 'tol-chbar-ver', href: inDepth ? here.href : deepHref(here) },
-      inDepth ? T('Short version', 'Versión corta') : T('Full version', 'Versión completa')));
+      inDepth ? 'Short version' : 'Full version'));
     nav.querySelector('.tol-chbar-nav').appendChild(xb);
     var head = main.querySelector('.read-head');
     if (head) head.appendChild(nav); else main.insertBefore(nav, main.firstChild);
@@ -3324,14 +3234,14 @@
     if (hs.length < 4 || (main.textContent || '').length < 3500) return;
     var used = {};
     function slug(t) { var b = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'part', id = b, n = 2; while (used[id] || document.getElementById(id)) id = b + '-' + n++; used[id] = 1; return id; }
-    // each heading keeps its own language (an English heading on a Spanish page is read out in English)
+    // each heading keeps its own language
     var pageLang = (document.documentElement.getAttribute('lang') || '').toLowerCase();
     function langOf(h) { var l = h.closest('[lang]'); l = l ? (l.getAttribute('lang') || '').toLowerCase() : ''; return l && l.split('-')[0] !== pageLang.split('-')[0] ? l : ''; }
     function langAttr(i) { return i.lang ? ' lang="' + esc(i.lang) + '"' : ''; }
     var items = hs.slice(0, 20).map(function (h) { if (!h.id) h.id = slug(h.textContent); return { id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, ''), lang: langOf(h) }; });
-    var peek = items.slice(0, 3).map(function (i) { return '<span' + langAttr(i) + '>' + esc(i.t) + '</span>'; }).join(' · ') + (items.length > 3 ? ' · +' + (items.length - 3) + T(' more', ' más') : '');
+    var peek = items.slice(0, 3).map(function (i) { return '<span' + langAttr(i) + '>' + esc(i.t) + '</span>'; }).join(' · ') + (items.length > 3 ? ' · +' + (items.length - 3) + ' more' : '');
     var box = el('details', { class: 'tol-onpage no-bubble no-cheer no-dive' },
-      '<summary><span class="tol-onpage-k">' + T('What’s on this page', 'Lo que hay en esta página') + '</span><span class="tol-onpage-peek">' + peek + '</span></summary>' +
+      '<summary><span class="tol-onpage-k">' + 'What’s on this page' + '</span><span class="tol-onpage-peek">' + peek + '</span></summary>' +
       '<ol>' + items.map(function (i) { return '<li><a href="#' + esc(i.id) + '"' + langAttr(i) + '>' + esc(i.t) + '</a></li>'; }).join('') + '</ol>');
     box.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
@@ -3468,7 +3378,7 @@
     ['Hug a little longer.', 'A slow six-second hug helps both of you settle.'],
     ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow’s you will be grateful.']
   ];
-  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html', '/pursue-withdraw.html', '/upset-right-now.html', '/sent-this.html', '/someone-sent-you-this.html', '/outside-help.html'];
+  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html', '/pursue-withdraw.html', '/upset-right-now.html', '/sent-this.html', '/someone-sent-you-this.html'];
   // The full library (about 300 tips in topics) lives in tips.js and loads when a tip is shown;
   // the short list above is the fallback. Pages lean toward topics that fit them.
   var TIP_TOPICS = {
@@ -3508,7 +3418,7 @@
   function addTip(body) {
     if (body.hasAttribute('data-no-tip') || NO_TIPS.indexOf(current) !== -1 || /^\/legal\//.test(current)) return;
     // someone sent to a tool sees the tool: no tip under it
-    if (WORKSPACE.test(current) || /^\/(check-ins|pursue-withdraw|en-espanol)\.html$/.test(current)) return;
+    if (WORKSPACE.test(current) || /^\/(check-ins|pursue-withdraw)\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     var d = new Date(), seed = d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate();
     for (var i = 0; i < current.length; i++) seed = (seed * 31 + current.charCodeAt(i)) % 100003;
@@ -3655,7 +3565,7 @@
     if (!(TOOL_PAGES.test(current) || WORKSPACE.test(current) || body.hasAttribute('data-tool') || /^\/(the-logic-behind-it|check-ins|wavelength)\.html$/.test(current)) || body.classList.contains('is-game')) return;
     var main = document.querySelector('main'); if (!main) return;
     var MOV = '.tol-offer, .tol-onpage, .tsk-top-row, .tol-private, .tol-pillars-fold, .depth-bar.tol-depth';
-    var SKIP = MOV + ', .read-head, .tol-where, .tol-es-hint, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras, .ask-exit';
+    var SKIP = MOV + ', .read-head, .tol-where, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras, .ask-exit';
     function run() {
       var ctrl = Array.prototype.filter.call(main.querySelectorAll('input:not([type=hidden]), textarea, select, button'), function (n) {
         return n.getClientRects().length && !n.closest(SKIP);
@@ -3685,7 +3595,7 @@
     html.classList.add('tol-one-fab');
     var wrap = el('div', { class: 'tol-help no-bubble no-print' });
     var btn = el('button', { type: 'button', class: 'tol-help-fab', 'aria-expanded': 'false', 'aria-haspopup': 'true' },
-      '<span class="tol-help-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-help-t">' + T('Help', 'Ayuda') + '</span>');
+      '<span class="tol-help-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-help-t">' + 'Help' + '</span>');
     var menu = el('div', { class: 'tol-help-menu', role: 'menu', hidden: '' });
     function item(label, target) {
       var b = el('button', { type: 'button', role: 'menuitem', class: 'tol-help-item' }, label);
@@ -3695,18 +3605,18 @@
     function avail() { return { pud: pud && !html.classList.contains('tol-no-helpers') && document.contains(pud), br: br && document.contains(br) }; }
     function fill() {
       var a = avail(); menu.textContent = '';
-      if (a.pud) menu.appendChild(item(T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'), pud));
-      if (a.br) menu.appendChild(item(T('Breathe for a minute', 'Respirar un minuto'), br));
-      btn.setAttribute('aria-label', a.pud && a.br ? T('Help: ask Professor Puddles, or breathe for a minute', 'Ayuda: pregúntale al Profesor Puddles, o respira un minuto')
-        : a.pud ? T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') : T('Breathe: a one-minute calm break', 'Respirar: una pausa de un minuto'));
+      if (a.pud) menu.appendChild(item('Ask Professor Puddles', pud));
+      if (a.br) menu.appendChild(item('Breathe for a minute', br));
+      btn.setAttribute('aria-label', a.pud && a.br ? 'Help: ask Professor Puddles, or breathe for a minute'
+        : a.pud ? 'Ask Professor Puddles' : 'Breathe: a one-minute calm break');
       wrap.hidden = !a.pud && !a.br;
-      var t = btn.querySelector('.tol-help-t'); if (t) t.textContent = a.pud && a.br ? T('Help', 'Ayuda') : a.pud ? T('Ask Puddles', 'Pregúntale') : T('Breathe', 'Respirar');
+      var t = btn.querySelector('.tol-help-t'); if (t) t.textContent = a.pud && a.br ? 'Help' : a.pud ? 'Ask Puddles' : 'Breathe';
       // design17: in the phone's top bar it is one labelled "Ask" button that opens Professor Puddles straight away
       // (Breathe is in the Menu as "Calm down now", or press and hold this button); nothing to show without him
       if (docked()) {
         wrap.hidden = !a.pud;
-        if (t) t.textContent = T('Ask', 'Pregunta');
-        btn.setAttribute('aria-label', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'));
+        if (t) t.textContent = 'Ask';
+        btn.setAttribute('aria-label', 'Ask Professor Puddles');
         btn.removeAttribute('aria-haspopup'); btn.removeAttribute('aria-expanded');
       } else { btn.setAttribute('aria-haspopup', 'true'); btn.setAttribute('aria-expanded', String(!menu.hidden)); }
       return a;
@@ -3904,11 +3814,10 @@
     }
     function opts(topic) {
       return { name: PUDDLES.name, svg: PUDDLES.svg, color: PUDDLES.color, topic: topic || '',
-        greeting: esPage() ? '¡Hola! Soy el Profesor Puddles. Escríbeme en español y te respondo con lo esencial de este sitio. Lo que escribes se queda en tu dispositivo.' :
-          'Hello! I’m Professor Puddles. Curious about something on “' + shortTitle(title, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.' };
+        greeting: ('Hello! I’m Professor Puddles. Curious about something on “' + shortTitle(title, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.') };
     }
-    var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': T('Ask Professor Puddles about this page', 'Pregúntale al Profesor Puddles (escríbele en español)'), title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles (escríbele en español)') },
-      '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + T('Ask Professor Puddles', '¿Hablamos?') + '</span>');
+    var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': 'Ask Professor Puddles about this page', title: 'Ask Professor Puddles' },
+      '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + 'Ask Professor Puddles' + '</span>');
     fab.addEventListener('click', function () { openPud(opts('')); });
     if (!game) { body.appendChild(fab); body.classList.add('has-pud-fab'); }
     // on a phone he is a small round button in the corner (site.css), with no name pill that could cover the first words
@@ -3926,10 +3835,8 @@
     if (!main.querySelector('.tol-pud-end') && current !== '/index.html') {
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
-        (esPage() ? '<p><strong>¿Quieres saber más?</strong> Pregúntale al Profesor Puddles. Escríbele en español: te responde en español con lo esencial, con palabras sencillas y desde las páginas de este sitio. Lo que escribes no sale de tu dispositivo.</p>' +
-        '<button type="button" class="tol-pud-card-go">💧 Pregúntale al Profesor Puddles</button>' :
-        '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
-        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(shortTitle(title, 60)) + '”' : 'Ask Professor Puddles') + '</button>'));
+        (('<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
+        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(shortTitle(title, 60)) + '”' : 'Ask Professor Puddles') + '</button>')));
       endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title && current !== '/index.html' ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); /* the home page's headline isn't a topic: just say hello */ });
       main.appendChild(endBox);
     }
@@ -3948,7 +3855,7 @@
   ];
   function buildPuddlesCards(body) {
     var main = document.querySelector('main.read');
-    if (!main || body.classList.contains('is-game') || body.hasAttribute('data-no-pudcards') || workMode() || sensitivePage() || esPage() || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
+    if ((!main || body.classList.contains('is-game') || body.hasAttribute('data-no-pudcards') || workMode() || sensitivePage()) || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
     var sec = body.getAttribute('data-sec') || '', course = /^\/(book|workpapers|learn)\//.test(current) || /^(book|workpapers|program|self|relationships|start|tools)$/.test(sec);
     if (!course) return;
@@ -4111,15 +4018,15 @@
     // (only the still switches: Dark mode and Quiet mode share the look, and keep their own state)
     document.querySelectorAll('.tol-still-btn:not(.tol-dark-btn):not(.tol-quiet-btn)').forEach(function (b) {
       b.setAttribute('aria-pressed', String(stillOn));
-      b.querySelector('.tol-still-state').textContent = stillOn ? T('On', 'Sí') : T('Off', 'No');
+      b.querySelector('.tol-still-state').textContent = stillOn ? 'On' : 'Off';
     });
     stillHooks.forEach(function (f) { try { f(stillOn); } catch (e) {} });
     try { document.dispatchEvent(new CustomEvent('tol-still', { detail: { on: stillOn } })); } catch (e) {}
   }
   function stillButton() {
     var b = el('button', { type: 'button', class: 'tol-still-btn', 'aria-pressed': String(stillOn) },
-      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + T('Keep the page still', 'Página quieta') +
-      '<span class="tol-still-state" aria-hidden="true">' + (stillOn ? T('On', 'Sí') : T('Off', 'No')) + '</span>');
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + 'Keep the page still' +
+      '<span class="tol-still-state" aria-hidden="true">' + (stillOn ? 'On' : 'Off') + '</span>');
     b.addEventListener('click', function () { setStill(!stillOn); });
     return b;
   }
@@ -4144,16 +4051,9 @@
       CONTRAST_KEY = 'tol-contrast';
   // the sound switches the pal cam and the games keep for themselves
   var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
-  // the Spanish page gets the Settings panel in Spanish: T('English', 'Español')
-  // (a function, so the bar and menu can use it too, wherever they're built)
-  // (home16b: a tool opened in Spanish with ?lang=es counts too, so its bar, menu and footer are in Spanish)
-  function esPage() { return /^es\b/i.test(document.documentElement.lang || '') || /[?&]lang=es\b/i.test(location.search); }
-  function T(en, es) { return esPage() ? es : en; }
-  // for the other scripts: TOLLang.es() is true on a Spanish page, TOLLang.T('Close', 'Cerrar') picks the words
-  window.TOLLang = { es: esPage, T: T };
   // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.15, 1.35 or 1.6)
-  var SIZE_NAMES = { md: T('Normal', 'Normal'), lg: T('Large', 'Grande'), xl: T('Extra large', 'Muy grande'), xxl: T('Largest', 'La más grande') }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
-  var TINTS = { cream: T('Cream', 'Crema'), blue: T('Soft blue', 'Azul suave'), mint: T('Mint', 'Verde menta') };
+  var SIZE_NAMES = { md: 'Normal', lg: 'Large', xl: 'Extra large', xxl: 'Largest' }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
+  var TINTS = { cream: 'Cream', blue: 'Soft blue', mint: 'Mint' };
   function quietOn() { return lsGet(QUIET_KEY) === '1'; }
   // High contrast: black on white (or white on black in dark mode), solid backgrounds, a strong focus ring,
   // and none of the soft washes, bubbles or drifting shapes behind the words
@@ -4199,11 +4099,11 @@
     if (meta) meta.setAttribute('content', contrastOn() ? (darkNow() ? '#000000' : '#FFFFFF') : darkNow() ? '#1E1B24' : '#F5EFDE');
     document.querySelectorAll('.tol-dark-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(darkNow()));
-      b.querySelector('.tol-still-state').textContent = darkNow() ? T('On', 'Sí') : T('Off', 'No');
+      b.querySelector('.tol-still-state').textContent = darkNow() ? 'On' : 'Off';
     });
     document.querySelectorAll('.tol-quiet-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(quietOn()));
-      var st = b.querySelector('.tol-still-state'); if (st) st.textContent = quietOn() ? T('On', 'Sí') : T('Off', 'No');
+      var st = b.querySelector('.tol-still-state'); if (st) st.textContent = quietOn() ? 'On' : 'Off';
     });
     document.querySelectorAll('.tol-set').forEach(syncSettings);
   }
@@ -4219,8 +4119,8 @@
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyReading); } catch (e) {} }
   function darkButton() {
     var b = el('button', { type: 'button', class: 'tol-still-btn tol-dark-btn', 'aria-pressed': String(darkNow()) },
-      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + T('Dark mode', 'Modo oscuro') +
-      '<span class="tol-still-state" aria-hidden="true">' + (darkNow() ? T('On', 'Sí') : T('Off', 'No')) + '</span>');
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + 'Dark mode' +
+      '<span class="tol-still-state" aria-hidden="true">' + (darkNow() ? 'On' : 'Off') + '</span>');
     b.addEventListener('click', function () { lsSet(THEME_KEY, darkNow() ? 'light' : 'dark'); applyReading(); });
     return b;
   }
@@ -4267,23 +4167,23 @@
   function quietButton(kind) {
     var sw = kind === 'switch', b;
     if (sw) b = el('button', { type: 'button', class: 'tol-still-btn tol-quiet-btn', 'aria-pressed': String(quietOn()) },
-      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + T('Quiet mode', 'Modo tranquilo') + '<span class="tol-still-state" aria-hidden="true">' + (quietOn() ? T('On', 'Sí') : T('Off', 'No')) + '</span>');
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + 'Quiet mode' + '<span class="tol-still-state" aria-hidden="true">' + (quietOn() ? 'On' : 'Off') + '</span>');
     else {
-      b = el('button', { type: 'button', class: 'tol-quiet-btn tol-bar-quiet', 'aria-pressed': String(quietOn()), title: T('Quiet mode: a still page with no helpers, pop-ups, sounds, levels or petals', 'Modo tranquilo: una página quieta, sin ayudantes, ventanas emergentes ni sonidos') },
+      b = el('button', { type: 'button', class: 'tol-quiet-btn tol-bar-quiet', 'aria-pressed': String(quietOn()), title: 'Quiet mode: a still page with no helpers, pop-ups, sounds, levels or petals' },
         '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M19.5 14.2A7.8 7.8 0 1 1 9.8 4.5a6.2 6.2 0 0 0 9.7 9.7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>' +
-        '<span class="tol-quiet-name">' + T('Quiet', 'Tranquilo') + '</span>');
-      b.setAttribute('aria-label', T('Quiet mode', 'Modo tranquilo'));
+        '<span class="tol-quiet-name">' + 'Quiet' + '</span>');
+      b.setAttribute('aria-label', 'Quiet mode');
     }
-    b.addEventListener('click', function () { setPreset('quiet', !quietOn()); announce(quietOn() ? T('Quiet mode is on: the page is still, and helpers, pop-ups, sounds, levels and petals are off.', 'El modo tranquilo está activado: la página está quieta y sin sonidos.') : T('Quiet mode is off. Everything is back the way it was.', 'El modo tranquilo está desactivado.')); });
+    b.addEventListener('click', function () { setPreset('quiet', !quietOn()); announce(quietOn() ? 'Quiet mode is on: the page is still, and helpers, pop-ups, sounds, levels and petals are off.' : 'Quiet mode is off. Everything is back the way it was.'); });
     return b;
   }
   function settingsButton(cls, text) {
     var b = el('button', { type: 'button', class: 'tol-set-btn ' + (cls || ''), 'aria-haspopup': 'dialog' },
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/></svg>' +
-      '<span class="tol-set-name">' + (esPage() ? (text ? 'Ajustes: letra, contraste, modo tranquilo' : 'Ajustes') : (text || 'Settings')) + '</span>');
+      '<span class="tol-set-name">' + ((text || 'Settings')) + '</span>');
     // the spoken name starts with the words on the button, so voice control ("click Settings") finds it
-    if (!text) b.setAttribute('aria-label', T('Settings: text size, contrast and calm', 'Ajustes: tamaño de letra, contraste y calma'));
-    b.title = T('Text size, high contrast, Quiet mode and more', 'Tamaño de letra, alto contraste, modo tranquilo y más');
+    if (!text) b.setAttribute('aria-label', 'Settings: text size, contrast and calm');
+    b.title = 'Text size, high contrast, Quiet mode and more';
     b.addEventListener('click', function () { openSettings(b); });
     return b;
   }
@@ -4324,37 +4224,37 @@
     }
     var box = el('div', { class: 'tol-set', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': id + '-h', hidden: '' },
       '<div class="tol-set-card">' +
-      '<div class="tol-set-head"><h2 id="' + id + '-h">' + T('Settings', 'Ajustes') + '</h2><button type="button" class="tol-set-close">' + T('Close', 'Cerrar') + '</button></div>' +
-      '<p class="tol-set-intro">' + T('Make the site easier to see, calmer, or easier to read. Your choices stay on this device only.', 'Haz que el sitio se vea mejor, más tranquilo o más fácil de leer. Lo que elijas se queda solo en este dispositivo.') + '</p>' +
-      (esPage() ? '' : '<p class="tol-set-takein"><a href="/how-you-take-things-in.html"><strong>How you take things in</strong>: pick by neurotype (ADHD, autistic, dyslexic and more) or by plain preferences, and every page adapts</a></p>') +
+      '<div class="tol-set-head"><h2 id="' + id + '-h">' + 'Settings' + '</h2><button type="button" class="tol-set-close">' + 'Close' + '</button></div>' +
+      '<p class="tol-set-intro">' + 'Make the site easier to see, calmer, or easier to read. Your choices stay on this device only.' + '</p>' +
+      ('<p class="tol-set-takein"><a href="/how-you-take-things-in.html"><strong>How you take things in</strong>: pick by neurotype (ADHD, autistic, dyslexic and more) or by plain preferences, and every page adapts</a></p>') +
       // the two things people look for first: bigger words and stronger contrast
-      '<h3 class="tol-set-k tol-set-k1">' + T('Text and contrast', 'Letra y contraste') + '</h3>' +
-      '<fieldset class="tol-set-sizes"><legend>' + T('Text size', 'Tamaño de letra') + ' <small>' + T('(smallest to biggest)', '(de menor a mayor)') + '</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
-      sw('contrast', T('High contrast', 'Alto contraste'), T('Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colours or shapes behind the words.', 'Letra negra sobre blanco (blanca sobre negro en modo oscuro), bordes claros y un marco fuerte en lo que eliges. Sin colores suaves ni formas detrás del texto.')) +
-      '<fieldset><legend>' + T('Colors (dark mode)', 'Colores (modo oscuro)') + '</legend>' + radio('theme', 'data-theme-opt', 'auto', T('Follow my device', 'Como mi dispositivo')) + radio('theme', 'data-theme-opt', 'light', T('Light', 'Claro')) + radio('theme', 'data-theme-opt', 'dark', T('Dark', 'Oscuro')) + '</fieldset>' +
-      '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">' + T('Listen to this page', 'Escuchar esta página') + '</button> <small>' + T('Your device reads the page aloud, with a speed control and “Read from where I am”.', 'Tu dispositivo lee la página en voz alta, con control de velocidad y “Leer desde aquí”.') + '</small></p>' +
+      '<h3 class="tol-set-k tol-set-k1">' + 'Text and contrast' + '</h3>' +
+      '<fieldset class="tol-set-sizes"><legend>' + 'Text size' + ' <small>' + '(smallest to biggest)' + '</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
+      sw('contrast', 'High contrast', 'Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colours or shapes behind the words.') +
+      '<fieldset><legend>' + 'Colors (dark mode)' + '</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
+      '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">' + 'Listen to this page' + '</button> <small>' + 'Your device reads the page aloud, with a speed control and “Read from where I am”.' + '</small></p>' +
       '<div class="tol-set-presets">' +
-        '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>' + T('Quiet mode', 'Modo tranquilo') + '</strong><small>' + T('A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.', 'Una página quieta y sencilla. Sin ayudantes, ventanas emergentes ni sonidos, y sin nada que se mueva.') + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
-        '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>' + T('Easy reading', 'Lectura fácil') + '</strong><small>' + T('A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.', 'Una letra clara, más espacio entre letras y líneas, líneas más cortas, un fondo suave y una página quieta.') + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
+        '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>' + 'Quiet mode' + '</strong><small>' + 'A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.' + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
+        '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>' + 'Easy reading' + '</strong><small>' + 'A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.' + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
       '</div>' +
-      (esPage() ? '' : '<h3 class="tol-set-k">Focus</h3><div class="tol-set-focus"></div>') +   // Focus mode picks English pages, so it stays off the Spanish panel
-      '<h3 class="tol-set-k">' + T('Calm', 'Calma') + '</h3>' +
-      '<p class="tol-set-qnote" hidden>' + T('Quiet mode is looking after these. Turn it off above to change them one by one.', 'El modo tranquilo se encarga de esto. Apágalo arriba para cambiar cada opción.') + '</p>' +
-      sw('still', T('Keep the page still', 'Página quieta'), T('No moving garden, bubbles, hearts or sliding in, here and in the Breathe break', 'Sin jardín en movimiento, burbujas, corazones ni cosas que se deslizan')) +
-      sw('helpers', T('Hide the helpers', 'Ocultar los ayudantes'), T('Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.', 'Las tarjetas del Profesor Puddles, los amigos que animan, los perritos que aparecen mientras lees, los consejos y las invitaciones emergentes.')) +
-      sw('sound', T('Keep site sounds off', 'Sin sonidos'), T('When this is on, the pal cam, the games and the Breathe break start silent', 'Los juegos, la cámara de los perritos y la pausa para respirar empiezan en silencio')) +
-      '<h3 class="tol-set-k">' + T('Reading', 'Lectura') + '</h3>' +
-      '<p class="tol-set-aloud"><small>' + T('Read pages aloud: tap “Listen” near the top of any chapter or guide. Your device’s own voice reads it, nothing is sent anywhere.', 'Leer en voz alta: toca “Escuchar” cerca del principio de un capítulo o una guía. Lo lee la voz de tu propio dispositivo.') + '</small></p>' +
-      '<fieldset><legend>' + T('Font', 'Letra') + '</legend>' + radio('font', 'data-font-opt', 'usual', T('The usual', 'La de siempre')) + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">' + T('Easy to read', 'Fácil de leer') + '</span>') + '</fieldset>' +
-      '<fieldset><legend>' + T('Spacing', 'Espacio') + '</legend>' + radio('space', 'data-space-opt', 'usual', T('The usual', 'El de siempre')) + radio('space', 'data-space-opt', 'wide', T('Roomy', 'Amplio')) + '</fieldset>' +
-      '<fieldset class="tol-set-tints"><legend>' + T('Page tint', 'Color de fondo') + ' <small class="tol-set-tintnote" hidden>' + T('(resting while high contrast is on)', '(en pausa con alto contraste)') + '</small></legend>' + radio('tint', 'data-tint-opt', 'none', T('None', 'Ninguno')) + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
-      sw('ruler', T('Reading ruler', 'Regla de lectura'), T('A soft band that follows your pointer or finger, so you keep your place on the line', 'Una franja suave que sigue tu dedo o el puntero, para no perder la línea')) +
-      sw('bubbles', T('Text bubbles', 'Burbujas de texto'), T('Off: plain text, one card per section. On: each piece of text sits in its own soft, round bubble', 'Apagado: texto sencillo, una tarjeta por sección. Encendido: cada parte del texto va en su propia burbuja suave')) +
-      '<h3 class="tol-set-k">' + T('Time and weather', 'Hora y clima') + '</h3>' +
-      sw('wxnote', T('Show the time and weather note', 'Mostrar la hora y el clima'), T('A very faint note in the corner of each page', 'Una nota muy suave en la esquina de cada página')) +
-      sw('wxloc', T('Use my location for the weather', 'Usar mi ubicación para el clima'), T('Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it', 'Tu navegador te pregunta primero. Solo se guarda un lugar aproximado, en este dispositivo. Para buscar el clima, ese lugar aproximado se envía a Open-Meteo, un servicio gratis sin cuenta. A nosotros no nos llega nada. Apágalo para borrarlo')) +
+      '<h3 class="tol-set-k">Focus</h3><div class="tol-set-focus"></div>' +
+      '<h3 class="tol-set-k">' + 'Calm' + '</h3>' +
+      '<p class="tol-set-qnote" hidden>' + 'Quiet mode is looking after these. Turn it off above to change them one by one.' + '</p>' +
+      sw('still', 'Keep the page still', 'No moving garden, bubbles, hearts or sliding in, here and in the Breathe break') +
+      sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
+      sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
+      '<h3 class="tol-set-k">' + 'Reading' + '</h3>' +
+      '<p class="tol-set-aloud"><small>' + 'Read pages aloud: tap “Listen” near the top of any chapter or guide. Your device’s own voice reads it, nothing is sent anywhere.' + '</small></p>' +
+      '<fieldset><legend>' + 'Font' + '</legend>' + radio('font', 'data-font-opt', 'usual', 'The usual') + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">' + 'Easy to read' + '</span>') + '</fieldset>' +
+      '<fieldset><legend>' + 'Spacing' + '</legend>' + radio('space', 'data-space-opt', 'usual', 'The usual') + radio('space', 'data-space-opt', 'wide', 'Roomy') + '</fieldset>' +
+      '<fieldset class="tol-set-tints"><legend>' + 'Page tint' + ' <small class="tol-set-tintnote" hidden>' + '(resting while high contrast is on)' + '</small></legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
+      sw('ruler', 'Reading ruler', 'A soft band that follows your pointer or finger, so you keep your place on the line') +
+      sw('bubbles', 'Text bubbles', 'Off: plain text, one card per section. On: each piece of text sits in its own soft, round bubble') +
+      '<h3 class="tol-set-k">' + 'Time and weather' + '</h3>' +
+      sw('wxnote', 'Show the time and weather note', 'A very faint note in the corner of each page') +
+      sw('wxloc', 'Use my location for the weather', 'Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it') +
       '<p class="tol-set-wxmsg" role="status" hidden></p>' +
-      '<p class="tol-set-foot">' + T('These choices stay in this browser only.', 'Estas opciones se quedan solo en este navegador.') + ' <button type="button" class="tol-set-reset">' + T('Back to the usual', 'Volver a lo de siempre') + '</button> <a href="/on-this-device.html"' + (esPage() ? ' hreflang="en"' : '') + '>' + T('What’s stored on this device', 'Qué se guarda en este dispositivo (en inglés)') + '</a></p>' +
+      '<p class="tol-set-foot">' + 'These choices stay in this browser only.' + ' <button type="button" class="tol-set-reset">' + 'Back to the usual' + '</button> <a href="/on-this-device.html"' + ('') + '>' + 'What’s stored on this device' + '</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
       var i = e.target;
@@ -4368,20 +4268,20 @@
       if (s === 'helpers') { if (i.checked) lsSet(HELP_KEY, '1'); else lsDel(HELP_KEY); }
       if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
-      if (s === 'contrast') { if (i.checked) lsSet(CONTRAST_KEY, '1'); else lsDel(CONTRAST_KEY); announce(i.checked ? T('High contrast is on.', 'El alto contraste está activado.') : T('High contrast is off.', 'El alto contraste está desactivado.')); }
+      if (s === 'contrast') { if (i.checked) lsSet(CONTRAST_KEY, '1'); else lsDel(CONTRAST_KEY); announce(i.checked ? 'High contrast is on.' : 'High contrast is off.'); }
       if (s === 'bubbles') { if (i.checked) lsSet(BUB_KEY, '0'); else lsDel(BUB_KEY); }
       if (s === 'wxnote') { var cw = window.TOLClockWx; if (cw && cw.show) cw.show(i.checked); else if (i.checked) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); var cwl = document.createElement('script'); cwl.src = '/assets/js/clock-weather.js'; document.head.appendChild(cwl); } else { lsSet('tol-clockwx-off', '1'); lsDel('tol-clockwx-on'); } }
       if (s === 'wxloc') {
         var msg = box.querySelector('.tol-set-wxmsg'), cw2 = window.TOLClockWx;
         if (!i.checked) { if (cw2 && cw2.off) cw2.off(); else lsDel('tol-pc-wx'); if (msg) msg.hidden = true; }
         else {
-          if (msg) { msg.hidden = false; msg.textContent = T('Asking your browser… choose Allow when it asks.', 'Preguntando a tu navegador… elige Permitir cuando te pregunte.'); }
+          if (msg) { msg.hidden = false; msg.textContent = 'Asking your browser… choose Allow when it asks.'; }
           var go = function () { return window.TOLClockWx && window.TOLClockWx.ask ? window.TOLClockWx.ask() : Promise.resolve('unavailable'); };
           if (!window.TOLClockWx || !window.TOLClockWx.ask) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); }
           wxPending = true;
           go().then(function (r) {
             wxPending = false; var ok = r === 'ok'; i.checked = ok;
-            if (msg) { msg.hidden = ok; if (!ok) msg.textContent = r === 'denied' ? T('Your browser has location blocked for this site. Allow it in the browser’s site settings (the lock or tune icon next to the address), then switch this on again.', 'Tu navegador tiene bloqueada la ubicación para este sitio. Permítela en los ajustes del sitio (el candado junto a la dirección) y vuelve a activar esta opción.') : T('The weather could not be found just now. Try again in a moment.', 'No se pudo encontrar el clima ahora. Inténtalo de nuevo en un momento.'); }
+            if (msg) { msg.hidden = ok; if (!ok) msg.textContent = r === 'denied' ? 'Your browser has location blocked for this site. Allow it in the browser’s site settings (the lock or tune icon next to the address), then switch this on again.' : 'The weather could not be found just now. Try again in a moment.'; }
           });
         }
       }
@@ -4395,7 +4295,7 @@
       if (e.target.closest('.tol-set-reset')) {
         [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY, CONTRAST_KEY].forEach(lsDel);
         lsDel('tol-take-in'); if (window.TOLTakeIn && window.TOLTakeIn.reset) window.TOLTakeIn.reset();
-        setSounds(false); refreshStill(); after(); quietEvent(); announce(T('Everything is back to the usual.', 'Todo volvió a lo de siempre.'));
+        setSounds(false); refreshStill(); after(); quietEvent(); announce('Everything is back to the usual.');
       }
     });
     box.addEventListener('keydown', function (e) {
@@ -4457,7 +4357,7 @@
   }
   function renderPanelFocus() {
     var host = panel && panel.querySelector('.tol-panel-focus'); if (!host) return;
-    host.innerHTML = ''; if (!esPage()) host.appendChild(focusLine('panel'));   // Focus mode picks English pages, so it stays off a Spanish page
+    host.innerHTML = ''; host.appendChild(focusLine('panel'));
   }
   function renderFocusPill() {
     Array.prototype.forEach.call(document.querySelectorAll('.tol-focus-line.is-page'), function (n) { n.remove(); });
@@ -4652,15 +4552,14 @@
     var seenBefore = lsGet('tol-comfort-offer') || '', seenHere = ssGet('tol-offer-seen');
     var again = seenHere && seenHere === location.pathname;   // the same page, reloaded this visit
     if (seenBefore === 'done' || (seenBefore && !again) || !promptFree('offer') || workMode() || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') || /#together=|[?&]together=/.test(location.href) || document.documentElement.classList.contains('ti-nosurprise') ||
-        document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
+        document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|sent-this|someone-sent-you-this|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     lsSet('tol-comfort-offer', 'shown:1'); ssSet('tol-offer-seen', location.pathname); // once on this device; Settings at the top is always there
     promptTake('offer');
-    var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': T('Make the site calmer or easier to read', 'Una página más tranquila o más fácil de leer') },
-      T('<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>',
-        '<p><strong>¿Te ayudaría una página más tranquila?</strong> El modo tranquilo deja todo quieto, en silencio y sencillo, sin ventanas que aparecen. La lectura fácil usa una letra clara y más espacio entre líneas. Puedes cambiarlo cuando quieras en <em>Ajustes</em>, arriba.</p>') +
-      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">' + T('Quiet mode', 'Modo tranquilo') + '</button><button type="button" data-offer="easy">' + T('Easy reading', 'Lectura fácil') + '</button><button type="button" data-offer="large">' + T('Larger text', 'Letra más grande') + '</button><button type="button" data-offer="biggest">' + T('Biggest text, and keep still', 'La letra más grande, y la página quieta') + '</button><button type="button" data-offer="no" class="is-quiet">' + T('No thanks', 'No, gracias') + '</button></p>' +
-      (esPage() ? '' : '<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Read your way: pick how you take things in &rarr;</a></p>'));
+    var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
+      '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>' +
+      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">' + 'Quiet mode' + '</button><button type="button" data-offer="easy">' + 'Easy reading' + '</button><button type="button" data-offer="large">' + 'Larger text' + '</button><button type="button" data-offer="biggest">' + 'Biggest text, and keep still' + '</button><button type="button" data-offer="no" class="is-quiet">' + 'No thanks' + '</button></p>' +
+      ('<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Read your way: pick how you take things in &rarr;</a></p>'));
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-offer]'); if (!b) return;
       var what = b.getAttribute('data-offer');
@@ -4669,7 +4568,7 @@
         // No thanks: the card folds down to one line where it is, so nothing on the page jumps. It goes
         // quietly once it has scrolled out of view (and the page is moved back by its height if it was above).
         var h0 = box.offsetHeight;
-        box.innerHTML = '<p class="tol-offer-done">' + T('Okay. These are always in <em>Settings</em> at the top.', 'Está bien. Siempre están en <em>Ajustes</em>, arriba.') + '</p>';
+        box.innerHTML = '<p class="tol-offer-done">' + 'Okay. These are always in <em>Settings</em> at the top.' + '</p>';
         box.classList.add('is-done');
         var h1 = box.offsetHeight, still = document.documentElement.classList.contains('tol-still') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
         if (!still && h0 > h1) { box.style.height = h0 + 'px'; box.style.overflow = 'hidden'; void box.offsetHeight; box.style.transition = 'height .35s ease'; box.style.height = h1 + 'px'; }
@@ -4686,9 +4585,9 @@
         var foc = box.querySelector('p'); foc.setAttribute('tabindex', '-1'); foc.focus({ preventScroll: true });
         return;
       }
-      if (what === 'large') { lsSet(SIZE_KEY, 'lg'); after(); announce(T('Larger text is on. Change it any time in Settings.', 'La letra más grande está activada. Puedes cambiarla en Ajustes.')); }
-      else if (what === 'biggest') { lsSet(SIZE_KEY, 'xxl'); setStill(true); after(); announce(T('The biggest text is on, and the page is kept still. Change it any time in Settings.', 'La letra más grande está activada, y la página se queda quieta. Puedes cambiarlo en Ajustes.')); }
-      else { setPreset(what, true); announce(what === 'quiet' ? T('Quiet mode is on.', 'El modo tranquilo está activado.') : T('Easy reading is on.', 'La lectura fácil está activada.')); }
+      if (what === 'large') { lsSet(SIZE_KEY, 'lg'); after(); announce('Larger text is on. Change it any time in Settings.'); }
+      else if (what === 'biggest') { lsSet(SIZE_KEY, 'xxl'); setStill(true); after(); announce('The biggest text is on, and the page is kept still. Change it any time in Settings.'); }
+      else { setPreset(what, true); announce(what === 'quiet' ? 'Quiet mode is on.' : 'Easy reading is on.'); }
       // focus goes to whatever came next (the page's first heading if nothing else), so a screen reader lands somewhere real
       var nx = box.nextElementSibling, m = document.getElementById('tol-main'); box.remove();
       var tgt = (nx && nx.matches && nx.matches('h1, h2, h3, p, section, header') ? nx : null) || document.querySelector('main h1, main h2');
@@ -4706,7 +4605,7 @@
     else if (firstPart) {
       // before the whole tool: the first block of the page with something to fill in or press
       var lead = firstPart;
-      for (var k = firstPart.parentNode.firstElementChild; k && k !== firstPart; k = k.nextElementSibling) if (toolish(k) && !k.matches('.tol-private, .tol-es-hint, .read-head, nav')) { lead = k; break; }
+      for (var k = firstPart.parentNode.firstElementChild; k && k !== firstPart; k = k.nextElementSibling) if (toolish(k) && !k.matches('.tol-private, .read-head, nav')) { lead = k; break; }
       lead.before(box);
     }
     else if (head && head.parentNode === main) head.after(box);
@@ -4740,15 +4639,13 @@
       return;
     }
     var steps = ios
-      ? T('<li>Tap the <strong>Share</strong> button <span aria-hidden="true">(the square with an arrow)</span>.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li>',
-          '<li>Toca el botón <strong>Compartir</strong> <span aria-hidden="true">(el cuadrado con una flecha)</span>.</li><li>Baja y toca <strong>Agregar a pantalla de inicio</strong>.</li><li>Toca <strong>Agregar</strong>.</li>')
-      : T('<li>Open your browser’s menu <span aria-hidden="true">(&#8942; or &#8943;)</span>.</li><li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li><li>Confirm, and look for the two little bubbles on your home screen.</li>',
-          '<li>Abre el menú del navegador <span aria-hidden="true">(&#8942; o &#8943;)</span>.</li><li>Toca <strong>Agregar a la pantalla principal</strong> o <strong>Instalar app</strong>.</li><li>Confirma, y busca las dos burbujitas en tu pantalla.</li>');
+      ? '<li>Tap the <strong>Share</strong> button <span aria-hidden="true">(the square with an arrow)</span>.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li>'
+      : '<li>Open your browser’s menu <span aria-hidden="true">(&#8942; or &#8943;)</span>.</li><li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li><li>Confirm, and look for the two little bubbles on your home screen.</li>';
     var d = el('div', { class: 'tol-install', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tol-install-h' },
       '<div class="tol-install-card"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72">' +
-      '<h2 id="tol-install-h">' + T('Keep us on your home screen', 'Tennos a mano en tu pantalla de inicio') + '</h2>' +
-      '<p>' + T('It opens like an app, works without a connection, and nothing you type ever leaves your phone.', 'Se abre como una app, funciona sin conexión, y nada de lo que escribes sale de tu teléfono.') + '</p>' +
-      '<ol>' + steps + '</ol><p><a href="/install.html"' + (esPage() ? ' hreflang="en"' : '') + '>' + T('More help, and what about widgets', 'Más ayuda (en inglés)') + '</a></p><button type="button" class="tol-install-close">' + T('Got it', 'Entendido') + '</button></div>');
+      '<h2 id="tol-install-h">' + 'Keep us on your home screen' + '</h2>' +
+      '<p>' + 'It opens like an app, works without a connection, and nothing you type ever leaves your phone.' + '</p>' +
+      '<ol>' + steps + '</ol><p><a href="/install.html"' + ('') + '>' + 'More help, and what about widgets' + '</a></p><button type="button" class="tol-install-close">' + 'Got it' + '</button></div>');
     function close() { d.remove(); document.removeEventListener('keydown', onKey); }
     function onKey(e) { if (e.key === 'Escape') close(); }
     d.addEventListener('click', function (e) { if (e.target === d || e.target.classList.contains('tol-install-close')) close(); });
@@ -4773,8 +4670,8 @@
       if (!quietFor(30000)) { if (++tries < 6) setTimeout(invite, 30000); return; }
       lsSet('tol-install-asked', '1'); ssSet('tol-invite-seen', '1'); promptTake('invite');
       var t = el('div', { class: 'tol-invite', role: 'status' },
-        '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>' + T('Want us on your home screen? It opens like an app, and nothing you type leaves your phone.', '¿Nos quieres en tu pantalla de inicio? Se abre como una app, y nada de lo que escribes sale de tu teléfono.') + '</p>' +
-        '<span><button type="button" class="tol-invite-yes">' + T('Show me how', 'Muéstrame cómo') + '</button><button type="button" class="tol-invite-no">' + T('Not now', 'Ahora no') + '</button></span>');
+        '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>' + 'Want us on your home screen? It opens like an app, and nothing you type leaves your phone.' + '</p>' +
+        '<span><button type="button" class="tol-invite-yes">' + 'Show me how' + '</button><button type="button" class="tol-invite-no">' + 'Not now' + '</button></span>');
       t.querySelector('.tol-invite-yes').addEventListener('click', function () { t.remove(); showInstall(); });
       t.querySelector('.tol-invite-no').addEventListener('click', function () { t.remove(); });
       document.body.appendChild(t);
@@ -5033,8 +4930,8 @@
   // breathe.js and loads the first time someone taps it.
   function buildBreathe(body) {
     var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
-    var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>' + T('Breathe', 'Respirar') + '</span>');
-    btn.setAttribute('aria-label', T('Breathe: take a breathing break', 'Respirar: una pausa para respirar'));
+    var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>' + 'Breathe' + '</span>');
+    btn.setAttribute('aria-label', 'Breathe: take a breathing break');
     body.appendChild(btn);
     keepBreatheClear(btn);
     var loading = false;
@@ -5397,22 +5294,22 @@
   function buildShareSheet() {
     var box = el('div', { class: 'tol-sharesheet tol-plain no-bubble', 'data-share-sheet': '', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tol-share-h', hidden: '' },
       '<div class="tol-share-card">' +
-        '<div class="tol-share-head"><h2 id="tol-share-h">' + T('Share', 'Compartir') + '</h2><button type="button" class="tol-share-close">' + T('Close', 'Cerrar') + '</button></div>' +
+        '<div class="tol-share-head"><h2 id="tol-share-h">' + 'Share' + '</h2><button type="button" class="tol-share-close">' + 'Close' + '</button></div>' +
         '<p class="tol-share-what"></p>' +
         '<p class="tol-share-preview" hidden></p>' +
         '<div class="tol-share-acts">' +
-          '<button type="button" class="tol-share-act" data-act="copy">' + T('Copy link', 'Copiar enlace') + '</button>' +
-          '<button type="button" class="tol-share-act" data-act="copy-text">' + T('Copy message', 'Copiar mensaje') + '</button>' +
-          '<a class="tol-share-act" data-act="sms">' + T('Text message', 'Mensaje de texto') + '</a>' +
-          '<a class="tol-share-act" data-act="email">' + T('Email', 'Correo') + '</a>' +
+          '<button type="button" class="tol-share-act" data-act="copy">' + 'Copy link' + '</button>' +
+          '<button type="button" class="tol-share-act" data-act="copy-text">' + 'Copy message' + '</button>' +
+          '<a class="tol-share-act" data-act="sms">' + 'Text message' + '</a>' +
+          '<a class="tol-share-act" data-act="email">' + 'Email' + '</a>' +
           '<a class="tol-share-act" data-act="whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>' +
           '<a class="tol-share-act" data-act="facebook" target="_blank" rel="noopener noreferrer">Facebook</a>' +
           '<a class="tol-share-act" data-act="x" target="_blank" rel="noopener noreferrer">X</a>' +
           '<a class="tol-share-act" data-act="pinterest" target="_blank" rel="noopener noreferrer">Pinterest</a>' +
-          '<button type="button" class="tol-share-act" data-act="print">' + T('Print or save as PDF', 'Imprimir o guardar como PDF') + '</button>' +
+          '<button type="button" class="tol-share-act" data-act="print">' + 'Print or save as PDF' + '</button>' +
         '</div>' +
         '<p class="tol-share-status" role="status" aria-live="polite"></p>' +
-        '<p class="tol-share-note">' + T('Sharing opens your own app. Nothing is sent from this site.', 'Compartir abre tu propia app. Este sitio no envía nada.') + '</p>' +
+        '<p class="tol-share-note">' + 'Sharing opens your own app. Nothing is sent from this site.' + '</p>' +
       '</div>');
     box.addEventListener('click', function (e) {
       if (e.target === box) { closeShareSheet(); return; }
@@ -5421,8 +5318,8 @@
       if (act === 'copy' || act === 'copy-text') {
         var orig = a.getAttribute('data-label') || a.textContent; a.setAttribute('data-label', orig);
         shareCopy(act === 'copy' ? shareCur.url : shareMessage(shareCur)).then(function (ok) {
-          a.textContent = ok ? T('Copied!', '¡Copiado!') : orig;
-          st.textContent = ok ? (act === 'copy' ? T('Link copied. Paste it wherever you like.', 'Enlace copiado. Pégalo donde quieras.') : T('Message copied. Paste it wherever you like.', 'Mensaje copiado. Pégalo donde quieras.')) : T('Couldn’t copy here. Try selecting the link by hand.', 'No se pudo copiar aquí. Prueba a seleccionar el enlace a mano.');
+          a.textContent = ok ? 'Copied!' : orig;
+          st.textContent = ok ? (act === 'copy' ? 'Link copied. Paste it wherever you like.' : 'Message copied. Paste it wherever you like.') : 'Couldn’t copy here. Try selecting the link by hand.';
           clearTimeout(a._t); a._t = setTimeout(function () { a.textContent = orig; }, 2000);
           if (ok) shareFire(shareCur.url, act);
         });
@@ -5449,7 +5346,7 @@
     if (!shareBox) shareBox = buildShareSheet();
     shareCur = d; shareLast = document.activeElement;
     var box = shareBox, enc = encodeURIComponent, msg = shareMessage(d);
-    box.querySelector('#tol-share-h').textContent = d.result ? T('Share what you made', 'Comparte lo que hiciste') : T('Share', 'Compartir');
+    box.querySelector('#tol-share-h').textContent = d.result ? 'Share what you made' : 'Share';
     box.querySelector('.tol-share-what').textContent = d.title || '';
     box.querySelector('.tol-share-what').hidden = !d.title;
     var pv = box.querySelector('.tol-share-preview');
@@ -5458,7 +5355,7 @@
     var img = '', og = document.querySelector('meta[property="og:image"]'); if (og) img = og.getAttribute('content') || '';
     var links = {
       sms: 'sms:?&body=' + enc(msg),
-      email: 'mailto:?subject=' + enc(d.title || T('Something to share', 'Algo para compartir')) + '&body=' + enc(msg),
+      email: 'mailto:?subject=' + enc(d.title || 'Something to share') + '&body=' + enc(msg),
       whatsapp: 'https://wa.me/?text=' + enc(msg),
       facebook: d.url ? 'https://www.facebook.com/sharer/sharer.php?u=' + enc(d.url) : '',
       x: msg.length <= 260 ? 'https://x.com/intent/post?text=' + enc(d.text || d.title || '') + (d.url ? '&url=' + enc(d.url) : '') : '',
@@ -5592,7 +5489,7 @@
     [/^\/pause-and-play\.html$/, 'Share the games', 'Calm games for a busy mind. Free, with no timers.'],
     [/^\/(word-bloom|quiet-crossword|daily-ledger-crossword|quiet-words)\.html$/, 'Share this game', 'A calm word game I like.'],
     [/^\/frequency-journey\.html$/, 'Share this game', 'A calm puzzle journey with two pups. Free.'],
-    [/^\/night-garden\.html$/, T('Share the garden', 'Compartir el jardín'), T('A calm place to breathe and play. Free, with no timers.', 'Un lugar tranquilo para respirar y jugar. Gratis y sin relojes.')]
+    [/^\/night-garden\.html$/, 'Share the garden', 'A calm place to breathe and play. Free, with no timers.']
   ];
   function shareTitle() {
     var h = document.querySelector('main h1');
@@ -5718,8 +5615,7 @@
     var BB_PAGE = /^\/(index|start-in-10-minutes|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz|check-ins|turning-toward|complacency|wired-differently|love-languages|share-the-load|new-parent|co-parenting|prog-01)(-in-depth)?\.html$|^\/(book|workpapers)\/(?!fill\/)/;
     if ((current === '/index.html' || BB_PAGE.test(current)) && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
     // tablets, laptops and desktops: an "On this page" outline, keyboard shortcuts, roomier touch targets (wide-screens.js)
-    // (the English "press ? for keyboard shortcuts" tip stays off the Spanish page: for this tab only, it counts as already seen)
-    { if (esPage()) ssSet('tol-keys-hint', '1'); var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
+    { var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
     // a very faint local time and weather note in the corner, so nobody has to leave the page to check (clock-weather.js)
     if (!workMode()) { var cwx = document.createElement('script'); cwx.src = '/assets/js/clock-weather.js'; cwx.defer = true; document.head.appendChild(cwx); }
     // phones: a "turn sideways" hint under big pictures, and full screen asks for landscape
@@ -5740,7 +5636,7 @@
     var lock = lsGet('tol-lock-v1') || '', locked = lock.indexOf('"on":1') > 0, h = document.documentElement;
     var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
     // (the lock never covers the two safety pages, so they're never hidden, not even for a moment)
-    if (locked && !inFrame && !/^\/(safety|upset-right-now)\.html$/.test(current)) h.style.visibility = 'hidden';
+    if (locked && !inFrame && !/^\/(upset-right-now)\.html$/.test(current)) h.style.visibility = 'hidden';
     var go = function () { loadScript('/assets/js/progress.js').catch(function () { h.style.visibility = ''; }); };
     var n = 0; try { n = localStorage.length; } catch (e) {}
     if (current === '/on-this-device.html' || lsGet('tol-save-mode-v1') === 'shared' || locked) go();
@@ -5753,11 +5649,11 @@
     var b = e.target && e.target.closest && e.target.closest('[data-clear-confirm]');
     if (!b || b.tolClearOk || b.disabled) return;
     e.preventDefault(); e.stopImmediatePropagation();
-    var what = b.getAttribute('data-clear-confirm') || T('this', 'esto');
+    var what = b.getAttribute('data-clear-confirm') || 'this';
     var pass = function () { b.tolClearOk = true; try { b.click(); } finally { b.tolClearOk = false; } };
     var ask = function () {
       if (window.TOLConfirmClear) window.TOLConfirmClear.ask({ what: what, keys: b.getAttribute('data-clear-keys') || null, onConfirm: pass });
-      else if (window.confirm(T('Clear ' + what + '? This can’t be undone.', '¿Borrar ' + what + '? No se puede deshacer.'))) pass();
+      else if (window.confirm(('Clear ' + what + '? This can’t be undone.'))) pass();
     };
     if (window.TOLConfirmClear) ask(); else loadScript('/assets/js/confirm-clear.js').then(ask, ask);
   }, true);

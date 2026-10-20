@@ -4,7 +4,6 @@
 tools/book/build_book.py imports this and places what it returns. Nothing here writes a file.
 
 Front of the book (print only, like the rest of the front matter):
-  help-now      "If you need help now": crisis lines for several countries     (front-help-now.html)
   find-it-fast  "Find it fast": everyday problems mapped to chapter, page, tool (front-find-it-fast.json)
   handed        "If someone handed you this book"                             (front-handed-this-book.html)
 Back of the book:
@@ -26,7 +25,7 @@ How build_book.py uses it (see the bookfixB1 fixnote for the exact patch):
 Template words inside the .html fragments:
     {{ref:KEY|Label}}   a link to a place in the book with its page number, or "(online)" when that chapter
                         isn't in this copy. KEY is a chapter slug, "slug#id" for a section (the id as it is on
-                        the chapter page), or a front/back section key (help-now, find-it-fast, handed,
+                        the chapter page), or a front/back section key (find-it-fast, handed,
                         numbers, worksheets).
     {{pg:KEY}}          just the page number slot for KEY (same KEY forms).
     {{site}}            spreadloveandacceptance.com
@@ -39,7 +38,7 @@ import os
 import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FRONT_KEYS = ('help-now', 'find-it-fast', 'handed')
+FRONT_KEYS = ('find-it-fast', 'handed')
 BACK_KEYS = ('numbers', 'worksheets')
 
 
@@ -64,7 +63,6 @@ class Ctx(object):
 
 # (key, contents label, file, packages that get it (None = all), parts it needs (None = any))
 SECTIONS = [
-    ('help-now', 'If you need help now', 'front-help-now.html', None, None),
     ('find-it-fast', 'Find it fast', 'front-find-it-fast.json', None, None),
     ('handed', 'If someone handed you this book', 'front-handed-this-book.html', ('whole', 'together'), None),
     ('numbers', 'How the numbers work', 'back-numbers.html', None, None),
@@ -327,14 +325,7 @@ STYLE = '''<style>
   .pe-fb-small { font-size: 8.6pt !important; color: var(--soft); margin-top: 3mm; }
   .pe-fb .pe-pg { font-size: inherit; min-width: 0; }
   .pe-fb a { text-decoration: none; }
-  /* If you need help now */
-  .pe-fb-help-now .pe-help-urgent { border: 1.2pt solid #96412B; background: #FBEDE7; border-radius: 1.6mm; padding: 3mm 4mm; margin: 0 0 4mm; break-inside: avoid; }
-  .pe-fb-help-now .pe-help-urgent p { font-size: 10.4pt; margin: 0; }
-  .pe-fb-help-now table, .pe-fb-numbers table, .pe-fb-help-now .pe-help-young { width: 100%; border-collapse: collapse; }
-  .pe-fb-help-now th, .pe-fb-help-now td { text-align: left; vertical-align: top; padding: 1.5mm 2mm; border-bottom: .5pt solid #DCCFAE; font-size: 9.8pt; line-height: 1.38; }
-  .pe-fb-help-now thead th { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .1em; text-transform: uppercase; color: #96412B; border-bottom: .8pt solid #96412B; }
-  .pe-fb-help-now tbody th { font-family: "Fraunces", serif; font-weight: 600; width: 27mm; }
-  .pe-fb-help-now .pe-help-num { font-family: "Fraunces", serif; font-weight: 600; font-size: 11pt; white-space: nowrap; }
+  .pe-fb-numbers table { width: 100%; border-collapse: collapse; }
   /* Find it fast */
   .pe-fb-find-it-fast .pe-ff-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.4pt; letter-spacing: .16em; text-transform: uppercase; color: var(--pc); margin: 3.6mm 0 1mm; }
   .pe-ff { width: 100%; border-collapse: collapse; table-layout: fixed; }

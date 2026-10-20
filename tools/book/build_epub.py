@@ -489,7 +489,7 @@ def book_docs(book, where):
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     # contents: nav.xhtml (added later, after the title and copyright pages)
     docs.append(None)
-    # help now (kept word for word), then the three friends
+    # then the three friends
     # printfix13: "About this book, and how to use it", as in print but with links in place of page numbers and codes
     namer = S.namer_for(book)
     ebook_ref = lambda s_: (namer.ref(s_)[0], None)
@@ -1117,13 +1117,10 @@ def build_boxset(built, images):
           '<em>%s</em> at spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print books and ebooks are optional.</p>'
           '<p><strong>Not therapy.</strong> These books are general education about people and relationships. They are not a diagnosis, treatment or a '
           'replacement for help from a doctor, counsellor or other trained professional, and they can’t know your situation.</p>'
-          '<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
-          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
-          'If you are in danger now, call your local emergency number.</p>'
           '<p><strong>The examples are made up.</strong> The people in these books’ examples are made up; any likeness to real people is coincidence. None of them is a testimonial.</p>'
           '<p>Each book that follows keeps its own title page and copyright page.</p></section>') % (
         B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.esc(PUBLISHER), B.AUTHOR, B.UPDATED,
-        ('<p>ISBN %s (ebook)</p>' % B.esc(bx['isbn_ebook'])) if bx.get('isbn_ebook') else '', B.esc(S.POCKET['title']), SITE)
+        ('<p>ISBN %s (ebook)</p>' % B.esc(bx['isbn_ebook'])) if bx.get('isbn_ebook') else '', B.esc(S.POCKET['title']))
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     for d in docs:
         d.root = transform(parse(pre(d.html)), images, set(), d.heading_shift)

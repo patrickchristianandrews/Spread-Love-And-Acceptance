@@ -67,7 +67,7 @@ const PATTERNS = [
   ['Carers UK', /carers\s*uk/i],
   ['Dementia UK', /dementia\s*uk/i],
   ['Stroke Association', /stroke\s+association|stroke\.org/i],
-  ['Eldercare Locator', /eldercare/i],
+  ['Eldercare Locator', /eldercare\s+locator|eldercare\.(?:acl\.)?gov/i],
   ['SAMHSA', /samhsa/i],
   ['NAMI', /\bNAMI\b|nami\.org/],
   ['Mermaids (charity)', /mermaids\.org|\bMermaids\s+(?:charity|helpline|supports|\()/i],

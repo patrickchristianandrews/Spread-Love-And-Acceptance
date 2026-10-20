@@ -918,7 +918,6 @@ select.wpf-tap-sel{ position: absolute !important; width: 1px !important; height
 .wpf-share-raw{ margin: 8px 0 0; }
 .wpf-share-raw > summary{ cursor: pointer; min-height: 40px; display: inline-flex; align-items: center; color: #2F6FB0; text-decoration: underline; }
 .wpf-share-raw[open] > summary{ margin-bottom: 6px; }
-.wpf-safe{ margin: 4px 0 10px; color: #5B4A6E; }
 
 /* ---------- "Print this form" (wpf-print.js): the printout is the form and nothing else ---------- */
 @media print{

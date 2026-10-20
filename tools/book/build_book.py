@@ -304,7 +304,7 @@ INDEX_TERMS = [
     ('teenagers', r'teen(?:s|ager|agers)?|teenage'), ('work, the workplace', r'workplace|at work|office'),
     # situations
     ('arguments', r'argu(?:ment|ments|e|ing|ed)'), ('breakups', r'break-?ups?'), ('chores', r'chores?|housework|dishes|laundry|bins'),
-    ('crisis lines', r'Samaritans|988|findahelpline|Lifeline|crisis'), ('debt, money worries', r'debts?'), ('exams', r'exams?'),
+    ('debt, money worries', r'debts?'), ('exams', r'exams?'),
     ('group chats', r'group chats?'), ('illness, long-term', r'ill(?:ness)?|chronic|long COVID|disab(?:led|ility)'), ('infidelity, affairs', r'affairs?'),
     ('money', r'money|budget|income|bills?|£'), ('online life', r'online|social media|phones?'), ('remote and hybrid work', r'remote|hybrid'),
     ('separation', r'separat(?:e|ed|ing|ion)'), ('shift work', r'shift work(?:ers?)?|night shifts?|late shifts?|on shifts'), ('suicide', r'suicid(?:e|al)|ending (?:your|their|my) life'),
@@ -979,13 +979,11 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
 <p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “{ST}, spreadloveandacceptance.com” and don’t change it or sell it.</p>
 <p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>
-<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. If you are in danger now, call your local emergency number.</p>
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
 </div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, mark('titlep'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
-                       book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE, SITE)
-    s += '\n' + fbk.get('help-now', '')
+                       book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE)
     # how to use this book
     parts_li = ''.join('<li style="--pc:%s"><strong>%s: %s.</strong> %s</li>' % (PCOL[p][0], PARTS[p][0], PARTS[p][1], esc(PARTS[p][2])) for p in parts)
     s += '''
