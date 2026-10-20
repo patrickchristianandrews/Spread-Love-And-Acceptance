@@ -133,7 +133,7 @@
       { href: '/week-0.html', code: 'New', title: 'Week 0, and the six weeks in your calendar', note: 'Five minutes before the six gentle weeks, and a reminder for each week in your own calendar' },
       { href: '/someone-sent-you-this.html', code: 'New', title: 'Someone sent you this?', note: 'What the site is in three lines, with no pressure, and messages to send someone else' },
       { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, housemates, siblings, co-parents, friends and more' },
-      { href: '/outside-help.html', code: 'New', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
+      { href: '/outside-help.html', code: 'New', title: 'Help beyond this site', note: 'Finding a counsellor, support groups and books' },
       { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies and books behind the pages, in plain words' },
       { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '17 chapters on how people work: feelings, stress, trust, change, grief, healing, helping, anger, love, worry and groups' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
@@ -177,7 +177,7 @@
       { href: '/new-parent.html', code: '', title: 'New baby, sharing the load', note: 'A three-step way for new parents to split the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check, parallel parenting, and a safety note' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
-      { href: '/outside-help.html', code: '', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
+      { href: '/outside-help.html', code: '', title: 'Help beyond this site', note: 'Finding a counsellor, support groups and books' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/install.html', code: '', title: 'Get the app', note: 'Android now; on iPhone, add it to your Home Screen from Safari. Its own icon, full screen, works offline' },
       { href: '/program.html', code: '', title: 'Which part of the program to use', note: 'Six weeks, the Workpaper Suite, the package and report, and the indexes: which to use when' },
@@ -414,7 +414,7 @@
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/journeys.html', code: 'Steps', title: 'Guided journeys', note: 'Tell us what’s going on and follow 3 to 6 small steps, ticked off on this device' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
-      { href: '/outside-help.html', code: 'Help', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
+      { href: '/outside-help.html', code: 'Help', title: 'Help beyond this site', note: 'Finding a counsellor, support groups and books' },
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and see your results side by side' },
       { href: '/on-this-device.html#progress', code: 'Yours', title: 'Your progress', note: 'Back it up, move it to the app, lock it with a PIN, or clear it' },
@@ -901,7 +901,7 @@
   // ===== Focus mode: "Focus on what I'm learning" =====
   // Someone can pick one or more areas (who it's about, or what they're working on). While it's on, the menus,
   // search, "What's new" and the suggestions show just those areas; every page is still reachable by its link.
-  // Safety ("Not safe at home?", "Leave this site quickly", "Upset right now?") is never hidden.
+  // "Upset right now?" is never hidden.
   // Kept in this browser only, as tol-focus: {"on":true,"areas":["couples","load"]}.
   // Other scripts: window.TOLFocus (isOn, areas, matches, allows, open, off) and the 'tol-focus-change' event;
   // while it's on, <html> and <body> have class tol-focus and body[data-focus] lists the chosen ids.
@@ -927,8 +927,8 @@
     'play': 'frequency-journey word-bloom quiet-crossword daily-ledger-crossword quiet-words recheck-drive pause-and-play keepsakes surprise night-garden bears-dojo coin-pusher',
     'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
   };
-  // pages that are never "outside your focus": the start, safety, help and the site's own pages
-  var FOCUS_NEUTRAL = /^\/(index|start-here|safety|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|someone-sent-you-this|outside-help|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
+  // pages that are never "outside your focus": the start, help and the site's own pages
+  var FOCUS_NEUTRAL = /^\/(index|start-here|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|someone-sent-you-this|outside-help|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
   var AREA_OF = {};
   function fpath(u) {
     var p = String(u || '').split(/[?#]/)[0];
@@ -974,7 +974,7 @@
     return s.areas.some(function (x) { return a[x]; });
   }
   function focusNeutral(u) { var p = fpath(u); return !p || FOCUS_NEUTRAL.test(p) || !areasOf(u); }
-  // fine to show while focused: in a chosen area, or a page that belongs to no area (safety, the start, help)
+  // fine to show while focused: in a chosen area, or a page that belongs to no area (the start, help)
   function focusAllows(u) { return !focusOn() || focusNeutral(u) || focusMatches(u); }
   function focusName(id, short) { for (var i = 0; i < FOCUS_AREAS.length; i++) if (FOCUS_AREAS[i][0] === id) return (short && FOCUS_AREAS[i][3]) || FOCUS_AREAS[i][1]; return id; }
   function focusList() { return focusAreas().map(function (a) { return focusName(a, true); }).join(', '); }
@@ -1869,7 +1869,12 @@
       if (bk) bk.hidden = false;
       if (rx) rx.hidden = false;
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
-      if (rx && crowded()) rx.hidden = true;                             // then "Relax and reset" (it is in Calm & play too)
+      // then "Read & learn" and "Calm & play" fold into Menu to make room for "Relax and reset" (the calm corner, one tap
+      // away); only if that isn't enough does Relax step aside
+      if (rx && crowded()) {
+        bar.classList.add('is-fold1'); if (crowded()) bar.classList.add('is-fold2');
+        if (crowded()) { rx.hidden = true; bar.classList.remove('is-fold1', 'is-fold2'); }
+      }
       ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
       // still too full: "Read the book" steps aside too (it is first in the menu panel), and the sections try again
       if (crowded() && bk) { bk.hidden = true; bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'); ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); }); }
@@ -2067,8 +2072,8 @@
     autism: ['/wired-differently.html', '/wavelength.html', '/wiring-card.html', '/know-yourself.html'], autistic: 'autism', adhd: 'autism', neurodivergent: 'autism', wiring: 'autism', sensory: 'autism',
     personality: ['/wavelength.html', '/know-yourself.html'], quiz: 'personality', archetype: 'personality', wavelength: 'personality', heartprint: 'personality', neurotype: 'personality', audhd: 'autism',
     dyslexia: ['#settings', '/wired-differently.html'], listen: ['#settings'], aloud: ['#settings'], read: null, larger: ['#settings'], size: ['#settings'], bigger: ['#settings'], font: ['#settings'], quiet: ['#settings'], dark: ['#settings'], settings: ['#settings'], contrast: ['#settings'], lowvision: ['#settings'],
-    safe: ['/safety.html', '/on-this-device.html', '/upset-right-now.html'], safety: 'safe', unsafe: 'safe', abuse: 'safe', abused: 'safe', abusive: 'safe', abuser: 'safe', violence: 'safe', violent: 'safe',
-    hotline: 'safe', helpline: 'safe', danger: 'safe', dangerous: 'safe', scared: 'safe', afraid: 'safe', threat: 'safe', threatened: 'safe', threatens: 'safe', controlling: 'safe', coercive: 'safe', hide: 'safe', escape: 'safe', dv: 'safe', hurts: 'safe', hit: 'safe', hits: 'safe', stalking: 'safe',
+    safe: ['/outside-help.html', '/on-this-device.html', '/upset-right-now.html'], safety: 'safe', unsafe: 'safe', abuse: 'safe', abused: 'safe', abusive: 'safe', abuser: 'safe', violence: 'safe', violent: 'safe',
+    danger: 'safe', dangerous: 'safe', scared: 'safe', afraid: 'safe', threat: 'safe', threatened: 'safe', threatens: 'safe', controlling: 'safe', coercive: 'safe', hide: 'safe', escape: 'safe', dv: 'safe', hurts: 'safe', hit: 'safe', hits: 'safe', stalking: 'safe',
     boundaries: ['/book/self-2-now-in-depth.html', '/self-path.html', '/workpapers/wp-01.html', '/library/connection.html'], boundary: 'boundaries', overgiving: 'boundaries', 'over-giving': 'boundaries', giving: 'boundaries', control: 'boundaries', pleaser: 'boundaries', pleasing: 'boundaries', energy: 'boundaries', resentment: 'boundaries',
     kids: ['/parents.html', '/frequency-buddies.html', '/library/life.html', '/growing-up.html'], kid: 'kids', child: 'kids', children: 'kids', parenting: 'kids', siblings: 'kids', sibling: 'kids', brothers: 'kids', sisters: 'kids', tantrum: 'kids', tantrums: 'kids',
     teen: ['/parents.html', '/teens.html', '/library/life.html', '/turning-toward.html', '/workpapers/wp-13-daily-check-in.html'], teenager: 'teen', teenagers: 'teen', teenage: 'teen', son: 'teen', daughter: 'teen', adolescent: 'teen',
@@ -2078,8 +2083,8 @@
     grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/retired-together.html', '/lemonade-stand.html#quick', '/empty-nest.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/turning-toward.html', '/recheck-drive.html', '/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
     yelling: ['/parents.html', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', screaming: 'yelling',
     dementia: ['/caregivers.html', '/library/stress.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], alzheimers: 'dementia', alzheimer: 'dementia', respite: 'dementia', carer: 'dementia', carers: 'dementia', caregiver: 'dementia', caregivers: 'dementia', caregiving: 'dementia',
-    pronouns: ['/teens.html', '/safety.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
-    harassment: ['/safety.html', '/co-parenting.html'], harassing: 'harassment', harass: 'harassment', cutting: ['/teens.html', '/safety.html'], selfharm: 'cutting',
+    pronouns: ['/teens.html', '/coming-out.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
+    harassment: ['/outside-help.html', '/co-parenting.html'], harassing: 'harassment', harass: 'harassment', cutting: ['/teens.html', '/outside-help.html'], selfharm: 'cutting',
     espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol',
     flat: ['/complacency.html', '/turning-toward.html', '/recheck-drive.html'], routine: 'flat',
     stepmom: ['/stepfamily.html', '/stepfamily-in-depth.html#stepparent', '/parents.html#stepfamilies', '/co-parenting.html'], halfsibling: 'stepmom', halfsiblings: 'stepmom', stepsibling: 'stepmom', stepsiblings: 'stepmom', stepgrandparent: 'stepmom', 'step-grandparent': 'stepmom', bonusmom: 'stepmom', bonusdad: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom', stepkids: 'stepmom', stepchild: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', stepmother: 'stepmom', stepdad: 'stepmom', stepfather: 'stepmom', stepparent: 'stepmom', stepparents: 'stepmom', stepkids: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom',
@@ -2094,7 +2099,7 @@
     eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare', dementia: 'eldercare', alzheimers: 'eldercare', dad: ['/caregivers.html', '/parents.html', '/teens.html'], mum: 'dad', mom: 'dad', father: 'dad', mother: 'dad',
     rentlate: ['/share-the-load.html#roommates', '/lemonade-stand.html'], housemates: 'rentlate', flatmates: 'rentlate', housemate: 'rentlate', flatmate: 'rentlate',
     ndcouple: ['/neurodivergent-relationships.html', '/wiring-card.html', '/wavelength.html'],
-    controlsafe: ['/safety.html', '/ask.html'], punched: 'controlsafe', threw: 'controlsafe', smashed: 'controlsafe', datenight: ['/turning-toward.html', '/recheck-drive.html', '/check-ins.html'], controlling: 'controlsafe', coercive: 'controlsafe', template: 'workpapersuite', templates: 'workpapersuite', handover: ['/work.html', '/workpapers/wp-03-one-owner-per-job.html'], handovers: 'handover',
+    controlsafe: ['/outside-help.html', '/ask.html'], punched: 'controlsafe', threw: 'controlsafe', smashed: 'controlsafe', datenight: ['/turning-toward.html', '/recheck-drive.html', '/check-ins.html'], controlling: 'controlsafe', coercive: 'controlsafe', template: 'workpapersuite', templates: 'workpapersuite', handover: ['/work.html', '/workpapers/wp-03-one-owner-per-job.html'], handovers: 'handover',
     longdistance: ['/long-distance.html', '/turning-toward.html', '/check-ins.html'], calling: ['/long-distance.html#rhythm', '/long-distance.html', '/turning-toward.html'], calls: 'calling', phonecalls: 'calling', reachout: 'calling', ldr: 'longdistance', timezone: 'longdistance', timezones: 'longdistance', apart: 'longdistance',
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
@@ -2183,9 +2188,9 @@
     adhdkid: ['/adhd-kids.html', '/parents.html', '/neurodivergent-relationships.html'], fidgeting: 'adhdkid', fidget: 'adhdkid', fidgets: 'adhdkid', fidgety: 'adhdkid', hyperactive: 'adhdkid', impulsive: 'adhdkid',
     grownkids: ['/grown-up-children.html', '/family-obligations.html#visits', '/grandparents.html'], oversteps: 'grownkids', overstep: 'grownkids', overstepping: 'grownkids', unannounced: 'grownkids', meddling: 'grownkids', interfering: 'grownkids',
     moneytogether: ['/money-together.html', '/lemonade-stand.html', '/family-obligations.html'], saver: 'moneytogether', savers: 'moneytogether', spender: 'moneytogether', spenders: 'moneytogether', spending: 'moneytogether', wedding: 'moneytogether', weddings: 'moneytogether', prenup: 'moneytogether', prenuptial: 'moneytogether', budget: 'moneytogether', budgeting: 'moneytogether', debt: 'moneytogether', debts: 'moneytogether', fiance: 'moneytogether', fiancee: 'moneytogether', engaged: 'moneytogether', engagement: 'moneytogether', money: ['/money-together.html', '/lemonade-stand.html', '/family-obligations.html'],
-    comingout: ['/coming-out.html', '/teens.html', '/safety.html'], gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', bi: 'comingout', queer: 'comingout', lgbt: 'comingout', lgbtq: 'comingout', 'lgbtq+': 'comingout', lgbtqia: 'comingout', homosexual: 'comingout', sexuality: 'comingout', closeted: 'comingout', closet: 'comingout',
+    comingout: ['/coming-out.html', '/teens.html'], gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', bi: 'comingout', queer: 'comingout', lgbt: 'comingout', lgbtq: 'comingout', 'lgbtq+': 'comingout', lgbtqia: 'comingout', homosexual: 'comingout', sexuality: 'comingout', closeted: 'comingout', closet: 'comingout',
     counselors: ['/outside-help.html', '/for-counselors.html', '/groups.html', '/check-ins.html'],
-    outsidehelp: ['/outside-help.html', '/safety.html'], weekzero: ['/week-0.html', '/prog-01.html'],
+    outsidehelp: ['/outside-help.html'], weekzero: ['/week-0.html', '/prog-01.html'],
     examples: ['/examples.html', '/by-relationship.html'], example: 'examples',
     research: ['/research.html'], studies: 'research', study: 'research', evidence: 'research', science: 'research', therapist: 'counselors', therapists: 'counselors', counsellor: 'counselors', counselor: 'counselors', counsellors: 'counselors', client: 'counselors', clients: 'counselors', professional: 'counselors', professionals: 'counselors', practitioner: 'counselors', practitioners: 'counselors', coach: 'counselors', coaches: 'counselors', therapy: 'counselors', counselling: 'counselors', counseling: 'counselors', psychologist: 'counselors', 'social-worker': 'counselors',
     sharedroom: ['/sharing-a-room.html', '/share-the-load.html#roommates', '/upset-right-now.html'], dorm: 'sharedroom', dorms: 'sharedroom', halls: 'sharedroom', dormitory: 'sharedroom', college: 'sharedroom', university: 'sharedroom', uni: 'sharedroom', campus: 'sharedroom', freshman: 'sharedroom', ra: 'sharedroom', bunk: 'sharedroom',
@@ -2204,7 +2209,7 @@
     familyrift: ['/family-rifts.html', '/grief.html', '/teens.html#siblings'], brother: 'familyrift', sister: 'familyrift', brothers: 'familyrift', sisters: 'familyrift', sibling: 'familyrift', siblings: 'familyrift', estranged: 'familyrift', estrangement: 'familyrift', rift: 'familyrift', rifts: 'familyrift', feud: 'familyrift', feuding: 'familyrift', inheritance: 'familyrift', inherit: 'familyrift', inherited: 'familyrift', estate: 'familyrift', executor: 'familyrift', favourite: 'familyrift', favorite: 'familyrift', favouritism: 'familyrift', favoritism: 'familyrift', reconcile: 'familyrift', reconciliation: 'familyrift', reconciling: 'familyrift', reconnect: ['/family-rifts.html', '/turning-toward.html', '/recheck-drive.html', '/grief.html'],
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandparents: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather', grandchild: 'grandfather', nan: 'grandfather', nana: 'grandfather', nanna: 'grandfather', gran: 'grandfather', granny: 'grandfather', grandad: 'grandfather', granddad: 'grandfather', gramps: 'grandfather', abuelita: 'espanol',
     askeachother: ['/turning-toward-in-depth.html#their-world', '/turning-toward.html', '/check-ins.html'],
-    moneycontrol: ['/money-together.html#control', '/money-together.html', '/safety.html'],
+    moneycontrol: ['/money-together.html#control', '/money-together.html', '/outside-help.html'],
     polyguest: ['/more-than-two.html#joining', '/more-than-two.html', '/check-ins.html'],
     friendbaby: ['/friends.html#after-baby', '/friends.html', '/new-parent.html'],
     parttime: ['/on-my-own.html#part-time-parent', '/on-my-own.html', '/co-parenting.html'],
@@ -2269,7 +2274,7 @@
     escasa: ['/en-espanol.html#casa', '/en-espanol.html'], tareas: 'escasa', quehaceres: 'escasa', ayuda: 'escasa',
     espequenos: ['/en-espanol.html#pequenos', '/en-espanol.html'], gemelos: 'espequenos', gemelas: 'espequenos', bebe: 'espequenos', dormimos: 'espequenos',
     esenojado: ['/en-espanol.html#enojado', '/en-espanol.html'], peleamos: 'esenojado', peleas: 'esenojado', pelea: 'esenojado', enojado: 'esenojado', enojada: 'esenojado', gritos: 'esenojado',
-    comingout: ['/coming-out.html', '/teens.html#lgbtq', '/safety.html'], bi: 'comingout', gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', queer: 'comingout', trans: 'comingout', closeted: 'comingout', closet: 'comingout',
+    comingout: ['/coming-out.html', '/teens.html#lgbtq'], bi: 'comingout', gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', queer: 'comingout', trans: 'comingout', closeted: 'comingout', closet: 'comingout',
     christening: 'twofaiths', christened: 'twofaiths', christen: 'twofaiths', baptism: 'twofaiths', baptised: 'twofaiths', baptized: 'twofaiths', ramadan: 'twofaiths', eid: 'twofaiths', diwali: 'twofaiths', hanukkah: 'twofaiths'
   };
   Object.keys(ACT_12).forEach(function (k) { ACT[k] = ACT_12[k]; });
@@ -2367,7 +2372,7 @@
     [/\b(mov(e|ing) in together|should we move in|move in with (him|her|them|my)|ready to move in)\b/, 'r13movein'],
     [/\b(step ?(mum|mom|dad|mother|father|parent|kids?|children|child|son|daughter|siblings?|family|families|grand\w*)|blended famil\w*|half ?(brother|sister|siblings?)|bonus (mum|mom|dad|kids?))\b/, 'stepmom'],
     [/\b(yell\w*|shout\w*|scream\w*)\b.*\babus\w*|\babus\w*\b.*\b(yell\w*|shout\w*|scream\w*)\b/, 'r13yellabuse'],
-    // control, fear and abuse: the safety page's signs first, never a dead end
+    // control, fear and abuse: help beyond this site first, never a dead end
     [/\b(gaslight\w*|coercive|coercion|narciss\w*|controlling|abus\w*|domestic violence|dv|intimate partner violence|manipulat\w*|isolat\w* me|threaten\w*|stalk\w*|walking on eggshells|afraid of (him|her|them|my)|scared of (him|her|them|my))\b/, 'r13abuse']
   ];
   var ACT_13 = {
@@ -2384,8 +2389,8 @@
     r13checkin: ['/check-ins.html', '/workpapers/wp-13-daily-check-in.html', '/share-the-load.html#roommates'],
     r13rota: ['/workpapers/wp-03-one-owner-per-job.html', '/chore-chart-for-couples.html', '/share-the-load.html#roommates', '/share-the-load.html'], rota: 'r13rota', rotas: 'r13rota', roster: 'r13rota',
     r13book: ['/book/index.html', '/book/topic-start-here.html', '/book/self-1-then.html'], book: 'r13book', ebook: 'r13book',
-    comingout: ['/coming-out.html', '/teens.html#lgbtq', '/family-rifts.html', '/safety.html'], homophobic: 'comingout', transphobic: 'comingout', lgbt: 'comingout', lgbtq: 'comingout',
-    r13stored: ['/on-this-device.html', '/safety.html#traces', '/legal/privacy-policy.html'],
+    comingout: ['/coming-out.html', '/teens.html#lgbtq', '/family-rifts.html'], homophobic: 'comingout', transphobic: 'comingout', lgbt: 'comingout', lgbtq: 'comingout',
+    r13stored: ['/on-this-device.html', '/legal/privacy-policy.html'],
     adhd: ['/adhd-kids.html', '/neurodivergent-relationships.html', '/wired-differently.html', '/wiring-card.html'],
     r13adhdadult: ['/wired-differently.html', '/neurodivergent-relationships.html', '/work.html#neurodiversity', '/wiring-card.html'],
     r13explore: ['/explore.html', '/contents.html', '/by-relationship.html'],
@@ -2394,8 +2399,8 @@
     r13dating: ['/new-relationship.html', '/new-relationship-in-depth.html#flags', '/teens.html#dating', '/on-my-own.html'],
     datingapp: 'r13dating', newrelationship: 'r13dating', exclusive: 'r13dating', exclusivity: 'r13dating', ghosting: 'r13dating', ghosted: 'r13dating', redflag: 'r13dating', redflags: 'r13dating', lovebombing: 'r13dating', cohabit: 'r13dating', cohabiting: 'r13dating',
     r13movein: ['/new-relationship.html#moving-in', '/money-together.html', '/new-relationship.html'],
-    r13yellabuse: ['/parents.html#is-yelling-abuse', '/safety.html#signs', '/parents.html#anger-help'],
-    r13abuse: ['/safety.html#signs', '/safety.html', '/money-together.html#control', '/outside-help.html'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
+    r13yellabuse: ['/parents.html#is-yelling-abuse', '/parents.html#anger-help', '/outside-help.html'],
+    r13abuse: ['/outside-help.html', '/money-together.html#control'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
     r13smalltalk: ['/book/understanding-4-communication.html#small-talk', '/book/understanding-4-communication.html', '/refusals.html'],
     emotions: ['/book/understanding-1-feelings.html', '/library/emotions.html', '/communication.html'], emotion: 'emotions', emotional: 'emotions'
   };
@@ -2475,8 +2480,6 @@
    ['/stepfamily-in-depth.html#stepparent', 'The stepparent role: a warm adult first', 'Rules come later. Build the relationship first and let the parent lead on discipline.', 'Guide'],
    ['/stepfamily.html#loyalty', 'When children feel torn between homes', 'Kids caught between a parent and a stepparent, or between two homes: what helps them, in words you could use.', 'Guide'],
    ['/teens.html#dating', 'For teens: dating and crushes', 'Written for teens: going at your own pace, and when something doesn’t feel right.', 'Teens'],
-   ['/safety.html#signs', 'Signs of control or abuse (gaslighting, coercive control)', 'Being told you imagined things, checked on, cut off from friends or money, or afraid of how they’ll react: the signs, and free, private people to talk to.', 'Safety'],
-   ['/safety.html#traces', 'Clearing your traces on a shared device', 'What this site keeps on your device, how to erase it, and leaving quickly.', 'Safety'],
    ['/foster-and-kinship.html#support', 'Kinship and foster carers: where to get support', 'Support groups for grandparents raising grandchildren and other kinship carers, money help, and a break for you.', 'Guide'],
    ['/book/index.html', 'Read the book', 'The whole book, from the beginning: Part One (you), Part Two (sharing the load) and Part Three (understanding people).', 'Book'],
    // merged tools that live in a part of a page (round 11): the old addresses are stubs that send people here
@@ -2527,7 +2530,7 @@
     '/family-rifts.html': ['Family rifts and estrangement', 'Adult brothers and sisters, a will, a favourite child, years of silence: reaching out, or deciding you’re not ready.'],
     '/when-one-is-ill.html': ['When one of you is ill', 'Chronic illness, disability, long Covid or ME/CFS: sharing the load when one of you has fewer spoons, without either of you feeling a burden.'],
     '/someone-sent-you-this.html': ['Someone sent you this?', 'What this site is in three lines. You don’t have to do anything, nothing you type leaves your phone, and there are messages to send someone else.'],
-    '/outside-help.html': ['Help beyond this site', 'Finding a counsellor in the US and UK, free helplines, support groups for families and carers, and a few well-known books.'],
+    '/outside-help.html': ['Help beyond this site', 'Finding a counsellor in the US and UK, support groups for families and carers, and a few well-known books.'],
     '/examples.html': ['What small changes look like', 'Made-up examples built from common patterns: a couple, housemates, siblings, co-parents, friends, co-founders, a poly home, a kinship carer and someone on their own.'],
     '/week-0.html': ['Week 0: a gentle start', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'],
     '/workpapers/wp-12-same-moment-different-speeds.html': ['WP-12: Same moment, different speeds', 'When one of you wants to sort it now and the other needs time: five everyday moments, your gaps in plain words, and one small agreement.'],
@@ -2844,9 +2847,9 @@
     if (NTOGETHER.test(fold(q))) return go.slice();
     return go.map(function (g, i) { return [g, i]; }).sort(function (a, b) { return ((b[0][3] ? 1 : 0) - (a[0][3] ? 1 : 0)) || (a[1] - b[1]); }).map(function (x) { return x[0]; });
   }
-  // a question about safety at home never gets a "best match" in front of the safety page
+  // a question about being hurt, scared or controlled at home never gets a "best match" in front of its pages
   function safetyQuery(q) {
-    try { return searchTerms(q).some(function (t) { var a = actFor(t); return a && /^\/safety\.html/.test(a[0]); }); } catch (e) { return false; }
+    try { var S = [ACT.safe, ACT.harassment, ACT.controlsafe, ACT.r13abuse]; return searchTerms(q).some(function (t) { var a = actFor(t); return a && S.indexOf(a) !== -1; }); } catch (e) { return false; }
   }
   function matchNeeds(q) {
     var P = needsPrep, D = needsData;
@@ -3011,23 +3014,6 @@
   }
   document.addEventListener('DOMContentLoaded', function () { try { buildAlsoLike(); } catch (e) {} });
   var runSearch = function () {};
-  // Leave quickly: any [data-tol-exit] button, or Esc pressed twice, swaps this tab for a weather search
-  // (location.replace, so Back doesn't return here). Linked from the safety page, the menu and safety notes.
-  // it also forgets the chat and the pages remembered for "Pick up where you left off", so nothing shows on a shared device afterwards
-  function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); localStorage.removeItem('tol-recent'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
-  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tol-exit]'); if (b) { e.preventDefault(); quickExit(); } });
-  // Esc twice, quickly, leaves the site from any page: in a game, while typing in a box, or with a menu open.
-  // (The first Esc still does its usual job, like closing a menu or clearing a box; a second one within a second leaves.)
-  (function () {
-    var last = 0;
-    window.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape' && e.key !== 'Esc') return;
-      if (e.repeat) return;   // holding the key down isn't two presses
-      var now = Date.now();
-      if (now - last < 1000) { last = 0; quickExit(); return; }
-      last = now;
-    }, true);
-  })();
   function buildSearch() {
     var box = el('div', { class: 'tol-find', role: 'search' },
       '<label for="tol-find-q">' + T('Search the site', 'Buscar en el sitio') + '</label>' +
@@ -3077,7 +3063,7 @@
         // and a tool's own entry (its address with #quick, #today…) stands for its page, so the page isn't listed again
         R.hits.forEach(function (h) { var u = h.p.u; if (/[?#]/.test(u) && u.charAt(0) === '/' && kindOf(u, h.p.k) === 'Tool') bestP[u.split(/[?#]/)[0]] = 1; });
         var hits = R.hits.filter(function (h) { return !bestU[h.p.u] && !(h.p.u.indexOf('#') === -1 && h.p.u.indexOf('?') === -1 && bestP[h.p.u]); }), used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
-        // Focus mode: pages in your areas (and the start, safety and help pages, which are never hidden) first;
+        // Focus mode: pages in your areas (and the start and help pages, which are never hidden) first;
         // the rest wait behind "Show everything"
         var outside = 0, focusNone = false;
         if (focusOn()) {
@@ -3481,7 +3467,7 @@
     ['Hug a little longer.', 'A slow six-second hug helps both of you settle.'],
     ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow’s you will be grateful.']
   ];
-  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html', '/pursue-withdraw.html', '/upset-right-now.html', '/safety.html', '/sent-this.html', '/someone-sent-you-this.html', '/outside-help.html'];
+  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html', '/pursue-withdraw.html', '/upset-right-now.html', '/sent-this.html', '/someone-sent-you-this.html', '/outside-help.html'];
   // The full library (about 300 tips in topics) lives in tips.js and loads when a tip is shown;
   // the short list above is the fallback. Pages lean toward topics that fit them.
   var TIP_TOPICS = {
@@ -3668,7 +3654,7 @@
     if (!(TOOL_PAGES.test(current) || WORKSPACE.test(current) || body.hasAttribute('data-tool') || /^\/(the-logic-behind-it|check-ins|wavelength)\.html$/.test(current)) || body.classList.contains('is-game')) return;
     var main = document.querySelector('main'); if (!main) return;
     var MOV = '.tol-offer, .tol-onpage, .tsk-top-row, .tol-private, .tol-pillars-fold, .depth-bar.tol-depth';
-    var SKIP = MOV + ', .read-head, .tol-where, .tol-es-hint, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras, .ask-exit, [data-tol-exit]';
+    var SKIP = MOV + ', .read-head, .tol-where, .tol-es-hint, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras, .ask-exit';
     function run() {
       var ctrl = Array.prototype.filter.call(main.querySelectorAll('input:not([type=hidden]), textarea, select, button'), function (n) {
         return n.getClientRects().length && !n.closest(SKIP);
@@ -3796,8 +3782,8 @@
     sc.onload = function () { if (window.TOLChat) window.TOLChat.open(o); };
     document.head.appendChild(sc);
   }
-  // The floating Puddles button never sits on top of something to press: a "Leave this site quickly" button
-  // above all, a link, a card, a form field, or a bar fixed at the bottom of the screen (a privacy note, a
+  // The floating Puddles button never sits on top of something to press: a link,
+  // a card, a form field, or a bar fixed at the bottom of the screen (a privacy note, a
   // game's Full screen button). If it would, he drops his name and steps up just above it, and goes back
   // down once the way is clear again.
   // Is any text someone could be reading (or an "In short" box) under this floating button's box? Samples a grid
@@ -3841,8 +3827,8 @@
     return found;
   }
   function keepFabClear(fab) {
-    var PRESS = 'a[href], button, input, select, textarea, summary, label, [role="button"], [tabindex]:not([tabindex="-1"]), [data-tol-exit]';
-    var busy = false, strict = true;   // strict (first look, resize): anything to press; while scrolling, only quick-exit buttons and fixed bars
+    var PRESS = 'a[href], button, input, select, textarea, summary, label, [role="button"], [tabindex]:not([tabindex="-1"])';
+    var busy = false, strict = true;   // strict (first look, resize): anything to press; while scrolling, only fixed bars
     function under(r) {
       var found = null, pts = [[r.left + 3, r.top + 3], [r.right - 3, r.top + 3], [r.left + 3, r.bottom - 3], [r.right - 3, r.bottom - 3], [(r.left + r.right) / 2, (r.top + r.bottom) / 2]];
       var was = fab.style.pointerEvents; fab.style.pointerEvents = 'none';
@@ -3850,7 +3836,7 @@
         if (p[0] < 0 || p[1] < 0 || p[0] >= innerWidth || p[1] >= innerHeight) return false;
         var n = document.elementFromPoint(p[0], p[1]);
         if (!n || n === document.body || n === document.documentElement || fab.contains(n)) return false;
-        var hit = n.closest(strict ? PRESS : '[data-tol-exit]'), bar = null;
+        var hit = strict ? n.closest(PRESS) : null, bar = null;
         for (var x = n; x && x !== document.body; x = x.parentElement) { var pos = getComputedStyle(x).position; if (pos === 'fixed' || pos === 'sticky') { bar = x; break; } }
         if (hit && hit.closest('.tol-panel, .tol-sharesheet, [role="dialog"]')) hit = null;   // an open dialog sits above him anyway
         if (bar && /tol-(breathe-btn|top|cw|wx|bar)\b/.test(bar.className || '')) bar = null;  // the other little helpers keep their own places
@@ -4508,7 +4494,7 @@
     var box = el('div', { class: 'tol-set tol-focus-dlg', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': id + '-h', 'aria-describedby': id + '-d', hidden: '' },
       '<div class="tol-set-card">' +
       '<div class="tol-set-head"><h2 id="' + id + '-h">Focus on what I’m learning</h2><button type="button" class="tol-set-close tol-focus-close">Close</button></div>' +
-      '<p class="tol-set-intro" id="' + id + '-d">Pick one or more. The menu, search and suggestions then show just these, until you choose Show everything. Safety links, search and Settings always stay, and any page still opens from a link.</p>' +
+      '<p class="tol-set-intro" id="' + id + '-d">Pick one or more. The menu, search and suggestions then show just these, until you choose Show everything. Search and Settings always stay, and any page still opens from a link.</p>' +
       group('rel', 'Who it’s about') + group('topic', 'What you’re working on') +
       '<p class="tol-focus-msg" role="status" aria-live="polite"></p>' +
       '<p class="tol-focus-row"><button type="button" class="tol-focus-save">Focus on these</button> <button type="button" class="tol-focus-all">Show everything</button></p>' +
@@ -5694,7 +5680,7 @@
   // Read-only access for pages that need the page list (e.g. 404.html)
   // Erase everything this site keeps in this browser: every local and session storage key (only this site's own
   // can be reached), the offline copies of pages, the service worker, and the analytics cookies. Used by
-  // "Erase everything" on the safety page and "What's stored on this device". opts.stopRemembering keeps one
+  // "Erase" on "What's stored on this device". opts.stopRemembering keeps one
   // switch afterwards so the page list isn't started again.
   function eraseAll(opts) {
     opts = opts || {};

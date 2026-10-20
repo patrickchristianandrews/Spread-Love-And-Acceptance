@@ -3333,6 +3333,11 @@ html body main.read > :is(.tsk-top-row, .tol-steps-toggle) + :is(.tsk-top-row, .
   display:inline-flex !important; width:auto !important; vertical-align:top; margin:0 .5rem .75rem 0 !important; padding:0 !important;
 }
 
+/* the bar's own buttons on a laptop: 44px targets too (Quiet, Settings, Search were 36px) */
+@media (min-width:480px){
+  html body .tol-bar > :is(button, .tol-bar-quiet, .tol-bar-set, .tol-search-btn, .tol-contents-btn){ min-height:44px; min-width:44px; box-sizing:border-box; }
+}
+
 /* ---------- 6. Listen / Read from where I am: one small row, not two big buttons ---------- */
 html body main .tol-listen{ gap:.15rem .35rem !important; margin:-.4rem 0 .6rem !important; }
 html:not(.tol-own-look) body main .tol-listen button{ min-height:44px !important; padding:.3rem .6rem !important; font-size:.92rem !important; font-weight:600 !important; }
