@@ -433,6 +433,113 @@
       ]
     },
     {
+      "id": "eldercarehome",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "caring for a parent who lives with you",
+      "pat": "\\b(his|her|my husband( s)?|my wife( s)?|my partner( s)?|my|our) (mother|mum|mom|father|dad|parents?|mother in law|father in law|mil|fil|nan|gran|grandma|grandad)\\b.{0,30}\\b(lives with us|moved in|living with us|staying with us|is living with us|came to live with us)\\b|\\b(share|split|divide|sharing|splitting)\\b.{0,30}\\b(looking after|the care of|care of|caring for|care for)\\b.{0,10}\\b(his|her|my|our) (mother|mum|mom|father|dad|parents?|mother in law|father in law|mil|fil|nan|gran|grandma|grandad)\\b",
+      "what": [
+        "Caring for a parent who lives with you is real work, on top of everything else, and it often lands on whoever is home most. Fair isn’t always 50/50, but it should be agreed, not assumed."
+      ],
+      "how": [
+        "List the care jobs, the thinking ones too: medicines, appointments, meals, nights, the calls.",
+        "Agree together first, then each of you leads with your own family: the partner whose parent it is asks their brothers and sisters for help.",
+        "Count both of your weeks: long paid hours are real work too. Who does what? can compare your weeks side by side, paid hours included.",
+        "Give each job one owner, and ask other family for specific help, with a day and a time.",
+        "Keep some time as a couple during a long stay, even a walk on your own each evening."
+      ],
+      "links": [
+        [
+          "Visits, long stays and the role of elders",
+          "/family-obligations.html#visits"
+        ],
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "Who does what? Compare both weeks",
+          "/lemonade-stand.html#quick"
+        ]
+      ],
+      "script": [
+        "I want your mum to feel at home here. Can we list what her care takes each week, and agree who does what, including asking your brothers and sisters?"
+      ],
+      "plain": [
+        "List the care jobs.",
+        "Agree together first.",
+        "Count both your weeks.",
+        "Ask family for specific help."
+      ],
+      "follow": [
+        [
+          "\\b(says|thinks) (she|he|they) (does|do)|\\b(hours|driving|i work|my job)\\b",
+          "eldercareaccused"
+        ],
+        [
+          "\\b(share|split|divide|fair|siblings|brothers?|sisters?)\\b",
+          "eldercarehome"
+        ]
+      ]
+    },
+    {
+      "id": "eldercareaccused",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "when your partner says they do all the care",
+      "pat": "\\b(says|thinks|feels|told me) (she|he|they) (does|do|is doing|are doing) (all|most|all of|most of) (the )?(work|care|caring|looking after)\\b.{0,30}\\b(for )?(my|his|her|our) (mother|mum|mom|father|dad|parents?|mother in law|father in law|mil|fil|nan|gran|grandma|grandad)\\b|\\b(says|thinks) (she|he|they) (does|do) everything for (my|his|her|our) (mother|mum|mom|father|dad|parents?|mother in law|father in law|mil|fil|nan|gran|grandma|grandad)\\b",
+      "what": [
+        "Your long hours are real work too, and so is the care at home. Both can be true. It usually helps to say what you see your partner doing first, then look at both weeks together."
+      ],
+      "how": [
+        "Start with thanks, specifically: what your partner does for your parent that you see.",
+        "Compare your weeks side by side, paid hours and driving included. Who does what? keeps paid work and home work apart, so neither cancels the other out.",
+        "Fair isn’t always 50/50. Agree the split for this season, and take the jobs that fit your hours, like weekend care or the calls to your family.",
+        "As it’s your parent, lead with your own family: ask your brothers and sisters for specific help."
+      ],
+      "links": [
+        [
+          "Who does what? Compare both weeks",
+          "/lemonade-stand.html#quick"
+        ],
+        [
+          "Visits, long stays and the role of elders",
+          "/family-obligations.html#visits"
+        ],
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ]
+      ],
+      "script": [
+        "I know you do most of Mum’s care, and I see it. My driving days are long too. Can we look at both weeks together and agree what’s fair for now?"
+      ],
+      "plain": [
+        "Your hours are real work too.",
+        "Thank your partner first.",
+        "Compare both weeks.",
+        "Agree a fair split for now."
+      ],
+      "follow": [
+        [
+          "\\b(says|thinks) (she|he|they) (does|do)|\\b(hours|driving|i work|my job)\\b",
+          "eldercareaccused"
+        ],
+        [
+          "\\b(share|split|divide|fair|siblings|brothers?|sisters?)\\b",
+          "eldercarehome"
+        ]
+      ]
+    },
+    {
       "id": "forwhom",
       "kind": "intent",
       "first": true,
