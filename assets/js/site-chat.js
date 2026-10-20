@@ -5024,16 +5024,16 @@
     var el = document.createElement('div');
     if (m.r === 'c') {
       el.className = 'tolc-ctx' + (isNew ? ' is-new' : '');
-      var pc = document.createElement('p'); pc.textContent = (this.esChrome ? 'Hablamos de: ' : 'Talking about: ') + (m.l || m.x); el.appendChild(pc);
+      var pc = document.createElement('p'); pc.textContent = 'Talking about: ' + (m.l || m.x); el.appendChild(pc);
       this.log.appendChild(el);
       return el;
     }
     el.className = 'tolc-msg ' + (m.r === 'u' ? 'tolc-me' : 'tolc-bot') + (isNew ? ' is-new' : '');
     if (m.r === 'u') {
       var p = document.createElement('p'); p.textContent = m.x; el.appendChild(p);
-      var sr = document.createElement('span'); sr.className = 'tolc-sr'; sr.textContent = this.esChrome ? 'Tú dijiste: ' : 'You said: '; el.insertBefore(sr, p);
+      var sr = document.createElement('span'); sr.className = 'tolc-sr'; sr.textContent = 'You said: '; el.insertBefore(sr, p);
     } else {
-      var sr2 = document.createElement('span'); sr2.className = 'tolc-sr'; sr2.textContent = this.esChrome ? (m.n === DEFAULT_CHAR.name ? 'El Profesor Puddles' : (m.n || 'Buddy')) + ' dice: ' : (m.n || 'Buddy') + ' says: '; el.appendChild(sr2);
+      var sr2 = document.createElement('span'); sr2.className = 'tolc-sr'; sr2.textContent = (m.n || 'Buddy') + ' says: '; el.appendChild(sr2);
       (m.b || []).forEach(function (b) {
         if (b.k === 'p') { var p2 = document.createElement('p'); p2.textContent = b.x; el.appendChild(p2); return; }
         if (b.k === 'info') {
@@ -5172,7 +5172,6 @@
     loadKB(function (ok) {
       if (!ok) { me.say([{ k: 'p', x: 'Sorry, I couldn’t open the site’s pages just now. Please try again in a moment.' }], [], 300); return; }
       reply(me.state, text, doc, function (r) {
-        if (me.state.es && !me.esChrome && me.char && /Professor Puddles/.test(me.char.name)) me.applyEs();
         var len = r.blocks.reduce(function (n, b) { return n + (b.k === 'info' ? 20 : wc(b.x && b.x.join ? b.x.join(' ') : b.x || '')); }, 0);
         me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6), r.think);
       });
@@ -5180,20 +5179,20 @@
   };
 
   Chat.prototype.greet = function (text, then) {
-    var me = this, es = this.es;
+    var me = this;
     // the hello shows at once, before the pages have loaded, so it is always the first thing in the chat, even when
     // someone types straight away (and a phone's sheet never opens blank)
     var m = { r: 'b', b: [{ k: 'p', x: text }], n: me.char.name };
     me.msgs.push(m); save(me.msgs);
     me.render(m, true);
     var asked0 = me.msgs.length;
-    me.setChips(es ? ES_CHIPS : GREET_CHIPS);
+    me.setChips(GREET_CHIPS);
     // opened from a page with its own questions (coming out, co-parenting…): those first, never "We keep arguing about chores"
     loadKB(function (ok) {
-      var st = me.state, chips = es ? ES_CHIPS : GREET_CHIPS;
+      var st = me.state, chips = GREET_CHIPS;
       if (ok && st.pageCtx && !st.pageDone) pageInit(st);
-      if (!es && st.page && st.page.chips && st.page.chips.length) chips = st.page.chips.concat([{ label: 'Talk deep', q: 'Talk deep' }]);
-      else if (!es && st.page && (st.page.u || st.page.about)) chips = [{ label: 'Tell me about this page', q: 'Tell me more about ' + (st.page.about || pageTitle(st.page.u) || 'this page') }, STARTERS[3], STARTERS[1], { label: 'Just chat', q: 'Let’s just chat' }];
+      if (st.page && st.page.chips && st.page.chips.length) chips = st.page.chips.concat([{ label: 'Talk deep', q: 'Talk deep' }]);
+      else if (st.page && (st.page.u || st.page.about)) chips = [{ label: 'Tell me about this page', q: 'Tell me more about ' + (st.page.about || pageTitle(st.page.u) || 'this page') }, STARTERS[3], STARTERS[1], { label: 'Just chat', q: 'Let’s just chat' }];
       if (me.msgs.length === asked0 && !me.busy) { me.setChips(chips); me.lastChips = chips; }
       if (then) then();
     });
@@ -5208,14 +5207,8 @@
     var prevName = this.char ? this.char.name : (lastBot && lastBot.n) || DEFAULT_CHAR.name;
     this.setChar(opts);
     var changed = this.char.name !== prevName;
-    // from the Spanish page (or a Spanish browser): the hello, and the box, in Spanish
-    this.es = spanishHere();
     // the home page's headline isn't a page topic: the usual hello there
     if (/^\/(index\.html)?$/.test(pageCtxNow().path) && /Curious about something on/.test(this.char.greeting || '')) this.char.greeting = DEFAULT_CHAR.greeting;
-    if (this.es && this.char.name === DEFAULT_CHAR.name || this.es && /Professor Puddles/.test(this.char.name)) {
-      this.char.greeting = ES_GREETING;
-      this.applyEs();
-    }
     if (!this.started) {
       this.started = true;
       var me = this;
