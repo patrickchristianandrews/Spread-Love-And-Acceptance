@@ -468,10 +468,10 @@ def main():
 Keep every image free of prices, review quotes and claims like "bestseller". [OWNER]
 ''')
     md.append('## "Look inside" tips\n')
-    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast”, one page on the workpapers, tools and characters, the help page), so a browser reaches Chapter 1 early.
+    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast”, one page on the workpapers, tools and characters), so a browser reaches Chapter 1 early.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
 - The pocket guide reaches its first situation on page 10, after a short introduction to the six parts.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, the help page, then the three friends, so Chapter 1 comes early. The box set opens on one contents page for all five books.
+- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, then the three friends, so Chapter 1 comes early. The box set opens on one contents page for all five books.
 ''')
     md.append('## Author Central bio (short, warm and true)\n')
     md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
