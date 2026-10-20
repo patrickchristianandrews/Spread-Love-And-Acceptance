@@ -50,8 +50,11 @@ def item(iid, overrides=None):
     it = dict(next(x for x in lib()['items'] if x['id'] == iid))
     it['chain'], it['an'] = list(it['chain']), list(it['an'])
     for k, v in (overrides or {}).get(iid, {}).items():
-        if k.startswith('care'):
-            continue  # "With care" lines stay exactly as written
+        if k.startswith('care') and k != 'care_print':
+            continue  # "With care" lines stay exactly as written, except an explicit care_print (books-final9: the owner removed safety lines)
+        if k == 'care_print':
+            it['care'] = v
+            continue
         if '.' in k:
             f, n = k.split('.')
             it[f][int(n)] = v

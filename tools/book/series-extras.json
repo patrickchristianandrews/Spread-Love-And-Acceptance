@@ -318,7 +318,7 @@
         ]
       },
       "reassurance": {
-        "step": "Agree a kind limit together. One clear answer, then “I said it, and I meant it,” and something calming to do side by side. If the worry runs your days, a GP or therapist can help.",
+        "step": "Agree a kind limit together. One clear answer, then “I said it, and I meant it,” and something calming to do side by side.",
         "looks": "“Are you sure you’re not cross with me?” It’s the fourth time tonight, and you give the same answer you gave the other three times, a bit more tightly.",
         "an.0": "Going back for the third time to check the front door is locked.",
         "other": "Answering the same question for the fourth time is tiring, and it can start to feel like your word isn’t trusted. Answering it again and again can also keep the loop going, which is the unkind part of an act of kindness.",
@@ -351,7 +351,8 @@
           "The brain’s buffer fills up",
           "When it overflows, control goes",
           "A meltdown is an overflow, and nobody chooses it to get something"
-        ]
+        ],
+        "care_print": "Afterwards, a repair and a plan for next time help both people."
       },
       "dont-know-feeling": {
         "say": "“I really don’t know yet. Ask me about my body. Am I tired, tense or hungry?”",

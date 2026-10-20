@@ -8,7 +8,7 @@
    },
    "2": {
     "what": "This book is for the heavy days. It covers stress, sleep and rest, anger, worry, low mood and trauma, grief, repair after hurt, the slow work of change, and what matters to you.",
-    "who": "It is for anyone going through a hard stretch, and for anyone standing beside someone who is. Each chapter says plainly when it is time to get help from a doctor or counsellor."
+    "who": "It is for anyone going through a hard stretch, and for anyone standing beside someone who is."
    },
    "3": {
     "what": "This book is about the people around you. It looks at how pace and tone pull people out of step, how words land, why two people remember the same moment differently, belonging and trust, love in its many forms, the pull of groups, and how to help someone without burning out.",
@@ -26,7 +26,7 @@
    "3": "about understanding the people around you",
    "4": "about sharing the work of a shared life"
   },
-  "series_lead": "There are four books in the series, and each stands on its own. The others are",
+  "series_lead": "Each book in the series stands on its own. The others are",
   "refs": "When a chapter mentions another book, it gives the book, the chapter and the page in that book, as in “{example}”. The workbook, The Workpapers, has every form from the series on big pages",
   "ideas_lead": "Five ideas run under the whole series.",
   "ideas": [
@@ -55,7 +55,7 @@
  },
  "ledes": {
   "preface": "Running a shared life takes a lot of work that nobody sees. This opening chapter helps you make that work visible, to yourself and to anyone you share it with, so that you can talk about it fairly and kindly.",
-  "afterword": "A short look back over the whole series: what each of the four books was for, the few ideas that run through all of them, and where to go next."
+  "afterword": "A short look back over the whole series: what each book in the series was for, the few ideas that run through all of them, and where to go next."
  },
  "swaps": [
   {
@@ -76,7 +76,7 @@
    ],
    [
     "What if looking back brings up something painful?",
-    "<p>Stop there, and come back another day if you want to. Nobody has to finish a page. If old memories keep pulling you under, or you find yourself avoiding more and more of everyday life, talk to a doctor or counsellor. <a href=\"/book/understanding-16-worry.html\">Worry, low mood and trauma</a> describes the kinds of help there are.</p>"
+    "<p>Stop there, and come back another day if you want to. Nobody has to finish a page.</p>"
    ],
    [
     "I think I might be autistic or have ADHD. Can this book tell me?",
@@ -89,17 +89,9 @@
    [
     "My partner isn’t interested in any of this. Is it still worth reading?",
     "<p>Yes. This book is about you, and it works if you are the only person in your home who ever opens it. Knowing your own wiring and weather makes it easier to say what you need, and the people around you often notice the change before they notice the book. If you later want to look at things together, Book 3 and Book 4 are written for that.</p>"
-   ],
-   [
-    "How do I know when a book isn’t enough?",
-    "<p>Most chapters have a short part called “When to get more help”, with the signs to look out for, and what kind of help to ask a doctor or counsellor about.</p>"
    ]
   ],
   "2": [
-   [
-    "How do I tell ordinary stress from something that needs help?",
-    "<p>Stress that comes and goes with what is happening, and eases when the pressure lifts, is part of life. When it hangs on after the pressure has gone, or sleep, appetite and mood stay off for weeks, it is worth a word with your doctor. Every chapter in this book has a short part called “When to get more help”, and <a href=\"/book/understanding-2-stress.html\">Stress and the nervous system</a> is a good place to begin.</p>"
-   ],
    [
     "I lost my temper and said something I regret. Is it too late to put it right?",
     "<p>It rarely is. A short apology that names what you did, without a “but”, and a plan for next time go a long way, even days later. <a href=\"/book/understanding-11-healing.html\">Healing after hurt</a> shows how a repair goes, and <a href=\"/book/understanding-13-anger.html\">Anger</a> has a pause plan for the next time the heat rises.</p>"
