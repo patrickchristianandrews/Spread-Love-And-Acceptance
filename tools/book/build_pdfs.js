@@ -462,7 +462,9 @@ function seriesCosts(job, pages, C) {
   // finalfix15: a job can name its own cost model (the workbook's black-and-white edition: black ink, large trim)
   const kdp = (job.cost && C[job.cost]) || (large ? C.kdp_large : C.kdp);
   if (kdp.max_pages && pages > kdp.max_pages) console.log('  WARNING: %s has %d pages; the %s printing cost is for up to %d pages', job.id, pages, job.cost, kdp.max_pages);
-  const P = job.price;
+  // voice18: the owner's pricing rule: under 100 pages is the short line ($9.99), anything longer $14.99 (series.json price_rule)
+  const R = job.price_rule;
+  const P = R ? (pages < R.short_under_pages ? R.short_usd : R.regular_usd) : job.price;
   const kdpPrint = kdp.fixed + kdp.per_page * pages;
   const royalty = P >= (kdp.threshold || 0) ? kdp.royalty : (kdp.royalty_low || kdp.royalty);
   const row = net => ({ net: r2(net), pct: Math.round(net / P * 1000) / 10 });
@@ -471,7 +473,7 @@ function seriesCosts(job, pages, C) {
   return {
     list_price: P,
     kdp_amazon: Object.assign({ print: r2(kdpPrint), royalty_rate: royalty, how: `${Math.round(royalty * 100)}% x $${P.toFixed(2)} - ($${kdp.fixed.toFixed(2)} + ${pages} x $${kdp.per_page})` }, row(r2(royalty * P) - r2(kdpPrint))),
-    kdp_expanded: Object.assign({ print: r2(kdpPrint) }, row(r2(kdp.expanded * P) - r2(kdpPrint))),
+    kdp_expanded: Object.assign({ print: r2(kdpPrint), min_price: Math.ceil(r2(kdpPrint) / kdp.expanded * 100) / 100 }, row(r2(kdp.expanded * P) - r2(kdpPrint))),
   };
 }
 

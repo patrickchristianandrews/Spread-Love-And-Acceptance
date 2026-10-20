@@ -12,7 +12,7 @@
    ],
    "pages": 164,
    "blank_pages": 5,
-   "bytes": 2473381,
+   "bytes": 2473621,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
@@ -34,6 +34,7 @@
     },
     "kdp_expanded": {
      "print": 5.18,
+     "min_price": 12.95,
      "net": 0.82,
      "pct": 5.5
     }
@@ -75,7 +76,7 @@
    ],
    "pages": 158,
    "blank_pages": 3,
-   "bytes": 2185598,
+   "bytes": 2185698,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
@@ -97,6 +98,7 @@
     },
     "kdp_expanded": {
      "print": 5.03,
+     "min_price": 12.58,
      "net": 0.97,
      "pct": 6.5
     }
@@ -159,6 +161,7 @@
     },
     "kdp_expanded": {
      "print": 4.93,
+     "min_price": 12.33,
      "net": 1.07,
      "pct": 7.1
     }
@@ -222,6 +225,7 @@
     },
     "kdp_expanded": {
      "print": 5.08,
+     "min_price": 12.7,
      "net": 0.92,
      "pct": 6.1
     }
@@ -282,18 +286,19 @@
    ],
    "spine_text": false,
    "costs": {
-    "list_price": 14.99,
+    "list_price": 9.99,
     "kdp_amazon": {
      "print": 4.14,
      "royalty_rate": 0.6,
-     "how": "60% x $14.99 - ($1.00 + 78 x $0.0402)",
-     "net": 4.85,
-     "pct": 32.4
+     "how": "60% x $9.99 - ($1.00 + 78 x $0.0402)",
+     "net": 1.85,
+     "pct": 18.5
     },
     "kdp_expanded": {
      "print": 4.14,
-     "net": 1.86,
-     "pct": 12.4
+     "min_price": 10.35,
+     "net": -0.14,
+     "pct": -1.4
     }
    },
    "pagemap": {
@@ -351,6 +356,7 @@
     },
     "kdp_expanded": {
      "print": 2.84,
+     "min_price": 7.1,
      "net": 1.16,
      "pct": 11.6
     }
@@ -410,6 +416,7 @@
     },
     "kdp_expanded": {
      "print": 2.99,
+     "min_price": 7.48,
      "net": 1.01,
      "pct": 10.1
     }

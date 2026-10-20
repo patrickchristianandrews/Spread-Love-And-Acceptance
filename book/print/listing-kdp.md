@@ -5,7 +5,9 @@ Made by tools/book/listing_kdp.py (print12, logicbook14) from tools/book/series.
 ## Read this first
 - **Amazon only.** The books are sold on Amazon (KDP) and nowhere else: no shop on the website, no other print service, no discount codes. Expanded distribution stays off. Everything stays free to read online.
 - **Free KDP ISBNs (decided).** Every paperback uses a free KDP ISBN: on the Paperback Content screen choose **"Get a free KDP ISBN"**. KDP prints it in the barcode on the back cover, so the copyright pages carry no ISBN line. A free KDP ISBN can only be used for that book in that format on KDP and can't be moved to another publisher, and KDP shows the imprint as **"Independently published"** (the title and copyright pages already say so). The Kindle editions and the box set need no ISBN: leave the Kindle ISBN blank, and Amazon gives each one an ASIN.
-- **The workbook: publish one of two editions.** The colour edition ($14.99) and a black-and-white interior with the same colour cover ($9.99, **recommended**) are both built and both listed below, side by side. See "Which workbook edition?". [OWNER]
+- **Prices (the owner's rule).** Every paperback under 100 pages is a short edition at **$9.99**; every longer one is **$14.99**. The build applies the rule to the final page count, so the prices below follow it: the books at $14.99, and the short editions (the pocket guide and both workbook editions) at $9.99.
+- **The short editions are listed together**, after the books: the pocket guide, then the two workbook editions. Each keeps its own name.
+- **The workbook: publish one of two editions.** The colour edition and a black-and-white interior with the same colour cover are both built, both at $9.99, and listed side by side; the black-and-white one is **recommended** because it keeps more a copy. At $9.99 the colour edition can't use expanded distribution, so it is Amazon only. See "Which workbook edition?". [OWNER]
 - **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
 - **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
@@ -468,6 +470,126 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 ---
 
+# The short editions (under 100 pages, $9.99 each)
+
+The pocket guide and the workbook are the series' short editions. They keep their own names and their own listings; the owner's rule simply prices every paperback under 100 pages at $9.99.
+
+
+---
+
+## Pocket guide: The Logic Behind It
+
+### Basic details (paperback and Kindle)
+
+| Field | Paperback | Kindle |
+|---|---|---|
+| Language | English | English |
+| Book title | The Logic Behind It | The Logic Behind It |
+| Subtitle | A Pocket Guide to Why People React the Way They Do | A Pocket Guide to Why People React the Way They Do |
+| Series | Spread Love & Acceptance, as a companion: number 6 after the workbook, or no number if KDP lets you add it unnumbered [OWNER] | the same series; number 5 among the Kindle editions (the workbook has none), or unnumbered [OWNER] |
+| Edition number | 1 | 1 |
+| Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
+| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
+| Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
+| Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
+| Primary marketplace | Amazon.com | Amazon.com |
+| Description | below (1883 characters of 4,000) | the same, word for word |
+
+**Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
+
+```html
+<p><b>Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.</b></p><p>A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.</p><p>It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime”. Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.</p><p><b>Inside</b></p><ul><li>38 situations, one to a page, in nine short sections</li><li>On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step</li><li>“With care” notes where a reaction can land hard on someone else</li><li>A short introduction to the six-part lens, and why logic explains but never excuses</li><li>Blank cards to work out a reaction of your own</li><li>A code on every page to the same situation online, free</li></ul><p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, and the pages say so where it matters.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p><p><i>This guide is general education, not therapy or a diagnosis.</i></p>
+```
+
+### Categories (pick 3)
+KDP lets you choose three categories for each format. Check that each path is offered in the category picker for **Books** (paperback) and **Kindle eBooks**; the Kindle picker has the same names under "Kindle Store › Kindle eBooks". [OWNER: confirm in the picker]
+
+| | Best 3 | Alternates |
+|---|---|---|
+| 1 | Books › Self-Help › Communication & Social Skills | Books › Health, Fitness & Dieting › Mental Health › Neuropsychology |
+| 2 | Books › Health, Fitness & Dieting › Psychology & Counseling › Social Psychology & Interactions | Books › Parenting & Relationships › Family Relationships |
+| 3 | Books › Self-Help › Relationships › Interpersonal Relations | Books › Self-Help › Emotions |
+
+### Keywords (the 7 boxes)
+
+| Box | Keyword phrase | Characters |
+|---|---|---|
+| 1 | understanding autistic adults and neurodiversity | 48 |
+| 2 | unwritten social rules explained | 32 |
+| 3 | adhd and autism in relationships | 32 |
+| 4 | small talk white lies and hints | 31 |
+| 5 | cross cultural communication differences | 40 |
+| 6 | empathy and seeing the other side | 33 |
+| 7 | why my partner goes quiet in arguments | 38 |
+
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+
+### Content details: AI disclosure (KDP requires an answer)
+
+KDP asks three separate questions: did you use AI-based tools to create the **text**, the **images**, or **translations**? KDP's own definitions:
+- **AI-generated** means an AI-based tool created the actual content, *even if you edited it a lot afterwards*. This must be disclosed.
+- **AI-assisted** means you created the content yourself and used AI to edit, check, brainstorm or improve it. This does not need to be disclosed.
+
+Honest answers for this book, as it was made [OWNER: confirm; only you know your own process]:
+
+| Question | Answer to choose | Why |
+|---|---|---|
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Translations | **No** | The book is in English only. |
+
+The answers are seen by Amazon, not printed on the product page.
+
+### Print details (the pocket guide is 5 × 8 in)
+
+| Field | Answer |
+|---|---|
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
+| Publication date | Leave blank (KDP fills in the date it goes live) |
+| Print options | Ink and paper: **Standard color, white paper**. Trim: **5 × 8 in (12.7 × 20.32 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
+| Page count | 78 (KDP reads it from the file) — 72 is KDP's minimum for standard colour, so the guide is built to 72 to 80 pages |
+| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
+| Manuscript file | book/print/pocket-the-logic-behind-it.pdf |
+| Cover file | book/print/cover-pocket-the-logic-behind-it.pdf (full wrap 10.426 × 8.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Is this a low-content book? | **No** |
+| Large-print book? | No |
+
+### Pricing (paperback)
+
+| Marketplace | List price | Printing cost | Your royalty a copy |
+|---|---|---|---|
+| Amazon.com (primary) | $9.99 | $2.99 | **$3.00** (60% × $9.99 − printing) |
+| Amazon.co.uk | £7.99 | KDP shows it | 60% (at £7.99 and up) minus printing [OWNER: KDP shows the exact figure] |
+| Amazon.de, .fr, .es, .it, .nl, .ie, .be | €9.99 | KDP shows it | 60% (at €9.99 and up) minus printing [OWNER] |
+| Amazon.ca | CA$13.99 | KDP shows it | KDP shows it [OWNER] |
+| Amazon.com.au | AU$15.99 | KDP shows it | KDP shows it [OWNER] |
+| Expanded distribution | **No** (Amazon only) | $2.99 | would pay $1.01 a copy (40% × $9.99 − printing) |
+
+**Price: $9.99 (the short-edition rule: under 100 pages).** KDP's printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) is $1.00 a book plus $0.0255 a page: $1.00 + 78 × $0.0255 = **$2.99**. KDP pays 60% of the list price from $9.99 up, so 60% × $9.99 = $5.99, minus printing, leaves **$3.00 a copy**. Below $9.99 it would pay only 50%, so $9.99 is the lowest price that keeps the higher royalty. The panel's readers put its value at about $8.40.
+
+### Kindle extras
+
+| Field | Answer |
+|---|---|
+| Manuscript (ebook) file | **book/print/epub/pocket-the-logic-behind-it.epub** (EPUB 3, reflowable, 0.30 MB, 9 sections, 38 situations; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Kindle cover file | book/print/cover-pocket-the-logic-behind-it-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
+| Kindle price | **$2.99** with the **70%** royalty: 70% × $2.99 − delivery (0.30 MB × $0.15 = $0.04) = about **$2.05 a copy**. The owner's range is $0.99 to $2.99; below $2.99 KDP pays only 35% (at $0.99, about $0.35 a copy), so $2.99 is the one price in that range that earns 70%. It is also at least 20% below the paperback ($9.99), as the 70% band requires. [OWNER] |
+| KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
+| DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
+| Kindle categories and keywords | the same as the paperback |
+### Taglines for ads (short and true)
+
+- Why did they react like that?
+- Thirty-eight everyday reactions, and the logic behind each one.
+- Both sides of the story, on a single page.
+- Small enough for a pocket. Kind enough to hand over.
+
+---
+
 ## Which workbook edition? [OWNER: decide; (b) is recommended]
 
 Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each gets its own free KDP ISBN).
@@ -477,12 +599,13 @@ Both editions are built from the same pages, with no blank pages, and both have 
 | Files | workbook.pdf, cover-workbook.pdf | workbook-bw.pdf, cover-workbook-bw.pdf |
 | Pages | 78 | 78 |
 | KDP ink | Standard color | Black & white |
-| List price | $14.99 | $9.99 |
+| List price | $9.99 | $9.99 |
 | Printing (Amazon.com) | $4.14 | $2.84 |
 | Royalty | 60% | 60% |
-| **You keep a copy** | **$4.85** | **$3.15** |
+| **You keep a copy** | **$1.85** | **$3.15** |
+| Expanded distribution | Not available at $9.99 (KDP would need about $10.35): **Amazon only** | Off (Amazon only, as every book) |
 
-**Why (b).** The simulated reader panel put the workbook's value at about **$8.50**, against $14.99, and 5 of 10 would not buy it, mostly because every form is free to print online and the book says so. $9.99 sits close to what readers expect to pay. Black ink costs a flat $2.84 to print at this size, so (b) still keeps $3.15 a copy, $1.70 less than (a), and it is far more likely to sell. The sheets are forms to write on, so colour adds little; the cover stays in colour. Below $9.99 KDP pays 50% instead of 60%, so $9.99 is the lowest price that keeps the higher royalty.
+**Both at $9.99.** The owner's rule puts every paperback under 100 pages in the short line at $9.99, so both editions cost the reader the same. **Why (b).** At the same price, black ink keeps **$3.15** a copy against colour's **$1.85**: colour printing at this size costs $4.14, black ink a flat $2.84. The sheets are forms to write on, so colour adds little, and the cover stays in colour either way. The simulated reader panel put the workbook's value at about $8.50, so $9.99 is close to what readers expect. Below $9.99 KDP pays 50% instead of 60%, so $9.99 is also the lowest price that keeps the higher royalty.
 
 The sources for the printing costs are at the end of this file. KDP's own calculator gives the exact figure for each file; check it before you set the price.
 
@@ -572,14 +695,14 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.14 | **$4.85** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | KDP shows it | KDP shows it [OWNER] |
-| Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
-| Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
-| Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.14 | would pay $1.86 a copy (40% × $14.99 − printing) |
+| Amazon.com (primary) | $9.99 | $4.14 | **$1.85** (60% × $9.99 − printing) |
+| Amazon.co.uk | £7.99 | KDP shows it | 60% (at £7.99 and up) minus printing [OWNER: KDP shows the exact figure] |
+| Amazon.de, .fr, .es, .it, .nl, .ie, .be | €9.99 | KDP shows it | 60% (at €9.99 and up) minus printing [OWNER] |
+| Amazon.ca | CA$13.99 | KDP shows it | KDP shows it [OWNER] |
+| Amazon.com.au | AU$15.99 | KDP shows it | KDP shows it [OWNER] |
+| Expanded distribution | **No** (Amazon only) | $4.14 | **not available at $9.99**: 40% × $9.99 is less than the printing cost, so KDP won't offer expanded distribution below about $10.35 for this book |
 
-Printing: standard colour, large trim (8.5 × 11 in): $1.00 + 78 × $0.0402 = **$4.14**. Royalty: 60% × $14.99 − printing = **$4.85 a copy**. Compare the black-and-white edition below. [OWNER]
+Price: **$9.99** (the short-edition rule: under 100 pages). Printing: standard colour, large trim (8.5 × 11 in): $1.00 + 78 × $0.0402 = **$4.14**. Royalty: 60% × $9.99 − printing = **$1.85 a copy**. At this price the colour edition is **Amazon only**: expanded distribution would need a list price of at least about $10.35. Compare the black-and-white edition below. [OWNER]
 
 ### Kindle
 **No Kindle edition: the workbook is print only.** It is made to be written in, and every form is already free to print or fill in at spreadloveandacceptance.com/workpapers/fill. A companion ebook would only repeat those links, so there is no file to upload. On the paperback's page, leave the Kindle edition empty. Each Kindle book in the series links every workpaper to its free form instead.
@@ -683,7 +806,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Amazon.com.au | AU$15.99 | KDP shows it | KDP shows it [OWNER] |
 | Expanded distribution | **No** (Amazon only) | $2.84 | would pay $1.16 a copy (40% × $9.99 − printing) |
 
-Printing: black ink, large trim (8.5 × 11 in), 24 to 110 pages: a flat $2.84 a book = **$2.84**. Royalty: 60% × $9.99 − printing = **$3.15 a copy**. The colour cover costs nothing extra: KDP prints every cover in colour. [OWNER]
+Price: **$9.99** (the short-edition rule: under 100 pages). Printing: black ink, large trim (8.5 × 11 in), 24 to 110 pages: a flat $2.84 a book = **$2.84**. Royalty: 60% × $9.99 − printing = **$3.15 a copy**. The colour cover costs nothing extra: KDP prints every cover in colour. [OWNER]
 
 ### Kindle
 **No Kindle edition: the workbook is print only.** It is made to be written in, and every form is already free to print or fill in at spreadloveandacceptance.com/workpapers/fill. A companion ebook would only repeat those links, so there is no file to upload. On the paperback's page, leave the Kindle edition empty. Each Kindle book in the series links every workpaper to its free form instead.
@@ -694,119 +817,6 @@ Printing: black ink, large trim (8.5 × 11 in), 24 to 110 pages: a flat $2.84 a 
 - Room to write, and spare copies for the weeks ahead.
 - Fill it in on your own or together.
 - The same forms are free online; this one is for your shelf.
-
----
-
-## Pocket guide: The Logic Behind It
-
-### Basic details (paperback and Kindle)
-
-| Field | Paperback | Kindle |
-|---|---|---|
-| Language | English | English |
-| Book title | The Logic Behind It | The Logic Behind It |
-| Subtitle | A Pocket Guide to Why People React the Way They Do | A Pocket Guide to Why People React the Way They Do |
-| Series | Spread Love & Acceptance, as a companion: number 6 after the workbook, or no number if KDP lets you add it unnumbered [OWNER] | the same series; number 5 among the Kindle editions (the workbook has none), or unnumbered [OWNER] |
-| Edition number | 1 | 1 |
-| Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
-| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
-| Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
-| Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
-| Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
-| Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1883 characters of 4,000) | the same, word for word |
-
-**Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
-
-```html
-<p><b>Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.</b></p><p>A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.</p><p>It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime”. Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.</p><p><b>Inside</b></p><ul><li>38 situations, one to a page, in nine short sections</li><li>On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step</li><li>“With care” notes where a reaction can land hard on someone else</li><li>A short introduction to the six-part lens, and why logic explains but never excuses</li><li>Blank cards to work out a reaction of your own</li><li>A code on every page to the same situation online, free</li></ul><p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, and the pages say so where it matters.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p><p><i>This guide is general education, not therapy or a diagnosis.</i></p>
-```
-
-### Categories (pick 3)
-KDP lets you choose three categories for each format. Check that each path is offered in the category picker for **Books** (paperback) and **Kindle eBooks**; the Kindle picker has the same names under "Kindle Store › Kindle eBooks". [OWNER: confirm in the picker]
-
-| | Best 3 | Alternates |
-|---|---|---|
-| 1 | Books › Self-Help › Communication & Social Skills | Books › Health, Fitness & Dieting › Mental Health › Neuropsychology |
-| 2 | Books › Health, Fitness & Dieting › Psychology & Counseling › Social Psychology & Interactions | Books › Parenting & Relationships › Family Relationships |
-| 3 | Books › Self-Help › Relationships › Interpersonal Relations | Books › Self-Help › Emotions |
-
-### Keywords (the 7 boxes)
-
-| Box | Keyword phrase | Characters |
-|---|---|---|
-| 1 | understanding autistic adults and neurodiversity | 48 |
-| 2 | unwritten social rules explained | 32 |
-| 3 | adhd and autism in relationships | 32 |
-| 4 | small talk white lies and hints | 31 |
-| 5 | cross cultural communication differences | 40 |
-| 6 | empathy and seeing the other side | 33 |
-| 7 | why my partner goes quiet in arguments | 38 |
-
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
-
-### Content details: AI disclosure (KDP requires an answer)
-
-KDP asks three separate questions: did you use AI-based tools to create the **text**, the **images**, or **translations**? KDP's own definitions:
-- **AI-generated** means an AI-based tool created the actual content, *even if you edited it a lot afterwards*. This must be disclosed.
-- **AI-assisted** means you created the content yourself and used AI to edit, check, brainstorm or improve it. This does not need to be disclosed.
-
-Honest answers for this book, as it was made [OWNER: confirm; only you know your own process]:
-
-| Question | Answer to choose | Why |
-|---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
-| Translations | **No** | The book is in English only. |
-
-The answers are seen by Amazon, not printed on the product page.
-
-### Print details (the pocket guide is 5 × 8 in)
-
-| Field | Answer |
-|---|---|
-| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
-| Publication date | Leave blank (KDP fills in the date it goes live) |
-| Print options | Ink and paper: **Standard color, white paper**. Trim: **5 × 8 in (12.7 × 20.32 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 78 (KDP reads it from the file) — 72 is KDP's minimum for standard colour, so the guide is built to 72 to 80 pages |
-| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
-| Manuscript file | book/print/pocket-the-logic-behind-it.pdf |
-| Cover file | book/print/cover-pocket-the-logic-behind-it.pdf (full wrap 10.426 × 8.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
-| Is this a low-content book? | **No** |
-| Large-print book? | No |
-
-### Pricing (paperback)
-
-| Marketplace | List price | Printing cost | Your royalty a copy |
-|---|---|---|---|
-| Amazon.com (primary) | $9.99 | $2.99 | **$3.00** (60% × $9.99 − printing) |
-| Amazon.co.uk | £7.99 | KDP shows it | 60% (at £7.99 and up) minus printing [OWNER: KDP shows the exact figure] |
-| Amazon.de, .fr, .es, .it, .nl, .ie, .be | €9.99 | KDP shows it | 60% (at €9.99 and up) minus printing [OWNER] |
-| Amazon.ca | CA$13.99 | KDP shows it | KDP shows it [OWNER] |
-| Amazon.com.au | AU$15.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $2.99 | would pay $1.01 a copy (40% × $9.99 − printing) |
-
-**Price: $9.99 [OWNER: recommended $9.99; the alternative is $8.99].** KDP's printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) is $1.00 a book plus $0.0255 a page: $1.00 + 78 × $0.0255 = **$2.99**. From a list price of $9.99, KDP pays 60% of the list price, so 60% × $9.99 = $5.99, minus printing, leaves **$3.00 a copy**. Below $9.99 it pays only 50%: at $8.99 that is 50% × $8.99 − $2.99 = $1.51 a copy. One dollar more on the price nearly doubles what you keep, and the panel's readers put its value at about $8.40, close to either price. [OWNER]
-
-### Kindle extras
-
-| Field | Answer |
-|---|---|
-| Manuscript (ebook) file | **book/print/epub/pocket-the-logic-behind-it.epub** (EPUB 3, reflowable, 0.30 MB, 9 sections, 38 situations; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
-| Kindle cover file | book/print/cover-pocket-the-logic-behind-it-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
-| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
-| Publisher | Leave blank (decided). |
-| Kindle price | **$2.99** with the **70%** royalty: 70% × $2.99 − delivery (0.30 MB × $0.15 = $0.04) = about **$2.05 a copy**. The owner's range is $0.99 to $2.99; below $2.99 KDP pays only 35% (at $0.99, about $0.35 a copy), so $2.99 is the one price in that range that earns 70%. It is also at least 20% below the paperback ($9.99), as the 70% band requires. [OWNER] |
-| KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
-| DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
-| Kindle categories and keywords | the same as the paperback |
-### Taglines for ads (short and true)
-
-- Why did they react like that?
-- Thirty-eight everyday reactions, and the logic behind each one.
-- Both sides of the story, on a single page.
-- Small enough for a pocket. Kind enough to hand over.
 
 ---
 

@@ -138,10 +138,13 @@ def home_html():
                      '<a class="tol-btn is-quiet" href="/book/download.html#%s">%s</a></p>%s</div></li>') % (
             b['color'], cover_img(b['id'], 'Cover of Book %d, %s' % (b['n'], b['title'])), b['n'], esc(b['title']), esc(b['line']), meta, first,
             book_anchor(b), pdf_label(m), shop_row(b['id'])))
+    # voice18: the paperbacks under 100 pages (the pocket guide and the workbook) are grouped as the short editions,
+    # after the books, each under its own name
+    short = []
     w = c['workbook']
     m = made.get(w['id'], {})
     meta = 'Every workpaper, to fill in by hand' + (' · %d large pages' % m['pages'] if m.get('pages') else '')
-    rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+    short.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                  '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/workpapers/fill/index.html">Fill them in free online</a>%s</p>%s</div></li>') % (
         w['color'], cover_img(w['id'], 'Cover of %s' % w['title']), esc(w['title']), esc(w['line']), meta, free_pdf(w['id'], m), shop_row(w['id'])))
     try:
@@ -152,7 +155,7 @@ def home_html():
     if pk:
         m = made.get(pk['id'], {})
         meta = '%d everyday reactions, one to a page' % len(pk['items']) + (' · %d small pages' % m['pages'] if m.get('pages') else '')
-        rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+        short.insert(0, ('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                      '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/the-logic-behind-it.html">Every situation, free online</a>%s</p>%s</div></li>') % (
             pk['color'], cover_img(pk['id'], 'Cover of %s' % pk['title'], 768), esc(pk['title']), esc(pk['line']), meta, free_pdf(pk['id'], m), shop_row(pk['id'])))
     return ('%s\n%s\n<section class="bk-series no-bubble no-dive no-cheer" data-no-bubble id="print-series" aria-labelledby="series-h">'
@@ -161,7 +164,10 @@ def home_html():
             'In print, each chapter is the short version, with a code to scan for the full one.</p>'
             '<p class="bk-series-note" data-shop-soon>Paperbacks: coming to Amazon soon. Everything here stays free to read online.</p>'
             '<p class="bk-series-note">' + EMAIL_LINE + ' ' + FREE_LINE + '</p>'
-            '<ol class="bk-series-list">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), JS, END)
+            '<ol class="bk-series-list">%s</ol>'
+            '<h3 class="bk-series-h3" id="short-editions">The short editions</h3>'
+            '<p class="bk-series-note">Two smaller companions to the books, each under a hundred pages: the pocket guide and the workbook.</p>'
+            '<ol class="bk-series-list bk-series-short">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), '\n'.join(short), JS, END)
 
 
 def patch_home(path):

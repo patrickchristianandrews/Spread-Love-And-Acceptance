@@ -68,10 +68,11 @@ def items():
 def label(it):
     if it['kind'] == 'book':
         return 'Book %d: %s' % (it['n'], it['title'])
+    # voice18: the paperbacks under 100 pages are grouped as the short editions, each keeping its own name
     if it['kind'] == 'pocket':
-        return 'Pocket guide: %s' % it['title']
+        return 'Short edition, pocket guide: %s' % it['title']
     if it['kind'] == 'workbook':
-        return 'Workbook (%s): %s' % ('black-and-white, recommended' if it.get('bw') else 'colour, the alternative', it['title'])
+        return 'Short edition, workbook (%s): %s' % ('black-and-white, recommended' if it.get('bw') else 'colour, the alternative', it['title'])
     return 'Box set (Kindle only): %s' % it['title']
 
 
@@ -144,10 +145,17 @@ def paperback_pricing_rows(it):
     kdp = c.get('kdp_amazon', {})
     kind = it['kind']
     bw = it.get('bw')
-    price = c.get('list_price') or it.get('price_usd')
-    cheap = kind == 'pocket' or bw
+    price = LK.list_price(it['id'], kind)
+    cheap = price < LK.RULE['regular_usd']
     uk, eu, ca, au = (LK.PK_UK, LK.PK_EU, LK.PK_CA, LK.PK_AU) if cheap else (LK.UK_PRICE, LK.EU_PRICE, LK.CA_PRICE, LK.AU_PRICE)
-    rec = ' [OWNER: recommended]' if cheap else ''
+    rec = (' (the owner’s rule: under %d pages is a short edition at %s)' % (LK.RULE['short_under_pages'], money(LK.RULE['short_usd']))) if cheap else (
+        ' (the owner’s rule: %d pages or more is %s)' % (LK.RULE['short_under_pages'], money(LK.RULE['regular_usd'])))
+    ex = c.get('kdp_expanded', {})
+    if ex.get('net', 0) <= 0:
+        exp = ('Leave it unticked: this edition is Amazon only. At %s KDP can’t offer expanded distribution at all (40%% of %s is less than the %s printing cost; '
+               'it would need a list price of about %s or more).' % (money(price), money(price), money(ex.get('print', 0)), money(ex.get('min_price') or 0)))
+    else:
+        exp = 'Leave it unticked. The books are sold on Amazon only (and at %s it would pay only %s a copy).' % (money(price), money(ex.get('net', 0)))
     return [
         ('Territories', '“All territories (worldwide rights)”'),
         ('Primary marketplace', 'Amazon.com'),
@@ -158,7 +166,7 @@ def paperback_pricing_rows(it):
         ('Amazon.ca', ca),
         ('Amazon.com.au', au),
         ('Other marketplaces (.co.jp, .pl, .se and so on)', 'Leave them “based on Amazon.com”. KDP converts the price.'),
-        ('Expanded Distribution', 'Leave it unticked. The books are sold on Amazon only (and at %s it would pay only %s a copy).' % (money(price), money(c.get('kdp_expanded', {}).get('net', 0)))),
+        ('Expanded Distribution', exp),
         ('Request a proof copy', 'Do this before you publish. On your Bookshelf, click the “…” button next to the book and choose “Request Printed Proofs”. Up to 5 copies an order; they carry a “Not for Resale” mark; shipping is not free.'),
         ('Terms & Conditions', 'Read, then “Publish Your Paperback Book” only after the proof has been checked.'),
     ]
@@ -246,6 +254,7 @@ def build():
     order = [
         'Before you start: nothing to buy. Each paperback gets a free KDP ISBN on its Paperback Content screen, and the Kindle editions and the box set need no ISBN.',
         'Publish the paperbacks first, one at a time, and order a proof of each. Publish only after the proof is right.',
+        'Prices follow the owner’s rule: a paperback under 100 pages is a short edition at $9.99, anything longer is $14.99. The short editions (the pocket guide and the workbook) come after the books here, each under its own name. At $9.99 the colour workbook can’t use Expanded Distribution, so it is Amazon only; every other book is Amazon only by choice.',
         'Then the Kindle editions. Use exactly the same title, subtitle and author, so Amazon links each Kindle edition to its paperback.',
         'The box set last, once the four books and the pocket guide are live.',
     ]
@@ -269,7 +278,9 @@ def build():
         if has_kindle:
             facts.append('Kindle: %s.epub with %s as the cover, %s.' % (it['id'], 'cover-%s-front.jpg' % it['id'], money(it.get('kindle_price_usd') or LK.KINDLE_PRICE)))
         if it['kind'] == 'workbook' and not it.get('bw'):
-            facts.append('Publish this colour edition ONLY if you chose it instead of the black-and-white one. The screens are the same as the black-and-white workbook above, except: Ink and Paper Type “Standard color interior, white paper”; manuscript workbook.pdf; cover cover-workbook.pdf; list price $14.99 (printing $4.14, you keep $4.85). It gets its own free KDP ISBN. [OWNER: the recommendation is the black-and-white edition]')
+            ck = m.get('costs', {}).get('kdp_amazon', {})
+            facts.append('Publish this colour edition ONLY if you chose it instead of the black-and-white one. The screens are the same as the black-and-white workbook above, except: Ink and Paper Type “Standard color interior, white paper”; manuscript workbook.pdf; cover cover-workbook.pdf; list price %s, the same short-edition price (printing %s, you keep %s); and Expanded Distribution is not available at that price, so it is Amazon only (KDP would need about %s). It gets its own free KDP ISBN. [OWNER: the recommendation is the black-and-white edition, which keeps more a copy at the same price]' % (
+                money(LK.list_price(it['id'], 'workbook')), money(ck.get('print', 0)), money(ck.get('net', 0)), money(m.get('costs', {}).get('kdp_expanded', {}).get('min_price') or 0)))
         body_md += ['\n\n'.join(facts)]
         body_h.append('<section class="item"><h2 id="i%d">%s</h2>%s' % (len(toc), esc(sec), ''.join('<p class="fact">%s</p>' % bold(esc(f)) for f in facts)))
         if it['kind'] == 'workbook' and not it.get('bw'):

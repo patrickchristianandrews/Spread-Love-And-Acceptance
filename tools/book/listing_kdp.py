@@ -13,9 +13,15 @@ logicbook14: the owner sells on Amazon only, so the listing has no other shops, 
 codes. It also lists the pocket guide (The Logic Behind It: paperback $9.99 recommended, $8.99 the alternative; Kindle $2.99,
 from tools/book/series-extras.json) and the Kindle box set (Books 1 to 4 and the pocket guide in one ebook).
 
-finalfix15: the workbook comes in two editions, built from the same pages: the colour edition (workbook.pdf, $14.99) and a
-black-and-white interior with the same colour cover (workbook-bw.pdf, $9.99, recommended). Both are listed, side by side,
-and the owner publishes one. ISBNs come from the one "isbn" block in tools/book/series.json.
+finalfix15: the workbook comes in two editions, built from the same pages: the colour edition (workbook.pdf) and a
+black-and-white interior with the same colour cover (workbook-bw.pdf, recommended). Both are listed, side by side,
+and the owner publishes one. Every paperback uses a free KDP ISBN.
+
+voice18: the owner's pricing rule (series.json "price_rule"): a paperback under 100 pages is a short edition at $9.99,
+anything longer is $14.99. build_pdfs.js applies it to the final page count and writes list_price into book/print/series.json;
+this file reads that, recomputes every royalty line from it, and groups the short editions (the pocket guide and the workbook)
+together after the books. A short edition whose printing cost is too high for KDP's expanded distribution at $9.99 (the colour
+workbook) is marked Amazon only, with the lowest price that would allow it.
 """
 import csv
 import json
@@ -54,7 +60,7 @@ UK_PRICE, EU_PRICE, CA_PRICE, AU_PRICE = '£11.99', '€13.99', 'CA$19.99', 'AU$
 PK_UK, PK_EU, PK_CA, PK_AU = '£7.99', '€9.99', 'CA$13.99', 'AU$15.99'
 # finalfix15: the workbook's black-and-white edition at $9.99: the same local equivalents
 BW_UK, BW_EU, BW_CA, BW_AU = PK_UK, PK_EU, PK_CA, PK_AU
-POCKET_ALT = 8.99  # the alternative pocket price the owner first chose
+RULE = CFG.get('price_rule') or {'short_under_pages': 100, 'short_usd': 9.99, 'regular_usd': 14.99}
 UK_FIXED, UK_PER_PAGE = 0.85, 0.020  # standard colour, regular trim, Amazon.co.uk (third-party figure, not confirmed)
 
 # Each book: the listing words. Categories are KDP browse paths (pick 3); keywords fill the 7 boxes (50 characters each).
@@ -206,6 +212,30 @@ def money(x):
     return '$%.2f' % x
 
 
+def list_price(bid, kind):
+    """voice18: the list price the build set from the final page count (the owner's rule); the rule itself if the book isn't built yet"""
+    m = MADE.get(bid, {})
+    lp = (m.get('costs') or {}).get('list_price')
+    if lp:
+        return lp
+    if m.get('pages'):
+        return RULE['short_usd'] if m['pages'] < RULE['short_under_pages'] else RULE['regular_usd']
+    return RULE['regular_usd'] if kind == 'book' else RULE['short_usd']
+
+
+def is_short(bid, kind):
+    return list_price(bid, kind) < RULE['regular_usd']
+
+
+def expanded_text(c, price):
+    """the expanded distribution cell: what it would pay, or that KDP doesn't allow it at this price"""
+    e = c.get('kdp_expanded', {})
+    if e.get('net', 0) <= 0:
+        return ('**No** (Amazon only) | %s | **not available at %s**: 40%% × %s is less than the printing cost, so KDP won\'t offer expanded distribution '
+                'below about %s for this book |' % (money(e.get('print', 0)), money(price), money(price), money(e.get('min_price') or e.get('print', 0) / 0.4)))
+    return '**No** (Amazon only) | %s | would pay %s a copy (40%% × %s − printing) |' % (money(e.get('print', 0)), money(e.get('net', 0)), money(price))
+
+
 def kindle_net(price, mb):
     """70% band ($2.99 to $12.99 on Amazon.com since 7 July 2026): 70% x price - delivery ($0.15 a MB); 35% outside it, with no delivery fee"""
     if 2.99 <= price <= 12.99:
@@ -239,7 +269,8 @@ def workbook_choice():
     """finalfix15: the two workbook editions side by side, and the recommendation"""
     c, b = MADE.get('workbook', {}), MADE.get(WB_BW['id'], {})
     cc, bc = (c.get('costs') or {}).get('kdp_amazon', {}), (b.get('costs') or {}).get('kdp_amazon', {})
-    cp, bp = CFG['workbook_price_usd'], CFG['workbook_bw_price_usd']
+    cp, bp = list_price('workbook', 'workbook'), list_price(WB_BW['id'], 'workbook')
+    ce = (c.get('costs') or {}).get('kdp_expanded', {})
     return '\n'.join([
         '\n---\n\n## Which workbook edition? [OWNER: decide; (b) is recommended]\n',
         'Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each gets its own free KDP ISBN).\n',
@@ -251,17 +282,18 @@ def workbook_choice():
         '| Printing (Amazon.com) | %s | %s |' % (money(cc.get('print', 0)), money(bc.get('print', 0))),
         '| Royalty | 60% | 60% |',
         '| **You keep a copy** | **%s** | **%s** |' % (money(cc.get('net', 0)), money(bc.get('net', 0))),
+        '| Expanded distribution | Not available at %s (KDP would need about %s): **Amazon only** | Off (Amazon only, as every book) |' % (money(cp), money(ce.get('min_price') or 0)),
         '',
-        '**Why (b).** The simulated reader panel put the workbook\'s value at about **$8.50**, against $14.99, and 5 of 10 would not buy it, mostly because every form is free to print '
-        'online and the book says so. $9.99 sits close to what readers expect to pay. Black ink costs a flat %s to print at this size, so (b) still keeps %s a copy, '
-        '%s less than (a), and it is far more likely to sell. The sheets are forms to write on, so colour adds little; the cover stays in colour. '
-        'Below $9.99 KDP pays 50%% instead of 60%%, so $9.99 is the lowest price that keeps the higher royalty.\n' % (
-            money(bc.get('print', 0)), money(bc.get('net', 0)), money(cc.get('net', 0) - bc.get('net', 0))),
+        '**Both at %s.** The owner\'s rule puts every paperback under 100 pages in the short line at %s, so both editions cost the reader the same. '
+        '**Why (b).** At the same price, black ink keeps **%s** a copy against colour\'s **%s**: colour printing at this size costs %s, black ink a flat %s. '
+        'The sheets are forms to write on, so colour adds little, and the cover stays in colour either way. The simulated reader panel put the workbook\'s value at about $8.50, '
+        'so %s is close to what readers expect. Below $9.99 KDP pays 50%% instead of 60%%, so $9.99 is also the lowest price that keeps the higher royalty.\n' % (
+            money(bp), money(bp), money(bc.get('net', 0)), money(cc.get('net', 0)), money(cc.get('print', 0)), money(bc.get('print', 0)), money(bp)),
         'The sources for the printing costs are at the end of this file. KDP\'s own calculator gives the exact figure for each file; check it before you set the price.\n'])
 
 
 def main():
-    items = CFG['books'] + [CFG['workbook'], WB_BW, POCKET, BOXSET]
+    items = CFG['books'] + [POCKET, CFG['workbook'], WB_BW, BOXSET]
     md, rows = [], []
     md.append('# Amazon KDP listing: %s print series and Kindle editions\n' % SERIES)
     md.append('Made by tools/book/listing_kdp.py (print12, logicbook14) from tools/book/series.json, tools/book/series-extras.json and the built books in book/print/. '
@@ -270,7 +302,9 @@ def main():
     md.append('''## Read this first
 - **Amazon only.** The books are sold on Amazon (KDP) and nowhere else: no shop on the website, no other print service, no discount codes. Expanded distribution stays off. Everything stays free to read online.
 - **Free KDP ISBNs (decided).** Every paperback uses a free KDP ISBN: on the Paperback Content screen choose **"Get a free KDP ISBN"**. KDP prints it in the barcode on the back cover, so the copyright pages carry no ISBN line. A free KDP ISBN can only be used for that book in that format on KDP and can't be moved to another publisher, and KDP shows the imprint as **"Independently published"** (the title and copyright pages already say so). The Kindle editions and the box set need no ISBN: leave the Kindle ISBN blank, and Amazon gives each one an ASIN.
-- **The workbook: publish one of two editions.** The colour edition ($14.99) and a black-and-white interior with the same colour cover ($9.99, **recommended**) are both built and both listed below, side by side. See "Which workbook edition?". [OWNER]
+- **Prices (the owner's rule).** Every paperback under 100 pages is a short edition at **$9.99**; every longer one is **$14.99**. The build applies the rule to the final page count, so the prices below follow it: the books at $14.99, and the short editions (the pocket guide and both workbook editions) at $9.99.
+- **The short editions are listed together**, after the books: the pocket guide, then the two workbook editions. Each keeps its own name.
+- **The workbook: publish one of two editions.** The colour edition and a black-and-white interior with the same colour cover are both built, both at $9.99, and listed side by side; the black-and-white one is **recommended** because it keeps more a copy. At $9.99 the colour edition can't use expanded distribution, so it is Amazon only. See "Which workbook edition?". [OWNER]
 - **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
 - **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
@@ -290,7 +324,8 @@ def main():
         sub = item['sub']
         desc = description(item, d, kind)
         kdp = c.get('kdp_amazon', {})
-        price = item.get('price_usd') or (CFG['workbook_price_usd'] if kind == 'workbook' else CFG['price_usd'])
+        price = list_price(bid, kind)
+        short = kind != 'boxset' and is_short(bid, kind)
         k_price = item.get('kindle_price_usd') or KINDLE_PRICE
         k_mb = kindle_mb(bid)
         k_net, k_pct = kindle_net(k_price, k_mb)
@@ -298,6 +333,8 @@ def main():
         has_kindle = kind != 'workbook'
         head = ('Book %d: ' % num) if num else ('Pocket guide: ' if kind == 'pocket' else ('Kindle box set: ' if kind == 'boxset' else ''))
         bw = bid == WB_BW['id']
+        if bid == POCKET['id']:
+            md.append('\n---\n\n# The short editions (under 100 pages, %s each)\n\nThe pocket guide and the workbook are the series\' short editions. They keep their own names and their own listings; the owner\'s rule simply prices every paperback under 100 pages at %s.\n' % (money(RULE['short_usd']), money(RULE['short_usd'])))
         if bid == 'workbook':
             md.append(workbook_choice())
         if kind == 'workbook':
@@ -368,7 +405,7 @@ def main():
             md.append('| Marketplace | List price | Printing cost | Your royalty a copy |\n|---|---|---|---|')
             pct = int(round(kdp.get('royalty_rate', 0.6) * 100))
             md.append('| Amazon.com (primary) | %s | %s | **%s** (%d%% × %s − printing) |' % (money(price), money(kdp.get('print', 0)), money(kdp.get('net', 0)), pct, money(price)))
-            if kind == 'pocket' or bw:
+            if short:
                 md.append('| Amazon.co.uk | %s | KDP shows it | 60%% (at £7.99 and up) minus printing [OWNER: KDP shows the exact figure] |' % PK_UK)
                 md.append('| Amazon.de, .fr, .es, .it, .nl, .ie, .be | %s | KDP shows it | 60%% (at €9.99 and up) minus printing [OWNER] |' % PK_EU)
                 md.append('| Amazon.ca | %s | KDP shows it | KDP shows it [OWNER] |' % PK_CA)
@@ -380,24 +417,23 @@ def main():
                 md.append('| Amazon.de, .fr, .es, .it, .nl, .ie, .be | %s | KDP shows it | KDP shows it (60%% at €9.99 and up) [OWNER] |' % EU_PRICE)
                 md.append('| Amazon.ca | %s | KDP shows it | KDP shows it [OWNER] |' % CA_PRICE)
                 md.append('| Amazon.com.au | %s | KDP shows it | KDP shows it [OWNER] |' % AU_PRICE)
-            md.append('| Expanded distribution | **No** (Amazon only) | %s | would pay %s a copy (40%% × %s − printing) |' % (
-                money(c.get('kdp_expanded', {}).get('print', 0)), money(c.get('kdp_expanded', {}).get('net', 0)), money(price)))
+            md.append('| Expanded distribution | ' + expanded_text(c, price))
             if kind == 'pocket':
                 cost = COSTS['kdp']
                 pr = kdp.get('print', 0)
-                md.append('\n**Price: $%.2f [OWNER: recommended $9.99; the alternative is $%.2f].** KDP\'s printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) '
-                          'is $%.2f a book plus $%.4f a page: $%.2f + %d × $%.4f = **%s**. From a list price of $9.99, KDP pays 60%% of the list price, so 60%% × $9.99 = $5.99, minus printing, '
-                          'leaves **%s a copy**. Below $9.99 it pays only 50%%: at $%.2f that is 50%% × $%.2f − %s = %s a copy. One dollar more on the price nearly doubles what you keep, '
-                          'and the panel\'s readers put its value at about $8.40, close to either price. [OWNER]\n' % (
-                              price, POCKET_ALT, cost['fixed'], cost['per_page'], cost['fixed'], pages, cost['per_page'], money(pr), money(round(0.6 * 9.99, 2) - pr),
-                              POCKET_ALT, POCKET_ALT, money(pr), money(round(0.5 * POCKET_ALT, 2) - pr)))
+                md.append('\n**Price: $%.2f (the short-edition rule: under 100 pages).** KDP\'s printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) '
+                          'is $%.2f a book plus $%.4f a page: $%.2f + %d × $%.4f = **%s**. KDP pays 60%% of the list price from $9.99 up, so 60%% × $%.2f = %s, minus printing, '
+                          'leaves **%s a copy**. Below $9.99 it would pay only 50%%, so $9.99 is the lowest price that keeps the higher royalty. The panel\'s readers put its value at about $8.40.\n' % (
+                              price, cost['fixed'], cost['per_page'], cost['fixed'], pages, cost['per_page'], money(pr), price, money(round(0.6 * price, 2)), money(kdp.get('net', 0))))
             elif kind == 'workbook':
                 cost = COSTS['kdp_bw_large'] if bw else COSTS['kdp_large']
                 how = ('black ink, large trim (8.5 × 11 in), 24 to 110 pages: a flat $%.2f a book' % cost['fixed']) if bw else (
                     'standard colour, large trim (8.5 × 11 in): $%.2f + %d × $%.4f' % (cost['fixed'], pages, cost['per_page']))
-                md.append('\nPrinting: %s = **%s**. Royalty: 60%% × %s − printing = **%s a copy**. %s [OWNER]\n' % (
-                    how, money(kdp.get('print', 0)), money(price), money(kdp.get('net', 0)),
-                    'The colour cover costs nothing extra: KDP prints every cover in colour.' if bw else 'Compare the black-and-white edition below.'))
+                md.append('\nPrice: **%s** (the short-edition rule: under 100 pages). Printing: %s = **%s**. Royalty: %d%% × %s − printing = **%s a copy**. %s [OWNER]\n' % (
+                    money(price), how, money(kdp.get('print', 0)), int(round(kdp.get('royalty_rate', 0.6) * 100)), money(price), money(kdp.get('net', 0)),
+                    'The colour cover costs nothing extra: KDP prints every cover in colour.' if bw else (
+                        'At this price the colour edition is **Amazon only**: expanded distribution would need a list price of at least about %s. Compare the black-and-white edition below.'
+                        % money(c.get('kdp_expanded', {}).get('min_price') or 0))))
             else:
                 md.append('\nThe non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP\'s "based on Amazon.com" fill them, then round to .99. [OWNER]\n')
         if has_kindle:
@@ -439,10 +475,10 @@ def main():
             'ai_text': 'Yes: entire work, extensive editing [OWNER]', 'ai_images': 'Yes: entire work, extensive editing [OWNER]', 'ai_translations': 'No',
             'isbn': 'Get a free KDP ISBN', 'ink_paper': 'Black & white, white' if bw else 'Standard color, white', 'trim': {'workbook': '8.5 x 11 in', 'pocket': '5 x 8 in'}.get(kind, '6 x 9 in'),
             'bleed': 'No bleed', 'cover_finish': 'Matte', 'pages': pages, 'interior_file': 'book/print/%s.pdf' % bid, 'cover_file': 'book/print/cover-%s.pdf' % bid, 'low_content': 'No',
-            'price_usd': '%.2f' % price + (' [OWNER: recommended]' if kind == 'pocket' or bw else ''),
-            'price_gbp': PK_UK if (kind == 'pocket' or bw) else UK_PRICE, 'price_eur': PK_EU if (kind == 'pocket' or bw) else EU_PRICE,
-            'price_cad': PK_CA if (kind == 'pocket' or bw) else CA_PRICE, 'price_aud': PK_AU if (kind == 'pocket' or bw) else AU_PRICE,
-            'expanded_distribution': 'No', 'printing_cost_usd': kdp.get('print', ''), 'royalty_rate': '%d%%' % int(round(kdp.get('royalty_rate', 0.6) * 100)) if has_print else '',
+            'price_usd': '%.2f' % price,
+            'price_gbp': PK_UK if short else UK_PRICE, 'price_eur': PK_EU if short else EU_PRICE,
+            'price_cad': PK_CA if short else CA_PRICE, 'price_aud': PK_AU if short else AU_PRICE,
+            'expanded_distribution': 'No (Amazon only)' + ('; not available at this price' if (c.get('kdp_expanded', {}).get('net', 1) <= 0) else ''), 'printing_cost_usd': kdp.get('print', ''), 'royalty_rate': '%d%%' % int(round(kdp.get('royalty_rate', 0.6) * 100)) if has_print else '',
             'royalty_usd': kdp.get('net', ''), 'kdp_select': '', 'drm': '',
         }
         if has_print:

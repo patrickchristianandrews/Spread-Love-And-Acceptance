@@ -1389,6 +1389,10 @@ def jobs():
               'cover': 'cover-' + POCKET['id'], 'title': POCKET['title'], 'n': 0, 'min_pages': 72, 'max_pages': 80})
     j.append({'id': BOXSET['id'], 'kind': 'front', 'trim': CFG['trim_in'], 'cover': 'cover-' + BOXSET['id'], 'title': BOXSET['title'], 'n': 0})
     j.append({'id': 'measure', 'kind': 'measure', 'trim': CFG['trim_in'], 'colPx': COL_PX['book'], 'only_when_named': True})
+    # voice18: the owner's pricing rule (series.json price_rule): build_pdfs.js sets the list price from the final page count
+    for x in j:
+        if 'price' in x and CFG.get('price_rule'):
+            x['price_rule'] = CFG['price_rule']
     return j
 
 

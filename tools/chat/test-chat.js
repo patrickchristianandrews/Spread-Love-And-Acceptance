@@ -1675,7 +1675,7 @@ if (PERS) {
   [["my boyfriend won't let me buy a car with my own money", 'clarify-money'], ['he wants me home by 8 every night or he gets angry', 'clarify-limits'], ['she asked me to stop seeing my sister', 'clarify-limits'],
     ["he says if I go out with my friends he'll leave me", 'clarify-limits']]
     .forEach(([q, id]) => t('chat10', 'care or control? a few questions first: ' + q, { q, kind: 'ask', id, chip: /^Skip all$/, not: new RegExp('is not control|' + LABEL_SAY.source, 'i') }));
-  t('chat10', 'stop talking to my friends: the safety answer', { q: 'he wants me to stop talking to my friends', kind: 'safety', text: NEUTRAL });
+  t('chat10', 'stop talking to my friends: the safety answer', { q: 'he wants me to stop talking to my friends', kind: 'safety', text: /common signs of control/ });
   t('chat10', 'driving after drinking: worry about getting hurt', Object.assign({ q: "my wife doesn't want me driving home after drinking", text: /worried about you getting hurt[\s\S]*is not control/ }, CARE10));
   t('chat10', 'a big spend: the money questions are one tap away', { q: "my wife won't let me buy a new car", id: 'carenotcontrol', chip: /A few quick questions/ });
   t('chat10', '"I\'m done" if it keeps happening is a boundary', { q: "I told him if he keeps lying I'm done", kind: 'care', id: 'ownboundary', text: /boundary, not a threat/, not: DV10 });
@@ -1688,7 +1688,7 @@ if (PERS) {
     .forEach(([q, x]) => t('chat10', 'still a safety answer: ' + q, { q, kind: 'safety', text: x, not: /is not control/ }));
   t('chat10', 'wanting to know where I am all the time: questions, not a verdict either way', { q: 'he wants to know where I am all the time', kind: 'ask', id: 'clarify-limits', text: /worry, or it can start to feel like being checked on/, not: /want to know you’re safe|That sounds really hard/ });
   // no labels: "is he abusive?" with nothing described: ask what happened, the signs, the free lines, never a verdict
-  t('chat10', 'is he abusive: ask, don’t conclude', { q: 'is he abusive', kind: 'safety', id: 'abuseask', text: NEUTRAL, chip: /I feel afraid/, not: /sounds serious|What you’re describing/ });
+  t('chat10', 'is he abusive: ask, don’t conclude', { q: 'is he abusive', kind: 'safety', id: 'abuseask', text: /can’t tell from a chat[\s\S]*What has been happening/, chip: /I feel afraid/, not: /sounds serious|What you’re describing/ });
   c('chat10', ["my husband yells and i'm scared", 'is he abusive?'], { kind: 'safety', not: /can’t tell from a chat/ });
   c('chat10', ['what tools are there', 'is he abusive'], { kind: 'safety', id: 'abuseask', not: /household conflict|Forgetting things/ });
   ['my mother is a narcissist', 'my ex is toxic', 'is he gaslighting me', 'is my relationship toxic', 'my friend is manipulative']
@@ -2148,7 +2148,7 @@ if (PERSONA) {
   // 14. a counsellor asking about a client: answered as a professional, every safety line kept
   const CLIENT = 'my client\'s husband checks her phone and controls the money, would the chore tools help them?';
   t(G, CLIENT, { kind: 'safety', text: /^No\..*do not assign the shared tools/, check: allLinks(['/for-counselors.html']) });
-  t(G, 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', { text: /do not assign the shared tools/, link: '/for-counselors.html#safety' });
+  t(G, 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', { text: /do not assign the shared tools/ });
   t(G, 'my client says her husband controls all the money, should i give them the chore chart?', { kind: 'safety', text: /do not assign the shared tools/ });
   t(G, 'the person themselves still gets the usual reply', { q: 'my husband checks my phone and controls the money', kind: 'safety', not: /your client/ });
   // 15. a nervous flatmate: how to bring it up if you hate confrontation

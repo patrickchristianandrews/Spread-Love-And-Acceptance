@@ -2,7 +2,13 @@
  "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. The paperbacks use free KDP ISBNs, so no ISBN is printed (see \"isbn\"). The imprint is \"Independently published\". summary_at_end: chapters that print \"What to remember\" at the end in place of \"In short\" at the top (never both). examples: false leaves the filled-in examples out of the print books.",
  "series_title": "Spread Love & Acceptance",
  "price_usd": 14.99,
- "workbook_price_usd": 14.99,
+ "workbook_price_usd": 9.99,
+ "price_rule": {
+  "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+  "short_under_pages": 100,
+  "short_usd": 9.99,
+  "regular_usd": 14.99
+ },
  "workbook_bw_price_usd": 9.99,
  "trim_in": [
   6,

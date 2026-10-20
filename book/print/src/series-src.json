@@ -13,7 +13,13 @@
    "cover": "cover-book-1-know-yourself-kindly",
    "title": "Know Yourself Kindly",
    "n": 1,
-   "chapters": 7
+   "chapters": 7,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "book-2-heal-and-steady",
@@ -28,7 +34,13 @@
    "cover": "cover-book-2-heal-and-steady",
    "title": "Heal and Steady",
    "n": 2,
-   "chapters": 7
+   "chapters": 7,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "book-3-understanding-each-other",
@@ -43,7 +55,13 @@
    "cover": "cover-book-3-understanding-each-other",
    "title": "Understanding Each Other",
    "n": 3,
-   "chapters": 7
+   "chapters": 7,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "book-4-share-the-load",
@@ -58,7 +76,13 @@
    "cover": "cover-book-4-share-the-load",
    "title": "Share the Load",
    "n": 4,
-   "chapters": 6
+   "chapters": 6,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "workbook",
@@ -69,10 +93,16 @@
    ],
    "colPx": 696,
    "paper_in": 0.002252,
-   "price": 14.99,
+   "price": 9.99,
    "cover": "cover-workbook",
    "title": "The Workpapers: The Bound Edition",
-   "n": 0
+   "n": 0,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "workbook-bw",
@@ -89,7 +119,13 @@
    "price": 9.99,
    "cover": "cover-workbook-bw",
    "title": "The Workpapers: The Bound Edition (black-and-white edition)",
-   "n": 0
+   "n": 0,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "pocket-the-logic-behind-it",
@@ -105,7 +141,13 @@
    "title": "The Logic Behind It",
    "n": 0,
    "min_pages": 72,
-   "max_pages": 80
+   "max_pages": 80,
+   "price_rule": {
+    "about": "The owner's pricing rule for every paperback: fewer than short_under_pages printed pages is the short line at short_usd, anything longer is regular_usd. tools/book/build_pdfs.js applies it to the final page count (so it overrides the price_usd values above, which are only the expected results), writes list_price into book/print/series.json, and listing_kdp.py and kdp_steps.py read it from there.",
+    "short_under_pages": 100,
+    "short_usd": 9.99,
+    "regular_usd": 14.99
+   }
   },
   {
    "id": "boxset-complete-series",
