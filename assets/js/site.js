@@ -1871,9 +1871,10 @@
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
       // then "Read & learn" and "Calm & play" fold into Menu to make room for "Relax and reset" (the calm corner, one tap
       // away); only if that isn't enough does Relax step aside
-      if (rx && crowded()) {
-        bar.classList.add('is-fold1'); if (crowded()) bar.classList.add('is-fold2');
-        if (crowded()) { rx.hidden = true; bar.classList.remove('is-fold1', 'is-fold2'); }
+      var tight = function () { return bar.scrollWidth > bar.clientWidth || crowded(); };   // not even 1px over the edge
+      if (rx && tight()) {
+        bar.classList.add('is-fold1'); if (tight()) bar.classList.add('is-fold2');
+        if (tight()) { rx.hidden = true; bar.classList.remove('is-fold1', 'is-fold2'); }
       }
       ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
       // still too full: "Read the book" steps aside too (it is first in the menu panel), and the sections try again
