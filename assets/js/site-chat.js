@@ -646,7 +646,7 @@
 
   // Name-calling, screaming, "walking on eggshells", "he turns everything around on me", "how do I say it so he doesn't get
   // angry": from the person on the receiving end, that is a safety matter, not a wording problem. Never a script for them.
-  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex|mum|mom|dad|mother|father))\b.{0,40}\b(calls|called|calling) me (a |an )?((stupid|fucking|effing|dumb|fat|ugly|useless|worthless|lazy|little|crazy) )+(bitch|slut|whore|cunt|idiot|loser|failure|moron|retard\w*|cow|pig|piece of shit)\b|\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?(narcissis\w*|psychopath\w*|sociopath\w*)\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*|psychopath\w*|sociopath\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
+  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?(narcissis\w*|psychopath\w*|sociopath\w*)\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*|psychopath\w*|sociopath\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
   // the same, without a bare "he yells at me": names, put-downs, eggshells, always/every day, fear
   var VERBAL_STRONG = new RegExp(VERBAL.source.replace(/\|\\b\(he\|she\|my \(partner[^]*$/, ''));
   // a sibling, a child, a classmate or a boss calling names is a different conversation
@@ -923,75 +923,7 @@
   }
   // "whats unbiled debt", "were do i start", "i dont no were to begin": read as the words meant.
   // Returns {q, fixes: [[typed, meant]], known, unknown}; q is unchanged when nothing needed fixing.
-  // ---------- crude words, insults and frustration (puddles16, the owner's finding): never "corrected" into other words,
-  // never mirrored, never a lecture; a topic underneath ("I'm so fucking tired of fighting with my wife") is answered as usual
-  var CRUDE_SWEAR = /\b(fuck\w*|fck\w*|fuk\w*|f+u+c+k+\w*|motherfuck\w*|shit\w*|sh1t|bullshit|crap|crappy|damn|dammit|goddamn\w*|wtf|ffs|stfu|omfg|bloody hell|piss\w*|bastard\w*|bitch\w*|arse|arsehole\w*|ass|asshole\w*|a\$\$|dick|dickhead\w*|prick\w*|wank\w*|wanker\w*|twat\w*|cunt\w*|bollocks|bugger\w*|jerk)\b/;
-  var CRUDE_SEX = /\b(penis\w*|cock|cocks|cocksuck\w*|dick pics?|boob\w*|tit|tits|titties|tiddies|pussy|pussies|vagina\w*|nudes?|naked|nipples?|horny|porn\w*|blow ?jobs?|handjobs?|cum|cumming|dildo\w*|sex with (you|me)|have sex|sexting|suck my|jerk off|jack off|masturbat\w*|send (me )?(pics|pictures|photos) of (you|your)|show me your (body|boobs|tits|dick|penis|pussy|naked))\b/;
-  var CRUDE_SLUR = /\b(retard\w*|fag|fags|faggot\w*|nigg\w*|spaz|spastic|tranny|trannies|dyke|kike|chink|paki|slut\w*|whore\w*|hoe)\b/;
-  var CRUDE_MASKED = /\bf[*#@!_.\-]+c?k|\bf\*+|\bsh[*#@!]+t\b|\bb[*#@!]+tch|\bc[*#@!]+nt\b|\ba[*#@!$]+hole/;
-  var ES_CRUDE_RE = /\b(mierda|puta\w*|put[oa]s?|pendej\w*|pinche|cabron\w*|joder|jodete|chinga\w*|verga|culer[oa]s?|cono|carajo|vete a la)\b/;
-  function crudeIn(f, raw) { return CRUDE_SWEAR.test(f) || CRUDE_SEX.test(f) || CRUDE_SLUR.test(f) || (raw != null && CRUDE_MASKED.test(String(raw).toLowerCase())); }
-  // swear words used as intensifiers, dropped before routing ("my ex is a fucking nightmare about pickups")
-  var SWEAR_STRIP = /\b(fucking|fuckin|freaking|frickin|effing|bloody|damn|damned|goddamn|goddamned|flipping|shitty|crappy|ffs|wtf|omfg|fuck(ing)? this|fuck(ing)? that|for fucks sake|holy shit|oh shit|shit)\b/g;
-  var FRUST = /^(\W*(ugh|omg|seriously|honestly|lol|lmao|wow|um|hmm|oh|ok|okay|so|and|but|no|nope|nah|yeah|man|dude|bro|mate|puddles|professor)\b)*\W*(are you (kidding|joking|serious)( me)?|you (must|have got to|ve got to|gotta) be (kidding|joking)( me)?|you re (kidding|joking)( me)?|youre (kidding|joking)( me)?|(this|that|it) (is|s|was) (so |really |just |totally |completely )?(stupid|dumb|useless|pointless|rubbish|garbage|trash|ridiculous|nonsense|a joke|crap|shit|wrong|terrible|awful|bad|not helpful|unhelpful|no help)|this (sucks|is not helping|isnt helping)|(you re|youre|you are|ur|u r|u re) (so |really |just |totally |completely |pretty )?(dumb|stupid|useless|an idiot|a moron|thick|rubbish|hopeless|wrong|no help|not helping|not listening|not helpful|garbage|trash|crap|a joke|pathetic|annoying|broken)|(you|u) (dont|don t|do not|never) (listen|understand|get it|help)|you (re |are )?not (listening|helping|understanding)|you didnt (listen|answer|read|understand)|wrong answer|(thats|that s|that is|that|thats just|that just|this|this is|its|it is|it) (not it|wrong|not right|not what i (asked|meant|said|wanted|needed))|not what i (asked|meant|said|wanted)|not helpful|unhelpful|what are you (on|talking) about|that makes no sense|(stupid|dumb|useless|broken) (bot|dog|puddle|thing|app|site|professor|robot|chatbot))(\W+(you|lol|seriously|man|dude|mate|again|at all|whatsoever|smh|lmao))*\W*$/;
-  var CRUDE_LINES = ['I’ll skip that one. If something I said missed the mark, tell me in a few words what you need, or pick one of these.',
-    'Let’s leave that there. If I got something wrong, tell me what you were hoping for, or tap one of these.',
-    'I won’t go there, but I’m glad to help. What do you need? A few words is plenty, or pick one below.',
-    'That’s not something I can help with. If you came for something else, tell me in a few words, or start from one of these.'];
-  var CRUDE_CHIPS = [{ label: 'Chores feel unfair', q: 'I feel like I do everything at home' }, { label: 'We keep arguing', q: 'We keep having the same fight again' }, { label: 'I need to calm down', q: 'Tell me something calming' }, { label: 'What can I ask?', q: 'What can I ask?' }];
-  var CRUDE_LINKS = [['Talk to a person: someone to talk to, free', '/outside-help.html#talk'], ['Find a page by who it’s for', '/by-relationship.html']];
-  function crudeReply(state) {
-    var run = state.lastKind === 'crude' ? (state.crudeRun || 1) + 1 : 1; state.crudeRun = run;
-    state.crudeIdx = ((state.crudeIdx == null ? -1 : state.crudeIdx) + 1) % CRUDE_LINES.length;
-    state.last = null;
-    var x = run >= 3 ? 'I’m here when you want help with something.' : CRUDE_LINES[state.crudeIdx];
-    return { blocks: [{ k: 'p', x: x }, { k: 'links', x: CRUDE_LINKS }], chips: CRUDE_CHIPS, kind: 'crude', id: run >= 3 ? 'crude-repeat' : 'crude', noBrief: true };
-  }
-  // "are you kidding me", "that's not it", "you're useless": a real apology that names the miss, the next-best matches for
-  // what was asked before, and an easy way to search, browse or reach a person
-  function frustReply(state) {
-    var lq = state.lastQ || '', L = state.last, b = [], chips = [];
-    var shown = (L && L.shown) || {}, pagesSeen = {};
-    if (L && L.u) pagesSeen[String(L.u).split('#')[0]] = 1;
-    if (lq) {
-      var res = search(lq);
-      res.hits.forEach(function (h) {
-        var d = KB.docs[h.i], pg = d.u.split('#')[0];
-        if (chips.length >= 3 || d.tip || d.g || shown[h.i] || pagesSeen[pg] || h.cov < 0.5 || /^\/research\.html#ref-/.test(d.u) || /^\/(about\.html|architecture\/|legal\/|privacy)/.test(d.u)) return;
-        pagesSeen[pg] = 1; var lab = pageName(d.h).split(':')[0].replace(/^\d+\s+/, '').trim();
-        chips.push({ label: lab.length > 46 ? lab.slice(0, 44).replace(/\s+\S*$/, '') + '…' : lab, doc: h.i });
-      });
-      var short = lq.length > 60 ? lq.slice(0, 57).replace(/\s+\S*$/, '') + '…' : lq;
-      b.push({ k: 'p', x: 'Sorry, that answer missed. ' + (chips.length ? 'For “' + short + '”, these are the next closest things I have. Or tell me what you were hoping for, in a few words, and I’ll try again.' : 'What were you hoping for? Tell me in a few words, and I’ll try again.') });
-    } else b.push({ k: 'p', x: 'Sorry, I’ve missed. What were you hoping for? Tell me in a few words, or pick one of these.' });
-    b.push({ k: 'links', x: [['Find a page by who it’s for, or search the site', '/by-relationship.html'], ['Talk to a person: someone to talk to, free', '/outside-help.html#talk']] });
-    state.last = null;
-    return { blocks: b, chips: chips.length ? chips : CRUDE_CHIPS.slice(0, 3), kind: 'frust', id: 'frust', noBrief: true };
-  }
-  // the crude and frustration turn: after every safety check, before topic matching; null when there's a real topic
-  // (then routing goes on, with the swearing taken out)
-  function crudeTurn(state, q, vf) {
-    // frustration only: every clause is frustration ("are you kidding me, this is useless")
-    var clauses = String(q).split(/[.,!?;:…]+|\s+(?:and|&)\s+/).map(norm).filter(Boolean);
-    var crude = crudeIn(vf, q), frust = FRUST.test(vf) || (clauses.length > 1 && clauses.every(function (c) { return FRUST.test(c) || /^(ugh|omg|seriously|honestly|lol|wow|come on|really|what|no|nope|god)$/.test(c); }));
-    if (!crude && !frust) return null;
-    if (DANGER.test(vf) || NOT_LIVE.test(vf) || SELF_HARMFUL.test(vf) || HARD.test(vf) || FEAR_W.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || OWN_VIOLENT.test(vf) || CHILD_CRISIS.test(vf) || fearOf(vf)) return null;
-    // what's left once the swearing and the frustration are taken out: a real topic gets a real answer
-    var rest = vf.replace(SWEAR_STRIP, ' ').replace(CRUDE_SWEAR, ' ').replace(/\b(you|u|ur|youre|you re|are|is|so|a|an|the|me|this|that|it|its|lol|lmao|omg|big|little|stupid|dumb|useless|idiot|kidding|joking|seriously|off|up|go|shut|what|im|i m|i|just|really|oh|wow|like|man|dude|bro|mate)\b/g, ' ').replace(/\s+/g, ' ').trim();
-    var sit = rest ? detectSituation(rest) : { score: 0 };
-    var cardHit = rest && (matchCard(rest) || (IDX.first || []).some(function (c) { return c.re.test(rest) && !(c.notRe && c.notRe.test(rest)); }));
-    var topical = !CRUDE_SEX.test(vf) && !CRUDE_SLUR.test(vf) && rest.split(' ').filter(function (w) { return w.length > 2 && !STOP[w]; }).length >= 2 && (sit.score >= 2 || cardHit || sit.who && sit.who !== 'self' && sit.who !== 'other');
-    if (topical) return { cleaned: vf.replace(SWEAR_STRIP, ' ').replace(/\b(fuck\w*|shit\w*|crap)\b/g, ' ').replace(/\s+/g, ' ').trim() };
-    if (crude) return crudeReply(state);
-    // "that didn't help" after a playbook or a caring answer: the turn that already comes at it from another side
-    if (CV_NOHELP.test(vf) && ((state.last && state.last.kind === 'sit') || careCard(state))) return null;
-    return frustReply(state);
-  }
-
   function spellFix(q) {
-    // crude words are never "corrected" into other words ("fuck off" is not "face off"): no fixes at all then
-    var lowAll = String(q).toLowerCase().replace(/[’']/g, '');
-    if (crudeIn(lowAll, q) || ES_CRUDE_RE.test(esFold(lowAll))) return { q: q, fixes: [], known: 1, unknown: 0 };
     // names are never "corrected": any capitalised word that isn't the first word ("Marcus", "Leo") is left alone
     var NAMES = {};
     String(q).replace(/[’‘`´]/g, "'").split(/\s+/).forEach(function (w, i) { var m = /^([A-Z][a-z]+)/.exec(w); if (m && (i > 0 || /^[A-Z][a-z]+,/.test(w)) && m[1] !== 'I') NAMES[m[1].toLowerCase()] = 1; });
@@ -2810,9 +2742,6 @@
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       // chit-chat: games in progress, jokes, riddles, "I'm bored", reactions, and a plain hand-off when something real comes up
-      var crt = crudeTurn(state, q, vf);
-      if (crt && crt.cleaned) { q = q0 = crt.cleaned; vf = norm(q); }
-      else if (crt) return crt;
       var pze = !DANGER.test(vf) && pzEarly(state, q0, vf);
       if (pze) { state.last = null; return pze; }
       var ovr = (state.turn || 0) <= 3 && pageOverview(state, vf);
@@ -2886,8 +2815,7 @@
     'necesitamos podemos quieres tienes puedes sabes soy eres somos estamos estan dias semana fin mañana manana hoy siempre vez veces llorar lloro sueño sueno ' +
     'tiene tienen parkinson alzheimer paciencia pierdo culpable culpa dice entiendo cansancio esta él ella ' +
     'resentido resentida rabia coraje repartir cuidado lejos vive viven dicen ayuden ayude peleando hago hermana hermanas cunado cunada ' +
-    'familia ensamblada padrastro madrastra hijastro hijastra hijastros nueva acepta respeta caso tension viene cada fines ' +
-    'vete mierda eres inutil tonto tonta estupido estupida idiota sirves sirve joder pendejo pendeja cabron puta sirven ayudas').split(' ');
+    'familia ensamblada padrastro madrastra hijastro hijastra hijastros nueva acepta respeta caso tension viene cada fines').split(' ');
   var ES_SET = {}; ES_WORDS.forEach(function (w) { ES_SET[w] = 1; });
   var STEP_ES = /\b(ensamblad[ao]s?|reconstituid[ao]s?|padrastro|madrastra|hijastr[oa]s?|(el|la|los|las) (hij[oa]s?) de mi (esposo|esposa|marido|pareja|mujer|novio|novia)|no acepta a mi (esposo|esposa|marido|pareja|novio|novia)|familia nueva|viene cada dos fines de semana|cada dos fines de semana)\b/;
   var EN_SET = {}; 'the and my is are i you he she it to of in with what how do does can not but on at this that we they am was have has'.split(' ').forEach(function (w) { EN_SET[w] = 1; });
@@ -2911,8 +2839,8 @@
     var esc = !hablas && !hola && pzEsWhich(f);
     // "no quiero vivir" is Spanish, and a safety answer, however few other Spanish words it has
     var esSafe = /\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|me quiero morir|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f);
-    if (!hablas && !hola && !esc && !esSafe && !isSpanish(q) && !shortEs && !STEP_ES.test(f) && !ES_CRUDE_RE.test(f)) return null;
-    if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1 && !STEP_ES.test(f) && !ES_CRUDE_RE.test(f)) return null;
+    if (!hablas && !hola && !esc && !esSafe && !isSpanish(q) && !shortEs && !STEP_ES.test(f)) return null;
+    if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1 && !STEP_ES.test(f)) return null;
     var first = !state.es;
     state.es = 1; state.last = null;
     var L = '/en-espanol.html', chips = state.esTopic === 'cuidar' ? ES_CARE_CHIPS : ES_CHIPS;
@@ -2934,16 +2862,6 @@
       return ans('988', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', ['Llama al 988 (EE. UU.) y marca el 2 para hablar en español, o envía un mensaje de texto con la palabra AYUDA al 988.', 'Si estás en peligro ahora, llama al 911.', 'Fuera de EE. UU.: findahelpline.com tiene líneas de ayuda gratis en tu país.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me controla|me grita y tengo miedo)\b/.test(f))
       return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
-    // crude words, insults and frustration, in Spanish: calm, short, no lecture (puddles16)
-    var ES_MENU = [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Siento que hago todo en la casa', L + '#casa'], ['Cuando estoy muy enojado', L + '#enojado'], ['Si no estás a salvo en casa', L + '#seguro']];
-    var esCrude = ES_CRUDE_RE.test(f) || /\b(jodete|tetas|pene|culo|sexo)\b/.test(f);
-    var esFrust = /\b(eres|sos|que) (un |una |muy )?(inutil|tont[oa]|estupid[oa]|idiota|imbecil|pendej[oa]|basura|mal[oa])\b|\bno (sirves|sirve|me sirve|me sirves|ayudas|me ayudas|entiendes|me entiendes|es eso)\b|\beso no es\b|\b(me estas tomando el pelo|es en serio|en serio)\b|\besto es (una )?(basura|tonto|estupido|inutil|ridiculo)\b/.test(f);
-    if ((esCrude || esFrust) && f.split(' ').length <= 12 && !/\b(mi (esposo|esposa|marido|pareja|mujer|mama|papa|madre|padre|hij[oa]|herman[oa])|mis (hijos|hermanos))\b/.test(f)) {
-      state.last = null;
-      var esRun = state.lastKind === 'lang-crude' ? 2 : 1;
-      return { blocks: [{ k: 'p', x: esCrude && !esFrust ? (esRun > 1 ? 'Aquí estoy cuando quieras ayuda con algo.' : 'Eso lo dejo pasar. Si algo de lo que dije no te sirvió, dime en pocas palabras qué necesitas, o elige una de estas partes:') : 'Perdón, esa respuesta no te sirvió. ¿Qué buscabas? Dímelo en pocas palabras, o mira una de estas partes:' },
-        { k: 'links', x: ES_MENU.concat([['Hablar con una persona (ayuda gratis)', '/outside-help.html#talk']]) }], chips: chips, kind: 'lang', id: esCrude && !esFrust ? 'es-crude' : 'es-frust', noBrief: true };
-    }
     // a little chit-chat in Spanish, after the safety answers: "¿cómo estás?", "cuéntame un chiste", "gracias"
     if (esc) { var esr0 = pzEs(state, esc, q); if (esr0) return esr0; }
     // a stepfamily ("familia ensamblada", "padrastro", "el hijo de mi esposo"): the Spanish page's own section (#ensamblada)
@@ -3320,7 +3238,7 @@
     var R = P.rules || {}, k = r.kind || 'search', f = norm(q);
     // after anything serious, stay plain: for good after safety, and after care or someone's situation until a light topic
     if (/^(safety|redflag)$/.test(k) || state.unsafe || state.crisis) { state.plain = 2; return r; }
-    if (/^(care|care-more|sit|sit-more|road|road-more|nohelp|calc|lang|ask|read|crude|frust)$/.test(k)) { state.plain = Math.max(state.plain || 0, 1); return r; }
+    if (/^(care|care-more|sit|sit-more|road|road-more|nohelp|calc|lang|ask|read)$/.test(k)) { state.plain = Math.max(state.plain || 0, 1); return r; }
     if ((R.never_on_kinds || []).indexOf(k) !== -1) return r;
     if (FUN_UPSET.test(f) || DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return r;
     var txt = JSON.stringify(r.blocks);
@@ -4823,7 +4741,7 @@
     });
   }
   function noRepeat(state, q, r) {
-    if (!r || !r.blocks || /^(safety|redflag|clarify|hello|thanks|calc|lang|fun|chat|restart|info|ask|read|crude|frust)$/.test(r.kind || '')) return r;
+    if (!r || !r.blocks || /^(safety|redflag|clarify|hello|thanks|calc|lang|fun|chat|restart|info|ask|read)$/.test(r.kind || '')) return r;
     var sig = sigOf(r);
     if (!sig || sig !== state.lastSig) return r;
     // a playbook again ("he just writes 'ok.'"): one thing for tonight and another way to say it, not the whole answer
@@ -4871,7 +4789,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
