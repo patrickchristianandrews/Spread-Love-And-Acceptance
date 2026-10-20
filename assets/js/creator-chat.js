@@ -28,6 +28,7 @@
     return s;
   }
   var ABOUT_HIM = /\b(christians?|creators?|founders?|authors?|owners?|makers?|he|him|his|she|her|they|their|them)\b/;
+  var SELF_DANGER = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|going) to die\b|\bend (it all|my life)\b|\bself ?harm\w*|\b(hurt|harm|cut) my ?self\b|\bno reason to (live|go on)\b|\b(dont|do not) want to (be here|be alive|live|exist)\b/;
   var DANGER = /\bsuicid\w*|\bkill(ing)? (my ?self|me)\b|\b(want|wants|going) to die\b|\bend (it all|my life)\b|\bself ?harm\w*|\b(hurt|harm|cut) my ?self\b|\bno reason to (live|go on)\b|\b(dont|do not) want to (be here|be alive|live|exist)\b|\babus(e|ed|ive|ing)\b|\bdomestic (violence|abuse)\b|\b(hits?|hitting|hurts?|hurting) me\b|\bnot safe (at home|with)\b|\bfeel unsafe\b|\bthreaten\w* (to )?(hurt|kill|harm)\b/;
   var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|going) to die\b|\bend (it all|my life)\b|\bno reason to (live|go on)\b|\b(dont|do not) want to (be here|be alive|live|exist)\b/;
   var SMALL = [
@@ -40,7 +41,9 @@
     var text = norm(q);
     if (text.trim() === '') return null;
     if (DANGER.test(text)) {
-      // the owner's decision (purge19): a short neutral line, no resources
+      // the owner's decision (purge19): no resources. Plain suicide guidance is allowed (the owner's update); every other
+      // danger message gets the short neutral line
+      if (SELF_DANGER.test(text)) return { a: ['I’m really glad you said something. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it.'] };
       return { a: ['That sounds really hard. I’m a small guide to Christian’s story and this site, and I can’t help with this one.'] };
     }
     for (var s = 0; s < SMALL.length; s++) if (SMALL[s][0].test(text) && text.split(' ').length <= 6) return { a: SMALL[s][1], f: KB.starters.slice(0, 3) };

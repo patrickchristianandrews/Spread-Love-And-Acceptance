@@ -222,7 +222,7 @@
   }
 
   // the owner's decision (purge19): a short neutral line, no resources
-  var CRISIS_HTML = '<p><strong>That sounds really hard.</strong> This tool is a small guide to everyday requests, and it can’t help with this one.</p>';
+  var CRISIS_HTML = '<p><strong>I’m really glad you said something.</strong> If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it.</p>';
   // No flip here: asking nicely is not the answer to fear or control.
   var DANGER_HTML = '<p><strong>If you feel afraid of someone, or they control you, a kinder request isn’t the answer, and it isn’t your fault.</strong></p>';
 

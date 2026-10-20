@@ -4016,9 +4016,9 @@ function simpler(text){
 /* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
 const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
-/* The owner's decision (purge19): no safety resources, numbers, services or links anywhere. Where someone may hurt
-   themselves, this short neutral line, which adds nothing else */
-const SAFE_ONE = "That sounds really hard. This tool is a small guide to everyday messages, and it can't help with this one.";
+/* The owner's decision (purge19): no safety resources, numbers, services or links anywhere. Plain suicide guidance is
+   allowed (the owner's update): where someone may hurt themselves, this one line, with no numbers, services or links */
+const SAFE_ONE = "I'm really glad you said something. If you're having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don't stay alone with it.";
 const ATTACK_IDS = ["harm","withdraw","olddays","menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */

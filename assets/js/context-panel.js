@@ -292,7 +292,7 @@
     // safety notes go first, and are never softened by anything above
     if (out.safety) {
       var S = {
-        crisis: 'Something you added sounds like someone may be thinking about ending their life. That sounds really hard. This tool is a small guide to everyday messages, and it can’t help with this one.',
+        crisis: 'Something you added sounds like someone may be thinking about ending their life. I’m really glad you said something. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it.',
         fear: 'Something you added says someone feels afraid or controlled. That matters much more than the wording, and it isn’t something a better wording can fix.',
         threat: 'Something you added sounds like a threat. That matters more than the wording of this message.',
         control: 'Something you added sounds like someone’s choices may be being taken away (who they see, their phone or money).'

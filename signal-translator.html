@@ -2898,9 +2898,9 @@ function run(){
    A THREAT: not a tone problem. Said plainly, in both modes.
    No rewrite keeps the threat, no "looks okay", and no garden reward for it.
    ============================================================ */
-/* The owner's decision (purge19): no safety resources, numbers, services or links. Where someone may hurt themselves,
-   one short neutral line (SAFE_ONE) that adds nothing else */
-const SAFE_ONE = 'That sounds really hard. This tool is a small guide to everyday messages, and it can&rsquo;t help with this one.';
+/* The owner's decision (purge19): no safety resources, numbers, services or links. Plain suicide guidance is allowed
+   (the owner's update): where someone may hurt themselves, one plain line (SAFE_ONE), with no numbers, services or links */
+const SAFE_ONE = 'I&rsquo;m really glad you said something. If you&rsquo;re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don&rsquo;t stay alone with it.';
 const SAFETY_SELF = '<p class="vhelp"><b>If you&rsquo;re worried about your own anger,</b> that&rsquo;s a brave thing to notice.</p>';
 const CRISIS_SELF = '<p class="vhelp">'+SAFE_ONE+'</p>';
 const CONTROL_GOT = '<p class="vhelp"><b>This may be about control, not communication.</b> Checking up on you, cutting you off from people, ultimatums or putting you down can be signs of control. That isn&rsquo;t yours to fix with better wording, and you don&rsquo;t have to answer it.</p>';
@@ -2923,12 +2923,12 @@ function noReward(R){
   rewardGuard();
 }
 function quietGarden(R, on){ if(on || isWork()) R.setAttribute("data-quiet-garden",""); else R.removeAttribute("data-quiet-garden"); rewardGuard(); }
-/* "I want to kill myself" in your own message: not a tone question. A short neutral line, and no rewrite */
+/* "I want to kill myself" in your own message: not a tone question. Plain guidance (no numbers, services or links), and no rewrite */
 function runCrisis(text){
   lastChanged = false;
-  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">That sounds really hard</h2>';
-  h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">That sounds really hard.</p>';
-  h += '<p>This tool is a small guide to everyday messages, and it can&rsquo;t help with this one.</p>';
+  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">I&rsquo;m really glad you said something</h2>';
+  h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">I&rsquo;m really glad you said something.</p>';
+  h += '<p>If you&rsquo;re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don&rsquo;t stay alone with it.</p>';
   h += '<p class="small">If someone sent this to you, choose &ldquo;A message I got&rdquo; above.</p></div>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R);
   R.focus({preventScroll:true});
