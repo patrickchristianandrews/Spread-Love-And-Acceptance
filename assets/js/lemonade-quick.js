@@ -349,6 +349,8 @@
 
   /* ---------- en español (the quick look only): from /en-espanol.html or a browser set to Spanish ---------- */
   var ES_AUTO = (function () {
+    // flow17: ?lang=es (the Spanish chores page, the Spanish page's links) opens the quick look in Spanish too
+    try { if (/[?&]lang=es\b/.test(location.search || '')) return 'ref'; } catch (e) {}
     try { if (/\/en-espanol\.html/.test(document.referrer || '')) return 'ref'; } catch (e) {}
     try { if (/^es\b/i.test(navigator.language || '')) return 'nav'; } catch (e) {}
     return '';
@@ -438,6 +440,10 @@
   var undoQ = null, ready = false;
   // arrived from the Spanish page: remember it with the quick look (English stays one tap away)
   if (!q.lang && ES_AUTO === 'ref') q.lang = 'es';
+  // flow17: the quick look in Spanish makes the whole page Spanish before the site's bar, menu, footer and share
+  // sheet are built (site.js reads <html lang>), so nothing around the tool stays in English. This file runs before
+  // site.js (deferred), so the header comes in Spanish from the start.
+  if (body.getAttribute('data-ls-view') === 'quick' && (q.lang ? q.lang === 'es' : !!ES_AUTO)) document.documentElement.setAttribute('lang', 'es');
   function tidy(o) {
     if (!o || typeof o !== 'object' || !Array.isArray(o.people)) return null;
     var n = Math.min(MAX_P, Math.max(2, o.people.length));
@@ -2023,7 +2029,16 @@
       var lp = document.createElement('p'); lp.className = 'lq-mini lq-lang';
       lp.innerHTML = '<button type="button" class="lq-btn-link" id="lq-lang" lang="es">En español</button>';
       lede.parentNode.insertBefore(lp, lede.nextSibling);
-      $('lq-lang').addEventListener('click', function () { q.lang = isEs() ? 'en' : 'es'; save(); renderAll(); var b = $('lq-lang'); if (b) b.focus({ preventScroll: true }); status(L('Back to English.', 'Ahora en español. Los nombres de las tareas, el resultado y el mensaje para compartir.')); });
+      $('lq-lang').addEventListener('click', function () {
+        q.lang = isEs() ? 'en' : 'es'; save();
+        // flow17: the page's bar, menu and share sheet follow too: open the page again in the new language
+        var want = q.lang === 'es' ? 'es' : 'en', have = /^es\b/i.test(document.documentElement.lang || '') ? 'es' : 'en';
+        if (want !== have) {
+          var srch = (location.search || '').replace(/[?&]lang=es\b/g, '').replace(/^&/, '?');
+          if (want === 'es') srch = (srch && srch !== '?' ? srch + '&' : '?') + 'lang=es';
+          try { location.replace(location.pathname + srch + '#quick'); return; } catch (e) {}
+        }
+        renderAll(); var b = $('lq-lang'); if (b) b.focus({ preventScroll: true }); status(L('Back to English.', 'Ahora en español. Los nombres de las tareas, el resultado y el mensaje para compartir.')); });
     }
     // land16: taps carried over from a front door (/start/chores.html's three-job preview), through this tab only:
     // sessionStorage 'tol-lemonade-pre' = { a: { <job id>: 'me' | 'b' | 'them' } }, read once and removed. Only known
