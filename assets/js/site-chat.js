@@ -576,6 +576,11 @@
   // exit anywhere. A reply to someone in danger, or who may hurt themselves or someone else, is this short neutral line only.
   var SAFE_LINE = 'That sounds really hard. I’m a small guide to this site, and I can’t help with this one.';
   function safeOnly(id) { var r = { blocks: [{ k: 'p', x: SAFE_LINE }], chips: [], kind: 'safety' }; if (id) r.id = id; return r; }
+  // the owner's update: plain suicide guidance is allowed. When someone says they're thinking of suicide, not wanting to be
+  // here, or hurting themselves: this line, with no numbers, services or links. Every other danger message keeps SAFE_LINE.
+  var SUICIDE_LINE = 'I’m really glad you said something. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it.';
+  function suicideOnly(id) { var r = { blocks: [{ k: 'p', x: SUICIDE_LINE }], chips: [], kind: 'safety' }; if (id) r.id = id; return r; }
+  function hasSafeLine(s) { return s.indexOf(SAFE_LINE) !== -1 || s.indexOf(SUICIDE_LINE) !== -1; }
   // the words people use when they may not want to live: these also get the danger line
   var NOT_LIVE = /\b(no quiero vivir|quiero morir(me)?|me quiero morir|matarme|quitarme la vida|hacerme dano|lastimarme|no vale la pena vivir)\b|\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bending (it all|my life)\b|\b(feel|felt|feeling) like ending\b|\b(whats|what s|what is) the point (of|in) (living|life|being alive|going on|carrying on|it all|being here)\b|\bno point (in )?(carrying on|being here)\b|\b(would|d) be better off (dead|without me)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   // Watching, checking, limiting or blaming: a real warning sign, but often asked about before anyone feels in danger.
@@ -607,7 +612,10 @@
   // hands on you, or being kept from leaving: never "a normal part of arguments", however small it's made to sound
   var PHYS = /\b(push\w*|shov\w*|grabb?\w*|slap\w*|hit|hits|hitting|kick\w*|chok\w*|strangl\w*|bit|bites|restrain\w*|pinned|pins|held me|holds me|shook|spat|throws? things|threw \w+ at me|block\w* the (door|doorway|way)|let me (leave|go|get out|out|past)|took my (phone|keys)|beats? me)\b/;
   var STRANGLE = /\b(chok\w*|strangl\w*|throat|neck|couldn.?t breathe|cant breathe|can t breathe)\b/;
-  function safetyReply(f) { return safeOnly(); }
+  // hurting themselves, in the person's own words (not someone else's: OTHER_HARM is the neutral reply)
+  var SELF_HURT = /\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting|burn|burning) my ?self\b|\b(hacerme dano|lastimarme)\b/;
+  function selfDanger(f) { return (NOT_LIVE.test(f) || SELF_HURT.test(f)) && (!OTHER_HARM.test(f) || /\b(i|me|my ?self)\b.{0,20}\b(cut|hurt|harm|kill|die)\b/.test(f)); }
+  function safetyReply(f) { return selfDanger(f || '') ? suicideOnly() : safeOnly(); }
 
 
   // "how do I hide that I visited", "clear my history": how to cover tracks on this site, kindly and plainly
@@ -2655,7 +2663,7 @@
     var b = norm(nx.body).indexOf(norm(nx.title)) === 0 ? [] : [{ k: 'p', x: nx.title + '.' }];
     if (res.reasons && res.reasons.length && !S.skipAll) { b.push({ k: 'p', x: 'What I took into account:' }); b.push({ k: 'list', x: res.reasons.slice(0, 4) }); }
     else if (res.reasons && res.reasons.length) b.push({ k: 'note', x: res.reasons[0] });
-    b.push({ k: 'p', x: res.level >= 4 ? SAFE_LINE : nx.body });
+    b.push({ k: 'p', x: res.level >= 4 ? (res.crisis ? SUICIDE_LINE : SAFE_LINE) : nx.body });
     if (nx.say) b.push({ k: 'script', l: 'Words you could use', x: nx.say });
     if (nx.footer) b.push({ k: 'note', x: nx.footer });
     var links = (nx.links || []).concat(nx.footerLinks || []).map(function (l) { return [l.text, l.href]; });
@@ -2947,7 +2955,7 @@
   }
 
   // after a crisis reply: "I don't want to call anyone, just talk to me" gets a warm reply that stays, never a page excerpt
-  function crisisStayReply() { return safeOnly('crisis-stay'); }
+  function crisisStayReply() { return suicideOnly('crisis-stay'); }
   var CRISIS_STAY = /\b(talk to me|just talk|stay with me|don.?t want to (call|talk to|text|ring)|dont want to (call|talk to|text|ring)|can.?t call|cant call|no one|nobody|anyone|alone|lonely|i m scared|im scared|help me|what do i do|i don.?t know|i dont know|please|listen|why|tired|can.?t|cant|hurts?|pointless|worthless|no one cares|nobody cares|i m fine|im fine|it s fine|its fine|whatever|ok|okay|yes|no|maybe|i guess)\b/;
   // "gaslighting", "coercive control", "narcissist" typed on their own: what it means, plainly, then the signs and people to talk to
   var SAFETY_TERM = /^(what is |what s |whats |what does |define |meaning of |is it |signs of |am i being )?(a |an )?(gaslighting|gaslight|gaslighted|gaslit|coercive control|coercive|narcissists?|narcissism|narcissistic( abuse| personality| behaviou?r)?|love bombing|lovebombing|trauma bond(ing)?)( mean| meaning| means)?$/;
@@ -3107,7 +3115,7 @@
     if ((R.never_on_kinds || []).indexOf(k) !== -1) return r;
     if (FUN_UPSET.test(f) || DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return r;
     var txt = JSON.stringify(r.blocks);
-    if (txt.indexOf(SAFE_LINE) !== -1) return r;
+    if (hasSafeLine(txt)) return r;
     var card = (k === 'card' || k === 'card-more') && r.id ? cardById(r.id) : null;
     var light = card ? (card.kind === 'tool' || (R.light_card_ids || []).indexOf(card.id) !== -1) : false;
     if (light || k === 'thanks' || k === 'fun') { if (state.plain === 1) state.plain = 0; }
@@ -3461,7 +3469,7 @@
     if (never.indexOf(k) !== -1) return r;
     var f = norm(q);
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
-    if (JSON.stringify(r.blocks).indexOf(SAFE_LINE) !== -1) return r;
+    if (hasSafeLine(JSON.stringify(r.blocks))) return r;
     var h = deepFind(stNorm(q), f);
     if (!h || dlist(dRule('safety_topic_ids')).indexOf(h.t.id) !== -1) return r;
     r.chips = (r.chips || []).slice(0, 4);
