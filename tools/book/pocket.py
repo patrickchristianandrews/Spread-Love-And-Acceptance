@@ -101,30 +101,30 @@ def sections(p):
 
 # ---------- the words around the situations ----------
 SEC_INTRO = {
-    'plans': 'A plan does more than fix a time. For many people it is a map of the day, already walked through in the mind. When it changes at short notice, or was never quite made, the map has to be redrawn. These pages look at what that costs, and at the friendly plans that were never meant to happen at all.',
-    'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, reach for headphones or snap at a small question. These pages follow the logic of a battery that is running down, and what helps before it reaches empty.',
-    'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what is said. Others hint, soften and tease, and expect the hidden meaning to be heard. Both are systems, and either one can be learned, or simply asked about.',
-    'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, such as showing goodwill or sparing a feeling. These pages lay out those jobs in plain steps, along with the cost of keeping up appearances all day.',
-    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones to the same room. These pages look at asking for things in writing, starting late, agreeing in the meeting and disagreeing afterwards, and wrapping criticism in praise.',
-    'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again and giving advice nobody asked for each have a logic, and each has another side. These pages hold both.',
-    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or an outburst over a cup. None of these is a choice in the moment. These pages explain what is happening inside, and what helps afterwards.',
-    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid or one-sided. These pages show the logic, and a way to meet in the middle.',
-    'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means, how loud a family dinner gets, how plainly feedback is given and whether a full stop in a text is cross are all learned in a particular place, family or generation.',
+    'plans': 'A plan does more than fix a time. For a lot of people it’s a map of the day, already walked through in their head, and when it changes at short notice the map has to be redrawn on the spot. These pages are about what that costs, and about the friendly plans that were never really meant to happen at all.',
+    'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, or put their headphones in, or snap at a small question. These pages follow a battery running down, and what helps before it hits empty.',
+    'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what’s said. Others hint, soften and tease, and expect the hidden meaning to be picked up. Both are systems. Either can be learned. Or you can just ask.',
+    'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, like showing goodwill or sparing a feeling. These pages set out those jobs plainly, along with what it costs to keep up appearances all day.',
+    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the lifts, and wrapping criticism in praise.',
+    'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again, giving advice nobody asked for. Each has a logic, and each has another side.',
+    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a row about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterwards.',
+    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle.',
+    'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means. How loud a family dinner gets. How plainly feedback is given. Whether a full stop in a text is cross. All of it learned in a particular place, family or generation.',
 }
 
 HOW = [
-    ('Dip in anywhere', 'Each page stands on its own. Use the contents, the section pages or “Find it fast” at the back to go straight to the situation in front of you.'),
-    ('Read it with the other person', 'A page can say what is hard to say in the moment. Hand it over, or read it together, and talk about the last two parts, the other side and the small step.'),
-    ('Use it both ways', 'Some pages may explain you, and some may explain the people around you. Either way, the aim is a fair view of both sides.'),
-    ('Scan for more', 'Each page has a code to the same situation on the website, free, with more pictures to choose from. The website has more than seventy situations and a box where you can type your own.'),
-    ('Build your own', 'The blank cards at the back walk you through the six parts for a reaction this guide doesn’t cover.'),
+    ('Dip in anywhere', 'Every page stands on its own. Use the contents, the section pages or “Find it fast” at the back to go straight to whatever’s in front of you.'),
+    ('Read it with the other person', 'A page can say what’s hard to say in the moment. Hand it over, or read it together, and talk about the last two parts, the other side and the small step.'),
+    ('Use it both ways', 'Some pages may explain you. Some may explain the people round you. Either way, the point is a fair view of both sides.'),
+    ('Scan for more', 'Each page has a code to the same situation on the website, free, with more pictures to choose from. The website has more than seventy situations, and a box where you can type your own.'),
+    ('Build your own', 'The blank cards at the back walk you through the six parts for a reaction this guide doesn’t cover. There will be plenty of those.'),
 ]
 
 LENS = [
     ('lens-why', 'Why a reaction can look odd', [
-        'A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. Seen from outside, each of these can look odd, rude or over the top.',
-        'Most of them have a logic behind them. It makes sense once you can see it, and it is usually a sensible answer to how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so other people fill the gap with a guess, and the guess is often unkind.',
-        'This guide puts the logic into words, one step at a time, so the reaction can be understood. It also gives the other person a fair way to respond, because every page includes their side too. I’m autistic myself, and as the About page on the website puts it, the social rules most people absorb without noticing had to be learned on purpose.',
+        'A friend leaves the party without saying goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they very obviously aren’t. From outside, each of these can look odd, or rude, or a bit much.',
+        'Most of them have a logic behind them. Once you can see it, it usually makes sense, given how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so the rest of us fill the gap with a guess. The guess is often unkind.',
+        'This guide puts the logic into words, a step at a time, and every page gives the other person’s side as well, because otherwise it wouldn’t be fair. I’m autistic myself, and as the About page on the website puts it, the social rules most people absorb without noticing had to be learned on purpose. As that page also says, everyone else seemed to have been handed a set of instructions about being human that nobody ever gave me. This guide is a small part of the set I went looking for.',
         'No page is a diagnosis or a label. People differ, and no group always does anything. The pages say “many people” or “some people” on purpose.',
     ]),
     ('lens-parts', 'The six parts', None),
