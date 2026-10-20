@@ -9,8 +9,6 @@
    work mode on, nothing pops up at all. Everything is kept in this browser only. Nothing is sent anywhere. */
 (function () {
   'use strict';
-  // English or Spanish, following the page (site.js sets window.TOLLang; read at call time)
-  function T(en, es) { try { return window.TOLLang && window.TOLLang.es() ? es : en; } catch (e) { return en; } }
   if (window.TOLRewards) return; // already loaded on this page
   var KEY = 'tol-rewards-v1';
 
@@ -271,7 +269,7 @@
     if (typeof document === 'undefined') return;
     Array.prototype.forEach.call(document.querySelectorAll('[data-rewards-chip]'), function (el) {
       style();
-      el.innerHTML = '<a class="tr-chip" href="/keepsakes.html" aria-label="' + T('Level ' + level() + '. Open My garden to see your keepsakes', 'Nivel ' + level() + '. Abre Mi jardín para ver tus recuerdos') + '" title="' + T('My garden: everything that has arrived', 'Mi jardín: todo lo que ha llegado') + '">✨ ' + level() + '</a>';
+      el.innerHTML = '<a class="tr-chip" href="/keepsakes.html" aria-label="' + ('Level ' + level() + '. Open My garden to see your keepsakes') + '" title="' + 'My garden: everything that has arrived' + '">✨ ' + level() + '</a>';
     });
   }
 

@@ -32,13 +32,11 @@
 
    AFTER INSTALL. Opened from the Home Screen (navigator.standalone), one small "Installed. Welcome to the app"
    note shows once (localStorage 'tol-ios-welcome'). site.js loads this file in the app only until then.
-   Spanish pages get Spanish words (TOLLang from site.js). Nothing is sent anywhere. */
+   Nothing is sent anywhere. */
 (function () {
   'use strict';
   if (window.TOLAppBar) return;
   var OFF = 'tol-appbar-off', WELCOME = 'tol-ios-welcome';
-  function T(en, es) { return window.TOLLang ? window.TOLLang.T(en, es) : en; }
-  function isEs() { return !!(window.TOLLang && window.TOLLang.es()); }
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -84,44 +82,44 @@
   var G_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var ARROW = '<svg viewBox="0 0 56 56" aria-hidden="true" focusable="false"><path d="M28 5v36M14 29l14 15 14-15" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 5v36M14 29l14 15 14-15" fill="none" stroke="#007AFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function sh() { return '<span class="tol-iosg-ico">' + G_SHARE + '</span>'; }
-  function dt() { return '<span class="tol-iosg-ico">' + G_DOTS + '<span class="tol-iosg-sr">' + T('More', 'Más') + ' (&middot;&middot;&middot;)</span></span>'; }
+  function dt() { return '<span class="tol-iosg-ico">' + G_DOTS + '<span class="tol-iosg-sr">' + 'More' + ' (&middot;&middot;&middot;)</span></span>'; }
 
   // ---------------------------------------------------------------- the words
   var NAME = 'Spread Love &amp; Acceptance';
   function step1(w) {
     return {
-      iphone: T('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the bottom of the screen.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de Safari, abajo en la pantalla.'),
-      iphone26: T('Tap ' + dt() + ' in Safari&rsquo;s toolbar, at the bottom right. Then tap <b>Share</b> ' + sh() + '.', 'Toca ' + dt() + ' en la barra de Safari, abajo a la derecha. Luego toca <b>Compartir</b> ' + sh() + '.'),
-      ipad: T('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the top right.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de Safari, arriba a la derecha.'),
-      chrome: T('Tap <b>Share</b> ' + sh() + ' in Chrome&rsquo;s address bar, at the top right.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de direcciones de Chrome, arriba a la derecha.'),
-      edge: T('Tap ' + dt() + ' at the bottom of Edge. Then tap <b>Share</b> ' + sh() + '.', 'Toca ' + dt() + ' abajo en Edge. Luego toca <b>Compartir</b> ' + sh() + '.'),
-      firefox: T('Tap the menu <span class="tol-iosg-ico">' + G_MENU + '</span> at the bottom right of Firefox. Then tap <b>Share</b> ' + sh() + '.', 'Toca el menú <span class="tol-iosg-ico">' + G_MENU + '</span> abajo a la derecha en Firefox. Luego toca <b>Compartir</b> ' + sh() + '.')
+      iphone: ('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the bottom of the screen.'),
+      iphone26: ('Tap ' + dt() + ' in Safari&rsquo;s toolbar, at the bottom right. Then tap <b>Share</b> ' + sh() + '.'),
+      ipad: ('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the top right.'),
+      chrome: ('Tap <b>Share</b> ' + sh() + ' in Chrome&rsquo;s address bar, at the top right.'),
+      edge: ('Tap ' + dt() + ' at the bottom of Edge. Then tap <b>Share</b> ' + sh() + '.'),
+      firefox: ('Tap the menu <span class="tol-iosg-ico">' + G_MENU + '</span> at the bottom right of Firefox. Then tap <b>Share</b> ' + sh() + '.')
     }[w] || '';
   }
-  function step2() { return T('Tap <b>Add to Home Screen</b>, then <b>Add</b>.', 'Toca <b>Agregar a pantalla de inicio</b> y luego <b>Agregar</b>.'); }
+  function step2() { return 'Tap <b>Add to Home Screen</b>, then <b>Add</b>.'; }
   // a little copy of the share sheet's list, and of the Add bar, so the right row is easy to spot
   function mock() {
     function row(g, t, hi) { return '<span class="tol-iosg-mrow' + (hi ? ' is-hi' : '') + '"><span>' + t + '</span><span class="tol-iosg-mg">' + g + '</span></span>'; }
     return '<span class="tol-iosg-mock" aria-hidden="true">' +
-      '<span class="tol-iosg-mlist">' + row(G_BOOK, T('Add Bookmark', 'Agregar marcador')) + row(G_PLUS, T('Add to Home Screen', 'Agregar a pantalla de inicio'), true) + '</span>' +
-      '<span class="tol-iosg-mbar"><span class="tol-iosg-mc">' + T('Cancel', 'Cancelar') + '</span><b>' + T('Add to Home Screen', 'Agregar a inicio') + '</b><span class="tol-iosg-madd">' + T('Add', 'Agregar') + '</span></span>' +
+      '<span class="tol-iosg-mlist">' + row(G_BOOK, 'Add Bookmark') + row(G_PLUS, 'Add to Home Screen', true) + '</span>' +
+      '<span class="tol-iosg-mbar"><span class="tol-iosg-mc">' + 'Cancel' + '</span><b>' + 'Add to Home Screen' + '</b><span class="tol-iosg-madd">' + 'Add' + '</span></span>' +
     '</span>';
   }
   function stepsHTML(w) {
     return '<ol class="tol-iosg-steps no-bubble">' +
       '<li><span class="tol-iosg-n" aria-hidden="true">1</span><span class="tol-iosg-t">' + step1(w) + '</span></li>' +
       '<li><span class="tol-iosg-n" aria-hidden="true">2</span><span class="tol-iosg-t">' + step2() + mock() +
-        '<span class="tol-iosg-note">' + T('It may be further down the list. If you see <i>Open as Web App</i>, leave it on.', 'Puede estar más abajo en la lista. Si ves <i>Abrir como app web</i>, déjalo activado.') + '</span></span></li>' +
+        '<span class="tol-iosg-note">' + 'It may be further down the list. If you see <i>Open as Web App</i>, leave it on.' + '</span></span></li>' +
     '</ol>';
   }
   function inappHTML() {
     return '<div class="tol-iosg-inapp">' +
-      '<p class="tol-iosg-h3" id="tol-iosg-step">' + T('Open this page in Safari first', 'Primero abre esta página en Safari') + '</p>' +
-      '<p class="tol-iosg-p">' + T('This page is open inside another app. Apps like Instagram, Facebook, TikTok and Gmail can&rsquo;t add things to your Home Screen. Safari can.', 'Esta página está abierta dentro de otra app. Apps como Instagram, Facebook, TikTok y Gmail no pueden agregar cosas a tu pantalla de inicio. Safari sí.') + '</p>' +
-      '<p class="tol-iosg-p">' + T('Tap ' + dt() + ' or the menu at the top right and choose <b>Open in Safari</b> (or <b>Open in browser</b>). Or copy the link and paste it into Safari.', 'Toca ' + dt() + ' o el menú de arriba a la derecha y elige <b>Abrir en Safari</b> (o <b>Abrir en el navegador</b>). O copia el enlace y pégalo en Safari.') + '</p>' +
-      '<button type="button" class="tol-iosg-copy">' + T('Copy link', 'Copiar enlace') + '</button>' +
+      '<p class="tol-iosg-h3" id="tol-iosg-step">' + 'Open this page in Safari first' + '</p>' +
+      '<p class="tol-iosg-p">' + 'This page is open inside another app. Apps like Instagram, Facebook, TikTok and Gmail can&rsquo;t add things to your Home Screen. Safari can.' + '</p>' +
+      '<p class="tol-iosg-p">' + ('Tap ' + dt() + ' or the menu at the top right and choose <b>Open in Safari</b> (or <b>Open in browser</b>). Or copy the link and paste it into Safari.') + '</p>' +
+      '<button type="button" class="tol-iosg-copy">' + 'Copy link' + '</button>' +
       '<p class="tol-iosg-copied" role="status"></p>' +
-      '<p class="tol-iosg-p tol-iosg-dim">' + T('Then tap <b>Install the free app</b> again, in Safari.', 'Luego toca <b>Instala la app gratis</b> otra vez, en Safari.') + '</p>' +
+      '<p class="tol-iosg-p tol-iosg-dim">' + 'Then tap <b>Install the free app</b> again, in Safari.' + '</p>' +
     '</div>';
   }
   // the top of the sheet: icon, name, one grey line, and the blue Install button (App Store style)
@@ -130,7 +128,7 @@
       '<img class="tol-iosg-icon" src="/assets/icons/apple-touch-icon-180.png" alt="" width="88" height="88">' +
       '<div class="tol-iosg-meta">' +
         '<' + tag + ' class="tol-iosg-name" id="' + (tag === 'h2' ? 'tol-iosg-h' : 'tol-iosg-hi') + '">' + NAME + '</' + tag + '>' +
-        '<p class="tol-iosg-sub">' + T('Free &middot; No account &middot; Works offline', 'Gratis &middot; Sin cuenta &middot; Funciona sin conexión') + '</p>' +
+        '<p class="tol-iosg-sub">' + 'Free &middot; No account &middot; Works offline' + '</p>' +
         button +
       '</div>' +
     '</div>';
@@ -151,15 +149,15 @@
     dlg.innerHTML =
       '<div class="tol-iosg-card no-bubble" tabindex="-1">' +
         '<span class="tol-iosg-grab" aria-hidden="true"></span>' +
-        '<button type="button" class="tol-iosg-x" aria-label="' + T('Close', 'Cerrar') + '"><span aria-hidden="true">&times;</span></button>' +
-        headHTML('h2', '<button type="button" class="tol-iosg-get">' + T('Install', 'Instalar') + '</button><span class="tol-iosg-free" hidden>' + G_CHECK + T('Free', 'Gratis') + '</span>') +
-        '<p class="tol-iosg-about">' + T('Puts ' + NAME + ' on your Home Screen with its own icon. It opens full screen, like any app.', 'Pone ' + NAME + ' en tu pantalla de inicio con su propio ícono. Se abre a pantalla completa, como cualquier app.') + '</p>' +
+        '<button type="button" class="tol-iosg-x" aria-label="' + 'Close' + '"><span aria-hidden="true">&times;</span></button>' +
+        headHTML('h2', '<button type="button" class="tol-iosg-get">' + 'Install' + '</button><span class="tol-iosg-free" hidden>' + G_CHECK + 'Free' + '</span>') +
+        '<p class="tol-iosg-about">' + ('Puts ' + NAME + ' on your Home Screen with its own icon. It opens full screen, like any app.') + '</p>' +
         '<div class="tol-iosg-how" hidden>' +
           (w === 'inapp' ? inappHTML() :
-            '<p class="tol-iosg-h3" id="tol-iosg-step" tabindex="-1">' + T('Two taps in ' + ({ chrome: 'Chrome', edge: 'Edge', firefox: 'Firefox' }[w] || 'Safari'), 'Dos toques en ' + ({ chrome: 'Chrome', edge: 'Edge', firefox: 'Firefox' }[w] || 'Safari')) + '</p>' + stepsHTML(w)) +
-          (IOS ? '' : '<p class="tol-iosg-p tol-iosg-dim">' + T('Open this page on your iPhone or iPad to do it there.', 'Abre esta página en tu iPhone o iPad para hacerlo allí.') + '</p>') +
-          '<button type="button" class="tol-iosg-done">' + T('Done', 'Listo') + '</button>' +
-          (here ? '' : '<a class="tol-iosg-more" href="/install.html#iphone"' + (isEs() ? ' hreflang="en"' : '') + '>' + T('More help', 'Más ayuda (en inglés)') + '</a>') +
+            '<p class="tol-iosg-h3" id="tol-iosg-step" tabindex="-1">' + ('Two taps in ' + ({ chrome: 'Chrome', edge: 'Edge', firefox: 'Firefox' }[w] || 'Safari')) + '</p>' + stepsHTML(w)) +
+          (IOS ? '' : '<p class="tol-iosg-p tol-iosg-dim">' + 'Open this page on your iPhone or iPad to do it there.' + '</p>') +
+          '<button type="button" class="tol-iosg-done">' + 'Done' + '</button>' +
+          (here ? '' : '<a class="tol-iosg-more" href="/install.html#iphone"' + ('') + '>' + 'More help' + '</a>') +
         '</div>' +
       '</div>' +
       (IOS && POINT[w] ? '<div class="tol-iosg-point" aria-hidden="true">' + ARROW + '</div>' : '');
@@ -179,8 +177,8 @@
     var copy = dlg.querySelector('.tol-iosg-copy');
     if (copy) copy.addEventListener('click', function () {
       var link = location.origin + location.pathname, said = dlg.querySelector('.tol-iosg-copied');
-      function ok() { said.textContent = T('Copied. Now open Safari and paste it into the address bar.', 'Copiado. Ahora abre Safari y pégalo en la barra de direcciones.'); }
-      function manual() { said.textContent = T('Copy this link: ', 'Copia este enlace: ') + link; }
+      function ok() { said.textContent = 'Copied. Now open Safari and paste it into the address bar.'; }
+      function manual() { said.textContent = 'Copy this link: ' + link; }
       function old() {
         try {
           var ta = document.createElement('textarea'); ta.value = link; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -278,18 +276,18 @@
     var file = '<svg class="tol-desk-file" viewBox="0 0 28 34" aria-hidden="true" focusable="false"><path d="M3 2h15l7 7v23H3z" fill="var(--cell)" stroke="var(--label2)" stroke-width="1.5" stroke-linejoin="round"/><path d="M18 2v7h7" fill="none" stroke="var(--label2)" stroke-width="1.5" stroke-linejoin="round"/></svg>' +
       '<img src="/assets/icons/favicon-32.png" alt="" width="14" height="14">';
     return '<span class="tol-desk-fig" aria-hidden="true">' +
-      '<span class="tol-desk-place"><span class="tol-desk-box is-folder"><span class="tol-desk-doc">' + file + '</span></span><span class="tol-desk-cap">' + T('Downloads', 'Descargas') + '</span></span>' +
+      '<span class="tol-desk-place"><span class="tol-desk-box is-folder"><span class="tol-desk-doc">' + file + '</span></span><span class="tol-desk-cap">' + 'Downloads' + '</span></span>' +
       '<svg class="tol-desk-arrow" viewBox="0 0 64 24" focusable="false"><path d="M4 18C20 2 42 2 56 14" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-dasharray="4 4" stroke-linecap="round"/><path d="M49 15l8 0-2-8" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-      '<span class="tol-desk-place"><span class="tol-desk-box is-screen"><span class="tol-desk-doc">' + file + '</span></span><span class="tol-desk-cap">' + T('Desktop', 'Escritorio') + '</span></span>' +
+      '<span class="tol-desk-place"><span class="tol-desk-box is-screen"><span class="tol-desk-doc">' + file + '</span></span><span class="tol-desk-cap">' + 'Desktop' + '</span></span>' +
     '</span>';
   }
   // a small copy of Safari's File menu, with Add to Dock picked out
   function dockMenu() {
     function it(t, hi) { return '<span class="tol-desk-mi' + (hi ? ' is-hi' : '') + '">' + t + '</span>'; }
     return '<span class="tol-desk-menu" aria-hidden="true">' +
-      '<span class="tol-desk-mbar"><b>Safari</b><span class="is-on">' + T('File', 'Archivo') + '</span><span>' + T('Edit', 'Edición') + '</span><span>' + T('View', 'Visualización') + '</span></span>' +
-      '<span class="tol-desk-mdrop">' + it(T('New Window', 'Nueva ventana')) + it(T('Open File&hellip;', 'Abrir archivo&hellip;')) + it(T('Close Window', 'Cerrar ventana')) +
-        '<span class="tol-desk-msep"></span>' + it(T('Share', 'Compartir')) + it(T('Add to Dock&hellip;', 'Agregar al Dock&hellip;'), true) + '</span>' +
+      '<span class="tol-desk-mbar"><b>Safari</b><span class="is-on">' + 'File' + '</span><span>' + 'Edit' + '</span><span>' + 'View' + '</span></span>' +
+      '<span class="tol-desk-mdrop">' + it('New Window') + it('Open File&hellip;') + it('Close Window') +
+        '<span class="tol-desk-msep"></span>' + it('Share') + it('Add to Dock&hellip;', true) + '</span>' +
     '</span>';
   }
   function desk(from) {
@@ -303,22 +301,22 @@
     dlg.innerHTML =
       '<div class="tol-iosg-card no-bubble" tabindex="-1">' +
         '<span class="tol-iosg-grab" aria-hidden="true"></span>' +
-        '<button type="button" class="tol-iosg-x" aria-label="' + T('Close', 'Cerrar') + '"><span aria-hidden="true">&times;</span></button>' +
+        '<button type="button" class="tol-iosg-x" aria-label="' + 'Close' + '"><span aria-hidden="true">&times;</span></button>' +
         headHTML('h2', '') +
-        '<p class="tol-iosg-about">' + T('Put the site on your desktop. One double-click opens it, any time.', 'Pon el sitio en tu escritorio. Un doble clic lo abre, cuando quieras.') + '</p>' +
-        '<button type="button" class="tol-desk-dl">' + G_DOWN + '<span>' + T('Download a desktop shortcut', 'Descargar un acceso directo') + '</span></button>' +
+        '<p class="tol-iosg-about">' + 'Put the site on your desktop. One double-click opens it, any time.' + '</p>' +
+        '<button type="button" class="tol-desk-dl">' + G_DOWN + '<span>' + 'Download a desktop shortcut' + '</span></button>' +
         '<div class="tol-desk-after" hidden>' + dragFig() +
           '<p class="tol-iosg-p tol-desk-said" role="status"></p>' +
         '</div>' +
         (dock ? '<div class="tol-desk-app">' +
-            '<p class="tol-iosg-h3">' + T('Or make it an app', 'O conviértelo en una app') + '</p>' +
-            '<p class="tol-iosg-p">' + T('In Safari&rsquo;s menu bar choose <b>File</b> &rarr; <b>Add to Dock</b>, then click <b>Add</b>. It opens in its own window, with its own icon in the Dock.', 'En la barra de menús de Safari elige <b>Archivo</b> &rarr; <b>Agregar al Dock</b> y luego haz clic en <b>Agregar</b>. Se abre en su propia ventana, con su propio ícono en el Dock.') + '</p>' +
+            '<p class="tol-iosg-h3">' + 'Or make it an app' + '</p>' +
+            '<p class="tol-iosg-p">' + 'In Safari&rsquo;s menu bar choose <b>File</b> &rarr; <b>Add to Dock</b>, then click <b>Add</b>. It opens in its own window, with its own icon in the Dock.' + '</p>' +
             dockMenu() +
-            '<p class="tol-iosg-p tol-iosg-dim">' + T('This needs macOS Sonoma or later.', 'Necesita macOS Sonoma o posterior.') + '</p>' +
+            '<p class="tol-iosg-p tol-iosg-dim">' + 'This needs macOS Sonoma or later.' + '</p>' +
           '</div>' : '') +
-        (DESK.br === 'firefox' ? '<p class="tol-iosg-p tol-iosg-dim tol-desk-ff">' + T('For a full app with its own window, open this site in Chrome or Edge and tap <b>Install</b>.', 'Para una app completa con su propia ventana, abre este sitio en Chrome o Edge y haz clic en <b>Instalar</b>.') + '</p>' : '') +
-        '<button type="button" class="tol-iosg-done">' + T('Done', 'Listo') + '</button>' +
-        (here ? '' : '<a class="tol-iosg-more" href="/install.html#' + (DESK.os === 'win' ? 'windows' : 'desktop') + '"' + (isEs() ? ' hreflang="en"' : '') + '>' + T('More help', 'Más ayuda (en inglés)') + '</a>') +
+        (DESK.br === 'firefox' ? '<p class="tol-iosg-p tol-iosg-dim tol-desk-ff">' + 'For a full app with its own window, open this site in Chrome or Edge and tap <b>Install</b>.' + '</p>' : '') +
+        '<button type="button" class="tol-iosg-done">' + 'Done' + '</button>' +
+        (here ? '' : '<a class="tol-iosg-more" href="/install.html#' + (DESK.os === 'win' ? 'windows' : 'desktop') + '"' + ('') + '>' + 'More help' + '</a>') +
       '</div>';
     present(dlg, from);
     var dl = dlg.querySelector('.tol-desk-dl'), after = dlg.querySelector('.tol-desk-after');
@@ -327,11 +325,11 @@
       after.hidden = false;
       dlg.querySelector('.tol-iosg-about').hidden = true;   // room for the next step, as the iPhone sheet does
       dl.classList.add('is-again');
-      dl.querySelector('span').textContent = T('Download it again', 'Descargarlo otra vez');
+      dl.querySelector('span').textContent = 'Download it again';
       // filled after it is shown, so screen readers say it
       setTimeout(function () {
-        after.querySelector('.tol-desk-said').innerHTML = T('Drag it from your Downloads to your desktop. Double-click it any time to open the site.', 'Arrástralo de tus Descargas a tu escritorio. Haz doble clic en él cuando quieras para abrir el sitio.') +
-          (DESK.os === 'linux' ? ' <span class="tol-iosg-dim">' + T('If your computer asks whether to trust it or allow launching, say yes.', 'Si tu computadora pregunta si confías en él o si permites abrirlo, di que sí.') + '</span>' : '');
+        after.querySelector('.tol-desk-said').innerHTML = 'Drag it from your Downloads to your desktop. Double-click it any time to open the site.' +
+          (DESK.os === 'linux' ? ' <span class="tol-iosg-dim">' + 'If your computer asks whether to trust it or allow launching, say yes.' + '</span>' : '');
       }, 60);
     });
     dl.focus();
@@ -340,8 +338,8 @@
   // the same sheet, still, inside a page (the install page's Apple steps)
   function inline(host) {
     var w = where(), btn = IOS
-      ? '<button type="button" class="tol-iosg-get">' + T('Install', 'Instalar') + '</button>'
-      : '<span class="tol-iosg-free is-plain">' + T('Free', 'Gratis') + '</span>';
+      ? '<button type="button" class="tol-iosg-get">' + 'Install' + '</button>'
+      : '<span class="tol-iosg-free is-plain">' + 'Free' + '</span>';
     host.innerHTML = '<div class="tol-iosg-card is-inline no-bubble">' + headHTML('p', btn) +
       stepsHTML(w === 'inapp' ? (IPAD ? 'ipad' : 'iphone26') : w) + '</div>';
     var b = host.querySelector('.tol-iosg-get');
@@ -356,7 +354,7 @@
       var t = document.createElement('div');
       t.className = 'tol-iosw no-bubble' + (stillMotion() ? ' is-still' : '');
       t.setAttribute('role', 'status');
-      t.innerHTML = '<img src="/assets/icons/apple-touch-icon-180.png" alt="" width="28" height="28"><span>' + T('Installed. Welcome to the app', 'Instalada. Te damos la bienvenida a la app') + '</span>';
+      t.innerHTML = '<img src="/assets/icons/apple-touch-icon-180.png" alt="" width="28" height="28"><span>' + 'Installed. Welcome to the app' + '</span>';
       document.body.appendChild(t);
       function bye() { t.classList.add('is-out'); setTimeout(function () { t.remove(); }, 400); }
       t.addEventListener('click', bye);
@@ -376,28 +374,28 @@
     document.head.appendChild(l);
   }
   var ICON = '<img class="tol-appbar-ic" src="/assets/icons/apple-touch-icon-180.png" alt="" width="24" height="24">';
-  function hl() { return isEs() ? ' hreflang="en"' : ''; }
+  function hl() { return ''; }
   function render(bar) {
     if (!bar || !document.contains(bar)) return;
     if (standalone()) { bar.hidden = true; return; }
     var ready = !!(window.TOLInstall && window.TOLInstall.ready()), html;
-    var note = '<span class="tol-appbar-note">' + T('Its own icon, works offline, no sign-up', 'Su propio ícono, funciona sin conexión, sin registrarte') + '</span>';
+    var note = '<span class="tol-appbar-note">' + 'Its own icon, works offline, no sign-up' + '</span>';
     if (ready) {
-      html = '<button type="button" class="tol-appbar-go" data-appbar="install"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
+      html = '<button type="button" class="tol-appbar-go" data-appbar="install"><span>' + 'Install the free app' + '</span></button>' + note;
     } else if (lsGet('tol-app-installed') === '1' && !IOS) {
-      html = '<span class="tol-appbar-note" style="display:block">' + T('You have the free app. Open it from your home screen or app list.', 'Ya tienes la app gratis. Ábrela desde tu pantalla de inicio.') + '</span>';
+      html = '<span class="tol-appbar-note" style="display:block">' + 'You have the free app. Open it from your home screen or app list.' + '</span>';
     } else if (IOS) {   // the same words as Android; Apple's two taps are shown in the sheet
-      html = '<button type="button" class="tol-appbar-go" data-appbar="ios" aria-haspopup="dialog"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
+      html = '<button type="button" class="tol-appbar-go" data-appbar="ios" aria-haspopup="dialog"><span>' + 'Install the free app' + '</span></button>' + note;
     } else if (DESK) {   // Safari on a Mac, Firefox: a desktop shortcut in one click (and Add to Dock in Safari 17+), in a sheet
-      html = '<button type="button" class="tol-appbar-go" data-appbar="desk" aria-haspopup="dialog"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
+      html = '<button type="button" class="tol-appbar-go" data-appbar="desk" aria-haspopup="dialog"><span>' + 'Install the free app' + '</span></button>' + note;
     } else if (ANDROID) {
-      html = '<a class="tol-appbar-go" href="/install.html#chrome"' + hl() + '><span>' + T('Get the free app<span class="tol-appbar-more"> for Android</span>', 'Consigue la app gratis<span class="tol-appbar-more"> para Android</span>') + '</span></a>' + note;
+      html = '<a class="tol-appbar-go" href="/install.html#chrome"' + hl() + '><span>' + 'Get the free app<span class="tol-appbar-more"> for Android</span>' + '</span></a>' + note;
     } else {
-      html = '<a class="tol-appbar-go" href="/install.html"' + hl() + '><span>' + T('Get the free app', 'Consigue la app gratis') + '</span></a>' + note;
+      html = '<a class="tol-appbar-go" href="/install.html"' + hl() + '><span>' + 'Get the free app' + '</span></a>' + note;
     }
     var had = bar.contains(document.activeElement);
     bar.innerHTML = '<span class="tol-appbar-in">' + ICON + html + '</span>' +
-      '<button type="button" class="tol-appbar-x" aria-label="' + T('Hide the app line', 'Ocultar la línea de la app') + '" title="' + T('Hide it (it stays hidden for a month)', 'Ocultarla (queda oculta un mes)') + '">&times;</button>';
+      '<button type="button" class="tol-appbar-x" aria-label="' + 'Hide the app line' + '" title="' + 'Hide it (it stays hidden for a month)' + '">&times;</button>';
     var go = bar.querySelector('[data-appbar]');
     if (go && go.getAttribute('data-appbar') === 'install') go.addEventListener('click', function () {
       window.TOLInstall.ask().then(function (r) { if (r === 'unavailable' || r === 'error') location.href = '/install.html'; else render(bar); });
@@ -459,7 +457,7 @@
   function pageText() {
     var m = document.querySelector('meta[name="description"]'), d = m ? (m.getAttribute('content') || '').trim() : '';
     if (d.length > 200) d = d.slice(0, 197).replace(/\s+\S*$/, '') + '…';
-    return d || T('Free, kind tools for yourself and the people you share a life with.', 'Herramientas gratis y amables para ti y para quienes comparten tu vida.');
+    return d || 'Free, kind tools for yourself and the people you share a life with.';
   }
   function pageShare() { return { title: pageTitle(), text: pageText(), url: cleanUrl() }; }
   // the site's own share sheet (the fallback, and "Copy link or show a QR code")
@@ -492,9 +490,9 @@
     if (!bar || bar.querySelector('.tol-app-share')) return !!bar;
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'tol-app-share no-bubble';
-    b.setAttribute('aria-label', T('Share this page', 'Compartir esta página'));
-    b.setAttribute('title', T('Share this page', 'Compartir esta página'));
-    b.innerHTML = G_APPSHARE + '<span class="tol-app-share-t">' + T('Share', 'Compartir') + '</span>';
+    b.setAttribute('aria-label', 'Share this page');
+    b.setAttribute('title', 'Share this page');
+    b.innerHTML = G_APPSHARE + '<span class="tol-app-share-t">' + 'Share' + '</span>';
     b.addEventListener('click', function () { appShareNow(b); });
     var menu = bar.querySelector('.tol-contents-btn');
     bar.insertBefore(b, menu && menu.parentNode === bar ? menu : null);
@@ -507,8 +505,8 @@
     if (!panel || panel.querySelector('.tol-app-share-row')) return !!panel;
     var row = document.createElement('div');
     row.className = 'tol-app-share-row no-bubble';
-    row.innerHTML = '<button type="button" class="tol-btn tol-app-share-go" data-app-share="device">' + G_APPSHARE + '<span>' + T('Share this page', 'Compartir esta página') + '</span></button>' +
-      '<button type="button" class="tol-btn is-quiet tol-app-share-more" data-app-share="sheet">' + T('Copy link or show a QR code', 'Copiar el enlace o mostrar un código QR') + '</button>';
+    row.innerHTML = '<button type="button" class="tol-btn tol-app-share-go" data-app-share="device">' + G_APPSHARE + '<span>' + 'Share this page' + '</span></button>' +
+      '<button type="button" class="tol-btn is-quiet tol-app-share-more" data-app-share="sheet">' + 'Copy link or show a QR code' + '</button>';
     function shut() { var c = panel.querySelector('.tol-panel-head .tol-close'); if (c && !panel.hidden) c.click(); }
     row.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-app-share]'); if (!b) return;

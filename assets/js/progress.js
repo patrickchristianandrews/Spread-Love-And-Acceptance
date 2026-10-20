@@ -70,7 +70,6 @@
   var DAY = 86400000;
   var OLDEST = Date.UTC(2020, 0, 1);
 
-  function T(en, es) { try { return W && W.TOLLang && W.TOLLang.es() ? es : en; } catch (e) { return en; } }
 
   // ------------------------------------------------------------------ which keys are progress
   // Left out: looks-only settings, invitations and tips seen, visit lists, the email sign-up, the weather spot.
@@ -78,9 +77,9 @@
     'tol-nobubbles', 'tol-quiet', 'tol-comfort-prev', 'tol-comfort-offer', 'tol-still', 'tol-hide-helpers', 'tol-sound-off',
     'tol-listen-rate', 'tol-recent', 'tol-recent-off', 'tol-visit-days', 'tol-depth-seen', 'tol-depth-pref', 'tol-weather-nudge',
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
-    'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-es-hint', 'tol-puddles-hi-seen', 'tol-wide',
+    'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
@@ -103,46 +102,46 @@
     ['tol-journeys-v1', 'journeys']
   ];
   var GROUPS = {
-    entries: ['*', 'My saved entries', 'Mis entradas guardadas'],
-    together: ['*', 'Worked on together', 'Trabajado juntos'],
-    checkin: ['*', 'This week’s check-in: jobs that keep coming back', 'Revisión de la semana: tareas que vuelven'],
-    wins: ['*', 'Small wins', 'Pequeños logros'],
-    ten: ['*', 'Start in 10 minutes', 'Empieza en 10 minutos'],
-    weather: ['*', 'Today’s Weather almanac', 'El almanaque del clima de hoy'],
-    six: ['*', 'Six gentle weeks', 'Seis semanas tranquilas'],
-    sheets: ['*', 'Worksheets you kept', 'Hojas de trabajo guardadas'],
-    sheetset: ['', 'Worksheet keeping choices', 'Opciones para guardar hojas'],
-    roots: ['*', 'Roots & Wings', 'Raíces y alas'],
-    wiring: ['*', 'Your Wiring Card', 'Tu tarjeta de conexiones'],
-    wave: ['*', 'Wavelength', 'Wavelength'],
-    lemon: ['*', 'The Lemonade Stand', 'El puesto de limonada'],
-    lemonset: ['', 'The Lemonade Stand: just me or with others', 'El puesto de limonada: solo o con otros'],
-    calc01: ['*', 'Is the setup working for everyone?', '¿Funciona el reparto para todos?'],
-    calc02: ['*', 'Look back over 30 days', 'Mirar atrás 30 días'],
-    deal: ['*', 'Your time-together deal', 'Su acuerdo de tiempo juntos'],
-    work: ['*', 'Who owns what at work', 'Quién se encarga de qué en el trabajo'],
-    drive: ['*', 'The Re-check Drive', 'The Re-check Drive'],
-    rules: ['*', 'The rulebook from home', 'Las reglas de casa'],
-    pause: ['*', 'Your pause plan', 'Su plan de pausa'],
-    house: ['*', 'Your household', 'Tu hogar'],
-    cwd: ['*', 'The Carrier Wave Decoder', 'The Carrier Wave Decoder'],
-    cwdset: ['', 'Decoder saving', 'Guardar el Decoder'],
-    tt: ['*', 'Turning Toward', 'Acercarse'],
-    letters: ['*', 'Written conversations', 'Conversaciones por escrito'],
-    family: ['*', 'Check-ins: the family plan', 'Revisiones: el plan familiar'],
-    week: ['*', 'Different hours: our week', 'Horarios distintos: nuestra semana'],
-    ctx: ['*', 'Context for a person', 'Contexto sobre una persona'],
-    self: ['*', 'Your self path', 'Tu camino personal'],
-    mv: ['*', 'Your music video', 'Tu video musical'],
-    takein: ['', 'How you take things in', 'Cómo asimilas las cosas'],
-    reading: ['', 'Reading: chapters, plans and picks', 'Lectura: capítulos, planes y elecciones'],
-    garden: ['', 'The Night Garden', 'El jardín nocturno'],
-    games: ['', 'Games and puzzles', 'Juegos y pasatiempos'],
-    watch: ['', 'Frequency Buddies and visualizers', 'Frequency Buddies y visualizadores'],
-    calm: ['', 'Breathing and calm sounds', 'Respiración y sonidos tranquilos'],
-    picks: ['', 'Tool choices', 'Opciones de las herramientas'],
-    journeys: ['*', 'Guided journeys', 'Recorridos guiados'],
-    other: ['', 'Other notes from the site', 'Otras notas del sitio']
+    entries: ['*', 'My saved entries'],
+    together: ['*', 'Worked on together'],
+    checkin: ['*', 'This week’s check-in: jobs that keep coming back'],
+    wins: ['*', 'Small wins'],
+    ten: ['*', 'Start in 10 minutes'],
+    weather: ['*', 'Today’s Weather almanac'],
+    six: ['*', 'Six gentle weeks'],
+    sheets: ['*', 'Worksheets you kept'],
+    sheetset: ['', 'Worksheet keeping choices'],
+    roots: ['*', 'Roots & Wings'],
+    wiring: ['*', 'Your Wiring Card'],
+    wave: ['*', 'Wavelength'],
+    lemon: ['*', 'The Lemonade Stand'],
+    lemonset: ['', 'The Lemonade Stand: just me or with others'],
+    calc01: ['*', 'Is the setup working for everyone?'],
+    calc02: ['*', 'Look back over 30 days'],
+    deal: ['*', 'Your time-together deal'],
+    work: ['*', 'Who owns what at work'],
+    drive: ['*', 'The Re-check Drive'],
+    rules: ['*', 'The rulebook from home'],
+    pause: ['*', 'Your pause plan'],
+    house: ['*', 'Your household'],
+    cwd: ['*', 'The Carrier Wave Decoder'],
+    cwdset: ['', 'Decoder saving'],
+    tt: ['*', 'Turning Toward'],
+    letters: ['*', 'Written conversations'],
+    family: ['*', 'Check-ins: the family plan'],
+    week: ['*', 'Different hours: our week'],
+    ctx: ['*', 'Context for a person'],
+    self: ['*', 'Your self path'],
+    mv: ['*', 'Your music video'],
+    takein: ['', 'How you take things in'],
+    reading: ['', 'Reading: chapters, plans and picks'],
+    garden: ['', 'The Night Garden'],
+    games: ['', 'Games and puzzles'],
+    watch: ['', 'Frequency Buddies and visualizers'],
+    calm: ['', 'Breathing and calm sounds'],
+    picks: ['', 'Tool choices'],
+    journeys: ['*', 'Guided journeys'],
+    other: ['', 'Other notes from the site']
   };
   function matches(k, p) { return k === p || (/[-:]$/.test(p) && k.indexOf(p) === 0); }
   function ours(k) { return typeof k === 'string' && /^(tol-|cwd-|bears-dojo-)[A-Za-z0-9:_.\-]{1,160}$/.test(k); }
@@ -150,7 +149,7 @@
   function included(k) { return ours(k) && !skipped(k); }
   function groupOf(k) { for (var i = 0; i < CAT.length; i++) if (matches(k, CAT[i][0])) return CAT[i][1]; return 'other'; }
   function meaningful(k) { return GROUPS[groupOf(k)][0] === '*'; }
-  function groupName(g) { var x = GROUPS[g] || GROUPS.other; return T(x[1], x[2]); }
+  function groupName(g) { var x = GROUPS[g] || GROUPS.other; return x[1]; }
 
   // ------------------------------------------------------------------ small helpers
   function ProgressError(code, msg) { var e = new Error(msg || code); e.name = 'ProgressError'; e.code = code; return e; }
@@ -455,7 +454,7 @@
   }
   function describe(data) {
     var n = 0; Object.keys(data).forEach(function (k) { var v = data[k], p; try { p = JSON.parse(v); } catch (e) { p = v; } n += leaves(p, 0); });
-    return n === 1 ? T('1 answer', '1 respuesta') : n + T(' answers', ' respuestas');
+    return n === 1 ? '1 answer' : n + ' answers';
   }
   function newId(now) { var r = ''; try { r = b64url(rand(6)).toLowerCase().replace(/[^a-z0-9]/g, ''); } catch (e) { r = Math.random().toString(36).slice(2, 8); } return (now || Date.now()).toString(36) + r; }
   function saveEntry(st, o, now) {
@@ -709,28 +708,28 @@
   }
   function btn(label, cls, fn, attrs) { var b = mk('button', Object.assign({ type: 'button', class: 'tp-btn' + (cls ? ' ' + cls : '') }, attrs || {}), label); if (fn) b.addEventListener('click', fn); return b; }
   function day(t) {
-    try { return new Date(t).toLocaleDateString(T('en-US', 'es'), { month: 'short', day: 'numeric', year: new Date(t).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' }); }
+    try { return new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: new Date(t).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' }); }
     catch (e) { return new Date(t).toDateString(); }
   }
-  function dayTime(t) { try { return day(t) + ', ' + new Date(t).toLocaleTimeString(T('en-US', 'es'), { hour: 'numeric', minute: '2-digit' }); } catch (e) { return new Date(t).toString(); } }
+  function dayTime(t) { try { return day(t) + ', ' + new Date(t).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); } catch (e) { return new Date(t).toString(); } }
   function ymd(d) { function p(n) { return (n < 10 ? '0' : '') + n; } return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
   function coarse() { return !!(W.matchMedia && W.matchMedia('(pointer: coarse)').matches); }
   function reveal() { HTML.style.visibility = ''; }
   function errText(e) {
     var c = e && e.code;
-    if (c === 'password') return T('That password doesn’t open it. Check it (capital letters count) and try again.', 'Esa contraseña no lo abre. Revísala (las mayúsculas cuentan) y prueba otra vez.');
-    if (c === 'needpassword') return T('This one is locked with a password. Type it below.', 'Está protegido con contraseña. Escríbela abajo.');
-    if (c === 'big') return T('That’s too big to be a backup from this site.', 'Es demasiado grande para ser una copia de este sitio.');
-    if (c === 'version') return T('This backup was made by a newer version of the site. Reload the page and try again.', 'Esta copia se hizo con una versión más nueva del sitio. Recarga la página y prueba otra vez.');
-    if (c === 'changed') return T('This backup was changed after it was made, so it can’t be trusted. Nothing was restored.', 'Esta copia se cambió después de hacerla, así que no es fiable. No se restauró nada.');
-    if (c === 'empty') return T('There’s nothing in it that this site can restore.', 'No hay nada que este sitio pueda restaurar.');
-    if (c === 'full') return T('Your saved entries are full. Delete a few old ones first.', 'Tus entradas guardadas están llenas. Borra algunas antiguas primero.');
-    if (c === 'nozip') return T('This browser can’t open move links. Use a backup file instead.', 'Este navegador no puede abrir enlaces de traslado. Usa un archivo de copia.');
-    if (c === 'nocrypto') return T('This browser can’t lock or unlock with a password here. Try an up-to-date browser.', 'Este navegador no puede usar contraseñas aquí. Prueba un navegador actualizado.');
-    return T('That isn’t a backup from this site, or it’s damaged. Nothing was changed.', 'No es una copia de este sitio, o está dañada. No se cambió nada.');
+    if (c === 'password') return 'That password doesn’t open it. Check it (capital letters count) and try again.';
+    if (c === 'needpassword') return 'This one is locked with a password. Type it below.';
+    if (c === 'big') return 'That’s too big to be a backup from this site.';
+    if (c === 'version') return 'This backup was made by a newer version of the site. Reload the page and try again.';
+    if (c === 'changed') return 'This backup was changed after it was made, so it can’t be trusted. Nothing was restored.';
+    if (c === 'empty') return 'There’s nothing in it that this site can restore.';
+    if (c === 'full') return 'Your saved entries are full. Delete a few old ones first.';
+    if (c === 'nozip') return 'This browser can’t open move links. Use a backup file instead.';
+    if (c === 'nocrypto') return 'This browser can’t lock or unlock with a password here. Try an up-to-date browser.';
+    return 'That isn’t a backup from this site, or it’s damaged. Nothing was changed.';
   }
   function confirmClear(o) {
-    var go = function () { if (W.TOLConfirmClear) return W.TOLConfirmClear.ask(o); return Promise.resolve(W.confirm(T('Clear ', '¿Borrar ') + o.what + T('? This can’t be undone.', '? No se puede deshacer.')) ? Promise.resolve(o.onConfirm && o.onConfirm()).then(function () { return true; }) : false); };
+    var go = function () { if (W.TOLConfirmClear) return W.TOLConfirmClear.ask(o); return Promise.resolve(W.confirm('Clear ' + o.what + '? This can’t be undone.') ? Promise.resolve(o.onConfirm && o.onConfirm()).then(function () { return true; }) : false); };
     if (W.TOLConfirmClear) return go();
     return new Promise(function (ok) { var s = D.createElement('script'); s.src = '/assets/js/confirm-clear.js'; s.onload = function () { ok(go()); }; s.onerror = function () { ok(go()); }; D.head.appendChild(s); });
   }
@@ -783,16 +782,16 @@
     var inFrame = true; try { inFrame = W.self !== W.top; } catch (e) {}
     if (inFrame || D.getElementById('tp-chip')) return;
     css();
-    var c = mk('aside', { id: 'tp-chip', class: 'tp-chip no-bubble no-print', 'aria-label': T('Shared computer mode', 'Modo de computadora compartida') });
-    c.appendChild(mk('span', { class: 'tp-chip-t' }, T('Shared computer mode · nothing is kept', 'Modo de computadora compartida · no se guarda nada')));
-    c.appendChild(btn(T('Clear everything now', 'Borrar todo ahora'), 'is-small', function () { clearShared(); }));
-    if (!PAGE) c.appendChild(mk('a', { href: '/on-this-device.html#take', class: 'tp-chip-a' }, T('Take it with you', 'Llévatelo')));
+    var c = mk('aside', { id: 'tp-chip', class: 'tp-chip no-bubble no-print', 'aria-label': 'Shared computer mode' });
+    c.appendChild(mk('span', { class: 'tp-chip-t' }, 'Shared computer mode · nothing is kept'));
+    c.appendChild(btn('Clear everything now', 'is-small', function () { clearShared(); }));
+    if (!PAGE) c.appendChild(mk('a', { href: '/on-this-device.html#take', class: 'tp-chip-a' }, 'Take it with you'));
     D.body.appendChild(c);
   }
   function clearShared() {
     confirmClear({
-      what: T('everything from this visit', 'todo lo de esta visita'), keys: '*', short: true,
-      doneText: T('Cleared. Nothing you typed is left on this computer.', 'Borrado. No queda nada de lo que escribiste en esta computadora.'),
+      what: 'everything from this visit', keys: '*', short: true,
+      doneText: 'Cleared. Nothing you typed is left on this computer.',
       onConfirm: function () { try { sess().removeItem(SH_STASH); } catch (e) {} return eraseEverything(); }
     }).then(function (ok) { if (ok) location.reload(); });
   }
@@ -808,7 +807,7 @@
   function passkeyCreate() {
     return W.navigator.credentials.create({ publicKey: {
       challenge: rand(32), rp: { name: 'Spread Love & Acceptance', id: location.hostname },
-      user: { id: rand(16), name: 'this-device', displayName: T('You, on this device', 'Tú, en este dispositivo') },
+      user: { id: rand(16), name: 'this-device', displayName: 'You, on this device' },
       pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
       authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
       timeout: 60000, attestation: 'none' } }).then(function (c) { return b64(new Uint8Array(c.rawId)); });
@@ -826,28 +825,28 @@
     var o = mk('div', { class: 'tp-lock no-print', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tp-lock-h' });
     o.style.visibility = 'visible';
     var c = mk('div', { class: 'tp-lock-card' });
-    c.appendChild(mk('h2', { id: 'tp-lock-h' }, T('Locked', 'Bloqueado')));
-    c.appendChild(mk('p', null, T('Type your PIN to open Spread Love & Acceptance.', 'Escribe tu PIN para abrir Spread Love & Acceptance.')));
+    c.appendChild(mk('h2', { id: 'tp-lock-h' }, 'Locked'));
+    c.appendChild(mk('p', null, 'Type your PIN to open Spread Love & Acceptance.'));
     var row = mk('p', { class: 'tp-row' });
-    row.appendChild(mk('label', { for: 'tp-lock-pin' }, T('PIN', 'PIN')));
+    row.appendChild(mk('label', { for: 'tp-lock-pin' }, 'PIN'));
     var pin = mk('input', { id: 'tp-lock-pin', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'off', class: 'tp-pin' });
     row.appendChild(pin); c.appendChild(row);
     var msg = mk('p', { class: 'tp-status', role: 'status', 'aria-live': 'polite' });
     var acts = mk('p', { class: 'tp-acts' });
-    var go = btn(T('Unlock', 'Desbloquear'), 'is-strong', tryPin);
+    var go = btn('Unlock', 'is-strong', tryPin);
     acts.appendChild(go);
     if (rec.cred) {
-      acts.appendChild(btn(T('Use Face ID or fingerprint', 'Usar Face ID o huella'), '', function () {
-        passkeyCheck(rec.cred).then(function (ok) { if (ok) unlock(); else msg.textContent = T('That didn’t work. Use your PIN.', 'No funcionó. Usa tu PIN.'); });
+      acts.appendChild(btn('Use Face ID or fingerprint', '', function () {
+        passkeyCheck(rec.cred).then(function (ok) { if (ok) unlock(); else msg.textContent = 'That didn’t work. Use your PIN.'; });
       }));
     }
     c.appendChild(acts); c.appendChild(msg);
     var forgot = mk('details', { class: 'tp-forgot' });
-    forgot.appendChild(mk('summary', null, T('Forgot your PIN?', '¿Olvidaste tu PIN?')));
-    forgot.appendChild(mk('p', null, T('It can’t be reset: it’s kept only on this device, and we never see it. You can erase everything this site keeps here and start fresh. A backup file can bring your progress back afterwards.', 'No se puede restablecer: se guarda solo en este dispositivo y nunca lo vemos. Puedes borrar todo lo que este sitio guarda aquí y empezar de nuevo. Un archivo de copia puede traer tu progreso después.')));
-    forgot.appendChild(btn(T('Erase everything on this device', 'Borrar todo en este dispositivo'), 'is-danger', function () {
-      confirmClear({ what: T('everything this site keeps on this device', 'todo lo que este sitio guarda en este dispositivo'), keys: '*',
-        doneText: T('Cleared. Nothing you saved is left on this device, and the lock is off.', 'Borrado. No queda nada de lo que guardaste en este dispositivo, y el bloqueo está quitado.'),
+    forgot.appendChild(mk('summary', null, 'Forgot your PIN?'));
+    forgot.appendChild(mk('p', null, 'It can’t be reset: it’s kept only on this device, and we never see it. You can erase everything this site keeps here and start fresh. A backup file can bring your progress back afterwards.'));
+    forgot.appendChild(btn('Erase everything on this device', 'is-danger', function () {
+      confirmClear({ what: 'everything this site keeps on this device', keys: '*',
+        doneText: 'Cleared. Nothing you saved is left on this device, and the lock is off.',
         onConfirm: eraseEverything }).then(function (ok) { if (ok) location.reload(); });
     }));
     c.appendChild(forgot);
@@ -857,15 +856,15 @@
     function tryPin() {
       var r = readLock(st); if (!r) { unlock(); return; }
       var now = Date.now();
-      if (r.until && r.until > now) { msg.textContent = T('Too many tries. Please wait ', 'Demasiados intentos. Espera ') + Math.ceil((r.until - now) / 1000) + T(' seconds and try again.', ' segundos y vuelve a intentarlo.'); return; }
-      go.disabled = true; msg.textContent = T('Checking…', 'Comprobando…');
+      if (r.until && r.until > now) { msg.textContent = 'Too many tries. Please wait ' + Math.ceil((r.until - now) / 1000) + ' seconds and try again.'; return; }
+      go.disabled = true; msg.textContent = 'Checking…';
       checkPin(pin.value, r).then(function (ok) {
         go.disabled = false;
         var r2 = readLock(st) || r;
         if (ok) { r2.tries = 0; delete r2.until; writeLock(st, r2); unlock(); return; }
         r2.tries = (r2.tries || 0) + 1; var wait = failDelay(r2.tries); if (wait) r2.until = Date.now() + wait; writeLock(st, r2);
         pin.value = ''; pin.focus();
-        msg.textContent = wait ? T('That’s not it. Please wait ', 'No es ese. Espera ') + Math.ceil(wait / 1000) + T(' seconds before the next try.', ' segundos antes del siguiente intento.') : T('That’s not it. Try again.', 'No es ese. Prueba otra vez.');
+        msg.textContent = wait ? 'That’s not it. Please wait ' + Math.ceil(wait / 1000) + ' seconds before the next try.' : 'That’s not it. Try again.';
       });
     }
   }
@@ -912,22 +911,22 @@
   }
   function placeCard(c) { D.body.appendChild(c); card = c; }
   function askCard() {
-    var c = cardShell(T('Your own computer, or shared?', '¿Tu computadora, o compartida?'), T('Is this your own computer or a shared one?', '¿Es tu propia computadora o una compartida?'));
-    c.appendChild(mk('p', null, T('On your own computer, this site can keep a history of your results, saved entries and an app lock. On a shared or public computer, nothing is kept after you close the tab. Either way, nothing is sent to us.', 'En tu propia computadora, este sitio puede guardar un historial de tus resultados, entradas guardadas y un bloqueo. En una computadora compartida o pública, no se guarda nada al cerrar la pestaña. En ambos casos, no se nos envía nada.')));
+    var c = cardShell('Your own computer, or shared?', 'Is this your own computer or a shared one?');
+    c.appendChild(mk('p', null, 'On your own computer, this site can keep a history of your results, saved entries and an app lock. On a shared or public computer, nothing is kept after you close the tab. Either way, nothing is sent to us.'));
     var acts = mk('p', { class: 'tp-pop-acts' });
-    acts.appendChild(btn(T('My own computer', 'Mi propia computadora'), 'is-strong', function () { chooseMode('own'); ownDone(c); }));
-    acts.appendChild(btn(T('Shared or public', 'Compartida o pública'), '', function () { chooseMode('shared'); closeCard(); }));
-    acts.appendChild(btn(T('Not sure', 'No sé'), '', function () { chooseMode('shared'); closeCard(); }));
+    acts.appendChild(btn('My own computer', 'is-strong', function () { chooseMode('own'); ownDone(c); }));
+    acts.appendChild(btn('Shared or public', '', function () { chooseMode('shared'); closeCard(); }));
+    acts.appendChild(btn('Not sure', '', function () { chooseMode('shared'); closeCard(); }));
     c.appendChild(acts);
     placeCard(c);
   }
   function ownDone(c) {
     c.textContent = '';
-    c.appendChild(mk('p', { class: 'tp-pop-h' }, T('Saving on your own computer', 'Guardar en tu computadora')));
-    c.appendChild(mk('p', null, T('Your results stay here, with earlier versions and saved entries. Change it any time under Your progress. The free app opens in one tap too.', 'Tus resultados se quedan aquí, con versiones anteriores y entradas guardadas. Cámbialo cuando quieras en Tu progreso. La app gratis también se abre con un toque.')));
+    c.appendChild(mk('p', { class: 'tp-pop-h' }, 'Saving on your own computer'));
+    c.appendChild(mk('p', null, 'Your results stay here, with earlier versions and saved entries. Change it any time under Your progress. The free app opens in one tap too.'));
     var acts = mk('p', { class: 'tp-pop-acts' });
-    acts.appendChild(btn(T('Install the free app', 'Instalar la app gratis'), 'is-strong', function (e) { installFlow(e.currentTarget); }));
-    acts.appendChild(btn(T('Close', 'Cerrar'), '', closeCard));
+    acts.appendChild(btn('Install the free app', 'is-strong', function (e) { installFlow(e.currentTarget); }));
+    acts.appendChild(btn('Close', '', closeCard));
     c.appendChild(acts);
   }
   function chooseMode(m) {
@@ -938,22 +937,21 @@
   }
   function infoCard(kind) {
     var tip = kind === 'tip', ipad = /iPad/.test(W.navigator.userAgent) || (W.navigator.platform === 'MacIntel' && W.navigator.maxTouchPoints > 1);
-    var c = cardShell(tip || kind === 'perk' ? T('Keep your progress', 'Guarda tu progreso') : T('A backup reminder', 'Recordatorio de copia'),
-      tip ? (ipad ? T('Keep your progress safe on this iPad', 'Guarda tu progreso en este iPad') : T('Keep your progress safe on this iPhone', 'Guarda tu progreso en este iPhone'))
-        : kind === 'perk' ? T('The free app keeps more', 'La app gratis guarda más') : T('Keep a copy of your progress?', '¿Guardar una copia de tu progreso?'));
+    var c = cardShell(tip || kind === 'perk' ? 'Keep your progress' : 'A backup reminder',
+      tip ? (ipad ? 'Keep your progress safe on this iPad' : 'Keep your progress safe on this iPhone')
+        : kind === 'perk' ? 'The free app keeps more' : 'Keep a copy of your progress?');
     c.appendChild(mk('p', null, tip
-      ? T('What you do here is kept in Safari, and Safari can clear it after 7 days without a visit. The free app on your Home Screen isn’t cleared that way, and it keeps a history of your results, saved entries and an app lock. Its storage is separate from Safari’s, so after installing, bring your progress over with a move link or a backup file.',
-          'Lo que haces aquí se guarda en Safari, y Safari puede borrarlo tras 7 días sin visitas. La app gratis en tu pantalla de inicio no se borra así, y guarda un historial de tus resultados, entradas guardadas y un bloqueo. Su espacio es aparte del de Safari: después de instalarla, trae tu progreso con un enlace de traslado o un archivo de copia.')
+      ? 'What you do here is kept in Safari, and Safari can clear it after 7 days without a visit. The free app on your Home Screen isn’t cleared that way, and it keeps a history of your results, saved entries and an app lock. Its storage is separate from Safari’s, so after installing, bring your progress over with a move link or a backup file.'
       : kind === 'perk'
-        ? T('Install the free app to keep a history of your results, saved entries and an app lock. Still private: it all stays on this phone.', 'Instala la app gratis para guardar un historial de tus resultados, entradas guardadas y un bloqueo. Sigue siendo privado: todo se queda en este teléfono.')
-        : T('What you’ve done here is kept only in this browser. A backup file keeps it safe if the browser clears it, and lets you move to a new phone. It stays private: the file goes only where you put it.', 'Lo que has hecho aquí se guarda solo en este navegador. Un archivo de copia lo protege si el navegador lo borra, y te deja pasarlo a otro teléfono. Es privado: el archivo va solo a donde tú lo pongas.')));
+        ? 'Install the free app to keep a history of your results, saved entries and an app lock. Still private: it all stays on this phone.'
+        : 'What you’ve done here is kept only in this browser. A backup file keeps it safe if the browser clears it, and lets you move to a new phone. It stays private: the file goes only where you put it.'));
     var acts = mk('p', { class: 'tp-pop-acts' });
     if (tip || kind === 'perk') {
-      acts.appendChild(btn(T('Get the free app', 'Obtener la app gratis'), 'is-strong', function (e) { installFlow(e.currentTarget); }));
-      if (tip) acts.appendChild(mk('a', { href: '/on-this-device.html#move', class: 'tp-btn' }, T('How to bring it over', 'Cómo pasarlo')));
-    } else acts.appendChild(mk('a', { href: '/on-this-device.html#backup', class: 'tp-btn is-strong' }, T('Save a backup', 'Guardar una copia')));
-    acts.appendChild(btn(T('Not now', 'Ahora no'), '', closeCard));
-    if (kind === 'nudge') acts.appendChild(btn(T('Don’t remind me', 'No me lo recuerdes'), 'tp-link', function () { setState({ off: 1 }); closeCard(); }));
+      acts.appendChild(btn('Get the free app', 'is-strong', function (e) { installFlow(e.currentTarget); }));
+      if (tip) acts.appendChild(mk('a', { href: '/on-this-device.html#move', class: 'tp-btn' }, 'How to bring it over'));
+    } else acts.appendChild(mk('a', { href: '/on-this-device.html#backup', class: 'tp-btn is-strong' }, 'Save a backup'));
+    acts.appendChild(btn('Not now', '', closeCard));
+    if (kind === 'nudge') acts.appendChild(btn('Don’t remind me', 'tp-link', function () { setState({ off: 1 }); closeCard(); }));
     c.appendChild(acts);
     placeCard(c);
     var p = {}; p[kind] = Date.now(); setState(p);
@@ -1026,21 +1024,21 @@
   API.level = level;
   API.perks = function () { return perks(); };
   API.save = function (o) {
-    if (!perks()) return Promise.resolve({ ok: false, why: 'not-here', text: T('Saved entries come with the free app, or on your own computer.', 'Las entradas guardadas vienen con la app gratis, o en tu propia computadora.') });
-    try { var e = saveEntry(local(), o); return Promise.resolve({ ok: true, entry: e, text: T('Saved to My saved entries.', 'Guardado en Mis entradas guardadas.') }); }
+    if (!perks()) return Promise.resolve({ ok: false, why: 'not-here', text: 'Saved entries come with the free app, or on your own computer.' });
+    try { var e = saveEntry(local(), o); return Promise.resolve({ ok: true, entry: e, text: 'Saved to My saved entries.' }); }
     catch (er) { return Promise.resolve({ ok: false, why: er.code, text: errText(er) }); }
   };
   API.saveBackup = function (pw, sayFn) {
     var p = collect();
-    if (!Object.keys(p.keys).length) return Promise.resolve(T('There’s nothing to back up yet.', 'Todavía no hay nada que copiar.'));
+    if (!Object.keys(p.keys).length) return Promise.resolve('There’s nothing to back up yet.');
     var name = 'spread-love-progress-' + ymd(new Date()) + '.json';
     return makeBackup(p, pw || '').then(function (text) {
       return deliver(new Blob([text], { type: 'application/json' }), name, sayFn || function () {}).then(function (how) {
-        if (how === 'cancelled') return T('Not saved. Nothing left this device.', 'No se guardó. Nada salió de este dispositivo.');
-        if (how === 'needtap') return T('It’s ready: tap “Save it now”.', 'Está listo: toca “Guardarlo ahora”.');
+        if (how === 'cancelled') return 'Not saved. Nothing left this device.';
+        if (how === 'needtap') return 'It’s ready: tap “Save it now”.';
         setState({ last: Date.now() }); if (PAGE) drawWhat();
-        return (how === 'shared' ? T('Sent where you chose. ', 'Enviado a donde elegiste. ') : T('Saved to your downloads as ', 'Guardado en tus descargas como ') + name + '. ') +
-          (pw ? T('Keep the password somewhere safe: without it, the file can’t be opened, and we can’t reset it.', 'Guarda la contraseña en un lugar seguro: sin ella no se puede abrir el archivo, y no podemos restablecerla.') : T('Anyone who opens this file can read it, so keep it somewhere private.', 'Cualquiera que abra este archivo puede leerlo, así que guárdalo en un lugar privado.'));
+        return (how === 'shared' ? 'Sent where you chose. ' : 'Saved to your downloads as ' + name + '. ') +
+          (pw ? 'Keep the password somewhere safe: without it, the file can’t be opened, and we can’t reset it.' : 'Anyone who opens this file can read it, so keep it somewhere private.');
       });
     });
   };
@@ -1052,11 +1050,11 @@
       return n.share({ files: [file], title: name }).then(function () { return 'shared'; }, function (e) {
         if (e && e.name === 'AbortError') return 'cancelled';
         if (e && e.name === 'NotAllowedError') { // the password step took long enough that the tap no longer counts: one more tap
-          var b = btn(T('Save it now', 'Guardarlo ahora'), 'is-strong', function () {
-            n.share({ files: [file], title: name }).then(function () { setState({ last: Date.now() }); if (PAGE) drawWhat(); sayFn(T('Sent where you chose.', 'Enviado a donde elegiste.')); },
-              function () { download(blob, name); setState({ last: Date.now() }); if (PAGE) drawWhat(); sayFn(T('Saved to your downloads as ', 'Guardado en tus descargas como ') + name + '.'); });
+          var b = btn('Save it now', 'is-strong', function () {
+            n.share({ files: [file], title: name }).then(function () { setState({ last: Date.now() }); if (PAGE) drawWhat(); sayFn('Sent where you chose.'); },
+              function () { download(blob, name); setState({ last: Date.now() }); if (PAGE) drawWhat(); sayFn('Saved to your downloads as ' + name + '.'); });
           });
-          sayFn(T('It’s ready. ', 'Está listo. '), b);
+          sayFn('It’s ready. ', b);
           return 'needtap';
         }
         download(blob, name); return 'downloaded';
@@ -1076,45 +1074,45 @@
   function pwPair(a, b, msgId) {
     var p1 = $(a), p2 = $(b), v1 = p1 ? p1.value : '', v2 = p2 ? p2.value : '';
     if (!v1 && !v2) return { ok: true, pw: '' };
-    if (v1 !== v2) { say(msgId, T('The two passwords aren’t the same. Type them again.', 'Las dos contraseñas no son iguales. Escríbelas otra vez.'), true); (p2 || p1).focus(); return { ok: false }; }
-    if (v1.length < 6) { say(msgId, T('Use at least 6 characters, or leave both boxes empty.', 'Usa al menos 6 caracteres, o deja las dos casillas vacías.'), true); p1.focus(); return { ok: false }; }
+    if (v1 !== v2) { say(msgId, 'The two passwords aren’t the same. Type them again.', true); (p2 || p1).focus(); return { ok: false }; }
+    if (v1.length < 6) { say(msgId, 'Use at least 6 characters, or leave both boxes empty.', true); p1.focus(); return { ok: false }; }
     return { ok: true, pw: v1 };
   }
-  function countLine(g) { return (g.n === 1 ? T('1 item', '1 elemento') : g.n + T(' items', ' elementos')) + (g.last ? ' · ' + T('changed ', 'cambiado el ') + day(g.last) : ''); }
+  function countLine(g) { return (g.n === 1 ? '1 item' : g.n + ' items') + (g.last ? ' · ' + 'changed ' + day(g.last) : ''); }
   var LEVEL_NAMES = function (lv) {
-    return { app: T('In the app', 'En la app'), own: T('Your own computer', 'Tu propia computadora'), shared: T('Shared computer', 'Computadora compartida'),
-      phone: T('Phone or tablet browser', 'Navegador del teléfono o tableta'), unasked: T('This computer’s browser', 'El navegador de esta computadora') }[lv];
+    return { app: 'In the app', own: 'Your own computer', shared: 'Shared computer',
+      phone: 'Phone or tablet browser', unasked: 'This computer’s browser' }[lv];
   };
   function drawLevel() {
     var host = $('tp-level'); if (!host) return;
     var lv = level(), tbl = $('tp-compare');
     host.textContent = '';
-    host.appendChild(mk('p', { class: 'tp-level-h' }, T('Saving here: ', 'Guardando aquí: ') + LEVEL_NAMES(lv)));
+    host.appendChild(mk('p', { class: 'tp-level-h' }, 'Saving here: ' + LEVEL_NAMES(lv)));
     var p = mk('p'), acts = mk('p', { class: 'tp-acts' });
-    if (lv === 'app') p.textContent = T('Your history, saved entries and automatic protection are on. Everything stays on this device.', 'Tu historial, entradas guardadas y protección automática están activos. Todo se queda en este dispositivo.');
+    if (lv === 'app') p.textContent = 'Your history, saved entries and automatic protection are on. Everything stays on this device.';
     else if (lv === 'own') {
-      p.textContent = T('You said this is your own computer, so it keeps the same extras as the app: earlier versions, saved entries and the lock.', 'Dijiste que es tu propia computadora, así que guarda los mismos extras que la app: versiones anteriores, entradas guardadas y el bloqueo.');
-      acts.appendChild(btn(T('Install the free app', 'Instalar la app gratis'), 'is-strong', function (e) { installFlow(e.currentTarget); }));
-      acts.appendChild(btn(T('Change to a shared computer', 'Cambiar a computadora compartida'), '', function () { chooseMode('shared'); }));
+      p.textContent = 'You said this is your own computer, so it keeps the same extras as the app: earlier versions, saved entries and the lock.';
+      acts.appendChild(btn('Install the free app', 'is-strong', function (e) { installFlow(e.currentTarget); }));
+      acts.appendChild(btn('Change to a shared computer', '', function () { chooseMode('shared'); }));
     } else if (lv === 'shared') {
-      p.textContent = T('Nothing is kept after you close this tab. Before you go, take what you want with you:', 'No se guarda nada al cerrar esta pestaña. Antes de irte, llévate lo que quieras:');
+      p.textContent = 'Nothing is kept after you close this tab. Before you go, take what you want with you:';
       var ul = mk('ul', { class: 'tp-take', id: 'take' });
-      [['#backup', T('Save a backup file, for example to a USB stick.', 'Guarda un archivo de copia, por ejemplo en una memoria USB.')],
-       ['#move', T('Email a move link to yourself.', 'Envíate por correo un enlace de traslado.')],
-       ['#move', T('Show a QR code and scan it with your phone.', 'Muestra un código QR y escanéalo con tu teléfono.')]].forEach(function (x) { var li = mk('li'); li.appendChild(mk('a', { href: x[0] }, x[1])); ul.appendChild(li); });
+      [['#backup', 'Save a backup file, for example to a USB stick.'],
+       ['#move', 'Email a move link to yourself.'],
+       ['#move', 'Show a QR code and scan it with your phone.']].forEach(function (x) { var li = mk('li'); li.appendChild(mk('a', { href: x[0] }, x[1])); ul.appendChild(li); });
       host.appendChild(p); host.appendChild(ul); p = null;
-      acts.appendChild(btn(T('Clear everything now', 'Borrar todo ahora'), 'is-danger', clearShared));
-      acts.appendChild(btn(T('This is my own computer', 'Es mi propia computadora'), '', function () { chooseMode('own'); }));
+      acts.appendChild(btn('Clear everything now', 'is-danger', clearShared));
+      acts.appendChild(btn('This is my own computer', '', function () { chooseMode('own'); }));
     } else if (lv === 'phone') {
-      p.textContent = T('Kept in this browser, with backup, restore and move. The app lock is here too.', 'Se guarda en este navegador, con copia, restauración y traslado. El bloqueo también está aquí.');
-      var perk = mk('p', { class: 'tp-perk' }, T('Install the free app to keep a history of your results, saved entries and an app lock.', 'Instala la app gratis para guardar un historial de tus resultados, entradas guardadas y un bloqueo.'));
+      p.textContent = 'Kept in this browser, with backup, restore and move. The app lock is here too.';
+      var perk = mk('p', { class: 'tp-perk' }, 'Install the free app to keep a history of your results, saved entries and an app lock.');
       host.appendChild(p); host.appendChild(perk); p = null;
-      acts.appendChild(btn(T('Install the free app', 'Instalar la app gratis'), 'is-strong', function (e) { installFlow(e.currentTarget); }));
+      acts.appendChild(btn('Install the free app', 'is-strong', function (e) { installFlow(e.currentTarget); }));
     } else {
-      p.textContent = T('Is this your own computer or a shared one? On your own, it can keep earlier versions, saved entries and a lock. On a shared or public one, nothing is kept after you close the tab.', '¿Es tu propia computadora o una compartida? En la tuya puede guardar versiones anteriores, entradas guardadas y un bloqueo. En una compartida o pública, no se guarda nada al cerrar la pestaña.');
-      acts.appendChild(btn(T('My own computer', 'Mi propia computadora'), 'is-strong', function () { chooseMode('own'); }));
-      acts.appendChild(btn(T('Shared or public', 'Compartida o pública'), '', function () { chooseMode('shared'); }));
-      acts.appendChild(btn(T('Not sure', 'No sé'), '', function () { chooseMode('shared'); }));
+      p.textContent = 'Is this your own computer or a shared one? On your own, it can keep earlier versions, saved entries and a lock. On a shared or public one, nothing is kept after you close the tab.';
+      acts.appendChild(btn('My own computer', 'is-strong', function () { chooseMode('own'); }));
+      acts.appendChild(btn('Shared or public', '', function () { chooseMode('shared'); }));
+      acts.appendChild(btn('Not sure', '', function () { chooseMode('shared'); }));
     }
     if (p) host.appendChild(p);
     if (acts.childNodes.length) host.appendChild(acts);
@@ -1125,26 +1123,26 @@
     track();
     var p = collect(), list = summary(p);
     host.textContent = '';
-    if (!list.length) { host.appendChild(mk('p', { class: 'tp-none' }, T('Nothing saved yet. When you use a tool, what you keep shows up here.', 'Todavía no hay nada guardado. Cuando uses una herramienta, lo que guardes aparecerá aquí.'))); }
+    if (!list.length) { host.appendChild(mk('p', { class: 'tp-none' }, 'Nothing saved yet. When you use a tool, what you keep shows up here.')); }
     else {
-      host.appendChild(mk('p', { class: 'tp-what-h' }, T('Saved in this browser now:', 'Guardado ahora en este navegador:')));
+      host.appendChild(mk('p', { class: 'tp-what-h' }, 'Saved in this browser now:'));
       var ul = mk('ul', { class: 'tp-list' });
       list.forEach(function (g) { var li = mk('li'); li.appendChild(mk('strong', null, g.name)); li.appendChild(mk('span', null, ' · ' + countLine(g))); ul.appendChild(li); });
       host.appendChild(ul);
     }
     var s = state();
-    host.appendChild(mk('p', { class: 'tp-last' }, s.last ? T('Your last backup: ', 'Tu última copia: ') + day(s.last) + '.' : T('No backup saved from this browser yet.', 'Aún no se ha guardado ninguna copia desde este navegador.')));
+    host.appendChild(mk('p', { class: 'tp-last' }, s.last ? 'Your last backup: ' + day(s.last) + '.' : 'No backup saved from this browser yet.'));
   }
   function drawKeep() {
     var e = $('tp-persist'), b = D.querySelector('[data-tp="persist"]'); if (!e) return;
-    if (level() === 'shared') { e.textContent = T('On a shared computer, nothing is kept after the tab closes, on purpose.', 'En una computadora compartida no se guarda nada al cerrar la pestaña, a propósito.'); if (b) b.hidden = true; return; }
+    if (level() === 'shared') { e.textContent = 'On a shared computer, nothing is kept after the tab closes, on purpose.'; if (b) b.hidden = true; return; }
     persisted().then(function (p) {
       e.className = '';
-      if (p === null) { e.textContent = T('This browser doesn’t say whether it will keep it. A backup file is the sure way.', 'Este navegador no dice si lo conservará. Un archivo de copia es lo seguro.'); if (b) b.hidden = true; return; }
-      if (p) { e.textContent = T('Protected: this browser has agreed not to clear it to make room. Clearing your history or site data yourself still removes it, so a backup is still wise.', 'Protegido: este navegador aceptó no borrarlo para hacer espacio. Si tú borras el historial o los datos del sitio, se elimina igual, así que una copia sigue siendo buena idea.'); e.className = 'tp-ok'; if (b) b.hidden = true; return; }
+      if (p === null) { e.textContent = 'This browser doesn’t say whether it will keep it. A backup file is the sure way.'; if (b) b.hidden = true; return; }
+      if (p) { e.textContent = 'Protected: this browser has agreed not to clear it to make room. Clearing your history or site data yourself still removes it, so a backup is still wise.'; e.className = 'tp-ok'; if (b) b.hidden = true; return; }
       e.textContent = state().asked
-        ? T('Not protected yet. This browser decides by itself (often by how much you use the site, or whether it’s installed or bookmarked). A backup is the sure way.', 'Aún no está protegido. El navegador decide solo (a menudo según cuánto usas el sitio, o si está instalado o en marcadores). Una copia es lo seguro.')
-        : T('Not protected yet. This browser may clear it if the device runs low on space.', 'Aún no está protegido. Este navegador puede borrarlo si el dispositivo se queda sin espacio.');
+        ? 'Not protected yet. This browser decides by itself (often by how much you use the site, or whether it’s installed or bookmarked). A backup is the sure way.'
+        : 'Not protected yet. This browser may clear it if the device runs low on space.';
       if (b) b.hidden = false;
     });
     var r = $('tp-remind'); if (r) r.checked = !state().off;
@@ -1152,9 +1150,9 @@
   function perkNote(host) {
     var lv = level();
     host.appendChild(mk('p', { class: 'tp-perk' }, lv === 'shared'
-      ? T('Not on a shared computer: nothing is kept here after the tab closes.', 'No en una computadora compartida: aquí no se guarda nada al cerrar la pestaña.')
-      : T('This comes with the free app, or on your own computer.', 'Esto viene con la app gratis, o en tu propia computadora.')));
-    if (lv !== 'shared') host.appendChild(btn(T('Install the free app', 'Instalar la app gratis'), '', function (e) { installFlow(e.currentTarget); }));
+      ? 'Not on a shared computer: nothing is kept here after the tab closes.'
+      : 'This comes with the free app, or on your own computer.'));
+    if (lv !== 'shared') host.appendChild(btn('Install the free app', '', function (e) { installFlow(e.currentTarget); }));
   }
   // ---- My saved entries
   var openEntry = null;
@@ -1166,36 +1164,36 @@
     var form = mk('div', { class: 'tp-entry-new' });
     if (groups.length) {
       var r1 = mk('p', { class: 'tp-row' });
-      r1.appendChild(mk('label', { for: 'tp-e-tool' }, T('Tool', 'Herramienta')));
+      r1.appendChild(mk('label', { for: 'tp-e-tool' }, 'Tool'));
       var sel = mk('select', { id: 'tp-e-tool' });
       groups.forEach(function (g) { sel.appendChild(mk('option', { value: g.id }, g.name)); });
       r1.appendChild(sel); form.appendChild(r1);
       var r2 = mk('p', { class: 'tp-row' });
-      r2.appendChild(mk('label', { for: 'tp-e-name' }, T('Name (optional)', 'Nombre (opcional)')));
+      r2.appendChild(mk('label', { for: 'tp-e-name' }, 'Name (optional)'));
       r2.appendChild(mk('input', { id: 'tp-e-name', type: 'text', maxlength: String(NAME_MAX), autocomplete: 'off' }));
       form.appendChild(r2);
-      form.appendChild(btn(T('Save as an entry', 'Guardar como entrada'), 'is-strong', function () {
-        try { saveEntry(st, { group: $('tp-e-tool').value, name: $('tp-e-name').value }); say('tp-e-msg', T('Saved. It’s in the list below.', 'Guardado. Está en la lista de abajo.')); $('tp-e-name').value = ''; drawEntries(); drawWhat(); }
+      form.appendChild(btn('Save as an entry', 'is-strong', function () {
+        try { saveEntry(st, { group: $('tp-e-tool').value, name: $('tp-e-name').value }); say('tp-e-msg', 'Saved. It’s in the list below.'); $('tp-e-name').value = ''; drawEntries(); drawWhat(); }
         catch (e) { say('tp-e-msg', errText(e), true); }
       }));
-    } else form.appendChild(mk('p', { class: 'tp-none' }, T('Use a tool first; then you can save its answers here as an entry.', 'Usa primero una herramienta; luego podrás guardar sus respuestas aquí como entrada.')));
+    } else form.appendChild(mk('p', { class: 'tp-none' }, 'Use a tool first; then you can save its answers here as an entry.'));
     form.appendChild(mk('p', { id: 'tp-e-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
     host.appendChild(form);
     var list = entries(st).sort(function (a, b) { return b.t - a.t; });
-    if (!list.length) { host.appendChild(mk('p', { class: 'tp-none' }, T('No saved entries yet.', 'Aún no hay entradas guardadas.'))); return; }
+    if (!list.length) { host.appendChild(mk('p', { class: 'tp-none' }, 'No saved entries yet.')); return; }
     var ul = mk('ul', { class: 'tp-entries' });
     list.forEach(function (e) {
       var li = mk('li', { 'data-entry': e.id });
       li.appendChild(mk('strong', null, e.name));
       li.appendChild(mk('span', { class: 'tp-e-meta' }, groupName(e.g) + ' · ' + dayTime(e.t) + ' · ' + e.sum));
       var a = mk('p', { class: 'tp-acts' });
-      a.appendChild(btn(openEntry === e.id ? T('Close', 'Cerrar') : T('Open', 'Abrir'), 'is-small', function () { openEntry = openEntry === e.id ? null : e.id; drawEntries(); var n = D.querySelector('[data-entry="' + e.id + '"] button'); if (n) n.focus(); }, { 'aria-expanded': String(openEntry === e.id) }));
-      a.appendChild(btn(T('Rename', 'Renombrar'), 'is-small', function () {
-        var n = W.prompt(T('New name for this entry', 'Nuevo nombre para esta entrada'), e.name); if (n == null) return;
+      a.appendChild(btn(openEntry === e.id ? 'Close' : 'Open', 'is-small', function () { openEntry = openEntry === e.id ? null : e.id; drawEntries(); var n = D.querySelector('[data-entry="' + e.id + '"] button'); if (n) n.focus(); }, { 'aria-expanded': String(openEntry === e.id) }));
+      a.appendChild(btn('Rename', 'is-small', function () {
+        var n = W.prompt('New name for this entry', e.name); if (n == null) return;
         if (renameEntry(st, e.id, n)) drawEntries();
       }));
-      a.appendChild(btn(T('Delete', 'Borrar'), 'is-small', function () {
-        confirmClear({ what: T('the saved entry “', 'la entrada guardada “') + e.name + '”', items: [{ name: groupName(e.g) + ' · ' + dayTime(e.t), n: 0 }],
+      a.appendChild(btn('Delete', 'is-small', function () {
+        confirmClear({ what: 'the saved entry “' + e.name + '”', items: [{ name: groupName(e.g) + ' · ' + dayTime(e.t), n: 0 }],
           onConfirm: function () { deleteEntry(st, e.id); if (openEntry === e.id) openEntry = null; drawEntries(); drawWhat(); } });
       }));
       li.appendChild(a);
@@ -1207,40 +1205,40 @@
   function linesBox(rows) {
     var dl = mk('dl', { class: 'tp-lines' });
     rows.slice(0, 200).forEach(function (r) { dl.appendChild(mk('dt', null, r[0])); dl.appendChild(mk('dd', null, r[1])); });
-    if (rows.length > 200) dl.appendChild(mk('dd', null, T('…and ', '…y ') + (rows.length - 200) + T(' more', ' más')));
+    if (rows.length > 200) dl.appendChild(mk('dd', null, '…and ' + (rows.length - 200) + ' more'));
     return dl;
   }
   function entryDetail(e, list) {
     var box = mk('div', { class: 'tp-e-detail' });
     var rows = rowsOf(e);
-    box.appendChild(mk('p', { class: 'tp-what-h' }, T('What was saved', 'Lo que se guardó')));
+    box.appendChild(mk('p', { class: 'tp-what-h' }, 'What was saved'));
     if (e.kind === 'result' && e.text) box.appendChild(mk('p', { class: 'tp-e-text' }, e.text));
-    else box.appendChild(rows.length ? linesBox(rows) : mk('p', { class: 'tp-none' }, T('No answers in this one.', 'Sin respuestas en esta.')));
+    else box.appendChild(rows.length ? linesBox(rows) : mk('p', { class: 'tp-none' }, 'No answers in this one.'));
     var acts = mk('p', { class: 'tp-acts' });
     if (e.kind !== 'result') {
-    acts.appendChild(btn(T('Put this back in the tool', 'Volver a ponerla en la herramienta'), '', function () {
-      if (!W.confirm(T('Put this entry back? What the tool has now is replaced (it stays in Earlier versions).', '¿Volver a poner esta entrada? Lo que tiene ahora la herramienta se reemplaza (queda en Versiones anteriores).'))) return;
+    acts.appendChild(btn('Put this back in the tool', '', function () {
+      if (!W.confirm('Put this entry back? What the tool has now is replaced (it stays in Earlier versions).')) return;
       recordHistory(local()); var n = putBack(local(), e.id); recordHistory(local());
-      say('tp-e-msg', n ? T('Put back. Open the tool to see it.', 'Hecho. Abre la herramienta para verlo.') : T('Couldn’t put it back.', 'No se pudo volver a poner.'), !n); drawWhat(); drawHistory();
+      say('tp-e-msg', n ? 'Put back. Open the tool to see it.' : 'Couldn’t put it back.', !n); drawWhat(); drawHistory();
     }));
     box.appendChild(acts);
     }
     var same = list.filter(function (x) { return x.g === e.g && x.id !== e.id; });
     if (same.length) {
       var r = mk('p', { class: 'tp-row' });
-      r.appendChild(mk('label', { for: 'tp-cmp-' + e.id }, T('Compare with', 'Comparar con')));
+      r.appendChild(mk('label', { for: 'tp-cmp-' + e.id }, 'Compare with'));
       var sel = mk('select', { id: 'tp-cmp-' + e.id });
       same.forEach(function (x) { sel.appendChild(mk('option', { value: x.id }, x.name + ' · ' + day(x.t))); });
       r.appendChild(sel);
       var out = mk('div', { class: 'tp-diff', 'aria-live': 'polite' });
-      r.appendChild(btn(T('Compare', 'Comparar'), 'is-small', function () {
+      r.appendChild(btn('Compare', 'is-small', function () {
         var other = same.filter(function (x) { return x.id === sel.value; })[0]; if (!other) return;
         var older = other.t < e.t ? other : e, newer = older === e ? other : e;
         var d = compare(older, newer); out.textContent = '';
-        out.appendChild(mk('p', { class: 'tp-what-h' }, T('From ', 'De ') + day(older.t) + T(' to ', ' a ') + day(newer.t) + ': ' + (d.length ? d.length + T(' changes', ' cambios') : T('no changes', 'sin cambios'))));
+        out.appendChild(mk('p', { class: 'tp-what-h' }, 'From ' + day(older.t) + ' to ' + day(newer.t) + ': ' + (d.length ? d.length + ' changes' : 'no changes')));
         var ul = mk('ul', { class: 'tp-list' });
         d.slice(0, 100).forEach(function (c) {
-          ul.appendChild(mk('li', null, c.path + ': ' + (c.was === null ? T('added “', 'añadido “') + c.now + '”' : c.now === null ? T('removed (was “', 'quitado (era “') + c.was + '”)' : '“' + c.was + '” → “' + c.now + '”')));
+          ul.appendChild(mk('li', null, c.path + ': ' + (c.was === null ? 'added “' + c.now + '”' : c.now === null ? 'removed (was “' + c.was + '”)' : '“' + c.was + '” → “' + c.now + '”')));
         });
         out.appendChild(ul);
       }));
@@ -1255,7 +1253,7 @@
     if (!perks()) { perkNote(host); return; }
     var st = local(); recordHistory(st);
     var h = versions(st), keys = Object.keys(h).filter(function (k) { return h[k].length > 1; }).sort();
-    if (!keys.length) { host.appendChild(mk('p', { class: 'tp-none' }, T('Nothing yet. Each time you change something in a tool, the version before is kept here (the last ' + (HIST_N - 1) + ').', 'Nada todavía. Cada vez que cambies algo en una herramienta, la versión anterior se guarda aquí (las últimas ' + (HIST_N - 1) + ').'))); return; }
+    if (!keys.length) { host.appendChild(mk('p', { class: 'tp-none' }, ('Nothing yet. Each time you change something in a tool, the version before is kept here (the last ' + (HIST_N - 1) + ').'))); return; }
     var counts = {}; keys.forEach(function (k) { var g = groupOf(k); counts[g] = (counts[g] || 0) + 1; });
     keys.forEach(function (k, i) {
       var g = groupOf(k), name = groupName(g) + (counts[g] > 1 ? ' (' + k.replace(/^(tol-|cwd-|bears-dojo-)/, '') + ')' : '');
@@ -1265,10 +1263,10 @@
       var sel = mk('select', { id: 'tp-h-' + i });
       h[k].slice(0, -1).reverse().forEach(function (v) { sel.appendChild(mk('option', { value: String(v.t) }, dayTime(v.t))); });
       r.appendChild(sel);
-      r.appendChild(btn(T('Go back to this version', 'Volver a esta versión'), 'is-small', function () {
-        if (!W.confirm(T('Go back to the version from ', '¿Volver a la versión del ') + sel.options[sel.selectedIndex].text + T('? The one you have now stays in this list.', '? La que tienes ahora queda en esta lista.'))) return;
+      r.appendChild(btn('Go back to this version', 'is-small', function () {
+        if (!W.confirm('Go back to the version from ' + sel.options[sel.selectedIndex].text + '? The one you have now stays in this list.')) return;
         var ok = goBack(st, k, +sel.value);
-        say('tp-h-msg', ok ? T('Done. Open the tool to see that version.', 'Hecho. Abre la herramienta para ver esa versión.') : T('Couldn’t go back to that one.', 'No se pudo volver a esa.'), !ok);
+        say('tp-h-msg', ok ? 'Done. Open the tool to see that version.' : 'Couldn’t go back to that one.', !ok);
         drawHistory(); drawWhat();
       }));
       row.appendChild(r); host.appendChild(row);
@@ -1280,64 +1278,64 @@
     var host = $('tp-lock'); if (!host) return;
     host.textContent = '';
     var lv = level(), st = local(), rec = readLock(st);
-    if (lv === 'shared') { host.appendChild(mk('p', { class: 'tp-perk' }, T('Not on a shared computer: nothing is kept here after the tab closes.', 'No en una computadora compartida: aquí no se guarda nada al cerrar la pestaña.'))); return; }
-    host.appendChild(mk('p', { class: 'tp-note' }, T('A privacy screen: after some time away, the site asks for your PIN before showing anything. It doesn’t encrypt what’s stored, and someone who clears this site’s data in the browser’s settings removes the lock along with everything else.', 'Una pantalla de privacidad: tras un rato fuera, el sitio pide tu PIN antes de mostrar nada. No cifra lo guardado, y quien borre los datos de este sitio en los ajustes del navegador quita el bloqueo junto con todo lo demás.')));
+    if (lv === 'shared') { host.appendChild(mk('p', { class: 'tp-perk' }, 'Not on a shared computer: nothing is kept here after the tab closes.')); return; }
+    host.appendChild(mk('p', { class: 'tp-note' }, 'A privacy screen: after some time away, the site asks for your PIN before showing anything. It doesn’t encrypt what’s stored, and someone who clears this site’s data in the browser’s settings removes the lock along with everything else.'));
     var minsSel = function (id, cur) {
       var s = mk('select', { id: id });
-      [[1, T('1 minute away', '1 minuto fuera')], [5, T('5 minutes away', '5 minutos fuera')], [15, T('15 minutes away', '15 minutos fuera')], [60, T('1 hour away', '1 hora fuera')], [0, T('Every time it opens', 'Cada vez que se abre')]].forEach(function (o) { var op = mk('option', { value: String(o[0]) }, o[1]); if (o[0] === cur) op.selected = true; s.appendChild(op); });
+      [[1, '1 minute away'], [5, '5 minutes away'], [15, '15 minutes away'], [60, '1 hour away'], [0, 'Every time it opens']].forEach(function (o) { var op = mk('option', { value: String(o[0]) }, o[1]); if (o[0] === cur) op.selected = true; s.appendChild(op); });
       return s;
     };
     if (!rec) {
       var r1 = mk('p', { class: 'tp-row' });
-      r1.appendChild(mk('label', { for: 'tp-pin1' }, T('Choose a PIN (4 to 6 digits)', 'Elige un PIN (de 4 a 6 dígitos)')));
+      r1.appendChild(mk('label', { for: 'tp-pin1' }, 'Choose a PIN (4 to 6 digits)'));
       r1.appendChild(mk('input', { id: 'tp-pin1', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'new-password', class: 'tp-pin' }));
       var r2 = mk('p', { class: 'tp-row' });
-      r2.appendChild(mk('label', { for: 'tp-pin2' }, T('Type it again', 'Escríbelo otra vez')));
+      r2.appendChild(mk('label', { for: 'tp-pin2' }, 'Type it again'));
       r2.appendChild(mk('input', { id: 'tp-pin2', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'new-password', class: 'tp-pin' }));
       var r3 = mk('p', { class: 'tp-row' });
-      r3.appendChild(mk('label', { for: 'tp-mins' }, T('Lock after', 'Bloquear tras')));
+      r3.appendChild(mk('label', { for: 'tp-mins' }, 'Lock after'));
       r3.appendChild(minsSel('tp-mins', 5));
       host.appendChild(r1); host.appendChild(r2); host.appendChild(r3);
-      host.appendChild(btn(T('Turn on the lock', 'Activar el bloqueo'), 'is-strong', function (ev) {
+      host.appendChild(btn('Turn on the lock', 'is-strong', function (ev) {
         var a = $('tp-pin1').value, b = $('tp-pin2').value;
-        if (!validPin(a)) { say('tp-lock-msg', T('Use 4 to 6 digits.', 'Usa de 4 a 6 dígitos.'), true); $('tp-pin1').focus(); return; }
-        if (a !== b) { say('tp-lock-msg', T('The two PINs aren’t the same.', 'Los dos PIN no son iguales.'), true); $('tp-pin2').focus(); return; }
+        if (!validPin(a)) { say('tp-lock-msg', 'Use 4 to 6 digits.', true); $('tp-pin1').focus(); return; }
+        if (a !== b) { say('tp-lock-msg', 'The two PINs aren’t the same.', true); $('tp-pin2').focus(); return; }
         ev.currentTarget.disabled = true;
-        pinRecord(a, +$('tp-mins').value).then(function (r) { r.away = Date.now(); writeLock(st, r); drawLock(); say('tp-lock-msg', T('The lock is on. Keep your PIN in mind: it can’t be reset.', 'El bloqueo está activo. Recuerda tu PIN: no se puede restablecer.')); });
+        pinRecord(a, +$('tp-mins').value).then(function (r) { r.away = Date.now(); writeLock(st, r); drawLock(); say('tp-lock-msg', 'The lock is on. Keep your PIN in mind: it can’t be reset.'); });
       }));
     } else {
-      host.appendChild(mk('p', { class: 'tp-ok' }, T('The lock is on.', 'El bloqueo está activo.')));
+      host.appendChild(mk('p', { class: 'tp-ok' }, 'The lock is on.'));
       var r4 = mk('p', { class: 'tp-row' });
-      r4.appendChild(mk('label', { for: 'tp-mins' }, T('Lock after', 'Bloquear tras')));
+      r4.appendChild(mk('label', { for: 'tp-mins' }, 'Lock after'));
       var ms = minsSel('tp-mins', rec.mins); r4.appendChild(ms);
-      ms.addEventListener('change', function () { var r = readLock(st); if (r) { r.mins = +ms.value; writeLock(st, r); say('tp-lock-msg', T('Saved.', 'Guardado.')); } });
+      ms.addEventListener('change', function () { var r = readLock(st); if (r) { r.mins = +ms.value; writeLock(st, r); say('tp-lock-msg', 'Saved.'); } });
       host.appendChild(r4);
       var acts = mk('p', { class: 'tp-acts' });
-      acts.appendChild(btn(T('Lock now', 'Bloquear ahora'), '', function () { lockNow(); }));
+      acts.appendChild(btn('Lock now', '', function () { lockNow(); }));
       var pk = mk('span'); acts.appendChild(pk);
       passkeyReady().then(function (ok) {
         if (!ok) return;
-        if (rec.cred) pk.appendChild(btn(T('Stop using Face ID or fingerprint', 'Dejar de usar Face ID o huella'), '', function () { var r = readLock(st); delete r.cred; writeLock(st, r); drawLock(); }));
-        else pk.appendChild(btn(T('Also unlock with Face ID, Touch ID or fingerprint', 'Desbloquear también con Face ID, Touch ID o huella'), '', function () {
-          passkeyCreate().then(function (id) { var r = readLock(st); r.cred = id; writeLock(st, r); drawLock(); say('tp-lock-msg', T('Done. The lock screen will offer it, with your PIN as the backup.', 'Hecho. La pantalla de bloqueo lo ofrecerá, con tu PIN de respaldo.')); },
-            function () { say('tp-lock-msg', T('That wasn’t set up. Your PIN still works.', 'No se configuró. Tu PIN sigue funcionando.'), true); });
+        if (rec.cred) pk.appendChild(btn('Stop using Face ID or fingerprint', '', function () { var r = readLock(st); delete r.cred; writeLock(st, r); drawLock(); }));
+        else pk.appendChild(btn('Also unlock with Face ID, Touch ID or fingerprint', '', function () {
+          passkeyCreate().then(function (id) { var r = readLock(st); r.cred = id; writeLock(st, r); drawLock(); say('tp-lock-msg', 'Done. The lock screen will offer it, with your PIN as the backup.'); },
+            function () { say('tp-lock-msg', 'That wasn’t set up. Your PIN still works.', true); });
         }));
       });
       host.appendChild(acts);
       var r5 = mk('p', { class: 'tp-row' });
-      r5.appendChild(mk('label', { for: 'tp-pin-off' }, T('To turn it off, type your PIN', 'Para quitarlo, escribe tu PIN')));
+      r5.appendChild(mk('label', { for: 'tp-pin-off' }, 'To turn it off, type your PIN'));
       var po = mk('input', { id: 'tp-pin-off', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'off', class: 'tp-pin' });
       r5.appendChild(po);
-      r5.appendChild(btn(T('Turn off the lock', 'Quitar el bloqueo'), '', function () {
+      r5.appendChild(btn('Turn off the lock', '', function () {
         checkPin(po.value, readLock(st)).then(function (ok) {
-          if (!ok) { say('tp-lock-msg', T('That’s not your PIN.', 'Ese no es tu PIN.'), true); po.value = ''; po.focus(); return; }
-          writeLock(st, null); drawLock(); say('tp-lock-msg', T('The lock is off.', 'El bloqueo está quitado.'));
+          if (!ok) { say('tp-lock-msg', 'That’s not your PIN.', true); po.value = ''; po.focus(); return; }
+          writeLock(st, null); drawLock(); say('tp-lock-msg', 'The lock is off.');
         });
       }));
       host.appendChild(r5);
     }
     host.appendChild(mk('p', { id: 'tp-lock-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
-    host.appendChild(mk('p', { class: 'tp-note' }, T('Why your saved entries aren’t encrypted with the PIN: a 4 to 6 digit PIN has at most a million possibilities, so anyone who copied this browser’s data could try them all quickly. It would only look safe. For real protection, save a backup file with a long password.', 'Por qué tus entradas no se cifran con el PIN: un PIN de 4 a 6 dígitos tiene como mucho un millón de posibilidades, así que quien copiara los datos del navegador podría probarlas todas rápido. Solo parecería seguro. Para una protección real, guarda una copia con una contraseña larga.')));
+    host.appendChild(mk('p', { class: 'tp-note' }, 'Why your saved entries aren’t encrypted with the PIN: a 4 to 6 digit PIN has at most a million possibilities, so anyone who copied this browser’s data could try them all quickly. It would only look safe. For real protection, save a backup file with a long password.'));
   }
   // ---- Clear my data: everything, or one tool
   function drawClear() {
@@ -1345,28 +1343,28 @@
     host.textContent = '';
     var groups = summary(collect());
     var fs = mk('fieldset', { class: 'tp-mode' });
-    fs.appendChild(mk('legend', null, T('What to clear', 'Qué borrar')));
-    var l1 = mk('label'), r1 = mk('input', { type: 'radio', name: 'tp-clr', value: 'all' }); r1.checked = true; l1.appendChild(r1); l1.appendChild(D.createTextNode(' ' + T('Everything this site keeps on this device', 'Todo lo que este sitio guarda en este dispositivo'))); fs.appendChild(l1);
-    var l2 = mk('label'), r2 = mk('input', { type: 'radio', name: 'tp-clr', value: 'one' }); l2.appendChild(r2); l2.appendChild(D.createTextNode(' ' + T('One tool:', 'Una herramienta:') + ' '));
-    var sel = mk('select', { id: 'tp-clr-tool', 'aria-label': T('Which tool', 'Qué herramienta') });
+    fs.appendChild(mk('legend', null, 'What to clear'));
+    var l1 = mk('label'), r1 = mk('input', { type: 'radio', name: 'tp-clr', value: 'all' }); r1.checked = true; l1.appendChild(r1); l1.appendChild(D.createTextNode(' ' + 'Everything this site keeps on this device')); fs.appendChild(l1);
+    var l2 = mk('label'), r2 = mk('input', { type: 'radio', name: 'tp-clr', value: 'one' }); l2.appendChild(r2); l2.appendChild(D.createTextNode(' ' + 'One tool:' + ' '));
+    var sel = mk('select', { id: 'tp-clr-tool', 'aria-label': 'Which tool' });
     groups.forEach(function (g) { sel.appendChild(mk('option', { value: g.id }, g.name)); });
     if (!groups.length) { r2.disabled = true; sel.disabled = true; }
     sel.addEventListener('change', function () { r2.checked = true; });
     l2.appendChild(sel); fs.appendChild(l2);
     host.appendChild(fs);
-    host.appendChild(btn(T('Clear…', 'Borrar…'), 'is-danger', function () {
+    host.appendChild(btn('Clear…', 'is-danger', function () {
       var one = r2.checked && sel.value;
       if (!one) {
-        confirmClear({ what: T('everything you’ve saved on this device', 'todo lo que has guardado en este dispositivo'), items: groups.map(function (g) { return { name: g.name, n: g.n }; }),
-          doneText: T('Cleared. Nothing you saved is left on this device.', 'Borrado. No queda nada de lo que guardaste en este dispositivo.'),
+        confirmClear({ what: 'everything you’ve saved on this device', items: groups.map(function (g) { return { name: g.name, n: g.n }; }),
+          doneText: 'Cleared. Nothing you saved is left on this device.',
           onConfirm: function () { return eraseEverything().then(drawAll); } });
         return;
       }
       var st = local(), keys = groupKeys(st, one), es = entries(st).filter(function (e) { return e.g === one; }), h = versions(st), hv = 0;
       keys.forEach(function (k) { if (h[k]) hv += h[k].length; });
       var items = [{ name: groupName(one), n: keys.length }];
-      if (es.length) items.push({ name: T('Saved entries for it', 'Sus entradas guardadas'), n: es.length });
-      if (hv) items.push({ name: T('Earlier versions of it', 'Sus versiones anteriores'), n: hv });
+      if (es.length) items.push({ name: 'Saved entries for it', n: es.length });
+      if (hv) items.push({ name: 'Earlier versions of it', n: hv });
       confirmClear({ what: groupName(one), items: items, onConfirm: function () {
         keys.forEach(function (k) { try { st.removeItem(k); } catch (e) {} });
         dropHistory(st, keys);
@@ -1383,19 +1381,19 @@
     var box = inBox(); if (!box) return;
     incoming = src; box.hidden = false; box.textContent = '';
     box.appendChild(mk('p', { class: 'tp-in-h' }, src.kind === 'link'
-      ? T('This link holds progress from another device or browser. Nothing has changed here yet.', 'Este enlace trae progreso de otro dispositivo o navegador. Aquí no ha cambiado nada todavía.')
-      : T('Backup file: ', 'Archivo de copia: ') + (src.name || '')));
+      ? 'This link holds progress from another device or browser. Nothing has changed here yet.'
+      : 'Backup file: ' + (src.name || '')));
     if (src.encrypted) {
       var row = mk('p', { class: 'tp-row' });
-      row.appendChild(mk('label', { for: 'tp-in-pw' }, T('Its password', 'Su contraseña')));
+      row.appendChild(mk('label', { for: 'tp-in-pw' }, 'Its password'));
       var inp = mk('input', { id: 'tp-in-pw', type: 'password', autocomplete: 'current-password', autocapitalize: 'off', spellcheck: 'false' });
-      row.appendChild(inp); row.appendChild(btn(T('Open it', 'Abrirlo'), 'is-strong', null, { 'data-tp': 'unlock' })); box.appendChild(row);
+      row.appendChild(inp); row.appendChild(btn('Open it', 'is-strong', null, { 'data-tp': 'unlock' })); box.appendChild(row);
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); unlockIn(); } });
       box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
-      box.appendChild(btn(T('Cancel', 'Cancelar'), '', null, { 'data-tp': 'cancel' }));
+      box.appendChild(btn('Cancel', '', null, { 'data-tp': 'cancel' }));
       inp.focus();
     } else {
-      box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }, T('Reading it…', 'Leyendo…')));
+      box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }, 'Reading it…'));
       unlockIn();
     }
   }
@@ -1403,7 +1401,7 @@
     if (!incoming) return;
     var pw = $('tp-in-pw') ? $('tp-in-pw').value : '';
     if (incoming.encrypted && !pw) { say('tp-in-msg', errText({ code: 'needpassword' }), true); return; }
-    say('tp-in-msg', T('Opening…', 'Abriendo…'));
+    say('tp-in-msg', 'Opening…');
     var b = D.querySelector('[data-tp="unlock"]'); if (b) b.disabled = true;
     (incoming.kind === 'link' ? unpackLink(incoming.raw, pw) : readBackup(incoming.raw, pw))
       .then(preview, function (e) { if (b) b.disabled = false; say('tp-in-msg', errText(e), true); if ($('tp-in-pw')) $('tp-in-pw').focus(); });
@@ -1411,24 +1409,24 @@
   function preview(payload) {
     var box = inBox(); incoming.payload = payload;
     box.textContent = '';
-    box.appendChild(mk('p', { class: 'tp-in-h' }, (incoming.kind === 'link' ? T('From the link', 'Del enlace') : T('From the backup', 'De la copia')) +
-      (payload.created ? T(', made ', ', hecha el ') + day(Date.parse(payload.created)) : '') + T('. It holds:', '. Contiene:')));
+    box.appendChild(mk('p', { class: 'tp-in-h' }, (incoming.kind === 'link' ? 'From the link' : 'From the backup') +
+      (payload.created ? ', made ' + day(Date.parse(payload.created)) : '') + '. It holds:'));
     var ul = mk('ul', { class: 'tp-list' });
     summary(payload).forEach(function (g) { var li = mk('li'); li.appendChild(mk('strong', null, g.name)); li.appendChild(mk('span', null, ' · ' + countLine(g))); ul.appendChild(li); });
     box.appendChild(ul);
-    if (payload.dropped) box.appendChild(mk('p', { class: 'tp-warn is-bad' }, T(payload.dropped + ' item(s) didn’t look right and will be left out.', payload.dropped + ' elemento(s) no parecían correctos y se dejarán fuera.')));
-    if (level() === 'shared') box.appendChild(mk('p', { class: 'tp-warn' }, T('This is a shared computer: what you restore is kept only until you close this tab.', 'Es una computadora compartida: lo que restaures se guarda solo hasta cerrar esta pestaña.')));
+    if (payload.dropped) box.appendChild(mk('p', { class: 'tp-warn is-bad' }, (payload.dropped + ' item(s) didn’t look right and will be left out.')));
+    if (level() === 'shared') box.appendChild(mk('p', { class: 'tp-warn' }, 'This is a shared computer: what you restore is kept only until you close this tab.'));
     var fs = mk('fieldset', { class: 'tp-mode' });
-    fs.appendChild(mk('legend', null, T('How to bring it in', 'Cómo traerlo')));
-    [['merge', T('Add it to what’s here. Where both have the same thing, the newer one stays.', 'Añadirlo a lo que hay. Si ambos tienen lo mismo, se queda lo más nuevo.')],
-     ['replace', T('Replace what’s here with the backup. Progress here that isn’t in it is removed.', 'Reemplazar lo que hay con la copia. Lo de aquí que no esté en ella se elimina.')]].forEach(function (o, i) {
+    fs.appendChild(mk('legend', null, 'How to bring it in'));
+    [['merge', 'Add it to what’s here. Where both have the same thing, the newer one stays.'],
+     ['replace', 'Replace what’s here with the backup. Progress here that isn’t in it is removed.']].forEach(function (o, i) {
       var l = mk('label'), r = mk('input', { type: 'radio', name: 'tp-mode', value: o[0] }); if (!i) r.checked = true;
       l.appendChild(r); l.appendChild(D.createTextNode(' ' + o[1])); fs.appendChild(l);
     });
     box.appendChild(fs);
     var acts = mk('p', { class: 'tp-acts' });
-    acts.appendChild(btn(T('Restore', 'Restaurar'), 'is-strong', null, { 'data-tp': 'apply' }));
-    acts.appendChild(btn(T('Cancel', 'Cancelar'), '', null, { 'data-tp': 'cancel' }));
+    acts.appendChild(btn('Restore', 'is-strong', null, { 'data-tp': 'apply' }));
+    acts.appendChild(btn('Cancel', '', null, { 'data-tp': 'cancel' }));
     box.appendChild(acts);
     box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
     box.querySelector('[data-tp="apply"]').focus();
@@ -1436,18 +1434,18 @@
   function apply() {
     if (!incoming || !incoming.payload) return;
     var m = D.querySelector('input[name="tp-mode"]:checked'), mode = m ? m.value : 'merge';
-    if (mode === 'replace' && !W.confirm(T('Replace the progress in this browser with the backup? What’s here now and not in the backup will be removed.', '¿Reemplazar el progreso de este navegador con la copia? Lo que hay ahora y no está en la copia se eliminará.'))) return;
+    if (mode === 'replace' && !W.confirm('Replace the progress in this browser with the backup? What’s here now and not in the backup will be removed.')) return;
     if (perks()) recordHistory(local());
     var r = restore(incoming.payload, mode);
     var box = inBox(); box.textContent = '';
     var parts = [];
-    if (r.added) parts.push(r.added + T(' added', ' añadidos'));
-    if (r.updated) parts.push(r.updated + T(' updated', ' actualizados'));
-    if (r.kept) parts.push(r.kept + T(' already up to date here', ' ya al día aquí'));
-    if (r.removed) parts.push(r.removed + T(' removed', ' eliminados'));
-    box.appendChild(mk('p', { class: 'tp-ok', role: 'status' }, T('Restored. ', 'Restaurado. ') + (parts.join(', ') || T('Nothing needed changing', 'No hacía falta cambiar nada')) + '.' +
-      (r.failed ? ' ' + T(r.failed + ' couldn’t be saved: this browser is out of room or won’t keep things.', r.failed + ' no se pudieron guardar: este navegador no tiene espacio o no guarda datos.') : '') +
-      ' ' + T('Open any tool to see it.', 'Abre cualquier herramienta para verlo.')));
+    if (r.added) parts.push(r.added + ' added');
+    if (r.updated) parts.push(r.updated + ' updated');
+    if (r.kept) parts.push(r.kept + ' already up to date here');
+    if (r.removed) parts.push(r.removed + ' removed');
+    box.appendChild(mk('p', { class: 'tp-ok', role: 'status' }, 'Restored. ' + (parts.join(', ') || 'Nothing needed changing') + '.' +
+      (r.failed ? ' ' + (r.failed + ' couldn’t be saved: this browser is out of room or won’t keep things.') : '') +
+      ' ' + 'Open any tool to see it.'));
     incoming = null;
     if (perks()) recordHistory(local());
     drawAll();
@@ -1459,7 +1457,7 @@
   function backup() {
     var pw = pwPair('tp-pw1', 'tp-pw2', 'tp-backup-msg'); if (!pw.ok) return;
     var btnB = D.querySelector('[data-tp="backup"]'); btnB.disabled = true;
-    say('tp-backup-msg', pw.pw ? T('Locking it with your password…', 'Protegiéndolo con tu contraseña…') : T('Making the file…', 'Haciendo el archivo…'));
+    say('tp-backup-msg', pw.pw ? 'Locking it with your password…' : 'Making the file…');
     API.saveBackup(pw.pw, function (t, extra) { say('tp-backup-msg', t, false, extra); if (extra) extra.focus(); })
       .then(function (t) { btnB.disabled = false; if (!/Save it now|Guardarlo ahora/.test(t) || !$('tp-backup-msg').querySelector('button')) say('tp-backup-msg', t); })
       .catch(function (e) { btnB.disabled = false; say('tp-backup-msg', errText(e), true); });
@@ -1468,12 +1466,12 @@
   function makeLink() {
     var pw = pwPair('tp-lpw1', 'tp-lpw2', 'tp-link-msg'); if (!pw.ok) return;
     var p = collect();
-    if (!Object.keys(p.keys).length) { say('tp-link-msg', T('There’s nothing to move yet.', 'Todavía no hay nada que pasar.'), true); return; }
-    if (!pw.pw && !W.confirm(T('Make the link without a password? Anyone who gets the link can open your progress. A password is strongly suggested.', '¿Hacer el enlace sin contraseña? Cualquiera que reciba el enlace puede abrir tu progreso. Te recomendamos mucho una contraseña.'))) return;
-    say('tp-link-msg', T('Making the link…', 'Haciendo el enlace…'));
+    if (!Object.keys(p.keys).length) { say('tp-link-msg', 'There’s nothing to move yet.', true); return; }
+    if (!pw.pw && !W.confirm('Make the link without a password? Anyone who gets the link can open your progress. A password is strongly suggested.')) return;
+    say('tp-link-msg', 'Making the link…');
     packLink(p, pw.pw).then(function (packed) {
       var box = $('tp-link');
-      if (packed.length > MAX_LINK) { box.hidden = true; say('tp-link-msg', T('There’s too much to fit in a link. Use “Save a backup” instead, then open the file on the other device.', 'Hay demasiado para un enlace. Usa “Guardar una copia” y abre el archivo en el otro dispositivo.'), true); return; }
+      if (packed.length > MAX_LINK) { box.hidden = true; say('tp-link-msg', 'There’s too much to fit in a link. Use “Save a backup” instead, then open the file on the other device.', true); return; }
       lastLink = location.origin + '/on-this-device.html#restore=' + packed;
       $('tp-link-text').value = lastLink;
       box.hidden = false;
@@ -1481,34 +1479,34 @@
       D.querySelector('[data-tp="qr"]').hidden = !qrOk;
       D.querySelector('[data-tp="share-link"]').hidden = !W.navigator.share;
       D.querySelector('[data-tp="email-link"]').hidden = lastLink.length > 8000;
-      say('tp-link-msg', (pw.pw ? T('Ready. Open it on the other device and type the password there. ', 'Listo. Ábrelo en el otro dispositivo y escribe allí la contraseña. ') : T('Ready. Anyone with this link can open it, so send it only to yourself. ', 'Listo. Cualquiera con este enlace puede abrirlo, así que envíatelo solo a ti. ')) +
-        (qrOk ? '' : T('It’s too long for a QR code: copy it, email it or share it to yourself.', 'Es demasiado largo para un código QR: cópialo, envíalo por correo o compártelo contigo.')));
+      say('tp-link-msg', (pw.pw ? 'Ready. Open it on the other device and type the password there. ' : 'Ready. Anyone with this link can open it, so send it only to yourself. ') +
+        (qrOk ? '' : 'It’s too long for a QR code: copy it, email it or share it to yourself.'));
     }).catch(function (e) { say('tp-link-msg', errText(e), true); });
   }
   function copyLink() {
-    var t = $('tp-link-text'), done = function (ok) { say('tp-link-msg', ok ? T('Link copied. Paste it into a note or a message to yourself.', 'Enlace copiado. Pégalo en una nota o un mensaje para ti.') : T('Couldn’t copy. Select the link above and copy it.', 'No se pudo copiar. Selecciona el enlace de arriba y cópialo.'), !ok); };
+    var t = $('tp-link-text'), done = function (ok) { say('tp-link-msg', ok ? 'Link copied. Paste it into a note or a message to yourself.' : 'Couldn’t copy. Select the link above and copy it.', !ok); };
     var legacy = function () { t.select(); var ok = false; try { ok = D.execCommand('copy'); } catch (e) {} done(ok); };
     if (W.navigator.clipboard && W.navigator.clipboard.writeText) W.navigator.clipboard.writeText(lastLink).then(function () { done(true); }, legacy); else legacy();
   }
   function showQR() {
-    var go = function () { if (W.TOLShareKit && W.TOLShareKit.showQR) W.TOLShareKit.showQR(lastLink, { title: T('Scan with the other device', 'Escanéalo con el otro dispositivo'), note: T('Point the other phone’s camera at this code. The link opens there and asks before restoring anything.', 'Apunta la cámara del otro teléfono a este código. El enlace se abre allí y pregunta antes de restaurar nada.') }); };
+    var go = function () { if (W.TOLShareKit && W.TOLShareKit.showQR) W.TOLShareKit.showQR(lastLink, { title: 'Scan with the other device', note: 'Point the other phone’s camera at this code. The link opens there and asks before restoring anything.' }); };
     if (W.TOLShareKit) { go(); return; }
     var s = D.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; D.head.appendChild(s);
   }
   function emailLink() {
-    var subj = T('My Spread Love & Acceptance progress', 'Mi progreso de Spread Love & Acceptance');
-    var body = T('Open this link on the device where you want your progress. It asks before restoring anything.', 'Abre este enlace en el dispositivo donde quieras tu progreso. Pregunta antes de restaurar nada.') + '\n\n' + lastLink;
+    var subj = 'My Spread Love & Acceptance progress';
+    var body = 'Open this link on the device where you want your progress. It asks before restoring anything.' + '\n\n' + lastLink;
     location.href = 'mailto:?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
   }
-  function shareLink() { if (W.navigator.share) W.navigator.share({ url: lastLink, title: T('My Spread Love & Acceptance progress', 'Mi progreso de Spread Love & Acceptance') }).catch(function () {}); }
+  function shareLink() { if (W.navigator.share) W.navigator.share({ url: lastLink, title: 'My Spread Love & Acceptance progress' }).catch(function () {}); }
   function openPasted() {
     var v = ($('tp-paste').value || '').trim(), info;
-    try { info = linkInfo(v); } catch (e) { say('tp-paste-msg', T('That doesn’t look like a move link. It should have “#restore=” in it.', 'No parece un enlace de traslado. Debe incluir “#restore=”.'), true); return; }
+    try { info = linkInfo(v); } catch (e) { say('tp-paste-msg', 'That doesn’t look like a move link. It should have “#restore=” in it.', true); return; }
     say('tp-paste-msg', ''); $('tp-paste').value = '';
     startIncoming({ kind: 'link', raw: v, encrypted: info.encrypted });
     var r = $('restore'); if (r) r.scrollIntoView({ block: 'start' });
   }
-  function badIn(text) { var box = inBox(); incoming = null; box.hidden = false; box.textContent = ''; box.appendChild(mk('p', { class: 'tp-status is-bad', role: 'status' }, text)); box.appendChild(btn(T('Close', 'Cerrar'), '', null, { 'data-tp': 'cancel' })); }
+  function badIn(text) { var box = inBox(); incoming = null; box.hidden = false; box.textContent = ''; box.appendChild(mk('p', { class: 'tp-status is-bad', role: 'status' }, text)); box.appendChild(btn('Close', '', null, { 'data-tp': 'cancel' })); }
   function pickFile(f) {
     if (!f) return;
     if (f.size > MAX_FILE) { badIn(errText({ code: 'big' })); return; }
@@ -1525,8 +1523,8 @@
     var w = $(warnId); if (!w) return;
     var empty = !($(a).value || $(b).value);
     w.textContent = empty
-      ? T('No password: anyone who opens it can read what’s in it. Adding one is best.', 'Sin contraseña: cualquiera que lo abra puede leer lo que contiene. Lo mejor es poner una.')
-      : T('Locked with your password. Without it, nobody can open it, not even us, so keep it somewhere safe.', 'Protegido con tu contraseña. Sin ella nadie puede abrirlo, ni siquiera nosotros, así que guárdala bien.');
+      ? 'No password: anyone who opens it can read what’s in it. Adding one is best.'
+      : 'Locked with your password. Without it, nobody can open it, not even us, so keep it somewhere safe.';
     w.classList.toggle('is-bad', empty);
   }
   function drawAll() { drawLevel(); drawWhat(); drawKeep(); drawEntries(); drawHistory(); drawLock(); drawClear(); var h = $('tp-app-hint'); if (h) h.hidden = !isApp(); }
@@ -1572,7 +1570,7 @@
       try { history.replaceState(null, '', location.pathname + location.search + '#restore'); } catch (er) {}
       var info = null; try { info = linkInfo(hsh); } catch (er) {}
       if (info) startIncoming({ kind: 'link', raw: hsh, encrypted: info.encrypted });
-      else badIn(T('This move link is incomplete or damaged. Copy the whole link again, or use a backup file.', 'Este enlace de traslado está incompleto o dañado. Copia el enlace entero otra vez, o usa un archivo de copia.'));
+      else badIn('This move link is incomplete or damaged. Copy the whole link again, or use a backup file.');
       var r = $('restore'); if (r) setTimeout(function () { r.scrollIntoView({ block: 'start' }); }, 60);
     }
   }

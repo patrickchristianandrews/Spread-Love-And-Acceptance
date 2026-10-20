@@ -14,8 +14,6 @@
    Nothing is stored or sent. */
 (function () {
   'use strict';
-  // English or Spanish, following the page (site.js sets window.TOLLang; read at call time)
-  function T(en, es) { try { return window.TOLLang && window.TOLLang.es() ? es : en; } catch (e) { return en; } }
   var path = location.pathname.replace(/\/index\.html$/, '/');
   var OWN = /^\/(frequency-journey|frequency-buddies[a-z0-9-]*|pause-and-play|soundscapes|calm-visualizer|night-garden|pal-cam-tv|re-?check[a-z-]*|daily-ledger[a-z-]*|word-bloom|quiet-words|quiet-crossword|install|ask)\.html$|^\/(games|puzzles|workpapers\/fill)\//;
   var RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -87,9 +85,9 @@
     var hs = Array.prototype.filter.call(main.querySelectorAll('h2'), function (h) { return h.textContent.trim().length > 2 && !h.closest('aside, nav, .tol-keys, .sx-safe, .tol-outline, [data-teaser], .cb-end, .bb-end, .appad, .tol-pud-card'); });
     if (hs.length < 4 || main.textContent.length < 3500) return;
     var used = {}, items = hs.slice(0, 18).map(function (h) { if (!h.id) h.id = slug(h.textContent, used); return { h: h, id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, '') }; });
-    var nav = document.createElement('nav'); nav.className = 'tol-outline no-bubble'; nav.setAttribute('aria-label', T('On this page', 'En esta página'));
+    var nav = document.createElement('nav'); nav.className = 'tol-outline no-bubble'; nav.setAttribute('aria-label', 'On this page');
     // home16b: a small "On this page" button by default; it opens to the list (and stays open on this page once opened)
-    nav.innerHTML = '<button type="button" class="tol-outline-t" aria-expanded="false" aria-controls="tol-outline-b">' + T('On this page', 'En esta página') + '</button><div class="tol-outline-b" id="tol-outline-b" hidden><ol>' + items.map(function (i) { return '<li><a href="#' + i.id + '">' + i.t.replace(/</g, '&lt;') + '</a></li>'; }).join('') + '</ol><label class="tol-outline-wide"><input type="checkbox" id="tol-wide-cb"> ' + T('Wide page', 'Página ancha') + '</label></div>';
+    nav.innerHTML = '<button type="button" class="tol-outline-t" aria-expanded="false" aria-controls="tol-outline-b">' + 'On this page' + '</button><div class="tol-outline-b" id="tol-outline-b" hidden><ol>' + items.map(function (i) { return '<li><a href="#' + i.id + '">' + i.t.replace(/</g, '&lt;') + '</a></li>'; }).join('') + '</ol><label class="tol-outline-wide"><input type="checkbox" id="tol-wide-cb"> ' + 'Wide page' + '</label></div>';
     var otb = nav.querySelector('.tol-outline-t'), obd = nav.querySelector('.tol-outline-b');
     otb.addEventListener('click', function () { var open = obd.hidden; obd.hidden = !open; otb.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); });
     document.body.appendChild(nav);
@@ -186,7 +184,7 @@
     if (OWN.test(path)) return;
     var main = document.querySelector('main.read'); if (!main) return;
     var bar = document.createElement('div'); bar.className = 'tol-prog'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
-    var top = document.createElement('button'); top.type = 'button'; top.className = 'tol-top'; top.setAttribute('aria-label', T('Back to top', 'Volver arriba')); top.innerHTML = '&uarr;'; document.body.appendChild(top);
+    var top = document.createElement('button'); top.type = 'button'; top.className = 'tol-top'; top.setAttribute('aria-label', 'Back to top'); top.innerHTML = '&uarr;'; document.body.appendChild(top);
     top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); var h = main.querySelector('h1'); if (h) { h.setAttribute('tabindex', '-1'); try { h.focus({ preventScroll: true }); } catch (e) {} } });
     // integ16: on a phone (under 480px) the corner can't stay clear of the words, so "Back to top" shows only at the very
     // end of the page, where the footer leaves empty room for it
@@ -199,7 +197,7 @@
     // a small "copy link to this section" mark after each section heading that has an id
     if (fine) Array.prototype.forEach.call(main.querySelectorAll('h2[id]'), function (h) {
       if (h.closest('aside, nav, .tol-keys, .tol-outline, .appad') || h.querySelector('.tol-hl')) return;
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'tol-hl'; b.textContent = '#'; b.title = T('Copy a link to this section', 'Copiar un enlace a esta sección'); b.setAttribute('aria-hidden', 'true'); b.tabIndex = -1;   // a mouse extra: kept out of the heading's spoken name
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'tol-hl'; b.textContent = '#'; b.title = 'Copy a link to this section'; b.setAttribute('aria-hidden', 'true'); b.tabIndex = -1;   // a mouse extra: kept out of the heading's spoken name
       b.addEventListener('click', function (e) {
         e.preventDefault(); var url = location.origin + location.pathname + '#' + h.id;
         function done() { b.classList.add('done'); b.textContent = 'copied'; setTimeout(function () { b.classList.remove('done'); b.textContent = '#'; }, 1400); }

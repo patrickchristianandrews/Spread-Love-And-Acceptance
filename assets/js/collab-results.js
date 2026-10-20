@@ -23,8 +23,6 @@
   'use strict';
   var W = typeof window !== 'undefined' ? window : null, D = W && W.document;
   var C = (W && W.TOLCollab) || (typeof require === 'function' ? require('./collab.js') : null);
-  function esPage() { try { return !!(W && W.TOLLang && W.TOLLang.es()); } catch (e) { return false; } }
-  function T(en, es) { return esPage() && es ? es : en; }
   function J(s) { try { return s ? JSON.parse(s) : null; } catch (e) { return null; } }
   function str(s, n) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().slice(0, n || 300); }
   var BUNDLE_V = 1;
@@ -38,18 +36,18 @@
   function wpNames(v) { var out = {}; 'ABCDEFGH'.split('').forEach(function (c) { var n = str(v && v['partner' + c], 40); if (n) out[c] = n; }); return out; }
   function wpVal(v, sec, id) { if (!v) return null; if (v[sec + '.' + id] != null) return v[sec + '.' + id]; return v[sec] && typeof v[sec] === 'object' ? v[sec][id] : null; }
 
-  var WL_AXES = [['pace', 'Pace', 'Ritmo', { Q: 'Quick Spark', S: 'Slow Simmer' }], ['lens', 'Lens', 'Lente', { F: 'Forest (big picture first)', T: 'Trees (details first)' }],
-    ['send', 'Sending', 'Al hablar', { D: 'Direct', N: 'Nuanced' }], ['recv', 'Receiving', 'Al escuchar', { E: 'Explicit', A: 'Attuned' }]];
-  var CARE = [['w', 'Words', 'Palabras'], ['s', 'Acts of service', 'Actos de servicio'], ['g', 'Gifts', 'Regalos'], ['t', 'Quality time', 'Tiempo de calidad'], ['p', 'Touch', 'Contacto físico']];
+  var WL_AXES = [['pace', 'Pace', { Q: 'Quick Spark', S: 'Slow Simmer' }], ['lens', 'Lens', { F: 'Forest (big picture first)', T: 'Trees (details first)' }],
+    ['send', 'Sending', { D: 'Direct', N: 'Nuanced' }], ['recv', 'Receiving', { E: 'Explicit', A: 'Attuned' }]];
+  var CARE = [['w', 'Words'], ['s', 'Acts of service'], ['g', 'Gifts'], ['t', 'Quality time'], ['p', 'Touch']];
   var SKY = { clear: 'Clear: calm and connected', gusty: 'Gusty: revved up', fog: 'Fogged in: running on empty' };
   var WP_LISTS = [['WP-03', 'One owner per job', 'treaty', 'task', 'r'], ['WP-01', 'Who did what', 'audit', 'task', 'who'], ['WP-04', 'What keeps coming back', 'raw', 'task', ''],
     ['WP-12', 'Same moment, different speeds', 'agree', 'moment', ''], ['WP-14', 'Is it us, or is it everything else?', 'wrong', 'moment', ''], ['WP-15', 'Keep your little rituals alive', 'rituals', 'ritual', '']];
 
-  /* Each result: id, title [en, es], private, version, get(store) → the data that goes in the link (or null),
+  /* Each result: id, title [en], private, version, get(store) → the data that goes in the link (or null),
      sub(data) → a short line for the checklist, view: how two or more of them are joined, open(data, name) → a
      link to the tool's own fuller view (optional). */
   var PROVIDERS = [
-    { id: 'wavelength', title: ['Your Wave Code (communication style)', 'Tu código Wave (estilo de comunicación)'], v: 1,
+    { id: 'wavelength', title: ['Your Wave Code (communication style)'], v: 1,
       get: function (store) {
         var r = W && W.TOLWavelengthData && W.TOLWavelengthData.results ? W.TOLWavelengthData.results() : null;
         var me = r && r.filter(function (x) { return x.main; })[0];
@@ -65,12 +63,12 @@
         return ok && !(s.chips && s.chips.length) ? { c: code } : null;
       },
       sub: function (d) { return d.c + (d.a ? ', ' + d.a : ''); },
-      view: { kind: 'fields', fields: WL_AXES.map(function (a) { return { k: a[0], en: a[1], es: a[2] }; }),
-        shape: function (d) { var o = {}; WL_AXES.forEach(function (a, i) { var L = String(d.c || '').charAt(i); o[a[0]] = L ? L + ' · ' + (a[3][L] || '') : ''; }); return o; },
-        next: function () { return T('Pick the line where you differ most, and each say one thing that helps you there.', 'Elijan la línea donde más difieren, y digan cada uno algo que les ayude ahí.'); } },
+      view: { kind: 'fields', fields: WL_AXES.map(function (a) { return { k: a[0], en: a[1] }; }),
+        shape: function (d) { var o = {}; WL_AXES.forEach(function (a, i) { var L = String(d.c || '').charAt(i); o[a[0]] = L ? L + ' · ' + (a[2][L] || '') : ''; }); return o; },
+        next: function () { return 'Pick the line where you differ most, and each say one thing that helps you there.'; } },
       open: function (d, n, id) { return C.link(C.envelope({ tool: 'wavelength', id: id, name: n, d: { c: d.c } }), '/wavelength.html'); },
-      openLabel: ['Open the full comparison in Wavelength', 'Abrir la comparación completa en Wavelength'] },
-    { id: 'wiring', title: ['Your “how to talk to me” card', 'Tu Tarjeta de cableado'], v: 1,
+      openLabel: ['Open the full comparison in Wavelength'] },
+    { id: 'wiring', title: ['Your “how to talk to me” card'], v: 1,
       get: function (store) {
         var s = J(store.ss('tol-wiring-draft')) || J(store.ls('tol-wiring-card')), a = s && s.A;
         if (!a) return null;
@@ -84,37 +82,37 @@
         var b = C.b64e(new TextEncoder().encode(JSON.stringify(o)));
         return { code: 'WC1.' + b + '.', n: o.n || '', wave: o.v || '', count: Object.keys(p).reduce(function (s0, k) { return s0 + p[k].length; }, 0) + Object.keys(c).length };
       },
-      sub: function (d) { return T((d.count || 0) + ((d.count || 0) === 1 ? ' thing that helps you' : ' things that help you') + (d.wave ? ' · Wave Code ' + d.wave : ''), (d.count || 0) + ' cosas que te ayudan' + (d.wave ? ' · código ' + d.wave : '')); },
-      view: { kind: 'fields', fields: [{ k: 'wave', en: 'Wave Code', es: 'Código Wave' }, { k: 'count', en: 'Things that help, on the card', es: 'Cosas que ayudan, en la tarjeta' }],
+      sub: function (d) { return ((d.count || 0) + ((d.count || 0) === 1 ? ' thing that helps you' : ' things that help you') + (d.wave ? ' · Wave Code ' + d.wave : '')); },
+      view: { kind: 'fields', fields: [{ k: 'wave', en: 'Wave Code' }, { k: 'count', en: 'Things that help, on the card' }],
         shape: function (d) { return { wave: d.wave || '', count: d.count != null ? String(d.count) : '' }; },
-        next: function () { return T('Open the cards side by side on the “how to talk to me” card page, and each read the other’s “what helps” out loud.', 'Abran las tarjetas lado a lado en la página de la Tarjeta, y lea cada uno en voz alta lo que ayuda al otro.'); } },
+        next: function () { return 'Open the cards side by side on the “how to talk to me” card page, and each read the other’s “what helps” out loud.'; } },
       open: function (d) { return (W ? W.location.origin : 'https://spreadloveandacceptance.com') + '/wiring-card.html#card=' + encodeURIComponent(d.code); },
-      openLabel: ['Open both cards side by side', 'Abrir las dos tarjetas lado a lado'] },
-    { id: 'care', title: ['Your care card (what feels like care right now)', 'Tu tarjeta de cuidado'], v: 1,
+      openLabel: ['Open both cards side by side'] },
+    { id: 'care', title: ['Your care card (what feels like care right now)'], v: 1,
       get: function (store) { var r = J(store.ss('tol-collab-results')), c = r && r.care; if (!c) return null; var o = {}, any = false; CARE.forEach(function (g) { if (Array.isArray(c[g[0]]) && c[g[0]].length) { o[g[0]] = c[g[0]].slice(0, 12).map(function (x) { return str(x, 120); }); any = true; } }); return any ? o : null; },
-      sub: function (d) { var n = 0; Object.keys(d).forEach(function (k) { n += (d[k] || []).length; }); return T(n + (n === 1 ? ' thing ticked' : ' things ticked'), n + (n === 1 ? ' cosa marcada' : ' cosas marcadas')); },
-      view: { kind: 'fields', fields: CARE.map(function (g) { return { k: g[0], en: g[1], es: g[2] }; }),
-        next: function () { return T('This week, each try one thing from the other’s card.', 'Esta semana, prueben cada uno una cosa de la tarjeta del otro.'); } } },
-    { id: 'rituals', title: ['Your rituals and touchstones (the touchstone list and WP-15)', 'Tus rituales (la lista y WP-15)'], v: 1,
+      sub: function (d) { var n = 0; Object.keys(d).forEach(function (k) { n += (d[k] || []).length; }); return (n + (n === 1 ? ' thing ticked' : ' things ticked')); },
+      view: { kind: 'fields', fields: CARE.map(function (g) { return { k: g[0], en: g[1] }; }),
+        next: function () { return 'This week, each try one thing from the other’s card.'; } } },
+    { id: 'rituals', title: ['Your rituals and touchstones (the touchstone list and WP-15)'], v: 1,
       get: function (store) {
         var items = [], st = wpState(store, 'WP-15'), r = J(store.ss('tol-collab-results'));
         ((st && st.tables && st.tables.rituals) || []).forEach(function (row) { if (row && str(row.ritual, 120)) items.push({ t: str(row.ritual, 120), x: str(row.state, 40) }); });
         ((r && r.touch && r.touch.items) || []).forEach(function (t) { if (str(t, 120)) items.push({ t: str(t, 120) }); });
         return items.length ? { items: items.slice(0, 60) } : null;
       },
-      sub: function (d) { return T(d.items.length + ' on your list', d.items.length + ' en tu lista'); },
-      view: { kind: 'list', next: function () { return T('Pick one from the joined list to keep (or restart) this week, small enough for a hard week.', 'Elijan uno de la lista unida para mantener (o retomar) esta semana, algo pequeño que aguante una semana difícil.'); } } },
-    { id: 'load', wp: true, title: ['WP-02 How much are you carrying?', 'WP-02 ¿Cuánto estás cargando?'], v: 1,
+      sub: function (d) { return (d.items.length + ' on your list'); },
+      view: { kind: 'list', next: function () { return 'Pick one from the joined list to keep (or restart) this week, small enough for a hard week.'; } } },
+    { id: 'load', wp: true, title: ['WP-02 How much are you carrying?'], v: 1,
       get: function (store) {
         var st = wpState(store, 'WP-02'), v = st && st.values; if (!v) return null;
         var sum = 0, n = 0; ['sleep', 'work', 'conflict', 'physical', 'time'].forEach(function (id) { var x = +wpVal(v, 'factors', id); if (wpVal(v, 'factors', id) !== '' && wpVal(v, 'factors', id) != null && isFinite(x) && x >= 0 && x <= 4) { sum += x; n++; } });
         return n === 5 ? { s: Math.round(sum / 20 * 100) / 100 } : null;
       },
-      sub: function (d) { return T('Load score ' + d.s.toFixed(2) + ' (0 is light, 1 is very heavy)', 'Carga ' + d.s.toFixed(2) + ' (0 es poca, 1 es mucha)'); },
-      view: { kind: 'score', k: 's', scoreLabel: '', next: function () { return T('If one load reads higher, look together at one thing that could move off that plate this week.', 'Si una carga está más alta, miren juntos una cosa que podría salir de ese plato esta semana.'); } },
+      sub: function (d) { return ('Load score ' + d.s.toFixed(2) + ' (0 is light, 1 is very heavy)'); },
+      view: { kind: 'score', k: 's', scoreLabel: '', next: function () { return 'If one load reads higher, look together at one thing that could move off that plate this week.'; } },
       open: function (d, n) { return C.wrap('workpaper', { t: 'tol-list', v: 1, wp: 'WP-02', p: [n || 'Someone'], m: {}, tb: {}, vals: {}, s: d.s }, { page: '/workpapers/fill/wp-02.html', name: n }); },
-      openLabel: ['Add it beside yours on How much are you carrying?', 'Ponerlo junto al tuyo en ¿Cuánto estás cargando?'] },
-    { id: 'chores', title: ['Your quick look at who does what', 'Tu vistazo a quién hace qué (Lemonade Stand)'], v: 1,
+      openLabel: ['Add it beside yours on How much are you carrying?'] },
+    { id: 'chores', title: ['Your quick look at who does what'], v: 1,
       get: function (store) {
         var q = J(store.ls('tol-lemonade-quick')); if (!q || !Array.isArray(q.people) || !Array.isArray(q.list)) return null;
         var me = typeof q.me === 'number' ? q.me : 0, a = q.ans && q.ans[me]; if (!a) return null;
@@ -123,44 +121,44 @@
         var ans = {}; ans[me] = s;
         return { x: { v: 1, p: q.people.map(function (p) { return str(p, 40); }), l: ids, a: ans, f: me, t: -1 }, n: ids.length, who: str(q.people[me], 40) };
       },
-      sub: function (d) { return T(d.n + ' jobs answered', d.n + ' tareas respondidas'); },
-      view: { kind: 'fields', fields: [{ k: 'n', en: 'Jobs answered', es: 'Tareas respondidas' }], shape: function (d) { return { n: String(d.n) }; },
-        next: function () { return T('Open Who does what? to see each job side by side, with the ones you see differently picked out.', 'Abran el Lemonade Stand para ver cada tarea lado a lado, con las que ven distinto marcadas.'); } },
+      sub: function (d) { return (d.n + ' jobs answered'); },
+      view: { kind: 'fields', fields: [{ k: 'n', en: 'Jobs answered' }], shape: function (d) { return { n: String(d.n) }; },
+        next: function () { return 'Open Who does what? to see each job side by side, with the ones you see differently picked out.'; } },
       open: function (d, n) { return C.wrap('lemonade-quick', d.x, { page: '/lemonade-stand.html', name: n }); },
-      openLabel: ['Compare in Who does what?', 'Comparar en el Lemonade Stand'] },
-    { id: 'checkin', title: ['This week’s check-in card', 'La tarjeta de esta semana'], v: 1,
+      openLabel: ['Compare in Who does what?'] },
+    { id: 'checkin', title: ['This week’s check-in card'], v: 1,
       get: function (store) { var c = J(store.ss('tol-checkin-card')); if (!c) return null; var o = {}; ['well', 'heavy', 'try', 'next'].forEach(function (k) { if (str(c[k])) o[k] = str(c[k]); }); if (Array.isArray(c.jobs) && c.jobs.length) o.jobs = c.jobs.slice(0, 12).map(function (x) { return str(x, 60); }); return Object.keys(o).length ? o : null; },
-      sub: function (d) { return d.well ? '“' + d.well.slice(0, 50) + (d.well.length > 50 ? '…' : '') + '”' : T('Filled in this week', 'Completada esta semana'); },
-      view: { kind: 'fields', fields: [{ k: 'well', en: 'One thing that went well', es: 'Algo que fue bien' }, { k: 'heavy', en: 'One thing that felt heavy', es: 'Algo que pesó' }, { k: 'try', en: 'One small thing to try next week', es: 'Algo pequeño para probar' }, { k: 'next', en: 'Our next check-in', es: 'Nuestra próxima conversación' }, { k: 'jobs', en: 'Jobs that slipped', es: 'Tareas que se quedaron sin hacer' }],
-        next: function () { return T('Pick one of the “try next week” ideas and agree who does it.', 'Elijan una de las ideas para la semana que viene y acuerden quién la hace.'); } } },
-    { id: 'weather', private: true, title: ['Today’s weather (how you are today)', 'El clima de hoy (cómo estás hoy)'], v: 1,
+      sub: function (d) { return d.well ? '“' + d.well.slice(0, 50) + (d.well.length > 50 ? '…' : '') + '”' : 'Filled in this week'; },
+      view: { kind: 'fields', fields: [{ k: 'well', en: 'One thing that went well' }, { k: 'heavy', en: 'One thing that felt heavy' }, { k: 'try', en: 'One small thing to try next week' }, { k: 'next', en: 'Our next check-in' }, { k: 'jobs', en: 'Jobs that slipped' }],
+        next: function () { return 'Pick one of the “try next week” ideas and agree who does it.'; } } },
+    { id: 'weather', private: true, title: ['Today’s weather (how you are today)'], v: 1,
       get: function (store) { var a = J(store.ls('tol-weather-v1')); if (!Array.isArray(a) || !a.length) return null; var e = a[a.length - 1]; if (!e || !SKY[e.sky]) return null; return { d: str(e.d, 10), sky: e.sky, load: e.load != null ? String(e.load) : '', sleep: e.sleep != null ? String(e.sleep) : '' }; },
       sub: function (d) { return SKY[d.sky] + (d.d ? ' · ' + d.d : ''); },
-      view: { kind: 'fields', fields: [{ k: 'd', en: 'Day', es: 'Día' }, { k: 'sky', en: 'Weather', es: 'Clima' }, { k: 'load', en: 'Load', es: 'Carga' }, { k: 'sleep', en: 'Sleep', es: 'Sueño' }],
+      view: { kind: 'fields', fields: [{ k: 'd', en: 'Day' }, { k: 'sky', en: 'Weather' }, { k: 'load', en: 'Load' }, { k: 'sleep', en: 'Sleep' }],
         format: function (k, v) { return k === 'sky' ? SKY[v] || '' : null; },
-        next: function () { return T('If either of you is fogged in, keep today light and pick a better time for anything big.', 'Si alguno está nublado, que hoy sea liviano y busquen otro momento para lo importante.'); } } },
-    { id: 'letter', private: true, title: ['Your latest message from “Write it through”', 'Tu último mensaje de «Háblalo por escrito»'], v: 1,
+        next: function () { return 'If either of you is fogged in, keep today light and pick a better time for anything big.'; } } },
+    { id: 'letter', private: true, title: ['Your latest message from “Write it through”'], v: 1,
       get: function (store) {
         var s = J(store.ls('tol-letters')), c = s && s.convos && s.cur && s.convos[s.cur], t = c && Array.isArray(c.turns) ? c.turns.filter(function (x) { return x && x.who === 'me'; }).slice(-1)[0] : null;
         return t && (str(t.f) || str(t.a)) ? { f: str(t.f, 500), a: str(t.a, 500) } : null;
       },
       sub: function (d) { return d.a ? '“' + d.a.slice(0, 50) + (d.a.length > 50 ? '…' : '') + '”' : ''; },
-      view: { kind: 'fields', fields: [{ k: 'f', en: 'What happened', es: 'Lo que pasó' }, { k: 'a', en: 'The ask', es: 'Lo que pido' }] } },
-    { id: 'setup', title: ['Is the setup working? (your latest numbers)', '¿Funciona el sistema? (tus últimos números)'], v: 1,
+      view: { kind: 'fields', fields: [{ k: 'f', en: 'What happened' }, { k: 'a', en: 'The ask' }] } },
+    { id: 'setup', title: ['Is the setup working? (your latest numbers)'], v: 1,
       get: function (store) {
         var s = J(store.ls('tol-calc01-full-v2')), t = s && Array.isArray(s.trend) ? s.trend[s.trend.length - 1] : null; if (!t) return null;
         var o = {}; ['sol', 'apex', 'wb', 'oc', 'as', 'rf'].forEach(function (k) { if (typeof t[k] === 'number' && isFinite(t[k])) o[k] = Math.round(t[k] * 100) / 100; });
         if (t.date) o.date = str(t.date, 12);
         return o.sol != null || o.apex != null ? o : null;
       },
-      sub: function (d) { return T('Setup score ' + (d.sol != null ? d.sol.toFixed(2) : '–') + (d.date ? ' · ' + d.date : ''), 'Puntaje ' + (d.sol != null ? d.sol.toFixed(2) : '–')); },
-      view: { kind: 'fields', fields: [{ k: 'date', en: 'Date', es: 'Fecha' }, { k: 'sol', en: 'Setup score', es: 'Puntaje del sistema' }, { k: 'apex', en: 'Overall score', es: 'Puntaje general' }, { k: 'wb', en: 'Balance', es: 'Equilibrio' }, { k: 'oc', en: 'Ownership', es: 'Dueños' }, { k: 'as', en: 'Stress', es: 'Estrés' }, { k: 'rf', en: 'Retuning', es: 'Reajuste' }],
+      sub: function (d) { return ('Setup score ' + (d.sol != null ? d.sol.toFixed(2) : '–') + (d.date ? ' · ' + d.date : '')); },
+      view: { kind: 'fields', fields: [{ k: 'date', en: 'Date' }, { k: 'sol', en: 'Setup score' }, { k: 'apex', en: 'Overall score' }, { k: 'wb', en: 'Balance' }, { k: 'oc', en: 'Ownership' }, { k: 'as', en: 'Stress' }, { k: 'rf', en: 'Retuning' }],
         format: function (k, v) { return typeof v === 'number' ? v.toFixed(2) : null; },
-        next: function () { return T('Where your numbers differ most, compare what each of you counted, not who is right.', 'Donde sus números más difieren, comparen qué contó cada uno, no quién tiene razón.'); } } }
+        next: function () { return 'Where your numbers differ most, compare what each of you counted, not who is right.'; } } }
   ];
   // the fill-in workpapers kept together: a merged list in the side-by-side view; the full combine on their own page
   WP_LISTS.forEach(function (w) {
-    PROVIDERS.push({ id: 'wp-' + w[0].slice(3), wp: true, title: [w[0] + ' ' + w[1], w[0] + ' ' + w[1]], v: 1,
+    PROVIDERS.push({ id: 'wp-' + w[0].slice(3), wp: true, title: [w[0] + ' ' + w[1]], v: 1,
       get: function (store) {
         var st = wpState(store, w[0]); if (!st || !st.tables) return null;
         // (WP-03's untouched starter jobs have no owner yet: only the jobs someone gave an owner travel)
@@ -171,10 +169,10 @@
         var p = 'ABCDEFGH'.split('').map(function (c) { return names[c]; }).filter(Boolean);
         return { items: items, list: { t: 'tol-list', v: 1, wp: w[0], p: p, m: {}, tb: tb } };
       },
-      sub: function (d) { return T(d.items.length + (d.items.length === 1 ? ' row' : ' rows'), d.items.length + ' filas'); },
-      view: { kind: 'list', next: function () { return T('Open it on the worksheet to combine the two lists properly, matched by name, with a choice wherever they differ.', 'Ábranlo en la hoja para combinar bien las dos listas, con una opción donde difieren.'); } },
+      sub: function (d) { return (d.items.length + (d.items.length === 1 ? ' row' : ' rows')); },
+      view: { kind: 'list', next: function () { return 'Open it on the worksheet to combine the two lists properly, matched by name, with a choice wherever they differ.'; } },
       open: function (d, n) { return C.wrap('workpaper', d.list, { page: '/workpapers/fill/wp-' + w[0].slice(3) + '.html', name: n }); },
-      openLabel: ['Combine on the worksheet', 'Combinar en la hoja'] });
+      openLabel: ['Combine on the worksheet'] });
   });
   var BY_ID = {}; PROVIDERS.forEach(function (p) { BY_ID[p.id] = p; });
 
@@ -215,22 +213,22 @@
     return n;
   }
   var STORE = { ls: function (k) { try { return W.localStorage.getItem(k); } catch (e) { return null; } }, ss: function (k) { try { return W.sessionStorage.getItem(k); } catch (e) { return null; } } };
-  function title(id) { var p = BY_ID[id]; return p ? T(p.title[0], p.title[1]) : id; }
+  function title(id) { var p = BY_ID[id]; return p ? p.title[0] : id; }
 
   // the sender's side: a checklist (nothing ticked), a name, the "Send by" buttons
   function mountSend(box, getBase) {
     box.textContent = '';
     var have = available(STORE), chosen = [];
     var nid = 'tres-name';
-    box.appendChild(mk('p', { cls: 'tcol-me' }, [mk('label', { for: nid, text: T('Your name (optional)', 'Tu nombre (opcional)') }), mk('input', { type: 'text', id: nid, cls: 'tcol-name', maxlength: '40', autocomplete: 'off', placeholder: T('Me', 'Yo') })]));
+    box.appendChild(mk('p', { cls: 'tcol-me' }, [mk('label', { for: nid, text: 'Your name (optional)' }), mk('input', { type: 'text', id: nid, cls: 'tcol-name', maxlength: '40', autocomplete: 'off', placeholder: 'Me' })]));
     var name = box.querySelector('#' + nid); name.value = C.me().name || '';
     if (!have.length) {
-      box.appendChild(mk('p', { cls: 'tres-none', text: T('Nothing to share from this device yet. Your results show up here once you’ve done a tool (and it was kept on this device, or done in this tab).', 'Todavía no hay nada para compartir desde este aparato. Tus resultados aparecen aquí cuando hagas una herramienta.') }));
+      box.appendChild(mk('p', { cls: 'tres-none', text: 'Nothing to share from this device yet. Your results show up here once you’ve done a tool (and it was kept on this device, or done in this tab).' }));
     }
-    box.appendChild(mk('p', { cls: 'tcol-send-h', text: have.length ? T('Choose what goes in. Nothing is ticked for you.', 'Elige qué va. No hay nada marcado por defecto.') : '' }));
+    box.appendChild(mk('p', { cls: 'tcol-send-h', text: have.length ? 'Choose what goes in. Nothing is ticked for you.' : '' }));
     // tools and workpapers are listed apart, each under its own heading
-    var ul = mk('div', { cls: 'tres-groups', role: 'group', 'aria-label': T('Results to share', 'Resultados para compartir') });
-    var groups = [[T('From the tools', 'De las herramientas'), have.filter(function (a) { return !BY_ID[a.id].wp; })], [T('From the workpapers', 'De las hojas de trabajo (workpapers)'), have.filter(function (a) { return BY_ID[a.id].wp; })]];
+    var ul = mk('div', { cls: 'tres-groups', role: 'group', 'aria-label': 'Results to share' });
+    var groups = [['From the tools', have.filter(function (a) { return !BY_ID[a.id].wp; })], ['From the workpapers', have.filter(function (a) { return BY_ID[a.id].wp; })]];
     groups.forEach(function (g) {
       if (!g[1].length) return;
       var gl = mk('ul', { cls: 'tres-pick' });
@@ -240,20 +238,20 @@
     });
     function add(list, a) {
       var id = 'tres-c-' + a.id, p = BY_ID[a.id];
-      var lab = mk('label', { for: id }, [mk('input', { type: 'checkbox', id: id, 'data-res': a.id }), mk('span', {}, [mk('span', { cls: 'tres-t', text: title(a.id) }), p.private ? mk('span', { cls: 'tres-priv', text: T('private', 'privado') }) : null, mk('span', { cls: 'tres-s', text: p.sub ? p.sub(a.data) : '' })])]);
+      var lab = mk('label', { for: id }, [mk('input', { type: 'checkbox', id: id, 'data-res': a.id }), mk('span', {}, [mk('span', { cls: 'tres-t', text: title(a.id) }), p.private ? mk('span', { cls: 'tres-priv', text: 'private' }) : null, mk('span', { cls: 'tres-s', text: p.sub ? p.sub(a.data) : '' })])]);
       list.appendChild(mk('li', {}, [lab]));
     }
     if (have.length) box.appendChild(ul);
-    if (have.some(function (a) { return BY_ID[a.id].private; })) box.appendChild(mk('p', { cls: 'tcol-small', text: T('“Private” ones are about how you are, or something you wrote for one person. They only go in if you tick them yourself.', 'Los «privados» son sobre cómo estás, o algo que escribiste para una persona. Solo van si los marcas tú.') }));
+    if (have.some(function (a) { return BY_ID[a.id].private; })) box.appendChild(mk('p', { cls: 'tcol-small', text: '“Private” ones are about how you are, or something you wrote for one person. They only go in if you tick them yourself.' }));
     function url() {
       if (!chosen.length) return '';
       var me = C.me(), base = getBase ? getBase() : null;
       var env = C.envelope({ tool: 'bundle', id: me.id, name: (name.value || '').trim(), d: build(STORE, chosen), base: base, r: base ? base.r : null });
       return C.link(env, '/together.html');
     }
-    var send = C.sendBlock({ url: url, title: T('My results', 'Mis resultados'), subject: T('Some of my results, to put next to yours', 'Algunos de mis resultados, para ver junto a los tuyos'),
-      text: function () { var n = (name.value || '').trim(); return T((n ? n + ' here. ' : '') + 'Here are some of my results from Spread Love & Acceptance. Open the link to see them, and put yours next to them if you like. Nothing is uploaded: it travels inside the link.', (n ? 'Soy ' + n + '. ' : '') + 'Aquí van algunos de mis resultados. Abre el enlace para verlos y, si quieres, pon los tuyos al lado. No se sube nada: viaja dentro del enlace.'); },
-      empty: function () { return T('Tick at least one result first.', 'Marca al menos un resultado primero.'); },
+    var send = C.sendBlock({ url: url, title: 'My results', subject: 'Some of my results, to put next to yours',
+      text: function () { var n = (name.value || '').trim(); return ((n ? n + ' here. ' : '') + 'Here are some of my results from Spread Love & Acceptance. Open the link to see them, and put yours next to them if you like. Nothing is uploaded: it travels inside the link.'); },
+      empty: function () { return 'Tick at least one result first.'; },
       onSent: function () { C.saveMe((name.value || '').trim() || null); } });
     box.appendChild(send);
     ul.addEventListener('change', function () { chosen = Array.prototype.filter.call(ul.querySelectorAll('input:checked'), function () { return true; }).map(function (i) { return i.getAttribute('data-res'); }); send.refresh(); });
@@ -269,35 +267,35 @@
     // only results someone else sent (your own part comes back with a reply, and is already yours)
     var from = env.f && env.p[env.f] && env.f !== me.id ? env.p[env.f].n : '', ids = Object.keys(got.byItem).filter(function (id) { return got.byItem[id].some(function (x) { return !x.me; }); });
     if (!from) { var o0 = Object.keys(env.p).filter(function (k) { return k !== me.id; }).sort(function (a, b) { return (env.p[b].at || 0) - (env.p[a].at || 0); })[0]; if (o0) from = env.p[o0].n; }
-    var senders = Object.keys(env.p).filter(function (k) { return k !== me.id; }).map(function (k) { return env.p[k].n || T('Someone', 'Alguien'); });
-    box.appendChild(mk('h2', { id: 'tres-in-h', tabindex: '-1', text: senders.length > 1 ? T(senders.join(', ') + ' sent you some results', senders.join(', ') + ' te enviaron algunos resultados') : T((from || T('Someone', 'Alguien')) + ' sent you some results', (from || 'Alguien') + ' te envió algunos resultados') }));
-    box.appendChild(mk('p', { text: ids.length ? T('Here’s what came in: ', 'Esto es lo que llegó: ') + ids.map(title).join(', ') + '. ' + T('For each one, put yours next to it, or just look.', 'Para cada uno, pon el tuyo al lado o solo míralo.') : T('Nothing in this link that this page can show.', 'Nada en este enlace que esta página pueda mostrar.') }));
-    if (got.unknown.length) box.appendChild(mk('p', { cls: 'tcol-small', text: T('Some of it comes from a newer version of the site, so this page can’t show it yet. Nothing was added.', 'Una parte viene de una versión más nueva del sitio y esta página todavía no puede mostrarla. No se agregó nada.') }));
+    var senders = Object.keys(env.p).filter(function (k) { return k !== me.id; }).map(function (k) { return env.p[k].n || 'Someone'; });
+    box.appendChild(mk('h2', { id: 'tres-in-h', tabindex: '-1', text: senders.length > 1 ? (senders.join(', ') + ' sent you some results') : ((from || 'Someone') + ' sent you some results') }));
+    box.appendChild(mk('p', { text: ids.length ? 'Here’s what came in: ' + ids.map(title).join(', ') + '. ' + 'For each one, put yours next to it, or just look.' : 'Nothing in this link that this page can show.' }));
+    if (got.unknown.length) box.appendChild(mk('p', { cls: 'tcol-small', text: 'Some of it comes from a newer version of the site, so this page can’t show it yet. Nothing was added.' }));
     ids.forEach(function (id) {
       var p = BY_ID[id], list = got.byItem[id].filter(function (x) { return !x.me; }), card = mk('section', { cls: 'tres-item', 'aria-label': title(id) });
-      card.appendChild(mk('p', { cls: 'tres-kind', text: p.wp ? T('Workpaper', 'Hoja de trabajo') : T('Tool', 'Herramienta') }));
+      card.appendChild(mk('p', { cls: 'tres-kind', text: p.wp ? 'Workpaper' : 'Tool' }));
       card.appendChild(mk('h4', { text: title(id) }));
-      if (got.newer.indexOf(id) >= 0) card.appendChild(mk('p', { cls: 'tcol-small', text: T('This came from a newer version of the site. Showing what this page can read.', 'Esto viene de una versión más nueva del sitio. Se muestra lo que esta página puede leer.') }));
-      var missing = senders.filter(function (n) { return !list.some(function (x) { return (x.n || T('Someone', 'Alguien')) === n; }); });
-      if (missing.length) card.appendChild(mk('p', { cls: 'tcol-small', text: T(missing.join(', ') + ' didn’t include this one.', missing.join(', ') + ' no incluyó este.') }));
+      if (got.newer.indexOf(id) >= 0) card.appendChild(mk('p', { cls: 'tcol-small', text: 'This came from a newer version of the site. Showing what this page can read.' }));
+      var missing = senders.filter(function (n) { return !list.some(function (x) { return (x.n || 'Someone') === n; }); });
+      if (missing.length) card.appendChild(mk('p', { cls: 'tcol-small', text: (missing.join(', ') + ' didn’t include this one.') }));
       var mineD = mineNow[id], out = mk('div', { cls: 'tres-out' });
       var acts = mk('div', { cls: 'tres-acts' });
-      var comb = mk('button', { type: 'button', cls: 'tcol-btn', 'data-r': 'combine', text: T('Combine with mine', 'Combinar con el mío') });
+      var comb = mk('button', { type: 'button', cls: 'tcol-btn', 'data-r': 'combine', text: 'Combine with mine' });
       if (!mineD) { comb.disabled = true; comb.setAttribute('aria-disabled', 'true'); }
-      var just = mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-r': 'view', text: T('Just view', 'Solo ver') });
+      var just = mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-r': 'view', text: 'Just view' });
       acts.appendChild(comb); acts.appendChild(just);
       card.appendChild(acts);
-      if (!mineD) card.appendChild(mk('p', { cls: 'tcol-small', text: T('You haven’t done this one on this device yet (or it wasn’t kept here), so there’s nothing of yours to put next to it.', 'Todavía no hiciste este en este aparato (o no se guardó aquí), así que no hay nada tuyo para poner al lado.') }));
+      if (!mineD) card.appendChild(mk('p', { cls: 'tcol-small', text: 'You haven’t done this one on this device yet (or it wasn’t kept here), so there’s nothing of yours to put next to it.' }));
       card.appendChild(out);
       function show(withMine) {
         out.textContent = '';
         var people = list.map(function (x) { return { id: x.id, n: x.n, d: shaped(id, x.d) }; });
         if (withMine && mineD) people.unshift({ id: me.id, n: C.me().name, me: true, d: shaped(id, mineD) });
         var v = p.view || {};
-        out.appendChild(C.combine.view(people, { kind: v.kind, fields: v.fields, format: v.format, k: v.k, scoreLabel: v.scoreLabel, next: withMine ? v.next : null, tool: id, title: withMine ? T('Side by side', 'Lado a lado') : T('What they sent', 'Lo que enviaron') }));
+        out.appendChild(C.combine.view(people, { kind: v.kind, fields: v.fields, format: v.format, k: v.k, scoreLabel: v.scoreLabel, next: withMine ? v.next : null, tool: id, title: withMine ? 'Side by side' : 'What they sent' }));
         if (p.open) list.forEach(function (x) {
           var u = ''; try { u = p.open(x.d, x.n, x.id); } catch (e) { u = ''; }
-          if (u) out.appendChild(mk('p', {}, [mk('a', { href: u, cls: 'tcol-btn tcol-quiet', text: T(p.openLabel[0], p.openLabel[1]) + (list.length > 1 ? ' (' + (x.n || T('Someone', 'Alguien')) + ')' : '') })]));
+          if (u) out.appendChild(mk('p', {}, [mk('a', { href: u, cls: 'tcol-btn tcol-quiet', text: p.openLabel[0] + (list.length > 1 ? ' (' + (x.n || 'Someone') + ')' : '') })]));
         });
       }
       comb.addEventListener('click', function () { show(true); });
@@ -314,7 +312,7 @@
       if (!/^#together=/.test(W.location.hash || '')) return false;
       var env = C.read(W.location.hash);
       try { W.history.replaceState(W.history.state, '', W.location.pathname + W.location.search); } catch (e) {}
-      if (!env || env.t !== 'bundle') { recv.hidden = false; recv.textContent = ''; recv.appendChild(mk('p', { cls: 'tcol-in', text: env ? T('That link is for a tool, not a set of results. Open it on its own page.', 'Ese enlace es de una herramienta, no de un conjunto de resultados.') : T('That link didn’t open. Part of it may have been cut off. Ask them to send it again, or as a code.', 'Ese enlace no se abrió. Pide que lo envíen otra vez, o como código.') })); return true; }
+      if (!env || env.t !== 'bundle') { recv.hidden = false; recv.textContent = ''; recv.appendChild(mk('p', { cls: 'tcol-in', text: env ? 'That link is for a tool, not a set of results. Open it on its own page.' : 'That link didn’t open. Part of it may have been cut off. Ask them to send it again, or as a code.' })); return true; }
       var res = C.merge(received, env); received = res ? res.env : env;
       C.saveMe();
       recv.hidden = false; mountReceive(recv, received);
@@ -328,7 +326,7 @@
     var pasteBtn = D.getElementById('tres-open');
     if (pasteBtn) pasteBtn.addEventListener('click', function () {
       var ta = D.getElementById('tres-paste'), env = C.read(ta.value), st = D.getElementById('tres-paste-st');
-      if (!env || env.t !== 'bundle') { st.textContent = T('That doesn’t look like a results link or code. Copy all of it and try again.', 'Eso no parece un enlace o código de resultados.'); return; }
+      if (!env || env.t !== 'bundle') { st.textContent = 'That doesn’t look like a results link or code. Copy all of it and try again.'; return; }
       var m = /(?:#together=|TOL-TOGETHER:)\s*([12]\.[A-Za-z0-9_-]+)/i.exec(ta.value) || /([12]\.[A-Za-z0-9_-]{8,})/.exec(ta.value);
       if (m) { ta.value = ''; st.textContent = ''; W.location.hash = 'together=' + m[1]; }
     });

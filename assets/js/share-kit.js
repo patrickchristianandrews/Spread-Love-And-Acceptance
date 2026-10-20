@@ -67,7 +67,7 @@
        when: function (d) { return !!(d.kit && d.kit.together); },
        build: function (box, d, api) { … }       // fill box (an empty <div>) each time the sheet opens
      })
-     api = { data, status(text), close(), copy(text) → Promise<bool>, showQR(url, o), T(en, es) }
+     api = { data, status(text), close(), copy(text) → Promise<bool>, showQR(url, o) }
      d is what is being shared: { title, text, url, result, private, kit }. Any extra options a page
      passes as TOLShare.share({ …, kit: { … } }) arrive untouched in d.kit (for example d.kit.together).
      Both return a function that removes what they added. Sections are drawn in the sheet's own look
@@ -79,8 +79,6 @@
 (function () {
   'use strict';
   var BROWSER = typeof document !== 'undefined' && typeof window !== 'undefined';
-  // English or Spanish, following the page (site.js sets window.TOLLang; read at call time)
-  function T(en, es) { try { return BROWSER && window.TOLLang && window.TOLLang.es() ? es : en; } catch (e) { return en; } }
   if (BROWSER && window.TOLShareKit) return;
 
   var SITE_NAME = 'Spread Love & Acceptance', SITE_HOST = 'spreadloveandacceptance.com';
@@ -376,7 +374,7 @@
   }
   function emailSelfHref(d, addr) {
     if (!emailOk(addr)) return '';
-    return 'mailto:' + String(addr).trim() + '?subject=' + enc(T('For later: ', 'Para más tarde: ') + (d.title || T('something to read', 'algo para leer'))) + '&body=' + enc(message(d));
+    return 'mailto:' + String(addr).trim() + '?subject=' + enc('For later: ' + (d.title || 'something to read')) + '&body=' + enc(message(d));
   }
 
   // ---- calendar files (the same shape as /assets/js/remind.js: a plain local time, a reminder at the start) ----
@@ -416,49 +414,49 @@
   // ---- which places show for what is being shared ----
   // groups, in order; "together" sits first and only shows when another script adds to it
   var GROUPS = [
-    ['together', 'Work on this together', 'Trabajar juntos en esto'],
-    ['chat', 'Messages & chat', 'Mensajes y chat'],
-    ['social', 'Social', 'Redes sociales'],
-    ['work', 'Work & school', 'Trabajo y escuela'],
-    ['other', 'Save, print & more', 'Guardar, imprimir y más']
+    ['together', 'Work on this together'],
+    ['chat', 'Messages & chat'],
+    ['social', 'Social'],
+    ['work', 'Work & school'],
+    ['other', 'Save, print & more']
   ];
-  // id, group, English, Spanish, kind, may go to one person (private)
+  // id, group, label, kind, may go to one person (private)
   //   site: a button site.js already makes (data-act), moved into its group
   //   link: a plain link · copyopen: copy formatted, then open the app · story: save a story picture, then a hint
   var PLACES = [
-    ['sms', 'chat', 'Text message', 'Mensaje de texto', 'site', 1],
-    ['whatsapp', 'chat', 'WhatsApp', 'WhatsApp', 'site', 1],
-    ['email', 'chat', 'Email', 'Correo', 'site', 1],
-    ['messenger', 'chat', 'Messenger', 'Messenger', 'link', 1],
-    ['telegram', 'chat', 'Telegram', 'Telegram', 'link', 1],
-    ['signal', 'chat', 'Signal', 'Signal', 'copy', 1],
-    ['viber', 'chat', 'Viber', 'Viber', 'link', 1],
-    ['line', 'chat', 'LINE', 'LINE', 'link', 1],
-    ['wechat', 'chat', 'WeChat', 'WeChat', 'qr', 1],
-    ['emailself', 'chat', 'Email it to myself', 'Enviármelo por correo', 'panel', 1],
-    ['facebook', 'social', 'Facebook', 'Facebook', 'site', 0],
-    ['x', 'social', 'X', 'X', 'site', 0],
-    ['bluesky', 'social', 'Bluesky', 'Bluesky', 'link', 0],
-    ['threads', 'social', 'Threads', 'Threads', 'link', 0],
-    ['mastodon', 'social', 'Mastodon', 'Mastodon', 'mastodon', 0],
-    ['reddit', 'social', 'Reddit', 'Reddit', 'link', 0],
-    ['pinterest', 'social', 'Pinterest', 'Pinterest', 'link', 0],
-    ['tumblr', 'social', 'Tumblr', 'Tumblr', 'link', 0],
-    ['instagram', 'social', 'Instagram', 'Instagram', 'story', 0],
-    ['tiktok', 'social', 'TikTok', 'TikTok', 'story', 0],
-    ['snapchat', 'social', 'Snapchat', 'Snapchat', 'story', 0],
-    ['nextdoor', 'social', 'Nextdoor', 'Nextdoor', 'link', 0],
-    ['linkedin', 'work', 'LinkedIn', 'LinkedIn', 'link', 0],
-    ['slack', 'work', 'Slack', 'Slack', 'copyopen', 1],
-    ['teams', 'work', 'Microsoft Teams', 'Microsoft Teams', 'copyopen', 1],
-    ['discord', 'work', 'Discord', 'Discord', 'copyopen', 1],
-    ['classroom', 'work', 'Google Classroom', 'Google Classroom', 'link', 0],
-    ['qr', 'other', 'Show a QR code', 'Mostrar un código QR', 'qr-inline', 1],
-    ['device', 'other', 'Send to my other device', 'Enviar a mi otro dispositivo', 'device', 1],
-    ['square', 'other', 'Save as square image', 'Guardar como imagen cuadrada', 'image', 1],
-    ['story', 'other', 'Save as story image', 'Guardar como imagen para historias', 'image', 1],
-    ['print', 'other', 'Print or save as PDF', 'Imprimir o guardar como PDF', 'site', 1],
-    ['calendar', 'other', 'Add a reminder to my calendar', 'Añadir un recordatorio a mi calendario', 'panel', 1]
+    ['sms', 'chat', 'Text message', 'site', 1],
+    ['whatsapp', 'chat', 'WhatsApp', 'site', 1],
+    ['email', 'chat', 'Email', 'site', 1],
+    ['messenger', 'chat', 'Messenger', 'link', 1],
+    ['telegram', 'chat', 'Telegram', 'link', 1],
+    ['signal', 'chat', 'Signal', 'copy', 1],
+    ['viber', 'chat', 'Viber', 'link', 1],
+    ['line', 'chat', 'LINE', 'link', 1],
+    ['wechat', 'chat', 'WeChat', 'qr', 1],
+    ['emailself', 'chat', 'Email it to myself', 'panel', 1],
+    ['facebook', 'social', 'Facebook', 'site', 0],
+    ['x', 'social', 'X', 'site', 0],
+    ['bluesky', 'social', 'Bluesky', 'link', 0],
+    ['threads', 'social', 'Threads', 'link', 0],
+    ['mastodon', 'social', 'Mastodon', 'mastodon', 0],
+    ['reddit', 'social', 'Reddit', 'link', 0],
+    ['pinterest', 'social', 'Pinterest', 'link', 0],
+    ['tumblr', 'social', 'Tumblr', 'link', 0],
+    ['instagram', 'social', 'Instagram', 'story', 0],
+    ['tiktok', 'social', 'TikTok', 'story', 0],
+    ['snapchat', 'social', 'Snapchat', 'story', 0],
+    ['nextdoor', 'social', 'Nextdoor', 'link', 0],
+    ['linkedin', 'work', 'LinkedIn', 'link', 0],
+    ['slack', 'work', 'Slack', 'copyopen', 1],
+    ['teams', 'work', 'Microsoft Teams', 'copyopen', 1],
+    ['discord', 'work', 'Discord', 'copyopen', 1],
+    ['classroom', 'work', 'Google Classroom', 'link', 0],
+    ['qr', 'other', 'Show a QR code', 'qr-inline', 1],
+    ['device', 'other', 'Send to my other device', 'device', 1],
+    ['square', 'other', 'Save as square image', 'image', 1],
+    ['story', 'other', 'Save as story image', 'image', 1],
+    ['print', 'other', 'Print or save as PDF', 'site', 1],
+    ['calendar', 'other', 'Add a reminder to my calendar', 'panel', 1]
   ];
   // the words a picture carries: a result's own words, or a page's title and line
   var IMAGE_MAX = { square: 520, story: 1100 };
@@ -469,7 +467,7 @@
     env = env || {};
     var p = null; PLACES.some(function (x) { if (x[0] === id) { p = x; return true; } return false; });
     if (!p) return false;
-    if (isPrivate(d) && !p[5]) return false;
+    if (isPrivate(d) && !p[4]) return false;
     var L = links(d, env), msg = message(d);
     switch (id) {
       case 'messenger': return !!L.messenger && (!isPrivate(d) || /^fb-messenger:/.test(L.messenger));
@@ -636,21 +634,21 @@
     if (!native) { d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.hidden = true; }
     var card = mk('div', { class: 'tsk-qrd-card' });
     var head = mk('div', { class: 'tsk-qrd-head' });
-    head.appendChild(mk('h2', { id: 'tsk-qrd-h' }, T('Scan with the other phone', 'Escanéalo con el otro teléfono')));
-    var x = mk('button', { type: 'button', class: 'tsk-qrd-close', 'data-qrd': 'close' }, T('Close', 'Cerrar'));
+    head.appendChild(mk('h2', { id: 'tsk-qrd-h' }, 'Scan with the other phone'));
+    var x = mk('button', { type: 'button', class: 'tsk-qrd-close', 'data-qrd': 'close' }, 'Close');
     head.appendChild(x);
     card.appendChild(head);
     card.appendChild(mk('p', { class: 'tsk-qrd-note', id: 'tsk-qrd-note' }));
     var box = mk('div', { class: 'tsk-qrd-code' });
-    box.appendChild(mk('canvas', { role: 'img', 'aria-label': T('QR code for the link', 'Código QR del enlace') }));
+    box.appendChild(mk('canvas', { role: 'img', 'aria-label': 'QR code for the link' }));
     card.appendChild(box);
-    card.appendChild(mk('p', { class: 'tsk-qrd-hint', hidden: '' }, T('Hold the phones closer, or use Copy link.', 'Acerca los teléfonos o usa Copiar enlace.')));
-    card.appendChild(mk('p', { class: 'tsk-qrd-long', hidden: '' }, T('This link holds too much to fit in a QR code a phone can read. Use Copy link and send it in a message instead.', 'Este enlace es demasiado largo para un código QR. Usa Copiar enlace y envíalo en un mensaje.')));
+    card.appendChild(mk('p', { class: 'tsk-qrd-hint', hidden: '' }, 'Hold the phones closer, or use Copy link.'));
+    card.appendChild(mk('p', { class: 'tsk-qrd-long', hidden: '' }, 'This link holds too much to fit in a QR code a phone can read. Use Copy link and send it in a message instead.'));
     var acts = mk('div', { class: 'tsk-qrd-acts' });
-    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-qrd': 'big', 'aria-pressed': 'false' }, T('Bigger', 'Más grande')));
-    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-qrd-copy', 'data-qrd': 'copy' }, T('Copy link', 'Copiar enlace')));
+    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-qrd': 'big', 'aria-pressed': 'false' }, 'Bigger'));
+    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-qrd-copy', 'data-qrd': 'copy' }, 'Copy link'));
     card.appendChild(acts);
-    card.appendChild(mk('p', { class: 'tsk-qrd-private' }, T('The code holds the link and nothing else. It is made on this device; nothing is uploaded.', 'El código solo lleva el enlace. Se hace en este dispositivo y no se sube nada.')));
+    card.appendChild(mk('p', { class: 'tsk-qrd-private' }, 'The code holds the link and nothing else. It is made on this device; nothing is uploaded.'));
     card.appendChild(mk('p', { class: 'tsk-qrd-status', role: 'status', 'aria-live': 'polite' }));
     d.appendChild(card);
     d.addEventListener('click', function (e) {
@@ -662,7 +660,7 @@
       else if (k === 'copy') {
         var u = dlgCur && dlgCur.url, st = d.querySelector('.tsk-qrd-status');
         copyText(u).then(function (ok) {
-          st.textContent = ok ? T('Link copied. Paste it into a message to the other person.', 'Enlace copiado. Pégalo en un mensaje.') : T('Couldn’t copy here. Press and hold the link in your address bar to copy it.', 'No se pudo copiar aquí. Mantén pulsado el enlace en la barra de direcciones para copiarlo.');
+          st.textContent = ok ? 'Link copied. Paste it into a message to the other person.' : 'Couldn’t copy here. Press and hold the link in your address bar to copy it.';
           if (ok) fireShared(u, 'copy');
         });
       }
@@ -686,7 +684,7 @@
     var q = dlgCur && dlgCur.q, cv = dlg.querySelector('canvas'), box = dlg.querySelector('.tsk-qrd-code');
     var hint = dlg.querySelector('.tsk-qrd-hint'), big = dlg.querySelector('[data-qrd="big"]');
     dlg.classList.toggle('tsk-qrd-big', dlgBig);
-    big.setAttribute('aria-pressed', String(dlgBig)); big.textContent = dlgBig ? T('Smaller', 'Más pequeño') : T('Bigger', 'Más grande');
+    big.setAttribute('aria-pressed', String(dlgBig)); big.textContent = dlgBig ? 'Smaller' : 'Bigger';
     if (!q) return;
     var n = q.size + 8, vw = document.documentElement.clientWidth || window.innerWidth, vh = window.innerHeight;
     // room left for the code: the card's width, and the height after the words and buttons
@@ -712,9 +710,9 @@
     if (!dlg) dlg = buildDialog();
     var q = qrFits(url) ? QR.matrix(url) : null;
     dlgCur = { url: url, q: q }; dlgBig = false;
-    dlg.querySelector('#tsk-qrd-h').textContent = q ? (o.title || T('Scan with the other phone', 'Escanéalo con el otro teléfono')) : T('Too long for a QR code', 'Demasiado largo para un código QR');
+    dlg.querySelector('#tsk-qrd-h').textContent = q ? (o.title || 'Scan with the other phone') : 'Too long for a QR code';
     var note = dlg.querySelector('.tsk-qrd-note');
-    note.textContent = o.note || T('Open the camera on the other phone and point it at this code. The link opens there.', 'Abre la cámara del otro teléfono y apúntala a este código. El enlace se abre allí.');
+    note.textContent = o.note || 'Open the camera on the other phone and point it at this code. The link opens there.';
     note.hidden = !q;
     dlg.querySelector('.tsk-qrd-status').textContent = '';
     dlg.querySelector('.tsk-qrd-long').hidden = !!q;
@@ -819,7 +817,7 @@
       ctx.fillStyle = '#ffffff'; ctx.fillRect(qx, qy, px, px);
       ctx.fillStyle = '#000000';
       for (var yy = 0; yy < q.size; yy++) for (var xx = 0; xx < q.size; xx++) if (q.modules[yy][xx]) ctx.fillRect(qx + (xx + 4) * k, qy + (yy + 4) * k, k, k);
-      if (story) { ctx.fillStyle = '#5A5346'; ctx.font = '28px ' + SANS; ctx.fillText(T('Scan to open', 'Escanea para abrir'), W / 2, qy + px + 30); }
+      if (story) { ctx.fillStyle = '#5A5346'; ctx.font = '28px ' + SANS; ctx.fillText('Scan to open', W / 2, qy + px + 30); }
     }
     var fxText = q && !story ? (fx + 40 + (W - 2 * fx - 80 - qrPx - 30) / 2) : W / 2, fMax = q && !story ? W - 2 * fx - 120 - qrPx : maxW;
     var fy2 = story ? H - fy - 130 : H - fy - 90;
@@ -877,7 +875,7 @@
     return ['together', 'chat'];
   }
   function api(d) {
-    return { data: d, status: status, close: function () { closeSheet(); }, copy: copyText, T: T,
+    return { data: d, status: status, close: function () { closeSheet(); }, copy: copyText,
       showQR: function (u, o) { return showQR(u, o); } };
   }
 
@@ -932,38 +930,38 @@
     wrapP.appendChild(qr);
     // email it to myself: the address is typed (or filled in by the browser) and not kept
     var em = mk('div', { class: 'tsk-panel', 'data-panel': 'emailself', id: 'tsk-p-emailself', hidden: '' });
-    em.appendChild(mk('label', { for: 'tsk-self-addr', class: 'tsk-lab' }, T('Your email address', 'Tu correo electrónico')));
-    em.appendChild(mk('input', { id: 'tsk-self-addr', type: 'email', autocomplete: 'email', inputmode: 'email', class: 'tsk-in', placeholder: T('you@example.com', 'tu@ejemplo.com') }));
-    var emGo = mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'emailself', 'aria-disabled': 'true' }, T('Open my email app', 'Abrir mi correo'));
+    em.appendChild(mk('label', { for: 'tsk-self-addr', class: 'tsk-lab' }, 'Your email address'));
+    em.appendChild(mk('input', { id: 'tsk-self-addr', type: 'email', autocomplete: 'email', inputmode: 'email', class: 'tsk-in', placeholder: 'you@example.com' }));
+    var emGo = mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'emailself', 'aria-disabled': 'true' }, 'Open my email app');
     em.appendChild(emGo);
-    em.appendChild(mk('p', { class: 'tsk-small' }, T('Your email app opens with the link in a message to you. The address isn’t kept here.', 'Tu correo se abre con el enlace en un mensaje para ti. La dirección no se guarda aquí.')));
+    em.appendChild(mk('p', { class: 'tsk-small' }, 'Your email app opens with the link in a message to you. The address isn’t kept here.'));
     wrapP.appendChild(em);
     // Mastodon: which server, asked once and remembered on this device
     var ma = mk('div', { class: 'tsk-panel', 'data-panel': 'mastodon', id: 'tsk-p-mastodon', hidden: '' });
-    ma.appendChild(mk('label', { for: 'tsk-masto', class: 'tsk-lab' }, T('Your Mastodon server', 'Tu servidor de Mastodon')));
+    ma.appendChild(mk('label', { for: 'tsk-masto', class: 'tsk-lab' }, 'Your Mastodon server'));
     ma.appendChild(mk('input', { id: 'tsk-masto', type: 'text', autocomplete: 'off', autocapitalize: 'none', spellcheck: 'false', inputmode: 'url', class: 'tsk-in', placeholder: 'mastodon.social' }));
-    var maGo = mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'mastodon', target: '_blank', rel: 'noopener noreferrer', 'aria-disabled': 'true' }, T('Post on Mastodon', 'Publicar en Mastodon'));
+    var maGo = mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'mastodon', target: '_blank', rel: 'noopener noreferrer', 'aria-disabled': 'true' }, 'Post on Mastodon');
     ma.appendChild(maGo);
-    ma.appendChild(mk('p', { class: 'tsk-small' }, T('Remembered on this device, so you only type it once. ', 'Se recuerda en este dispositivo, así que solo lo escribes una vez. ')));
-    var maForget = mk('button', { type: 'button', class: 'tsk-linkbtn', 'data-go': 'mastodon-forget' }, T('Forget my server', 'Olvidar mi servidor'));
+    ma.appendChild(mk('p', { class: 'tsk-small' }, 'Remembered on this device, so you only type it once. '));
+    var maForget = mk('button', { type: 'button', class: 'tsk-linkbtn', 'data-go': 'mastodon-forget' }, 'Forget my server');
     ma.lastChild.appendChild(maForget);
     wrapP.appendChild(ma);
     // a calendar reminder
     var ca = mk('div', { class: 'tsk-panel', 'data-panel': 'calendar', id: 'tsk-p-calendar', hidden: '' });
     var row = function (id, lab, el) { var r = mk('p', { class: 'tsk-field' }); r.appendChild(mk('label', { for: id, class: 'tsk-lab' }, lab)); r.appendChild(el); return r; };
-    ca.appendChild(row('tsk-cal-t', T('What it says in your calendar', 'Lo que dirá tu calendario'), mk('input', { id: 'tsk-cal-t', type: 'text', maxlength: '60', class: 'tsk-in', autocomplete: 'off' })));
+    ca.appendChild(row('tsk-cal-t', 'What it says in your calendar', mk('input', { id: 'tsk-cal-t', type: 'text', maxlength: '60', class: 'tsk-in', autocomplete: 'off' })));
     var two = mk('div', { class: 'tsk-two' });
-    two.appendChild(row('tsk-cal-d', T('Day', 'Día'), mk('input', { id: 'tsk-cal-d', type: 'date', class: 'tsk-in' })));
-    two.appendChild(row('tsk-cal-h', T('Time', 'Hora'), mk('input', { id: 'tsk-cal-h', type: 'time', step: '300', class: 'tsk-in' })));
+    two.appendChild(row('tsk-cal-d', 'Day', mk('input', { id: 'tsk-cal-d', type: 'date', class: 'tsk-in' })));
+    two.appendChild(row('tsk-cal-h', 'Time', mk('input', { id: 'tsk-cal-h', type: 'time', step: '300', class: 'tsk-in' })));
     ca.appendChild(two);
     var rep = mk('select', { id: 'tsk-cal-r', class: 'tsk-in' });
-    [['once', T('Just once', 'Solo una vez')], ['daily', T('Every day', 'Cada día')], ['weekly', T('Every week', 'Cada semana')]].forEach(function (o) { var op = mk('option', { value: o[0] }, o[1]); rep.appendChild(op); });
-    ca.appendChild(row('tsk-cal-r', T('Repeat', 'Repetir'), rep));
+    [['once', 'Just once'], ['daily', 'Every day'], ['weekly', 'Every week']].forEach(function (o) { var op = mk('option', { value: o[0] }, o[1]); rep.appendChild(op); });
+    ca.appendChild(row('tsk-cal-r', 'Repeat', rep));
     var cacts = mk('div', { class: 'tsk-acts' });
-    cacts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-go', 'data-go': 'ics' }, T('Download calendar file', 'Descargar archivo de calendario')));
-    cacts.appendChild(mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'gcal', target: '_blank', rel: 'noopener noreferrer' }, T('Google Calendar', 'Google Calendar')));
+    cacts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-go', 'data-go': 'ics' }, 'Download calendar file'));
+    cacts.appendChild(mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'gcal', target: '_blank', rel: 'noopener noreferrer' }, 'Google Calendar'));
     ca.appendChild(cacts);
-    ca.appendChild(mk('p', { class: 'tsk-small' }, T('The file works with Apple Calendar, Outlook and most phones. The reminder lives in your calendar; nothing is kept here.', 'El archivo sirve para Apple Calendar, Outlook y la mayoría de teléfonos. El recordatorio vive en tu calendario; aquí no se guarda nada.')));
+    ca.appendChild(mk('p', { class: 'tsk-small' }, 'The file works with Apple Calendar, Outlook and most phones. The reminder lives in your calendar; nothing is kept here.'));
     wrapP.appendChild(ca);
     root.appendChild(wrapP);
 
@@ -987,19 +985,19 @@
       var k = b.getAttribute('data-go');
       if (b.getAttribute('aria-disabled') === 'true') {
         e.preventDefault();
-        status(k === 'emailself' ? T('Type your email address first.', 'Escribe primero tu correo.') : T('Type your server first, like mastodon.social.', 'Escribe primero tu servidor, como mastodon.social.'));
+        status(k === 'emailself' ? 'Type your email address first.' : 'Type your server first, like mastodon.social.');
         return;
       }
-      if (k === 'emailself') { fireShared(cur.url, 'email-self'); status(T('Your email app is opening.', 'Se está abriendo tu correo.')); return; }
+      if (k === 'emailself') { fireShared(cur.url, 'email-self'); status('Your email app is opening.'); return; }
       if (k === 'mastodon') { var h = mastodonHost(mIn.value); if (h) lsSet(MASTO_KEY, h); fireShared(cur.url, 'mastodon'); return; }
-      if (k === 'mastodon-forget') { lsSet(MASTO_KEY, null); mIn.value = ''; syncMasto(); status(T('Forgotten. The next time, you’ll be asked for your server again.', 'Olvidado. La próxima vez se te pedirá el servidor otra vez.')); return; }
+      if (k === 'mastodon-forget') { lsSet(MASTO_KEY, null); mIn.value = ''; syncMasto(); status('Forgotten. The next time, you’ll be asked for your server again.'); return; }
       if (k === 'ics') {
-        var o = calData(); if (!o) { status(T('Pick a day and a time first.', 'Elige primero un día y una hora.')); return; }
+        var o = calData(); if (!o) { status('Pick a day and a time first.'); return; }
         try {
           downloadBlob(new Blob([ics(o)], { type: 'text/calendar;charset=utf-8' }), slug(o.title) + '.ics');
-          status(T('Calendar file saved. Open it to add the reminder to your calendar.', 'Archivo guardado. Ábrelo para añadir el recordatorio a tu calendario.'));
+          status('Calendar file saved. Open it to add the reminder to your calendar.');
           fireShared(cur.url, 'calendar');
-        } catch (er) { status(T('Couldn’t make the file here. Try Google Calendar instead.', 'No se pudo crear el archivo aquí. Prueba con Google Calendar.')); }
+        } catch (er) { status('Couldn’t make the file here. Try Google Calendar instead.'); }
         return;
       }
       if (k === 'gcal') { if (!b.getAttribute('href')) { e.preventDefault(); return; } fireShared(cur.url, 'calendar'); }
@@ -1007,19 +1005,19 @@
   }
   function calData() {
     if (!kit) return null;
-    var t = kit.querySelector('#tsk-cal-t').value.trim() || T('Reminder', 'Recordatorio');
+    var t = kit.querySelector('#tsk-cal-t').value.trim() || 'Reminder';
     var dv = kit.querySelector('#tsk-cal-d').value, hv = kit.querySelector('#tsk-cal-h').value, rp = kit.querySelector('#tsk-cal-r').value;
     var m = /^(\d{4})-(\d\d)-(\d\d)$/.exec(dv), h = /^(\d\d):(\d\d)/.exec(hv);
     if (!m || !h) return null;
     var start = new Date(+m[1], +m[2] - 1, +m[3], +h[1], +h[2], 0, 0);
     var r = (cur && remindFor(cur)) || {};
     var u = cur && cur.url && !isPrivate(cur) ? cur.url : location.origin + location.pathname;
-    return { title: t, start: start, minutes: r.minutes || 15, repeat: rp, url: u, note: T('From ', 'De ') + SITE_NAME + ': ' + u };
+    return { title: t, start: start, minutes: r.minutes || 15, repeat: rp, url: u, note: 'From ' + SITE_NAME + ': ' + u };
   }
 
   // ---- one place in a group ----
   function placeEl(p) {
-    var id = p[0], kind = p[4], label = T(p[2], p[3]), a;
+    var id = p[0], kind = p[3], label = p[2], a;
     if (kind === 'link') a = mk('a', { class: 'tol-share-act tsk-place', 'data-place': id, target: '_blank', rel: 'noopener noreferrer' });
     else if (kind === 'copyopen') a = mk('a', { class: 'tol-share-act tsk-place', 'data-place': id, target: '_blank', rel: 'noopener noreferrer' });
     else a = mk('button', { type: 'button', class: 'tol-share-act tsk-place', 'data-place': id });
@@ -1038,7 +1036,7 @@
     var box = mk('div', { class: 'tsk-group', 'data-group': g[0] });
     var h = mk('h3', { class: 'tsk-gh' });
     var b = mk('button', { type: 'button', class: 'tsk-gt', 'aria-expanded': String(open), 'aria-controls': 'tsk-g-' + g[0] });
-    b.appendChild(mk('span', { class: 'tsk-gt-t' }, T(g[1], g[2])));
+    b.appendChild(mk('span', { class: 'tsk-gt-t' }, g[1]));
     b.appendChild(mk('span', { class: 'tsk-gt-i', 'aria-hidden': 'true' }));
     h.appendChild(b); box.appendChild(h);
     var grid = mk('div', { class: 'tsk-grid', id: 'tsk-g-' + g[0] }); grid.hidden = !open;
@@ -1066,7 +1064,7 @@
     var sitePin = box.querySelector('[data-act="pinterest"]'); if (sitePin) sitePin.remove();
     PLACES.forEach(function (p) {
       var grid = byGroup[p[1]].querySelector('.tsk-grid'), a;
-      if (p[4] === 'site') { a = box.querySelector('[data-act="' + p[0] + '"]'); if (!a) return; a.classList.add('tsk-place'); a.setAttribute('data-place', p[0]); a.setAttribute('data-label', T(p[2], p[3])); }
+      if (p[3] === 'site') { a = box.querySelector('[data-act="' + p[0] + '"]'); if (!a) return; a.classList.add('tsk-place'); a.setAttribute('data-place', p[0]); a.setAttribute('data-label', p[2]); }
       else a = placeEl(p);
       grid.appendChild(a);
     });
@@ -1075,7 +1073,7 @@
 
     // the device's own share menu goes first in the sheet, where the device has one
     var nat = mk('button', { type: 'button', class: 'tol-share-act tsk-native', 'data-kit': 'native' });
-    nat.appendChild(svgIcon('native')); nat.appendChild(mk('span', { class: 'tsk-pl' }, T('More apps on this device', 'Más apps de este dispositivo')));
+    nat.appendChild(svgIcon('native')); nat.appendChild(mk('span', { class: 'tsk-pl' }, 'More apps on this device'));
     nat.addEventListener('click', function () {
       var d = cur, done = ctl; if (!d) return;
       try {
@@ -1096,33 +1094,33 @@
       if (b._tskHref) { fireShared(d.url, id); return; }
       var p = null; PLACES.some(function (x) { if (x[0] === id) { p = x; return true; } return false; });
       if (!p) return;
-      var kind = p[4];
+      var kind = p[3];
       if (kind === 'link') {
         fireShared(d.url, id);
-        if (id === 'messenger' && /^fb-messenger:/.test(b.getAttribute('href') || '')) laterHint(T('Messenger didn’t open? Try Copy link and paste it into Messenger.', '¿No se abrió Messenger? Usa Copiar enlace y pégalo en Messenger.'));
-        else if (id === 'messenger') status(T('This opens Facebook. Choose “Send in Messenger” there.', 'Esto abre Facebook. Elige “Enviar por Messenger” allí.'));
-        if (id === 'viber') laterHint(T('Viber didn’t open? It needs the Viber app. Try Signal’s way: Copy message, then paste it in Viber.', '¿No se abrió Viber? Necesita la app de Viber. Copia el mensaje y pégalo en Viber.'));
+        if (id === 'messenger' && /^fb-messenger:/.test(b.getAttribute('href') || '')) laterHint('Messenger didn’t open? Try Copy link and paste it into Messenger.');
+        else if (id === 'messenger') status('This opens Facebook. Choose “Send in Messenger” there.');
+        if (id === 'viber') laterHint('Viber didn’t open? It needs the Viber app. Try Signal’s way: Copy message, then paste it in Viber.');
         return;
       }
       if (kind === 'copyopen') {
         var app = { slack: 'Slack', teams: 'Microsoft Teams', discord: 'Discord' }[id];
         copyText(formatted(d, id)).then(function (ok) {
-          status(ok ? T('Message copied for ' + app + '. Paste it into a chat there.', 'Mensaje copiado para ' + app + '. Pégalo en un chat allí.') : T('Couldn’t copy here. Use Copy link instead.', 'No se pudo copiar aquí. Usa Copiar enlace.'));
+          status(ok ? ('Message copied for ' + app + '. Paste it into a chat there.') : 'Couldn’t copy here. Use Copy link instead.');
           if (ok) fireShared(d.url, id);
         });
         return;   // the link opens the app in a new tab
       }
       if (kind === 'copy') {   // Signal: no share link of its own
         copyText(message(d)).then(function (ok) {
-          status(ok ? T('Message copied. Open Signal, pick a chat, and paste it.', 'Mensaje copiado. Abre Signal, elige un chat y pégalo.') : T('Couldn’t copy here. Use Copy link instead.', 'No se pudo copiar aquí. Usa Copiar enlace.'));
+          status(ok ? 'Message copied. Open Signal, pick a chat, and paste it.' : 'Couldn’t copy here. Use Copy link instead.');
           if (ok) fireShared(d.url, id);
         });
         return;
       }
       if (kind === 'qr' || kind === 'device') {
         var u = d.url || d.text;
-        if (id === 'wechat') showQR(u, { title: T('Scan this in WeChat', 'Escanéalo en WeChat'), note: T('Open WeChat, tap +, then Scan. The link opens in WeChat, ready to send to a chat.', 'Abre WeChat, toca +, luego Escanear. El enlace se abre en WeChat, listo para enviar.') });
-        else showQR(u, { title: T('Open it on your other device', 'Ábrelo en tu otro dispositivo'), note: T('Point your other phone’s or tablet’s camera at this code. The link opens there.', 'Apunta la cámara de tu otro teléfono o tableta a este código. El enlace se abre allí.') });
+        if (id === 'wechat') showQR(u, { title: 'Scan this in WeChat', note: 'Open WeChat, tap +, then Scan. The link opens in WeChat, ready to send to a chat.' });
+        else showQR(u, { title: 'Open it on your other device', note: 'Point your other phone’s or tablet’s camera at this code. The link opens there.' });
         return;
       }
       if (kind === 'qr-inline') {
@@ -1144,20 +1142,20 @@
         var words = imageWords(d);
         var o = { text: d.result ? words : (d.text || d.title), title: d.result || d.text ? d.title : '', url: d.url, result: d.result, private: d.private, format: fmt, qr: !isPrivate(d) && !!d.url };
         var hint = {
-          instagram: T('Picture saved. Open Instagram, start a story, and pick the picture from your photos. You can add the link with a link sticker.', 'Imagen guardada. Abre Instagram, crea una historia y elige la imagen de tus fotos. Puedes añadir el enlace con un sticker de enlace.'),
-          tiktok: T('Picture saved. Open TikTok, tap +, then Upload, and pick the picture.', 'Imagen guardada. Abre TikTok, toca +, luego Subir, y elige la imagen.'),
-          snapchat: T('Picture saved and link copied. In Snapchat, add the picture from your camera roll, then paste the link with the paperclip.', 'Imagen guardada y enlace copiado. En Snapchat, añade la imagen desde tu carrete y pega el enlace con el clip.')
+          instagram: 'Picture saved. Open Instagram, start a story, and pick the picture from your photos. You can add the link with a link sticker.',
+          tiktok: 'Picture saved. Open TikTok, tap +, then Upload, and pick the picture.',
+          snapchat: 'Picture saved and link copied. In Snapchat, add the picture from your camera roll, then paste the link with the paperclip.'
         }[id];
         var go = function () {
           saveImage(o).then(function () {
-            b.querySelector('.tsk-pl').textContent = T('Saved!', '¡Guardada!');
-            status(hint || T('Picture saved to your downloads. It stays on your device until you share it.', 'Imagen guardada en tus descargas. Se queda en tu dispositivo hasta que la compartas.'));
+            b.querySelector('.tsk-pl').textContent = 'Saved!';
+            status(hint || 'Picture saved to your downloads. It stays on your device until you share it.');
             fireShared(d.url, id === 'square' || id === 'story' ? 'image' : id);
             clearTimeout(b._t); b._t = setTimeout(function () { b.querySelector('.tsk-pl').textContent = orig; }, 2000);
-          }, function () { status(T('Couldn’t make the picture here. Try “Copy link” instead.', 'No se pudo hacer la imagen aquí. Prueba “Copiar enlace”.')); });
+          }, function () { status('Couldn’t make the picture here. Try “Copy link” instead.'); });
         };
         if (id === 'snapchat' && d.url) copyText(d.url).then(go, go); else go();
-        if (id === 'snapchat' && !imageOk(d, 'story')) status(T('Link copied. Open Snapchat and paste it with the paperclip.', 'Enlace copiado. Abre Snapchat y pégalo con el clip.'));
+        if (id === 'snapchat' && !imageOk(d, 'story')) status('Link copied. Open Snapchat and paste it with the paperclip.');
       }
     });
     return root;
@@ -1174,7 +1172,7 @@
     var el2 = mk(tag, tag === 'a' ? { class: 'tol-share-act tsk-place', 'data-place': 'x-' + a.id, target: '_blank', rel: 'noopener noreferrer' } : { type: 'button', class: 'tol-share-act tsk-place', 'data-place': 'x-' + a.id });
     var ic = a.icon ? customIcon(a.icon) : null;
     el2.appendChild(ic || svgIcon(a.group === 'together' ? 'together' : 'dot'));
-    el2.appendChild(mk('span', { class: 'tsk-pl' }, T(a.label || a.id, a.labelEs || a.label || a.id)));
+    el2.appendChild(mk('span', { class: 'tsk-pl' }, (a.label || a.id)));
     if (a.run) el2._tskRun = a.run;
     if (a.href) el2._tskHref = a.href;
     return el2;
@@ -1196,7 +1194,7 @@
     EXTRA_SECTIONS.forEach(function (s) {
       if (!s._el || !kit.contains(s._el)) {
         s._el = mk('section', { class: 'tsk-xsec', 'data-section': s.id, 'aria-labelledby': 'tsk-x-' + s.id });
-        s._el.appendChild(mk('h3', { class: 'tsk-xh', id: 'tsk-x-' + s.id }, T(s.title || '', s.titleEs || s.title || '')));
+        s._el.appendChild(mk('h3', { class: 'tsk-xh', id: 'tsk-x-' + s.id }, (s.title || '')));
         s._el.appendChild(mk('div', { class: 'tsk-xbody' }));
         var host = (s.order || 0) < 0 ? kit._top : kit._after;
         // keep them in order
@@ -1247,20 +1245,20 @@
     kit._native.hidden = !canNative(d);
     // site.js's buttons: icons, and labels in the page's language
     PLACES.forEach(function (p) {
-      if (p[4] !== 'site') return;
+      if (p[3] !== 'site') return;
       var a = box.querySelector('[data-act="' + p[0] + '"]'); if (!a) return;
-      if (!a.querySelector('.tsk-ic')) { a.textContent = T(p[2], p[3]); decorate(a, p[0]); }
+      if (!a.querySelector('.tsk-ic')) { a.textContent = p[2]; decorate(a, p[0]); }
     });
     var cp = box.querySelector('[data-act="copy"]'), ct = box.querySelector('[data-act="copy-text"]');
-    if (cp && !cp.querySelector('.tsk-ic')) { cp.textContent = T('Copy link', 'Copiar enlace'); decorate(cp, 'copy'); cp.setAttribute('data-label', cp.textContent); }
-    if (ct && !ct.querySelector('.tsk-ic')) { ct.textContent = T('Copy message', 'Copiar mensaje'); decorate(ct, 'copytext'); ct.setAttribute('data-label', ct.textContent); }
+    if (cp && !cp.querySelector('.tsk-ic')) { cp.textContent = 'Copy link'; decorate(cp, 'copy'); cp.setAttribute('data-label', cp.textContent); }
+    if (ct && !ct.querySelector('.tsk-ic')) { ct.textContent = 'Copy message'; decorate(ct, 'copytext'); ct.setAttribute('data-label', ct.textContent); }
     // the kit's places
     PLACES.forEach(function (p) {
-      if (p[4] === 'site') return;
+      if (p[3] === 'site') return;
       var a = kit.querySelector('[data-place="' + p[0] + '"]'); if (!a) return;
-      var show = !(priv && !p[5]) && placeShows(p[0], d, env);
-      var lbl = a.querySelector('.tsk-pl'); if (lbl) lbl.textContent = T(p[2], p[3]);
-      if (p[4] === 'link' || p[4] === 'copyopen') {
+      var show = !(priv && !p[4]) && placeShows(p[0], d, env);
+      var lbl = a.querySelector('.tsk-pl'); if (lbl) lbl.textContent = p[2];
+      if (p[3] === 'link' || p[3] === 'copyopen') {
         if (L[p[0]]) a.setAttribute('href', L[p[0]]); else a.removeAttribute('href');
       }
       a.hidden = !show;
@@ -1272,9 +1270,9 @@
     qb._qrText = qrFits(qrText) ? qrText : '';
     if (qb._qrText && !s) qb.removeAttribute('aria-controls'); else qb.setAttribute('aria-controls', 'tsk-qr');
     if (s) {
-      s.setAttribute('aria-label', d.url ? T('QR code for the link', 'Código QR del enlace') : T('QR code for these words', 'Código QR de estas palabras'));
+      s.setAttribute('aria-label', d.url ? 'QR code for the link' : 'QR code for these words');
       qrBox.appendChild(s);
-      kit.querySelector('.tsk-qr-note').textContent = d.url ? T('Scan it with another phone’s camera to open the link. It holds the link and nothing else.', 'Escanéalo con la cámara de otro teléfono para abrir el enlace. Solo lleva el enlace.') : T('Scan it with another phone’s camera to read the words.', 'Escanéalo con la cámara de otro teléfono para leer las palabras.');
+      kit.querySelector('.tsk-qr-note').textContent = d.url ? 'Scan it with another phone’s camera to open the link. It holds the link and nothing else.' : 'Scan it with another phone’s camera to read the words.';
     }
     // the panels: start from what's known
     kit._sync.email();
@@ -1282,7 +1280,7 @@
     var r = remindFor(d);
     if (r) {
       var st = remindStart(r);
-      kit.querySelector('#tsk-cal-t').value = Array.isArray(r.title) ? T(r.title[0], r.title[1]) : (r.title || T('Reminder', 'Recordatorio'));
+      kit.querySelector('#tsk-cal-t').value = Array.isArray(r.title) ? r.title[0] : (r.title || 'Reminder');
       kit.querySelector('#tsk-cal-d').value = dateVal(st); kit.querySelector('#tsk-cal-h').value = timeVal(st);
       kit.querySelector('#tsk-cal-r').value = r.repeat || 'once';
     }
@@ -1292,7 +1290,7 @@
       g.hidden = !g.querySelector('.tsk-grid > :not([hidden])');
     });
     // the print button: "Print or save as PDF"
-    var pr = box.querySelector('[data-act="print"]'); if (pr) pr.setAttribute('data-label', T('Print or save as PDF', 'Imprimir o guardar como PDF'));
+    var pr = box.querySelector('[data-act="print"]'); if (pr) pr.setAttribute('data-label', 'Print or save as PDF');
   }
   // site.js announces each opening with a 'tol-share-sheet' event ({ data, box, close }).
   // Without it, the kit watches the sheet and reads what is being shared back from the sheet itself.
@@ -1335,7 +1333,7 @@
     o = o || {};
     var d = { title: o.title || '', text: o.text || '', url: o.url, result: o.result !== false, kit: o.kit };
     if (window.TOLShare && window.TOLShare.open) {
-      pendingHeading = o.heading || T('Share this', 'Compartir esto');
+      pendingHeading = o.heading || 'Share this';
       window.TOLShare.open(d);
       return Promise.resolve({ method: 'sheet' });
     }
@@ -1371,9 +1369,9 @@
   // the book: chapters share themselves, and "Share the book" sits beside
   var BOOK_CH = /^\/book\/(preface|chapter-\d+|self-\d-[a-z]+|understanding-\d+-[a-z-]+|afterword|for-yourself|together|understanding|whole|topic-[a-z-]+)(-in-depth)?\.html$/;
   function bookButton() {
-    return shareBtn(T('Share the book', 'Compartir el libro'), {
+    return shareBtn('Share the book', {
       title: 'Spread Love & Acceptance: the free book',
-      text: T('A free, kind book about yourself, the people you share a life with, and how people work. Read it online or as free PDFs.', 'Un libro gratis y amable sobre ti, las personas con quienes compartes la vida y cómo funcionamos. Léelo en línea o en PDF gratis.'),
+      text: 'A free, kind book about yourself, the people you share a life with, and how people work. Read it online or as free PDFs.',
       url: '/book/index.html', pin: true
     });
   }
@@ -1386,14 +1384,14 @@
     var isDownload = path === '/book/download.html';
     var opts = function () {
       return isDownload
-        ? { title: 'Spread Love & Acceptance: the free book', text: T('The whole book, free, as PDFs. No account.', 'El libro entero, gratis, en PDF. Sin cuenta.'), url: '/book/download.html', pin: true }
+        ? { title: 'Spread Love & Acceptance: the free book', text: 'The whole book, free, as PDFs. No account.', url: '/book/download.html', pin: true }
         : { title: title, text: line, pin: true };
     };
     // 1. a small Share button under the title
     if (content && !main.querySelector('.tsk-top-row')) {
-      var top = shareBtn(isDownload ? T('Share the book', 'Compartir el libro') : T('Share', 'Compartir'), opts, 'is-small tsk-top-btn');
+      var top = shareBtn(isDownload ? 'Share the book' : 'Share', opts, 'is-small tsk-top-btn');
       if (top) {
-        top.setAttribute('aria-label', isDownload ? T('Share the book', 'Compartir el libro') : T('Share this page', 'Compartir esta página'));
+        top.setAttribute('aria-label', isDownload ? 'Share the book' : 'Share this page');
         top.setAttribute('data-no-clip', '');
         var tr = mk('p', { class: 'tsk-top-row tol-plain no-bubble' }); tr.appendChild(top);
         var head = h1.closest('header');
@@ -1406,13 +1404,13 @@
     // 2. a "Share this page" row at the end, unless site.js already put one there
     var row = main.querySelector('.tol-share-row:not(.is-inline)'), home = path === '/index.html';
     if (!row && (content || home) && path !== '/about.html') {
-      var b = shareBtn(isDownload ? T('Share the book', 'Compartir el libro') : home ? T('Share this site', 'Compartir este sitio') : T('Share this page', 'Compartir esta página'),
-        home ? { title: SITE_NAME, text: line || T('Free, kind tools for sharing the load at home.', 'Herramientas gratis y amables para repartir la carga en casa.'), url: '/index.html', pin: true } : opts);
+      var b = shareBtn(isDownload ? 'Share the book' : home ? 'Share this site' : 'Share this page',
+        home ? { title: SITE_NAME, text: line || 'Free, kind tools for sharing the load at home.', url: '/index.html', pin: true } : opts);
       if (b) {
         row = mk('div', { class: 'tol-share-row tsk-end-row tol-plain no-bubble' });
         row.appendChild(b);
         if (!main.querySelector('main [data-print], .tol-print-btn') && !isDownload && !home) {
-          var pb = mk('button', { type: 'button', class: 'tol-print-btn' }, T('Print this page', 'Imprimir esta página'));
+          var pb = mk('button', { type: 'button', class: 'tol-print-btn' }, 'Print this page');
           pb.addEventListener('click', function () { window.print(); });
           row.appendChild(pb);
         }
@@ -1429,16 +1427,16 @@
   // ---- tool results: "Share this result" on result cards with no share button of their own ----
   // [page, the result box, what the result is called, { from: an element inside whose text or value is the result }]
   var RESULTS = [
-    [/^\/refusals\.html$/, '#rf-out', ['Ways to say no kindly', 'Formas de decir que no con cariño']],
-    [/^\/carrier-wave-decoder\.html$/, '#result', ['Where our talk went sideways', 'Dónde se torció nuestra charla']],
-    [/^\/love-languages\.html$/, '#ll-out', ['What feels like care to me', 'Lo que para mí es cariño'], { from: 'textarea' }],
-    [/^\/touchstones\.html$/, '#ts-out', ['Our shared words and rituals', 'Nuestras palabras y rituales'], { from: 'textarea' }],
-    [/^\/tools\/frequency-calibration\.html$/, '#results', ['Our daily rhythms', 'Nuestros ritmos diarios']],
-    [/^\/tools\/soften-a-tense-moment\.html$/, '#pick-out', ['A way to soften a tense moment', 'Una forma de suavizar un momento tenso']],
-    [/^\/family-rifts\.html$/, '#ft-out', ['My terms for the family event', 'Mis condiciones para el evento familiar']],
-    [/^\/small-wins\.html$/, '#sw-flip-out', ['A request, not a complaint', 'Una petición, no una queja']],
-    [/^\/surprise\.html$/, '#su-out', ['A little surprise', 'Una pequeña sorpresa']],
-    [/^\/signal-translator\.html$/, '#results', ['How my message might land', 'Cómo podría sentar mi mensaje']]
+    [/^\/refusals\.html$/, '#rf-out', ['Ways to say no kindly']],
+    [/^\/carrier-wave-decoder\.html$/, '#result', ['Where our talk went sideways']],
+    [/^\/love-languages\.html$/, '#ll-out', ['What feels like care to me'], { from: 'textarea' }],
+    [/^\/touchstones\.html$/, '#ts-out', ['Our shared words and rituals'], { from: 'textarea' }],
+    [/^\/tools\/frequency-calibration\.html$/, '#results', ['Our daily rhythms']],
+    [/^\/tools\/soften-a-tense-moment\.html$/, '#pick-out', ['A way to soften a tense moment']],
+    [/^\/family-rifts\.html$/, '#ft-out', ['My terms for the family event']],
+    [/^\/small-wins\.html$/, '#sw-flip-out', ['A request, not a complaint']],
+    [/^\/surprise\.html$/, '#su-out', ['A little surprise']],
+    [/^\/signal-translator\.html$/, '#results', ['How my message might land']]
   ];
   var SHAREISH = /\b(share|send|compartir|enviar)\b/i;
   function hasOwnShare(box) {
@@ -1458,7 +1456,7 @@
   }
   function watchResult(rule) {
     var box = document.querySelector(rule[1]); if (!box) return;
-    var cfg = rule[3] || {}, name = T(rule[2][0], rule[2][1]);
+    var cfg = rule[3] || {}, name = rule[2][0];
     var first = (box.textContent || '').trim();
     var host = /^(P|OUTPUT|TEXTAREA|INPUT|SPAN)$/.test(box.tagName) ? null : box;   // where the button can sit inside
     var rowEl = null;
@@ -1470,10 +1468,10 @@
       if (!ok) { if (rowEl) rowEl.hidden = true; return; }
       if (!rowEl || !document.contains(rowEl)) {
         rowEl = mk('p', { class: 'tsk-res-row tol-plain no-bubble' });
-        var b = shareBtn(T('Share this result', 'Compartir el resultado'), function () {
+        var b = shareBtn('Share this result', function () {
           var t = resultText(box, cfg);
           if (t.length > 3000) t = t.slice(0, 2997) + '…';
-          pendingHeading = T('Share your result', 'Comparte tu resultado');
+          pendingHeading = 'Share your result';
           return { title: name, text: t, url: location.pathname, result: true };
         }, 'is-small tsk-res-btn');
         if (!b) return;
@@ -1508,7 +1506,7 @@
         if (li.querySelector('.tsk-card-share')) return;
         var a = li.querySelector('a.tl-card'); if (!a) return;
         var name = ((a.querySelector('.tl-name') || {}).textContent || '').trim(), does = ((a.querySelector('.tl-does') || {}).textContent || '').trim();
-        var b = mk('button', { type: 'button', class: 'tsk-card-share', 'data-share': '', 'data-share-title': name, 'data-share-text': does + ' ' + T('Free, no account.', 'Gratis, sin cuenta.'), 'data-share-url': a.getAttribute('href') || '', 'data-share-pin': '', 'aria-label': T('Share this tool: ', 'Compartir esta herramienta: ') + name, title: T('Share this tool', 'Compartir esta herramienta') });
+        var b = mk('button', { type: 'button', class: 'tsk-card-share', 'data-share': '', 'data-share-title': name, 'data-share-text': does + ' ' + 'Free, no account.', 'data-share-url': a.getAttribute('href') || '', 'data-share-pin': '', 'aria-label': 'Share this tool: ' + name, title: 'Share this tool' });
         b.appendChild(svgIcon('share', 'tsk-ic-plain'));
         li.classList.add('tsk-cardhost'); li.appendChild(b);
       });
@@ -1535,10 +1533,10 @@
     if (SAFETY_WORDS.test(text) || msg.querySelector('a[href*="safety"]')) return;
     var who = ((msg.querySelector('.tolc-sr') || {}).textContent || '').replace(/\s*says:\s*$/i, '').trim() || 'Professor Puddles';
     var b = mk('button', { type: 'button', class: 'tsk-ans' });
-    b.appendChild(svgIcon('share', 'tsk-ic-plain')); b.appendChild(mk('span', null, T('Share this answer', 'Compartir esta respuesta')));
+    b.appendChild(svgIcon('share', 'tsk-ic-plain')); b.appendChild(mk('span', null, 'Share this answer'));
     b.addEventListener('click', function () {
       var t = text.length > 1500 ? text.slice(0, 1497) + '…' : text;
-      shareText({ title: T('An answer from ', 'Una respuesta de ') + who, text: t, url: url || false, heading: T('Share this answer', 'Compartir esta respuesta') });
+      shareText({ title: 'An answer from ' + who, text: t, url: url || false, heading: 'Share this answer' });
     });
     msg.appendChild(b);
   }
@@ -1619,13 +1617,13 @@
         if (seen.indexOf(p) !== -1 || p.querySelector('.tsk-line')) return;
         seen.push(p);
         var text = lineText(p); if (!text || text.length > 400) return;
-        var b = mk('button', { type: 'button', class: 'tsk-line', 'aria-label': T('Share this line', 'Compartir esta frase'), title: T('Share this line', 'Compartir esta frase') });
+        var b = mk('button', { type: 'button', class: 'tsk-line', 'aria-label': 'Share this line', title: 'Share this line' });
         b.appendChild(icon());
         b.addEventListener('click', function (e) {
           e.preventDefault(); e.stopPropagation();
           var t = lineText(p), sec = sectionOf(p, main), url = location.origin + location.pathname + (sec ? '#' + encodeURIComponent(sec.id) : '');
           var head = headingFor(p, main) || (document.querySelector('h1') || {}).textContent || '';
-          pendingHeading = T('Share this line', 'Compartir esta frase');
+          pendingHeading = 'Share this line';
           if (window.TOLShare && window.TOLShare.open) window.TOLShare.open({ title: head.trim(), text: t, url: url, result: true });
           else shareText({ title: head, text: t, url: url });
         });

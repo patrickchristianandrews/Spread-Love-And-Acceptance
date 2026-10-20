@@ -7,16 +7,14 @@
    The only thing kept is the speed you chose (in this browser).
    It also puts a small "Listen" button on the short cards people use most (the "In short" box, the
    steps of Start in 10 minutes, the choices on the home page, tool results, and anything marked
-   data-listen-card), and on the Spanish page every word of its own controls is in Spanish and the
-   page is read with a Spanish voice. */
+   data-listen-card). */
 (function () {
   'use strict';
   if (window.TOLListen) return;
   var ok = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
   var synth = ok ? window.speechSynthesis : null;
-  var PAGE_LANG = (document.documentElement.lang || 'en-US').toLowerCase(), ES = /^es\b/.test(PAGE_LANG);
-  function T(en, es) { return ES ? es : en; }
-  var RATES = [['0.8', T('Slower', 'Más lento')], ['1', T('Usual', 'Normal')], ['1.2', T('Faster', 'Más rápido')], ['1.4', T('Fastest', 'Lo más rápido')]];
+  var PAGE_LANG = (document.documentElement.lang || 'en-US').toLowerCase();
+  var RATES = [['0.8', 'Slower'], ['1', 'Usual'], ['1.2', 'Faster'], ['1.4', 'Fastest']];
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   var rate = +(lsGet('tol-listen-rate') || 1) || 1;
@@ -104,13 +102,12 @@
   function pickVoice() {
     var vs = synth ? synth.getVoices() : [];
     var lang = PAGE_LANG.replace('_', '-');
-    // the page's own language first (the Spanish page is read in Spanish, a Latin American voice first), then English
+    // the page's own language first, then English
     var base = lang.split('-')[0];
     function L(v) { return (v.lang || '').toLowerCase().replace('_', '-'); }
     if (base !== 'en') {
       var mine = vs.filter(function (v) { return L(v).indexOf(base) === 0; });
-      voice = mine.filter(function (v) { return L(v) === lang; })[0] ||
-        mine.filter(function (v) { return /^es-(419|us|mx|co|ar|cl|pe)/.test(L(v)); })[0] || mine[0] || null;
+      voice = mine.filter(function (v) { return L(v) === lang; })[0] || mine[0] || null;
       return vs.length;   // no voice in the page's language: the browser picks one from u.lang, never an English voice
     }
     voice = vs.filter(function (v) { return L(v) === lang && v.localService; })[0] ||
@@ -152,7 +149,7 @@
     var block = S.queue[S.bi], sent = block.s.list[S.si];
     mark(block.el, { nodes: block.s.nodes, from: sent.from, to: sent.to });
     var u = new SpeechSynthesisUtterance(sent.text);
-    u.rate = rate; if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = ES ? 'es-US' : (document.documentElement.lang || 'en-US');
+    u.rate = rate; if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = (document.documentElement.lang || 'en-US');
     var done = false, guard = setTimeout(next, sent.text.split(/\s+/).length * 900 / rate + 5000);
     function next() { if (done || my !== S.token) return; done = true; clearTimeout(guard); S.si++; if (S.playing && !S.paused) speakNext(); }
     u.onend = next; u.onerror = function (e) { if (e && (e.error === 'interrupted' || e.error === 'canceled')) { clearTimeout(guard); return; } next(); };
@@ -172,18 +169,18 @@
     S.playing = false; S.paused = false; clearMarks(); pickMode(false);
     if (!quiet) { status(); hideBar(); }
   }
-  function finish() { S.playing = false; clearMarks(); status(T('Finished reading.', 'Terminó la lectura.')); setTimeout(function () { if (!S.playing) hideBar(); }, 2500); }
+  function finish() { S.playing = false; clearMarks(); status('Finished reading.'); setTimeout(function () { if (!S.playing) hideBar(); }, 2500); }
   window.addEventListener('pagehide', function () { if (synth) synth.cancel(); });
 
   // ---------- the player strip (fixed near the top while reading) ----------
   function showBar() {
     if (!bar) {
       bar = document.createElement('div');
-      bar.className = 'tol-listen-bar'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', T('Reading aloud', 'Lectura en voz alta'));
+      bar.className = 'tol-listen-bar'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Reading aloud');
       bar.innerHTML = '<button type="button" data-l="pause"></button>' +
-        '<button type="button" data-l="stop"><span aria-hidden="true">&#9632;</span> ' + T('Stop', 'Parar') + '</button>' +
-        '<label class="tol-listen-speed"><span class="sr-only">' + T('Speed', 'Velocidad') + '</span><select data-l="rate">' + RATES.map(function (r) { return '<option value="' + r[0] + '"' + (+r[0] === rate ? ' selected' : '') + '>' + r[1] + '</option>'; }).join('') + '</select></label>' +
-        '<button type="button" data-l="here" aria-pressed="false">' + T('Read from here', 'Leer desde aquí') + '</button>' +
+        '<button type="button" data-l="stop"><span aria-hidden="true">&#9632;</span> ' + 'Stop' + '</button>' +
+        '<label class="tol-listen-speed"><span class="sr-only">' + 'Speed' + '</span><select data-l="rate">' + RATES.map(function (r) { return '<option value="' + r[0] + '"' + (+r[0] === rate ? ' selected' : '') + '>' + r[1] + '</option>'; }).join('') + '</select></label>' +
+        '<button type="button" data-l="here" aria-pressed="false">' + 'Read from here' + '</button>' +
         '<p class="tol-listen-status" aria-live="polite"></p>';
       bar.addEventListener('click', function (e) {
         var b = e.target.closest('button'); if (!b) return;
@@ -204,9 +201,9 @@
   function status(msg) {
     if (!bar) return;
     var p = bar.querySelector('[data-l="pause"]');
-    p.innerHTML = S.paused ? '<span aria-hidden="true">&#9654;</span> ' + T('Resume', 'Seguir') : '<span aria-hidden="true">&#10074;&#10074;</span> ' + T('Pause', 'Pausa');
+    p.innerHTML = S.paused ? '<span aria-hidden="true">&#9654;</span> ' + 'Resume' : '<span aria-hidden="true">&#10074;&#10074;</span> ' + 'Pause';
     p.disabled = !S.playing;
-    bar.querySelector('.tol-listen-status').textContent = msg || (S.picking ? T('Tap a paragraph to start there, or press Enter to start at the top of the screen.', 'Toca un párrafo para empezar ahí, o presiona Enter para empezar arriba de la pantalla.') : S.paused ? T('Paused.', 'En pausa.') : S.playing ? '' : '');
+    bar.querySelector('.tol-listen-status').textContent = msg || (S.picking ? 'Tap a paragraph to start there, or press Enter to start at the top of the screen.' : S.paused ? 'Paused.' : S.playing ? '' : '');
   }
 
   // "Read from here": tap a paragraph, or press Enter to start at the top of the screen
@@ -250,7 +247,7 @@
       var words = 0;
       blocksIn(main).forEach(function (b) { words += (textOf(b).match(/\S+/g) || []).length; });
       var len = go.querySelector('.tol-listen-len');
-      if (len && words > 60) len.textContent = T('(about ', '(unos ') + Math.max(1, Math.round(words / 150)) + ' min)';
+      if (len && words > 60) len.textContent = '(about ' + Math.max(1, Math.round(words / 150)) + ' min)';
       go.addEventListener('click', function () { S.host = main; start(blocksIn(main), 0); });
     }
     if (here) here.addEventListener('click', function () { S.host = main; showBar(); pickMode(true); status(); });
@@ -265,8 +262,8 @@
     if (!main || document.querySelector('.tol-listen') || /^\/(index\.html)?$/.test(location.pathname)) return;   // the home page gets the card buttons only
     var box = document.createElement('div');
     box.className = 'tol-listen no-bubble no-cheer';
-    box.innerHTML = '<button type="button" class="tol-listen-go"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> ' + T('Listen to this page', 'Escuchar esta página') + '</button>' +
-      '<button type="button" class="tol-listen-here">' + T('Read from where I am', 'Leer desde aquí') + '</button>';
+    box.innerHTML = '<button type="button" class="tol-listen-go"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> ' + 'Listen to this page' + '</button>' +
+      '<button type="button" class="tol-listen-here">' + 'Read from where I am' + '</button>';
     box.querySelector('.tol-listen-go').addEventListener('click', function () { S.host = main; start(blocksIn(main), 0); });
     box.querySelector('.tol-listen-here').addEventListener('click', function () { S.host = main; showBar(); pickMode(true); status(); });
     var anchor = opts.after || main.querySelector(':scope > .read-head') || main.querySelector('.read-head');
@@ -285,19 +282,19 @@
   }
   function button(label) {
     var b = document.createElement('button'); b.type = 'button'; b.className = 'tol-listen-mini'; b.setAttribute('aria-pressed', 'false');
-    b.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> ' + (label || T('Listen', 'Escuchar'));
+    b.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> ' + (label || 'Listen');
     return b;
   }
 
   // ---------- "Listen" on the cards people use most ----------
   // [selector, label, where the button goes: 'after' a heading inside the card, or 'before' the card]
   var CARDS = [
-    ['.tol-inshort', T('Listen', 'Escuchar'), '.tol-inshort-h'],
-    ['.ten-steps > li', T('Listen to this step', 'Escuchar este paso'), 'h2, h3'],
-    ['ul:has(> li > a.hh-card)', T('Listen to these choices', 'Escuchar estas opciones'), null],
-    ['#forecast', T('Listen to your forecast', 'Escuchar tu pronóstico'), '.fc-head'],
-    ['#lq-res', T('Listen to your result', 'Escuchar tu resultado'), 'h2, h3'],
-    ['.cb-done', T('Listen', 'Escuchar'), null],
+    ['.tol-inshort', 'Listen', '.tol-inshort-h'],
+    ['.ten-steps > li', 'Listen to this step', 'h2, h3'],
+    ['ul:has(> li > a.hh-card)', 'Listen to these choices', null],
+    ['#forecast', 'Listen to your forecast', '.fc-head'],
+    ['#lq-res', 'Listen to your result', 'h2, h3'],
+    ['.cb-done', 'Listen', null],
     ['[data-listen-card]', null, 'h2, h3, h4']
   ];
   function wireCard(card, label, head) {
@@ -305,7 +302,7 @@
     card.__tolCard = true;
     var row = document.createElement('p');
     row.className = 'tol-listen-cardrow no-bubble no-cheer';
-    var lb = label || card.getAttribute('data-listen-card') || T('Listen', 'Escuchar');
+    var lb = label || card.getAttribute('data-listen-card') || 'Listen';
     var b = button(lb);
     // the button says what it reads: "Listen to this step: Check your own weather"
     var h = /^(LI|SECTION|ARTICLE|DIV)$/.test(card.tagName) && !/^(forecast|lq-res)$/.test(card.id) && !card.getAttribute('data-listen-card') && card.querySelector('h2, h3, h4');

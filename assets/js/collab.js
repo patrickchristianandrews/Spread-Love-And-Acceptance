@@ -59,10 +59,6 @@
   var ID_RE = /^[a-z0-9]{4,16}$/, TOOL_RE = /^[a-z0-9][a-z0-9-]{0,31}$/;
   var ME_KEY = 'tol-collab-me', KEPT_KEY = 'tol-collab-kept', TAB_KEY = 'tol-collab-tab';
 
-  // ============================================================== words (English or Spanish)
-  function esPage() { try { if (W && W.TOLLang && W.TOLLang.es) return !!W.TOLLang.es(); } catch (e) {} return !!D && /^es\b/i.test(D.documentElement.lang || ''); }
-  function T(en, es) { return esPage() && es ? es : en; }
-  var T0 = T;   // the page's language, for functions that pick their own (rulesCard)
 
   // ============================================================== bytes
   function utf8(s) {
@@ -484,10 +480,10 @@
     return false;
   }
   function rulesLines(T) {
-    return [T('This is for understanding each other, not for scoring points.', 'Esto es para entenderse, no para ganar puntos.'),
-      T('Either of you can stop at any time.', 'Cualquiera de los dos puede parar cuando quiera.'),
-      T('Nothing here is a verdict about a person.', 'Nada de esto es un veredicto sobre una persona.'),
-      T('Share only what you’re comfortable sharing.', 'Comparte solo lo que te haga sentir cómodo.')];
+    return ['This is for understanding each other, not for scoring points.',
+      'Either of you can stop at any time.',
+      'Nothing here is a verdict about a person.',
+      'Share only what you’re comfortable sharing.'];
   }
   function rulesClose(how) {
     try { if (how === 'ok') W.localStorage.setItem(RULES_KEY, new Date().toISOString().slice(0, 10)); else W.sessionStorage.setItem(RULES_SKIP, '1'); } catch (e) {}
@@ -498,7 +494,6 @@
   // lang: the sending tool's own language ('es' / 'en'), when it has its own switch; otherwise the page's
   function rulesCard(where, lang) {
     if (!D || rulesDone(where)) return null;
-    var T = lang ? function (en, es) { return lang === 'es' && es ? es : en; } : T0;
     css();
     if (!rulesWired) {
       rulesWired = true;
@@ -514,11 +509,11 @@
     var ul = mk('ul', { cls: 'tcol-rules-l' });
     rulesLines(T).forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
     return mk('div', { cls: 'tcol-rules tol-plain no-bubble' + (where === 'float' ? ' is-float' : ''), role: 'group', 'aria-labelledby': id }, [
-      mk('p', { cls: 'tcol-rules-h', id: id, text: T('Before you share', 'Antes de compartir') }),
+      mk('p', { cls: 'tcol-rules-h', id: id, text: 'Before you share' }),
       ul,
       mk('p', { cls: 'tcol-rules-acts' }, [
-        mk('button', { type: 'button', cls: 'tcol-btn', 'data-tcol-rules': 'ok', text: T('Got it', 'Entendido') }), ' ',
-        mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-tcol-rules': 'skip', text: T('Skip', 'Omitir') })])
+        mk('button', { type: 'button', cls: 'tcol-btn', 'data-tcol-rules': 'ok', text: 'Got it' }), ' ',
+        mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-tcol-rules': 'skip', text: 'Skip' })])
     ]);
   }
   // a link opened on a page whose tool shows no panel card (a workpaper, or the results page): a small card
@@ -539,52 +534,49 @@
   function sendBlock(opts) {
     css();
     opts = opts || {};
-    // the page's language, or the tool's own choice (a tool with its own English/Spanish switch)
-    function T(en, es) { return (opts.lang ? opts.lang === 'es' : esPage()) && es ? es : en; }
     var box = mk('div', { cls: 'tcol-send' });
     var rules = rulesCard('send', opts.lang); if (rules) box.appendChild(rules);
     // flow17: the ground rules show once per device. Sending anything counts as having read them, so the
     // card isn't there again on the next send (it stays in this sheet until it closes).
     function seen() { if (!rules) return; try { W.localStorage.setItem(RULES_KEY, new Date().toISOString().slice(0, 10)); } catch (er) {} }
-    var head = mk('p', { cls: 'tcol-send-h', text: opts.heading || T('Send it by', 'Envíalo por') });
-    var acts = mk('div', { cls: 'tcol-acts', role: 'group', 'aria-label': opts.heading || T('Send it by', 'Envíalo por') });
-    var qr = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'qr', text: T('QR code', 'Código QR') });
-    var sms = mk('a', { cls: 'tcol-act', 'data-c': 'sms', href: '#', text: T('Text message', 'Mensaje de texto') });
-    var mail = mk('a', { cls: 'tcol-act', 'data-c': 'mail', href: '#', text: T('Email', 'Correo') });
+    var head = mk('p', { cls: 'tcol-send-h', text: opts.heading || 'Send it by' });
+    var acts = mk('div', { cls: 'tcol-acts', role: 'group', 'aria-label': opts.heading || 'Send it by' });
+    var qr = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'qr', text: 'QR code' });
+    var sms = mk('a', { cls: 'tcol-act', 'data-c': 'sms', href: '#', text: 'Text message' });
+    var mail = mk('a', { cls: 'tcol-act', 'data-c': 'mail', href: '#', text: 'Email' });
     // flow17: one sheet at a time. With the phone's own share menu this button opens it; without one (most
     // laptops) it is a plain WhatsApp link, so it never opens a second sheet behind this one.
     var nativeShare = !!(W && W.navigator && typeof W.navigator.share === 'function');
-    var more = mk('a', { cls: 'tcol-act', 'data-c': 'more', href: '#', target: '_blank', rel: 'noopener noreferrer', text: nativeShare ? T('WhatsApp or another app', 'WhatsApp u otra app') : 'WhatsApp' });
-    var cp = mk('button', { type: 'button', cls: 'tcol-act tcol-act-copy', 'data-c': 'copy', text: T('Copy link', 'Copiar enlace') });
-    var cd = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'code', text: T('Copy as a code', 'Copiar como código'), hidden: '' });
+    var more = mk('a', { cls: 'tcol-act', 'data-c': 'more', href: '#', target: '_blank', rel: 'noopener noreferrer', text: nativeShare ? 'WhatsApp or another app' : 'WhatsApp' });
+    var cp = mk('button', { type: 'button', cls: 'tcol-act tcol-act-copy', 'data-c': 'copy', text: 'Copy link' });
+    var cd = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'code', text: 'Copy as a code', hidden: '' });
     // the ones people use most come first: WhatsApp (or the phone's share menu), a text, copy the link
     [more, sms, cp, mail, qr, cd].forEach(function (b) { acts.appendChild(b); });
     var long = mk('p', { cls: 'tcol-long', hidden: '' });
-    var priv = mk('p', { cls: 'tcol-priv', text: T('Anyone with the link can read your answers. Nothing is stored on our side.', 'Cualquiera que tenga el enlace puede leer tus respuestas. No se guarda nada de nuestro lado.') });
+    var priv = mk('p', { cls: 'tcol-priv', text: 'Anyone with the link can read your answers. Nothing is stored on our side.' });
     var st = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
     box.appendChild(head); box.appendChild(acts); box.appendChild(long); box.appendChild(priv); box.appendChild(st);
     var cur = '', stT = 0;
     function say(m) { st.textContent = ''; clearTimeout(stT); setTimeout(function () { st.textContent = m; }, 30); stT = setTimeout(function () { st.textContent = ''; }, 9000); }
     function getUrl() { var u = typeof opts.url === 'function' ? opts.url() : opts.url; return String(u || ''); }
     function message(u) { return [typeof opts.text === 'function' ? opts.text() : opts.text, u].filter(Boolean).join('\n'); }
-    function subject() { return (typeof opts.subject === 'function' ? opts.subject() : opts.subject) || (typeof opts.title === 'function' ? opts.title() : opts.title) || T('Let’s work on this together', 'Trabajemos en esto juntos'); }
+    function subject() { return (typeof opts.subject === 'function' ? opts.subject() : opts.subject) || (typeof opts.title === 'function' ? opts.title() : opts.title) || 'Let’s work on this together'; }
     function refresh() {
       cur = getUrl();
       var on = !!cur, lg = isLong(cur);
       [qr, sms, mail, more, cp].forEach(function (b) { b.classList.toggle('is-off', !on); if (on) b.removeAttribute('aria-disabled'); else b.setAttribute('aria-disabled', 'true'); });
       sms.hidden = lg; qr.hidden = lg; cd.hidden = !lg;
       long.hidden = !lg;
-      long.textContent = lg ? T('This link is long (' + cur.length.toLocaleString() + ' characters), too long for a QR code or a text message to carry safely. Copy it as a code and paste it into a chat, or send it by email, which has no limit. On their side, they paste the code under “Got a code instead of a link?”.',
-        'Este enlace es largo (' + cur.length.toLocaleString() + ' caracteres), demasiado para un código QR o un mensaje de texto. Cópialo como código y pégalo en un chat, o envíalo por correo, que no tiene límite. Del otro lado, pegan el código en «¿Te llegó un código en vez de un enlace?».') : '';
+      long.textContent = lg ? ('This link is long (' + cur.length.toLocaleString() + ' characters), too long for a QR code or a text message to carry safely. Copy it as a code and paste it into a chat, or send it by email, which has no limit. On their side, they paste the code under “Got a code instead of a link?”.') : '';
       sms.setAttribute('href', on ? smsHref(message(cur)) : '#');
-      mail.setAttribute('href', on ? mailHref(subject(), message(cur) + '\n\n' + T('Nothing is uploaded: everything travels inside the link.', 'No se sube nada: todo viaja dentro del enlace.')) : '#');
+      mail.setAttribute('href', on ? mailHref(subject(), message(cur) + '\n\n' + 'Nothing is uploaded: everything travels inside the link.') : '#');
       more.setAttribute('href', on ? 'https://wa.me/?text=' + encodeURIComponent(message(cur)) : '#');
       return cur;
     }
     function notReady(e) {
       if (cur) return false;
       if (e) e.preventDefault();
-      say(opts.empty ? (typeof opts.empty === 'function' ? opts.empty() : opts.empty) : T('Fill in your part first, then send it.', 'Primero completa tu parte y luego envíala.'));
+      say(opts.empty ? (typeof opts.empty === 'function' ? opts.empty() : opts.empty) : 'Fill in your part first, then send it.');
       return true;
     }
     // the link is made fresh as a finger or a key reaches for a button, so it always holds the latest answers
@@ -596,10 +588,10 @@
       refresh();
       if (notReady(e)) return;
       if (c !== 'more') seen();
-      if (c === 'sms' || c === 'mail') { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); say(c === 'sms' ? T('Opening your messages app. If nothing opens, use “Copy link”.', 'Abriendo tus mensajes. Si no se abre nada, usa «Copiar enlace».') : T('Opening your email. If nothing opens, use “Copy link”.', 'Abriendo tu correo. Si no se abre nada, usa «Copiar enlace».')); return; }
+      if (c === 'sms' || c === 'mail') { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); say(c === 'sms' ? 'Opening your messages app. If nothing opens, use “Copy link”.' : 'Opening your email. If nothing opens, use “Copy link”.'); return; }
       if (c === 'qr') {
         var who = typeof opts.who === 'function' ? opts.who() : opts.who;
-        withKit(function (K) { K.showQR(cur, { title: who ? T('Scan with ' + who + '’s phone', 'Escanéalo con el teléfono de ' + who) : T('Scan with the other phone', 'Escanéalo con el otro teléfono'), note: opts.qrNote || T('Open the camera on the other phone and point it at this code. It opens this page there, with your part in it.', 'Abre la cámara del otro teléfono y apúntala a este código. Abre esta página allí, con tu parte.') }); });
+        withKit(function (K) { K.showQR(cur, { title: who ? ('Scan with ' + who + '’s phone') : 'Scan with the other phone', note: opts.qrNote || 'Open the camera on the other phone and point it at this code. It opens this page there, with your part in it.' }); });
         if (opts.onSent) opts.onSent('qr', cur);
         return;
       }
@@ -616,14 +608,14 @@
               try { W.open(wa, '_blank', 'noopener'); } catch (x) {}
             });
           } catch (er) { try { W.open(wa, '_blank', 'noopener'); } catch (x) {} }
-        } else { fire(cur, 'whatsapp'); say(T('Opening WhatsApp. If nothing opens, use “Copy link”.', 'Abriendo WhatsApp. Si no se abre nada, usa «Copiar enlace».')); }
+        } else { fire(cur, 'whatsapp'); say('Opening WhatsApp. If nothing opens, use “Copy link”.'); }
         if (opts.onSent) opts.onSent('more', cur);
         return;
       }
       if (c === 'copy' || c === 'code') {
         var t = c === 'code' ? codeOf(cur) : cur;
         copyText(t).then(function (ok) {
-          say(!ok ? T('Couldn’t copy here. Press and hold to copy by hand.', 'No se pudo copiar aquí.') : c === 'code' ? T('Code copied. Paste it into a chat or a note. On their side, they paste it under “Got a code instead of a link?”.', 'Código copiado. Pégalo en un chat o una nota. Del otro lado, lo pegan en «¿Te llegó un código en vez de un enlace?».') : T('Link copied. Paste it into a message to them.', 'Enlace copiado. Pégalo en un mensaje.'));
+          say(!ok ? 'Couldn’t copy here. Press and hold to copy by hand.' : c === 'code' ? 'Code copied. Paste it into a chat or a note. On their side, they paste it under “Got a code instead of a link?”.' : 'Link copied. Paste it into a message to them.');
           if (ok) { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); }
         });
       }
@@ -648,7 +640,7 @@
     if (!sheet) {
       sheet = mk('div', { cls: 'tcol-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tcol-sheet-h', hidden: '' });
       var card = mk('div', { cls: 'tcol-sheet-card' });
-      var hd = mk('div', { cls: 'tcol-sheet-head' }, [mk('h2', { id: 'tcol-sheet-h' }), mk('button', { type: 'button', cls: 'tcol-sheet-x', 'data-x': '1', text: T('Close', 'Cerrar') })]);
+      var hd = mk('div', { cls: 'tcol-sheet-head' }, [mk('h2', { id: 'tcol-sheet-h' }), mk('button', { type: 'button', cls: 'tcol-sheet-x', 'data-x': '1', text: 'Close' })]);
       card.appendChild(hd); card.appendChild(mk('p', { cls: 'tcol-sheet-note' })); card.appendChild(mk('div', { cls: 'tcol-sheet-body' }));
       sheet.appendChild(card);
       sheet.addEventListener('click', function (e) { if (e.target === sheet || (e.target.closest && e.target.closest('[data-x]'))) closeSheet(); });
@@ -662,10 +654,10 @@
       });
       D.body.appendChild(sheet);
     }
-    sheet.querySelector('#tcol-sheet-h').textContent = opts.heading || T('Send it', 'Envíalo');
+    sheet.querySelector('#tcol-sheet-h').textContent = opts.heading || 'Send it';
     var note = sheet.querySelector('.tcol-sheet-note'); note.textContent = opts.note || ''; note.hidden = !opts.note;
     var body = sheet.querySelector('.tcol-sheet-body'); body.textContent = '';
-    var sb = sendBlock(Object.assign({}, opts, { heading: opts.blockHeading || T('Send by', 'Enviar por') }));
+    var sb = sendBlock(Object.assign({}, opts, { heading: opts.blockHeading || 'Send by' }));
     body.appendChild(sb);
     sheetBack = D.activeElement;
     sheet.hidden = false; D.documentElement.classList.add('tcol-sheet-on');
@@ -696,14 +688,14 @@
     opts = opts || {};
     var tool = opts.tool, mount = opts.mount;
     if (!D || !mount || !TOOL_RE.test(tool || '')) return null;
-    var title = function () { var t = opts.title || ['this', 'esto']; return Array.isArray(t) ? T(t[0], t[1]) : t; };
+    var title = function () { var t = opts.title || ['this', 'esto']; return Array.isArray(t) ? t[0] : t; };
     var fieldMap = {}; (opts.fields || []).forEach(function (f) { fieldMap[f.k] = f; });
-    function label(k) { var f = fieldMap[k]; return f ? T(f.en, f.es || f.en) : k; }
+    function label(k) { var f = fieldMap[k]; return f ? f.en : k; }
     function fmt(k, v) {
       if (opts.format) { var r = opts.format(k, v); if (r != null) return String(r); }
       if (Array.isArray(v)) return v.map(function (x) { return typeof x === 'object' ? JSON.stringify(x) : String(x); }).join(', ');
       if (v && typeof v === 'object') return Object.keys(v).map(function (x) { return x + ': ' + fmt(x, v[x]); }).join('; ');
-      if (v === true) return T('Yes', 'Sí'); if (v === false) return T('No', 'No');
+      if (v === true) return 'Yes'; if (v === false) return 'No';
       return v == null ? '' : String(v);
     }
     function mine() { var d = {}; try { d = opts.mine() || {}; } catch (e) { d = {}; } return clone(d); }
@@ -739,7 +731,7 @@
     // the envelope to send: everyone's parts this tab has, and yours as it is now
     function current() {
       var me = getMe(), d = mine();
-      return envelope({ tool: tool, id: me.id, name: myName() || me.name, d: d, at: myAt(), base: st.env, r: st.env ? st.env.r : st.r, lang: esPage() ? 'es' : undefined });
+      return envelope({ tool: tool, id: me.id, name: myName() || me.name, d: d, at: myAt(), base: st.env, r: st.env ? st.env.r : st.r, lang: undefined });
     }
     function url() { if (blankish(mine()) && !others().length) return ''; return link(current(), opts.page); }
     function sendText() {
@@ -747,15 +739,15 @@
       if (opts.message) { var m = opts.message(reply); if (m) return m; }
       var who = myName();
       return reply
-        ? T((who ? who + ' here. ' : '') + 'I’ve added my part of ' + title() + '. Open the link to see everyone’s parts together. Nothing is uploaded: it travels inside the link.', (who ? 'Soy ' + who + '. ' : '') + 'Agregué mi parte de ' + title() + '. Abre el enlace para ver las partes de todos juntas. No se sube nada: viaja dentro del enlace.')
-        : T((who ? who + ' here. ' : '') + 'Here’s my part of ' + title() + '. Open the link, add yours, and send it back. Nothing is uploaded: it travels inside the link.', (who ? 'Soy ' + who + '. ' : '') + 'Aquí está mi parte de ' + title() + '. Abre el enlace, agrega la tuya y envíala de vuelta. No se sube nada: viaja dentro del enlace.');
+        ? ((who ? who + ' here. ' : '') + 'I’ve added my part of ' + title() + '. Open the link to see everyone’s parts together. Nothing is uploaded: it travels inside the link.')
+        : ((who ? who + ' here. ' : '') + 'Here’s my part of ' + title() + '. Open the link, add yours, and send it back. Nothing is uploaded: it travels inside the link.');
     }
 
     // ---- the panel ----
     var hid = 'tcol-h-' + tool;
     var panel = mk('section', { cls: 'tcol no-print', 'aria-labelledby': hid, 'data-collab': tool });
-    panel.appendChild(mk('h3', { cls: 'tcol-h', id: hid, text: T('Work on this together', 'Trabajar en esto juntos') }));
-    panel.appendChild(mk('p', { cls: 'tcol-lede', text: opts.lede || T('Each of you fills in your own part, on your own phone. Send yours, they add theirs and send it back. Nobody’s answers overwrite anyone else’s, and it works for three or more of you too.', 'Cada uno completa su propia parte, en su propio teléfono. Envía la tuya, la otra persona agrega la suya y te la devuelve. Nadie borra las respuestas de nadie, y funciona también con tres o más.') }));
+    panel.appendChild(mk('h3', { cls: 'tcol-h', id: hid, text: 'Work on this together' }));
+    panel.appendChild(mk('p', { cls: 'tcol-lede', text: opts.lede || 'Each of you fills in your own part, on your own phone. Send yours, they add theirs and send it back. Nobody’s answers overwrite anyone else’s, and it works for three or more of you too.' }));
     var banner = mk('div', { cls: 'tcol-in', role: 'status', tabindex: '-1', hidden: '' });
     var pick = mk('div', { cls: 'tcol-pick', hidden: '' });
     var people = mk('p', { cls: 'tcol-people', hidden: '' });
@@ -764,25 +756,25 @@
     var side = mk('div', { cls: 'tcol-side', hidden: '' }), sideOpen = false;
     var hist = mk('details', { cls: 'tcol-hist', hidden: '' });
     var nid = 'tcol-n-' + tool;
-    var meRow = mk('p', { cls: 'tcol-me' }, [mk('label', { for: nid, text: T('Your name (optional)', 'Tu nombre (opcional)') }),
-      mk('input', { type: 'text', id: nid, cls: 'tcol-name', maxlength: '40', autocomplete: 'off', placeholder: T('Me', 'Yo') })]);
-    var send = sendBlock({ url: url, title: function () { return cap(title()); }, text: sendText, subject: function () { return T('My part of ', 'Mi parte de ') + title(); },
+    var meRow = mk('p', { cls: 'tcol-me' }, [mk('label', { for: nid, text: 'Your name (optional)' }),
+      mk('input', { type: 'text', id: nid, cls: 'tcol-name', maxlength: '40', autocomplete: 'off', placeholder: 'Me' })]);
+    var send = sendBlock({ url: url, title: function () { return cap(title()); }, text: sendText, subject: function () { return 'My part of ' + title(); },
       who: function () { var o = others(); return o.length === 1 ? st.env.p[o[0]].n : ''; },
-      empty: function () { return T('Fill in your part first, then send it.', 'Primero completa tu parte y luego envíala.'); },
+      empty: function () { return 'Fill in your part first, then send it.'; },
       onSent: function () { saveMe(myName()); } });
     var pid = 'tcol-p-' + tool;
-    var paste = mk('details', { cls: 'tcol-paste' }, [mk('summary', { text: T('Got a code instead of a link?', '¿Te llegó un código en vez de un enlace?') }),
-      mk('label', { for: pid, text: T('Paste the code or the link here', 'Pega aquí el código o el enlace') }),
+    var paste = mk('details', { cls: 'tcol-paste' }, [mk('summary', { text: 'Got a code instead of a link?' }),
+      mk('label', { for: pid, text: 'Paste the code or the link here' }),
       mk('textarea', { id: pid, rows: '3', cls: 'tcol-pastebox', autocomplete: 'off', spellcheck: 'false' }),
-      mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'open', text: T('Open it', 'Abrirlo') })])]);
+      mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'open', text: 'Open it' })])]);
     var kid = 'tcol-k-' + tool;
     var keep = mk('div', { cls: 'tcol-keep' }, [
-      mk('p', {}, [mk('input', { type: 'checkbox', id: kid, cls: 'tcol-keepbox' }), ' ', mk('label', { for: kid, text: T('Keep on this device', 'Guardar en este aparato') })]),
-      mk('p', { cls: 'tcol-small', text: T('So next time you can see what changed. Only on this device, never sent anywhere. Off: what they sent stays in this tab until you close it.', 'Así la próxima vez ves qué cambió. Solo en este aparato, nunca se envía. Si no lo marcas, lo que te enviaron queda en esta pestaña hasta que la cierres.') }),
+      mk('p', {}, [mk('input', { type: 'checkbox', id: kid, cls: 'tcol-keepbox' }), ' ', mk('label', { for: kid, text: 'Keep on this device' })]),
+      mk('p', { cls: 'tcol-small', text: 'So next time you can see what changed. Only on this device, never sent anywhere. Off: what they sent stays in this tab until you close it.' }),
       // site.js asks "are you sure?" first (data-clear-confirm), then this clears it
-      mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'clear', 'data-clear-confirm': T('what the others sent you here', 'lo que te enviaron los demás'), 'data-clear-keys': KEPT_KEY + ' ' + TAB_KEY, text: T('Clear what you received', 'Borrar lo que recibiste') })])]);
+      mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'clear', 'data-clear-confirm': 'what the others sent you here', 'data-clear-keys': KEPT_KEY + ' ' + TAB_KEY, text: 'Clear what you received' })])]);
     var pst = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
-    var more = mk('p', { cls: 'tcol-small' }, [T('Sending several results at once (your Wave Code, your care card…)? ', '¿Varios resultados a la vez? '), mk('a', { href: '/together.html#share', text: T('Share my results', 'Compartir mis resultados') }), '.']);
+    var more = mk('p', { cls: 'tcol-small' }, ['Sending several results at once (your Wave Code, your care card…)? ', mk('a', { href: '/together.html#share', text: 'Share my results' }), '.']);
     [banner, pick, people, parts, side, hist, meRow, send, paste, keep, more, pst].forEach(function (n) { panel.appendChild(n); });
     mount.appendChild(panel);
     function cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -794,31 +786,31 @@
     // ---- showing the parts ----
     function when(at) {
       if (!at) return '';
-      try { return new Date(at * 1000).toLocaleString(esPage() ? 'es' : undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); } catch (e) { return ''; }
+      try { return new Date(at * 1000).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); } catch (e) { return ''; }
     }
-    function nameOf(id) { var s = st.env && st.env.p[id]; return (s && s.n) || T('Someone', 'Alguien'); }
+    function nameOf(id) { var s = st.env && st.env.p[id]; return (s && s.n) || 'Someone'; }
     function draw() {
       var ids = others(), e = st.env, mineNow = mine(), id0 = myId();
       // who's in it so far
       if (e && ids.length) {
-        var names = ids.map(nameOf).concat([myName() ? myName() + T(' (you)', ' (tú)') : T('you', 'tú')]);
-        people.textContent = T('In this so far: ', 'Hasta ahora: ') + names.join(' · ');
+        var names = ids.map(nameOf).concat([myName() ? myName() + ' (you)' : 'you']);
+        people.textContent = 'In this so far: ' + names.join(' · ');
         people.hidden = false;
       } else people.hidden = true;
       parts.textContent = '';
       if (!ids.length) { parts.hidden = true; return; }
       parts.hidden = false;
-      parts.appendChild(mk('h4', { cls: 'tcol-parts-h', text: ids.length === 1 ? T('What ' + nameOf(ids[0]) + ' sent', 'Lo que envió ' + nameOf(ids[0])) : T('What the others sent', 'Lo que enviaron los demás') }));
+      parts.appendChild(mk('h4', { cls: 'tcol-parts-h', text: ids.length === 1 ? ('What ' + nameOf(ids[0]) + ' sent') : 'What the others sent' }));
       ids.sort(function (a, b) { return (e.p[b].at || 0) - (e.p[a].at || 0); });
       ids.forEach(function (id) {
         var s = e.p[id], ch = info && info.changes ? info.changes.filter(function (c) { return c.id === id; })[0] : null;
         var art = mk('article', { cls: 'tcol-part' });
-        var h = mk('h5', { text: s.n || T('Someone', 'Alguien') });
-        if (ch && ch.kind === 'new') h.appendChild(mk('span', { cls: 'tcol-tag', text: T('New', 'Nuevo') }));
-        if (ch && ch.kind === 'updated') h.appendChild(mk('span', { cls: 'tcol-tag', text: T('Changed', 'Cambió') }));
+        var h = mk('h5', { text: s.n || 'Someone' });
+        if (ch && ch.kind === 'new') h.appendChild(mk('span', { cls: 'tcol-tag', text: 'New' }));
+        if (ch && ch.kind === 'updated') h.appendChild(mk('span', { cls: 'tcol-tag', text: 'Changed' }));
         art.appendChild(h);
-        if (s.at) art.appendChild(mk('p', { cls: 'tcol-when', text: T('Their part as of ', 'Su parte al ') + when(s.at) }));
-        if (ch && ch.kind === 'updated' && ch.keys.length) art.appendChild(mk('p', { cls: 'tcol-changed', text: T('Changed since last time: ', 'Cambió desde la última vez: ') + ch.keys.map(label).join(', ') }));
+        if (s.at) art.appendChild(mk('p', { cls: 'tcol-when', text: 'Their part as of ' + when(s.at) }));
+        if (ch && ch.kind === 'updated' && ch.keys.length) art.appendChild(mk('p', { cls: 'tcol-changed', text: 'Changed since last time: ' + ch.keys.map(label).join(', ') }));
         var dl = mk('dl', { cls: 'tcol-dl' }), any = false;
         var keys = (opts.fields || []).map(function (f) { return f.k; }).filter(function (k) { return k in s.d; });
         Object.keys(s.d).forEach(function (k) { if (keys.indexOf(k) < 0 && (!opts.fields || !opts.fields.length)) keys.push(k); });
@@ -828,16 +820,16 @@
           var dd = mk('dd', { text: txt });
           var row = mk('div', { cls: 'tcol-row' }, [mk('dt', { text: label(k) }), dd]);
           if (opts.shared && opts.fill && own.indexOf(k) < 0 && !same(mineNow[k], s.d[k])) {
-            var ub = mk('button', { type: 'button', cls: 'tcol-btn tcol-use', 'data-k': 'use', 'data-id': id, 'data-f': k, text: T('Use this', 'Usar esto') });
-            ub.setAttribute('aria-label', T('Use ' + (s.n || 'their') + '’s ' + label(k).toLowerCase(), 'Usar ' + label(k).toLowerCase() + ' de ' + (s.n || 'esa persona')));
+            var ub = mk('button', { type: 'button', cls: 'tcol-btn tcol-use', 'data-k': 'use', 'data-id': id, 'data-f': k, text: 'Use this' });
+            ub.setAttribute('aria-label', ('Use ' + (s.n || 'their') + '’s ' + label(k).toLowerCase()));
             row.appendChild(mk('div', { cls: 'tcol-usebox' }, [ub]));
           }
           dl.appendChild(row);
         });
-        if (!any) art.appendChild(mk('p', { cls: 'tcol-small', text: T('Nothing filled in yet.', 'Todavía no completó nada.') }));
+        if (!any) art.appendChild(mk('p', { cls: 'tcol-small', text: 'Nothing filled in yet.' }));
         else art.appendChild(dl);
         if (opts.shared && opts.fill && any && keys.filter(function (k) { return own.indexOf(k) < 0 && !same(mineNow[k], s.d[k]) && fmt(k, s.d[k]); }).length > 1) {
-          art.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'useall', 'data-id': id, text: T('Use all of ' + (s.n || 'theirs'), 'Usar todo lo de ' + (s.n || 'esa persona')) })]));
+          art.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'useall', 'data-id': id, text: ('Use all of ' + (s.n || 'theirs')) })]));
         }
         parts.appendChild(art);
       });
@@ -854,22 +846,22 @@
       side.textContent = '';
       if (!canCombine()) { side.hidden = true; return; }
       side.hidden = false;
-      var b = mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', 'aria-expanded': String(sideOpen), text: sideOpen ? T('Hide the side-by-side view', 'Ocultar la vista lado a lado') : T('See everyone’s answers side by side', 'Ver las respuestas de todos lado a lado') });
+      var b = mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', 'aria-expanded': String(sideOpen), text: sideOpen ? 'Hide the side-by-side view' : 'See everyone’s answers side by side' });
       side.appendChild(mk('p', {}, [b]));
       if (sideOpen) side.appendChild(combinedView(everyone(), { kind: opts.kind || 'fields', fields: opts.fields, format: opts.format, next: opts.next, k: opts.scoreKey, list: opts.listKey, tool: tool,
-        title: T('Side by side', 'Lado a lado') }));
+        title: 'Side by side' }));
     }
     function drawHist() {
       hist.textContent = '';
       var k = (lsGet(KEPT_KEY) || {})[tool], h = opts.history && k && Array.isArray(k.hist) ? k.hist : [];
       if (!h.length) { hist.hidden = true; return; }
       hist.hidden = false;
-      hist.appendChild(mk('summary', { text: T('Earlier rounds, kept on this device (' + h.length + ')', 'Rondas anteriores, guardadas en este aparato (' + h.length + ')') }));
+      hist.appendChild(mk('summary', { text: ('Earlier rounds, kept on this device (' + h.length + ')') }));
       h.slice().reverse().forEach(function (r) {
         var art = mk('div', { cls: 'tcol-hist-r' }, [mk('p', { cls: 'tcol-when', text: when(r.at) })]);
         (r.people || []).forEach(function (p) {
           var bits = Object.keys(p.d || {}).filter(function (x) { return fmt(x, p.d[x]); }).map(function (x) { return label(x) + ': ' + fmt(x, p.d[x]); });
-          if (bits.length) art.appendChild(mk('p', { cls: 'tcol-small', text: (p.n || T('Someone', 'Alguien')) + ' · ' + bits.join(' · ') }));
+          if (bits.length) art.appendChild(mk('p', { cls: 'tcol-small', text: (p.n || 'Someone') + ' · ' + bits.join(' · ') }));
         });
         hist.appendChild(art);
       });
@@ -879,47 +871,47 @@
       if (!info) { banner.hidden = true; return; }
       banner.hidden = false;
       if (info.bad) {
-        banner.appendChild(mk('p', { text: T('That link didn’t open. Part of it may have been cut off when it was copied. Ask them to send it again, or to copy it as a code.', 'Ese enlace no se abrió. Puede que se haya cortado al copiarlo. Pide que lo envíen otra vez, o como código.') }));
+        banner.appendChild(mk('p', { text: 'That link didn’t open. Part of it may have been cut off when it was copied. Ask them to send it again, or to copy it as a code.' }));
       } else if (info.wrong) {
-        banner.appendChild(mk('p', { text: T('That link is for a different tool, so nothing was added here.', 'Ese enlace es de otra herramienta, así que no se agregó nada aquí.') }));
+        banner.appendChild(mk('p', { text: 'That link is for a different tool, so nothing was added here.' }));
       } else if (info.own) {
-        banner.appendChild(mk('p', { text: T('This is the link you sent. Nothing new in it yet: when they send it back, their part shows up here.', 'Este es el enlace que enviaste. Todavía no trae nada nuevo: cuando te lo devuelvan, su parte aparecerá aquí.') }));
+        banner.appendChild(mk('p', { text: 'This is the link you sent. Nothing new in it yet: when they send it back, their part shows up here.' }));
       } else {
-        var from = info.from || T('Someone', 'Alguien'), reply = info.reply;
+        var from = info.from || 'Someone', reply = info.reply;
         var lead = mk('p', {}, [mk('strong', { text: reply
-          ? T(from + ' added their part of ' + title() + '. ', from + ' agregó su parte de ' + title() + '. ')
-          : T(from + ' sent you their part of ' + title() + '. ', from + ' te envió su parte de ' + title() + '. ') }),
-          reply ? T('It’s below, beside yours. Change anything, then send it back.', 'Está abajo, junto a la tuya. Cambia lo que quieras y envíala de vuelta.') : T('Add yours, then send it back.', 'Agrega la tuya y envíala de vuelta.')]);
+          ? (from + ' added their part of ' + title() + '. ')
+          : (from + ' sent you their part of ' + title() + '. ') }),
+          reply ? 'It’s below, beside yours. Change anything, then send it back.' : 'Add yours, then send it back.']);
         banner.appendChild(lead);
-        if (!reply) banner.appendChild(mk('p', { cls: 'tcol-welcome', text: T('This is for understanding each other, not for scoring points. Your answers stay on this device until you send them back.', 'Esto es para entenderse, no para ganar puntos. Tus respuestas se quedan en este aparato hasta que las envíes de vuelta.') }));
+        if (!reply) banner.appendChild(mk('p', { cls: 'tcol-welcome', text: 'This is for understanding each other, not for scoring points. Your answers stay on this device until you send them back.' }));
         var lines = [];
         info.changes.forEach(function (c) {
           if (c.id === myId()) return;
-          var n = c.n || T('Someone', 'Alguien');
-          if (c.kind === 'new') lines.push(T(n + '’s part is new here.', 'La parte de ' + n + ' es nueva aquí.'));
-          else if (c.kind === 'updated') lines.push(c.keys.length ? T(n + ' changed: ' + c.keys.map(label).join(', ') + '.', n + ' cambió: ' + c.keys.map(label).join(', ') + '.') : T(n + ' sent it again; nothing in their part changed.', n + ' lo envió otra vez; su parte no cambió.'));
-          else if (c.kind === 'older') lines.push(T('This link is older than what you already have from ' + n + ', so the newer part stays.', 'Este enlace es más viejo que lo que ya tienes de ' + n + ', así que se queda la parte más nueva.'));
-          else if (c.kind === 'same') lines.push(T('Nothing new from ' + n + '.', 'Nada nuevo de ' + n + '.'));
+          var n = c.n || 'Someone';
+          if (c.kind === 'new') lines.push((n + '’s part is new here.'));
+          else if (c.kind === 'updated') lines.push(c.keys.length ? (n + ' changed: ' + c.keys.map(label).join(', ') + '.') : (n + ' sent it again; nothing in their part changed.'));
+          else if (c.kind === 'older') lines.push(('This link is older than what you already have from ' + n + ', so the newer part stays.'));
+          else if (c.kind === 'same') lines.push(('Nothing new from ' + n + '.'));
         });
-        if (info.fresh && !keepOn && info.changes.some(function (c) { return c.kind === 'new' && c.id !== myId(); }) && info.reply) lines.push(T('To see what changed next time, tick “Keep on this device” below.', 'Para ver qué cambió la próxima vez, marca «Guardar en este aparato» abajo.'));
-        if (info.filled) lines.push(T('Their answers are filled in below, so you can start from them and change anything.', 'Sus respuestas están abajo, así puedes partir de ellas y cambiar lo que quieras.'));
-        if (info.mineBack) lines.push(T('Your own part came back with the link, so it’s filled in again.', 'Tu propia parte volvió con el enlace, así que está completa otra vez.'));
+        if (info.fresh && !keepOn && info.changes.some(function (c) { return c.kind === 'new' && c.id !== myId(); }) && info.reply) lines.push('To see what changed next time, tick “Keep on this device” below.');
+        if (info.filled) lines.push('Their answers are filled in below, so you can start from them and change anything.');
+        if (info.mineBack) lines.push('Your own part came back with the link, so it’s filled in again.');
         if (lines.length) { var ul = mk('ul', { cls: 'tcol-changes' }); lines.forEach(function (l) { ul.appendChild(mk('li', { text: l })); }); banner.appendChild(ul); }
         // you've done it too: offer to join the answers
         // (flow17: only when you really had your own answers before the link: a fresh phone, whose form was just
         // filled from theirs, is asked to add its part, not to combine)
-        if (canCombine() && !sideOpen && (reply || info.hadMine)) banner.appendChild(mk('p', {}, [reply ? '' : T('You’ve done this too. ', 'Tú también lo hiciste. '),
-          mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', text: reply ? T('See your answers side by side', 'Ver sus respuestas lado a lado') : T('Combine your answers?', '¿Combinar sus respuestas?') })]));
+        if (canCombine() && !sideOpen && (reply || info.hadMine)) banner.appendChild(mk('p', {}, [reply ? '' : 'You’ve done this too. ',
+          mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', text: reply ? 'See your answers side by side' : 'Combine your answers?' })]));
       }
-      banner.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'hide', text: T('Okay, hide this', 'Listo, ocultar esto') })]));
+      banner.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'hide', text: 'Okay, hide this' })]));
     }
     function drawPick() {
       pick.textContent = '';
       if (!whoAsk) { pick.hidden = true; return; }
       pick.hidden = false;
-      pick.appendChild(mk('p', { text: T('Is “' + whoAsk.n + '” you, on another device?', '¿“' + whoAsk.n + '” eres tú, en otro aparato?') }));
-      pick.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'isme', text: T('Yes, that’s me', 'Sí, soy yo') }), ' ',
-        mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'notme', text: T('No, someone else', 'No, es otra persona') })]));
+      pick.appendChild(mk('p', { text: ('Is “' + whoAsk.n + '” you, on another device?') }));
+      pick.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'isme', text: 'Yes, that’s me' }), ' ',
+        mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'notme', text: 'No, someone else' })]));
     }
     function render() { drawBanner(); drawPick(); draw(); drawHist(); send.refresh(); }
 
@@ -964,7 +956,7 @@
         var kk0 = lsGet(KEPT_KEY) || {}, e0 = kk0[tool];
         if (e0) {
           e0.hist = Array.isArray(e0.hist) ? e0.hist : [];
-          e0.hist.push({ at: now(), people: [{ n: myName() || T('You', 'Tú'), d: mine() }].concat(Object.keys(res.env.p).map(function (k) { return { n: res.env.p[k].n, d: res.env.p[k].d }; })) });
+          e0.hist.push({ at: now(), people: [{ n: myName() || 'You', d: mine() }].concat(Object.keys(res.env.p).map(function (k) { return { n: res.env.p[k].n, d: res.env.p[k].d }; })) });
           e0.hist = e0.hist.slice(-12); lsSet(KEPT_KEY, kk0);
         }
       }
@@ -996,7 +988,7 @@
       if (k === 'hide') { info = null; drawBanner(); var h = panel.querySelector('.tcol-h'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } return; }
       if (k === 'open') {
         var ta = panel.querySelector('.tcol-pastebox'), env = read(ta.value);
-        if (!env) { status(T('That doesn’t look like a link or a code from this site. Copy all of it and try again.', 'Eso no parece un enlace o código de este sitio. Copia todo e inténtalo otra vez.')); ta.focus(); return; }
+        if (!env) { status('That doesn’t look like a link or a code from this site. Copy all of it and try again.'); ta.focus(); return; }
         if (take(env, 'code') && env.t === tool) { ta.value = ''; paste.open = false; banner.focus({ preventScroll: true }); }
         return;
       }
@@ -1007,7 +999,7 @@
         else Object.keys(shareable(s.d)).forEach(function (x) { if (s.d[x] != null && s.d[x] !== '') cur[x] = clone(s.d[x]); });
         try { opts.fill(cur); } catch (er) {}
         draw(); send.refresh();
-        status(T('Done. It’s in your part now. Send it back so you both have the same.', 'Listo. Ya está en tu parte. Envíala de vuelta para que los dos tengan lo mismo.'));
+        status('Done. It’s in your part now. Send it back so you both have the same.');
         return;
       }
       if (k === 'clear') {
@@ -1016,14 +1008,14 @@
         var kk = lsGet(KEPT_KEY) || {}; delete kk[tool]; lsSet(KEPT_KEY, Object.keys(kk).length ? kk : null);
         st = { env: null, sig: st.sig, at: st.at, r: rid(6) };
         render();
-        status(T('Cleared. What they sent is gone from this device. Your own part is still in the form.', 'Borrado. Lo que te enviaron ya no está en este aparato. Tu propia parte sigue en el formulario.'));
+        status('Cleared. What they sent is gone from this device. Your own part is still in the form.');
         return;
       }
       if (k === 'isme' && whoAsk) {
         // their part was you on another device: it becomes yours here, and the id you send with
         var m = getMe(); m.id = whoAsk.id; saveMe();
         if (st.env && st.env.p[whoAsk.id]) { var d0 = st.env.p[whoAsk.id].d; delete st.env.p[whoAsk.id]; if (opts.fill && mineBlank()) { try { opts.fill(clone(d0)); } catch (er) {} } }
-        whoAsk = null; persist(); render(); status(T('Got it. That part is yours on this device now.', 'Entendido. Esa parte es tuya en este aparato ahora.'));
+        whoAsk = null; persist(); render(); status('Got it. That part is yours on this device now.');
         return;
       }
       if (k === 'notme') { whoAsk = null; drawPick(); return; }
@@ -1031,7 +1023,7 @@
     panel.addEventListener('change', function (e) {
       if (!e.target.classList.contains('tcol-keepbox')) return;
       keepOn = e.target.checked; persist();
-      status(keepOn ? T('Kept on this device. “Clear what you received” removes it.', 'Guardado en este aparato. «Borrar lo que recibiste» lo quita.') : T('Not kept on this device now.', 'Ya no se guarda en este aparato.'));
+      status(keepOn ? 'Kept on this device. “Clear what you received” removes it.' : 'Not kept on this device now.');
     });
     nameInput().addEventListener('input', function () { if (!getMe().fresh) saveMe(myName()); send.refresh(); });
     W.addEventListener('hashchange', fromHash);
@@ -1122,19 +1114,19 @@
   // the kind words for a gap between two or more scores
   function gapWords(res, o) {
     o = o || {};
-    if (res.gap === null) return T('Only one score so far. When the others send theirs, the gap shows here.', 'Por ahora solo hay un puntaje. Cuando los demás envíen el suyo, la diferencia aparece aquí.');
+    if (res.gap === null) return 'Only one score so far. When the others send theirs, the gap shows here.';
     var g = res.gap.toFixed(2);
-    if (res.close) return T('Your scores are close (a gap of ' + g + '). Neither of you is carrying much more than the other right now.', 'Sus puntajes están cerca (una diferencia de ' + g + '). Ahora mismo nadie carga mucho más que el otro.');
-    var who = res.high.me ? T('yours', 'el tuyo') : (res.high.n || T('one of yours', 'uno de ustedes')) + T('’s', '');
-    return o.words ? o.words(res, g) : T('A gap of ' + g + ': ' + who + ' reads higher right now. That isn’t a contest or anyone’s fault. It’s a reason to look at what’s on each plate this week.', 'Una diferencia de ' + g + ': ' + who + ' está más alto ahora. No es una competencia ni culpa de nadie. Es una razón para mirar qué tiene cada uno esta semana.');
+    if (res.close) return ('Your scores are close (a gap of ' + g + '). Neither of you is carrying much more than the other right now.');
+    var who = res.high.me ? 'yours' : (res.high.n || 'one of yours') + '’s';
+    return o.words ? o.words(res, g) : ('A gap of ' + g + ': ' + who + ' reads higher right now. That isn’t a contest or anyone’s fault. It’s a reason to look at what’s on each plate this week.');
   }
 
   // ---- the side-by-side view on the page (only text, never HTML)
-  function personName(p) { return p.me ? (p.n ? p.n + T(' (you)', ' (tú)') : T('You', 'Tú')) : (p.n || T('Someone', 'Alguien')); }
+  function personName(p) { return p.me ? (p.n ? p.n + ' (you)' : 'You') : (p.n || 'Someone'); }
   function showVal(v, fmt, k) {
     if (fmt) { var r = fmt(k, v); if (r != null) return String(r); }
     if (Array.isArray(v)) return v.join(', ');
-    if (v === true) return T('Yes', 'Sí'); if (v === false || v == null) return '';
+    if (v === true) return 'Yes'; if (v === false || v == null) return '';
     return String(v);
   }
   // opts: { kind: 'fields'|'score'|'list', fields, label(k), format(k, v), next (a sentence), title, scoreLabel, k }
@@ -1143,12 +1135,12 @@
     opts = opts || {};
     var box = mk('div', { cls: 'tcol-cmp' });
     if (opts.title) box.appendChild(mk('h4', { cls: 'tcol-cmp-h', text: opts.title }));
-    var label = opts.label || function (k) { var f = (opts.fields || []).filter(function (x) { return x.k === k; })[0]; return f ? T(f.en, f.es || f.en) : k; };
+    var label = opts.label || function (k) { var f = (opts.fields || []).filter(function (x) { return x.k === k; })[0]; return f ? f.en : k; };
     var kind = opts.kind || 'fields', summary = '';
     if (kind === 'score') {
       var res = combineScore(people, opts);
       var ul = mk('ul', { cls: 'tcol-cmp-scores' });
-      res.vals.forEach(function (v) { ul.appendChild(mk('li', {}, [mk('strong', { text: personName(people.filter(function (p) { return p.id === v.id; })[0] || v) + ': ' }), v.v === null ? T('not answered yet', 'todavía sin responder') : v.v.toFixed(opts.digits == null ? 2 : opts.digits) + (opts.scoreLabel ? ' ' + opts.scoreLabel : '')])); });
+      res.vals.forEach(function (v) { ul.appendChild(mk('li', {}, [mk('strong', { text: personName(people.filter(function (p) { return p.id === v.id; })[0] || v) + ': ' }), v.v === null ? 'not answered yet' : v.v.toFixed(opts.digits == null ? 2 : opts.digits) + (opts.scoreLabel ? ' ' + opts.scoreLabel : '')])); });
       box.appendChild(ul);
       summary = gapWords(res, opts);
       box.appendChild(mk('p', { cls: 'tcol-cmp-sum', text: summary }));
@@ -1156,48 +1148,48 @@
       var L = combineList(people, opts), ol = mk('ul', { cls: 'tcol-cmp-list' });
       L.items.forEach(function (it) {
         var li = mk('li', { cls: it.by.length > 1 ? 'is-same' : '' }, [mk('span', { cls: 'tcol-cmp-item', text: it.text }), ' ',
-          mk('span', { cls: 'tcol-cmp-by', text: it.by.length === people.length && people.length > 1 ? T('everyone', 'todos') : T('added by ', 'de ') + it.by.join(', ') })]);
+          mk('span', { cls: 'tcol-cmp-by', text: it.by.length === people.length && people.length > 1 ? 'everyone' : 'added by ' + it.by.join(', ') })]);
         it.extra.forEach(function (e) { li.appendChild(mk('span', { cls: 'tcol-cmp-x', text: e.n + ': ' + e.x })); });
         ol.appendChild(li);
       });
-      summary = L.items.length ? T(L.items.length + (L.items.length === 1 ? ' item' : ' items') + ' in all' + (L.shared ? ', ' + L.shared + ' on more than one list (joined into one).' : '.'), L.items.length + ' en total' + (L.shared ? ', ' + L.shared + ' en más de una lista (unidos en uno).' : '.')) : T('Nothing on the lists yet.', 'Todavía no hay nada en las listas.');
+      summary = L.items.length ? (L.items.length + (L.items.length === 1 ? ' item' : ' items') + ' in all' + (L.shared ? ', ' + L.shared + ' on more than one list (joined into one).' : '.')) : 'Nothing on the lists yet.';
       box.appendChild(mk('p', { cls: 'tcol-cmp-sum', text: summary }));
       box.appendChild(ol);
     } else {
       var F = combineFields(people, opts.fields);
-      summary = people.length < 2 ? '' : T('You match on ' + F.same + ' and see ' + F.differ + ' differently.', 'Coinciden en ' + F.same + ' y lo ven distinto en ' + F.differ + '.') + (F.missing ? T(' Some answers are only on one side.', ' Algunas respuestas están solo de un lado.') : '');
+      summary = people.length < 2 ? '' : ('You match on ' + F.same + ' and see ' + F.differ + ' differently.') + (F.missing ? ' Some answers are only on one side.' : '');
       if (summary) box.appendChild(mk('p', { cls: 'tcol-cmp-sum', text: summary }));
       F.rows.forEach(function (r) {
         var row = mk('div', { cls: 'tcol-cmp-row' + (r.same ? ' is-same' : '') });
         var h = mk('p', { cls: 'tcol-cmp-k' }, [mk('strong', { text: label(r.k) })]);
-        if (people.length > 1 && !r.missing) h.appendChild(mk('span', { cls: 'tcol-tag' + (r.same ? ' is-same' : ''), text: r.same ? T('Same', 'Igual') : T('Different', 'Distinto') }));
+        if (people.length > 1 && !r.missing) h.appendChild(mk('span', { cls: 'tcol-tag' + (r.same ? ' is-same' : ''), text: r.same ? 'Same' : 'Different' }));
         else if (people.length > 1) {
           var only = people.filter(function (p, i) { return filled(r.vals[i]); });
-          if (only.length === 1) h.appendChild(mk('span', { cls: 'tcol-tag', text: T('Only ', 'Solo ') + personName(only[0]) }));
+          if (only.length === 1) h.appendChild(mk('span', { cls: 'tcol-tag', text: 'Only ' + personName(only[0]) }));
         }
         row.appendChild(h);
         var ul2 = mk('ul', { cls: 'tcol-cmp-vals' });
-        people.forEach(function (p, i) { var t = showVal(r.vals[i], opts.format, r.k); ul2.appendChild(mk('li', {}, [mk('span', { cls: 'tcol-cmp-who', text: personName(p) + ': ' }), t || T('(left blank)', '(en blanco)')])); });
+        people.forEach(function (p, i) { var t = showVal(r.vals[i], opts.format, r.k); ul2.appendChild(mk('li', {}, [mk('span', { cls: 'tcol-cmp-who', text: personName(p) + ': ' }), t || '(left blank)'])); });
         row.appendChild(ul2);
-        if (r.common && r.common.length && !r.same) row.appendChild(mk('p', { cls: 'tcol-cmp-common', text: T('You both chose: ', 'Los dos eligieron: ') + r.common.join(', ') }));
+        if (r.common && r.common.length && !r.same) row.appendChild(mk('p', { cls: 'tcol-cmp-common', text: 'You both chose: ' + r.common.join(', ') }));
         box.appendChild(row);
       });
     }
     var next = typeof opts.next === 'function' ? opts.next(people) : opts.next;
-    if (next) box.appendChild(mk('p', { cls: 'tcol-cmp-next' }, [mk('strong', { text: T('One next step: ', 'Un paso siguiente: ') }), next]));
-    box.appendChild(mk('p', { cls: 'tcol-priv', text: T('Their answers came inside the link. Nothing is stored on our side.', 'Sus respuestas llegaron dentro del enlace. No se guarda nada de nuestro lado.') }));
+    if (next) box.appendChild(mk('p', { cls: 'tcol-cmp-next' }, [mk('strong', { text: 'One next step: ' }), next]));
+    box.appendChild(mk('p', { cls: 'tcol-priv', text: 'Their answers came inside the link. Nothing is stored on our side.' }));
     // "Save this combined view" in My saved entries (progress.js), where the device keeps them
     var P = W && W.TOLProgress, perks = true;
     try { perks = !P || typeof P.perks !== 'function' || !!P.perks(); } catch (e) { perks = false; }
     // a phone browser or a shared computer can't keep saved entries: say where they can be kept instead
     if (P && typeof P.saveEntry === 'function' && !perks) {
-      box.appendChild(mk('p', { cls: 'tcol-small' }, [T('Install the free app to keep a history of your results, saved entries and an app lock. ', 'Instala la app gratuita para guardar el historial de tus resultados, tus entradas y un bloqueo. '), mk('a', { href: '/install.html', text: T('Install the free app', 'Instalar la app gratuita') })]));
+      box.appendChild(mk('p', { cls: 'tcol-small' }, ['Install the free app to keep a history of your results, saved entries and an app lock. ', mk('a', { href: '/install.html', text: 'Install the free app' })]));
     } else if (P && typeof P.saveEntry === 'function' && (typeof P.level !== 'function' || P.level() !== 'shared')) {
-      var sv = mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', text: T('Save this combined view', 'Guardar esta vista combinada') }), sst = mk('span', { cls: 'tcol-small', role: 'status' });
+      var sv = mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', text: 'Save this combined view' }), sst = mk('span', { cls: 'tcol-small', role: 'status' });
       sv.addEventListener('click', function () {
         var text = combinedText(people, opts);
-        Promise.resolve().then(function () { return P.saveEntry({ tool: 'together' + (opts.tool ? ':' + opts.tool : ''), title: opts.title || T('Combined view', 'Vista combinada'), text: text, data: { people: people.map(function (p) { return { n: p.n, me: !!p.me, d: p.d }; }), kind: kind } }); })
-          .then(function (r) { sst.textContent = r === false ? T(' Couldn’t save it here.', ' No se pudo guardar aquí.') : T(' Saved in My saved entries, on this device only.', ' Guardado en Mis entradas guardadas, solo en este aparato.'); }, function () { sst.textContent = T(' Couldn’t save it here.', ' No se pudo guardar aquí.'); });
+        Promise.resolve().then(function () { return P.saveEntry({ tool: 'together' + (opts.tool ? ':' + opts.tool : ''), title: opts.title || 'Combined view', text: text, data: { people: people.map(function (p) { return { n: p.n, me: !!p.me, d: p.d }; }), kind: kind } }); })
+          .then(function (r) { sst.textContent = r === false ? ' Couldn’t save it here.' : ' Saved in My saved entries, on this device only.'; }, function () { sst.textContent = ' Couldn’t save it here.'; });
       });
       box.appendChild(mk('p', {}, [sv, sst]));
     }

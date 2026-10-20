@@ -20,7 +20,6 @@
   var W = typeof window !== 'undefined' ? window : null;
   var D = W && W.document;
   if (W && W.TOLConfirmClear) return;
-  function T(en, es) { try { return W && W.TOLLang && W.TOLLang.es() ? es : en; } catch (e) { return en; } }
 
   // ------------------------------------------------------------------ the parts that tests can reach
   function ours(k) { return typeof k === 'string' && /^(tol-|cwd-|bears-dojo-)[A-Za-z0-9:_.\-]{1,160}$|^br-q$/.test(k); }
@@ -77,7 +76,7 @@
     if (D.getElementById('tol-progress-css')) return;
     var l = mk('link', { id: 'tol-progress-css', rel: 'stylesheet', href: '/assets/css/progress.css' }); D.head.appendChild(l);
   }
-  function words(n) { return n === 1 ? T('1 item', '1 elemento') : n + T(' items', ' elementos'); }
+  function words(n) { return n === 1 ? '1 item' : n + ' items'; }
   function itemsFor(o) {
     if (o.items && o.items.length) return o.items;
     if (!o.keys) return [];
@@ -96,7 +95,7 @@
     o = o || {};
     if (open) open.close(false);
     css();
-    var what = o.what || T('what you’ve saved', 'lo que has guardado');
+    var what = o.what || 'what you’ve saved';
     var f = flow({ short: !!o.short, onConfirm: o.onConfirm });
     var back = D.activeElement;
     var native = typeof HTMLDialogElement === 'function' && !!D.createElement('dialog').showModal;
@@ -119,20 +118,20 @@
       resolve(!!result);
     }
     function btn(label, cls, fn) { var b = mk('button', { type: 'button', class: 'tp-btn' + (cls ? ' ' + cls : '') }, label); b.addEventListener('click', fn); return b; }
-    function cancelBtn() { return btn(T('Cancel', 'Cancelar'), '', function () { close(false); }); }
+    function cancelBtn() { return btn('Cancel', '', function () { close(false); }); }
     function step1() {
-      h.textContent = T('Clear ', '¿Borrar ') + what + T('?', '?');
+      h.textContent = 'Clear ' + what + '?';
       body.textContent = ''; acts.textContent = ''; live.textContent = '';
-      body.appendChild(mk('p', null, T('This can’t be undone.', 'No se puede deshacer.')));
+      body.appendChild(mk('p', null, 'This can’t be undone.'));
       var c = cancelBtn();
       acts.appendChild(c);
-      acts.appendChild(btn(T('Yes, clear it', 'Sí, borrarlo'), '', function () { f.yes(); f.step === 'sure' ? step2() : step3(); }));
+      acts.appendChild(btn('Yes, clear it', '', function () { f.yes(); f.step === 'sure' ? step2() : step3(); }));
       c.focus();
     }
     function listBox() {
       var items = itemsFor(o), box = mk('div');
       if (items.length) {
-        box.appendChild(mk('p', null, T('This will remove:', 'Esto eliminará:')));
+        box.appendChild(mk('p', null, 'This will remove:'));
         var ul = mk('ul', { class: 'tcc-list' });
         items.forEach(function (it) { ul.appendChild(mk('li', null, it.name + (it.n ? ' · ' + words(it.n) : ''))); });
         box.appendChild(ul);
@@ -141,56 +140,56 @@
     }
     function backupBox() {
       var box = mk('div', { class: 'tcc-backup' });
-      box.appendChild(mk('p', null, T('Want to keep a copy first? Save a backup file. It stays with you; nothing is sent to us.', '¿Quieres guardar una copia antes? Guarda un archivo de copia. Se queda contigo; no se nos envía nada.')));
+      box.appendChild(mk('p', null, 'Want to keep a copy first? Save a backup file. It stays with you; nothing is sent to us.'));
       var row = mk('p', { class: 'tcc-row' });
-      var lab = mk('label', { for: 'tcc-pw' }, T('Password for the backup (optional)', 'Contraseña para la copia (opcional)'));
+      var lab = mk('label', { for: 'tcc-pw' }, 'Password for the backup (optional)');
       var pw = mk('input', { id: 'tcc-pw', type: 'password', autocomplete: 'new-password', autocapitalize: 'off', spellcheck: 'false' });
       row.appendChild(lab); row.appendChild(pw); box.appendChild(row);
-      box.appendChild(btn(T('Save a backup first', 'Guardar una copia primero'), '', function () {
+      box.appendChild(btn('Save a backup first', '', function () {
         var go = function () {
-          if (!W.TOLProgress || !W.TOLProgress.saveBackup) { live.textContent = T('Couldn’t make a backup here. Use “Save a backup” under Your progress.', 'No se pudo hacer una copia aquí. Usa “Guardar una copia” en Tu progreso.'); return; }
-          live.textContent = T('Making the backup…', 'Haciendo la copia…');
-          W.TOLProgress.saveBackup(pw.value).then(function (r) { live.textContent = r; }, function () { live.textContent = T('Couldn’t make a backup. Nothing was cleared.', 'No se pudo hacer la copia. No se borró nada.'); });
+          if (!W.TOLProgress || !W.TOLProgress.saveBackup) { live.textContent = 'Couldn’t make a backup here. Use “Save a backup” under Your progress.'; return; }
+          live.textContent = 'Making the backup…';
+          W.TOLProgress.saveBackup(pw.value).then(function (r) { live.textContent = r; }, function () { live.textContent = 'Couldn’t make a backup. Nothing was cleared.'; });
         };
         if (W.TOLProgress) go(); else { var s = mk('script', { src: '/assets/js/progress.js' }); s.onload = go; s.onerror = go; D.head.appendChild(s); }
       }));
       return box;
     }
     function step2() {
-      h.textContent = T('Are you sure?', '¿Seguro?');
+      h.textContent = 'Are you sure?';
       body.textContent = ''; acts.textContent = ''; live.textContent = '';
       body.appendChild(listBox());
       body.appendChild(backupBox());
       var c = cancelBtn(); acts.appendChild(c);
-      acts.appendChild(btn(T('Yes, I’m sure', 'Sí, seguro'), '', function () { f.yes(); step3(); }));
+      acts.appendChild(btn('Yes, I’m sure', '', function () { f.yes(); step3(); }));
       c.focus();
     }
     function step3() {
-      h.textContent = o.short ? T('Clear ', 'Borrar ') + what : T('One last check', 'Una última comprobación');
+      h.textContent = o.short ? 'Clear ' + what : 'One last check';
       body.textContent = ''; acts.textContent = ''; live.textContent = '';
       if (o.short) body.appendChild(listBox());
       var q = mk('p', { class: 'tcc-q' });
       var lab = mk('label', { for: 'tcc-ans' });
       var inp = mk('input', { id: 'tcc-ans', type: 'text', inputmode: 'numeric', pattern: '[0-9]*', autocomplete: 'off', maxlength: '2', class: 'tcc-ans' });
-      function sumText() { lab.textContent = T('To clear, type the answer: ', 'Para borrar, escribe el resultado: ') + f.p.a + ' + ' + f.p.b + ' ='; }
+      function sumText() { lab.textContent = 'To clear, type the answer: ' + f.p.a + ' + ' + f.p.b + ' ='; }
       sumText();
       q.appendChild(lab); q.appendChild(inp);
       body.appendChild(q);
-      var chk = btn(T('Check', 'Comprobar'), '', checkIt);
+      var chk = btn('Check', '', checkIt);
       body.appendChild(chk);
       var c = cancelBtn();
-      var now = btn(T('Clear now', 'Borrar ahora'), 'is-danger', function () {
+      var now = btn('Clear now', 'is-danger', function () {
         if (!f.ok) return;
         now.disabled = true; c.disabled = true;
-        f.clearNow().then(function () { done(); }, function () { live.textContent = T('Something went wrong, so it may not all be cleared. Try again.', 'Algo salió mal; puede que no se haya borrado todo. Prueba otra vez.'); c.disabled = false; });
+        f.clearNow().then(function () { done(); }, function () { live.textContent = 'Something went wrong, so it may not all be cleared. Try again.'; c.disabled = false; });
       });
       now.disabled = true;
       acts.appendChild(c); acts.appendChild(now);
       function checkIt() {
-        if (f.answer(inp.value)) { now.disabled = false; live.textContent = T('That’s right. “Clear now” is ready.', 'Correcto. “Borrar ahora” está listo.'); now.focus(); }
+        if (f.answer(inp.value)) { now.disabled = false; live.textContent = 'That’s right. “Clear now” is ready.'; now.focus(); }
         else {
           now.disabled = true;
-          live.textContent = (inp.value.trim() ? T('Not quite, that’s OK. Here’s a new one: ', 'No es correcto, no pasa nada. Aquí tienes otra: ') : T('Type the answer first. ', 'Escribe primero el resultado. ')) + f.p.a + ' + ' + f.p.b + '.';
+          live.textContent = (inp.value.trim() ? 'Not quite, that’s OK. Here’s a new one: ' : 'Type the answer first. ') + f.p.a + ' + ' + f.p.b + '.';
           sumText(); inp.value = ''; inp.focus();
         }
       }
@@ -199,10 +198,10 @@
       inp.focus();
     }
     function done() {
-      h.textContent = T('Cleared', 'Borrado');
+      h.textContent = 'Cleared';
       body.textContent = ''; acts.textContent = '';
-      body.appendChild(mk('p', null, o.doneText || (T('Cleared. Nothing from ', 'Borrado. No queda nada de ') + what + T(' is left on this device.', ' en este dispositivo.'))));
-      var ok = btn(T('Close', 'Cerrar'), 'is-strong', function () { close(true); });
+      body.appendChild(mk('p', null, o.doneText || ('Cleared. Nothing from ' + what + ' is left on this device.')));
+      var ok = btn('Close', 'is-strong', function () { close(true); });
       acts.appendChild(ok); ok.focus();
     }
     d.addEventListener('cancel', function (e) { e.preventDefault(); close(f.step === 'done'); });
