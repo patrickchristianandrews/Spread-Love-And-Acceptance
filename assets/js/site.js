@@ -4017,7 +4017,10 @@
   // Settings is remembered, like any other choice made here
   function stillDefault() {
     var mm = window.matchMedia;
-    return !!(mm && (mm('(prefers-reduced-motion: reduce)').matches || mm('(max-width: 700px) and (pointer: coarse)').matches || mm('(max-width: 560px)').matches));
+    if (mm && mm('(prefers-reduced-motion: reduce)').matches) return true;
+    // the home page keeps Tidbit and Sugarfoot running in the garden behind it on phones too
+    if (current === '/index.html') return false;
+    return !!(mm && (mm('(max-width: 700px) and (pointer: coarse)').matches || mm('(max-width: 560px)').matches));
   }
   var stillOn = (function () {
     var v = lsGet(STILL_KEY);
