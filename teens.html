@@ -20,6 +20,7 @@
   .tn-first .tn-jump{ margin:.4rem 0 .6rem !important; gap:.4rem; }
   .tn-first .tn-jump a{ padding:.35rem .85rem; font-size:.93rem; }
   .tn-steps-slot{ margin:0 !important; }
+  .tn-more-topics{ margin:0 0 .5rem; } .tn-more-topics > summary{ cursor:pointer; min-height:44px; display:inline-flex; align-items:center; color:var(--focus); text-decoration:underline; }
   .tn-steps-slot:empty{ display:none; }
   .tn-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
   .tn-jump li{ margin:0 !important; max-width:none !important; }
@@ -123,20 +124,24 @@
 <p class="tn-first-l" data-keep-steps>Skip to whatever is loud right now. Nothing you type here is sent anywhere.</p>
 <ul class="tn-jump" aria-label="On this page" data-keep-steps>
   <li><a href="#curfew-phone">Curfew and your phone</a></li>
-  <li><a href="#family-care">Living with grandparents, family or foster carers</a></li>
-  <li><a href="#parent-away">A parent who’s away</a></li>
   <li><a href="#parents">Parents and carers</a></li>
   <li><a href="#talking">Getting heard</a></li>
+  <li><a href="#friends">Friends and group chats</a></li>
+  <li><a href="#feelings">Big feelings</a></li>
+  <li><a href="#help">More than a bad day</a></li>
+</ul>
+<details class="tn-more-topics" data-keep-steps><summary>More topics</summary>
+<ul class="tn-jump" aria-label="More on this page" data-keep-steps>
+  <li><a href="#family-care">Living with grandparents, family or foster carers</a></li>
+  <li><a href="#parent-away">A parent who’s away</a></li>
   <li><a href="#middle">Adults at home fighting</a></li>
   <li><a href="#siblings">Brothers and sisters</a></li>
-  <li><a href="#friends">Friends and group chats</a></li>
   <li><a href="#bonding">Feeling closer</a></li>
-  <li><a href="#feelings">Big feelings</a></li>
   <li><a href="#lgbtq">Being yourself at home</a></li>
   <li><a href="#dating">Dating</a></li>
-  <li><a href="#help">More than a bad day</a></li>
   <li><a href="#fun">Need a break</a></li>
 </ul>
+</details>
 <div data-steps-slot data-keep-steps class="tn-steps-slot"></div>
 </section>
 
