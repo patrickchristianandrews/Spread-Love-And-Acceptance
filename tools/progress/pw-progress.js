@@ -236,7 +236,8 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     await p.evaluate((w) => localStorage.setItem('tol-weather-v1', w), WEATHER);
     await p.waitForTimeout(6000);
     ok(!(await p.$('.tp-card-pop')), 'computer: not asked over the page where the first save happened');
-    await p.goto(BASE + '/index.html');
+    // home18: the home page asks nothing on arrival, so the question comes on the next tool page
+    await p.goto(BASE + '/tools.html');
     await p.waitForSelector('.tp-card-pop', { timeout: 25000 });
     ok(/own computer or a shared one/.test(await p.textContent('.tp-card-pop')), 'computer: asked once, own or shared');
     await p.screenshot({ path: path.join(OUT, 'ask-computer-1366.png') });

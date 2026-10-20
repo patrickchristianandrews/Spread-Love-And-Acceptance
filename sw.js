@@ -9,7 +9,7 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v144';
+var VERSION = 'tol-v145';
 // A first visit saves only this small shell (so the offline page works). The full list below is saved only
 // once the site is installed as an app (site.js asks for it), so a visitor on a metered plan never
 // downloads megabytes they didn't ask for. Everything else is saved the first time it's used.
@@ -33,7 +33,7 @@ var CORE = [
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js', '/assets/js/buddies-suggest.js',
   '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/assets/icons/icon-maskable-192.png', '/assets/icons/icon-maskable-512.png', '/assets/icons/apple-touch-icon-180.png', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/manifest.webmanifest',
   '/assets/css/book-series.css', '/assets/js/book-shop.js', '/workpapers/fill/wpf-print.js',
-  '/assets/css/home.css', '/assets/js/home.js', '/assets/img/home/cover-book-1-240.webp', '/assets/img/home/cover-book-2-240.webp', '/assets/img/home/cover-book-3-240.webp', '/assets/img/home/cover-book-4-240.webp', '/assets/img/home/cover-pocket-240.webp',
+  '/assets/css/home.css', '/assets/js/home.js', '/assets/img/home/pals-pups.webp', '/assets/img/home/pal-tidbit.webp', '/assets/img/home/pal-sugarfoot.webp', '/assets/img/home/cover-book-1-240.webp', '/assets/img/home/cover-book-2-240.webp', '/assets/img/home/cover-book-3-240.webp', '/assets/img/home/cover-book-4-240.webp', '/assets/img/home/cover-pocket-240.webp',
   '/the-logic-behind-it.html', '/assets/js/logic-library.js', '/assets/js/logic-lens.js', '/assets/css/logic-lens.css',
   '/assets/css/short-first.css', '/assets/js/short-first.js',
   '/assets/css/start.css', '/assets/js/start.js', '/start/chores.html', '/start/text-check.html', '/start/breakup.html',
