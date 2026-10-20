@@ -149,3 +149,19 @@ html.tol-quiet .h18 .h-trust li::before{ background:none; content:"\2713" !impor
 @media (min-width:641px){ html.h18-top .tol-help{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; } }
 /* no "On this page", hello bubble or "Meet the friends" helpers on a page this short */
 .h18-page .tol-outline, .h18-page .tol-otp, .h18-page .tol-puddles-hi{ display:none !important; }
+
+/* "Pick up where you left off": only shown when something is saved (home.js) */
+.h18 .h-resume{ margin:1.1rem 0 .4rem; padding:1rem 1.1rem .9rem; border-radius:18px; background:var(--h-card); border:1px solid var(--h-line); max-width:34rem; }
+.h18 .h-resume[hidden]{ display:none; }
+html body main.read.h18 .h-resume-h{ margin:0 0 .55rem; padding:0; font:600 1.15rem/1.2 var(--h-head); color:var(--h-ink); background:none; border:0; text-transform:none; letter-spacing:normal; }
+html body main.read.h18 .h-resume-list{ list-style:none; margin:0; padding:0; display:grid; gap:.45rem; }
+html body main.read.h18 .h-resume-list li{ margin:0; padding:0; }
+.h18 a.h-resume-item{ display:flex; flex-direction:column; gap:.1rem; min-height:44px; box-sizing:border-box; padding:.55rem .8rem; border-radius:12px; text-decoration:none; color:var(--h-ink); background:#FFFFFF; border:1px solid var(--h-line); }
+.h18 a.h-resume-item:hover, .h18 a.h-resume-item:focus-visible{ border-color:var(--h-acc); }
+.h18 .h-resume-t{ font:700 1rem/1.25 var(--h-ui); }
+.h18 .h-resume-t::after{ content:"\a0\2192"; color:var(--h-acc); }
+.h18 .h-resume-k{ font:400 .85rem/1.2 var(--h-ui); color:var(--h-muted); }
+.h18 .h-resume-more{ margin:.6rem 0 0; }
+.h18 .h-resume + .h-art{ display:none; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .h18 a.h-resume-item{ background:transparent; } }
+:root[data-theme="dark"] .h18 a.h-resume-item{ background:transparent; }
