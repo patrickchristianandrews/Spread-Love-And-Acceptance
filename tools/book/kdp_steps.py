@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """kdp_steps.py: "Amazon KDP, step by step" for the owner (voice17).
 
-A plain walk-through of every KDP screen, in the order KDP shows them, for each paperback (Books 1 to 4, the pocket guide,
-the recommended black-and-white workbook, with a note for the colour workbook) and each Kindle ebook (Books 1 to 4, the
-pocket guide, the box set). Every value is copied from the same data as book/print/listing-kdp.md (tools/book/listing_kdp.py)
+A plain walk-through of every KDP screen, in the order KDP shows them, for each paperback (the books, the pocket guide,
+the recommended black-and-white workbook, with a note for the colour workbook) and each Kindle ebook (the books, the
+pocket guide; the Kindle box set is held back for the second wave). Every value is copied from the same data as book/print/listing-kdp.md (tools/book/listing_kdp.py)
 and from the built files (book/print/series.json), so page counts, spine widths and prices are the real ones.
 
 Run from the repo root, after the builds and listing_kdp.py:
@@ -61,7 +61,7 @@ def items():
     out.append(dict(pocket, kind='pocket'))
     out.append(dict(wbbw, kind='workbook', bw=True))
     out.append(dict(wb, kind='workbook', bw=False))
-    out.append(dict(box, kind='boxset'))
+    # books-final9: the Kindle box set is held back for the second wave, with Book 5
     return out
 
 
@@ -79,10 +79,9 @@ def label(it):
 def series_line(it, fmt):
     if it['kind'] == 'book':
         return '%s, number %d' % (SERIES, it['n'])
-    if it['kind'] == 'pocket':
-        return ('%s, number 6 [OWNER: or leave it unnumbered]' % SERIES) if fmt == 'paperback' else ('%s, number 5 among the Kindle editions [OWNER: or unnumbered]' % SERIES)
-    if it['kind'] == 'workbook':
-        return '%s, number 5 [OWNER: or leave the workbook out of the numbered series]' % SERIES
+    if it['kind'] in ('pocket', 'workbook'):
+        # books-final9: the companions carry no series number, the same in print and on Kindle
+        return '%s, as a companion with no number: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]' % SERIES
     return 'Leave it out of the numbered series [OWNER: KDP may not offer a box set a number]'
 
 
@@ -174,11 +173,11 @@ def paperback_pricing_rows(it):
 
 def kindle_content_rows(it):
     ep = LK.EPUB.get(it['id'], {})
-    front = 'cover-%s-front.jpg' % it['id']
+    front = 'cover-%s-kindle.jpg' % it['id']
     return [
         ('Manuscript', 'Upload %s.epub from the zip (EPUB 3, %.2f MB). Do not upload the PDF.' % (it['id'], LK.kindle_mb(it['id']))),
         ('Digital Rights Management (DRM)', 'Choose No (do not apply DRM). The same chapters are free online, so DRM protects nothing. KDP’s help page now says this setting can be changed later, and that without DRM verified buyers can download an EPUB and PDF copy (from 20 January 2026). [OWNER]'),
-        ('Kindle eBook Cover', '“Upload a cover you already have”, then upload %s (1,600 px wide, JPG). Do not use Cover Creator.' % front),
+        ('Kindle eBook Cover', '“Upload a cover you already have”, then upload %s (1,600 × 2,560 px, JPG, the 1.6:1 shape KDP prefers). Do not use Cover Creator.' % front),
         ('AI-Generated Content', 'See “The AI questions”. Same honest answers as the paperback.'),
         ('Kindle eBook Preview', 'Click “Launch Previewer”. Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve”. You can also open the EPUB in the free Kindle Previewer app on your computer first.'),
         ('Kindle eBook ISBN (optional)', 'Leave blank. Amazon gives the ebook an ASIN.'),
@@ -252,11 +251,11 @@ def build():
         'Field names were checked in October 2026 against KDP’s help pages, through web search, because kdp.amazon.com could not be opened from the build machine. Where a box could not be confirmed, the guide says so. KDP changes its screens from time to time, so if a box is named differently, look for the one that means the same thing.',
     ]
     order = [
-        'Before you start: nothing to buy. Each paperback gets a free KDP ISBN on its Paperback Content screen, and the Kindle editions and the box set need no ISBN.',
+        'Before you start: nothing to buy. Each paperback gets a free KDP ISBN on its Paperback Content screen, and the Kindle editions need no ISBN.',
         'Publish the paperbacks first, one at a time, and order a proof of each. Publish only after the proof is right.',
         'Prices follow the owner’s rule: a paperback under 100 pages is a short edition at $9.99, anything longer is $14.99. The short editions (the pocket guide and the workbook) come after the books here, each under its own name. At $9.99 the colour workbook can’t use Expanded Distribution, so it is Amazon only; every other book is Amazon only by choice.',
         'Then the Kindle editions. Use exactly the same title, subtitle and author, so Amazon links each Kindle edition to its paperback.',
-        'The box set last, once the four books and the pocket guide are live.',
+        'No box set in this wave. The Kindle box set is held back and comes with Book 5, in the second wave.',
     ]
     md += ['# ' + title, '', '\n\n'.join(intro), '', '## The order to do things in', ''] + ['%d. %s' % (i + 1, x) for i, x in enumerate(order)]
     md += ['', '## The AI questions (every book asks them)', '', '\n\n'.join(ai_section())]
@@ -276,7 +275,7 @@ def build():
                 m.get('pages', 0), {'workbook': '8.5 x 11 in', 'pocket': '5 x 8 in'}.get(it['kind'], '6 x 9 in'), m.get('spine_in', 0), m.get('spine_mm', 0),
                 money(m.get('costs', {}).get('list_price', 0))))
         if has_kindle:
-            facts.append('Kindle: %s.epub with %s as the cover, %s.' % (it['id'], 'cover-%s-front.jpg' % it['id'], money(it.get('kindle_price_usd') or LK.KINDLE_PRICE)))
+            facts.append('Kindle: %s.epub with %s as the cover, %s.' % (it['id'], 'cover-%s-kindle.jpg' % it['id'], money(it.get('kindle_price_usd') or LK.KINDLE_PRICE)))
         if it['kind'] == 'workbook' and not it.get('bw'):
             ck = m.get('costs', {}).get('kdp_amazon', {})
             facts.append('Publish this colour edition ONLY if you chose it instead of the black-and-white one. The screens are the same as the black-and-white workbook above, except: Ink and Paper Type “Standard color interior, white paper”; manuscript workbook.pdf; cover cover-workbook.pdf; list price %s, the same short-edition price (printing %s, you keep %s); and Expanded Distribution is not available at that price, so it is Amazon only (KDP would need about %s). It gets its own free KDP ISBN. [OWNER: the recommendation is the black-and-white edition, which keeps more a copy at the same price]' % (
