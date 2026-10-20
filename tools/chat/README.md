@@ -7,6 +7,10 @@ It answers in this order:
 
 1. **Safety.** A message that suggests danger or harm gets one short neutral line ("That sounds really hard. I’m a
    small guide to this site, and I can’t help with this one.") and nothing else: no numbers, services or links.
+   The one exception: when someone says they’re thinking of suicide, not wanting to be here, or hurting themselves,
+   the reply is plain guidance (`SUICIDE_LINE`: “I’m really glad you said something. If you’re having thoughts of
+   hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it.”),
+   still with no numbers, services or links. Someone else’s harm, a child in crisis and threats keep the neutral line.
 2. **Care first.** Program cards marked `"first": true` answer before anything else, plainly: who can see this
    chat (this tab only; “Start over” erases it; closing the tab clears it), “is it my fault?” (never a yes; after
    being snapped at, `what_hurt`/`how_hurt`), “tell me something calming”, “I feel judged”, “can you tell me if I’m
