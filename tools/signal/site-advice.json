@@ -628,18 +628,6 @@
   "src": "empty-nest.html .en-say"
  },
  {
-  "t": "No voy a elegir un ganador. Les voy a ayudar a encontrar un plan para los dos.",
-  "src": "en-espanol.html .es-say"
- },
- {
-  "t": "Estoy hablando muy fuerte. Voy a respirar un momento.",
-  "src": "en-espanol.html .es-say"
- },
- {
-  "t": "Estoy cansado, no soy una mala persona. Hoy hice lo que pude.",
-  "src": "en-espanol.html .es-say"
- },
- {
   "t": "Helping my parents isn’t optional for me. I’d like us to agree a monthly amount together, so it’s planned, not a surprise every month.",
   "src": "family-obligations.html .fo-say"
  },

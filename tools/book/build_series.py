@@ -358,13 +358,44 @@ def logic_box(b):
 LOGIC_BEFORE = re.compile(r'<h[234]\b[^>]*\bid="(?:[a-z0-9-]+--)?(?:everyday|all-relationships|mix-ups)"')
 
 
+TW_ASIDE = re.compile(r'\s*<aside class="two-ways\b[^"]*"[^>]*>(.*?)</aside>', re.S)
+
+
+def two_ways_rows(inner):
+    """voice18: the chapter's "Two ways to read this" (its online aside) as rows for the one box per chapter"""
+    title = re.search(r'<p class="tw-t">(.*?)</p>', inner, re.S)
+    two = re.search(r'<p class="tw-two">(.*?)</p>', inner, re.S)
+    fields = re.search(r'<p class="tw-f"><strong>Where the fields meet\.</strong>\s*(.*?)</p>', inner, re.S)
+    rows = ''
+    if two:
+        rows += '<p class="lg-row lg-two"><span class="lg-l">Both directions</span> %s</p>' % two.group(1)
+    if fields:
+        rows += '<p class="lg-row lg-fields"><span class="lg-l">Where the fields meet</span> %s</p>' % fields.group(1)
+    return (title.group(1) if title else ''), rows
+
+
 def add_logic_boxes(body, slug):
     """each box goes before the chapter's "In everyday life" (or "You, in all your relationships", or "Common mix-ups"),
-    or at the end of the chapter when it has none of them"""
+    or at the end of the chapter when it has none of them. voice18 (owner): one side element per chapter, "Two ways to
+    read this": the chapter's two-way translation and its "where the fields meet" join the situation box, or make a box
+    of their own in the same style when the chapter has no situation"""
+    tw = TW_ASIDE.search(body)
+    tw_title, tw_rows = two_ways_rows(tw.group(1)) if tw else ('', '')
+    if tw:
+        body = body[:tw.start()] + body[tw.end():]
     boxes = logic_boxes(slug)
-    if not boxes:
+    if boxes:
+        h = ''.join(logic_box(b) for b in boxes)
+        if tw_rows:
+            k = h.rfind('<p class="lg-box-end">')
+            h = h[:k] + tw_rows + h[k:]
+    elif tw_rows:
+        import pocket
+        h = ('<aside class="lg-box tw-only no-bubble no-cheer no-dive" data-no-bubble aria-label="%s" id="tw-%s">'
+             '<p class="lg-box-k">%s<span>%s</span></p><p class="lg-box-t">%s</p>%s</aside>') % (
+            esc(LOGIC['kicker']), slug, pocket.puzzle_svg(), esc(LOGIC['kicker']), tw_title, tw_rows)
+    else:
         return body
-    h = ''.join(logic_box(b) for b in boxes)
     m = LOGIC_BEFORE.search(body)
     return (body[:m.start()] + h + body[m.start():]) if m else body + h
 
@@ -604,7 +635,7 @@ def series_items():
 def logic_free_page(book, epub=False):
     """logicbook14: one short page near the end of each book: the free situations online, and the pocket guide"""
     n = len(POCKET['items'])
-    words = ('<p class="pe-back-lede">The “Another way to see it” boxes in this book come from a free page on the website. It has more than seventy everyday '
+    words = ('<p class="pe-back-lede">Most of the “Two ways to read this” boxes in this book hold a situation from a free page on the website. It has more than seventy everyday '
              'reactions that can look odd, rude or over the top from outside, each laid out in the same six parts, with the other person’s side and one small step.</p>'
              '<p>You can type what happened in your own words and see the closest situations, pick another picture when the first doesn’t click, and build a card of '
              'your own. It is free, with no account, and what you type stays on your device.</p>'
@@ -616,6 +647,50 @@ def logic_free_page(book, epub=False):
             '<h1 class="pe-back-h">The Logic Behind It: more examples, free online</h1>%s'
             '<div class="ps-logic-code">%s<p><strong>Scan to open</strong>Or type the address.<span class="ps-addr">spreadloveandacceptance.com/the-logic-behind-it</span></p></div>'
             '</section>') % (book['color'], book['tint'], mark('logic'), __import__('pocket').puzzle_svg(), words, qr(LOGIC_PAGE))
+
+
+IDEAS = json.load(open(os.path.join(ROOT, 'tools', 'book', 'ideas-map.json'), encoding='utf-8'))
+
+
+def ideas_map(book, chs, epub=False, pocket_sections=None):
+    """voice18 (owner, polymath-lens.md): "How the ideas connect", one page. The seven roots in the middle, the thirteen
+    fields round them, with the chapters (or, in the pocket guide, the sections) where each comes up. Plain title, and
+    nothing about who wrote the book."""
+    where_f, where_r = {}, {}
+    if pocket_sections:
+        for sec_key, sec_label in pocket_sections:
+            for f in IDEAS['pocket'].get(sec_key, []):
+                where_f.setdefault(f, []).append(sec_label)
+    else:
+        for slug in chs:
+            c = IDEAS['chapters'].get(slug)
+            if not c:
+                continue
+            lab = chapter_label(slug, book)[0]
+            for f in c['fields']:
+                where_f.setdefault(f, []).append(lab)
+            for r in c['roots']:
+                where_r.setdefault(r, []).append(lab)
+    unit = 'In' if pocket_sections else 'Chapter'
+    def at(xs):
+        if not xs:
+            return ''
+        if pocket_sections:
+            return '<span class="ps-ideas-ch">In: %s</span>' % esc(', '.join(xs))
+        return '<span class="ps-ideas-ch">%s %s</span>' % ('Chapters' if len(xs) > 1 else 'Chapter', esc(', '.join(xs)))
+    cards = ''.join('<div class="ps-ideas-f"><b>%s</b>%s%s</div>' % (esc(f['name']), esc(f['idea'][0].upper() + f['idea'][1:]) + '.', at(where_f.get(f['key'], [])))
+                    for f in IDEAS['fields'])
+    roots = ''.join('<li><b>%s</b> %s%s</li>' % (esc(r['name']), esc(r['line']), (' <span class="ps-ideas-ch">%s</span>' % esc(', '.join(where_r[r['key']]))) if where_r.get(r['key']) else '')
+                    for r in IDEAS['roots'])
+    lede = ('Thirteen fields of study turn up in %s, and underneath them the same seven roots keep showing through. Learn a root once and you '
+            'can carry it from one field to the next: if a budget needs a safety margin, so does a tired person.') % ('this guide' if pocket_sections else 'this book')
+    note = 'Holistic therapies, laughter and aromatherapy appear only in their plain, everyday parts; the research on them is modest or still growing.'
+    body = ('<p class="pe-back-lede">%s</p><div class="ps-ideas-map"><div class="ps-ideas-roots"><p class="ps-ideas-rk">The seven roots</p><ul>%s</ul></div>%s</div>'
+            '<p class="ps-ideas-note">%s</p>') % (esc(lede), roots, cards, esc(note))
+    if epub:
+        return '<section class="pe-back ps-ideas" id="ideas"><h1 class="pe-back-h">How the ideas connect</h1>%s</section>' % body
+    return ('<section class="pe-back ps-ideas no-bubble no-cheer no-dive" data-no-bubble id="ideas" style="--pc:%s;--pt:%s">%s'
+            '<h1 class="pe-back-h">How the ideas connect</h1>%s</section>') % (book['color'], book['tint'], mark('ideas'), body)
 
 
 def series_page(book):
@@ -899,6 +974,7 @@ def build_book(book, where):
     extra.append(('wp-tools', 'Workpapers and tools in this book', wt_html))
     extra += numbers
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
+    extra.append(('ideas', 'How the ideas connect', ideas_map(book, chs)))
     back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('logic', 'The Logic Behind It: more examples'),
                                              ('series', 'The series'), ('jot', 'Your notes')]
     for k, t in back:
@@ -1368,6 +1444,12 @@ def main():
         POCKET['title'], pstats['situations'], pstats['sections'], pstats['sides']['nd'], pstats['sides']['nt'], pstats['sides']['all'], pstats['rulebooks']))
     print('series: %d "Another way to see it" boxes (%s)' % (len(LOGIC['boxes']), ', '.join('Book %d: %d' % (b['n'], len([x for x in LOGIC['boxes'] if x['book'] == b['n']])) for b in books())))
     print('series: %d QR codes, all checked against a page' % len(set(QRS)))
+    # voice18 (owner, bookqa18 M5): free KDP ISBNs, so no placeholder may ever be printed
+    import glob as _glob
+    for _f in _glob.glob(os.path.join(SRC, '*.html')):
+        _t = open(_f, encoding='utf-8').read()
+        if '[to be added]' in _t or re.search(r'ISBN:?\s*\[', _t):
+            ERRORS.append('%s prints an ISBN placeholder; the paperbacks use free KDP ISBNs and print no ISBN line' % os.path.basename(_f))
     if ERRORS:
         for err in ERRORS:
             print('series: ERROR', err)

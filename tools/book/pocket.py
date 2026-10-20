@@ -101,14 +101,14 @@ def sections(p):
 
 # ---------- the words around the situations ----------
 SEC_INTRO = {
-    'plans': 'A plan does more than fix a time. For a lot of people it’s a map of the day, already walked through in their head, and when it changes at short notice the map has to be redrawn on the spot. These pages are about what that costs, and about the friendly plans that were never really meant to happen at all.',
-    'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, or put their headphones in, or snap at a small question. These pages follow a battery running down, and what helps before it hits empty.',
-    'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what’s said. Others hint, soften and tease, and expect the hidden meaning to be picked up. Both are systems. Either can be learned. Or you can just ask.',
-    'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, like showing goodwill or sparing a feeling. These pages set out those jobs plainly, along with what it costs to keep up appearances all day.',
-    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the lifts, and wrapping criticism in praise.',
-    'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again, giving advice nobody asked for. Each has a logic, and each has another side.',
-    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a row about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterwards.',
-    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle.',
+    'plans': 'A plan does more than fix a time. For a lot of people it’s a map of the day, already walked through in their head, and when it changes at short notice the map has to be redrawn on the spot. These pages are about what that costs, and about the friendly plans that were never really meant to happen at all. An economist would say the plan already spent some of the day’s budget; changing it spends more.',
+    'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, or put their headphones in, or snap at a small question. These pages follow a battery running down, and what helps before it hits empty. Neurobiology’s phrase for it is that your state sets the volume, and holistic practice starts there, with the body.',
+    'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what’s said. Others hint, soften and tease, and expect the hidden meaning to be picked up. Both are systems. Either can be learned. Or you can just ask. Psychology’s short version is that intent isn’t impact.',
+    'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, like showing goodwill or sparing a feeling. These pages set out those jobs plainly, along with what it costs to keep up appearances all day. The art of debating would add: say the other person’s strongest point first.',
+    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the lifts, and wrapping criticism in praise. Business and politics agree that every job needs an owner and every group a fair way to decide.',
+    'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again, giving advice nobody asked for. Each has a logic, and each has another side. Finance has a picture for it: a repair tops up a reserve of goodwill.',
+    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a row about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterwards. Music explains a lot of it, because tone and tempo carry more than words, and a shared laugh can reset a heavy room (the research on laughter is modest).',
+    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle. Behavioural science calls these habits that save effort; the setting matters too, and aromatherapy’s modest point is that a familiar scent or a quieter room can help some people settle.',
     'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means. How loud a family dinner gets. How plainly feedback is given. Whether a full stop in a text is cross. All of it learned in a particular place, family or generation.',
 }
 
@@ -411,7 +411,7 @@ def build(S):
         toc.append(S.B.toc_row('sec-' + c['id'], str(i), esc(c['name']), 'is-ch', '%d situations' % len(its)))
         body.append(sec_html(i, c, its, S, nums))
         body += [sit_html(it, nums[it['id']], S, p.get('include_fits', True)) for it in its]
-    for key, title in (('build', 'Build your own'), ('find', 'Find it fast'), ('online', 'More, free online'), ('notes', 'Research notes'), ('series', 'The series'),
+    for key, title in (('build', 'Build your own'), ('find', 'Find it fast'), ('ideas', 'How the ideas connect'), ('online', 'More, free online'), ('notes', 'Research notes'), ('series', 'The series'),
                        ('jot', 'Your notes')):
         if key == 'jot' and p.get('notes_pages', 2) <= 0:
             continue
@@ -419,11 +419,11 @@ def build(S):
     front = title_html(p, S) + copyright_html(p, S)
     front += '<nav class="pe-toc ps-toc pk-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (S.mark('contents'), ''.join(toc))
     front += how_html(S) + lens_html(S)
-    back = build_html(p, S) + find_html(secs, S, nums) + online_html(p, S) + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
+    back = build_html(p, S) + find_html(secs, S, nums) + S.ideas_map(p, [], pocket_sections=[(c['id'], c['name']) for c, _x in secs]) + online_html(p, S) + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
     ol = [['Contents', 'contents', 0], ['How to use this guide', 'how', 0]] + [[t, k_, 0] for k_, t, _x in LENS]
     for c, its in secs:
         ol.append([c['name'], 'sec-' + c['id'], 0])
-    ol += [['Build your own', 'build', 0], ['Find it fast', 'find', 0], ['More, free online', 'online', 0], ['Research notes', 'notes', 0], ['The series', 'series', 0]]
+    ol += [['Build your own', 'build', 0], ['Find it fast', 'find', 0], ['How the ideas connect', 'ideas', 0], ['More, free online', 'online', 0], ['Research notes', 'notes', 0], ['The series', 'series', 0]]
     title = '%s: %s' % (p['title'], p['sub'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': S.B.AUTHOR, 'subject': p['line']}, ensure_ascii=False).replace('</', '<\\/')
@@ -482,5 +482,6 @@ def epub_docs(S, Doc, B):
     docs.append(Doc('build.xhtml', 'Build your own', bh))
     docs.append(Doc('find.xhtml', 'Find it fast', find_html(secs, S, nums, epub=True)))
     docs.append(Doc('online.xhtml', 'More, free online', online_html(p, S, epub=True)))
+    docs.append(Doc('ideas.xhtml', 'How the ideas connect', S.ideas_map(p, [], epub=True, pocket_sections=[(c['id'], c['name']) for c, _x in secs])))
     docs.append(Doc('notes.xhtml', 'Research notes', notes_html(secs, S, nums, epub=True).replace('<section class="pk-back pk-notes"', '<section epub:type="bibliography" class="pk-back pk-notes"', 1)))
     return p, docs, chapters

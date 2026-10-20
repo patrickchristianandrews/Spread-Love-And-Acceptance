@@ -1,6 +1,6 @@
 {
  "about": "logicbook14: the \"Another way to see it\" boxes in the print series and the ebooks (from logic13's $SP/logic13-book-boxes.md, rewritten in the series' natural voice: few colons, at most one \"X, not Y\" in a box, no stacked punchlines). Each box is one situation from /the-logic-behind-it.html (assets/js/logic-library.js, by its id) in the lens's six parts, tied to one chapter. tools/book/build_series.py prints it before the chapter's \"In everyday life\" (or \"You, in all your relationships\", or \"Common mix-ups\") section, else at the end of the chapter, and ends it with a code (print) or a link (ebook) to /the-logic-behind-it.html?item=<id>#find. refs are research ids on /research.html; they join the chapter's Research notes. No made-up names. The owner's road-rage tip is for the website only and is never used here.",
- "kicker": "Another way to see it",
+ "kicker": "Two ways to read this",
  "labels": {"looks": "From outside", "logic": "The logic", "like": "It’s like", "fits": "Why it fits", "other": "The other side", "say": "You could say", "step": "One small step"},
  "boxes": [
   {"id": "left-party", "book": 1, "slug": "self-2-now", "title": "Leaving early without a long goodbye",

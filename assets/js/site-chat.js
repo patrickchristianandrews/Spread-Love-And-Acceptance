@@ -3355,12 +3355,12 @@
   function deepReply(state, hit, only) {
     var T = hit.t, b = [], id = String(T.id || dTitle(T));
     var safetyTopic = dlist(dRule('safety_topic_ids')).indexOf(T.id) !== -1;
+    // fear, control or harm: the short neutral reply only (the owner's decision)
+    if (safetyTopic) { state.last = null; state.deepLast = id; return safeOnly('deep-' + id); }
     if (!only) b.push({ k: 'p', x: dTitle(T).replace(/\?$/, '') === dTitle(T) ? 'Let’s think about ' + dTitle(T).charAt(0).toLowerCase() + dTitle(T).slice(1) + '.' : dTitle(T) });
     var keys = only === 'links' ? [] : only ? [only, 'together'] : safetyTopic ? ['together'] : DEEP_SECTIONS.map(function (S) { return S[0]; });
     var links = dLinks(T), p3 = part3Link(T.id);
     if (p3 && !links.some(function (l) { return l[1] === p3[1]; })) links.splice(Math.min(2, links.length), 0, p3);
-    // fear, control or harm: the safety page first, and no lenses unless asked
-    if (safetyTopic && !only) { var sl = links.filter(function (l) { return /\/safety\.html/.test(l[1]); }); if (sl.length) b.push({ k: 'links', x: sl }); }
     (only ? DEEP_SECTIONS.slice().sort(function (a, c) { return keys.indexOf(a[0]) - keys.indexOf(c[0]); }) : DEEP_SECTIONS).forEach(function (S) {
       if (keys.indexOf(S[0]) === -1) return;
       var ps = dParas(dget(T, S[2])); if (!ps.length) return;

@@ -479,7 +479,7 @@
     try { if (W.sessionStorage.getItem(RULES_SKIP)) return true; } catch (e) {}
     return false;
   }
-  function rulesLines(T) {
+  function rulesLines() {
     return ['This is for understanding each other, not for scoring points.',
       'Either of you can stop at any time.',
       'Nothing here is a verdict about a person.',
@@ -507,7 +507,7 @@
     }
     var id = 'tcol-rules-h' + (++rulesN);
     var ul = mk('ul', { cls: 'tcol-rules-l' });
-    rulesLines(T).forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
+    rulesLines().forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
     return mk('div', { cls: 'tcol-rules tol-plain no-bubble' + (where === 'float' ? ' is-float' : ''), role: 'group', 'aria-labelledby': id }, [
       mk('p', { cls: 'tcol-rules-h', id: id, text: 'Before you share' }),
       ul,

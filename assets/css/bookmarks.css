@@ -3,8 +3,8 @@
    icons are told not to be turned back, so they keep the colour of the words in dark mode too. */
 
 /* ---------- the Save button in the bar ---------- */
-.tol-bar button.tol-save-btn{ display:inline-flex; align-items:center; justify-content:center; gap:.35rem; flex:none; white-space:nowrap;
-  min-height:44px; min-width:44px; box-sizing:border-box; border-radius:999px; font-weight:600; }
+.tol-bar button.tol-save-btn{ display:inline-flex; align-items:center; justify-content:center; gap:.3rem; flex:none; white-space:nowrap;
+  min-height:44px; min-width:44px; box-sizing:border-box; border-radius:999px; font-weight:600; padding-left:.6rem !important; padding-right:.75rem !important; }
 .tol-bar button.tol-save-btn .tol-sv-ico{ flex:none; display:block; }
 .tol-sv-ico path{ fill:none; transition:fill .2s ease; }
 .tol-save-btn.is-saved .tol-sv-ico path, .tol-save-btn[aria-pressed="true"] .tol-sv-ico path{ fill:currentColor; }
@@ -19,18 +19,27 @@
 .tol-bar:is(.is-narrow, .is-tight, .is-snug, .is-tightest) button.tol-save-btn{ flex-direction:column; gap:1px; padding:.2rem .4rem !important; font-size:.8rem !important; line-height:1; }
 .tol-bar:is(.is-narrow, .is-tight, .is-snug, .is-tightest) button.tol-save-btn .tol-sv-ico{ width:19px; height:19px; }
 /* a phone's bar has room for four controls with words; with Save as well, Quiet shows its moon and Menu its word
-   (their names stay for screen readers), and on the narrowest phones Ask shows Professor Puddles' face alone */
+   (their names stay for screen readers), and below 390px Ask shows Professor Puddles' face alone */
 @media (max-width:479px){
   html body .tol-bar:has(> .tol-save-btn) .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   html body .tol-bar:has(> .tol-save-btn) .tol-bar-quiet{ padding:.3rem .55rem !important; }
-  html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn svg{ display:none; }
+  html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn svg, html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn::before{ display:none !important; }
   html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn{ padding:.3rem .65rem !important; }
-  html body .tol-bar > button.tol-save-btn{ flex:0 0 auto; margin:0 !important; }
+  html body .tol-bar > button.tol-save-btn{ flex:0 0 auto; margin:0 !important; padding:.2rem .3rem !important; }
 }
 @media (max-width:389px){
   html body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-t{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; }
   html body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-fab{ padding:.2rem !important; min-width:44px !important; }
   html body .tol-bar:has(> .tol-save-btn){ gap:.25rem !important; }
+}
+@media (max-width:359px){
+  html body .tol-bar:has(> .tol-save-btn){ gap:.2rem !important; padding-left:10px !important; padding-right:10px !important; }
+}
+/* the installed app adds Share to the bar too: Ask shows the face alone and the gaps get smaller */
+@media (max-width:479px){
+  html.tol-in-app body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-t{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; }
+  html.tol-in-app body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-fab{ padding:.2rem !important; min-width:44px !important; }
+  html.tol-in-app body .tol-bar:has(> .tol-save-btn){ gap:.2rem !important; padding-left:10px !important; padding-right:10px !important; }
 }
 @media print{ .tol-save-btn, .tol-sv{ display:none !important; } }
 

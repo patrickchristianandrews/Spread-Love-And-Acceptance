@@ -26,7 +26,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 COMMON = os.path.join(ROOT, 'tools', 'chat', 'common-words.txt')
 # Everyday words the search must take as typed, never "correct" into a site word. common-words.txt
 # (shared with the chat) has English words of 4 to 12 letters; these add short words, names of faiths,
-# holidays, games and places, family words, and everyday Spanish.
+# holidays, games and places, and family words.
 REAL_EXTRA = '''
 act add age ago aid aim air all and ant any ape app arm art ash ask ate awe axe baa bad bag ban bar bat bay bed bee beg bet bib bid big bin bit bob bog boo bow box boy bra bud bug bum bun bus but buy bye cab cad cam can cap car cat cop cot cow coy cry cub cue cup cut dab dad dam day den dew did die dig dim din dip doe dog don dot dry dub due dug dye ear eat ebb egg ego elf elk elm emu end era eve ewe eye fab fad fan far fat fax fed fee fen few fib fig fin fir fit fix flu fly foe fog for fox fry fun fur gag gal gap gas gay gel gem get gig gin gnu god got gum gun gut guy gym had hag ham has hat hay hem hen her hid him hip his hit hob hog hop hot how hub hue hug hum hut ice icy ill imp ink inn ion its ivy jab jam jar jaw jet jig job jog jot joy jug kid kin kit lab lad lag lap law lay led leg let lid lie lip lit log lot low mad man map mat may men met mid mix mob mod mom mop mud mug mum nag nan nap nay net new nil nip nit nod nor not now nun nut oak oar oat odd off oil old one opt orb ore our out owe owl own pad pal pan pap par pat paw pay pea peg pen pep per pet pew pie pig pin pit ply pod pop pot pro pry pub pug pun pup put rag ram ran rap rat raw ray red rib rid rig rim rip rob rod roe rot row rub rug rum run rut rye sad sag sat saw say sea see set sew sex she shy sin sip sir sis sit six ski sky sly sob sod son sow soy spa spy sty sub sum sun tab tag tan tap tar tax tea ten the tie tin tip toe ton too top tow toy try tub tug two urn use van vat vet vow wag war was wax way web wed wet who why wig win wit woe wok won woo wow yak yam yap yes yet yew you zap zen zip zoo
 eid ramadan diwali hanukkah chanukah passover easter christmas xmas baptism christening muslim muslims islam islamic christian catholic jewish judaism hindu hinduism sikh sikhism buddhist buddhism atheist agnostic mosque synagogue church halal kosher interfaith
@@ -38,10 +38,7 @@ deployment deployed veteran veterans homecoming reintegration fifo offshore nigh
 christen christened christening christenings baptise baptised baptize baptized aqiqah naming-ceremony bris godparent godparents godmother godfather
 boyfriend boyfriends girlfriend girlfriends befriend gf bf bff hubby wifey fiances fiancees inhaler inhalers handover handovers mediator mediators inheritance probate executor
 wont dont cant didnt doesnt isnt wasnt arent werent wouldnt couldnt shouldnt havent hasnt hadnt youre theyre thats whats
-construccion construcción obra horas trabaja trabajamos cansadas turnos turno noches
-repartir reparto hermanos hermana hermano hermanas hijastros hijastro hijastra hijastras padrastro madrastra ensamblada ensambladas resentido resentida culpa rabia
 contempt contemptuous horsemen stonewalling paperback paperbacks hardback exam exams halls flatmate
-ayuda ayudar pareja parejas esposa esposo marido mujer hombre hijos hijo hija hijas ninos nino nina ninas bebe bebes gemelos gemelas cuidador cuidadora cuidadores cuidar cuidado familia casa trabajo dinero tareas quehaceres pelea peleas pelean peleamos discutir discusion enojado enojada enojo miedo calma tranquilo tranquila cansado cansada divorcio separados separacion suegra suegro suegros abuela abuelo abuelos abuelita madre padre mama papa novio novia amor relacion matrimonio gritar grita gritos violencia seguridad necesito tengo tiene somos estoy esta como que por para con sin mas muy bien mal ayudame hablar hablamos escuchar tiempo noche dia semana escuela salud enfermedad enferma enfermo parkinson demencia hogar juntos solo sola soltero soltera mudanza boda dinero ahorro gasto deuda dios iglesia fe navidad pascua bautizo espanol castellano latino latina hispano gracias hola donde cuando porque quien puedo quiero siento triste feliz celoso celosa respeto confianza
 '''
 
 OUT = os.path.join(ROOT, 'assets', 'js', 'search-index.js')
@@ -74,7 +71,7 @@ class Page(HTMLParser):
         self._in_main = 0
         self._saw_main = False
         self._body_text = []
-        # flow17: snippets read as English prose: no Spanish box inside an English page, and no game scoreboard
+        # flow17: snippets read as English prose: no box in another language, and no game scoreboard
         # (a hidden panel on a game page, like "US 0 1st & 10 THE RUT 0")
         self.page_lang = 'en'
         self.is_game = False

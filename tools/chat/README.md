@@ -5,8 +5,8 @@ sent anywhere, and the only thing kept is the current tab's conversation (sessio
 
 It answers in this order:
 
-1. **Safety.** A message that suggests danger or harm gets a short, kind "this is beyond me, please
-   reach out to someone you trust or a qualified professional" and nothing else.
+1. **Safety.** A message that suggests danger or harm gets one short neutral line ("That sounds really hard. I’m a
+   small guide to this site, and I can’t help with this one.") and nothing else: no numbers, services or links.
 2. **Care first.** Program cards marked `"first": true` answer before anything else, plainly: who can see this
    chat (this tab only; “Start over” erases it; closing the tab clears it), “is it my fault?” (never a yes; after
    being snapped at, `what_hurt`/`how_hurt`), “tell me something calming”, “I feel judged”, “can you tell me if I’m
@@ -125,7 +125,7 @@ happening”) gets help to talk it through (`careReqReply`), never the control a
 (`labelReply`). “Is this fair?”, a label with a topic, “is that a red flag?” after a situation, and the topic chips
 (“A few questions about money”) start the short questions from `assets/js/clarify-data.js` (loaded on first use): one
 per turn, the answers as chips (plus Not sure, Skip this one, Skip all), then `evaluate()` and `next()` give a read of
-level 0–3, or the safety answer with its hotlines. Isolation from people in general, checking without agreement,
+level 0–3, or (at level 4) the short neutral reply. Isolation from people in general, checking without agreement,
 money kept back, threats and fear keep the safety answers. Tests: the `care10` group.
 
 Panel 16 (puddles16): `KB.logic` holds The Logic Behind It cards (from `assets/js/logic-library.js`, one passage each,
@@ -135,8 +135,7 @@ answers from the Library's "what the research says" passage and the studies behi
 (`researchReply`). A card's `after` list names the next card to give instead of "I've shared the main steps already"
 (grief never hears that). After a playbook, "what do I actually say?", "and if she says no?" stay with it (`sitFollow`).
 A counsellor asking about a client gets a "for counsellors" lead before the safety reply (`proReply`, every safety line kept).
-In Spanish (the Spanish page, a Spanish browser, or once someone writes Spanish) the chat's own buttons, footer and
-screen-reader lines are Spanish too (`applyEs`). Tests: the `panel16` group.
+A message in Spanish gets the normal English reply (the Spanish layer was removed, October 2026).
 
 ## Adding a situation playbook
 

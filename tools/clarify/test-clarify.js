@@ -3,7 +3,7 @@
 
    Run: node tools/clarify/test-clarify.js
    Exits 1 on any failure. Three parts:
-     1. the banks: 3 to 6 questions per type, 2 to 5 answers each, Spanish for every string, no labels for people
+     1. the banks: 3 to 6 questions per type, 2 to 5 answers each, no labels for people
      2. the rules, exhaustively: no single answer reaches level 3 or safety unless it is "afraid", "threat",
         "danger"; a "care" limit never reaches safety without a fear, threat or clear sign; "Skip all" is level 0
      3. scenarios: answer sets -> the level they must get (or the range they must stay in) */
@@ -27,14 +27,14 @@ D.ORDER.forEach(function (id) {
   var ty = D.TYPES[id];
   ok(ty, 'type ' + id + ' exists');
   ok(ty.questions.length >= 3 && ty.questions.length <= 6, id + ': 3 to 6 questions (has ' + ty.questions.length + ')');
-  ok(ty.title.en && ty.title.es && ty.why.en && ty.why.es, id + ': title and why in both languages');
+  ok(ty.title && ty.why, id + ': has a title and a why');
   var seen = {};
   ty.questions.forEach(function (q) {
     ok(!seen[q.id], id + '.' + q.id + ': question ids are unique'); seen[q.id] = 1;
     ok(q.answers.length >= 2 && q.answers.length <= 5, id + '.' + q.id + ': 2 to 5 answers (has ' + q.answers.length + ')');
-    ok(q.text.en && q.text.es && q.short.en && q.short.es, id + '.' + q.id + ': text in both languages');
+    ok(q.text && q.short, id + '.' + q.id + ': has its words');
     q.answers.forEach(function (a) {
-      ok(a.text.en && a.text.es, id + '.' + q.id + '.' + a.id + ': answer in both languages');
+      ok(a.text, id + '.' + q.id + '.' + a.id + ': answer has its words');
       ok(a.w >= -2 && a.w <= 3, id + '.' + q.id + '.' + a.id + ': weight between -2 and 3');
       ok(a.id !== 'notsure' && a.id !== 'skip', id + '.' + q.id + ': "Not sure" and "Skip" are added, not listed');
     });
@@ -50,9 +50,6 @@ D.ORDER.forEach(function (id) {
 });
 walk(D.TYPES, 'TYPES', function (s, at) { ok(!LABELS.test(s), 'no labels for people: ' + at + ' "' + s + '"'); });
 walk(D.exportForChat('en'), 'export.en', function (s, at) { ok(!LABELS.test(s) || /^rules/.test(at.replace(/^export\.en\./, '')), 'no labels for people: ' + at + ' "' + s + '"'); });
-walk(D.exportForChat('es'), 'export.es', function (s, at) { ok(!LABELS.test(s) || /^rules/.test(at.replace(/^export\.es\./, '')), 'no labels for people (es): ' + at + ' "' + s + '"'); });
-// Spanish actually differs from English
-D.ORDER.forEach(function (id) { ok(D.questions(id, 'es')[0].text !== D.questions(id, 'en')[0].text, id + ': Spanish questions are Spanish'); });
 // exportForChat is plain data
 var ex = D.exportForChat('en');
 ok(JSON.stringify(JSON.parse(JSON.stringify(ex))) === JSON.stringify(ex), 'exportForChat is JSON-safe');
@@ -68,9 +65,15 @@ Object.keys(hrefs).forEach(function (h) {
   var hash = h.split('#')[1];
   if (hash && fs.existsSync(f)) ok(new RegExp('id="' + hash + '"').test(fs.readFileSync(f, 'utf8')), 'anchor exists: ' + h);
 });
-// the crisis words are the ones the site already uses
-var safetyHtml = fs.readFileSync(path.join(root, 'safety.html'), 'utf8').replace(/<[^>]+>/g, '');
-ok(safetyHtml.indexOf('In the UK, call Samaritans free on 116 123, or text SHOUT to 85258, any time') >= 0, 'crisis line matches safety.html');
+// level 4 (fear, threats, crisis wording) is one short neutral reply: no resources, numbers or links (the owner's decision)
+var GONE = require(path.join(root, 'tools', 'checks', 'no-removed-content.js')).PATTERNS;
+function clean(o) { var s = JSON.stringify(o); return !GONE.some(function (p) { return p[1].test(s); }); }
+D.ORDER.forEach(function (id) {
+  var n4 = D.next({ type: id, level: 4, crisis: true }, 'en');
+  ok(/^That sounds really hard\./.test(n4.body) && !n4.links.length && !n4.extra, id + ': level 4 is the short neutral reply, with no links');
+  [0, 1, 2, 3, 4].forEach(function (l) { ok(clean(D.next({ type: id, level: l, crisis: true }, 'en')), id + ' level ' + l + ': no removed content'); });
+});
+ok(clean(D.exportForChat('en')), 'exportForChat: no removed content');
 
 /* ---------- 2. the rules, exhaustively ---------- */
 function ev(type, answers, ctx) { return D.evaluate(type, answers, ctx); }
@@ -256,11 +259,9 @@ S.forEach(function (s) {
   ok(Array.isArray(r.reasons) && r.reasons.length > 0, 'scenario: ' + s[0] + ' has reasons');
   var n = D.next(r, 'en');
   ok(n.title && n.body, 'scenario: ' + s[0] + ' has a next step');
-  if (r.level === 4) ok(n.links.some(function (l) { return /^\/safety\.html/.test(l.href); }), 'scenario: ' + s[0] + ' points to the existing safety page');
-  if (r.level < 4) ok(!n.links.some(function (l) { return /^\/safety\.html#(now|talk)/.test(l.href); }), 'scenario: ' + s[0] + ' does not show the danger resources below safety');
-  if (r.crisis) ok(/988/.test(n.extra), 'scenario: ' + s[0] + ' shows the crisis line');
-  var es = D.evaluate(s[1], s[2], Object.assign({}, s[4] || {}, { lang: 'es' }));
-  ok(es.level === r.level, 'scenario: ' + s[0] + ' same level in Spanish');
+  if (r.level === 4) ok(/^That sounds really hard\./.test(n.body) && !n.links.length, 'scenario: ' + s[0] + ' gets the short neutral reply, with no links');
+  ok(clean(n), 'scenario: ' + s[0] + ' has no numbers, services or safety links');
+  if (r.crisis) ok(!n.extra, 'scenario: ' + s[0] + ' adds no crisis line');
 });
 var scen = S.length;
 

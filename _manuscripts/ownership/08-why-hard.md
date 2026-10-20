@@ -1,6 +1,6 @@
 # 8. Why owning it is hard for some people
 
-*A Sunday afternoon, a semi in Swindon. Made up.*
+*A Sunday afternoon, a semi in Swindon (made up).*
 
 Corinne has found out, from a letter, that Rafe moved four hundred pounds out of their joint savings in March to cover his car repair, without telling her. It isn't the money. They have enough. It's that this is the second time, and last time he'd promised to talk to her first.
 
@@ -14,7 +14,7 @@ Two hours later he comes back in. He's pale, and he says, slowly, "I'm sorry. I 
 
 ## Refusal and overwhelm can look identical from the outside.
 
-The layers. On the surface, a question and a man walking out. One layer down, the second broken promise about the same thing, which is what Corinne actually came to talk about. Below that, Rafe's body has gone into something close to a shutdown: his words have gone, and walking to the shed is the only move left. Below that, embarrassment about the car, which was the reason he hid the transfer in the first place, and which the letter dragged straight back into the light. And at the root, the plain fact that a body on high alert can't do a careful conversation, however much its owner might want to.
+The layers. On the surface, a question and a man walking out. One layer down, the second broken promise about the same thing, which is what Corinne actually came to talk about. Below that, Rafe's body has gone into something close to a shutdown: his words have gone, and walking to the shed is the only move left. Below that, embarrassment about the car, which was the reason he hid the transfer in the first place, and which the letter dragged straight back into the light. And at the root, the plain fact that a body on high alert can't do a careful conversation, however much its owner might want to. It's the same root as the hidden cost in chapter 2, seen from the inside: limited capacity.
 
 Taken slowly, what Corinne saw as refusal was something else. That doesn't make the transfer all right, and it doesn't mean she was wrong to raise it. It means that whether someone *can't* own something right now and whether they *won't* are very different situations, and they need very different responses.
 
@@ -69,7 +69,7 @@ What helps: specifics, and questions (chapter 6). The concrete, camera-level det
 
 ### Learned behaviour
 
-Some people grew up somewhere apologies weren't made, or were made only under pressure, or were used against the person who made them. A boy whose father never once said sorry, and who watched his mother's apologies get thrown back at her for years, can grow into a man for whom "I was wrong" feels genuinely dangerous, or simply foreign: a phrase in a language he never learned. He may explain, minimise or shift blame without even noticing, because that's what owning things sounded like at home.
+Some people grew up somewhere apologies weren't made, or were made only under pressure, or were used against the person who made them. A boy whose father never once said sorry, and who watched his mother's apologies get thrown back at her for years, can grow into a man for whom "I was wrong" feels genuinely dangerous, or just foreign: a phrase in a language he never learned. He may explain, minimise or shift blame without even noticing, because that's what owning things sounded like at home.
 
 What helps: say the unwritten rule out loud, without contempt. "In this house, saying sorry doesn't mean you lose." Model it yourself, often, for small things. Notice and thank the first awkward attempts.
 
@@ -78,6 +78,20 @@ What helps: say the unwritten rule out loud, without contempt. "In this house, s
 And sometimes a person understands perfectly well what they did and how it landed, and doesn't want to own it, because owning it would cost something: discomfort, a change in behaviour, a concession, a loss of position. It's the hardest of the five to sit across from, and it's real. It isn't the same as the other four, and it doesn't respond to the same things. Patience, questions and reassurance about the self won't change a decision.
 
 What helps: clarity about what you will and won't keep doing. Chapter 11 is about that.
+
+## If it's you.
+
+You may have recognised yourself somewhere in that list. Most readers do, usually in more than one place. That's no reason for alarm, or for the collapse from chapter 3. Treat it as useful information, the way it's useful to know which of your knees gives you trouble on stairs.
+
+If it's mostly **shame**, the work is learning to hold the act and the self apart, and it gets easier with practice. The sentence from chapter 3 helps: *I did that, it was wrong, and I'm not a bad person.*
+
+If it's mostly **defensiveness**, the work starts in the body. Learn your own early signs: the heat in the face, the clenched jaw, the counter-argument forming before the other person has finished. Then buy yourself time: "I can feel myself getting defensive. Give me a minute."
+
+If it's **limited self-awareness**, the work is asking (chapter 6) and listening to the answer, especially when it surprises you.
+
+If it's **learned behaviour**, the work is practising a sentence you didn't grow up hearing until it stops feeling foreign. Start with small things. "Sorry, that was me" about a dropped spoon is still practice.
+
+And if, being honest, it's sometimes **unwillingness**, it can help to ask what owning it would cost you, specifically. Often the cost turns out to be smaller than it felt, or worth paying. Sometimes it really is large, and then at least you can make the decision with your eyes open, and say so honestly instead of pretending you don't understand.
 
 ## You can't tell which it is from one apology.
 
@@ -93,7 +107,7 @@ Patterns tell you a great deal. Over weeks and months, some questions are worth 
 
 The first four point towards someone who finds ownership hard but is, in their own way, trying. The last points towards unwillingness. Most people are a mixture, and most people improve when the conditions do.
 
-There's a sentence in the notes behind this book that's worth keeping in your pocket: the best approach for someone who is ashamed and defensive is different from the approach for someone who repeatedly avoids responsibility while understanding exactly what they're doing. The first needs safety, time and specifics. The second needs a limit.
+One sentence is worth keeping in your pocket here: the best approach for someone who is ashamed and defensive is different from the approach for someone who repeatedly avoids responsibility while understanding exactly what they're doing. The first needs safety, time and specifics. The second needs a limit.
 
 ## You can't do someone else's inner work.
 
@@ -101,7 +115,7 @@ This is the hardest truth in the chapter, and it applies to every one of the fiv
 
 What you can't do is the looking for them. The moment where a person sees what they did and lets it be true is something that happens inside them, on their timetable, or not at all. You can open the door, light the room and put the chair in the right place. You can't walk them through it.
 
-That's not a failure on your part. It's simply where your part ends.
+That's no failure on your part. It's where your part ends.
 
 **Said:** "Rafe? Can you at least say something?"
 **Heard:** *You're failing at this conversation, too.*
@@ -120,11 +134,11 @@ The website's *Calm-Down Kit* helps you make a plan for heated moments in advanc
 
 ## One small thing to try
 
-On a calm day, agree a short phrase with someone close to you that means *I'm overloaded, not leaving, back soon*. Make it something either of you can say in three or four words, or text. Then, the next time either of you uses it, the other person's only job is to believe it, and the first person's only job is to come back.
+On a calm day, agree a short phrase with someone close to you that means *I'm overloaded, I'm staying, I'll be back soon*. Make it something either of you can say in three or four words, or text. Then, the next time either of you uses it, the other person's only job is to believe it, and the first person's only job is to come back.
 
 ## What to remember
 
 - A body on high alert can't do careful ownership. Calm first, conversation second.
 - Shutdown and refusal can look the same from outside. The difference shows in whether the person comes back.
 - Shame, defensiveness, limited self-awareness, learned behaviour and unwillingness are five different reasons, and they need different responses. Most people have a mix.
-- Judge by patterns over time, not one apology. You can open the door, but the looking is theirs to do.
+- Judge by patterns over time; one apology tells you very little. You can open the door, but the looking is theirs to do.

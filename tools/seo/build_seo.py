@@ -1142,7 +1142,7 @@ GROUPS = [
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
     ('Frequency Buddies, a cartoon about feelings for all ages', r'^frequency-buddies'),
     ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
-    ('Help for your situation', r'^(by-relationship|examples|for-teachers|groups\.html|infographic|ladder|refusals|upset-right-now|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
+    ('Help for your situation', r'^(by-relationship|examples|for-teachers|groups\.html|infographic|ladder|refusals|upset-right-now|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw)'),
     ('The book, Part Three: Understanding people', r'^book/understanding-'),
     ('The book', r'^book/'),
     ('The Professor’s Library and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|polymath|frequency-framework)'),

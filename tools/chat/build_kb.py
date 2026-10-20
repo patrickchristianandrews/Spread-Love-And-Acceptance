@@ -1087,7 +1087,7 @@ def link_ok(u):
     return os.path.isfile(fp) or os.path.isfile(fp + '.html') or os.path.isfile(os.path.join(fp, 'index.html'))
 
 
-BANNED = re.compile(r'\b(suicid\w*|self[- ]?harm\w*|hotlines?|crisis lines?|domestic violence|abus(e|ive|er)|analytics|kill (yourself|myself))\b', re.I)
+BANNED = re.compile(r'\b(suicid\w*|self[- ]?harm\w*|domestic violence|abus(e|ive|er)|analytics|kill (yourself|myself))\b', re.I)
 
 
 def check_text(obj, where, warnings):
@@ -1512,6 +1512,39 @@ def logic_docs(items):
                      'k': norm_space('logic reaction why ' + ' '.join(it['s']) + ' ' + ' '.join(keywords(x)))})
     return docs
 
+# ---------------------------------------------------------------- removed content never comes back (purge19)
+# The patterns live in tools/checks/no-removed-content.js (one list for the whole site). A page passage that still
+# carries any of it (a book page not yet cleaned, say) is left out of the KB; anything else (cards, deep talk,
+# persona, situations) must already be clean, and guard() stops the build if the written files carry any of it.
+def removed_patterns():
+    import subprocess
+    out = subprocess.run(['node', '-e', "const {PATTERNS}=require(process.argv[1]);"
+                          "console.log(JSON.stringify(PATTERNS.map(([l,r])=>[l,r.source,r.flags])))",
+                          os.path.join(ROOT, 'tools', 'checks', 'no-removed-content.js')], capture_output=True, text=True, check=True).stdout
+    return [(l, re.compile(s, re.I if 'i' in fl else 0)) for l, s, fl in json.loads(out)]
+
+
+def drop_removed(docs):
+    pats = removed_patterns()
+    kept, removed_from = [], {}
+    for d in docs:
+        text = ' '.join(str(d.get(k, '')) for k in ('t', 'h', 'u', 'x'))
+        if any(r.search(text) for _, r in pats):
+            page = (d.get('u') or '').split('#')[0] or d.get('id', '?')
+            removed_from[page] = removed_from.get(page, 0) + 1
+            continue
+        kept.append(d)
+    return kept, removed_from
+
+
+def guard():
+    import subprocess
+    r = subprocess.run(['node', os.path.join(ROOT, 'tools', 'checks', 'no-removed-content.js'), OUT, OUT_BG], capture_output=True, text=True)
+    if r.returncode != 0:
+        sys.stdout.write(r.stdout + r.stderr)
+        raise SystemExit('build_kb: removed content found in the chat KB (see above).')
+
+
 def main():
     meta = site_sections()
     pages = [p for p in find_pages()]
@@ -1609,6 +1642,7 @@ def main():
         docs.append({'id': 't:%d' % i, 't': 'Little tip for today', 'h': t, 'u': '', 'x': t + ' ' + b,
                      'k': cat + ' ' + cats.get(cat, ''), 'tip': cats.get(cat, cat)})
 
+    docs, removed_from = drop_removed(docs)
     docs, dropped = dedupe(docs)
     for i, d in enumerate(docs):
         d['id'] = i  # compact ids
@@ -1674,8 +1708,12 @@ def main():
     print('background notes: %d entries in %d topics, wrote %s (%.1f KB)' % (len(bg), len(topics), os.path.relpath(OUT_BG, ROOT), bsize / 1024))
     if bsize > 2 * 1024 * 1024:
         print('WARNING: background file is over 2 MB', file=sys.stderr)
+    if removed_from:
+        print('passages left out because they still carry removed content (safety lines, outside resources, Spanish): %d, from %s'
+              % (sum(removed_from.values()), ', '.join(sorted(removed_from))))
     for w in warnings:
         print('  check: ' + w)
+    guard()
 
 
 if __name__ == '__main__':

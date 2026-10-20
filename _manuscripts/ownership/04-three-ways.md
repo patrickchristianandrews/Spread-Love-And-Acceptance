@@ -1,6 +1,6 @@
 # 4. Three ways to say sorry
 
-*A Thursday evening, a tapas place in Bristol, Karin's fortieth. Made up.*
+*A Thursday evening, a tapas place in Bristol, Karin's fortieth (made up).*
 
 Karin booked the table for eight people at half past seven. Nell, who has been her closest friend since they shared a flat at university, arrived at twenty past eight, kissed her, said "Sorry, sorry, work," and sat down. For the next hour her phone lay face up beside her plate, and she answered it three times, once taking it outside. She left before the cake because she had an early start.
 
@@ -30,11 +30,12 @@ Bookkeepers have a useful way to see this. In double-entry bookkeeping, every en
 
 That's why people so often say, after a partial apology, "you didn't actually apologise", and why the person who gave it is so baffled. They did say sorry. They can point to the word. What they didn't do was leave the entry standing.
 
-The "but" usually comes in one of three shapes:
+The "but" usually comes in one of four shapes:
 
 - **"But you…"** The responsibility is moved across to the other person. "But you made me angry." "But you moved the date."
 - **"But I…"** It's moved into a circumstance, which then does the work of an excuse. "But I was exhausted." "But work's been mad."
 - **"But it…"** It's made smaller. "But it was only an hour." "But it wasn't a big deal at the time."
+- **"But we…"** It's spread thinly across both people until nobody in particular owns it. "But we were both tired." "But we'd both had a drink."
 
 The things after the "but" are sometimes perfectly true. Karin did move the date. Nell was exhausted. Truth isn't the problem. Placement is. Put straight after the ownership, they read as a counterclaim. Kept until the other person has felt heard, or offered as context once the responsibility is clearly on your side of the ledger, they can actually help.
 
@@ -56,7 +57,7 @@ It **offers something different**: a repair now (taking her out) and a change fo
 There's nothing magic about those four. They line up with what research finds people value most: acknowledgement of responsibility first, then an offer of repair. And none of them requires Nell to beat herself up, or to agree that she's a terrible friend. Chapter 3 is the reason that matters.
 
 > **From the research.** Across 175 studies with more than 26,000 people, a meta-analysis of what goes with forgiveness found that receiving an apology was one of the stronger links, alongside the hurt person's empathy and how intentional the harm seemed. Situational factors, such as whether there was an apology, mattered more than the forgiving person's personality.
-> *Fehr, Gelfand and Nag (2010) · Strong: a large meta-analysis, though most of the studies are correlational, so it shows what tends to go together, not what causes what.*
+> *Fehr, Gelfand and Nag (2010) · Strong: a large meta-analysis, though most of the studies are correlational, so it shows what tends to go together rather than what causes what.*
 
 ## You can be sorry without agreeing with every reading of what happened.
 
@@ -71,6 +72,16 @@ It doesn't mean that. Accountability means honest acknowledgement of your own be
 That's not a "but" cancelling the apology. It's a disagreement about one conclusion, offered after the ownership is complete, with the cause still placed squarely on her side. There's a difference between "I'm sorry, but you're wrong that I don't care" (which reads as a counterattack) and "I did this, I see why it looked like that, and here's what's actually true for me" (which reads as someone who has taken it in and is being honest with you).
 
 Disagreeing about meaning is fine. Disagreeing about whether the thing happened, when it plainly did, is where it goes wrong.
+
+## Make the apology the size of the thing.
+
+There's one more way an apology misfires, and it has nothing to do with which parts it contains. It's the size.
+
+A small thing wants a small, quick apology. If you bump into someone's elbow and spill their tea, "Sorry, that was me, let me get you another" is perfect, and a ten-minute speech about how careless you've been would be strange and slightly exhausting. A big thing wants a proper one: time set aside, the full four parts, a repair that costs you something. "Soz about Thursday x" after missing a friend's fortieth is the wrong size, however sincere the x.
+
+Getting the size wrong in either direction sends a message of its own. Too small, and it says *I don't think this mattered.* Too big, and it can say *this is now about how bad I feel*, which is chapter 3's collapse, or it can sound like a performance. People are oddly precise about this. Most of us can tell, within a sentence, whether an apology is the right size for what happened.
+
+If you're not sure, ask. "I think I owe you a proper apology for Thursday, in person. Can I come round on Sunday?" The question itself tells the other person you've judged the size about right.
 
 ## The goodwill reserve.
 
@@ -93,11 +104,11 @@ That last version keeps the explanation (which Nell needs to say, and which Kari
 >
 > **If you need to explain,** own the act first and then ask: "Do you want to know what was going on, or not right now?" If the answer is not now, keep it for later. It hasn't gone anywhere.
 >
-> **If explanations sound like excuses to you,** it can help to know that for some people an apology without the why feels incomplete and slightly dishonest. Once they've clearly owned it, the explanation that follows is often them trying to give you the whole truth, not trying to wriggle.
+> **If explanations sound like excuses to you,** it can help to know that for some people an apology without the why feels incomplete and slightly dishonest. Once they've clearly owned it, the explanation that follows is often them trying to give you the whole truth. Wriggling tends to come before the ownership, and seldom after it.
 
 > **Say it**
 >
-> To give a genuine one: "I did [the specific thing]. I can see it [the effect on you]. That was mine, not yours. I'm sorry. Next time I'll [one concrete change]."
+> To give a genuine one: "I did [the specific thing]. I can see it [the effect on you]. That was mine. I'm sorry. Next time I'll [one concrete change]."
 >
 > To ask for one without a fight: "I don't need you to agree with every word of how I've seen it. I'd just like you to say what you did, without the 'but'."
 >

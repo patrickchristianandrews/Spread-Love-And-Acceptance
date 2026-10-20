@@ -77,7 +77,6 @@ knowledge base (`KB.pers.persona` and `KB.pers`), so after editing either file r
 | `handoff` | `to_help` (plain, never funny), `listen`, `lighten` (only when the person picks it), `better` ("Fancy a joke to lighten it?") |
 | `memory` | callbacks for a pet and a favourite thing, and what he says about remembering |
 | `starters` | the rotating "just chat" chips |
-| `es` | Spanish basics: how are you, jokes, riddles, facts, thanks, bye, bored |
 
 Text may use `{name}`, `{pet}`, `{thing}` and `{Thing}`. A line with `{pet}` or `{thing}` is only used when that is known.
 

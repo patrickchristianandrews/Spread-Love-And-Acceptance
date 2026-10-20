@@ -168,3 +168,18 @@ h3.kind-h-tool::before{ background:#3E6B4C; border-radius:999px; }
 /* boxes, figures and headings never sit beside a side note, only plain paragraphs do */
 .pe-body h2, .pe-body h3, .pe-body figure, .pe-body aside:not(.side-note), .pe-body .book-ex-wrap, .pe-body .try-this,
 .pe-body .book-hint, .pe-body .tol-try, .pe-body table, .pe-body .lg-box, .pe-body .pe-end{ clear:right; }
+
+/* voice18: "Two ways to read this", one per chapter. Online it is a compact aside; in the print books and ebooks its two
+   rows join the chapter's situation box (or make a box of their own in the same style), see build_series.add_logic_boxes */
+.two-ways{
+  margin:1.4rem 0; padding:.8rem 1rem .85rem; max-width:44rem; box-sizing:border-box;
+  background:#FFFFFF; border:1px solid #CDBF98; border-left:4px solid #8C7A4E; border-radius:12px;
+  font-family:"Lora", Georgia, serif; font-size:.96rem; line-height:1.58; color:var(--ink, #2B2620);
+}
+.two-ways p{ margin:0 0 .45rem; }
+.two-ways p:last-child{ margin-bottom:0; }
+.two-ways .tw-k{ font-family:"IBM Plex Mono", monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:#6B5A2E; margin-bottom:.2rem; }
+.two-ways .tw-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; }
+.two-ways .tw-f strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; }
+.pe-body .lg-box .lg-two{ margin-top:1.8mm; padding-top:1.6mm; border-top:.5pt dashed var(--pc); }
+.pe-body .lg-box.tw-only .lg-two{ margin-top:0; padding-top:0; border-top:0; }

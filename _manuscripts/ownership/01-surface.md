@@ -1,6 +1,6 @@
 # 1. The surface and the fuller picture
 
-*Tuesday, twenty to seven, a terraced house in Leicester. Made up, like every scene in this book.*
+*Tuesday, twenty to seven, a terraced house in Leicester (made up, like every scene in this book).*
 
 Lorraine has her coat half off when she asks whether Pete rang his mum back.
 
@@ -14,7 +14,7 @@ By nine they're arguing, and the argument is about the phone call, which neither
 
 ## A moment has a surface and a depth.
 
-Here is that scene in a few quick strokes, the way it arrives if you've learned to look for the layers.
+Take that scene in a few quick strokes, the way it arrives once you've learned to look for the layers.
 
 On the surface, a question about a phone call and a one-word answer. One layer down, it's the third time this week his mother has rung, and the third "later". Below that, when Pete doesn't ring back, his mother rings Lorraine instead, to ask if he's all right, and Lorraine has been taking those calls for a month without anyone agreeing she would. Below that, two things no camera could film: Lorraine feels like the household switchboard, and Pete feels nagged about a conversation with his mother that he's been dreading for reasons he hasn't said out loud. And at the root, an old pattern that turns up in offices and families alike: a job that nobody owns lands on whoever notices first.
 
@@ -43,6 +43,14 @@ This is the most common way a conversation about an apology breaks down. Two peo
 
 The finding is useful because it takes the blame out of the gap. Pete isn't lying when he says it was one evening, and Lorraine isn't exaggerating when she says it's been weeks. They're standing in different seats. From the seat of the person who did the thing, you see your reasons and this one moment. From the seat of the person it was done to, you see the effect and every time before.
 
+## The surface wins arguments, and loses the point.
+
+There's a reason the person standing on the surface tends to win these arguments on points. The surface can be checked. "I said later, and it's half seven" is a fact anyone can verify. The lower layers can't be checked in the same way. "It's been weeks" is a pattern, and patterns are made of many small moments, each of which, taken on its own, can be explained away.
+
+So the person who's carrying the pattern does what people do when they can feel something real that they can't quite prove. They reach for bigger words. "Always." "Every single time." "You never." These words are an attempt to make the lower layer visible, to say *this is bigger than tonight*. And they're a gift to the person on the surface, because "always" is almost never literally true, and one counter-example ("I rang her on Sunday") is enough to make the whole complaint look exaggerated.
+
+This is how a real grievance loses an argument. The facts were on the hurt person's side the whole time; they were just spread across a month instead of sitting in one evening. If you're carrying a pattern, the fix is to swap the big words for small, countable ones: three calls this week, four this month. If you're on the surface and hear an "always", the fix is to hear it as *this has happened more than you've noticed*, and ask how often, before you reach for Sunday.
+
 ## Sort the facts from the guesses.
 
 Philosophy has a branch with a forbidding name, epistemology, which asks a plain question: how do you know what you think you know? It turns out to be one of the most practical tools for an argument at home, because in the middle of a row almost nothing being said is actually known. Most of it is memory and inference and pattern-matching, dressed up as fact and delivered with total confidence.
@@ -66,7 +74,7 @@ That sorting is the first move of almost every chapter in this book. What happen
 
 ## The gap between layers is where apologies go missing.
 
-Here's the reason this chapter comes first. When someone wants an apology, they nearly always want it for something in the lower layers: the pattern, the cost, the meaning. When someone offers one, they nearly always offer it for the surface.
+This chapter comes first for a reason. When someone wants an apology, they nearly always want it for something in the lower layers: the pattern, the cost, the meaning. When someone offers one, they nearly always offer it for the surface.
 
 So Pete, an hour later and wanting the evening back, says, "Sorry I didn't ring her. I'll do it now." And he does, there and then, in the hall. It's a real apology for a real thing, and Lorraine still feels as though nothing has been said, because nothing has been said about the month of calls she's been taking. Pete, having apologised and acted on it, now feels that nothing he does is ever enough.
 
@@ -75,9 +83,18 @@ Neither of them is being unreasonable. The apology was for the top layer, and th
 **Said:** "Sorry I didn't ring her. I'll do it now."
 **Heard:** *I'll make tonight's problem go away so we can stop talking about it.*
 **Meant:** *I didn't realise this was such a big deal, and I want us to be all right.*
-**A better way:** "I've been leaving Mum to you, haven't I? Every time I say later, she rings you. That's not fair on you. I'll ring her now, and I'll tell her to call me, not you, from now on."
+**A better way:** "I've been leaving Mum to you, haven't I? Every time I say later, she rings you. That's not fair on you. I'll ring her now, and from now on I'll tell her to call me instead of you."
 
-The better version isn't longer because longer is better. It's longer because it reaches the layer where the hurt actually is: the pattern ("every time"), the cost ("she rings you") and the fix that changes the setup rather than tonight.
+The better version isn't longer because longer is better. It's longer because it reaches the layer where the hurt actually is: the pattern ("every time"), the cost ("she rings you") and a fix that changes the setup rather than tonight.
+
+The same gap opens at work, often in writing. Dawn, who manages a small team at a housing association, emails Bryn on a Friday afternoon: "As per my email on Tuesday, can you send the figures by Monday?" Bryn reads it on his phone at the bus stop and feels his face go hot.
+
+**Said:** "As per my email on Tuesday, can you send the figures by Monday?"
+**Heard:** *You ignored me, and now I'm putting it in writing.*
+**Meant:** *I need the figures for a board paper, I'm anxious about Monday, and I can't remember whether I was clear on Tuesday.*
+**A better way:** "Hi Bryn, I need the figures for the board paper on Tuesday. Could you get them to me by Monday lunchtime? I'm not sure I made the deadline clear last time, so flagging it now."
+
+On the surface, a reasonable request. One layer down, three words ("as per my") that, in a lot of offices, have come to carry a sharp edge. Below that, Dawn's own worry, and a genuine doubt about whether her earlier email said enough. Nobody meant anything unkind, and Bryn spends his weekend feeling told off.
 
 ## Seeing the layers is a skill, and it can be learned.
 
@@ -93,14 +110,14 @@ You don't need to see everything at once. You need a habit of asking, after the 
 >
 > Other people's wiring hears the tune more than the words. A short "fine", in a flat tone, after a pause, is a door left ajar: *I'm not going to say it now, and I'd like you to notice.* To a brain that works like this, Pete ignored something obvious.
 >
-> **If your brain works like Lorraine's,** the word you say may be the only thing that arrives. Try saying the layer: "It isn't fine yet. Can we talk about your mum's calls after tea?" That's not giving in; it's sending the message on a channel the other person actually receives.
+> **If your brain works like Lorraine's,** the word you say may be the only thing that arrives. Try saying the layer: "It isn't fine yet. Can we talk about your mum's calls after tea?" Saying it plainly sends the message on a channel the other person actually receives, and it costs you nothing.
 >
 > **If your brain works like Pete's,** a flat, quick "fine" is often a sign there's something under it. You don't have to guess what. You can ask: "Fine as in fine, or fine as in later?" Most people will tell you, and some will laugh, which helps.
 >
-> Neither way of hearing is the correct one. They're different settings, and two people on different settings each find the other hard to read.
+> Neither way of hearing is the correct one. They're different settings, and two people on different settings each find the other hard to read. The root underneath is one that will keep turning up in this book: what's sent isn't always what arrives.
 
-> **From the research.** The idea that misunderstanding runs both ways between people who are wired differently has a name: the double empathy problem. It began as a short argument by Damian Milton that the difficulty sits between two kinds of mind, not in one of them. Since then, an experiment passing a story along chains of people found that chains of autistic people and chains of non-autistic people each passed the story on about equally well, while mixed chains lost detail faster and reported less rapport.
-> *Milton (2012) · Theory: an argument, not a study. Crompton and colleagues (2020) · Early: one small lab task with 72 people; a replication has since been published.*
+> **From the research.** The idea that misunderstanding runs both ways between people who are wired differently has a name: the double empathy problem. It began as a short argument by Damian Milton that the difficulty sits between two kinds of mind rather than inside one of them. Since then, an experiment passing a story along chains of people found that chains of autistic people and chains of non-autistic people each passed the story on about equally well, while mixed chains lost detail faster and reported less rapport.
+> *Milton (2012) · Theory: an argument without data of its own. Crompton and colleagues (2020) · Early: one small lab task with 72 people; a replication has since been published.*
 
 ## What helps when you're stuck on different layers.
 

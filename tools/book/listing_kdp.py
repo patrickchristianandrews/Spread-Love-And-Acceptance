@@ -457,7 +457,7 @@ def main():
                              interior_file='None: print only (the forms are free to print online)', cover_file='', isbn='', price_usd=''))
     md.append('\n---\n\n## A+ content ideas (for each book\'s product page)\n')
     md.append('''- **Module 1, the series banner:** the six front covers side by side, with one line under each ("Start with yourself", "For the heavy days", "Between people", "The work nobody sees", "Every form, all in one", "The logic behind a reaction").
-- **Module 2, what a chapter looks like:** three panels: a short made-up scene, "Words you could use", and an "Another way to see it" box, each as a cropped page image.
+- **Module 2, what a chapter looks like:** three panels: a short made-up scene, "Words you could use", and a "Two ways to read this" box, each as a cropped page image.
 - **Module 3, meet the three friends:** Professor Puddles, Tidbit and Sugarfoot, with one gentle hint each.
 - **Module 4, free online:** "Every chapter is also free online, in a short and a full version, with no account." (Words only; KDP doesn't allow web addresses in A+ content.)
 - **Module 5, the workbook and the pocket guide:** a filled-in example sheet beside a blank one, and one page of the pocket guide.

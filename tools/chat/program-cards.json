@@ -165,27 +165,17 @@
       "name": "a client in a relationship with control",
       "pat": "\\b(my|a|our) (clients?|patients?|counsell?ees?|service users?)\\b.{0,80}\\b(checks? (her|his|their) (phone|messages|texts)|tracks? (her|his|their) (location|phone)|controls? (the|all the|her|his|their) money|controlling|coercive|afraid of (him|her|them)|scared of (him|her|them)|monitors?|reads? (her|his|their) (texts|messages))\\b",
       "what": [
-        "No. What you describe sounds like control, and the shared tools here aren’t for relationships with control. The site’s note for counsellors says: if you suspect coercive control or violence in a couple you see, please do not assign the shared tools. A shared chore list or pause plan can become one more thing to be checked on."
-      ],
-      "how": [
-        "Point the person to the safety page, or to support of their own. Not safe at home? says plainly that fear, control and threats are not a communication problem, lists free and private helplines, and explains how to leave the site quickly.",
-        "If your client might be checked, the same page explains how to clear what this site keeps on a device."
+        "No. What you describe sounds like control, and the shared tools here aren’t for relationships with control. If you suspect coercive control or violence in a couple you see, please do not assign the shared tools. A shared chore list or pause plan can become one more thing to be checked on."
       ],
       "links": [
         [
-          "For counsellors: the safety screen",
-          "/for-counselors.html#safety"
-        ],
-        [
-          "Not safe at home? People to talk to, and leaving this site quickly",
-          "/safety.html"
+          "For counsellors, coaches and group leaders",
+          "/for-counselors.html"
         ]
       ],
       "safety": true,
       "plain": [
-        "Do not assign the shared tools.",
-        "Point them to Not safe at home?",
-        "Or to support of their own."
+        "Do not assign the shared tools."
       ]
     },
     {
@@ -1084,7 +1074,6 @@
         "Look at the pattern, not the label: what do they do, how often, and how do you feel around them?",
         "Notice whether it’s new or has always been there, and whether it’s getting worse.",
         "If you’re worried about their health, say so kindly and suggest they see their doctor. A doctor or psychologist is the right person to assess it.",
-        "If you feel scared, controlled or put down, that matters more than any label: the Not safe at home? page lists the signs, and people to talk to.",
         "For yourself, a counsellor can help you think it through, whatever the answer turns out to be."
       ],
       "script": [
@@ -1093,16 +1082,7 @@
       "scriptLabels": [
         "If you’re worried about them"
       ],
-      "links": [
-        [
-          "How to find a professional",
-          "/outside-help.html#counsellor"
-        ],
-        [
-          "When it’s more than a rough patch",
-          "/safety.html#signs"
-        ]
-      ],
+      "links": [],
       "kind": "intent",
       "first": true,
       "newTopic": true,
@@ -1119,18 +1099,12 @@
       ],
       "how": [
         "Start with your doctor or GP: tell them about the sleep and the jumpiness, and how long it has been going on.",
-        "US service members and veterans: call 988, then press 1, any time. Military OneSource is free and confidential on 800-342-9647.",
-        "UK veterans: the Combat Stress helpline is 0800 138 1619.",
         "Meanwhile, make a pause plan together while things are calm: a word that means “I need a break”, and a time you’ll come back."
       ],
       "links": [
         [
           "Sleep, nightmares and feeling on edge",
           "/coming-home.html#sleep"
-        ],
-        [
-          "Where to get support",
-          "/coming-home.html#support"
         ]
       ],
       "chips": [
@@ -1247,10 +1221,6 @@
         "Wired Differently explains how different wiring can change the way words land, without labels."
       ],
       "links": [
-        [
-          "How to find a professional",
-          "/outside-help.html#counsellor"
-        ],
         [
           "The Wiring Card",
           "/wiring-card.html"
@@ -1374,16 +1344,12 @@
       "keys": [],
       "what": [
         "I’m glad you asked. When panic won’t stop, or you’ve felt low for weeks, that’s more than a supplement can fix, and you deserve real help from a person.",
-        "In the US you can call or text 988 any time. In the UK and Ireland, Samaritans are free on 116 123. If you might be in danger right now, call 911 or 999. Your doctor can help too, and it’s worth telling them about any herbs or supplements you take."
+        "Your doctor can help too, and it’s worth telling them about any herbs or supplements you take."
       ],
       "links": [
         [
           "Getting help: when it’s more than everyday stress",
           "/calming-supplements.html#get-help"
-        ],
-        [
-          "Help beyond this site",
-          "/outside-help.html"
         ]
       ],
       "chips": [],
@@ -1668,22 +1634,12 @@
       ],
       "how": [
         "Ask your doctor for a referral: they often know local counsellors, and what is covered.",
-        "Use a therapist directory you can filter by cost, place and focus, such as Psychology Today (US and UK) or the BACP directory (UK).",
-        "Through work: an Employee Assistance Program (EAP) often gives a few free, confidential sessions.",
-        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits.",
-        "Lower cost: university training clinics and community centres often have sliding-scale fees."
+        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits."
       ],
       "plain": [
-        "Ask your doctor who to see.",
-        "Look in a therapist directory.",
-        "Work may offer free sessions (EAP).",
-        "Training clinics can cost less."
+        "Ask your doctor who to see."
       ],
       "links": [
-        [
-          "Help beyond this site: finding a counsellor",
-          "/outside-help.html#counsellor"
-        ],
         [
           "For counsellors, coaches and group leaders",
           "/for-counselors.html"
@@ -1705,16 +1661,11 @@
       ],
       "how": [
         "Ask your doctor for a referral: they often know local counsellors, and what is covered.",
-        "Use a therapist directory you can filter by cost, place and focus, such as Psychology Today (US and UK) or the BACP directory (UK).",
-        "Through work: an Employee Assistance Program (EAP) often gives a few free, confidential sessions.",
-        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits.",
-        "Lower cost: university training clinics and community centres often have sliding-scale fees."
+        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits."
       ],
       "plain": [
         "No, I am not a therapist.",
-        "Ask your doctor who to see.",
-        "Look in a therapist directory.",
-        "Work may offer free sessions (EAP)."
+        "Ask your doctor who to see."
       ],
       "links": [
         [
@@ -1724,10 +1675,6 @@
         [
           "For counsellors, coaches and group leaders",
           "/for-counselors.html"
-        ],
-        [
-          "Help beyond this site: counsellors, helplines, groups",
-          "/outside-help.html"
         ]
       ],
       "chips": []
@@ -1779,17 +1726,13 @@
       "how": [
         "The For counsellors page explains what the program is and isn’t, how it was built, and its honest limits.",
         "It’s self-help, not a clinical tool: the scores start conversations; they don’t assess anyone.",
-        "Please don’t use the couples tools where there is fear or control in the relationship. The Not safe at home? page explains why.",
+        "Please don’t use the couples tools where there is fear or control in the relationship.",
         "Workpapers and the Lemonade Stand work well as homework: each person fills in their own side, then you look at it together."
       ],
       "links": [
         [
           "For counsellors, coaches and group leaders",
           "/for-counselors.html"
-        ],
-        [
-          "Safety first: when not to use the couples tools",
-          "/for-counselors.html#safety"
         ],
         [
           "Method and honest limits",
@@ -1812,24 +1755,17 @@
       ],
       "how": [
         "See a doctor (or your unit’s medical team), especially if it lasts more than a month or gets in the way of sleep, work or home. Treatments for this work well.",
-        "In the US, Military OneSource is free and confidential, day or night: 800-342-9647. Veterans and service members can also dial 988 and then press 1 to talk to someone now.",
-        "In the UK, Combat Stress supports veterans and their families: 0800 138 1619.",
         "At home: keep sleep and meals regular, go easy on alcohol, and agree a signal for “I need a few minutes” when it gets too much."
       ],
       "plain": [
         "This is common after deployment.",
         "I cannot diagnose it.",
-        "Please see a doctor.",
-        "Military OneSource: 800-342-9647."
+        "Please see a doctor."
       ],
       "links": [
         [
           "Sleep, nightmares and feeling on edge",
           "/coming-home.html#sleep"
-        ],
-        [
-          "Where to get support",
-          "/coming-home.html#support"
         ],
         [
           "Coming home after time apart",
@@ -1914,8 +1850,7 @@
       "how": [
         "Make a pause plan while things are calm: a word that means “I need a break”, and a time you’ll come back.",
         "When you feel it rising, step away, breathe out slower than you breathe in, then come back and repair.",
-        "Talk to your doctor about sleep and feeling on edge. Help works better when it starts early.",
-        "Support: in the US, Military OneSource is free and confidential, any time, on 800-342-9647 (veterans and service members can call 988, then press 1). In the UK, Combat Stress is on 0800 138 1619."
+        "Talk to your doctor about sleep and feeling on edge. Help works better when it starts early."
       ],
       "script": [
         "I snapped at you earlier. That wasn’t your fault. I’m still getting used to being home, and I’m sorry."
@@ -1927,10 +1862,6 @@
         [
           "Sleep, nightmares and feeling on edge",
           "/coming-home.html#sleep"
-        ],
-        [
-          "Where to get support",
-          "/coming-home.html#support"
         ],
         [
           "The kids and coming home",
@@ -1967,8 +1898,7 @@
       "how": [
         "Keep sleep and meals regular, and go easy on alcohol and late caffeine.",
         "Slow breathing before bed helps many people: the Night Garden counts it for you.",
-        "See your doctor (or your unit’s medical team) if it lasts more than a few weeks, or comes with nightmares or feeling on edge.",
-        "Support: Military OneSource, 800-342-9647, free and confidential any time; in the UK, Combat Stress on 0800 138 1619."
+        "See your doctor (or your unit’s medical team) if it lasts more than a few weeks, or comes with nightmares or feeling on edge."
       ],
       "script": [
         "You’ve been sleeping badly since you got back. Would you be willing to talk to a doctor about it? I’ll come with you if you want."
@@ -1980,10 +1910,6 @@
         [
           "Sleep, nightmares and feeling on edge",
           "/coming-home.html#sleep"
-        ],
-        [
-          "Where to get support",
-          "/coming-home.html#support"
         ]
       ],
       "pat": "\\b(zzqx_never_matches)\\b",
@@ -3123,8 +3049,7 @@
       "how": [
         "Ask for the reason behind one rule, at a calm moment, then suggest a deal: “10 on school nights, 11 on weekends?”",
         "You can say what you miss. Missing your old home or your family isn’t ungrateful.",
-        "You can ask your social worker, or an advocate, about things you want to change: seeing your family, keeping your old school or friends, or a house rule. You’re allowed to ask, and to ask again.",
-        "If you want to talk to someone outside the house, Childline (UK) is free on 0800 1111, any time."
+        "You can ask your social worker, or an advocate, about things you want to change: seeing your family, keeping your old school or friends, or a house rule. You’re allowed to ask, and to ask again."
       ],
       "script": [
         "I know you’re doing a lot for me. Can we talk about the phone rule? I’ve got an idea.",
@@ -3790,8 +3715,7 @@
       "how": [
         "Pick one thing you wish she understood, and say just that one thing, at a calm moment.",
         "Ask what she worries about, too. A rule is often a worry in disguise.",
-        "Find one other adult who does get you (a teacher, a school counsellor, an aunt) and talk to them as well.",
-        "If things at home are more than clashing, Childline (UK) is free on 0800 1111, any time."
+        "Find one other adult who does get you (a teacher, a school counsellor, an aunt) and talk to them as well."
       ],
       "script": [
         "Can I tell you one thing I wish you got about me? I’m not having a go."
@@ -3888,7 +3812,7 @@
         "Then suggest a deal that covers their worry: “10 on school nights, 11 at weekends?” or “The phone charges in the kitchen, and I get it back after homework.”",
         "Say what you need too: “Messaging my friends after school is how we keep in touch.”",
         "If they still say no, ask when you can try again, like in a month. Keeping a deal for a few weeks is the quickest way to more freedom.",
-        "If someone at home scares you, hurts you or cuts you off from everyone, that’s different, and it isn’t your fault. Tell a trusted adult, or call Childline free on 0800 1111 (UK) or Childhelp on 1-800-422-4453 (US)."
+        "If someone at home scares you, hurts you or cuts you off from everyone, that’s different, and it isn’t your fault."
       ],
       "script": [
         "I know you’re doing a lot for me. Can we talk about the phone rule? I’ve got an idea: 10 on school nights, 11 at weekends?"
@@ -3930,7 +3854,6 @@
       "how": [
         "You’re allowed to ask questions about what’s happening, and to say when you don’t want to talk about it.",
         "Pick one adult you trust (your grandparent, a teacher, a school counsellor) and tell them how you’re really doing.",
-        "If you want to talk to someone outside the family: in the UK, Childline is free on 0800 1111; in the US, you can text HOME to 741741.",
         "It’s okay to love your parent and still be upset with them."
       ],
       "links": [
@@ -3968,8 +3891,7 @@
       "how": [
         "All of it is allowed: missing her, being angry with her, feeling relieved, or all three in one day.",
         "You choose who knows. One friend or one adult is enough.",
-        "Tell the adult you live with when it’s a missing-her day. It helps them not take it personally.",
-        "Free people to talk to: Childline (UK) 0800 1111, any time. If a parent drinks, Nacoa (UK) and Alateen (US) are there for you."
+        "Tell the adult you live with when it’s a missing-her day. It helps them not take it personally."
       ],
       "script": [
         "I’m not angry at you. I’m just missing Mum today.",
@@ -6947,7 +6869,7 @@
         "Normal: a limit you both agree, that applies to both of you, like “we check with each other before anything over $200.”",
         "Normal: either of you can raise it, change it, or say no, without fear.",
         "Not normal: it’s one-sided (only one of you has to ask), hidden, or punished, with anger, the silent treatment or a card taken away.",
-        "Not normal: you have to ask for money you need, explain every receipt, or aren’t allowed to work or see the accounts. If that sounds familiar, the Not safe at home? page lists the signs, and people you can talk to privately."
+        "Not normal: you have to ask for money you need, explain every receipt, or aren’t allowed to work or see the accounts."
       ],
       "script": [
         "Can we agree one amount where we both check with each other first? Same rule for both of us, and we look at it again in a month."
@@ -6956,10 +6878,6 @@
         [
           "Money together: an agreed limit, or control?",
           "/money-together.html#control"
-        ],
-        [
-          "Not safe at home? The signs of control",
-          "/safety.html"
         ]
       ],
       "chips": [],
@@ -6973,8 +6891,7 @@
           "how": [
             "Ask yourself the quick check: did we both agree to it? Does it apply to both of us? Can either of us bring it up and change it? Do we both know where the money is?",
             "If the answers are yes, it’s a plan you can tweak together. Suggest one limit for big purchases, and leave the rest alone.",
-            "If it’s one-sided, hidden, or you face anger, sulking or a card taken away when you spend, that isn’t a money style. It’s a sign of control.",
-            "If you feel afraid to spend, to ask or to say no, the Not safe at home? page lists the signs, and people you can talk to privately."
+            "If it’s one-sided, hidden, or you face anger, sulking or a card taken away when you spend, that isn’t a money style. It’s a sign of control."
           ],
           "script": [
             "I feel watched when I have to explain small things. Could we agree a limit for big purchases, and leave the rest alone?"
@@ -6986,10 +6903,6 @@
             [
               "An agreed limit, or control? (money)",
               "/money-together.html#control"
-            ],
-            [
-              "Not safe at home? The signs",
-              "/safety.html#signs"
             ]
           ]
         },
@@ -7071,7 +6984,7 @@
         "Agree the big numbers together: what you save each month, and a fun amount each of you spends with no questions asked.",
         "Pick a check-first limit that applies to both of you, like any single purchase over $200.",
         "Look at it once a month for 20 minutes, not in the middle of an argument.",
-        "If you’re scared of them, not just worried about money, that’s different. The Not safe at home? page can help."
+        "If you’re scared of them, not just worried about money, that’s different."
       ],
       "script": [
         "I’m a saver; it helps me feel safe. I know you love enjoying life now. Can we agree a fun budget for each of us and a savings amount, and check in monthly?"
@@ -7279,29 +7192,6 @@
           "showwhatido"
         ]
       ]
-    },
-    {
-      "id": "spanish",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "something in Spanish",
-      "pat": "\\b(in |into )?spanish\\b|\\bespanol\\b|\\ben espanol\\b|\\bespañol\\b",
-      "keys": [],
-      "what": [
-        "Yes. There’s a short page in Spanish with the essentials: sharing the housework, when children fight, calming down when you’re angry, caring for someone, and staying safe. Most other pages can be read in Spanish with your browser’s Translate option (in Chrome: the ⋮ menu, then Translate)."
-      ],
-      "how": [
-        "Send her the page: it opens on any phone, with no account.",
-        "For tools like the Lemonade Stand, turn on the browser’s translate option; the buttons and labels translate too."
-      ],
-      "links": [
-        [
-          "En español",
-          "/en-espanol.html"
-        ]
-      ],
-      "chips": []
     },
     {
       "id": "illchores",
@@ -8750,8 +8640,7 @@
       ],
       "how": [
         "Every tool lets you type your own names, so it says “Sam and Alex”, not “husband and wife”.",
-        "If you’re working through coming out as an adult, to family, at work or with a partner, there’s a page for that.",
-        "If a family reaction could put you at risk, the Not safe at home? page can help you plan."
+        "If you’re working through coming out as an adult, to family, at work or with a partner, there’s a page for that."
       ],
       "links": [
         [
@@ -9566,8 +9455,7 @@
         "Stop and step back as soon as you notice your voice going up.",
         "Say what’s happening: “I’m getting too loud. I’m going to take a breath.”",
         "Breathe for one minute, in for 4 and out for 6, and don’t go back until your body has slowed down.",
-        "Make it right: “I’m sorry I yelled. That wasn’t fair to you.” Then say what you’ll do differently.",
-        "Get support for yourself too: your doctor, an Employee Assistance Program, or an anger-management group or counsellor."
+        "Make it right: “I’m sorry I yelled. That wasn’t fair to you.” Then say what you’ll do differently."
       ],
       "script": [
         "I’m sorry I lost my temper. That wasn’t fair to you, and it wasn’t your fault. I’m working on stepping away before I get loud."
@@ -9654,8 +9542,6 @@
       ],
       "how": [
         "Your doctor: stress, sleep, alcohol and low mood all shorten a fuse, and a doctor can help with those and point you to local support.",
-        "An Employee Assistance Program (EAP) through work, if you have one: a few free, confidential counselling sessions.",
-        "A counsellor or anger-management group: search “anger management” in a therapist directory such as Psychology Today, or ask your doctor for a local group.",
         "Meanwhile, the Calm-Down Kit helps you spot your triggers and first warning signs, and the four steps on Upset right now? help in the moment."
       ],
       "script": [
@@ -9909,8 +9795,7 @@
       "how": [
         "It’s normal to feel tired, sad, and sometimes impatient, then guilty. That’s a sign you need more support, not that you’re failing.",
         "Ask family for specific jobs with a time, including grown children far away: calls, paperwork, a regular phone call, paying for a sitter.",
-        "Look for respite: day centres, sitters, and carer support groups.",
-        "Illness helplines know your situation well (in the US: Parkinson’s Foundation 1-800-473-4636, Alzheimer’s Association 800-272-3900)."
+        "Look for respite: day centres, sitters, and carer support groups."
       ],
       "script": [
         "I’m tired and I need more help with your mum. Could you take the insurance calls and call her every Sunday at six?"
@@ -9918,17 +9803,12 @@
       "plain": [
         "Caring is hard work.",
         "Feeling tired or impatient is normal.",
-        "Ask for one clear kind of help.",
-        "Call a helpline for support."
+        "Ask for one clear kind of help."
       ],
       "links": [
         [
           "Caring for someone you love",
           "/caregivers.html"
-        ],
-        [
-          "En español: cuando cuido a alguien",
-          "/en-espanol.html#cuidar"
         ]
       ],
       "chips": [],
@@ -9961,8 +9841,7 @@
       "how": [
         "Your own money: a bank account and a phone in your own name, and some savings if you can.",
         "Somewhere to go if a talk goes badly: a friend’s sofa, a way home.",
-        "You can wait. There’s no deadline, and telling a sibling or a friend first is a real step.",
-        "Support: in the US, the LGBT National Help Center on 1-888-843-4564; in the UK, Switchboard on 0800 0119 100. If you’re afraid of violence, or of being forced into anything, see Not safe at home?"
+        "You can wait. There’s no deadline, and telling a sibling or a friend first is a real step."
       ],
       "script": [
         "I know this is hard for you. I’m not going anywhere. When you’re ready to talk, I’m here."
@@ -9975,10 +9854,6 @@
         [
           "What if they cut me off?",
           "/coming-out.html#cut-off"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ]
       ],
       "pat": "\\b(zzqx_never_matches)\\b"
@@ -9994,7 +9869,7 @@
         "Talk about what each of you needs, not about who is braver.",
         "Agree small steps: who knows now, who’s next, and roughly when.",
         "Agree what you’ll each say if someone asks, so nobody is caught off guard.",
-        "A partner who threatens to out you, or uses it to control you, is crossing a line. The Not safe at home? page can help."
+        "A partner who threatens to out you, or uses it to control you, is crossing a line."
       ],
       "script": [
         "I want to be out with you. I’m scared about my parents, and I need to do it in my own time. Can we agree a first step together, like telling my sister by the summer?",
@@ -10027,7 +9902,7 @@
       "first": true,
       "newTopic": true,
       "name": "coming out as an adult",
-      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|hotline|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b|\\b(i m|im|i am) (\\d{2}|an adult|a grown (up|woman|man)|grown up|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b.{0,40}\\b(come|coming) out\\b|\\b(come|coming) out\\b.{0,30}\\b(at work|to my (boss|manager|coworkers?|colleagues?|team)|as an adult|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b|\\b(come|coming|came) out\\b(?! of\\b)|\\blgbt\\w* (support |help )?(line|helpline|number|hotline)\\b|\\b(conservative|religious|traditional|strict)\\b.{0,25}\\b(parents|family|mum|mom|dad)\\b.{0,40}\\b(gay|queer|bi|bisexual|lesbian|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\btell my (mom|mum|dad|parents|family|mother|father) (i have|i ve got|ive got|im|i m|i am|about my|that i m|that im|that i have) (a )?(girlfriend|boyfriend|gay|bi|bisexual|queer|lesbian|trans|same sex partner)\\b|\\b(i m|im|i am) (gay|lesbian|bi|bisexual|queer|pan|pansexual|trans|nonbinary|non binary|ace|asexual)\\b.{0,60}\\b(tell|telling|come out to|coming out to)\\b.{0,15}\\b(my )?(parents|family|mum|mom|dad|mother|father)\\b|\\b(parents|family|mum|mom|dad)\\b.{0,30}\\b(religious|conservative|traditional|strict|christian|muslim|catholic)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\b(i m|im|i am) (1[89]|[2-9]\\d)\\b.{0,80}\\b(my (partner|girlfriend|wife) is a woman|my (partner|boyfriend|husband) is a man|same sex|conservative|religious)\\b",
+      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b|\\b(i m|im|i am) (\\d{2}|an adult|a grown (up|woman|man)|grown up|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b.{0,40}\\b(come|coming) out\\b|\\b(come|coming) out\\b.{0,30}\\b(at work|to my (boss|manager|coworkers?|colleagues?|team)|as an adult|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b|\\b(come|coming|came) out\\b(?! of\\b)|\\blgbt\\w* (support |help )?(line|number)\\b|\\b(conservative|religious|traditional|strict)\\b.{0,25}\\b(parents|family|mum|mom|dad)\\b.{0,40}\\b(gay|queer|bi|bisexual|lesbian|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\btell my (mom|mum|dad|parents|family|mother|father) (i have|i ve got|ive got|im|i m|i am|about my|that i m|that im|that i have) (a )?(girlfriend|boyfriend|gay|bi|bisexual|queer|lesbian|trans|same sex partner)\\b|\\b(i m|im|i am) (gay|lesbian|bi|bisexual|queer|pan|pansexual|trans|nonbinary|non binary|ace|asexual)\\b.{0,60}\\b(tell|telling|come out to|coming out to)\\b.{0,15}\\b(my )?(parents|family|mum|mom|dad|mother|father)\\b|\\b(parents|family|mum|mom|dad)\\b.{0,30}\\b(religious|conservative|traditional|strict|christian|muslim|catholic)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\b(i m|im|i am) (1[89]|[2-9]\\d)\\b.{0,80}\\b(my (partner|girlfriend|wife) is a woman|my (partner|boyfriend|husband) is a man|same sex|conservative|religious)\\b",
       "notPat": "\\b(i m|im|i am) 1[0-7]\\b|\\b1[0-7] (years old|yo|year old)\\b|\\b(teen|teenager|school|year \\d+|grade \\d+|pronouns?|misgender\\w*|deadnam\\w*|my teacher|gsa|homeroom|middle school|high school)\\b",
       "keys": [],
       "what": [
@@ -10038,7 +9913,7 @@
         "Choose a calm time and say it simply: “I’m telling you because I love you and want you in my life. I’m bisexual, and [their name] is my partner.”",
         "Expect that first reactions aren’t always final ones. Give them time, and set one clear boundary: “I won’t stay if my partner is insulted. I’ll call you next week.”",
         "If your partner wants you to come out sooner, tell them what you need: “I want to, and I need to do it on my timing. Can you support me with that?”",
-        "Line up your own support: friends, a counsellor, or an LGBTQ+ line. In the US, the LGBT National Help Center is on 1-888-843-4564; in the UK, Switchboard is on 0800 0119 100. The Trevor Project serves people under 25."
+        "Line up your own support: friends or a counsellor."
       ],
       "script": [
         "I’m telling you because I love you and want you in my life. I’m bisexual, and [their name] is my partner. I don’t need you to have all the answers today."
@@ -10057,14 +9932,6 @@
         [
           "Safety and money first",
           "/coming-out.html#safety-first"
-        ],
-        [
-          "Where to get support",
-          "/coming-out.html#support"
-        ],
-        [
-          "Not safe at home? (if a reaction could be dangerous)",
-          "/safety.html"
         ]
       ],
       "chips": [],
@@ -10077,10 +9944,6 @@
         [
           "\\b(religious|conservative|strict|traditional|scared|afraid|temper|kick me out|cut me off|disown\\w*|safe)\\b",
           "lgbtsafety"
-        ],
-        [
-          "\\b(support line|helpline|line|number|someone to talk to)\\b",
-          "lgbtadult"
         ]
       ],
       "pageChips": [
@@ -10117,8 +9980,7 @@
       "how": [
         "Think through what you depend on them for (money, housing, a job, childcare) and make a backup for each before a big conversation.",
         "Have your own people lined up for the day of the talk and the days after: a friend, a partner, a counsellor.",
-        "First reactions often soften with time. Leave the door open (“I’ll call you next week”) without accepting cruelty.",
-        "If a reaction could be dangerous, or you’d need somewhere to go, look at the Not safe at home? page first."
+        "First reactions often soften with time. Leave the door open (“I’ll call you next week”) without accepting cruelty."
       ],
       "script": [
         "I’m not asking you to agree with everything today. I’m asking you to stay in my life while you think about it."
@@ -10133,10 +9995,6 @@
         [
           "What if they cut me off?",
           "/coming-out.html#cut-off"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ],
         [
           "What’s stored on this device",
@@ -10174,10 +10032,6 @@
         [
           "What’s stored on this device",
           "/on-this-device.html"
-        ],
-        [
-          "Clearing what this site keeps",
-          "/safety.html#traces"
         ]
       ],
       "chips": []
@@ -10197,17 +10051,12 @@
       "how": [
         "“On this device” shows exactly what’s kept right now, and erases it in one tap.",
         "Your browser’s history can show which pages you opened. A private window, or clearing your history, keeps the visit off this device.",
-        "Whoever runs the Wi-Fi can usually see the names of sites a device visits, though not what you read or type. Mobile data avoids that.",
-        "The Leave quickly button, or Esc twice, takes you off this site fast."
+        "Whoever runs the Wi-Fi can usually see the names of sites a device visits, though not what you read or type. Mobile data avoids that."
       ],
       "links": [
         [
           "What’s stored on this device",
           "/on-this-device.html"
-        ],
-        [
-          "Clearing what this site keeps",
-          "/safety.html#traces"
         ]
       ]
     },
@@ -10595,10 +10444,6 @@
           "/teens.html#middle"
         ],
         [
-          "If home doesn’t feel safe",
-          "/safety.html#teens"
-        ],
-        [
           "Calm sounds",
           "/soundscapes.html#brain-breakers"
         ]
@@ -10659,26 +10504,18 @@
         "It’s good that you’re looking for someone to talk to. You don’t have to handle things alone."
       ],
       "how": [
-        "An adult you trust: a relative, a teacher, a school counselor, a coach or a friend’s parent. If the first person doesn’t help, tell someone else.",
-        "In the US, you can text HOME to 741741 (Crisis Text Line) any time, or call or text Childhelp at 1-800-422-4453. In the UK, call Childline free on 0800 1111.",
-        "If you’re thinking about hurting yourself, call or text 988 (US). If you’re in danger right now, call 911 or your local emergency number."
+        "An adult you trust: a relative, a teacher, a school counselor, a coach or a friend’s parent. If the first person doesn’t help, tell someone else."
       ],
       "script": [
         "Can I talk to you about something that’s been going on at home? I don’t need you to fix it, I just need someone to know."
       ],
       "plain": [
-        "Talk to an adult you trust.",
-        "You can text HOME to 741741 (US) or call Childline 0800 1111 (UK).",
-        "If you are in danger, call 911."
+        "Talk to an adult you trust."
       ],
       "links": [
         [
           "For teens",
           "/teens.html"
-        ],
-        [
-          "If home doesn’t feel safe",
-          "/safety.html#teens"
         ]
       ],
       "chips": [],
@@ -11676,7 +11513,7 @@
         "You can own your part, if there is one, without carrying all of it.",
         "Look at the setup before the person, and that includes you.",
         "You don’t have to settle who was right tonight.",
-        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry. The Not safe at home? page has free people to talk to."
+        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry."
       ],
       "what_hurt": [
         "No, not the way it was said to you. How someone speaks to you is theirs to own, and things between two people are rarely one person’s fault."
@@ -11686,7 +11523,7 @@
         "Crying or feeling shaken afterward is a very human response, not a weakness.",
         "You don’t have to work out who was right tonight.",
         "When you’re both calm, you can say how it landed, in one sentence.",
-        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry. The Not safe at home? page has free people to talk to."
+        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry."
       ],
       "pillar": "Pillar II, Fix the setup, not the person.",
       "links": [
@@ -11697,10 +11534,6 @@
         [
           "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ]
       ],
       "chips": [
@@ -12330,7 +12163,7 @@
         "In your hands: your words, your effort, your rest, your limits, and saying yes, no or “not today.” Theirs to decide: how it lands, whether they change, what they think of you.",
         "Signs you’re over-giving: quiet resentment, a silent scorecard, feeling invisible, being tired before the day starts.",
         "Notice it, name it once without blame, then adjust your side: give the effort that’s being given, and see what comes back.",
-        "Matching energy means matching care and effort, never volume or meanness. If you’re afraid of someone, that’s different: the Not safe at home? page is for that."
+        "Matching energy means matching care and effort, never volume or meanness."
       ],
       "script": "I can do my part. That one is yours.",
       "links": [
@@ -12364,14 +12197,12 @@
       "first": true,
       "newTopic": true,
       "name": "respite and support for caregivers",
-      "pat": "\\b(respite|adult day|day program|sitter|break from caregiving|break from caring|caregiver support|support group)\\b|\\b(helpline|help line|someone to call)\\b.{0,40}\\b(caregiv\\w*|carer|dementia|alzheimer\\w*)\\b|\\b(dementia|alzheimer\\w*)\\b.{0,40}\\b(help|support|exhausted|tired|break)\\b|\\bi need a break from (caring|caregiving|looking after)\\b",
+      "pat": "\\b(respite|adult day|day program|sitter|break from caregiving|break from caring|caregiver support|support group)\\b|\\b(dementia|alzheimer\\w*)\\b.{0,40}\\b(help|support|exhausted|tired|break)\\b|\\bi need a break from (caring|caregiving|looking after)\\b",
       "keys": [],
       "what": [
         "You deserve real breaks, and there is help made for exactly this. Getting support isn’t giving up on the person you care for; it’s how you keep going."
       ],
       "how": [
-        "In the US, the Alzheimer’s Association 24/7 Helpline is 800-272-3900 (alz.org). You can call any time, about anything, including how you’re feeling.",
-        "The Eldercare Locator (1-800-677-1116, eldercare.acl.gov) can find local help: adult day programs, in-home respite, meals, and caregiver support groups.",
         "Ask his or her doctor, or a hospital or clinic social worker, about respite care and what insurance or local programs cover.",
         "Pick one regular break and protect it, even two hours a week. Put a name on who covers it."
       ],
@@ -12451,8 +12282,7 @@
         "Write down what caring for your parent actually involves in a normal week: visits, appointments, medication, paperwork, calls, and the worrying. Seeing it in one place helps the others understand.",
         "Ask each sibling for one specific, ongoing job with a time, rather than “more help”: “Could you take over the insurance calls and phone Dad every Sunday at 6?”",
         "Siblings who live far away can still own things: paperwork, bills, booking appointments, researching care, paying for a sitter.",
-        "Talk it through at a planned family call, not in the hallway after an appointment.",
-        "Look after yourself too: respite care and carer helplines exist for exactly this."
+        "Talk it through at a planned family call, not in the hallway after an appointment."
       ],
       "script": [
         "I can’t keep doing most of Dad’s care on my own. Could you each take one thing, like Thursday’s appointment or the Sunday call?"
@@ -12528,7 +12358,7 @@
         "Let the feeling be a signal, not a verdict: it’s telling you something needs to change in the setup, not in your heart.",
         "You don’t have to say it to the person you care for. Say it to someone who can hold it: a friend, a support group, a counselor.",
         "Look for one thing to take off your plate this week, even a small one.",
-        "If the weight doesn’t lift, or you feel hopeless, please talk to a doctor or counselor. In the US you can call or text 988 any time."
+        "If the weight doesn’t lift, or you feel hopeless, please talk to a doctor or counselor."
       ],
       "links": [
         [
@@ -12708,8 +12538,7 @@
       "how": [
         "Keep three basics going: some sleep, a proper meal, and daylight every day.",
         "Once a day, take a one-minute reading of how you are. My weather today keeps it on this device, so you can see the waves get smaller.",
-        "Tell one or two people what would help: company, a walk, or a message each evening.",
-        "If the heaviness doesn’t lift over a few weeks, if you can’t sleep or eat, or if you feel hopeless, please tell someone today: a friend, your doctor, or a helpline."
+        "Tell one or two people what would help: company, a walk, or a message each evening."
       ],
       "links": [
         [
@@ -12719,10 +12548,6 @@
         [
           "When it feels heavy",
           "/after-a-breakup.html#heavy"
-        ],
-        [
-          "Help beyond this site: someone to talk to",
-          "/outside-help.html#talk"
         ]
       ],
       "notPat": "\\b(died|passed|passed away|funeral|death|widow\\w*|grief|griev\\w*|bereave\\w*|lost (my|our)|kids?|children|son|daughter|baby|toddler|child)\\b|\\b(snapped|shouted|yelled|screamed|called me|insulted|criticis\\w*|criticiz\\w*|mean to me|hurt me|said)\\b",
@@ -12921,8 +12746,7 @@
       "how": [
         "People in the same family often grieve differently: one wants to talk, another keeps busy. Neither is wrong.",
         "Staying connected to the person you lost, through memories and rituals, is healthy. Grief doesn’t have to end in “moving on”.",
-        "If you’ve pulled away from family, one small step is enough: a short call, or one honest line like “I’ve been quiet because I miss them, not because of you.”",
-        "If the weight doesn’t lift, or you have thoughts of not wanting to be here, please talk to a doctor, a grief counselor, or call or text 988 in the US."
+        "If you’ve pulled away from family, one small step is enough: a short call, or one honest line like “I’ve been quiet because I miss them, not because of you.”"
       ],
       "links": [
         [
@@ -13087,8 +12911,7 @@
         "Talk about it on a calm day, not as you’re heading out or just back.",
         "Ask what the feeling is about: “What goes on for you when I’m out with them?” Listen before you explain.",
         "Offer what you can, by choice: a text during the evening, a plan for time just the two of you that week, or having them along sometimes.",
-        "Keep seeing your friends. Reassurance helps; giving up your people doesn’t, and usually makes the worry bigger.",
-        "If you’re ever stopped from seeing people, or you feel afraid of how they’ll react, that’s different, and private help is on the Not safe at home? page."
+        "Keep seeing your friends. Reassurance helps; giving up your people doesn’t, and usually makes the worry bigger."
       ],
       "script": [
         "I love you, and my friends matter to me too. When I come home and you go quiet, I feel like I’ve done something wrong. Can we talk about what would help you feel okay when I’m out?"
@@ -13101,10 +12924,6 @@
         [
           "Check-ins: raise it once, calmly",
           "/check-ins.html"
-        ],
-        [
-          "Not safe at home? People to talk to",
-          "/safety.html"
         ]
       ],
       "chips": [
@@ -13139,7 +12958,7 @@
         "Talk about the feeling, not the device: “When you’re on your phone at dinner, I feel like I’m not really there.” That lands better than “you’re always on your phone”.",
         "Agree on one or two simple norms together, like phones away at meals or in bed, rather than one person setting rules for the other.",
         "If it’s about trust or jealousy, say what would help you feel secure, and ask what would help them. Reassurance you both choose works; checking each other’s phones usually makes it worse.",
-        "If either of you checks, tracks or controls the other’s phone or friends, that’s a different thing from a disagreement. The Not safe at home? page explains the difference."
+        "If either of you checks, tracks or controls the other’s phone or friends, that’s a different thing from a disagreement."
       ],
       "script": [
         "I don’t want to police your phone. I think what’s really bugging me is feeling a bit shut out. Can we figure out some phone-free time that works for both of us?"
@@ -13152,10 +12971,6 @@
         [
           "Turning toward: small ways to connect",
           "/turning-toward.html"
-        ],
-        [
-          "Not safe at home? (the difference between worry and control)",
-          "/safety.html"
         ]
       ],
       "chips": [
@@ -13185,8 +13000,7 @@
       "how": [
         "Send one easy message today. It doesn’t need to be a big catch-up: “Saw this and thought of you. Fancy a coffee next week?”",
         "Some couple friends may drift, and some will stay. It’s okay to make new ones.",
-        "Regular beats big. A weekly thing with the same faces builds friendships faster than one big night out.",
-        "If loneliness turns into hopelessness, please talk to someone now: call or text 988 in the US, or Samaritans on 116 123 in the UK and Ireland."
+        "Regular beats big. A weekly thing with the same faces builds friendships faster than one big night out."
       ],
       "script": [
         "Saw this and thought of you. Fancy a coffee next week?"
@@ -13240,16 +13054,12 @@
         "Pick one person and send one easy message today, like “Saw this and thought of you”. Small, low-pressure contact counts.",
         "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
         "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
-        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor. If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor."
       ],
       "links": [
         [
           "Cool-down corner: Upset right now? A few minutes to settle",
           "/upset-right-now.html"
-        ],
-        [
-          "Help beyond this site: someone to talk to, free",
-          "/outside-help.html#talk"
         ],
         [
           "Loneliness: what the research says",
@@ -13284,7 +13094,7 @@
         "Pick one person and send one easy message today, like “Saw this and thought of you”. Small, low-pressure contact counts.",
         "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
         "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
-        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor. If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor."
       ],
       "links": [
         [
@@ -13324,16 +13134,12 @@
         "That’s a big question, and it deserves more than a chat can give. I can’t tell you whether to stay or go, but I can help you think it through."
       ],
       "how": [
-        "First, safety: if you feel scared of them, or they hurt, threaten, watch or control you, that changes everything. Please look at the Not safe at home? page and talk to an advocate, who can help you plan safely.",
+        "First, safety: if you feel scared of them, or they hurt, threaten, watch or control you, that changes everything.",
         "If it’s more that things feel stuck or empty, it can help to write down what you want, what you’ve tried, and what would need to change for you to want to stay.",
         "A couples counselor, or a counselor just for you, is the best place to work out a decision like this. Many people go on their own first.",
         "You don’t have to decide today. Taking care of your sleep and support while you think is part of deciding well."
       ],
       "links": [
-        [
-          "Not safe at home?",
-          "/safety.html"
-        ],
         [
           "Fair split check (Is the setup working for everyone?)",
           "/is-the-setup-working.html"
@@ -13649,14 +13455,9 @@
       "how": [
         "Save everything: screenshots with dates, and keep all contact in one channel, ideally a co-parenting app if your court order allows it.",
         "Reply only about the children and logistics, once a day at a set time, briefly and factually. Silence on everything else is allowed.",
-        "Talk to your lawyer or a family-court advocate about what counts as harassment where you live and whether a protective order or a change to the parenting plan fits.",
-        "If you’re threatened or feel unsafe, call 911 in an emergency. Advocates at 1-800-799-7233 (or text START to 88788) help people after a separation too, and it’s free and private."
+        "Talk to your lawyer or a family-court advocate about what counts as harassment where you live and whether a protective order or a change to the parenting plan fits."
       ],
       "links": [
-        [
-          "After a separation: when it’s more than conflict",
-          "/safety.html#after-separation"
-        ],
         [
           "Separated co-parents",
           "/co-parenting.html"
@@ -13685,7 +13486,7 @@
         "You don’t have to reply tonight. Answer at a set time once a day, and only the parts about the kids or logistics.",
         "Use BIFF: Brief, Informative, Friendly (or at least neutral), Firm. For example: “Got it. I’ll be at the school at 5 on Sunday.”",
         "Skip the history, the feelings and the defending yourself. Don’t admit fault in writing (“It was my fault”, “I always do this”); if something needs owning, say what you’ll do next instead: “I’ll leave earlier on Sundays.”",
-        "Keep copies. If messages turn threatening or won’t stop, see the after-separation part of the Not safe at home? page and talk to your lawyer."
+        "Keep copies."
       ],
       "script": [
         "Thanks for letting me know. I’ll have the kids at the school at 5 on Sunday."
@@ -13797,7 +13598,6 @@
           "The flat is so quiet after they leave on Sunday"
         ],
         [
-          "Cheap weekend ideas",
           "What can we do this weekend that doesn’t cost much?"
         ],
         [
@@ -14117,10 +13917,6 @@
         [
           "Talking about it: getting heard, and hearing them",
           "/teens.html#talking"
-        ],
-        [
-          "If home doesn’t feel safe",
-          "/safety.html#teens"
         ]
       ],
       "script": [
@@ -14170,10 +13966,6 @@
         [
           "When it’s tense with your parents",
           "/teens.html#parents"
-        ],
-        [
-          "If home doesn’t feel safe",
-          "/safety.html#teens"
         ]
       ],
       "script": [
@@ -14211,17 +14003,12 @@
       "how": [
         "You get to decide who you come out to, when, and how. There’s no deadline, and it’s okay to wait until you feel safe.",
         "If a parent mocks your pronouns or identity, one calm line can help, if you feel safe saying it: “I’m not asking you to understand everything today. I’m asking you not to make fun of me.” If it isn’t safe, you don’t have to say anything.",
-        "Find your people: a friend, a school counselor, a GSA club, or an online community you trust. One accepting adult makes a real difference.",
-        "Free, confidential help just for LGBTQ+ young people: The Trevor Project (call 1-866-488-7386, or text START to 678-678), Trans Lifeline (877-565-8860), and the LGBT National Youth Talkline (1-800-246-7743). If you’re thinking about hurting yourself, call or text 988."
+        "Find your people: a friend, a school counselor, a GSA club, or an online community you trust. One accepting adult makes a real difference."
       ],
       "links": [
         [
           "For teens: being yourself at home",
           "/teens.html#lgbtq"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ],
         [
           "For teens",
@@ -14257,7 +14044,7 @@
         "Ask what they’re worried about. Often there’s one specific fear (strangers, bullying, safety), and you can agree on something that covers it without reading everything.",
         "Offer a deal: “Can we agree on what you’ll check and when, instead of reading everything? I’ll keep location on when I’m out.”",
         "Keep your passwords to yourself, and be careful what you put in writing anywhere.",
-        "If a parent uses your phone to scare, punish or isolate you, or you don’t feel safe at home, that’s different. Talk to a school counselor or another trusted adult, or see the Not safe at home? page."
+        "If a parent uses your phone to scare, punish or isolate you, or you don’t feel safe at home, that’s different."
       ],
       "script": [
         "I get that you worry about me. Could we agree on what you check and when, so I can have some privacy too?"
@@ -14266,10 +14053,6 @@
         [
           "For teens",
           "/teens.html"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ]
       ],
       "chips": [],
@@ -14290,7 +14073,7 @@
         "Give yourself somewhere to go when it gets loud: headphones, your room, a walk, a friend’s place, or a calm sound on this site.",
         "If you want to say something, pick a calm moment and keep it about you: “When you two shout, I feel scared and can’t sleep.” You don’t have to take sides.",
         "Talk to someone outside it: a friend, a relative, a school counselor or coach.",
-        "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing. Call 911 in an emergency, and see the Not safe at home? page."
+        "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing."
       ],
       "links": [
         [
@@ -14300,10 +14083,6 @@
         [
           "Calm sounds",
           "/soundscapes.html"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ]
       ],
       "chips": [],
@@ -15198,7 +14977,7 @@
         "Wait before you send. Big feelings fade a little in twenty minutes.",
         "Send it as a private link. Nothing is sent anywhere else."
       ],
-      "results": "If you’re afraid of the other person, a well-worded message isn’t the answer: your safety is, and the Not safe at home? page has free, private people to talk to. If you’re flooded right now, try Upset right now? first.",
+      "results": "If you’re flooded right now, try Upset right now? first.",
       "links": [
         [
           "Write it through (Talk it through in writing)",
@@ -16587,51 +16366,6 @@
         [
           "How it fits your relationships",
           "/relationships.html"
-        ]
-      ]
-    },
-    {
-      "id": "outsidehelp",
-      "kind": "tool",
-      "name": "Help beyond this site",
-      "keys": [
-        "help beyond this site",
-        "outside help",
-        "help outside this site",
-        "where else can i get help",
-        "where can i get more help",
-        "where can i find a counsellor",
-        "where can i find a counselor",
-        "how do i find a counsellor",
-        "how do i find a counselor",
-        "how do i find a therapist",
-        "where can i find a therapist",
-        "support groups",
-        "support group for carers",
-        "support group for families",
-        "helplines",
-        "free helplines",
-        "books about relationships",
-        "what books do you recommend"
-      ],
-      "what": "Help beyond this site is a short, trusted list of outside help: how to find a counsellor in the US and the UK, free helplines, support groups for families and carers, and a few well-known books. This site is self-help; for anything bigger, a trained person is the right next step.",
-      "how": [
-        "Pick what you need: a counsellor, someone to talk to today, a group, or a book.",
-        "For a counsellor, start with your doctor or the directories on the page.",
-        "If you don’t feel safe at home, go to the safety page instead."
-      ],
-      "links": [
-        [
-          "Help beyond this site",
-          "/outside-help.html"
-        ],
-        [
-          "Finding a counsellor",
-          "/outside-help.html#counsellor"
-        ],
-        [
-          "Not safe at home?",
-          "/safety.html"
         ]
       ]
     },
@@ -18571,7 +18305,7 @@
         "Politics + Finance (balance): A budget is a political document: it shows what a group values. A week’s chores and hours are a household budget, and they show the same thing. In the program: Who did what (WP-01).",
         "Music + Business (ownership and structure): An orchestra works because every player has a part and someone sets the tempo: one owner per job, and one shared beat. In the program: One owner per job (WP-03).",
         "Laughter therapy + Behavioral science (feedback loops): A small, shared bit of silliness gets repeated and sticks. The in-joke is a habit that keeps closeness going. In the program: Turning Toward.",
-        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. A few minutes of play is a cheap way to top up the battery everything else draws on. In the program: Gentle games (Pause & Play).",
+        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. In the program: Gentle games (Pause & Play).",
         "Laughter therapy + Business (feedback loops): Teams that can laugh together tend to find it easier to say hard things early, while they’re still small. In the program: Check-ins.",
         "Laughter therapy + Aromatherapy (state and setting): A warm, softly lit, relaxed room makes laughter easier. The senses set the mood for play as much as for calm. In the program: Brain Breakers."
       ],
@@ -19320,7 +19054,7 @@
         "List every job, including the thinking part: the pediatrician visits, noticing the diapers are low, meals, the family chat, thank-you notes.",
         "Give each job one owner. That person does it and also remembers it.",
         "Review it once a week for ten minutes: what felt heavy, and one job to swap.",
-        "If sadness or anxiety lasts more than two weeks or gets heavier, tell a doctor or nurse. In the US, Postpartum Support International’s helpline is 1-800-944-4773."
+        "If sadness or anxiety lasts more than two weeks or gets heavier, tell a doctor or nurse."
       ],
       "pillar": "Pillar I, See the whole load.",
       "links": [
@@ -19841,8 +19575,7 @@
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
         "Tell one person you trust, even in one line: “I’m having a hard day.”",
         "Make the day smaller: pick one small thing to do, and let the rest wait.",
-        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step.",
-        "If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
+        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
@@ -19851,17 +19584,12 @@
         "I’m sorry you feel this way.",
         "Drink some water and eat something.",
         "Tell one person you trust.",
-        "If it lasts more than two weeks, see your doctor.",
-        "If you feel you can’t go on, call or text 988 (US) or 116 123 (UK). Under 18 in the UK: Childline, 0800 1111."
+        "If it lasts more than two weeks, see your doctor."
       ],
       "links": [
         [
           "Cool-down corner: Upset right now? A few minutes to settle",
           "/upset-right-now.html"
-        ],
-        [
-          "Help beyond this site: someone to talk to, free",
-          "/outside-help.html#talk"
         ],
         [
           "Your self path",
@@ -19887,8 +19615,7 @@
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
         "Tell one person you trust, even in one line: “I’m having a hard day.”",
         "Make the day smaller: pick one small thing to do, and let the rest wait.",
-        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step.",
-        "If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
+        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
@@ -19897,8 +19624,7 @@
         "I’m sorry you feel this way.",
         "Drink some water and eat something.",
         "Tell one person you trust.",
-        "If it lasts more than two weeks, see your doctor.",
-        "If you feel you can’t go on, call or text 988 (US) or 116 123 (UK). Under 18 in the UK: Childline, 0800 1111."
+        "If it lasts more than two weeks, see your doctor."
       ],
       "links": [
         [
@@ -20486,8 +20212,7 @@
         "Listen first, and check you got it before you answer: “So you mean…?”",
         "Say one thing at a time: what happened, how you feel, and what you’d like.",
         "Pick a calm moment. If either of you is flooded, pause and say when you’ll come back.",
-        "Repair mix-ups quickly. They’re normal.",
-        "If you feel afraid, it isn’t a communication problem: the safety page has help."
+        "Repair mix-ups quickly. They’re normal."
       ],
       "links": [
         [

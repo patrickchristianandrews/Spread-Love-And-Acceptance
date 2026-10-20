@@ -1,6 +1,6 @@
 # 5. What you meant and what landed
 
-*A Wednesday morning, a meeting room in an office in Leeds, on a video call to a client. Made up.*
+*A Wednesday morning, a meeting room in an office in Leeds, on a video call to a client (made up).*
 
 Gemma spent three weeks on the analysis. She built the model, found the error in the client's own figures, and wrote the summary that the whole proposal now rests on. In the meeting, Osman, who leads the team, introduces everyone. When he gets to her he says, warmly, "And Gemma's just the numbers side, so if you've got any detailed questions, she's your person."
 
@@ -31,7 +31,7 @@ The trouble starts when one person tries to use their half to overrule the other
 **"You did it to put me down"** is a true statement about impact, offered as if it proved something about intent. It's equally common, and equally unfair, because it takes a sting and turns it into a motive.
 
 > **From the research.** The authors of *Difficult Conversations*, from the Harvard Negotiation Project, describe this pattern as a central trap in hard conversations: we assume we know other people's intentions from the effect their actions had on us, and we expect our own good intentions to cancel out the harm we did. Their advice is to disentangle the two: say what the impact was without assigning an intent, and when you're told about an impact, take it seriously before explaining what you meant.
-> *Stone, Patton and Heen (1999) · Theory: a practical book drawing on negotiation research and the authors' casework, widely used, not a controlled study.*
+> *Stone, Patton and Heen (1999) · Theory: a practical book drawing on negotiation research and the authors' casework, widely used, though it isn't a controlled study.*
 
 A sentence that has helped a great many people stuck at this point: *I believe you didn't mean to hurt me. Not meaning to hurt someone doesn't mean you had no part in it.* Both halves are true. The first half tells the other person their intent has been heard and believed. The second tells them it doesn't end the conversation.
 
@@ -52,9 +52,26 @@ The gap between meaning and landing usually opens in one of a handful of places.
 > **From the research.** In a series of experiments, Justin Kruger, Nicholas Epley and colleagues had people send short messages, some sarcastic and some serious, by email or by voice. Senders were confident their tone would come across. Over email, recipients identified the tone correctly only a little more often than chance, and were themselves confident they'd got it right. The authors put it down to egocentrism: when we write, we hear our own tone in our head, and forget the reader can't.
 > *Kruger, Epley, Parker and Ng (2005) · Moderate: five lab experiments with students; exact figures vary between reports, and texting has changed since, but the pattern is widely accepted.*
 
+## One word, sent at the wrong moment.
+
+Writing is where intent and impact drift furthest apart, because the reader gets the words and none of the voice.
+
+A few weeks after the curry night, Fran texts Dele from work: "Mum's asked if we can do Sunday lunch instead of Saturday. I said yes, hope that's OK?" Dele, who is in the middle of something, replies: "Noted."
+
+Fran reads it four times on the bus. To her, "Noted." with a full stop is what a manager sends when they're annoyed with you and have decided not to say so. She spends the evening braced for an argument about her mother.
+
+**Said:** "Noted."
+**Heard:** *I'm not happy about this, and I'm being curt so you know.*
+**Meant:** *I've read it and added it to my calendar. Sunday is fine.*
+**A better way:** "Sunday's fine, I've put it in the calendar. Busy now, talk later x"
+
+Nothing about Dele's reply was unkind, and nothing about Fran's reading was unreasonable. One word, without a voice, gave her mind a gap to fill, and she filled it with the version she was most worried about. Researchers who study written messages have a plain name for the speaker's half of this: egocentrism, meaning that we hear our own tone so clearly in our heads that we forget the reader can't.
+
+There are two fixes, one for each side. The sender can spend five more words. The reader can treat a short message as short, and check before deciding it's cold: "Is Sunday really OK? Your 'noted' sounded a bit frosty!" If Dele was frosty, he'll say so. Usually, he'll send back a confused face and a heart.
+
 ## What helps, on each side.
 
-**If you caused the impact,** take the impact first and the intent second. You don't have to give up your intent. You just have to put it in the right place. "I can see that came out as 'just the numbers person', in front of the client, after you'd done the core of the work. That's not how I see you, but it's what I said." Then, if it helps, say what you meant.
+**If you caused the impact,** take the impact first and the intent second. You don't have to give up your intent. You just have to put it in the right place. "I can see that came out as 'just the numbers person', in front of the client, after you'd done the core of the work. I don't see you that way. It's still what I said." Then, if it helps, say what you meant.
 
 **Said:** "I didn't mean it like that at all."
 **Heard:** *Your reaction is a misunderstanding, and you should drop it.*

@@ -1,6 +1,6 @@
 # 2. Sorry for the feeling, or sorry for the thing
 
-*Saturday night, the drive home from a family dinner in Cardiff. Made up.*
+*Saturday night, the drive home from a family dinner in Cardiff (made up).*
 
 Fran's sister got engaged, and the whole family went for a curry to celebrate. Twice during the evening Fran started telling a story, and twice Dele, her partner of four years, stopped her to fix a detail. The first time it was the day of the week. The second time it was the price of a taxi, which she'd said was twenty pounds and he was fairly sure was fourteen. Her dad laughed. Her sister said, "Ooh, fact-checked," and everyone laughed again, and Fran laughed too, and didn't finish the story.
 
@@ -23,6 +23,18 @@ Now slowly.
 **Responsibility** is a statement about your part in causing the outcome. It names what you did. "I corrected you twice in front of your family." It needs a verb, and the verb needs to be yours.
 
 An apology with regret and no responsibility leaves the other person holding the thing they came to talk about. They raised an action. They got back a comment about their feelings. And because the comment was technically kind, they now look unreasonable if they push.
+
+## The family of sorries that leave something out.
+
+"Sorry it made you feel that way" has relatives. Each one sounds like an apology and quietly leaves out one part, and once you can hear what's missing you'll recognise them everywhere, including in your own mouth.
+
+- **"I'm sorry if anyone was offended."** The *if* does the work. It suggests the hurt may not have happened, and if it did, the problem was the other person's sensitivity.
+- **"Mistakes were made."** The passive voice: things happened, and nobody did them. Carol Tavris and Elliot Aronson chose that phrase for the title of their book on self-justification, because it's such a clean example of owning an event without owning an act.
+- **"I'm sorry you're upset."** Regret only, the same as Dele's sentence, with no action anywhere in it.
+- **"I said sorry, didn't I?"** The word used as a ticket out. It treats the apology as the end of the matter rather than the start of putting it right.
+- **"Sorry, but…"** An action named and then handed straight back. Chapter 4 is mostly about this one.
+
+None of these makes the speaker a bad person. Most of them come out when someone is embarrassed, or caught off guard, or doesn't yet know what they did. But each leaves the person who was hurt holding something. If you hear one, it helps to know which piece is missing, so you can ask for that piece and nothing more.
 
 ## The sentence can be completely sincere.
 
@@ -48,9 +60,9 @@ Economists have a word for a cost that one party creates and another party pays:
 
 A non-apology works the same way. Something was done, and it cost something: Fran's evening, a little of her standing at her own family's table, the end of her story. When the apology is about her feelings, the cost stays on her books. Worse, it picks up a second charge, because now the problem under discussion is her reaction, which is something she apparently needs to manage. The person who did the thing walks away with the matter closed and nothing owed.
 
-Looked at this way, the non-apology has a quiet incentive behind it. In the short run, it's cheaper for the person giving it. It ends the conversation without having to say anything uncomfortable. Nobody has to choose that on purpose for it to become a habit; things drift towards whatever is cheapest in the moment. That's why "sorry you feel that way" is so common, including from people who are otherwise kind.
+Seen this way, the non-apology has a quiet incentive behind it. In the short run, it's cheaper for the person giving it. It ends the conversation without having to say anything uncomfortable. Nobody has to choose that on purpose for it to become a habit; things drift towards whatever is cheapest in the moment. That's why "sorry you feel that way" is so common, including from people who are otherwise kind.
 
-> **From the research.** In one set of experiments, people who were asked to write a message refusing to apologise afterwards reported higher self-esteem and a greater sense of power than people who apologised or simply didn't, at least in the short term. The authors pointed out that this helps explain why refusing can feel good, and why it makes repair harder.
+> **From the research.** In one set of experiments, people who were asked to write a message refusing to apologise afterwards reported higher self-esteem and a greater sense of power than people who apologised or did neither, at least in the short term. The authors pointed out that this helps explain why refusing can feel good, and why it makes repair harder.
 > *Okimoto, Wenzel and Hedrick (2013) · Moderate: two studies with self-report measures, short-term feelings only; it says nothing about what refusing does to a relationship over time.*
 
 The long run is another matter. The cost doesn't disappear because one person stopped looking at it. It sits on the other person's books and accrues, and some months later it gets paid all at once, usually in a row about something unrelated.

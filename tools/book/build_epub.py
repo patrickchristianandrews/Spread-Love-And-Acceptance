@@ -530,6 +530,7 @@ def book_docs(book, where):
         for x in S.front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 docs.append(Doc('numbers.xhtml', x['toc'], x['html']))
+    docs.append(Doc('ideas.xhtml', 'How the ideas connect', S.ideas_map(book, chs, epub=True)))
     docs.append(Doc('glossary.xhtml', 'Words used in this book', S.glossary_short(book, chs).replace('<section class="pe-back pe-gloss', '<section epub:type="glossary" class="pe-back pe-gloss', 1)))
     docs.append(Doc('notes.xhtml', 'Research notes', S.research_short(book, here).replace('<section class="pe-back ps-notes', '<section epub:type="bibliography" class="pe-back ps-notes', 1)))
     docs.append(Doc('series.xhtml', 'The series', series_page(book)))
@@ -647,6 +648,8 @@ ol.ideas > li { margin: 0 0 1.6em; }
 .yp-note, .locked-section, .pe-safe { border-left: 3px solid #9A9283; padding-left: .8em; }
 table.ps-about-t, table.bk-ex-t { table-layout: fixed; width: 100%%; }
 table.ps-about-t td, table.ps-about-t th, table.bk-ex-t td, table.bk-ex-t th { overflow-wrap: anywhere; word-break: break-word; }
+.two-ways { margin: 1em 0; padding: .6em .8em; border: 1px solid #CDBF98; border-left: 3px solid #8C7A4E; }
+.lg-two, .lg-fields { margin-top: .4em; }
 .side-note { margin: 1em 0; padding: .5em .8em; border-left: 3px solid #B7AA86; background: #F4F1E8; font-size: .9em; line-height: 1.45; }
 .side-note p { margin: 0; }
 .side-note .sn-h { font-weight: bold; }

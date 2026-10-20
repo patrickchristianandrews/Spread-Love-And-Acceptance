@@ -156,7 +156,7 @@
       return (b.textContent || '').replace(/\s+/g, '').length > 1;
     });
   }
-  function words(b) { return plain(b.textContent, 400).slice(0, 80); }
+  function words(b) { return plain(b.textContent, 400).replace(/\s*[#¶§]+$/, '').slice(0, 80); }
   function absTop(n) { return n.getBoundingClientRect().top + window.scrollY; }
   function spotNow() {
     var bs = blocks(); if (!bs.length) return null;
@@ -165,7 +165,7 @@
     var idx = bs.indexOf(b), id = '', n = 0, h = '';
     for (var j = idx; j >= 0; j--) {
       var x = bs[j];
-      if (!h && /^H[2-4]$/.test(x.tagName)) h = plain(x.textContent, 70);
+      if (!h && /^H[2-4]$/.test(x.tagName)) h = plain(x.textContent, 200).replace(/\s*[#¶§]+$/, '').slice(0, 70);
       if (!id) { var withId = x.id ? x : (x.closest('[id]') && D.querySelector('main').contains(x.closest('[id]')) ? x.closest('[id]') : null); if (withId && withId.tagName !== 'MAIN') { id = withId.id; n = idx - j; } }
       if (id && h) break;
     }
@@ -196,10 +196,10 @@
     if (b) top = absTop(b) - barBottom() - 18;
     else if (s && typeof s.f === 'number') top = s.f * Math.max(0, D.documentElement.scrollHeight - window.innerHeight);
     else return false;
-    window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+    window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
     if (b) {
       // a late picture or font can move things a little: settle once more
-      setTimeout(function () { var r = b.getBoundingClientRect(), want = barBottom() + 18; if (Math.abs(r.top - want) > 40) window.scrollTo({ top: Math.max(0, absTop(b) - want), behavior: 'auto' }); }, 450);
+      setTimeout(function () { var r = b.getBoundingClientRect(), want = barBottom() + 18; if (Math.abs(r.top - want) > 40) window.scrollTo({ top: Math.max(0, absTop(b) - want), behavior: 'instant' }); }, 450);
       b.classList.add('tol-sv-here');
       if (!b.hasAttribute('tabindex')) { b.setAttribute('tabindex', '-1'); b.addEventListener('blur', function () { b.removeAttribute('tabindex'); }, { once: true }); }
       try { b.focus({ preventScroll: true }); } catch (e) {}
@@ -233,7 +233,9 @@
     if (pop) { btn.setAttribute('aria-expanded', pop.hidden ? 'false' : 'true'); btn.removeAttribute('aria-pressed'); }
     else btn.setAttribute('aria-pressed', String(on));
     btn.classList.toggle('is-saved', on);
-    if (word) word.textContent = on ? 'Saved' : 'Save';
+    // the word stays "Save" (the icon fills in), so the bar never moves; screen readers hear the state
+    if (word) word.textContent = pop ? (on ? ' this page (saved)' : ' this page') : ' this page';
+    btn.setAttribute('title', on ? 'Saved. Tap to change' : 'Save this page for later');
     if (pop && !pop.hidden) fillPop();
   }
   function savePage(spot) {
@@ -292,8 +294,7 @@
       bar.insertBefore(b, menu && menu.parentNode === bar ? menu : null);
     }
     b.innerHTML = ICON + '<span class="tol-save-t">Save</span><span class="tol-sv-sr"> this page</span>';
-    b.setAttribute('title', 'Save this page for later');
-    word = b.querySelector('.tol-save-t');
+    word = b.querySelector('.tol-sv-sr');
     return b;
   }
   function setupButton() {

@@ -1,6 +1,6 @@
 # 6. Questions that open a door
 
-*A Monday evening, a few weeks after the engagement dinner. Fran and Dele's flat in Cardiff. Made up.*
+*A Monday evening, a few weeks after the engagement dinner, Fran and Dele's flat in Cardiff (made up).*
 
 The taxi-fare apology went well, in the end. But a fortnight later it happens again, smaller: at a friend's barbecue, Dele corrects the year Fran says she started her job. She catches his eye across the garden and he looks puzzled, then, a second later, stricken.
 
@@ -63,7 +63,7 @@ If someone has had a lot of courtroom questions over the years, they may treat e
 
 In a lot of music, from work songs and gospel to folk and jazz, one voice sings a phrase and another answers it. The first phrase is the call. What matters, and what beginners get wrong, is that the call leaves room. It stops. There's a rest, a beat of silence, and the response comes into that space. If the first singer barrels straight on, the response has nowhere to go, and you get two people singing over each other.
 
-A question is a call. The silence after it is the rest in the bar, and it's part of the music, not a gap in it. Most of us are bad at rests. We ask a question, and two seconds into the silence we fill it: we rephrase it, or answer it ourselves, or add a second question, or explain why we asked. The other person, who had just started to look inward, has to come back out and deal with what we've added.
+A question is a call. The silence after it is the rest in the bar, and it belongs to the music as much as the notes do. Most of us are bad at rests. We ask a question, and two seconds into the silence we fill it: we rephrase it, or answer it ourselves, or add a second question, or explain why we asked. The other person, who had just started to look inward, has to come back out and deal with what we've added.
 
 So ask, and then stop. Count, silently, if it helps. The answer that comes after five or ten seconds of quiet is usually more honest than the one that would have come after two.
 
@@ -77,10 +77,32 @@ The same pattern runs through anything that corrects itself over time: a thermos
 >
 > **If you need time,** say so in a way that makes the return visible: "I don't know yet. I want to give you a real answer. Can I tell you tomorrow at breakfast?" Then come back, without being asked. That return is what turns "I don't know" from a dodge into a promise.
 >
-> **If you answer fast,** try treating "I don't know yet" as an appointment rather than a refusal. Let it go for now, and notice whether they come back. If they do, you'll often get the best answer of the whole conversation. If they reliably don't, that's a pattern, and it's worth talking about on its own (chapter 10).
+> **If you answer fast,** try treating "I don't know yet" as an appointment rather than a refusal. Let it go for now, and notice whether they come back. If they do, you'll often get the best answer of the whole conversation. If they reliably don't, that's a pattern, and it deserves a conversation of its own (chapter 10).
 
 > **From the research.** Accounts from autistic people often describe needing more time to process a conversation, especially an emotional one, and a sense that attention tends to run deep on one thing at a time rather than spread across several at once. Researchers have called this pattern of attention "monotropism".
-> *Murray, Lesser and Lawson (2005) · Theory: an influential account, drawing on research and the authors' own experience, not a test of it. Experiences vary a great deal from person to person.*
+> *Murray, Lesser and Lawson (2005) · Theory: an influential account, drawing on research and the authors' own experience, rather than a test of it. Experiences vary a great deal from person to person.*
+
+## Questions work at work, too.
+
+On the Monday after the "as per my email" message in chapter 1, Bryn could have replied in kind. He'd drafted something on Sunday night that began "As per my reply on Wednesday", which would have been satisfying for about four seconds.
+
+Instead, he catches Dawn by the kettle and asks a question. "Can I check something about Friday's email? When you put 'as per my email on Tuesday', what were you hoping I'd take from it?"
+
+Dawn looks genuinely blank, then embarrassed. "Oh God. Nothing. I couldn't remember whether I'd actually given you a date on Tuesday, and I was panicking about the board paper. Did it come across as a telling-off?"
+
+"A bit," Bryn says.
+
+"Sorry. It wasn't one. Monday lunchtime is fine, honestly."
+
+A question did in thirty seconds what a reply-all could never have done: it found the layer underneath. And it did it without anyone having to accuse anyone. Bryn didn't say "that email was a dig". He asked what she meant, and she told him, and then she apologised for the impact on her own.
+
+## Ask yourself first.
+
+Every question in this chapter works turned inward, and often works better that way, because nobody is listening and you can be completely honest.
+
+Before you ask someone else what part was theirs, ask yourself what part was yours. Before you ask them what they'd do differently, ask what you'd do differently. Before you ask whether they can see why it hurt you, ask whether you can see why your reaction might have been hard for them.
+
+You won't always find much. Sometimes the honest answer to "what was my part?" is "very little", and that's worth knowing too. But you'll find something more often than you expect, and when you go into the conversation having already found it, two things change. You're calmer, because you're no longer defending a spotless record. And your questions sound different, because they come from someone who has already done the looking they're asking for.
 
 ## What to do with the answer.
 

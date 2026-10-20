@@ -1,6 +1,6 @@
 # 9. Your own part, by the same rule
 
-*A Friday night, six weeks after the phone-call argument. Lorraine and Pete's house in Leicester. Made up.*
+*A Friday night, six weeks after the phone-call argument, Lorraine and Pete's house in Leicester (made up).*
 
 Things have been better since Pete told his mum to ring him directly. So Lorraine is surprised when he comes off a call with his mother looking tight around the mouth.
 
@@ -40,9 +40,12 @@ Nobody sets out to apply one rule to their partner and a softer one to themselve
 
 Put those together and you get the everyday double standard. Your own reasons are vivid to you; theirs are a blur. Your effort is obvious to you; theirs is half invisible. Your "you know what he's like" was affectionate, because you know what you meant; their "sorry you feel that way" was a dodge, because you only saw the effect.
 
-It's worth adding one honest note. For years, psychology textbooks taught that people *always* explain their own behaviour by circumstances and other people's by character. When Bertram Malle pulled together over a hundred studies, that particular pattern turned out to be much weaker than the textbooks claimed. So the double standard isn't an iron law of the mind. It's a tendency, and tendencies can be checked.
+One honest note belongs here, because it's the kind of thing popular psychology tends to overstate.
 
-> *Malle (2006) · Strong: a large meta-analysis that found the classic actor-observer pattern close to zero on average, while other self-serving biases remain well supported.*
+> **From the research.** For decades, textbooks taught that people explain their own behaviour by circumstances and other people's by character. When Bertram Malle pulled together more than a hundred studies of that idea, the pattern turned out to be close to zero on average. Other self-serving tendencies, like the ones above, remain well supported.
+> *Malle (2006) · Strong: a large meta-analysis, which is a useful reminder that a famous finding can be weaker than its reputation.*
+
+So the double standard is no iron law of the mind. It's a tendency, and tendencies can be checked.
 
 ## The mirror question works on you first.
 
@@ -61,6 +64,14 @@ So that's what she says, about two minutes after "sorry you took it that way".
 
 Notice what happens when she does this. Pete's shoulders come down. And six weeks of Lorraine asking Pete to own his part suddenly look fair, because she's just shown him she'll do the same.
 
+## Taking all the blame isn't owning your part.
+
+There's an opposite mistake, and kind, conflict-averse people make it all the time. To end the argument, they take the whole thing on: "No, you're right, it's all my fault, I'm sorry, let's forget it." It feels generous. It ends the evening.
+
+It also leaves the other person's part untouched, which means the same thing will happen again. It quietly teaches both of you that the way through a disagreement is for one person to absorb it. And it's not quite honest, which the other person usually senses, so the apology doesn't even land as well as it should.
+
+Owning your part means the part that's actually yours: no bigger, no smaller. That can be less comfortable than taking all of it, because it means you still have to raise their part afterwards. But it's the only version that leaves both of you with the true picture.
+
 ## What counts as your part.
 
 Owning your part doesn't mean taking all of the blame to end the argument. That's its own kind of dodge, and it leaves the other person's part untouched. It means finding the bits that were yours, however small, and owning those fully.
@@ -70,7 +81,11 @@ Your part might be the thing you did. It might also be:
 - **How you raised it.** Saving it up for weeks and delivering it all at once. Raising it when they were walking in the door. Starting with "you always".
 - **The guess you offered as a fact.** "You did it on purpose." "You don't care."
 - **The hint you expected to be understood.** "Fine." The banging pans. The silence that you wanted noticed and that they took at face value.
-- **Your reaction, where it went further than the event.** Not the feeling, which is yours to have, but what you did with it: the door, the tone, the thing said to their mother.
+- **Your reaction, where it went further than the event.** The feeling is yours to have. What you did with it may be another matter: the door, the tone, the thing said to their mother.
+
+Karin, from chapter 4, found two of these when she looked. She'd said nothing on the night of her fortieth, smiled through the cake, and then sent "Honestly, Thursday really hurt" two days later, which Nell read at a supermarket checkout and spent the afternoon dreading. And her Monday message, "It's obvious our friendship isn't a priority for you anymore", was a guess presented as a fact. When Nell came round on the Wednesday with her full apology, Karin added one of her own: "I should have said something on the night, instead of letting it stew and then dropping it on you by text. And I said you don't care about our friendship. I don't actually think that. I was hurt."
+
+It took her about twenty seconds. It made the rest of the evening twice as easy, because Nell no longer felt like the only person in the room who'd got something wrong.
 
 None of these cancels what they did. Chapter 7 still holds: two people can both be responsible for different things. But owning yours, first and plainly, is the fastest way to make it safe for them to own theirs.
 
@@ -88,7 +103,7 @@ None of these cancels what they did. Chapter 7 still holds: two people can both 
 >
 > When you catch yourself deflecting: "Hang on. That's exactly what I don't like when you do it. Let me try again."
 >
-> The mirror question, asked gently: "If I'd done the same thing to you, what would you want me to say?"
+> The mirror question, asked kindly: "If I'd done the same thing to you, what would you want me to say?"
 >
 > Owning your part before theirs: "Before we get to the bigger thing, I want to own my bit. I raised it badly, and I saved it up. That was mine."
 

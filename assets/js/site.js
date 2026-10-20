@@ -2461,7 +2461,7 @@
   var REAL = null, indexed = {};
   function prepSearch(list) {
     vocab = {}; indexed = {};
-    // everyday English and Spanish words that aren't on the site (built by tools/search/build_index.py):
+    // everyday English words that aren't on the site (built by tools/search/build_index.py):
     // one of these is searched as typed, never "corrected" into a site word ("gaming" isn't "naming")
     REAL = {};
     String((window.TOL_SEARCH && window.TOL_SEARCH.w) || '').split(' ').forEach(function (w) { if (w) REAL[w] = 1; });
@@ -2519,7 +2519,7 @@
       [/er$/, ''], [/er$/, 'e'], [/ers$/, ''], [/ers$/, 'e'], [/ier$/, 'y'], [/iest$/, 'y'], [/est$/, ''], [/ly$/, ''], [/ily$/, 'y'], [/ness$/, ''], [/ful$/, ''], [/less$/, ''], [/ment$/, ''], [/able$/, ''], [/able$/, 'e'], [/ings$/, ''], [/ings$/, 'e']];
     return ends.some(function (e) { var w = t.replace(e[0], e[1]); return w !== t && w.length > 3 && ok(w); });
   }
-  // a spelling fix: only for a word that isn't a word at all (not on the site, not everyday English or Spanish)
+  // a spelling fix: only for a word that isn't a word at all (not on the site, not everyday English)
   function correct(t) {
     if (SLIPS[t] && SLIPS[t] !== t) return SLIPS[t];
     // three letters is too short to guess from ("nan" isn't "can"): those only get "Did you mean" if nothing matches
@@ -2672,15 +2672,14 @@
     sc.onerror = function () { sc.remove(); done(null); };
     document.head.appendChild(sc);
   }
-  // filler words that say nothing about the problem (English and everyday Spanish)
+  // filler words that say nothing about the problem
   var NSTOP = {};
   ('a an the and or but so to of in on at by for with from into about as is it its be been am are was were do does did done have has had having ' +
    'i im ive id me my mine myself we us our ours you your yours he him his she her hers they them their theirs this that these those there here ' +
    'what how why when where which can could would should will shall may might must just really very quite so too also still even ever ' +
    'get got gets getting keep keeps kept one some any all each every much many more most lot lots thing things stuff something anything ' +
    'dont doesnt didnt cant cannot wont isnt arent wasnt werent havent hasnt hadnt wouldnt couldnt shouldnt aint not no ' +
-   'youre theyre were hes shes thats whats theres lets ok okay please like want need ' +
-   'de la el los las y en que con por para mi mis me un una lo le se es muy al del su sus yo tu te nos').split(' ').forEach(function (w) { NSTOP[w] = 1; });
+   'youre theyre were hes shes thats whats theres lets ok okay please like want need').split(' ').forEach(function (w) { NSTOP[w] = 1; });
   // "want", "need", "feel" say how, not what: kept out, so "i need calm" and "calm" read the same
   function nStem(w) {
     w = w.replace(/'s$/, '').replace(/'/g, '');
