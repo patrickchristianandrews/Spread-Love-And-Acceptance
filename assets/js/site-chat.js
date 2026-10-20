@@ -434,7 +434,7 @@
   }
   // page furniture that slips into a passage ("Then test your ask in the Signal Translator →", "What’s this?") reads as noise in a chat
   function dechrome(x) {
-    return String(x).replace(/[^.!?…”]*→\.?/g, ' ').replace(/\s*What’s this\?[^.]*\.?/g, ' ').replace(/\s*(Goes with Chapter [IVX]+[^.·]*[.·]?|Do all your sheets in one place\.?|On the full version and on the PDF[^.]*\.)/g, ' ').replace(/\s+/g, ' ').trim();
+    return String(x).replace(/\s*Read more\s+Show less\s*·?\s*(about \d+ min\.?)?\s*:?/g, ' ').replace(/[^.!?…”]*→\.?/g, ' ').replace(/\s*What’s this\?[^.]*\.?/g, ' ').replace(/\s*(Goes with Chapter [IVX]+[^.·]*[.·]?|Do all your sheets in one place\.?|On the full version and on the PDF[^.]*\.)/g, ' ').replace(/\s+/g, ' ').trim();
   }
   function passageBlock(i, qterms) {
     var d = KB.docs[i];
@@ -933,7 +933,7 @@
   function crudeIn(f, raw) { return CRUDE_SWEAR.test(f) || CRUDE_SEX.test(f) || CRUDE_SLUR.test(f) || (raw != null && CRUDE_MASKED.test(String(raw).toLowerCase())); }
   // swear words used as intensifiers, dropped before routing ("my ex is a fucking nightmare about pickups")
   var SWEAR_STRIP = /\b(fucking|fuckin|freaking|frickin|effing|bloody|damn|damned|goddamn|goddamned|flipping|shitty|crappy|ffs|wtf|omfg|fuck(ing)? this|fuck(ing)? that|for fucks sake|holy shit|oh shit|shit)\b/g;
-  var FRUST = /^(\W*(ugh|omg|seriously|honestly|lol|lmao|wow|um|hmm|oh|ok|okay|so|and|but|no|nope|nah|yeah|man|dude|bro|mate|puddles|professor)\b)*\W*(are you (kidding|joking|serious)( me)?|you (must|have got to|ve got to|gotta) be (kidding|joking)( me)?|you re (kidding|joking)( me)?|youre (kidding|joking)( me)?|(this|that|it) (is|s|was) (so |really |just |totally |completely )?(stupid|dumb|useless|pointless|rubbish|garbage|trash|ridiculous|nonsense|a joke|crap|shit|wrong|terrible|awful|bad|not helpful|unhelpful|no help)|this (sucks|is not helping|isnt helping)|(you re|youre|you are|ur|u r|u re) (so |really |just |totally |completely |pretty )?(dumb|stupid|useless|an idiot|a moron|thick|rubbish|hopeless|wrong|no help|not helping|not listening|not helpful|garbage|trash|crap|a joke|pathetic|annoying|broken)|(you|u) (dont|don t|do not|never) (listen|understand|get it|help)|you (re |are )?not (listening|helping|understanding)|you didnt (listen|answer|read|understand)|wrong answer|(thats|that s|that is|that|thats just|that just|this|this is|its|it is|it) (not it|wrong|not right|not what i (asked|meant|said|wanted|needed))|not what i (asked|meant|said|wanted)|not helpful|unhelpful|what are you (on|talking) about|that makes no sense|(stupid|dumb|useless|broken) (bot|dog|puddle|thing|app|site|professor|robot|chatbot))(\W+(you|lol|seriously|man|dude|mate|again|at all|whatsoever|smh|lmao))*\W*$/;
+  var FRUST = /^(\W*(ugh|omg|seriously|honestly|lol|lmao|wow|um|hmm|oh|ok|okay|so|and|but|no|nope|nah|yeah|man|dude|bro|mate|puddles|professor)\b)*\W*(are you (kidding|joking|serious)( me)?|you (must|have got to|ve got to|gotta) be (kidding|joking)( me)?|you re (kidding|joking)( me)?|youre (kidding|joking)( me)?|(this|that|it) (is|s|was) (so |really |just |totally |completely )?(stupid|dumb|useless|pointless|rubbish|garbage|trash|ridiculous|nonsense|a joke|crap|shit|wrong|terrible|awful|bad|not helpful|unhelpful|no help)|this (sucks|is not helping|isnt helping)|(you re|youre|you are|ur|u r|u re) (so |really |just |totally |completely |pretty |actually |literally |honestly |kinda |kind of )?(dumb|stupid|useless|an idiot|a moron|thick|rubbish|hopeless|wrong|no help|not helping|not listening|not helpful|garbage|trash|crap|a joke|pathetic|annoying|broken)|(you|u) (dont|don t|do not|never) (listen|understand|get it|help)|you (re |are )?not (listening|helping|understanding)|you didnt (listen|answer|read|understand)|wrong answer|(thats|that s|that is|that|thats just|that just|this|this is|its|it is|it) (not it|wrong|not right|not what i (asked|meant|said|wanted|needed))|not what i (asked|meant|said|wanted)|not helpful|unhelpful|what are you (on|talking) about|that makes no sense|(stupid|dumb|useless|broken) (bot|dog|puddle|thing|app|site|professor|robot|chatbot))(\W+(you|lol|seriously|man|dude|mate|again|at all|whatsoever|smh|lmao))*\W*$/;
   var CRUDE_LINES = ['I’ll skip that one. If something I said missed the mark, tell me in a few words what you need, or pick one of these.',
     'Let’s leave that there. If I got something wrong, tell me what you were hoping for, or tap one of these.',
     'I won’t go there, but I’m glad to help. What do you need? A few words is plenty, or pick one below.',
@@ -970,10 +970,16 @@
   }
   // the crude and frustration turn: after every safety check, before topic matching; null when there's a real topic
   // (then routing goes on, with the swearing taken out)
+  var BORED_Q = /\b(anything fun( to do)?( on here| here| on this site)?|where (are|r) (the|ur|your) games|(any|got any|are there any|got) games|something (fun )?to do(?! with)|i m (so )?bored|im (so )?bored|so bored|bored af|bored out of my mind)\b/;
   function crudeTurn(state, q, vf) {
     // frustration only: every clause is frustration ("are you kidding me, this is useless")
     var clauses = String(q).split(/[.,!?;:…]+|\s+(?:and|&)\s+/).map(norm).filter(Boolean);
     var crude = crudeIn(vf, q), frust = FRUST.test(vf) || (clauses.length > 1 && clauses.every(function (c) { return FRUST.test(c) || /^(ugh|omg|seriously|honestly|lol|wow|come on|really|what|no|nope|god)$/.test(c); }));
+    var fc = clauses.filter(function (c) { return FRUST.test(c); });
+    if (!crude && !frust && fc.length && fc.length < clauses.length && !DANGER.test(vf)) {
+      var restQ = clauses.filter(function (c) { return !FRUST.test(c) && !/^(ugh|omg|seriously|honestly|lol|wow|come on|really|what|no|nope|god|ok|okay|ok whatever|whatever)$/.test(c); }).join(' ');
+      if (restQ.split(' ').filter(function (w) { return w.length > 2 && !STOP[w]; }).length) return { cleaned: restQ, sorry: true };
+    }
     if (!crude && !frust) return null;
     if (DANGER.test(vf) || NOT_LIVE.test(vf) || SELF_HARMFUL.test(vf) || HARD.test(vf) || FEAR_W.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || OWN_VIOLENT.test(vf) || CHILD_CRISIS.test(vf) || fearOf(vf)) return null;
     // what's left once the swearing and the frustration are taken out: a real topic gets a real answer
@@ -2061,6 +2067,14 @@
     // anything that might be about harm or control, or a card that answers those, is never bent to fit the topic
     var risky = VERBAL.test(f) || SELF_HARMFUL.test(f) || NOT_LIVE.test(f) || HARD.test(f.replace(/\b(scared|afraid|frightened|terrified)\b/g, ' ').replace(/\b(i m|im|i am|i feel|feel|feeling|felt|was|so|really|very|a bit)( so| really| very)? hurt\b|\bhurt (my |her |his |their )?feelings\b/g, ' ')) || CONTROL.test(f.replace(/\bcontrolling\b/g, ' '));
     // and a card about the chat itself or a feeling (bigger text, "is it my fault?") answers as usual, keeping the topic
+    // a young person (said once: "im 17", on the teens page) talking about their parents: the teen's side, never the
+    // adult-child or kinship answer, for the rest of the chat (reports17)
+    var PAR_T = /\b(parents?|mum|mom|dad|mother|father|stepmum|stepmom|stepdad|folks)\b/, GP_T = /\b(nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandparents?|carers?|foster|aunt|auntie|uncle)\b/;
+    var teenCtx = state.care && /^teen/.test(state.care.id || '') && (state.turn || 0) - state.care.turn <= 3;
+    if (state.teen && !risky && !(cm && cm.safety) && !GP_T.test(f) && (PAR_T.test(f) || (teenCtx && /\b(they|them|am i right|who is right|whos right|adult|fair)\b/.test(f))) && (!cm || /^(teenhouse|teennotgetme|teens|selfworry|teenparents|teentalking)$/.test(cm.id))) {
+      var ttid = /\b(talk|say|tell|screaming|shouting|yelling|without it turning|argu\w*|fight\w*)\b/.test(f) ? 'teentalking' : (/\b(phone|mobile|ipad|tablet|laptop)\b/.test(f) && /\b(take|takes|took|taking|confiscat\w*)\b/.test(f)) ? 'teenphonetaken' : 'teenparents';
+      cm = cardByIdF(ttid) || cm;
+    }
     if (risky || (cm && (cm.safety || !cm.newTopic))) TC = TR = null;
     // a short follow-up while we're on a topic ("i do all the meetings and paperwork" after fostering, "how do i get a say"
     // after a co-parent answer, "what do i actually text her" after a friendship one) stays with that topic: a card names,
@@ -2811,8 +2825,9 @@
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       // chit-chat: games in progress, jokes, riddles, "I'm bored", reactions, and a plain hand-off when something real comes up
       var crt = crudeTurn(state, q, vf);
-      if (crt && crt.cleaned) { q = q0 = crt.cleaned; vf = norm(q); }
+      if (crt && crt.cleaned) { q = q0 = crt.cleaned; vf = norm(q); if (crt.sorry) state.sorryTurn = state.turn; }
       else if (crt) return crt;
+      if (BORED_Q.test(vf) && vf.split(' ').length <= 12 && !/\b(my|our|the) (kids?|children|son|daughter|partner|husband|wife|boyfriend|girlfriend|grandson|granddaughter|teen\w*)\b/.test(vf) && !DANGER.test(vf) && !FUN_UPSET.test(vf) && KB.pers) { state.last = null; return pzBored(state); }
       var pze = !DANGER.test(vf) && pzEarly(state, q0, vf);
       if (pze) { state.last = null; return pze; }
       var ovr = (state.turn || 0) <= 3 && pageOverview(state, vf);
@@ -4182,9 +4197,7 @@
     var P = PZ(), L = pzPick(state, P.bored_links || []), line = pzPick(state, P.bored);
     var b = [{ k: 'p', x: line }];
     // a line that promises the arcade links the arcade (and the calm games), never only the Night Garden (puddles16)
-    var arc = /\barcade\b/i.test(line) && (P.bored_links || []).filter(function (x) { return /arcade|pause-and-play/i.test(x[0] + ' ' + x[1]); });
-    if (arc && arc.length) b.push({ k: 'links', x: arc.slice(0, 2) });
-    else if (L && L.length === 2) b.push({ k: 'links', x: [L] });
+    b.push({ k: 'links', x: [['Tidbit and Sugarfoot’s Arcade', '/frequency-journey.html'], ['Home Run Derby', '/frequency-journey.html#derby'], ['Gentle games (Pause & Play)', '/pause-and-play.html']] });
     return pzR(state, b, [{ label: 'Rock, paper, scissors', q: 'Rock paper scissors' }, { label: 'Quiz me', q: 'Quiz me' }, { label: 'Would you rather…', q: 'Would you rather' }, { label: 'Tell me a riddle', q: 'Tell me a riddle' }], 'fun', 'pz-bored', 'bored');
   }
   function pzRpsStart(state) {
@@ -4871,7 +4884,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); if (x && x.blocks && state.sorryTurn && state.sorryTurn === state.turn && x.kind !== 'safety') { x.blocks.unshift({ k: 'p', x: 'Sorry, that last answer missed. Here’s what I have for your question:' }); } state.sorryTurn = 0; x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -4996,6 +5009,7 @@
     // phones: chips wrap onto more lines, never cut off at the edge (puddles16); in the pop-up the row can scroll down if it's tall
     '@media (max-width:719px){.tolc-chips{padding-bottom:.6rem}.tolc-chip{flex:0 1 auto;max-width:100%;white-space:normal}.tolc.is-modal .tolc-chips{max-height:32vh;max-height:32dvh;overflow-y:auto}}',
     // short laptop screens (1366x768 at 125%, Larger text): the pop-up uses the full height, so an answer has room to show
+    '@media (max-height:560px){.tolc .tolc-note{font-size:.68rem;padding:.1rem .8rem .25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tolc .tolc-chips{max-height:3.4rem;overflow-y:auto;padding-top:.1rem;padding-bottom:.25rem}.tolc .tolc-av{width:34px;height:34px}.tolc .tolc-av svg{width:28px;height:28px}.tolc .tolc-head{padding-top:.35rem;padding-bottom:.3rem}.tolc .tolc-form{padding-top:.35rem}.tolc.is-inline{height:calc(100vh - 1.5rem);height:calc(100dvh - 1.5rem)}}',
     '@media (min-width:720px) and (max-height:700px){.tolc.is-modal{bottom:8px;height:calc(100vh - 16px);height:calc(100dvh - 16px)}.tolc.is-modal .tolc-note{padding:.2rem 1rem .35rem}.tolc.is-modal .tolc-chips{max-height:6.5rem;overflow-y:auto}.tolc.is-modal .tolc-head{padding-top:.5rem;padding-bottom:.45rem}}',
     '.tolc-chip{min-height:44px;padding:.45rem .9rem;border-radius:22px;border:1px solid var(--c);background:#fff;color:var(--ink);font:inherit;font-size:.88rem;line-height:1.25;cursor:pointer;text-align:left}',
     '.tolc-chip:hover{background:var(--c-soft)}',

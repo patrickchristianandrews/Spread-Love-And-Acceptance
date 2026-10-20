@@ -1582,6 +1582,10 @@ def main():
         for si, s in enumerate(secs):
             chunks = chunk_section(s['s'])
             for ci, c in enumerate(chunks):
+                # a page's fold control ("Read more Show less · about 1 min") is not part of the text (puddles16)
+                if s.get('h'):
+                    c = re.sub(r'\s*Read more\s+Show less\s*·?\s*(about \d+ min\.?)?\s*:?\s*' + re.escape(s['h']) + r'\s*', ' ', c)
+                c = norm_space(re.sub(r'\s*Read more\s+Show less\s*·?\s*(about \d+ min\.?)?\s*:?', ' ', c))
                 if len(words(c)) < 12:
                     continue
                 sents = [x for x in re.split(r'(?<=[.!?:;])\s+', c) if x]

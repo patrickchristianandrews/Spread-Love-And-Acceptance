@@ -2322,6 +2322,59 @@ if (PERSONA) {
   t(G, 'Spanish carer with swearing', { q: 'estoy hasta la madre, mis hermanos no me ayudan con mi mamá', id: /^es-hermanos/ });
 }
 
+// ---------------------------------------------------------------- panel17 (puddles16, reports17): teens, a parent and a teen
+// texting, dementia and care homes, evenings alone, social vs quiet, back at home, stroke, a parent who lives with you
+{
+  const G = 'panel17';
+  const NOSPLICE = /Read more|Show less|about \d+ min/;
+  // zoe (17): games in her own words, frustration with a real question, the teen's side for the rest of the chat
+  ['anything fun on here? im bored', 'where are the games', 'something to do, im bored', 'any games?'].forEach(q =>
+    t(G, q, { id: 'pz-bored', link: '/frequency-journey.html', chip: /Rock, paper/, not: /Self-expansion/, check: r => replyLinks(r).includes('/frequency-journey.html#derby') ? '' : 'no Home Run Derby' }));
+  t(G, 'something to do with my anger is not boredom', { q: 'something to do with my anger', check: r => r.id === 'pz-bored' ? 'bored answer' : '' });
+  t(G, 'the kids being bored is not my boredom', { q: 'the kids are bored at my place', check: r => r.id === 'pz-bored' ? 'bored answer' : '' });
+  c(G, ['anything fun on here? im bored', 'omg thats not what i asked?? ur actually useless lol. where are the GAMES'], { id: 'pz-bored', text: /^Sorry, that last answer missed/, nochip: /same fight|worn out/ });
+  t(G, 'omg thats not what i asked?? ur actually useless lol. where are the GAMES', { id: 'pz-bored', text: /^Sorry/ });
+  const TEEN = 'im 17 and my parents are so strict';
+  c(G, [TEEN, 'im 17 tho, im basically an adult. am i right or are they'], { id: 'teenparents', link: '/teens.html#parents', nochip: /same fight|worn out/ });
+  c(G, [TEEN, 'ok whatever. so how do i talk to my parents without it turning into a screaming match'], { id: 'teentalking', link: '/teens.html#talking', not: /old family roles|the adult you are now/ });
+  c(G, [TEEN, 'how do i get my mum to stop taking my phone at night'], { id: 'teenphonetaken', check: r => replyLinks(r)[0] === '/teens.html#parents' ? '' : 'first link ' + replyLinks(r)[0] });
+  t(G, 'how do i get my mum to stop taking my phone at night', { id: 'teenphonetaken', not: /grandparents/i, check: r => /family-care/.test(replyLinks(r)[0] || '') ? 'kinship link first' : '' });
+  c(G, ['i\'m 16', 'my dad never listens to me'], { id: /^teen/, not: /old family roles/ });
+  c(G, [TEEN, 'i want to die'], { kind: 'safety' });
+  t(G, 'an adult and a parent still gets the grown-up answer', { q: 'i\'m 35 and my mum still treats me like a child', check: r => /^teen/.test(r.id || '') ? 'teen answer for an adult' : '' });
+  // malcolm: a parent and a 15-year-old fighting over texts; is the checker keyword matching
+  t(G, 'my 15 year old son and I keep fighting over text messages, he thinks I\'m nagging', { id: 'teentexting', link: '/parents.html#house-rules', not: /one owner per job|If it isn’t done by 7/i });
+  t(G, 'my teenage daughter ignores my texts and we argue about it', { id: 'teentexting' });
+  ['is the checker just keyword matching', 'is the chat analyzer just looking for keywords', 'is it just keyword matching?'].forEach(q =>
+    t(G, q, { id: 'checkerrules', text: /rule-based/, not: /don’t have a page/ }));
+  // harold: dementia, a care home, guilt about visiting, long evenings
+  t(G, 'my wife doesnt recognise me anymore', { id: 'stillhere', link: '/caregivers.html#still-here', nochip: /chores|Things said the wrong way/ });
+  t(G, 'my mum doesn\'t know who I am any more', { id: 'stillhere' });
+  t(G, 'the evenings are very long and quiet on my own. what can i do', { id: 'eveningsalone', link: '/grief.html#hard-evening', not: /false consensus/i, check: r => replyLinks(r).includes('/night-garden.html') ? '' : 'no Night Garden' });
+  c(G, ['my wife has dementia and is in a care home now', 'is it wrong that sometimes i dont want to go and visit her'], { id: 'carerguilt', link: '/caregivers.html#feelings', not: /introvert|recharge/i });
+  t(G, 'my wife has dementia and is in a care home now. she doesnt know who i am when i visit. what can i do when i go to see her', { id: /^(carehomevisit|stillhere)$/, link: '/caregivers.html', not: /insurance calls|your mum/ });
+  t(G, 'what can i do when i visit my husband in the nursing home', { id: 'carehomevisit', link: '/caregivers.html#bonding' });
+  // jordan-casey: friends over without warning; social and quiet partners; the follow-up stays on it
+  t(G, 'I get overwhelmed when they invite friends over without telling me', { id: 'guestsoverload', link: '/the-logic-behind-it.html#l-alone-after-people', not: /school run/ });
+  const SQ = 'my partner needs heaps of alone time and routine and I\'m super social, I love having people over last minute. I feel kinda rejected';
+  t(G, SQ, { id: 'socialquiet', script: true, not: /plans fall through|time blindness/ });
+  c(G, [SQ, 'how do we plan having friends over so it works for both of us'], { id: /^(guestsoverload|socialquiet)$/, not: /Implementation intentions|vegetables/ });
+  // bea: back with mum, feeling a failure; no UI text inside excerpts
+  t(G, 'i\'m back living with my mum and i feel like such a failure', { id: 'backhome', not: NOSPLICE });
+  t(G, 'no fold text inside an excerpt', { q: 'grieving someone who is still here', not: NOSPLICE });
+  t(G, 'no fold text inside an excerpt (sensory)', { q: 'sensory overload at home', not: NOSPLICE });
+  // gail-ron: stroke, and the partner who is ill
+  c(G, ['My husband had a stroke last year and I look after him now', 'is there anything about stroke'], { id: 'strokecare', link: '/when-one-is-ill.html', not: /isn’t covered|not my subject/ });
+  t(G, 'is there anything about stroke', { id: 'strokecare' });
+  t(G, 'my wife does everything for me and I feel useless', { id: /^(illburden)$/, not: /retir/i, check: () => '' , q: 'my wife does everything for me since my stroke and I feel useless' });
+  t(G, 'my wife does everything for me and I feel useless (no illness named)', { q: 'my wife does everything for me and I feel useless', id: 'illburden', not: /retir/i });
+  // fatima-yusuf: a parent who lives with you
+  t(G, 'My husband\'s mother lives with us and I end up doing most of her care on top of three kids. How do we split it fairly', { id: 'eldercarehome', link: '/family-obligations.html#visits', not: /three or more people|NOSPLICE/ });
+  c(G, ['My husband\'s mother lives with us and I end up doing most of her care on top of three kids. How do we split it fairly', 'how do we share looking after his mum'], { id: 'eldercarehome', not: /every other Sunday/ });
+  t(G, 'how do we share looking after his mum', { id: 'eldercarehome', not: /every other Sunday|with your mum/ });
+  t(G, 'wife says she does all the work for my mum but i drive 11 hours a day. what do i do', { id: 'eldercareaccused', text: /real work too/, not: NOSPLICE });
+}
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];
