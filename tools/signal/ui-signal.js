@@ -89,6 +89,8 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     await p.click('#addB'); await p.selectOption('#wB1','adhd');
     await p.selectOption('#relSel','manager');
     await p.selectOption('#chSel','group');
+    // sig17: More examples is a small fold under the button now
+    await p.$eval('#stMoreEx', d=>{ d.open = true; });
     await p.selectOption('#presetSel','Reminder: timesheets are due Friday. Please also update the tracker, reply to the funder, and book the room for Tuesday.');
     ok(/timesheets/.test(await p.$eval('#phrase', e=>e.value)), `${tag}: preset did not fill the box`);
     await translate(p);
@@ -326,11 +328,12 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     else ok(lay.more && lay.notes && lay.again, `${tag}: desktop layout: ${JSON.stringify(lay)}`);
     for(const q of ['?use=work','?rel=family']){ await go(q); ok(!(await p.$eval('#fine', e=>e.open)), `${tag}: ${q} should not open More options before Translate`); }
     await go('?use=work');
-    ok(!(await p.$eval('header.top .kicker', e=>e.checkVisibility())) && !/Pairs with|Chapter I/.test(await p.$eval('header.top', e=>e.innerText)), `${tag}: work mode: no reading link in the header`);
+    ok(!(await p.$$eval('header.top .kicker', es=>es.some(e=>e.checkVisibility()))) && !/Pairs with|Chapter I/.test(await p.$eval('header.top', e=>e.innerText)), `${tag}: work mode: no reading link in the header`);
     r = await read('Could you send me the Q3 numbers by 3 today?');
     ok(await p.$eval('#results', e=>e.hasAttribute('data-quiet-garden')), `${tag}: work mode: no garden line`);
     await go('');
-    ok(/Want to understand why messages land differently\?/.test(await p.$eval('header.top', e=>e.innerText)), `${tag}: plain reading link in the header`);
+    // sig17: the reading link moved below the tool (the line above the box is gone), and still hides in work mode
+    ok(!/Want to understand why/.test(await p.$eval('header.top', e=>e.innerText)) && await p.$eval('main .st-wd', e=>e.checkVisibility()), `${tag}: plain reading link below the tool, not above it`);
     ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     // 8. the Perspective Shifter: a family rift gets rift options, no "your day" or deadline, no roommates, no stray pup names
     // (See it from their side now lives in the Carrier Wave Decoder's "Their side" step; the old address sends people there)

@@ -203,7 +203,8 @@
       other: 'A partner or host may feel shut out just when they wanted to chat about how it went, or wonder if they did something wrong.',
       say: '“I had a good time. I need an hour on my own, then I’d love to hear what you thought.”',
       step: 'Agree a recharge time after visits, with a time to come back together, such as a cup of tea at eight.',
-      s: ['needs alone time after visitors', 'goes to their room after guests leave', 'disappears after socialising', 'needs to recharge after people', 'wants to be alone after family visit', 'shuts the door after company'],
+      s: ['needs alone time after visitors', 'goes to their room after guests leave', 'disappears after socialising', 'needs to recharge after people', 'wants to be alone after family visit', 'shuts the door after company',
+        'needs a quiet evening alone after friends over', 'quiet night on my own after people come round', 'partner is social and I need alone time', 'overwhelmed after guests, need time alone', 'alone time after a busy weekend with people'],
       refs: ['raymaker-2020'] },
 
     // ------------------------------------------------------------------ Talking and literal meaning

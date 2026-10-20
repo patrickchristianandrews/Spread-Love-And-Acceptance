@@ -108,7 +108,11 @@
   var DEXT = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13];
   // The small deflater: LZ77 matches (a 32 KB window, hash chains) coded with the fixed Huffman codes.
   // Short texts like ours squeeze to about half. The browser's own CompressionStream does a little better.
-  function deflateRaw(data) {
+  // flow17: dict (optional) is a preset dictionary: the text both sides already know, so the parts of a link that are
+  // the same every time (the envelope's keys, the job names) cost a few bits instead of their letters
+  function deflateRaw(data, dict) {
+    var D0 = dict ? dict.length : 0;
+    if (D0) { var cat = new Uint8Array(D0 + data.length); cat.set(dict, 0); cat.set(data, D0); data = cat; }
     var out = [], buf = 0, cnt = 0, n = data.length;
     function put(v, k) { buf |= v << cnt; cnt += k; while (cnt >= 8) { out.push(buf & 255); buf >>>= 8; cnt -= 8; } }
     function rev(c, k) { var r = 0; while (k--) { r = (r << 1) | (c & 1); c >>= 1; } return r; }
@@ -129,7 +133,8 @@
     for (i = 0; i < 32768; i++) head[i] = -1;
     function hash(p) { return ((data[p] << 10) ^ (data[p + 1] << 5) ^ data[p + 2]) & 32767; }
     function insert(p) { if (p + 2 < n) { var h = hash(p); prev[p] = head[h]; head[h] = p; } }
-    i = 0;
+    for (i = 0; i < D0; i++) insert(i);
+    i = D0;
     while (i < n) {
       var best = 0, dist = 0;
       if (i + 2 < n) {
@@ -152,9 +157,11 @@
   }
 
   // The small inflater (stored, fixed and dynamic blocks), after "puff" by Mark Adler. It stops at maxOut bytes.
-  function inflateRaw(src, maxOut) {
+  function inflateRaw(src, maxOut, dict) {
     maxOut = maxOut || MAX_RAW;
-    var pos = 0, buf = 0, cnt = 0, out = new Uint8Array(Math.min(maxOut, Math.max(1024, src.length * 4))), len = 0;
+    var D0 = dict ? dict.length : 0; maxOut += D0;
+    var pos = 0, buf = 0, cnt = 0, out = new Uint8Array(Math.min(maxOut, Math.max(1024 + D0, src.length * 4 + D0))), len = 0;
+    if (D0) { out.set(dict, 0); len = D0; }
     function fail(m) { throw new Error('inflate: ' + m); }
     function bits(k) {
       while (cnt < k) { if (pos >= src.length) fail('ran out'); buf |= src[pos++] << cnt; cnt += 8; }
@@ -240,11 +247,24 @@
         }
       } else fail('bad block type');
     }
-    return out.subarray(0, len);
+    return out.subarray(D0, len);
   }
 
   // ============================================================== pack / unpack
-  function packSync(obj) { return VERSION + '.' + b64e(deflateRaw(utf8(JSON.stringify(obj)))); }
+  // Two formats, both read forever: "1." raw deflate, and "2." (flow17) raw deflate with the preset dictionary
+  // below, about half as long for a typical link. DICT2 must never change: a "2." link needs this exact text.
+  var DICT2_TEXT = '{"v":1,"t":"","r":"","p":{"":{"n":"","at":17,"d":{}}},"at":17,"f":"","x":{"v":1,"p":["",""],' +
+    '"l":["dishes","laundry","bathroom","cooking","groceries","bills","appts","bedtime","school","petfeed","walks","lowstock","planweek","dates","kidstuff",' +
+    '"tidy","floors","bins","sheets","mealplan","nightfeeds","oncall","nappies","bottles","eldermeals","eldermeds","paid","nightshift","recovery"],' +
+    '"a":{"0":"","1":""},"f":0,"t":1,"k":1,"i":1,"o":0,"lang":"es","fr":[{"n":"","w":""}]}}' +
+    '"hours":"","sleep":"","over":"","together":"","check":"","jobs":"","lemonade-quick","our-week","checkin","weather"';
+  var DICT2 = null;
+  function dict2() { return DICT2 || (DICT2 = utf8(DICT2_TEXT)); }
+  function packSync(obj) {
+    var raw = utf8(JSON.stringify(obj));
+    var one = '1.' + b64e(deflateRaw(raw)), two = '2.' + b64e(deflateRaw(raw, dict2()));
+    return two.length < one.length ? two : one;
+  }
   function streamBytes(bytes, stream) {
     var s = new Blob([bytes]).stream().pipeThrough(stream);
     return new Response(s).arrayBuffer().then(function (b) { return new Uint8Array(b); });
@@ -255,15 +275,15 @@
     if (typeof CompressionStream !== 'function' || typeof Blob !== 'function' || typeof Response !== 'function') return Promise.resolve(sync);
     try {
       return streamBytes(utf8(JSON.stringify(obj)), new CompressionStream('deflate-raw')).then(function (z) {
-        var p = VERSION + '.' + b64e(z); return p.length < sync.length ? p : sync;
+        var p = '1.' + b64e(z); return p.length < sync.length ? p : sync;
       }, function () { return sync; });
     } catch (e) { return Promise.resolve(sync); }
   }
   function unpackSync(s) {
-    var m = /^1\.([A-Za-z0-9_-]+)$/.exec(String(s || '').replace(/\s+/g, ''));
+    var m = /^([12])\.([A-Za-z0-9_-]+)$/.exec(String(s || '').replace(/\s+/g, ''));
     if (!m) throw new Error('not a together link');
-    if (m[1].length > MAX_PACKED) throw new Error('too long');
-    return JSON.parse(unutf8(inflateRaw(b64d(m[1]), MAX_RAW)));
+    if (m[2].length > MAX_PACKED) throw new Error('too long');
+    return JSON.parse(unutf8(inflateRaw(b64d(m[2]), MAX_RAW, m[1] === '2' ? dict2() : null)));
   }
   function unpack(s) { try { return Promise.resolve(unpackSync(s)); } catch (e) { return Promise.reject(e); } }
 
@@ -376,14 +396,14 @@
   function link(env, page) { return pagePath(page) + HASH + packSync(env); }
   function linkAsync(env, page) { return pack(env).then(function (p) { return pagePath(page) + HASH + p; }); }
   function code(env) { return CODE + packSync(env); }
-  function codeOf(url) { var m = /#together=(1\.[A-Za-z0-9_-]+)/.exec(String(url || '')); return m ? CODE + m[1] : ''; }
+  function codeOf(url) { var m = /#together=([12]\.[A-Za-z0-9_-]+)/.exec(String(url || '')); return m ? CODE + m[1] : ''; }
   // the envelope in a link, a code, or a message with one in it; null when there isn't a good one
   function read(text) {
-    var s = String(text == null ? '' : text), m = /#together=(1\.[A-Za-z0-9_-]+)/.exec(s) || /TOL-TOGETHER:\s*(1\.[A-Za-z0-9_-]+)/i.exec(s) || /^\s*(1\.[A-Za-z0-9_-]{8,})\s*$/.exec(s);
+    var s = String(text == null ? '' : text), m = /#together=([12]\.[A-Za-z0-9_-]+)/.exec(s) || /TOL-TOGETHER:\s*([12]\.[A-Za-z0-9_-]+)/i.exec(s) || /^\s*([12]\.[A-Za-z0-9_-]{8,})\s*$/.exec(s);
     if (!m) return null;
     try { return cleanEnv(unpackSync(m[1])); } catch (e) { return null; }
   }
-  function has(text) { return /#together=1\.|TOL-TOGETHER:/i.test(String(text || '')); }
+  function has(text) { return /#together=[12]\.|TOL-TOGETHER:/i.test(String(text || '')); }
   function isLong(url) { return String(url || '').length > LONG; }
   function wrap(tool, x, o) {
     o = o || {};
@@ -454,7 +474,7 @@
   // banner says it in one line instead. sessionStorage 'tol-collab-received' marks this visit as theirs.
   var RULES_KEY = 'tol-collab-rules', RULES_SKIP = 'tol-collab-rules-skip', RECEIVED = 'tol-collab-received', rulesN = 0, rulesWired = false;
   function markReceived() { try { W.sessionStorage.setItem(RECEIVED, '1'); } catch (e) {} }
-  if (W && W.location && /#together=1\.|TOL-TOGETHER:/i.test(W.location.hash || '')) markReceived();
+  if (W && W.location && /#together=[12]\.|TOL-TOGETHER:/i.test(W.location.hash || '')) markReceived();
   // (where: 'send' is the person sending something themselves, so the card still shows there, even after receiving)
   function rulesDone(where) {
     if (!W) return true;
@@ -503,7 +523,7 @@
   }
   // a link opened on a page whose tool shows no panel card (a workpaper, or the results page): a small card
   // at the bottom of the screen instead, once the page has had a moment to put one in its own panel
-  if (W && D && W.location && /#together=1\.|TOL-TOGETHER:/i.test(W.location.hash || '') && !rulesDone()) {
+  if (W && D && W.location && /#together=[12]\.|TOL-TOGETHER:/i.test(W.location.hash || '') && !rulesDone()) {
     var rulesFloat = function () {
       setTimeout(function () {
         if (rulesDone() || D.querySelector('.tcol-rules') || !D.body) return;
@@ -886,7 +906,9 @@
         if (info.mineBack) lines.push(T('Your own part came back with the link, so it’s filled in again.', 'Tu propia parte volvió con el enlace, así que está completa otra vez.'));
         if (lines.length) { var ul = mk('ul', { cls: 'tcol-changes' }); lines.forEach(function (l) { ul.appendChild(mk('li', { text: l })); }); banner.appendChild(ul); }
         // you've done it too: offer to join the answers
-        if (canCombine() && !sideOpen) banner.appendChild(mk('p', {}, [reply ? '' : T('You’ve done this too. ', 'Tú también lo hiciste. '),
+        // (flow17: only when you really had your own answers before the link: a fresh phone, whose form was just
+        // filled from theirs, is asked to add its part, not to combine)
+        if (canCombine() && !sideOpen && (reply || info.hadMine)) banner.appendChild(mk('p', {}, [reply ? '' : T('You’ve done this too. ', 'Tú también lo hiciste. '),
           mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', text: reply ? T('See your answers side by side', 'Ver sus respuestas lado a lado') : T('Combine your answers?', '¿Combinar sus respuestas?') })]));
       }
       banner.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'hide', text: T('Okay, hide this', 'Listo, ocultar esto') })]));
@@ -910,13 +932,17 @@
       var me = getMe(), fresh = !st.env;
       // the first link ever opened here: the ground rules, at the top of this panel
       // (home16b: no "Before you share" card for whoever opens a link; the banner has a one-line welcome)
+      // flow17: an old "Link copied" from before is about the last send, not this link: clear it
+      try { if (send && send.say) send.say(''); } catch (e0) {}
       if (how === 'link' || how === 'code') { markReceived(); Array.prototype.forEach.call(panel.querySelectorAll('.tcol-rules'), function (n) { n.parentNode.removeChild(n); }); }
       var res = merge(st.env, env);
       if (!res) { info = { bad: true }; render(); return false; }
       var ids = Object.keys(res.env.p);
       saveMe();
       var myPart = res.env.p[me.id];
-      info = { changes: res.changes, older: res.older, fresh: fresh, from: env.f && env.p[env.f] ? env.p[env.f].n : '', reply: !!myPart, how: how };
+      // flow17: whether you had answers of your own before this link (theirs filled into an empty form don't count)
+      var hadMine = !mineBlank();
+      info = { hadMine: hadMine, changes: res.changes, older: res.older, fresh: fresh, from: env.f && env.p[env.f] ? env.p[env.f].n : '', reply: !!myPart, how: how };
       info.own = env.f === me.id && ids.every(function (k) { return k === me.id; });
       // your own part, back from the other side, into an empty form
       if (myPart && mineBlank() && opts.fill && !blankish(myPart.d)) { try { opts.fill(clone(myPart.d)); info.mineBack = true; } catch (e) {} }
@@ -1191,7 +1217,7 @@
   var API = {
     version: VERSION, HASH: HASH, CODE: CODE, LONG: LONG,
     pack: pack, packSync: packSync, unpack: unpack, unpackSync: unpackSync,
-    deflateRaw: deflateRaw, inflateRaw: inflateRaw, b64e: b64e, b64d: b64d,
+    deflateRaw: deflateRaw, inflateRaw: inflateRaw, b64e: b64e, b64d: b64d, DICT2_TEXT: DICT2_TEXT,
     clean: cleanEnv, envelope: envelope, merge: merge, changedKeys: changedKeys,
     link: link, linkAsync: linkAsync, code: code, codeOf: codeOf, read: read, has: has, isLong: isLong, wrap: wrap,
     me: getMe, saveMe: saveMe, rid: rid,

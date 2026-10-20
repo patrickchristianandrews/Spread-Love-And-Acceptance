@@ -1297,6 +1297,13 @@ def research_notes(here):
     except Exception:
         fixes = {}
     by = {}
+    # voice18: the research side notes in a chapter (<aside class="side-note" data-ref="…">) list their study too
+    sn = {}
+    for c in here:
+        try:
+            sn[c] = set(re.findall(r'class="side-note[^"]*"[^>]*\bdata-ref="([^"]+)"', read(os.path.join(ROOT, 'book', c + '.html'))))
+        except Exception:
+            sn[c] = set()
     for r in refs:
         if r['id'] in fixes:
             f = fixes[r['id']]
@@ -1309,6 +1316,9 @@ def research_notes(here):
             mm = re.match(r'/book/([a-z0-9-]+?)(?:-in-depth)?\.html', m)
             if mm and mm.group(1) in here and mm.group(1) not in chs:
                 chs.append(mm.group(1))
+        for c in here:
+            if r['id'] in sn.get(c, ()) and c not in chs:
+                chs.append(c)
         for c in chs:
             by.setdefault(c, {})[r['id']] = r
     return by

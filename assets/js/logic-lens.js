@@ -56,6 +56,8 @@
     ['melt down', 'meltdown'], ['lost it', 'meltdown'], ['silent treatment', 'quiet'], ['how are you', 'howareyou'], ['i love you', 'iloveyou'],
     ["i'm fine", 'imfine'], ['im fine', 'imfine'], ['on time', 'ontime'], ['full stop', 'fullstop'], ['special interest', 'interest'], ['non verbal', 'quiet'],
     ['non-verbal', 'quiet'], ['said no', 'refuse'], ['say no', 'refuse'], ['saying no', 'refuse'], ['say goodbye', 'goodbye'], ['saying goodbye', 'goodbye'],
+    ['friends over', 'guest'], ['people over', 'guest'], ['friends round', 'guest'], ['people round', 'guest'], ['come round', 'guest'], ['came over', 'guest'], ['had over', 'guest'],
+    ['alone time', 'alone'], ['time alone', 'alone'], ['on my own', 'alone'], ['by myself', 'alone'],
     ['in laws', 'parent'], ['in-laws', 'parent'], ['mother in law', 'parent'], ['father in law', 'parent'], ['tell me off', 'criticise'], ['told off', 'criticise']
   ].map(function (m) { return [new RegExp('(^|[^a-z0-9])' + m[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-z0-9])', 'g'), '$1' + m[1]]; });
   // words that mean the same thing: the first word is the one they all become
@@ -65,6 +67,7 @@
     'snap snapped snaps snapping shout shouted shouts shouting yell yelled yells yelling scream screamed screams screaming',
     'leave left leaves leaving exit exited bail bailed bails disappear disappeared snuck sneak sneaked',
     'party wedding gathering bbq barbecue celebration do',
+    'guest guests visitor visitors company socialising socializing socialise socialize',
     'cancel cancelled canceled cancels cancelling canceling flake flaked flakes flaky',
     'tired exhausted drained knackered wiped shattered sleepy worn fatigued',
     'hungry hangry starving',
@@ -497,11 +500,23 @@
       ul.parentNode.insertBefore(p, ul);
       ul.parentNode.insertBefore(mk('p', { cls: 'lg-an-more' }, [b, ' ', n]), ul);
     });
+    // flow17: the builder and the list are folded; a link into them (#build, #library, #cat-…, #l-…) opens every
+    // fold around it, then the place itself
     function openHash() {
-      var h = (location.hash || '').slice(1); if (!/^l-[a-z0-9-]+$/.test(h)) return;
-      var el = D.getElementById(h); if (el && el.tagName === 'DETAILS') { el.open = true; try { el.scrollIntoView({ block: 'start' }); } catch (e) {} }
+      var h = (location.hash || '').slice(1); if (!/^[a-z][a-z0-9-]*$/.test(h)) return;
+      var el = D.getElementById(h); if (!el) return;
+      var fold = el.querySelector && el.querySelector(':scope > details.lg-fold');
+      if (fold) fold.open = true;
+      for (var a = el.parentNode; a && a !== D.body; a = a.parentNode) if (a.tagName === 'DETAILS' && !a.open) a.open = true;
+      if (el.tagName === 'DETAILS') el.open = true;
+      if (fold || /^(l-|cat-)/.test(h)) { try { el.scrollIntoView({ block: 'start' }); } catch (e) {} }
     }
     openHash(); W.addEventListener('hashchange', openHash);
+    // a click on a link to a folded place on this page opens it even when the address already has that #
+    D.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+      var h = a.getAttribute('href').slice(1); if (h && h === (location.hash || '').slice(1)) setTimeout(openHash, 0);
+    });
   }
 
   function start() {

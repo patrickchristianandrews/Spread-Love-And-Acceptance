@@ -200,6 +200,7 @@
 
     pre('');
     out.innerHTML = html;
+    try { var mr = document.getElementById('cr-me-row'); if (mr) mr.querySelectorAll('input[name="cr-me-pre"]').forEach(function (el) { el.checked = el.value === state.me; }); } catch (e) {}
     draftStep.hidden = false;
     wire();
     clarifyFor(r);

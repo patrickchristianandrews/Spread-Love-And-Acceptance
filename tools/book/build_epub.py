@@ -649,6 +649,11 @@ ol.ideas { list-style: none; padding-left: 0; }
 ol.ideas > li { margin: 0 0 1.6em; }
 .pe-ex, .pe-words, .pe-try { padding-left: .8em; border-left: 2px solid %(acc)s; }
 .yp-note, .locked-section, .pe-safe { border-left: 3px solid #9A9283; padding-left: .8em; }
+.side-note { margin: 1em 0; padding: .5em .8em; border-left: 3px solid #B7AA86; background: #F4F1E8; font-size: .9em; line-height: 1.45; }
+.side-note p { margin: 0; }
+.side-note .sn-h { font-weight: bold; }
+.side-note .sn-src { margin-top: .3em; font-size: .9em; }
+.side-note .sn-ev { font-style: italic; }
 .kind-h { font-size: .8em; letter-spacing: .06em; text-transform: uppercase; margin-top: 1.2em; }
 .table-wrap { margin: .6em 0 1em; }
 

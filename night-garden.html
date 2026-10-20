@@ -57,6 +57,9 @@
   .ng-stage.is-play #ng-canvas{ touch-action:none; }
   .ng-card{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:1rem; background:rgba(16,18,38,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
   .ng-card[hidden]{ display:none; }
+  /* flow17: a card always fits the screen you can see (a short laptop screen, big text): fixed to the window, with
+     its own scroll, so "Got it" is never below the edge */
+  .ng-card{ position:fixed; z-index:950; }
   .ng-card{ overflow:hidden; }
   .ng-card > div{ max-height:calc(100% - .5rem); overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y; -webkit-overflow-scrolling:touch; }
   .ng-card > div{ max-width:32rem; text-align:center; background:rgba(42,45,82,.88); border:1px solid rgba(244,241,250,.2); border-radius:24px; padding:1.8rem 1.6rem; box-shadow:0 20px 60px rgba(0,0,0,.35); }

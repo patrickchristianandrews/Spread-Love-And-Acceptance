@@ -125,6 +125,9 @@ LENS = [
         'A friend leaves the party without saying goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they very obviously aren’t. From outside, each of these can look odd, or rude, or a bit much.',
         'Most of them have a logic behind them. Once you can see it, it usually makes sense, given how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so the rest of us fill the gap with a guess. The guess is often unkind.',
         'This guide puts the logic into words, a step at a time, and every page gives the other person’s side as well, because otherwise it wouldn’t be fair.',
+        {'sn': 'ross-greene-house-1977', 'title': 'Why our own way looks normal',
+         'text': 'In the studies that named the false consensus effect, people overestimated how many others would make the same choice they had, and saw the other choice as the odd one. It’s why a reaction unlike yours can look strange before it looks logical.',
+         'ev': 'Strong: replicated many times, though the size of the effect varies', 'cite': 'Ross, Greene and House (1977)'},
         'No page is a diagnosis or a label. People differ, and no group always does anything. The pages say “many people” or “some people” on purpose.',
     ]),
     ('lens-parts', 'The six parts', None),
@@ -132,6 +135,9 @@ LENS = [
         'Every situation carries one of three small tags.',
         None,
         'The tag says where a reaction is common. It never tells you what the person in front of you is.',
+        {'sn': 'milton-2012', 'title': 'The double empathy problem',
+         'text': 'The autistic researcher Damian Milton argued that misunderstanding between autistic and non-autistic people runs both ways: each finds the other hard to read, so the problem sits between them. His paper is an argument rather than an experiment; later studies support parts of it.',
+         'ev': 'Theory: no data in the paper itself; later experiments support parts of it', 'cite': 'Milton (2012)'},
         'The pages about common social habits matter as much as the others. If you have ever been told you “should have known” what someone meant, it can be a relief to see that there was a system all along, and that it can be learned or simply asked about. And if you use those habits without thinking, seeing their logic written down shows where someone else might miss the signal.',
         'The last section, “Different rulebooks”, is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
     ]),
@@ -264,6 +270,10 @@ def lens_parts(S):
                 if x is None:
                     body += '<ul class="pk-tags">%s</ul>' % ''.join('<li><span class="pk-side pk-side-%s">%s</span> %s</li>' % (
                         k, esc(t), esc(d)) for k, (t, d) in zip(('nd', 'nt', 'all'), side_words()))
+                elif isinstance(x, dict):
+                    body += ('<aside class="side-note no-bubble no-cheer no-dive" data-no-bubble data-ref="%s" aria-label="Side note"><p><span class="sn-h">%s</span> %s</p>'
+                             '<p class="sn-src"><a href="/research.html#ref-%s">%s</a> <span class="sn-ev">· %s</span></p></aside>') % (
+                        x['sn'], esc(x['title']), esc(x['text']), x['sn'], esc(x['cite']), esc(x['ev']))
                 else:
                     body += '<p>%s</p>' % esc(x)
         out.append((key, title, '<section class="pk-front pk-lens" id="%s">%s<p class="pk-front-k">The six-part lens</p><h1>%s</h1>%s</section>' % (
@@ -336,12 +346,17 @@ def notes_html(secs, S, nums, epub=False):
             for rid in it.get('refs', []):
                 if rid in R:
                     used.setdefault(rid, []).append(it)
+    # voice18: the two side notes on the lens pages
+    for key, title, paras in LENS:
+        for x in (paras or []):
+            if isinstance(x, dict) and x.get('sn') in R:
+                used.setdefault(x['sn'], []).append({'t': title, 'id': None, 'lens': key})
     rows = []
     for rid, its in sorted(used.items(), key=lambda kv: (R[kv[0]].get('authors', '').lower(), str(R[kv[0]].get('year', '')))):
         r = R[rid]
         t = (r.get('title') or '').strip()
         t = t if re.search(r'[.?!]$', t) else t + '.'
-        where = ', '.join('%s%s' % (esc(it['t']), '' if epub else ' (%s)' % S.pg('sit-' + it['id'])) for it in its)
+        where = ', '.join('%s%s' % (esc(it['t']), '' if epub else ' (%s)' % S.pg(it['lens'] if it.get('lens') else 'sit-' + it['id'])) for it in its)
         rows.append('<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span> <span class="pk-ref-w">%s</span></li>' % (
             esc(r.get('authors', '')), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(t), where))
     return ('<section class="pk-back pk-notes" id="notes">%s<h1>Research notes</h1><p class="pk-lede">The %d studies and essays these pages lean on, in short, with the '

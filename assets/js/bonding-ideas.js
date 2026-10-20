@@ -302,6 +302,14 @@
     if (pos >= deck.length) pos = 0;
     show(deck[pos++], c);
   }
+  // flow17: after a pick, the idea is on screen (scrolled up to it if it sits below the fold)
+  function seeIdea() {
+    var box = ideaEl && (ideaEl.closest('.bd-card') || ideaEl); if (!box) return;
+    var r = box.getBoundingClientRect();
+    if (r.bottom > window.innerHeight || r.top < 0) { try { box.scrollIntoView({ block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } catch (e) { box.scrollIntoView(); } }
+  }
+  // arriving at #ideas (a journey's "Stay close" step): land on the picker's top once the page has settled
+  if (location.hash === '#ideas') window.addEventListener('load', function () { setTimeout(function () { var h = document.getElementById('ideas'); if (h && Math.abs(h.getBoundingClientRect().top) > 120) h.scrollIntoView({ block: 'start' }); }, 50); }, { once: true });
   function refresh() {
     var c = choices();
     save(c);
@@ -352,7 +360,7 @@
     copy(text + '\n' + shareUrl(), null);
   });
   root.addEventListener('change', function (e) {
-    if (e.target && e.target.matches('input')) refresh();
+    if (e.target && e.target.matches('input')) { refresh(); seeIdea(); }
   });
 
   load();

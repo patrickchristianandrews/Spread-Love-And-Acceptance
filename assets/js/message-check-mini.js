@@ -54,7 +54,8 @@
     return q.split(/\s+/).filter(function (w) { return w && low.indexOf(w.toLowerCase().replace(/[\u2018\u2019]/g, "'")) !== -1; });
   }
   function whyList(E, an, rw) {
-    var stood = (an.staticIds || []).filter(function (id) { return ['nowhen', 'long', 'period', 'multi', 'questions'].indexOf(id) === -1 && E.FBY && E.FBY[id]; }).slice(0, 3).map(function (id) {
+    var cons = ((rw && rw.changes) || []).some(function (c) { return c.id === 'consequence'; });
+    var stood = (an.staticIds || []).filter(function (id) { return ['nowhen', 'long', 'period', 'multi', 'questions'].indexOf(id) === -1 && !(cons && id === 'oblig') && E.FBY && E.FBY[id]; }).slice(0, 3).map(function (id) {
       var w = (an.found[id] || []).filter(Boolean)[0];
       return esc(E.FBY[id].name.replace(/\s*\(.*\)$/, '').toLowerCase().replace(/^contempt:/, 'contempt:')) + (w && id !== 'harm' && String(w).length < 60 ? ' (' + esc(quote(w)) + ')' : '');
     });
@@ -146,7 +147,8 @@
 
   // "Before you send: want to sleep on it?", with a copy of the writer's own words for the morning
   function sleepBox(v, reach) {
-    return '<div class="mcm-sleep no-bubble"><p><b>Before you send: want to sleep on it?</b> ' + (reach ? 'If it still feels right in the morning, it will still be yours to send.' : 'A message to an ex often reads differently in the morning, and once it&rsquo;s sent it can&rsquo;t be taken back.') + '</p>' +
+    // (a reaching-out message already has "Before you send: want to sleep on it?" as its verdict line)
+    return '<div class="mcm-sleep no-bubble">' + (reach ? '' : '<p><b>Before you send: want to sleep on it?</b> A message to an ex often reads differently in the morning, and once it&rsquo;s sent it can&rsquo;t be taken back.</p>') +
       '<p>Save your words for the morning: copy them into your notes, and read them again before you decide.</p>' +
       '<button type="button" class="mcm-copy mcm-keep">Save it for the morning</button><p class="mcm-note no-bubble mcm-keep-note" aria-live="polite"></p>' +
       (v.link ? '<p style="margin:.2rem 0 0"><a href="' + esc(v.link[0]) + '">' + esc(v.link[1]) + '</a></p>' : '') + '</div>';

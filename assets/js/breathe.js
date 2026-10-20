@@ -306,7 +306,8 @@
         '<p class="br-guide"></p>' +
         '<p class="br-why"></p>' +
         '<div class="br-progress" aria-hidden="true"><i></i></div>' +
-        '<div class="tol-breathe-row"><button type="button" data-act="close">' + L('I’m done', 'Parar') + '</button><button type="button" data-act="mute" aria-pressed="false">&#127925; ' + L('Sound on', 'Con sonido') + '</button></div>' +
+        '<div class="tol-breathe-row"><button type="button" data-act="close">' + L('I’m done', 'Parar') + '</button><button type="button" data-act="change" class="br-change">' + L('Change', 'Cambiar') + '</button><button type="button" data-act="mute" aria-pressed="false">&#127925; ' + L('Sound on', 'Con sonido') + '</button></div>' +
+        '<p class="br-change-note" style="margin:.35rem 0 0;font-size:.88rem;line-height:1.4;text-align:center;opacity:.85;position:relative;z-index:2">' + L('Change: box breathing or 4-7-8, 3 or 5 minutes, or a sound.', 'Cambiar: respiración en caja o 4-7-8, 3 o 5 minutos, o un sonido.') + '</p>' +
       '</section>' +
       // done
       '<section class="br-done" hidden>' +
@@ -330,7 +331,7 @@
   }
 
   var $ = function (q) { return ov.querySelector(q); };
-  var method = 'box', minutes = 1, scape = 'off', engine = null, muted = false, timers = [], raf = 0, last = null;
+  var method = 'calm', minutes = 1, scape = 'off', engine = null, muted = false, timers = [], raf = 0, last = null;
   var run = { start: 0, total: 0, cycle: 0, rounds: 0 };
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function stopAll() { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf); raf = 0; }
@@ -454,13 +455,16 @@
     if (!ov) build();
     last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
     ov.classList.remove('is-open', 'is-in', 'is-out'); void ov.offsetWidth; ov.classList.add('is-open');
-    method = get('tol-br-method', 'box'); if (!PATTERNS[method]) method = 'box';
+    // flow17: it starts straight away, with calm breathing (in 4, out 6) for a minute in silence, unless you picked
+    // something else here before. Everything else is behind "Change".
+    method = get('tol-br-method', 'calm'); if (!PATTERNS[method]) method = 'calm';
     // silent unless a sound was picked before (sound is always one tap away, and says so first)
     minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'off'); if (scape !== 'off' && !SCAPES[scape]) scape = 'off';
     // quiet mode, or site sounds switched off in Settings: start in silence (a sound is one tap away)
     if (window.TOLQuiet && !window.TOLQuiet.sound()) scape = 'off';
-    muted = false; show('pick'); pickUI();
-    $('.br-begin').focus();
+    muted = false; pickUI();
+    begin();
+    var stop = ov.querySelector('.br-run [data-act="close"]'); if (stop) stop.focus();
   }
   function close() {
     stopAll(); cur.k = '';
@@ -477,7 +481,7 @@
       if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); set('tol-br-scape', scape); pickUI(); }
       var act = b.getAttribute('data-act');
       if (act === 'begin' || act === 'again') begin();
-      if (act === 'change') { if (engine) { engine.end(); engine = null; } show('pick'); pickUI(); $('.br-begin').focus(); }
+      if (act === 'change') { stopAll(); cur.k = ''; ov.classList.remove('is-in', 'is-out'); if (engine) { engine.end(); engine = null; } show('pick'); pickUI(); $('.br-begin').focus(); }
       if (act === 'close') close();
       if (act === 'mute') { muted = !muted; if (engine) engine.mute(muted); muteUI(); }
     });

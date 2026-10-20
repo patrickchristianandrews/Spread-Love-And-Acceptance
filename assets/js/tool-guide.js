@@ -183,7 +183,7 @@
 
     h += '<p class="tg-foot"><a href="/tools.html">All tools</a><span aria-hidden="true"> · </span><a href="/method-and-limits.html">Method and limits</a><span aria-hidden="true"> · </span>' +
       '<a href="/research.html">The research behind the site</a><span aria-hidden="true"> · </span>' +
-      '<a href="/why-this-site.html">Why use this instead of an article or an AI chat?</a></p>';
+      '<a href="/why-this-site.html">Why use this instead of reading an article?</a></p>';
     h += '</div>';
 
     var box = doc.createElement('details');

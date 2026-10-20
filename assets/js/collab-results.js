@@ -329,7 +329,7 @@
     if (pasteBtn) pasteBtn.addEventListener('click', function () {
       var ta = D.getElementById('tres-paste'), env = C.read(ta.value), st = D.getElementById('tres-paste-st');
       if (!env || env.t !== 'bundle') { st.textContent = T('That doesn’t look like a results link or code. Copy all of it and try again.', 'Eso no parece un enlace o código de resultados.'); return; }
-      var m = /(?:#together=|TOL-TOGETHER:)\s*(1\.[A-Za-z0-9_-]+)/i.exec(ta.value) || /(1\.[A-Za-z0-9_-]{8,})/.exec(ta.value);
+      var m = /(?:#together=|TOL-TOGETHER:)\s*([12]\.[A-Za-z0-9_-]+)/i.exec(ta.value) || /([12]\.[A-Za-z0-9_-]{8,})/.exec(ta.value);
       if (m) { ta.value = ''; st.textContent = ''; W.location.hash = 'together=' + m[1]; }
     });
   }

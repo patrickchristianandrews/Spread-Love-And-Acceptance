@@ -77,7 +77,7 @@ const OWN_X = {
     eq(back.t, tool, 'tool id kept: ' + tool);
     const url = C.link(env, '/x.html'), r = C.read(url);
     eq(r && r.p[ALEX].d, SHAPES[tool], 'link → read(): ' + tool);
-    ok(/^https:\/\/spreadloveandacceptance\.com\/x\.html#together=1\.[A-Za-z0-9_-]+$/.test(url), 'link format: ' + tool);
+    ok(/^https:\/\/spreadloveandacceptance\.com\/x\.html#together=[12]\.[A-Za-z0-9_-]+$/.test(url), 'link format: ' + tool);
     eq(C.read(C.code(env)).p[ALEX].d, SHAPES[tool], 'code → read(): ' + tool);
     eq(C.read('Here you go:\n' + url + '\nthanks').p[ALEX].d, SHAPES[tool], 'a link inside a message: ' + tool);
   });
@@ -88,6 +88,34 @@ const OWN_X = {
   // wavelength: a code in the person's part
   const wl = C.envelope({ tool: 'wavelength', id: SAM, name: 'Priya', d: { c: 'SFNA', rel: 'friends' } });
   eq(C.read(C.link(wl, '/wavelength.html')).p[SAM].d, { c: 'SFNA', rel: 'friends' }, 'round-trip: wavelength');
+})();
+
+// flow17: "2." links (raw deflate with the preset dictionary): shorter, and "1." links still open
+(function () {
+  const env = C.envelope({ tool: 'lemonade-quick', id: ALEX, name: 'Jen', d: {}, x: { v: 1, p: ['Jen', 'Tom'], l: ['dishes', 'laundry', 'bathroom', 'cooking', 'groceries', 'bills', 'appts', 'petfeed', 'walks', 'lowstock', 'planweek', 'dates', 'bedtime', 'school', 'kidstuff'], a: { 0: '0b10b100b10bb11' }, f: 0, t: 1, k: 1, o: 0 }, at: 1792503151, r: 'wpduxh' });
+  const p2 = C.packSync(env);
+  ok(/^2\./.test(p2), 'a typical quick look packs as a "2." link');
+  const raw = Buffer.from(JSON.stringify(env)), p1 = '1.' + C.b64e(C.deflateRaw(new Uint8Array(raw)));
+  ok(p2.length < p1.length * 0.7, '"2." is at least 30% shorter than "1." (' + p2.length + ' vs ' + p1.length + ')');
+  eq(C.clean(C.unpackSync(p1)).x, env.x, 'an old "1." link still reads');
+  eq(C.clean(C.unpackSync(p2)).x, env.x, 'a "2." link reads');
+  eq(C.read('#together=' + p2).x, env.x, 'read() takes a "2." link');
+  ok(C.has('x #together=' + p2), 'has() spots a "2." link');
+  eq(C.read(C.code(env)).x, env.x, 'a "2." code reads');
+  // the dictionary on both ends, and zlib's own preset-dictionary deflate reads with the small inflater
+  for (let i = 0; i < 200; i++) {
+    const t = Buffer.from(JSON.stringify({ v: 1, t: 'checkin', r: 'abcdef', p: { a: { n: 'Sam' + i, at: i, d: { well: 'x'.repeat(i % 50) + ' dishes laundry' } } } }));
+    const d2 = C.deflateRaw(new Uint8Array(t), Buffer.from(C.DICT2_TEXT || ''));
+    if (C.DICT2_TEXT) eq(Buffer.from(C.inflateRaw(d2, 1 << 20, Buffer.from(C.DICT2_TEXT))).toString(), t.toString(), 'dictionary round-trip ' + i);
+  }
+  if (C.DICT2_TEXT) {
+    const z = zlib.deflateRawSync(raw, { dictionary: Buffer.from(C.DICT2_TEXT) });
+    eq(Buffer.from(C.inflateRaw(new Uint8Array(z), 1 << 20, Buffer.from(C.DICT2_TEXT))).toString(), raw.toString(), 'zlib with the same dictionary reads back');
+  }
+  // a "1." body labelled "2." still reads the same (it never points back into the dictionary)
+  eq((C.read('#together=2.' + C.b64e(C.deflateRaw(new Uint8Array(raw)))) || {}).x, env.x, 'a "1." body labelled "2." reads the same');
+  // and a "2." body labelled "1." never reads as something else: it refers back past its start, so it is refused
+  ok(C.read('#together=1.' + p2.slice(2)) === null, 'a "2." body labelled "1." is refused');
 })();
 
 // the browser-style deflate (CompressionStream) reads back with the small inflater

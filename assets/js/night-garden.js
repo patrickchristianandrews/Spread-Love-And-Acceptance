@@ -784,7 +784,9 @@
     updateCount();
     // The first time in each activity, show how it works
     save.seen = save.seen || {};
-    if (!save.seen[m]) { save.seen[m] = 1; persist(); showHelp(m); }
+    // (flow17: not for breathing: it starts straight away, and the line under the light says what to do;
+    // "How it works" still opens the card)
+    if (!save.seen[m]) { save.seen[m] = 1; persist(); if (m !== 'breathe') showHelp(m); }
   }
 
   // Breathe: a light that grows as you breathe in and softens as you breathe out.

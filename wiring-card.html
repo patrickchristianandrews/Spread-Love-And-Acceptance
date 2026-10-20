@@ -12,7 +12,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
-<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}  .swapbox{ margin:0 0 12px; } .swap-q{ margin:0 0 6px; }
+  .cmp-next{ margin:12px 0 0; } .cmp-next ul{ margin:.3rem 0 0; padding-left:1.1rem; } .cmp-next li{ margin:.3rem 0; } .cmp-next a{ font-weight:600; }
+</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Wiring Card: A One-Page “How I Communicate” Card</title>
 <meta name="description" content="Make a free one-page card on how you take in words, what your silence means and how a request lands best, to share at home or at work. No sign-up.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -606,19 +608,22 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
 
   function paintForms(){
     let h = '<p class="privacy" id="pickmsg" role="status" aria-live="polite">' + esc(lastSwap) + '</p>';
-    h += people.map(buildForm).join("");
-    const pasteBtn = '<button class="ghost" type="button" id="pasteopen" aria-expanded="'+(pasteOpen?"true":"false")+'" aria-controls="pastebox">Paste someone&rsquo;s card</button>';
-    if(!people.includes("B")){
-      h += '<div class="actions"><button class="go" type="button" id="addB">Add the other person\'s card</button>'+pasteBtn+'</div>';
-    } else {
-      h += '<div class="actions"><button class="go" type="button" id="cmpbtn" aria-controls="compare" aria-expanded="'+(showCmp?"true":"false")+'">'+(showCmp?"Hide the comparison":"Compare the two cards")+'</button>'+pasteBtn+'</div>';
-    }
+    const pasteBtn = '<button class="ghost" type="button" id="pasteopen" aria-expanded="'+(pasteOpen?"true":"false")+'" aria-controls="pastebox">Paste their card</button>';
+    // flow17: "Got their card?" sits at the top, so nobody scrolls past a whole form to find where to paste it
+    h += '<div class="panel swapbox"><p class="swap-q"><strong>Got the other person&rsquo;s card?</strong> Paste the message or link they sent, and see both cards side by side.</p><div class="actions">'+pasteBtn+'</div>';
     if(pasteOpen){
-      h += '<div class="panel" id="pastebox" style="margin-top:12px"><h2>Paste their card</h2>' +
-        '<p class="hint">On their device, they make their card and tap &ldquo;Copy the card&rdquo; or &ldquo;Copy a link to my card&rdquo;, then send it to you. Paste the whole message or the link here and it fills in the other person&rsquo;s card, so you can compare without retyping. (Opening the link does the same thing.) Nothing is sent anywhere.</p>' +
+      h += '<div id="pastebox" style="margin-top:8px">' +
+        '<p class="hint">On their device, they make their card and tap &ldquo;Copy the card&rdquo; or &ldquo;Copy a link to my card&rdquo;, then send it to you. Paste the whole message or the link here and it fills in the other person&rsquo;s card. (Opening the link does the same thing.) Nothing is sent anywhere.</p>' +
         '<label class="lab" for="pastetext">Their copied card</label><textarea id="pastetext" class="pastein" spellcheck="false">'+esc(pasteDraft)+'</textarea>' +
         '<div class="actions"><button class="go" type="button" id="pastego">Fill in their card</button><button class="ghost" type="button" id="pastecancel">Cancel</button></div>' +
         '<p class="privacy" id="pastemsg" role="status" aria-live="polite">'+esc(pasteMsg)+'</p></div>';
+    }
+    h += '</div>';
+    h += people.map(buildForm).join("");
+    if(!people.includes("B")){
+      h += '<div class="actions"><button class="go" type="button" id="addB">Add the other person\'s card</button></div>';
+    } else {
+      h += '<div class="actions"><button class="go" type="button" id="cmpbtn" aria-controls="compare" aria-expanded="'+(showCmp?"true":"false")+'">'+(showCmp?"Hide the comparison":"Compare the two cards")+'</button></div>';
     }
     h += '<p class="draftnote"><span>Kept in this tab until you close it, so an interruption won&rsquo;t lose your answers.</span><button class="ghost" type="button" id="cleardraft" data-clear-confirm="both cards (in this tab, and blank on this device if you keep it there)">Clear</button></p>';
     h += '<div class="panel keepbox"><label class="keep"><input type="checkbox" id="keepcard"' + (keep ? " checked" : "") + '> Keep my card on this device</label> <button class="ghost" type="button" id="erasecard" data-clear-confirm="the card kept on this device" data-clear-keys="tol-wiring-card">Erase</button>' +
@@ -875,6 +880,9 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(sameCard(cards[0], state.A)){ lastSwap = "That link is your own card, so there was nothing new to bring in."; return false; }
     const nm = cards[0].name.trim();
     bringIn(decodeURIComponent(hsh.slice(6)));
+    // flow17: a card swap keeps both cards on this device (ticked for you, untick to stop), so a link opened in
+    // another tab, or the next one they send back, finds yours still here
+    swapKeep();
     if(!hasContent("A")) showCmp = false;
     lastSwap = hasContent("A")
       ? (nm ? nm + "’s card" : "Their card") + " came in with the link. It’s filled in below yours, and the two cards are side by side further down. To see the same side-by-side on their device, send yours back: tap “Copy a link to my card” under your card."
@@ -932,10 +940,12 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     // first what the two cards share, then (if there's a lot) a nudge to start small
     const said = shared.filter(t=>!/^picked /.test(t)).concat(shared.filter(t=>/^picked /.test(t))).slice(0,3);
     let top = said.length ? '<p class="cmp-shared"><strong>What you share:</strong> You both '+esc(joinAnd(said))+'.</p>'
-      : '<p class="cmp-shared"><strong>What you share:</strong> Nothing on the two cards lines up exactly yet, and that’s okay. You each wrote down how words reach you so the other one doesn’t have to guess, and wanting that is something you already share.</p>';
+      : '<p class="cmp-shared"><strong>Start here:</strong> each line below has a bridge to try, something small either of you can do to meet the other. You both wrote down how words reach you so the other doesn’t have to guess: that’s already something you share.</p>';
     if(diffs >= 3) top += '<p class="cmp-shared"><strong>Pick one or two to talk about first.</strong> '+diffs+' lines point different ways. That’s normal, and none of them has to be sorted today.</p>';
     h = top + h;
     h += '</tbody></table><p class="hint" style="margin-top:8px">'+(diffs ? (diffs===1 ? '1 line points' : diffs+' lines point')+' different ways. Each has a bridge to try.'+(diffs < 3 ? ' Pick one to talk about, not all of them.' : '') : 'Nothing points opposite ways yet.')+(blanks ? ' '+blanks+' line'+(blanks===1?' is':'s are')+' blank on both cards, so '+(blanks===1?'it isn’t':'they aren’t')+' shown.' : '')+'</p>';
+    // flow17: one clear next step after the side-by-side
+    h += '<div class="cmp-next"><p><strong>Next:</strong></p><ul><li><a href="/tools/frequency-calibration.html">Rhythms side by side &rarr;</a> Rest, plans and money: where your rhythms differ, in about ten minutes.</li><li><a href="/the-logic-behind-it.html?item=alone-after-people">Needing time alone after seeing people &rarr;</a> Why quiet after company isn’t rejection, with words for both of you.</li></ul></div>';
     $("#cmp-body").innerHTML = h;
   }
 

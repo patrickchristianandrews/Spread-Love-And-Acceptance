@@ -572,7 +572,7 @@
           "/workpapers/wp-13-daily-check-in.html"
         ]
       ],
-      "notPat": "\\b(screen|screens|tablet|ipad|kids? (play|watch)|for the kids)\\b",
+      "notPat": "\\b(screen|screens|tablet|ipad|kids? (play|watch)|for the kids)\\b|\\b(he|she) (s |is )?\\d{1,2}\\b|\\b\\d{1,2} ?(yo|year old|years old)\\b|\\b(grandson|granddaughter|grandkids?|grandchild\\w*|nephew|niece|son|daughter|stepson|stepdaughter)\\b",
       "script": [
         "No big talks tonight. Want to pick one small thing to do together for ten minutes?"
       ],

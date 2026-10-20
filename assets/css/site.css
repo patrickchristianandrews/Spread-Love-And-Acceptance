@@ -3167,7 +3167,7 @@ body{ font-family:var(--d17-read); }
 html:not(.tol-own-look):not(.tol-font-easy) body :is(button, input, select, textarea, label, legend, optgroup, option,
   [role="button"], [role="tab"], [role="menuitem"], [role="option"], [role="switch"],
   .tol-bar, .tol-panel, .tol-set, .tol-help, .tol-outline, .tol-where, .tol-listen, .tol-listen-bar, .tol-toast, .tol-offer, .tol-invite,
-  .tol-sharesheet, [class*="tsk-"], .tcol, .tres, .tfs, .tol-mp, .tol-appbar, .tol-install-card, .tol-tip, .tol-rm-row, .tol-steps-toggle,
+  .tol-sharesheet, .tsk-kit, .tsk-panel, .tsk-panels, .tsk-acts, .tsk-grid, .tsk-qrd, .tsk-top-row, .tsk-res-row, .tsk-xbody, .tsk-xsec, :is(button, a)[class*="tsk-"], .tcol, .tres, .tfs, .tol-mp, .tol-appbar, .tol-install-card, .tol-tip, .tol-rm-row, .tol-steps-toggle,
   [class*="chip"], [class*="-tag"], [class*="badge"], .tol-share-btn, .tol-print-btn, .tol-pud-card-go, .tol-keys-hint):not(svg, svg *){
   font-family:var(--d17-ui) !important;
 }
@@ -3176,6 +3176,12 @@ html:not(.tol-own-look):not(.tol-font-easy) body :is(button, label, [role="butto
   :not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *, svg, svg *, code, kbd){
   font-family:var(--d17-ui) !important;
 }
+/* the menus, drop-downs, Settings and the helper's menu are UI through and through */
+html:not(.tol-own-look):not(.tol-font-easy) body :is(.tol-drop, .tol-panel, .tol-set, .tol-help-menu, .tsk-panel, .tol-sharesheet) :is(a, button, li, span, small, p, strong, em, input, label, summary, h3, h4):not(svg *, .tol-brand, .tol-brand *){
+  font-family:var(--d17-ui) !important;
+}
+/* a card that is a button keeps its description in the reading serif, like every other card */
+html:not(.tol-own-look):not(.tol-font-easy) body main :is(button, [role="button"]) p{ font-family:var(--d17-read) !important; }
 /* a card title inside a button or a link card stays in the heading face */
 html:not(.tol-own-look):not(.tol-font-easy) body main :is(button, [role="button"], label, a) :is(h2, h3, h4){ font-family:var(--d17-head) !important; }
 /* the brand wordmark and the menu's own title stay in the heading face */
@@ -3191,7 +3197,7 @@ html body .tol-where a{ color:var(--d17-muted) !important; min-height:44px; }
 /* ---------- 2. One button system ---------- */
 /* shared shape: every button kind below */
 html:not(.tol-own-look) body :is(
-  .tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b, .hm-btn, .tol-ctx-done, .lp-btn, .is-main, a.tol-button,
+  .tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b, .hm-btn, .tol-ctx-done, .lp-btn, .is-main, a.tol-button, main .st-btn,
   main .ghost, main a.ghost, .tol-share-btn, .tol-print-btn, .st-quiet-btn, .tol-steps-toggle button, .tol-tip-next, .tol-read-next,
   .tol-pud-card-go, .hm-ex, .pp-quick-btn, .sw-showmore, .tol-listen button, .dh-btn, .dh-pick, .is-quiet, .tsk-ans, .tfs-act,
   .tcol button:not([class*="chip"]), .tres button, .tol-quiet-extras button, .ask-exit button, [data-tol-exit],
@@ -3205,10 +3211,10 @@ html:not(.tol-own-look) body :is(
   box-shadow:none !important; cursor:pointer; box-sizing:border-box; max-width:100%; white-space:normal; text-align:center;
 }
 /* primary: filled */
-html:not(.tol-own-look) body :is(.tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b:not(.is-soft), .hm-btn, .tol-ctx-done, .lp-btn.lp-next, .is-main, a.tol-button){
+html:not(.tol-own-look) body :is(.tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b:not(.is-soft), .hm-btn, .tol-ctx-done, .lp-btn.lp-next, .is-main, a.tol-button, main .st-btn){
   background:var(--d17-pri) !important; color:var(--d17-pri-ink) !important; border:1.5px solid var(--d17-pri) !important;
 }
-html:not(.tol-own-look) body :is(.tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b:not(.is-soft), .hm-btn, .tol-ctx-done, .lp-btn.lp-next, .is-main, a.tol-button):hover{ background:var(--d17-pri-h) !important; border-color:var(--d17-pri-h) !important; }
+html:not(.tol-own-look) body :is(.tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b:not(.is-soft), .hm-btn, .tol-ctx-done, .lp-btn.lp-next, .is-main, a.tol-button, main .st-btn):hover{ background:var(--d17-pri-h) !important; border-color:var(--d17-pri-h) !important; }
 html:not(.tol-own-look) body :is(main .go, .mcm-go, .tol-ctx-done):disabled{ opacity:.55; cursor:default; }
 /* secondary: outlined */
 html:not(.tol-own-look) body :is(main .ghost, main a.ghost, .tol-share-btn, .tol-print-btn, .st-quiet-btn, .tol-steps-toggle button, .tol-tip-next, .tol-read-next,
@@ -3219,11 +3225,11 @@ html:not(.tol-own-look) body :is(main .ghost, main a.ghost, .tol-share-btn, .tol
   .tol-pud-card-go, .hm-ex, .pp-quick-btn, .sw-showmore, .dh-btn, .dh-pick, .tsk-ans, .tfs-act, .tcol button:not([class*="chip"]), .tres button, .tol-rm-b.is-soft, .tol-close, .cb-nx-done, .lp-btn:not(.lp-next), .add-row):hover{ background:var(--d17-sec-h) !important; }
 html:not(.tol-own-look) body :is(.dh-pick, .tfs-act, .tsk-ans)[aria-pressed="true"]{ background:var(--d17-sec-h) !important; box-shadow:inset 0 0 0 1.5px var(--d17-sec-line) !important; }
 /* quiet: text only, still a 44px target */
-html:not(.tol-own-look) body :is(.linkbtn, .lq-btn-link, .tol-ctx-skip, .tol-ctx-add, .tol-ctx-clear, .is-quiet, .tol-quiet-extras button, .tol-listen .tol-listen-here){
+html:not(.tol-own-look) body :is(.linkbtn, .lq-btn-link, .tol-ctx-skip, .tol-ctx-add, .tol-ctx-clear, .is-quiet, .tol-quiet-extras button, .tol-listen .tol-listen-here):not(#d17-x){
   background:transparent !important; border:1.5px solid transparent !important; color:var(--d17-sec-ink) !important;
   padding-left:.6rem !important; padding-right:.6rem !important; text-decoration:underline !important; text-underline-offset:3px; text-decoration-thickness:1px;
 }
-html:not(.tol-own-look) body :is(.linkbtn, .lq-btn-link, .tol-ctx-skip, .tol-ctx-add, .tol-ctx-clear, .is-quiet, .tol-quiet-extras button, .tol-listen .tol-listen-here):hover{ background:var(--d17-sec-h) !important; }
+html:not(.tol-own-look) body :is(.linkbtn, .lq-btn-link, .tol-ctx-skip, .tol-ctx-add, .tol-ctx-clear, .is-quiet, .tol-quiet-extras button, .tol-listen .tol-listen-here):not(#d17-x):hover{ background:var(--d17-sec-h) !important; }
 /* focus ring on all of them */
 html body :is(.tol-btn, main .go, main .ghost, .mcm-go, .tol-rm-b, .tol-share-btn, .st-quiet-btn, .linkbtn, .lq-btn-link, .pp-quick-btn, .dh-btn, .tol-listen button):focus-visible{
   outline:3px solid var(--focus, #2B5B8C) !important; outline-offset:2px !important;
@@ -3232,15 +3238,18 @@ html body :is(.tol-btn, main .go, main .ghost, .mcm-go, .tol-rm-b, .tol-share-bt
 html:not(.tol-own-look) body main :is(button[aria-pressed], [class*="chip"]:is(button, a), .lq-w, .lq-toggle, .lq-chip, .ap-q, .tolc-chip, .relchips button, .relchips-more, .tryex, .swap, .wgo-opt, .sw-opt):not(.tol-hl, .tol-dive, .remove, [class*="-x"], .tol-listen-mini){
   border-radius:var(--d17-r-btn) !important; font-family:var(--d17-ui) !important; letter-spacing:normal !important; text-transform:none !important; min-height:44px;
 }
-html:not(.tol-own-look) body main :is(.wgo-opt, .sw-opt, .tryex){ border-radius:14px !important; }
+html:not(.tol-own-look) body main :is(.wgo-opt, .sw-opt, .tryex):not(.tol-hl, .tol-dive){ border-radius:16px !important; }
 /* the Wiring Card's answer buttons were square, black-outlined boxes */
 html:not(.tol-own-look) body main button:not([class])[aria-pressed]{ border-radius:var(--d17-r-btn) !important; padding:.45rem 1rem !important; }
 
 /* ---------- 3. Flatten the nesting ---------- */
 /* no pill or bubble round a heading, paragraph or label (the "Every word in a bubble" pills and the text bubbles) */
-html:not(.tol-scene) :is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(h2, h3, h4, h5){
-  --bb-fill:transparent; --bb-edge:transparent; --bb-shadow:none; --bb-pl:0px; --bb-pr:0px; --bb-w:auto;
+/* a heading on its own (not opening a card) is plain text on the page, not a pill */
+html:not(.tol-scene) :is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > div.chapter-body, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(h2, h3, h4, h5):not(:has(+ :is(p, ul, ol, dl, h1, h4, h5, details, figure, .table-wrap, address, pre))){
+  --bb-fill:transparent; --bb-edge:transparent; --bb-shadow:none; --bb-pl:0px; --bb-pr:0px;
 }
+/* a list of link cards is not itself a card (no card round the cards) */
+html:not(.tol-scene) body main.read > :is(ul, ol)[class*="links"]{ --bb-fill:transparent; --bb-edge:transparent; --bb-shadow:none; --bb-px:0px; --bb-pl:0px; --bb-pr:0px; --bb-w:100%; }
 html body main :is(h1, h2, h3, h4, h5, h6, label, legend):not([class*="chip"], [class*="btn"], [role="button"]){ box-shadow:none; }
 html.tol-nobubbles body main :is(label, legend):not([class*="chip"], [class*="btn"], [role="button"], :has(> input[type="radio"], > input[type="checkbox"])){
   background-color:transparent; box-shadow:none;
@@ -3255,6 +3264,11 @@ html:not(.tol-scene) body main :is(section, article, aside, .bb, .card, [class*=
 /* list items inside a section card are plain list items, not boxes */
 html:not(.tol-scene) body main.read :is(ul, ol):not([class]) > li:not([class]){ background:none; box-shadow:none; border:0; border-radius:0; }
 
+/* "jump to a section" chip lists on the guides: UI font, and the list sits flush in its card */
+html:not(.tol-own-look) body main :is(ul, ol, nav, p, div)[class*="jump"]{ font-family:var(--d17-ui) !important; }
+html:not(.tol-own-look) body main :is(ul, ol)[class*="jump"]{ padding-left:var(--bb-px, 1.2rem) !important; }
+html:not(.tol-own-look) body main [class*="jump"] a{ font-family:var(--d17-ui) !important; min-height:44px; box-sizing:border-box; }
+
 /* ---------- 4. Reading layout ---------- */
 @media (min-width:900px){
   html body main.read:not(.is-wide){ max-width:54rem; }                 /* ~800px of text */
@@ -3263,6 +3277,8 @@ html:not(.tol-scene) body main.read :is(ul, ol):not([class]) > li:not([class]){ 
 }
 /* less empty space above the first line: the page starts right under the bar */
 html body main.read{ padding-top:clamp(1rem, 2.5vw, 2rem); }
+/* cards on calm pages: one even edge and a whisper of shadow (no rainbow rim) */
+html:not(.tol-scene){ --bb-edge:linear-gradient(#E4D9BE, #E4D9BE); --bb-shadow:0 1px 2px rgba(60,40,10,.06); --bb-fill:#FFFDF8; }
 /* the calm plain background: no colour washes or blobs behind the words outside the scene pages */
 html:not(.tol-scene) .tol-wash{ display:none !important; }
 html:not(.tol-scene) body{ background-color:var(--d17-paper); }
@@ -3276,7 +3292,7 @@ html.tol-home .tol-outline{ display:none !important; }
   html body .tol-bar .tol-brand > span{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   html body .tol-bar .tol-brand .tol-logo{ width:40px; height:40px; }
   html body .tol-bar :is(.tol-bar-quiet, .tol-bar-set, .tol-contents-btn, .tol-ask-link, .tol-help.is-docked .tol-help-fab){
-    flex:0 0 auto; min-height:44px !important; margin:0 !important; box-sizing:border-box;
+    flex:0 0 auto; min-height:44px !important; min-width:44px !important; margin:0 !important; box-sizing:border-box; justify-content:center;
   }
   html body .tol-bar .tol-bar-quiet{ padding:.3rem .7rem !important; }
   html body .tol-bar .tol-contents-btn{ padding:.3rem .75rem !important; }
@@ -3291,6 +3307,12 @@ html.tol-home .tol-outline{ display:none !important; }
 }
 @media (max-width:374px){
   html body .tol-bar .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+}
+
+/* Share and "Show me only the steps" sit side by side in one row, not stacked */
+html body main.read > :is(.tsk-top-row, .tol-steps-toggle):has(+ :is(.tsk-top-row, .tol-steps-toggle)),
+html body main.read > :is(.tsk-top-row, .tol-steps-toggle) + :is(.tsk-top-row, .tol-steps-toggle){
+  display:inline-flex !important; width:auto !important; vertical-align:top; margin:0 .5rem .75rem 0 !important; padding:0 !important;
 }
 
 /* ---------- 6. Listen / Read from where I am: one small row, not two big buttons ---------- */
@@ -3311,9 +3333,34 @@ html body .br-method strong{ font-size:1.05rem; }
 /* the open "By relationship" (or any) drop-down fits a 768px-tall screen and scrolls inside, with a fade to say there's more */
 html body .tol-bar .tol-drop, html body .tol-bar [class*="drop-panel"]{ max-height:calc(100vh - var(--tol-bar-h, 64px) - 24px) !important; overflow-y:auto !important; overscroll-behavior:contain;
   -webkit-mask-image:linear-gradient(#000 calc(100% - 28px), transparent); mask-image:linear-gradient(#000 calc(100% - 28px), transparent); padding-bottom:28px !important; }
+/* on a phone the helper button lives in the bar, so the page doesn't keep a big empty strip for it at the end
+   (it was ~100px of blank above the footer on /start/breakup) */
+@media (max-width:560px){ html.tol-one-fab body main{ padding-bottom:1.25rem; } }
+/* the /start/ pages: the same 16px side gutter as every other page (they had the browser's 8px) */
+html body:has(> main.st){ margin:0; }
+html body > main.read.st{ padding-left:16px; padding-right:16px; }
+@media (min-width:900px){ html body > main.read.st{ max-width:54rem; margin-left:auto; margin-right:auto; } }
+/* on a short screen (a laptop at 150%, a phone on its side) every line counts: no app line, and a slimmer bar */
+@media (max-height:560px){
+  .tol-appbar{ display:none !important; }
+  .tol-bar{ padding-top:.3rem !important; padding-bottom:.3rem !important; }
+}
+/* the Arcade's romping pups run behind the cards and buttons, so their name tags never sit on a control */
+html body .jp-canvas{ z-index:0 !important; }
+html body:has(> .jp-canvas) > main{ position:relative; z-index:1; }
+/* the quick look's running tally sticks to the foot of the screen: a row tabbed or scrolled to stays clear of it */
+html:has(.lq-mini-sum:not([hidden])){ scroll-padding-bottom:5.5rem; }
 /* "Calm for the senses", Quiet mode, Keep the page still: no shapes behind the words at all */
 html:is(.ti-senses, .tol-quiet, .tol-still, .tol-contrast) .tol-wash{ display:none !important; }
 html:is(.ti-senses, .tol-quiet, .tol-still) body main.read > header.read-head::after{ content:none !important; display:none !important; }
+/* tool pages with their own old wordmark bar (Chat analyzer, Carrier wave): the site's bar is already there, so no second
+   "Spread Love & Acceptance" pill, and the tool starts sooner */
+html body:has(> .tol-bar) .wrap > .sitebar{ display:none !important; }
+html body:has(> .tol-bar) .wrap:has(> .sitebar) > header.top{ padding-top:.25rem !important; margin-top:.25rem !important; }
+/* text boxes: the same soft corners and UI font as the buttons */
+html:not(.tol-own-look) body main :is(textarea, input:is([type="text"], [type="search"], [type="email"], [type="number"], [type="time"], [type="date"], :not([type])), select){
+  border-radius:12px !important; font-family:var(--d17-ui) !important; font-size:max(1rem, 16px);
+}
 /* Pause & Play, Relax and reset: card text a laptop can read (was 14.4px grey; time labels 14px pale purple mono) */
 html body .pp-card p{ font-size:1rem !important; line-height:1.45 !important; color:#3F3930 !important; }
 html body .pp-card .pp-meta{ font-family:var(--d17-ui) !important; font-size:.95rem !important; font-weight:600; color:#5B4660 !important; letter-spacing:normal; }
@@ -3322,4 +3369,20 @@ html body .pp-card.is-garden .pp-meta{ color:#FBE3C8 !important; }
 html body .pp-card .pp-tag{ font-family:var(--d17-ui) !important; }
 html body main :is(.pp-k, .pp-wd-k){ font-family:var(--d17-ui) !important; text-transform:none !important; letter-spacing:normal !important; font-size:.95rem !important; }
 html body main .pp-k{ color:#5E4A63 !important; }
+/* dark mode: a clean neutral dark (was an olive brown), cards one even tone, no bright lavender or blue panels
+   (the page is turned around by a filter, so these are the light colours that come out dark) */
+html[data-theme="dark"]:not(.tol-nodark){ --paper:#EFEDE8; --paper-deep:#E2DED6; --d17-paper:#EFEDE8; --tb-fill:#FFFDF8; }
+html[data-theme="dark"]:not(.tol-nodark) body, html[data-theme="dark"]:not(.tol-nodark) .tol-bar, html[data-theme="dark"]:not(.tol-nodark).has-garden .tol-bar, html[data-theme="dark"]:not(.tol-nodark) .tol-panel{ background-color:#EFEDE8; }
+html[data-theme="dark"]:not(.tol-nodark):not(.tol-scene) body main :is(.bb, section, article){ --bb-edge:linear-gradient(#DAD5CB, #DAD5CB); }
+html[data-theme="dark"]:not(.tol-nodark) #ar-select{ filter:invert(1) hue-rotate(180deg); }
+html[data-theme="dark"]:not(.tol-nodark) #ar-select :is(img, video, canvas, picture, svg, iframe){ filter:none !important; }
+html[data-theme="dark"]:not(.tol-nodark) main .sh-first > li.is-main{ background:#BDD7F5 !important; border-color:#BDD7F5 !important; }
+@media (prefers-color-scheme: dark){
+html:not([data-theme="light"]):not(.tol-nodark){ --paper:#EFEDE8; --paper-deep:#E2DED6; --d17-paper:#EFEDE8; --tb-fill:#FFFDF8; }
+html:not([data-theme="light"]):not(.tol-nodark) body, html:not([data-theme="light"]):not(.tol-nodark) .tol-bar, html:not([data-theme="light"]):not(.tol-nodark).has-garden .tol-bar, html:not([data-theme="light"]):not(.tol-nodark) .tol-panel{ background-color:#EFEDE8; }
+html:not([data-theme="light"]):not(.tol-nodark):not(.tol-scene) body main :is(.bb, section, article){ --bb-edge:linear-gradient(#DAD5CB, #DAD5CB); }
+html:not([data-theme="light"]):not(.tol-nodark) #ar-select{ filter:invert(1) hue-rotate(180deg); }
+html:not([data-theme="light"]):not(.tol-nodark) #ar-select :is(img, video, canvas, picture, svg, iframe){ filter:none !important; }
+html:not([data-theme="light"]):not(.tol-nodark) main .sh-first > li.is-main{ background:#BDD7F5 !important; border-color:#BDD7F5 !important; }
+}
 /* ========================= end design17 ========================= */

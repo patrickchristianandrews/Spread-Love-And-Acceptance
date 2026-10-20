@@ -607,11 +607,16 @@
     out.owns = owns(out);
     // sig17: each side's hottest line, shown side by side so nobody is cast as the one who started it
     out.hottest = {};
+    // (the edge counts, not the length: a short reply's own weight is left out; on a tie the sharper kind, then the later line)
     out.turns.forEach(function (t, i) {
       var k = t.mine ? 'me' : 'them', h = out.hottest[k];
-      if (t.heat > 0 && (!h || t.heat > h.heat)) {
-        var top = t.marks.filter(function (m) { return KINDS[m.kind] && KINDS[m.kind].heat > 0; }).sort(function (a, b) { return KINDS[b.kind].heat - KINDS[a.kind].heat; })[0];
-        out.hottest[k] = { at: i, who: t.who, text: t.text, heat: t.heat, kind: top ? top.kind : '', label: top ? KINDS[top.kind].label : '', said: top ? (top.whole ? trim(t.text) : sentenceOf(t.text, top)) : trim(t.text) };
+      var edge = t.marks.filter(function (m) { return KINDS[m.kind] && KINDS[m.kind].heat > 0 && m.kind !== 'short' && m.kind !== 'brief'; });
+      var e = 0, cnt = {}; edge.forEach(function (m) { cnt[m.kind] = (cnt[m.kind] || 0) + 1; if (cnt[m.kind] <= 2) e += KINDS[m.kind].heat; });
+      if (!(e > 0)) return;
+      var rank = function (m) { var r = OWN_ORDER.indexOf(m.kind); return r === -1 ? 99 : r; };
+      var top = edge.sort(function (a, b) { return rank(a) - rank(b) || KINDS[b.kind].heat - KINDS[a.kind].heat; })[0];
+      if (!h || e > h.edge || (e === h.edge && rank(top) <= h.rank)) {
+        out.hottest[k] = { at: i, who: t.who, text: t.text, heat: t.heat, edge: e, rank: rank(top), kind: top.kind, label: KINDS[top.kind].label, said: top.whole ? trim(t.text) : sentenceOf(t.text, top) };
       }
     });
     // sig17: "don't call", "leave me alone", "going to bed": no reply suggests a call, a talk tonight or a meeting

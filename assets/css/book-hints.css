@@ -143,3 +143,28 @@ h3.kind-h-tool::before{ background:#3E6B4C; border-radius:999px; }
   h3.kind-h, .pe-body h4.kind-h{ font-size:10.6pt; margin:3.4mm 0 1.2mm; break-after:avoid; }
   .kind-h .kind-sub{ font-size:8.6pt; }
 }
+
+/* voice18: research side notes (tools/book chapter sources, <aside class="side-note" data-ref="…">). One study,
+   in plain words, with its evidence label and a link to its entry on /research. On screen: a compact tinted aside.
+   In the print books (.pe-body): a small tinted box floated to the outer edge of the text column. */
+.side-note{
+  margin:1.2rem 0; padding:.65rem .95rem .7rem; max-width:40rem; box-sizing:border-box;
+  background:#F4F1E8; border-left:4px solid #B7AA86; border-radius:0 12px 12px 0;
+  font-family:"Lora", Georgia, serif; font-size:.93rem; line-height:1.55; color:var(--ink, #2B2620);
+}
+.side-note p{ margin:0; }
+.side-note .sn-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; color:#6B5A2E; margin-right:.2rem; }
+.side-note .sn-src{ margin-top:.35rem; font-size:.85rem; line-height:1.45; color:#5C5446; }
+.side-note .sn-src a{ font-weight:600; }
+.side-note .sn-ev{ font-style:italic; }
+.pe-body .side-note{
+  float:right; clear:right; width:47%; max-width:none; margin:.6mm 0 2.6mm 4mm; padding:2.2mm 2.8mm 2.4mm;
+  background:var(--pt, #F4F1E8); border:0; border-left:2pt solid var(--pc, #B7AA86); border-radius:0 1.6mm 1.6mm 0;
+  font-size:8.4pt; line-height:1.38; break-inside:avoid; page-break-inside:avoid;
+}
+.pe-body .side-note .sn-h{ display:block; font-size:8.8pt; line-height:1.25; margin:0 0 .8mm; color:var(--pc, #6B5A2E); }
+.pe-body .side-note .sn-src{ margin-top:1.2mm; font-size:7.6pt; line-height:1.3; }
+.pe-body .side-note .sn-src a{ color:inherit; text-decoration:none; }
+/* boxes, figures and headings never sit beside a side note, only plain paragraphs do */
+.pe-body h2, .pe-body h3, .pe-body figure, .pe-body aside:not(.side-note), .pe-body .book-ex-wrap, .pe-body .try-this,
+.pe-body .book-hint, .pe-body .tol-try, .pe-body table, .pe-body .lg-box, .pe-body .pe-end{ clear:right; }

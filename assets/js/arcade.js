@@ -1518,6 +1518,10 @@
     sw.innerHTML = on ? '&#9918; Tap “Play ball” first' : '&#9918; Swing!';
   }
   function swingNudge() {
+    // flow17: a tap on the field or on Swing while the "Play ball" card is up starts the game (the card says to tap
+    // the field, so that tap works), instead of asking for one more tap
+    var go0 = $('ar-ov-go'), ov0 = $('ar-overlay');
+    if (go0 && ov0 && !ov0.hidden && /Play ball/.test(go0.textContent || '')) { go0.click(); return; }
     say('Tap Play ball to start. Then swing.');
     var go = $('ar-ov-go'); if (!go || $('ar-overlay').hidden) return;
     try { go.focus({ preventScroll: true }); } catch (e) { go.focus(); }
@@ -1651,6 +1655,8 @@
     if (location.hash === '#derby') { S.game = 'derby'; var dr = D.querySelector('input[name="ar-game"][value="derby"]'); if (dr) dr.checked = true; startLabel(); }
     D.addEventListener('keydown', onKey);
     window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize);
+    // flow17: tapping the field around the Derby's "Play ball" card starts the game
+    var ovl = $('ar-overlay'); if (ovl) ovl.addEventListener('click', function (e) { if (e.target === ovl) { var sw0 = $('ar-swing'); if (sw0 && sw0.classList.contains('is-wait')) swingNudge(); } });
     var wrap = $('ar-wrap'); wrap.addEventListener('pointerdown', onPointerDown); wrap.addEventListener('pointermove', onPointerMove); wrap.addEventListener('pointerup', onPointerUp); wrap.addEventListener('pointercancel', function () { ptr = null; });
     syncToggles(); refreshBest();
     // tools16: someone who came here from another game's row of tabs lands on the game picker, not the page's opening

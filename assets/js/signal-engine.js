@@ -1479,6 +1479,8 @@ function analyze(textIn, opts){
       push("impera", se.s+Math.max(0,off), se.s+Math.max(0,off)+firstWord.length);
     }
   });
+  // (sig17) "Be home by 10 or you're grounded": a threatened consequence on the end of an ask is pressure
+  sentences.forEach(se=>{ const cm = se.text.trim().match(CONSEQ_RE); if(cm){ const at = se.s + se.text.indexOf(cm[2]); const st = low.lastIndexOf(" or ", at); push("oblig", st>se.s ? st+1 : at, at+cm[2].length); } });
   // (sig17) "ur doing bedtime tonight", "you're taking the bins out today": an order said as a fact, not asked
   { const OR = /(?:^|[.!?]\s+)((?:ur|you're|you are|youre|u r|ure) (?:doing|taking|cooking|making|handling|picking up|getting|sorting|washing|cleaning|on) (?:the |your |our |a )?(?:bedtime|bath ?time|baths?|dinner|tea|lunch|breakfast|pick-?ups?|drop-?offs?|school run|bins?|dishes|washing(?: up)?|laundry|kids|baby|dog|dog walk|hoovering|vacuuming|cooking|shopping|night feeds?|feeds?|nappies|bathroom|kitchen|trash|rubbish|recycling|homework|cleaning|ironing|story|stories)\b[^.!?\n]{0,20}?\b(?:tonight|today|tomorrow|this (?:evening|weekend|morning|afternoon)|now)\b)(?=\s*(?:[.!]|$))/gi; let om;
     while((om=OR.exec(text))!==null){ const st = om.index+om[0].indexOf(om[1]); push("impera", st, st+om[1].length); } }
@@ -1758,6 +1760,8 @@ function analyze(textIn, opts){
       if(/\b(?:have to|has to|got to|end up|ends up|left to|left with|stuck|everything|always me|the one\b|on my own|by myself|alone|get (?:any|no)|nobody|no one|help(?:s|ed)?|anymore|any more|see (?:you|them|him|her|the)|hear from|invited|included|asked|thanked|told|chosen|picked|listened)\b/.test(st)) return false;
       return true;
     });
+    // (sig17) a count said with warmth ("three nights in a row and honestly I loved it", "thanks for doing it the last three nights")
+    drop("count", h=>/\b(?:loved|enjoyed|happy to|glad to|no problem|my pleasure|fun|thank you|thanks)\b/.test(sentText(h)+" "+lc.slice(sentOf(h).e, sentOf(h).e+40)));
     // sig17: a denial ("never said you were", "I didn't say you were lazy") answers a charge; it isn't an always/never,
     // a label or criticism aimed at them
     if(SHARED && SHARED.denial) ["absolute","label","critic","impera"].forEach(id=>drop(id, h=>SHARED.denial(lc, h.s, h.e)));
@@ -2632,7 +2636,7 @@ function beforeAsk(main, line){
    one-line message, is left to the fuller replacements in rewriteSentence ("Grow up." -> the feeling and a time). */
 const CONTEMPT_RX = ()=> SHARED && SHARED.BY && SHARED.BY.contempt ? new RegExp(SHARED.BY.contempt.re.source, "i") : null;
 const SARC_OPEN = /^(?:oh,?\s*)?wow,?\s+(?=(?:you|u|so|really|ok(?:ay)?|just)\b)|^(?:oh,?\s*)?(?:great|perfect|wonderful|lovely|brilliant|fantastic|nice),\s+(?=(?:you|u|so|now|another|again)\b)/i;
-const SARC_TAIL = /^(?:(?:and|but|so|well|anyway)[,\s]+)*(?:(?:i(?:'m| am)|im) not (?:your|ur) (?:(?:personal |live-in |unpaid |bloody |own )?(?:maid|servant|slave|cleaner|skivvy|butler|housekeeper|cook|chef|secretary|pa|assistant|nanny|babysitter))(?: either| too)?|(?:i )?hope (?:she|he|they|it|your new \w+) (?:makes you (?:happy|very happy|so happy)|(?:was|is) worth it)|(?:i )?hope you(?:'re| are) (?:both )?(?:happy|very happy|so happy) (?:now|together)|(?:have a nice|have a good|enjoy your (?:new )?) life)$/;
+const SARC_TAIL = /^(?:(?:and|but|so|well|anyway)[,\s]+)*(?:(?:i(?:'m| am)|im) not (?:your|ur) (?:(?:personal |live-in |unpaid |bloody |own )?(?:maid|servant|slave|cleaner|skivvy|butler|housekeeper|cook|chef|secretary|pa|assistant|nanny|babysitter))(?: either| too)?|(?:i )?hope (?:she|he|they|it|your new \w+) (?:makes you (?:happy|very happy|so happy)|(?:was|is) worth it)|(?:i )?hope you(?:'re| are) (?:both )?(?:happy|very happy|so happy) (?:now|together)|(?:have a nice|have a good|enjoy your(?: new)?) life(?: with (?:her|him|them|your \w+))?)$/;
 const SARC_JAB = /^(?:sure|right|yeah|oh sure|of course),?\s+because\b/i;
 function dropContempt(s0, an, ctx, note, nAll){
   const CX = CONTEMPT_RX(); const lowf = x=>norm(x).toLowerCase();
@@ -2726,8 +2730,11 @@ function rewriteSentence(s, ctx, note, an, W){
     const thing = (m[2].match(/\b(phone|xbox|ps5|playstation|switch|ipad|tablet|laptop|console|tv|screen time|wifi|internet|car keys|car)\b/i)||[])[1];
     const phoneAsk = /\b(?:answer|pick up|call|ring|text|reply|phone|message)\b/i.test(m[1]);
     const given = WHEN_REAL.test(m[1]) && !/\bnow\b/i.test(m[1]);
+    // how long, only when the writer said it ("for a month", "tonight"); otherwise a blank for them
+    const span = (m[2].match(/\bfor [^.!?]{1,25}$|\b(?:tonight|today|tomorrow)\b/i)||[""])[0].toLowerCase() || "for [how long]";
+    const homeAsk = /\b(?:be|get|come) (?:home|back)\b/i.test(m[1]);
     const cons = phoneAsk ? "If I can't reach you, the phone stays home next time."
-      : "If it isn't done "+(given ? "by then" : "by [a time]")+", "+(thing ? "the "+thing.toLowerCase()+" stays with me "+(/tonight|today/i.test(m[2]) ? m[2].match(/tonight|today/i)[0].toLowerCase() : "for [how long]") : "you'll be staying in this weekend")+".";
+      : (homeAsk ? "If you're not back " : "If it isn't done ")+(given ? "by then" : /\bnow\b/i.test(m[1]) ? "straight away" : "by [a time]")+", "+(thing ? "the "+thing.toLowerCase()+" stays with me "+span : "you'll be staying in "+span)+".";
     note("consequence", m[2].replace(/[.!\s]+$/,""), cons);
     ctx.noAsk = true; ctx.consequence = true;
     return ask+" "+cons;
@@ -4280,7 +4287,7 @@ function verdict(an, sc, rw, opts){
     v = Object.assign({}, v, {exReach:true, sleepOn:true, link, text: v.text+" And before you send anything to an ex: want to sleep on it?"});
   }
   // care: named, and never read as control
-  if(an.care && v.id!=="danger" && !v.control && !hot){
+  if(an.care && v.id!=="danger" && !v.control && !hot && !v.order){
     v = Object.assign({}, v, {careNote: CARE_SEND[an.care.kind], care: an.care.kind});
     if(an.care.kind==="no" && v.id==="ok") v = Object.assign(v, {id:"hurt", mild:true, text:"This is a firm no. That's yours to give, and it isn't control on its own. It usually lands better with the reason and room to talk."});
     else if(v.id==="hurt" && !v.apology && an.staticIds.every(id=>MILD_IDS.concat(["oblig","nowhen","period","long"]).includes(id))) v.text = "This comes from care, and it may still sound like an order. "+(soft ? "Here's a version that keeps the reason and the ask." : "Adding the reason helps.");

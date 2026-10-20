@@ -15,6 +15,12 @@
 <script src="/assets/js/site.js" defer></script>
 <style>
   /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .tn-first{ margin:0 0 1rem; }
+  .tn-first-l{ margin:.2rem 0 .4rem !important; font-size:1rem; }
+  .tn-first .tn-jump{ margin:.4rem 0 .6rem !important; gap:.4rem; }
+  .tn-first .tn-jump a{ padding:.35rem .85rem; font-size:.93rem; }
+  .tn-steps-slot{ margin:0 !important; }
+  .tn-steps-slot:empty{ display:none; }
   .tn-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
   .tn-jump li{ margin:0 !important; max-width:none !important; }
   .tn-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
@@ -106,19 +112,17 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/teens.html#page","name":"For Teens: When Home, Friends and Feelings Get Loud","headline":"For Teens: When Home, Friends and Feelings Get Loud","description":"Free, private help for teens: getting along with parents or carers, a parent who is away, friend drama, big feelings, healthy dating, and help fast.","url":"https://spreadloveandacceptance.com/teens.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-07","dateModified":"2026-10-19","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"Article","author":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://spreadloveandacceptance.com/teens.html"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"For Teens: When Home, Friends and Feelings Get Loud","item":"https://spreadloveandacceptance.com/teens.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body data-no-offer data-no-learnplay data-no-cheer data-no-pillars data-no-fullpath data-no-reading>
+<body data-steps-phone data-no-offer data-no-learnplay data-no-cheer data-no-pillars data-no-fullpath data-no-reading>
 <main class="read" id="main">
 <header class="read-head"><p class="read-code">For teens</p><h1>For teens: when home, friends and feelings get loud</h1></header>
 
-<p class="ask-exit no-bubble"><button type="button" data-tol-exit>Leave this site quickly</button> <small>Or press Esc twice. <a href="#help">People to talk to</a></small></p>
+<p class="ask-exit no-bubble" data-keep-steps><button type="button" data-tol-exit>Leave this site quickly</button> <small>Or press Esc twice. <a href="#help">People to talk to</a></small></p>
 
-<p class="simple-lede">This page is for you, not about you. No quiz to finish, no homework. Skip to whatever is loud right now, take what helps, and leave the rest.</p>
-
-<p class="tn-private"><strong>Private, for real.</strong> Everything you type on this site stays on your device. Nothing is sent to your parents or carers, your school or anyone else. <a href="/on-this-device.html">See exactly what’s stored, and wipe it</a>.</p>
-
-<p class="tn-who">Live with a grandparent, an aunt or uncle, foster carers or another family? This page is for you too. Wherever it says “parents”, read it as the adults looking after you.</p>
-
-<ul class="tn-jump" aria-label="On this page">
+<!-- flow17: short first: the jump chips and the first section's steps on the first screen; the rest of the intro comes after it -->
+<section class="tn-first" aria-label="Start here">
+<p class="tn-first-l" data-keep-steps>Skip to whatever is loud right now. Nothing you type here is sent anywhere.</p>
+<ul class="tn-jump" aria-label="On this page" data-keep-steps>
+  <li><a href="#curfew-phone">Curfew and your phone</a></li>
   <li><a href="#family-care">Living with grandparents, family or foster carers</a></li>
   <li><a href="#parent-away">A parent who’s away</a></li>
   <li><a href="#parents">Parents and carers</a></li>
@@ -133,6 +137,32 @@
   <li><a href="#help">More than a bad day</a></li>
   <li><a href="#fun">Need a break</a></li>
 </ul>
+<div data-steps-slot data-keep-steps class="tn-steps-slot"></div>
+</section>
+
+<h2 id="curfew-phone">Curfew and your phone: make a deal</h2>
+<p>Most rows with parents at your age are about two things: what time you’re home, and your phone. Both go better as a deal you agree on a calm day than as a fight at 11pm.</p>
+<ol>
+  <li><strong>Pick a calm moment,</strong> not the night it’s happening. “Can we sort out a phone and curfew deal this weekend?”</li>
+  <li><strong>Ask the reason behind their rule.</strong> It’s usually sleep, safety or school. Say it back: “So it’s about me sleeping enough on school nights?”</li>
+  <li><strong>Offer a deal that covers their reason,</strong> with times written down, so nobody argues about what was said.</li>
+  <li><strong>Try it for two weeks,</strong> then look at it again together. Keeping a deal is how you earn a later time.</li>
+</ol>
+<div class="tn-say">
+  <h3>A deal you could suggest</h3>
+  <p>“Phone charges in the kitchen at 10:30 on school nights, and I get it back at 7. Weekends, 11:30.”</p>
+  <p>“Home by 10 on school nights and 11 on Fridays and Saturdays. If I’m going to be late, I text before, not after.”</p>
+  <p>“Let’s try it for two weeks. If it goes well, can we talk about half an hour later?”</p>
+</div>
+<p>If they take your phone when you’re upset, ask for a time it comes back, not a fight about whether. “Okay. Can I have it back after dinner?” For the adults, there’s <a href="/parents.html#teens">the teens part of our parents page</a> and <a href="/gaming-and-time-together.html#td-phone">a phone and screen-time deal</a>.</p>
+
+<p class="simple-lede">This page is for you, not about you. No quiz to finish, no homework. Skip to whatever is loud right now, take what helps, and leave the rest.</p>
+
+<p class="tn-private"><strong>Private, for real.</strong> Everything you type on this site stays on your device. Nothing is sent to your parents or carers, your school or anyone else. <a href="/on-this-device.html">See exactly what’s stored, and wipe it</a>.</p>
+
+<p class="tn-who">Live with a grandparent, an aunt or uncle, foster carers or another family? This page is for you too. Wherever it says “parents”, read it as the adults looking after you.</p>
+
+
 <p class="tn-share no-bubble"><button type="button" class="tn-share-btn" data-share data-share-title="For teens: when home, friends and feelings get loud" data-share-text="A free, private page for teens about home, family, friends and feelings. Nothing is sent anywhere.">Share this guide</button> <small>Sends the link only, never anything you typed.</small></p>
 
 <h2 id="parents">When it’s tense with your parents or carers</h2>
@@ -214,7 +244,7 @@
   <p>“Can we talk about Mum? I keep thinking about her.”</p>
   <p>“I don’t want to talk about it today. Can I just tell you I’m having a bad day?”</p>
 </div>
-<div class="tn-help">
+<div class="tn-help" data-keep-steps>
   <p><strong>Free people to talk to:</strong></p>
   <ul>
     <li>UK: <strong>Childline</strong>, <a href="tel:08001111">0800 1111</a>, any time, about anything.</li>

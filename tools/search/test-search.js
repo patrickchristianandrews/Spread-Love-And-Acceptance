@@ -47,6 +47,18 @@ const CASES = [
   ['husband retired and under my feet', ['/retired-together.html']],
   ['partner has a chronic illness', ['/when-one-is-ill.html']],
   ['caring for my mum with dementia', ['/caregivers.html']],
+  // flow17 (panel17): real words from the panel
+  ['caring for elderly parent', ['/caregivers.html', '/family-obligations.html#visits']],
+  ['mother in law lives with us', ['/family-obligations.html#visits']],
+  ["wife doesn't recognise me", ['/caregivers.html#still-here', '/caregivers.html#care-home']],
+  ['care home', ['/caregivers.html#care-home']],
+  ['my partner is in a care home', ['/caregivers.html#care-home']],
+  ['partner is social and I need alone time', ['/wiring-card.html', '/the-logic-behind-it.html#l-alone-after-people']],
+  ['we just moved in together and I need quiet and routine', ['/wiring-card.html', '/the-logic-behind-it.html#l-alone-after-people']],
+  ['texts misread', ['/signal-translator.html', '/different-hours.html#talking']],
+  ['teen phone', ['/teens.html#curfew-phone', '/parents.html#teens']],
+  ['5 minutes together', ['/journeys.html#busy2']],
+  ['quick thing tonight', ['/journeys.html#busy2']],
   ['worksheets', ['/workpapers/fill/suite.html']],
   ['step by step plan', ['/prog-01.html']],
   // talking, fights and texts
@@ -259,7 +271,10 @@ async function waitUp(url, n) { for (let i = 0; i < (n || 50); i++) { try { cons
       ['how do i stop texting my ex', '/co-parenting.html', 3],
       ['adhd forgetting', '/adhd-kids.html', 2],
       ['anxious before exam', '/invisible-labor-mental-load.html', 5],
-      ["she says I don't notice things", '/love-languages.html', 1]
+      ["she says I don't notice things", '/love-languages.html', 1],
+      // flow17: a misread text is not about an ex
+      ['texts misread', '/after-a-breakup.html', 2],
+      ['care home', '/foster-and-kinship.html', 1]
     ];
     for (const [q, u, n] of NOT) {
       const R = await rank(q);

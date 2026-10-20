@@ -88,7 +88,11 @@
       document.documentElement.classList.toggle('tol-only-steps', on);
       t.querySelector('.tol-steps-note').textContent = on ? ' Showing the headings and the numbered steps.' : '';
     });
-    var ins = main.querySelector('.tol-inshort'); if (ins) ins.after(t); else place(t);
+    // flow17: a page can say where the switch goes ([data-steps-slot]), and that a phone starts on the steps
+    // (<body data-steps-phone>), unless the address points somewhere on the page
+    var slot = main.querySelector('[data-steps-slot]');
+    var ins = main.querySelector('.tol-inshort'); if (slot) slot.appendChild(t); else if (ins) ins.after(t); else place(t);
+    try { if (document.body.hasAttribute('data-steps-phone') && !location.hash && window.matchMedia('(max-width: 640px)').matches) btn.click(); } catch (e) {}
   }
   window.TOLInShort = { has: !!S[path], steps: steps.length };
 })();

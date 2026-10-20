@@ -51,7 +51,7 @@ SKIP = re.compile(r'^(tools|supabase|_|node_modules|architecture|infrastructure|
 
 
 class Page(HTMLParser):
-    SKIP_TAGS = {'script', 'style', 'noscript', 'svg', 'template', 'nav', 'header-skip', 'button', 'select', 'textarea', 'form'}
+    SKIP_TAGS = {'script', 'style', 'noscript', 'svg', 'template', 'nav', 'header-skip', 'button', 'select', 'textarea', 'form', 'fieldset', 'legend'}
     # the breadcrumb and the "simple / full" line aren't prose: leave them out of the text, so a result's
     # snippet reads as a sentence from the page, not a string of labels
     SKIP_CLASSES = {'read-code', 'depth-bar', 'breadcrumb', 'crumbs', 'no-index'}
@@ -74,6 +74,10 @@ class Page(HTMLParser):
         self._in_main = 0
         self._saw_main = False
         self._body_text = []
+        # flow17: snippets read as English prose: no Spanish box inside an English page, and no game scoreboard
+        # (a hidden panel on a game page, like "US 0 1st & 10 THE RUT 0")
+        self.page_lang = 'en'
+        self.is_game = False
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -89,7 +93,12 @@ class Page(HTMLParser):
         if tag in ('br', 'img', 'input', 'link', 'hr', 'meta', 'source', 'wbr'):
             return
         classes = set((a.get('class') or '').split())
-        skip = tag in self.SKIP_TAGS or (a.get('aria-hidden') == 'true') or bool(classes & self.SKIP_CLASSES) or tag in self.HEAD_TAGS
+        if tag == 'html':
+            self.page_lang = (a.get('lang') or 'en').lower()
+        if tag == 'body' and 'is-game' in classes:
+            self.is_game = True
+        other_lang = bool(a.get('lang')) and not (a.get('lang') or '').lower().startswith(self.page_lang[:2])
+        skip = other_lang or (self.is_game and 'hidden' in a) or tag in self.SKIP_TAGS or (a.get('aria-hidden') == 'true') or bool(classes & self.SKIP_CLASSES) or tag in self.HEAD_TAGS
         self._stack.append((tag, skip))
         if skip:
             self._skip += 1

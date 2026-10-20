@@ -52,7 +52,7 @@ function read(t, c){
 const pct = (a, b) => b ? Math.round(1000 * a / b) / 10 : 0;
 const report = {};
 let failed = false;
-['tune', 'holdout', 'holdout2', 'holdout3', 'holdout4', 'sig16', 'sig16h', 'sig16h2'].forEach(split => {
+['tune', 'holdout', 'holdout2', 'holdout3', 'holdout4', 'sig16', 'sig16h', 'sig16h2', 'sig17', 'sig17h', 'sig17h2'].forEach(split => {
   if(ONLY && ONLY !== split) return;
   const rows = SET.filter(c => c.split === split);
   const M = {}; LBL.forEach(a => { M[a] = {}; LBL.forEach(b => M[a][b] = 0); });
@@ -73,10 +73,10 @@ let failed = false;
     {name: 'warm/neutral flagged fight or concern (under 5%)', got: g.negHot.length, of: g.negN, max: '<5%', pass: pct(g.negHot.length, g.negN) < 5, list: g.negHot},
     {name: 'warm/neutral flagged unsure (under 15%)', got: g.negUnsure.length, of: g.negN, max: '<15%', pass: pct(g.negUnsure.length, g.negN) < 15, list: g.negUnsure}
   ];
-  if(gates.some(x => !x.pass) && (STRICT || split === 'tune' || split === 'holdout' || split === 'sig16')) failed = true;
+  if(gates.some(x => !x.pass) && (STRICT || split === 'tune' || split === 'holdout' || split === 'sig16' || split === 'sig17')) failed = true;
   report[split] = {cases: rows.length, right, rate: pct(right, rows.length), matrix: M, gates: gates.map(x => ({name: x.name, got: x.got, of: x.of, pct: pct(x.got, x.of), pass: x.pass}))};
   if(JSON_OUT) return;
-  console.log('\n== ' + split + (/^holdout[234]$/.test(split) ? ' (fresh phrasings, written to find gaps; ' : split === 'sig16' ? ' (the round-16 reviewers\' cases and variations, tuned on; ' : split === 'sig16h' ? ' (round 16 held out: written before any run; its first run led to fixes, so it is now seen; ' : split === 'sig16h2' ? ' (round 16 second held-out set: written after those fixes, never tuned on; ' : ' (') + rows.length + ' messages): ' + right + ' read within their labels (' + pct(right, rows.length) + '%)');
+  console.log('\n== ' + split + (/^holdout[234]$/.test(split) ? ' (fresh phrasings, written to find gaps; ' : split === 'sig16' ? ' (the round-16 reviewers\' cases and variations, tuned on; ' : split === 'sig16h' ? ' (round 16 held out: written before any run; its first run led to fixes, so it is now seen; ' : split === 'sig16h2' ? ' (round 16 second held-out set: written after those fixes, never tuned on; ' : split === 'sig17' ? ' (the round-17 reviewers\' cases and variations, tuned on; ' : split === 'sig17h' ? ' (round 17 held out: written before any run; its first run led to fixes, so it is now seen; ' : split === 'sig17h2' ? ' (round 17 second held-out set: written after those fixes, never tuned on; ' : ' (') + rows.length + ' messages): ' + right + ' read within their labels (' + pct(right, rows.length) + '%)');
   console.log('expected \\ got  ' + LBL.slice(0, 5).map(x => x.padStart(11)).join(''));
   LBL.slice(0, 5).forEach(a => console.log(a.padEnd(16) + LBL.slice(0, 5).map(b => String(M[a][b] || 0).padStart(11)).join('')));
   gates.forEach(x => {

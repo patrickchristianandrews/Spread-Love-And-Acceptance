@@ -372,23 +372,26 @@
       </div>
     </div>
     <p class="hh-start-n" data-mode-show="with me" hidden>Tap the closest: one guided journey, and one thing to do in two minutes.</p>
-    <p class="hh-start-n" data-mode-show="none">Tap the closest. For more choices (flatmates, family, raising a grandchild), pick With someone or Just me.</p>
+    <p class="hh-start-n" data-mode-show="none">Tap the closest. For more choices (flatmates, a parent living with you, raising a grandchild), pick With someone or Just me.</p>
     <!-- home16b: eight choices in each state. Nothing picked shows both sides (loss and a breakup too); each choice
          that is a plain link goes straight to its page; "Our life has changed" opens a short "which is closest?" list. -->
+    <!-- flow17: still eight in each state; more choices sit in short "which is closest?" lists (Home and family,
+         We need different things at home, Our life has changed). -->
     <ul class="wgo-opts">
       <li data-mode-show="none with"><a class="wgo-opt" data-wgo="argument" href="/journeys.html?for=argument#pick">We keep having the same argument</a></li>
       <li data-mode-show="none with"><a class="wgo-opt" data-wgo="chores" href="/journeys.html?for=chores#pick">Chores feel unfair</a></li>
       <li data-mode-show="none with"><a class="wgo-opt" data-wgo="drift" href="/journeys.html?for=drift#pick">We&rsquo;ve drifted apart</a></li>
-      <li data-mode-show="with" hidden><a class="wgo-opt" href="/sharing-a-room.html#bring-it-up">Flatmate or housemate trouble</a></li>
+      <li data-mode-show="with" hidden><a class="wgo-opt" data-wgo="quietsocial" href="/journeys.html?for=quietsocial#pick">We need different things at home <span class="wgo-opt-n">(quiet vs social)</span></a></li>
+      <li data-mode-show="with" hidden><a class="wgo-opt" data-wgo="homefam" href="/journeys.html?for=homefam#pick">Home and family <span class="wgo-opt-n">(a parent with us, flatmates, teens)</span></a></li>
+      <li data-mode-show="none me"><a class="wgo-opt" href="/teens.html#curfew-phone">Fighting with my parents <span class="wgo-opt-n">(I&rsquo;m under 18)</span></a></li>
       <li data-mode-show="none me"><a class="wgo-opt" data-wgo="myself" href="/journeys.html?for=myself#pick">I want to understand myself</a></li>
       <li data-mode-show="none me"><a class="wgo-opt" data-wgo="breakup" href="/journeys.html?for=breakup#pick">I&rsquo;m going through a breakup</a></li>
-      <li data-mode-show="none me"><a class="wgo-opt" href="/grief.html">I&rsquo;ve lost someone</a></li>
+      <li data-mode-show="me" hidden><a class="wgo-opt" href="/grief.html">I&rsquo;ve lost someone</a></li>
       <li data-mode-show="me" hidden><a class="wgo-opt" data-wgo="family" href="/journeys.html?for=family#pick">Family stuff</a></li>
-      <li data-mode-show="with me" hidden><a class="wgo-opt" href="/foster-and-kinship.html#kinship">Raising a child who isn&rsquo;t mine <span class="wgo-opt-n">(grandchild, foster, kin)</span></a></li>
-      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="life" href="/journeys.html?for=life#pick">Our life has changed <span class="wgo-opt-n">(retired, kids left, illness)</span></a></li>
+      <li data-mode-show="me" hidden><a class="wgo-opt" href="/foster-and-kinship.html#kinship">Raising a child who isn&rsquo;t mine <span class="wgo-opt-n">(grandchild, foster, kin)</span></a></li>
+      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="life" href="/journeys.html?for=life#pick">Our life has changed <span class="wgo-opt-n">(retired, kids left, illness, loss)</span></a></li>
       <li data-mode-show="none me with"><a class="wgo-opt" data-wgo="calm" href="/journeys.html?for=calm#pick">I need to calm down</a></li>
       <li data-mode-show="me with" hidden><a class="wgo-opt" data-wgo="busy" href="/journeys.html?for=busy#pick">I only have five minutes</a></li>
-      <li data-mode-show="me" hidden><a class="wgo-opt" href="/teens.html">I&rsquo;m under 18</a></li>
     </ul>
     <div class="wgo-out" id="wgo-out" hidden></div>
     <p class="wgo-ten"><a href="/by-relationship.html">Find it by relationship &rarr;</a> <a href="/journeys.html">All journeys &rarr;</a></p>
@@ -485,7 +488,7 @@
     <li><span class="hm-why-i" aria-hidden="true">&#127873;</span><p class="hm-why-t"><a href="/membership.html">Free, with no account</a></p><p class="hm-why-n">No account and no paid version. Read every chapter free online. To download a book as a PDF, we’ll ask for your email.</p></li>
     <li><span class="hm-why-i" aria-hidden="true">&#128274;</span><p class="hm-why-t"><a href="/on-this-device.html">It stays on your device</a></p><p class="hm-why-n">What you type isn&rsquo;t sent to us. Erase it any time.</p></li>
     <li><span class="hm-why-i" aria-hidden="true">&#9878;&#65039;</span><p class="hm-why-t"><a href="/someone-sent-you-this.html">Fair to both sides</a></p><p class="hm-why-n">It looks at the setup, not at who&rsquo;s to blame. Nobody is the bad guy.</p></li>
-    <li><span class="hm-why-i" aria-hidden="true">&#128218;</span><p class="hm-why-t"><a href="/research.html">Grounded in research</a></p><p class="hm-why-n">With honest limits: <a href="/method-and-limits.html">what the tools can and can&rsquo;t do</a>. The scores are plain, written-out rules, and Professor Puddles is a scripted helper, not a generative AI.</p></li>
+    <li><span class="hm-why-i" aria-hidden="true">&#128218;</span><p class="hm-why-t"><a href="/research.html">Grounded in research</a></p><p class="hm-why-n">With honest limits: <a href="/method-and-limits.html">what the tools can and can&rsquo;t do</a>. The scores are plain, written-out rules, and Professor Puddles answers with replies written in advance for this site.</p></li>
   </ul>
   <p class="hm-made">Made by Christian, a former government auditor, and grown out of their own life. <a href="/about.html">Who built this, and why</a> <span aria-hidden="true">&middot;</span> <a href="/is-this-for-you.html">Is this right for you?</a> <span aria-hidden="true">&middot;</span> <a href="/for-counselors.html">Counsellor or coach? What this is and isn&rsquo;t &rarr;</a></p>
 </section>

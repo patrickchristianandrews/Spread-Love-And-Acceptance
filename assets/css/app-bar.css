@@ -6,7 +6,7 @@
   position:relative; z-index:901; display:flex; align-items:center; justify-content:center; gap:.5rem;
   height:36px; min-height:36px; box-sizing:border-box; margin:0; padding:0 40px 0 10px; overflow:hidden;
   background:linear-gradient(90deg,#FCE8EE,#F1EAFD 55%,#E6F3F5); border-bottom:1px solid #E4D2EE;
-  color:#3B2A55; font:600 14px/1.2 "Lora", Georgia, serif; text-align:center;
+  color:#3B2A55; font:600 14px/1.2 var(--tol-sans, system-ui, sans-serif); text-align:center;
 }
 .tol-appbar *{ box-sizing:border-box; }
 .tol-appbar[hidden]{ display:none !important; }
@@ -15,7 +15,7 @@
 .tol-appbar-go{
   display:inline-flex; align-items:center; min-width:0; height:28px; padding:0 .8rem; border-radius:999px;
   border:1px solid #C9A4DC; background:#fff; color:#4A2370 !important; text-decoration:none !important;
-  font:700 14px/1 "Lora", Georgia, serif; white-space:nowrap; cursor:pointer;
+  font:700 14px/1 var(--tol-sans, system-ui, sans-serif); white-space:nowrap; cursor:pointer;
 }
 .tol-appbar-go > span{ min-width:0; overflow:hidden; text-overflow:ellipsis; }
 .tol-appbar-go:hover{ background:#F6EEFC; }

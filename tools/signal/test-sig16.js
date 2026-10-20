@@ -135,5 +135,54 @@ const DANGLING = /(?:^|[.!?]\s+)(?:and|but|so|or)\b[^.!?]{0,30}[.!?]/i;
    'Thanks for doing the dishes every night, I noticed.', "Oh wow, you forgot AGAIN? Of course you did. Nobody notices what I do."]
     .forEach(t => { const r = send(t); chk(!ACK.test(r.v.text), 'no effort line: ' + t + ' => ' + r.v.text); }); }
 
-console.log('sig16 gates: ' + (n - fails) + ' passed, ' + fails + ' failed');
+/* ---------- sig17 (panel17: Aiko and Ravi, Malcolm, Bea, Jen and Tom) ---------- */
+// 1. fairness in the whole-chat read
+{ const CHAT = "Ravi: home. dishes from last night still in the sink\nAiko: I was on a deadline all day. you could have done them\nRavi: I did a 12 hour night\nAiko: and I work too. I'm not your maid\nRavi: never said you were. forget it\nAiko: fine. whatever.\nRavi: going to bed. don't call";
+  const p = R.parse(CHAT);
+  ['Ravi', 'Aiko'].forEach(me => {
+    const r = R.read(p.turns, me, 'text');
+    chk(!r.turns[4].marks.some(m => m.kind === 'absolute'), 'sig17: a denial ("never said you were") is not always/never (' + me + ')');
+    chk(r.turned !== 4, 'sig17: the denial is not where it turned (' + me + '): ' + r.turned);
+    chk(r.turns[3].heat >= 2, 'sig17: "I\'m not your maid" carries heat (' + me + '): ' + r.turns[3].heat);
+    chk(r.hottest && r.hottest.me && r.hottest.them, 'sig17: each side\'s hottest line is there (' + me + ')');
+    chk(r.hottest.me && r.hottest.them && [r.hottest.me.said, r.hottest.them.said].includes("I'm not your maid"), 'sig17: Aiko\'s hottest line is "I\'m not your maid" (' + me + ')');
+    const all = (r.next || []).map(m => m.say + ' ' + m.script).concat((r.drafts || []).map(d => d.text), (r.owns || []).map(o => o.script)).join(' \n ');
+    chk(!/\b(?:call you|ring you|talk about this tonight|Can we talk\b[^?]*at \[)/i.test(all), 'sig17: no call or talk tonight after "don\'t call" (' + me + '): ' + all.slice(0, 200));
+    chk(!/go sleep/i.test(all), 'sig17: never quotes words that aren\'t in the chat ("go sleep") (' + me + ')');
+  });
+  const q = R.parse("Sam: you never help\nAlex: I never said I wouldn't. I didn't say you were lazy either.\nSam: whatever");
+  const rq = R.read(q.turns, 'Alex', 'text');
+  chk(!rq.turns[1].marks.some(m => m.kind === 'absolute' || m.kind === 'verdict'), 'sig17: "I never said…", "I didn\'t say you were lazy" are denials, not charges');
+  chk(rq.turns[0].marks.some(m => m.kind === 'absolute'), 'sig17: "you never help" is still always/never'); }
+// the single-message checker reads denials the same way
+['never said you were. forget it', "I didn't say you were selfish, I said I was tired.", 'I never said that'].forEach(t => { const a = E.analyze(t, {channel: 'text'}); chk(!a.found.absolute && !a.found.label, 'sig17: denial, not a charge: ' + t + ' [' + a.staticIds + ']'); });
+['You never said thank you.', 'I never said that, you always do this.'].forEach(t => { const a = E.analyze(t, {channel: 'text'}); chk(!!a.found.absolute, 'sig17: still always/never: ' + t); });
+// 2. rewrites
+{ const r = send("Where are you?? You said 9. Answer your phone NOW or you're grounded.", { rel: 'family' });
+  chk(r.v.id !== 'ok', 'sig17: a threatened consequence is not "okay"');
+  r.all.forEach(x => {
+    chk(!/grounded/i.test(x) && !/Could you [^?]*\bor\b[^?]*\?/i.test(x), 'sig17: no threat kept, no "Could you … or …?": ' + x);
+    chk(/You said 9\./.test(x) && /\bnow\b/.test(x) && !/\[a time\]|urgent because/i.test(x), 'sig17: the writer\'s own time ("9", "now") is kept, no blanks added: ' + x);
+  });
+  chk(/If I can't reach you, the phone stays home next time\./.test(r.rw.main), 'sig17: the consequence is said calmly: ' + r.rw.main); }
+{ const r = send("Fine. Do whatever you want, clearly my opinion doesn't matter in this house.", { rel: 'family' });
+  r.all.forEach(x => chk(!/doesn't matter|(?:^|\. )Fine\./i.test(x), 'sig17: no flagged phrase put back: ' + x)); }
+["you're such a liar. you never cared about me. hope she makes you happy"].forEach(t => [undefined, 'ex', 'partner'].forEach(rel => {
+  const r = send(t, { rel });
+  r.all.forEach(x => {
+    chk(!/hope she makes you happy/i.test(x), 'sig17: the sarcastic tail goes (' + rel + '): ' + x);
+    chk(!/[a-z0-9\]] (?:Can|Could|Would|Is|I'm|I'd|Thank) /.test(x), 'sig17: sentences joined with punctuation (' + rel + '): ' + x);
+  });
+  if (rel === 'ex') { chk(r.all.every(x => !/\b(?:can|could) we (?:talk|meet|speak)|sort this out together|by \[a time\]/i.test(x)), 'sig17: to an ex, never "can we talk", never "by [a time]": ' + r.all.join(' / ')); chk(r.v.sleepOn, 'sig17: to an ex, "sleep on it" comes with it'); }
+}));
+{ const r = send('I felt hurt when you just said k. Can we talk tonight?', { rel: 'ex' }); chk(r.v.sleepOn, 'sig17: any message to an ex gets "sleep on it"'); }
+// 3. Jen and Tom: an order with a tally
+['ur doing bedtime tonight. i did it the last 3 nights'].forEach(t => [undefined, 'partner'].forEach(rel => {
+  const r = send(t, { rel });
+  chk(r.v.id === 'hurt' && /order/.test(r.v.text) && /score/.test(r.v.text) && !r.v.careNote, 'sig17: an order with a tally is named, never "a request, not an order": ' + r.v.id + ' ' + r.v.text);
+  chk(r.rw.main === "Could you do bedtime tonight? I've done the last few and I'm wiped.", 'sig17: asked, with the reason: ' + r.rw.main);
+}));
+['You\'re doing great today!', 'Thanks for doing bedtime the last three nights, I\'ll take tonight.'].forEach(t => { const r = send(t); chk(r.v.id === 'ok', 'sig17: not an order or a score: ' + t + ' -> ' + r.v.id); });
+
+console.log('sig16 + sig17 gates: ' + (n - fails) + ' passed, ' + fails + ' failed');
 process.exit(fails ? 1 : 0);

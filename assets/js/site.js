@@ -169,7 +169,7 @@
       { href: '/explore.html', code: 'All', title: 'Everything on this site', note: 'Every page and tool on one page: filter by what you need, who it’s about, how long you have, and what kind of page it is' },
       { href: '/tools.html', code: 'All', title: 'All tools', note: 'Every tool in one place, the ones you can use on your own first, with filters by what you want to do' },
       { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and put your results side by side. Tools and workpapers are listed apart' },
-      { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of an article or an AI chat?', note: 'What’s different here, and where it falls short' },
+      { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of reading an article?', note: 'What’s different here, and where it falls short' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Ten-minute start', note: 'A short, straight path: check your weather, read the Preface, try one card and log one thing' },
       { href: '/someone-sent-you-this.html', code: '', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
       { href: '/sent-this.html', code: '', title: 'Sent this by someone?', note: 'What they see, what stays yours, doing your side privately, and saying no kindly' },
@@ -453,7 +453,7 @@
       { sub: 'More ways in' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Ten-minute start', note: 'Today’s weather, the Preface, one card and one thing logged' },
       { href: '/someone-sent-you-this.html', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
-      { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of an article or an AI chat?', note: 'What’s different here, and where it falls short' },
+      { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of reading an article?', note: 'What’s different here, and where it falls short' },
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
       { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'From the beginning, one short chapter at a time' },
       { href: '/for-teachers.html', code: 'Class', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
@@ -556,12 +556,16 @@
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
       { href: '/grown-up-children.html', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
       { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and what to tell the grandparents' },
-      { href: '/caregivers.html', title: 'Caring for someone you love', note: 'A parent or relative who needs care' },
+      { href: '/family-obligations.html#visits', title: 'In-laws, and a parent living with you', note: 'Visits, long stays and an elder at home, planned together' },
+      { href: '/caregivers.html', title: 'Caring for someone you love', note: 'A parent or relative who needs care, or a partner in a care home' },
       { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To parents and family, at your own pace' },
+      // flow17: breakups get their own name (the guide's breadcrumb reads "Breakups", not "Separated & co-parents")
+      { sub: 'Breakups', all: '/by-relationship.html#co-parents', allLabel: 'All for breakups and co-parents' },
+      { href: '/after-a-breakup.html', deep: true, title: 'After a breakup: steady again', note: 'Feelings in waves, a kinder inner voice, who you are now' },
+      { href: '/start/breakup.html', title: 'When you want to text your ex', note: 'Check it before you send, and three steps for tonight' },
+      { href: '/on-my-own.html', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
       { sub: 'Separated & co-parents', all: '/by-relationship.html#co-parents', allLabel: 'All for co-parents' },
       { href: '/co-parenting.html', title: 'Separated co-parents', note: 'Calmer handoffs and a tone check' },
-      { href: '/on-my-own.html', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
-      { href: '/after-a-breakup.html', deep: true, title: 'After a breakup: steady again', note: 'Feelings in waves, a kinder inner voice, who you are now' },
       { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'Children in two homes, and a stepparent’s place' },
       { sub: 'Housemates', all: '/by-relationship.html#housemates', allLabel: 'All for housemates' },
       { href: '/sharing-a-room.html', title: 'Sharing a room', note: 'Dorm or flat: a room agreement' },
@@ -660,6 +664,17 @@
     ]},
     { id: 'play', name: 'Calm & play', title: 'Calm, play, watch & listen', blurb: 'Calm games, breathing, the pups’ cartoon and calm music for a busy mind. No timers and no way to lose. Every episode has captions.',
       all: '/explore.html?need=calm', allLabel: 'See everything calm, to play, watch or hear', items: [
+      { sub: 'Relax and reset', tt: 'calm', all: '/pause-and-play.html#relax', allLabel: 'Every calm tool in one place' },
+      { href: '/pause-and-play.html#relax', code: 'Relax', title: 'Relax and reset', note: 'A breathing break, a silent wind-down, slow colours, calm music and sounds, and quiet games' },
+      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/ladder.html', code: 'Now', title: 'My weather today: quick, 4 taps', note: 'Find where you are right now, and a next step that fits' },
+      { href: '/wp-11.html', code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
+      { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
+      { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Why you feel wired or shut down, and what helps your body settle' },
+      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements, herbs and natural approaches', note: 'Natural help for calm and sleep: what the research says, and what to watch out for' },
+      { href: '/keepsakes.html', code: 'Garden', title: 'My garden', note: 'Your keepsakes from the calm games' },
+      { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
+      { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
       { sub: 'Games', all: '/pause-and-play.html', allLabel: 'All the calm games' },
       { href: '/pause-and-play.html', code: 'All', title: 'Gentle games: every calm game in one place', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
@@ -670,17 +685,6 @@
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
       { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cosy 3D coin pusher: a kind tip every few coins, and every character on the site to collect' },
-      { sub: 'Relax and reset', tt: 'calm', all: '/pause-and-play.html#relax', allLabel: 'Every calm tool in one place' },
-      { href: '/pause-and-play.html#relax', code: 'Relax', title: 'Relax and reset: every calm tool in one place', note: 'A breathing break, a silent wind-down, slow colours, calm music and sounds, and quiet games' },
-      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
-      { href: '/ladder.html', code: 'Now', title: 'My weather today: quick, 4 taps', note: 'Find where you are right now, and a next step that fits' },
-      { href: '/wp-11.html', code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
-      { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
-      { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Why you feel wired or shut down, and what helps your body settle' },
-      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements, herbs and natural approaches', note: 'Natural help for calm and sleep: what the research says, and what to watch out for' },
-      { href: '/keepsakes.html', code: 'Garden', title: 'My garden', note: 'Your keepsakes from the calm games' },
-      { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
-      { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
       { sub: 'Frequency Buddies cartoon', area: 'media', all: '/frequency-buddies.html', allLabel: 'All the episodes' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'All the episodes', note: 'Animated adventures with the two pals, in two seasons, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
@@ -1530,6 +1534,8 @@
        ['/by-relationship.html', '&#128101;', T('Guides by relationship', 'Guías por relación')],
        ['/book/index.html', '&#128214;', T('Read the book', 'Leer el libro')],
        ['/ladder.html', '&#127807;', T('Calm down now', 'Calmarte ahora')],
+       ['/relax.html', '&#127769;', T('Relax and reset', 'Relajarte (en inglés)')],
+       ['/teens.html', '&#127890;', T('For teens', 'Para adolescentes (en inglés)')],
        ['/ask.html', '&#128167;', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles')],
        ['/calming-supplements.html', '&#127793;', T('Calming herbs and supplements', 'Hierbas y suplementos')],
        ['/start-here.html#three-questions', '&#10067;', T('Not sure? Three questions', 'No sé por dónde empezar')]
@@ -2525,7 +2531,7 @@
     '/look-back-30-days.html': ['Fair split check: look back over 30 days, every number', 'Four weeks of hours, rescues, load and jobs side by side, with the running imbalance and one next step.'],
     '/make-a-plan.html': ['Plan it once', 'Make a plan together. Pick a template: a festival year, your terms for a family event, a time-together deal, a room agreement, your week on one page, or a handoff-bag list. Fill it in together, then send it.'],
     '/tools.html': ['All tools', 'Every tool on the site with a plain name, the ones you can use on your own first, with filters: communication, self-discovery, share the load, calm and stress, family, work, health, plans, learning and play.'],
-    '/why-this-site.html': ['Why use this instead of an article or an AI chat?', 'What is different here: tools that use your own situation, plain words, research shown openly, and nothing you type leaving your device. And where it falls short.'],
+    '/why-this-site.html': ['Why use this instead of reading an article?', 'What is different here: tools that use your own situation, plain words, research shown openly, and nothing you type leaving your device. And where it falls short.'],
     '/nervous-system.html': ['Your nervous system, in plain words', 'Fight, flight and freeze, the vagus nerve and polyvagal theory explained honestly, and what helps your body settle.'],
     '/living-alone.html': ['Living on your own, living well', 'Any age, any reason: alone is not lonely, a home that runs itself, making friends as an adult, asking for help, and safety basics.'],
     '/research.html': ['The research behind this site', 'The studies, books and reviews behind the site: what each found, in plain words, and how strong the evidence is.']
@@ -4350,7 +4356,7 @@
       '<fieldset><legend>' + T('Spacing', 'Espacio') + '</legend>' + radio('space', 'data-space-opt', 'usual', T('The usual', 'El de siempre')) + radio('space', 'data-space-opt', 'wide', T('Roomy', 'Amplio')) + '</fieldset>' +
       '<fieldset class="tol-set-tints"><legend>' + T('Page tint', 'Color de fondo') + ' <small class="tol-set-tintnote" hidden>' + T('(resting while high contrast is on)', '(en pausa con alto contraste)') + '</small></legend>' + radio('tint', 'data-tint-opt', 'none', T('None', 'Ninguno')) + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
       sw('ruler', T('Reading ruler', 'Regla de lectura'), T('A soft band that follows your pointer or finger, so you keep your place on the line', 'Una franja suave que sigue tu dedo o el puntero, para no perder la línea')) +
-      sw('bubbles', T('Text bubbles', 'Burbujas de texto'), T('Each piece of text sits in its own soft, round bubble. Turn this off for plain text on the page', 'Cada parte del texto va en su propia burbuja suave. Apágalo para ver el texto sencillo')) +
+      sw('bubbles', T('Text bubbles', 'Burbujas de texto'), T('Off: plain text, one card per section. On: each piece of text sits in its own soft, round bubble', 'Apagado: texto sencillo, una tarjeta por sección. Encendido: cada parte del texto va en su propia burbuja suave')) +
       '<h3 class="tol-set-k">' + T('Time and weather', 'Hora y clima') + '</h3>' +
       sw('wxnote', T('Show the time and weather note', 'Mostrar la hora y el clima'), T('A very faint note in the corner of each page', 'Una nota muy suave en la esquina de cada página')) +
       sw('wxloc', T('Use my location for the weather', 'Usar mi ubicación para el clima'), T('Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it', 'Tu navegador te pregunta primero. Solo se guarda un lugar aproximado, en este dispositivo. Para buscar el clima, ese lugar aproximado se envía a Open-Meteo, un servicio gratis sin cuenta. A nosotros no nos llega nada. Apágalo para borrarlo')) +

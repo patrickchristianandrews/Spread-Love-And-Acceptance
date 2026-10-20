@@ -186,7 +186,7 @@
   // the first-visit picker: one journey, and one thing to do in about 2 minutes
   var PICKS = [
     { id: 'argument', label: 'We keep having the same argument', j: 'agree', now: { id: 'flip', f: '/small-wins.html#flip-it', do: 'Turn your side of it into one clear, kind request.' } },
-    { id: 'breakup', label: 'I’m going through a breakup', j: 'steady', now: { t: 'The first days', f: '/after-a-breakup.html#first-days', do: 'Read the three basics for this week.' } },
+    { id: 'breakup', label: 'I’m going through a breakup', j: 'steady', now: { t: 'The first days', f: '/start/breakup.html#first-days', do: 'Read the short card for tonight and the first days.' } },
     { id: 'myself', label: 'I want to understand myself', j: 'know', now: { id: 'weather', f: '/quick-checks.html#today', do: 'Check how you are right now, in four taps.' } },
     { id: 'chores', label: 'Chores feel unfair', j: 'fair', now: { id: 'lemon-quick', f: '/lemonade-stand.html#quick', do: 'Tap who mostly does each job at home.' } },
     // home16b: a pick can depend on "With someone" / "Just me" (tol-mode-v1): modes.with / modes.me replace its fields.
@@ -202,7 +202,19 @@
       ['Retired, and both home now', '/retired-together.html', 'Routines, handing over whole jobs, and time apart'],
       ['The kids have left home', '/empty-nest.html', 'Finding each other again in a quieter house'],
       ['One of us is ill', '/when-one-is-ill.html', 'Sharing the load when one of you has less energy'],
-      ['Caring for someone we love', '/caregivers.html', 'When they can’t share the load back']] }
+      ['Caring for someone we love', '/caregivers.html', 'When they can’t share the load back, after a stroke, with dementia, or in a care home'],
+      ['We’ve lost someone', '/grief.html', 'Grief, and a new chapter']] },
+    // flow17: two more short "which is closest?" lists for the home page's "With someone" choices
+    { id: 'quietsocial', label: 'We need different things at home', choose: [
+      ['How each of you recharges, side by side', '/wiring-card.html', 'Each of you makes a card in a few taps, then sees both, with a bridge for each difference'],
+      ['Needing time alone after seeing people', '/the-logic-behind-it.html?item=alone-after-people', 'Why quiet after company isn’t rejection, with words for both of you'],
+      ['Rhythms side by side', '/tools/frequency-calibration.html', 'Rest, plans and money: where your rhythms differ, without it being a fight']] },
+    { id: 'homefam', label: 'Home and family', choose: [
+      ['A parent or in-law lives with us', '/family-obligations.html#visits', 'Visits, long stays and an elder at home, planned together'],
+      ['Caring for a parent at home', '/caregivers.html', 'When they can’t share the load back, and where to find help'],
+      ['Fighting with my parents (I’m under 18)', '/teens.html#curfew-phone', 'Curfew, your phone, and getting heard'],
+      ['Flatmate or housemate trouble', '/sharing-a-room.html#bring-it-up', 'Bring it up without a row, and a house agreement'],
+      ['Raising a child who isn’t mine', '/foster-and-kinship.html#kinship', 'A grandchild, a foster child or a relative’s child']] }
   ];
 
   var API = { journeys: J, picks: PICKS, key: KEY, heavy: HEAVY };
@@ -292,7 +304,7 @@
   }
   function required(j) { return j.steps.filter(function (s) { return s.k !== 'wp'; }).length; }
   // flow17: "4 steps + 1 optional", so the count matches the steps listed
-  function stepsLabel(j) { var o = j.steps.length - required(j); return stepsLabel(j) + (o ? ' + ' + o + ' optional' : ''); }
+  function stepsLabel(j) { var o = j.steps.length - required(j); return required(j) + ' steps' + (o ? ' + ' + o + ' optional' : ''); }
   function doneCount(j, r) { var d = (r && r.d) || []; return j.steps.filter(function (s, i) { return s.k !== 'wp' && d.indexOf(i) >= 0; }).length; }
   function stepWord(j, r) {
     var n = nextStep(j, r), req = required(j);
