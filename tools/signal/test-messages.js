@@ -565,7 +565,7 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   chk(/you'd like me to send you my notes/.test(ask2), 'the ask starts in lower case: ' + ask2);
   // a threat to self-harm used as leverage: still a threat, and it's not their job to stay; no numbers, services or links (purge19)
   const GONE = require('../checks/no-removed-content.js').PATTERNS, HOT = { test: s => GONE.some(p => p[1].test(s)) }, ONE = E.SAFE_ONE;
-  chk(/^That sounds really hard\./.test(ONE) && !HOT.test(ONE), 'the danger line is the short neutral reply: ' + ONE);
+  chk(/^I'm really glad you said something\. If you're having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today/.test(ONE) && !HOT.test(ONE), 'the self-harm line is plain suicide guidance, no numbers, services or links: ' + ONE);
   ['If you leave me I’ll kill myself and it’ll be your fault.', 'I’ll kill myself if you leave.', 'If you break up with me I will hurt myself.'].forEach(t => {
     const a = an(t), g = E.receive(a, {});
     chk(a.danger && a.selfHarm, '“' + t + '”: a threat, and a self-harm worry');
@@ -574,7 +574,7 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   // "I want to kill myself": not a tone question in either direction
   { const a = an('I want to kill myself'), g = E.receive(a, {}), v = vd('I want to kill myself');
     chk(a.selfHarm && !a.danger && g.selfHarm && g.danger && !HOT.test(g.meanings.join(' ') + ' ' + g.replies.map(r => r.text).join(' ')), 'a crisis message received: read plainly, no numbers or services');
-    chk(v.id === 'danger' && v.text === ONE, 'a crisis message sent: the short neutral reply only: ' + v.text); }
+    chk(v.id === 'danger' && v.text === ONE, 'a crisis message sent: plain suicide guidance only: ' + v.text); }
 }
 // ---------- re-test round 12: co-parents get BIFF, facts beat "Lately it's felt like", notes tell the truth ----------
 {

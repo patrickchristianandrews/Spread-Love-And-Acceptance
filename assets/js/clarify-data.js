@@ -608,12 +608,14 @@
   // level 4: a short, neutral reply (the owner's decision: no resources, numbers or links)
   var SAFE = { body: 'That sounds really hard. This quick check is a small guide to this site, and it can’t help with this one.',
     links: [] };
+  // crisis wording in what they typed: plain suicide guidance instead (the owner's update), still with no numbers, services or links
+  var SUICIDE = { body: 'I’m really glad you said something. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it.', links: [] };
   var SAFE_FOOT = 'If it doesn’t fit, that’s okay too: the steps for a calm talk are still here.';
 
   function next(result, lang) {
     lang = lang || 'en';
     var id = (result && result.type) || 'load', lvl = result ? result.level : 0, bank = NEXT[id] || NEXT.load;
-    var src = lvl >= 4 ? SAFE : lvl === 3 ? L3 : bank[LEVEL_KEYS[lvl]] || bank.l1;
+    var src = lvl >= 4 ? (result && result.crisis ? SUICIDE : SAFE) : lvl === 3 ? L3 : bank[LEVEL_KEYS[lvl]] || bank.l1;
     var out = { level: lvl, key: LEVEL_KEYS[lvl], title: t(LEVEL_TITLES[lvl], lang), body: t(src.body, lang), say: src.say ? t(src.say, lang) : '',
       links: (src.links || []).map(function (l) { return { text: t(l.text, lang), href: l.href }; }), extra: '', footer: '', footerLinks: [] };
     // at level 3, the type's own plan stays one tap away

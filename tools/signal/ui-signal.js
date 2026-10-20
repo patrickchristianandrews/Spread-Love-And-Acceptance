@@ -373,7 +373,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     // a crisis typed into the context is never ignored
     await p.fill('#stCtx textarea[data-f="other"]', 'She said she wants to kill herself');
     r = await read('ok', true);
-    ok(/That sounds really hard\./.test(r.all) && /ending their life|ending your life/.test(r.all) && !GONE(r.all + r.html), `${tag}: crisis in the context: the short neutral reply, no resources`);
+    ok(/tell someone you trust today/.test(r.all) && /ending their life|ending your life/.test(r.all) && !GONE(r.all + r.html), `${tag}: crisis in the context: plain suicide guidance, no resources`);
     await p.click('#stCtx .tol-ctx-clear');
     // care, not control: a request from worry, and a "no" between adults
     r = await read("Please text me if you'll be late so I don't worry.");

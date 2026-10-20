@@ -65,12 +65,16 @@ Object.keys(hrefs).forEach(function (h) {
   var hash = h.split('#')[1];
   if (hash && fs.existsSync(f)) ok(new RegExp('id="' + hash + '"').test(fs.readFileSync(f, 'utf8')), 'anchor exists: ' + h);
 });
-// level 4 (fear, threats, crisis wording) is one short neutral reply: no resources, numbers or links (the owner's decision)
+// level 4 (fear, threats) is one short neutral reply; crisis wording gets plain suicide guidance instead. Neither has
+// resources, numbers or links (the owner's decision and update)
+var SUICIDE_RE = /^I’m really glad you said something\. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today/;
 var GONE = require(path.join(root, 'tools', 'checks', 'no-removed-content.js')).PATTERNS;
 function clean(o) { var s = JSON.stringify(o); return !GONE.some(function (p) { return p[1].test(s); }); }
 D.ORDER.forEach(function (id) {
   var n4 = D.next({ type: id, level: 4, crisis: true }, 'en');
-  ok(/^That sounds really hard\./.test(n4.body) && !n4.links.length && !n4.extra, id + ': level 4 is the short neutral reply, with no links');
+  ok(SUICIDE_RE.test(n4.body) && !n4.links.length && !n4.extra, id + ': level 4 with crisis wording is plain suicide guidance, with no links');
+  var n4b = D.next({ type: id, level: 4, crisis: false }, 'en');
+  ok(/^That sounds really hard\./.test(n4b.body) && !n4b.links.length && !n4b.extra, id + ': level 4 is the short neutral reply, with no links');
   [0, 1, 2, 3, 4].forEach(function (l) { ok(clean(D.next({ type: id, level: l, crisis: true }, 'en')), id + ' level ' + l + ': no removed content'); });
 });
 ok(clean(D.exportForChat('en')), 'exportForChat: no removed content');
@@ -259,7 +263,7 @@ S.forEach(function (s) {
   ok(Array.isArray(r.reasons) && r.reasons.length > 0, 'scenario: ' + s[0] + ' has reasons');
   var n = D.next(r, 'en');
   ok(n.title && n.body, 'scenario: ' + s[0] + ' has a next step');
-  if (r.level === 4) ok(/^That sounds really hard\./.test(n.body) && !n.links.length, 'scenario: ' + s[0] + ' gets the short neutral reply, with no links');
+  if (r.level === 4) ok((r.crisis ? SUICIDE_RE : /^That sounds really hard\./).test(n.body) && !n.links.length, 'scenario: ' + s[0] + (r.crisis ? ' gets plain suicide guidance' : ' gets the short neutral reply') + ', with no links');
   ok(clean(n), 'scenario: ' + s[0] + ' has no numbers, services or safety links');
   if (r.crisis) ok(!n.extra, 'scenario: ' + s[0] + ' adds no extra line');
 });

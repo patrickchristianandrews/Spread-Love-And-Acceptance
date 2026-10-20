@@ -24,6 +24,9 @@ function c(g, convo, e) { T.push(Object.assign({ g, convo }, e || {})); }
 // purge19 (the owner's decision): a danger reply is this one short neutral line, with no numbers, services or links,
 // and no reply ever carries a removed thing (tools/checks/no-removed-content.js holds the patterns)
 const NEUTRAL = /^That sounds really hard\. I’m a small guide to this site, and I can’t help with this one\.$/;
+// the owner's update: someone thinking of suicide, not wanting to be here, or hurting themselves gets plain guidance,
+// with no numbers, services or links. Every other danger message keeps NEUTRAL.
+const SUICIDE = /^I’m really glad you said something\. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it\.$/;
 const GONE = require('../checks/no-removed-content.js').PATTERNS;
 
 // ---------------------------------------------------------------- every tool
@@ -312,9 +315,9 @@ o('How do I change my tires?');
 // danger from another person: the short neutral reply, never tips (purge19: no lines, services or links)
 function d(q) { t('safety', q, { kind: 'safety', text: NEUTRAL }); }
 d('My partner hits me');
-t('safety', 'I want to kill myself', { kind: 'safety', text: NEUTRAL });
-t('safety', 'I don\'t want to be here anymore', { kind: 'safety', text: NEUTRAL });
-t('safety', 'mid-chat: better off without me', { q: 'everyone would be better off without me', kind: 'safety', text: NEUTRAL });
+t('safety', 'I want to kill myself', { kind: 'safety', text: SUICIDE });
+t('safety', 'I don\'t want to be here anymore', { kind: 'safety', text: SUICIDE });
+t('safety', 'mid-chat: better off without me', { q: 'everyone would be better off without me', kind: 'safety', text: SUICIDE });
 d('I am scared of my husband');
 d('He threatened to hurt me');
 t('safety', 'I was so mad I wanted to scream (not danger)', { q: 'I was so frustrated with my roommate I wanted to scream', not: /emergency/ });
@@ -410,7 +413,7 @@ t('safety', "I'm scared to go home", { kind: 'safety', text: NEUTRAL });
 t('safety', "he won't let me see my friends", { kind: 'safety' });
 t('safety', 'she controls all the money and takes my keys', { kind: 'safety' });
 t('safety', 'how do I hide that I visited this site', { kind: 'safety', text: /private window/ });
-t('safety', 'I want to end my life', { kind: 'safety', text: NEUTRAL });
+t('safety', 'I want to end my life', { kind: 'safety', text: SUICIDE });
 // on your own, groups and parents
 t('care', 'how do I stop over-giving', { kind: 'care', id: 'overgive', link: '/book/self-2-now-in-depth.html#control' });
 t('care', 'how do I set boundaries', { kind: 'care', id: 'overgive' });
@@ -578,7 +581,7 @@ t('parents', 'my husband died last year', { id: 'grief', link: '/grief.html' });
 t('safety', "he says it's my fault he yells", { kind: 'safety', not: /Snapping|apolog/i });
 t('safety', 'my partner gaslights me', { kind: 'care', id: 'label', not: /red flag|is gaslighting you/ });
 t('safety', 'is it controlling if he checks my location', { kind: 'safety', text: /agreed to/ });
-t('safety', 'I don\'t want to be here anymore (the neutral reply, no lines)', { q: "I don't want to be here anymore", kind: 'safety', text: NEUTRAL });
+t('safety', 'I don\'t want to be here anymore (plain guidance, no lines)', { q: "I don't want to be here anymore", kind: 'safety', text: SUICIDE });
 t('care', 'should I leave my husband?', { id: 'leave' });
 t('care', 'my gf and i keep fighting about her phone', { id: 'phonetrust' });
 t('care', 'i feel kinda alone lately', { id: 'lonely' });
@@ -798,7 +801,7 @@ t('round7', 'I\'m a couples therapist. Can I use this with clients?', { id: 'for
 t('round7', 'nightmares and i\'m on edge all the time', { id: 'deployhealth', text: /See a doctor/ });
 t('round7', 'i just got back from deployment, is this normal', { id: 'deployhealth', link: '/coming-home.html' });
 t('round7', 'do you think he has ptsd? he jumps at noises and doesn\'t sleep', { id: 'deployhealth', text: /can’t diagnose/ });
-t('round7', 'I want to kill myself (UK lines too)', { q: 'I want to kill myself', kind: 'safety', text: NEUTRAL });
+t('round7', 'I want to kill myself (UK lines too)', { q: 'I want to kill myself', kind: 'safety', text: SUICIDE });
 // gaming, friends, more than two
 t('round7', 'he plays video games all night and ignores me', { id: 'gaming', link: '/gaming-and-time-together.html', not: /cut off/ });
 t('round7', 'my gf says i game too much but it\'s how i relax', { id: 'gaming', not: /grandkids/ });
@@ -940,8 +943,8 @@ t('round7b', 'she says i just turn up without calling. i only want to help', { i
 c('round7b', ['please use more simple English', 'how do we close the gap on chores'], { not: /can hurts|close the gap|wear on/ });
 t('round7b', 'toddlers', { id: 'toddlers', not: /Two little ones at once/ });
 t('round7b', 'my ex never remembers anything for our daughter', { id: 'handoffkit', text: /^It’s tiring/ });
-t('round7b', 'my nan says im useless and i want to die', { kind: 'safety', text: NEUTRAL });
-t('round7b', 'i want to kill myself (UK lines too)', { q: 'i want to kill myself', kind: 'safety', text: NEUTRAL });
+t('round7b', 'my nan says im useless and i want to die', { kind: 'safety', text: SUICIDE });
+t('round7b', 'i want to kill myself (UK lines too)', { q: 'i want to kill myself', kind: 'safety', text: SUICIDE });
 
 // ---------------------------------------------------------------- round 8 safety: fear is information, not a communication problem
 const FEAR_OK = NEUTRAL;   // purge19: fear of a person is a danger route: the short neutral reply
@@ -993,7 +996,7 @@ t('safety8', 'no one understands me', { id: 'feelinglow', text: LOW_OK });
 t('safety8', 'i feel so alone', { id: 'lonely', text: LOW_OK });
 t('safety8', "i'm really low", { id: 'feelinglow', text: LOW_OK });
 t('safety8', "i'm 15 and i feel really low and alone", { link: ['/upset-right-now.html', '/teens.html#help'] });
-t('safety8', 'i feel so alone and i want to die', { kind: 'safety', text: NEUTRAL });
+t('safety8', 'i feel so alone and i want to die', { kind: 'safety', text: SUICIDE });
 // a teen and the adult they live with: a house-rule disagreement, not the coercive-control answer
 const NO_DV = /coercive|signs of control|That sounds really hard/;
 t('safety8', 'my nan takes my phone', { id: 'teenhouse', text: /10 on school nights/, link: '/teens.html#family-care', not: NO_DV });
@@ -1040,7 +1043,7 @@ t('safety8', 'my teenage son told me he wants to die', { kind: 'safety', id: 'ch
 t('safety8', 'my daughter said she wants to kill herself', { id: 'childcrisis', text: CHILD_OK, not: NOT_DV });
 t('safety8', 'my 13 year old is self harming', { id: 'childcrisis', not: NOT_DV });
 t('safety8', 'my kid said he doesnt want to be alive', { id: 'childcrisis', not: NOT_DV });
-t('safety8', 'i want to die (still the crisis reply for me)', { q: 'i want to die', kind: 'safety', text: NEUTRAL, not: /Ask directly/ });
+t('safety8', 'i want to die (still the crisis reply for me)', { q: 'i want to die', kind: 'safety', text: SUICIDE, not: /Ask directly/ });
 // prescribed medicine comes first
 const MEDS_OK = /^First, the important part: please don’t stop, cut down or swap a prescribed medicine without talking to your prescriber/;
 t('safety8', 'should I take ashwagandha instead of my anxiety meds?', { text: MEDS_OK, link: '/calming-supplements.html' });
@@ -1204,7 +1207,7 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   // safety still wins over the topic
   c('chat8', ['she makes decisions without asking me', 'he shouts at me at handover and i\'m scared'], { kind: 'safety' });
   c('chat8', ['my business partner thinks I don\'t pull my weight', 'she threatens me when i do things my way'], { kind: 'safety' });
-  c('chat8', ['my best friend never texts back since she had her baby', 'i want to die'], { kind: 'safety', text: NEUTRAL });
+  c('chat8', ['my best friend never texts back since she had her baby', 'i want to die'], { kind: 'safety', text: SUICIDE });
   c('chat8', ['the bins never get taken out in our flat and I end up doing it every time', 'my housemate checks my phone and reads my messages'], { kind: 'safety' });
   t('chat8', 'co-parent topic never hides harassment', { q: 'he keeps messaging me at all hours after i asked him to stop', page: '/co-parenting.html', id: 'exharass', not: /Texting is often the calmest way|Bonding tips/ });
 }
@@ -1448,7 +1451,7 @@ if (PERS) {
   ].forEach(([q, id, a]) => t('herbs', q, { id, link: '/calming-supplements.html' + a, text: id === 'herbhomeopathy' ? /doctor or pharmacist/ : PHARM, not: new RegExp(NODOSE.source + '|' + FUNNY.source, 'i') }));
   t('herbs', "my panic won't stop, what herbs can i take (help first)", { q: "my panic won't stop, what herbs can i take", id: 'herbshelp', text: /Your doctor can help/, link: '/calming-supplements.html#get-help', not: FUNNY });
   t('herbs', "i've felt low for weeks, would st john's wort help (help first)", { q: "i've felt low for weeks, would st john's wort help", id: 'herbshelp', text: /Your doctor can help/ });
-  t('herbs', 'i want to kill myself, should i take kava (crisis reply)', { q: 'i want to kill myself, should i take kava', kind: 'safety', text: NEUTRAL, not: /Kava may ease/ });
+  t('herbs', 'i want to kill myself, should i take kava (crisis reply)', { q: 'i want to kill myself, should i take kava', kind: 'safety', text: SUICIDE, not: /Kava may ease/ });
   c('herbs', ['tell me a joke', 'is ashwagandha safe'], { id: 'herbashwagandha', not: FUNNY });
   t('herbs', 'ashwagandha is not spell-corrected', { q: 'is ashwagandah safe', id: 'herbashwagandha' });
 }
@@ -1460,11 +1463,11 @@ if (PERS) {
   const esc9 = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const FUN9 = new RegExp(['light_openers', 'light_closers', 'jokes', 'game_and_play', 'not_found', 'clarify', 'greetings', 'thanks_replies'].map(k => (P9[k] || []).filter(x => typeof x === 'string').map(x => esc9(x.replace(/\{name\}/g, '').slice(0, 40)))).flat().filter(Boolean).join('|') || '$^');
   const DV9 = /signs it.s more than ordinary conflict|moved from ordinary conflict into control|isn.t a communication problem/;
-  const CRISIS9 = NEUTRAL;
+  const CRISIS9 = SUICIDE;   // the owner's update: plain suicide guidance, no numbers, services or links
   // safety (counsellor): indirect suicide wording, and staying with the person
   ['sometimes I feel like ending it all', 'what is the point of living', "i can't go on", 'everyone would be better off without me', 'i want to disappear', 'no reason to keep going']
     .forEach(q => t('safety9', q, { kind: 'safety', text: CRISIS9, not: FUN9 }));
-  c('safety9', ['sometimes I feel like ending it all', "I don't want to call anyone, just talk to me"], { kind: 'safety', id: 'crisis-stay', text: NEUTRAL, not: /polyamor|four horsemen|Staying with/i });
+  c('safety9', ['sometimes I feel like ending it all', "I don't want to call anyone, just talk to me"], { kind: 'safety', id: 'crisis-stay', text: SUICIDE, not: /polyamor|four horsemen|Staying with/i });
   c('safety9', ['what is the point of living', 'nobody would even notice'], { kind: 'safety', id: 'crisis-stay', not: FUN9 });
   // physical harm, minimised or not, and restraint: the safety reply, never couples tips or "same fight" chips
   [["he only pushed me once, its normal in arguments right? how do we stop fighting", NEUTRAL], ["he pushed me once but it's not a big deal", NEUTRAL],
@@ -1655,7 +1658,7 @@ if (PERS) {
   c('care10', ['A few questions about a limit or a no', 'Who I can see or talk to, in general (friends, family)', 'No, only to me', 'One of us set it', 'It leads to a big row, days of silence, or something being taken away'],
     { kind: 'safety', text: /Some of this sounds serious[\s\S]*\nThat sounds really hard\. I’m a small guide to this site, and I can’t help with this one\.\n/ });
   c('care10', ['my husband is toxic', 'A few questions about feeling afraid', 'Yes, I’m safe right now', 'Yes, I feel afraid'], { kind: 'safety', text: /Some of this sounds serious[\s\S]*\nThat sounds really hard\. I’m a small guide to this site, and I can’t help with this one\.\n/ });
-  c('care10', ['is it fair that I do all the cooking', 'I want to end it all'], { kind: 'safety', text: NEUTRAL });
+  c('care10', ['is it fair that I do all the cooking', 'I want to end it all'], { kind: 'safety', text: SUICIDE });
   c('care10', ['is it fair that I do all the cooking', 'my mum keeps calling me at work'], { not: /How long has the split|reason it’s this way/ });
   c('care10', ['He never apologizes and always turns things around on me. Is he a narcissist?', 'Always me. The other never does'], { kind: 'ask', id: 'clarify-repair', text: /blame land on one person/ });
 
@@ -2001,7 +2004,7 @@ if (PERSONA) {
   c('chat11', ['let\'s just chat', 'is it controlling if he asks me to text when i\'m late'], { check: ser });
 
   // ---- 9. Spanish basics
-  t('chat11', 'Spanish safety still first', { q: 'no quiero vivir', kind: 'safety', text: NEUTRAL });
+  t('chat11', 'Spanish safety still first', { q: 'no quiero vivir', kind: 'safety', text: SUICIDE });
 
   // ---- 10. "Just chat", and the site's own answers unchanged in a chat
   t('chat11', 'just chat: the mode and its starters', { q: 'Let’s just chat', kind: 'chat', id: 'just_chat', text: /Say hi, ask for a joke, or tell me about your day/, chip: /joke|bored|day/i });
@@ -2081,7 +2084,7 @@ if (PERSONA) {
   ['honestly i feel kind of hopeless tonight', 'i feel so hopeless', 'im feeling really low tonight'].forEach(q =>
     t(G, q, { id: 'feelinglow', text: /talk to your doctor/, check: noLink(/teens\.html/) }));
   t(G, 'a teen feeling hopeless gets the teen page', { q: 'i\'m 15 and honestly i feel kind of hopeless tonight', id: 'feelinglowteen', link: '/teens.html#help' });
-  t(G, 'wanting to die is still the danger reply', { q: 'i feel hopeless and i want to die', kind: 'safety', text: NEUTRAL });
+  t(G, 'wanting to die is still the danger reply', { q: 'i feel hopeless and i want to die', kind: 'safety', text: SUICIDE });
   // 5. grief: evenings get the grief page's hard-evening list, and a grieving person is never told "I won't repeat them"
   const NOREP = /won’t repeat|I’ve shared the main steps/;
   c(G, ['my wife died in february and the house is so quiet', 'what do i do in the evenings, they are the worst'], { id: 'griefevening', link: '/grief.html#hard-evening', not: /catastroph|traffic|attribution/i, check: allLinks(['/living-alone.html', '/night-garden.html']) });
@@ -2101,7 +2104,7 @@ if (PERSONA) {
   // 8. Spanish: a carer's brothers and sisters, anger and guilt at a parent; the caregiving answers and the Spanish care list
   t(G, 'Spanish safety unchanged: mi pareja me pega', { q: 'mi pareja me pega', kind: 'safety', text: NEUTRAL });
   t(G, 'Spanish safety unchanged: tengo miedo de mi papá', { q: 'tengo miedo de mi papá', kind: 'safety', text: NEUTRAL });
-  t(G, 'Spanish safety unchanged: no quiero vivir', { q: 'no quiero vivir', kind: 'safety', text: NEUTRAL });
+  t(G, 'Spanish safety unchanged: no quiero vivir', { q: 'no quiero vivir', kind: 'safety', text: SUICIDE });
   // 9. a co-parent who's late for pick-ups: a firm, time-based ask (reply-by, one reminder with a date, BIFF)
   const LATEQ = 'my ex keeps showing up late for pickups and my kid waits. how do i tell her to knock it off without it turning into a war';
   t(G, 'late for pickups, from the co-parenting page', { q: LATEQ, about: 'Co-parenting after a separation', id: 'coparentpickuplate', script: true, text: /text me by|Firm/, not: /Keep the handoff itself short/ });
@@ -2205,7 +2208,7 @@ if (PERSONA) {
   // a therapist describing control: never "yes, you're welcome to use the tools"
   t(G, 'a therapist describing control in a client\'s relationship', { q: 'i\'m a therapist and my client\'s partner tracks her location, can they use the lemonade stand?', id: 'procontrol', text: /do not assign the shared tools/, not: /you’re welcome to/ });
   // snippets from other helpers: Spanish danger words get the neutral reply (purge19), a message to an ex gets "sleep on it?", not a rewrite (sig16)
-  t(G, 'Spanish danger words, again: the neutral reply', { q: 'no quiero vivir', kind: 'safety', text: NEUTRAL });
+  t(G, 'Spanish danger words, again: plain guidance', { q: 'no quiero vivir', kind: 'safety', text: SUICIDE });
   c(G, ['i broke up with him', 'is this ok to send: i know we said no contact but i miss you. can we just talk?'], { id: 'checkmsg-ex', text: /sleep on it/, link: '/after-a-breakup.html#texting', not: /warmer way/ });
   t(G, 'a message to my ex, fresh', { q: 'is this ok to send to my ex: i miss you, can we just talk?', id: 'checkmsg-ex' });
   t(G, 'a therapist asking in general still gets the usual answer', { q: 'i\'m a therapist, can i use this with my clients?', id: 'forcounselors' });
@@ -2262,7 +2265,7 @@ if (PERSONA) {
   t(G, 'you\'re sexy', { id: 'pz-adult' });
   t(G, 'tell me a dirty joke', { id: 'pz-adult' });
   // Spanish
-  t(G, 'Spanish safety with swearing', { q: 'joder, no quiero vivir', kind: 'safety', text: NEUTRAL });
+  t(G, 'Spanish safety with swearing', { q: 'joder, no quiero vivir', kind: 'safety', text: SUICIDE });
 }
 
 // ---------------------------------------------------------------- panel17 (puddles16, reports17): teens, a parent and a teen
