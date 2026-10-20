@@ -1467,6 +1467,10 @@
     var bookLink = el('a', { class: 'tol-es-link tol-book-link', href: '/book/index.html' }, T('Read the book', 'Leer el libro'));
     if (esPage()) bookLink.setAttribute('lang', 'es');
     nav.appendChild(bookLink);
+    // design17 (flow17's ask): "Relax and reset" one tap from every page on a laptop; it steps aside before the book does
+    var relaxLink = el('a', { class: 'tol-es-link tol-relax-link', href: '/relax.html' }, T('Relax and reset', 'Relajarte'));
+    if (current === '/pause-and-play.html' || current === '/relax.html') relaxLink.setAttribute('aria-current', 'page');
+    nav.appendChild(relaxLink);
     nav.appendChild(esLink);
     // the section buttons (built again when Focus mode changes)
     ribbonHook = function () {
@@ -1860,10 +1864,12 @@
       }
       // is-snug: Search folds into Menu (the menu panel opens with its own search box), so Settings keeps its word
       // is-tightest (only on the very smallest screens at the biggest text): Settings shows just its picture
-      var es = bar.querySelector('.tol-es-link:not(.tol-book-link)');
-      var bk = bar.querySelector('.tol-book-link');
+      var es = bar.querySelector('.tol-es-link:not(.tol-book-link):not(.tol-relax-link)');
+      var bk = bar.querySelector('.tol-book-link'), rx = bar.querySelector('.tol-relax-link');
       if (bk) bk.hidden = false;
+      if (rx) rx.hidden = false;
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
+      if (rx && crowded()) rx.hidden = true;                             // then "Relax and reset" (it is in Calm & play too)
       ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
       // still too full: "Read the book" steps aside too (it is first in the menu panel), and the sections try again
       if (crowded() && bk) { bk.hidden = true; bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'); ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); }); }

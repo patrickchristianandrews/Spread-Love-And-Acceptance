@@ -2850,6 +2850,8 @@ html.tol-contrast[data-theme="dark"]:not(.tol-nodark){ filter:invert(1) hue-rota
 }
 /* "Read the book" in the top bar: a plain link like "En español", a touch tighter so the sections keep their room */
 .tol-bar a.tol-book-link{ padding-left:.45rem; padding-right:.45rem; font-weight:600; }
+.tol-bar a.tol-relax-link{ padding-left:.45rem; padding-right:.45rem; }
+.tol-bar a.tol-relax-link[aria-current="page"]{ text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
 .tol-bar a.tol-book-link[aria-current="page"]{ text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
 /* Phones: the floating helpers are small round buttons, fully on screen with a safe inset (never a half-hidden tab
    at the edge): Professor Puddles bottom left, Breathe bottom right, Back to top just above Breathe. While someone
@@ -3254,6 +3256,8 @@ html body main :is(h1, h2, h3, h4, h5, h6, label, legend):not([class*="chip"], [
 html.tol-nobubbles body main :is(label, legend):not([class*="chip"], [class*="btn"], [role="button"], :has(> input[type="radio"], > input[type="checkbox"])){
   background-color:transparent; box-shadow:none;
 }
+/* a form group's label (legend) is a plain label, even with Text bubbles on: no half-width pill behind "Who with?" */
+html body main legend:not([class*="chip"], [class*="btn"]){ background:none !important; box-shadow:none !important; border-radius:0 !important; padding-left:0 !important; padding-right:0 !important; }
 /* the page title: plain on the page, no bubble round it */
 html:not(.tol-scene) body main.read > header.read-head{ background:none !important; border:0 !important; box-shadow:none !important; padding:0 !important; width:auto; margin:0 0 1.1rem; }
 html:not(.tol-scene) body main.read > p.depth-bar{ background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; }

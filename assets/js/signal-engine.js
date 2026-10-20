@@ -3822,8 +3822,8 @@ function receiveBase(an, opts){
   if(an.danger) return {crossed:true, danger:true, threat:true, head:["danger","This is a threat, not a tone problem."],
     meanings:["It's worded as a threat. That isn't okay, whatever was meant, and it isn't your job to fix how it was said.",
       "You don't have to answer it, and you don't have to do what it asks to keep the peace.",
-      "If it frightens you, or it's part of a pattern (checking up on you, cutting you off from friends, threats), you deserve support. Free, private people can help, any time."]
-      .concat(an.selfHarm ? ["If you think they might act on it, call 988 (US) or your local emergency number for them. It's not your job to stay to keep them safe."] : []),
+      SAFE_ONE]
+      .concat(an.selfHarm ? ["If they say they'll hurt themselves, take it seriously, and it's still not your job to stay to keep them safe."] : []),
     selfHarm: !!an.selfHarm,
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   // checking up, cutting someone off, or a put-down that says they're worth nothing: control, not tone.
@@ -3831,7 +3831,7 @@ function receiveBase(an, opts){
   if(an.control && an.control.kind==="fear") return {crossed:false, danger:true, control:true, fear:true, head:["danger","They may be telling you they feel afraid or controlled."],
     meanings:["Take it seriously. This is about how safe they feel, not about the wording.",
       "Listen first, and ask what they need from you right now. Arguing with it, or explaining it away, can make it harder for them to say more.",
-      "If someone is afraid of a partner or a family member, free and private support can help them, any time."],
+      SAFE_ONE],
     literal:[], replies:[{label:"A first answer", text:"Thank you for telling me. I believe you. What would help most right now?"}], found};
   if(an.control) return {crossed:true, danger:true, control:true, oneMessage:true, head:["danger", an.control.kind==="degrade" ? "This line is a put-down. It says nothing true about you." : an.control.kind==="isolate" ? "This tells you who you can see. That choice is yours." : "This line checks up on you. What you share, and when, is your choice."],
     meanings:[an.control.kind==="degrade" ? "Telling someone they're worth nothing, or that nobody else would want them, isn't okay, whatever was meant. It isn't true, and it isn't yours to fix."
@@ -3840,14 +3840,14 @@ function receiveBase(an, opts){
       an.control.kind==="degrade" ? "You don't have to answer it, or argue with it. A put-down like this says nothing true about you."
       : an.control.kind==="isolate" ? "You don't have to give up your friends or family to keep the peace, and you don't have to answer right away."
       : "You don't have to share your location, your phone or your passwords to prove anything, and you don't have to answer right away.",
-      "If messages like this leave you feeling afraid or cut off, free and private support is there, any time.",
+      SAFE_ONE,
       "One message can't tell you what a relationship is like. Look at the whole picture, and trust what you know."],
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   // "I want to kill myself": not a tone question. Their safety comes first, and so does yours
   if(an.selfHarm) return {crossed:false, danger:true, selfHarm:true, head:["danger","They may be in real pain. Their safety comes first."],
-    meanings:["They may be thinking about ending their life. Take it seriously: ask them directly, stay with them or keep talking if you can, and call or text 988 (US), or your local emergency number if they might act on it now.",
+    meanings:["They may be thinking about ending their life. Take it seriously: ask them directly, and stay with them or keep talking if you can.", SAFE_ONE,
       "You don't have to handle this alone, and it isn't your fault."],
-    literal:[], replies:[{label:"Reach out now", text:"I'm really glad you told me. Are you safe right now? I'm here, and I'd like us to call or text 988 together."}], found};
+    literal:[], replies:[{label:"Reach out now", text:"I'm really glad you told me. Are you safe right now? I'm here, and I'm staying with you."}], found};
   // "I'm going to slap you", "I know where you live": read flatly, a threat. "I'll beat you at Mario Kart lol": hard to tell.
   // Either way it isn't theirs to decode alone, and "it's probably fine" is never the headline
   if(an.harm && has("harm") && !["label","contempt","swear","hostile","dxlabel","legal"].some(has)){
@@ -4019,6 +4019,9 @@ function simpler(text){
 /* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
 const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
+/* nohot18 (the owner's decision): no helpline numbers or names anywhere. Where someone is in danger, might hurt themselves
+   or someone else, or is being hurt, this one line, and only this line */
+const SAFE_ONE = "If you're in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.";
 const ATTACK_IDS = ["harm","withdraw","olddays","menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
@@ -4042,7 +4045,7 @@ function verdictBase(an, sc, rw, opts){
   // a threat that would frighten or control the other person: said plainly, before anything else
   if(an.danger || (an.found && an.found.menace)) return {id:"danger", text:"This is a threat, not a tone problem."};
   // "I want to kill myself": the person writing it comes first
-  if(an.selfHarm) return {id:"danger", selfHarm:true, text:"If you're thinking about ending your life, please talk to someone now: call or text 988 (US), or your local emergency number. You deserve support."};
+  if(an.selfHarm) return {id:"danger", selfHarm:true, text: SAFE_ONE};
   // checking up, cutting someone off, or "nobody else would want you": can work as control, whatever was meant
   if(an.control && an.control.kind==="fear") return {id:"fight", control:true, fear:true, text:"This says someone feels afraid or controlled. That matters much more than the wording, and it isn't something a better wording can fix."};
   // the words, never the person: what this line may do, and what usually works better
@@ -4548,6 +4551,6 @@ function rewrite(an, opts){
   return rw;
 }
 
-const api = {exReach, EX_TEXT, adviceKey, askFirst, answerCtx, ASK_Q, CARE_SEND, CARE_GOT, verdictBase, receiveBase, rewriteBase, moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+const api = {SAFE_ONE, exReach, EX_TEXT, adviceKey, askFirst, answerCtx, ASK_Q, CARE_SEND, CARE_GOT, verdictBase, receiveBase, rewriteBase, moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);
