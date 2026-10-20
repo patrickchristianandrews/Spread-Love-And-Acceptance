@@ -21,6 +21,7 @@
   // worth a short talk") are turned into the UI font, in sentence case and at a readable size, in every stylesheet on the
   // page, including a page's own <style> and the ones that load later. Code, the games and the crosswords keep theirs.
   (function unmono() {
+    var UI = 'var(--tol-sans, system-ui, sans-serif)', VAR = /var\(--[\w-]*mono/i;
     var RX = /plex mono/i, KEEP = /\b(code|pre|kbd|samp|tt)\b|\.xw|\.gm-|\.qw-|is-game|\.cp-|\.bd-|\.fb-|\.mv-|\.rd-|receipt|\.tol-keep-font/;
     function pri(st, p) { return st.getPropertyPriority(p); }
     function fix(rules) {
@@ -28,9 +29,13 @@
       for (var i = 0; i < rules.length; i++) {
         var r = rules[i];
         if (!r.selectorText) { if (r.cssRules) fix(r.cssRules); continue; }
-        var st = r.style, ff = st && st.getPropertyValue('font-family');
-        if (!ff || !RX.test(ff) || KEEP.test(r.selectorText)) continue;
-        st.setProperty('font-family', 'var(--tol-sans, system-ui, sans-serif)', pri(st, 'font-family'));
+        var st = r.style; if (!st || KEEP.test(r.selectorText)) continue;
+        // a variable that holds the mono face (--mono: "IBM Plex Mono") now holds the UI font
+        for (var j = 0; j < st.length; j++) if (st[j].indexOf('--') === 0 && RX.test(st.getPropertyValue(st[j]))) st.setProperty(st[j], UI);
+        var ff = st.getPropertyValue('font-family'), sh = st.getPropertyValue('font');
+        if (ff ? !(RX.test(ff) || VAR.test(ff)) : !(sh && (RX.test(sh) || VAR.test(sh)))) continue;
+        if (ff) st.setProperty('font-family', UI, pri(st, 'font-family'));
+        else if (RX.test(sh)) st.setProperty('font', sh.replace(/(["']?IBM Plex Mono["']?).*$/i, UI), pri(st, 'font'));
         if (/uppercase/.test(st.getPropertyValue('text-transform'))) st.setProperty('text-transform', 'none', pri(st, 'text-transform'));
         if (parseFloat(st.getPropertyValue('letter-spacing')) > 0) st.setProperty('letter-spacing', 'normal', pri(st, 'letter-spacing'));
         var m = /^([\d.]+)(rem|em|px)$/.exec(st.getPropertyValue('font-size') || '');

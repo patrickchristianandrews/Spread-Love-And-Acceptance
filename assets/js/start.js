@@ -328,6 +328,26 @@
     } else start();
   }
 
-  function init() { choresEs(); carryOn(); art(); preview(); checker(); comeBack(); journey(); }
+  // flow17: "Read it. Tick step 1": the journey's first step is the card on this page, so it can be ticked right here
+  // (the same record as the journeys page: 'tol-journeys-v1', step numbers as they are)
+  function doneHere() {
+    $$('[data-st-done]').forEach(function (b) {
+      var id = b.getAttribute('data-st-done'), i = +b.getAttribute('data-st-i') || 0;
+      function rec() { try { var o = JSON.parse(localStorage.getItem('tol-journeys-v1') || 'null'); return o && o.j && o.j[id] ? o.j[id] : null; } catch (e) { return null; } }
+      function paint() { var r = rec(), on = !!(r && Array.isArray(r.d) && r.d.indexOf(i) >= 0); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? '✓ Step ' + (i + 1) + ' ticked. Your next step is below' : 'Read it. Tick step ' + (i + 1) + ' of my journey'; }
+      b.addEventListener('click', function () {
+        var o = null; try { o = JSON.parse(localStorage.getItem('tol-journeys-v1') || 'null'); } catch (e) {}
+        if (!o || typeof o !== 'object' || !o.j) o = { v: 1, j: {} };
+        var r = o.j[id] = o.j[id] || { d: [] }; r.d = Array.isArray(r.d) ? r.d : [];
+        if (r.d.indexOf(i) < 0) { r.d.push(i); r.d.sort(function (a, c) { return a - c; }); if (!r.s) r.s = ymd(new Date()); }
+        else r.d = r.d.filter(function (x) { return x !== i; });
+        try { localStorage.setItem('tol-journeys-v1', JSON.stringify(o)); } catch (e) {}
+        try { D.dispatchEvent(new CustomEvent('tol-journeys')); } catch (e) {}
+        paint();
+      });
+      paint();
+    });
+  }
+  function init() { choresEs(); carryOn(); doneHere(); art(); preview(); checker(); comeBack(); journey(); }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', init); else init();
 })();

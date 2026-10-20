@@ -3176,6 +3176,8 @@ html:not(.tol-own-look):not(.tol-font-easy) body :is(button, label, [role="butto
   :not(h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *, svg, svg *, code, kbd){
   font-family:var(--d17-ui) !important;
 }
+/* a card title inside a button or a link card stays in the heading face */
+html:not(.tol-own-look):not(.tol-font-easy) body main :is(button, [role="button"], label, a) :is(h2, h3, h4){ font-family:var(--d17-head) !important; }
 /* the brand wordmark and the menu's own title stay in the heading face */
 html body .tol-bar .tol-brand, html body .tol-panel .tol-panel-head h2, html body .tol-set h2{ font-family:var(--d17-head) !important; }
 /* reading text stays the reading serif inside cards and sheets */
@@ -3312,4 +3314,12 @@ html body .tol-bar .tol-drop, html body .tol-bar [class*="drop-panel"]{ max-heig
 /* "Calm for the senses", Quiet mode, Keep the page still: no shapes behind the words at all */
 html:is(.ti-senses, .tol-quiet, .tol-still, .tol-contrast) .tol-wash{ display:none !important; }
 html:is(.ti-senses, .tol-quiet, .tol-still) body main.read > header.read-head::after{ content:none !important; display:none !important; }
+/* Pause & Play, Relax and reset: card text a laptop can read (was 14.4px grey; time labels 14px pale purple mono) */
+html body .pp-card p{ font-size:1rem !important; line-height:1.45 !important; color:#3F3930 !important; }
+html body .pp-card .pp-meta{ font-family:var(--d17-ui) !important; font-size:.95rem !important; font-weight:600; color:#5B4660 !important; letter-spacing:normal; }
+html body .pp-card.is-garden p{ color:#F1EDFA !important; }
+html body .pp-card.is-garden .pp-meta{ color:#FBE3C8 !important; }
+html body .pp-card .pp-tag{ font-family:var(--d17-ui) !important; }
+html body main :is(.pp-k, .pp-wd-k){ font-family:var(--d17-ui) !important; text-transform:none !important; letter-spacing:normal !important; font-size:.95rem !important; }
+html body main .pp-k{ color:#5E4A63 !important; }
 /* ========================= end design17 ========================= */

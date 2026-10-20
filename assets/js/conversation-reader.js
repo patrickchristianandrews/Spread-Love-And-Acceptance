@@ -273,6 +273,7 @@
       short: ''
     }[r.trend];
     parts.push('<p>' + story + '</p>');
+    if (r.hottest && (r.hottest.me || r.hottest.them) && r.peak >= 1.5) parts.push(hottest(r, them));
     // a line that reads as a threat is named first: it matters more than how the rest of the chat went
     var hReal = (r.harm || []).filter(function (h) { return !h.playful; })[0], hPlay = (r.harm || []).filter(function (h) { return h.playful; })[0];
     if (hReal) parts.push('<p class="cr-note cr-threat"><strong>Message ' + (hReal.at + 1) + ' could read as a threat:</strong> “' + esc(snip(hReal.text, 80)) + '”. Read flatly, words like that can frighten someone, whatever was meant. That matters more than how the rest of the chat went. <a class="cr-ctx-open" href="#cr-ctx">Add context</a> if you know more.</p>');
@@ -345,6 +346,17 @@
   // a resigned "whatever" carries the gentler name everywhere: on the card, in the marks and in the table
   function markLabel(m) { return m.kind === 'dismiss' && m.resigned && R.KINDS.dismiss.resigned ? R.KINDS.dismiss.resigned.label : R.KINDS[m.kind].label; }
 
+  // sig17: each side's hottest line, side by side, so nobody is cast as the one who started it
+  function hottest(r, them) {
+    var H = r.hottest || {}, cells = [];
+    [['me', 'You'], ['them', them]].forEach(function (x) {
+      var h = H[x[0]];
+      cells.push('<div class="cr-hot-c"><p class="cr-hot-k">' + esc(x[0] === 'me' ? 'Your hottest line' : (x[1].length > 14 ? 'Their' : x[1] + '’s') + ' hottest line') + '</p>' +
+        (h ? '<p class="cr-hot-q">“' + esc(snip(h.said || h.text, 90)) + '”</p><p class="cr-hot-l">Message ' + (h.at + 1) + (h.label ? ' · ' + esc(h.label.toLowerCase()) : '') + '</p>'
+           : '<p class="cr-hot-q cr-hot-none">Nothing that added heat.</p>') + '</div>');
+    });
+    return '<div class="cr-hot" role="group" aria-label="Each side’s hottest line">' + cells.join('') + '</div>';
+  }
   function patterns(r, them) {
     // a resigned "whatever" is its own row, under the gentler name the message card uses
     var rMe = r.resignedMe || 0, rThem = r.resignedThem || 0;
@@ -355,7 +367,7 @@
     var hint = r.crossedThem && !r.crossedMe ? 'Patterns in the chat, not a score. Some lines from ' + esc(them) + ' were put-downs. Whatever else was going on, that isn’t okay, and it isn’t yours to fix.'
       : r.crossedMe && !r.crossedThem ? 'Patterns in the chat, not a score. Some of your lines were put-downs. Owning those, plainly, is the fastest way back.'
       : 'Patterns in the chat, not a score. These count words, not people, and the same words count the same way on both sides: both of you are doing your best with what you were carrying.';
-    var h = '<p class="cr-hint">' + hint + '</p>' +
+    var h = '<p class="cr-hint">' + hint + '</p>' + hottest(r, them) +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {
       var lab = k === 'dismiss:resigned' ? R.KINDS.dismiss.resigned.label : R.KINDS[k].label;
@@ -430,7 +442,33 @@
   }
   draft.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(checkDraft, 250); });
 
-  $('cr-go').addEventListener('click', function () { start(input.value); });
+  // sig17: "Which one is you?" right under the box, as soon as the paste has names: one tap reads it straight away.
+  // A "Me:" or "You:" name is picked already; so is the name picked last time on this page (until the tab closes).
+  var meRow = document.createElement('div'); meRow.id = 'cr-me-row'; meRow.className = 'cr-me-row no-bubble'; meRow.hidden = true;
+  input.parentNode.insertBefore(meRow, input.nextSibling);
+  var lastMe = '', meT = null;
+  function drawMe() {
+    var p = input.value.trim() ? R.parse(input.value) : { speakers: [], turns: [] };
+    var sp = p.turns.length >= 2 ? p.speakers.filter(Boolean).slice(0, 6) : [];
+    if (sp.length < 2 || p.format === 'unlabelled') { meRow.hidden = true; meRow.innerHTML = ''; return; }
+    var pick = sp.filter(function (x) { return /^(me|you|i|myself)$/i.test(x); })[0] || (sp.indexOf(lastMe) !== -1 ? lastMe : '');
+    var cur = meRow.querySelector('input:checked'); if (cur && sp.indexOf(cur.value) !== -1) pick = cur.value;
+    meRow.innerHTML = '<p class="cr-hint cr-me-k" id="cr-me-k">Which one is you? <span>One tap reads it.</span></p><div class="cr-chips" role="radiogroup" aria-labelledby="cr-me-k">' +
+      sp.map(function (x) { return '<label class="cr-chip"><input type="radio" name="cr-me-pre" value="' + esc(x) + '"' + (x === pick ? ' checked' : '') + '><span>' + esc(x) + '</span></label>'; }).join('') + '</div>';
+    meRow.hidden = false;
+    meRow.querySelectorAll('input[name="cr-me-pre"]').forEach(function (el) {
+      el.addEventListener('change', function () { lastMe = el.value; readAs(el.value); });
+    });
+  }
+  function readAs(me) {
+    start(input.value);
+    if (state && me && state.speakers.indexOf(me) !== -1) { state.me = me; render(true); }
+  }
+  input.addEventListener('input', function () { clearTimeout(meT); meT = setTimeout(drawMe, 250); });
+  $('cr-go').addEventListener('click', function () {
+    var c = meRow.hidden ? null : meRow.querySelector('input:checked');
+    if (c) readAs(c.value); else start(input.value);
+  });
   // Add context: closed by default; "Done" reads the conversation again with it
   // "Add context" next to a line that reads as a threat opens the panel
   document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a.cr-ctx-open'); if (a && ctxPanel && ctxPanel.open) { e.preventDefault(); ctxPanel.open(false); var el = $('cr-ctx'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start' }); } });
@@ -439,17 +477,18 @@
   window.TOLReaderPage = {
     read: function (text, me) {
       input.value = text;
+      drawMe();
       start(text);
       if (state && me && state.speakers.indexOf(me) !== -1 && state.me !== me) { state.me = me; render(true); }
     }
   };
   $('cr-example').addEventListener('click', function () {
-    input.value = EXAMPLE; start(EXAMPLE);
+    input.value = EXAMPLE; drawMe(); start(EXAMPLE);
     // In the example, read it from Alex's side: the one whose reach-outs came back cold
     if (state) { state.me = 'Alex'; render(true); }
   });
   $('cr-clear').addEventListener('click', function () {
-    input.value = ''; draft.value = ''; out.innerHTML = ''; pre(''); draftOut.innerHTML = ''; draftStep.hidden = true; state = null; input.focus();
+    input.value = ''; draft.value = ''; out.innerHTML = ''; pre(''); drawMe(); draftOut.innerHTML = ''; draftStep.hidden = true; state = null; input.focus();
   });
   // A whole conversation handed over from another page or another part of the Chat analyzer waits in this tab's
   // sessionStorage ('tol-cr-text': {text, me} or plain text), never in the address. It is removed as soon as it's read.

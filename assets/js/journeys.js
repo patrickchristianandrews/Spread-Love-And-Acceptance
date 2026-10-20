@@ -34,12 +34,14 @@
       leave: 'three basics for the hard days, a kinder sentence for yourself, a done list and a short “who I am now” list',
       back: { q: 'A week on: how are the waves? Take today’s reading, then pick your next small step.', id: 'weather', f: '/quick-checks.html#today', go: 'Take today’s reading' },
       steps: [
-        { k: 'read', t: 'After a breakup: the first days', f: '/after-a-breakup.html#first-days', mins: 5, do: 'Read what to expect in the first days, and the basics that help.', leave: 'Three basics to keep going this week' },
-        { k: 'tool', id: 'weather', f: '/quick-checks.html#today', mins: 1, do: 'Take a one-minute reading of how you are, once a day.', leave: 'A reading a day on this device, so you can see the waves get smaller' },
+        // flow17: step 1 is the short card on the breakup front door itself; step 2 opens the 4-tap quick check (the
+        // order stays: ticks are kept by step number)
+        { k: 'read', t: 'The first days: a short card', f: '/start/breakup.html#first-days', mins: 2, do: 'Read the short card on what helps in the first days.', leave: 'Three basics to keep going this week, and one person to tell' },
+        { k: 'tool', id: 'weather', f: '/quick-checks.html?mode=sky#today', mins: 1, secs: 20, do: 'Take a four-tap reading of how you are, once a day.', leave: 'A reading a day on this device, so you can see the waves get smaller' },
         { k: 'read', t: 'A kinder inner voice', f: '/after-a-breakup.html#kind-voice', mins: 5, do: 'Find a kinder sentence for the hard moments.', leave: 'One sentence to say to yourself' },
         { k: 'read', t: 'Small wins: your done list', f: '/small-wins.html#done-list', mins: 2, do: 'Write down one small thing you did today. Do it again tomorrow.', leave: 'A done list that adds up' },
         { k: 'read', t: 'Your self-discovery path', f: '/self-path.html', mins: 15, do: 'Work out what is yours: what you enjoy, and what you want next.', leave: 'A short “who I am now” list' },
-        { k: 'read', t: 'Living on your own: weekends and evenings', f: '/living-alone.html#weekends', mins: 10, do: 'Plan one or two anchors for the evenings and weekends.', leave: 'One regular thing that’s just yours' }
+        { k: 'read', t: 'Evenings and weekends that are yours', f: '/living-alone.html#weekends', mins: 10, do: 'On your own now, or back at a parent’s place: plan one or two anchors for the evenings and weekends.', leave: 'One regular thing that’s just yours' }
       ] },
     { id: 'know', who: 'solo', title: 'Know yourself in a week', len: 'One week, about 10 minutes a day',
       intro: 'Six short looks at how you work. Nothing here needs anyone else.',
@@ -280,7 +282,7 @@
     return tool(s.id, s.f);
   }
   function kindLabel(s) { return s.breathe ? 'Breathe' : s.k === 'tool' ? 'Tool' : s.k === 'wp' ? 'Workpaper' : 'Read'; }
-  function mins(n) { return n <= 1 ? 'About 1 minute' : 'About ' + n + ' minutes'; }
+  function mins(n, secs) { return secs ? 'About ' + secs + ' seconds' : n <= 1 ? 'About 1 minute' : 'About ' + n + ' minutes'; }
   function whoLabel(j) { return j.who === 'solo' ? 'Just you' : 'Two of you (either can start alone)'; }
   // where you are: the first unticked step that isn't optional
   function nextStep(j, r) {
@@ -424,7 +426,7 @@
     function stepItem(j, s, i, r) {
       var L = stepLink(s), done = r.d.indexOf(i) >= 0, cid = 'js-' + j.id + '-' + i;
       var li = mk('li', { cls: 'js-step' + (done ? ' is-done' : '') + (s.k === 'wp' ? ' is-opt' : ''), 'data-i': i });
-      var head = mk('p', { cls: 'js-head' }, [mk('span', { cls: 'js-kind js-kind-' + s.k, text: kindLabel(s) + (s.k === 'wp' ? ' · optional' : '') }), mk('span', { cls: 'js-mins', text: mins(s.mins) })]);
+      var head = mk('p', { cls: 'js-head' }, [mk('span', { cls: 'js-kind js-kind-' + s.k, text: kindLabel(s) + (s.k === 'wp' ? ' · optional' : '') }), mk('span', { cls: 'js-mins', text: mins(s.mins, s.secs) })]);
       li.appendChild(head);
       li.appendChild(mk('p', { cls: 'js-do', text: s.do }));
       li.appendChild(mk('p', { cls: 'js-leave' }, [mk('strong', { text: 'You’ll leave with: ' }), s.leave + '.']));
