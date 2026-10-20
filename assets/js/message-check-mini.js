@@ -46,17 +46,28 @@
     absolute: 'always or never', past: 'brings up the past', compare: 'a comparison', dxlabel: 'a diagnosis used as an insult', jab: 'a dig', passiveag: 'a dig',
     madefeel: 'blames them for a feeling', calm: 'tells them how to feel', invalid: 'brushes their feeling aside', minim: 'makes it sound small', intens: 'turns the heat up' };
   function quote(t) { t = String(t || '').replace(/\s+/g, ' ').trim(); return '\u201c' + (t.length > 42 ? t.slice(0, 40).replace(/\s\S*$/, '') + '\u2026' : t) + '\u201d'; }
+  // sig17: only words that are really in the message are quoted ("NOW ??" -> "??" and "NOW", each as typed)
+  function present(text, f) {
+    var low = String(text || '').toLowerCase().replace(/[\u2018\u2019]/g, "'"), q = String(f || '').trim();
+    if (!q) return [];
+    if (low.indexOf(q.toLowerCase().replace(/[\u2018\u2019]/g, "'")) !== -1) return [q];
+    return q.split(/\s+/).filter(function (w) { return w && low.indexOf(w.toLowerCase().replace(/[\u2018\u2019]/g, "'")) !== -1; });
+  }
   function whyList(E, an, rw) {
     var stood = (an.staticIds || []).filter(function (id) { return ['nowhen', 'long', 'period', 'multi', 'questions'].indexOf(id) === -1 && E.FBY && E.FBY[id]; }).slice(0, 3).map(function (id) {
       var w = (an.found[id] || []).filter(Boolean)[0];
       return esc(E.FBY[id].name.replace(/\s*\(.*\)$/, '').toLowerCase().replace(/^contempt:/, 'contempt:')) + (w && id !== 'harm' && String(w).length < 60 ? ' (' + esc(quote(w)) + ')' : '');
     });
-    var left = [];
+    var left = [], text = an.text || an.norm || '';
     ((rw && rw.changes) || []).forEach(function (c) {
+      // a threat tacked onto an ask ("or you're grounded"): it stood out, and the version below says it calmly
+      if (c.id === 'consequence' && c.from && c.from[0] && stood.length < 4) { stood.push('a threat tacked onto the ask (' + esc(quote('or ' + c.from[0])) + ')'); return; }
       if (left.length >= 3 || !c.from || !c.from.length || (c.to && c.to.filter(Boolean).length) || !LEFT_WHY[c.id]) return;
       var f = c.from.filter(function (x) { return x && !/^\(/.test(x); })[0]; if (!f) return;
-      if (left.some(function (x) { return x.indexOf(quote(f)) !== -1; })) return;
-      left.push(esc(quote(f)) + ' (' + LEFT_WHY[c.id] + ')');
+      var bits = present(text, f); if (!bits.length) return;
+      var qs = bits.map(quote).join(', ');
+      if (left.some(function (x) { return x.indexOf(esc(quote(bits[0]))) !== -1; })) return;
+      left.push(esc(qs) + ' (' + LEFT_WHY[c.id] + ')');
     });
     var h = '';
     if (stood.length) h += '<li><b>What stood out:</b> ' + stood.join('; ') + '</li>';
@@ -68,8 +79,86 @@
     try { window.TOLCheckerShownAt = Date.now(); document.documentElement.setAttribute('data-checker-result', String(window.TOLCheckerShownAt)); document.dispatchEvent(new CustomEvent('tol:checker-result')); } catch (e) {}
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  // "[a time]" is a blank for the writer's own words
-  function blanks(s) { return esc(s).replace(/\[([^\]]+)\]/g, '<span class="mcm-ph">$1</span>'); }
+  // "[a time]" is a blank for the writer's own words: click (or Tab) and type. sig17: the blanks are inline fields,
+  // and Copy uses what was typed. Blanks left empty are taken out, with a gentle note.
+  function blanks(s) {
+    return esc(s).replace(/\[([^\]]+)\]/g, function (m, ph) {
+      return '<span class="mcm-ph" contenteditable="true" role="textbox" spellcheck="true" tabindex="0" aria-label="Fill in: ' + ph + '" data-ph="' + ph + '">' + ph + '</span>';
+    });
+  }
+  function wireBlanks(root) {
+    Array.prototype.forEach.call(root.querySelectorAll('.mcm-ph[data-ph]'), function (b) {
+      b.addEventListener('focus', function () {
+        if (b.getAttribute('data-filled')) return;
+        try { var r = document.createRange(); r.selectNodeContents(b); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); } catch (e) {}
+      });
+      b.addEventListener('input', function () { var t = b.textContent.replace(/\s+/g, ' ').trim(); if (t && t !== b.getAttribute('data-ph')) b.setAttribute('data-filled', '1'); else b.removeAttribute('data-filled'); });
+      b.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); b.blur(); } });
+      b.addEventListener('blur', function () { if (!b.textContent.replace(/\s+/g, '').length) { b.textContent = b.getAttribute('data-ph'); b.removeAttribute('data-filled'); } });
+      b.addEventListener('paste', function (e) { try { e.preventDefault(); var t = (e.clipboardData || window.clipboardData).getData('text').replace(/\s+/g, ' '); document.execCommand('insertText', false, t); } catch (x) {} });
+    });
+  }
+  // the words to copy: typed blanks filled in; empty ones taken out, along with the little word that led into them
+  function textOf(say) {
+    var parts = [], left = 0;
+    Array.prototype.forEach.call(say.childNodes, function (n) {
+      if (n.nodeType === 3) parts.push(n.textContent);
+      else if (n.getAttribute && n.getAttribute('data-ph')) {
+        var t = n.textContent.replace(/\s+/g, ' ').trim();
+        if (n.getAttribute('data-filled') && t) parts.push(t); else { parts.push('\u27e6\u27e7'); left++; }
+      } else parts.push(n.textContent);
+    });
+    var s = parts.join('').replace(/\s+/g, ' ').trim();
+    if (left) s = dropBlanks(s);
+    return { text: s, left: left };
+  }
+  function dropBlanks(s) {
+    var B = '\u27e6\u27e7';
+    return s.split(/(?<=[.!?])\s+/).map(function (x) {
+      if (x.indexOf(B) === -1) return x;
+      if (!x.replace(new RegExp(B, 'g'), '').replace(/[\s.,!?]/g, '')) return '';
+      var y = x.replace(new RegExp('\\s*,?\\s*(?:\\b(?:by|at|on|about|for|because|like|to|with|in|from|until|before|after|than)\\s+)?' + B, 'g'), '')
+        .replace(/\s+([,.!?])/g, '$1').replace(/,\s*([.!?])/g, '$1').replace(/,\s*,/g, ',').replace(/^\s*,\s*/, '').replace(/\s{2,}/g, ' ').trim();
+      if ((y.match(/[A-Za-z']+/g) || []).length < 3 || /\b(?:because|is|was|felt|feel|that|the|a|an|and|or|but|so|I|when|if|could you|can you|would you)[.?!]$/i.test(y)) return '';
+      return y.charAt(0).toUpperCase() + y.slice(1);
+    }).filter(Boolean).join(' ');
+  }
+  // sig17: the result comes into view after "Check it" (smoothly, unless the visitor prefers less motion), clear of a
+  // fixed header, so the verdict, the clearer version and Copy show without scrolling by hand
+  function reveal(el) {
+    try {
+      if (!el || !el.getBoundingClientRect) return;
+      var vh = window.innerHeight || document.documentElement.clientHeight, top = 0;
+      var hit = document.elementFromPoint(Math.round((window.innerWidth || 400) / 2), 4);
+      for (var a = hit; a && a !== document.body && a !== document.documentElement; a = a.parentElement) {
+        var cs = getComputedStyle(a); if (cs.position === 'fixed' || cs.position === 'sticky') { top = Math.max(0, a.getBoundingClientRect().bottom); break; }
+      }
+      var sec = el.closest('.mcm') || el, r = el.getBoundingClientRect(), rs = sec.getBoundingClientRect(), avail = vh - top - 16;
+      if (r.top >= top + 4 && r.bottom <= vh - 4) return;
+      var y0 = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var y = rs.height <= avail ? y0 + rs.top - top - 8            // the whole card: the box and the result
+        : r.height <= avail ? y0 + r.bottom - vh + 12               // the whole result, its last line just above the fold
+        : y0 + r.top - top - 8;                                     // a long result: from its top
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
+    } catch (e) { try { el.scrollIntoView(); } catch (x) {} }
+  }
+
+  // "Before you send: want to sleep on it?", with a copy of the writer's own words for the morning
+  function sleepBox(v, reach) {
+    return '<div class="mcm-sleep no-bubble"><p><b>Before you send: want to sleep on it?</b> ' + (reach ? 'If it still feels right in the morning, it will still be yours to send.' : 'A message to an ex often reads differently in the morning, and once it&rsquo;s sent it can&rsquo;t be taken back.') + '</p>' +
+      '<p>Save your words for the morning: copy them into your notes, and read them again before you decide.</p>' +
+      '<button type="button" class="mcm-copy mcm-keep">Save it for the morning</button><p class="mcm-note no-bubble mcm-keep-note" aria-live="polite"></p>' +
+      (v.link ? '<p style="margin:.2rem 0 0"><a href="' + esc(v.link[0]) + '">' + esc(v.link[1]) + '</a></p>' : '') + '</div>';
+  }
+  function wireKeep(out, text) {
+    var kp = out.querySelector('.mcm-keep'), kn = out.querySelector('.mcm-keep-note'); if (!kp) return;
+    kp.addEventListener('click', function () {
+      (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () {
+        kp.textContent = 'Copied'; if (kn) kn.textContent = 'Copied. Paste it into your notes for now. Nothing here was sent or saved.';
+      }, function () { kp.textContent = 'Select and copy manually'; });
+    });
+  }
 
   var CSS = '' +
     '.mcm{margin:1.2rem 0;padding:16px 16px 14px;border:1.5px solid var(--line,#D9CBA3);border-radius:14px;' +
@@ -97,7 +186,13 @@
     '.mcm-addctx a{font-weight:600;color:inherit}' +
     '.mcm-k{margin:.4rem 0 .15rem;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
     '.mcm-say{margin:0;padding:8px 11px;border-radius:8px;background:var(--paper,#F5EFDE);border:1px solid var(--line,#D9CBA3);line-height:1.5;overflow-wrap:anywhere}' +
-    '.mcm-ph{border:1.5px dashed var(--brass,#A8792F);border-radius:4px;padding:0 4px}' +
+    '.mcm-ph{border:1.5px dashed var(--brass,#A8792F);border-radius:4px;padding:1px 5px;cursor:text;outline:none;min-width:2ch;display:inline-block;line-height:1.35}' +
+    '.mcm-ph:not([data-filled]){color:var(--ink-soft,#5A5346);font-style:italic}' +
+    '.mcm-ph:focus{box-shadow:0 0 0 2px var(--focus,#2B5B8C);background:color-mix(in srgb,var(--paper,#F5EFDE) 70%,#fff)}' +
+    '.mcm-ph[data-filled]{border-style:solid;font-style:normal}' +
+    '.mcm-out{scroll-margin-top:72px}' +
+    '.mcm-for{margin:.5rem 0 0;font-size:.95rem}' +
+    '.mcm-for a{font-weight:600;color:inherit;display:inline-flex;align-items:center;min-height:44px}' +
     '.mcm-copy{min-height:44px;margin-top:6px;padding:6px 14px;border:1.5px solid var(--line,#D9CBA3);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:.9rem;cursor:pointer}' +
     '.mcm-note{margin:.55rem 0 0;font-size:.85rem;color:var(--ink-soft,#5A5346)}' +
     // what stood out, and what the clearer version left out: short, so it fits a phone
@@ -175,6 +270,7 @@
             b.addEventListener('click', function () { answer = b.getAttribute('data-ans'); answeredFor = text; answerCtx = answer === 'skip' ? null : E.answerCtx(answer, null); check(); });
           });
           var f = out.querySelector('[data-ans]'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
+          reveal(out);
           return;
         }
         var sc = E.score(an, ['general'], 'text');
@@ -184,13 +280,11 @@
         var h = '<p class="mcm-v no-bubble ' + esc(v.id) + '">' + esc(v.text) + '</p>';
         // a message to an ex: no polish and no praise. Sleep on it, and keep the words for the morning
         if (v.exReach && v.id === 'unsure') {
-          h += '<div class="mcm-sleep no-bubble"><p>If it still feels right in the morning, it will still be yours to send. You could copy it into your notes for now.</p>' +
-            '<button type="button" class="mcm-copy mcm-keep">Copy it for later</button>' +
-            (v.link ? '<p style="margin:.4rem 0 0"><a href="' + esc(v.link[0]) + '">' + esc(v.link[1]) + '</a></p>' : '') + '</div>';
+          h += sleepBox(v, true);
           out.innerHTML = h + '<p class="mcm-note no-bubble">It reads the words only, so it&rsquo;s a second opinion, not a verdict.</p>';
-          var kp = out.querySelector('.mcm-keep');
-          if (kp) kp.addEventListener('click', function () { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { kp.textContent = 'Copied'; }, function () { kp.textContent = 'Select and copy manually'; }); });
+          wireKeep(out, text);
           resultShown();
+          reveal(out);
           return;
         }
         // what stood out, and what the clearer version leaves out, with a short reason
@@ -199,19 +293,36 @@
         if (v.addContext && !an.selfHarm) h += '<p class="mcm-addctx no-bubble"><a class="mcm-ctx2" href="' + full + '#add-context">Add context</a>: who they are, and whether you joke like this. The words alone can&rsquo;t show a joke.</p>';
         if (an.selfHarm) {
           h += '<p class="mcm-note no-bubble">In the US, call or text 988. In the UK and Ireland, Samaritans: 116 123. If someone may act on it now, call your local emergency number.</p>';
+        } else if (v.sleepOn && !an.danger && !an.control) {
+          // sig17: a message to an ex (every message on /start/breakup.html): sleep on it first, never "can we talk"
+          h += sleepBox(v, false);
+          if (rw && !rw.unchanged && rw.main && !rw.danger)
+            h += '<p class="mcm-k no-bubble">If you still want to send something tomorrow, a calmer version</p><p class="mcm-say no-bubble">' + blanks(rw.main) + '</p>' +
+              '<button type="button" class="mcm-copy">Copy</button>' + (/\[/.test(rw.main) ? '<p class="mcm-note no-bubble mcm-blank-note">Dashed words are blanks: tap one and type.</p>' : '');
         } else if (!an.danger && !an.control && rw && !rw.unchanged && rw.main && !rw.danger) {
           h += '<p class="mcm-k no-bubble">A clearer way to say it</p><p class="mcm-say no-bubble">' + blanks(rw.main) + '</p>' +
             '<button type="button" class="mcm-copy">Copy</button>' +
-            (/\[/.test(rw.main) ? '<p class="mcm-note no-bubble">Words in dashed boxes are blanks for your own words.</p>' : '');
+            (/\[/.test(rw.main) ? '<p class="mcm-note no-bubble mcm-blank-note">Dashed words are blanks: tap one and type your own. Copy uses what you type.</p>' : '');
         }
+        // sig17: texting a teen? the parents' page has house rules with the reason said out loud
+        if (rel === 'family' && !an.selfHarm && !an.danger) h += '<p class="mcm-for no-bubble">Texting a teen? <a href="/parents.html#house-rules">House rules with the why &rarr;</a></p>';
         h += '<p class="mcm-note no-bubble">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The Chat analyzer shows why, and more ways to say it.</p>';
         out.innerHTML = h;
         resultShown();
+        wireKeep(out, text);
         var c2 = out.querySelector('.mcm-ctx2'); if (c2) c2.addEventListener('click', hand);
-        var cp = out.querySelector('.mcm-copy');
+        var sayEl = out.querySelector('.mcm-say');
+        if (sayEl) wireBlanks(sayEl);
+        var cp = out.querySelector('.mcm-copy:not(.mcm-keep)');
         if (cp) cp.addEventListener('click', function () {
-          (navigator.clipboard ? navigator.clipboard.writeText(rw.main) : Promise.reject()).then(function () { cp.textContent = 'Copied'; }, function () { cp.textContent = 'Select and copy manually'; });
+          var t = sayEl ? textOf(sayEl) : { text: rw.main, left: 0 };
+          var bn = out.querySelector('.mcm-blank-note');
+          (navigator.clipboard ? navigator.clipboard.writeText(t.text) : Promise.reject()).then(function () {
+            cp.textContent = 'Copied';
+            if (bn) bn.textContent = t.left ? 'Copied. The blanks you left empty were taken out, so read it through once before you send.' : 'Copied, with your words in the blanks.';
+          }, function () { cp.textContent = 'Select and copy manually'; });
         });
+        reveal(out);
       }).catch(function () {
         out.innerHTML = '<p class="mcm-note no-bubble">The checker couldn&rsquo;t load just now. <a href="' + full + '">Open the Chat analyzer</a> instead.</p>';
       }).then(function () { go.disabled = false; go.textContent = 'Check it'; });
@@ -227,5 +338,5 @@
     Array.prototype.forEach.call(hosts, mount);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-  window.TOLMessageCheckMini = { mount: function (el) { addCSS(); mount(el); } };
+  window.TOLMessageCheckMini = { mount: function (el) { addCSS(); mount(el); }, textOf: function (say) { return textOf(say).text; } };
 })();

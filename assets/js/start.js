@@ -152,14 +152,15 @@
       var say = $('.mcm-say', out), k = $('.mcm-k', out);
       if (say && k && host.hasAttribute('data-st-share')) {
         k.textContent = 'Here’s a clearer version that keeps your point';
-        var cp = $('.mcm-copy', out);
+        var cp = $('.mcm-copy:not(.mcm-keep)', out);
         if (cp && !$('[data-st-send]', out)) {
           var row = D.createElement('p'); row.className = 'st-share-row no-bubble';
           var send = D.createElement('button'); send.type = 'button'; send.className = 'st-quiet-btn'; send.setAttribute('data-st-send', ''); send.textContent = 'Send it…';
           cp.className += ' st-quiet-btn';
           cp.parentNode.insertBefore(row, cp); row.appendChild(cp); row.appendChild(send);
           send.addEventListener('click', function () {
-            var text = say.textContent.replace(/\s+/g, ' ').trim();
+            // sig17: what was typed into the blanks goes along; empty blanks are taken out
+            var text = W.TOLMessageCheckMini && W.TOLMessageCheckMini.textOf ? W.TOLMessageCheckMini.textOf(say) : say.textContent.replace(/\s+/g, ' ').trim();
             if (W.TOLShare && W.TOLShare.share) { try { W.TOLShare.share({ title: '', text: text, url: false }); return; } catch (e) {} }
             if (navigator.share) navigator.share({ text: text }).catch(function () {});
           });
@@ -168,7 +169,7 @@
       var sleep = $('.mcm-sleep', out);
       if (sleep && !$('[data-st-tonight]', sleep)) {
         var p = D.createElement('p'); p.setAttribute('data-st-tonight', '');
-        p.innerHTML = '<a href="#tonight-h">Three steps for tonight</a> · <a href="#back-h">Tomorrow&rsquo;s small step</a>';
+        p.innerHTML = '<a href="#tonight-h">Three steps for tonight</a> · <a href="#back-h">Your next small step</a>';
         sleep.appendChild(p);
       }
     });

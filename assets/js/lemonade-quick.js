@@ -698,7 +698,7 @@
     var p = document.createElement('button'); p.type = 'button'; p.className = 'lq-job'; p.id = rowHtmlId(id);
     var open = !!rowOpen[id], hasW = weighted() && kindOf(id) !== 'work', set = hasW && !!(q.jw && q.jw[id]);
     p.setAttribute('aria-expanded', String(open)); p.setAttribute('aria-controls', p.id + '-x');
-    p.innerHTML = '<span class="lq-job-t"></span><span class="lq-job-more" aria-hidden="true">' + (open ? '&#9662;' : '&#9656;') + '</span>';
+    p.innerHTML = '<span class="lq-job-t"></span>&nbsp;<span class="lq-job-more" aria-hidden="true">' + (open ? '&#9662;' : '&#9656;') + '</span>';
     p.querySelector('.lq-job-t').textContent = label(id);
     p.title = L('More for this job', 'Más para esta tarea');
     p.addEventListener('click', function () {
