@@ -2638,7 +2638,7 @@ function dropContempt(s0, an, ctx, note, nAll){
   const CX = CONTEMPT_RX(); const lowf = x=>norm(x).toLowerCase();
   let s = s0.trim();
   // (sig17) a sarcastic tail ("Hope she makes you happy", "I'm not your maid", "Have a nice life"): the sentence goes whole
-  if(SARC_TAIL.test(lowf(s).replace(/[.!?…🙄😒🙃\s]+$/,"")) && nAll>1){ note("sarcasm", s.replace(/[.!?…\s]+$/,""), ""); ctx.contempt = true; return ""; }
+  if(SARC_TAIL.test(lowf(s).replace(/[.!?…🙄😒🙃\s]+$/,"")) && nAll>1){ note(/not (?:your|ur)/i.test(s) ? "jab" : "sarcasm", s.replace(/[.!?…\s]+$/,""), ""); ctx.contempt = true; return ""; }
   const marks = [].concat(an.found.contempt||[]).filter(Boolean).map(x=>lowf(x).replace(/^(?:and|but|so)\s+/,"").replace(/[\s.!?,…]+$/,"")).filter(x=>x.length>2);
   // "Sure, because you're SO busy.": agreement said as a jab, the whole sentence is the jab
   if(SARC_JAB.test(s)){ note("sarcasm", s.replace(/[.!?…\s]+$/,""), ""); ctx.contempt = true; return ""; }
@@ -4078,9 +4078,9 @@ function verdictBase(an, sc, rw, opts){
   if((an.found.withdraw || an.found.olddays) && !an.found.jab)
     return {id:"hurt", guilt:true, text: "This may land as hurt or guilt. "+(soft ? "Here's a way to keep the feeling and leave the door open." : "The notes below show why.")};
   // (sig17) an order with a tally ("ur doing bedtime tonight. i did it the last 3 nights"): never "okay"
-  if(an.found.count && an.found.impera && !attack)
+  if(an.found.count && an.found.impera && !attack && !work)
     return {id:"hurt", order:true, text: "This may sound like an order, with a score being kept. "+(soft ? "Asking, and saying you're worn out, is easier to say yes to. Here's a version that keeps your point." : "The notes below show why.")};
-  if(an.found.count && !attack && lvl==="clear")
+  if(an.found.count && !attack && !work && lvl==="clear")
     return {id:"hurt", mild:true, text: "This may sound like keeping score. "+(soft ? "Here's a version that keeps your point without the count." : "Saying what you need, without the count, is easier to answer.")};
   // blame said as a dig, or keeping score: never "probably okay"
   if(an.found.jab || (an.found.motive && lvl!=="clear"))

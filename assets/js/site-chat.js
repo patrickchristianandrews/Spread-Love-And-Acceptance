@@ -4885,10 +4885,32 @@
     r.chips = (r.chips || []).filter(function (c) { return !/^(WP|CALC|REPORT|PROG)-\d+\b/.test(c.label); }).map(function (c) { var l = clean(c.label); return l === c.label ? c : Object.assign({}, c, { label: l }); });
     return r;
   }
+  // owner: Puddles never brings up AI himself. Page excerpts that compare the site with AI chats lose those sentences
+  // unless the person asked about AI, bots or ChatGPT.
+  var AI_ASKED = /\b(ai|a i|chat ?gpt|gpt|bot|chatbot|robot|generative|llm|language model|artificial intelligence)\b/;
+  function noAI(r, q) {
+    if (!r || !r.blocks || r.kind === 'safety' || AI_ASKED.test(fold(q))) return r;
+    function phrase(t) { return String(t).replace(/\s+or an AI chat\b/gi, '').replace(/\s+or AI chats?\b/gi, ''); }
+    function clean(t) {
+      t = phrase(t);
+      if (!/\b(AI|ChatGPT|generative)\b/.test(t)) return t;
+      return t.replace(/[^.!?…]*\b(AI|ChatGPT|generative)\b[^.!?…]*[.!?…]*[”"]?\s*/g, '').replace(/^\s*…\s*$/, '').replace(/\s{2,}/g, ' ').trim();
+    }
+    r.blocks = r.blocks.filter(function (b) {
+      if (b.h) b.h = phrase(b.h);
+      if (b.src) b.src = phrase(b.src);
+      if (b.k === 'p' || b.k === 'note') { b.x = clean(b.x); return !!b.x; }
+      if ((b.k === 'list' || b.k === 'passage' || b.k === 'bg') && Array.isArray(b.x)) { b.x = b.x.map(clean).filter(Boolean); return b.x.length > 0; }
+      if (b.k === 'links' && Array.isArray(b.x)) b.x = b.x.map(function (l) { return [phrase(l[0]), l[1]]; });
+      return true;
+    });
+    if (r.chips) r.chips = r.chips.map(function (c) { var l = phrase(c.label); return l === c.label ? c : Object.assign({}, c, { label: l, q: phrase(c.q || c.label) }); });
+    return r;
+  }
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); if (x && x.blocks && state.sorryTurn && state.sorryTurn === state.turn && x.kind !== 'safety') { x.blocks.unshift({ k: 'p', x: 'Sorry, that last answer missed. Here’s what I have for your question:' }); } state.sorryTurn = 0; x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); if (x && x.blocks && state.sorryTurn && state.sorryTurn === state.turn && x.kind !== 'safety') { x.blocks.unshift({ k: 'p', x: 'Sorry, that last answer missed. Here’s what I have for your question:' }); } state.sorryTurn = 0; x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noAI(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }

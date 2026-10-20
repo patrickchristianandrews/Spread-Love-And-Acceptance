@@ -289,6 +289,8 @@
     return -1;
   }
   function required(j) { return j.steps.filter(function (s) { return s.k !== 'wp'; }).length; }
+  // flow17: "4 steps + 1 optional", so the count matches the steps listed
+  function stepsLabel(j) { var o = j.steps.length - required(j); return stepsLabel(j) + (o ? ' + ' + o + ' optional' : ''); }
   function doneCount(j, r) { var d = (r && r.d) || []; return j.steps.filter(function (s, i) { return s.k !== 'wp' && d.indexOf(i) >= 0; }).length; }
   function stepWord(j, r) {
     var n = nextStep(j, r), req = required(j);
@@ -474,7 +476,7 @@
       slot.textContent = '';
       slot.appendChild(journeyBody(j, o));
       var st = det.querySelector('.jr-sum-step'), r = o.j[j.id];
-      if (st) st.textContent = r && (r.s || r.d.length) ? stepWord(j, r) : required(j) + ' steps';
+      if (st) st.textContent = r && (r.s || r.d.length) ? stepWord(j, r) : stepsLabel(j);
     }
     function all() { var o = load(); Array.prototype.forEach.call(host.querySelectorAll('details.jr'), function (d) { fill(d, o); }); }
     function one(id) { var d = host.querySelector('details.jr[data-j="' + id + '"]'); if (d) fill(d, load()); }
@@ -491,7 +493,7 @@
       var line = det && det.querySelector('[data-jr-step]'); if (line) line.textContent = stepWord(j, rr) + (rr.s ? ' · started ' + niceDate(rr.s) : '');
       var bar = det && det.querySelector('.jr-bar'), n = doneCount(j, rr);
       if (bar) { bar.setAttribute('aria-valuenow', String(n)); bar.firstChild.style.width = Math.round(100 * n / required(j)) + '%'; }
-      var st = det && det.querySelector('.jr-sum-step'); if (st) st.textContent = rr.s || rr.d.length ? stepWord(j, rr) : required(j) + ' steps';
+      var st = det && det.querySelector('.jr-sum-step'); if (st) st.textContent = rr.s || rr.d.length ? stepWord(j, rr) : stepsLabel(j);
     });
     host.addEventListener('click', function (e) {
       var br = e.target.closest && e.target.closest('a[data-breathe]');

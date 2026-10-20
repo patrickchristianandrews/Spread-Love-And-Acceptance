@@ -1245,6 +1245,8 @@
       var oName = typed(o) || personN(o);
       var who = q.people.length === 2 ? L('You', 'Ustedes') : L('You and ' + oName, 'Tú y ' + oName);
       html += '<div class="lq-cmpbox"><h4>' + esc(q.people.length === 2 ? L('Where you agree, and where you don’t', 'En qué coinciden, y en qué no') : L('You and ' + oName, 'Tú y ' + oName)) + '</h4>';
+      // flow17: the person who answered second (they opened a link) gets a thank-you
+      if (q.from && !q.from.reply && q.from.f === o && hasAny(q.me)) html += '<p class="lq-thanks">' + esc(L('Thanks for doing your side. That’s the hard bit done.', 'Gracias por hacer tu parte. Lo más difícil ya está.')) + '</p>';
       if (!same.length && !diff.length) html += '<p class="lq-pend">' + esc(L('No jobs answered by both yet.', 'Todavía no hay tareas respondidas por los dos.')) + '</p>';
       else {
         html += '<p>' + esc(isEs() ? who + ' coinciden en ' + same.length + (same.length === 1 ? ' tarea' : ' tareas') + (diff.length ? ' y ven ' + diff.length + ' distinto.' : '.')
@@ -1322,12 +1324,18 @@
   function babyOn() { return q.list.some(function (id) { return groupOf(id) === 'baby'; }); }
   function cmpNext(o, diff) {
     var n = diff.length;
-    return '<ul class="lq-cmp-next">' +
+    // flow17: one obvious next step first: give each of these jobs one owner (they go to the top of the fridge list)
+    var elder = q.list.some(function (id) { return groupOf(id) === 'elder' || id === 'inlaws' || (isCustom(id) && /\b(mum|mom|mother|dad|father|parent|in-law|ammi|abbu|nan|gran|grandma|grandad|madre|padre|suegr)/i.test(id)); });
+    return '<p class="lq-cmp-go"><button type="button" class="lq-go-btn" data-lq-fridge-go>' + esc(L('Next: give ' + (n === 1 ? 'this job' : 'these ' + n + ' jobs') + ' one owner each →', 'Siguiente: un dueño para ' + (n === 1 ? 'esta tarea' : 'estas ' + n + ' tareas') + ' →')) + '</button><span class="lq-mini">' + esc(L('They go at the top of your fridge list. About a minute. “Take turns” works too, like bedtime on set nights.', 'Van arriba en su lista para el refri. Más o menos un minuto. También pueden turnarse por días.')) + '</span></p>' +
+      '<ul class="lq-cmp-next">' +
+      (elder ? '<li><a href="/family-obligations.html#visits">' + esc(L('Caring for a parent at home? Supporting family: visits, long stays and elders', '¿Cuidan a un padre o una madre en casa? Apoyar a la familia (en inglés)') + ' →') + '</a><span>' + esc(L('Words for both of you, and one owner for each part of the care.', 'Palabras para los dos, y un dueño para cada parte del cuidado.')) + '</span></li>' : '') +
+      '<li><a href="/journeys.html#busy2">' + esc(L('For tonight: Busy? Five minutes together', 'Para esta noche: cinco minutos juntos (en inglés)') + ' →') + '</a><span>' + esc(L('Small, low-energy things to do once the day is done.', 'Cosas pequeñas y tranquilas para cuando acaba el día.')) + '</span></li>' +
       '<li><a href="' + esc(wp01Link(diff)) + '">' + esc(L('Next: log the ' + (n === 1 ? 'job' : n + ' jobs') + ' you see differently for a week', 'Siguiente: anoten durante una semana ' + (n === 1 ? 'la tarea' : 'las ' + n + ' tareas') + ' que ven distinto') + ' →') + '</a><span>' + esc(L('“Who did what”, with ' + (n === 1 ? 'that job' : 'those jobs') + ' already on it.', '«Quién hizo qué», con esas tareas ya puestas (en inglés).')) + '</span></li>' +
       '<li><a href="/signal-translator.html?rel=partner" data-lq-st="' + esc(stText(o, diff)) + '">' + esc(L('Check how you’ll bring it up', 'Revisa cómo lo vas a decir') + ' →') + '</a><span>' + esc(L('The Chat analyzer, with a first line ready to change.', 'El analizador de mensajes, con una primera frase lista para cambiar (en inglés).')) + '</span></li>' +
       (babyOn() ? '<li><a href="/new-parent.html">' + esc(L('New baby: when you’re both running on empty', 'Bebé nuevo: cuando los dos están agotados') + ' →') + '</a><span>' + esc(L('Splitting the nights, and one clear ask at 3am.', 'Repartir las noches, y un pedido claro a las 3 de la mañana.')) + '</span></li>' : '') + '</ul>';
   }
   document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('[data-lq-fridge-go]')) { fridge(); return; }
     var a = e.target.closest && e.target.closest('a[data-lq-st]'); if (!a) return;
     // the first line waits in this tab for the Chat analyzer (its own way in), so it never sits in the address
     try { sessionStorage.setItem('tol-st-text', a.getAttribute('data-lq-st')); } catch (er) {}
@@ -1745,10 +1753,11 @@
     var conf = (f.conf || []).filter(function (c) { return c.k === 's' ? q.people.length === 2 : +c.k.slice(1) < q.people.length; });
     var chg = f.chg && (f.chg.add.length || f.chg.rm.length) ? f.chg : null;
     if (answered && !f.replaced && !conf.length && !chg) { box.hidden = true; box.innerHTML = ''; box.removeAttribute('data-h'); return; }
-    var html = answered ? '' : '<p>' + esc(f.reply
-      ? L(by + '’s view is in. Below: where you agree, and where you see it differently.', 'Llegó la vista de ' + by + '. Abajo: en qué coinciden y en qué lo ven distinto.')
-      : L(by + ' sent this. Your answers stay on your ' + (touchy() ? 'phone' : 'device') + '. Start tapping: ' + (f.by ? f.by + '’s' : 'their') + ' answers stay hidden until you’ve done yours, so you’re not swayed.',
-        by + ' te envió su vistazo. Toca quién hace casi siempre cada tarea, como tú lo ves. Sus respuestas quedan ocultas hasta que hagas las tuyas, para que no te influyan.')) + '</p>';
+    var html = answered ? '' : f.reply ? '<p>' + esc(L(by + '’s view is in. Below: where you agree, and where you see it differently.', 'Llegó la vista de ' + by + '. Abajo: en qué coinciden y en qué lo ven distinto.')) + '</p>'
+      // flow17: a short, three-line welcome for whoever opened the link
+      : '<p class="lq-from-1"><strong>' + esc(L(by + ' sent you a who-does-what.', by + ' te envió un «quién hace qué».')) + '</strong></p>' +
+        '<p>' + esc(L('Tap who mostly does each job, as you see it. About 2 minutes, and you can stop and come back.', 'Toca quién hace casi siempre cada tarea, como tú lo ves. Unos 2 minutos, y puedes parar y seguir después.')) + '</p>' +
+        '<p class="lq-mini">' + esc(L((f.by ? f.by + '’s' : 'Their') + ' answers stay hidden until you’ve done yours.', 'Sus respuestas quedan ocultas hasta que hagas las tuyas.')) + '</p>';
     if (!answered && (q.people.length > 2 || f.t < 0)) {
       html += '<p class="lq-mini">' + esc(L('Which one are you?', '¿Quién eres?')) + '</p><div class="lq-pick" role="group" aria-label="' + esc(L('Which one are you?', '¿Quién eres?')) + '">' + q.people.map(function (_, i) {
         return '<button type="button" class="lq-w" style="--pc:' + COLORS[i] + '" aria-pressed="' + (q.me === i) + '" data-lq-iam="' + i + '">' + esc(typed(i) || personN(i)) + '</button>';
