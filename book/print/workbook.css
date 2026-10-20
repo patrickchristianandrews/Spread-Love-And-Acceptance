@@ -39,6 +39,7 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-facts dt { flex: 0 0 34mm; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); padding-top: .8mm; }
 .wb-facts dd { margin: 0; font-size: 11.4pt; line-height: 1.45; }
 .wb-open .ps-online-box p { font-size: 10.4pt; }
+.wb-note { font-size: 11.4pt; line-height: 1.5; margin: 0 0 6mm; font-style: italic; }
 .wb-open .pe-qr, .wb-open .pe-qr svg { width: 20mm; height: 20mm; flex-basis: 20mm; }
 .wb-lines div { height: 9.6mm; border-bottom: .4pt solid #B8AE98; }
 @page wb-front { }

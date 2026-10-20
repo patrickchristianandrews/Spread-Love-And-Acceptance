@@ -968,13 +968,27 @@ WB_SUMS = {'wp01', 'wp02', 'wp03', 'wp04', 'setup'}
 # printfix13: what each sheet's opening page says where no book chapter teaches it, and how to read the answers
 WB_EXPLAINED = {
     'wp12': ('Book 3, Chapter 1 (Why we get out of tune), and in full, free online at spreadloveandacceptance.com/workpapers/wp-12-same-moment-different-speeds',
-             'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so choose that moment for Part C. '
-             'A gap in speed is about pace and says nothing about how much either of you cares. If your answers barely differ, the friction may come '
-             'from somewhere else, such as tiredness or pressure from outside.'),
+             'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so that’s the moment for Part C. '
+             'A gap in speed is about pace. It says nothing about how much either of you cares. If your answers barely differ, the friction is probably coming '
+             'from somewhere else, tiredness or pressure from outside.'),
     'wp14': ('Book 4, Chapter 3 (Full tanks and different angles), and in full, free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
-             'In Part B, count the tense moments that fell on heavy days. If most of them did, outside pressure is doing much of the damage, and a plan for '
+             'In Part B, count the tense moments that fell on heavy days. If most did, outside pressure is doing a lot of the damage, and a plan for '
              'the pressure (Part D) will help more than talking about each other. If most came on light days, the friction really does start between you, '
-             'and Say it so it lands or the monthly look-back is a good next step.'),
+             'and Say it so it lands or the monthly look-back is the next thing to try.'),
+}
+# voice18: a short note before each workpaper's blank copies, in the books' voice (the people in them are made up)
+WB_NOTE = {
+    'wp02': 'Two minutes, about yourself and nobody else. You may be surprised by your own number. A score of 0.65 on a Tuesday is information. It is not a character reference.',
+    'wp11': 'Make this on a dull, ordinary day, ideally with a cup of tea. Trying to write a calm-down plan in the middle of a row is like reading the instructions on a fire extinguisher while the pan is still burning.',
+    'wp09': 'For one thing that actually stung, not a list of grievances. It’s a check on your side of the conversation. Most people find the first draft of their reply is about twice as long as it needs to be.',
+    'wp13': 'Ninety seconds, once a day, both of you. It’s meant to be almost too small to bother with, which is exactly why it keeps going. If you miss a day, write nothing and carry on tomorrow.',
+    'wp12': 'Fill in your own rows first, before you look at theirs. Often one moment stands out a mile, bedtime, say, or the first ten minutes after someone gets home.',
+    'wp14': 'A line each evening, about your own day. At the end of the week, the question is simple. Was it us, or was it everything else? Quite often it was everything else.',
+    'wp01': 'One ordinary week. Write only what you did or saw yourself, including the thinking jobs, the remembering and the booking. Nobody fills in anybody else’s side, however sure they are.',
+    'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list. They are the reason you’re doing this.',
+    'setup': 'The sums from Book 4, done with a pencil. You’ll need a week of Who did what, your job list, and each person’s own tank score. If anyone’s tank is 0.60 or more, start there, whatever the total says.',
+    'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock.',
+    'wp15': 'The Sunday walk, the birthday breakfast, the silly thing you always say at the door. Every few months, see which are still alive. Nobody is to blame for one that faded.',
 }
 ALL_FOUND = {}
 
@@ -1080,6 +1094,8 @@ def build_workbook(where, bw=False):
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
         s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
               'where you can also fill the form in on screen.</dd></div></dl>') % copies
+        if key in WB_NOTE:
+            s += '<p class="wb-note">%s</p>' % esc(WB_NOTE[key])
         if key in WB_EXPLAINED:
             s += '<p class="wb-read"><strong>How to read your answers.</strong> %s</p>' % esc(WB_EXPLAINED[key][1])
         s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> %s '
@@ -1112,19 +1128,19 @@ def build_workbook(where, bw=False):
     front += copyright_page(book, workbook=True, bw=bw)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
     front += ('<section class="wb-how pe-only" id="wb-how">%s<h1>How to use this workbook</h1>'
-              '<p class="wb-lede">Every workpaper from the books, on big pages with room to write. Write in pencil if you like. There are no right answers, '
-              'and nothing here is a test.</p><ul class="wb-how-list">'
-              '<li><strong>One sheet, one go.</strong> Each workpaper starts with a short page: when to use it, how long it takes, who fills it in, and which book '
-              'explains it. Then come the blank copies, one after another.</li>'
-              '<li><strong>On your own, or together.</strong> Some sheets are only about you; fill those in for yourself, never for someone else. On shared sheets, '
-              'each person writes only their own rows.</li>'
-              '<li><strong>Describe what happened, not who someone is.</strong> The sheets look at the setup and the week, not at anyone’s character.</li>'
+              '<p class="wb-lede">Every workpaper from the books, on big pages with room to write. Pencil is fine. Crossing out is fine. There are no right answers, '
+              'and nothing here is marked.</p><ul class="wb-how-list">'
+              '<li><strong>One sheet, one go.</strong> Each workpaper opens with a short page that says when to use it, how long it takes, who fills it in and which book '
+              'explains it. The blank copies follow, one after another.</li>'
+              '<li><strong>On your own, or together.</strong> Some sheets are only about you, so fill those in for yourself and never for anyone else. On shared sheets, '
+              'each person writes only their own rows, even when it’s very tempting to help.</li>'
+              '<li><strong>Write what happened.</strong> “Bins missed Tuesday” is useful. “Typical” is not. The sheets look at the setup and the week, and leave everyone’s character alone.</li>'
               '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet in free on the website, where it does the sums and keeps '
               'what you type on your own device.</li>'
               '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine. If you feel afraid of someone you live with, '
               'a worksheet is not the answer: spreadloveandacceptance.com/safety lists free, private help.</li></ul>'
-              '<p class="wb-how-h">Six gentle weeks</p><p>If you want an order to follow, the six-week program puts the workpapers to work one small step a week. '
-              'The next page is a planner for it.</p></section>') % mark('wb-how')
+              '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
+              'The next page is a planner for it. Most people miss a week somewhere. That’s built in.</p></section>') % mark('wb-how')
     weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', '—'),
              ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what · WP-13 daily check-in'),
              ('Week 2', 'Give every job one owner.', 'WP-03 One owner per job'),
@@ -1132,8 +1148,8 @@ def build_workbook(where, bw=False):
              ('Week 4', 'Talk about it kindly.', 'WP-09 Say it so it lands · WP-11 Calm-Down Kit'),
              ('Week 5', 'Look at the pace and the pressure.', 'WP-12 Same moment, different speeds · WP-14 Is it us?'),
              ('Week 6', 'Make it last.', 'WP-04 What keeps coming back? · WP-15 rituals')]
-    front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Missing a week is fine; '
-              'pick it up again where you left off. The full program is free at spreadloveandacceptance.com/prog-01.</p>'
+    front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Miss one and you just carry on '
+              'where you left off. The full program is free at spreadloveandacceptance.com/prog-01.</p>'
               '<table class="wb-six-t"><thead><tr><th>Week</th><th>The step</th><th>Workpapers</th><th>Start date</th><th>Done</th></tr></thead><tbody>%s</tbody></table>'
               '<p class="wb-how-h">At the end: what changed?</p><div class="pe-ws-box wb-tall"><b>One thing that is easier now</b></div>'
               '<div class="pe-ws-box wb-tall"><b>One thing to keep an eye on</b></div></section>') % (
