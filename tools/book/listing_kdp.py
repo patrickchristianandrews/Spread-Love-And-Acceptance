@@ -11,7 +11,8 @@ sizes from book/print/epub/epub.json, so run it after build_epub.py too.
 
 logicbook14: the owner sells on Amazon only, so the listing has no other shops, no bookshop distributor and no discount
 codes. It also lists the pocket guide (The Logic Behind It: paperback $9.99 recommended, $8.99 the alternative; Kindle $2.99,
-from tools/book/series-extras.json) and the Kindle box set (Books 1 to 4 and the pocket guide in one ebook).
+from tools/book/series-extras.json). books-final9: the Kindle box set is held back for the second wave, with Book 5; its
+listing words stay here (L[BOXSET]) but it is left out of this wave's listing.
 
 finalfix15: the workbook comes in two editions, built from the same pages: the colour edition (workbook.pdf) and a
 black-and-white interior with the same colour cover (workbook-bw.pdf, recommended). Both are listed, side by side,
@@ -145,7 +146,7 @@ L[POCKET['id']] = {
     ],
     'inside': ['38 situations, one to a page, in nine short sections', 'On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step',
                '“With care” notes where a reaction can land hard on someone else', 'A short introduction to the six-part lens, and why logic explains but never excuses',
-               'Blank cards to work out a reaction of your own', 'A code on every page to the same situation online, free'],
+               'Blank cards to work out a reaction of your own', 'A code on every page to the same situation online'],
     'cats': ['Books › Self-Help › Communication & Social Skills', 'Books › Health, Fitness & Dieting › Psychology & Counseling › Social Psychology & Interactions',
              'Books › Self-Help › Relationships › Interpersonal Relations'],
     'alt': ['Books › Health, Fitness & Dieting › Mental Health › Neuropsychology', 'Books › Parenting & Relationships › Family Relationships', 'Books › Self-Help › Emotions'],
@@ -293,7 +294,7 @@ def workbook_choice():
 
 
 def main():
-    items = CFG['books'] + [POCKET, CFG['workbook'], WB_BW, BOXSET]
+    items = CFG['books'] + [POCKET, CFG['workbook'], WB_BW]  # books-final9: the box set waits for Book 5 (second wave)
     md, rows = [], []
     md.append('# Amazon KDP listing: %s print series and Kindle editions\n' % SERIES)
     md.append('Made by tools/book/listing_kdp.py (print12, logicbook14) from tools/book/series.json, tools/book/series-extras.json and the built books in book/print/. '
@@ -309,7 +310,9 @@ def main():
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
 - **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
 - **The workbook is print only.** Its forms are made to be written in, and every one is already free to print or fill in on the website, so a Kindle edition would only repeat links (and KDP can turn away ebooks that are mostly links or freely available content). Each Kindle book already links every workpaper to its free form. The workbook has no Kindle row to fill in.
-- **The pocket guide** (*%s*, %d pages, 5 × 8 in) is a paperback and a Kindle ebook. **The box set** is a Kindle ebook only: Books 1 to 4 and the pocket guide in one file.
+- **The pocket guide** (*%s*, %d pages, 5 × 8 in) is a paperback and a Kindle ebook.
+- **No box set in this wave.** The Kindle box set is held back and comes with Book 5, in the second wave, so it is published once with every book in it.
+- **Series numbers.** The books are numbered in the series in order. The pocket guide and the workbook are companions and carry **no number**, the same in print and on Kindle.
 - **The same answers every time:** British English text on the Amazon.com store is fine; mark the language as English.
 ''' % (POCKET['title'], pk.get('pages', 0)))
     for item in items:
@@ -358,9 +361,9 @@ def main():
         if kind == 'book':
             row('Series', '%s, number %s (use "Add to series" so all books show together)' % (SERIES, num), 'the same series, the same number')
         elif kind == 'workbook':
-            row('Series', '%s, number 5 [OWNER: or leave the workbook out of the numbered series]' % SERIES, 'no Kindle edition (print only)')
+            row('Series', '%s, as a companion with **no number**: add it to the series as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]' % SERIES, 'no Kindle edition (print only)')
         elif kind == 'pocket':
-            row('Series', '%s, as a companion: number 6 after the workbook, or no number if KDP lets you add it unnumbered [OWNER]' % SERIES, 'the same series; number 5 among the Kindle editions (the workbook has none), or unnumbered [OWNER]')
+            row('Series', '%s, as a companion with **no number**: add it as related (unnumbered) content if KDP offers that; otherwise leave the series box empty [OWNER: check the series page in KDP]' % SERIES, 'the same: the same series, no number')
         else:
             row('Series', '', 'Leave it out of the numbered series, or add it unnumbered if KDP offers that for a box set [OWNER: check the series page in KDP]')
         row('Edition number', '1', '1')
@@ -423,7 +426,7 @@ def main():
                 pr = kdp.get('print', 0)
                 md.append('\n**Price: $%.2f (the short-edition rule: under 100 pages).** KDP\'s printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) '
                           'is $%.2f a book plus $%.4f a page: $%.2f + %d × $%.4f = **%s**. KDP pays 60%% of the list price from $9.99 up, so 60%% × $%.2f = %s, minus printing, '
-                          'leaves **%s a copy**. Below $9.99 it would pay only 50%%, so $9.99 is the lowest price that keeps the higher royalty. The panel\'s readers put its value at about $8.40.\n' % (
+                          'leaves **%s a copy**. Below $9.99 it would pay only 50%%, so $9.99 is the lowest price that keeps the higher royalty. The simulated reader panel put its value at about $8.40.\n' % (
                               price, cost['fixed'], cost['per_page'], cost['fixed'], pages, cost['per_page'], money(pr), price, money(round(0.6 * price, 2)), money(kdp.get('net', 0))))
             elif kind == 'workbook':
                 cost = COSTS['kdp_bw_large'] if bw else COSTS['kdp_large']
@@ -443,8 +446,8 @@ def main():
             what = {'pocket': '%d sections, %d situations' % (ep.get('chapters') or 0, len(POCKET['items'])), 'boxset': '5 books, %d chapters and sections' % (ep.get('chapters') or 0)}.get(kind, '%d chapters' % len(item.get('chapters', [])))
             md.append('| Manuscript (ebook) file | **book/print/epub/%s.epub** (EPUB 3, reflowable, %.2f MB, %s%s). Made by tools/book/build_epub.py. |' % (
                 bid, k_mb, what, ('; EPUBCheck: ' + ep['epubcheck']['summary']) if (ep.get('epubcheck') or {}).get('summary') else ''))
-            md.append('| Kindle cover file | book/print/cover-%s-front.jpg (%s, the %s; also inside the EPUB) |' % (
-                bid, '1600 px wide', 'front of the box set, made for Kindle only' if kind == 'boxset' else 'paperback front without bleed'))
+            md.append('| Kindle cover file | book/print/cover-%s-kindle.jpg (%s, the %s; also inside the EPUB) |' % (
+                bid, '1600 × 2560 px, the 1.6:1 shape KDP prefers', 'front of the box set, made for Kindle only' if kind == 'boxset' else 'the paperback front, trimmed slightly at the sides'))
             md.append('| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |')
             md.append('| Publisher | Leave blank (decided). |')
             if kind == 'boxset':
@@ -467,7 +470,7 @@ def main():
         md.append('### Taglines for ads (short and true)\n')
         md.append('\n'.join('- %s' % t for t in TAGLINES[bid]))
         base = {
-            'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or ('6 [OWNER]' if kind == 'pocket' else ('5 [OWNER]' if kind == 'workbook' else '')),
+            'id': bid, 'format': 'paperback', 'title': title, 'subtitle': sub, 'series': SERIES, 'series_number': num or '',
             'edition': 1, 'author': 'Christian', 'publisher': PUBLISHER, 'imprint': IMPRINT,
             'description_html': desc, 'category_1': d['cats'][0], 'category_2': d['cats'][1], 'category_3': d['cats'][2],
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
@@ -485,7 +488,7 @@ def main():
             rows.append(base)
         if has_kindle:
             rows.append(dict(base, format='kindle', series_number=(num or ''), isbn='Leave blank (ASIN)', publisher='', imprint='', ink_paper='', trim='', bleed='', cover_finish='', pages='',
-                             interior_file='book/print/epub/%s.epub' % bid, cover_file='book/print/cover-%s-front.jpg' % bid, low_content='', price_usd='%.2f' % k_price,
+                             interior_file='book/print/epub/%s.epub' % bid, cover_file='book/print/cover-%s-kindle.jpg' % bid, low_content='', price_usd='%.2f' % k_price,
                              price_gbp='', price_eur='', price_cad='', price_aud='', expanded_distribution='', printing_cost_usd='', royalty_rate='%d%%' % k_pct,
                              royalty_usd='%.2f' % k_net, kdp_select='No', drm='No'))
         else:
@@ -499,12 +502,14 @@ def main():
 - **Module 5, the workbook and the pocket guide:** a filled-in example sheet beside a blank one, and one page of the pocket guide.
 Keep every image free of prices, review quotes and claims like "bestseller". [OWNER]
 ''')
+    pm = MADE.get(POCKET['id'], {}).get('pagemap', {})
+    POCKET_FIRST = min([v for k, v in pm.items() if k.startswith('sit-')] or [12])
     md.append('## "Look inside" tips\n')
     md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast”, one page on the workpapers, tools and characters), so a browser reaches Chapter 1 early.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
-- The pocket guide reaches its first situation on page 10, after a short introduction to the six parts.
-- For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, then the three friends, so Chapter 1 comes early. The box set opens on one contents page for all five books.
-''')
+- The pocket guide reaches its first situation on page %d, after a short introduction to the six parts.
+- For Kindle, KDP shows about the first 10%%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, then the three friends, so Chapter 1 comes early.
+''' % POCKET_FIRST)
     md.append('## Author Central bio (short, warm and true)\n')
     md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
 

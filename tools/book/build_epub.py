@@ -90,6 +90,21 @@ FRIENDS = [('puddles', hints.SVG_PUDDLES, 'Professor Puddles, a cheerful raindro
 WARN = []
 
 
+
+def kindle_cover(bid):
+    """books-final9 (audit S2): KDP's ideal Kindle cover is 1600 x 2560 (1.6:1). The print fronts are 6 x 9 (1.5:1), so this
+    trims the sides evenly (about 0.19 in a side; every cover keeps its text well inside that) and scales to 1600 x 2560.
+    Writes book/print/cover-<id>-kindle.jpg and returns its path; the EPUB and the listing use it."""
+    from PIL import Image
+    src = os.path.join(ROOT, 'book', 'print', 'cover-%s-front.jpg' % bid)
+    out = os.path.join(ROOT, 'book', 'print', 'cover-%s-kindle.jpg' % bid)
+    im = Image.open(src).convert('RGB')
+    w, h = im.size
+    tw = min(w, int(round(h / 1.6)))
+    x0 = (w - tw) // 2
+    im.crop((x0, 0, x0 + tw, h)).resize((1600, 2560), Image.LANCZOS).save(out, 'JPEG', quality=90, optimize=True)
+    return out
+
 def warn(msg):
     WARN.append(msg)
 
@@ -930,7 +945,7 @@ def write_epub(book, docs, nav_at, used, pics, path, extra_files=None, nav_html=
         spine.append((iid, True))
     files['css/book.css'] = (CSS % {'acc': acc}).encode('utf-8')
     items.append(('css', 'css/book.css', 'text/css', ''))
-    cover = os.path.join(ROOT, 'book', 'print', 'cover-%s-front.jpg' % book['id'])
+    cover = kindle_cover(book['id'])
     files['images/cover.jpg'] = open(cover, 'rb').read()
     items.append(('cover-image', 'images/cover.jpg', 'image/jpeg', 'cover-image'))
     for k, (name, src) in enumerate(sorted((extra_files or {}).items())):
@@ -1223,7 +1238,7 @@ def main():
         report = {}
     report.setdefault('books', {})
     report['about'] = ('Made by tools/book/build_epub.py (epub13, logicbook14): the Kindle ebooks (EPUB 3) of the print series, the pocket guide and the box set. '
-                       'Upload <id>.epub as the Kindle manuscript and cover-<id>-front.jpg as the Kindle cover. The workbook has no ebook (print only).')
+                       'Upload <id>.epub as the Kindle manuscript and cover-<id>-kindle.jpg (1600 x 2560) as the Kindle cover. The workbook has no ebook (print only).')
     fails = 0
     jobs = list(built)
     if extras:
