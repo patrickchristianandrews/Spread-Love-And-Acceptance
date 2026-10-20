@@ -21,16 +21,15 @@
                                     wording and explicit threats only.
      next(result, lang)          -> {title, body, say, links:[{text, href}], extra, footer}: the proportionate next step
      exportForChat(lang)         -> a plain JSON-safe object of every bank, the rules and the next steps, for chat turns
-     t(pair, lang)               -> the words in that language
+     t(words)                    -> the words as plain text
 
    LEVELS
      0  "Sounds like an ordinary rough patch, or a one-off"  -> everyday tips
      1  "Worth a calm talk"                                    -> one tool and words to start
      2  "A pattern worth working on together"                  -> a plan: tools, worksheets, the six-week program
-     3  "Worth talking to someone outside the two of you"      -> a neutral pointer (counsellor, doctor, someone you
-                                                                 both trust, /outside-help.html), worded as an option
-     4  safety                                                 -> the site's existing safety and crisis pages, unchanged,
-                                                                 offered as a gentle question, never as a verdict
+     3  "Worth talking to someone outside the two of you"      -> a neutral note (a counsellor, a doctor, someone you
+                                                                 both trust), worded as an option
+     4  safety                                                 -> a short, neutral reply: the read, and no resources
 
    THE RULES (tools/clarify/test-clarify.js checks every one of them)
      Each answer has a weight w (plus = more concern, minus = an ordinary explanation) and flags f.
@@ -367,16 +366,16 @@
   }
   // a first guess from a few typed words; the person can always change it
   var GUESS = [
-    ['afraid', /\b(?:afraid|scared|frightened|unsafe|not safe|fear|miedo|asustad[oa])\b/i],
-    ['money', /\b(?:money|bills?|spend(?:ing)?|budget|rent|debt|paid|pay(?:ing)?|card|dinero|gastos?|cuentas?)\b/i],
-    ['limits', /\b(?:won't let|not allowed|allowed to|limit|boundar(?:y|ies)|said no|says no|forbid|rules? for me|no me deja)\b/i],
-    ['repair', /\b(?:sorry|apolog\w*|blame[sd]?|my fault|fault|perd[oó]n|culpa)\b/i],
-    ['respect', /\b(?:disrespect\w*|rude|mock\w*|put[- ]?downs?|made fun|laugh(?:ed|s) at|insult\w*|respeto)\b/i],
+    ['afraid', /\b(?:afraid|scared|frightened|unsafe|not safe|fear)\b/i],
+    ['money', /\b(?:money|bills?|spend(?:ing)?|budget|rent|debt|paid|pay(?:ing)?|card)\b/i],
+    ['limits', /\b(?:won't let|not allowed|allowed to|limit|boundar(?:y|ies)|said no|says no|forbid|rules? for me)\b/i],
+    ['repair', /\b(?:sorry|apolog\w*|blame[sd]?|my fault|fault)\b/i],
+    ['respect', /\b(?:disrespect\w*|rude|mock\w*|put[- ]?downs?|made fun|laugh(?:ed|s) at|insult\w*)\b/i],
     ['decisions', /\b(?:decid\w*|decision\w*|without asking|choose|chose|decide)\b/i],
-    ['communication', /\b(?:listen\w*|unheard|ignor\w*|yell\w*|shout\w*|snap\w*|tone|talk(?:ed)? over|interrupt\w*|escucha\w*)\b/i],
-    ['time', /\b(?:time together|no time|attention|phone|busy|date night|tiempo)\b/i],
-    ['load', /\b(?:chores?|dishes|laundry|cleaning|cook\w*|housework|trash|groceries|mental load|tareas|platos)\b/i],
-    ['recurring', /\b(?:again|keeps? coming|every time|always the same|same fight|same argument|otra vez)\b/i]
+    ['communication', /\b(?:listen\w*|unheard|ignor\w*|yell\w*|shout\w*|snap\w*|tone|talk(?:ed)? over|interrupt\w*)\b/i],
+    ['time', /\b(?:time together|no time|attention|phone|busy|date night)\b/i],
+    ['load', /\b(?:chores?|dishes|laundry|cleaning|cook\w*|housework|trash|groceries|mental load)\b/i],
+    ['recurring', /\b(?:again|keeps? coming|every time|always the same|same fight|same argument)\b/i]
   ];
   function guessType(text) {
     var s = String(text || '');
@@ -404,7 +403,7 @@
     return PAT;
   }
   // a small fallback, used only when the shared pattern list isn't on the page
-  var CRISIS_FALLBACK = /\b(?:kill myself|end my life|take my (?:own )?life|want to die|don't want to (?:live|be alive)|better off without me|suicid\w*|hurt myself|me voy a matar|quiero morir(?:me)?|no quiero vivir)\b/i;
+  var CRISIS_FALLBACK = /\b(?:kill myself|end my life|take my (?:own )?life|want to die|don't want to (?:live|be alive)|better off without me|suicid\w*|hurt myself)\b/i;
   var THREAT_FALLBACK = /\b(?:(?:said|says|threatened)(?: that)? (?:he|she|they)(?:'d| would|'ll| will) (?:kill|hurt) (?:me|the kids|my)|threatened to (?:kill|hurt|take the kids))\b/i;
   function readText(text) {
     var s = String(text || ''); if (!s.trim()) return { crisis: false, threat: false };
@@ -423,7 +422,7 @@
     'Worth a calm talk',
     'A pattern worth working on together',
     'Worth talking to someone outside the two of you',
-    'Your safety comes first'
+    'Some of this sounds serious'
   ];
   var FLAG_WORDS = {
     agreed: 'It was agreed between you.',
@@ -596,21 +595,19 @@
         links: [L('Communication, in plain words', '/communication.html'), L('A kind weekly check-in', '/check-ins.html')] }
     },
     afraid: {
-      l0: { body: 'Glad to hear you feel safe. If that ever changes, there is a page here with free, private people to talk to.',
-        links: [L('Not safe at home?', '/safety.html')] },
+      l0: { body: 'Glad to hear you feel safe.',
+        links: [] },
       l1: { body: 'It can help to talk it over with someone you trust, so you can see it clearly.',
-        links: [L('Someone to talk to, free', '/outside-help.html#talk'), L('When it’s more than a rough patch', '/safety.html#signs')] },
-      l2: { body: 'Some of what you said is worth some care. Talking it over with someone you trust, or a free, private line, can help you see it clearly.',
-        links: [L('Someone to talk to, free', '/outside-help.html#talk'), L('When it’s more than a rough patch', '/safety.html#signs')] }
+        links: [] },
+      l2: { body: 'Some of what you said is worth some care. Talking it over with someone you trust can help you see it clearly.',
+        links: [] }
     }
   };
   var L3 = { body: 'Not because anything is wrong with either of you: some patterns are easier to shift with a neutral person in the room. A counsellor, your doctor, or someone you both trust are all options, if they feel right.',
-    links: [L('Find a counsellor or therapist', '/outside-help.html#counsellor'), L('Help beyond this site', '/outside-help.html')] };
-  // the site's existing safety pages, offered as a question and an option, never as a verdict
-  var SAFE = { body: 'Some of what you said can make it hard to feel safe, or free to say no. Only you can judge what fits. If it does, there are free, private people to talk to, any time.',
-    links: [L('Free, private people to talk to', '/safety.html#talk'), L('If you are in danger right now', '/safety.html#now')] };
-  // the same words the site already uses for a crisis (safety.html, en-espanol.html)
-  var CRISIS = 'If you are thinking about ending your life: in the US, call or text 988. In the UK, call Samaritans free on 116 123, or text SHOUT to 85258, any time. Anywhere else, find your local line at findahelpline.com.';
+    links: [] };
+  // level 4: a short, neutral reply (the owner's decision: no resources, numbers or links)
+  var SAFE = { body: 'That sounds really hard. This quick check is a small guide to this site, and it can’t help with this one.',
+    links: [] };
   var SAFE_FOOT = 'If it doesn’t fit, that’s okay too: the steps for a calm talk are still here.';
 
   function next(result, lang) {
@@ -621,7 +618,7 @@
       links: (src.links || []).map(function (l) { return { text: t(l.text, lang), href: l.href }; }), extra: '', footer: '', footerLinks: [] };
     // at level 3, the type's own plan stays one tap away
     if (lvl === 3 && bank.l2) out.links = out.links.concat(bank.l2.links.slice(0, 1).map(function (l) { return { text: t(l.text, lang), href: l.href }; }));
-    if (lvl >= 4) { if (result && result.crisis) out.extra = t(CRISIS, lang); if (id !== 'afraid' && bank.l1) { out.footer = t(SAFE_FOOT, lang); out.footerLinks = bank.l1.links.map(function (l) { return { text: t(l.text, lang), href: l.href }; }); } }
+    if (lvl >= 4) { if (id !== 'afraid' && bank.l1) { out.footer = t(SAFE_FOOT, lang); out.footerLinks = bank.l1.links.map(function (l) { return { text: t(l.text, lang), href: l.href }; }); } }
     return out;
   }
 
@@ -642,7 +639,7 @@
     return {
       version: 1, lang: lang, order: ORDER.slice(), aliases: JSON.parse(JSON.stringify(ALIASES)), types: types,
       levels: LEVEL_TITLES.map(function (x, i) { return { level: i, key: LEVEL_KEYS[i], title: t(x, lang) }; }),
-      level3: next({ type: 'load', level: 3 }, lang), safety: next({ type: 'afraid', level: 4 }, lang), crisis: t(CRISIS, lang),
+      level3: next({ type: 'load', level: 3 }, lang), safety: next({ type: 'afraid', level: 4 }, lang),
       flags: { benign: BENIGN.slice(), pattern: PATTERN.slice(), pressure: PRESSURE.slice(), signs: SIGNS.slice(), safety: SAFETY.slice() },
       rules: [
         'Ask the questions of one type in order, one per turn. Every question also accepts "Not sure" and "Skip". "Skip all" ends with level 0 and everyday tips.',

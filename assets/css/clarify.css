@@ -60,7 +60,6 @@
 .tcl-say .tcl-say-h{ margin-top:0 !important; }
 .tcl-say-q{ font-style:italic; }
 .tcl-copied{ font-size:.85rem; color:var(--credit, #3E6B4C); margin-left:.4rem; }
-.tcl-crisis{ font-weight:600; }
 .tcl-links, .tcl-took, .tcl-yours ul{ margin:.35rem 0 .35rem 1.1rem; padding:0; }
 .tcl-links li, .tcl-took li, .tcl-yours li{ margin:.2rem 0; }
 .tcl-links a{ color:var(--focus, #2B5B8C); }
