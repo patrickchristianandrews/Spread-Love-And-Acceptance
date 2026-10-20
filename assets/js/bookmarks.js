@@ -436,7 +436,7 @@
       if (!panel) { if (++tries < 40) setTimeout(place, 250); return; }
       if (panel.querySelector('a[href="/saved.html"]')) return;
       var ul = panel.querySelector('.tol-panel-quick ul');
-      var li = el('li', null, '<a href="/saved.html"><span aria-hidden="true">🔖</span> Saved: your pages and places</a>');
+      var li = el('li', null, '<a href="/saved.html"><span aria-hidden="true">🔖</span> Saved for later</a>');
       if (ul) ul.insertBefore(li, ul.children[1] || null);
     })();
   }

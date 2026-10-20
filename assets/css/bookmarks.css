@@ -108,7 +108,8 @@ html[data-theme="dark"]:not(.tol-nodark) :is(.tol-sv, .sv-page) svg{ filter:none
 /* pages with their own dark look (games, the Night Garden): the boxes keep light colours, which is fine on dark */
 
 /* ---------- /saved.html ---------- */
-.sv-page .sv-group{ margin:1.6rem 0 0; }
+.sv-page .sv-group{ margin:1rem 0 0; }
+.sv-page .sv-group + .sv-group{ margin-top:1.6rem; }
 .sv-page .sv-group h2{ display:flex; align-items:baseline; gap:.5rem; margin-bottom:.4rem; }
 .sv-page .sv-c{ font:600 .85rem/1 "Lora", Georgia, serif; color:var(--ink-soft, #5A5346); padding:.2rem .5rem; border-radius:999px; background:var(--paper-deep, #ECE2C4); }
 .sv-page .sv-list{ list-style:none; padding:0 !important; margin:0 !important; display:grid; gap:.6rem; }
@@ -134,7 +135,7 @@ html[data-theme="dark"]:not(.tol-nodark) :is(.tol-sv, .sv-page) svg{ filter:none
 .sv-page .sv-btn.sv-soft{ border-color:var(--line, #D9CBA3); font-weight:500; }
 .sv-page .sv-btn[hidden]{ display:none; }
 .sv-page .sv-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-.sv-page .sv-msg{ min-height:1.5rem; font-weight:600; color:#2F5A3C; }
+.sv-page .sv-msg{ min-height:1.5rem; margin:0 0 .4rem !important; font-weight:600; color:#2F5A3C; }
 .sv-page .sv-none{ color:var(--ink-soft, #5A5346); font-style:italic; }
 .sv-page .sv-empty{ padding:1rem 1.1rem; border-radius:18px; border:1.5px dashed var(--line, #D9CBA3); background:rgba(255,251,242,.9); }
 .sv-page .sv-empty-h{ margin:0 0 .5rem !important; font-weight:600; }
