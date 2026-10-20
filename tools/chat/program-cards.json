@@ -189,6 +189,250 @@
       ]
     },
     {
+      "id": "checkerrules",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [],
+      "name": "how the Chat analyzer reads a message",
+      "pat": "\\b(checker|chat analy[sz]er|analy[sz]er|signal translator|text checker|message checker|the tool|this tool|it|this|you|puddles)\\b.{0,25}\\b(just |only |basically )?(keyword|key word)s?( matching| matcher| search| based| spotting)?\\b|\\b(just|only) (matching|looking for|spotting|searching for) (keywords|key words|words)\\b",
+      "what": [
+        "It’s rule-based, not a generative AI, and it’s more than spotting single words. It reads each message by written-out rules (patterns like “always” and “never”, put-downs, threats, a clear ask), the same way for everyone. It reads words, not names: swap the names and you get the same read."
+      ],
+      "how": [
+        "It can miss tone of voice, history and in-jokes, so add context when something matters.",
+        "Every rule and cut-off the site uses is written out on Method and honest limits.",
+        "Professor Puddles works the same way: he picks from what’s already written on this site, and doesn’t invent new answers."
+      ],
+      "links": [
+        [
+          "The Chat analyzer",
+          "/signal-translator.html"
+        ],
+        [
+          "Method and honest limits",
+          "/method-and-limits.html"
+        ],
+        [
+          "How Professor Puddles answers",
+          "/ask.html#how-he-answers"
+        ]
+      ],
+      "plain": [
+        "It follows written rules.",
+        "It reads words, not names.",
+        "It can miss tone and history."
+      ]
+    },
+    {
+      "id": "teentexting",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "texting with a teenager",
+      "pat": "\\b(my |our )?(1[0-9] ?(year|yr) ?old|teen\\w*|son|daughter|kid)\\b.{0,60}\\b(text|texts|texting|messages?|messaging|whatsapp|snapchat)\\b.{0,60}\\b(nag\\w*|fight\\w*|argu\\w*|ignor\\w*|one word|short|rude|blue ticks?|left on read)\\b|\\b(fight\\w*|argu\\w*|nag\\w*)\\b.{0,40}\\b(over|about|by) (text|texts|texting|messages?)\\b.{0,60}\\b(1[0-9] ?(year|yr) ?old|teen\\w*|son|daughter)\\b",
+      "what": [
+        "Texts with a teenager go wrong easily: a reminder can read as nagging, and a one-word reply can read as rude when it’s just busy. It helps to agree what texts are for, and to keep the bigger talks for side by side."
+      ],
+      "how": [
+        "Put the reason in the rule: “Text if plans change, because we worry, not because we don’t trust you.” A rule with a reason feels like care; one without can feel like control.",
+        "One reminder, not three. Agree together which things you’ll text about, and which can wait until you’re in the same room.",
+        "Read short replies kindly. “k” is often busy, not rude. Ask, don’t assume.",
+        "For anything bigger, talk side by side, in the car or while cooking, and listen more than you advise."
+      ],
+      "links": [
+        [
+          "A few house rules, with the why",
+          "/parents.html#house-rules"
+        ],
+        [
+          "Talking with teens",
+          "/parents.html#teens"
+        ],
+        [
+          "Reading short texts carefully",
+          "/long-distance.html#texts"
+        ]
+      ],
+      "notPat": "\\b(i m|im|i am) 1[0-7]\\b",
+      "script": [
+        "I don’t need every detail. I just want to know you’re okay.",
+        "Which of my texts feel like nagging? Let’s keep the ones that matter and drop the rest."
+      ],
+      "scriptLabels": [
+        "Words you could use",
+        "To agree it together"
+      ],
+      "plain": [
+        "Give the reason with the rule.",
+        "One reminder, not three.",
+        "A short reply is often just busy.",
+        "Talk side by side for big things."
+      ]
+    },
+    {
+      "id": "guestsoverload",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "friends over without warning",
+      "pat": "\\b(overwhelm\\w*|overload\\w*|drained|stressed|anxious|panic\\w*|exhausted)\\b.{0,60}\\b(friends|guests|people|visitors|mates)\\b.{0,20}\\b(over|round|coming|here|home)\\b|\\b(invite\\w*|bring\\w*|brought|has|have|having) (friends|people|guests|mates|everyone) (over|round|home)\\b.{0,40}\\b(without (telling|asking|warning|checking with) me|last minute|no (warning|notice))\\b|\\b(plan|planning|organi[sz]e) (having )?(friends|people|guests) (over|round)\\b",
+      "what": [
+        "That makes sense. For many people, guests at home take a lot of energy, especially without warning: it’s a sensory and social load, not unfriendliness. A heads-up rule usually helps both of you."
+      ],
+      "how": [
+        "Agree notice before guests: a day’s warning, or a quick text first, so it isn’t a surprise.",
+        "Agree a recharge time after visitors, and a quiet corner anyone can go to without explaining.",
+        "A simple signal, like a hand on the heart, can mean “I’m overloaded and need ten minutes.”",
+        "Swap Wiring Cards, so each of you can see what the other needs at home."
+      ],
+      "links": [
+        [
+          "Needing time alone after seeing people (The Logic Behind It)",
+          "/the-logic-behind-it.html#l-alone-after-people"
+        ],
+        [
+          "Sensory overload at home",
+          "/neurodivergent-relationships.html#sensory"
+        ],
+        [
+          "How to talk to me (the Wiring Card)",
+          "/wiring-card.html"
+        ]
+      ],
+      "script": [
+        "I love that you love having people over. Could we agree a heads-up first, and a quiet hour for me after?"
+      ],
+      "plain": [
+        "Agree notice before guests.",
+        "Agree a quiet time after.",
+        "Use a signal for “I need ten minutes”."
+      ],
+      "follow": [
+        [
+          "\\b(plan\\w*|friends over|people over|guests|heads up|notice|warning)\\b",
+          "guestsoverload"
+        ],
+        [
+          "\\b(rejected|alone time|introvert\\w*|extrovert\\w*|social|quiet)\\b",
+          "socialquiet"
+        ]
+      ]
+    },
+    {
+      "id": "socialquiet",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "a social partner and a quiet partner",
+      "pat": "\\b(needs?|wants?|likes?|loves?) (heaps of |lots of |a lot of |more |so much )?(alone time|time alone|quiet time|space|routine|downtime|quiet)\\b.{0,100}\\b(social|extrovert\\w*|people over|friends over|going out|having people)\\b|\\b(social|extrovert\\w*|people over|friends over)\\b.{0,100}\\b(alone time|time alone|quiet time|routine|introvert\\w*|homebody)\\b|\\bintrovert\\w*\\b.{0,60}\\bextrovert\\w*\\b|\\bextrovert\\w*\\b.{0,60}\\bintrovert\\w*\\b",
+      "what": [
+        "One of you recharges with people and the other recharges alone. Neither is wrong, and needing quiet isn’t a rejection of you. With a plan, you can both get what you need."
+      ],
+      "how": [
+        "For the social one: give notice before guests, and keep a weekly people night that’s yours.",
+        "For the quieter one: say what you need as a plan, not a no: “Friday’s great, and I’ll need Saturday morning quiet.”",
+        "Agree a recharge time after visitors, and that leaving a gathering early isn’t rude.",
+        "Swap Wiring Cards to see each other’s needs side by side."
+      ],
+      "links": [
+        [
+          "Needing time alone after seeing people (The Logic Behind It)",
+          "/the-logic-behind-it.html#l-alone-after-people"
+        ],
+        [
+          "When partners are wired differently",
+          "/neurodivergent-relationships.html#mixed"
+        ],
+        [
+          "How to talk to me (the Wiring Card)",
+          "/wiring-card.html"
+        ]
+      ],
+      "script": [
+        "I love having people over, and I know it drains you. Can we agree notice before guests, and one people night a week?",
+        "Needing quiet isn’t about you. Can we plan the nights with friends, so I can enjoy them too?"
+      ],
+      "scriptLabels": [
+        "If you’re the social one",
+        "If you’re the quieter one"
+      ],
+      "plain": [
+        "Neither of you is wrong.",
+        "Give notice before guests.",
+        "Keep a weekly people night.",
+        "Plan quiet time too."
+      ],
+      "follow": [
+        [
+          "\\b(plan\\w*|friends over|people over|guests|heads up|notice|warning)\\b",
+          "guestsoverload"
+        ],
+        [
+          "\\b(rejected|alone time|introvert\\w*|extrovert\\w*|social|quiet)\\b",
+          "socialquiet"
+        ]
+      ]
+    },
+    {
+      "id": "backhome",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "back living with a parent",
+      "pat": "\\b(back|moved back|moving back|living back|live back) (home|in with|living with|with) (my )?(mum|mom|mother|dad|father|parents?|family)\\b|\\b(living|live|staying) with (my )?(mum|mom|parents?|dad) (again|at \\d+|as an adult)\\b",
+      "what": [
+        "Moving back in with a parent can feel like going backwards, and that feeling is very common. It isn’t a verdict on you. Being hard on yourself feels like it should help; it usually doesn’t."
+      ],
+      "how": [
+        "Talk to yourself the way you’d talk to a good friend in the same spot: kindly, remembering that hard stretches happen to almost everyone.",
+        "Notice small steps. One thing done each day, written down, adds up.",
+        "At home, old family roles can show up fast. It’s okay to respond as the adult you are now, not the role you had growing up.",
+        "Agree a few house things early (who does what, quiet hours), so you’re living together as adults."
+      ],
+      "links": [
+        [
+          "A kinder inner voice",
+          "/after-a-breakup.html#kind-voice"
+        ],
+        [
+          "Small wins: hard days into small steps",
+          "/small-wins.html"
+        ],
+        [
+          "Grown-up children and parents: when old roles come back",
+          "/grown-up-children.html#talking"
+        ]
+      ],
+      "script": [
+        "I can learn from what went wrong without deciding I’m the problem."
+      ],
+      "scriptLabels": [
+        "To yourself"
+      ],
+      "notPat": "\\b(hopeless|cant go on|can t go on|no point|kill|die|dying|end it|hurt (myself|me))\\b",
+      "plain": [
+        "This is common.",
+        "It is not a verdict on you.",
+        "Be kind to yourself.",
+        "Notice small steps."
+      ]
+    },
+    {
       "id": "forwhom",
       "kind": "intent",
       "first": true,
@@ -3389,6 +3633,48 @@
           "\\b(took|takes|taking|confiscat\\w*) my (phone|tablet|ipad|laptop|switch|xbox|console)\\b|\\b(phone|curfew|rules?)\\b",
           "teenhouse"
         ]
+      ]
+    },
+    {
+      "id": "teenphonetaken",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "a parent taking your phone at night",
+      "pat": "\\b(mum|mom|dad|mother|father|parents?|stepmum|stepmom|stepdad)\\b.{0,30}\\b(takes?|took|taking|keeps taking|confiscat\\w*) (away )?my (phone|mobile|ipad|tablet|laptop)\\b",
+      "what": [
+        "Losing your phone at night is a common clash, and it usually comes from worry about sleep, not from wanting to control you. A deal you both agree is often easier to keep than a rule handed down."
+      ],
+      "how": [
+        "Ask why, calmly, and say back their worry: “You’re worried I’m up all night on it.”",
+        "Offer a deal: the phone charges downstairs at a set time on school nights, and you get it back at breakfast. A rule with a reason, that you helped shape, is easier to keep.",
+        "Ask to look at it again in two weeks, so it isn’t forever.",
+        "If it blows up, try again later with a note or a text: it lets you say it all without being interrupted."
+      ],
+      "links": [
+        [
+          "When it’s tense with your parents",
+          "/teens.html#parents"
+        ],
+        [
+          "A few house rules, with the why (for the grown-ups)",
+          "/parents.html#house-rules"
+        ],
+        [
+          "Talking about it: getting heard",
+          "/teens.html#talking"
+        ]
+      ],
+      "script": [
+        "I get that you’re worried about my sleep. Could my phone charge downstairs at eleven on school nights, and I get it back at breakfast?"
+      ],
+      "plain": [
+        "Ask why, calmly.",
+        "Offer a deal with a time.",
+        "Ask to look again in two weeks."
       ]
     },
     {
@@ -6823,40 +7109,6 @@
       "chips": []
     },
     {
-      "id": "illburden",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "feeling like a burden when you’re ill",
-      "pat": "\\bburden\\b.{0,40}\\b(my )?(husband|wife|partner|boyfriend|girlfriend|carer|caregiver|spouse)\\b|\\b(husband|wife|partner|boyfriend|girlfriend|carer|caregiver|spouse)\\b.{0,40}\\bburden\\b|\\b(ill|illness|sick|disabled|disability|chronic\\w*|chronically ill|pain|me cfs|mecfs|cfs|long covid|fibromyalgia|fibro|lupus|ms|crohns?|endometriosis|arthritis)\\b.{0,60}\\bburden\\b|\\bburden\\b.{0,60}\\b(ill|illness|sick|disabled|disability|chronic\\w*|chronically ill|pain|me cfs|mecfs|cfs|long covid|fibromyalgia|fibro|lupus|ms|crohns?|endometriosis|arthritis)\\b",
-      "notPat": "\\b(mum|mom|mother|dad|father|parents?) (made|makes|treated) me\\b",
-      "keys": [],
-      "what": [
-        "Being ill isn’t being a burden. You’re a partner who is ill, and what you bring to the relationship isn’t measured in chores. Feeling this way is very common, and it’s worth saying out loud to them."
-      ],
-      "how": [
-        "Tell them the feeling, not only the guilt: “I feel like a burden, and I hate it.” Most partners want to hear that.",
-        "Share by energy, not hours: each of you does what you can on the energy you have that day.",
-        "Keep a list of things you can own from bed or the sofa: planning meals, online orders, birthdays, calls.",
-        "Make sure the carer side has support too, so neither of you runs on empty.",
-        "If the feeling turns into thoughts that they’d be better off without you, tell your doctor or someone you trust today."
-      ],
-      "script": [
-        "I feel like a burden, and I hate it. Can we talk about what I can still own, so it feels more like a team?"
-      ],
-      "links": [
-        [
-          "When one of you is ill or disabled",
-          "/when-one-is-ill.html"
-        ],
-        [
-          "Caring for someone you love (their side)",
-          "/caregivers.html"
-        ]
-      ],
-      "chips": []
-    },
-    {
       "id": "illchores",
       "kind": "intent",
       "first": true,
@@ -9016,6 +9268,53 @@
       ]
     },
     {
+      "id": "illburden",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "when you’re the one who is ill",
+      "pat": "\\b(does|do|doing|has to do) (everything|it all|all of it) for me\\b.{0,60}\\b(useless|burden|guilty|helpless|worthless|bad)\\b|\\b(i feel|feel like|feeling) (a |such a |like a |so )?(burden|useless|helpless)\\b.{0,60}\\b(ill|illness|sick|since (my|the) (stroke|diagnosis|accident|operation)|stroke|disabled|disability|chronic|pain|can t do|cant do|wheelchair)\\b|\\b(ill|illness|sick|stroke|disabled|disability|chronic|pain|wheelchair)\\b.{0,60}\\b(i feel|feel like|feeling) (a |such a |like a |so )?(burden|useless|helpless)\\b",
+      "what": [
+        "Being ill isn’t being a burden. You’re a partner with less energy. What you do on good days counts. What you plan and remember from a chair or bed counts. Looking after your health so you don’t crash counts."
+      ],
+      "how": [
+        "It’s very common to feel guilty, or to push too hard on a good day to make up for it, and then crash.",
+        "Saying what you can do, honestly, helps your partner more than overdoing it.",
+        "Take a job that fits your energy, like the bills or the calendar, so it’s off their mind."
+      ],
+      "links": [
+        [
+          "If you are the one who is ill",
+          "/when-one-is-ill.html#burden"
+        ],
+        [
+          "Good-day and bad-day owners",
+          "/when-one-is-ill.html#good-bad"
+        ],
+        [
+          "Jobs that can be done from bed count",
+          "/when-one-is-ill.html#from-bed"
+        ]
+      ],
+      "script": [
+        "I hate that you’re carrying more right now. Thank you. Can I take the bills and the calendar so they’re off your mind?",
+        "Today is a low day. I can do the grocery order, but not cooking. Can we have something easy?"
+      ],
+      "scriptLabels": [
+        "To your partner",
+        "On a low day"
+      ],
+      "notPat": "\\b(hopeless|cant go on|can t go on|no point|kill|die|dying|end it|hurt (myself|me))\\b",
+      "plain": [
+        "Being ill is not being a burden.",
+        "What you do on good days counts.",
+        "Say honestly what you can do."
+      ]
+    },
+    {
       "id": "selfworry",
       "kind": "intent",
       "first": true,
@@ -9191,6 +9490,216 @@
       "safety": true
     },
     {
+      "id": "stillhere",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "when someone you love doesn’t recognise you",
+      "pat": "\\b(doesnt|does not|dont|don t|no longer|cant|can t|didnt|did not) (recognise|recognize|know) (me|who i am)( anymore| any more)?\\b|\\b(forgot|forgotten|forgets) who i am\\b|\\bthinks i m (a stranger|someone else)\\b",
+      "what": [
+        "I’m so sorry. You may miss the person you knew, even while you sit with them. This is a real loss, and it is normal to grieve it. Some people call it “ambiguous loss”: the person is here, but part of who they were is gone. Feeling grief now doesn’t mean you love them less."
+      ],
+      "how": [
+        "Moments that aren’t care still reach people: music from their younger years, old photos, a small ritual from before, holding hands.",
+        "Songs often reach people even late in dementia, and singing along can be a real moment together.",
+        "You can grieve and visit at the same time. Other people may not notice this kind of grief; it still counts.",
+        "Say it to someone safe: a friend, a carers’ group or a counsellor."
+      ],
+      "links": [
+        [
+          "Grieving someone who is still here",
+          "/caregivers.html#still-here"
+        ],
+        [
+          "Moments that aren’t care",
+          "/caregivers.html#bonding"
+        ],
+        [
+          "Grief and later life",
+          "/grief.html"
+        ]
+      ],
+      "script": [
+        "Shall we put on your old records and just sit for a bit?"
+      ],
+      "plain": [
+        "This is a real loss.",
+        "It is normal to grieve.",
+        "Music and photos can still reach them.",
+        "Talk to someone safe."
+      ],
+      "follow": [
+        [
+          "\\b(recognise|recognize|know (me|who i am)|forgot\\w* (me|who))\\b",
+          "stillhere"
+        ],
+        [
+          "\\b(dont|don t|do not) (want|feel like) (to )?(go|visit)\\b|\\bguilt\\w*\\b",
+          "carerguilt"
+        ],
+        [
+          "\\b(visit\\w*|care home|nursing home|when i go|see (her|him))\\b",
+          "carehomevisit"
+        ]
+      ]
+    },
+    {
+      "id": "carehomevisit",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "visiting someone in a care home",
+      "pat": "\\b(care home|nursing home|residential home|memory care|home for the elderly|aged care)\\b.{0,120}\\b(visit\\w*|go to see|when i go|see (her|him|them)|do with (her|him|them))\\b|\\b(visit\\w*|go to see)\\b.{0,60}\\b(care home|nursing home|residential home|memory care)\\b",
+      "what": [
+        "Visiting someone who may not know you can be very hard. A few moments that aren’t care help you both remember who you are to each other, even when the words don’t come."
+      ],
+      "how": [
+        "Play music from their younger years. Songs often reach people even late in dementia.",
+        "Look through old photos together, and let them tell the stories, even the ones you’ve heard many times.",
+        "Keep one small ritual from before: tea at four, the crossword, a favourite programme.",
+        "Offer gentle touch, if they welcome it: holding hands, brushing their hair, a hand massage with cream.",
+        "Short visits still count. You don’t have to fill the time."
+      ],
+      "links": [
+        [
+          "Moments that aren’t care",
+          "/caregivers.html#bonding"
+        ],
+        [
+          "Grieving someone who is still here",
+          "/caregivers.html#still-here"
+        ],
+        [
+          "Resentment and guilt",
+          "/caregivers.html#feelings"
+        ]
+      ],
+      "script": [
+        "Shall we put on your old records and just sit for a bit?"
+      ],
+      "plain": [
+        "Play music they love.",
+        "Look at old photos.",
+        "Keep a small ritual.",
+        "Short visits count."
+      ],
+      "follow": [
+        [
+          "\\b(recognise|recognize|know (me|who i am)|forgot\\w* (me|who))\\b",
+          "stillhere"
+        ],
+        [
+          "\\b(dont|don t|do not) (want|feel like) (to )?(go|visit)\\b|\\bguilt\\w*\\b",
+          "carerguilt"
+        ],
+        [
+          "\\b(visit\\w*|care home|nursing home|when i go|see (her|him))\\b",
+          "carehomevisit"
+        ]
+      ]
+    },
+    {
+      "id": "carerguilt",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "not wanting to visit, and the guilt",
+      "pat": "\\b(dont|don t|do not|didnt|did not) (want|feel like|feel up to) (to )?(go|visit|see (her|him|them)|going)\\b.{0,60}\\b(visit|see (her|him|them)|care home|nursing home|hospital|dementia)?|\\b(guilty|guilt|awful|terrible|wrong|bad)\\b.{0,40}\\bnot (want(ing)? to )?(visit|go|going)\\b",
+      "what": [
+        "No, it isn’t wrong. Many carers sometimes don’t want to go, or feel angry or resentful: at the illness, even at the person they care for. Then they feel guilty for feeling that way. These feelings are normal. They don’t mean you are a bad person. They are usually a sign that you are carrying too much for too long."
+      ],
+      "how": [
+        "Say it to someone safe: a friend, a support group or a counsellor. Saying it out loud often makes it lighter.",
+        "Take real breaks, not only sleep. Something just for you, even an hour a week.",
+        "Visits can be shorter and still count: a song, a photo, holding hands.",
+        "Ask for one more helper. Resentment often means the load needs to be shared more widely."
+      ],
+      "links": [
+        [
+          "Resentment and guilt",
+          "/caregivers.html#feelings"
+        ],
+        [
+          "Moments that aren’t care",
+          "/caregivers.html#bonding"
+        ],
+        [
+          "Grieving someone who is still here",
+          "/caregivers.html#still-here"
+        ]
+      ],
+      "notPat": "\\b(work|job|party|school|gym|class|wedding|church|in ?laws?)\\b",
+      "plain": [
+        "It isn’t wrong.",
+        "Many carers feel this.",
+        "Take real breaks.",
+        "Short visits still count."
+      ],
+      "follow": [
+        [
+          "\\b(recognise|recognize|know (me|who i am)|forgot\\w* (me|who))\\b",
+          "stillhere"
+        ],
+        [
+          "\\b(dont|don t|do not) (want|feel like) (to )?(go|visit)\\b|\\bguilt\\w*\\b",
+          "carerguilt"
+        ],
+        [
+          "\\b(visit\\w*|care home|nursing home|when i go|see (her|him))\\b",
+          "carehomevisit"
+        ]
+      ]
+    },
+    {
+      "id": "strokecare",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "caring after a stroke",
+      "pat": "\\b(had|has|after|since|following) (a |his |her |their )?stroke\\b|\\bstroke (survivor|patient|recovery|carer|caregiver)\\b|\\b(anything|something|info\\w*|help|page) (about|on|for) (a )?stroke\\b|^stroke\\??$",
+      "what": [
+        "Yes. Life after a stroke comes under two parts of this site: sharing the load when one of you is ill, and caring for someone you love, including the feelings that come with it. The book also has a stroke carer’s story, Helen’s, about noticing when you’re running on empty."
+      ],
+      "how": [
+        "Share the load by energy, not hours. Jobs that can be done from a chair or bed count.",
+        "Agree good-day and bad-day owners, so nobody has to ask on a hard day.",
+        "Resentment and guilt are normal for carers: a sign you’re carrying too much for too long. Ask for one more helper.",
+        "The carers page lists where to get support and how to find services near you."
+      ],
+      "links": [
+        [
+          "When one of you is ill or disabled",
+          "/when-one-is-ill.html"
+        ],
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "Notice when you’re running on empty (Helen’s story)",
+          "/book/understanding-12-helping.html#fig-u12-help"
+        ]
+      ],
+      "plain": [
+        "Share the load by energy.",
+        "Plan good days and bad days.",
+        "Guilt and resentment are normal.",
+        "Ask for more help."
+      ]
+    },
+    {
       "id": "illnesscare",
       "kind": "intent",
       "first": true,
@@ -9227,7 +9736,21 @@
           "/en-espanol.html#cuidar"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "follow": [
+        [
+          "\\b(recognise|recognize|know (me|who i am)|forgot\\w* (me|who))\\b",
+          "stillhere"
+        ],
+        [
+          "\\b(dont|don t|do not) (want|feel like) (to )?(go|visit)\\b|\\bguilt\\w*\\b",
+          "carerguilt"
+        ],
+        [
+          "\\b(visit\\w*|care home|nursing home|when i go|see (her|him))\\b",
+          "carehomevisit"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -12032,6 +12555,50 @@
       ]
     },
     {
+      "id": "eveningsalone",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "long evenings on your own",
+      "pat": "\\b(evenings?|nights?|weekends?|sundays?)\\b.{0,40}\\b(long|quiet|lonely|empty|hard|worst|endless)\\b.{0,40}\\b(on my own|alone|by myself)\\b|\\b(on my own|alone|by myself|live alone|living alone)\\b.{0,40}\\b(evenings?|nights)\\b.{0,30}\\b(long|quiet|lonely|empty|hard|worst)\\b",
+      "what": [
+        "Long, quiet evenings on your own are one of the hardest parts for many people. You don’t have to fill them, and a little shape helps."
+      ],
+      "how": [
+        "A few quiet things for a hard evening: the Night Garden (slow breathing with a glowing light), calm music at a low volume, or a few pages on loneliness, in plain words.",
+        "Give the evening a small shape: a call at the same time each week, a walk before dark, a meal at the table.",
+        "See people, a little: a club, a class, a neighbour. Short, ordinary contact helps.",
+        "If the loneliness feels heavy most days, tell one person, or your doctor. Help works."
+      ],
+      "links": [
+        [
+          "For a hard evening",
+          "/grief.html#hard-evening"
+        ],
+        [
+          "Routines and rhythms for one",
+          "/living-alone.html#rhythms"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ],
+      "notPat": "\\b(died|passed|passed away|funeral|death|widow\\w*|grief|griev\\w*|bereave\\w*|lost (my|our))\\b",
+      "script": [
+        "I’m having a hard time and I’ve been really lonely. Could we talk this week?"
+      ],
+      "plain": [
+        "Evenings alone can be long.",
+        "Breathe slowly in the Night Garden.",
+        "Call someone at the same time each week.",
+        "Tell your doctor if it feels heavy."
+      ]
+    },
+    {
       "id": "griefwaves",
       "kind": "intent",
       "first": true,
@@ -13325,6 +13892,113 @@
         [
           "My parents keep fighting",
           "My parents keep fighting"
+        ]
+      ]
+    },
+    {
+      "id": "teenparents",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "a teen and their parents",
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "what": [
+        "You’re becoming your own person, and wanting more say over your time, your space and your choices is supposed to happen. Your parents are adjusting too, and they’re often a step behind. A lot of the friction lives in that gap. It doesn’t mean anyone is doing it wrong, and there’s usually some right on both sides."
+      ],
+      "how": [
+        "Pick the moment: not when they’ve just walked in or are already annoyed. Later that evening usually beats right now.",
+        "Say what you want, and why, and say back their worry first: “You’re scared I’ll be up all night on it.” It often makes them listen to you.",
+        "Offer a plan they can say yes to: “Phone downstairs at eleven, and I’ll set an alarm.”",
+        "If it blows up, fix it after: a short “I didn’t like how that went” counts."
+      ],
+      "links": [
+        [
+          "When it’s tense with your parents",
+          "/teens.html#parents"
+        ],
+        [
+          "Talking about it: getting heard, and hearing them",
+          "/teens.html#talking"
+        ],
+        [
+          "If home doesn’t feel safe",
+          "/safety.html#teens"
+        ]
+      ],
+      "script": [
+        "I get that you’re worried. Can I tell you my plan, and you tell me what would make it okay?"
+      ],
+      "plain": [
+        "Pick a calm moment.",
+        "Say what you want and why.",
+        "Say back their worry.",
+        "Offer a plan."
+      ],
+      "follow": [
+        [
+          "\\b(talk|say|tell|screaming|shouting|yelling|without it turning)\\b",
+          "teentalking"
+        ],
+        [
+          "\\b(right|fair|rules?|phone|strict|curfew|adult)\\b",
+          "teenparents"
+        ]
+      ]
+    },
+    {
+      "id": "teentalking",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "talking to your parents without a screaming match",
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "what": [
+        "It’s hard to feel heard when adults decide most things, and it’s easy to go quiet, or loud. Both make sense, and neither usually gets you what you want. These help:"
+      ],
+      "how": [
+        "Listen first, even when you disagree. Saying back their worry often makes them listen to you.",
+        "Pick your moment: not right after a fight, or when they’re stressed.",
+        "Write it down if saying it is too hard. A note or a text lets you say it all without being interrupted.",
+        "Skip “you never” and “whatever”. They shut a talk down fast. And fix it after a blow-up: “I didn’t like how that went.”"
+      ],
+      "links": [
+        [
+          "Talking about it: getting heard, and hearing them",
+          "/teens.html#talking"
+        ],
+        [
+          "When it’s tense with your parents",
+          "/teens.html#parents"
+        ],
+        [
+          "If home doesn’t feel safe",
+          "/safety.html#teens"
+        ]
+      ],
+      "script": [
+        "It’s hard for me to say this out loud, so I wrote it down. Can you read it when you have a minute?",
+        "I get that you’re worried. Can I tell you my plan, and you tell me what would make it okay?"
+      ],
+      "plain": [
+        "Listen first.",
+        "Pick a calm moment.",
+        "Write it down if talking is hard.",
+        "Skip “you never”."
+      ],
+      "follow": [
+        [
+          "\\b(talk|say|tell|screaming|shouting|yelling|without it turning)\\b",
+          "teentalking"
+        ],
+        [
+          "\\b(right|fair|rules?|phone|strict|curfew|adult)\\b",
+          "teenparents"
         ]
       ]
     },
