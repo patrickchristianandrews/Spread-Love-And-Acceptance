@@ -1490,7 +1490,7 @@
     find.addEventListener('click', function () { openPanel(null, true); });
     // home16b: when the helpers are tucked away (Quiet mode, No surprises, Hide the helpers), Professor Puddles' floating
     // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
-    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'), 'aria-label': T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask<span class="tol-ask-more"> Puddles</span>', 'Pregúntale')));
+    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'), 'aria-label': T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask<span class="tol-ask-more"> Puddles</span>', 'Pregunta')));
     bar.appendChild(find);
     // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)
     if (isApp()) loadScript('/assets/js/app-bar.js').catch(function () {});
@@ -1510,7 +1510,7 @@
         var sn = bar.querySelector('.tol-set-name'); if (sn) sn.textContent = 'Ajustes';
         var fs = find.querySelector('span'); if (fs) fs.textContent = 'Buscar';
         mob.textContent = 'Menú';
-        var ak = bar.querySelector('.tol-ask-link'); if (ak) ak.textContent = 'Pregúntale';
+        var ak = bar.querySelector('.tol-ask-link'); if (ak) ak.textContent = 'Pregunta';
       };
       var esMo = new MutationObserver(esCheck);
       if (esMain) esMo.observe(esMain, { subtree: true, attributes: true, attributeFilter: ['lang', 'data-ls-lang'] });

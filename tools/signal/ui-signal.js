@@ -284,17 +284,17 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     // safety: control is never read kindly, and never gets a compliant reply
     await go('');
     r = await read('Where were you? Send me your location now. Who were you with?', true);
-    ok(/control, not communication/.test(r.all) && /safety\.html#signs/.test(r.html) && /1-800-799-7233/.test(r.all), `${tag}: control received: safety note first`);
+    ok(/control, not communication/.test(r.all) && !/988|116 ?123|1-?800|hotline|helpline|Samaritans|Lifeline|safety\.html|Not safe at home/i.test(r.all + r.html), `${tag}: control received: control note first, no lines or safety links (nohot18)`);
     ok(!/kinder ways to read it|usually a request|you'd like me to|Check the ask/i.test(r.all), `${tag}: control received: no kind reading or compliant reply`);
     r = await read('Where were you? Send me your location now. Who were you with?');
     ok(/checking up on them/.test(r.all) && !/Send me your location/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: control sent: the check is named and left out`);
     r = await read("If you leave me I'll kill myself and it'll be your fault.", true);
-    ok(/988/.test(r.all) && /not your job to stay/.test(r.all), `${tag}: a self-harm threat received: 988 for them`);
+    ok(/contact your local emergency services now/.test(r.all) && /not your job to stay/.test(r.all) && !/988|116 ?123|1-?800|hotline|helpline|Samaritans|Lifeline|safety\.html|Not safe at home/i.test(r.all + r.html), `${tag}: a self-harm threat received: the one safety line, no numbers`);
     ok(await overflow(p)<=0, `${tag}: overflow on round-12 reads`);
     // ---------- re-test 2 (round 13) ----------
     // a counsellor's report: control received is never "looks okay", and never gets a garden level
     r = await read("If you go out with your friends tonight don't bother coming home. I'll know if you do.", true);
-    ok(/This may be about control, not communication/.test(r.all) && /safety\.html#signs/.test(r.html) && /1-800-799-7233/.test(r.all) && !/looks okay|Nothing here needs decoding/i.test(r.all), `${tag}: "don't bother coming home" received: control card`);
+    ok(/This may be about control, not communication/.test(r.all) && !/988|116 ?123|1-?800|hotline|helpline|Samaritans|Lifeline|safety\.html|Not safe at home/i.test(r.all + r.html) && !/looks okay|Nothing here needs decoding/i.test(r.all), `${tag}: "don't bother coming home" received: control card`);
     ok(await p.$eval('#results', e=>e.hasAttribute('data-no-reward')), `${tag}: control received: no garden reward`);
     r = await read("If you go out with your friends tonight don't bother coming home. I'll know if you do.");
     ok(/control, not communication/.test(r.all) && await p.$eval('#results', e=>e.hasAttribute('data-no-reward')), `${tag}: control sent: card, and no garden reward`);
@@ -371,7 +371,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     // a crisis typed into the context is never ignored
     await p.fill('#stCtx textarea[data-f="other"]', 'She said she wants to kill herself');
     r = await read('ok', true);
-    ok(/988/.test(r.all) && /ending their life|ending your life/.test(r.all), `${tag}: crisis in the context shows the help`);
+    ok(/contact your local emergency services now/.test(r.all) && /ending their life|ending your life/.test(r.all) && !/988|116 ?123|1-?800|hotline|helpline|Samaritans|Lifeline|safety\.html|Not safe at home/i.test(r.all + r.html), `${tag}: crisis in the context shows the one safety line`);
     await p.click('#stCtx .tol-ctx-clear');
     // care, not control: a request from worry, and a "no" between adults
     r = await read("Please text me if you'll be late so I don't worry.");
