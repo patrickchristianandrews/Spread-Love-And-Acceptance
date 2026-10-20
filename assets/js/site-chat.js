@@ -26,7 +26,6 @@
   // internal or structural headings never offered as a likely topic
   var HIDE_TITLE = /\b(carrier wave vs\.? payload|architecture|pillar [ivx]+|in detail|sources?|references?|footnotes?)\b/i;
   var PRIVACY_LINE = 'Answers come from this site’s pages and the Professor’s notes. What you type stays on this device.';
-  var PRIVACY_LINE_ES = 'Las respuestas vienen de las páginas de este sitio y de las notas del Profesor. Lo que escribes se queda en este dispositivo.';
 
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
@@ -927,7 +926,6 @@
   var CRUDE_SEX = /\b(penis\w*|cock|cocks|cocksuck\w*|dick pics?|boob\w*|tit|tits|titties|tiddies|pussy|pussies|vagina\w*|nudes?|naked|nipples?|horny|porn\w*|blow ?jobs?|handjobs?|cum|cumming|dildo\w*|sex with (you|me)|have sex|sexting|suck my|jerk off|jack off|masturbat\w*|send (me )?(pics|pictures|photos) of (you|your)|show me your (body|boobs|tits|dick|penis|pussy|naked))\b/;
   var CRUDE_SLUR = /\b(retard\w*|fag|fags|faggot\w*|nigg\w*|spaz|spastic|tranny|trannies|dyke|kike|chink|paki|slut\w*|whore\w*|hoe)\b/;
   var CRUDE_MASKED = /\bf[*#@!_.\-]+c?k|\bf\*+|\bsh[*#@!]+t\b|\bb[*#@!]+tch|\bc[*#@!]+nt\b|\ba[*#@!$]+hole/;
-  var ES_CRUDE_RE = /\b(mierda|puta\w*|put[oa]s?|pendej\w*|pinche|cabron\w*|joder|jodete|chinga\w*|verga|culer[oa]s?|cono|carajo|vete a la)\b/;
   function crudeIn(f, raw) { return CRUDE_SWEAR.test(f) || CRUDE_SEX.test(f) || CRUDE_SLUR.test(f) || (raw != null && CRUDE_MASKED.test(String(raw).toLowerCase())); }
   // swear words used as intensifiers, dropped before routing ("my ex is a fucking nightmare about pickups")
   var SWEAR_STRIP = /\b(fucking|fuckin|freaking|frickin|effing|bloody|damn|damned|goddamn|goddamned|flipping|shitty|crappy|ffs|wtf|omfg|fuck(ing)? this|fuck(ing)? that|for fucks sake|holy shit|oh shit|shit)\b/g;
@@ -995,7 +993,7 @@
   function spellFix(q) {
     // crude words are never "corrected" into other words ("fuck off" is not "face off"): no fixes at all then
     var lowAll = String(q).toLowerCase().replace(/[’']/g, '');
-    if (crudeIn(lowAll, q) || ES_CRUDE_RE.test(esFold(lowAll))) return { q: q, fixes: [], known: 1, unknown: 0 };
+    if (crudeIn(lowAll, q)) return { q: q, fixes: [], known: 1, unknown: 0 };
     // names are never "corrected": any capitalised word that isn't the first word ("Marcus", "Leo") is left alone
     var NAMES = {};
     String(q).replace(/[’‘`´]/g, "'").split(/\s+/).forEach(function (w, i) { var m = /^([A-Z][a-z]+)/.exec(w); if (m && (i > 0 || /^[A-Z][a-z]+,/.test(w)) && m[1] !== 'I') NAMES[m[1].toLowerCase()] = 1; });
@@ -1851,7 +1849,7 @@
     var R0 = state.restore; state.restore = null;
     if (R0 && !cardFor(path) && cardById(R0.id)) state.topic = { id: R0.id, root: R0.root && cardById(R0.root) ? R0.root : R0.id, side: R0.side, turn: 0, v: 0 };
     if (!path || path === '/ask.html') { state.page = about ? { u: '', about: about } : null; return; }
-    state.page = { u: path, about: about, es: path === '/en-espanol.html' };
+    state.page = { u: path, about: about };
     var pc = cardFor(path);
     if (pc) { state.pageTopic = { id: pc.id, root: pc.id }; state.page.chips = (pc.pageChips || []).map(function (x) { return { label: x[0], q: x[1] }; }); }
   }
@@ -2748,15 +2746,12 @@
     state.turn = (state.turn || 0) + 1;
     if (state.pageCtx && !state.pageDone) pageInit(state);
     if (chipDoc == null) {
-      // a message in Spanish gets a Spanish answer, before any English spelling fix ("triste" is not "trust")
       // an answer to one of the short questions (tapped or typed) carries on with them
       if (state.cq) { var cqr = cqTurn(state, q); if (cqr) return cqr; }
       var f00 = norm(q);
       if (!window.TOLClarifyData && !cdTried && (CQ_PICK.test(f00) || CV_REDFLAG.test(f00) || LABEL_PERSON.test(f00) || FAIR_Q.test(f00) || UNFAIR_DESC.test(f00) || WHERE_ALWAYS.test(cnorm(f00)) || limitAsk(cnorm(f00), cnorm(f00)))) return { needCD: true };
       var cqt = cqTypeOf(f00), cqs = cqt && cqStart(state, cqt, state.lastQ || '', [{ k: 'p', x: 'Okay. A few short questions, so my answer fits what’s really going on.' }]);
       if (cqs) { state.last = null; state.care = null; return cqs; }
-      var esr = spanishReply(state, q);
-      if (esr) return esr;
       sp = spellFix(q);
       // a spelling fix must never hide a safety concern ("it's my fault" read as "it is my fault")
       if (sp.fixes.length && !(DANGER.test(norm(q)) && !DANGER.test(norm(sp.q)))) q = sp.q; else if (sp.fixes.length) sp = { q: q, fixes: [], known: sp.known, unknown: sp.unknown };
@@ -2883,141 +2878,8 @@
     return r;
   }
 
-  // ------------------------------------------------------------------ en español
-  // A Spanish message gets a short answer in Spanish and the matching part of /en-espanol.html, never an English fallback
-  var ES_WORDS = ('estoy esta esto este triste cansado cansada agotado agotada noche dificil necesito calma calmarme tranquilo tranquila ayuda ayudar ayudame hijos hijas hijo hija ' +
-    'mi peleamos pelean peleas pelear mucho mucha muy gemelos gemelas dormimos duermo dormir esposo esposa marido mujer trabaja trabajo horas construccion tenemos tengo anos mis ' +
-    'con los las del que como pido una son por para todo nada casa hago hace pareja ninos nino nina bebe bebes enojado enojada enfadado enfadada miedo cuido cuidar cuidando ' +
-    'mama papa madre padre discutimos discusion gritos grita grito sola hola gracias quiero puedo siento cuando donde porque pero tambien nunca siempre espanol hablas habla ' +
-    'ayudan cuidadora cuidador enfermo enferma demencia quehaceres tareas platos ropa limpiar novio novia familia abuela abuelo suegra hermanos hermano hermana ' +
-    'necesitamos podemos quieres tienes puedes sabes soy eres somos estamos estan dias semana fin mañana manana hoy siempre vez veces llorar lloro sueño sueno ' +
-    'tiene tienen parkinson alzheimer paciencia pierdo culpable culpa dice entiendo cansancio esta él ella ' +
-    'resentido resentida rabia coraje repartir cuidado lejos vive viven dicen ayuden ayude peleando hago hermana hermanas cunado cunada ' +
-    'familia ensamblada padrastro madrastra hijastro hijastra hijastros nueva acepta respeta caso tension viene cada fines ' +
-    'vete mierda eres inutil tonto tonta estupido estupida idiota sirves sirve joder pendejo pendeja cabron puta sirven ayudas').split(' ');
-  var ES_SET = {}; ES_WORDS.forEach(function (w) { ES_SET[w] = 1; });
-  var STEP_ES = /\b(ensamblad[ao]s?|reconstituid[ao]s?|padrastro|madrastra|hijastr[oa]s?|(el|la|los|las) (hij[oa]s?) de mi (esposo|esposa|marido|pareja|mujer|novio|novia)|no acepta a mi (esposo|esposa|marido|pareja|novio|novia)|familia nueva|viene cada dos fines de semana|cada dos fines de semana)\b/;
-  var EN_SET = {}; 'the and my is are i you he she it to of in with what how do does can not but on at this that we they am was have has'.split(' ').forEach(function (w) { EN_SET[w] = 1; });
+  // accents folded away, for spelling lookups
   function esFold(s) { return String(s || '').toLowerCase().replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e').replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o').replace(/[úùü]/g, 'u').replace(/ñ/g, 'n').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
-  function isSpanish(q) {
-    var raw = String(q || ''), f = esFold(raw), ws = f.split(' '), es = 0, en = 0;
-    ws.forEach(function (w) { if (ES_SET[w]) es++; if (EN_SET[w]) en++; });
-    if (/[¿¡ñ]/.test(raw) && es >= 1) return true;
-    if (/[áéíóú]/.test(raw) && es >= 1 && en === 0) return true;
-    return es >= 2 && es > en * 2 && !/\b(the|and|my|is|are|you|what|how)\b/.test(f);
-  }
-  function spanishReply(state, q) {
-    var f = esFold(q);
-    var hablas = /\bhabl\w*\b.{0,20}\bespanol\b|^(en )?espanol$|\b(se puede|puedo|hay algo|tienes algo|tienen algo|hay una pagina|hay)\b.{0,30}\bespanol\b|\bin spanish\b.{0,10}$/.test(f) && !/\b(for my|para mi)\b.{0,15}\b(wife|husband|mum|mom)\b/.test(f);
-    // once we're talking in Spanish, a short Spanish reply ("tiene parkinson") stays in Spanish
-    var shortEs = state.es && f.split(' ').length <= 6 && f.split(' ').some(function (w) { return ES_SET[w]; }) && !/\b(the|and|my|is|are|you|what|how|i)\b/.test(f);
-    // on the Spanish page, a message with no English in it is Spanish ("padrastro", "familia ensamblada"): never an English fallback (puddles16)
-    var esPage = state.pageCtx && /\/en-espanol(\.html)?$/.test(state.pageCtx.path || '');
-    if (esPage && !shortEs && f && !/\b(the|and|my|is|are|you|what|how|i|it|to|of|with|do|can|me|we|he|she|they|this|that|help|hi|hello)\b/.test(f) && /[a-z]{3,}/.test(f)) shortEs = true;
-    var hola = /^(hola|buenas|buenos dias|buenas tardes|buenas noches)$/.test(f);
-    var esc = !hablas && !hola && pzEsWhich(f);
-    // "no quiero vivir" is Spanish, and a safety answer, however few other Spanish words it has
-    var esSafe = /\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|me quiero morir|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f);
-    if (!hablas && !hola && !esc && !esSafe && !isSpanish(q) && !shortEs && !STEP_ES.test(f) && !ES_CRUDE_RE.test(f)) return null;
-    if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1 && !STEP_ES.test(f) && !ES_CRUDE_RE.test(f)) return null;
-    var first = !state.es;
-    state.es = 1; state.last = null;
-    var L = '/en-espanol.html', chips = state.esTopic === 'cuidar' ? ES_CARE_CHIPS : ES_CHIPS;
-    function ans(id, lead, list, script, links, note) {
-      var b = [{ k: 'p', x: lead }];
-      if (list && list.length) b.push({ k: 'list', x: list });
-      if (script) b.push({ k: 'script', l: 'Palabras que puedes usar', x: script });
-      if (note) b.push({ k: 'p', x: note });
-      if (links && links.length) b.push({ k: 'links', x: links });
-      return { blocks: b, chips: chips, kind: 'lang', id: 'es-' + id, noBrief: true };
-    }
-    if (hola) return { blocks: [{ k: 'p', x: ES_GREETING }], chips: chips, kind: 'lang', id: 'es-saludo' };
-    if (hablas) return { blocks: [
-      { k: 'p', x: '¡Hola! Sí: te respondo en español con lo esencial y te llevo a la página en español: repartir las tareas de la casa, cuando uno trabaja muchas horas, con gemelos o niños pequeños, cuando los hijos pelean, cuando estás muy enojado, cuidar a alguien que quieres, y si no estás seguro en casa.' },
-      { k: 'p', x: 'Casi todo el sitio está en inglés. Muchas páginas y herramientas (como el Lemonade Stand y las fichas de trabajo) se pueden leer en español con el traductor del navegador: en Chrome, toca el menú ⋮ y luego “Traducir”.' },
-      { k: 'links', x: [['Ayuda para tu familia, en español', L]] }], chips: chips, kind: 'lang', id: 'es-hola' };
-    // safety first, as everywhere
-    if (/\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f))
-      return ans('peligro', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', [SAFE_LINE_ES], '', []);
-    if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me controla|me grita y tengo miedo)\b/.test(f))
-      return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', [SAFE_LINE_ES], '', []);
-    // crude words, insults and frustration, in Spanish: calm, short, no lecture (puddles16)
-    var ES_MENU = [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Siento que hago todo en la casa', L + '#casa'], ['Cuando estoy muy enojado', L + '#enojado']];
-    var esCrude = ES_CRUDE_RE.test(f) || /\b(jodete|tetas|pene|culo|sexo)\b/.test(f);
-    var esFrust = /\b(eres|sos|que) (un |una |muy )?(inutil|tont[oa]|estupid[oa]|idiota|imbecil|pendej[oa]|basura|mal[oa])\b|\bno (sirves|sirve|me sirve|me sirves|ayudas|me ayudas|entiendes|me entiendes|es eso)\b|\beso no es\b|\b(me estas tomando el pelo|es en serio|en serio)\b|\besto es (una )?(basura|tonto|estupido|inutil|ridiculo)\b/.test(f);
-    if ((esCrude || esFrust) && f.split(' ').length <= 12 && !/\b(mi (esposo|esposa|marido|pareja|mujer|mama|papa|madre|padre|hij[oa]|herman[oa])|mis (hijos|hermanos))\b/.test(f)) {
-      state.last = null;
-      var esRun = state.lastKind === 'lang-crude' ? 2 : 1;
-      return { blocks: [{ k: 'p', x: esCrude && !esFrust ? (esRun > 1 ? 'Aquí estoy cuando quieras ayuda con algo.' : 'Eso lo dejo pasar. Si algo de lo que dije no te sirvió, dime en pocas palabras qué necesitas, o elige una de estas partes:') : 'Perdón, esa respuesta no te sirvió. ¿Qué buscabas? Dímelo en pocas palabras, o mira una de estas partes:' },
-        { k: 'links', x: ES_MENU }], chips: chips, kind: 'lang', id: esCrude && !esFrust ? 'es-crude' : 'es-frust', noBrief: true };
-    }
-    // a little chit-chat in Spanish, after the safety answers: "¿cómo estás?", "cuéntame un chiste", "gracias"
-    if (esc) { var esr0 = pzEs(state, esc, q); if (esr0) return esr0; }
-    // a stepfamily ("familia ensamblada", "padrastro", "el hijo de mi esposo"): the Spanish page's own section (#ensamblada)
-    if (STEP_ES.test(f)) {
-      var ENS = [['Cuando somos una familia ensamblada', L + '#ensamblada'], ['La guía completa, en inglés: Blended families and stepfamilies', '/stepfamily.html']];
-      if (/\b(no (me )?(acepta|respeta|hace caso|quiere)|no le hace caso|me ignora|me odia|no me habla|reglas|castig\w*|disciplina|mand\w*)\b/.test(f))
-        return ans('ensamblada-rol', 'Sentirse familia toma años, no meses, y es normal que un niño tarde en aceptar al adulto nuevo. Al principio, el papá o la mamá pone las reglas. Quien llega nuevo, el padrastro o la madrastra, empieza como un adulto cariñoso y de confianza, no como un nuevo jefe.',
-          ['Apoya las reglas de la casa sin ser quien castiga. Con el tiempo, si hay confianza, puede tomar más.', 'El niño no tiene que elegir. Díganle en voz alta que no tiene que escoger, y nunca critiquen a la otra casa delante de los niños.', 'Tiempo a solas: cada papá o mamá con sus propios hijos, y un rato para la pareja.'],
-          '¿Puedes poner tú las reglas con tus hijos, y yo te apoyo?', ENS);
-      return ans('ensamblada', 'Una familia ensamblada empieza cuando dos adultos se juntan y al menos uno ya tiene hijos. Sentirse familia toma años, no meses. Ir despacio es normal.',
-        ['Al principio, el papá o la mamá pone las reglas. El padrastro o la madrastra empieza como un adulto cariñoso y de confianza, no como un nuevo jefe.', 'Dos casas, dos reglas, y está bien. Pónganse de acuerdo en pareja, en privado, en pocas reglas claras.', 'Un niño que viene cada dos fines de semana también es de la casa. Dale un lugar que sea suyo, aunque sea un cajón o una repisa. Puede tener tareas, menos que quien vive aquí todos los días.'],
-        'Cuando estás aquí, esta también es tu casa. Este cajón es tuyo.', ENS);
-    }
-    // a carer's brothers and sisters, a parent, anger and guilt: the caregiver's answers (#cuidar, #resentimiento) and the
-    // Spanish care list, never the couple's "si tienes miedo de tu pareja" (puddles16)
-    var SIB_ES = /\b(herman[oa]s?|cunad[oa]s?)\b/.test(f), PAR_ES = /\b(mama|mami|papa|madre|padre|suegra|suegro|abuela|abuelo|viejita|viejito)\b/.test(f);
-    var CARE_ES = /\b(cuid\w*|repartir|reparto|turnar\w*|turnos?|ayud\w*|encarg\w*|visit\w*|lejos|no puede|no pueden|dicen que no|dice que no|no quiere|no quieren|se niega\w*)\b/.test(f);
-    var RES_ES = /\b(rabia|coraje|enoj\w*|enfad\w*|resentid[oa]s?|resentimiento|rencor|culpa|culpable|hart[oa]|frustrad[oa]|me molesta)\b/.test(f);
-    var PAREJA_ES = /\b(pareja|esposo|esposa|marido|mi mujer|novio|novia)\b/.test(f);
-    var parW = /\b(papa|padre|abuelo|suegro|viejito)\b/.test(f) && !/\b(mama|mami|madre|abuela|suegra|viejita)\b/.test(f) ? 'papá' : 'mamá';
-    var CARE_LIST = ['Una lista para repartir el cuidado', '/workpapers/fill/wp-03.html?for=care&lang=es'];
-    if (RES_ES && (SIB_ES || PAR_ES || state.esTopic === 'cuidar') && !PAREJA_ES && !/\b(miedo|me pega|golpe\w*|amenaz\w*)\b/.test(f)) {
-      state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS;
-      return ans('resentimiento', 'Muchos cuidadores a veces sienten enojo o resentimiento: contra la enfermedad, contra la familia que no ayuda, y hasta contra la persona que cuidan. Luego sienten culpa por sentirlo. Es normal. No te hace mala persona. Casi siempre quiere decir que llevas demasiado peso por demasiado tiempo.',
-        ['Dilo en voz alta a alguien de confianza: una amiga, un grupo de apoyo o un consejero. Decirlo lo hace más ligero.', 'Toma descansos de verdad, no solo dormir. Algo solo para ti, aunque sea una hora a la semana.', 'Pide un ayudante más. El resentimiento muchas veces quiere decir que el cuidado se tiene que repartir entre más personas.'].concat(SIB_ES ? ['Con tus hermanos, pide algo concreto, con día y hora. Una lista de quién se encarga de cada cosa les deja hablar de hechos, no de culpas.'] : []),
-        'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Enojo, resentimiento y culpa', L + '#resentimiento'], CARE_LIST, ['Cuando cuido a alguien que quiero', L + '#cuidar']]);
-    }
-    if ((SIB_ES && (CARE_ES || ((PAR_ES || state.esTopic === 'cuidar') && !/\b(pelean|se pelean|se pegan|discuten)\b/.test(f)))) || /\brepart\w*\b.{0,30}\bcuidado\b|\bcuidado\b.{0,30}\brepart\w*\b/.test(f)) {
-      state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS;
-      var links3 = [['Cuando mis hermanos no ayudan con mamá o papá', L + '#hermanos'], CARE_LIST, ['Enojo, resentimiento y culpa', L + '#resentimiento']];
-      if (/\b(dicen que no|dice que no|no quieren|no quiere|se niega\w*|no ayudan|no ayuda|no hacen nada|no hace nada)\b/.test(f))
-        return ans('hermanos-no', 'Si tus hermanos dicen que no, no quiere decir que tengas que cargar con todo tú solo.',
-          ['Pide algo más pequeño y concreto, con día y hora: una llamada al seguro, una cita, una llamada fija cada domingo. Es más fácil decir que sí a algo claro que a “ayúdame más”.', 'Busca descanso para ti: centros de día, cuidadores por horas, grupos de apoyo para cuidadores.', 'El resentimiento muchas veces quiere decir que el cuidado se tiene que repartir entre más personas. Una lista de quién se encarga de cada cosa les deja hablar de hechos, no de culpas.'],
-          'Así estuvo ' + parW + ' esta semana. Necesito una sola cosa de ti: ¿puedes encargarte de ir a la farmacia los viernes?', links3);
-      if (/\b(lejos|otra ciudad|otro pais|otro estado|no puede venir|no pueden venir)\b/.test(f))
-        return ans('hermanos-lejos', 'Vivir lejos no quiere decir que no pueda ayudar. Los que viven lejos también pueden ayudar, con tareas que se hacen desde cualquier lugar:',
-          ['Las llamadas al seguro, los papeles y pedir las citas.', 'Una llamada fija a ' + parW + ' cada domingo.', 'Pagar unas horas de cuidado, o venir unos días para que tú descanses.'],
-          'Así estuvo ' + parW + ' esta semana. Necesito una sola cosa de ti: ¿puedes encargarte de las llamadas al seguro?', links3);
-      return ans('hermanos', 'Muchas veces un hijo o una hija carga con casi todo el cuidado de mamá o de papá, y sus hermanos ayudan poco o nada. Eso cansa y duele, y es normal sentir enojo. Antes de reclamar, sirve tener en cuenta dos cosas:',
-        ['Alejarse puede parecer que no le importa, cuando en realidad es miedo o culpa. A algunos les cuesta mucho ver a su mamá o a su papá enfermos.', 'Tus hermanos quizá no ven todo lo que haces. Muéstrales la lista antes de reclamar: cuando cada tarea está escrita, con un nombre al lado, es más fácil que alguien diga “esa la tomo yo”.', 'Cuéntales cómo va y pide una sola cosa, con día y hora. Un mensaje corto cada semana ayuda a que todos vean lo mismo.'],
-        'No te estoy reclamando. Hice una lista de todo lo que hay que hacer por ' + parW + '. ¿Cuál de estas cosas puedes tomar tú?', links3);
-    }
-    if (/\b(hijos|ninos|hermanos|hijas)\b.{0,30}\b(pelean|peleas|pelear|se pegan|discuten)\b/.test(f))
-      return ans('hijos-pelean', 'Casi todas las peleas entre hermanos son por las mismas cosas: los turnos, el espacio, lo que es justo y la atención de los adultos. Si las reglas son claras, hay menos motivos para pelear.', ['Fíjate cuándo pelean: el mismo juguete, el mismo asiento, la misma hora.', 'Pon una regla sencilla para eso, como un reloj para los turnos de la tableta.', 'No busques quién empezó. Habla de lo que pasa ahora.'], 'Veo a dos niños que quieren lo mismo. ¿Qué podemos hacer para que los dos tengan su turno?', [['Cuando los hijos pelean', L + '#hijos-pelean']]);
-    if (/\b(gemel[oa]s|bebes?|ninos pequenos|nino pequeno|panal\w*|siestas?|no dormimos|no duermo|no dormimos nada|recien nacido)\b/.test(f))
-      return ans('pequenos', 'Con gemelos o niños pequeños el trabajo no para, y es normal que los dos estén agotados y que haya más discusiones. No quiere decir que la relación va mal: es una etapa muy pesada.', ['Las noches también cuentan: túrnense, una noche cada uno, o uno hasta las dos de la mañana y el otro después.', 'Bajen la meta por ahora: comer, ropa limpia y dormir. Lo demás puede esperar.', 'Un descanso para cada uno, todos los días si se puede, aunque sean veinte minutos.'], 'Esta noche me levanto yo con los niños. Mañana te toca a ti.', [['Con gemelos o niños pequeños', L + '#pequenos']]);
-    if (/\b(trabaja|trabajo|trabajamos)\b.{0,30}\b(mucho|muchas horas|horas|todo el dia|turnos?|noches?)\b|\b\d+ horas\b|\bconstruccion\b|\bmuchas horas\b/.test(f))
-      return ans('horas', 'Cuando uno trabaja muchas horas fuera, es fácil que los dos se sientan solos: uno trabaja sin parar y siente que nadie lo nota, y el otro se queda con la casa y los niños. Los dos trabajos cuentan, y los dos cansan.', ['Cuenten las horas de los dos: el trabajo pagado y el viaje, y también las horas con los niños y la casa.', 'Lo justo no tiene que ser mitad y mitad. Hablen de qué reparto es justo para ustedes en esta etapa.', 'Algunos trabajos pueden ser de quien trabaja fuera: los de la noche o del fin de semana, como bañar a los niños o las compras del sábado.'], 'Sé que trabajas muchísimo, y te lo agradezco. Yo también llego al final del día sin fuerzas. ¿Qué parte de la casa podrías tomar tú, aunque sea en la noche?', [['Cuando uno trabaja muchas horas', L + '#horas']]);
-    if (/\b(casa|tareas|quehaceres|limpi\w*|platos|ropa|no me ayuda|no ayuda|hago todo|hago casi todo|no hace nada|todo yo)\b/.test(f) && !/\b(cuid\w*|enferm\w*)\b/.test(f))
-      return ans('casa', 'Muchas veces una sola persona carga con casi todo, y además con el trabajo de pensar en todo. Casi nunca es culpa de nadie: lo más común es que nunca hablaron de quién hace qué.', ['Hagan una lista de todos los trabajos de la casa, también los que no se ven: planear las comidas, pedir citas, pagar las cuentas.', 'Un dueño para cada trabajo, de principio a fin: no solo hacerlo, también acordarse de hacerlo.', 'Diez minutos a la semana para mirar la lista juntos. Empiecen con un “gracias”.'], 'No quiero pelear. Quiero que hagamos juntos una lista de todo lo que hay que hacer en la casa, para ver cómo lo repartimos.', [['Cuando siento que hago todo en la casa', L + '#casa'], ['Prueba el Vistazo rápido (en español)', '/lemonade-stand.html#quick']]);
-    if (/\b(peleamos|peleas|pelear|pelea|discutimos|discusion\w*|enojad[oa]s?|enfadad[oa]s?|rabia|grit\w*|furios[oa])\b/.test(f))
-      return ans('enojado', 'Cuando los dos están muy enojados, nada de lo que se dice sale bien. Esto es para dos personas que están seguras.', ['Pide una pausa y di cuándo vuelves. Una pausa con hora de regreso no es irse.', 'Respira: suelta el aire más despacio de lo que lo tomas, 4 para entrar y 6 para salir.', 'Vuelve a la hora que dijiste, y hablen de un solo tema.'], 'Quiero hacerlo bien, y ahora me siento muy alterado/a. ¿Lo hablamos a las ocho?', [['Cuando estoy muy enojado ahora mismo', L + '#enojado']], 'Si tienes miedo de tu pareja, eso no es un problema de comunicación y no es tu culpa: la página tiene ayuda gratis y confidencial.');
-    if (/\b(mis hijos|mis hijas|a mis hijos|los hijos)\b.{0,40}\b(ayud\w*|pido|pedir|ayuden)\b|\b(ayud\w*|pido|pedir)\b.{0,30}\b(mis hijos|mis hijas|a mis hijos)\b/.test(f))
-      return ans('cuidar-hijos', 'Pedir ayuda a tus hijos no es ser una carga: es dejarles cuidar contigo. Funciona mejor si pides algo concreto, con día y hora.', ['Elige una tarea para cada uno: las llamadas al seguro, los papeles, las citas, una llamada fija cada domingo.', 'Los que viven lejos también pueden ayudar: pagar unas horas de cuidado, o venir unos días.', 'Hagan una lista de quién se encarga de cada cosa, y compártanla.'], 'Ya no puedo con todo solo. ¿Podrías encargarte de las llamadas al seguro y llamar a mamá cada domingo a las seis?', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Una lista para repartir el cuidado', '/workpapers/fill/wp-03.html?for=care&lang=es']]);
-    if (/\b(pierdo|perdi|pierda|perder) (la )?paciencia\b|\b(culpa|culpable|resentimiento|rencor)\b/.test(f))
-      return ans('culpa', 'Perder la paciencia y luego sentir culpa es muy común cuando cuidas a alguien. No te hace una mala persona. Casi siempre quiere decir que llevas demasiado peso por demasiado tiempo.', ['Dilo en voz alta a alguien de confianza: una amiga, un grupo de apoyo o un consejero. Decirlo lo hace más ligero.', 'Toma descansos de verdad, no solo dormir. Algo solo para ti, aunque sea una hora a la semana.', 'Pide un ayudante más. El resentimiento muchas veces quiere decir que el cuidado se tiene que repartir entre más personas.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Enojo, resentimiento y culpa', L + '#resentimiento'], ['Cuando cuido a alguien que quiero', L + '#cuidar']]);
-    // "él dice que yo no entiendo lo cansado que está": a tired partner, not caregiving
-    if (/\b(dice|dices|dijo)\b.{0,30}\b(cansad[oa]|agotad[oa])\b|\b(el|ella|mi (esposo|esposa|marido|mujer|pareja))\b.{0,20}\b(esta|anda|llega) (muy )?(cansad[oa]|agotad[oa])\b/.test(f) && !/\b(cuid\w*|enferm\w*|parkinson|alzheimer|demencia)\b/.test(f))
-      return ans('horas', 'Los dos trabajos cuentan, y los dos cansan. Cuando uno llega agotado, es fácil que el otro sienta que nadie ve lo que hace en casa, y al revés.', ['Escucha primero cómo está: “¿Qué fue lo más pesado de hoy?”', 'Cuenten las horas de los dos: el trabajo pagado y el viaje, y también las horas con los niños y la casa.', 'Lo justo no tiene que ser mitad y mitad. Elijan juntos una cosa que alivie al que esté más cansado esta semana.'], 'Veo que estás muy cansado. Yo también lo estoy. ¿Podemos mirar juntos la semana y ver qué nos alivia a los dos?', [['Cuando uno trabaja muchas horas', L + '#horas']]);
-    if (/\b(cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f)) { state.esTopic = 'cuidar'; chips = ES_CARE_CHIPS; }
-    if (/\b(triste|tristeza|cansad[oa]s?|agotad[oa]s?|noche dificil|dificil|calma|calmarme|tranquil\w*|no puedo mas|llor\w*|nervios\w*|ansiedad|cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f))
-      return ans('cuidar', 'Lo siento, suena muy pesado. Vamos paso a paso. Primero, un momento de calma:', ['Respira despacio: toma aire contando hasta 4 y suéltalo contando hasta 6. Hazlo cinco veces.', 'Toma un vaso de agua y siéntate unos minutos en un lugar tranquilo.', 'Si cuidas a alguien, estar agotado o triste es normal. No es un fallo tuyo: es una señal de que necesitas más apoyo. Mañana pide una ayuda concreta, con día y hora.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['El Jardín de noche, para respirar despacio', '/night-garden.html']], 'Si la tristeza no se va, habla con alguien de confianza o con tu médico.');
-    var menu = state.esTopic === 'cuidar' ? [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Enojo, resentimiento y culpa', L + '#resentimiento'], CARE_LIST]
-      : [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Cuando somos una familia ensamblada', L + '#ensamblada']];
-    return { blocks: [{ k: 'p', x: (first ? 'Hola. Te respondo en español con lo esencial. ' : '') + '¿De qué se trata? Cuéntame un poco más en tus palabras, o mira una de estas partes:' },
-      { k: 'links', x: menu }], chips: chips, kind: 'lang', id: 'es-menu' };
-  }
   // Once someone has told us about control or danger, later questions in the same chat never get couples tips
   // ("you're on the same side", talk it through calmly, conflict is normal): those could put them at risk.
   // "he shouts at me at the handover in front of Leo": safer handoffs first, and a promise that questions
@@ -4429,31 +4291,6 @@
     if (/^[a-z][a-z'-]{1,15}$/.test(fs) && /^(offtopic|none|unclear)$/.test(r.kind || '')) return pzReact(state, 'oneword', { word: fs });
     return null;
   }
-  // Spanish basics (esFold text): "¿cómo estás?", "cuéntame un chiste", "estoy aburrido", "gracias", "adiós", "me llamo Ana"
-  var PZ_ES = [
-    ['how', /^(?:hola[ ,]*)?(?:como estas|como esta usted|que tal|que tal estas|como te va|como andas|como estas tu|y tu|y tu como estas)(?: profesor| puddles| profe)?$/],
-    ['jokes', /\b(?:cuentame|cuenta|dime|cuentanos|quiero|otro|un) (?:un |otro )?chistes?\b|^chistes?$|^otro chiste$|^un chiste(?: por favor)?$/],
-    ['riddles', /\badivinanzas?\b/],
-    ['facts', /\bdatos? curiosos?\b/],
-    ['bored', /^(?:estoy )?(?:muy |tan |re )?aburrid[oa]s?$/],
-    ['who', /^(?:y )?quien eres(?: tu)?$/],
-    ['thanks', /^(?:muchas |mil )?gracias(?: profesor| puddles| profe)?$/],
-    ['bye', /^(?:adios|hasta luego|hasta pronto|chao|chau|nos vemos|hasta manana)(?: profesor| puddles| profe)?$/],
-    ['laugh', /^(?:ja){2,}j?a?$|^(?:je){2,}$|^jaja\w*$/],
-    ['love', /^te quiero(?: mucho)?$/],
-    ['name', /^(?:hola[ ,]*)?me llamo [a-z]{2,20}$/]
-  ];
-  function pzEsWhich(f) { for (var i = 0; i < PZ_ES.length; i++) if (PZ_ES[i][1].test(f)) return PZ_ES[i][0]; return ''; }
-  function pzEs(state, which, q) {
-    var P = PZ(), E = P && P.es; if (!E) return null;
-    var chips = (E.chips || []).map(function (c) { return { label: c[0], q: c[1] }; });
-    if (which === 'name') {
-      var m = /me llamo\s+([A-Za-zÁÉÍÓÚÑáéíóúñ][A-Za-zÁÉÍÓÚÑáéíóúñ'-]{1,19})/i.exec(String(q)), nm = m ? m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase() : '';
-      if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
-    }
-    var x = pzFill(state, pzPick(state, E[which] || E.how));
-    return { blocks: [{ k: 'p', x: x }], chips: chips, kind: 'lang', id: 'es-charla-' + which };
-  }
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null && SELF_HARMFUL.test(f) && !/\b(he|she|they|my (husband|wife|partner|boyfriend|girlfriend|ex|dad|mum|mom|father|mother|stepdad|stepmom)) (says|said|calls|called|tells|told) (me )?(i m|im|i am)\b/.test(f)) { state.last = null; state.unsafe = false; return selfHarmfulReply(f); }
@@ -5096,14 +4933,6 @@
     try { var T = state.topic; sessionStorage.setItem(TOPIC_KEY, T ? JSON.stringify({ id: T.id, root: T.root, side: T.side == null ? null : T.side }) : ''); } catch (e) { /* fine */ }
   }
   function loadTopic() { try { var o = JSON.parse(sessionStorage.getItem(TOPIC_KEY) || 'null'); return o && typeof o.id === 'string' ? o : null; } catch (e) { return null; } }
-  function spanishHere() {
-    var P = pageCtxNow();
-    if (/\/en-espanol(\.html)?$/.test(P.path) || /espa[nñ]ol/i.test(P.about)) return true;
-    try { return /^es\b/i.test(document.documentElement.getAttribute('lang') || '') || (/^es\b/i.test(navigator.language || '') && !/^en\b/i.test((navigator.languages || [])[0] || '')); } catch (e) { return false; }
-  }
-  var ES_GREETING = 'Hola, soy el Profesor Puddles. Cuéntame qué pasa, en tus palabras. Te respondo en español con lo esencial y te llevo a la página en español; casi todo lo demás del sitio está en inglés.';
-  var ES_CARE_CHIPS = [{ label: 'Mis hermanos no ayudan', q: 'Mis hermanos no me ayudan a cuidar a mi mamá' }, { label: 'Repartir el cuidado', q: 'Quiero repartir el cuidado con mis hermanos' }, { label: 'Me siento culpable', q: 'Me da rabia y luego me siento culpable' }, { label: 'Necesito calma', q: 'Es una noche difícil, necesito calma' }];
-  var ES_CHIPS = [{ label: 'Hago todo en la casa', q: 'Siento que hago todo en la casa' }, { label: 'Estoy agotado/a', q: 'Estoy agotado/a, cuido a mi pareja' }, { label: 'Peleamos mucho', q: 'Peleamos mucho' }, { label: 'Necesito calma', q: 'Es una noche difícil, necesito calma' }];
   function Chat(mode, host) {
     var me = this;
     this.mode = mode;
@@ -5189,22 +5018,6 @@
     this.root.querySelector('.tolc-name').textContent = c.name;
     this.root.querySelector('label').textContent = 'Ask ' + c.name + ' a question';
     this.input.placeholder = 'Ask ' + c.name + ' something…';
-  };
-
-  // the chat's own buttons and lines in Spanish (from the Spanish page, a Spanish browser, or once someone writes in
-  // Spanish): "Empezar de nuevo", the footer, and what a screen reader hears (puddles16)
-  Chat.prototype.applyEs = function () {
-    var R = this.root, q = function (sel) { return R.querySelector(sel); }, x;
-    this.esChrome = true;
-    if ((x = q('.tolc-reset'))) x.textContent = 'Empezar de nuevo';
-    if ((x = q('.tolc-x'))) x.setAttribute('aria-label', 'Cerrar el chat');
-    if ((x = q('.tolc-sub'))) { x.textContent = 'Guía del programa'; x.title = 'Tu guía de todo el programa'; }
-    if ((x = q('.tolc-log'))) x.setAttribute('aria-label', 'Conversación');
-    if ((x = q('.tolc-chips'))) x.setAttribute('aria-label', 'Sugerencias');
-    if ((x = q('.tolc-send'))) x.setAttribute('aria-label', 'Enviar');
-    if ((x = q('.tolc-note'))) x.textContent = PRIVACY_LINE_ES;
-    if ((x = q('label'))) x.textContent = 'Pregúntale al Profesor Puddles';
-    this.input.placeholder = 'Escribe aquí, en español…';
   };
 
   Chat.prototype.render = function (m, isNew) {
