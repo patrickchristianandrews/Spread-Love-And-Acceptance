@@ -88,10 +88,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "book-1-know-yourself-kindly" → "paperback", and rebuild, so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 158 (KDP reads it from the file) |
-| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Page count | 160 (KDP reads it from the file) |
+| Spine width | 0.3603 in (9.15 mm): 160 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-1-know-yourself-kindly.pdf |
-| Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.606 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.610 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -99,12 +99,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $5.03 | **$3.96** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £4.01 (estimate) | about £3.18 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.08 | **$3.91** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.05 (estimate) | about £3.14 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $5.03 | would pay $0.97 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $5.08 | would pay $0.92 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -112,10 +112,10 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-1-know-yourself-kindly.epub** (EPUB 3, reflowable, 1.18 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-1-know-yourself-kindly.epub** (EPUB 3, reflowable, 1.19 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-1-know-yourself-kindly-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
 | ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.02 a copy after delivery (1.18 MB × $0.15 = $0.18). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.01 a copy after delivery (1.19 MB × $0.15 = $0.18). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -424,10 +424,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "book-4-share-the-load" → "paperback", and rebuild, so it prints on the copyright page] |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 156 (KDP reads it from the file) |
-| Spine width | 0.3513 in (8.92 mm): 156 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Page count | 158 (KDP reads it from the file) |
+| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-4-share-the-load.pdf |
-| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.601 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.606 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -435,12 +435,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.98 | **$4.01** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.97 (estimate) | about £3.22 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.03 | **$3.96** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.01 (estimate) | about £3.18 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.98 | would pay $1.02 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $5.03 | would pay $0.97 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -448,10 +448,10 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.04 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.03 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-4-share-the-load-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
 | ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.04 MB × $0.15 = $0.16). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.03 MB × $0.15 = $0.15). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
 | Kindle categories and keywords | the same as the paperback |

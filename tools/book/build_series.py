@@ -978,14 +978,14 @@ WB_EXPLAINED = {
 }
 # voice18: a short note before each workpaper's blank copies, in the books' voice (the people in them are made up)
 WB_NOTE = {
-    'wp02': 'Two minutes, about yourself and nobody else. You may be surprised by your own number. A score of 0.65 on a Tuesday is information. It is not a character reference.',
+    'wp02': 'Two minutes, about yourself and nobody else. You may be surprised by your own number. A score of 0.65 on a Tuesday tells you something about Tuesday and nothing whatsoever about your character.',
     'wp11': 'Make this on a dull, ordinary day, ideally with a cup of tea. Trying to write a calm-down plan in the middle of a row is like reading the instructions on a fire extinguisher while the pan is still burning.',
     'wp09': 'For one thing that actually stung, not a list of grievances. It’s a check on your side of the conversation. Most people find the first draft of their reply is about twice as long as it needs to be.',
     'wp13': 'Ninety seconds, once a day, both of you. It’s meant to be almost too small to bother with, which is exactly why it keeps going. If you miss a day, write nothing and carry on tomorrow.',
     'wp12': 'Fill in your own rows first, before you look at theirs. Often one moment stands out a mile, bedtime, say, or the first ten minutes after someone gets home.',
     'wp14': 'A line each evening, about your own day. At the end of the week, the question is simple. Was it us, or was it everything else? Quite often it was everything else.',
     'wp01': 'One ordinary week. Write only what you did or saw yourself, including the thinking jobs, the remembering and the booking. Nobody fills in anybody else’s side, however sure they are.',
-    'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list. They are the reason you’re doing this.',
+    'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list, because they are the reason you’re doing this. A made-up example of how it tends to go: when Sian and Huw did theirs at the kitchen table, nineteen jobs went on the list and fourteen had a name within five minutes. The other five, which included the car tax and Huw’s mum’s birthday, took the rest of the evening, and the car tax turned out to be a fortnight overdue.',
     'setup': 'The sums from Book 4, done with a pencil. You’ll need a week of Who did what, your job list, and each person’s own tank score. If anyone’s tank is 0.60 or more, start there, whatever the total says.',
     'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock.',
     'wp15': 'The Sunday walk, the birthday breakfast, the silly thing you always say at the door. Every few months, see which are still alive. Nobody is to blame for one that faded.',

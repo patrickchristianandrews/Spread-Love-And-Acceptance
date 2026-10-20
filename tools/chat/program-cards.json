@@ -276,58 +276,6 @@
       ]
     },
     {
-      "id": "guestsoverload",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "topic": true,
-      "keys": [],
-      "chips": [],
-      "name": "friends over without warning",
-      "pat": "\\b(overwhelm\\w*|overload\\w*|drained|stressed|anxious|panic\\w*|exhausted)\\b.{0,60}\\b(friends|guests|people|visitors|mates)\\b.{0,20}\\b(over|round|coming|here|home)\\b|\\b(invite\\w*|bring\\w*|brought|has|have|having) (friends|people|guests|mates|everyone) (over|round|home)\\b.{0,40}\\b(without (telling|asking|warning|checking with) me|last minute|no (warning|notice))\\b|\\b(plan|planning|organi[sz]e) (having )?(friends|people|guests) (over|round)\\b",
-      "what": [
-        "That makes sense. For many people, guests at home take a lot of energy, especially without warning: it’s a sensory and social load, not unfriendliness. A heads-up rule usually helps both of you."
-      ],
-      "how": [
-        "Agree notice before guests: a day’s warning, or a quick text first, so it isn’t a surprise.",
-        "Agree a recharge time after visitors, and a quiet corner anyone can go to without explaining.",
-        "A simple signal, like a hand on the heart, can mean “I’m overloaded and need ten minutes.”",
-        "Swap Wiring Cards, so each of you can see what the other needs at home."
-      ],
-      "links": [
-        [
-          "Needing time alone after seeing people (The Logic Behind It)",
-          "/the-logic-behind-it.html#l-alone-after-people"
-        ],
-        [
-          "Sensory overload at home",
-          "/neurodivergent-relationships.html#sensory"
-        ],
-        [
-          "How to talk to me (the Wiring Card)",
-          "/wiring-card.html"
-        ]
-      ],
-      "script": [
-        "I love that you love having people over. Could we agree a heads-up first, and a quiet hour for me after?"
-      ],
-      "plain": [
-        "Agree notice before guests.",
-        "Agree a quiet time after.",
-        "Use a signal for “I need ten minutes”."
-      ],
-      "follow": [
-        [
-          "\\b(plan\\w*|friends over|people over|guests|heads up|notice|warning)\\b",
-          "guestsoverload"
-        ],
-        [
-          "\\b(rejected|alone time|introvert\\w*|extrovert\\w*|social|quiet)\\b",
-          "socialquiet"
-        ]
-      ]
-    },
-    {
       "id": "socialquiet",
       "kind": "intent",
       "first": true,
@@ -373,6 +321,58 @@
         "Give notice before guests.",
         "Keep a weekly people night.",
         "Plan quiet time too."
+      ],
+      "follow": [
+        [
+          "\\b(plan\\w*|friends over|people over|guests|heads up|notice|warning)\\b",
+          "guestsoverload"
+        ],
+        [
+          "\\b(rejected|alone time|introvert\\w*|extrovert\\w*|social|quiet)\\b",
+          "socialquiet"
+        ]
+      ]
+    },
+    {
+      "id": "guestsoverload",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "friends over without warning",
+      "pat": "\\b(overwhelm\\w*|overload\\w*|drained|stressed|anxious|panic\\w*|exhausted)\\b.{0,60}\\b(friends|guests|people|visitors|mates)\\b.{0,20}\\b(over|round|coming|here|home)\\b|\\b(invite\\w*|bring\\w*|brought|has|have|having) (friends|people|guests|mates|everyone) (over|round|home)\\b.{0,40}\\b(without (telling|asking|warning|checking with) me|last minute|no (warning|notice))\\b|\\b(plan|planning|organi[sz]e) (having )?(friends|people|guests) (over|round)\\b",
+      "what": [
+        "That makes sense. For many people, guests at home take a lot of energy, especially without warning: it’s a sensory and social load, not unfriendliness. A heads-up rule usually helps both of you."
+      ],
+      "how": [
+        "Agree notice before guests: a day’s warning, or a quick text first, so it isn’t a surprise.",
+        "Agree a recharge time after visitors, and a quiet corner anyone can go to without explaining.",
+        "A simple signal, like a hand on the heart, can mean “I’m overloaded and need ten minutes.”",
+        "Swap Wiring Cards, so each of you can see what the other needs at home."
+      ],
+      "links": [
+        [
+          "Needing time alone after seeing people (The Logic Behind It)",
+          "/the-logic-behind-it.html#l-alone-after-people"
+        ],
+        [
+          "Sensory overload at home",
+          "/neurodivergent-relationships.html#sensory"
+        ],
+        [
+          "How to talk to me (the Wiring Card)",
+          "/wiring-card.html"
+        ]
+      ],
+      "script": [
+        "I love that you love having people over. Could we agree a heads-up first, and a quiet hour for me after?"
+      ],
+      "plain": [
+        "Agree notice before guests.",
+        "Agree a quiet time after.",
+        "Use a signal for “I need ten minutes”."
       ],
       "follow": [
         [
@@ -537,6 +537,94 @@
           "\\b(share|split|divide|fair|siblings|brothers?|sisters?)\\b",
           "eldercarehome"
         ]
+      ]
+    },
+    {
+      "id": "coupletonight",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "a little time together tonight",
+      "pat": "\\b(something|anything|ideas?|\\d+ (minutes|mins)|ten minutes|five minutes|half an hour|a few minutes)\\b.{0,40}\\b(together|for us|the two of us|we can do)\\b.{0,60}\\b(tonight|this evening|once the kids|after the kids|kids are in bed|kids in bed|after bedtime|nothing heavy)\\b|\\b(once|after|when) the (kids|children|baby) (are |is |re )?(in bed|asleep|down)\\b.{0,60}\\b(together|us|we|the two of us)\\b|\\b(\\d+|ten|five|fifteen) (minutes|mins) together\\b|\\btogether tonight\\b.{0,30}\\bnothing heavy\\b|\\bnothing heavy\\b.{0,30}\\btogether\\b",
+      "what": [
+        "After a busy day, a few minutes of easy time together helps more than a big talk, especially if you’ve been bickering. Here are some small things, none of them heavy:"
+      ],
+      "how": [
+        "Get one small idea to do together: the bonding picker suggests something that fits your time and energy, in about a minute.",
+        "The 90-second check-in: one sentence each about how you’re doing and what’s coming up. Nothing to solve.",
+        "Busy? Five minutes together: each step stands on its own, and either of you can start it.",
+        "Keep it light tonight: if the bickering is about something real, pick a calm time this week for that, not now."
+      ],
+      "links": [
+        [
+          "Get one small idea to do together",
+          "/bonding.html?who=partner#ideas"
+        ],
+        [
+          "Busy? Five minutes together",
+          "/journeys.html#busy2"
+        ],
+        [
+          "The 90-second daily check-in",
+          "/workpapers/wp-13-daily-check-in.html"
+        ]
+      ],
+      "notPat": "\\b(screen|screens|tablet|ipad|kids? (play|watch)|for the kids)\\b",
+      "script": [
+        "No big talks tonight. Want to pick one small thing to do together for ten minutes?"
+      ],
+      "plain": [
+        "Ten easy minutes together.",
+        "Pick one small idea.",
+        "Try the 90-second check-in.",
+        "Keep big topics for another time."
+      ]
+    },
+    {
+      "id": "bedtimesplit",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "name": "who does the kids’ bedtime",
+      "pat": "\\b(who does|whose turn|who puts|who takes|who s doing|who is doing|whos doing)\\b.{0,20}\\b(the )?(kids |kid |children |baby )?(to )?bed(time)?\\b|\\b(argu\\w*|fight\\w*|bicker\\w*|row\\w*)\\b.{0,30}\\b(about|over) (who does )?(the )?(kids )?bedtime\\b|\\bbedtime (rota|turns|split)\\b|\\bsplit (the )?bedtime\\b",
+      "what": [
+        "Bedtime is a real job, often the longest one of the evening, and arguing about whose turn it is usually means nobody owns it. Give it an owner, or a rota, and the argument tends to go."
+      ],
+      "how": [
+        "Pick a pattern you both agree: one of you owns bedtime on set nights (Monday, Wednesday, Friday), or you take turns, or split it (one does bath, the other does the story).",
+        "The one who isn’t on bedtime owns something else at the same time, like the kitchen or tomorrow’s bags, so it feels even.",
+        "Put it where you both see it, and look at it again in two weeks.",
+        "Each tap who mostly does each job in the Who does what? quick look, bedtime included, then compare."
+      ],
+      "links": [
+        [
+          "Who does what? quick look",
+          "/lemonade-stand.html#quick"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ],
+        [
+          "A few house rules, with the why",
+          "/parents.html#house-rules"
+        ]
+      ],
+      "notPat": "\\b(won t|wont|refuses?|tantrum\\w*|meltdown\\w*|screams?|stay in bed|sleep through)\\b",
+      "script": [
+        "Can we pick bedtime nights? I’ll take Monday, Wednesday and Friday, and you take the rest, and the other one does the kitchen."
+      ],
+      "plain": [
+        "Give bedtime an owner.",
+        "Or take turns on set nights.",
+        "The other one does another job.",
+        "Look at it again in two weeks."
       ]
     },
     {

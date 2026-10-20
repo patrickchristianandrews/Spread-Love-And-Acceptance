@@ -523,17 +523,24 @@
     function T(en, es) { return (opts.lang ? opts.lang === 'es' : esPage()) && es ? es : en; }
     var box = mk('div', { cls: 'tcol-send' });
     var rules = rulesCard('send', opts.lang); if (rules) box.appendChild(rules);
+    // flow17: the ground rules show once per device. Sending anything counts as having read them, so the
+    // card isn't there again on the next send (it stays in this sheet until it closes).
+    function seen() { if (!rules) return; try { W.localStorage.setItem(RULES_KEY, new Date().toISOString().slice(0, 10)); } catch (er) {} }
     var head = mk('p', { cls: 'tcol-send-h', text: opts.heading || T('Send it by', 'Envíalo por') });
     var acts = mk('div', { cls: 'tcol-acts', role: 'group', 'aria-label': opts.heading || T('Send it by', 'Envíalo por') });
     var qr = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'qr', text: T('QR code', 'Código QR') });
     var sms = mk('a', { cls: 'tcol-act', 'data-c': 'sms', href: '#', text: T('Text message', 'Mensaje de texto') });
     var mail = mk('a', { cls: 'tcol-act', 'data-c': 'mail', href: '#', text: T('Email', 'Correo') });
-    var more = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'more', text: T('WhatsApp or another app', 'WhatsApp u otra app') });
+    // flow17: one sheet at a time. With the phone's own share menu this button opens it; without one (most
+    // laptops) it is a plain WhatsApp link, so it never opens a second sheet behind this one.
+    var nativeShare = !!(W && W.navigator && typeof W.navigator.share === 'function');
+    var more = mk('a', { cls: 'tcol-act', 'data-c': 'more', href: '#', target: '_blank', rel: 'noopener noreferrer', text: nativeShare ? T('WhatsApp or another app', 'WhatsApp u otra app') : 'WhatsApp' });
     var cp = mk('button', { type: 'button', cls: 'tcol-act tcol-act-copy', 'data-c': 'copy', text: T('Copy link', 'Copiar enlace') });
     var cd = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'code', text: T('Copy as a code', 'Copiar como código'), hidden: '' });
-    [qr, sms, mail, more, cd, cp].forEach(function (b) { acts.appendChild(b); });
+    // the ones people use most come first: WhatsApp (or the phone's share menu), a text, copy the link
+    [more, sms, cp, mail, qr, cd].forEach(function (b) { acts.appendChild(b); });
     var long = mk('p', { cls: 'tcol-long', hidden: '' });
-    var priv = mk('p', { cls: 'tcol-priv', text: T('Your answers travel inside the link. Anyone with the link can read them. Nothing is stored on our side.', 'Tus respuestas viajan dentro del enlace. Cualquiera que tenga el enlace puede leerlas. No se guarda nada de nuestro lado.') });
+    var priv = mk('p', { cls: 'tcol-priv', text: T('Anyone with the link can read your answers. Nothing is stored on our side.', 'Cualquiera que tenga el enlace puede leer tus respuestas. No se guarda nada de nuestro lado.') });
     var st = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
     box.appendChild(head); box.appendChild(acts); box.appendChild(long); box.appendChild(priv); box.appendChild(st);
     var cur = '', stT = 0;
@@ -551,6 +558,7 @@
         'Este enlace es largo (' + cur.length.toLocaleString() + ' caracteres), demasiado para un código QR o un mensaje de texto. Cópialo como código y pégalo en un chat, o envíalo por correo, que no tiene límite. Del otro lado, pegan el código en «¿Te llegó un código en vez de un enlace?».') : '';
       sms.setAttribute('href', on ? smsHref(message(cur)) : '#');
       mail.setAttribute('href', on ? mailHref(subject(), message(cur) + '\n\n' + T('Nothing is uploaded: everything travels inside the link.', 'No se sube nada: todo viaja dentro del enlace.')) : '#');
+      more.setAttribute('href', on ? 'https://wa.me/?text=' + encodeURIComponent(message(cur)) : '#');
       return cur;
     }
     function notReady(e) {
@@ -567,6 +575,7 @@
       var c = b.getAttribute('data-c');
       refresh();
       if (notReady(e)) return;
+      if (c !== 'more') seen();
       if (c === 'sms' || c === 'mail') { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); say(c === 'sms' ? T('Opening your messages app. If nothing opens, use “Copy link”.', 'Abriendo tus mensajes. Si no se abre nada, usa «Copiar enlace».') : T('Opening your email. If nothing opens, use “Copy link”.', 'Abriendo tu correo. Si no se abre nada, usa «Copiar enlace».')); return; }
       if (c === 'qr') {
         var who = typeof opts.who === 'function' ? opts.who() : opts.who;
@@ -575,10 +584,19 @@
         return;
       }
       if (c === 'more') {
-        var d = { title: typeof opts.title === 'function' ? opts.title() : opts.title || '', text: typeof opts.text === 'function' ? opts.text() : opts.text || '', url: cur, private: true, result: true };
-        if (W.TOLShare && W.TOLShare.open) W.TOLShare.open(d);
-        else if (W.navigator.share) { try { W.navigator.share({ title: d.title, text: d.text, url: cur }).catch(function () {}); } catch (er) {} }
-        else copyText(message(cur)).then(function (ok) { say(ok ? T('Copied. Paste it into any app.', 'Copiado. Pégalo en cualquier app.') : T('Couldn’t copy here.', 'No se pudo copiar aquí.')); });
+        // never a second sheet: the phone's own share menu, or (no share menu) the WhatsApp link itself opens
+        seen();
+        if (nativeShare) {
+          e.preventDefault();
+          var d = { title: typeof opts.title === 'function' ? opts.title() : opts.title || '', text: typeof opts.text === 'function' ? opts.text() : opts.text || '' };
+          var wa = more.getAttribute('href');
+          try {
+            W.navigator.share({ title: d.title, text: d.text, url: cur }).then(function () { fire(cur, 'native'); }, function (er) {
+              if (er && er.name === 'AbortError') return;
+              try { W.open(wa, '_blank', 'noopener'); } catch (x) {}
+            });
+          } catch (er) { try { W.open(wa, '_blank', 'noopener'); } catch (x) {} }
+        } else { fire(cur, 'whatsapp'); say(T('Opening WhatsApp. If nothing opens, use “Copy link”.', 'Abriendo WhatsApp. Si no se abre nada, usa «Copiar enlace».')); }
         if (opts.onSent) opts.onSent('more', cur);
         return;
       }

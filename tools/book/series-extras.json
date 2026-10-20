@@ -79,7 +79,7 @@
         "fits": "For many people with ADHD, sensing time passing is genuinely harder. Researchers describe it as part of how attention and self-control work. It says nothing about how much someone cares.",
         "say": "“I misjudge time. You matter to me, and I’m working on it.”",
         "step": "Set the alarm for leaving, not arriving, and text “Leaving now” as you go. Whoever’s waiting can agree a time to start without you.",
-        "looks": "Twenty past. A breathless apology at the door, coat half on. Third time this month. They plainly care. They are also plainly late.",
+        "looks": "Twenty past, and here they are at the door with their coat half on and a breathless apology, for the third time this month. They plainly care, and they are also plainly late.",
         "other": "Waiting tells the waiting person they matter less, whatever was meant. It costs them real time, sometimes a cold dinner or a missed film, and over months it wears down trust.",
         "chain": [
           "Some minds have two settings for time, “now” and “not now”",
@@ -127,7 +127,7 @@
         "an.0": "Sunglasses on a bright day. You still see everything, just without squinting.",
         "say": "“These help me stay at the table. Tap my arm and I’m all yours.”",
         "step": "Agree a signal, a tap on the arm, that means “I’m talking to you”. Where you can, turn the room down for everyone. One conversation at a time is kinder to more people than you’d think.",
-        "looks": "Sunday lunch, nine people, the telly on, two conversations at once. One person has earbuds in. Not music. Just in.",
+        "looks": "Sunday lunch, nine people, the telly on and two conversations going at once, and one person at the end of the table has earbuds in with nothing playing through them at all.",
         "other": "Everyone else can feel shut out, or assume the person doesn’t want to talk to them at all.",
         "chain": [
           "Sound arrives whether you want it or not",
@@ -146,7 +146,7 @@
           "This week used all of it up",
           "Going out on empty means turning up in body only"
         ],
-        "step": "Cancel as early as you can, and put a new date in the same message. If it keeps happening, make the plans lighter. A walk. A takeaway on the sofa."
+        "step": "Cancel as early as you can, and put a new date in the same message. If it keeps happening, make the plans lighter, a walk, say, or a takeaway on the sofa where nobody has to put proper shoes on."
       },
       "blunt": {
         "looks": "You asked what she thought of your draft. She tells you. “The second half doesn’t work.” Full stop.",
@@ -196,7 +196,7 @@
       },
       "no-eye-contact": {
         "step": "Check understanding with words instead of eyes, with the listener summing up one line of what they heard. Hard talks can happen side by side, on a walk or in the car.",
-        "looks": "While you’re talking, he looks at the table. The window. His own hands. Anywhere, really, except at you.",
+        "looks": "While you’re talking, he looks at the table, or out of the window, or at his own hands, anywhere really except at you.",
         "other": "Most of us were taught that eye contact means “I’m with you”. Without it, it’s very easy to feel ignored, or think they’re bored, or hiding something.",
         "chain": [
           "Eyes carry a huge amount of information",
@@ -308,7 +308,7 @@
       },
       "quiet-in-fight": {
         "step": "Say a return time. “I need twenty minutes. I’ll come back at eight.” Then come back at eight.",
-        "looks": "Halfway through the row he stops answering. Looks at the floor. Says nothing at all, which somehow makes it worse.",
+        "looks": "Halfway through the row he stops answering and looks at the floor, and somehow his saying nothing at all makes it worse.",
         "other": "Silence can feel like being shut out, or punished. If you’re someone who needs to settle things before you can calm down, it can be frightening.",
         "chain": [
           "A fast argument floods the body",
@@ -319,7 +319,7 @@
       },
       "reassurance": {
         "step": "Agree a kind limit together. One clear answer, then “I said it, and I meant it,” and something calming to do side by side. If the worry runs your days, a GP or therapist can help.",
-        "looks": "“Are you sure you’re not cross with me?” Fourth time tonight. Same question, same answer, same face.",
+        "looks": "“Are you sure you’re not cross with me?” It’s the fourth time tonight, and you give the same answer you gave the other three times, a bit more tightly.",
         "an.0": "Going back for the third time to check the front door is locked.",
         "other": "The person answering can feel worn out, or that their word isn’t trusted. And answering again and again can keep the loop going.",
         "chain": [
@@ -476,7 +476,7 @@
         ]
       },
       "shutdown": {
-        "looks": "She stops talking. Stares. Questions get nothing back at all.",
+        "looks": "She stops talking and stares at a point somewhere past your shoulder, and questions get nothing back at all.",
         "an.0": "A computer restarting in safe mode.",
         "other": "People nearby can feel ignored, or frightened, or completely sure they caused it, and start asking more questions, which doesn’t help.",
         "chain": [
