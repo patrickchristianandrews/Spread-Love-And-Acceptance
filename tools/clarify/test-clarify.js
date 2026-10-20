@@ -261,7 +261,7 @@ S.forEach(function (s) {
   ok(n.title && n.body, 'scenario: ' + s[0] + ' has a next step');
   if (r.level === 4) ok(/^That sounds really hard\./.test(n.body) && !n.links.length, 'scenario: ' + s[0] + ' gets the short neutral reply, with no links');
   ok(clean(n), 'scenario: ' + s[0] + ' has no numbers, services or safety links');
-  if (r.crisis) ok(!n.extra, 'scenario: ' + s[0] + ' adds no crisis line');
+  if (r.crisis) ok(!n.extra, 'scenario: ' + s[0] + ' adds no extra line');
 });
 var scen = S.length;
 

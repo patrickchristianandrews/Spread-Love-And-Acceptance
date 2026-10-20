@@ -61,7 +61,7 @@ There's a version of shame that looks, at first glance, like the opposite of def
 
 It sounds like ownership. It has all the vocabulary of ownership, and more. But listen to what it's about: the self, again. The specific act (the confidence broken, the evening missed) has disappeared just as completely as it does in a counterattack, and now the person who was hurt has a new job. They have to reassure. "You're not useless. Of course I put up with you." Euan, driving home from the garden centre having apologised to his mother, has been given exactly this job.
 
-Collapsing isn't usually a tactic. It's what shame feels like from the inside, and it's sincere. It still leaves the hurt person comforting the one who hurt them, which is the wrong way round. And it's exhausting to be on the receiving end of it, because every complaint, however small, turns into a crisis that you have to talk someone down from.
+Collapsing is rarely a tactic. It's what shame feels like from the inside, and it's sincere. It still leaves the hurt person comforting the one who hurt them, which is the wrong way round. And it's exhausting to be on the receiving end of it, because every complaint, however small, turns into a crisis that you have to talk someone down from.
 
 What helps, if you recognise yourself here, is proportion. A small act needs a small, plain apology: what you did, that it was yours, what you'll do. You can feel terrible privately, and talk about the terrible feeling with someone else on another day. In the moment, keep it to the size of the act. The person you hurt will usually find a short, specific "I'm sorry I told her, it was your news" far more comforting than a long account of your failings.
 
@@ -81,9 +81,9 @@ It isn't Euan's job to manage his mother's shame. But a sentence that leaves her
 
 **If you're the one being asked,** notice the jump. When you hear yourself think *so I'm a terrible…*, that's the moment. You've just turned an act into a verdict, on your own, without help. Try saying the act back instead: "You're right. You asked me not to tell her, and I did." Then, if you need to, say the part that keeps your self intact: "I did it because I was worried, and I'm not proud of it. It was your news to tell."
 
-Marion, a week later, rings him, "I've been thinking about Kirsty. You asked me not to tell her and I did. I was worried and I wanted someone to worry with, but it was your news. I'm sorry. I won't pass on anything you've asked me to keep."
+If Marion could get there, it might sound like this. "I've been thinking about Kirsty. You asked me not to tell her and I did. I was worried and I wanted someone to worry with, but it was your news. I'm sorry. I won't pass on anything you've asked me to keep."
 
-Notice that her explanation is still in there: she was worried. It's allowed in, after the ownership, as context. It just isn't standing in for it.
+Notice that her explanation would still be in there: she was worried. (Whether she gets there is another matter, and chapter 11 picks up that thread.) It's allowed in, after the ownership, as context. It just isn't standing in for it.
 
 > **Two ways to read a single sentence of criticism**
 >
