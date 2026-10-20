@@ -58,7 +58,7 @@ So the useful conversation between Gregor and Lewis isn't about sorry. It's abou
 
 This isn't Gregor running Lewis's life. Lewis designs it; Gregor agrees to the backstop. And nobody has to be a worse person for needing it.
 
-> **Two ways to read sorry, and late again.**
+> **Two ways to read "sorry", late again**
 >
 > Some people's wiring keeps track of time loosely. An hour can feel like twenty minutes when they're absorbed, and "I'll leave in a minute" can genuinely become forty without them noticing it pass. They often care intensely about the thing they're late for, and are mortified each time. More effort and more sincerity don't fix it, because the problem isn't caring; it's a clock that runs differently inside.
 >

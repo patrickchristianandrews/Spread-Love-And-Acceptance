@@ -54,7 +54,7 @@ The field is a mixed one. Some of what goes under the name "holistic" is well st
 
 Before Euan made that call, he walked round the block twice and breathed out longer than he breathed in. It's not magic. It just gave his body a few minutes to come down, so that the sentence he'd written arrived at the volume he meant.
 
-> **Two ways to read stating a limit.**
+> **Two ways to read a plainly stated limit**
 >
 > Some people's wiring states a limit plainly, as information. "I'm going to stop talking about this now, and we can try again tomorrow." To them it's a clear, kind sentence: no guessing, no games, a time to come back.
 >

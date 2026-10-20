@@ -56,7 +56,7 @@ The gap between meaning and landing usually opens in one of a handful of places.
 
 Writing is where intent and impact drift furthest apart, because the reader gets the words and none of the voice.
 
-A few weeks after the curry night, Fran texts Dele from work: "Mum's asked if we can do Sunday lunch instead of Saturday. I said yes, hope that's OK?" Dele, who is in the middle of something, replies: "Noted."
+A few weeks after the curry night, Fran texts Dele from work, "Mum's asked if we can do Sunday lunch instead of Saturday. I said yes, hope that's OK?" Dele, who is in the middle of something, replies, "Noted."
 
 Fran reads it four times on the bus. To her, "Noted." with a full stop is what a manager sends when they're annoyed with you and have decided not to say so. She spends the evening braced for an argument about her mother.
 

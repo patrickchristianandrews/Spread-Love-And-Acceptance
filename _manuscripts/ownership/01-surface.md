@@ -88,7 +88,7 @@ Neither of them is being unreasonable. The apology was for the top layer, and th
 
 The better version isn't longer because longer is better. It's longer because it reaches the layer where the hurt actually is: the pattern ("every time"), the cost ("she rings you") and a fix that changes the setup rather than tonight.
 
-The same gap opens at work, often in writing. Dawn, who manages a small team at a housing association, emails Bryn on a Friday afternoon: "As per my email on Tuesday, can you send the figures by Monday?" Bryn reads it on his phone at the bus stop and feels his face go hot.
+The same gap opens at work, often in writing. Dawn, who manages a small team at a housing association, emails Bryn on a Friday afternoon, "As per my email on Tuesday, can you send the figures by Monday?" Bryn reads it on his phone at the bus stop and feels his face go hot.
 
 | Said | "As per my email on Tuesday, can you send the figures by Monday?" |
 |---|---|

@@ -29,7 +29,7 @@ Start with the body, because it comes first. The science of the nervous system h
 
 When Corinne put the letter down, Rafe's body did what bodies do when they sense a threat. That's not an excuse for the transfer. It's an explanation of the next ten minutes. Nobody owns anything well while their body is shouting at them to get out of the room, and pushing harder ("Can you at least say something?") turns the volume up further.
 
-> **Two ways to read going silent.**
+> **Two ways to read a sudden silence**
 >
 > Some people's wiring, when overloaded, shuts down. Words go first, and sometimes movement and expression too. Their face can look blank or cold. They may leave the room, or sit very still. From the inside, it's often closer to a fuse tripping than a choice: the system protecting itself. Many people who experience it are distressed by how it looks to others, and want to explain, and can't, until it passes.
 >
@@ -83,7 +83,7 @@ What helps: clarity about what you will and won't keep doing. Chapter 11 is abou
 
 You may have recognised yourself somewhere in that list. Most readers do, usually in more than one place. That's no reason for alarm, or for the collapse from chapter 3. Treat it as useful information, the way it's useful to know which of your knees gives you trouble on stairs.
 
-If it's mostly **shame**, the work is learning to hold the act and the self apart, and it gets easier with practice. The sentence from chapter 3 helps: *I did that, it was wrong, and I'm not a bad person.*
+If it's mostly **shame**, the work is learning to hold the act and the self apart, and it gets easier with practice. The sentence from chapter 3 helps, *I did that, it was wrong, and I'm not a bad person.*
 
 If it's mostly **defensiveness**, the work starts in the body. Learn your own early signs: the heat in the face, the clenched jaw, the counter-argument forming before the other person has finished. Then buy yourself time: "I can feel myself getting defensive. Give me a minute."
 

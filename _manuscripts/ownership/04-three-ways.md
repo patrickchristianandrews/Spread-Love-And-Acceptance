@@ -97,7 +97,7 @@ Every unacknowledged hurt is a small withdrawal from that reserve. Each one on i
 
 That last version keeps the explanation (which Nell needs to say, and which Karin may well want to hear), and moves it to after the ownership, as an offer.
 
-> **Two ways to read the explanation.**
+> **Two ways to read an explanation**
 >
 > Some people's wiring treats a full explanation as part of honesty. If they leave out *why* it happened, they feel they're hiding something, or giving a false picture of their own motives. Explaining is how they show they've thought it through and how they make sense of it themselves.
 >

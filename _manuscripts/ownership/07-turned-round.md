@@ -53,7 +53,7 @@ The way out is to keep noticing what's fair, and to move it off the private scor
 
 It isn't only flatmates. In an office, it often sounds more polite and works the same way.
 
-Nadine, a project manager at an engineering firm in Derby, raises with her colleague Gil that he's missed the last three deadlines for his section of the monthly report. Gil listens, nods, and says: "Fair enough. Though to be honest, I'd have got it in on time if your templates weren't always late going out."
+Nadine, a project manager at an engineering firm in Derby, raises with her colleague Gil that he's missed the last three deadlines for his section of the monthly report. Gil listens, nods, and says, "Fair enough. Though to be honest, I'd have got it in on time if your templates weren't always late going out."
 
 | Said | "Fair enough. Though I'd have got it in on time if your templates weren't always late going out." |
 |---|---|
@@ -79,7 +79,7 @@ That isn't a way of dodging your own part. It only works if you mean it: if you 
 
 And if Joss can find it in himself, a better way from him: "Sorry. That came out as a counterattack. You're right about last night. Can I say the Ruairidh thing too, after we've sorted the noise? It's been bothering me."
 
-> **Two ways to read bringing in something else.**
+> **Two ways to read a second topic**
 >
 > Some people's wiring holds several threads at once and sees how they connect. To a mind like this, the washing machine and the late nights genuinely are part of the same picture, which is how the two of you share the flat, and raising one while talking about the other isn't a comeback. It's the bigger view. Leaving a connected thread unsaid can feel like losing it, and some people worry, with reason, that if they don't say it now they'll forget it entirely.
 >

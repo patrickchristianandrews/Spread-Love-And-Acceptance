@@ -81,11 +81,11 @@ It isn't Euan's job to manage his mother's shame. But a sentence that leaves her
 
 **If you're the one being asked,** notice the jump. When you hear yourself think *so I'm a terrible…*, that's the moment. You've just turned an act into a verdict, on your own, without help. Try saying the act back instead: "You're right. You asked me not to tell her, and I did." Then, if you need to, say the part that keeps your self intact: "I did it because I was worried, and I'm not proud of it. It was your news to tell."
 
-**Said (Marion, a week later):** "I've been thinking about Kirsty. You asked me not to tell her and I did. I was worried and I wanted someone to worry with, but it was your news. I'm sorry. I won't pass on anything you've asked me to keep."
+Marion, a week later, rings him, "I've been thinking about Kirsty. You asked me not to tell her and I did. I was worried and I wanted someone to worry with, but it was your news. I'm sorry. I won't pass on anything you've asked me to keep."
 
 Notice that her explanation is still in there: she was worried. It's allowed in, after the ownership, as context. It just isn't standing in for it.
 
-> **Two ways to read a single sentence of criticism.**
+> **Two ways to read a single sentence of criticism**
 >
 > Some people's wiring meets criticism with a sharp, almost physical sting. It arrives fast and it arrives whole: a passing comment about one thing can land as rejection of the entire person, and the first few minutes are about getting through the feeling rather than hearing the content. People who experience this often describe it as something that happens *to* them rather than something they choose, and they can be mortified afterwards by how strongly they reacted.
 >

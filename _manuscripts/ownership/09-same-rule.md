@@ -53,7 +53,7 @@ There's a question that does more to expose a double standard than any amount of
 
 You can ask it of the other person. If they would clearly expect an apology from you for the very thing they won't apologise for, the conversation changes. They may see it and laugh, a bit sheepishly. Or, if they expect accountability from you and still won't offer it themselves, you've learned something important: the problem may be less about understanding and more about unwillingness (chapter 8).
 
-But the question is most useful turned on yourself first, quietly, before the conversation even starts. *If Pete had said "you know what she's like" to my mother, what would I want him to say?* Lorraine knows the answer at once. She'd want him to say: "I shouldn't have said that to your mum. It made you look bad to her, and that's not my place."
+But the question is most useful turned on yourself first, quietly, before the conversation even starts. *If Pete had said "you know what she's like" to my mother, what would I want him to say?* Lorraine knows the answer at once. She'd want him to say, "I shouldn't have said that to your mum. It made you look bad to her, and that's not my place."
 
 So that's what she says, about two minutes after "sorry you took it that way".
 
@@ -84,13 +84,13 @@ Your part might be the thing you did. It might also be:
 - **The hint you expected to be understood.** "Fine." The banging pans. The silence that you wanted noticed and that they took at face value.
 - **Your reaction, where it went further than the event.** The feeling is yours to have. What you did with it may be another matter: the door, the tone, the thing said to their mother.
 
-Karin, from chapter 4, found two of these when she looked. She'd said nothing on the night of her fortieth, smiled through the cake, and then sent "Honestly, Thursday really hurt" two days later, which Nell read at a supermarket checkout and spent the afternoon dreading. And her Monday message, "It's obvious our friendship isn't a priority for you anymore", was a guess presented as a fact. When Nell came round on the Wednesday with her full apology, Karin added one of her own: "I should have said something on the night, instead of letting it stew and then dropping it on you by text. And I said you don't care about our friendship. I don't actually think that. I was hurt."
+Karin, from chapter 4, found two of these when she looked. She'd said nothing on the night of her fortieth, smiled through the cake, and then sent "Honestly, Thursday really hurt" two days later, which Nell read at a supermarket checkout and spent the afternoon dreading. And her Monday message, "It's obvious our friendship isn't a priority for you anymore", was a guess presented as a fact. When Nell came round on the Wednesday with her full apology, Karin added one of her own, "I should have said something on the night, instead of letting it stew and then dropping it on you by text. And I said you don't care about our friendship. I don't actually think that. I was hurt."
 
 It took her about twenty seconds. It made the rest of the evening twice as easy, because Nell no longer felt like the only person in the room who'd got something wrong.
 
 None of these cancels what they did. Chapter 7 still holds: two people can both be responsible for different things. But owning yours, first and plainly, is the fastest way to make it safe for them to own theirs.
 
-> **Two ways to read a rule, applied.**
+> **Two ways to read a rule**
 >
 > Some people's wiring applies a rule the same way every time. If "we don't discuss each other with family" is a rule, it's a rule on Friday as much as on Monday, for you as much as for me. People wired like this notice inconsistencies quickly and say so plainly, and are often told they're being rigid, or keeping score.
 >
@@ -98,7 +98,7 @@ None of these cancels what they did. Chapter 7 still holds: two people can both 
 >
 > **If you apply rules exactly,** your sense of fairness is a real strength in a relationship, and it lands better when it's pointed at yourself first. "I said I'd do X and I didn't" is the kind of consistency that makes other people trust your consistency about them.
 >
-> **If you flex rules by context,** it can help to know that for some people the flex itself feels like unfairness: a rule that changes depending on who broke it. Naming the flex out loud helps: "I know I said we don't do this. I did it, and here's why it felt different at the time. Does that seem fair to you, or is it one rule for me?"
+> **If you flex rules by context,** it can help to know that for some people the flex itself feels like unfairness: a rule that changes depending on who broke it. Naming the flex out loud helps, "I know I said we don't do this. I did it, and here's why it felt different at the time. Does that seem fair to you, or is it one rule for me?"
 
 > **Say it**
 >

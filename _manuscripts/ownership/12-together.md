@@ -65,13 +65,13 @@ The field of aromatherapy itself makes claims that range from reasonable to very
 
 For the purposes of this book, that's actually the useful finding. You don't need a particular oil. You need a setting that tells both your bodies they're safe enough to think. For some people, that's a familiar smell, like coffee on a walk or the kitchen after a meal you both like. For others it's quiet, or softer light, or being outdoors, or not being looked at directly. Ask the other person what helps. Tell them what helps you.
 
-> **Two ways to read where to sit.**
+> **Two ways to read where someone sits**
 >
 > Some people's wiring finds eye contact expensive. Holding someone's gaze while also listening, thinking and choosing words is a lot of work at once, and something has to give, usually the thinking. Side by side, walking, driving (on an ordinary day), or in writing, they can give the conversation their full attention.
 >
 > Other people's wiring reads eye contact as the sign that someone is listening. Looking away, or wanting to talk while doing something else, can feel like being half-heard, or like the subject isn't being taken seriously.
 >
-> **If eye contact costs you,** say so, and offer the setting that helps: "I listen better when we're walking. It's not that I don't care. It's that I can think." Most people are glad of a reason.
+> **If eye contact costs you,** say so, and offer the setting that helps, "I listen better when we're walking. It's not that I don't care. It's that I can think." Most people are glad of a reason.
 >
 > **If you need eye contact to feel heard,** try a walk once, and judge by what the other person says rather than where they look. If the answers are more thoughtful side by side, you've found something useful. And you can always ask for a moment of looking at the end: "Can you look at me while you say that bit?"
 
