@@ -1349,7 +1349,7 @@
   // Share buttons on the pages: content pages, book chapters, tool results, tool cards, Puddles
   // =====================================================================================
   var GAME = /^\/(word-bloom|quiet-crossword|daily-ledger-crossword|quiet-words|frequency-journey(-play)?|night-garden|bears-dojo|recheck-drive|echoes-of-gold|pal-cam-tv|garden-backdrop|pause-and-play|keepsakes|calm-visualizer|soundscapes|heartprint|pawprint|frequency-buddies[\w-]*)\.html$/;
-  var NOT_CONTENT = /^\/(404|offline|safety|on-this-device|privacy-policy|terms-of-service|refund-policy|membership|dashboard|telemetry|sent-this|someone-sent-you-this|upset-right-now|surprise|index)\.html$|^\/(legal|workpapers\/fill|store|supabase|infrastructure|notes|samples|manuscript|shots)\//;
+  var NOT_CONTENT = /^\/(404|offline|on-this-device|privacy-policy|terms-of-service|refund-policy|membership|dashboard|telemetry|sent-this|someone-sent-you-this|upset-right-now|surprise|index)\.html$|^\/(legal|workpapers\/fill|store|supabase|infrastructure|notes|samples|manuscript|shots)\//;
   function noShare() { return document.body.hasAttribute('data-no-share') || document.body.classList.contains('is-game'); }
   function noindex() { var m = document.querySelector('meta[name="robots"]'); return !!m && /noindex/i.test(m.getAttribute('content') || ''); }
   function pageTitle() {

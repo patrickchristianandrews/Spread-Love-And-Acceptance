@@ -554,8 +554,6 @@
   .ls-own-ttd{ display:flex; flex-wrap:wrap; gap:.25rem; }
   .ls-own .ls-chip.ls-day{ min-width:44px; min-height:44px; padding:.2rem .3rem; font-size:.85rem; justify-content:center; }
   body[data-ls-view="quick"] .ls-tag{ display:none !important; }
-  /* flow17: the quick look in Spanish: the English "About this tool" (about the full stand) stays out of the way */
-  body[data-lq-es] details.tg{ display:none !important; }
   .lq-add{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0 0; }
   .lq-add input{ flex:1 1 11rem; min-height:44px; }
   .lq-add button{ margin:0 !important; min-height:44px; }
@@ -587,7 +585,7 @@
   .ls-top-note{ margin:-.4rem 0 1rem !important; font-size:.88rem; color:var(--ink-soft); line-height:1.45; }
   .ls-top-note a{ color:var(--focus); }
   .ls-safe-note{ display:inline-block; margin-top:.3rem; }
-  @media print{ .ls-top-note, .lq-extra, .lq-kids, .lq-lang, .lq-toggle:not([aria-pressed="true"]){ display:none !important; } }
+  @media print{ .ls-top-note, .lq-extra, .lq-kids, .lq-toggle:not([aria-pressed="true"]){ display:none !important; } }
   .ls-own-bk{ align-items:center; margin:.2rem 0 0; }
   .ls-own-bk .ls-mini{ margin:0 !important; }
   .ls-own-bk .ls-chip{ min-height:40px; font-size:.86rem; padding:.2rem .7rem; }

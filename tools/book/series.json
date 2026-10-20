@@ -1,5 +1,5 @@
 {
- "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. ISBNs live in one place, \"isbn\" (one value per book and format); until the owner buys them, the copyright page prints \"ISBN: \" + isbn_placeholder. publisher and imprint go on every copyright page, in the PDF metadata and in the KDP listing. summary_at_end: chapters that print \"What to remember\" at the end in place of \"In short\" at the top (never both). examples: false leaves the filled-in examples out of the print books.",
+ "about": "print12: the print series of the book (6 x 9 in, standard colour, print on demand). series_title is THE ONE PLACE the series (and the online book) is named: tools/book/build_series.py uses it for the covers, title pages, running heads, copyright pages and the /book/ series block, and tools/book/build_book.py for the online book, its packages and PDFs. Change it, then rebuild (build_book.py, build_pdfs.js, build_series.py, BOOK_SERIES=1 build_pdfs.js). Chapters are the short versions, in the order given here. The paperbacks use free KDP ISBNs, so no ISBN is printed (see \"isbn\"). The imprint is \"Independently published\". summary_at_end: chapters that print \"What to remember\" at the end in place of \"In short\" at the top (never both). examples: false leaves the filled-in examples out of the print books.",
  "series_title": "Spread Love & Acceptance",
  "price_usd": 14.99,
  "workbook_price_usd": 14.99,
@@ -52,7 +52,7 @@
     "understanding-10-values"
    ],
    "notes_pages": 4,
-   "blurb": "Some days are heavy. Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book is about steadying yourself through all of it, gently and without blame. It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, how worry, low mood and trauma work, and when and where to get help. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change, one small step at a time. It ends with what matters to you, and what a good life can mean. Each chapter has words you could use and one small thing to try. Where a chapter touches hard things, it says where to find help. Go at your own pace."
+   "blurb": "Some days are heavy. Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book is about steadying yourself through all of it, gently and without blame. It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, and how worry, low mood and trauma work. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change, one small step at a time. It ends with what matters to you, and what a good life can mean. Each chapter has words you could use and one small thing to try. Go at your own pace."
   },
   {
    "n": 3,
@@ -103,7 +103,7 @@
   "id": "workbook",
   "title": "The Workpapers: The Bound Edition",
   "sub": "Every form from the series in one book, on big pages, with room to write",
-  "line": "Every form is free to print or fill in at spreadloveandacceptance.com. This is the bound edition, with spare copies and the sums on paper.",
+  "line": "Every workpaper from the series in one bound book, with spare copies and the sums on paper.",
   "color": "#2E6E6A",
   "tint": "#DDEFEC",
   "art": "workbook",
@@ -121,9 +121,8 @@
   "chapter-2",
   "chapter-4"
  ],
- "isbn_placeholder": "[to be added]",
  "isbn": {
-  "how": "finalfix15: THE ONE PLACE for ISBNs: one value per book and format. Paste each 13-digit ISBN from Bowker (myidentifiers.com) between the quotes, then rebuild (see README). An empty value prints \"ISBN: \" + isbn_placeholder on that paperback's copyright page. Every paperback needs its own ISBN, and the workbook's colour and black-and-white editions are two different books to KDP, so each has one. Kindle editions and the box set need none (Amazon gives them an ASIN); fill \"kindle\" only if you buy an ebook ISBN.",
+  "how": "voice18 (owner): every paperback uses a free KDP ISBN, chosen on KDP's Paperback Content screen (\"Get a free KDP ISBN\"). KDP prints it in the barcode, so the copyright pages carry no ISBN line, and the imprint is KDP's \"Independently published\". Kindle editions and the box set need no ISBN (Amazon gives them an ASIN). Leave these values empty; they are kept only so a future edition could record the ISBNs KDP assigns.",
   "book-1-know-yourself-kindly": {
    "paperback": "",
    "kindle": ""
@@ -152,6 +151,6 @@
    "kindle": ""
   }
  },
- "publisher": "Christian's Lab",
- "imprint": "Christian's Lab"
+ "publisher": "Independently published",
+ "imprint": "Independently published"
 }

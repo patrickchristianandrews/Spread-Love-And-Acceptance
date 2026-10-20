@@ -357,7 +357,7 @@ window.TOLToolGuideData = {
         ['schwarz-clore-1983', 'Our mood colours how we judge everything else that day (Schwarz and Clore, 1983).']
       ],
       idea: 'The weather picture and the tally are this site’s own; the scoring is written out on <a href="/method-and-limits.html">Method and limits</a>.',
-      limits: 'A reading of what you told it, not a measurement. If low days go on for weeks, talk to a doctor or see <a href="/outside-help.html">Help beyond this site</a>.',
+      limits: 'A reading of what you told it, not a measurement. If low days go on for weeks, talk to a doctor.',
       privacy: 'A reading is kept only if you choose to save it (up to 120 days), in this browser. The almanac can download or erase them.'
     },
 
@@ -402,7 +402,7 @@ window.TOLToolGuideData = {
         ['kashdan-barrett-mcknight-2015', 'Telling your feelings apart is linked with coping better (Kashdan and colleagues, 2015).']
       ],
       idea: 'The order of the steps is this site’s own.',
-      limits: 'Self-help, not therapy. If something here brings up a lot, <a href="/outside-help.html">Help beyond this site</a> lists people to talk to.',
+      limits: 'Self-help, not therapy.',
       privacy: 'Which steps you mark done is kept in this browser, so the home page can show your next step. Nothing is sent anywhere.'
     },
 
@@ -986,7 +986,7 @@ window.TOLToolGuideData = {
         ['byng-hall-1995', '“Family scripts” are patterns passed down that families can rewrite (Byng-Hall, 1995; a clinical framework).']
       ],
       idea: 'The tap-through and the example rules are this site’s own.',
-      limits: 'A gentle look back, not therapy. If old memories are painful, <a href="/outside-help.html">Help beyond this site</a> lists people to talk to.',
+      limits: 'A gentle look back, not therapy.',
       privacy: 'Your answers stay until you close the tab, or are kept in this browser only if you tick “Keep my answers on this device”. Nothing is sent anywhere.'
     },
 

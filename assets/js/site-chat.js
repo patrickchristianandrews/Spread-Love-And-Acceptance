@@ -526,7 +526,7 @@
       return k.charAt(0) === k.charAt(0).toUpperCase() ? v.charAt(0).toUpperCase() + v.slice(1) : v;
     });
   }
-  function safeLinks(list) { return (list || []).filter(function (l) { return l && safePath(l[1]) && !GONE_LINK.test(l[1]); }); }
+  function safeLinks(list) { return (list || []).filter(function (l) { return l && safePath(l[1]); }); }
 
   // ------------------------------------------------------------------ safety first
   // Anything that sounds like danger or harm gets a short, kind "this is beyond me", never advice.
@@ -570,12 +570,10 @@
     '\\bpunch(es|ed|ing)? (a hole in |holes in )?(the|a) (wall|door|walls|doors)\\b', '\\b(smash|smashes|smashed|smashing|break|breaks|broke|breaking|throw|throws|threw|throwing) (things|stuff|plates|dishes|my \\w+)\\b',
     '\\bthrew (a|the|my|his|her) \\w+ (across|against|at)\\b', '\\b(stands?|stood|standing) (in|at|across) the (door|doorway)\\b', '\\b(block|blocks|blocked|blocking) (the |my )?(door|doorway|way out|way)\\b', '\\bso i can.?t (get out|leave)\\b'
   ].join('|'));
-  // nohot18 (owner): no hotline numbers, service names, safety-page links or quick exit anywhere. Only a reply to someone
-  // who says they're in danger or might hurt themselves or someone else carries this one line, with no number and no name.
-  var SAFE_LINE = 'If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.';
-  var SAFE_LINE_ES = 'Si estás en peligro o podrías hacerte daño a ti o a otra persona, contacta ahora con los servicios de emergencia de tu zona, o díselo a alguien de confianza que esté cerca.';
-  // links that are gone (the safety page is a redirect stub; the outside-help list of lines is removed)
-  var GONE_LINK = /^\/(safety\.html|outside-help\.html#talk)/;
+  // The owner's decision (purge19): no phone or text lines, service names, safety-page links, outside resources or quick
+  // exit anywhere. A reply to someone in danger, or who may hurt themselves or someone else, is this short neutral line only.
+  var SAFE_LINE = 'That sounds really hard. I’m a small guide to this site, and I can’t help with this one.';
+  function safeOnly(id) { var r = { blocks: [{ k: 'p', x: SAFE_LINE }], chips: [], kind: 'safety' }; if (id) r.id = id; return r; }
   // the words people use when they may not want to live: these also get the danger line
   var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bending (it all|my life)\b|\b(feel|felt|feeling) like ending\b|\b(whats|what s|what is) the point (of|in) (living|life|being alive|going on|carrying on|it all|being here)\b|\bno point (in )?(carrying on|being here)\b|\b(would|d) be better off (dead|without me)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   // Watching, checking, limiting or blaming: a real warning sign, but often asked about before anyone feels in danger.
@@ -599,42 +597,15 @@
     return { blocks: [
       { k: 'p', x: 'That’s worth taking seriously, and it’s not your fault. Checking someone’s phone or location, limiting who they see or what money they have, or blaming them for someone else’s anger are common signs of control. They aren’t a communication problem that better wording can fix.' },
       { k: 'p', x: 'There’s a real difference between sharing you both chose (like location sharing you each agreed to and can turn off) and checking or tracking that happens in secret, without asking, or that you’d be afraid to say no to.' },
-      { k: 'list', x: ['If you feel watched, scared, or like you have to explain yourself to avoid trouble, trust that feeling.',
-        'If your phone might be checked, use a device they can’t see. The What’s stored on this device page shows what this site keeps, and can erase it.'] },
-      { k: 'links', x: [['What’s stored on this device', '/on-this-device.html']] }],
+      { k: 'list', x: ['If you feel watched, scared, or like you have to explain yourself to avoid trouble, trust that feeling.',] }],
       chips: [{ label: 'Ask me a few questions', q: 'A few questions about put-downs or respect' }, { label: 'How do I tell the difference?', q: 'How do I tell the difference?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
   }  // A friend (or anyone else) who is hurting themselves: how to help them, and who helps you help
   var OTHER_HARM = /\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\b|\b(friend|sister|brother|son|daughter|kid|child|partner|girlfriend|boyfriend|gf|bf|mom|dad|someone)\b.{0,40}\b(self ?harm\w*|suicid\w*|wants? to die|kill (themselves|himself|herself))\b/;
-  function otherHarmReply() {
-    return { blocks: [
-      { k: 'p', x: 'Thank you for caring about them. That’s a lot to carry, and you don’t have to handle it alone.' },
-      { k: 'list', x: ['Tell them you noticed and you care, calmly: “I’m worried about you. I’m not mad. I’m here.” Listen more than you fix.',
-        'Don’t promise to keep it secret. Tell a trusted adult (a parent, school counselor, teacher, coach, or doctor) even if they ask you not to. That isn’t betraying them; it’s getting them help.',
-        SAFE_LINE,
-        'Look after yourself too. Supporting someone who self-harms is heavy; talk to someone about how you’re doing.'] },
-      { k: 'links', x: [['For teens: when it’s more than a bad day', '/teens.html']] }], chips: [], kind: 'safety' };
-  }
+  function otherHarmReply() { return safeOnly(); }
   // hands on you, or being kept from leaving: never "a normal part of arguments", however small it's made to sound
   var PHYS = /\b(push\w*|shov\w*|grabb?\w*|slap\w*|hit|hits|hitting|kick\w*|chok\w*|strangl\w*|bit|bites|restrain\w*|pinned|pins|held me|holds me|shook|spat|throws? things|threw \w+ at me|block\w* the (door|doorway|way)|let me (leave|go|get out|out|past)|took my (phone|keys)|beats? me)\b/;
   var STRANGLE = /\b(chok\w*|strangl\w*|throat|neck|couldn.?t breathe|cant breathe|can t breathe)\b/;
-  function safetyReply(f) {
-    var live = f && NOT_LIVE.test(f), self = live && !/\b(he|she|they|partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother)\b/.test(f);
-    var blocks = [
-      { k: 'p', x: 'I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.' }];
-    if (!self && f && PHYS.test(f)) blocks.push({ k: 'p', x: 'Pushing, grabbing, slapping, throwing things or stopping someone from leaving isn’t a normal part of arguments, even once, and even if it seems small next to everything else. It isn’t something better communication can fix.' });
-    if (!self && f && STRANGLE.test(f) && PHYS.test(f)) blocks.push({ k: 'p', x: 'Being choked or strangled is very serious, even if it was quick and left no marks: it can cause injuries you can’t see. Please get a medical check soon, and tell the doctor what happened.' });
-    if (!self) blocks.push(
-      { k: 'p', x: 'If someone is hurting, threatening, watching or controlling you, that is not your fault, and it isn’t something better wording or staying calmer can fix. The tips on this site are for two people who are both safe, so please don’t use them to manage someone who frightens you.' },
-      { k: 'p', x: SAFE_LINE });
-    var exS = !self && EX_W.test(f || '');
-    if (exS) blocks.push({ k: 'p', x: 'With an ex or co-parent: hand over in a public place, or at school or nursery so you don’t meet, keep copies of every message with dates, and ask a family lawyer or advocate about safer handover arrangements.' });
-    else blocks.push({ k: 'p', x: 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.' });
-    if (self) blocks.push({ k: 'p', x: SAFE_LINE });
-    var young = !self && /\b(mum|mom|dad|stepdad|stepmom|stepfather|stepmother|parents?|mother|father|at home|i m 1[0-7]|im 1[0-7]|i am 1[0-7]|teen|school)\b/.test(f || '');
-    if (young) blocks.push({ k: 'p', x: 'If you’re under 18: it also counts if the shouting or fighting at home scares you, even if nobody is hurting you directly. Telling an adult you trust (a teacher, school counselor, relative or doctor) is a good step, and if the first person doesn’t help, tell someone else.' });
-    if (young) blocks.push({ k: 'links', x: [['For teens', '/teens.html']] });
-    return { blocks: blocks, chips: [], kind: 'safety' };
-  }
+  function safetyReply(f) { return safeOnly(); }
 
 
   // "how do I hide that I visited", "clear my history": how to cover tracks on this site, kindly and plainly
@@ -661,7 +632,7 @@
     if (detail && /narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologises and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
     b.push({ k: 'p', x: detail ? 'Some signs it has moved from ordinary conflict into control:' : 'Whatever the label, these are signs that it’s more than ordinary conflict:' });
     b.push({ k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] });
-    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+    return { blocks: b, chips: [{ label: 'Something else', q: 'Start over' }], kind: 'safety' };
   }
 
 
@@ -689,16 +660,7 @@
     return FEAR_WHO.test(f);
   }
   var EX_W = /\b(ex|exes|exhusband|exwife|expartner|ex (husband|wife|partner|boyfriend|girlfriend)|co ?parent\w*|coparent\w*|handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?|custody|separat\w*|divorc\w*|contact (visits?|days?))\b/;
-  function fearReply(f) {
-    var ex = EX_W.test(f), kids = /\b(son|daughter|kids?|child|children|baby|toddler|our boy|our girl)\b/.test(f);
-    var b = [{ k: 'p', x: 'I’m really glad you told me. Being scared of someone is important information, not a communication problem. It isn’t something you can fix by choosing better words or staying calmer, and it is not your fault.' }];
-    if (kids) b.push({ k: 'p', x: 'It matters that it happens in front of your child, too. Children feel fear in the room even when nobody is touched, so getting support is also looking after them.' });
-    b.push({ k: 'p', x: 'Some signs it’s more than ordinary conflict:' });
-    b.push({ k: 'list', x: ex ? ['They shout at you or threaten you at handovers, or in front of the children.', 'They threaten you about the children, money or court.', 'They keep messaging after you’ve asked them to stop, or at all hours.', 'They turn up at your home or work uninvited, follow you, or ask others to watch you.', 'They use the children to carry messages, or to find out what you’re doing.', 'You change your plans, or what you say, to avoid their anger.']
-      : ['You feel scared of them, or change what you say and do to avoid their anger.', 'Shouting, threats or name-calling, especially in front of the children.', 'They grab, push, block your way or break things.', 'They check your phone, follow you, or turn up when you didn’t invite them.', 'They control the money, or who you see.', 'You’re always the one to blame.'] });
-    if (ex) b.push({ k: 'p', x: 'Things that can help now: hand over in a public place (a busy shop entrance or car park, or at school or nursery so you don’t meet at all), or with a calm adult you trust there. Keep it short. Keep copies of every message, with dates, and write a few lines after any handover that goes wrong. A family lawyer or advocate can help you ask for safer handover arrangements.' });
-    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
-  }
+  function fearReply(f) { return safeOnly(); }
   // "is this abuse?" after only everyday complaints (forgets things, does nothing): answer honestly that it sounds like
   // conflict, and say what would be different. Once fear, threats or control came up, the safety answer stays.
   var ABUSE_Q = /^(but |so |ok |okay |and |honestly |seriously |wait |hmm |um |then )*(is|isnt|is not|would|could|does|do|are|was|so is)( (this|that|it|he|she|they|what (he|she|they) (does|do|did)|(this|that|his|her|their) behaviou?r))?( (be|being|count|counts|count as|considered|classed as|called|a form of|a kind of|a type of|kind of|sort of|technically|actually|really|you think|emotional|financial|verbal|domestic|psychological))* ?(abuse|abusive)( (to me|me))?( or (not|am i overreacting|is it just (normal|conflict))| though| really| then)?$|^(would you call (this|that|it)|do you think (this|that|it) is|do you think (he|she) is( being)?) (abuse|abusive)$/;
@@ -1474,7 +1436,7 @@
     var cc3 = careCard(state);
     if (cc3 && (/^care/.test(cc3.id) || cc3.id === 'illnesscare')) {
       var to = /\b(daughter|son|kids|children|sister|brother|family)\b/.test(f) && /\b(won t|wont|doesn t|doesnt|don t|dont|never|help|visit|call)\b/.test(f) ? 'careadultkids'
-        : /\b(resent\w*|guilt\w*|ashamed|angry at him|angry at her)\b/.test(f) ? 'careresent' : /\b(respite|break|helpline|support|someone to call)\b/.test(f) ? 'carehelp' : '';
+        : /\b(resent\w*|guilt\w*|ashamed|angry at him|angry at her)\b/.test(f) ? 'careresent' : /\b(respite|break|support|someone to call)\b/.test(f) ? 'carehelp' : '';
       var tc = to && cardByIdF(to);
       if (tc) { var rc = cardReply(state, tc, 'about'); rc.kind = 'care'; state.care = { id: to, turn: state.turn || 0, f: f }; return rc; }
     }
@@ -1891,7 +1853,7 @@
   }
   function setTopic(state, c, root, side) { var T0 = state.topic; state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: T0 && T0.id === c.id ? (T0.v || 0) : 0, side: side != null ? side : (T0 && T0.root === (root || c.id) ? T0.side : null) }; }
   // the page a topic card is about: its own "page", else its first link that isn't a general tool
-  var GENERIC_PAGE = /^\/(lemonade-stand|turning-toward|signal-translator|check-ins|safety|start-here|outside-help|upset-right-now|wp-11|wiring-card|night-garden|soundscapes|self-path|conversation-reader)\.html|^\/(workpapers|library|tools)\//;
+  var GENERIC_PAGE = /^\/(lemonade-stand|turning-toward|signal-translator|check-ins|start-here|upset-right-now|wp-11|wiring-card|night-garden|soundscapes|self-path|conversation-reader)\.html|^\/(workpapers|library|tools)\//;
   function topicPage(c) {
     if (!c) return '';
     if (c.page) return c.page;
@@ -2689,17 +2651,15 @@
     var b = norm(nx.body).indexOf(norm(nx.title)) === 0 ? [] : [{ k: 'p', x: nx.title + '.' }];
     if (res.reasons && res.reasons.length && !S.skipAll) { b.push({ k: 'p', x: 'What I took into account:' }); b.push({ k: 'list', x: res.reasons.slice(0, 4) }); }
     else if (res.reasons && res.reasons.length) b.push({ k: 'note', x: res.reasons[0] });
-    b.push({ k: 'p', x: nx.body });
-    if (nx.extra) b.push({ k: 'p', x: nx.extra });
-    if (res.level >= 4) b.push({ k: 'p', x: SAFE_LINE });
+    b.push({ k: 'p', x: res.level >= 4 ? SAFE_LINE : nx.body });
     if (nx.say) b.push({ k: 'script', l: 'Words you could use', x: nx.say });
     if (nx.footer) b.push({ k: 'note', x: nx.footer });
-    var links = (nx.links || []).concat(nx.footerLinks || []).map(function (l) { return [l.text, l.href]; }).filter(function (l) { return !GONE_LINK.test(l[1] || ''); });
+    var links = (nx.links || []).concat(nx.footerLinks || []).map(function (l) { return [l.text, l.href]; });
     if (links.length) b.push({ k: 'links', x: links });
     b.push({ k: 'note', x: 'This is a read of your answers, not a verdict on anyone. You know your situation best.' });
     if (res.level >= 4) { state.unsafe = true; state.fearSeen = true; }
     state.last = null;
-    var chips = res.level >= 4 ? [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }]
+    var chips = res.level >= 4 ? [{ label: 'Something else', q: 'Start over' }]
       : [{ label: 'Ask the questions again', q: 'A few questions about ' + (CQ_TYPES.filter(function (x) { return x[0] === S.type; })[0] || ['', 'who does what'])[1] }, { label: 'Something else', q: 'Start over' }];
     return { blocks: b, chips: chips, kind: res.level >= 4 ? 'safety' : 'read', id: 'clarify-' + S.type, level: res.level };
   }
@@ -2969,38 +2929,21 @@
 
   // "he says he'll kill himself if I leave": a pressure sign, and their safety is not yours to carry by staying
   var THREAT_SELF = /\b(kill|hurt|harm|end) (himself|herself|themselves|themself|his life|her life|their life|it all)\b.{0,40}\b(if|unless|when) (i|we) (leave|left|go|went|break up|broke up|end (it|things)|split|stop|say no|see|tell)\b|\b(if|unless|when) (i|we) (leave|left|go|break up|end (it|things)|split|stop seeing)\b.{0,50}\b(kill|hurt|harm|end) (himself|herself|themselves|themself|his life|her life|their life|it all)\b|\b(threaten\w*|says|said|keeps saying|tells me|told me) (that )?(he|she|they)( will| ll| would| d| is going to| s going to| s gonna| is gonna)? (kill|hurt|harm) (himself|herself|themselves|themself)\b.{0,40}\b(leave|break up|go|split|end)\b/;
-  function threatSelfReply(f) {
-    var he = /\b(he|him|himself|his|boyfriend|husband)\b/.test(f) ? 'he' : /\b(she|her|herself|girlfriend|wife)\b/.test(f) ? 'she' : 'they';
-    var young = /\b(i m|im|i am) 1[0-7]\b|\b(school|my parents|my mum|my mom|my dad|year \d+|grade \d+)\b/.test(f);
-    var b = [{ k: 'p', x: 'That’s a frightening thing to hear, and a lot to carry. I’m glad you told me.' },
-      { k: 'p', x: 'Threatening to hurt themselves if you leave is a pressure sign, because it puts the weight of their safety on you. You are not responsible for keeping them alive by staying. Their safety matters, and it belongs with people who can help them.' },
-      { k: 'p', x: SAFE_LINE }];
-    if (young) b.push({ k: 'p', x: 'If you’re under 18, please tell an adult you trust today (a parent, a teacher or a school counsellor).' });
-    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety', id: 'threatself' };
-  }
+  function threatSelfReply(f) { return safeOnly('threatself'); }
 
   // "I'm the one who gets violent", "how do I stop hitting": the person writing is the one doing it
   var OWN_VIOLENT = /\b(i m|im|i am|i)( (the one|the one who|who|that))?( (always|sometimes|often|can|keep|kept|tend to|just))* (get|gets|getting|got|become|became|can get|can be|am|m) (so )?violent\b|\bi m the violent one\b|\bmy (own )?(violence|violent (side|streak|temper))\b|\bhow (do|can) i stop (being violent|hitting|hurting|pushing|grabbing|shoving) (him|her|them|my \w+|people)?\b/;
   function ownViolentReply(f) {
     var kids = /\b(son|daughter|kids?|child|children|baby|toddler)\b/.test(f);
-    var b = [{ k: 'p', x: 'Thank you for being honest. Saying it out loud is the first step to stopping it, and it can change. Violence is never okay, and it’s important to get help today, for the people around you and for you.' },
+    var b = [{ k: 'p', x: 'Thank you for being honest. Saying it out loud is the first step to stopping it, and it can change. Violence is never okay.' },
       { k: 'list', x: ['Right now: when you feel it rising, leave the room or the house, and don’t go back until your body has calmed down. Distance first, words later.',
-        'Breathe in for 4 and out for 6 until it eases. Cold water on your face helps.',
-        'Get support this week: your doctor, a counsellor, or a programme for people who want to stop being violent or abusive at home.',
-        SAFE_LINE] },
+        'Breathe in for 4 and out for 6 until it eases. Cold water on your face helps.'] },
       { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }];
     return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownviolent' };
   }
 
   // after a crisis reply: "I don't want to call anyone, just talk to me" gets a warm reply that stays, never a page excerpt
-  function crisisStayReply() {
-    return { blocks: [
-      { k: 'p', x: 'I’m here, and I’m glad you’re still talking to me. You don’t have to do anything big right now.' },
-      { k: 'p', x: 'I’m a small helper, not a counsellor, but here’s what might help right now:' },
-      { k: 'list', x: ['Put your feet flat on the floor, and breathe out slowly, longer than you breathe in. Do that five times.', 'Look around and name five things you can see, four you can hear, and three you can touch.', 'If you can, go where there are other people, or message someone you trust: “I’m having a really hard time. Can you stay with me for a bit?”', 'Put away anything you might use to hurt yourself, or ask someone to hold onto it for now.'] },
-      { k: 'p', x: SAFE_LINE }],
-      chips: [{ label: 'Tell me something calming', q: 'Tell me something calming' }], kind: 'safety', id: 'crisis-stay' };
-  }
+  function crisisStayReply() { return safeOnly('crisis-stay'); }
   var CRISIS_STAY = /\b(talk to me|just talk|stay with me|don.?t want to (call|talk to|text|ring)|dont want to (call|talk to|text|ring)|can.?t call|cant call|no one|nobody|anyone|alone|lonely|i m scared|im scared|help me|what do i do|i don.?t know|i dont know|please|listen|why|tired|can.?t|cant|hurts?|pointless|worthless|no one cares|nobody cares|i m fine|im fine|it s fine|its fine|whatever|ok|okay|yes|no|maybe|i guess)\b/;
   // "gaslighting", "coercive control", "narcissist" typed on their own: what it means, plainly, then the signs and people to talk to
   var SAFETY_TERM = /^(what is |what s |whats |what does |define |meaning of |is it |signs of |am i being )?(a |an )?(gaslighting|gaslight|gaslighted|gaslit|coercive control|coercive|narcissists?|narcissism|narcissistic( abuse| personality| behaviou?r)?|love bombing|lovebombing|trauma bond(ing)?)( mean| meaning| means)?$/;
@@ -3016,9 +2959,8 @@
     var def = /^gasl/.test(w) ? TERM_DEF.gaslighting : /^coerc/.test(w) ? TERM_DEF.coercive : /^narc/.test(w) ? TERM_DEF.narcissist : /^love/.test(w) ? TERM_DEF.love : TERM_DEF.trauma;
     return { blocks: [{ k: 'p', x: def },
       { k: 'p', x: 'Some signs it has moved from ordinary conflict into control:' },
-      { k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] },
-      { k: 'p', x: 'If any of this sounds familiar, the tools here aren’t the right fit: they’re for two people who both feel safe.' }],
-      chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety', id: 'safetyterm' };
+      { k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] }],
+      chips: [{ label: 'Something else', q: 'Start over' }], kind: 'safety', id: 'safetyterm' };
   }
 
 
@@ -3041,17 +2983,15 @@
     var person = /\b(hit|grab\w*|shov\w*|push\w*) (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)\b|\b(throw|threw|throwing) \w+ at (my|him|her|them)\b/.test(f), intent = HURT_INTENT.test(f);
     if (intent) return { blocks: [
       { k: 'p', x: 'Thank you for saying it instead of doing it. That matters. Right now, put distance between you: leave the room, or the house, and don’t go back until your body has calmed down. Nobody needs to be hurt, including you.' },
-      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk round the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.', SAFE_LINE, 'When it has passed, get support today: your doctor, an anger-management group, or a counsellor.'] },
+      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk round the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.'] },
       { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }],
       chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownagg' };
     var b = [{ k: 'p', x: 'Thank you for being honest about this. That takes courage, and it’s the first step to changing it. ' + (person ? 'Throwing things at someone, or putting hands on them, is serious: it frightens them, and someone can get hurt.' : 'Slamming doors, punching walls or throwing things is serious even when nobody is touched: it frightens the people who see it, and it’s a step closer to someone getting hurt.') + ' It isn’t a verdict on who you are, and it can change.' }];
-    if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed, thrown things at or threatened anyone, that is abuse, and it’s important to get help today.' });
+    if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed, thrown things at or threatened anyone, that is abuse, and it has to stop.' });
     b.push({ k: 'p', x: 'Right now, keep everyone safe:' });
     b.push({ k: 'list', x: ['When you feel it rising, step away first: leave the room, or go outside. Say “I’m getting too angry. I’m taking a break, and I’ll be back in twenty minutes.”',
       'Breathe in for 4 and out for 6 until your body slows down. Don’t go back until it has.',
-      'Later, repair: “I scared you when I slammed the door. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
-      'Get support today: your doctor, an Employee Assistance Program, or an anger-management group or counsellor. That’s a strong thing to do for your family.'] });
-    b.push({ k: 'p', x: SAFE_LINE });
+      'Later, repair: “I scared you when I slammed the door. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.'] });
     b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['Getting help with anger', '/parents.html#anger-help'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child']] });
     return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }, { label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }], kind: 'care', id: 'ownagg' };
   }
@@ -3071,32 +3011,11 @@
   }
   // "we both yell and sometimes shove each other": physical fights are a safety matter, whoever starts them
   var MUTUAL = /\b(we|we both|both of us)( (sometimes|often|always|end up|ended up|have|ve|get|got|just|even|kind of|kinda|started|start|both|then|also))* (shove|shoving|push|pushing|hit|hitting|slap|slapping|punch|punching|kick|kicking|grab|grabbing|scratch|scratching|bite|biting|get physical|got physical|physically fight|fight physically)\w*\b|\b(shove|push|hit|slap|punch|kick|grabb?|scratch|bite)\w* each other\b|\b(fights?|arguments?|rows?) (get|gets|got|getting|turn|turns|turned) physical\b|\bphysical fights?\b|\bwe (get|got) physical\b/;
-  function mutualReply() {
-    return { blocks: [
-      { k: 'p', x: 'Thank you for being honest about this. When fights get physical, even pushing or shoving, and even when it goes both ways, it’s a safety issue, not a communication one. Someone can get hurt quickly, and it tends to get worse, not better.' },
-      { k: 'list', x: ['For now, stop using the shared couples tools and talks on this site. They’re for two people who both feel safe.',
-        'Agree one stop rule today: the moment voices rise, one of you leaves the room, or the house, and the other doesn’t follow.',
-        'Each get support on your own first: your doctor, or your own counsellor or anger-management group. Couples counselling isn’t usually recommended while there’s violence.',
-        'If either of you is scared of the other, or someone has been hurt, that matters more than who started it.'] },
-      { k: 'p', x: SAFE_LINE },
-      { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }],
-      chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
-  }
+  function mutualReply() { return safeOnly(); }
 
   // A parent whose child said they want to die: what to do now, for the parent, not the DV paragraph
   var CHILD_CRISIS = /\b(my|our) ((teenage |teen |little |young |eldest |oldest |youngest |\d+ ?(year|yr) ?old )?(son|daughter|child|kid|teen|teenager|boy|girl|stepson|stepdaughter|stepkid|grandson|granddaughter)|\d+ ?(year|yr) ?old)\b.{0,60}\b(wants? to die|wanted to die|want(s|ed)? to kill (himself|herself|themselves|themself)|suicid\w*|kill(ing)? (himself|herself|themselves|themself)|self ?harm\w*|hurt(ing|s)? (himself|herself|themselves|themself)|cut(s|ting)? (himself|herself|themselves|themself)|(doesn t|doesnt|does not|don t|dont) want to (live|be here|be alive|exist)|better off dead|end (his|her|their) life|no reason to live)/;
-  function childCrisisReply() {
-    return { blocks: [
-      { k: 'p', x: 'I’m so sorry. Hearing that from your child is frightening. Take it seriously every time, even if it came out in anger or they say they didn’t mean it. You did the right thing by not brushing it off.' },
-      { k: 'list', x: ['If you think they might act on it, stay with them, or make sure a safe adult is with them, now.',
-        'Ask directly and calmly: “Are you thinking about killing yourself?” Asking doesn’t put the idea in their head. It shows them they can tell you.',
-        'Listen more than you talk, and thank them for telling you. You don’t need the perfect words.',
-        'Make home safer today: lock away or remove medicines, blades and anything else they could use, and store any gun outside the home.',
-        'Get an urgent appointment with their doctor, and ask about mental health support for young people.',
-        SAFE_LINE] },
-      { k: 'links', x: [['For teens: when it’s more than a bad day (to read together)', '/teens.html#help'], ['Upset right now?', '/upset-right-now.html']] }],
-      chips: [], kind: 'safety', id: 'childcrisis' };
-  }
+  function childCrisisReply() { return safeOnly('childcrisis'); }
   // "I cheated on my wife and she found out": an honest, non-shaming answer, and healing after hurt
   var CHEATED_ME = /\b(i|i ve|ive|i have|i had)( (also|just|actually|recently|once))? (cheated on|been unfaithful|was unfaithful|had an affair|been having an affair|m having an affair|am having an affair|slept with someone else)\b|\bmy affair\b/;
   var CHEATED_ON = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( (has|had|s))? (cheated|been cheating|was cheating|was unfaithful|been unfaithful|had an affair|been having an affair|slept with someone( else)?)\b|\bcheated on me\b|\bfound out about (his|her|their|the) affair\b|\b(his|her|their) affair\b/;
@@ -3109,7 +3028,7 @@
         'Trust comes back through changed actions over time, not one big apology.',
         'See a couples counsellor who works with affairs: there are well-studied approaches for exactly this. A counsellor for you alone can help you understand why it happened.'] },
       { k: 'note', x: 'Whether to stay together is their choice as much as yours. You can’t earn forgiveness on a timetable.' },
-      { k: 'links', x: [['Healing after hurt: rebuilding trust', '/book/understanding-11-healing-in-depth.html#trust'], ['An apology that takes responsibility', '/apology-languages.html#responsibility'], ['Finding a counsellor', '/outside-help.html#counsellor']] }],
+      { k: 'links', x: [['Healing after hurt: rebuilding trust', '/book/understanding-11-healing-in-depth.html#trust'], ['An apology that takes responsibility', '/apology-languages.html#responsibility']] }],
       chips: [{ label: 'How do I apologise?', q: 'how do i say sorry so it lands' }], kind: 'care', id: 'infidelity' };
     return { blocks: [
       { k: 'p', x: 'I’m so sorry. Finding out about an affair is one of the most painful things that can happen in a relationship, and the shock can feel physical. What you’re feeling is a normal response to a real betrayal, and it isn’t your fault.' },
@@ -3118,14 +3037,14 @@
         'Ask the questions you need answered when you’re ready. You deserve honest answers.',
         'If you both want to try, a couples counsellor who works with affairs can help, and many couples do recover. A counsellor just for you can help either way.',
         'If you’re worried about your sexual health, a sexual health clinic can test you confidentially.'] },
-      { k: 'links', x: [['Healing after hurt', '/book/understanding-11-healing-in-depth.html#hurt'], ['Forgiveness, and what it isn’t', '/book/understanding-11-healing-in-depth.html#forgiveness'], ['Finding a counsellor', '/outside-help.html#counsellor']] }],
+      { k: 'links', x: [['Healing after hurt', '/book/understanding-11-healing-in-depth.html#hurt'], ['Forgiveness, and what it isn’t', '/book/understanding-11-healing-in-depth.html#forgiveness']] }],
       chips: [], kind: 'care', id: 'infidelity' };
   }
   var AFTER_SAFE = /\b(he|him|his|she|her|they|them|partner|boyfriend|girlfriend|husband|wife|bf|gf|normal|overreact\w*|too sensitive|my fault|talk to|talk with|stop|friends?|money|phone|argue|argument|fight\w*|calm|leave|stay|love|counts?|is it|am i|what do i do|how do i)\b/;
   function afterSafeReply(f) {
     var b = [{ k: 'p', x: 'Because of what you told me earlier, I won’t suggest ways to talk them round or keep the peace. When someone is checking, limiting or frightening you, that isn’t a communication problem, and it isn’t yours to fix by saying things better.' }];
     if (/\b(normal|overreact\w*|too sensitive|counts?|is it (that )?bad|am i (being )?(dramatic|silly|crazy))\b/.test(f)) b.push({ k: 'p', x: 'What you described isn’t a normal part of disagreeing, and you’re not overreacting by asking about it. You don’t need to be hit for it to count.' });
-    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+    return { blocks: b, chips: [{ label: 'Something else', q: 'Start over' }], kind: 'safety' };
   }  // "should I take ashwagandha instead of my anxiety meds?": never stop or swap prescribed medicine without the prescriber
   var MEDS_SWAP = /\b(instead of|rather than|replace|replacing|swap|swapping|switch|switching|stop|stopping|come off|coming off|quit|quitting|get off|wean (myself )?off|ditch|go off|cut down)\b.{0,30}\b(my |the )?(meds|medication|medications|medicine|prescription|prescribed|antidepressants?|ssris?|sertraline|fluoxetine|citalopram|escitalopram|paroxetine|venlafaxine|prozac|zoloft|lexapro|anxiety (meds|medication|pills)|pills|tablets)\b/;
   function medsFirst(q, x) {
@@ -3138,10 +3057,9 @@
     var hurt = /\b(hit|hits|slap\w*|punch\w*|shov\w*|push\w*|grab\w*|threat\w*|kick\w*|choke\w*|throw|threw)\b/.test(f);
     var b = [{ k: 'p', x: 'It took courage to ask that, and asking it usually means you want to do better. Here’s an honest answer.' },
       { k: 'p', x: 'Yelling now and then, followed by a real repair, is not the same as abuse. It becomes a safety issue if your family is afraid of you, if it comes with threats, name-calling, breaking or throwing things, or control, or if it happens most days. If someone flinched or went quiet around you, take that seriously: not as a verdict on you, but as a sign to get support now.' }];
-    if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it’s important to get help today. ' + SAFE_LINE });
+    if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it has to stop.' });
     b.push({ k: 'list', x: ['In the moment: stop, step back, say “I’m getting too loud, I’m going to take a breath,” and breathe for a minute.',
       'Afterwards, repair: “I scared you when I yelled. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
-      'Get support for yourself: your doctor, an Employee Assistance Program, or a counsellor or anger-management group. That’s a strong thing to do for your family.',
       'Write your triggers and first warning signs in the Calm-Down Kit, so you can catch it earlier.'] });
     b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Getting help with anger', '/parents.html#anger-help'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] });
     return { blocks: b, chips: [{ label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care' };
@@ -3185,7 +3103,7 @@
     if ((R.never_on_kinds || []).indexOf(k) !== -1) return r;
     if (FUN_UPSET.test(f) || DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return r;
     var txt = JSON.stringify(r.blocks);
-    if (/local emergency services|servicios de emergencia/.test(txt)) return r;
+    if (txt.indexOf(SAFE_LINE) !== -1) return r;
     var card = (k === 'card' || k === 'card-more') && r.id ? cardById(r.id) : null;
     var light = card ? (card.kind === 'tool' || (R.light_card_ids || []).indexOf(card.id) !== -1) : false;
     if (light || k === 'thanks' || k === 'fun') { if (state.plain === 1) state.plain = 0; }
@@ -3265,7 +3183,7 @@
     if (!rq) return null;
     // after a safety reply (or once someone has told us about danger), no pictures: privacy and safety come first
     if (state.unsafe || state.lastKind === 'safety' || state.lastKind === 'redflag') {
-      return { blocks: [{ k: 'p', x: 'I won’t make a picture of this one. Pictures can be saved and shared, and what you told me deserves to stay private.' }], chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety' };
+      return { blocks: [{ k: 'p', x: 'I won’t make a picture of this one. Pictures can be saved and shared, and what you told me deserves to stay private.' }], chips: [], kind: 'safety' };
     }
     var spec = null, src = '';
     try {
@@ -3539,7 +3457,7 @@
     if (never.indexOf(k) !== -1) return r;
     var f = norm(q);
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
-    if (/local emergency services|servicios de emergencia/.test(JSON.stringify(r.blocks))) return r;
+    if (JSON.stringify(r.blocks).indexOf(SAFE_LINE) !== -1) return r;
     var h = deepFind(stNorm(q), f);
     if (!h || dlist(dRule('safety_topic_ids')).indexOf(h.t.id) !== -1) return r;
     r.chips = (r.chips || []).slice(0, 4);
@@ -4704,15 +4622,6 @@
   // owner: Puddles never brings up AI himself. Page excerpts that compare the site with AI chats lose those sentences
   // unless the person asked about AI, bots or ChatGPT.
   var AI_ASKED = /\b(ai|a i|chat ?gpt|gpt|bot|chatbot|robot|generative|llm|language model|artificial intelligence)\b/;
-  function noGone(r) {
-    if (!r || !r.blocks) return r;
-    r.blocks = r.blocks.filter(function (b) {
-      if (b.k !== 'links' || !Array.isArray(b.x)) return true;
-      b.x = b.x.filter(function (l) { return !(l && GONE_LINK.test(l[1] || '')); });
-      return b.x.length > 0;
-    });
-    return r;
-  }
   function noAI(r, q) {
     if (!r || !r.blocks || r.kind === 'safety' || AI_ASKED.test(fold(q))) return r;
     function phrase(t) { return String(t).replace(/\s+or an AI chat\b/gi, '').replace(/\s+or AI chats?\b/gi, ''); }
@@ -4735,7 +4644,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); if (x && x.blocks && state.sorryTurn && state.sorryTurn === state.turn && x.kind !== 'safety') { x.blocks.unshift({ k: 'p', x: 'Sorry, that last answer missed. Here’s what I have for your question:' }); } state.sorryTurn = 0; x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noAI(x, q); x = noGone(x); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify|crude|frust)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); if (x && x.blocks && state.sorryTurn && state.sorryTurn === state.turn && x.kind !== 'safety') { x.blocks.unshift({ k: 'p', x: 'Sorry, that last answer missed. Here’s what I have for your question:' }); } state.sorryTurn = 0; x = proReply(q, x); x = momMum(state, q, x); x = tidy(state, q, x); x = dejargon(x, q); x = noAI(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -4819,7 +4728,7 @@
     'html.tol-text-lg .tolc-sub,html.tol-text-xl .tolc-sub,html.tol-text-xxl .tolc-sub{display:none}',
     // tablets: a taller answer area
     '@media (min-width:720px) and (min-height:900px){.tolc.is-modal{height:min(860px,calc(100vh - 48px));width:440px}}',
-    // Larger text zooms the page body: keep the whole panel (and its Leave quickly button) on screen
+    // Larger text zooms the page body: keep the whole panel on screen
     // (the page zoom multiplies the panel's own size, so each cap divides the screen height by that zoom; on tablets and
     // computers the panel floats 24px above the bottom, so the cap leaves that much room above it too)
     'html.tol-text-lg:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.15 - 12px);max-height:calc(100dvh / 1.15 - 12px)}',
@@ -4828,7 +4737,7 @@
     '@media (min-width:720px){html.tol-text-lg:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.15 - 48px);max-height:calc(100dvh / 1.15 - 48px)}',
     ' html.tol-text-xl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.35 - 48px);max-height:calc(100dvh / 1.35 - 48px)}',
     ' html.tol-text-xxl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.6 - 48px);max-height:calc(100dvh / 1.6 - 48px)}}',
-    // at every size the header (with × and Leave quickly) stays put and only the answers scroll
+    // at every size the header (with ×) stays put and only the answers scroll
     '.tolc.is-modal{max-height:100vh;max-height:100dvh}.tolc.is-modal .tolc-head{flex:0 0 auto}.tolc.is-modal .tolc-log{min-height:0}',
     '.tolc-hbtn{white-space:nowrap;flex:0 0 auto;min-width:44px;min-height:44px;border:0;background:none;border-radius:12px;color:var(--ink-soft);font:inherit;font-size:.85rem;cursor:pointer;padding:0 .55rem}',
     '.tolc-hbtn:hover{background:var(--paper2);color:var(--ink)}',

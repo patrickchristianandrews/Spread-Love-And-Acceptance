@@ -1,7 +1,7 @@
 const path = require('path'), fs = require('fs');
 const R = '/home/user/Spread-Love-And-Acceptance';
 delete require.cache[require.resolve(R + '/assets/js/journeys.js')];
-const { journeys: J, picks: P, heavy: H } = require(R + '/assets/js/journeys.js');
+const { journeys: J, picks: P } = require(R + '/assets/js/journeys.js');
 const e = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/’/g, '&rsquo;').replace(/“/g, '&ldquo;').replace(/”/g, '&rdquo;').replace(/→/g, '&rarr;');
 const mins = (n, secs) => secs ? 'About ' + secs + ' seconds' : n <= 1 ? 'About 1 minute' : 'About ' + n + ' minutes';
 const kind = s => s.breathe ? 'Breathe' : s.k === 'tool' ? 'Tool' : s.k === 'wp' ? 'Workpaper · optional' : 'Read';
@@ -15,7 +15,6 @@ function det(j) {
     h += `        <li class="js-step${s.k === 'wp' ? ' is-opt' : ''}"><p class="js-head"><span class="js-kind js-kind-${s.k}">${kind(s)}</span><span class="js-mins">${mins(s.mins, s.secs)}</span></p><p class="js-do">${e(s.do)}</p><p class="js-leave"><strong>You&rsquo;ll leave with:</strong> ${e(s.leave)}.</p><p class="js-row"><a class="js-open" href="${e(s.f)}"${s.breathe ? ' data-breathe="calm breathing"' : ''}>${s.k === 'read' ? e(s.t) : 'Open it'} &rarr;</a></p></li>\n`;
   });
   h += `      </ol>\n`;
-  if (j.heavy) h += `      <p class="jr-heavy"><a href="${H.href}">${e(H.text)} &rarr;</a></p>\n`;
   h += `    </div>\n  </details>\n`;
   return h;
 }

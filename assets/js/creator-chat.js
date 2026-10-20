@@ -40,9 +40,8 @@
     var text = norm(q);
     if (text.trim() === '') return null;
     if (DANGER.test(text)) {
-      var a = ['I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.', 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.'];
-      if (NOT_LIVE.test(text)) a.push('If you might act on these feelings, you can call or text 988, the Suicide & Crisis Lifeline, any time.');
-      return { a: a };
+      // the owner's decision (purge19): a short neutral line, no resources
+      return { a: ['That sounds really hard. I’m a small guide to Christian’s story and this site, and I can’t help with this one.'] };
     }
     for (var s = 0; s < SMALL.length; s++) if (SMALL[s][0].test(text) && text.split(' ').length <= 6) return { a: SMALL[s][1], f: KB.starters.slice(0, 3) };
     var best = null, bs = 0, second = null, ss = 0;

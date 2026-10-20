@@ -415,22 +415,20 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
 def title_page(book):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · Book %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
-            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
         book['color'], mark('titlep'), esc(SERIES_TITLE), book['n'], esc(book['title']), esc(book['sub']),
         series_site.art(book['art']), B.AUTHOR)
 
 
 def copyright_page(book, workbook=False, bw=False):
-    # printfix13: the ISBN line is always there; until the owner buys ISBNs it carries the placeholder from series.json
-    # (finalfix15: from the one "isbn" block there; the workbook's black-and-white edition has its own)
-    isbn = '<p>ISBN: %s (paperback%s)</p>' % (esc((book.get('isbn_bw') if bw else book.get('isbn')) or CFG.get('isbn_placeholder', '[to be added]')),
-                                             ', black-and-white edition' if bw else '')
+    # voice18 (owner, bookqa18 M5): the paperbacks use KDP's free ISBNs, which KDP prints in the barcode, so no ISBN line here,
+    # and the imprint is KDP's "Independently published"
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>' % (
-        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR, esc(CFG.get('publisher', "Christian's Lab").replace("'", '’')))
-    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>%s' % (
-        B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '', isbn)
+    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Independently published.</p>' % (
+        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
+    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>' % (
+        B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '')
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
           'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % (what, esc(SERIES_TITLE))
@@ -804,7 +802,8 @@ def page_rules(book, here_order, back_keys):
     num = 'content:counter(page);font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:8.8pt;color:#2B2620;vertical-align:top;padding-top:2.6mm;border-top:.4pt solid #CDBF98;'
     edge = 'vertical-align:top;border-top:.4pt solid #CDBF98;'
     q = lambda t: '"%s"' % t.replace('\\', '').replace('"', '\\"')
-    verso = '%s · Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
+    # voice18 (bookqa18 M1): the short form on left pages, so the footer stays well clear of the gutter
+    verso = 'Book %d · %s' % (book['n'], book['title'])
 
     def rules(nm, recto):
         return ('@page %s:right{@bottom-left{content:%s;%s}@bottom-center{content:"";%s}@bottom-right{%stext-align:right}}'
@@ -1120,7 +1119,7 @@ def build_workbook(where, bw=False):
     ol += [['Notes', 'wb-notes', 0], ['The series', 'series', 0]]
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
-             '<p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+             '<p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
         wb['color'], mark('titlep'), esc(SERIES_TITLE), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
     front += copyright_page(book, workbook=True, bw=bw)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
@@ -1220,7 +1219,7 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
                  '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
-                 '.cv-free { max-width: 2.6in; font-size: 7.8pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
+                 '.cv-free { max-width: 2.05in; font-size: 7.8pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
     return '''<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
 %(gfonts)s

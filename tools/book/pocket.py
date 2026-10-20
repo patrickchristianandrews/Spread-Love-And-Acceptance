@@ -222,11 +222,10 @@ def puzzle_svg(color='currentColor', w=None):
 
 
 def copyright_html(p, S):
-    isbn = p.get('isbn') or S.CFG.get('isbn_placeholder', '[to be added]')
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += ('<p><em>%s: %s</em>. Part of the %s series.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>') % (
-        esc(p['title']), esc(p['sub']), esc(S.SERIES_TITLE), S.B.AUTHOR, esc(S.CFG.get('publisher', "Christian's Lab").replace("'", '’')))
-    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p><p>ISBN: %s (paperback)</p>' % (S.B.AUTHOR, S.B.UPDATED, esc(isbn))
+    s += ('<p><em>%s: %s</em>. Part of the %s series.<br>By %s. Independently published.</p>') % (
+        esc(p['title']), esc(p['sub']), esc(S.SERIES_TITLE), S.B.AUTHOR)
+    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>' % (S.B.AUTHOR, S.B.UPDATED)
     s += ('<p><strong>Free online, always.</strong> Every situation in this guide, and more than seventy in all, is free at '
           'spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print book is optional. You may copy pages of this guide '
           'for personal use and for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % esc(p['title'])
@@ -242,7 +241,7 @@ def copyright_html(p, S):
 def title_html(p, S):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
-            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
         p['color'], S.mark('titlep'), esc(S.SERIES_TITLE), esc(p['kicker']), esc(p['title']), esc(p['sub']), S.series_site.art(p['art']), S.B.AUTHOR)
 
 
@@ -455,16 +454,17 @@ def epub_docs(S, Doc, B):
     docs.append(Doc('title.xhtml', p['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · %s</p><h1 class="ps-title-t">%s</h1>'
         '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt="Two smiling round friends fit two jigsaw pieces together, with a heart above them."/></p>'
-        '<p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        '<p class="ps-title-a">by %s</p><p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
         esc(S.SERIES_TITLE), esc(p['kicker']), esc(p['title']), esc(p['sub']), p['art'], B.AUTHOR, S.SITE)))
     cp = copyright_html(p, S)
-    cp = cp.replace('First print edition, %s. Printed on demand.</p><p>ISBN: %s (paperback)</p>' % (B.UPDATED, esc(p.get('isbn') or S.CFG.get('isbn_placeholder', '[to be added]'))),
-                    'First ebook edition, %s.</p>%s' % (B.UPDATED, ('<p>ISBN %s (ebook)</p>' % esc(p['isbn_ebook'])) if p.get('isbn_ebook') else ''))
+    cp = cp.replace('First print edition, %s. Printed on demand.</p>' % B.UPDATED, 'First ebook edition, %s.</p>' % B.UPDATED)
     cp = cp.replace('The print book is optional.', 'The print book and ebook are optional.').replace('<p>Set in Lora, Fraunces and IBM Plex Mono.</p>', '')
     cp = cp.replace('<section class="ps-copy pe-only">', '<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>', 1)
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     docs.append(None)  # nav.xhtml
     how = how_html(S).replace('Use the contents, the section pages or “Find it fast” at the back', 'Use the contents or “Find it fast” at the back')
+    # voice18 (bookqa18 M9): an ebook has links, not codes
+    how = how.replace('<strong>Scan for more.</strong> Each page has a code to the same situation on the website,', '<strong>Tap for more.</strong> Each page links to the same situation on the website,')
     how = how.replace('Each page has a code to the same situation on the website', 'Each page links to the same situation on the website')
     docs.append(Doc('how.xhtml', 'How to use this guide', how))
     for key, title, h in lens_parts(S):

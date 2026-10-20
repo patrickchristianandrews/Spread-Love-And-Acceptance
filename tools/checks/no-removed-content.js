@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const EXTS = new Set(['.html', '.js', '.json', '.py', '.xml', '.txt']);
+const EXTS = new Set(['.html', '.js', '.json', '.py', '.xml', '.txt', '.css']);
 
 // Folders never scanned.
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__']);
@@ -45,6 +45,7 @@ const PATTERNS = [
   ['988 line', /\b988\b/],
   ['emergency number as a line to call', /\b(?:call|ring|dial|phone|text)(?:ing)?\s+(?:9-?1-?1|999|112)\b|\b(?:911|999|112)\s+(?:or|if|right away|now|for help)\b/i],
   ['116 123', /\b116\s?123\b/],
+  ['phone link to a line', /\b(?:tel|sms):\+?(?:911|999|112|988|116|0800|0808|1-?800|1800|741741|85258)/i],
   ['0808 / 0800 number', /\b080[08]\s?\d{2,4}\s?\d{2,4}/],
   ['US toll-free number', /\b1[-\s.](?:800|888|877|866|855|844|833)[-\s.]\d{3}/],
   ['text-to short code', /\btext\s+(?:["“']?[A-Za-z]+["”']?\s+)?to\s+\d{5,6}\b/i],
@@ -68,7 +69,7 @@ const PATTERNS = [
   ['Dementia UK', /dementia\s*uk/i],
   ['Stroke Association', /stroke\s+association|stroke\.org/i],
   ['Eldercare Locator', /eldercare\s+locator|eldercare\.(?:acl\.)?gov/i],
-  ['SAMHSA', /samhsa/i],
+  ['SAMHSA helpline', /samhsa(?:’s|'s)? (?:national )?help ?line|1-800-662/i],
   ['NAMI', /\bNAMI\b|nami\.org/],
   ['Mermaids (charity)', /mermaids\.org|\bMermaids\s+(?:charity|helpline|supports|\()/i],
   ['Switchboard (LGBT line)', /switchboard\.lgbt|\bSwitchboard\s+(?:LGBT|on)\b|LGBT\+?\s+Switchboard/i],
@@ -81,7 +82,7 @@ const PATTERNS = [
   ['Open Path', /open\s*path\s+collective|openpathcollective/i],
   ['Gingerbread (charity)', /gingerbread\.org|\bGingerbread\b(?=[^.]{0,60}(?:charity|helpline|single parent))/i],
   // Panels and notes
-  ['danger sentence (emergency services)', /local emergency services|servicios de emergencia/i],
+  ['danger sentence', /contact your local emergency services now|servicios de emergencia/i],
   ['Get help now', /get help now/i],
   ['free and private help', /free and private help/i],
   ['Not safe at home', /not safe at home/i],
@@ -93,7 +94,7 @@ const PATTERNS = [
   ['Leave this site quickly', /leave this site quickly/i],
   ['Leave quickly', /leave quickly/i],
   // Spanish layer
-  ['lang="es"', /\blang\s*=\s*["']?es\b|hreflang\s*=\s*["']?es\b/i],
+  ['lang="es"', /\blang\s*[\^|]?=\s*["']?es\b|hreflang\s*=\s*["']?es\b/i],
   ['En español', /en\s+espa(?:ñ|&ntilde;|n)ol/i],
   ['Español', /espa(?:ñ|&ntilde;)ol/i],
   ['/en-espanol', /en-espanol/i],

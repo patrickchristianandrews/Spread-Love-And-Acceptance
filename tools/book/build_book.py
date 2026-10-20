@@ -95,7 +95,7 @@ ORDER = [
         (13, 'anger', 'What anger is for, the hot minutes, repair, and when it becomes harm'),
         (14, 'personality', 'Dials, not boxes: the Big Five, temperament, and how people change'),
         (15, 'love', 'Love in many forms, being known, and love across ages and relationship types'),
-        (16, 'worry', 'How anxiety works, low mood vs depression, trauma, what helps and where to get help'),
+        (16, 'worry', 'How anxiety works, low mood vs depression, trauma and what helps'),
         (17, 'groups', 'Conformity, obedience, us and them, culture, and disagreeing kindly'),
     ]
 ] + [

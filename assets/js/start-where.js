@@ -57,8 +57,7 @@
       say:'Money talks go better when you start with what money means to each of you, like safety or freedom, before the numbers. Different styles are normal. If one person controls all the money or checks every purchase, that is something else, and help is there.',
       picks:[
         ['/money-together.html','Money together','Saver and spender, moving in, wedding costs and family expectations.'],
-        ['/lemonade-stand.html#money','Money in the Lemonade Stand','Bills and shared costs as plain numbers, never a debt between you.'],
-        ['/safety.html#signs','When it\u2019s more than a difference','Signs of money control, and who can help.']
+        ['/lemonade-stand.html#money','Money in the Lemonade Stand','Bills and shared costs as plain numbers, never a debt between you.']
       ]},
     { id:'coming-home', ico:'\uD83E\uDDF3', label:'Someone just came home after months away',
       say:'After a deployment, a long stretch of work away or a hospital stay, both of you have changed how things run. That is nobody\u2019s fault. Handing jobs back one at a time, with patience on both sides, helps everyone find their place again.',
@@ -109,7 +108,6 @@
       picks:[
         ['/foster-and-kinship.html#kinship','Raising a grandchild or a relative\u2019s child','Being the grown-up now, the child\u2019s parents, and the rest of the family.'],
         ['/foster-and-kinship.html#rules','House rules, with the why written in','A few rules everyone can see, and the reason for each.'],
-        ['/foster-and-kinship.html#support','Where to get support','Groups, money help and a break for you.'],
         ['/teens.html','For the teen in your home','A page written for them, not about them.']
       ]},
     { id:'grandparents', ico:'\uD83E\uDDD3', label:'Grandparents: helping with the grandchildren, and new rules with a grown-up child',
@@ -169,8 +167,7 @@
       say:'Coming out as an adult, to family, at work or with a partner, is yours to share at your own pace. You choose who, when and how much. If someone threatens or controls you, your safety comes first.',
       picks:[
         ['/coming-out.html','Coming out as an adult','To family, at work or with a partner, with words you could use.'],
-        ['/signal-translator.html','Check a message first','Try the words before you say them.'],
-        ['/safety.html','Not safe at home?','Free, private people to talk to.']
+        ['/signal-translator.html','Check a message first','Try the words before you say them.']
       ]},
     { id:'adhd-kids', ico:'\uD83C\uDF92', label:'A child with ADHD',
       say:'A child who can\u2019t sit still, forgets things or melts down is not being naughty on purpose. ADHD is a different kind of wiring. Short steps, calm reminders and noticing what goes right help the whole family.',
@@ -258,11 +255,6 @@
         ['/signal-translator.html','The Chat analyzer','Test a message before you send it.'],
         ['/frequency-journey.html','The arcade','When you just need a break.']
       ]},
-    { id:'not-safe', ico:'\uD83D\uDEE1', label:'I don\u2019t feel safe with someone',
-      say:'If someone hurts, threatens, watches or controls you, that is not a communication problem and it is not your fault. Please skip the tools here and talk to people who help with this every day.',
-      picks:[
-        ['/safety.html','Not safe at home?','Free hotlines, how to leave this site quickly, and how to clear what it keeps.']
-      ]},
     { id:'work', ico:'\uD83D\uDCBC', label:'At work, or in business together',
       say:'Work has its own version of all of this: who owns which job, messages that land badly, and effort nobody sees. Business partners have it too, plus money and big decisions. There is a plain, no-cartoons version you can use with your team or your partner in the business.',
       picks:[
@@ -312,7 +304,6 @@
       picks:[
         ['/co-parenting.html','Separated co-parents','Calmer handoffs, short messages, and what to do when the other parent won\u2019t cooperate.'],
         ['/signal-translator.html','Check a message first','See how a message may land before you send it.'],
-        ['/safety.html#after-separation','When it\u2019s more than conflict','Messages that won\u2019t stop, threats, or using the kids: what helps.'],
         ['/on-my-own.html#part-time-parent','Part-time with your kids','Weekend ideas, the Sunday goodbye, and staying close in between.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',

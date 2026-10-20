@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-es>
+<html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
@@ -136,16 +136,6 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/night-garden.js" defer></script>
-<script>
-/* En español: /night-garden.html?lang=es (the link on the Spanish page), or arriving from /en-espanol.html, makes this
-   a Spanish page: lang="es" on <html>, set here before site.js and night-garden.js run. site.js then puts the bar,
-   menu, footer and Settings in Spanish, and night-garden.js writes every word of the garden in Spanish. */
-(function () {
-  var es = /[?&]lang=es\b/.test(location.search);
-  try { if (!es && /\/en-espanol\.html/.test(document.referrer || '')) es = true; } catch (e) {}
-  if (es) document.documentElement.setAttribute('lang', 'es');
-})();
-</script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/night-garden.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/night-garden.html">

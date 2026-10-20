@@ -165,7 +165,7 @@
       { href: '/sent-this.html', code: '', title: 'Sent this by someone?', note: 'What they see, what stays yours, doing your side privately, and saying no kindly' },
       { href: '/share-the-load.html', code: '', title: 'Share the load, step by step', note: 'Which tool to use first for splitting the work at home, and what comes next. Roommates included' },
       { href: '/new-parent.html', code: '', title: 'New baby, sharing the load', note: 'A three-step way for new parents to split the baby jobs and the invisible ones' },
-      { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check, parallel parenting, and a safety note' },
+      { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check and parallel parenting' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/install.html', code: '', title: 'Get the app', note: 'Android now; on iPhone, add it to your Home Screen from Safari. Its own icon, full screen, works offline' },
@@ -2292,7 +2292,7 @@
   ];
   var ACT_13 = {
     r13cpdecide: ['/co-parenting.html#who-decides', '/co-parenting.html', '/co-parenting.html#parallel'],
-    r13homesleep: ['/coming-home.html#sleep', '/coming-home.html#support', '/coming-home.html'],
+    r13homesleep: ['/coming-home.html#sleep', '/coming-home.html'],
     nightmare: 'r13homesleep', nightmares: 'r13homesleep', hypervigilant: 'r13homesleep',
     r13apart: ['/empty-nest.html', '/complacency.html', '/turning-toward.html', '/bonding.html'],
     r13longhours: ['/different-hours.html#long-days', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
@@ -2385,7 +2385,6 @@
   [['/co-parenting.html#who-decides', 'Co-parents: who decides what', 'When the other parent decides without you, or you feel shut out: name the joint decisions, agree a reply-by window, and keep it to one written channel.', 'Guide'],
    ['/co-parenting.html#parallel', 'When the other parent won’t cooperate', 'Parallel parenting: fewer joint decisions, short written messages, and your own calm home.', 'Guide'],
    ['/coming-home.html#sleep', 'Sleep, nightmares and feeling on edge after coming home', 'Trouble sleeping since getting back, jumping at noises, feeling wired: what is common, what helps, and when to talk to someone.', 'Guide'],
-   ['/coming-home.html#support', 'Coming home: where to get support', 'Who to talk to after a deployment, work away or a hospital stay, for you and for the family.', 'Guide'],
    ['/book/understanding-1-feelings.html#not-brought-up', 'If you weren’t brought up to talk about feelings', 'Part Three, Chapter 1. Many people, often men, were never taught the words. Short, plain lines you could use, and why it’s never too late.', 'Book'],
    ['/book/understanding-4-communication.html#small-talk', 'Small talk has a job, and it can be short', 'Part Three, Chapter 4. Why small talk matters, why it is hard work for many people, and a few ready-made lines.', 'Book'],
    ['/workpapers/fill/wp-03.html?for=coparents', 'A list for two homes (one owner per job)', 'A fillable list for co-parents: the handoff bag, school, doctor, clubs. Each job has one owner. Kept on this device.', 'Tool'],
@@ -2395,7 +2394,6 @@
    ['/stepfamily-in-depth.html#stepparent', 'The stepparent role: a warm adult first', 'Rules come later. Build the relationship first and let the parent lead on discipline.', 'Guide'],
    ['/stepfamily.html#loyalty', 'When children feel torn between homes', 'Kids caught between a parent and a stepparent, or between two homes: what helps them, in words you could use.', 'Guide'],
    ['/teens.html#dating', 'For teens: dating and crushes', 'Written for teens: going at your own pace, and when something doesn’t feel right.', 'Teens'],
-   ['/foster-and-kinship.html#support', 'Kinship and foster carers: where to get support', 'Support groups for grandparents raising grandchildren and other kinship carers, money help, and a break for you.', 'Guide'],
    ['/book/index.html', 'Read the book', 'The whole book, from the beginning: Part One (you), Part Two (sharing the load) and Part Three (understanding people).', 'Book'],
    // merged tools that live in a part of a page (round 11): the old addresses are stubs that send people here
    ['/start-here.html#three-questions', 'Not sure where to start? Three quick questions', 'Who it’s about, what’s going on and how much time you have. You get one thing to try first.', 'Tool'],
@@ -2405,7 +2403,7 @@
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // a grandparent asking about support groups means the kinship support section first
   PRE.push([/\bgrand(parent|parents|ma|pa|mother|father|kids?|child|children|son|daughter)s?\b.*\b(support|group|groups|help|benefits?|allowance|money)\b|\bkinship (support|carers?|group)\b/, 'r13kin']);
-  ACT.r13kin = ['/foster-and-kinship.html#support', '/foster-and-kinship.html#kinship', '/grandparents.html'];
+  ACT.r13kin = ['/foster-and-kinship.html#kinship', '/grandparents.html'];
   // these pages only show when they're asked for: the album, the crossword, the podcast
   var ONLY_ASKED = [
     [/^\/echoes-of-gold\.html$/, /^(album|albums|music|song|songs|echoes|gold|listen|listening|track|tracks)$/],
@@ -3565,7 +3563,7 @@
     if (!(TOOL_PAGES.test(current) || WORKSPACE.test(current) || body.hasAttribute('data-tool') || /^\/(the-logic-behind-it|check-ins|wavelength)\.html$/.test(current)) || body.classList.contains('is-game')) return;
     var main = document.querySelector('main'); if (!main) return;
     var MOV = '.tol-offer, .tol-onpage, .tsk-top-row, .tol-private, .tol-pillars-fold, .depth-bar.tol-depth';
-    var SKIP = MOV + ', .read-head, .tol-where, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras, .ask-exit';
+    var SKIP = MOV + ', .read-head, .tol-where, .tol-work-note, nav, header, .depth-bar, .tol-skip, .tol-quiet-extras';
     function run() {
       var ctrl = Array.prototype.filter.call(main.querySelectorAll('input:not([type=hidden]), textarea, select, button'), function (n) {
         return n.getClientRects().length && !n.closest(SKIP);

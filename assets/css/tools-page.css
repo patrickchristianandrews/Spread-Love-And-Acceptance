@@ -165,7 +165,6 @@
 .tl-m{ display:inline-block; padding:.12rem .55rem; border-radius:999px; font:500 .76rem/1.45 "IBM Plex Mono", ui-monospace, monospace; color:#4E3F6B; background:#F4ECFB; }
 .tl-m.tl-time{ color:#6B4A12; background:#FFF0D9; }
 .tl-m.tl-solo{ color:#235238; background:#E3F2E9; }
-.tl-m.tl-es{ color:#2B4F73; background:#E4EFF9; }
 .tl-acts{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin-top:auto; padding-top:.3rem; }
 .tl-exbtn{ display:inline-flex; align-items:center; gap:.3rem; min-height:44px; padding:.2rem .8rem; border-radius:999px; cursor:pointer; font:600 .86rem/1.2 "Lora", Georgia, serif; color:#3C2F58; background:#FFFDF7; border:1.5px solid #D9C8F0; }
 .tl-exbtn::before{ content:"+"; font-family:"IBM Plex Mono", monospace; }

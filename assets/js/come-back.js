@@ -510,7 +510,6 @@
     '/examples.html': { me: 'ten', with: 'ten' },
     '/someone-sent-you-this.html': { me: ['weather', 'one minute, just for you; nothing is shared'], with: ['weather', 'one minute, just for you; nothing is shared'] },
     '/week-0.html': { me: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, at your own pace' }, with: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, together or each on your own' } },
-    '/outside-help.html': { me: 'weather', with: 'weather' },
     '/is-the-setup-working.html': { me: 'wp02', with: 'wp03' },
     '/turning-toward.html': { me: 'weather', with: 'daily' },
     '/small-wins.html': { me: 'weather', with: 'turning' },
@@ -753,7 +752,7 @@
   // the end card of a tool or chapter keeps the recommended next right under it
   function nextUnder(box) { if (panel && box && box.parentNode && box.nextElementSibling !== panel) box.after(panel); }
 
-  var NO_NEXT = /^\/(index|start-in-10-minutes|start-here|find-your-start|why-this-site|contents|by-relationship|library|whats-new|roadmap|brand|install|about|glossary|research|podcast-index|safety|upset-right-now|ask|ways-in|suite-index|program|program-overview|curriculum|prog-01|en-espanol|reading|surprise|quest|pause-and-play|infographic|search|frequency-buddies[a-z0-9-]*|pal-cam[a-z-]*|frequency-journey[a-z-]*)(-in-depth)?\.html$|^\/book\/topic-/;
+  var NO_NEXT = /^\/(index|start-in-10-minutes|start-here|find-your-start|why-this-site|contents|by-relationship|library|whats-new|roadmap|brand|install|about|glossary|research|podcast-index|upset-right-now|ask|ways-in|suite-index|program|program-overview|curriculum|prog-01|reading|surprise|quest|pause-and-play|infographic|search|frequency-buddies[a-z0-9-]*|pal-cam[a-z-]*|frequency-journey[a-z-]*)(-in-depth)?\.html$|^\/book\/topic-/;
   function wantsNext(main) {
     if (NO_NEXT.test(path) || !/^en/i.test(root.getAttribute('lang') || 'en')) return false;
     if (GAME_PAGES.test(path) || doc.body.classList.contains('is-game')) return false;

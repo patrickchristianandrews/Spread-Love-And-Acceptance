@@ -674,7 +674,6 @@ def build_page(refs, missing):
   <li><strong>“This site’s idea” means our own suggestion.</strong> Across the site, notes marked <span class="lib-own-k">This site’s idea</span> are our way of putting research into practice, like the tools, the scores and the step-by-step plans. They are not established science.</li>
   <li><strong>The site has not been tested in a trial.</strong> It is free self-help, not therapy, and it can’t know your situation. The <a href="/method-and-limits.html">method and limits</a> page sets out how the scores work.</li>
   <li><strong>We only list what we could check.</strong> Every entry here was looked up and has a working link. Anything we could not confirm is left off this page.</li>
-  <li><strong>If someone is afraid at home,</strong> research about everyday disagreements doesn’t apply. Please see <a href="/safety.html">Not safe at home?</a> first.</li>
 </ul>
 <h3>What the research supports, and what it doesn’t</h3>
 <ul>
@@ -742,7 +741,6 @@ def build_page(refs, missing):
   <li><a href="/method-and-limits.html"><strong>Method and limits</strong><span>How the site’s scores work, written out, with their cut-offs.</span></a></li>
   <li><a href="/for-counselors.html"><strong>For counsellors, coaches and group leaders</strong><span>What this site is and isn’t, and the tools that work as homework.</span></a></li>
   <li><a href="/is-this-for-you.html"><strong>Is this right for you?</strong><span>Who the site is for, and when to look for other help.</span></a></li>
-  <li><a href="/safety.html"><strong>Not safe at home?</strong><span>Helplines, and how to leave the site quickly.</span></a></li>
 </ul>
 <p>Spotted a mistake? Research moves on, and we would rather be corrected than be wrong. The links above go to the publisher, a library record or a trusted summary, and open in a new tab.</p>
 ''')

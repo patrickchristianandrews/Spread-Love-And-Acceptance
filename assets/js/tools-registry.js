@@ -17,7 +17,7 @@
      top     1–6 for the "Start here" strip on /tools.html: tools a person can use on their own (our picks), else 0
      kw      extra words people might search for
      modes   optional [[label, href], ...]: the ways in when one tool has more than one (tabs or parts of its page)
-     outcomes, people, bestFor, useful, example, sample, es: added below from MORE (what it helps with, who it is for)
+     outcomes, people, bestFor, useful, example, sample: added below from MORE (what it helps with, who it is for)
      kind    'tool' or 'workpaper' (added below; wp: a workpaper's short code). /tools.html shows tools only.
    Old ids of merged tools: window.TOLToolAliases (old id -> new id); window.TOLToolById(id) follows them, and for an old id
    that is now one mode of a place it returns the place pointed at that mode. window.TOLToolForPage(href): the place a page is in.
@@ -305,7 +305,7 @@
       sample: 'Picked: ADHD. Pages now show shorter steps, one thing at a time, with read-aloud on.' },
     rhythms: { o: 'other plan', p: 'partner housemates', best: 'a morning person and a night owl, or a saver and a spender, under one roof',
       sample: 'Money: one plans ahead, one spends as it comes. Agreement: a 10-minute money check every other Sunday.' },
-    'lemon-quick': { o: 'load other plan', p: 'partner housemates family', best: 'the “who does more?” argument', ex: 'ex-lemonade-housemates', es: 1 },
+    'lemon-quick': { o: 'load other plan', p: 'partner housemates family', best: 'the “who does more?” argument', ex: 'ex-lemonade-housemates' },
     owner: { o: 'load plan', p: 'housemates partner family', best: 'jobs that only get done when someone nags', ex: 'ex-wp03-coparents' },
     whodid: { o: 'load', p: 'partner housemates family', best: 'swapping “I do everything” for a real week', ex: 'ex-wp01-marcus-theo' },
     keepscoming: { o: 'load plan', p: 'housemates partner family', best: 'the same argument coming back every month', ex: 'ex-wp04-triad' },
@@ -316,14 +316,14 @@
     suite: { o: 'plan load learn', p: 'partner family housemates work', best: 'doing the whole program properly, in order' },
     sixweeks: { o: 'plan learn', p: 'partner family housemates', best: 'a guided start, one small step a week' },
     progress: { o: 'plan', p: 'partner family housemates', best: 'seeing whether things are actually getting better' },
-    ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box', es: 1,
+    ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box',
       sample: 'You type: “my partner never helps with bedtime”. You get: kind next steps, words you could use, and two pages to read.' },
     start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
       sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes’.”' },
     pauseplay: { o: 'fun calm', p: 'family partner', best: 'a gentle break before you talk, or playing with kids with no way to lose',
       sample: 'Five minutes of Word Bloom before a hard talk: a few words found, a slower breath, nothing to win or lose.' },
     split: { o: 'load plan', p: 'partner housemates family', best: 'checking whether your split can last, and whether last month’s changes stuck', ex: 'ex-setup-rosemary-ken' },
-    calm: { o: 'calm talk', p: 'partner family', best: 'a fight that’s getting worse, now or next time', es: 1,
+    calm: { o: 'calm talk', p: 'partner family', best: 'a fight that’s getting worse, now or next time',
       sample: 'Pause line: “I’m getting too heated. I’m taking 20 minutes and I’ll come back at 8:15.”' },
     plans: { o: 'plan', p: 'partner family housemates', best: 'settling one thing once, kindly: holidays, a family event, gaming time, a shared room, shifts or a handover bag',
       sample: 'Room agreement: quiet after 11 on weeknights. Guests: a heads-up by the afternoon. Borrowing: ask first, every time.' },
@@ -379,7 +379,6 @@
     t.useful = USEFUL[t.id] || 3;
     if (x.ex) t.example = x.ex;
     if (x.sample) t.sample = x.sample;
-    if (x.es) t.es = true;
     if (BASIS[t.id]) t.basis = BASIS[t.id];
   });
 

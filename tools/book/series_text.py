@@ -308,6 +308,8 @@ def drop_sections(body, B):
     body = B.drop_element(body, r'<[a-z0-9]+\b[^>]*\bclass="[^"]*\bps-omit\b')
     body = B.drop_element(body, r'<h3 class="kind-h kind-h-reading"')
     body = B.drop_element(body, r'<ul class="kind-list kind-reading"')
+    # voice18 (bookqa18 M3): a "Reading on the website" heading left with nothing under it goes too
+    body = re.sub(r'<h2\b[^>]*>[^<]*</h2>((?:\s|<!--.*?-->)*)(?=<h[12]\b|</article>|</section>|$)', r'\1', body, flags=re.S)
     return body
 
 

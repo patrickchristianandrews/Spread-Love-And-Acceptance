@@ -9,8 +9,8 @@
      #communication, #self-discovery, #know-yourself, #health-and-body, and ?type=talk (a registry type id).
    - "Start here": the six most useful tools a person can use alone.
    - "Not sure where to start?": a 60-second tour, guided paths, the three questions and Professor Puddles.
-   - More filters (what you want to do, who it's for, how much time, works in Spanish, words) combine with the type, and
-     live in the address too (?do=calm,talk&who=me&time=2&es=1&q=text&sort=quick). Old ?who=solo and ?who=together work.
+   - More filters (what you want to do, who it's for, how much time, words) combine with the type, and
+     live in the address too (?do=calm,talk&who=me&time=2&q=text&sort=quick). Old ?who=solo and ?who=together work.
    - "Most useful first" is one plain score: the registry's `useful` (our judgement of how widely and quickly a tool
      helps, and how often people look for it), plus our "Start here" picks; on a tie, tools you can use alone first.
      Never shown on the page.
@@ -222,7 +222,7 @@
   $('[data-tl-do]').innerHTML = chips('do', DO, countBy(function (t) { return t.outcomes || []; }));
   $('[data-tl-who]').innerHTML = chips('who', WHO, countBy(function (t) { return t.people || []; }));
   $('[data-tl-time]').innerHTML = chips('time', TIME, countBy(function (t) { return [timeOf(t)]; }));
-  var typeSel = $('#tl-type'), sortSel = $('#tl-sort'), qEl = $('#tl-q'), esEl = $('#tl-es'), moreEl = $('[data-tl-filters]');
+  var typeSel = $('#tl-type'), sortSel = $('#tl-sort'), qEl = $('#tl-q'), moreEl = $('[data-tl-filters]');
   // "Show me:" one option per section, with how many tools it holds; a section with none (after a merge) is left out
   var SEC_N = {}; TOOLS.forEach(function (t) { SEC_N[secOf(t)] = (SEC_N[secOf(t)] || 0) + 1; });
   typeSel.innerHTML = '<option value="">All tools (' + TOOLS.length + ')</option>' + SECS.filter(function (s) { return SEC_N[s.key]; }).map(function (s) {
@@ -231,7 +231,7 @@
   $('[data-tl-show]').hidden = false; $('[data-tl-jump]').hidden = true;
   moreEl.hidden = false; $('[data-tl-bar]').hidden = false;
 
-  var S = { q: '', do: [], who: [], time: [], type: '', es: false, sort: 'useful' };
+  var S = { q: '', do: [], who: [], time: [], type: '', sort: 'useful' };
   var VALID = { do: DO.map(function (x) { return x[0]; }), who: WHO.map(function (x) { return x[0]; }), time: TIME.map(function (x) { return x[0]; }) };
   function readUrl() {
     try {
@@ -243,7 +243,6 @@
         S[k] = v.filter(function (s, i) { return VALID[k].indexOf(s) !== -1 && v.indexOf(s) === i; });
       });
       S.type = secFor(u.get('type') || '');
-      S.es = u.get('es') === '1';
       S.sort = own(SORTS, u.get('sort') || '') ? u.get('sort') : 'useful';
     } catch (e) {}
     // an old link to a type's #part (/tools.html#calm-and-stress, #know-yourself) opens that section on its own
@@ -252,7 +251,7 @@
     return !!S.type;
   }
   function sync() {
-    qEl.value = S.q; typeSel.value = S.type; sortSel.value = S.sort; esEl.checked = S.es;
+    qEl.value = S.q; typeSel.value = S.type; sortSel.value = S.sort;
     $$('.tl-filters input[type="checkbox"][name]').forEach(function (i) { i.checked = (S[i.name] || []).indexOf(i.value) !== -1; });
   }
   function active() {
@@ -261,7 +260,6 @@
     S.who.forEach(function (v) { a.push(['who', v, LABEL[v]]); });
     S.time.forEach(function (v) { a.push(['time', v, LABEL[v]]); });
     if (S.type) a.push(['type', S.type, 'Only ' + SEC[S.type].name]);
-    if (S.es) a.push(['es', '1', 'Works in Spanish']);
     if (S.q) a.push(['q', S.q, '“' + S.q + '”']);
     return a;
   }
@@ -290,7 +288,6 @@
     if (S.who.length && !S.who.some(function (w) { return (t.people || []).indexOf(w) !== -1; })) return false;
     if (S.time.length && S.time.indexOf(timeOf(t)) === -1) return false;
     if (S.type && secOf(t) !== S.type) return false;
-    if (S.es && !t.es) return false;
     if (S.q && !needHit(t)) { var words = fold(S.q).split(/\s+/).filter(Boolean); if (!words.every(function (w) { return t.hay.indexOf(w) !== -1; })) return false; }
     return true;
   }
@@ -311,7 +308,7 @@
       '<dl class="tl-qa">' + qa('Helps with', esc(t.bestFor)) + qa('What you’ll do', esc(t.does) + (t.time ? ' <span class="tl-dur">' + esc(t.time) + '</span>' : '')) +
       qa('You’ll leave with', esc(t.gets)) + qa('Based on', basis) + '</dl>' + modes +
       '<span class="tl-meta"><span class="tl-m' + (solo(t) ? ' tl-solo' : '') + '">' + esc(whoText(t)) + '</span>' +
-      (t.es ? '<span class="tl-m tl-es" lang="es">También en español</span>' : '') + '</span>' +
+      '</span>' +
       '<span class="tl-acts">' + (hasEx ? '<button type="button" class="tl-exbtn" aria-expanded="false" aria-controls="' + exId + '" data-ex="' + esc(t.id) + '">See an example</button>' : '') +
       '<a class="tl-open" href="' + esc(t.href) + '" tabindex="-1" aria-hidden="true">Open&nbsp;&rarr;</a></span>' +
       (hasEx ? '<div class="tl-ex" id="' + exId + '" hidden></div>' : '') + '</li>';
@@ -415,7 +412,7 @@
         var p = new URLSearchParams();
         if (S.type) p.set('type', S.type);
         ['do', 'who', 'time'].forEach(function (k) { if (S[k].length) p.set(k, S[k].join(',')); });
-        if (S.es) p.set('es', '1'); if (S.q) p.set('q', S.q); if (S.sort !== 'useful') p.set('sort', S.sort);
+        if (S.q) p.set('q', S.q); if (S.sort !== 'useful') p.set('sort', S.sort);
         var qs = p.toString().replace(/%2C/g, ','), h = location.hash, hn = '';
         try { hn = decodeURIComponent(h.slice(1)); } catch (e) {}
         if (push || secFor(hn)) h = '';
@@ -440,7 +437,7 @@
     else if (scrollTo) goTo(scrollTo.hidden ? results : scrollTo);
   }
   function remove(k, v) {
-    if (k === 'type') S.type = ''; else if (k === 'es') S.es = false; else if (k === 'q') S.q = '';
+    if (k === 'type') S.type = ''; else if (k === 'q') S.q = '';
     else S[k] = S[k].filter(function (x) { return x !== v; });
     sync(); apply(true, k === 'type');
   }
@@ -463,7 +460,6 @@
   moreEl.addEventListener('change', function (e) {
     var i = e.target;
     if (i.name && VALID[i.name]) { S[i.name] = $$('.tl-filters input[name="' + i.name + '"]:checked').map(function (x) { return x.value; }); apply(true); }
-    else if (i === esEl) { S.es = esEl.checked; apply(true); }
   });
   sortSel.addEventListener('change', function () { S.sort = sortSel.value; apply(true); });
   var tmr = 0;
@@ -473,12 +469,12 @@
     clearTimeout(tmr); S.q = qEl.value.trim().slice(0, 80); apply(true);
     var first = list.querySelector('a.tl-card'); if (first && S.q) { e.preventDefault(); location.href = first.getAttribute('href'); }
   });
-  function clearAll() { var had = !!S.type; S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; S.es = false; sync(); apply(true, had); }
+  function clearAll() { var had = !!S.type; S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; sync(); apply(true, had); }
   resetBtn.addEventListener('click', function () { clearAll(); typeSel.focus({ preventScroll: true }); });
   $('[data-tl-empty-reset]').addEventListener('click', function () { clearAll(); typeSel.focus(); });
 
   var restricted = readUrl(); sync(); apply(false);
-  if (S.do.length || S.who.length || S.time.length || S.es) moreEl.open = true;
+  if (S.do.length || S.who.length || S.time.length) moreEl.open = true;
   // a link with ?type= or an old type #part opens on that section; any other #part (#workpapers, #start-here) works as usual
   // (again once the page has loaded, after the browser's own jump to the #part)
   if (restricted) {

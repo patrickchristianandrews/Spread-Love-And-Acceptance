@@ -221,9 +221,10 @@
     return { text: lines.join('\n'), send: send, why: 'Anger is information about a value or a limit. Use it to find the request, then wait until your body has settled before you say it.' };
   }
 
-  var CRISIS_HTML = '<p><strong>It sounds like you might be in a lot of pain.</strong> You don’t have to carry this alone. In the US, call or text <strong>988</strong>. Elsewhere, <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free lines by country. If you are in danger now, call your local emergency number.</p>';
+  // the owner's decision (purge19): a short neutral line, no resources
+  var CRISIS_HTML = '<p><strong>That sounds really hard.</strong> This tool is a small guide to everyday requests, and it can’t help with this one.</p>';
   // No flip here: asking nicely is not the answer to fear or control.
-  var DANGER_HTML = '<p><strong>If you feel afraid of someone, or they control you, a kinder request isn’t the answer, and it isn’t your fault.</strong> <a href="/safety.html">Safety &amp; support</a> has free, private people to talk to.</p>';
+  var DANGER_HTML = '<p><strong>If you feel afraid of someone, or they control you, a kinder request isn’t the answer, and it isn’t your fault.</strong></p>';
 
   // one say-no script: why it's fair + what you have left + something instead (refusals.html and the Chat analyzer)
   function sayNoScript(k, typeKey, tone, whenText) {

@@ -31,7 +31,7 @@
     return p.replace(/\/{2,}/g, '/');
   }
   var here = norm(location.pathname);
-  // "Stop remembering pages I visit" (Not safe at home? / Pick up) also stops the garden noting visited pages
+  // "Stop remembering pages I visit" (Pick up) also stops the garden noting visited pages
   var noRecent = false; try { noRecent = !!localStorage.getItem('tol-recent-off'); } catch (e) {}
   if (here !== '/404.html' && !noRecent) { S.seen[here] = S.seen[here] || Date.now(); save(); }
 

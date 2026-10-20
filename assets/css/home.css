@@ -16,7 +16,10 @@ html body main.read.h18{ max-width:70rem; margin:0 auto; padding:clamp(.75rem, 2
 html body main.read.h18 > section{ margin:0 0 clamp(1.5rem, .9rem + 2.4vw, 2.6rem); padding:0; background:none; border:0; box-shadow:none; }
 .h18 p, .h18 li, .h18 h1, .h18 h2, .h18 h3{ max-width:none; }
 .h18 ul{ list-style:none; margin:0; padding:0; }
-.h18 li{ margin:0; padding:0; }
+html body main.read.h18 li{ margin:0; padding:0; width:auto; max-width:none !important; background:none; border:0; box-shadow:none; }
+html body main.read.h18 :is(.wgo-opts, .h-tools, .h-games) > li:not([hidden]){ display:flex; }
+html body main.read.h18 .wgo-opts > li[hidden]{ display:none !important; }
+html body main.read.h18 :is(.wgo-opts, .h-tools, .h-games) > li > *{ flex:1 1 auto; width:100%; }
 .h18 li::before{ content:none !important; }
 /* no text bubbles, "#" heading links or tips inside the home page's own parts (the live site.css has bubbles on) */
 html body main.read.h18 :is(p, h1, h2, h3, li){ --bb-fill:transparent; --bb-edge:transparent; --bb-shadow:none; }
@@ -141,7 +144,8 @@ html.tol-quiet .h18 .h-trust li::before{ background:none; content:"\2713" !impor
 /* ---------- the site's extras that don't belong on a two-screen page ---------- */
 /* the round floating helpers never sit over the first screen's words on a phone (the header has "Ask") */
 @media (max-width:640px){ html.h18-top .tol-pud-fab, html.h18-top .tol-breathe-btn{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; } }
-/* short laptop screens (1366x768 at 150%): the corner Help button would sit on the last choice while the first screen is in view */
-@media (min-width:641px) and (max-height:620px){ html.h18-top .tol-help{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; } }
+/* tablets and laptops: the corner Help button would sit on a choice or a tool card while the first screen is in view
+   (Search, Menu and the cards are all there); it comes back once the page scrolls on */
+@media (min-width:641px){ html.h18-top .tol-help{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; } }
 /* no "On this page", hello bubble or "Meet the friends" helpers on a page this short */
 .h18-page .tol-outline, .h18-page .tol-otp, .h18-page .tol-puddles-hi{ display:none !important; }

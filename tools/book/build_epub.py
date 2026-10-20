@@ -473,16 +473,12 @@ def book_docs(book, where):
     docs.append(Doc('title.xhtml', book['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · Book %d</p><h1 class="ps-title-t">%s</h1>'
         '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt="%s"/></p><p class="ps-title-a">by %s</p>'
-        '<p class="ps-title-p">%s<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        '<p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
         B.esc(SERIES_TITLE), n, B.esc(book['title']), B.esc(book['sub']), book['art'], B.esc(ART_ALT.get(book['art'], 'A small drawing.')), B.AUTHOR,
-        B.esc(PUBLISHER), SITE)))
+        SITE)))
     # copyright page: the print words, for an ebook
     cp = S.copyright_page(book)
     cp = swap(cp, 'First print edition, %s. Printed on demand.' % B.UPDATED, 'First ebook edition, %s.' % B.UPDATED, 'copyright')
-    # finalfix15: the ebook doesn't print the paperback's placeholder ("ISBN: [to be added] (paperback)"); a real paperback ISBN stays
-    cp = cp.replace('<p>ISBN: %s (paperback)</p>' % B.esc(S.CFG.get('isbn_placeholder', '[to be added]')), '')
-    if book.get('isbn_ebook'):
-        cp = swap(cp, 'First ebook edition, %s.</p>' % B.UPDATED, 'First ebook edition, %s.</p><p>ISBN %s (ebook)</p>' % (B.UPDATED, B.esc(book['isbn_ebook'])), 'copyright')
     cp = swap(cp, 'The print books are optional.', 'The print books and ebooks are optional.', 'copyright')
     cp = swap(cp, '<p>Set in Lora, Fraunces and IBM Plex Mono.</p>', '', 'copyright')
     cp = cp.replace('<section class="ps-copy pe-only">', '<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>', 1)
@@ -649,6 +645,8 @@ ol.ideas { list-style: none; padding-left: 0; }
 ol.ideas > li { margin: 0 0 1.6em; }
 .pe-ex, .pe-words, .pe-try { padding-left: .8em; border-left: 2px solid %(acc)s; }
 .yp-note, .locked-section, .pe-safe { border-left: 3px solid #9A9283; padding-left: .8em; }
+table.ps-about-t, table.bk-ex-t { table-layout: fixed; width: 100%%; }
+table.ps-about-t td, table.ps-about-t th, table.bk-ex-t td, table.bk-ex-t th { overflow-wrap: anywhere; word-break: break-word; }
 .side-note { margin: 1em 0; padding: .5em .8em; border-left: 3px solid #B7AA86; background: #F4F1E8; font-size: .9em; line-height: 1.45; }
 .side-note p { margin: 0; }
 .side-note .sn-h { font-weight: bold; }
@@ -823,10 +821,7 @@ def opf(book, items, spine, modified, ident):
     md.append('<meta refines="#author" property="role" scheme="marc:relators">aut</meta>')
     md.append('<meta refines="#author" property="file-as">%s</meta>' % xesc(B.AUTHOR))
     md.append('<dc:language>en-GB</dc:language>')
-    md.append('<dc:publisher id="publisher">%s</dc:publisher>' % xesc(PUBLISHER))
-    if IMPRINT:
-        md.append('<meta refines="#publisher" property="display-seq">1</meta><dc:contributor id="imprint">%s</dc:contributor>' % xesc(IMPRINT))
-        md.append('<meta refines="#imprint" property="role" scheme="marc:relators">pbl</meta>')
+    # voice18 (owner): the Kindle "Publisher" field is left blank, so the EPUBs carry no publisher or imprint either
     md.append('<dc:rights>Text and pictures © 2026 %s. Every chapter is also free to read at spreadloveandacceptance.com.</dc:rights>' % xesc(B.AUTHOR))
     md.append('<dc:description>%s</dc:description>' % xesc(book.get('blurb', book['line'])))
     md.append('<dc:subject>Self-help</dc:subject><dc:subject>Relationships</dc:subject>')
@@ -1108,19 +1103,18 @@ def build_boxset(built, images):
     docs.append(Doc('title.xhtml', bx['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s</p><h1 class="ps-title-t">%s</h1><p class="ps-title-s">%s</p>'
         '<p class="ps-title-art"><img src="images/art-%s.png" alt="Five books on a shelf in the series’ colours, with two smiling round friends and a heart."/></p>'
-        '<p class="ps-title-a">by %s</p><p class="ps-title-p">%s<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
-        B.esc(SERIES_TITLE), B.esc(bx['short_title']), B.esc(bx['sub']), bx['art'], B.AUTHOR, B.esc(PUBLISHER), SITE)))
+        '<p class="ps-title-a">by %s</p><p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        B.esc(SERIES_TITLE), B.esc(bx['short_title']), B.esc(bx['sub']), bx['art'], B.AUTHOR, SITE)))
     cp = ('<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>'
-          '<p><em>%s</em>. %s, in one ebook.<br/>By %s. Published by %s, spreadloveandacceptance.com.</p>'
-          '<p>Text and pictures © 2026 %s. First ebook edition, %s.</p>%s'
+          '<p><em>%s</em>. %s, in one ebook.<br/>By %s. Independently published.</p>'
+          '<p>Text and pictures © 2026 %s. First ebook edition, %s.</p>'
           '<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, and every situation in '
           '<em>%s</em> at spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print books and ebooks are optional.</p>'
           '<p><strong>Not therapy.</strong> These books are general education about people and relationships. They are not a diagnosis, treatment or a '
           'replacement for help from a doctor, counsellor or other trained professional, and they can’t know your situation.</p>'
           '<p><strong>The examples are made up.</strong> The people in these books’ examples are made up; any likeness to real people is coincidence. None of them is a testimonial.</p>'
           '<p>Each book that follows keeps its own title page and copyright page.</p></section>') % (
-        B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.esc(PUBLISHER), B.AUTHOR, B.UPDATED,
-        ('<p>ISBN %s (ebook)</p>' % B.esc(bx['isbn_ebook'])) if bx.get('isbn_ebook') else '', B.esc(S.POCKET['title']))
+        B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.AUTHOR, B.UPDATED, B.esc(S.POCKET['title']))
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     for d in docs:
         d.root = transform(parse(pre(d.html)), images, set(), d.heading_shift)

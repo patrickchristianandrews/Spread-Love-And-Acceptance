@@ -127,8 +127,6 @@ html[data-theme="dark"]:not(.tol-nodark):not(.tol-quiet) .read .hh .hh-wgo .hh-m
 .read .js-tick{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:0 .3rem; cursor:pointer; font-size:.95rem; }
 .read .js-tick input{ width:1.35rem; height:1.35rem; margin:0; accent-color:#3E6B4C; cursor:pointer; }
 .read .js-tick:focus-within{ outline:3px solid var(--focus, #2B5B8C); outline-offset:1px; border-radius:8px; }
-.read .jr-heavy{ margin:.5rem 0 .2rem !important; font-size:.95rem; }
-.read .jr-heavy a{ display:inline-flex; align-items:center; min-height:44px; color:#2B5B8C; }
 .read .jr-back{ margin:.6rem 0 0; padding:.6rem .8rem; border-radius:12px; background:#FBF7FF; border:1px solid #E2D5F3; }
 .read .jr-back p{ margin:.2rem 0 !important; max-width:none; }
 .read .jr-back-n{ font-size:.9rem; color:var(--ink-soft, #5A5346); }

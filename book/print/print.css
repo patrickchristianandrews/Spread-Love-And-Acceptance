@@ -79,7 +79,7 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-online-box { display: flex; gap: 3.4mm; align-items: center; border: .7pt solid var(--pc); border-radius: 1.6mm; padding: 2.4mm 3mm; margin: 0 0 4mm; break-inside: avoid; }
 .ps-online-box p { margin: 0; font-size: 9pt; line-height: 1.42; }
 .ps-refs { columns: 1; font-size: 7.8pt; line-height: 1.36; }
-.ps-refs li { margin: 0 0 1.1mm; padding-left: 3mm; text-indent: -3mm; }
+.ps-refs li { margin: 0 0 1.1mm; padding-left: 3mm; text-indent: -3mm; break-inside: avoid; page-break-inside: avoid; }
 .ps-notes .pe-notes-h { font-size: 10.2pt; margin: 3.6mm 0 1.4mm; }
 .ps-series-list { list-style: none; padding: 0; margin: 0 0 4mm; }
 .ps-series-list li { display: flex; gap: 3mm; align-items: baseline; padding: 2.4mm 0 2.4mm 3mm; border-left: 2.4pt solid var(--bc); border-bottom: .4pt solid #E2D6B6; }

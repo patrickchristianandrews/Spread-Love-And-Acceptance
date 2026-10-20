@@ -17,10 +17,6 @@
 <style>
   .ask-head{ margin-bottom:1rem; padding-bottom:.9rem; }
   .ask-head h1{ font-size:clamp(1.35rem,4.5vw,1.8rem); margin-bottom:.2rem; }
-  .ask-exit{ margin:.2rem 0 1rem; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.4rem .7rem; align-items:center; }
-  .ask-exit button{ font:inherit; font-size:.9rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; border:1px solid var(--line, #d8cfb8); background:var(--paper, #fffaf0); color:var(--ink, #2a2530); cursor:pointer; }
-  .ask-exit button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  .ask-exit small{ color:var(--ink-soft, #5A5346); }
 
   /* the intro: who he is, in two sentences */
   .ap-intro{ display:flex; gap:.9rem; align-items:flex-start; margin:0 0 .6rem; }
@@ -94,7 +90,7 @@
   html[data-theme="dark"]:not(.tol-nodark) .ap-ico svg, html[data-theme="dark"]:not(.tol-nodark) .ap-trustline svg{ filter:none !important; }
   @media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) :is(.ap-ico, .ap-trustline) svg{ filter:none !important; } }
   @media (prefers-reduced-motion: reduce){ .ap-q, .ap-group > summary::after{ transition:none !important; } }
-  @media print{ .ap-group{ break-inside:avoid; } .ap-q{ border:0; background:none; padding:0; min-height:0; } .ask-exit, #ask-chat{ display:none; } }
+  @media print{ .ap-group{ break-inside:avoid; } .ap-q{ border:0; background:none; padding:0; min-height:0; } #ask-chat{ display:none; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/ask.html">
@@ -159,8 +155,6 @@
 <main class="read">
 <header class="read-head ask-head"><p class="read-code">Ask</p><h1>Ask Professor Puddles</h1><p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">Chat with Professor Puddles, the site&rsquo;s helper. Also called Ask a question in your own words</p><p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> you type what&rsquo;s going on, the way you&rsquo;d tell a friend. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> kind next steps, words you could use and the right pages, made only from this site. <span aria-hidden="true">&middot;</span> About 2 minutes</p></header>
 
-<p class="ask-exit no-bubble"><button type="button" data-tol-exit>Leave this site quickly</button> <small>Or press Esc twice.</small></p>
-
 <div id="ask-chat"></div>
 <noscript><p>The Professor needs JavaScript to run in your browser. You can still browse everything from the <a href="/contents.html">Contents</a>.</p></noscript>
 <!-- integ16: the chat comes first (on a phone this block sat 326px above the box); who he is and how he answers follow it -->
@@ -204,10 +198,8 @@
   <li class="ap-card"><span class="ap-ico t-rose" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16"/><path d="M9 3.5c-.8 1 .8 1.8 0 3M12.5 3.5c-.8 1 .8 1.8 0 3"/></svg></span><h3>Just chat</h3><p>Want to just chat? Say hi, ask for a joke, or tell me about your day. He’ll share his puddle news, play a quick game, and ask about you.</p></li>
   <li class="ap-card"><span class="ap-ico t-lilac" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0012 3z"/></svg></span><h3>Talk deep</h3><p>Big questions, like what love is or whether honesty is always kind, through philosophy, psychology and an autistic lens.</p></li>
   <li class="ap-card"><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M7.5 16v-3M11 16V9.5M14.5 16v-5M7.5 7.5h3"/><circle cx="17" cy="8" r="1.5"/></svg></span><h3>Makes infographics</h3><p>A small poster about a topic, drawn on your device, that you can save as an image, share or print.</p></li>
-  <li class="ap-card"><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M12 8.5v4M12 15.5h.01"/></svg></span><h3>Safety first</h3><p>If something sounds like fear or control, not a communication problem, he says so gently and points to real help.</p></li>
   <li class="ap-card"><span class="ap-ico t-sand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5.5c2.5-1 5.5-1 8 .8 2.5-1.8 5.5-1.8 8-.8V19c-2.5-1-5.5-1-8 .8-2.5-1.8-5.5-1.8-8-.8z"/><path d="M12 6.3v13.5"/></svg></span><h3>Explains ideas plainly</h3><p>The mental load, fair vs equal, “flooded”, the double empathy problem: what they mean, with an everyday example.</p></li>
   <li class="ap-card"><span class="ap-ico t-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c.9 1.4 2.1 2 3.5 2s2.6-.6 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></span><h3>Jokes on request</h3><p>Very bad puddle puns, riddles and tiny stories, only when you ask. Never in the middle of something hard.</p></li>
-  <li class="ap-card"><span class="ap-ico t-rose" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5S9.7 5.9 12 3.5z"/></svg></span><h3 lang="es">Un poco de español</h3><p>Ask in Spanish and he’ll answer the basics in Spanish, with the site’s Spanish page.</p></li>
 </ul>
 </section>
 
@@ -263,7 +255,6 @@
       <li><button type="button" class="ap-q" data-q>Quiz me</button></li>
       <li><button type="button" class="ap-q" data-q>Tell me a fun fact</button></li>
       <li><button type="button" class="ap-q" data-q>Who are you?</button></li>
-      <li><button type="button" class="ap-q" data-q lang="es">¿Hablas español?</button></li>
     </ul>
   </details>
   <details class="ap-group">
@@ -320,7 +311,7 @@
   </div>
   <div>
     <h3>What he’s made for</h3>
-    <p>Everyday disagreements between people who feel safe with each other. If anyone feels afraid or controlled, that isn’t a communication problem, and <a href="/safety.html">private help is here</a>. The <strong>Leave quickly</strong> button, or Esc twice, takes you off this site fast.</p>
+    <p>Everyday disagreements between people who feel safe with each other.</p>
   </div>
   <div>
     <h3>Starting over</h3>

@@ -128,7 +128,6 @@
       '<h3 id="ld-pause-h">A pause line you could say</h3>' +
       '<p class="ld-line"><q id="ld-pause"></q> <button type="button" class="ld-btn" id="ld-copy-line">Copy</button></p>' +
       '<h3 id="ld-when-h">When to come back to a talk</h3><p id="ld-when"></p>' +
-      '<p class="ld-small">If you’re tense because you’re afraid of how someone will react, that is not just stress. Your body may be warning you. <a href="/safety.html">Not safe at home?</a> has free, private help.</p>' +
       '<div class="ld-more"><h3 style="margin-top:0">Add the rest of today’s weather</h3><p class="ld-small">Sleep, the pressure you were already carrying, your body and what’s coming up. You get today’s forecast, with a good time to talk, and you can keep it in your almanac on this device.</p>' +
       (moreHref ? '<a class="ld-btn" id="ld-more" href="' + esc(moreHref) + '">Add the rest (about a minute) →</a>' : '<button type="button" class="ld-btn" id="ld-more">Add the rest (about a minute) →</button>') + '</div>' +
       '<div class="ld-share"><h3>Save or share your result</h3><p class="ld-small">Only the rung goes in the link. Nothing is uploaded, and your answers aren’t kept.</p>' +

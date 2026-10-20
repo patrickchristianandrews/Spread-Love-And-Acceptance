@@ -76,9 +76,9 @@ L = {
         'hook': 'Some days are heavy. This book helps you find your footing again, gently and without blame.',
         'body': [
             'Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book explains what is going on inside you, in plain words, and gives you small, practical things to try.',
-            'It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, how worry, low mood and trauma work, and when and where to get help. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change. It ends with what matters to you, and what a good life can mean.',
+            'It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, and how worry, low mood and trauma work. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change. It ends with what matters to you, and what a good life can mean.',
         ],
-        'inside': ['Stress, the ladder, flooding and rest that helps', 'Anger: what it is for, and the hot minutes', 'Worry, low mood and trauma, and where to get help', 'Grief in waves, and losses nobody sees',
+        'inside': ['Stress, the ladder, flooding and rest that helps', 'Anger: what it is for, and the hot minutes', 'Worry, low mood and trauma, and what helps', 'Grief in waves, and losses nobody sees',
                    'Repair, apologies that land and forgiveness', 'Habits and change, one small step at a time', 'Values, meaning and a good life'],
         'cats': ['Books › Self-Help › Stress Management', 'Books › Self-Help › Anger Management', 'Books › Self-Help › Death & Grief › Grief & Bereavement'],
         'alt': ['Books › Self-Help › Anxieties & Phobias', 'Books › Self-Help › Emotions', 'Books › Health, Fitness & Dieting › Mental Health › Post-traumatic Stress Disorder'],
@@ -112,10 +112,10 @@ L = {
                'household management for working parents', 'roommates and co-parenting chores', 'resentment in relationships over housework'],
     },
     'workbook': {
-        'hook': 'Every form in the series is free to print or fill in online. This is the bound edition, on big pages with room to write.',
+        'hook': 'Every workpaper from the series, bound together on big pages with room to write.',
         'body': [
             'Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.',
-            'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes. The same forms are free to print or fill in on screen at spreadloveandacceptance.com; this bound edition is for anyone who would rather have them all in one book, with a pencil.',
+            'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.',
         ],
         'inside': ['10 workpapers and a paper setup score, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page; longer sheets run over two pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
         'cats': ['Books › Self-Help › Relationships', 'Books › Parenting & Relationships › Marriage & Adult Relationships', 'Books › Self-Help › Communication & Social Skills'],
@@ -178,20 +178,17 @@ def description(item, d, kind='book'):
         h += '<p><b>Part of a series.</b> %s is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p>' % esc(SERIES)
     elif kind == 'boxset':
         h += ('<p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try. Three friendly characters, Professor Puddles, '
-              'Tidbit and Sugarfoot, drop in with hints on the lighter pages. Where a chapter touches hard things, it says where to find help.</p>')
+              'Tidbit and Sugarfoot, drop in with hints on the lighter pages.</p>')
     else:
         h += ('<p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, '
-              'Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages. Where a chapter touches hard things, it says where to find help.</p>')
+              'Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p>')
         h += '<p><b>Part of a series.</b> %s is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p>' % esc(SERIES)
     if kind == 'pocket':
-        h += ('<p><i>Every situation in this guide, and more than seventy in all, is also free online, with no account. The print and Kindle editions are for readers who '
-              'prefer a book in hand. This guide is general education, not therapy or a diagnosis.</i></p>')
+        h += '<p><i>This guide is general education, not therapy or a diagnosis.</i></p>'
     elif kind == 'boxset':
-        h += ('<p><i>Every chapter is also free to read online, in a short and a full version, with no account. This ebook is for readers who prefer the whole series '
-              'in one place. These books are general education, not therapy or a diagnosis.</i></p>')
+        h += '<p><i>These books are general education, not therapy or a diagnosis.</i></p>'
     else:
-        h += ('<p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who '
-              'prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>')
+        h += '<p><i>This book is general education, not therapy or a diagnosis.</i></p>'
     return h
 
 
@@ -245,7 +242,7 @@ def workbook_choice():
     cp, bp = CFG['workbook_price_usd'], CFG['workbook_bw_price_usd']
     return '\n'.join([
         '\n---\n\n## Which workbook edition? [OWNER: decide; (b) is recommended]\n',
-        'Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each would need its own ISBN).\n',
+        'Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each gets its own free KDP ISBN).\n',
         '| | (a) Colour edition | (b) Black-and-white interior (recommended) |', '|---|---|---|',
         '| Files | workbook.pdf, cover-workbook.pdf | workbook-bw.pdf, cover-workbook-bw.pdf |',
         '| Pages | %d | %d |' % (c.get('pages', 0), b.get('pages', 0)),
@@ -272,7 +269,7 @@ def main():
     pk = MADE.get(POCKET['id'], {})
     md.append('''## Read this first
 - **Amazon only.** The books are sold on Amazon (KDP) and nowhere else: no shop on the website, no other print service, no discount codes. Expanded distribution stays off. Everything stays free to read online.
-- **One account, your own ISBNs.** Use your own Bowker ISBN for each paperback (one per book and format: four books, the workbook edition you publish and the pocket guide). Paste each one into the one "isbn" block in tools/book/series.json and rebuild, so it prints on that book's copyright page. The Kindle editions and the box set need no ISBN; Amazon gives each one an ASIN. [OWNER]
+- **Free KDP ISBNs (decided).** Every paperback uses a free KDP ISBN: on the Paperback Content screen choose **"Get a free KDP ISBN"**. KDP prints it in the barcode on the back cover, so the copyright pages carry no ISBN line. A free KDP ISBN can only be used for that book in that format on KDP and can't be moved to another publisher, and KDP shows the imprint as **"Independently published"** (the title and copyright pages already say so). The Kindle editions and the box set need no ISBN: leave the Kindle ISBN blank, and Amazon gives each one an ASIN.
 - **The workbook: publish one of two editions.** The colour edition ($14.99) and a black-and-white interior with the same colour cover ($9.99, **recommended**) are both built and both listed below, side by side. See "Which workbook edition?". [OWNER]
 - **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
@@ -331,14 +328,14 @@ def main():
             row('Series', '', 'Leave it out of the numbered series, or add it unnumbered if KDP offers that for a box set [OWNER: check the series page in KDP]')
         row('Edition number', '1', '1')
         row('Author', 'Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER]', 'Christian')
-        row('Publisher', PUBLISHER, PUBLISHER)
-        row('Imprint', '%s (KDP asks for it beside your own ISBN; it also prints on the copyright page)' % IMPRINT, IMPRINT)
+        row('Publisher', 'Nothing to type: with a free KDP ISBN, KDP shows "Independently published"', 'Leave blank (decided)')
+        row('Imprint', '"Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same)', 'Leave blank')
         row('Contributors', 'None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER]', 'None')
         row('Publishing rights', '"I own the copyright and I hold the necessary publishing rights."', 'the same')
         row('Primary audience', 'Sexually explicit images or title: **No**. Reading age: leave blank (adults).', 'the same')
         row('Primary marketplace', 'Amazon.com', 'Amazon.com')
         if has_print:
-            row('Description', 'below (%d characters of 4,000)' % len(desc), 'no Kindle edition' if not has_kindle else 'the same, but replace the last line about print with: "The paperback has the same %s."' % ('pages' if kind == 'pocket' else 'chapters'))
+            row('Description', 'below (%d characters of 4,000)' % len(desc), 'no Kindle edition' if not has_kindle else 'the same, word for word' )
         else:
             row('Description', '', 'below (%d characters of 4,000)' % len(desc))
         md.append('\n**Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):\n')
@@ -358,8 +355,7 @@ def main():
             md.append('### Print details%s\n' % (' (the workbook is large trim)' if kind == 'workbook' else (' (the pocket guide is 5 × 8 in)' if kind == 'pocket' else '')))
             trim = {'workbook': '8.5 × 11 in (21.59 × 27.94 cm)', 'pocket': '5 × 8 in (12.7 × 20.32 cm)'}.get(kind, '6 × 9 in (15.24 × 22.86 cm)')
             md.append('| Field | Answer |\n|---|---|')
-            md.append('| ISBN | Your own Bowker ISBN: `%s` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "%s" → "%s", and rebuild, so it prints on the copyright page] |' % (
-                item.get('isbn') or 'ISBN-13 to come', 'workbook' if kind == 'workbook' else bid, ('paperback-bw' if bw else 'paperback-colour') if kind == 'workbook' else 'paperback'))
+            md.append('| ISBN | Choose **"Get a free KDP ISBN"**. It can\'t be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |')
             md.append('| Publication date | Leave blank (KDP fills in the date it goes live) |')
             md.append('| Print options | Ink and paper: **%s, white paper**. Trim: **%s**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |' % ('Black & white interior' if bw else 'Standard color', trim))
             md.append('| Page count | %d (KDP reads it from the file)%s |' % (pages, ' — 72 is KDP\'s minimum for standard colour, so the guide is built to 72 to 80 pages' if kind == 'pocket' else ''))
@@ -413,8 +409,8 @@ def main():
                 bid, k_mb, what, ('; EPUBCheck: ' + ep['epubcheck']['summary']) if (ep.get('epubcheck') or {}).get('summary') else ''))
             md.append('| Kindle cover file | book/print/cover-%s-front.jpg (%s, the %s; also inside the EPUB) |' % (
                 bid, '1600 px wide', 'front of the box set, made for Kindle only' if kind == 'boxset' else 'paperback front without bleed'))
-            md.append('| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/%s and rebuild the EPUB. [OWNER] |' % (
-                'series-extras.json' if kind in ('pocket', 'boxset') else 'series.json'))
+            md.append('| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |')
+            md.append('| Publisher | Leave blank (decided). |')
             if kind == 'boxset':
                 low = 0.35 * 14.99
                 md.append('| Kindle price | **$%.2f** with the **70%%** royalty [OWNER: recommended]. About **%s a copy** after delivery (%.2f MB × $0.15 = %s). |' % (k_price, money(k_net), k_mb, money(0.15 * k_mb)))
@@ -441,7 +437,7 @@ def main():
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
             **{'keyword_%d' % (i + 1): k for i, k in enumerate(d['kw'])},
             'ai_text': 'Yes: entire work, extensive editing [OWNER]', 'ai_images': 'Yes: entire work, extensive editing [OWNER]', 'ai_translations': 'No',
-            'isbn': item.get('isbn') or '[OWNER]', 'ink_paper': 'Black & white, white' if bw else 'Standard color, white', 'trim': {'workbook': '8.5 x 11 in', 'pocket': '5 x 8 in'}.get(kind, '6 x 9 in'),
+            'isbn': 'Get a free KDP ISBN', 'ink_paper': 'Black & white, white' if bw else 'Standard color, white', 'trim': {'workbook': '8.5 x 11 in', 'pocket': '5 x 8 in'}.get(kind, '6 x 9 in'),
             'bleed': 'No bleed', 'cover_finish': 'Matte', 'pages': pages, 'interior_file': 'book/print/%s.pdf' % bid, 'cover_file': 'book/print/cover-%s.pdf' % bid, 'low_content': 'No',
             'price_usd': '%.2f' % price + (' [OWNER: recommended]' if kind == 'pocket' or bw else ''),
             'price_gbp': PK_UK if (kind == 'pocket' or bw) else UK_PRICE, 'price_eur': PK_EU if (kind == 'pocket' or bw) else EU_PRICE,
@@ -452,7 +448,7 @@ def main():
         if has_print:
             rows.append(base)
         if has_kindle:
-            rows.append(dict(base, format='kindle', series_number=(num or ''), isbn='(none: ASIN)', ink_paper='', trim='', bleed='', cover_finish='', pages='',
+            rows.append(dict(base, format='kindle', series_number=(num or ''), isbn='Leave blank (ASIN)', publisher='', imprint='', ink_paper='', trim='', bleed='', cover_finish='', pages='',
                              interior_file='book/print/epub/%s.epub' % bid, cover_file='book/print/cover-%s-front.jpg' % bid, low_content='', price_usd='%.2f' % k_price,
                              price_gbp='', price_eur='', price_cad='', price_aud='', expanded_distribution='', printing_cost_usd='', royalty_rate='%d%%' % k_pct,
                              royalty_usd='%.2f' % k_net, kdp_select='No', drm='No'))

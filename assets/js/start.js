@@ -60,45 +60,8 @@
   /* ---------------------------------------------------------------- chores: three jobs, three taps */
   var JOBS = { dishes: 'Dishes', laundry: 'Laundry', planweek: 'Planning the week' };
   var SAY = { me: 'mostly you', b: 'shared', them: 'mostly them' };
-  // flow17: the chores page in Spanish (a phone set to Spanish, or ?lang=es: the page's own head script sets <html lang>)
-  function es() { return /^es\b/i.test(root.lang || ''); }
-  function T(en, sp) { return es() ? sp : en; }
-  if (es()) { JOBS = { dishes: 'Platos', laundry: 'Ropa (lavar y secar)', planweek: 'Planear la semana' }; SAY = { me: 'sobre todo tú', b: 'compartida', them: 'sobre todo la otra persona' }; }
-  var ES_CHORES = [
-    ['.st-kick span:nth-of-type(1)', 'Gratis'], ['.st-kick span:nth-of-type(2)', 'Privado'], ['.st-kick span:nth-of-type(3)', 'Sin registrarte'],
-    ['#st-h1', '¿Quién hace qué en casa? <span class="st-accent">Descúbranlo en 2 minutos, juntos.</span>'],
-    ['.st-lede', 'Cada uno toca quién hace casi siempre cada tarea. Luego ven en qué coinciden, y las pocas tareas que ven distinto.'],
-    ['#pv-h', 'Prueba tres tareas ahora'], ['.st-tool-n', '¿Quién la hace casi siempre? Un toque cada una. No se envía nada.'],
-    ['.st-job[data-job="dishes"] legend', 'Platos'], ['.st-job[data-job="laundry"] legend', 'Ropa (lavar y secar)'],
-    ['.st-job[data-job="planweek"] legend', 'Planear la semana <small>&middot; el trabajo de pensar</small>'],
-    ['.st-tool .st-fine', 'El vistazo completo: una docena de tareas de cada día, sin horas ni números. «Enviar a tu pareja» crea un enlace, para que responda en su propio teléfono y vean las dos vistas lado a lado.'],
-    ['#back-h', 'Vuelve para&hellip;'],
-    ['.st-back-l li:nth-child(1) .st-back-t', 'Revisarlo otra vez en una semana'],
-    ['.st-back-l li:nth-child(1) .st-back-d > p', 'Mira si el reparto cambió. Tus respuestas se quedan en este aparato, así que el vistazo se abre donde lo dejaste.'],
-    ['.st-back-l li:nth-child(1) [data-st-remind]', 'Añadir un recordatorio a mi calendario'],
-    ['.st-back-l li:nth-child(2) .st-back-t', 'La lista para el refri'],
-    ['.st-back-l li:nth-child(2) .st-back-d > p', 'Un dueño para cada tarea, para que nadie tenga que andar pidiendo. Imprímela o tenla en el teléfono.'],
-    ['.st-back-l li:nth-child(2) .st-link', 'Hacer la lista para el refri'],
-    ['#why-h', 'Por qué ayuda'],
-    ['.st-why li:nth-child(1)', '<b>Cada uno responde por su lado,</b> así nadie se deja llevar por las respuestas del otro.'],
-    ['.st-why li:nth-child(2)', '<b>Seguramente coinciden en casi todo.</b> La pelea suele ser por las pocas tareas que ven distinto, y ahora pueden ver cuáles son.'],
-    ['.st-why li:nth-child(3)', '<b>El trabajo de pensar cuenta:</b> notar lo que falta, planear la semana, acordarse de las fechas.'],
-    ['.st-why + .st-k', 'Bueno saber'],
-    ['.st-trust li:nth-child(1)', 'Gratis. No hace falta registrarte para usar las herramientas.'],
-    ['.st-trust li:nth-child(2)', 'Lo que escribes se queda en tu aparato.'],
-    ['.st-trust li:nth-child(3)', 'Una forma de hablar, no una puntuación ni un veredicto sobre nadie.'],
-    ['#more-h', 'Más que puedes hacer aquí (en inglés)']
-  ];
-  function choresEs() {
-    if (!es() || !$('.st-chores')) return;
-    ES_CHORES.forEach(function (r) { var n = $(r[0]); if (n) { n.innerHTML = r[1]; n.setAttribute('lang', 'es'); } });
-    $$('.st-opts span').forEach(function (sp) { var v = sp.previousElementSibling && sp.previousElementSibling.value; sp.textContent = v === 'me' ? 'Yo' : v === 'b' ? 'Los dos' : 'Él o ella'; });
-    $$('[data-st-go], .st-back-l a[href^="/lemonade-stand.html"]').forEach(function (a) { a.setAttribute('href', a.getAttribute('href').replace('/lemonade-stand.html', '/lemonade-stand.html?lang=es')); });
-    // the language chips: back to English, on this page
-    $$('[data-st-lang]').forEach(function (a) { a.textContent = 'In English'; a.setAttribute('href', '/start/chores.html?lang=en'); a.setAttribute('lang', 'en'); a.setAttribute('hreflang', 'en'); });
-    var rm = $('[data-st-remind]'); if (rm) rm.setAttribute('data-what', 'Quién hace qué en casa: revísenlo otra vez y vean si el reparto cambió.');
-  }
-  // flow17: a quick look already saved on this device: carry on with it, one tap (in either language)
+
+  // flow17: a quick look already saved on this device: carry on with it, one tap
   function savedQuick() {
     try {
       var q = JSON.parse(localStorage.getItem('tol-lemonade-quick') || 'null');
@@ -110,9 +73,9 @@
   function carryOn() {
     var box = $('[data-st-preview]'); if (!box || !savedQuick()) return;
     var p = D.createElement('p'); p.className = 'st-carry';
-    var a = D.createElement('a'); a.className = 'st-btn is-wide'; a.href = es() ? '/lemonade-stand.html?lang=es#quick' : '/lemonade-stand.html#quick';
-    a.textContent = T('Carry on with your quick look →', 'Seguir con tu vistazo →');
-    var s = D.createElement('span'); s.className = 'st-fine'; s.textContent = T('It’s saved on this device, with your answers. Any reply that came back is there too.', 'Está guardado en este aparato, con tus respuestas. Si llegó una respuesta, también está ahí.');
+    var a = D.createElement('a'); a.className = 'st-btn is-wide'; a.href = '/lemonade-stand.html#quick';
+    a.textContent = 'Carry on with your quick look →';
+    var s = D.createElement('span'); s.className = 'st-fine'; s.textContent = 'It’s saved on this device, with your answers. Any reply that came back is there too.';
     p.appendChild(a); p.appendChild(D.createElement('br')); p.appendChild(s);
     var h = $('#pv-h', box); box.insertBefore(p, h);
   }
@@ -126,24 +89,16 @@
     }
     function draw(focus) {
       var a = answers(), ids = Object.keys(a), all = ids.length === Object.keys(JOBS).length;
-      go.textContent = ids.length ? T('Carry on with your ' + (ids.length === 1 ? 'answer' : ids.length + ' answers'), 'Seguir con ' + (ids.length === 1 ? 'tu respuesta' : 'tus ' + ids.length + ' respuestas')) : T('Do the full quick look (2 minutes)', 'Hacer el vistazo completo (2 minutos)');
+      go.textContent = ids.length ? ('Carry on with your ' + (ids.length === 1 ? 'answer' : ids.length + ' answers')) : 'Do the full quick look (2 minutes)';
       if (!all) { if (shown) { res.hidden = true; shown = false; } return; }
       var me = 0, b = 0, them = 0;
       ids.forEach(function (id) { if (a[id] === 'me') me++; else if (a[id] === 'b') b++; else them++; });
-      var lead = b === 3 ? T('You share all three. A good start: the full list is where small differences show up.', 'Comparten las tres. Buen comienzo: en la lista completa se ven las diferencias pequeñas.')
-        : me === 3 || them === 3 ? T('All three lean one way. Worth a calm look at the full list together.', 'Las tres se inclinan hacia un lado. Vale la pena ver la lista completa juntos, con calma.')
-        : T('A mix, like most homes. The full list shows which jobs you see the same way, and which you don’t.', 'Una mezcla, como en casi todas las casas. La lista completa muestra qué tareas ven igual y cuáles no.');
-      var think = a.planweek === 'b' ? T('Planning the week is shared. It’s thinking work, and it counts as much as the dishes.', 'Planear la semana es compartido. Es trabajo de pensar, y cuenta tanto como los platos.')
-        : T('Planning the week is ' + SAY[a.planweek] + '. It’s thinking work: often the part nobody sees, and it counts.', 'Planear la semana: ' + SAY[a.planweek] + '. Es trabajo de pensar: muchas veces la parte que nadie ve, y cuenta.');
-      if (es()) {
-        res.innerHTML = '<p class="st-res-k">Tu imagen hasta ahora</p><p class="st-res-h">' + esc(lead) + '</p>' +
-          '<ul class="st-res-l">' + ids.map(function (id) { return '<li><b>' + esc(JOBS[id]) + '</b><span>' + esc(SAY[a[id]]) + '</span></li>'; }).join('') + '</ul>' +
-          '<p>' + esc(think) + '</p><p>Tres tareas son un vistazo, no un veredicto. Tu pareja responde en su propio teléfono, y luego los dos ven en qué coinciden, y las pocas tareas que ven distinto.</p>' +
-          '<p class="st-res-row"><button type="button" class="st-quiet-btn" data-st-ask>Pedirle a mi pareja que lo pruebe</button></p>';
-        res.hidden = false; if (!shown && focus) { try { res.focus({ preventScroll: true }); } catch (e) {} } shown = true;
-        try { D.dispatchEvent(new CustomEvent('tol:checker-result')); } catch (e) {}
-        return;
-      }
+      var lead = b === 3 ? 'You share all three. A good start: the full list is where small differences show up.'
+        : me === 3 || them === 3 ? 'All three lean one way. Worth a calm look at the full list together.'
+        : 'A mix, like most homes. The full list shows which jobs you see the same way, and which you don’t.';
+      var think = a.planweek === 'b' ? 'Planning the week is shared. It’s thinking work, and it counts as much as the dishes.'
+        : ('Planning the week is ' + SAY[a.planweek] + '. It’s thinking work: often the part nobody sees, and it counts.');
+
       res.innerHTML =
         '<p class="st-res-k">Your picture so far</p>' +
         '<p class="st-res-h">' + esc(lead) + '</p>' +
@@ -159,8 +114,8 @@
     box.addEventListener('change', function (e) { if (e.target && e.target.type === 'radio') draw(true); });
     box.addEventListener('click', function (e) {
       var ask = e.target.closest && e.target.closest('[data-st-ask]'); if (!ask) return;
-      var text = T('Shall we each try this on our own, then compare? Who does what at home, in 2 minutes. Free, and nothing we type leaves our phones.', '¿Lo probamos cada uno por su lado y luego comparamos? Quién hace qué en casa, en 2 minutos. Gratis, y nada de lo que escribimos sale de nuestros teléfonos.');
-      var url = location.origin + location.pathname + (es() ? '?lang=es' : '');   // the page's own address: no campaign tags passed on
+      var text = 'Shall we each try this on our own, then compare? Who does what at home, in 2 minutes. Free, and nothing we type leaves our phones.';
+      var url = location.origin + location.pathname + ('');   // the page's own address: no campaign tags passed on
       if (W.TOLShare && W.TOLShare.share) { try { W.TOLShare.share({ title: 'Who does what at home?', text: text, url: url }); return; } catch (er) {} }
       if (navigator.share) { navigator.share({ title: 'Who does what at home?', text: text, url: url }).catch(function () {}); return; }
       if (navigator.clipboard) navigator.clipboard.writeText(text + ' ' + url).then(function () { ask.textContent = 'Link copied'; }, function () {});
@@ -348,6 +303,6 @@
       paint();
     });
   }
-  function init() { choresEs(); carryOn(); doneHere(); art(); preview(); checker(); comeBack(); journey(); }
+  function init() { carryOn(); doneHere(); art(); preview(); checker(); comeBack(); journey(); }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', init); else init();
 })();

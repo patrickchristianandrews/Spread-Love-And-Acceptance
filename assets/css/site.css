@@ -2688,23 +2688,16 @@ html.tol-reading :is(.tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-
 .tol-drop .tol-tree > li:first-child > .tol-subm-btn{ border-top:0; }
 /* the At work page on its own keeps Calm & play in the menus (only work mode, when chosen, hides it) */
 html.tol-work-page .tol-nav-item:has(> button:is([data-sec="play"], [data-sec="media"])), html.tol-work-page :is(#tol-sec-play, #tol-sec-media){ display:block !important; }
-/* "En español": a plain link in the top bar, the same size as the section buttons (it steps aside when the bar is full) */
+/* "Read the book" and "Relax and reset": plain links in the top bar, the same size as the section buttons (they step aside when the bar is full) */
 .tol-bar a.tol-es-link{ font:inherit; font-size:1rem; color:var(--ink); padding:.5rem .7rem; border:1px solid transparent; border-radius:var(--radius, 6px); text-decoration:none; white-space:nowrap; line-height:1.2; }
 .tol-bar a.tol-es-link:hover{ border-color:var(--line); background:var(--paper-deep); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
 .tol-bar a.tol-es-link[hidden]{ display:none; }
-.tol-panel-es{ margin:.5rem 0 0; font-size:.95rem; }
-.tol-panel-es a{ font-weight:600; }
 /* "Print this page" beside "Share this guide" */
 .tol-share-row .tol-print-btn{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem 1.05rem; box-sizing:border-box;
   font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; }
 .tol-share-row .tol-print-btn:hover{ background:#F3EEF9; }
 .tol-print-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-/* "¿Prefieres español?": one quiet line under the bar for a browser set to Spanish */
-.tol-es-hint{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .8rem; margin:.4rem auto .6rem; max-width:46rem; padding:.4rem .5rem .4rem .9rem; box-sizing:border-box;
-  border:1px solid var(--line, #d8cfb8); border-radius:10px; font-size:.95rem; background:var(--paper, #fffaf0); color:var(--ink, #2a2530); }
-.tol-es-hint a{ font-weight:600; }
-.tol-es-hint button{ margin-left:auto; font:inherit; font-size:.9rem; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; min-height:36px; min-width:36px; padding:.15rem .7rem; cursor:pointer; }
-@media print{ .tol-es-hint, .tol-print-btn, .tol-panel-es{ display:none !important; } }
+@media print{ .tol-print-btn{ display:none !important; } }
 /* a smaller laptop: the less-used sections fold into Menu one by one (site.js fitBar), and Menu shows so they stay one tap away */
 .tol-bar:is(.is-fold1, .is-fold2, .is-fold3, .is-fold4) .tol-nav-item[data-fold="1"], .tol-bar:is(.is-fold2, .is-fold3, .is-fold4) .tol-nav-item[data-fold="2"],
 .tol-bar:is(.is-fold3, .is-fold4) .tol-nav-item[data-fold="3"], .tol-bar.is-fold4 .tol-nav-item[data-fold]{ display:none; }
@@ -2767,8 +2760,6 @@ main .tol-focus-line.is-page{ margin-left:0; margin-right:0; }
    ===================================================================== */
 :where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible{ outline:2px solid var(--focus, #2B5B8C); outline-offset:2px; }
 .tol-set-k1{ margin-top:1rem; }
-html[lang^="es"] .tol-preset-state::before{ content:"Apagado"; }
-html[lang^="es"] .tol-preset[aria-pressed="true"] .tol-preset-state::before{ content:"Activado \2713"; }
 .tol-set input[type=radio]:disabled + *{ opacity:.6; }
 
 html.tol-contrast{ --paper:#FFFFFF; --paper-deep:#FFFFFF; --ink:#000000; --ink-soft:#000000; --line:#000000;
@@ -2845,7 +2836,7 @@ html.tol-contrast[data-theme="dark"]:not(.tol-nodark){ filter:invert(1) hue-rota
 @media (max-width:640px){
   .tol-bar.is-tightest:not(.is-shortname) .tol-brand span{ font-size:.8rem !important; line-height:1.08; letter-spacing:-.01em; overflow-wrap:normal; word-break:normal; }
 }
-/* "Read the book" in the top bar: a plain link like "En español", a touch tighter so the sections keep their room */
+/* "Read the book" in the top bar: a plain link, a touch tighter so the sections keep their room */
 .tol-bar a.tol-book-link{ padding-left:.45rem; padding-right:.45rem; font-weight:600; }
 .tol-bar a.tol-relax-link{ padding-left:.45rem; padding-right:.45rem; }
 .tol-bar a.tol-relax-link[aria-current="page"]{ text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
@@ -2910,7 +2901,7 @@ small.tol-mi-n{ display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit
 .tol-panel .tol-title small.tol-mi-n{ font-size:.86rem; margin-top:.15rem; }
 .tol-panel .tol-row{ min-height:48px; box-sizing:border-box; }
 .tol-panel .tol-close{ min-height:44px; min-width:64px; }
-.tol-panel-safe a, .tol-panel-safe button, .tol-panel-es a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; }
+.tol-panel-safe a, .tol-panel-safe button{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; }
 .tol-panel-quick{ margin:.7rem 0 .3rem; }
 .tol-panel .tol-panel-quick-h{ margin:0 0 .35rem; font:500 .74rem/1.2 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); }
 .tol-panel-quick ul{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; margin:0; padding:0; list-style:none; }
@@ -3111,9 +3102,6 @@ html.has-garden .tol-bar{ background:var(--paper, #F5EFDE); backdrop-filter:none
 html{ scroll-padding-top:calc(var(--tol-bar-h, 60px) + 1rem); }
 :is(.tol-offer, .tol-invite, .tcol-rules, .tol-install-card, .tp-card-pop, .tol-help-menu) :is(p, li, button, a, strong){ font-family:"Lora", Georgia, serif; }
 :is(.tol-offer, .tol-invite, .tcol-rules, .tol-help, .tol-outline) :is(button, a):focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-/* home16b: "English" on the Spanish page */
-main .tol-en-switch{ margin:0 0 .4rem !important; text-align:right; max-width:none !important; }
-main .tol-en-switch a{ display:inline-flex; align-items:center; min-height:44px; padding:0 .4rem; font-weight:600; }
 /* home16b: on a phone the corner button is just Professor Puddles' round face (its name stays for screen readers) */
 @media (max-width:640px){
   html:not(.tol-quiet) .tol-help-fab{ padding:.2rem; min-width:48px; justify-content:center; }
@@ -3311,16 +3299,12 @@ html.tol-home .tol-outline{ display:none !important; }
   html body .tol-bar .tol-contents-btn svg{ display:none; }
   html body .tol-bar .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 }
-/* longer words (Spanish) or bigger text: Quiet shows just its moon and Ask just its word, so Menu always fits */
+/* bigger text: Quiet shows just its moon and Ask just its word, so Menu always fits */
 @media (max-width:479px){
-  html:is([lang="es"], .tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
-  html:is([lang="es"], .tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-art{ display:none; }
-  html:is([lang="es"], .tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-fab{ padding:.2rem .7rem !important; }
-  html:is(.tol-text-xl, .tol-text-xxl, [lang="es"]) body .tol-bar .tol-contents-btn svg{ display:none; }
-  /* Spanish with bigger text: Ask is Professor Puddles' face alone (its name stays for screen readers) */
-  html[lang="es"]:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-art{ display:inline-flex; }
-  html[lang="es"]:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-t{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; }
-  html[lang="es"]:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-fab{ padding:.2rem !important; min-width:44px !important; }
+  html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-art{ display:none; }
+  html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl, .tol-easy, .tol-font-easy) body .tol-bar .tol-help.is-docked .tol-help-fab{ padding:.2rem .7rem !important; }
+  html:is(.tol-text-xl, .tol-text-xxl) body .tol-bar .tol-contents-btn svg{ display:none; }
   html:is(.tol-text-xl, .tol-text-xxl) body .tol-bar{ gap:.2rem !important; padding-left:10px !important; padding-right:10px !important; }
 }
 

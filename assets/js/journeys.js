@@ -23,13 +23,12 @@
   'use strict';
   var W = typeof window !== 'undefined' ? window : null, D = W && W.document;
   var KEY = 'tol-journeys-v1';
-  var HEAVY = { text: 'If this keeps feeling too heavy, or you feel unsafe, outside help can make a real difference', href: '/outside-help.html' };
 
   // ---------------------------------------------------------------- the journeys
   // step kinds: 'tool' (id: registry id), 'wp' (a workpaper, always optional), 'read' (a page to read; t: its title)
   // f: the address when written (a fallback, and how a merged tool's mode is found); mins: minutes; leave: what you leave with
   var J = [
-    { id: 'steady', who: 'solo', title: 'After a breakup: steady again', len: 'About two weeks, a few minutes a day', heavy: true,
+    { id: 'steady', who: 'solo', title: 'After a breakup: steady again', len: 'About two weeks, a few minutes a day',
       intro: 'For the weeks after a relationship ends, whoever ended it. Gentle, on your own, at your own pace.',
       leave: 'three basics for the hard days, a kinder sentence for yourself, a done list and a short “who I am now” list',
       back: { q: 'A week on: how are the waves? Take today’s reading, then pick your next small step.', id: 'weather', f: '/quick-checks.html#today', go: 'Take today’s reading' },
@@ -77,7 +76,7 @@
         { k: 'tool', id: 'weather', f: '/quick-checks.html#today', mins: 1, do: 'Once you’ve settled a little, check how you are, in four taps.', leave: 'Today’s reading, and what tends to help on days like it' },
         { k: 'wp', id: 'calmkit', f: '/wp-11.html', mins: 10, do: 'On a calm day, write down your early signs and what settles you.', leave: 'Your own calm-down plan for next time' }
       ] },
-    { id: 'family', who: 'solo', title: 'Family conflict: your terms, kindly', len: 'About a week, before a family event or a hard visit', heavy: true,
+    { id: 'family', who: 'solo', title: 'Family conflict: your terms, kindly', len: 'About a week, before a family event or a hard visit',
       intro: 'For grown-up families: siblings, parents, in-laws. Start on your own; bring others in only if they’re willing.',
       leave: 'your terms for the next event, kind ways to say no, and a family plan if others want one',
       back: { q: 'Did your terms hold at the event? Adjust them here.', id: 'terms', f: '/family-rifts.html#terms', go: 'Adjust your terms' },
@@ -88,7 +87,7 @@
         { k: 'tool', id: 'familyplan', f: '/check-ins.html?for=family#card', mins: 15, do: 'If others are willing: fill in a family plan together.', leave: 'A family plan card with a date to look at it again' },
         { k: 'read', t: 'Grown-up children and parents', f: '/grown-up-children.html', mins: 5, do: 'Read about boundaries with a parent you love.', leave: 'Words for visits and advice' }
       ] },
-    { id: 'agree', who: 'two', title: 'Same argument again → one agreement we both keep', len: 'About a week, with a look back after', heavy: true,
+    { id: 'agree', who: 'two', title: 'Same argument again → one agreement we both keep', len: 'About a week, with a look back after',
       intro: 'From “here we go again” to one specific agreement, one calm step at a time. Either of you can start alone.',
       leave: 'where your argument turns, a pause plan, and one written agreement with a date to check it',
       back: { q: 'Did the agreement hold? Adjust it here.', id: 'checkincard', f: '/check-ins.html#card', go: 'Adjust the agreement' },
@@ -217,7 +216,7 @@
       ['Raising a child who isn’t mine', '/foster-and-kinship.html#kinship', 'A grandchild, a foster child or a relative’s child']] }
   ];
 
-  var API = { journeys: J, picks: PICKS, key: KEY, heavy: HEAVY };
+  var API = { journeys: J, picks: PICKS, key: KEY };
   if (typeof module === 'object' && module.exports) module.exports = API;
   if (!W || !D) return;
   if (W.TOLJourneys) return;
@@ -465,7 +464,6 @@
       var ol = mk('ol', { cls: 'js-steps' });
       j.steps.forEach(function (s, i) { ol.appendChild(stepItem(j, s, i, r)); });
       body.appendChild(ol);
-      if (j.heavy) body.appendChild(mk('p', { cls: 'jr-heavy' }, [mk('a', { href: HEAVY.href, text: HEAVY.text + ' →' })]));
       // come back
       var days = j.days || 7, cb = mk('div', { cls: 'jr-back' });
       if (r.b) {

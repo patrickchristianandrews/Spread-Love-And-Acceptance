@@ -79,7 +79,7 @@
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
     'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-save-tip', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
@@ -99,7 +99,7 @@
     ['tol-buddies-v1', 'watch'], ['tol-fb-s2-teaser', 'watch'], ['tol-music-video-v1', 'watch'], ['tol-drift-v1', 'watch'],
     ['tol-br-', 'calm'], ['tol-sound-', 'calm'], ['tol-haptic', 'calm'], ['tol-sense-look', 'calm'], ['tol-mini-', 'calm'],
     ['tol-bonding-picker', 'picks'], ['tol-freq-mode', 'picks'], ['tol-st-simple', 'picks'], ['tol-st-brief', 'picks'],
-    ['tol-journeys-v1', 'journeys']
+    ['tol-journeys-v1', 'journeys'], ['tol-saved', 'saved'], ['tol-lastread', 'saved']
   ];
   var GROUPS = {
     entries: ['*', 'My saved entries'],
@@ -141,6 +141,7 @@
     calm: ['', 'Breathing and calm sounds'],
     picks: ['', 'Tool choices'],
     journeys: ['*', 'Guided journeys'],
+    saved: ['*', 'Your saved places'],
     other: ['', 'Other notes from the site']
   };
   function matches(k, p) { return k === p || (/[-:]$/.test(p) && k.indexOf(p) === 0); }
@@ -797,7 +798,7 @@
   }
 
   // ---------------------------------------------------------------- the app lock screen
-  var LOCK_FREE = /^\/(safety|upset-right-now)\.html$/;
+  var LOCK_FREE = /^\/(upset-right-now)\.html$/;
   var lockEl = null;
   function passkeyReady() {
     var P = W.PublicKeyCredential;
@@ -890,7 +891,7 @@
     var h = HTML.classList, b = D.body;
     var inFrame = true; try { inFrame = W.self !== W.top; } catch (e) {}
     return inFrame || PAGE || !b || b.hasAttribute('data-no-tip') || h.contains('tol-no-helpers') || h.contains('tol-work') ||
-      /^\/(safety|upset-right-now|install|404|offline|privacy-policy)\.html$|^\/legal\//.test(path) || !D.querySelector('main');
+      /^\/(upset-right-now|install|404|offline|privacy-policy)\.html$|^\/legal\//.test(path) || !D.querySelector('main');
   }
   function autoPersist() {
     var st = local(); if (!st || !W.navigator.storage || !W.navigator.storage.persist || isFirefox()) return; // Firefox asks with a pop-up: only from the button
@@ -988,7 +989,7 @@
     if (!hasMeaningful(local())) return;
     if (lv === 'unasked') {
       var due = false; try { due = sess().getItem(ASK_DUE) === '1'; } catch (e) {}
-      if (due && !inFrame && !PAGE && !(D.body && D.body.hasAttribute('data-no-tip')) && !/^\/(safety|upset-right-now)\.html$/.test(path) && promptOk('progress', true)) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
+      if (due && !inFrame && !PAGE && !(D.body && D.body.hasAttribute('data-no-tip')) && !/^\/(upset-right-now)\.html$/.test(path) && promptOk('progress', true)) { if (W.TOLPrompt) W.TOLPrompt.take('progress'); askCard(); }
       return;
     }
     if (quietPage()) return;

@@ -524,7 +524,7 @@ async function makeCover(browser, job, pages) {
   fs.writeFileSync(path.join(SERIES_OUT, job.cover + '.pdf'), pdf);
   // printfix13: the same document information as the books (Chromium's own names would be left in otherwise)
   execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), '--tag', path.join(SERIES_OUT, job.cover + '.pdf'),
-    SERIES_TITLE + ': ' + job.title + ' (cover)', AUTHOR_NAME, 'Full-wrap cover: back, spine, front']);
+    SERIES_TITLE + ': ' + job.title + ' (cover)', AUTHOR_NAME, 'Full-wrap cover: back, spine, front', W + ',' + H]);
   const big = path.join(SERIES_OUT, job.cover + '-front.jpg');
   fs.writeFileSync(big, await shoot(1600 / (job.trim[0] * 96), 'jpg'));
   execFileSync('python3', ['-c', 'import sys\nfrom PIL import Image\nim = Image.open(sys.argv[1]); w = 480; h = round(im.height * w / im.width)\nim.convert("RGB").resize((w, h), Image.LANCZOS).save(sys.argv[2], quality=84, optimize=True, progressive=True)', big, path.join(SERIES_OUT, job.cover + '-front-small.jpg')]);
@@ -562,7 +562,7 @@ async function runSeries(browser, ctx) {
     const outline = (meta.outline || []).map(([t, k, l]) => [t, r.pagemap[k] || 0, l]);
     const jf = path.join(TMP, job.id + '-job.json');
     const out = path.join(SERIES_OUT, job.id + '.pdf');
-    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline }));
+    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline, kdp: true }));
     const f = JSON.parse(execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), jf]).toString().trim().split('\n').pop());
     const pages = f.interior_pages;
     const cov = job.cover ? await makeCover(browser, job, pages) : {};

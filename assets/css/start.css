@@ -30,12 +30,6 @@ main.st a:focus-visible, main.st button:focus-visible, main.st summary:focus-vis
 .read .st-kick span{ display:inline-flex; align-items:center; gap:.25rem; padding:.16rem .6rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace;
   font-size:.72rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase; color:var(--st-green); background:rgba(226,242,230,.92); border:1px solid #C6E0CD; }
 .read .st-kick span::before{ content:"\2713"; font-weight:700; }
-.read .st-kick a.st-es{ display:inline-flex; align-items:center; min-height:28px; padding:.12rem .65rem; border-radius:999px; font-size:.82rem; font-weight:600;
-  color:var(--st-blue); background:#FFFFFF; border:1px solid #BFD2E6; text-decoration:none; }
-.read .st-kick a.st-es::after{ content:"\a0\2192"; }
-/* a 44px tap area around the small chip */
-.read .st-kick a.st-es{ position:relative; }
-.read .st-kick a.st-es::before{ content:""; position:absolute; inset:-8px -4px; }
 .read .st-tool .mcm-full{ display:inline-flex; align-items:center; min-height:44px; }
 
 .read .st-art{ position:absolute; top:clamp(.7rem, .5rem + 1vw, 1.4rem); right:clamp(.7rem, .5rem + 1vw, 1.6rem); width:76px; height:68px; display:grid; place-items:center;

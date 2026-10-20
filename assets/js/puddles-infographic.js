@@ -707,14 +707,11 @@
   function firstLink(links) { var l = arr(links)[0]; return l && l[1] && /^\//.test(l[1]) ? l[1] : ''; }
   function easyWanted(opts) { return (opts && opts.plain) || htmlHas('tol-easy'); }
 
-  // a card that touches fear or control keeps the way to help on the poster itself
-  var SAFETY = /not safe at home|\/safety\.html|scared of (them|him|her)|afraid of (them|him|her)|control(ling)? (you|me)/i;
   // topics about fear, control or safety: no Save / Share / Print, so nothing is left on the device by accident
   var SENSITIVE_ID = /control|safe|abuse|harass|usedagainst|wifiprivacy|phonetrust|fear/i;
   function fromCard(card, kind, opts) {
     var s = fromCard0(card, kind, opts);
     if (s && card && SENSITIVE_ID.test(String(card.id || ''))) s.sensitive = true;
-    if (s && !s.note) { try { if (SAFETY.test(JSON.stringify(card))) s.note = 'If you ever feel afraid or controlled, there’s help at ' + SITE + '/safety'; } catch (e) {} }
     return s;
   }
   function fromCard0(card, kind, opts) {

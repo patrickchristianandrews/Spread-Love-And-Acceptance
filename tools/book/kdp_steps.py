@@ -120,11 +120,9 @@ def paperback_content_rows(it):
     kind = it['kind']
     bw = it.get('bw')
     trim = {'workbook': '8.5 x 11 in (21.59 x 27.94 cm)', 'pocket': '5 x 8 in (12.7 x 20.32 cm)'}.get(kind, '6 x 9 in (15.24 x 22.86 cm)')
-    isbn_key = ('paperback-bw' if bw else 'paperback-colour') if kind == 'workbook' else 'paperback'
     return [
-        ('Print ISBN', '“Use my own ISBN”, then type the ISBN-13 you bought for this book and format: %s [OWNER]. Paste the same number into tools/book/series.json, block “isbn” → “%s” → “%s”, and rebuild, so the copyright page prints it. (A free KDP ISBN also works, but then the imprint shows as “Independently published” and the number can only be used on KDP.)' % (
-            it.get('isbn') or 'not bought yet', 'workbook' if kind == 'workbook' else it['id'], isbn_key)),
-        ('Imprint', '%s (must match exactly what is registered with your ISBN agency, letter for letter, or KDP refuses it).' % LK.IMPRINT),
+        ('Print ISBN', 'Choose “Get a free KDP ISBN” (decided). KDP assigns the number and prints it in the barcode on the back cover. A free KDP ISBN can’t be moved to another publisher, and KDP shows “Independently published” as the imprint. Nothing to paste and nothing to rebuild: no ISBN prints inside the book.'),
+        ('Imprint', 'Nothing to type: KDP sets it to “Independently published”, which is what the title and copyright pages already say.'),
         ('Publication Date', 'Leave empty. KDP fills it in when the book goes live.'),
         ('Print Options: Ink and Paper Type', '%s, white paper' % ('Black & white interior' if bw else 'Standard color interior')),
         ('Print Options: Trim Size', trim),
@@ -175,8 +173,8 @@ def kindle_content_rows(it):
         ('Kindle eBook Cover', '“Upload a cover you already have”, then upload %s (1,600 px wide, JPG). Do not use Cover Creator.' % front),
         ('AI-Generated Content', 'See “The AI questions”. Same honest answers as the paperback.'),
         ('Kindle eBook Preview', 'Click “Launch Previewer”. Check on the phone, tablet and Kindle views: the contents page works, the links open, the pictures show, nothing is cut off. Then “Approve”. You can also open the EPUB in the free Kindle Previewer app on your computer first.'),
-        ('Kindle eBook ISBN (optional)', 'Leave empty. Amazon gives the ebook an ASIN.'),
-        ('Publisher (optional)', LK.PUBLISHER),
+        ('Kindle eBook ISBN (optional)', 'Leave blank. Amazon gives the ebook an ASIN.'),
+        ('Publisher (optional)', 'Leave blank (decided).'),
         ('EPUBCheck result (for you, not KDP)', (ep.get('epubcheck') or {}).get('summary', 'see the README')),
     ]
 
@@ -246,7 +244,7 @@ def build():
         'Field names were checked in October 2026 against KDP’s help pages, through web search, because kdp.amazon.com could not be opened from the build machine. Where a box could not be confirmed, the guide says so. KDP changes its screens from time to time, so if a box is named differently, look for the one that means the same thing.',
     ]
     order = [
-        'Before you start: buy the ISBNs (one for each paperback: Books 1 to 4, the pocket guide and the one workbook edition you publish), paste them into tools/book/series.json, rebuild, and use the new PDFs. The Kindle editions and the box set need no ISBN.',
+        'Before you start: nothing to buy. Each paperback gets a free KDP ISBN on its Paperback Content screen, and the Kindle editions and the box set need no ISBN.',
         'Publish the paperbacks first, one at a time, and order a proof of each. Publish only after the proof is right.',
         'Then the Kindle editions. Use exactly the same title, subtitle and author, so Amazon links each Kindle edition to its paperback.',
         'The box set last, once the four books and the pocket guide are live.',
@@ -271,7 +269,7 @@ def build():
         if has_kindle:
             facts.append('Kindle: %s.epub with %s as the cover, %s.' % (it['id'], 'cover-%s-front.jpg' % it['id'], money(it.get('kindle_price_usd') or LK.KINDLE_PRICE)))
         if it['kind'] == 'workbook' and not it.get('bw'):
-            facts.append('Publish this colour edition ONLY if you chose it instead of the black-and-white one. The screens are the same as the black-and-white workbook above, except: Ink and Paper Type “Standard color interior, white paper”; manuscript workbook.pdf; cover cover-workbook.pdf; list price $14.99 (printing $4.14, you keep $4.85). It needs its own ISBN. [OWNER: the recommendation is the black-and-white edition]')
+            facts.append('Publish this colour edition ONLY if you chose it instead of the black-and-white one. The screens are the same as the black-and-white workbook above, except: Ink and Paper Type “Standard color interior, white paper”; manuscript workbook.pdf; cover cover-workbook.pdf; list price $14.99 (printing $4.14, you keep $4.85). It gets its own free KDP ISBN. [OWNER: the recommendation is the black-and-white edition]')
         body_md += ['\n\n'.join(facts)]
         body_h.append('<section class="item"><h2 id="i%d">%s</h2>%s' % (len(toc), esc(sec), ''.join('<p class="fact">%s</p>' % bold(esc(f)) for f in facts)))
         if it['kind'] == 'workbook' and not it.get('bw'):
