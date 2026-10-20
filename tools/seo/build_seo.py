@@ -329,7 +329,6 @@ SEARCH.update({
  'calming-supplements.html': ('Calming Supplements and Herbs: What the Research Says', 'Chamomile, lavender, magnesium, ashwagandha, kava, St John’s wort, melatonin, CBD and more: what the research shows, side effects, interactions and when to get help. Not medical advice.'),
  'someone-sent-you-this.html': ('Someone Sent You This Link? What This Free Site Is, and What’s Here', 'Someone sent you a link to Spread Love & Acceptance? What it is in three lines, what you’ll find here, and no pressure: nothing you type leaves your device.'),
  'examples.html': ('Examples: Small Changes in Different Kinds of Relationships', 'Made-up examples built from common patterns: a couple, housemates, siblings, co-parents, friends, co-founders, a poly home, a kinship carer and someone on their own.'),
- 'outside-help.html': ('Help Beyond This Site: Counsellors, Helplines, Groups and Books', 'A short, trusted list of outside help: finding a counsellor in the US and UK, free helplines, support groups for families and carers, and a few well-known books.'),
  'week-0.html': ('Week 0: A Gentle Start to the Six Weeks', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, why missing a week is fine, and one small thing to do now.'),
  'research.html': ('The Research Behind This Site, in Plain Words', 'The studies, books and reviews behind this free self-help site: what each found, in plain words, how strong the evidence is, and a link to read more.'),
  'start-in-10-minutes.html': ('Start in 10 Minutes', 'Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern or each say one thing, then pick one small change. Private, no sign-up.'),
@@ -346,15 +345,14 @@ SEARCH.update({
  'coming-home.html': ('Coming Home After Time Apart: Deployment and Work Away', 'Free help for the first weeks after a deployment, work away or a hospital stay: a handover week, finding your place again, the kids, and where to get support.'),
  'different-hours.html': ('Different Hours: Night Shifts, Shift Work and Time Together', 'Free help when you work different hours: night shifts and recovery sleep count as work, protected sleep, a shift-change check-in and one fixed together time.'),
  'two-faiths.html': ('Two Faiths or Cultures, One Family', 'Fair help for interfaith and mixed-culture families: decide names, rituals and upbringing together, tell both families, and plan festivals on one calendar.'),
- 'coming-out.html': ('Coming Out as an Adult: Family, Work and Partners', 'Free help for coming out as an adult: your timing, safety and money first, words for parents, if they cut you off, at work, with a partner, and support.'),
+ 'coming-out.html': ('Coming Out as an Adult: Family, Work and Partners', 'Free help for coming out as an adult: your timing, money first, words for parents, if they cut you off, at work, with a partner, and support.'),
  'on-my-own.html': ('On My Own After a Breakup or Divorce', 'Free, gentle help after a breakup or divorce: the first weeks, loneliness, money, rebuilding a life, and part-time parenting when the kids are with you.'),
- 'for-counselors.html': ('For Counselors, Coaches and Group Leaders', 'For therapists, counselors, coaches and group leaders: what this free self-help site is and isn’t, its safety screen, evidence status, and homework tools.'),
+ 'for-counselors.html': ('For Counselors, Coaches and Group Leaders', 'For therapists, counselors, coaches and group leaders: what this free self-help site is and isn’t, evidence status, and homework tools.'),
  'sharing-a-room.html': ('Sharing a Room: Dorm and Flat Roommate Agreement', 'Free, calm help for sharing a dorm room or flat: overnight guests, quiet hours, cleaning, borrowing, talking to your RA or warden, and a room agreement to fill in.'),
  'when-one-is-ill.html': ('When One of You Is Ill or Disabled: Share by Energy', 'Free help for couples when one partner lives with a chronic illness or disability: share the load by energy, not hours, plan for bad days, and find support.'),
  'family-rifts.html': ('Adult Siblings and Family Rifts: Reaching Out, or Not Yet', 'Free, fair help for family rifts between grown siblings: after a loss, a will or years of silence. Short first messages, and kind ways to say “not yet”.'),
  'empty-nest.html': ('Empty Nest: When the House Is Quiet Between You', 'Free help in plain English for couples whose children have grown and left home: small daily habits, care shown by doing, and questions to ask each other.'),
  'caregivers.html': ('Caring for Someone You Love: Help for Caregivers', 'Free, practical help for caregivers: when the person can’t share the load back, how to ask family for specific help, and where to find respite and support.'),
- 'en-espanol.html': ('Ayuda en español: familia, pareja y tareas de la casa', 'Ayuda gratis en español: hijos que pelean, enojo, cuidar a mamá o papá cuando tus hermanos no ayudan, familias ensambladas y si no estás a salvo.'),
  'work.html': ('At Work: Fair Workloads and Kind Messages for Teams', 'Free, plain tools for teams: one owner per job, messages that land, appreciation that fits, and a 45-minute team session. No sign-up, no cartoons.'),
  'grief.html': ('Grief and Later Life: Loss, Family and a New Chapter', 'Gentle, free help after a loss: grieving differently in one family, reconnecting with grown children, starting a new chapter, and where to get support.'),
  'retired-together.html': ('Retired and Both Home Now: Sharing the House Again', 'Free, practical help when retirement puts you both at home all day: territory and routines, re-dividing whole jobs, handing over kindly, and finding purpose.'),
@@ -438,7 +436,7 @@ SEARCH.update({
  'wiring-card.html': ('Wiring Card: A One-Page “How I Communicate” Card', 'Make a free one-page card on how you take in words, what your silence means and how a request lands best, to share at home or at work. No sign-up.'),
  'refusals.html': ('How to Say No Kindly: Polite Refusal Scripts', 'Pick a situation and a tone, and get three kind, copy-ready ways to say no: “I’m full today”, “Not me, but let’s find who” or “Yes, just later”. Free.'),
  'wavelength.html': ('Wavelength: A 2-Minute Quiz on How You Talk and Listen', 'A free two-minute quiz on how you like to talk and listen. Get your four-letter Wave Code, compare it with someone and make a card for work. Free.'),
- 'upset-right-now.html': ('Upset Right Now? How to Calm Down Together, Fast', 'A five-minute page for upset people: a pause line with a return time, a one-minute breathing pacer, and steps for a parent about to yell. Also in Spanish.'),
+ 'upset-right-now.html': ('Upset Right Now? How to Calm Down Together, Fast', 'A five-minute page for upset people: a pause line with a return time, a one-minute breathing pacer, and steps for a parent about to yell.'),
  # who it is for
  'co-parenting.html': ('Co-Parenting After Separation: Calmer Handoffs and Texts', 'Calmer co-parenting after a separation: an exchange-day script, keeping kids out of the middle, a tone check for texts, and a parallel-parenting route.'),
  'parents.html': ('Parenting Help: Big Feelings, Sibling Fights, Calm Kids', 'Free, gentle help for parents: name big feelings, calm sibling fights, simple calm-down routines for kids, talking with teens, and a cartoon to watch.'),
@@ -456,7 +454,6 @@ SEARCH.update({
  'foster-and-kinship.html': ('Raising Someone Else’s Child: Grandparents and Foster Carers', 'Free help for grandparents and relatives raising a child (kinship care), foster carers and adoptive parents: behaviour, house rules and contact visits.'),
  'adhd-kids.html': ('When a Child Has ADHD: For Parents and Grandparents', 'Plain, free help when a child has ADHD: it is real, not bad behaviour. Words for fidgeting and forgetting, one instruction at a time, routines and screens.'),
  'grown-up-children.html': ('For Grown-Up Children: Boundaries With a Parent You Love', 'Free, kind help for grown-up children: ask a parent to text before visiting, handle unasked-for advice, the new baby, in-laws and holidays.'),
- 'en-espanol.html': ('Ayuda en español: familia, pareja y tareas de la casa', 'Ayuda gratis en español: hijos que pelean, enojo, cuidar a mamá o papá cuando tus hermanos no ayudan, familias ensambladas y si no estás a salvo.'),
  # calm, stress and the body
  'nervous-system.html': ('How to Calm Your Nervous System, in Plain Words', 'How your nervous system works: the stress response, fight, flight and freeze, the window of tolerance, the vagus nerve, and what helps you settle.'),
  'calming-supplements.html': ('Calming Supplements for Anxiety: What Research Says', 'Supplements, herbs, foods and practices for anxiety, stress, sleep and mood, graded honestly, with side effects, interactions and when to get help.'),
@@ -673,7 +670,7 @@ TOOLS = (r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|l
 # Pages that list other pages (marked as a collection, with the site search on explore.html)
 HUBS = r'^(book/index\.html|tools\.html|explore\.html|by-relationship\.html|contents\.html|pause-and-play\.html)$'
 GAMES = r'^(coin-pusher|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
-ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|outside-help|research\.html|en-espanol)'
+ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|research\.html)'
 
 
 def rel_url(path):
@@ -926,7 +923,7 @@ LAUNCH_BOOT = ['<style id="lp-boot-css">html.lp-boot::before{content:"";position
                'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style>',
                '<script>(function(){try{var d=document.documentElement,m=window.matchMedia;'
                'if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")'
-               '||/^\\/(safety|upset-right-now)\\.html$/.test(location.pathname))return;'
+               '||/^\\/upset-right-now\\.html$/.test(location.pathname))return;'
                'var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");'
                'sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");'
                'l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";'
@@ -940,7 +937,7 @@ CSP_META = 'http-equiv="Content-Security-Policy"'
 # before it paints. Not on the two pages the lock never covers, and not on redirect stubs. Written by lock_boot(),
 # between lock:start and lock:end, and idempotent.
 LOCK_BOOT = '<script src="/assets/js/lock-boot.js"></script>'
-LOCK_FREE = ('safety.html', 'upset-right-now.html')
+LOCK_FREE = ('upset-right-now.html',)
 
 
 def lock_boot(path):
@@ -971,7 +968,7 @@ def process(path, report):
     s = re.sub(r'\n?[ \t]*<!-- seo:start -->.*?<!-- seo:end -->[ \t]*', '', s, flags=re.S)
     # the installed app's launch cover goes near the top of <head> (just after the viewport line), so it starts at once
     s = re.sub(r'\n?<!-- launch:start -->.*?<!-- launch:end -->', '', s, flags=re.S)
-    # (never on the two safety pages: the cover doesn't show there anyway, and those pages are left as they are)
+    # (never on the upset-right-now page: the cover doesn't show there anyway, and that page is left as it is)
     if 'id="lp-boot-css"' not in s[:s.find('</head>')] and CSP_META not in s[:s.find('</head>')] and path not in LOCK_FREE:
         # (after the app-lock line when there is one, so lock_boot() below finds it already in place)
         mv = (re.search(r'<!-- lock:end -->', s[:s.find('</head>')]) or re.search(r'<meta name="viewport"[^>]*>', s[:s.find('</head>')])
@@ -1018,7 +1015,7 @@ def process(path, report):
     body = s[s.find('</head>'):]
     has = lambda needle: needle in head
     og_type = 'article' if path != 'index.html' and re.search(ARTICLES, path) else 'website'
-    # a page in another language (en-espanol.html is lang="es") says so in its tags
+    # a page in another language says so in its tags
     m_lang = re.search(r'<html[^>]*\slang="([a-z]{2})', s); lang = m_lang.group(1) if m_lang else 'en'
     lines = ['<!-- seo:start -->',
              '<link rel="canonical" href="' + attr(url) + '">',
@@ -1145,10 +1142,10 @@ GROUPS = [
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
     ('Frequency Buddies, a cartoon about feelings for all ages', r'^frequency-buddies'),
     ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
-    ('Help for your situation', r'^(by-relationship|examples|for-teachers|groups\.html|infographic|ladder|refusals|upset-right-now|safety|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
+    ('Help for your situation', r'^(by-relationship|examples|for-teachers|groups\.html|infographic|ladder|refusals|upset-right-now|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
     ('The book, Part Three: Understanding people', r'^book/understanding-'),
     ('The book', r'^book/'),
-    ('The Professor’s Library and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|outside-help|polymath|frequency-framework)'),
+    ('The Professor’s Library and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|polymath|frequency-framework)'),
     ('About this site', r'^(install|roadmap|telemetry|on-this-device|surprise|keepsakes|brand|legal/|architecture/)'),
 ]
 
@@ -1193,6 +1190,17 @@ def write_llms(report):
     open(os.path.join(ROOT, 'llms-full.txt'), 'w', encoding='utf-8').write('\n'.join(full))
 
 
+def guard():
+    """The removed content (safety lines, outside resources, the Spanish layer) never comes back through the SEO
+    outputs: tools/checks/no-removed-content.js checks every title, description and URL written here. Stops on any hit."""
+    import subprocess, sys
+    outs = [os.path.join(ROOT, n) for n in ('sitemap.xml', 'llms.txt', 'llms-full.txt', 'robots.txt')]
+    r = subprocess.run(['node', os.path.join(ROOT, 'tools', 'checks', 'no-removed-content.js')] + outs, capture_output=True, text=True)
+    if r.returncode != 0:
+        sys.stdout.write(r.stdout + r.stderr)
+        sys.exit('build_seo: removed content found in the SEO outputs (see above).')
+
+
 def main():
     report = []
     locks = 0
@@ -1202,6 +1210,7 @@ def main():
     open(os.path.join(ROOT, 'robots.txt'), 'w', encoding='utf-8').write(ROBOTS)
     write_sitemap(report)
     write_llms(report)
+    guard()
     print('pages tagged: %d; sitemap: %d urls; robots.txt, llms.txt and llms-full.txt written; app-lock head line changed on %d pages' % (len(report), len(report), locks))
 
 

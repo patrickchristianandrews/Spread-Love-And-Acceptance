@@ -1877,7 +1877,6 @@
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
  (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">' + 'Every part of this program grows from the same few roots, seen across thirteen fields.' + ' <a href="/polymath.html"' + hl + '>' + 'The polymath way' + ' &rarr;</a></p>') +
       '<nav class="tol-foot-guides" aria-label="' + 'Guides' + '">' +
-        (es ? '<span class="tol-foot-guides-k">Guías en inglés:</span>' : '') +
         '<a href="/invisible-labor-mental-load.html"' + hl + '>' + 'The mental load' + '</a>' +
         '<a href="/chore-chart-for-couples.html"' + hl + '>' + 'Fair chore chart' + '</a>' +
         '<a href="/how-to-stop-fighting-with-your-partner.html"' + hl + '>' + 'How to stop fighting' + '</a>' +
@@ -1885,7 +1884,6 @@
         '<a href="/communication-style-quiz.html"' + hl + '>' + 'Communication style quiz' + '</a>' +
         '<a href="/frequency-buddies.html" data-work-hide' + hl + '>' + 'Cartoon for all ages' + '</a>' +
       '</nav>' +
-      (es ? '<p class="tol-foot-es-note">Estos enlaces llevan a páginas en inglés:</p>' : '') +
       '<span class="tol-foot-links">' +
         '<a href="/explore.html"' + hl + '>' + 'Everything on this site' + '</a>' +
         '<a href="/contents.html"' + hl + '>' + 'All pages' + '</a>' +
