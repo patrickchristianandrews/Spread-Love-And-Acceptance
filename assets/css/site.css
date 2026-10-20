@@ -197,9 +197,6 @@ div.tol-gate p{ max-width:60ch; }
 .tol-panel{ width:min(38rem, 100vw); max-width:100vw; box-sizing:border-box; padding-top:0; }
 .tol-panel-head{ position:sticky; top:0; z-index:1; background:var(--paper); padding:1.1rem 0 .75rem; margin:0; border-bottom:1px solid var(--line); }
 .tol-panel-intro{ margin:.9rem 0 0; font-size:.95rem; color:var(--ink-soft); line-height:1.55; }
-.tol-panel-safe{ margin:.6rem 0 0; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.4rem .9rem; align-items:center; }
-.tol-panel-safe button{ font:inherit; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; padding:.2rem .7rem; min-height:32px; cursor:pointer; }
-@media print{ .tol-panel-safe{ display:none !important; } }
 .tol-panel-tools{ margin:.6rem 0 0; display:flex; flex-wrap:wrap; gap:.5rem; }
 .tol-panel-tools a{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; box-sizing:border-box; padding:.25rem .85rem; border:1px solid currentColor; border-radius:999px; font-size:.92rem; text-decoration:none; color:inherit; }
 .tol-panel-tools a:hover, .tol-panel-tools a:focus-visible{ background:rgba(0,0,0,.05); }
@@ -3202,7 +3199,7 @@ html:not(.tol-own-look) body :is(
   .tol-btn, main .go, main a.go, .mcm-go, .tol-rm-b, .hm-btn, .tol-ctx-done, .lp-btn, .is-main, a.tol-button, main .st-btn,
   main .ghost, main a.ghost, .tol-share-btn, .tol-print-btn, .st-quiet-btn, .tol-steps-toggle button, .tol-tip-next, .tol-read-next,
   .tol-pud-card-go, .hm-ex, .pp-quick-btn, .sw-showmore, .tol-listen button, .dh-btn, .dh-pick, .is-quiet, .tsk-ans, .tfs-act,
-  .tcol button:not([class*="chip"]), .tres button, .tol-quiet-extras button, .ask-exit button, [data-tol-exit],
+  .tcol button:not([class*="chip"]), .tres button, .tol-quiet-extras button,
   .linkbtn, .lq-btn-link, .tol-ctx-skip, .tol-ctx-add, .tol-ctx-clear, .add-row, .tol-rm-b.is-soft, .tol-close, .cb-nx-done
 ){
   display:inline-flex; align-items:center; justify-content:center; gap:.45rem;
