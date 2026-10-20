@@ -2773,7 +2773,7 @@ function run(){
   if(NOT_PARENT.test(text)){ const pw = (text.match(/\bnot my (?:real )?(mum|mom|mother|dad|father)\b/i)||["","Mum"])[1].toLowerCase(); const who = pw==="mom" ? "Mom" : /dad|father/.test(pw) ? "Dad" : "Mum";
     vtop+='<p class="small st-grief"><b>Often this is grief talking.</b> '+(/\bstop\b|can.t tell me/i.test(text) ? 'You can still ask for what you need: &ldquo;I miss '+who+', and I&rsquo;d like to be treated more like my age.&rdquo;' : 'Try: &ldquo;I&rsquo;m not angry at you. I&rsquo;m just missing '+who+' today.&rdquo;')+' Living with grandparents, a carer or other family? The <a href="/teens.html">teen page</a> has more.</p>'; }
   if(relId==="friend" && (found.jab || ONLY_ONE.test(text))) vtop+='<p class="small"><b>It hurts to feel like the only one reaching out.</b> Saying you miss them, and asking for one small thing, usually lands better than keeping score.</p>';
-  if(an.control && an.control.kind==="fear") vtop+='<p class="vhelp"><b>What you&rsquo;ve written says someone feels afraid or controlled.</b> That matters much more than the wording, and a softer version can&rsquo;t fix it.</p>'+SAFETY_GOT;
+  if(an.control && an.control.kind==="fear") vtop+='<p class="vhelp"><b>What you&rsquo;ve written says someone feels afraid or controlled.</b> That matters much more than the wording, and a softer version can&rsquo;t fix it.</p>';
   else if(an.control) vtop+=CONTROL_SELF;
   if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
   // Easy reading: the words to send come straight after the plain line, the simpler English first
@@ -2895,17 +2895,16 @@ function run(){
 }
 
 /* ============================================================
-   A THREAT: not a tone problem. Said plainly, in both modes, with safety help.
+   A THREAT: not a tone problem. Said plainly, in both modes.
    No rewrite keeps the threat, no "looks okay", and no garden reward for it.
    ============================================================ */
-/* nohot18 (the owner's decision): no helpline numbers or names. Where someone is in danger, might hurt themselves or
-   someone else, or is being hurt, one line only (SAFE_ONE) */
-const SAFE_ONE = 'If you&rsquo;re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.';
-const SAFETY_SELF = '<p class="vhelp"><b>If you&rsquo;re worried about your own anger,</b> that&rsquo;s a brave thing to notice. '+SAFE_ONE+'</p>';
+/* The owner's decision (purge19): no safety resources, numbers, services or links. Where someone may hurt themselves,
+   one short neutral line (SAFE_ONE) that adds nothing else */
+const SAFE_ONE = 'That sounds really hard. This tool is a small guide to everyday messages, and it can&rsquo;t help with this one.';
+const SAFETY_SELF = '<p class="vhelp"><b>If you&rsquo;re worried about your own anger,</b> that&rsquo;s a brave thing to notice.</p>';
 const CRISIS_SELF = '<p class="vhelp">'+SAFE_ONE+'</p>';
 const CONTROL_GOT = '<p class="vhelp"><b>This may be about control, not communication.</b> Checking up on you, cutting you off from people, ultimatums or putting you down can be signs of control. That isn&rsquo;t yours to fix with better wording, and you don&rsquo;t have to answer it.</p>';
 const CONTROL_SELF = '<p class="vhelp"><b>This may be about control, not communication.</b> Asking where someone is, who they were with, to see their phone, telling them who they can see, or &ldquo;don&rsquo;t bother coming home&rdquo; can feel like control, even when it comes from worry or hurt. Try saying the worry itself.</p>';
-const SAFETY_GOT = '<p class="vhelp"><b>If it frightens you, you deserve support.</b> '+SAFE_ONE+' If it&rsquo;s safe, save a copy with the date, somewhere the other person can&rsquo;t see.</p>';
 /* The garden level ("you tried a tool") is for calm moments. Never for a threat or control (no reward at all);
    at work, or on a tense family or money message, progress is still kept quietly, with no level line */
 function rewardGuard(){
@@ -2924,13 +2923,12 @@ function noReward(R){
   rewardGuard();
 }
 function quietGarden(R, on){ if(on || isWork()) R.setAttribute("data-quiet-garden",""); else R.removeAttribute("data-quiet-garden"); rewardGuard(); }
-/* "I want to kill myself" in your own message: not a tone question. Help first, and no rewrite */
+/* "I want to kill myself" in your own message: not a tone question. A short neutral line, and no rewrite */
 function runCrisis(text){
   lastChanged = false;
-  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">You deserve support</h2>';
-  h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">You deserve support right now.</p>';
-  h += CRISIS_SELF;
-  h += '<p>If you want to tell someone close to you, your words are fine as they are. You could add one line: &ldquo;I&rsquo;m not okay, and I need you to stay with me or call me.&rdquo;</p>';
+  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">That sounds really hard</h2>';
+  h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">That sounds really hard.</p>';
+  h += '<p>This tool is a small guide to everyday messages, and it can&rsquo;t help with this one.</p>';
   h += '<p class="small">If someone sent this to you, choose &ldquo;A message I got&rdquo; above.</p></div>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R);
   R.focus({preventScroll:true});
@@ -2949,7 +2947,7 @@ function runDanger(text, an, B){
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
   if(pause) h += '<p class="vk" style="margin-top:12px">Or take a break first</p><p class="vbest">'+phHTML(pause)+'</p>';
   h += '<p class="vk" style="margin-top:12px">Your words, with the threat marked</p><p class="vbest marked">'+markup(an.text, an.spans)+'</p>';
-  h += SAFETY_SELF;   // (one safety line: it covers hurting yourself too)
+  h += SAFETY_SELF;
   h += '<p class="small">If someone sent this to you, choose &ldquo;A message I got&rdquo; above.</p></div>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R); paintSimple();
   const cb=$("#copyBest"); if(cb) cb.addEventListener("click",()=>{ (navigator.clipboard?navigator.clipboard.writeText(need):Promise.reject()).then(()=>{cb.textContent="Copied";},()=>{cb.textContent="Select and copy manually";}); });
@@ -3089,7 +3087,6 @@ function runReceived(text){
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
   if(rv.crossed && !rv.danger) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
-    + (rv.threat ? '<p><b>Save a copy, with the date.</b> A screenshot is fine. Keep it somewhere the other person can&rsquo;t see. You don&rsquo;t have to answer it.</p>' : '')
     + '<p style="margin-bottom:0">How are you doing right now? If it hurt to read, that makes sense. Look after yourself first. The reply can wait.</p></div>';
   h += '<div class="verdict"><p class="vk">Ways to answer calmly</p>';
   h += '<div class="simple-wrap"><button type="button" class="linkbtn st-simple-btn" aria-expanded="'+simpleOn+'">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button></div>';
@@ -3298,7 +3295,6 @@ function ctxExtra(v, an, mode){
   let h = "";
   const r = v && v.context;
   if(v && v.ctxSafety==="crisis") h += CRISIS_SELF;
-  else if(v && (v.ctxSafety==="fear" || v.ctxSafety==="threat")) h += SAFETY_GOT;
   if(v && v.careNote) h += '<p class="small st-care"><b>'+esc(v.careNote)+'</b></p>';
   // threat-shaped, or hard to read: "Add context" is the obvious next step (who they are, whether you joke like this)
   const askCtx = v && v.addContext && !(v.context && v.context.flags && v.context.flags.teaseRoom);

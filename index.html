@@ -18,280 +18,16 @@
 <meta name="description" content="Free self-help for calmer, fairer relationships: share chores and the mental load, check how a text lands, calm down and understand yourself. No sign-up.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<!-- The homepage's tools (state check, Lemonade Stand, access columns, sign-up form)
-     still take their styling from the original stylesheet. -->
-<link rel="stylesheet" href="/assets/css/book-layout.css">
-<style>
-  /* Switch off the original stylesheet's page-wide rules for menus, footers and
-     headings, so they don't leak into the site navigation that site.js adds.
-     This block sits BEFORE site.css on purpose: site.css still overrides it. */
-  nav ol, nav ul{ list-style: revert; margin: revert; padding: revert; border-top: revert; counter-reset: none; }
-  nav li{ border-bottom: revert; counter-increment: none; }
-  nav a{ display: revert; gap: revert; align-items: revert; padding: revert; text-decoration: revert; color: revert; font-size: revert; transition: revert; }
-  nav a::before{ content: none; }
-  nav a:hover{ color: revert; padding-left: revert; }
-  nav a.active{ color: revert; font-weight: revert; }
-  main{ padding: revert; max-width: revert; }
-  footer{ max-width: revert; margin: revert; padding: revert; font-family: revert; font-size: revert; color: revert; }
-  h2{ font-size: revert; max-width: revert; }
-</style>
-
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<!-- home18: a calm front door. This visit's one prompt is taken here, so no pop-up, app line or invitation shows on arrival
+     (site.js's one-prompt rule), the same as the /start/ pages. -->
+<script>try { if (!sessionStorage.getItem('tol-prompt')) sessionStorage.setItem('tol-prompt', 'start'); } catch (e) {}</script>
 <link rel="stylesheet" href="/assets/css/site.css">
-<link rel="stylesheet" href="/assets/css/reading.css">
-<link rel="stylesheet" href="/assets/css/tol-index.css">
-<link rel="stylesheet" href="/assets/css/home.css">
-<style>
-  /* First screen: what this is, who it's for, and where to start */
-  .read .hh{ position:relative; isolation:isolate; overflow:hidden; margin:0 0 1.8rem; padding:clamp(1.25rem, .8rem + 2.4vw, 2.3rem); text-align:left;
-    border-radius:28px; background:rgba(255,251,244,.9); border:1px solid rgba(255,255,255,.85);
-    box-shadow:0 24px 60px -28px rgba(78,63,107,.45), 0 2px 8px rgba(78,63,107,.08); }
-  @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
-    .read .hh{ background:rgba(255,251,244,.8); -webkit-backdrop-filter:blur(16px) saturate(1.15); backdrop-filter:blur(16px) saturate(1.15); }
-  }
-  /* Two soft glows in the corners */
-  .read .hh::before, .read .hh::after{ content:""; position:absolute; z-index:-1; border-radius:50%; pointer-events:none; }
-  .read .hh::before{ top:-140px; right:-120px; width:340px; height:340px; background:radial-gradient(closest-side, rgba(244,170,190,.55), rgba(244,170,190,0)); }
-  .read .hh::after{ bottom:-160px; left:-140px; width:380px; height:380px; background:radial-gradient(closest-side, rgba(190,168,232,.5), rgba(190,168,232,0)); }
-  .read .hh p, .read .hh h1, .read .hh ul, .read .hh li{ max-width:none; }
-  .read .hh-brand{ display:flex; align-items:center; gap:.4rem; margin:0 0 .6rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.02rem; color:#7A5620; }
-  .read .hh-heart{ display:inline-grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%; font-style:normal; font-size:.95rem; color:#A23E63; background:#FCE4EA; }
-  .read .hh-kick{ display:flex; flex-wrap:wrap; gap:.35rem; margin:0 0 1rem; }
-  .read .hh-kick span{ display:inline-flex; align-items:center; gap:.3rem; padding:.2rem .65rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase;
-    color:#2F5E3E; background:rgba(226,242,230,.9); border:1px solid #C6E0CD; }
-  .read .hh-kick span::before{ content:"\2713"; font-weight:700; }
-  .read .hh-kick a.hh-es{ display:inline-flex; align-items:center; min-height:24px; box-sizing:border-box; padding:.15rem .7rem; border-radius:999px; font-size:.84rem; font-weight:600; line-height:1.2;
-    color:#2B5B8C; background:#FFFFFF; border:1px solid #BFD2E6; text-decoration:none; }
-  .read .hh-kick a.hh-es::after{ content:"\a0\2192"; }
-  .read .hh-kick a.hh-es:hover{ border-color:#2B5B8C; }
-  .read .hh-kick a.hh-es:focus-visible, .read .hh-for a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  /* the walking pups pass behind this button, so give it a solid face */
-  .read #start-where .sw-showmore{ background:#FFFBF4; }
-  .read #start-where .sw-showmore:hover{ background:var(--paper-deep, #ECE2C4); }
-  .read .hh-h1{ margin:0 0 .8rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(2rem, 1.2rem + 3vw, 2.75rem); line-height:1.1; letter-spacing:-.02em; color:var(--ink, #2B2620); text-wrap:balance; }
-  .read .hh-accent{ display:inline; font-style:italic; font-weight:500; color:#8A3F72;
-    background:linear-gradient(100deg, #B0405F 0%, #7A4A92 55%, #2B5B8C 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-  .read .hh-nw{ white-space:nowrap; }
-  @media (forced-colors: active){ .read .hh-accent{ background:none; -webkit-text-fill-color:currentColor; } }
-  .read .hh-lede{ margin:0 0 1.3rem; max-width:40em; font-size:1.14rem; line-height:1.6; color:#3F382E; text-wrap:pretty; }
-  /* the first screen's one-line "what this is", then three plain ways in (one per reason people come) */
-  .read .hh .hh-lede{ font-size:1.03rem; line-height:1.55; }
-  @media (min-width:641px){ .read .hh-brand{ display:none; } }
-  .read .hh .hh-go li{ display:flex; flex-direction:column; }
-  .read .hh .hh-go li[hidden]{ display:none; }
-  .read .hh .hh-go li > a.hh-card{ flex:1 1 auto; }
-  /* Just me / With someone (kept in tol-mode-v1; come-back.js reads it too) */
-  .read .hh-mode{ margin:0 0 .9rem; }
-  .read .hh-mode-opts{ display:flex; flex-wrap:wrap; gap:.45rem; }
-  .read .hh-mode-opts button{ flex:0 1 auto; min-height:44px; padding:.35rem 1.1rem; border-radius:999px; cursor:pointer; font:600 1rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
-  .read .hh-mode-opts button:hover{ border-color:#9A80C8; }
-  .read .hh-mode-opts button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
-  .read .hh-mode-opts button[aria-pressed="true"]::before{ content:"\2713\a0"; }
-  .read .hh-mode-opts button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  .read .hh-start-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.07em; text-transform:uppercase; opacity:.9; }
-  .read .hh-start-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.35rem, 1.1rem + 1vw, 1.6rem); line-height:1.15; }
-  .read .hh-start-t::after{ content:"\a0\2192"; font-family:"Lora", Georgia, serif; font-weight:400; }
-  .read .hh-start-n{ font-size:.95rem; line-height:1.4; }
-  /* the two crisis routes stay in sight */
-  .read .hh .hh-help{ margin:-.2rem 0 1rem; font-size:.9rem; line-height:1.8; color:var(--ink-soft, #5A5346); }
-  .read .hh-help a{ font-weight:600; color:#2B5B8C; text-decoration:underline; text-decoration-color:#BFD2E6; text-underline-offset:3px; white-space:nowrap; }
-  .read .hh-help a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:4px; }
-  .read .hh-go{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.8rem; margin:0 0 1rem; padding:0; list-style:none; }
-  .read .hh-go.is-two{ grid-template-columns:repeat(2, 1fr); }
-  .read .hh .hh-go li{ margin:0; padding:0; width:auto; }
-  .read .hh-go li::before, .read .hh-more li::before{ content:none; }
-  .read a.hh-card{ display:flex; flex-direction:column; align-items:flex-start; gap:.55rem; height:100%; box-sizing:border-box; min-height:64px; padding:1rem 1rem 1.05rem;
-    border-radius:20px; border:1px solid #E6DAF3; background:#FFFFFF; color:var(--ink, #2B2620); text-decoration:none;
-    box-shadow:0 10px 24px -16px rgba(78,63,107,.55), 0 1px 2px rgba(78,63,107,.06); }
-  .read a.hh-card.is-main{ background:linear-gradient(140deg, #5B3F82 0%, #2B5B8C 100%); border-color:transparent; color:#FFFDF7; box-shadow:0 14px 30px -14px rgba(43,91,140,.7); }
-  .read a.hh-card:hover{ border-color:#B9A2DD; box-shadow:0 16px 30px -16px rgba(78,63,107,.6), 0 1px 2px rgba(78,63,107,.06); }
-  .read a.hh-card.is-main:hover{ background:linear-gradient(140deg, #4E3570 0%, #244E78 100%); }
-  .read a.hh-card:focus-visible, .read .hh-more a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
-  @media (prefers-reduced-motion: no-preference){
-    .read a.hh-card, .read .hh-more a{ transition:background-color .15s ease, border-color .15s ease, box-shadow .2s ease, transform .2s ease; }
-    .read a.hh-card:hover, .read .hh-more a:hover{ transform:translateY(-2px); }
-  }
-  /* Quiet mode: the same first screen in plain text, no panel, glows, pills, gradients or icons */
-  html.tol-quiet .read .hh{ padding:clamp(1rem, .8rem + 1.5vw, 1.6rem); margin:0 0 1.6rem; border:1px solid var(--line, #D9CBA3); border-radius:12px; background:#FFFBF2; box-shadow:none; -webkit-backdrop-filter:none; backdrop-filter:none; overflow:visible; }
-  html.tol-quiet .read .hh::before, html.tol-quiet .read .hh::after, html.tol-quiet .read .hh-heart, html.tol-quiet .read .hh-card-i{ display:none; }
-  html.tol-quiet .read .hh-kick{ display:block; }
-  html.tol-quiet .read .hh-kick span{ display:inline; padding:0; border:0; background:none; }
-  html.tol-quiet .read .hh-kick span::before{ content:none; }
-  html.tol-quiet .read .hh-kick span + span::before{ content:" · "; }
-  html.tol-quiet .read .hh-kick a.hh-es{ display:inline; min-height:0; padding:0; border:0; background:none; text-decoration:underline; text-underline-offset:3px; }
-  html.tol-quiet .read .hh-kick a.hh-es::before{ content:"\b7\a0"; display:inline-block; margin-right:.25rem; color:var(--ink-soft, #5A5346); }
-  html.tol-quiet .read .hh-accent{ font-style:normal; font-weight:600; color:inherit; background:none; -webkit-text-fill-color:currentColor; }
-  html.tol-quiet .read a.hh-card, html.tol-quiet .read a.hh-card.is-main{ background:#FFFDF7; color:var(--ink, #2B2620); border:1px solid var(--line, #D9CBA3); box-shadow:none; border-radius:10px; transform:none; }
-  @media (max-width:640px){
-    .read .hh{ margin-left:-6px; margin-right:-6px; padding:1.2rem .95rem 1.3rem; border-radius:24px; }
-    .read .hh-h1{ font-size:clamp(1.85rem, 1rem + 4.2vw, 2.2rem); }
-    .read .hh-go{ grid-template-columns:1fr; gap:.55rem; }
-    .read a.hh-card{ flex-direction:row; align-items:center; gap:.8rem; min-height:56px; padding:.7rem .9rem; }
-    .read .hh-lede{ font-size:1.06rem; margin-bottom:1rem; }
-    .read .hh-lede{ font-size:.96rem; line-height:1.5; margin-bottom:.8rem; }
-    .read .hh-brand{ display:none; }
-    .read .hh-kick{ margin-bottom:.7rem; }
-    .read .hh-go.is-two{ grid-template-columns:1fr; }
-    .read .hh .hh-help{ display:flex; flex-direction:column; align-items:flex-start; line-height:1.3; gap:0; margin-top:-.4rem; }
-    .read .hh-help a{ display:inline-flex; align-items:center; min-height:44px; }
-    .read .hh-help > span{ display:none; }
-    .read .hh .hh-go li > a.hh-card{ padding:.6rem .8rem; }
-  }
-  /* while Professor Puddles' card (Meet the friends) is on screen, the floating "Ask Professor Puddles" button steps aside */
-  html.hh-pud-on .tol-pud-fab{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
-  @media (prefers-reduced-motion: no-preference){ .tol-pud-fab{ transition:opacity .25s ease, visibility .25s; } }
-  @media (max-width:640px){
-    }
-  /* ---- First screen, tightened (re-test round): one quiet trust line, then who it's for, then the one first step ---- */
-  .read .hh-kick{ display:block; margin:0 0 .45rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.05em; line-height:1.5; text-transform:uppercase; color:#2F5E3E; }
-  .read .hh-kick span{ display:inline; padding:0; border:0; background:none; font-size:inherit; color:inherit; }
-  .read .hh-kick span::before{ content:none; }
-  .read .hh-kick span + span::before{ content:"\b7\a0"; margin-left:.15rem; }
-  .read .hh-kick a.hh-es{ display:inline; white-space:nowrap; min-height:0; padding:0 0 0 .3rem; border:0; background:none; font-family:"Lora", Georgia, serif; font-size:.86rem; text-transform:none; letter-spacing:0; text-decoration:underline; text-underline-offset:3px; }
-  .read .hh-kick a.hh-es::before{ content:"\b7\a0"; color:#2F5E3E; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; display:inline-block; text-decoration:none; margin-right:.2rem; }
-  .read .hh-lede-z{ display:none; }
-  /* the calmer-page offer (site.js) sits here on the home page, small, so it shows on the first screen */
-  .read .hh-offer-slot:empty{ display:none; }
-  .read .hh-offer-slot .tol-offer{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .6rem; margin:-.35rem 0 1rem; max-width:none; padding:.5rem .7rem; border-radius:14px; box-shadow:none; font-size:.9rem; line-height:1.35; }
-  .read .hh-offer-slot .tol-offer > p:first-child{ font-size:0; }
-  .read .hh-offer-slot .tol-offer > p:first-child strong{ font-size:.92rem; }
-  .read .hh-offer-slot .tol-offer .tol-offer-row{ margin:0; gap:.3rem; }
-  .read .hh-offer-slot .tol-offer button{ min-height:44px; padding:.2rem .7rem; font-size:.86rem; }
-  .read .hh-offer-slot .tol-offer .tol-offer-more a{ min-height:44px; }
-  .read .hh-offer-slot .tol-offer.is-done > p:first-child{ font-size:.88rem; }
-  /* "Start where you are": the line for grandparents raising a grandchild */
-  .read #start-where .sw-lead{ margin:0 0 .6rem; font-weight:600; }
-  @media (min-width:641px){
-    .read .hh-go.is-two{ grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:1fr; }
-    .read .hh{ padding-top:clamp(1.1rem, .6rem + 1.6vw, 1.7rem); }
-    .read .hh .hh-lede{ margin-bottom:1rem; }
-    .read .hh-h1{ margin-bottom:.6rem; }
-  }
-  /* laptops with a short screen: a slightly smaller headline keeps the first step and the calmer-page offer in view */
-  @media (min-width:641px) and (max-height:820px){
-    .read .hh-h1{ font-size:clamp(1.9rem, 1.1rem + 2.2vw, 2.4rem); }
-  }
-  @media (max-width:640px){
-    .read .hh-lede-y{ display:none; }
-    .read .hh-lede-z{ display:inline; }
-    .read .hh-kick{ margin-bottom:.35rem; }
-    .read .hh-h1{ margin-bottom:.55rem; }
-    .read .hh-start-n{ font-size:.9rem; }
-    /* while the first screen is in view the round helper buttons step aside, so they never cover its words */
-    html.hh-top-on .tol-pud-fab, html.hh-top-on .tol-breathe-btn{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
-  }
-  .home-explore-links{ margin:1rem 0; }
-  .home-explore-links li{ margin:.35rem 0; }
-  .home-fold{ margin:.8rem 0; border:1px solid var(--line, #d8cfb8); border-radius:12px; padding:.2rem 1rem; background:var(--paper, #fffaf0); }
-  .home-fold > summary{ cursor:pointer; padding:.7rem 0; font-weight:600; min-height:44px; box-sizing:border-box; }
-  .home-fold[open] > summary{ border-bottom:1px solid var(--line, #d8cfb8); margin-bottom:.6rem; }
-  .home-fold .tol-remind{ margin:.4rem 0 .8rem; }
-  .home-new{ font-size: .95rem; margin: 1.1rem 0; display:flex; flex-wrap:wrap; gap:.3rem .6rem; align-items:center; }
-  .home-new .announce-tag{ margin:0; }
-  #contents h2, #directory h2{ margin-top: 0; }
-  /* Where to go next */
-  .next-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line, #D9CBA3); border: 1px solid var(--line, #D9CBA3); border-radius: var(--radius, 3px); margin: 1.3rem 0 0; overflow: hidden; }
-  @media (max-width: 720px){ .next-grid{ grid-template-columns: 1fr; } }
-  /* Sign-up strip */
-  .free-note a{ font-weight: 600; }
-  .free-fine{ font-size: .88rem; color: var(--ink-soft, #524B3E); margin: .9rem 0 0; }
-  /* Contents: two panels, free (this page) and members */
-  .contents-join{ display: flex; flex-wrap: wrap; align-items: flex-end; gap: .5rem .6rem; margin: 0; }
-  .contents-join label{ flex: 1 1 100%; display: block; text-align: left; font-weight: 600; font-size: .92rem; margin: 0; }
-  @media (max-width: 520px){ .contents-join input, .contents-join button{ flex: 1 1 100%; } }
-  .contents-join input{
-    flex: 1 1 220px; min-width: 0; font: inherit; font-size: 1rem;
-    padding: .6rem .75rem; border: 1px solid var(--ink-soft, #524B3E); border-radius: var(--radius, 3px);
-    background: #FFFDF7; color: var(--ink, #211D17);
-  }
-  .contents-join button{
-    flex: 0 0 auto; font: inherit; font-weight: 600; font-size: .98rem;
-    padding: .6rem 1.1rem; border: 1px solid var(--ink, #211D17); border-radius: var(--radius, 3px);
-    background: var(--ink, #211D17); color: var(--paper, #F5EFDE); cursor: pointer;
-  }
-  .contents-join button:hover{ background: var(--focus, #2B5B8C); border-color: var(--focus, #2B5B8C); }
-  .contents-join input:focus-visible, .contents-join button:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
-  /* Ways in: the access cards */
-  .tiers{ display: grid; gap: 1rem; margin-top: 1.25rem; }
-  .tier{
-    padding: 1.1rem 1.25rem;
-    border: 1px solid var(--line, #D9CBA3);
-    border-radius: var(--radius, 3px);
-    background: var(--paper, #F5EFDE);
-  }
-  .tier ul{ margin: 0 0 .75rem; padding-left: 1.1rem; }
-  .tier li{ margin-bottom: .3rem; max-width: none; }
-  .tier p{ margin: 0 0 .75rem; font-size: .95rem; max-width: none; }
-  /* Announcements: stacked, one under the other */
-  .announce-stack{ display: flex; flex-direction: column; gap: 10px; margin: 0 0 2rem; }
-  .announce-line{ margin: 0; }
-  .announce-tag{
-    display: inline-block; margin-right: 6px; padding: 1px 8px;
-    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem;
-    color: var(--paper, #F5EFDE); background: var(--brass, #A8792F); border-radius: 3px; vertical-align: 1px;
-  }
-  /* Opening */
-  .hero{ padding: .5rem 0 1.9rem; margin-bottom: 1.6rem; border-bottom: 3px double var(--ink, #211D17); }
-  .read .hero h1{
-    font-family: "Fraunces", Georgia, serif; font-weight: 600;
-    font-size: clamp(2.1rem, 5.6vw, 3.25rem); line-height: 1.1; letter-spacing: -.02em;
-    margin: 0 0 1.25rem; max-width: 18ch;
-  }
-  .read .hero a:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 3px; }
-  /* Outside lens section */
-  .lens{ margin: 2.25rem 0 0; }
-  .lens > h2{ margin: 0 0 .7rem; }
-  .lens p{ max-width: 64ch; }
-  .layers{ margin: 1.4rem 0 1.6rem; }
-  .read .layers h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 0 0 .5rem; }
-  .layer{ padding: .9rem 1.1rem 1rem 0; }
-  .layer + .layer{ padding-left: 1.1rem; border-left: 1px dashed var(--line, #D9CBA3); }
-  .layer p{ font-size: .96rem; line-height: 1.6; margin: 0; }
-  @media (max-width: 640px){
-    .layer + .layer{ padding-left: 0; border-left: 0; border-top: 1px dashed var(--line, #D9CBA3); }
-  }
-  .spirit{ margin: .2rem 0 1rem; }
-  .spirit p{ margin: 0 0 .75rem; padding-left: 1rem; border-left: 3px solid var(--credit, #3E6B4C); }
-  .spirit strong{ font-family: "Fraunces", Georgia, serif; }
-  [hidden]{ display: none !important; }
-  /* Quiet mode: the home page comes down to the first steps. "Show everything" brings the rest back (this visit only). */
-  .read .hh-quiet{ display:none; }
-  html.tol-quiet .read .hh-quiet{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1rem; margin:.9rem 0 0; }
-  html.tol-quiet .read .hh .hh-quiet p{ margin:0; }
-  html.tol-quiet .read .hh-quiet a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; text-underline-offset:3px; }
-  html.tol-quiet .read .hh-quiet button{ min-height:44px; padding:.3rem 1rem; border-radius:10px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid var(--line, #D9CBA3); }
-  html.tol-quiet .read .hh-quiet button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  /* (the calm way in stays: "I need calm right now", plus Breathe and Today's weather) */
-  html.tol-quiet:not(.hh-all) .read .hh .hh-offer-slot,
-  html.tol-quiet:not(.hh-all) .read > :is(#friends, #books, #logic, #explore, .cb-panel, .cb-extra),
-  html.tol-quiet:not(.hh-all) .read [data-app-ad]{ display:none !important; }
-  html.tol-quiet.hh-all .read .hh-quiet button{ display:none; }
-  /* What's here: the whole site in eight doors (find10) */
-  .read .hh-map{ margin:.2rem 0 .5rem; }
-  .read .hh .hh-map-h{ margin:0 0 .5rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.12rem; line-height:1.3; color:var(--ink, #2B2620); }
-  .read .hh-map-doors{ display:grid; grid-template-columns:repeat(auto-fill, minmax(13rem, 1fr)); gap:.55rem; margin:0; padding:0; list-style:none; }
-  .read .hh .hh-map-doors li{ margin:0; padding:0; width:auto; max-width:none; display:flex; }
-  .read .hh-map-doors li::before{ content:none; }
-  .read .hh-map-doors a{ display:grid; grid-template-columns:auto 1fr; grid-template-areas:"i t" "c c" "n n"; align-items:center; align-content:start; gap:.25rem .45rem; width:100%; box-sizing:border-box; min-height:48px; padding:.65rem .7rem .7rem;
-    border-radius:16px; border:1px solid #E6DAF3; background:#FFFFFF; color:var(--ink, #2B2620); text-decoration:none; box-shadow:0 8px 20px -16px rgba(78,63,107,.55); }
-  .read .hh-map-doors a:hover{ border-color:#B9A2DD; }
-  .read .hh-map-doors a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  .read .hh-map-i{ grid-area:i; font-size:1.15rem; line-height:1; }
-  .read .hh-map-t{ grid-area:t; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1rem; line-height:1.2; }
-  .read .hh-map-c{ grid-area:c; justify-self:start; padding:.05rem .45rem; border-radius:999px; font:500 .72rem/1.5 "IBM Plex Mono", ui-monospace, monospace; color:#6B4A12; background:#FFF0D9; }
-  .read .hh-map-n{ grid-area:n; font-size:.85rem; line-height:1.35; color:var(--ink-soft, #5A5346); }
-  .read .hh .hh-map-all{ margin:.55rem 0 0; font-size:.95rem; }
-  .read .hh-map-all a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
-  @media (max-width:640px){ .read .hh-map-doors{ grid-template-columns:repeat(2, minmax(0, 1fr)); } }
-  @media (max-width:640px){ .read .hh-map-doors a{ padding:.55rem .6rem .6rem; border-radius:14px; } .read .hh-map-n{ font-size:.82rem; } .read .hh-map-t{ font-size:.96rem; } }
-  html.tol-quiet .read .hh-map-doors a{ background:#FFFDF7; border-color:var(--line, #D9CBA3); box-shadow:none; border-radius:10px; }
-  html.tol-quiet .read .hh-map-i{ display:none; }
-</style>
-<script src="/assets/js/site.js" defer></script>
-<script src="/assets/js/start-where.js" defer></script>
 <link rel="stylesheet" href="/assets/css/journeys.css">
+<link rel="stylesheet" href="/assets/css/home.css">
+<script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/journeys.js" defer></script>
+<script src="/assets/js/home.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/">
@@ -351,63 +87,60 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","alternateName":["Spread Love and Acceptance","spreadloveandacceptance"],"url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","@id":"https://spreadloveandacceptance.com/#logo","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","contentUrl":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","caption":"Spread Love & Acceptance"},"image":{"@id":"https://spreadloveandacceptance.com/#logo"},"email":"patrick.christian.andrews@gmail.com","slogan":"See it fairly. Say it kindly.","description":"Spread Love & Acceptance is a young, independent start-up building a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, gentle games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.","founder":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"knowsAbout":["self-help","relationships","love and acceptance","kindness","appreciation","communication in relationships","mental load","invisible labor","division of labor at home","household chores for couples","calm","breathing exercises","mindfulness","neurodiversity","neurodivergent relationships","self-discovery"]},{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html","jobTitle":"Creator of Spread Love & Acceptance","worksFor":{"@id":"https://spreadloveandacceptance.com/#org"},"description":"Christian (they/them) created Spread Love & Acceptance after working as a government auditor."},{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","alternateName":["Spread Love and Acceptance"],"url":"https://spreadloveandacceptance.com/","description":"Free self-help for calmer, fairer relationships: share chores and the mental load, check how a text lands, calm down and understand yourself. No sign-up.","inLanguage":"en-US","publisher":{"@id":"https://spreadloveandacceptance.com/#org"},"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://spreadloveandacceptance.com/explore.html?q={search_term_string}"},"query-input":"required name=search_term_string"}},{"@id":"https://spreadloveandacceptance.com/#page","name":"Free Self-Help for Relationships · Spread Love & Acceptance","headline":"Free Self-Help for Relationships · Spread Love & Acceptance","description":"Free self-help for calmer, fairer relationships: share chores and the mental load, check how a text lands, calm down and understand yourself. No sign-up.","url":"https://spreadloveandacceptance.com/","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-29","dateModified":"2026-10-19","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage","about":{"@id":"https://spreadloveandacceptance.com/#org"}}]}</script>
 <!-- seo:end -->
 </head>
-<body>
-<main class="read">
-<section class="hh tol-plain no-bubble" data-home-intro aria-labelledby="hero-h">
-  <p class="hh-brand"><span class="hh-heart" aria-hidden="true">&#9825;</span> Spread Love &amp; Acceptance</p>
-  <p class="hh-kick"><span>Free</span> <span title="What you type stays on your device">Private</span> <span>No account</span> <a class="hh-es" href="/en-espanol.html" lang="es" hreflang="es">En español</a></p>
-  <h1 id="hero-h" class="hh-h1">Understand yourself. <span class="hh-accent">Understand <span class="hh-nw">each other.</span></span></h1>
-  <p class="hh-lede">Free, kind tools for understanding yourself and the people in your life. <span class="hh-lede-y">Most take a minute or two, and nothing</span><span class="hh-lede-z">Nothing</span> you type leaves your device.</p>
-  <!-- for someone coming back: their journey, next chapter or self path (home.js; reads keys the site already keeps) -->
-  <!-- "What's going on?": the one main way in. One tap gives one guided journey and one 2-minute thing to do now (journeys.js).
-       "With someone" / "Just me" changes the choices (kept in tol-mode-v1; come-back.js and start-where.js read it too). -->
-  <section class="hh-wgo no-bubble" id="whats-going-on" data-journey-pick="home" aria-labelledby="wgo-h">
+<body class="h18-page" data-no-offer data-no-share data-no-reading data-no-listen data-no-where data-no-related data-no-fullpath data-no-tip data-no-learnplay data-no-cheer data-no-pillars data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-dives data-no-comeback data-no-garden data-no-weather data-no-private-note data-no-line-share data-no-wash data-no-pudcards>
+<main class="read is-wide h18" id="main">
+<!-- tells site.js not to add its own Professor Puddles hello here (the header's Ask is enough) -->
+<span class="hh-pud" hidden></span>
+
+<!-- 1. The first screen: what this is, who it's for, and the one thing to do: "What's going on?" (journeys.js answers each choice right here) -->
+<section class="h-hero tol-plain no-bubble no-dive" id="top" data-h18-top aria-labelledby="hero-h">
+  <div class="h-intro">
+    <h1 class="h-h1" id="hero-h">Get along better, starting today.</h1>
+    <p class="h-lede">Kind, practical help for <strong>couples, families, flatmates</strong> and <strong>anyone on their own</strong>. Nothing you type leaves your device.</p>
+    <ul class="h-trust" aria-label="Good to know"><li>Free</li><li>Private</li><li>No sign-up</li></ul>
+    <p class="h-quick"><a href="/start/text-check.html">Got a tense text? <strong>Check it before you send</strong></a></p>
+    <div class="h-art" aria-hidden="true"><img src="/assets/img/home/pals-pups.webp" alt="" width="719" height="193" decoding="async"></div>
+  </div>
+  <section class="h-pick tol-plain no-bubble no-dive" id="whats-going-on" data-journey-pick="home" aria-labelledby="wgo-h">
     <div class="jb" data-journey-back hidden></div>
-    <p class="hh-start-k">Start here</p>
-    <h2 class="hh-start-t" id="wgo-h">What&rsquo;s going on?</h2>
-    <div class="hh-mode" data-tol-mode>
-      <div class="hh-mode-opts" role="group" aria-label="Who is this for today?">
-        <button type="button" data-mode="with" aria-pressed="false">With someone</button>
-        <button type="button" data-mode="me" aria-pressed="false">Just me</button>
-      </div>
+    <h2 class="h-h2" id="wgo-h">What&rsquo;s going on?</h2>
+    <p class="h-sub">Tap the closest for one small thing to do now.</p>
+    <div class="h-mode" data-tol-mode role="group" aria-label="Who is this for today?">
+      <button type="button" data-mode="with" aria-pressed="false">With someone</button>
+      <button type="button" data-mode="me" aria-pressed="false">Just me</button>
     </div>
-    <p class="hh-start-n" data-mode-show="with me" hidden>Tap the closest: one guided journey, and one thing to do in two minutes.</p>
-    <p class="hh-start-n" data-mode-show="none">Tap the closest. For more choices (flatmates, a parent living with you, raising a grandchild), pick With someone or Just me.</p>
-    <!-- home16b: eight choices in each state. Nothing picked shows both sides (loss and a breakup too); each choice
-         that is a plain link goes straight to its page; "Our life has changed" opens a short "which is closest?" list. -->
-    <!-- flow17: still eight in each state; more choices sit in short "which is closest?" lists (Home and family,
-         We need different things at home, Our life has changed). -->
+    <!-- eight choices in each view. data-fallback: where a choice goes if this copy of journeys.js has no answer for it -->
     <ul class="wgo-opts">
       <li data-mode-show="none with"><a class="wgo-opt" data-wgo="argument" href="/journeys.html?for=argument#pick">We keep having the same argument</a></li>
       <li data-mode-show="none with"><a class="wgo-opt" data-wgo="chores" href="/journeys.html?for=chores#pick">Chores feel unfair</a></li>
       <li data-mode-show="none with"><a class="wgo-opt" data-wgo="drift" href="/journeys.html?for=drift#pick">We&rsquo;ve drifted apart</a></li>
-      <li data-mode-show="with" hidden><a class="wgo-opt" data-wgo="quietsocial" href="/journeys.html?for=quietsocial#pick">We need different things at home <span class="wgo-opt-n">(quiet vs social)</span></a></li>
-      <li data-mode-show="with" hidden><a class="wgo-opt" data-wgo="homefam" href="/journeys.html?for=homefam#pick">Home and family <span class="wgo-opt-n">(a parent with us, flatmates, teens)</span></a></li>
-      <li data-mode-show="none me"><a class="wgo-opt" href="/teens.html#curfew-phone">Fighting with my parents <span class="wgo-opt-n">(I&rsquo;m under 18)</span></a></li>
+      <li data-mode-show="with" hidden data-fallback="/wiring-card.html"><a class="wgo-opt" data-wgo="quietsocial" href="/journeys.html?for=quietsocial#pick">We need different things at home</a></li>
+      <li data-mode-show="with" hidden data-fallback="/by-relationship.html"><a class="wgo-opt" data-wgo="homefam" href="/journeys.html?for=homefam#pick">Home and family</a></li>
+      <li data-mode-show="none me"><a class="wgo-opt" href="/teens.html#curfew-phone">Fighting with my parents (under 18)</a></li>
       <li data-mode-show="none me"><a class="wgo-opt" data-wgo="myself" href="/journeys.html?for=myself#pick">I want to understand myself</a></li>
       <li data-mode-show="none me"><a class="wgo-opt" data-wgo="breakup" href="/journeys.html?for=breakup#pick">I&rsquo;m going through a breakup</a></li>
       <li data-mode-show="me" hidden><a class="wgo-opt" href="/grief.html">I&rsquo;ve lost someone</a></li>
       <li data-mode-show="me" hidden><a class="wgo-opt" data-wgo="family" href="/journeys.html?for=family#pick">Family stuff</a></li>
-      <li data-mode-show="me" hidden><a class="wgo-opt" href="/foster-and-kinship.html#kinship">Raising a child who isn&rsquo;t mine <span class="wgo-opt-n">(grandchild, foster, kin)</span></a></li>
-      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="life" href="/journeys.html?for=life#pick">Our life has changed <span class="wgo-opt-n">(retired, kids left, illness, loss)</span></a></li>
-      <li data-mode-show="none me with"><a class="wgo-opt" data-wgo="calm" href="/journeys.html?for=calm#pick">I need to calm down</a></li>
+      <li data-mode-show="me" hidden><a class="wgo-opt" href="/foster-and-kinship.html#kinship">Raising a child who isn&rsquo;t mine</a></li>
+      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="life" href="/journeys.html?for=life#pick">Our life has changed</a></li>
+      <li data-mode-show="none me with"><a class="wgo-opt" href="/caregivers.html">Caring for someone</a></li>
       <li data-mode-show="me with" hidden><a class="wgo-opt" data-wgo="busy" href="/journeys.html?for=busy#pick">I only have five minutes</a></li>
     </ul>
     <div class="wgo-out" id="wgo-out" hidden></div>
-    <p class="wgo-ten"><a href="/by-relationship.html">Find it by relationship &rarr;</a> <a href="/journeys.html">All journeys &rarr;</a></p>
+    <p class="h-pick-more"><a class="h-link" href="/by-relationship.html">By relationship</a> <a class="h-link" href="/journeys.html">All situations</a></p>
   </section>
   <script>
-  /* With someone / Just me: one choice, kept on this device (tol-mode-v1), changeable any time. Tap it again to clear it.
-     It changes which choices show above (and start-where.js's order further down). come-back.js reads the same key. */
+  /* With someone / Just me: one choice, kept on this device (tol-mode-v1, as before), changeable any time; tap it again to
+     clear it. It runs here, before the page is drawn, so the right eight choices show with no jump. */
   (function () {
-    var KEY = 'tol-mode-v1', box = document.querySelector('[data-tol-mode]'), out = document.getElementById('wgo-out');
+    var KEY = 'tol-mode-v1', host = document.getElementById('whats-going-on'), box = host && host.querySelector('[data-tol-mode]');
+    if (!host) return;
     function get() { try { var m = localStorage.getItem(KEY); return m === 'me' || m === 'with' ? m : ''; } catch (e) { return ''; } }
     function apply() {
-      var m = get() || 'none';
-      Array.prototype.forEach.call(document.querySelectorAll('.hh [data-mode-show]'), function (el) { el.hidden = (' ' + el.getAttribute('data-mode-show') + ' ').indexOf(' ' + m + ' ') === -1; });
+      var m = get() || 'none', out = document.getElementById('wgo-out');
+      Array.prototype.forEach.call(host.querySelectorAll('[data-mode-show]'), function (el) { el.hidden = (' ' + el.getAttribute('data-mode-show') + ' ').indexOf(' ' + m + ' ') === -1; });
       if (box) Array.prototype.forEach.call(box.querySelectorAll('[data-mode]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
-      // a suggestion for a choice that is now hidden goes away with it
-      var on = document.querySelector('.hh-wgo [data-wgo][aria-pressed="true"]');
+      var on = host.querySelector('[data-wgo][aria-pressed="true"]');
       if (on && on.closest('li') && on.closest('li').hidden && out) { out.hidden = true; on.setAttribute('aria-pressed', 'false'); }
     }
     apply();
@@ -422,198 +155,70 @@
     window.addEventListener('storage', function (e) { if (e.key === KEY) apply(); });
   })();
   </script>
-  <p class="hh-help"><a href="/upset-right-now.html">Upset right now? Five minutes to pause</a> <span aria-hidden="true">&middot;</span> <a href="/safety.html">Not safe at home? Get help</a></p>
-  <div class="hh-offer-slot" data-offer-slot></div>
-  <div class="hh-quiet" data-hh-quiet>
-    <p><a href="/book/index.html">Read the book</a> <span aria-hidden="true">&middot;</span> <a href="/quick-checks.html#today">Today&rsquo;s weather</a> <span aria-hidden="true">&middot;</span> <a href="/the-logic-behind-it.html">The logic behind it</a> <span aria-hidden="true">&middot;</span> <a href="/how-you-take-things-in.html">Read your way</a></p>
-    <button type="button" aria-expanded="false" data-hh-all>Show everything</button>
+</section>
+
+<!-- 2. Three tools most people start with -->
+<section class="h-toolsec tol-plain no-bubble no-dive" id="tools" aria-labelledby="tools-h">
+  <h2 class="h-h2" id="tools-h">Or start with a tool</h2>
+  <ul class="h-tools">
+    <li><a class="h-tool" href="/start/text-check.html"><span class="h-tool-i" aria-hidden="true"><img src="/assets/img/mascots/two-bubbles.svg" alt="" width="40" height="40" loading="lazy" decoding="async"></span><span class="h-tool-t">Check a text before you send it</span><span class="h-tool-n">See how it may land, and get a clearer way to say it.</span></a></li>
+    <li><a class="h-tool" href="/lemonade-stand.html#quick"><span class="h-tool-i" aria-hidden="true"><img src="/assets/img/mascots/balanced-heart.svg" alt="" width="40" height="40" loading="lazy" decoding="async"></span><span class="h-tool-t">Who does what at home?</span><span class="h-tool-n">Tap through the jobs, each on your own phone, then compare.</span></a></li>
+    <li><a class="h-tool" href="/upset-right-now.html"><span class="h-tool-i" aria-hidden="true"><img src="/assets/img/mascots/heart-bubble.svg" alt="" width="40" height="40" loading="lazy" decoding="async"></span><span class="h-tool-t">Upset right now?</span><span class="h-tool-n">Calm down in five minutes: breathe, pause, then come back to it.</span></a></li>
+  </ul>
+  <p class="h-more"><a class="h-link" href="/tools.html">All tools</a> <a class="h-link" href="/pause-and-play.html">Relax and reset</a></p>
+</section>
+
+<!-- 3. A 2-minute break: Tidbit and Sugarfoot's games, one tap each -->
+<section class="h-play tol-plain no-bubble no-dive" id="friends" aria-labelledby="friends-h">
+  <div class="h-play-head">
+    <h2 class="h-h2" id="friends-h">Take a 2-minute break</h2>
+    <p class="h-sub">Play a quick game. One tap to start.</p>
+  </div>
+  <ul class="h-games">
+    <li><a class="h-game" href="/frequency-journey.html#derby"><span class="h-game-art" aria-hidden="true"><img src="/assets/img/home/pal-tidbit.webp" alt="" width="294" height="145" loading="lazy" decoding="async"></span><span class="h-game-txt"><span class="h-game-t">Home Run Derby</span><span class="h-game-n">Swing with Tidbit</span></span></a></li>
+    <li><a class="h-game" href="/frequency-journey.html"><span class="h-game-art" aria-hidden="true"><img src="/assets/img/home/pal-sugarfoot.webp" alt="" width="309" height="142" loading="lazy" decoding="async"></span><span class="h-game-txt"><span class="h-game-t">The pups&rsquo; arcade</span><span class="h-game-n">Six games with Sugarfoot</span></span></a></li>
+    <li><a class="h-game" href="/coin-pusher.html"><span class="h-game-art" aria-hidden="true"><svg viewBox="0 0 64 64" width="48" height="48" aria-hidden="true" focusable="false"><ellipse cx="32" cy="54" rx="19" ry="4" fill="#E9D3A6" opacity=".8"/><circle cx="40" cy="36" r="15" fill="#E7B84C" stroke="#B9862A" stroke-width="2"/><circle cx="28" cy="29" r="19" fill="#F4C95D" stroke="#C9952E" stroke-width="2.4"/><circle cx="28" cy="29" r="13.5" fill="none" stroke="#E0AE45" stroke-width="1.6" stroke-dasharray="2 2.6"/><path d="M28 37.5c-6.2-4.1-9-7-9-10.4a4.7 4.7 0 0 1 9-1.7a4.7 4.7 0 0 1 9 1.7c0 3.4-2.8 6.3-9 10.4z" fill="#E86F8E"/><ellipse cx="21" cy="20" rx="4" ry="2.2" fill="#fff" opacity=".55" transform="rotate(-30 21 20)"/></svg></span><span class="h-game-txt"><span class="h-game-t">Coin pusher</span><span class="h-game-n">Kind tips fall out</span></span></a></li>
+  </ul>
+</section>
+
+<!-- 4. One idea from the book, in one minute: a different one each day (lines from the book itself), then the next, then the book -->
+<section class="h-ideasec tol-plain no-bubble no-dive" id="books" aria-labelledby="books-h">
+  <h2 class="h-h2" id="books-h">One idea in one minute</h2>
+  <div class="h-idea" data-h18-idea>
+    <div class="h-idea-body" aria-live="polite">
+      <h3 class="h-idea-t" data-idea-t>Nobody has to be wrong.</h3>
+      <p class="h-idea-n" data-idea-n>Two radios that both work perfectly will still crackle if they’re slightly off, and arguing about whose fault the static is won’t clear it.</p>
+      <p class="h-idea-from">From the book: <a data-idea-a href="/book/chapter-1.html">Chapter I: Why we get out of tune</a></p>
+    </div>
+    <p class="h-idea-go"><button type="button" class="h-btn" data-idea-next>Read the next one</button> <a class="h-link" href="/book/index.html">Read the book free</a></p>
   </div>
   <script>
-  /* Quiet mode keeps the home page short; "Show everything" (or a link to a section further down) opens the rest */
+  /* today's idea (one a day, the same for everyone), drawn before the page shows, so nothing jumps; "Read the next one" moves on */
   (function () {
-    var h = document.documentElement, b = document.querySelector('[data-hh-all]');
-    function all() { h.classList.add('hh-all'); if (b) b.setAttribute('aria-expanded', 'true'); }
-    if (b) b.addEventListener('click', function () { all(); var n = document.getElementById('friends'); if (n) { if (!n.hasAttribute('tabindex')) n.setAttribute('tabindex', '-1'); n.focus(); } });
-    document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a && /^#(start-where|friends|books|explore|open-free)$/.test(a.getAttribute('href'))) all(); }, true);
-    if (/^#(start-where|friends|books|explore|open-free)$/.test(location.hash)) all();
-  })();
-  </script>
-  <script>
-  /* the calmer-page offer (built by site.js) moves into the first screen, just under "What's going on?" */
-  (function () {
-    var slot = document.querySelector('[data-offer-slot]'), main = document.querySelector('main');
-    if (!slot || !main || !('MutationObserver' in window)) return;
-    function move() { var o = main.querySelector(':scope > .tol-offer'); if (o) { slot.appendChild(o); mo.disconnect(); } }
-    var mo = new MutationObserver(move);
-    mo.observe(main, { childList: true });
-    document.addEventListener('DOMContentLoaded', function () { move(); setTimeout(function () { mo.disconnect(); }, 4000); });
+    var IDEAS = [["Nobody has to be wrong.", "Two radios that both work perfectly will still crackle if they’re slightly off, and arguing about whose fault the static is won’t clear it.", "/book/chapter-1.html", "Chapter I: Why we get out of tune"], ["We fill the gaps with stories.", "When we don’t know why someone did something, the mind makes up a reason, fast. A late reply becomes anger, and a closed door becomes rejection.", "/book/understanding-3-seeing.html", "Chapter 3: How we see each other"], ["Start smaller than feels useful.", "Big goals are inspiring and easy to drop. Tiny steps feel almost silly, and they work precisely because they’re easy enough to manage on a bad day.", "/book/understanding-6-change.html", "Chapter 6: Habits and change"], ["Hard things land better when they start soft.", "How a hard conversation starts often decides how it ends. A complaint about one thing (“The bins weren’t taken out”) is easier to hear than a criticism of the person (“You never help”).", "/book/understanding-4-communication.html", "Chapter 4: How communication works"], ["Anger often guards a softer feeling.", "Anger can arrive first because it feels stronger and safer than whatever is under it, which is often hurt, or fear, or shame, or plain exhaustion.", "/book/understanding-13-anger.html", "Chapter 13: Anger"], ["Every close relationship has breaks. Repair is what counts.", "No relationship is smooth all the time, because people snap, forget, misread each other and let each other down.", "/book/understanding-11-healing.html", "Chapter 11: Healing after hurt"], ["Trust is built in small moments.", "Trust rarely comes from big gestures. It grows from small, ordinary things done again and again, like doing what you said, and being the same person on a hard day as on a good one.", "/book/understanding-5-belonging.html", "Chapter 5: Trust and belonging"], ["Different values aren’t wrong values.", "Two people can share a home, a family or a team and still put the same good things in a different order, one putting safety first and another adventure.", "/book/understanding-10-values.html", "Chapter 10: Values and a good life"], ["Covering is kind. Say it out loud.", "Helping out when the owner can’t is lovely, and it helps to mention it, so the help is seen. “I put the bins out this week, since you were away.”", "/book/chapter-4.html", "Chapter IV: Two kinds of fair"], ["Feeling understood matters most.", "What makes someone feel loved is often less about grand gestures and more about feeling understood.", "/book/understanding-15-love.html", "Chapter 15: Closeness and love"]];
+    var box = document.querySelector('[data-h18-idea]'); if (!box) return;
+    var i = Math.floor(Date.now() / 864e5) % IDEAS.length;
+    function show() {
+      var d = IDEAS[i % IDEAS.length];
+      box.querySelector('[data-idea-t]').textContent = d[0];
+      box.querySelector('[data-idea-n]').textContent = d[1];
+      var a = box.querySelector('[data-idea-a]'); a.textContent = d[3]; a.setAttribute('href', d[2]);
+    }
+    show();
+    box.querySelector('[data-idea-next]').addEventListener('click', function () { i++; show(); });
   })();
   </script>
 </section>
 
-<!-- Try it in 10 seconds: the pocket Chat analyzer (message-check-mini.js), with "Try an example" (home.js) -->
-<section class="hm hm-try tol-plain no-bubble no-dive" id="try" aria-label="Try it in 10 seconds">
-  <p class="hm-k">Try it in 10 seconds</p>
-  <div data-message-check-mini data-heading="Check a text before you send it"></div>
-</section>
-
-<!-- Meet the friends: the characters and the games that make it fun to come back -->
-<section class="hm hm-friends tol-plain no-bubble no-dive" id="friends" aria-labelledby="friends-h">
-  <p class="hm-k">Meet the friends</p>
-  <h2 class="hm-h" id="friends-h">A little company along the way</h2>
-  <ul class="hm-fr">
-    <li class="hh-pud"><a class="hm-fr-card" href="/ask.html" data-ask-puddles>
-      <span class="hm-fr-art"><svg viewBox="-4 -14 88 92" width="52" height="52" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg></span>
-      <span class="hm-fr-t">Professor Puddles</span>
-      <span class="hm-fr-n">Small drop, big brain. Ask in your own words.</span>
-      <span class="hm-fr-go">Ask him anything</span></a></li>
-    <li><a class="hm-fr-card" href="/frequency-journey.html">
-      <span class="hm-fr-art"><canvas data-hm-pups width="192" height="116" aria-hidden="true"></canvas></span>
-      <span class="hm-fr-t">Tidbit &amp; Sugarfoot&rsquo;s Arcade</span>
-      <span class="hm-fr-n">Six arcade games in one place, now with a Home Run Derby.</span>
-      <span class="hm-fr-go">Pick a pup</span></a></li>
-    <li><a class="hm-fr-card" href="/coin-pusher.html">
-      <span class="hm-fr-art"><svg viewBox="0 0 64 64" width="52" height="52" aria-hidden="true" focusable="false"><ellipse cx="32" cy="54" rx="19" ry="4" fill="#E9D3A6" opacity=".8"/><circle cx="40" cy="36" r="15" fill="#E7B84C" stroke="#B9862A" stroke-width="2"/><circle cx="28" cy="29" r="19" fill="#F4C95D" stroke="#C9952E" stroke-width="2.4"/><circle cx="28" cy="29" r="13.5" fill="none" stroke="#E0AE45" stroke-width="1.6" stroke-dasharray="2 2.6"/><path d="M28 37.5c-6.2-4.1-9-7-9-10.4a4.7 4.7 0 0 1 9-1.7a4.7 4.7 0 0 1 9 1.7c0 3.4-2.8 6.3-9 10.4z" fill="#E86F8E"/><ellipse cx="21" cy="20" rx="4" ry="2.2" fill="#fff" opacity=".55" transform="rotate(-30 21 20)"/></svg></span>
-      <span class="hm-fr-t">Kindness Coin Pusher</span>
-      <span class="hm-fr-n">Watch the coins tumble. Kind tips fall out too.</span>
-      <span class="hm-fr-go">Drop a coin</span></a></li>
-  </ul>
-  <p class="hm-links"><a class="hm-go" href="/pause-and-play.html">All the gentle games</a></p>
-</section>
-
-<!-- Why it's different: four true things, each with the page that shows it -->
-<section class="hm hm-why tol-plain no-bubble no-dive" id="why" aria-labelledby="why-h">
-  <h2 class="hm-h" id="why-h">Why it&rsquo;s different</h2>
-  <ul class="hm-why-l">
-    <li><span class="hm-why-i" aria-hidden="true">&#127873;</span><p class="hm-why-t"><a href="/membership.html">Free, with no account</a></p><p class="hm-why-n">No account and no paid version. Read every chapter free online. To download a book as a PDF, we’ll ask for your email.</p></li>
-    <li><span class="hm-why-i" aria-hidden="true">&#128274;</span><p class="hm-why-t"><a href="/on-this-device.html">It stays on your device</a></p><p class="hm-why-n">What you type isn&rsquo;t sent to us. Erase it any time.</p></li>
-    <li><span class="hm-why-i" aria-hidden="true">&#9878;&#65039;</span><p class="hm-why-t"><a href="/someone-sent-you-this.html">Fair to both sides</a></p><p class="hm-why-n">It looks at the setup, not at who&rsquo;s to blame. Nobody is the bad guy.</p></li>
-    <li><span class="hm-why-i" aria-hidden="true">&#128218;</span><p class="hm-why-t"><a href="/research.html">Grounded in research</a></p><p class="hm-why-n">With honest limits: <a href="/method-and-limits.html">what the tools can and can&rsquo;t do</a>. The scores are plain, written-out rules, and Professor Puddles answers with replies written in advance for this site.</p></li>
-  </ul>
-  <p class="hm-made">Made by Christian, a former government auditor, and grown out of their own life. <a href="/about.html">Who built this, and why</a> <span aria-hidden="true">&middot;</span> <a href="/is-this-for-you.html">Is this right for you?</a> <span aria-hidden="true">&middot;</span> <a href="/for-counselors.html">Counsellor or coach? What this is and isn&rsquo;t &rarr;</a></p>
-</section>
-
-<!-- The series: the book as four short books and a pocket guide. Shop links come from book-shop.js and stay hidden while empty. -->
-<section class="hm hm-books tol-plain no-bubble no-dive" id="books" aria-labelledby="books-h">
-  <p class="hm-k">The book series</p>
-  <h2 class="hm-h" id="books-h">Four short books and a pocket guide</h2>
-  <p class="hm-sub">Free to read here. Print is optional.</p>
-  <ul class="hm-bk">
-    <li><a class="hm-bk-a" href="/book/self-1-then.html"><img src="/assets/img/home/cover-book-1-240.webp" alt="" width="240" height="359" loading="lazy" decoding="async"><span class="hm-bk-k">Book 1</span><span class="hm-bk-t">Know Yourself Kindly</span></a><p class="hm-bk-shop" data-shop-book="book-1-know-yourself-kindly" hidden><a data-shop="amazon" hidden aria-label="Get the paperback of Know Yourself Kindly">Paperback</a></p></li>
-    <li><a class="hm-bk-a" href="/book/understanding-2-stress.html"><img src="/assets/img/home/cover-book-2-240.webp" alt="" width="240" height="359" loading="lazy" decoding="async"><span class="hm-bk-k">Book 2</span><span class="hm-bk-t">Heal and Steady</span></a><p class="hm-bk-shop" data-shop-book="book-2-heal-and-steady" hidden><a data-shop="amazon" hidden aria-label="Get the paperback of Heal and Steady">Paperback</a></p></li>
-    <li><a class="hm-bk-a" href="/book/chapter-1.html"><img src="/assets/img/home/cover-book-3-240.webp" alt="" width="240" height="359" loading="lazy" decoding="async"><span class="hm-bk-k">Book 3</span><span class="hm-bk-t">Understanding Each Other</span></a><p class="hm-bk-shop" data-shop-book="book-3-understanding-each-other" hidden><a data-shop="amazon" hidden aria-label="Get the paperback of Understanding Each Other">Paperback</a></p></li>
-    <li><a class="hm-bk-a" href="/book/preface.html"><img src="/assets/img/home/cover-book-4-240.webp" alt="" width="240" height="359" loading="lazy" decoding="async"><span class="hm-bk-k">Book 4</span><span class="hm-bk-t">Share the Load</span></a><p class="hm-bk-shop" data-shop-book="book-4-share-the-load" hidden><a data-shop="amazon" hidden aria-label="Get the paperback of Share the Load">Paperback</a></p></li>
-    <li><a class="hm-bk-a" href="/the-logic-behind-it.html"><img src="/assets/img/home/cover-pocket-240.webp" alt="" width="240" height="383" loading="lazy" decoding="async"><span class="hm-bk-k">Pocket guide</span><span class="hm-bk-t">The Logic Behind It</span></a><p class="hm-bk-shop" data-shop-book="pocket-the-logic-behind-it" hidden><a data-shop="amazon" hidden aria-label="Get the paperback of The Logic Behind It">Paperback</a></p></li>
-  </ul>
-  <p class="hm-bk-row"><a class="hm-btn" href="/book/index.html">Read free online</a> <a class="hm-btn is-quiet" href="/book/index.html#print-series" data-hm-print hidden>Get the paperback</a></p>
-</section>
-
-<!-- What's here: the big areas, each with what it is and how many (counts update from the menu and the tools list) -->
-<section class="hm hm-map tol-plain no-bubble no-dive" id="whats-here" aria-labelledby="hh-map-h">
-  <nav class="hh-map" aria-labelledby="hh-map-h">
-    <h2 class="hm-h hh-map-h" id="hh-map-h">What&rsquo;s here</h2>
-    <ul class="hh-map-doors">
-    <li><a href="/tools.html"><span class="hh-map-i" aria-hidden="true">&#129520;</span><span class="hh-map-t">Tools</span><span class="hh-map-c" data-hh-count="tools">19 tools</span><span class="hh-map-n">Chat analyzer, chore split, quizzes and more.</span></a></li>
-    <li><a href="/workpapers/fill/suite.html"><span class="hh-map-i" aria-hidden="true">&#128221;</span><span class="hh-map-t">Workpapers</span><span class="hh-map-c">Fill in or print</span><span class="hh-map-n">Short worksheets for sharing the load, talking and calm.</span></a></li>
-    <li><a href="/journeys.html"><span class="hh-map-i" aria-hidden="true">&#129517;</span><span class="hh-map-t">Guided journeys</span><span class="hh-map-c" data-hh-count="journeys">11 journeys</span><span class="hh-map-n">A few small steps for what&rsquo;s going on.</span></a></li>
-    <li><a href="/book/index.html"><span class="hh-map-i" aria-hidden="true">&#128214;</span><span class="hh-map-t">The book</span><span class="hh-map-c" data-hh-count="chapters">26 chapters</span><span class="hh-map-n">Yourself, between us, and understanding people.</span></a></li>
-    <li><a href="/ladder.html"><span class="hh-map-i" aria-hidden="true">&#127807;</span><span class="hh-map-t">Calm right now</span><span class="hh-map-c" data-hh-count="calm">4 calm tools</span><span class="hh-map-n">A one-minute check, then one calm step that fits.</span></a></li>
-    <li><a href="/pause-and-play.html"><span class="hh-map-i" aria-hidden="true">&#127922;</span><span class="hh-map-t">Games and play</span><span class="hh-map-c" data-hh-count="play">9 ways to play</span><span class="hh-map-n">Calm games, the pups&rsquo; cartoon and music. No way to lose.</span></a></li>
-    </ul>
-    <p class="hh-map-all"><a href="/explore.html">Everything on this site, with filters<span data-hh-count="pages"></span> &rarr;</a></p>
-  </nav>
-  <details class="hm-fold" id="start-where">
-    <summary><h2 id="sw-h">Every situation, one tap each</h2></summary>
-    <p class="lede">Tap whatever is closest to true right now. We&rsquo;ll point you to the two or three pages that help most.</p>
-    <div data-tol-start data-first="same-fight,illness,friends,family-rifts,raising-grandchild,grandparents,foster,separated,money,long-hours,different-hours,gaming,two-faiths,widowed,more-than-two,sharing-a-room,coming-home,empty-nest,child-teen,coming-out,work,not-safe" data-first-me="know-myself,anxious,widowed,on-my-own,empty,illness,read-book,coming-out,grief,teen,give-too-much,anger,not-safe" data-more="Something else? See all situations"></div>
-  </details>
-</section>
-
-<!-- The logic behind it: one reaction, its logic shown step by step (from /the-logic-behind-it.html) -->
-<section class="hm hm-logic tol-plain no-bubble no-dive" id="logic" aria-labelledby="logic-h">
-  <p class="hm-k">The logic behind it</p>
-  <h2 class="hm-h" id="logic-h">Most reactions make sense, once you see the logic</h2>
-  <p class="hm-logic-out"><strong>From the outside:</strong> someone leaves a party early, without a goodbye round.</p>
-  <p class="hm-chain"><span>Energy is a budget</span> <span>the party spent it faster than expected</span> <span>staying past zero risks a shutdown</span> <span>leaving quietly protects the evening and the friendship.</span></p>
-  <p class="hm-note">Logic explains a reaction. It doesn&rsquo;t excuse harm.</p>
-  <p class="hm-links"><a class="hm-go" href="/the-logic-behind-it.html">More reactions</a> <a class="hm-go" href="/how-it-works.html">How it all works</a></p>
-</section>
-
-<!-- Come back gently: for next time -->
-<section class="hm hm-back tol-plain no-bubble no-dive" id="explore" aria-labelledby="explore-h">
-  <h2 class="hm-h" id="explore-h">Come back gently</h2>
-  <p class="home-new"><span class="announce-tag">New</span> <a href="/friends.html">Friends</a> <span aria-hidden="true">&middot;</span> <a href="/family-rifts.html">Family rifts</a> <span aria-hidden="true">&middot;</span> <a href="/coming-home.html">Coming home after time apart</a> <span aria-hidden="true">&middot;</span> <a href="/whats-new.html">Everything new &rarr;</a></p>
-  <details class="home-fold">
-    <summary>A weekly reminder, in your calendar</summary>
+<!-- 5. Come back gently: one small way, a weekly reminder in their own calendar (remind.js, loaded by site.js) -->
+<section class="h-back tol-plain no-bubble no-dive" id="explore" aria-label="Come back gently">
+  <details>
+    <summary id="explore-h">A gentle weekly reminder, in your calendar</summary>
     <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
   </details>
-  <details class="home-fold home-extras">
-    <summary>Music, the pups&rsquo; cam and the app</summary>
-<!-- pal cam hook (site.js loads the cam on demand): check in on Tidbit & Sugarfoot. The Brain Breakers music card (brain-breaks.js) goes just after it. -->
-<div class="pc-launch-row" data-palcam-row><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
-<!-- /pal cam hook -->
-<div data-app-ad></div>
-  </details>
-  <details class="home-fold" id="open-free">
-    <summary>Email updates (optional)</summary>
-    <p>Everything here is free, with no account, no sign-up and no paid version. If you&rsquo;d like a short note when something new ships, leave your email. No password, no account.</p>
-    <p class="free-note" data-tol-if-member hidden><strong>You&rsquo;re on the list.</strong> We&rsquo;ll send a short note when something new ships.</p>
-    <form class="contents-join" data-tol-if-guest data-tol-signup action="https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance" method="post">
-      <label for="home-email">Email address</label>
-      <input type="email" name="email" id="home-email" placeholder="name@example.com" autocomplete="email" required>
-      <button type="submit">Send me updates</button>
-    </form>
-    <p class="free-fine">Buttondown, our newsletter service, holds your address and uses it only for site updates. You can unsubscribe from any email. <a href="/legal/privacy-policy.html">Privacy policy</a></p>
-  </details>
-  <ul class="home-explore-links">
-    <li><a href="/someone-sent-you-this.html">Sent a link?</a></li>
-    <li><a href="/self-path.html">Your self path</a></li>
-    <li><a href="/for-teachers.html">For teachers</a></li>
-    <li><a href="/for-counselors.html">For counsellors and coaches</a></li>
-  </ul>
+  <p class="h-made">Made by Christian, kindly and independently. <a href="/about.html">Who built this, and why</a></p>
 </section>
 
 </main>
-
-<script src="/assets/js/pups.js" defer></script>
-<script src="/assets/js/app-ad.js" defer></script>
-<script src="/assets/js/message-check-mini.js" defer></script>
-<script src="/assets/js/book-shop.js" defer></script>
-<script src="/assets/js/home.js" defer></script>
-<script>
-/* What's here: the counts come from the menu and the tools list, so they stay right as pages are added */
-document.addEventListener('DOMContentLoaded', function () {
-  function set(k, v) { Array.prototype.forEach.call(document.querySelectorAll('[data-hh-count="' + k + '"]'), function (n) { n.textContent = v; }); }
-  var M = window.TOLSiteMap;
-  if (M) {
-    var pages = {};
-    M.sections.concat(M.menu).forEach(function (g) { g.items.forEach(function (it) { if (it.href && it.href.charAt(0) === '/') pages[it.href.split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html')] = 1; }); });
-    set('pages', '\u00a0(' + Object.keys(pages).length + ' pages)');
-    var book = M.sections.filter(function (s) { return s.id === 'book'; })[0];
-    // counted the way the book's own page counts them ("26 chapters in three parts, and an afterword"): the afterword isn't one
-    if (book) set('chapters', book.items.filter(function (it) { return /^\/book\/(self-\d-[a-z]+|preface|chapter-\d|understanding-\d+-[a-z-]+)\.html$/.test(it.href || ''); }).length + ' chapters');
-    var read = M.menu.filter(function (g) { return g.id === 'read'; })[0], rp = {};
-    if (read) { read.items.forEach(function (it) { if (it.href) rp[it.href.split(/[?#]/)[0]] = 1; }); set('read', Object.keys(rp).length + ' pages'); }
-  }
-  if (window.TOLJourneys && window.TOLJourneys.journeys) set('journeys', window.TOLJourneys.journeys.length + ' journeys');
-  // the tools list loads after the page, only for the numbers
-  window.addEventListener('load', function () {
-    var sc = document.querySelector('script[src="/assets/js/tools-registry.js"]'), have = !!sc;   // journeys.js may have loaded it already
-    if (!sc) { sc = document.createElement('script'); sc.src = '/assets/js/tools-registry.js'; }
-    function counts() {
-      var T = (window.TOLTools || []).filter(function (x) { return x.kind !== 'workpaper'; }); if (!T.length) return;
-      // a tool counts for a door when it is its main type or one it also fits; the games door counts the ways in to Gentle games
-      function n(t) { return T.filter(function (x) { return x.type === t || (x.also || []).indexOf(t) >= 0; }).length; }
-      function pl(k, one, many) { return k + ' ' + (k === 1 ? one : many); }
-      var games = T.filter(function (x) { return x.id === 'pauseplay'; })[0], g = games && games.modes ? games.modes.length - 1 : 0;
-      set('tools', pl(T.length, 'tool', 'tools')); set('calm', pl(n('calm'), 'calm tool', 'calm tools'));
-      if (g > 0) set('play', pl(g, 'way to play', 'ways to play'));
-    }
-    if (window.TOLTools) { counts(); return; }
-    sc.addEventListener('load', counts);
-    if (!have) document.head.appendChild(sc);
-  });
-});
-</script>
 </body>
 </html>

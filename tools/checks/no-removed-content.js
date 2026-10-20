@@ -81,6 +81,7 @@ const PATTERNS = [
   ['Open Path', /open\s*path\s+collective|openpathcollective/i],
   ['Gingerbread (charity)', /gingerbread\.org|\bGingerbread\b(?=[^.]{0,60}(?:charity|helpline|single parent))/i],
   // Panels and notes
+  ['danger sentence (emergency services)', /local emergency services|servicios de emergencia/i],
   ['Get help now', /get help now/i],
   ['free and private help', /free and private help/i],
   ['Not safe at home', /not safe at home/i],

@@ -180,8 +180,8 @@
         : 'If you’re afraid of them, or they control your money, your phone or who you see, a well-worded message isn’t the fix, and it isn’t your job to talk them round. Your safety is what matters.' }));
     }
     if (s.self) {
-      // nohot18: the one safety line, no numbers or names
-      box.appendChild(el('p', { text: 'If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.' }));
+      // the owner's decision (purge19): a short neutral line, no resources
+      box.appendChild(el('p', { text: 'That sounds really hard. This tool is a small guide to everyday conversations, and it can’t help with this one.' }));
     }
     return box;
   }

@@ -292,12 +292,12 @@
     // safety notes go first, and are never softened by anything above
     if (out.safety) {
       var S = {
-        crisis: 'Something you added sounds like someone may be thinking about ending their life. That matters more than any message. If you’re in danger or might hurt yourself or someone else, contact your local emergency services now, or tell someone you trust nearby.',
+        crisis: 'Something you added sounds like someone may be thinking about ending their life. That sounds really hard. This tool is a small guide to everyday messages, and it can’t help with this one.',
         fear: 'Something you added says someone feels afraid or controlled. That matters much more than the wording, and it isn’t something a better wording can fix.',
         threat: 'Something you added sounds like a threat. That matters more than the wording of this message.',
         control: 'Something you added sounds like someone’s choices may be being taken away (who they see, their phone or money).'
       };
-      out.notes.unshift({ id: 'safety', text: S[out.safety], href: '', link: '' });   // nohot18: no link to a list of lines
+      out.notes.unshift({ id: 'safety', text: S[out.safety], href: '', link: '' });
       F.parentLimit = false; F.teaseRoom = false;
     }
     return out;
