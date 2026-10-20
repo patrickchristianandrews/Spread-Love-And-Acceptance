@@ -882,11 +882,11 @@
   // ---- reminders: pages with a plan or a check-in time ----
   // title is neutral on purpose (a calendar can be seen by others); repeat: once, daily or weekly
   var REMIND = [
-    [/^\/check-ins\.html$/, { title: ['Our check-in', 'Nuestra charla'], repeat: 'weekly', day: 0, time: '19:30', minutes: 30 }],
-    [/^\/workpapers\/(fill\/wp-13|wp-13-daily-check-in)\.html$|^\/wp-13\.html$/, { title: ['90-second check-in', 'Charla de 90 segundos'], repeat: 'daily', time: '21:00', minutes: 5 }],
-    [/^\/week-0\.html$/, { title: ['My weekly half hour', 'Mi media hora semanal'], repeat: 'weekly', day: 0, time: '19:30', minutes: 30 }],
-    [/^\/pursue-withdraw\.html$/, { title: ['Back to our talk', 'Volver a nuestra charla'], repeat: 'once', inMinutes: 30, minutes: 30 }],
-    [/^\/different-hours\.html$/, { title: ['Our week together', 'Nuestra semana'], repeat: 'weekly', day: 0, time: '18:00', minutes: 15 }]
+    [/^\/check-ins\.html$/, { title: ['Our check-in'], repeat: 'weekly', day: 0, time: '19:30', minutes: 30 }],
+    [/^\/workpapers\/(fill\/wp-13|wp-13-daily-check-in)\.html$|^\/wp-13\.html$/, { title: ['90-second check-in'], repeat: 'daily', time: '21:00', minutes: 5 }],
+    [/^\/week-0\.html$/, { title: ['My weekly half hour'], repeat: 'weekly', day: 0, time: '19:30', minutes: 30 }],
+    [/^\/pursue-withdraw\.html$/, { title: ['Back to our talk'], repeat: 'once', inMinutes: 30, minutes: 30 }],
+    [/^\/different-hours\.html$/, { title: ['Our week together'], repeat: 'weekly', day: 0, time: '18:00', minutes: 15 }]
   ];
   function remindFor(d) {
     if (d.kit && d.kit.remind) return d.kit.remind;

@@ -3016,7 +3016,6 @@
   if (window.TOLFridge && $('own-fridge')) {
     window.TOLFridge.button($('own-fridge'), fridgeData, {
       note: 'One clean page: each job, its owner and a box to tick. Fits A4 and US Letter. With nothing picked yet, it prints a blank list to fill in together.',
-      noteEs: 'Una página limpia: cada tarea, su dueño y una casilla para marcar. Cabe en A4 y carta.',
       before: function () {
         var noNames = ownersList().length && state.people.some(function (p) { return placeholder(p); });
         var ut = unownedText();

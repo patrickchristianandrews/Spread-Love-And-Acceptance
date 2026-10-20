@@ -411,7 +411,7 @@
     var mm = document.createElement('div'), deal = $('deal'); deal.appendChild(mm);
     var keys = ['td-games', 'td-heads', 'td-ask', 'td-eve', 'td-phone', 'td-chores'];
     collab = C.attach({ tool: 'time-deal', page: '/gaming-and-time-together.html', mount: mm, shared: true,
-      title: ['our time-together deal', 'nuestro trato de tiempo juntos'],
+      title: ['our time-together deal'],
       lede: 'Fill in the deal on your own phone and send it. They change anything and send it back. Opening theirs shows both versions side by side, with “Use this” wherever they differ. Nobody’s version is overwritten.',
       fields: keys.map(function (k) { return { k: k.slice(3), en: LABELS[k] }; }),
       name: function () { return val('td-n1'); },

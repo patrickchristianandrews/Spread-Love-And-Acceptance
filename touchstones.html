@@ -233,7 +233,7 @@
     var C = window.TOLCollab; if (!C || !C.attach) return;
     var m = document.createElement('div'); form.parentNode.appendChild(m);
     var ctl = C.attach({ tool: 'touchstones', page: '/touchstones.html', mount: m,
-      title: ['our touchstone lists', 'nuestras listas de cosas nuestras'],
+      title: ['our touchstone lists'],
       lede: 'Each of you writes your own list, on your own phone, and sends it. Opening theirs puts the two lists side by side: the ones you both wrote, and the ones only one of you thought of.',
       fields: Object.keys(L).map(function (k) { return { k: k, en: L[k] }; }),
       next: function () { return 'Pick one from either list and use it on purpose this week, with a smile.'; },

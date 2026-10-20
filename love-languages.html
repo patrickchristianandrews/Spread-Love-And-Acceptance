@@ -265,7 +265,7 @@
     var C = window.TOLCollab; if (!C || !C.attach) return;
     var m = document.createElement('div'); form.parentNode.appendChild(m);
     var ctl = C.attach({ tool: 'care-card', page: '/love-languages.html', mount: m,
-      title: ['our care cards', 'nuestras tarjetas de cuidado'],
+      title: ['our care cards'],
       lede: 'Each of you ticks your own card, on your own phone, and sends it. Opening theirs puts the two cards side by side, with what you both picked.',
       fields: Object.keys(NAMES).map(function (k) { return { k: k, en: NAMES[k] }; }),
       next: function () { return 'This week, each try one thing from the other’s card.'; },

@@ -408,9 +408,9 @@
     function mi() { return me >= 0 ? me : 0; }
     var mm = document.createElement('div'); box.appendChild(mm);
     var collab = C.attach({ tool: 'our-week', page: '/different-hours.html', mount: mm, shared: true, own: ['hours'],
-      title: ['our week on one page', 'nuestra semana en una página'],
+      title: ['our week on one page'],
       lede: 'Fill in your own hours on your phone and send them. They add theirs and send it back. Their hours go in the other row; where the shared lines differ, each one gets “Use this”.',
-      fields: [{ k: 'hours', en: 'Shifts or work hours this week', es: 'Turnos u horas de trabajo esta semana' }].concat(SH.map(function (x) { return { k: x[0].slice(3), en: x[1], es: x[2] }; })),
+      fields: [{ k: 'hours', en: 'Shifts or work hours this week' }].concat(SH.map(function (x) { return { k: x[0].slice(3), en: x[1], es: x[2] }; })),
       name: function () { return v('dh-n' + (mi() + 1)); },
       mine: function () { var o = { hours: v('dh-r' + (mi() + 1)) }; SH.forEach(function (x) { o[x[0].slice(3)] = v(x[0]); }); return o; },
       fill: function (d) { if (typeof d.hours === 'string') el('dh-r' + (mi() + 1)).value = d.hours.slice(0, 300); SH.forEach(function (x) { var k = x[0].slice(3); if (typeof d[k] === 'string') el(x[0]).value = d[k].slice(0, 300); }); build(); labels(); keep(); },

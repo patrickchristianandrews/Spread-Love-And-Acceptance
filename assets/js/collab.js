@@ -670,8 +670,8 @@
      opts = {
        tool: 'checkin',                       the tool id (letters, numbers, dashes)
        page: '/check-ins.html',               the page the link opens (default: this page)
-       title: ['the weekly check-in card', 'la tarjeta semanal'],   for "Alex sent you their part of …"
-       fields: [{ k:'well', en:'What went well', es:'Lo que fue bien' }, ...],   labels for showing parts
+       title: ['the weekly check-in card'],   for "Alex sent you their part of …"
+       fields: [{ k:'well', en:'What went well' }, ...],   labels for showing parts
        mine: function () { return { well: '...', ... }; },   your part, as it is now
        fill: function (d) { ... },             optional: put values into your form ("Use this", or your own
                                                part coming back to an empty form)
@@ -688,7 +688,7 @@
     opts = opts || {};
     var tool = opts.tool, mount = opts.mount;
     if (!D || !mount || !TOOL_RE.test(tool || '')) return null;
-    var title = function () { var t = opts.title || ['this', 'esto']; return Array.isArray(t) ? t[0] : t; };
+    var title = function () { var t = opts.title || 'this'; return Array.isArray(t) ? t[0] : t; };
     var fieldMap = {}; (opts.fields || []).forEach(function (f) { fieldMap[f.k] = f; });
     function label(k) { var f = fieldMap[k]; return f ? f.en : k; }
     function fmt(k, v) {

@@ -411,7 +411,7 @@
     var C = window.TOLCollab; if (!C || !C.attach) return;
     var m = document.createElement('div'); $('agreement').appendChild(m);
     collab = C.attach({ tool: 'room', page: '/sharing-a-room.html', mount: m, shared: true,
-      title: ['our room agreement', 'nuestro acuerdo de cuarto'],
+      title: ['our room agreement'],
       lede: 'Change the agreement on your own phone and send it. Your roommate changes anything and sends it back. Opening theirs shows both versions side by side, with “Use this” wherever they differ. Nobody’s version is overwritten.',
       fields: rows.map(function (r) { return { k: r[0].slice(3), en: r[1] }; }),
       name: function () { return val('ra-me'); },

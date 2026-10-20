@@ -262,9 +262,9 @@
     var C = window.TOLCollab; if (!C || !C.attach) return;
     var m = document.createElement('div'); fam.insertBefore(m, document.getElementById('cf-fridge'));
     collab = C.attach({ tool: 'family-plan', page: '/check-ins.html?for=family', mount: m, shared: true,
-      title: ['our family plan', 'nuestro plan familiar'],
+      title: ['our family plan'],
       lede: 'Each of you can fill in the plan on your own phone and send it. Opening theirs shows both versions side by side, with “Use this” wherever they differ. Nobody’s version is overwritten.',
-      fields: [{ k: 'names', en: 'Who’s in this plan', es: 'Quiénes están en el plan' }].concat(F.map(function (f) { return { k: f[0].slice(3), en: f[1] }; })),
+      fields: [{ k: 'names', en: 'Who’s in this plan' }].concat(F.map(function (f) { return { k: f[0].slice(3), en: f[1] }; })),
       mine: read,
       fill: function (o) { fill(o); keep(); },
       onMerge: function () { show('family'); } });
