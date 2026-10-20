@@ -474,9 +474,9 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 - For Kindle, KDP shows about the first 10%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, the help page, then the three friends, so Chapter 1 comes early. The box set opens on one contents page for all five books.
 ''')
     md.append('## Author Central bio (short, warm and true)\n')
-    md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. He brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
+    md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
 
-[OWNER: confirm every detail, the pronoun, and whether you want a photo. Keep it to things that are true and that you're happy to share.]
+[OWNER: confirm every detail (the About page uses they/them for Christian), and whether you want a photo. Keep it to things that are true and that you're happy to share.]
 ''')
     md.append('## Sources (looked up October 2026)\n')
     md.append('''- KDP printing cost, standard colour regular trim $1.00 + $0.0255 a page (72 to 600 pages; 72 is the minimum for standard colour), large trim $1.00 + $0.0402: [KDP help, printing costs](https://kdp.amazon.com/en_US/help/topic/G201834340); [Cambric KDP printing cost guide](https://cambric.pub/guides/kdp-printing-cost-guide/).

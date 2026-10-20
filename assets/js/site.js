@@ -39,7 +39,7 @@
     }
     function sheet(sh) { try { fix(sh.cssRules); } catch (e) {} }   // another site's stylesheet can't be read: nothing to do
     function all() {
-      if (document.body && document.body.classList.contains('is-game')) return;
+      if (document.body && document.body.classList.contains('is-game') && !document.body.classList.contains('pp-page')) return;
       for (var i = 0; i < document.styleSheets.length; i++) sheet(document.styleSheets[i]);
     }
     try {
@@ -1565,6 +1565,8 @@
     if (scenePage()) document.documentElement.classList.add('tol-scene');
     // pages with their own dark look (the games, the Night Garden, Drift) keep it as it is
     if (body.classList.contains('is-game') || body.hasAttribute('data-no-dark') || /^\/(night-garden|calm-visualizer|pal-cam-tv|garden-backdrop)\.html$/.test(current)) document.documentElement.classList.add('tol-nodark');
+    // design17: and keep their own type and buttons too (Pause & Play is a hub of calm cards, so it takes the site's system)
+    if (document.documentElement.classList.contains('tol-nodark') && !body.classList.contains('pp-page')) document.documentElement.classList.add('tol-own-look');
     // every piece of reading text in its own soft bubble (site.css "Text bubbles"), except on pages with their own full-screen look
     if (!document.documentElement.classList.contains('tol-nodark') && !/^\/(404|offline)\.html$/.test(current)) {
       document.documentElement.classList.add('tol-bubbles');
