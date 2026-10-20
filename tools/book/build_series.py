@@ -1134,8 +1134,7 @@ def build_workbook(where, bw=False):
               '<li><strong>Write what happened.</strong> “Bins missed Tuesday” is useful. “Typical” is not. The sheets look at the setup and the week, and leave everyone’s character alone.</li>'
               '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet in free on the website, where it does the sums and keeps '
               'what you type on your own device.</li>'
-              '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine. If you feel afraid of someone you live with, '
-              'a worksheet is not the answer: spreadloveandacceptance.com/safety lists free, private help.</li></ul>'
+              '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
               '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
               'The next page is a planner for it. Most people miss a week somewhere. That’s built in.</p></section>') % mark('wb-how')
     weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', '—'),
