@@ -20,6 +20,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/coin-pusher.css">
+<style>
+/* game19: celebration banner, combo counter, Skip the show, the trophy (motion: transforms and opacity only; calm turns it off) */
+.cp-banner{ position:absolute; left:50%; top:52%; z-index:4; display:flex; align-items:center; gap:.7rem; max-width:calc(100% - 24px); padding:.6rem 1.1rem .6rem .7rem; border-radius:20px;
+  background:rgba(43,22,26,.9); color:#FFF3DC; border:2px solid #E9C46F; box-shadow:0 10px 30px rgba(40,20,10,.35); transform:translate(-50%, -50%) scale(.6); opacity:0; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .25s; pointer-events:none; }
+.cp-banner.is-up{ transform:translate(-50%, -50%) scale(1); opacity:1; }
+.cp-banner[hidden]{ display:none; }
+.cp-banner img{ width:64px; height:64px; flex:0 0 auto; }
+.cp-banner img[hidden]{ display:none; }
+.cp-banner p{ margin:0; }
+.cp-banner-k{ font:500 .74rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:#E9C46F; }
+.cp-banner-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.35rem; line-height:1.15; }
+.cp-banner.t2{ border-color:#B9A2D9; }
+.cp-banner.t3{ border-color:#8EC5EA; box-shadow:0 0 0 4px rgba(142,197,234,.35), 0 10px 30px rgba(40,20,10,.35); }
+.cp-banner.t4{ border-color:#F2A98A; box-shadow:0 0 0 4px rgba(242,169,138,.4), 0 0 40px rgba(255,200,120,.5); }
+.cp-banner.t4 .cp-banner-t, .cp-banner.t5 .cp-banner-t{ font-size:1.55rem; }
+.cp-banner.t5{ border:3px solid transparent; background:linear-gradient(rgba(43,22,26,.92), rgba(43,22,26,.92)) padding-box, linear-gradient(90deg, #E9C46F, #F2A98A, #B9A2D9, #8EC5EA, #7DB07A) border-box; box-shadow:0 0 50px rgba(255,210,140,.6); }
+.cp-banner.t4.is-up:not(.is-calm), .cp-banner.t5.is-up:not(.is-calm){ animation:cp-bob 1.2s ease-in-out infinite alternate; }
+@keyframes cp-bob{ to{ transform:translate(-50%, -54%) scale(1.04) rotate(-1deg); } }
+.cp-banner.is-calm{ transition:none; transform:translate(-50%, -50%); }
+.cp-combo{ position:absolute; left:50%; bottom:12px; z-index:4; margin:0; padding:.25rem .9rem; border-radius:999px; transform:translateX(-50%); background:rgba(43,22,26,.85); color:#FFE7B0; font:700 1.1rem "Fraunces", Georgia, serif; pointer-events:none; white-space:nowrap; }
+.cp-combo[hidden]{ display:none; }
+.cp-combo[data-lvl="2"]{ color:#2A1B14; background:#E9C46F; }
+.cp-combo[data-lvl="3"]{ color:#2A1B14; background:linear-gradient(90deg, #E9C46F, #F2A98A, #B9A2D9); font-size:1.25rem; }
+.cp-combo[data-lvl="0"]{ font-size:.95rem; color:#FFF3DC; }
+.cp-combo.is-pop{ animation:cp-combo-pop .3s ease-out; }
+@keyframes cp-combo-pop{ 0%{ transform:translateX(-50%) scale(1.35); } 100%{ transform:translateX(-50%) scale(1); } }
+.cp .cp-skipshow{ position:absolute; right:10px; bottom:10px; z-index:5; }
+.cp .cp-skipshow[hidden]{ display:none; }
+.cp-trophy{ display:block; width:120px; height:120px; margin:0 auto .3rem; }
+.cp-trophy-note{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .6rem; margin:.2rem 0 .6rem; font-weight:600; }
+.cp-trophy-note[hidden]{ display:none; }
+@media (max-width:640px){ .cp-banner{ padding:.5rem .8rem .5rem .5rem; gap:.5rem; } .cp-banner img{ width:48px; height:48px; } .cp-banner-t{ font-size:1.1rem; } .cp-banner.t4 .cp-banner-t, .cp-banner.t5 .cp-banner-t{ font-size:1.2rem; } }
+html.tol-quiet .cp-banner, html.tol-quiet .cp-combo{ animation:none !important; transition:none !important; }
+</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -87,12 +121,12 @@
 <main class="cp" id="cp">
   <a class="cp-skip" href="#cp-drop">Skip to the Drop a coin button</a>
   <header class="cp-head">
-    <p class="cp-kicker">A cosy arcade</p>
+    <p class="cp-kicker">A cozy arcade</p>
     <h1>Kindness Coin Pusher</h1>
-    <p class="cp-intro cp-intro-short">Tap the machine to drop a coin. Every five coins that fall brings a short, useful tip.</p>
+    <p class="cp-intro cp-intro-short">Tap the machine to drop a coin. Push all 22 friends over the edge for the biggest party on the site.</p>
     <details class="cp-how">
       <summary>How it works</summary>
-      <p class="cp-intro">Tap the machine where you want a coin to drop, or use Left, Right and Drop a coin. The pusher slides back and forth, and every coin that falls off the front edge fills the kindness meter. Every five coins, a short, useful tip slides up for a few seconds, and bigger pushes bring deeper ones. Every tip you find is kept in “Tips you’ve found” below the machine. Now and then a medallion with one of the site’s friends rides in with your coins: push it over the edge to put them on your shelf. There’s no money here and nothing to buy. Your coins refill by themselves, and everything stays on this device.</p>
+      <p class="cp-intro">Tap the machine where you want a coin to drop, or use Left, Right and Drop a coin. The pusher slides back and forth, and every coin that falls off the front edge fills the kindness meter: every three put a coin back in your cup. Now and then a medallion with one of the site’s 22 friends rides in with your coins. Push it over the edge to put that friend on your shelf. Each new friend brings a celebration that gets bigger as your shelf fills, and finding all 22 brings the big finale and a trophy. Once in a while, a short, useful tip slides up (at most one every few minutes, never in the middle of a celebration). Every tip is kept in “Tips you’ve found” below the machine, and the Tips button turns them off. There’s no money here and nothing to buy. Your coins refill by themselves, and everything stays on this device.</p>
     </details>
   </header>
 <!-- place:pauseplay style=gm --><nav class="gm-switch no-print no-bubble" aria-label="Gentle games: every game"><a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Gentle games">✨</a><a class="gm-tab" href="/frequency-journey.html">🎵 Arcade</a><a class="gm-tab" href="/word-bloom.html">🌼 Bloom</a><a class="gm-tab" href="/quiet-words.html">🔍 Words</a><a class="gm-tab" href="/quiet-crossword.html">✏️ Crossword</a><a class="gm-tab" href="/daily-ledger-crossword.html">📰 Newspaper</a><a class="gm-tab" href="/recheck-drive.html">🏈 Re-check Drive</a><a class="gm-tab" href="/bears-dojo.html">🐻 Bears Dojo</a><a class="gm-tab" href="/coin-pusher.html" aria-current="page">🪙 Coin Pusher</a><a class="gm-tab" href="/frequency-buddies-music-video-maker.html">🎬 Music video</a></nav><!-- /place:pauseplay -->
@@ -105,8 +139,11 @@
       <span class="cp-chip">🪙 <b id="cp-cup">0</b> in your cup</span>
       <span class="cp-chip">💛 Meter <b id="cp-meter">0</b></span>
     </div>
-    <div class="cp-stage" id="cp-stage" tabindex="0" role="group" aria-roledescription="coin pusher" aria-label="A cosy coin pusher in a wood and brass cabinet. Tap where to drop a coin, or use the left and right arrow keys to aim and Space to drop.">
+    <div class="cp-stage" id="cp-stage" tabindex="0" role="group" aria-roledescription="coin pusher" aria-label="A cozy coin pusher in a wood and brass cabinet. Tap where to drop a coin, or use the left and right arrow keys to aim and Space to drop.">
       <canvas class="cp-fx" id="cp-fx" aria-hidden="true"></canvas>
+      <div class="cp-banner" id="cp-banner" hidden aria-hidden="true"><img id="cp-banner-img" alt="" width="72" height="72" hidden><div><p class="cp-banner-k" id="cp-banner-k"></p><p class="cp-banner-t" id="cp-banner-t"></p></div></div>
+      <p class="cp-combo" id="cp-combo" hidden aria-hidden="true"></p>
+      <button type="button" class="cp-pill cp-skipshow" id="cp-skipshow" hidden>Skip the show</button>
       <div class="cp-card" id="cp-card" hidden>
         <p class="cp-card-k" id="cp-card-k"></p>
         <h3 class="cp-card-t" id="cp-card-t"></h3>
@@ -119,19 +156,20 @@
       <button type="button" class="cp-go" id="cp-drop">Drop a coin</button>
       <button type="button" class="cp-pill cp-aim" id="cp-right" aria-label="Aim right">Right <span aria-hidden="true">▶</span></button>
     </div>
-    <p class="cp-empty" id="cp-empty" hidden>Your cup is empty for now. It refills by itself, one coin every 8 seconds: a nice moment to stretch or look out of a window.</p>
+    <p class="cp-empty" id="cp-empty" hidden>Your cup is empty for now. It refills by itself, one coin every 8 seconds: a nice moment to stretch or look out the window.</p>
     <div class="cp-meter-box">
-      <p class="cp-meter-label"><b>Kindness meter</b> <span id="cp-next">5 more coins to the next tip</span></p>
-      <div class="cp-meter" role="progressbar" aria-label="Coins toward the next tip" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><span id="cp-meter-bar"></span></div>
-      <p class="cp-note"><span id="cp-refill">Your cup is full.</span> Friends found: <b id="cp-found">0</b>. Tips found: <b id="cp-tips-n">0</b>.</p>
+      <p class="cp-meter-label"><b>Kindness meter</b> <span id="cp-next">3 more coins over the edge for a free coin</span></p>
+      <div class="cp-meter" role="progressbar" aria-label="Coins toward a free coin" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span id="cp-meter-bar"></span></div>
+      <p class="cp-note"><span id="cp-refill">Your cup is full.</span> Friends found: <b id="cp-found">0</b>. Tips found: <b id="cp-tips-n">0</b>. <span id="cp-tipnext"></span></p>
     </div>
     <div class="cp-bar" role="group" aria-label="Machine options">
       <button type="button" class="cp-pill" id="cp-sound" aria-pressed="false">Sound: <b>off</b></button>
       <button type="button" class="cp-pill" id="cp-music" aria-pressed="false">Music: <b>off</b></button>
       <button type="button" class="cp-pill" id="cp-view" aria-pressed="false">View: <b>3D</b></button>
+      <button type="button" class="cp-pill" id="cp-tipsbtn" aria-pressed="true">Tips: <b>on</b></button>
     </div>
     <p class="cp-note cp-center" id="cp-quiet-note" hidden>Quiet mode is on, or site sounds are off in Settings, so the machine stays silent.</p>
-    <p class="cp-note cp-center" id="cp-calm-note" hidden>“Keep the page still” is on, so you’re seeing the calm, flat view: no shaking, no confetti, and the pusher only moves after you drop a coin.</p>
+    <p class="cp-note cp-center" id="cp-calm-note" hidden>“Keep the page still” is on, so you’re seeing the calm, flat view: no shaking, no confetti, and the pusher only moves after you drop a coin. Celebrations are a short, still banner.</p>
     <p class="sr-only" id="cp-live" aria-live="polite"></p>
   </section>
 
@@ -147,27 +185,30 @@
   </section>
 
   <section class="cp-celebrate" id="cp-celebrate" hidden aria-labelledby="cp-cel-h">
+    <canvas class="cp-trophy" id="cp-trophy" width="160" height="160" role="img" aria-label="A gold trophy with a heart and the words All 22"></canvas>
     <h2 id="cp-cel-h" tabindex="-1">You found every friend on the site</h2>
+    <p class="cp-note" id="cp-cel-when"></p>
     <div class="cp-cel-friends" id="cp-cel-friends" aria-hidden="true"></div>
     <p>Professor Puddles, Tidbit, Sugarfoot, the Frequency Buddies, the Night Garden friends, your Dojo bear, Kip, Peach and Lilac, and all four little clouds of Static are on your shelf. Thank you for playing gently. Each of them lives somewhere on this site, and every one of those places is about the same thing: seeing each other fairly, and holding on kindly.</p>
-    <div class="cp-row"><button type="button" class="cp-go tol-share-btn" id="cp-share">Share the coin pusher</button><button type="button" class="cp-pill" id="cp-cel-close">Back to the machine</button></div>
+    <div class="cp-row"><button type="button" class="cp-go tol-share-btn" id="cp-share">Share the coin pusher</button><button type="button" class="cp-pill" id="cp-replay">Replay the moment</button><button type="button" class="cp-pill" id="cp-cel-close">Back to the machine</button></div>
   </section>
 
   <p class="cp-note cp-center cp-gaming"><a href="/gaming-and-time-together.html">Arguing about gaming at home? A no-blame guide for both of you <span aria-hidden="true">→</span></a></p>
 
   <section class="cp-tips-wrap" aria-labelledby="cp-tips-h">
     <h2 id="cp-tips-h">Tips you’ve found</h2>
-    <p class="cp-note" id="cp-tips-none">None yet. The first one arrives after five coins.</p>
+    <p class="cp-note" id="cp-tips-none">None yet. The first one comes after a minute or two of play.</p>
     <ul class="cp-tips" id="cp-tips"></ul>
   </section>
 
   <section class="cp-shelf-box-wrap" aria-labelledby="cp-shelf-h">
     <h2 id="cp-shelf-h">Your shelf of friends</h2>
+    <p class="cp-trophy-note" id="cp-trophy-note" hidden><span aria-hidden="true">🏆</span> Trophy: every friend found, <span id="cp-trophy-date"></span>. <button type="button" class="cp-pill" id="cp-replay2">Replay the moment</button></p>
     <p class="cp-note">Every character on the site is in the machine somewhere. Tap a friend you’ve found to visit where they live. Medallions turn up at random, but never more than a few coins apart, so everyone can find them all.</p>
     <ul class="cp-shelf" id="cp-shelf"></ul>
   </section>
 
-  <p class="cp-note cp-center">A cosy arcade, not a casino: no real money, nothing to buy, no prizes worth anything but a smile. Your coins, friends and tips are kept only in this browser, on this device.</p>
+  <p class="cp-note cp-center">A cozy arcade, not a casino: no real money, nothing to buy, no prizes worth anything but a smile. Your coins, friends and tips are kept only in this browser, on this device.</p>
   <p class="cp-center"><button type="button" class="cp-pill" id="cp-reset">Start over</button></p>
 </main>
 </body>

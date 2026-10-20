@@ -178,6 +178,30 @@
   .ar-tui-ch .ar-btn.is-main b{ background:rgba(255,255,255,.18); }
   .ar-tui-ch .ar-btn b{ display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; margin-right:.35rem; border-radius:50%; background:rgba(60,50,80,.12); font-size:.85rem; }
   .ar-tui-ch .ar-btn.is-sel{ outline:3px solid #E3B15C; outline-offset:1px; }
+  /* game19: the Derby's trick bats, the round summary and the intermissions' Skip button */
+  .ar-bats{ margin:-.3rem auto .7rem; max-width:24rem; text-align:center; }
+  .ar-bats[hidden]{ display:none; }
+  .ar-bats-h{ margin:0 0 .35rem; font:500 .78rem "IBM Plex Mono", monospace; letter-spacing:.04em; color:#CFC3F0; }
+  .ar-bats-h b{ color:#FFE08A; }
+  .ar-bats-row{ display:grid; grid-template-columns:repeat(4, 1fr); gap:.35rem; }
+  .ar-bat{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.05rem; min-height:56px; padding:.3rem .2rem; border-radius:16px; border:2px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#FFF6E0; font:600 .85rem "Lora", Georgia, serif; cursor:pointer; touch-action:manipulation; }
+  .ar-bat span{ font-size:1.2rem; line-height:1; }
+  .ar-bat small{ font:500 .62rem/1.2 "IBM Plex Mono", monospace; color:#CFC3F0; }
+  .ar-bat:hover{ background:rgba(255,224,138,.18); }
+  .ar-bat.is-on{ background:#FFE08A; border-color:#FFE08A; color:#2A2552; }
+  .ar-bat.is-on small{ color:#4E3F6B; }
+  .ar-bat:disabled{ opacity:.45; cursor:default; }
+  .ar-bat:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
+  @media (orientation: landscape) and (pointer: coarse){ .ar-side .ar-bats-row{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .ar-bats-row{ grid-template-columns:1fr 1fr; } .ar-bat{ flex-direction:row; flex-wrap:wrap; gap:0 .35rem; min-height:48px; } .ar-bat small{ flex-basis:100%; } }
+  .ar-ov-stats{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.35rem .6rem; margin:0 auto .8rem; max-width:24rem; }
+  .ar-ov-stats[hidden]{ display:none; }
+  .ar-ov-stats div{ padding:.35rem .3rem; border-radius:12px; background:rgba(255,255,255,.1); }
+  .ar-ov-stats dt{ font:500 .66rem "IBM Plex Mono", monospace; letter-spacing:.06em; text-transform:uppercase; color:#CFC3F0; }
+  .ar-ov-stats dd{ margin:0; font:700 1rem "Fraunces", Georgia, serif; color:#FFE08A; }
+  @media (max-width:420px){ .ar-overlay{ padding:.6rem; } .ar-overlay h2{ font-size:1.25rem; } .ar-overlay p{ font-size:.9rem; margin-bottom:.6rem; } .ar-ov-stats{ grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+  .ar-skip{ position:absolute; right:10px; bottom:10px; z-index:3; min-width:44px; min-height:44px; background:rgba(20,16,44,.82); }
+  .ar-skip[hidden]{ display:none; }
   @media print{ .ar-select, .ar-stage{ display:none; } }
 </style>
 <!-- seo:start -->
@@ -251,7 +275,7 @@
 <div class="pc-launch-row" data-palcam-row hidden><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
 <!-- /pal cam hook -->
   <p class="jl-sub">Six gentle classic games. Pick a pup and a game, then press Start.</p>
-  <details class="jl-howto no-bubble"><summary>How it works</summary><p>Six classic arcade games, made gentle: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby. Play as Tidbit or Sugarfoot. Every level is new, there’s no game over, and the controls are as easy as we could make them. Your pup, your settings and your best scores stay in this browser.</p></details>
+  <details class="jl-howto no-bubble"><summary>How it works</summary><p>Six classic arcade games, made gentle: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby. Play as Tidbit or Sugarfoot. Every level is new, there’s no game over, and the controls are as easy as we could make them. Between levels, Tidbit and Sugarfoot put on a short cartoon show (skip it any time). Your pup, your settings and your best scores stay in this browser.</p></details>
   <div class="jl-actions">
     <a class="jl-go" href="#ar-select">&#9654; Choose and play</a>
     <a class="jl-go is-soft" href="#buddies">Watch Frequency Buddies</a>
@@ -279,7 +303,7 @@
       <label class="ar-card"><input type="radio" name="ar-game" value="trail"><canvas id="ar-prev-trail" width="120" height="90" aria-hidden="true"></canvas><h3>The Treat Trail</h3><p>Lead the wagon from Puddle Hollow to Starfall Hill. Choose your pace and snack sizes, cross rivers, trade at posts, and handle whatever the trail brings. Nobody gets hurt.</p><span class="ar-ctl">Tap a choice, or press 1 to 5</span><span class="ar-best" id="ar-best-trail"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
       <label class="ar-card"><input type="radio" name="ar-game" value="bricks"><canvas id="ar-prev-bricks" width="120" height="90" aria-hidden="true"></canvas><h3>Bubble Break</h3><p>Bounce a bubble into the blocks of Static until the wall is clear. A miss just floats back down to the cushion.</p><span class="ar-ctl">Left and right, or drag; up to send the bubble</span><span class="ar-best" id="ar-best-bricks"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
       <label class="ar-card"><input type="radio" name="ar-game" value="shower"><canvas id="ar-prev-shower" width="120" height="90" aria-hidden="true"></canvas><h3>Treat Shower</h3><p>Treats tumble down from a friendly cloud. Catch them in the basket. A raindrop is only a little drip on the nose.</p><span class="ar-ctl">Left and right, or drag</span><span class="ar-best" id="ar-best-shower"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
-      <label class="ar-card"><input type="radio" name="ar-game" value="derby"><canvas id="ar-prev-derby" width="120" height="90" aria-hidden="true"></canvas><h3 id="derby">Home Run Derby</h3><p>Your pup bats and the other one pitches. Ten pitches: swing as the ring closes on the plate and send it into the stands. Swap roles any time.</p><span class="ar-ctl">Tap, the big Swing button, or space</span><span class="ar-best" id="ar-best-derby"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
+      <label class="ar-card"><input type="radio" name="ar-game" value="derby"><canvas id="ar-prev-derby" width="120" height="90" aria-hidden="true"></canvas><h3 id="derby">Home Run Derby</h3><p>Your pup bats and the other one pitches. Ten pitches: power up, time it with the ring, read the pitcher’s tell and send it into the stands. Three trick bats a round, and the odd super hit. Swap roles any time.</p><span class="ar-ctl">Hold Swing (or space) and let go; arrows step</span><span class="ar-best" id="ar-best-derby"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
     </div>
   </fieldset>
 
@@ -309,6 +333,15 @@
     <div class="ar-side" id="ar-side">
       <p class="ar-status" id="ar-status" aria-live="polite"></p>
       <button type="button" class="ar-swing" id="ar-swing" hidden>&#9918; Swing!</button>
+      <div class="ar-bats" id="ar-bats" role="group" aria-labelledby="ar-bats-h" hidden>
+        <p class="ar-bats-h" id="ar-bats-h">Trick bats <span id="ar-bats-ic" aria-hidden="true">🏏🏏🏏</span> <b id="ar-bats-n">3 left</b></p>
+        <div class="ar-bats-row">
+          <button type="button" class="ar-bat" data-bat="mega" aria-pressed="false"><span aria-hidden="true">🏏</span> Mega<small>bigger sweet spot</small></button>
+          <button type="button" class="ar-bat" data-bat="rocket" aria-pressed="false"><span aria-hidden="true">🚀</span> Rocket<small>extra power</small></button>
+          <button type="button" class="ar-bat" data-bat="banana" aria-pressed="false"><span aria-hidden="true">🍌</span> Banana<small>super hit on contact</small></button>
+          <button type="button" class="ar-bat" data-bat="magnet" aria-pressed="false"><span aria-hidden="true">🧲</span> Magnet<small>wider timing</small></button>
+        </div>
+      </div>
       <div class="ar-dpad" id="ar-dpad" role="group" aria-label="Move: on-screen arrows (hold one to keep going)">
         <button type="button" class="d-up" id="ar-d-up" aria-label="Up">&#9650;</button>
         <button type="button" class="d-left" id="ar-d-left" aria-label="Left">&#9664;</button>

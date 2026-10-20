@@ -179,7 +179,7 @@
    "royalty_low": 0.5,
    "threshold": 9.99,
    "expanded": 0.4,
-   "note": "KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)"
+   "note": "KDP Amazon.com, standard color, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)"
   },
   "kdp_large": {
    "fixed": 1.0,
@@ -188,7 +188,7 @@
    "royalty_low": 0.5,
    "threshold": 9.99,
    "expanded": 0.4,
-   "note": "KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page"
+   "note": "KDP Amazon.com, standard color, large trim (8.5 x 11): $1.00 + $0.0402 a page"
   },
   "kdp_bw_large": {
    "fixed": 2.84,
@@ -202,5 +202,5 @@
   }
  },
  "paper_in": 0.002252,
- "paper_note": "KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)"
+ "paper_note": "KDP standard color (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)"
 }

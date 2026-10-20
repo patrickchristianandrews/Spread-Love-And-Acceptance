@@ -1,5 +1,5 @@
 {
- "about": "voice18: \"How the ideas connect\", one page in each book (and in the pocket guide): the seven roots in the middle, the thirteen fields round them, and where each one comes up in that book. Fields and roots use the wording on /polymath.html. Made from voice18 twoways_data.py.",
+ "about": "voice18: \"How the ideas connect\", one page in each book (and in the pocket guide): the seven roots in the middle, the thirteen fields around them, and where each one comes up in that book. Fields and roots use the wording on /polymath.html. Made from voice18 twoways_data.py.",
  "fields": [
   {
    "key": "NB",
@@ -28,7 +28,7 @@
   },
   {
    "key": "BS",
-   "name": "Behavioural science",
+   "name": "Behavioral science",
    "idea": "habits beat good intentions"
   },
   {
@@ -96,7 +96,7 @@
   {
    "key": "QI",
    "name": "Quiet incentives",
-   "line": "things drift towards whatever the setup quietly rewards"
+   "line": "things drift toward whatever the setup quietly rewards"
   },
   {
    "key": "SS",

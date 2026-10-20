@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """pocket.py: "The Logic Behind It", the series' pocket guide (logicbook14).
 
-A 5 x 8 in standard-colour paperback (72 to 80 pages) and a Kindle ebook, made from the situations in
+A 5 x 8 in standard-color paperback (72 to 80 pages) and a Kindle ebook, made from the situations in
 assets/js/logic-library.js (the same words as /the-logic-behind-it.html, with the print wording in
 tools/book/series-extras.json "overrides"), one situation to a page. tools/book/build_series.py calls build() for the
 print page (book/print/src/<id>.html) and its cover; tools/book/build_epub.py calls epub_docs() for the ebook and the
@@ -110,15 +110,15 @@ SEC_INTRO = {
     'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, like showing goodwill or sparing a feeling. These pages set out those jobs plainly, along with what it costs to keep up appearances all day. The art of debating would add: say the other person’s strongest point first.',
     'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the lifts, and wrapping criticism in praise. Business and politics agree that every job needs an owner and every group a fair way to decide.',
     'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again, giving advice nobody asked for. Each has a logic, and each has another side. Finance has a picture for it: a repair tops up a reserve of goodwill.',
-    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a row about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterwards. Music explains a lot of it, because tone and tempo carry more than words, and a shared laugh can reset a heavy room (the research on laughter is modest).',
-    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle. Behavioural science calls these habits that save effort; the setting matters too, and aromatherapy’s modest point is that a familiar scent or a quieter room can help some people settle.',
-    'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means. How loud a family dinner gets. How plainly feedback is given. Whether a full stop in a text is cross. All of it learned in a particular place, family or generation. Philosophy’s habit helps here: separate the fact from the guess.',
+    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a fight about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterward. Music explains a lot of it, because tone and tempo carry more than words, and a shared laugh can reset a heavy room (the research on laughter is modest).',
+    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle. Behavioral science calls these habits that save effort; the setting matters too, and aromatherapy’s modest point is that a familiar scent or a quieter room can help some people settle.',
+    'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means. How loud a family dinner gets. How plainly feedback is given. Whether a period in a text is annoyed. All of it learned in a particular place, family or generation. Philosophy’s habit helps here: separate the fact from the guess.',
 }
 
 HOW = [
     ('Dip in anywhere', 'Every page stands on its own. Use the contents, the section pages or “Find it fast” at the back to go straight to whatever’s in front of you.'),
     ('Read it with the other person', 'A page can say what’s hard to say in the moment. Hand it over, or read it together, and talk about the last two parts, the other side and the small step.'),
-    ('Use it both ways', 'Some pages may explain you. Some may explain the people round you. Either way, the point is a fair view of both sides.'),
+    ('Use it both ways', 'Some pages may explain you. Some may explain the people around you. Either way, the point is a fair view of both sides.'),
     ('Scan for more', 'Each page has a code to the same situation on the website, free, with more pictures to choose from. The website has more than seventy situations, and a box where you can type your own.'),
     ('Build your own', 'The blank cards at the back walk you through the six parts for a reaction this guide doesn’t cover. There will be plenty of those.'),
 ]
@@ -142,19 +142,19 @@ LENS = [
          'text': 'The autistic researcher Damian Milton argued that misunderstanding between autistic and non-autistic people runs both ways: each finds the other hard to read, so the problem sits between them. His paper is an argument rather than an experiment; later studies support parts of it.',
          'ev': 'Theory: no data in the paper itself; later experiments support parts of it', 'cite': 'Milton (2012)'},
         'The pages about common social habits matter as much as the others. If you have ever been told you “should have known” what someone meant, it can be a relief to see that there was a system all along, and that it can be learned or simply asked about. And if you use those habits without thinking, seeing their logic written down shows where someone else might miss the signal.',
-        'The last section, “Different rulebooks”, is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
+        'The last section, “Different rulebooks,” is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
     ]),
     ('lens-care', 'Logic explains. It doesn’t excuse.', [
         'Knowing why a reaction happened doesn’t make its effects disappear. If a reaction hurts someone, the kind and logical next step is to say so, put it right and find a better step for next time.',
-        'Some pages have a line marked “With care”. It appears where a reaction can land hard on someone else, and it says what keeps things fair.',
+        'Some pages have a line marked “With care.” It appears where a reaction can land hard on someone else, and it says what keeps things fair.',
         'Seeing the other side doesn’t mean agreeing to everything the other person wants. A “no” or a limit given with care is part of looking after a relationship.',
         'If you’re reading a page with someone, start with the part about their side. People listen more easily once they feel understood.',
     ]),
 ]
 
 PARTS = [
-    ('What it looks like', 'One line in camera words, what a camera would see or hear. There is no “rude” and no “weird”, because a verdict closes the question before the logic can answer it.'),
-    ('The logic', 'Three or four short steps, each following from the one before. The chain starts with a plain fact about how things work, such as “Energy works like a budget”.'),
+    ('What it looks like', 'One line in camera words, what a camera would see or hear. There is no “rude” and no “weird,” because a verdict closes the question before the logic can answer it.'),
+    ('The logic', 'Three or four short steps, each following from the one before. The chain starts with a plain fact about how things work, such as “Energy works like a budget.”'),
     ('It’s like', 'An everyday picture that works the same way inside. A phone on 3% shuts down the extras to protect the call, which is why it suits low energy so well.'),
     ('Why it fits', 'What makes the reaction reasonable, said fairly and without stretching it. Where research supports a page, the research notes at the back list it.'),
     ('The other side', 'What the other person may have felt or needed. This part keeps the lens fair, so nobody has to be the bad guy.'),
@@ -231,9 +231,9 @@ def copyright_html(p, S):
     s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>' % (S.B.AUTHOR, S.B.UPDATED)
     s += ('<p><strong>Free online, always.</strong> Every situation in this guide, and more than seventy in all, is free at '
           'spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print book is optional. You may copy pages of this guide '
-          'for personal use and for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % esc(p['title'])
+          'for personal use and for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % esc(p['title'])
     s += ('<p><strong>Not therapy.</strong> This guide is general education about people and relationships. It is not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation. No page labels anyone.</p>')
+          'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation. No page labels anyone.</p>')
     s += ('<p><strong>The examples are made up.</strong> The situations in this guide are drawn from common patterns, and nobody in them is a real person; '
           'any likeness is coincidence. None of them is a testimonial.</p>')
     s += '<p>The research the pages lean on is listed in short at the back, and in full at spreadloveandacceptance.com/research.</p>'
@@ -287,8 +287,8 @@ def lens_html(S):
 def build_html(p, S):
     s = ('<section class="pk-back pk-build" id="build">%s<h1>Build your own</h1><p class="pk-lede">For a reaction this guide doesn’t cover, your own or someone else’s. '
          'It works best on a calm day, and better still with the other person.</p><ol class="pk-parts">%s</ol>'
-         '<p class="pk-small"><strong>Watch for verdict words.</strong> “Rude”, “lazy”, “selfish” and “dramatic” are guesses about a person. Swap them for what a camera '
-         'would see, and the logic has room to show itself. If a step needs “because they’re like that”, keep asking why.</p>'
+         '<p class="pk-small"><strong>Watch for verdict words.</strong> “Rude,” “lazy,” “selfish” and “dramatic” are guesses about a person. Swap them for what a camera '
+         'would see, and the logic has room to show itself. If a step needs “because they’re like that,” keep asking why.</p>'
          '<p class="pk-small"><strong>Online, it makes a card.</strong> The website’s “Build your own” turns your six parts into a card you can save or share. '
          'Nothing you type is sent anywhere.</p></section>') % (S.mark('build'), ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), esc(d)) for t, d in BUILD_PROMPTS))
     for k in range(p.get('build_cards', 3)):
@@ -420,7 +420,7 @@ def build(S):
             continue
         toc.append(S.B.toc_row(key, '', esc(title), 'is-back'))
     front = title_html(p, S) + copyright_html(p, S)
-    front += '<nav class="pe-toc ps-toc pk-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (S.mark('contents'), ''.join(toc))
+    front += '<nav class="pe-toc ps-toc pk-toc is-long pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (S.mark('contents'), ''.join(toc))
     front += how_html(S) + lens_html(S)
     back = build_html(p, S) + find_html(secs, S, nums) + S.ideas_map(p, [], pocket_sections=[(c['id'], c['name']) for c, _x in secs]) + online_html(p, S) + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
     ol = [['Contents', 'contents', 0], ['How to use this guide', 'how', 0]] + [[t, k_, 0] for k_, t, _x in LENS]

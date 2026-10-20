@@ -24,7 +24,7 @@ book/pdf/manifest.json; the next run of this script writes them into the package
 so printing from the browser shows the same numbers as the PDF.
 
 Change the order, a chapter's program links or the connection map below, then run it again.
-Afterwards run tools/seo/build_seo.py (new pages need their SEO lines there).
+Afterward run tools/seo/build_seo.py (new pages need their SEO lines there).
 """
 import glob
 import html
@@ -259,7 +259,7 @@ INDEX_TERMS = [
     ('balance (of the work)', r'balance'), ('battery', r'battery|batteries'), ('belonging', r'belong(?:ing)?'),
     ('bias', r'bias(?:es|ed)?'), ('bids for connection', r'bids?'), ('Big Five', r'Big Five', 1), ('blame', r'blam(?:e|ed|ing)'),
     ('boundaries, limits', r'boundar(?:y|ies)|kind limits?'), ('burnout', r'burn(?:out|ing out|ed out|t out)'),
-    ('bystander effect', r'bystanders?'), ('care, caring', r'caring|care work'), ('carers, caregiving', r'carers?|caregiv(?:er|ers|ing)'),
+    ('bystander effect', r'bystanders?'), ('care, caring', r'caring|care work'), ('caregivers, caregiving', r'carers?|caregiv(?:er|ers|ing)'),
     ('change', r'chang(?:e|es|ing)'), ('check-in', r'check-ins?'), ('closeness', r'closeness|intimacy'),
     ('communication', r'communicat(?:ion|e|ing)'), ('compassion', r'compassion(?:ate)?'), ('conflict', r'conflicts?'),
     ('conformity', r'conform(?:ity|ing|ed|s)?'), ('control, circle of', r'circle of control'), ('co-regulation', r'co-regulat(?:ion|e)'),
@@ -291,14 +291,14 @@ INDEX_TERMS = [
     ('us and them', r'us and them|in-groups?|out-groups?'), ('values', r'values'), ('vulnerability', r'vulnerab(?:le|ility)'),
     ('window of tolerance', r'window of tolerance'), ('wiring', r'wiring|wired'), ('worry', r'worr(?:y|ies|ied|ying)'),
     # people and relationships
-    ('adult children', r'grown-up (?:son|daughter|children|child)|adult children'), ('ageing, later life', r'later life|older (?:people|adults)|retire(?:d|ment)'),
+    ('adult children', r'grown-up (?:son|daughter|children|child)|adult children'), ('aging, later life', r'later life|older (?:people|adults)|retire(?:d|ment)'),
     ('babies, new parents', r'new parents?|new baby|babies|baby'), ('children', r'children|kids'), ('co-parenting', r'co-parent(?:s|ing)?|two homes'),
     ('couples', r'couples?'), ('coworkers', r'coworkers?|colleagues?'), ('divorce', r'divorce(?:d)?'), ('dorms, shared rooms', r'dorm(?:s|itory)?|roommates?'),
     ('empty nest', r'empty nest|left home'), ('ex-partners', r'ex-partners?|\bex\b'), ('faith', r'faith|prayer|church|mosque|synagogue|temple'),
     ('family', r'famil(?:y|ies)'), ('fathers, dads', r'fathers?|dads?'), ('foster care', r'foster(?:ing)?'), ('friends', r'friends?'),
-    ('grandparents', r'grandparents?|grandmother|grandfather|grandchild(?:ren)?|grandson|granddaughter'), ('housemates', r'housemates?|flatmates?'),
+    ('grandparents', r'grandparents?|grandmother|grandfather|grandchild(?:ren)?|grandson|granddaughter'), ('roommates', r'roommates?|housemates?|flatmates?'),
     ('in-laws', r'in-laws?'), ('kinship care', r'kinship'), ('managers', r'managers?'), ('marriage', r'marri(?:age|ed)'),
-    ('more than two partners', r'triads?|more than two partners|three partners'), ('mothers, mums', r'mothers?|mums?'), ('moving in', r'moving in|move in'),
+    ('more than two partners', r'triads?|more than two partners|three partners'), ('mothers, moms', r'mothers?|moms?|mums?'), ('moving in', r'moving in|move in'),
     ('neighbours', r'neighbours?'), ('parents', r'parents?|parenting'), ('partners', r'partners?'), ('siblings', r'siblings?|brothers?|sisters?'),
     ('single, living alone', r'living alone|lives alone|on your own|on my own'), ('step-parents', r'step-parents?|stepparents?|stepmum|stepdad'),
     ('teenagers', r'teen(?:s|ager|agers)?|teenage'), ('work, the workplace', r'workplace|at work|office'),
@@ -918,7 +918,7 @@ def clean_for_whole(inner, slug, deep, here=None):
 PACKAGES = [
     ('whole', (1, 2, 3), 'The Whole Book', 'Every chapter, all three parts.'),
     ('for-yourself', (1, 3), 'The Book for One Person', 'Part One (self-discovery) and Part Three (understanding people): everything you can read and use on your own.'),
-    ('together', (2,), 'The Book for Two or More', 'Part Two (between us): sharing a home, work or care with partners, family, housemates, co-parents or coworkers.'),
+    ('together', (2,), 'The Book for Two or More', 'Part Two (between us): sharing a home, work or care with partners, family, roommates, co-parents or coworkers.'),
     ('understanding', (3,), 'Understanding People', 'Part Three on its own: how feelings, stress, trust, change, grief and love work.'),
 ]
 COVER = {
@@ -930,7 +930,7 @@ COVER = {
 BLURB = {
     'whole': 'A calm, practical book about the quiet work of sharing a life. It starts with you: where your lens came from, how you work today and who you are becoming. Then it looks at what happens between people who share a home, work or care. And it ends with how people work: feelings, stress, trust, change, loss, anger, love and the groups we belong to.',
     'for-yourself': 'A book you can read on your own. Part One helps you see where your lens came from, how you work today and who you are becoming. Part Three explains how people work: feelings, stress, trust, change, loss, anger, love and the groups we belong to, so the people around you make a little more sense.',
-    'together': 'A book for people who share a home, work or care: partners, family, housemates, co-parents and coworkers. Each chapter takes one idea, from the work nobody sees to a fair way to share it and a kind way to talk about it, and comes with a worksheet that puts it to use.',
+    'together': 'A book for people who share a home, work or care: partners, family, roommates, co-parents and coworkers. Each chapter takes one idea, from the work nobody sees to a fair way to share it and a kind way to talk about it, and comes with a worksheet that puts it to use.',
     'understanding': 'How people work, in plain words: feelings, stress, how we see each other, communication, trust, change, worth, loss, minds that work differently, values, repair, helping, anger, personality, love, worry and groups. Each chapter has everyday examples, words you could use and something small to try.',
 }
 
@@ -978,7 +978,7 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p><em>{ST}</em>: %s, %s.<br>By %s. Published by Spread Love &amp; Acceptance.</p>
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
 <p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “{ST}, spreadloveandacceptance.com” and don’t change it or sell it.</p>
-<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>
+<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
@@ -1238,7 +1238,7 @@ GLOSS_EXTRA = [
     ('parallel-parenting', 'Parallel parenting', 'Co-parenting with as little direct contact as possible: each home runs its own way, and messages stay short, polite and about the children.', r'parallel parenting'),
     ('kinship-care', 'Kinship care', 'When a grandparent, aunt, older sibling or family friend raises a child whose parents can’t.', r'kinship'),
     ('gatekeeping', 'Gatekeeping', 'Holding on to how a home or child-care job must be done, so the other person steps back. Researchers first described it in mothers (“maternal gatekeeping”), but anyone can do it.', r'gatekeep\w*'),
-    ('if-then-plan', 'If-then plan', 'A small plan written as “If this happens, then I will do that”, which makes a new habit easier to start (Peter Gollwitzer).', r'if-then'),
+    ('if-then-plan', 'If-then plan', 'A small plan written as “If this happens, then I will do that,” which makes a new habit easier to start (Peter Gollwitzer).', r'if-then'),
 ]
 
 
@@ -1276,14 +1276,10 @@ UK_WORDS = {'behavior': 'behaviour', 'behaviors': 'behaviours', 'behavioral': 'b
 
 
 def uk(text):
-    """British spelling for the book's own plain-words text (research findings, glossary lines); titles of
-    published works keep their own spelling."""
-    def sub(m):
-        w = m.group(0)
-        r = UK_WORDS[w.lower()]
-        return r[0].upper() + r[1:] if w[0].isupper() else r
-    parts = re.split(r'(<[^>]+>)', text or '')
-    return ''.join(x if x.startswith('<') else re.sub(r'\b(%s)\b' % '|'.join(UK_WORDS), sub, x, flags=re.I) for x in parts)
+    """books-final9 (owner decision, 20 Oct 2026): American English for the book's own plain-words text (research findings,
+    glossary lines). The name is kept so the callers stay the same; titles of published works keep their own spelling."""
+    import us_english
+    return us_english.us_html(text or '')
 
 
 def research_notes(here):
@@ -1619,7 +1615,7 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <main class="read bk-home bk-dl" id="main">
 <header class="read-head"><p class="read-code">The book</p><h1>Download the books as PDFs</h1></header>
 <p class="simple-lede">{EMAIL} {FREE}</p>
-<p>Pick one of the four short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
+<p>Pick one of the short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
 <p>To download a book, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>

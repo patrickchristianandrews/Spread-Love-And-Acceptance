@@ -224,7 +224,7 @@
      ]
     },
     {
-     "problem": "We share a house with a housemate, or more than two of us share a home.",
+     "problem": "We share a house with a roommate, or more than two of us share a home.",
      "refs": [
       {
        "ch": "chapter-4",
@@ -237,7 +237,7 @@
         "housemate",
         "housemates"
        ],
-       "label": "A couple and a housemate"
+       "label": "A couple and a roommate"
       },
       {
        "ch": "chapter-2",
@@ -359,7 +359,7 @@
    "title": "Talking it through",
    "rows": [
     {
-     "problem": "Small things turn into big rows.",
+     "problem": "Small things turn into big fights.",
      "refs": [
       {
        "ch": "chapter-1",

@@ -1,8 +1,14 @@
 /* coin-pusher.js — the Kindness Coin Pusher (/coin-pusher.html): a cozy 3D coin pusher.
    Tap where to drop a coin. The pusher slides back and forth, and every coin that falls off the front edge
-   fills the kindness meter. Every 5 coins a tip card slides up (bigger pushes bring deeper tips), and now and
-   then a medallion with one of the site's characters rides along with the coins. Find them all and the machine
-   goes wild for a moment.
+   fills the kindness meter (every 3 put a coin back in your cup). Now and then a medallion with one of the
+   site's 22 friends rides along with the coins. Each friend you push over the edge brings a celebration that
+   grows as your shelf fills (friends 1-5, 6-10, 11-15, 16-21), and the 22nd brings the big finale: a long,
+   wild show, a trophy kept on this device, and a "Replay the moment" button.
+   game19: tips are rare now (the first after about a minute of play, then at most one every 4 minutes, never
+   during a celebration) and can be switched off. Coins bounce when they land, wobble on the edge, tumble as
+   they fall; a combo counter counts a push, and a near miss gets a little "So close!".
+   Calm: reduced motion, "Keep the page still" or Quiet mode turn every celebration into a short, still banner
+   (no shaking, no flashes, no confetti). Nothing flashes faster than 3 times a second.
 
    - One simple simulation (circles on a flat bed, a sliding pusher, friction, an open front edge), drawn two ways:
      three.js (r128, from cdnjs) for the cabinet, or a flat, calm view on a 2D canvas. The flat view is used with
@@ -10,8 +16,11 @@
    - All sound is made here with WebAudio, and only starts after the first tap. Quiet mode or site sounds off
      keep it silent. It pauses when the tab is hidden.
    - No money, nothing to buy. Coins refill slowly by themselves.
-   - Kept on this device only: localStorage "tol-coin-v1" { cup, t, meter, found{id:time}, tips[], pending[], since, dup, snd, mus, view, done }.
-   - #debug-all shows the full-collection celebration (nothing is saved while it runs). */
+   - Kept on this device only: localStorage "tol-coin-v1" { cup, t, meter, found{id:time}, tips[], pending[], since, dup, snd, mus, view, done,
+     tipsOff (game19: 1 when tips are switched off), lastTip (game19: when the last tip showed), trophy (game19: when all 22 were found) }.
+   - #debug-all shows the full-collection celebration (nothing is saved while it runs).
+   - Test hooks: TOLCoinPusher.celebrate(n) plays the celebration for friend n of 22 (22: the finale) without saving;
+     TOLCoinPusher.give(k) really finds k more friends; TOLCoinPusher.stats(). */
 (function () {
   'use strict';
   var D = window.TOLCoinData; if (!D) return;
@@ -32,6 +41,9 @@
   var st = load() || {};
   st.cup = typeof st.cup === 'number' ? st.cup : CUPMAX; st.t = st.t || Date.now(); st.meter = st.meter || 0;
   st.found = st.found || {}; st.tips = st.tips || []; st.pending = st.pending || []; st.since = st.since || 0; st.dup = st.dup || 0;
+  st.lastTip = st.lastTip || 0; st.tipsOff = st.tipsOff ? 1 : 0;
+  // someone who found everyone before the trophy existed gets it too, dated to their last find
+  if (st.done && !st.trophy) { var lastFind = 0; for (var fk in st.found) lastFind = Math.max(lastFind, +st.found[fk] || 0); st.trophy = lastFind || Date.now(); }
   // sound and music start on, except for someone who has Quiet mode (or site sounds off) on: then they start off and stay
   // off until they're switched on here, even after Quiet mode is turned off (tools16)
   var quietAtStart = window.TOLQuiet ? !window.TOLQuiet.sound() : root.classList.contains('tol-quiet');
@@ -47,9 +59,11 @@
   function stillChosen() { return window.TOLStill && window.TOLStill.chosen ? window.TOLStill.chosen() : (root.classList.contains('tol-still') || mm('(prefers-reduced-motion: reduce)')); }
   function soundAllowed() { return window.TOLQuiet ? window.TOLQuiet.sound() : !root.classList.contains('tol-quiet'); }
   var calm = stillChosen();
+  // celebrations are calm with a still page, or in Quiet mode
+  function celCalm() { if (calm) return true; try { return !!(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return false; } }
 
   // ---------- the simulation
-  var items = [], t = 0, pf = PF_MID - PF_AMP, pfPrev = pf, pushT = 0, pushIdle = 0, wildUntil = 0;
+  var items = [], t = 0, pf = PF_MID - PF_AMP, pfPrev = pf, pushT = 0, pushIdle = 0, wildUntil = 0, pushDir = 0;
   function pusherAt(tt) { return PF_MID + PF_AMP * Math.sin(tt * 2 * Math.PI / PERIOD - Math.PI / 2); }
   function mk(x, z, kind, pid) { return { x: x, z: z, px: x, pz: z, r: kind === 'prize' ? RP : R, kind: kind, pid: pid || '', st: 'field', y: 0, vy: 0, vz: 0, tilt: 0, spin: Math.random() * 6, age: 0 }; }
   function prefill() {
@@ -74,9 +88,19 @@
     var i, j, a, b, n = items.length;
     for (i = 0; i < n; i++) {
       a = items[i];
-      if (a.st === 'drop') { a.vy -= 22 * dt; a.y += a.vy * dt; if (a.y <= 0) { a.y = 0; a.st = 'field'; a.px = a.x; a.pz = a.z; if (!silent) clink(a.kind === 'prize' ? 0.7 : 1, 0.6); } continue; }
+      if (a.st === 'drop') {
+        a.vy -= 22 * dt; a.y += a.vy * dt;
+        if (a.y <= 0) {
+          // one little bounce, then it settles (two clinks: the land and the bounce)
+          if (!a.bounced && a.vy < -3) { a.bounced = true; a.y = 0.001; a.vy = -a.vy * 0.24; a.spin += 0.6; if (!silent) clink(a.kind === 'prize' ? 0.7 : 1, 0.6); }
+          else { a.y = 0; a.st = 'field'; a.px = a.x; a.pz = a.z; if (!silent) clink(a.kind === 'prize' ? 0.75 : 1.08, 0.3); }
+        }
+        continue;
+      }
       if (a.st === 'fall') {
-        a.age += dt; a.vy -= 14 * dt; a.y += a.vy * dt; a.z += a.vz * dt; a.tilt = Math.min(1.5, a.tilt + dt * 5);
+        // tumbling over the edge: a forward tip, a spin and a little roll
+        a.age += dt; a.vy -= 14 * dt; a.y += a.vy * dt; a.z += a.vz * dt; a.x += (a.vx || 0) * dt; a.tilt = Math.min(2.6, a.tilt + dt * 6);
+        a.spin += (a.vs || 0) * dt; a.roll = (a.roll || 0) + (a.vr || 0) * dt;
         if (a.y < -1.15) { a.st = 'gone'; if (!silent) landed(a); }
         continue;
       }
@@ -112,8 +136,16 @@
     // off the front edge
     for (i = 0; i < n; i++) {
       a = items[i]; if (a.st !== 'field') continue;
-      if (a.z > ZE) { a.st = 'fall'; a.vy = 0; a.vz = 1.2 + Math.random() * 0.6; a.age = 0; if (silent) a.st = 'gone'; }
+      if (a.z > ZE) { a.st = 'fall'; a.vy = 0; a.vz = 1.2 + Math.random() * 0.6; a.age = 0; a.vx = (Math.random() - 0.5) * 0.5; a.vs = (Math.random() - 0.5) * 10; a.vr = (Math.random() - 0.5) * 5; if (silent) a.st = 'gone'; }
     }
+    // a near miss: the pusher turns back while coins (or a medallion) hang right on the edge
+    var dir = pf > pfPrev + 1e-6 ? 1 : pf < pfPrev - 1e-6 ? -1 : pushDir;
+    if (!silent && pushDir === 1 && dir === -1) {
+      var hang = 0, prizeHang = false;
+      for (i = 0; i < n; i++) { a = items[i]; if (a.st === 'field' && a.z > ZE - a.r * 0.45) { hang++; if (a.kind === 'prize') prizeHang = true; } }
+      if (prizeHang || hang >= 3) nearMiss(prizeHang);
+    }
+    pushDir = dir;
     if (items.length > 40 && (items.length - fieldCount()) > 20) items = items.filter(function (q) { return q.st !== 'gone'; });
   }
 
@@ -166,21 +198,22 @@
     if (!burst.length) burstAge = 0;
     burst.push(st.meter); burstTimer = 0.8;
     trayAdd();
-    chime(burst.length);
+    chime(burst.length); thunk();
     sparkleAt(a.x, ZE + 0.6);
+    combo(burst.length);
     save(); hud();
   }
   function endBurst() {
-    var n = burst.length, first = burst[0] - 1, last = burst[n - 1]; burst = [];
-    if (n >= 5) { shake(Math.min(1, n / 10)); lights('sparkle', 1.6); dropJingle(n); }
-    var crossed5 = Math.floor(last / 5) > Math.floor(first / 5);
-    if (!crossed5 && n < 5) return;
-    var tier = n >= 9 ? 3 : n >= 5 ? 2 : 1;
-    if (Math.floor(last / 100) > Math.floor(first / 100)) tier = 3;
-    else if (Math.floor(last / 25) > Math.floor(first / 25)) tier = Math.max(tier, 2);
-    if (crossed5 || tier > 1) showTip(tier, n);
-    say(n + (n === 1 ? ' coin' : ' coins') + ' dropped. Kindness meter: ' + st.meter + '.');
+    var n = burst.length; burst = [];
+    comboEnd(n);
+    if (n >= 5 && !celebrating()) { shake(Math.min(1, n / 10)); lights('sparkle', 1.6); dropJingle(n); }
+    // a tip only now and then: after about a minute of play, then at most one every few minutes, never during a
+    // celebration, and never once tips are switched off. Bigger pushes still bring deeper ones.
+    if (tipReady()) showTip(n >= 9 ? 3 : n >= 5 ? 2 : 1, n);
+    if (n >= 2) say(n + ' coins dropped. Kindness meter: ' + st.meter + '.');
   }
+  var TIP_FIRST = 60000, TIP_GAP = 4 * 60000;
+  function tipReady() { return !st.tipsOff && !celebrating() && playMs >= TIP_FIRST && Date.now() - st.lastTip >= TIP_GAP; }
 
   // ---------- tips
   function toolLink(tip) {
@@ -199,6 +232,7 @@
   function showTip(tier, n) {
     var tip = pickTip(tier); if (!tip) return;
     if (st.tips.indexOf(tip.id) < 0) st.tips.push(tip.id);
+    st.lastTip = Date.now();
     save(); tipsList();
     var L = toolLink(tip);
     card('tip t' + tip.tier, (n >= 5 ? 'A big push of ' + n + ' coins · ' : '') + TIER_NAME[tip.tier], tip.t,
@@ -220,42 +254,151 @@
     if (isNew) {
       card('prize', 'A new friend for your shelf · ' + have + ' of ' + all, c.name,
         img + '<p>' + esc(c.line) + '</p><p class="cp-card-go"><a href="' + esc(c.home) + '">Visit ' + esc(c.name.replace(/^The /, 'the ')) + ' in ' + esc(c.where) + ' <span aria-hidden="true">→</span></a></p>');
-      fanfare(); lights('sparkle', 2.4); shake(0.5);
       say('New friend found: ' + c.name + '. ' + have + ' of ' + all + ' on your shelf.');
-      if (have >= all && !st.done) setTimeout(wild, 1600);
+      if (have >= all && !st.done) { st.done = 1; st.trophy = st.trophy || Date.now(); save(); trophyNote(); queueCel(all, c, false); }
+      else queueCel(have, c, false);
     } else {
       card('prize', 'Hello again · 3 coins back in your cup', c.name, img + '<p>' + esc(c.name) + ' came back to say hello. ' + esc(c.line) + '</p>');
       bell(1);
     }
   }
 
-  // ---------- the machine goes wild (every friend found)
-  var wilding = false;
-  function wild() {
-    if (wilding) return; wilding = true;
-    st.done = 1; save();
-    wildUntil = t + 9;
-    lights('wild', 9);
-    jackpot();
-    if (!calm) {
-      confetti(220);
-      for (var k = 0; k < 36; k++) setTimeout(function () { dropCoin((Math.random() - 0.5) * 2 * (HX - R), true); }, 120 + k * 70);
-      shake(1);
-    }
-    if (view && view.dance) view.dance(9);
-    main.classList.add('is-wild');
-    setTimeout(function () { main.classList.remove('is-wild'); wilding = false; }, 9000);
-    setTimeout(celebrate, calm ? 400 : 3800);
-    say('You found every friend on the site. The machine is celebrating with you.');
+  // ---------- celebrations: one for every new friend, bigger as the shelf fills, and a finale for all 22
+  //   tier 1 (friends 1-5)    a banner with the friend, sparkles at the edge, a little fanfare
+  //   tier 2 (6-10)           + confetti, one soft flash, a small shake, the friends you've found cheering along the bottom
+  //   tier 3 (11-15)          + fireworks, the lights chase, Tidbit and Sugarfoot cheering, an extra music layer
+  //   tier 4 (16-21)          + a shower of free coins, more fireworks, every found friend dancing on the cabinet, two music layers
+  //   the finale (all 22)     about 22 seconds: flashes (two, far apart), waves of fireworks and confetti, a coin rain,
+  //                           all 22 friends dancing and parading, every music layer, then the trophy
+  // Calm (reduced motion, "Keep the page still", Quiet mode): the banner only, still, with one soft chime.
+  var celQ = [], celUntil = 0, celTimers = [], finaleOn = false;
+  var flashA = 0, cheerUntil = 0, pupsUntil = 0, congaUntil = 0, congaT0 = 0, fwUntil = 0, fwNext = 0, fwGap = 1;
+  function celebrating() { return Date.now() < celUntil || finaleOn; }
+  function friendTier(n) { return n >= D.chars.length ? 5 : n >= 16 ? 4 : n >= 11 ? 3 : n >= 6 ? 2 : 1; }
+  function later(f, ms) { celTimers.push(setTimeout(f, ms)); }
+  function queueCel(n, c, dry) { celQ.push([n, c, dry]); if (!celebrating()) nextCel(); }
+  function nextCel() { var q = celQ.shift(); if (!q) return; if (friendTier(q[0]) === 5) finale(q[2]); else celebrateFriend(q[0], q[1]); }
+  function banner(tier, kicker, title, c, secs) {
+    var b = $('#cp-banner'); if (!b) return;
+    b.className = 'cp-banner t' + tier + (celCalm() ? ' is-calm' : '');
+    $('#cp-banner-k').textContent = kicker; $('#cp-banner-t').textContent = title;
+    var im = $('#cp-banner-img'); if (im) { if (c) { im.src = medURL(c, true); im.hidden = false; } else im.hidden = true; }
+    b.hidden = false; void b.offsetWidth; b.classList.add('is-up');
+    clearTimeout(banner.tm); banner.tm = setTimeout(function () { b.classList.remove('is-up'); setTimeout(function () { if (!b.classList.contains('is-up')) b.hidden = true; }, celCalm() ? 0 : 350); }, secs * 1000);
   }
+  var TIER_LINE = {
+    1: ['A new friend!', 'Welcome to the shelf.', 'Hello, friend!', 'Look who it is!', 'One more smile.'],
+    2: ['The shelf is filling up!', 'What a find!', 'Friends keep coming!', 'Hooray!', 'Halfway there soon!'],
+    3: ['The machine is cheering!', 'More than halfway!', 'What a collection!', 'The lights are dancing!', 'Keep it going!'],
+    4: ['Almost everyone!', 'So close to all of them!', 'The whole cabinet is dancing!', 'Nearly there!', 'Just a few to go!']
+  };
+  function celebrateFriend(n, c) {
+    var tier = friendTier(n), all = D.chars.length, left = all - n, calmNow = celCalm();
+    var dur = [0, 2.6, 3.4, 4.4, 5.6][tier];
+    celUntil = Date.now() + dur * 1000;
+    later(nextCel, dur * 1000 + 200);
+    var kick = 'Friend ' + n + ' of ' + all + (tier === 4 ? ' · only ' + left + ' to go' : '');
+    banner(tier, kick, c ? c.name : TIER_LINE[tier][n % 5], c, dur);
+    if (calmNow) { bell(1); return; }
+    celSting(tier);
+    burstAt(0, ZE - 0.4, 30 + tier * 14, '#FFE7A0');
+    if (tier >= 2) { confetti([0, 0, 70, 110, 160][tier]); flash(0.32); shake(0.3 + tier * 0.12); cheerUntil = t + dur; }
+    if (tier >= 3) { fireworks(tier === 3 ? 4 : 8, dur * 0.8); lights('wild', dur); pupsUntil = t + dur; musicBoost(tier - 1, 10 + tier * 2); }
+    else lights('sparkle', dur);
+    if (tier >= 4) {
+      for (var k = 0; k < 14; k++) later(function () { dropCoin((Math.random() - 0.5) * 2 * (HX - R), true); }, 200 + k * 120);
+      if (view && view.dance) view.dance(dur, foundIds());
+      main.classList.add('is-wild'); later(function () { main.classList.remove('is-wild'); }, dur * 1000);
+    }
+  }
+  function foundIds() { return D.chars.filter(function (c) { return !!st.found[c.id]; }).map(function (c) { return c.id; }); }
+  // the big one: every friend found
+  function finale(dry) {
+    if (finaleOn) return;
+    finaleOn = true; wilding = true;
+    var calmNow = celCalm(), all = D.chars.length;
+    say('You found every friend on the site. ' + (calmNow ? 'Here is your trophy.' : 'The machine is throwing a party for you.'));
+    if (calmNow) {
+      banner(5, 'All ' + all + ' friends found', 'You found everyone!', null, 3.5);
+      bell(3); later(function () { endFinale(); }, 1200); return;
+    }
+    var sk = $('#cp-skipshow'); if (sk) { sk.hidden = false; }
+    banner(5, 'All ' + all + ' friends found', 'The whole site came to party!', null, 6);
+    jackpot(); flash(0.45); shake(1); lights('wild', 22); wildUntil = t + 20; musicBoost(3, 26);
+    confetti(160); fireworks(5, 1.2);
+    fwUntil = t + 18; fwGap = 0.9; fwNext = t + 1;
+    if (view && view.dance) view.dance(21, foundIds().length ? foundIds() : null);
+    congaUntil = t + 20; congaT0 = t; cheerUntil = t + 20; pupsUntil = t + 20;
+    main.classList.add('is-wild');
+    for (var k = 0; k < 50; k++) later(function () { dropCoin((Math.random() - 0.5) * 2 * (HX - R), true); }, 400 + k * 110);
+    later(function () { confetti(120); shake(0.6); celSting(4); banner(5, 'Every friend', 'Tidbit and Sugarfoot are dancing!', null, 4.5); }, 5000);
+    later(function () { flash(0.3); confetti(100); celSting(3); banner(5, 'Look at them go', 'All ' + all + ' on the dance floor!', null, 4.5); }, 10000);
+    later(function () { confetti(120); fireworks(8, 2); jackpot(); banner(5, 'The finale', 'Thank you for playing!', null, 5); }, 14500);
+    later(function () { endFinale(); }, 22000);
+  }
+  function endFinale() {
+    celTimers.forEach(clearTimeout); celTimers = [];
+    finaleOn = false; wilding = false; congaUntil = 0; cheerUntil = 0; pupsUntil = 0; fwUntil = 0; wildUntil = 0; lightUntil = 0;
+    main.classList.remove('is-wild');
+    var sk = $('#cp-skipshow'); if (sk) sk.hidden = true;
+    var b = $('#cp-banner'); if (b) { b.classList.remove('is-up'); b.hidden = true; }
+    celUntil = 0;
+    celebrate();
+    nextCel();
+  }
+  var wilding = false;
+  function wild() { finale(DEBUG_ALL); }
   function celebrate() {
     var box = $('#cp-celebrate'); if (!box) return;
     box.hidden = false;
     var row = $('#cp-cel-friends');
     if (row && !row.childNodes.length) D.chars.forEach(function (c, i) { var im = doc.createElement('img'); im.src = medURL(c, true); im.alt = ''; im.width = 48; im.height = 48; im.style.animationDelay = (i * 0.07) + 's'; row.appendChild(im); });
-    // focus the message without jumping away from the machine mid-celebration; bring it into view once the dancing ends
+    drawTrophy($('#cp-trophy'));
+    var w = $('#cp-cel-when'); if (w) w.textContent = st.trophy ? 'Trophy earned ' + new Date(st.trophy).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + ', kept on this device.' : '';
     var h = $('#cp-cel-h'); if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } }
-    setTimeout(function () { try { box.scrollIntoView({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' }); } catch (e) {} }, calm ? 0 : 5200);
+    setTimeout(function () { try { box.scrollIntoView({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' }); } catch (e) {} }, 300);
+  }
+  // the trophy: a gold cup with a heart, drawn once on a small canvas
+  function drawTrophy(cv) {
+    if (!cv || !cv.getContext) return; var g = cv.getContext('2d'), S = cv.width, u = S / 160;
+    g.clearRect(0, 0, S, S);
+    var gr = g.createLinearGradient(0, 0, S, S); gr.addColorStop(0, '#FBE3A0'); gr.addColorStop(0.5, '#D4A94E'); gr.addColorStop(1, '#9C7330');
+    g.fillStyle = gr;
+    g.beginPath(); g.moveTo(40 * u, 22 * u); g.lineTo(120 * u, 22 * u); g.quadraticCurveTo(120 * u, 92 * u, 80 * u, 98 * u); g.quadraticCurveTo(40 * u, 92 * u, 40 * u, 22 * u); g.fill();
+    g.lineWidth = 8 * u; g.strokeStyle = '#C99A3E';
+    g.beginPath(); g.arc(36 * u, 46 * u, 16 * u, Math.PI * 0.5, Math.PI * 1.5); g.stroke(); g.beginPath(); g.arc(124 * u, 46 * u, 16 * u, -Math.PI * 0.5, Math.PI * 0.5); g.stroke();
+    g.fillStyle = gr; g.fillRect(72 * u, 96 * u, 16 * u, 22 * u); g.fillRect(50 * u, 118 * u, 60 * u, 12 * u); g.fillStyle = '#7A4A2B'; g.fillRect(44 * u, 130 * u, 72 * u, 16 * u);
+    g.fillStyle = '#E2556A'; var x = 80 * u, y = 52 * u, s = 16 * u;
+    g.beginPath(); g.moveTo(x, y + s * 0.9); g.bezierCurveTo(x - s * 1.4, y, x - s * 0.7, y - s * 1.1, x, y - s * 0.35); g.bezierCurveTo(x + s * 0.7, y - s * 1.1, x + s * 1.4, y, x, y + s * 0.9); g.fill();
+    g.fillStyle = '#FFF3CC'; g.font = '600 ' + Math.round(10 * u) + 'px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText('ALL 22', 80 * u, 142 * u);
+    g.fillStyle = 'rgba(255,255,255,.45)'; g.fillRect(52 * u, 28 * u, 6 * u, 40 * u);
+  }
+  function trophyNote() {
+    var n = $('#cp-trophy-note'); if (!n) return;
+    n.hidden = !st.trophy;
+    var d = $('#cp-trophy-date'); if (d && st.trophy) d.textContent = new Date(st.trophy).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+  function replay() { $('#cp-celebrate').hidden = true; try { stage.scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' }); } catch (e) {} setTimeout(function () { finale(true); }, calm ? 0 : 450); }
+  // a combo counter while a push is falling, and its total at the end
+  var comboEl = $('#cp-combo'), comboHide = 0, nearAt = 0;
+  function combo(n) {
+    if (!comboEl || n < 2) return;
+    comboEl.textContent = '×' + n; comboEl.setAttribute('data-lvl', n >= 12 ? '3' : n >= 7 ? '2' : '1');
+    comboEl.hidden = false; comboEl.classList.remove('is-pop'); void comboEl.offsetWidth; if (!celCalm()) comboEl.classList.add('is-pop');
+    clearTimeout(comboHide);
+  }
+  function comboEnd(n) {
+    if (!comboEl) return;
+    if (n >= 3) { comboEl.textContent = (n >= 12 ? 'Mega combo ×' : n >= 7 ? 'Big combo ×' : 'Combo ×') + n + '!'; comboEl.classList.remove('is-pop'); void comboEl.offsetWidth; if (!celCalm()) comboEl.classList.add('is-pop'); comboEl.hidden = false; }
+    clearTimeout(comboHide); comboHide = setTimeout(function () { comboEl.hidden = true; }, n >= 3 ? 1500 : 300);
+  }
+  function nearMiss(prize) {
+    var now = Date.now(); if (now - nearAt < (prize ? 12000 : 25000) || celebrating() || !comboEl || !comboEl.hidden) return;
+    nearAt = now;
+    comboEl.textContent = prize ? 'So close! The medallion is on the edge.' : 'So close!'; comboEl.setAttribute('data-lvl', '0');
+    comboEl.hidden = false; comboEl.classList.remove('is-pop'); void comboEl.offsetWidth; if (!celCalm()) comboEl.classList.add('is-pop');
+    clearTimeout(comboHide); comboHide = setTimeout(function () { comboEl.hidden = true; }, 1600);
+    ooh();
   }
   function share() {
     var o = { title: 'Kindness Coin Pusher', text: 'I found every friend on Spread Love & Acceptance in the Kindness Coin Pusher: Professor Puddles, Tidbit, Sugarfoot and the whole gang. A cozy arcade with a kind tip every few coins. Free, nothing to buy.', url: location.origin + '/coin-pusher.html', heading: 'Share the coin pusher' };
@@ -282,8 +425,9 @@
   function hud() {
     var c = $('#cp-cup'); if (c) c.textContent = st.cup;
     var m = $('#cp-meter'); if (m) m.textContent = st.meter;
-    var bar = $('#cp-meter-bar'); if (bar) { var p = (st.meter % 5) / 5; bar.style.width = (p * 100) + '%'; bar.parentNode.setAttribute('aria-valuenow', String(st.meter % 5)); }
-    var nx = $('#cp-next'); if (nx) { var left = 5 - (st.meter % 5); nx.textContent = left === 1 ? '1 more coin to the next tip' : left + ' more coins to the next tip'; }
+    var bar = $('#cp-meter-bar'); if (bar) { var p = (st.meter % 3) / 3; bar.style.width = (p * 100) + '%'; bar.parentNode.setAttribute('aria-valuenow', String(st.meter % 3)); }
+    var nx = $('#cp-next'); if (nx) { var left = 3 - (st.meter % 3); nx.textContent = left === 1 ? '1 more coin over the edge for a free coin' : left + ' more coins over the edge for a free coin'; }
+    tipLine();
     var f = $('#cp-found'); if (f) f.textContent = Object.keys(st.found).length + ' of ' + D.chars.length;
     var tp = $('#cp-tips-n'); if (tp) tp.textContent = st.tips.length + ' of ' + D.tips.length;
     var b = $('#cp-drop'); if (b) { b.setAttribute('aria-disabled', st.cup <= 0 ? 'true' : 'false'); }
@@ -344,6 +488,14 @@
   })();
   function nudgeEmpty() { var e = $('#cp-empty'); if (e) { e.hidden = false; e.classList.remove('is-pulse'); void e.offsetWidth; if (!calm) e.classList.add('is-pulse'); } }
 
+  // when the next tip can come (tips are rare, and can be switched off)
+  function tipLine() {
+    var e = $('#cp-tipnext'); if (!e) return;
+    if (st.tipsOff) { e.textContent = 'Tips are off.'; return; }
+    var wait = Math.max(TIP_FIRST - playMs, TIP_GAP - (Date.now() - st.lastTip)), m = Math.ceil(wait / 60000);
+    e.textContent = wait <= 0 ? 'A tip may come with your next push.' : 'Next tip in about ' + m + (m === 1 ? ' minute' : ' minutes') + ' of play.';
+  }
+  function syncTips() { var b = $('#cp-tipsbtn'); if (b) { b.setAttribute('aria-pressed', String(!st.tipsOff)); b.querySelector('b').textContent = st.tipsOff ? 'off' : 'on'; } tipLine(); }
   // the refill clock and the "take a break" nudge
   var playMs = 0, lastActive = 0, breakShown = 0;
   function active() { lastActive = Date.now(); }
@@ -355,6 +507,7 @@
     if (changed) { save(); hud(); }
     var e = $('#cp-refill'); if (e) { var s = Math.max(0, Math.ceil((REFILL - (Date.now() - st.t)) / 1000)); e.textContent = st.cup >= CUPMAX ? 'Your cup is full.' : 'Next coin in ' + s + ' s.'; }
     if (Date.now() - lastActive < 60000) playMs += 1000;
+    if (playMs % 15000 === 0) tipLine();
     if (playMs - breakShown >= 10 * 60000) { breakShown = playMs; var b = $('#cp-break'); if (b) b.hidden = false; }
   }, 1000);
 
@@ -425,49 +578,133 @@
         if (s8 === 0 || s8 === 5) CHORDS[bar].forEach(function (f) { tone(f, 'sine', tt, 0.03, 0.035, s8 === 0 ? 2.2 : 1.2, musBus); tone(f * 2, 'sine', tt, 0.01, 0.008, 0.6, musBus); });
         if (s8 % 2 === 0) tone(BASS[bar][s8 / 2], 'triangle', tt, 0.01, 0.07, beat * 0.9, musBus);
         var n = TUNE[musStep % 32]; if (n) { tone(n * 2, 'sine', tt, 0.003, 0.03, 0.7, musBus); tone(n * 4.02, 'sine', tt, 0.002, 0.006, 0.25, musBus); }
+        if (Date.now() < boostUntil) {
+          noise(tt, 0.04, 0.025, 7000, musBus);
+          if (boostLvl >= 2) { var ch = CHORDS[bar]; tone(ch[s8 % 4] * 4, 'sine', tt, 0.003, 0.02, 0.35, musBus); }
+          if (boostLvl >= 3) { if (s8 % 2 === 0) { tone(BASS[bar][s8 / 2] / 2, 'sine', tt, 0.005, 0.08, beat * 0.6, musBus); tone(70, 'sine', tt, 0.002, 0.09, 0.14, musBus); } }
+        }
       }
       musNext += beat / 2; musStep++;
     }
   }
+  // a soft thunk as a coin lands in the tray, an "ooh" for a near miss, a pop for fireworks
+  function thunk() { if (!soundOn() || !AC) return; var t0 = AC.currentTime + 0.02, m = 0.9 + Math.random() * 0.2; tone(190 * m, 'triangle', t0, 0.002, 0.05, 0.12); tone(1400 * m, 'sine', t0 + 0.01, 0.002, 0.02, 0.06); }
+  function ooh() { if (!soundOn() || !AC) return; var t0 = AC.currentTime + 0.02; tone(659.25, 'sine', t0, 0.03, 0.05, 0.3); tone(523.25, 'sine', t0 + 0.22, 0.03, 0.05, 0.45); }
+  function pop() { if (!soundOn() || !AC) return; var t0 = AC.currentTime + 0.01; noise(t0, 0.18, 0.06, 900); tone(220 + Math.random() * 200, 'sine', t0, 0.003, 0.04, 0.2); }
+  // white noise, filtered (shakers, fireworks)
+  var NB = null;
+  function noise(t0, dur, vol, freq, bus) {
+    if (!AC) return;
+    try {
+      if (!NB) { var n = AC.sampleRate, b = AC.createBuffer(1, n, n), d = b.getChannelData(0); for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; NB = b; }
+      var src = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(); src.buffer = NB; f.type = 'bandpass'; f.frequency.value = freq || 6000; f.Q.value = 0.8;
+      env(g, t0, 0.003, vol, dur); src.connect(f); f.connect(g); g.connect(bus || sfx); src.start(t0, Math.random() * 0.5); src.stop(t0 + dur + 0.05);
+    } catch (e) {}
+  }
+  // the celebration stings grow with the tier
+  function celSting(tier) {
+    if (!soundOn() || !AC) return; var t0 = AC.currentTime + 0.05;
+    fanfare();
+    if (tier >= 2) for (var k = 0; k < 6; k++) noise(t0 + k * 0.06, 0.05, 0.05, 2500);
+    if (tier >= 3) [783.99, 987.77, 1174.66, 1567.98].forEach(function (f, i) { bellNote(f, t0 + 0.6 + i * 0.1, 0.07); });
+    if (tier >= 4) [1046.5, 1318.5, 1568, 2093].forEach(function (f, i) { bellNote(f, t0 + 1.1 + i * 0.12, 0.08); tone(f / 4, 'triangle', t0 + 1.1 + i * 0.12, 0.01, 0.05, 0.3); });
+  }
+  // extra music layers for a while after a big celebration: a shaker, then bells, then a deeper bass and a kick
+  var boostLvl = 0, boostUntil = 0;
+  function musicBoost(lvl, secs) { if (celCalm()) return; boostLvl = Math.max(Date.now() < boostUntil ? boostLvl : 0, lvl); boostUntil = Math.max(boostUntil, Date.now() + secs * 1000); }
   function hum(speed) { if (!AC || !humG) return; var v = soundOn() ? Math.min(0.05, Math.abs(speed) * 1.4) : 0; humG.gain.setTargetAtTime(v, AC.currentTime, 0.15); humO.frequency.setTargetAtTime(58 + Math.abs(speed) * 300, AC.currentTime, 0.2); }
   function firstTap() { if (soundOn()) { audio(); if (AC && AC.state === 'suspended') AC.resume(); } }
 
-  // ---------- light chase, shake, confetti, sparkles (shared by both views)
-  var lightMode = 'idle', lightUntil = 0, shakeAmt = 0;
-  function lights(mode, secs) { if (calm && mode !== 'idle') return; lightMode = mode; lightUntil = t + secs; }
-  function shake(a) { if (calm) return; shakeAmt = Math.max(shakeAmt, a); }
+  // ---------- light chase, shake, confetti, sparkles, fireworks (shared by both views)
+  // Calm (celCalm) turns all of it off. Particles are capped (MAXP) and cleaned up as they go, for phones.
+  var lightMode = 'idle', lightUntil = 0, shakeAmt = 0, MAXP = 450;
+  function lights(mode, secs) { if (celCalm() && mode !== 'idle') return; lightMode = mode; lightUntil = t + secs; }
+  function shake(a) { if (celCalm()) return; shakeAmt = Math.max(shakeAmt, a); }
+  function flash(a) { if (celCalm()) return; flashA = Math.max(flashA, a); }   // one soft flash that fades (celebrations keep them seconds apart)
   var fx = $('#cp-fx'), fxg = fx ? fx.getContext('2d') : null, parts = [];
   var CONF = ['#E9C46F', '#F2A98A', '#B9A2D9', '#8EC5EA', '#7DB07A', '#E2556A', '#FFF3CC'];
+  function room(n) { return Math.max(0, Math.min(n, MAXP - parts.length)); }
   function confetti(n) {
-    if (calm || !fx) return;
-    var w = fx.clientWidth, h = fx.clientHeight;
+    if (celCalm() || !fx) return;
+    var w = fx.clientWidth, h = fx.clientHeight; n = room(n);
     for (var i = 0; i < n; i++) parts.push({ x: Math.random() * w, y: -20 - Math.random() * h * 0.6, vx: (Math.random() - 0.5) * 60, vy: 60 + Math.random() * 120, r: Math.random() * 6, vr: (Math.random() - 0.5) * 8, s: 4 + Math.random() * 6, c: CONF[i % CONF.length], life: 6, kind: 'c' });
   }
   function sparkleAt(x, z) {
-    if (calm || !fx || !view) return;
+    if (celCalm() || !fx || !view) return;
     var p = view.project(x, -0.6, z); if (!p) return;
-    for (var i = 0; i < 9; i++) { var an = Math.random() * 6.28, sp = 30 + Math.random() * 70; parts.push({ x: p[0], y: p[1], vx: Math.cos(an) * sp, vy: Math.sin(an) * sp - 30, r: 0, vr: 0, s: 2 + Math.random() * 3, c: '#FFE7A0', life: 0.7, kind: 's' }); }
+    var n = room(9);
+    for (var i = 0; i < n; i++) { var an = Math.random() * 6.28, sp = 30 + Math.random() * 70; parts.push({ x: p[0], y: p[1], vx: Math.cos(an) * sp, vy: Math.sin(an) * sp - 30, r: 0, vr: 0, s: 2 + Math.random() * 3, c: '#FFE7A0', life: 0.7, kind: 's' }); }
+    if (parts.length < MAXP) parts.push({ x: p[0], y: p[1] - 8, vx: 0, vy: -40, r: 0, vr: 0, s: 0, c: '#FFF3CC', life: 0.8, kind: 't', txt: '+1' });
+  }
+  // a big ring of sparkles from a spot on the bed
+  function burstAt(x, z, n, col) {
+    if (celCalm() || !fx || !view) return;
+    var p = view.project(x, 0, z); if (!p) return; n = room(n);
+    for (var i = 0; i < n; i++) { var an = i / n * 6.28, sp = 80 + Math.random() * 120; parts.push({ x: p[0], y: p[1], vx: Math.cos(an) * sp, vy: Math.sin(an) * sp - 40, r: 0, vr: 0, s: 2 + Math.random() * 3, c: col || '#FFE7A0', life: 1, kind: 's' }); }
+  }
+  // fireworks over the back of the cabinet: n bursts spread over secs seconds
+  function fireworks(n, secs) {
+    if (celCalm() || !fx) return;
+    for (var k = 0; k < n; k++) (function (d) { celTimers.push(setTimeout(function () { boom(); }, d)); })(k * (secs || 1) * 1000 / Math.max(1, n));
+  }
+  function boom() {
+    if (!fx || celCalm()) return;
+    var w = fx.clientWidth, h = fx.clientHeight, x = w * (0.15 + Math.random() * 0.7), y = h * (0.1 + Math.random() * 0.3), c = CONF[Math.floor(Math.random() * CONF.length)], n = room(28);
+    for (var i = 0; i < n; i++) { var an = i / n * 6.28, sp = 60 + Math.random() * 60; parts.push({ x: x, y: y, vx: Math.cos(an) * sp, vy: Math.sin(an) * sp, r: 0, vr: 0, s: 2.2, c: c, life: 1.3, kind: 'f' }); }
+    pop();
+  }
+  // the friends you've found, hopping along the bottom; the 22 in a conga line (the finale); the pups cheering
+  function drawCrowd(dt) {
+    var w = fx.clientWidth, h = fx.clientHeight;
+    if (t < cheerUntil) {
+      var ids = foundIds(), n = Math.min(ids.length, 22), s = Math.max(22, Math.min(40, (w - 20) / Math.max(8, n)));
+      for (var i = 0; i < n; i++) { var c = charById(ids[i]); if (!c) continue; var x = w / 2 - n * s / 2 + i * s, y = h - s - 4 - Math.abs(Math.sin(t * 7 + i)) * 10; fxg.drawImage(medCanvas(c, true, 128), x, y, s - 2, s - 2); }
+    }
+    if (t < congaUntil) {
+      var all = D.chars, cs = Math.max(30, Math.min(52, w / 11)), span = all.length * cs * 1.1 + w;
+      all.forEach(function (c, i) {
+        var x = ((t - congaT0) * 90 + i * cs * 1.1) % span - all.length * cs * 1.1 + w * 0.2, y = h * 0.42 + Math.sin((t - congaT0) * 4 + i * 0.6) * h * 0.08;
+        if (x < -cs || x > w) return;
+        fxg.save(); fxg.translate(x, y); fxg.rotate(Math.sin(t * 6 + i) * 0.25); fxg.drawImage(medCanvas(c, true, 128), -cs / 2, -cs / 2, cs, cs); fxg.restore();
+      });
+    }
+    if (t < pupsUntil && window.TOLPups) {
+      var ps = Math.max(0.55, Math.min(1.1, w / 600));
+      [['collar', 34, 1], ['drop', w - 34, -1]].forEach(function (q, i) {
+        fxg.save(); fxg.translate(q[1], h - 8 - Math.abs(Math.sin(t * 6 + i * 1.5)) * 14); fxg.scale(q[2] * ps, ps);
+        try { window.TOLPups.draw(fxg, window.TOLPups.looks[q[0]], 'wiggle', t * 10, Math.sin(t * 14) * 0.6, false, t * 1000, Math.sin(t * 3 + i) * 0.15); } catch (e) {}
+        fxg.restore();
+      });
+    }
   }
   function drawFx(dt) {
     if (!fxg) return;
     var dpr = fx.width / Math.max(1, fx.clientWidth);
     fxg.setTransform(dpr, 0, 0, dpr, 0, 0); fxg.clearRect(0, 0, fx.clientWidth, fx.clientHeight);
-    if (!parts.length) return;
+    // the finale keeps fireworks coming
+    if (t < fwUntil && t >= fwNext) { fwNext = t + fwGap; boom(); if (Math.random() < 0.5) boom(); }
+    var busy = t < cheerUntil || t < congaUntil || t < pupsUntil;
+    if (!parts.length && !busy && flashA <= 0) return;
     var h = fx.clientHeight;
+    if (busy && !celCalm()) drawCrowd(dt);
     parts = parts.filter(function (p) { p.life -= dt; return p.life > 0 && p.y < h + 30; });
-    parts.forEach(function (p) {
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
       p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt;
-      if (p.kind === 'c') { p.vy += 30 * dt; fxg.save(); fxg.translate(p.x, p.y); fxg.rotate(p.r); fxg.fillStyle = p.c; fxg.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); fxg.restore(); }
-      else { p.vy += 120 * dt; fxg.globalAlpha = Math.max(0, p.life / 0.7); fxg.fillStyle = p.c; fxg.beginPath(); fxg.arc(p.x, p.y, p.s, 0, 7); fxg.fill(); fxg.globalAlpha = 1; }
-    });
+      if (p.kind === 'c') { p.vy += 30 * dt; var co = Math.cos(p.r), si = Math.sin(p.r); fxg.setTransform(dpr * co, dpr * si, -dpr * si, dpr * co, dpr * p.x, dpr * p.y); fxg.fillStyle = p.c; fxg.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); }
+      else if (p.kind === 't') { fxg.setTransform(dpr, 0, 0, dpr, 0, 0); fxg.globalAlpha = Math.max(0, p.life / 0.8); fxg.fillStyle = p.c; fxg.font = '700 15px Fraunces, Georgia, serif'; fxg.textAlign = 'center'; fxg.fillText(p.txt, p.x, p.y); fxg.textAlign = 'start'; fxg.globalAlpha = 1; }
+      else { fxg.setTransform(dpr, 0, 0, dpr, 0, 0); p.vy += (p.kind === 'f' ? 40 : 120) * dt; if (p.kind === 'f') p.vx *= 0.985; fxg.globalAlpha = Math.max(0, Math.min(1, p.life / (p.kind === 'f' ? 0.9 : 0.7))); fxg.fillStyle = p.c; fxg.beginPath(); fxg.arc(p.x, p.y, p.s, 0, 7); fxg.fill(); fxg.globalAlpha = 1; }
+    }
+    fxg.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (flashA > 0) { fxg.fillStyle = 'rgba(255,248,230,' + Math.min(0.45, flashA) + ')'; fxg.fillRect(0, 0, fx.clientWidth, h); flashA = Math.max(0, flashA - dt * 1.2); }
   }
-  // the bulbs: a colour for bulb i of n right now
+  // the bulbs: a color for bulb i of n right now. No bulb changes more than about twice a second (photosensitivity).
   var WARM = [[255, 214, 150], [255, 180, 120], [255, 236, 200], [240, 160, 170], [200, 180, 240]];
   function bulb(i, n) {
     var mode = t < lightUntil ? lightMode : 'idle', k, v;
     if (calm) return [255, 222, 170, 0.75];
-    if (mode === 'wild') { k = WARM[(i + Math.floor(t * 12)) % WARM.length]; v = ((i + Math.floor(t * 14)) % 3 === 0) ? 1 : 0.35; return [k[0], k[1], k[2], v]; }
-    if (mode === 'sparkle') { v = Math.random() < 0.5 ? 1 : 0.4; return [255, 226, 160, v]; }
+    if (mode === 'wild') { var step_ = Math.floor(t * 5); k = WARM[(i + Math.floor(t * 2)) % WARM.length]; v = ((i + step_) % 3 === 0) ? 1 : 0.45; return [k[0], k[1], k[2], v]; }
+    if (mode === 'sparkle') { var q = Math.floor(t * 2.5) * 31 + i * 17; v = (Math.sin(q) * 43758.5453 % 1 + 1) % 1 < 0.5 ? 1 : 0.45; return [255, 226, 160, v]; }
     v = 0.45 + 0.55 * Math.max(0, Math.sin(t * 2.2 - i * 0.55)); return [255, 214, 150, v];
   }
 
@@ -551,7 +788,7 @@
       g.strokeStyle = '#E9C46F'; g.lineWidth = 8; g.strokeRect(14, 14, w - 28, h - 28);
       g.fillStyle = '#FFE7B0'; g.textAlign = 'center'; g.textBaseline = 'middle';
       g.font = '500 92px Fraunces, Georgia, serif'; g.fillText('Kindness Coin Pusher', w / 2, h / 2 - 14);
-      g.font = '500 34px "IBM Plex Mono", monospace'; g.fillStyle = '#E9C46F'; g.fillText('A COSY ARCADE · EVERY COIN, A KIND IDEA', w / 2, h / 2 + 62);
+      g.font = '500 34px "IBM Plex Mono", monospace'; g.fillStyle = '#E9C46F'; g.fillText('A COZY ARCADE · EVERY COIN, A KIND IDEA', w / 2, h / 2 + 62);
       signTex.needsUpdate = true;
     }
     paintSign(); if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(paintSign);
@@ -598,13 +835,14 @@
       var m = new THREE.Mesh(prizeGeo, [brass, top, brass]); scene.add(m); prizeMeshes[p.pid + p.spin] = m; return m;
     }
     // the friends who dance on top when the machine goes wild
-    var dancers = [], danceUntil = 0;
-    function dance(secs) {
-      danceUntil = t + secs;
+    var dancers = [], danceUntil = 0, danceIds = null;
+    // ids: only these friends dance (the ones found so far); none given: all of them
+    function dance(secs, ids) {
+      danceUntil = t + secs; danceIds = ids || null;
       if (!dancers.length) D.chars.forEach(function (c, i) {
         var tx = new THREE.CanvasTexture(medCanvas(c, true, 256)); tx.encoding = THREE.sRGBEncoding;
         var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, transparent: true })); s.scale.set(0.85, 0.85, 1);
-        s.userData.i = i; scene.add(s); dancers.push(s);
+        s.userData.i = i; s.userData.id = c.id; scene.add(s); dancers.push(s);
       });
       dancers.forEach(function (s) { s.visible = true; });
     }
@@ -637,8 +875,11 @@
       for (i = 0; i < items.length; i++) {
         a = items[i]; if (a.st === 'gone') continue;
         var h = a.kind === 'prize' ? PRIZE_H : COIN_H;
-        P.set(a.x, a.y + h / 2 + 0.001, a.z);
-        E.set(a.tilt, a.spin, 0); Q.setFromEuler(E);
+        var tilt = a.tilt, py = a.y;
+        // a coin hanging over the edge tips forward and wobbles a little
+        if (a.st === 'field') { var over = a.z - (ZE - a.r * 0.6); if (over > 0) { var k = Math.min(1, over / (a.r * 0.6)); tilt = k * 0.32 + (calm ? 0 : Math.sin(t * 16 + a.spin * 3) * 0.05 * k); py -= k * 0.05; } }
+        P.set(a.x, py + h / 2 + 0.001, a.z);
+        E.set(tilt, a.spin, a.roll || 0); Q.setFromEuler(E);
         if (a.kind === 'prize') { var pm = prizeMesh(a); if (pm) { pm.position.copy(P); pm.quaternion.copy(Q); pm.visible = true; seen[a.pid + a.spin] = 1; } continue; }
         if (n >= MAXC + 8) continue;
         M.compose(P, Q, S1); coins.setMatrixAt(n++, M);
@@ -647,10 +888,12 @@
       for (var k in prizeMeshes) if (!seen[k]) { scene.remove(prizeMeshes[k]); delete prizeMeshes[k]; }
       ghost.position.set(aimX, 1.62 + 0.18 + Math.sin(t * 3) * 0.04, -3.55 + 0.25); ghost.rotation.set(Math.PI / 2 * 0.85, 0, 0); ghost.visible = st.cup > 0;
       for (i = 0; i < bulbs.length; i++) { var b = bulb(i, bulbs.length); bulbs[i].material.color.setRGB(b[0] / 255 * (0.35 + 0.65 * b[3]), b[1] / 255 * (0.35 + 0.65 * b[3]), b[2] / 255 * (0.35 + 0.65 * b[3])); }
-      glow.intensity = (t < lightUntil && lightMode === 'wild') ? 1.2 + Math.sin(t * 20) * 0.4 : 0.9;
+      glow.intensity = (t < lightUntil && lightMode === 'wild') ? 1.2 + Math.sin(t * 6) * 0.3 : 0.9;   // a slow glow, never a flicker
       if (dancers.length) {
         var on = t < danceUntil;
-        dancers.forEach(function (s, j) {
+        var shown = dancers.filter(function (s) { return !danceIds || danceIds.indexOf(s.userData.id) >= 0; });
+        dancers.forEach(function (s) { s.visible = false; });
+        shown.forEach(function (s, j) {
           s.visible = on; if (!on) return;
           var col = j % 11, row = Math.floor(j / 11);
           s.position.set(-4.2 + col * 0.84, 4.25 - row * 0.95 + Math.abs(Math.sin(t * 6 + j)) * 0.22, ZB + 0.5);
@@ -680,7 +923,7 @@
   // =====================================================================================
   function make2D() {
     var cv = doc.createElement('canvas'); cv.className = 'cp-canvas';
-    var g = cv.getContext('2d'), W = 0, H = 0, sc = 1, ox = 0, oz = 0, dpr = 1, nTray = 0, danceUntil = 0;
+    var g = cv.getContext('2d'), W = 0, H = 0, sc = 1, ox = 0, oz = 0, dpr = 1, nTray = 0, danceUntil = 0, danceIds = null;
     var Z0 = PF_MID - PF_AMP - 0.6, Z1 = ZE + 1.5;
     function resize() {
       W = stage.clientWidth; H = stage.clientHeight; if (!W || !H) return;
@@ -719,12 +962,12 @@
       }
       if (t < danceUntil) {
         var n = D.chars.length, s = Math.min(36, (W - 20) / 11);
-        D.chars.forEach(function (c, k) { g.drawImage(medCanvas(c, true, 128), W / 2 - 5.5 * s + (k % 11) * s, 6 + Math.floor(k / 11) * s, s - 2, s - 2); });
+        D.chars.filter(function (c) { return !danceIds || danceIds.indexOf(c.id) >= 0; }).forEach(function (c, k) { g.drawImage(medCanvas(c, true, 128), W / 2 - 5.5 * s + (k % 11) * s, 6 + Math.floor(k / 11) * s, s - 2, s - 2); });
       }
     }
     function aimFrom(cx) { var r = cv.getBoundingClientRect(); return ((cx - r.left) / r.width * W - ox) / sc; }
     function project(x, y, z) { return [X(x), Y(z)]; }
-    return { canvas: cv, resize: resize, render: render, aimFrom: aimFrom, project: project, tray: function (n) { nTray = n; }, dance: function (s) { danceUntil = t + s; }, theme: function () {}, dispose: function () {}, kind: '2d' };
+    return { canvas: cv, resize: resize, render: render, aimFrom: aimFrom, project: project, tray: function (n) { nTray = n; }, dance: function (s, ids) { danceUntil = t + s; danceIds = ids || null; }, theme: function () {}, dispose: function () {}, kind: '2d' };
   }
 
   function sizeFx() { if (!fx) return; var d = Math.min(window.devicePixelRatio || 1, 2); fx.width = Math.round(stage.clientWidth * d); fx.height = Math.round(stage.clientHeight * d); }
@@ -746,7 +989,7 @@
   // ---------- input: tap where to drop, or use the buttons and arrow keys
   function aimTo(x) { if (x == null || isNaN(x)) return; aimX = Math.max(-HX + R, Math.min(HX - R, x)); }
   stage.addEventListener('pointerdown', function (e) {
-    if (e.target.closest && e.target.closest('.cp-card, .cp-hud, button, a')) return;
+    if (e.target.closest && e.target.closest('.cp-card, .cp-hud, .cp-banner, button, a')) return;
     firstTap(); aimTo(view.aimFrom(e.clientX, e.clientY)); dropCoin(aimX);
   });
   stage.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' && !(e.target.closest && e.target.closest('.cp-card'))) aimTo(view.aimFrom(e.clientX, e.clientY)); });
@@ -782,6 +1025,10 @@
   });
   $('#cp-rest-back').addEventListener('click', function () { resting = false; $('#cp-rest').hidden = true; if (AC && soundOn()) AC.resume(); startLoop(); });
   $('#cp-share').addEventListener('click', share);
+  var tb = $('#cp-tipsbtn'); if (tb) tb.addEventListener('click', function () { st.tipsOff = st.tipsOff ? 0 : 1; save(); syncTips(); say(st.tipsOff ? 'Tips are off. Turn them on again here any time.' : 'Tips are on. One comes now and then.'); });
+  var rp = $('#cp-replay'); if (rp) rp.addEventListener('click', replay);
+  var rp2 = $('#cp-replay2'); if (rp2) rp2.addEventListener('click', replay);
+  var sks = $('#cp-skipshow'); if (sks) sks.addEventListener('click', function (e) { e.stopPropagation(); celTimers.forEach(clearTimeout); celTimers = []; parts = []; flashA = 0; shakeAmt = 0; boostUntil = 0; if (view && view.dance) view.dance(0); endFinale(); });
   $('#cp-cel-close').addEventListener('click', function () { $('#cp-celebrate').hidden = true; stage.focus(); });
   $('#cp-reset').addEventListener('click', function () {
     if (!window.confirm('Start over? This clears your coins, your shelf of friends and the tips you have found, on this device.')) return;
@@ -790,7 +1037,7 @@
   });
   // Quiet mode switched on here: sound and music go off and stay off until switched on again (tools16)
   window.addEventListener('tol-quiet', function () { if (!soundAllowed()) { st.snd = 0; st.mus = 0; save(); } syncBar(); });
-  doc.addEventListener('tol-still', function () { var c = stillChosen(); if (c !== calm) { calm = c; if (calm) { parts = []; shakeAmt = 0; } mount(); } });
+  doc.addEventListener('tol-still', function () { var c = stillChosen(); if (c !== calm) { calm = c; if (calm) { parts = []; shakeAmt = 0; flashA = 0; } mount(); } });
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { view && view.theme(); }); } catch (e) {} }
   new MutationObserver(function () { view && view.theme(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
@@ -819,14 +1066,18 @@
 
   // for checks: window.TOLCoinPusher.stats()
   window.TOLCoinPusher = {
-    stats: function () { var s = frames.slice().sort(function (a, b) { return a - b; }); return { view: view && view.kind, calm: calm, coins: fieldCount(), meter: st.meter, cup: st.cup, found: Object.keys(st.found).length, tips: st.tips.length, p50: s[Math.floor(s.length / 2)] * 1000, p95: s[Math.floor(s.length * 0.95)] * 1000, simMs: simMs }; },
+    stats: function () { var s = frames.slice().sort(function (a, b) { return a - b; }); return { view: view && view.kind, calm: calm, celCalm: celCalm(), tipsOff: !!st.tipsOff, lastTip: st.lastTip, playMs: playMs, coins: fieldCount(), meter: st.meter, cup: st.cup, found: Object.keys(st.found).length, tips: st.tips.length, p50: s[Math.floor(s.length / 2)] * 1000, p95: s[Math.floor(s.length * 0.95)] * 1000, simMs: simMs }; },
     drop: function (x) { return dropCoin(x == null ? aimX : x); },
+    // test hooks: play the celebration for friend n of 22 without saving (22: the finale); really find k more friends
+    celebrate: function (n) { n = Math.max(1, Math.min(D.chars.length, n | 0)); var c = D.chars[(n - 1) % D.chars.length]; queueCel(n, c, true); return { tier: friendTier(n), calm: celCalm() }; },
+    give: function (k) { var open = D.chars.filter(function (c) { return !st.found[c.id]; }).slice(0, k || 1); open.forEach(function (c) { gotPrize(c.id); }); return Object.keys(st.found).length; },
+    celebrating: function () { return { on: celebrating(), finale: finaleOn, queue: celQ.length, parts: parts.length, trophy: st.trophy || 0 }; },
     // run the machine for a while without drawing (for checks)
     run: function (secs) { for (var i = 0; i < Math.round(secs * 60); i++) { step(1 / 60); if (burstTimer > 0) { burstTimer -= 1 / 60; burstAge += 1 / 60; if (burstTimer <= 0 || burstAge > 2.5) { burstTimer = 0; endBurst(); } } } return this.stats(); }
   };
 
   // ---------- go
-  prefill(); mount(); shelf(); tipsList(); syncBar(); hud(); startLoop();
+  prefill(); mount(); shelf(); tipsList(); syncBar(); syncTips(); trophyNote(); hud(); startLoop();
   // tools16: the row of games starts at the beginning, so the Arcade (and the others) show on a phone, not only this one
   // (the shared "show the tab you're on" helpers run later too, so this runs again after load, unless you've swiped the row)
   (function () {

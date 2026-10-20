@@ -14,14 +14,14 @@ codes. It also lists the pocket guide (The Logic Behind It: paperback $9.99 reco
 from tools/book/series-extras.json). books-final9: the Kindle box set is held back for the second wave, with Book 5; its
 listing words stay here (L[BOXSET]) but it is left out of this wave's listing.
 
-finalfix15: the workbook comes in two editions, built from the same pages: the colour edition (workbook.pdf) and a
-black-and-white interior with the same colour cover (workbook-bw.pdf, recommended). Both are listed, side by side,
+finalfix15: the workbook comes in two editions, built from the same pages: the color edition (workbook.pdf) and a
+black-and-white interior with the same color cover (workbook-bw.pdf, recommended). Both are listed, side by side,
 and the owner publishes one. Every paperback uses a free KDP ISBN.
 
 voice18: the owner's pricing rule (series.json "price_rule"): a paperback under 100 pages is a short edition at $9.99,
 anything longer is $14.99. build_pdfs.js applies it to the final page count and writes list_price into book/print/series.json;
 this file reads that, recomputes every royalty line from it, and groups the short editions (the pocket guide and the workbook)
-together after the books. A short edition whose printing cost is too high for KDP's expanded distribution at $9.99 (the colour
+together after the books. A short edition whose printing cost is too high for KDP's expanded distribution at $9.99 (the color
 workbook) is marked Amazon only, with the lowest price that would allow it.
 """
 import csv
@@ -108,8 +108,8 @@ L = {
     'book-4-share-the-load': {
         'hook': 'Every shared home runs on work that nobody sees.',
         'body': [
-            'Noticing the shoes are too small, booking the appointment, remembering bin day: when that work is not counted, someone ends up carrying more than anyone realises, and resentment grows quietly.',
-            'This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, housemates, co-parents and teams. It looks at the setup, never at the person.',
+            'Noticing the shoes are too small, booking the appointment, remembering trash day: when that work is not counted, someone ends up carrying more than anyone realizes, and resentment grows quietly.',
+            'This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, roommates, co-parents and teams. It looks at the setup, never at the person.',
         ],
         'inside': ['The work nobody sees: the mental load, made visible', 'Is the split working? A simple check you can both trust', 'Full stress tanks and seven angles on the same moment',
                    'Two kinds of fair, and letting words land', 'The monthly look-back', 'How the numbers work, in plain arithmetic', 'An afterword that draws the series together'],
@@ -135,14 +135,14 @@ L = {
 
 # finalfix15: the workbook's black-and-white edition: the same words, the same pages, a black-ink interior
 WB_BW = dict(CFG['workbook'], id=CFG['workbook']['id'] + '-bw', isbn=CFG['workbook'].get('isbn_bw', ''), price_usd=CFG['workbook_bw_price_usd'])
-L[WB_BW['id']] = dict(L['workbook'], inside=[x for x in L['workbook']['inside'] if not x.startswith('Large')] + ['Large 8.5 × 11 in pages, printed in black and white, under a colour cover'])
+L[WB_BW['id']] = dict(L['workbook'], inside=[x for x in L['workbook']['inside'] if not x.startswith('Large')] + ['Large 8.5 × 11 in pages, printed in black and white, under a color cover'])
 
 # logicbook14: the pocket guide and the box set's listing words
 L[POCKET['id']] = {
     'hook': 'Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.',
     'body': [
         'A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.',
-        'It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime”. Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.',
+        'It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime.” Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.',
     ],
     'inside': ['38 situations, one to a page, in nine short sections', 'On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step',
                '“With care” notes where a reaction can land hard on someone else', 'A short introduction to the six-part lens, and why logic explains but never excuses',
@@ -238,14 +238,14 @@ def expanded_text(c, price):
 
 
 def kindle_net(price, mb):
-    """70% band ($2.99 to $12.99 on Amazon.com since 7 July 2026): 70% x price - delivery ($0.15 a MB); 35% outside it, with no delivery fee"""
+    """70% band ($2.99 to $12.99 on Amazon.com since July 7, 2026): 70% x price - delivery ($0.15 a MB); 35% outside it, with no delivery fee"""
     if 2.99 <= price <= 12.99:
         return 0.70 * price - 0.15 * mb, 70
     return 0.35 * price, 35
 
 
 AI_TEXT = '''KDP asks three separate questions: did you use AI-based tools to create the **text**, the **images**, or **translations**? KDP's own definitions:
-- **AI-generated** means an AI-based tool created the actual content, *even if you edited it a lot afterwards*. This must be disclosed.
+- **AI-generated** means an AI-based tool created the actual content, *even if you edited it a lot afterward*. This must be disclosed.
 - **AI-assisted** means you created the content yourself and used AI to edit, check, brainstorm or improve it. This does not need to be disclosed.
 
 Honest answers for this book, as it was made [OWNER: confirm; only you know your own process]:
@@ -263,7 +263,7 @@ SELECT_NO = ('**No.** Select needs the ebook to be exclusive to Amazon in digita
              'Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take '
              'the free online book down.')
 DRM_NO = ('**No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers\' way. KDP\'s help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, '
-          'checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER]')
+          'checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from January 20, 2026). [OWNER]')
 
 
 def workbook_choice():
@@ -274,7 +274,7 @@ def workbook_choice():
     ce = (c.get('costs') or {}).get('kdp_expanded', {})
     return '\n'.join([
         '\n---\n\n## Which workbook edition? [OWNER: decide; (b) is recommended]\n',
-        'Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each gets its own free KDP ISBN).\n',
+        'Both editions are built from the same pages, with no blank pages, and both have the same color cover. Publish one of them (each gets its own free KDP ISBN).\n',
         '| | (a) Colour edition | (b) Black-and-white interior (recommended) |', '|---|---|---|',
         '| Files | workbook.pdf, cover-workbook.pdf | workbook-bw.pdf, cover-workbook-bw.pdf |',
         '| Pages | %d | %d |' % (c.get('pages', 0), b.get('pages', 0)),
@@ -287,7 +287,7 @@ def workbook_choice():
         '',
         '**Both at %s.** The owner\'s rule puts every paperback under 100 pages in the short line at %s, so both editions cost the reader the same. '
         '**Why (b).** At the same price, black ink keeps **%s** a copy against colour\'s **%s**: colour printing at this size costs %s, black ink a flat %s. '
-        'The sheets are forms to write on, so colour adds little, and the cover stays in colour either way. The simulated reader panel put the workbook\'s value at about $8.50, '
+        'The sheets are forms to write on, so color adds little, and the cover stays in color either way. The simulated reader panel put the workbook\'s value at about $8.50, '
         'so %s is close to what readers expect. Below $9.99 KDP pays 50%% instead of 60%%, so $9.99 is also the lowest price that keeps the higher royalty.\n' % (
             money(bp), money(bp), money(bc.get('net', 0)), money(cc.get('net', 0)), money(cc.get('print', 0)), money(bc.get('print', 0)), money(bp)),
         'The sources for the printing costs are at the end of this file. KDP\'s own calculator gives the exact figure for each file; check it before you set the price.\n'])
@@ -341,7 +341,7 @@ def main():
         if bid == 'workbook':
             md.append(workbook_choice())
         if kind == 'workbook':
-            head = 'Workbook, %s: ' % ('black-and-white edition (recommended)' if bw else 'colour edition')
+            head = 'Workbook, %s: ' % ('black-and-white edition (recommended)' if bw else 'color edition')
         md.append('\n---\n\n## %s%s\n' % (head, title))
         if kind == 'boxset':
             md.append('A Kindle ebook only. There is no print box set: each paperback is listed on its own. The file is **book/print/epub/%s.epub** and the cover **book/print/cover-%s-front.jpg**.\n' % (bid, bid))
@@ -398,7 +398,7 @@ def main():
             md.append('| ISBN | Choose **"Get a free KDP ISBN"**. It can\'t be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |')
             md.append('| Publication date | Leave blank (KDP fills in the date it goes live) |')
             md.append('| Print options | Ink and paper: **%s, white paper**. Trim: **%s**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |' % ('Black & white interior' if bw else 'Standard color', trim))
-            md.append('| Page count | %d (KDP reads it from the file)%s |' % (pages, ' — 72 is KDP\'s minimum for standard colour, so the guide is built to 72 to 80 pages' if kind == 'pocket' else ''))
+            md.append('| Page count | %d (KDP reads it from the file)%s |' % (pages, ' — 72 is KDP\'s minimum for standard color, so the guide is built to 72 to 80 pages' if kind == 'pocket' else ''))
             md.append('| Spine width | %.4f in (%.2f mm): %d pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: %s |' % (m.get('spine_in', 0), m.get('spine_mm', 0), pages, 'yes (over 79 pages)' if m.get('spine_text') else 'no (KDP allows it only above 79 pages)'))
             md.append('| Manuscript file | book/print/%s.pdf |' % bid)
             md.append('| Cover file | book/print/cover-%s.pdf (full wrap %.3f × %.2f in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |' % (bid, m.get('cover_in', [0, 0])[0], m.get('cover_in', [0, 0])[1]))
@@ -431,11 +431,11 @@ def main():
             elif kind == 'workbook':
                 cost = COSTS['kdp_bw_large'] if bw else COSTS['kdp_large']
                 how = ('black ink, large trim (8.5 × 11 in), 24 to 110 pages: a flat $%.2f a book' % cost['fixed']) if bw else (
-                    'standard colour, large trim (8.5 × 11 in): $%.2f + %d × $%.4f' % (cost['fixed'], pages, cost['per_page']))
+                    'standard color, large trim (8.5 × 11 in): $%.2f + %d × $%.4f' % (cost['fixed'], pages, cost['per_page']))
                 md.append('\nPrice: **%s** (the short-edition rule: under 100 pages). Printing: %s = **%s**. Royalty: %d%% × %s − printing = **%s a copy**. %s [OWNER]\n' % (
                     money(price), how, money(kdp.get('print', 0)), int(round(kdp.get('royalty_rate', 0.6) * 100)), money(price), money(kdp.get('net', 0)),
-                    'The colour cover costs nothing extra: KDP prints every cover in colour.' if bw else (
-                        'At this price the colour edition is **Amazon only**: expanded distribution would need a list price of at least about %s. Compare the black-and-white edition below.'
+                    'The color cover costs nothing extra: KDP prints every cover in color.' if bw else (
+                        'At this price the color edition is **Amazon only**: expanded distribution would need a list price of at least about %s. Compare the black-and-white edition below.'
                         % money(c.get('kdp_expanded', {}).get('min_price') or 0))))
             else:
                 md.append('\nThe non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP\'s "based on Amazon.com" fill them, then round to .99. [OWNER]\n')
@@ -505,7 +505,7 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
     pm = MADE.get(POCKET['id'], {}).get('pagemap', {})
     POCKET_FIRST = min([v for k, v in pm.items() if k.startswith('sit-')] or [12])
     md.append('## "Look inside" tips\n')
-    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast”, one page on the workpapers, tools and characters), so a browser reaches Chapter 1 early.
+    md.append('''- Amazon builds "Look inside" from the uploaded files. The front matter is kept short on purpose (title, copyright, contents, one page about the book and how to use it, a one-page “Find it fast,” one page on the workpapers, tools and characters), so a browser reaches Chapter 1 early.
 - Chapter 1 of each book opens with a scene, "Words you could use" and a "Try this" box early on, which shows the book's feel at a glance.
 - The pocket guide reaches its first situation on page %d, after a short introduction to the six parts.
 - For Kindle, KDP shows about the first 10%%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, then the three friends, so Chapter 1 comes early.
@@ -516,11 +516,11 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 [OWNER: confirm every detail (the About page uses they/them for Christian), and whether you want a photo. Keep it to things that are true and that you're happy to share.]
 ''')
     md.append('## Sources (looked up October 2026)\n')
-    md.append('''- KDP printing cost, standard colour regular trim $1.00 + $0.0255 a page (72 to 600 pages; 72 is the minimum for standard colour), large trim $1.00 + $0.0402: [KDP help, printing costs](https://kdp.amazon.com/en_US/help/topic/G201834340); [Cambric KDP printing cost guide](https://cambric.pub/guides/kdp-printing-cost-guide/).
-- KDP printing cost, black ink on Amazon.com: a flat $2.30 a book at regular trim and **$2.84 a book at large trim** (8.5 × 11 in) for 24 to 110 pages, with a per-page charge only above that: [KDP help, printing costs](https://kdp.amazon.com/en_US/help/topic/G201834340) (looked up 18 October 2026).
-- Paperback royalty 60% at $9.99 and up, 50% below (since 10 June 2025), 40% expanded distribution: [KDP help](https://kdp.amazon.com/help/topic/G201834330); [Writem on the 2025 change](https://writem.substack.com/p/what-the-new-amazon-print-royalty); UK £7.99 and EU €9.99 thresholds: [Cartmango](https://cartmango.com/kdp-royalties/).
-- Spine: standard colour 0.002252 in a page: [KDP help, cover calculator](https://kdp.amazon.com/help/topic/G201953020).
-- 70% Kindle band $2.99 to $12.99 from 7 July 2026 (35% outside it), delivery fee: [KDP eBook list price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560); [Authors Guild statement](https://authorsguild.org/news/statement-on-amazon-kdp-raising-70-percent-royalty-ceiling/); [Publishers Lunch](https://lunch.publishersmarketplace.com/2026/07/kdp-raises-price-ceiling-for-70-percent-royalty-rate-for-the-first-time/).
+    md.append('''- KDP printing cost, standard color regular trim $1.00 + $0.0255 a page (72 to 600 pages; 72 is the minimum for standard color), large trim $1.00 + $0.0402: [KDP help, printing costs](https://kdp.amazon.com/en_US/help/topic/G201834340); [Cambric KDP printing cost guide](https://cambric.pub/guides/kdp-printing-cost-guide/).
+- KDP printing cost, black ink on Amazon.com: a flat $2.30 a book at regular trim and **$2.84 a book at large trim** (8.5 × 11 in) for 24 to 110 pages, with a per-page charge only above that: [KDP help, printing costs](https://kdp.amazon.com/en_US/help/topic/G201834340) (looked up October 18, 2026).
+- Paperback royalty 60% at $9.99 and up, 50% below (since June 10, 2025), 40% expanded distribution: [KDP help](https://kdp.amazon.com/help/topic/G201834330); [Writem on the 2025 change](https://writem.substack.com/p/what-the-new-amazon-print-royalty); UK £7.99 and EU €9.99 thresholds: [Cartmango](https://cartmango.com/kdp-royalties/).
+- Spine: standard color 0.002252 in a page: [KDP help, cover calculator](https://kdp.amazon.com/help/topic/G201953020).
+- 70% Kindle band $2.99 to $12.99 from July 7, 2026 (35% outside it), delivery fee: [KDP eBook list price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560); [Authors Guild statement](https://authorsguild.org/news/statement-on-amazon-kdp-raising-70-percent-royalty-ceiling/); [Publishers Lunch](https://lunch.publishersmarketplace.com/2026/07/kdp-raises-price-ceiling-for-70-percent-royalty-rate-for-the-first-time/).
 - KDP Select exclusivity and benefits: [Reedsy](https://reedsy.com/blog/guide/kdp/kdp-select); [Scribe Media](https://scribemedia.com/kdp-select/).
 - Content free on the web is accepted from the copyright owner: [KDP content guidelines](https://kdp.amazon.com/en_US/help/topic/G200672390).
 - AI disclosure definitions (AI-generated vs AI-assisted; text, images, translations): [KDP content guidelines, reposted](https://www.lesswrong.com/posts/4csaBfAgiyzrFXvEj/amazon-kdp-ai-content-guidelines).
@@ -548,7 +548,7 @@ TAGLINES = {
     'book-1-know-yourself-kindly': ['Get to know yourself, kindly.', 'Where your lens came from, and who you are becoming.', 'Feelings, worth and wiring, in plain words.', 'Short chapters. One small thing to try each week.'],
     'book-2-heal-and-steady': ['For the heavy days.', 'Stress, anger, worry and grief, explained gently.', 'Find your footing again, one small step at a time.', 'No blame. Just steadier days.'],
     'book-3-understanding-each-other': ['Care about each other and still out of tune? Start here.', 'How words land, and how to get back in step.', 'Belonging, love and kinder disagreements.', 'For couples, families, friends and teams.'],
-    'book-4-share-the-load': ['See the work nobody sees.', 'Fix the setup, not the person.', 'A fair, kind way to share the chores.', 'For couples, families, housemates and teams.'],
+    'book-4-share-the-load': ['See the work nobody sees.', 'Fix the setup, not the person.', 'A fair, kind way to share the chores.', 'For couples, families, roommates and teams.'],
     'workbook': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it in on your own or together.', 'The same forms are free online; this one is for your shelf.'],
     POCKET['id']: ['Why did they react like that?', 'Thirty-eight everyday reactions, and the logic behind each one.', 'Both sides of the story, on a single page.', 'Small enough for a pocket. Kind enough to hand over.'],
     'workbook-bw': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it in on your own or together.', 'The same forms are free online; this one is for your shelf.'],

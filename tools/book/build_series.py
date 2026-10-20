@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """build_series.py: the print series of the book (print12). Its name is series_title in tools/book/series.json.
 
-A series of short colour books for print on demand (6 x 9 in, KDP "regular" trim, standard colour, white
+A series of short color books for print on demand (6 x 9 in, KDP "regular" trim, standard color, white
 paper), plus a separate workbook (8.5 x 11 in) with every workpaper in fill-in form. The books are made from the
 SHORT chapter versions; every chapter ends with a "Go deeper (free online)" line and a QR code to its full
-version. The series is set in tools/book/series.json (which chapters go in which book, titles, colours, back-cover
+version. The series is set in tools/book/series.json (which chapters go in which book, titles, colors, back-cover
 words, ISBNs once bought).
 
 Run from the repo root:
@@ -67,9 +67,9 @@ COL_PX = {'book': round((6 - 0.75 - 0.5) * 96), 'workbook': round((8.5 - 0.75 - 
 # (since 10 June 2025), minus printing.
 COSTS = {
     'kdp': {'fixed': 1.00, 'per_page': 0.0255, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
-            'note': 'KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)'},
+            'note': 'KDP Amazon.com, standard color, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)'},
     'kdp_large': {'fixed': 1.00, 'per_page': 0.0402, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
-                  'note': 'KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page'},
+                  'note': 'KDP Amazon.com, standard color, large trim (8.5 x 11): $1.00 + $0.0402 a page'},
     # finalfix15: black ink, large trim, 24 to 110 pages: a flat $2.84 a book on Amazon.com (KDP help G201834340, looked up
     # 18 October 2026). Above 110 pages KDP adds a per-page charge, so the build warns if the workbook ever gets that long.
     'kdp_bw_large': {'fixed': 2.84, 'per_page': 0.0, 'max_pages': 110, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
@@ -87,6 +87,21 @@ LOGIC_PAGE = '/the-logic-behind-it.html'
 SERIES_CSS = '/book/print/print.css'
 WB_CSS = '/book/print/workbook.css'
 
+
+
+# books-final9 (owner decision, 20 Oct 2026): every print page is American English. The sources are converted already;
+# this catches words that come from site data the books reuse (the logic library, the workpaper sheets, tool option lists).
+import us_english  # noqa: E402
+_b_write = B.write
+
+
+def _us_write(path, s):
+    if path.endswith('.html'):
+        s = us_english.us_html(s)
+    return _b_write(path, s)
+
+
+B.write = _us_write
 
 def books():
     return CFG['books']
@@ -124,7 +139,7 @@ STUB_RE = re.compile(r'<meta http-equiv="refresh" content="\d+;\s*url=([^"]+)"',
 
 
 def unstub(url):
-    """printfix13: a code never opens a page that only forwards to another one: follow the forward"""
+    """printfix13: a code never opens a page that only forward to another one: follow the forward"""
     p = re.sub(r'^https://spreadloveandacceptance\.com', '', url)
     if not p.startswith('/'):
         return url
@@ -162,7 +177,7 @@ def check_qrs():
         elif frag and not re.search(r'\bid="%s"' % re.escape(frag), B.read(f)):
             bad.append('QR to a missing #%s: %s' % (frag, u))
         elif STUB_RE.search(B.read(f)[:4000]):
-            bad.append('QR to a page that only forwards: ' + u)
+            bad.append('QR to a page that only forward: ' + u)
     return bad
 
 
@@ -342,7 +357,8 @@ def logic_box(b):
     lab = LOGIC['labels']
     url = '%s?item=%s#find' % (LOGIC_PAGE, b['id'])
     row = lambda k, v, cls='': '<p class="lg-row%s"><span class="lg-l">%s</span> %s</p>' % (cls, esc(lab[k]), v)
-    steps = '<span class="lg-arr" aria-hidden="true"> → </span>'.join('<span class="lg-step">%s</span>' % esc(x) for x in b['logic'])
+    # books-final9 (owner: no arrows inside sentences): the chain reads as short plain sentences, one per step
+    steps = ' '.join('<span class="lg-step">%s</span>' % esc(x.rstrip('.') + '.') for x in b['logic'])
     s = '<aside class="lg-box no-bubble no-cheer no-dive" data-no-bubble aria-label="%s" id="lg-%s">' % (esc(LOGIC['kicker']), b['id'])
     # the code sits at the top right, so the box can run on across a page break between any two parts
     s += '<div class="lg-box-qr">%s</div>' % qr(url)
@@ -462,9 +478,9 @@ def copyright_page(book, workbook=False, bw=False):
         B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '')
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
-          'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % (what, esc(SERIES_TITLE))
+          'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % (what, esc(SERIES_TITLE))
     s += ('<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>')
+          'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>')
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
         s += ('<p>The research the chapters mention is listed in short at the back. The full list, with what each study found and links, is at '
@@ -482,7 +498,7 @@ def meet_page(book, found=()):
     wp = next((hints.WP[k] for (kind, k) in found if kind == 'wp' and k in hints.WP), hints.WP.get('wp03'))
     tl = next((hints.TL[k] for (kind, k) in found if kind == 'tool' and k in hints.TL), None)
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
-    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s”. '
+    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s.” '
           'Every workpaper is free to print or to fill in on the website, and the book gives a code to scan for each one. '
           '<em>%s</em> has them all in one place, on big pages.</p>'
           '<p>%s <strong>A tool</strong> is a helper you use on the website%s. You use it and it gives you something back.</p>'
@@ -500,7 +516,7 @@ def meet_page(book, found=()):
           '<blockquote><p>“I spent my career as a government auditor and audit manager in tax enforcement, internal controls and compliance.” '
           '“Everyone else seemed to have been handed a set of instructions about being human that nobody ever gave me, so I went looking for them myself.” '
           '“Everything here exists so that you can do the same thing in far less time than it took me.”</p></blockquote>'
-          '<p class="ps-meet-note">Christian, quoted from the About page at spreadloveandacceptance.com/about. Where the chapters say “I”, '
+          '<p class="ps-meet-note">Christian, quoted from the About page at spreadloveandacceptance.com/about. Where the chapters say “I,” '
           'they speak for the website and these books; any fact about Christian in them comes from that page.</p></div></section>')
     return s
 
@@ -654,7 +670,7 @@ IDEAS = json.load(open(os.path.join(ROOT, 'tools', 'book', 'ideas-map.json'), en
 
 def ideas_map(book, chs, epub=False, pocket_sections=None):
     """voice18 (owner, polymath-lens.md): "How the ideas connect", one page. The seven roots in the middle, the thirteen
-    fields round them, with the chapters (or, in the pocket guide, the sections) where each comes up. Plain title, and
+    fields around them, with the chapters (or, in the pocket guide, the sections) where each comes up. Plain title, and
     nothing about who wrote the book."""
     where_f, where_r = {}, {}
     if pocket_sections:
@@ -815,7 +831,7 @@ SHOWCASE = [
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
     ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
     ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
-    ('coins', 'Kindness Coin Pusher', 'A cosy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
+    ('coins', 'Kindness Coin Pusher', 'A cozy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
     ('garden', 'The Night Garden', 'A calm breathing game. A flower blooms with every slow breath, and there are fireflies to guide and a lily pond to fill.', '/night-garden.html', 'garden'),
     ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
 ]
@@ -835,7 +851,7 @@ def showcase(book, epub=False):
     c = book['color']
     head = ('<p class="ps-sc-k">Free on the website</p><h1 class="ps-sc-h">Your book has a home online</h1>'
             '<p class="ps-sc-lede">Everything in this book is free at spreadloveandacceptance.com, along with tools that do the sums for you, '
-            'guided journeys, a raindrop professor with kind answers and a few cosy games. There is no account and no paid version.</p>')
+            'guided journeys, a raindrop professor with kind answers and a few cozy games. There is no account and no paid version.</p>')
     home = ('<div class="ps-sc-home">%s<p><strong>Start here</strong>Scan with your phone’s camera to open the home page.'
             '<span class="ps-addr">spreadloveandacceptance.com</span></p></div>') % ('' if epub else qr('/'))
 
@@ -856,7 +872,7 @@ def showcase(book, epub=False):
     s = '<div class="pe-verso-pad pe-only" data-for="free"></div>'
     s += ('<section class="pe-back ps-showcase ps-sc-left no-bubble" data-no-bubble id="free" style="--pc:%s;--pt:%s">%s%s%s'
           '<div class="ps-sc-grid">%s</div></section>') % (c, book['tint'], mark('free'), head, home, left)
-    s += ('<section class="pe-back ps-showcase ps-sc-right no-bubble" data-no-bubble style="--pc:%s;--pt:%s"><p class="ps-sc-k">Cosy, calm and free</p>'
+    s += ('<section class="pe-back ps-showcase ps-sc-right no-bubble" data-no-bubble style="--pc:%s;--pt:%s"><p class="ps-sc-k">Cozy, calm and free</p>'
           '<div class="ps-sc-grid">%s</div>%s</section>') % (c, book['tint'], right, promise)
     return s
 
@@ -1051,15 +1067,15 @@ WB_EXPLAINED = {
 # voice18: a short note before each workpaper's blank copies, in the books' voice (the people in them are made up)
 WB_NOTE = {
     'wp02': 'Two minutes, about yourself and nobody else. You may be surprised by your own number. A score of 0.65 on a Tuesday tells you something about Tuesday and nothing whatsoever about your character.',
-    'wp11': 'Make this on a dull, ordinary day, ideally with a cup of tea. Trying to write a calm-down plan in the middle of a row is like reading the instructions on a fire extinguisher while the pan is still burning.',
+    'wp11': 'Make this on a dull, ordinary day, ideally with a cup of tea. Trying to write a calm-down plan in the middle of a fight is like reading the instructions on a fire extinguisher while the pan is still burning.',
     'wp09': 'For one thing that actually stung, not a list of grievances. It’s a check on your side of the conversation. Most people find the first draft of their reply is about twice as long as it needs to be.',
     'wp13': 'Ninety seconds, once a day, both of you. It’s meant to be almost too small to bother with, which is exactly why it keeps going. If you miss a day, write nothing and carry on tomorrow.',
     'wp12': 'Fill in your own rows first, before you look at theirs. Often one moment stands out a mile, bedtime, say, or the first ten minutes after someone gets home.',
     'wp14': 'A line each evening, about your own day. At the end of the week, the question is simple. Was it us, or was it everything else? Quite often it was everything else.',
     'wp01': 'One ordinary week. Write only what you did or saw yourself, including the thinking jobs, the remembering and the booking. Nobody fills in anybody else’s side, however sure they are.',
-    'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list, because they are the reason you’re doing this. A made-up example of how it tends to go: when Sian and Huw did theirs at the kitchen table, nineteen jobs went on the list and fourteen had a name within five minutes. The other five, which included the car tax and Huw’s mum’s birthday, took the rest of the evening, and the car tax turned out to be a fortnight overdue.',
+    'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list, because they are the reason you’re doing this. A made-up example of how it tends to go: when Sian and Huw did theirs at the kitchen table, nineteen jobs went on the list and fourteen had a name within five minutes. The other five, which included the car registration and Huw’s mom’s birthday, took the rest of the evening, and the car registration turned out to be two weeks overdue.',
     'setup': 'The sums from Book 4, done with a pencil. You’ll need a week of Who did what, your job list, and each person’s own tank score. If anyone’s tank is 0.60 or more, start there, whatever the total says.',
-    'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock. Another made-up example: Ifan and Kemal’s first look-back found the bins slipped three weeks out of four, every time on the week Kemal was on lates, so Ifan took the bins and Kemal took the Sunday shop. It took eleven minutes, most of it spent finding a pen.',
+    'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock. Another made-up example: Ifan and Kemal’s first look-back found the trash slipped three weeks out of four, every time on the week Kemal was on late shifts, so Ifan took the trash and Kemal took the Sunday shop. It took eleven minutes, most of it spent finding a pen.',
     'wp15': 'The Sunday walk, the birthday breakfast, the silly thing you always say at the door. Every few months, see which are still alive. Nobody is to blame for one that faded.',
 }
 ALL_FOUND = {}
@@ -1084,7 +1100,7 @@ def wb_sheet_fix(key, sh):
         sh = sh.replace('<p class="pe-ws-opts">Part B (optional), Kind ways to say no: say why the request is fair, say honestly what you have left, and offer something instead.</p>',
                         '<h3>Part B (optional): Kind ways to say no</h3><p class="pe-ws-opts">For a request you can’t take on this week: say why the request is fair, '
                         'say honestly what you have left, and offer something instead.</p><div class="wb-lines">%s</div>' % ('<div></div>' * 6))
-        sh = sh.replace('How the score works: “How the numbers work”, at the back.', 'How the score works: “How the numbers work”, page %s of this workbook.' % pg('numbers'))
+        sh = sh.replace('How the score works: “How the numbers work,” at the back.', 'How the score works: “How the numbers work,” page %s of this workbook.' % pg('numbers'))
     if key == 'wp15':
         sh = sh.replace('<h3>Part C: One to restart, or start</h3>',
                         '<h3>Part B: Count them</h3><div class="pe-ws-meta"><span>Alive ____</span><span>Fading ____</span><span>Stopped ____</span><span>New idea ____</span></div>'
@@ -1105,7 +1121,7 @@ SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the 
                '<div class="pe-ws-meta"><span>Hours, person A ____</span><span>Hours, person B ____</span><span>Total ____</span></div>'
                '<div class="pe-ws-meta"><span>A’s share: hours ÷ total × 100 = ____ %</span><span>B’s share = ____ %</span></div>'
                '<div class="pe-ws-meta"><span>Balance = 1 − (the gap between the two shares) ÷ 100 = ____</span></div>'
-               '<p class="pe-ws-opts">Three or more of you, or an uneven split you agreed on purpose: see “How the numbers work”.</p>'
+               '<p class="pe-ws-opts">Three or more of you, or an uneven split you agreed on purpose: see “How the numbers work.”</p>'
                '<h3>Part B: Ownership (does each job have a name?)</h3>'
                '<div class="pe-ws-meta"><span>Jobs with an owner ____</span><span>All jobs on the list ____</span><span>Ownership = owned ÷ all = ____</span></div>'
                '<h3>Part C: Stress tanks</h3>'
@@ -1118,12 +1134,12 @@ SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the 
                '<h3>Part E: The biggest shortfall</h3>'
                '<div class="pe-ws-meta"><span>Balance: 0.40 − ____ = ____</span><span>Ownership: 0.35 − ____ = ____</span><span>Tank: 0.25 − ____ = ____</span></div>'
                '<div class="pe-ws-meta"><span>The biggest one is ____________</span><span>One small change we’ll try ____________</span><span>Look again on ____</span></div>'
-               '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work”, at the back of this workbook.</p></section>')
+               '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work,” at the back of this workbook.</p></section>')
 
 
 def build_workbook(where, bw=False):
-    """the workbook (8.5 x 11 in). finalfix15: two editions from the same pages. The colour edition (workbook.html) and a
-    black-and-white interior (workbook-bw.html, bw=True), printed in shades of grey for KDP's cheaper black ink. Neither
+    """the workbook (8.5 x 11 in). finalfix15: two editions from the same pages. The color edition (workbook.html) and a
+    black-and-white interior (workbook-bw.html, bw=True), printed in shades of gray for KDP's cheaper black ink. Neither
     has blank pages: each workpaper's opening page follows the last sheet of the one before, so a two-page sheet that
     starts on a right-hand page runs on overleaf."""
     wb = CFG['workbook']
@@ -1150,7 +1166,7 @@ def build_workbook(where, bw=False):
         for s_ in ALL_FOUND.get(('wp', key), []):
             b = where.get(s_)
             if b:
-                lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].replace('Afterword', 'the afterword')  # books-final9: capital C, as everywhere else, B.SHORT[s_])
+                lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].replace('Afterword', 'the afterword'), B.SHORT[s_])  # books-final9: capital C, as everywhere else
                 if lab not in ins:
                     ins.append(lab)
         fill = ('/workpapers/fill/%s.html' % w['code'].lower()) if key != 'setup' else '/is-the-setup-working.html'
@@ -1165,7 +1181,7 @@ def build_workbook(where, bw=False):
         elif ins:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
         s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
-              'where you can also fill the form in on screen.</dd></div></dl>') % copies
+              'where you can also fill the form out on screen.</dd></div></dl>') % copies
         if key in WB_NOTE:
             s += '<p class="wb-note">%s</p>' % esc(WB_NOTE[key])
         if key in WB_EXPLAINED:
@@ -1206,8 +1222,8 @@ def build_workbook(where, bw=False):
               'explains it. The blank copies follow, one after another.</li>'
               '<li><strong>On your own, or together.</strong> Some sheets are only about you, so fill those in for yourself and never for anyone else. On shared sheets, '
               'each person writes only their own rows, even when it’s very tempting to help.</li>'
-              '<li><strong>Write what happened.</strong> “Bins missed Tuesday” is useful. “Typical” is not. The sheets look at the setup and the week, and leave everyone’s character alone.</li>'
-              '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet in free on the website, where it does the sums and keeps '
+              '<li><strong>Write what happened.</strong> “Trash missed Tuesday” is useful. “Typical” is not. The sheets look at the setup and the week, and leave everyone’s character alone.</li>'
+              '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet out free on the website, where it does the sums and keeps '
               'what you type on your own device.</li>'
               '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
               '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
@@ -1426,7 +1442,7 @@ def main():
     if 'tailgating' in boxes:
         ERRORS.append('the road-rage tip is for the website only (logic-boxes.json)')
     B.write(os.path.join(SRC, 'series-src.json'), json.dumps({'jobs': jobs(), 'costs': COSTS, 'paper_in': PAPER_IN,
-                                                               'paper_note': 'KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)'}, indent=1) + '\n')
+                                                               'paper_note': 'KDP standard color (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)'}, indent=1) + '\n')
     # the series on /book/ (also made by build_book.py's build_home, so a full rebuild keeps it)
     series_site.patch_home(os.path.join(ROOT, 'book', 'index.html'))
     # owner17: and the four books on /book/download.html (page counts from book/print/series.json; run again after build_pdfs.js)

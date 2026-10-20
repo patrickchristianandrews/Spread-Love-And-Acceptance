@@ -45,7 +45,7 @@ def isbn(cfg, item_id, fmt):
 
 def put_isbns(cfg, item):
     """copies an item's ISBNs from the "isbn" block onto it, as the builders read them: isbn (the paperback; the workbook's
-    colour edition), isbn_bw (the workbook's black-and-white edition) and isbn_ebook"""
+    color edition), isbn_bw (the workbook's black-and-white edition) and isbn_ebook"""
     i = item['id']
     item['isbn'] = isbn(cfg, i, 'paperback') or isbn(cfg, i, 'paperback-colour')
     item['isbn_bw'] = isbn(cfg, i, 'paperback-bw')
@@ -116,7 +116,7 @@ def pdf_label(m):
 
 
 def free_pdf(item_id, m):
-    """owner17: the workbook and the pocket guide download straight away, with no email (the owner's exceptions)"""
+    """owner17: the workbook and the pocket guide download right away, with no email (the owner's exceptions)"""
     f = m.get('pdf') or (item_id + '.pdf')
     if not os.path.exists(os.path.join(ROOT, 'book', 'print', f)):
         return ''
@@ -160,7 +160,7 @@ def home_html():
             pk['color'], cover_img(pk['id'], 'Cover of %s' % pk['title'], 768), esc(pk['title']), esc(pk['line']), meta, free_pdf(pk['id'], m), shop_row(pk['id'])))
     return ('%s\n%s\n<section class="bk-series no-bubble no-dive no-cheer" data-no-bubble id="print-series" aria-labelledby="series-h">'
             '<h2 id="series-h">The book in print</h2>'
-            '<p>The same chapters, as a series of short colour books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
+            '<p>The same chapters, as a series of short color books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
             'In print, each chapter is the short version, with a code to scan for the full one.</p>'
             '<p class="bk-series-note" data-shop-soon>Paperbacks: coming to Amazon soon. Everything here stays free to read online.</p>'
             '<p class="bk-series-note">' + EMAIL_LINE + ' ' + FREE_LINE + '</p>'
@@ -301,8 +301,8 @@ def download_html():
                 pk['color'], cover_img(pk['id'], '', 768).replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), esc(pk['title']), esc(pk['line']),
                 esc(_file(pk['id'], m)), esc(pk['id']), _save_name(pk['title']), _meta(m)))
     out = ['%s\n%s' % (DL_START, DL_CSS),
-           '<section class="bk-dl-four" aria-labelledby="bk-dl-four-h"><h2 id="bk-dl-four-h">The four books</h2>'
-           '<p>The same four short books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
+           '<section class="bk-dl-four" aria-labelledby="bk-dl-four-h"><h2 id="bk-dl-four-h">The books</h2>'
+           '<p>The same short books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
            'Each chapter is the short version, with a code to scan for the full one.</p>'
            '<ul class="bk-dl-books no-bubble" data-no-bubble>%s</ul></section>' % '\n'.join(rows)]
     if free:

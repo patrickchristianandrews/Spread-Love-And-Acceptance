@@ -459,7 +459,7 @@ SEARCH.update({
  'calming-supplements.html': ('Calming Supplements for Anxiety: What Research Says', 'Supplements, herbs, foods and practices for anxiety, stress, sleep and mood, graded honestly, with side effects, interactions and when to get help.'),
  # the book
  'book/index.html': ('Free Self-Help Book Online: Spread Love & Acceptance', 'Read the whole self-help book free online: 26 chapters in three parts on yourself, sharing a life fairly and understanding people. No sign-up, no account.'),
- 'book/download.html': ('The Books as Free PDFs', 'Get the four books as free PDFs. Read every chapter free online; to download a book, we’ll ask for your email. The workbook and pocket guide need none.'),
+ 'book/download.html': ('The Books as Free PDFs', 'Get the books as free PDFs. Read every chapter free online; to download a book, we’ll ask for your email. The workbook and pocket guide need none.'),
  'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
  'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/for-yourself.html': ('The Book for One Person: Know Yourself, Understand People', 'Part One (yourself) and Part Three (understanding people) of the free book on one page: everything you can read and use on your own. No sign-up.'),

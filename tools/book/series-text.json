@@ -12,11 +12,11 @@
    },
    "3": {
     "what": "This book is about the people around you. It looks at how pace and tone pull people out of step, how words land, why two people remember the same moment differently, belonging and trust, love in its many forms, the pull of groups, and how to help someone without burning out.",
-    "who": "It is for partners, families, friends, housemates and teams, and for anyone who has wondered why a kind conversation went wrong."
+    "who": "It is for partners, families, friends, roommates and teams, and for anyone who has wondered why a kind conversation went wrong."
    },
    "4": {
     "what": "This book is about the work of sharing a life: the jobs nobody sees, a simple check of whether the way you share them can last, how much of a reaction is leftover stress, two kinds of fair, and a gentle monthly look back.",
-    "who": "It is for anyone who shares a home, a family or a job, whether that is a couple, a family, housemates, co-parents or coworkers. Most of it also works if you are the only one reading."
+    "who": "It is for anyone who shares a home, a family or a job, whether that is a couple, a family, roommates, co-parents or coworkers. Most of it also works if you are the only one reading."
    }
   },
   "how": "Read the chapters in any order. Each is a short version of a chapter that is free to read online, where the full version has more research, more examples and more to try. The code at the end of each chapter opens it on your phone.",
@@ -27,7 +27,7 @@
    "4": "about sharing the work of a shared life"
   },
   "series_lead": "Each book in the series stands on its own. The others are",
-  "refs": "When a chapter mentions another book, it gives the book, the chapter and the page in that book, as in “{example}”. The workbook, The Workpapers, has every form from the series on big pages",
+  "refs": "When a chapter mentions another book, it gives the book, the chapter and the page in that book, as in “{example}.” The workbook, The Workpapers, has every form from the series on big pages",
   "ideas_lead": "Five ideas run under the whole series.",
   "ideas": [
    [
@@ -80,11 +80,11 @@
    ],
    [
     "I think I might be autistic or have ADHD. Can this book tell me?",
-    "<p>It can’t, and nothing in it is a test. <a href=\"/book/understanding-9-minds.html\">Minds that work differently</a> describes how some minds work, so that you might recognise yourself or someone you love, and it says who can talk you through an assessment if you want one. Plenty of people find the descriptions useful whether or not they ever look for a diagnosis.</p>"
+    "<p>It can’t, and nothing in it is a test. <a href=\"/book/understanding-9-minds.html\">Minds that work differently</a> describes how some minds work, so that you might recognize yourself or someone you love, and it says who can talk you through an assessment if you want one. Plenty of people find the descriptions useful whether or not they ever look for a diagnosis.</p>"
    ],
    [
     "Can a grown-up really change their personality?",
-    "<p>A little, slowly, and mostly by practising the thing you want to be more like. <a href=\"/book/understanding-14-personality.html\">Personality, temperament and change</a> treats traits as dials that move a few notches over the years. Every setting has its gifts and its costs, so the aim is a better fit with your life more than a new you.</p>"
+    "<p>A little, slowly, and mostly by practicing the thing you want to be more like. <a href=\"/book/understanding-14-personality.html\">Personality, temperament and change</a> treats traits as dials that move a few notches over the years. Every setting has its gifts and its costs, so the aim is a better fit with your life more than a new you.</p>"
    ],
    [
     "My partner isn’t interested in any of this. Is it still worth reading?",
@@ -94,11 +94,11 @@
   "2": [
    [
     "I lost my temper and said something I regret. Is it too late to put it right?",
-    "<p>It rarely is. A short apology that names what you did, without a “but”, and a plan for next time go a long way, even days later. <a href=\"/book/understanding-11-healing.html\">Healing after hurt</a> shows how a repair goes, and <a href=\"/book/understanding-13-anger.html\">Anger</a> has a pause plan for the next time the heat rises.</p>"
+    "<p>It rarely is. A short apology that names what you did, without a “but,” and a plan for next time go a long way, even days later. <a href=\"/book/understanding-11-healing.html\">Healing after hurt</a> shows how a repair goes, and <a href=\"/book/understanding-13-anger.html\">Anger</a> has a pause plan for the next time the heat rises.</p>"
    ],
    [
     "Someone I love is grieving. What should I say?",
-    "<p>Something simple and true, such as “I don’t know what to say, but I’m here.” Saying the name of the person who died is usually a kindness. Practical help, like a meal, a lift or a walk, often means more than the right words, and so does still being there a few months on. <a href=\"/book/understanding-8-loss.html\">Loss, grief and big life changes</a> has more.</p>"
+    "<p>Something simple and true, such as “I don’t know what to say, but I’m here.” Saying the name of the person who died is usually a kindness. Practical help, like a meal, a ride or a walk, often means more than the right words, and so does still being there a few months on. <a href=\"/book/understanding-8-loss.html\">Loss, grief and big life changes</a> has more.</p>"
    ],
    [
     "I keep starting good habits and dropping them. What am I doing wrong?",
@@ -138,7 +138,7 @@
    ],
    [
     "There are three or more of us. Does any of this still work?",
-    "<p>Yes. Housemates, families with older children and teams can all use the same pages. Compare each person’s share with an even share, which is 100 divided by the number of people, or with the split you agreed. “How the numbers work” at the back of this book (page {page:numbers}) shows the sums.</p>"
+    "<p>Yes. Roommates, families with older children and teams can all use the same pages. Compare each person’s share with an even share, which is 100 divided by the number of people, or with the split you agreed. “How the numbers work” at the back of this book (page {page:numbers}) shows the sums.</p>"
    ],
    [
     "One of us works much longer paid hours. Is it fair to count only housework?",
@@ -149,12 +149,12 @@
     "<p>They can own jobs that suit their age, with an adult as the backstop who notices if it slips. Owning one small job from start to finish, such as feeding the cat or packing a school bag, is a good first step. Keep the planning and remembering with the adults until a child is ready for a piece of it, and say thank you out loud.</p>"
    ],
    [
-    "Talking about chores always turns into a row. What can we do?",
+    "Talking about chores always turns into a fight. What can we do?",
     "<p>Pick a calm time, never the moment something has been left undone. Check how full each of your stress tanks is first, because a full tank makes every word land harder. <a href=\"/book/chapter-3.html\">Full tanks and different angles</a> shows how, and <a href=\"/book/chapter-5.html\">The monthly look-back</a> gives you a short, regular time to talk so that nothing has to wait for an argument.</p>"
    ],
    [
     "Does this work at work, in a team?",
-    "<p>Yes. The same quiet jobs exist at work, such as booking the room, chasing the late reply and noticing that the printer is out of paper, and a named owner and a real thank-you help there too. Most of the pages in this book work for a team with the word “home” swapped for “work”.</p>"
+    "<p>Yes. The same quiet jobs exist at work, such as booking the room, chasing the late reply and noticing that the printer is out of paper, and a named owner and a real thank-you help there too. Most of the pages in this book work for a team with the word “home” swapped for “work.”</p>"
    ]
   ]
  },
@@ -166,20 +166,20 @@
     "Home and food",
     [
      "Dishes and the kitchen reset",
-     "Washing and drying",
+     "Laundry and drying",
      "Folding and putting away",
      "Changing the sheets",
      "Cleaning the bathroom",
      "Vacuuming and floors",
      "Tidying up",
-     "Bins and recycling",
+     "Trash and recycling",
      "Cooking dinner",
      "Meal planning",
      "Grocery shopping",
      "Packing lunches",
      "Restocking soap, paper and supplies",
      "Small fixes around the home",
-     "Plants and the garden"
+     "Plants and the yard"
     ]
    ],
    [
@@ -199,7 +199,7 @@
     "Children",
     [
      "Getting the kids up and ready",
-     "School or nursery runs",
+     "School or daycare runs",
      "Homework help",
      "Bath time",
      "Bedtime",
@@ -233,11 +233,11 @@
     "Family and friends",
     [
      "Keeping up with both families",
-     "Birthdays and holidays",
+     "Birthdays and vacations",
      "Gifts and cards",
      "Hosting visitors",
      "Planning time with friends",
-     "Planning trips and holidays"
+     "Planning trips and vacations"
     ]
    ],
    [
@@ -296,7 +296,7 @@
     [
      "To check what they meant",
      [
-      "“When you said ‘fine’, did you mean fine, or not really?”",
+      "“When you said ‘fine,’ did you mean fine, or not really?”",
       "“Can I check I’ve got this right?”",
       "“What did you hear me say?”"
      ]
@@ -351,7 +351,7 @@
     [
      "Handing over a job",
      [
-      "“Could you own the bins from now on, from noticing they’re full to putting them out?”",
+      "“Could you own the trash from now on, from noticing they’re full to putting them out?”",
       "“It’s yours now, so do it your way. I’ll only step in if you ask.”",
       "“I’ll be the backstop this month. If it slips, I’ll mention it once, gently.”"
      ]
@@ -500,7 +500,7 @@
     "chapter-2"
    ],
    [
-    "Small things turn into big rows",
+    "Small things turn into big fights",
     "chapter-3"
    ],
    [

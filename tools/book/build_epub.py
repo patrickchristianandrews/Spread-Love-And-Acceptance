@@ -20,7 +20,7 @@ back of the book). Then, for a reflowable ebook:
     missing, the SVG files go in as they are (valid EPUB 3; check them in Kindle Previewer).
   - One XHTML file per chapter and per front or back page, nav.xhtml (contents and landmarks), the cover image
     (book/print/cover-<id>-front.jpg) marked properties="cover-image", simple CSS that suits Kindle (no fixed
-    positions, no page sizes, no colours on text or backgrounds, relative sizes), no scripts.
+    positions, no page sizes, no colors on text or backgrounds, relative sizes), no scripts.
 The workbook has no ebook: its forms are made to be written in, and are free to print online (see listing_kdp.py).
 logicbook14: it also makes the pocket guide's ebook (book/print/epub/pocket-the-logic-behind-it.epub, from tools/book/pocket.py)
 and the Kindle box set (book/print/epub/boxset-complete-series.epub): Books 1 to 4 and the pocket guide in one EPUB, each
@@ -42,6 +42,9 @@ import subprocess
 import sys
 import tempfile
 import uuid
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import us_english  # noqa: E402  (books-final9: American English)
 import zipfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -350,7 +353,7 @@ class Images:
 
 
 def shrink_png(path):
-    """256 colours, no dithering: the flat drawings look the same at about a third of the size (Kindle charges
+    """256 colors, no dithering: the flat drawings look the same at about a third of the size (Kindle charges
     delivery by the megabyte). Uses Pillow when it is installed; without it the PNG stays as it is."""
     try:
         from PIL import Image
@@ -564,7 +567,7 @@ def series_page(book):
         pocket_ = b.get('id') == S.POCKET['id']
         k = ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if pocket_ else 'Workbook')
         online = ('%s/book/%s.html' % (SITE, b['chapters'][0])) if b.get('chapters') else (SITE + S.LOGIC_PAGE if pocket_ else SITE + '/workpapers/fill/index.html')
-        links = ['<a href="%s">%s</a>' % (online, 'Read it free online' if b.get('chapters') else ('Every situation, free online' if pocket_ else 'Print or fill in the forms free online'))]
+        links = ['<a href="%s">%s</a>' % (online, 'Read it free online' if b.get('chapters') else ('Every situation, free online' if pocket_ else 'Print or fill out the forms free online'))]
         st = STORE_LINKS.get(b['id'], {})
         if st.get('kindle'):
             links.append('<a href="%s">Kindle edition</a>' % B.esc(st['kindle']))
@@ -590,8 +593,8 @@ def free_page(book):
 
 # ---------- CSS: plain, relative, and kind to Kindle's own settings ----------
 CSS = '''/* Spread Love & Acceptance ebooks. Kindle-friendly on purpose: no fixed
-   positions, no page sizes, no text or background colours (so the reader's own light, sepia or dark page works),
-   relative sizes, colour only in thin rules (the book's colour: %(acc)s). */
+   positions, no page sizes, no text or background colors (so the reader's own light, sepia or dark page works),
+   relative sizes, color only in thin rules (the book's color: %(acc)s). */
 html, body { margin: 0; padding: 0; }
 body { line-height: 1.45; widows: 2; orphans: 2; }
 p { margin: 0 0 .7em; text-indent: 0; }
@@ -939,7 +942,7 @@ def write_epub(book, docs, nav_at, used, pics, path, extra_files=None, nav_html=
             items.append(('nav', 'nav.xhtml', 'application/xhtml+xml', 'nav'))
             spine.append(('nav', True))
         body = serialize(d.root)
-        files[d.fname] = xhtml(d.title, body, d.body_type if d.body_type in ('bodymatter',) else '').encode('utf-8')
+        files[d.fname] = xhtml(us_english.us(d.title), us_english.us_html(body), d.body_type if d.body_type in ('bodymatter',) else '').encode('utf-8')  # books-final9: American English
         iid = 'x-' + re.sub(r'[^A-Za-z0-9-]', '-', d.fname[:-6])
         items.append((iid, d.fname, 'application/xhtml+xml', ''))
         spine.append((iid, True))
@@ -1129,7 +1132,7 @@ def build_boxset(built, images):
           '<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, and every situation in '
           '<em>%s</em> at spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print books and ebooks are optional.</p>'
           '<p><strong>Not therapy.</strong> These books are general education about people and relationships. They are not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counsellor or other trained professional, and they can’t know your situation.</p>'
+          'replacement for help from a doctor, counselor or other trained professional, and they can’t know your situation.</p>'
           '<p><strong>The examples are made up.</strong> The people in these books’ examples are made up; any likeness to real people is coincidence. None of them is a testimonial.</p>'
           '<p>Each book that follows keeps its own title page and copyright page.</p></section>') % (
         B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.AUTHOR, B.UPDATED, B.esc(S.POCKET['title']))
@@ -1265,7 +1268,7 @@ def main():
         print('epub: %s.epub  %.2f MB, %d chapters, %d figures, %d filled-in examples, %d pictures, %d links out (%d to the site, all real pages), %d inside%s' % (
             b['id'], size / 1048576, len(b['chapters']), len(figs), len(exs), facts.get('images', 0), facts.get('links_out', 0),
             facts.get('site_links_checked', 0), facts.get('links_inside', 0), ('; EPUBCheck: ' + ec['summary']) if ec else ''))
-    report['workbook'] = 'No ebook: the workbook is print only. Its forms are made to be written in, and every one is free to print or fill in at spreadloveandacceptance.com/workpapers/fill/.'
+    report['workbook'] = 'No ebook: the workbook is print only. Its forms are made to be written in, and every one is free to print or fill out at spreadloveandacceptance.com/workpapers/fill/.'
     with open(os.path.join(OUT, 'epub.json'), 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=1, ensure_ascii=False)
         f.write('\n')

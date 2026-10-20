@@ -145,8 +145,8 @@
   "file": "tools/book/examples/ex-lemonade-housemates.html",
   "tool": "/lemonade-stand.html#quick-h",
   "title": "Who does what? Quick look",
-  "who": "Wren, Josh and Mei, housemates (Wren’s view)",
-  "relationship": "housemates (three)",
+  "who": "Wren, Josh and Mei, roommates (Wren’s view)",
+  "relationship": "roommates (three)",
   "versions": [
    "short",
    "full"
@@ -179,7 +179,7 @@
   "file": "tools/book/examples/ex-wp02-rosa.html",
   "tool": "/workpapers/fill/wp-02.html",
   "title": "How much are you carrying?",
-  "who": "Rosa, who shares her mum’s care with her brother",
+  "who": "Rosa, who shares her mom’s care with her brother",
   "relationship": "adult siblings caring for a parent",
   "versions": [
    "short",
@@ -213,8 +213,8 @@
   "file": "tools/book/examples/ex-wp03-foster.html",
   "tool": "/workpapers/fill/wp-03.html?for=foster",
   "title": "One owner per job",
-  "who": "Dee and Mark, foster carers",
-  "relationship": "foster carers",
+  "who": "Dee and Mark, foster caregivers",
+  "relationship": "foster caregivers",
   "versions": [
    "short",
    "full"
@@ -452,7 +452,7 @@
   "tool": "/workpapers/fill/wp-11.html",
   "title": "The Calm-Down Kit",
   "who": "Pat, a grandmother raising her grandson Jay, 13",
-  "relationship": "a kinship carer and a teen",
+  "relationship": "a kinship caregiver and a teen",
   "versions": [
    "short",
    "full"
