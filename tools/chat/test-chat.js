@@ -404,7 +404,7 @@ t('care', 'my boss was really rude to me in the meeting', { kind: 'sit', id: /hu
 t('care', 'i snapped at my partner this morning (still the apology)', { q: 'i snapped at my partner this morning', kind: 'sit', id: 'partner+repair' });
 t('care', 'is it my fault?', { kind: 'care', id: 'fault', text: /rarely one person’s fault/, not: /\bYes\b|your fault/ });
 // safety: control and fear are never answered with tips (purge19: and carry no lines, services or links)
-t('safety', 'my partner checks my phone and gets angry', { kind: 'safety', text: NEUTRAL });
+t('safety', 'my partner checks my phone and gets angry', { kind: 'safety', text: /common signs of control/ });
 t('safety', 'is it my fault he yells', { kind: 'safety', not: /own your part/ });
 t('safety', "I'm scared to go home", { kind: 'safety', text: NEUTRAL });
 t('safety', "he won't let me see my friends", { kind: 'safety' });

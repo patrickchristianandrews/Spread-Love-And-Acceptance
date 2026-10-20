@@ -2229,6 +2229,9 @@
     var lead = [{ k: 'p', x: (asksTools ? 'No. ' : '') + 'What you describe sounds like control, and the shared tools here aren’t for relationships with control. If you suspect coercive control or violence in a couple you see, please do not assign the shared tools. A shared chore list or pause plan can become one more thing to be checked on.' },
       { k: 'p', x: 'Here is what I’d say to your client, if they asked me themselves:' }];
     r.blocks = lead.concat(r.blocks);
+    var lb = r.blocks.filter(function (x) { return x.k === 'links'; })[0];
+    var pro = [['For counsellors, coaches and group leaders', '/for-counselors.html']];
+    if (lb) { if (!lb.x.some(function (l) { return l[1] === pro[0][1]; })) lb.x = pro.concat(lb.x); } else r.blocks.push({ k: 'links', x: pro });
     return r;
   }
 

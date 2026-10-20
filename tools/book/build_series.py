@@ -1290,12 +1290,12 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], label(b), esc(b['title'])) for b in series_items())
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
     title = item.get('short_title') or item['title']
-    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.com/the-logic-behind-it') if pocket else (
+    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.<wbr>com/<wbr>the-logic-behind-it') if pocket else (
         '%s/book/' % SITE, 'Free to read online', 'Every chapter, short and full, at spreadloveandacceptance.com/book')
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
                  '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
-                 '.cv-free { max-width: 1.85in; font-size: 7.8pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
+                 'div.cv-free { max-width: 2.25in; font-size: 7.3pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
     return '''<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
 %(gfonts)s
