@@ -377,6 +377,8 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
     body = B.clean_for_whole(src, slug, False, here)
     body = B.drop_element(body, r'<header class="read-head', 'header')
     body = re.sub(r'<p class="simple-lede">.*?</p>', '', body, count=1, flags=re.S)
+    # voice18: hints marked "print": false in hints.json stay on the website only
+    body = re.sub(r'<aside class="book-hint[^"]*"[^>]*\bdata-print="no"[^>]*>.*?</aside>\s*', '', body, flags=re.S)
     body, errs = ST.apply_swaps(body, slug, pg, lambda s_: namer.label(s_) or s_)
     ERRORS.extend(errs)
     body = ST.drop_sections(body, B)
