@@ -1191,8 +1191,12 @@ def glossary_terms(text):
         ex = re.search(r'<p class="gl-ex">(.*?)</p>', body, re.S)
         words_ = [name.split(' (')[0]] + [a.strip() for a in (also or '').split(',') if len(a.strip()) > 3]
         hits = sum(len(re.findall(r'\b%s\b' % re.escape(w), text, re.I)) for w in words_[:4])
-        if hits >= 2:
-            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))),
+        # books-final9 (audit D-should 13): the headword itself must appear in the book, not only a related word
+        head = re.sub(r'^(?:the|a|an) ', '', words_[0], flags=re.I)
+        if hits >= 2 and re.search(r'\b%s\b' % re.escape(head), text, re.I):
+            if gid == 'calm-down-kit':  # audit D4: every chapter, WP-11 and the workbook call it the Calm-Down Kit
+                name = 'Calm-Down Kit'
+            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))).replace('Your calm-down plan (once called the Calm-Down Kit) is', 'Your Calm-Down Kit is'),
                         tool_names(uk(gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1))))) if ex else '', words_[0]))
     have = {x[1].lower() for x in out}
     for gid, name, d, rx in GLOSS_EXTRA:
