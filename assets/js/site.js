@@ -344,6 +344,7 @@
       { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'What is live today, counted plainly' },
       { href: '/membership.html', code: '', title: 'Email updates', note: 'Everything is open; leave your email if you’d like a short note when something new ships' },
       { href: '/on-this-device.html', code: '', title: 'What’s stored on this device', note: 'Everything this site keeps in your browser, in plain words, with a button to erase each one' },
+      { href: '/saved.html', code: '', title: 'Your saved places', note: 'The pages, tools and places in the book you saved, to pick up later' },
       { href: '/on-this-device.html#progress', code: '', title: 'Your progress', note: 'Save a backup, move it to another phone or the free app, lock it with a PIN, or clear it' },
       { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
       { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service', note: 'The rules for using the site' },
@@ -372,6 +373,7 @@
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and see your results side by side' },
       { href: '/on-this-device.html#progress', code: 'Yours', title: 'Your progress', note: 'Back it up, move it to the app, lock it with a PIN, or clear it' },
+      { href: '/saved.html', code: 'Yours', title: 'Your saved places', note: 'Pages, tools and places in the book you saved for later' },
       { href: '/en-espanol.html', code: 'ES', title: 'En español', note: 'Una página corta en español', lang: 'es' },
       { sub: 'What’s new', all: '/whats-new.html', allLabel: 'Everything new, with dates' },
       { href: '/together.html', code: 'New', title: 'Work on it together', note: 'Share your results by link, QR code or text' },
@@ -878,7 +880,7 @@
     'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
   };
   // pages that are never "outside your focus": the start, safety, help and the site's own pages
-  var FOCUS_NEUTRAL = /^\/(index|start-here|safety|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|someone-sent-you-this|outside-help|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
+  var FOCUS_NEUTRAL = /^\/(index|saved|start-here|safety|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|someone-sent-you-this|outside-help|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
   var AREA_OF = {};
   function fpath(u) {
     var p = String(u || '').split(/[?#]/)[0];
@@ -951,6 +953,7 @@
   }
   function menuNow() { return MENU.map(menuGroup).filter(Boolean); }
 
+  function inFrameNow() { try { return window.self !== window.top; } catch (e) { return true; } }
   function el(tag, attrs, html) {
     var n = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach(function (k) {
@@ -1275,7 +1278,7 @@
   }
   // the last few pages opened here, so the time picker and progress line can suggest something new (this browser only; it can be switched off or erased)
   function rememberPage(body) {
-    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|saved|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*Spread Love.*$/, '');
     if (!t) return;
@@ -1434,6 +1437,12 @@
     // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
     if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask Puddles', 'Pregúntale')));
     bar.appendChild(find);
+    // mark19: "Save": keep this page, or your place in the book, for later (bookmarks.js wires it up, /saved.html lists them)
+    if (!/^\/(404|offline|garden-backdrop|pal-cam-tv|saved)\.html$/.test(current) && !inFrameNow()) {
+      bar.appendChild(el('button', { type: 'button', class: 'tol-save-btn no-bubble', title: 'Save this page for later' },
+        '<svg class="tol-sv-ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11a1 1 0 0 1 1 1v16l-6.5-4.2-6.5 4.2v-16a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="tol-save-t">Save</span><span class="tol-sv-sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> this page</span>'));
+    }
+    if (!inFrameNow()) loadScript('/assets/js/bookmarks.js').catch(function () {});
     // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)
     if (isApp()) loadScript('/assets/js/app-bar.js').catch(function () {});
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, T('Menu', 'Menú'));
@@ -1476,6 +1485,7 @@
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': T('The whole site at a glance', 'Todo el sitio de un vistazo') },
       '<p class="tol-panel-quick-h">' + T('The whole site at a glance', 'Todo el sitio de un vistazo') + '</p><ul>' +
       [['/explore.html', '&#129517;', T('Everything on this site', 'Todo el sitio (en inglés)')],
+       ['/saved.html', '&#128278;', T('Saved for later', 'Guardado para más tarde')],
        ['/tools.html', '&#129520;', T('All tools', 'Todas las herramientas')],
        ['/by-relationship.html', '&#128101;', T('Guides by relationship', 'Guías por relación')],
        ['/book/index.html', '&#128214;', T('Read the book', 'Leer el libro')],
@@ -3154,7 +3164,7 @@
         if (head) main.insertBefore(nav, head); else main.insertBefore(nav, main.firstChild);
       }
     }
-    if (body.hasAttribute('data-no-related') || sensitivePage() || /^\/(safety|upset-right-now|ask|start-here|find-your-start|someone-sent-you-this|sent-this|whats-new|on-this-device|install)\.html$|^\/legal\//.test(current)) return;
+    if (body.hasAttribute('data-no-related') || sensitivePage() || /^\/(safety|upset-right-now|ask|start-here|find-your-start|someone-sent-you-this|sent-this|whats-new|on-this-device|saved|install)\.html$|^\/legal\//.test(current)) return;
     var draw = function () { try { buildRelated(main, pl); } catch (e) {} };
     // the needs map (search-needs.js) suggests the next most useful page; the strip still shows without it
     var withNeeds = function () { var done = false, t = setTimeout(function () { if (!done) { done = true; draw(); } }, 2500); loadNeeds(function () { if (!done) { done = true; clearTimeout(t); draw(); } }); };

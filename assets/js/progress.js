@@ -80,7 +80,7 @@
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
     'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-es-hint', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', 'tol-save-tip', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
@@ -100,7 +100,7 @@
     ['tol-buddies-v1', 'watch'], ['tol-fb-s2-teaser', 'watch'], ['tol-music-video-v1', 'watch'], ['tol-drift-v1', 'watch'],
     ['tol-br-', 'calm'], ['tol-sound-', 'calm'], ['tol-haptic', 'calm'], ['tol-sense-look', 'calm'], ['tol-mini-', 'calm'],
     ['tol-bonding-picker', 'picks'], ['tol-freq-mode', 'picks'], ['tol-st-simple', 'picks'], ['tol-st-brief', 'picks'],
-    ['tol-journeys-v1', 'journeys']
+    ['tol-journeys-v1', 'journeys'], ['tol-saved', 'saved'], ['tol-lastread', 'saved']
   ];
   var GROUPS = {
     entries: ['*', 'My saved entries', 'Mis entradas guardadas'],
@@ -142,6 +142,7 @@
     calm: ['', 'Breathing and calm sounds', 'Respiración y sonidos tranquilos'],
     picks: ['', 'Tool choices', 'Opciones de las herramientas'],
     journeys: ['*', 'Guided journeys', 'Recorridos guiados'],
+    saved: ['*', 'Your saved places', 'Tus lugares guardados'],
     other: ['', 'Other notes from the site', 'Otras notas del sitio']
   };
   function matches(k, p) { return k === p || (/[-:]$/.test(p) && k.indexOf(p) === 0); }

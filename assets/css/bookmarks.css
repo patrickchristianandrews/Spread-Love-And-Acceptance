@@ -1,0 +1,150 @@
+/* bookmarks.css — "Save" and "Mark my place" (assets/js/bookmarks.js) and the Saved page (/saved.html).
+   Light colours only: the site's dark mode turns the whole page around (site.css), so these follow it. The line
+   icons are told not to be turned back, so they keep the colour of the words in dark mode too. */
+
+/* ---------- the Save button in the bar ---------- */
+.tol-bar button.tol-save-btn{ display:inline-flex; align-items:center; justify-content:center; gap:.3rem; flex:none; white-space:nowrap;
+  min-height:44px; min-width:44px; box-sizing:border-box; border-radius:999px; font-weight:600; padding-left:.6rem !important; padding-right:.75rem !important; }
+.tol-bar button.tol-save-btn .tol-sv-ico{ flex:none; display:block; }
+.tol-sv-ico path{ fill:none; transition:fill .2s ease; }
+.tol-save-btn.is-saved .tol-sv-ico path, .tol-save-btn[aria-pressed="true"] .tol-sv-ico path{ fill:currentColor; }
+.tol-save-btn.is-saved{ color:var(--brass-ink, #7A5620); }
+.tol-bar button.tol-save-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tol-sv-sr{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; padding:0 !important; margin:-1px !important; border:0 !important; }
+/* phones and crowded bars: the word sits under the icon, so the button stays one finger wide */
+@media (max-width:560px){
+  .tol-bar button.tol-save-btn{ flex-direction:column; gap:1px; padding:.2rem .35rem !important; font-size:.8rem !important; line-height:1; }
+  .tol-bar button.tol-save-btn .tol-sv-ico{ width:19px; height:19px; }
+}
+.tol-bar:is(.is-narrow, .is-tight, .is-snug, .is-tightest) button.tol-save-btn{ flex-direction:column; gap:1px; padding:.2rem .4rem !important; font-size:.8rem !important; line-height:1; }
+.tol-bar:is(.is-narrow, .is-tight, .is-snug, .is-tightest) button.tol-save-btn .tol-sv-ico{ width:19px; height:19px; }
+/* a phone's bar has room for four controls with words; with Save as well, Quiet shows its moon and Menu its word
+   (their names stay for screen readers), and below 390px Ask shows Professor Puddles' face alone */
+@media (max-width:479px){
+  html body .tol-bar:has(> .tol-save-btn) .tol-bar-quiet .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  html body .tol-bar:has(> .tol-save-btn) .tol-bar-quiet{ padding:.3rem .55rem !important; }
+  html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn svg, html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn::before{ display:none !important; }
+  html body .tol-bar:has(> .tol-save-btn) .tol-contents-btn{ padding:.3rem .65rem !important; }
+  html body .tol-bar > button.tol-save-btn{ flex:0 0 auto; margin:0 !important; padding:.2rem .3rem !important; }
+}
+@media (max-width:389px){
+  html body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-t{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; }
+  html body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-fab{ padding:.2rem !important; min-width:44px !important; }
+  html body .tol-bar:has(> .tol-save-btn){ gap:.25rem !important; }
+}
+@media (max-width:359px){
+  html body .tol-bar:has(> .tol-save-btn){ gap:.2rem !important; padding-left:10px !important; padding-right:10px !important; }
+}
+/* the installed app adds Share to the bar too: Ask shows the face alone and the gaps get smaller */
+@media (max-width:479px){
+  html.tol-in-app body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-t{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; }
+  html.tol-in-app body .tol-bar:has(> .tol-save-btn) .tol-help.is-docked .tol-help-fab{ padding:.2rem !important; min-width:44px !important; }
+  html.tol-in-app body .tol-bar:has(> .tol-save-btn){ gap:.2rem !important; padding-left:10px !important; padding-right:10px !important; }
+}
+@media print{ .tol-save-btn, .tol-sv{ display:none !important; } }
+
+/* ---------- small boxes under the bar: the note, the two choices, the tip, "Continue" ---------- */
+.tol-sv{ font-family:"Lora", Georgia, serif; color:var(--ink, #2B2620); box-sizing:border-box; }
+.tol-sv *{ box-sizing:border-box; }
+.tol-sv-x{ flex:none; min-width:44px; min-height:44px; margin:-.4rem -.5rem -.4rem 0; padding:0; border:0; background:none; color:var(--ink-soft, #5A5346);
+  font:400 1.5rem/1 Georgia, serif; cursor:pointer; border-radius:999px; }
+.tol-sv-x:hover{ background:rgba(0,0,0,.05); }
+.tol-sv :is(button, a):focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+
+.tol-sv-toast{ position:fixed; left:50%; top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 64px)) + .7rem); z-index:986;
+  display:flex; align-items:center; gap:.6rem; width:max-content; max-width:min(34rem, calc(100vw - 24px)); padding:.5rem .6rem .5rem 1rem;
+  border-radius:16px; background:rgba(255,253,247,.98); border:1.5px solid var(--line, #D9CBA3); box-shadow:0 10px 30px rgba(43,38,32,.16);
+  font-size:.95rem; line-height:1.4; transform:translate(-50%, -8px); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .25s ease, transform .25s ease, visibility 0s .25s; }
+.tol-sv-toast.is-in{ opacity:1; visibility:visible; transform:translate(-50%, 0); pointer-events:auto; transition:opacity .25s ease, transform .25s ease, visibility 0s; }
+.tol-sv-toast a, .tol-sv-undo{ color:var(--focus, #2B5B8C); font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+.tol-sv-undo{ display:inline-flex; align-items:center; min-height:44px; margin:-.5rem 0; padding:0 .6rem; border:0; background:none; font:inherit; font-weight:700; cursor:pointer; }
+.tol-sv-toast-t a{ display:inline-flex; align-items:center; min-height:44px; margin:-.6rem 0; padding:0 .2rem; }
+
+.tol-sv-pop{ position:fixed; z-index:986; padding:.75rem .8rem .5rem; border-radius:18px; background:#FFFDF7; border:1.5px solid var(--line, #D9CBA3);
+  box-shadow:0 14px 40px rgba(43,38,32,.2); }
+.tol-sv-pop[hidden]{ display:none; }
+.tol-sv-pop-h{ margin:0 0 .45rem .2rem; font:600 1rem/1.3 "Fraunces", Georgia, serif; }
+.tol-sv-go{ display:flex; align-items:center; gap:.6rem; width:100%; min-height:52px; margin:0 0 .45rem; padding:.5rem .8rem; text-align:left; cursor:pointer;
+  border-radius:14px; border:1.5px solid #2B5B8C; background:#EAF1F9; color:#1F3F62; font:inherit; }
+.tol-sv-go:hover{ background:#DCE8F5; }
+.tol-sv-go.tol-sv-alt{ border-color:var(--line, #D9CBA3); background:#FFFDF7; color:var(--ink, #2B2620); }
+.tol-sv-go.tol-sv-alt:hover{ background:var(--paper, #F5EFDE); }
+.tol-sv-go strong{ display:block; font-weight:700; font-size:1rem; line-height:1.25; }
+.tol-sv-go small{ display:block; font-size:.88rem; line-height:1.3; color:var(--ink-soft, #5A5346); }
+.tol-sv-go .tol-sv-ico{ flex:none; }
+.tol-sv-pop-foot{ margin:.1rem 0 0 .2rem; font-size:.92rem; }
+.tol-sv-pop-foot a{ display:inline-flex; align-items:center; min-height:44px; color:var(--focus, #2B5B8C); font-weight:600; text-underline-offset:3px; }
+
+.tol-sv-tip{ position:fixed; z-index:984; display:flex; align-items:flex-start; gap:.4rem; padding:.6rem .6rem .6rem .9rem; border-radius:16px;
+  background:#FFF8E4; border:1.5px solid #E2C77E; box-shadow:0 10px 28px rgba(43,38,32,.16); font-size:.95rem; line-height:1.45; }
+.tol-sv-tip::before{ content:""; position:absolute; top:-8px; left:calc(var(--tol-sv-arrow, 50%) - 7px); width:14px; height:14px; background:#FFF8E4;
+  border-left:1.5px solid #E2C77E; border-top:1.5px solid #E2C77E; transform:rotate(45deg); }
+.tol-sv-tip p{ margin:0; padding-top:.35rem; }
+.tol-sv-chip{ display:inline-flex; align-items:center; gap:.2rem; padding:.05rem .5rem .05rem .35rem; border-radius:999px; border:1.5px solid var(--ink-soft, #5A5346);
+  font-weight:700; font-size:.92em; white-space:nowrap; vertical-align:baseline; background:#FFFDF7; }
+.tol-sv-chip .tol-sv-ico{ width:1.05em; height:1.05em; }
+
+.tol-sv-cont{ position:fixed; left:50%; top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 64px)) + .6rem); transform:translateX(-50%); z-index:983;
+  display:flex; align-items:center; gap:.4rem; width:max-content; max-width:calc(100vw - 24px); padding:.3rem .5rem .3rem 1rem; border-radius:999px;
+  background:rgba(234,241,249,.98); border:1.5px solid #9DB9D8; box-shadow:0 8px 24px rgba(36,66,94,.16); font-size:.95rem; line-height:1.3; }
+.tol-sv-cont p{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .5rem; margin:0; }
+.tol-sv-cgo{ display:inline-flex; align-items:center; gap:.3rem; min-height:44px; padding:0 .9rem; border-radius:999px; border:0; cursor:pointer;
+  background:#2B5B8C; color:#fff; font:700 .95rem/1 "Lora", Georgia, serif; }
+.tol-sv-cgo:hover{ background:#22496F; }
+.tol-sv-near{ flex-basis:100%; font-size:.85rem; color:#3F5468; padding-bottom:.2rem; }
+@media (max-width:420px){ .tol-sv-cont{ border-radius:18px; } }
+
+/* the paragraph you came back to: a soft mark for a few seconds */
+.tol-sv-here{ border-radius:6px; background-color:rgba(232,201,122,.35) !important; box-shadow:0 0 0 .4rem rgba(232,201,122,.35); transition:background-color 1.2s ease, box-shadow 1.2s ease; }
+.tol-sv-here:focus{ outline:none; }
+
+/* still pages and Quiet mode: nothing slides */
+html:is(.tol-still, .tol-quiet) :is(.tol-sv-toast, .tol-sv-toast.is-in, .tol-sv-ico path, .tol-sv-here){ transition:none !important; }
+@media (prefers-reduced-motion: reduce){ :is(.tol-sv-toast, .tol-sv-toast.is-in, .tol-sv-ico path, .tol-sv-here){ transition:none !important; } }
+
+/* dark mode turns the page around; the line icons follow the words instead of being turned back */
+html[data-theme="dark"]:not(.tol-nodark) :is(.tol-sv, .sv-page) svg{ filter:none !important; }
+@media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) :is(.tol-sv, .sv-page) svg{ filter:none !important; } }
+/* pages with their own dark look (games, the Night Garden): the boxes keep light colours, which is fine on dark */
+
+/* ---------- /saved.html ---------- */
+.sv-page .sv-group{ margin:1rem 0 0; }
+.sv-page .sv-group + .sv-group{ margin-top:1.6rem; }
+.sv-page .sv-group h2{ display:flex; align-items:baseline; gap:.5rem; margin-bottom:.4rem; }
+.sv-page .sv-c{ font:600 .85rem/1 "Lora", Georgia, serif; color:var(--ink-soft, #5A5346); padding:.2rem .5rem; border-radius:999px; background:var(--paper-deep, #ECE2C4); }
+.sv-page .sv-list{ list-style:none; padding:0 !important; margin:0 !important; display:grid; gap:.6rem; }
+.sv-page .sv-item{ margin:0 !important; max-width:none !important; padding:.8rem 1rem; border-radius:16px; border:1px solid var(--line, #D9CBA3); background:rgba(255,251,242,.97);
+  display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:.4rem 1rem; align-items:start; }
+.sv-page .sv-item.is-auto{ background:rgba(240,246,252,.97); border-style:dashed; }
+.sv-page .sv-title{ font:600 1.08rem/1.3 "Fraunces", Georgia, serif; overflow-wrap:anywhere; }
+.sv-page .sv-meta{ margin:.25rem 0 0 !important; font-size:.9rem; color:var(--ink-soft, #5A5346); padding:0 !important; max-width:none !important; }
+.sv-page .sv-spot{ display:inline-flex; align-items:center; gap:.2rem; white-space:normal; }
+.sv-page .sv-spot .tol-sv-ico{ width:1em; height:1em; flex:none; }
+.sv-page .sv-spot .tol-sv-ico path{ fill:currentColor; }
+.sv-page .sv-note{ margin:.35rem 0 0 !important; font-style:italic; color:#3B352C; padding:0 !important; max-width:none !important; overflow-wrap:anywhere; }
+.sv-page .sv-note-edit{ margin-top:.5rem; display:grid; gap:.4rem; }
+.sv-page .sv-note-edit[hidden]{ display:none; }
+.sv-page .sv-note-edit label{ display:grid; gap:.25rem; font-weight:600; font-size:.95rem; }
+.sv-page .sv-opt{ font-weight:400; color:var(--ink-soft, #5A5346); }
+.sv-page .sv-note-edit input{ width:100%; min-height:44px; padding:.4rem .7rem; font:inherit; font-weight:400; border:1.5px solid var(--ink-soft, #5A5346); border-radius:10px; background:#fff; color:var(--ink, #2B2620); }
+.sv-page .sv-note-acts{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.sv-page .sv-acts{ display:flex; flex-wrap:wrap; gap:.4rem; justify-content:flex-end; }
+.sv-page .sv-btn, .sv-msg .sv-btn{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.35rem .95rem; border-radius:999px; cursor:pointer;
+  font:600 .93rem/1.1 "Lora", Georgia, serif; text-decoration:none; border:1.5px solid #B9A8D6; background:#FFFDF7; color:#2B2620; }
+.sv-page .sv-btn.sv-strong{ background:#2B5B8C; border-color:#2B5B8C; color:#fff; }
+.sv-page .sv-btn.sv-soft{ border-color:var(--line, #D9CBA3); font-weight:500; }
+.sv-page .sv-btn[hidden]{ display:none; }
+.sv-page .sv-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.sv-page .sv-msg{ min-height:1.5rem; margin:0 0 .4rem !important; font-weight:600; color:#2F5A3C; }
+.sv-page .sv-none{ color:var(--ink-soft, #5A5346); font-style:italic; }
+.sv-page .sv-empty{ padding:1rem 1.1rem; border-radius:18px; border:1.5px dashed var(--line, #D9CBA3); background:rgba(255,251,242,.9); }
+.sv-page .sv-empty-h{ margin:0 0 .5rem !important; font-weight:600; }
+.sv-page .sv-steps{ list-style:none; padding:0 !important; margin:0 !important; display:grid; gap:.55rem; }
+.sv-page .sv-steps li{ display:flex; align-items:flex-start; gap:.6rem; margin:0 !important; line-height:1.5; }
+.sv-page .sv-n{ flex:none; display:inline-flex; align-items:center; justify-content:center; width:1.8rem; height:1.8rem; border-radius:50%; background:#2B5B8C; color:#fff; font-weight:700; font-size:.95rem; }
+.sv-page .sv-art{ display:flex; align-items:center; gap:.8rem; margin:1rem 0; }
+.sv-page .sv-art svg{ flex:none; }
+@media (max-width:560px){
+  .sv-page .sv-item{ grid-template-columns:minmax(0, 1fr); }
+  .sv-page .sv-acts{ justify-content:flex-start; }
+}

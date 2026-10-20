@@ -516,6 +516,7 @@ SEARCH.update({
 # save10's and tools11's lines are trimmed to 60/155 here. /conversation-reader.html is now a noindex redirect to
 # /signal-translator.html#conversation, so process() leaves it alone and it stays out of the sitemap.
 SEARCH.update({
+ 'saved.html': ('Your Saved Places: Pages, Tools and Book Spots', 'The pages, tools and places in the book you saved for later, kept only on this device. Open one to pick up right where you were.'),
  'on-this-device.html': ('Your Progress and What’s Stored on This Device', 'Keep your progress private and safe: save a backup file, move it to another phone or the free app, lock it with a PIN, or clear it. Nothing is sent to us.'),
  'tools.html': ('All Free Tools: Start on Your Own, Then Together', 'Every free tool in one place, the ones you can use on your own first. Filter by what you want to do, who it is for and your time. No sign-up, no account.'),
  'together.html': ('Work on It Together: Share Results by Link, QR Code or Text', 'Fill in a tool on your own phone and pass it back and forth by QR code, text or email. Put your results side by side. Nothing is stored on our side.'),
