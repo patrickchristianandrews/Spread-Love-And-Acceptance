@@ -1150,7 +1150,7 @@ def build_workbook(where, bw=False):
         for s_ in ALL_FOUND.get(('wp', key), []):
             b = where.get(s_)
             if b:
-                lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].lower().replace('afterword', 'the afterword'), B.SHORT[s_])
+                lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].replace('Afterword', 'the afterword')  # books-final9: capital C, as everywhere else, B.SHORT[s_])
                 if lab not in ins:
                     ins.append(lab)
         fill = ('/workpapers/fill/%s.html' % w['code'].lower()) if key != 'setup' else '/is-the-setup-working.html'
