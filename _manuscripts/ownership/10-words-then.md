@@ -12,9 +12,7 @@ It's the fourth time since April. Every apology has been warm and real. Gregor b
 
 ## The apology was never the problem.
 
-Quickly. On the surface, a man late, with satsumas and a heartfelt apology. One layer down, the fourth time, which turns an accident into a pattern. Below that, Gregor's real question has quietly changed from *is he sorry?* to *does sorry mean anything?* Below that, Lewis means every word, and still can't get there on time, and he's beginning to dread these Sundays because each one ends in him failing again. And at the root, the oldest lesson of behavioural science: good intentions don't run a system. Setups do.
-
-Now slowly.
+Gregor has had forty minutes in a car park to see the layers, and he's seen them. A man late, with satsumas and a heartfelt apology. The fourth time, which turns an accident into a pattern. His own question, which has quietly changed from *is he sorry?* to *does sorry mean anything?* What he can't see from the car is the layer on Lewis's side: Lewis means every word, still can't get there on time, and has begun to dread these Sundays because each one ends in him failing again. Under both of them sits the oldest lesson of behavioural science. Good intentions don't run a system; setups do.
 
 Lewis's apologies are, on any reasonable measure, good ones. He names the act ("I lost track"). He keeps the responsibility. He clearly feels it. What's missing is the part that comes after the apology: anything changing next time. Words of ownership are where repair begins, and if nothing changes afterwards, the words lose value every time they're spent. By the fourth time, "I'm sorry" from Lewis sounds to Gregor like a currency that's been printed too freely.
 
@@ -95,13 +93,9 @@ The words open the account. The behaviour pays into it. And the follow-up, a mon
 
 And from Gregor, his side of the same moment: "I believe you're sorry. I don't want any more sorries. I want us to make it work. And thank you for the satsumas."
 
-> **Say it**
->
-> When your apologies have started to sound cheap: "I know you've heard sorry from me before. This time I want to change something you'll be able to see."
->
-> When you're receiving the fourth apology: "I believe you mean it. I don't need another sorry. What can we change so it doesn't happen again?"
->
-> A month later: "Can we check how it's going? Is the new way working for you?"
+## Say it, without another sorry.
+
+If your apologies have started to sound cheap, the next one needs to be shorter than the last, with a change in it: "I know you've heard sorry from me before. This time I want to change something you'll be able to see." If you're the one receiving the fourth apology, you can accept the feeling and still ask for the change: "I believe you mean it. I don't need another sorry. What can we change so it doesn't happen again?" And a month later, whoever remembers first: "Can we check how it's going? Is the new way working for you?"
 
 The *What keeps coming back?* workpaper on the website is a monthly look-back for exactly this: the things that keep slipping, and what change to the setup might catch them (spreadloveandacceptance.com/wp-04). The *90-second daily check-in* is deliberately small enough to keep doing on a bad week, which is when it matters most (spreadloveandacceptance.com/wp-13).
 

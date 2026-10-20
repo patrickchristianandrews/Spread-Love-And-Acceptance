@@ -9,7 +9,7 @@
     "jokes_only_on_request": true,
 
     "never_on_kinds": ["safety", "redflag", "care", "care-more", "nohelp", "sit", "sit-more", "road", "road-more", "calc", "lang", "crisis", "danger", "grief"],
-    "_kinds_note": "The first eleven are the exact reply kinds in assets/js/site-chat.js today. safety = danger, control and red-flag help; redflag = the red-flags list; care/care-more = feelings and hard moments; nohelp = 'that didn't help'; sit/sit-more and road/road-more = the visitor's own situation; calc = their Battery score; lang = the Spanish replies (wordplay doesn't translate). crisis, danger and grief are reserved names, in case such kinds are added later.",
+    "_kinds_note": "The first eleven are the exact reply kinds in assets/js/site-chat.js today. safety = danger, control and red-flag help; redflag = the red-flags list; care/care-more = feelings and hard moments; nohelp = 'that didn't help'; sit/sit-more and road/road-more = the visitor's own situation; calc = their Battery score; crisis, danger and grief are reserved names, in case such kinds are added later.",
 
     "opener_kinds": ["thanks", "offtopic", "none", "unclear", "clarify", "restart"],
     "opener_on_cards": "Openers are also allowed on kind 'card' and 'card-more' when the card's own kind is 'tool' (how a tool, game or page works), or when its id is in light_card_ids. Every other intent card is about someone's life, so it gets no opener and no closer.",

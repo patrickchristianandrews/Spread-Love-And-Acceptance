@@ -14,7 +14,7 @@
    "grief-urgent",
    "urgent"
   ],
-  "_kinds_note": "The first seven are exact reply kinds in assets/js/site-chat.js today: safety = danger, control and red-flag help; redflag = the red-flags list; care and care-more = feelings and hard moments; nohelp = 'that didn't help'; lang = the Spanish replies; calc = the visitor's own Battery score. Deep chat must never be added to, or replace, those replies, even while deep mode is on. crisis, danger, grief-urgent and urgent are reserved names, in case such kinds are added later. If a safety or care reply fires during deep mode, it wins, and deep mode should switch itself off for that turn.",
+  "_kinds_note": "The first seven are exact reply kinds in assets/js/site-chat.js today: safety = danger, control and red-flag help; redflag = the red-flags list; care and care-more = feelings and hard moments; nohelp = 'that didn't help'; calc = the visitor's own Battery score. Deep chat must never be added to, or replace, those replies, even while deep mode is on. crisis, danger, grief-urgent and urgent are reserved names, in case such kinds are added later. If a safety or care reply fires during deep mode, it wins, and deep mode should switch itself off for that turn.",
   "enter_phrases": [
    "talk deep",
    "deep chat",

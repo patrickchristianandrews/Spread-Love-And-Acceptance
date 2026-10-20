@@ -87,6 +87,7 @@ Source for the Spread Love & Acceptance site. The repo root is the site root: Gi
 - **Shipping anything means updating all three status pages:** `telemetry.html` (the counts), `suite-index.html` (every component named) and `roadmap.html` (what's next). Where they disagree, `suite-index.html` wins. Denominators never shrink to raise a percentage; if the plan changes, say so on the page.
 - **One copy per page.** Before uploading a new version, check where the current one lives (search the repo) and replace it there instead of adding a second copy under another name.
 - **Use root-relative links** (`/book/chapter-1.html`) so pages work from any folder.
+- **No safety/hotline content, outside-resources lists, quick exit or Spanish layer** (the owner's decision, October 2026). `/safety.html`, `/outside-help.html` and `/en-espanol.html` are noindex redirect stubs to `/`. A danger reply is one short neutral line with no numbers, services or links. Before every release run `node tools/checks/no-removed-content.js` (no dependencies; exits 1 with file:line on any hit; `--book` lists the book's own hits). `tools/chat/build_kb.py` and `tools/seo/build_seo.py` run the same check on what they write and stop on a hit.
 
 ## Open decisions
 

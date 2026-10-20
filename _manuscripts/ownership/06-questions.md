@@ -14,9 +14,7 @@ At breakfast the next morning, Dele says, "I think when someone says something t
 
 ## Telling invites a defence. Asking invites a look.
 
-Quickly: on the surface, a question about a year. One layer down, the same habit as the curry night, now with a name on it. Below that, a difference in the order Fran and Dele need things: she wants an answer now, to know they're all right; he needs time before he can say anything he's sure is true. Below that, the realisation that his "I don't know" was the most honest answer in the room. And at the root, something that applies to every kind of communication, from a thermostat to a choir: a loop works when each side leaves room for the other's signal to come back.
-
-Now slowly.
+Fran turns it over on the bus to work the next morning. A question about a year. The same habit as the curry night, which means it's a pattern now, with a name. Two people who need things in a different order: she wants an answer now, to know they're all right, and he needs time before he can say anything he's sure is true. His "I don't know", which she'd heard as a dodge, turning out to be the truest thing either of them said all evening. And under it, something that applies to every kind of communication, from a thermostat to a choir: a loop only works if each side leaves room for the other's signal to come back.
 
 When you tell someone what they did wrong, their mind does what minds do with incoming criticism: it checks the claim against its own version and looks for the places that don't match. There are always some. Your account is from your seat; theirs is from theirs. So they correct the details, and you defend your account, and before long you're arguing about whose version of the barbecue is right.
 
@@ -51,7 +49,7 @@ Some sentences are shaped like questions and work like accusations.
 
 **The leading question.** "Don't you think that was a bit selfish?" There's only one answer you'll accept, and both of you know it.
 
-**The courtroom question.** "So you admit you knew I'd hate it?" This turns any honest reflection into evidence for the prosecution, and teaches the other person that thinking out loud is dangerous.
+**The courtroom question.** "So you admit you knew I'd hate it?" This turns any reflection into evidence for the prosecution, and teaches the other person that thinking out loud is dangerous.
 
 **The rhetorical question.** "Do you have any idea how that felt?" It isn't asking. It's telling, at volume.
 
@@ -65,13 +63,13 @@ In a lot of music, from work songs and gospel to folk and jazz, one voice sings 
 
 A question is a call. The silence after it is the rest in the bar, and it belongs to the music as much as the notes do. Most of us are bad at rests. We ask a question, and two seconds into the silence we fill it: we rephrase it, or answer it ourselves, or add a second question, or explain why we asked. The other person, who had just started to look inward, has to come back out and deal with what we've added.
 
-So ask, and then stop. Count, silently, if it helps. The answer that comes after five or ten seconds of quiet is usually more honest than the one that would have come after two.
+So ask, and then stop. Count, silently, if it helps. The answer that comes after five or ten seconds of quiet is usually truer than the one that would have come after two.
 
 The same pattern runs through anything that corrects itself over time: a thermostat checks the room and adjusts, a choir listens and retunes. Each answer you get shapes the next question you ask. That's a feedback loop, and it only works if the signal is allowed to come back.
 
 > **Two ways to read "I don't know. Can I tell you tomorrow?"**
 >
-> Some people's wiring needs processing time before it can answer a question about their own behaviour. The honest answer isn't available yet. It's being assembled, slowly and carefully, and anything they said right now would be a guess, or whatever would end the conversation fastest. For a brain like this, "I don't know yet" is the truthful answer, and "let me think" is a promise to come back with a real one.
+> Some people's wiring needs processing time before it can answer a question about their own behaviour. The real answer isn't available yet. It's being assembled, slowly and carefully, and anything they said right now would be a guess, or whatever would end the conversation fastest. For a brain like this, "I don't know yet" is the truthful answer, and "let me think" is a promise to come back with a real one.
 >
 > Other people's wiring answers on the spot and expects the same. A pause, or "I don't know", feels like a dodge: a way of not answering, buying time until the other person drops it.
 >
@@ -98,7 +96,7 @@ A question did in thirty seconds what a reply-all could never have done: it foun
 
 ## Ask yourself first.
 
-Every question in this chapter works turned inward, and often works better that way, because nobody is listening and you can be completely honest.
+Every question in this chapter works turned inward, and often works better that way, because nobody is listening and there's nothing to defend.
 
 Before you ask someone else what part was theirs, ask yourself what part was yours. Before you ask them what they'd do differently, ask what you'd do differently. Before you ask whether they can see why it hurt you, ask whether you can see why your reaction might have been hard for them.
 
@@ -106,7 +104,7 @@ You won't always find much. Sometimes the honest answer to "what was my part?" i
 
 ## What to do with the answer.
 
-When someone gives you an honest answer, even a partial one, the next thing you do decides whether they'll ever answer honestly again.
+When someone gives you a real answer, even a partial one, the next thing you do decides whether they'll ever give you one again.
 
 Don't pounce. If Dele had said "I suppose I do correct you quite a lot," and Fran had said "Exactly! So you admit it!", she'd have won the point and lost the conversation. People learn very fast whether reflection is safe. Punish it once, and next time you get the defence instead.
 
@@ -141,4 +139,4 @@ Next time you're about to tell someone what they did, turn it into one open ques
 - Telling someone what they did invites them to defend their version. Asking invites them to look.
 - Imagining someone's point of view mostly makes you more confident in your own guess. Asking them is what actually improves understanding.
 - A question is a call; the silence after it is part of the answer. Leave the rest in the bar.
-- "I don't know yet" can be the most honest answer available. Treat it as an appointment, and notice whether they keep it.
+- "I don't know yet" can be the truest answer available. Treat it as an appointment, and notice whether they keep it.

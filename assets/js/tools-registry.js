@@ -272,7 +272,6 @@
   //          ('me', on your own, comes from who: ['solo'])
   //   best   "Best for: …" in a few words
   //   ex     a filled-in example from the book (tools/book/examples/<ex>.html); sample: a two-line made-up result instead
-  //   es     the tool also works in Spanish
   // A tool with no line here still works: the page falls back to its type.
   // ---------- How useful each tool is likely to be (1–10), for "Most useful first" on /tools.html.
   // Our judgement from everything the program covers: how many people face the need, how fast the tool helps,

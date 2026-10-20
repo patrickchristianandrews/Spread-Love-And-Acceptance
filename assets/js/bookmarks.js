@@ -162,7 +162,15 @@
     var bs = blocks(); if (!bs.length) return null;
     var line = barBottom() + Math.min(60, window.innerHeight * 0.08), b = bs[0];
     for (var i = 0; i < bs.length; i++) { var r = bs[i].getBoundingClientRect(); if (r.bottom > line) { b = bs[i]; break; } b = bs[i]; }
-    var idx = bs.indexOf(b), id = '', n = 0, h = '';
+    // a very short line (a number in a chart, a label) is a poor anchor: take the next real sentence still on screen
+    var idx = bs.indexOf(b);
+    if (words(b).length < 24) {
+      for (var k = idx + 1; k < Math.min(bs.length, idx + 8); k++) {
+        if (bs[k].getBoundingClientRect().top > window.innerHeight * 0.6) break;
+        if (words(bs[k]).length >= 24) { b = bs[k]; idx = k; break; }
+      }
+    }
+    var id = '', n = 0, h = '';
     for (var j = idx; j >= 0; j--) {
       var x = bs[j];
       if (!h && /^H[2-4]$/.test(x.tagName)) h = plain(x.textContent, 200).replace(/\s*[#¶§]+$/, '').slice(0, 70);
@@ -249,7 +257,7 @@
     sync();
     if (!was) return;
     var t = toast('Removed from Saved. <button type="button" class="tol-sv-undo">Undo</button>', 8000);
-    t.querySelector('.tol-sv-undo').addEventListener('click', function () { save(was); sync(); toast('Back in Saved.', 3000); if (btn) btn.focus(); });
+    t.querySelector('.tol-sv-undo').addEventListener('click', function () { save(was); sync(); toast('Back in Saved.', 3000); if (btn) btn.focus({ preventScroll: true }); });
   }
   function toggle() {
     if (isSaved()) { removePage(); return; }
@@ -259,7 +267,7 @@
     var s = spotNow();
     if (!s) { toggle(); return; }
     if (!savePage(s)) return;
-    if (isChapter()) setLast(here, { at: Date.now(), title: pageTitle(), spot: s });
+    if (isChapter()) { setLast(here, { at: Date.now(), title: pageTitle(), spot: s }); markedY = window.scrollY; }
     toast('Your place is marked' + (s.h ? ', at “' + esc(s.h) + '”' : '') + '. Find it in Saved, in the menu. <a href="/saved.html">Open Saved</a>', 6000);
   }
   function fillPop() {
@@ -274,9 +282,9 @@
   function openPop() {
     if (!pop) return;
     fillPop(); placePop(pop); pop.hidden = false; sync();
-    var f = pop.querySelector('button'); if (f) f.focus();
+    var f = pop.querySelector('button'); if (f) f.focus({ preventScroll: true });
   }
-  function closePop(back) { if (!pop || pop.hidden) return; pop.hidden = true; sync(); if (back && btn) btn.focus(); }
+  function closePop(back) { if (!pop || pop.hidden) return; pop.hidden = true; sync(); if (back && btn) btn.focus({ preventScroll: true }); }
   function placePop(box) {
     if (!btn) return;
     var r = btn.getBoundingClientRect(), w = Math.min(320, window.innerWidth - 24);
@@ -369,9 +377,11 @@
   }
 
   // ---------------------------------------------------------------- book chapters: remember where you stopped
-  var hold = null, contEl = null, lastT = 0;
+  var hold = null, contEl = null, lastT = 0, markedY = null;
   function recordLast(force) {
     if (!isChapter() || locked()) return;
+    // a place marked by hand stays as it is until the reader moves on from it
+    if (!force && markedY != null) { if (Math.abs(window.scrollY - markedY) < window.innerHeight * 0.4) return; markedY = null; }
     var s = spotNow(); if (!s) return;
     if (hold != null && !force) { if (s.f + 0.02 < hold) return; hold = null; }
     if (s.f < 0.04) return;                                  // still at the top: nothing to come back to

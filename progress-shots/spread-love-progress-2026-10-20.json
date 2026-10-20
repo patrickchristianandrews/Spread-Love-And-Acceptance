@@ -1,7 +1,7 @@
 {
  "format": "spread-love-progress",
  "version": 1,
- "created": "2026-10-20T14:15:01.985Z",
+ "created": "2026-10-20T19:09:07.349Z",
  "site": "spreadloveandacceptance.com",
  "encrypted": true,
  "note": "Locked with a password. Open it on spreadloveandacceptance.com/on-this-device.html to restore.",
@@ -9,12 +9,12 @@
   "name": "PBKDF2",
   "hash": "SHA-256",
   "iterations": 310000,
-  "salt": "CzgtIS9J1j7EAQ8BfU630w=="
+  "salt": "EqXFCCRu3gEzn3sQGINxhg=="
  },
  "cipher": {
   "name": "AES-GCM",
   "bits": 256,
-  "iv": "8TzDev2rRiMN3PSr"
+  "iv": "24GlQ9s682ctS0Gm"
  },
- "data": "fK3uc85NULWuvrR0i5dDjr6IrWvMkXFrfwyD+nnmlVjv+WN8Ma0L8qNO0sGnbunkj5/S1nYzW+HXuD8yqgYs8C2IsJHj5ufwlk7txU5+nAUwrqY2llRuO065DadFObFJ3QsteJGBvaa5g9ALs9f/tmVVLA3jH5pZqzJygkRsPGUEs2NGmQ+MUuCt28m1v1J71HxDOaasQeag9wjykb8n8+LKhnD2P+9ZoM4t8bZSibJQXE8xJeQHEM4sE/UQfUfTwDjCjWDwA1FLOoE2F53LcpBhitkBQhOpL58BJwLsWY5jeU4zDRQmwts9hOQcbvGK7FHwm2TqsJ3cSkZHIn29/6BjLSn+996nzGfjK+5D8aXqwx+UEOxW3JXC2DoL/gtAz8sr8qCnOscVXwJdGtIvvLAvxuZLvKQ8pS/N9KDOyRM2RT+9fB+Z/h3MgB914Rr2+ClQZrLKdFyqaadDsGUUW3usVNM8p4/QguxzwENuyOsilGjDvxyrjlJRHG2/E2O1iNCZJBGJA/J6PQ0iNB5ZFoikp9/+oybVanQ1LOoSC+nro5IgR4R2KTSHBYKda0dI/DInkgBYPnrYGgSjX6jPIq9aePp0LP/UsdRgkLgnnW9ggia7qpFleha4lwTzRiukAe7DtSN+6n+/ofrRLoqmdA8X1Dbi58tPisdJrKar1bfYN2dA6kvqOD1fQ6yf6g/hF9ldA/5Hgy3TG+W2PBPBDn0oHFNEa5ypyEN/QV1elLvD+j2hQTUNhICMcH2J28QdO+35GbwAtz/L8BsTTcZLFFFvZDpUZpp22JpPMW5SejoKPtiZdYws13WDjZf6mTer9oziUqy23JjRHxA1nc9wh9htd4VYCP/Xh9cFZbCvEUyCLox61YjfZHQfAYm+YhQfv7QXrL5iZGgXEZTE2M3FhYs4Jc5xJN0n79kGwdSrZ2zMmE50cx2OwBppC2nOGYX1EHkpwvnJPIXjxmE8WGutQpKNodo7W0ciavgvK5Ap03nua/W6M2UsMB1cyOFukCIgjmKb3A4Rha4nGpp4EhNOaZqk9qpcUA+d9y7U+CO8RHhY4rXw7w2neLJJpkNz7dzoLxCxc1yeJLUIR1kljlA13CwjJKZdg/JQgMV884f19ncWS4SyuAwW2n2s5925vR6L7SG/Zis+l8RzJ0NHNaxZS47agj1+7DzK7yL8jxusRyIdwe1hxliz5HHlswTniLrbIE9/Z1Vh3rz72gTUT3I2UTBzbp/csNVRsYdrL9jVJZSxj57ykICfqy9Bg/e8AVOgmQXGBeLQAjEdoaXjK9M/1f3MmIaiSHe5c0T7kfoYTKRCmzvbXbFMHoBYYowW+PoYHLwEt3YGDYZvyf9jloqM8nKzIDUrK6QI9fp/jTmAkka5kWNcJvtTKgBL3XeVH5dGDCyvkYfpBO+EZDdrlS8vMy6zVbC8FGZ2"
+ "data": "S2PlyDipTmqv4zLfqxoMVmcuh99yggHrkGiqLOpFmCoHSTOxPLWlxtO6zNVM3v23yo0bGzm8RS/kF1CVWHlaE/fOwZeWgFpXTDZODJ3fqN5f40CcCTamiwFbDElqvybKVrS8+J/ofsfRFulwkcDZLuKgH436Jy3iC1ed80DwGmR24erchKcfdN5XGLAfeD87tXm1Lxwew7RRJW58nZKJNNJse75p/imuQ6dFxS6LVI7JHl3Y0p/ABCPZLDTxZ/lPd4UOqa76UI6186wijti4/gcTGzYCpEUf4GtlXlmvtI+BFxbzNh2s+itD5HBL2QJAcTGwGkcc2+koz1nt3kLjQDlnCWrfZzx9NdAU7CKvc9nzJY4pJmZBqrpjjttqEXdipd39cY3zPv5OQIomyc91tJSCENPD8x7pSiJ+0h9uSV7DeSFNW8Xs/wmokDwCmLQTQvAPR8ettkew+h/e2wDar2IS+Zd1fbqaGSbkyietoAsv+6Me1pJqkC6SI20kT1yHQ79nm40ytPTqQ0C6/MOUbRKOnE0ihm6wKhSA6qIPv7EzUGxlicQHk7IJwMRXou86KN36NxnjvEmQ1KlalIa/K9XnfoJZe4a16VJ0TKViRkErRwU66XqH4BCMIa9czolffa2hCYJvRFld44d2HC+ADVaVftHBqWTOFnndg60Ro9PUmX1MeDuM5Lvux/Op51zVBooe+4BwYPbQiJCkd7cfyBUIC+GxpJChoTfycsl/V28hlSpYtyi3IgM8YflhyaZxl2mTEuKdkwh3qUGDMKRXN1g1UaNkWttxIZU1Vt40ooPuBSv7baaamISvxW3QBMPLmC+4Qc3gO7m9OvX3qBJjmnmOQdTOBDPcWi1Ym+9P8qRgkt3zkLUgFHgoFIdpQ3c/q2QHgHNYzAxpK+W32RZmJ5wVPYhoWDvkiUOA/aYXqYgQ/i1tUBjYH9INux2jYGjpOjLNyGvaHpeeGmpa1QpcCWTV5xkS/e6h+/Uwy827/jOnuHl5TikILunMYyVlnvdFu29RD/f9yx2ewKmOj2z8FkxJsLcaWXBJqVhAv7BMO+U8YvM9ZbgBrNxRNs6qGB8dW8WLA76ZHHWH/FV/URb9klcu/PBP6q0xx6PNuhSvBKJhQyk8Uh0b4A2FHIJLD36MVDIf77LeORMGaOeuCnWZ66+G1OhWs/dsPPTvZrdWgz1wn2C4NgDwj32Ezaw1b6AiVAoYsuNTn0BcMlyr7zy09dqQFTEBKr1eHVZB2UsBaWd1fNd5eghVK9Vq5H4HUnJpoIECBZObEOeXrfQ4TqP48A/dgGDIn1G5Nn6LfmB20cYDoWj9AGMQwXGstgFGIQm0D4iQQOW0892NRlGYtD275lOiTPd2rMs6s8hMTqnzzlJGI9eIlFMxazoIbcNh0F14Fqjkv6PYiWhyROHQWNpDPoFElPiisdsu"
 }

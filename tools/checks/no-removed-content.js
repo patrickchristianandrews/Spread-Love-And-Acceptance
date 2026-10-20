@@ -38,11 +38,12 @@ const SKIP_FILES = new Set([
 ]);
 
 // Folders treated as "book" (reported apart, owned by the book work).
-const BOOK_PREFIXES = ['book/', 'tools/book/'];
+// (and _manuscripts/: the book's manuscript drafts and their audit scripts)
+const BOOK_PREFIXES = ['book/', 'tools/book/', '_manuscripts/'];
 
 const PATTERNS = [
   // Phone and text lines
-  ['988 line', /\b988\b/],
+  ['988 line', /(?<![:\d])\b988\b/],   // (not a number field such as "id":988)
   ['emergency number as a line to call', /\b(?:call|ring|dial|phone|text)(?:ing)?\s+(?:9-?1-?1|999|112)\b|\b(?:911|999|112)\s+(?:or|if|right away|now|for help)\b/i],
   ['116 123', /\b116\s?123\b/],
   ['phone link to a line', /\b(?:tel|sms):\+?(?:911|999|112|988|116|0800|0808|1-?800|1800|741741|85258)/i],
@@ -104,11 +105,19 @@ const PATTERNS = [
 
 // Genuine unrelated matches. Each: [file, pattern label, regex the LINE must match, why].
 const ALLOW = [
-  // (none needed outside book/* at the time of writing; add with a reason)
+  // The search test checks that the removed pages and phrases never come back, so it has to name them.
+  ['tools/search/test-search.js', '*', /GONE_PAGES = |GONE_Q = |removed pages \(\/safety\.html/],
+  // Word lists that detect heavy topics in text (to keep jokes, pop-ups and sharing away from them); not content.
+  ['assets/js/cheer.js', '*', /var SERIOUS_H = /],
+  ['assets/js/pup-visits.js', '*', /var SERIOUS_H = |var BAD = /],
+  ['assets/js/share-kit.js', '*', /var SAFETY_WORDS = /],
+  ['tools/buddies/check.js', '*', /const BANNED = /],
+  // A generated puzzle file's header: "puzzles 937 to 988" is a count, not a phone line.
+  ['assets/js/puzzles/xw-expert-18.js', '988 line', /puzzles \d+ to 988\b/],
 ];
 
 function allowed(rel, label, line) {
-  return ALLOW.some(([f, l, re]) => (f === rel || f === '*') && l === label && re.test(line));
+  return ALLOW.some(([f, l, re]) => (f === rel || f === '*') && (l === '*' || l === label) && re.test(line));
 }
 
 function walk(dir, out) {

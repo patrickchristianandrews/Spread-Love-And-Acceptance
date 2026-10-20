@@ -4,13 +4,13 @@ Made by tools/book/listing_kdp.py (print12, logicbook14) from tools/book/series.
 
 ## Read this first
 - **Amazon only.** The books are sold on Amazon (KDP) and nowhere else: no shop on the website, no other print service, no discount codes. Expanded distribution stays off. Everything stays free to read online.
-- **One account, your own ISBNs.** Use your own Bowker ISBN for each paperback (one per book and format: four books, the workbook edition you publish and the pocket guide). Paste each one into the one "isbn" block in tools/book/series.json and rebuild, so it prints on that book's copyright page. The Kindle editions and the box set need no ISBN; Amazon gives each one an ASIN. [OWNER]
+- **Free KDP ISBNs (decided).** Every paperback uses a free KDP ISBN: on the Paperback Content screen choose **"Get a free KDP ISBN"**. KDP prints it in the barcode on the back cover, so the copyright pages carry no ISBN line. A free KDP ISBN can only be used for that book in that format on KDP and can't be moved to another publisher, and KDP shows the imprint as **"Independently published"** (the title and copyright pages already say so). The Kindle editions and the box set need no ISBN: leave the Kindle ISBN blank, and Amazon gives each one an ASIN.
 - **The workbook: publish one of two editions.** The colour edition ($14.99) and a black-and-white interior with the same colour cover ($9.99, **recommended**) are both built and both listed below, side by side. See "Which workbook edition?". [OWNER]
 - **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
 - **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
 - **The workbook is print only.** Its forms are made to be written in, and every one is already free to print or fill in on the website, so a Kindle edition would only repeat links (and KDP can turn away ebooks that are mostly links or freely available content). Each Kindle book already links every workpaper to its free form. The workbook has no Kindle row to fill in.
-- **The pocket guide** (*The Logic Behind It*, 74 pages, 5 × 8 in) is a paperback and a Kindle ebook. **The box set** is a Kindle ebook only: Books 1 to 4 and the pocket guide in one file.
+- **The pocket guide** (*The Logic Behind It*, 78 pages, 5 × 8 in) is a paperback and a Kindle ebook. **The box set** is a Kindle ebook only: Books 1 to 4 and the pocket guide in one file.
 - **The same answers every time:** British English text on the Amazon.com store is fine; mark the language as English.
 
 
@@ -28,18 +28,18 @@ Made by tools/book/listing_kdp.py (print12, logicbook14) from tools/book/series.
 | Series | Spread Love & Acceptance, number 1 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1811 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same chapters." |
+| Description | below (1582 characters of 4,000) | the same, word for word |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Before you can share a life well, it helps to understand your own.</b></p><p>This short, warm book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time?</p><p>Along the way it explains, in plain words, how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how minds work differently, from ADHD and autism to sensory and learning differences.</p><p><b>Inside this book</b></p><ul><li>Where your lens came from, and the rulebook from home</li><li>Your wiring, your weather and your words</li><li>Who you are becoming: one small goal and a kind monthly look at yourself</li><li>How feelings work, and naming what you feel</li><li>Self-worth, shame and a kinder inner voice</li><li>Personality and temperament: dials, not boxes</li><li>Minds that work differently, and meeting in the middle</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages. Where a chapter touches hard things, it says where to find help.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Before you can share a life well, it helps to understand your own.</b></p><p>This short, warm book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time?</p><p>Along the way it explains, in plain words, how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how minds work differently, from ADHD and autism to sensory and learning differences.</p><p><b>Inside this book</b></p><ul><li>Where your lens came from, and the rulebook from home</li><li>Your wiring, your weather and your words</li><li>Who you are becoming: one small goal and a kind monthly look at yourself</li><li>How feelings work, and naming what you feel</li><li>Self-worth, shame and a kinder inner voice</li><li>Personality and temperament: dials, not boxes</li><li>Minds that work differently, and meeting in the middle</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -85,13 +85,13 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "book-1-know-yourself-kindly" → "paperback", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 154 (KDP reads it from the file) |
-| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Page count | 164 (KDP reads it from the file) |
+| Spine width | 0.3693 in (9.38 mm): 164 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-1-know-yourself-kindly.pdf |
-| Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.597 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.619 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -99,12 +99,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.93 | **$4.06** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.93 (estimate) | about £3.26 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.18 | **$3.81** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.13 (estimate) | about £3.06 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.93 | would pay $1.07 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $5.18 | would pay $0.82 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -114,7 +114,8 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 |---|---|
 | Manuscript (ebook) file | **book/print/epub/book-1-know-yourself-kindly.epub** (EPUB 3, reflowable, 1.18 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-1-know-yourself-kindly-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
 | Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.02 a copy after delivery (1.18 MB × $0.15 = $0.18). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
@@ -140,18 +141,18 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 2 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1809 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same chapters." |
+| Description | below (1545 characters of 4,000) | the same, word for word |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Some days are heavy. This book helps you find your footing again, gently and without blame.</b></p><p>Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book explains what is going on inside you, in plain words, and gives you small, practical things to try.</p><p>It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, how worry, low mood and trauma work, and when and where to get help. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change. It ends with what matters to you, and what a good life can mean.</p><p><b>Inside this book</b></p><ul><li>Stress, the ladder, flooding and rest that helps</li><li>Anger: what it is for, and the hot minutes</li><li>Worry, low mood and trauma, and where to get help</li><li>Grief in waves, and losses nobody sees</li><li>Repair, apologies that land and forgiveness</li><li>Habits and change, one small step at a time</li><li>Values, meaning and a good life</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages. Where a chapter touches hard things, it says where to find help.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Some days are heavy. This book helps you find your footing again, gently and without blame.</b></p><p>Stress piles up, anger flares, worry keeps you awake, or a loss changes everything. This book explains what is going on inside you, in plain words, and gives you small, practical things to try.</p><p>It explains what stress does to the body and why it adds up, what anger is for and what helps in the hot minutes, and how worry, low mood and trauma work. It walks with you through grief in its many forms, through repair and apologies that land, and through the slow work of change. It ends with what matters to you, and what a good life can mean.</p><p><b>Inside this book</b></p><ul><li>Stress, the ladder, flooding and rest that helps</li><li>Anger: what it is for, and the hot minutes</li><li>Worry, low mood and trauma, and what helps</li><li>Grief in waves, and losses nobody sees</li><li>Repair, apologies that land and forgiveness</li><li>Habits and change, one small step at a time</li><li>Values, meaning and a good life</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -197,13 +198,13 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "book-2-heal-and-steady" → "paperback", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 152 (KDP reads it from the file) |
-| Spine width | 0.3423 in (8.69 mm): 152 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Page count | 158 (KDP reads it from the file) |
+| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-2-heal-and-steady.pdf |
-| Cover file | book/print/cover-book-2-heal-and-steady.pdf (full wrap 12.592 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-2-heal-and-steady.pdf (full wrap 12.606 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -211,12 +212,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.88 | **$4.11** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.89 (estimate) | about £3.30 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.03 | **$3.96** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.01 (estimate) | about £3.18 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.88 | would pay $1.12 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $5.03 | would pay $0.97 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -224,10 +225,11 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.05 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.04 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-2-heal-and-steady-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.05 MB × $0.15 = $0.16). [OWNER] |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.04 MB × $0.15 = $0.16). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -252,18 +254,18 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 3 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1779 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same chapters." |
+| Description | below (1550 characters of 4,000) | the same, word for word |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Two people can care about each other and still fall out of tune.</b></p><p>One wants to talk now; the other needs an hour. A comment meant lightly lands hard. This book is about understanding the people around you: at home, in families, with friends, at work and in every group you belong to.</p><p>It explains how pace and tone pull people apart, how communication really works, and why two people can see the same moment so differently. It looks at why we need to belong, how trust grows and is rebuilt, how love takes many forms, and the quiet pull of groups. It ends with helping others well, with kind limits and without burning out.</p><p><b>Inside this book</b></p><ul><li>Why we get out of tune, and how to get back</li><li>How communication works: meaning, listening and repair</li><li>How we see each other: perception, bias and the stories we tell</li><li>Attachment, trust and belonging</li><li>Closeness and love in many forms</li><li>Groups, influence and disagreeing kindly</li><li>Helping others well, without burning out</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages. Where a chapter touches hard things, it says where to find help.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Two people can care about each other and still fall out of tune.</b></p><p>One wants to talk now; the other needs an hour. A comment meant lightly lands hard. This book is about understanding the people around you: at home, in families, with friends, at work and in every group you belong to.</p><p>It explains how pace and tone pull people apart, how communication really works, and why two people can see the same moment so differently. It looks at why we need to belong, how trust grows and is rebuilt, how love takes many forms, and the quiet pull of groups. It ends with helping others well, with kind limits and without burning out.</p><p><b>Inside this book</b></p><ul><li>Why we get out of tune, and how to get back</li><li>How communication works: meaning, listening and repair</li><li>How we see each other: perception, bias and the stories we tell</li><li>Attachment, trust and belonging</li><li>Closeness and love in many forms</li><li>Groups, influence and disagreeing kindly</li><li>Helping others well, without burning out</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -309,13 +311,13 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "book-3-understanding-each-other" → "paperback", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 150 (KDP reads it from the file) |
-| Spine width | 0.3378 in (8.58 mm): 150 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Page count | 154 (KDP reads it from the file) |
+| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-3-understanding-each-other.pdf |
-| Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.588 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.597 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -323,12 +325,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.82 | **$4.17** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.85 (estimate) | about £3.34 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $4.93 | **$4.06** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £3.93 (estimate) | about £3.26 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.82 | would pay $1.18 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $4.93 | would pay $1.07 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -338,7 +340,8 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 |---|---|
 | Manuscript (ebook) file | **book/print/epub/book-3-understanding-each-other.epub** (EPUB 3, reflowable, 1.06 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-3-understanding-each-other-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
 | Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.03 a copy after delivery (1.06 MB × $0.15 = $0.16). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
@@ -364,18 +367,18 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 | Series | Spread Love & Acceptance, number 4 (use "Add to series" so all books show together) | the same series, the same number |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1816 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same chapters." |
+| Description | below (1587 characters of 4,000) | the same, word for word |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Every shared home runs on work that nobody sees.</b></p><p>Noticing the shoes are too small, booking the appointment, remembering bin day: when that work is not counted, someone ends up carrying more than anyone realises, and resentment grows quietly.</p><p>This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, housemates, co-parents and teams. It looks at the setup, never at the person.</p><p><b>Inside this book</b></p><ul><li>The work nobody sees: the mental load, made visible</li><li>Is the split working? A simple check you can both trust</li><li>Full stress tanks and seven angles on the same moment</li><li>Two kinds of fair, and letting words land</li><li>The monthly look-back</li><li>How the numbers work, in plain arithmetic</li><li>An afterword that draws the series together</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages. Where a chapter touches hard things, it says where to find help.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every shared home runs on work that nobody sees.</b></p><p>Noticing the shoes are too small, booking the appointment, remembering bin day: when that work is not counted, someone ends up carrying more than anyone realises, and resentment grows quietly.</p><p>This book helps you see the whole load, kindly and without keeping score. It shows a simple way to check whether the way you share the work can last, how much of a reaction is leftover stress, how to agree what fair means to each of you, and a gentle monthly look-back that catches what weekly chats miss. It works for couples, families, housemates, co-parents and teams. It looks at the setup, never at the person.</p><p><b>Inside this book</b></p><ul><li>The work nobody sees: the mental load, made visible</li><li>Is the split working? A simple check you can both trust</li><li>Full stress tanks and seven angles on the same moment</li><li>Two kinds of fair, and letting words land</li><li>The monthly look-back</li><li>How the numbers work, in plain arithmetic</li><li>An afterword that draws the series together</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -421,13 +424,13 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "book-4-share-the-load" → "paperback", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 152 (KDP reads it from the file) |
-| Spine width | 0.3423 in (8.69 mm): 152 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Page count | 160 (KDP reads it from the file) |
+| Spine width | 0.3603 in (9.15 mm): 160 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-4-share-the-load.pdf |
-| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.592 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.610 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -435,12 +438,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.88 | **$4.11** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.89 (estimate) | about £3.30 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.08 | **$3.91** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.05 (estimate) | about £3.14 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.88 | would pay $1.12 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $5.08 | would pay $0.92 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -450,7 +453,8 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 |---|---|
 | Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.04 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-4-share-the-load-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series.json and rebuild the EPUB. [OWNER] |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
 | Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.04 MB × $0.15 = $0.16). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
@@ -466,7 +470,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 ## Which workbook edition? [OWNER: decide; (b) is recommended]
 
-Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each would need its own ISBN).
+Both editions are built from the same pages, with no blank pages, and both have the same colour cover. Publish one of them (each gets its own free KDP ISBN).
 
 | | (a) Colour edition | (b) Black-and-white interior (recommended) |
 |---|---|---|
@@ -497,18 +501,18 @@ The sources for the printing costs are at the end of this file. KDP's own calcul
 | Series | Spread Love & Acceptance, number 5 [OWNER: or leave the workbook out of the numbered series] | no Kindle edition (print only) |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1650 characters of 4,000) | no Kindle edition |
+| Description | below (1268 characters of 4,000) | no Kindle edition |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Every form in the series is free to print or fill in online. This is the bound edition, on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes. The same forms are free to print or fill in on screen at spreadloveandacceptance.com; this bound edition is for anyone who would rather have them all in one book, with a pencil.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every workpaper from the series, bound together on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -554,7 +558,7 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "workbook" → "paperback-colour", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **8.5 × 11 in (21.59 × 27.94 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 78 (KDP reads it from the file) |
@@ -601,18 +605,18 @@ Printing: standard colour, large trim (8.5 × 11 in): $1.00 + 78 × $0.0402 = **
 | Series | Spread Love & Acceptance, number 5 [OWNER: or leave the workbook out of the numbered series] | no Kindle edition (print only) |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1700 characters of 4,000) | no Kindle edition |
+| Description | below (1318 characters of 4,000) | no Kindle edition |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Every form in the series is free to print or fill in online. This is the bound edition, on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes. The same forms are free to print or fill in on screen at spreadloveandacceptance.com; this bound edition is for anyone who would rather have them all in one book, with a pencil.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages, printed in black and white, under a colour cover</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. The print and Kindle editions are for readers who prefer a book in hand. This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every workpaper from the series, bound together on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages, printed in black and white, under a colour cover</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -658,7 +662,7 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "workbook" → "paperback-bw", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Black & white interior, white paper**. Trim: **8.5 × 11 in (21.59 × 27.94 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 78 (KDP reads it from the file) |
@@ -705,18 +709,18 @@ Printing: black ink, large trim (8.5 × 11 in), 24 to 110 pages: a flat $2.84 a 
 | Series | Spread Love & Acceptance, as a companion: number 6 after the workbook, or no number if KDP lets you add it unnumbered [OWNER] | the same series; number 5 among the Kindle editions (the workbook has none), or unnumbered [OWNER] |
 | Edition number | 1 | 1 |
 | Author | Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER] | Christian |
-| Publisher | Christian’s Lab | Christian’s Lab |
-| Imprint | Christian’s Lab (KDP asks for it beside your own ISBN; it also prints on the copyright page) | Christian’s Lab |
+| Publisher | Nothing to type: with a free KDP ISBN, KDP shows "Independently published" | Leave blank (decided) |
+| Imprint | "Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same) | Leave blank |
 | Contributors | None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER] | None |
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (2055 characters of 4,000) | the same, but replace the last line about print with: "The paperback has the same pages." |
+| Description | below (1883 characters of 4,000) | the same, word for word |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.</b></p><p>A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.</p><p>It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime”. Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.</p><p><b>Inside</b></p><ul><li>38 situations, one to a page, in nine short sections</li><li>On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step</li><li>“With care” notes where a reaction can land hard on someone else</li><li>A short introduction to the six-part lens, and why logic explains but never excuses</li><li>Blank cards to work out a reaction of your own</li><li>A code on every page to the same situation online, free</li></ul><p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, and the pages say so where it matters.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p><p><i>Every situation in this guide, and more than seventy in all, is also free online, with no account. The print and Kindle editions are for readers who prefer a book in hand. This guide is general education, not therapy or a diagnosis.</i></p>
+<p><b>Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.</b></p><p>A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.</p><p>It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime”. Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.</p><p><b>Inside</b></p><ul><li>38 situations, one to a page, in nine short sections</li><li>On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step</li><li>“With care” notes where a reaction can land hard on someone else</li><li>A short introduction to the six-part lens, and why logic explains but never excuses</li><li>Blank cards to work out a reaction of your own</li><li>A code on every page to the same situation online, free</li></ul><p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, and the pages say so where it matters.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p><p><i>This guide is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -762,13 +766,13 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| ISBN | Your own Bowker ISBN: `ISBN-13 to come` [OWNER: buy and paste; also paste it into tools/book/series.json, "isbn" → "pocket-the-logic-behind-it" → "paperback", and rebuild, so it prints on the copyright page] |
+| ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **5 × 8 in (12.7 × 20.32 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 74 (KDP reads it from the file) — 72 is KDP's minimum for standard colour, so the guide is built to 72 to 80 pages |
-| Spine width | 0.1666 in (4.23 mm): 74 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
+| Page count | 78 (KDP reads it from the file) — 72 is KDP's minimum for standard colour, so the guide is built to 72 to 80 pages |
+| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
 | Manuscript file | book/print/pocket-the-logic-behind-it.pdf |
-| Cover file | book/print/cover-pocket-the-logic-behind-it.pdf (full wrap 10.417 × 8.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-pocket-the-logic-behind-it.pdf (full wrap 10.426 × 8.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -776,14 +780,14 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $9.99 | $2.89 | **$3.10** (60% × $9.99 − printing) |
+| Amazon.com (primary) | $9.99 | $2.99 | **$3.00** (60% × $9.99 − printing) |
 | Amazon.co.uk | £7.99 | KDP shows it | 60% (at £7.99 and up) minus printing [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €9.99 | KDP shows it | 60% (at €9.99 and up) minus printing [OWNER] |
 | Amazon.ca | CA$13.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$15.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $2.89 | would pay $1.11 a copy (40% × $9.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $2.99 | would pay $1.01 a copy (40% × $9.99 − printing) |
 
-**Price: $9.99 [OWNER: recommended $9.99; the alternative is $8.99].** KDP's printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) is $1.00 a book plus $0.0255 a page: $1.00 + 74 × $0.0255 = **$2.89**. From a list price of $9.99, KDP pays 60% of the list price, so 60% × $9.99 = $5.99, minus printing, leaves **$3.10 a copy**. Below $9.99 it pays only 50%: at $8.99 that is 50% × $8.99 − $2.89 = $1.61 a copy. One dollar more on the price nearly doubles what you keep, and the panel's readers put its value at about $8.40, close to either price. [OWNER]
+**Price: $9.99 [OWNER: recommended $9.99; the alternative is $8.99].** KDP's printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) is $1.00 a book plus $0.0255 a page: $1.00 + 78 × $0.0255 = **$2.99**. From a list price of $9.99, KDP pays 60% of the list price, so 60% × $9.99 = $5.99, minus printing, leaves **$3.00 a copy**. Below $9.99 it pays only 50%: at $8.99 that is 50% × $8.99 − $2.99 = $1.51 a copy. One dollar more on the price nearly doubles what you keep, and the panel's readers put its value at about $8.40, close to either price. [OWNER]
 
 ### Kindle extras
 
@@ -791,7 +795,8 @@ The answers are seen by Amazon, not printed on the product page.
 |---|---|
 | Manuscript (ebook) file | **book/print/epub/pocket-the-logic-behind-it.epub** (EPUB 3, reflowable, 0.30 MB, 9 sections, 38 situations; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-pocket-the-logic-behind-it-front.jpg (1600 px wide, the paperback front without bleed; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series-extras.json and rebuild the EPUB. [OWNER] |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
 | Kindle price | **$2.99** with the **70%** royalty: 70% × $2.99 − delivery (0.30 MB × $0.15 = $0.04) = about **$2.05 a copy**. The owner's range is $0.99 to $2.99; below $2.99 KDP pays only 35% (at $0.99, about $0.35 a copy), so $2.99 is the one price in that range that earns 70%. It is also at least 20% below the paperback ($9.99), as the 70% band requires. [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
@@ -819,18 +824,18 @@ A Kindle ebook only. There is no print box set: each paperback is listed on its 
 | Series | Leave it out of the numbered series, or add it unnumbered if KDP offers that for a box set [OWNER: check the series page in KDP] |
 | Edition number | 1 |
 | Author | Christian |
-| Publisher | Christian’s Lab |
-| Imprint | Christian’s Lab |
+| Publisher | Leave blank (decided) |
+| Imprint | Leave blank |
 | Contributors | None |
 | Publishing rights | the same |
 | Primary audience | the same |
 | Primary marketplace | Amazon.com |
-| Description | below (1672 characters of 4,000) |
+| Description | below (1448 characters of 4,000) |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>The whole series in one Kindle edition: four short books and a pocket guide.</b></p><p>Book 1, Know Yourself Kindly, starts with you: where your way of seeing things came from, your wiring, your feelings, your worth and how minds work differently. Book 2, Heal and Steady, is for the heavy days of stress, anger, worry, grief and repair. Book 3, Understanding Each Other, looks at how we hear, see and belong to each other, at home and in every group.</p><p>Book 4, Share the Load, makes the unseen work at home visible and offers a fair, kind way to share it. The Logic Behind It, a pocket guide, lays out the reasoning behind thirty-eight everyday reactions that can look odd or rude from outside, with the other person’s side and one small step.</p><p><b>Inside</b></p><ul><li>Book 1: Know Yourself Kindly (7 chapters)</li><li>Book 2: Heal and Steady (7 chapters)</li><li>Book 3: Understanding Each Other (7 chapters)</li><li>Book 4: Share the Load (5 chapters and an afterword)</li><li>The Logic Behind It: a pocket guide to 38 everyday reactions</li><li>One contents page for all five, and every book’s own contents, notes and research list</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints on the lighter pages. Where a chapter touches hard things, it says where to find help.</p><p><i>Every chapter is also free to read online, in a short and a full version, with no account. This ebook is for readers who prefer the whole series in one place. These books are general education, not therapy or a diagnosis.</i></p>
+<p><b>The whole series in one Kindle edition: four short books and a pocket guide.</b></p><p>Book 1, Know Yourself Kindly, starts with you: where your way of seeing things came from, your wiring, your feelings, your worth and how minds work differently. Book 2, Heal and Steady, is for the heavy days of stress, anger, worry, grief and repair. Book 3, Understanding Each Other, looks at how we hear, see and belong to each other, at home and in every group.</p><p>Book 4, Share the Load, makes the unseen work at home visible and offers a fair, kind way to share it. The Logic Behind It, a pocket guide, lays out the reasoning behind thirty-eight everyday reactions that can look odd or rude from outside, with the other person’s side and one small step.</p><p><b>Inside</b></p><ul><li>Book 1: Know Yourself Kindly (7 chapters)</li><li>Book 2: Heal and Steady (7 chapters)</li><li>Book 3: Understanding Each Other (7 chapters)</li><li>Book 4: Share the Load (5 chapters and an afterword)</li><li>The Logic Behind It: a pocket guide to 38 everyday reactions</li><li>One contents page for all five, and every book’s own contents, notes and research list</li></ul><p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try. Three friendly characters, Professor Puddles, Tidbit and Sugarfoot, drop in with hints on the lighter pages.</p><p><i>These books are general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -876,10 +881,11 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/boxset-complete-series.epub** (EPUB 3, reflowable, 3.77 MB, 5 books, 36 chapters and sections; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/boxset-complete-series.epub** (EPUB 3, reflowable, 3.78 MB, 5 books, 36 chapters and sections; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-boxset-complete-series-front.jpg (1600 px wide, the front of the box set, made for Kindle only; also inside the EPUB) |
-| ISBN | None needed: Amazon gives the Kindle edition an ASIN. If you buy an ebook ISBN, put it in `isbn_ebook` in tools/book/series-extras.json and rebuild the EPUB. [OWNER] |
-| Kindle price | **$12.99** with the **70%** royalty [OWNER: recommended]. About **$8.53 a copy** after delivery (3.77 MB × $0.15 = $0.57). |
+| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
+| Publisher | Leave blank (decided). |
+| Kindle price | **$12.99** with the **70%** royalty [OWNER: recommended]. About **$8.53 a copy** after delivery (3.78 MB × $0.15 = $0.57). |
 | Why not $14.99 | Amazon.com pays 70% only from $2.99 to $12.99 (the top of the band rose from $9.99 to $12.99 on 7 July 2026). At $14.99 the royalty drops to 35%: $5.25 a copy, about $3.28 less than at $12.99. $12.99 is also about half the price of the four Kindle books and the pocket guide bought one by one ($26.95). If you prefer a round "$14.99" box set, it pays less. [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from 20 January 2026). [OWNER] |
@@ -896,7 +902,7 @@ The answers are seen by Amazon, not printed on the product page.
 ## A+ content ideas (for each book's product page)
 
 - **Module 1, the series banner:** the six front covers side by side, with one line under each ("Start with yourself", "For the heavy days", "Between people", "The work nobody sees", "Every form, all in one", "The logic behind a reaction").
-- **Module 2, what a chapter looks like:** three panels: a short made-up scene, "Words you could use", and an "Another way to see it" box, each as a cropped page image.
+- **Module 2, what a chapter looks like:** three panels: a short made-up scene, "Words you could use", and a "Two ways to read this" box, each as a cropped page image.
 - **Module 3, meet the three friends:** Professor Puddles, Tidbit and Sugarfoot, with one gentle hint each.
 - **Module 4, free online:** "Every chapter is also free online, in a short and a full version, with no account." (Words only; KDP doesn't allow web addresses in A+ content.)
 - **Module 5, the workbook and the pocket guide:** a filled-in example sheet beside a blank one, and one page of the pocket guide.

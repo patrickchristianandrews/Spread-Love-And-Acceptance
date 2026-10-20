@@ -509,9 +509,10 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(/signal-translator\.html#conversation$/.test(q.url()), 'redirect with JavaScript off: '+q.url());
     await off.close();
     // the mini checker points to the Chat analyzer, with the screenshot and whole-chat way in
+    // (the new home page has no mini checker, so this uses the communication page)
     const m = await b.newPage({viewport:{width:390,height:844}});
     await m.route('**/*', r=>/^http:\/\/(localhost|127\.0\.0\.1)/.test(r.request().url()) ? r.continue() : r.abort());
-    await m.goto(BASE+'/index.html'); await m.waitForSelector('[data-message-check-mini] .mcm-shotl', {timeout:10000});
+    await m.goto(BASE+'/communication.html'); await m.waitForSelector('[data-message-check-mini] .mcm-shotl', {timeout:10000});
     const mini = await m.evaluate(()=>({full:document.querySelector('.mcm-full').getAttribute('href'), fullT:document.querySelector('.mcm-full').innerText, shot:document.querySelector('.mcm-shotl').getAttribute('href'), shotT:document.querySelector('.mcm-shotl').innerText}));
     ok(mini.full==='/signal-translator.html' && /Chat analyzer/.test(mini.fullT) && mini.shot==='/signal-translator.html#conversation' && /Got a screenshot or a whole chat\?/.test(mini.shotT), 'mini checker links: '+JSON.stringify(mini));
     await m.click('.mcm-shotl'); await m.waitForURL(/#conversation$/); await m.waitForLoadState('load');

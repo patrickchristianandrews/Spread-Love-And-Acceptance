@@ -54,6 +54,16 @@ This is the book on one page, in the order that tends to work.
 
 You won't use all sixteen in any one conversation. Most conversations need three or four. The list is there so that, when a talk goes wrong, you can look back and find which step went missing.
 
+## If it's you who owes one tonight.
+
+Most of the guide above is written from the side of the person raising something. Turn it round, because at least half the time the apology is yours to give, and the steps are nearly the same.
+
+Settle first, as before. Then find the layers of what you did, the way you'd find them in someone else's: the act a camera would have caught, the pattern if there is one, what it cost the other person, and what it seemed to say about how you see them. Sort what you know from what you've guessed about their feelings, and plan to ask about the guesses. Ask yourself the mirror question, the other way round: if they'd done this to you, what would you need to hear?
+
+Then say it, the right size for the thing. Name the act in plain words. Keep the "but" out of the first paragraph. Show you can see how it landed. Offer something that changes, and something that repairs. If you need to explain, ask first whether they want to hear it. If they need time, give it, and don't ask for forgiveness on the spot; Lewicki's six-part study found that was the part people valued least, and it puts the other person under pressure at exactly the wrong moment.
+
+And then, a month later, check. Not with another apology. With a question: "Is it better? Is there anything I'm still getting wrong?"
+
 ## The setting is part of the conversation.
 
 People who work with scent and the senses start from a point that most relationship advice skips: the setting isn't neutral background. Light, noise, smell, temperature and time of day all shape what a person can take in. The same sentence lands differently in a bright, loud kitchen at six in the evening and on a quiet walk at nine in the morning.

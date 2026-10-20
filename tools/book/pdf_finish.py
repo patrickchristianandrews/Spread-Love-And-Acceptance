@@ -46,12 +46,12 @@ def tag(path, title, author='', subject='', size=''):
     w = PdfWriter()
     w.append(r, import_outline=False)
     if size:
-        from pypdf.generic import RectangleObject
+        from pypdf.generic import NameObject, RectangleObject
         wi, hi = (float(x) * 72 for x in size.split(','))
         for pg in w.pages:
             for k in ('/MediaBox', '/CropBox', '/TrimBox', '/BleedBox', '/ArtBox'):
                 if k == '/MediaBox' or k in pg:
-                    pg[k] = RectangleObject([0, 0, wi, hi])
+                    pg[NameObject(k)] = RectangleObject([0, 0, wi, hi])
     info(w, {'title': title, 'author': author, 'subject': subject})
     with open(path, 'wb') as f:
         w.write(f)

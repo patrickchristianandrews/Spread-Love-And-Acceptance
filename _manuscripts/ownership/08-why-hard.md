@@ -71,7 +71,7 @@ What helps: specifics, and questions (chapter 6). The concrete, camera-level det
 
 Some people grew up somewhere apologies weren't made, or were made only under pressure, or were used against the person who made them. A boy whose father never once said sorry, and who watched his mother's apologies get thrown back at her for years, can grow into a man for whom "I was wrong" feels genuinely dangerous, or just foreign: a phrase in a language he never learned. He may explain, minimise or shift blame without even noticing, because that's what owning things sounded like at home.
 
-What helps: say the unwritten rule out loud, without contempt. "In this house, saying sorry doesn't mean you lose." Model it yourself, often, for small things. Notice and thank the first awkward attempts.
+What helps: say the unwritten rule out loud, without contempt. "In this house, saying sorry doesn't mean you lose." Model it yourself, often, for small things. Thank the first awkward attempts, however clumsy.
 
 ### Unwillingness
 
@@ -91,7 +91,7 @@ If it's **limited self-awareness**, the work is asking (chapter 6) and listening
 
 If it's **learned behaviour**, the work is practising a sentence you didn't grow up hearing until it stops feeling foreign. Start with small things. "Sorry, that was me" about a dropped spoon is still practice.
 
-And if, being honest, it's sometimes **unwillingness**, it can help to ask what owning it would cost you, specifically. Often the cost turns out to be smaller than it felt, or worth paying. Sometimes it really is large, and then at least you can make the decision with your eyes open, and say so honestly instead of pretending you don't understand.
+And if, being honest, it's sometimes **unwillingness**, it can help to ask what owning it would cost you, specifically. Often the cost turns out to be smaller than it felt, or worth paying. Sometimes it really is large, and then at least you can make the decision with your eyes open, and say so plainly instead of pretending you don't understand.
 
 ## You can't tell which it is from one apology.
 
@@ -123,13 +123,13 @@ That's no failure on your part. It's where your part ends.
 | Meant | *I'm frightened you don't care.* |
 | A better way | "I can see this has hit you hard. I'm not going anywhere. Take the time you need, and come and find me when you can talk." |
 
-> **Say it**
->
-> When someone has shut down: "I can see you can't talk right now. That's OK. Come back when you can. I'll be here."
->
-> When you're the one overloaded: "I'm not walking out on this. I can't speak yet. Give me an hour."
->
-> When a pattern needs naming, on a calm day: "I've noticed that when I bring up money, we never get back to it. I don't think that's on purpose. Can we work out a way that makes it easier for you to come back to?"
+## Say it, briefly.
+
+When someone has shut down in front of you, the fewer words the better. "I can see you can't talk right now. That's OK. Come back when you can. I'll be here." Then leave them be, and don't follow them to the shed.
+
+When you're the one overloaded, you probably have about seven words available, so make them these: "I'm not walking out on this. Give me an hour." Then come back, and start with the thing you couldn't say.
+
+And when a pattern needs naming, choose a calm day, well away from the last time it happened: "I've noticed that when I bring up money, we never get back to it. I don't think that's on purpose. Can we work out a way that makes it easier for you to come back to?"
 
 The website's *Calm-Down Kit* helps you make a plan for heated moments in advance, including what you'll say and where you'll go (spreadloveandacceptance.com/wp-11). If you're in the middle of one right now, *Upset right now?* has a fast version for two people (spreadloveandacceptance.com/upset-right-now). *The logic behind it* has a whole section on shutdowns and on why a reaction can make sense once you can see the steps (spreadloveandacceptance.com/the-logic-behind-it).
 

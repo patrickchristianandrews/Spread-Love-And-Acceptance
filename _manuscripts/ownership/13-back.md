@@ -19,7 +19,7 @@ A shared laugh is one of the oldest ways people repair things after tension. Sho
 > **From the research.** In a study of 71 couples filmed talking about how they met, the share of the conversation in which both partners laughed at the same time went with feeling closer and more supported, and rating the relationship more highly, over and above how much each laughed on their own. Later work by the same researchers suggests shared laughter may help by making people feel more alike.
 > *Kurtz and Algoe (2015) · Early: one observational study of couples, which shows laughter and closeness go together but can't show which causes which. Claims made for "laughter therapy" more widely run well ahead of the evidence.*
 
-Notice, though, when Gregor and Lewis laugh. Not in April, in the car park, when Lewis arrived forty minutes late with the satsumas. A joke then would have been a way of skipping the hard part, and Gregor would rightly have felt brushed off. The laugh comes in June, after the apology, after the setup, after six visits that showed the change was real. It can only land because the repair is already done.
+Look, though, at when Gregor and Lewis laugh. Not in April, in the car park, when Lewis arrived forty minutes late with the satsumas. A joke then would have been a way of skipping the hard part, and Gregor would rightly have felt brushed off. The laugh comes in June, after the apology, after the setup, after six visits that showed the change was real. It can only land because the repair is already done.
 
 That's the rule for laughter in this book, and it's a simple one. Laugh *with*, never *at*. And laugh after, never instead.
 

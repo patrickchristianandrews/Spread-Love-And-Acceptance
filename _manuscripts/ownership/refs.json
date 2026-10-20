@@ -1,0 +1,877 @@
+[
+ {
+  "id": "lewicki-polin-lount-2016",
+  "authors": "Lewicki, R. J., Polin, B., & Lount, R. B., Jr.",
+  "year": 2016,
+  "title": "An exploration of the structure of effective apologies",
+  "venue": "Negotiation and Conflict Management Research, 9(2), 177–196",
+  "doi": "10.1111/ncmr.12073",
+  "url": "https://doi.org/10.1111/ncmr.12073",
+  "kind": "study",
+  "finding": "Testing six apology components across two studies, acknowledging responsibility was rated most important, then an offer of repair; a request for forgiveness mattered least. Apologies with more components were rated better.",
+  "strength": "moderate — two studies using written apology statements, so spoken apologies may differ",
+  "topics": [
+   "apology",
+   "repair",
+   "ownership"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://encompass.eku.edu/fs_research/92 ; https://www.psypost.org/6-elements-effective-apology-according-science/",
+  "spin19_chapters": [
+   "02"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "frantz-bennigson-2005",
+  "authors": "Frantz, C. M., & Bennigson, C.",
+  "year": 2005,
+  "title": "Better late than early: The influence of timing on apology effectiveness",
+  "venue": "Journal of Experimental Social Psychology, 41(2), 201–207",
+  "doi": "10.1016/j.jesp.2004.07.007",
+  "url": "https://doi.org/10.1016/j.jesp.2004.07.007",
+  "kind": "study",
+  "finding": "Across a study of real conflicts and one of imagined ones, apologies offered later in a conversation, after the hurt person had explained how they felt, were more effective than early ones; feeling heard seemed to explain it.",
+  "strength": "moderate — one study of students’ real conflicts and one of imagined ones; small samples",
+  "topics": [
+   "apology",
+   "timing"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://search.isc.ac/Inventory/10/148244.htm ; https://adastra.fit.edu/blog/copla/scienceminute/349-apologies-timing/",
+  "spin19_chapters": [
+   "04"
+  ],
+  "already_in_site_refs": true,
+  "note": "DOI as listed in the site’s existing refs-b.json entry; the search confirmed authors, title, journal, volume and pages."
+ },
+ {
+  "id": "chapman-thomas-2006",
+  "authors": "Chapman, G., & Thomas, J.",
+  "year": 2006,
+  "title": "The Five Languages of Apology: How to Experience Healing in All Your Relationships",
+  "venue": "Northfield Publishing (Chicago); revised 2022 as The 5 Apology Languages",
+  "doi": null,
+  "url": "https://catalog.burlesontx.com/Record/563560",
+  "kind": "book",
+  "finding": "Describes five parts of an apology (expressing regret, accepting responsibility, making restitution, genuinely repenting, requesting forgiveness) and suggests people differ in which they most need.",
+  "strength": "theory — a popular framework, tested very little",
+  "topics": [
+   "apology"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://catalog.burlesontx.com/Record/563560 ; https://boulder.flatironslibrary.org/Record/.b16633180",
+  "spin19_chapters": [
+   "04 (via the website)",
+   "13-back"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "fehr-gelfand-nag-2010",
+  "authors": "Fehr, R., Gelfand, M. J., & Nag, M.",
+  "year": 2010,
+  "title": "The road to forgiveness: A meta-analytic synthesis of its situational and dispositional correlates",
+  "venue": "Psychological Bulletin, 136(5), 894–914",
+  "doi": "10.1037/a0019993",
+  "url": "https://doi.org/10.1037/a0019993",
+  "kind": "meta-analysis",
+  "finding": "Across 175 studies and about 26,000 people, receiving an apology was one of the stronger correlates of forgiving an offender (around r = .4), alongside empathy and perceived intent; situational factors explained more than the victim’s personality.",
+  "strength": "strong — a large meta-analysis, though most included studies are correlational",
+  "topics": [
+   "apology",
+   "forgiveness"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://ggsc.berkeley.edu/images/uploads/Fehr_et_al_2010_The_road_to_forgiveness-_A_meta-analytic_synthesis_of_its_situational_and_dispositional_correlates.pdf ; https://www.ovid.com/journals/plbul/pdf/10.1037/a0019993",
+  "spin19_chapters": [
+   "04"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "tangney-dearing-2002",
+  "authors": "Tangney, J. P., & Dearing, R. L.",
+  "year": 2002,
+  "title": "Shame and guilt",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": "https://www.guilford.com/books/Shame-and-Guilt/Tangney-Dearing/9781572309876",
+  "kind": "book",
+  "finding": "Summarizes years of research distinguishing shame (about the self) from guilt (about the act): guilt-proneness goes with empathy and repair, shame-proneness with hiding, blame and anger.",
+  "strength": "moderate: a large body of research, with some debate about whether measures fully separate the two and about cultural differences.",
+  "topics": [
+   "shame-guilt",
+   "ownership"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.guilford.com/books/Shame-and-Guilt/Tangney-Dearing/9781572309876 ; https://metapsychology.net/?p=1826",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "tangney-wagner-fletcher-gramzow-1992",
+  "authors": "Tangney, J. P., Wagner, P., Fletcher, C., & Gramzow, R.",
+  "year": 1992,
+  "title": "Shamed into anger? The relation of shame and guilt to anger and self-reported aggression",
+  "venue": "Journal of Personality and Social Psychology, 62(4), 669–675",
+  "doi": "10.1037/0022-3514.62.4.669",
+  "url": "https://doi.org/10.1037/0022-3514.62.4.669",
+  "kind": "study",
+  "finding": "Shame-proneness was linked with anger, hostility and blaming others; guilt-proneness was not linked in the same way.",
+  "strength": "moderate — self-report questionnaire studies; the shame–anger link has been widely cited and built on",
+  "topics": [
+   "shame-guilt",
+   "anger"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://ngdc.cncb.ac.cn/openlb/publication/OLB-PM-01500604 ; https://psu.pb.unizin.org/psych425/chapter/references-4/",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": false,
+  "note": "Abstract not reached; the finding is stated as later reviews describe it."
+ },
+ {
+  "id": "breines-chen-2012",
+  "authors": "Breines, J. G., & Chen, S.",
+  "year": 2012,
+  "title": "Self-compassion increases self-improvement motivation",
+  "venue": "Personality and Social Psychology Bulletin, 38(9), 1133–1143",
+  "doi": "10.1177/0146167212445599",
+  "url": "https://doi.org/10.1177/0146167212445599",
+  "kind": "study",
+  "finding": "In four experiments, self-compassion after a failure or a moral transgression increased motivation to make amends and avoid repeating it, compared with a self-esteem boost or no intervention.",
+  "strength": "moderate — lab experiments with students; motivation measured, not later behaviour",
+  "topics": [
+   "self-compassion",
+   "ownership",
+   "repair"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/22645164/",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "schumann-dweck-2014",
+  "authors": "Schumann, K., & Dweck, C. S.",
+  "year": 2014,
+  "title": "Who accepts responsibility for their transgressions?",
+  "venue": "Personality and Social Psychology Bulletin, 40(12), 1598–1610",
+  "doi": "10.1177/0146167214552789",
+  "url": "https://doi.org/10.1177/0146167214552789",
+  "kind": "study",
+  "finding": "In four studies, including a week-long diary study of 60 cohabiting couples, people who believed personality can change were more likely to accept responsibility and apologise for their offences than people who saw personality as fixed.",
+  "strength": "moderate — four studies mixing real and hypothetical offences, correlational and experimental",
+  "topics": [
+   "ownership",
+   "apology",
+   "mindset"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.psychologytoday.com/us/blog/ulterior-motives/201412/what-makes-some-of-us-own-our-mistakes-but-not-others ; https://greatergood.berkeley.edu/article/item/why_some_people_own_mistakes_and_others_dont",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "schumann-2014-self-affirmation",
+  "authors": "Schumann, K.",
+  "year": 2014,
+  "title": "An affirmed self and a better apology: The effect of self-affirmation on transgressors’ responses to victims",
+  "venue": "Journal of Experimental Social Psychology, 54, 89–96",
+  "doi": null,
+  "url": "https://spsp.org/news-center/character-context-blog/self-affirmation-promotes-better-apologies",
+  "kind": "study",
+  "finding": "In two studies, people who first affirmed an important personal value, then wrote to someone they had hurt in an unresolved conflict, offered more comprehensive apologies and used fewer defensive strategies than controls.",
+  "strength": "moderate — two experiments, written responses coded by observers",
+  "topics": [
+   "apology",
+   "ownership",
+   "self-affirmation"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://spsp.org/news-center/character-context-blog/self-affirmation-promotes-better-apologies ; https://www.psychology.pitt.edu/node/6989",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": false,
+  "note": "DOI not confirmed by search, so none is given; the link is to a verified summary."
+ },
+ {
+  "id": "okimoto-wenzel-hedrick-2013",
+  "authors": "Okimoto, T. G., Wenzel, M., & Hedrick, K.",
+  "year": 2013,
+  "title": "Refusing to apologize can have psychological benefits (and we issue no mea culpa for this research finding)",
+  "venue": "European Journal of Social Psychology, 43(1), 22–31",
+  "doi": "10.1002/ejsp.1901",
+  "url": "https://doi.org/10.1002/ejsp.1901",
+  "kind": "study",
+  "finding": "In two studies, people who explicitly refused to apologise for a harm reported higher self-esteem afterwards, explained partly by feeling more powerful and true to their values; the authors note this can make reconciliation harder.",
+  "strength": "moderate — two studies with self-report measures of short-term feelings",
+  "topics": [
+   "apology",
+   "non-apology"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://research.monash.edu/en/publications/refusing-to-apologize-can-have-psychological-benefits-and-we-issu/ ; https://vuir.vu.edu.au/46763/",
+  "spin19_chapters": [
+   "02"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "baumeister-stillwell-wotman-1990",
+  "authors": "Baumeister, R. F., Stillwell, A., & Wotman, S. R.",
+  "year": 1990,
+  "title": "Victim and perpetrator accounts of interpersonal conflict: Autobiographical narratives about anger",
+  "venue": "Journal of Personality and Social Psychology, 59(5), 994–1005",
+  "doi": "10.1037/0022-3514.59.5.994",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/2266485/",
+  "kind": "study",
+  "finding": "In people’s own written stories, perpetrators described the provoking act as a single, meaningful and closed incident; victims described it as arbitrary, part of a longer series, with lasting harm. The roles produce different accounts of the same kind of event.",
+  "strength": "moderate — autobiographical narratives, which show how people remember rather than what happened",
+  "topics": [
+   "perspective",
+   "conflict",
+   "surface-and-depth"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/2266485/ ; https://roybaumeister.com/tag/1990/",
+  "spin19_chapters": [
+   "01"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "tavris-aronson-2007",
+  "authors": "Tavris, C., & Aronson, E.",
+  "year": 2007,
+  "title": "Mistakes Were Made (But Not by Me): Why We Justify Foolish Beliefs, Bad Decisions, and Hurtful Acts",
+  "venue": "Harcourt (Orlando); revised editions 2015 and 2020",
+  "doi": null,
+  "url": "https://en.wikipedia.org/wiki/Mistakes_Were_Made_(but_Not_by_Me)",
+  "kind": "book",
+  "finding": "Draws on cognitive dissonance research to explain how people justify their own mistakes and hurtful acts to protect their self-image, which prolongs conflicts and blocks correction.",
+  "strength": "theory — a readable synthesis of decades of dissonance research, not a single test",
+  "topics": [
+   "self-justification",
+   "ownership"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://en.wikipedia.org/wiki/Mistakes_Were_Made_(but_Not_by_Me) ; https://www.library.ualberta.ca/permalink/opac/3942088/WUAARCHIVE",
+  "spin19_chapters": [
+   "02",
+   "08"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "pronin-lin-ross-2002",
+  "authors": "Pronin, E., Lin, D. Y., & Ross, L.",
+  "year": 2002,
+  "title": "The bias blind spot: Perceptions of bias in self versus others",
+  "venue": "Personality and Social Psychology Bulletin, 28(3), 369–381",
+  "doi": "10.1177/0146167202286008",
+  "url": "https://doi.org/10.1177/0146167202286008",
+  "kind": "study",
+  "finding": "Across three studies people saw cognitive and motivational biases much more in others than in themselves, and judged a peer’s self-serving explanation as biased while seeing their own similar one as accurate.",
+  "strength": "strong — three studies; a 2021 replication with 969 people found the same pattern",
+  "topics": [
+   "bias",
+   "same-standard"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://collaborate.princeton.edu/en/publications/the-bias-blind-spot-perceptions-of-bias-in-self-versus-others/ ; https://en.wikipedia.org/wiki/Bias_blind_spot",
+  "spin19_chapters": [
+   "09"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "ross-sicoly-1979",
+  "authors": "Ross, M., & Sicoly, F.",
+  "year": 1979,
+  "title": "Egocentric biases in availability and attribution",
+  "venue": "Journal of Personality and Social Psychology, 37(3), 322–336",
+  "doi": "10.1037/0022-3514.37.3.322",
+  "url": "https://doi.org/10.1037/0022-3514.37.3.322",
+  "kind": "study",
+  "finding": "In five experiments, including 37 married couples, people’s own contributions to a joint effort came to mind more easily, and they accepted more responsibility than others gave them.",
+  "strength": "strong — classic, widely replicated",
+  "topics": [
+   "bias",
+   "same-standard",
+   "shared-work"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://en.wikipedia.org/wiki/Egocentric_bias ; https://resolve.cambridge.org/core/books/judgment-under-uncertainty/egocentric-biases-in-availability-and-attribution/EB2AB8EAB64D9806F27158695919B84B",
+  "spin19_chapters": [
+   "09"
+  ],
+  "already_in_site_refs": true,
+  "note": "The popular claim that spouses’ estimates “add up to more than 100%” could not be confirmed (the paper may have used a line scale rather than percentages), so the book does not repeat it."
+ },
+ {
+  "id": "mezulis-2004",
+  "authors": "Mezulis, A. H., Abramson, L. Y., Hyde, J. S., & Hankin, B. L.",
+  "year": 2004,
+  "title": "Is there a universal positivity bias in attributions? A meta-analytic review of individual, developmental, and cultural differences in the self-serving attributional bias",
+  "venue": "Psychological Bulletin, 130(5), 711–747",
+  "doi": "10.1037/0033-2909.130.5.711",
+  "url": "https://doi.org/10.1037/0033-2909.130.5.711",
+  "kind": "meta-analysis",
+  "finding": "Across 266 studies, people tended to credit themselves for good outcomes and circumstances for bad ones; the average bias was large, and smaller in East Asian samples than Western ones.",
+  "strength": "strong — a large meta-analysis; size varies by culture and age",
+  "topics": [
+   "bias",
+   "ownership"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://en.wikipedia.org/wiki/Amy_Mezulis ; https://baylor-ir.tdl.org/bitstream/handle/2104/9045/David_Coalson_HonorsThesis.pdf",
+  "spin19_chapters": [
+   "08"
+  ],
+  "already_in_site_refs": false,
+  "note": "Abstract not reached; only points that several sources agree on are used."
+ },
+ {
+  "id": "malle-2006-actor-observer",
+  "authors": "Malle, B. F.",
+  "year": 2006,
+  "title": "The actor-observer asymmetry in attribution: A (surprising) meta-analysis",
+  "venue": "Psychological Bulletin, 132(6), 895–919",
+  "doi": "10.1037/0033-2909.132.6.895",
+  "url": "https://doi.org/10.1037/0033-2909.132.6.895",
+  "kind": "meta-analysis",
+  "finding": "Across more than 100 studies, the classic actor-observer asymmetry (explaining one’s own behaviour by situation and others’ by disposition) was close to zero on average.",
+  "strength": "strong — a large meta-analysis",
+  "topics": [
+   "bias",
+   "attribution"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://en.wikipedia.org/wiki/Actor%E2%80%93observer_asymmetry ; https://supp.apa.org/psycarticles/supplemental/0033-2909.132.6.895/0033-2909.132.6.895_supp.html",
+  "spin19_chapters": [
+   "09"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "kruger-epley-2005-email",
+  "authors": "Kruger, J., Epley, N., Parker, J., & Ng, Z.-W.",
+  "year": 2005,
+  "title": "Egocentrism over e-mail: Can we communicate as well as we think?",
+  "venue": "Journal of Personality and Social Psychology, 89(6), 925–936",
+  "doi": "10.1037/0022-3514.89.6.925",
+  "url": "https://doi.org/10.1037/0022-3514.89.6.925",
+  "kind": "study",
+  "finding": "In five experiments, people overestimated how well they could convey tone such as sarcasm by email; recipients were barely better than chance yet confident. Egocentrism (hearing one’s own tone) explained the overconfidence.",
+  "strength": "moderate — five lab experiments with students; exact figures differ between reports",
+  "topics": [
+   "communication",
+   "text",
+   "intent-impact"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.stern.nyu.edu/experience-stern/faculty-research/justin-kruger-email-research ; https://www.bps.org.uk/research-digest/oops-how-sarcastic-emails-fall-flat",
+  "spin19_chapters": [
+   "05"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "eyal-steffel-epley-2018",
+  "authors": "Eyal, T., Steffel, M., & Epley, N.",
+  "year": 2018,
+  "title": "Perspective mistaking: Accurately understanding the mind of another requires getting perspective, not taking perspective",
+  "venue": "Journal of Personality and Social Psychology, 114(4), 547–571",
+  "doi": "10.1037/pspa0000115",
+  "url": "https://doi.org/10.1037/pspa0000115",
+  "kind": "study",
+  "finding": "In 25 experiments, instructing people to imagine another’s perspective did not improve accuracy about that person’s thoughts and feelings; getting the perspective directly through conversation did.",
+  "strength": "moderate — many consistent experiments, mostly lab tasks",
+  "topics": [
+   "perspective",
+   "questions"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://cris.iucc.ac.il/en/publications/perspective-mistaking-accurately-understanding-the-mind-of-anothe/ ; https://nautil.us/taking-another-persons-perspective-doesnt-help-you-understand-them-237127",
+  "spin19_chapters": [
+   "06"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "stone-patton-heen-1999",
+  "authors": "Stone, D., Patton, B., & Heen, S.",
+  "year": 1999,
+  "title": "Difficult Conversations: How to Discuss What Matters Most",
+  "venue": "Viking (New York); 10th-anniversary edition, Penguin 2010",
+  "doi": null,
+  "url": "https://www.beyondintractability.org/bksum/stone-difficult",
+  "kind": "book",
+  "finding": "From the Harvard Negotiation Project: separate intent from impact, map each person’s contribution instead of assigning blame, and recognise the \"what happened\", feelings and identity conversations inside a hard talk.",
+  "strength": "theory — practical guidance from negotiation research and casework, not a controlled study",
+  "topics": [
+   "intent-impact",
+   "conflict"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.beyondintractability.org/bksum/stone-difficult ; https://mtas.tennessee.edu/librarycatalog/difficult-conversations-how-discuss-what-matters-most-douglas-stone-bruce-patton",
+  "spin19_chapters": [
+   "05"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "gottman-1994-what-predicts-divorce",
+  "authors": "Gottman, J. M.",
+  "year": 1994,
+  "title": "What predicts divorce? The relationship between marital processes and marital outcomes",
+  "venue": "Lawrence Erlbaum Associates (Hillsdale, NJ); reissued by Routledge as a Classic Edition",
+  "doi": null,
+  "url": "https://www.routledge.com/What-Predicts-Divorce-The-Relationship-Between-Marital-Processes-and-Marital-Outcomes/Gottman/p/book/9781032539379",
+  "kind": "book",
+  "finding": "Observational research on couples’ conflict discussions identifying patterns (criticism, defensiveness, contempt, stonewalling) that predicted later dissatisfaction and separation.",
+  "strength": "moderate — careful observational research with couples, mostly in the US; predictions are stronger for groups than for any one couple",
+  "topics": [
+   "conflict",
+   "defensiveness"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://search.ub.tum.de/vufind/Record/DE-604.BV008865053 ; https://www.routledge.com/What-Predicts-Divorce-The-Relationship-Between-Marital-Processes-and-Marital-Outcomes/Gottman/p/book/9781032539379",
+  "spin19_chapters": [
+   "07"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "gottman-levenson-1992",
+  "authors": "Gottman, J. M., & Levenson, R. W.",
+  "year": 1992,
+  "title": "Marital processes predictive of later dissolution: Behavior, physiology, and health",
+  "venue": "Journal of Personality and Social Psychology, 63(2), 221–233",
+  "doi": "10.1037/0022-3514.63.2.221",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/1403613/",
+  "kind": "study",
+  "finding": "Among 73 couples followed from 1983 to 1987, couples with more negative than positive behaviour in conflict showed more defensiveness, poorer health and a higher risk of separation.",
+  "strength": "moderate — one longitudinal sample of couples",
+  "topics": [
+   "conflict",
+   "defensiveness"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/1403613/ ; https://bpl.studentorg.berkeley.edu/docs/41-Marital Processes92.pdf",
+  "spin19_chapters": [
+   "07"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "gottman-silver-1999",
+  "authors": "Gottman, J. M., & Silver, N.",
+  "year": 1999,
+  "title": "The Seven Principles for Making Marriage Work",
+  "venue": "Crown Publishers (New York); revised edition, Harmony 2015",
+  "doi": null,
+  "url": "https://en.wikipedia.org/wiki/The_Seven_Principles_for_Making_Marriage_Work",
+  "kind": "book",
+  "finding": "A popular book built on Gottman’s research: describes flooding (physiological overwhelm that blocks problem-solving), repair attempts, and taking a real break to calm down before returning.",
+  "strength": "moderate — popular synthesis of observational research; not itself a controlled trial",
+  "topics": [
+   "conflict",
+   "flooding",
+   "repair"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://en.wikipedia.org/wiki/The_Seven_Principles_for_Making_Marriage_Work ; https://gsd.swanlibraries.net/Record/a2166359",
+  "spin19_chapters": [
+   "08"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "schweitzer-hershey-bradlow-2006",
+  "authors": "Schweitzer, M. E., Hershey, J. C., & Bradlow, E. T.",
+  "year": 2006,
+  "title": "Promises and lies: Restoring violated trust",
+  "venue": "Organizational Behavior and Human Decision Processes, 101(1), 1–19",
+  "doi": null,
+  "url": "https://repository.upenn.edu/oid_papers/25",
+  "kind": "study",
+  "finding": "In a repeated trust game, trust harmed by untrustworthy behaviour recovered after a consistent series of trustworthy actions, and a promise sped recovery; when deception was involved, trust never fully recovered even with a promise, an apology and good behaviour.",
+  "strength": "moderate — a well-designed lab study with a money game",
+  "topics": [
+   "trust",
+   "repair",
+   "changed-behaviour"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://faculty.wharton.upenn.edu/wp-content/uploads/2014/06/Promises-and-Lies.pdf ; https://repository.upenn.edu/oid_papers/25",
+  "spin19_chapters": [
+   "10"
+  ],
+  "already_in_site_refs": false,
+  "note": "DOI not confirmed by search, so none is given; the link is to a verified summary."
+ },
+ {
+  "id": "kim-ferrin-2004-apology-trust",
+  "authors": "Kim, P. H., Ferrin, D. L., Cooper, C. D., & Dirks, K. T.",
+  "year": 2004,
+  "title": "Removing the shadow of suspicion: The effects of apology versus denial for repairing competence- versus integrity-based trust violations",
+  "venue": "Journal of Applied Psychology, 89(1), 104–118",
+  "doi": "10.1037/0021-9010.89.1.104",
+  "url": "https://doi.org/10.1037/0021-9010.89.1.104",
+  "kind": "study",
+  "finding": "In two studies, an apology repaired trust better than a denial after a competence-based violation, while integrity-based violations were harder to repair with an apology.",
+  "strength": "moderate — two experiments using a work scenario",
+  "topics": [
+   "trust",
+   "apology"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://ink.library.smu.edu.sg/lkcsb_research/686 ; https://source.washu.edu/2004/09/removing-the-shadow-of-suspicion/",
+  "spin19_chapters": [
+   "10"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "gollwitzer-sheeran-2006",
+  "authors": "Gollwitzer, P. M., & Sheeran, P.",
+  "year": 2006,
+  "title": "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
+  "venue": "Advances in Experimental Social Psychology, 38, 69–119",
+  "doi": "10.1016/S0065-2601(06)38002-1",
+  "url": "https://doi.org/10.1016/S0065-2601(06)38002-1",
+  "kind": "meta-analysis",
+  "finding": "Across 94 independent tests, specific if-then plans (\"when X happens, I will do Y\") improved goal attainment beyond intentions alone, with a medium-to-large average effect (d = .65).",
+  "strength": "strong — a large meta-analysis; effects vary by goal and person",
+  "topics": [
+   "habits",
+   "changed-behaviour",
+   "setup"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://stafforini.com/works/gollwitzer-2006-implementation-intentions-and/ ; https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.565202/pdf",
+  "spin19_chapters": [
+   "10"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "milton-2012",
+  "authors": "Milton, D. E. M.",
+  "year": 2012,
+  "title": "On the ontological status of autism: The “double empathy problem”",
+  "venue": "Disability & Society, 27(6), 883–887",
+  "doi": "10.1080/09687599.2012.710008",
+  "url": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
+  "kind": "theory",
+  "finding": "A short conceptual paper arguing that misunderstanding between autistic and non-autistic people runs both ways: each side finds the other hard to read, so the problem lies between them, not only in the autistic person.",
+  "strength": "theory: no data in the paper itself; later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
+  "topics": [
+   "neurodiversity",
+   "communication",
+   "two-way"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://en.wikipedia.org/wiki/Damian_Milton ; https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
+  "spin19_chapters": [
+   "01"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "crompton-2020",
+  "authors": "Crompton, C. J., Ropar, D., Evans-Williams, C. V. M., Flynn, E. G., & Fletcher-Watson, S.",
+  "year": 2020,
+  "title": "Autistic peer-to-peer information transfer is highly effective",
+  "venue": "Autism, 24(7), 1704–1712",
+  "doi": "10.1177/1362361320919286",
+  "url": "https://doi.org/10.1177/1362361320919286",
+  "kind": "study",
+  "finding": "In diffusion chains of eight people (72 in all), all-autistic and all-non-autistic chains passed on a story about equally well; mixed chains lost detail faster and reported lower rapport.",
+  "strength": "early — one small lab task; a replication has since been published",
+  "topics": [
+   "neurodiversity",
+   "communication",
+   "two-way"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pure.qub.ac.uk/en/publications/autistic-peer-to-peer-information-transfer-is-highly-effective/ ; https://www.research.ed.ac.uk/en/publications/autistic-peer-to-peer-information-transfer-is-highly-effective/",
+  "spin19_chapters": [
+   "01"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "sheppard-2016",
+  "authors": "Sheppard, E., Pillai, D., Wong, G. T.-L., Ropar, D., & Mitchell, P.",
+  "year": 2016,
+  "title": "How easy is it to read the minds of people with autism spectrum disorder?",
+  "venue": "Journal of Autism and Developmental Disorders, 46(4), 1247–1254",
+  "doi": "10.1007/s10803-015-2662-8",
+  "url": "https://doi.org/10.1007/s10803-015-2662-8",
+  "kind": "study",
+  "finding": "Neurotypical observers identified which event autistic people had experienced from their filmed reactions less accurately than for neurotypical people, though autistic reactions were rated as equally expressive and described differently; the difficulty may run both ways.",
+  "strength": "early — a small set of lab studies",
+  "topics": [
+   "neurodiversity",
+   "two-way",
+   "intent-impact"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://nottingham-repository.worktribe.com/output/1108470 ; https://bradscholars.brad.ac.uk/entities/publication/f94e3def-47c9-4408-a780-5e49226280c6",
+  "spin19_chapters": [
+   "05"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "phung-2021-bims",
+  "authors": "Phung, J., Penner, M., Pirlot, C., & Welch, C.",
+  "year": 2021,
+  "title": "What I wish you knew: Insights on burnout, inertia, meltdown, and shutdown from autistic youth",
+  "venue": "Frontiers in Psychology, 12, 741421",
+  "doi": "10.3389/fpsyg.2021.741421",
+  "url": "https://doi.org/10.3389/fpsyg.2021.741421",
+  "kind": "study",
+  "finding": "A co-designed qualitative study with eight autistic children and young people describing burnout, inertia, meltdown and shutdown, including shutdown as an involuntary state of overload that others often misread.",
+  "strength": "early — a small qualitative study",
+  "topics": [
+   "neurodiversity",
+   "shutdown"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.741421/pdf",
+  "spin19_chapters": [
+   "08"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "downey-feldman-1996",
+  "authors": "Downey, G., & Feldman, S. I.",
+  "year": 1996,
+  "title": "Implications of rejection sensitivity for intimate relationships",
+  "venue": "Journal of Personality and Social Psychology, 70(6), 1327–1343",
+  "doi": "10.1037/0022-3514.70.6.1327",
+  "url": "https://doi.org/10.1037/0022-3514.70.6.1327",
+  "kind": "study",
+  "finding": "Across three studies, people who anxiously expected rejection more readily perceived intentional rejection in ambiguous behaviour, including a new partner’s insensitive behaviour.",
+  "strength": "moderate — three studies, mostly with students",
+  "topics": [
+   "rejection-sensitivity",
+   "shame-guilt"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://psychology.columbia.edu/sites/default/files/2016-11/merp.pdf",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "shaw-2014-emotion-dysregulation-adhd",
+  "authors": "Shaw, P., Stringaris, A., Nigg, J., & Leibenluft, E.",
+  "year": 2014,
+  "title": "Emotion dysregulation in attention deficit hyperactivity disorder",
+  "venue": "American Journal of Psychiatry, 171(3), 276–293",
+  "doi": "10.1176/appi.ajp.2013.13070966",
+  "url": "https://doi.org/10.1176/appi.ajp.2013.13070966",
+  "kind": "review",
+  "finding": "A review finding that emotion dysregulation is common in ADHD across the lifespan and contributes substantially to impairment.",
+  "strength": "strong — a large review combining quantitative and qualitative evidence",
+  "topics": [
+   "adhd",
+   "emotion"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/24480998/",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "rowney-smith-2026-rs-adhd",
+  "authors": "Rowney-Smith, A., Sutton, B., Quadt, L., & Eccles, J. A.",
+  "year": 2026,
+  "title": "The lived experience of rejection sensitivity in ADHD: A qualitative exploration",
+  "venue": "PLOS One",
+  "doi": "10.1371/journal.pone.0314669",
+  "url": "https://doi.org/10.1371/journal.pone.0314669",
+  "kind": "study",
+  "finding": "Five students with ADHD described rejection sensitivity as felt in the body, covered by masking and followed by withdrawal; the authors note few studies have examined it.",
+  "strength": "early — five participants in focus groups",
+  "topics": [
+   "adhd",
+   "rejection-sensitivity"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.bsms.ac.uk/about/news/2026/it-hurts-in-your-body-new-bsms-research-explores-rejection-sensitivity-in-adhd.aspx ; https://www.medrxiv.org/content/10.1101/2024.11.16.24317418.full.pdf",
+  "spin19_chapters": [
+   "03"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "murray-lesser-lawson-2005",
+  "authors": "Murray, D., Lesser, M., & Lawson, W.",
+  "year": 2005,
+  "title": "Attention, monotropism and the diagnostic criteria for autism",
+  "venue": "Autism, 9(2), 139–156",
+  "doi": "10.1177/1362361305051398",
+  "url": "https://doi.org/10.1177/1362361305051398",
+  "kind": "theory",
+  "finding": "Argues that atypical allocation of attention, a tendency to focus deeply on few things at once (monotropism), is central to autism.",
+  "strength": "theory — an influential account drawing on research and personal accounts, not a test",
+  "topics": [
+   "neurodiversity",
+   "processing-time"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/15857859/ ; https://monotropism.org/murray-lesser-lawson/",
+  "spin19_chapters": [
+   "06"
+  ],
+  "already_in_site_refs": true
+ },
+ {
+  "id": "kurtz-algoe-2015",
+  "authors": "Kurtz, L. E., & Algoe, S. B.",
+  "year": 2015,
+  "title": "Putting laughter in context: Shared laughter as behavioral indicator of relationship well-being",
+  "venue": "Personal Relationships, 22(4), 573–590",
+  "doi": "10.1111/pere.12095",
+  "url": "https://doi.org/10.1111/pere.12095",
+  "kind": "study",
+  "finding": "In 71 couples filmed recalling how they met, the proportion of time spent laughing simultaneously was uniquely associated with higher relationship quality, closeness and perceived support.",
+  "strength": "early — one observational study; cannot show cause",
+  "topics": [
+   "laughter",
+   "repair"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/26957946/ ; https://greatergood.berkeley.edu/article/item/how_laughter_brings_us_together",
+  "spin19_chapters": [
+   "13-back"
+  ],
+  "already_in_site_refs": false
+ },
+ {
+  "id": "herz-2009",
+  "authors": "Herz, R. S.",
+  "year": 2009,
+  "title": "Aromatherapy facts and fictions: A scientific analysis of olfactory effects on mood, physiology and behavior",
+  "venue": "International Journal of Neuroscience, 119(2), 263–290",
+  "doi": null,
+  "url": "https://www.epistemonikos.org/de/documents/1e54c132af9952efac6cce8a6c08631eb72e42d8",
+  "kind": "review",
+  "finding": "A review of studies on scent concluding that odours can affect mood, physiology and behaviour, with psychological explanations (expectation, learned association) fitting the evidence better than direct pharmacological ones.",
+  "strength": "debated — a careful review of a field with many small, weak studies; claims for specific oils remain unproven",
+  "topics": [
+   "aromatherapy",
+   "setting"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://www.epistemonikos.org/de/documents/1e54c132af9952efac6cce8a6c08631eb72e42d8",
+  "spin19_chapters": [
+   "12"
+  ],
+  "already_in_site_refs": false,
+  "note": "DOI not confirmed by search, so none is given; the link is to a verified summary."
+ },
+ {
+  "id": "zaccaro-2018-slow-breathing",
+  "authors": "Zaccaro, A., Piarulli, A., Laurino, M., Garbella, E., Menicucci, D., Neri, B., & Gemignani, A.",
+  "year": 2018,
+  "title": "How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing",
+  "venue": "Frontiers in Human Neuroscience, 12, 353",
+  "doi": "10.3389/fnhum.2018.00353",
+  "url": "https://doi.org/10.3389/fnhum.2018.00353",
+  "kind": "review",
+  "finding": "A systematic review of 15 studies of slow breathing (under 10 breaths a minute) in healthy people: it went with higher heart-rate variability and with feeling more relaxed and less anxious; mechanisms are debated.",
+  "strength": "early — only 15 small studies of varying quality",
+  "topics": [
+   "breathing",
+   "calm",
+   "holistic"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.frontiersin.org/articles/10.3389/fnhum.2018.00353/full",
+  "spin19_chapters": [
+   "11"
+  ],
+  "already_in_site_refs": false,
+  "note": "Co-author list from the journal record; the search confirmed the first author, year, title, journal and DOI."
+ },
+ {
+  "id": "zheng-2022-adhd-time",
+  "authors": "Zheng, Q., Wang, X., Chiu, K. Y., & Shum, K. K.",
+  "year": 2022,
+  "title": "Time perception deficits in children and adolescents with ADHD: A meta-analysis",
+  "venue": "Journal of Attention Disorders, 26(2), 267–281",
+  "doi": "10.1177/1087054720978557",
+  "url": "https://doi.org/10.1177/1087054720978557",
+  "kind": "meta-analysis",
+  "finding": "Across 27 studies (1,620 young people with ADHD, 1,249 controls), those with ADHD perceived time less accurately and less precisely on average, regardless of task type.",
+  "strength": "moderate — a meta-analysis of lab timing tasks in children and adolescents only",
+  "topics": [
+   "adhd",
+   "time"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "web search, 20 Oct 2026: https://hub.hku.hk/handle/10722/309307 ; https://adhdevidence.org/blog/time-blindness-found-to-be-a-consistent-feature-of-adhd",
+  "spin19_chapters": [
+   "10"
+  ],
+  "already_in_site_refs": false,
+  "note": "Published online December 2020; print issue 2022."
+ }
+]

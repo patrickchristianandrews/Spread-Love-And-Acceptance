@@ -2,7 +2,7 @@
 
 *A Sunday afternoon, a garden centre café outside Norwich (made up).*
 
-Euan has been working up to this for a week. Over a pot of tea and two slightly dry scones, he tells his mum, Marion, that he knows she told his sister about him losing his job. He'd asked her not to. He wanted to tell Kirsty himself, when he had a new one lined up.
+Euan has been working up to this for a week. Over a pot of tea and two slightly dry scones, he tells his mum, Marion, that he knows she told his sister about him losing his job. He'd asked her not to. He wanted to tell Isobel himself, when he had a new one lined up.
 
 Marion puts her cup down. "Well. I suppose I'm a terrible mother now."
 
@@ -10,13 +10,13 @@ Marion puts her cup down. "Well. I suppose I'm a terrible mother now."
 
 "No, you don't need to. I can't do anything right, can I? I only told her because I was worried about you. But fine. I'm the villain."
 
-Ten minutes later, Euan is reassuring his mother that she's a wonderful mother, she's always been there for him, he didn't mean to upset her. He drives home having apologised to her, for bringing it up. Nothing has been said about Kirsty.
+Ten minutes later, Euan is reassuring his mother that she's a wonderful mother, she's always been there for him, he didn't mean to upset her. He drives home having apologised to her, for bringing it up. Nothing has been said about Isobel.
 
 ## A small act turned into a whole person.
 
-The layers, quickly. On the surface, a confidence passed on. One layer down, Euan asked her clearly not to, so it was a promise broken, not just a slip. Below that, Marion heard "you did a thing that hurt me" as "you are a bad mother", and from that moment the conversation stopped being about Kirsty and started being about her. Below that, Euan wanted one small acknowledgement and instead had to comfort her through a feeling he hadn't caused. And at the root, something that runs underneath a huge number of failed apologies: when owning an act feels like accepting a verdict on your whole self, people will do almost anything to avoid it.
+Under the scones there are at least four layers, and they arrive almost at once: a confidence passed on; a promise broken, since he'd asked her plainly; a mother who heard "you did a thing that hurt me" as "you are a bad mother", so that from then on the conversation was about her; and a son who wanted one small acknowledgement and drove home having comforted her instead. Under all four sits something that runs beneath a huge number of failed apologies. When owning an act feels like accepting a verdict on your whole self, people will do almost anything to avoid it.
 
-Taken slowly, that last layer is the subject of this chapter.
+That bottom layer is the subject of this chapter.
 
 ## Guilt says "I did a bad thing". Shame says "I am bad".
 
@@ -69,19 +69,19 @@ And if you're on the receiving end, you're allowed to bring it back, kindly: "I 
 
 ## What helps, on each side.
 
-**If you're the one raising it,** frame it as an act and keep your sentence away from their character. Use the camera's words ("you told Kirsty about my job") and leave the verdict ("you can't keep anything to yourself") unsaid. Avoid "always" and "never", which turn one event into a personality. And it helps more than you'd expect to say out loud what you are *not* saying, because shame is listening for it.
+**If you're the one raising it,** frame it as an act and keep your sentence away from their character. Use the camera's words ("you told Isobel about my job") and leave the verdict ("you can't keep anything to yourself") unsaid. Avoid "always" and "never", which turn one event into a personality. And say out loud what you are *not* saying, because shame is listening for it.
 
-| Said | "You told Kirsty about my job. I asked you not to." |
+| Said | "You told Isobel about my job. I asked you not to." |
 |---|---|
 | Heard | *You're a bad mother who can't be trusted.* |
 | Meant | *That one thing hurt, and I'd like you to see it.* |
-| A better way | "Mum, I'm not saying you're a bad mum. You're not. I'm saying one thing hurt: I asked you to keep my job news to yourself and you told Kirsty. I'd like you to see why that mattered to me." |
+| A better way | "Mum, I'm not saying you're a bad mum. You're not. I'm saying one thing hurt: I asked you to keep my job news to yourself and you told Isobel. I'd like you to see why that mattered to me." |
 
 It isn't Euan's job to manage his mother's shame. But a sentence that leaves her self out of the dock makes it easier for her to look at the act, which is what he wants.
 
 **If you're the one being asked,** notice the jump. When you hear yourself think *so I'm a terrible…*, that's the moment. You've just turned an act into a verdict, on your own, without help. Try saying the act back instead: "You're right. You asked me not to tell her, and I did." Then, if you need to, say the part that keeps your self intact: "I did it because I was worried, and I'm not proud of it. It was your news to tell."
 
-If Marion could get there, it might sound like this. "I've been thinking about Kirsty. You asked me not to tell her and I did. I was worried and I wanted someone to worry with, but it was your news. I'm sorry. I won't pass on anything you've asked me to keep."
+If Marion could get there, it might sound like this. "I've been thinking about Isobel. You asked me not to tell her and I did. I was worried and I wanted someone to worry with, but it was your news. I'm sorry. I won't pass on anything you've asked me to keep."
 
 Notice that her explanation would still be in there: she was worried. (Whether she gets there is another matter, and chapter 11 picks up that thread.) It's allowed in, after the ownership, as context. It just isn't standing in for it.
 
@@ -91,7 +91,7 @@ Notice that her explanation would still be in there: she was worried. (Whether s
 >
 > Other people's wiring hears a comment about one thing as a comment about one thing. If someone says "you left the gas on", that's information about the gas.
 >
-> **If criticism hits you like that,** you don't have to respond in the first minute. You can say, "Give me a minute, that's landed hard and I want to hear it properly," and come back to it once the sting has passed. Owning the act afterwards is still owning it, and it's often more honest than anything you'd have said in the first ten seconds.
+> **If criticism hits you like that,** you don't have to respond in the first minute. You can say, "Give me a minute, that's landed hard and I want to hear it properly," and come back to it once the sting has passed. Owning the act afterwards is still owning it, and it's often truer than anything you'd have said in the first ten seconds.
 >
 > **If your wiring hears it lightly,** know that for some people the first reaction is out of proportion to what you said, and it's not a performance. Make the request small and specific, say what you're not saying, and give them time. The point will usually come back to you, clearer, once the wave has gone through.
 

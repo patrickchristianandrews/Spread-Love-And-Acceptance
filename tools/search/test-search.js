@@ -7,8 +7,9 @@
    python3 -m http.server on PORT, default 8547), CHROMIUM=/path/to/chromium, UI=0 to skip the screen checks.
 
    1. Ranking: each query must have one of its expected pages in the top 3 of the combined list (the
-      "Best match for what you described" pages first, then the page search). Typos, Spanish, vague words.
-   2. Safety: questions about being hurt or controlled at home lead with /safety.html and get no "best match".
+      "Best match for what you described" pages first, then the page search). Typos, vague words.
+   2. Safety: questions about being hurt or controlled at home get no "best match", and no search ever offers the
+      removed pages (/safety.html, /outside-help.html, /en-espanol.html: redirect stubs since purge19).
    3. Nothing found: the query gets the fallback (closest needs, the 3-question finder, Professor Puddles, Explore).
    4. Screens: the menu search at 390 (touch) and 1366, light and dark: the empty-box chips, a best match, the
       fallback; /explore.html and /tools.html find boxes; no console errors, no sideways scroll.
@@ -124,7 +125,7 @@ const CASES = [
   ['breathing exercise', ['/night-garden.html', '/upset-right-now.html']],
   ['supplements for anxiety', ['/calming-supplements.html']],
   ['sad', ['/quick-checks.html#today', '/small-wins.html']],
-  ['i feel depressed', ['/quick-checks.html#today', '/small-wins.html', '/outside-help.html']],
+  ['i feel depressed', ['/quick-checks.html#today', '/small-wins.html']],
   ['exhausted', ['/quick-checks.html#today', '/workpapers/wp-02-how-much-are-you-carrying.html', '/quick-checks.html']],
   ['calm down', ['/upset-right-now.html']],
   ["i'm bored", ['/pause-and-play.html']],
@@ -170,7 +171,6 @@ const CASES = [
   ["i'm autistic", ['/how-you-take-things-in.html', '/wired-differently.html']],
   ['difficult coworker', ['/work.html']],
   ['unfair workload at work', ['/work.html#workload', '/work.html#owner-list']],
-  ['find a therapist', ['/outside-help.html']],
   ['run a support group', ['/groups.html']],
   // vague
   ['help', ['/start-here.html#three-questions', '/ask.html']],
@@ -189,13 +189,6 @@ const CASES = [
   ['apologise', ['/apology-languages.html']],
   ['my gf is mad at me', ['/signal-translator.html', '/upset-right-now.html', '/carrier-wave-decoder.html']],
   ['hubby never does the laundry', ['/lemonade-stand.html', '/invisible-labor-mental-load.html']],
-  // Spanish
-  ['peleamos mucho', ['/en-espanol.html#enojado', '/upset-right-now.html#es']],
-  ['hago todo en la casa', ['/en-espanol.html#casa']],
-  ['mi pareja no ayuda en la casa', ['/en-espanol.html#casa']],
-  ['mis hijos pelean', ['/en-espanol.html#hijos-pelean']],
-  ['necesito ayuda', ['/en-espanol.html']],
-  ['no puedo dormir', ['/upset-right-now.html#es', '/night-garden.html']],
   // home16b (panel16): an ex without kids is a breakup; clinical words; adult ADHD; exams and halls; retirement;
   // kinship; the print books; Spanish family words; the mental load in his words
   ['how do i stop texting my ex', ['/after-a-breakup.html']],
@@ -216,18 +209,17 @@ const CASES = [
   ["mom doesn't show up", ['/foster-and-kinship.html#kinship', '/foster-and-kinship.html#contact']],
   ['paperback', ['/book/index.html#print-series']],
   ['buy the book', ['/book/index.html#print-series']],
-  ['hermanos', ['/en-espanol.html#hermanos', '/en-espanol.html#cuidar']],
-  ['cuidar a mi madre', ['/en-espanol.html#cuidar']],
-  ['hijastros', ['/en-espanol.html#ensamblada', '/stepfamily.html']],
-  ['familia ensamblada', ['/en-espanol.html#ensamblada', '/stepfamily.html']],
   ["she says I don't notice things", ['/invisible-labor-mental-load.html', '/lemonade-stand.html#quick']],
   // page names still find the page
   ['night garden', ['/night-garden.html']],
   ['wavelength', ['/wavelength.html']],
   ['glossary', ['/glossary.html']]
 ];
-// safety: the safety page leads, with no "best match" in front of it
+// safety: no "best match", and never a removed page
 const SAFETY = ['my partner hits me', 'he controls the money', 'scared of him', 'he checks my phone'];
+// the removed pages never come up, whatever is typed (purge19)
+const GONE_PAGES = /^\/(safety|outside-help|en-espanol)\.html/;
+const GONE_Q = ['find a therapist', 'helpline', 'hotline', 'not safe at home', 'help beyond this site', 'support groups', 'en español', 'spanish', 'peleamos mucho', 'necesito ayuda', 'leave this site quickly'];
 // nothing matches: the fallback shows
 const NONE = ['xyzzy blorf', 'qqqq zzzz'];
 
@@ -288,7 +280,11 @@ async function waitUp(url, n) { for (let i = 0; i < (n || 50); i++) { try { cons
     }
     for (const q of SAFETY) {
       const R = await rank(q);
-      ok(/^\/safety\.html/.test(R.urls[0] || '') && !R.best, 'safety ' + JSON.stringify(q) + ' -> ' + R.urls.slice(0, 2).join(' ') + (R.best ? ' (best match shown: ' + R.best.id + ')' : ''));
+      ok(!R.urls.some(u => GONE_PAGES.test(u)) && !R.best, 'safety ' + JSON.stringify(q) + ' -> ' + R.urls.slice(0, 2).join(' ') + (R.best ? ' (best match shown: ' + R.best.id + ')' : ''));
+    }
+    for (const q of SAFETY.concat(GONE_Q)) {
+      const R = await rank(q);
+      ok(!R.urls.some(u => GONE_PAGES.test(u)) && !(R.best && R.best.g.some(g => GONE_PAGES.test(g[0]))), 'no removed page for ' + JSON.stringify(q) + ': ' + R.urls.slice(0, 5).join(' '));
     }
     for (const q of NONE) {
       const R = await rank(q);

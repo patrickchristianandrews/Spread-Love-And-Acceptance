@@ -14,9 +14,7 @@ There's a pause. Pete raises his eyebrows, very slightly. Lorraine hears what sh
 
 ## The sentence came out of the other mouth.
 
-The layers, quickly. On the surface, a throwaway line repeated by a third person. One layer down, a small piece of disloyalty: discussing Pete's failings with his mother, which is exactly the role Lorraine said she didn't want. Below that, the reflex: "sorry you took it that way", the very deflection she'd found so maddening from him. Below that, the reason the reflex fires in everyone: being on the receiving end of a complaint feels completely different from making one, and the rules we apply so clearly to other people blur when they're turned on us. And at the root, a question of balance: a standard only counts as fair if it weighs the same on both sides.
-
-Now slowly.
+In the second it takes her to go red, Lorraine sees all of it at once. A throwaway line, repeated by his mother. Under it, a small disloyalty: talking about Pete's failings with his mum, the very go-between role she'd said she didn't want. Under that, her reflex, "sorry you took it that way", the exact deflection she'd found so maddening from him six weeks ago. And under that, the reason the reflex fires in everyone: being on the receiving end of a complaint feels completely different from making one, and rules that look so clear when we apply them to other people go blurry when they're turned on us. A bookkeeper would call it a question of balance. A standard only counts as fair if it weighs the same on both sides.
 
 This chapter is the one the rest of the book depends on. Everything so far has been about how to help someone else own their part. All of it applies, word for word, to you. If the scripts only ever point outward, they stop being tools for understanding and become tools for winning, and the other person will feel the difference within a sentence.
 
@@ -40,7 +38,7 @@ Nobody sets out to apply one rule to their partner and a softer one to themselve
 
 Put those together and you get the everyday double standard. Your own reasons are vivid to you; theirs are a blur. Your effort is obvious to you; theirs is half invisible. Your "you know what he's like" was affectionate, because you know what you meant; their "sorry you feel that way" was a dodge, because you only saw the effect.
 
-One honest note belongs here, because it's the kind of thing popular psychology tends to overstate.
+One correction belongs here, because it's the kind of thing popular psychology tends to overstate.
 
 > **From the research.** For decades, textbooks taught that people explain their own behaviour by circumstances and other people's by character. When Bertram Malle pulled together more than a hundred studies of that idea, the pattern turned out to be close to zero on average. Other self-serving tendencies, like the ones above, remain well supported.
 > *Malle (2006) · Strong: a large meta-analysis, which is a useful reminder that a famous finding can be weaker than its reputation.*
@@ -63,15 +61,25 @@ So that's what she says, about two minutes after "sorry you took it that way".
 | Meant | *I'm embarrassed, and I don't want this to be a big deal.* |
 | A better way | "No, scrap that. That's exactly what I can't stand when you do it. I said 'you know what he's like' to your mum. It made you look bad to her, and it's the very thing I said I didn't want to be part of. I'm sorry. I won't discuss you with her again." |
 
-Notice what happens when she does this. Pete's shoulders come down. And six weeks of Lorraine asking Pete to own his part suddenly look fair, because she's just shown him she'll do the same.
+Pete's shoulders come down. And six weeks of Lorraine asking Pete to own his part suddenly look fair, because she's just shown him she'll do the same.
 
 ## Taking all the blame isn't owning your part.
 
 There's an opposite mistake, and kind, conflict-averse people make it all the time. To end the argument, they take the whole thing on: "No, you're right, it's all my fault, I'm sorry, let's forget it." It feels generous. It ends the evening.
 
-It also leaves the other person's part untouched, which means the same thing will happen again. It quietly teaches both of you that the way through a disagreement is for one person to absorb it. And it's not quite honest, which the other person usually senses, so the apology doesn't even land as well as it should.
+It also leaves the other person's part untouched, which means the same thing will happen again. It quietly teaches both of you that the way through a disagreement is for one person to absorb it. And it isn't quite true, which the other person usually senses, so the apology doesn't even land as well as it should.
 
 Owning your part means the part that's actually yours: no bigger, no smaller. That can be less comfortable than taking all of it, because it means you still have to raise their part afterwards. But it's the only version that leaves both of you with the true picture.
+
+## When you don't owe an apology.
+
+Sometimes you look, carefully, and find that you don't owe one. Or you owe one for a much smaller thing than the one you're being asked to apologise for. That happens, and the same standard that asks you to own your part also protects you from owning what isn't yours.
+
+People get pressed into false apologies all the time, usually to end a row. It feels like peace-making. It costs more than it seems to. It teaches the other person that pressure works, it leaves the real issue unexplored, and it can leave you carrying a resentment that comes out later, sideways.
+
+You can decline kindly, and you can do it without denying the other person's hurt. "I can see you're really upset, and I'm sorry you're hurting. I've thought about it, and I don't think I did what you're describing. I'd like to understand why it looked that way to you. Can we go through it?" That keeps the door open and keeps the feeling respected. It also keeps the truth intact, which matters more in the long run than how the evening ends.
+
+If you're not sure whether you owe one, it's fine to say so, and to ask for time: "I'm not sure yet. Let me think about it properly, and I'll come back to you tomorrow." Then come back, whichever way you've decided.
 
 ## What counts as your part.
 
@@ -87,6 +95,10 @@ Your part might be the thing you did. It might also be:
 Karin, from chapter 4, found two of these when she looked. She'd said nothing on the night of her fortieth, smiled through the cake, and then sent "Honestly, Thursday really hurt" two days later, which Nell read at a supermarket checkout and spent the afternoon dreading. And her Monday message, "It's obvious our friendship isn't a priority for you anymore", was a guess presented as a fact. When Nell came round on the Wednesday with her full apology, Karin added one of her own, "I should have said something on the night, instead of letting it stew and then dropping it on you by text. And I said you don't care about our friendship. I don't actually think that. I was hurt."
 
 It took her about twenty seconds. It made the rest of the evening twice as easy, because Nell no longer felt like the only person in the room who'd got something wrong.
+
+Fran found one too, about the barbecue in chapter 6. When Dele corrected the year, she didn't say anything. She caught his eye across the garden, gave him a look that would have stripped paint, and was cool with him for the rest of the afternoon, waiting for him to work out why. He knew the look meant something, and not what, because a look is a message he finds very hard to read, so he spent three hours feeling punished for something he couldn't name. That evening, before she asked him her question, she said: "Before anything else, I owe you one. I went cold on you all afternoon and expected you to guess why. You'd have stopped in a second if I'd just told you. That wasn't fair." Dele, who had been bracing for a row, looked so relieved that she nearly laughed.
+
+Hinting is a perfectly normal way of communicating, and for a lot of people it's the polite one. But when the other person's wiring doesn't pick up hints easily, a hint that isn't received and then a coldness that follows can feel, from their side, like being blamed for failing a test nobody told them they were sitting. Owning that part is no admission that you were wrong to be hurt. It's an admission that the message never arrived.
 
 None of these cancels what they did. Chapter 7 still holds: two people can both be responsible for different things. But owning yours, first and plainly, is the fastest way to make it safe for them to own theirs.
 

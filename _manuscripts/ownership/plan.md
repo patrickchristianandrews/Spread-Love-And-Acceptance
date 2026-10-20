@@ -20,7 +20,7 @@ A standalone spin-off in the Spread Love & Acceptance family, for adult general 
 
 ## Shape
 
-- 6 x 9 in, same look as the four books. Target 32 to 40 thousand words; drafted at about 38,000 (see the fixnote for the count), which should land near 140 to 156 printed pages with the series' type, boxes and chapter openers.
+- 6 x 9 in, same look as the four books. Target 32 to 40 thousand words; the draft after the round-2 revision is 34,020 words (every word in the .md files, headings and tables included), which should land near 140 to 156 printed pages with the series' type, boxes and chapter openers. Confirm at build.
 - Twelve chapters plus front and back matter. One Markdown file per chapter (`00-front.md` to `13-back.md`), and `refs.json` (research, in the site's refs format, for later merging).
 - Every chapter has: a short made-up opening scene; the "layers" move (the moment laid out in a few quick strokes, surface to root, then taken slowly); the idea in plain words; one or two worked examples (said, heard, meant, a better way); one **Two ways to read this** box (the same moment read by two kinds of wiring, translated both ways, neither as the default); one idea from another field woven into the prose; a **Say it** script; one small thing to try; **What to remember**. The research sits in short "From the research" notes with the site's evidence labels (strong, moderate, mixed, early, debated, theory).
 - Narrator: the house "I" from voice17/18, opinions only, plus a few About-page facts (audit career, two kinds of finding, the eight-word sentence, intent and impact, separating the claim from the person). No invented life events. No line saying what the author's wiring is.
@@ -50,11 +50,19 @@ All thirteen fields and all seven roots appear at least once (the map in 13-back
 
 All cited work was checked by web search on 20 October 2026 (author, year, title, venue and what it found). Full entries, with the source used to verify each, are in `refs.json`.
 
-**Verified and cited (36):** Lewicki, Polin & Lount 2016; Frantz & Bennigson 2005; Chapman & Thomas 2006; Fehr, Gelfand & Nag 2010; Tangney & Dearing 2002; Tangney, Wagner, Fletcher & Gramzow 1992; Breines & Chen 2012; Schumann & Dweck 2014; Schumann 2014; Okimoto, Wenzel & Hedrick 2013; Baumeister, Stillwell & Wotman 1990; Tavris & Aronson 2007; Pronin, Lin & Ross 2002; Ross & Sicoly 1979; Mezulis, Abramson, Hyde & Hankin 2004; Malle 2006; Kruger, Epley, Parker & Ng 2005; Eyal, Steffel & Epley 2018; Stone, Patton & Heen 1999; Gottman 1994; Gottman & Levenson 1992; Gottman & Silver 1999; Schweitzer, Hershey & Bradlow 2006; Kim, Ferrin, Cooper & Dirks 2004; Gollwitzer & Sheeran 2006; Milton 2012; Crompton et al. 2020; Sheppard et al. 2016; Phung, Penner, Pirlot & Welch 2021; Downey & Feldman 1996; Shaw, Stringaris, Nigg & Leibenluft 2014; Rowney-Smith, Sutton, Quadt & Eccles 2026; Murray, Lesser & Lawson 2005; Kurtz & Algoe 2015; Herz 2009; Zaccaro et al. 2018.
+**Verified and cited (37):** Lewicki, Polin & Lount 2016; Frantz & Bennigson 2005; Chapman & Thomas 2006; Fehr, Gelfand & Nag 2010; Tangney & Dearing 2002; Tangney, Wagner, Fletcher & Gramzow 1992; Breines & Chen 2012; Schumann & Dweck 2014; Schumann 2014; Okimoto, Wenzel & Hedrick 2013; Baumeister, Stillwell & Wotman 1990; Tavris & Aronson 2007; Pronin, Lin & Ross 2002; Ross & Sicoly 1979; Mezulis, Abramson, Hyde & Hankin 2004; Malle 2006; Kruger, Epley, Parker & Ng 2005; Eyal, Steffel & Epley 2018; Stone, Patton & Heen 1999; Gottman 1994; Gottman & Levenson 1992; Gottman & Silver 1999; Schweitzer, Hershey & Bradlow 2006; Kim, Ferrin, Cooper & Dirks 2004; Gollwitzer & Sheeran 2006; Milton 2012; Crompton et al. 2020; Sheppard et al. 2016; Phung, Penner, Pirlot & Welch 2021; Downey & Feldman 1996; Shaw, Stringaris, Nigg & Leibenluft 2014; Rowney-Smith, Sutton, Quadt & Eccles 2026; Murray, Lesser & Lawson 2005; Kurtz & Algoe 2015; Herz 2009; Zaccaro et al. 2018; Zheng, Wang, Chiu & Shum 2022.
 
 **Checked and left out, or used only in part:**
 - Ross & Sicoly 1979: the popular claim that spouses' shares "add up to well over 100%" could not be confirmed (the paper's own scale may not have used percentages). The book cites only the abstract's finding.
 - Mezulis et al. 2004: the abstract was not reached; the book cites only what several sources agree on (266 studies, a large average bias, smaller in East Asian samples).
 - "Rejection sensitive dysphoria": not a formal diagnosis, and no validated measure was found. The book describes the experience and cites the early qualitative study and the broader rejection-sensitivity work instead.
 - Babinski and colleagues (2019) on rejection sensitivity in ADHD: not found by search, so not cited.
+- DOIs not confirmed by search for Schumann 2014, Schweitzer et al. 2006 and Herz 2009, so refs.json gives none for them and links to verified summaries instead.
 - Raymaker et al. 2020 (autistic burnout): verified, but not needed in this book.
+
+## Status (20 October 2026, end of spin19)
+
+- Manuscript complete: 00-front to 13-back, 34,020 words, plus refs.json (37 verified references) and companion-picker.md.
+- Style audit (adapted copy, `style_audit_ms.py`) run on the final text; numbers against the four books are in `$SP/fixnotes/spin19.md`.
+- SIMULATED panel: two rounds (`$SP/spin19/panel19-r1.md`, `-r2.md`).
+- Build integration: `$SP/spin19/integration.md`.

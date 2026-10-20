@@ -12,9 +12,9 @@ That afternoon she tells him it bothered her. Osman is genuinely surprised. "I w
 
 ## Six words, two true stories.
 
-Quickly, the layers. On the surface, a friendly introduction in a client meeting. One layer down, the word "just", which shrinks whatever comes after it, applied to the person who did the work the proposal stands on. Below that, Gemma has been passed over to present twice this year, and the word fell on a bruise that was already there. Below that, Osman thinks of "the numbers side" as the important side, so to him the sentence was praise; he has no idea it sounded like a footnote. And at the root, the oldest problem in communication: what's sent isn't always what arrives.
+Standing by the kettle, Gemma does what she always does with a moment like this and takes it to pieces. A friendly introduction in a client meeting. Inside it, the word "just", which shrinks whatever follows it, applied to the person whose work the proposal stands on. Under that, two times this year she's been passed over to present, so the word fell on a bruise that was already there. What she can't see from the kettle, and finds out that afternoon, is Osman's layer: he thinks of "the numbers side" as the important side, so to him the sentence was praise. And under both of them, the oldest problem in communication. What's sent isn't always what arrives.
 
-Now slowly, because both of them are telling the truth.
+Both of them are telling the truth, and that's what makes it worth taking slowly.
 
 Osman's intent was good. He wanted the client to know Gemma was the expert. Gemma's experience of the impact was real. In front of the client, the person who did the core work was introduced as a support function. Both statements are true at the same time, and neither cancels the other.
 
@@ -60,11 +60,7 @@ A few weeks after the curry night, Fran texts Dele from work, "Mum's asked if we
 
 Fran reads it four times on the bus. To her, "Noted." with a full stop is what a manager sends when they're annoyed with you and have decided not to say so. She spends the evening braced for an argument about her mother.
 
-| Said | "Noted." |
-|---|---|
-| Heard | *I'm not happy about this, and I'm being curt so you know.* |
-| Meant | *I've read it and added it to my calendar. Sunday is fine.* |
-| A better way | "Sunday's fine, I've put it in the calendar. Busy now, talk later x" |
+What Dele meant was: *I've read it, I've added it to the calendar, Sunday is fine.* What would have carried it was five more words: "Sunday's fine, it's in the calendar. Busy now, talk later x".
 
 Nothing about Dele's reply was unkind, and nothing about Fran's reading was unreasonable. One word, without a voice, gave her mind a gap to fill, and she filled it with the version she was most worried about. Researchers who study written messages have a plain name for the speaker's half of this: egocentrism, meaning that we hear our own tone so clearly in our heads that we forget the reader can't.
 

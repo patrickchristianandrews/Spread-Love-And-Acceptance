@@ -16,9 +16,7 @@ Tegan opens her mouth to defend the loo roll, and is late for the bus.
 
 ## The list arrives, and the first issue disappears under it.
 
-Quickly. On the surface, a complaint about noise, and a reply with three complaints in it. One layer down, Joss feels ambushed before breakfast and reaches for the nearest defence, which is attack. Below that, some of what he said is true: Ruairidh did stay a week without anyone asking Joss, and it did bother him at the time, and he never said so. Below that, they've never had a way of raising things in this flat, so complaints get saved up until one person goes first and the other empties the drawer. And at the root, a structural problem: two separate issues have been put on one line, so neither has an owner and neither can be fixed.
-
-Now slowly.
+There's a lot under the toast. A complaint about noise met with three complaints back. A man ambushed before breakfast, reaching for the nearest defence, which is attack. Some truth in what he said: Ruairidh did stay a week without anyone asking Joss, and it did bother him, and he never said so. A flat with no way of raising things, so that complaints get saved up until one person goes first and the other empties the drawer. And underneath, a problem of structure more than character: two separate issues put on one line, so that neither has an owner and neither can be fixed.
 
 The counter-list is one of the most effective ways to make an issue vanish, and part of what makes it effective is that it's usually partly fair. If Joss had invented his complaints, Tegan could dismiss them. Because some of them are real, she has to deal with them, and the moment she does, the conversation about two o'clock in the morning is over. Each person ends up defending their own record instead of looking at what they did. Nobody apologises for anything, because apologising now would feel like losing.
 
@@ -45,7 +43,7 @@ Running a home, or a friendship, isn't so different from running a team. Work th
 
 Underneath the counter-list there's usually a scoreboard. Somewhere in each person's head is a running total: what I've put up with, what you've got away with, who gave way last time. When Tegan raises the late nights, Joss's scoreboard lights up. He's been quietly counting Ruairidh's week since September, and now the score looks unfair: she's complaining about one thing, and he's been sitting on one of his own for a month.
 
-Scoreboards feel like fairness. They aren't much use for it, because each person's scoreboard is kept by them, from their seat, with their own effort counted in full and the other person's half-remembered (chapter 9 has the research on that). Two honest people with two honest scoreboards will reliably each find themselves behind.
+Scoreboards feel like fairness. They aren't much use for it, because each person's scoreboard is kept by them, from their seat, with their own effort counted in full and the other person's half-remembered (chapter 9 has the research on that). Two fair-minded people with two scoreboards will reliably each find themselves behind.
 
 The way out is to keep noticing what's fair, and to move it off the private scoreboard onto a shared list, one per line, where both people can see them and each one can be dealt with on its own. Joss's complaint about Ruairidh deserved a hearing in September. It was never going to get a fair one as ammunition in October.
 
@@ -55,13 +53,9 @@ It isn't only flatmates. In an office, it often sounds more polite and works the
 
 Nadine, a project manager at an engineering firm in Derby, raises with her colleague Gil that he's missed the last three deadlines for his section of the monthly report. Gil listens, nods, and says, "Fair enough. Though to be honest, I'd have got it in on time if your templates weren't always late going out."
 
-| Said | "Fair enough. Though I'd have got it in on time if your templates weren't always late going out." |
-|---|---|
-| Heard | *This is your fault, really.* |
-| Meant | *I'm embarrassed about the deadlines, and there is a real problem with the templates that nobody has fixed.* |
-| A better way (from Gil) | "You're right, I've missed three. That's on me, and I'll get the next one in by the fifth. Separately, can we look at when the templates go out? I think it's making it harder for a few of us." |
+Nadine hears *this is your fault, really.* What Gil means is that he's embarrassed about the deadlines, and that there's a real problem with the templates which nobody has fixed. He could have said both, in the right order: "You're right, I've missed three. That's on me, and I'll get the next one in by the fifth. Separately, can we look at when the templates go out? I think it's making it harder for a few of us."
 
-Notice that the template problem may be completely real. In the better version, it doesn't disappear. It gets its own line, its own conversation and, with luck, its own fix. What changes is that it stops being used to cancel the first issue.
+The template problem may be completely real. In the better version, it doesn't disappear. It gets its own line, its own conversation and, with luck, its own fix. What changes is that it stops being used to cancel the first issue.
 
 And Nadine's better way, if the counter arrives anyway: "That's worth looking at, and I'll take it away. Can we agree the deadline first, and then talk about the templates?"
 
@@ -69,7 +63,7 @@ And Nadine's better way, if the counter arrives anyway: "That's worth looking at
 
 When the counter-list arrives, the instinct is to answer each item as it comes, and every answer pulls the conversation further from where it started. Try something different: acknowledge that the other items exist, promise to come back to them, and hold your ground on doing one at a time.
 
-That isn't a way of dodging your own part. It only works if you mean it: if you really will come back to the washing, and really will own the parts that are yours. Said honestly, it's often a relief to the other person, because they've just learned that their complaints will get a proper hearing instead of being swatted away.
+That isn't a way of dodging your own part. It only works if you mean it: if you really will come back to the washing, and really will own the parts that are yours. Meant, it's often a relief to the other person, because they've just learned that their complaints will get a proper hearing instead of being swatted away.
 
 | Said | "OK, well, since we're doing this. You leave your washing in the machine for days." |
 |---|---|

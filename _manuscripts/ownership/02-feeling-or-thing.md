@@ -12,11 +12,9 @@ Fran looks out of the window for the rest of the M4.
 
 ## One sentence, two completely different messages.
 
-Lay it out quickly. On the surface, an apology with the right word in it. One layer down, the apology is about her reaction, and the corrections themselves have dropped out of the sentence. Below that, Dele doesn't yet see what was wrong with the corrections: the details were inaccurate and he fixed them, which in his book is helping. Below that again, Fran grew up as the younger sister whose stories got finished and fixed by other people at that same table, and tonight was the old evening come round again. And at the root, a cost has been moved from one person to another without either of them quite noticing.
+There's an apology on the surface, with the right word in it. Under the word, the apology is about her reaction, and the corrections themselves have dropped out of the sentence. Under that, Dele doesn't yet see what was wrong with the corrections, since the details were inaccurate and he fixed them, which in his book is helping. Further down, Fran grew up as the younger sister whose stories got finished and fixed by other people at that same table, and tonight was the old evening come round again. And at the bottom of it, a cost has been moved from one person to another without either of them quite noticing.
 
-Now slowly.
-
-"I'm sorry it made you feel that way" is a sentence with an odd grammar. Its subject is *it*, and *it* made *you* feel. The speaker's action has gone missing. What's left is regret about the other person's emotional state, which is a real thing to regret, offered in place of something else. That something else is responsibility, which is a different thing entirely.
+The grammar is the place to start. "I'm sorry it made you feel that way" is a sentence with an odd grammar. Its subject is *it*, and *it* made *you* feel. The speaker's action has gone missing. What's left is regret about the other person's emotional state, which is a real thing to regret, offered in place of something else. That something else is responsibility, which is a different thing entirely.
 
 **Regret** is a feeling about an outcome. You can regret the rain. You can regret that a friend is having a hard week. You can regret, quite genuinely, that someone you love is upset.
 
@@ -40,17 +38,17 @@ None of these makes the speaker a bad person. Most of them come out when someone
 
 It's tempting to treat "I'm sorry you feel that way" as a trick. Sometimes it is one: a way of closing a conversation without conceding anything. But in the car on the M4, Dele isn't being slippery. He's being as exact as he knows how to be.
 
-He is, honestly, sorry that Fran is upset. He doesn't yet understand what he did wrong. The day of the week *was* Thursday and the taxi *was* fourteen pounds. To say "I'm sorry I corrected you" would, from inside his head, mean apologising for being accurate, and that would be saying something he doesn't believe. So he says the true thing he does believe. It's the most honest sentence available to him, and it lands as the least honest thing he could have said.
+He is truly sorry that Fran is upset. He doesn't yet understand what he did wrong. The day of the week *was* Thursday and the taxi *was* fourteen pounds. To say "I'm sorry I corrected you" would, from inside his head, mean apologising for being accurate, and that would be saying something he doesn't believe. So he says the true thing he does believe. It's the most honest sentence available to him, and it lands as the least honest thing he could have said.
 
-That's the gap this book keeps returning to. The same nine words can be a dodge from one person and a careful, truthful statement from another, and the listener usually can't tell which from the words alone.
+That's the gap this book keeps returning to. The same eight words can be a dodge from one person and a careful, truthful statement from another, and the listener usually can't tell which from the words alone.
 
 > **Two ways to read "I'm sorry it made you feel that way."**
 >
-> Some people's wiring is very literal about apologies. Saying sorry for something you don't think was wrong feels like lying, and lying feels worse than the argument. If you aren't sure what you did, the only honest sorry is a sorry about the feeling. To a brain that works like this, "I'm sorry it made you feel that way" is a sincere and careful answer.
+> Some people's wiring is very literal about apologies. Saying sorry for something you don't think was wrong feels like lying, and lying feels worse than the argument. If you aren't sure what you did, the only truthful sorry is a sorry about the feeling. To a brain that works like this, "I'm sorry it made you feel that way" is a sincere and careful answer.
 >
 > Other people's wiring hears what's missing from a sentence as loudly as what's in it. To them, the missing verb is the message. "Sorry you feel that way" is a well-known way of not apologising, and they've heard it used that way often enough to flinch.
 >
-> **If you'd say it and mean it,** say the true thing more fully so it can't be mistaken for the dodge: "I can see this really hurt, and I'm sorry about that. I don't understand yet what I did. Will you tell me, and give me a minute to think about it?" That's still completely honest, and it opens the door instead of closing it.
+> **If you'd say it and mean it,** say the true thing more fully so it can't be mistaken for the dodge: "I can see this really hurt, and I'm sorry about that. I don't understand yet what I did. Will you tell me, and give me a minute to think about it?" Every word of that is still true, and it opens the door instead of closing it.
 >
 > **If you hear it and flinch,** check before you decide what it was. "Are you sorry I'm upset, or sorry about the correcting? They're different and I'd like to know which." Someone who meant it sincerely will usually be relieved to be asked. Someone who meant it as a full stop will tell you that too, by what they do next.
 
@@ -58,14 +56,14 @@ That's the gap this book keeps returning to. The same nine words can be a dodge 
 
 Economists have a word for a cost that one party creates and another party pays: an externality. The classic example is a factory upstream whose smoke is breathed by the town downstream. The factory's books look fine. The cost is real; it has just landed on someone who didn't choose it.
 
-A non-apology works the same way. Something was done, and it cost something: Fran's evening, a little of her standing at her own family's table, the end of her story. When the apology is about her feelings, the cost stays on her books. Worse, it picks up a second charge, because now the problem under discussion is her reaction, which is something she apparently needs to manage. The person who did the thing walks away with the matter closed and nothing owed.
+A non-apology works the same way. Something was done, and it cost something: Fran's evening, a little of her standing at her own family's table, the end of her story. When the apology is about her feelings, the bill stays with her. Worse, a second charge gets added, because now the problem under discussion is her reaction, which is something she apparently needs to manage. The person who did the thing walks away with the matter closed and nothing owed.
 
 Seen this way, the non-apology has a quiet incentive behind it. In the short run, it's cheaper for the person giving it. It ends the conversation without having to say anything uncomfortable. Nobody has to choose that on purpose for it to become a habit; things drift towards whatever is cheapest in the moment. That's why "sorry you feel that way" is so common, including from people who are otherwise kind.
 
 > **From the research.** In one set of experiments, people who were asked to write a message refusing to apologise afterwards reported higher self-esteem and a greater sense of power than people who apologised or did neither, at least in the short term. The authors pointed out that this helps explain why refusing can feel good, and why it makes repair harder.
 > *Okimoto, Wenzel and Hedrick (2013) · Moderate: two studies with self-report measures, short-term feelings only; it says nothing about what refusing does to a relationship over time.*
 
-The long run is another matter. The cost doesn't disappear because one person stopped looking at it. It sits on the other person's books and accrues, and some months later it gets paid all at once, usually in a row about something unrelated.
+The long run is another matter. The cost doesn't disappear because one person stopped looking at it. The other person goes on paying it, quietly, with interest, and some months later it gets paid all at once, usually in a row about something unrelated.
 
 ## What the hurt person usually wants is the verb.
 
@@ -108,7 +106,7 @@ You might recognise yourself in Dele, or in the less sincere version. Either way
 
 Ask yourself what, exactly, you're sorry for. If the answer is "that they're upset", you've found regret, and that's a fine start. Then ask: is there anything I did, any word or choice that was mine, that contributed? Very often there is, even when it's smaller than the other person thinks and even when they've got some of the details wrong. You can own that part, fully and plainly, without agreeing to the rest. Chapter 4 goes into how.
 
-And if you honestly can't see anything you did, say so in a way that keeps the door open: "I can't see it yet. Help me see it." That isn't an apology, and it doesn't pretend to be. It's an invitation, and it's honest.
+And if you really can't see anything you did, say so in a way that keeps the door open: "I can't see it yet. Help me see it." That isn't an apology, and it doesn't pretend to be one. It's an invitation.
 
 The *Apology languages* page on the website treats the parts of a good sorry as a menu rather than a script, so you can ask the other person which part they need (spreadloveandacceptance.com/apology-languages).
 
@@ -120,5 +118,5 @@ Next time you're about to say "sorry", stop for one breath and finish the senten
 
 - Regret is a feeling about an outcome. Responsibility names your part in causing it. A good apology has both.
 - "I'm sorry it made you feel that way" can be a sincere, careful sentence, and it still leaves the action out. Ask which one you're hearing before you decide.
-- A non-apology moves a cost onto the other person's books. It's cheaper in the moment and dearer later.
+- A non-apology leaves the bill with the person who was hurt. It's cheaper in the moment and dearer later.
 - When someone keeps apologising for your feelings, go back to the specific behaviour, and say clearly what you're not asking for.

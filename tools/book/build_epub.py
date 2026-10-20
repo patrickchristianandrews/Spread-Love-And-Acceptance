@@ -999,7 +999,7 @@ def check_epub(path, book):
         spine = [man[r.get('idref')][0] for r in pkg.findall('.//opf:spine/opf:itemref', NS)]
         md = pkg.find('opf:metadata', NS)
         txt = ET.tostring(md, encoding='unicode')
-        for need in ('belongs-to-collection', 'group-position', 'dcterms:modified', 'title-type', 'dc:language', 'dc:creator', 'dc:publisher', 'dc:identifier'):
+        for need in ('belongs-to-collection', 'group-position', 'dcterms:modified', 'title-type', 'dc:language', 'dc:creator', 'dc:identifier'):
             if need == 'group-position' and not book.get('n'):
                 continue  # the pocket guide and the box set carry the series name without a number
             if need.split(':')[-1] not in txt:

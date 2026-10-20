@@ -37,7 +37,7 @@ The "but" usually comes in one of four shapes:
 - **"But it…"** It's made smaller. "But it was only an hour." "But it wasn't a big deal at the time."
 - **"But we…"** It's spread thinly across both people until nobody in particular owns it. "But we were both tired." "But we'd both had a drink."
 
-The things after the "but" are sometimes perfectly true. Karin did move the date. Nell was exhausted. Truth isn't the problem. Placement is. Put straight after the ownership, they read as a counterclaim. Kept until the other person has felt heard, or offered as context once the responsibility is clearly on your side of the ledger, they can actually help.
+The things after the "but" are sometimes perfectly true. Karin did move the date. Nell was exhausted. The trouble is their position. Straight after the ownership, they read as a counterclaim. Kept until the other person has felt heard, or offered as context once the responsibility is clearly on your side of the ledger, they can actually help.
 
 > **From the research.** Two studies by Cynthia Frantz and Courtney Bennigson found that apologies worked better when they came later in a conversation, after the hurt person had had a chance to explain how they felt, than when they came right at the start. The proposed reason: by then, the person felt heard and understood.
 > *Frantz and Bennigson (2005) · Moderate: one study of students' real conflicts and one of imagined ones; small samples.*
@@ -69,7 +69,7 @@ It doesn't mean that. Accountability means honest acknowledgement of your own be
 
 > "I can see why Thursday made it look like you weren't a priority. I'd have read it that way too. It isn't true, and I want to show you it isn't. But I understand why you thought it, and I'm the one who gave you the reason."
 
-That's not a "but" cancelling the apology. It's a disagreement about one conclusion, offered after the ownership is complete, with the cause still placed squarely on her side. There's a difference between "I'm sorry, but you're wrong that I don't care" (which reads as a counterattack) and "I did this, I see why it looked like that, and here's what's actually true for me" (which reads as someone who has taken it in and is being honest with you).
+That's not a "but" cancelling the apology. It's a disagreement about one conclusion, offered after the ownership is complete, with the cause still placed squarely on her side. There's a difference between "I'm sorry, but you're wrong that I don't care" (which reads as a counterattack) and "I did this, I see why it looked like that, and here's what's actually true for me" (which reads as someone who has taken it in and is telling you the truth).
 
 Disagreeing about meaning is fine. Disagreeing about whether the thing happened, when it plainly did, is where it goes wrong.
 

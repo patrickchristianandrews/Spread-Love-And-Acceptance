@@ -90,13 +90,7 @@ The better version isn't longer because longer is better. It's longer because it
 
 The same gap opens at work, often in writing. Dawn, who manages a small team at a housing association, emails Bryn on a Friday afternoon, "As per my email on Tuesday, can you send the figures by Monday?" Bryn reads it on his phone at the bus stop and feels his face go hot.
 
-| Said | "As per my email on Tuesday, can you send the figures by Monday?" |
-|---|---|
-| Heard | *You ignored me, and now I'm putting it in writing.* |
-| Meant | *I need the figures for a board paper, I'm anxious about Monday, and I can't remember whether I was clear on Tuesday.* |
-| A better way | "Hi Bryn, I need the figures for the board paper on Tuesday. Could you get them to me by Monday lunchtime? I'm not sure I made the deadline clear last time, so flagging it now." |
-
-On the surface, a reasonable request. One layer down, three words ("as per my") that, in a lot of offices, have come to carry a sharp edge. Below that, Dawn's own worry, and a genuine doubt about whether her earlier email said enough. Nobody meant anything unkind, and Bryn spends his weekend feeling told off.
+What Bryn hears is *you ignored me, and now I'm putting it in writing.* What Dawn meant was that she needs the figures for a board paper, she's anxious about Monday, and she can't remember whether she was clear on Tuesday. Three words ("as per my") have, in a lot of offices, come to carry a sharp edge, and they were sitting on top of a worry that never made it into the email. A version that would have carried better is barely longer: "Hi Bryn, I need the figures for the board paper on Tuesday. Could you get them to me by Monday lunchtime? I'm not sure I made the deadline clear last time, so flagging it now." Nobody meant anything unkind, and Bryn spends his weekend feeling told off. (Chapter 6 has what he does on Monday.)
 
 ## Seeing the layers is a skill, and it can be learned.
 
