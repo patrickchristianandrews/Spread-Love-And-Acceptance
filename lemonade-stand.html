@@ -470,7 +470,9 @@
     .lq-res{ position:sticky; top:calc(var(--tol-bar-h, 58px) + .8rem); }
     .lq-mini-sum{ display:none !important; }
   }
-  .lq-mini-sum{ position:sticky; top:calc(var(--tol-bar-h, 58px) + .3rem); z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; margin:0 0 .5rem; padding:.4rem .7rem; border-radius:12px; background:#FFFDF6; border:2px solid var(--ink); box-shadow:0 3px 10px rgba(43,38,32,.12); font-size:.9rem; }
+  /* flow17: the running tally sits at the foot of the screen (its place is the end of the list), so it never covers
+     the job you're about to tap, and "See how it looks" is always one tap away */
+  .lq-mini-sum{ position:sticky; top:auto; bottom:.5rem; z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; margin:0 0 .5rem; padding:.4rem .7rem; border-radius:12px; background:#FFFDF6; border:2px solid var(--ink); box-shadow:0 3px 10px rgba(43,38,32,.12); font-size:.9rem; }
   .lq-mini-sum .lq-mini-t{ flex:1 1 12rem; min-width:0; }
   .lq-mini-sum a{ font-size:.9rem; color:var(--focus); min-height:44px; display:inline-flex; align-items:center; }
   .ls-link-btn[data-keep-forget], .ls-link-btn[data-keep-yes]{ min-height:44px; }
@@ -482,6 +484,16 @@
   .lq-row-top{ display:flex; align-items:center; gap:.4rem; min-width:0; }
   .lq-job{ margin:0 !important; flex:1 1 auto; min-width:0; font-size:.98rem; line-height:1.3; overflow-wrap:break-word; hyphens:auto; -webkit-hyphens:auto; }
   .lq-row .remove{ width:2.75rem !important; height:2.75rem !important; font-size:.95rem !important; flex:none; }
+  /* flow17: the job's name is a quiet button that opens its extras */
+  button.lq-job{ appearance:none; -webkit-appearance:none; display:flex; flex-wrap:wrap; align-items:center; gap:0 .3rem; width:100%; min-height:44px; padding:.15rem .1rem; background:none; border:0; border-radius:8px; font:inherit; font-size:.98rem; text-align:left; color:var(--ink); cursor:pointer; }
+  button.lq-job:hover .lq-job-t{ text-decoration:underline; text-decoration-color:var(--ink-soft); }
+  button.lq-job:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+  .lq-job-more{ font-size:.75rem; color:var(--ink-soft); }
+  .lq-job-set{ flex-basis:100%; font-size:.78rem; color:var(--ink-soft); }
+  .lq-rowx{ grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:flex-end; gap:.4rem .8rem; padding:.15rem 0 .3rem; }
+  .lq-rowx[hidden]{ display:none !important; }
+  .lq-rowx .lq-often{ flex:1 1 16rem; }
+  .lq-row .lq-rm{ width:auto !important; height:auto !important; min-height:44px; padding:.2rem .8rem !important; font-size:.88rem !important; border-radius:999px; }
   .lq-who{ display:grid; grid-template-columns:repeat(auto-fit, minmax(3.6rem, 1fr)); gap:.3rem; }
   .lq-w{ font:inherit; font-size:.9rem; min-height:44px; padding:.25rem .4rem; border-radius:999px; border:2px solid var(--pc, #EAD9A0); background:#FFFDF6; color:var(--ink); cursor:pointer; overflow-wrap:break-word; line-height:1.15; }
   .lq-w:hover{ background:#FFF3C4; }
@@ -498,9 +510,14 @@
   }
   /* on a phone: the job name on its own full-width line, its buttons in a row underneath, so names never break
      mid-word ("Rememberi/ng") and a picked name never gets cut off ("✓Kei…") */
+  /* flow17: with two of you, one line per job on a phone too: the name (wrapping at its spaces), then the three
+     buttons; with three or more, the buttons go on their own line underneath */
   @media (max-width:639px){
     #lq-list .lq-row{ grid-template-columns:minmax(0, 1fr); gap:.25rem; padding:.4rem .1rem; }
-    #lq-list.is-two .lq-who{ grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.3rem; }
+    #lq-list.is-two .lq-row{ grid-template-columns:minmax(0, .95fr) minmax(0, 2fr); gap:.15rem .35rem; padding:.2rem .05rem; }
+    #lq-list.is-two .lq-who{ grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.25rem; }
+    #lq-list.is-two .lq-w{ font-size:.84rem; padding:.2rem .2rem; }
+    #lq-list.is-two button.lq-job{ font-size:.9rem; line-height:1.2; }
     #lq-list .lq-job{ font-size:.95rem; overflow-wrap:normal; word-break:normal; hyphens:manual; -webkit-hyphens:manual; }
     #lq-list .lq-cmp{ grid-column:1 / -1; }
   }
@@ -531,6 +548,8 @@
   .ls-own-blkt input{ width:8.5rem; min-height:44px; }
   .ls-own-split{ grid-column:1 / -1; justify-self:start; min-height:44px; }
   body[data-ls-view="quick"] .ls-tag{ display:none !important; }
+  /* flow17: the quick look in Spanish: the English "About this tool" (about the full stand) stays out of the way */
+  body[data-lq-es] details.tg{ display:none !important; }
   .lq-add{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0 0; }
   .lq-add input{ flex:1 1 11rem; min-height:44px; }
   .lq-add button{ margin:0 !important; min-height:44px; }
@@ -715,7 +734,7 @@
 <body data-no-pillars>
 <main class="read">
 <div class="ls-awning" aria-hidden="true"><span>Fresh squeezed &middot; always free</span></div>
-<header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>Who does what? Chores and bills at home <svg class="ls-lemon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 34c0-13 11-24 26-24 5 0 9 1 12 3 3-2 7-2 9 0-1 3-1 6 0 9 2 3 3 7 3 11 0 14-12 23-27 23S8 47 8 34z" fill="#F8DC6E" stroke="#C9A227" stroke-width="3" stroke-linejoin="round"/><path d="M40 11c2-5 7-7 12-6-2 5-6 8-12 6z" fill="#8CC7A5" stroke="#4E8A66" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="32" r="2.6" fill="#211D17"/><circle cx="38" cy="32" r="2.6" fill="#211D17"/><path d="M26 40c3 3 7 3 10 0" fill="none" stroke="#211D17" stroke-width="2.5" stroke-linecap="round"/><circle cx="19" cy="38" r="3" fill="#F2A3B6" opacity=".7"/><circle cx="43" cy="38" r="3" fill="#F2A3B6" opacity=".7"/></svg></h1><p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">Also called the Lemonade Stand</p><p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> tap who mostly does each job, or list the hours and bills for one person or a whole home. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain picture of the split, where you agree and differ, and a fridge list. <span aria-hidden="true">&middot;</span> About 2 minutes for the quick look, 15 for the full stand</p><p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">Also called the Lemonade Stand, and Who does what at home</p></header>
+<header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>Who does what? Chores and bills at home <svg class="ls-lemon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 34c0-13 11-24 26-24 5 0 9 1 12 3 3-2 7-2 9 0-1 3-1 6 0 9 2 3 3 7 3 11 0 14-12 23-27 23S8 47 8 34z" fill="#F8DC6E" stroke="#C9A227" stroke-width="3" stroke-linejoin="round"/><path d="M40 11c2-5 7-7 12-6-2 5-6 8-12 6z" fill="#8CC7A5" stroke="#4E8A66" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="32" r="2.6" fill="#211D17"/><circle cx="38" cy="32" r="2.6" fill="#211D17"/><path d="M26 40c3 3 7 3 10 0" fill="none" stroke="#211D17" stroke-width="2.5" stroke-linecap="round"/><circle cx="19" cy="38" r="3" fill="#F2A3B6" opacity=".7"/><circle cx="43" cy="38" r="3" fill="#F2A3B6" opacity=".7"/></svg></h1><p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">Also called the Lemonade Stand</p><p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> tap who mostly does each job, or list the hours and bills for one person or a whole home. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain picture of the split, where you agree and differ, and a fridge list. <span aria-hidden="true">&middot;</span> About 2 minutes for the quick look, 15 for the full stand</p></header>
 <p class="ls-tag">List the jobs and the bills, and see who does what, or your own load.</p>
 <div id="ls-drift"></div>
 <p class="ls-top-note no-bubble">Sharing work in a business or team? <a href="/work.html#owner-list">Use the team one-owner list &rarr;</a><br><span class="ls-safe-note">For households where everyone feels safe. If anyone is afraid or controlled, a shared list can be used to check up on someone. See <a href="/safety.html">Not safe at home?</a></span></p>
@@ -732,7 +751,6 @@
   <div class="lq-asrow" id="lq-asrow" role="group" aria-label="Whose view is this?" hidden></div>
   <div class="lq-grid">
     <div class="lq-list-wrap">
-      <div class="lq-mini-sum" id="lq-mini" hidden><span class="lq-mini-t" id="lq-mini-t"></span><a href="#lq-res" id="lq-mini-go">See it &darr;</a></div>
       <div id="lq-list"></div>
       <div class="lq-add">
         <label class="sr-only" for="lq-new">Another job</label>
@@ -744,6 +762,7 @@
         <p class="lq-mini">Tap to put a job on the list above. Baby, caring, pets, paperwork, and work nights are here too.</p>
         <div id="lq-more-list"></div>
       </details>
+      <div class="lq-mini-sum" id="lq-mini" hidden><span class="lq-mini-t" id="lq-mini-t"></span><a href="#lq-res" id="lq-mini-go">See how it looks &darr;</a></div>
     </div>
     <section class="lq-res" id="lq-res" aria-labelledby="lq-res-h" tabindex="-1">
       <p class="lq-print-only" id="lq-print-head">Spread Love &amp; Acceptance &middot; The Lemonade Stand, quick look</p>

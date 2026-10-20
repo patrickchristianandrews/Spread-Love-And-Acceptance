@@ -74,7 +74,7 @@
     '.tol-keys-in dt{ white-space:nowrap; } .tol-keys-in dd{ margin:0; }' +
     '.tol-keys-in kbd{ display:inline-block; min-width:1.6rem; padding:.1rem .45rem; text-align:center; border-radius:7px; border:1px solid #B9A0E0; border-bottom-width:3px; background:#F6F1FD; font:600 .85rem "IBM Plex Mono",monospace; }' +
     '.tol-keys-x{ margin-top:.9rem; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; border:1px solid #6B4F8A; background:#6B4F8A; color:#fff; font:inherit; cursor:pointer; }' +
-    '.tol-keys-hint{ position:fixed; left:auto; right:5rem; bottom:.6rem; transform:none; z-index:870; padding:.25rem .8rem; border-radius:999px; background:rgba(43,33,64,.78); color:#fff; font:500 .78rem "Lora",Georgia,serif; pointer-events:none; opacity:0; transition:opacity .4s; }' +
+    '.tol-keys-hint{ position:fixed; left:1rem; right:auto; bottom:1rem; white-space:nowrap; transform:none; z-index:870; padding:.25rem .8rem; border-radius:999px; background:rgba(43,33,64,.78); color:#fff; font:600 .875rem var(--tol-sans, system-ui, sans-serif); pointer-events:none; opacity:0; transition:opacity .4s; }' +
     '.tol-keys-hint.on{ opacity:1; }';
   function css() { if (document.getElementById('tol-wide-css')) return; var s = document.createElement('style'); s.id = 'tol-wide-css'; s.textContent = CSS; document.head.appendChild(s); }
 
@@ -168,7 +168,9 @@
     // a one-time whisper that the shortcuts exist, for people with a keyboard
     // (once ever, not once a visit; never in the plain or work version, and never on top of another note)
     var seen = false; try { seen = localStorage.getItem('tol-keys-hint') === '1' || sessionStorage.getItem('tol-keys-hint') === '1'; } catch (e) {}
-    if (!seen && !document.body.hasAttribute('data-no-tip') && innerWidth >= 900 && !document.documentElement.classList.contains('tol-work')) {
+    // design17: only with a real mouse and keyboard (never on a touch screen), and in the bottom-left corner, clear of Help
+    var fine = !!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches);
+    if (!seen && fine && !document.body.hasAttribute('data-no-tip') && innerWidth >= 900 && !document.documentElement.classList.contains('tol-work')) {
       var onKey = function () { document.removeEventListener('keydown', onKey); };
       setTimeout(function () {
         if (document.querySelector('.tr-toast.is-in, .tol-offer')) return;

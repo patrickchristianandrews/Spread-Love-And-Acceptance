@@ -1285,7 +1285,7 @@ if (PERS) {
     t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', text: /chore|job|split|share|Lemonade/i });
     t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match; I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
     t('puddles', 'do you hallucinate', { kind: 'about', text: /I don’t make things up[\s\S]*that’s not it[\s\S]*not a therapist and can’t diagnose/ });
-    t('puddles', 'are you AI?', { kind: 'about', text: /what’s already written on this site\. I pick the best match; I don’t invent new answers/, not: /written (and checked )?by people|checked by people/ });
+    t('puddles', 'are you AI?', { kind: 'about', text: /^No\. Every answer here was written in advance for this site\. I pick the best match/, not: /written (and checked )?by people|checked by people/ });
     t('puddles', 'who are you (says where answers come from)', { q: 'who are you', text: /I don’t make things up/ });
   }
   // deep talk (deep.json): three lenses, put together; safety, care and someone's own situation always first; no jokes
@@ -1389,9 +1389,10 @@ if (PERS) {
     t('chat4', 'make an infographic about small wins', { kind: 'info', info: true, link: '/small-wins.html' });
     t('chat4', 'make me a poster about the ladder', { kind: 'info', info: true, link: '/ladder.html' });
     // the honest answer: rule-based, from the site's own checked pages, can pick the wrong topic, not a therapist
-    const HONEST = /I don’t make things up[\s\S]*already written on this site[\s\S]*wrong topic[\s\S]*not a therapist[\s\S]*rule-based/;
+    // (owner: AI is never mentioned unless asked; asked straight out, the answer is a short, true "No")
+    const HONEST = /(already written on this site|written in advance for this site)[\s\S]*wrong topic[\s\S]*not a therapist/;
     ['do you make things up', 'are you an AI', 'can i trust you', 'do you hallucinate', 'are you chatgpt', 'is this real advice', 'do you make mistakes'].forEach(q =>
-      t('chat4', q, { kind: 'about', id: 'honest', text: HONEST, link: '/ask.html#how-he-answers' }));
+      t('chat4', q, { kind: 'about', id: 'honest', text: HONEST, link: '/ask.html#how-he-answers', not: /\b(rule-based|generative)\b/, check: (r, rs, text) => !/\b(ai|chatgpt)\b/i.test(q) && /\bAI\b/.test(text) ? 'AI mentioned unprompted' : '' }));
     t('chat4', 'can i trust your answers (research link)', { q: 'can i trust your answers', link: '/research.html' });
     t('chat4', 'are you a therapist (still the scope answer)', { q: 'are you a therapist', id: 'therapistq' });
     t('chat4', 'where can i find a counsellor (no “No.”)', { q: 'where can i find a counsellor', id: 'findcounsellor', not: /^No\./, link: '/outside-help.html' });
@@ -2125,7 +2126,7 @@ if (PERSONA) {
     t(G, q, { id: 'forwhom', link: '/by-relationship.html', text: /^No\./, not: /Gratitude|find-remind-bind/ }));
   // 7. "is this AI?": how Professor Puddles answers (rule-based, from the site's pages)
   ['is this thing actually AI or just canned answers', 'are you an ai?', 'are these answers scripted?', 'is this just canned responses'].forEach(q =>
-    t(G, q, { id: 'honest', link: '/ask.html#how-he-answers', text: /rule-based|not a generative AI/, not: /don’t have a page/ }));
+    t(G, q, { id: 'honest', link: '/ask.html#how-he-answers', text: /written in advance for this site/, not: /don’t have a page|generative/ }));
   // 8. Spanish: a carer's brothers and sisters, anger and guilt at a parent; the caregiving answers and the Spanish care list
   const ESP = { page: ES };
   t(G, '¿Cómo le pido a mis hermanos que me ayuden con mi mamá sin que acabemos peleando?', Object.assign({ id: 'es-hermanos', link: CARE_ES, not: /pareja|Peleamos/, nochip: /gemelos/i }, ESP));
@@ -2346,7 +2347,7 @@ if (PERSONA) {
   t(G, 'my 15 year old son and I keep fighting over text messages, he thinks I\'m nagging', { id: 'teentexting', link: '/parents.html#house-rules', not: /one owner per job|If it isn’t done by 7/i });
   t(G, 'my teenage daughter ignores my texts and we argue about it', { id: 'teentexting' });
   ['is the checker just keyword matching', 'is the chat analyzer just looking for keywords', 'is it just keyword matching?'].forEach(q =>
-    t(G, q, { id: 'checkerrules', text: /rule-based/, not: /don’t have a page/ }));
+    t(G, q, { id: 'checkerrules', text: /written-out rules/, not: /don’t have a page|\bAI\b/ }));
   // harold: dementia, a care home, guilt about visiting, long evenings
   t(G, 'my wife doesnt recognise me anymore', { id: 'stillhere', link: '/caregivers.html#still-here', nochip: /chores|Things said the wrong way/ });
   t(G, 'my mum doesn\'t know who I am any more', { id: 'stillhere' });
@@ -2369,10 +2370,23 @@ if (PERSONA) {
   t(G, 'my wife does everything for me and I feel useless', { id: /^(illburden)$/, not: /retir/i, check: () => '' , q: 'my wife does everything for me since my stroke and I feel useless' });
   t(G, 'my wife does everything for me and I feel useless (no illness named)', { q: 'my wife does everything for me and I feel useless', id: 'illburden', not: /retir/i });
   // fatima-yusuf: a parent who lives with you
-  t(G, 'My husband\'s mother lives with us and I end up doing most of her care on top of three kids. How do we split it fairly', { id: 'eldercarehome', link: '/family-obligations.html#visits', not: /three or more people|NOSPLICE/ });
+  t(G, 'My husband\'s mother lives with us and I end up doing most of her care on top of three kids. How do we split it fairly', { id: 'eldercarehome', link: '/family-obligations.html#visits', not: /three or more people|Read more|Show less/ });
   c(G, ['My husband\'s mother lives with us and I end up doing most of her care on top of three kids. How do we split it fairly', 'how do we share looking after his mum'], { id: 'eldercarehome', not: /every other Sunday/ });
   t(G, 'how do we share looking after his mum', { id: 'eldercarehome', not: /every other Sunday|with your mum/ });
   t(G, 'wife says she does all the work for my mum but i drive 11 hours a day. what do i do', { id: 'eldercareaccused', text: /real work too/, not: NOSPLICE });
+  // jen-tom: couple time after the kids are in bed; who does bedtime
+  t(G, 'something quick we can do tonight once the kids are in bed, we keep bickering', { id: 'coupletonight', not: /screen time|screens/i });
+  t(G, 'how do we stop arguing about who does bedtime', { id: 'bedtimesplit' });
+  t(G, '10 minutes together tonight, nothing heavy', { id: 'coupletonight' });
+}
+
+// owner: Puddles never brings up AI unless asked
+{
+  const NOAI = (r, rs, text) => /\b(AI|A\.I\.|generative|ChatGPT)\b/.test(text) ? 'mentions AI unprompted' : '';
+  ['hi', 'what can you do', 'who are you', 'how does this work', 'are you real', 'are you a real person', 'is this private', 'can i trust you', 'do you make things up', 'tell me about yourself', 'what are you', 'help'].forEach(q =>
+    t('noai', q, { check: NOAI }));
+  t('noai', 'asked straight out: a short, true no', { q: 'are you chatgpt?', text: /^No\. Every answer here was written in advance/ });
+  t('noai', 'asked straight out: is it AI', { q: 'is this AI', text: /^No\./ });
 }
 
 // ---------------------------------------------------------------- run

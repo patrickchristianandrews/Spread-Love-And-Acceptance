@@ -16,6 +16,47 @@
 (function () {
   'use strict';
 
+  // design17: one calm type system. Fraunces for headings, Lora for reading, Atkinson Hyperlegible (--tol-sans) for every
+  // piece of UI. The old typewriter labels (IBM Plex Mono: breadcrumbs, "Step 1 of 8", time labels, "Jordan:", "Different:
+  // worth a short talk") are turned into the UI font, in sentence case and at a readable size, in every stylesheet on the
+  // page, including a page's own <style> and the ones that load later. Code, the games and the crosswords keep theirs.
+  (function unmono() {
+    var RX = /plex mono/i, KEEP = /\b(code|pre|kbd|samp|tt)\b|\.xw|\.gm-|\.qw-|is-game|\.cp-|\.bd-|\.fb-|\.mv-|\.rd-|receipt|\.tol-keep-font/;
+    function pri(st, p) { return st.getPropertyPriority(p); }
+    function fix(rules) {
+      if (!rules) return;
+      for (var i = 0; i < rules.length; i++) {
+        var r = rules[i];
+        if (!r.selectorText) { if (r.cssRules) fix(r.cssRules); continue; }
+        var st = r.style, ff = st && st.getPropertyValue('font-family');
+        if (!ff || !RX.test(ff) || KEEP.test(r.selectorText)) continue;
+        st.setProperty('font-family', 'var(--tol-sans, system-ui, sans-serif)', pri(st, 'font-family'));
+        if (/uppercase/.test(st.getPropertyValue('text-transform'))) st.setProperty('text-transform', 'none', pri(st, 'text-transform'));
+        if (parseFloat(st.getPropertyValue('letter-spacing')) > 0) st.setProperty('letter-spacing', 'normal', pri(st, 'letter-spacing'));
+        var m = /^([\d.]+)(rem|em|px)$/.exec(st.getPropertyValue('font-size') || '');
+        if (m && (m[2] === 'px' ? +m[1] < 13.6 : +m[1] < .85)) st.setProperty('font-size', m[2] === 'px' ? '14px' : '.875' + m[2], pri(st, 'font-size'));
+      }
+    }
+    function sheet(sh) { try { fix(sh.cssRules); } catch (e) {} }   // another site's stylesheet can't be read: nothing to do
+    function all() {
+      if (document.body && document.body.classList.contains('is-game')) return;
+      for (var i = 0; i < document.styleSheets.length; i++) sheet(document.styleSheets[i]);
+    }
+    try {
+      all();
+      document.addEventListener('DOMContentLoaded', all);
+      window.addEventListener('load', all);
+      var mo = 'MutationObserver' in window && new MutationObserver(function (ms) {
+        ms.forEach(function (m) { Array.prototype.forEach.call(m.addedNodes, function (n) {
+          if (n.tagName === 'STYLE' && n.sheet) sheet(n.sheet);
+          else if (n.tagName === 'LINK' && /stylesheet/i.test(n.rel)) n.addEventListener('load', function () { if (n.sheet) sheet(n.sheet); });
+        }); });
+      });
+      // styles added later go into <head> (or straight into <body>): only those two are watched, not the whole page
+      if (mo) { mo.observe(document.head, { childList: true }); if (document.body) mo.observe(document.body, { childList: true }); else document.addEventListener('DOMContentLoaded', function () { mo.observe(document.body, { childList: true }); }); }
+    } catch (e) {}
+  })();
+
   // En español: a page with its own Spanish words says so with <html data-es>. Opened with ?lang=es (or #es),
   // it becomes a Spanish page: lang="es" on <html>, so the bar, menu, footer and Settings below come in
   // Spanish (T() and esPage(), further down, read that lang). A page can also set lang="es" itself before
@@ -1361,8 +1402,12 @@
   // page's opening and "Meet the friends", and the play pages. Not on tools, guides, the book, workpapers or the serious
   // pages, and nowhere with Larger text, Quiet mode, Keep the page still, "Plain and literal" or reduced motion.
   var PLAY_PAGE = /^\/(index|pause-and-play|frequency-journey(-play)?|coin-pusher|night-garden|bears-dojo|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|frequency-buddies[a-z0-9-]*|calm-visualizer|soundscapes|echoes-of-gold|pal-cam[a-z0-9-]*)\.html$/;
+  // design17: Pause & Play opens on "Relax and reset", a calm page: no moving scene or drifting things behind it
+  function scenePage() {
+    return current !== '/pause-and-play.html' && !!(PLAY_PAGE.test(current) || (document.body && document.body.classList.contains('is-game')));
+  }
   function ambientOk() {
-    return !!(PLAY_PAGE.test(current) || (document.body && document.body.classList.contains('is-game'))) && !sensitivePage() && !calmExtras();
+    return current !== '/pause-and-play.html' && !!(PLAY_PAGE.test(current) || (document.body && document.body.classList.contains('is-game'))) && !sensitivePage() && !calmExtras();
   }
   function floatCount() {
     if (WORKSPACE.test(current) || !ambientOk()) return 0;
@@ -1432,7 +1477,7 @@
     find.addEventListener('click', function () { openPanel(null, true); });
     // home16b: when the helpers are tucked away (Quiet mode, No surprises, Hide the helpers), Professor Puddles' floating
     // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
-    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask Puddles', 'Pregúntale')));
+    if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'), 'aria-label': T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') }, T('Ask<span class="tol-ask-more"> Puddles</span>', 'Pregúntale')));
     bar.appendChild(find);
     // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)
     if (isApp()) loadScript('/assets/js/app-bar.js').catch(function () {});
@@ -1516,6 +1561,8 @@
     // Simple pages get their cute dressing and a gentle reminder (see site.css)
     if (hereSection) body.setAttribute('data-sec', hereSection.id);
     if (current === '/index.html') document.documentElement.classList.add('tol-home');
+    // design17: pages that keep the night scene and its colour washes (home, play pages); every other page is calm and plain
+    if (scenePage()) document.documentElement.classList.add('tol-scene');
     // pages with their own dark look (the games, the Night Garden, Drift) keep it as it is
     if (body.classList.contains('is-game') || body.hasAttribute('data-no-dark') || /^\/(night-garden|calm-visualizer|pal-cam-tv|garden-backdrop)\.html$/.test(current)) document.documentElement.classList.add('tol-nodark');
     // every piece of reading text in its own soft bubble (site.css "Text bubbles"), except on pages with their own full-screen look
@@ -1580,7 +1627,9 @@
       var mm = window.matchMedia;
       if (mm && mm('(prefers-reduced-motion: reduce)').matches && lsGet(STILL_KEY) !== '0') return false;
       // home16b: and not on the tender and grief pages, or with Larger text or "Plain and literal"
-      return lsGet(STILL_KEY) !== '1' && !workMode() && !WORKSPACE.test(current) && !sensitivePage() && !calmExtras();
+      // design17: the night scene (moon, bunny, fireflies, pups) only where play is the point: the home page and the play
+      // pages. Guides, tools, the book and Relax get the site's calm plain background (cream, or the dark tone).
+      return lsGet(STILL_KEY) !== '1' && !workMode() && !WORKSPACE.test(current) && !sensitivePage() && !calmExtras() && scenePage();
     }
     function makeGarden() {
       if (gardenParts || !gardenOk()) return;
@@ -3646,11 +3695,30 @@
         : a.pud ? T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') : T('Breathe: a one-minute calm break', 'Respirar: una pausa de un minuto'));
       wrap.hidden = !a.pud && !a.br;
       var t = btn.querySelector('.tol-help-t'); if (t) t.textContent = a.pud && a.br ? T('Help', 'Ayuda') : a.pud ? T('Ask Puddles', 'Pregúntale') : T('Breathe', 'Respirar');
+      // design17: in the phone's top bar it is one labelled "Ask" button that opens Professor Puddles straight away
+      // (Breathe is in the Menu as "Calm down now", or press and hold this button); nothing to show without him
+      if (docked()) {
+        wrap.hidden = !a.pud;
+        if (t) t.textContent = T('Ask', 'Pregunta');
+        btn.setAttribute('aria-label', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'));
+        btn.removeAttribute('aria-haspopup'); btn.removeAttribute('aria-expanded');
+      } else { btn.setAttribute('aria-haspopup', 'true'); btn.setAttribute('aria-expanded', String(!menu.hidden)); }
       return a;
     }
     function close(focus) { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); if (focus) btn.focus(); }
+    // design17: press and hold the docked Ask button for the one-minute Breathe break
+    var holdT = 0, held = false;
+    btn.addEventListener('pointerdown', function () {
+      held = false; clearTimeout(holdT);
+      if (!docked()) return;
+      holdT = setTimeout(function () { var a = avail(); if (a.br) { held = true; br.click(); } }, 650);
+    });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { btn.addEventListener(ev, function () { clearTimeout(holdT); }); });
+    btn.addEventListener('contextmenu', function (e) { if (docked()) e.preventDefault(); });
     btn.addEventListener('click', function () {
+      if (held) { held = false; return; }
       var a = fill();
+      if (docked() && a.pud) { pud.click(); return; }
       if (a.pud && !a.br) { pud.click(); return; }
       if (a.br && !a.pud) { br.click(); return; }
       var open = menu.hidden; menu.hidden = !open; btn.setAttribute('aria-expanded', String(open));
@@ -3675,6 +3743,7 @@
       if (want && wrap.parentNode !== bar) { close(); bar.insertBefore(wrap, mb); wrap.classList.add('is-docked'); wrap.classList.remove('is-away', 'is-tucked'); }
       else if (!want && wrap.parentNode !== body) { close(); body.appendChild(wrap); wrap.classList.remove('is-docked'); }
       else return;
+      fill();
       if (typeof barHeightHook === 'function') barHeightHook();
     }
     dock(); setTimeout(dock, 0);   // the bar goes into the page just after this runs
@@ -4113,10 +4182,12 @@
     h.classList.toggle('tol-font-easy', lsGet(FONT_KEY) === 'easy');
     h.classList.toggle('tol-space-wide', lsGet(SPACE_KEY) === 'wide');
     h.classList.toggle('tol-contrast', contrastOn());
-    h.classList.toggle('tol-nobubbles', lsGet(BUB_KEY) === '1' || contrastOn());
+    // design17: plain text by default (one card per section, not a bubble round every line); Settings → Text bubbles turns them on ('0')
+    h.classList.toggle('tol-nobubbles', lsGet(BUB_KEY) !== '0' || contrastOn());
     var tint = lsGet(TINT_KEY);
     Object.keys(TINTS).forEach(function (k) { h.classList.toggle('tol-tint-' + k, tint === k && !contrastOn()); });
-    if (lsGet(FONT_KEY) === 'easy') linkEasyFont();
+    // design17: Atkinson Hyperlegible is the one UI font (buttons, labels, inputs, chips, sheets), so it loads on every page
+    linkEasyFont();
     ruler(lsGet(RULER_KEY) === '1');
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', contrastOn() ? (darkNow() ? '#000000' : '#FFFFFF') : darkNow() ? '#1E1B24' : '#F5EFDE');
@@ -4227,7 +4298,7 @@
     box.querySelectorAll('input[data-font-opt]').forEach(function (i) { i.checked = i.value === (lsGet(FONT_KEY) || 'usual'); });
     box.querySelectorAll('input[data-space-opt]').forEach(function (i) { i.checked = i.value === (lsGet(SPACE_KEY) || 'usual'); });
     box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.checked = i.value === (lsGet(TINT_KEY) || 'none'); });
-    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1' && !contrastOn(), contrast: contrastOn(), wxnote: lsGet('tol-clockwx-off') !== '1' && (lsGet('tol-clockwx-on') === '1' || !!lsGet('tol-pc-wx')), wxloc: !!lsGet('tol-pc-wx') || wxPending };
+    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) === '0' && !contrastOn(), contrast: contrastOn(), wxnote: lsGet('tol-clockwx-off') !== '1' && (lsGet('tol-clockwx-on') === '1' || !!lsGet('tol-pc-wx')), wxloc: !!lsGet('tol-pc-wx') || wxPending };
     box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; var sk = i.getAttribute('data-switch'); i.disabled = (quietOn() && !/^(ruler|bubbles|wxnote|wxloc|contrast)$/.test(sk)) || (sk === 'bubbles' && contrastOn()); });
     // a page tint can't sit under high contrast: the tints wait until it's off
     box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.disabled = contrastOn(); });
@@ -4292,7 +4363,7 @@
       if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
       if (s === 'contrast') { if (i.checked) lsSet(CONTRAST_KEY, '1'); else lsDel(CONTRAST_KEY); announce(i.checked ? T('High contrast is on.', 'El alto contraste está activado.') : T('High contrast is off.', 'El alto contraste está desactivado.')); }
-      if (s === 'bubbles') { if (i.checked) lsDel(BUB_KEY); else lsSet(BUB_KEY, '1'); }
+      if (s === 'bubbles') { if (i.checked) lsSet(BUB_KEY, '0'); else lsDel(BUB_KEY); }
       if (s === 'wxnote') { var cw = window.TOLClockWx; if (cw && cw.show) cw.show(i.checked); else if (i.checked) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); var cwl = document.createElement('script'); cwl.src = '/assets/js/clock-weather.js'; document.head.appendChild(cwl); } else { lsSet('tol-clockwx-off', '1'); lsDel('tol-clockwx-on'); } }
       if (s === 'wxloc') {
         var msg = box.querySelector('.tol-set-wxmsg'), cw2 = window.TOLClockWx;

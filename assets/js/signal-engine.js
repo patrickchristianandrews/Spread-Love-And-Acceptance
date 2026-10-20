@@ -224,7 +224,7 @@ const F = [
    what:"Small words like \"again,\" \"still\" and \"even\" point to a pattern. They quietly say \"this is who you are,\" so the listener hears the whole history, not today.",
    fix:"Drop them. Talk about this one time."},
   {id:"count", name:"Keeping count (\"third time\")", kind:"static",
-   re:/\b(?:(?:this|that|it)(?:'s| is| was) (?:now |already |officially )?the|for the) (?:second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|umpteenth|hundredth|millionth|nth|\d+(?:st|nd|rd|th)) time\b|\b(?:\d+|two|three|four|five|six|several|so many|too many) times (?:now|already|this (?:week|month|sprint|quarter|year)|in a row)\b/gi,
+   re:/\b(?:(?:this|that|it)(?:'s| is| was) (?:now |already |officially )?the|for the) (?:second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|umpteenth|hundredth|millionth|nth|\d+(?:st|nd|rd|th)) time\b|\b(?:\d+|two|three|four|five|six|several|so many|too many) times (?:now|already|this (?:week|month|sprint|quarter|year)|in a row)\b|\bi(?:'ve| have)? (?:did|done|do|had|cooked|cleaned|taken|took|covered|handled) (?:it|them|that|this|bedtime|bath ?time|the \w+)? ?(?:for )?(?:the )?(?:last|past) (?:\d+|two|three|four|five|six|seven|few|several) (?:nights|days|times|evenings|mornings|weekends|weeks)(?: in a row| running)?\b|\b(?:\d+|two|three|four|five|six|seven) (?:nights|days|evenings|mornings|weekends) in a row\b|\bmy turn count\b/gi,
    what:"Counting the misses (\"third time,\" \"three times now\") reads as a record being kept on someone. People hear blame, and stop reading for the fix.",
    fix:"Name the days it happened and what it affected, then ask for one change. If it keeps happening with one person, talk to them on their own."},
   {id:"excuse", name:"Shifts the job onto them", kind:"static",
@@ -1472,6 +1472,9 @@ function analyze(textIn, opts){
       push("impera", se.s+Math.max(0,off), se.s+Math.max(0,off)+firstWord.length);
     }
   });
+  // (sig17) "ur doing bedtime tonight", "you're taking the bins out today": an order said as a fact, not asked
+  { const OR = /(?:^|[.!?]\s+)((?:ur|you're|you are|youre|u r|ure) (?:doing|taking|cooking|making|handling|picking up|getting|sorting|washing|cleaning|on) (?:the |your |our |a )?(?:bedtime|bath ?time|baths?|dinner|tea|lunch|breakfast|pick-?ups?|drop-?offs?|school run|bins?|dishes|washing(?: up)?|laundry|kids|baby|dog|dog walk|hoovering|vacuuming|cooking|shopping|night feeds?|feeds?|nappies|bathroom|kitchen|trash|rubbish|recycling|homework|cleaning|ironing|story|stories)\b[^.!?\n]{0,20}?\b(?:tonight|today|tomorrow|this (?:evening|weekend|morning|afternoon)|now)\b)(?=\s*(?:[.!]|$))/gi; let om;
+    while((om=OR.exec(text))!==null){ const st = om.index+om[0].indexOf(om[1]); push("impera", st, st+om[1].length); } }
   const inside=(h,id)=>hits.some(x=>x.id===id && h.s<x.e && x.s<h.e);
   const drop=(id, pred)=>{ for(let i=hits.length-1;i>=0;i--) if(hits[i].id===id && (!pred||pred(hits[i]))) hits.splice(i,1); };
   const has=id=>hits.some(h=>h.id===id);
@@ -2025,6 +2028,7 @@ function score(an, ids, ch, state){
    are blanks for the speaker to fill in their own words.
    ============================================================ */
 const CHANGE_WHY = {
+  consequence:{g:"A threat tacked onto an ask (\"or you're grounded\") turns it into a fight about the threat. The ask on its own, and the consequence said once and calmly, keeps the limit and is easier to hear."},
   contempt:{g:"An eye-roll or a put-down says \"I look down on you,\" and the listener defends themselves instead of hearing the complaint. The plain complaint can actually be answered.", anxiety:"A put-down tends to be heard as \"you're not wanted,\" which is much bigger than the moment.", trauma:"Mocking can feel unsafe, not just unkind, and shut the conversation down."},
   passiveag:{g:"A complaint wrapped in politeness leaves the listener with an edge to react to and no clear ask. Saying the ask directly gives them something they can say yes to.", autistic:"The real request is hidden under the politeness, so it may simply not be heard.", anxiety:"The edge is often heard louder than the words, and replayed later."},
   stonewall:{g:"A pause is fine, and often wise. Adding when you'll come back turns \"this is over\" into \"not yet,\" so the other person can settle too.", anxiety:"Silence without a return time tends to be filled with the worst case.", adhd:"A clear time to come back makes the pause easy to hold, and easy to remember."},
@@ -2381,6 +2385,10 @@ function rewriteBase(an, opts){
     sents = sents.map(x=>dropContempt(x, an, ctx, note, before)).filter(Boolean);
     if(sents.length>1 || before>1) sents = sents.filter(x=>{ if(before>1 && CURT_ONLY.test(x.trim()) && sents.length>1){ note("brushoff", x.trim().replace(/[.!…\s]+$/,""), ""); ctx.curtDropped = true; return false; } return true; });
   }
+  // (sig17) "Fine." next to a fed-up line or a door shut ("Fine. Do whatever you want, clearly my opinion doesn't matter"):
+  // the curt piece keeps the sting, so it goes too
+  if((has("hostile") || has("stonewall") || has("label")) && sents.length>1)
+    sents = sents.filter(x=>{ if(sents.length>1 && CURT_ONLY.test(x.trim())){ note("brushoff", x.trim().replace(/[.!…\s]+$/,""), ""); ctx.curtDropped = true; return false; } return true; });
   ctx.nSents = sents.length;
   const pairs = [];
   ctx.safety = an.safety;
@@ -2413,7 +2421,7 @@ function rewriteBase(an, opts){
     const lead = ctx.hostile ? "I'm really frustrated right now." : (ctx.swore || has("swear")) ? "I'm frustrated about [what happened]." : "";
     if(!main.trim()) main = ctx.hostile ? lead+" I need a few minutes, and then can we talk about [the thing]?" : (lead || "[Say what happened, plainly.]")+" Could you [one specific thing] by [a time]?";
     else if(lead && hasAsk) main = lead+" "+main;
-    else main = lead+" "+main.replace(/\s*$/,"")+" Can we talk about it at [a time], once I've had a few minutes?";
+    else main = (lead ? lead+" " : "")+endP(main.replace(/\s*$/,""))+" Can we talk about it at [a time], once I've had a few minutes?";
   }
 
   // at work: the fact, what it affected, and one request. No "guys", no count of misses, no "sort it out"
@@ -2617,10 +2625,13 @@ function beforeAsk(main, line){
    one-line message, is left to the fuller replacements in rewriteSentence ("Grow up." -> the feeling and a time). */
 const CONTEMPT_RX = ()=> SHARED && SHARED.BY && SHARED.BY.contempt ? new RegExp(SHARED.BY.contempt.re.source, "i") : null;
 const SARC_OPEN = /^(?:oh,?\s*)?wow,?\s+(?=(?:you|u|so|really|ok(?:ay)?|just)\b)|^(?:oh,?\s*)?(?:great|perfect|wonderful|lovely|brilliant|fantastic|nice),\s+(?=(?:you|u|so|now|another|again)\b)/i;
+const SARC_TAIL = /^(?:(?:and|but|so|well|anyway)[,\s]+)*(?:(?:i(?:'m| am)|im) not (?:your|ur) (?:(?:personal |live-in |unpaid |bloody |own )?(?:maid|servant|slave|cleaner|skivvy|butler|housekeeper|cook|chef|secretary|pa|assistant|nanny|babysitter))(?: either| too)?|(?:i )?hope (?:she|he|they|it|your new \w+) (?:makes you (?:happy|very happy|so happy)|(?:was|is) worth it)|(?:i )?hope you(?:'re| are) (?:both )?(?:happy|very happy|so happy) (?:now|together)|(?:have a nice|have a good|enjoy your (?:new )?) life)$/;
 const SARC_JAB = /^(?:sure|right|yeah|oh sure|of course),?\s+because\b/i;
 function dropContempt(s0, an, ctx, note, nAll){
   const CX = CONTEMPT_RX(); const lowf = x=>norm(x).toLowerCase();
   let s = s0.trim();
+  // (sig17) a sarcastic tail ("Hope she makes you happy", "I'm not your maid", "Have a nice life"): the sentence goes whole
+  if(SARC_TAIL.test(lowf(s).replace(/[.!?…🙄😒🙃\s]+$/,"")) && nAll>1){ note("sarcasm", s.replace(/[.!?…\s]+$/,""), ""); ctx.contempt = true; return ""; }
   const marks = [].concat(an.found.contempt||[]).filter(Boolean).map(x=>lowf(x).replace(/^(?:and|but|so)\s+/,"").replace(/[\s.!?,…]+$/,"")).filter(x=>x.length>2);
   // "Sure, because you're SO busy.": agreement said as a jab, the whole sentence is the jab
   if(SARC_JAB.test(s)){ note("sarcasm", s.replace(/[.!?…\s]+$/,""), ""); ctx.contempt = true; return ""; }
@@ -2688,9 +2699,32 @@ function calmSentence(s0, ctx, note){
   return capFirst(kept.join(", ")) + (end || ".");
 }
 
+const CONSEQ_RE = /^(.{3,90}?)[,\s]+or (?:else,? )?((?:you(?:'re| are)|ur|youre) grounded(?: for [^.!?]{1,25})?|you(?:'ll| will) be grounded(?: for [^.!?]{1,25})?|no (?:phone|xbox|ps5|playstation|switch|ipad|tablet|tv|screen time|wifi|internet|car)(?: for [^.!?]{1,25}| tonight| today| tomorrow)?|i(?:'ll| will|'m| am) (?:going to )?tak(?:e|ing) (?:your|the) (?:phone|xbox|switch|ipad|tablet|laptop|console|car keys|car)(?: away)?(?: for [^.!?]{1,25}| tonight| today)?|you(?:'re| are) losing (?:your |the )?(?:phone|xbox|switch|ipad|tablet|laptop|console|car keys|car)(?: for [^.!?]{1,25}| tonight| today)?)[.!]*$/i;
 function ingBase(w){ const l=w.toLowerCase().replace(/ing$/,""); if(/([^aeiouls])\1$/.test(l)) return l.slice(0,-1); if(VERBSET.has(l)) return l; if(VERBSET.has(l+"e")) return l+"e"; return l; }
 function rewriteSentence(s, ctx, note, an, W){
   let t = s.trim(), m;
+  // sig17: "my opinion doesn't matter in this house": the door-shutting words aren't put back. The hurt under them is
+  m = t.match(/^(?:(?:and|so|but|clearly|obviously|apparently|i guess|guess)[,\s]+)*(my (?:opinion|view|views|say|vote|input|feelings?|voice|wishes)|what i (?:want|think|say|feel|need)|i) (?:clearly |obviously |apparently |just )?(?:doesn't|don't|does not|do not) (?:really |even )?(?:matter|count)(?: (?:in|around|to anyone in) (?:this house|this family|here|this home))?(?: to (?:you|anyone|anybody))?[.!]*$/i);
+  if(m){ const who = /^i$/i.test(m[1]) ? "I don't" : capFirst(m[1].toLowerCase())+(/^what i|feelings$|views$|wishes$/i.test(m[1]) ? " don't" : " doesn't");
+    const rep = "It feels like "+lowerFirst(who.replace(/^I don't$/,"I don't"))+" count for much here.";
+    note("stonewall", t.replace(/[.!?]+$/,"").replace(/^(?:and|so|but)\s+/i,""), rep); ctx.critical = true; return rep.replace(/^It feels like i don't/,"It feels like I don't"); }
+  // sig17: "Answer your phone now or you're grounded": a threat tacked onto an ask. The ask stays (with the writer's own
+  // "now"), and the consequence is said once, calmly, as what happens next time. Never "Could you … or you're grounded?"
+  m = t.match(CONSEQ_RE);
+  if(m && /[a-z]/i.test(m[1]) && !/\b(?:hurt|hit|smack|slap|kill|beat)\b/i.test(t)){
+    let ask = m[1].replace(/^(?:and|so|just)\s+/i,"").replace(/[,\s]+$/,"");
+    const asQ = /^(?:could|can|would|will) you\b/i.test(ask);
+    if(!asQ && !/^please\b/i.test(ask)) ask = "Please "+lowerFirst(ask);
+    ask = asQ ? endQ(capFirst(ask)) : endP(capFirst(ask));
+    const thing = (m[2].match(/\b(phone|xbox|ps5|playstation|switch|ipad|tablet|laptop|console|tv|screen time|wifi|internet|car keys|car)\b/i)||[])[1];
+    const phoneAsk = /\b(?:answer|pick up|call|ring|text|reply|phone|message)\b/i.test(m[1]);
+    const given = WHEN_REAL.test(m[1]) && !/\bnow\b/i.test(m[1]);
+    const cons = phoneAsk ? "If I can't reach you, the phone stays home next time."
+      : "If it isn't done "+(given ? "by then" : "by [a time]")+", "+(thing ? "the "+thing.toLowerCase()+" stays with me "+(/tonight|today/i.test(m[2]) ? m[2].match(/tonight|today/i)[0].toLowerCase() : "for [how long]") : "you'll be staying in this weekend")+".";
+    note("consequence", m[2].replace(/[.!\s]+$/,""), cons);
+    ctx.noAsk = true; ctx.consequence = true;
+    return ask+" "+cons;
+  }
   // "I don't get why you keep saying I never notice anything": the defence goes; what stung is said, and one shared ask
   m = t.match(/^(?:but |and |honestly,? )?i (?:don't|do not|dont|really don't) (?:get|understand|see) why you (?:keep|always|still) (?:saying|telling me|say|tell me|acting like|act like|making out|make out)(?: that)? (.{3,80}?)[.!?]*$/i);
   if(m){ const said = m[1].replace(/[.!?\s]+$/,"").replace(/\b(i'm|i am|i|my|me|myself|mine)\b/gi, w=>({"i'm":"you're","i am":"you are",i:"you",my:"your",me:"you",myself:"yourself",mine:"yours"})[w.toLowerCase()]);
@@ -3257,14 +3291,16 @@ function rewriteSentence(s, ctx, note, an, W){
   const hadReason = WHY_RE.test(t) || WHY_RE.test(an.norm);
   let urgentHit = false;
   if(/^(?:could|would|can) you\b/i.test(t)) t = t.replace(/\s*\b(?:right now|immediately|this instant|this second|this minute|asap|a\.s\.a\.p\.?|urgently)\b/gi, mm=>{ urgentHit=true; note("urgent", mm.trim(), "by [a time]"); return " by [a time]"; });
-  if(/^(?:could|would) you\b/i.test(t) && /\bnow\b/i.test(t) && !/\b(?:for|by|just|until|right) now\b/i.test(t)){
+  // (sig17) a bare "now" is a time the writer gave: it stays. With other lines around it ("Where are you? You said 9."),
+  // the reason is already there, so no "It's urgent because [the reason]" either
+  if(/^(?:could|would) you\b/i.test(t) && /\bnow\b/i.test(t) && !/\b(?:for|by|just|until|right) now\b/i.test(t) && (ctx.nSents||1) < 2){
     t = t.replace(/\s*\bnow\b/i, ()=>{ urgentHit=true; note("urgent","now","by [a time]"); return " by [a time]"; });
   }
   if(/^please\b/i.test(t) && /\b(?:asap|a\.s\.a\.p\.?|right now|immediately|urgently)\b/i.test(t)){
     t = t.replace(/\s*\b(?:right now|immediately|asap|a\.s\.a\.p\.?|urgently)\b/gi, mm=>{ note("urgent", mm.trim(), "by [a time]"); return " by [a time]"; });
     t = endP(t) + (hadReason ? "" : " It's urgent because [the reason].");
   }
-  if(urgentHit && !hadReason) t = endQ(t).replace(/\?$/,"? It's urgent because [the reason].").replace(/^([^?]*[^?.])\.\s*It's urgent/,"$1. It's urgent");
+  if(urgentHit && !hadReason && (ctx.nSents||1) < 2) t = endQ(t).replace(/\?$/,"? It's urgent because [the reason].").replace(/^([^?]*[^?.])\.\s*It's urgent/,"$1. It's urgent");
 
   // --- vague timing and standards
   t = t.replace(/\b(?:when you get a (?:chance|sec|second|minute|moment)|when you have (?:a (?:sec|second|minute|moment|chance)|time)|when you're free|when you can|whenever|at some point|sometime(?! (?:this|next|today|tonight|tomorrow|on|before|after|between)\b)|eventually|in a bit|one of these days|soon|(?<!see you |talk to you |talk |catch you )later(?! (?:on )?(?:today|tonight|this)))\b/gi, mm=>{ note("vtime", mm, "by [a time]"); return "by [a time]"; });

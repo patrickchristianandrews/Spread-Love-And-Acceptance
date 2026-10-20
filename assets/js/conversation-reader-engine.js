@@ -339,6 +339,8 @@
     marks.forEach(function (m) { if (m.kind === 'dismiss' && /^(?:(?:fine|ok(?:ay)?|sure)[.,!]?\s*)?(?:whatever(?: works for you| works| you want| you like| you think| you say)?|i don['’]t care|do what you want)[.!…]*$/i.test(String(m.text).trim()) && /^\s*(?:fine|ok(?:ay)?|sure)?[.,!]?\s*(?:whatever|i don['’]t care|do what you want)/i.test(text)) m.resigned = true; });
     // "I'm always the one who reaches out": a pattern the speaker has noticed on their own side, not a verdict on the other person
     marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) { m.pattern = true; m.kind = 'need'; } });
+    // sig17: a denial ("never said you were", "I didn't say you were lazy") answers a charge: not always/never, not a verdict
+    if (P && P.denial) marks = marks.filter(function (m) { return !((m.kind === 'absolute' || m.kind === 'verdict' || m.kind === 'need') && !m.whole && P.denial(text, m.start, m.end)); });
     // "I don't always do anything" (a denial) and "I can't write essays every time" (about yourself): not aimed at them
     marks = marks.filter(function (m) {
       if (m.kind !== 'absolute' || m.whole) return true;
@@ -360,6 +362,9 @@
       if (hm && !marks.some(function (m) { return (m.kind === 'threat' || m.kind === 'harmplay') && m.start < hm.end && hm.start < m.end; })) marks.push({ kind: hm.playful ? 'harmplay' : 'harm', start: hm.start, end: hm.end, text: hm.text, idiom: hm.kind === 'idiom' });
     }
     if (P && P.digs) P.digs(text).forEach(function (x) { marks.push({ kind: 'dig', start: x.start, end: x.end, text: x.text }); });
+    // sig17: blame said as what they should have done ("you could have done them", "you could've told me"): a dig
+    var cr = /\byou (?:could|should)(?:'ve|’ve| have) (?:just |at least |easily )?(?:done|helped|told|asked|called|texted|said|cleaned|washed|picked|put|taken|sorted|emptied|loaded|tidied|warned|checked)\b[^.!?\n]{0,30}/gi, cm;
+    while ((cm = cr.exec(text))) if (!marks.some(function (m) { return m.start < cm.index + cm[0].length && cm.index < m.end && m.kind !== 'ask'; })) marks.push({ kind: 'dig', start: cm.index, end: cm.index + cm[0].replace(/[\s,]+$/, '').length, text: cm[0].replace(/[\s,]+$/, '') });
     // the shared reading of control (cutting someone off from people generally, checking up as a demand, put-downs that
     // say they're worth nothing, someone saying they're afraid): the same bar as the Text message checker
     if (P && P.control) { var cx = P.control(text); if (cx && !marks.some(function (m) { return m.kind === 'control' && m.start < cx.end && cx.start < m.end; })) marks.push({ kind: 'control', start: cx.start, end: cx.end, text: cx.text, ckind: cx.kind }); }
@@ -457,7 +462,8 @@
     for (var i = 1; i < n; i++) {
       var before = out.turns.slice(Math.max(0, i - 3), i);
       var avg = before.reduce(function (s, x) { return s + x.heat; }, 0) / before.length;
-      if (out.turns[i].heat >= 3 && out.turns[i].heat >= avg + 2.5) { turned = i; break; }
+      // (sig17) a first blame line out of a calm start counts too: "you could have done them" after "dishes still in the sink"
+      if ((out.turns[i].heat >= 3 && out.turns[i].heat >= avg + 2.5) || (out.turns[i].heat >= 2.5 && avg < 0.5 && i <= 3)) { turned = i; break; }
     }
     if (turned === -1 && n && out.turns[0].heat >= 3) turned = 0;
     out.turned = turned;
@@ -599,10 +605,45 @@
     out.bids = [];
     out.turns.forEach(function (t, i) { if (t.marks.some(function (m) { return m.kind === 'turnaway'; })) out.bids.push({ at: i - 1, reply: i }); });
     out.owns = owns(out);
+    // sig17: each side's hottest line, shown side by side so nobody is cast as the one who started it
+    out.hottest = {};
+    out.turns.forEach(function (t, i) {
+      var k = t.mine ? 'me' : 'them', h = out.hottest[k];
+      if (t.heat > 0 && (!h || t.heat > h.heat)) {
+        var top = t.marks.filter(function (m) { return KINDS[m.kind] && KINDS[m.kind].heat > 0; }).sort(function (a, b) { return KINDS[b.kind].heat - KINDS[a.kind].heat; })[0];
+        out.hottest[k] = { at: i, who: t.who, text: t.text, heat: t.heat, kind: top ? top.kind : '', label: top ? KINDS[top.kind].label : '', said: top ? (top.whole ? trim(t.text) : sentenceOf(t.text, top)) : trim(t.text) };
+      }
+    });
+    // sig17: "don't call", "leave me alone", "going to bed": no reply suggests a call, a talk tonight or a meeting
+    out.noCall = null;
+    out.turns.forEach(function (t, i) {
+      var m = t.text.replace(/[’]/g, "'").match(NO_CALL);
+      if (m) out.noCall = { at: i, mine: t.mine, text: m[0], sleep: /bed|sleep|night shift|nights/i.test(t.text) };
+    });
     out.next = nextMove(out);
     out.drafts = out.safety ? [] : drafts(out);
+    if (out.noCall) {
+      var sl = out.noCall.sleep, ncWho = out.turns[out.noCall.at].who;
+      // self: the one writing is the one who said "don't call" (or is going to sleep); otherwise it's the other person
+      var fix = function (x, self) {
+        if (!x) return x;
+        var later = self ? (sl ? ' I’m going to sleep now. I’ll message you when I’m up, and we can sort it out.' : ' I need some space for now. I’ll message you when I’m ready, and we can sort it out.')
+          : ' I’ll leave it for now. When you’re ready, message me and we’ll sort it out' + (sl ? ', after you’ve slept' : '') + '.';
+        return x.replace(/\s*Can (?:I|we) (?:call|ring|phone|facetime) you(?: at \[(?:a )?time\]| tonight| later| tomorrow)?\?/g, self ? later : ' No need to reply now. Message me ' + (sl ? 'when you’ve slept' : 'when you’re ready') + '.')
+          .replace(/\s*(?:Can|Could) we (?:talk|speak|meet|catch up|pick it up|look at it)(?: about [^?]{1,60}?)?(?: properly)?(?: tonight)?(?: at \[(?:a |a calm )?time\]| tonight| later| tomorrow)?\?/g, later)
+          .replace(/Let’s talk when we can both be calmer\./g, 'Let’s come back to it when we’re both calmer, by message, when you’re ready.')
+          .replace(/ Text strips out tone, so a call or talking in person later will go better\./g, '')
+          .replace(/ I’m (?:stepping away until then|not going anywhere)\./g, '')
+          .replace(/^\s+/, '');
+      };
+      var meSelf = out.turns.some(function (t) { return t.mine && t.who === ncWho; });
+      (out.next || []).forEach(function (m) { m.script = fix(m.script, meSelf); m.say = fix(m.say, meSelf); });
+      (out.drafts || []).forEach(function (d) { d.text = fix(d.text, meSelf); if (/^Pause, with a time/.test(d.label)) d.label = 'Pause for now'; });
+      (out.owns || []).forEach(function (o) { o.script = fix(o.script, o.who === ncWho); });
+    }
     return out;
   }
+  var NO_CALL = /\b(?:(?:please |pls )?(?:don't|do not|dont) (?:call|ring|phone|facetime|video ?call)(?: me)?|no (?:calls|calling)|leave me alone|stop (?:calling|texting|messaging) me|(?:don't|do not|dont) (?:text|message|contact) me|i need (?:some )?space)\b/i;
 
   // What the conversation is about: the most-mentioned "the ___" / "your ___" phrase early on
   var VAGUE = /^(?:way|point|problem|thing|fact|end|same|whole|rest|last|first|second|third|fourth|fifth|next|other|time|times|weekend|plan|plans|moment|idea|deal|reason|issue|mood|situation|conversation|matter)$/;
@@ -739,7 +780,7 @@
       var sw = (trim(shortT[shortT.length - 1].text).toLowerCase().replace(/[’]/g, "'").match(/^(?:nothing|ok(?:ay)?|kk?|fine|whatever|sure|it'?s fine|its fine|i'?m fine|all good)/) || ['fine'])[0].replace(/^its\b/, "it's");
       var two = /^(?:k|kk|ok|okay)$/.test(sw) ? cap(sw) + ' as in all good, or ' + sw + ' as in not really?' : sw === 'nothing' ? 'Nothing as in nothing, or something I should hear?' : sw === 'whatever' ? 'Whatever as in either is fine, or whatever as in you’re upset?' : /fine|good/.test(sw) && sw !== 'fine' ? cap(sw) + ' as in really fine, or not really?' : cap(sw) + ' as in good, or ' + sw + ' as in not really?';
       moves.push({ key: 'short', title: 'Short replies may mean hurt, not done',
-        say: (shortT.length >= 2 ? shortT.length + ' very short replies (' + shortT.slice(-3).map(function (t) { return '“' + snippet(t.text) + '”'; }).join(', ') + ')' : '“' + snippet(shortT[0].text) + '”') + ' can mean “it’s really fine” or “I’m hurt and done for now.” If something just happened between you, the second is more likely. Asking gently is kinder than guessing, or than taking “go sleep” at its word.',
+        say: (shortT.length >= 2 ? shortT.length + ' very short replies (' + shortT.slice(-3).map(function (t) { return '“' + snippet(t.text) + '”'; }).join(', ') + ')' : '“' + snippet(shortT[0].text) + '”') + ' can mean “it’s really fine” or “I’m hurt and done for now.” If something just happened between you, the second is more likely. Asking gently is kinder than guessing' + (function () { var g = shortT.map(function (t) { return (t.text.match(/\bgo (?:to )?(?:sleep|bed)\b|\bhave fun\b|\bdo what(?:ever)? you want\b/i) || [])[0]; }).filter(Boolean).pop(); return g ? ', or than taking “' + g + '” at its word.' : '.'; })(),
         script: two + ' I’d like to hear it. Can I call you at [time]?',
         dig: ['/check-ins-in-depth.html#regroup', 'Coming back after it went wrong'] });
     }

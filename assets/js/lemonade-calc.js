@@ -2445,7 +2445,8 @@
     state.jobs.forEach(function (jb) { if (!jb.ex && kindOf(jb) === 'home') addName(jb.name); });
     box.innerHTML = '';
     // nothing listed yet (the one-minute path): a few common jobs to tap, plus your own below
-    var common = !names.length;
+    // flow17: the common starter chips only on an empty list (never beside a list someone sent, where "Groceries" next to "Grocery shopping" read as two jobs)
+    var common = !names.length && !ownersList().length;
     if (common) {
       (UKISH ? ['Dishes', 'Bins & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Loo roll & supplies']
         : ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies']).forEach(addName);

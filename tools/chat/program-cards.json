@@ -199,7 +199,7 @@
       "name": "how the Chat analyzer reads a message",
       "pat": "\\b(checker|chat analy[sz]er|analy[sz]er|signal translator|text checker|message checker|the tool|this tool|it|this|you|puddles)\\b.{0,25}\\b(just |only |basically )?(keyword|key word)s?( matching| matcher| search| based| spotting)?\\b|\\b(just|only) (matching|looking for|spotting|searching for) (keywords|key words|words)\\b",
       "what": [
-        "It’s rule-based, not a generative AI, and it’s more than spotting single words. It reads each message by written-out rules (patterns like “always” and “never”, put-downs, threats, a clear ask), the same way for everyone. It reads words, not names: swap the names and you get the same read."
+        "It’s more than spotting single words. It reads each message by written-out rules (patterns like “always” and “never”, put-downs, threats, a clear ask), the same way for everyone. It reads words, not names: swap the names and you get the same read."
       ],
       "how": [
         "It can miss tone of voice, history and in-jokes, so add context when something matters.",
@@ -17035,7 +17035,7 @@
         "why this site and not another"
       ],
       "what": [
-        "Articles and AI chats can be useful, and sometimes they’re the better choice. What’s different here: most tools end in something you make and keep together, like a pause plan or a job list with one owner each, not just advice.",
+        "Articles and other chat tools can be useful, and sometimes they’re the better choice. What’s different here: most tools end in something you make and keep together, like a pause plan or a job list with one owner each, not just advice.",
         "They’re built for both sides: each person answers for themselves, and nothing scores who is better or worse. Everything is free and private, with no account, and what you type stays on your device."
       ],
       "how": [
@@ -17045,7 +17045,7 @@
       ],
       "links": [
         [
-          "Why use this instead of an article or an AI chat?",
+          "Why use this instead of an article?",
           "/why-this-site.html"
         ],
         [

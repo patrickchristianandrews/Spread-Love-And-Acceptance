@@ -264,7 +264,7 @@
 
   /* ---------- the jobs ---------- */
   var GROUPS = [
-    ['home', 'Home & food'], ['admin', 'Money & admin'], ['kids', 'Kids & care'], ['baby', 'New baby'], ['care', 'Caring for a partner'],
+    ['home', 'Home & food'], ['admin', 'Money & admin'], ['kids', 'Kids & care'], ['baby', 'New baby'], ['care', 'Caring for a partner'], ['elder', 'Caring for a parent at home'],
     ['pets', 'Pets'], ['family', 'Family & friends'], ['think', 'The thinking work', 'noticing, planning, remembering'],
     ['work', 'Work, nights & recovery', 'counted on its own, not with the home jobs'], ['own', 'Your own jobs']
   ];
@@ -320,6 +320,12 @@
     ['healthcalls', 'care', 'Health appointments & calls for them', 'Health appointments and calls'],
     ['oncallill', 'care', 'Being on call for a partner who is unwell'],
     ['personal', 'care', 'Personal care (washing, dressing)'],
+    // flow17: an elderly parent or in-law who lives with you, as one named block of work
+    ['eldermeals', 'elder', null, 'Meals and sitting with them', { cat: 'care', m: 60, f: 'day' }],
+    ['eldermeds', 'elder', null, 'Their medicines', { cat: 'care', m: 10, f: 'day' }],
+    ['elderappts', 'elder', null, 'Their appointments and calls', { cat: 'care', m: 90, f: 'month' }],
+    ['elderpersonal', 'elder', null, 'Their personal care (washing, dressing)', { cat: 'care', m: 30, f: 'day' }],
+    ['eldernights', 'elder', null, 'Nights on call for them', { cat: 'care', m: 60, f: 'few' }],
     ['walks', 'pets', 'Dog walks'],
     ['litter', 'pets', 'Litter, cage or tank cleaning', 'Litter, cage or tank'],
     ['vet', 'pets', 'Vet visits & pet supplies', 'Vet visits and pet supplies'],
@@ -368,12 +374,13 @@
     nightwake: 'Despertares de noche', forms: 'Formularios e inscripciones de la escuela', solokids: 'Cuidar a los niños a solas (mientras el otro trabaja)', parties: 'Juegos y fiestas de los niños',
     nightfeeds: 'Tomas de noche', oncall: 'De guardia de noche (quien escucha al bebé)', nappies: 'Pañales', bottles: 'Biberones y esterilizar', solobaby: 'Cuidar al bebé a solas (mientras el otro trabaja)',
     meds: 'Medicinas y recetas', healthcalls: 'Citas médicas y llamadas', oncallill: 'Estar pendiente de quien está enfermo', personal: 'Cuidado personal (bañar, vestir)',
+    eldermeals: 'Comidas y acompañarle', eldermeds: 'Sus medicinas', elderappts: 'Sus citas médicas y llamadas', elderpersonal: 'Su cuidado personal (bañar, vestir)', eldernights: 'De guardia por la noche por si necesita algo',
     litter: 'Arenero, jaula o pecera', vet: 'Veterinario y cosas de las mascotas', inlaws: 'Mantener el contacto con las dos familias', birthdays: 'Cumpleaños y fiestas',
     hosting: 'Recibir visitas', friends: 'Planear tiempo con amigos', calendar: 'Llevar el calendario de la familia', backup: 'Cuidado de niños y planes de respaldo',
     checking: 'Revisar que las cosas se hicieron', trips: 'Planear viajes y vacaciones', checkin: 'Preguntar cómo está cada uno', peace: 'Mantener la paz',
     paid: 'Trabajo pagado', homecall: 'En casa pero de guardia (entregas, arreglos, el perro)', nightshift: 'Turnos de noche', recovery: 'Dormir después del turno de noche', commute: 'Un trayecto largo al trabajo'
   };
-  var ES_GROUP = { home: 'Casa y comida', admin: 'Dinero y trámites', kids: 'Niños y cuidado', baby: 'Bebé', care: 'Cuidar a la pareja', pets: 'Mascotas', family: 'Familia y amigos',
+  var ES_GROUP = { home: 'Casa y comida', admin: 'Dinero y trámites', kids: 'Niños y cuidado', baby: 'Bebé', care: 'Cuidar a la pareja', elder: 'Cuidar a un padre o una madre en casa', pets: 'Mascotas', family: 'Familia y amigos',
     think: 'El trabajo de pensar', work: 'Trabajo, noches y descanso', own: 'Sus propias tareas' };
   var ES_GROUP_SUB = { think: 'notar, planear, acordarse', work: 'se cuenta aparte, no con las tareas de la casa' };
   var JOB = {}, LIBX = {};
@@ -449,6 +456,7 @@
     var n = Math.min(MAX_P, Math.max(2, o.people.length));
     var t = { v: 1, people: [], list: [], ans: {}, me: 0, ill: !!o.ill, away: !!o.away, hrs: {}, split: '', peek: {} };
     if (o.lang === 'es' || o.lang === 'en') t.lang = o.lang;
+    if (typeof o.illBy === 'string' && o.illBy.trim()) t.illBy = o.illBy.replace(/\s+/g, ' ').trim().slice(0, 40);
     if (o.hhNo) t.hhNo = true;
     if (o.baby) t.baby = true;
     if (o.cxOn) t.cxOn = true;
@@ -660,7 +668,7 @@
   var rowIds = {};
   function renderList() {
     var box = $('lq-list'); if (!box) return;
-    var act = document.activeElement, keep = act && act.closest && act.closest('#lq-list') ? { id: act.closest('.lq-row') && act.closest('.lq-row').getAttribute('data-id'), w: act.getAttribute('data-w'), rm: act.classList.contains('remove') } : null;
+    var act = document.activeElement, keep = act && act.closest && act.closest('#lq-list') ? { id: act.closest('.lq-row') && act.closest('.lq-row').getAttribute('data-id'), w: act.getAttribute('data-w'), rm: act.classList.contains('remove'), job: act.classList.contains('lq-job') } : null;
     box.innerHTML = '';
     box.classList.toggle('is-two', q.people.length === 2);
     GROUPS.forEach(function (g) {
@@ -675,23 +683,33 @@
     });
     if (keep && keep.id) {
       var r = box.querySelector('.lq-row[data-id="' + cssq(keep.id) + '"]');
-      var f = r && (keep.w != null ? r.querySelector('.lq-w[data-w="' + keep.w + '"]') : keep.rm ? r.querySelector('.remove') : null);
+      var f = r && (keep.w != null ? r.querySelector('.lq-w[data-w="' + keep.w + '"]') : keep.rm ? r.querySelector('.remove') : keep.job ? r.querySelector('.lq-job') : null);
       if (f) f.focus({ preventScroll: true });
     }
   }
   function cssq(s) { return String(s).replace(/["\\]/g, '\\$&'); }
+  // flow17: one line per job: the job's name, then the three buttons. The name is itself a small button that opens
+  // the job's extras ("How often", "Roughly how long?" and "Take it off the list"), one job at a time, so 20 jobs
+  // fit in about four phone screens. Which jobs are open is never kept or sent in a link.
+  var rowOpen = {};
   function rowEl(id) {
     var r = document.createElement('div'); r.className = 'lq-row'; r.setAttribute('data-id', id);
     var top = document.createElement('div'); top.className = 'lq-row-top';
-    var p = document.createElement('p'); p.className = 'lq-job'; p.id = rowHtmlId(id); p.textContent = label(id);
+    var p = document.createElement('button'); p.type = 'button'; p.className = 'lq-job'; p.id = rowHtmlId(id);
+    var open = !!rowOpen[id], hasW = weighted() && kindOf(id) !== 'work', set = hasW && !!(q.jw && q.jw[id]);
+    p.setAttribute('aria-expanded', String(open)); p.setAttribute('aria-controls', p.id + '-x');
+    p.innerHTML = '<span class="lq-job-t"></span><span class="lq-job-more" aria-hidden="true">' + (open ? '&#9662;' : '&#9656;') + '</span>';
+    p.querySelector('.lq-job-t').textContent = label(id);
+    p.title = L('More for this job', 'Más para esta tarea');
+    p.addEventListener('click', function () {
+      if (rowOpen[id]) delete rowOpen[id]; else rowOpen[id] = 1;
+      var nr = rowEl(id); r.parentNode.replaceChild(nr, r);
+      var b = nr.querySelector('.lq-job'); if (b) b.focus({ preventScroll: true });
+    });
     top.appendChild(p);
-    // every job can come off (a starter goes back under "Show more jobs")
-    var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;';
-    rm.setAttribute('aria-label', L('Take ' + label(id) + ' off the list', 'Quitar ' + label(id) + ' de la lista'));
-    rm.addEventListener('click', function () { dropJob(id); });
-    top.appendChild(rm);
+    if (set) { var sm = document.createElement('span'); sm.className = 'lq-job-set'; var ow0 = OFTEN.filter(function (o) { return o[0] === oftenOf(id); })[0]; sm.textContent = (ow0 ? (isEs() ? ow0[3] : ow0[2]) : '') + (lenOf(id) ? ' · ' + lenOf(id) + ' h' : ''); p.appendChild(sm); }
     r.appendChild(top);
-    var g = document.createElement('div'); g.className = 'lq-who'; g.setAttribute('role', 'group'); g.setAttribute('aria-labelledby', p.id);
+    var g = document.createElement('div'); g.className = 'lq-who'; g.setAttribute('role', 'group'); g.setAttribute('aria-label', label(id));
     var order = q.people.length === 2 ? [0, 'b', 1] : q.people.map(function (_, i) { return i; }).concat(['b']);
     order.forEach(function (w) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'lq-w' + (w === 'b' ? ' is-both' : '');
@@ -703,14 +721,23 @@
       g.appendChild(b);
     });
     r.appendChild(g);
-    if (weighted() && kindOf(id) !== 'work') {
-      var ow = document.createElement('div'); ow.className = 'lq-often';
-      var f = oftenOf(id), h = lenOf(id);
-      ow.innerHTML = '<label><span>' + esc(L('How often', 'Cada cuánto')) + '</span><select data-lq-often="' + esc(id) + '" aria-label="' + esc(L('How often: ', 'Cada cuánto: ') + label(id)) + '">' +
-        OFTEN.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === f ? ' selected' : '') + '>' + esc(isEs() ? o[3] : o[2]) + '</option>'; }).join('') + '</select></label>' +
-        '<label><span>' + esc(L('Roughly how long? (h each time)', '¿Cuánto tarda? (h cada vez)')) + '</span><input type="number" min="0" max="80" step="0.25" inputmode="decimal" autocomplete="off" data-lq-len="' + esc(id) + '" aria-label="' + esc(L('Roughly how long, in hours each time: ', 'Cuánto tarda, en horas cada vez: ') + label(id)) + '" placeholder="' + esc(L('optional', 'opcional')) + '" value="' + (h || '') + '"></label>';
-      r.appendChild(ow);
+    var x = document.createElement('div'); x.className = 'lq-rowx'; x.id = p.id + '-x'; x.hidden = !open;
+    if (open) {
+      if (hasW) {
+        var f = oftenOf(id), h = lenOf(id);
+        var ow = document.createElement('div'); ow.className = 'lq-often';
+        ow.innerHTML = '<label><span>' + esc(L('How often', 'Cada cuánto')) + '</span><select data-lq-often="' + esc(id) + '" aria-label="' + esc(L('How often: ', 'Cada cuánto: ') + label(id)) + '">' +
+          OFTEN.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === f ? ' selected' : '') + '>' + esc(isEs() ? o[3] : o[2]) + '</option>'; }).join('') + '</select></label>' +
+          '<label><span>' + esc(L('Roughly how long? (h each time)', '¿Cuánto tarda? (h cada vez)')) + '</span><input type="number" min="0" max="80" step="0.25" inputmode="decimal" autocomplete="off" data-lq-len="' + esc(id) + '" aria-label="' + esc(L('Roughly how long, in hours each time: ', 'Cuánto tarda, en horas cada vez: ') + label(id)) + '" placeholder="' + esc(L('optional', 'opcional')) + '" value="' + (h || '') + '"></label>';
+        x.appendChild(ow);
+      }
+      // every job can come off (a starter goes back under "Show more jobs")
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'remove lq-rm'; rm.textContent = L('Take it off the list', 'Quitarla de la lista');
+      rm.setAttribute('aria-label', L('Take ' + label(id) + ' off the list', 'Quitar ' + label(id) + ' de la lista'));
+      rm.addEventListener('click', function () { delete rowOpen[id]; dropJob(id); });
+      x.appendChild(rm);
     }
+    r.appendChild(x);
     var c = document.createElement('p'); c.className = 'lq-cmp'; c.hidden = true; r.appendChild(c);
     paintRow(r);
     return r;
@@ -789,8 +816,13 @@
         var on = q.list.indexOf(id) >= 0;
         b.setAttribute('aria-pressed', String(on)); b.textContent = label(id);
         b.addEventListener('click', function () {
-          if (q.list.indexOf(id) >= 0) dropJob(id); else addJob(id);
-          var again = box.querySelector('[data-more="' + id + '"]'); if (again) again.focus({ preventScroll: true });
+          if (q.list.indexOf(id) >= 0) { dropJob(id); var again = box.querySelector('[data-more="' + id + '"]'); if (again) again.focus({ preventScroll: true }); return; }
+          addJob(id);
+          // flow17: the drawer closes once a job is added, and the new job is right there to tap, so the picture is
+          // never pages of chips away. "Show more jobs" opens it again for the next one.
+          var dm = $('lq-more'); if (dm) dm.open = false;
+          var nr = document.querySelector('#lq-list .lq-row[data-id="' + cssq(id) + '"]');
+          if (nr) { goTo(nr, 'center'); var w0 = nr.querySelector('.lq-w'); if (w0) w0.focus({ preventScroll: true }); }
         });
         pk.appendChild(b);
       });
@@ -846,7 +878,7 @@
   function lhNote() {
     if (!q.ill) return '';
     var w = lhWho();
-    if (!w.length) return L('Long hours or illness noted.', 'Se tienen en cuenta horas largas o una enfermedad.');
+    if (!w.length) return q.illBy ? L(q.illBy + ' noted long hours or illness.', q.illBy + ' anotó horas largas o una enfermedad.') : L('Long hours or illness noted.', 'Se tienen en cuenta horas largas o una enfermedad.');
     return w.map(lhLine).join('. ') + '.';
   }
   /* Paid work and shifts: each person's own paid work, side by side (never "mostly" one of you, which hid the
@@ -921,8 +953,8 @@
       html = '<p>' + esc(L('Tap who mostly does each job. The picture builds here as you go.', 'Toca quién hace casi siempre cada tarea. La imagen se arma aquí mientras avanzas.')) + '</p>' +
         '<p class="lq-mini">' + esc(L('No hours, no numbers. Leave out any job that doesn’t happen in your home.', 'Sin horas ni números. Deja fuera cualquier tarea que no pase en su casa.')) + '</p>';
     } else {
-      html += '<p>' + esc(isEs() ? 'Así se ve' + (multiView() ? ' desde ' + (q.me === q.me && typed(q.me) ? 'el lado de ' + typed(q.me) : 'tu lado') : '') + ', ' + all.n + (all.n === 1 ? ' tarea' : ' tareas') + ' hasta ahora.'
-        : 'Here’s how it looks' + (multiView() ? ' from ' + poss(q.me) + ' side' : '') + ', ' + all.n + (all.n === 1 ? ' job' : ' jobs') + ' so far.') + '</p>';
+      html += '<p class="lq-yourview">' + esc(isEs() ? (multiView() ? 'Tu vista' + (typed(q.me) ? ' (' + typed(q.me) + ')' : '') : 'Así se ve') + ', ' + all.n + (all.n === 1 ? ' tarea' : ' tareas') + ' hasta ahora.'
+        : (multiView() ? 'Your view' + (typed(q.me) ? ' (' + typed(q.me) + ')' : '') : 'Here’s how it looks') + ', ' + all.n + (all.n === 1 ? ' job' : ' jobs') + ' so far.') + '</p>';
       var lines = [];
       SECTIONS.forEach(function (s) {
         var t = tally(q.me, s[0]);
@@ -1665,6 +1697,8 @@
       if (lang0) q.lang = lang0;
       if (!q.ans[me]) q.ans[me] = {};
     }
+    // "Someone works long hours or is ill" turned on over there without saying who: say whose note it is
+    if (d.ill && !Object.keys(d.lh || {}).length && d.f >= 0 && d.f !== me && String(d.people[d.f] || '').trim()) q.illBy = String(d.people[d.f]).trim().slice(0, 40);
     var by = d.f >= 0 ? typed(d.f) : '';
     q.from = { by: by, reply: hasAny(me) && d.f >= 0 && d.f !== me, t: d.t, f: d.f };
     if (q.from.reply && d.f >= 0) q.peek[me + '>' + d.f] = 1;
@@ -1929,7 +1963,7 @@
     'lq-next-h': 'Próximos pasos', 'lq-fridge-t': 'Hacer una lista para el refri (un dueño por tarea)', 'lq-fridge-d': 'Cada tarea de tu vistazo está para elegir. Elijan a quién le toca cada una, y luego imprímanla o envíenla como texto.',
     'lq-deeper-t': 'Ir más a fondo: contar las horas (en inglés)', 'lq-deeper-d': 'La versión completa, con horas, cuentas y el lado de cada persona. Sus nombres y tareas pasan con ustedes.',
     'lq-talk-t': 'Hablarlo', 'lq-talk-d': 'Una forma tranquila de sacar el tema, cuando estén descansados.',
-    'lq-keep-t': 'Se guarda en este aparato para la próxima vez. Nunca se envía a ningún lado.', 'lq-erase': 'Borrar el vistazo', 'lq-mini-go': 'Verlo ↓'
+    'lq-keep-t': 'Se guarda en este aparato para la próxima vez. Nunca se envía a ningún lado.', 'lq-erase': 'Borrar el vistazo', 'lq-mini-go': 'Ver cómo se ve ↓'
   };
   function uiEls() {
     var g = function (sel) { return document.querySelector(sel); };
@@ -1953,12 +1987,63 @@
       if (tn.textContent !== t && !(k === 'lq-erase' && el.dataset && el.dataset.armed)) tn.textContent = t;
     });
     headLang(es);
+    chromeLang(es && body.getAttribute('data-ls-view') === 'quick');
     var inp = $('lq-new'); if (inp) inp.placeholder = es ? '+ añadir una tarea' : '+ add a job';
     var lb = $('lq-lang'); if (lb) { lb.textContent = es ? 'In English' : 'En español'; lb.setAttribute('lang', es ? 'en' : 'es'); }
     var sec = $('quick'); if (sec) { if (es) sec.setAttribute('lang', 'es'); else sec.removeAttribute('lang'); }
     // "Talk about it": in Spanish, the words to use on the Spanish page
     var talkA = $('lq-talk-d') && $('lq-talk-d').closest('a'); if (talkA) talkA.setAttribute('href', es ? '/en-espanol.html#casa' : '/check-ins.html');
     fridgeLang(es);
+  }
+  // flow17: the words around the quick look (the awning, the "4 ways in" switch, labels, the privacy line, the card's
+  // buttons) follow its language too, so a Spanish visitor never meets half-English chrome. The English is kept
+  // and put back on "In English". The safety line is left exactly as it is.
+  var CH0 = null;
+  var CH_ES = [
+    ['.ls-awning span', 'Recién exprimida · siempre gratis'],
+    ['.read-head .read-code', 'Herramienta · nada sale de tu aparato'],
+    ['nav.ps .ps-k b', '¿Quién hace qué?'],
+    ['nav.ps .ps-k span', '· 4 formas de empezar'],
+    ['nav.ps a.ps-b[href$="#quick"]', 'Vistazo rápido', 1],
+    ['nav.ps a.ps-b[href$="#stand"]', 'Horas y cuentas', 1],
+    ['nav.ps a.ps-b[href$="#owners"]', 'Lista para el refri', 1],
+    ['nav.ps a.ps-b[href^="/snapshot/"]', 'Por dónde empezar', 1],
+    ['label[for="lq-new"]', 'Otra tarea'],
+    ['label[for="own-new"]', 'Otra tarea'],
+    ['.ls-top-note > a[href^="/work.html"]', 'Usa la lista de equipo (en inglés) →'],
+    ['.tol-private strong', 'Privado desde el diseño.'],
+    ['.tol-private a[href*="privacy"]', 'Más'],
+    ['#lq-card h4', 'Tu resultado como imagen'],
+    ['#lq-card [data-card="save"]', 'Guardar imagen'],
+    ['#lq-card [data-card="link"]', 'Copiar enlace'],
+    ['#lq-card [data-card="share"]', 'Compartir'],
+    ['#lq-card [data-card="print"]', 'Guardar como PDF o imprimir'],
+    ['#lq-card .ls-card-note', 'Hecha aquí, en este aparato. No se sube nada: la imagen y el enlace se quedan contigo hasta que los envíes.']
+  ];
+  // text nodes right after an element (the business line's question, the privacy line's sentence)
+  var CH_ES_AFTER = [
+    ['.ls-top-note', 'first', '¿Reparten trabajo en un negocio o un equipo? '],
+    ['.tol-private strong', 'next', ' Lo que escribes o eliges en esta página se queda en tu aparato. Nunca se nos envía. ']
+  ];
+  function chromeLang(es) {
+    if (!CH0) CH0 = { el: [], tn: [] };
+    CH_ES.forEach(function (r, i) {
+      [].forEach.call(document.querySelectorAll(r[0]), function (el, k) {
+        // the switch's buttons keep their little picture: only the words after it change
+        var tn = r[2] ? el.lastChild : ownText(el); if (!tn) return;
+        var key = i + ':' + k;
+        if (!(key in CH0.el)) CH0.el[key] = tn.textContent;
+        var t = es ? (r[2] ? ' ' + r[1] : r[1]) : CH0.el[key];
+        if (tn.textContent !== t) tn.textContent = t;
+      });
+    });
+    CH_ES_AFTER.forEach(function (r, i) {
+      var el = document.querySelector(r[0]); if (!el) return;
+      var tn = r[1] === 'first' ? el.firstChild : el.nextSibling; if (!tn || tn.nodeType !== 3) return;
+      if (!(i in CH0.tn)) CH0.tn[i] = tn.textContent;
+      var t = es ? r[2] : CH0.tn[i]; if (tn.textContent !== t) tn.textContent = t;
+    });
+    body.toggleAttribute('data-lq-es', !!es);
   }
   // The page's own title and intro follow the quick look's language too (a shared link opened in Spanish)
   var HEAD0 = null;
@@ -1982,7 +2067,7 @@
     var g = function (sel) { return own.querySelector(sel); };
     var els = { h: $('owners-h'), lede: g('.ls-panel-note'), p1: g('#own-pick') && g('#own-pick').previousElementSibling, p2: $('own-add-person') && $('own-add-person').parentNode,
       add: $('own-add-go'), addp: $('own-add-person'), empty: $('own-empty'), namesH: $('own-names-h'), more: g('.ls-own-more-l') };
-    var ES_F = { h: 'Sin proyecto: un dueño para cada tarea', lede: 'Sin anotar una semana entera. Elijan las tareas que más discuten, denle un dueño a cada una con un toque, y pongan la lista en el refri: imprímanla, guárdenla como PDF o envíenla como texto. Ser dueño de una tarea es hacerla, o asegurarse de que se haga.',
+    var ES_F = { h: 'La lista para el refri: un dueño para cada tarea', lede: 'Sin anotar una semana entera. Elijan las tareas que más discuten, denle un dueño a cada una con un toque, y pongan la lista en el refri: imprímanla, guárdenla como PDF o envíenla como texto. Ser dueño de una tarea es hacerla, o asegurarse de que se haga.',
       p1: '1. Elegir las tareas (toca para poner o quitar)', p2: '2. Un dueño para cada una', add: 'Añadir', addp: '+ Añadir a una persona', empty: 'Todavía no hay nada elegido.',
       namesH: '¿De quién es la lista? Escriban sus nombres, para que diga quién se encarga de qué.', more: 'Añadir un respaldo para los días malos y qué significa «hecho» (opcional)' };
     if (!FR0) { FR0 = {}; Object.keys(els).forEach(function (k) { if (els[k]) FR0[k] = k === 'p2' ? els[k].firstChild.textContent : els[k].textContent; }); }
@@ -2058,6 +2143,8 @@
     })();
     ready = true;
     renderAll();
+    // the site's privacy line and "About this tool" arrive after this: put them in the quick look's language too
+    window.addEventListener('load', function () { try { applyLang(); } catch (e) {} });
     // arriving at #quick (the home page's "Quick look"): the site's top bar lands after the first paint and pushes the
     // page down, which showed as a blank band above the quick look. Put the quick look back at the top once the bar is
     // in, unless the person has already started scrolling.
