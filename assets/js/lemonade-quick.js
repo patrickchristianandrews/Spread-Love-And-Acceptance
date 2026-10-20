@@ -390,8 +390,8 @@
   function known(id) { return typeof id === 'string' && (isCustom(id) ? id.length > 2 && id.length <= 62 : !!JOB[id]); }
 
   // how often a job comes round, as a weight (used with "Someone works long hours or is ill")
-  var OFTEN = [['day', 5, 'Daily', 'Cada día'], ['few', 2.5, 'A few times a week', 'Varias veces por semana'], ['week', 1, 'Weekly', 'Cada semana'], ['fort', 0.5, 'Every other week', 'Cada dos semanas'],
-    ['month', 0.25, 'Monthly', 'Cada mes'], ['qtr', 0.08, 'Every few months', 'Cada pocos meses'], ['need', 0.1, 'Now and then', 'De vez en cuando']];
+  var OFTEN = [['day', 5, 'Daily'], ['few', 2.5, 'A few times a week'], ['week', 1, 'Weekly'], ['fort', 0.5, 'Every other week'],
+    ['month', 0.25, 'Monthly'], ['qtr', 0.08, 'Every few months'], ['need', 0.1, 'Now and then']];
   var OFTEN_W = {}; OFTEN.forEach(function (o) { OFTEN_W[o[0]] = o[1]; });
   var LIB_OFTEN = { day: 'day', wkd: 'day', few: 'few', two: 'few', week: 'week', eow: 'fort', month: 'month' };
   /* ---------- the quick look's own state ---------- */
@@ -818,7 +818,7 @@
     if (t.both > 0 && t.both >= max) return { shared: true, words: 'mostly shared' };
     return { even: true, words: ('spread between ' + (q.people.length === 2 ? 'you' : 'you all')) };
   }
-  var SECTIONS = [['home', 'Everyday jobs', 'Tareas de cada día'], ['think', 'Planning and remembering', 'Planear y acordarse'], ['night', 'Nights with the baby', 'Noches con el bebé'], ['work', 'Paid work and shifts', 'Trabajo pagado y turnos']];
+  var SECTIONS = [['home', 'Everyday jobs'], ['think', 'Planning and remembering'], ['night', 'Nights with the baby'], ['work', 'Paid work and shifts']];
   // only night wakings (older kids, no baby jobs): "Nights with the kids"
   function babyNights() { return q.list.some(function (id) { return kindOf(id) === 'night' && id !== 'nightwake'; }); }
   function secName(s) {
