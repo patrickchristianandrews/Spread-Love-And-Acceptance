@@ -128,7 +128,7 @@
         "say": "“These help me stay at the table. Tap my arm and I’m all yours.”",
         "step": "Agree a signal, a tap on the arm, that means “I’m talking to you”. Where you can, turn the room down for everyone. One conversation at a time is kinder to more people than you’d think.",
         "looks": "Sunday lunch, nine people, the telly on and two conversations going at once, and one person at the end of the table has earbuds in with nothing playing through them at all.",
-        "other": "Everyone else can feel shut out, or assume the person doesn’t want to talk to them at all.",
+        "other": "From across the table it looks like a closed door. Most people won’t knock on it, so they talk round the person instead, and the person notices.",
         "chain": [
           "Sound arrives whether you want it or not",
           "A brain that filters less hears all of it at once",
@@ -255,7 +255,7 @@
         "say": "“I ask for it in writing so I get it right first time. I trust what we agreed.”",
         "step": "After a chat, send a two-line summary. “So I’m doing X by Friday. Right?” The manager only has to reply “Yes.”",
         "looks": "Ten-minute briefing, lots of nodding. At the end: “Sorry, could you just pop that in an email?”",
-        "other": "The manager may feel it’s extra work, or hear it as “I don’t trust what you said.”",
+        "other": "The manager may hear “I don’t trust what you said”, or just one more job at five o’clock.",
         "chain": [
           "Spoken words vanish as they’re said",
           "Holding them while you work splits your attention",
@@ -321,7 +321,7 @@
         "step": "Agree a kind limit together. One clear answer, then “I said it, and I meant it,” and something calming to do side by side. If the worry runs your days, a GP or therapist can help.",
         "looks": "“Are you sure you’re not cross with me?” It’s the fourth time tonight, and you give the same answer you gave the other three times, a bit more tightly.",
         "an.0": "Going back for the third time to check the front door is locked.",
-        "other": "The person answering can feel worn out, or that their word isn’t trusted. And answering again and again can keep the loop going.",
+        "other": "Answering the same question for the fourth time is tiring, and it can start to feel like your word isn’t trusted. Answering it again and again can also keep the loop going, which is the unkind part of an act of kindness.",
         "chain": [
           "Doubt feels like danger",
           "Reassurance switches the alarm off for a moment",
@@ -342,10 +342,10 @@
       },
       "meltdown": {
         "fits": "Autistic young people describe meltdowns as different from tantrums. They come from overload rather than from wanting something, and they are not chosen. Children and adults can both have them.",
-        "step": "During one, fewer words, less noise, more space, and safety first. Afterwards, rest. Much later, a calm talk about early warning signs.",
+        "step": "During one: fewer words, less noise, more space, and safety first. Afterwards, rest. The calm talk about early signs can wait for another day, sometimes a week.",
         "looks": "Suddenly he’s shouting, or crying, or running, and it looks far, far bigger than whatever just happened.",
         "an.0": "A bath overflowing because the tap was never turned off.",
-        "other": "People nearby can feel frightened, embarrassed or blamed, and often don’t know what to do.",
+        "other": "Frightening, if you’re the one standing nearby. Embarrassing, if it’s in a shop. And people very often feel it must be their fault, and don’t know what to do with their hands.",
         "chain": [
           "Input keeps coming, noise and demands and change",
           "The brain’s buffer fills up",
@@ -358,7 +358,7 @@
         "step": "Try simpler questions about the body. “More tired or more annoyed?” “Space or company?” Give it time and come back to it later, or tomorrow.",
         "looks": "“How are you feeling about it?” “I don’t know.” And he really does seem stuck, not dodging.",
         "an.0": "A radio caught between two stations, all hiss.",
-        "other": "The person asking can feel shut out, or suspect something is being kept from them.",
+        "other": "It’s hard to be on the asking end. You can start to suspect something is being kept from you, when it may simply not have a name yet.",
         "chain": [
           "Feelings start as signals in the body",
           "Some people find those signals hard to read",
@@ -368,7 +368,7 @@
       },
       "last-straw": {
         "fits": "Stress builds up and makes small things feel bigger. The reaction belongs to the whole day.",
-        "step": "Name the full glass early, with “I’m nearly full today.” Afterwards, apologise for the size and talk about the cup separately.",
+        "step": "Say “I’m nearly full today” early, before the mug. Afterwards, apologise for the size of it, and talk about the mug another time, if it still matters.",
         "looks": "One mug, left on the side, after a long, long day. And off she goes.",
         "an.0": "The last drop of rain that makes the gutter overflow.",
         "other": "Whoever left the mug gets the whole day poured over them. That feels unfair, because it is.",
@@ -382,7 +382,7 @@
         "an.0": "A favourite mug. Any mug holds tea; this one is right.",
         "say": "“I eat this because it’s safe and easy for me. It says nothing about your cooking.”",
         "looks": "Cheese sandwich, white bread, every lunchtime, for three years. Anything new is politely declined.",
-        "other": "The cook can feel their effort is being refused, and families worry about health, or about meals out.",
+        "other": "The cook has stood over a hob for an hour, so a polite “no thank you” can feel like the effort being refused. Families worry about health, too, and about every meal out.",
         "chain": [
           "Every new food is a small gamble",
           "A known food is a sure thing",
@@ -393,7 +393,7 @@
       "on-time-means": {
         "an.0": "A recipe that says “a pinch”, when everyone’s pinch is different.",
         "step": "Say which kind of time you mean, such as “Seven sharp, the table is booked” or “Any time after seven.”",
-        "other": "The one who came at seven sharp may have waited, felt less important, or watched the food go cold. Possibly all three.",
+        "other": "The one who came at seven sharp sat with the wine going warm and the food going cold, wondering whether they mattered less.",
         "looks": "Dinner at seven. Bayo arrives at seven, on the dot, with wine. Shelley arrives at twenty to eight and thinks she’s on time.",
         "chain": [
           "“Seven o’clock” gets read through a local rule",
@@ -404,7 +404,7 @@
       "loud-family": {
         "looks": "Your first dinner at his family’s. Everyone talking at once, at full volume, over each other. To you it sounds exactly like a row.",
         "an.0": "A Saturday market, where the shouting is how business gets done.",
-        "other": "Someone from a quieter home can feel swamped, unable to get a word in, or sure that everyone is cross.",
+        "other": "Someone from a quieter home can sit through a whole dinner without getting a word in, and go home sure everyone was cross. By that family’s standards it was a lovely evening.",
         "chain": [
           "Every family has its own volume, and its own rules for whose turn it is",
           "In some homes, talking over each other means everyone’s involved",
@@ -414,7 +414,7 @@
         "step": "The quieter person can take short breaks, or ask a direct question to get a turn. The family can stop now and then and ask them in by name."
       },
       "direct-culture": {
-        "step": "Ask early, “How do you like feedback, straight or with some cushioning?” Agree a style for the team.",
+        "step": "Ask early: “Do you like feedback straight, or with some cushioning?” Then agree a style for the team and write it down somewhere people will see it.",
         "other": "The softer speaker can feel attacked. The plainer speaker can feel misled when the soft words turn out to have been hiding a real problem.",
         "looks": "One new colleague says “This is wrong” in the meeting. Another says “Maybe we could think about it a bit more,” and also means “This is wrong.”",
         "chain": [
@@ -427,7 +427,7 @@
         "an.0": "Handwriting, neat or scrawly. It says nothing about how they feel about you.",
         "step": "Talk about it once, on a calm day. What does “OK.” mean to each of you? When is a call welcome, and when would a text do?",
         "looks": "Mum replies “OK.” with a full stop, and her teenager reads pure fury. Meanwhile Grandad has rung, again, about something a text would have covered.",
-        "other": "The reader can feel snubbed, told off or interrupted, and worry about what was meant.",
+        "other": "“OK.” with a full stop reads, to some people, like a door being shut. The writer usually meant nothing of the kind.",
         "chain": [
           "Texting habits are learned in a particular time and group",
           "For some, a full stop just ends a sentence; for others it means annoyed",
@@ -468,7 +468,7 @@
       },
       "unasked-advice": {
         "looks": "Three in the morning, you’re finally getting the baby down, and your mother-in-law appears in the doorway. “In my day we just let them cry.”",
-        "other": "You can hear “You’re doing it wrong”, and feel undermined, at exactly the hour you have least left to give.",
+        "other": "At three in the morning “Have you tried…” sounds a lot like “You’re doing it wrong.”",
         "chain": [
           "Advice is how some people show care",
           "They learned things the hard way",
@@ -478,7 +478,7 @@
       "shutdown": {
         "looks": "She stops talking and stares at a point somewhere past your shoulder, and questions get nothing back at all.",
         "an.0": "A computer restarting in safe mode.",
-        "other": "People nearby can feel ignored, or frightened, or completely sure they caused it, and start asking more questions, which doesn’t help.",
+        "other": "People nearby can feel ignored or frightened, or sure they caused it, so they ask more questions. That usually makes it longer.",
         "chain": [
           "Overload builds",
           "The system switches off whatever isn’t essential",
@@ -488,13 +488,14 @@
       "info-dump": {
         "looks": "You asked one question about the 1950s railway timetable. That was twenty minutes ago.",
         "an.0": "Showing someone round your allotment, bed by bed.",
-        "other": "The listener can feel lost, or trapped, or unable to get a word in, and too polite to say any of that.",
+        "other": "Twenty minutes into the railway timetable the listener is lost, slightly trapped and far too polite to say either.",
         "chain": [
           "The interest is where they feel most themselves",
           "Sharing it is sharing themselves",
           "The detail is the gift",
           "A long explanation is an invitation in"
-        ]
+        ],
+        "step": "Start with the five-minute version and ask “Want more?” If you’re listening, “Tell me the best bit” works surprisingly well, and so does “Can we pause there and come back to it?”"
       }
     }
   },
