@@ -1220,6 +1220,13 @@ function grievanceOf(t){
   return /^you$/i.test(m[1]) ? "that you "+what : "by "+m[1].toLowerCase()+" "+what;
 }
 const REFRAMES = [
+  // (sig17, Jen and Tom) "ur doing bedtime tonight. i did it the last 3 nights": an order with a tally attached. Ask, and
+  // say why plainly: you've done the last few and you're worn out
+  {id:"turnorder", re:/^\s*(?:(?:ok|okay|right|so)[,\s]+)?(?:ur|you're|you are|youre|u r|ure) (doing|taking|cooking|making|handling|picking up|getting|sorting|washing|cleaning|on) ((?:the |your |our )?[a-z][a-z ]{1,25}?) (tonight|today|tomorrow|this (?:evening|weekend|morning|afternoon))[.!,]*\s*(?:(?:cos|because|coz|bc|since) )?(?:i|i've|i have|ive) (?:did|done|do|had|been doing|taken|took|covered|cooked|made)(?: it| them| that| this)? (?:for )?(?:the )?(?:last|past) (\S+) (nights|days|times|evenings|mornings|weekends|weeks)(?: in a row| running)?[.!]*\s*$/i,
+   why:"\"You're doing it tonight\" plus a count of your turns lands as an order and a score. Asking, and saying you're worn out, says the same thing in a way they can say yes to.",
+   send:(m)=>{ const V = {doing:"do", taking:"take", cooking:"cook", making:"make", handling:"handle", "picking up":"pick up", getting:"get", sorting:"sort", washing:"wash", cleaning:"clean", on:"do"};
+     return "Could you "+(V[m[1].toLowerCase()]||"do")+" "+m[2].toLowerCase().trim()+" "+m[3].toLowerCase()+"? I've done the last few and I'm wiped."; },
+   recv:{mean:"They're asking you to take a turn, and saying they've done the last few. It may come out as an order because they're worn out.", reply:"Fair, you've done the last few. I'll do it tonight."}},
   {id:"visits", re:/\b(?:you can't|you cannot|you can not|stop|please don't|don't|you shouldn't|you need to stop)\s+(?:just\s+)?(?:turn(?:ing)? up|show(?:ing)? up|com(?:e|ing) (?:over|round|around|by)|drop(?:ping)? (?:by|in|round)|pop(?:ping)? (?:by|in|round|over)|visit(?:ing)?|let(?:ting)? yourself in)(?: (?:here|at ours|at our place|at the house))?\s*(?:whenever|any ?time|when(?:ever)? you (?:want|like|feel like it|please)|unannounced|without (?:asking|calling|texting|warning|telling us|a heads-up))/i,
    why:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and it keeps the door open.",
    send:(m,c)=>{ const home = (c.text.match(/\b(?:it's|it is|this is) (our|my) (home|house|place|flat|space)\b/i)||[]);
@@ -4070,6 +4077,11 @@ function verdictBase(an, sc, rw, opts){
   // "I won't bother then", "I'm not wanted", "in my day": hurt said sideways. Never "probably okay"
   if((an.found.withdraw || an.found.olddays) && !an.found.jab)
     return {id:"hurt", guilt:true, text: "This may land as hurt or guilt. "+(soft ? "Here's a way to keep the feeling and leave the door open." : "The notes below show why.")};
+  // (sig17) an order with a tally ("ur doing bedtime tonight. i did it the last 3 nights"): never "okay"
+  if(an.found.count && an.found.impera && !attack)
+    return {id:"hurt", order:true, text: "This may sound like an order, with a score being kept. "+(soft ? "Asking, and saying you're worn out, is easier to say yes to. Here's a version that keeps your point." : "The notes below show why.")};
+  if(an.found.count && !attack && lvl==="clear")
+    return {id:"hurt", mild:true, text: "This may sound like keeping score. "+(soft ? "Here's a version that keeps your point without the count." : "Saying what you need, without the count, is easier to answer.")};
   // blame said as a dig, or keeping score: never "probably okay"
   if(an.found.jab || (an.found.motive && lvl!=="clear"))
     return {id:"hurt", jab:true, text: "This may land as blame or a dig. "+(soft ? "Here's a kinder way to say it that keeps what you need." : "The notes below show why.")};
@@ -4277,6 +4289,9 @@ function verdict(an, sc, rw, opts){
     v = Object.assign({}, v, {id:"hurt", labelWord:true, text:"A word like that is a label for the person, so it may land as an accusation. "+(soft ? "Here's a way to say what happened and how it felt." : "Saying what happened, and how it felt, can be answered.")});
   if(an.ultOwn && v.id==="fight" && !["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","harm"].some(id=>f[id]))
     v = Object.assign({}, v, {ult:true, text:"This is an ultimatum about your own choice, and it may land as pressure. "+(soft ? "Try the version below, and say your limit once, calmly." : "Make the ask on its own, and say your limit once, calmly.")});
+  // (sig17) anything to an ex: "Before you send: want to sleep on it?" comes with it (never for a danger or self-harm reading)
+  if(opts.rel==="ex" && !v.exReach && v.id!=="danger" && !an.selfHarm && !v.control)
+    v = Object.assign({}, v, {sleepOn:true, exMode:true, link: ["/after-a-breakup.html#their-feed", "After a breakup: when a memory pulls at you"]});
   v = effortSeen(v, an);
   if(!r0) return answered(v, an, opts);
   const r = r0, F = r.flags;
@@ -4470,6 +4485,20 @@ const GOAL_WHY = {
   understood:"You want to be understood: it asks them to say back what they heard.",
   check:"You want to check you're reading it right: ask before you decide."
 };
+/* (sig17) A message to an ex (Relationship "An ex", and every message on /start/breakup.html): no "Can we talk about it at
+   [a time]", no "Is that okay?", no "let's sort this out together". What's left is the plain point, kept for the morning. */
+const EX_DROP = /^(?:(?:can|could) we (?:talk|meet|speak|catch up|look at it|take a breather|come back)\b.*\?|i'd like us to sort this out together\.|i'm not upset with you as a person\.|is that okay, or would something else work better for you\?|if that time doesn't work, tell me what does\.|thank you\.|i'd like to hear how it looks to you, too\.|i need a few minutes, and then can we talk about .*\?|what time works for you\?)$/i;
+function exMode(rw, opts){
+  if(!rw || !opts || opts.rel!=="ex" || rw.exReach || rw.danger || rw.unchanged || rw.gibberish || rw.lang) return rw;
+  const clean = t=>{ const ss = splitSentences(String(t||"")).map(x=>x.text.trim()).filter(Boolean).filter(x=>!EX_DROP.test(x));
+    let r = ss.join(" ").replace(/\s+by \[a time\]/g,"").replace(/,? once I've had a few minutes/g,"").trim();
+    return /[A-Za-z]/.test(r.replace(/\[[^\]]*\]/g,"")) ? r : "[What you want them to know, in one plain line.]"; };
+  const seen = new Set(), variants = [];
+  (rw.variants||[]).forEach(v=>{ const t = clean(v.text); if(seen.has(t)) return; seen.add(t); variants.push(Object.assign({}, v, {text:t})); });
+  const main = clean(rw.main);
+  if(!variants.length || variants[0].text!==main) variants.unshift({id:"main", label:"The plain point", why:"No invitation to talk, and nothing to answer tonight: the point, said plainly, if you still want to send it tomorrow.", text:main});
+  return Object.assign({}, rw, {main, variants, primary:variants[0], ex:true});
+}
 function rewrite(an, opts){
   opts = opts||{};
   const r = an && !an.danger && !an.control && !an.selfHarm ? ctxRead(an, opts, "send") : null;
@@ -4482,7 +4511,7 @@ function rewrite(an, opts){
     const v0 = {id:"main", label:"Your words, unsent for now", why:"A message to an ex isn't something to polish. If you still want to send it in the morning, these are your words.", text: an.text.trim()};
     return {main:v0.text, primary:v0, variants:[v0], changes:[], ask:null, list:"", unchanged:true, exReach:true};
   }
-  let rw = rewriteBase(an, opts);
+  let rw = exMode(rewriteBase(an, opts), opts);
   if(opts.answer==="upset" && !rw.danger && !rw.harm && !an.control && (rw.unchanged || noEvidence(an))){
     const main = "I'm upset with you right now. [What happened, and what you need.]";
     const v0 = {id:"main", label:"Say the feeling", why:"You said you're upset with them. Saying that plainly can be heard and answered; a line that sounds like a warning can't.", text:main};

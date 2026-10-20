@@ -467,6 +467,9 @@
       // "Split by time": two blocks of the night, an owner each (still one job on the list)
       if (Array.isArray(o.sp) && o.sp.length === 2) o.sp = o.sp.map(function (b) { b = b || {}; return { t: String(b.t == null ? '' : b.t).slice(0, 24), w: typeof b.w === 'number' && b.w >= 0 && b.w < n ? b.w : -1 }; });
       else delete o.sp;
+      // flow17: "Take turns": who has the job on each day, Monday to Sunday (still one job on the list)
+      if (Array.isArray(o.tt) && o.tt.length === 7) o.tt = o.tt.map(function (w) { return typeof w === 'number' && w >= 0 && w < n ? w : -1; });
+      else delete o.tt;
     });
     if (state.path !== 'fridge' && state.path !== 'count' && state.path !== 'money') delete state.path;
     if (!state.goal || typeof state.goal !== 'object') state.goal = { a: '', f: '' };
@@ -2483,8 +2486,18 @@
   var SPLITTABLE = /night feed|on call at night|night wak|night block|tomas de noche|de guardia de noche|despertares de noche/i;
   function canSplit(o) { return SPLITTABLE.test(o.name || ''); }
   function splitWords(o) { return o.sp.map(function (b) { return (b.t || '…') + ' ' + (b.w >= 0 && b.w < state.people.length ? nameOf(b.w) : (esq() ? '(sin dueño)' : '(no owner yet)')); }).join(' · '); }
-  function ownerWords(o) { return o.sp ? splitWords(o) : o.who >= 0 ? nameOf(o.who) : ''; }
-  function isOwned(o) { return o.sp ? o.sp.every(function (b) { return b.w >= 0 && b.w < state.people.length; }) : o.who >= 0 && o.who < state.people.length; }
+  // flow17: "Take turns" by day: "Tom Mon/Wed/Fri · Jen Tue/Thu/Sat/Sun"
+  var DAYS_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], DAYS_ES = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
+  function dayN(k) { return (esq() ? DAYS_ES : DAYS_EN)[k]; }
+  function turnWords(o) {
+    var out = [];
+    state.people.forEach(function (_, i) { var ds = []; o.tt.forEach(function (w, k) { if (w === i) ds.push(dayN(k)); }); if (ds.length) out.push(nameOf(i) + ' ' + ds.join('/')); });
+    var none = []; o.tt.forEach(function (w, k) { if (w < 0 || w >= state.people.length) none.push(dayN(k)); });
+    if (none.length && out.length) out.push(none.join('/') + (esq() ? ': sin dueño' : ': no one yet'));
+    return out.join(' · ');
+  }
+  function ownerWords(o) { return o.tt ? turnWords(o) : o.sp ? splitWords(o) : o.who >= 0 ? nameOf(o.who) : ''; }
+  function isOwned(o) { return o.tt ? o.tt.every(function (w) { return w >= 0 && w < state.people.length; }) : o.sp ? o.sp.every(function (b) { return b.w >= 0 && b.w < state.people.length; }) : o.who >= 0 && o.who < state.people.length; }
   function renderOwners() {
     var ol = $('own-list'); if (!ol) return;
     renderPicks();
@@ -2498,7 +2511,7 @@
       var li = document.createElement('li'); li.className = 'ls-own';
       var h = document.createElement('p'); h.className = 'ls-own-job'; h.textContent = o.name;
       var g = document.createElement('div'); g.className = 'ls-own-who'; g.setAttribute('role', 'group'); g.setAttribute('aria-label', 'Who owns ' + o.name);
-      if (!o.sp) state.people.forEach(function (p, i) {
+      if (!o.sp && !o.tt) state.people.forEach(function (p, i) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
         b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'ow' + idx + '_' + i);
         b.setAttribute('aria-pressed', String(o.who === i)); b.textContent = nameOf(i);
@@ -2529,7 +2542,49 @@
           li.appendChild(row);
         });
       }
-      if (canSplit(o) && !solo()) {
+      if (o.tt) {
+        // one row per person, a chip for each day; a day belongs to one person at a time
+        var tw = document.createElement('div'); tw.className = 'ls-own-tt';
+        state.people.forEach(function (p, i) {
+          var row = document.createElement('div'); row.className = 'ls-own-ttrow'; row.setAttribute('role', 'group');
+          row.setAttribute('aria-label', (esq() ? 'Días de ' : 'Days for ') + nameOf(i) + ': ' + o.name);
+          var nmS = document.createElement('span'); nmS.className = 'ls-own-ttn'; nmS.textContent = nameOf(i); nmS.style.setProperty('--pc', COLORS[i]); row.appendChild(nmS);
+          var days = document.createElement('span'); days.className = 'ls-own-ttd';
+          o.tt.forEach(function (w, k) {
+            var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip ls-day';
+            b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'ott' + idx + '_' + i + '_' + k);
+            b.setAttribute('aria-pressed', String(w === i)); b.textContent = dayN(k);
+            b.setAttribute('aria-label', nameOf(i) + ', ' + ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][k]);
+            b.addEventListener('click', function () {
+              o.tt[k] = o.tt[k] === i ? -1 : i; renderOwners(); save();
+              var f = document.querySelector('[data-fk="ott' + idx + '_' + i + '_' + k + '"]'); if (f) f.focus({ preventScroll: true });
+              status('“' + o.name + '”: ' + (turnWords(o) || (esq() ? 'nadie todavía' : 'no days picked yet')) + '.');
+            });
+            days.appendChild(b);
+          });
+          row.appendChild(days); tw.appendChild(row);
+        });
+        li.appendChild(tw);
+      }
+      if (!solo() && !o.sp) {
+        var tb = document.createElement('button'); tb.type = 'button'; tb.className = 'ls-link-btn ls-own-split'; tb.setAttribute('data-fk', 'otake' + idx);
+        tb.textContent = o.tt ? (esq() ? 'Volver a un solo dueño' : 'Back to one owner') : (esq() ? 'Turnarse por días' : 'Take turns');
+        tb.addEventListener('click', function () {
+          if (o.tt) {
+            var c0 = o.tt.filter(function (w) { return w >= 0; }), w1 = c0.length && c0.every(function (w) { return w === c0[0]; }) ? c0[0] : -1;
+            delete o.tt; o.who = w1; status('“' + o.name + '” has one owner again.');
+          } else {
+            // a start to change: the owner it had takes Mon/Wed/Fri, the next person the other days
+            var a = o.who >= 0 ? o.who : 0, b2 = (a + 1) % state.people.length;
+            o.tt = [a, b2, a, b2, a, b2, b2]; o.who = -1; delete o.alt; delete o.altBy;
+            status('“' + o.name + '”: taking turns by day, ' + turnWords(o) + '. Tap a day to change it. It still counts as one job on the list.');
+          }
+          renderOwners(); save();
+          var f = document.querySelector('[data-fk="otake' + idx + '"]'); if (f) f.focus({ preventScroll: true });
+        });
+        li.appendChild(tb);
+      }
+      if (canSplit(o) && !solo() && !o.tt) {
         var sb = document.createElement('button'); sb.type = 'button'; sb.className = 'ls-link-btn ls-own-split'; sb.setAttribute('data-fk', 'osplit' + idx);
         sb.textContent = o.sp ? (esq() ? 'Volver a un solo dueño' : 'Back to one owner') : (esq() ? 'Dividir por horario' : 'Split by time');
         sb.addEventListener('click', function () {
@@ -2634,7 +2689,7 @@
     var d = { app: 'lemonade', v: 1, fridge: 1, people: idx.map(nm), jobs: [], bills: [] };
     if (state.me >= 0 && !placeholder(state.people[state.me])) d.by = nm(state.me);
     if (to >= 0 && idx.indexOf(to) >= 0) d.to = nm(to);
-    d.own = ownersList().map(function (o) { var x = { n: o.name }; if (o.who >= 0 && idx.indexOf(o.who) >= 0) x.w = nm(o.who); if (o.sp) x.s = o.sp.map(function (b) { return [b.t, b.w >= 0 && idx.indexOf(b.w) >= 0 ? nm(b.w) : '']; }); if (o.bk >= 0 && idx.indexOf(o.bk) >= 0) x.b = nm(o.bk); if (o.dn && o.dn.trim()) x.d = clean(o.dn, 80); return x; });
+    d.own = ownersList().map(function (o) { var x = { n: o.name }; if (o.who >= 0 && idx.indexOf(o.who) >= 0) x.w = nm(o.who); if (o.tt) x.t = o.tt.map(function (w) { return w >= 0 && idx.indexOf(w) >= 0 ? nm(w) : ''; }); if (o.sp) x.s = o.sp.map(function (b) { return [b.t, b.w >= 0 && idx.indexOf(b.w) >= 0 ? nm(b.w) : '']; }); if (o.bk >= 0 && idx.indexOf(o.bk) >= 0) x.b = nm(o.bk); if (o.dn && o.dn.trim()) x.d = clean(o.dn, 80); return x; });
     return packSide(JSON.stringify(d)).then(sideLink);
   }
   document.addEventListener('click', function (e) {
@@ -3445,6 +3500,7 @@
     var own = list(raw.own, MAX_OWN_ANY).map(function (o) {
       var x = { n: clean(o.n, 60), w: low(o.w), b: low(o.b), d: clean(o.d, 80) };
       if (Array.isArray(o.s) && o.s.length === 2) x.s = o.s.map(function (b) { b = Array.isArray(b) ? b : []; return [clean(b[0], 24), low(b[1])]; });
+      if (Array.isArray(o.t) && o.t.length === 7) x.t = o.t.map(function (w) { return low(w); });
       return x;
     }).filter(function (o) { return o.n; });
     if (!people.length && !jobs.length && !bills.length) return null;
@@ -3653,8 +3709,9 @@
         else if (have.who >= 0 && w >= 0 && w !== have.who) { have.alt = w; have.altBy = d.by || ''; out.ownDiff = (out.ownDiff || []).concat([have.name]); }
         if (!(have.bk >= 0) && bk >= 0) have.bk = bk; if (!have.dn && o.d) have.dn = o.d;
         if (o.s && (!have.sp || have.sp.every(function (b) { return b.w < 0; }))) { have.sp = spIn(o.s, map); have.who = -1; }
+        if (o.t) ttIn(have, o.t, function (nm) { return nm && map[low(nm)] != null ? map[low(nm)] : -1; });
       }
-      else if (state.owners.length < maxOwn()) { var no = { name: o.n, who: w, bk: bk, dn: o.d || '' }; if (o.s) { no.sp = spIn(o.s, map); no.who = -1; } state.owners.push(no); out.own = (out.own || 0) + 1; }
+      else if (state.owners.length < maxOwn()) { var no = { name: o.n, who: w, bk: bk, dn: o.d || '' }; if (o.s) { no.sp = spIn(o.s, map); no.who = -1; } if (o.t) ttIn(no, o.t, function (nm) { return nm && map[low(nm)] != null ? map[low(nm)] : -1; }); state.owners.push(no); out.own = (out.own || 0) + 1; }
       if ((bk >= 0 || o.d) && !state.ownMore) state.ownMore = true;
     });
     // their own side has arrived: a number typed in for them here (from the quick look) now counts as theirs
@@ -3680,6 +3737,12 @@
   }
 
   // two night blocks from a link: [["9pm–2am", "andre"], …] with the names as this stand has them
+  // "Take turns" from a link: the days fill in where this device has none yet (a day picked here stays)
+  function ttIn(o, t, who) {
+    var n = state.people.length, got = t.map(function (nm) { var k = who(nm); return typeof k === 'number' && k >= 0 && k < n ? k : -1; });
+    if (!o.tt) { o.tt = got; o.who = -1; return; }
+    o.tt = o.tt.map(function (w, k) { return w >= 0 ? w : got[k]; });
+  }
   function spIn(s, map) { return s.map(function (b) { var k = b[1] && map[low(b[1])] != null ? map[low(b[1])] : -1; return { t: String(b[0] || '').slice(0, 24), w: typeof k === 'number' && k < state.people.length ? k : -1 }; }); }
   // the two boxes: send, and add
   var pending = null, PENDING = 'tol-lemonade-pending';
@@ -4746,7 +4809,7 @@
     ownersOut: function () {
       if (!state) return [];
       var nmOf = function (i) { return i >= 0 && i < state.people.length && !placeholder(state.people[i]) ? state.people[i].trim() : ''; };
-      return ownersList().map(function (o) { var x = { n: o.name, w: nmOf(o.who) }; if (o.sp) x.s = o.sp.map(function (b) { return [b.t, nmOf(b.w)]; }); return x; });
+      return ownersList().map(function (o) { var x = { n: o.name, w: nmOf(o.who) }; if (o.sp) x.s = o.sp.map(function (b) { return [b.t, nmOf(b.w)]; }); if (o.tt) x.t = o.tt.map(nmOf); return x; });
     },
     // a fridge list that came inside a quick-look link: merged by job name, people by name; a different owner
     // is shown beside the one here to pick (never quietly replaced). Returns how many jobs it holds now.
@@ -4760,7 +4823,9 @@
         var nm = String(x.n || '').trim().slice(0, 60); if (!nm) return;
         var w = who(x.w), sp = Array.isArray(x.s) && x.s.length === 2 ? x.s.map(function (b) { return { t: String(b[0] || '').slice(0, 24), w: who(b[1]) }; }) : null;
         var have = list.filter(function (y) { return chipKey(y.name) === chipKey(nm); })[0];
-        if (!have) { if (list.length >= maxOwn()) return; var no = { name: nm, who: sp ? -1 : w }; if (sp) no.sp = sp; list.push(no); return; }
+        var tt = Array.isArray(x.t) && x.t.length === 7 ? x.t : null;
+        if (!have) { if (list.length >= maxOwn()) return; var no = { name: nm, who: sp || tt ? -1 : w }; if (sp) no.sp = sp; if (tt) ttIn(no, tt, who); list.push(no); return; }
+        if (tt) { ttIn(have, tt, who); return; }
         if (sp) { if (!have.sp || have.sp.every(function (b) { return b.w < 0; })) { have.sp = sp; have.who = -1; } else have.sp.forEach(function (b, k) { if (b.w < 0 && sp[k].w >= 0) b.w = sp[k].w; }); return; }
         if (have.sp) return;
         if (have.who < 0 && w >= 0) have.who = w;

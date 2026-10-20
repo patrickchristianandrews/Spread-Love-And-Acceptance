@@ -547,6 +547,12 @@
   .ls-own-blk{ grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.15rem 0 0 1rem; }
   .ls-own-blkt input{ width:8.5rem; min-height:44px; }
   .ls-own-split{ grid-column:1 / -1; justify-self:start; min-height:44px; }
+  /* flow17: "Take turns": a row of day chips for each person */
+  .ls-own-tt{ grid-column:1 / -1; display:grid; gap:.35rem; margin:.15rem 0 0; }
+  .ls-own-ttrow{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .5rem; }
+  .ls-own-ttn{ flex:0 0 100%; font-size:.9rem; font-weight:600; }
+  .ls-own-ttd{ display:flex; flex-wrap:wrap; gap:.25rem; }
+  .ls-own .ls-chip.ls-day{ min-width:44px; min-height:44px; padding:.2rem .3rem; font-size:.85rem; justify-content:center; }
   body[data-ls-view="quick"] .ls-tag{ display:none !important; }
   /* flow17: the quick look in Spanish: the English "About this tool" (about the full stand) stays out of the way */
   body[data-lq-es] details.tg{ display:none !important; }

@@ -1643,6 +1643,7 @@
       var x = { n: nn, w: String(o.w == null ? '' : o.w).trim().slice(0, 40) };
       if (Array.isArray(o.s)) x.s = o.s.slice(0, 2).map(function (b) { return Array.isArray(b) ? [String(b[0] == null ? '' : b[0]).slice(0, 24), String(b[1] == null ? '' : b[1]).trim().slice(0, 40)] : null; }).filter(Boolean);
       if (x.s && x.s.length !== 2) delete x.s;
+      if (Array.isArray(o.t) && o.t.length === 7) x.t = o.t.map(function (w) { return String(w == null ? '' : w).trim().slice(0, 40); });
       return x;
     }).filter(Boolean);
     return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i, away: !!d.aw, kids: !!d.k || list.some(isKidJob), hrs: hrs, split: split, jw: jw, solo: solo, st: st0,
@@ -1836,12 +1837,16 @@
       var vs = [q.me].concat(so).map(function (p) { return (q.ans[p] || {})[id]; }).filter(function (x) { return x != null; });
       var who = vs.length && typeof vs[0] === 'number' && vs.every(function (x) { return x === vs[0]; }) ? vs[0] : -1;
       if (who >= 0) known0++;
-      return { name: label(id), who: who, night: kindOf(id) === 'night' };
+      // seen differently: more than one view, and they don't match
+      var diff = vs.length > 1 && vs.some(function (x) { return x !== vs[0]; });
+      return { name: label(id), who: who, night: kindOf(id) === 'night', diff: diff, own: isCustom(id) };
     });
-    // the nights first (they can be split by time, an owner for each block), then owned jobs, so a long list keeps
-    // the settled ones
-    owners.sort(function (a, b) { return (b.night - a.night) || ((b.who >= 0) - (a.who >= 0)); });
-    owners.forEach(function (o) { delete o.night; });
+    // flow17: after a compare, the jobs you see differently come first (your own ones first among them): they are
+    // the ones to settle. Then the nights (they can be split by time), then the jobs you agree on. Without a
+    // compare, the nights first, then owned jobs, so a long list keeps the settled ones.
+    owners.sort(function (a, b) { return (b.diff - a.diff) || (a.diff && b.diff ? (b.own - a.own) : 0) || (b.night - a.night) || ((b.who >= 0) - (a.who >= 0)); });
+    var nDiff = owners.filter(function (o) { return o.diff; }).length;
+    owners.forEach(function (o) { delete o.night; delete o.diff; delete o.own; });
     var r = api.fromQuick({ people: namesOut(), me: q.me, chips: chipList(), owners: owners.slice(0, cap) });
     body.setAttribute('data-ls-fridge', '');
     var o = $('owners'), h = $('owners-h'), st = $('own-status');
@@ -1850,7 +1855,7 @@
     var tot = r && typeof r.total === 'number' ? r.total : owners.length, open = tot - known0;
     var msg = !owners.length ? L('Nothing answered in the quick look yet, so nothing is picked for you. Every job from it is a chip above, under “1. Pick the jobs”: tap the ones you want on the list.',
         'Todavía no hay respuestas en el vistazo, así que no se eligió nada. Cada tarea está arriba, en «1. Elegir las tareas»: toquen las que quieran en la lista.')
-      : L(tot + (tot === 1 ? ' job is' : ' jobs are') + ' on the list, each with the owner from your quick look' + (open > 0 ? '. ' + open + (open === 1 ? ' has' : ' have') + ' no owner yet (shared, or seen differently): pick one together.' : '.') + (owners.length > tot ? ' The list holds ' + cap + ', so the rest are chips above to swap in.' : '') + ' Owning a job means you do it, or make sure it gets done.',
+      : L((nDiff ? 'The ' + (nDiff === 1 ? 'job' : nDiff + ' jobs') + ' you see differently ' + (nDiff === 1 ? 'is' : 'are') + ' at the top, to settle first. ' : '') + tot + (tot === 1 ? ' job is' : ' jobs are') + ' on the list, each with the owner from your quick look' + (open > 0 ? '. ' + open + (open === 1 ? ' has' : ' have') + ' no owner yet (shared, or seen differently): pick one together.' : '.') + (owners.length > tot ? ' The list holds ' + cap + ', so the rest are chips above to swap in.' : '') + ' Owning a job means you do it, or make sure it gets done.',
         'Hay ' + tot + (tot === 1 ? ' tarea' : ' tareas') + ' en la lista, cada una con el dueño de su vistazo' + (open > 0 ? '. ' + open + (open === 1 ? ' no tiene' : ' no tienen') + ' dueño todavía (compartidas, o vistas distinto): elíjanlo juntos.' : '.') + ' Ser dueño de una tarea es hacerla, o asegurarse de que se haga.');
     if (st) { st.textContent = msg; }
   }
