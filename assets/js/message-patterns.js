@@ -524,7 +524,7 @@
   var DENY_VERB = "(?:said|say|says|saying|meant|mean|told|tell|claimed|claim|called|call|implied|imply|suggested|suggest|accused|thought|think|asked|ask|promised|agreed|did that|wrote)";
   var DENY_AT = new RegExp("^\\s*(?:(?:but|no|nah|and|i mean|well|ok(?:ay)?|look|honestly|um|erm|wait)[,\\s]+)*(?:i\\s+(?:have\\s+|had\\s+)?)?$");
   var DENY_AFTER = new RegExp("^\\s+(?:once\\s+|ever\\s+)?" + DENY_VERB + "\\b");
-  var DENY_PRE = new RegExp("(?:^\\s*|\\bi\\s+|[,;]\\s*)(?:never|didn't|did not|don't|do not|have never|never once|wasn't|was not)\\s+(?:ever\\s+|once\\s+)?" + DENY_VERB + "\\b[^.!?\\n]*$");
+  var DENY_PRE = new RegExp("(?:^\\s*|\\bi\\s+|[,;]\\s*)(?:never|didn't|did not|don't|do not|have never|never once|wasn't|was not)\\s+(?:ever\\s+|once\\s+)?" + DENY_VERB + "\\b[^.!?\\n,;]*$");
   function denial(text, start, end) {
     var t = prep(text), s0 = Math.max(t.lastIndexOf('.', start - 1), t.lastIndexOf('!', start - 1), t.lastIndexOf('?', start - 1), t.lastIndexOf('\n', start - 1)) + 1;
     var pre = t.slice(s0, start), w = t.slice(start, end);

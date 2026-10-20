@@ -1748,6 +1748,9 @@ function analyze(textIn, opts){
       if(/\b(?:have to|has to|got to|end up|ends up|left to|left with|stuck|everything|always me|the one\b|on my own|by myself|alone|get (?:any|no)|nobody|no one|help(?:s|ed)?|anymore|any more|see (?:you|them|him|her|the)|hear from|invited|included|asked|thanked|told|chosen|picked|listened)\b/.test(st)) return false;
       return true;
     });
+    // sig17: a denial ("never said you were", "I didn't say you were lazy") answers a charge; it isn't an always/never,
+    // a label or criticism aimed at them
+    if(SHARED && SHARED.denial) ["absolute","label","critic","impera"].forEach(id=>drop(id, h=>SHARED.denial(lc, h.s, h.e)));
     // "I never mind driving": never minding is generous, not a door shut
     drop("stonewall", h=>/^never ?mind/i.test(h.match) && /\b(?:i|we|you|they|he|she|honestly i|really)\s+$/.test(lc.slice(Math.max(0,h.s-14), h.s)));
     // "Not a big deal at all, I'll grab milk on the way": generous about your own errand, not brushing off their feeling
