@@ -19,8 +19,8 @@
 
   var WHO = [
     ['self', 'Myself'], ['us', 'Us, together'], ['partner', 'A partner'], ['relative', 'A parent or relative'], ['young', 'A child or teen'],
-    ['friend', 'A friend'], ['housemate', 'A housemate'], ['coworker', 'A coworker'],
-    ['grown', 'A grown child or grandchild'], ['neighbor', 'A neighbour']
+    ['friend', 'A friend'], ['housemate', 'A roommate'], ['coworker', 'A coworker'],
+    ['grown', 'A grown child or grandchild'], ['neighbor', 'A neighbor']
   ];
   // the newer choices borrow the closest set of words when a play has none of its own
   var LIKE = { grown: 'relative', neighbor: 'friend' };
@@ -69,7 +69,7 @@
         relative: 'Thank you for always remembering everyone’s birthday. I notice it.',
         young: 'I saw how patient you were today. Thank you.',
         friend: 'Thank you for always being the one who plans things. I don’t say it enough.',
-        housemate: 'Thanks for always taking the bins out without being asked.',
+        housemate: 'Thanks for always taking the trash out without being asked.',
         coworker: 'Thanks for the follow-up notes after every meeting. They keep us all on track.' },
       why: 'Reliable work gets used to. Thanks makes it visible again.' },
     { id: 'share', cat: 'Share your context', yards: 10, title: 'Share your side',
@@ -178,6 +178,8 @@
 
   /* ---------- small helpers ---------- */
   function $(id) { return document.getElementById(id); }
+  // soft sound effects (game-sfx.js): the shared "Sounds" switch, remembered on this device
+  function fx(name, o) { if (window.TOLSfx) window.TOLSfx.play(name, o); }
   function el(tag, attrs, text) {
     var n = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); });
@@ -405,15 +407,15 @@
     sheet.appendChild(lab); sheet.appendChild(ta);
     var row = el('div', { 'class': 'rd-row' });
     var copy = el('button', { type: 'button', 'class': 'rd-btn' }, 'Copy these words');
-    copy.addEventListener('click', function () { copyText(ta.value, copy, 'Copy these words'); });
+    copy.addEventListener('click', function () { fx('tap'); copyText(ta.value, copy, 'Copy these words'); });
     var did = el('button', { type: 'button', 'class': 'rd-btn is-primary' }, 'I did it');
     did.addEventListener('click', function () { finishPlay(id); });
     var no = el('button', { type: 'button', 'class': 'rd-btn' }, 'Not today');
-    no.addEventListener('click', function () { sheet.hidden = true; $('rd-handwrap').hidden = false; var c = document.querySelector('.rd-card[data-play="' + id + '"]'); if (c) c.focus(); });
+    no.addEventListener('click', function () { fx('tap'); sheet.hidden = true; $('rd-handwrap').hidden = false; var c = document.querySelector('.rd-card[data-play="' + id + '"]'); if (c) c.focus(); });
     row.appendChild(did); row.appendChild(copy); row.appendChild(no);
     sheet.appendChild(row);
     sheet.appendChild(el('p', { 'class': 'rd-honest' }, 'Do it for real first, then tap “I did it.” ' + (plainOn() ? 'You move along the path' : 'The ball moves') + ' only when you say so, and “Not today” costs nothing. Words you type here are never saved or sent.'));
-    sheet.hidden = false;
+    sheet.hidden = false; fx('flip');
     $('rd-handwrap').hidden = true;
     sheet.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
     ta.focus();
@@ -434,12 +436,16 @@
     var msg = plainOn() ? 'Well done: ' + p.why : (crossed ? 'First down! ' : '') + 'Good play: ' + p.why;
     $('rd-status').textContent = msg;
     save();
+    // a good play: a warm "yes", the ball rolling on, a sparkle for a first down, and a rising line in field-goal range
+    fx('correct'); setTimeout(function () { fx('bounce'); }, 260);
+    if (S.yards >= KICK && !S.kicked && before < KICK) setTimeout(function () { fx('level-up'); }, 520);
+    else if (crossed) setTimeout(function () { fx('star'); }, 520);
     var c = document.querySelector('.rd-card'); if (c && !S.kicked && S.yards < KICK) c.focus();
     if (S.yards >= KICK && !S.kicked) $('rd-kick-btn').focus();
   }
 
   function kick() {
-    var btn = $('rd-kick-btn'); btn.disabled = true;
+    var btn = $('rd-kick-btn'); btn.disabled = true; fx('hit'); setTimeout(function () { fx('whoosh'); }, 80);
     var x0 = xOf(Math.min(S.yards, TOP)), y0 = 150, x1 = 977, y1 = 120;
     var cx = (x0 + x1) / 2, cy = -60, dur = reduced ? 1 : 1500, t0 = null;
     var body = $('rd-ball-body');
@@ -456,6 +462,7 @@
     }
     function landed() {
       ball.style.transition = '';
+      fx('cheer'); setTimeout(function () { fx('win'); }, 350);
       S.kicked = true; S.total += 1;
       var both = S.flags.mine && S.flags.theirs;
       var p = $('rd-done-p');
@@ -550,31 +557,37 @@
     drawField();
     applyPlain();
     Array.prototype.forEach.call(document.querySelectorAll('[data-rd-plain]'), function (b) {
-      b.addEventListener('click', function () { S.plain = !plainOn(); save(); applyPlain(); if (S.started) { drawHand(); renderStatus(); } });
+      b.addEventListener('click', function () { fx('tap'); S.plain = !plainOn(); save(); applyPlain(); if (S.started) { drawHand(); renderStatus(); } });
     });
     $('rd-start').addEventListener('click', function () {
       var r = document.querySelector('input[name="rd-who"]:checked');
-      S.who = r ? r.value : 'self';
+      S.who = r ? r.value : 'self'; fx('whoosh');
       S.started = true; S.yards = START; S.down = 1; S.done = []; S.kicked = false; S.flags = { mine: false, theirs: false };
       dealHand(); save(); renderAll();
       $('rd-hand').querySelector('.rd-card').focus();
     });
     $('rd-shuffle').addEventListener('click', function () {
-      var cur = S.hand.slice();
+      fx('flip'); var cur = S.hand.slice();
       var pool = PLAYS.map(function (p) { return p.id; }).filter(function (i) { return S.done.indexOf(i) < 0 && cur.indexOf(i) < 0; });
       if (pool.length < 3) pool = PLAYS.map(function (p) { return p.id; }).filter(function (i) { return cur.indexOf(i) < 0; });
       S.hand = shuffle(pool).slice(0, 3); save(); drawHand();
     });
     $('rd-kick-btn').addEventListener('click', kick);
-    $('rd-copy').addEventListener('click', function () { copyText(driveText(), $('rd-copy'), 'Copy my drive'); });
-    $('rd-again').addEventListener('click', function () { newDrive(true); });
+    $('rd-copy').addEventListener('click', function () { fx('tap'); copyText(driveText(), $('rd-copy'), 'Copy my drive'); });
+    $('rd-again').addEventListener('click', function () { fx('whoosh'); newDrive(true); });
     $('rd-reset').addEventListener('click', function () {
-      var keepPlain = S.plain;
+      fx('tap'); var keepPlain = S.plain;
       erase(); S = { who: '', yards: START, done: [], hand: [], kicked: false, total: 0, started: false, flags: { mine: false, theirs: false } };
       if (typeof keepPlain === 'boolean') S.plain = keepPlain;
       $('rd-sheet').hidden = true; renderAll();
     });
     if (S.started && !S.hand.length && !S.kicked) dealHand();
+    // choosing who it's for, and the "Sounds" switch beside "Start the drive" and beside "Plain words"
+    who.addEventListener('change', function () { fx('pick'); });
+    if (window.TOLSfx) {
+      window.TOLSfx.button({ className: 'rd-btn', parent: $('rd-start').parentNode });
+      var pr = document.querySelector('#rd-game .rd-plainrow'); if (pr) window.TOLSfx.button({ className: 'rd-btn', parent: pr });
+    }
     renderAll();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

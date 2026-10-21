@@ -47,6 +47,10 @@
     music.start(); return music;
   }
   function note(i) { var m = wake(); if (m) m.pluck(m.note(i + 1), 0.045); }
+  // sound effects (game-sfx.js, its own "Sounds" switch). While the music is on it already answers each petal
+  // and each word, so those effects rest then (musicCovers).
+  var SFX = window.TOLSfx;
+  function fx(name, o, musicCovers) { if (!SFX || (musicCovers && soundOn())) return; SFX.play(name, o); }
 
   // ---------- a level ----------
   function start(c) {
@@ -143,7 +147,7 @@
     if (i == null) return;
     if (chosen.length > 1 && chosen[chosen.length - 2] === i) { chosen.pop(); drawLines(); return; } // slide back to undo
     if (chosen.indexOf(i) !== -1) return;
-    chosen.push(i); note(chosen.length - 1); drawLines();
+    chosen.push(i); note(chosen.length - 1); fx('letter', { step: chosen.length - 1 }, true); drawLines();
   }
   wheel.addEventListener('pointerdown', function (e) {
     var i = petalAt(e.clientX, e.clientY);
@@ -154,6 +158,12 @@
     if (tapMode && chosen.length) { add(i); return; }
     dragging = true; pointer = [e.clientX, e.clientY]; chosen = []; add(i);
   });
+  // phones: a finger that lands on a petal spells (the page holds still); one that lands anywhere else on the
+  // wheel can scroll the page as usual (the wheel's CSS allows touch-action: manipulation)
+  wheel.addEventListener('touchstart', function (e) {
+    var t = e.touches && e.touches[0]; if (!t || e.touches.length > 1) return;
+    if (petalAt(t.clientX, t.clientY) != null && e.cancelable) e.preventDefault();
+  }, { passive: false });
   wheel.addEventListener('pointermove', function (e) {
     if (!dragging) return;
     pointer = [e.clientX, e.clientY]; add(petalAt(e.clientX, e.clientY)); drawLines();
@@ -218,22 +228,24 @@
     if (hit) {
       S.found.push(hit[0]); save(); fill(hit, true, w); feedback('is-good');
       var m = wake(); if (m) m.reward(false);
+      fx('word', null, true);
       var left = lv.w.length - S.found.length;
       noteEl.innerHTML = '<b>' + cap(w) + '</b> ' + (left ? '· ' + left + (left === 1 ? ' word to go' : ' words to go') : '');
       say('Found ' + w.toLowerCase() + '.' + (left ? ' ' + left + ' to go.' : ''));
       if (!left) setTimeout(finish, 700);
     } else if (foundAlready(w)) {
-      feedback('is-again'); noteEl.innerHTML = 'You already found <b>' + cap(w) + '</b>.';
+      feedback('is-again'); fx('bounce'); noteEl.innerHTML = 'You already found <b>' + cap(w) + '</b>.';
       say('Already found ' + w.toLowerCase() + '.');
     } else if (isWord(w)) {
       S.bonus.push(w); S.jar++; save(); feedback('is-bonus'); jar(true);
       var mm = wake(); if (mm) mm.pluck(mm.note(6), 0.05);
+      fx(S.jar % 10 === 0 ? 'unlock' : 'star');
       var more = 10 - S.jar % 10;
       noteEl.innerHTML = '<b>' + cap(w) + '</b> goes in the bonus jar ✨' + (more === 10 ? ' The jar is full. Lovely.' : ' ' + more + (more === 1 ? ' more fills it.' : ' more fill it.'));
       say(w.toLowerCase() + ' is a bonus word.');
     } else {
       // gentle: it may well be a word, just not one this little puzzle knows
-      feedback('is-miss'); noteEl.innerHTML = '<b>' + cap(w) + '</b> isn’t one of the words this little puzzle knows, and that’s okay. Try another mix of petals.';
+      feedback('is-miss'); fx('wrong'); noteEl.innerHTML = '<b>' + cap(w) + '</b> isn’t one of the words this little puzzle knows, and that’s okay. Try another mix of petals.';
       say(w.toLowerCase() + ' isn’t one of this puzzle’s words. Try another mix.');
     }
     setTimeout(function () { chosen = []; drawLines(); }, 450);
@@ -250,6 +262,7 @@
     S.cleared++; if (perfect) S.perfect++;
     save();
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
+    fx('win', null, true);
     if (window.TOLGarden && S.cleared % 5 === 0) window.TOLGarden.gift('words');
     var res = null;
     // the finish card is the only card: anything new in the garden is shown on it, not in a second pop-up
@@ -258,6 +271,7 @@
     card.querySelector('.wb-done-h').textContent = cur.fresh ? 'Wheel bloomed' : 'Level ' + (cur.index + 1) + ' bloomed';
     card.querySelector('.wb-done-p').textContent = KIND[S.level % KIND.length] + (S.bonus.length ? ' You found ' + S.bonus.length + ' bonus ' + (S.bonus.length === 1 ? 'word' : 'words') + ' too.' : '');
     card.querySelector('.wb-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? res.unlocked[0].icon + ' New in your garden: ' + res.unlocked[0].name : '');
+    if (res && res.unlocked && res.unlocked.length) setTimeout(function () { fx('unlock'); }, 1500);
     levels.finished(cur);
     var tip = card.querySelector('.wb-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
     card.hidden = false;
@@ -266,7 +280,7 @@
   }
 
   // ---------- buttons ----------
-  $('.wb-next').addEventListener('click', function () { $('.wb-done').hidden = true; go(levels.next()); });
+  $('.wb-next').addEventListener('click', function () { $('.wb-done').hidden = true; fx('level-up'); go(levels.next()); });
   function go(p) { p.then(start, function () { noteEl.textContent = 'That level didn\u2019t load. Check your connection and try again.'; }); }
   // the difficulty bar: switch level, a random level, or the next one
   var barEl = $('.gl-host');
@@ -314,7 +328,7 @@
   }
   $('.wb-shuffle').addEventListener('click', function () {
     for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = order[i]; order[i] = order[j]; order[j] = t; }
-    chosen = []; wheel.classList.add('is-spin'); setTimeout(function () { wheel.classList.remove('is-spin'); buildWheel(); drawLines(); }, 250);
+    chosen = []; fx('whoosh'); wheel.classList.add('is-spin'); setTimeout(function () { wheel.classList.remove('is-spin'); buildWheel(); drawLines(); }, 250);
   });
   $('.wb-hint').addEventListener('click', function () {
     // show one letter of a word not yet found
@@ -322,18 +336,20 @@
     for (var k = 0; k < left.length; k++) {
       var done = false;
       eachCell(left[k], function (el, i, key) { if (!done && !el.textContent) { el.textContent = left[k][0][i]; el.classList.add('is-hinted'); S.revealed.push(key); done = true; } });
-      if (done) { S.hints++; save(); noteEl.textContent = 'A letter is showing. Use as many as you like.'; return; }
+      if (done) { S.hints++; save(); fx('pop'); noteEl.textContent = 'A letter is showing. Use as many as you like.'; return; }
     }
   });
   var sb = $('.wb-sound');
   if (window.TOLMusic && window.TOLMusic.toggle) soundSw = window.TOLMusic.toggle(sb, { key: 'tol-bloom-sound', label: 'Music', onChange: function (on) { if (on) wake(); else if (music) music.stop(); } });
   else sb.hidden = true;
+  // the shared "Sounds" switch for the game's sound effects sits beside the music switch
+  if (SFX) SFX.button({ className: 'wb-sound wb-sfx', parent: $('.wb-tools') });
   document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn()) music.start(); });
 
   // ---------- less spelling: first letters, and hearing a word ----------
   var fb = $('.wb-first');
   function firstLabel() { fb.setAttribute('aria-pressed', String(firstOn)); fb.innerHTML = '<span aria-hidden="true">&#128292;</span> First letters: ' + (firstOn ? 'on' : 'off'); }
-  fb.addEventListener('click', function () { firstOn = !firstOn; set('tol-bloom-first', firstOn ? 'on' : 'off'); firstLabel(); if (lv) anchors(); });
+  fb.addEventListener('click', function () { fx('tap'); firstOn = !firstOn; set('tol-bloom-first', firstOn ? 'on' : 'off'); firstLabel(); if (lv) anchors(); });
   firstLabel();
   // "Hear a word" says one word you haven't found yet, out loud (only when you tap it)
   var hb = $('.wb-hear');

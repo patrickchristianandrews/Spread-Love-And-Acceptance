@@ -102,7 +102,10 @@
   .ar-who span{ font-size:.85rem; color:#E6DDF6; }
   .ar-nums{ display:flex; gap:.9rem; font:500 .78rem "IBM Plex Mono", monospace; letter-spacing:.04em; color:#CFC3F0; text-transform:uppercase; }
   .ar-nums b{ display:block; font-size:1.25rem; color:#FFE08A; letter-spacing:0; }
-  .ar-wrap{ position:relative; margin:0 auto; width:100%; max-width:min(100%, 760px); touch-action:none; user-select:none; -webkit-user-select:none; border-radius:18px; outline:none; }
+  .ar-wrap{ position:relative; margin:0 auto; width:100%; max-width:min(100%, 760px); touch-action:manipulation; user-select:none; -webkit-user-select:none; border-radius:18px; outline:none; }
+  /* sfx20: the field holds the page still only while a round is actually being played (arcade.js adds .ar-live);
+     before the start, while paused, between levels and on the summary, a swipe on it scrolls the page as usual */
+  .ar-wrap.ar-live{ touch-action:none; }
   .ar-wrap:focus-visible{ box-shadow:0 0 0 3px #FFE08A; }
   .ar-wrap canvas{ display:block; width:100%; height:auto; border-radius:18px; background:#201C44; }
   .ar-overlay{ position:absolute; inset:0; display:grid; place-items:center; padding:1rem; border-radius:18px; background:rgba(20,16,44,.84); text-align:center; }

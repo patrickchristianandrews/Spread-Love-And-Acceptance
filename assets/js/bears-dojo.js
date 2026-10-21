@@ -122,6 +122,8 @@
   };
   A.tone = function (f, dur, vol) { if (!A.on || !A.ctx) return false; partial(f, vol || 0.07, dur || 1.5); return true; };
   doc.addEventListener('visibilitychange', function () { if (!A.ctx) return; try { if (doc.hidden) A.ctx.suspend(); else if (A.on) A.ctx.resume(); } catch (e) {} });
+  window.addEventListener('pagehide', function () { if (!A.ctx) return; try { A.master.gain.value = 0; A.ctx.suspend(); } catch (e) {} });
+  window.addEventListener('pageshow', function (e) { if (e.persisted && A.on && A.ctx) { try { A.ctx.resume(); A.master.gain.setTargetAtTime(0.9, A.ctx.currentTime, 0.4); } catch (x) {} } });
   function syncSound() { var b = $('#bd-sound'); if (!b) return; b.setAttribute('aria-pressed', String(A.on)); $('b', b).textContent = A.on ? 'on' : 'off'; b.setAttribute('aria-label', 'Sound: ' + (A.on ? 'on. Press to turn off.' : 'off. Press to turn on.')); }
   function syncStillBtn() { var b = $('#bd-still'); if (!b) return; var s = still(); b.setAttribute('aria-pressed', String(s)); $('b', b).textContent = s ? 'on' : 'off'; }
 
@@ -261,7 +263,7 @@
     c.appendChild(radioGroup('face', 'Expression', OPTS.face));
     c.appendChild(radioGroup('ears', 'Ears', OPTS.ears));
     c.appendChild(radioGroup('shape', 'Shape', OPTS.shape));
-    c.appendChild(radioGroup('robe', 'Robe colour', ROBE, true));
+    c.appendChild(radioGroup('robe', 'Robe color', ROBE, true));
     c.appendChild(radioGroup('style', 'Robe style', OPTS.style));
     c.appendChild(radioGroup('acc', 'Accessory', OPTS.acc));
     var row = el('div', { class: 'bd-row' });
@@ -458,9 +460,16 @@
       if (window.TOLStill && window.TOLStill.set) window.TOLStill.set(s);
       else { root.classList.toggle('tol-still', s); fireStill(); }
     });
-    $('#bd-enter').addEventListener('click', enter);
-    $('#bd-leave').addEventListener('click', leave);
-    $('#bd-next').addEventListener('click', function () { BD.next(); });
+    $('#bd-enter').addEventListener('click', function () { if (!inside && !moving) A.chime(A.note(2), 0.12); enter(); });
+    $('#bd-leave').addEventListener('click', function () { if (inside && !moving) A.tone(A.note(0), 1.2, 0.06); leave(); });
+    $('#bd-next').addEventListener('click', function () { A.pluck(A.note(5), 0.12); BD.next(); });
+    // building your bear: each choice answers with one soft note, and "Surprise me" with a little rising run
+    $('#bd-controls').addEventListener('change', function (e) { if (e.target && e.target.type === 'radio') A.pluck(A.note(2 + Math.floor(Math.random() * 5)), 0.13); });
+    $('#bd-controls').addEventListener('click', function (e) {
+      var b = e.target && e.target.closest && e.target.closest('.bd-pill'); if (!b || !A.on) return;
+      if (/Surprise/.test(b.textContent)) [3, 5, 7].forEach(function (n, i) { setTimeout(function () { A.pluck(A.note(n), 0.12); }, i * 90); });
+      else A.tone(A.note(1), 0.6, 0.05);
+    });
     $('#bd-drift').addEventListener('click', function () { setDrift(!driftOn); });
     $('#bd-bear-go').addEventListener('click', BD.gotoBuilder = function () { var h = $('#bd-bear-h'); h.scrollIntoView({ block: 'start', behavior: still() ? 'auto' : 'smooth' }); try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } });
     doc.addEventListener('keydown', function (e) {

@@ -125,7 +125,7 @@ HOW = [
 
 LENS = [
     ('lens-why', 'Why a reaction can look odd', [
-        'A friend leaves the party without saying goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they very obviously aren’t. From outside, each of these can look odd, or rude, or a bit much.',
+        'A friend leaves the party without saying goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they very obviously aren’t. From outside, each of these can look odd, or rude, or a bit much, when it may be plain, direct speech or a tired body.',
         'Most of them have a logic behind them. Once you can see it, it usually makes sense, given how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so the rest of us fill the gap with a guess. The guess is often unkind.',
         'This guide puts the logic into words, a step at a time, and every page gives the other person’s side as well, because otherwise it wouldn’t be fair.',
         {'sn': 'ross-greene-house-1977', 'title': 'Why our own way looks normal',
@@ -153,7 +153,7 @@ LENS = [
 ]
 
 PARTS = [
-    ('What it looks like', 'One line in camera words, what a camera would see or hear. There is no “rude” and no “weird,” because a verdict closes the question before the logic can answer it.'),
+    ('What it looks like', 'One line in camera words, what a camera would see or hear. There is no “rude” and no “weird,” because a verdict closes the question before the logic can answer it. Describe what happened instead: plain words, a door closed, a reply that came late.'),
     ('The logic', 'Three or four short steps, each following from the one before. The chain starts with a plain fact about how things work, such as “Energy works like a budget.”'),
     ('It’s like', 'An everyday picture that works the same way inside. A phone on 3% shuts down the extras to protect the call, which is why it suits low energy so well.'),
     ('Why it fits', 'What makes the reaction reasonable, said fairly and without stretching it. Where research supports a page, the research notes at the back list it.'),
@@ -287,8 +287,8 @@ def lens_html(S):
 def build_html(p, S):
     s = ('<section class="pk-back pk-build" id="build">%s<h1>Build your own</h1><p class="pk-lede">For a reaction this guide doesn’t cover, your own or someone else’s. '
          'It works best on a calm day, and better still with the other person.</p><ol class="pk-parts">%s</ol>'
-         '<p class="pk-small"><strong>Watch for verdict words.</strong> “Rude,” “lazy,” “selfish” and “dramatic” are guesses about a person. Swap them for what a camera '
-         'would see, and the logic has room to show itself. If a step needs “because they’re like that,” keep asking why.</p>'
+         '<p class="pk-small"><strong>Watch for verdict words.</strong> “Rude,” “lazy,” “selfish” and “dramatic” are guesses about a person. A late start may be about attention or energy, and blunt words may be a plain, direct style. Swap the verdict for what a camera '
+         'would see, describe what happened instead of the label, and the logic has room to show itself. If a step needs “because they’re like that,” keep asking why.</p>'
          '<p class="pk-small"><strong>Online, it makes a card.</strong> The website’s “Build your own” turns your six parts into a card you can save or share. '
          'Nothing you type is sent anywhere.</p></section>') % (S.mark('build'), ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), esc(d)) for t, d in BUILD_PROMPTS))
     for k in range(p.get('build_cards', 3)):

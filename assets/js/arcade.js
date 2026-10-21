@@ -244,8 +244,16 @@
     if (Math.abs(tx) > Math.abs(ty)) dir(tx > 0 ? 1 : -1, 0); else dir(0, ty > 0 ? 1 : -1);
   }
 
+  // the field takes over touch (no page scrolling on it) only while a round is really being played
+  var liveOn = false;
+  function syncLive() {
+    var ov = $('ar-overlay'), on = !!(running && !paused && game && !ism && (!ov || ov.hidden));
+    if (on === liveOn) return; liveOn = on;
+    var w = $('ar-wrap'); if (w) w.classList.toggle('ar-live', on);
+  }
   function frame(ts) {
     raf = requestAnimationFrame(frame);
+    syncLive();
     if (!last) last = ts; var dt = Math.min(0.05, (ts - last) / 1000); last = ts;
     if (!running || paused || !game) return;
     tAll += dt * 1000;
@@ -256,9 +264,9 @@
     hud();
   }
   function startLoop() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
-  function stopLoop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  function stopLoop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } syncLive(); }
   D.addEventListener('visibilitychange', function () { if (D.hidden && running && !paused) togglePause(true); gaming(running && !D.hidden); });
-  window.addEventListener('pagehide', function () { gaming(false); });
+  window.addEventListener('pagehide', function () { gaming(false); if (AC) { try { AC.suspend(); } catch (e) { /* ignore */ } } });
   window.addEventListener('pageshow', function () { gaming(running && !D.hidden); });
 
   /* ---------- overlay ---------- */

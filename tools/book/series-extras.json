@@ -263,7 +263,7 @@
         ]
       },
       "last-minute": {
-        "fits": "For many people with ADHD, getting started depends on interest, novelty or urgency more than importance. Researchers link this to how motivation and self-control work in ADHD. It has nothing to do with laziness.",
+        "fits": "For many people with ADHD, getting started depends on interest, novelty or urgency more than importance. Researchers link this to how motivation and self-control work in ADHD, and to attention and energy, so describe the late start rather than calling it laziness.",
         "looks": "The report had a month. It gets written between ten at night and two in the morning, with chips.",
         "an.0": "An old car that only starts on a downhill.",
         "other": "Colleagues or family carry the stress of not knowing whether it’ll be done, and sometimes end up quietly covering for it at nine the next morning.",
@@ -327,7 +327,8 @@
           "Reassurance switches the alarm off for a moment",
           "The alarm comes back on",
           "Asking again is trying to switch it off again"
-        ]
+        ],
+        "fits": "Uncertainty can feel unbearable, especially with anxiety or with intrusive, repeating worries. Asking is an understandable way to get relief, even if the relief doesn’t last."
       },
       "you-should-know": {
         "step": "Agree that saying it out loud is allowed and still counts as being loved. The guesser can ask, “I can see something’s up. Tell me?”",

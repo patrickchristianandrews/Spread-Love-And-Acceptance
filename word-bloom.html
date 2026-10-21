@@ -24,7 +24,8 @@
 <style>
   .wb[hidden]{ display:none; }
   .wb{ position:relative; padding:.9rem .9rem 1.1rem; }
-  .wb-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.5rem; }
+  .wb-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.5rem; flex-wrap:wrap; }
+  .wb-tools{ flex-wrap:wrap; justify-content:flex-end; }
   .wb-head > div:first-child{ display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
   .wb-level{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.25rem; }
   .wb-chapter{ margin:0; font-size:.82rem; color:var(--g-soft); }
@@ -44,7 +45,7 @@
   @keyframes wb-shake{ 25%{ transform:translateX(-6px); } 75%{ transform:translateX(6px); } }
   .wb-play{ display:grid; grid-template-columns:48px 1fr 48px; align-items:center; gap:.3rem; }
   .wb-side{ display:flex; flex-direction:column; gap:.6rem; align-items:center; }
-  .wb-wheel{ position:relative; width:min(100%, 17rem, 33vh); aspect-ratio:1; margin:0 auto; border-radius:50%; touch-action:none; user-select:none; -webkit-user-select:none;
+  .wb-wheel{ position:relative; width:min(100%, 17rem, 33vh); aspect-ratio:1; margin:0 auto; border-radius:50%; touch-action:manipulation; user-select:none; -webkit-user-select:none;
     background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.75) 0 30%, rgba(255,255,255,.35) 31% 70%, rgba(255,255,255,0) 71%); transition:transform .25s; }
   html[data-tiles="tiles-moon"] .wb-wheel{ background:radial-gradient(circle, rgba(255,255,255,.12) 0 30%, rgba(255,255,255,.05) 31% 70%, transparent 71%); }
   .wb-wheel.is-spin{ transform:rotate(40deg) scale(.95); }
@@ -86,6 +87,7 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/game-levels.js" defer></script>
+<script src="/assets/js/game-sfx.js" defer></script>
 <script src="/assets/js/word-bloom.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/word-bloom.html">

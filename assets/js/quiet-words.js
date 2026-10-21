@@ -121,6 +121,10 @@
   }
   function letterNote(i) { var m = wake(); if (m) m.pluck(m.note(i + 2), 0.045); }
   function bell(i) { var m = wake(); if (m) m.reward(false); }
+  // sound effects (game-sfx.js, its own "Sounds" switch). While the music is on it already answers each letter
+  // and each word, so those effects rest then (musicCovers).
+  var SFX = window.TOLSfx;
+  function fx(name, o, musicCovers) { if (!SFX || (musicCovers && soundOn())) return; SFX.play(name, o); }
 
   // ---------- making a puzzle ----------
   // Every choice comes from a random number seeded by the level, the puzzle's number and its theme,
@@ -277,14 +281,14 @@
     var cell = cellFromPoint(e.clientX, e.clientY); if (!cell) return;
     e.preventDefault(); dragging = true; moved = false; wake();
     if (anchor && (anchor[0] !== cell[0] || anchor[1] !== cell[1])) { sel = lineTo(anchor, cell); drawMarks(sel); return; }
-    anchor = cell; sel = [cell]; drawMarks(sel); letterNote(0);
+    anchor = cell; sel = [cell]; drawMarks(sel); letterNote(0); fx('letter', { step: 0 }, true);
   });
   gridEl.addEventListener('pointermove', function (e) {
     if (!dragging || !anchor) return;
     var cell = cellFromPoint(e.clientX, e.clientY); if (!cell) return;
     if (cell[0] !== anchor[0] || cell[1] !== anchor[1]) moved = true;
     var before = sel.length; sel = lineTo(anchor, cell); drawMarks(sel);
-    if (sel.length > before) letterNote(sel.length - 1); // each new letter rises a note
+    if (sel.length > before) { letterNote(sel.length - 1); fx('letter', { step: sel.length - 1, vol: 0.8 }, true); } // each new letter rises a note
   });
   window.addEventListener('pointerup', function () {
     if (!dragging) return; dragging = false;
@@ -319,7 +323,7 @@
     }
     var n = Object.keys(found).length;
     found[hit.word] = COLORS[n % COLORS.length];
-    bell(n);
+    bell(n); if (Object.keys(found).length < words.length) fx('word', null, true);
     line.forEach(function (p, i) { var t = tile(p[0], p[1]); setTimeout(function () { t.classList.add('is-pop'); setTimeout(function () { t.classList.remove('is-pop'); }, 450); }, i * 60); });
     var li = listEl.querySelector('[data-w="' + hit.word + '"]'); if (li) { li.classList.add('is-found'); li.style.setProperty('--c', found[hit.word]); }
     noteEl.innerHTML = '<span class="qw-note-h">' + hit.word.charAt(0) + hit.word.slice(1).toLowerCase() + '</span> ' + hit.line;
@@ -334,6 +338,7 @@
     noteEl.innerHTML = done ? '<span class="qw-note-h">Already found.</span> ' + cap(done.word) + ' is glowing on the board.'
       : '<span class="qw-note-h">Not one of the hidden words.</span> Keep looking, there’s no rush.';
     say(done ? 'Already found ' + done.word.toLowerCase() + '.' : 'Not one of the hidden words.');
+    fx(done ? 'bounce' : 'wrong');
     gridEl.classList.remove('is-miss'); void gridEl.offsetWidth; gridEl.classList.add('is-miss');
   }
   function cap(w) { return w.charAt(0) + w.slice(1).toLowerCase(); }
@@ -349,6 +354,7 @@
     root.classList.add('is-done');
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
     setTimeout(function () { var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 600); } }, 300);
+    fx('win', null, true);
     noteEl.innerHTML = '<span class="qw-note-h">All found. Lovely.</span> Take a slow breath before you go. ' +
       (n > 1 ? 'You’ve finished ' + n + ' quiet puzzles here.' : 'A new theme is waiting under Next whenever you’re ready.');
     say('All the words are found.');
@@ -363,7 +369,7 @@
   function go(p) { p.then(function (c) { start(c.index, c); }, function () { noteEl.textContent = 'That puzzle didn\u2019t load. Check your connection and try again.'; }); }
   var barEl = $('.gl-host');
   if (levels) levels.bar(barEl, function (p) { go(p); });
-  $('.qw-next').addEventListener('click', function () { if (levels) go(levels.next()); else start(puzzleNo + 1); });
+  $('.qw-next').addEventListener('click', function () { fx('flip'); if (levels) go(levels.next()); else start(puzzleNo + 1); });
   // today's theme: picked from the bank by the date alone, so it's the same for everyone today
   $('.qw-today').addEventListener('click', function () {
     var d = new Date(), day = Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);
@@ -395,13 +401,15 @@
   $('.qw-hint').addEventListener('click', function () {
     var left = words.filter(function (w) { return !found[w.word]; }); if (!left.length) return;
     var w = left[Math.floor(Math.random() * left.length)], t = tile(w.r, w.c); hinted = true;
-    t.classList.add('is-hint'); setTimeout(function () { t.classList.remove('is-hint'); }, 3200); savePlace();
+    t.classList.add('is-hint'); setTimeout(function () { t.classList.remove('is-hint'); }, 3200); savePlace(); fx('pop');
     say('Look near the glowing letter for a word.');
   });
   var sb = $('.qw-sound');
   // music plays only after you turn it on here (it is off to begin with)
   if (window.TOLMusic && window.TOLMusic.toggle) soundSw = window.TOLMusic.toggle(sb, { key: 'tol-qw-sound', label: 'Music', onChange: function (on) { if (on) { var m = wake(); if (m) m.reward(false); } else if (music) music.stop(); } });
   else sb.hidden = true;
+  // the shared "Sounds" switch for the game's sound effects sits beside the music switch
+  if (SFX) SFX.button({ className: 'qw-sound qw-sfx', parent: sb.parentNode });
   document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn()) music.start(); });
   window.addEventListener('resize', function () { drawMarks(); });
 

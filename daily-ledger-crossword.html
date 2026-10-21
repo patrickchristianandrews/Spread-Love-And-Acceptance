@@ -31,11 +31,11 @@
   .xw-modes a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
   .xw[hidden]{ display:none; }
   .xw{ position:relative; padding:.9rem .9rem 1rem; }
-  .xw-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.6rem; }
+  .xw-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.6rem; flex-wrap:wrap; }
   .xw-head > div:first-child{ display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
   .xw-theme{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem; }
   .xw-no{ margin:0; font-size:.8rem; color:var(--g-soft); }
-  .xw-tools{ display:flex; gap:.4rem; align-items:center; }
+  .xw-tools{ display:flex; gap:.4rem; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
   .xw-tools button{ width:44px; height:44px; border-radius:50%; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); font-size:1.15rem; cursor:pointer; }
   .xw-tools .xw-sound{ width:auto; min-width:44px; padding:0 .85rem; border-radius:999px; font-size:.86rem; font-weight:600; white-space:nowrap; }
   .xw-grid{ gap:3px; }
@@ -115,6 +115,7 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/game-levels.js" defer></script>
+<script src="/assets/js/game-sfx.js" defer></script>
 <script src="/assets/js/quiet-crossword.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/daily-ledger-crossword.html">

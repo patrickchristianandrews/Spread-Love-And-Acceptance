@@ -107,6 +107,10 @@
     if (!music) { music = window.TOLMusic.create(null, null, { calm: true }); music.level(0.4); }
     music.start(); return music;
   }
+  // sound effects (game-sfx.js, its own "Sounds" switch), the soft and quiet set for a calm game. While the music
+  // is on it already answers each letter and each word, so those effects rest then (musicCovers).
+  var SFX = window.TOLSfx; if (SFX) SFX.calm(true);
+  function fx(name, o, musicCovers) { if (!SFX || (musicCovers && soundOn())) return; SFX.play(name, o); }
 
   function start(c) {
     cur = c;
@@ -225,6 +229,7 @@
     S.fill[sel] = ch; save();
     var m = wake(); if (m) m.pluck(m.note(w.cells.indexOf(sel) + 1), 0.035);
     var i = w.cells.indexOf(sel);
+    fx('letter', { step: i, vol: 0.7 }, true);
     // move on to the next empty square in this word, or the next square
     var nxt = null;
     for (var j = i + 1; j < w.cells.length; j++) if (!S.fill[w.cells[j]]) { nxt = w.cells[j]; break; }
@@ -233,6 +238,7 @@
     var after = words.filter(solved).length;
     if (after > before) {
       if (m) m.reward(false);
+      if (after < words.length) fx('word', null, true);
       var nw = words.filter(function (x) { return solved(x) && x.cells.indexOf(w.cells[i]) !== -1; })[0];
       noteEl.innerHTML = '<b>' + cap(nw ? nw.text : '') + '</b> ✨';
       live.textContent = 'Correct: ' + (nw ? nw.text.toLowerCase() : '');
@@ -244,7 +250,7 @@
     if (!sel) return;
     var w = current(), i = w.cells.indexOf(sel);
     if (S.fill[sel]) { delete S.fill[sel]; } else if (i > 0) { sel = w.cells[i - 1]; delete S.fill[sel]; }
-    save(); paint();
+    fx('tick'); save(); paint();
   }
   function cap(t) { return t.charAt(0) + t.slice(1).toLowerCase(); }
   function nextWord(step, skipSolved) {
@@ -263,6 +269,7 @@
     S.solved++; save();
     if (cur.daily) markToday(cur.daily); else levels.finished(cur);
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
+    fx('win', null, true);
     var res = null;
     if (R) { res = R.earn(won, 'crossword', 'Crossword solved'); R.record('crossword', 'done'); }
     if (window.TOLGarden) window.TOLGarden.gift('words');
@@ -301,7 +308,7 @@
     var k = b.getAttribute('data-k');
     if (k === sel) { var both = words.filter(function (w) { return w.cells.indexOf(k) !== -1; }); if (both.length > 1) dir = dir === 'a' ? 'd' : 'a'; }
     else { sel = k; if (!words.some(function (w) { return w.d === dir && w.cells.indexOf(k) !== -1; })) dir = dir === 'a' ? 'd' : 'a'; }
-    wake(); paint();
+    wake(); fx('tick'); paint();
   });
   $('.xw-keys').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
@@ -342,17 +349,19 @@
   $('.xw-reveal').addEventListener('click', function () {
     var w = current(); if (!w) return;
     var k = w.cells.filter(function (x) { return S.fill[x] !== sol[x]; })[0]; if (!k) return;
-    sel = k; S.reveals++; type(sol[k]);
+    sel = k; S.reveals++; fx('pop'); type(sol[k]);
     noteEl.textContent = 'One letter is in. Show a letter whenever you like.';
   });
   $('.xw-check').addEventListener('click', function () {
     var wrong = Object.keys(S.fill).filter(function (k) { return S.fill[k] && S.fill[k] !== sol[k]; });
     wrong.forEach(function (k) { cells[k].classList.add('is-wrong'); setTimeout(function () { cells[k].classList.remove('is-wrong'); }, 2200); });
+    fx(wrong.length ? 'wrong' : 'correct');
     noteEl.textContent = wrong.length ? wrong.length + (wrong.length === 1 ? ' square is' : ' squares are') + ' gently glowing: worth another look.' : 'Everything you’ve typed so far is right.';
   });
   function go(p) { p.then(start, function () { noteEl.textContent = 'That puzzle didn\u2019t load. Check your connection and try again.'; }); }
-  $('.xw-another').addEventListener('click', function () { go(levels.random()); });
+  $('.xw-another').addEventListener('click', function () { fx('flip'); go(levels.random()); });
   $('.xw-again').addEventListener('click', function () {
+    fx('level-up');
     var to = this.getAttribute('data-go');
     if (to === 'mini' || to === 'main') go(today(to)); else if (to === 'more') go(levels.current()); else go(levels.next());
   });
@@ -433,6 +442,8 @@
   var sb = $('.xw-sound');
   if (window.TOLMusic && window.TOLMusic.toggle) soundSw = window.TOLMusic.toggle(sb, { key: 'tol-xw-sound', label: 'Music', onChange: function (on) { if (on) wake(); else if (music) music.stop(); } });
   else sb.hidden = true;
+  // the shared "Sounds" switch for the game's sound effects sits beside the music switch
+  if (SFX) SFX.button({ className: 'xw-sound xw-sfx', parent: sb.parentNode });
   document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn()) music.start(); });
 
   var dateEl = document.getElementById('np-date');

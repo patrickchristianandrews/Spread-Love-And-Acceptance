@@ -2613,11 +2613,15 @@
     var bp = chooseBreath();
     eb.textContent = ('The easiest. Breathe with a glowing light. This visit: ' + bName(bp) + ' (' + breathDesc(bp) + '), with a little star going round ' + breathShape(bp) + '. Other visits bring other calm patterns. A flower blooms with every round.');
   })();
+  // the welcome sits in the page (the garden grows to fit it), so it scrolls with the page like anything else
+  if (welcome && !welcome.hidden) { stage.classList.add('is-welcome'); resize(); }
   document.querySelectorAll('[data-enter]').forEach(function (b) {
     b.addEventListener('click', function () {
       welcome.hidden = true;
+      if (stage.classList.contains('is-welcome')) { stage.classList.remove('is-welcome'); resize(); }
       window.scrollTo(0, 0); // the whole garden in view, clear of the header at the top
-      if (window.innerWidth <= 560 && fullBtn && !document.documentElement.classList.contains('ng-full')) setFull(true); // more room on a phone
+      // (sfx20: a phone no longer jumps into full screen by itself, so the page can still be scrolled past the
+      // garden; "Full screen" at the top is there for anyone who wants it)
       setMode(b.getAttribute('data-enter'));
       soundIfClear(); // only if sound is on, and not while the how-to card is showing
     });
@@ -2628,6 +2632,9 @@
     if (running) { lastT = performance.now(); kick(); if (audio && save.sound) audio.ctx.resume(); }
     else { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } if (audio) audio.ctx.suspend(); }
   });
+  // leaving the page: every sound stops at once
+  window.addEventListener('pagehide', function () { stopAudio(); if (audio) { try { audio.ctx.suspend(); } catch (e) {} } });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) soundIfClear(); }); // back again (the back button): the sound returns if it was on
   window.addEventListener('resize', function () { var w0 = W, h0 = H; resize(); if (mode === 'fireflies' && (Math.abs(W - w0) > 1 || Math.abs(H - h0) > 1)) relayoutShape(); });
 
   resize(); soundLabel(); updateCount();

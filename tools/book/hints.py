@@ -76,7 +76,7 @@ SVG_TIDBIT = (
     '<ellipse cx="22.5" cy="38" rx="2.3" ry="1.3" fill="#F7A5B9" opacity=".6"/><ellipse cx="41.5" cy="38" rx="2.3" ry="1.3" fill="#F7A5B9" opacity=".6"/>'
     '<path d="M18.5 46.5Q32 55 45.5 46.5" fill="none" stroke="#141111" stroke-width="3.4" stroke-linecap="round"/>'
     '<circle cx="32" cy="54" r="3.1" fill="#D5D9E0" stroke="#141111" stroke-width="1"/></svg>')
-# Sugarfoot (pups.js "drop"): stockier, long drop ears, tan brows running into tan cheeks, a cream muzzle, white chest.
+# Sugarfoot (pups.js "drop"): stockier, long drop ears, tan brows running into tan cheeks, the same fawn-tan muzzle as on the rest of the site, white chest.
 SVG_SUGARFOOT = (
     '<svg viewBox="0 0 64 64" focusable="false" aria-hidden="true">'
     '<ellipse cx="14.5" cy="35" rx="6.6" ry="13.5" fill="#1B1817" transform="rotate(14 14.5 35)"/>'
@@ -86,7 +86,7 @@ SVG_SUGARFOOT = (
     '<ellipse cx="23.8" cy="23" rx="3.8" ry="2.2" fill="#C9965F" transform="rotate(-14 23.8 23)"/>'
     '<ellipse cx="40.2" cy="23" rx="3.8" ry="2.2" fill="#C9965F" transform="rotate(14 40.2 23)"/>'
     '<ellipse cx="22.8" cy="36.5" rx="4.6" ry="4.2" fill="#C9965F"/><ellipse cx="41.2" cy="36.5" rx="4.6" ry="4.2" fill="#C9965F"/>'
-    '<ellipse cx="32" cy="39" rx="9.2" ry="7.2" fill="#EADCC2"/>'
+    '<ellipse cx="32" cy="39" rx="9.2" ry="7.2" fill="#C9965F"/>'
     '<circle cx="25.2" cy="29.2" r="2.5" fill="#3A2418"/><circle cx="38.8" cy="29.2" r="2.5" fill="#3A2418"/>'
     '<circle cx="26" cy="28.3" r=".85" fill="#fff"/><circle cx="39.6" cy="28.3" r=".85" fill="#fff"/>'
     '<path d="M22.4 26.6Q25.2 25.4 28 26.6M36 26.6Q38.8 25.4 41.6 26.6" fill="none" stroke="#3A2418" stroke-width=".9" stroke-linecap="round"/>'

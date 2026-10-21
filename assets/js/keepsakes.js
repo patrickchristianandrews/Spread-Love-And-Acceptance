@@ -66,7 +66,15 @@
     var box = e.target.closest && e.target.closest('input[data-id]');
     if (!box || !window.TOLRewards) return;
     window.TOLRewards.setGarden(box.getAttribute('data-id'), box.checked);
+    if (SFX) SFX.play(box.checked ? 'place' : 'tap'); // a soft sound as a keepsake goes into the background or rests
   });
+  // the shared "Sounds" switch for the games (game-sfx.js), quiet and gentle here
+  var SFX = window.TOLSfx;
+  if (SFX) {
+    SFX.calm(true);
+    var sum = document.getElementById('ks-sum');
+    if (sum) { var row = document.createElement('div'); row.className = 'gm-btns ks-sfx no-bubble'; SFX.button({ parent: row }); sum.parentNode.insertBefore(row, sum.nextSibling); }
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render); else render();
   window.addEventListener('focus', render);
 })();
