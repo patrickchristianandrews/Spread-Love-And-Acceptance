@@ -33,7 +33,7 @@
 
   /* ---------- saved choices and best scores ---------- */
   var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var S = { pup: 'tidbit', game: 'chase', relaxed: true, sound: true, best: {} };
+  var S = { pup: 'tidbit', game: 'chase', relaxed: true, sound: true, best: {}, ism: 0 };
   try {
     var raw = localStorage.getItem(KEY);
     if (raw) { var d = JSON.parse(raw); if (d && typeof d === 'object') {
@@ -42,6 +42,7 @@
       if (typeof d.relaxed === 'boolean') S.relaxed = d.relaxed;
       if (typeof d.sound === 'boolean') S.sound = d.sound;
       if (d.best && typeof d.best === 'object') S.best = d.best;
+      if (typeof d.ism === 'number' && d.ism >= 0) S.ism = Math.floor(d.ism);
     } }
   } catch (e) { /* private window: fine */ }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
@@ -116,11 +117,12 @@
     tidbit:   { name: 'Tidbit',   look: 'collar', blurb: 'Quick on her paws. A little faster, and her golden hearts last a bit less long.', chaseSpeed: 6.9, power: 6, hop: 0.10 },
     sugarfoot: { name: 'Sugarfoot', look: 'drop',   blurb: 'Steady and strong. A little slower, but golden hearts last longer and she is harder to bump.', chaseSpeed: 6.3, power: 9, hop: 0.14 }
   };
-  function drawPup(g, who, x, y, scale, face, phase, moving, t, pose) {
+  // wag and tilt (optional): the tail and the head, for the Derby pitcher's tells and the intermissions
+  function drawPup(g, who, x, y, scale, face, phase, moving, t, pose, wag, tilt) {
     if (!window.TOLPups) return;
     var L = window.TOLPups.looks[PUPS[who].look];
     g.save(); g.translate(x, y); g.scale(face * scale, scale);
-    try { window.TOLPups.draw(g, L, pose || (moving ? 'run' : 'wiggle'), phase, Math.sin(t / 130) * 0.5, Math.sin(t / 900) > 0.985, t, 0); } catch (e) { /* ignore */ }
+    try { window.TOLPups.draw(g, L, pose || (moving ? 'run' : 'wiggle'), phase, wag != null ? wag : Math.sin(t / 130) * 0.5, Math.sin(t / 900) > 0.985, t, tilt || 0); } catch (e) { /* ignore */ }
     g.restore();
   }
 
@@ -196,8 +198,9 @@
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var k = e.key, handled = true;
+    if (ism && !paused) { if (k === ' ' || k === 'Enter' || k === 'Escape' || k === 's' || k === 'S') { if (!(tag === 'BUTTON' && k !== 'Escape')) { e.preventDefault(); endIsm(); } } return; }
     // games with their own keys (the Treat Trail's numbered choices); Enter on a focused button is left to the button
-    if (game && game.onKey && !paused && !(tag === 'BUTTON' && (k === 'Enter' || k === ' ')) && game.onKey(k)) { e.preventDefault(); return; }
+    if (game && game.onKey && !paused && !(tag === 'BUTTON' && (k === 'Enter' || k === ' ')) && game.onKey(k, e)) { e.preventDefault(); return; }
     if (k === 'ArrowUp' || k === 'w' || k === 'W') dir(0, -1);
     else if (k === 'ArrowDown' || k === 's' || k === 'S') dir(0, 1);
     else if (k === 'ArrowLeft' || k === 'a' || k === 'A') dir(-1, 0);
@@ -207,12 +210,19 @@
     else handled = false;
     if (handled) e.preventDefault();
   }
+  // the Derby: letting go of space (or Enter, or up) swings
+  function onKeyUp(e) {
+    if (!running || !game || !game.onKeyUp) return;
+    var tag = e.target && e.target.tagName; if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
+    if (game.onKeyUp(e.key)) e.preventDefault();
+  }
   // a swipe goes that way; a tap on the playfield sends the pup toward the tap
   var ptr = null;
   function onPointerDown(e) {
     if (!running || paused) return;
-    if (e.target && e.target.closest && e.target.closest('.ar-overlay')) return;
-    if (game && game.onTap) { e.preventDefault(); ptr = null; game.onTap(); return; }   // the Derby: a tap is a swing, at once
+    if (e.target && e.target.closest && e.target.closest('.ar-overlay, .ar-skip')) return;
+    if (ism) { e.preventDefault(); ptr = null; endIsm(); return; }
+    if (game && game.onTap) { e.preventDefault(); ptr = null; try { cv.parentNode.setPointerCapture(e.pointerId); } catch (er) { /* ignore */ } game.onTap(); return; }   // the Derby: press to power up, let go to swing
     ptr = { x: e.clientX, y: e.clientY };
   }
   // dragging a finger or the mouse steers the games with a cushion or basket
@@ -223,6 +233,7 @@
     game.onPoint((e.clientX - rect.left) / rect.width * LW); if (ptr) ptr.drag = true;
   }
   function onPointerUp(e) {
+    if (game && game.release && running) { game.release(); ptr = null; return; }
     if (!ptr || !running || paused || !game) { ptr = null; return; }
     if (ptr.drag && game.onPoint) { ptr = null; return; }
     var dx = e.clientX - ptr.x, dy = e.clientY - ptr.y; ptr = null;
@@ -238,6 +249,7 @@
     if (!last) last = ts; var dt = Math.min(0.05, (ts - last) / 1000); last = ts;
     if (!running || paused || !game) return;
     tAll += dt * 1000;
+    if (ism) { ismUpdate(dt); if (ism) ismDraw(); return; }
     var steps = Math.max(1, Math.ceil(dt / 0.016)), sdt = dt / steps;
     for (var i = 0; i < steps; i++) game.update(sdt);
     game.draw(tAll);
@@ -251,8 +263,12 @@
 
   /* ---------- overlay ---------- */
   // alt: an optional third button, { label, fn } (the Home Run Derby's "Swap roles")
-  function overlay(title, text, goLabel, onGo, extra, alt) {
+  // stats: an optional list of [label, value] pairs (the Derby's round summary)
+  function overlay(title, text, goLabel, onGo, extra, alt, stats) {
     $('ar-ov-h').textContent = title; $('ar-ov-p').textContent = text;
+    var sl = $('ar-ov-stats'), pp = $('ar-ov-p');
+    if (!sl && pp && pp.parentNode) { sl = D.createElement('dl'); sl.id = 'ar-ov-stats'; sl.className = 'ar-ov-stats'; pp.parentNode.insertBefore(sl, pp); }
+    if (sl) { sl.hidden = !stats; sl.innerHTML = ''; (stats || []).forEach(function (r) { var d = D.createElement('div'), dt = D.createElement('dt'), dd = D.createElement('dd'); dt.textContent = r[0]; dd.textContent = r[1]; d.appendChild(dt); d.appendChild(dd); sl.appendChild(d); }); }
     var go = $('ar-ov-go'); go.textContent = goLabel; go.onclick = function () { $('ar-overlay').hidden = true; if (onGo) onGo(); $('ar-wrap').focus(); };
     var ab = $('ar-ov-alt');
     if (!ab && go.parentNode) { ab = D.createElement('button'); ab.type = 'button'; ab.className = 'ar-btn'; ab.id = 'ar-ov-alt'; go.parentNode.insertBefore(ab, go.nextSibling); }
@@ -264,6 +280,7 @@
   function togglePause(force) {
     if (!running) return;
     paused = typeof force === 'boolean' ? force : !paused;
+    if (paused && game && game.holdT0 != null) game.holdT0 = null;
     $('ar-pause').textContent = paused ? '▶ Resume' : '⏸ Pause';
     if (paused) overlay('Paused', 'Take your time. Nothing moves until you’re ready.', '▶ Resume', function () { paused = false; $('ar-pause').textContent = '⏸ Pause'; last = 0; });
     else $('ar-overlay').hidden = true;
@@ -496,7 +513,7 @@
     var me = this; me.score += 500; SFX.clear(); recordBest(); hud();
     var lesson = nextLesson();
     var gift = rewardLevel('Treat Chase · level ' + me.level);
-    overlay('Level ' + me.level + ' cleared!', 'Every treat is gathered. ' + lesson, 'Next level →', function () { var prevD = me.diff(); me.level++; me.cleared = false; me.map = genMaze(Math.random); me.reset(true); me.banner = levelBanner(me.level, me.diff(), prevD); say(me.banner.title + ': ' + me.banner.note + '.'); last = 0; }, '+500 for clearing the maze' + (gift ? ' · ' + gift : ''));
+    overlay('Level ' + me.level + ' cleared!', 'Every treat is gathered. ' + lesson, 'Next level →', function () { intermission(function () { var prevD = me.diff(); me.level++; me.cleared = false; me.map = genMaze(Math.random); me.reset(true); me.banner = levelBanner(me.level, me.diff(), prevD); say(me.banner.title + ': ' + me.banner.note + '.'); last = 0; }); }, '+500 for clearing the maze' + (gift ? ' · ' + gift : ''));
     paused = true; var go = $('ar-ov-go'); var orig = go.onclick; go.onclick = function () { paused = false; orig(); };
   };
   // every cleared level counts toward the garden behind every page, like the other calm games
@@ -553,7 +570,7 @@
     // pops
     (me.pops || []).forEach(function (q) { var a = 1 - q.t / 0.5; g.strokeStyle = 'rgba(190,230,255,' + a + ')'; g.lineWidth = 2; for (var i = 0; i < 5; i++) { var an = i * 1.256 + q.t * 3; g.beginPath(); g.arc(q.x * T + T / 2 + Math.cos(an) * q.t * 40, q.y * T + T / 2 + Math.sin(an) * q.t * 40, 3 + i % 2 * 2, 0, 7); g.stroke(); } });
     // the pup
-    var p = me.pup, blink = p.invul > 0 && Math.floor(t / 110) % 2 === 0;
+    var p = me.pup, blink = p.invul > 0 && Math.floor(t / 170) % 2 === 0;   // under 3 blinks a second
     if (!blink) drawPup(g, me.who, p.x * T + T / 2 + (p.face > 0 ? -2 : 2), p.y * T + T / 2 + 10, 0.5, p.face, p.ph, p.moving, t);
     drawBanner(g, me.banner, LW, 12.5 * T);
     // toast
@@ -772,7 +789,7 @@
     paused = true;
     var gift = rewardLevel('Cross the Way · level ' + me.level);
     overlay('Level ' + me.level + ' cleared!', 'All five doghouses are full. ' + lesson, 'Next level →', function () {
-      paused = false; var prevD = me.d; me.level++; me.cleared = false; me.filled = []; me.buildLevel(prevD); me.newPup(); last = 0; say(me.banner.title + (me.banner.note ? ': ' + me.banner.note + '.' : '.'));
+      paused = false; intermission(function () { var prevD = me.d; me.level++; me.cleared = false; me.filled = []; me.buildLevel(prevD); me.newPup(); last = 0; say(me.banner.title + (me.banner.note ? ': ' + me.banner.note + '.' : '.')); });
     }, '+200 for filling every doghouse' + (gift ? ' · ' + gift : ''));
   };
   function rr(g, x, y, w, h, r, col) { g.fillStyle = col; wallPath(g, x, y, w, h, r); g.fill(); }
@@ -842,7 +859,7 @@
   var OW = 480, OH = 300, TRIP = 800;
   var PLACES = ['Clover Meadow', 'Lantern Bridge', 'Owl’s Hollow', 'Bluebell Creek', 'Mossy Mill', 'Snail’s Rest', 'Pinecone Pass', 'Honeybee Orchard', 'Frog Pond Ferry',
     'Windmill Rise', 'Old Oak Crossing', 'Teapot Rock', 'Firefly Fields', 'Pebble Beach', 'Sunflower Market', 'Whistling Woods', 'Duckling Dock', 'Moonlit Marsh'];
-  var WEATHER = [['sunny', 'Sunny and warm'], ['breezy', 'A gentle breeze'], ['cloudy', 'Soft grey clouds'], ['rain', 'A light rain'], ['fog', 'A bit foggy']];
+  var WEATHER = [['sunny', 'Sunny and warm'], ['breezy', 'A gentle breeze'], ['cloudy', 'Soft gray clouds'], ['rain', 'A light rain'], ['fog', 'A bit foggy']];
   var EVENTS = [
     { t: 'A berry patch by the path! Everyone fills up.', d: { treats: 18 } },
     { t: 'Tidbit has a case of the zoomies. Lots of running, not much traveling.', d: { miles: -15, joy: 2 } },
@@ -972,7 +989,7 @@
     me.score += bonus; SFX.clear(); recordBest(); hud(); paused = true;
     var gift = rewardLevel('The Treat Trail · journey ' + me.level);
     overlay('You made it to Starfall Hill!', 'Day ' + me.day + '. Everyone arrives together, a little muddy and very happy. ' + nextLesson(), 'A new journey →',
-      function () { paused = false; me.level++; me.cleared = false; me.newTrip(); last = 0; }, '+' + bonus + ' for treats, energy, kindness and buttons left' + (gift ? ' · ' + gift : ''));
+      function () { paused = false; intermission(function () { me.level++; me.cleared = false; me.newTrip(); last = 0; }); }, '+' + bonus + ' for treats, energy, kindness and buttons left' + (gift ? ' · ' + gift : ''));
   };
   Trek.prototype.update = function (dt) { if (this.moveT > 0) { this.moveT -= dt; this.roll += dt * 6; } };
   Trek.prototype.draw = function (t) {
@@ -1060,7 +1077,7 @@
   Bricks.prototype.finish = function () {
     var me = this; me.cleared = true; me.score += 300; SFX.clear(); recordBest(); hud(); paused = true;
     var gift = rewardLevel('Bubble Break · level ' + me.level);
-    overlay('Level ' + me.level + ' cleared!', 'All the Static is popped. ' + nextLesson(), 'Next level →', function () { paused = false; me.level++; me.cleared = false; me.newLevel(); last = 0; }, '+300 for clearing the wall' + (gift ? ' · ' + gift : ''));
+    overlay('Level ' + me.level + ' cleared!', 'All the Static is popped. ' + nextLesson(), 'Next level →', function () { paused = false; intermission(function () { me.level++; me.cleared = false; me.newLevel(); last = 0; }); }, '+300 for clearing the wall' + (gift ? ' · ' + gift : ''));
   };
   Bricks.prototype.draw = function (t) {
     var me = this; g.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -1110,7 +1127,7 @@
   Catch.prototype.finish = function () {
     var me = this; me.cleared = true; me.score += 250; SFX.clear(); recordBest(); hud(); paused = true;
     var gift = rewardLevel('Treat Shower · level ' + me.level);
-    overlay('Level ' + me.level + ' cleared!', 'The basket is full. ' + nextLesson(), 'Next level →', function () { paused = false; me.level++; me.cleared = false; me.newLevel(); last = 0; }, '+250 for a full basket' + (gift ? ' · ' + gift : ''));
+    overlay('Level ' + me.level + ' cleared!', 'The basket is full. ' + nextLesson(), 'Next level →', function () { paused = false; intermission(function () { me.level++; me.cleared = false; me.newLevel(); last = 0; }); }, '+250 for a full basket' + (gift ? ' · ' + gift : ''));
   };
   Catch.prototype.draw = function (t) {
     var me = this; g.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -1131,32 +1148,59 @@
   };
 
   /* ==================================================================================================
-     HOME RUN DERBY
+     HOME RUN DERBY (game19: home runs by skill, super hits, trick bats)
      The pup picked on the menu bats and the other one pitches ("Swap roles" lets them change places). Ten
-     pitches, each a touch quicker than the last. The pitcher names every pitch before the wind-up, and a ring
-     in the pitch's colour closes on the plate: swing (a tap on the field, the big Swing button, or space) as it
-     closes. Right on time is a home run; a little early is a grounder and a little late a pop fly; more than
-     that is a foul; a miss is only a strike. A home run brings fireworks, confetti, a cheering crowd, the
-     distance ("412 ft!"), a little dance and the ballpark organ. With reduced motion or "Keep the page still"
-     the extras stay small: no fireworks, confetti or shake, and a calm crowd.
+     pitches, each a touch quicker than the last. Home runs come from skill, and every part of it shows:
+       timing      a ring closes on the plate. The gold band around the plate is the perfect window, the green
+                   one is good. After each swing a little bar shows how early or late it was.
+       power       hold Swing (or space, or a finger on the field) to power up, and let go to swing. A full
+                   meter hits a lot further than a quick tap.
+       sweet spot  the ring comes in on the inside, the middle or the outside of the plate. Step with the
+                   arrows so the gold marker under the plate sits under the ring.
+       the tell    the first three pitches are named. After that, read the pitcher: she scuffs her paw before
+                   a fastball, wags her tail slowly before a changeup and tilts her head before a curveball.
+       streak      good swings in a row widen the perfect window (7.5% a swing, up to 30% wider).
+     Super hits: about 1 in 12 good swings (a little more on a streak) rockets out of the park and everything
+     goes wild, six different ways. Trick bats: three a round, picked before a pitch (Mega, Rocket, Banana,
+     Magnet), one swing each. Every one of them still needs contact. With reduced motion, "Keep the page still"
+     or Quiet mode, the extras become a short, still banner.
+     Test hooks: TOLArcade._game().forceSwing(e, charge, align), .forceSuper(variant), .arm(kind),
+     TOLArcade.derbySim(skill, rounds, relaxed, tricks).
      ================================================================================================== */
   var DW = 440, DH = 520, MOUND = { x: 220, y: 356 }, HIT = { x: 224, y: 444 }, BAT = { x: 166, y: 478, s: 1.25 };
+  var LOCX = 18, FENCE = 372, RING0 = 14, RINGK = 100, CHARGE_T = 0.55;
   var PITCH = {
-    fast: { name: 'Fastball', cue: 'quick and straight', col: '#FF9F6E', time: 1.05 },
-    change: { name: 'Changeup', cue: 'nice and slow', col: '#8EC5FF', time: 1.6 },
-    curve: { name: 'Curveball', cue: 'it bends, so follow the ring', col: '#D2B0FF', time: 1.32 }
+    fast: { name: 'Fastball', cue: 'quick and straight', tell: 'scuffs her paw', col: '#FF9F6E', time: 1.05, bonus: 10 },
+    change: { name: 'Changeup', cue: 'nice and slow', tell: 'wags her tail slowly', col: '#8EC5FF', time: 1.6, bonus: 0 },
+    curve: { name: 'Curveball', cue: 'it bends, so follow the ring', tell: 'tilts her head', col: '#D2B0FF', time: 1.32, bonus: 4 }
   };
+  // the trick bats: three uses a round, one swing each, and every one of them still needs contact
+  var TRICK = {
+    mega: { name: 'Mega Bat', icon: '🏏', note: 'It has a much bigger sweet spot.', col: '#A8E6B8' },
+    rocket: { name: 'Rocket Bat', icon: '🚀', note: 'Extra power, so good contact goes a long way.', col: '#FF9F6E' },
+    banana: { name: 'Banana Bat', icon: '🍌', note: 'Any good contact is a super hit.', col: '#FFE08A' },
+    magnet: { name: 'Magnet Bat', icon: '🧲', note: 'The timing window is much wider.', col: '#F2A6C0' }
+  };
+  var TRICK_ORDER = ['mega', 'rocket', 'banana', 'magnet'];
   var DLINES = {
     fast: ['Here comes my fastball. Ready?', 'A quick one, pal! Watch the ring.', 'Zoom! You can do it.'],
     change: ['A nice slow one for you.', 'Easy does it. This one floats.', 'Slow and friendly, coming up.'],
     curve: ['This one bends. Follow the ring!', 'A little curve, just for you.', 'Watch it swoop!'],
+    secret: ['Can you guess this one?', 'I won’t say what this one is.', 'Watch me closely.', 'A mystery pitch!'],
     cheeky: ['Bet you can’t hit this one. (You probably can.)', 'I’m cheering for you, even while I pitch.', 'Don’t tell anyone, but I love it when you hit it far.', 'Ready, set, wag!'],
     hr: ['Wow! That one’s in orbit!', 'Nice hit! I’m a little proud of you.', 'Bye-bye, baseball!', 'The crowd loves you. So do I.'],
+    super: ['Did that just happen?!', 'Everybody dance!', 'That ball is still going!', 'Best. Hit. Ever.'],
     hit: ['Good contact! The next one goes further.', 'Nice! You’re finding the timing.', 'Ooh, close to a big one.'],
     foul: ['Just outside the line. Next one!', 'Foul ball, but a good swing.', 'Almost! A tiny bit sooner or later.'],
     strike: ['So close! You’ll get the next one.', 'That’s okay. Watch the ring.', 'Shake it off. Here comes another.']
   };
-  function calmMotion() { if (reduced) return true; try { return !!(window.TOLStill && window.TOLStill.chosen && window.TOLStill.chosen()); } catch (e) { return false; } }
+  // calm celebrations: reduced motion, "Keep the page still" or Quiet mode
+  function calmMotion() {
+    if (reduced) return true;
+    try { if (window.TOLStill && window.TOLStill.chosen && window.TOLStill.chosen()) return true; } catch (e) { /* ignore */ }
+    try { if (window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()) return true; } catch (e) { /* ignore */ }
+    return false;
+  }
   function otherPup(who) { return who === 'tidbit' ? 'sugarfoot' : 'tidbit'; }
   // easy first (a changeup, a gentle fastball, another changeup), a mix in the middle, a last quick one
   function derbyPlan() {
@@ -1164,46 +1208,199 @@
     for (var i = mid.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = mid[i]; mid[i] = mid[j]; mid[j] = x; }
     return ['change', 'fast', 'change'].concat(mid, ['fast']);
   }
+
+  /* ---- the Derby's rules, as plain functions (the game and the tuning simulation share them) ---- */
+  // where the pitch crosses the plate: the first three down the middle, then inside (-1), middle (0) or outside (+1)
+  function derbyLoc(n, r) { if (n < 3) return 0; var x = r(); return x < 0.4 ? 0 : x < 0.7 ? -1 : 1; }
+  function streakBoost(s) { return s >= 2 ? Math.min(0.3, 0.075 * (s - 1)) : 0; }
+  // the timing windows for pitch n (0 to 9), in seconds either side of the moment the ring closes: [perfect, good, foul]
+  function derbyWin(n, relaxed, streak, trick) {
+    var f = Math.min(n, 9) / 9, rx = relaxed ? 1.2 : 1, mg = trick === 'magnet';
+    var good = lerp(0.1, 0.08, f) * rx * (mg ? 1.4 : 1);
+    var perfect = Math.min(good * 0.9, lerp(0.03, 0.022, f) * rx * (1 + streakBoost(streak)) * (mg ? 1.8 : 1));
+    return [perfect, good, lerp(0.2, 0.17, f) * rx * (mg ? 1.25 : 1)];
+  }
+  // one swing: e is how early (minus) or late (plus) in seconds; off is how many steps the sweet spot is from the
+  // ball (0, 1 or 2); charge is the power meter (0 to 1)
+  function derbyContact(e, W, off, charge, kind, trick, r) {
+    var a = Math.abs(e);
+    if (a > W[2]) return { q: 'miss', early: e < 0 };
+    if (a > W[1]) return { q: 'foul', early: e < 0 };
+    var perfect = a <= W[0];
+    var tq = perfect ? 1 - 0.08 * a / W[0] : 0.78 - 0.28 * (a - W[0]) / (W[1] - W[0]);
+    var sq = (trick === 'mega' ? [1, 1, 0.92] : [1, 0.84, 0.7])[Math.min(2, off)];
+    var pf = trick === 'rocket' ? 1.1 : 0.74 + 0.26 * clamp(charge, 0, 1);
+    var c = tq * sq * pf, dist = Math.round(110 + 330 * c + (r() - 0.5) * 16 + PITCH[kind].bonus);
+    return { q: perfect ? 'perfect' : 'good', early: e < 0, c: c, tq: tq, sq: sq, pf: pf, dist: dist, hr: dist >= FENCE };
+  }
+  // a super hit: about 1 in 12 good swings, a little more on a streak; the Banana Bat makes any good contact one
+  function superRoll(streak, trick, r) { return trick === 'banana' || r() < 1 / 12 + 0.015 * Math.min(4, streak); }
+  function gauss(r) { var u = 1 - r(), v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  // the tuning simulation: made-up players of three skill levels, playing whole rounds with the real rules
+  //   beginner  timing spread 100 ms and 35 ms late on average, never reads the tell (20% more spread from pitch 4),
+  //             mostly quick taps (holds for power a quarter of the time), never steps
+  //   casual    70 ms, 20 ms late, holds about half the time, steps for about half the pitches
+  //   skilled   50 ms, on time, reads the tell, full power, steps 95% of the time
+  // (every player is 10% less steady on fastballs). Tuned so a beginner hits about 1 home run in 10 and a skilled
+  // player 5 to 6 (see the game19 notes for the table).
+  var SIMP = {
+    beginner: { sd: 0.1, bias: 0.035, read: false, hold: 0.25, align: 0, tricks: 0.6 },
+    casual: { sd: 0.07, bias: 0.02, read: false, hold: 0.55, align: 0.5, tricks: 1 },
+    skilled: { sd: 0.05, bias: 0, read: true, hold: 0.95, align: 0.95, tricks: 1 }
+  };
+  function derbySim(skill, rounds, relaxed, useTricks) {
+    var P = SIMP[skill] || SIMP.beginner, R = Math.random, hr = 0, sup = 0, perf = 0, trickHR = 0, rounds_ = rounds || 2000;
+    for (var k = 0; k < rounds_; k++) {
+      var plan = derbyPlan(), streak = 0, bats = useTricks ? 3 : 0;
+      for (var n = 0; n < 10; n++) {
+        var kind = plan[n], loc = derbyLoc(n, R), trick = null;
+        if (bats > 0 && R() < P.tricks && R() < bats / (10 - n)) { trick = TRICK_ORDER[Math.floor(R() * 4)]; bats--; }
+        var W = derbyWin(n, !!relaxed, streak, trick);
+        var sd = P.sd * (n >= 3 && !P.read ? 1.2 : 1) * (kind === 'fast' ? 1.1 : 1);
+        var e = P.bias + gauss(R) * sd;
+        var charge = R() < P.hold ? (P.read ? 1 : 0.5 + R() * 0.5) : R() * 0.2;
+        var pos = R() < P.align ? loc : 0;
+        var res = derbyContact(e, W, Math.abs(loc - pos), charge, kind, trick, R);
+        if (res.q === 'perfect' || res.q === 'good') {
+          if (res.q === 'perfect') perf++;
+          if (superRoll(streak, trick, R)) { res.hr = true; sup++; }
+          streak++;
+        } else streak = 0;
+        if (res.hr) { hr++; if (trick) trickHR++; }
+      }
+    }
+    return { skill: skill, relaxed: !!relaxed, trickBats: !!useTricks, rounds: rounds_, homeRunsPer10: +(hr / rounds_).toFixed(2), superHitsPer10: +(sup / rounds_).toFixed(2), perfectPer10: +(perf / rounds_).toFixed(2), trickHomeRunsPerRound: +(trickHR / rounds_).toFixed(2) };
+  }
+
+  /* ---- the critters who dance on the field during a super hit (drawn by coin-pusher-data.js, fetched once) ---- */
+  var CRIT_IDS = ['ollie', 'hopper', 'nutmeg', 'dot', 'lumi', 'ducklings', 'bunny', 'hedgehog', 'beep', 'puddles'];
+  var critters = null, critLoading = false;
+  function loadCritters() {
+    if (critters || critLoading) return;
+    function build() {
+      var CD = window.TOLCoinData; if (!CD || !CD.drawChar) return;
+      critters = [];
+      CRIT_IDS.forEach(function (id) {
+        var c = null; CD.chars.forEach(function (x) { if (x.id === id) c = x; }); if (!c) return;
+        var k = D.createElement('canvas'); k.width = k.height = 96;
+        try { CD.drawChar(k.getContext('2d'), c, 96); critters.push(k); } catch (e) { /* ignore */ }
+      });
+    }
+    if (window.TOLCoinData) { build(); return; }
+    critLoading = true;
+    var s = D.createElement('script'); s.src = '/assets/js/coin-pusher-data.js';
+    s.onload = function () { critLoading = false; build(); }; s.onerror = function () { critLoading = false; };
+    D.head.appendChild(s);
+  }
+  var SUPERS = ['bananas', 'fireworks', 'zoomies', 'conga', 'moon', 'disco'];
+  var SUPER_NAME = { bananas: 'Banana Bonanza!', fireworks: 'Fireworks Night!', zoomies: 'Zoomies!', conga: 'Conga Line!', moon: 'Moonshot!', disco: 'Disco Derby!' };
+  var FWCOL = ['#FFE08A', '#F6A9C8', '#8EC5FF', '#A8E6B8', '#FFB38A', '#D2B0FF'];
+  // a different music sting for each kind of super hit (the ballpark organ)
+  function sting(v) {
+    var N = {
+      bananas: [[523.25, 0, 0.12], [659.25, 0.12, 0.12], [783.99, 0.24, 0.12], [1046.5, 0.36, 0.14], [880, 0.52, 0.12], [1046.5, 0.66, 0.5]],
+      fireworks: [[392, 0, 0.3], [523.25, 0.3, 0.3], [659.25, 0.6, 0.3], [783.99, 0.9, 0.3], [1046.5, 1.2, 0.8]],
+      zoomies: [[523.25, 0, 0.07], [587.33, 0.07, 0.07], [659.25, 0.14, 0.07], [698.46, 0.21, 0.07], [783.99, 0.28, 0.07], [880, 0.35, 0.07], [987.77, 0.42, 0.07], [1046.5, 0.49, 0.5]],
+      conga: [[392, 0, 0.14], [392, 0.2, 0.14], [392, 0.4, 0.14], [523.25, 0.6, 0.14], [440, 0.8, 0.14], [523.25, 1.0, 0.4]],
+      moon: [[261.63, 0, 0.5], [392, 0.4, 0.5], [523.25, 0.8, 0.5], [783.99, 1.2, 0.5], [1046.5, 1.6, 1.0]],
+      disco: [[349.23, 0, 0.12], [349.23, 0.25, 0.12], [440, 0.5, 0.12], [523.25, 0.75, 0.12], [440, 1.0, 0.12], [523.25, 1.25, 0.5]]
+    };
+    organ(N[v] || N.bananas);
+  }
+
   function Derby(who) {
     var me = this; me.who = who; me.pit = otherPup(who); me.P = PUPS[who];
     me.score = 0; me.level = 1; me.n = 0; me.best = 0; me.log = []; me.plan = derbyPlan();
+    me.pts = 0; me.streak = 0; me.bestStreak = 0; me.supers = 0; me.pos = 0; me.bx = 0; me.trick = null; me.tricksUsed = 0; me.trickHRs = 0;
     sizeCanvas(DW, DH);
-    me.t = 0; me.phase = 'intro'; me.pt = 0; me.trail = []; me.fw = []; me.conf = []; me.shake = 0; me.hype = 0.15;
+    me.t = 0; me.phase = 'intro'; me.pt = 0; me.trail = []; me.fw = []; me.conf = []; me.nanas = []; me.shake = 0; me.hype = 0.15; me.flash = 0;
     me.batT = -1; me.dance = 0; me.callout = null; me.bubble = null; me.hitB = null; me.calm = calmMotion();
+    me.holdT0 = null; me.lastCharge = 0; me.relT = 9; me.meter = null; me.fb = null; me.sup = null; me.lastVar = ''; me.forceSup = null;
     me.crowd = [];
     var cols = ['#F6A9C8', '#FFE08A', '#8EC5FF', '#A8D8C8', '#F2B6A0', '#C9A8E0', '#FFF6E0', '#9FD3A8'];
     [96, 122, 148].forEach(function (y, r) { for (var x = 8 + r * 5; x < DW; x += 15) me.crowd.push({ x: x + rnd(-2, 2), y: y + rnd(-2, 2), c: cols[Math.floor(Math.random() * cols.length)], ph: rnd(0, 6), dog: Math.random() < 0.35 }); });
     me.setPitch();
+    loadCritters();
   }
-  // the pitch about to come: how long it takes to reach the plate, and how wide each timing window is
+  // the pitch about to come: how long it takes to reach the plate, and where it crosses
   Derby.prototype.setPitch = function () {
-    var me = this, k = Math.min(me.n, 9), f = k / 9, rx = S.relaxed ? 1.3 : 1;
+    var me = this, k = Math.min(me.n, 9), f = k / 9;
     me.kind = me.plan[k]; me.pk = PITCH[me.kind];
     me.T = me.pk.time * lerp(1, 0.8, f) * (S.relaxed ? 1.2 : 1);
-    me.win = [lerp(0.1, 0.062, f) * rx, lerp(0.2, 0.15, f) * rx, lerp(0.3, 0.24, f) * rx];
-    me.bend = Math.random() < 0.5 ? 1 : -1; me.swung = false; me.res = null; me.hitB = null; me.trail = [];
+    me.loc = derbyLoc(k, Math.random);
+    me.bend = Math.random() < 0.5 ? 1 : -1; me.swung = false; me.res = null; me.hitB = null; me.trail = []; me.whiff = false; me.adv = ''; me.usedTrick = null;
     me.level = k + 1;
   };
+  Derby.prototype.windows = function () { return derbyWin(this.n, S.relaxed, this.streak, this.trick); };
+  Derby.prototype.named = function () { return this.n < 3; };
+  Derby.prototype.bats = function () { return 3 - this.tricksUsed; };
   Derby.prototype.intro = function () {
-    var me = this; paused = true; swingWait(true);
-    overlay('Home Run Derby', me.P.name + ' bats and ' + PUPS[me.pit].name + ' pitches. Ten pitches. Swing as the ring closes on the plate: tap the field, press the big Swing button, or press space.', '⚾ Play ball', function () { paused = false; last = 0; me.begin(); }, 'Want the other pup to bat? Swap roles.', { label: '⇄ Swap roles', fn: function () { derbyAgain(true); } });
+    var me = this; paused = true; swingWait(true); syncBats();
+    overlay('Home Run Derby', me.P.name + ' bats and ' + PUPS[me.pit].name + ' pitches. Hold Swing to power up, and let go as the ring closes on the plate. Step with the arrows so the gold marker sits under the ring. After three pitches, read the pitcher for a clue. You also get three trick bats.', '⚾ Play ball', function () { paused = false; last = 0; me.begin(); }, 'Want the other pup to bat? Swap roles.', { label: '⇄ Swap roles', fn: function () { derbyAgain(true); } });
   };
-  Derby.prototype.begin = function () { var me = this; swingWait(false); me.phase = 'ready'; me.pt = 0; me.talk(); SFX.charge(); me.hype = 0.6; };
+  Derby.prototype.begin = function () { var me = this; swingWait(false); me.phase = 'ready'; me.pt = 0; me.talk(); SFX.charge(); me.hype = 0.6; syncBats(); };
+  Derby.prototype.where = function () { return this.loc === 0 ? 'down the middle' : this.loc < 0 ? 'on the inside' : 'on the outside'; };
   Derby.prototype.talk = function () {
-    var me = this, pool = Math.random() < 0.3 ? DLINES.cheeky : DLINES[me.kind];
+    var me = this, pool = Math.random() < 0.3 ? DLINES.cheeky : me.named() ? DLINES[me.kind] : DLINES.secret;
     me.bubble = { text: pick(pool), t: 0 };
-    say('Pitch ' + (me.n + 1) + ' of 10: ' + me.pk.name + ', ' + me.pk.cue + '.');
+    say('Pitch ' + (me.n + 1) + ' of 10. ' + (me.named() ? me.pk.name + ', ' + me.pk.cue + '.' : PUPS[me.pit].name + ' ' + me.pk.tell + '.') + ' It comes ' + me.where() + '.');
   };
   Derby.prototype.react = function (kind) { this.bubble = { text: pick(DLINES[kind]), t: 0 }; };
-  // test hook: a swing exactly e seconds early (minus) or late (plus), while the ball is on its way
-  Derby.prototype.forceSwing = function (e) { var me = this; if (me.phase !== 'flight' || me.swung) return false; me.batT = 0; me.swung = true; me.pt = me.T + e; me.judge(e); return true; };
-  Derby.prototype.onKey = function (k) { if (k === ' ' || k === 'Enter' || k === 'ArrowUp' || k === 'x' || k === 'X') { this.swing(); return true; } return false; };
-  Derby.prototype.onTap = function () { this.swing(); };
+  // trick bats: tap one before a pitch to get it ready (tap it again to put it back); it lasts one swing
+  Derby.prototype.arm = function (kind) {
+    var me = this; if (!TRICK[kind]) return false;
+    if (me.phase === 'intro' || me.phase === 'done') return false;
+    if (me.trick === kind) { me.trick = null; syncBats(); say(TRICK[kind].name + ' put back.'); return true; }
+    if (me.bats() <= 0) { say('No trick bats left this round.'); return false; }
+    if (me.phase === 'flight' || me.phase === 'hit') { say('Too late for this pitch. Pick a trick bat before the next one.'); return false; }
+    me.trick = kind; syncBats(); blip(660, 0.1, 'triangle', 0.05, 990);
+    say(TRICK[kind].name + ' is ready for your next swing. ' + TRICK[kind].note);
+    return true;
+  };
+  // test hooks
+  Derby.prototype.forceSwing = function (e, c, align) { var me = this; if (me.phase !== 'flight' || me.swung) return false; if (align !== false) me.pos = me.loc; me.batT = 0; me.swung = true; me.holdT0 = null; me.pt = me.T + e; me.judge(e, c == null ? 1 : c); return true; };
+  Derby.prototype.forceSuper = function (v) { this.forceSup = SUPERS.indexOf(v) >= 0 ? v : pick(SUPERS); };
+  Derby.prototype.onKey = function (k, e) {
+    if (k === ' ' || k === 'Enter' || k === 'ArrowUp' || k === 'x' || k === 'X' || k === 'w' || k === 'W') { if (!(e && e.repeat)) this.press(); return true; }
+    if (/^[1-4]$/.test(k)) { this.arm(TRICK_ORDER[+k - 1]); return true; }
+    return false;
+  };
+  Derby.prototype.onKeyUp = function (k) { if (k === ' ' || k === 'Enter' || k === 'ArrowUp' || k === 'x' || k === 'X' || k === 'w' || k === 'W') { this.release(); return true; } return false; };
+  Derby.prototype.onDir = function (dx) { if (dx) this.step(dx); };
+  Derby.prototype.onTap = function () { this.press(); };
   Derby.prototype.center = function () { return { x: HIT.x, y: HIT.y }; };
+  // step toward the plate (right) or away from it (left), so the sweet spot meets the ball
+  Derby.prototype.step = function (dx) {
+    var me = this; if (me.phase === 'intro' || me.phase === 'done' || me.swung) return;
+    var p = clamp(me.pos + (dx > 0 ? 1 : -1), -1, 1); if (p === me.pos) return;
+    me.pos = p; SFX.hop();
+  };
+  // power: hold to fill the meter (about half a second), let go to swing. Held a long while, the arms tire a little.
+  Derby.prototype.press = function () {
+    var me = this;
+    if (me.sup && me.phase === 'result') { me.pt = Math.max(me.pt, me.resT - 0.5); return; }   // a tap moves a super hit along
+    if (me.phase === 'intro' || me.phase === 'done' || me.phase === 'hit' || me.phase === 'result' || me.swung || me.holdT0 != null) return;
+    me.holdT0 = me.t; me.fullBlip = false;
+  };
+  Derby.prototype.charge = function () {
+    if (this.holdT0 == null) return 0; var h = this.t - this.holdT0;
+    if (h < CHARGE_T) return h / CHARGE_T; if (h < CHARGE_T + 1.4) return 1;
+    return Math.max(0.6, 1 - (h - CHARGE_T - 1.4) * 0.35);
+  };
+  Derby.prototype.release = function () { var me = this; if (me.holdT0 == null) return; var c = me.charge(); me.holdT0 = null; me.lastCharge = c; me.relT = 0; me.swing(c); };
+  Derby.prototype.swing = function (c) {
+    var me = this; if (me.phase === 'intro' || me.phase === 'done') return;
+    if (me.batT >= 0 && me.batT < 0.5) return;
+    if (me.phase !== 'flight' || me.swung) {
+      if (me.phase === 'ready' || me.phase === 'windup') { me.batT = 0; SFX.whoosh(0.5); me.fb = { text: 'Too soon', t: 0, col: '#CFC3F0' }; say('A practice swing. Wait for the ball, then let go as the ring closes.'); }
+      return;
+    }
+    me.batT = 0; SFX.whoosh(0.5 + 0.5 * (c || 0)); me.swung = true; me.judge(me.pt - me.T, c || 0);
+  };
   // where the pitched ball is at u (0 at the pitcher's mouth, 1 at the plate)
   Derby.prototype.ballAt = function (u) {
-    var me = this, x0 = MOUND.x - 22, y0 = MOUND.y - 30, e = Math.pow(Math.max(0, u), 1.25);
-    var x = lerp(x0, HIT.x, u), y = lerp(y0, HIT.y, e), r = lerp(2.2, 6.4, Math.pow(Math.min(1, Math.max(0, u)), 1.6));
+    var me = this, x0 = MOUND.x - 22, y0 = MOUND.y - 30, e = Math.pow(Math.max(0, u), 1.25), tx = HIT.x + me.loc * LOCX;
+    var x = lerp(x0, tx, u), y = lerp(y0, HIT.y, e), r = lerp(2.2, 6.4, Math.pow(Math.min(1, Math.max(0, u)), 1.6));
     if (u <= 1) {
       if (me.kind === 'fast') y -= 6 * Math.sin(Math.PI * u);
       else if (me.kind === 'change') y -= 18 * Math.sin(Math.PI * u);
@@ -1211,78 +1408,136 @@
     } else { y += (u - 1) * 300; x += (u - 1) * 30; r = 6.4 + (u - 1) * 8; }
     return { x: x, y: y, r: r };
   };
-  Derby.prototype.swing = function () {
-    var me = this; if (me.phase === 'intro' || me.phase === 'done') return;
-    if (me.batT >= 0 && me.batT < 0.5) return;
-    me.batT = 0; SFX.whoosh(0.7);
-    if (me.phase !== 'flight' || me.swung) { if (me.phase === 'ready' || me.phase === 'windup') say('Wait for the ball, then swing as the ring closes.'); return; }
-    me.swung = true; me.judge(me.pt - me.T);
-  };
-  // e: how early (minus) or late (plus) the swing was, in seconds
-  Derby.prototype.judge = function (e) {
-    var me = this, a = Math.abs(e), W = me.win, b = me.ballAt(me.pt / me.T), q, dist, kind; me.lastE = e;
-    if (a > W[2]) { me.whiff = true; return; }   // a miss: the ball sails on by and it's a strike
-    if (a <= W[0]) {
-      q = 1 - a / W[0]; kind = 'hr';
-      dist = Math.round(365 + 85 * q + (me.kind === 'fast' ? 12 : me.kind === 'curve' ? 6 : 0) + rnd(0, 8));
-      me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: clamp(220 + (e < 0 ? -1 : 1) * rnd(10, 150) * (0.4 + (1 - q) * 0.6), 40, 400), y1: 124, H: 150, dur: me.calm ? 1.3 : 1.5, r1: 2.2, t: 0, dist: dist };
-      if (!me.calm) me.shake = 0.35; me.hype = 1; SFX.crack(); SFX.cheer(true);
-    } else if (a <= W[1]) {
-      if (e < 0) { kind = 'ground'; dist = Math.round(rnd(70, 130)); me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: 220 - rnd(30, 120), y1: 338, H: 0, dur: 1.0, r1: 3.6, t: 0, dist: dist }; }
-      else { kind = 'pop'; dist = Math.round(rnd(150, 250)); me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: 220 + rnd(-50, 60), y1: 300, H: 300, dur: 1.8, r1: 3.6, t: 0, dist: dist }; }
-      SFX.crack(); SFX.cheer(false); me.hype = Math.max(me.hype, 0.5);
-    } else {
-      kind = 'foul'; var side = e < 0 ? -1 : 1;
+  // e: how early (minus) or late (plus) the swing was, in seconds; c: the power meter
+  Derby.prototype.judge = function (e, c) {
+    var me = this, W = me.windows(), off = Math.abs(me.loc - me.pos), trick = me.trick, b = me.ballAt(me.pt / me.T);
+    var r = derbyContact(e, W, off, c, me.kind, trick, Math.random), side = e < 0 ? -1 : 1, kind, dist = r.dist || 0;
+    me.lastE = e; me.meter = { e: e, W: W, t: 0 }; me.usedTrick = trick || null; me.lastQ = r.q;
+    if (trick) { me.trick = null; me.tricksUsed++; syncBats(); }
+    if (r.q === 'miss') { me.whiff = true; me.streak = 0; me.fb = { text: e < 0 ? 'Way early' : 'Way late', t: 0, col: '#F2B6A0' }; me.adv = 'Let go as the ring touches the plate.'; return; }
+    if (r.q === 'foul') {
+      me.streak = 0; kind = 'foul'; me.fb = { text: e < 0 ? 'Early' : 'Late', t: 0, col: '#CFC3F0' };
       me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: side < 0 ? -30 : DW + 30, y1: 236, H: 120, dur: 1.1, r1: 4, t: 0, dist: 0 };
       blip(700, 0.05, 'square', 0.03, 300);
+    } else {
+      var sup = !!me.forceSup || superRoll(me.streak, trick, Math.random);
+      me.streak++; me.bestStreak = Math.max(me.bestStreak, me.streak);
+      me.fb = { text: r.q === 'perfect' ? 'Perfect!' : e < 0 ? 'Good, a touch early' : 'Good, a touch late', t: 0, col: r.q === 'perfect' ? '#FFE08A' : '#A8E6B8' };
+      // what would have made it go further
+      me.adv = r.q !== 'perfect' ? 'A touch ' + (e < 0 ? 'later' : 'sooner') + ' is a perfect swing.' : off && trick !== 'mega' ? 'Step so the gold marker sits under the ring.' : c < 0.6 && trick !== 'rocket' ? 'Hold Swing a little longer to power up.' : '';
+      if (sup) {
+        kind = 'super'; dist = Math.round(rnd(486, 560));
+        me.supVar = trick === 'banana' ? 'bananas' : me.forceSup || (function () { var v; do { v = pick(SUPERS); } while (v === me.lastVar); return v; })();
+        me.forceSup = null;
+        me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: clamp(220 + side * rnd(0, 90), 60, 380), y1: -70, H: 60, dur: 0.85, r1: 2, t: 0, dist: dist };
+        if (!calmMotion()) me.shake = 0.35; me.hype = 1; SFX.crack(); setTimeout(SFX.crack, 60); SFX.cheer(true);
+      } else if (r.hr) {
+        kind = 'hr';
+        me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: clamp(220 + side * rnd(10, 150) * (0.4 + (1 - Math.min(1, r.c)) * 0.6), 40, 400), y1: 124, H: 150, dur: me.calm ? 1.3 : 1.5, r1: 2.2, t: 0, dist: dist };
+        if (!me.calm) me.shake = 0.35; me.hype = 1; SFX.crack(); SFX.cheer(true);
+      } else if (dist >= FENCE - 24) {
+        kind = 'wall'; me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: clamp(220 + side * rnd(20, 140), 40, 400), y1: 196, H: 170, dur: 1.5, r1: 2.6, t: 0, dist: dist };
+        SFX.crack(); SFX.cheer(false); me.hype = Math.max(me.hype, 0.7);
+      } else if (dist < 230) {
+        if (e < 0) { kind = 'ground'; me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: 220 - rnd(30, 120), y1: 338, H: 0, dur: 1.0, r1: 3.6, t: 0, dist: dist }; }
+        else { kind = 'pop'; me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: 220 + rnd(-50, 60), y1: 300, H: 300, dur: 1.8, r1: 3.6, t: 0, dist: dist }; }
+        SFX.crack(); SFX.cheer(false); me.hype = Math.max(me.hype, 0.5);
+      } else {
+        kind = 'fly'; me.hitB = { kind: kind, x0: b.x, y0: b.y, x1: clamp(220 + side * rnd(10, 130), 50, 390), y1: lerp(300, 214, (dist - 230) / (FENCE - 254)), H: 200, dur: 1.6, r1: 3, t: 0, dist: dist };
+        SFX.crack(); SFX.cheer(false); me.hype = Math.max(me.hype, 0.55);
+      }
     }
     me.res = kind; me.phase = 'hit'; me.pt = 0; me.trail = [];
   };
   Derby.prototype.result = function (kind, dist) {
-    var me = this, logK = kind === 'ground' || kind === 'pop' ? 'hit' : kind;
-    me.log.push({ k: logK, ft: dist || 0 });
-    if (kind === 'hr') me.score++;
+    var me = this, isHR = kind === 'hr' || kind === 'super';
+    var logK = kind === 'super' ? 'super' : kind === 'hr' ? 'hr' : kind === 'foul' || kind === 'strike' ? kind : 'hit';
+    me.log.push({ k: logK, ft: dist || 0, trick: me.usedTrick || '' });
+    me.calm = calmMotion();
+    if (isHR) { me.score++; if (me.usedTrick) me.trickHRs++; }
+    if (kind === 'super') me.supers++;
     if (dist && kind !== 'foul') me.best = Math.max(me.best, dist);
-    var big = { hr: dist + ' ft!', ground: 'Grounder', pop: 'Pop fly', foul: 'Foul ball', strike: 'Strike' }[kind];
-    var sub = { hr: 'Home run!', ground: dist + ' ft', pop: dist + ' ft', foul: 'Nearly!', strike: 'Next one!' }[kind];
-    me.callout = { big: big, sub: sub, t: 0, hr: kind === 'hr' };
-    me.react(logK === 'hit' ? 'hit' : kind);
-    say(kind === 'hr' ? 'Home run! ' + dist + ' feet. ' + me.score + ' of 10 so far.' : kind === 'strike' ? 'Strike. That’s fine: watch the ring on the next one.' : kind === 'foul' ? 'Foul ball. A touch ' + (me.lastE < 0 ? 'later' : 'sooner') + ' next time.' : (kind === 'ground' ? 'A grounder, ' : 'A pop fly, ') + dist + ' feet. A touch ' + (kind === 'ground' ? 'later' : 'sooner') + ' for a home run.');
-    me.phase = 'result'; me.pt = 0; me.resT = kind === 'hr' ? (me.calm ? 2.2 : 2.8) : kind === 'strike' ? 1.3 : 1.5;
-    if (kind === 'hr') { me.dance = me.calm ? 0 : 2.4; me.celebrate(); }
+    var pts = isHR ? dist + (kind === 'super' ? 1000 : 0) : dist ? Math.round(dist / 4) : 0;
+    if (me.lastQ === 'perfect' && kind !== 'strike' && kind !== 'foul') pts += 50;
+    if (isHR && me.streak > 1) pts += 25 * Math.min(8, me.streak);
+    me.pts += pts;
+    var big = { super: dist + ' ft!', hr: dist + ' ft!', wall: 'Off the wall!', fly: 'Fly ball', ground: 'Grounder', pop: 'Pop fly', foul: 'Foul ball', strike: 'Strike' }[kind];
+    var sub = { super: 'Super hit!', hr: 'Home run!', wall: dist + ' ft. So close!', fly: dist + ' ft', ground: dist + ' ft', pop: dist + ' ft', foul: 'Nearly!', strike: 'Next one!' }[kind];
+    me.callout = { big: big, sub: sub, t: 0, hr: isHR, sup: kind === 'super' };
+    me.react(kind === 'super' ? 'super' : isHR ? 'hr' : kind === 'foul' || kind === 'strike' ? kind : 'hit');
+    var msg;
+    if (kind === 'super') msg = 'A super hit! ' + dist + ' feet. ' + SUPER_NAME[me.supVar];
+    else if (kind === 'hr') msg = 'Home run! ' + dist + ' feet.';
+    else if (kind === 'strike') msg = me.swung ? 'A miss. ' + (me.adv || '') : 'Strike. That’s fine: watch the ring on the next one.';
+    else if (kind === 'foul') msg = 'Foul ball. A touch ' + (me.lastE < 0 ? 'later' : 'sooner') + ' next time.';
+    else msg = { wall: 'Off the wall, ', fly: 'A fly ball, ', ground: 'A grounder, ', pop: 'A pop fly, ' }[kind] + dist + ' feet. ' + (me.adv || 'So close.');
+    if (isHR && me.usedTrick) msg += ' (' + TRICK[me.usedTrick].name + ')';
+    say(msg + ' ' + me.score + ' home run' + (me.score === 1 ? '' : 's') + ' so far.');
+    me.phase = 'result'; me.pt = 0;
+    me.resT = kind === 'super' ? (me.calm ? 2.8 : 5.2) : isHR ? (me.calm ? 2.2 : 2.8) : kind === 'strike' ? 1.4 : 1.7;
+    if (kind === 'super') me.superFx(me.supVar);
+    else if (kind === 'hr') { me.dance = me.calm ? 0 : 2.4; me.celebrate(); }
     hud();
   };
   Derby.prototype.celebrate = function () {
     var me = this; SFX.charge();
     if (me.calm) return;
-    var cols = ['#FFE08A', '#F6A9C8', '#8EC5FF', '#A8E6B8', '#FFB38A', '#D2B0FF'];
-    for (var b = 0; b < 4; b++) me.fw.push({ x: rnd(70, DW - 70), y: rnd(36, 96), t: -b * 0.28, c: pick(cols), parts: null });
-    for (var i = 0; i < 64; i++) me.conf.push({ x: rnd(0, DW), y: rnd(-80, -4), vx: rnd(-30, 30), vy: rnd(70, 150), r: rnd(0, 6), vr: rnd(-6, 6), c: pick(cols), t: 0 });
+    for (var b = 0; b < 4; b++) me.fw.push({ x: rnd(70, DW - 70), y: rnd(36, 96), t: -b * 0.28, c: pick(FWCOL), parts: null });
+    for (var i = 0; i < 64; i++) me.conf.push({ x: rnd(0, DW), y: rnd(-80, -4), vx: rnd(-30, 30), vy: rnd(70, 150), r: rnd(0, 6), vr: rnd(-6, 6), c: pick(FWCOL), t: 0 });
+  };
+  // the park goes wild: confetti, fireworks, bananas, the crowd up, everyone dancing on the field, then it settles
+  Derby.prototype.superFx = function (v) {
+    var me = this; me.lastVar = v;
+    me.sup = { v: v, t: 0, dur: me.calm ? 2.6 : 5 };
+    if (me.calm) { blip(784, 0.3, 'sine', 0.05); blip(1047, 0.4, 'sine', 0.04); return; }
+    sting(v); SFX.cheer(true);
+    me.flash = 0.4; me.shake = Math.max(me.shake, 0.45); me.dance = 4.8; me.hype = 1;
+    var i, nb = v === 'fireworks' ? 9 : 3;
+    for (i = 0; i < nb; i++) me.fw.push({ x: rnd(60, DW - 60), y: rnd(30, 110), t: -i * (v === 'fireworks' ? 0.42 : 0.6), c: pick(FWCOL), parts: null });
+    for (i = 0; i < 80 && me.conf.length < 150; i++) me.conf.push({ x: rnd(0, DW), y: rnd(-120, -4), vx: rnd(-30, 30), vy: rnd(70, 150), r: rnd(0, 6), vr: rnd(-6, 6), c: pick(FWCOL), t: 0 });
+    var nn = v === 'bananas' ? 34 : 8;
+    for (i = 0; i < nn && me.nanas.length < 40; i++) me.nanas.push({ x: rnd(10, DW - 10), y: rnd(-260, -20), vy: rnd(90, 170), r: rnd(0, 6), vr: rnd(-4, 4), s: rnd(0.8, 1.3) });
   };
   Derby.prototype.next = function () {
     var me = this; me.n++;
     if (me.n >= 10) { me.finish(); return; }
-    me.setPitch(); me.phase = 'ready'; me.pt = 0; me.talk(); hud();
+    me.setPitch(); me.phase = 'ready'; me.pt = 0; me.talk(); hud(); syncBats();
   };
   Derby.prototype.finish = function () {
-    var me = this; me.phase = 'done'; me.level = 10; recordBest(); hud();
-    var fk = 'derby-ft:' + me.who; if (me.best > (+S.best[fk] || 0)) { S.best[fk] = me.best; save(); }
-    var hr = me.score, s = hr === 1 ? '' : 's';
-    var title = hr >= 7 ? 'What a show!' : hr >= 4 ? 'Lovely swings!' : 'Derby done!';
+    var me = this; me.phase = 'done'; me.level = 10; me.trick = null; syncBats();
+    var who = me.who, k = function (n) { return n + ':' + who; };
+    var was = { hr: +S.best[k('derby')] || 0, ft: +S.best[k('derby-ft')] || 0, pts: +S.best[k('derby-pts')] || 0, sup: +S.best[k('derby-sup')] || 0 };
+    recordBest();
+    if (me.best > was.ft) S.best[k('derby-ft')] = me.best;
+    if (me.pts > was.pts) S.best[k('derby-pts')] = me.pts;
+    if (me.supers > was.sup) S.best[k('derby-sup')] = me.supers;
+    save(); hud();
+    var hr = me.score, s = hr === 1 ? '' : 's', pb = (hr > was.hr && hr > 0) || me.pts > was.pts;
+    var title = pb && (was.hr || was.pts) ? 'New personal best!' : hr >= 6 ? 'What a show!' : hr >= 3 ? 'Lovely swings!' : 'Derby done!';
     var gift = rewardLevel('Home Run Derby · ' + hr + ' home run' + s);
-    paused = true; say('Derby done: ' + hr + ' home run' + s + ' out of 10.');
-    overlay(title, (hr ? hr + ' home run' + s + ' out of 10. ' : 'No home runs this time, and every swing was good practice. ') + (me.best ? 'Longest hit: ' + me.best + ' ft. ' : '') + nextLesson(), '↻ Play again', function () { derbyAgain(false); },
-      'Best with ' + me.P.name + ': ' + (+S.best['derby:' + me.who] || 0) + ' home runs, ' + (+S.best[fk] || 0) + ' ft' + (gift ? ' · ' + gift : ''),
-      { label: '⇄ Swap roles: ' + PUPS[me.pit].name + ' bats', fn: function () { derbyAgain(true); } });
+    paused = true; say('Derby done: ' + hr + ' home run' + s + ' out of 10, ' + me.supers + ' super hit' + (me.supers === 1 ? '' : 's') + ', ' + me.pts + ' points.');
+    var stats = [
+      ['Home runs', hr + ' of 10'], ['Super hits', String(me.supers)], ['Longest', me.best ? me.best + ' ft' : 'none yet'],
+      ['Best streak', String(me.bestStreak)], ['Trick bats', me.tricksUsed + ' of 3 used' + (me.trickHRs ? ', ' + me.trickHRs + ' HR' : '')], ['Points', me.pts.toLocaleString('en-US')]
+    ];
+    overlay(title, hr ? (pb ? 'Kept on this device as your best.' : 'Every swing counts.') : 'No home runs this time, and every swing was good practice.', '↻ Play again', function () { derbyAgain(false); },
+      'Best with ' + me.P.name + ': ' + (+S.best[k('derby')] || 0) + ' home runs, ' + (+S.best[k('derby-ft')] || 0) + ' ft, ' + (+S.best[k('derby-pts')] || 0).toLocaleString('en-US') + ' points' + (gift ? ' · ' + gift : ''),
+      { label: '⇄ Swap roles: ' + PUPS[me.pit].name + ' bats', fn: function () { derbyAgain(true); } }, stats);
   };
   Derby.prototype.update = function (dt) {
-    var me = this; me.t += dt; me.pt += dt;
+    var me = this; me.t += dt; me.pt += dt; me.relT += dt;
     if (me.batT >= 0) { me.batT += dt; if (me.batT > 0.9) me.batT = -1; }
     if (me.shake > 0) me.shake = Math.max(0, me.shake - dt);
     if (me.dance > 0) me.dance = Math.max(0, me.dance - dt);
-    me.hype = Math.max(0.15, me.hype - dt * 0.3);
+    if (me.flash > 0) me.flash = Math.max(0, me.flash - dt);
+    me.bx += (me.pos * LOCX - me.bx) * Math.min(1, dt * 14);
+    me.hype = Math.max(0.15, me.hype - dt * (me.sup ? 0.05 : 0.3));
+    if (me.holdT0 != null && !me.fullBlip && me.charge() >= 1) { me.fullBlip = true; blip(880, 0.08, 'triangle', 0.04, 1320); }
     if (me.bubble) { me.bubble.t += dt; if (me.bubble.t > 3.2) me.bubble = null; }
-    if (me.callout) { me.callout.t += dt; if (me.callout.t > 2.4) me.callout = null; }
+    if (me.callout) { me.callout.t += dt; if (me.callout.t > (me.callout.sup ? 3.2 : 2.4)) me.callout = null; }
+    if (me.meter) { me.meter.t += dt; if (me.meter.t > 2.4) me.meter = null; }
+    if (me.fb) { me.fb.t += dt; if (me.fb.t > 1.4) me.fb = null; }
+    if (me.sup) { me.sup.t += dt; if (me.sup.t > me.sup.dur) me.sup = null; }
     me.fw.forEach(function (f) {
       f.t += dt; if (f.t < 0) return;
       if (!f.parts) { f.parts = []; for (var i = 0; i < 24; i++) { var an = i / 24 * Math.PI * 2, sp = rnd(55, 95); f.parts.push({ x: f.x, y: f.y, vx: Math.cos(an) * sp, vy: Math.sin(an) * sp }); } blip(rnd(500, 800), 0.18, 'triangle', 0.02, 200); }
@@ -1290,14 +1545,16 @@
     });
     me.fw = me.fw.filter(function (f) { return f.t < 1.4; });
     me.conf.forEach(function (c) { c.t += dt; c.x += c.vx * dt + Math.sin(c.t * 3 + c.r) * 0.4; c.y += c.vy * dt; c.r += c.vr * dt; });
-    me.conf = me.conf.filter(function (c) { return c.y < DH + 10 && c.t < 4; });
+    me.conf = me.conf.filter(function (c) { return c.y < DH + 10 && c.t < 5; });
+    me.nanas.forEach(function (n) { n.y += n.vy * dt; n.r += n.vr * dt; n.x += Math.sin(n.y / 40) * 0.3; });
+    me.nanas = me.nanas.filter(function (n) { return n.y < DH + 20; });
     var tl = me.calm ? 4 : 14;
     if (me.phase === 'ready') { if (me.pt > 1.15) { me.phase = 'windup'; me.pt = 0; } }
     else if (me.phase === 'windup') { if (me.pt > 0.85) { me.phase = 'flight'; me.pt = 0; SFX.whoosh(0.5); } }
     else if (me.phase === 'flight') {
       var u = me.pt / me.T, b = me.ballAt(u); me.trail.push(b); if (me.trail.length > tl) me.trail.shift();
-      if (!me.res && u > 1 + me.win[2] / me.T) { me.res = 'strike'; SFX.mitt(); }
-      if (u > 1.32) me.result('strike');
+      if (!me.res && u > 1 + me.windows()[2] / me.T) { me.res = 'strike'; SFX.mitt(); }
+      if (u > 1.32) { if (!me.swung) me.usedTrick = null; me.result('strike'); }
     } else if (me.phase === 'hit') {
       var h = me.hitB, s = Math.min(1, me.pt / h.dur), p = me.hitPos(s); me.trail.push(p); if (me.trail.length > tl) me.trail.shift();
       if (s >= 1) me.result(h.kind, h.dist);
@@ -1307,6 +1564,7 @@
     var h = this.hitB, x = lerp(h.x0, h.x1, s), y = lerp(h.y0, h.y1, s) - h.H * Math.sin(Math.PI * s);
     if (h.kind === 'ground') y -= 12 * Math.abs(Math.sin(s * Math.PI * 3)) * (1 - s);
     if (h.kind === 'pop') y = lerp(h.y0, h.y1, s) - h.H * Math.sin(Math.PI * Math.min(1, s * 1.05));
+    if (h.kind === 'super') y = lerp(h.y0, h.y1, s * 0.4 + s * s * 0.6) - h.H * Math.sin(Math.PI * s * 0.5);
     return { x: x, y: y, r: lerp(6, h.r1, s) };
   };
   // ---- drawing ----
@@ -1339,14 +1597,17 @@
   Derby.prototype.draw = function (t) {
     var me = this; g.setTransform(DPR, 0, 0, DPR, 0, 0);
     if (!me.bg || me.bgDPR !== DPR) me.bg = me.makeBg();
-    if (me.shake > 0) { var a = 7 * me.shake / 0.35; g.translate(rnd(-a, a), rnd(-a, a)); }
+    if (me.shake > 0 && !me.calm) { var a = 7 * me.shake / 0.35; g.translate(rnd(-a, a), rnd(-a, a)); }
     g.fillStyle = '#1E1A46'; g.fillRect(-10, -10, DW + 20, DH + 20);
     g.drawImage(me.bg, 0, 0, DW, DH);
-    // the crowd: little heads (some with dog ears) that bounce when they cheer
+    var sv = me.sup && !me.calm ? me.sup.v : '';
+    if (sv === 'moon' || sv === 'disco') me.drawSky(sv, t);
+    // the crowd: little heads (some with dog ears) that bounce when they cheer; on a super hit they do the wave
     var hype = me.calm ? Math.min(me.hype, 0.2) * 0.4 : me.hype;
     me.crowd.forEach(function (c) {
       var by = c.y - hype * Math.abs(Math.sin(t / 110 + c.ph)) * 7;
-      if (hype > 0.45 && !me.calm) { g.strokeStyle = c.c; g.lineWidth = 2; g.beginPath(); g.moveTo(c.x - 4, by + 4); g.lineTo(c.x - 7, by - 6 - Math.sin(t / 90 + c.ph) * 2); g.moveTo(c.x + 4, by + 4); g.lineTo(c.x + 7, by - 6 - Math.cos(t / 90 + c.ph) * 2); g.stroke(); }
+      if (sv) by = c.y - 9 * Math.max(0, Math.sin(t / 160 - c.x / 40));
+      if ((hype > 0.45 || sv) && !me.calm) { g.strokeStyle = c.c; g.lineWidth = 2; g.beginPath(); g.moveTo(c.x - 4, by + 4); g.lineTo(c.x - 7, by - 6 - Math.sin(t / 90 + c.ph) * 2); g.moveTo(c.x + 4, by + 4); g.lineTo(c.x + 7, by - 6 - Math.cos(t / 90 + c.ph) * 2); g.stroke(); }
       g.fillStyle = c.c; g.beginPath(); g.arc(c.x, by, 5.2, 0, 7); g.fill();
       if (c.dog) { g.fillStyle = '#2A2540'; g.beginPath(); g.ellipse(c.x - 4.5, by - 1, 1.8, 3.4, 0.3, 0, 7); g.ellipse(c.x + 4.5, by - 1, 1.8, 3.4, -0.3, 0, 7); g.fill(); }
       g.fillStyle = 'rgba(40,30,60,.75)'; g.fillRect(c.x - 2.2, by - 1, 1.4, 1.4); g.fillRect(c.x + 0.8, by - 1, 1.4, 1.4);
@@ -1357,41 +1618,104 @@
       g.fillStyle = f.c; g.globalAlpha = al; f.parts.forEach(function (p) { g.beginPath(); g.arc(p.x, p.y, 2, 0, 7); g.fill(); }); g.globalAlpha = 1;
     });
     me.drawBoard();
-    // the pitch's name and colour, before and as it's thrown
-    if (me.phase === 'ready' || me.phase === 'windup' || me.phase === 'flight') {
-      var lab = 'Pitch ' + (me.n + 1) + ' · ' + me.pk.name + ': ' + me.pk.cue;
-      g.font = '600 12px Lora, Georgia, serif'; var lw = g.measureText(lab).width + 28;
-      g.fillStyle = 'rgba(20,16,44,.85)'; wallPath(g, DW / 2 - lw / 2, 62, lw, 24, 12); g.fill(); g.strokeStyle = me.pk.col; g.lineWidth = 1.5; g.stroke();
-      g.fillStyle = me.pk.col; g.beginPath(); g.arc(DW / 2 - lw / 2 + 12, 74, 4, 0, 7); g.fill();
-      g.fillStyle = '#FFF6E0'; g.textAlign = 'center'; g.fillText(lab, DW / 2 + 5, 78); g.textAlign = 'start';
-    }
-    // the timing ring: it closes on the plate exactly when the ball arrives
-    if (me.phase === 'windup' || me.phase === 'flight') {
-      var u = me.phase === 'flight' ? me.pt / me.T : -0.25 + me.pt / 0.85 * 0.25 - 0.0001, close = clamp(1 - u, 0, 1.25);
-      g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 1.5; g.setLineDash([4, 4]); g.beginPath(); g.arc(HIT.x, HIT.y, 12, 0, 7); g.stroke(); g.setLineDash([]);
-      if (u <= 1 + me.win[2] / me.T) {
-        var near = Math.abs(u - 1) * me.T <= me.win[0];
-        g.strokeStyle = near ? '#FFE08A' : me.pk.col; g.lineWidth = near ? 4 : 3; g.globalAlpha = me.phase === 'windup' ? 0.45 : 1;
-        g.beginPath(); g.arc(HIT.x, HIT.y, 12 + 62 * Math.max(0, close), 0, 7); g.stroke(); g.globalAlpha = 1;
-      }
-    }
-    me.drawPitcher(t);
+    me.drawLabel();
+    me.drawRing();
+    // the critters dance on the outfield grass during a super hit (behind the players)
+    if (sv) me.drawCritters(sv, t);
+    if (sv === 'zoomies') me.drawZoomies(t);
+    else me.drawPitcher(t);
     // the pitched ball, its shadow and its trail
     if (me.phase === 'flight') {
       var bu = me.pt / me.T, b = me.ballAt(bu);
-      g.fillStyle = 'rgba(0,0,0,.18)'; g.beginPath(); g.ellipse(lerp(MOUND.x - 22, HIT.x, bu) + (me.kind === 'curve' && bu <= 1 ? 34 * me.bend * Math.sin(Math.PI * bu) : 0), lerp(MOUND.y, 466, Math.min(1.2, bu)), b.r, b.r * 0.4, 0, 0, 7); g.fill();
+      g.fillStyle = 'rgba(0,0,0,.18)'; g.beginPath(); g.ellipse(lerp(MOUND.x - 22, HIT.x + me.loc * LOCX, bu) + (me.kind === 'curve' && bu <= 1 ? 34 * me.bend * Math.sin(Math.PI * bu) : 0), lerp(MOUND.y, 466, Math.min(1.2, bu)), b.r, b.r * 0.4, 0, 0, 7); g.fill();
       me.drawTrail(me.pk.col); me.drawBall(b.x, b.y, b.r);
     }
-    me.drawBatter(t);
+    me.drawMarker();
+    if (sv !== 'zoomies') me.drawBatter(t);
+    me.drawPower();
     if (me.phase === 'hit' || (me.phase === 'result' && me.hitB && me.res !== 'strike')) {
-      if (me.phase === 'hit') { var hp = me.hitPos(Math.min(1, me.pt / me.hitB.dur)); me.drawTrail(me.hitB.kind === 'hr' ? '#FFE08A' : '#FFF6E0'); me.drawBall(hp.x, hp.y, hp.r); }
+      if (me.phase === 'hit') { var hp = me.hitPos(Math.min(1, me.pt / me.hitB.dur)); me.drawTrail(me.hitB.kind === 'super' ? '#FF8FA3' : me.hitB.kind === 'hr' ? '#FFE08A' : '#FFF6E0'); me.drawBall(hp.x, hp.y, hp.r); }
       else if (me.hitB.kind === 'hr' && me.pt < 0.6) { g.strokeStyle = 'rgba(255,224,138,' + (1 - me.pt / 0.6) + ')'; g.lineWidth = 2; g.beginPath(); g.arc(me.hitB.x1, me.hitB.y1, 4 + me.pt * 30, 0, 7); g.stroke(); }
     }
-    // confetti
+    // confetti and bananas
     me.conf.forEach(function (c) { g.save(); g.translate(c.x, c.y); g.rotate(c.r); g.fillStyle = c.c; g.fillRect(-3, -1.5, 6, 3); g.restore(); });
-    me.drawCallout(); me.drawBubble();
-    if (me.n < 2 && (me.phase === 'ready' || me.phase === 'windup')) { g.fillStyle = 'rgba(20,16,44,.6)'; wallPath(g, 70, DH - 30, DW - 140, 22, 10); g.fill(); g.fillStyle = '#FFF6E0'; g.font = '600 11px Lora, Georgia, serif'; g.textAlign = 'center'; g.fillText('Swing as the ring closes on the plate', DW / 2, DH - 15); g.textAlign = 'start'; }
+    me.nanas.forEach(function (n) { banana(g, n.x, n.y, 13 * n.s, n.r); });
+    if (me.sup) me.drawSuperTitle(t);
+    me.drawCallout(); if (!(me.sup && me.calm)) me.drawBubble(); me.drawFeedback(); me.drawMeter(); me.drawHint();
+    if (me.flash > 0) { g.fillStyle = 'rgba(255,250,235,' + Math.min(0.5, me.flash) + ')'; g.fillRect(-10, -10, DW + 20, DH + 20); }
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  };
+  // the pitch's name (the first three) or "read the tell" (after that), before and as it's thrown
+  Derby.prototype.drawLabel = function () {
+    var me = this; if (!(me.phase === 'ready' || me.phase === 'windup' || me.phase === 'flight')) return;
+    var known = me.named() || me.phase === 'flight', col = known ? me.pk.col : '#FFF6E0';
+    var lab = 'Pitch ' + (me.n + 1) + ' · ' + (me.named() ? me.pk.name + ': ' + PUPS[me.pit].name.split(' ')[0] + ' ' + me.pk.tell : known ? me.pk.name : 'Read her tell');
+    if (me.trick) lab += '  ·  ' + TRICK[me.trick].icon + ' ' + TRICK[me.trick].name;
+    g.font = '600 12px Lora, Georgia, serif'; var lw = Math.min(DW - 16, g.measureText(lab).width + 28);
+    g.fillStyle = 'rgba(20,16,44,.85)'; wallPath(g, DW / 2 - lw / 2, 62, lw, 24, 12); g.fill(); g.strokeStyle = col; g.lineWidth = 1.5; g.stroke();
+    g.fillStyle = col; g.beginPath(); g.arc(DW / 2 - lw / 2 + 12, 74, 4, 0, 7); g.fill();
+    g.fillStyle = '#FFF6E0'; g.textAlign = 'center'; g.fillText(lab, DW / 2 + 5, 78, lw - 30); g.textAlign = 'start';
+  };
+  // the timing ring: it closes on the plate exactly when the ball arrives. The gold band is the perfect window,
+  // the green one the good window (both grow on a hot streak, and with the Magnet Bat).
+  Derby.prototype.drawRing = function () {
+    var me = this; if (!(me.phase === 'windup' || me.phase === 'flight')) return;
+    var W = me.windows(), cx = HIT.x + me.loc * LOCX, cy = HIT.y, Tt = me.T;
+    var band = function (w, col) { var ro = RING0 + RINGK * w / Tt, ri = Math.max(2, RING0 - RINGK * w / Tt); g.strokeStyle = col; g.lineWidth = ro - ri; g.beginPath(); g.arc(cx, cy, (ro + ri) / 2, 0, 7); g.stroke(); };
+    band(W[1], 'rgba(168,230,184,.28)'); band(W[0], me.streak >= 2 ? 'rgba(255,224,138,.62)' : 'rgba(255,224,138,.45)');
+    g.strokeStyle = 'rgba(255,255,255,.6)'; g.lineWidth = 1.2; g.setLineDash([4, 4]); g.beginPath(); g.arc(cx, cy, RING0, 0, 7); g.stroke(); g.setLineDash([]);
+    var u = me.phase === 'flight' ? me.pt / me.T : -0.25 + me.pt / 0.85 * 0.25 - 0.0001, close = 1 - u;
+    if (u <= 1 + W[2] / me.T) {
+      var near = Math.abs(u - 1) * me.T <= W[0], col = me.named() || me.phase === 'flight' ? me.pk.col : '#FFF6E0';
+      g.strokeStyle = near ? '#FFE08A' : col; g.lineWidth = near ? 4 : 3; g.globalAlpha = me.phase === 'windup' ? 0.45 : 1;
+      g.beginPath(); g.arc(cx, cy, Math.max(3, RING0 + RINGK * close), 0, 7); g.stroke(); g.globalAlpha = 1;
+    }
+  };
+  // the gold marker under the plate: where the bat's sweet spot will meet the ball
+  Derby.prototype.drawMarker = function () {
+    var me = this; if (me.phase === 'intro' || me.phase === 'done') return;
+    var x = HIT.x + me.bx, y = 470, ok = me.pos === me.loc && (me.phase === 'windup' || me.phase === 'flight');
+    g.fillStyle = ok ? '#FFE08A' : 'rgba(255,224,138,.75)'; g.beginPath(); g.moveTo(x, y - 6); g.lineTo(x + 6, y); g.lineTo(x, y + 6); g.lineTo(x - 6, y); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(20,16,44,.7)'; g.lineWidth = 1; g.stroke();
+    if (me.trick === 'mega') { g.strokeStyle = 'rgba(168,230,184,.8)'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - LOCX - 6, y); g.lineTo(x + LOCX + 6, y); g.stroke(); }
+  };
+  // the power meter beside the batter: fills while you hold, gold when full
+  Derby.prototype.drawPower = function () {
+    var me = this, holding = me.holdT0 != null, c = holding ? me.charge() : me.lastCharge;
+    if (!holding && me.relT > 0.7) return;
+    var x = 112 + me.bx, y0 = 470, h = 64, a = holding ? 1 : Math.max(0, 1 - me.relT / 0.7);
+    g.globalAlpha = a; g.fillStyle = 'rgba(20,16,44,.75)'; wallPath(g, x - 7, y0 - h - 4, 14, h + 8, 6); g.fill();
+    g.fillStyle = c >= 0.99 ? '#FFE08A' : '#F2A6C0'; g.fillRect(x - 4, y0 - c * h, 8, c * h);
+    g.fillStyle = '#FFF6E0'; g.font = '700 9px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText(c >= 0.99 ? 'MAX' : 'POWER', x, y0 + 14); g.textAlign = 'start'; g.globalAlpha = 1;
+  };
+  // after a swing: a little bar that shows how early or late it was
+  Derby.prototype.drawMeter = function () {
+    var me = this, m = me.meter; if (!m) return;
+    var a = Math.max(0, Math.min(1, (2.4 - m.t) / 0.4)), cx = DW / 2, y = 128, half = 150, sc = half / m.W[2];
+    g.save(); g.globalAlpha = a;
+    g.fillStyle = 'rgba(20,16,44,.86)'; wallPath(g, cx - half - 34, y - 14, half * 2 + 68, 38, 12); g.fill();
+    g.fillStyle = 'rgba(207,195,240,.35)'; g.fillRect(cx - half, y - 4, half * 2, 8);
+    g.fillStyle = 'rgba(168,230,184,.75)'; g.fillRect(cx - m.W[1] * sc, y - 4, m.W[1] * sc * 2, 8);
+    g.fillStyle = '#FFE08A'; g.fillRect(cx - m.W[0] * sc, y - 4, m.W[0] * sc * 2, 8);
+    var tx = cx + clamp(m.e, -m.W[2] * 1.08, m.W[2] * 1.08) * sc;
+    g.fillStyle = '#FFFFFF'; g.beginPath(); g.moveTo(tx, y - 7); g.lineTo(tx + 5, y - 13); g.lineTo(tx - 5, y - 13); g.closePath(); g.fill(); g.fillRect(tx - 1, y - 7, 2, 14);
+    g.font = '600 9px "IBM Plex Mono", monospace'; g.fillStyle = '#CFC3F0'; g.textAlign = 'center';
+    g.fillText('EARLY', cx - half - 2, y + 18); g.fillText('PERFECT', cx, y + 18); g.fillText('LATE', cx + half + 2, y + 18);
+    g.restore(); g.textAlign = 'start';
+  };
+  Derby.prototype.drawFeedback = function () {
+    var f = this.fb; if (!f) return;
+    var a = Math.max(0, Math.min(1, (1.4 - f.t) / 0.35)), pop = this.calm ? 1 : 1 + 0.3 * Math.max(0, 1 - f.t / 0.18);
+    g.save(); g.globalAlpha = a; g.translate(HIT.x + 62, 404 - (this.calm ? 0 : f.t * 10)); g.scale(pop, pop); g.textAlign = 'center';
+    g.font = '700 17px Fraunces, Georgia, serif'; g.lineWidth = 4; g.strokeStyle = 'rgba(20,16,44,.85)'; g.strokeText(f.text, 0, 0); g.fillStyle = f.col; g.fillText(f.text, 0, 0);
+    g.restore(); g.textAlign = 'start';
+  };
+  // the first few pitches teach one thing each, in a line along the bottom
+  Derby.prototype.drawHint = function () {
+    var me = this; if (!(me.phase === 'ready' || me.phase === 'windup') || me.n > 3) return;
+    var h = ['Hold Swing to power up. Let go as the ring closes.', 'Step with the arrows: gold marker under the ring.', 'Watch the pitcher. Her tell gives the pitch away.', 'Now read her tell. Try a trick bat too.'][me.n];
+    g.font = '600 11px Lora, Georgia, serif'; var w = Math.min(DW - 20, g.measureText(h).width + 24);
+    g.fillStyle = 'rgba(20,16,44,.7)'; wallPath(g, DW / 2 - w / 2, DH - 28, w, 22, 10); g.fill(); g.fillStyle = '#FFF6E0'; g.textAlign = 'center'; g.fillText(h, DW / 2, DH - 13); g.textAlign = 'start';
   };
   Derby.prototype.drawBall = function (x, y, r) {
     g.fillStyle = '#FFFDF6'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
@@ -1403,54 +1727,88 @@
     g.globalAlpha = 1;
   };
   Derby.prototype.drawBoard = function () {
-    var me = this, x = 64, w = DW - 128;
+    var me = this, x = 52, w = DW - 104;
     g.fillStyle = '#14112C'; wallPath(g, x, 6, w, 50, 10); g.fill(); g.strokeStyle = '#FFE08A'; g.lineWidth = 1.5; g.stroke();
-    g.fillStyle = '#FFE08A'; g.font = '700 18px "IBM Plex Mono", monospace'; g.fillText('HR ' + me.score + '/10', x + 12, 30);
-    g.textAlign = 'right'; g.fillStyle = '#CFC3F0'; g.font = '600 10px "IBM Plex Mono", monospace'; g.fillText('LONGEST', x + w - 12, 20);
-    g.fillStyle = '#FFF6E0'; g.font = '700 15px "IBM Plex Mono", monospace'; g.fillText(me.best ? me.best + ' ft' : '—', x + w - 12, 37); g.textAlign = 'start';
+    g.fillStyle = '#FFE08A'; g.font = '700 17px "IBM Plex Mono", monospace'; g.fillText('HR ' + me.score + '/10', x + 12, 29);
+    g.fillStyle = '#CFC3F0'; g.font = '600 10px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText('POINTS', x + w / 2 + 6, 19);
+    g.fillStyle = '#FFF6E0'; g.font = '700 14px "IBM Plex Mono", monospace'; g.fillText(me.pts.toLocaleString('en-US'), x + w / 2 + 6, 35);
+    g.textAlign = 'right'; g.fillStyle = '#CFC3F0'; g.font = '600 10px "IBM Plex Mono", monospace'; g.fillText('LONGEST', x + w - 12, 19);
+    g.fillStyle = '#FFF6E0'; g.font = '700 14px "IBM Plex Mono", monospace'; g.fillText(me.best ? me.best + ' ft' : '-', x + w - 12, 35); g.textAlign = 'start';
     for (var i = 0; i < 10; i++) {
       var L = me.log[i], cx = x + 18 + i * ((w - 36) / 9), cy = 47;
+      if (L && L.k === 'super') { star(g, cx, cy, 5.5, '#FF8FA3'); continue; }
       g.fillStyle = !L ? (i === me.n && me.phase !== 'done' ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.16)') : L.k === 'hr' ? '#FFE08A' : L.k === 'hit' ? '#A8E6B8' : L.k === 'foul' ? '#CFC3F0' : '#F2B6A0';
       g.beginPath(); g.arc(cx, cy, 4, 0, 7); g.fill();
+      if (L && L.trick) { g.strokeStyle = TRICK[L.trick].col; g.lineWidth = 1.5; g.beginPath(); g.arc(cx, cy, 6.5, 0, 7); g.stroke(); }
+    }
+    // a hot streak shows under the board
+    if (me.streak >= 2 && me.phase !== 'done') {
+      var s = 'Streak ' + me.streak + ': wider gold window';
+      g.font = '700 10px "IBM Plex Mono", monospace'; var sw = g.measureText(s).width + 16;
+      g.fillStyle = 'rgba(255,224,138,.92)'; wallPath(g, DW - sw - 8, 90, sw, 18, 9); g.fill(); g.fillStyle = '#2A2552'; g.fillText(s, DW - sw, 103);
     }
   };
+  // the pitcher, with her tell before each pitch: a paw scuff (fastball), a slow tail wag (changeup), a head tilt (curve)
   Derby.prototype.drawPitcher = function (t) {
-    var me = this, px = MOUND.x + 8, py = MOUND.y + 6, sc = 0.95, pose = 'sit', rot = 0, lift = 0, hold = false;
+    var me = this, px = MOUND.x + 8, py = MOUND.y + 6, sc = 0.95, pose = 'sit', rot = 0, lift = 0, hold = false, wag = null, tilt = 0;
+    var tellOn = (me.phase === 'ready' && me.pt > 0.15) || (me.phase === 'windup' && me.pt < 0.35);
     if (me.phase === 'intro' || me.phase === 'ready') { hold = true; if (me.phase === 'ready' && me.pt > 0.9) { rot = (me.pt - 0.9) * 0.6; } }
     else if (me.phase === 'windup') { var k = me.pt / 0.85; hold = k < 0.75; if (k < 0.65) { rot = 0.1 + k * 0.3; lift = Math.sin(k / 0.65 * Math.PI / 2) * 8; } else { pose = 'bow'; rot = -0.1; } }
     else if (me.phase === 'flight' && me.pt < 0.3) pose = 'bow';
-    else if (me.dance > 0 || (me.phase === 'result' && me.res === 'hr')) pose = me.calm ? 'sit' : 'wiggle';
+    else if (me.dance > 0 || (me.phase === 'result' && (me.res === 'hr' || me.res === 'super'))) pose = me.calm ? 'sit' : 'wiggle';
+    if (tellOn) {
+      var tp = me.phase === 'ready' ? me.pt : 1.15 + me.pt;
+      if (me.kind === 'change') wag = Math.sin(tp * 4.2) * 0.9;
+      else if (me.kind === 'curve') tilt = 0.38 * Math.min(1, (tp - 0.15) * 3);
+      else if (me.kind === 'fast') {
+        var ph = ((tp - 0.15) % 0.4) / 0.4;   // a scuff every 0.4 s, with a little puff of dust
+        g.fillStyle = 'rgba(201,154,100,' + (0.7 * (1 - ph)) + ')';
+        for (var d = 0; d < 3; d++) { g.beginPath(); g.arc(px - 22 - d * 5 - ph * 8, py - 1 - d * 2 - ph * 6, 2.5 + ph * 3, 0, 7); g.fill(); }
+        lift = (lift || 0) + (ph < 0.3 ? 1.5 : 0);
+      }
+    }
     g.save(); g.translate(px, py - lift); g.rotate(rot);
-    drawPup(g, me.pit, 0, 0, sc, -1, 0, false, t, pose);
+    drawPup(g, me.pit, 0, 0, sc, -1, 0, false, t, pose, wag, tilt);
     if (hold) me.drawBall(-31 * sc, (PUPS[me.pit].look === 'collar' ? -26 : -23.5) * sc, 3.4);
     g.restore();
   };
   Derby.prototype.drawBatter = function (t) {
-    var me = this, s = BAT.s, x = BAT.x, y = BAT.y, face = 1, pose = 'run', hop = 0;
+    var me = this, s = BAT.s, x = BAT.x + me.bx, y = BAT.y, face = 1, pose = 'run', hop = 0, holding = me.holdT0 != null, ch = holding ? me.charge() : 0;
     if (me.dance > 0) { pose = 'wiggle'; hop = Math.abs(Math.sin(t / 120)) * 9; face = Math.floor(me.dance / 0.4) % 2 ? -1 : 1; }
-    drawPup(g, me.who, x, y - hop, s, face, 0, false, t, pose);
+    drawPup(g, me.who, x, y - hop + ch * 3, s, face, 0, false, t, pose);
     if (me.dance > 0) { // the bat is tossed up for joy
-      g.save(); g.translate(x + 50, y - 70 - Math.sin(me.dance * 2.6) * 20); g.rotate(t / 160); me.drawBat(); g.restore(); return;
+      g.save(); g.translate(x + 50, y - 70 - Math.sin(me.dance * 2.6) * 20); g.rotate(t / 160); me.drawBat(null); g.restore(); return;
     }
-    var my = (PUPS[me.who].look === 'collar' ? -26 : -23.5) * s, pvx = x + 32 * s, pvy = y + my, ang = -2.25, bt = me.batT;
+    var my = (PUPS[me.who].look === 'collar' ? -26 : -23.5) * s, pvx = x + 32 * s, pvy = y + my + ch * 3, ang = -2.25 - ch * 0.45, bt = me.batT;
     if (bt >= 0) {
       if (bt < 0.13) ang = lerp(-2.25, 0.9, 1 - Math.pow(1 - bt / 0.13, 2));
       else if (bt < 0.45) ang = lerp(0.9, 1.5, (bt - 0.13) / 0.32);
       else ang = lerp(1.5, -2.25, (bt - 0.45) / 0.45);
       if (bt < 0.2 && !me.calm) { g.fillStyle = 'rgba(255,246,224,.22)'; g.beginPath(); g.moveTo(pvx, pvy); g.arc(pvx, pvy, 52, -2.25, ang); g.closePath(); g.fill(); }
     }
-    g.save(); g.translate(pvx, pvy); g.rotate(ang); me.drawBat(); g.restore();
+    if (holding && ch >= 1 && !me.calm) { g.strokeStyle = 'rgba(255,224,138,.5)'; g.lineWidth = 2; g.beginPath(); g.arc(pvx, pvy, 56 + Math.sin(t / 90) * 2, -2.9, -1.6); g.stroke(); }
+    g.save(); g.translate(pvx, pvy); g.rotate(ang); me.drawBat(me.trick || (bt >= 0 && bt < 0.5 ? me.usedTrick : null)); g.restore();
   };
-  Derby.prototype.drawBat = function () {
-    g.fillStyle = '#D9A066'; g.beginPath(); g.moveTo(0, -1.8); g.lineTo(34, -3.6); g.quadraticCurveTo(50, -4, 50, 0); g.quadraticCurveTo(50, 4, 34, 3.6); g.lineTo(0, 1.8); g.closePath(); g.fill();
+  // the bat: the plain one, or a trick bat
+  Derby.prototype.drawBat = function (k) {
+    if (k === 'banana') {
+      g.fillStyle = '#FFE08A'; g.beginPath(); g.moveTo(0, -2); g.quadraticCurveTo(28, -14, 52, -4); g.quadraticCurveTo(56, 0, 52, 3); g.quadraticCurveTo(28, -4, 0, 2); g.closePath(); g.fill();
+      g.fillStyle = '#7A5A2A'; g.fillRect(-3, -2, 5, 4); g.beginPath(); g.arc(53, -1, 2, 0, 7); g.fill(); return;
+    }
+    var thick = k === 'mega' ? 2.2 : 1, col = k === 'rocket' ? '#E0525F' : k === 'magnet' ? '#C9CED8' : k === 'mega' ? '#9FD3A8' : '#D9A066';
+    g.save(); g.scale(k === 'mega' ? 1.12 : 1, thick);
+    g.fillStyle = col; g.beginPath(); g.moveTo(0, -1.8); g.lineTo(34, -3.6); g.quadraticCurveTo(50, -4, 50, 0); g.quadraticCurveTo(50, 4, 34, 3.6); g.lineTo(0, 1.8); g.closePath(); g.fill();
+    g.restore();
     g.fillStyle = '#7A4A2A'; g.fillRect(-2, -2, 12, 4); g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(18, -2.4, 26, 1.2);
+    if (k === 'magnet') { g.strokeStyle = '#E0525F'; g.lineWidth = 3; g.beginPath(); g.arc(54, 0, 5, -Math.PI / 2, Math.PI / 2); g.stroke(); }
+    if (k === 'rocket') { g.fillStyle = '#FFB38A'; g.beginPath(); g.moveTo(-2, -3); g.lineTo(-11 - Math.random() * 4, 0); g.lineTo(-2, 3); g.closePath(); g.fill(); }
   };
   Derby.prototype.drawCallout = function () {
-    var c = this.callout; if (!c) return;
-    var a = Math.max(0, Math.min(1, (2.4 - c.t) / 0.4)), pop = this.calm ? 1 : 1 + 0.45 * Math.max(0, 1 - c.t / 0.22);
-    g.save(); g.globalAlpha = a; g.translate(DW / 2, 224); g.scale(pop, pop); g.textAlign = 'center';
+    var c = this.callout; if (!c || c.sup) return;   // a super hit shows its distance under its own title
+    var life = 2.4, a = Math.max(0, Math.min(1, (life - c.t) / 0.4)), pop = this.calm ? 1 : 1 + 0.45 * Math.max(0, 1 - c.t / 0.22);
+    g.save(); g.globalAlpha = a; g.translate(DW / 2, c.sup ? 250 : 224); g.scale(pop, pop); g.textAlign = 'center';
     g.font = '700 ' + (c.hr ? 42 : 30) + 'px Fraunces, Georgia, serif'; g.lineWidth = 6; g.strokeStyle = 'rgba(20,16,44,.85)'; g.strokeText(c.big, 0, 0);
-    g.fillStyle = c.hr ? '#FFE08A' : '#FFF6E0'; g.fillText(c.big, 0, 0);
+    g.fillStyle = c.sup ? '#FF8FA3' : c.hr ? '#FFE08A' : '#FFF6E0'; g.fillText(c.big, 0, 0);
     g.font = '600 15px Lora, Georgia, serif'; g.lineWidth = 4; g.strokeText(c.sub, 0, 24); g.fillStyle = '#FFF6E0'; g.fillText(c.sub, 0, 24);
     g.restore(); g.textAlign = 'start';
   };
@@ -1467,6 +1825,100 @@
     g.fillStyle = '#2B2140'; lines.forEach(function (l, i) { g.fillText(l, bx + 10, by + 18 + i * 15); });
     g.restore();
   };
+  // ---- super hits ----
+  Derby.prototype.drawSuperTitle = function (t) {
+    var me = this, s = me.sup, name = SUPER_NAME[s.v] || 'Super hit!';
+    if (me.calm) {   // the calm version: one still banner, with the friends standing in a row
+      var bw = DW - 60, by = 196;
+      g.fillStyle = 'rgba(20,16,44,.9)'; wallPath(g, 30, by, bw, 96, 16); g.fill(); g.strokeStyle = '#FF8FA3'; g.lineWidth = 2; g.stroke();
+      g.textAlign = 'center'; g.fillStyle = '#FF8FA3'; g.font = '700 26px Fraunces, Georgia, serif'; g.fillText('Super hit!', DW / 2, by + 32);
+      g.fillStyle = '#FFF6E0'; g.font = '600 13px Lora, Georgia, serif'; g.fillText(name.replace('!', '') + ', ' + (me.hitB ? me.hitB.dist : '') + ' ft', DW / 2, by + 52);
+      if (critters) critters.slice(0, 8).forEach(function (k, i) { g.drawImage(k, DW / 2 - 4 * 34 + i * 34, by + 60, 30, 30); });
+      g.textAlign = 'start'; return;
+    }
+    var a = Math.max(0, Math.min(1, s.t / 0.15, (s.dur - s.t) / 0.5)), pop = 1 + 0.5 * Math.max(0, 1 - s.t / 0.25);
+    g.save(); g.globalAlpha = a; g.translate(DW / 2, 166); g.rotate(Math.sin(s.t * 3) * 0.04); g.scale(pop, pop); g.textAlign = 'center';
+    g.font = '700 34px Fraunces, Georgia, serif'; g.lineWidth = 7; g.strokeStyle = 'rgba(20,16,44,.9)'; g.strokeText(name, 0, 0);
+    var gr = g.createLinearGradient(-120, 0, 120, 0); gr.addColorStop(0, '#FFE08A'); gr.addColorStop(0.5, '#FF8FA3'); gr.addColorStop(1, '#8EC5FF'); g.fillStyle = gr; g.fillText(name, 0, 0);
+    var sub = 'Super hit! ' + (me.hitB ? me.hitB.dist + ' ft' : '');
+    g.font = '700 16px Lora, Georgia, serif'; g.lineWidth = 4; g.strokeText(sub, 0, 26); g.fillStyle = '#FFF6E0'; g.fillText(sub, 0, 26);
+    g.restore(); g.textAlign = 'start';
+  };
+  // the friends from around the site dance on the outfield grass (or dance across it in a conga line)
+  Derby.prototype.drawCritters = function (v, t) {
+    var list = critters || [], n = list.length, me = this, st = me.sup.t;
+    var enter = Math.min(1, st / 0.5);
+    list.forEach(function (k, i) {
+      var x, y, rot, sz = 46;
+      if (v === 'conga') { x = ((st * 80 + i * 48) % (DW + 160)) - 60; y = 240 + Math.sin(st * 6 + i) * 5; rot = Math.sin(st * 8 + i) * 0.2; }
+      else { x = 30 + i * ((DW - 60) / Math.max(1, n - 1)); y = 232 + (i % 2) * 24 + (1 - enter) * 40 - Math.abs(Math.sin(t / 150 + i)) * 12; rot = Math.sin(t / 200 + i * 1.3) * 0.28; }
+      g.save(); g.globalAlpha = enter; g.translate(x, y); g.rotate(rot); g.scale(1 + Math.sin(t / 120 + i) * 0.06, 1 - Math.sin(t / 120 + i) * 0.06);
+      g.drawImage(k, -sz / 2, -sz / 2, sz, sz); g.restore();
+    });
+    // and the two pups join the conga at the end of the line
+    if (v === 'conga') { var span = DW + 160, cx0 = ((st * 80 + n * 48) % span) - 60, cx1 = ((st * 80 + (n + 1) * 48) % span) - 60; drawPup(g, 'tidbit', cx0, 266, 0.7, 1, st * 14, true, t); drawPup(g, 'sugarfoot', cx1, 266, 0.7, 1, st * 14 + 1, true, t); }
+  };
+  // Zoomies: both pups race around the bases
+  Derby.prototype.drawZoomies = function (t) {
+    var me = this, pts = [[220, 470], [304, 404], [220, 340], [136, 404], [220, 470]], st = me.sup.t;
+    [[me.who, 0], [me.pit, 0.14]].forEach(function (p) {
+      var s = ((st * 0.42 - p[1]) % 1 + 1) % 1, seg = Math.min(3, Math.floor(s * 4)), f = s * 4 - seg, A = pts[seg], B = pts[seg + 1];
+      var x = lerp(A[0], B[0], f), y = lerp(A[1], B[1], f);
+      drawPup(g, p[0], x, y, 0.75, B[0] >= A[0] ? 1 : -1, st * 18, true, t);
+    });
+  };
+  // Moonshot and Disco Derby change the sky
+  Derby.prototype.drawSky = function (v, t) {
+    var st = this.sup.t;
+    if (v === 'moon') {
+      // the moon rises behind the stands at the right, winks once, and the stars twinkle slowly
+      var my = lerp(150, 84, Math.min(1, st / 1.2)), mx = 396;
+      g.fillStyle = 'rgba(255,246,224,.18)'; g.beginPath(); g.arc(mx, my, 40, 0, 7); g.fill();
+      g.fillStyle = '#FFF3C4'; g.beginPath(); g.arc(mx, my, 28, 0, 7); g.fill();
+      g.fillStyle = 'rgba(200,180,120,.35)'; g.beginPath(); g.arc(mx - 10, my + 8, 5, 0, 7); g.arc(mx + 11, my - 9, 4, 0, 7); g.fill();
+      var wink = st > 1.6 && st < 2.1;
+      g.strokeStyle = '#5A4A2A'; g.fillStyle = '#5A4A2A'; g.lineWidth = 2;
+      g.beginPath(); g.arc(mx - 8, my - 4, 2.4, 0, 7); g.fill();
+      if (wink) { g.beginPath(); g.moveTo(mx + 5, my - 4); g.lineTo(mx + 11, my - 4); g.stroke(); } else { g.beginPath(); g.arc(mx + 8, my - 4, 2.4, 0, 7); g.fill(); }
+      g.beginPath(); g.arc(mx, my + 5, 7, 0.2 * Math.PI, 0.8 * Math.PI); g.stroke();
+      for (var i = 0; i < 14; i++) { g.globalAlpha = 0.4 + 0.4 * Math.sin(st * 2.4 + i); star(g, (i * 71) % DW + 10, 14 + (i * 29) % 70, 3, '#FFF6E0'); } g.globalAlpha = 1;
+    } else {   // a disco ball and slow, soft beams (they sweep; they never blink)
+      var bx = DW / 2, by = lerp(-20, 44, Math.min(1, st / 0.8));
+      ['rgba(255,143,163,.13)', 'rgba(142,197,255,.13)', 'rgba(255,224,138,.13)', 'rgba(168,230,184,.13)'].forEach(function (c, i) {
+        var an = Math.PI / 2 + Math.sin(st * 1.2 + i * 1.6) * 0.9;
+        g.fillStyle = c; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + Math.cos(an - 0.13) * 560, by + Math.sin(an - 0.13) * 560); g.lineTo(bx + Math.cos(an + 0.13) * 560, by + Math.sin(an + 0.13) * 560); g.closePath(); g.fill();
+      });
+      g.strokeStyle = '#BFC3D9'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(bx, 0); g.lineTo(bx, by - 16); g.stroke();
+      g.fillStyle = '#C9CED8'; g.beginPath(); g.arc(bx, by, 16, 0, 7); g.fill();
+      g.fillStyle = 'rgba(255,255,255,.7)'; for (var q = 0; q < 10; q++) { var qa = q * 0.63 + st * 0.8; g.fillRect(bx + Math.cos(qa) * 9 - 2, by + Math.sin(q * 1.7) * 9 - 2, 4, 4); }
+    }
+  };
+  function star(g, x, y, r, col) {
+    g.fillStyle = col; g.beginPath();
+    for (var i = 0; i < 10; i++) { var an = -Math.PI / 2 + i * Math.PI / 5, rr_ = i % 2 ? r * 0.45 : r; g.lineTo(x + Math.cos(an) * rr_, y + Math.sin(an) * rr_); }
+    g.closePath(); g.fill();
+  }
+  function banana(g, x, y, s, rot) {
+    g.save(); g.translate(x, y); g.rotate(rot);
+    g.fillStyle = '#FFD84A'; g.beginPath(); g.moveTo(-s, -s * 0.2); g.quadraticCurveTo(0, s * 0.9, s, -s * 0.2); g.quadraticCurveTo(0, s * 0.4, -s, -s * 0.2); g.fill();
+    g.fillStyle = '#6B4A22'; g.beginPath(); g.arc(-s, -s * 0.2, s * 0.14, 0, 7); g.arc(s, -s * 0.2, s * 0.12, 0, 7); g.fill();
+    g.restore();
+  }
+  // the trick-bat buttons under Swing: how many are left, and which one is ready
+  function syncBats() {
+    var box = $('ar-bats'); if (!box) return;
+    var dg = game && game instanceof Derby ? game : null;
+    box.hidden = !dg;
+    if (!dg) return;
+    var left = dg.bats(), n = $('ar-bats-n'); if (n) n.textContent = left === 1 ? '1 left' : left + ' left';
+    var ic = $('ar-bats-ic'); if (ic) ic.textContent = '🏏'.repeat(left) + '·'.repeat(3 - left);
+    Array.prototype.forEach.call(box.querySelectorAll('[data-bat]'), function (b) {
+      var k = b.getAttribute('data-bat'), on = dg.trick === k;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.classList.toggle('is-on', on);
+      b.disabled = !on && left <= 0;
+    });
+  }
   // Play again, or swap roles (the pitcher bats): straight back to the first pitch
   function derbyAgain(swap) {
     if (!game || !(game instanceof Derby)) return;
@@ -1478,6 +1930,157 @@
     try { $('ar-wrap').focus({ preventScroll: true }); } catch (e) { /* ignore */ }
   }
 
+  /* ==================================================================================================
+     INTERMISSIONS (game19): little cartoon breaks between levels, in the spirit of the old arcade ones.
+     After "Next level" in Treat Chase, Cross the Way, Bubble Break, Treat Shower (and between journeys on the
+     Treat Trail), Tidbit and Sugarfoot put on a short show, 6 to 9 seconds, no words but a title. Skip it with
+     the Skip button, a tap on the field, or space, Enter or Escape. Six scenes play in turn, and two running
+     gags pay off over several of them: the bone that keeps getting bigger (parts 1, 2 and the finale), and
+     Tidbit's cape, which snags in "The snag" and wears a heart patch from then on. Where the scenes have got to
+     is kept with the other arcade settings (tol-arcade-v1, "ism"), so the story carries on next visit.
+     With reduced motion or "Keep the page still", a still card (one picture and the title) takes its place.
+     ================================================================================================== */
+  var ISM = [
+    { id: 'chase', title: 'The chase', dur: 8, still: 5.6 },
+    { id: 'bone1', title: 'A bone appears', dur: 7.5, still: 4.6 },
+    { id: 'snag', title: 'The snag', dur: 8.5, still: 6.6 },
+    { id: 'bone2', title: 'Tug of war', dur: 8, still: 3.2 },
+    { id: 'switch', title: 'Switcheroo', dur: 7.5, still: 5.2 },
+    { id: 'bone3', title: 'The biggest bone', dur: 9, still: 6.5 }
+  ];
+  var ism = null;
+  function intermission(after) {
+    if (!cv || !g) { after(); return; }
+    var k = (+S.ism || 0), sc = ISM[k % ISM.length];
+    S.ism = k + 1; save();
+    var still = calmMotion();
+    ism = { sc: sc, t: still ? sc.still : 0, after: after, still: still, wait: 0, act: Math.floor(k / ISM.length) + 1, part: k % ISM.length };
+    var b = $('ar-skip');
+    if (!b) {
+      b = D.createElement('button'); b.type = 'button'; b.id = 'ar-skip'; b.className = 'ar-btn ar-skip';
+      b.addEventListener('click', function (e) { e.stopPropagation(); endIsm(); });
+      b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+      $('ar-wrap').appendChild(b);
+    }
+    b.textContent = still ? 'Continue ▶' : 'Skip ⏭'; b.hidden = false;
+    say('Intermission: ' + sc.title + '. ' + (still ? 'Press Continue when you are ready.' : 'Skip it any time.'));
+    if (!still) ismTune(sc.id);
+    try { b.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+    last = 0;
+  }
+  function endIsm() {
+    if (!ism) return; var a = ism.after; ism = null;
+    var b = $('ar-skip'); if (b) b.hidden = true;
+    last = 0; if (a) a();
+    try { $('ar-wrap').focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+  }
+  function ismTune(id) {
+    var A = [[523.25, 0, 0.18], [659.25, 0.2, 0.18], [783.99, 0.4, 0.18], [659.25, 0.6, 0.18], [698.46, 0.8, 0.18], [880, 1.0, 0.18], [783.99, 1.2, 0.4]];
+    var B = [[392, 0, 0.18], [440, 0.2, 0.18], [493.88, 0.4, 0.18], [523.25, 0.6, 0.36], [493.88, 1.0, 0.18], [523.25, 1.2, 0.5]];
+    organ(id === 'bone3' ? A.concat(B.map(function (n) { return [n[0] * 1.5, n[1] + 1.8, n[2]]; })) : /bone/.test(id) ? B : A);
+  }
+  function ismUpdate(dt) {
+    if (!ism) return;
+    if (ism.still) { ism.wait += dt; if (ism.wait > 6) endIsm(); return; }
+    ism.t += dt; if (ism.t >= ism.sc.dur) endIsm();
+  }
+  // ---- the little props ----
+  function ismBone(x, y, s, rot) {
+    g.save(); g.translate(x, y); g.rotate(rot || 0); g.fillStyle = '#FFF3D6'; g.strokeStyle = 'rgba(120,90,50,.45)'; g.lineWidth = 1;
+    g.fillRect(-s, -s * 0.22, s * 2, s * 0.44);
+    [[-s, -0.25], [-s, 0.25], [s, -0.25], [s, 0.25]].forEach(function (p) { g.beginPath(); g.arc(p[0], p[1] * s * 1.3, s * 0.32, 0, 7); g.fill(); });
+    g.restore();
+  }
+  function ismCloud(x, y, s, col, scared, t, dir) {
+    g.save(); g.translate(x, y); g.scale(s, s);
+    g.fillStyle = scared ? '#9ED3FF' : col;
+    g.beginPath(); g.arc(-5, -2, 6.5, Math.PI, 0); g.arc(5, -2, 6.5, Math.PI, 0); g.arc(0, -6, 8, Math.PI, 0); g.lineTo(10, 8);
+    var w = Math.sin(t * 9) * 1.2; for (var i = 0; i < 3; i++) g.quadraticCurveTo(10 - 3.3 - i * 6.6, 12 + w, 10 - 6.6 - i * 6.6, 8);
+    g.closePath(); g.fill();
+    g.fillStyle = '#2A2540'; g.beginPath(); g.arc(-3.4 + dir * 1.5, -3, 1.9, 0, 7); g.arc(3.4 + dir * 1.5, -3, 1.9, 0, 7); g.fill();
+    g.strokeStyle = '#2A2540'; g.lineWidth = 1.3; g.beginPath(); if (scared) g.arc(0, 4, 3, 1.15 * Math.PI, 1.85 * Math.PI); else g.arc(0, 1, 3.2, 0.15 * Math.PI, 0.85 * Math.PI); g.stroke();
+    g.restore();
+  }
+  function ismCape(who, x, y, s, face, t, torn, patched) {
+    if (!window.TOLPups || !window.TOLPups.cape) return;
+    g.save(); g.translate(x, y); g.scale(face * s, s);
+    if (torn) { g.beginPath(); g.rect(-6, -60, 40, 70); g.clip(); }
+    try { window.TOLPups.cape(g, window.TOLPups.looks[PUPS[who].look], t * 1000, '#E0525F', true); } catch (e) { /* ignore */ }
+    if (patched) heart(g, -8, -20, 3.4, '#FFE08A');
+    g.restore();
+  }
+  // a pup at (x, y) on the ground: running (dir +1 right, -1 left), sitting, wiggling or lying
+  function ismPup(who, x, y, s, face, t, pose, wag, tilt) { drawPup(g, who, x, y, s, face, t * 14, pose === 'run', t * 1000, pose, wag, tilt); }
+  function ismDraw() {
+    var W = LW, H = LH, sc = ism.sc, t = ism.t, gy = Math.round(H * 0.64), k = Math.min(W, H) / 440 * 1.3, ps = 1.05 * k;
+    g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    var bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#141033'); bg.addColorStop(0.64, '#2C2660'); bg.addColorStop(0.64, '#3E7D4E'); bg.addColorStop(1, '#2F6B3E');
+    g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    g.fillStyle = 'rgba(255,246,224,.55)'; for (var i = 0; i < 24; i++) g.fillRect((i * 97) % W, 10 + (i * 53) % Math.max(20, gy - 60), 1.6, 1.6);
+    // a soft spotlight on the stage
+    var sp = g.createRadialGradient(W / 2, gy, 10, W / 2, gy, W * 0.6); sp.addColorStop(0, 'rgba(255,240,190,.18)'); sp.addColorStop(1, 'rgba(255,240,190,0)'); g.fillStyle = sp; g.fillRect(0, 0, W, H);
+    var X = function (f) { return -60 * k + f * (W + 120 * k); };   // f 0 = off the left, 1 = off the right
+    var patched = ism.act > 1 || ism.part > 2;   // once the cape has snagged, it wears a heart patch
+    var id = sc.id;
+    if (id === 'chase') {
+      if (t < 3.6) { var f = 1 - t / 3.6; ismPup('tidbit', X(f), gy, ps, -1, t, 'run'); ismCloud(X(f) + 80 * k, gy - 22 * k, 1.6 * k, '#9FA8C9', false, t, -1); }
+      else if (t > 4.1) { var f2 = (t - 4.1) / 3.9; ismCloud(X(f2) + 70 * k, gy - 22 * k, 1.6 * k, '#9FA8C9', true, t, 1); ismPup('tidbit', X(f2) - 30 * k, gy, ps * 2, 1, t, 'run'); }
+    } else if (id === 'bone1') {
+      var sx = t < 2.2 ? lerp(X(0), W * 0.38, t / 2.2) : W * 0.38, sface = t > 3.6 && t < 5.2 ? -1 : 1;
+      ismPup('sugarfoot', sx, gy, ps, sface, t, t < 2.2 ? 'run' : 'sit');
+      ismBone(sx + 30 * k * sface, gy - 38 * k, 9 * k, 0.1);
+      var tx = t < 2.4 ? X(1.1) : t < 3.6 ? lerp(X(1.05), W * 0.62, (t - 2.4) / 1.2) : W * 0.62;
+      if (t > 2.4) ismPup('tidbit', tx, gy, ps, -1, t * (t < 3.6 ? 0.4 : 1), t < 3.6 ? 'run' : 'sit', null, t > 3.6 && t < 5.2 ? -0.25 : 0);
+      if (t > 3.8 && t < 5.4) { g.fillStyle = '#FFF6E0'; g.font = '700 ' + Math.round(26 * k) + 'px Fraunces, Georgia, serif'; g.textAlign = 'center'; g.fillText('?', sx, gy - 70 * k); g.textAlign = 'start'; }
+      if (t > 5.4) { g.fillStyle = '#FFE08A'; g.font = Math.round(16 * k) + 'px serif'; g.fillText('♪', W * 0.62 + 10 * k, gy - 66 * k - Math.sin(t * 6) * 4); }
+    } else if (id === 'snag') {
+      var post = W * 0.5;
+      g.fillStyle = '#8B5E3C'; g.fillRect(post - 4 * k, gy - 48 * k, 8 * k, 48 * k); g.fillStyle = '#A8764C'; g.fillRect(post - 7 * k, gy - 52 * k, 14 * k, 6 * k);
+      var cx = t < 2.2 ? lerp(X(0), post - 18 * k, t / 2.2) : t < 3.2 ? post - 18 * k + (t - 2.2) * 12 * k : t < 5 ? post - 6 * k : lerp(post - 6 * k, X(1.1), (t - 5) / 2.2);
+      if (t < 2.2) ismCloud(cx + 90 * k, gy - 22 * k, 1.4 * k, '#C9A8E0', false, t, 1);
+      var tornNow = t >= 3.2;   // after the snag only a stub of the cape is left (then, from the next scene on, a heart patch)
+      if (t < 3.2) ismCape('tidbit', cx, gy, ps, 1, t, false, false);
+      else if (t < 5) { g.fillStyle = '#E0525F'; g.beginPath(); g.moveTo(post, gy - 36 * k); g.lineTo(post - 18 * k, gy - 30 * k); g.lineTo(post - 12 * k, gy - 22 * k); g.closePath(); g.fill(); }
+      ismPup('tidbit', cx, gy, ps, t > 3.2 && t < 5 ? -1 : 1, t, t < 3.2 || t > 5 ? 'run' : 'sit');
+      if (tornNow && t > 5) ismCape('tidbit', cx, gy, ps, 1, t, true, false);
+      if (t > 4.6) { var sfx = lerp(X(-0.1), post - 40 * k, Math.min(1, (t - 4.6) / 1.4)); ismPup('sugarfoot', sfx, gy, ps, 1, t, t < 6 ? 'run' : 'wiggle'); if (t > 6.2) heart(g, sfx + 12 * k, gy - 60 * k - (t - 6.2) * 10 * k, 7 * k, '#FFE08A'); }
+    } else if (id === 'bone2') {
+      var mid = W / 2, pull = t < 4.5 ? Math.sin(t * 3) * 14 * k : 0, fall = t > 4.5 ? Math.min(1, (t - 4.5) / 0.5) : 0;
+      if (t < 4.5) {
+        ismBone(mid + pull, gy - 30 * k, 22 * k, 0);
+        ismPup('sugarfoot', mid - 50 * k + pull, gy, ps, 1, t, 'bow'); ismPup('tidbit', mid + 50 * k + pull, gy, ps, -1, t, 'bow');
+      } else {
+        var by = gy - 30 * k - Math.sin(Math.min(1, (t - 4.5) / 1.4) * Math.PI) * 90 * k;
+        ismBone(mid, t < 5.9 ? by : gy - 8 * k, 22 * k, (t - 4.5) * 5 * (t < 5.9 ? 1 : 0));
+        ismPup('sugarfoot', mid - 50 * k - fall * 30 * k, gy, ps, 1, t, t < 6.2 ? 'lie' : 'sit');
+        ismPup('tidbit', mid + 50 * k + fall * 30 * k, gy, ps, -1, t, t < 6.2 ? 'lie' : 'sit');
+        if (t > 6.2) { g.fillStyle = '#FFF6E0'; g.font = '700 ' + Math.round(22 * k) + 'px Fraunces, Georgia, serif'; g.textAlign = 'center'; g.fillText('!', mid - 80 * k, gy - 70 * k); g.fillText('!', mid + 80 * k, gy - 70 * k); g.textAlign = 'start'; }
+      }
+    } else if (id === 'switch') {
+      if (t < 3.4) { var a = 1 - t / 3.4; if (patched) ismCape('tidbit', X(a), gy, ps, -1, t, false, true); ismPup('tidbit', X(a), gy, ps, -1, t, 'run'); ismPup('sugarfoot', X(a) + 70 * k, gy, ps, -1, t, 'run'); ismBall(X(a) - 8 * k, gy - 50 * k - Math.abs(Math.sin(t * 6)) * 20 * k, k); }
+      else if (t > 3.8) { var b2 = (t - 3.8) / 3.7; ismPup('sugarfoot', X(b2) + 40 * k, gy, ps, 1, t, 'run'); if (patched) ismCape('tidbit', X(b2) - 30 * k, gy, ps, 1, t, false, true); ismPup('tidbit', X(b2) - 30 * k, gy, ps, 1, t, 'run'); ismBall(X(b2) + 60 * k, gy - 50 * k - Math.abs(Math.sin(t * 6)) * 20 * k, k); }
+    } else if (id === 'bone3') {
+      var gx = t < 3 ? lerp(X(1.2), W * 0.62, t / 3) : t < 6 ? W * 0.62 : lerp(W * 0.62, X(-0.3), (t - 6) / 3);
+      // the biggest bone, on a little wagon pulled by a friendly Grumble
+      ismCloud(gx + 120 * k, gy - 24 * k, 1.4 * k, '#9FA8C9', false, t, -1);
+      g.fillStyle = '#9B6B43'; g.fillRect(gx - 70 * k, gy - 14 * k, 140 * k, 8 * k); g.fillStyle = '#2A2540'; g.beginPath(); g.arc(gx - 50 * k, gy - 4 * k, 6 * k, 0, 7); g.arc(gx + 50 * k, gy - 4 * k, 6 * k, 0, 7); g.fill();
+      var lift = t > 4.6 ? Math.min(1, (t - 4.6) / 0.8) : 0;
+      ismBone(gx, gy - 26 * k - lift * 14 * k, 44 * k, 0);
+      var px1 = t < 3.6 ? lerp(X(-0.1), W * 0.36, t / 3.6) : gx - 74 * k, px2 = t < 3.6 ? lerp(X(-0.15), W * 0.3, t / 3.6) : gx + 74 * k;
+      ismPup('sugarfoot', px1, gy, ps, t < 3.6 ? 1 : 1, t, t < 3.6 || t > 6 ? 'run' : 'wiggle');
+      if (patched && (t < 3.6 || t > 6)) ismCape('tidbit', px2, gy, ps, t < 3.6 ? 1 : -1, t, false, true);
+      ismPup('tidbit', px2, gy, ps, t < 3.6 ? 1 : -1, t, t < 3.6 ? 'run' : t > 6 ? 'run' : 'wiggle');
+      if (t > 5) heart(g, gx, gy - 90 * k - Math.sin(t * 2) * 6 * k, 14 * k, '#FF8FA3');
+    }
+    // the title card
+    var ta = ism.still ? 1 : Math.max(0, Math.min(1, t / 0.3, (sc.dur - t) / 0.4));
+    g.globalAlpha = ta; g.textAlign = 'center';
+    g.fillStyle = '#FFE08A'; g.font = '600 ' + Math.round(11 * k + 1) + 'px "IBM Plex Mono", monospace'; g.fillText('INTERMISSION ' + (ism.part + 1) + (ism.act > 1 ? ' · ROUND ' + ism.act : ''), W / 2, 28 * k + 8);
+    g.fillStyle = '#FFF6E0'; g.font = '700 ' + Math.round(22 * k + 2) + 'px Fraunces, Georgia, serif'; g.fillText(sc.title, W / 2, 56 * k + 10);
+    g.textAlign = 'start'; g.globalAlpha = 1;
+  }
+  function ismBall(x, y, k) { g.fillStyle = '#F6A9C8'; g.beginPath(); g.arc(x, y, 7 * k, 0, 7); g.fill(); g.strokeStyle = '#FFF6E0'; g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, 7 * k, 0.4, 2.2); g.stroke(); }
+
   // every game in the arcade
   var GAMES = {
     chase: { name: 'Treat Chase', make: function (w) { return new Chase(w); }, hint: 'Gather every treat. Golden hearts turn the Static into bubbles you can pop.', keys: 'udlr', help: 'Move with the arrow keys or WASD, a swipe, a tap on the field, or the big arrows. A turn you press a little early is remembered. P pauses, M mutes.' },
@@ -1485,8 +2088,8 @@
     trail: { name: 'The Treat Trail', make: function (w) { return new Trek(w); }, hint: 'Lead the wagon from Puddle Hollow to Starfall Hill: choose your pace and snacks, cross the rivers, trade at the posts. Nobody gets hurt.', keys: '', help: 'Tap a choice under the picture, or press 1 to 5. Up and down pick a choice, Enter takes it. P pauses, M mutes.' },
     bricks: { name: 'Bubble Break', make: function (w) { return new Bricks(w); }, hint: 'Bounce the bubble into the Static. Up or a tap above the pup sends it off; a miss just floats back.', keys: 'lur', up: 'Send the bubble', help: 'Left and right (or drag along the field) move the cushion; up or a tap above the pup sends the bubble. P pauses, M mutes.' },
     shower: { name: 'Treat Shower', make: function (w) { return new Catch(w); }, hint: 'Catch the treats in the basket. A raindrop is only a little drip on the nose.', keys: 'lr', help: 'Left and right, or drag along the field, move the basket. P pauses, M mutes.' },
-    derby: { name: 'Home Run Derby', make: function (w) { return new Derby(w); }, hint: 'Ten pitches. Swing as the ring closes on the plate: right on time is a home run.', keys: '', swing: true, labels: ['Home runs', 'Pitch', 'Best'],
-      aria: 'Home Run Derby game. Press space, Enter or up to swing, P to pause, M for sound.', help: 'Swing with a tap on the field, the big Swing button, or space (Enter and up work too) as the ring closes on the plate. P pauses, M mutes.' }
+    derby: { name: 'Home Run Derby', make: function (w) { return new Derby(w); }, hint: 'Ten pitches. Hold Swing to power up and let go as the ring closes on the plate.', keys: 'lr', left: 'Step away from the plate', right: 'Step toward the plate', swing: true, labels: ['Home runs', 'Pitch', 'Best'],
+      aria: 'Home Run Derby game. Hold space, Enter or up to power up and let go to swing. Left and right step. 1 to 4 pick a trick bat. P pauses, M for sound.', help: 'Hold Swing (or a finger on the field, or space) to power up, and let go as the ring closes on the plate. Left and right step, so the gold marker sits under the ring. 1 to 4 pick a trick bat. P pauses, M mutes.' }
   };
 
   /* ---------- the menu and the stage ---------- */
@@ -1497,6 +2100,7 @@
     $('ar-select').hidden = true; $('ar-stage').hidden = false;
     if (!GAMES[S.game]) S.game = 'chase';
     if (game && game.destroy) game.destroy();
+    clearIsm();
     game = GAMES[S.game].make(S.pup);
     paused = false; running = true; tAll = 0; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause';
     $('ar-title').textContent = GAMES[S.game].name;
@@ -1518,6 +2122,10 @@
     sw.innerHTML = on ? '&#9918; Tap “Play ball” first' : '&#9918; Swing!';
   }
   function swingNudge() {
+    // flow17: a tap on the field or on Swing while the "Play ball" card is up starts the game (the card says to tap
+    // the field, so that tap works), instead of asking for one more tap
+    var go0 = $('ar-ov-go'), ov0 = $('ar-overlay');
+    if (go0 && ov0 && !ov0.hidden && /Play ball/.test(go0.textContent || '')) { go0.click(); return; }
     say('Tap Play ball to start. Then swing.');
     var go = $('ar-ov-go'); if (!go || $('ar-overlay').hidden) return;
     try { go.focus({ preventScroll: true }); } catch (e) { go.focus(); }
@@ -1535,6 +2143,8 @@
       pad.setAttribute('aria-label', keys === 'lr' || keys === 'lur' ? 'Move left and right: on-screen arrows (hold one to keep going)' : 'Move: on-screen arrows (hold one to keep going)');
     }
     var sw = $('ar-swing'); if (sw) sw.hidden = !G.swing;
+    var dl = $('ar-d-left'), dr = $('ar-d-right'); if (dl) dl.setAttribute('aria-label', G.left || 'Left'); if (dr) dr.setAttribute('aria-label', G.right || 'Right');
+    syncBats();
     var h = $('ar-help'); if (h && G.help) h.textContent = G.help;
   }
   // the site header stays at the top of the screen; the game sits just under it
@@ -1564,7 +2174,7 @@
   var fitT = 0;
   function onResize() { clearTimeout(fitT); fitT = setTimeout(function () { if (running) fitStage(); }, 120); }
   function backToMenu() {
-    recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop(); gaming(false);
+    clearIsm(); recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop(); gaming(false); syncBats();
     $('ar-overlay').hidden = true; $('ar-stage').hidden = true; $('ar-select').hidden = false; $('ar-wrap').style.width = '';
     try { $('ar-select').scrollIntoView({ block: 'start' }); } catch (e) { /* ignore */ }
     var f = D.querySelector('input[name="ar-game"]:checked'); if (f) f.focus();
@@ -1583,7 +2193,8 @@
     if (r.top < headerH() || r.bottom > vh - (stuck ? 0 : 90)) { try { row.scrollIntoView({ block: 'end', behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { row.scrollIntoView(false); } }
     if (!reduced) { b.classList.remove('is-nudge'); void b.offsetWidth; b.classList.add('is-nudge'); }
   }
-  function restart() { recordBest(); if (!game) return; if (game.destroy) game.destroy(); game = GAMES[S.game].make(S.pup); paused = false; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause'; tAll = 0; last = 0; game.draw(0); hud(); say('A fresh start.'); fitStage(); if (game.intro) game.intro(); }
+  function clearIsm() { ism = null; var b = $('ar-skip'); if (b) b.hidden = true; }
+  function restart() { clearIsm(); recordBest(); if (!game) return; if (game.destroy) game.destroy(); game = GAMES[S.game].make(S.pup); paused = false; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause'; tAll = 0; last = 0; game.draw(0); hud(); say('A fresh start.'); fitStage(); if (game.intro) game.intro(); }
   function drawBadge() {
     var c = $('ar-who'); if (!c || !window.TOLPups) return; var x = c.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height);
     drawPupOn(x, S.pup, 24, 50, 0.85);
@@ -1644,14 +2255,25 @@
     });
     var sw = $('ar-swing');
     if (sw) {   // the big Swing button: it swings the moment it's pressed (a keyboard press arrives as a click)
-      sw.addEventListener('pointerdown', function (e) { if (sw.classList.contains('is-wait')) { e.preventDefault(); swingNudge(); return; } if (!running || paused || !game || !game.swing) return; e.preventDefault(); game.swing(); });
-      sw.addEventListener('click', function (e) { if (e.detail === 0 && sw.classList.contains('is-wait')) { swingNudge(); return; } if (e.detail === 0 && running && !paused && game && game.swing) game.swing(); });
+      // hold it to power up, let go to swing; a keyboard press on it works the same way (space or Enter held)
+      var okGame = function () { return running && !paused && game && game.press; };
+      sw.addEventListener('pointerdown', function (e) { if (sw.classList.contains('is-wait')) { e.preventDefault(); swingNudge(); return; } if (!okGame()) return; e.preventDefault(); try { sw.setPointerCapture(e.pointerId); } catch (er) { /* ignore */ } game.press(); });
+      ['pointerup', 'pointercancel'].forEach(function (ev) { sw.addEventListener(ev, function () { if (game && game.release) game.release(); }); });
+      sw.addEventListener('keydown', function (e) { if (e.key !== ' ' && e.key !== 'Enter') return; e.preventDefault(); if (sw.classList.contains('is-wait')) { swingNudge(); return; } if (!e.repeat && okGame()) game.press(); });
+      sw.addEventListener('keyup', function (e) { if (e.key !== ' ' && e.key !== 'Enter') return; e.preventDefault(); if (game && game.release) game.release(); });
+      sw.addEventListener('click', function (e) { if (e.detail === 0 && sw.classList.contains('is-wait')) { swingNudge(); return; } if (e.detail === 0 && okGame()) { game.press(); game.release(); } });
+    }
+    var bx = $('ar-bats');
+    if (bx) {
+      bx.addEventListener('click', function (e) { var b = e.target.closest('[data-bat]'); if (!b || !running || paused || !game || !game.arm) return; game.arm(b.getAttribute('data-bat')); try { $('ar-wrap').focus({ preventScroll: true }); } catch (er) { /* ignore */ } });
     }
     // /frequency-journey.html#derby opens the menu with the Home Run Derby picked
     if (location.hash === '#derby') { S.game = 'derby'; var dr = D.querySelector('input[name="ar-game"][value="derby"]'); if (dr) dr.checked = true; startLabel(); }
-    D.addEventListener('keydown', onKey);
+    D.addEventListener('keydown', onKey); D.addEventListener('keyup', onKeyUp);
     window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize);
-    var wrap = $('ar-wrap'); wrap.addEventListener('pointerdown', onPointerDown); wrap.addEventListener('pointermove', onPointerMove); wrap.addEventListener('pointerup', onPointerUp); wrap.addEventListener('pointercancel', function () { ptr = null; });
+    // flow17: tapping the field around the Derby's "Play ball" card starts the game
+    var ovl = $('ar-overlay'); if (ovl) ovl.addEventListener('click', function (e) { if (e.target === ovl) { var sw0 = $('ar-swing'); if (sw0 && sw0.classList.contains('is-wait')) swingNudge(); } });
+    var wrap = $('ar-wrap'); wrap.addEventListener('pointerdown', onPointerDown); wrap.addEventListener('pointermove', onPointerMove); wrap.addEventListener('pointerup', onPointerUp); wrap.addEventListener('pointercancel', function () { ptr = null; if (game && game.release) game.release(); });
     syncToggles(); refreshBest();
     // tools16: someone who came here from another game's row of tabs lands on the game picker, not the page's opening
     try {
@@ -1665,8 +2287,10 @@
     if (window.TOLPups) go(); else window.addEventListener('load', go);
   }
   window.TOLArcade = {
-    state: function () { return game ? { game: S.game, pup: S.pup, score: game.score, level: game.level, treats: game.treats, filled: game.filled && game.filled.length, paused: paused, running: running, x: game.pup && game.pup.x, y: game.pup && game.pup.y, phase: game.phase, pitch: game.n, log: game.log, longest: game.best } : { running: false }; },
+    state: function () { return game ? { game: S.game, pup: S.pup, score: game.score, level: game.level, treats: game.treats, filled: game.filled && game.filled.length, paused: paused, running: running, x: game.pup && game.pup.x, y: game.pup && game.pup.y, phase: game.phase, pitch: game.n, log: game.log, longest: game.best, points: game.pts, supers: game.supers, streak: game.streak, trick: game.trick, tricksUsed: game.tricksUsed, intermission: ism ? ism.sc.id : null } : { running: false }; },
     _game: function () { return game; }, _set: function (k, v) { S[k] = v; },
+    derbySim: derbySim, _derby: { win: derbyWin, contact: derbyContact, superRoll: superRoll, FENCE: FENCE },
+    intermission: function () { if (game) intermission(function () { say('Back to the game.'); }); return !!ism; }, _ism: function () { return ism ? { id: ism.sc.id, t: ism.t, still: ism.still } : null; }, skipIsm: function () { endIsm(); },
     _lanes: function (level, relaxed) { return laneSet(level, !!relaxed); }, _crossDiff: crossDiff, _shrink: crossShrink
   };
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', init); else init();

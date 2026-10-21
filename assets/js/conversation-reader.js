@@ -116,7 +116,7 @@
       html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Step away from this one</h2>' +
         '<p>Something here may be more than a wording problem: a threat, or checking up on someone or cutting them off, or someone feeling afraid. Better wording can’t fix that, and the Reader can’t judge it properly. One conversation can’t tell you what a relationship is like. If messages like this leave you feeling afraid or cut off, free and private support is there. It’s okay to step away.</p>' +
         '<p>If someone is hurting, threatening, watching or controlling you, it isn’t your fault. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233 or text START to 88788. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.</p>' +
-        '<p><a href="/safety.html">Not safe at home?</a> <button type="button" class="cr-btn is-quiet is-small" data-tol-exit>Leave this site quickly</button></p></section>';
+        '</section>';
     }
 
     // 03 The read

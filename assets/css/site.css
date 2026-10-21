@@ -3136,3 +3136,19 @@ html.tol-quiet .tol-bar .tol-help.is-docked .tol-help-fab{ padding:.3rem .6rem !
 /* home16b: the "On your own?" card's links on /is-this-for-you.html are full-size tap targets */
 .read .ideas .fit-links{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .6rem; }
 .read .ideas .fit-links a{ display:inline-flex; align-items:center; min-height:44px; }
+
+/* rows of chips that run past the edge (the game tabs, a place's "ways in"): a mouse can't swipe sideways, so on a computer
+   they wrap onto more lines; on a phone they stay one row you swipe, with a thin visible bar and a fade that says "more" */
+@media (min-width:641px){
+  .gm-switch{ flex-wrap:wrap !important; overflow:visible !important; }
+  html.has-garden body.is-game .gm-switch{ border-radius:26px; }
+}
+@media (max-width:640px){
+  .gm-switch, .ps-many .ps-row{ scrollbar-width:thin !important; scrollbar-color:rgba(60,51,80,.35) transparent; padding-bottom:6px !important; padding-right:1.4rem !important;
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent); mask-image:linear-gradient(to right, #000 calc(100% - 1.6rem), transparent); }
+  .gm-switch::-webkit-scrollbar, .ps-many .ps-row::-webkit-scrollbar{ display:block !important; height:4px; }
+  .gm-switch::-webkit-scrollbar-thumb, .ps-many .ps-row::-webkit-scrollbar-thumb{ background:rgba(60,51,80,.35); border-radius:4px; }
+}
+.tol-set-lock{ margin:.3rem 0 .6rem; line-height:1.5; }
+.tol-set-lock a{ display:inline-flex; align-items:center; min-height:44px; font-weight:700; color:var(--focus, #2B5B8C); text-underline-offset:3px; }
+.tol-set-lock small{ display:block; color:var(--ink-soft); font-size:.88rem; }

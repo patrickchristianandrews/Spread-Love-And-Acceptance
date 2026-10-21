@@ -80,7 +80,7 @@
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
     'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-es-hint', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', 'tol-save-tip', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', 'tol-save-tip', 'tol-save-how', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
@@ -828,9 +828,9 @@
     o.style.visibility = 'visible';
     var c = mk('div', { class: 'tp-lock-card' });
     c.appendChild(mk('h2', { id: 'tp-lock-h' }, T('Locked', 'Bloqueado')));
-    c.appendChild(mk('p', null, T('Type your PIN to open Spread Love & Acceptance.', 'Escribe tu PIN para abrir Spread Love & Acceptance.')));
+    c.appendChild(mk('p', null, T('Type your passcode to open Spread Love & Acceptance.', 'Escribe tu PIN para abrir Spread Love & Acceptance.')));
     var row = mk('p', { class: 'tp-row' });
-    row.appendChild(mk('label', { for: 'tp-lock-pin' }, T('PIN', 'PIN')));
+    row.appendChild(mk('label', { for: 'tp-lock-pin' }, T('Passcode', 'PIN')));
     var pin = mk('input', { id: 'tp-lock-pin', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'off', class: 'tp-pin' });
     row.appendChild(pin); c.appendChild(row);
     var msg = mk('p', { class: 'tp-status', role: 'status', 'aria-live': 'polite' });
@@ -839,12 +839,12 @@
     acts.appendChild(go);
     if (rec.cred) {
       acts.appendChild(btn(T('Use Face ID or fingerprint', 'Usar Face ID o huella'), '', function () {
-        passkeyCheck(rec.cred).then(function (ok) { if (ok) unlock(); else msg.textContent = T('That didn’t work. Use your PIN.', 'No funcionó. Usa tu PIN.'); });
+        passkeyCheck(rec.cred).then(function (ok) { if (ok) unlock(); else msg.textContent = T('That didn’t work. Use your passcode.', 'No funcionó. Usa tu PIN.'); });
       }));
     }
     c.appendChild(acts); c.appendChild(msg);
     var forgot = mk('details', { class: 'tp-forgot' });
-    forgot.appendChild(mk('summary', null, T('Forgot your PIN?', '¿Olvidaste tu PIN?')));
+    forgot.appendChild(mk('summary', null, T('Forgot your passcode?', '¿Olvidaste tu PIN?')));
     forgot.appendChild(mk('p', null, T('It can’t be reset: it’s kept only on this device, and we never see it. You can erase everything this site keeps here and start fresh. A backup file can bring your progress back afterwards.', 'No se puede restablecer: se guarda solo en este dispositivo y nunca lo vemos. Puedes borrar todo lo que este sitio guarda aquí y empezar de nuevo. Un archivo de copia puede traer tu progreso después.')));
     forgot.appendChild(btn(T('Erase everything on this device', 'Borrar todo en este dispositivo'), 'is-danger', function () {
       confirmClear({ what: T('everything this site keeps on this device', 'todo lo que este sitio guarda en este dispositivo'), keys: '*',
@@ -1282,7 +1282,7 @@
     host.textContent = '';
     var lv = level(), st = local(), rec = readLock(st);
     if (lv === 'shared') { host.appendChild(mk('p', { class: 'tp-perk' }, T('Not on a shared computer: nothing is kept here after the tab closes.', 'No en una computadora compartida: aquí no se guarda nada al cerrar la pestaña.'))); return; }
-    host.appendChild(mk('p', { class: 'tp-note' }, T('A privacy screen: after some time away, the site asks for your PIN before showing anything. It doesn’t encrypt what’s stored, and someone who clears this site’s data in the browser’s settings removes the lock along with everything else.', 'Una pantalla de privacidad: tras un rato fuera, el sitio pide tu PIN antes de mostrar nada. No cifra lo guardado, y quien borre los datos de este sitio en los ajustes del navegador quita el bloqueo junto con todo lo demás.')));
+    host.appendChild(mk('p', { class: 'tp-note' }, T('A privacy screen: after some time away, the site asks for your passcode before showing anything. It doesn’t encrypt what’s stored, and someone who clears this site’s data in the browser’s settings removes the lock along with everything else.', 'Una pantalla de privacidad: tras un rato fuera, el sitio pide tu PIN antes de mostrar nada. No cifra lo guardado, y quien borre los datos de este sitio en los ajustes del navegador quita el bloqueo junto con todo lo demás.')));
     var minsSel = function (id, cur) {
       var s = mk('select', { id: id });
       [[1, T('1 minute away', '1 minuto fuera')], [5, T('5 minutes away', '5 minutos fuera')], [15, T('15 minutes away', '15 minutos fuera')], [60, T('1 hour away', '1 hora fuera')], [0, T('Every time it opens', 'Cada vez que se abre')]].forEach(function (o) { var op = mk('option', { value: String(o[0]) }, o[1]); if (o[0] === cur) op.selected = true; s.appendChild(op); });
@@ -1290,7 +1290,7 @@
     };
     if (!rec) {
       var r1 = mk('p', { class: 'tp-row' });
-      r1.appendChild(mk('label', { for: 'tp-pin1' }, T('Choose a PIN (4 to 6 digits)', 'Elige un PIN (de 4 a 6 dígitos)')));
+      r1.appendChild(mk('label', { for: 'tp-pin1' }, T('Choose a passcode (4 to 6 digits)', 'Elige un PIN (de 4 a 6 dígitos)')));
       r1.appendChild(mk('input', { id: 'tp-pin1', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'new-password', class: 'tp-pin' }));
       var r2 = mk('p', { class: 'tp-row' });
       r2.appendChild(mk('label', { for: 'tp-pin2' }, T('Type it again', 'Escríbelo otra vez')));
@@ -1302,9 +1302,9 @@
       host.appendChild(btn(T('Turn on the lock', 'Activar el bloqueo'), 'is-strong', function (ev) {
         var a = $('tp-pin1').value, b = $('tp-pin2').value;
         if (!validPin(a)) { say('tp-lock-msg', T('Use 4 to 6 digits.', 'Usa de 4 a 6 dígitos.'), true); $('tp-pin1').focus(); return; }
-        if (a !== b) { say('tp-lock-msg', T('The two PINs aren’t the same.', 'Los dos PIN no son iguales.'), true); $('tp-pin2').focus(); return; }
+        if (a !== b) { say('tp-lock-msg', T('The two passcodes aren’t the same.', 'Los dos PIN no son iguales.'), true); $('tp-pin2').focus(); return; }
         ev.currentTarget.disabled = true;
-        pinRecord(a, +$('tp-mins').value).then(function (r) { r.away = Date.now(); writeLock(st, r); drawLock(); say('tp-lock-msg', T('The lock is on. Keep your PIN in mind: it can’t be reset.', 'El bloqueo está activo. Recuerda tu PIN: no se puede restablecer.')); });
+        pinRecord(a, +$('tp-mins').value).then(function (r) { r.away = Date.now(); writeLock(st, r); drawLock(); say('tp-lock-msg', T('The lock is on. Keep your passcode in mind: it can’t be reset.', 'El bloqueo está activo. Recuerda tu PIN: no se puede restablecer.')); });
       }));
     } else {
       host.appendChild(mk('p', { class: 'tp-ok' }, T('The lock is on.', 'El bloqueo está activo.')));
@@ -1320,25 +1320,25 @@
         if (!ok) return;
         if (rec.cred) pk.appendChild(btn(T('Stop using Face ID or fingerprint', 'Dejar de usar Face ID o huella'), '', function () { var r = readLock(st); delete r.cred; writeLock(st, r); drawLock(); }));
         else pk.appendChild(btn(T('Also unlock with Face ID, Touch ID or fingerprint', 'Desbloquear también con Face ID, Touch ID o huella'), '', function () {
-          passkeyCreate().then(function (id) { var r = readLock(st); r.cred = id; writeLock(st, r); drawLock(); say('tp-lock-msg', T('Done. The lock screen will offer it, with your PIN as the backup.', 'Hecho. La pantalla de bloqueo lo ofrecerá, con tu PIN de respaldo.')); },
-            function () { say('tp-lock-msg', T('That wasn’t set up. Your PIN still works.', 'No se configuró. Tu PIN sigue funcionando.'), true); });
+          passkeyCreate().then(function (id) { var r = readLock(st); r.cred = id; writeLock(st, r); drawLock(); say('tp-lock-msg', T('Done. The lock screen will offer it, with your passcode as the backup.', 'Hecho. La pantalla de bloqueo lo ofrecerá, con tu PIN de respaldo.')); },
+            function () { say('tp-lock-msg', T('That wasn’t set up. Your passcode still works.', 'No se configuró. Tu PIN sigue funcionando.'), true); });
         }));
       });
       host.appendChild(acts);
       var r5 = mk('p', { class: 'tp-row' });
-      r5.appendChild(mk('label', { for: 'tp-pin-off' }, T('To turn it off, type your PIN', 'Para quitarlo, escribe tu PIN')));
+      r5.appendChild(mk('label', { for: 'tp-pin-off' }, T('To turn it off, type your passcode', 'Para quitarlo, escribe tu PIN')));
       var po = mk('input', { id: 'tp-pin-off', type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '6', autocomplete: 'off', class: 'tp-pin' });
       r5.appendChild(po);
       r5.appendChild(btn(T('Turn off the lock', 'Quitar el bloqueo'), '', function () {
         checkPin(po.value, readLock(st)).then(function (ok) {
-          if (!ok) { say('tp-lock-msg', T('That’s not your PIN.', 'Ese no es tu PIN.'), true); po.value = ''; po.focus(); return; }
+          if (!ok) { say('tp-lock-msg', T('That’s not your passcode.', 'Ese no es tu PIN.'), true); po.value = ''; po.focus(); return; }
           writeLock(st, null); drawLock(); say('tp-lock-msg', T('The lock is off.', 'El bloqueo está quitado.'));
         });
       }));
       host.appendChild(r5);
     }
     host.appendChild(mk('p', { id: 'tp-lock-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
-    host.appendChild(mk('p', { class: 'tp-note' }, T('Why your saved entries aren’t encrypted with the PIN: a 4 to 6 digit PIN has at most a million possibilities, so anyone who copied this browser’s data could try them all quickly. It would only look safe. For real protection, save a backup file with a long password.', 'Por qué tus entradas no se cifran con el PIN: un PIN de 4 a 6 dígitos tiene como mucho un millón de posibilidades, así que quien copiara los datos del navegador podría probarlas todas rápido. Solo parecería seguro. Para una protección real, guarda una copia con una contraseña larga.')));
+    host.appendChild(mk('p', { class: 'tp-note' }, T('Why your saved entries aren’t encrypted with the passcode: a 4 to 6 digit passcode has at most a million possibilities, so anyone who copied this browser’s data could try them all quickly. It would only look safe. For real protection, save a backup file with a long password.', 'Por qué tus entradas no se cifran con el PIN: un PIN de 4 a 6 dígitos tiene como mucho un millón de posibilidades, así que quien copiara los datos del navegador podría probarlas todas rápido. Solo parecería seguro. Para una protección real, guarda una copia con una contraseña larga.')));
   }
   // ---- Clear my data: everything, or one tool
   function drawClear() {

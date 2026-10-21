@@ -116,11 +116,11 @@ def pdf_label(m):
 
 
 def free_pdf(item_id, m):
-    """owner17: the workbook and the pocket guide download straight away, with no email (the owner's exceptions)"""
+    """owner, 21 Oct: the workbook and the pocket guide go through the same one-time email step as the books"""
     f = m.get('pdf') or (item_id + '.pdf')
     if not os.path.exists(os.path.join(ROOT, 'book', 'print', f)):
         return ''
-    return ' <a class="tol-btn is-quiet" href="/book/print/%s" download>%s</a>' % (esc(f), pdf_label(m) + ', no email')
+    return ' <a class="tol-btn is-quiet" href="/book/download.html#%s">%s</a>' % ('workbook' if f.startswith('workbook') else 'pocket', pdf_label(m))
 
 
 def home_html():
@@ -194,7 +194,7 @@ def patch_home(path):
 DL_START, DL_END = '<!-- book-dl-books:start -->', '<!-- book-dl-books:end -->'
 # the one sentence about email, the same everywhere it is said (download page, book page, Professor Puddles)
 EMAIL_LINE = 'Read every chapter free online. To download a book as a PDF, we’ll ask for your email.'
-FREE_LINE = 'The workbook and the pocket guide download without an email.'
+FREE_LINE = 'Both use the same one-time email step as the books.'
 DL_CSS = '''<style>
 .bk-dl .bk-dl-books{ list-style:none; padding:0 !important; margin:.6rem 0 1.4rem; display:grid; gap:1rem; }
 @media (min-width:760px){ .bk-dl .bk-dl-books{ grid-template-columns:1fr 1fr; } }
@@ -274,7 +274,7 @@ def download_html():
         if os.path.exists(os.path.join(ROOT, 'book', 'print', _file('workbook-bw', bw))):
             bw_link = (' <a class="bk-dl-nomail" href="/book/print/%s" data-series="workbook-bw" download="%s"><span class="bk-dl-v">Black and white</span>'
                        '<span class="bk-dl-m" data-series-meta>%s</span></a>') % (esc(_file('workbook-bw', bw)), _save_name(w['title'] + ' Black and White'), _meta(bw))
-        free.append(('<li class="bk-dl-book" id="workbook" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Workbook · no email needed</p>'
+        free.append(('<li class="bk-dl-book" id="workbook" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Workbook</p>'
                      '<h3>%s</h3><p class="bk-dl-book-line">Every workpaper in one PDF, on large pages, to print and fill in by hand. Each one is also free to fill in on screen.</p>'
                      '<p class="bk-dl-book-links"><a class="bk-dl-nomail" href="/book/print/%s" data-series="%s" download="%s"><span class="bk-dl-v">Download the workbook (PDF)</span>'
                      '<span class="bk-dl-m" data-series-meta>%s</span></a>%s <a class="bk-dl-read" href="/workpapers/fill/index.html">Fill them in online</a></p></div></li>') % (
@@ -288,7 +288,7 @@ def download_html():
     if pk:
         m = made.get(pk['id'], {})
         if os.path.exists(os.path.join(ROOT, 'book', 'print', _file(pk['id'], m))):
-            free.append(('<li class="bk-dl-book" id="pocket" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Pocket guide · no email needed</p>'
+            free.append(('<li class="bk-dl-book" id="pocket" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Pocket guide</p>'
                          '<h3>%s</h3><p class="bk-dl-book-line">%s</p><p class="bk-dl-book-links"><a class="bk-dl-nomail" href="/book/print/%s" data-series="%s" download="%s">'
                          '<span class="bk-dl-v">Download the pocket guide (PDF)</span><span class="bk-dl-m" data-series-meta>%s</span></a> '
                          '<a class="bk-dl-read" href="/the-logic-behind-it.html">Every situation, free online</a></p></div></li>') % (
@@ -300,7 +300,7 @@ def download_html():
            'Each chapter is the short version, with a code to scan for the full one.</p>'
            '<ul class="bk-dl-books no-bubble" data-no-bubble>%s</ul></section>' % '\n'.join(rows)]
     if free:
-        out.append('<section class="bk-dl-free" aria-labelledby="bk-dl-free-h"><h2 id="bk-dl-free-h">Free to download, no email needed</h2>'
+        out.append('<section class="bk-dl-free" aria-labelledby="bk-dl-free-h"><h2 id="bk-dl-free-h">The workbook and the pocket guide</h2>'
                    '<p class="bk-dl-free-note">%s</p><ul class="bk-dl-books no-bubble" data-no-bubble>%s</ul></section>' % (FREE_LINE, '\n'.join(free)))
     out.append(DL_END)
     return '\n'.join(out)

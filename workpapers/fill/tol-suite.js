@@ -2163,6 +2163,7 @@
       say('The report is made from what you’ve filled in. Fill in a sheet, or bring in a draft, first. The fillable PDF works any time.');
       return;
     }
+    if (!WPK.pdfReady(say)) return;
     try {
       var bytes = kind === 'report' ? SP.report(p) : SP.fillable(null, { plan: p });
       WPK.download(bytes, base() + (kind === 'report' ? '-report.pdf' : '-fillable.pdf'), 'application/pdf');

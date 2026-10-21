@@ -640,7 +640,7 @@
   function hideReply() {
     return { blocks: [
       { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off”, and this chat). The Not safe at home? page has one button to erase all of it and stop the page list.' },
-      { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance”, and delete those entries.', 'To leave fast, press Esc twice, or use “Leave this site quickly” in the menu.'] },
+      { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance”, and delete those entries.'] },
       { k: 'links', x: [['Not safe at home? (erase button and hotlines)', '/safety.html'], ['What’s stored on this device', '/on-this-device.html']] }], chips: [], kind: 'safety' };
   }
 
@@ -5017,7 +5017,6 @@
     root.innerHTML =
       '<div class="tolc-head"><div class="tolc-av"></div><div class="tolc-who"><p class="tolc-name" id="' + uid + '-name"></p><p class="tolc-sub" title="Your guide to the whole program">Program guide</p></div>' +
       '<div class="tolc-hbtns"><button type="button" class="tolc-hbtn tolc-reset">Start over</button>' +
-      '<button type="button" class="tolc-hbtn tolc-leave" data-tol-exit title="Leave this site quickly">Leave quickly</button>' +
       (mode === 'modal' ? '<button type="button" class="tolc-hbtn tolc-x" aria-label="Close chat">&times;</button>' : '') + '</div></div>' +
       '<div class="tolc-log" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>' +
       '<div class="tolc-chips" role="group" aria-label="Suggestions"></div>' +

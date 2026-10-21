@@ -28,7 +28,7 @@
   var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
   if (inFrame || /palcam-pop/.test(location.search)) { window.TOLSaved = { off: true }; return; }
 
-  var KEY = 'tol-saved', LAST = 'tol-lastread', TIP = 'tol-save-tip';
+  var KEY = 'tol-saved', LAST = 'tol-lastread', TIP = 'tol-save-tip', HOW = 'tol-save-how';
   var MAX_SAVED = 200, MAX_LAST = 60, SPOT_HASH = '#saved-spot';
   var NO_BUTTON = /^\/(404|offline|garden-backdrop|pal-cam-tv|saved)\.html$/;
   var GAME = /^\/(pause-and-play|frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|coin-pusher|bears-dojo|night-garden|calm-visualizer|frequency-buddies[a-z0-9-]*|echoes-of-gold|keepsakes|quest|relax)\.html$/;
@@ -50,6 +50,12 @@
   function plain(s, max) {
     return String(s == null ? '' : s).replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim()
       .replace(/<(?=[a-z!\/?])/gi, '‹').replace(/(java|vb)script\s*:/gi, '$1script :').replace(/data\s*:\s*text\/html/gi, 'data : text/html').slice(0, max || 160);
+  }
+  // a note keeps its line breaks (one blank line at most) and can run to 1000 characters
+  var NOTE_MAX = 1000;
+  function notePlain(s) {
+    return String(s == null ? '' : s).replace(/\r\n?/g, '\n').split('\n').map(function (l) { return plain(l, NOTE_MAX); })
+      .join('\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, NOTE_MAX);
   }
   function el(tag, attrs, html) {
     var n = D.createElement(tag);
@@ -124,14 +130,14 @@
     var old = find(item.url);
     var it = { url: plain(item.url, 300), title: plain(item.title, 140), type: item.type || typeOf(item.url), at: item.at || Date.now() };
     var note = item.note != null ? item.note : old && old.note;
-    if (note) it.note = plain(note, 140);
+    if (note) it.note = notePlain(note);
     var spot = item.spot !== undefined ? item.spot : old && old.spot;
     if (spot) it.spot = spot;
     a.unshift(it);
     return store(a) ? it : null;
   }
   function remove(u) { var k = keyOf(u), was = find(u); store(list().filter(function (x) { return keyOf(x.url) !== k; })); return was; }
-  function setNote(u, note) { var it = find(u); if (!it) return false; it.note = plain(note, 140); if (!it.note) delete it.note; var a = list().map(function (x) { return keyOf(x.url) === keyOf(u) ? it : x; }); return store(a); }
+  function setNote(u, note) { var it = find(u); if (!it) return false; it.note = notePlain(note); if (!it.note) delete it.note; var a = list().map(function (x) { return keyOf(x.url) === keyOf(u) ? it : x; }); return store(a); }
   function lastAll() { var o = json(LAST, {}); return o && typeof o === 'object' && !Array.isArray(o) ? o : {}; }
   function lastRead(p) { return lastAll()[norm(p || here)] || null; }
   function setLast(p, rec) {
@@ -261,14 +267,55 @@
   }
   function toggle() {
     if (isSaved()) { removePage(); return; }
-    if (savePage()) toast('Saved. Find it in Saved, in the menu. <a href="/saved.html">Open Saved</a>', 5500);
+    if (savePage()) noteToast(toast('Saved. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000));
   }
-  function markPlace() {
+  function noteToast(t) { var b = t && t.querySelector('.tol-sv-addnote'); if (b) b.addEventListener('click', function () { hideToast(); openNote(); }); }
+  function markPlace(andNote) {
     var s = spotNow();
-    if (!s) { toggle(); return; }
+    if (!s) { if (andNote) openNote(); else toggle(); return; }
     if (!savePage(s)) return;
     if (isChapter()) { setLast(here, { at: Date.now(), title: pageTitle(), spot: s }); markedY = window.scrollY; }
-    toast('Your place is marked' + (s.h ? ', at “' + esc(s.h) + '”' : '') + '. Find it in Saved, in the menu. <a href="/saved.html">Open Saved</a>', 6000);
+    if (andNote) { openNote(); return; }
+    noteToast(toast('Your place is marked' + (s.h ? ', at “' + esc(s.h) + '”' : '') + '. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000));
+  }
+
+  // ---------------------------------------------------------------- notes: your own words on any saved page, tool, workpaper or book spot
+  var noteBox = null, mineEl = null;
+  function openNote() {
+    hideToast(); if (pop) closePop(false);
+    if (!isSaved() && !savePage(isChapter() ? (spotNow() || undefined) : undefined)) return;
+    var it = find(cleanUrl()); if (!it) return;
+    if (!noteBox) {
+      noteBox = el('div', { class: 'tol-sv tol-sv-pop tol-sv-notebox no-bubble no-cheer', role: 'dialog', 'aria-label': 'Your note', hidden: '' });
+      D.body.appendChild(noteBox);
+      D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && noteBox && !noteBox.hidden) closeNote(); });
+    }
+    noteBox.innerHTML = '<label class="tol-sv-pop-h" for="tol-sv-notetext">Your note' + (it.spot && it.spot.h ? ' <small>near “' + esc(it.spot.h) + '”</small>' : '') + '</label>' +
+      '<textarea id="tol-sv-notetext" rows="5" maxlength="' + NOTE_MAX + '" placeholder="What you want to remember, try, or ask about this. Kept only on this device."></textarea>' +
+      '<p class="tol-sv-note-acts"><button type="button" class="tol-sv-cgo" data-nt="ok">Keep note</button><button type="button" class="tol-sv-undo" data-nt="no">Cancel</button>' +
+      '<a href="/saved.html">All my notes</a></p>';
+    var ta = noteBox.querySelector('textarea'); ta.value = it.note || '';
+    noteBox.querySelector('[data-nt="ok"]').addEventListener('click', function () {
+      setNote(cleanUrl(), ta.value); fire(); closeNote();
+      toast(find(cleanUrl()) && find(cleanUrl()).note ? 'Note kept. It’s on this page and under Saved for later, in the Menu.' : 'Note cleared.', 5000);
+    });
+    noteBox.querySelector('[data-nt="no"]').addEventListener('click', closeNote);
+    placePop(noteBox); noteBox.hidden = false; ta.focus({ preventScroll: true });
+  }
+  function closeNote() { if (noteBox && !noteBox.hidden) { noteBox.hidden = true; if (btn) btn.focus({ preventScroll: true }); } }
+  // a page you saved with a note shows the note under its title, so it's there when you come back
+  function showMine() {
+    var it = !locked() && find(cleanUrl());
+    if (!it || !it.note) { if (mineEl) { mineEl.remove(); mineEl = null; } return; }
+    var h1 = D.querySelector('main h1'); if (!h1) return;
+    var after = h1.closest('header, .read-head, .bk-cover') || h1;
+    if (!mineEl) {
+      mineEl = el('div', { class: 'tol-sv-mine no-bubble no-cheer', role: 'note', 'aria-label': 'Your note on this page' });
+      mineEl.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-nt="edit"]')) openNote(); });
+    }
+    if (!mineEl.parentNode) after.parentNode.insertBefore(mineEl, (howEl && howEl.parentNode === after.parentNode ? howEl : after).nextSibling);
+    mineEl.innerHTML = '<p class="tol-sv-mine-k">' + ICON + 'Your note</p><p class="tol-sv-mine-t"></p><button type="button" class="tol-sv-undo" data-nt="edit">Edit note</button>';
+    mineEl.querySelector('.tol-sv-mine-t').textContent = it.note;
   }
   function fillPop() {
     var on = isSaved(), it = find(cleanUrl());
@@ -277,6 +324,7 @@
       '<button type="button" class="tol-sv-go" data-sv="mark">' + ICON + '<span><strong>Mark my place here</strong><small>Keeps the paragraph you’re reading now</small></span></button>' +
       (on ? '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="remove"><span><strong>Remove from Saved</strong>' + (it && it.spot ? '<small>Your marked place goes too</small>' : '') + '</span></button>'
           : '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="page"><span><strong>Save this page</strong><small>Opens at the top</small></span></button>') +
+      '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="note"><span><strong>' + (it && it.note ? 'Edit my note' : 'Write a note here') + '</strong><small>' + (on ? 'Your own words, kept with this page' : 'Marks your place and keeps your words with it') + '</small></span></button>' +
       '<p class="tol-sv-pop-foot"><a href="/saved.html">See everything you saved</a></p>';
   }
   function openPop() {
@@ -318,7 +366,8 @@
         var a = b.getAttribute('data-sv');
         closePop(true);
         if (a === 'mark') markPlace();
-        else if (a === 'page') { if (savePage(null)) toast('Saved. Find it in Saved, in the menu. <a href="/saved.html">Open Saved</a>', 5500); }
+        else if (a === 'note') { if (isSaved()) openNote(); else markPlace(true); }
+        else if (a === 'page') { if (savePage(null)) noteToast(toast('Saved. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000)); }
         else if (a === 'remove') removePage();
       });
       D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pop && !pop.hidden) closePop(true); });
@@ -331,12 +380,39 @@
     } else {
       btn.addEventListener('click', function () { hideTip(); toggle(); });
     }
-    hooks.push(sync);
+    hooks.push(sync); hooks.push(showMine);
     window.addEventListener('storage', function (e) { if (e.key === KEY || e.key === null) sync(); });
     sync();
     // the bar fits itself to the room it has (site.js listens for resize)
     try { window.dispatchEvent(new Event('resize')); } catch (e) {}
   }
+
+  // ---------------------------------------------------------------- "How to save this": one plain line under the title
+  // On chapters, tools, workpapers and guides, until the person has saved something, closes the line, or has seen it on 8 pages.
+  var howEl = null;
+  function howLine() {
+    if (!btn || locked() || list().length || H.classList.contains('tol-no-helpers')) return;
+    var t = typeOf(here), seen = parseInt(lsGet(HOW) || '0', 10);
+    if (lsGet(HOW) === 'off' || seen >= 8 || t === 'game' || here === '/index.html') return;
+    var h1 = D.querySelector('main h1'); if (!h1) return;
+    var after = h1.closest('header, .read-head, .bk-cover') || h1;
+    if (!after.parentNode || !(D.querySelector('main') || D.body).contains(after)) return;
+    var what = isChapter() ? 'this exact spot in the book' : t === 'workpaper' ? 'this workpaper' : t === 'tool' ? 'this tool' : 'this page';
+    var chip = '<button type="button" class="tol-sv-chip tol-sv-howgo">' + ICON + 'Save</button>';
+    howEl = el('p', { class: 'tol-sv-how no-bubble no-cheer', role: 'note' },
+      '<span class="tol-sv-how-t"><strong>Want to come back to ' + what + ' later?</strong> Tap ' + chip + ' at the top of the page' +
+      (isChapter() ? ', then <strong>Mark my place here</strong>' : '') + '. You can add your own note to it, too. You’ll find it under <strong>Saved for later</strong> in the Menu, and on the home page.</span>' +
+      '<button type="button" class="tol-sv-x" aria-label="Got it, hide this line">×</button>');
+    after.parentNode.insertBefore(howEl, after.nextSibling);
+    lsSet(HOW, String(seen + 1));
+    howEl.querySelector('.tol-sv-howgo').addEventListener('click', function () {
+      if (btn.getClientRects().length) btn.scrollIntoView({ block: 'nearest' });
+      btn.click(); if (pop && !pop.hidden) { var f = pop.querySelector('[data-sv]'); if (f) f.focus(); }
+    });
+    howEl.querySelector('.tol-sv-x').addEventListener('click', function () { lsSet(HOW, 'off'); hideHow(); });
+    hooks.push(function () { if (list().length) hideHow(); });
+  }
+  function hideHow() { if (howEl) { howEl.remove(); howEl = null; } }
 
   // ---------------------------------------------------------------- the one-time tip
   var tipEl = null;
@@ -345,7 +421,7 @@
   function promptTake(n) { var P = window.TOLPrompt; if (P && P.take) P.take(n); else ssSet('tol-prompt', n); }
   function tipOk() {
     var c = H.classList, t = typeOf(here);
-    if (!btn || lsGet(TIP) || !(t === 'tool' || isChapter())) return false;
+    if (!btn || howEl || lsGet(TIP) || !(t === 'tool' || isChapter())) return false;
     if (!lsGet('tol-comfort-offer')) return false;           // a first visit belongs to "Would a calmer page help?"
     if (c.contains('tol-quiet') || c.contains('tol-no-helpers') || c.contains('ti-nosurprise') || locked()) return false;
     if (/#together=|[?&]together=/.test(location.href) || cameForSpot) return false;
@@ -456,9 +532,9 @@
       host.innerHTML = '<div class="sv-empty">' +
         '<p class="sv-empty-h">Nothing saved yet. Saving takes one tap:</p>' +
         '<ol class="sv-steps">' +
-        '<li><span class="sv-n" aria-hidden="true">1</span> Open any page, tool or chapter of the book.</li>' +
-        '<li><span class="sv-n" aria-hidden="true">2</span> Tap <span class="tol-sv-chip">' + ICON + 'Save</span> at the top, next to Menu. In the book, choose <strong>Mark my place here</strong> to keep the exact paragraph.</li>' +
-        '<li><span class="sv-n" aria-hidden="true">3</span> Come back here any time: <strong>Menu</strong>, then <strong>Saved</strong>. Tap <strong>Open</strong> to go straight back.</li>' +
+        '<li><span class="sv-n" aria-hidden="true">1</span> Open any page, tool, workpaper or chapter of the book.</li>' +
+        '<li><span class="sv-n" aria-hidden="true">2</span> Tap <span class="tol-sv-chip">' + ICON + 'Save</span> at the top, next to Menu. In the book, choose <strong>Mark my place here</strong> to keep the exact paragraph, or <strong>Write a note here</strong>. Anywhere else, tap <strong>Add a note</strong> right after saving.</li>' +
+        '<li><span class="sv-n" aria-hidden="true">3</span> Come back here any time: <strong>Menu</strong>, then <strong>Saved for later</strong>. Your newest three also show on the home page. Tap <strong>Open</strong> to go straight back.</li>' +
         '</ol></div>';
       return;
     }
@@ -474,7 +550,7 @@
           '<div class="sv-main"><a class="sv-title" href="' + esc(open) + '">' + esc(x.title || x.url) + '</a>' +
           '<p class="sv-meta">Saved ' + esc(dayText(x.at)) + (x.spot ? ' · <span class="sv-spot">' + ICON + 'Your place' + (x.spot.h ? ': near “' + esc(x.spot.h) + '”' : '') + '</span>' : '') + '</p>' +
           (x.note ? '<p class="sv-note"><span class="tol-sv-sr">Your note: </span>“' + esc(x.note) + '”</p>' : '') +
-          '<div class="sv-note-edit" hidden><label>Why I saved this <span class="sv-opt">(optional, kept only here)</span><input type="text" maxlength="140" value="' + esc(x.note || '') + '"></label>' +
+          '<div class="sv-note-edit" hidden><label>My note <span class="sv-opt">(kept only on this device)</span><textarea rows="4" maxlength="' + NOTE_MAX + '">' + esc(x.note || '') + '</textarea></label>' +
           '<span class="sv-note-acts"><button type="button" class="sv-btn" data-act="note-ok">Keep note</button><button type="button" class="sv-btn sv-soft" data-act="note-no">Cancel</button></span></div></div>' +
           '<div class="sv-acts"><a class="sv-btn sv-strong" href="' + esc(open) + '" aria-label="Open ' + esc(x.title) + (x.spot ? ' at your place' : '') + '">Open</a>' +
           '<button type="button" class="sv-btn" data-act="note" aria-label="' + (x.note ? 'Change the note for ' : 'Add a note to ') + esc(x.title) + '">' + (x.note ? 'Edit note' : 'Add a note') + '</button>' +
@@ -514,10 +590,10 @@
         var h1 = D.querySelector('main h1'); if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus(); }
       } else if (act === 'note') {
         var ed = li.querySelector('.sv-note-edit'); ed.hidden = false; b.hidden = true;
-        var inp = ed.querySelector('input'); inp.focus(); inp.select();
-        inp.onkeydown = function (k) { if (k.key === 'Enter') { k.preventDefault(); ed.querySelector('[data-act="note-ok"]').click(); } if (k.key === 'Escape') { ed.querySelector('[data-act="note-no"]').click(); } };
+        var inp = ed.querySelector('textarea'); inp.focus();
+        inp.onkeydown = function (k) { if (k.key === 'Enter' && (k.ctrlKey || k.metaKey)) { k.preventDefault(); ed.querySelector('[data-act="note-ok"]').click(); } if (k.key === 'Escape') { ed.querySelector('[data-act="note-no"]').click(); } };
       } else if (act === 'note-ok') {
-        setNote(url, li.querySelector('.sv-note-edit input').value);
+        setNote(url, li.querySelector('.sv-note-edit textarea').value);
         say('Note kept.');
         var again = host.querySelector('.sv-item[data-url="' + (window.CSS && CSS.escape ? CSS.escape(url) : url) + '"] [data-act="note"]'); if (again) again.focus();
       } else if (act === 'note-no') {
@@ -540,7 +616,7 @@
     D.head.appendChild(l);
   }
   window.TOLSaved = { list: list, find: find, isSaved: isSaved, save: save, remove: remove, setNote: setNote, lastRead: lastRead, lastAll: lastAll,
-    spotNow: spotNow, goSpot: goSpot, typeOf: typeOf, cleanUrl: cleanUrl, renderList: renderList, KEYS: { saved: KEY, last: LAST, tip: TIP } };
+    spotNow: spotNow, goSpot: goSpot, typeOf: typeOf, cleanUrl: cleanUrl, renderList: renderList, openNote: openNote, KEYS: { saved: KEY, last: LAST, tip: TIP, how: HOW } };
   function start() {
     css(function () {
       var tries = 0;
@@ -551,6 +627,7 @@
         savedPage();
         arriveAtSpot();
         chapterSetup();
+        try { howLine(); showMine(); } catch (e) {}
         setTimeout(maybeTip, 2500);
       })();
     });

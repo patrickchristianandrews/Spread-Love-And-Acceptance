@@ -42,6 +42,7 @@
   function today() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function fileBase(data) { return 'Spread-Love-and-Acceptance-Full-Path-' + FP.ROADS[data.road].label.replace(/[^A-Za-z0-9]+/g, '-').replace(/-+$/, '') + '-' + today(); }
   function download(bytes, name, type) {
+    if (type === 'application/pdf' && global.TOLWorkpaper && !global.TOLWorkpaper.pdfReady(say)) return false;
     var blob = new Blob([bytes], { type: type }), url = URL.createObjectURL(blob), a = h('a', { href: url, download: name, rel: 'noopener' });
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
@@ -99,7 +100,7 @@
     try {
       var data = FP.blankData(road, n, names);
       names.forEach(function (nm, i) { if (nm) data.values[FP.NS + 'who.p' + (i + 1)] = nm; });
-      download(FPP.packagePdf(data), fileBase(data) + '-package.pdf', 'application/pdf');
+      if (download(FPP.packagePdf(data), fileBase(data) + '-package.pdf', 'application/pdf') === false) return;
       say('Your full path package is in your Downloads. Fill it in any PDF app, then bring it back here.');
     } catch (err) {
       say('The PDF could not be made. Please try again.');
@@ -794,7 +795,7 @@
   function reportPdf() {
     if (!S.data) return;
     var share = S.shareOnly && !FP.ROADS[S.data.road].solo;
-    try { download(FPP.reportPdf(share ? FP.report(FP.shareCopy(S.data)) : (S.model || FP.report(S.data))), fileBase(S.data) + (share ? '-report-to-share.pdf' : '-report.pdf'), 'application/pdf'); say(share ? 'A copy of your report to share is in your Downloads. It leaves out the stress tank scores, self-notes, raw reaction and calm-down triggers.' : 'Your report is in your Downloads. Keep it somewhere private; ' + (FP.ROADS[S.data.road].solo ? 'it is yours.' : 'anyone you share it with will see every page.')); }
+    try { if (download(FPP.reportPdf(share ? FP.report(FP.shareCopy(S.data)) : (S.model || FP.report(S.data))), fileBase(S.data) + (share ? '-report-to-share.pdf' : '-report.pdf'), 'application/pdf') === false) return; say(share ? 'A copy of your report to share is in your Downloads. It leaves out the stress tank scores, self-notes, raw reaction and calm-down triggers.' : 'Your report is in your Downloads. Keep it somewhere private; ' + (FP.ROADS[S.data.road].solo ? 'it is yours.' : 'anyone you share it with will see every page.')); }
     catch (err) { say('The report PDF could not be made. Save a backup so nothing is lost, then try again.'); if (global.console) console.error(err); }
   }
   function saveJson() {
@@ -809,7 +810,7 @@
   function filledPdf() {
     if (!S.data) return;
     var share = S.shareOnly && !FP.ROADS[S.data.road].solo;
-    try { download(FPP.packagePdf(share ? FP.shareCopy(S.data) : S.data), fileBase(S.data) + (share ? '-package-to-share.pdf' : '-package-filled.pdf'), 'application/pdf'); say(share ? 'A copy to share is in your Downloads, without the private parts. Keep your full copy too.' : 'Your answers are in a filled package PDF in your Downloads. You can keep filling it in any PDF app.' + (FP.ROADS[S.data.road].solo ? '' : ' If you share it, everyone will see every page.')); }
+    try { if (download(FPP.packagePdf(share ? FP.shareCopy(S.data) : S.data), fileBase(S.data) + (share ? '-package-to-share.pdf' : '-package-filled.pdf'), 'application/pdf') === false) return; say(share ? 'A copy to share is in your Downloads, without the private parts. Keep your full copy too.' : 'Your answers are in a filled package PDF in your Downloads. You can keep filling it in any PDF app.' + (FP.ROADS[S.data.road].solo ? '' : ' If you share it, everyone will see every page.')); }
     catch (err) { say('The PDF could not be made.'); if (global.console) console.error(err); }
   }
 

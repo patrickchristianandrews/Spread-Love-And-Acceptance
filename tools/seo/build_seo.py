@@ -21,7 +21,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 SITE = 'https://spreadloveandacceptance.com'
 BRAND = 'Spread Love & Acceptance'
 BOOK_NAME = BRAND   # the book series has the site's name
-EMAIL = 'patrick.christian.andrews@gmail.com'
+EMAIL = 'spreadloveandacceptance@gmail.com'
 OG_IMAGE = SITE + '/assets/img/og-image.png'
 LOGO = SITE + '/assets/img/logo-stacked.png'
 TAGLINE = 'See it fairly. Say it kindly.'
@@ -462,7 +462,7 @@ SEARCH.update({
  'calming-supplements.html': ('Calming Supplements for Anxiety: What Research Says', 'Supplements, herbs, foods and practices for anxiety, stress, sleep and mood, graded honestly, with side effects, interactions and when to get help.'),
  # the book
  'book/index.html': ('Free Self-Help Book Online: Spread Love & Acceptance', 'Read the whole self-help book free online: 26 chapters in three parts on yourself, sharing a life fairly and understanding people. No sign-up, no account.'),
- 'book/download.html': ('The Books as Free PDFs', 'Get the four books as free PDFs. Read every chapter free online; to download a book, we’ll ask for your email. The workbook and pocket guide need none.'),
+ 'book/download.html': ('Books and Downloads: Every PDF, Worksheet, Video and Song', 'Every book, PDF, worksheet, video and song you can take with you, on one page. Read and use everything free online; PDFs ask for your email once.'),
  'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
  'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/for-yourself.html': ('The Book for One Person: Know Yourself, Understand People', 'Part One (yourself) and Part Three (understanding people) of the free book on one page: everything you can read and use on your own. No sign-up.'),
@@ -517,7 +517,7 @@ SEARCH.update({
 # /signal-translator.html#conversation, so process() leaves it alone and it stays out of the sitemap.
 SEARCH.update({
  'saved.html': ('Your Saved Places: Pages, Tools and Book Spots', 'The pages, tools and places in the book you saved for later, kept only on this device. Open one to pick up right where you were.'),
- 'on-this-device.html': ('Your Progress and What’s Stored on This Device', 'Keep your progress private and safe: save a backup file, move it to another phone or the free app, lock it with a PIN, or clear it. Nothing is sent to us.'),
+ 'on-this-device.html': ('Your Progress and What’s Stored on This Device', 'Keep your progress private and safe: save a backup file, move it to another phone or the free app, lock it with a passcode, or clear it. Nothing is sent to us.'),
  'tools.html': ('All Free Tools: Start on Your Own, Then Together', 'Every free tool in one place, the ones you can use on your own first. Filter by what you want to do, who it is for and your time. No sign-up, no account.'),
  'together.html': ('Work on It Together: Share Results by Link, QR Code or Text', 'Fill in a tool on your own phone and pass it back and forth by QR code, text or email. Put your results side by side. Nothing is stored on our side.'),
  'signal-translator.html': ('Chat Analyzer: Check a Text, a Reply or a Whole Chat', 'Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.'),

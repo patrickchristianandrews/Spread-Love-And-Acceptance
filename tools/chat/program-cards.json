@@ -12,7 +12,7 @@
       "name": "the book in print",
       "pat": "\\b(paperback|paper back|hardback|hard copy|printed (book|books|copy|copies|version|edition)|print (edition|version|copy|copies)|physical (book|books|copy|copies)|book in print|books in print|kindle|e ?book)\\b|\\bbuy (the|a|this|your|these) (book|books)\\b|\\border (the|a) (book|copy)\\b|\\b(book|books) on amazon\\b",
       "what": [
-        "Every chapter is free to read online, with no account. Each of the four books is also a free PDF (we ask for your email to download a book; the workbook and the pocket guide need none). The book page also shows the series in print: the same chapters as short colour books (162, 160, 156 and 156 pages), plus a bound workbook and a pocket guide. Paperbacks are coming to Amazon; “The book in print” there has the latest."
+        "Every chapter is free to read online, with no account. Each of the four books is also a free PDF (we ask for your email once, on this device, before the first download; the workbook, the pocket guide and the workpapers use the same step). The book page also shows the series in print: the same chapters as short colour books (162, 160, 156 and 156 pages), plus a bound workbook and a pocket guide. Paperbacks are coming to Amazon; “The book in print” there has the latest."
       ],
       "how": [
         "Read free online: every chapter, any time.",
