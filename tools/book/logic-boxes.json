@@ -152,7 +152,7 @@
    "refs": []},
   {"id": "cancel-tired", "book": 4, "slug": "chapter-3", "title": "Canceling plans after a long week",
    "looks": "Friday afternoon. “So sorry, I can’t make tonight.”",
-   "logic": ["Energy comes back with rest", "This week spent all of it", "Going out on empty means being there in body only", "Canceling spares everyone a flat, tired evening"],
+   "logic": ["Energy comes back with rest", "This week spent all of it", "Going out on empty means being there in body only", "Canceling spares everyone a dull, tired evening"],
    "like": "Not driving when you’re too tired to drive safely.",
    "fits": "A full stress tank changes what anyone has to give.",
    "other": "The friend may have cleared their evening and been looking forward to it.",

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 679" width="540" height="679" role="img" aria-labelledby="fig-u4-ffa-t fig-u4-ffa-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-u4-ffa-t">Start soft: what happened, how I feel, what I’d like</title>
-<desc id="fig-u4-ffa-d">Three blocks build a hard sentence that can be heard. What happened, one specific fact: &quot;The bins didn’t go out on Tuesday.&quot; How I feel: &quot;I felt let down, because I’d asked.&quot; What I’d like: &quot;Could you set a reminder for next week?&quot; Compare a criticism, an attack on the person: &quot;You never help.&quot; Complaints can be heard; criticism tends to start a defence.</desc>
+<desc id="fig-u4-ffa-d">Three blocks build a hard sentence that can be heard. What happened, one specific fact: &quot;The trash didn’t go out on Tuesday.&quot; How I feel: &quot;I felt let down, because I’d asked.&quot; What I’d like: &quot;Could you set a reminder for next week?&quot; Compare a criticism, an attack on the person: &quot;You never help.&quot; Complaints can be heard; criticism tends to start a defense.</desc>
 
 <rect x="1" y="1" width="538" height="677" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Say it so it lands</text>
@@ -9,7 +9,7 @@
 <rect x="28" y="98" width="10" height="105" rx="4" fill="#2F5F8A"/>
 <text x="52" y="132" font-size="21" font-weight="bold" fill="#2F5F8A">What happened</text>
 <text x="52" y="156" font-size="18" fill="#5A5346">One specific fact, not a verdict.</text>
-<text x="52" y="184" font-size="19" font-style="italic">“The bins didn’t go out on Tuesday.”</text>
+<text x="52" y="184" font-size="19" font-style="italic">“The trash didn’t go out on Tuesday.”</text>
 <rect x="28" y="213" width="484" height="105" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
 <rect x="28" y="213" width="10" height="105" rx="4" fill="#7A5620"/>
 <text x="52" y="247" font-size="21" font-weight="bold" fill="#7A5620">How I feel</text>
@@ -23,6 +23,6 @@
 <rect x="28" y="451" width="484" height="107.04" rx="14" fill="#FFFFFF" stroke="#8E3B47" stroke-width="1.5" stroke-dasharray="6 5"/>
 <path d="M50 473.0 L66 489.0 M66 473.0 L50 489.0" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="80" y="487" font-size="20" font-weight="bold" fill="#8E3B47">Not: “You never help.”</text>
-<text x="80" y="515" font-size="18" font-style="italic" fill="#5A5346"><tspan x="80" dy="0">That’s about the person, so it starts a</tspan><tspan x="80" dy="23.04">defence.</tspan></text>
+<text x="80" y="515" font-size="18" font-style="italic" fill="#5A5346"><tspan x="80" dy="0">That’s about the person, so it starts a</tspan><tspan x="80" dy="23.04">defense.</tspan></text>
 <text x="28" y="583.04" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">This book’s plain-language shape, a cousin of</tspan><tspan x="28" dy="23.04">I-messages and Nonviolent Communication;</tspan><tspan x="28" dy="23.04">research on such scripts is mixed, and tone matters</tspan><tspan x="28" dy="23.04">most.</tspan></text>
 </svg>

@@ -13,7 +13,7 @@
     {"key": "wp13", "code": "WP-13", "name": "The 90-second daily check-in", "href": "/workpapers/wp-13-daily-check-in.html", "print": "/wp-13"},
     {"key": "wp14", "code": "WP-14", "name": "Is it us, or is it everything else?", "href": "/workpapers/wp-14-is-it-us-or-everything-else.html", "print": "/wp-14"},
     {"key": "wp15", "code": "WP-15", "name": "Keep your little rituals alive", "href": "/workpapers/wp-15-keep-your-little-rituals-alive.html", "print": "/wp-15"},
-    {"key": "fill", "code": "", "name": "All the workpapers, to fill in on screen or print", "href": "/workpapers/fill/index.html", "print": "/workpapers/fill"}
+    {"key": "fill", "code": "", "name": "All the workpapers, to fill out on screen or print", "href": "/workpapers/fill/index.html", "print": "/workpapers/fill"}
   ],
   "tools": [
     {"key": "chat", "name": "Chat analyzer", "href": "/signal-translator.html", "match": ["/conversation-reader.html"]},
@@ -51,7 +51,7 @@
   ],
   "hints": [
     {"chapter": "part-1", "who": "sugarfoot", "text": "Go slowly in this part. It’s all about you, and you’re worth the time. A one-minute check on how you are today is an easy way in.", "tool": "weather"},
-    {"chapter": "part-2", "who": "tidbit", "text": "This part comes with workpapers to fill in, together or on your own. If you only try one, make it the one-week log.", "wp": "wp01"},
+    {"chapter": "part-2", "who": "tidbit", "text": "This part comes with workpapers to fill out, together or on your own. If you only try one, make it the one-week log.", "wp": "wp01"},
     {"chapter": "part-3", "who": "puddles", "text": "If a question pops up while you read, ask me. Nothing you type leaves your device.", "tool": "ask"},
     {"chapter": "self-1-then", "version": "short", "idea": 2, "who": "tidbit", "text": "The rules from home aren’t good or bad. They’re just yours, and worth a proper look. How you like to talk is a good first one to look at.", "tool": "wavelength", "print": false},
     {"chapter": "self-1-then", "version": "short", "idea": 6, "who": "puddles", "text": "When an old rule jumps in before you’ve had a chance to think, you don’t have to argue with it. Write it down, and look at it again on a calm day.", "tool": "roots"},
@@ -176,9 +176,9 @@
     {"chapter": "understanding-17-groups", "version": "full", "after_id": "remote", "who": "sugarfoot", "text": "Teams that rarely share a room need a small, steady check-in. Ten minutes is plenty.", "tool": "teamcheck"},
     {"chapter": "understanding-17-groups", "version": "full", "after_id": "dissent", "who": "puddles", "text": "Disagreeing early and kindly is easier with the words ready. This workpaper helps you say it so it lands.", "wp": "wp09"},
     {"chapter": "afterword", "version": "short", "idea": 4, "who": "tidbit", "text": "That’s the end. Pick one small thing from the book and try it this week, and leave the rest for later.", "tool": "start10"},
-    {"chapter": "afterword", "version": "short", "after_id": "next", "who": "puddles", "text": "When you’re ready, every workpaper in the book is in one place, to fill in on screen or to print. Start with whichever one fits this week.", "wp": "fill"},
+    {"chapter": "afterword", "version": "short", "after_id": "next", "who": "puddles", "text": "When you’re ready, every workpaper in the book is in one place, to fill out on screen or to print. Start with whichever one fits this week.", "wp": "fill"},
     {"chapter": "afterword", "version": "full", "after_id": "three-parts", "who": "tidbit", "text": "You made it to the end. High five. Pick one small thing from the book and try it this week.", "tool": "start10"},
-    {"chapter": "afterword", "version": "full", "after_id": "next", "who": "puddles", "text": "When you’re ready, every workpaper in the book is in one place, to fill in on screen or to print. Start with whichever one fits this week.", "wp": "fill"},
+    {"chapter": "afterword", "version": "full", "after_id": "next", "who": "puddles", "text": "When you’re ready, every workpaper in the book is in one place, to fill out on screen or to print. Start with whichever one fits this week.", "wp": "fill"},
     {"chapter": "topic-start-here", "after_heading": "Three ways to read the book", "who": "puddles", "text": "As you read, Tidbit, Sugarfoot and I pop up with small hints. A <em>workpaper</em> is a page you fill in; a <em>tool</em> is a helper you use on the site. If you’re short on time, start here.", "tool": "start10"},
     {"chapter": "topic-calm", "after_heading": "Part One, Now: what settles you", "who": "sugarfoot", "text": "The best time to plan for a stormy moment is a calm one. Make your kit today, while things are quiet.", "wp": "wp11"},
     {"chapter": "topic-share-the-load", "after_heading": "Chapter II: is the split working?", "who": "tidbit", "text": "The quick split check takes a few minutes and shows who does what at a glance.", "tool": "split"},

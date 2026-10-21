@@ -16,7 +16,7 @@
 <line x1="40" y1="300" x2="500" y2="300" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
 <circle cx="201" cy="300" r="9" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
 <text x="28" y="326" font-size="17" font-style="italic" fill="#5A5346">easygoing, flexible</text>
-<text x="512" y="326" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">organised, plans ahead</text>
+<text x="512" y="326" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">organized, plans ahead</text>
 <text x="28" y="360" font-size="20" font-weight="bold" fill="#3E6B4C">Extraversion</text>
 <polygon points="40,418.0 40,417.1 48,416.8 55,416.5 63,416.1 71,415.6 78,415.0 86,414.3 94,413.4 101,412.5 109,411.4 117,410.1 124,408.6 132,407.0 140,405.3 147,403.3 155,401.2 163,399.0 170,396.7 178,394.3 186,391.8 193,389.3 201,386.9 209,384.6 216,382.3 224,380.3 232,378.5 239,376.9 247,375.7 255,374.7 262,374.2 270,374.0 278,374.2 285,374.7 293,375.7 301,376.9 308,378.5 316,380.3 324,382.3 331,384.6 339,386.9 347,389.3 354,391.8 362,394.3 370,396.7 377,399.0 385,401.2 393,403.3 400,405.3 408,407.0 416,408.6 423,410.1 431,411.4 439,412.5 446,413.4 454,414.3 462,415.0 469,415.6 477,416.1 485,416.5 492,416.8 500,417.1 500,418.0" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
 <line x1="40" y1="418" x2="500" y2="418" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>

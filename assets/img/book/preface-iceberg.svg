@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 742" width="540" height="742" role="img" aria-labelledby="fig-preface-iceberg-t fig-preface-iceberg-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-preface-iceberg-t">The work nobody sees: an iceberg of shared work</title>
-<desc id="fig-preface-iceberg-d">An iceberg. Above the waterline, the small visible part: doing the job, such as washing up or the school run. Below the waterline, the much larger unseen part, in five kinds: noticing, remembering, planning and deciding, checking, and smoothing. Whoever holds the hidden part can never fully switch off.</desc>
+<desc id="fig-preface-iceberg-d">An iceberg. Above the waterline, the small visible part: doing the job, such as doing the dishes or the school drop-off. Below the waterline, the much larger unseen part, in five kinds: noticing, remembering, planning and deciding, checking, and smoothing. Whoever holds the hidden part can never fully switch off.</desc>
 
 <rect x="1" y="1" width="538" height="740" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">The work nobody sees</text>
@@ -8,13 +8,13 @@
 <path d="M200.0 222.0 L236.0 124.0 L264.0 108.0 L300.0 132.0 L348.0 222.0 Z" fill="#FFFFFF" stroke="#2F5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="274" y="190" font-size="21" font-weight="bold" text-anchor="middle">Doing</text>
 <text x="28" y="132" font-size="19" font-style="italic" fill="#5A5346">What others see</text>
-<text x="28" y="156" font-size="19" fill="#5A5346">washing up, the</text>
-<text x="28" y="180" font-size="19" fill="#5A5346">school run</text>
+<text x="28" y="156" font-size="19" fill="#5A5346">doing the dishes, the</text>
+<text x="28" y="180" font-size="19" fill="#5A5346">school drop-off</text>
 <rect x="16" y="222" width="508" height="420" rx="0" fill="#DCEAF6"/>
 <path d="M16 222.0 Q 60 214.0 104 222.0 T 192 222.0 T 280 222.0 T 368 222.0 T 456 222.0 T 524 222.0" fill="none" stroke="#2F5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M200.0 222.0 C 80.0 282.0 40.0 442.0 100.0 552.0 C 160.0 632.0 390.0 632.0 450.0 552.0 C 510.0 452.0 470.0 292.0 348.0 222.0 Z" fill="#F4F9FD" stroke="#2F5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="270" y="274" font-size="21" font-weight="bold" text-anchor="middle">Noticing</text>
-<text x="270" y="298" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle">the bin is full</text>
+<text x="270" y="298" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle">the trash is full</text>
 <text x="270" y="340" font-size="21" font-weight="bold" text-anchor="middle">Remembering</text>
 <text x="270" y="364" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle">dates, forms, birthdays</text>
 <text x="270" y="406" font-size="21" font-weight="bold" text-anchor="middle">Planning and deciding</text>
@@ -24,5 +24,5 @@
 <text x="270" y="538" font-size="21" font-weight="bold" text-anchor="middle">Smoothing</text>
 <text x="270" y="562" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle">keeping the peace</text>
 <text x="510" y="624" font-size="19" font-style="italic" fill="#2F5F8A" text-anchor="end">What stays unseen</text>
-<text x="28" y="669" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. The five kinds are this book’s plain</tspan><tspan x="28" dy="23.04">words; researchers call the thinking part “cognitive</tspan><tspan x="28" dy="23.04">labour” (Daminger, 2019).</tspan></text>
+<text x="28" y="669" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. The five kinds are this book’s plain</tspan><tspan x="28" dy="23.04">words; researchers call the thinking part “cognitive</tspan><tspan x="28" dy="23.04">labor” (Daminger, 2019).</tspan></text>
 </svg>

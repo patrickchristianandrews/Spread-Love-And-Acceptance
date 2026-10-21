@@ -164,12 +164,12 @@ P = [
     (r'\bThe bins go out\b', 'The trash goes out'), (r'\btake the bins out\b', 'take the trash out'), (r'\btook the bins out\b', 'took the trash out'),
     (r'\btaking the bins\b', 'taking out the trash'), (r'\btake the bins\b', 'take out the trash'), (r'\bThe bins weren’t taken out\b', 'The trash wasn’t taken out'),
     (r'\bthe council about the bins\b', 'the city about trash pickup'), (r'\bthe bins again\b', 'the trash again'), (r'\bThe bins again\b', 'The trash again'),
-    (r'\bthe bins\b', 'the trash'), (r'\bThe bins\b', 'The trash'), (r'\bbins\b', 'trash cans'), (r'\bbin\b', 'trash can'), (r'\brubbish\b', 'trash'),
+    (r'\bthe bins\b', 'the trash'), (r'\bThe bins\b', 'The trash'), (r'\bbins\b', 'trash cans'), (r'\bthe bin is full\b', 'the trash is full'), (r'\bThe bin is full\b', 'The trash is full'), (r'\bbin\b', 'trash can'), (r'\brubbish\b', 'trash'),
     (r'\bthe council\b', 'the city'), (r'\bThe council\b', 'The city'), (r'\bcouncil\b', 'city'), (r'\bcar tax\b', 'car registration'), (r'\bthe MOT\b', 'the car inspection'),
     (r'\bMOT\b', 'car inspection'),
     # out and about
     (r'\bstaff car park\b', 'staff parking lot'), (r'\btest centre car park\b', 'DMV parking lot'), (r'\bcar parks?\b', 'parking lot'), (r'\bcar park charges\b', 'parking charges'),
-    (r'\bcar boot\b', 'trunk'), (r'\bsat nav\b', 'GPS'), (r'\bhigh street\b', 'main street'), (r'\bring road\b', 'beltway'),
+    (r'\bcar boot\b', 'trunk'), (r'\bsat nav\b', 'navigation app'), (r'\bhigh street\b', 'main street'), (r'\bring road\b', 'beltway'),
     (r'\bat the roundabout\b', 'at the intersection'), (r'\bon a wet roundabout\b', 'at a wet intersection'), (r'\broundabouts?\b', 'traffic circle'),
     (r'\bzebra crossing\b', 'crosswalk'), (r'\bdual carriageway\b', 'highway'), (r'\bthe railway\b', 'the train tracks'), (r'\breturn ticket\b', 'round-trip ticket'),
     (r'\bthe queue\b', 'the line'), (r'\bThe queue\b', 'The line'), (r'\ba queue\b', 'a line'), (r'\bqueue\b', 'line'), (r'\bqueuing\b', 'waiting in line'),
@@ -227,7 +227,7 @@ P = [
     (r'\bhalf cross with\b', 'half annoyed with'), (r'\bquite cross with\b', 'pretty annoyed with'), (r'\bnot cross with you\b', 'not mad at you'),
     (r'\bcross about\b', 'mad about'), (r'\bcross with\b', 'annoyed with'), (r'\bcross at\b', 'mad at'), (r'\bis cross\b', 'is annoyed'), (r'\bgets cross\b', 'gets annoyed'),
     # rows (arguments), never rows of a table
-    (r'(?<!in )\b(a|the|this|that|big|every|another|our|their|your|same|first|last|next|huge|blazing) row\b(?=( about| over| between| with (his|her|their|my|your|a|an|the)| was| is| didn| happen| that| starts| started| began| begins| blew| brewing| coming| kicked|[.,;:!?)”’]))', r'\1 fight'),
+    (r'(?<!in )\b(a|the|this|that|big|every|another|our|their|your|same|huge|blazing) row\b(?=( about| over| between| with (his|her|their|my|your|a|an|the)| was| is| didn| happen| that| starts| started| began| begins| blew| brewing| coming| kicked|[.,;:!?)”’]))', r'\1 fight'),
     (r'\bstart the rows\b', 'start the fights'), (r'\browing\b', 'fighting'),
     (r'\bThe row\b(?! (of|for|above|below))', 'The fight'), (r'\bMid-row\b', 'Mid-fight'), (r'\bmid-row\b', 'mid-fight'),
     # food and things
@@ -239,6 +239,17 @@ P = [
     (r'\bthe torch\b', 'the flashlight'), (r'\ba torch\b', 'a flashlight'), (r'\btorch\b', 'flashlight'), (r'\bthe timetable\b', 'the schedule'), (r'\btimetable\b', 'schedule'),
     (r'\bhas already cancelled the football\b', 'has already canceled soccer'), (r'\bcharity football match\b', 'charity soccer game'), (r'\bfootball match\b', 'soccer game'),
     (r'\bCubs\b', 'Cub Scouts'), (r'\bpost office\b', 'mailroom'), (r'\btake a decision\b', 'make a decision'), (r'\bhall warden\b', 'RA'),
+    (r'\b([Ff])ill (this|it|them) in (on|together|online|by hand|about|for|before|after|at|with|first|again)\b', r'\1ill \2 out \3'),
+    (r'\bto fill in on\b', 'to fill out on'), (r'\bfill in on\b', 'fill out on'), (r'\bto fill in\b(?=[.,;)])', 'to fill out'),
+    (r'\bcommunity garden plots\b', 'community gardens'), (r'\bthe whole of the holiday weekend\b', 'the whole long weekend'),
+    (r'\bthe Thursday before a holiday weekend\b', 'the Thursday before a long weekend'), (r'\bThe holidays belong to my family\b', 'Christmas belongs to my family'),
+    (r'\bby the lifts\b', 'by the elevators'), (r'\bthe lifts\b', 'the elevators'), (r'\bcompany a lift\b', 'company a ride'),
+    (r'\bTwenty past\b', 'Twenty after'), (r'\bTen past\b', 'Ten after'), (r'\bFive past\b', 'Five after'), (r'\brailway schedule\b', 'train schedule'),
+    (r'\bThe post\b(?= is)', 'The mail'), (r'\(washing, dressing\)', '(bathing, dressing)'), (r'\bwashing up\b', 'doing the dishes'),
+    (r'\bthe row (he|she|they|we|you|I)\b', r'the fight \1'), (r'\ba row (turning|getting|going|starting)\b', r'a fight from \1'),
+    (r'\bBiscuit\b(?=,? the family)', 'Pickles'),
+    (r'\b([Aa]) GPS\b', r'\1 navigation app'), (r'\btalking therapies\b', 'talk therapies'), (r'\btalking therapy\b', 'talk therapy'),
+    (r'\bTalking therapies\b', 'Talk therapies'), (r'\ba cup of tea at\b', 'a cup of tea together at'), (r' A therapist can help with strong fears\.', ''),
     (r'\bBins out\b', 'Trash out'), (r'\bBins and recycling\b', 'Trash and recycling'), (r'\bBins:', 'Trash:'), (r'\bBins\b', 'Trash'),
     (r'\bA row about\b', 'A fight about'), (r'\bbig rows\b', 'big fights'), (r'\bWashing\b(?! machine| dishes| up)', 'Laundry'), (r'\bbaby’s washing\b', 'baby’s laundry'),
     (r'\bdiapers, washing,', 'diapers, laundry,'), (r'\bhalls and shared flats\b', 'dorms and shared apartments'), (r'\bhalls and flats\b', 'dorms and apartments'),
@@ -338,12 +349,23 @@ def _us(t):
 _SKIP = re.compile(r'<(script|style|code|pre)\b.*?</\1>|<span class="pe-ref-[atv]">.*?</span>|<cite\b.*?</cite>|<p class="sn-src">.*?</p>', re.S)
 
 
+def _title_punct(g):
+    """a published title keeps its spelling; its quotation marks follow US style (double quotes, period inside)"""
+    g = re.sub(r'(?<![“\w])‘([^’“”]{2,120})’(?!\w)', r'“\1”', g)
+    g = re.sub(r'\s*—\s*', ': ', g)  # no dashes as dashes, even in a title: a colon does the same job
+    g = re.sub(r'(?<=[a-z])–(?=[a-z])', '-', g)
+    return _quotes(g)
+
+
 def us_html(h):
     """American English for the text of an HTML fragment; tags, attributes, scripts, styles and reference lists are left alone"""
     out, last = [], 0
     for m in _SKIP.finditer(h):
         out.append(_us_text_nodes(h[last:m.start()]))
-        out.append(m.group(0))
+        g = m.group(0)
+        if g.startswith('<span class="pe-ref-t">'):
+            g = _title_punct(g)  # spelling as published; US quote punctuation only
+        out.append(g)
         last = m.end()
     out.append(_us_text_nodes(h[last:]))
     return ''.join(out)

@@ -79,7 +79,7 @@
         "fits": "For many people with ADHD, sensing time passing is genuinely harder. Researchers describe it as part of how attention and self-control work. It says nothing about how much someone cares.",
         "say": "“I misjudge time. You matter to me, and I’m working on it.”",
         "step": "Set the alarm for leaving, not arriving, and text “Leaving now” as you go. Whoever’s waiting can agree a time to start without you.",
-        "looks": "Twenty past, and here they are at the door with their coat half on and a breathless apology, for the third time this month. They plainly care, and they are also plainly late.",
+        "looks": "Twenty after, and here they are at the door with their coat half on and a breathless apology, for the third time this month. They plainly care, and they are also plainly late.",
         "other": "Waiting tells the waiting person they matter less, whatever was meant. It costs them real time, sometimes a cold dinner or a missed film, and over months it wears down trust.",
         "chain": [
           "Some minds have two settings for time, “now” and “not now”",
@@ -277,7 +277,7 @@
       "disagree-later": {
         "say": "“I raised it afterward so it would be heard. I wasn’t going behind anyone’s back.”",
         "step": "Teams can offer both routes. “Say it now, or message me after.” Quiet disagreers can say “I’ve a different view, I’ll send it after.”",
-        "looks": "Nods all the way through the meeting. Then, by the lifts, quietly: “Between you and me, I don’t think it’ll work.”",
+        "looks": "Nods all the way through the meeting. Then, by the elevators, quietly: “Between you and me, I don’t think it’ll work.”",
         "other": "If you value saying things openly, it can look two-faced, and the meeting itself starts to feel like a bit of a performance.",
         "chain": [
           "Disagreeing in public can make people dig in",
@@ -308,7 +308,7 @@
       },
       "quiet-in-fight": {
         "step": "Say a return time. “I need twenty minutes. I’ll come back at eight.” Then come back at eight.",
-        "looks": "Halfway through the row he stops answering and looks at the floor, and somehow his saying nothing at all makes it worse.",
+        "looks": "Halfway through the fight he stops answering and looks at the floor, and somehow his saying nothing at all makes it worse.",
         "other": "Silence can feel like being shut out, or punished. If you’re someone who needs to settle things before you can calm down, it can be frightening.",
         "chain": [
           "A fast argument floods the body",
@@ -487,7 +487,7 @@
         ]
       },
       "info-dump": {
-        "looks": "You asked one question about the 1950s railway schedule. That was twenty minutes ago.",
+        "looks": "You asked one question about the 1950s train schedule. That was twenty minutes ago.",
         "an.0": "Showing someone around your community garden plot, bed by bed.",
         "other": "Twenty minutes into the train tracks schedule the listener is lost, slightly trapped and far too polite to say either.",
         "chain": [

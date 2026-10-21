@@ -1210,7 +1210,7 @@ def glossary_terms(text):
 GLOSS_OVERRIDE = {
     # printfix13: "load" means the shared work only; the personal score is the stress tank
     'battery': 'Your battery is how much energy you have left today. Full means you have room to spare; low means you’re running on empty. “How much are you carrying?” measures the other side of it, how full your stress tank is: a fuller tank means a lower battery.',
-    'workpaper': 'A page you fill in, on your own or with someone, about your own week or your own side. Every workpaper is free to print or to fill in on the website.',
+    'workpaper': 'A page you fill in, on your own or with someone, about your own week or your own side. Every workpaper is free to print or to fill out on the website.',
     'pressure': 'Pressure, in My weather today, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
 }
 # Words from the chapters (Part Three above all) that the site's glossary doesn't define: (id, word, definition,
@@ -1308,6 +1308,11 @@ def research_notes(here):
             r = dict(r, **{k: f[k] for k in ('authors', 'title', 'venue', 'url', 'doi', 'finding', 'year', 'year_label') if k in f})
         if not r.get('verified') or 'wikipedia.org' in (r.get('url') or ''):
             continue
+        # books-final9 (owner: no UK services in the books): the UK health service pages are not listed
+        if r['id'].startswith('nhs-') or (r.get('authors') or '').strip().startswith('NHS'):
+            continue
+        if 'Mental Health Services Administration' in (r.get('authors') or ''):
+            r = dict(r, authors='SAMHSA')
         r['finding'] = uk(re.sub(r'\s*Only the citation[^.]*\.[^.]*\.', '', r.get('finding', '')))
         chs = []
         for m in r.get('mentioned_on', []):

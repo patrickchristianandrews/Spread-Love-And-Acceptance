@@ -281,9 +281,9 @@ def download_html():
             bw_link = (' <a class="bk-dl-nomail" href="/book/print/%s" data-series="workbook-bw" download="%s"><span class="bk-dl-v">Black and white</span>'
                        '<span class="bk-dl-m" data-series-meta>%s</span></a>') % (esc(_file('workbook-bw', bw)), _save_name(w['title'] + ' Black and White'), _meta(bw))
         free.append(('<li class="bk-dl-book" id="workbook" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Workbook · no email needed</p>'
-                     '<h3>%s</h3><p class="bk-dl-book-line">Every workpaper in one PDF, on large pages, to print and fill in by hand. Each one is also free to fill in on screen.</p>'
+                     '<h3>%s</h3><p class="bk-dl-book-line">Every workpaper in one PDF, on large pages, to print and fill in by hand. Each one is also free to fill out on screen.</p>'
                      '<p class="bk-dl-book-links"><a class="bk-dl-nomail" href="/book/print/%s" data-series="%s" download="%s"><span class="bk-dl-v">Download the workbook (PDF)</span>'
-                     '<span class="bk-dl-m" data-series-meta>%s</span></a>%s <a class="bk-dl-read" href="/workpapers/fill/index.html">Fill them in online</a></p></div></li>') % (
+                     '<span class="bk-dl-m" data-series-meta>%s</span></a>%s <a class="bk-dl-read" href="/workpapers/fill/index.html">Fill them out online</a></p></div></li>') % (
             w['color'], cover_img(w['id'], '').replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), esc(w['title']), esc(_file(w['id'], m)), esc(w['id']),
             _save_name(w['title']), _meta(m), bw_link))
     try:

@@ -510,7 +510,7 @@ def book_docs(book, where):
     about = S.about_page(book, namer).replace('<section class="ps-about pe-only"', '<section class="ps-about"', 1)
     about = re.sub(r'<span class="ps-addr ps-about-u" data-full="([^"]+)">[^<]*</span>', r'<span class="ps-addr">\1</span>', about)
     about = swap(about, 'The code at the end of each chapter opens it on your phone.', 'The link at the end of each chapter opens it.', 'about page')
-    about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?”', r'it gives the book and the chapter, as in “\1”', about)
+    about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?([.,]?)”', r'it gives the book and the chapter, as in “\1\2”', about)
     if not n_:
         warn('about page: text to change not found: it gives the book, the chapter and the page')
     docs.append(Doc('about.xhtml', 'About this book, and how to use it', about))
@@ -577,7 +577,7 @@ def series_page(book):
               '<p class="ps-series-a">%s</p></li>') % (
             'is-this' if this else '', k, B.esc(b['title']), ' <em>(this book)</em>' if this else '', B.esc(b['line']), ' · '.join(links))
     s += ('</ol><p class="ps-series-note">All the books, in print and as ebooks: <a href="%s/book/#print-series">spreadloveandacceptance.com/book</a>. '
-          'The workbook is a print book only: its forms are made to be written in, and every one is free to print or fill in on the website.</p></section>') % SITE
+          'The workbook is a print book only: its forms are made to be written in, and every one is free to print or fill out on the website.</p></section>') % SITE
     return s
 
 

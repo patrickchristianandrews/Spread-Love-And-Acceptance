@@ -11,7 +11,7 @@
 <text x="46" y="215.32" font-size="19"><tspan x="46" dy="0">Guards: Will the home</tspan><tspan x="46" dy="24.32">keep running?</tspan></text>
 <text x="46" y="266.64" font-size="18" fill="#5A5346"><tspan x="46" dy="0">Good: flexible. Watch: it can</tspan><tspan x="46" dy="23.04">hide who always steps in.</tspan></text>
 <rect x="330" y="140.32" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
-<text x="342" y="165.32" font-size="17">Bins</text>
+<text x="342" y="165.32" font-size="17">Trash</text>
 <path d="M468 159.32 L473.6 164.92 L484 152.92" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="330" y="186.32" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
 <text x="342" y="211.32" font-size="17">Dentist</text>
@@ -25,7 +25,7 @@
 <text x="46" y="439" font-size="19">Guards: Can I rely on you?</text>
 <text x="46" y="466" font-size="18" fill="#5A5346"><tspan x="46" dy="0">Good: clear. Watch: it can</tspan><tspan x="46" dy="23.04">feel rigid in a hard week.</tspan></text>
 <rect x="330" y="339.68" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
-<text x="342" y="364.68" font-size="17">Bins · Sam</text>
+<text x="342" y="364.68" font-size="17">Trash · Sam</text>
 <path d="M468 358.67999999999995 L473.6 364.28 L484 352.28" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="330" y="385.68" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
 <text x="342" y="410.68" font-size="17">Dentist · Maya</text>
@@ -36,7 +36,7 @@
 <text x="28" y="543.04" font-size="21" font-weight="bold" fill="#7A5620">The agreement: look to the owner</text>
 <path d="M54 557.04 H512 V621.04 H54 L28 589.04 Z" fill="#F1E2C2" stroke="#7A5620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="54" cy="589.04" r="6" fill="#FCF9F1" stroke="#7A5620" stroke-width="2"/>
-<text x="74" y="584.04" font-size="20" font-weight="bold">Bins · owner: Sam</text>
+<text x="74" y="584.04" font-size="20" font-weight="bold">Trash · owner: Sam</text>
 <text x="74" y="609.04" font-size="18" font-style="italic" fill="#5A5346">second name: Alex, who notices and asks once</text>
 <text x="28" y="652.04" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Once a job has a named owner, judge it by whether</tspan><tspan x="28" dy="23.04">the owner did their part (swapping or asking ahead</tspan><tspan x="28" dy="23.04">counts), not by whether someone quietly covered.</tspan><tspan x="28" dy="23.04">Made-up examples.</tspan></text>
 </svg>

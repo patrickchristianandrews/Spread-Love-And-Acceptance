@@ -8,7 +8,7 @@
   'use strict';
 
   var tips = [
-    // ---------- everyday tips (every 5 coins)
+    // ---------- everyday tips (a small push)
     { id: 'setup', tier: 1, t: 'Fix the setup, not the person', b: 'When the same thing keeps going wrong, look at the setup before the person: who owns it, when it happens, and how anyone would know it’s done.', href: '/five-pillars.html#p2-h', label: 'The Five Pillars: fix the setup, not the person' },
     { id: 'state', tier: 1, t: 'Check your state first', b: 'Before a hard talk, ask yourself: am I hungry, tired or already wound up? If so, it’s a later talk, not a never talk. The same goes for them.', tool: 'weather', label: 'My weather today' },
     { id: 'pauseline', tier: 1, t: 'A pause needs a return time', b: 'If it’s getting heated, say when you’ll come back: “I need to stop. I’ll come back at eight.” A pause with a time is a promise, not a door shutting.', tool: 'pause', href: '/pursue-withdraw.html#plan-h', label: 'Make a pause plan' },
@@ -33,7 +33,7 @@
     { id: 'battery', tier: 1, t: 'Tired isn’t a character flaw', b: 'Snapping when you’re worn out says more about your battery than your heart. Give the other person the same allowance you’d want.', href: '/five-pillars.html#p3-h', label: 'The Five Pillars: read your state first' },
     { id: 'move', tier: 1, t: 'Move for a few minutes', b: 'A short walk, the stairs, shaking out your arms. Moving is one of the best-studied ways to ease stress, and it needs nothing you don’t have.', href: '/nervous-system.html#now', label: 'Calm your nervous system now' },
 
-    // ---------- deeper tips (every 25 coins, or 4 or more coins in one push)
+    // ---------- deeper tips (5 or more coins in one push)
     { id: 'pursue', tier: 2, t: 'Talk now, or need space? Both are real', b: 'If one of you wants to talk now and the other needs space, neither is wrong. On a calm day, agree how a pause works and when you’ll come back.', href: '/pursue-withdraw.html#both', label: 'One of you wants to talk now, the other needs space' },
     { id: 'kit', tier: 2, t: 'Make your calm plan on a calm day', b: 'Write down your early signs, two things that settle you, and your pause line, while you’re calm. In the moment, you only have to follow it.', tool: 'calmkit', label: 'Calm-down plan' },
     { id: 'comesback', tier: 2, t: 'The argument that keeps coming back', b: 'If the same fight returns every month, the setup is probably feeding it. Look back once a month and change one thing about how it’s set up.', tool: 'keepscoming', label: 'What keeps coming back?' },
@@ -49,7 +49,7 @@
     { id: 'whole', tier: 2, t: 'See the whole load together', b: 'Before deciding who should do more, put everything both of you do on one page. It’s hard to be fair about work you can’t see.', tool: 'lemon-quick', label: 'Who does what at home' },
     { id: 'restate', tier: 2, t: 'Say their side first', b: 'Put their point into your own words until they say “yes, that’s it”. Then make yours. People listen better once they feel heard.', tool: 'perspective', label: 'Rewind the talk: their side' },
 
-    // ---------- rare tips (every 100 coins, or 7 or more coins in one push)
+    // ---------- rare tips (9 or more coins in one push)
     { id: 'incentives', tier: 3, t: 'Notice the quiet incentives', b: 'Things drift toward whatever the setup quietly rewards. If whoever notices a job always ends up doing it, noticing gets punished. Change the setup, not the person.', href: '/five-pillars.html#p5-h', label: 'The Five Pillars: notice the quiet incentives' },
     { id: 'columns', tier: 3, t: 'Both columns on one page', b: 'Some work is done but never written down: the remembering, the smoothing-over. The fix isn’t a bill. It’s getting both people’s work onto one page, in the same units.', href: '/book/preface-in-depth.html#unbilled-debt', label: 'The book: unbilled debt' },
     { id: 'window', tier: 3, t: 'Know your window', b: 'Everyone has a range where they can think and listen. Outside it, the best talk is a later talk. Learn the signs that you’re leaving yours.', href: '/nervous-system.html#window', label: 'The window of tolerance' },

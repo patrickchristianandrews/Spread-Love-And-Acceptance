@@ -22,9 +22,9 @@
 <link rel="stylesheet" href="/assets/css/coin-pusher.css">
 <style>
 /* game19: celebration banner, combo counter, Skip the show, the trophy (motion: transforms and opacity only; calm turns it off) */
-.cp-banner{ position:absolute; left:50%; top:52%; z-index:4; display:flex; align-items:center; gap:.7rem; max-width:calc(100% - 24px); padding:.6rem 1.1rem .6rem .7rem; border-radius:20px;
-  background:rgba(43,22,26,.9); color:#FFF3DC; border:2px solid #E9C46F; box-shadow:0 10px 30px rgba(40,20,10,.35); transform:translate(-50%, -50%) scale(.6); opacity:0; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .25s; pointer-events:none; }
-.cp-banner.is-up{ transform:translate(-50%, -50%) scale(1); opacity:1; }
+.cp-banner{ position:absolute; left:0; right:0; top:60%; z-index:4; display:flex; align-items:center; gap:.7rem; width:max-content; max-width:calc(100% - 24px); margin:0 auto; padding:.6rem 1.1rem .6rem .7rem; border-radius:20px;
+  background:rgba(43,22,26,.9); color:#FFF3DC; border:2px solid #E9C46F; box-shadow:0 10px 30px rgba(40,20,10,.35); transform:translateY(-50%) scale(.6); opacity:0; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .25s; pointer-events:none; }
+.cp-banner.is-up{ transform:translateY(-50%) scale(1); opacity:1; }
 .cp-banner[hidden]{ display:none; }
 .cp-banner img{ width:64px; height:64px; flex:0 0 auto; }
 .cp-banner img[hidden]{ display:none; }
@@ -37,8 +37,8 @@
 .cp-banner.t4 .cp-banner-t, .cp-banner.t5 .cp-banner-t{ font-size:1.55rem; }
 .cp-banner.t5{ border:3px solid transparent; background:linear-gradient(rgba(43,22,26,.92), rgba(43,22,26,.92)) padding-box, linear-gradient(90deg, #E9C46F, #F2A98A, #B9A2D9, #8EC5EA, #7DB07A) border-box; box-shadow:0 0 50px rgba(255,210,140,.6); }
 .cp-banner.t4.is-up:not(.is-calm), .cp-banner.t5.is-up:not(.is-calm){ animation:cp-bob 1.2s ease-in-out infinite alternate; }
-@keyframes cp-bob{ to{ transform:translate(-50%, -54%) scale(1.04) rotate(-1deg); } }
-.cp-banner.is-calm{ transition:none; transform:translate(-50%, -50%); }
+@keyframes cp-bob{ to{ transform:translateY(-54%) scale(1.04) rotate(-1deg); } }
+.cp-banner.is-calm{ transition:none; transform:translateY(-50%); }
 .cp-combo{ position:absolute; left:50%; bottom:12px; z-index:4; margin:0; padding:.25rem .9rem; border-radius:999px; transform:translateX(-50%); background:rgba(43,22,26,.85); color:#FFE7B0; font:700 1.1rem "Fraunces", Georgia, serif; pointer-events:none; white-space:nowrap; }
 .cp-combo[hidden]{ display:none; }
 .cp-combo[data-lvl="2"]{ color:#2A1B14; background:#E9C46F; }

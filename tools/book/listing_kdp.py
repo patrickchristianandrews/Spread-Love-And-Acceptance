@@ -534,6 +534,8 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
         w.writeheader()
         w.writerows(rows)
     for bid, d in L.items():
+        if not any(i['id'] == bid for i in items):
+            continue  # books-final9: the box set waits for the second wave
         for k, n, bad in kw_ok(next(i for i in items if i['id'] == bid), d):
             if n > 50 or bad:
                 print('listing: WARNING keyword', bid, k, n, bad)

@@ -276,7 +276,8 @@
   function celebrating() { return Date.now() < celUntil || finaleOn; }
   function friendTier(n) { return n >= D.chars.length ? 5 : n >= 16 ? 4 : n >= 11 ? 3 : n >= 6 ? 2 : 1; }
   function later(f, ms) { celTimers.push(setTimeout(f, ms)); }
-  function queueCel(n, c, dry) { celQ.push([n, c, dry]); if (!celebrating()) nextCel(); }
+  // the finale goes ahead of any smaller celebrations still waiting (they would only be in its way)
+  function queueCel(n, c, dry) { if (friendTier(n) === 5) celQ = []; celQ.push([n, c, dry]); if (!celebrating()) nextCel(); }
   function nextCel() { var q = celQ.shift(); if (!q) return; if (friendTier(q[0]) === 5) finale(q[2]); else celebrateFriend(q[0], q[1]); }
   function banner(tier, kicker, title, c, secs) {
     var b = $('#cp-banner'); if (!b) return;

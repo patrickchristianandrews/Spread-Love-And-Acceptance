@@ -483,7 +483,7 @@ def copyright_page(book, workbook=False, bw=False):
           'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>')
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
-        s += ('<p>The research the chapters mention is listed in short at the back. The full list, with what each study found and links, is at '
+        s += ('<p>The research the chapters mention is listed briefly at the back. The full list, with what each study found and links, is at '
               '<a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>') % SITE
     s += '<p>Set in Lora, Fraunces and IBM Plex Mono.</p></div></section>'
     return s
@@ -499,7 +499,7 @@ def meet_page(book, found=()):
     tl = next((hints.TL[k] for (kind, k) in found if kind == 'tool' and k in hints.TL), None)
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
     s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s.” '
-          'Every workpaper is free to print or to fill in on the website, and the book gives a code to scan for each one. '
+          'Every workpaper is free to print or to fill out on the website, and the book gives a code to scan for each one. '
           '<em>%s</em> has them all in one place, on big pages.</p>'
           '<p>%s <strong>A tool</strong> is a helper you use on the website%s. You use it and it gives you something back.</p>'
           '<p class="ps-meet-note">Workpapers and tools are kept in separate lists. Both are free and need no account, and what you '
@@ -569,13 +569,14 @@ def about_page(book, namer):
             esc(lab), esc(B.SHORT[slug]), esc(B.short_address(B.href(slug))), esc(tail))
     s += ('<table class="ps-about-t"><thead><tr><th scope="col">Here</th><th scope="col">About</th><th scope="col">Free online at spreadloveandacceptance.com/book</th></tr></thead>'
           '<tbody>%s</tbody></table>') % rows
-    others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
-                       for b in books() if b is not book)
+    # books-final9: one plain sentence per book (no semicolon list)
+    others = ' '.join('%s, <em>%s</em>, is %s.' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
+                      for b in books() if b is not book)
     # a real example of a reference to another book: its first chapter and the page it starts on
     eb = next(b for b in books() if b['n'] == (2 if book['n'] != 2 else 1))
     epage = namer.other_page(eb['chapters'][0])
     example = 'Book %d, Chapter 1%s' % (eb['n'], (' (page %s)' % epage) if epage else '')
-    s += '<p>%s %s. %s.</p>' % (ab['series_lead'], others, ab['refs'].replace('{example}', example))
+    s += '<p>%s %s %s.</p>' % (ab['series_lead'], others, ab['refs'].replace('{example}', example))
     s += '<p class="ps-about-h">Five big ideas</p><p class="ps-about-small">%s</p><ul class="ps-about-ideas">%s</ul>' % (
         ab['ideas_lead'], ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), d) for t, d in ab['ideas']))
     s += '<p class="ps-about-small">%s %s</p></section>' % (ab['program'], esc(MADE_UP))
@@ -605,7 +606,7 @@ def research_short(book, here):
     n = sum(len(v) for v in notes.values())
     s = '<section class="pe-back ps-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (
         book['color'], book['tint'], mark('notes'))
-    s += ('<div class="ps-online-box">%s<p>The %d studies and books these chapters mention, in short. Each one was looked up and checked. The full list, '
+    s += ('<div class="ps-online-box">%s<p>The %d studies and books these chapters mention, briefly. Each one was looked up and checked. The full list, '
           'with what each study found, how strong the finding is and where to read it, is free online: '
           '<span class="ps-addr">spreadloveandacceptance.com/research</span>.</p></div>') % (qr('/research.html'), n)
     for slug in book['chapters']:
@@ -827,7 +828,7 @@ SHOWCASE = [
     ('ask', 'Ask Professor Puddles', 'Tell a cheerful raindrop professor what’s going on and get kind next steps and words to say. His answers are written in advance, never made up on the spot.', '/ask.html', 'puddles'),
     ('chat', 'The Chat analyzer', 'Check how a text may land before you send it, read one you got, or look at a whole chat to see where it turned.', '/signal-translator.html', 'chat'),
     ('journeys', 'Guided journeys', 'Three to six small steps for what’s going on, from the same argument again to a new blended family.', '/journeys.html', 'journey'),
-    ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill in on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
+    ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill out on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
     ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
     ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
@@ -1186,7 +1187,7 @@ def build_workbook(where, bw=False):
             s += '<p class="wb-note">%s</p>' % esc(WB_NOTE[key])
         if key in WB_EXPLAINED:
             s += '<p class="wb-read"><strong>How to read your answers.</strong> %s</p>' % esc(WB_EXPLAINED[key][1])
-        s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> %s '
+        s += ('<div class="ps-online-box">%s<p><strong>Fill it out on screen, free.</strong> %s '
               '<span class="ps-addr">%s</span></p></div>') % (
             qr(fill), 'The online version does the sums for you and keeps what you type on your own device.' if key in WB_SUMS
             else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(B.short_address(fill)))
@@ -1228,7 +1229,7 @@ def build_workbook(where, bw=False):
               '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
               '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
               'The next page is a planner for it. Most people miss a week somewhere. That’s built in.</p></section>') % mark('wb-how')
-    weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', '—'),
+    weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', 'None yet'),
              ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what · WP-13 daily check-in'),
              ('Week 2', 'Give every job one owner.', 'WP-03 One owner per job'),
              ('Week 3', 'Notice how much each of you is carrying.', 'WP-02 How much are you carrying?'),

@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 640" width="540" height="640" role="img" aria-labelledby="fig-u4-layers-t fig-u4-layers-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-u4-layers-t">What is said, what is meant, what is heard</title>
-<desc id="fig-u4-layers-d">Three rows. What was said: &quot;The bin is full.&quot; What was meant: just that, the bin is full. What was heard: &quot;And you should have emptied it.&quot; Every message carries content and also something about the relationship, and the listener may hear a layer the speaker never sent. The fix: check, don’t guess. &quot;Did you mean the bin, or me?&quot;</desc>
+<desc id="fig-u4-layers-d">Three rows. What was said: &quot;The trash is full.&quot; What was meant: just that, the trash is full. What was heard: &quot;And you should have emptied it.&quot; Every message carries content and also something about the relationship, and the listener may hear a layer the speaker never sent. The fix: check, don’t guess. &quot;Did you mean the trash, or me?&quot;</desc>
 
 <rect x="1" y="1" width="538" height="638" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Every message says two things</text>
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">The words, and what they seem to say about us.</text>
 <text x="28" y="128" font-size="20" font-weight="bold" fill="#2F5F8A">Said</text>
 <path d="M136 100.0 H496 Q512 100.0 512 116.0 V140.0 Q512 156.0 496 156.0 H166 L150 172.0 L146 156.0 H136 Q120 156.0 120 140.0 V116.0 Q120 100.0 136 100.0 Z" fill="#FFFFFF" stroke="#2F5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="136" y="135" font-size="19" font-weight="bold">“The bin is full.”</text>
+<text x="136" y="135" font-size="19" font-weight="bold">“The trash is full.”</text>
 <text x="124" y="194" font-size="17" font-style="italic" fill="#5A5346">the content</text>
 <text x="28" y="244" font-size="20" font-weight="bold" fill="#3E6B4C">Meant</text>
 <path d="M136 216.0 H496 Q512 216.0 512 232.0 V256.0 Q512 272.0 496 272.0 H166 L150 288.0 L146 272.0 H136 Q120 272.0 120 256.0 V232.0 Q120 216.0 136 216.0 Z" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="136" y="251" font-size="19" font-style="italic">Just that. The bin is full.</text>
+<text x="136" y="251" font-size="19" font-style="italic">Just that. The trash is full.</text>
 <text x="124" y="310" font-size="17" font-style="italic" fill="#5A5346">what the speaker sent</text>
 <text x="28" y="360" font-size="20" font-weight="bold" fill="#8E3B47">Heard</text>
 <path d="M136 332.0 H496 Q512 332.0 512 348.0 V372.0 Q512 388.0 496 388.0 H166 L150 404.0 L146 388.0 H136 Q120 388.0 120 372.0 V348.0 Q120 332.0 136 332.0 Z" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -19,6 +19,6 @@
 <text x="124" y="426" font-size="17" font-style="italic" fill="#5A5346">a relationship layer nobody sent</text>
 <rect x="28" y="450" width="484" height="92" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
 <text x="46" y="482" font-size="21" font-weight="bold" fill="#3E6B4C">Check, don’t guess.</text>
-<text x="46" y="512" font-size="19" font-style="italic">“Did you mean the bin, or me?”</text>
+<text x="46" y="512" font-size="19" font-style="italic">“Did you mean the trash, or me?”</text>
 <text x="28" y="567" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Content and relationship levels: Watzlawick, Beavin</tspan><tspan x="28" dy="23.04">and Jackson (1967), a framework more than a tested</tspan><tspan x="28" dy="23.04">law. Made-up example.</tspan></text>
 </svg>

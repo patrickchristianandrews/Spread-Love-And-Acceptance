@@ -1518,9 +1518,9 @@
     paused = true; say('Derby done: ' + hr + ' home run' + s + ' out of 10, ' + me.supers + ' super hit' + (me.supers === 1 ? '' : 's') + ', ' + me.pts + ' points.');
     var stats = [
       ['Home runs', hr + ' of 10'], ['Super hits', String(me.supers)], ['Longest', me.best ? me.best + ' ft' : 'none yet'],
-      ['Best streak', String(me.bestStreak)], ['Trick bats', me.tricksUsed + ' of 3 used' + (me.trickHRs ? ', ' + me.trickHRs + ' home run' + (me.trickHRs === 1 ? '' : 's') : '')], ['Points', me.pts.toLocaleString('en-US')]
+      ['Best streak', String(me.bestStreak)], ['Trick bats', me.tricksUsed + ' of 3 used' + (me.trickHRs ? ', ' + me.trickHRs + ' HR' : '')], ['Points', me.pts.toLocaleString('en-US')]
     ];
-    overlay(title, hr ? 'Every swing counts. ' + nextLesson() : 'No home runs this time, and every swing was good practice. ' + nextLesson(), '↻ Play again', function () { derbyAgain(false); },
+    overlay(title, hr ? (pb ? 'Kept on this device as your best.' : 'Every swing counts.') : 'No home runs this time, and every swing was good practice.', '↻ Play again', function () { derbyAgain(false); },
       'Best with ' + me.P.name + ': ' + (+S.best[k('derby')] || 0) + ' home runs, ' + (+S.best[k('derby-ft')] || 0) + ' ft, ' + (+S.best[k('derby-pts')] || 0).toLocaleString('en-US') + ' points' + (gift ? ' · ' + gift : ''),
       { label: '⇄ Swap roles: ' + PUPS[me.pit].name + ' bats', fn: function () { derbyAgain(true); } }, stats);
   };
@@ -1639,9 +1639,9 @@
     }
     // confetti and bananas
     me.conf.forEach(function (c) { g.save(); g.translate(c.x, c.y); g.rotate(c.r); g.fillStyle = c.c; g.fillRect(-3, -1.5, 6, 3); g.restore(); });
-    me.nanas.forEach(function (n) { banana(g, n.x, n.y, 9 * n.s, n.r); });
+    me.nanas.forEach(function (n) { banana(g, n.x, n.y, 13 * n.s, n.r); });
     if (me.sup) me.drawSuperTitle(t);
-    me.drawCallout(); me.drawBubble(); me.drawFeedback(); me.drawMeter(); me.drawHint();
+    me.drawCallout(); if (!(me.sup && me.calm)) me.drawBubble(); me.drawFeedback(); me.drawMeter(); me.drawHint();
     if (me.flash > 0) { g.fillStyle = 'rgba(255,250,235,' + Math.min(0.5, me.flash) + ')'; g.fillRect(-10, -10, DW + 20, DH + 20); }
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
   };
@@ -1691,7 +1691,7 @@
   // after a swing: a little bar that shows how early or late it was
   Derby.prototype.drawMeter = function () {
     var me = this, m = me.meter; if (!m) return;
-    var a = Math.max(0, Math.min(1, (2.4 - m.t) / 0.4)), cx = DW / 2, y = 100, half = 150, sc = half / m.W[2];
+    var a = Math.max(0, Math.min(1, (2.4 - m.t) / 0.4)), cx = DW / 2, y = 128, half = 150, sc = half / m.W[2];
     g.save(); g.globalAlpha = a;
     g.fillStyle = 'rgba(20,16,44,.86)'; wallPath(g, cx - half - 34, y - 14, half * 2 + 68, 38, 12); g.fill();
     g.fillStyle = 'rgba(207,195,240,.35)'; g.fillRect(cx - half, y - 4, half * 2, 8);
@@ -1804,8 +1804,8 @@
     if (k === 'rocket') { g.fillStyle = '#FFB38A'; g.beginPath(); g.moveTo(-2, -3); g.lineTo(-11 - Math.random() * 4, 0); g.lineTo(-2, 3); g.closePath(); g.fill(); }
   };
   Derby.prototype.drawCallout = function () {
-    var c = this.callout; if (!c) return;
-    var life = c.sup ? 3.2 : 2.4, a = Math.max(0, Math.min(1, (life - c.t) / 0.4)), pop = this.calm ? 1 : 1 + 0.45 * Math.max(0, 1 - c.t / 0.22);
+    var c = this.callout; if (!c || c.sup) return;   // a super hit shows its distance under its own title
+    var life = 2.4, a = Math.max(0, Math.min(1, (life - c.t) / 0.4)), pop = this.calm ? 1 : 1 + 0.45 * Math.max(0, 1 - c.t / 0.22);
     g.save(); g.globalAlpha = a; g.translate(DW / 2, c.sup ? 250 : 224); g.scale(pop, pop); g.textAlign = 'center';
     g.font = '700 ' + (c.hr ? 42 : 30) + 'px Fraunces, Georgia, serif'; g.lineWidth = 6; g.strokeStyle = 'rgba(20,16,44,.85)'; g.strokeText(c.big, 0, 0);
     g.fillStyle = c.sup ? '#FF8FA3' : c.hr ? '#FFE08A' : '#FFF6E0'; g.fillText(c.big, 0, 0);
@@ -1840,6 +1840,8 @@
     g.save(); g.globalAlpha = a; g.translate(DW / 2, 166); g.rotate(Math.sin(s.t * 3) * 0.04); g.scale(pop, pop); g.textAlign = 'center';
     g.font = '700 34px Fraunces, Georgia, serif'; g.lineWidth = 7; g.strokeStyle = 'rgba(20,16,44,.9)'; g.strokeText(name, 0, 0);
     var gr = g.createLinearGradient(-120, 0, 120, 0); gr.addColorStop(0, '#FFE08A'); gr.addColorStop(0.5, '#FF8FA3'); gr.addColorStop(1, '#8EC5FF'); g.fillStyle = gr; g.fillText(name, 0, 0);
+    var sub = 'Super hit! ' + (me.hitB ? me.hitB.dist + ' ft' : '');
+    g.font = '700 16px Lora, Georgia, serif'; g.lineWidth = 4; g.strokeText(sub, 0, 26); g.fillStyle = '#FFF6E0'; g.fillText(sub, 0, 26);
     g.restore(); g.textAlign = 'start';
   };
   // the friends from around the site dance on the outfield grass (or dance across it in a conga line)
@@ -1847,14 +1849,14 @@
     var list = critters || [], n = list.length, me = this, st = me.sup.t;
     var enter = Math.min(1, st / 0.5);
     list.forEach(function (k, i) {
-      var x, y, rot, sz = 34;
-      if (v === 'conga') { x = ((st * 80 + i * 40) % (DW + 120)) - 60; y = 252 + Math.sin(st * 6 + i) * 5; rot = Math.sin(st * 8 + i) * 0.2; }
-      else { x = 40 + i * ((DW - 80) / Math.max(1, n - 1)); y = 248 + (i % 2) * 18 + (1 - enter) * 40 - Math.abs(Math.sin(t / 150 + i)) * 12; rot = Math.sin(t / 200 + i * 1.3) * 0.28; }
+      var x, y, rot, sz = 46;
+      if (v === 'conga') { x = ((st * 80 + i * 48) % (DW + 160)) - 60; y = 240 + Math.sin(st * 6 + i) * 5; rot = Math.sin(st * 8 + i) * 0.2; }
+      else { x = 30 + i * ((DW - 60) / Math.max(1, n - 1)); y = 232 + (i % 2) * 24 + (1 - enter) * 40 - Math.abs(Math.sin(t / 150 + i)) * 12; rot = Math.sin(t / 200 + i * 1.3) * 0.28; }
       g.save(); g.globalAlpha = enter; g.translate(x, y); g.rotate(rot); g.scale(1 + Math.sin(t / 120 + i) * 0.06, 1 - Math.sin(t / 120 + i) * 0.06);
       g.drawImage(k, -sz / 2, -sz / 2, sz, sz); g.restore();
     });
     // and the two pups join the conga at the end of the line
-    if (v === 'conga') { var cx0 = ((st * 80 + n * 40) % (DW + 120)) - 60; drawPup(g, 'tidbit', cx0, 272, 0.6, 1, st * 14, true, t); drawPup(g, 'sugarfoot', cx0 + 40 > DW + 60 ? cx0 - 520 : cx0 + 40, 272, 0.6, 1, st * 14 + 1, true, t); }
+    if (v === 'conga') { var span = DW + 160, cx0 = ((st * 80 + n * 48) % span) - 60, cx1 = ((st * 80 + (n + 1) * 48) % span) - 60; drawPup(g, 'tidbit', cx0, 266, 0.7, 1, st * 14, true, t); drawPup(g, 'sugarfoot', cx1, 266, 0.7, 1, st * 14 + 1, true, t); }
   };
   // Zoomies: both pups race around the bases
   Derby.prototype.drawZoomies = function (t) {
@@ -1869,15 +1871,16 @@
   Derby.prototype.drawSky = function (v, t) {
     var st = this.sup.t;
     if (v === 'moon') {
-      var my = lerp(130, 58, Math.min(1, st / 1.2)), mx = 352;
-      g.fillStyle = 'rgba(255,246,224,.18)'; g.beginPath(); g.arc(mx, my, 44, 0, 7); g.fill();
-      g.fillStyle = '#FFF3C4'; g.beginPath(); g.arc(mx, my, 32, 0, 7); g.fill();
-      g.fillStyle = 'rgba(200,180,120,.35)'; g.beginPath(); g.arc(mx - 10, my + 8, 6, 0, 7); g.arc(mx + 12, my - 10, 4, 0, 7); g.fill();
+      // the moon rises behind the stands at the right, winks once, and the stars twinkle slowly
+      var my = lerp(150, 84, Math.min(1, st / 1.2)), mx = 396;
+      g.fillStyle = 'rgba(255,246,224,.18)'; g.beginPath(); g.arc(mx, my, 40, 0, 7); g.fill();
+      g.fillStyle = '#FFF3C4'; g.beginPath(); g.arc(mx, my, 28, 0, 7); g.fill();
+      g.fillStyle = 'rgba(200,180,120,.35)'; g.beginPath(); g.arc(mx - 10, my + 8, 5, 0, 7); g.arc(mx + 11, my - 9, 4, 0, 7); g.fill();
       var wink = st > 1.6 && st < 2.1;
       g.strokeStyle = '#5A4A2A'; g.fillStyle = '#5A4A2A'; g.lineWidth = 2;
-      g.beginPath(); g.arc(mx - 9, my - 4, 2.6, 0, 7); g.fill();
-      if (wink) { g.beginPath(); g.moveTo(mx + 6, my - 4); g.lineTo(mx + 12, my - 4); g.stroke(); } else { g.beginPath(); g.arc(mx + 9, my - 4, 2.6, 0, 7); g.fill(); }
-      g.beginPath(); g.arc(mx, my + 6, 8, 0.2 * Math.PI, 0.8 * Math.PI); g.stroke();
+      g.beginPath(); g.arc(mx - 8, my - 4, 2.4, 0, 7); g.fill();
+      if (wink) { g.beginPath(); g.moveTo(mx + 5, my - 4); g.lineTo(mx + 11, my - 4); g.stroke(); } else { g.beginPath(); g.arc(mx + 8, my - 4, 2.4, 0, 7); g.fill(); }
+      g.beginPath(); g.arc(mx, my + 5, 7, 0.2 * Math.PI, 0.8 * Math.PI); g.stroke();
       for (var i = 0; i < 14; i++) { g.globalAlpha = 0.4 + 0.4 * Math.sin(st * 2.4 + i); star(g, (i * 71) % DW + 10, 14 + (i * 29) % 70, 3, '#FFF6E0'); } g.globalAlpha = 1;
     } else {   // a disco ball and slow, soft beams (they sweep; they never blink)
       var bx = DW / 2, by = lerp(-20, 44, Math.min(1, st / 0.8));
@@ -1940,7 +1943,7 @@
   var ISM = [
     { id: 'chase', title: 'The chase', dur: 8, still: 5.6 },
     { id: 'bone1', title: 'A bone appears', dur: 7.5, still: 4.6 },
-    { id: 'snag', title: 'The snag', dur: 8.5, still: 4.4 },
+    { id: 'snag', title: 'The snag', dur: 8.5, still: 6.6 },
     { id: 'bone2', title: 'Tug of war', dur: 8, still: 3.2 },
     { id: 'switch', title: 'Switcheroo', dur: 7.5, still: 5.2 },
     { id: 'bone3', title: 'The biggest bone', dur: 9, still: 6.5 }
@@ -2009,9 +2012,9 @@
   // a pup at (x, y) on the ground: running (dir +1 right, -1 left), sitting, wiggling or lying
   function ismPup(who, x, y, s, face, t, pose, wag, tilt) { drawPup(g, who, x, y, s, face, t * 14, pose === 'run', t * 1000, pose, wag, tilt); }
   function ismDraw() {
-    var W = LW, H = LH, sc = ism.sc, t = ism.t, gy = Math.round(H * 0.66), k = Math.min(W, H) / 440, ps = 1.05 * k;
+    var W = LW, H = LH, sc = ism.sc, t = ism.t, gy = Math.round(H * 0.64), k = Math.min(W, H) / 440 * 1.3, ps = 1.05 * k;
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
-    var bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#141033'); bg.addColorStop(0.66, '#2C2660'); bg.addColorStop(0.66, '#3E7D4E'); bg.addColorStop(1, '#2F6B3E');
+    var bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#141033'); bg.addColorStop(0.64, '#2C2660'); bg.addColorStop(0.64, '#3E7D4E'); bg.addColorStop(1, '#2F6B3E');
     g.fillStyle = bg; g.fillRect(0, 0, W, H);
     g.fillStyle = 'rgba(255,246,224,.55)'; for (var i = 0; i < 24; i++) g.fillRect((i * 97) % W, 10 + (i * 53) % Math.max(20, gy - 60), 1.6, 1.6);
     // a soft spotlight on the stage
@@ -2035,18 +2038,17 @@
       g.fillStyle = '#8B5E3C'; g.fillRect(post - 4 * k, gy - 48 * k, 8 * k, 48 * k); g.fillStyle = '#A8764C'; g.fillRect(post - 7 * k, gy - 52 * k, 14 * k, 6 * k);
       var cx = t < 2.2 ? lerp(X(0), post - 18 * k, t / 2.2) : t < 3.2 ? post - 18 * k + (t - 2.2) * 12 * k : t < 5 ? post - 6 * k : lerp(post - 6 * k, X(1.1), (t - 5) / 2.2);
       if (t < 2.2) ismCloud(cx + 90 * k, gy - 22 * k, 1.4 * k, '#C9A8E0', false, t, 1);
-      var tornNow = t >= 3.2;
+      var tornNow = t >= 3.2;   // after the snag only a stub of the cape is left (then, from the next scene on, a heart patch)
       if (t < 3.2) ismCape('tidbit', cx, gy, ps, 1, t, false, false);
       else if (t < 5) { g.fillStyle = '#E0525F'; g.beginPath(); g.moveTo(post, gy - 36 * k); g.lineTo(post - 18 * k, gy - 30 * k); g.lineTo(post - 12 * k, gy - 22 * k); g.closePath(); g.fill(); }
       ismPup('tidbit', cx, gy, ps, t > 3.2 && t < 5 ? -1 : 1, t, t < 3.2 || t > 5 ? 'run' : 'sit');
-      if (tornNow && t < 5) ismCape('tidbit', cx, gy, ps, -1, t, true, false);
+      if (tornNow && t > 5) ismCape('tidbit', cx, gy, ps, 1, t, true, false);
       if (t > 4.6) { var sfx = lerp(X(-0.1), post - 40 * k, Math.min(1, (t - 4.6) / 1.4)); ismPup('sugarfoot', sfx, gy, ps, 1, t, t < 6 ? 'run' : 'wiggle'); if (t > 6.2) heart(g, sfx + 12 * k, gy - 60 * k - (t - 6.2) * 10 * k, 7 * k, '#FFE08A'); }
     } else if (id === 'bone2') {
       var mid = W / 2, pull = t < 4.5 ? Math.sin(t * 3) * 14 * k : 0, fall = t > 4.5 ? Math.min(1, (t - 4.5) / 0.5) : 0;
       if (t < 4.5) {
         ismBone(mid + pull, gy - 30 * k, 22 * k, 0);
         ismPup('sugarfoot', mid - 50 * k + pull, gy, ps, 1, t, 'bow'); ismPup('tidbit', mid + 50 * k + pull, gy, ps, -1, t, 'bow');
-        if (patched) ismCape('tidbit', mid + 50 * k + pull, gy, ps, -1, t, false, true);
       } else {
         var by = gy - 30 * k - Math.sin(Math.min(1, (t - 4.5) / 1.4) * Math.PI) * 90 * k;
         ismBone(mid, t < 5.9 ? by : gy - 8 * k, 22 * k, (t - 4.5) * 5 * (t < 5.9 ? 1 : 0));
@@ -2055,8 +2057,8 @@
         if (t > 6.2) { g.fillStyle = '#FFF6E0'; g.font = '700 ' + Math.round(22 * k) + 'px Fraunces, Georgia, serif'; g.textAlign = 'center'; g.fillText('!', mid - 80 * k, gy - 70 * k); g.fillText('!', mid + 80 * k, gy - 70 * k); g.textAlign = 'start'; }
       }
     } else if (id === 'switch') {
-      if (t < 3.4) { var a = 1 - t / 3.4; ismPup('tidbit', X(a), gy, ps, -1, t, 'run'); if (patched) ismCape('tidbit', X(a), gy, ps, -1, t, false, true); ismPup('sugarfoot', X(a) + 70 * k, gy, ps, -1, t, 'run'); ismBall(X(a) - 8 * k, gy - 50 * k - Math.abs(Math.sin(t * 6)) * 20 * k, k); }
-      else if (t > 3.8) { var b2 = (t - 3.8) / 3.7; ismPup('sugarfoot', X(b2) + 40 * k, gy, ps, 1, t, 'run'); ismPup('tidbit', X(b2) - 30 * k, gy, ps, 1, t, 'run'); if (patched) ismCape('tidbit', X(b2) - 30 * k, gy, ps, 1, t, false, true); ismBall(X(b2) + 60 * k, gy - 50 * k - Math.abs(Math.sin(t * 6)) * 20 * k, k); }
+      if (t < 3.4) { var a = 1 - t / 3.4; if (patched) ismCape('tidbit', X(a), gy, ps, -1, t, false, true); ismPup('tidbit', X(a), gy, ps, -1, t, 'run'); ismPup('sugarfoot', X(a) + 70 * k, gy, ps, -1, t, 'run'); ismBall(X(a) - 8 * k, gy - 50 * k - Math.abs(Math.sin(t * 6)) * 20 * k, k); }
+      else if (t > 3.8) { var b2 = (t - 3.8) / 3.7; ismPup('sugarfoot', X(b2) + 40 * k, gy, ps, 1, t, 'run'); if (patched) ismCape('tidbit', X(b2) - 30 * k, gy, ps, 1, t, false, true); ismPup('tidbit', X(b2) - 30 * k, gy, ps, 1, t, 'run'); ismBall(X(b2) + 60 * k, gy - 50 * k - Math.abs(Math.sin(t * 6)) * 20 * k, k); }
     } else if (id === 'bone3') {
       var gx = t < 3 ? lerp(X(1.2), W * 0.62, t / 3) : t < 6 ? W * 0.62 : lerp(W * 0.62, X(-0.3), (t - 6) / 3);
       // the biggest bone, on a little wagon pulled by a friendly Grumble
@@ -2066,8 +2068,8 @@
       ismBone(gx, gy - 26 * k - lift * 14 * k, 44 * k, 0);
       var px1 = t < 3.6 ? lerp(X(-0.1), W * 0.36, t / 3.6) : gx - 74 * k, px2 = t < 3.6 ? lerp(X(-0.15), W * 0.3, t / 3.6) : gx + 74 * k;
       ismPup('sugarfoot', px1, gy, ps, t < 3.6 ? 1 : 1, t, t < 3.6 || t > 6 ? 'run' : 'wiggle');
+      if (patched && (t < 3.6 || t > 6)) ismCape('tidbit', px2, gy, ps, t < 3.6 ? 1 : -1, t, false, true);
       ismPup('tidbit', px2, gy, ps, t < 3.6 ? 1 : -1, t, t < 3.6 ? 'run' : t > 6 ? 'run' : 'wiggle');
-      if (patched) ismCape('tidbit', px2, gy, ps, t < 3.6 ? 1 : -1, t, false, true);
       if (t > 5) heart(g, gx, gy - 90 * k - Math.sin(t * 2) * 6 * k, 14 * k, '#FF8FA3');
     }
     // the title card

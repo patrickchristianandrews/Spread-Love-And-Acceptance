@@ -108,7 +108,7 @@ SEC_INTRO = {
     'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, or put their headphones in, or snap at a small question. These pages follow a battery running down, and what helps before it hits empty. Neurobiology’s phrase for it is that your state sets the volume, and holistic practice, which has modest support, starts there, with the body.',
     'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what’s said. Others hint, soften and tease, and expect the hidden meaning to be picked up. Both are systems. Either can be learned. Or you can just ask. Psychology’s short version is that intent isn’t impact.',
     'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, like showing goodwill or sparing a feeling. These pages set out those jobs plainly, along with what it costs to keep up appearances all day. The art of debating would add: say the other person’s strongest point first.',
-    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the lifts, and wrapping criticism in praise. Business and politics agree that every job needs an owner and every group a fair way to decide.',
+    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the elevators, and wrapping criticism in praise. Business and politics agree that every job needs an owner and every group a fair way to decide.',
     'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again, giving advice nobody asked for. Each has a logic, and each has another side. Finance has a picture for it: a repair tops up a reserve of goodwill.',
     'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a fight about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterward. Music explains a lot of it, because tone and tempo carry more than words, and a shared laugh can reset a heavy room (the research on laughter is modest).',
     'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle. Behavioral science calls these habits that save effort; the setting matters too, and aromatherapy’s modest point is that a familiar scent or a quieter room can help some people settle.',
@@ -140,7 +140,7 @@ LENS = [
         'The tag says where a reaction is common. It never tells you what the person in front of you is.',
         {'sn': 'milton-2012', 'title': 'The double empathy problem',
          'text': 'The autistic researcher Damian Milton argued that misunderstanding between autistic and non-autistic people runs both ways: each finds the other hard to read, so the problem sits between them. His paper is an argument rather than an experiment; later studies support parts of it.',
-         'ev': 'Theory: no data in the paper itself; later experiments support parts of it', 'cite': 'Milton (2012)'},
+         'ev': 'Theory: no data in the paper itself. Later experiments support parts of it', 'cite': 'Milton (2012)'},
         'The pages about common social habits matter as much as the others. If you have ever been told you “should have known” what someone meant, it can be a relief to see that there was a system all along, and that it can be learned or simply asked about. And if you use those habits without thinking, seeing their logic written down shows where someone else might miss the signal.',
         'The last section, “Different rulebooks,” is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
     ]),
@@ -236,7 +236,7 @@ def copyright_html(p, S):
           'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation. No page labels anyone.</p>')
     s += ('<p><strong>The examples are made up.</strong> The situations in this guide are drawn from common patterns, and nobody in them is a real person; '
           'any likeness is coincidence. None of them is a testimonial.</p>')
-    s += '<p>The research the pages lean on is listed in short at the back, and in full at spreadloveandacceptance.com/research.</p>'
+    s += '<p>The research the pages lean on is listed briefly at the back, and in full at spreadloveandacceptance.com/research.</p>'
     s += '<p>Set in Lora, Fraunces and IBM Plex Mono.</p></div></section>'
     return s
 
@@ -358,7 +358,7 @@ def notes_html(secs, S, nums, epub=False):
         where = ', '.join('%s%s' % (esc(it['t']), '' if epub else ' (%s)' % S.pg(it['lens'] if it.get('lens') else 'sit-' + it['id'])) for it in its)
         rows.append('<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span> <span class="pk-ref-w">%s</span></li>' % (
             esc(r.get('authors', '')), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(t), where))
-    return ('<section class="pk-back pk-notes" id="notes">%s<h1>Research notes</h1><p class="pk-lede">The %d studies and essays these pages lean on, in short, with the '
+    return ('<section class="pk-back pk-notes" id="notes">%s<h1>Research notes</h1><p class="pk-lede">The %d studies and essays these pages lean on, briefly, with the '
             'situations that use them. Each one was looked up and checked. The full list, with what each study found and how strong the finding is, is free at '
             'spreadloveandacceptance.com/research.</p><ul class="pe-refs ps-refs pk-refs">%s</ul></section>') % ('' if epub else S.mark('notes'), len(rows), ''.join(rows))
 

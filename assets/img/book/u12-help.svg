@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 696" width="540" height="696" role="img" aria-labelledby="fig-u12-help-t fig-u12-help-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-u12-help-t">Ask what kind of help they want</title>
-<desc id="fig-u12-help-d">One question at the top: &quot;Ideas, or just someone to listen?&quot; It leads to four kinds of help: comfort and listening; practical help, like a lift or a meal; ideas and advice, when they are asked for; and help making sense of it. Below, a reminder: fixing it for them can take away their power, and your limits make your help last.</desc>
+<desc id="fig-u12-help-d">One question at the top: &quot;Ideas, or just someone to listen?&quot; It leads to four kinds of help: comfort and listening; practical help, like a ride or a meal; ideas and advice, when they are asked for; and help making sense of it. Below, a reminder: fixing it for them can take away their power, and your limits make your help last.</desc>
 
 <rect x="1" y="1" width="538" height="694" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Ask what kind of help they want</text>
@@ -12,7 +12,7 @@
 <text x="44" y="270.32" font-size="18" font-style="italic">comfort, company</text>
 <rect x="277" y="208.32" width="235" height="92" rx="16" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
 <text x="293" y="242.32" font-size="21" font-weight="bold" fill="#7A5620">Practical</text>
-<text x="293" y="270.32" font-size="18" font-style="italic">a lift, a meal</text>
+<text x="293" y="270.32" font-size="18" font-style="italic">a ride, a meal</text>
 <rect x="28" y="312.32" width="235" height="92" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
 <text x="44" y="346.32" font-size="21" font-weight="bold" fill="#3E6B4C">Ideas</text>
 <text x="44" y="374.32" font-size="18" font-style="italic">advice, if asked</text>

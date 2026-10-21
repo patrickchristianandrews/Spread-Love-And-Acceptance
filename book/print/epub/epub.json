@@ -3,15 +3,15 @@
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
    "kind": "book",
-   "bytes": 1239110,
-   "mb": 1.18,
+   "bytes": 1267879,
+   "mb": 1.21,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
    "figures": 10,
    "examples": 9,
    "images": 23,
    "links_out": 279,
-   "links_inside": 218,
+   "links_inside": 217,
    "checks": "pass",
    "epubcheck": {
     "ok": true,
@@ -21,15 +21,15 @@
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
    "kind": "book",
-   "bytes": 1092099,
-   "mb": 1.04,
+   "bytes": 1114941,
+   "mb": 1.06,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
    "figures": 9,
    "examples": 7,
    "images": 20,
-   "links_out": 315,
-   "links_inside": 176,
+   "links_out": 316,
+   "links_inside": 169,
    "checks": "pass",
    "epubcheck": {
     "ok": true,
@@ -39,15 +39,15 @@
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
    "kind": "book",
-   "bytes": 1111598,
-   "mb": 1.06,
+   "bytes": 1142816,
+   "mb": 1.09,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
    "figures": 9,
    "examples": 8,
    "images": 22,
    "links_out": 297,
-   "links_inside": 192,
+   "links_inside": 188,
    "checks": "pass",
    "epubcheck": {
     "ok": true,
@@ -57,14 +57,14 @@
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
    "kind": "book",
-   "bytes": 1094393,
-   "mb": 1.04,
+   "bytes": 1108540,
+   "mb": 1.06,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,
    "figures": 8,
    "examples": 13,
    "images": 21,
-   "links_out": 280,
+   "links_out": 278,
    "links_inside": 181,
    "checks": "pass",
    "epubcheck": {
@@ -75,7 +75,7 @@
   "pocket-the-logic-behind-it": {
    "file": "book/print/epub/pocket-the-logic-behind-it.epub",
    "kind": "pocket",
-   "bytes": 317867,
+   "bytes": 319691,
    "mb": 0.3,
    "identifier": "urn:uuid:33b0bed3-99e8-53b0-8a56-024abff9a832",
    "chapters": 9,
@@ -93,15 +93,15 @@
   "boxset-complete-series": {
    "file": "book/print/epub/boxset-complete-series.epub",
    "kind": "boxset",
-   "bytes": 3965273,
-   "mb": 3.78,
+   "bytes": 3976879,
+   "mb": 3.79,
    "identifier": "urn:uuid:53207083-e866-53c9-a95c-fc8c179971bd",
    "chapters": 36,
    "figures": 0,
    "examples": 0,
    "images": 90,
-   "links_out": 1221,
-   "links_inside": 837,
+   "links_out": 1220,
+   "links_inside": 825,
    "checks": "pass",
    "epubcheck": {
     "ok": true,
@@ -109,6 +109,6 @@
    }
   }
  },
- "about": "Made by tools/book/build_epub.py (epub13, logicbook14): the Kindle ebooks (EPUB 3) of the print series, the pocket guide and the box set. Upload <id>.epub as the Kindle manuscript and cover-<id>-front.jpg as the Kindle cover. The workbook has no ebook (print only).",
- "workbook": "No ebook: the workbook is print only. Its forms are made to be written in, and every one is free to print or fill in at spreadloveandacceptance.com/workpapers/fill/."
+ "about": "Made by tools/book/build_epub.py (epub13, logicbook14): the Kindle ebooks (EPUB 3) of the print series, the pocket guide and the box set. Upload <id>.epub as the Kindle manuscript and cover-<id>-kindle.jpg (1600 x 2560) as the Kindle cover. The workbook has no ebook (print only).",
+ "workbook": "No ebook: the workbook is print only. Its forms are made to be written in, and every one is free to print or fill out at spreadloveandacceptance.com/workpapers/fill/."
 }

@@ -26,7 +26,7 @@
    "3": "about understanding the people around you",
    "4": "about sharing the work of a shared life"
   },
-  "series_lead": "Each book in the series stands on its own. The others are",
+  "series_lead": "Each book in the series stands on its own.",
   "refs": "When a chapter mentions another book, it gives the book, the chapter and the page in that book, as in “{example}.” The workbook, The Workpapers, has every form from the series on big pages",
   "ideas_lead": "Five ideas run under the whole series.",
   "ideas": [
@@ -217,7 +217,7 @@
      "Medicines and refills",
      "Health appointments and calls",
      "Being on call for someone who is unwell",
-     "Personal care (washing, dressing)"
+     "Personal care (bathing, dressing)"
     ]
    ],
    [
