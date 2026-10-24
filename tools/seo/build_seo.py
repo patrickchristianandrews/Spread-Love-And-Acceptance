@@ -526,6 +526,9 @@ SEARCH.update({
  'start/chores.html': ('Who Does What at Home? A 2-Minute Chore Check for Two', 'Arguing about housework and the mental load? Each of you taps who mostly does each job, then see where you agree. Free, private, no sign-up.'),
  'start/text-check.html': ('Check a Text Before You Send It: Free Tone Checker', 'About to send a tense text? See how it may land and get a clearer version that keeps your point. Free, private: nothing you type leaves your device.'),
  'start/breakup.html': ('Want to Text Your Ex? Start Here, Before You Send', 'In the first weeks after a breakup: check a message before you send it, three steps for tonight, and gentle next steps. Free and private, on your device.'),
+ # lang21 (wave21): Support languages, and the hub's description now names it
+ 'support-languages.html': ('Support Languages: What Helps When You’re Having a Hard Time', 'Seven support languages, from needing room to needing a hand: what each looks like, how it gets misread both ways, a short quiz and words to ask for help that works. Free.'),
+ 'languages-of-connection.html': ('Love, Apology and Appreciation Languages, Together', 'Love, apology, support and appreciation languages, touchstones and your wiring, in one picture: seven layers from you outward, and where to start.'),
 })
 
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results
@@ -671,7 +674,7 @@ TOOLS = (r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|l
 # Pages that list other pages (marked as a collection, with the site search on explore.html)
 HUBS = r'^(book/index\.html|tools\.html|explore\.html|by-relationship\.html|contents\.html|pause-and-play\.html)$'
 GAMES = r'^(coin-pusher|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
-ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|research\.html)'
+ARTICLES = r'^(support-languages|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|research\.html)'
 
 
 def rel_url(path):
@@ -1137,7 +1140,7 @@ def write_sitemap(report):
 GROUPS = [
     ('Start here', r'^(index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0)'),
     ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz'
-                                   r'|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|nervous-system|calming-supplements|living-alone|stepfamily|new-relationship|small-wins|growing-up)'),
+                                   r'|love-languages|apology-languages|support-languages|languages-of-connection|appreciation-at-work|touchstones|nervous-system|calming-supplements|living-alone|stepfamily|new-relationship|small-wins|growing-up)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
