@@ -25,7 +25,7 @@ TOLBuddies.episodes['s1e4'] = {
       { act: 'carry', who: 'sugarfoot', item: 'kite', dur: 3 },
       { say: 'tidbit', to: 'sugarfoot', text: 'Smell that sea air! This is perfect kite weather!', mood: 'excited', energy: 1.3, hold: 0.8 },
       { say: 'sugarfoot', to: 'tidbit', text: 'And Sunny\'s all ready. I brought her down from the treehouse this morning.', mood: 'happy', hold: 0.8 },
-      { say: 'narrator', text: 'Sunny was their lemon-yellow kite, named after their favourite song. She had spent all winter hanging in the treehouse.', mood: 'happy', hold: 1 },
+      { say: 'narrator', text: 'Sunny was their lemon-yellow kite, named after their favorite song. She had spent all winter hanging in the treehouse.', mood: 'happy', hold: 1 },
       { guest: 'frog', enter: 'right', name: 'Hopper the frog' },
       { say: 'frog', to: 'both', text: 'Ribbit! Kite flyers! Have you heard? The Great Kite Festival is tonight, at Lighthouse Point!', mood: 'excited', energy: 1.3, hold: 0.8 },
       { say: 'tidbit', to: 'frog', text: 'Tonight? Hopper, where\'s Lighthouse Point?', mood: 'excited', hold: 0.8 },
@@ -132,7 +132,7 @@ TOLBuddies.episodes['s1e4'] = {
       { say: 'narrator', text: 'The sun was warm. The waves hummed a sleepy song. Swish, and swash, and swish.', mood: 'sleepy', energy: 0.8, hold: 1 },
       { act: 'lie', who: 'both', dur: 3 },
       { act: 'sleep', who: 'both', dur: 4 },
-      { say: 'narrator', text: 'And before they knew it, the two pals drifted off into a deep, cosy dream.', mood: 'sleepy', energy: 0.7, hold: 1.6 }
+      { say: 'narrator', text: 'And before they knew it, the two pals drifted off into a deep, cozy dream.', mood: 'sleepy', energy: 0.7, hold: 1.6 }
     ] },
     { title: 'Under the sea', beats: [
       { scene: 'underwater', hour: 12, weather: 'clear', caption: 'A dream under the sea' },
@@ -262,7 +262,7 @@ TOLBuddies.episodes['s1e4'] = {
       { say: 'sugarfoot', to: 'tidbit', text: 'You know what? When Sunny broke, I thought it had to be somebody\'s fault.', mood: 'calm', energy: 0.8, hold: 0.8 },
       { say: 'tidbit', to: 'sugarfoot', text: 'Me too. But the problem was the setup. Not you, and not me.', mood: 'calm', energy: 0.8, hold: 0.8 },
       { say: 'sugarfoot', to: 'tidbit', text: 'So the kite checklist goes in the treehouse. Right next to the picnic blanket one.', mood: 'happy', hold: 0.8, offscreen: ['blanket'] },
-      { say: 'tidbit', to: 'sugarfoot', text: 'Our treehouse is getting very organised. Fancy!', mood: 'silly', hold: 0.8 },
+      { say: 'tidbit', to: 'sugarfoot', text: 'Our treehouse is getting very organized. Fancy!', mood: 'silly', hold: 0.8 },
       { act: 'laugh', who: 'both', dur: 2.5 },
       { act: 'lookat', who: 'both', target: 'up', dur: 3.5 },
       { props: { shooting: 'one' } },

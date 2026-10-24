@@ -80,12 +80,12 @@
       { id: 's1e4', n: 4, title: 'Who Broke the Kite?', world: 'Beach, lighthouse, dock and the deep', theme: 'A seaside kite race', pillar: 'II', emoji: '🪁' },
       { id: 's1e5', n: 5, title: 'The Longest Night', world: 'Forest, campsite, pond and the stars', theme: 'A night quest to the shooting stars', pillar: 'V', emoji: '🌠' }
     ] },
-    // Season 2 lists only the episodes that are finished (no "coming soon" cards); they have no recorded voices
-    // yet (clips: false), so they play with the device's own voice, or captions
+    // Season 2 lists only the episodes that are finished (no "coming soon" cards). Its lines are recorded exactly
+    // the way Season 1's are (the same voice for every character, measured from Season 1's own clips)
     { season: 2, name: 'Season 2: The Great Big Sea', more: 'New episodes are added as they are finished.', len: 'about 15 minutes', eps: [
-      { id: 's2e1', n: 1, title: 'The Great Big Sea', world: 'The dock, the open sea and a little island', theme: 'Setting sail with a map in a bottle', pillar: 'IV', emoji: '⛵', clips: false, thumb: 'sea' },
-      { id: 's2e2', n: 2, title: 'The Lighthouse in the Fog', world: 'Lantern Island, its lighthouse and the fog', theme: 'Lost in the fog, and the lanterns that lead home', pillar: 'I', emoji: '🏮', clips: false, thumb: 'lighthouse' },
-      { id: 's2e3', n: 3, title: 'Room for One More', world: 'The island library, its secret door and the night market', theme: 'A new friend, and a pal who feels left out', pillar: 'V', emoji: '📚', clips: false, thumb: 'carnival' }
+      { id: 's2e1', n: 1, title: 'The Great Big Sea', world: 'The dock, the open sea and a little island', theme: 'Setting sail with a map in a bottle', pillar: 'IV', emoji: '⛵', thumb: 'sea' },
+      { id: 's2e2', n: 2, title: 'The Lighthouse in the Fog', world: 'Lantern Island, its lighthouse and the fog', theme: 'Lost in the fog, and the lanterns that lead home', pillar: 'I', emoji: '🏮', thumb: 'lighthouse' },
+      { id: 's2e3', n: 3, title: 'Room for One More', world: 'The island library, its secret door and the night market', theme: 'A new friend, and a pal who feels left out', pillar: 'V', emoji: '📚', thumb: 'carnival' }
     ] }
   ];
   // a short, calm note shown before each episode plays: what happens that might feel big
@@ -110,7 +110,7 @@
   function catalogIds() { var out = []; CATALOG.forEach(function (s) { s.eps.forEach(function (e) { out.push(e.id); }); }); return out; }
   function catalogEntry(id) { var f = null; CATALOG.forEach(function (s) { s.eps.forEach(function (e) { if (e.id === id) f = e; }); }); return f; }
 
-  // ---------- small maths ----------
+  // ---------- small math ----------
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function mix(a, b, p) { return a + (b - a) * p; }
   function eio(p) { p = clamp(p, 0, 1); return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }

@@ -311,6 +311,14 @@ P = [
     (r'\bFetching a member of staff\b', 'Getting a staff member'), (r'\bThen came the fundraiser\b', 'Then came the fundraiser'),
     (r'\bFish fingers\b', 'Fish sticks'), (r'\bcome and find you at half past\.', 'come and find you in half an hour.'), (r'\bat half past\.', 'in half an hour.'),
     (r'\blike a lens any more,', 'like a lens anymore,'), (r'\bYou finish your tea\b', 'You finish your coffee'), (r'\bTherapists call this exposure\.', 'Psychologists call this exposure.'),
+    # book20, bookqa20 round 2: grammar left by earlier swaps, and the last idioms
+    (r'\b([Aa]) assistant principal\b', r'\1n assistant principal'), (r'\bat a indoor\b', 'at an indoor'), (r'\bthe trash are the surface\b', 'the trash is the surface'),
+    (r'\bfrom noticing they’re full to putting them out\b', 'from noticing it’s full to putting it out'), (r'\bthe rows often feel\b', 'the fights often feel'),
+    (r'\b(second|two|three|four|five|six) (weeks?|days?|nights?|months?|times?) running\b', r'\1 \2 in a row'), (r'\bstopped him getting on\b', 'kept him from getting on'),
+    (r'\bslept on the settee and had stopped answering the phone to his friends\b', 'slept on the couch and had stopped answering his friends’ calls'), (r'\bsettee\b', 'couch'),
+    (r'\bgetting properly cross\b', 'getting really frustrated'), (r'\bI’ll come and get you at five to\b', 'I’ll come and get you in five minutes'), (r'\bcomes round\b', 'comes around'),
+    (r'\bcrosser\b', 'angrier'), (r'“I’ve a different view\b', '“I have a different view'), (r'\bthe only reason she turns up\b', 'the only reason she shows up'),
+    (r'\bbites his head off, properly,', 'bites his head off,'), (r'\bshop door\b', 'store door'), (r'\bnight-time\b', 'nighttime'), (r'\b([Ss])tep-parent', r'\1tepparent'),
 ]
 
 

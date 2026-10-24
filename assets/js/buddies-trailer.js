@@ -268,7 +268,7 @@
     var b = calm ? 0 : Math.abs(Math.sin(u * 4.1)) * 3;
     pup(g, 'tidbit', VW / 2 - 70, 292 - b, 1.6, { pose: 'sit', wag: Math.sin(u * 9) * 0.6, t: u, face: 1 });
     pup(g, 'sugarfoot', VW / 2 + 70, 292 - (calm ? 0 : Math.abs(Math.sin(u * 4.1 + 1)) * 3), 1.6, { pose: 'sit', wag: Math.sin(u * 8 + 2) * 0.6, t: u, face: -1 });
-    for (var h = 0; h < 5; h++) { var hu = ((u * (calm ? 0.2 : 0.35)) + h / 5) % 1; g.globalAlpha = Math.sin(Math.PI * hu) * 0.9; heart(g, VW / 2 + Math.sin(hu * 5 + h) * 16, 240 - hu * 90, 5 + h % 2 * 2, '#F48FB1'); }
+    for (var h = 0; h < 5; h++) { var hu = ((u * (calm ? 0.2 : 0.35)) + h / 5) % 1; g.globalAlpha = Math.sin(Math.PI * hu) * 0.9; heart(g, VW / 2 + Math.sin(hu * 5 + h) * 16, 262 - hu * 52, 5 + h % 2 * 2, '#F48FB1'); }
     g.globalAlpha = 1;
     var s = calm ? 1 : backOut(seg(u, 0.1, 0.6));
     g.save(); g.translate(VW / 2, 74); g.scale(s, s); font(g, '600', 42); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#FFE7B8'; g.fillText('Frequency Buddies', 0, 0); g.restore();
@@ -372,7 +372,8 @@
     UI = { host: host, cv: $('.fbt-cv'), stage: $('.fbt-stage'), big: $('.fbt-big'), endb: $('.fbt-endb'), who: $('.fbt-who'), line: $('.fbt-line'), fill: $('.fbt-fill'), track: $('.fbt-track'), time: $('.fbt-time'), play: $('.fbt-play'), snd: $('.fbt-snd'), dl: $('.fbt-dl'),
       T: 0, playing: false, raf: 0, last: 0, wall0: 0, from: 0, ready: false };
     function resize() { var r = UI.stage.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1); UI.dpr = d; var w = Math.max(160, Math.round(r.width * d)), h = Math.max(90, Math.round(r.height * d)); if (UI.cv.width !== w || UI.cv.height !== h) { UI.cv.width = w; UI.cv.height = h; } paint(); }
-    function paint() { try { renderAt(UI.cv, UI.T, { dpr: UI.dpr || 1 }); } catch (e) { if (window.console) console.error('trailer', e); } }
+    // before the first play, the picture is the title card with the name and the pals (a poster)
+    function paint() { try { renderAt(UI.cv, UI.played ? UI.T : (UI.T || 4.6), { dpr: UI.dpr || 1 }); } catch (e) { if (window.console) console.error('trailer', e); } }
     function caption() {
       var c = capAt(UI.T), who = c ? (c[2] === '♪' ? '♪ ' : c[2] + ': ') : '', line = c ? c[3] + (c[2] === '♪' ? ' ♪' : '') : '';
       if (UI.line.textContent !== line) { UI.who.textContent = who; UI.line.textContent = line; }
@@ -404,12 +405,12 @@
       var c = actx(); if (c && c.state === 'suspended') { try { var pr = c.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } // inside the tap, so phones allow sound
       ready().then(function () {
         if (UI.T >= TL.dur - 0.05) UI.T = 0;
-        UI.endb.hidden = true; UI.playing = true; UI.from = UI.T; UI.wall0 = performance.now();
+        UI.endb.hidden = true; UI.playing = true; UI.played = true; UI.from = UI.T; UI.wall0 = performance.now();
         soundStart(UI.T); sync(); if (!UI.raf) UI.raf = requestAnimationFrame(frame);
       }).catch(function () { UI.big.querySelector('span').textContent = 'The trailer couldn’t load. Try again?'; });
     }
     function pause() { UI.playing = false; soundStop(); if (UI.raf) cancelAnimationFrame(UI.raf); UI.raf = 0; sync(); }
-    function seek(t) { var was = UI.playing; if (was) pause(); UI.T = clamp(t, 0, TL ? TL.dur : 0); UI.endb.hidden = !(TL && UI.T >= TL.dur - 0.05); paint(); caption(); progress(); sync(); if (was) play(); }
+    function seek(t) { var was = UI.playing; if (was) pause(); UI.played = true; UI.T = clamp(t, 0, TL ? TL.dur : 0); UI.endb.hidden = !(TL && UI.T >= TL.dur - 0.05); paint(); caption(); progress(); sync(); if (was) play(); }
     UI.big.addEventListener('click', play);
     UI.play.addEventListener('click', function () { if (UI.playing) pause(); else play(); });
     $('.fbt-re').addEventListener('click', function () { seek(0); if (!UI.playing) play(); });

@@ -229,11 +229,11 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.06 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-2-heal-and-steady.epub** (EPUB 3, reflowable, 1.05 MB, 7 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-2-heal-and-steady-kindle.jpg (1600 × 2560 px, the 1.6:1 shape KDP prefers, the the paperback front, trimmed slightly at the sides; also inside the EPUB) |
 | ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
 | Publisher | Leave blank (decided). |
-| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.03 a copy after delivery (1.06 MB × $0.15 = $0.16). [OWNER] |
+| Kindle price | **$5.99** with the **70%** royalty (the 70% band is $2.99 to $12.99 since 7 July 2026). About $4.04 a copy after delivery (1.05 MB × $0.15 = $0.16). [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from January 20, 2026). [OWNER] |
 | Kindle categories and keywords | the same as the paperback |

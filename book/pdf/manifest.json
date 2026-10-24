@@ -3,7 +3,7 @@
   "pages": 154,
   "interior_pages": 152,
   "blank_pages": 2,
-  "bytes": 2128793,
+  "bytes": 2128744,
   "title": "Spread Love & Acceptance: For two or more (short version)",
   "pagemap": {
    "half": 1,
@@ -154,7 +154,7 @@
    "ix-ownership-one-owner-per-job": "45–46, 49–50, 52–55, 62, 80, 82, 84–87, 95, 98–105, 110, 118–121, 126–127",
    "ix-panic": "51",
    "ix-parallel-parenting": "77",
-   "ix-parents": "24, 26–27, 37, 40, 59, 61, 63, 72, 77–78, 91, 101–103, 110–111, 115, 118",
+   "ix-parents": "24, 26, 37, 40, 59, 61, 63, 72, 77–78, 91, 101–103, 110–111, 115, 118",
    "ix-partners": "18, 21, 23–24, 33, 48, 54, 72, 77, 84, 90, 94–96, 100, 105–106, 110–111, 118–119",
    "ix-pause-taking-a": "30–31, 34–36, 40–42, 54, 63, 74, 77–78, 87, 107, 110, 116, 125, 128–129",
    "ix-perspective": "63",
@@ -200,7 +200,7 @@
   },
   "print": {
    "interior": "print/together-interior.pdf",
-   "interior_bytes": 2051703,
+   "interior_bytes": 2051654,
    "cover": "print/together-cover.pdf",
    "cover_bytes": 77442
   }
@@ -209,7 +209,7 @@
   "pages": 256,
   "interior_pages": 254,
   "blank_pages": 2,
-  "bytes": 3540817,
+  "bytes": 3540796,
   "title": "Spread Love & Acceptance: For two or more (full version)",
   "pagemap": {
    "half": 1,
@@ -465,7 +465,7 @@
   },
   "print": {
    "interior": "print/together-in-depth-interior.pdf",
-   "interior_bytes": 3463148,
+   "interior_bytes": 3463127,
    "cover": "print/together-in-depth-cover.pdf",
    "cover_bytes": 77459
   }
@@ -474,7 +474,7 @@
   "pages": 500,
   "interior_pages": 498,
   "blank_pages": 3,
-  "bytes": 6243573,
+  "bytes": 6243492,
   "title": "Spread Love & Acceptance: The whole book (short version)",
   "pagemap": {
    "half": 1,
@@ -850,7 +850,7 @@
   },
   "print": {
    "interior": "print/whole-interior.pdf",
-   "interior_bytes": 6168931,
+   "interior_bytes": 6168850,
    "cover": "print/whole-cover.pdf",
    "cover_bytes": 73582
   }
@@ -859,7 +859,7 @@
   "pages": 826,
   "interior_pages": 824,
   "blank_pages": 4,
-  "bytes": 9226958,
+  "bytes": 9226941,
   "title": "Spread Love & Acceptance: The whole book (full version)",
   "pagemap": {
    "half": 1,
@@ -1314,7 +1314,7 @@
   },
   "print": {
    "interior": "print/whole-in-depth-interior.pdf",
-   "interior_bytes": 9150988,
+   "interior_bytes": 9150971,
    "cover": "print/whole-in-depth-cover.pdf",
    "cover_bytes": 73593
   }
@@ -1328,7 +1328,7 @@
   "pages": 368,
   "interior_pages": 366,
   "blank_pages": 2,
-  "bytes": 4617706,
+  "bytes": 4617668,
   "title": "Spread Love & Acceptance: For one person (short version)",
   "pagemap": {
    "half": 1,
@@ -1642,7 +1642,7 @@
   },
   "print": {
    "interior": "print/for-yourself-interior.pdf",
-   "interior_bytes": 4547504,
+   "interior_bytes": 4547466,
    "cover": "print/for-yourself-cover.pdf",
    "cover_bytes": 70045
   }
@@ -1651,7 +1651,7 @@
   "pages": 592,
   "interior_pages": 590,
   "blank_pages": 2,
-  "bytes": 6201218,
+  "bytes": 6201220,
   "title": "Spread Love & Acceptance: For one person (full version)",
   "pagemap": {
    "half": 1,
@@ -2028,7 +2028,7 @@
   },
   "print": {
    "interior": "print/for-yourself-in-depth-interior.pdf",
-   "interior_bytes": 6130117,
+   "interior_bytes": 6130119,
    "cover": "print/for-yourself-in-depth-cover.pdf",
    "cover_bytes": 70057
   }
@@ -2037,7 +2037,7 @@
   "pages": 320,
   "interior_pages": 318,
   "blank_pages": 2,
-  "bytes": 4004085,
+  "bytes": 4004052,
   "title": "Spread Love & Acceptance: Understanding people (short version)",
   "pagemap": {
    "half": 1,
@@ -2320,7 +2320,7 @@
   },
   "print": {
    "interior": "print/understanding-interior.pdf",
-   "interior_bytes": 3930545,
+   "interior_bytes": 3930512,
    "cover": "print/understanding-cover.pdf",
    "cover_bytes": 73375
   }
@@ -2329,7 +2329,7 @@
   "pages": 498,
   "interior_pages": 496,
   "blank_pages": 2,
-  "bytes": 5020763,
+  "bytes": 5020764,
   "title": "Spread Love & Acceptance: Understanding people (full version)",
   "pagemap": {
    "half": 1,
@@ -2675,7 +2675,7 @@
   },
   "print": {
    "interior": "print/understanding-in-depth-interior.pdf",
-   "interior_bytes": 4946522,
+   "interior_bytes": 4946523,
    "cover": "print/understanding-in-depth-cover.pdf",
    "cover_bytes": 73388
   }
