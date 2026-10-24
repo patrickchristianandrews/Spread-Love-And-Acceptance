@@ -699,9 +699,9 @@ def ideas_map(book, chs, epub=False, pocket_sections=None):
                     for f in IDEAS['fields'])
     roots = ''.join('<li><b>%s</b> %s%s</li>' % (esc(r['name']), esc(r['line']), (' <span class="ps-ideas-ch">%s</span>' % esc(', '.join(where_r[r['key']]))) if where_r.get(r['key']) else '')
                     for r in IDEAS['roots'])
-    lede = ('Thirteen fields of study turn up in %s, and underneath them the same seven roots keep showing through. Learn a root once and you '
+    lede = ('Many fields of study turn up in %s, from music to economics, and underneath them the same seven roots keep showing through. Learn a root once and you '
             'can carry it from one field to the next: if a budget needs a safety margin, so does a tired person.') % ('this guide' if pocket_sections else 'this book')
-    note = 'Holistic therapies, laughter and aromatherapy appear only in their plain, everyday parts; the research on them is modest or still growing.'
+    note = 'Holistic therapies, laughter and aromatherapy appear only in their plain, everyday parts. The research on them is modest or still growing.'
     body = ('<p class="pe-back-lede">%s</p><div class="ps-ideas-map"><div class="ps-ideas-roots"><p class="ps-ideas-rk">The seven roots</p><ul>%s</ul></div>%s</div>'
             '<p class="ps-ideas-note">%s</p>') % (esc(lede), roots, cards, esc(note))
     if epub:
@@ -1184,7 +1184,7 @@ def build_workbook(where, bw=False):
         if key in WB_EXPLAINED:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(WB_EXPLAINED[key][0])
         elif ins:
-            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
+            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(' · '.join(ins[:4]))
         s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
               'where you can also fill the form out on screen.</dd></div></dl>') % copies
         if key in WB_NOTE:

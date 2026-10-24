@@ -97,7 +97,8 @@
           "It’s a friendly signal, not a booking",
           "It means “I like you and I’m open to more”",
           "A date would turn it into a promise neither of you has checked"
-        ]
+        ],
+        "say": "“When I say we should get coffee sometime, I mean I’d like to. If you want a real date, ask me for one and I’ll say yes or no.”"
       },
       "maybe-means-no": {
         "an.0": "A dimmer switch instead of a light switch. The light still goes off, just gently.",
@@ -108,7 +109,8 @@
           "A flat “no” can feel like a door shut in someone’s face",
           "“Maybe” lets the other person down slowly",
           "Nobody gets refused out loud, so nobody loses face"
-        ]
+        ],
+        "say": "“Sometimes I say maybe when I don’t want to hurt your feelings. I’ll try to give you a clear yes or no.”"
       },
       "left-party": {
         "fits": "A long goodbye costs energy too, with a round of hugs and small talk at the door. For people who find social time draining, including many autistic people, the quiet exit still leaves them able to get home safely.",
@@ -170,7 +172,8 @@
           "It protects the line, the meeting, the school drop-off",
           "Often it means “not here, not now,” and leaves later open"
         ],
-        "step": "Try swapping “fine” for “Not now. Later tonight?” And if you’re the one asking, “Now or later?” goes down better than “What’s wrong?”"
+        "step": "Try swapping “fine” for “Not now. Later tonight?” And if you’re the one asking, “Now or later?” goes down better than “What’s wrong?”",
+        "say": "“When I say I’m fine, sometimes I mean I’m not ready to talk yet. I’ll try to tell you that instead.”"
       },
       "hints": {
         "fits": "Researchers who study indirect speech argue that hints let people make requests while leaving everyone room to decline without embarrassment. It is a way of being polite.",
@@ -237,7 +240,8 @@
           "It’s a greeting that happens to be shaped like a question",
           "Its job is to say “hello, I see you”",
           "A short answer finishes the greeting"
-        ]
+        ],
+        "say": "“When I ask how you are in passing, I mean hello. If I really want to know, I’ll stop and ask.”"
       },
       "mask-crash": {
         "fits": "Research with autistic adults describes “camouflaging,” working hard to appear like everyone else, often followed by exhaustion. Long stretches of it are linked with autistic burnout. Children and adults who aren’t autistic can do a version of this too.",

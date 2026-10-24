@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<title>Sleeping Pals Cam: Tidbit and Sugarfoot Asleep, to Fall Asleep To</title>
+<meta name="description" content="A calm night cam to go to bed with: two cartoon pups snoring softly, little z's floating up, a sleep timer and an optional rain, fan or brown-noise sound. Free, no sign-up.">
+<meta name="theme-color" content="#141228">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* a night page in light mode and dark mode alike: dim, warm, easy on sleepy eyes */
+  :root { --bg: #141228; --ink: #F4EEFF; --soft: #D5CCEE; --line: rgba(244,238,255,.38); --chip: rgba(244,238,255,.08); --focus: #F2CAD5; color-scheme: dark; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font-family: Lora, Georgia, serif; }
+  * { box-sizing: border-box; }
+  .spc-start { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2rem 16px 2.5rem; text-align: center; }
+  .spc-start[hidden] { display: none; }
+  .spc-k { margin: 0; font: 600 .78rem/1 Lora, Georgia, serif; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+  .spc-start h1 { margin: 0; font: 600 clamp(1.7rem, 1.2rem + 2.4vw, 2.7rem)/1.15 Fraunces, Georgia, serif; }
+  .spc-start p { margin: 0; max-width: 32rem; font-size: 1.05rem; line-height: 1.55; color: var(--soft); }
+  #spc-preview { width: min(100%, 36rem); aspect-ratio: 16 / 9; height: auto; border-radius: 18px; display: block; background: #0D0B16; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+  .spc-opts { display: grid; gap: .8rem; width: min(100%, 36rem); text-align: left; }
+  .spc-opts fieldset { margin: 0; padding: .55rem .8rem .7rem; border: 1px solid var(--line); border-radius: 16px; }
+  .spc-opts legend { padding: 0 .35rem; font-weight: 600; }
+  .spc-row { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .3rem; }
+  .spc-row label, .spc-check { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: .35rem .85rem; border: 1px solid var(--line); border-radius: 999px; background: var(--chip); cursor: pointer; font-size: .98rem; }
+  .spc-row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .spc-row label:has(input:checked) { background: #F4EEFF; color: #2A2340; border-color: #F4EEFF; }
+  .spc-row label:has(input:focus-visible), .spc-check:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .spc-check input { width: 20px; height: 20px; margin: 0 .55rem 0 0; accent-color: #CFC2F5; }
+  .spc-go { min-height: 56px; padding: .8rem 2.1rem; border: 0; border-radius: 999px; background: #F4EEFF; color: #2A2340; font: 600 1.2rem Lora, Georgia, serif; cursor: pointer; }
+  .spc-go:hover { background: #fff; }
+  .spc-go:focus-visible, .spc-start a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .spc-start a { color: var(--ink); }
+  .spc-links { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: center; font-size: .98rem; }
+  .spc-links a { display: inline-flex; align-items: center; min-height: 44px; }
+  /* the cam itself: the whole screen */
+  .spc-cam { position: fixed; inset: 0; z-index: 50; background: #0D0B16; }
+  .spc-cam[hidden] { display: none; }
+  .spc-cam canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  html.spc-running, html.spc-running body { overflow: hidden; }
+  .spc-ctl { position: absolute; left: 50%; top: max(10px, env(safe-area-inset-top)); transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; width: max-content; max-width: calc(100% - 20px); transition: opacity .8s; }
+  .spc-ctl button { min-height: 48px; min-width: 48px; padding: .45rem .95rem; border-radius: 999px; border: 1.5px solid rgba(244,238,255,.5); background: rgba(20,16,34,.78); color: #F4EEFF; font: 600 .98rem/1.1 Lora, Georgia, serif; cursor: pointer; touch-action: manipulation; }
+  .spc-ctl button[aria-pressed="false"] { border-style: dashed; color: #CFC6E6; }
+  .spc-ctl button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .spc-ctl .spc-exit { background: #F4EEFF; color: #2A2340; border-color: #F4EEFF; }
+  .spc-cam.is-quiet .spc-ctl { opacity: 0; }
+  .spc-cam.is-quiet { cursor: none; }
+  .spc-hint { position: absolute; left: 50%; bottom: max(18px, 5vh); transform: translateX(-50%); max-width: min(90vw, 30rem); padding: .45rem 1rem; border-radius: 999px; background: rgba(20,16,34,.8); color: #F4EEFF; font-size: 1rem; text-align: center; opacity: 0; transition: opacity .8s; pointer-events: none; }
+  .spc-hint.is-on { opacity: 1; }
+  .spc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 420px) { .spc-ctl button { padding: .45rem .7rem; font-size: .92rem; } }
+  @media (prefers-reduced-motion: reduce) { .spc-ctl, .spc-hint { transition: none; } }
+</style>
+</head>
+<body>
+<main class="spc-start" id="spc-start">
+  <p class="spc-k">Bedtime</p>
+  <h1>Sleeping Pals Cam</h1>
+  <p>Tidbit and Sugarfoot, fast asleep. Soft snores, a few floating z’s, and now and then a funny little midnight moment.</p>
+  <canvas id="spc-preview" role="img" aria-label="Tidbit and Sugarfoot asleep on a rug in a dim room at night, with little z's floating up"></canvas>
+  <div class="spc-opts">
+    <fieldset>
+      <legend>Sleep timer</legend>
+      <div class="spc-row">
+        <label><input type="radio" name="spc-timer" value="0">Off</label>
+        <label><input type="radio" name="spc-timer" value="15">15 min</label>
+        <label><input type="radio" name="spc-timer" value="30">30 min</label>
+        <label><input type="radio" name="spc-timer" value="60">60 min</label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Sound bed</legend>
+      <div class="spc-row">
+        <label><input type="radio" name="spc-bed" value="off">None</label>
+        <label><input type="radio" name="spc-bed" value="rain">Soft rain</label>
+        <label><input type="radio" name="spc-bed" value="fan">Fan</label>
+        <label><input type="radio" name="spc-bed" value="brown">Brown noise</label>
+      </div>
+    </fieldset>
+    <label class="spc-check"><input type="checkbox" id="spc-snore-opt" checked>Soft snoring</label>
+  </div>
+  <button type="button" class="spc-go" id="spc-go">Start the Sleeping Pals Cam</button>
+  <p>When the timer ends, the sound fades out and the room goes dark.</p>
+  <p class="spc-links"><a href="/pal-cam-tv.html">The daytime Pal Cam</a> <a href="/frequency-buddies.html">Frequency Buddies</a> <a href="/">Back to the site</a></p>
+</main>
+<div class="spc-cam" id="spc-cam" hidden>
+  <canvas tabindex="-1" role="img" aria-label="Tidbit and Sugarfoot asleep on a rug in a dim room at night. Now and then one of them gets up for a drink, a bone from the refrigerator, or a little sleepwalk, then curls up again."></canvas>
+  <div class="spc-ctl" role="toolbar" aria-label="Sleeping Pals Cam controls">
+    <button type="button" class="spc-timer">⏲ Timer off</button>
+    <button type="button" class="spc-bed">🌧 No sound bed</button>
+    <button type="button" class="spc-snore" aria-pressed="true">💤 Snores on</button>
+    <button type="button" class="spc-dim" aria-pressed="true">🌙 Dimmer on</button>
+    <button type="button" class="spc-exit">✕ Exit</button>
+  </div>
+  <p class="spc-hint" aria-live="polite"></p>
+</div>
+<script src="/assets/js/pups.js"></script>
+<script src="/assets/js/pals-cam-sleep.js"></script>
+</body>
+</html>

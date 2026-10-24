@@ -265,6 +265,17 @@ P = [
     (r'\b([Tt])he friend everyone rings\b', r'\1he friend everyone calls'), (r'\bto ring\b', 'to call'), (r'\bor ring\b', 'or call'), (r'\bwho to ring\b', 'who to call'),
     (r'\bof a term\b', 'of a semester'), (r'\bdark garden\b', 'dark backyard'), (r'\bstarted quite enjoying\b', 'started to enjoy'),
     (r'\brevise\b(?= (every|for|at|tonight|on))', 'study'), (r'\bward round\b', 'hospital rounds'), (r'\bcurry and the quiz on the TV\b', 'takeout and a game show on TV'),
+    # book20 (books-final9, bookqa20 round): the last British words and settings
+    (r'\blasagne\b', 'lasagna'), (r'\bbarely off the drive\b', 'barely out of the driveway'), (r'\boff the drive\b', 'out of the driveway'),
+    (r'“Cheers,”', '“Thanks,”'), (r'“Cheers\.”', '“Thanks.”'), (r'\bjust a moan\?”', 'just a vent?”'), (r'“Moan\.”', '“Vent.”'),
+    (r'\bat the school gate\b', 'at school pickup'), (r'\bdreads the school gate\b', 'dreads school pickup'), (r'\bthe school gate\b', 'school pickup'),
+    (r'\b([Ss])tepmum\b', r'\1tepmom'), (r'\b([Ss])tepmums\b', r'\1tepmoms'), (r'\bsoppy\b', 'sappy'), (r'\bfeeling a bit of a lemon\b', 'feeling a bit silly'), (r'\ba bit of a lemon\b', 'a bit silly'),
+    (r'\b([Tt])he out-of-hours pharmacy\b', r'\1he late-night pharmacy'), (r'\bout-of-hours\b', 'after-hours'), (r'\bhis repeat prescription\b', 'his prescription refills'), (r'\brepeat prescriptions?\b', 'prescription refill'),
+    (r'\bthought about ringing to check\b', 'thought about calling to check'), (r'\bringing to check\b', 'calling to check'), (r'\bto get on in the house\b', 'to get along in the house'),
+    (r'\bI’d better get on\.', 'I’d better get going.'), (r'\bAuntie\b', 'Aunt'), (r'\bgoes home shattered\b', 'goes home exhausted'), (r'\bshattered\b(?= (and|after|by))', 'exhausted'),
+    (r'\beveryone was cross\b', 'everyone was upset'), (r'\bCarers and parents\b', 'Caregivers and parents'), (r'\bCarers\b', 'Caregivers'), (r'\bfootball pitch\b', 'football field'),
+    (r'\bOne bit of outside help we could ask for\b', 'One bit of help we could ask a friend or family for'), (r'\bcharity soccer game\b', 'fundraiser soccer game'),
+    (r'\bTraining and support group\b', 'Training and caregiver meetup'), (r'\byou don’t have to be their therapist\b', 'you don’t have to fix anything'),
 ]
 
 
