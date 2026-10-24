@@ -431,10 +431,10 @@ The answers are seen by Amazon, not printed on the product page.
 | ISBN | Choose **"Get a free KDP ISBN"**. It can't be moved to another publisher, and KDP shows "Independently published" as the imprint. Nothing to paste or rebuild: no ISBN prints inside the book. |
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
-| Page count | 156 (KDP reads it from the file) |
-| Spine width | 0.3513 in (8.92 mm): 156 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: yes (over 79 pages) |
+| Page count | 158 (KDP reads it from the file) |
+| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-4-share-the-load.pdf |
-| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.601 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
+| Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.606 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
 | Large-print book? | No |
 
@@ -442,12 +442,12 @@ The answers are seen by Amazon, not printed on the product page.
 
 | Marketplace | List price | Printing cost | Your royalty a copy |
 |---|---|---|---|
-| Amazon.com (primary) | $14.99 | $4.98 | **$4.01** (60% × $14.99 − printing) |
-| Amazon.co.uk | £11.99 | about £3.97 (estimate) | about £3.22 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
+| Amazon.com (primary) | $14.99 | $5.03 | **$3.96** (60% × $14.99 − printing) |
+| Amazon.co.uk | £11.99 | about £4.01 (estimate) | about £3.18 (60% at £7.99 and up) [OWNER: KDP shows the exact figure] |
 | Amazon.de, .fr, .es, .it, .nl, .ie, .be | €13.99 | KDP shows it | KDP shows it (60% at €9.99 and up) [OWNER] |
 | Amazon.ca | CA$19.99 | KDP shows it | KDP shows it [OWNER] |
 | Amazon.com.au | AU$23.99 | KDP shows it | KDP shows it [OWNER] |
-| Expanded distribution | **No** (Amazon only) | $4.98 | would pay $1.02 a copy (40% × $14.99 − printing) |
+| Expanded distribution | **No** (Amazon only) | $5.03 | would pay $0.97 a copy (40% × $14.99 − printing) |
 
 The non-US prices are rounded local equivalents a little above $14.99, so the 60% band applies everywhere. Let KDP's "based on Amazon.com" fill them, then round to .99. [OWNER]
 
@@ -497,12 +497,12 @@ The pocket guide and the workbook are the series' short editions. They keep thei
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1877 characters of 4,000) | the same, word for word |
+| Description | below (1887 characters of 4,000) | the same, word for word |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.</b></p><p>A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.</p><p>It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime.” Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.</p><p><b>Inside</b></p><ul><li>38 situations, one to a page, in nine short sections</li><li>On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step</li><li>“With care” notes where a reaction can land hard on someone else</li><li>A short introduction to the six-part lens, and why logic explains but never excuses</li><li>Blank cards to work out a reaction of your own</li><li>A code on every page to the same situation online</li></ul><p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, and the pages say so where it matters.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p><p><i>This guide is general education, not therapy or a diagnosis.</i></p>
+<p><b>Why did they react like that? Most reactions that look odd, rude or over the top from outside make sense once you can see the logic.</b></p><p>A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. This pocket guide takes thirty-eight everyday reactions like these and lays out the reasoning behind each one, step by step, on a single page.</p><p>It runs both ways. Some pages explain neurodivergent logic for people who don’t share it, such as headphones at dinner or a long talk about one interest. Some explain common social habits in plain logic for anyone who finds them baffling, such as small talk, white lies, hints and “Let’s get coffee sometime.” Many cover things anyone does, like snapping when hungry or going quiet in a row. A short section on “different rulebooks” looks at habits learned in a particular family, place or generation.</p><p><b>Inside</b></p><ul><li>38 situations, one to a page, in nine short sections</li><li>On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step</li><li>“With care” notes where a reaction can land hard on someone else</li><li>A short introduction to the six-part lens, and why logic explains but never excuses</li><li>Blank cards to work out a reaction of your own</li><li>A QR code on each page that opens the same situation online</li></ul><p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, and the pages say so where it matters.</p><p><b>Part of a series.</b> Spread Love &amp; Acceptance is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p><p><i>This guide is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -632,12 +632,12 @@ The sources for the printing costs are at the end of this file. KDP's own calcul
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1268 characters of 4,000) | no Kindle edition |
+| Description | below (1269 characters of 4,000) | no Kindle edition |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Every workpaper from the series, bound together on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every workpaper from the series, bound together on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages</li></ul><p>The sheets describe what happened, never who someone is. Fill them out on your own or together. On shared sheets each person writes only their own rows.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)
@@ -736,12 +736,12 @@ Price: **$9.99** (the short-edition rule: under 100 pages). Printing: standard c
 | Publishing rights | "I own the copyright and I hold the necessary publishing rights." | the same |
 | Primary audience | Sexually explicit images or title: **No**. Reading age: leave blank (adults). | the same |
 | Primary marketplace | Amazon.com | Amazon.com |
-| Description | below (1317 characters of 4,000) | no Kindle edition |
+| Description | below (1318 characters of 4,000) | no Kindle edition |
 
 **Description** (paste into the description box; KDP allows these tags: b, i, u, br, p, ul, ol, li, h4 to h6):
 
 ```html
-<p><b>Every workpaper from the series, bound together on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages, printed in black and white, under a color cover</li></ul><p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
+<p><b>Every workpaper from the series, bound together on big pages with room to write.</b></p><p>Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the sums laid out.</p><p>Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.</p><p><b>Inside</b></p><ul><li>10 workpapers and a paper setup score, 30 blank copies in all</li><li>A short guide page before each one</li><li>Single sheets on one page; longer sheets run over two pages</li><li>A six-week planner and lined pages for notes</li><li>Large 8.5 × 11 in pages, printed in black and white, under a color cover</li></ul><p>The sheets describe what happened, never who someone is. Fill them out on your own or together. On shared sheets each person writes only their own rows.</p><p><i>This book is general education, not therapy or a diagnosis.</i></p>
 ```
 
 ### Categories (pick 3)

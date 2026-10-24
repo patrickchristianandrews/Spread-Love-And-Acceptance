@@ -31,13 +31,31 @@
   var bufs = {}, cur = [], gen = 0, sceneId = null, hour = 12, on = true, paused = false, out = null;
   function ctx() { return window.__pcAudio || null; }
   function isNight(h) { return h < 6 || h >= 20.5; }
+  // A seamless loop, made once per sound: the mp3's tiny padding is trimmed from both ends, and the last
+  // 1.5 seconds are blended into the first 1.5 seconds (equal-power), so the end flows straight into the
+  // start. (Looping the raw file between two cut points left a jump in the waveform, heard as a click
+  // every time the sound came round, about once a minute per layer.)
+  var XF = 1.5;
+  function seamless(c, buf) {
+    try {
+      var sr = buf.sampleRate, pad = Math.min(Math.round(0.06 * sr), Math.floor(buf.length / 8)), n = buf.length - pad * 2, x = Math.min(Math.round(XF * sr), Math.floor(n / 3));
+      if (n < sr * 2 || x < 64) return buf;
+      var out = c.createBuffer(buf.numberOfChannels, n - x, sr);
+      for (var ch = 0; ch < buf.numberOfChannels; ch++) {
+        var a = buf.getChannelData(ch).subarray(pad, pad + n), o = out.getChannelData(ch);
+        for (var i = 0; i < x; i++) { var p = (i + 0.5) / x; o[i] = a[i] * Math.sin(p * Math.PI / 2) + a[n - x + i] * Math.cos(p * Math.PI / 2); }
+        o.set(a.subarray(x, n - x), x);
+      }
+      return out;
+    } catch (e) { return buf; }
+  }
   function load(name) {
     if (bufs[name]) return bufs[name];
     var c = ctx(); if (!c) return Promise.resolve(null);
     bufs[name] = fetch(BASE + name + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
       if (!ab) return null;
       return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } });
-    }).catch(function () { return null; });
+    }).then(function (buf) { return buf ? seamless(c, buf) : null; }).catch(function () { return null; });
     return bufs[name];
   }
   function bus() {
@@ -65,9 +83,10 @@
       bs.forEach(function (buf, i) {
         if (!buf) return; var L = layers[i];
         var s = c.createBufferSource(), g = c.createGain();
-        s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06); // skip the mp3's tiny padding
+        s.buffer = buf; s.loop = true; // the whole (already seamless) buffer loops, end straight into start
         g.gain.value = 0.0001; s.connect(g); g.connect(b);
-        var t = c.currentTime; s.start(t, Math.random() * buf.duration); g.gain.linearRampToValueAtTime(L[1], t + FADE_IN);
+        var t = c.currentTime; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(L[1], t + FADE_IN); // the ramp is anchored at now, so it never jumps
+        s.start(t, Math.random() * buf.duration);
         cur.push({ s: s, g: g });
       });
     });
@@ -79,7 +98,7 @@
     pause: function () { paused = true; stopAll(0.6); },
     resume: function () { if (!paused) return; paused = false; if (sceneId) start(); },
     set: function (v) { on = !!v; if (on) start(); else stopAll(0.8); return on; },
-    level: function (v) { var b = bus(); if (b) b.gain.value = v; },
+    level: function (v) { var b = bus(), c = ctx(); if (b && c) { try { b.gain.setTargetAtTime(v, c.currentTime, 0.08); } catch (e) { b.gain.value = v; } } },
     has: function (id) { return !!MAP[id || sceneId]; },
     scenes: function () { return Object.keys(MAP); },
     playing: function () { return cur.length; }

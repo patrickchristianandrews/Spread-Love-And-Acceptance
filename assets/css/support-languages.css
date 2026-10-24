@@ -1,0 +1,98 @@
+/* support-languages.css: the Support languages page (/support-languages.html).
+   Uses the site's color tokens, so light, dark (the site's inverted theme) and high contrast follow Settings.
+   Every control is at least 44px tall. No animation, so nothing to switch off for reduced motion. */
+
+.sl-page{ --sl-card:#FFFDF7; }
+
+/* the seven dialects */
+.sl-grid{ list-style:none; margin:1rem 0 1.4rem; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap:.8rem; }
+.sl-grid > li{ margin:0 !important; max-width:none !important; min-width:0; }
+.sl-card{ height:100%; box-sizing:border-box; padding:.85rem 1rem .9rem; border-radius:18px; border:1px solid var(--line); border-top:6px solid var(--c, #8A4FA8); background:var(--sl-card); }
+.sl-card h3{ margin:0 0 .15rem !important; font:600 1.12rem/1.25 "Fraunces", Georgia, serif !important; }
+.sl-card .sl-tag{ margin:0 0 .45rem !important; font:500 .78rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); }
+.sl-card p{ margin:.35rem 0 !important; font-size:.97rem; line-height:1.5; max-width:none !important; }
+.sl-card .sl-ask{ padding:.45rem .7rem; border-left:3px solid var(--c, #8A4FA8); background:var(--paper); border-radius:0 10px 10px 0; font-style:italic; }
+.sl-card details{ margin:.5rem 0 0; }
+.sl-card summary{ display:flex; align-items:center; gap:.4rem; min-height:44px; cursor:pointer; font-weight:600; color:var(--ink); list-style:none; }
+.sl-card summary::-webkit-details-marker{ display:none; }
+.sl-card summary::before{ content:"+"; font-weight:700; color:var(--credit); width:1rem; }
+.sl-card details[open] > summary::before{ content:"\2212"; }
+.sl-card summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:6px; }
+.sl-card dl{ margin:.2rem 0 0; }
+.sl-card dt{ margin:.55rem 0 .1rem; font:500 .8rem/1.3 "IBM Plex Mono", ui-monospace, monospace; color:var(--brass-ink); }
+.sl-card dd{ margin:0; font-size:.95rem; line-height:1.5; }
+
+.sl-c-room{ --c:#4F7FB0; } .sl-c-near{ --c:#C2566B; } .sl-c-hear{ --c:#8A4FA8; } .sl-c-think{ --c:#3E8A8A; }
+.sl-c-hands{ --c:#B07A1F; } .sl-c-believe{ --c:#3E7A4C; } .sl-c-shift{ --c:#C46A2B; }
+
+/* boxes for the quiz, the result and the translator */
+.sl-box{ margin:1rem 0 1.5rem; padding:1rem 1.1rem 1.1rem; border-radius:20px; border:1px solid var(--line); background:var(--paper-deep); }
+.sl-box > :first-child{ margin-top:0 !important; }
+.sl-box p{ max-width:none !important; }
+.sl-small{ font-size:.93rem; color:var(--ink-soft); }
+
+.sl-q{ border:0; margin:0 0 1rem; padding:.75rem .85rem .6rem; min-width:0; border-radius:16px; background:var(--sl-card); border:1px solid var(--line); }
+.sl-q legend{ float:left; width:100%; padding:0; margin:0 0 .35rem; font:600 1.02rem/1.35 "Fraunces", Georgia, serif; }
+.sl-q legend .sl-n{ display:inline-block; min-width:2.6rem; font:500 .8rem/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+.sl-q .sl-opts{ clear:both; display:grid; gap:.35rem; }
+.sl-q label{ display:flex; gap:.6rem; align-items:flex-start; min-height:44px; box-sizing:border-box; padding:.55rem .7rem; border-radius:12px; border:1px solid var(--line); background:var(--paper); cursor:pointer; font-size:.98rem; line-height:1.4; }
+.sl-q label:hover{ border-color:var(--credit); }
+.sl-q input[type=radio]{ width:1.2rem; height:1.2rem; margin:.1rem 0 0; flex:none; accent-color:var(--credit); }
+.sl-q input[type=radio]:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sl-q label:has(input:checked){ border-color:var(--credit); box-shadow:inset 0 0 0 1px var(--credit); }
+
+.sl-row{ display:flex; flex-wrap:wrap; gap:.5rem .7rem; align-items:center; margin:.8rem 0 0 !important; }
+.sl-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid var(--credit); background:var(--credit); color:var(--paper); cursor:pointer; }
+.sl-btn.is-quiet{ background:var(--paper); color:var(--credit); }
+.sl-btn:hover{ filter:brightness(1.05); }
+.sl-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sl-msg{ min-height:1.4em; margin:.5rem 0 0 !important; font-size:.95rem; color:var(--credit); }
+.sl-progress{ margin:.2rem 0 .8rem !important; font-size:.93rem; color:var(--ink-soft); }
+
+.sl-result{ margin:1rem 0 0; padding:1rem 1.1rem; border-radius:18px; border:2px solid var(--credit); background:var(--sl-card); }
+.sl-result:focus{ outline:3px solid var(--focus); outline-offset:3px; }
+.sl-result h3{ margin:0 0 .4rem !important; font:600 1.25rem/1.3 "Fraunces", Georgia, serif !important; }
+.sl-result h4{ margin:.9rem 0 .25rem !important; font:600 1.02rem/1.3 "Fraunces", Georgia, serif !important; }
+.sl-result p, .sl-result li{ font-size:.98rem; line-height:1.5; }
+.sl-result ul{ margin:.3rem 0 .5rem; padding-left:1.2rem; }
+.sl-top{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap:.6rem; margin:.4rem 0 .6rem; }
+.sl-top > div{ padding:.7rem .85rem; border-radius:14px; border:1px solid var(--line); border-left:6px solid var(--c, #8A4FA8); background:var(--paper); }
+.sl-top .sl-rank{ margin:0 !important; font:500 .78rem/1.3 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+.sl-top strong{ font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
+.sl-bars{ list-style:none; margin:.3rem 0 .4rem; padding:0 !important; display:grid; gap:.3rem; }
+.sl-bars li{ display:grid; grid-template-columns:minmax(7.5rem, 11rem) 1fr; gap:.6rem; align-items:center; font-size:.93rem; }
+.sl-bar{ height:.7rem; border-radius:999px; background:var(--line); overflow:hidden; }
+.sl-bar > span{ display:block; height:100%; border-radius:999px; background:var(--c, #8A4FA8); }
+.sl-share textarea, .sl-out textarea{ box-sizing:border-box; width:100%; font:1rem/1.55 "Lora", Georgia, serif; color:var(--ink); background:var(--paper); border:1px solid var(--ink-soft); border-radius:12px; padding:.6rem .8rem; }
+
+/* the translator */
+.sl-pick{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap:.6rem .9rem; }
+.sl-pick label{ display:block; font-weight:600; margin:0 0 .25rem; }
+.sl-pick select{ width:100%; min-height:44px; box-sizing:border-box; padding:.4rem .6rem; font:1rem "Lora", Georgia, serif; color:var(--ink); background:var(--paper); border:1px solid var(--ink-soft); border-radius:12px; }
+.sl-pick select:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sl-trans{ margin:.9rem 0 0; padding:.85rem 1rem; border-radius:16px; background:var(--sl-card); border:1px solid var(--line); }
+.sl-trans p{ margin:.4rem 0 !important; font-size:.98rem; line-height:1.5; }
+.sl-trans .sl-say{ padding:.45rem .7rem; border-left:3px solid var(--brass); font-style:italic; }
+.sl-between{ margin:1rem 0 0; }
+.sl-between h4{ margin:0 0 .3rem !important; font:600 1.05rem/1.3 "Fraunces", Georgia, serif !important; }
+
+/* tables and folds */
+.sl-table{ border-collapse:collapse; min-width:640px; width:100%; font-size:.95rem; }
+.sl-table th, .sl-table td{ text-align:left; vertical-align:top; padding:.55rem .7rem; border-bottom:1px solid var(--line); }
+.sl-table thead th{ font:500 .8rem/1.2 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+.sl-table tbody th{ font-weight:600; }
+.sl-fold{ margin:.55rem 0; border:1px solid var(--line); border-radius:16px; background:var(--sl-card); }
+.sl-fold > summary{ display:flex; align-items:center; gap:.5rem; min-height:44px; box-sizing:border-box; padding:.5rem .9rem; cursor:pointer; font-weight:600; list-style:none; }
+.sl-fold > summary::-webkit-details-marker{ display:none; }
+.sl-fold > summary::before{ content:"+"; font-weight:700; color:var(--credit); width:1rem; flex:none; }
+.sl-fold[open] > summary::before{ content:"\2212"; }
+.sl-fold > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:16px; }
+.sl-fold > .sl-fold-body{ padding:0 1rem .9rem; }
+.sl-fold-body p, .sl-fold-body li{ font-size:.97rem; line-height:1.55; max-width:none !important; }
+.sl-fold-body h4{ margin:.8rem 0 .2rem !important; font:600 .98rem/1.3 "Fraunces", Georgia, serif !important; }
+.sl-fold-body ul{ margin:.2rem 0 .5rem; padding-left:1.2rem; }
+
+@media print{
+  .sl-quiz-form, .sl-row, .tcol{ display:none !important; }
+  .sl-card details, .sl-fold{ border:0; }
+}

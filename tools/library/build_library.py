@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Professor's Library: /library.html (the hub) and /library/<theme>.html.
+"""Build Psychology in plain words (once called the Professor's Library): /library.html (the hub) and /library/<theme>.html.
 
 The entries live in plain-text files in tools/library/entries/, one file per theme.
 Edit those, then run:
@@ -240,7 +240,7 @@ def main():
     os.makedirs(os.path.join(ROOT, 'library'), exist_ok=True)
 
     def foot(current):
-        o = ['<nav class="lib-foot" aria-label="Library themes"><p><strong>More from the Professor’s Library</strong> '
+        o = ['<nav class="lib-foot" aria-label="Library themes"><p><strong>More psychology in plain words</strong> '
              '(<a href="/library.html">all themes</a>)</p><ul>']
         for m, en in themes:
             if m['slug'] != current:
@@ -250,8 +250,8 @@ def main():
 
     for meta, entries in themes:
         slug = meta['slug']
-        o = [HEAD % {'title': html.escape(meta['title'] + ' · The Professor’s Library'), 'desc': html.escape(meta['blurb'])}]
-        o.append('<header class="read-head"><p class="read-code">The Professor’s Library</p><h1>%s</h1></header>' % inline(meta['title']))
+        o = [HEAD % {'title': html.escape(meta['title'] + ' · Psychology in plain words'), 'desc': html.escape(meta['blurb'])}]
+        o.append('<header class="read-head"><p class="read-code">Psychology in plain words</p><h1>%s</h1></header>' % inline(meta['title']))
         o.append('<p class="depth-bar"><span>%d entries</span><a class="dig" href="/library.html">All library themes</a></p>' % len(entries))
         o.append(NOTE)
         o += ['<p class="simple-lede">%s</p>' % inline(p) for p in [meta['intro']]]
@@ -272,10 +272,10 @@ def main():
             fh.write('\n'.join(o))
 
     # hub
-    o = [HEAD % {'title': 'The Professor’s Library',
+    o = [HEAD % {'title': 'Psychology in plain words',
                  'desc': 'The science behind the program: %d plain-language entries on relationships, conflict, '
                          'fairness, stress, emotions, thinking traps, wiring, habits and connection.' % total}]
-    o.append('<header class="read-head"><p class="read-code">The Professor’s Library</p><h1>The science behind the program</h1></header>')
+    o.append('<header class="read-head"><p class="read-code">Guides · Research and big ideas</p><h1>Psychology in plain words</h1></header>')
     o.append('<p class="simple-lede">The program borrows from a lot of fields: relationship research, '
              'conflict resolution, psychology, behavioural science, even project management. This library is where '
              'those ideas are laid out properly, in plain words, with who found what, how strong the evidence is, and '

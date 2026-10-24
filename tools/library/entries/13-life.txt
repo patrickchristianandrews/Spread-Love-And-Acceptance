@@ -1,14 +1,14 @@
 #slug: life
 #title: Family, money and life changes
 #pillars: II, IV
-#blurb: Family systems, in-laws, co-parenting, new babies, stepfamilies, money, moving, ageing parents, holidays and the big transitions of life.
+#blurb: Family systems, in-laws, co-parenting, new babies, stepfamilies, money, moving, aging parents, holidays and the big transitions of life.
 #pillarnote: Family, money and life changes run across Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive. In you, they ask what scripts and expectations you brought from your own family and how a life change is affecting you. Between you, they ask how the setup should change when life does, so that a new baby, a move or a parent’s care doesn’t quietly reshuffle the load (Pillar I) without anyone deciding.
 #intro: Households don’t exist in a vacuum. They sit inside wider families, money pressures and life stages that keep changing: a new baby, a move, a parent who needs more help, children leaving home. These transitions reshuffle who does what, often without anyone deciding. These entries gather what research says about the family and life-stage side of sharing a life, gently and without clinical claims.
 
 @@ family-systems | Family systems and triangles
 pillars: II, IV
 aka: family systems, Bowen, triangles, triangulation, differentiation, family patterns
-nut: Family systems thinking sees a family as a connected system, where each person’s behaviour affects the others. Murray Bowen described how tension between two people is often routed through a third, forming a triangle.
+nut: Family systems thinking sees a family as a connected system, where each person’s behavior affects the others. Murray Bowen described how tension between two people is often routed through a third, forming a triangle.
 deep:
 Bowen observed that when two people are in conflict, anxiety often gets relieved by involving a third: a child, a parent, a friend. A couple who argue may both confide in one of their mothers; a parent may lean on a child for support against the other parent. These triangles can bring short-term relief but keep the original issue unresolved.
 
@@ -30,7 +30,7 @@ pillars: IV, II
 aka: family script, family patterns, how we were raised, family of origin, inherited habits
 nut: A family script is a set of expectations about how family life should go, learned in the family you grew up in. Two partners often bring two different scripts, and clashes between them can feel like personal disagreements.
 deep:
-John Byng-Hall described family scripts as shared expectations about roles and patterns, passed down across generations. Some are repeated (“in our family, Mum handles birthdays”), some are corrective (“I’ll never do it the way my parents did”).
+John Byng-Hall described family scripts as shared expectations about roles and patterns, passed down across generations. Some are repeated (“in our family, Mom handles birthdays”), some are corrective (“I’ll never do it the way my parents did”).
 
 Partners from different families bring different scripts about chores, money, emotions, holidays and conflict. Each script feels normal to the person who grew up with it, so the other person’s way can feel wrong rather than just different.
 
@@ -54,7 +54,7 @@ Joining a family means joining its habits, expectations and history. What feels 
 
 Being caught between a partner and a parent is painful. A widely recommended approach is for the couple to agree a position privately first, and for each person to communicate it to their own family. This protects the partner from being cast as the outsider.
 
-In-law relationships can also be deeply valuable, especially when children arrive. Many grandparents provide practical help and warmth. Recognising what is good alongside what is hard helps keep the relationship in balance.
+In-law relationships can also be deeply valuable, especially when children arrive. Many grandparents provide practical help and warmth. Recognizing what is good alongside what is hard helps keep the relationship in balance.
 research:
 Research on in-law relationships is smaller than on couples, but studies generally link in-law conflict with lower marital satisfaction. Studies also suggest that feeling your partner backs you up in dealings with your own family, and theirs, is linked to feeling closer as a couple. Most of this research is correlational and based on Western samples, and family norms vary a great deal across cultures.
 links:
@@ -70,13 +70,13 @@ pillars: II, I
 aka: coparenting, co-parenting, parenting together, parenting disagreements, team parenting, parenting teamwork
 nut: Co-parenting is how parents work together: agreeing on approaches, supporting each other, sharing the work and handling disagreements. Research suggests the quality of co-parenting matters for both children and the couple.
 deep:
-Mark Feinberg described several parts of co-parenting: agreement on childrearing, support versus undermining, division of labour, and how the family is managed together. Couples can love each other and still co-parent poorly, or be distant and still co-parent well.
+Mark Feinberg described several parts of co-parenting: agreement on childrearing, support versus undermining, division of labor, and how the family is managed together. Couples can love each other and still co-parent poorly, or be distant and still co-parent well.
 
-Undermining (contradicting the other parent in front of the children, or competing for the children’s favour) tends to cause trouble. Support (backing each other up, talking disagreements through privately) tends to help.
+Undermining (contradicting the other parent in front of the children, or competing for the children’s favor) tends to cause trouble. Support (backing each other up, talking disagreements through privately) tends to help.
 
 Parents often disagree on bedtimes, screens, discipline or food. Resolving these calmly, away from the children, and presenting a shared approach reduces conflict for everyone. The same tools as other disagreements apply: interests over positions, one topic at a time, and a regular check-in.
 research:
-Feinberg published his framework in 2003 and developed the Family Foundations programme, which in randomised trials improved co-parenting and some child outcomes. Research generally finds that co-parenting quality is linked with children’s adjustment, and that parents’ conflict, particularly hostile conflict that children witness, is associated with more difficulties for children.
+Feinberg published his framework in 2003 and developed the Family Foundations program, which in randomized trials improved co-parenting and some child outcomes. Research generally finds that co-parenting quality is linked with children’s adjustment, and that parents’ conflict, particularly hostile conflict that children witness, is associated with more difficulties for children.
 links:
 /relationships.html#co-parents | How it fits: co-parents
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
@@ -110,13 +110,13 @@ pillars: I, II
 aka: new baby, becoming parents, transition to parenthood, new parents, after having a baby
 nut: Many couples report a dip in relationship satisfaction after a first baby arrives, alongside new joys. It isn’t universal, and it is often linked to sleep loss, less couple time and a shift in who does what.
 deep:
-A new baby brings enormous change: broken sleep, new tasks, less free time, changes in work, and often a drift toward more traditional divisions of labour, even in couples who expected to share equally.
+A new baby brings enormous change: broken sleep, new tasks, less free time, changes in work, and often a drift toward more traditional divisions of labor, even in couples who expected to share equally.
 
 Research suggests satisfaction tends to decline on average, and that the decline is steeper for couples who didn’t plan the pregnancy or who were already struggling. Many couples recover, and many report the relationship deepening in new ways.
 
 Talking early about how work will be shared, before and after the baby arrives, can help prevent drift. So can protecting small moments of connection, even ten minutes a day, and being gentle about how tired everyone is.
 research:
-Brian Doss, Galena Rhoades, Scott Stanley and Howard Markman (2009) followed couples over eight years and found declines in satisfaction after the birth of a first child, on average. Jean Twenge, Keith Campbell and Craig Foster’s 2003 meta-analysis found parents reported lower marital satisfaction than non-parents, with larger differences among mothers of infants. Programmes like Gottman’s Bringing Baby Home and Feinberg’s Family Foundations aim to support couples through this transition.
+Brian Doss, Galena Rhoades, Scott Stanley and Howard Markman (2009) followed couples over eight years and found declines in satisfaction after the birth of a first child, on average. Jean Twenge, Keith Campbell and Craig Foster’s 2003 meta-analysis found parents reported lower marital satisfaction than non-parents, with larger differences among mothers of infants. Programs like Gottman’s Bringing Baby Home and Feinberg’s Family Foundations aim to support couples through this transition.
 links:
 /relationships.html#co-parents | How it fits: co-parents
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
@@ -173,11 +173,11 @@ nut: Nancy Schlossberg’s model says how people cope with a transition depends 
 deep:
 Transitions include moving, changing jobs, retirement, illness, children leaving home, or any change that alters roles and routines. Schlossberg suggested looking at the situation (what is changing, is it chosen, how long will it last?), the self (personal strengths and past experience), support (people and resources) and strategies (ways of coping).
 
-In couples, transitions often shift the division of labour without anyone deciding. A new job for one person may leave the other carrying more at home. A move may mean the person who is home more does most of the unpacking and setting up.
+In couples, transitions often shift the division of labor without anyone deciding. A new job for one person may leave the other carrying more at home. A move may mean the person who is home more does most of the unpacking and setting up.
 
 Using a transition as an explicit moment to revisit who does what, such as a fresh-start review, can prevent a temporary imbalance from becoming permanent.
 research:
-Schlossberg published her model in 1981 and developed it in later work. It is widely used in counselling and career development. It is a practical framework rather than a tested predictive model, but it fits research on coping resources and social support.
+Schlossberg published her model in 1981 and developed it in later work. It is widely used in counseling and career development. It is a practical framework rather than a tested predictive model, but it fits research on coping resources and social support.
 links:
 /how-it-works.html#situation | How It Works: your life situation
 /book/chapter-5.html | The monthly look-back (Chapter V)
@@ -206,12 +206,12 @@ talk:
 - How do we support each other through that uncertainty?
 - What small rituals could help mark changes?
 
-@@ ageing-parents | Caring for ageing parents
+@@ aging-parents | Caring for aging parents
 pillars: I, II
-aka: ageing parents, aging parents, elderly parents, parent care, sandwich generation, siblings and care
-nut: Caring for an ageing parent brings practical work, emotional complexity and often sibling tension. Planning and dividing care explicitly, as for any shared project, can reduce strain.
+aka: aging parents, aging parents, elderly parents, parent care, sandwich generation, siblings and care
+nut: Caring for an aging parent brings practical work, emotional complexity and often sibling tension. Planning and dividing care explicitly, as for any shared project, can reduce strain.
 deep:
-Care for ageing parents often falls unevenly among siblings: the one who lives closest, or who is seen as the caring one, ends up doing most. This can create resentment and reopen old family dynamics.
+Care for aging parents often falls unevenly among siblings: the one who lives closest, or who is seen as the caring one, ends up doing most. This can create resentment and reopen old family dynamics.
 
 The same tools that help households help here: listing all the tasks (appointments, finances, visits, calls), giving each an owner, and reviewing regularly. Siblings who live far away can own tasks that can be done remotely, like managing bills or researching services.
 
@@ -239,7 +239,7 @@ Practical steps: list all the holiday tasks and share them; agree on how much ti
 
 Whatever you celebrate, the same steps work. If your family keeps more than one faith or culture, put both sets of festivals on one calendar and decide which you host and which you visit.
 research:
-Research specifically on holiday stress is limited, though surveys often report increased stress around major holidays. Research on the division of household labour, emotional labour and family roles applies. Anthropologist Micaela di Leonardo’s 1987 essay described “kin work”: the cards, calls, gifts and gatherings that keep extended families connected, which she found was done mostly by women in the families she studied.
+Research specifically on holiday stress is limited, though surveys often report increased stress around major holidays. Research on the division of household labor, emotional labor and family roles applies. Anthropologist Micaela di Leonardo’s 1987 essay described “kin work”: the cards, calls, gifts and gatherings that keep extended families connected, which she found was done mostly by women in the families she studied.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /lemonade-stand.html | The Lemonade Stand
@@ -249,12 +249,12 @@ talk:
 - How should we divide time between families?
 - What would make holidays more restful for both of us?
 
-@@ roommates-and-shared-homes | Sharing a home with housemates
+@@ roommates-and-shared-homes | Sharing a home with roommates
 pillars: II
-aka: roommates, housemates, flatmates, shared house, living with friends
-nut: Housemates face the same issues as couples, like chores, money, noise and guests, often without the same closeness to smooth things over. Clear agreements made early prevent most problems.
+aka: roommates, roommates, roommates, shared house, living with friends
+nut: Roommates face the same issues as couples, like chores, money, noise and guests, often without the same closeness to smooth things over. Clear agreements made early prevent most problems.
 deep:
-Housemate conflicts often grow from small things: dishes left in the sink, noise at night, a guest who stays too long. Without clear agreements, each person relies on their own assumptions.
+Roommate conflicts often grow from small things: dishes left in the sink, noise at night, a guest who stays too long. Without clear agreements, each person relies on their own assumptions.
 
 Agreements that help include a chore rota with clear owners, rules for shared costs, quiet hours, guest policies, and a regular short house meeting. Writing these down makes them fairer and easier to revisit.
 
@@ -271,14 +271,14 @@ talk:
 
 @@ lifespan-priorities | How priorities change across life
 pillars: V, IV
-aka: socioemotional selectivity, getting older, priorities, ageing, older adults, life stages
-nut: Laura Carstensen’s socioemotional selectivity theory suggests that as people sense time is limited, they prioritise emotionally meaningful relationships and experiences. This helps explain shifting priorities across life.
+aka: socioemotional selectivity, getting older, priorities, aging, older adults, life stages
+nut: Laura Carstensen’s socioemotional selectivity theory suggests that as people sense time is limited, they prioritize emotionally meaningful relationships and experiences. This helps explain shifting priorities across life.
 deep:
 Younger people, feeling time is open-ended, often seek new experiences and broad networks. Older people, or anyone facing a sense of limited time, tend to focus on fewer, closer relationships and on emotionally satisfying experiences.
 
 This shift can explain some differences between partners or generations. It also suggests that older adults often report good emotional wellbeing, a pattern sometimes called the positivity effect.
 
-For couples at different life stages, recognising these shifts can help: one partner may want to slow down and deepen, the other to explore.
+For couples at different life stages, recognizing these shifts can help: one partner may want to slow down and deepen, the other to explore.
 research:
 Carstensen developed the theory from the early 1990s, with a key 1999 paper with Derek Isaacowitz and Susan Charles. Research supports that time perspective shapes social goals and that older adults often show a positivity effect in attention and memory. The effect sizes and generality are still studied.
 links:
@@ -312,7 +312,7 @@ pillars: V, I
 aka: hedonic adaptation, hedonic treadmill, getting used to good things, novelty wears off, taking for granted
 nut: Hedonic adaptation is the tendency to get used to changes, good and bad, so their emotional impact fades. It helps people cope with hardship, and also explains why good things can come to be taken for granted.
 deep:
-Philip Brickman and colleagues’ famous study compared lottery winners and people who had become paralysed, finding smaller differences in happiness than expected. The study was small and has been debated, but the broader idea of adaptation is well supported.
+Philip Brickman and colleagues’ famous study compared lottery winners and people who had become paralyzed, finding smaller differences in happiness than expected. The study was small and has been debated, but the broader idea of adaptation is well supported.
 
 In relationships, adaptation means that kindness can become invisible. A partner who always makes the coffee may stop being thanked, because it has become normal.
 
@@ -330,7 +330,7 @@ talk:
 @@ work-life | Work, home and the spillover between them
 pillars: III, II
 aka: work life balance, work family conflict, spillover, bringing work home, long hours
-nut: Work and home affect each other. Stress from work can spill into home life, and home stress can spill into work. Recognising spillover helps couples understand each other’s moods and plan support.
+nut: Work and home affect each other. Stress from work can spill into home life, and home stress can spill into work. Recognizing spillover helps couples understand each other’s moods and plan support.
 deep:
 Researchers describe work–family conflict in both directions: work interfering with family (long hours, stress, emails at night) and family interfering with work (caring responsibilities, household crises).
 
@@ -353,7 +353,7 @@ pillars: II, IV
 aka: joint decisions, deciding together, big decisions, shared decision making, moving, buying a house
 nut: Big joint decisions go better when both people’s interests are laid out, options are explored before choosing, and the process feels fair. Rushing or letting one person decide tends to leave resentment.
 deep:
-Big decisions, like where to live, whether to change jobs, or how to handle a family situation, often involve different priorities. One may prioritise security, the other opportunity; one may want to decide fast, the other slowly.
+Big decisions, like where to live, whether to change jobs, or how to handle a family situation, often involve different priorities. One may prioritize security, the other opportunity; one may want to decide fast, the other slowly.
 
 A structured approach helps: each person lists what matters to them, options are explored together, and criteria are agreed before choosing. Decision researchers also recommend considering more than one option, rather than a yes/no on a single idea.
 

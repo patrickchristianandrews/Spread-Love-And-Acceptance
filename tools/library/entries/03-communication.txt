@@ -16,7 +16,7 @@ In everyday terms, active listening includes putting down the phone, following w
 
 It is harder than it sounds. Most of us listen partly to reply: to fix, advise, defend or relate it to our own story. Those impulses are well-meant, but they can leave the speaker feeling that they weren’t really heard.
 research:
-Rogers and Richard Farson’s 1957 essay *Active Listening* popularised the term. Studies of active listening, such as a 2014 experiment by Harry Weger and colleagues, have found that people whose listeners used active listening responses felt more understood, though effects on other outcomes were smaller. In couples, Gottman’s 1998 research found that formal paraphrasing was rare in real conflicts and did not predict outcomes, which suggests listening skills matter most as a general attitude of interest rather than a rigid technique.
+Rogers and Richard Farson’s 1957 essay *Active Listening* popularized the term. Studies of active listening, such as a 2014 experiment by Harry Weger and colleagues, have found that people whose listeners used active listening responses felt more understood, though effects on other outcomes were smaller. In couples, Gottman’s 1998 research found that formal paraphrasing was rare in real conflicts and did not predict outcomes, which suggests listening skills matter most as a general attitude of interest rather than a rigid technique.
 links:
 /check-ins-in-depth.html#acknowledge | Check-ins: acknowledge first
 /workpapers/wp-13-daily-check-in.html | The daily check-in: just listen (WP-13)
@@ -30,7 +30,7 @@ pillars: IV
 aka: I statements, I messages, I feel statements, speaking for yourself
 nut: An I-statement describes your own experience (“I felt worried when you were late and didn’t text”) instead of accusing the other person (“You never think about me”). It is meant to lower defensiveness.
 deep:
-The classic form is: “I feel [feeling] when [specific situation], because [why it matters]. I’d like [request].” The emphasis is on your experience and a specific event, rather than on judgements about the other person’s character.
+The classic form is: “I feel [feeling] when [specific situation], because [why it matters]. I’d like [request].” The emphasis is on your experience and a specific event, rather than on judgments about the other person’s character.
 
 I-statements can be very helpful, but they are not magic words. “I feel that you are selfish” is a you-statement in disguise. What matters is the spirit behind the words: owning your feelings, being specific, and leaving room for the other person’s view.
 
@@ -50,7 +50,7 @@ pillars: IV
 aka: NVC, Marshall Rosenberg, observations feelings needs requests, compassionate communication
 nut: Nonviolent Communication, developed by Marshall Rosenberg, has four steps: describe what you observed, name your feeling, name the need behind it, and make a clear request. It is popular and useful, though its evidence base is limited and it can feel formulaic.
 deep:
-Rosenberg’s insight was that judgements (“you’re lazy”) hide needs (“I need rest, and I need help”). By separating observations from evaluations, and linking feelings to needs rather than to the other person’s wrongdoing, NVC aims to make it easier for the other person to respond with care.
+Rosenberg’s insight was that judgments (“you’re lazy”) hide needs (“I need rest, and I need help”). By separating observations from evaluations, and linking feelings to needs rather than to the other person’s wrongdoing, NVC aims to make it easier for the other person to respond with care.
 
 A full NVC sentence might be: “When I see the laundry still on the floor (observation), I feel discouraged (feeling), because I need some order in the space we share (need). Would you be willing to put it away before dinner? (request).”
 
@@ -63,7 +63,7 @@ links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /signal-translator.html | The Signal Translator
 talk:
-- What is a common judgement you make that might be hiding a need?
+- What is a common judgment you make that might be hiding a need?
 - Does feelings-and-needs language feel natural or awkward to you?
 - How could we use the idea without it sounding scripted?
 
@@ -74,11 +74,11 @@ nut: Validation means communicating that someone’s feelings or thoughts make s
 deep:
 Validation is not agreement. You can say “It makes sense you’re frustrated; you were expecting help and it didn’t come” while still having your own view about what happened. What validation says is: your reaction is understandable, and you’re not wrong to have it.
 
-Marsha Linehan described several levels of validation, from simply paying attention, through accurately reflecting, to recognising how someone’s reaction makes sense given their history or the situation, and finally treating them as a capable equal.
+Marsha Linehan described several levels of validation, from simply paying attention, through accurately reflecting, to recognizing how someone’s reaction makes sense given their history or the situation, and finally treating them as a capable equal.
 
 Invalidation is the opposite: “You’re overreacting,” “It’s not a big deal,” “Don’t be so sensitive.” Even when well-meant (as reassurance), these messages can leave people feeling dismissed, and often make the feeling stronger rather than weaker.
 research:
-Linehan developed the concept within dialectical behaviour therapy in the 1990s, and wrote about levels of validation in 1997. Laboratory studies, including one by Chad Shenk and Alan Fruzzetti (2011), found that being validated during a stressful task was associated with lower negative emotion and lower physiological arousal than being invalidated. The broader idea connects with research on perceived responsiveness in relationships.
+Linehan developed the concept within dialectical behavior therapy in the 1990s, and wrote about levels of validation in 1997. Laboratory studies, including one by Chad Shenk and Alan Fruzzetti (2011), found that being validated during a stressful task was associated with lower negative emotion and lower physiological arousal than being invalidated. The broader idea connects with research on perceived responsiveness in relationships.
 links:
 /check-ins-in-depth.html#acknowledge | Check-ins: acknowledgement
 /wired-differently.html#double-empathy | Wired Differently: feeling understood across differences
@@ -139,7 +139,7 @@ In conflict, curiosity is a powerful de-escalator. Asking “What’s the most i
 
 Questions can also be used badly: interrogations, leading questions (“Don’t you think you were being unfair?”), or questions that are really statements. Tone and genuine interest make the difference.
 research:
-Karen Huang, Michael Yeomans, Alison Wood Brooks and colleagues (2017) found across several studies that people who asked more questions, particularly follow-up questions, were rated as more likeable by conversation partners. Motivational interviewing, an approach to conversations about change developed by William Miller and Stephen Rollnick, emphasises open questions and reflective listening and has a substantial evidence base in health settings.
+Karen Huang, Michael Yeomans, Alison Wood Brooks and colleagues (2017) found across several studies that people who asked more questions, particularly follow-up questions, were rated as more likeable by conversation partners. Motivational interviewing, an approach to conversations about change developed by William Miller and Stephen Rollnick, emphasizes open questions and reflective listening and has a substantial evidence base in health settings.
 links:
 /turning-toward.html#their-world | Turning Toward: their world
 /check-ins.html#room | Check-ins: making room
@@ -175,11 +175,11 @@ nut: Assertiveness means expressing your needs and views clearly and respectfull
 deep:
 Passive communication avoids conflict in the short term but tends to build resentment. Aggressive communication gets needs heard but damages relationships. Passive-aggressive communication expresses anger indirectly: sighs, sarcasm, forgetting on purpose. Assertiveness aims to be clear, direct and kind.
 
-Assertive statements are usually specific and calm: “I’d like us to split the cooking more evenly. Could we talk about it this weekend?” They don’t apologise for having needs, and they don’t demand.
+Assertive statements are usually specific and calm: “I’d like us to split the cooking more evenly. Could we talk about it this weekend?” They don’t apologize for having needs, and they don’t demand.
 
 People from families or cultures that discouraged directness, or who have been punished for speaking up, may find assertiveness feels risky at first. It is a skill that grows with practice, ideally in low-stakes situations first.
 research:
-Assertiveness training grew from behaviour therapy in the 1950s and 1960s, including the work of Joseph Wolpe, and was popularised by Robert Alberti and Michael Emmons’ *Your Perfect Right* (1970). Studies of assertiveness training have generally found improvements in self-reported assertiveness and related outcomes, though many are older and small. Cultural norms affect what is seen as appropriately assertive.
+Assertiveness training grew from behavior therapy in the 1950s and 1960s, including the work of Joseph Wolpe, and was popularized by Robert Alberti and Michael Emmons’ *Your Perfect Right* (1970). Studies of assertiveness training have generally found improvements in self-reported assertiveness and related outcomes, though many are older and small. Cultural norms affect what is seen as appropriately assertive.
 links:
 /workpapers/wp-01.html | Kind ways to say no (WP-01)
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
@@ -231,9 +231,9 @@ talk:
 @@ feedback | Giving and receiving feedback
 pillars: IV, II
 aka: feedback, criticism at work, constructive criticism, SBI, feedback sandwich, praise
-nut: Useful feedback is specific, about behaviour rather than character, and given in a way the person can hear. Research shows feedback doesn’t always help; how it is given matters a great deal.
+nut: Useful feedback is specific, about behavior rather than character, and given in a way the person can hear. Research shows feedback doesn’t always help; how it is given matters a great deal.
 deep:
-One widely used format is Situation–Behaviour–Impact (SBI): describe the situation, the specific behaviour, and its impact. “In this morning’s meeting (situation), when you finished my sentence (behaviour), I felt I couldn’t make my point (impact).” It keeps feedback concrete.
+One widely used format is Situation–Behavior–Impact (SBI): describe the situation, the specific behavior, and its impact. “In this morning’s meeting (situation), when you finished my sentence (behavior), I felt I couldn’t make my point (impact).” It keeps feedback concrete.
 
 The “feedback sandwich” (praise, criticism, praise) is popular but debated: the praise can feel insincere, and the main message can get lost. Many practitioners suggest being clear and kind rather than wrapping.
 
@@ -251,15 +251,15 @@ talk:
 @@ complaints-vs-criticism | Complaints versus criticism
 pillars: IV
 aka: complaining, criticism, how to complain, raising a problem
-nut: A complaint is about a specific behaviour; criticism is about the person’s character. Complaints are healthy and necessary. Criticism tends to make people defensive.
+nut: A complaint is about a specific behavior; criticism is about the person’s character. Complaints are healthy and necessary. Criticism tends to make people defensive.
 deep:
-“I was frustrated that the bins weren’t taken out last night” is a complaint. “You never take responsibility for anything” is criticism. The first can be solved; the second invites a defence.
+“I was frustrated that the bins weren’t taken out last night” is a complaint. “You never take responsibility for anything” is criticism. The first can be solved; the second invites a defense.
 
 Words like “always” and “never,” and phrases like “what kind of person…”, usually signal criticism. They turn one event into a verdict.
 
-It is important to say that complaints are not a problem. Relationships where people can’t complain tend to build silent resentment. The aim is to complain well: specific, recent, about the behaviour, with a request.
+It is important to say that complaints are not a problem. Relationships where people can’t complain tend to build silent resentment. The aim is to complain well: specific, recent, about the behavior, with a request.
 research:
-The distinction is central to Gottman’s work; criticism is the first of his four horsemen. Research on attributions in couples, for example by Frank Fincham and Thomas Bradbury, shows that seeing a partner’s negative behaviour as a stable trait of the partner (rather than a situation) goes along with lower satisfaction.
+The distinction is central to Gottman’s work; criticism is the first of his four horsemen. Research on attributions in couples, for example by Frank Fincham and Thomas Bradbury, shows that seeing a partner’s negative behavior as a stable trait of the partner (rather than a situation) goes along with lower satisfaction.
 links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /check-ins.html#ground | Check-ins: ground rules
@@ -268,23 +268,23 @@ talk:
 - Do “always” and “never” come up in our disagreements?
 - Is there a complaint either of us has been holding back?
 
-@@ humour | Humour in hard moments
+@@ humor | Humor in hard moments
 pillars: IV
 aka: humor, laughing together, jokes in arguments, playfulness, sarcasm
-nut: Shared, affectionate humour can defuse tension and repair after conflict. Humour that mocks or belittles has the opposite effect.
+nut: Shared, affectionate humor can defuse tension and repair after conflict. Humor that mocks or belittles has the opposite effect.
 deep:
-Rod Martin described four humour styles: affiliative (humour that brings people together), self-enhancing (seeing the funny side of life), aggressive (humour at others’ expense) and self-defeating (putting yourself down to please others). The first two are associated with better wellbeing and relationships; the other two less so.
+Rod Martin described four humor styles: affiliative (humor that brings people together), self-enhancing (seeing the funny side of life), aggressive (humor at others’ expense) and self-defeating (putting yourself down to please others). The first two are associated with better wellbeing and relationships; the other two less so.
 
 In conflict, a well-timed light moment can be a repair attempt. It reminds both people that they are on the same side. But timing matters: joking when the other person feels unheard can seem dismissive.
 
 Sarcasm is a special case: it can be playful between people who share the joke, but in tension it often slides into contempt.
 research:
-Martin and colleagues published their Humor Styles Questionnaire in 2003, and much research since links affiliative humour with relationship satisfaction. Laura Kurtz and Sara Algoe (2015) found that shared laughter between romantic partners was associated with feeling closer and more supported.
+Martin and colleagues published their Humor Styles Questionnaire in 2003, and much research since links affiliative humor with relationship satisfaction. Laura Kurtz and Sara Algoe (2015) found that shared laughter between romantic partners was associated with feeling closer and more supported.
 links:
 /pause-and-play.html | Pause and play
 /check-ins.html#regroup | Check-ins: regrouping
 talk:
-- What kind of humour do we share?
+- What kind of humor do we share?
 - When has a joke helped us, and when has it made things worse?
 - Is there any sarcasm between us that stings more than it seems?
 
@@ -320,7 +320,7 @@ Popular claims that “93% of communication is nonverbal” are a misreading of 
 
 Nonverbal cues are also read differently across people. Eye contact, for example, can signal attention for one person and be uncomfortable for another; many autistic people find eye contact effortful and listen better without it. Assuming that someone’s face or posture means what yours would mean is a common source of misunderstanding.
 research:
-Mehrabian’s studies (1967) are often misquoted; he himself cautioned against generalising them. Research on facial expressions, including debates between Paul Ekman and Lisa Feldman Barrett, shows that expressions are less universal and less reliably linked to specific emotions than once thought. Research on autistic communication supports the idea that nonverbal norms differ across neurotypes.
+Mehrabian’s studies (1967) are often misquoted; he himself cautioned against generalizing them. Research on facial expressions, including debates between Paul Ekman and Lisa Feldman Barrett, shows that expressions are less universal and less reliably linked to specific emotions than once thought. Research on autistic communication supports the idea that nonverbal norms differ across neurotypes.
 links:
 /wired-differently-in-depth.html#channels | Wired Differently in depth: channels
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)

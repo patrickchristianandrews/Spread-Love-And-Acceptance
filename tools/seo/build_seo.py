@@ -109,7 +109,7 @@ OVERRIDE = {
         'Paste a text thread or chat into the Conversation Reader and see where it turned, what each of you may be hearing, and calmer replies built '
         'from your own words. A free, private tool for repair and reconciliation.'),
     'library.html': (None,
-        'The Professor’s Library: 235 plain-language entries on relationships, conflict and reconciliation, kindness, '
+        'Psychology in plain words: 235 short entries on relationships, conflict and reconciliation, kindness, '
         'gratitude, emotions, stress, calm and differences in wiring, with honest notes on the evidence.'),
     'sent-this.html': (None,
         'Someone sent you Spread Love & Acceptance? Here is what they can and can’t see, what stays yours, and kind ways '
@@ -136,7 +136,7 @@ SEARCH = {
  'check-ins.html': ('Relationship Check-Ins: A Simple, Kind Weekly Ritual', 'A short, kind check-in for couples, families and housemates: what went well, what felt heavy, and one small change to try next.'),
  'quick-checks.html': ('My Weather Today: Daily Mood and Stress Check-In', 'A 60-second check-in on how you’re doing today, with a gentle forecast for hard talks and a calm pause with something soothing to do.'),
  'ask.html': ('Ask Professor Puddles: Free, Private Relationship Help Chat', 'Tell a cheerful raindrop professor what’s going on: kind next steps, words to say, deep talks and infographics. Free, and nothing you type leaves your device.'),
- 'library.html': ('Relationship Psychology Library, in Plain English', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
+ 'library.html': ('Psychology in Plain Words: How Relationships Work', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
  'pause-and-play.html': ('Relax and Play: Calm Tools and Gentle Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colours, calm music and sounds, or play a calm game with no timers and no way to lose.'),
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Game', 'A peaceful garden at night: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. A free, calm game.'),
@@ -281,7 +281,7 @@ SEARCH.update({
  'book/self-2-now-in-depth.html': (None, 'Part One, Now, in full: wiring and conditions, how you like to be spoken to, reading your state, a four-step self-check, kind limits and how much to share.'),
  'book/self-3-next-in-depth.html': (None, 'Part One, Next, in full: values first, one small goal, what gets in the way, tiny repeatable steps, if-then plans, asking for support and a kind monthly look-back.'),
  # library
- 'library.html': ('Relationship Psychology Library, in Plain English', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
+ 'library.html': ('Psychology in Plain Words: How Relationships Work', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
  'library/fairness.html': ('The Mental Load and Fair Division of Labor at Home', 'What research says about the mental load, invisible work and the division of labor at home, why each person often thinks they do more, and what helps.'),
  'library/conflict.html': ('Conflict Resolution in Relationships, Explained', 'Plain-language research on conflict in relationships: why arguments escalate, how repair works, apology, forgiveness, mediation and fair process.'),
  'library/communication.html': ('Communication in Relationships: Talking and Listening', 'Plain-language research on communication in relationships: listening, asking, feedback, tone, apology and the everyday skills of being understood.'),
@@ -295,7 +295,7 @@ SEARCH.update({
  'library/teams.html': ('Fair Systems for Teams and Households', 'How fair systems work for teams and households: clear owners, blameless reviews, checklists, and why shared jobs slip when everyone owns them at once.'),
  'library/life.html': ('Family, Money and Big Life Changes', 'Plain-language research on family life, money talks, co-parents, holidays, in-laws and the big transitions of life, and how to share the load through them.'),
  'library/calm.html': ('Calm and Attention, Explained', 'What research says about calm and attention: breathing, mindfulness, nature, rest, mind-wandering and flow, with modest and honest claims about each one.'),
- 'learn/index.html': ('Stories From Philosophy for Everyday Life', 'Twelve old stories from philosophy, retold in plain words, to help you know yourself, see the other person more clearly and live more kindly with others.'),
+ 'learn/index.html': ('Philosophy for Everyday Life: Old Stories, Useful Ideas', 'Twelve old stories from philosophy, retold in plain words, to help you know yourself, see the other person more clearly and live more kindly with others.'),
  # cut-off descriptions
  'complacency-in-depth.html': (None, 'Why good things fade into the background, the quiet signs of complacency, how it shows up in yourself and in every kind of relationship, and the small, kind re-checks that keep things alive.'),
  'check-ins-in-depth.html': (None, 'How to hold a hard conversation kindly: a calm time and place, listening before any reply, a reply that does not erase what was heard, and a plan for both.'),
@@ -334,7 +334,7 @@ SEARCH.update({
  'start-in-10-minutes.html': ('Start in 10 Minutes', 'Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern or each say one thing, then pick one small change. Private, no sign-up.'),
  'grandparents.html': ('For Grandparents: Help Without Taking Over', 'Free, gentle help for grandparents: share childcare fairly, agree on house rules with your adult children, say no kindly, and stay close to your grandkids.'),
  'book/topic-by-relationship.html': ('The Book by Relationship: What to Read First', 'Which parts of the book matter most for you: the best sections for couples, friends, family, siblings, co-parents, carers, housemates and work.'),
- 'by-relationship.html': ('Find It by Relationship: Every Page, Sorted by Who It’s For', 'Every page on the site in one list, sorted by who it’s for: just you, couples, friends, family, co-parents, roommates, work, life changes, safety and games.'),
+ 'by-relationship.html': ('Find It by Relationship: Every Page, Sorted by Who It’s For', 'Every page on the site in one list, sorted by who it’s for: just you, couples, friends, family, co-parents, roommates, work, life changes and games.'),
  'friends.html': ('Friends: When a Friendship Drifts', 'Free, kind help when a friendship drifts: for the friend who always reaches out and the one who went quiet after a baby or a hard year, with short messages.'),
  'more-than-two.html': ('More Than Two Partners at Home', 'Free help for triads and homes with more than two partners: share the planning, join a home that ran before you, and include the partner who works long hours.'),
  'gaming-and-time-together.html': ('Gaming, Phones and Time Together', 'Fair, free help when one of you games or scrolls a lot: heads-ups, bids between matches, a protected evening, and a time-together deal to fill in and share.'),
@@ -640,8 +640,8 @@ BOOK_PDFS = [('The whole book', 'whole'), ('The book for one person (Parts One a
 # The middle step of each page's breadcrumb trail (name, page)
 CRUMB_PARENTS = [
     (r'^book/', 'The book', 'book/index.html'),
-    (r'^library/', 'The Professor’s Library', 'library.html'),
-    (r'^learn/index-in-depth', 'Stories from Philosophy', 'learn/index.html'),
+    (r'^library/', 'Psychology in plain words', 'library.html'),
+    (r'^learn/index-in-depth', 'Philosophy for everyday life', 'learn/index.html'),
     (r'^(workpapers/|wp-\d|prog-01-in)', 'Which part of the program to use', 'program.html'),
     (r'^(coin-pusher|night-garden|bears-dojo|word-bloom|quiet-crossword|quiet-words|daily-ledger|frequency-journey|calm-visualizer|keepsakes)', 'Calm games', 'pause-and-play.html'),
     (r'^frequency-buddies-', 'Frequency Buddies', 'frequency-buddies.html'),
@@ -1146,7 +1146,7 @@ GROUPS = [
     ('Help for your situation', r'^(by-relationship|examples|for-teachers|groups\.html|infographic|ladder|refusals|upset-right-now|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw)'),
     ('The book, Part Three: Understanding people', r'^book/understanding-'),
     ('The book', r'^book/'),
-    ('The Professor’s Library and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|polymath|frequency-framework)'),
+    ('Psychology in plain words, philosophy and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|polymath|frequency-framework)'),
     ('About this site', r'^(install|roadmap|telemetry|on-this-device|surprise|keepsakes|brand|legal/|architecture/)'),
 ]
 

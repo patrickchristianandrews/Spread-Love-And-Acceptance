@@ -21,7 +21,10 @@
     dice: ['dice-1', 'dice-2', 'dice-3'], coins: ['coins-1', 'coins-2'], bling: ['coin-bling-1', 'coin-bling-2'], bell: ['bell-1', 'bell-2']
   };
   var BARK_VOL = 0.42; // the pups sit under the music
-  var ctx = null, out = null, bufs = {}, loading = null, lastAt = -10, lastKey = '', lastKeyAt = 0, nextAmb = 0, clockMs = 0, lastName = '';
+  var ctx = null, out = null, soft = null, bufs = {}, loading = null, lastAt = -10, lastKey = '', lastKeyAt = 0, nextAmb = 0, clockMs = 0, lastName = '', hushT = 0;
+  var OUT_LV = 0.9;
+  // the sharp little casino sounds (chips, cards, dice, coins) go through a gentle low-pass, so they land as soft taps, not clicks
+  var SHARP = { stack: 1, clink: 1, shuffle: 1, flip: 1, dice: 1, coins: 1 };
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   var enabled = lsGet('tol-pc-sound') !== 'off', held = false; // held: kept quiet for this visit (the site's quiet mode), without changing the saved choice
@@ -32,9 +35,12 @@
       try { ctx = window.__pcAudio || new AC(); } catch (e) { return false; }
       var comp = ctx.createDynamicsCompressor();
       comp.threshold.value = -18; comp.knee.value = 12; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.2;
-      out = ctx.createGain(); out.gain.value = 0.9;
+      out = ctx.createGain(); out.gain.value = OUT_LV;
       out.connect(comp); comp.connect(ctx.destination);
+      soft = ctx.createBiquadFilter(); soft.type = 'lowpass'; soft.frequency.value = 3200; soft.Q.value = 0.5; soft.connect(out);
     }
+    clearTimeout(hushT); hushT = 0;
+    if (out.gain.value < OUT_LV * 0.9) { try { var n0 = ctx.currentTime; out.gain.cancelScheduledValues(n0); out.gain.setValueAtTime(Math.max(0.0001, out.gain.value), n0); out.gain.linearRampToValueAtTime(OUT_LV, n0 + 0.08); } catch (e) { out.gain.value = OUT_LV; } }
     if (ctx.state === 'suspended' && ctx.resume) { try { var pr = ctx.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} }
     load();
     return ctx.state !== 'closed';
@@ -64,8 +70,10 @@
     var name = pick(list), s = ctx.createBufferSource(), g = ctx.createGain();
     s.buffer = bufs[name];
     s.playbackRate.value = /^bark/.test(group) ? 1 : 0.98 + Math.random() * 0.04; // barks exactly as recorded
-    g.gain.value = vol == null ? 1 : vol;
-    s.connect(g); g.connect(out); s.start(now + 0.02 + (delay || 0));
+    // every sound eases in over a few milliseconds (no instant jump in level), and the sharp ones are softened
+    var at = now + 0.02 + (delay || 0), lv = vol == null ? 1 : vol;
+    g.gain.setValueAtTime(0.0001, at); g.gain.linearRampToValueAtTime(lv * (SHARP[group] ? 0.8 : 1), at + (SHARP[group] ? 0.012 : 0.006));
+    s.connect(g); g.connect(SHARP[group] && soft ? soft : out); s.start(at);
     lastAt = now + (delay || 0); lastName = name; nextAmb = Math.max(nextAmb, clockMs + 6000);
     return true;
   }
@@ -126,10 +134,22 @@
     if (clockMs < nextAmb) return;
     nextAmb = clockMs + 8000 + Math.random() * 8000; // a gentle, steady rhythm even at the calmer pace
     var r = Math.random(), w = Math.random() < 0.5 ? 0 : 1;
-    if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['stack', 'clink', 'flip', 'bling']), 0.5);
+    // out of nowhere, only the pups or a soft chime: the chip and card clicks are kept for moments you can see happen
+    if (r < 0.55) bark(w, 0.72); else if (r < 0.85) chat(w); else play(pick(['bling', 'bell']), 0.45);
   }
   function musicOn() { var M = window.TOLPalsCamMusic; return !!(M && M.on()); }
-  function hush() { if (musicOn()) return; /* the music shares this audio: never silence it */ if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
+  // going quiet: fade out first, and only put the audio to sleep once the place sounds have faded too
+  // (suspending straight away cut every sound off mid-wave, and woke it up mid-wave: two clicks)
+  function hush() {
+    if (musicOn() || !ctx) return; /* the music shares this audio: never silence it */
+    if (out) { try { var n0 = ctx.currentTime; out.gain.cancelScheduledValues(n0); out.gain.setValueAtTime(Math.max(0.0001, out.gain.value), n0); out.gain.linearRampToValueAtTime(0.0001, n0 + 0.15); } catch (e) {} }
+    clearTimeout(hushT);
+    hushT = setTimeout(function () {
+      hushT = 0;
+      if (musicOn() || !ctx || ctx.state !== 'running' || !ctx.suspend) return;
+      try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {}
+    }, 2600);
+  }
   function wake() { if (ctx && ctx.state === 'suspended' && (musicOn() || (enabled && !held))) { if (enabled && !held) ensure(); else { try { var pr = ctx.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } } }
   function setOn(v) {
     held = false; enabled = !!v; lsSet('tol-pc-sound', enabled ? 'on' : 'off');

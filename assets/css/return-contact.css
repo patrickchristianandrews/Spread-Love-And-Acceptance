@@ -1,0 +1,68 @@
+/* return-contact.css: the Contact page (contact.html) and the sign-up form on membership.html (return21).
+   Light colors only: the site's dark mode turns the whole page (site.css). */
+.ct-page *, .ct-page *::before, .ct-page *::after{ box-sizing:border-box; }
+.ct-jump{ display:flex; flex-wrap:wrap; gap:.4rem .5rem; margin:0 0 1.4rem; }
+.ct-jump a{ display:inline-flex; align-items:center; min-height:44px; padding:.35rem .9rem; border-radius:999px; border:1.5px solid var(--line, #D9CBA3);
+  background:#FFFDF7; color:var(--ink, #2B2620); text-decoration:none; font-size:.95rem; font-family:var(--d17-ui, system-ui, sans-serif); }
+.ct-jump a:hover{ border-color:var(--brass, #A8792F); }
+.ct-card{ position:relative; z-index:2; max-width:42rem; margin:0 0 1.4rem; padding:1.1rem 1.15rem 1.15rem; border-radius:18px 18px 18px 6px;
+  background:rgba(255,251,242,.97); border:1.5px solid #D9C8F0; box-shadow:0 6px 18px rgba(90,70,120,.08); scroll-margin-top:90px; }
+.read .ct-card h2{ margin-top:0; }
+.read .ct-card p, .read .ct-card li{ max-width:none; }
+.read .ct-card > p:last-child{ margin-bottom:0; }
+#privacy{ scroll-margin-top:90px; }
+
+.ct-form{ margin:0 0 .8rem; }
+.ct-form fieldset{ border:0; margin:0 0 .9rem; padding:0; min-width:0; }
+.ct-form legend{ font-weight:600; margin:0 0 .45rem; padding:0; }
+.ct-opt{ font-weight:400; font-size:.88rem; color:var(--ink-soft, #5A5346); }
+.ct-chips{ display:flex; flex-wrap:wrap; gap:.45rem; }
+.ct-chips legend{ width:100%; }
+.ct-chips label{ position:relative; display:inline-flex; }
+.ct-chips input{ position:absolute; opacity:0; width:1px; height:1px; margin:0; }
+.ct-chips label > span{ display:inline-flex; align-items:center; min-height:44px; padding:.4rem .95rem; border-radius:999px; border:1.5px solid #B9A3DA; background:#FFFDF7;
+  color:var(--ink, #2B2620); font-size:.95rem; cursor:pointer; user-select:none; }
+.ct-chips input:checked + span{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+.ct-chips input:checked + span::before{ content:"\2713"; margin-right:.35rem; }
+.ct-chips input:focus-visible + span{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.read .ct-field{ display:flex; flex-direction:column; gap:.25rem; margin:0 0 .8rem; }
+.ct-field label{ font-weight:600; }
+.ct-form input[type="text"], .ct-form input[type="email"], .ct-form textarea, .register-form input[type="email"]{ width:100%; min-height:44px; padding:.5rem .75rem; border-radius:10px;
+  border:1.5px solid #CDB9E6; background:#FFFDF7; color:var(--ink, #2B2620); font:inherit; font-size:1rem; }
+.ct-form textarea{ min-height:9rem; resize:vertical; line-height:1.5; }
+.ct-form input:focus-visible, .ct-form textarea:focus-visible, .register-form input:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.ct-help{ font-size:.88rem; color:var(--ink-soft, #5A5346); }
+.read .ct-check{ margin:0 0 .5rem; }
+.ct-check label{ display:flex; align-items:flex-start; gap:.55rem; min-height:44px; padding:.35rem 0; cursor:pointer; }
+.ct-check input{ width:22px; height:22px; margin:.15rem 0 0; flex:0 0 auto; accent-color:#4E3F6B; }
+.ct-btns, .ct-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .6rem; }
+.ct-row input{ flex:1 1 14rem; min-width:0; width:auto !important; }
+.ct-btn, .register-form button{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.5rem 1.1rem; border-radius:999px;
+  border:1.5px solid #4E3F6B; background:#4E3F6B; color:#FFFDF7; font-weight:600; font-size:1rem; line-height:1.2; font-family:var(--d17-ui, system-ui, sans-serif); cursor:pointer; text-decoration:none; }
+.ct-btn:hover, .register-form button:hover{ background:#3C3056; }
+.ct-btn.is-soft{ background:#FFFDF7; color:#4E3F6B; }
+.ct-btn.is-soft:hover{ background:#F3EEFA; }
+.read a.ct-btn{ color:#4E3F6B; }
+.ct-btn:focus-visible, .register-form button:focus-visible, .ct-jump a:focus-visible, .ct-more > summary:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.read .ct-say{ margin:.5rem 0 0; font-size:.95rem; min-height:0; }
+.read .ct-say:empty{ margin:0; }
+.read .ct-small{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.ct-addr{ overflow-wrap:anywhere; }
+.ct-more{ margin:.3rem 0 0; }
+.ct-more > summary{ min-height:44px; display:flex; align-items:center; gap:.4rem; cursor:pointer; font-weight:600; color:#4E3F6B; list-style:none; }
+.ct-more > summary::-webkit-details-marker{ display:none; }
+.ct-more > summary::before{ content:"\25B8"; display:inline-block; transition:transform .2s; }
+.ct-more[open] > summary::before{ transform:rotate(90deg); }
+@media (prefers-reduced-motion: reduce){ .ct-more > summary::before{ transition:none; } }
+
+/* membership.html: the plain sign-up form */
+.register-form{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:.5rem .6rem; max-width:40rem; margin:0 0 1.2rem; }
+.register-form label{ width:100%; font-weight:600; }
+.register-form input[type="email"]{ flex:1 1 14rem; width:auto; min-width:0; }
+.register-form .tol-msg{ width:100%; margin:.2rem 0 0; }
+
+@media (max-width:480px){
+  .ct-card{ padding:.95rem .85rem 1rem; }
+  .ct-btns .ct-btn, .register-form button{ width:100%; }
+  .ct-row button{ width:100%; }
+}

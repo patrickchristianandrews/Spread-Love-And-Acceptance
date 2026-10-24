@@ -2,21 +2,21 @@
 #title: Thinking traps
 #pillars: V, IV
 #blurb: The biases and mental shortcuts that make us assume the worst, remember selectively and misread each other.
-#pillarnote: Thinking traps belong mostly to Pillar V, Notice the quiet incentives: the mental shortcuts and defaults that steer judgements without our noticing. In you, it means catching your own biases, like remembering your efforts more than anyone else’s. Between you, it means seeing how those shortcuts turn a situation into a story about someone’s character. Many entries also point to Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive.
+#pillarnote: Thinking traps belong mostly to Pillar V, Notice the quiet incentives: the mental shortcuts and defaults that steer judgments without our noticing. In you, it means catching your own biases, like remembering your efforts more than anyone else’s. Between you, it means seeing how those shortcuts turn a situation into a story about someone’s character. Many entries also point to Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive.
 #intro: Human minds take shortcuts. Most of the time they work well enough, but in close relationships they can quietly tilt the picture: we judge others by their actions and ourselves by our intentions, remember our own efforts better than anyone else’s, and assume the worst when we’re tired. Knowing the common traps doesn’t make anyone immune, but it makes them easier to spot, in ourselves first.
 
 @@ fundamental-attribution-error | The fundamental attribution error
 pillars: II, V
 aka: fundamental attribution error, correspondence bias, blaming character, assuming the worst about people, why do we assume the worst
-nut: People tend to explain others’ behaviour by their character (“they’re careless”) and underweight the situation (“they were rushing to pick up the kids”). It is one of the most studied biases in social psychology.
+nut: People tend to explain others’ behavior by their character (“they’re careless”) and underweight the situation (“they were rushing to pick up the kids”). It is one of the most studied biases in social psychology.
 deep:
-When someone cuts you off in traffic, it is easy to think “what a rude person” rather than “maybe they’re rushing to hospital.” With our own behaviour, we usually know the circumstances, so we explain it by the situation.
+When someone cuts you off in traffic, it is easy to think “what a rude person” rather than “maybe they’re rushing to hospital.” With our own behavior, we usually know the circumstances, so we explain it by the situation.
 
-In close relationships, this bias can do a lot of damage. A forgotten errand becomes “you don’t care” rather than “you had a hard day.” Over time, these character explanations add up to a story about who the other person is, which then colours every new event.
+In close relationships, this bias can do a lot of damage. A forgotten errand becomes “you don’t care” rather than “you had a hard day.” Over time, these character explanations add up to a story about who the other person is, which then colors every new event.
 
 A useful habit is to ask “what situation would make a reasonable person do this?” It doesn’t excuse everything, but it often reveals a less damning explanation, and it lets the conversation be about the situation, which can actually be changed.
 research:
-Edward Jones and Victor Harris’s 1967 study, in which people judged essay writers’ opinions even when told the writers had been assigned a side, is a classic demonstration. Lee Ross named the “fundamental attribution error” in 1977. The effect is robust in many studies, though researchers have found it is weaker in some cultures that emphasise context, and that people can correct for it when they have time and motivation.
+Edward Jones and Victor Harris’s 1967 study, in which people judged essay writers’ opinions even when told the writers had been assigned a side, is a classic demonstration. Lee Ross named the “fundamental attribution error” in 1977. The effect is robust in many studies, though researchers have found it is weaker in some cultures that emphasize context, and that people can correct for it when they have time and motivation.
 links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands: weigh what you heard (WP-09)
 /book/chapter-2.html | It judges the setup, never a person (Chapter II)
@@ -31,9 +31,9 @@ pillars: II, V
 aka: actor observer bias, my situation your character, double standard
 nut: The actor–observer idea says we explain our own actions by the situation and others’ by their character. It is intuitive and often described, but research suggests the effect is smaller and more patchy than once thought.
 deep:
-Edward Jones and Richard Nisbett proposed in 1971 that actors (doing the behaviour) and observers (watching it) explain behaviour differently. The actor sees the situation; the observer sees the person.
+Edward Jones and Richard Nisbett proposed in 1971 that actors (doing the behavior) and observers (watching it) explain behavior differently. The actor sees the situation; the observer sees the person.
 
-The idea rings true in everyday life: “I was late because of traffic; you were late because you’re disorganised.” Yet when Bertram Malle reviewed the research, he found the asymmetry was small on average and appeared only under certain conditions, for example with negative events or when the actor was a close other.
+The idea rings true in everyday life: “I was late because of traffic; you were late because you’re disorganized.” Yet when Bertram Malle reviewed the research, he found the asymmetry was small on average and appeared only under certain conditions, for example with negative events or when the actor was a close other.
 
 So it is fair to say that people sometimes judge themselves more kindly than others, especially for negative events, but not that this happens universally. The more useful takeaway may be simply to notice when you are using different standards for yourself and for someone else.
 research:
@@ -43,7 +43,7 @@ links:
 /book/chapter-3-in-depth.html#vectors | Chapter III in depth: seven angles
 talk:
 - Do you tend to go easier on yourself or on others?
-- Is there a behaviour we each excuse in ourselves but not in the other?
+- Is there a behavior we each excuse in ourselves but not in the other?
 - What would a fair standard for both of us look like?
 
 @@ negativity-bias | Negativity bias: why bad weighs more than good
@@ -71,7 +71,7 @@ pillars: V, I
 aka: confirmation bias, seeing what you expect, selective attention, only noticing evidence that fits
 nut: Confirmation bias is the tendency to notice, seek and remember information that fits what we already believe, and to discount information that doesn’t. Once we have a story about someone, we tend to see evidence for it everywhere.
 deep:
-If you believe your housemate never cleans, you will notice every dirty mug and overlook the times the kitchen was spotless. The belief shapes attention, and attention shapes memory.
+If you believe your roommate never cleans, you will notice every dirty mug and overlook the times the kitchen was spotless. The belief shapes attention, and attention shapes memory.
 
 This makes stories about other people self-sealing. The more we believe them, the more evidence we collect. It is one reason recurring conflicts can harden: each person has a well-stocked file of examples.
 
@@ -89,15 +89,15 @@ talk:
 @@ cognitive-distortions | Cognitive distortions (the CBT list)
 pillars: V, III
 aka: cognitive distortions, thinking errors, unhelpful thinking styles, Beck, Burns, CBT
-nut: Cognitive distortions are common patterns of biased thinking identified in cognitive therapy, like all-or-nothing thinking, mind-reading and catastrophising. Everyone uses them sometimes; noticing them can take the sting out of hard moments.
+nut: Cognitive distortions are common patterns of biased thinking identified in cognitive therapy, like all-or-nothing thinking, mind-reading and catastrophizing. Everyone uses them sometimes; noticing them can take the sting out of hard moments.
 deep:
-Aaron Beck, the founder of cognitive therapy, noticed that people with low mood often had automatic thoughts that followed predictable patterns. David Burns later popularised a list of ten in *Feeling Good*. The list includes all-or-nothing thinking, overgeneralisation, mental filter, disqualifying the positive, jumping to conclusions (mind-reading and fortune-telling), magnification or minimisation, emotional reasoning, should statements, labelling, and personalisation.
+Aaron Beck, the founder of cognitive therapy, noticed that people with low mood often had automatic thoughts that followed predictable patterns. David Burns later popularized a list of ten in *Feeling Good*. The list includes all-or-nothing thinking, overgeneralization, mental filter, disqualifying the positive, jumping to conclusions (mind-reading and fortune-telling), magnification or minimization, emotional reasoning, should statements, labeling, and personalization.
 
 These aren’t signs of anything wrong with a person. They are shortcuts everyone’s mind takes, especially when tired or stressed. In relationships, they often show up as “you always,” “you never,” “you obviously don’t care,” or “this is going to be a disaster.”
 
 The CBT approach is not to force positive thoughts but to check thoughts against evidence: is it really always? What else could explain this? What would I say to a friend thinking this?
 research:
-Beck described cognitive distortions in the 1960s and 1970s, and Burns’ *Feeling Good* was published in 1980. Cognitive behavioural therapy has a large evidence base for several conditions. The specific list of distortions is a clinical teaching tool; research supports the general idea that certain thinking patterns are linked with low mood and anxiety, though the categories overlap and are not precise scientific constructs.
+Beck described cognitive distortions in the 1960s and 1970s, and Burns’ *Feeling Good* was published in 1980. Cognitive behavioral therapy has a large evidence base for several conditions. The specific list of distortions is a clinical teaching tool; research supports the general idea that certain thinking patterns are linked with low mood and anxiety, though the categories overlap and are not precise scientific constructs.
 links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /signal-translator.html | The Signal Translator
@@ -127,10 +127,10 @@ talk:
 - Is there a need you expect the other person to guess? Could you say it instead?
 - What phrase could we use to check a guess gently?
 
-@@ catastrophising | Catastrophising and all-or-nothing thinking
+@@ catastrophizing | Catastrophizing and all-or-nothing thinking
 pillars: III, V
-aka: catastrophizing, catastrophising, worst case thinking, all or nothing thinking, black and white thinking, always and never
-nut: Catastrophising jumps to the worst possible outcome; all-or-nothing thinking sees things as total success or total failure. Both make ordinary problems feel much bigger than they are.
+aka: catastrophizing, catastrophizing, worst case thinking, all or nothing thinking, black and white thinking, always and never
+nut: Catastrophizing jumps to the worst possible outcome; all-or-nothing thinking sees things as total success or total failure. Both make ordinary problems feel much bigger than they are.
 deep:
 One bad conversation becomes “our relationship is falling apart.” One forgotten job becomes “you never do anything.” These leaps happen quickly and feel convincing, especially when tired or stressed.
 
@@ -138,7 +138,7 @@ All-or-nothing thinking shows up in words like “always,” “never,” “com
 
 Useful questions: What is the most likely outcome, not just the worst? What would I tell a friend? Is it really always, or just often, or just recently? Looking at a month of records rather than one bad evening, as the program suggests, is a practical way to find the middle ground.
 research:
-Catastrophising and dichotomous thinking are standard distortions in cognitive therapy. Catastrophising has been studied especially in pain research, where it is linked to greater distress. Research on relationships links global, stable negative attributions (“you always”) with lower satisfaction.
+Catastrophizing and dichotomous thinking are standard distortions in cognitive therapy. Catastrophizing has been studied especially in pain research, where it is linked to greater distress. Research on relationships links global, stable negative attributions (“you always”) with lower satisfaction.
 links:
 /book/chapter-2.html | Look at the month, not last night (Chapter II)
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
@@ -154,11 +154,11 @@ nut: Should statements are rigid rules about how you or others ought to behave. 
 deep:
 “He should know I need help.” “I should be able to handle this.” “A good partner would…” Shoulds hide expectations inside rules, and rules feel non-negotiable.
 
-Karen Horney wrote about the “tyranny of the shoulds” in the 1950s, and Albert Ellis criticised rigid demands (“musts”) in his rational emotive behaviour therapy. Both saw these rules as a source of needless distress.
+Karen Horney wrote about the “tyranny of the shoulds” in the 1950s, and Albert Ellis criticized rigid demands (“musts”) in his rational emotive behavior therapy. Both saw these rules as a source of needless distress.
 
 Turning a should into a preference or a request helps: “I’d really like help with this; could you take it on?” It makes the expectation visible and discussable. With self-directed shoulds, asking “says who?” and “what would be good enough?” can loosen the grip.
 research:
-Should statements are one of the distortions in Burns’ list. Ellis developed rational emotive behaviour therapy from the 1950s; it has supportive evidence, though less than mainstream CBT. Research on unspoken expectations in relationships (for example, studies of relationship beliefs by Roy Eidelson and Norman Epstein in 1982) links rigid beliefs such as “partners should read each other’s minds” with lower satisfaction.
+Should statements are one of the distortions in Burns’ list. Ellis developed rational emotive behavior therapy from the 1950s; it has supportive evidence, though less than mainstream CBT. Research on unspoken expectations in relationships (for example, studies of relationship beliefs by Roy Eidelson and Norman Epstein in 1982) links rigid beliefs such as “partners should read each other’s minds” with lower satisfaction.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job: expectations written down (WP-03)
 /check-ins.html#ground | Check-ins: ground rules
@@ -167,18 +167,18 @@ talk:
 - Is there a should about the other person that could become a request?
 - Where did some of our shoulds come from?
 
-@@ personalisation | Personalisation and blame
+@@ personalization | Personalization and blame
 pillars: II
 aka: personalization, taking things personally, self blame, blaming others, it is all my fault
-nut: Personalisation means assuming you are the cause of events that have many causes; its twin, blaming, means assuming someone else is solely responsible. Both skip over the situation.
+nut: Personalization means assuming you are the cause of events that have many causes; its twin, blaming, means assuming someone else is solely responsible. Both skip over the situation.
 deep:
-If your partner is grumpy after work, personalisation says “what did I do?” Blaming says “they’re taking it out on me on purpose.” The more likely explanation (a bad day) gets lost.
+If your partner is grumpy after work, personalization says “what did I do?” Blaming says “they’re taking it out on me on purpose.” The more likely explanation (a bad day) gets lost.
 
-Personalisation can lead to constant apologising and anxiety. Blaming can lead to anger and defensiveness. Both make it harder to solve problems, because they locate the issue in a person rather than in circumstances that could be changed.
+Personalization can lead to constant apologizing and anxiety. Blaming can lead to anger and defensiveness. Both make it harder to solve problems, because they locate the issue in a person rather than in circumstances that could be changed.
 
 The program’s habit of looking at systems (unclear ownership, overloaded weeks, mismatched rhythms) rather than at people is partly designed to counter this. Most household problems have several causes and no villain.
 research:
-Personalisation is one of Beck’s original distortions. Research on attributions in relationships, particularly by Thomas Bradbury and Frank Fincham, consistently finds that blaming attributions for a partner’s behaviour predict lower satisfaction and more conflict over time, with some evidence that the effect runs in both directions.
+Personalization is one of Beck’s original distortions. Research on attributions in relationships, particularly by Thomas Bradbury and Frank Fincham, consistently finds that blaming attributions for a partner’s behavior predict lower satisfaction and more conflict over time, with some evidence that the effect runs in both directions.
 links:
 /book/chapter-5.html | It’s not a review of either person (Chapter V)
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? Nobody owes anything (WP-04)
@@ -198,13 +198,13 @@ This matters in conflict because both people’s feelings are valid and yet can 
 
 A gentle approach is to hold feelings as starting points: “I’m feeling unappreciated; can we look at what’s been happening?” That keeps the feeling central while leaving room for the facts.
 research:
-Emotional reasoning is one of the distortions described by Beck and Burns. Research on affect-as-information (Norbert Schwarz and Gerald Clore, 1983) showed that people use their mood as information when making judgements, for example rating life satisfaction lower on rainy days, unless the mood is attributed to its real cause. Some later replications of the weather finding were weaker, but the broader principle is well supported.
+Emotional reasoning is one of the distortions described by Beck and Burns. Research on affect-as-information (Norbert Schwarz and Gerald Clore, 1983) showed that people use their mood as information when making judgments, for example rating life satisfaction lower on rainy days, unless the mood is attributed to its real cause. Some later replications of the weather finding were weaker, but the broader principle is well supported.
 links:
 /workpapers/wp-01.html | Who did what (WP-01)
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - When has a strong feeling turned out to have a different cause than you thought?
-- How can we honour feelings while still checking the facts?
+- How can we honor feelings while still checking the facts?
 - What else might be colouring how you feel today?
 
 @@ spotlight-effect | The spotlight effect and the illusion of transparency
@@ -256,7 +256,7 @@ If you like a tidy kitchen, you may assume most people do, so someone who doesn�
 
 Lee Ross, David Greene and Pamela House found that people who agreed to wear a sandwich-board sign around campus thought most others would agree too; those who refused thought most would refuse.
 
-Recognising false consensus makes differences less personal. Your partner isn’t unusual for not caring about the towels; they may be perfectly typical in a way you aren’t. Neither preference is the default.
+Recognizing false consensus makes differences less personal. Your partner isn’t unusual for not caring about the towels; they may be perfectly typical in a way you aren’t. Neither preference is the default.
 research:
 Ross, Greene and House published the false consensus studies in 1977. Many studies have replicated the effect, though its size varies. It is related to projection and naive realism.
 links:
@@ -298,7 +298,7 @@ Last week’s argument is more available than last month’s calm. The one time 
 
 Records correct for this. A simple log of what happened over a month gives a more balanced picture than memory alone, and is kinder to both people.
 research:
-Tversky and Kahneman published on availability in 1973. It is one of the foundational heuristics in judgement and decision-making research. Later work, for example by Norbert Schwarz, showed that the subjective ease of recall itself influences judgements.
+Tversky and Kahneman published on availability in 1973. It is one of the foundational heuristics in judgment and decision-making research. Later work, for example by Norbert Schwarz, showed that the subjective ease of recall itself influences judgments.
 links:
 /workpapers/wp-01.html | Who did what (WP-01)
 /book/chapter-5.html | Weekly check-ins miss patterns (Chapter V)
@@ -316,7 +316,7 @@ Frederic Bartlett showed in the 1930s that people reshape stories to fit their e
 
 In relationships, this means arguments about “what you said” are often unwinnable. Both people may be sincere and both partly wrong. Emotion also shapes memory: we tend to remember the gist and the feeling more reliably than exact words.
 
-It helps to focus less on reconstructing the exact words and more on how each person experienced the moment, and what to do next. For things that matter, writing them down soon after is the best defence against drift.
+It helps to focus less on reconstructing the exact words and more on how each person experienced the moment, and what to do next. For things that matter, writing them down soon after is the best defense against drift.
 research:
 Bartlett’s *Remembering* was published in 1932. Loftus and John Palmer’s 1974 car-crash study showed that question wording altered speed estimates and memory. Research on memory reconstruction is extensive and robust. Studies of couples’ memories suggest partners often remember shared events differently, in ways that fit their current feelings about the relationship.
 links:
@@ -334,7 +334,7 @@ nut: People tend to judge a past experience mostly by its most intense moment an
 deep:
 Daniel Kahneman and colleagues found that people’s memories of unpleasant experiences depended largely on the peak and the end. In one study, people preferred a longer unpleasant experience with a milder ending over a shorter one that ended at its worst.
 
-For relationships, this suggests two things. A single intense moment can dominate the memory of an otherwise good evening. And endings matter: finishing a hard conversation with warmth, even briefly, may colour how the whole conversation is remembered.
+For relationships, this suggests two things. A single intense moment can dominate the memory of an otherwise good evening. And endings matter: finishing a hard conversation with warmth, even briefly, may color how the whole conversation is remembered.
 
 It is another reason to close check-ins on a kind note, and to repair after a rough moment even if the rest of the day was fine.
 research:
@@ -374,7 +374,7 @@ nut: Once we know something, it is hard to imagine not knowing it. This makes us
 deep:
 In a well-known study, people tapped out the rhythm of familiar songs and predicted how many listeners would guess the song. They expected many would; very few did. The tappers heard the melody in their heads; the listeners heard only knocking.
 
-At home, the person who usually does a job knows all its hidden steps. When they hand it over (“just do the shopping”), they may not realise how much they know that the other person doesn’t: which brand, which shop, what’s running low.
+At home, the person who usually does a job knows all its hidden steps. When they hand it over (“just do the shopping”), they may not realize how much they know that the other person doesn’t: which brand, which shop, what’s running low.
 
 Writing down the full steps of a job when handing it over, as the program’s ownership sheet encourages, helps a lot.
 research:
@@ -389,8 +389,8 @@ talk:
 
 @@ motivated-reasoning | Motivated reasoning
 pillars: V
-aka: motivated reasoning, believing what we want, rationalising, defending our position
-nut: Motivated reasoning is reasoning toward a conclusion we want to reach. We scrutinise evidence we dislike more harshly than evidence we like, often without realising.
+aka: motivated reasoning, believing what we want, rationalizing, defending our position
+nut: Motivated reasoning is reasoning toward a conclusion we want to reach. We scrutinize evidence we dislike more harshly than evidence we like, often without realizing.
 deep:
 Ziva Kunda described how people are motivated both to be accurate and to reach particular conclusions. When the stakes feel personal (“am I a good partner?”), the second motive tends to win, and we find reasons to support what we already want to believe.
 
@@ -409,16 +409,16 @@ talk:
 
 @@ halo-effect | The halo and horns effects
 pillars: V
-aka: halo effect, horns effect, first impressions, one trait colours everything
-nut: The halo effect is when one positive trait colours our view of everything else about a person. The horns effect is the negative version. Both affect how we judge partners, colleagues and family.
+aka: halo effect, horns effect, first impressions, one trait colors everything
+nut: The halo effect is when one positive trait colors our view of everything else about a person. The horns effect is the negative version. Both affect how we judge partners, colleagues and family.
 deep:
 Edward Thorndike noticed in 1920 that officers rating soldiers tended to rate them similarly across unrelated qualities: a soldier seen as good-looking was also rated as intelligent and loyal.
 
-In long relationships, halos and horns can shift over time. Early on, a partner’s habits may seem charming; later, when resentment has built up, the same habits seem irritating. The behaviour hasn’t changed; the lens has.
+In long relationships, halos and horns can shift over time. Early on, a partner’s habits may seem charming; later, when resentment has built up, the same habits seem irritating. The behavior hasn’t changed; the lens has.
 
 Noticing this helps separate the person from the pattern. If everything the other person does feels irritating, it may be the lens (and the unresolved resentment behind it) that needs attention.
 research:
-Thorndike described the halo effect in 1920. Richard Nisbett and Timothy Wilson (1977) showed that people are often unaware of halo effects in their own judgements. The effect is well documented, though its size varies across contexts.
+Thorndike described the halo effect in 1920. Richard Nisbett and Timothy Wilson (1977) showed that people are often unaware of halo effects in their own judgments. The effect is well documented, though its size varies across contexts.
 links:
 /book/chapter-1.html | Why we get out of tune (Chapter I)
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)

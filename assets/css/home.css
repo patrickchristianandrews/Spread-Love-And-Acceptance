@@ -1,6 +1,6 @@
 /* home.css: the home page (home18). Two screens on a phone, one primary action on the first one.
    1. The promise, who it's for, Free · Private · No sign-up, "Got a tense text?", and "What's going on?" (journeys.js)
-   2. Three tools   3. A 2-minute game break   4. One idea from the book, in one minute   5. A weekly reminder
+   2. Three tools   2b. Worth a look (the languages, Frequency Buddies episode 4)   3. A 2-minute game break   4. One idea from the book, in one minute   5. A weekly reminder
    One accent (#2B5B8C, the design17 blue), Fraunces headings, Lora text, the UI font for every control, no monospace,
    at most one card level, and a plain background. Light colours only: dark mode is the site's inversion filter, and
    site.css turns images, canvas and svg back. Works with the live site.css (no design17 tokens) and the dev one. */
@@ -170,3 +170,22 @@ html body main.read.h18 .h-resume-how{ margin:0; padding:0; font:400 .95rem/1.5 
 .h18 .h-resume-how .h-link{ white-space:nowrap; }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .h18 a.h-resume-item{ background:transparent; } }
 :root[data-theme="dark"] .h18 a.h-resume-item{ background:transparent; }
+
+/* ---------- nav21: "Worth a look": the languages and Frequency Buddies episode 4, two quiet cards ---------- */
+.h18 .h-feats{ display:grid; grid-template-columns:1fr; gap:.6rem; }
+@media (min-width:760px){ .h18 .h-feats{ grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.9rem; } }
+.h18 a.h-feat{ display:flex; align-items:center; gap:.9rem; height:100%; min-height:44px; box-sizing:border-box; padding:.8rem 1rem; border-radius:18px;
+  text-decoration:none; color:var(--h-ink); background:var(--h-card); border:1px solid var(--h-line); }
+.h18 a.h-feat:hover{ border-color:var(--h-acc); }
+.h18 .h-feat-art{ flex:none; position:relative; display:grid; place-items:center; width:64px; height:64px; border-radius:14px; background:#F3ECDD; overflow:hidden; }
+.h18 .h-feat-art img{ display:block; width:48px; height:48px; }
+.h18 .h-feat-art.is-ep{ width:112px; height:63px; background:#1E1B24; }
+.h18 .h-feat-art.is-ep img{ width:100%; height:100%; object-fit:cover; }
+.h18 .h-feat-play{ position:absolute; inset:auto auto 6px 6px; display:grid; place-items:center; width:26px; height:26px; border-radius:50%; background:rgba(255,253,248,.92); color:var(--h-acc); font-size:.75rem; line-height:1; }
+.h18 .h-feat-txt{ display:flex; flex-direction:column; gap:.15rem; min-width:0; }
+.h18 .h-feat-k{ font:700 .82rem/1.2 var(--h-ui); color:var(--h-acc); }
+.h18 .h-feat-t{ font:600 1.1rem/1.2 var(--h-head); }
+.h18 .h-feat-t::after{ content:"\a0\2192"; font-family:var(--h-ui); color:var(--h-acc); }
+.h18 .h-feat-n{ font:400 .95rem/1.4 var(--h-read); color:var(--h-muted); }
+@media (max-width:420px){ .h18 .h-feat-art.is-ep{ width:88px; height:50px; } }
+html.tol-quiet .h18 .h-feat-art:not(.is-ep){ display:none !important; }

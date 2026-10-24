@@ -129,7 +129,7 @@ def paperback_content_rows(it):
         ('Print Options: Bleed Settings', 'No Bleed'),
         ('Print Options: Paperback cover finish', 'Matte [OWNER: choose Glossy only if the proof looks dull]'),
         ('Reading direction (if shown)', 'Left to right. ' + UNVERIFIED),
-        ('Manuscript', 'Upload %s from the zip (%d pages; KDP reads the count from the file).' % (m.get('pdf', it['id'] + '.pdf'), m.get('pages', 0))),
+        ('Manuscript', 'Upload %s from the package (%d pages; KDP reads the count from the file).' % (m.get('pdf', it['id'] + '.pdf'), m.get('pages', 0))),
         ('Book Cover', '“Upload a cover you already have (print-ready PDF only),” then upload %s (full wrap %.4f x %.2f in, spine %.4f in = %d pages x 0.002252 in, 0.125 in bleed, barcode area left clear). Do not use Cover Creator.' % (
             m.get('cover_pdf', 'cover-' + it['id'] + '.pdf'), m.get('cover_in', [0, 0])[0], m.get('cover_in', [0, 0])[1], m.get('spine_in', 0), m.get('pages', 0))),
         ('AI-Generated Content', 'See “The AI questions” near the start of this guide. Answer truthfully about how this book was made.'),
@@ -175,7 +175,7 @@ def kindle_content_rows(it):
     ep = LK.EPUB.get(it['id'], {})
     front = 'cover-%s-kindle.jpg' % it['id']
     return [
-        ('Manuscript', 'Upload %s.epub from the zip (EPUB 3, %.2f MB). Do not upload the PDF.' % (it['id'], LK.kindle_mb(it['id']))),
+        ('Manuscript', 'Upload %s.epub from the package (EPUB 3, %.2f MB). Do not upload the PDF.' % (it['id'], LK.kindle_mb(it['id']))),
         ('Digital Rights Management (DRM)', 'Choose No (do not apply DRM). The same chapters are free online, so DRM protects nothing. KDP’s help page now says this setting can be changed later, and that without DRM verified buyers can download an EPUB and PDF copy (from January 20, 2026). [OWNER]'),
         ('Kindle eBook Cover', '“Upload a cover you already have,” then upload %s (1,600 × 2,560 px, JPG, the 1.6:1 shape KDP prefers). Do not use Cover Creator.' % front),
         ('AI-Generated Content', 'See “The AI questions.” Same honest answers as the paperback.'),
@@ -208,7 +208,7 @@ def ai_section():
     return [
         'KDP asks, on the Content screen of every book, whether you used AI-based tools to create the book’s **texts**, **images** or **translations**. You answer each one separately. The answer is for Amazon and is not shown on the product page.',
         '**What the words mean (KDP’s definitions, as reported in October 2026):** “AI-generated” means an AI tool created the actual words or pictures, even if you then edited them heavily. That must be disclosed. “AI-assisted” means you created the work yourself and used AI only to brainstorm, edit, check or improve it. That does not need to be disclosed.',
-        '**The choices for each question** (as reported; check the screen): “None”, “Some sections, with minimal or no editing”, “Some sections, with extensive editing”, “Entire work, with minimal or no editing”, “Entire work, with extensive editing”.',
+        '**The choices for each question** (as reported, so check the screen) are “None,” “Some sections, with minimal or no editing,” “Some sections, with extensive editing,” “Entire work, with minimal or no editing” and “Entire work, with extensive editing.”',
         '**[OWNER] Only you can answer, because only you know how each book was made.** Answer truthfully. For your own reference, the build notes (listing-kdp.md) record that these chapters were drafted with AI writing tools and then reviewed and edited many times, and that the covers, characters and figures are drawn by code written with an AI tool. That matches “Entire work, with extensive editing” for texts and for images, and “None” for translations. Never pick “None” (or answer “No”) to make a book look more human-made than it is.',
     ]
 
@@ -246,7 +246,7 @@ def build():
     md, h = [], []
     title = 'Amazon KDP, step by step'
     intro = [
-        'This guide walks through every KDP screen, in the order KDP shows them, for each book in the zip. Every value is copied from the built files and from listing-kdp.md, so the titles, page counts, spine widths and prices are the real ones from this build.',
+        'This guide walks through every KDP screen, in the order KDP shows them, for each book in the package. Every value is copied from the built files and from listing-kdp.md, so the titles, page counts, spine widths and prices are the real ones from this build.',
         'Anything marked **[OWNER]** is your decision. The recommendation is given next to it.',
         'Field names were checked in October 2026 against KDP’s help pages, through web search, because kdp.amazon.com could not be opened from the build machine. Where a box could not be confirmed, the guide says so. KDP changes its screens from time to time, so if a box is named differently, look for the one that means the same thing.',
     ]
@@ -255,7 +255,6 @@ def build():
         'Publish the paperbacks first, one at a time, and order a proof of each. Publish only after the proof is right.',
         'Prices follow the owner’s rule: a paperback under 100 pages is a short edition at $9.99, anything longer is $14.99. The short editions (the pocket guide and the workbook) come after the books here, each under its own name. At $9.99 the color workbook can’t use Expanded Distribution, so it is Amazon only; every other book is Amazon only by choice.',
         'Then the Kindle editions. Use exactly the same title, subtitle and author, so Amazon links each Kindle edition to its paperback.',
-        'No box set in this wave. The Kindle box set is held back and comes with Book 5, in the second wave.',
     ]
     md += ['# ' + title, '', '\n\n'.join(intro), '', '## The order to do things in', ''] + ['%d. %s' % (i + 1, x) for i, x in enumerate(order)]
     md += ['', '## The AI questions (every book asks them)', '', '\n\n'.join(ai_section())]

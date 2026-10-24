@@ -94,7 +94,7 @@ talk:
 @@ polyvagal-theory | Polyvagal theory, and the criticisms
 pillars: III
 aka: polyvagal, vagus nerve, ventral vagal, dorsal vagal, Porges, social engagement system, is polyvagal theory true
-nut: Polyvagal theory, proposed by Stephen Porges, describes three nervous-system states (safe and social, mobilised, and shut down). It is popular with therapists and in self-help, but many of its specific biological claims have been strongly challenged by other scientists.
+nut: Polyvagal theory, proposed by Stephen Porges, describes three nervous-system states (safe and social, mobilized, and shut down). It is popular with therapists and in self-help, but many of its specific biological claims have been strongly challenged by other scientists.
 deep:
 Porges proposed in the 1990s that the vagus nerve has two branches with different evolutionary histories. In his account, a newer “ventral vagal” branch supports calm social engagement, the sympathetic system supports fight-or-flight, and an older “dorsal vagal” branch produces shutdown or freezing. He also coined “neuroception” for the body’s unconscious sense of safety or danger.
 
@@ -177,14 +177,14 @@ talk:
 
 @@ burnout | Burnout
 pillars: III
-aka: burnout, burnt out, burned out, exhausted, cynicism, Maslach, parental burnout
-nut: Burnout is a state of exhaustion, detachment and reduced sense of effectiveness that develops from long-term stress, usually at work, though parental and caregiver burnout are also described. It is recognised by the World Health Organization as an occupational phenomenon, not a medical condition.
+aka: burnout, burned out, burned out, exhausted, cynicism, Maslach, parental burnout
+nut: Burnout is a state of exhaustion, detachment and reduced sense of effectiveness that develops from long-term stress, usually at work, though parental and caregiver burnout are also described. It is recognized by the World Health Organization as an occupational phenomenon, not a medical condition.
 deep:
-Christina Maslach described burnout as having three parts: emotional exhaustion (feeling drained), depersonalisation or cynicism (feeling detached or negative about the work or people), and reduced personal accomplishment (feeling ineffective).
+Christina Maslach described burnout as having three parts: emotional exhaustion (feeling drained), depersonalization or cynicism (feeling detached or negative about the work or people), and reduced personal accomplishment (feeling ineffective).
 
 Burnout isn’t simply tiredness; rest alone doesn’t always fix it, because the conditions causing it are still there. Research points to workload, lack of control, insufficient reward, poor community, unfairness and value conflicts as drivers.
 
-At home, parental and caregiver burnout can look similar: exhaustion, emotional distance from the people you are caring for, and a sense of doing it badly. Recognising it isn’t a failing; it is a signal that the load and the resources are out of balance.
+At home, parental and caregiver burnout can look similar: exhaustion, emotional distance from the people you are caring for, and a sense of doing it badly. Recognizing it isn’t a failing; it is a signal that the load and the resources are out of balance.
 research:
 Maslach and Susan Jackson published the Maslach Burnout Inventory in 1981. The World Health Organization included burnout in ICD-11 (2019) as an occupational phenomenon, not a medical diagnosis. Research on parental burnout, led by Isabelle Roskam and Moïra Mikolajczak from around 2017, has grown quickly. Burnout overlaps with depression in some measures, and researchers continue to debate the boundary.
 links:
@@ -199,7 +199,7 @@ talk:
 @@ caregiver-strain | Caring for others and your own battery
 pillars: III, I
 aka: caregiver, caregiving, looking after a parent, caring for someone, sandwich generation
-nut: Looking after a child with extra needs, an ill partner or an ageing parent is meaningful and demanding. Research consistently finds that caregivers carry more stress, and that support, breaks and shared responsibility matter.
+nut: Looking after a child with extra needs, an ill partner or an aging parent is meaningful and demanding. Research consistently finds that caregivers carry more stress, and that support, breaks and shared responsibility matter.
 deep:
 Caregiving combines practical work, emotional work and a lot of planning. It often comes on top of paid work and other family responsibilities. The “sandwich generation,” people caring for both children and parents, can feel squeezed from both sides.
 
@@ -270,7 +270,7 @@ The optimal level is thought to depend on the task: simple tasks tolerate more a
 
 The picture also varies between people. Some people perform well under pressure; others need calm. Knowing your own curve is more useful than the general rule.
 research:
-Robert Yerkes and John Dodson’s 1908 study was about mice learning to discriminate between boxes under different strengths of electric shock. The generalised “inverted U” for human stress and performance developed later and has been criticised as too simple. Research on arousal and attention does support the idea that high stress impairs complex thinking, which is the part most relevant here.
+Robert Yerkes and John Dodson’s 1908 study was about mice learning to discriminate between boxes under different strengths of electric shock. The generalized “inverted U” for human stress and performance developed later and has been criticized as too simple. Research on arousal and attention does support the idea that high stress impairs complex thinking, which is the part most relevant here.
 links:
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#today | Today’s Weather

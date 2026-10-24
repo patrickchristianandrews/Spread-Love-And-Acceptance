@@ -123,7 +123,7 @@
       { href: '/tools.html', code: 'New', title: 'All tools', note: 'Every tool with a plain name, the ones you can use on your own first: what it does, what you get and how long it takes' },
       { href: '/week-0.html', code: 'New', title: 'Week 0, and the six weeks in your calendar', note: 'Five minutes before the six gentle weeks, and a reminder for each week in your own calendar' },
       { href: '/someone-sent-you-this.html', code: 'New', title: 'Someone sent you this?', note: 'What the site is in three lines, with no pressure, and messages to send someone else' },
-      { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, housemates, siblings, co-parents, friends and more' },
+      { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, roommates, siblings, co-parents, friends and more' },
       { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies and books behind the pages, in plain words' },
       { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '17 chapters on how people work: feelings, stress, trust, change, grief, healing, helping, anger, love, worry and groups' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
@@ -132,11 +132,11 @@
       { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements and herbs: what the research says', note: 'Chamomile, magnesium, ashwagandha, St John’s wort, melatonin and more: what helps, side effects and what to check with a pharmacist' },
       { href: '/ladder.html', code: 'New', title: 'My weather today: quick, 4 taps', note: 'The quick mode: find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
-      { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, housemates, work and life changes' },
+      { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, roommates, work and life changes' },
       { href: '/friends.html', code: 'New', title: 'Friends', note: 'When a friendship drifts, you’re always the one reaching out, or life changes pull you apart' },
       { href: '/money-together.html', code: 'New', title: 'Money together', note: 'Saver and spender, moving in, wedding costs, family expectations, and normal limits versus control' },
       { href: '/when-one-is-ill.html', code: 'New', title: 'When one of you is ill', note: 'Chronic illness or disability: sharing the load without anyone feeling a burden' },
-      { href: '/family-rifts.html', code: 'New', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, a favourite child, years of silence' },
+      { href: '/family-rifts.html', code: 'New', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, a favorite child, years of silence' },
       { href: '/coming-out.html', code: 'New', title: 'Coming out as an adult', note: 'To family, at work or with a partner, at your own pace' },
       { href: '/on-my-own.html', code: 'New', title: 'On my own after a breakup or divorce', note: 'Building a life again, and part-time parenting when the kids are with you some days' },
       { href: '/gaming-and-time-together.html', code: 'New', title: 'Gaming, phones and time together', note: 'A calm talk with no blame, and a small time-together deal to fill in' },
@@ -148,8 +148,8 @@
       { href: '/foster-and-kinship.html', code: 'New', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
       { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents: routines, kind words and looking after yourselves' },
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love: visits, advice and the new baby' },
-      { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
-      { href: '/for-counselors.html', code: 'New', title: 'For counsellors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
+      { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or apartment: a room agreement to fill in together' },
+      { href: '/for-counselors.html', code: 'New', title: 'For counselors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
       { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions, and permission to use them in class' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now: yourself, between us, and understanding people, plus a guide to the book by topic' }
     ]},
@@ -184,7 +184,7 @@
       { href: '/quest.html', code: '', title: 'Your quest map', note: 'Little “Check yourself” moments on reading pages, and a map that lights up as you learn' }
     ]},
     { id: 'guides', title: 'Guides', blurb: 'Plain, practical guides to the questions people ask most, each linked to the free tools that help.', items: [
-      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labour and the mental load', note: 'What the mental load is, everyday examples, and five calm steps to share it fairly' },
+      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What the mental load is, everyday examples, and five calm steps to share it fairly' },
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, asks that land, timing, hard talks, repair, and talking in every kind of relationship' },
@@ -194,11 +194,11 @@
       { href: '/bonding.html', code: 'Guide', title: 'Bonding: how closeness grows', note: 'What research says about closeness, with small ideas for partners, kids, friends, family, coworkers and you' },
       { href: '/small-wins.html', code: 'Guide', title: 'Small wins, and turning the hard stuff into fuel', note: 'Why small wins build momentum, and kind ways to turn anger, worry and complaints into plans' },
       { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'Both sides of the same fight, and a pause plan with a return time' },
-      { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practise and talk about them, and ideas like them' },
+      { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and ideas like them' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Practical tips for ADHD, autistic and AuDHD couples and families' },
       { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'What the quiz looks at, the four Wave Code letters, and how to use your result' },
-      { href: '/complacency.html', deep: true, code: 'Guide', title: 'Complacency', note: 'Why “it’s fine” stops being checked, how it shows up in you, partners, family, friends, housemates and coworkers, and the small re-checks that keep things alive' }
+      { href: '/complacency.html', deep: true, code: 'Guide', title: 'Complacency', note: 'Why “it’s fine” stops being checked, how it shows up in you, partners, family, friends, roommates and coworkers, and the small re-checks that keep things alive' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step: your battery, your wiring, what settles you and kind words, on your own' },
@@ -217,15 +217,15 @@
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Rhythms side by side', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'Calm-down plan', note: 'Decide in advance what settles your body', paid: true },
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause', paid: true },
-      { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
+      { href: '/learn/index.html#part-self', deep: true, code: 'Ideas', title: 'Philosophy for everyday life: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
     ]},
     { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind: a gentle way to read your state and settle it (Pillar III) before you talk. No timers and no way to lose, and something new in the background every few levels.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Gentle games', note: 'All the calm games in one place, with your level and your garden' },
       { href: '/recheck-drive.html', code: 'New', title: 'The Re-check Drive', note: 'A calm football game: do the small, kind things from the complacency playbook, and the ball moves toward a field goal. No clock, no way to lose' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'Wander a temple garden while Tidbit and Sugarfoot tend it, build your own bear, then step inside for something gentle and always different' },
-      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cosy 3D coin pusher: every five coins bring a short, useful tip, and medallions of every character on the site ride along. Nothing to buy' },
+      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cozy 3D coin pusher: every five coins bring a short, useful tip, and medallions of every character on the site ride along. Nothing to buy' },
       { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six gentle classic games with Tidbit and Sugarfoot: a maze chase, a crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby' },
-      { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualiser', note: 'Pick how you feel. Slow, deep 3D colours and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
+      { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels, made for playing on a phone' },
@@ -235,7 +235,7 @@
     { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared tools themselves live under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
       { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to have a tender conversation kindly: a good time and place, listening first, and an ending that feels good to both' },
-      { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'Why “it’s fine” stops being checked, how it shows up in you, partners, family, friends, housemates and coworkers, and the small re-checks that keep things alive' },
+      { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'Why “it’s fine” stops being checked, how it shows up in you, partners, family, friends, roommates and coworkers, and the small re-checks that keep things alive' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook: real actions move the ball toward a field goal' },
       { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with who did what, one owner per job, and the daily check-in' },
       { href: '/relationships.html#family', deep: true, code: '', title: 'Family', note: 'Start with getting back in tune, one owner per job, and saying it so it lands' },
@@ -263,16 +263,16 @@
       { href: '/foster-and-kinship.html', code: 'New', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
       { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents: routines, kind words and looking after yourselves' },
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love: visits, advice and the new baby' },
-      { href: '/family-rifts.html', code: 'New', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, a favourite child, years of silence' },
+      { href: '/family-rifts.html', code: 'New', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, a favorite child, years of silence' },
       { href: '/empty-nest.html', code: 'New', title: 'When the kids have left home', note: 'An empty nest and a quiet house: finding each other again' },
       { href: '/coming-out.html', code: 'New', title: 'Coming out as an adult', note: 'To family, at work or with a partner, at your own pace' },
       { href: '/on-my-own.html', code: 'New', title: 'On my own after a breakup or divorce', note: 'Building a life again, and part-time parenting when the kids are with you some days' },
       { href: '/after-a-breakup.html', deep: true, code: 'New', title: 'After a breakup: steady again', note: 'The first days, feelings in waves, a kinder inner voice, who you are now, and small steps that count' },
       { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Any age, any reason: alone not lonely, a home for one, making friends as an adult, and asking for help' },
-      { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
-      { href: '/for-counselors.html', code: 'New', title: 'For counsellors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
+      { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or apartment: a room agreement to fill in together' },
+      { href: '/for-counselors.html', code: 'New', title: 'For counselors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
       { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions, and permission to use them in class' },
-      { href: '/examples.html', code: '', title: 'What small changes look like', note: 'Made-up examples: couples, housemates, siblings, co-parents, friends, co-founders and more' },
+      { href: '/examples.html', code: '', title: 'What small changes look like', note: 'Made-up examples: couples, roommates, siblings, co-parents, friends, co-founders and more' },
       { href: '/long-distance.html', code: '', title: 'Long-distance and apart', note: 'Time zones, check-ins on video, a call rhythm you agree, and reading short texts' },
       { href: '/retired-together.html', code: '', title: 'Retired and both home now', note: 'Sharing the house all day: routines, whole jobs, handing over kindly, and finding purpose' },
       { href: '/family-obligations.html', code: '', title: 'Supporting family and money home', note: 'When supporting parents is a duty: agree an amount together, and save alongside it' },
@@ -316,7 +316,7 @@
       { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
       { href: '/book/topic-know-yourself.html', code: 'Topic', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
       { href: '/book/topic-calm.html', code: 'Topic', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
-      { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology, behavioural science and conflict resolution in plain words: 235 short entries, each tied to the Five Pillars and the program' },
+      { href: '/library.html', code: 'Read', title: 'Psychology in plain words', note: 'Psychology, behavioral science and conflict resolution in plain words: 235 short entries, each tied to the Five Pillars and the program' },
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets. Each of you fills in your own, then you read them together. They work best in the order listed, with the monthly look-back once a month.', items: [
       { href: '/workpapers/fill/suite.html#full-path', code: 'Package', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one fillable PDF of everything, and a detailed report from your answers: findings, recommendations and a plan' },
@@ -348,9 +348,9 @@
       { href: '/wavelength.html', code: 'New', title: 'How you connect', note: 'A communication style guide: your wiring, your Wave Code, the 9 inputs of learning, a personal statement and a way to compare with someone' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'Rewind the talk', note: 'After a talk went wrong: settle, work out what went out of sync, see it from their side, and try again. Also called the Carrier Wave Decoder' },
       { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your worksheet numbers and see whether the way you share the load is working' },
-      { href: '/is-the-setup-working.html', code: 'CALC-01', title: 'Is the setup working for everyone? The long form', note: 'Enter hours and jobs for 2–8 people and see the maths step by step', menu: false },
+      { href: '/is-the-setup-working.html', code: 'CALC-01', title: 'Is the setup working for everyone? The long form', note: 'Enter hours and jobs for 2–8 people and see the math step by step', menu: false },
       { href: '/workpapers/calculators/look-back-30-days-quick.html', code: 'CALC-02', title: 'Look back over 30 days', note: 'Then and now: what shifted this month, what didn’t, and one next step' },
-      { href: '/do/index.html', code: '', title: 'Practise the worksheets on an example', note: 'A playground to try the worksheets on a made-up household before you fill in your own' },
+      { href: '/do/index.html', code: '', title: 'Practice the worksheets on an example', note: 'A playground to try the worksheets on a made-up household before you fill in your own' },
       { href: '/look-back-30-days.html', code: 'CALC-02', title: 'Look back over 30 days: the long form', note: 'Four weeks side by side, with the running imbalance', menu: false },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood: a printable plan builder, five scenarios and a four-week practice plan' },
       { href: '/tools/soften-a-tense-moment-full.html', code: 'Tool', title: 'Soften a tense moment: the full toolkit', note: 'Five everyday scenarios and a four-week practice plan', paid: true, menu: false },
@@ -370,6 +370,7 @@
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
       { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
+      { href: '/contact.html', code: '', title: 'Contact us', note: 'Tell us what would make this better, every way to reach us, and email updates' },
       { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how thirteen of them became one program' },
       { href: '/method-and-limits.html', code: '', title: 'Method and limits', note: 'Every score, formula and cut-off on the site, written out, with what each can’t tell you' },
       { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
@@ -389,105 +390,83 @@
   // ===== The menu: what the top bar and the "Menu" panel show =====
   // SECTIONS above stays the full list of pages (it sets each page's lock, previous/next links and look,
   // and the Contents page lists all of it). MENU is the shorter, grouped view people browse.
-  // Each group shows the same three things, on a phone and on a laptop: its blurb, ONE "See all" link to the
-  // group's own directory page ({ all: '/page.html', allLabel: 'See all …' } on the group), and then only
-  // small labelled sub-menus that open on a tap or click. { sub: 'Name', all: '/page.html#part', allLabel: 'All …' }
-  // starts one, and the lines after it, up to the next { sub }, are its pages. Every page line sits under a
-  // { sub } (no loose pages above the first one). Keep each list to about seven so no opened level is
-  // overwhelming; a longer one shows seven and a "Show all" button.
-  // A page left out of MENU is still on the Contents page (/contents.html, linked in every footer as "All pages").
+  // nav21: six areas with plain, task-based names, in the order people reach for them: Start here, Tools, Workpapers,
+  // Guides (who it's about, by topic, and the research), Calm & play, and Read the book (a link of its own in the top bar).
+  // Each group shows its blurb, ONE "See all" link to the group's own directory page ({ all, allLabel } on the group),
+  // and then small labelled sub-menus that open on a tap or click. { sub: 'Name', all: '/page.html#part', allLabel: 'All …' }
+  // starts one, and the lines after it, up to the next { sub }, are its pages. No list is longer than eight, and a page
+  // sits in one place only (a few, like the Chat analyzer, are also in the quick links at the top of the Menu panel).
+  // A page left out of MENU is still on the Contents page (/contents.html, linked in every footer as "All pages") and on
+  // the directory pages ("Everything on this site", "All tools", "Everything by relationship").
   var MENU = [
-    { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? See the whole site at a glance, find your first step, or get help right now.',
+    { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? Find your first step, calm down fast, see what’s new, or get in touch.',
       all: '/explore.html', allLabel: 'See everything on this site', items: [
-      { sub: 'First steps', all: '/start-here.html', allLabel: 'Start here, in one minute' },
-      { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
-      { href: '/journeys.html', code: 'Steps', title: 'Guided journeys', note: 'Tell us what’s going on and follow 3 to 6 small steps, ticked off on this device' },
-      { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
-      { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
-      { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and see your results side by side' },
-      { href: '/on-this-device.html#progress', code: 'Yours', title: 'Your progress', note: 'Back it up, move it to the app, lock it with a passcode, or clear it' },
-      { href: '/saved.html', code: 'Yours', title: 'Your saved places', note: 'Pages, tools and places in the book you saved for later' },
+      { sub: 'First steps' },
+      { href: '/start-here.html', title: 'Start here', note: 'What this is in one minute, and your best first step' },
+      { href: '/start-here.html#three-questions', title: 'Not sure? Three questions', note: 'Three taps to the one page that fits' },
+      { href: '/journeys.html', title: 'Guided journeys', note: 'Tell us what’s going on and follow 3 to 6 small steps' },
+      { href: '/upset-right-now.html', title: 'Upset right now?', note: 'Pause, breathe and come back to it in five minutes' },
+      { href: '/ask.html', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
+      { href: '/start-in-10-minutes.html', title: 'Ten-minute start', note: 'Today’s weather, one idea, one card and one thing logged' },
+      { href: '/someone-sent-you-this.html', title: 'Someone sent you this?', note: 'What it is in three lines, with no pressure' },
+      { href: '/surprise.html', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
+      { sub: 'Yours, on this device', all: '/on-this-device.html', allLabel: 'Everything stored on this device' },
+      { href: '/saved.html', title: 'Saved for later', note: 'Pages, tools and places in the book you saved' },
+      { href: '/on-this-device.html#progress', title: 'Your progress', note: 'Back it up, move it to another phone or the app' },
+      { href: '/on-this-device.html#lock', title: 'Lock with a passcode', note: 'Keep what you typed here private on a shared device' },
+      { href: '/together.html', title: 'Work on it together', note: 'Pass a tool back and forth by link or QR code, then compare' },
+      { href: '/how-you-take-things-in.html', title: 'Read your way', note: 'Make every page fit how your mind takes things in' },
+      { href: '/install.html', title: 'Get the app', note: 'Its own icon, full screen, works offline' },
       { sub: 'What’s new', all: '/whats-new.html', allLabel: 'Everything new, with dates' },
-      { href: '/together.html', code: 'New', title: 'Work on it together', note: 'Share your results by link, QR code or text' },
-      { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
-      { href: '/nervous-system.html', code: 'New', title: 'Your nervous system, in plain words', note: 'The stress response, polyvagal theory honestly, and what helps' },
-      { href: '/tools.html', code: 'New', title: 'All tools', note: 'Every tool with a plain name: what it does and what you get' },
-      { href: '/week-0.html', code: 'New', title: 'Week 0, and the six weeks in your calendar', note: 'A five-minute start, and a reminder for each week' },
-      { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for many kinds of relationship' },
-      { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies behind the pages, in plain words' },
-      { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements, herbs and natural approaches', note: 'What the research says, with safety notes and what to check first' },
-      { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide' },
-      { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small ways to grow closeness with anyone' },
-      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: 'Chapters on how people work' },
-      { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'With a Flip it tool' },
-      { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
-      { href: '/friends.html', code: 'New', title: 'Friends', note: 'When a friendship drifts, or you’re always the one reaching out' },
-      { href: '/money-together.html', code: 'New', title: 'Money together', note: 'Saver and spender, moving in, wedding costs' },
-      { href: '/when-one-is-ill.html', code: 'New', title: 'When one of you is ill', note: 'Chronic illness or disability, without anyone feeling a burden' },
-      { href: '/family-rifts.html', code: 'New', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
-      { href: '/coming-out.html', code: 'New', title: 'Coming out as an adult', note: 'To family, at work or with a partner' },
-      { href: '/on-my-own.html', code: 'New', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
-      { href: '/gaming-and-time-together.html', code: 'New', title: 'Gaming, phones and time together', note: 'A calm talk and a small time-together deal' },
-      { href: '/different-hours.html', code: 'New', title: 'Different hours', note: 'Night shifts, shift work, or one of you works from home' },
-      { href: '/coming-home.html', code: 'New', title: 'Coming home after time apart', note: 'After deployment, work away or a hospital stay' },
-      { href: '/two-faiths.html', code: 'New', title: 'Two faiths, one family', note: 'Holidays, naming the baby and family expectations' },
-      { href: '/more-than-two.html', code: 'New', title: 'More than two partners', note: 'Polyamorous homes and triads, sharing the load' },
-      { href: '/empty-nest.html', code: 'New', title: 'When the kids have left home', note: 'Finding each other again in a quiet house' },
-      { href: '/foster-and-kinship.html', code: 'New', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
-      { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents' },
-      { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
-      { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
-      { href: '#settings', code: 'New', title: 'High contrast', note: 'A new switch in Settings' },
-      { sub: 'More ways in' },
-      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Ten-minute start', note: 'Today’s weather, the Preface, one card and one thing logged' },
-      { href: '/someone-sent-you-this.html', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
-      { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of reading an article?', note: 'What’s different here, and where it falls short' },
-      { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
-      { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'From the beginning, one short chapter at a time' },
-      { href: '/for-teachers.html', code: 'Class', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
-      { href: '/groups.html', code: 'Group', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
-      { href: '/for-counselors.html', code: 'Pro', title: 'For counsellors and coaches', note: 'Using the free pages and tools with clients' },
-      { href: '/method-and-limits.html', code: 'Limits', title: 'Method and limits', note: 'What this site is, what it isn’t, and when to get other help' },
-      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
-      { href: '/quick-checks.html#today', code: 'Daily', title: 'My weather today', note: 'How am I right now? Four quick taps, or a one-minute forecast of today' },
-      { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
-      { href: '/install.html', code: 'App', title: 'Get the app', note: 'Install in a few taps: its own icon, full screen, works offline' }
+      { href: '/support-languages.html', title: 'Support languages', note: 'New: what helps you, and them, through a hard time, with a short quiz' },
+      { href: '/frequency-buddies.html?ep=s1e4', title: 'Cartoon: Who Broke the Kite?', note: 'Frequency Buddies, episode 4: look at the setup before the blame' },
+      { href: '/nervous-system.html', title: 'Your nervous system, in plain words', note: 'The stress response, and what helps you settle' },
+      { href: '/living-alone.html', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
+      { href: '/refusals.html', title: 'Say no kindly', note: 'Kind, clear ways to turn something down' },
+      { href: '/examples.html', title: 'What small changes look like', note: 'Made-up examples for many kinds of relationship' },
+      { sub: 'About and contact', all: '/contents.html', allLabel: 'Every page on the site' },
+      { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
+      { href: '/contact.html', title: 'Contact us', note: 'Tell us what would make this better, or just say hello' },
+      { href: '/is-this-for-you.html', deep: true, title: 'Is this right for you?', note: 'What this is and isn’t, and who it helps' },
+      { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
+      { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
+      { href: '/method-and-limits.html', title: 'Method and limits', note: 'Every score and cut-off written out, and what each can’t tell you' },
+      { href: '/membership.html', title: 'Email updates', note: 'Optional: a short note when something new goes live' },
+      { href: '/legal/privacy-policy.html', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' }
     ]},
     // consol12: 51 tools became 19 places. Each line is one place (one card on /tools.html); its ways in are on its own page.
     { id: 'tools', name: 'Tools', title: 'Tools, by type', blurb: 'Every tool, grouped by type. Each one says what it does and what you get, and has its ways in at the top.',
       all: '/tools.html', allLabel: 'See all tools, by type', items: [
       { sub: 'Talk and stay close', all: '/tools.html#communication', allLabel: 'All communication tools' },
-      { href: '/signal-translator.html', plain: true, title: 'Chat analyzer', note: 'See how a text will land, or read a whole chat clearly.' },
-      { href: '/write-it-through.html', plain: true, title: 'Write it through', note: 'Sort out a big topic without a shouting match: one topic, in writing, at your own pace. Also called Talk it through in writing.' },
-      { href: '/carrier-wave-decoder.html', plain: true, title: 'Rewind the talk', note: 'Turn a talk that went sideways into a better second try, with their side in view. Also called the Carrier Wave Decoder.' },
-      { href: '/check-ins.html#card', plain: true, title: 'Kitchen-table check-in', note: 'Raise small things before they grow: a short, kind weekly talk, or a family plan. Also called the check-in card.' },
+      { href: '/signal-translator.html', plain: true, title: 'Chat analyzer', note: 'Check a text before you send it, read one you got, or a whole chat.' },
+      { href: '/write-it-through.html', plain: true, title: 'Write it through', note: 'Sort out a big topic in writing, at your own pace: one topic, one clear ask.' },
+      { href: '/carrier-wave-decoder.html', plain: true, title: 'Rewind the talk', note: 'Turn a talk that went sideways into a better second try, with their side in view.' },
+      { href: '/check-ins.html#card', plain: true, title: 'Kitchen-table check-in', note: 'Raise small things before they grow: a short, kind weekly talk, or a family plan.' },
       { href: '/bonding.html#ideas', plain: true, title: 'Stay close', note: 'Feel closer without a big plan: one small idea, or the words that say “this is us”.' },
       { sub: 'Self-discovery', all: '/tools.html#self-discovery', allLabel: 'All self-discovery tools' },
-      { href: '/wavelength.html', plain: true, title: 'How you connect', note: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share. Also called Wavelength.' },
-      { href: '/quick-checks.html#today', plain: true, title: 'My weather today', note: 'Know if now is a good time to talk: four taps, or one minute on mood, sleep and energy. Also called Today’s Weather.' },
-      { href: '/growing-up.html#roots-h', plain: true, title: 'Old rules, new choices', note: 'Choose which old rules to keep: look gently at where a reaction started. Also called Roots & Wings.' },
-      { href: '/how-you-take-things-in.html', plain: true, title: 'Read your way', note: 'Make every page suit how your mind works: shorter steps, a calmer look, read-aloud.' },
-      { href: '/tools/frequency-calibration.html', plain: true, title: 'Rhythms side by side', note: 'Stop different rhythms feeling like a fight: money, rest and decisions, side by side. Also called Frequency Calibration.' },
+      { href: '/wavelength.html', plain: true, title: 'How you connect', note: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share.' },
+      { href: '/quick-checks.html#today', plain: true, title: 'My weather today', note: 'Know if now is a good time to talk: four taps, or one minute on mood, sleep and energy.' },
+      { href: '/growing-up.html#roots-h', plain: true, title: 'Old rules, new choices', note: 'Choose which old rules to keep: look gently at where a reaction started.' },
+      { href: '/wiring-card.html', plain: true, title: 'How to talk to me: a card', note: 'One page on how you take in words, what silence means, and what to avoid.' },
+      { href: '/tools/frequency-calibration.html', plain: true, title: 'Rhythms side by side', note: 'Stop different rhythms feeling like a fight: money, rest and decisions, side by side.' },
       { sub: 'Calm', all: '/tools.html#calm', allLabel: 'All calm tools' },
-      { href: '/upset-right-now.html', plain: true, title: 'Cool-down corner', note: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time. It starts with Upset right now?' },
+      { href: '/upset-right-now.html', plain: true, title: 'Cool-down corner', note: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time.' },
       { sub: 'Home, plans and work', all: '/tools.html#home-and-family', allLabel: 'All home, family and work tools' },
-      { href: '/lemonade-stand.html#quick', plain: true, title: 'Who does what?', note: 'Settle “who does more?” with facts, not blame: tap who does each job, then compare. Also called the Lemonade Stand.' },
-      { href: '/workpapers/calculators/is-the-setup-working-quick.html', plain: true, title: 'Fair split check', note: 'Know if your split can last, and whether what you changed is working, this week or over a month. Also called the fair-split calculator.' },
+      { href: '/lemonade-stand.html#quick', plain: true, title: 'Who does what?', note: 'Settle “who does more?” with facts, not blame: tap who does each job, then compare.' },
+      { href: '/workpapers/calculators/is-the-setup-working-quick.html', plain: true, title: 'Fair split check', note: 'Know if your split can last, and whether what you changed is working.' },
       { href: '/make-a-plan.html', plain: true, title: 'Plan it once', note: 'Settle it once, kindly, and both keep it: holidays, family days, screen time, rooms, shifts.' },
       { href: '/work.html#team-tools', plain: true, title: 'Team job list', note: 'No job lands on whoever notices first: owners, backups and a 10-minute weekly round.' },
-      { sub: 'Learn and play', all: '/tools.html#learn-and-play', allLabel: 'All learn and play tools' },
+      { sub: 'Learn and practice', all: '/tools.html#learn-and-play', allLabel: 'All learn and play tools' },
       { href: '/ask.html', plain: true, title: 'Ask Professor Puddles', note: 'Get kind next steps for your exact situation: type it the way you’d tell a friend.' },
-      { href: '/start-in-10-minutes.html', plain: true, title: 'Ten-minute start', note: 'The quickest way in: four small steps, and a “here’s what I got” to keep.' },
-      { href: '/do/index.html', plain: true, title: 'Learn by doing', note: 'Get a feel for it all first: practise on a made-up home, and watch ideas move. Also called the Workpaper Playground.' },
-      { href: '/pause-and-play.html', plain: true, title: 'Gentle games', note: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose. Also called Pause & Play.' }
+      { href: '/do/index.html', plain: true, title: 'Learn by doing', note: 'Practice on a made-up home first, and watch ideas move. Also called the Workpaper Playground.' }
     ]},
     { id: 'workpapers', name: 'Workpapers', title: 'Workpapers', blurb: 'Short worksheets to fill in, print or keep on this device, alone or together. The interactive tools are in Tools.',
       all: '/workpapers/fill/suite.html', allLabel: 'See all the worksheets, in order', items: [
       { sub: 'Where to begin', area: 'load' },
       { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a gentle start', note: 'Five minutes before the six weeks' },
       { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
-      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one PDF of everything, with a report written from your answers' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Suite', title: 'Workpapers for you', note: 'The “Just me” road: worksheets in order, fillable and printable' },
+      { href: '/workpapers/fill/index.html', title: 'Fill in a workpaper', note: 'Type straight into any worksheet and save it as a PDF on your device' },
       { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Type in what your worksheets produced each week' },
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the report, side by side' },
       { sub: 'Sharing the load', area: 'load' },
@@ -497,301 +476,155 @@
       { href: '/workpapers/wp-04-what-keeps-coming-back.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back' },
       { href: '/workpapers/wp-14-is-it-us-or-everything-else.html', deep: true, code: 'WP-14', title: 'Is it us, or is it everything else?', note: 'A week’s log: outside pressure, or friction between you' },
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job' },
-      { sub: 'Talking and closeness', area: 'talk' },
+      { sub: 'Talking, closeness and calm', area: 'talk' },
       { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
       { href: '/workpapers/wp-12-same-moment-different-speeds.html', deep: true, code: 'WP-12', title: 'Same moment, different speeds', note: 'One of you wants to sort it now, the other needs time' },
       { href: '/workpapers/wp-13-daily-check-in.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Keep small things small' },
       { href: '/workpapers/wp-15-keep-your-little-rituals-alive.html', deep: true, code: 'WP-15', title: 'Keep your little rituals alive', note: 'Which shared rituals are alive, fading or stopped' },
-      { sub: 'Calm', area: 'self' },
-      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' }
+      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you', area: 'self' }
     ]},
-    { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games, cartoons and music are in Calm & play.',
-      all: '/by-relationship.html', allLabel: 'See everything by relationship', items: [
-      { sub: 'Just me', all: '/by-relationship.html#just-me', allLabel: 'All for just me' },
-      { href: '/self-path.html', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
-      { href: '/living-alone.html', deep: true, title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
-      { href: '/wavelength.html', title: 'Find your Wave Code', note: 'How you think, talk and listen' },
-      { href: '/workpapers/wp-02-how-much-are-you-carrying.html', title: 'How much are you carrying?', note: 'Five quick questions about today’s load' },
-      { href: '/wp-11.html', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
-      { href: '/know-yourself.html', title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today' },
-      { sub: 'Couples & partners', all: '/by-relationship.html#couples', allLabel: 'All for couples' },
-      { href: '/new-relationship.html', deep: true, title: 'Early days: dating and new relationships', note: 'Texting and pace, meeting family, and the big questions, at any age' },
-      { href: '/how-to-stop-fighting-with-your-partner.html', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
-      { href: '/share-the-load.html', title: 'Share the load, step by step', note: 'Which tool to use first' },
-      { href: '/more-than-two.html', title: 'More than two partners', note: 'Polyamorous homes and triads' },
-      { href: '/different-hours.html', title: 'Different hours', note: 'Night shifts and opposite schedules' },
-      { href: '/money-together.html', title: 'Money together', note: 'Saver and spender, moving in, wedding costs' },
-      { href: '/gaming-and-time-together.html', title: 'Gaming, phones and time together', note: 'A calm talk and a time-together deal' },
-      { href: '/when-one-is-ill.html', title: 'When one of you is ill', note: 'Chronic illness or disability' },
-      { href: '/empty-nest.html', title: 'When the kids have left home', note: 'Finding each other again' },
-      { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and family expectations' },
-      { href: '/long-distance.html', title: 'Long-distance and apart', note: 'Calls, time zones and short texts' },
-      { href: '/caregivers.html', title: 'Caring for someone you love', note: 'When they can’t share the load back' },
-      { href: '/coming-home.html', title: 'Coming home after time apart', note: 'After deployment or time away' },
-      { sub: 'Friends', all: '/by-relationship.html#friends', allLabel: 'All for friends' },
-      { href: '/friends.html', title: 'Friends: when a friendship drifts', note: 'Always the one reaching out, or life pulling you apart' },
-      { href: '/turning-toward.html', title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
-      { href: '/living-alone.html#friends', title: 'Making friends as an adult', note: 'And friendships in your 20s' },
-      { href: '/signal-translator.html', title: 'Chat analyzer', note: 'Paste a tricky chat and see where it turned, or check a message before you send it' },
-      { sub: 'Parents, kids & teens', all: '/by-relationship.html#family', allLabel: 'All for families' },
-      { href: '/parents.html', title: 'For parents', note: 'Big feelings, coming back after you yell, siblings and teens' },
-      { href: '/teens.html', title: 'For teens', note: 'Written for you: home, family, friends and feelings' },
-      { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules' },
-      { href: '/adhd-kids.html', title: 'When a child has ADHD', note: 'For parents and grandparents' },
-      { href: '/foster-and-kinship.html', title: 'Raising a grandchild, foster or adopted child', note: 'Grandparents and relatives raising a child (kinship care), foster and adoptive families' },
-      { href: '/grandparents.html', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
-      { sub: 'Wider family', all: '/by-relationship.html#family', allLabel: 'All for families' },
-      { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
-      { href: '/grown-up-children.html', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
-      { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and what to tell the grandparents' },
-      { href: '/family-obligations.html#visits', title: 'In-laws, and a parent living with you', note: 'Visits, long stays and an elder at home, planned together' },
-      { href: '/caregivers.html', title: 'Caring for someone you love', note: 'A parent or relative who needs care, or a partner in a care home' },
-      { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To parents and family, at your own pace' },
-      // flow17: breakups get their own name (the guide's breadcrumb reads "Breakups", not "Separated & co-parents")
-      { sub: 'Breakups', all: '/by-relationship.html#co-parents', allLabel: 'All for breakups and co-parents' },
-      { href: '/after-a-breakup.html', deep: true, title: 'After a breakup: steady again', note: 'Feelings in waves, a kinder inner voice, who you are now' },
-      { href: '/start/breakup.html', title: 'When you want to text your ex', note: 'Check it before you send, and three steps for tonight' },
-      { href: '/on-my-own.html', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
-      { sub: 'Separated & co-parents', all: '/by-relationship.html#co-parents', allLabel: 'All for co-parents' },
-      { href: '/co-parenting.html', title: 'Separated co-parents', note: 'Calmer handoffs and a tone check' },
-      { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'Children in two homes, and a stepparent’s place' },
-      { sub: 'Housemates', all: '/by-relationship.html#housemates', allLabel: 'All for housemates' },
-      { href: '/sharing-a-room.html', title: 'Sharing a room', note: 'Dorm or flat: a room agreement' },
-      { href: '/share-the-load.html#roommates', title: 'Roommates and housemates', note: 'Chores, bills and a house meeting' },
-      { href: '/lemonade-stand.html', title: 'Who does what, and who pays what', note: 'Also called the Lemonade Stand' },
-      { sub: 'Work & business partners', all: '/by-relationship.html#work', allLabel: 'All for work' },
-      { href: '/work.html', title: 'At work and business partners', note: 'One owner per job, for teams and co-owners' },
-      { href: '/appreciation-at-work.html', title: 'Appreciation at work', note: 'Five ways people like to be thanked' },
-      { href: '/wiring-card.html', title: 'A card on how you take in words', note: 'Also called the Wiring Card, with a team version' },
-      { href: '/groups.html', title: 'Leading a group', note: 'Six sessions with handouts' },
-      { href: '/for-counselors.html', title: 'For counsellors and coaches', note: 'Using these pages with clients' },
-      { sub: 'Life changes', all: '/by-relationship.html#life-changes', allLabel: 'All life changes' },
+    // nav21: one Guides area in place of By relationship, Topics and Learn: who it's about (each line opens that part of
+    // the directory page, where every page for it is listed), then the guides by topic, then the research and big ideas.
+    { id: 'guides', name: 'Guides', title: 'Guides', blurb: 'Plain guides by who it’s about (couples, family, roommates, breakups, grief and other life changes) and by topic, with the research behind them.',
+      all: '/explore.html', allLabel: 'See every guide, with filters', items: [
+      { sub: 'Who it’s about', all: '/by-relationship.html', allLabel: 'Everything by relationship' },
+      { href: '/by-relationship.html#just-me', title: 'Just me', note: 'Knowing yourself, living alone, your own load' },
+      { href: '/by-relationship.html#couples', title: 'Couples and partners', note: 'Dating, fights, money, chores and closeness' },
+      { href: '/by-relationship.html#friends', title: 'Friends', note: 'Drifting apart, always reaching out, adult friendships' },
+      { href: '/by-relationship.html#family', title: 'Parents, kids and family', note: 'Teens, stepfamilies, grandparents, in-laws and rifts' },
+      { href: '/by-relationship.html#co-parents', title: 'Breakups and co-parents', note: 'Steady again after a breakup, calmer handoffs' },
+      { href: '/by-relationship.html#housemates', title: 'Roommates', note: 'Chores, bills and a room agreement' },
+      { href: '/by-relationship.html#work', title: 'Work and teams', note: 'One owner per job, appreciation, a team session' },
+      { href: '/by-relationship.html#life-changes', title: 'Life changes', note: 'A new baby, illness, caregiving, grief, retirement' },
+      { sub: 'Sharing the load', area: 'load', all: '/explore.html?need=load', allLabel: 'Everything on sharing the load' },
+      { href: '/share-the-load.html', title: 'Share the load, step by step', note: 'Which tool to use first, and what comes next' },
+      { href: '/invisible-labor-mental-load.html', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
+      { href: '/chore-chart-for-couples.html#chart', title: 'Splitting chores fairly', note: 'One owner per job, with a free printable chart' },
+      { href: '/money-together.html', title: 'Money together', note: 'Saver and spender, moving in, and normal limits' },
       { href: '/new-parent.html', title: 'New baby, sharing the load', note: 'The baby jobs and the invisible ones' },
-      { href: '/when-one-is-ill.html', title: 'When one of you is ill', note: 'Chronic illness or disability' },
       { href: '/caregivers.html', title: 'Caring for someone you love', note: 'When they can’t share the load back' },
-      { href: '/coming-home.html', title: 'Coming home after time apart', note: 'After deployment or time away' },
-      { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To family, at work or with a partner' },
-      { href: '/empty-nest.html', title: 'When the kids have left home', note: 'Finding each other again' },
-      { href: '/retired-together.html', title: 'Retired and both home now', note: 'Sharing the house all day: routines and whole jobs' },
-      { href: '/grief.html', title: 'Grief and loss', note: 'Loss, and a new chapter' },
-      { href: '/living-alone.html', deep: true, title: 'Living on your own', note: 'Any age, any reason: a home for one' },
-      { sub: 'Stories', all: '/examples.html', allLabel: 'All the stories' },
-      { href: '/examples.html', title: 'What small changes look like', note: 'Made-up examples for ten kinds of situation' },
-      { sub: 'Miscellaneous', all: '/by-relationship.html#misc', allLabel: 'All the odds and ends' },
-      { href: '/install.html', title: 'Get the app', note: 'Its own icon, works offline' },
-      { href: '/on-this-device.html', title: 'What’s stored on this device', note: 'See and erase what this site keeps' }
-    ]},
-    { id: 'topics', name: 'Topics', title: 'Guides by topic', blurb: 'Plain guides and the tools that go with them: sharing the load, talking it through, self-discovery and settling. What you type stays on your device.',
-      all: '/explore.html', allLabel: 'See all guides, with filters by topic', items: [
-      { sub: 'Share the load', area: 'load', all: '/explore.html?need=load', allLabel: 'Everything on sharing the load' },
-      { href: '/share-the-load.html', code: 'Start', title: 'Share the load: tools, in order', note: 'Which tool to use first, and what comes next' },
-      { href: '/lemonade-stand.html', code: 'Tool', title: 'Who does what?', note: 'List who did what this week, and see the split plainly' },
-      { href: '/workpapers/wp-03-one-owner-per-job.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'So nobody has to keep asking' },
-      { href: '/workpapers/wp-02-how-much-are-you-carrying.html', deep: true, code: 'Check', title: 'How much are you carrying?', note: 'A two-minute load check: how full your days are, before you split anything' },
-      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job' },
-      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labour and the mental load', note: 'What it is, and five calm steps to share it' },
-      { href: '/book/topic-share-the-load.html', code: 'Book', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
-      { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your numbers and see if the split works' },
-      { href: '/workpapers/calculators/look-back-30-days-quick.html', code: 'CALC-02', title: 'Look back over 30 days', note: 'What shifted this month, and one next step' },
-      { sub: 'Sharing the load in your situation', area: 'load', all: '/by-relationship.html', allLabel: 'Everything by relationship' },
-      { href: '/money-together.html', code: 'New', title: 'Money together', note: 'Saver and spender, moving in, wedding costs, and normal limits versus control' },
-      { href: '/work.html', code: 'New', title: 'At work and business partners', note: 'One owner and a backup for every job, for teams and co-owners' },
-      { href: '/caregivers.html', code: 'New', title: 'Caring for someone you love', note: 'When they can’t share the load back, and where to find respite' },
-      { href: '/when-one-is-ill.html', code: 'New', title: 'When one of you is ill', note: 'Sharing the load with fewer spoons, without anyone feeling a burden' },
-      { href: '/different-hours.html', code: 'New', title: 'Different hours', note: 'Night shifts, shift work, or one of you works from home' },
-      { href: '/new-parent.html', code: 'New', title: 'New baby, sharing the load', note: 'Three steps for the baby jobs and the invisible ones' },
-      { href: '/family-obligations.html', code: 'Guide', title: 'Family, money and in-laws', note: 'Supporting parents, money home, long visits: plan it together' },
-      { sub: 'Talk it through', area: 'talk', all: '/explore.html?need=talk', allLabel: 'Everything on talking it through' },
-      { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, timing, hard talks and repair' },
-      { href: '/write-it-through.html', code: 'New', title: 'Write it through', note: 'One topic, facts not verdicts, one clear ask: write it, wait, then send' },
-      { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
-      { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'A pause plan you agree' },
+      { href: '/book/topic-share-the-load.html', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
+      { sub: 'Talking it through', area: 'talk', all: '/explore.html?need=talk', allLabel: 'Everything on talking it through' },
+      { href: '/communication.html', title: 'Effective communication', note: 'Listening, timing, hard talks and repair' },
+      { href: '/how-to-stop-fighting-with-your-partner.html', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
+      { href: '/pursue-withdraw.html', title: 'One wants to talk now, one needs space', note: 'Both sides, and a pause plan with a return time' },
       { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
       { href: '/turning-toward.html', deep: true, title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
-      { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
-      { href: '/workpapers/wp-12-same-moment-different-speeds.html', deep: true, code: 'WP-12', title: 'Same moment, different speeds', note: 'One of you wants to sort it now, the other needs time' },
-      { href: '/book/topic-talk-it-through.html', code: 'Book', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
-      { sub: 'Tools for a message or a moment', area: 'talk', all: '/tools.html#communication', allLabel: 'All communication tools' },
-      { href: '/signal-translator.html', code: 'Tool', title: 'Chat analyzer', note: 'How one message might land, or where a whole chat turned' },
-      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'Rewind the talk', note: 'After a talk went wrong: settle, see it from their side, and try again' },
-      { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
-      { sub: 'Love, sorry and thanks', area: 'talk' },
-      { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness, with an idea picker' },
-      { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
-      { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages', note: 'What’s healthy and unhealthy about each, how to practise them, and ideas like them' },
-      { href: '/apology-languages.html', code: 'New', title: 'Apology languages', note: 'The parts of a sorry that help after a hurt, and what research says works' },
-      { href: '/appreciation-at-work.html', code: 'New', title: 'Appreciation at work', note: 'Five ways people like to be thanked at work, as a menu, not a label' },
-      { href: '/touchstones.html', deep: true, code: 'New', title: 'Touchstones', note: 'The shared words, jokes and rituals that say we are us, and how to keep them fresh' },
-      { href: '/workpapers/wp-15-keep-your-little-rituals-alive.html', deep: true, code: 'WP-15', title: 'Keep your little rituals alive', note: 'Which shared rituals are alive, fading or stopped' },
-      { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture' },
-      { href: '/complacency.html', deep: true, title: 'Complacency', note: 'Why “it’s fine” stops being checked, and the small re-checks that keep things alive' },
-      { sub: 'Self-discovery', area: 'self', all: '/explore.html?need=self', allLabel: 'Everything on self-discovery' },
-      { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
-      { href: '/how-you-take-things-in.html', code: 'New', title: 'How you take things in', note: 'ADHD, autistic, dyslexic or just your own way: make every page fit your mind' },
-      { href: '/wavelength.html', code: 'New', title: 'Find your Wave Code', note: 'How you think, talk and listen: your Wave Code' },
-      { href: '/wiring-card.html', code: 'Tool', title: 'How to talk to me: a card', note: 'A one-page card on how you like to be spoken to' },
-      { href: '/workpapers/wp-02-how-much-are-you-carrying.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'Five quick questions about today’s load' },
-      { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
-      { href: '/wired-differently.html', deep: true, title: 'Wired Differently', note: 'How differently wired people hear the same words' },
-      { href: '/workpapers/fill/suite.html?road=self', code: 'Suite', title: 'Workpapers for you', note: 'The “Just me” road: worksheets in order, fillable and printable' },
-      { href: '/book/topic-know-yourself.html', code: 'Book', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
-      { sub: 'Know your own wiring', area: 'self' },
+      { href: '/the-logic-behind-it.html', deep: true, title: 'The logic behind it', note: 'Why a reaction that looks odd or rude makes sense, both ways' },
+      { href: '/book/topic-talk-it-through.html', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
+      { sub: 'The languages of connection', area: 'talk', all: '/languages-of-connection.html', allLabel: 'How the languages fit together' },
+      { href: '/support-languages.html', title: 'Support languages', note: 'New: what helps when you’re having a hard time' },
+      { href: '/love-languages.html', deep: true, title: 'Love languages', note: 'A menu, not a label: what feels like care to each of you' },
+      { href: '/apology-languages.html', title: 'Apology languages', note: 'The parts of a sorry that help after a hurt' },
+      { href: '/appreciation-at-work.html', title: 'Appreciation at work', note: 'Five ways people like to be thanked' },
+      { href: '/touchstones.html', deep: true, title: 'Touchstones', note: 'The shared words and rituals that say “this is us”' },
+      { href: '/bonding.html', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness' },
+      { sub: 'Knowing yourself', area: 'self', all: '/explore.html?need=self', allLabel: 'Everything on knowing yourself' },
+      { href: '/self-path.html', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
       { href: '/know-yourself.html', deep: true, title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today' },
       { href: '/growing-up.html', deep: true, title: 'Where your lens came from', note: 'How growing up shapes what you expect, and which rules to keep' },
-      { href: '/the-logic-behind-it.html', deep: true, title: 'The logic behind it', note: 'Why a reaction that looks odd or rude makes sense, both ways, with analogies' },
-      { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'What the quiz looks at, and how to use your result' },
-      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Rhythms side by side', note: 'Your rhythms for money, decisions, check-ins and rest' },
-      { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD, autistic and AuDHD readers' },
-      { href: '/quick-checks.html#today', code: 'Daily', title: 'My weather today', note: 'How am I right now? Four quick taps, or a one-minute forecast of today' },
-      { sub: 'Settle yourself', area: 'self', tt: 'calm', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
-      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
-      { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Fight, flight and freeze, the vagus nerve, and what helps you settle' },
-      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements, herbs and natural approaches', note: 'What the research says, side effects, and what to check with a pharmacist' },
-      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
-      { href: '/ladder.html', code: 'Now', title: 'My weather today: quick, 4 taps', note: 'Four quick taps, then one calm step that fits' }
-    ]},
-    { id: 'play', name: 'Calm & play', title: 'Calm, play, watch & listen', blurb: 'Calm games, breathing, the pups’ cartoon and calm music for a busy mind. No timers and no way to lose. Every episode has captions.',
-      all: '/explore.html?need=calm', allLabel: 'See everything calm, to play, watch or hear', items: [
-      { sub: 'Relax and reset', tt: 'calm', all: '/pause-and-play.html#relax', allLabel: 'Every calm tool in one place' },
-      { href: '/pause-and-play.html#relax', code: 'Relax', title: 'Relax and reset', note: 'A breathing break, a silent wind-down, slow colours, calm music and sounds, and quiet games' },
-      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
-      { href: '/ladder.html', code: 'Now', title: 'My weather today: quick, 4 taps', note: 'Find where you are right now, and a next step that fits' },
-      { href: '/wp-11.html', code: 'WP-11', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
-      { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
-      { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Why you feel wired or shut down, and what helps your body settle' },
-      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements, herbs and natural approaches', note: 'Natural help for calm and sleep: what the research says, and what to watch out for' },
-      { href: '/keepsakes.html', code: 'Garden', title: 'My garden', note: 'Your keepsakes from the calm games' },
-      { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
-      { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
-      { sub: 'Games', all: '/pause-and-play.html', allLabel: 'All the calm games' },
-      { href: '/pause-and-play.html', code: 'All', title: 'Gentle games: every calm game in one place', note: 'All the calm games and word puzzles, your level and your garden' },
-      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
-      { href: '/frequency-journey.html', code: 'Game', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six gentle classic games: a maze chase, a crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby' },
-      { href: '/word-bloom.html', code: 'Game', title: 'Word Bloom', note: 'Swipe across the petals to spell words, in gentle levels' },
-      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme in every puzzle' },
-      { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels' },
-      { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
-      { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
-      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cosy 3D coin pusher: a kind tip every few coins, and every character on the site to collect' },
-      { sub: 'Frequency Buddies cartoon', area: 'media', all: '/frequency-buddies.html', allLabel: 'All the episodes' },
-      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'All the episodes', note: 'Animated adventures with the two pals, in two seasons, with captions' },
-      { href: '/frequency-buddies-live.html', code: 'On air', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
-      { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Episodes on shuffle', note: 'Episode after episode in a random order' },
-      { href: '/frequency-buddies-music-video.html', code: 'Song', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
-      { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
-      { href: '/frequency-buddies-season-2.html', code: 'Teaser', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
-      { sub: 'Music and calm sounds', area: 'media' },
-      { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces, with a music visualiser and vibration' },
-      { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualiser', note: 'Slow colours and tones matched to how you feel' },
-      { href: '/soundscapes.html#background', code: 'Sounds', title: 'Calm sounds: background', note: 'Brown noise, a low hum and a soft flutter' },
-      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
-      { sub: 'The pups live', area: 'media' },
-      { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
-    ]},
-    { id: 'thebook', name: 'Read the book', title: 'Read the book', blurb: 'The book free online: from the start, by part, on one page, by topic, or as PDFs and paperbacks.',
-      all: '/book/index.html', allLabel: 'All the ways to read the book', items: [
-      { sub: 'The book, in order', area: 'read', all: '/book/topic-start-here.html', allLabel: 'The book at a glance' },
-      { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'The whole book in order, from the first page, or on one page to print' },
-      { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Part One: Where you came from', note: 'Growing up, old rules and what life taught you' },
-      { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Part One: Who you are today', note: 'Your wiring, your weather and your words' },
-      { href: '/book/self-3-next.html', deep: true, code: 'Next', title: 'Part One: Who you are becoming', note: 'What matters to you, and tiny steps' },
-      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'Preface to Part Two: The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
-      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync' },
-      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'Look at the arrangement, never at a person' },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause' },
-      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both' },
-      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'Catch what weekly check-ins miss' },
-      { href: '/book/understanding-1-feelings.html', deep: true, code: '1', title: 'Part Three · Chapter 1: How feelings work', note: 'Signals, the body, and naming what you feel' },
-      { href: '/book/understanding-2-stress.html', deep: true, code: '2', title: 'Part Three · Chapter 2: Stress and the nervous system', note: 'The ladder, flooding, rest and recovery' },
-      { href: '/book/understanding-3-seeing.html', deep: true, code: '3', title: 'Part Three · Chapter 3: How we see each other', note: 'Perception, bias and the stories we tell' },
-      { href: '/book/understanding-4-communication.html', deep: true, code: '4', title: 'Part Three · Chapter 4: How communication works', note: 'Listening, repair and messages that land' },
-      { href: '/book/understanding-5-belonging.html', deep: true, code: '5', title: 'Part Three · Chapter 5: Attachment, trust and belonging', note: 'How trust grows, and finding your people' },
-      { href: '/book/understanding-6-change.html', deep: true, code: '6', title: 'Part Three · Chapter 6: Habits and change', note: 'Why change is hard, and why small steps work' },
-      { href: '/book/understanding-7-worth.html', deep: true, code: '7', title: 'Part Three · Chapter 7: Self-worth, shame and self-compassion', note: 'Shame, guilt and a kinder inner voice' },
-      { href: '/book/understanding-8-loss.html', deep: true, code: '8', title: 'Part Three · Chapter 8: Loss, grief and big life changes', note: 'Grief in waves, and big life changes' },
-      { href: '/book/understanding-9-minds.html', deep: true, code: '9', title: 'Part Three · Chapter 9: Minds that work differently', note: 'Autism, ADHD, sensory and learning differences' },
-      { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Part Three · Chapter 10: Values, meaning and a good life', note: 'What philosophy offers everyday life' },
-      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Part Three · Chapter 11: Healing after hurt', note: 'Repair, forgiveness, and when to get help' },
-      { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Part Three · Chapter 12: Helping others well', note: 'Support without fixing, and not burning out' },
-      { href: '/book/understanding-13-anger.html', deep: true, code: '13', title: 'Part Three · Chapter 13: Anger', note: 'What anger is for, the hot minutes, and repair' },
-      { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Part Three · Chapter 14: Personality and temperament', note: 'Dials, not boxes, and how people change' },
-      { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Part Three · Chapter 15: Closeness and love', note: 'Being known, and love in many forms' },
-      { href: '/book/understanding-16-worry.html', deep: true, code: '16', title: 'Part Three · Chapter 16: Worry, low mood and trauma', note: 'Anxiety, low mood, trauma, and where to get help' },
-      { href: '/book/understanding-17-groups.html', deep: true, code: '17', title: 'Part Three · Chapter 17: Fitting in', note: 'Groups, influence and culture, and disagreeing kindly' },
-      { href: '/book/afterword.html', deep: true, code: 'After', title: 'Afterword: what the book adds up to', note: 'Six threads through the book, and where to go from here' },
-      { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
-      { sub: 'Every way to read it', area: 'read', all: '/book/download.html', allLabel: 'Books and downloads' },
-      { href: '/book/download.html', code: 'PDF', title: 'Books and downloads', note: 'Every book, PDF, worksheet, video and song in one place' },
-      { href: '/book/whole.html', code: 'Book', title: 'The whole book on one page', note: 'Every part and chapter in one long page, to read straight through or print' },
-      { href: '/book/for-yourself.html', code: 'Book', title: 'The book for one person', note: 'Part One and the chapters for reading on your own, in one page' },
-      { href: '/book/together.html', code: 'Book', title: 'The book for two or more', note: 'The chapters for couples, families and housemates, in one page' },
-      { href: '/book/understanding.html', code: 'Book', title: 'Understanding People, as one book', note: 'Part Three on its own: how feelings, stress, trust and change work' },
-      { sub: 'The book by topic', area: 'read' },
-      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
-      { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
-      { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
-      { href: '/book/topic-know-yourself.html', code: 'Topic', title: 'The book on knowing yourself', note: 'Every chapter’s part about you' },
-      { href: '/book/topic-calm.html', code: 'Topic', title: 'The book on staying calm', note: 'Every chapter’s part on settling' },
-      { href: '/book/topic-by-relationship.html', code: 'Topic', title: 'The book by relationship', note: 'The best sections of the book for your kind of relationship' },
-    ]},
-    { id: 'read', name: 'Learn', title: 'Learn', blurb: 'The library, guides and stories. Each page has a short version and a deeper one.',
-      all: '/explore.html?need=read', allLabel: 'See everything to learn', items: [
-      { sub: 'The Professor’s Library, by topic', all: '/library.html', allLabel: 'The whole library' },
-      { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words, with the evidence and its limits' },
-      { href: '/library/emotions.html', code: 'Library', title: 'Feelings and emotions', note: 'What feelings are for, and naming them' },
-      { href: '/library/stress.html', code: 'Library', title: 'Stress and the body', note: 'The stress response, in plain English' },
-      { href: '/library/communication.html', code: 'Library', title: 'Talking and listening', note: 'Communication in relationships' },
-      { href: '/library/conflict.html', code: 'Library', title: 'Conflict and how to resolve it', note: 'What helps a disagreement end well' },
-      { href: '/library/connection.html', code: 'Library', title: 'Kindness and connection', note: 'Gratitude, kindness and closeness' },
-      { href: '/library/relationships.html', code: 'Library', title: 'How relationships work', note: 'What research says' },
-      { href: '/library/fairness.html', code: 'Library', title: 'Fairness and the mental load', note: 'Sharing the work at home fairly' },
-      { href: '/library/life.html', code: 'Library', title: 'Family, money and life changes', note: 'In-laws, money and big changes' },
-      { href: '/library/motivation.html', code: 'Library', title: 'Motivation, habits and change', note: 'Why change is hard, and what helps' },
-      { href: '/library/thinking.html', code: 'Library', title: 'Thinking traps', note: 'Common traps, and kinder ways to think' },
-      { href: '/library/wiring.html', code: 'Library', title: 'Differences in wiring', note: 'Autism, ADHD and sensitivity explained' },
-      { href: '/library/calm.html', code: 'Library', title: 'Calm and attention', note: 'Settling, focus and rest' },
-      { href: '/library/teams.html', code: 'Library', title: 'Systems and teams', note: 'Fair systems for teams and households' },
-      { sub: 'Autism and neurodivergence' },
-      { href: '/how-you-take-things-in.html', title: 'How you take things in', note: 'Pick your neurotype or preferences, and every page adapts' },
-      { href: '/book/understanding-9-minds.html', code: '9', title: 'Minds that work differently (Part Three, Chapter 9)', note: 'Autism, ADHD, dyslexia and more, in plain words' },
-      { href: '/wired-differently.html', title: 'Wired Differently', note: 'How differently wired minds take in words, plans and noise' },
-      { href: '/neurodivergent-relationships.html', title: 'Neurodivergent relationships', note: 'ADHD and autistic couples, families and friends' },
-      { href: '/adhd-kids.html', title: 'When a child has ADHD', note: 'Routines, reminders and calm, for parents and grandparents' },
-      { sub: 'For teachers and groups' },
-      { href: '/for-teachers.html', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
-      { href: '/groups.html', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
-      { href: '/for-counselors.html', title: 'For counsellors and coaches', note: 'Using the pages and tools with clients' },
-      { sub: 'Library and stories' },
-      { href: '/learn/index.html', deep: true, code: 'Stories', title: 'Stories from Philosophy', note: 'Old stories with useful ideas inside' },
-      { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from trusted sources' },
-      { href: '/research.html', code: 'Research', title: 'The research behind the site', note: 'The studies, books and reviews behind the pages, in plain words' },
+      { href: '/nervous-system.html', title: 'Your nervous system, in plain words', note: 'Fight, flight and freeze, and what helps you settle' },
+      { href: '/complacency.html', deep: true, title: 'Complacency', note: 'What you’ve stopped checking, and small ways to look again' },
+      { href: '/book/topic-know-yourself.html', title: 'The book on knowing yourself', note: 'Every chapter’s part about you' },
+      { sub: 'Minds that work differently', area: 'self' },
+      { href: '/neurodivergent-relationships.html', title: 'Neurodivergent relationships', note: 'ADHD, autistic and AuDHD partners, families and friends' },
+      { href: '/wired-differently.html', deep: true, title: 'Wired Differently', note: 'How differently wired people hear the same words' },
+      { href: '/book/understanding-9-minds.html', deep: true, title: 'Minds that work differently (the book)', note: 'Autism, ADHD, sensory and learning differences' },
+      { href: '/adhd-kids.html', title: 'When a child has ADHD', note: 'Routines, kind words and looking after yourselves' },
+      { href: '/communication-style-quiz.html', title: 'Communication style quiz', note: 'What the quiz looks at, and how to use your result' },
+      { sub: 'Research and big ideas', area: 'read', all: '/explore.html?need=read', allLabel: 'Everything to read and learn' },
+      { href: '/library.html', title: 'Psychology in plain words', note: '235 short entries on how people work, with the evidence and its limits' },
+      { href: '/learn/index.html', deep: true, title: 'Philosophy for everyday life', note: 'Old stories with useful ideas inside, like the Second Arrow' },
+      { href: '/research.html', title: 'The research behind the site', note: 'The studies, books and reviews, in plain words' },
+      { href: '/reading.html', title: 'Articles worth reading', note: 'Hand-picked articles from trusted sources' },
       { href: '/frequency-framework.html', deep: true, title: 'The Frequency Framework', note: 'Why two kind people fall out of step, and how to find the rhythm again' },
+      { href: '/glossary.html', title: 'Glossary', note: 'Every word the site uses, in plain English' },
       { href: '/infographic.html', title: 'The whole idea on one page', note: 'A printable summary, easy to share' },
-      { href: '/polymath.html', title: 'The polymath way', note: 'How thirteen fields of study became one program' },
-      { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' },
-      { sub: 'Guides' },
-      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labour and the mental load', note: 'What it is, and five calm steps to share it' },
-      { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
-      { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five' },
-      { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Practical tips for ADHD, autistic and AuDHD couples and families' },
-      { href: '/complacency.html', deep: true, code: 'Guide', title: 'Complacency', note: 'Why “it’s fine” stops being checked' },
-      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job, for any home' }
+      { sub: 'Teaching and groups' },
+      { href: '/for-teachers.html', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
+      { href: '/groups.html', title: 'Leading a group', note: 'Six sessions with discussion questions and handouts' },
+      { href: '/for-counselors.html', title: 'For counselors and coaches', note: 'Using the free pages and tools with clients' }
     ]},
-    { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what this is, and the site’s policies.',
-      all: '/contents.html', allLabel: 'See every page on the site', items: [
-      { sub: 'About this site' },
-      { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
-      { href: '/is-this-for-you.html', deep: true, title: 'Is this right for you?', note: 'What this is and isn’t, and who it helps' },
-      { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
-      { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
-      { href: '/method-and-limits.html', title: 'Method and limits', note: 'Every score, formula and cut-off, written out' },
-      { href: '/ways-in.html', deep: true, title: 'Ways in', note: 'Everything is free: no account, no paid version' },
-      { href: '/membership.html', title: 'Email updates', note: 'Optional: a short note when something new ships' },
-      { sub: 'Privacy and policies' },
-      { href: '/on-this-device.html', title: 'What’s stored on this device', note: 'See and erase what this site keeps in your browser' },
-      { href: '/legal/privacy-policy.html', title: 'Privacy policy' },
-      { href: '/legal/terms-of-service.html', title: 'Terms of service' },
-      { href: '/legal/refund-policy.html', title: 'Refund policy' }
+    { id: 'play', name: 'Calm & play', title: 'Calm, play, watch & listen', blurb: 'Calm down now, play a gentle game, watch the pups’ cartoon or put on calm music. No timers and no way to lose.',
+      all: '/explore.html?need=calm', allLabel: 'See everything calm, to play, watch or hear', items: [
+      { sub: 'Calm down now', tt: 'calm', all: '/pause-and-play.html#relax', allLabel: 'Every calm tool in one place' },
+      { href: '/pause-and-play.html#relax', title: 'Relax and reset', note: 'A breathing break, a silent wind-down, slow colors and calm sounds' },
+      { href: '/ladder.html', title: 'My weather today: 4 quick taps', note: 'Find where you are right now, and a next step that fits' },
+      { href: '/night-garden.html', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/wp-11.html', title: 'Calm-down plan', note: 'Decide ahead of time what settles you' },
+      { href: '/tools/soften-a-tense-moment.html', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
+      { href: '/calming-supplements.html', title: 'Calming supplements and herbs', note: 'What the research says, and what to check first' },
+      { href: '/book/topic-calm.html', title: 'The book on staying calm', note: 'Every chapter’s part on settling' },
+      { sub: 'Games', all: '/pause-and-play.html', allLabel: 'All the calm games' },
+      { href: '/frequency-journey.html', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six gentle classic games, including a Home Run Derby' },
+      { href: '/bears-dojo.html', title: 'The Bears Dojo', note: 'A temple garden to wander and a bear to build' },
+      { href: '/word-bloom.html', title: 'Word Bloom', note: 'Swipe across the petals to spell words' },
+      { href: '/quiet-words.html', title: 'Quiet Words', note: 'A gentle word search with a new theme each time' },
+      { href: '/quiet-crossword.html', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels' },
+      { href: '/daily-ledger-crossword.html', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
+      { href: '/recheck-drive.html', title: 'The Re-check Drive', note: 'A calm football game made of small, kind acts' },
+      { href: '/coin-pusher.html', title: 'Kindness Coin Pusher', note: 'A cozy coin pusher with a kind tip every few coins' },
+      { sub: 'Frequency Buddies cartoon', area: 'media', all: '/frequency-buddies.html', allLabel: 'All the episodes' },
+      { href: '/frequency-buddies.html?ep=s1e4', title: 'Episode 4: Who Broke the Kite?', note: 'A favorite: when something breaks, look at the setup first' },
+      { href: '/frequency-buddies-live.html', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
+      { href: '/frequency-buddies-shuffle.html', title: 'Episodes on shuffle', note: 'Episode after episode in a random order' },
+      { href: '/frequency-buddies-music-video.html', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
+      { href: '/frequency-buddies-music-video-maker.html', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
+      { href: '/frequency-buddies-season-2.html', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
+      { sub: 'Music, sounds and the pups live', area: 'media' },
+      { href: '/soundscapes.html#brain-breakers', title: 'Brain Breakers', note: 'Four instrumental pieces, with a music visualizer' },
+      { href: '/calm-visualizer.html', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
+      { href: '/soundscapes.html#background', title: 'Calm background sounds', note: 'Brown noise, a low hum and a soft flutter' },
+      { href: '/echoes-of-gold.html', title: 'Echoes of Gold', note: 'The companion album' },
+      { href: '/pal-cam-tv.html', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
+    ]},
+    { id: 'thebook', name: 'Read the book', title: 'Read the book', blurb: 'The book, free online: from the start, by part, on one page, by topic, or as PDFs and paperbacks.',
+      all: '/book/index.html', allLabel: 'The book: contents and start reading', items: [
+      { sub: 'Part One: Yourself', area: 'read' },
+      { href: '/book/topic-start-here.html', title: 'The book at a glance', note: 'Where to start, on your own or with others' },
+      { href: '/book/self-1-then.html', deep: true, title: 'Where you came from', note: 'Growing up, old rules and what life taught you' },
+      { href: '/book/self-2-now.html', deep: true, title: 'Who you are today', note: 'Your wiring, your weather and your words' },
+      { href: '/book/self-3-next.html', deep: true, title: 'Who you are becoming', note: 'What matters to you, and tiny steps' },
+      { sub: 'Part Two: Between us', area: 'read' },
+      { href: '/book/preface.html', deep: true, title: 'Preface: The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
+      { href: '/book/chapter-1.html', deep: true, title: 'Chapter I: Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync' },
+      { href: '/book/chapter-2.html', deep: true, title: 'Chapter II: Is the split working?', note: 'Look at the arrangement, never at a person' },
+      { href: '/book/chapter-3.html', deep: true, title: 'Chapter III: Full tanks and different angles', note: 'Why some reactions are bigger than their cause' },
+      { href: '/book/chapter-4.html', deep: true, title: 'Chapter IV: Two kinds of fair', note: 'Agreeing on what fair means to you both' },
+      { href: '/book/chapter-5.html', deep: true, title: 'Chapter V: The monthly look-back', note: 'Catch what weekly check-ins miss' },
+      { sub: 'Part Three: Understanding people, 1 to 9', area: 'read' },
+      { href: '/book/understanding-1-feelings.html', deep: true, title: 'Chapter 1: How feelings work', note: 'Signals, the body, and naming what you feel' },
+      { href: '/book/understanding-2-stress.html', deep: true, title: 'Chapter 2: Stress and the nervous system', note: 'The ladder, flooding, rest and recovery' },
+      { href: '/book/understanding-3-seeing.html', deep: true, title: 'Chapter 3: How we see each other', note: 'Perception, bias and the stories we tell' },
+      { href: '/book/understanding-4-communication.html', deep: true, title: 'Chapter 4: How communication works', note: 'Listening, repair and messages that land' },
+      { href: '/book/understanding-5-belonging.html', deep: true, title: 'Chapter 5: Attachment, trust and belonging', note: 'How trust grows, and finding your people' },
+      { href: '/book/understanding-6-change.html', deep: true, title: 'Chapter 6: Habits and change', note: 'Why change is hard, and why small steps work' },
+      { href: '/book/understanding-7-worth.html', deep: true, title: 'Chapter 7: Self-worth, shame and self-compassion', note: 'Shame, guilt and a kinder inner voice' },
+      { href: '/book/understanding-8-loss.html', deep: true, title: 'Chapter 8: Loss, grief and big life changes', note: 'Grief in waves, and big life changes' },
+      { href: '/book/understanding-9-minds.html', deep: true, title: 'Chapter 9: Minds that work differently', note: 'Autism, ADHD, sensory and learning differences' },
+      { sub: 'Part Three: 10 to 17, and the Afterword', area: 'read' },
+      { href: '/book/understanding-10-values.html', deep: true, title: 'Chapter 10: Values, meaning and a good life', note: 'What philosophy offers everyday life' },
+      { href: '/book/understanding-11-healing.html', deep: true, title: 'Chapter 11: Healing after hurt', note: 'Repair, apologies that land, and forgiveness' },
+      { href: '/book/understanding-12-helping.html', deep: true, title: 'Chapter 12: Helping others well', note: 'Support without fixing, and not burning out' },
+      { href: '/book/understanding-13-anger.html', deep: true, title: 'Chapter 13: Anger', note: 'What anger is for, the hot minutes, and repair' },
+      { href: '/book/understanding-14-personality.html', deep: true, title: 'Chapter 14: Personality and temperament', note: 'Dials, not boxes, and how people change' },
+      { href: '/book/understanding-15-love.html', deep: true, title: 'Chapter 15: Closeness and love', note: 'Being known, and love in many forms' },
+      { href: '/book/understanding-16-worry.html', deep: true, title: 'Chapter 16: Worry, low mood and trauma', note: 'How anxiety and low mood work, and what helps' },
+      { href: '/book/understanding-17-groups.html', deep: true, title: 'Chapter 17: Fitting in', note: 'Groups, influence and culture, and disagreeing kindly' },
+      { href: '/book/afterword.html', deep: true, title: 'Afterword: what the book adds up to', note: 'Six threads through the book, and where to go next' },
+      { sub: 'PDFs and other ways to read', area: 'read', all: '/book/download.html', allLabel: 'Books and downloads' },
+      { href: '/book/download.html', title: 'Books, PDFs and downloads', note: 'Every book, PDF, worksheet, video and song in one place' },
+      { href: '/book/whole.html', title: 'The whole book on one page', note: 'Every part and chapter, to read straight through or print' },
+      { href: '/book/for-yourself.html', title: 'The book for one person', note: 'Part One and the chapters for reading on your own' },
+      { href: '/book/together.html', title: 'The book for two or more', note: 'The chapters for couples, families and roommates' },
+      { href: '/book/understanding.html', title: 'Understanding People, as one book', note: 'Part Three on its own' },
+      { sub: 'The book by topic', area: 'read' },
+      { href: '/book/topic-share-the-load.html', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
+      { href: '/book/topic-talk-it-through.html', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
+      { href: '/book/topic-know-yourself.html', title: 'The book on knowing yourself', note: 'Every chapter’s part about you' },
+      { href: '/book/topic-calm.html', title: 'The book on staying calm', note: 'Every chapter’s part on settling' },
+      { href: '/book/topic-by-relationship.html', title: 'The book by relationship', note: 'The best sections for your kind of relationship' },
+      { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' }
     ]}
   ];
 
@@ -868,13 +701,13 @@
       });
       if (isAll) { if (best < 100) { best = 100; hereGroup = g; } return; }
       if (score === null) return;
-      if (g.id === 'rel') score -= 1.5; else if (g.id === 'start') score -= 3; else if (g.id === 'tools') score -= 0.5;
+      if (g.id === 'guides') score -= 1.5; else if (g.id === 'start') score -= 3; else if (g.id === 'tools') score -= 0.5;
       if (hasRef) score += 5;
       if (score > best) { best = score; hereGroup = g; }
     });
-    // a few pages belong to one section whatever else lists them: the work page is By relationship > Work,
+    // a few pages belong to one section whatever else lists them: the work page is Guides,
     // "Someone sent you this?" is Start here
-    var HERE_FIX = { '/work.html': 'rel', '/someone-sent-you-this.html': 'start', '/sent-this.html': 'start' };
+    var HERE_FIX = { '/work.html': 'guides', '/someone-sent-you-this.html': 'start', '/sent-this.html': 'start' };
     if (Object.prototype.hasOwnProperty.call(HERE_FIX, current)) hereGroup = MENU.filter(function (g) { return g.id === HERE_FIX[current]; })[0] || null;
     // a page that is a tool in its own right (listed in Tools without a #part) belongs to Tools, under its type
     // (the games stay in Calm & play)
@@ -892,7 +725,7 @@
   // [id, name, kind, short name]
   var FOCUS_AREAS = [
     ['just-me', 'Just me', 'rel'], ['couples', 'Couples & partners', 'rel', 'Couples'], ['friends', 'Friends', 'rel'], ['family', 'Family', 'rel'],
-    ['co-parents', 'Separated & co-parents', 'rel', 'Co-parents'], ['housemates', 'Housemates', 'rel'], ['work', 'Work & business partners', 'rel', 'Work'],
+    ['co-parents', 'Breakups & co-parents', 'rel', 'Co-parents'], ['housemates', 'Roommates', 'rel'], ['work', 'Work & business partners', 'rel', 'Work'],
     ['life-changes', 'Life changes', 'rel'],
     ['load', 'Share the load', 'topic'], ['talk', 'Talk it through', 'topic'], ['self', 'Self-discovery', 'topic'], ['play', 'Calm & play', 'topic'],
     ['media', 'Watch & listen', 'topic'], ['read', 'Read the book & learn', 'topic', 'Book & learn']
@@ -925,17 +758,14 @@
   Object.keys(FOCUS_PAGES).forEach(function (a) { FOCUS_PAGES[a].split(' ').forEach(function (x) { tagArea('/' + x + '.html', a); }); });
   MENU.forEach(function (g) {
     // a group named for an area tags its pages with it; a sub-menu or a page can name its own area ({ area: 'media' })
+    // (the relationship areas come from the groups on /by-relationship.html, in FOCUS_PAGES above)
     var ga = /^(load|talk|self|play|media|read)$/.test(g.id) ? g.id : null, ca = ga;
-    if (g.id !== 'rel') g.items.forEach(function (it) { if (it.sub) { ca = it.area || ga; return; } if (it.href && (it.area || ca)) tagArea(it.href, it.area || ca); });
-    if (g.id === 'rel') {
-      var cur = null;
-      g.items.forEach(function (it) {
-        if (it.sub) { var m = /#([a-z-]+)$/.exec(it.all || ''); cur = m && m[1] !== 'misc' ? m[1] : null; return; }
-        if (cur && it.href) tagArea(it.href, cur);
-      });
-    }
+    g.items.forEach(function (it) { if (it.sub) { ca = it.area || ga; return; } if (it.href && !/^\/by-relationship\.html/.test(it.href) && (it.area || ca)) tagArea(it.href, it.area || ca); });
   });
   SECTIONS.forEach(function (s) { if (s.id === 'book' || s.id === 'media') s.items.forEach(function (it) { tagArea(it.href, s.id === 'book' ? 'read' : 'media'); }); });
+  // nav21: a guide reached through Guides > Who it's about (it isn't named in the menu itself) belongs to Guides
+  if (!hereGroup && AREA_OF[current] && FOCUS_AREAS.some(function (x) { return x[2] === 'rel' && AREA_OF[current][x[0]]; }))
+    hereGroup = MENU.filter(function (g) { return g.id === 'guides'; })[0] || null;
   function areasOf(u) {
     var p = fpath(u); if (!p) return null;
     var a = AREA_OF[p] || null;
@@ -1044,7 +874,7 @@
     '/ladder.html': 'My weather today: 4 quick taps',
     '/wp-11.html': 'Calm-down plan (Calm-Down Kit)',
     '/tools/soften-a-tense-moment.html': 'Cool-down corner: soften a tense moment',
-    '/calm-visualizer.html': 'Cool-down corner: slow colours and tones (Drift)',
+    '/calm-visualizer.html': 'Cool-down corner: slow colors and tones (Drift)',
     '/night-garden.html': 'Cool-down corner: breathing game (Night Garden)',
     '/soundscapes.html#brain-breakers': 'Cool-down corner: calm music (Brain Breakers)',
     '/soundscapes.html#background': 'Cool-down corner: background sounds (Sound Toolkit)',
@@ -1067,7 +897,7 @@
     '/ask.html': 'Ask Professor Puddles: a question in your own words',
     '/start-in-10-minutes.html': 'Ten-minute start',
     '/journeys.html': 'Guided journeys: small steps for what’s going on',
-    '/do/index.html': 'Learn by doing: practise on an example (Workpaper Playground)',
+    '/do/index.html': 'Learn by doing: practice on an example (Workpaper Playground)',
     '/tools/frequency-sync-visualizer.html': 'Learn by doing: two rhythms in step (Frequency Sync Visualizer)',
     '/polymath.html#connect': 'Learn by doing: connect two fields of study',
     '/quest.html': 'Learn by doing: your learning map (quest map)',
@@ -1079,14 +909,16 @@
     '/daily-ledger-crossword.html': 'Gentle games: crosswords, newspaper daily (Daily Ledger Crossword)',
     '/recheck-drive.html': 'Gentle games: calm football for small kind acts (Re-check Drive)',
     '/bears-dojo.html': 'Gentle games: a quiet temple garden to wander (Bears Dojo)',
-    '/coin-pusher.html': 'Gentle games: a cosy coin pusher with kind tips (Kindness Coin Pusher)',
+    '/coin-pusher.html': 'Gentle games: a cozy coin pusher with kind tips (Kindness Coin Pusher)',
     '/frequency-buddies-music-video-maker.html': 'Gentle games: make a cartoon music video (Frequency Buddies video maker)',
     '/surprise.html': 'Surprise me',
     '/quick-checks.html': 'My weather today (Today’s Weather)',
     '/soundscapes.html': 'Cool-down corner: calm sounds and music (Brain Breakers)',
     '/workpapers/fill/suite.html?road=self': 'Worksheets for you, in order (Workpaper Suite)'
   };
-  function menuLabel(it) { return (it.plain && it.title) || PLAIN_LABEL[it.href] || it.title; }
+  // nav21: each menu line is named in the menu itself (its sub-menu already says what kind of thing it is); the plain
+  // labels above are for the directory pages (TOLSiteMap.plainLabel) and for a line with no title
+  function menuLabel(it) { return it.title || PLAIN_LABEL[it.href] || ''; }
   // A group splits into its sub-menus (and any loose pages before the first { sub }, which MENU no longer has)
   function menuTree(g) {
     var top = [], subs = [], cur = null;
@@ -1422,15 +1254,13 @@
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     // on a smaller laptop the less-used sections fold into Menu one by one, before all of them do
-    var FOLD = { read: 1, play: 2, workpapers: 3, topics: 3, rel: 4 };
+    var FOLD = { play: 1, workpapers: 2, guides: 3, tools: 4 };
     // the book, one tap from every page: on a laptop the less-used sections fold into Menu before it goes
     var bookLink = el('a', { class: 'tol-es-link tol-book-link', href: '/book/index.html' }, 'Read the book');
 
     nav.appendChild(bookLink);
-    // design17 (flow17's ask): "Relax and reset" one tap from every page on a laptop; it steps aside before the book does
-    var relaxLink = el('a', { class: 'tol-es-link tol-relax-link', href: '/relax.html' }, 'Relax and reset');
-    if (current === '/pause-and-play.html' || current === '/relax.html') relaxLink.setAttribute('aria-current', 'page');
-    nav.appendChild(relaxLink);
+    // nav21: "Relax and reset" is the first line of Calm & play (and "Calm down now" in the Menu's quick links), so the
+    // bar holds just the six areas
     // the section buttons (built again when Focus mode changes)
     ribbonHook = function () {
       closeDrop();
@@ -1470,22 +1300,21 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     // the most used tool, one tap away, right under search (the Chat analyzer: one message or a whole chat)
-    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + 'Chat analyzer' + '</a>'));
+    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + 'Chat analyzer: check a text before you send it' + '</a>'));
     // the whole site at a glance, one tap each: the directories first, then what most people come for
     // (the sections below hold everything else)
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': 'The whole site at a glance' },
       '<p class="tol-panel-quick-h">' + 'The whole site at a glance' + '</p><ul>' +
-      [['/explore.html', '&#129517;', 'Everything on this site'],
-       ['/saved.html', '&#128278;', 'Saved for later'],
-       ['/on-this-device.html#lock', '&#128274;', 'Lock with a passcode'],
+      [['/start-here.html#three-questions', '&#10067;', 'Not sure? Three questions'],
+       ['/ladder.html', '&#127807;', 'Calm down now'],
        ['/tools.html', '&#129520;', 'All tools'],
        ['/by-relationship.html', '&#128101;', 'Guides by relationship'],
        ['/book/index.html', '&#128214;', 'Read the book'],
-       ['/book/download.html', '&#128229;', 'Books and downloads'],
-       ['/ladder.html', '&#127807;', 'Calm down now'],
-       ['/ask.html', '&#128167;', 'Ask Professor Puddles'],
-       ['/calming-supplements.html', '&#127793;', 'Calming herbs and supplements'],
-       ['/start-here.html#three-questions', '&#10067;', 'Not sure? Three questions']
+       ['/book/download.html', '&#128229;', 'PDFs and downloads'],
+       ['/saved.html', '&#128278;', 'Saved for later'],
+       ['/on-this-device.html#lock', '&#128274;', 'Lock with a passcode'],
+       ['/explore.html', '&#129517;', 'Everything on this site'],
+       ['/contact.html', '&#9993;&#65039;', 'Contact us']
       ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === '/ladder.html' ? ' data-panel-breathe' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
     // home16b: "Calm down now" opens the one-minute Breathe break right here first (the 4-tap check is one tap on, in Topics)
     panel.addEventListener('click', function (e) {
@@ -1686,13 +1515,7 @@
     }
 
     // "Come back gently": a weekly reminder in the visitor's own calendar, wherever a page asks for one (remind.js)
-    // "Listen to this page": read aloud by the device's own voice (listen.js) on reading pages; it hides itself without a voice
-    if (document.querySelector('main.read') && !body.classList.contains('is-game') && !body.hasAttribute('data-no-listen') && 'speechSynthesis' in window &&
-        !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
-      var lsn = document.createElement('script'); lsn.src = '/assets/js/listen.js';
-      lsn.onload = function () { if (window.TOLListen && window.TOLListen.mount) window.TOLListen.mount({}); };
-      document.head.appendChild(lsn);
-    }
+    // (the owner's decision, Oct 2026: no read-aloud or "Listen to this page" anywhere on the site, so listen.js is not loaded)
     if (document.querySelector('.bt-switch')) { var btj = document.createElement('script'); btj.src = '/assets/js/book-topic.js'; document.head.appendChild(btj); }
     if (document.querySelector('[data-tol-remind]')) { var rmj = document.createElement('script'); rmj.src = '/assets/js/remind.js'; document.head.appendChild(rmj); }
 
@@ -1892,13 +1715,13 @@
         '<a href="/explore.html"' + hl + '>' + 'Everything on this site' + '</a>' +
         '<a href="/contents.html"' + hl + '>' + 'All pages' + '</a>' +
         '<a href="/for-teachers.html"' + hl + '>' + 'For teachers' + '</a>' +
-        '<a href="/for-counselors.html"' + hl + '>' + 'For counsellors and coaches' + '</a>' +
+        '<a href="/for-counselors.html"' + hl + '>' + 'For counselors and coaches' + '</a>' +
         '<a href="/membership.html"' + hl + '>' + (CONFIG.openAll ? 'Email updates' : 'Membership') + '</a>' +
         '<a href="/roadmap.html"' + hl + '>' + 'Roadmap' + '</a>' +
         '<a href="/legal/privacy-policy.html"' + hl + '>' + 'Privacy' + '</a>' +
         '<a href="/on-this-device.html"' + hl + '>' + 'Stored on this device' + '</a>' +
         '<a href="/legal/terms-of-service.html"' + hl + '>' + 'Terms' + '</a>' +
-        '<a href="mailto:' + CONFIG.supportEmail + '">' + 'Contact' + '</a>' +
+        '<a href="/contact.html"' + hl + '>' + 'Contact us' + '</a>' +
         (isApp() ? '' : '<button type="button" class="tol-install-link">' + 'Add to your home screen' + '</button>') +
       '</span>';
     foot.querySelector('.tol-foot-links').appendChild(quietButton('switch'));
@@ -2215,12 +2038,12 @@
     '/teens.html#middle': { u: '/teens.html#middle', t: 'For teens: when your parents fight with each other', d: 'It isn’t your job to fix their relationship, and you don’t have to pick a side. Words to use, space when it’s loud, and help if it ever feels scary.', k: 'Teens' },
     '/teens.html#siblings': { u: '/teens.html#siblings', t: 'For teens: brothers and sisters', d: 'Fighting with a brother or sister is common. Simple rules for space and stuff, walking away, and what to say.', k: 'Teens' },
     '/parents.html#siblings': { u: '/parents.html#siblings', t: 'Siblings who fight (for parents)', d: 'What helps when brothers and sisters clash: fair rules, not taking sides, one-to-one time.', k: 'Guide' },
-    '/share-the-load.html#roommates': { u: '/share-the-load.html#roommates', t: 'Roommates and housemates: rent, bills and three or more people', d: 'Start with the numbers, not with who is late. A house rule for rent day, shared supplies, and a fridge list with one owner per job.', k: 'Guide' },
+    '/share-the-load.html#roommates': { u: '/share-the-load.html#roommates', t: 'Roommates: rent, bills and three or more people', d: 'Start with the numbers, not with who is late. A house rule for rent day, shared supplies, and a fridge list with one owner per job.', k: 'Guide' },
     '/long-distance.html#rhythm': { u: '/long-distance.html#rhythm', t: 'Long distance: who calls, and how often', d: 'If one of you does most of the reaching out, that’s real information, not scorekeeping; and calling less is usually about the hours, not the love. Agree it, with words for each of you.', k: 'Guide' },
     '/workpapers/fill/suite.html': { u: '/workpapers/fill/suite.html', t: 'The Workpaper Suite', d: 'Every worksheet in one place: pick your road, fill them in on screen, combine two people’s files, and make one report.', k: 'Tool' },
     '#palcam': { u: '#palcam', t: 'Check in on Tidbit & Sugarfoot (the pal cam)', d: 'Opens right here: a peek at the two pups, Tidbit and Sugarfoot, with little captions. You can turn the sound off.', k: 'Pups' }
   };
-  EXTRA['/parents.html#anger-help'] = { u: '/parents.html#anger-help', t: 'Getting help for your anger', d: 'If you’re yelling most days or your temper feels like it’s running you: your doctor, a counsellor or anger-management group, and a calm-down plan. Getting help is a strong, loving thing to do.', k: 'Guide' };
+  EXTRA['/parents.html#anger-help'] = { u: '/parents.html#anger-help', t: 'Getting help for your anger', d: 'If you’re yelling most days or your temper feels like it’s running you: what helps in the hot minutes, a calm-down plan, and coming back to repair. Wanting to change it is a strong, loving thing to do.', k: 'Guide' };
   EXTRA['/work.html#owner-list'] = { u: '/work.html#owner-list', t: 'Team one-owner list (at work, or with a business partner)', d: 'Every recurring job gets one owner and one backup, with a “who carries what” tally. For co-founders, co-owners and teams. Kept on this device.', k: 'Tool' };
   EXTRA['/work.html#neurodiversity'] = { u: '/work.html#neurodiversity', t: 'At work: ADHD, autism and neurodiversity', d: 'Written asks after meetings, one ask per message, protected focus time, and asking how people work best. Plain, direct words that help everyone.', k: 'Guide' };
   EXTRA['/turning-toward-in-depth.html#their-world'] = { u: '/turning-toward-in-depth.html#their-world', t: 'Questions to ask each other: know their world', d: '“What’s on your mind this week that I don’t know about?” Small questions that keep you up to date with each other, and how to really listen to the answer.', k: 'Guide' };
@@ -2235,8 +2058,8 @@
   [['/co-parenting.html#handoff-bag', 'A handoff-bag checklist (co-parents)', 'What travels with the children between homes: medicines and the inhaler with a note of the last dose, school things, the comfort toy. One list both homes use.', 'Guide'],
    ['/family-rifts.html#money', 'When grief and money get tangled', 'A parent has died, there’s a will or a house, and old roles come back. Keeping the money talk separate, and when a family mediator helps.', 'Guide'],
    ['/family-rifts.html#not-ready', '“I’m not ready”, or “I don’t have to”', 'Forgiving is not the same as reconciling. You can say not yet, yes with terms, or no for now.', 'Guide'],
-   ['/teens.html#family-care', 'For teens: living with grandparents, family or foster carers', 'Living with your nan or grandad, an aunt or foster carers: house rules, phones, feeling understood, and missing your mum or dad.', 'Teens'],
-   ['/teens.html#parent-away', 'For teens: when a parent is away, ill, or in treatment', 'Missing your mum or dad, worrying about them, and who you can talk to.', 'Teens'],
+   ['/teens.html#family-care', 'For teens: living with grandparents, family or foster parents', 'Living with your grandma or grandpa, an aunt or foster parents: house rules, phones, feeling understood, and missing your mom or dad.', 'Teens'],
+   ['/teens.html#parent-away', 'For teens: when a parent is away, ill, or in treatment', 'Missing your mom or dad, worrying about them, and who you can talk to.', 'Teens'],
    ['/teens.html#lgbtq', 'For teens: being yourself at home', 'Coming out, or not yet, to parents and family, at your own pace and safely.', 'Teens'],
    ['/foster-and-kinship.html#kinship', 'Raising a grandchild or a relative’s child', 'Kinship carers, grandparents raising grandchildren: the change in roles, the child’s parents, and support.', 'Guide'],
    ['/more-than-two.html#long-hours', 'The partner who works long hours', 'In a home of three or more, when one partner works long hours and feels left out of plans and decisions.', 'Guide'],
@@ -2417,7 +2240,7 @@
   // search doesn't show one tool twice under two names (tools/seo/build_seo.py has the same titles for the next build)
   var RETITLE = { '/lemonade-stand.html': ['Who does what? Chores and bills at home (the Lemonade Stand)', 'Tap who does each job and who pays for what, for one person or a whole home, then compare without blame.'],
     '/quick-checks.html': ['My weather today: a daily mood and stress check', 'How you are today in four quick taps, or a one-minute forecast, with a calm next step that fits.'],
-    '/check-ins.html': ['Check-ins: for couples, families and housemates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and housemates. How to raise a thing once, properly.'] };
+    '/check-ins.html': ['Check-ins: for couples, families and roommates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and roommates. How to raise a thing once, properly.'] };
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
     '/new-relationship.html': ['Early days: dating and new relationships', 'Dating at any age: texting and pace, telling a difference from a real concern, the big questions, meeting family, moving in, and ending it kindly.'],
@@ -2439,13 +2262,13 @@
     '/two-faiths.html': ['Two faiths, one family', 'Two faiths or cultures under one roof: holidays, naming and blessing a baby, family expectations, and what to tell the children.'],
     '/coming-out.html': ['Coming out as an adult', 'Coming out to family, at work or with a partner: going at your pace, words you could use, and places to get support.'],
     '/on-my-own.html': ['On my own after a breakup or divorce', 'Building a life again, and part-time parenting when the kids are with you some days.'],
-    '/for-counselors.html': ['For counsellors, coaches and group leaders', 'How to use these free pages and tools with clients and groups.'],
-    '/sharing-a-room.html': ['Sharing a room (dorm or flat)', 'A room agreement to fill in together: guests, quiet hours, sleep and cleaning, and how to raise it kindly.'],
+    '/for-counselors.html': ['For counselors, coaches and group leaders', 'How to use these free pages and tools with clients and groups.'],
+    '/sharing-a-room.html': ['Sharing a room (dorm or apartment)', 'A room agreement to fill in together: guests, quiet hours, sleep and cleaning, and how to raise it kindly.'],
     '/empty-nest.html': ['When the kids have left home', 'An empty nest and a quiet house: finding each other again when you feel like roommates.'],
-    '/family-rifts.html': ['Family rifts and estrangement', 'Adult brothers and sisters, a will, a favourite child, years of silence: reaching out, or deciding you’re not ready.'],
+    '/family-rifts.html': ['Family rifts and estrangement', 'Adult brothers and sisters, a will, a favorite child, years of silence: reaching out, or deciding you’re not ready.'],
     '/when-one-is-ill.html': ['When one of you is ill', 'Chronic illness, disability, long Covid or ME/CFS: sharing the load when one of you has fewer spoons, without either of you feeling a burden.'],
     '/someone-sent-you-this.html': ['Someone sent you this?', 'What this site is in three lines. You don’t have to do anything, nothing you type leaves your phone, and there are messages to send someone else.'],
-    '/examples.html': ['What small changes look like', 'Made-up examples built from common patterns: a couple, housemates, siblings, co-parents, friends, co-founders, a poly home, a kinship carer and someone on their own.'],
+    '/examples.html': ['What small changes look like', 'Made-up examples built from common patterns: a couple, roommates, siblings, co-parents, friends, co-founders, a poly home, a kinship carer and someone on their own.'],
     '/week-0.html': ['Week 0: a gentle start', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'],
     '/workpapers/wp-12-same-moment-different-speeds.html': ['WP-12: Same moment, different speeds', 'When one of you wants to sort it now and the other needs time: five everyday moments, your gaps in plain words, and one small agreement.'],
     '/workpapers/wp-14-is-it-us-or-everything-else.html': ['WP-14: Is it us, or is it everything else?', 'A one-week log: outside pressure in one column, tense moments between you in the other, so outside strain stops getting blamed on each other.'],
@@ -3068,7 +2891,7 @@
   // Picked in menu order, never at random. Not on the home page, directory pages, book chapters (they have the
   // chapter bar) or games. <body data-no-where> leaves out the trail; <body data-no-related> leaves out the strip.
   var WHERE_SKIP = /^\/(index|404|offline|garden-backdrop|explore|tools|contents|by-relationship|pal-cam-tv|frequency-journey-play)\.html$/;
-  var GROUP_HOME = { start: '/start-here.html', tools: '/tools.html', workpapers: '/workpapers/fill/suite.html', rel: '/by-relationship.html', topics: '/explore.html', play: '/explore.html?need=calm', read: '/explore.html?need=read', about: '/contents.html' };
+  var GROUP_HOME = { start: '/start-here.html', tools: '/tools.html', workpapers: '/workpapers/fill/suite.html', guides: '/explore.html', play: '/explore.html?need=calm', thebook: '/book/index.html' };
   // a menu area (or a By relationship sub-menu) and the tool type that goes with it
   var AREA_TOOLTYPE = { load: 'load', talk: 'talk', self: 'self', play: 'calm', media: 'calm', read: 'learn', 'just-me': 'self', couples: 'talk', friends: 'talk', family: 'family', 'co-parents': 'family', housemates: 'load', work: 'work', 'life-changes': 'plan' };
   function pathOnly(u) { return String(u || '').split(/[?#]/)[0]; }
@@ -3083,7 +2906,6 @@
       if (hit) {
         var area = null, tt = null;
         g.items.some(function (it) { if (it.sub === hit.name && hit.name) { area = it.area || null; tt = it.tt || null; return true; } return false; });
-        if (!area && g.id === 'rel' && hit.all) { var m = /#([a-z-]+)$/.exec(hit.all); area = m ? m[1] : null; }
         if (!area) area = /^(play|read)$/.test(g.id) ? g.id : null;
         return { g: g, list: hit, area: area, tt: tt };
       }
@@ -3100,7 +2922,10 @@
       return c;
     }
     if (hereSection) return [[hereSection.title, sectionHome(hereSection)]];
-    var P = [[/^\/book\//, 'The book', '/book/index.html'], [/^\/library\//, 'The Professor’s Library', '/library.html'], [/^\/learn\//, 'Stories from Philosophy', '/learn/index.html'],
+    // nav21: a guide that the menu reaches through "Who it's about" says so: Guides, then its part of the directory page
+    var ra = null; FOCUS_AREAS.some(function (x) { if (x[2] === 'rel' && (AREA_OF[current] || {})[x[0]]) { ra = x; return true; } return false; });
+    if (ra && !/^\/(book|library|learn|workpapers|legal|tools)\//.test(current)) return [['Guides', '/explore.html'], [ra[1], '/by-relationship.html#' + ra[0]]];
+    var P = [[/^\/book\//, 'The book', '/book/index.html'], [/^\/library\//, 'Psychology in plain words', '/library.html'], [/^\/learn\//, 'Philosophy for everyday life', '/learn/index.html'],
       [/^\/workpapers\//, 'Worksheets', '/workpapers/fill/suite.html'], [/^\/legal\//, 'About', '/contents.html'], [/^\/tools\//, 'Tools', '/tools.html']];
     for (var i = 0; i < P.length; i++) if (P[i][0].test(current)) return [[P[i][1], P[i][2]]];
     return [];
@@ -4234,9 +4059,8 @@
       // the two things people look for first: bigger words and stronger contrast
       '<h3 class="tol-set-k tol-set-k1">' + 'Text and contrast' + '</h3>' +
       '<fieldset class="tol-set-sizes"><legend>' + 'Text size' + ' <small>' + '(smallest to biggest)' + '</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
-      sw('contrast', 'High contrast', 'Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colours or shapes behind the words.') +
+      sw('contrast', 'High contrast', 'Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colors or shapes behind the words.') +
       '<fieldset><legend>' + 'Colors (dark mode)' + '</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
-      '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">' + 'Listen to this page' + '</button> <small>' + 'Your device reads the page aloud, with a speed control and “Read from where I am”.' + '</small></p>' +
       '<div class="tol-set-presets">' +
         '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>' + 'Quiet mode' + '</strong><small>' + 'A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.' + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
         '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>' + 'Easy reading' + '</strong><small>' + 'A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.' + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
@@ -4297,7 +4121,6 @@
       var p = e.target.closest('[data-preset]');
       if (p) { var n = p.getAttribute('data-preset'); setPreset(n, lsGet(PRESETS[n].key) !== '1'); }
       if (e.target.closest('.tol-set-close') || e.target === box) closeSettings();
-      if (e.target.closest('.tol-set-listen-go')) { var lg = document.querySelector('.tol-listen-go'); closeSettings(); if (lg) { lg.scrollIntoView({ block: 'center' }); lg.click(); } }
       if (e.target.closest('.tol-set-reset')) {
         [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY, CONTRAST_KEY].forEach(lsDel);
         lsDel('tol-take-in'); if (window.TOLTakeIn && window.TOLTakeIn.reset) window.TOLTakeIn.reset();
@@ -4323,7 +4146,6 @@
     if (!setBox) setBox = buildSettings();
     setLast = from || document.activeElement;
     syncSettings(setBox);
-    var sl = setBox.querySelector('.tol-set-listen'); if (sl) sl.hidden = !document.querySelector('.tol-listen-go');
     setBox.hidden = false;
     setInerted = Array.prototype.filter.call(document.body.children, function (n) { return n !== setBox && !n.hasAttribute('inert') && !/^(SCRIPT|STYLE|LINK)$/.test(n.tagName); });
     setInerted.forEach(function (n) { n.setAttribute('inert', ''); });
@@ -5275,7 +5097,7 @@
     try { return new URL(u, location.href).href; } catch (e) { return String(u); }
   }
   function shareFire(url, method) {
-    // both spellings: 'tol:shared' and 'tol-shared' (the paperclip listens for the second, reading detail.how)
+    // both spellings: 'tol:shared' and 'tol-shared' (other scripts listen for the second, reading detail.how)
     ['tol:shared', 'tol-shared'].forEach(function (name) {
       try { document.dispatchEvent(new CustomEvent(name, { detail: { url: url, method: method, how: method } })); } catch (e) {}
     });
@@ -5577,7 +5399,7 @@
       };
       addTeaser();
     }
-    // buttons written into a page as plain data-share get the same look and the paperclip
+    // buttons written into a page as plain data-share get the same look (Kip the paperclip is gone)
     Array.prototype.forEach.call(document.querySelectorAll('[data-share]:not(.tol-share-btn)'), shareMount);
   }
 

@@ -769,7 +769,7 @@ header.top .lede .lede-more{display:none}
     <p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--muted)">Also called the Signal Translator</p>
     <p class="tol-what st-sub no-bubble"><strong>What it does:</strong> reads one message you&rsquo;re about to send, one you got, a whole conversation, or a screenshot of one. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> how it may land or what it might mean, and calm, clear words that keep your point. <span aria-hidden="true">&middot;</span> About 2 minutes</p>
     <div class="modes st-modes" role="radiogroup" aria-label="What would you like to read?">
-      <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>A message I&rsquo;m about to send</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
+      <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>Check a text before you send it</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
       <label class="mode"><input type="radio" name="stmode" value="got"><span><b>A message I got</b><small>What it might mean, and calm ways to answer.</small></span></label>
       <label class="mode"><input type="radio" name="stmode" value="chat"><span><b>A whole chat or screenshot</b><small>Paste a chat or add a screenshot. See where it turned, and a calm way to answer.</small></span></label>
       <label class="mode"><input type="radio" name="stmode" value="write"><span><b>Help me write it</b><small>Ask for a change, reply to something that stung, or say no kindly. Then check how it may land.</small></span></label>
@@ -847,7 +847,7 @@ header.top .lede .lede-more{display:none}
         <p><strong>Adding context makes the read fairer.</strong> Under &ldquo;Add context&rdquo; you can say who they are to you, how they usually write, whether this keeps coming back, how you&rsquo;re each doing today and what you want from it. The read uses it and shows what it took into account. It still can&rsquo;t know everything, and one conversation can&rsquo;t tell you what a relationship is like.</p>
         <p>It can&rsquo;t hear tone of voice, and it doesn&rsquo;t know your history, your in-jokes, or what either of you meant. The same words can be affectionate between two people and cutting between two others. Use it to slow down and prepare, never as proof of who was right. The program judges arrangements, never people.</p>
         <p>A screenshot is read by a text reader on this device. It can miss a word, or an emoji, so the &ldquo;What I read&rdquo; box shows exactly what it used.</p>
-        <p>If someone&rsquo;s wiring shapes how words land, choose <a href="#main" data-stmode="send">A message I&rsquo;m about to send</a> above to go deeper on one sentence at a time, and <a href="/wired-differently.html">Wired Differently</a> explains why the same words reach people differently.</p>
+        <p>If someone&rsquo;s wiring shapes how words land, choose <a href="#main" data-stmode="send">Check a text before you send it</a> above to go deeper on one sentence at a time, and <a href="/wired-differently.html">Wired Differently</a> explains why the same words reach people differently.</p>
       </details>
     </section>
     <div data-tool-guide="conversation-reader"></div>
@@ -912,7 +912,7 @@ header.top .lede .lede-more{display:none}
       <summary>How accurate is this?</summary>
       <div class="st-acc-b">
         <p class="no-bubble">It&rsquo;s a rule-based reader. It looks for patterns in the words (&ldquo;always,&rdquo; a bare order, a hint, a joke marker, a threat) and reads them the way a careful person might. It can&rsquo;t hear a tone of voice, see a face, or know your history together.</p>
-        <p class="no-bubble"><b>On everyday messages it&rsquo;s right about 9 times in 10.</b> We checked it against messages people labelled by hand, between partners, co-parents, housemates, friends, family and coworkers, written the way people really text. On 101 messages it had never been tuned on, it read how the message may land the same way a person did 92 times. It&rsquo;s least sure with sarcasm that has no tell-tale words, in-jokes, and lines that only make sense with what came before.</p>
+        <p class="no-bubble"><b>On everyday messages it&rsquo;s right about 9 times in 10.</b> We checked it against messages people labeled by hand, between partners, co-parents, roommates, friends, family and coworkers, written the way people really text. On 101 messages it had never been tuned on, it read how the message may land the same way a person did 92 times. It&rsquo;s least sure with sarcasm that has no tell-tale words, in-jokes, and lines that only make sense with what came before.</p>
         <p class="no-bubble"><b>Adding context makes the reading fairer.</b> Under &ldquo;Add context&rdquo; you can say who they are to you, how they usually write, whether this keeps coming back, how you&rsquo;re each doing today and what you want from it. The reading then uses it, and shows what it took into account. It still can&rsquo;t know everything.</p>
         <p class="no-bubble">So use it as a second opinion, not a verdict. Check what it says against what you know about the person. One message can&rsquo;t tell you what a relationship is like.</p>
       </div>
@@ -3713,16 +3713,6 @@ sync();
       }
     } catch (e) {}
   })();
-</script>
-<script>
-/* "Listen to this page": the site's reader (listen.js) loads itself only on reading pages (main.read), and this
-   page is a tool, so it loads it here and puts the button under the title. The device's own voice reads it. */
-(function(){
-  if(!("speechSynthesis" in window) || document.body.hasAttribute("data-no-listen") || document.querySelector("main.read")) return;
-  function go(){ if(window.TOLListen && window.TOLListen.mount) window.TOLListen.mount({after: document.querySelector("header.top .lede")}); }
-  if(window.TOLListen) return go();
-  var sc=document.createElement("script"); sc.src="/assets/js/listen.js"; sc.onload=go; document.head.appendChild(sc);
-})();
 </script>
 </body>
 </html>

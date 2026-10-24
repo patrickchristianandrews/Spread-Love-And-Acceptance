@@ -30,13 +30,13 @@ pillars: II
 aka: role ambiguity, role clarity, unclear roles, who is responsible, role conflict
 nut: Role ambiguity means not being clear about what you are expected to do. Research consistently links it to stress, lower satisfaction and conflict, at work and plausibly at home.
 deep:
-Robert Kahn and colleagues studied role stress in organisations in the 1960s. They distinguished role ambiguity (unclear expectations) from role conflict (incompatible expectations, like being asked to do two things at once).
+Robert Kahn and colleagues studied role stress in organizations in the 1960s. They distinguished role ambiguity (unclear expectations) from role conflict (incompatible expectations, like being asked to do two things at once).
 
 Unclear roles create friction in two directions. One person does something they thought was theirs, and the other redoes it. Or both assume someone else is doing it, and it doesn’t get done. Each outcome can lead to blame.
 
 Clarifying roles, by writing them down, agreeing them together and reviewing them, is one of the simplest ways to reduce conflict. It works especially well for recurring tasks that nobody has explicitly discussed.
 research:
-Kahn, Donald Wolfe, Robert Quinn, J. Diedrick Snoek and Robert Rosenthal published *Organizational Stress* in 1964. John Rizzo, Robert House and Sidney Lirtzman developed widely used measures in 1970. Meta-analyses since then have linked role ambiguity with job stress and lower satisfaction. Research in households is less direct, but related findings on the division of labour are consistent.
+Kahn, Donald Wolfe, Robert Quinn, J. Diedrick Snoek and Robert Rosenthal published *Organizational Stress* in 1964. John Rizzo, Robert House and Sidney Lirtzman developed widely used measures in 1970. Meta-analyses since then have linked role ambiguity with job stress and lower satisfaction. Research in households is less direct, but related findings on the division of labor are consistent.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#coworkers | How it fits: coworkers
@@ -148,10 +148,10 @@ talk:
 
 @@ swiss-cheese | The Swiss cheese model
 pillars: II
-aka: Swiss cheese model, how mistakes happen, layers of defence, James Reason
+aka: Swiss cheese model, how mistakes happen, layers of defense, James Reason
 nut: James Reason’s Swiss cheese model pictures safeguards as slices of cheese with holes. Accidents happen when the holes line up. Most failures have several causes, not one.
 deep:
-Each layer of defence, like a checklist, a reminder, a second person, has weaknesses. Usually, a hole in one layer is caught by another. When holes in several layers line up, something slips through.
+Each layer of defense, like a checklist, a reminder, a second person, has weaknesses. Usually, a hole in one layer is caught by another. When holes in several layers line up, something slips through.
 
 At home, a missed appointment might involve a calendar nobody checked, a reminder that went to the wrong phone, and a busy morning. Blaming one person misses the others.
 
@@ -173,7 +173,7 @@ nut: Checklists help people remember routine steps under pressure. A famous surg
 deep:
 Checklists work because memory is unreliable, especially when tired, rushed or interrupted. They take routine steps out of memory and put them somewhere visible.
 
-Atul Gawande’s *The Checklist Manifesto* popularised the idea beyond aviation. He emphasised that good checklists are short, focused on critical steps, and written with the people who use them.
+Atul Gawande’s *The Checklist Manifesto* popularized the idea beyond aviation. He emphasized that good checklists are short, focused on critical steps, and written with the people who use them.
 
 At home, checklists can help with recurring routines: getting out the door, weekly shopping, handovers between people. They also help when handing a job to a new owner, because they capture the hidden steps.
 research:
@@ -249,15 +249,15 @@ talk:
 @@ goodharts-law | Goodhart’s law: when measures become targets
 pillars: V
 aka: Goodhart's law, Campbell's law, gaming metrics, keeping score, measuring
-nut: Goodhart’s law, in its popular form, says: “When a measure becomes a target, it ceases to be a good measure.” Numbers are useful for seeing patterns, but chasing them can distort behaviour.
+nut: Goodhart’s law, in its popular form, says: “When a measure becomes a target, it ceases to be a good measure.” Numbers are useful for seeing patterns, but chasing them can distort behavior.
 deep:
 Economist Charles Goodhart made the observation about monetary policy in 1975. Anthropologist Marilyn Strathern later gave it its familiar phrasing. Donald Campbell described a similar law for social indicators.
 
-The lesson for households is important. The program uses numbers, like battery scores and fairness ratios, to see patterns, not to win. If people start optimising for the number (doing lots of small visible tasks to boost a tally, for example), the number stops reflecting reality and the point is lost.
+The lesson for households is important. The program uses numbers, like battery scores and fairness ratios, to see patterns, not to win. If people start optimizing for the number (doing lots of small visible tasks to boost a tally, for example), the number stops reflecting reality and the point is lost.
 
 This is why the program stresses that its scores judge the setup, not the person, and are for conversation rather than competition.
 research:
-Goodhart’s original statement was in a 1975 paper; Strathern’s phrasing appeared in 1997. Campbell’s law dates from 1979. The phenomenon is widely documented in education, healthcare and business, where targets have produced unintended behaviour.
+Goodhart’s original statement was in a 1975 paper; Strathern’s phrasing appeared in 1997. Campbell’s law dates from 1979. The phenomenon is widely documented in education, healthcare and business, where targets have produced unintended behavior.
 links:
 /book/chapter-2-in-depth.html#limits | Chapter II in depth: what this number is not
 /book/preface.html | Writing it down isn’t keeping score (Preface)
@@ -277,7 +277,7 @@ At home, this takes pressure off decisions. Instead of arguing about the perfect
 
 Framing changes as experiments also makes them easier to agree to. “Let’s try it for a fortnight” is less threatening than “this is how it will be.”
 research:
-Deming popularised the cycle from the 1950s. PDSA is widely used in healthcare quality improvement. A 2014 systematic review by Michael Taylor and colleagues found that many healthcare projects claiming to use PDSA didn’t follow it fully, suggesting it is easy to name and harder to do well.
+Deming popularized the cycle from the 1950s. PDSA is widely used in healthcare quality improvement. A 2014 systematic review by Michael Taylor and colleagues found that many healthcare projects claiming to use PDSA didn’t follow it fully, suggesting it is easy to name and harder to do well.
 links:
 /book/chapter-5.html | The monthly look-back (Chapter V)
 /workpapers/wp-03-one-owner-per-job.html | Change it on purpose, not by drift (WP-03)
@@ -297,7 +297,7 @@ The technique helps move conversations from blame to systems. Most recurring pro
 
 Critics point out that real problems often have several causes, and asking “why” in a single line can lead to one convenient answer. It works best combined with other views, like the Swiss cheese model.
 research:
-The technique is associated with Sakichi Toyoda and Taiichi Ohno at Toyota. It is widely used in lean management and healthcare. Safety researchers have criticised it for encouraging a single root cause where there are several, so it is best used as a conversation starter rather than a full analysis.
+The technique is associated with Sakichi Toyoda and Taiichi Ohno at Toyota. It is widely used in lean management and healthcare. Safety researchers have criticized it for encouraging a single root cause where there are several, so it is best used as a conversation starter rather than a full analysis.
 links:
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 /book/chapter-5.html | A problem that keeps coming back usually has no real owner (Chapter V)
@@ -313,7 +313,7 @@ nut: Bruce Tuckman described teams moving through stages: forming, storming, nor
 deep:
 When a new team forms, people are polite and unsure. Then differences surface (storming): disagreements about how to do things. Gradually, shared norms develop, and eventually the team works smoothly.
 
-New households, such as moving in together, new housemates or a new baby, often go through something similar. The storming stage can feel alarming, but it is part of working things out.
+New households, such as moving in together, new roommates or a new baby, often go through something similar. The storming stage can feel alarming, but it is part of working things out.
 
 The model also suggests that norms don’t appear by themselves. Talking explicitly about how things will work speeds up norming and makes it fairer.
 research:

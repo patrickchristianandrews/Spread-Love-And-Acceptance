@@ -146,7 +146,7 @@ L[POCKET['id']] = {
     ],
     'inside': ['38 situations, one to a page, in nine short sections', 'On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step',
                '“With care” notes where a reaction can land hard on someone else', 'A short introduction to the six-part lens, and why logic explains but never excuses',
-               'Blank cards to work out a reaction of your own', 'A code on every page to the same situation online'],
+               'Blank cards to work out a reaction of your own', 'A QR code on each page that opens the same situation online'],
     'cats': ['Books › Self-Help › Communication & Social Skills', 'Books › Health, Fitness & Dieting › Psychology & Counseling › Social Psychology & Interactions',
              'Books › Self-Help › Relationships › Interpersonal Relations'],
     'alt': ['Books › Health, Fitness & Dieting › Mental Health › Neuropsychology', 'Books › Parenting & Relationships › Family Relationships', 'Books › Self-Help › Emotions'],
@@ -178,7 +178,7 @@ def description(item, d, kind='book'):
     h += ''.join('<p>%s</p>' % esc(p) for p in d['body'])
     h += '<p><b>%s</b></p><ul>%s</ul>' % ('Inside this book' if kind == 'book' else 'Inside', ''.join('<li>%s</li>' % esc(x) for x in d['inside']))
     if kind == 'workbook':
-        h += '<p>The sheets describe what happened, never who someone is. Fill them in on your own or together; on shared sheets each person writes only their own rows.</p>'
+        h += '<p>The sheets describe what happened, never who someone is. Fill them out on your own or together. On shared sheets each person writes only their own rows.</p>'
     elif kind == 'pocket':
         h += ('<p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, '
               'and the pages say so where it matters.</p>')

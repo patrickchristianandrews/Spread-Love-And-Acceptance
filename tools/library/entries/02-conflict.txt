@@ -140,7 +140,7 @@ Soft startups often share a few features: start with “I” and a feeling, desc
 
 Timing is part of it too. Bringing up a sore topic when someone has just walked in the door, is hungry or is already stressed makes a harsh landing more likely, however carefully the words are chosen.
 research:
-Sybil Carrère and John Gottman’s 1999 study found that how newlywed couples began a conflict discussion (the first three minutes) predicted later divorce in their sample. It is a striking finding from one research group’s observational data. The broader principle that openings set the tone is consistent with research on negative reciprocity: negative behaviour tends to be returned in kind.
+Sybil Carrère and John Gottman’s 1999 study found that how newlywed couples began a conflict discussion (the first three minutes) predicted later divorce in their sample. It is a striking finding from one research group’s observational data. The broader principle that openings set the tone is consistent with research on negative reciprocity: negative behavior tends to be returned in kind.
 links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /quick-checks.html#today | Today’s Weather: is now a good time?
@@ -153,7 +153,7 @@ talk:
 @@ escalation | How arguments escalate, and how to step off the escalator
 pillars: III, IV
 aka: escalation, conflict spiral, tit for tat, negative reciprocity, heated argument
-nut: Arguments often escalate through a spiral of matching and raising: a sharp remark gets a sharper reply. Recognising the spiral, and deliberately not matching, is one of the most powerful moves in conflict.
+nut: Arguments often escalate through a spiral of matching and raising: a sharp remark gets a sharper reply. Recognizing the spiral, and deliberately not matching, is one of the most powerful moves in conflict.
 deep:
 Negotiation researchers describe conflict spirals, where each side responds to the other’s last move with something a bit stronger. In couples, this shows up as negative reciprocity: negativity from one person makes negativity from the other more likely, often within seconds.
 
@@ -182,7 +182,7 @@ What you do during the break matters. Replaying the argument keeps the body stir
 
 The return is as important as the pause. Coming back when promised builds trust that timeouts are not a way of avoiding the topic. If one person is still not ready, a second, shorter extension is fine; indefinite postponement isn’t.
 research:
-Timeouts are a standard technique in couples therapy and anger-management programmes. Gottman’s physiological research supports the idea that flooding impairs listening and that it takes time to recover; he recommends breaks of at least around twenty minutes. The effectiveness of timeouts has mostly been studied as part of broader programmes rather than alone, so evidence for the technique on its own is limited but consistent with what is known about stress physiology.
+Timeouts are a standard technique in couples therapy and anger-management programs. Gottman’s physiological research supports the idea that flooding impairs listening and that it takes time to recover; he recommends breaks of at least around twenty minutes. The effectiveness of timeouts has mostly been studied as part of broader programs rather than alone, so evidence for the technique on its own is limited but consistent with what is known about stress physiology.
 links:
 /wp-11.html | The Calm-Down Kit (WP-11)
 /wp-11-in-depth.html#reentry | The Calm-Down Kit in depth: coming back
@@ -199,7 +199,7 @@ nut: When you notice signs of flooding (racing heart, tight chest, heat, tunnel 
 deep:
 Flooding is less a thought than a body state, so body-level tools tend to work better than willpower. Slowing the breath, especially lengthening the out-breath, relaxing the shoulders and jaw, sitting down, or stepping into a different room are all ways of telling the body that the threat has passed.
 
-It helps to know your own early warning signs, because by the time you are fully flooded it is hard to notice anything. Some people get hot; some go cold and quiet; some start talking fast. Writing these down while calm, as the program suggests, means you can recognise them sooner.
+It helps to know your own early warning signs, because by the time you are fully flooded it is hard to notice anything. Some people get hot; some go cold and quiet; some start talking fast. Writing these down while calm, as the program suggests, means you can recognize them sooner.
 
 It is also worth agreeing that either person can call a pause without it being treated as a loss. Flooding is not a character flaw. It is a body doing what bodies do under stress.
 research:
@@ -213,24 +213,24 @@ talk:
 - Which calming moves could we use right where we are, without leaving?
 - How can we make calling a pause feel normal rather than dramatic?
 
-@@ reflective-listening | Reflective listening and summarising
+@@ reflective-listening | Reflective listening and summarizing
 pillars: IV
-aka: paraphrasing, summarising, reflecting back, mirroring, active listening in conflict
+aka: paraphrasing, summarizing, reflecting back, mirroring, active listening in conflict
 nut: Reflective listening means saying back, in your own words, what you understood the other person to mean, and checking you got it right, before you give your own view.
 deep:
-In a heated conversation, people often stop listening and start preparing their reply. Reflective listening interrupts that. Before responding, you summarise: “So what you’re saying is that you feel the weekends are all errands and no rest. Is that right?” The other person can correct or confirm.
+In a heated conversation, people often stop listening and start preparing their reply. Reflective listening interrupts that. Before responding, you summarize: “So what you’re saying is that you feel the weekends are all errands and no rest. Is that right?” The other person can correct or confirm.
 
-Summarising does several things at once. It shows the speaker they were heard, it catches misunderstandings early, and it slows the pace, which lowers heat. It also changes the listener: putting someone’s view into your own words tends to make it more understandable.
+Summarizing does several things at once. It shows the speaker they were heard, it catches misunderstandings early, and it slows the pace, which lowers heat. It also changes the listener: putting someone’s view into your own words tends to make it more understandable.
 
-It is easy to overdo. Parroting word for word can feel robotic, and summarising in a sarcastic tone defeats the point. A brief, genuine summary once or twice in a conversation is often enough. Understanding is not the same as agreeing; you can say “I get why that bothered you” and still have a different view.
+It is easy to overdo. Parroting word for word can feel robotic, and summarizing in a sarcastic tone defeats the point. A brief, genuine summary once or twice in a conversation is often enough. Understanding is not the same as agreeing; you can say “I get why that bothered you” and still have a different view.
 research:
-Reflective listening comes from Carl Rogers’ person-centred approach and was popularised by Rogers and Richard Farson’s 1957 essay on active listening. It is a core skill in counselling and mediation. Interestingly, a 1998 study by Gottman and colleagues found that paraphrasing was uncommon in happy couples’ real conflicts and didn’t predict outcomes, which suggests its value may lie in structured moments rather than as a constant technique. Studies of conversation generally find that people who feel understood are more satisfied and less defensive.
+Reflective listening comes from Carl Rogers’ person-centered approach and was popularized by Rogers and Richard Farson’s 1957 essay on active listening. It is a core skill in counseling and mediation. Interestingly, a 1998 study by Gottman and colleagues found that paraphrasing was uncommon in happy couples’ real conflicts and didn’t predict outcomes, which suggests its value may lie in structured moments rather than as a constant technique. Studies of conversation generally find that people who feel understood are more satisfied and less defensive.
 links:
 /check-ins-in-depth.html#acknowledge | Check-ins: acknowledging first
 /conversation-reader.html | The Conversation Reader
 talk:
 - When do you most want the other person to say back what they heard?
-- Can you summarise the other person’s view on a current disagreement in a way they’d agree with?
+- Can you summarize the other person’s view on a current disagreement in a way they’d agree with?
 - What makes a summary feel genuine rather than mechanical?
 
 @@ speaker-listener | The speaker–listener technique
@@ -244,7 +244,7 @@ The technique can feel awkward, even silly, and that is partly the point: the st
 
 The separation between understanding and solving is useful beyond the technique. A lot of conflict goes wrong because people jump to solutions before the problem has been fully heard.
 research:
-The technique is part of PREP (the Prevention and Relationship Education Program), developed by Howard Markman, Scott Stanley and colleagues in the 1980s, and described in *Fighting for Your Marriage* (1994). PREP has been tested in a number of trials, with some positive effects on communication and some mixed findings on longer-term outcomes, which is common for relationship education programmes.
+The technique is part of PREP (the Prevention and Relationship Education Program), developed by Howard Markman, Scott Stanley and colleagues in the 1980s, and described in *Fighting for Your Marriage* (1994). PREP has been tested in a number of trials, with some positive effects on communication and some mixed findings on longer-term outcomes, which is common for relationship education programs.
 links:
 /check-ins.html#order | Check-ins: taking turns in order
 /check-ins.html#room | Check-ins: making room to talk
@@ -264,7 +264,7 @@ A helpful habit is to name the topic at the start (“I want to talk about the s
 
 If old issues keep flooding into new arguments, that is itself information: there may be unresolved hurts that need their own conversation, possibly with help.
 research:
-The phrase has been used in couples therapy writing since at least the 1960s, including George Bach and Peter Wyden’s *The Intimate Enemy* (1969). Sticking to one issue is a standard recommendation in couples programmes and mediation. It is a practice principle rather than a separately tested finding, but it is consistent with research linking “overgeneralising” and bringing in unrelated grievances to escalation.
+The phrase has been used in couples therapy writing since at least the 1960s, including George Bach and Peter Wyden’s *The Intimate Enemy* (1969). Sticking to one issue is a standard recommendation in couples programs and mediation. It is a practice principle rather than a separately tested finding, but it is consistent with research linking “overgeneralizing” and bringing in unrelated grievances to escalation.
 links:
 /check-ins.html#ground | Check-ins: one topic at a time
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
@@ -280,7 +280,7 @@ nut: What someone meant (intent) and how it landed (impact) can be very differen
 deep:
 “I didn’t mean it that way” and “but it hurt” are both honest statements. Trouble starts when each person treats their own as the only one that counts. The speaker feels accused of something they didn’t intend; the listener feels their hurt is being denied.
 
-A useful sequence is to acknowledge impact first (“I can see that came across as dismissive, and I’m sorry it hurt”) and then, if needed, share intent (“I was trying to get us out the door on time”). Leading with intent tends to sound like a defence.
+A useful sequence is to acknowledge impact first (“I can see that came across as dismissive, and I’m sorry it hurt”) and then, if needed, share intent (“I was trying to get us out the door on time”). Leading with intent tends to sound like a defense.
 
 It works in the other direction too: when hurt, it can help to say how it landed without assuming the worst about why. “When you said that, I felt brushed off” leaves room for a different intention.
 research:
@@ -302,7 +302,7 @@ The “what happened” layer is where most arguing happens: who said what, whos
 
 The feelings layer is often left unspoken, but it leaks into tone. Naming feelings, carefully, usually makes the conversation easier rather than harder.
 
-The identity layer is subtle and powerful. A conversation about chores can quietly become “am I a good partner?” or “am I being taken for granted?” When identity feels at stake, people defend hard. Recognising this, in yourself and the other person, explains a lot of apparent overreaction.
+The identity layer is subtle and powerful. A conversation about chores can quietly become “am I a good partner?” or “am I being taken for granted?” When identity feels at stake, people defend hard. Recognizing this, in yourself and the other person, explains a lot of apparent overreaction.
 research:
 This framework comes from *Difficult Conversations* (1999; revised 2010), based on the authors’ work at the Harvard Negotiation Project. It is widely used in workplaces, schools and mediation. It is a practice model, well grounded in negotiation experience, rather than one built from controlled studies.
 links:
@@ -315,14 +315,14 @@ talk:
 
 @@ apology-research | What makes an apology work
 pillars: II, IV
-aka: apology, how to apologise, saying sorry, sorry, a good apology
+aka: apology, how to apologize, saying sorry, sorry, a good apology
 nut: Research on apologies suggests the most important elements are acknowledging responsibility and offering to repair. Explanations help less, and apologies that shift blame (“sorry you feel that way”) tend to backfire.
 deep:
 An apology can include several parts: expressing regret, explaining what happened, acknowledging responsibility, saying you’ll do better, offering to repair, and asking for forgiveness. Not all parts carry equal weight. Owning what you did and offering to put it right tend to matter most.
 
 Non-apologies are familiar: “I’m sorry if you were offended,” “Mistakes were made,” “I’m sorry, but…” They focus on the other person’s reaction or on excuses, and tend to leave people feeling more hurt.
 
-Timing matters too. An apology that comes before the hurt person has had a chance to explain how they feel can feel premature. Listening first, then apologising, often works better.
+Timing matters too. An apology that comes before the hurt person has had a chance to explain how they feel can feel premature. Listening first, then apologizing, often works better.
 research:
 A 2016 study by Roy Lewicki, Beth Polin and Robert Lount tested six apology components and found acknowledgement of responsibility was rated most important, followed by an offer of repair, while a request for forgiveness mattered least. Cynthia Frantz and Courtney Bennigson (2005) found that apologies were more effective when they came later in a conversation, after the hurt person felt heard. These are experimental studies, often using written scenarios, so real-life effects may differ.
 links:
@@ -344,7 +344,7 @@ Forgiveness is often a process rather than a moment, and it doesn’t follow a t
 
 Everyday forgiveness matters in close relationships because small hurts are constant. Holding onto each one, like a ledger of wrongs, tends to make future conflicts harsher. Letting small things go, while speaking up about patterns, is a balance most long-lasting relationships seem to strike.
 research:
-Michael McCullough, Everett Worthington, Robert Enright and others have studied forgiveness since the 1990s. Worthington’s REACH model and Enright’s process model are the best-known structured approaches, and meta-analyses (for example by Nathaniel Wade and colleagues in 2014) found that forgiveness interventions increase forgiveness compared with no intervention. Researchers emphasise that forgiveness should not be pressured and that it is not appropriate to expect in every circumstance.
+Michael McCullough, Everett Worthington, Robert Enright and others have studied forgiveness since the 1990s. Worthington’s REACH model and Enright’s process model are the best-known structured approaches, and meta-analyses (for example by Nathaniel Wade and colleagues in 2014) found that forgiveness interventions increase forgiveness compared with no intervention. Researchers emphasize that forgiveness should not be pressured and that it is not appropriate to expect in every circumstance.
 links:
 /book/preface.html | Preface: writing it down isn’t keeping score
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? Nobody owes anything (WP-04)
@@ -364,7 +364,7 @@ The emphasis is on understanding and repair, not on finding a villain. Everyone 
 
 This fits the spirit of the program: writing down what happened and sorting problems by type is meant to replace blame with repair. A missed chore is something to put right, not a verdict on anyone.
 research:
-Howard Zehr’s *Changing Lenses* (1990) is a foundational text on restorative justice, and John Braithwaite’s work on reintegrative shaming (1989) influenced the field. Evaluations of restorative justice programmes, including randomised trials led by Lawrence Sherman and Heather Strang, have found higher victim satisfaction and some reductions in reoffending, with variation across settings. Restorative practice in schools has mixed evaluation results. Its use in families is mostly practice-based.
+Howard Zehr’s *Changing Lenses* (1990) is a foundational text on restorative justice, and John Braithwaite’s work on reintegrative shaming (1989) influenced the field. Evaluations of restorative justice programs, including randomized trials led by Lawrence Sherman and Heather Strang, have found higher victim satisfaction and some reductions in reoffending, with variation across settings. Restorative practice in schools has mixed evaluation results. Its use in families is mostly practice-based.
 links:
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 /book/chapter-5.html | It’s not a review of either person (Chapter V)
@@ -378,13 +378,13 @@ pillars: II, IV
 aka: mediator, third party, outside help, facilitation, neutral person
 nut: Mediation brings in a neutral third person to help people in conflict talk and reach their own agreement. Mediators don’t decide who is right; they structure the conversation so both can be heard.
 deep:
-Mediators often follow stages: setting ground rules, letting each person tell their story uninterrupted, identifying the issues and interests, generating options, and writing down agreements. Much of their skill lies in summarising, reframing heated language into neutral terms, and keeping things moving.
+Mediators often follow stages: setting ground rules, letting each person tell their story uninterrupted, identifying the issues and interests, generating options, and writing down agreements. Much of their skill lies in summarizing, reframing heated language into neutral terms, and keeping things moving.
 
 Two broad styles are often described. Facilitative mediators help people communicate and find their own solutions. Evaluative mediators give more direct opinions about what is fair or likely. Many mix the two.
 
-Even without a professional, mediation’s tools can help: agreed ground rules, one person speaking at a time, summarising, and writing down what was agreed. Sometimes a trusted friend can play a light version of the role for small disputes, as long as both people accept them as fair.
+Even without a professional, mediation’s tools can help: agreed ground rules, one person speaking at a time, summarizing, and writing down what was agreed. Sometimes a trusted friend can play a light version of the role for small disputes, as long as both people accept them as fair.
 research:
-Leonard Riskin’s 1996 grid of mediator orientations popularised the facilitative–evaluative distinction. Research on family and community mediation generally finds high satisfaction and reasonable agreement rates, though outcomes depend on the setting and on whether participants chose mediation freely. Mediation is not appropriate in every situation, particularly where one person cannot speak freely.
+Leonard Riskin’s 1996 grid of mediator orientations popularized the facilitative–evaluative distinction. Research on family and community mediation generally finds high satisfaction and reasonable agreement rates, though outcomes depend on the setting and on whether participants chose mediation freely. Mediation is not appropriate in every situation, particularly where one person cannot speak freely.
 links:
 /check-ins.html | Check-ins
 /signal-translator.html | The Signal Translator: a neutral third view
@@ -417,7 +417,7 @@ talk:
 @@ fairness-rules | Equality, equity and need: three kinds of fair
 pillars: I, V
 aka: equal split, fair share, distributive justice, what is fair, fifty fifty
-nut: People use different rules for what counts as fair: equality (the same for each), equity (in proportion to what each puts in), and need (according to what each requires). Disagreements often come from using different rules without realising it.
+nut: People use different rules for what counts as fair: equality (the same for each), equity (in proportion to what each puts in), and need (according to what each requires). Disagreements often come from using different rules without realizing it.
 deep:
 Imagine a household where one person works longer paid hours. One person thinks chores should be split 50/50 (equality). The other thinks the one with more free time should do more (equity). A third view says whoever is struggling most right now should get more support (need). Each is a legitimate idea of fair.
 
@@ -425,7 +425,7 @@ Arguments about “fair” often go in circles because each person is quietly ap
 
 Different rules can apply to different areas, and they can change over time. A household might use need during an illness, equity during busy work seasons, and equality as the default.
 research:
-Morton Deutsch described equality, equity and need as distinct justice principles in 1975, suggesting that people favour equality in close, cooperative relationships, equity in economic ones, and need in caring ones. Research broadly supports that the chosen principle depends on context and relationship type. Equity theory (Adams, 1965) developed the proportional idea in detail.
+Morton Deutsch described equality, equity and need as distinct justice principles in 1975, suggesting that people favor equality in close, cooperative relationships, equity in economic ones, and need in caring ones. Research broadly supports that the chosen principle depends on context and relationship type. Equity theory (Adams, 1965) developed the proportional idea in detail.
 links:
 /book/chapter-4.html | Two kinds of fair (Chapter IV)
 /book/chapter-4-in-depth.html#parity | Chapter IV in depth: parity
@@ -446,7 +446,7 @@ Families work like small cultures. In one, raised voices are normal and quickly 
 
 Talking openly about these backgrounds turns misreadings into information. It also fits the program’s idea of a family script: patterns we inherited and can choose to keep or change.
 research:
-Hall introduced high- and low-context communication in *Beyond Culture* (1976). Ting-Toomey developed face-negotiation theory from 1988 onward, with cross-cultural studies supporting links between cultural values and conflict styles. Researchers caution that national-level generalisations don’t describe individuals well, and that variation within cultures is large.
+Hall introduced high- and low-context communication in *Beyond Culture* (1976). Ting-Toomey developed face-negotiation theory from 1988 onward, with cross-cultural studies supporting links between cultural values and conflict styles. Researchers caution that national-level generalizations don’t describe individuals well, and that variation within cultures is large.
 links:
 /frequency-framework.html | The Frequency Framework
 /wired-differently.html#dynamics | Wired Differently: dynamics
@@ -461,13 +461,13 @@ pillars: II, IV
 aka: integrative behavioral couple therapy, IBCT, accepting differences, acceptance, letting go of changing someone
 nut: Not every difference can or should be changed. Some approaches to couples conflict pair efforts to change with efforts to accept, and suggest that more acceptance often makes change easier too.
 deep:
-Traditional approaches to relationship conflict focused on changing behaviour: better communication, clearer agreements. Andrew Christensen and Neil Jacobson noticed that some differences stayed put however much people tried. They developed an approach that also helps partners accept each other’s differences, and even see them with some understanding or humour.
+Traditional approaches to relationship conflict focused on changing behavior: better communication, clearer agreements. Andrew Christensen and Neil Jacobson noticed that some differences stayed put however much people tried. They developed an approach that also helps partners accept each other’s differences, and even see them with some understanding or humor.
 
 Acceptance doesn’t mean resignation. It means seeing a difference as part of who someone is, understanding where it comes from, and softening the fight against it. Oddly, when people feel accepted, they often become more willing to change.
 
 This connects to Gottman’s perpetual problems: some issues are managed rather than solved. Knowing which is which saves a lot of energy.
 research:
-Integrative behavioural couple therapy was developed by Jacobson and Christensen in the 1990s. A large randomised trial led by Christensen (reported in 2004, with five-year follow-up in 2010) found that both integrative and traditional behavioural couple therapy helped many couples, with some evidence that gains after integrative therapy were more durable. It is one of the better-tested couples therapies.
+Integrative behavioral couple therapy was developed by Jacobson and Christensen in the 1990s. A large randomized trial led by Christensen (reported in 2004, with five-year follow-up in 2010) found that both integrative and traditional behavioral couple therapy helped many couples, with some evidence that gains after integrative therapy were more durable. It is one of the better-tested couples therapies.
 links:
 /frequency-framework.html | The Frequency Framework: agree when you’ll meet
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
@@ -487,7 +487,7 @@ A few things tend to help. First, writing down everything that actually happens,
 
 Finally, chore conversations go better with the conflict basics: soft startup, one topic at a time, interests over positions, and a regular check-in rather than an explosion.
 research:
-Research on the division of household labour consistently finds that perceived unfairness is associated with lower relationship satisfaction and more conflict, and that the planning and monitoring side of the work is often unevenly shared (see Allison Daminger’s 2019 study of cognitive labour). Studies also suggest that perceived fairness predicts satisfaction better than the exact split of hours.
+Research on the division of household labor consistently finds that perceived unfairness is associated with lower relationship satisfaction and more conflict, and that the planning and monitoring side of the work is often unevenly shared (see Allison Daminger’s 2019 study of cognitive labor). Studies also suggest that perceived fairness predicts satisfaction better than the exact split of hours.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /workpapers/wp-01.html | Who did what (WP-01)
@@ -547,7 +547,7 @@ Families differ in how close, involved and expressive they are. What feels like 
 
 A widely taught approach is to treat the couple as a team: talk privately first, agree what you both can live with, and then present it together, with each person handling conversations with their own family. This protects the partner from being cast as the villain.
 
-It also helps to be curious about the other person’s family culture rather than judging it, and to recognise that loyalty to a parent is not disloyalty to a partner. Both relationships matter.
+It also helps to be curious about the other person’s family culture rather than judging it, and to recognize that loyalty to a parent is not disloyalty to a partner. Both relationships matter.
 research:
 Family systems thinkers, including Murray Bowen, described how tension between two people can be routed through a third (triangulation), which is common in in-law conflicts. Empirical research on in-law relationships is smaller than on couples, but studies generally link in-law conflict to lower marital satisfaction and suggest that partner support in managing in-law relationships is protective.
 links:

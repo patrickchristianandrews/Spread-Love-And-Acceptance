@@ -3,14 +3,14 @@
 #pillars: V, II
 #blurb: Why people do things, how habits form, procrastination, perfectionism, mindset, self-esteem, values and making change stick.
 #pillarnote: Motivation, habits and change sit in Pillar V, Notice the quiet incentives, and Pillar II, Fix the setup, not the person. In you, they help you spot the defaults, rewards and feelings that steer your own choices, and redesign routines instead of blaming yourself. Between you, they explain how shared habits form, how pressure backfires, and how clear plans and visible progress keep things going.
-#intro: Knowing what would help is the easy part. Doing it, day after day, is harder. Psychologists have studied motivation, habits and behaviour change for a long time, and some of the most useful findings are surprisingly practical: plan the when and where, start small, make progress visible, and be kind to yourself when you slip. These entries also flag some popular ideas that turned out weaker than first thought.
+#intro: Knowing what would help is the easy part. Doing it, day after day, is harder. Psychologists have studied motivation, habits and behavior change for a long time, and some of the most useful findings are surprisingly practical: plan the when and where, start small, make progress visible, and be kind to yourself when you slip. These entries also flag some popular ideas that turned out weaker than first thought.
 
 @@ self-determination-theory | Self-determination theory
 pillars: V, II
 aka: self determination theory, SDT, autonomy, competence, relatedness, intrinsic motivation, Deci and Ryan
 nut: Self-determination theory says people thrive when three basic needs are met: autonomy (feeling you have a choice), competence (feeling capable) and relatedness (feeling connected). Motivation that comes from within tends to last longer than motivation driven by pressure.
 deep:
-Edward Deci and Richard Ryan distinguished between different kinds of motivation. Intrinsic motivation is doing something because it is interesting or satisfying. Extrinsic motivation ranges from doing something only for reward or to avoid punishment, to doing it because you genuinely value its purpose. The more internalised the reason, the more lasting and satisfying the behaviour tends to be.
+Edward Deci and Richard Ryan distinguished between different kinds of motivation. Intrinsic motivation is doing something because it is interesting or satisfying. Extrinsic motivation ranges from doing something only for reward or to avoid punishment, to doing it because you genuinely value its purpose. The more internalized the reason, the more lasting and satisfying the behavior tends to be.
 
 For households, this has practical implications. Chores done because someone is nagging (pressure) tend to feel resentful and slip. Chores done because both people agreed they matter, chose how to divide them, and feel competent at them tend to be more stable.
 
@@ -43,7 +43,7 @@ links:
 talk:
 - Is there anything you used to enjoy that became a chore once it was expected?
 - When do rewards help, and when do they feel controlling?
-- How can we recognise effort without turning it into payment?
+- How can we recognize effort without turning it into payment?
 
 @@ implementation-intentions | Implementation intentions: if–then plans
 pillars: II, V
@@ -56,7 +56,7 @@ These plans work partly because they hand control to the environment. You don’
 
 They can also be used for difficult moments: “If I notice I’m getting flooded, I’ll say ‘pause’ and go for a walk.” This is essentially what a calm-down plan made in advance does.
 research:
-Peter Gollwitzer introduced the concept in 1993 and summarized it in an influential 1999 review. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behaviour change research, though effects vary by task and setting.
+Peter Gollwitzer introduced the concept in 1993 and summarized it in an influential 1999 review. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behavior change research, though effects vary by task and setting.
 links:
 /wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
 /workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
@@ -70,11 +70,11 @@ pillars: V, II
 aka: habits, habit formation, 21 days, 66 days, Lally, building habits, how long does a habit take
 nut: The popular “21 days” figure isn’t based on research. In one well-known study, the median time for a new daily habit to become automatic was about 66 days, with a very wide range between people and habits.
 deep:
-Phillippa Lally and colleagues asked volunteers to pick a new daily behaviour, such as drinking water with lunch or doing a short exercise, and to report each day how automatic it felt. On average, automaticity rose steeply at first and then levelled off. The median time to reach that plateau was around 66 days, but individual times ranged from under three weeks to over eight months.
+Phillippa Lally and colleagues asked volunteers to pick a new daily behavior, such as drinking water with lunch or doing a short exercise, and to report each day how automatic it felt. On average, automaticity rose steeply at first and then leveled off. The median time to reach that plateau was around 66 days, but individual times ranged from under three weeks to over eight months.
 
 The study also found that missing a day now and then didn’t derail habit formation much. That is encouraging: a slip isn’t a failure.
 
-Simpler behaviours became automatic faster. Complex habits, like regular exercise, took longer. Habits also form best when tied to a consistent cue, such as a time, place or preceding action.
+Simpler behaviors became automatic faster. Complex habits, like regular exercise, took longer. Habits also form best when tied to a consistent cue, such as a time, place or preceding action.
 research:
 The study by Lally, Cornelia van Jaarsveld, Henry Potts and Jane Wardle was published in the *European Journal of Social Psychology* (online in 2009, in print in 2010). It had 96 participants, so its numbers should be taken as illustrative rather than precise. The “21 days” idea seems to come from a 1960 book by plastic surgeon Maxwell Maltz about adjusting to changes in appearance, not from habit research. Wendy Wood’s research supports the importance of stable cues.
 links:
@@ -88,15 +88,15 @@ talk:
 @@ habits-and-cues | Habits, cues and environments
 pillars: II, V
 aka: habit loop, cues, environment design, friction, making it easy, habit stacking
-nut: Habits are behaviours triggered automatically by cues in our environment. Changing the environment, by making good behaviours easier and unwanted ones harder, often works better than relying on willpower.
+nut: Habits are behaviors triggered automatically by cues in our environment. Changing the environment, by making good behaviors easier and unwanted ones harder, often works better than relying on willpower.
 deep:
-Wendy Wood’s research suggests that a large share of daily behaviour is habitual: done in the same context, often without much thought. When the context changes, habits can be disrupted, which is why moving house or starting a new job is a good time to form new ones.
+Wendy Wood’s research suggests that a large share of daily behavior is habitual: done in the same context, often without much thought. When the context changes, habits can be disrupted, which is why moving house or starting a new job is a good time to form new ones.
 
 Small amounts of friction make a big difference. Putting the laundry basket where clothes come off, keeping a shared list on the fridge, or setting a calendar reminder reduces the effort of doing the right thing. Adding friction (like logging out of an app) makes unwanted habits harder.
 
 “Habit stacking,” attaching a new habit to an existing one (“after I make my morning coffee, I check the family calendar”), is a popular technique that draws on the same principle as implementation intentions.
 research:
-Wood, Jeffrey Quinn and Deborah Kashy (2002) used diaries to estimate that a large proportion of daily behaviours were habitual. Wood and Dennis Rünger reviewed the psychology of habit in 2016. “Habit stacking” is a popular term, notably from James Clear’s *Atomic Habits* (2018), rather than a research term, but it fits research on cues and implementation intentions.
+Wood, Jeffrey Quinn and Deborah Kashy (2002) used diaries to estimate that a large proportion of daily behaviors were habitual. Wood and Dennis Rünger reviewed the psychology of habit in 2016. “Habit stacking” is a popular term, notably from James Clear’s *Atomic Habits* (2018), rather than a research term, but it fits research on cues and implementation intentions.
 links:
 /workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 /lemonade-stand.html | The Lemonade Stand
@@ -110,7 +110,7 @@ pillars: V, I
 aka: small wins, progress principle, motivation from progress, Amabile, momentum
 nut: Making progress on meaningful work, even small progress, is one of the strongest boosts to motivation and mood at work. Small wins build momentum.
 deep:
-Teresa Amabile and Steven Kramer analysed thousands of daily diary entries from people working on creative projects. On days when people felt they made progress on meaningful work, they reported better moods and more motivation. Setbacks had an even larger effect in the other direction.
+Teresa Amabile and Steven Kramer analyzed thousands of daily diary entries from people working on creative projects. On days when people felt they made progress on meaningful work, they reported better moods and more motivation. Setbacks had an even larger effect in the other direction.
 
 Karl Weick had earlier argued that big problems are often better tackled as a series of small wins: concrete, manageable steps that show progress and reduce overwhelm.
 
@@ -150,13 +150,13 @@ pillars: II
 aka: goals, goal setting, SMART goals, specific goals, Locke and Latham
 nut: Research shows that specific, challenging goals tend to lead to better performance than vague goals like “do your best,” as long as people are committed and get feedback.
 deep:
-Edwin Locke and Gary Latham summarised decades of research: goals direct attention, energise effort, increase persistence and encourage finding strategies. Specific goals work better than vague ones because they make progress clear.
+Edwin Locke and Gary Latham summarized decades of research: goals direct attention, energize effort, increase persistence and encourage finding strategies. Specific goals work better than vague ones because they make progress clear.
 
 In household terms, “we’ll share more” is vague. “Each of us will cook three nights a week” is specific. The second is easier to follow and to check.
 
 Goals can also backfire. Very narrow goals can make people ignore things that aren’t measured, and goals that feel imposed can undermine motivation. Goals work best when agreed together and reviewed kindly.
 research:
-Locke and Latham’s goal-setting theory was summarised in their 1990 book and a 2002 review. It is one of the most replicated theories in organisational psychology. The SMART acronym (specific, measurable, achievable, relevant, time-bound) comes from management writing, notably George Doran in 1981, rather than directly from the research. Lisa Ordóñez and colleagues (2009) discussed the side effects of goal setting.
+Locke and Latham’s goal-setting theory was summarized in their 1990 book and a 2002 review. It is one of the most replicated theories in organisational psychology. The SMART acronym (specific, measurable, achievable, relevant, time-bound) comes from management writing, notably George Doran in 1981, rather than directly from the research. Lisa Ordóñez and colleagues (2009) discussed the side effects of goal setting.
 links:
 /book/chapter-2.html | Is the split working? (Chapter II)
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
@@ -249,11 +249,11 @@ talk:
 @@ temptation-bundling | Temptation bundling
 pillars: V
 aka: temptation bundling, making chores fun, pairing tasks, podcasts while cleaning
-nut: Temptation bundling means pairing something you enjoy with something you should do but tend to avoid, like listening to a favourite podcast only while doing the ironing.
+nut: Temptation bundling means pairing something you enjoy with something you should do but tend to avoid, like listening to a favorite podcast only while doing the ironing.
 deep:
 Katherine Milkman and colleagues gave gym-goers audiobooks they could only access at the gym. Those in the bundled group visited the gym more often, at least initially.
 
-At home, bundling can make chores more pleasant: music while cleaning, a favourite show while folding laundry, a chat while cooking together. It works on the feeling side of motivation, which is often what gets in the way.
+At home, bundling can make chores more pleasant: music while cleaning, a favorite show while folding laundry, a chat while cooking together. It works on the feeling side of motivation, which is often what gets in the way.
 
 Doing chores together can itself be a bundle: the task becomes time together. Many couples find a shared tidy-up with music is more pleasant than two separate ones.
 research:
@@ -264,7 +264,7 @@ links:
 talk:
 - Which chore could be paired with something we enjoy?
 - Would doing some chores together make them more pleasant?
-- What is your favourite thing to listen to while doing a task?
+- What is your favorite thing to listen to while doing a task?
 
 @@ mental-contrasting | Mental contrasting and WOOP
 pillars: II, V
@@ -277,7 +277,7 @@ WOOP combines this with implementation intentions: What is my wish? What is the 
 
 For couples, WOOP can structure a goal conversation: “We wish for calmer evenings. The best outcome is time to relax together. The obstacle is we both get home tired and irritable. Plan: if we get home after six, we’ll eat first and talk later.”
 research:
-Oettingen’s *Rethinking Positive Thinking* (2014) summarises research on mental contrasting. Studies have found WOOP helps with various goals, though effects vary and many studies are small. It fits with the stronger evidence for implementation intentions.
+Oettingen’s *Rethinking Positive Thinking* (2014) summarizes research on mental contrasting. Studies have found WOOP helps with various goals, though effects vary and many studies are small. It fits with the stronger evidence for implementation intentions.
 links:
 /wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
 /book/chapter-5.html | The monthly look-back (Chapter V)
@@ -353,7 +353,7 @@ nut: Values are the qualities you want your actions to reflect, like kindness, f
 deep:
 Acceptance and commitment therapy (ACT) makes values central. A goal is something you achieve (clean the house); a value is a direction you move in (caring for our shared space). Values give meaning to effortful tasks.
 
-Couples often discover that they share deep values but express them differently. Both may value family, but one shows it by working long hours to provide and the other by being present. Seeing the shared value behind different behaviours can soften conflict.
+Couples often discover that they share deep values but express them differently. Both may value family, but one shows it by working long hours to provide and the other by being present. Seeing the shared value behind different behaviors can soften conflict.
 
 Values also help with trade-offs. When there isn’t time for everything, knowing what matters most makes it easier to choose, and to let go of the rest without guilt.
 research:
@@ -371,13 +371,13 @@ pillars: V, IV
 aka: stages of change, transtheoretical model, readiness, ambivalence, motivational interviewing, change talk
 nut: People often feel ambivalent about change: part of them wants it, part doesn’t. Approaches like motivational interviewing work with this ambivalence rather than pushing against it.
 deep:
-The transtheoretical model, developed by James Prochaska and Carlo DiClemente, describes stages: precontemplation (not considering change), contemplation (thinking about it), preparation, action and maintenance. The idea that people are at different points of readiness is useful, though the specific stages have been criticised.
+The transtheoretical model, developed by James Prochaska and Carlo DiClemente, describes stages: precontemplation (not considering change), contemplation (thinking about it), preparation, action and maintenance. The idea that people are at different points of readiness is useful, though the specific stages have been criticized.
 
 Motivational interviewing, developed by William Miller and Stephen Rollnick, suggests that pushing someone to change often increases resistance. Instead, it uses open questions and reflective listening to help people explore their own reasons for change, known as “change talk.”
 
 In relationships, this is a helpful reminder: lecturing a partner about why they should change tends to provoke defensiveness. Asking what they would like to be different, and why, often works better.
 research:
-Prochaska and DiClemente published the model in 1983. Robert West (2005) and others have criticised the stages as arbitrary. Miller and Rollnick’s *Motivational Interviewing* was first published in 1991; meta-analyses show modest positive effects across many behaviours, particularly in health settings.
+Prochaska and DiClemente published the model in 1983. Robert West (2005) and others have criticized the stages as arbitrary. Miller and Rollnick’s *Motivational Interviewing* was first published in 1991; meta-analyses show modest positive effects across many behaviors, particularly in health settings.
 links:
 /check-ins.html#leverage | Check-ins: leverage
 /workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)

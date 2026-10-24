@@ -1788,8 +1788,23 @@
     var c = AU.ctx; if (!c) return Promise.resolve(null);
     AMBP.bufs[n] = fetch('/assets/audio/ambience/' + n + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
       if (!ab) return null; return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } });
-    }).catch(function () { return null; });
+    }).then(function (buf) { return buf ? ambSeamless(c, buf) : null; }).catch(function () { return null; });
     return AMBP.bufs[n];
+  }
+  // a seamless loop: the mp3's padding trimmed from both ends and the last 1.5 s blended into the first 1.5 s
+  // (equal-power), so the end flows straight into the start with no jump in the waveform (no click each time round)
+  function ambSeamless(c, buf) {
+    try {
+      var sr = buf.sampleRate, pad = Math.min(Math.round(0.06 * sr), Math.floor(buf.length / 8)), n = buf.length - pad * 2, x = Math.min(Math.round(1.5 * sr), Math.floor(n / 3));
+      if (n < sr * 2 || x < 64) return buf;
+      var out = c.createBuffer(buf.numberOfChannels, n - x, sr);
+      for (var ch = 0; ch < buf.numberOfChannels; ch++) {
+        var a = buf.getChannelData(ch).subarray(pad, pad + n), o = out.getChannelData(ch);
+        for (var i = 0; i < x; i++) { var p = (i + 0.5) / x; o[i] = a[i] * Math.sin(p * Math.PI / 2) + a[n - x + i] * Math.cos(p * Math.PI / 2); }
+        o.set(a.subarray(x, n - x), x);
+      }
+      return out;
+    } catch (e) { return buf; }
   }
   function auAmbience(scene, weather, hour) {
     var c = AU.ctx; if (!c) return;
@@ -1804,8 +1819,8 @@
     layers.forEach(function (L) {
       ambLoad(L[0]).then(function (buf) {
         if (!buf || my !== AMBP.gen) return;
-        var s = c.createBufferSource(), g = c.createGain(); s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06);
-        g.gain.value = 0.0001; s.connect(g); g.connect(AU.amb || AU.sfx); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1], c.currentTime, 1);
+        var s = c.createBufferSource(), g = c.createGain(); s.buffer = buf; s.loop = true;
+        g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, c.currentTime); s.connect(g); g.connect(AU.amb || AU.sfx); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1], c.currentTime, 1);
         AMBP.cur.push({ s: s, g: g });
       });
     });

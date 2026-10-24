@@ -54,9 +54,9 @@ Shelly Gable described four ways of responding to good news. Active-constructive
 
 Only active-constructive responses were consistently associated with better relationships. The other three, even the mildly supportive one, left people feeling less understood.
 
-This is easy to practise. When someone shares good news, put down what you’re doing, ask questions, and let them relive it a little. It costs little and means a lot.
+This is easy to practice. When someone shares good news, put down what you’re doing, ask questions, and let them relive it a little. It costs little and means a lot.
 research:
-Gable, Harry Reis, Emily Impett and Evan Asher published the key study in 2004, and Gable, Gian Gonzaga and Amy Strachman followed up in 2006. The finding has been replicated in several studies, mostly correlational, and is widely used in positive psychology programmes.
+Gable, Harry Reis, Emily Impett and Evan Asher published the key study in 2004, and Gable, Gian Gonzaga and Amy Strachman followed up in 2006. The finding has been replicated in several studies, mostly correlational, and is widely used in positive psychology programs.
 links:
 /turning-toward.html#good-news | Turning Toward: sharing good news
 talk:
@@ -69,9 +69,9 @@ pillars: III, V
 aka: self compassion, being kind to yourself, self criticism, inner critic, Neff
 nut: Self-compassion means treating yourself with the kindness you would offer a friend when you’re struggling or make a mistake. Kristin Neff describes three parts: self-kindness, common humanity and mindfulness.
 deep:
-Self-kindness means being warm rather than harshly critical toward yourself. Common humanity means recognising that everyone struggles and makes mistakes; you are not uniquely flawed. Mindfulness here means noticing painful feelings without ignoring or exaggerating them.
+Self-kindness means being warm rather than harshly critical toward yourself. Common humanity means recognizing that everyone struggles and makes mistakes; you are not uniquely flawed. Mindfulness here means noticing painful feelings without ignoring or exaggerating them.
 
-A common worry is that self-compassion will make people lazy or complacent. Research suggests the opposite: people who respond to mistakes with self-compassion are often more motivated to improve, because they aren’t paralysed by shame.
+A common worry is that self-compassion will make people lazy or complacent. Research suggests the opposite: people who respond to mistakes with self-compassion are often more motivated to improve, because they aren’t paralyzed by shame.
 
 In relationships, self-compassion may help people own mistakes without becoming defensive, since admitting a mistake doesn’t feel like a verdict on their worth. It also helps people stay kind to others when stressed.
 research:
@@ -116,7 +116,7 @@ Adult friendships often fade not because of conflict but because of time: jobs, 
 
 Friends also matter for couples. Having other sources of support means a partner isn’t the only person meeting every social need, which can relieve pressure on the relationship.
 research:
-Hall published his study in 2019 in the *Journal of Social and Personal Relationships*. The hour estimates come from specific samples and should be seen as rough guides. Robin Dunbar’s research describes layers of friendship, with fewer people in closer layers. Research on friendship maintenance behaviours (such as by Debra Oswald) finds that positivity, support, openness and interaction all help keep friendships going.
+Hall published his study in 2019 in the *Journal of Social and Personal Relationships*. The hour estimates come from specific samples and should be seen as rough guides. Robin Dunbar’s research describes layers of friendship, with fewer people in closer layers. Research on friendship maintenance behaviors (such as by Debra Oswald) finds that positivity, support, openness and interaction all help keep friendships going.
 links:
 /relationships.html#friends | How it fits: friends
 /living-alone-in-depth.html#friends | Making friends as an adult
@@ -151,7 +151,7 @@ nut: Casual acquaintances (weak ties) matter more than people think. They bring 
 deep:
 Mark Granovetter found that people often got jobs through acquaintances rather than close friends, because acquaintances move in different circles and hear about different opportunities. He called this “the strength of weak ties.”
 
-Gillian Sandstrom and Elizabeth Dunn found that people felt happier on days they had more interactions with weak ties, like the barista, a neighbour or a classmate. Other research found that people underestimate how much they will enjoy talking to strangers.
+Gillian Sandstrom and Elizabeth Dunn found that people felt happier on days they had more interactions with weak ties, like the barista, a neighbor or a classmate. Other research found that people underestimate how much they will enjoy talking to strangers.
 
 For people who spend a lot of time at home or feel stretched thin, these small interactions can be an easy source of connection. They also take some pressure off a partner as the only source of social contact.
 research:
@@ -218,7 +218,7 @@ links:
 /turning-toward.html#good-news | Turning Toward: good news
 /pause-and-play.html | Pause and play
 talk:
-- What good moment from this week could we savour together?
+- What good moment from this week could we savor together?
 - Is there a happy memory we could reminisce about?
 - How could we slow down enough to enjoy the good moments?
 
@@ -233,7 +233,7 @@ One effect of awe is what researchers call the “small self”: feeling less fo
 
 Awe doesn’t require grand trips. Looking at the sky, listening to music, or watching a child learn can all evoke it. Sharing awe with someone may deepen connection.
 research:
-Keltner and Haidt published their conceptual paper in 2003. Paul Piff and colleagues (2015) found awe was associated with more generous behaviour. Keltner’s *Awe* (2023) summarises the research. The field is growing, with many studies using brief lab inductions, so real-world effects are less well known.
+Keltner and Haidt published their conceptual paper in 2003. Paul Piff and colleagues (2015) found awe was associated with more generous behavior. Keltner’s *Awe* (2023) summarizes the research. The field is growing, with many studies using brief lab inductions, so real-world effects are less well known.
 links:
 /night-garden.html | The Night Garden
 /soundscapes.html | Soundscapes
@@ -341,7 +341,7 @@ People in caring roles, including parents, partners of people who are struggling
 
 Compassion training, which focuses on warmth and goodwill rather than on sharing distress, appeared to increase positive feelings and helping in some studies. This suggests it is possible to care deeply without being overwhelmed.
 research:
-Klimecki, Singer and colleagues published a series of studies from around 2013 onward; Singer and Klimecki’s 2014 review summarises them. The term “compassion fatigue” came from healthcare research, including Charles Figley’s work in the 1990s. The research on compassion training is promising but based on relatively small samples.
+Klimecki, Singer and colleagues published a series of studies from around 2013 onward; Singer and Klimecki’s 2014 review summarizes them. The term “compassion fatigue” came from healthcare research, including Charles Figley’s work in the 1990s. The research on compassion training is promising but based on relatively small samples.
 links:
 /relationships.html#caregivers | How it fits: caregivers
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)

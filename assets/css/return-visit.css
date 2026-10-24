@@ -1,0 +1,85 @@
+/* return-visit.css: "Seven small days", "New since your last visit" and the email offer (return-visit.js).
+   Light colors only: the site's dark mode turns the whole page (site.css), so these follow it. */
+.rt-host{ display:block; box-sizing:border-box; max-width:40rem; margin:1.6rem 0; }
+.rt-host *, .rt-host *::before, .rt-host *::after{ box-sizing:border-box; }
+.rt-card, .rt-new{ position:relative; z-index:2; margin:0 0 1rem; padding:1rem 1.1rem 1.05rem; border-radius:18px 18px 18px 6px;
+  background:rgba(255,251,242,.97); border:1.5px solid #D9C8F0; color:var(--ink, #2B2620); box-shadow:0 6px 18px rgba(90,70,120,.08);
+  font:400 1rem/1.5 "Lora", Georgia, serif; text-align:left; }
+.rt-card:focus{ outline:none; }
+.rt-card:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
+.rt-host p, .read .rt-host p{ margin:0 0 .55rem; padding:0; max-width:none; background:none; box-shadow:none; }
+.rt-k, p.rt-k{ display:block; margin:0 0 .2rem !important; font:500 .74rem/1.3 "IBM Plex Mono", ui-monospace, monospace !important; letter-spacing:.06em; text-transform:uppercase; color:var(--credit, #3E6B4C); }
+.rt-host h2.rt-h, .read .rt-host h2.rt-h{ margin:0 0 .5rem !important; padding:0 !important; border:0 !important; background:none !important; box-shadow:none !important;
+  font:600 1.25rem/1.25 "Fraunces", Georgia, serif !important; color:var(--ink, #2B2620); max-width:none !important; }
+.rt-host h2.rt-h::before, .rt-host h2.rt-h::after, .rt-host h3.rt-t::before, .rt-host h3.rt-t::after{ content:none !important; }
+.rt-host h3.rt-t, .read .rt-host h3.rt-t{ margin:.6rem 0 .35rem !important; padding:0 !important; border:0 !important; background:none !important;
+  font:600 1.08rem/1.3 "Fraunces", Georgia, serif !important; color:#4E3F6B; max-width:none !important; }
+.rt-host h3.rt-t:focus{ outline:none; }
+.rt-host h3.rt-t:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+
+/* Just me / With someone */
+.rt-for{ display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 .6rem; }
+.rt-for button, .rt-btn, .rt-host .rt-mail-f button{ min-height:44px; padding:.45rem 1rem; border-radius:999px; border:1.5px solid #B9A3DA; background:#FFFDF7; color:var(--ink, #2B2620);
+  font-weight:600; font-size:.95rem; line-height:1.2; font-family:var(--d17-ui, system-ui, sans-serif); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+.rt-for button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+.rt-btn{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+.rt-btn.is-soft{ background:#FFFDF7; color:#4E3F6B; }
+.rt-for button:hover, .rt-btn:hover{ border-color:#4E3F6B; }
+.rt-btn:not(.is-soft):hover{ background:#3C3056; }
+.rt-for button:focus-visible, .rt-btn:focus-visible, .rt-link:focus-visible, .rt-host a:focus-visible, .rt-host input:focus-visible, .rt-more > summary:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.rt-link{ min-height:44px; padding:.3rem .2rem; border:0; background:none; color:var(--focus, #2B5B8C); font:inherit; font-weight:600; text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
+.rt-host a{ color:var(--focus, #2B5B8C); }
+
+/* progress: parts done, never days in a row */
+.rt-prog{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .7rem; font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.rt-dots{ display:inline-flex; gap:5px; }
+.rt-dots i{ width:12px; height:12px; border-radius:50%; background:#E6DAF3; border:1.5px solid #CDB9E6; }
+.rt-dots i.on{ background:#C58FB0; border-color:#A56F92; }
+.rt-dots i.now{ box-shadow:0 0 0 2px #FFFDF7, 0 0 0 4px #4E3F6B; }
+.rt-do{ font-size:1.02rem; }
+.rt-why{ font-size:.9rem; color:var(--ink-soft, #5A5346); }
+.rt-why-k{ font-weight:600; }
+.rt-btns, .rt-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.45rem .7rem; }
+.rt-did{ display:inline-flex; align-items:center; min-height:44px; padding:0 .9rem; border-radius:999px; background:#E8F1EA; color:var(--credit, #3E6B4C); font-weight:600; }
+.rt-did::before{ content:"\2713"; margin-right:.35rem; }
+.rt-go{ font-weight:600; }
+.rt-shared{ padding:.45rem .7rem; border-radius:10px; background:#F3EEFA; font-size:.95rem; }
+.rt-today, .rt-fin{ font-size:1.02rem; }
+.rt-today:focus, .rt-fin:focus{ outline:none; }
+
+/* after a part is done */
+.rt-after{ margin-top:.7rem; padding-top:.7rem; border-top:1px dashed #D9C8F0; }
+.rt-small{ font-size:.9rem; color:var(--ink-soft, #5A5346); }
+.rt-more{ margin:.2rem 0 .5rem; }
+.rt-more > summary{ min-height:44px; display:flex; align-items:center; gap:.4rem; cursor:pointer; font-weight:600; color:#4E3F6B; list-style:none; }
+.rt-more > summary::-webkit-details-marker{ display:none; }
+.rt-more > summary::before{ content:"\25B8"; display:inline-block; transition:transform .2s; }
+.rt-more[open] > summary::before{ transform:rotate(90deg); }
+.rt-host input[type="time"], .rt-host input[type="email"]{ min-height:44px; padding:.35rem .7rem; border-radius:10px; border:1.5px solid #CDB9E6; background:#FFFDF7; color:var(--ink, #2B2620); font:inherit; max-width:100%; }
+
+/* the email offer */
+.rt-mail{ margin-top:.8rem; padding:.8rem .9rem; border-radius:14px; background:#F6F0FB; border:1px solid #E6DAF3; }
+.rt-mail-h{ font:600 1.02rem/1.3 "Fraunces", Georgia, serif; }
+.rt-mail-n, .rt-mail-foot{ font-size:.92rem; }
+.rt-mail-foot{ color:var(--ink-soft, #5A5346); }
+.rt-mail-f label{ display:block; font-weight:600; font-size:.92rem; margin-bottom:.2rem; }
+.rt-mail-row{ display:flex; flex-wrap:wrap; gap:.45rem; }
+.rt-mail-row input{ flex:1 1 14rem; min-width:0; }
+.rt-host .rt-mail-f button{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+
+/* New since your last visit */
+.rt-new ul.rt-new-list, .read .rt-new ul.rt-new-list{ margin:.2rem 0 .5rem !important; padding:0 0 0 1.2rem !important; }
+.rt-new-list li{ margin:.25rem 0; max-width:none; }
+.rt-new-list a{ font-weight:600; display:inline-block; padding:.2rem 0; }
+
+/* one line in "What you got from this" (come-back.js) */
+.cb-end .rt-tomorrow{ margin-top:.45rem !important; padding-top:.45rem !important; border-top:1px dashed #E6DAF3; }
+html.tol-no-helpers .rt-new, html.tol-quiet .rt-new, html.tol-no-helpers .rt-tomorrow, html.tol-quiet .rt-tomorrow, html.tol-no-helpers .rt-mail, html.tol-quiet .rt-mail{ display:none !important; }
+
+@media (max-width:420px){
+  .rt-card, .rt-new{ padding:.9rem .85rem; }
+  .rt-for button{ flex:1 1 auto; }
+}
+@media (prefers-reduced-motion: reduce){ .rt-more > summary::before{ transition:none; } }
+html.tol-still .rt-more > summary::before{ transition:none; }
+@media print{ .rt-host{ display:none !important; } }
