@@ -62,7 +62,7 @@ PK_UK, PK_EU, PK_CA, PK_AU = '£7.99', '€9.99', 'CA$13.99', 'AU$15.99'
 # finalfix15: the workbook's black-and-white edition at $9.99: the same local equivalents
 BW_UK, BW_EU, BW_CA, BW_AU = PK_UK, PK_EU, PK_CA, PK_AU
 RULE = CFG.get('price_rule') or {'short_under_pages': 100, 'short_usd': 9.99, 'regular_usd': 14.99}
-UK_FIXED, UK_PER_PAGE = 0.85, 0.020  # standard colour, regular trim, Amazon.co.uk (third-party figure, not confirmed)
+UK_FIXED, UK_PER_PAGE = 0.85, 0.020  # standard color, regular trim, Amazon.co.uk (third-party figure, not confirmed)
 
 # Each book: the listing words. Categories are KDP browse paths (pick 3); keywords fill the 7 boxes (50 characters each).
 L = {
@@ -252,7 +252,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -275,7 +275,7 @@ def workbook_choice():
     return '\n'.join([
         '\n---\n\n## Which workbook edition? [OWNER: decide; (b) is recommended]\n',
         'Both editions are built from the same pages, with no blank pages, and both have the same color cover. Publish one of them (each gets its own free KDP ISBN).\n',
-        '| | (a) Colour edition | (b) Black-and-white interior (recommended) |', '|---|---|---|',
+        '| | (a) Color edition | (b) Black-and-white interior (recommended) |', '|---|---|---|',
         '| Files | workbook.pdf, cover-workbook.pdf | workbook-bw.pdf, cover-workbook-bw.pdf |',
         '| Pages | %d | %d |' % (c.get('pages', 0), b.get('pages', 0)),
         '| KDP ink | Standard color | Black & white |',
@@ -286,7 +286,7 @@ def workbook_choice():
         '| Expanded distribution | Not available at %s (KDP would need about %s): **Amazon only** | Off (Amazon only, as every book) |' % (money(cp), money(ce.get('min_price') or 0)),
         '',
         '**Both at %s.** The owner\'s rule puts every paperback under 100 pages in the short line at %s, so both editions cost the reader the same. '
-        '**Why (b).** At the same price, black ink keeps **%s** a copy against colour\'s **%s**: colour printing at this size costs %s, black ink a flat %s. '
+        '**Why (b).** At the same price, black ink keeps **%s** a copy against color\'s **%s**: color printing at this size costs %s, black ink a flat %s. '
         'The sheets are forms to write on, so color adds little, and the cover stays in color either way. The simulated reader panel put the workbook\'s value at about $8.50, '
         'so %s is close to what readers expect. Below $9.99 KDP pays 50%% instead of 60%%, so $9.99 is also the lowest price that keeps the higher royalty.\n' % (
             money(bp), money(bp), money(bc.get('net', 0)), money(cc.get('net', 0)), money(cc.get('print', 0)), money(bc.get('print', 0)), money(bp)),
@@ -305,15 +305,15 @@ def main():
 - **Free KDP ISBNs (decided).** Every paperback uses a free KDP ISBN: on the Paperback Content screen choose **"Get a free KDP ISBN"**. KDP prints it in the barcode on the back cover, so the copyright pages carry no ISBN line. A free KDP ISBN can only be used for that book in that format on KDP and can't be moved to another publisher, and KDP shows the imprint as **"Independently published"** (the title and copyright pages already say so). The Kindle editions and the box set need no ISBN: leave the Kindle ISBN blank, and Amazon gives each one an ASIN.
 - **Prices (the owner's rule).** Every paperback under 100 pages is a short edition at **$9.99**; every longer one is **$14.99**. The build applies the rule to the final page count, so the prices below follow it: the books at $14.99, and the short editions (the pocket guide and both workbook editions) at $9.99.
 - **The short editions are listed together**, after the books: the pocket guide, then the two workbook editions. Each keeps its own name.
-- **The workbook: publish one of two editions.** The colour edition and a black-and-white interior with the same colour cover are both built, both at $9.99, and listed side by side; the black-and-white one is **recommended** because it keeps more a copy. At $9.99 the colour edition can't use expanded distribution, so it is Amazon only. See "Which workbook edition?". [OWNER]
-- **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
+- **The workbook: publish one of two editions.** The color edition and a black-and-white interior with the same color cover are both built, both at $9.99, and listed side by side; the black-and-white one is **recommended** because it keeps more a copy. At $9.99 the color edition can't use expanded distribution, so it is Amazon only. See "Which workbook edition?". [OWNER]
+- **Order a proof copy of every paperback before you publish.** Check the color, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
 - **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
 - **The workbook is print only.** Its forms are made to be written in, and every one is already free to print or fill in on the website, so a Kindle edition would only repeat links (and KDP can turn away ebooks that are mostly links or freely available content). Each Kindle book already links every workpaper to its free form. The workbook has no Kindle row to fill in.
 - **The pocket guide** (*%s*, %d pages, 5 × 8 in) is a paperback and a Kindle ebook.
 - **No box set in this wave.** The Kindle box set is held back and comes with Book 5, in the second wave, so it is published once with every book in it.
 - **Series numbers.** The books are numbered in the series in order. The pocket guide and the workbook are companions and carry **no number**, the same in print and on Kindle.
-- **The same answers every time:** British English text on the Amazon.com store is fine; mark the language as English.
+- **The same answers every time:** the text is in American English; mark the language as English.
 ''' % (POCKET['title'], pk.get('pages', 0)))
     for item in items:
         bid = item['id']
@@ -388,7 +388,7 @@ def main():
         md.append('| Box | Keyword phrase | Characters |\n|---|---|---|')
         for i, (k, n, bad) in enumerate(kw_ok(item, d), 1):
             md.append('| %d | %s | %d%s |' % (i, k, n, (' (repeats: %s)' % ', '.join(bad)) if bad else ''))
-        md.append('\nNo other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]\n')
+        md.append('\nNo other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]\n')
         md.append('### Content details: AI disclosure (KDP requires an answer)\n')
         md.append(AI_TEXT)
         if has_print:
@@ -399,7 +399,7 @@ def main():
             md.append('| Publication date | Leave blank (KDP fills in the date it goes live) |')
             md.append('| Print options | Ink and paper: **%s, white paper**. Trim: **%s**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |' % ('Black & white interior' if bw else 'Standard color', trim))
             md.append('| Page count | %d (KDP reads it from the file)%s |' % (pages, ' — 72 is KDP\'s minimum for standard color, so the guide is built to 72 to 80 pages' if kind == 'pocket' else ''))
-            md.append('| Spine width | %.4f in (%.2f mm): %d pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: %s |' % (m.get('spine_in', 0), m.get('spine_mm', 0), pages, 'yes (over 79 pages)' if m.get('spine_text') else 'no (KDP allows it only above 79 pages)'))
+            md.append('| Spine width | %.4f in (%.2f mm): %d pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: %s |' % (m.get('spine_in', 0), m.get('spine_mm', 0), pages, 'yes (over 79 pages)' if m.get('spine_text') else 'no (KDP allows it only above 79 pages)'))
             md.append('| Manuscript file | book/print/%s.pdf |' % bid)
             md.append('| Cover file | book/print/cover-%s.pdf (full wrap %.3f × %.2f in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |' % (bid, m.get('cover_in', [0, 0])[0], m.get('cover_in', [0, 0])[1]))
             md.append('| Is this a low-content book? | **No** |')
@@ -424,7 +424,7 @@ def main():
             if kind == 'pocket':
                 cost = COSTS['kdp']
                 pr = kdp.get('print', 0)
-                md.append('\n**Price: $%.2f (the short-edition rule: under 100 pages).** KDP\'s printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) '
+                md.append('\n**Price: $%.2f (the short-edition rule: under 100 pages).** KDP\'s printing cost for a standard-color paperback at regular trim (5 × 8 in counts as regular) '
                           'is $%.2f a book plus $%.4f a page: $%.2f + %d × $%.4f = **%s**. KDP pays 60%% of the list price from $9.99 up, so 60%% × $%.2f = %s, minus printing, '
                           'leaves **%s a copy**. Below $9.99 it would pay only 50%%, so $9.99 is the lowest price that keeps the higher royalty. The simulated reader panel put its value at about $8.40.\n' % (
                               price, cost['fixed'], cost['per_page'], cost['fixed'], pages, cost['per_page'], money(pr), price, money(round(0.6 * price, 2)), money(kdp.get('net', 0))))

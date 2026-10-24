@@ -653,7 +653,7 @@ def logic_free_page(book, epub=False):
     """logicbook14: one short page near the end of each book: the free situations online, and the pocket guide"""
     n = len(POCKET['items'])
     words = ('<p class="pe-back-lede">Most of the “Two ways to read this” boxes in this book hold a situation from a free page on the website. It has more than seventy everyday '
-             'reactions that can look odd, rude or over the top from outside, each laid out in the same six parts, with the other person’s side and one small step.</p>'
+             'reactions that can look odd or over the top from outside, each laid out in the same six parts, with the other person’s side and one small step.</p>'
              '<p>You can type what happened in your own words and see the closest situations, pick another picture when the first doesn’t click, and build a card of '
              'your own. It is free, with no account, and what you type stays on your device.</p>'
              '<p>The pocket guide in this series, <em>%s</em>, collects %d of them in print, one to a page.</p>') % (esc(POCKET['title']), n)

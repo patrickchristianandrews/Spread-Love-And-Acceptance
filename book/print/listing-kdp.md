@@ -7,15 +7,15 @@ Made by tools/book/listing_kdp.py (print12, logicbook14) from tools/book/series.
 - **Free KDP ISBNs (decided).** Every paperback uses a free KDP ISBN: on the Paperback Content screen choose **"Get a free KDP ISBN"**. KDP prints it in the barcode on the back cover, so the copyright pages carry no ISBN line. A free KDP ISBN can only be used for that book in that format on KDP and can't be moved to another publisher, and KDP shows the imprint as **"Independently published"** (the title and copyright pages already say so). The Kindle editions and the box set need no ISBN: leave the Kindle ISBN blank, and Amazon gives each one an ASIN.
 - **Prices (the owner's rule).** Every paperback under 100 pages is a short edition at **$9.99**; every longer one is **$14.99**. The build applies the rule to the final page count, so the prices below follow it: the books at $14.99, and the short editions (the pocket guide and both workbook editions) at $9.99.
 - **The short editions are listed together**, after the books: the pocket guide, then the two workbook editions. Each keeps its own name.
-- **The workbook: publish one of two editions.** The colour edition and a black-and-white interior with the same colour cover are both built, both at $9.99, and listed side by side; the black-and-white one is **recommended** because it keeps more a copy. At $9.99 the colour edition can't use expanded distribution, so it is Amazon only. See "Which workbook edition?". [OWNER]
-- **Order a proof copy of every paperback before you publish.** Check the colour, the margins, the QR codes (scan each one) and the spine.
+- **The workbook: publish one of two editions.** The color edition and a black-and-white interior with the same color cover are both built, both at $9.99, and listed side by side; the black-and-white one is **recommended** because it keeps more a copy. At $9.99 the color edition can't use expanded distribution, so it is Amazon only. See "Which workbook edition?". [OWNER]
+- **Order a proof copy of every paperback before you publish.** Check the color, the margins, the QR codes (scan each one) and the spine.
 - **Free online and on Amazon.** KDP accepts content that is free on the web when the copyright owner publishes it, and may ask you to show that you own it. Keep an email from your site's domain ready. Because every chapter is free online, **do not enrol any Kindle edition in KDP Select**, the pocket guide and the box set included (see "Kindle extras").
 - **The Kindle editions have their own files.** KDP takes EPUB, DOCX or KPF for ebooks; the PDFs here are for print. Upload **book/print/epub/<book>.epub** as the Kindle manuscript (EPUB 3, reflowable: the same chapters as the paperback, no page numbers, live links instead of QR codes; checked with EPUBCheck) and **book/print/cover-<book>-front.jpg** as the Kindle cover. Open each EPUB in Amazon's free Kindle Previewer before you publish. [OWNER]
 - **The workbook is print only.** Its forms are made to be written in, and every one is already free to print or fill in on the website, so a Kindle edition would only repeat links (and KDP can turn away ebooks that are mostly links or freely available content). Each Kindle book already links every workpaper to its free form. The workbook has no Kindle row to fill in.
 - **The pocket guide** (*The Logic Behind It*, 76 pages, 5 × 8 in) is a paperback and a Kindle ebook.
 - **No box set in this wave.** The Kindle box set is held back and comes with Book 5, in the second wave, so it is published once with every book in it.
 - **Series numbers.** The books are numbered in the series in order. The pocket guide and the workbook are companions and carry **no number**, the same in print and on Kindle.
-- **The same answers every time:** British English text on the Amazon.com store is fine; mark the language as English.
+- **The same answers every time:** the text is in American English; mark the language as English.
 
 
 ---
@@ -67,7 +67,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | personality traits and temperament | 34 |
 | 7 | gentle personal growth for beginners | 36 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -79,7 +79,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -93,7 +93,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 158 (KDP reads it from the file) |
-| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Spine width | 0.3558 in (9.04 mm): 158 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-1-know-yourself-kindly.pdf |
 | Cover file | book/print/cover-book-1-know-yourself-kindly.pdf (full wrap 12.606 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
@@ -180,7 +180,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | trauma informed self care | 25 |
 | 7 | small habits for lasting change | 31 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -192,7 +192,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -206,7 +206,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 156 (KDP reads it from the file) |
-| Spine width | 0.3513 in (8.92 mm): 156 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Spine width | 0.3513 in (8.92 mm): 156 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-2-heal-and-steady.pdf |
 | Cover file | book/print/cover-book-2-heal-and-steady.pdf (full wrap 12.601 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
@@ -293,7 +293,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | peer pressure conformity and team dynamics | 42 |
 | 7 | support someone without burning out | 35 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -305,7 +305,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -319,7 +319,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 154 (KDP reads it from the file) |
-| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Spine width | 0.3468 in (8.81 mm): 154 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-3-understanding-each-other.pdf |
 | Cover file | book/print/cover-book-3-understanding-each-other.pdf (full wrap 12.597 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
@@ -406,7 +406,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | roommates and co-parenting chores | 33 |
 | 7 | resentment in relationships over housework | 42 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -418,7 +418,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -432,7 +432,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **6 × 9 in (15.24 × 22.86 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 156 (KDP reads it from the file) |
-| Spine width | 0.3513 in (8.92 mm): 156 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: yes (over 79 pages) |
+| Spine width | 0.3513 in (8.92 mm): 156 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: yes (over 79 pages) |
 | Manuscript file | book/print/book-4-share-the-load.pdf |
 | Cover file | book/print/cover-book-4-share-the-load.pdf (full wrap 12.601 × 9.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
@@ -526,7 +526,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | empathy and seeing the other side | 33 |
 | 7 | why my partner goes quiet in arguments | 38 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -538,7 +538,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -552,7 +552,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **5 × 8 in (12.7 × 20.32 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 76 (KDP reads it from the file) — 72 is KDP's minimum for standard color, so the guide is built to 72 to 80 pages |
-| Spine width | 0.1712 in (4.35 mm): 76 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
+| Spine width | 0.1712 in (4.35 mm): 76 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: no (KDP allows it only above 79 pages) |
 | Manuscript file | book/print/pocket-the-logic-behind-it.pdf |
 | Cover file | book/print/cover-pocket-the-logic-behind-it.pdf (full wrap 10.421 × 8.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
@@ -569,17 +569,17 @@ The answers are seen by Amazon, not printed on the product page.
 | Amazon.com.au | AU$15.99 | KDP shows it | KDP shows it [OWNER] |
 | Expanded distribution | **No** (Amazon only) | $2.94 | would pay $1.06 a copy (40% × $9.99 − printing) |
 
-**Price: $9.99 (the short-edition rule: under 100 pages).** KDP's printing cost for a standard-colour paperback at regular trim (5 × 8 in counts as regular) is $1.00 a book plus $0.0255 a page: $1.00 + 76 × $0.0255 = **$2.94**. KDP pays 60% of the list price from $9.99 up, so 60% × $9.99 = $5.99, minus printing, leaves **$3.05 a copy**. Below $9.99 it would pay only 50%, so $9.99 is the lowest price that keeps the higher royalty. The simulated reader panel put its value at about $8.40.
+**Price: $9.99 (the short-edition rule: under 100 pages).** KDP's printing cost for a standard-color paperback at regular trim (5 × 8 in counts as regular) is $1.00 a book plus $0.0255 a page: $1.00 + 76 × $0.0255 = **$2.94**. KDP pays 60% of the list price from $9.99 up, so 60% × $9.99 = $5.99, minus printing, leaves **$3.05 a copy**. Below $9.99 it would pay only 50%, so $9.99 is the lowest price that keeps the higher royalty. The simulated reader panel put its value at about $8.40.
 
 ### Kindle extras
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/pocket-the-logic-behind-it.epub** (EPUB 3, reflowable, 0.30 MB, 9 sections, 38 situations; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/pocket-the-logic-behind-it.epub** (EPUB 3, reflowable, 0.31 MB, 9 sections, 38 situations; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-pocket-the-logic-behind-it-kindle.jpg (1600 × 2560 px, the 1.6:1 shape KDP prefers, the the paperback front, trimmed slightly at the sides; also inside the EPUB) |
 | ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
 | Publisher | Leave blank (decided). |
-| Kindle price | **$2.99** with the **70%** royalty: 70% × $2.99 − delivery (0.30 MB × $0.15 = $0.04) = about **$2.05 a copy**. The owner's range is $0.99 to $2.99; below $2.99 KDP pays only 35% (at $0.99, about $0.35 a copy), so $2.99 is the one price in that range that earns 70%. It is also at least 20% below the paperback ($9.99), as the 70% band requires. [OWNER] |
+| Kindle price | **$2.99** with the **70%** royalty: 70% × $2.99 − delivery (0.31 MB × $0.15 = $0.05) = about **$2.05 a copy**. The owner's range is $0.99 to $2.99; below $2.99 KDP pays only 35% (at $0.99, about $0.35 a copy), so $2.99 is the one price in that range that earns 70%. It is also at least 20% below the paperback ($9.99), as the 70% band requires. [OWNER] |
 | KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take the free online book down. |
 | DRM | **No DRM.** The same chapters are free online, so DRM protects nothing and only gets in readers' way. KDP's help page on DRM (kdp.amazon.com/help/topic/GDDXGH9VR22ACM8U, checked October 2026 via search) now says you can change the setting at any time, and that a book without DRM lets verified buyers download an EPUB and PDF copy (from January 20, 2026). [OWNER] |
 | Kindle categories and keywords | the same as the paperback |
@@ -596,7 +596,7 @@ The answers are seen by Amazon, not printed on the product page.
 
 Both editions are built from the same pages, with no blank pages, and both have the same color cover. Publish one of them (each gets its own free KDP ISBN).
 
-| | (a) Colour edition | (b) Black-and-white interior (recommended) |
+| | (a) Color edition | (b) Black-and-white interior (recommended) |
 |---|---|---|
 | Files | workbook.pdf, cover-workbook.pdf | workbook-bw.pdf, cover-workbook-bw.pdf |
 | Pages | 78 | 78 |
@@ -607,7 +607,7 @@ Both editions are built from the same pages, with no blank pages, and both have 
 | **You keep a copy** | **$1.85** | **$3.15** |
 | Expanded distribution | Not available at $9.99 (KDP would need about $10.35): **Amazon only** | Off (Amazon only, as every book) |
 
-**Both at $9.99.** The owner's rule puts every paperback under 100 pages in the short line at $9.99, so both editions cost the reader the same. **Why (b).** At the same price, black ink keeps **$3.15** a copy against colour's **$1.85**: colour printing at this size costs $4.14, black ink a flat $2.84. The sheets are forms to write on, so color adds little, and the cover stays in color either way. The simulated reader panel put the workbook's value at about $8.50, so $9.99 is close to what readers expect. Below $9.99 KDP pays 50% instead of 60%, so $9.99 is also the lowest price that keeps the higher royalty.
+**Both at $9.99.** The owner's rule puts every paperback under 100 pages in the short line at $9.99, so both editions cost the reader the same. **Why (b).** At the same price, black ink keeps **$3.15** a copy against color's **$1.85**: color printing at this size costs $4.14, black ink a flat $2.84. The sheets are forms to write on, so color adds little, and the cover stays in color either way. The simulated reader panel put the workbook's value at about $8.50, so $9.99 is close to what readers expect. Below $9.99 KDP pays 50% instead of 60%, so $9.99 is also the lowest price that keeps the higher royalty.
 
 The sources for the printing costs are at the end of this file. KDP's own calculator gives the exact figure for each file; check it before you set the price.
 
@@ -661,7 +661,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | calm down plan for adults | 25 |
 | 7 | couples check in journal | 24 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -673,7 +673,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -687,7 +687,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Standard color, white paper**. Trim: **8.5 × 11 in (21.59 × 27.94 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 78 (KDP reads it from the file) |
-| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
+| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: no (KDP allows it only above 79 pages) |
 | Manuscript file | book/print/workbook.pdf |
 | Cover file | book/print/cover-workbook.pdf (full wrap 17.426 × 11.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
@@ -765,7 +765,7 @@ KDP lets you choose three categories for each format. Check that each path is of
 | 6 | calm down plan for adults | 25 |
 | 7 | couples check in journal | 24 |
 
-No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor); the book itself stays in British English. [OWNER]
+No other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]
 
 ### Content details: AI disclosure (KDP requires an answer)
 
@@ -777,7 +777,7 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. If you wrote any book entirely yourself and only used AI to edit it, choose "No" for that book instead. |
+| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
 | Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
 | Translations | **No** | The book is in English only. |
 
@@ -791,7 +791,7 @@ The answers are seen by Amazon, not printed on the product page.
 | Publication date | Leave blank (KDP fills in the date it goes live) |
 | Print options | Ink and paper: **Black & white interior, white paper**. Trim: **8.5 × 11 in (21.59 × 27.94 cm)**. Bleed: **No bleed**. Cover finish: **Matte** (calmer, less glare, hides fingerprints; choose glossy only if the proof looks dull). |
 | Page count | 78 (KDP reads it from the file) |
-| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard colour). Spine text: no (KDP allows it only above 79 pages) |
+| Spine width | 0.1757 in (4.46 mm): 78 pages × 0.002252 in (white paper; the same for black ink and standard color). Spine text: no (KDP allows it only above 79 pages) |
 | Manuscript file | book/print/workbook-bw.pdf |
 | Cover file | book/print/cover-workbook-bw.pdf (full wrap 17.426 × 11.25 in, with 0.125 in bleed; the barcode area at the bottom right of the back is left clear for KDP) |
 | Is this a low-content book? | **No** |
