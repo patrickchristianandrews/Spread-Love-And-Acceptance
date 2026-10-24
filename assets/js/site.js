@@ -745,7 +745,7 @@
     'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
   };
   // pages that are never "outside your focus": the start, help and the site's own pages
-  var FOCUS_NEUTRAL = /^\/(index|start-here|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|about|membership|install|sent-this|someone-sent-you-this|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
+  var FOCUS_NEUTRAL = /^\/(index|saved|contact|start-here|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|about|membership|install|sent-this|someone-sent-you-this|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
   var AREA_OF = {};
   function fpath(u) {
     var p = String(u || '').split(/[?#]/)[0];
@@ -815,6 +815,8 @@
   }
   function menuNow() { return MENU.map(menuGroup).filter(Boolean); }
 
+  // mark19 (restored by nav21): the page is shown inside another page (the garden backdrop, a preview): no Save, no bookmarks
+  function inFrameNow() { try { return window.self !== window.top; } catch (e) { return true; } }
   function el(tag, attrs, html) {
     var n = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach(function (k) {
@@ -1140,7 +1142,7 @@
   }
   // the last few pages opened here, so the time picker and progress line can suggest something new (this browser only; it can be switched off or erased)
   function rememberPage(body) {
-    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|saved|membership|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*Spread Love.*$/, '');
     if (!t) return;
@@ -1282,6 +1284,12 @@
     // button goes too, so a plain text link to him stays in the bar (site.css shows it only then)
     if (current !== '/ask.html') bar.appendChild(el('a', { class: 'tol-ask-link', href: '/ask.html', title: 'Ask Professor Puddles', 'aria-label': 'Ask Professor Puddles' }, 'Ask<span class="tol-ask-more"> Puddles</span>'));
     bar.appendChild(find);
+    // mark19 (restored by nav21): "Save": keep this page, or your place in the book, for later (bookmarks.js wires it up, /saved.html lists them)
+    if (!/^\/(404|offline|garden-backdrop|pal-cam-tv|saved)\.html$/.test(current) && !inFrameNow()) {
+      bar.appendChild(el('button', { type: 'button', class: 'tol-save-btn no-bubble', title: 'Save this page for later' },
+        '<svg class="tol-sv-ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11a1 1 0 0 1 1 1v16l-6.5-4.2-6.5 4.2v-16a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="tol-save-t">Save</span><span class="tol-sv-sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> this page</span>'));
+    }
+    if (!inFrameNow()) loadScript('/assets/js/bookmarks.js').catch(function () {});
     // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)
     if (isApp()) loadScript('/assets/js/app-bar.js').catch(function () {});
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Menu');
@@ -3785,7 +3793,7 @@
       '<details class="tol-depth-more"><summary>How the two versions, “Dig deeper” links and mini dives fit together</summary>' +
         '<p><strong>Both versions teach the same idea.</strong> The simple one gives you the gist; the full one adds the detail. You can switch at any time, and nothing is lost or graded.</p>' +
         '<p><strong>“Dig deeper” links</strong> on the simple cards jump straight to the matching part of the full version, so you only go deep where you want to.</p>' +
-        '<p><strong>Mini dives <span aria-hidden="true">💧</span></strong>: words with a little water drop open a short explanation right on the page. Tap one to wade in a step at a time, from the shore to the deep end, then close it and carry on where you were. The deepest step links to the page with everything on it.</p>' +
+        '<p><strong>Mini dives <span aria-hidden="true">💧</span></strong>: words with a dotted line and a little water drop open a short explanation right on the page. Tap one to wade in a step at a time, from the shore to the deep end, then close it and carry on where you were. The deepest step links to the page with everything on it.</p>' +
         '<p>Stuck on anything, in either version? <a href="/ask.html">Ask Professor Puddles</a>.</p>' +
       '</details>' +
       '<p class="tol-gentle' + (isFull ? ' is-deep' : '') + '"><span aria-hidden="true">' + (isFull ? '🌿' : '🌱') + '</span> Take what helps and leave the rest. Nothing here grades you.</p>');
