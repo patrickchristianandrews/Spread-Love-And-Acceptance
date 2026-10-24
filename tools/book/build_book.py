@@ -1618,12 +1618,13 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 # The books and the collections ask for an email (book-download.js); the workbook and the pocket guide do not.
 DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
 <main class="read bk-home bk-dl" id="main">
-<header class="read-head"><p class="read-code">The book</p><h1>Download the books as PDFs</h1></header>
-<p class="simple-lede">{EMAIL} {FREE}</p>
+<header class="read-head"><p class="read-code">Everything in one place</p><h1>Books and downloads</h1></header>
+<p class="simple-lede">Every book, PDF, worksheet, video and song you can take with you, on one page. Reading and using everything on the site is free and never needs an email. The PDFs of the books, the workbook, the pocket guide and the workpapers ask for your email once on this device.</p>
+<nav class="bk-dl-jump no-bubble" data-no-bubble aria-label="On this page"><a href="#bk-dl-four-h">The four books</a><a href="#workbook">Workbook and pocket guide</a><a href="#everything">Short and full versions</a><a href="#dl-workpapers">Workpapers</a><a href="#dl-media">Videos and music</a><a href="#dl-app">The free app</a></nav>
 <p>Pick one of the short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
-<p>To download a book, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
+<p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
 <form class="bk-dl-form" novalidate>
 <label for="bk-dl-email">Email address</label>
 <div class="bk-dl-row"><input type="email" id="bk-dl-email" name="email" autocomplete="email" placeholder="name@example.com" required><button type="submit" class="tol-btn">Show the downloads</button></div>
@@ -1632,13 +1633,41 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <p class="bk-dl-small">This device remembers only that you’ve given an email here (not the address itself), so you won’t be asked again on it. <a href="/legal/privacy-policy.html">Privacy policy</a>.</p>
 </div>
 {BOOKS}
-<details class="bk-dl-long no-bubble" data-no-bubble id="everything">
-<summary><h2>Everything in one PDF (long)</h2></summary>
-<p>The book also comes as four big collections: the whole book, the book for one person, the book for two or more, and Understanding People. Each has a short version and a full version (the full one adds the research, more examples and more to try). They are long, {SPAN}, so most people find one of the four books above easier. These ask for your email too.</p>
+<details class="bk-dl-long no-bubble" data-no-bubble id="everything" open>
+<summary><h2>Short and full versions, each part in one PDF</h2></summary>
+<p>The book also comes as four big collections: the whole book, the book for one person, the book for two or more, and Understanding People. Each has a short version and a full version (the full one adds the research, more examples and more to try). The short and full versions run {SPAN}. These use the same one-time email step.</p>
 <div class="bk-dl-cards no-bubble" data-no-bubble>
 {CARDS}
 </div>
 </details>
+<style>
+.bk-dl .bk-dl-jump{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.4rem 0 1.2rem; }
+.bk-dl .bk-dl-jump a{ display:inline-flex; align-items:center; min-height:44px; padding:0 .85rem; border:1.5px solid var(--line); border-radius:999px; background:var(--paper); color:var(--ink); font-weight:600; font-size:.95rem; text-decoration:none; }
+.bk-dl .bk-dl-jump a:hover, .bk-dl .bk-dl-jump a:focus-visible{ border-color:var(--ink-soft); }
+.bk-dl .bk-dl-more{ margin:1.6rem 0 1rem; padding-top:.4rem; border-top:1px solid var(--line); scroll-margin-top:5rem; }
+.bk-dl .bk-dl-links{ list-style:none; padding:0 !important; margin:.6rem 0 0; display:grid; gap:.6rem; }
+.bk-dl .bk-dl-links li{ margin:0; max-width:none; padding:.7rem .9rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); }
+.bk-dl .bk-dl-links li::before{ content:none !important; }
+.bk-dl .bk-dl-links a{ display:inline-flex; align-items:center; min-height:44px; font-weight:700; }
+.bk-dl .bk-dl-links span{ display:block; font-size:.92rem; color:var(--ink-soft); }
+.bk-dl [id]{ scroll-margin-top:5rem; }
+</style>
+<section class="bk-dl-more" id="dl-workpapers" aria-labelledby="dl-wp-h"><h2 id="dl-wp-h">Workpapers</h2>
+<p>Fill in a workpaper on the site, then download it as a PDF to keep, print or share, or as a fillable PDF to type into in any PDF app. The PDFs use the same one-time email step.</p>
+<ul class="bk-dl-links">
+<li><a href="/workpapers/fill/">Fill in a workpaper</a><span>Each workpaper on its own, with a PDF and a fillable PDF</span></li>
+<li><a href="/workpapers/fill/suite.html">All the worksheets for your situation, in order</a><span>Every worksheet for your situation as one PDF, with a report at the end</span></li>
+<li><a href="/workpapers/fill/suite.html#full-path">The full path package</a><span>One fillable PDF for your whole road: fill it in any PDF app, bring it back, and get one report</span></li>
+</ul></section>
+<section class="bk-dl-more" id="dl-media" aria-labelledby="dl-media-h"><h2 id="dl-media-h">Videos and music</h2>
+<p>These download right away, with no email.</p>
+<ul class="bk-dl-links">
+<li><a href="/assets/video/frequency-buddies-music-video.mp4" download="Frequency Buddies - Theme Song Music Video.mp4">Frequency Buddies theme song music video</a><span>MP4 video, 17 MB</span></li>
+<li><a href="/assets/video/frequency-buddies-season-2-teaser.mp4" download="Frequency Buddies - Season 2 teaser.mp4">Frequency Buddies Season 2 teaser</a><span>MP4 video, 9 MB</span></li>
+<li><a href="/soundscapes.html">Brain Breakers music</a><span>Listen on the site, or download each track as an MP3</span></li>
+</ul></section>
+<section class="bk-dl-more" id="dl-app" aria-labelledby="dl-app-h"><h2 id="dl-app-h">The free app</h2>
+<p>Put the whole site on your phone’s home screen, books included, so it opens like an app. It’s free. <a href="/install.html">Get the app</a></p></section>
 <p>Prefer to read online? <a href="/book/">The book’s home</a> has every chapter, free, with no email.</p>
 <p class="last-updated no-bubble">Last updated: {UPDATED}</p>
 </main>
@@ -1680,7 +1709,7 @@ def download_cards(manifest):
 
 def build_download():
     cards, span = download_cards(MANIFEST)
-    page = HEAD_TMPL.replace('{TITLE}', 'Download the Book as a PDF').replace('{DESC}', 'Download the book as a PDF.')
+    page = HEAD_TMPL.replace('{TITLE}', 'Books and Downloads').replace('{DESC}', 'Every book, PDF, worksheet, video and song you can take with you, on one page.')
     page += (DOWNLOAD_TMPL.replace('{EMAIL}', series_site.EMAIL_LINE).replace('{FREE}', series_site.FREE_LINE)
              .replace('{BOOKS}', series_site.download_html()).replace('{SPAN}', span).replace('{CARDS}', '\n'.join(cards)).replace('{UPDATED}', UPDATED))
     write(os.path.join(BOOK, 'download.html'), page.replace('{ST}', ST_H))
@@ -1700,16 +1729,28 @@ def build_home():
     page = HEAD_TMPL.replace('{TITLE}', 'The Book: ' + ST_H).replace('{DESC}', 'The book.')
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
 <main class="read bk-home" id="main">
+<nav class="bk-opts no-bubble" data-no-bubble aria-labelledby="bk-opts-h"><h2 id="bk-opts-h">Choose how to read</h2>
+<style>
+.bk-home .bk-opts{ margin:1.2rem 0 1.6rem; }
+.bk-home .bk-opts h2{ margin:0 0 .6rem; font-size:1.35rem; }
+.bk-home .bk-opts ul{ list-style:none; padding:0 !important; margin:0; display:grid; gap:.6rem; grid-template-columns:repeat(auto-fill, minmax(min(100%%, 15.5rem), 1fr)); }
+.bk-home .bk-opts li{ margin:0; padding:0; max-width:none; }
+.bk-home .bk-opts li::before{ content:none !important; }
+.bk-home a.bk-opt{ display:flex; flex-direction:column; gap:.2rem; height:100%%; box-sizing:border-box; min-height:44px; padding:.75rem .9rem; border:1.5px solid var(--line); border-radius:14px; background:var(--paper); color:var(--ink); text-decoration:none; }
+.bk-home a.bk-opt:hover, .bk-home a.bk-opt:focus-visible{ border-color:var(--ink-soft); }
+.bk-home .bk-opt-t{ font-weight:700; font-size:1.02rem; line-height:1.3; }
+.bk-home .bk-opt-t::after{ content:"\\a0\\2192"; }
+.bk-home .bk-opt-d{ font-size:.92rem; line-height:1.45; color:var(--ink-soft); }
+.bk-home a.bk-opt-go{ background:#2B5B8C; border-color:#2B5B8C; color:#fff; }
+.bk-home a.bk-opt-go .bk-opt-d{ color:#E6EEF7; }
+.bk-home [id]{ scroll-margin-top:5rem; }
+</style>
+<ul><li><a class="bk-opt bk-opt-go" href="/book/self-1-then.html"><span class="bk-opt-t">Start at the beginning</span><span class="bk-opt-d">Part One, chapter one. Read in order, one short chapter at a time (about 10 to 15 minutes each).</span></a></li><li><a class="bk-opt" href="#part-1"><span class="bk-opt-t">Part One: Self-discovery</span><span class="bk-opt-d">Where you came from, who you are now and who you are becoming. All of it works on your own.</span></a></li><li><a class="bk-opt" href="#part-2"><span class="bk-opt-t">Part Two: Between us</span><span class="bk-opt-d">One idea per chapter about sharing a life, a home or work with someone, each with a worksheet.</span></a></li><li><a class="bk-opt" href="#part-3"><span class="bk-opt-t">Part Three: Understanding people</span><span class="bk-opt-d">How feelings, stress, trust, change, grief, groups and love work, in any kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/topic-start-here.html"><span class="bk-opt-t">The book at a glance</span><span class="bk-opt-d">The whole book in short paragraphs, for one person or for people together. Good if you want the gist first.</span></a></li><li><a class="bk-opt" href="#other-ways"><span class="bk-opt-t">The book by topic</span><span class="bk-opt-d">Just the parts on one subject: sharing the load, talking it through, knowing yourself, staying calm, or your kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/whole.html"><span class="bk-opt-t">The whole book on one page</span><span class="bk-opt-d">Every part and chapter in one long page, to read straight through, search or print.</span></a></li><li><a class="bk-opt" href="/book/for-yourself.html"><span class="bk-opt-t">The book for one person</span><span class="bk-opt-d">Part One and Part Three on one page: everything you can read and use on your own.</span></a></li><li><a class="bk-opt" href="/book/together.html"><span class="bk-opt-t">The book for two or more</span><span class="bk-opt-d">The chapters for couples, families, friends and roommates, on one page.</span></a></li><li><a class="bk-opt" href="/book/understanding.html"><span class="bk-opt-t">Understanding People, as one book</span><span class="bk-opt-d">Part Three on its own: how people work, for anyone curious.</span></a></li><li><a class="bk-opt" href="/book/download.html"><span class="bk-opt-t">Books and downloads</span><span class="bk-opt-d">Every PDF in one place: the four books, the short and full versions, the workbook, the pocket guide and more.</span></a></li><li><a class="bk-opt" href="#print-series"><span class="bk-opt-t">The paperbacks</span><span class="bk-opt-d">The same chapters as four short books in print, plus the workbook and the pocket guide.</span></a></li><li><a class="bk-opt" href="/quest.html"><span class="bk-opt-t">Your quest map</span><span class="bk-opt-d">A map that lights up as you read, so you can see how far you’ve come.</span></a></li><li><a class="bk-opt" href="#contents"><span class="bk-opt-t">Contents</span><span class="bk-opt-d">Every chapter in order, with a line on what each one is about.</span></a></li></ul></nav>
 <div class="bk-cover no-bubble" data-no-bubble><div class="bk-cover-text"><p class="bk-cover-brand">spreadloveandacceptance.com</p>
 <p class="bk-cover-k">The book</p>
 <h1>{ST}</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">by %s</p></div>
 <div class="bk-cover-art">%s</div></div>
 <p class="simple-lede">The idea of this book is simple, like a ledger: a notebook where you write down what happened, so you can look at it calmly later. See what is really going on, in yourself and between people, without blaming anyone, and then change one small thing.</p>
-<div class="bk-start no-bubble" data-no-bubble>
-<a class="tol-btn bk-go" href="/book/self-1-then.html">Start reading: Part One, Then</a>
-<a class="tol-btn is-quiet" href="/book/whole.html">The whole book on one page</a>
-<a class="tol-btn is-quiet" href="/book/download.html">Download as PDF</a>
-</div>
 <ul class="bk-how no-bubble" data-no-bubble>
 <li><strong>Read it in order, like any book.</strong> %d chapters in three parts, and an afterword. Every chapter ends with what to remember, the chapters it connects to, and the next one.</li>
 <li><strong>Two sizes of every chapter.</strong> The short version takes about 10 to 15 minutes. The full version adds the research, more examples and more to try.</li>

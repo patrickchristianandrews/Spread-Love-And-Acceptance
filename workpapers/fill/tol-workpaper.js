@@ -2443,6 +2443,16 @@
     return Promise.resolve(fallback());
   }
 
+  // PDFs ask for an email once on this device (the same step as the book PDFs); it opens in a new tab so nothing here is lost
+  function pdfReady(say) {
+    try { if (localStorage.getItem('tol-book-dl') === '1') return true; } catch (e) { return true; }
+    var w = null;
+    try { w = global.open('/get-downloads.html?next=' + encodeURIComponent(location.pathname), '_blank'); } catch (e) {}
+    say(w ? 'One quick step first: a new tab asks for your email once. Then tap this button again. What you filled in stays here.'
+      : 'One quick step first: open spreadloveandacceptance.com/get-downloads.html to add your email once, then tap this button again.');
+    return false;
+  }
+
   function download(bytesOrText, filename, type) {
     var blob = new Blob([bytesOrText], { type: type });
     var url = URL.createObjectURL(blob);
@@ -2456,6 +2466,7 @@
   A.fileBase = function () { return (this.schema.slug || this.schema.code) + '-' + this.schema.code + '-' + today(); };
 
   A.savePdf = function () {
+    if (!pdfReady(this.status.bind(this))) return;
     try {
       var bytes = buildPdf(this.schema, this.state);
       download(bytes, this.fileBase() + '.pdf', 'application/pdf');
@@ -2501,6 +2512,7 @@
   };
 
   A.fillablePdf = function () {
+    if (!pdfReady(this.status.bind(this))) return;
     try {
       var bytes = global.TOLSuitePDF.fillable([{ workpaper: this.schema.code, state: this.state, label: '' }], { single: true });
       download(bytes, this.fileBase() + '-fillable.pdf', 'application/pdf');
@@ -2968,7 +2980,7 @@
 
   global.TOLWorkpaper = {
     buildPdf: buildPdf, blankState: blankState, makeCtx: makeCtx, sanitize: sanitize, answered: answered,
-    Report: Report, renderBody: renderBody, App: App, download: download, today: today, formatDate: formatDate,
+    Report: Report, renderBody: renderBody, App: App, download: download, pdfReady: pdfReady, today: today, formatDate: formatDate,
     displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT,
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels, setHousehold: setHousehold,

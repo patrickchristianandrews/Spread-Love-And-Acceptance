@@ -104,7 +104,7 @@
     // no paid version; the email list stays as an optional way to get updates.
     openAll: true,
     signupUrl: 'https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance',
-    supportEmail: 'patrick.christian.andrews@gmail.com',
+    supportEmail: 'spreadloveandacceptance@gmail.com',
     // Web3Forms access key: sends the 404 page's broken-link reports to your inbox without
     // putting your email address on the site. Get one free at https://web3forms.com
     // (it's safe to be public). Until it's filled in, the report form stays hidden.
@@ -117,7 +117,7 @@
     { id: 'new', title: 'What’s new', blurb: 'Newly added, newest first. Older pages live in their own sections.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/together.html', code: 'New', title: 'Work on it together', note: 'Fill in a tool on your own phone, pass it back and forth by link, QR code or text, and put your results side by side' },
-      { href: '/on-this-device.html#progress', code: 'New', title: 'Your progress', note: 'Save a backup, move it to another phone or the free app, lock it with a PIN, or clear it' },
+      { href: '/on-this-device.html#progress', code: 'New', title: 'Your progress', note: 'Save a backup, move it to another phone or the free app, lock it with a passcode, or clear it' },
       { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Any age, any reason: alone not lonely, a home for one, making friends as an adult, and asking for help' },
       { href: '/nervous-system.html', code: 'New', title: 'Your nervous system, in plain words', note: 'The stress response, polyvagal theory honestly, and what helps' },
       { href: '/tools.html', code: 'New', title: 'All tools', note: 'Every tool with a plain name, the ones you can use on your own first: what it does, what you get and how long it takes' },
@@ -378,7 +378,8 @@
       { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'What is live today, counted plainly' },
       { href: '/membership.html', code: '', title: 'Email updates', note: 'Everything is open; leave your email if you’d like a short note when something new ships' },
       { href: '/on-this-device.html', code: '', title: 'What’s stored on this device', note: 'Everything this site keeps in your browser, in plain words, with a button to erase each one' },
-      { href: '/on-this-device.html#progress', code: '', title: 'Your progress', note: 'Save a backup, move it to another phone or the free app, lock it with a PIN, or clear it' },
+      { href: '/saved.html', code: '', title: 'Your saved places', note: 'The pages, tools and places in the book you saved, to pick up later' },
+      { href: '/on-this-device.html#progress', code: '', title: 'Your progress', note: 'Save a backup, move it to another phone or the free app, lock it with a passcode, or clear it' },
       { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
       { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service', note: 'The rules for using the site' },
       { href: '/legal/refund-policy.html', code: '', title: 'Refund policy', note: 'Nothing is sold here, so there is nothing to refund' }
@@ -404,7 +405,8 @@
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/together.html', code: 'Share', title: 'Work on it together', note: 'Pass a tool back and forth by link, QR code or text, and see your results side by side' },
-      { href: '/on-this-device.html#progress', code: 'Yours', title: 'Your progress', note: 'Back it up, move it to the app, lock it with a PIN, or clear it' },
+      { href: '/on-this-device.html#progress', code: 'Yours', title: 'Your progress', note: 'Back it up, move it to the app, lock it with a passcode, or clear it' },
+      { href: '/saved.html', code: 'Yours', title: 'Your saved places', note: 'Pages, tools and places in the book you saved for later' },
       { sub: 'What’s new', all: '/whats-new.html', allLabel: 'Everything new, with dates' },
       { href: '/together.html', code: 'New', title: 'Work on it together', note: 'Share your results by link, QR code or text' },
       { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
@@ -686,9 +688,9 @@
       { sub: 'The pups live', area: 'media' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
     ]},
-    { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library, guides and stories. Each page has a short version and a deeper one.',
-      all: '/explore.html?need=read', allLabel: 'See everything to read and learn', items: [
-      { sub: 'The book, in order', all: '/book/topic-start-here.html', allLabel: 'The book at a glance' },
+    { id: 'thebook', name: 'Read the book', title: 'Read the book', blurb: 'The book free online: from the start, by part, on one page, by topic, or as PDFs and paperbacks.',
+      all: '/book/index.html', allLabel: 'All the ways to read the book', items: [
+      { sub: 'The book, in order', area: 'read', all: '/book/topic-start-here.html', allLabel: 'The book at a glance' },
       { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'The whole book in order, from the first page, or on one page to print' },
       { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Part One: Where you came from', note: 'Growing up, old rules and what life taught you' },
       { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Part One: Who you are today', note: 'Your wiring, your weather and your words' },
@@ -718,12 +720,22 @@
       { href: '/book/understanding-17-groups.html', deep: true, code: '17', title: 'Part Three · Chapter 17: Fitting in', note: 'Groups, influence and culture, and disagreeing kindly' },
       { href: '/book/afterword.html', deep: true, code: 'After', title: 'Afterword: what the book adds up to', note: 'Six threads through the book, and where to go from here' },
       { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
-      { sub: 'The whole book on one page', all: '/book/download.html', allLabel: 'Download the book as a PDF' },
-      { href: '/book/download.html', code: 'PDF', title: 'Download the book as a PDF', note: 'The whole book in one file, to read offline or print' },
+      { sub: 'Every way to read it', area: 'read', all: '/book/download.html', allLabel: 'Books and downloads' },
+      { href: '/book/download.html', code: 'PDF', title: 'Books and downloads', note: 'Every book, PDF, worksheet, video and song in one place' },
       { href: '/book/whole.html', code: 'Book', title: 'The whole book on one page', note: 'Every part and chapter in one long page, to read straight through or print' },
       { href: '/book/for-yourself.html', code: 'Book', title: 'The book for one person', note: 'Part One and the chapters for reading on your own, in one page' },
       { href: '/book/together.html', code: 'Book', title: 'The book for two or more', note: 'The chapters for couples, families and housemates, in one page' },
       { href: '/book/understanding.html', code: 'Book', title: 'Understanding People, as one book', note: 'Part Three on its own: how feelings, stress, trust and change work' },
+      { sub: 'The book by topic', area: 'read' },
+      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
+      { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
+      { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
+      { href: '/book/topic-know-yourself.html', code: 'Topic', title: 'The book on knowing yourself', note: 'Every chapter’s part about you' },
+      { href: '/book/topic-calm.html', code: 'Topic', title: 'The book on staying calm', note: 'Every chapter’s part on settling' },
+      { href: '/book/topic-by-relationship.html', code: 'Topic', title: 'The book by relationship', note: 'The best sections of the book for your kind of relationship' },
+    ]},
+    { id: 'read', name: 'Learn', title: 'Learn', blurb: 'The library, guides and stories. Each page has a short version and a deeper one.',
+      all: '/explore.html?need=read', allLabel: 'See everything to learn', items: [
       { sub: 'The Professor’s Library, by topic', all: '/library.html', allLabel: 'The whole library' },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words, with the evidence and its limits' },
       { href: '/library/emotions.html', code: 'Library', title: 'Feelings and emotions', note: 'What feelings are for, and naming them' },
@@ -749,13 +761,6 @@
       { href: '/for-teachers.html', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
       { href: '/groups.html', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
       { href: '/for-counselors.html', title: 'For counsellors and coaches', note: 'Using the pages and tools with clients' },
-      { sub: 'The book by topic' },
-      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
-      { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
-      { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
-      { href: '/book/topic-know-yourself.html', code: 'Topic', title: 'The book on knowing yourself', note: 'Every chapter’s part about you' },
-      { href: '/book/topic-calm.html', code: 'Topic', title: 'The book on staying calm', note: 'Every chapter’s part on settling' },
-      { href: '/book/topic-by-relationship.html', code: 'Topic', title: 'The book by relationship', note: 'The best sections of the book for your kind of relationship' },
       { sub: 'Library and stories' },
       { href: '/learn/index.html', deep: true, code: 'Stories', title: 'Stories from Philosophy', note: 'Old stories with useful ideas inside' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from trusted sources' },
@@ -890,7 +895,7 @@
     ['co-parents', 'Separated & co-parents', 'rel', 'Co-parents'], ['housemates', 'Housemates', 'rel'], ['work', 'Work & business partners', 'rel', 'Work'],
     ['life-changes', 'Life changes', 'rel'],
     ['load', 'Share the load', 'topic'], ['talk', 'Talk it through', 'topic'], ['self', 'Self-discovery', 'topic'], ['play', 'Calm & play', 'topic'],
-    ['media', 'Watch & listen', 'topic'], ['read', 'Read & learn', 'topic']
+    ['media', 'Watch & listen', 'topic'], ['read', 'Read the book & learn', 'topic', 'Book & learn']
   ];
   // the groups on /by-relationship.html (page names without .html); the menu's own groups are added below
   var FOCUS_PAGES = {
@@ -1235,7 +1240,7 @@
 
   // The sections shown in the top bar. Each opens a short list of its pages.
   // (in Focus mode, only the sections with pages in your areas: see menuNow)
-  function ribbon() { return menuNow().filter(function (g) { return g.id !== 'about'; }).map(function (g) { return [g.id, g.name || g.title]; }); }
+  function ribbon() { return menuNow().filter(function (g) { return g.id !== 'about' && g.id !== 'thebook'; }).map(function (g) { return [g.id, g.name || g.title]; }); }
   var ribbonHook = null;
   var openDrop = null;
 
@@ -1471,12 +1476,13 @@
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': 'The whole site at a glance' },
       '<p class="tol-panel-quick-h">' + 'The whole site at a glance' + '</p><ul>' +
       [['/explore.html', '&#129517;', 'Everything on this site'],
+       ['/saved.html', '&#128278;', 'Saved for later'],
+       ['/on-this-device.html#lock', '&#128274;', 'Lock with a passcode'],
        ['/tools.html', '&#129520;', 'All tools'],
        ['/by-relationship.html', '&#128101;', 'Guides by relationship'],
        ['/book/index.html', '&#128214;', 'Read the book'],
+       ['/book/download.html', '&#128229;', 'Books and downloads'],
        ['/ladder.html', '&#127807;', 'Calm down now'],
-       ['/relax.html', '&#127769;', 'Relax and reset'],
-       ['/teens.html', '&#127890;', 'For teens'],
        ['/ask.html', '&#128167;', 'Ask Professor Puddles'],
        ['/calming-supplements.html', '&#127793;', 'Calming herbs and supplements'],
        ['/start-here.html#three-questions', '&#10067;', 'Not sure? Three questions']
@@ -1885,6 +1891,7 @@
         '<a href="/frequency-buddies.html" data-work-hide' + hl + '>' + 'Cartoon for all ages' + '</a>' +
       '</nav>' +
       '<span class="tol-foot-links">' +
+        '<a href="/book/download.html"' + hl + '>' + 'Books and downloads' + '</a>' +
         '<a href="/explore.html"' + hl + '>' + 'Everything on this site' + '</a>' +
         '<a href="/contents.html"' + hl + '>' + 'All pages' + '</a>' +
         '<a href="/for-teachers.html"' + hl + '>' + 'For teachers' + '</a>' +
@@ -4252,7 +4259,9 @@
       sw('wxnote', 'Show the time and weather note', 'A very faint note in the corner of each page') +
       sw('wxloc', 'Use my location for the weather', 'Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it') +
       '<p class="tol-set-wxmsg" role="status" hidden></p>' +
-      '<p class="tol-set-foot">' + 'These choices stay in this browser only.' + ' <button type="button" class="tol-set-reset">' + 'Back to the usual' + '</button> <a href="/on-this-device.html"' + ('') + '>' + 'What’s stored on this device' + '</a></p>' +
+      '<h3 class="tol-set-k">' + 'Passcode' + '</h3>' +
+      '<p class="tol-set-lock"><a href="/on-this-device.html#lock">' + 'Lock the app with a passcode' + '</a> <small>' + 'A 4 to 6 digit passcode, or Face ID or a fingerprint, before anything shows' + '</small></p>' +
+      '<p class="tol-set-foot">' + 'These choices stay in this browser only.' + ' <button type="button" class="tol-set-reset">' + 'Back to the usual' + '</button> <a href="/on-this-device.html"' + (esPage() ? ' hreflang="en"' : '') + '>' + 'What’s stored on this device' + '</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
       var i = e.target;

@@ -38,7 +38,7 @@
     if (top && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { root.classList.toggle('h18-top', es[0].isIntersecting); }).observe(top);
   }
 
-  /* ---------------------------------------------------------------- "Pick up where you left off" (only when something is saved)
+  /* ---------------------------------------------------------------- "Pick up where you left off" (a one-line how-to until something is saved)
      Reads the bookmarks' own keys (tol-saved, tol-lastread; see bookmarks.js); shows the three most recent, newest first.
      Hidden while the app lock is on, and for anyone with nothing saved. */
   function resume() {
@@ -53,7 +53,11 @@
     var last = read('tol-lastread', {});
     Object.keys(last).forEach(function (u) { var r = last[u] || {}; add(u, r.title, r.at, 'Where you stopped reading', true); });
     read('tol-saved', []).forEach(function (x) { if (x) add(x.url, x.title, x.at, x.spot ? 'Your marked place' : 'Saved', !!x.spot); });
-    if (!items.length) return;
+    if (!items.length) {
+      // nothing saved yet: one plain line on how saving works, so the spot is ready when they come back
+      box.innerHTML = '<p class="h-resume-how"><strong>Tip:</strong> tap <span class="h-resume-chip">Save</span> at the top of any page, tool, workpaper or book chapter, and add a note if you like. It will wait for you right here. <a class="h-link" href="/saved.html#how">How saving works</a></p>';
+      box.removeAttribute('aria-labelledby'); box.classList.add('is-tip'); box.hidden = false; return;
+    }
     items.sort(function (a, b) { return b.at - a.at; });
     var ul = box.querySelector('.h-resume-list');
     items.slice(0, 3).forEach(function (it) {

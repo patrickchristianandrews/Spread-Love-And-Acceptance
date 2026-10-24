@@ -148,3 +148,30 @@ html[data-theme="dark"]:not(.tol-nodark) :is(.tol-sv, .sv-page) svg{ filter:none
   .sv-page .sv-item{ grid-template-columns:minmax(0, 1fr); }
   .sv-page .sv-acts{ justify-content:flex-start; }
 }
+
+/* "How to save this": one plain line under a page's title, until something is saved */
+.tol-sv-how{ display:flex; align-items:flex-start; gap:.4rem; margin:.6rem 0 1rem !important; padding:.5rem .5rem .5rem .9rem !important; max-width:none !important;
+  border-radius:14px; background:#FFF8E4; border:1.5px solid #E2C77E; font-size:.95rem; line-height:1.5; color:var(--ink, #2B2620); }
+.tol-sv-how-t{ flex:1; padding-top:.3rem; }
+.tol-sv-how .tol-sv-howgo{ cursor:pointer; min-height:32px; margin:0 .1rem; color:inherit; font-family:inherit; }
+.tol-sv-how .tol-sv-howgo:hover{ background:#F5EFDE; }
+
+/* notes */
+.tol-sv-notebox textarea{ display:block; box-sizing:border-box; width:100%; min-height:7.5rem; margin:.2rem 0 .5rem; padding:.55rem .7rem; font:inherit; font-size:1rem; line-height:1.45;
+  border:1.5px solid var(--ink-soft, #5A5346); border-radius:12px; background:#fff; color:var(--ink, #2B2620); resize:vertical; }
+.tol-sv-notebox .tol-sv-pop-h{ display:block; }
+.tol-sv-notebox .tol-sv-pop-h small{ display:block; font:400 .85rem/1.3 "Lora", Georgia, serif; color:var(--ink-soft, #5A5346); }
+.tol-sv-note-acts{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .6rem; margin:0 0 .3rem; }
+.tol-sv-note-acts a{ display:inline-flex; align-items:center; min-height:44px; margin-left:auto; color:var(--focus, #2B5B8C); font-weight:600; text-underline-offset:3px; }
+.tol-sv-mine{ margin:.6rem 0 1rem; padding:.6rem .8rem .2rem; border-radius:14px; background:#EAF1F9; border:1.5px solid #9DB9D8; color:#1F3F62; }
+.tol-sv-mine p, main.read .tol-sv-mine p, main.read p.tol-sv-how{ margin:0 !important; padding:0 !important; max-width:none !important; background:none !important; border:0 !important; box-shadow:none !important; border-radius:0 !important; }
+main.read p.tol-sv-how{ margin:.6rem 0 1rem !important; padding:.5rem .5rem .5rem .9rem !important; background:#FFF8E4 !important; border:1.5px solid #E2C77E !important; border-radius:14px !important; }
+.tol-sv-mine p::before, main.read p.tol-sv-how::before{ content:none !important; }
+.tol-sv-mine-k{ display:flex; align-items:center; gap:.3rem; font-weight:700; font-size:.92rem; }
+.tol-sv-mine-k .tol-sv-ico{ width:1.05em; height:1.05em; fill:#2B5B8C; }
+.tol-sv-mine-t{ margin-top:.2rem !important; white-space:pre-line; overflow-wrap:anywhere; color:var(--ink, #2B2620); }
+.tol-sv-mine .tol-sv-undo{ margin:0 0 0 -.6rem; color:#1F3F62; }
+.sv-page .sv-note{ white-space:pre-line; }
+.sv-page .sv-note-edit textarea{ width:100%; box-sizing:border-box; min-height:6rem; padding:.5rem .7rem; font:inherit; font-weight:400; border:1.5px solid var(--ink-soft, #5A5346); border-radius:10px; background:#fff; color:inherit; resize:vertical; }
+html.tol-quiet .tol-sv-how{ background:transparent; }
+@media print{ .tol-sv-how, .tol-sv-notebox{ display:none !important; } }

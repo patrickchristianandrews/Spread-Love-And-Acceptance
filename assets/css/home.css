@@ -162,6 +162,11 @@ html body main.read.h18 .h-resume-list li{ margin:0; padding:0; }
 .h18 .h-resume-t::after{ content:"\a0\2192"; color:var(--h-acc); }
 .h18 .h-resume-k{ font:400 .85rem/1.2 var(--h-ui); color:var(--h-muted); }
 .h18 .h-resume-more{ margin:.6rem 0 0; }
-.h18 .h-resume + .h-art{ display:none; }
+.h18 .h-resume:not([hidden]):not(.is-tip) + .h-art{ display:none; }
+.h18 .h-resume.is-tip{ padding:.6rem .9rem; background:transparent; border-style:dashed; }
+html body main.read.h18 .h-resume-how{ margin:0; padding:0; font:400 .95rem/1.5 var(--h-ui); color:var(--h-ink); max-width:none; }
+.h18 .h-resume-chip{ display:inline-block; padding:0 .5rem; border-radius:999px; border:1.5px solid var(--h-muted); font-weight:700; white-space:nowrap; }
+.h18 .h-resume-chip::before{ content:"\1F516\a0"; }
+.h18 .h-resume-how .h-link{ white-space:nowrap; }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .h18 a.h-resume-item{ background:transparent; } }
 :root[data-theme="dark"] .h18 a.h-resume-item{ background:transparent; }

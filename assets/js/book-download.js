@@ -2,7 +2,7 @@
    The address goes to Buttondown (the email updates list), the same way the site's sign-up form sends it.
    This device then remembers only that the downloads are unlocked ('tol-book-dl'), never the address.
    owner17: the four books (book/print/book-N-*.pdf) and the big collections (book/pdf/*.pdf) ask for the email
-   (links with class bk-dl-file or bk-dl-kit-file). The workbook and the pocket guide (class bk-dl-nomail) never do.
+   (links with class bk-dl-file or bk-dl-kit-file). Owner, 21 Oct: the workbook and the pocket guide (class bk-dl-nomail) ask too.
    The page counts and sizes on the buttons are read again from /book/print/series.json, so they always match the files.
    A link to #whole, #for-yourself, #together or #understanding opens "Everything in one PDF (long)" there. */
 (function () {
@@ -11,7 +11,7 @@
   var gate = document.querySelector('.bk-dl-gate'), form = document.querySelector('.bk-dl-form');
   if (!gate || !form) return;
   var msg = form.querySelector('.bk-dl-msg'), input = form.querySelector('input[type=email]');
-  var files = document.querySelectorAll('.bk-dl-file, .bk-dl-kit-file'), wanted = null;
+  var files = document.querySelectorAll('.bk-dl-file, .bk-dl-kit-file, .bk-dl-nomail'), wanted = null;
   function unlocked() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
   function paint() {
     var on = unlocked();
