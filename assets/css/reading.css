@@ -209,7 +209,9 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
   .read .book-fig-n{ font-size:max(.8rem, 13px); }
   html.tol-bookview .tol-pillars{ display:none !important; }
 }
-@media screen and (max-width:899px){
+/* owner, Oct 22: chapters read as one continuous column at every width (two columns of cards left big blank gaps
+   beside long cards and figures on wide screens) */
+@media screen{
   main.read:has(.book-open) .ideas{ grid-template-columns:1fr; }
 }
 
