@@ -336,7 +336,7 @@ li { margin: 0 0 1.4mm; }
 @media screen { body { max-width: 40em; margin: 0 auto; padding: 16px; } }'''
     def para(x):
         return '<p>%s</p>' % bold(esc(x))
-    h.append('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title><style>%s</style></head><body>' % (title, css))
+    h.append('<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title><style>%s</style></head><body>' % (title, css))
     h.append('<h1>%s</h1>%s' % (title, ''.join(para(x) for x in intro)))
     h.append('<h3>The order to do things in</h3><ol>%s</ol>' % ''.join('<li>%s</li>' % esc(x) for x in order))
     h.append('<h3>The AI questions (every book asks them)</h3>%s' % ''.join(para(x) for x in ai_section()))

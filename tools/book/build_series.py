@@ -922,7 +922,7 @@ def google_fonts():
 
 
 def head(title, css):
-    return ('<!doctype html>\n<html lang="en-GB">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    return ('<!doctype html>\n<html lang="en-US">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '<meta name="robots" content="noindex">\n<title>%s</title>\n'
             '%s\n<link rel="stylesheet" href="/assets/css/book-print.css">\n%s\n%s\n%s\n<link rel="stylesheet" href="%s">\n</head>\n') % (
         esc(title), google_fonts(), B.EX_CSS, front_back.STYLE, hints.CSS, css)
@@ -1318,7 +1318,7 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
                  'div.cv-free { max-width: 2.25in; font-size: 7.3pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
     return '''<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
 %(gfonts)s
 <style>
 %(fonts)s

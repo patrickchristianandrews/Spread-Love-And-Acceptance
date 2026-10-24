@@ -176,7 +176,7 @@
     var c = A.c; if (!c || S.ended) return; t = Math.max(t, c.currentTime + 0.01);
     var s = c.createBufferSource(), fl = c.createBiquadFilter(), gn = c.createGain();
     s.buffer = A.noise; fl.type = type; fl.frequency.value = f; fl.Q.value = q; s.connect(fl); fl.connect(gn); gn.connect(A.sfx);
-    ramp(gn.gain, t, peak, Math.min(0.02, len * 0.3), len * 0.2, len * 0.5); s.start(t, Math.random() * 2); s.stop(t + len + 0.1);
+    ramp(gn.gain, t, peak, Math.min(0.15, len * 0.3), len * 0.2, len * 0.5); s.start(t, Math.random() * 2); s.stop(t + len + 0.1);
   }
   function sfxTone(t, f0, f1, len, peak, type) {
     var c = A.c; if (!c || S.ended) return; t = Math.max(t, c.currentTime + 0.01);
@@ -187,10 +187,10 @@
     step: function () { if (A.c) sfxNoise(A.c.currentTime, 0.07, 'lowpass', 260, 0.7, 0.07); },
     fridge: function () { if (!A.c) return; var t = A.c.currentTime; sfxTone(t, 80, 60, 0.18, 0.07); sfxNoise(t + 0.02, 0.25, 'lowpass', 500, 0.5, 0.025); },
     hum: function (len) { if (!A.c) return; var c = A.c, t = c.currentTime, o = c.createOscillator(), gn = c.createGain(); o.frequency.value = 118; o.connect(gn); gn.connect(A.sfx); ramp(gn.gain, t, 0.008, 0.6, Math.max(0.1, len - 1.4), 0.8); o.start(t); o.stop(t + len + 0.2); },
-    crunch: function () { if (A.c) sfxNoise(A.c.currentTime, 0.08, 'bandpass', 1900, 1.2, 0.04); },
+    crunch: function () { if (A.c) sfxNoise(A.c.currentTime, 0.1, 'bandpass', 1300, 1.4, 0.035); },
     lap: function () { if (A.c) sfxNoise(A.c.currentTime, 0.06, 'bandpass', 1250, 2.5, 0.035); },
     bump: function () { if (!A.c) return; var t = A.c.currentTime; sfxTone(t, 110, 55, 0.22, 0.12); sfxNoise(t, 0.12, 'lowpass', 300, 0.6, 0.05); },
-    rustle: function () { if (A.c) sfxNoise(A.c.currentTime, 0.7, 'bandpass', 2200, 0.6, 0.022); },
+    rustle: function () { if (A.c) sfxNoise(A.c.currentTime, 0.8, 'bandpass', 1500, 0.7, 0.02); },
     woof: function (id) {
       var c = A.c, b = A.barks[id]; if (!c || !b || b === 'loading' || S.ended) return;
       var s = c.createBufferSource(), lp = c.createBiquadFilter(), gn = c.createGain(), t = c.currentTime + 0.02; s.buffer = b; s.playbackRate.value = 0.9;

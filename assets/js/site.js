@@ -1929,6 +1929,8 @@
   ].forEach(function (r) { r[0].split('|').forEach(function (k) { JOIN[k] = r[1]; }); });
   var ACT_MORE = {
     // nav21 (lang21's Support languages): 'stressed', 'overwhelmed' and 'space' already go to calm and to the pause plan, so they stay
+    // nav21: the renamed reading pages (Psychology in plain words, once the Professor's Library; Philosophy for everyday life)
+    library: ['/library.html', '/learn/index.html', '/research.html'], psychology: 'library', philosophy: ['/learn/index.html', '/library.html'], philosophers: 'philosophy',
     support: ['/support-languages.html', '/languages-of-connection.html'], supported: 'support', supportive: 'support', comfort: 'support', comforting: 'support',
     supplement: ['/calming-supplements.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', nintendo: 'gaming', fortnite: 'gaming', minecraft: 'gaming', esports: 'gaming', screentime: 'gaming', tiktok: 'gaming', scrolling: 'gaming', doomscrolling: 'gaming',
@@ -2927,10 +2929,10 @@
       if (pl.list.name) c.push([pl.list.name, pl.list.all || GROUP_HOME[pl.g.id] || '/explore.html']);
       return c;
     }
-    if (hereSection) return [[hereSection.title, sectionHome(hereSection)]];
     // nav21: a guide that the menu reaches through "Who it's about" says so: Guides, then its part of the directory page
     var ra = null; FOCUS_AREAS.some(function (x) { if (x[2] === 'rel' && (AREA_OF[current] || {})[x[0]]) { ra = x; return true; } return false; });
     if (ra && !/^\/(book|library|learn|workpapers|legal|tools)\//.test(current)) return [['Guides', '/explore.html'], [ra[1], '/by-relationship.html#' + ra[0]]];
+    if (hereSection) return [[hereSection.title, sectionHome(hereSection)]];
     var P = [[/^\/book\//, 'The book', '/book/index.html'], [/^\/library\//, 'Psychology in plain words', '/library.html'], [/^\/learn\//, 'Philosophy for everyday life', '/learn/index.html'],
       [/^\/workpapers\//, 'Worksheets', '/workpapers/fill/suite.html'], [/^\/legal\//, 'About', '/contents.html'], [/^\/tools\//, 'Tools', '/tools.html']];
     for (var i = 0; i < P.length; i++) if (P[i][0].test(current)) return [[P[i][1], P[i][2]]];
