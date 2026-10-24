@@ -220,7 +220,7 @@
   var ptr = null;
   function onPointerDown(e) {
     if (!running || paused) return;
-    if (e.target && e.target.closest && e.target.closest('.ar-overlay, .ar-skip')) return;
+    if (e.target && e.target.closest && e.target.closest('.ar-overlay, .ar-skip, .ar-cbat')) return;
     if (ism) { e.preventDefault(); ptr = null; endIsm(); return; }
     if (game && game.onTap) { e.preventDefault(); ptr = null; try { cv.parentNode.setPointerCapture(e.pointerId); } catch (er) { /* ignore */ } game.onTap(); return; }   // the Derby: press to power up, let go to swing
     ptr = { x: e.clientX, y: e.clientY };
@@ -233,6 +233,7 @@
     game.onPoint((e.clientX - rect.left) / rect.width * LW); if (ptr) ptr.drag = true;
   }
   function onPointerUp(e) {
+    if (e.target && e.target.closest && e.target.closest('.ar-cbat')) { ptr = null; return; }   // a tap on a corner trick bat is not a swing
     if (game && game.release && running) { game.release(); ptr = null; return; }
     if (!ptr || !running || paused || !game) { ptr = null; return; }
     if (ptr.drag && game.onPoint) { ptr = null; return; }
@@ -1177,6 +1178,10 @@
      ================================================================================================== */
   var DW = 440, DH = 520, MOUND = { x: 220, y: 356 }, HIT = { x: 224, y: 444 }, BAT = { x: 166, y: 478, s: 1.25 };
   var LOCX = 18, FENCE = 372, RING0 = 14, RINGK = 100, CHARGE_T = 0.55;
+  // play21: the trick bats sit in the four corners of the field; CZ is how far in (in field units) each corner stays clear
+  var CZ = 86, BAT_CORNER = { mega: 'tl', rocket: 'tr', banana: 'bl', magnet: 'br' };
+  // split a line of text (in the current canvas font) so it fits a width
+  function wrapText(t, maxW) { var words = String(t).split(' '), out = [], cur = ''; words.forEach(function (w) { var tt = cur ? cur + ' ' + w : w; if (g.measureText(tt).width > maxW && cur) { out.push(cur); cur = w; } else cur = tt; }); if (cur) out.push(cur); return out; }
   var PITCH = {
     fast: { name: 'Fastball', cue: 'quick and straight', tell: 'scuffs her paw', col: '#FF9F6E', time: 1.05, bonus: 10 },
     change: { name: 'Changeup', cue: 'nice and slow', tell: 'wags her tail slowly', col: '#8EC5FF', time: 1.6, bonus: 0 },
@@ -1259,10 +1264,10 @@
   function derbySim(skill, rounds, relaxed, useTricks) {
     var P = SIMP[skill] || SIMP.beginner, R = Math.random, hr = 0, sup = 0, perf = 0, trickHR = 0, rounds_ = rounds || 2000;
     for (var k = 0; k < rounds_; k++) {
-      var plan = derbyPlan(), streak = 0, bats = useTricks ? 3 : 0;
+      var plan = derbyPlan(), streak = 0, bats = useTricks ? 3 : 0, usedB = {};
       for (var n = 0; n < 10; n++) {
         var kind = plan[n], loc = derbyLoc(n, R), trick = null;
-        if (bats > 0 && R() < P.tricks && R() < bats / (10 - n)) { trick = TRICK_ORDER[Math.floor(R() * 4)]; bats--; }
+        if (bats > 0 && R() < P.tricks && R() < bats / (10 - n)) { var availB = TRICK_ORDER.filter(function (q) { return !usedB[q]; }); trick = availB[Math.floor(R() * availB.length)]; usedB[trick] = true; bats--; }
         var W = derbyWin(n, !!relaxed, streak, trick);
         var sd = P.sd * (n >= 3 && !P.read ? 1.2 : 1) * (kind === 'fast' ? 1.1 : 1);
         var e = P.bias + gauss(R) * sd;
@@ -1319,7 +1324,7 @@
   function Derby(who) {
     var me = this; me.who = who; me.pit = otherPup(who); me.P = PUPS[who];
     me.score = 0; me.level = 1; me.n = 0; me.best = 0; me.log = []; me.plan = derbyPlan();
-    me.pts = 0; me.streak = 0; me.bestStreak = 0; me.supers = 0; me.pos = 0; me.bx = 0; me.trick = null; me.tricksUsed = 0; me.trickHRs = 0;
+    me.pts = 0; me.streak = 0; me.bestStreak = 0; me.supers = 0; me.pos = 0; me.bx = 0; me.trick = null; me.tricksUsed = 0; me.trickHRs = 0; me.usedBats = {};
     sizeCanvas(DW, DH);
     me.t = 0; me.phase = 'intro'; me.pt = 0; me.trail = []; me.fw = []; me.conf = []; me.nanas = []; me.shake = 0; me.hype = 0.15; me.flash = 0;
     me.batT = -1; me.dance = 0; me.callout = null; me.bubble = null; me.hitB = null; me.calm = calmMotion();
@@ -1344,9 +1349,9 @@
   Derby.prototype.bats = function () { return 3 - this.tricksUsed; };
   Derby.prototype.intro = function () {
     var me = this; paused = true; swingWait(true); syncBats();
-    overlay('Home Run Derby', me.P.name + ' bats and ' + PUPS[me.pit].name + ' pitches. Hold Swing to power up, and let go as the ring closes on the plate. Step with the arrows so the gold marker sits under the ring. After three pitches, read the pitcher for a clue. You also get three trick bats.', '⚾ Play ball', function () { paused = false; last = 0; me.begin(); }, 'Want the other pup to bat? Swap roles.', { label: '⇄ Swap roles', fn: function () { derbyAgain(true); } });
+    overlay('Home Run Derby', me.P.name + ' bats and ' + PUPS[me.pit].name + ' pitches. Hold Swing to power up, and let go as the ring closes on the plate. Step with the arrows so the gold marker sits under the ring. After three pitches, read the pitcher for a clue. Trick bats wait in the four corners of the field: tap one (or press 1 to 4) before a pitch. Each works once, and you can use three of the four.', '⚾ Play ball', function () { paused = false; last = 0; me.begin(); }, 'Want the other pup to bat? Swap roles.', { label: '⇄ Swap roles', fn: function () { derbyAgain(true); } });
   };
-  Derby.prototype.begin = function () { var me = this; swingWait(false); me.phase = 'ready'; me.pt = 0; me.talk(); SFX.charge(); me.hype = 0.6; syncBats(); };
+  Derby.prototype.begin = function () { var me = this; swingWait(false); me.phase = 'ready'; me.pt = 0; me.talk(); SFX.charge(); me.hype = 0.6; syncBats(); batHint(true); };
   Derby.prototype.where = function () { return this.loc === 0 ? 'down the middle' : this.loc < 0 ? 'on the inside' : 'on the outside'; };
   Derby.prototype.talk = function () {
     var me = this, pool = Math.random() < 0.3 ? DLINES.cheeky : me.named() ? DLINES[me.kind] : DLINES.secret;
@@ -1359,9 +1364,10 @@
     var me = this; if (!TRICK[kind]) return false;
     if (me.phase === 'intro' || me.phase === 'done') return false;
     if (me.trick === kind) { me.trick = null; syncBats(); say(TRICK[kind].name + ' put back.'); return true; }
+    if (me.usedBats[kind]) { say(TRICK[kind].name + ' is used up this round.' + (me.bats() > 0 ? ' Try another corner.' : '')); return false; }
     if (me.bats() <= 0) { say('No trick bats left this round.'); return false; }
     if (me.phase === 'flight' || me.phase === 'hit') { say('Too late for this pitch. Pick a trick bat before the next one.'); return false; }
-    me.trick = kind; syncBats(); blip(660, 0.1, 'triangle', 0.05, 990);
+    me.trick = kind; syncBats(); batHint(false); blip(660, 0.1, 'triangle', 0.05, 990);
     say(TRICK[kind].name + ' is ready for your next swing. ' + TRICK[kind].note);
     return true;
   };
@@ -1421,7 +1427,7 @@
     var me = this, W = me.windows(), off = Math.abs(me.loc - me.pos), trick = me.trick, b = me.ballAt(me.pt / me.T);
     var r = derbyContact(e, W, off, c, me.kind, trick, Math.random), side = e < 0 ? -1 : 1, kind, dist = r.dist || 0;
     me.lastE = e; me.meter = { e: e, W: W, t: 0 }; me.usedTrick = trick || null; me.lastQ = r.q;
-    if (trick) { me.trick = null; me.tricksUsed++; syncBats(); }
+    if (trick) { me.trick = null; me.tricksUsed++; me.usedBats[trick] = true; syncBats(); }
     if (r.q === 'miss') { me.whiff = true; me.streak = 0; me.fb = { text: e < 0 ? 'Way early' : 'Way late', t: 0, col: '#F2B6A0' }; me.adv = 'Let go as the ring touches the plate.'; return; }
     if (r.q === 'foul') {
       me.streak = 0; kind = 'foul'; me.fb = { text: e < 0 ? 'Early' : 'Late', t: 0, col: '#CFC3F0' };
@@ -1659,10 +1665,13 @@
     var known = me.named() || me.phase === 'flight', col = known ? me.pk.col : '#FFF6E0';
     var lab = 'Pitch ' + (me.n + 1) + ' · ' + (me.named() ? me.pk.name + ': ' + PUPS[me.pit].name.split(' ')[0] + ' ' + me.pk.tell : known ? me.pk.name : 'Read her tell');
     if (me.trick) lab += '  ·  ' + TRICK[me.trick].icon + ' ' + TRICK[me.trick].name;
-    g.font = '600 12px Lora, Georgia, serif'; var lw = Math.min(DW - 16, g.measureText(lab).width + 28);
-    g.fillStyle = 'rgba(20,16,44,.85)'; wallPath(g, DW / 2 - lw / 2, 62, lw, 24, 12); g.fill(); g.strokeStyle = col; g.lineWidth = 1.5; g.stroke();
+    // play21: the pill stays between the corner bats, on two lines when it needs them
+    g.font = '600 12px Lora, Georgia, serif'; var maxW = DW - 2 * CZ - 8, lines = wrapText(lab, maxW - 30), lw = maxW;
+    if (lines.length === 1) lw = Math.min(maxW, g.measureText(lab).width + 28);
+    var lh = lines.length > 1 ? 38 : 24;
+    g.fillStyle = 'rgba(20,16,44,.85)'; wallPath(g, DW / 2 - lw / 2, 62, lw, lh, 12); g.fill(); g.strokeStyle = col; g.lineWidth = 1.5; g.stroke();
     g.fillStyle = col; g.beginPath(); g.arc(DW / 2 - lw / 2 + 12, 74, 4, 0, 7); g.fill();
-    g.fillStyle = '#FFF6E0'; g.textAlign = 'center'; g.fillText(lab, DW / 2 + 5, 78, lw - 30); g.textAlign = 'start';
+    g.fillStyle = '#FFF6E0'; g.textAlign = 'center'; lines.slice(0, 2).forEach(function (l, i) { g.fillText(l, DW / 2 + 5, 78 + i * 14, lw - 30); }); g.textAlign = 'start';
   };
   // the timing ring: it closes on the plate exactly when the ball arrives. The gold band is the perfect window,
   // the green one the good window (both grow on a hot streak, and with the Magnet Bat).
@@ -1691,7 +1700,7 @@
   Derby.prototype.drawPower = function () {
     var me = this, holding = me.holdT0 != null, c = holding ? me.charge() : me.lastCharge;
     if (!holding && me.relT > 0.7) return;
-    var x = 112 + me.bx, y0 = 470, h = 64, a = holding ? 1 : Math.max(0, 1 - me.relT / 0.7);
+    var x = 118 + me.bx, y0 = 470, h = 64, a = holding ? 1 : Math.max(0, 1 - me.relT / 0.7);
     g.globalAlpha = a; g.fillStyle = 'rgba(20,16,44,.75)'; wallPath(g, x - 7, y0 - h - 4, 14, h + 8, 6); g.fill();
     g.fillStyle = c >= 0.99 ? '#FFE08A' : '#F2A6C0'; g.fillRect(x - 4, y0 - c * h, 8, c * h);
     g.fillStyle = '#FFF6E0'; g.font = '700 9px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText(c >= 0.99 ? 'MAX' : 'POWER', x, y0 + 14); g.textAlign = 'start'; g.globalAlpha = 1;
@@ -1721,9 +1730,10 @@
   // the first few pitches teach one thing each, in a line along the bottom
   Derby.prototype.drawHint = function () {
     var me = this; if (!(me.phase === 'ready' || me.phase === 'windup') || me.n > 3) return;
-    var h = ['Hold Swing to power up. Let go as the ring closes.', 'Step with the arrows: gold marker under the ring.', 'Watch the pitcher. Her tell gives the pitch away.', 'Now read her tell. Try a trick bat too.'][me.n];
-    g.font = '600 11px Lora, Georgia, serif'; var w = Math.min(DW - 20, g.measureText(h).width + 24);
-    g.fillStyle = 'rgba(20,16,44,.7)'; wallPath(g, DW / 2 - w / 2, DH - 28, w, 22, 10); g.fill(); g.fillStyle = '#FFF6E0'; g.textAlign = 'center'; g.fillText(h, DW / 2, DH - 13); g.textAlign = 'start';
+    var h = ['Hold Swing to power up. Let go as the ring closes.', 'Step with the arrows: gold marker under the ring.', 'Watch the pitcher. Her tell gives the pitch away.', 'Now read her tell. Try a corner trick bat too.'][me.n];
+    g.font = '600 11px Lora, Georgia, serif'; var maxW = DW - 2 * CZ - 8, lines = wrapText(h, maxW - 24), w = lines.length > 1 ? maxW : Math.min(maxW, g.measureText(h).width + 24), hh = lines.length > 1 ? 36 : 22;
+    g.fillStyle = 'rgba(20,16,44,.7)'; wallPath(g, DW / 2 - w / 2, DH - 6 - hh, w, hh, 10); g.fill(); g.fillStyle = '#FFF6E0'; g.textAlign = 'center';
+    lines.slice(0, 2).forEach(function (l, i) { g.fillText(l, DW / 2, DH - 6 - hh + 15 + i * 14); }); g.textAlign = 'start';
   };
   Derby.prototype.drawBall = function (x, y, r) {
     g.fillStyle = '#FFFDF6'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
@@ -1735,7 +1745,7 @@
     g.globalAlpha = 1;
   };
   Derby.prototype.drawBoard = function () {
-    var me = this, x = 52, w = DW - 104;
+    var me = this, x = CZ + 4, w = DW - 2 * CZ - 8;   // play21: the four corners stay clear for the trick bats
     g.fillStyle = '#14112C'; wallPath(g, x, 6, w, 50, 10); g.fill(); g.strokeStyle = '#FFE08A'; g.lineWidth = 1.5; g.stroke();
     g.fillStyle = '#FFE08A'; g.font = '700 17px "IBM Plex Mono", monospace'; g.fillText('HR ' + me.score + '/10', x + 12, 29);
     g.fillStyle = '#CFC3F0'; g.font = '600 10px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText('POINTS', x + w / 2 + 6, 19);
@@ -1753,7 +1763,7 @@
     if (me.streak >= 2 && me.phase !== 'done') {
       var s = 'Streak ' + me.streak + ': wider gold window';
       g.font = '700 10px "IBM Plex Mono", monospace'; var sw = g.measureText(s).width + 16;
-      g.fillStyle = 'rgba(255,224,138,.92)'; wallPath(g, DW - sw - 8, 90, sw, 18, 9); g.fill(); g.fillStyle = '#2A2552'; g.fillText(s, DW - sw, 103);
+      g.fillStyle = 'rgba(255,224,138,.92)'; wallPath(g, 8, 206, sw, 18, 9); g.fill(); g.fillStyle = '#2A2552'; g.fillText(s, 16, 219);
     }
   };
   // the pitcher, with her tell before each pitch: a paw scuff (fastball), a slow tail wag (changeup), a head tilt (curve)
@@ -1912,19 +1922,83 @@
     g.fillStyle = '#6B4A22'; g.beginPath(); g.arc(-s, -s * 0.2, s * 0.14, 0, 7); g.arc(s, -s * 0.2, s * 0.12, 0, 7); g.fill();
     g.restore();
   }
-  // the trick-bat buttons under Swing: how many are left, and which one is ready
+  // the trick bats (play21): one large, labeled button in each corner of the field, plus a count under Swing.
+  // Each bat works once a round, three of the four can be used, and a tap on a corner is never a swing.
+  var cbats = null, hintEl = null, hintT = 0;
+  function hexA(h, a) { h = h.replace('#', ''); return 'rgba(' + parseInt(h.substr(0, 2), 16) + ',' + parseInt(h.substr(2, 2), 16) + ',' + parseInt(h.substr(4, 2), 16) + ',' + a + ')'; }
+  function makeCornerBats() {
+    var wrap = $('ar-wrap'); if (!wrap || cbats) return;
+    if (!D.getElementById('ar-cbat-css')) {
+      var st = D.createElement('style'); st.id = 'ar-cbat-css';
+      st.textContent = '.ar-cbat{position:absolute;z-index:2;box-sizing:border-box;width:58px;height:58px;padding:4px 2px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:18px;border:2px solid var(--c);background:rgba(20,16,44,.84);color:#FFF6E0;font:700 12px/1.1 "Lora",Georgia,serif;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;transition:transform .2s,opacity .3s,box-shadow .3s,background-color .2s}' +
+        '.ar-cbat[hidden]{display:none}.ar-cbat.tl{top:4px;left:4px}.ar-cbat.tr{top:4px;right:4px}.ar-cbat.bl{bottom:4px;left:4px}.ar-cbat.br{bottom:4px;right:4px}' +
+        '.ar-cbat-ic{font-size:26px;line-height:1}.ar-cbat-n{font-size:12px}.ar-cbat-k{position:absolute;top:2px;right:5px;font:600 10px "IBM Plex Mono",monospace;color:#CFC3F0}' +
+        '.ar-cbat-s{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);padding:0 5px;border-radius:6px;background:#FFF6E0;color:#2A2552;font:700 9px/14px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}.ar-cbat-s:empty{display:none}' +
+        '.ar-cbat.bl .ar-cbat-s,.ar-cbat.br .ar-cbat-s{bottom:auto;top:-9px}' +
+        '.ar-cbat.is-ready{box-shadow:0 0 14px 3px var(--g)}.ar-cbat:hover{background:rgba(60,50,110,.9)}' +
+        '.ar-cbat.is-on{background:var(--c);color:#2A2552;transform:scale(1.08);box-shadow:0 0 0 3px #FFF6E0,0 0 22px 6px var(--g)}.ar-cbat.is-on .ar-cbat-k{color:#2A2552}' +
+        '.ar-cbat.is-used,.ar-cbat.is-out{opacity:.4;filter:grayscale(.85);box-shadow:none;cursor:default}' +
+        '.ar-cbat:focus-visible{outline:3px solid #fff;outline-offset:2px}' +
+        '.ar-cbat.is-hint{animation:arCbatGlow 1.1s ease-in-out 4}@keyframes arCbatGlow{50%{box-shadow:0 0 0 4px var(--c),0 0 26px 8px var(--g)}}' +
+        '.ar-cbat-hint{position:absolute;left:50%;top:21%;z-index:2;transform:translateX(-50%);width:max-content;max-width:min(64%,20rem);padding:.4rem .9rem;border-radius:16px;background:rgba(255,224,138,.96);color:#2A2552;font:700 14px/1.3 "Lora",Georgia,serif;text-align:center;pointer-events:none;box-shadow:0 4px 14px rgba(20,16,44,.35);transition:opacity .4s}' +
+        '.ar-cbat-hint[hidden]{display:none}.ar-cbat-hint.is-gone{opacity:0}' +
+        '@media (prefers-reduced-motion: reduce){.ar-cbat,.ar-cbat-hint{transition:none}.ar-cbat.is-hint{animation:none}.ar-cbat.is-on{transform:none}}' +
+        'html.tol-still .ar-cbat,html.tol-still .ar-cbat-hint{transition:none}html.tol-still .ar-cbat.is-hint{animation:none}html.tol-still .ar-cbat.is-on{transform:none}';
+      (D.head || D.documentElement).appendChild(st);
+    }
+    var before = $('ar-overlay'); cbats = {};
+    TRICK_ORDER.forEach(function (kind, i) {
+      var T = TRICK[kind], b = D.createElement('button');
+      b.type = 'button'; b.className = 'ar-cbat ' + BAT_CORNER[kind]; b.setAttribute('data-cbat', kind); b.setAttribute('aria-pressed', 'false'); b.hidden = true;
+      b.style.setProperty('--c', T.col); b.style.setProperty('--g', hexA(T.col, 0.55));
+      b.innerHTML = '<span class="ar-cbat-ic" aria-hidden="true">' + T.icon + '</span><span class="ar-cbat-n" aria-hidden="true">' + T.name.replace(' Bat', '') + '</span><span class="ar-cbat-s" aria-hidden="true"></span><span class="ar-cbat-k" aria-hidden="true">' + (i + 1) + '</span>';
+      b.addEventListener('click', function () {
+        if (!running || paused || !game || !game.arm) return;
+        game.arm(kind);   // a used bat answers with a short "used up" note in the status line
+        try { wrap.focus({ preventScroll: true }); } catch (er) { /* ignore */ }
+      });
+      if (before && before.parentNode === wrap) wrap.insertBefore(b, before); else wrap.appendChild(b);
+      cbats[kind] = b;
+    });
+    hintEl = D.createElement('p'); hintEl.className = 'ar-cbat-hint'; hintEl.hidden = true; hintEl.setAttribute('aria-hidden', 'true');
+    hintEl.textContent = 'Tap a bat in a corner to use it';
+    if (before && before.parentNode === wrap) wrap.insertBefore(hintEl, before); else wrap.appendChild(hintEl);
+    // the old row under Swing becomes a short count; the bats themselves live in the corners now
+    var row = D.querySelector('#ar-bats .ar-bats-row'); if (row) row.style.display = 'none';
+  }
+  // the "Tap a bat in a corner" hint at the start of a round (it goes once a bat is picked, or after a few seconds)
+  function batHint(on) {
+    makeCornerBats(); if (!hintEl) return;
+    clearTimeout(hintT);
+    Object.keys(cbats || {}).forEach(function (k) { cbats[k].classList.toggle('is-hint', !!on && !reduced); });
+    if (on) {
+      hintEl.hidden = false; hintEl.classList.remove('is-gone');
+      hintT = setTimeout(function () { batHint(false); }, 5000);
+    } else if (!hintEl.hidden) {
+      hintEl.classList.add('is-gone'); hintT = setTimeout(function () { hintEl.hidden = true; }, reduced ? 0 : 420);
+    }
+  }
+  // how far in each corner stays clear, in field units, for the size the field is drawn at (58px buttons, 4px in)
+  function cornerZone() { var cv0 = $('ar-cv'), r = cv0 && cv0.getBoundingClientRect(); if (r && r.width > 40) CZ = clamp(Math.ceil(66 / (r.width / DW)), 80, 100); }
   function syncBats() {
-    var box = $('ar-bats'); if (!box) return;
+    makeCornerBats(); cornerZone();
+    var box = $('ar-bats');
     var dg = game && game instanceof Derby ? game : null;
-    box.hidden = !dg;
-    if (!dg) return;
-    var left = dg.bats(), n = $('ar-bats-n'); if (n) n.textContent = left === 1 ? '1 left' : left + ' left';
+    if (box) box.hidden = !dg;
+    Object.keys(cbats || {}).forEach(function (k) { cbats[k].hidden = !dg; });
+    if (!dg) { if (hintEl) { clearTimeout(hintT); hintEl.hidden = true; } return; }
+    var left = dg.bats(), n = $('ar-bats-n'); if (n) n.textContent = (left === 1 ? '1 left' : left + ' left') + ', in the corners';
     var ic = $('ar-bats-ic'); if (ic) ic.textContent = '🏏'.repeat(left) + '·'.repeat(3 - left);
-    Array.prototype.forEach.call(box.querySelectorAll('[data-bat]'), function (b) {
-      var k = b.getAttribute('data-bat'), on = dg.trick === k;
+    TRICK_ORDER.forEach(function (k, i) {
+      var b = cbats && cbats[k]; if (!b) return;
+      var T = TRICK[k], on = dg.trick === k, used = !!(dg.usedBats && dg.usedBats[k]), out = !on && !used && left <= 0;
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      b.classList.toggle('is-on', on);
-      b.disabled = !on && left <= 0;
+      b.classList.toggle('is-on', on); b.classList.toggle('is-used', used); b.classList.toggle('is-out', out);
+      b.classList.toggle('is-ready', !on && !used && !out);
+      // used bats stay focusable (aria-disabled) so a keyboard user can still find them and hear why
+      if (used || out) b.setAttribute('aria-disabled', 'true'); else b.removeAttribute('aria-disabled');
+      var st = b.querySelector('.ar-cbat-s'); if (st) st.textContent = on ? 'Ready' : used ? 'Used' : '';
+      b.setAttribute('aria-label', T.name + ', key ' + (i + 1) + ': ' + T.note.replace(/\.$/, '') + '. ' + (on ? 'Ready for your next swing. Press again to put it back.' : used ? 'Used this round.' : out ? 'No trick bats left this round.' : left + ' of 3 left this round.'));
     });
   }
   // Play again, or swap roles (the pitcher bats): straight back to the first pitch
@@ -2097,7 +2171,7 @@
     bricks: { name: 'Bubble Break', make: function (w) { return new Bricks(w); }, hint: 'Bounce the bubble into the Static. Up or a tap above the pup sends it off; a miss just floats back.', keys: 'lur', up: 'Send the bubble', help: 'Left and right (or drag along the field) move the cushion; up or a tap above the pup sends the bubble. P pauses, M mutes.' },
     shower: { name: 'Treat Shower', make: function (w) { return new Catch(w); }, hint: 'Catch the treats in the basket. A raindrop is only a little drip on the nose.', keys: 'lr', help: 'Left and right, or drag along the field, move the basket. P pauses, M mutes.' },
     derby: { name: 'Home Run Derby', make: function (w) { return new Derby(w); }, hint: 'Ten pitches. Hold Swing to power up and let go as the ring closes on the plate.', keys: 'lr', left: 'Step away from the plate', right: 'Step toward the plate', swing: true, labels: ['Home runs', 'Pitch', 'Best'],
-      aria: 'Home Run Derby game. Hold space, Enter or up to power up and let go to swing. Left and right step. 1 to 4 pick a trick bat. P pauses, M for sound.', help: 'Hold Swing (or a finger on the field, or space) to power up, and let go as the ring closes on the plate. Left and right step, so the gold marker sits under the ring. 1 to 4 pick a trick bat. P pauses, M mutes.' }
+      aria: 'Home Run Derby game. Hold space, Enter or up to power up and let go to swing. Left and right step. 1 to 4 pick a trick bat (they sit in the four corners). P pauses, M for sound.', help: 'Hold Swing (or a finger on the field, or space) to power up, and let go as the ring closes on the plate. Left and right step, so the gold marker sits under the ring. Tap a trick bat in a corner of the field (or press 1 to 4) before a pitch. P pauses, M mutes.' }
   };
 
   /* ---------- the menu and the stage ---------- */
@@ -2180,7 +2254,7 @@
     try { window.scrollTo({ top: Math.max(0, top), behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, Math.max(0, top)); }
   }
   var fitT = 0;
-  function onResize() { clearTimeout(fitT); fitT = setTimeout(function () { if (running) fitStage(); }, 120); }
+  function onResize() { clearTimeout(fitT); fitT = setTimeout(function () { if (running) { fitStage(); cornerZone(); } }, 120); }
   function backToMenu() {
     clearIsm(); recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop(); gaming(false); syncBats();
     $('ar-overlay').hidden = true; $('ar-stage').hidden = true; $('ar-select').hidden = false; $('ar-wrap').style.width = '';
