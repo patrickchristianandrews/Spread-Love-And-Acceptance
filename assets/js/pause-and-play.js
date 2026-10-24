@@ -66,7 +66,20 @@
     ['/bears-dojo.html', 'the Bears Dojo', 'wander the garden with the two bears for a minute or two']
   ], lastPick = -1;
   var pickBtn = document.getElementById('pp-pick'), pickOut = document.getElementById('pp-pick-out');
+  // one switch for the sound effects in every game (game-sfx.js), kept on this device; calm and quiet here
+  var SFX = window.TOLSfx;
+  if (SFX) {
+    SFX.calm(true);
+    var note = document.querySelector('.pp-quick-note');
+    if (note) {
+      var row = document.createElement('p'); row.className = 'pp-sfx-row';
+      SFX.button({ className: 'pp-quick-btn', label: 'Game sounds', parent: row });
+      row.appendChild(document.createTextNode(' One switch for the soft sound effects in every game. It stays on this device.'));
+      note.parentNode.insertBefore(row, note.nextSibling);
+    }
+  }
   if (pickBtn && pickOut) pickBtn.addEventListener('click', function () {
+    if (SFX) SFX.play('flip');
     var i; do { i = Math.floor(Math.random() * PICKS.length); } while (i === lastPick && PICKS.length > 1);
     lastPick = i; var k = PICKS[i];
     pickOut.innerHTML = '<strong>' + esc(k[1]) + ':</strong> ' + esc(k[2]) + '. Two minutes is plenty, and stopping is fine. <a href="' + k[0] + '">Go to ' + esc(k[1]) + ' &rarr;</a>';

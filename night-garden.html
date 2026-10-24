@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-es>
+<html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
@@ -57,8 +57,24 @@
   .ng-stage.is-play #ng-canvas{ touch-action:none; }
   .ng-card{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:1rem; background:rgba(16,18,38,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
   .ng-card[hidden]{ display:none; }
+  /* flow17: a card always fits the screen you can see (a short laptop screen, big text): fixed to the window, with
+     its own scroll, so "Got it" is never below the edge */
+  .ng-card{ position:fixed; z-index:950; }
   .ng-card{ overflow:hidden; }
   .ng-card > div{ max-height:calc(100% - .5rem); overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y; -webkit-overflow-scrolling:touch; }
+  /* sfx20: the welcome and the goodbye cards are part of the garden, not dialogs: they sit inside it and scroll away
+     with the page, and a swipe that reaches the end of a card carries on scrolling the page */
+  #ng-welcome, #ng-close{ position:absolute; z-index:5; }
+  #ng-welcome > div, #ng-close > div{ overscroll-behavior:auto; }
+  /* while the welcome shows, the garden grows to fit it, so the welcome never needs a scroll of its own:
+     the page simply scrolls (night-garden.js adds .is-welcome) */
+  #ng-stage.is-welcome{ height:auto; min-height:calc(100vh - var(--tol-bar-h, 64px)); min-height:calc(100dvh - var(--tol-bar-h, 64px)); }
+  #ng-stage.is-welcome #ng-welcome{ position:relative; inset:auto; min-height:inherit; }
+  #ng-stage.is-welcome #ng-welcome > div{ max-height:none; overflow:visible; }
+  /* phones: the garden leaves a strip of the page showing below it, so a finger can always scroll on past it
+     (only "Full screen", which you choose, fills the whole screen) */
+  @media (max-width:560px){ html:not(.ng-full) .ng-stage{ height:calc(100vh - var(--tol-bar-h, 64px) - 4.5rem); height:calc(100dvh - var(--tol-bar-h, 64px) - 4.5rem); min-height:460px; }
+    html:not(.ng-full) #ng-stage.is-welcome{ min-height:calc(100vh - var(--tol-bar-h, 64px) - 4.5rem); min-height:calc(100dvh - var(--tol-bar-h, 64px) - 4.5rem); } }
   .ng-card > div{ max-width:32rem; text-align:center; background:rgba(42,45,82,.88); border:1px solid rgba(244,241,250,.2); border-radius:24px; padding:1.8rem 1.6rem; box-shadow:0 20px 60px rgba(0,0,0,.35); }
   .ng-card h2{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1.8rem; margin:0 0 .6rem; color:#FFF6E0; }
   .ng-card p{ margin:0 0 1rem; color:#DCD6F0; line-height:1.6; }
@@ -133,16 +149,6 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/night-garden.js" defer></script>
-<script>
-/* En español: /night-garden.html?lang=es (the link on the Spanish page), or arriving from /en-espanol.html, makes this
-   a Spanish page: lang="es" on <html>, set here before site.js and night-garden.js run. site.js then puts the bar,
-   menu, footer and Settings in Spanish, and night-garden.js writes every word of the garden in Spanish. */
-(function () {
-  var es = /[?&]lang=es\b/.test(location.search);
-  try { if (!es && /\/en-espanol\.html/.test(document.referrer || '')) es = true; } catch (e) {}
-  if (es) document.documentElement.setAttribute('lang', 'es');
-})();
-</script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/night-garden.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/night-garden.html">

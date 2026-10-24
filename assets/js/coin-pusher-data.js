@@ -77,7 +77,7 @@
     { id: 'bunny', name: 'The Night Garden bunny', emo: '🐰', ring: '#D9B8C4', home: '/night-garden.html', where: 'The Night Garden', line: 'Spins, leaps and flops an ear when you say hello.' },
     { id: 'hedgehog', name: 'The Night Garden hedgehog', emo: '🦔', ring: '#A88F72', home: '/night-garden.html', where: 'The Night Garden', line: 'Snug in its burrow under the flowers.' },
     { id: 'bear', name: 'Your Dojo bear', emo: '🐻', ring: '#A9744A', home: '/bears-dojo.html', where: 'The Bears Dojo', line: 'The bear you build waits by the gate of the temple garden.' },
-    { id: 'kip', name: 'Kip the Paperclip', emo: '📎', ring: '#9DB0BF', home: '/whats-new.html', where: 'What’s new', line: 'Sits by the Share buttons. Tap him for a trick: a dance, a spin, a heart.' },
+    { id: 'kip', name: 'The fireflies', emo: '✨', ring: '#E9D27A', home: '/night-garden.html', where: 'The Night Garden', line: 'Little lights that blink on one by one when the garden gets dark.' },
     { id: 'peach', name: 'Peach', emo: '', draw: 'peach', ring: '#F2A98A', home: '/brand.html', where: 'Our logo', line: 'The round one in the logo. Shares one heart with Lilac.' },
     { id: 'lilac', name: 'Lilac', emo: '', draw: 'lilac', ring: '#B9A2D9', home: '/brand.html', where: 'Our logo', line: 'The squishy square one in the logo, because nobody is wired quite the same.' },
     { id: 'grumble', name: 'Grumble', emo: '', draw: 'cloud', col: '#9FA8C9', ring: '#9FA8C9', home: '/frequency-journey.html', where: 'Treat Chase, in the Arcade', line: 'A little cloud of Static. A golden heart turns him into bubbles.' },

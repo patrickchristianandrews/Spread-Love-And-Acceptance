@@ -91,7 +91,7 @@
   function has(p) { return !!ON[p]; }
 
   // ---------------------------------------------------------------- the site's own Settings keys each preference presets
-  var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
+  var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound', 'tol-sfx'];
   // → { key: value } (null = remove the key)
   function settingsFor(prefs) {
     var s = {}, on = {}; prefs.forEach(function (p) { on[p] = 1; });

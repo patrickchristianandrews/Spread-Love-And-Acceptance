@@ -1579,9 +1579,6 @@
     addTip(body);
     placeShare(body);
     loadScript('/assets/js/share-kit.js').catch(function () {}); // more places, QR, save as image, share this line
-    // Kip stays away from careful reading: not with Easy reading, larger text, a still page, hidden helpers or on the working pages
-    var kipOk = !helpersHidden() && !WORKSPACE.test(current) && !/\btol-(easy|still|text-(lg|xl|xxl))\b/.test(document.documentElement.className);
-    if (kipOk && !esPage() && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
     revealOnScroll();
 
     // The Night Garden, softly alive behind every page, under a see-through veil.
@@ -3350,6 +3347,8 @@
   // ---------- Things drift softly into place as you scroll to them ----------
   function revealOnScroll() {
     if (!('IntersectionObserver' in window) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    // owner, Oct 22: reading pages (the book, guides, the library) show everything at once, so a fast scroll never meets blank space
+    if (document.documentElement.classList.contains('tol-bookview') || document.querySelector('main.read')) return;
     var items = document.querySelectorAll('main .ideas > li, main .scene, main .try-this, main .tol-tip, main .tt-card, main .tt-week-wrap, main .track-card, main .live-card, main .off-list li, main .tol-welcome');
     if (!items.length) return;
     var io = new IntersectionObserver(function (entries) {
@@ -3359,7 +3358,7 @@
         setTimeout(function () { el.classList.add('is-in'); }, delay);
         io.unobserve(el);
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    }, { rootMargin: '0px 0px 15% 0px', threshold: 0 });
     Array.prototype.forEach.call(items, function (el, i) {
       // anything already on screen when the page opens just appears, so nothing flickers
       var r = el.getBoundingClientRect(); if (r.top < window.innerHeight * 0.9) return;
@@ -4070,7 +4069,7 @@
       TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', BUB_KEY = 'tol-nobubbles', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev',
       CONTRAST_KEY = 'tol-contrast';
   // the sound switches the pal cam and the games keep for themselves
-  var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
+  var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound', 'tol-sfx'];
   // the Spanish page gets the Settings panel in Spanish: T('English', 'Español')
   // (a function, so the bar and menu can use it too, wherever they're built)
   // (home16b: a tool opened in Spanish with ?lang=es counts too, so its bar, menu and footer are in Spanish)

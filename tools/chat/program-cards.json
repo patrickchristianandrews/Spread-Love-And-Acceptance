@@ -18000,10 +18000,8 @@
     {
       "id": "kipshare",
       "kind": "tool",
-      "name": "sharing and Kip the Paperclip",
+      "name": "sharing a page",
       "keys": [
-        "kip",
-        "paperclip",
         "share this page",
         "share a page",
         "share this chapter",
@@ -18015,19 +18013,17 @@
         "send a link",
         "pass it on"
       ],
-      "what": "You can share almost any page with the Share button near the end of it. On a phone it opens your own share menu; on a computer a small panel offers Copy link, Text, Email and a few social links. Tools share only their link, never what you typed. Your own results (like your Wave Code, your statement or your Lemonade Stand summary) are shared only when you tap Share. The cute lavender paperclip on the button is Kip: tap him for a trick, and he dances when something gets shared.",
+      "what": "You can share almost any page with the Share button near the end of it. On a phone it opens your own share menu; on a computer a small panel offers Copy link, Text, Email and a few social links. Tools share only their link, never what you typed. Your own results (like your Wave Code, your statement or your Lemonade Stand summary) are shared only when you tap Share.",
       "how": [
-        "Scroll to the end of the page and tap Share (Kip sits on the button).",
+        "Scroll to the end of the page and tap Share.",
         "Pick your app, or tap Copy link and paste it anywhere.",
-        "To share a result, use the Share button right next to it, like “Share my Wave Code”.",
-        "Tap Kip himself for a trick: a dance, a spin, a heart shape, a cartwheel and more.",
-        "Don’t want Kip? Turn him off in Settings (“Show Kip the Paperclip”) or with Hide the helpers."
+        "To share a result, use the Share button right next to it, like “Share my Wave Code”."
       ],
       "pillar": "Sharing opens your own app. Nothing is sent from this site.",
       "chips": [
         [
-          "What tricks can Kip do?",
-          "What tricks can Kip the paperclip do?"
+          "Can I share my results?",
+          "How do I share my results?"
         ],
         [
           "Is sharing private?",
@@ -18036,7 +18032,7 @@
       ],
       "links": [
         [
-          "What’s new: meet Kip",
+          "What’s new",
           "/whats-new.html"
         ]
       ],

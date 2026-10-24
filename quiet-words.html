@@ -36,6 +36,10 @@
   .qw-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#8A6D8F; }
   .qw-theme{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.4rem; color:var(--ink); margin:0; }
   .qw-board{ position:relative; width:min(100%, 30rem); margin:0 auto; touch-action:none; user-select:none; -webkit-user-select:none; }
+  /* a finished puzzle is only to look at: a swipe on it scrolls the page again */
+  .is-done .qw-board{ touch-action:manipulation; }
+  /* phones: a little more room beside the letters, so a finger can scroll the page there while a puzzle is in play */
+  @media (max-width:480px){ .qw-board{ width:calc(100% - 1.5rem); } }
   .qw-marks{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
   .qw-marks line{ opacity:.8; }
   .qw-found-mark{ animation:qw-in .6s var(--ease-out, ease) both; }
@@ -86,6 +90,7 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/game-levels.js" defer></script>
+<script src="/assets/js/game-sfx.js" defer></script>
 <script src="/assets/js/quiet-words.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/quiet-words.html">
