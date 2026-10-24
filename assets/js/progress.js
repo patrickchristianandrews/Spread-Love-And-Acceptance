@@ -91,7 +91,7 @@
     ['tol-recheck-drive-v1', 'drive'], ['tol-rulebook', 'rules'], ['tol-pause-plan-v1', 'pause'], ['tol-household-v1', 'house'],
     ['cwd-v1', 'cwd'], ['cwd-consent', 'cwdset'], ['tol-tt-', 'tt'], ['tol-letters', 'letters'], ['tol-family-plan', 'family'],
     ['tol-our-week', 'week'], ['tol-ctx-people', 'ctx'], ['tol-selfpath-v1', 'self'], ['tol-mv-maker-v1', 'mv'],
-    ['tol-take-in', 'takein'], ['tol-progress-v1', 'reading'], ['tol-come-back-v1', 'reading'], ['tol-reading-v1', 'reading'],
+    ['tol-take-in', 'takein'], ['tol-progress-v1', 'reading'], ['tol-come-back-v1', 'reading'], ['tol-return-v1', 'reading'], ['tol-reading-v1', 'reading'],
     ['tol-focus', 'reading'], ['tol-mode-v1', 'reading'], ['tol-bb-last', 'reading'], ['tol-booktopic-v', 'reading'],
     ['tol-night-garden-v1', 'garden'], ['tol-garden-gifts', 'garden'], ['tol-learnplay-v1', 'games'], ['tol-rewards-v1', 'games'],
     ['tol-levels-', 'games'], ['tol-arcade-v1', 'games'], ['tol-journey-v1', 'games'], ['tol-bloom-', 'games'], ['tol-xw-', 'games'],
