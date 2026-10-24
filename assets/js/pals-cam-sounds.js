@@ -72,7 +72,7 @@
     s.playbackRate.value = /^bark/.test(group) ? 1 : 0.98 + Math.random() * 0.04; // barks exactly as recorded
     // every sound eases in over a few milliseconds (no instant jump in level), and the sharp ones are softened
     var at = now + 0.02 + (delay || 0), lv = vol == null ? 1 : vol;
-    g.gain.setValueAtTime(0.0001, at); g.gain.linearRampToValueAtTime(lv * (SHARP[group] ? 0.8 : 1), at + (SHARP[group] ? 0.012 : 0.006));
+    g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, at); g.gain.linearRampToValueAtTime(lv * (SHARP[group] ? 0.8 : 1), at + (SHARP[group] ? 0.012 : 0.006));
     s.connect(g); g.connect(SHARP[group] && soft ? soft : out); s.start(at);
     lastAt = now + (delay || 0); lastName = name; nextAmb = Math.max(nextAmb, clockMs + 6000);
     return true;

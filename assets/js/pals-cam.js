@@ -615,7 +615,7 @@
       try { if (c.state === 'suspended') c.resume(); } catch (e) {}
       var g0 = c.createGain(), t0 = c.currentTime + 0.05; g0.connect(c.destination);
       // a short fade in (picking the song up partway would otherwise start mid-wave, with a click)
-      g0.gain.setValueAtTime(0.0001, t0); g0.gain.linearRampToValueAtTime(0.9, t0 + (from > 0.05 ? 0.25 : 0.02));
+      g0.gain.value = 0.0001; g0.gain.setValueAtTime(0.0001, t0); g0.gain.linearRampToValueAtTime(0.9, t0 + (from > 0.05 ? 0.25 : 0.02));
       var src = c.createBufferSource(); src.buffer = AD.buf; src.connect(g0); src.start(t0, Math.max(0, from || 0));
       AD.src = src; AD.gain = g0; AD.songAt = t0 - Math.max(0, from || 0);
     },

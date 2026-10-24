@@ -97,7 +97,7 @@
   }
   function aT(T) { return T + A.off; } // the page clock (T) to the audio clock
   function syncClock() { if (A.c) A.off = A.c.currentTime - S.T; }
-  function ramp(p, t, peak, a, hold, r) { p.setValueAtTime(0.0001, t); p.linearRampToValueAtTime(peak, t + a); p.setValueAtTime(peak, t + a + hold); p.linearRampToValueAtTime(0.0001, t + a + hold + r); }
+  function ramp(p, t, peak, a, hold, r) { p.value = 0.0001; p.setValueAtTime(0.0001, t); p.linearRampToValueAtTime(peak, t + a); p.setValueAtTime(peak, t + a + hold); p.linearRampToValueAtTime(0.0001, t + a + hold + r); }
   // one breath: the snore on the way in, a faint puff on the way out
   function breathSound(pal, b) {
     if (!A.c || !pal.au || !S.snore || S.ended) return;
@@ -130,7 +130,7 @@
     var now = c.currentTime;
     if (A.bedNodes) { var old = A.bedNodes; old.g.gain.cancelScheduledValues(now); old.g.gain.setValueAtTime(Math.max(0.0001, old.g.gain.value), now); old.g.gain.linearRampToValueAtTime(0.0001, now + 1.5); setTimeout(function () { try { old.s.stop(); } catch (e) {} }, 1800); A.bedNodes = null; }
     if (kind === 'off') return;
-    var gn = c.createGain(); gn.gain.setValueAtTime(0.0001, now); gn.connect(A.bed);
+    var gn = c.createGain(); gn.gain.value = 0.0001; gn.gain.setValueAtTime(0.0001, now); gn.connect(A.bed);
     var lv = 0.3, src;
     if (kind === 'rain') {
       if (!A.rain) { loadRain(); }
@@ -194,7 +194,7 @@
     woof: function (id) {
       var c = A.c, b = A.barks[id]; if (!c || !b || b === 'loading' || S.ended) return;
       var s = c.createBufferSource(), lp = c.createBiquadFilter(), gn = c.createGain(), t = c.currentTime + 0.02; s.buffer = b; s.playbackRate.value = 0.9;
-      lp.type = 'lowpass'; lp.frequency.value = 650; s.connect(lp); lp.connect(gn); gn.connect(A.sfx); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(0.16, t + 0.02); s.start(t);
+      lp.type = 'lowpass'; lp.frequency.value = 650; s.connect(lp); lp.connect(gn); gn.connect(A.sfx); gn.gain.value = 0.0001; gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(0.16, t + 0.02); s.start(t);
     }
   };
 

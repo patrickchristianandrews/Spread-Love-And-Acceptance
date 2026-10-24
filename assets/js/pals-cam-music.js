@@ -72,7 +72,7 @@
     return A;
   }
   function env(g, t, a, peak, hold, rel) {
-    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + a);
+    g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + a); // silent until the note starts
     g.gain.setValueAtTime(peak, t + a + hold); g.gain.exponentialRampToValueAtTime(0.0001, t + a + hold + rel);
   }
   // ---------- the instruments ----------

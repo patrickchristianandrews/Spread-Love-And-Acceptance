@@ -133,7 +133,7 @@
   }
   function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
   // every sound starts and ends on a smooth envelope (no clicks)
-  function env(p, t, peak, a, d) { p.setValueAtTime(0.0001, t); p.linearRampToValueAtTime(peak, t + a); p.exponentialRampToValueAtTime(0.0001, t + a + d); }
+  function env(p, t, peak, a, d) { p.value = 0.0001; p.setValueAtTime(0.0001, t); p.linearRampToValueAtTime(peak, t + a); p.exponentialRampToValueAtTime(0.0001, t + a + d); }
   // schedule the whole trailer from time `from` (seconds into it) onto context c, at context time `at`
   function schedule(c, out, from, at, bufs) {
     var bed = c.createGain(), vox = c.createGain(); bed.gain.value = 0.0001; vox.gain.value = 1; bed.connect(out); vox.connect(out);
@@ -151,7 +151,7 @@
         var end = e.t + Math.min(e.len, b.duration - e.off); if (end <= from) return;
         var into = Math.max(0, from - e.t), t = NOW(e.t + into), s = c.createBufferSource(), g = c.createGain(); s.buffer = b;
         var fin = into > 0 ? 0.12 : (e.fin || 0.01), fout = e.fout || 0.04, len = end - (e.t + into);
-        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(e.vol, t + fin); g.gain.setValueAtTime(e.vol, t + Math.max(fin, len - fout)); g.gain.linearRampToValueAtTime(0.0001, t + len);
+        g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(e.vol, t + fin); g.gain.setValueAtTime(e.vol, t + Math.max(fin, len - fout)); g.gain.linearRampToValueAtTime(0.0001, t + len);
         s.connect(g); g.connect(vox); s.start(t, e.off + into); s.stop(t + len + 0.05);
         return;
       }
@@ -163,7 +163,7 @@
         case 'hat': o = c.createBufferSource(); o.buffer = nb; f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 7000; g2 = c.createGain(); env(g2.gain, tt, 0.13 * (e.v || 1), 0.003, 0.05); o.connect(f); f.connect(g2); g2.connect(bed); o.start(tt, Math.random() * 0.5); o.stop(tt + 0.09); break;
         case 'bass': o = c.createOscillator(); o.type = 'triangle'; o.frequency.value = hz(e.f); g2 = c.createGain(); env(g2.gain, tt, 0.5, 0.01, e.len); o.connect(g2); g2.connect(bed); o.start(tt); o.stop(tt + e.len + 0.05); break;
         case 'stab': e.ch.forEach(function (m, i) { var oo = c.createOscillator(), gg = c.createGain(); oo.type = i ? 'sine' : 'triangle'; oo.frequency.value = hz(m + 12); env(gg.gain, tt, 0.16, 0.006, e.len); oo.connect(gg); gg.connect(bed); oo.start(tt); oo.stop(tt + e.len + 0.05); }); break;
-        case 'whoosh': o = c.createBufferSource(); o.buffer = nb; f = c.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.1; f.frequency.setValueAtTime(350, tt); f.frequency.exponentialRampToValueAtTime(3200, tt + 0.42); g2 = c.createGain(); g2.gain.setValueAtTime(0.0001, tt); g2.gain.linearRampToValueAtTime(0.16, tt + 0.22); g2.gain.linearRampToValueAtTime(0.0001, tt + 0.5); o.connect(f); f.connect(g2); g2.connect(out); o.start(tt, Math.random() * 0.4); o.stop(tt + 0.55); break;
+        case 'whoosh': o = c.createBufferSource(); o.buffer = nb; f = c.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.1; f.frequency.setValueAtTime(350, tt); f.frequency.exponentialRampToValueAtTime(3200, tt + 0.42); g2 = c.createGain(); g2.gain.value = 0.0001; g2.gain.setValueAtTime(0.0001, tt); g2.gain.linearRampToValueAtTime(0.16, tt + 0.22); g2.gain.linearRampToValueAtTime(0.0001, tt + 0.5); o.connect(f); f.connect(g2); g2.connect(out); o.start(tt, Math.random() * 0.4); o.stop(tt + 0.55); break;
         case 'hit': o = c.createOscillator(); g2 = c.createGain(); o.frequency.setValueAtTime(90, tt); o.frequency.exponentialRampToValueAtTime(40, tt + 0.5); env(g2.gain, tt, 0.5, 0.006, 0.7); o.connect(g2); g2.connect(out); o.start(tt); o.stop(tt + 0.8); break;
         case 'shimmer': [72, 76, 79, 84, 88].forEach(function (m, i) { var oo = c.createOscillator(), gg = c.createGain(), t2 = tt + i * 0.11; oo.frequency.value = hz(m); env(gg.gain, t2, 0.05, 0.005, 1.1); oo.connect(gg); gg.connect(out); oo.start(t2); oo.stop(t2 + 1.2); }); break;
       }
