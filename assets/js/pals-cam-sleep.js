@@ -45,14 +45,15 @@
   }
 
   // ------------------------------------------------------------------ the pals
-  var HOME = { tidbit: { dx: -27, face: 1 }, sugarfoot: { dx: 27, face: -1 } };
+  var PS = 1.3; // the pals' size in the room
+  var HOME = { tidbit: { dx: -52, face: 1 }, sugarfoot: { dx: 52, face: -1 } };
   function newPal(id) { return { id: id, look: id === 'tidbit' ? 'collar' : 'drop', homeDx: HOME[id].dx, face: HOME[id].face, x: 0, y: 0, pose: 'lie', rot: 0, lift: 0, ph: 0, tilt: 0, blink: true, carry: false, side: false, sy: 1, asleep: true, breaths: [], nextB: 0, period: id === 'tidbit' ? 3.9 : 4.9, eyeOpen: 0, star: 0 }; }
   var PALS = { tidbit: newPal('tidbit'), sugarfoot: newPal('sugarfoot') };
 
   // ------------------------------------------------------------------ state
   var S = { on: false, t0: 0, T: 0, last: 0, raf: 0, calm: calmNow(), ev: null, nextEv: 0, lastType: '', zs: [], cx: 320, LW: 640,
     timerMin: 0, timerEnd: 0, ending: 0, ended: false, dim: true, bed: 'off', snore: true, wake: true, lock: null, fps: 30, sinceDraw: 0,
-    fridge: 0, fridgeLight: 0, boneFloor: 0, boneLeft: 0, bubble: null, bump: null };
+    fridge: 0, fridgeLight: 0, boneFloor: 0, boneLeft: 0, bubble: null, bump: null, lay: { couch: -232, fridge: 186, bowl: 140, light: 100, shift: 0 } };
   var cv = null, g = null, W = 0, H = 0, DPR = 1, geo = null;
 
   // ------------------------------------------------------------------ audio
@@ -234,7 +235,7 @@
     var ev = S.ev; if (!ev) return;
     var p = PALS[ev.who], o = PALS[ev.who === 'tidbit' ? 'sugarfoot' : 'tidbit'], u = (S.T - ev.t0) / ev.k, hx = homeX(p);
     p.asleep = true; p.pose = 'lie'; p.rot = 0; p.lift = 0; p.side = false; p.tilt = 0; p.carry = false; p.x = hx; p.sy = 1; p.blink = true;
-    var fridgeX = S.cx + 152, bowlX = S.cx + 104, couchX = S.cx - 112;
+    var fridgeX = S.cx + S.lay.fridge - 8, bowlX = S.cx + S.lay.bowl, couchX = S.cx + S.lay.couch + 96;
     switch (ev.type) {
       case 'fridge': {
         p.asleep = u < 1 || u > 21;
@@ -286,7 +287,8 @@
       case 'kick': {
         // a dream: on her side, paws paddling, a muffled little "boof", and a dream bubble with a ball in it
         var on = sio(seg(u, 0.2, 0.9)) * (1 - sio(seg(u, 5, 5.8)));
-        p.side = on > 0.5; p.rot = on * (p.face > 0 ? -1.35 : 1.35); p.pose = on > 0.5 ? 'run' : 'lie'; p.ph = u * 13; p.lift = on * 4;
+        // still lying down, but her legs run in place (squashed low, nose down) while she dreams
+        p.side = on > 0.5; p.pose = on > 0.5 ? 'run' : 'lie'; p.ph = u * (S.calm ? 8 : 13); p.sy = on > 0.5 ? 0.74 : 1; p.rot = on > 0.5 ? 0.08 * p.face : 0; p.lift = on > 0.5 ? -3 : 0;
         S.bubble = on > 0.3 ? { who: p.id, a: on, t: u } : null;
         if (u > 2.2 && once(ev, 'w')) SFX.woof(p.id);
         if (u > 3.6 && Math.random() < 0.5 && once(ev, 'w2')) SFX.woof(p.id);
@@ -294,7 +296,7 @@
       }
       case 'snuggle': {
         // scoots in closer to her pal (or back out a little, if they're already close)
-        if (!ev.to) { var gap = Math.abs(homeX(o) - hx); ev.to = gap > 44 ? p.homeDx + (p.homeDx < 0 ? 9 : -9) : HOME[p.id].dx; ev.from = p.homeDx; }
+        if (!ev.to) { var gap = Math.abs(homeX(o) - hx); ev.to = gap > 96 ? p.homeDx + (p.homeDx < 0 ? 9 : -9) : HOME[p.id].dx; ev.from = p.homeDx; }
         var q = sio(seg(u, 0.8, 4.2)); p.homeDx = mix(ev.from, ev.to, q); p.x = homeX(p); p.lift = Math.sin(q * Math.PI * 4) * 1.2;
         if (once(ev, 'ru')) SFX.rustle();
         break;
@@ -329,8 +331,21 @@
 
   // ------------------------------------------------------------------ painting the room
   function geoFor(w, h) {
-    var lw = clamp(w / h * LH, 380, 640), k = Math.min(w / lw, h / LH), ox = (w - lw * k) / 2, oy = (h - LH * k) * 0.55;
+    var lw = clamp(w / h * LH, 330, 640), k = Math.min(w / lw, h / LH), ox = (w - lw * k) / 2, oy = (h - LH * k) * 0.55;
     return { LW: lw, k: k, ox: ox, oy: oy, x0: -ox / k, x1: (w - ox) / k, y0: -oy / k, y1: (h - oy) / k };
+  }
+  // where things stand, from the middle of the room: roomy on a wide screen, closer together on a phone held upright
+  function layout(lw) {
+    var half = lw / 2;
+    return { couch: -Math.min(232, half - 4), fridge: Math.min(186, half - 56), bowl: Math.min(140, half - 74), light: Math.min(100, half - 92), shift: half < 200 ? 18 : 0 };
+  }
+  var MOON = null;
+  function moonSprite() {
+    if (MOON) return MOON;
+    var c = document.createElement('canvas'); c.width = c.height = 48; var m = c.getContext('2d');
+    m.fillStyle = '#F4E9C8'; m.beginPath(); m.arc(24, 24, 18, 0, TAU); m.fill();
+    m.globalCompositeOperation = 'destination-out'; m.beginPath(); m.arc(32, 17, 16, 0, TAU); m.fill();
+    return (MOON = c);
   }
   function drawRoom(T) {
     var cx = S.cx, x0 = geo.x0, x1 = geo.x1, y0 = geo.y0, y1 = geo.y1;
@@ -340,12 +355,12 @@
     var fg = g.createLinearGradient(0, G, 0, y1); fg.addColorStop(0, '#2B2232'); fg.addColorStop(1, '#1A1520'); g.fillStyle = fg; g.fillRect(x0, G, x1 - x0, y1 - G);
     g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(x0, G - 6, x1 - x0, 6); // baseboard
     // the window: a quiet moon and a few stars that barely twinkle
-    var wx = cx - 72, wy = 58, ww = 92, wh = 84;
+    var wx = cx - 72 - S.lay.shift, wy = 58, ww = 92, wh = 84;
     rr(g, wx - 5, wy - 5, ww + 10, wh + 10, 6, '#3A3150');
     var sk = g.createLinearGradient(0, wy, 0, wy + wh); sk.addColorStop(0, '#0B1030'); sk.addColorStop(1, '#1C2350'); rr(g, wx, wy, ww, wh, 3, sk);
     g.save(); g.beginPath(); g.rect(wx, wy, ww, wh); g.clip();
     glow(g, wx + 62, wy + 26, 40, '250,236,200', 0.18);
-    circ(g, wx + 62, wy + 26, 11, '#F4E9C8'); circ(g, wx + 67, wy + 22, 10, '#141A40'); // a crescent
+    g.drawImage(moonSprite(), wx + 62 - 13, wy + 26 - 13, 26, 26); // a crescent moon
     [[12, 14], [30, 40], [20, 64], [44, 18], [78, 58], [84, 12], [56, 70]].forEach(function (s, i) {
       var tw = S.calm ? 0.75 : 0.6 + 0.3 * Math.sin(T * 0.35 + i * 1.9); circ(g, wx + s[0], wy + s[1], i % 3 ? 0.8 : 1.15, 'rgba(255,250,235,' + tw.toFixed(2) + ')');
     });
@@ -354,17 +369,17 @@
     // curtains
     ell(g, wx - 6, wy + 40, 9, 52, '#3B2E4D'); ell(g, wx + ww + 6, wy + 40, 9, 52, '#3B2E4D');
     // moonlight on the floor (very soft)
-    g.fillStyle = 'rgba(190,200,255,0.035)'; g.beginPath(); g.moveTo(wx + 8, G); g.lineTo(wx + ww + 30, G); g.lineTo(wx + ww + 70, y1); g.lineTo(wx + 10, y1); g.closePath(); g.fill();
+    g.fillStyle = 'rgba(190,200,255,0.025)'; g.beginPath(); g.moveTo(wx + 8, G); g.lineTo(wx + ww + 30, G); g.lineTo(wx + ww + 70, y1); g.lineTo(wx + 10, y1); g.closePath(); g.fill();
     // a framed picture of a bone (of course)
-    rr(g, cx + 38, 84, 40, 30, 3, '#4A3C5C'); rr(g, cx + 41, 87, 34, 24, 2, '#2E2742'); bone(g, cx + 58, 99, 1.1, -0.2, '#CDBFA6');
+    var px = cx + 38 - S.lay.shift; rr(g, px, 84, 40, 30, 3, '#4A3C5C'); rr(g, px + 3, 87, 34, 24, 2, '#2E2742'); bone(g, px + 20, 99, 1.1, -0.2, '#CDBFA6');
     // the couch, on the left
-    var cxl = cx - 205;
+    var cxl = cx + S.lay.couch;
     rr(g, cxl, 214, 96, 44, 12, '#3E3558'); rr(g, cxl - 6, 232, 20, 44, 9, '#463C63'); rr(g, cxl + 82, 232, 20, 44, 9, '#463C63');
     rr(g, cxl + 8, 242, 80, 24, 7, '#4C4169'); rr(g, cxl + 4, 266, 88, 12, 5, '#3A3152');
     ell(g, cxl + 30, 236, 14, 10, '#6A5A8A', -0.2); // a cushion
     g.fillStyle = '#2A2238'; g.fillRect(cxl + 4, 276, 6, 6); g.fillRect(cxl + 86, 276, 6, 6);
     // the refrigerator, on the right (its door opens when someone wants a bone)
-    var fx = cx + 160, fy = 150, fw = 52, fh = G - fy;
+    var fx = cx + S.lay.fridge, fy = 150, fw = 52, fh = G - fy;
     var open = S.fridge;
     if (open > 0.01) {
       rr(g, fx, fy, fw, fh, 5, '#4A4256');
@@ -380,17 +395,17 @@
       rr(g, fx + 6, fy + 14, 3, 24, 1.5, '#8F88A3'); rr(g, fx + 6, fy + fh * 0.36 + 12, 3, 30, 1.5, '#8F88A3');
     }
     // the water bowl
-    var bx = cx + 104; ell(g, bx, G + 6, 14, 4, 'rgba(0,0,0,.25)'); rr(g, bx - 13, G - 3, 26, 9, 4, '#6B8FB6'); ell(g, bx, G - 3, 12, 2.6, '#9CC3E6');
+    var bx = cx + S.lay.bowl; ell(g, bx, G + 6, 14, 4, 'rgba(0,0,0,.25)'); rr(g, bx - 13, G - 3, 26, 9, 4, '#6B8FB6'); ell(g, bx, G - 3, 12, 2.6, '#9CC3E6');
     // the plug-in night-light by the floor: a warm, steady glow (never flickers)
-    var nx = cx + 70; glow(g, nx, G - 22, 62, '255,190,120', 0.16); rr(g, nx - 5, G - 30, 10, 14, 4, '#FFD9A0'); glow(g, nx, G - 23, 14, '255,230,180', 0.5);
+    var nx = cx + S.lay.light; glow(g, nx, G - 22, 62, '255,190,120', 0.16); rr(g, nx - 5, G - 30, 10, 14, 4, '#FFD9A0'); glow(g, nx, G - 23, 14, '255,230,180', 0.5);
     // the rug the pals sleep on
-    ell(g, cx, G + 9, 90, 15, '#5C3F58'); ell(g, cx, G + 9, 80, 12, '#6E4C69'); g.strokeStyle = 'rgba(255,220,240,.12)'; g.lineWidth = 1.5; g.beginPath(); g.ellipse(cx, G + 9, 70, 9.5, 0, 0, TAU); g.stroke();
+    ell(g, cx, G + 9, 108, 15, '#5C3F58'); ell(g, cx, G + 9, 97, 12, '#6E4C69'); g.strokeStyle = 'rgba(255,220,240,.12)'; g.lineWidth = 1.5; g.beginPath(); g.ellipse(cx, G + 9, 86, 9.5, 0, 0, TAU); g.stroke();
     // a ball and a blanket corner, for a lived-in look
-    circ(g, cx - 92, G + 4, 6, '#B85C6B'); g.strokeStyle = 'rgba(255,255,255,.25)'; g.lineWidth = 1; g.beginPath(); g.arc(cx - 92, G + 4, 6, -1, 1); g.stroke();
+    var ballX = cx - 118; circ(g, ballX, G + 4, 6, '#B85C6B'); g.strokeStyle = 'rgba(255,255,255,.25)'; g.lineWidth = 1; g.beginPath(); g.arc(ballX, G + 4, 6, -1, 1); g.stroke();
   }
   function drawPal(p, T) {
     var P = window.TOLPups; if (!P) return;
-    var L = P.looks[p.look], s = 1.18, br = p.pose === 'lie' && !p.side ? breathAt(p, T) : 0;
+    var L = P.looks[p.look], s = PS, br = p.pose === 'lie' && !p.side ? breathAt(p, T) : 0;
     var x = p.x, y = G + 8 + p.y;
     ell(g, x + 2 * p.face, y + 1, 24 * s * (1 + p.y / 60), 4 * s, 'rgba(0,0,0,.28)');
     g.save(); g.translate(x, y - p.lift);
@@ -403,7 +418,7 @@
     g.restore();
   }
   // where her head is, for the z's and the dream bubble
-  function headOf(p) { var s = 1.18; return { x: p.x + 19 * s * p.face, y: G + 8 + p.y - p.lift - 21 * s }; }
+  function headOf(p) { var s = PS; return { x: p.x + 19 * s * p.face, y: G + 8 + p.y - p.lift - 21 * s }; }
   function drawZs(T, dt) {
     var calm = S.calm;
     ['tidbit', 'sugarfoot'].forEach(function (id) {
@@ -472,7 +487,7 @@
     var r = cv.getBoundingClientRect(); DPR = Math.min(2, window.devicePixelRatio || 1);
     var w = Math.max(200, Math.round(r.width)), h = Math.max(150, Math.round(r.height));
     W = Math.round(w * DPR); H = Math.round(h * DPR); cv.width = W; cv.height = H;
-    geo = geoFor(w, h); S.LW = geo.LW; S.cx = geo.LW / 2;
+    geo = geoFor(w, h); S.LW = geo.LW; S.cx = geo.LW / 2; S.lay = layout(geo.LW);
     ['tidbit', 'sugarfoot'].forEach(function (id) { var p = PALS[id]; if (!S.ev || S.ev.who !== id) p.x = homeX(p); });
     render(S.T, 0);
   }
