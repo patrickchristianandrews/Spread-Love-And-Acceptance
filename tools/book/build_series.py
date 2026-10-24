@@ -749,8 +749,12 @@ def faq_page(book, namer, epub=False):
         return ''
     h = ''.join('<h2 class="ps-faq-q">%s</h2>%s' % (esc(q), a) for q, a in items)
     return ('<section class="pe-back ps-faq no-bubble" data-no-bubble id="faq" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Questions people ask</h1>'
-            '<p class="pe-back-lede">%s</p>%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
-                                                           _series_html(h, book, namer, epub, 'faq'))
+            '<p class="pe-back-lede">%s</p>%s%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
+                                                           _series_html(h, book, namer, epub, 'faq'), CARE_LINE if book['n'] in (1, 2, 3) else '')
+
+
+# book20 (owner, 24 Oct): plain suicide guidance once per book, in the back matter only, small and plain (Books 1 to 3)
+CARE_LINE = '<p class="ps-care-line">If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today.</p>'
 
 
 def month_page(book, namer, epub=False):
