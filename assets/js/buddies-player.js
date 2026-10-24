@@ -1820,7 +1820,9 @@
       ambLoad(L[0]).then(function (buf) {
         if (!buf || my !== AMBP.gen) return;
         var s = c.createBufferSource(), g = c.createGain(); s.buffer = buf; s.loop = true;
-        g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, c.currentTime); s.connect(g); g.connect(AU.amb || AU.sfx); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1], c.currentTime, 1);
+        g.gain.value = 0.0001; g.gain.setValueAtTime(0.0001, c.currentTime); g.connect(AU.amb || AU.sfx);
+        // the fire's sharp snaps, rounded into soft pops (they came through as clicking)
+        if (L[0] === 'fire') { var lp = c.createBiquadFilter(), lp2 = c.createBiquadFilter(); lp.type = lp2.type = 'lowpass'; lp.frequency.value = lp2.frequency.value = 1400; lp.Q.value = lp2.Q.value = 0.5; s.connect(lp); lp.connect(lp2); lp2.connect(g); } else s.connect(g); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1], c.currentTime, 1);
         AMBP.cur.push({ s: s, g: g });
       });
     });
@@ -2872,6 +2874,51 @@
     };
   }
 
+  // =====================================================================================================
+  // AN EXCERPT for the Season 1 trailer (buddies-trailer.js): a stretch of an episode, beats [from, to),
+  // drawn by the real stage and run by the real director. The voices are played by the trailer itself,
+  // so here a line simply lasts as long as its recording (o.dur(b) gives the seconds); it never waits on
+  // a speech engine. o.pre: seconds the place settles first (weather, kites, shooting stars) before t = 0.
+  // =====================================================================================================
+  function excerpt(ep, from, to, o) {
+    o = o || {};
+    var st = makeStage({ reduced: !!o.reduced, bright: false }), pend = null, t = 0, done = false;
+    var hooks = {
+      speak: function (b, cb) {
+        var d = o.dur ? o.dur(b) : 0; if (!d) return false;
+        cb.start(0, d); pend = { cb: cb, end: t + d }; if (o.onLine) o.onLine(b, t, d); return true;
+      },
+      onCaption: function (who, text, b) { if (o.onCaption) o.onCaption(who, text, b, t); },
+      onAct: function (b) { if (o.onAct) o.onAct(b, t); },
+      stopSpeech: function () { pend = null; }
+    };
+    // the episode, cut just before beat `to`, so the director ends there by itself (and never starts the next line)
+    var F0 = flatten(ep), stopAt = F0.beats[to] && F0.beats[to].b, cut = ep;
+    if (stopAt) {
+      var hit = false; cut = {}; for (var kk in ep) cut[kk] = ep[kk];
+      cut.chapters = ep.chapters.map(function (c) { if (hit) return null; var bs = []; for (var j = 0; j < c.beats.length; j++) { if (c.beats[j] === stopAt) { hit = true; break; } bs.push(c.beats[j]); } var c2 = {}; for (var q in c) c2[q] = c[q]; c2.beats = bs; return c2; }).filter(function (c) { return c && c.beats.length; });
+    }
+    var dir = makeDirector(st, cut, hooks);
+    dir.seek(from); dir.playing = true;
+    if (o.pre && o.canvas) {
+      var cg = o.canvas.getContext('2d');
+      for (var k = 0; k < o.pre; k += 0.1) { st.step(0.1); st.render(cg, o.canvas.width, o.canvas.height, 1, 0.1); }
+    }
+    return {
+      stage: st, dir: dir,
+      time: function () { return t; },
+      ended: function () { return done; },
+      step: function (dt) {
+        t += dt;
+        if (done) { st.step(dt); return; }
+        dir.tick(dt);
+        if (pend && t >= pend.end) { var p = pend; pend = null; p.cb(true); }
+        if (dir.ended) done = true;
+      },
+      render: function (g, w, h, dpr, dt) { st.render(g, w, h, dpr || 1, dt || 0); }
+    };
+  }
+  API.excerpt = excerpt; API.clipKey = ckey;
   API.mount = mount; API.renderCards = renderCards; API.clip = clip; API.loadEpisode = loadEpisode; API.loadAll = loadAll;
   API.state = function () {
     var P = API._p; if (!P || !P.dir) return null;

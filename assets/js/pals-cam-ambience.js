@@ -84,7 +84,11 @@
         if (!buf) return; var L = layers[i];
         var s = c.createBufferSource(), g = c.createGain();
         s.buffer = buf; s.loop = true; // the whole (already seamless) buffer loops, end straight into start
-        g.gain.value = 0.0001; s.connect(g); g.connect(b);
+        g.gain.value = 0.0001; g.connect(b);
+        // the crackling fire's recording is full of sharp little snaps (about 400 a minute) that came through as a
+        // steady clicking: a soft low-pass rounds each snap into a gentle pop, at the same overall loudness
+        if (L[0] === 'fire') { var lp = c.createBiquadFilter(), lp2 = c.createBiquadFilter(); lp.type = lp2.type = 'lowpass'; lp.frequency.value = lp2.frequency.value = 1400; lp.Q.value = lp2.Q.value = 0.5; s.connect(lp); lp.connect(lp2); lp2.connect(g); }
+        else s.connect(g);
         var t = c.currentTime; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(L[1], t + FADE_IN); // the ramp is anchored at now, so it never jumps
         s.start(t, Math.random() * buf.duration);
         cur.push({ s: s, g: g });

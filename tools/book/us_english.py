@@ -309,6 +309,8 @@ P = [
     (r'\bI can’t do tonight x\.', 'I can’t do tonight.'), (r'\bon the sofa\b', 'on the couch'), (r'\bcould you just pop that in an email\b', 'could you put that in an email'), (r'\bpop (it|that|this) in\b', r'put \1 in'),
     (r'\bleft on the side\b', 'left on the counter'), (r'\bOn a train out of Sheffield\b', 'On a train out of Philadelphia'), (r'\bdown the carriage\b', 'down the car'), (r'“Hiya!', '“Hi!'),
     (r'\bFetching a member of staff\b', 'Getting a staff member'), (r'\bThen came the fundraiser\b', 'Then came the fundraiser'),
+    (r'\bFish fingers\b', 'Fish sticks'), (r'\bcome and find you at half past\.', 'come and find you in half an hour.'), (r'\bat half past\.', 'in half an hour.'),
+    (r'\blike a lens any more,', 'like a lens anymore,'), (r'\bYou finish your tea\b', 'You finish your coffee'), (r'\bTherapists call this exposure\.', 'Psychologists call this exposure.'),
 ]
 
 

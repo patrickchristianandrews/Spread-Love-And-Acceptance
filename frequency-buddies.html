@@ -16,6 +16,7 @@
 <script src="/assets/js/pups.js" defer></script>
 <script src="/assets/js/pals-cam.js" defer></script>
 <script src="/assets/js/buddies-player.js" defer></script>
+<script src="/assets/js/buddies-trailer.js" defer></script>
 <style>
   .fbp main.read{ max-width:60rem; }
   .fbp .read > *{ max-width:none; }
@@ -38,6 +39,37 @@
   @media (max-width:600px){ .fbp-player{ margin:0 -.6rem; } }
   .fbp-note{ text-align:center; font-size:.85rem; color:var(--ink-soft); margin:1rem auto; max-width:36rem; }
   .fbs-mv{ text-align:center; margin:.4rem 0 1rem; }
+  /* the Season 1 trailer, at the top */
+  .fbt{ margin:.2rem 0 1.6rem; }
+  .fbt > h2{ text-align:center; margin:0 0 .6rem; font-size:clamp(1.3rem, 4vw, 1.7rem); }
+  .fbt-box{ position:relative; display:flex; flex-direction:column; gap:.55rem; padding:.75rem; border-radius:26px; background:linear-gradient(170deg,#2E2552,#1B1629); color:#FFF6E6; box-shadow:0 18px 50px rgba(30,20,50,.28); font-family:Lora,Georgia,serif; }
+  .fbt-stage{ position:relative; width:100%; aspect-ratio:16/9; border-radius:18px; overflow:hidden; background:#2B2350; }
+  .fbt-cv{ position:absolute; inset:0; width:100%; height:100%; display:block; cursor:pointer; }
+  .fbt-big{ position:absolute; left:50%; top:auto; bottom:12%; transform:translateX(-50%); min-height:52px; padding:.6rem 1.5rem; border:0; border-radius:999px; background:#FFF3D6; color:#2B2140; font:600 1.1rem Lora,Georgia,serif; cursor:pointer; box-shadow:0 8px 24px rgba(20,10,40,.35); }
+  .fbt-big[hidden]{ display:none; }
+  .fbt-endb{ position:absolute; left:50%; bottom:9%; transform:translateX(-50%); display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; width:max-content; max-width:94%; }
+  .fbt-endb[hidden]{ display:none; }
+  .fbt-endb a, .fbt-endb button{ display:inline-flex; align-items:center; min-height:48px; padding:.5rem 1.2rem; border-radius:999px; font:600 1rem Lora,Georgia,serif; text-decoration:none; cursor:pointer; }
+  .fbt-watch{ background:#FFF3D6; color:#2B2140; border:0; }
+  .fbt-again{ background:rgba(20,14,34,.7); color:#FFF6E6; border:1px solid rgba(255,255,255,.4); }
+  .fbt-cap{ margin:0; min-height:3.2em; display:flex; align-items:center; justify-content:center; padding:.5rem .9rem; border-radius:14px; background:rgba(0,0,0,.34); text-align:center; font:500 1.08rem/1.4 Fraunces,Georgia,serif; color:#FFFDF6; text-wrap:balance; }
+  .fbt-who{ font-weight:600; color:#F7C98B; margin-right:.3em; }
+  .fbt-prog{ display:flex; align-items:center; gap:.7rem; padding:0 .2rem; }
+  .fbt-track{ position:relative; flex:1; height:10px; border-radius:99px; background:rgba(255,255,255,.16); cursor:pointer; }
+  .fbt-track:focus-visible{ outline:3px solid #C9B6F2; outline-offset:4px; }
+  .fbt-fill{ position:absolute; left:0; top:0; bottom:0; width:0; border-radius:99px; background:linear-gradient(90deg,#F7C98B,#F2A0B8); }
+  .fbt-time{ font:500 .85rem "IBM Plex Mono", monospace; color:#D9D2E6; white-space:nowrap; }
+  .fbt-ctrl{ display:flex; align-items:center; gap:.45rem; flex-wrap:wrap; }
+  .fbt-b{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; min-width:44px; padding:.35rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); color:#FFF6E6; font:600 .95rem/1.1 Lora,Georgia,serif; cursor:pointer; text-decoration:none; touch-action:manipulation; }
+  .fbt-b:hover{ background:rgba(255,255,255,.16); }
+  .fbt-b.is-main{ background:#FFF3D6; color:#2B2140; border-color:#FFF3D6; min-width:7.2em; }
+  .fbt-b[hidden]{ display:none; }
+  .fbt-b:focus-visible, .fbt-big:focus-visible, .fbt-endb a:focus-visible, .fbt-endb button:focus-visible{ outline:3px solid #C9B6F2; outline-offset:2px; }
+  .fbt-box:fullscreen{ border-radius:0; padding:0; justify-content:center; background:#000; }
+  .fbt-box:fullscreen .fbt-stage{ border-radius:0; flex:1; aspect-ratio:auto; }
+  .fbt-box:fullscreen .fbt-cap{ border-radius:0; }
+  .fbt-script{ margin:.8rem 0 0; }
+  @media (max-width:600px){ .fbt-box{ padding:.5rem; border-radius:20px; margin:0 -.6rem; } .fbt-lbl{ display:none; } .fbt-cap{ font-size:1rem; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/frequency-buddies.html">
@@ -107,7 +139,43 @@
   <p>Two pals. One big heart each. Every frequency an adventure. Tidbit and Sugarfoot set off on big little quests, hit real tough times, and find their way through, together.</p>
 </section>
 
-<section class="fbp-player" aria-label="The episode player">
+<section class="fbt" id="trailer" aria-labelledby="fbt-h">
+  <h2 id="fbt-h">Watch the Season 1 trailer</h2>
+  <div class="fbt-box fb-player" data-buddies-trailer><p class="fbp-note">The trailer needs JavaScript to play. What it says is written out just below.</p></div>
+  <details class="fbp-script fbt-script">
+    <summary>Read the trailer</summary>
+    <div>
+      <p class="n">The theme song: “Tune in, turn it up, here we go!”</p>
+      <p><strong>Narrator: </strong>Two pals. One big heart each. Every frequency an adventure.</p>
+      <h3>Episode 1: The Storm Over the Treehouse</h3>
+      <p class="n">When things fall apart, take a pause, then build it back together.</p>
+      <p><strong>Tidbit: </strong>Wait, wait! I found something!</p>
+      <p><strong>Sugarfoot: </strong>Um. That’s a bone.</p>
+      <p><strong>Tidbit: </strong>It’s a very nice bone. I buried it last spring. Hi, old buddy!</p>
+      <h3>Episode 2: Out of Tune</h3>
+      <p class="n">Say what you mean, then check how it landed.</p>
+      <p><strong>The ducklings: </strong>Encore! Encore!</p>
+      <p><strong>Tidbit: </strong>You can’t have an encore before the song even starts!</p>
+      <p><strong>The ducklings: </strong>We’re getting ready early!</p>
+      <h3>Episode 3: The Heavy Basket</h3>
+      <p class="n">Lay the jobs out where both pals can see them, and share the load.</p>
+      <p><strong>Tidbit: </strong>Snow! It’s snowing! The first snow of the year!</p>
+      <p><strong>Tidbit: </strong>Quick, catch one on your tongue! Like this!</p>
+      <h3>Episode 4: Who Broke the Kite?</h3>
+      <p class="n">Before you blame someone, look at how things were set up.</p>
+      <p><strong>Tidbit: </strong>Look at her go! She’s the highest kite on the whole beach!</p>
+      <p><strong>Sugarfoot: </strong>Um. She’s the only kite on the whole beach.</p>
+      <p><strong>Tidbit: </strong>Then she’s in first place and last place!</p>
+      <h3>Episode 5: The Longest Night</h3>
+      <p class="n">Notice your habits, then choose a new way, together.</p>
+      <p><strong>Tidbit: </strong>Look! Look! It’s raining stars!</p>
+      <p><strong>Sugarfoot: </strong>Oh. Oh, Tidbit. It’s the most beautiful thing I’ve ever seen.</p>
+      <p class="n">The chorus: “Frequency Buddies! Two pals, one big heart each!” Watch Season 1.</p>
+    </div>
+  </details>
+</section>
+
+<section class="fbp-player" id="episode-player" aria-label="The episode player">
   <div data-buddies-player><p class="fbp-note">The player needs JavaScript to run. The whole story is also written out below.</p></div>
 </section>
 
@@ -131,7 +199,7 @@
   <h2 id="fbp-how">About the show</h2>
   <div class="fbp-about">
     <div><strong>Gentle adventures</strong><p>Storms, rope bridges, lost song pages and night walks, with a little suspense and a lot of heart. Nothing too scary, and every episode ends stronger than it started. A short note before each episode says what happens, like a storm with thunder in episode 1. Lightning shows as a soft glow unless you turn bright flashes on.</p></div>
-    <div><strong>Made for watching together</strong><p>About 16 minutes each, in chapters of about 2 to 4 minutes. You can watch one chapter at a time and stop there. Captions are always on, and you can turn the voices and music off anytime. Season 2 has no recorded voices yet, so your device reads the lines in its own voice. Watching with your grandkids? See the <a href="/grandparents.html#calm">page for grandparents</a>.</p></div>
+    <div><strong>Made for watching together</strong><p>About 16 minutes each, in chapters of about 2 to 4 minutes. You can watch one chapter at a time and stop there. Captions are always on, and you can turn the voices and music off anytime. Every season has the same recorded voices for Tidbit, Sugarfoot and their friends. Watching with your grandkids? See the <a href="/grandparents.html#calm">page for grandparents</a>.</p></div>
     <div><strong>Quiet little lessons</strong><p>Each story quietly shows one of the program’s five ideas, like checking your battery before you fix things, without a lecture in sight.</p></div>
   </div>
 </section>

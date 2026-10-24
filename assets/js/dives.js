@@ -16,7 +16,7 @@
   var NAMES = { solvency: 1, deficit: 1, field: 1, battery: 1, raci: 1, tone: 1, pll: 1, kit: 1, checkins: 1, translator: 1, reader: 1, freq: 1, framework: 1,
     mood: 1, lemonade: 1, weather: 1, card: 1, report: 1, prog: 1, suite: 1, workpapers: 1, garden: 1, petals: 1, soundscapes: 1, stories: 1, wired: 1, verdict: 1 };
   // pages about the author, the legal pages and the "what's on this device" pages: no marks at all
-  var NO_PAGE = /^\/(about|about-in-depth|privacy-policy|terms-of-service|refund-policy|telemetry|on-this-device|saved|404|offline|brand|sent-this|someone-sent-you-this)\.html$/;
+  var NO_PAGE = /^\/((about|about-in-depth|privacy-policy|terms-of-service|refund-policy|telemetry|on-this-device|saved|404|offline|brand|sent-this|someone-sent-you-this)\.html$|legal\/)/;
   var MAX = 40, MIN = 10, WORDS_PER = 110; // up to 40 on a long page, about one per 110 words, at least 10
   var HINT = 'tol-dive-hint', HINT_PAGES = 5;
 

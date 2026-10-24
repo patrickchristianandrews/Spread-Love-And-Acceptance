@@ -13,10 +13,15 @@
      the home page.
    - The first time someone opens a tool or a chapter, one small tip points at the button, once per device, and only
      if no other prompt has had this visit (window.TOLPrompt, sessionStorage 'tol-prompt').
-   - /saved.html lists everything (window.TOLSaved.renderList), grouped, newest first, with Open, Remove and a note.
+   - Notes: "Write a note here" (in the book and long guides) or "Add a note" keeps your own words. Each note leaves a
+     small dot by the paragraph where it was written (by the title if it has no paragraph); tap it to read or edit.
+   - /saved.html lists everything (window.TOLSaved.renderList), grouped, newest first, with Open, Remove and every
+     note with "Go to the spot".
 
    localStorage (nothing is sent anywhere; included in backups by progress.js; "Erase everything" clears it):
-     tol-saved     [{ url, title, type, at, note?, spot? }], newest first, at most 200
+     tol-saved     [{ url, title, type, at, spot?, notes?: [{ id, text, at, spot? }], note? }], newest first, at most 200.
+                   notes: up to 50 per page, each with the paragraph it was written at (a small dot marks it on the
+                   page); note is a copy of the newest note's words for older versions. An old single note reads as one.
      tol-lastread  { '/book/chapter-2.html': { at, title, spot } }, at most 60 chapters
      tol-save-tip  the date the one-time tip was shown
    A spot is { t: first words of the paragraph, id: nearest id above, n: paragraphs after it, f: 0-1 down the page,
@@ -129,15 +134,68 @@
     var a = list().filter(function (x) { return keyOf(x.url) !== keyOf(item.url); });
     var old = find(item.url);
     var it = { url: plain(item.url, 300), title: plain(item.title, 140), type: item.type || typeOf(item.url), at: item.at || Date.now() };
-    var note = item.note != null ? item.note : old && old.note;
-    if (note) it.note = notePlain(note);
     var spot = item.spot !== undefined ? item.spot : old && old.spot;
-    if (spot) it.spot = spot;
+    if (spot) it.spot = cleanSpot(spot);
+    var ns = item.notes !== undefined || item.note !== undefined ? notesOf(item) : old ? notesOf(old) : [];
+    putNotes(it, ns);
     a.unshift(it);
     return store(a) ? it : null;
   }
   function remove(u) { var k = keyOf(u), was = find(u); store(list().filter(function (x) { return keyOf(x.url) !== k; })); return was; }
-  function setNote(u, note) { var it = find(u); if (!it) return false; it.note = notePlain(note); if (!it.note) delete it.note; var a = list().map(function (x) { return keyOf(x.url) === keyOf(u) ? it : x; }); return store(a); }
+
+  // ---------------------------------------------------------------- notes: several per page, each at its own paragraph
+  // A saved item keeps notes: [{ id, text, at, spot? }], newest last. Older saves had one note (and maybe a marked
+  // place); they read as one note at that place. "note" stays as a copy of the newest note's words, so a backup
+  // opened by an older version of the site still shows something.
+  var MAX_NOTES = 50;
+  function noteId() { return 'n' + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36); }
+  function cleanSpot(s) {
+    if (!s || typeof s !== 'object') return null;
+    var o = { t: plain(s.t, 80), f: Math.max(0, Math.min(1, +s.f || 0)) };
+    if (s.id) { o.id = plain(s.id, 80); o.n = Math.max(0, Math.min(400, parseInt(s.n, 10) || 0)); }
+    if (s.h) o.h = plain(s.h, 70);
+    return o;
+  }
+  function notesOf(it) {
+    if (!it) return [];
+    if (Array.isArray(it.notes)) return it.notes.filter(function (n) { return n && typeof n.text === 'string' && n.text.trim(); }).map(function (n, i) {
+      var o = { id: /^[a-z0-9]{2,24}$/i.test(n.id || '') ? n.id : 'n' + i + (n.at || 0).toString(36), text: notePlain(n.text), at: +n.at || +it.at || 0 };
+      var s = cleanSpot(n.spot); if (s) o.spot = s;
+      return o;
+    });
+    if (typeof it.note === 'string' && it.note.trim()) {
+      var o = { id: 'n0' + (+it.at || 0).toString(36), text: notePlain(it.note), at: +it.at || 0 };
+      var s = cleanSpot(it.spot); if (s) o.spot = s;
+      return [o];
+    }
+    return [];
+  }
+  function putNotes(it, ns) {
+    ns = (ns || []).filter(function (n) { return n && n.text; }).slice(-MAX_NOTES);
+    if (ns.length) { it.notes = ns; it.note = ns[ns.length - 1].text; } else { delete it.notes; delete it.note; }
+  }
+  function changeNotes(u, fn) {
+    var it = find(u); if (!it) return false;
+    var ns = fn(notesOf(it)); putNotes(it, ns);
+    return store(list().map(function (x) { return keyOf(x.url) === keyOf(u) ? it : x; }));
+  }
+  function addNote(u, text, spot) {
+    var t = notePlain(text); if (!t) return null;
+    var n = { id: noteId(), text: t, at: Date.now() }, s = cleanSpot(spot); if (s) n.spot = s;
+    return changeNotes(u, function (ns) { ns.push(n); return ns; }) ? n : null;
+  }
+  function editNote(u, id, text) {
+    var t = notePlain(text);
+    return changeNotes(u, function (ns) { return ns.map(function (n) { if (n.id === id) n.text = t; return n; }).filter(function (n) { return n.text; }); });
+  }
+  function deleteNote(u, id) { return changeNotes(u, function (ns) { return ns.filter(function (n) { return n.id !== id; }); }); }
+  // the old one-note call: replaces the newest note's words (or adds one)
+  function setNote(u, note) {
+    var it = find(u); if (!it) return false;
+    var ns = notesOf(it);
+    if (ns.length) return editNote(u, ns[ns.length - 1].id, note);
+    return !!addNote(u, note, null) || !notePlain(note);
+  }
   function lastAll() { var o = json(LAST, {}); return o && typeof o === 'object' && !Array.isArray(o) ? o : {}; }
   function lastRead(p) { return lastAll()[norm(p || here)] || null; }
   function setLast(p, rec) {
@@ -240,7 +298,7 @@
   function hideToast() { clearTimeout(toastT); if (toastEl) toastEl.classList.remove('is-in'); }
 
   // ---------------------------------------------------------------- the Save button in the bar
-  var btn = null, pop = null, word = null;
+  var btn = null, pop = null, word = null, noteSpot = null;
   function sync() {
     if (!btn) return;
     var on = isSaved();
@@ -269,62 +327,216 @@
     if (isSaved()) { removePage(); return; }
     if (savePage()) noteToast(toast('Saved. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000));
   }
-  function noteToast(t) { var b = t && t.querySelector('.tol-sv-addnote'); if (b) b.addEventListener('click', function () { hideToast(); openNote(); }); }
-  function markPlace(andNote) {
+  // "Add a note" in a toast: at the paragraph you're on if you've scrolled into the page, otherwise by the title
+  function noteToast(t, spot) {
+    var b = t && t.querySelector('.tol-sv-addnote');
+    if (b) b.addEventListener('click', function () { hideToast(); openNote({ spot: spot !== undefined ? spot : (window.scrollY > window.innerHeight * 0.5 ? spotNow() : null) }); });
+  }
+  function markPlace() {
     var s = spotNow();
-    if (!s) { if (andNote) openNote(); else toggle(); return; }
+    if (!s) { toggle(); return; }
     if (!savePage(s)) return;
     if (isChapter()) { setLast(here, { at: Date.now(), title: pageTitle(), spot: s }); markedY = window.scrollY; }
-    if (andNote) { openNote(); return; }
-    noteToast(toast('Your place is marked' + (s.h ? ', at “' + esc(s.h) + '”' : '') + '. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000));
+    noteToast(toast('Your place is marked' + (s.h ? ', at “' + esc(s.h) + '”' : '') + '. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000), s);
   }
 
   // ---------------------------------------------------------------- notes: your own words on any saved page, tool, workpaper or book spot
-  var noteBox = null, mineEl = null;
-  function openNote() {
-    hideToast(); if (pop) closePop(false);
-    if (!isSaved() && !savePage(isChapter() ? (spotNow() || undefined) : undefined)) return;
-    var it = find(cleanUrl()); if (!it) return;
+  // openNote({ spot }) writes a new note at that paragraph (or by the title when there's none); openNote({ id }) edits one.
+  var noteBox = null, noteBack = null;
+  function openNote(o) {
+    o = o || {};
+    hideToast(); if (pop) closePop(false); closeDotPop(false);
+    var it = find(cleanUrl()), editing = null;
+    if (o.id && it) notesOf(it).forEach(function (n) { if (n.id === o.id) editing = n; });
+    var spot = editing ? editing.spot : o.spot === undefined ? null : o.spot;
+    noteBack = o.back || btn;
     if (!noteBox) {
       noteBox = el('div', { class: 'tol-sv tol-sv-pop tol-sv-notebox no-bubble no-cheer', role: 'dialog', 'aria-label': 'Your note', hidden: '' });
       D.body.appendChild(noteBox);
       D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && noteBox && !noteBox.hidden) closeNote(); });
     }
-    noteBox.innerHTML = '<label class="tol-sv-pop-h" for="tol-sv-notetext">Your note' + (it.spot && it.spot.h ? ' <small>near “' + esc(it.spot.h) + '”</small>' : '') + '</label>' +
+    noteBox.innerHTML = '<label class="tol-sv-pop-h" for="tol-sv-notetext">' + (editing ? 'Your note' : 'A new note') +
+      '<small>' + (spot && spot.h ? 'Near “' + esc(spot.h) + '”. ' : '') + (spot ? 'A small dot will mark this paragraph.' : 'A small dot will sit beside the page title.') + '</small></label>' +
       '<textarea id="tol-sv-notetext" rows="5" maxlength="' + NOTE_MAX + '" placeholder="What you want to remember, try, or ask about this. Kept only on this device."></textarea>' +
-      '<p class="tol-sv-note-acts"><button type="button" class="tol-sv-cgo" data-nt="ok">Keep note</button><button type="button" class="tol-sv-undo" data-nt="no">Cancel</button>' +
+      '<p class="tol-sv-note-acts"><button type="button" class="tol-sv-cgo" data-nt="ok">Keep note</button>' +
+      (editing ? '<button type="button" class="tol-sv-undo" data-nt="del">Delete</button>' : '') +
+      '<button type="button" class="tol-sv-undo" data-nt="no">Cancel</button>' +
       '<a href="/saved.html">All my notes</a></p>';
-    var ta = noteBox.querySelector('textarea'); ta.value = it.note || '';
+    var ta = noteBox.querySelector('textarea'); ta.value = editing ? editing.text : '';
     noteBox.querySelector('[data-nt="ok"]').addEventListener('click', function () {
-      setNote(cleanUrl(), ta.value); fire(); closeNote();
-      toast(find(cleanUrl()) && find(cleanUrl()).note ? 'Note kept. It’s on this page and under Saved for later, in the Menu.' : 'Note cleared.', 5000);
+      var u = cleanUrl(), id = null;
+      if (editing) { editNote(u, editing.id, ta.value); id = notePlain(ta.value) ? editing.id : null; }
+      else if (notePlain(ta.value)) {
+        if (!isSaved() && !savePage(undefined)) return;
+        var n = addNote(u, ta.value, spot); id = n && n.id;
+      }
+      closeNote(id ? dotFor(id) : null);
+      if (id) { toast('Note kept. Look for the small dot' + (spot ? ' beside the paragraph' : ' beside the title') + '. Every note is under Saved for later, in the Menu.', 6000); flashDot(id); }
+      else if (editing) toast('Note deleted.', 4000);
     });
-    noteBox.querySelector('[data-nt="no"]').addEventListener('click', closeNote);
+    var del = noteBox.querySelector('[data-nt="del"]');
+    if (del) del.addEventListener('click', function () {
+      var was = editing; deleteNote(cleanUrl(), was.id); closeNote(btn);
+      var t = toast('Note deleted. <button type="button" class="tol-sv-undo">Undo</button>', 8000);
+      t.querySelector('.tol-sv-undo').addEventListener('click', function () {
+        changeNotes(cleanUrl(), function (ns) { ns.push(was); ns.sort(function (a, b) { return (a.at || 0) - (b.at || 0); }); return ns; });
+        hideToast(); flashDot(was.id); var d = dotFor(was.id); if (d) d.focus({ preventScroll: true });
+      });
+    });
+    noteBox.querySelector('[data-nt="no"]').addEventListener('click', function () { closeNote(); });
     placePop(noteBox); noteBox.hidden = false; ta.focus({ preventScroll: true });
   }
-  function closeNote() { if (noteBox && !noteBox.hidden) { noteBox.hidden = true; if (btn) btn.focus({ preventScroll: true }); } }
-  // a page you saved with a note shows the note under its title, so it's there when you come back
-  function showMine() {
-    var it = !locked() && find(cleanUrl());
-    if (!it || !it.note) { if (mineEl) { mineEl.remove(); mineEl = null; } return; }
-    var h1 = D.querySelector('main h1'); if (!h1) return;
-    var after = h1.closest('header, .read-head, .bk-cover') || h1;
-    if (!mineEl) {
-      mineEl = el('div', { class: 'tol-sv-mine no-bubble no-cheer', role: 'note', 'aria-label': 'Your note on this page' });
-      mineEl.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-nt="edit"]')) openNote(); });
+  // focus goes to the given place (the new dot), else back where the note was opened from, else the Save button
+  function closeNote(to) {
+    if (!noteBox || noteBox.hidden) return;
+    noteBox.hidden = true;
+    var b = to && D.contains(to) ? to : noteBack && D.contains(noteBack) ? noteBack : btn;
+    if (b) try { b.focus({ preventScroll: true }); } catch (e) {}
+  }
+
+  // ---------------------------------------------------------------- note dots: a small dot by each paragraph where a note was taken
+  // Wide screens: the dot sits in the margin to the left of the paragraph. Phones and indented boxes: a small marker
+  // at the start of the paragraph, so it never covers words. A note without a place (or whose paragraph has gone)
+  // shows its dot beside the page title. Tapping a dot opens a small box with the note, Edit and Close.
+  var dotLayer = null, dotPop = null, dotPopFor = null, dotT = 0, dotTries = 0;
+  var DOT_SVG = '<span class="tol-sv-ndot-i" aria-hidden="true"></span>';
+  function clearDots() {
+    if (dotLayer) dotLayer.innerHTML = '';
+    Array.prototype.forEach.call(D.querySelectorAll('.tol-sv-ndot.is-inline'), function (n) { n.remove(); });
+  }
+  function renderDots() {
+    clearTimeout(dotT);
+    if (!D.body || NO_BUTTON.test(here)) return;
+    if (locked()) { clearDots(); if (++dotTries < 600) dotT = setTimeout(renderDots, 1000); return; }
+    var it = find(cleanUrl()), ns = notesOf(it);
+    var openId = dotPopFor;
+    clearDots();
+    if (!ns.length) { closeDotPop(false); return; }
+    var main = D.querySelector('main'); if (!main) return;
+    var h1 = main.querySelector('h1');
+    var bs = blocks(), colLeft = Infinity;
+    bs.forEach(function (b) { var r = b.getBoundingClientRect(); if (r.width > 120 && r.left < colLeft) colLeft = r.left; });
+    // group notes by the paragraph they belong to (the title when there's none)
+    var groups = [];
+    ns.forEach(function (n) {
+      var b = n.spot ? spotEl(n.spot) : null, tgt = b || h1; if (!tgt) return;
+      var g = null; for (var i = 0; i < groups.length; i++) if (groups[i].el === tgt) g = groups[i];
+      if (!g) { g = { el: tgt, notes: [], title: !b }; groups.push(g); }
+      g.notes.push(n);
+    });
+    if (!groups.length) return;
+    if (!dotLayer) { dotLayer = el('div', { class: 'tol-sv-ndots no-bubble no-cheer' }); D.body.appendChild(dotLayer); }
+    if (!dotLayer.parentNode) D.body.appendChild(dotLayer);
+    var origin = dotLayer.getBoundingClientRect();
+    groups.forEach(function (g) {
+      var n = g.notes.length, label = (n > 1 ? n + ' notes' : 'Your note') + (g.title ? ' on this page' : ' here') + ': open';
+      var d = el('button', { type: 'button', class: 'tol-sv-ndot' + (n > 1 ? ' is-many' : ''), 'aria-label': label, 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'data-notes': g.notes.map(function (x) { return x.id; }).join(' '), 'data-title': g.title ? '1' : null },
+        DOT_SVG + (n > 1 ? '<span class="tol-sv-ndot-n" aria-hidden="true">' + n + '</span>' : ''));
+      var r = g.el.getBoundingClientRect(), list = g.el.closest('ul, ol, dl, blockquote'), left = r.left;
+      if (list && main.contains(list)) left = Math.min(left, list.getBoundingClientRect().left);
+      var wide = !g.title && left >= 56 && Math.abs(left - colLeft) < 30 && r.height > 0;
+      if (wide) {
+        var lh = parseFloat(getComputedStyle(g.el).lineHeight) || 26;
+        d.style.top = Math.round(r.top - origin.top + Math.max(0, lh / 2 - 22)) + 'px';
+        d.style.left = Math.round(left - origin.left - 48) + 'px';
+        dotLayer.appendChild(d);
+      } else {
+        d.classList.add('is-inline');
+        if (g.title) g.el.appendChild(d); else g.el.insertBefore(d, g.el.firstChild);
+      }
+      d.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); if (dotPop && !dotPop.hidden && dotPopFor === d.getAttribute('data-notes')) closeDotPop(true); else openDotPop(d); });
+    });
+    if (openId) { var again = dotFor(openId.split(' ')[0]); if (again) openDotPop(again, true); else closeDotPop(false); }
+  }
+  function dotFor(id) {
+    var ds = D.querySelectorAll('.tol-sv-ndot');
+    for (var i = 0; i < ds.length; i++) if ((' ' + ds[i].getAttribute('data-notes') + ' ').indexOf(' ' + id + ' ') !== -1) return ds[i];
+    return null;
+  }
+  function flashDot(id) {
+    setTimeout(function () {
+      var d = dotFor(id); if (!d) return;
+      d.classList.add('is-new'); setTimeout(function () { d.classList.remove('is-new'); }, 2600);
+    }, 60);
+  }
+  function soonDots() { clearTimeout(dotT); dotT = setTimeout(renderDots, 160); }
+  function openDotPop(d, quiet) {
+    var it = find(cleanUrl()), ids = (d.getAttribute('data-notes') || '').split(' ');
+    var ns = notesOf(it).filter(function (n) { return ids.indexOf(n.id) !== -1; });
+    if (!ns.length) return;
+    if (!dotPop) {
+      dotPop = el('div', { class: 'tol-sv tol-sv-npop no-bubble no-cheer', role: 'dialog', 'aria-labelledby': 'tol-sv-npop-h', hidden: '' });
+      D.body.appendChild(dotPop);
+      dotPop.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-np]'); if (!b) return;
+        var a = b.getAttribute('data-np'), back = curDot();
+        if (a === 'close') closeDotPop(true);
+        else if (a === 'edit') openNote({ id: b.getAttribute('data-id'), back: back });
+        else if (a === 'add') openNote({ spot: null, back: back });
+      });
+      D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dotPop && !dotPop.hidden) closeDotPop(true); });
+      D.addEventListener('pointerdown', function (e) { if (dotPop && !dotPop.hidden && !dotPop.contains(e.target) && !(e.target.closest && e.target.closest('.tol-sv-ndot'))) closeDotPop(false); }, true);
     }
-    if (!mineEl.parentNode) after.parentNode.insertBefore(mineEl, (howEl && howEl.parentNode === after.parentNode ? howEl : after).nextSibling);
-    mineEl.innerHTML = '<p class="tol-sv-mine-k">' + ICON + 'Your note</p><p class="tol-sv-mine-t"></p><button type="button" class="tol-sv-undo" data-nt="edit">Edit note</button>';
-    mineEl.querySelector('.tol-sv-mine-t').textContent = it.note;
+    var near = ns[0].spot && ns[0].spot.h ? ns[0].spot.h : '';
+    var onTitle = d.getAttribute('data-title') === '1';
+    dotPop.innerHTML = '<p class="tol-sv-pop-h" id="tol-sv-npop-h">' + (ns.length > 1 ? 'Your ' + ns.length + ' notes here' : 'Your note') +
+      (near && !onTitle ? '<small>Near “' + esc(near) + '”</small>' : onTitle ? '<small>On this page</small>' : '') + '</p>' +
+      '<ul class="tol-sv-npop-list">' + ns.map(function (n) {
+        return '<li><p class="tol-sv-npop-t"></p><p class="tol-sv-npop-m"><span>' + esc(dayText(n.at)) + '</span>' +
+          '<button type="button" class="tol-sv-undo" data-np="edit" data-id="' + esc(n.id) + '"' + (ns.length > 1 ? ' aria-label="Edit the note from ' + esc(dayText(n.at)) + '"' : '') + '>Edit</button></p></li>';
+      }).join('') + '</ul>' +
+      '<p class="tol-sv-note-acts">' + (onTitle && !pop ? '<button type="button" class="tol-sv-undo" data-np="add">Add another note</button>' : '') +
+      '<button type="button" class="tol-sv-cgo" data-np="close">Close</button><a href="/saved.html">All my notes</a></p>';
+    var ts = dotPop.querySelectorAll('.tol-sv-npop-t');
+    ns.forEach(function (n, i) { ts[i].textContent = n.text; });
+    dotPopFor = d.getAttribute('data-notes');
+    Array.prototype.forEach.call(D.querySelectorAll('.tol-sv-ndot[aria-expanded="true"]'), function (x) { x.setAttribute('aria-expanded', 'false'); });
+    d.setAttribute('aria-expanded', 'true');
+    dotPop.hidden = false;
+    placeDotPop(d);
+    if (!quiet) { var f = dotPop.querySelector('[data-np="close"]'); if (f) f.focus({ preventScroll: true }); }
+  }
+  function curDot() { return dotPopFor ? dotFor(dotPopFor.split(' ')[0]) : null; }
+  function placeDotPop(d) {
+    var r = d.getBoundingClientRect(), w = Math.min(320, window.innerWidth - 24);
+    dotPop.style.width = w + 'px';
+    var left = Math.max(12, Math.min(window.innerWidth - w - 12, r.left + r.width / 2 - 28));
+    dotPop.style.left = Math.round(left + window.scrollX) + 'px';
+    // below the dot, or above it when there isn't room below
+    var hgt = dotPop.offsetHeight || 200, up = r.bottom + hgt + 12 > window.innerHeight && r.top - hgt - 12 > barBottom();
+    dotPop.classList.toggle('is-up', up);
+    dotPop.style.top = Math.round((up ? r.top - hgt - 4 : r.bottom + 4) + window.scrollY) + 'px';
+    dotPop.style.setProperty('--tol-sv-arrow', Math.round(Math.max(16, Math.min(w - 16, r.left + r.width / 2 - left))) + 'px');
+  }
+  function closeDotPop(back) {
+    if (!dotPop || dotPop.hidden) { dotPopFor = null; return; }
+    var d = curDot();
+    dotPop.hidden = true; dotPopFor = null;
+    if (d) { d.setAttribute('aria-expanded', 'false'); if (back) try { d.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  function dotsSetup() {
+    if (NO_BUTTON.test(here)) return;
+    hooks.push(renderDots);
+    window.addEventListener('resize', function () { if (dotPop && !dotPop.hidden) closeDotPop(false); soonDots(); });
+    window.addEventListener('load', soonDots);
+    if (D.fonts && D.fonts.ready) D.fonts.ready.then(soonDots, function () {});
+    D.addEventListener('toggle', soonDots, true);   // a <details> opening moves everything below it
+    window.addEventListener('storage', function (e) { if (e.key === KEY || e.key === null) renderDots(); });
+    try {
+      var main = D.querySelector('main'), h0 = 0;
+      if (main && window.ResizeObserver) new ResizeObserver(function () { var h = main.offsetHeight; if (Math.abs(h - h0) > 2) { h0 = h; soonDots(); } }).observe(main);
+    } catch (e) {}
+    renderDots();
+    setTimeout(renderDots, 1200);   // late pictures, mini dives and helpers settle
   }
   function fillPop() {
     var on = isSaved(), it = find(cleanUrl());
     pop.innerHTML =
       '<p class="tol-sv-pop-h">Keep this for later</p>' +
       '<button type="button" class="tol-sv-go" data-sv="mark">' + ICON + '<span><strong>Mark my place here</strong><small>Keeps the paragraph you’re reading now</small></span></button>' +
-      (on ? '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="remove"><span><strong>Remove from Saved</strong>' + (it && it.spot ? '<small>Your marked place goes too</small>' : '') + '</span></button>'
+      (on ? '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="remove"><span><strong>Remove from Saved</strong>' + (notesOf(it).length ? '<small>Your notes go too (you can Undo)</small>' : it && it.spot ? '<small>Your marked place goes too</small>' : '') + '</span></button>'
           : '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="page"><span><strong>Save this page</strong><small>Opens at the top</small></span></button>') +
-      '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="note"><span><strong>' + (it && it.note ? 'Edit my note' : 'Write a note here') + '</strong><small>' + (on ? 'Your own words, kept with this page' : 'Marks your place and keeps your words with it') + '</small></span></button>' +
+      '<button type="button" class="tol-sv-go tol-sv-alt" data-sv="note"><span><strong>Write a note here</strong><small>Your own words, with a small dot by the paragraph you’re reading</small></span></button>' +
       '<p class="tol-sv-pop-foot"><a href="/saved.html">See everything you saved</a></p>';
   }
   function openPop() {
@@ -366,7 +578,7 @@
         var a = b.getAttribute('data-sv');
         closePop(true);
         if (a === 'mark') markPlace();
-        else if (a === 'note') { if (isSaved()) openNote(); else markPlace(true); }
+        else if (a === 'note') openNote({ spot: noteSpot });
         else if (a === 'page') { if (savePage(null)) noteToast(toast('Saved. Find it under Saved for later, in the Menu. <a href="/saved.html">Open Saved</a> <button type="button" class="tol-sv-undo tol-sv-addnote">Add a note</button>', 8000)); }
         else if (a === 'remove') removePage();
       });
@@ -376,11 +588,11 @@
       window.addEventListener('resize', function () { if (pop && !pop.hidden) placePop(pop); });
       var y0 = 0;
       window.addEventListener('scroll', function () { if (pop && !pop.hidden && Math.abs(window.scrollY - y0) > 120) closePop(false); }, { passive: true });
-      btn.addEventListener('click', function () { hideTip(); y0 = window.scrollY; if (pop.hidden) openPop(); else closePop(false); });
+      btn.addEventListener('click', function () { hideTip(); y0 = window.scrollY; if (pop.hidden) { noteSpot = spotNow(); openPop(); } else closePop(false); });
     } else {
       btn.addEventListener('click', function () { hideTip(); toggle(); });
     }
-    hooks.push(sync); hooks.push(showMine);
+    hooks.push(sync);
     window.addEventListener('storage', function (e) { if (e.key === KEY || e.key === null) sync(); });
     sync();
     // the bar fits itself to the room it has (site.js listens for resize)
@@ -494,13 +706,23 @@
     window.addEventListener('pagehide', function () { recordLast(false); });
     D.addEventListener('visibilitychange', function () { if (D.visibilityState === 'hidden') recordLast(false); });
   }
-  // arriving from Saved ("Open"): go to the marked place
+  // arriving from Saved ("Open"): go to the marked place; "Go to the spot" on a note: go there and open the note
+  var NOTE_HASH = /^#saved-note-([a-z0-9]{2,24})$/i;
   function arriveAtSpot() {
-    if (location.hash !== SPOT_HASH) return;
-    var it = find(cleanUrl()), rec = lastRead(here), s = it && it.spot ? it.spot : rec && rec.spot;
+    var nm = NOTE_HASH.exec(location.hash);
+    if (location.hash !== SPOT_HASH && !nm) return;
+    var it = find(cleanUrl()), rec = lastRead(here), s = it && it.spot ? it.spot : rec && rec.spot, nid = nm && nm[1];
+    if (nid) { s = null; notesOf(it).forEach(function (n) { if (n.id === nid) s = n.spot || null; }); }
     try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
-    if (!s) return;
-    var go = function () { goSpot(s); };
+    if (!s && !nid) return;
+    var go = function () {
+      if (s) goSpot(s, { keep: !nid });
+      if (nid) setTimeout(function () {
+        renderDots(); var d = dotFor(nid); if (!d) return;
+        if (!s) d.scrollIntoView({ block: 'center' });
+        flashDot(nid); openDotPop(d);
+      }, s ? 520 : 80);
+    };
     if (D.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function () { setTimeout(go, 60); });
   }
 
@@ -545,16 +767,27 @@
       if (!items.length && !extra.length) return;
       html += '<section class="sv-group" aria-labelledby="sv-g-' + g[0] + '"><h2 id="sv-g-' + g[0] + '">' + g[1] + ' <span class="sv-c">' + (items.length + extra.length) + '</span></h2><ul class="sv-list">';
       items.forEach(function (x) {
-        var open = keyOf(x.url) + (x.spot ? SPOT_HASH : (x.url.indexOf('#') > 0 ? x.url.slice(x.url.indexOf('#')) : ''));
+        var base = keyOf(x.url), open = base + (x.spot ? SPOT_HASH : (x.url.indexOf('#') > 0 ? x.url.slice(x.url.indexOf('#')) : ''));
+        var ns = notesOf(x).slice().reverse(), title = esc(x.title || x.url);
         html += '<li class="sv-item" data-url="' + esc(x.url) + '">' +
-          '<div class="sv-main"><a class="sv-title" href="' + esc(open) + '">' + esc(x.title || x.url) + '</a>' +
-          '<p class="sv-meta">Saved ' + esc(dayText(x.at)) + (x.spot ? ' · <span class="sv-spot">' + ICON + 'Your place' + (x.spot.h ? ': near “' + esc(x.spot.h) + '”' : '') + '</span>' : '') + '</p>' +
-          (x.note ? '<p class="sv-note"><span class="tol-sv-sr">Your note: </span>“' + esc(x.note) + '”</p>' : '') +
-          '<div class="sv-note-edit" hidden><label>My note <span class="sv-opt">(kept only on this device)</span><textarea rows="4" maxlength="' + NOTE_MAX + '">' + esc(x.note || '') + '</textarea></label>' +
-          '<span class="sv-note-acts"><button type="button" class="sv-btn" data-act="note-ok">Keep note</button><button type="button" class="sv-btn sv-soft" data-act="note-no">Cancel</button></span></div></div>' +
-          '<div class="sv-acts"><a class="sv-btn sv-strong" href="' + esc(open) + '" aria-label="Open ' + esc(x.title) + (x.spot ? ' at your place' : '') + '">Open</a>' +
-          '<button type="button" class="sv-btn" data-act="note" aria-label="' + (x.note ? 'Change the note for ' : 'Add a note to ') + esc(x.title) + '">' + (x.note ? 'Edit note' : 'Add a note') + '</button>' +
-          '<button type="button" class="sv-btn sv-soft" data-act="remove" aria-label="Remove ' + esc(x.title) + ' from Saved">Remove</button></div></li>';
+          '<div class="sv-main"><a class="sv-title" href="' + esc(open) + '">' + title + '</a>' +
+          '<p class="sv-meta">Saved ' + esc(dayText(x.at)) + (x.spot ? ' · <span class="sv-spot">' + ICON + 'Your place' + (x.spot.h ? ': near “' + esc(x.spot.h) + '”' : '') + '</span>' : '') +
+          (ns.length ? ' · ' + ns.length + (ns.length > 1 ? ' notes' : ' note') : '') + '</p>' +
+          (ns.length ? '<ul class="sv-notes" aria-label="Your notes on ' + title + '">' + ns.map(function (n) {
+            return '<li class="sv-n1" data-id="' + esc(n.id) + '"><span class="sv-ndot" aria-hidden="true"></span><div class="sv-n1-body">' +
+              '<p class="sv-note"><span class="tol-sv-sr">Your note: </span>' + esc(n.text) + '</p>' +
+              '<p class="sv-meta">' + esc(dayText(n.at)) + ' · ' + (n.spot ? (n.spot.h ? 'near “' + esc(n.spot.h) + '”' : 'at a paragraph') : 'by the title') + '</p>' +
+              '<div class="sv-note-edit" hidden><label>Edit this note <span class="sv-opt">(kept only on this device)</span><textarea rows="4" maxlength="' + NOTE_MAX + '">' + esc(n.text) + '</textarea></label>' +
+              '<span class="sv-note-acts"><button type="button" class="sv-btn" data-act="nok">Keep note</button><button type="button" class="sv-btn sv-soft" data-act="nno">Cancel</button></span></div>' +
+              '<span class="sv-note-btns"><a class="sv-btn sv-go" href="' + esc(base) + '#saved-note-' + esc(n.id) + '">Go to the spot</a>' +
+              '<button type="button" class="sv-btn sv-soft" data-act="nedit" aria-label="Edit the note from ' + esc(dayText(n.at)) + ' on ' + title + '">Edit</button>' +
+              '<button type="button" class="sv-btn sv-soft" data-act="ndel" aria-label="Delete the note from ' + esc(dayText(n.at)) + ' on ' + title + '">Delete</button></span></div></li>';
+          }).join('') + '</ul>' : '') +
+          '<div class="sv-note-edit sv-note-new" hidden><label>A new note <span class="sv-opt">(it shows beside the page title; kept only on this device)</span><textarea rows="4" maxlength="' + NOTE_MAX + '"></textarea></label>' +
+          '<span class="sv-note-acts"><button type="button" class="sv-btn" data-act="nok">Keep note</button><button type="button" class="sv-btn sv-soft" data-act="nno">Cancel</button></span></div></div>' +
+          '<div class="sv-acts"><a class="sv-btn sv-strong" href="' + esc(open) + '" aria-label="Open ' + title + (x.spot ? ' at your place' : '') + '">Open</a>' +
+          '<button type="button" class="sv-btn" data-act="note" aria-label="Add a note to ' + title + '">Add a note</button>' +
+          '<button type="button" class="sv-btn sv-soft" data-act="remove" aria-label="Remove ' + title + ' from Saved' + (ns.length ? ', with its notes' : '') + '">Remove</button></div></li>';
       });
       extra.forEach(function (p) {
         var r = lr[p];
@@ -588,18 +821,37 @@
         setLast(p, null); renderList(host);
         say('Forgotten: where you stopped in ' + esc(r && r.title || p) + '.');
         var h1 = D.querySelector('main h1'); if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus(); }
-      } else if (act === 'note') {
-        var ed = li.querySelector('.sv-note-edit'); ed.hidden = false; b.hidden = true;
-        var inp = ed.querySelector('textarea'); inp.focus();
-        inp.onkeydown = function (k) { if (k.key === 'Enter' && (k.ctrlKey || k.metaKey)) { k.preventDefault(); ed.querySelector('[data-act="note-ok"]').click(); } if (k.key === 'Escape') { ed.querySelector('[data-act="note-no"]').click(); } };
-      } else if (act === 'note-ok') {
-        setNote(url, li.querySelector('.sv-note-edit textarea').value);
-        say('Note kept.');
-        var again = host.querySelector('.sv-item[data-url="' + (window.CSS && CSS.escape ? CSS.escape(url) : url) + '"] [data-act="note"]'); if (again) again.focus();
-      } else if (act === 'note-no') {
+      } else if (act === 'note' || act === 'nedit') {
+        var box = act === 'note' ? li.querySelector('.sv-note-new') : b.closest('.sv-n1').querySelector('.sv-note-edit');
+        box.hidden = false; b.hidden = true;
+        var inp = box.querySelector('textarea'); inp.focus();
+        inp.onkeydown = function (k) { if (k.key === 'Enter' && (k.ctrlKey || k.metaKey)) { k.preventDefault(); box.querySelector('[data-act="nok"]').click(); } if (k.key === 'Escape') { box.querySelector('[data-act="nno"]').click(); } };
+      } else if (act === 'nok') {
+        var n1 = b.closest('.sv-n1'), val = b.closest('.sv-note-edit').querySelector('textarea').value, nid = n1 && n1.getAttribute('data-id');
+        if (nid) { editNote(url, nid, val); say(notePlain(val) ? 'Note kept.' : 'Note deleted.'); }
+        else if (notePlain(val)) { var made = addNote(url, val, null); nid = made && made.id; say(made ? 'Note kept. It shows beside the page title.' : 'This browser isn’t keeping anything right now.'); }
+        var to = nid && host.querySelector('.sv-n1[data-id="' + nid + '"] [data-act="nedit"]') || itemBtn(url, 'note'); if (to) to.focus();
+      } else if (act === 'nno') {
+        var n2 = b.closest('.sv-n1'), id2 = n2 && n2.getAttribute('data-id');
         renderList(host);
-        var back = host.querySelector('.sv-item[data-url="' + (window.CSS && CSS.escape ? CSS.escape(url) : url) + '"] [data-act="note"]'); if (back) back.focus();
+        var back = id2 && host.querySelector('.sv-n1[data-id="' + id2 + '"] [data-act="nedit"]') || itemBtn(url, 'note'); if (back) back.focus();
+      } else if (act === 'ndel') {
+        var n3 = b.closest('.sv-n1'), id3 = n3.getAttribute('data-id'), it3 = find(url), gone = null;
+        notesOf(it3).forEach(function (n) { if (n.id === id3) gone = n; });
+        deleteNote(url, id3);
+        noteUndo = gone ? { url: url, note: gone } : null;
+        say('Note deleted. <button type="button" class="sv-btn" data-sv-nundo>Undo</button>');
+        var u2 = msg && msg.querySelector('[data-sv-nundo]'); if (u2) u2.focus();
       }
+    });
+    function itemBtn(url, act) { return host.querySelector('.sv-item[data-url="' + (window.CSS && CSS.escape ? CSS.escape(url) : url) + '"] [data-act="' + act + '"]'); }
+    var noteUndo = null;
+    if (msg) msg.addEventListener('click', function (e) {
+      if (!(e.target.closest && e.target.closest('[data-sv-nundo]')) || !noteUndo) return;
+      var nu = noteUndo; noteUndo = null;
+      changeNotes(nu.url, function (ns) { ns.push(nu.note); ns.sort(function (a, b) { return (a.at || 0) - (b.at || 0); }); return ns; });
+      say('Your note is back.');
+      var bk = host.querySelector('.sv-n1[data-id="' + nu.note.id + '"] [data-act="nedit"]'); if (bk) bk.focus();
     });
     if (msg) msg.addEventListener('click', function (e) {
       if (!(e.target.closest && e.target.closest('[data-sv-undo]')) || !undoBox) return;
@@ -615,7 +867,7 @@
     l.onload = once; l.onerror = once; setTimeout(once, 2500);
     D.head.appendChild(l);
   }
-  window.TOLSaved = { list: list, find: find, isSaved: isSaved, save: save, remove: remove, setNote: setNote, lastRead: lastRead, lastAll: lastAll,
+  window.TOLSaved = { list: list, find: find, isSaved: isSaved, save: save, remove: remove, setNote: setNote, notesOf: notesOf, addNote: addNote, editNote: editNote, deleteNote: deleteNote, renderDots: renderDots, lastRead: lastRead, lastAll: lastAll,
     spotNow: spotNow, goSpot: goSpot, typeOf: typeOf, cleanUrl: cleanUrl, renderList: renderList, openNote: openNote, KEYS: { saved: KEY, last: LAST, tip: TIP, how: HOW } };
   function start() {
     css(function () {
@@ -627,7 +879,8 @@
         savedPage();
         arriveAtSpot();
         chapterSetup();
-        try { howLine(); showMine(); } catch (e) {}
+        try { howLine(); } catch (e) {}
+        try { dotsSetup(); } catch (e) {}
         setTimeout(maybeTip, 2500);
       })();
     });

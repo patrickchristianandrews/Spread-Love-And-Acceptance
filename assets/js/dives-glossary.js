@@ -1349,20 +1349,12 @@ window.TOL_DIVES = {
   selfcriticism: { t: 'Self-criticism', m: ['self-criticism', 'self-critical'],
     d: 'Self-criticism is the habit of judging yourself harshly, often in a voice you would never use with anyone else.\nA little self-review is useful. It turns into self-criticism when it is about who you are (“I’m useless”) instead of what you did (“I missed that deadline”), and when it leaves you frozen instead of ready to try again.\nOne way to catch it is to ask whether you would say the same sentence to a friend in your position.' },
 
-  selfesteem: { t: 'Self-esteem', m: ['self-esteem', 'self esteem'],
-    d: 'Self-esteem is your overall sense of your own worth: how you feel about yourself as a person.\nIt is different from confidence in a skill. Someone can be very good at their job and still feel worthless inside, or feel fine about themselves while knowing they are bad at cooking.\nSelf-esteem that depends on constant success or praise tends to swing. Many psychologists suggest aiming for steadier self-acceptance instead of a high score.' },
 
-  selfworth: { t: 'Self-worth', m: ['self-worth', 'sense of worth'],
-    d: 'Self-worth is the belief that you matter and deserve care, whatever you achieve that day.\nWhen self-worth is tied to being useful, every “no” or every mistake can feel like a threat. That is one reason the site keeps saying that numbers describe a situation and never a person.' },
 
   shame: { t: 'Shame', m: ['shame'], nx: 'shame on|a shame|such a shame',
     d: 'Shame is the feeling that you are bad, as a person. Guilt is the feeling that you did something bad. They can feel alike, and they push in different directions.\nResearch by June Tangney and others found guilt tends to lead toward repair (apologizing, fixing things), while shame tends to lead toward hiding, defending or blaming. That is why shaming someone rarely changes what they do.\nTalking about the action, not the person, keeps a hard conversation on the guilt side: “That comment hurt” instead of “You’re cruel.”', ev: 'Moderate evidence' },
 
-  guilt: { t: 'Guilt', m: ['guilt', 'guilty'], nx: 'guilty pleasure|not guilty|found guilty',
-    d: 'Guilt is the uncomfortable feeling that you did something wrong or let someone down. In healthy doses it is useful, because it points toward repair.\nGuilt fits when you actually did something against your own values. It misfires when you feel guilty for having needs, for saying no, or for things that were never yours to control. Asking “What exactly did I do, and what would make it right?” helps sort the two.' },
 
-  resentment: { t: 'Resentment', m: ['resentment', 'resentful', 'resent'],
-    d: 'Resentment is old anger that hasn’t been spoken or settled. It builds when something feels unfair again and again and nothing changes.\nIt often grows quietly from unseen work, broken agreements or needs that never got said out loud. By the time it shows, it can look bigger than the moment that set it off.\nThe cure is usually the conversation that was skipped: naming the specific pattern, early, in a calm moment.' },
 
   affectlabel: { t: 'Affect labeling', m: ['affect labeling', 'affect labelling', 'name it to tame it'], ev: 'Moderate evidence',
     d: 'Affect labeling means putting a feeling into words, such as “I’m frustrated” or “that scared me.” Saying it often takes a little of the heat out.\nBrain imaging studies by Matthew Lieberman and colleagues found naming a feeling was linked with calmer activity in threat areas. Daniel Siegel’s phrase “name it to tame it” comes from the same idea.\nIt works best when the word is your own and it fits. Being handed a feeling-word by someone else can feel like being corrected.' },
@@ -1454,7 +1446,7 @@ window.TOL_DIVES = {
   monotropism: { t: 'Monotropism', m: ['monotropism', 'monotropic', 'polytropism', 'polytropic'], ev: 'Early evidence',
     d: 'Monotropism is a theory of autism that says attention tends to flow deeply into a few things at a time instead of spreading across many.\nIt was proposed by autistic researchers Dinah Murray, Mike Lesser and Wenn Lawson. It helps explain both the joy of deep interests and why sudden switches feel jarring. Early research supports it, and testing is ongoing.\nIn practice, warnings before a change (“in ten minutes, can we talk about dinner?”) make switching much easier.' },
 
-  specialinterest: { t: 'Special interest', m: ['special interests', 'special interest', 'deep interests', 'obsessive'], nx: 'obsessive-compulsive',
+  specialinterest: { t: 'Special interest', m: ['special interests', 'special interest', 'deep interests'],
     d: 'A special interest is a topic someone loves deeply and wants to learn and talk about in detail. The term is often used by autistic people, and many find their interests a source of calm and joy.\nIt sometimes gets called “obsessive,” and the two are different. An obsession, in the clinical sense, is unwanted, causes distress and feels forced. A special interest is wanted, brings pleasure and restores energy. Spending lots of time on something you love is not, by itself, a problem.\nIf it causes friction, talk about time and timing (“Can we do your update after dinner?”), not about the interest being too much.' },
 
   infodump: { t: 'Info-dumping', m: ['info-dumping', 'infodumping', 'info dumping', 'info-dump'],
@@ -1552,7 +1544,7 @@ window.TOL_DIVES = {
   traumainformed: { t: 'Trauma-informed', m: ['trauma-informed', 'trauma informed'],
     d: 'Trauma-informed means acting with the awareness that anyone might be carrying past trauma, without needing to know their story. In practice that looks like predictability, choice, clear explanations, and avoiding surprises, shaming or pressure.\nIt is an approach used in schools, health care and support work. At home, it can be as simple as asking before touching, saying what is about to happen, and letting someone set the pace.' },
 
-  triggered: { t: 'Triggered', m: ['triggered', 'triggers', 'trigger'], nd: 'memor|trauma|old (hurt|wound|sore)|the past|reminder|remind|sore spot|flashback',
+  triggered: { t: 'Triggered', m: ['triggered', 'triggers', 'trigger'], nd: 'trauma|old (hurt|wound|sore)|the past|sore spot|flashback|lived through',
     nx: 'trigger (a|an|the) (bug|error|event|download|update|alarm system)',
     d: 'Being triggered, in the psychological sense, means a reminder of something painful sets off a strong reaction, often bigger than the present moment seems to call for.\nThe word started in trauma care and is now used loosely for being annoyed. It is most useful when kept close to its meaning: a reaction that is partly about the past. Saying “I think this hit an old sore spot” can explain a big reaction without blaming the other person.' },
 
@@ -1629,7 +1621,7 @@ window.TOL_DIVES = {
   attachment: { t: 'Attachment', m: ['attachment theory', 'attachment styles', 'attachment style', 'attachment patterns', 'attachment'], nx: 'email attachment|file attachment|attachment (file|to (the|an) email)|(open|download) (the|an) attachment', ev: 'Strong evidence',
     d: 'In psychology, attachment is the deep emotional bond between a person and the people they rely on for comfort and safety, first caregivers and later partners and close friends.\nAttachment theory, from John Bowlby and Mary Ainsworth, describes patterns such as secure, anxious and avoidant. They describe tendencies in how people seek closeness under stress. They aren’t fixed boxes or personality types, and they can change with experience.\nPop psychology often uses attachment styles as labels for partners (“he’s avoidant”). Research uses them as ranges on a scale, measured carefully, and a single behavior never shows someone’s style.' },
 
-  anxiousattach: { t: 'Anxious attachment', m: ['anxious attachment', 'anxiously attached', 'anxious-preoccupied', 'clingy', 'needy'], nx: 'needy (families|children|people|households)', ev: 'Strong evidence',
+  anxiousattach: { t: 'Anxious attachment', m: ['anxious attachment', 'anxiously attached', 'anxious-preoccupied', 'clingy', 'needy'], nx: 'needy (families|children|people|households)|kids|child|toddler|little ones|pickup|year-old|baby|babies', ev: 'Strong evidence',
     d: 'Anxious attachment is a tendency to worry about being left or loved less, so closeness and reassurance feel urgent, especially during conflict or distance.\nIt is often called “clingy” or “needy,” and those words hurt more than they explain. The real pattern is fear of losing connection that keeps coming back, shows across situations, and eases with steady, predictable responses. Wanting to talk tonight, texting during a long trip or asking “are we okay?” after a fight are normal on their own. They fit the pattern only when they come from frequent, hard-to-soothe worry about the relationship itself.\nIt helps to name the need instead of the label: “When I don’t hear back, my mind goes to the worst. A quick ‘busy, all good’ would help.” Steadiness from both sides tends to calm the cycle.' },
 
   avoidattach: { t: 'Avoidant attachment', m: ['avoidant attachment', 'avoidantly attached', 'dismissive-avoidant', 'fearful-avoidant', 'avoidant'], nd: 'attach|partner|close|distance|intimacy|independen|style|relationship', ev: 'Strong evidence',
@@ -1709,7 +1701,7 @@ window.TOL_DIVES = {
   criticism: { t: 'Criticism or feedback', m: ['criticism', 'criticize', 'criticizing', 'critical of'], nx: 'criticism of the person|self-criticism|literary criticism', ev: 'Moderate evidence',
     d: 'In relationship research, criticism means attacking the person instead of the problem: “You’re so lazy” or “You always ruin things.” Gottman lists it as one of the Four Horsemen.\nFeedback or a complaint is about a specific behavior and what you need: “The dishes were left again, and I’m worn out. Can we split them tonight?” The difference is whether it describes something that happened or judges who someone is. Words like “always,” “never” and “you’re the kind of person who” are clues it has become criticism.\nHearing feedback can still sting, and that doesn’t make it an attack. If it was about a behavior, said calmly, and came with a request, it is fair feedback, even if it was hard to hear.' },
 
-  boundaries: { t: 'Boundaries and ultimatums', m: ['set a boundary', 'setting boundaries', 'boundaries', 'ultimatums', 'ultimatum'], nx: 'property|county|city|state boundar',
+  boundaries: { t: 'Boundaries and ultimatums', m: ['set a boundary', 'setting boundaries', 'boundaries', 'ultimatums', 'ultimatum'], nx: 'property|county|city|state boundar|Moral Boundaries',
     d: 'A boundary is a limit about what you will do, to protect your time, energy, body or well-being: “If the shouting starts, I’ll leave the room and come back when it’s calm.”\nAn ultimatum is a demand about what the other person must do, with a threat attached: “Stop seeing your friends or I’m leaving.” The difference is whose behavior it is about. A boundary is about your own action and stays the same whether or not the other person changes. An ultimatum tries to control their choice by threat.\nSome situations do lead to a clear line, like “I won’t stay if this keeps happening.” Said calmly, about your own action, and after other tries, that is a boundary. Used as pressure to win an argument, it becomes an ultimatum.' },
 
   peoplepleasing: { t: 'People-pleasing', m: ['people-pleasing', 'people pleasing', 'people-pleaser', 'people pleaser', 'people-pleasers'],
@@ -1718,7 +1710,7 @@ window.TOL_DIVES = {
   jealousy: { t: 'Jealousy and insecurity', m: ['jealousy', 'jealous', 'insecurity', 'insecurities'], nx: 'threaten|frighten|afraid|unsafe|danger|abus|violen|coerc|scared of|food insecurity|job insecurity|housing insecurity|financial insecurity', ev: 'Moderate evidence',
     d: 'Jealousy is the painful feeling that someone you love might be drawn to someone else, or that you might lose your place with them. Insecurity is a more general doubt about whether you are enough or whether the relationship is safe.\nFeeling jealous now and then is human and doesn’t make anyone controlling. What matters is what happens next. Sharing the feeling (“I felt a bit left out tonight”) and asking for reassurance is healthy. Monitoring a partner’s phone, demanding passwords, limiting who they see, or punishing them for normal friendships moves into controlling behavior.\nWorry can also look like monitoring. Asking someone to text when they arrive safely is care when it is mutual and agreed. It becomes control when it is one-sided, constant and enforced. Talking about the feeling, not the other person’s guilt, keeps it workable.' },
 
-  nagging: { t: 'Nagging or reminding', m: ['nagging', 'nagged', 'nag'], nx: 'nagging (pain|cough|injury|doubt|feeling)',
+  nagging: { t: 'Nagging or reminding', m: ['nagging', 'nagged'], nx: 'nagging (pain|cough|injury|doubt|feeling)',
     d: 'Nagging usually means repeated requests or complaints that feel critical and wear both people down. Reminding means helping someone remember something they agreed to.\nThe difference is often in the setup, not the person. If one person has to keep reminding because the other never owns the task, the “nagging” is a sign of unseen work and unclear ownership. Tone matters too: a reminder is short and neutral, nagging carries blame.\nAgreeing who owns a job, and how they want to be reminded (a list, a shared calendar, one text), takes the reminding person out of the role of manager.' },
 
   triangulation: { t: 'Triangulation', m: ['triangulation', 'triangulating', 'triangulate'], nx: '(GPS|signal|data|methodological) triangulat', ev: 'Moderate evidence',
@@ -1781,8 +1773,6 @@ window.TOL_DIVES = {
   parallelparenting: { t: 'Parallel parenting', m: ['parallel parenting'],
     d: 'Parallel parenting is a way for separated parents with a lot of conflict to raise their children with as little direct contact as possible. Each parent runs their own home their own way, and communication is brief, written and about the children.\nIt is often a step toward calmer co-parenting later, and it protects children from being caught in the middle.' },
 
-  coparenting: { t: 'Co-parenting', m: ['co-parenting', 'coparenting', 'co-parent', 'co-parents'],
-    d: 'Co-parenting means two or more adults sharing the raising of a child, usually used for parents who live apart. It covers shared decisions, schedules and how the adults talk to each other about the child.\nResearch consistently finds that children do better when conflict between the adults is low, whatever the custody setup.' },
 
   parentingstyles: { t: 'Parenting styles', m: ['authoritative parenting', 'authoritarian parenting', 'permissive parenting', 'parenting styles', 'authoritative'], nd: 'parent|style|warm|rules|child|kid|discipline', ev: 'Moderate evidence',
     d: 'Psychologist Diana Baumrind described parenting styles by how warm and how structured parents are. Authoritative parenting is warm with clear, explained limits. Authoritarian is strict with little warmth. Permissive is warm with few limits.\nAuthoritative parenting is linked with good outcomes in many studies, though culture, temperament and circumstances matter, and real families mix styles.' },
@@ -1809,7 +1799,7 @@ window.TOL_DIVES = {
   activelistening: { t: 'Active listening', m: ['active listening', 'reflective listening', 'listen actively'], ev: 'Moderate evidence',
     d: 'Active listening means fully focusing on what someone says, then showing you understood by reflecting it back (“So the hard part was feeling left out of the decision?”) before adding your own view.\nCarl Rogers developed the idea in counseling. It helps people feel heard, which tends to calm a conversation, though on its own it doesn’t solve the problem underneath.' },
 
-  paraphrasing: { t: 'Paraphrasing', m: ['paraphrasing', 'paraphrase'], nd: 'listen|back to|heard|understand|reflect|check|own words',
+  paraphrasing: { t: 'Paraphrasing', m: ['paraphrasing', 'paraphrase'], nd: 'listen|back to|heard|reflect|check|own words', nx: 'quotation|retold',
     d: 'Paraphrasing means saying back what someone said in your own words, to check you understood: “You’re saying the plans changed and nobody told you.”\nIt slows a conversation down in a good way and catches misunderstandings early. Asking “Did I get that right?” at the end gives the other person a chance to correct it.' },
 
   istatement: { t: 'I-statements', m: ['I-statements', 'I-statement', 'I statements', 'I statement', '“I” statements'],
@@ -1906,8 +1896,6 @@ window.TOL_DIVES = {
   amends: { t: 'Making amends', m: ['make amends', 'making amends', 'amends'],
     d: 'Making amends means going beyond saying sorry, to actually repairing what you can: replacing what was broken, changing a habit, or making up for lost time.\nIt shows the apology meant something. Sometimes the only amends possible is a changed pattern going forward.' },
 
-  forgiveness: { t: 'Forgiveness', m: ['forgiveness'], ev: 'Moderate evidence',
-    d: 'Forgiveness is letting go of resentment and the wish for payback toward someone who hurt you. It is mostly something that happens inside you.\nIt is different from excusing what happened, forgetting it or reconciling. You can forgive someone and still keep a boundary or choose not to be close again. Research links forgiving, when people are ready, with less stress, but it can’t be rushed or demanded.' },
 
   restorative: { t: 'Restorative', m: ['restorative justice', 'restorative practice', 'restorative practices', 'restorative conversation', 'restorative'], nd: 'justice|practice|conversation|repair|harm|school|circle|approach',
     d: 'Restorative practices focus on repairing harm and relationships instead of only punishing. The people involved talk about what happened, who was affected and what would help put it right.\nThey are used in schools, communities and justice systems, and the same questions work at home: What happened? Who was affected? What do we need to make it right?' },
@@ -2040,7 +2028,7 @@ window.TOL_DIVES = {
   ambivalence: { t: 'Ambivalence', m: ['ambivalence', 'ambivalent'],
     d: 'Ambivalence means having mixed or opposite feelings about the same thing at once, like wanting to stay and wanting to leave, or loving someone and being angry with them.\nIt is normal, especially around big decisions and family. Naming both sides often makes it easier to move forward.' },
 
-  reactivity: { t: 'Emotional reactivity', m: ['emotional reactivity', 'reactivity', 'reactive'], nd: 'emotion|stress|feel|anger|quick|calm|trigger|body|partner',
+  reactivity: { t: 'Emotional reactivity', m: ['emotional reactivity', 'reactivity', 'reactive'], nd: 'emotion|stress|feel|anger|quick|calm|trigger|body|partner', nx: 'Reactivity Index',
     d: 'Emotional reactivity is how quickly and strongly someone responds to things that upset them. Highly reactive people feel things fast and big. Less reactive people take longer to get stirred up.\nIt is partly temperament and partly state. Anyone gets more reactive when tired, hungry or stressed.' },
 
   innercritic: { t: 'Inner critic', m: ['inner critic', 'inner critics'],
@@ -2050,8 +2038,5 @@ window.TOL_DIVES = {
     d: 'Self-regulation is managing your own feelings, attention and actions, for example calming down after a shock, staying focused, or pausing before you snap.\nIt grows through childhood, often first through co-regulation with caring adults, and it is harder for everyone when tired, hungry or stressed.' },
 
   chronotype: { t: 'Chronotype', m: ['chronotype', 'chronotypes', 'night owl', 'early bird'], ev: 'Strong evidence',
-    d: 'Your chronotype is your body’s natural timing for sleep and alertness: early bird, night owl or somewhere in between. It is partly genetic and shifts with age.\nA morning person and a night person may simply have different best hours for a hard talk, which is a scheduling question, not a character flaw.' },
-
-  bystander: { t: 'Bystander', m: ['bystander intervention'],
-    d: 'Bystander intervention means stepping in, safely, when you see something wrong happening, instead of assuming someone else will. Research on the bystander effect shows that the more people present, the less likely any one person is to act.\nSimply noticing that effect makes people more likely to help.' }
+    d: 'Your chronotype is your body’s natural timing for sleep and alertness: early bird, night owl or somewhere in between. It is partly genetic and shifts with age.\nA morning person and a night person may simply have different best hours for a hard talk, which is a scheduling question, not a character flaw.' }
 };

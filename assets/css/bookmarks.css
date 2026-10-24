@@ -175,3 +175,56 @@ main.read p.tol-sv-how{ margin:.6rem 0 1rem !important; padding:.5rem .5rem .5re
 .sv-page .sv-note-edit textarea{ width:100%; box-sizing:border-box; min-height:6rem; padding:.5rem .7rem; font:inherit; font-weight:400; border:1.5px solid var(--ink-soft, #5A5346); border-radius:10px; background:#fff; color:inherit; resize:vertical; }
 html.tol-quiet .tol-sv-how{ background:transparent; }
 @media print{ .tol-sv-how, .tol-sv-notebox{ display:none !important; } }
+
+/* ---------- note dots: a small dot by each paragraph where a note was taken (bookmarks.js renderDots) ----------
+   Wide screens: in the margin left of the paragraph (a layer over the page). Phones and indented boxes: a small
+   marker at the start of the paragraph, so it never covers the words. 44px to tap, about 12px to see. */
+.tol-sv-ndots{ position:absolute; top:0; left:0; width:0; height:0; z-index:40; }
+html body .tol-sv-ndot{ position:absolute; display:flex; align-items:center; justify-content:center; width:44px !important; height:44px !important; min-width:0 !important; min-height:0 !important;
+  margin:0 !important; padding:0 !important; border:0 !important; border-radius:50% !important; background:none !important; box-shadow:none !important; cursor:pointer; color:inherit; font:inherit; line-height:1; vertical-align:baseline; }
+.tol-sv-ndot-i{ display:block; width:12px; height:12px; border-radius:50%; background:#B8701F; box-shadow:0 0 0 3px rgba(184,112,31,.2), 0 1px 2px rgba(43,38,32,.25); transition:box-shadow .2s ease, transform .2s ease; }
+.tol-sv-ndot.is-many .tol-sv-ndot-i{ width:18px; height:18px; }
+.tol-sv-ndot-n{ position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); font:700 11px/1 "Lora", Georgia, serif; color:#fff; pointer-events:none; }
+html body .tol-sv-ndot:hover .tol-sv-ndot-i, html body .tol-sv-ndot[aria-expanded="true"] .tol-sv-ndot-i{ box-shadow:0 0 0 5px rgba(184,112,31,.28), 0 1px 2px rgba(43,38,32,.25); }
+html body .tol-sv-ndot:focus-visible{ outline:3px solid var(--focus, #2B5B8C) !important; outline-offset:-4px; }
+.tol-sv-ndot.is-new .tol-sv-ndot-i{ animation:tolSvDot 1.3s ease-out 2; }
+@keyframes tolSvDot{ 0%{ box-shadow:0 0 0 3px rgba(184,112,31,.45); } 100%{ box-shadow:0 0 0 14px rgba(184,112,31,0); } }
+/* the marker at the start of a paragraph (or after the title): small, inline, with an invisible 44px tap area */
+html body .tol-sv-ndot.is-inline{ position:relative; display:inline-flex !important; width:1.05em !important; height:1em !important; margin:0 .4em 0 0 !important; vertical-align:-.12em; overflow:visible; }
+html body h1 .tol-sv-ndot.is-inline{ margin:0 0 0 .35em !important; width:.7em !important; height:.7em !important; vertical-align:.12em; }
+html body .tol-sv-ndot.is-inline::before{ content:""; position:absolute; left:50%; top:50%; width:44px; height:44px; transform:translate(-50%, -50%); border-radius:50%; }
+html body h1 .tol-sv-ndot.is-inline .tol-sv-ndot-i{ width:14px; height:14px; }
+html body h1 .tol-sv-ndot.is-inline.is-many .tol-sv-ndot-i{ width:20px; height:20px; }
+/* Quiet mode: still there, just calm */
+html.tol-quiet .tol-sv-ndot-i{ background:#8F7E62; box-shadow:none; }
+html.tol-quiet .tol-sv-ndot.is-new .tol-sv-ndot-i, html.tol-still .tol-sv-ndot.is-new .tol-sv-ndot-i{ animation:none; }
+html:is(.tol-quiet, .tol-still) .tol-sv-ndot-i{ transition:none; }
+@media (prefers-reduced-motion: reduce){ .tol-sv-ndot.is-new .tol-sv-ndot-i{ animation:none; } .tol-sv-ndot-i{ transition:none; } }
+
+/* the small box a dot opens */
+.tol-sv-npop{ position:absolute; z-index:986; padding:.75rem .85rem .45rem; border-radius:18px; background:#FFFDF7; border:1.5px solid var(--line, #D9CBA3);
+  box-shadow:0 14px 40px rgba(43,38,32,.2); font-size:1rem; line-height:1.45; }
+.tol-sv-npop[hidden]{ display:none; }
+.tol-sv-npop::before{ content:""; position:absolute; top:-8px; left:calc(var(--tol-sv-arrow, 28px) - 7px); width:14px; height:14px; background:#FFFDF7;
+  border-left:1.5px solid var(--line, #D9CBA3); border-top:1.5px solid var(--line, #D9CBA3); transform:rotate(45deg); }
+.tol-sv-npop.is-up::before{ top:auto; bottom:-8px; transform:rotate(225deg); }
+.tol-sv-npop .tol-sv-pop-h small{ display:block; font:400 .85rem/1.3 "Lora", Georgia, serif; color:var(--ink-soft, #5A5346); }
+.tol-sv-npop-list{ list-style:none; margin:0 0 .3rem !important; padding:0 !important; max-height:min(50vh, 22rem); overflow-y:auto; overscroll-behavior:contain; }
+.tol-sv-npop-list li{ margin:0 !important; padding:.35rem 0 0 !important; border-top:1px solid rgba(217,203,163,.6); max-width:none !important; }
+.tol-sv-npop-list li:first-child{ border-top:0; padding-top:0 !important; }
+.tol-sv-npop-t{ margin:0 !important; white-space:pre-line; overflow-wrap:anywhere; color:var(--ink, #2B2620); }
+.tol-sv-npop-m{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin:0 !important; font-size:.85rem; color:var(--ink-soft, #5A5346); }
+.tol-sv-npop .tol-sv-note-acts .tol-sv-cgo{ order:-1; }
+
+/* the Saved page: every note, with "Go to the spot" */
+.sv-page .sv-notes{ list-style:none; margin:.5rem 0 0 !important; padding:0 !important; display:grid; gap:.45rem; }
+.sv-page .sv-n1{ display:flex; gap:.6rem; align-items:flex-start; margin:0 !important; max-width:none !important; padding:.5rem .6rem; border-radius:12px; background:rgba(255,253,247,.9); border:1px solid rgba(217,203,163,.8); }
+.sv-page .sv-ndot{ flex:none; width:12px; height:12px; margin-top:.45rem; border-radius:50%; background:#B8701F; box-shadow:0 0 0 3px rgba(184,112,31,.18); }
+.sv-page .sv-n1-body{ flex:1; min-width:0; }
+.sv-page .sv-n1 .sv-note{ margin:0 !important; font-style:normal; color:var(--ink, #2B2620); }
+.sv-page .sv-note-btns{ display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.35rem; }
+.sv-page .sv-note-btns .sv-btn{ min-height:44px; padding:.3rem .8rem; font-size:.88rem; }
+.sv-page .sv-btn.sv-go{ border-color:#2B5B8C; color:#1F3F62; }
+.sv-page .sv-note-new{ margin-top:.6rem; }
+html.tol-quiet .sv-page .sv-ndot{ background:#8F7E62; box-shadow:none; }
+@media print{ html body .tol-sv-ndot, html body .tol-sv-ndot.is-inline, html body h1 .tol-sv-ndot.is-inline, .tol-sv-ndots, .tol-sv-npop{ display:none !important; } }
