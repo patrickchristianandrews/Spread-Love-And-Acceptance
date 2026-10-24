@@ -783,7 +783,7 @@ figcaption { text-align: left; font-size: .88em; margin-top: .5em; }
 '''
 
 
-def xhtml(title, body, body_type='', lang='en-GB'):
+def xhtml(title, body, body_type='', lang='en-US'):
     bt = ' epub:type="%s"' % body_type if body_type else ''
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n'
             '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="%s" lang="%s">\n'
@@ -841,7 +841,7 @@ def opf(book, items, spine, modified, ident):
     md.append('<dc:creator id="author">%s</dc:creator>' % xesc(B.AUTHOR))
     md.append('<meta refines="#author" property="role" scheme="marc:relators">aut</meta>')
     md.append('<meta refines="#author" property="file-as">%s</meta>' % xesc(B.AUTHOR))
-    md.append('<dc:language>en-GB</dc:language>')
+    md.append('<dc:language>en-US</dc:language>')
     # voice18 (owner): the Kindle "Publisher" field is left blank, so the EPUBs carry no publisher or imprint either
     md.append('<dc:rights>Text and pictures © 2026 %s. Every chapter is also free to read at spreadloveandacceptance.com.</dc:rights>' % xesc(B.AUTHOR))
     md.append('<dc:description>%s</dc:description>' % xesc(book.get('blurb', book['line'])))
@@ -859,7 +859,7 @@ def opf(book, items, spine, modified, ident):
     man = ''.join('<item id="%s" href="%s" media-type="%s"%s/>' % (i, h, t, (' properties="%s"' % p) if p else '') for i, h, t, p in items)
     sp = ''.join('<itemref idref="%s"%s/>' % (i, '' if lin else ' linear="no"') for i, lin in spine)
     guide = '<guide><reference type="cover" title="Cover" href="cover.xhtml"/><reference type="toc" title="Contents" href="nav.xhtml"/><reference type="text" title="Start" href="%s.xhtml"/></guide>' % book.get('start', book['chapters'][0])
-    return ('<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-GB" '
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-US" '
             'prefix="schema: http://schema.org/">\n<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">\n%s\n</metadata>\n<manifest>\n%s\n</manifest>\n'
             '<spine>\n%s\n</spine>\n%s\n</package>\n') % ('\n'.join(md), man.replace('/><', '/>\n<'), sp.replace('/><', '/>\n<'), guide)
 

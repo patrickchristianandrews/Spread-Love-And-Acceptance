@@ -169,6 +169,15 @@
   <p class="h-more"><a class="h-link" href="/tools.html">All tools</a> <a class="h-link" href="/pause-and-play.html">Relax and reset</a></p>
 </section>
 
+<!-- 2a. Seven small days (return21): one small thing a day that continues where you stopped, and what's new since the last
+     visit (return-visit.js, loaded by site.js). The weekly calendar reminder sits with it. -->
+<section class="h-days tol-plain no-bubble no-dive" aria-label="Seven small days"><div data-return-today></div>
+  <details class="h-remind">
+    <summary id="explore-h">A gentle weekly reminder, in your calendar</summary>
+    <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
+  </details>
+</section>
+
 <!-- 2b. nav21: two things worth a look: the languages (lang21) and Frequency Buddies episode 4, the owner's favorite -->
 <section class="h-featsec tol-plain no-bubble no-dive" id="worth-a-look" aria-labelledby="feat-h">
   <h2 class="h-h2" id="feat-h">Worth a look</h2>
@@ -206,7 +215,7 @@
   <script>
   /* today's idea (one a day, the same for everyone), drawn before the page shows, so nothing jumps; "Read the next one" moves on */
   (function () {
-    var IDEAS = [["Nobody has to be wrong.", "Two radios that both work perfectly will still crackle if they’re slightly off, and arguing about whose fault the static is won’t clear it.", "/book/chapter-1.html", "Chapter I: Why we get out of tune"], ["We fill the gaps with stories.", "When we don’t know why someone did something, the mind makes up a reason, fast. A late reply becomes anger, and a closed door becomes rejection.", "/book/understanding-3-seeing.html", "Chapter 3: How we see each other"], ["Start smaller than feels useful.", "Big goals are inspiring and easy to drop. Tiny steps feel almost silly, and they work precisely because they’re easy enough to manage on a bad day.", "/book/understanding-6-change.html", "Chapter 6: Habits and change"], ["Hard things land better when they start soft.", "How a hard conversation starts often decides how it ends. A complaint about one thing (“The bins weren’t taken out”) is easier to hear than a criticism of the person (“You never help”).", "/book/understanding-4-communication.html", "Chapter 4: How communication works"], ["Anger often guards a softer feeling.", "Anger can arrive first because it feels stronger and safer than whatever is under it, which is often hurt, or fear, or shame, or plain exhaustion.", "/book/understanding-13-anger.html", "Chapter 13: Anger"], ["Every close relationship has breaks. Repair is what counts.", "No relationship is smooth all the time, because people snap, forget, misread each other and let each other down.", "/book/understanding-11-healing.html", "Chapter 11: Healing after hurt"], ["Trust is built in small moments.", "Trust rarely comes from big gestures. It grows from small, ordinary things done again and again, like doing what you said, and being the same person on a hard day as on a good one.", "/book/understanding-5-belonging.html", "Chapter 5: Trust and belonging"], ["Different values aren’t wrong values.", "Two people can share a home, a family or a team and still put the same good things in a different order, one putting safety first and another adventure.", "/book/understanding-10-values.html", "Chapter 10: Values and a good life"], ["Covering is kind. Say it out loud.", "Helping out when the owner can’t is lovely, and it helps to mention it, so the help is seen. “I put the bins out this week, since you were away.”", "/book/chapter-4.html", "Chapter IV: Two kinds of fair"], ["Feeling understood matters most.", "What makes someone feel loved is often less about grand gestures and more about feeling understood.", "/book/understanding-15-love.html", "Chapter 15: Closeness and love"]];
+    var IDEAS = [["Nobody has to be wrong.", "Two radios that both work perfectly will still crackle if they’re slightly off, and arguing about whose fault the static is won’t clear it.", "/book/chapter-1.html", "Chapter I: Why we get out of tune"], ["We fill the gaps with stories.", "When we don’t know why someone did something, the mind makes up a reason, fast. A late reply becomes anger, and a closed door becomes rejection.", "/book/understanding-3-seeing.html", "Chapter 3: How we see each other"], ["Start smaller than feels useful.", "Big goals are inspiring and easy to drop. Tiny steps feel almost silly, and they work precisely because they’re easy enough to manage on a bad day.", "/book/understanding-6-change.html", "Chapter 6: Habits and change"], ["Hard things land better when they start soft.", "How a hard conversation starts often decides how it ends. A complaint about one thing (“The trash didn’t go out”) is easier to hear than a criticism of the person (“You never help”).", "/book/understanding-4-communication.html", "Chapter 4: How communication works"], ["Anger often guards a softer feeling.", "Anger can arrive first because it feels stronger and safer than whatever is under it, which is often hurt, or fear, or shame, or plain exhaustion.", "/book/understanding-13-anger.html", "Chapter 13: Anger"], ["Every close relationship has breaks. Repair is what counts.", "No relationship is smooth all the time, because people snap, forget, misread each other and let each other down.", "/book/understanding-11-healing.html", "Chapter 11: Healing after hurt"], ["Trust is built in small moments.", "Trust rarely comes from big gestures. It grows from small, ordinary things done again and again, like doing what you said, and being the same person on a hard day as on a good one.", "/book/understanding-5-belonging.html", "Chapter 5: Trust and belonging"], ["Different values aren’t wrong values.", "Two people can share a home, a family or a team and still put the same good things in a different order, one putting safety first and another adventure.", "/book/understanding-10-values.html", "Chapter 10: Values and a good life"], ["Covering is kind. Say it out loud.", "Helping out when the owner can’t is lovely, and it helps to mention it, so the help is seen. “I put the trash out this week, since you were away.”", "/book/chapter-4.html", "Chapter IV: Two kinds of fair"], ["Feeling understood matters most.", "What makes someone feel loved is often less about grand gestures and more about feeling understood.", "/book/understanding-15-love.html", "Chapter 15: Closeness and love"]];
     var box = document.querySelector('[data-h18-idea]'); if (!box) return;
     var i = Math.floor(Date.now() / 864e5) % IDEAS.length;
     function show() {
@@ -221,12 +230,8 @@
   </script>
 </section>
 
-<!-- 5. Come back gently: one small way, a weekly reminder in their own calendar (remind.js, loaded by site.js) -->
-<section class="h-back tol-plain no-bubble no-dive" id="explore" aria-label="Come back gently">
-  <details>
-    <summary id="explore-h">A gentle weekly reminder, in your calendar</summary>
-    <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
-  </details>
+<!-- 5. Who made this (the weekly calendar reminder moved up beside Seven small days) -->
+<section class="h-back tol-plain no-bubble no-dive" id="explore" aria-label="Who made this">
   <p class="h-made">Made by Christian, kindly and independently. <a href="/about.html">Who built this, and why</a></p>
 </section>
 

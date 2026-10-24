@@ -305,12 +305,12 @@
         // stands up still asleep, wanders a little circle with her nose in the air, bumps gently into the couch,
         // turns, and comes back around the front of the rug to curl up again; her pal opens one eye at the bump
         p.asleep = true; p.blink = true;
-        var stop = couchX + 30;
+        var stop = couchX + 48; // her nose just meets the couch
         if (u >= 0.5 && u < 2) { p.pose = 'sit'; p.tilt = -0.15; }
         if (walk(p, ev, u, 2, 9, hx, stop, 'a')) { p.tilt = -0.2; p.ph = (u - 2) * 4.2; }
         if (u >= 9 && u < 12) {
           p.x = stop - Math.sin(Math.PI * seg(u, 9, 9.5)) * 3 + seg(u, 9.3, 10) * 5; p.face = -1; p.pose = 'run'; p.ph = 0; p.tilt = -0.2; p.sy = u < 9.5 ? 1 - Math.sin(Math.PI * seg(u, 9, 9.5)) * 0.07 : 1;
-          if (once(ev, 'bump')) { SFX.bump(); S.bump = { x: stop - 22, t: S.T }; }
+          if (once(ev, 'bump')) { SFX.bump(); S.bump = { x: stop - 50, t: S.T }; }
           o.eyeOpen = u < 11.6 ? 1 : 0;
         }
         if (u >= 12 && u < 13) { p.x = stop + 5; p.face = 1; p.pose = 'run'; p.tilt = -0.2; }
@@ -331,13 +331,13 @@
 
   // ------------------------------------------------------------------ painting the room
   function geoFor(w, h) {
-    var lw = clamp(w / h * LH, 330, 640), k = Math.min(w / lw, h / LH), ox = (w - lw * k) / 2, oy = (h - LH * k) * 0.55;
+    var lw = clamp(w / h * LH, 380, 640), k = Math.min(w / lw, h / LH), ox = (w - lw * k) / 2, oy = (h - LH * k) * 0.55;
     return { LW: lw, k: k, ox: ox, oy: oy, x0: -ox / k, x1: (w - ox) / k, y0: -oy / k, y1: (h - oy) / k };
   }
   // where things stand, from the middle of the room: roomy on a wide screen, closer together on a phone held upright
   function layout(lw) {
     var half = lw / 2;
-    return { couch: -Math.min(232, half - 4), fridge: Math.min(186, half - 56), bowl: Math.min(140, half - 74), light: Math.min(100, half - 92), shift: half < 200 ? 18 : 0 };
+    return { couch: -Math.min(232, half + 40), fridge: Math.min(186, half - 56), bowl: Math.min(140, half - 74), light: Math.min(100, half - 92), shift: half < 230 ? 14 : 0 };
   }
   var MOON = null;
   function moonSprite() {
@@ -414,7 +414,7 @@
     g.scale(s * big * p.face, s * big * p.sy * (1 + (S.calm ? 0.012 : 0.022) * br));
     var blink = p.blink && !p.eyeOpen;
     P.draw(g, L, p.pose, p.ph, p.pose === 'run' ? Math.sin(p.ph) * 0.2 : -0.05, blink, T * 1000 * (p.asleep ? 0.25 : 1), p.tilt, {});
-    if (p.carry) bone(g, 33, p.pose === 'sit' ? -27 : -20, 1, 0.15);
+    if (p.carry) bone(g, 31, p.pose === 'sit' ? -31 : p.pose === 'run' ? -27 : -14, 1, 0.15);
     g.restore();
   }
   // where her head is, for the z's and the dream bubble

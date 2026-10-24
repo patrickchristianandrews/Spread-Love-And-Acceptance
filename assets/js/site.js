@@ -371,14 +371,14 @@
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
       { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
-      { href: '/contact.html', code: '', title: 'Contact us', note: 'Tell us what would make this better, every way to reach us, and email updates' },
+      { href: '/contact.html', code: '', title: 'Contact us', note: 'Tell us what would make this better, and every way to reach us' },
       { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how thirteen of them became one program' },
       { href: '/method-and-limits.html', code: '', title: 'Method and limits', note: 'Every score, formula and cut-off on the site, written out, with what each can’t tell you' },
       { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
       { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
       { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, and what comes next' },
       { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'What is live today, counted plainly' },
-      { href: '/membership.html', code: '', title: 'Email updates', note: 'Everything is open; leave your email if you’d like a short note when something new ships' },
+      { href: '/membership.html', code: '', title: 'Email updates', note: 'Optional: at most one email a week, one small idea and what’s new' },
       { href: '/on-this-device.html', code: '', title: 'What’s stored on this device', note: 'Everything this site keeps in your browser, in plain words, with a button to erase each one' },
       { href: '/saved.html', code: '', title: 'Your saved places', note: 'The pages, tools and places in the book you saved, to pick up later' },
       { href: '/on-this-device.html#progress', code: '', title: 'Your progress', note: 'Save a backup, move it to another phone or the free app, lock it with a passcode, or clear it' },
@@ -427,12 +427,12 @@
       { href: '/examples.html', title: 'What small changes look like', note: 'Made-up examples for many kinds of relationship' },
       { sub: 'About and contact', all: '/contents.html', allLabel: 'Every page on the site' },
       { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
-      { href: '/contact.html', title: 'Contact us', note: 'Tell us what would make this better, or just say hello' },
+      { href: '/contact.html', title: 'Contact us', note: 'Feedback, email updates and every way to reach us' },
       { href: '/is-this-for-you.html', deep: true, title: 'Is this right for you?', note: 'What this is and isn’t, and who it helps' },
       { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
       { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
       { href: '/method-and-limits.html', title: 'Method and limits', note: 'Every score and cut-off written out, and what each can’t tell you' },
-      { href: '/membership.html', title: 'Email updates', note: 'Optional: a short note when something new goes live' },
+      { href: '/membership.html', title: 'Email updates', note: 'Optional: at most one email a week, one small idea and what’s new' },
       { href: '/legal/privacy-policy.html', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' }
     ]},
     // consol12: 51 tools became 19 places. Each line is one place (one card on /tools.html); its ways in are on its own page.
@@ -1556,7 +1556,10 @@
     comfortOffer(body);
     rememberPage(body);
     progNote();
-    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this" (come-back.js)
+    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); }
+    // return21: Seven small days, New since your last visit, and the "tomorrow" line (return-visit.js adds its own stylesheet;
+    // it does nothing on a page without [data-return-today] except one line inside .cb-end cards, and skips data-sensitive and data-no-return pages)
+    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var rtv = document.createElement('script'); rtv.src = '/assets/js/return-visit.js'; document.head.appendChild(rtv); } // time picker, "What you got from this" (come-back.js)
     palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
@@ -4916,7 +4919,7 @@
     function done() {
       unlock();
       try { localStorage.removeItem('tol-join-pending'); } catch (e) {}
-      say(CONFIG.openAll ? 'You’re on the list. We’ll send a short note when something new ships. The newsletter may send a confirmation email first; confirming keeps you on it.' : 'You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email; confirming keeps you on the update list.', 'ok');
+      say(CONFIG.openAll ? 'You’re on the list. At most one email a week: one small idea and anything new. The newsletter may send a confirmation email first; confirming keeps you on it.' : 'You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email; confirming keeps you on the update list.', 'ok');
       applyState(true);
     }
     // The newsletter couldn't be reached (offline, blocked, or the service is down). Everything still

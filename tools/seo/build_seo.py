@@ -529,6 +529,11 @@ SEARCH.update({
  # lang21 (wave21): Support languages, and the hub's description now names it
  'support-languages.html': ('Support Languages: What Helps When You’re Having a Hard Time', 'Seven support languages, from needing room to needing a hand: what each looks like, how it gets misread both ways, a short quiz and words to ask for help that works. Free.'),
  'languages-of-connection.html': ('Love, Apology and Appreciation Languages, Together', 'Love, apology, support and appreciation languages, touchstones and your wiring, in one picture: seven layers from you outward, and where to start.'),
+ # return21 (wave21): the Contact page, and Email updates now promise at most one email a week
+ 'contact.html': ('Contact Us: Tell Us What Would Make This Better', 'Tell us what helped, what was confusing and what is missing. Email us, get one small idea a week by email, share the site or add it to your home screen.'),
+ 'membership.html': ('Email Updates: One Small Idea a Week (Optional)', 'Everything here is free, with no account. If you like, get at most one email a week: one small thing to try in a minute, and what is new on the site.'),
+ # play21 (wave21): the Bears Dojo's music corner
+ 'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do and a music corner with instruments and long, slow songs.'),
 })
 
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results
@@ -1138,7 +1143,7 @@ def write_sitemap(report):
 
 
 GROUPS = [
-    ('Start here', r'^(index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0)'),
+    ('Start here', r'^(contact|index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0)'),
     ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz'
                                    r'|love-languages|apology-languages|support-languages|languages-of-connection|appreciation-at-work|touchstones|nervous-system|calming-supplements|living-alone|stepfamily|new-relationship|small-wins|growing-up)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),

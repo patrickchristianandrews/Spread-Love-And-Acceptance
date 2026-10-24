@@ -32,7 +32,7 @@ window.TOL_DIVES = {
     u: '/book/preface-in-depth.html#unbilled-debt', l: 'The Preface: unbilled debt', lt: 'The full scene, where the debt comes from, and why the book refuses to send a bill for it.',
     ctx: { '/book/preface.html': 'This is the idea the whole book starts from. Every later chapter is a way of writing this missing column down.', '/about.html': 'The founder names this as the problem audit work kept pointing at: work done, never recorded.', '/infographic.html': 'On this summary it sits under Pillar I: see everything that’s being carried before deciding what’s fair.' } },
 
-  invisible: { t: 'Invisible work', m: ['invisible work', 'unseen work', 'the work nobody sees', 'invisible labor', 'emotional labor', 'mental load'],
+  invisible: { t: 'Invisible work', m: ['invisible work', 'unseen work', 'the work nobody sees', 'invisible labor', 'emotional labor', 'cognitive labor', 'mental load'],
     s: 'You know the permission slip, the low milk and the birthday on Saturday before anyone else has finished their coffee? That list in your head is invisible work.',
     f: 'For you, it’s the thinking that never ends because home never closes. Between people, one head holds the list and the other can’t see it, so “you never help” and “you never asked” are both honest. It shows up the same way with partners, roommates, co-parents and coworkers.',
     w: 'Researchers split it into parts: the mental load (noticing, remembering, planning), emotional labor (managing moods so things go smoothly) and the plain tasks nobody logs because they were “quick.” It becomes visible when you write a real week down, compare hours side by side, and thank the specific thing. This is Pillar I, See the whole load.',
@@ -357,7 +357,7 @@ window.TOL_DIVES = {
     x: 'In measurement science, a clinical instrument has to show reliability (it gives consistent results) and validity (it measures what it claims), usually across large, tested samples, and it’s interpreted by someone trained to use it. None of the program’s tools has been through that, and none claims to.\nWhat they are is closer to a structured journal. The calculator (CALC-01) calls itself a rule-of-thumb worksheet; REPORT-01 says every finding is a written rule you can check, not a model or a prediction.\nThat honesty has a practical upside. Because nothing claims to know you better than you do, the numbers can start a conversation without anyone having to defend themselves against them.',
     u: '/how-it-works-in-depth.html#honest-note', l: 'How it works: an honest note', lt: 'What the tools are, what they aren’t, and why they’re still worth using.' },
 
-  heuristic: { t: 'A heuristic', m: ['heuristic self-reflection tool', 'practical heuristic', 'heuristic'],
+  heuristic: { t: 'A heuristic', m: ['heuristic self-reflection tool', 'practical heuristic', 'heuristics', 'heuristic'],
     s: 'A quick sketch of a room is great for deciding where the sofa goes, even though it’s not a surveyor’s measurement. That’s a heuristic: a practical rule of thumb.',
     f: 'For you, it’s a helpful starting point, not a verdict. Between people, it gives two people the same simple frame to talk from. What makes it worth acting on is using it the same way, week after week.',
     w: 'The site calls its tools heuristics on purpose. The calculator’s weights are judgment calls. The “P” in the setup score is only a label. The Lemonade Stand is a “Heuristic” in its full name. One entry is a mood. Twelve entries, asked the same way, start to show a pattern memory alone can’t.',
@@ -549,7 +549,7 @@ window.TOL_DIVES = {
     u: '/book/chapter-3-in-depth.html#ladder', l: 'Chapter III: the three everyday states', lt: 'The three states in plain words, where the labels come from, and what each one is good for.',
     ctx: { '/relationships.html': 'In any relationship the first step is the same: a quick check can show a 4pm snap was leftover stress, not about them.', '/check-ins.html': 'Here it’s why the bond line matters: left unsaid, a nervous system fills the silence with a worse story.', '/library/stress.html': 'This theme has the stress-response details. The program uses them only as everyday labels.' } },
 
-  ladder: { t: 'The Nervous System Ladder', m: ['Nervous System Ladder', 'the ladder'],
+  ladder: { t: 'The Nervous System Ladder', m: ['Nervous System Ladder', 'the ladder'], nx: 'career|corporate|climb(ing)? the ladder|social ladder|property ladder',
     s: 'Before a talk about the holidays, one of you says “I’m gusty,” the other “I’m clear.” You take a short walk first. That thirty-second check is the ladder.',
     f: 'For you, it tells you what this moment is good for, without grading you. Between people, each names their own rung, never the other’s. If either is revved up or shut down, it isn’t the moment for a hard talk.',
     w: 'Three rungs: calm and connected at the top, revved up in the middle, running on empty at the bottom. My weather today uses the same three as Clear, Gusty and Fogged in, so you never need the technical words. Check-ins, the calculator (CALC-01) and Rewind the talk all start with it.',
@@ -563,14 +563,14 @@ window.TOL_DIVES = {
     x: 'In polyvagal theory this is called the ventral vagal state, linked to what Porges called the social engagement system: the face, voice and listening working together when a person feels safe. That specific mapping is one of the debated parts of the theory, so the program keeps it as a label.\nWhat’s well supported more generally is that feeling safe and relaxed goes with more flexible attention, more generous interpretation of others and better listening. Barbara Fredrickson’s broaden-and-build research, for example, found positive states widen the range of thoughts and actions people consider.\nIn practice, the program reads this state as: Clear on My weather today, a talk window that’s open, and a stress-tank score comfortably under 0.50.',
     u: '/book/chapter-3-in-depth.html#ladder', l: 'Chapter III: the three everyday states', lt: 'The calm rung alongside the other two, with what each one is good for.' },
 
-  sympathetic: { t: 'Sympathetic: revved up', m: ['sympathetic activation', 'sympathetic', 'mobilized'],
+  sympathetic: { t: 'Sympathetic: revved up', m: ['sympathetic activation', 'sympathetic arousal'],
     s: 'Running late, someone asks where the car keys went, and your answer comes out sharp. You’re not angry at the question. Your body is already sprinting. That’s the revved-up state.',
     f: 'For you: talking faster, interrupting sooner, small things suddenly urgent or personal. Between people, a calm “no rush, I’ll look too” helps more than pointing out the tone. Logic tends to bounce off right now.',
     w: 'It’s the middle rung of the ladder, Gusty in My weather today, and “wound up” in Soften a tense moment. It isn’t aggression. It’s a body doing its job. A long out-breath, slowing down or a pause helps before any real talk.',
     x: 'The sympathetic nervous system is the “fight or flight” branch, a phrase from physiologist Walter Cannon in the early 1900s. It releases adrenaline within seconds, raises heart rate and sharpens attention toward threats. That’s helpful for a deadline or a near-miss in traffic and much less helpful for hearing nuance.\nChapter I notes what it does to conversation: pace speeds up, and a neutral pause can be read as stonewalling. The Library adds the slower stress system (the HPA axis and cortisol), which is why a stressful morning can still be coloring the evening.\nIn the program’s numbers, this state often shows up as a stress-tank score in the medium or high band. The plan’s re-entry rule (under 0.50) is a practical test that it has passed.',
     u: '/book/chapter-3-in-depth.html#ladder', l: 'Chapter III: the three everyday states', lt: 'The revved-up rung in context, and what helps before any real talk.' },
 
-  dorsal: { t: 'Dorsal: shut down', m: ['dorsal vagal', 'shut down', 'shutdown'],
+  dorsal: { t: 'Dorsal: shut down', m: ['dorsal vagal', 'dorsal state'],
     s: '“I don’t know. Whatever.” A blank face, few words, a body that feels heavy. That flat, far-away state is the bottom rung: shut down.',
     f: 'For you, it’s not calm and it’s not a choice. It’s a body that has run out of steam for now. Between people, fixing things won’t help yet. Steady company will: “The dishes aren’t going anywhere. I’m not upset. I’ll make us some tea.”',
     w: 'It’s the bottom rung of the ladder, Fogged in in My weather today. During a shutdown, stop asking questions, keep your voice low, and offer a later time. Check-ins is clear that going blank is dysregulation too, not the same as calm.',
@@ -600,7 +600,7 @@ window.TOL_DIVES = {
     u: '/check-ins-in-depth.html#regulate', l: 'Check-ins: regulating before the next sentence', lt: 'What to do the moment you notice you’re flooded, and what not to do with the pause.',
     ctx: { '/signal-translator.html': 'Here it’s a timing warning: a flooded listener can’t take in even a well-translated sentence, so pause first.', '/library/': 'This Library theme covers the research. The program’s own pause rules are in Check-ins.' } },
 
-  coregulate: { t: 'Co-regulating', m: ['co-regulate'],
+  coregulate: { t: 'Co-regulating', m: ['co-regulation', 'coregulation', 'co-regulating', 'co-regulate'],
     s: 'After a loud bang sets someone on edge, you sit nearby and breathe slowly without saying much. A few minutes later, they can talk. That’s co-regulating.',
     f: 'For you, it’s a way to help without fixing. Between people, calm is catching: a steady voice, a slow breath and quiet company can help another body feel safe enough to ease off. It’s always offered, never forced. Some people want closeness, others space first.',
     w: 'Wired Differently suggests it first when someone is activated, especially for trauma-wired people, whose nervous system may stay on watch. Slow breathing together, or the calm-down plan, comes before talking. It doesn’t replace each person settling themselves. It helps alongside.',
@@ -640,7 +640,7 @@ window.TOL_DIVES = {
     u: '/check-ins-in-depth.html#ground', l: 'Check-ins: ground rules', lt: 'The speaker’s line and the listener’s line, word for word.',
     ctx: { '/relationships.html': 'In every relationship on this page the same line helps: say once, before the topic, that you’re not against them.', '/signal-translator.html': 'The Chat analyzer’s suggested openers include this line, with a time to come back if either of you pauses.', '/workpapers/wp-09-say-it-so-it-lands.html': 'After your three lines, this is what to add out loud: you want one thing fixed, and you’re not against them.' } },
 
-  parkit: { t: 'Parking a topic', m: ['Park it', 'park the rest', 'parked'],
+  parkit: { t: 'Parking a topic', m: ['Park it', 'park the rest', 'parked topic', 'parked topics'],
     s: '“And you never plan anything for weekends.” Halfway through a talk about the dishes. Parking it sounds like: “That’s real. It isn’t this meeting. I’m writing it down for Sunday.”',
     f: 'For you, it lets a second topic be taken seriously without derailing the first. Between people, the person who raised it isn’t wrong, just early. On Sunday, the weekend topic gets its own twenty minutes.',
     w: 'A parked item needs a date: one with no date is a dismissal wearing good manners. And don’t explain why their point matters less. Just say it isn’t this meeting. Keep a small “parked” list and look at it at your weekly closing.',
@@ -705,7 +705,7 @@ window.TOL_DIVES = {
     u: '/check-ins-in-depth.html#acknowledge', l: 'Check-ins: acknowledgment', lt: 'How to mirror, how to take a correction, and how it changes for different wirings.',
     ctx: { '/signal-translator.html': 'Here the aim is the same: acknowledgment isn’t agreement, and hearing how it landed doesn’t cancel your fact.', '/library/': 'This Library theme covers the research; Check-ins shows the exact mirroring steps.' } },
 
-  validation: { t: 'Validation', m: ['validation', 'validating before arguing'],
+  validation: { t: 'Validation', m: ['validation', 'validating before arguing'], nx: '(form|input|field|data|email|password) validation',
     s: '“If I came down to a job I thought was done, I’d be frustrated too.” You can say that and still see it differently. That’s validation.',
     f: 'For you, it’s one honest way their reaction makes sense. Between people, it comes after the mirror, not instead of it. “You’re too sensitive” and “that isn’t what happened” do the opposite: they shut listening down.',
     w: '“That can make sense” means their reading is possible from the facts. It doesn’t mean you intended harm, and it doesn’t mean their reading is the only one. Don’t hand someone a feeling they didn’t name: “You said it landed as being left with it” is safer than “you seem hurt.”',
@@ -754,7 +754,7 @@ window.TOL_DIVES = {
     x: 'Researchers studying conflict describe repair as a normal, expected part of close relationships, not a sign of failure. Developmental psychologist Edward Tronick’s work on parents and babies is a striking example: interactions were frequently out of sync and then repaired, and the repairing itself seemed to matter for the relationship.\nThe regroup is the adult, planned version. Check-ins’ return line restates the topic (so drift can’t sneak in), restates the stance (not against you) and reports your state, the same three things the program checks at the start of any hard talk.\nThe “not ready yet” option connects to the calm-down plan’s re-entry rule: rescore How much are you carrying? (WP-02), and if you’re still 0.60 or more after two rounds, set a new time.',
     u: '/check-ins-in-depth.html#regroup', l: 'Check-ins: how to regroup', lt: 'The return line, what doesn’t belong in a regroup, and what to do if you’re not ready.' },
 
-  repair: { t: 'Repair', m: ['repair'],
+  repair: { t: 'Repair', m: ['repair attempts', 'repair attempt', 'repair'], nx: '(car|bike|roof|phone|home|house|shop|appliance|boiler|leak|plumbing|computer|screen)s? repair|repair (the|a|your|my) (car|bike|roof|phone|leak|fence|tap|sink|screen|computer)',
     s: 'The morning after a sharp word: “Last night I said you never listen. What I meant was I felt rushed. Next time I’ll ask for five minutes.” That’s repair.',
     f: 'For you, it’s how you come back after getting it wrong, which everyone does. Between people, specific repair works better than a general promise: the sentence you wish you’d used, and one change for next time.',
     w: 'Repair is one of Gottman’s six skills and a situation you can pick in the Chat analyzer. The calculator’s overall score counts it, because a home can share work evenly and still not be repairing. After a talk squeals anyway, Rewind the talk helps with the moment it slipped. This is Pillar IV, Tune how you send and receive.',
@@ -769,10 +769,10 @@ window.TOL_DIVES = {
     x: 'Preparing what you’ll say lowers the load on working memory during a stressful conversation, the same reason speakers use notes and pilots use checklists. Under stress, retrieval gets harder and the most emotionally loaded item tends to come out first.\nThe build follows the program’s pipeline: write everything you’re tempted to raise. Sort it into today, a system and can wait. Set up both people and the room in the Chat analyzer. Translate each sentence. Read the load note. Save the PDF.\nWhat the notes contain is also filtered. Structural items go to the job list, not the talk. Scores stay at home, because a number read out mid-talk becomes a verdict.',
     u: '/check-ins-in-depth.html#notes', l: 'Check-ins: how to build the talking notes', lt: 'Step by step from a messy list to one page you can take into the room.' },
 
-  stonewalling: { t: 'Stonewalling', m: ['stonewalling'],
-    s: 'Going silent, turning to your phone, walking out without a word. The other person is left talking to a wall. That’s stonewalling, and it’s often overwhelm, not punishment.',
-    f: 'For you, it may be the only way your body knows to stop. Between people, it reads as walking out however it’s meant, and for someone who fears being left, silence can feel like the start of it.',
-    w: 'The fix isn’t forcing yourself to keep talking. It’s leaving with a sentence: name your state, how long you need, and when you’ll be back. That turns a wall into a door. The other side matters too: a revved-up listener can read an ordinary pause as stonewalling when it isn’t.',
+  stonewalling: { t: 'Stonewalling', m: ['stonewalling', 'stonewalls', 'stonewalled', 'stonewall'],
+    s: 'Going silent, turning to your phone, walking out without a word. The other person is left talking to a wall. That is stonewalling, and in Gottman’s research it most often came from overwhelm.',
+    f: 'For the word to fit, it has to be a pattern. The person shuts down or refuses to engage again and again, offers no way back in (no “I need a break,” no time to return), and the topic stays closed. When silence is used to win, to punish or to make the other person drop an issue, it has become harmful. Asking for a break with a return time, a shutdown where words aren’t available yet, needing time to think before answering, or one quiet evening after a hard day are different things.',
+    w: 'The fix is leaving with a sentence: name your state, how long you need, and when you’ll be back. That turns a wall into a door. The other side matters too, since a revved-up listener can read an ordinary pause as stonewalling. Talk about the effect (“When the talk stops with no plan, I panic”) instead of calling the person a stonewaller.',
     x: 'Stonewalling is the fourth of Gottman’s Four Horsemen. His lab found it often followed flooding: the person who withdrew frequently had a high heart rate, and pulling away was an attempt to self-soothe. The antidote he describes is physiological self-soothing with a break, then returning.\nCouples researchers also describe the demand-withdraw cycle (Andrew Christensen and others): one person pursues, the other withdraws, and each makes the other’s move more likely. Naming the pause and a return time interrupts the cycle from both ends.\nIn the program, the signal line is the tool, the calm-down plan is where you prepare it, and the re-entry rule decides when you’re ready to come back.',
     u: '/wp-11-in-depth.html#defaults', l: 'Calm-down plan (WP-11): your signal line', lt: 'How to agree a line in advance so a pause is never mistaken for a wall.' },
 
@@ -1232,7 +1232,7 @@ window.TOL_DIVES = {
 
   /* ---------- Turning toward ---------- */
 
-  bids: { t: 'Bids for connection', m: ['bids', 'a bid', 'bid for', 'Turning away', 'turning against'],
+  bids: { t: 'Bids for connection', m: ['bids for connection', 'bid for connection', 'emotional bids', 'bids', 'a bid', 'bid for', 'Turning away', 'turning against'], nx: 'auction|eBay|price|tender|contract',
     s: 'Someone on the sofa laughs and holds up their phone: “Look at this.” You could say “mm” without looking up, or lean over and laugh with them. That tiny reach is a bid.',
     f: 'For you, it’s noticing the small reaches: a sigh, a joke, a question about your day, a link sent with no comment. Between people, you can turn toward (look up, answer), turn away (miss it) or turn against (“can’t you see I’m busy?”).',
     w: 'Turning away is rarely cruel. It’s usually tiredness or focus. Nobody catches every bid. The overall pattern counts. Can’t right now? “I want to hear this. Give me ten minutes?” then come back. That still counts as turning toward. This is Pillar IV, Tune how you send and receive.',
@@ -1318,5 +1318,740 @@ window.TOL_DIVES = {
     f: 'For you, it’s optional, always: no workpaper requires audio. Between people, some find a shared piece of music a gentle start to a calm evening together.',
     w: 'It holds four instrumental pieces by Christian’s Lab: Shooting Star (soft and floating, for quieting a busy mind), Thunderous Shimmer (textured and restless, for a little curious alertness) and Watching a Shooting Star (expansive and cinematic, for getting unstuck) and Bouncy Bedroom (short, cozy and playful, for a light lift). You can see and feel each one as a live picture, and on an Android phone as gentle vibration. Headphones help. It grew from the rule to regulate first and negotiate second.',
     x: 'Research on music for relaxation is mixed but generally suggests that slow, predictable sound can help some people feel calmer, and that personal preference matters a lot. The notes on each track are Christian’s own listening notes, not a validated therapeutic or clinical tool, and people react to music differently.\nThe picture is drawn from the sound itself, using an audio analyzer that runs on your device. Nothing is recorded or sent.\nThe program’s rule applies: a practice that becomes another obligation has already stopped working, so use it only if it helps you.',
-    u: '/soundscapes.html', l: 'Open Brain Breakers', lt: 'Four instrumental pieces you can see and feel.' }
+    u: '/soundscapes.html', l: 'Open Brain Breakers', lt: 'Four instrumental pieces you can see and feel.' },
+
+  /* ---------- Everyday hard words (notes21) ----------
+     Short, plain explanations of words a reader may not know, from psychology, the brain and body,
+     relationships, research and philosophy. Each has t (title), m (phrases to spot), d (the
+     explanation: first paragraph on the shore, the next ones a step deeper), and optional
+     ev (an evidence label in the site's own words), nd (the paragraph must match this, so
+     "freeze" is only marked when it is about stress) and nx (skip a paragraph that matches this).
+     Words that can be misused as labels for people carry the full criteria, per the site's
+     language rules: what must be present, what is not enough on its own, and how to talk
+     about it without the label. Nothing here diagnoses anyone. */
+
+  /* feelings and the self */
+  interoception: { t: 'Interoception', m: ['interoception', 'interoceptive'], ev: 'Moderate evidence',
+    d: 'Interoception is your sense of what is going on inside your body: a racing heart, a tight chest, hunger, thirst, needing the bathroom, being tired. Many feelings show up here first.\nSome people notice these signals early and clearly. Others notice them late or faintly, which is common in autistic people, people with ADHD and anyone under long stress. Noticing late can mean going from “fine” to overwhelmed with little warning.\nA quick body check at set times (shoulders, jaw, breath, stomach) helps more than waiting for a signal to get loud. Research on interoception is growing fast, and how to measure it well is still being worked out.' },
+
+  granularity: { t: 'Emotional granularity', m: ['emotional granularity', 'emotion granularity'], ev: 'Early evidence',
+    d: 'Emotional granularity means having precise words for feelings. “Bad” is broad. “Left out,” “embarrassed” and “dreading Monday” are granular.\nResearch by Lisa Feldman Barrett and others links finer feeling words with handling stress more flexibly, probably because a precise name points to a precise next step. The studies are mostly correlational, so it is a promising idea more than a proven cause.\nIt can be practiced. When you notice “bad,” ask which kind, and try two or three words until one fits.' },
+
+  rumination: { t: 'Rumination', m: ['rumination', 'ruminating', 'ruminate', 'ruminates'], ev: 'Strong evidence',
+    d: 'Rumination is going over the same worry or hurt again and again without getting closer to an answer. It can feel like problem solving, but it usually just replays the problem.\nResearch led by Susan Nolen-Hoeksema linked a habit of rumination with low mood and anxiety lasting longer. A useful test: after ten minutes of thinking about it, do you have a next step, or only the same loop?\nWhat tends to help is moving from “why did this happen” to “what is one thing I can do,” writing the loop down, or giving your attention something absorbing for a while.' },
+
+  corumination: { t: 'Co-rumination', m: ['co-rumination', 'co-ruminating', 'co-ruminate'], ev: 'Moderate evidence',
+    d: 'Co-rumination is when two people talk over a problem again and again, dwelling on the bad feelings together, without moving toward anything new.\nResearch by Amanda Rose found it brings friends closer and can also raise anxiety and low mood, especially in teens. Talking is good. Circling is the risk.\nA gentle switch helps: after the venting, one of you asks, “Do you want ideas, or do you want company for a bit?”' },
+
+  selfcompassion: { t: 'Self-compassion', m: ['self-compassion', 'self-compassionate'], ev: 'Moderate evidence',
+    d: 'Self-compassion is treating yourself the way you would treat a good friend who is struggling: noticing the pain, remembering that everyone gets things wrong, and speaking to yourself kindly.\nPsychologist Kristin Neff describes three parts: kindness instead of harsh judgment, a sense of shared humanity instead of isolation, and mindful awareness instead of ignoring or drowning in the feeling. Studies link it with less anxiety and more willingness to own mistakes.\nIt is different from letting yourself off the hook. People who are kind to themselves are often better at apologizing, because a mistake doesn’t feel like a verdict on their whole worth.' },
+
+  selfcriticism: { t: 'Self-criticism', m: ['self-criticism', 'self-critical'],
+    d: 'Self-criticism is the habit of judging yourself harshly, often in a voice you would never use with anyone else.\nA little self-review is useful. It turns into self-criticism when it is about who you are (“I’m useless”) instead of what you did (“I missed that deadline”), and when it leaves you frozen instead of ready to try again.\nOne way to catch it is to ask whether you would say the same sentence to a friend in your position.' },
+
+  selfesteem: { t: 'Self-esteem', m: ['self-esteem', 'self esteem'],
+    d: 'Self-esteem is your overall sense of your own worth: how you feel about yourself as a person.\nIt is different from confidence in a skill. Someone can be very good at their job and still feel worthless inside, or feel fine about themselves while knowing they are bad at cooking.\nSelf-esteem that depends on constant success or praise tends to swing. Many psychologists suggest aiming for steadier self-acceptance instead of a high score.' },
+
+  selfworth: { t: 'Self-worth', m: ['self-worth', 'sense of worth'],
+    d: 'Self-worth is the belief that you matter and deserve care, whatever you achieve that day.\nWhen self-worth is tied to being useful, every “no” or every mistake can feel like a threat. That is one reason the site keeps saying that numbers describe a situation and never a person.' },
+
+  shame: { t: 'Shame', m: ['shame'], nx: 'shame on|a shame|such a shame',
+    d: 'Shame is the feeling that you are bad, as a person. Guilt is the feeling that you did something bad. They can feel alike, and they push in different directions.\nResearch by June Tangney and others found guilt tends to lead toward repair (apologizing, fixing things), while shame tends to lead toward hiding, defending or blaming. That is why shaming someone rarely changes what they do.\nTalking about the action, not the person, keeps a hard conversation on the guilt side: “That comment hurt” instead of “You’re cruel.”', ev: 'Moderate evidence' },
+
+  guilt: { t: 'Guilt', m: ['guilt', 'guilty'], nx: 'guilty pleasure|not guilty|found guilty',
+    d: 'Guilt is the uncomfortable feeling that you did something wrong or let someone down. In healthy doses it is useful, because it points toward repair.\nGuilt fits when you actually did something against your own values. It misfires when you feel guilty for having needs, for saying no, or for things that were never yours to control. Asking “What exactly did I do, and what would make it right?” helps sort the two.' },
+
+  resentment: { t: 'Resentment', m: ['resentment', 'resentful', 'resent'],
+    d: 'Resentment is old anger that hasn’t been spoken or settled. It builds when something feels unfair again and again and nothing changes.\nIt often grows quietly from unseen work, broken agreements or needs that never got said out loud. By the time it shows, it can look bigger than the moment that set it off.\nThe cure is usually the conversation that was skipped: naming the specific pattern, early, in a calm moment.' },
+
+  affectlabel: { t: 'Affect labeling', m: ['affect labeling', 'affect labelling', 'name it to tame it'], ev: 'Moderate evidence',
+    d: 'Affect labeling means putting a feeling into words, such as “I’m frustrated” or “that scared me.” Saying it often takes a little of the heat out.\nBrain imaging studies by Matthew Lieberman and colleagues found naming a feeling was linked with calmer activity in threat areas. Daniel Siegel’s phrase “name it to tame it” comes from the same idea.\nIt works best when the word is your own and it fits. Being handed a feeling-word by someone else can feel like being corrected.' },
+
+  reappraisal: { t: 'Reappraisal', m: ['cognitive reappraisal', 'reappraisal', 'reappraise', 'reframing', 'reframe', 'reframed'], ev: 'Strong evidence',
+    d: 'Reappraisal means looking at a situation in a different, still honest way so it lands differently. “They’re ignoring me” might become “they’re probably in a meeting.”\nIn James Gross’s research on emotion regulation, reappraisal is one of the better-supported strategies, usually healthier over time than pushing feelings down.\nThe new reading has to be believable. Reappraisal is about finding a fair reading, never about pretending something hurtful was fine.' },
+
+  intrusive: { t: 'Intrusive thoughts', m: ['intrusive thoughts', 'intrusive thought', 'intrusive images'],
+    d: 'Intrusive thoughts are unwanted thoughts or pictures that pop into your mind, often upsetting or out of character, like imagining something terrible happening.\nNearly everyone has them now and then. They say nothing about what you want or who you are. They become a bigger problem when they come often, cause a lot of distress, or lead to rituals to make them go away, which is part of how OCD works.\nTrying hard to push a thought away tends to bring it back more often. Noticing it (“there’s that thought again”) and letting it pass usually works better.' },
+
+  uncertainty: { t: 'Intolerance of uncertainty', m: ['intolerance of uncertainty'], ev: 'Moderate evidence',
+    d: 'Intolerance of uncertainty means finding “not knowing” very hard to bear, sometimes harder than bad news.\nResearch links it with worry and anxiety. Someone high in it may ask for details, plans and reassurance. That is a way of coping, not of being difficult.\nClear plans, quick updates (“running late, all fine”) and a named time for a hard talk all lower the amount of not-knowing for both people.' },
+
+  perfectionism: { t: 'Perfectionism', m: ['perfectionism', 'perfectionist', 'perfectionistic'], ev: 'Moderate evidence',
+    d: 'Perfectionism is holding yourself (or others) to standards so high that nothing ever feels good enough, and feeling like a failure when they aren’t met.\nResearchers separate high standards, which can be healthy, from the part that hurts: harsh self-criticism and fear of mistakes. Studies link that second part with stress, burnout and putting things off.\nAt home it can turn into redoing someone else’s task, which quietly tells them not to bother. “Good enough and done” is often the kinder standard.' },
+
+  procrastination: { t: 'Procrastination', m: ['procrastination', 'procrastinate', 'procrastinating'], ev: 'Moderate evidence',
+    d: 'Procrastination is putting off something you mean to do, even though you expect to be worse off for waiting.\nResearch by Timothy Pychyl and Fuschia Sirois describes it as short-term mood repair: avoiding the bad feeling a task brings right now. It is usually about feelings, not laziness.\nMaking the first step tiny, setting a specific time, or doing it alongside someone else lowers the feeling enough to begin.' },
+
+  catastrophizing: { t: 'Catastrophizing', m: ['catastrophizing', 'catastrophising', 'catastrophize', 'catastrophise', 'catastrophic thinking'],
+    d: 'Catastrophizing is jumping from a small worry to the worst possible outcome, and treating that outcome as likely. “They didn’t text back” becomes “they’re leaving me.”\nIt is one of the thinking traps described in cognitive behavioral therapy. Asking “What is most likely? What would I do if the worst did happen?” usually shrinks it to its real size.' },
+
+  allornothing: { t: 'All-or-nothing thinking', m: ['all-or-nothing thinking', 'black-and-white thinking', 'all-or-nothing', 'black and white thinking'],
+    d: 'All-or-nothing thinking sees things in two boxes only: perfect or ruined, always or never, good person or bad person.\nWords like “always” and “never” in an argument are a sign of it. Real life is mostly in between, and a single slip rarely means the whole effort failed.\nSwapping “never” for “twice this week” keeps a complaint accurate and much easier to hear.' },
+
+  mindreading: { t: 'Mind reading', m: ['mind reading', 'mind-reading'], nd: 'assum|think|thought|guess|know what|believ|meant|mean|feel|trap|distortion',
+    d: 'Mind reading, as a thinking trap, means being sure you know what someone else is thinking or feeling without checking. “She’s quiet, so she must be mad at me.”\nWe all guess at other people’s minds, and often we are close. The trap is treating the guess as a fact and reacting to it. A short question (“You seem quiet. Is everything okay with us?”) replaces the guess with an answer.' },
+
+  negativitybias: { t: 'Negativity bias', m: ['negativity bias'], ev: 'Moderate evidence',
+    d: 'Negativity bias is the brain’s tendency to notice and remember bad things more strongly than good things of the same size.\nOne harsh comment can outweigh several kind ones. Researchers such as Roy Baumeister described it in the paper “Bad Is Stronger Than Good.” It is one reason small, regular appreciation matters so much in close relationships: it helps balance a scale that tips the other way by default.' },
+
+  confirmation: { t: 'Confirmation bias', m: ['confirmation bias'], ev: 'Strong evidence',
+    d: 'Confirmation bias is the tendency to notice, believe and remember things that fit what you already think, and to skip past things that don’t.\nIn a relationship, once you believe “they never help,” every missed chore stands out and every done one fades. Writing things down as they happen is one of the simplest checks on it.' },
+
+  fae: { t: 'Fundamental attribution error', m: ['fundamental attribution error'], ev: 'Moderate evidence',
+    d: 'The fundamental attribution error is explaining other people’s behavior by their character (“he’s rude”) while overlooking the situation (“he just got bad news”).\nWe tend to do the opposite for ourselves: when we snap, we know it was the long day. Asking “What else might be going on for them?” is a quick correction. The effect is real, though research shows it varies across cultures and situations.' },
+
+  actorobserver: { t: 'Actor-observer bias', m: ['actor-observer bias', 'actor-observer'], ev: 'Mixed evidence',
+    d: 'The actor-observer bias is the habit of blaming circumstances for our own mistakes while blaming other people’s character for theirs.\n“I was late because of traffic. You were late because you don’t care.” A large review found the effect smaller and less consistent than once thought, but the everyday pattern is easy to recognize, and fair to check for.' },
+
+  hostileattr: { t: 'Hostile attribution bias', m: ['hostile attribution bias', 'hostile attribution', 'hostile intent'], ev: 'Moderate evidence',
+    d: 'Hostile attribution bias is reading unclear actions as deliberately unkind. A bump in the hallway, a short text, a forgotten errand all get read as “they did it on purpose.”\nIt is more likely when you are stressed, tired or have been hurt before. Asking yourself for one neutral explanation before reacting is a simple counter.' },
+
+  egocentric: { t: 'Egocentric bias', m: ['egocentric bias', 'egocentric'], ev: 'Moderate evidence',
+    d: 'Egocentric bias is seeing things too much from your own position: overrating your own share of the work, or assuming others know what you know.\nIn a classic 1979 study by Michael Ross and Fiore Sicoly, both partners overestimated their share of household tasks, so their totals often came to more than 100 percent. Nobody was lying. Each simply saw their own work more clearly.' },
+
+  spotlight: { t: 'The spotlight effect', m: ['spotlight effect'], ev: 'Moderate evidence',
+    d: 'The spotlight effect is believing other people notice your mistakes, looks or awkward moments far more than they do.\nIn studies by Thomas Gilovich, students wearing an embarrassing T-shirt guessed about half the room noticed it, when the real number was much lower. Most people are busy thinking about their own spotlight.' },
+
+  availability: { t: 'Availability heuristic', m: ['availability heuristic'], ev: 'Strong evidence',
+    d: 'The availability heuristic is judging how common or likely something is by how easily examples come to mind.\nA vivid recent fight can make it feel like you “always” fight, even if most days are calm. Daniel Kahneman and Amos Tversky described this shortcut in the 1970s. A simple record over a few weeks gives a fairer picture than memory alone.' },
+
+  lossaversion: { t: 'Loss aversion', m: ['loss aversion', 'loss-averse', 'loss averse'], ev: 'Mixed evidence',
+    d: 'Loss aversion is the tendency to feel a loss more strongly than a gain of the same size. Losing $20 tends to sting more than finding $20 feels good.\nIt helps explain why giving up a familiar arrangement feels hard even when a new one would be fairer. Kahneman and Tversky described it, and later research suggests the effect is real but smaller and more variable than first claimed.' },
+
+  statusquo: { t: 'Status quo bias', m: ['status quo bias'], ev: 'Moderate evidence',
+    d: 'Status quo bias is preferring things to stay as they are, simply because that is how they are now.\nAt home, it is why the person who always did a job keeps doing it long after it stopped being fair. A planned review date makes change feel normal instead of like an accusation.' },
+
+  sunkcost: { t: 'Sunk cost', m: ['sunk cost fallacy', 'sunk cost', 'sunk costs', 'sunk-cost'], ev: 'Moderate evidence',
+    d: 'A sunk cost is time, money or effort already spent that you can’t get back. The sunk cost fallacy is continuing something mainly because of what you have already put in.\n“We’ve already argued for an hour, we have to finish this tonight” is a sunk cost thought. The better question is only about the future: from here, what would help most?' },
+
+  cogload: { t: 'Cognitive load', m: ['cognitive load'], ev: 'Moderate evidence',
+    d: 'Cognitive load is how much your working memory is juggling at once. When it is full, new information gets dropped and small things feel hard.\nA long list given in the middle of making dinner, or three topics in one talk, can overload anyone. Writing things down, one topic at a time and short sentences all lower the load.' },
+
+  decisionfatigue: { t: 'Decision fatigue', m: ['decision fatigue'], ev: 'Mixed evidence',
+    d: 'Decision fatigue is the worn-out feeling after making many choices, when even small decisions (what to cook, what to watch) feel like too much.\nThe experience is common, but studies on whether willpower truly “runs out” have had mixed results. Setting routines and defaults for small things still frees up room for the choices that matter.' },
+
+  egodepletion: { t: 'Ego depletion', m: ['ego depletion', 'ego-depletion'], ev: 'Weak evidence',
+    d: 'Ego depletion was the idea that self-control is a limited supply that gets used up during the day, like a battery.\nIt was very popular, but large replication studies did not find the effect reliably. Being tired and stressed clearly makes self-control harder. The specific “limited fuel” model is now doubted.' },
+
+  choiceoverload: { t: 'Choice overload', m: ['choice overload', 'paradox of choice'], ev: 'Mixed evidence',
+    d: 'Choice overload is feeling stuck or less satisfied when there are too many options to pick from.\nA famous jam-tasting study suggested more choice can mean fewer decisions, but later reviews found the effect depends a lot on the situation. Narrowing to two or three options is often a kind way to help someone decide.' },
+
+  workingmemory: { t: 'Working memory', m: ['working memory'], ev: 'Strong evidence',
+    d: 'Working memory is the mental notepad that holds a few things in mind while you use them, like a phone number you are about to dial or the three things you were asked to grab.\nIt holds only a handful of items and is easily disrupted by stress, tiredness or interruptions. Some people, including many with ADHD, have less room on it. Writing things down is the simplest support.' },
+
+  execfunction: { t: 'Executive function', m: ['executive function', 'executive functions', 'executive functioning', 'executive dysfunction'], ev: 'Strong evidence',
+    d: 'Executive function is the set of mental skills that help you plan, start tasks, switch between them, keep track of time and hold back an impulse. It is the brain’s project manager.\nIt can be weaker for some people (often with ADHD or autism) and for anyone who is exhausted, stressed or unwell. That can look like laziness or not caring from the outside. The difference is in the pattern: the person wants to do the task and may care a lot, yet starting, sequencing or remembering it is genuinely hard, often worse under pressure and better with structure.\nAsking “Is this a won’t or a can’t right now?” helps. Reminders, lists, visible calendars and breaking tasks into steps are supports, not crutches.' },
+
+  timeblindness: { t: 'Time blindness', m: ['time blindness', 'time-blindness', 'time blind'],
+    d: 'Time blindness is a common way people with ADHD describe trouble sensing how much time has passed or how long something will take.\nIt can look like not caring about being on time. Usually the person does care and simply loses track. Timers, alarms and visible clocks help more than reminders to “just be on time.” It is a description people use, not a formal diagnosis.' },
+
+  hyperfocus: { t: 'Hyperfocus', m: ['hyperfocus', 'hyperfocused', 'hyperfocusing'],
+    d: 'Hyperfocus is deep, absorbed attention on one thing, so strong that time, hunger and other people fade out.\nMany people with ADHD or autism describe it. It can be a real strength. It can also mean not hearing a question from the next room, which is very different from ignoring someone. A gentle touch on the shoulder or an agreed signal works better than repeating the question louder.' },
+
+  bodydoubling: { t: 'Body doubling', m: ['body doubling', 'body double', 'body-doubling'], ev: 'Early evidence',
+    d: 'Body doubling means doing a task with another person nearby, in the room or on a call, even if they are doing something else.\nMany people with ADHD find it helps them start and keep going. Formal research is still limited, but it is a low-cost thing to try: “Want to fold laundry while I do the bills?”' },
+
+  monotropism: { t: 'Monotropism', m: ['monotropism', 'monotropic', 'polytropism', 'polytropic'], ev: 'Early evidence',
+    d: 'Monotropism is a theory of autism that says attention tends to flow deeply into a few things at a time instead of spreading across many.\nIt was proposed by autistic researchers Dinah Murray, Mike Lesser and Wenn Lawson. It helps explain both the joy of deep interests and why sudden switches feel jarring. Early research supports it, and testing is ongoing.\nIn practice, warnings before a change (“in ten minutes, can we talk about dinner?”) make switching much easier.' },
+
+  specialinterest: { t: 'Special interest', m: ['special interests', 'special interest', 'deep interests', 'obsessive'], nx: 'obsessive-compulsive',
+    d: 'A special interest is a topic someone loves deeply and wants to learn and talk about in detail. The term is often used by autistic people, and many find their interests a source of calm and joy.\nIt sometimes gets called “obsessive,” and the two are different. An obsession, in the clinical sense, is unwanted, causes distress and feels forced. A special interest is wanted, brings pleasure and restores energy. Spending lots of time on something you love is not, by itself, a problem.\nIf it causes friction, talk about time and timing (“Can we do your update after dinner?”), not about the interest being too much.' },
+
+  infodump: { t: 'Info-dumping', m: ['info-dumping', 'infodumping', 'info dumping', 'info-dump'],
+    d: 'Info-dumping is sharing a lot of detail about something you care about, often all at once. Many autistic people describe it as a way of showing love and closeness: “I’m letting you into my world.”\nIt is not a lecture or showing off. If it is too much right now, a kind “I want to hear this. Can you give me the short version now and the long one later?” keeps the connection.' },
+
+  stimming: { t: 'Stimming', m: ['stimming', 'self-stimulatory', 'stims', 'stim'],
+    d: 'Stimming is repeated movement or sound that helps someone regulate: rocking, hand-flapping, tapping, humming, fidgeting with an object.\nEveryone stims a little (clicking a pen, bouncing a leg). For many autistic people it is a key way to cope with stress or show excitement. It is not rude or a sign of not listening. Stopping it on request often makes focus harder.' },
+
+  meltdown: { t: 'Meltdown', m: ['meltdowns', 'meltdown'],
+    d: 'A meltdown is an involuntary reaction to overwhelm, when a nervous system has had too much. It can look like crying, shouting, running off or lashing out.\nIt is different from a tantrum. A tantrum aims at a goal and often stops once the goal is met or there is no audience. A meltdown is not aimed at anything, can’t be switched off by giving in, and usually ends in exhaustion. The person often feels embarrassed afterward.\nWhat helps is less input (quiet, space, fewer words) and safety, not reasoning or consequences in the moment.' },
+
+  shutdown: { t: 'Shutdown', m: ['shutdowns', 'shutdown', 'shut down', 'shuts down', 'shutting down'], nd: 'overwhelm|overload|stress|nervous|body|feel|freez|numb|meltdown|autis|blank|speech|quiet|still|flooded|panick|window|exhaust|recover|sensory|emotion',
+    nx: 'shut down (the|your|a|my|our|their) (computer|laptop|phone|app|device|site|business|store|shop|school|office|government)',
+    d: 'A shutdown is the quiet response to overwhelm: going still, losing words, feeling numb or far away. It is a body protecting itself when it has had too much.\nIt can look like ignoring someone, sulking or giving the silent treatment. The difference is that it isn’t chosen and isn’t aimed at anyone. The person often can’t speak yet, even if they want to.\nThe best help is fewer demands: stop asking questions, lower the noise, stay nearby if welcome, and pick up the conversation later.' },
+
+  autburnout: { t: 'Autistic burnout', m: ['autistic burnout'], ev: 'Early evidence',
+    d: 'Autistic burnout is a long period of deep exhaustion, lower tolerance for sensory input and loss of skills, often after months or years of masking and coping with too much.\nIt was described first by autistic adults and is now being studied (Raymaker and colleagues, 2020). It is different from job burnout, though they can overlap. Rest, less masking and less demand are what people report helping most.' },
+
+  burnout: { t: 'Burnout', m: ['burnout', 'burned out', 'burnt out', 'burn out'], ev: 'Moderate evidence',
+    d: 'Burnout is deep exhaustion from long-term stress that hasn’t eased, often with feeling detached or cynical and a sense that your effort makes no difference.\nThe World Health Organization describes it in relation to work, but people use it for caregiving and home life too. A weekend off rarely fixes it. Changing the load, the support and the rhythm usually has to be part of the answer.' },
+
+  spoons: { t: 'Spoon theory', m: ['spoon theory', 'spoons'], nd: 'energy|spoon theory|chronic|run out|left|enough|day|tired|ill',
+    d: 'Spoon theory is a way to explain limited daily energy. Each task costs a spoon, and some people start the day with fewer spoons than others.\nChristine Miserandino came up with it in 2003 to explain life with lupus, and it is now used by many disabled and neurodivergent people. “I’m low on spoons today” is a quick, no-blame way to say “I can’t do much more.”' },
+
+  demandavoid: { t: 'Demand avoidance', m: ['pathological demand avoidance', 'demand avoidance', 'persistent drive for autonomy'], ev: 'Early evidence',
+    d: 'Demand avoidance means feeling strong anxiety or resistance when asked or expected to do something, even something the person wants to do.\nSome describe a profile called PDA, first named “pathological demand avoidance” in 2003. Many now prefer “persistent drive for autonomy.” It is debated whether it is a separate profile, and it is not a formal diagnosis in the main manuals.\nOffering choices, using requests that leave room (“I wonder if…”) and lowering pressure tend to help more than firmer instructions.' },
+
+  neurodiversity: { t: 'Neurodiversity', m: ['neurodiversity'],
+    d: 'Neurodiversity is the simple fact that human brains vary, the way bodies do. The word was popularized by sociologist Judy Singer in the late 1990s.\nThe neurodiversity view treats differences such as autism, ADHD and dyslexia as part of normal human variation that come with strengths and challenges, instead of only as problems to fix. It doesn’t deny that some people need a lot of support.' },
+
+  parallelplay: { t: 'Parallel play', m: ['parallel play', 'parallel playing'],
+    d: 'Parallel play is doing your own activities side by side, in the same space, without needing to talk much. Children do it, and many adults enjoy it too.\nMany autistic people describe it as a restful, real way to be close. Reading in the same room counts as time together.' },
+
+  literal: { t: 'Taking words literally', m: ['take words literally', 'take things literally', 'taking things literally', 'literal-minded', 'literal thinking', 'literal interpretation', 'literal'], nd: 'mean|word|said|say|autis|take|taking|hint|joke|sarcas|idiom|direct|rude',
+    d: 'Some people, including many autistic people, take words at their exact meaning. “Can you take the trash out?” gets “Yes” and no action, because it sounded like a question about ability.\nThis is easy to mistake for rudeness or being difficult. The difference is intent. A literal reader is answering what was said, without trying to dodge or mock. Rudeness shows in tone, choice and a pattern of disrespect even when meaning is clear.\nSaying exactly what you mean (“Please take the trash out before 8”) helps both people. Checking (“Did you mean that literally?”) is better than assuming the worst.' },
+
+  hyperarousal: { t: 'Hyperarousal', m: ['hyperarousal', 'hyper-arousal', 'hyperaroused'],
+    d: 'Hyperarousal is being stuck in a revved-up state: on edge, easily startled, irritable, heart racing, hard to settle or sleep.\nIt is the “above the window” side of the window of tolerance. It is common after long stress or trauma. Slowing the breath, lowering noise and moving the body can help bring it down.' },
+
+  hypoarousal: { t: 'Hypoarousal', m: ['hypoarousal', 'hypo-arousal', 'hypoaroused'],
+    d: 'Hypoarousal is the shut-down side of stress: flat, numb, foggy, low energy, far away.\nIt is the “below the window” side of the window of tolerance. It can look like not caring. Gentle movement, warmth, a familiar voice and simple, small tasks help more than pushing for a big talk.' },
+
+  window: { t: 'Window of tolerance', m: ['window of tolerance'], ev: 'Moderate evidence',
+    d: 'The window of tolerance is a picture, from psychiatrist Daniel Siegel, of the zone where you can feel strong emotions and still think, listen and choose what to do.\nAbove it you are wired, flooded or panicky. Below it you are flat, numb or shut down. Stress, poor sleep, hunger and old hurts can make the window narrower.\nIt is a useful picture, not a measured thing. Hard talks go best when both people are inside their windows.' },
+
+  polyvagal: { t: 'Polyvagal theory', m: ['polyvagal theory', 'polyvagal'], ev: 'Mixed evidence',
+    d: 'Polyvagal theory, proposed by Stephen Porges in the 1990s, describes three body states: safe and social, mobilized (fight or flight) and shut down. It links them to the vagus nerve.\nThe everyday picture of three states is helpful and widely used by therapists. Several of the theory’s claims about anatomy and evolution are disputed by other scientists. The evidence label here is Mixed: useful as a picture, not settled biology.\nThis site uses the three states only as plain labels (calm, revved up, running on empty), never as medical facts.' },
+
+  vagus: { t: 'The vagus nerve', m: ['vagus nerve', 'vagal tone', 'cardiac-vagal', 'cardiac vagal'], ev: 'Moderate evidence',
+    d: 'The vagus nerve is a long nerve running from the brainstem to the heart, lungs and gut. It helps slow the heart and calm the body after stress.\n“Vagal tone” describes how strongly it is working, often estimated from heart rate variability. Slow breathing with a long out-breath is linked with more vagal activity. Many online claims about “hacking” the vagus nerve go well beyond the evidence.' },
+
+  hrv: { t: 'Heart rate variability', m: ['heart rate variability', 'heart-rate variability', 'HRV'], cs: true, ev: 'Moderate evidence',
+    d: 'Heart rate variability (HRV) is the small, natural change in time between heartbeats. Some variation is healthy. It shows the body can shift between revving up and settling.\nHigher HRV at rest is generally linked with better stress recovery, though it varies a lot between people and by age, fitness and sleep. Wearable readings are rough estimates.' },
+
+  amygdala: { t: 'Amygdala', m: ['amygdala', 'amygdalae'], ev: 'Moderate evidence',
+    d: 'The amygdala is a small, almond-shaped part of the brain involved in spotting threats and in strong emotions, especially fear.\nIt is often called the brain’s “alarm,” which is a simplification. It also handles reward and what is important, and it works together with many other areas. Under stress or after poor sleep, it tends to react more strongly.' },
+
+  prefrontal: { t: 'Prefrontal cortex', m: ['prefrontal cortex', 'prefrontal'], ev: 'Moderate evidence',
+    d: 'The prefrontal cortex is the front part of the brain, behind the forehead. It helps with planning, weighing choices, holding back impulses and seeing other people’s points of view.\nIt keeps developing into the mid-twenties and works less well under high stress, which is one reason hard talks go badly when people are flooded.' },
+
+  cortisol: { t: 'Cortisol', m: ['cortisol'], ev: 'Strong evidence',
+    d: 'Cortisol is a hormone the body releases under stress. It helps you rise to a challenge by raising blood sugar and alertness.\nIt works more slowly than adrenaline and can stay up for hours, which is why a stressful morning can still color the evening. Long-term high levels are linked with poorer sleep and health. Calling it “the stress hormone” is a simplification, since it also follows a normal daily rhythm.' },
+
+  adrenaline: { t: 'Adrenaline', m: ['adrenaline', 'adrenalin', 'epinephrine'], ev: 'Strong evidence',
+    d: 'Adrenaline (also called epinephrine) is a fast-acting hormone released within seconds of a scare or stress. It speeds the heart, sharpens attention and readies the muscles.\nIt helps in an emergency and makes it hard to listen calmly in an argument. The rush usually fades within minutes, though the body can take longer to fully settle.' },
+
+  allostatic: { t: 'Allostatic load', m: ['allostatic load', 'allostatic', 'allostasis'], ev: 'Moderate evidence',
+    d: 'Allostatic load is the wear and tear on the body from stress that keeps coming without enough recovery.\nThe idea comes from Bruce McEwen. Short stress is normal and even useful. What builds up is stress with no break. It is a reason rest and recovery count as real work, not luxuries.' },
+
+  fightflight: { t: 'Fight, flight, freeze or fawn', m: ['fight, flight, freeze or fawn', 'fight, flight, freeze', 'fight or flight', 'fight-or-flight', 'fight-flight'], ev: 'Moderate evidence',
+    d: 'Fight or flight is the body’s fast response to threat: heart racing, muscles ready, attention narrowed. Walter Cannon described it in the early 1900s.\nFreeze (going still) and fawn (trying to please or appease to stay safe) are often added. “Fawn” is a newer term from therapist Pete Walker and has little formal research behind it, so treat it as a description, not a finding.\nNone of these are choices in the moment. They are the body trying to keep you safe, even when the “threat” is only a tense conversation.' },
+
+  freeze: { t: 'Freeze response', m: ['freeze response', 'freezing up', 'freeze', 'froze'], nd: 'fight|flight|threat|body|stress|frozen|nervous|fear|scared|still|blank|panic|response|trauma',
+    nx: 'freezer|freeze (the|a|your|my) (food|meat|bread|leftover|account|card|price|pay)|price freeze|hiring freeze',
+    d: 'The freeze response is going still, blank or unable to act or speak when something feels threatening. It is one of the body’s automatic ways of reacting to danger.\nIt can be mistaken for not caring or giving someone the cold shoulder. It isn’t chosen. Giving time, lowering pressure and not demanding an answer right away help the body come back online.' },
+
+  fawn: { t: 'Fawning', m: ['fawn response', 'fawning', 'fawn'], nd: 'fight|flight|freeze|please|appease|trauma|safe|threat|response',
+    d: 'Fawning describes reacting to tension by trying hard to please, agree or keep the other person happy, sometimes ignoring your own needs to stay safe.\nThe term comes from therapist Pete Walker and is used widely, but it has little formal research behind it. It overlaps with people-pleasing. It is a pattern to notice in yourself, not a label for anyone else.' },
+
+  dissociation: { t: 'Dissociation', m: ['dissociation', 'dissociative', 'dissociate', 'dissociating', 'depersonalization', 'depersonalisation', 'derealization', 'derealisation'], ev: 'Moderate evidence',
+    d: 'Dissociation is feeling disconnected from yourself, your body or your surroundings, as if things are unreal, far away or happening to someone else.\nMild forms are common (driving home and not remembering the trip). Stronger forms can happen under extreme stress or after trauma. Grounding through the senses, like naming what you can see and touch, can help bring attention back to the present.' },
+
+  trauma: { t: 'Trauma', m: ['traumatic', 'trauma'], nx: 'trauma (surgeon|center|ward|unit)|head trauma|blunt trauma', ev: 'Strong evidence',
+    d: 'Trauma usually means an event or series of events that overwhelmed someone’s ability to cope and felt threatening to their life, safety or sense of self, along with the lasting effects it can leave.\nThe same event affects people differently, and having lived through something hard does not mean someone is “traumatized.” When trauma does leave a mark, it can show up as quick alarm, overreactions, shutting down or trouble trusting, often in moments that echo the original danger.\nHaving had trauma is never the person’s fault. Understanding where a reaction comes from is a step toward taking back control so it no longer runs the show. Nobody can diagnose trauma in someone else from the outside.' },
+
+  ptsd: { t: 'PTSD', m: ['post-traumatic stress disorder', 'posttraumatic stress disorder', 'post-traumatic stress', 'PTSD'], cs: true, ev: 'Strong evidence',
+    d: 'PTSD (post-traumatic stress disorder) is a condition some people develop after a traumatic event. It involves unwanted memories or flashbacks, avoiding reminders, feeling on edge, and changes in mood or beliefs that last for more than a month.\nMost people who go through trauma do not develop PTSD. It is a clinical diagnosis, so it isn’t something to assign to a partner or friend from the outside. Effective, well-tested treatments exist.' },
+
+  cptsd: { t: 'Complex PTSD', m: ['complex PTSD', 'complex post-traumatic stress', 'C-PTSD', 'CPTSD'], ev: 'Moderate evidence',
+    d: 'Complex PTSD is a diagnosis in the World Health Organization’s ICD-11 for people who went through long or repeated trauma, often in childhood, that was hard or impossible to escape.\nIt includes the signs of PTSD plus lasting difficulty with managing emotions, a harsh sense of self and trouble in relationships. It is not in the main US manual (DSM-5), which is one reason you will see it discussed differently in different places.' },
+
+  ptgrowth: { t: 'Post-traumatic growth', m: ['post-traumatic growth', 'posttraumatic growth'], ev: 'Mixed evidence',
+    d: 'Post-traumatic growth is positive change some people report after struggling with a very hard event: closer relationships, new priorities, a stronger sense of what matters.\nThe idea comes from Richard Tedeschi and Lawrence Calhoun. Studies rely mostly on what people report, and some researchers question how much reported growth reflects real change. It should never be expected of anyone or used to say a hard thing was “for the best.”' },
+
+  traumainformed: { t: 'Trauma-informed', m: ['trauma-informed', 'trauma informed'],
+    d: 'Trauma-informed means acting with the awareness that anyone might be carrying past trauma, without needing to know their story. In practice that looks like predictability, choice, clear explanations, and avoiding surprises, shaming or pressure.\nIt is an approach used in schools, health care and support work. At home, it can be as simple as asking before touching, saying what is about to happen, and letting someone set the pace.' },
+
+  triggered: { t: 'Triggered', m: ['triggered', 'triggers', 'trigger'], nd: 'feel|felt|react|memor|trauma|old|past|upset|emotion|body|alarm|anger|panic|hurt|sensitive|calm',
+    nx: 'trigger (a|an|the) (bug|error|event|download|update|alarm system)',
+    d: 'Being triggered, in the psychological sense, means a reminder of something painful sets off a strong reaction, often bigger than the present moment seems to call for.\nThe word started in trauma care and is now used loosely for being annoyed. It is most useful when kept close to its meaning: a reaction that is partly about the past. Saying “I think this hit an old sore spot” can explain a big reaction without blaming the other person.' },
+
+  aces: { t: 'Adverse childhood experiences', m: ['adverse childhood experiences', 'adverse childhood experience'], ev: 'Strong evidence',
+    d: 'Adverse childhood experiences (ACEs) are hard experiences before age 18, such as abuse, neglect, or living with violence, addiction or serious mental illness at home.\nA large 1998 study by Vincent Felitti and colleagues linked more ACEs with more health and relationship problems later. ACE scores describe risk across groups. They don’t predict any one person’s future, and support, safe relationships and resilience matter a great deal.' },
+
+  resilience: { t: 'Resilience', m: ['resilience', 'resilient'], ev: 'Moderate evidence',
+    d: 'Resilience is the ability to cope with and recover from hard things. It is less a fixed trait and more a process that depends on support, skills and circumstances.\nResearcher Ann Masten called it “ordinary magic,” because it mostly comes from ordinary things: caring relationships, a sense of control, and chances to rest and recover. Being resilient doesn’t mean not hurting.' },
+
+  coping: { t: 'Problem-focused and emotion-focused coping', m: ['problem-focused coping', 'emotion-focused coping', 'coping strategies', 'coping strategy', 'coping skills'], ev: 'Moderate evidence',
+    d: 'Coping means the ways people deal with stress. Richard Lazarus and Susan Folkman described two broad kinds: problem-focused (changing the situation, such as making a plan) and emotion-focused (changing how you feel about it, such as calming down or getting support).\nNeither is better in general. Problem-focused coping fits what you can change. Emotion-focused coping fits what you can’t. Most hard days need some of both.' },
+
+  growthmindset: { t: 'Growth mindset', m: ['growth mindset', 'fixed mindset', 'growth mind-set'], ev: 'Mixed evidence',
+    d: 'A growth mindset is the belief that abilities can improve with effort and practice. A fixed mindset is the belief that they are set. The ideas come from psychologist Carol Dweck.\nLarge studies found that mindset programs have small effects on average, larger for some students and settings. Believing you can learn still helps, but it is not a cure-all.' },
+
+  selfefficacy: { t: 'Self-efficacy', m: ['self-efficacy', 'self efficacy'], ev: 'Strong evidence',
+    d: 'Self-efficacy is your belief that you can do a specific thing, such as “I can have this conversation calmly” or “I can learn this.” The idea comes from Albert Bandura.\nIt grows mostly from small successes, seeing people like you succeed, and encouragement. That is one reason the site starts with small, doable steps.' },
+
+  sdt: { t: 'Self-determination theory', m: ['self-determination theory', 'self-determination'], ev: 'Strong evidence',
+    d: 'Self-determination theory, from Edward Deci and Richard Ryan, says people thrive when three needs are met: autonomy (feeling you have a say), competence (feeling capable) and relatedness (feeling connected).\nIt is one of the best-studied theories of motivation. At home, chores handed out as orders tend to feel worse than jobs people chose and are trusted to do their own way.' },
+
+  intrinsic: { t: 'Intrinsic and extrinsic motivation', m: ['intrinsic motivation', 'extrinsic motivation', 'intrinsically motivated', 'extrinsically motivated'], ev: 'Moderate evidence',
+    d: 'Intrinsic motivation means doing something because you find it interesting or meaningful. Extrinsic motivation means doing it for something outside it, like money, praise or avoiding trouble.\nBoth are normal. Research suggests that rewards for things people already enjoy can sometimes lower their interest, an effect called overjustification, though it depends on the situation.' },
+
+  hedonic: { t: 'Hedonic adaptation', m: ['hedonic adaptation', 'hedonic treadmill'], ev: 'Moderate evidence',
+    d: 'Hedonic adaptation is the tendency to get used to good and bad changes, so happiness drifts back toward its usual level over time. People sometimes call it the hedonic treadmill.\nIt is why a new couch stops feeling special after a few weeks, and why small, varied moments of appreciation do more over time than one big gesture.' },
+
+  eudaimonic: { t: 'Eudaimonic well-being', m: ['eudaimonic', 'eudaimonia'],
+    d: 'Eudaimonic well-being is the kind of “good life” that comes from meaning, growth and living by your values, as opposed to pleasure alone (hedonic well-being).\nThe word eudaimonia comes from Aristotle, often translated as flourishing. Psychologists study both kinds, and most people need some of each.' },
+
+  savoring: { t: 'Savoring', m: ['savoring', 'savouring', 'savor the', 'savour the'], ev: 'Moderate evidence',
+    d: 'Savoring means deliberately noticing and staying with a good moment, such as a warm drink, a shared laugh or good news, instead of rushing past it.\nResearch by Fred Bryant links it with more positive feelings. Telling someone about a good moment is one way to savor it twice.' },
+
+  broaden: { t: 'Broaden-and-build', m: ['broaden-and-build', 'broaden and build'], ev: 'Moderate evidence',
+    d: 'Broaden-and-build is Barbara Fredrickson’s theory that positive feelings widen what we notice and consider, and over time help build resources such as friendships and skills.\nIt is one reason calm, warm moments are good times to solve problems together. Some later claims tied to the theory, like an exact “positivity ratio,” were withdrawn, while the core idea has decent support.' },
+
+  psychsafety: { t: 'Psychological safety', m: ['psychological safety', 'psychologically safe'], ev: 'Strong evidence',
+    d: 'Psychological safety is a shared sense that it is safe to speak up, ask questions, admit mistakes or disagree without being punished or embarrassed. Amy Edmondson studied it in work teams.\nIt doesn’t mean everyone is always comfortable or agrees. It means people can say hard things. Homes and friendships have their own version.' },
+
+  mindfulness: { t: 'Mindfulness', m: ['mindfulness', 'mindful attention'], ev: 'Moderate evidence',
+    d: 'Mindfulness means paying attention to the present moment on purpose, with curiosity instead of judgment, noticing thoughts and feelings without getting swept away by them.\nStudies show mindfulness programs can modestly reduce stress, anxiety and low mood for many people, with effects similar to other active approaches. It doesn’t suit everyone, and for some people with trauma, long silent sessions can feel worse, so short and guided is a gentler start.' },
+
+  grounding: { t: 'Grounding', m: ['grounding exercise', 'grounding technique', 'grounding techniques', 'grounding'], nd: 'sens|breath|feet|exercise|technique|present|five|5-4-3|notice|calm|panic|body|room|touch|see',
+    d: 'Grounding means using your senses to bring your attention back to the here and now, for example naming five things you can see, feeling your feet on the floor, or holding something cold.\nIt is widely used to ease panic, flashbacks or overwhelm. It doesn’t solve the problem. It helps you get steady enough to think.' },
+
+  expressive: { t: 'Expressive writing', m: ['expressive writing'], ev: 'Moderate evidence',
+    d: 'Expressive writing means writing freely about your deepest thoughts and feelings on something hard, usually for 15 to 20 minutes over a few days.\nJames Pennebaker’s research found it can help some people feel better and even sleep better, though effects in later studies were smaller and varied. Many people find writing a hard talk out first makes the real conversation calmer.' },
+
+  lovingkindness: { t: 'Loving-kindness', m: ['loving-kindness', 'loving kindness', 'metta'], ev: 'Moderate evidence',
+    d: 'Loving-kindness (metta in the Pali language) is a meditation practice from Buddhist traditions: quietly wishing well to yourself, someone you love, someone neutral, someone difficult and then everyone.\nStudies suggest it can increase warmth and positive feelings toward others. It doesn’t require any religious belief.' },
+
+  equanimity: { t: 'Equanimity', m: ['equanimity'],
+    d: 'Equanimity is a steady, balanced state of mind that stays calm whether things go well or badly. It isn’t not caring. It is caring without being knocked over.\nThe idea appears in Buddhist, Stoic and other traditions, and is often described as something built through practice.' },
+
+  impermanence: { t: 'Impermanence', m: ['impermanence', 'impermanent'],
+    d: 'Impermanence is the idea that everything changes and nothing stays the same forever: moods, situations, relationships, life itself.\nIt is central in Buddhist teaching. Many people find it comforting in hard times (“this will pass”) and a reminder to value good times while they are here.' },
+
+  stoic: { t: 'Stoic', m: ['Stoicism', 'Stoics', 'Stoic'],
+    d: 'Stoicism is an ancient Greek and Roman philosophy, taught by thinkers such as Epictetus, Seneca and Marcus Aurelius. Its core idea is to focus on what is within your control (your choices and responses) and accept what isn’t.\nIn everyday English, “stoic” has come to mean hiding feelings or not complaining. The original Stoics didn’t ask people to feel nothing. They asked people to respond wisely to what they feel.' },
+
+  ubuntu: { t: 'Ubuntu', m: ['Ubuntu'], cs: true,
+    d: 'Ubuntu is a Southern African idea, often summed up as “I am because we are.” It holds that a person becomes fully human through their relationships with others.\nArchbishop Desmond Tutu spoke about it often. It is a reminder that care, fairness and belonging are shared, not private achievements.' },
+
+  kintsugi: { t: 'Kintsugi', m: ['kintsugi'],
+    d: 'Kintsugi is the Japanese art of repairing broken pottery with gold, so the cracks become part of the beauty instead of something to hide.\nPeople often use it as a picture for relationships and people that are stronger, and more honest, after repair.' },
+
+  wabisabi: { t: 'Wabi-sabi', m: ['wabi-sabi', 'wabi sabi'],
+    d: 'Wabi-sabi is a Japanese way of seeing beauty in things that are imperfect, simple and changing, like a worn wooden table or a chipped cup.\nIt is a gentle counter to perfectionism: good enough, lived-in and real.' },
+
+  ikigai: { t: 'Ikigai', m: ['ikigai'],
+    d: 'Ikigai is a Japanese word roughly meaning “a reason for being,” the things that make life feel worth living.\nThe popular four-circle chart (what you love, what you are good at, what the world needs, what you can be paid for) is a Western addition. In Japan the word is usually about everyday joys and purpose, not careers.' },
+
+  /* relationships and attachment */
+  attachment: { t: 'Attachment', m: ['attachment theory', 'attachment styles', 'attachment style', 'attachment patterns', 'attachment'], nx: 'email attachment|file attachment|attachment (file|to (the|an) email)|(open|download) (the|an) attachment', ev: 'Strong evidence',
+    d: 'In psychology, attachment is the deep emotional bond between a person and the people they rely on for comfort and safety, first caregivers and later partners and close friends.\nAttachment theory, from John Bowlby and Mary Ainsworth, describes patterns such as secure, anxious and avoidant. They describe tendencies in how people seek closeness under stress. They aren’t fixed boxes or personality types, and they can change with experience.\nPop psychology often uses attachment styles as labels for partners (“he’s avoidant”). Research uses them as ranges on a scale, measured carefully, and a single behavior never shows someone’s style.' },
+
+  anxiousattach: { t: 'Anxious attachment', m: ['anxious attachment', 'anxiously attached', 'anxious-preoccupied', 'clingy', 'needy'], nx: 'needy (families|children|people|households)', ev: 'Strong evidence',
+    d: 'Anxious attachment is a tendency to worry about being left or loved less, so closeness and reassurance feel urgent, especially during conflict or distance.\nIt is often called “clingy” or “needy,” and those words hurt more than they explain. The real pattern is fear of losing connection that keeps coming back, shows across situations, and eases with steady, predictable responses. Wanting to talk tonight, texting during a long trip or asking “are we okay?” after a fight are normal on their own. They fit the pattern only when they come from frequent, hard-to-soothe worry about the relationship itself.\nIt helps to name the need instead of the label: “When I don’t hear back, my mind goes to the worst. A quick ‘busy, all good’ would help.” Steadiness from both sides tends to calm the cycle.' },
+
+  avoidattach: { t: 'Avoidant attachment', m: ['avoidant attachment', 'avoidantly attached', 'dismissive-avoidant', 'fearful-avoidant', 'avoidant'], nd: 'attach|partner|close|distance|intimacy|independen|style|relationship', ev: 'Strong evidence',
+    d: 'Avoidant attachment is a tendency to feel uneasy with too much closeness or dependence, so a person may pull back, go quiet or focus on independence when things get emotional.\nIt is easy to over-apply. Needing time alone, being private, processing silently or needing space after a fight can all be about temperament, wiring or overwhelm. The attachment pattern shows as a lasting discomfort with being depended on or depending on others, across relationships, especially when closeness grows.\nLabels like “he’s avoidant” tend to make people defensive. Talking about the specific moment (“When I reach for you after a hard day, you seem to step back. What’s going on for you then?”) opens the conversation.' },
+
+  securebase: { t: 'Secure base and safe haven', m: ['secure base', 'safe haven'], ev: 'Strong evidence',
+    d: 'In attachment research, a safe haven is someone you turn to for comfort when upset. A secure base is someone whose support makes it easier to go out and explore, take risks and grow.\nGood relationships do both: comfort when things go wrong, and encouragement when you want to try something new.' },
+
+  earnedsecure: { t: 'Earned security', m: ['earned security', 'earned secure', 'earned-secure'], ev: 'Moderate evidence',
+    d: 'Earned security describes adults who had difficult early relationships but now relate to others in a secure, steady way.\nIt is a hopeful finding: attachment patterns can change through supportive relationships, reflection and sometimes therapy. Your start doesn’t have to decide your whole story.' },
+
+  strangesituation: { t: 'The Strange Situation', m: ['Strange Situation'], cs: true, ev: 'Strong evidence',
+    d: 'The Strange Situation is a research method Mary Ainsworth developed in the 1970s to observe how toddlers react when a parent leaves the room briefly and then returns.\nIt led to the main attachment categories used today. It measures a child’s pattern with one caregiver in a lab, and it was never designed to label adults.' },
+
+  attunement: { t: 'Attunement', m: ['attunement', 'misattunement', 'attuned'], ev: 'Moderate evidence',
+    d: 'Attunement means picking up on and responding to someone’s feelings and needs, so they feel understood. A parent who notices a baby is tired, or a partner who notices you need quiet, is attuned.\nNobody is attuned all the time. What matters most is noticing when you missed and coming back to repair it.' },
+
+  mentalizing: { t: 'Mentalizing', m: ['mentalizing', 'mentalising', 'mentalization', 'mentalisation', 'theory of mind', 'reflective functioning'], ev: 'Moderate evidence',
+    d: 'Mentalizing means making sense of behavior, your own and other people’s, by thinking about the feelings, thoughts and intentions behind it. “She snapped because she’s worried about her mom” is mentalizing.\nPeter Fonagy and Anthony Bateman built a therapy approach around it. Everyone mentalizes less well when stressed or flooded, which is why hard talks go better in calm moments.\nThe related term “theory of mind” is about knowing that others have minds different from yours. Older claims that autistic people lack it are now widely challenged, partly by the double empathy idea.' },
+
+  reciprocity: { t: 'Reciprocity', m: ['reciprocity', 'reciprocal', 'reciprocate'], ev: 'Strong evidence',
+    d: 'Reciprocity is the back-and-forth of giving and receiving in a relationship: help, attention, effort and care moving both ways over time.\nIt doesn’t need to be equal every day. It matters that, over months, both people feel the flow goes both ways. Long stretches of one-way giving are often where resentment starts.' },
+
+  responsiveness: { t: 'Responsiveness', m: ['perceived partner responsiveness', 'partner responsiveness', 'responsiveness'], ev: 'Strong evidence',
+    d: 'Responsiveness is the sense that the other person understands you, values you and cares about your needs. Harry Reis and colleagues found that how responsive you feel your partner is ranks among the strongest predictors of a good relationship.\nIt is built in small moments: looking up when spoken to, remembering what someone said, asking how the thing they were worried about went.' },
+
+  selfexpansion: { t: 'Self-expansion', m: ['self-expansion'], ev: 'Moderate evidence',
+    d: 'Self-expansion is the idea, from Arthur and Elaine Aron, that people are drawn to relationships that help them grow, learn and try new things.\nStudies found couples who did new, slightly challenging activities together felt closer afterward. A new walk or recipe can count.' },
+
+  investmentmodel: { t: 'The investment model', m: ['investment model'], ev: 'Strong evidence',
+    d: 'The investment model, from Caryl Rusbult, explains commitment with three things: how satisfied you are, what alternatives you think you have, and how much you have invested (time, shared friends, a home, memories).\nIt helps explain why people stay in relationships that are not satisfying, and why commitment isn’t only about feelings.' },
+
+  interdependence: { t: 'Interdependence', m: ['interdependence', 'interdependent'], ev: 'Moderate evidence',
+    d: 'Interdependence means people’s lives, choices and well-being affect each other. In a close relationship, what one person does changes the other’s day.\nIt sits between total independence and losing yourself in the other person: two whole people, choosing to rely on each other.' },
+
+  demandwithdraw: { t: 'The pursue-withdraw cycle', m: ['demand-withdraw', 'demand–withdraw', 'pursue-withdraw', 'pursuer-distancer', 'pursuer', 'withdrawer', 'distancer'], ev: 'Strong evidence',
+    d: 'The pursue-withdraw cycle (researchers call it demand-withdraw) is a common pattern where one person pushes to talk about a problem and the other pulls away. The more one pursues, the more the other withdraws, and the other way around.\nAndrew Christensen and others found it in many couples and linked it with lower satisfaction. Neither role is “the problem.” The cycle is. Pursuers usually want connection, withdrawers usually want calm.\nNaming the cycle together (“we’re doing the chase again”) and agreeing on a pause with a return time breaks it from both ends.' },
+
+  horsemen: { t: 'The Four Horsemen', m: ['Four Horsemen'], ev: 'Moderate evidence',
+    d: 'The Four Horsemen is John Gottman’s name for four patterns in conflict that, in his research, predicted couples splitting up: criticism, contempt, defensiveness and stonewalling.\nEach has an antidote: a gentle start instead of criticism, appreciation instead of contempt, taking some responsibility instead of defensiveness, and a calming break instead of stonewalling. The findings come mostly from one research program, but the patterns are widely recognized.' },
+
+  harshstart: { t: 'Harsh startup', m: ['harsh startup', 'harsh start-up', 'harsh start'], ev: 'Moderate evidence',
+    d: 'A harsh startup is opening a conversation with blame, criticism or sarcasm, such as “You never think about anyone but yourself.”\nGottman’s research found that how a conversation starts strongly predicts how it ends. A soft start names the problem and the need without attacking: “I’m stressed about the bills. Can we sit down Sunday?”' },
+
+  sentiment: { t: 'Sentiment override', m: ['negative sentiment override', 'positive sentiment override', 'sentiment override'], ev: 'Moderate evidence',
+    d: 'Sentiment override is when your overall feeling about the relationship colors how you read each moment. In negative override, even neutral comments sound like attacks. In positive override, small slights get the benefit of the doubt.\nThe idea comes from Robert Weiss and was developed by Gottman. It is why building warmth in calm times matters: it changes how the hard moments land.' },
+
+  magicratio: { t: 'The 5:1 ratio', m: ['magic ratio', '5:1 ratio', '5 to 1', 'five-to-one', 'five to one'], ev: 'Mixed evidence',
+    d: 'The 5:1 ratio is Gottman’s finding that, during conflict, stable couples had about five positive moments (interest, humor, warmth) for every negative one.\nIt is a useful rule of thumb, not an exact law. The number comes from one research program, and what counts as positive or negative differs between people and cultures.' },
+
+  silenttreatment: { t: 'The silent treatment', m: ['silent treatment', 'the silent treatment'], ev: 'Moderate evidence',
+    d: 'The silent treatment is deliberately refusing to speak to or acknowledge someone as a way to punish them or pressure them into giving in.\nFor the term to fit, several things are true together. The silence is chosen. It is aimed at the other person, meant to make them feel bad, anxious or shut out. It goes on with no word about when it will end, and it is usually lifted when the other person apologizes or complies. Often it is a pattern, not a one-time event.\nSeveral things can look like it and aren’t. Needing quiet to calm down is one, especially with a return time (“I need an hour, then let’s talk”). So is a shutdown from overwhelm, where the person can’t find words, or slow processing before speaking, or simply being busy and missing messages. To tell them apart, ask whether there was a way back offered, whether it ends when the person calms or only when the other gives in, and whether it is used to win. Talk about the effect (“When I don’t know if or when we’ll talk, I panic”) instead of naming the person as punishing.' },
+
+  gaslighting: { t: 'Gaslighting', m: ['gaslighting', 'gaslight', 'gaslit', 'gaslighted'], ev: 'Early evidence',
+    d: 'Gaslighting means repeatedly and deliberately denying or twisting things another person knows happened, so that they start to doubt their own memory, perception or sanity. The name comes from a 1938 play and the 1944 film Gaslight.\nFor the word to fit, these need to be present together: it happens again and again (a pattern, not one argument), it is deliberate, it aims at making the other person distrust their own mind, and it usually gives the person doing it an advantage, such as control, avoiding blame or getting their way.\nSome things are not enough on their own. Two people often remember the same event differently, because memory rebuilds events each time we recall them. People misremember and forget. Couples disagree about what something meant. Someone may deny something once in a heated moment. None of these is gaslighting by itself. A useful question is “Is this person trying to make me doubt myself, again and again, to gain something?” Talk about the specific moments (“I remember you saying you’d pick her up. Can we write plans down?”) instead of using the label, which tends to end the conversation.' },
+
+  codependency: { t: 'Codependency', m: ['codependency', 'codependent', 'co-dependency', 'co-dependent'], ev: 'Weak evidence',
+    d: 'Codependency is a popular term for a pattern where someone’s sense of worth and safety depends heavily on taking care of, pleasing or controlling another person, often at a serious cost to their own needs. It began in addiction support groups in the 1970s and 1980s.\nIt is not a formal diagnosis and has no agreed definition, so researchers use it carefully. When people use it accurately, it describes a lasting pattern with most of these: neglecting your own needs and health to manage someone else, feeling responsible for their feelings and choices, covering for their behavior, struggling to say no, and feeling empty or anxious when not needed.\nWhat it is not: caring deeply, relying on each other, wanting to help a partner who is ill, or enjoying doing things for someone. Healthy interdependence is mutual and leaves room for both people’s needs. Talking about the specific pattern (“I notice I cancel my plans whenever you’re upset”) is more useful than the label.' },
+
+  controlling: { t: 'Controlling behavior', m: ['controlling behavior', 'controlling behaviour', 'controlling'], nd: 'partner|someone|person|relationship|parent|behavio|jealous|monitor|check|feel|seem|look|label|call',
+    nx: 'controlling (for|your breath|the (temperature|volume|budget|thermostat|car|bleeding|data)|costs|blood|symptoms)|self-controlling',
+    d: 'Controlling behavior means one person repeatedly limiting another person’s choices, freedom or contact with others, and making there be a cost when they don’t comply.\nFor the word to fit, look for a pattern over time, not a single moment: choices being taken away (money, friends, clothes, where you go, who you talk to), checking or monitoring that the other person hasn’t agreed to, rules that only apply to one person, and some kind of punishment or fear when those rules are broken, such as anger, sulking, threats or taking things away. The effect is that one person shrinks their life to avoid trouble.\nWhat can look controlling but isn’t: asking for a plan or routine because unpredictability is hard (common with anxiety or autism), stating a boundary about your own behavior, having strong preferences and saying so, worrying and asking you to text when you get home, or one tense request on a bad day. Questions that tell them apart: Can I say no without being punished? Do the rules go both ways? Is this about my choices or their own needs? Is it a pattern? Talk about the specific behavior and its effect on you, not about what kind of person they are.' },
+
+  manipulation: { t: 'Manipulation', m: ['manipulative', 'manipulation', 'manipulating', 'manipulate'], nd: 'person|people|partner|someone|feel|guilt|behavio|relationship|seem|label|call|emotional|tactic|intent',
+    nx: '(data|image|photo|number|statistic|tool|object|joint|spinal) manipulat|manipulat\\w* (data|images|photos|numbers|objects)',
+    d: 'Manipulation means trying to influence someone through hidden, unfair or pressuring means, such as guilt, flattery, threats or deception, to get something they wouldn’t freely agree to.\nFor the word to fit, look for these together: the influence is deliberate, the real aim is hidden or misrepresented, it works by pressure or deceit instead of honest asking, and it serves one person at the other’s cost. It is usually a pattern.\nWhat is not manipulation: saying how you feel (“I’m hurt”) even if it changes what the other person does, crying during a hard talk, asking for what you want directly, persuading with honest reasons, or a clumsy attempt to avoid a fight. Everyone influences the people around them. The difference is honesty and respect for the other person’s free “no.” A helpful question: “Could I say no openly, and would that be okay?” Name the move, not the person: “I feel pushed when this comes with ‘after all I do.’ Can you just ask me?”' },
+
+  narcissistic: { t: 'Narcissistic', m: ['narcissistic', 'narcissism', 'narcissist', 'narcissists'], ev: 'Moderate evidence',
+    d: 'Narcissism, in psychology, is a set of traits such as a strong need for admiration, a sense of being special or entitled, and difficulty taking other people’s perspective. Everyone has some of these traits to a degree.\nNarcissistic personality disorder is a rare clinical diagnosis that needs a long-lasting, inflexible pattern across many areas of life that causes real harm, assessed by a trained professional. It can’t be diagnosed from a story, a text message or a breakup.\nThe word is now used online for anyone selfish, hurtful or hard to deal with, which makes it less useful and can be unfair. A single selfish act, confidence, wanting praise for good work, or being self-focused under stress isn’t narcissism. Describe what happened and its effect (“You talked over me three times tonight”) instead of naming the person.' },
+
+  toxic: { t: 'Toxic', m: ['toxic relationship', 'toxic relationships', 'toxic person', 'toxic people', 'toxic behavior', 'toxic'], nx: 'toxic (positivity|stress|chemical|waste|fumes|substance|mold|plant|metal)|non-toxic|nontoxic',
+    d: '“Toxic” is a popular word for a relationship or behavior that does ongoing harm. It has no fixed meaning in psychology, which is why it gets used for everything from abuse to a single bad day.\nIf you use it, it helps to check for a lasting pattern that leaves one or both people regularly feeling worse: frequent contempt, put-downs, dishonesty, threats, control, or repair that never happens. One big fight, a hard season, different needs or a person you just don’t get along with is not the same thing.\nBecause the word judges a whole person or relationship, it usually makes people defensive. Naming the specific behavior and how often it happens (“Most of our talks this month ended with yelling”) is clearer and easier to work with.' },
+
+  passiveaggressive: { t: 'Passive-aggressive', m: ['passive-aggressive', 'passive aggressive', 'passive aggression', 'passive-aggression'],
+    d: 'Passive-aggressive describes expressing anger or resistance indirectly instead of openly: sarcasm, “forgetting” on purpose, doing a task badly to make a point, or saying “fine” while clearly meaning the opposite.\nFor the label to fit, the indirectness has to be a way of hitting back while keeping deniability, and it usually repeats. Indirect communication on its own isn’t that. Many people and cultures soften requests, avoid conflict, or hint because saying things directly feels risky or rude. A short reply can just be a short reply, and a forgotten task can be a real memory slip.\nAsking directly helps both people: “When you said ‘fine,’ I wasn’t sure you meant it. Is something bothering you?”' },
+
+  criticism: { t: 'Criticism or feedback', m: ['criticism', 'criticize', 'criticizing', 'critical of'], nx: 'criticism of the person|self-criticism|literary criticism', ev: 'Moderate evidence',
+    d: 'In relationship research, criticism means attacking the person instead of the problem: “You’re so lazy” or “You always ruin things.” Gottman lists it as one of the Four Horsemen.\nFeedback or a complaint is about a specific behavior and what you need: “The dishes were left again, and I’m worn out. Can we split them tonight?” The difference is whether it describes something that happened or judges who someone is. Words like “always,” “never” and “you’re the kind of person who” are clues it has become criticism.\nHearing feedback can still sting, and that doesn’t make it an attack. If it was about a behavior, said calmly, and came with a request, it is fair feedback, even if it was hard to hear.' },
+
+  boundaries: { t: 'Boundaries and ultimatums', m: ['set a boundary', 'setting boundaries', 'boundaries', 'ultimatums', 'ultimatum'], nx: 'property|county|city|state boundar',
+    d: 'A boundary is a limit about what you will do, to protect your time, energy, body or well-being: “If the shouting starts, I’ll leave the room and come back when it’s calm.”\nAn ultimatum is a demand about what the other person must do, with a threat attached: “Stop seeing your friends or I’m leaving.” The difference is whose behavior it is about. A boundary is about your own action and stays the same whether or not the other person changes. An ultimatum tries to control their choice by threat.\nSome situations do lead to a clear line, like “I won’t stay if this keeps happening.” Said calmly, about your own action, and after other tries, that is a boundary. Used as pressure to win an argument, it becomes an ultimatum.' },
+
+  peoplepleasing: { t: 'People-pleasing', m: ['people-pleasing', 'people pleasing', 'people-pleaser', 'people pleaser', 'people-pleasers'],
+    d: 'People-pleasing is a pattern of putting other people’s wishes ahead of your own so often that your needs disappear, usually out of fear of conflict, disapproval or being left.\nIt is different from kindness. Kindness is a choice you could make differently. People-pleasing feels like there is no choice: saying no brings guilt or panic, you agree before you have thought, and resentment builds quietly. It can grow from a past where keeping others happy kept you safe.\nA small practice: pause before saying yes (“Let me check and get back to you”), and notice what you actually want.' },
+
+  jealousy: { t: 'Jealousy and insecurity', m: ['jealousy', 'jealous', 'insecurity', 'insecurities'], nx: 'food insecurity|job insecurity|housing insecurity|financial insecurity', ev: 'Moderate evidence',
+    d: 'Jealousy is the painful feeling that someone you love might be drawn to someone else, or that you might lose your place with them. Insecurity is a more general doubt about whether you are enough or whether the relationship is safe.\nFeeling jealous now and then is human and doesn’t make anyone controlling. What matters is what happens next. Sharing the feeling (“I felt a bit left out tonight”) and asking for reassurance is healthy. Monitoring a partner’s phone, demanding passwords, limiting who they see, or punishing them for normal friendships moves into controlling behavior.\nWorry can also look like monitoring. Asking someone to text when they arrive safely is care when it is mutual and agreed. It becomes control when it is one-sided, constant and enforced. Talking about the feeling, not the other person’s guilt, keeps it workable.' },
+
+  nagging: { t: 'Nagging or reminding', m: ['nagging', 'nagged', 'nag'], nx: 'nagging (pain|cough|injury|doubt|feeling)',
+    d: 'Nagging usually means repeated requests or complaints that feel critical and wear both people down. Reminding means helping someone remember something they agreed to.\nThe difference is often in the setup, not the person. If one person has to keep reminding because the other never owns the task, the “nagging” is a sign of unseen work and unclear ownership. Tone matters too: a reminder is short and neutral, nagging carries blame.\nAgreeing who owns a job, and how they want to be reminded (a list, a shared calendar, one text), takes the reminding person out of the role of manager.' },
+
+  triangulation: { t: 'Triangulation', m: ['triangulation', 'triangulating', 'triangulate'], nx: '(GPS|signal|data|methodological) triangulat', ev: 'Moderate evidence',
+    d: 'In family therapy, triangulation is when a tension between two people gets pulled into a third person instead of being worked out directly. A parent complains to a child about the other parent, or a friend is asked to pass on messages.\nThe idea comes from Murray Bowen’s family systems theory. Asking a friend for advice or venting once isn’t triangulation. It becomes the pattern when the third person is regularly put in the middle, asked to take sides or carry messages, especially a child. Taking the issue back to the person it is with is the usual way out.' },
+
+  differentiation: { t: 'Differentiation of self', m: ['differentiation of self', 'differentiation', 'well-differentiated'], nd: 'self|family|Bowen|emotion|partner|relationship|identity',
+    d: 'Differentiation of self, from Murray Bowen, is the ability to stay yourself while staying close to others: holding your own views and feelings calmly, even when people you love feel differently.\nPeople with more of it can disagree without cutting off or caving in. It grows over a lifetime and is a matter of degree, not a pass or fail.' },
+
+  familysystems: { t: 'Family systems', m: ['family systems theory', 'family systems', 'family system'], ev: 'Moderate evidence',
+    d: 'Family systems thinking sees a family as one connected system, where each person’s behavior affects everyone else, instead of looking at one “problem person.”\nIt grew from the work of Murray Bowen, Salvador Minuchin and others. It explains why a change in one person, like a new boundary, can ripple through everyone, and why patterns can pass down generations.' },
+
+  estrangement: { t: 'Estrangement', m: ['estrangement', 'estranged'],
+    d: 'Estrangement is when family members are distant or have cut off contact, either by choice or because things gradually fell apart.\nIt is more common than many people think, and the reasons vary widely. It can be painful whichever side you are on. Neither side’s story is the whole story.' },
+
+  ambiguousloss: { t: 'Ambiguous loss', m: ['ambiguous loss', 'ambiguous losses'], ev: 'Moderate evidence',
+    d: 'Ambiguous loss, a term from Pauline Boss, is a loss without clear closure. Someone may be physically gone but still in your mind (a missing person, an estranged family member), or physically present but psychologically gone (someone with dementia or a serious addiction).\nBecause there is no clear ending, grief can feel stuck or unrecognized. Naming it as a real loss often helps.' },
+
+  disenfranchised: { t: 'Disenfranchised grief', m: ['disenfranchised grief'], ev: 'Moderate evidence',
+    d: 'Disenfranchised grief, a term from Kenneth Doka, is grief that others don’t recognize or support: losing a pet, an ex, a pregnancy, a friendship, or someone you weren’t “supposed” to grieve.\nWithout acknowledgment, people may grieve alone. Saying “That’s a real loss” can mean a great deal.' },
+
+  continuingbonds: { t: 'Continuing bonds', m: ['continuing bonds', 'continuing bond'], ev: 'Moderate evidence',
+    d: 'Continuing bonds is the idea that people often stay connected to someone who has died, through memories, rituals, talking to them or carrying on their values, and that this can be healthy.\nIt challenged an older view that grieving meant “letting go.” Klass, Silverman and Nickman described it in 1996.' },
+
+  prolongedgrief: { t: 'Prolonged grief', m: ['prolonged grief', 'complicated grief'], ev: 'Moderate evidence',
+    d: 'Prolonged grief describes intense longing and pain after a death that stays very strong for a long time (at least a year in the US manual) and makes everyday life very hard.\nIt is a recent diagnosis and some people worry it could make normal grief seem like an illness. Grief has no fixed timetable, and most people find the pain changes over time without it becoming a disorder.' },
+
+  dualprocessgrief: { t: 'The dual process model of grief', m: ['dual process model'], ev: 'Moderate evidence',
+    d: 'The dual process model, from Margaret Stroebe and Henk Schut, describes healthy grieving as moving back and forth between facing the loss (feeling it, remembering) and restoration (dealing with daily life, new roles, taking breaks).\nOscillating is normal. A day spent laughing or busy isn’t a sign someone has stopped caring.' },
+
+  fivestages: { t: 'The five stages of grief', m: ['five stages of grief', 'stages of grief', 'five stages'], nd: 'grie|loss|Kübler|Kubler|denial|died|death', ev: 'Weak evidence',
+    d: 'The five stages of grief (denial, anger, bargaining, depression, acceptance) come from Elisabeth Kübler-Ross’s 1969 book, first about people facing their own death.\nResearch doesn’t support grief moving through fixed stages in order. Many people feel some of these, in any order, or not at all. The stages are a list of common feelings, not a map.' },
+
+  bereavement: { t: 'Bereavement', m: ['bereavement', 'bereaved'],
+    d: 'Bereavement is the situation of having lost someone close through death. Grief is the response to it: the feelings, thoughts and changes that follow.\nPeople grieve in many ways, quietly or openly, through tears or through doing things. There is no single right way.' },
+
+  respite: { t: 'Respite care', m: ['respite care', 'respite'], nd: 'care|caregiv|break|rest|carer|family|relief',
+    d: 'Respite care is short-term care that gives a regular caregiver a break, for a few hours, a day or longer, while someone else looks after the person they care for.\nBreaks protect the caregiver’s health and usually make the care itself better. Needing a break isn’t a failure of love.' },
+
+  kinshipcare: { t: 'Kinship care', m: ['kinship care', 'kinship carers', 'kinship caregivers'],
+    d: 'Kinship care means a child being raised by relatives or close family friends, such as grandparents, aunts or older siblings, when their parents can’t care for them.\nIt keeps children connected to family and culture, and often comes with its own grief and practical strain for everyone involved.' },
+
+  sandwich: { t: 'The sandwich generation', m: ['sandwich generation'],
+    d: 'The sandwich generation means adults caring for their own children and their aging parents at the same time, often while working.\nThe load is easy to underestimate because much of it is unseen: appointments, phone calls, worry and planning.' },
+
+  secondshift: { t: 'The second shift', m: ['second shift'], ev: 'Moderate evidence',
+    d: 'The second shift is sociologist Arlie Hochschild’s 1989 name for the unpaid home and care work many people, especially working mothers, do after their paid job ends.\nLater studies show the gap has narrowed in many places but not closed, and that the planning and noticing side tends to be the least shared.' },
+
+  carework: { t: 'Care work', m: ['care work', 'carework', 'unpaid care'],
+    d: 'Care work means looking after other people: children, older relatives, sick or disabled family members, and the daily work of keeping a household running.\nMuch of it is unpaid and unseen, which is why the site asks you to count it as real hours.' },
+
+  gatekeeping: { t: 'Maternal gatekeeping', m: ['maternal gatekeeping', 'gatekeeping'], ev: 'Moderate evidence',
+    d: 'Gatekeeping, in family research, describes one parent (often the mother, hence “maternal gatekeeping”) limiting or controlling how much the other parent does with the children or the home, by redoing tasks, criticizing how they are done, or taking over.\nIt can also be encouraging, opening the gate. Having standards or showing someone how a task works is not gatekeeping. It becomes the pattern when one person regularly decides what “right” is, corrects without asking, and the other gives up trying. Agreeing on a “good enough” standard and letting the other person own the task their way helps.' },
+
+  weaponized: { t: 'Weaponized incompetence', m: ['weaponized incompetence', 'weaponised incompetence', 'strategic incompetence'],
+    d: 'Weaponized incompetence is a popular term for doing a task badly, or claiming you can’t, so that someone else takes it over. It is used a lot online about chores.\nFor it to fit, the person could do the task, knows it matters to the other person, and the poor job is a way of getting out of it, usually repeatedly. That is different from a real skill gap, executive function trouble, different standards (“clean enough” varies), or never having been shown. Asking “Do you want to learn it, or do you want to trade it for a different job?” moves the talk from blame to a fair split.' },
+
+  defaultparent: { t: 'The default parent', m: ['default parent'],
+    d: 'The default parent is the one who is automatically expected to handle things: the school call, the sick day, remembering the permission slip.\nIt often isn’t decided. It just happens and then sticks. Making it a conscious choice, and sharing the “on call” role, is one way to rebalance the unseen work.' },
+
+  parallelparenting: { t: 'Parallel parenting', m: ['parallel parenting'],
+    d: 'Parallel parenting is a way for separated parents with a lot of conflict to raise their children with as little direct contact as possible. Each parent runs their own home their own way, and communication is brief, written and about the children.\nIt is often a step toward calmer co-parenting later, and it protects children from being caught in the middle.' },
+
+  coparenting: { t: 'Co-parenting', m: ['co-parenting', 'coparenting', 'co-parent', 'co-parents'],
+    d: 'Co-parenting means two or more adults sharing the raising of a child, usually used for parents who live apart. It covers shared decisions, schedules and how the adults talk to each other about the child.\nResearch consistently finds that children do better when conflict between the adults is low, whatever the custody setup.' },
+
+  parentingstyles: { t: 'Parenting styles', m: ['authoritative parenting', 'authoritarian parenting', 'permissive parenting', 'parenting styles', 'authoritative'], nd: 'parent|style|warm|rules|child|kid|discipline', ev: 'Moderate evidence',
+    d: 'Psychologist Diana Baumrind described parenting styles by how warm and how structured parents are. Authoritative parenting is warm with clear, explained limits. Authoritarian is strict with little warmth. Permissive is warm with few limits.\nAuthoritative parenting is linked with good outcomes in many studies, though culture, temperament and circumstances matter, and real families mix styles.' },
+
+  serveandreturn: { t: 'Serve and return', m: ['serve and return', 'serve-and-return'], ev: 'Strong evidence',
+    d: 'Serve and return is the back-and-forth between a young child and an adult, like a game of tennis. The baby babbles or points (the serve) and the adult responds (the return).\nHarvard’s Center on the Developing Child describes these everyday exchanges as key to building a child’s brain. Adults do a version of it too, through bids for connection.' },
+
+  scaffolding: { t: 'Scaffolding', m: ['scaffolding'], nd: 'child|learn|skill|support|teach|help|kid|step',
+    d: 'Scaffolding means giving just enough support for someone to do something a little beyond what they can do alone, then stepping back as they get more capable.\nThe term comes from Jerome Bruner and colleagues, building on Lev Vygotsky. It works for adults learning a new household task, too.' },
+
+  goodnessfit: { t: 'Goodness of fit', m: ['goodness of fit'], ev: 'Moderate evidence',
+    d: 'Goodness of fit, from Alexander Thomas and Stella Chess, is how well a child’s temperament matches what their environment expects. A very active child in a calm, quiet home may struggle, and so may a quiet child in a loud, busy one.\nThe problem is often the fit, not the child, and small changes in expectations can help a lot.' },
+
+  temperament: { t: 'Temperament', m: ['temperament', 'temperaments'], ev: 'Strong evidence',
+    d: 'Temperament is the inborn side of personality: how active, sensitive, adaptable or intense someone tends to be, visible from infancy.\nIt shapes how people react, but it isn’t destiny. Experience and relationships shape how temperament shows up over a lifetime.' },
+
+  susceptibility: { t: 'Differential susceptibility', m: ['differential susceptibility', 'orchid child', 'orchid children', 'orchids and dandelions', 'orchid and dandelion'], ev: 'Moderate evidence',
+    d: 'Differential susceptibility is the idea that some people are more affected by their environment than others, for better and for worse. They struggle more in hard settings and thrive more in supportive ones.\nPeople sometimes call them “orchids,” and the steadier ones “dandelions.” Jay Belsky, W. Thomas Boyce and others developed the idea, and research supports it, though the flower labels are a simplification.' },
+
+  emotioncoaching: { t: 'Emotion coaching', m: ['emotion coaching', 'emotion-coaching', 'meta-emotion'], ev: 'Moderate evidence',
+    d: 'Emotion coaching, described by John Gottman, is a way of helping children with feelings: noticing them, seeing them as a chance to connect, naming them, listening with empathy, and then setting limits and solving problems together.\nStudies link it with children who manage emotions and friendships better. It accepts all feelings, not all behavior.' },
+
+  /* communication */
+  activelistening: { t: 'Active listening', m: ['active listening', 'reflective listening', 'listen actively'], ev: 'Moderate evidence',
+    d: 'Active listening means fully focusing on what someone says, then showing you understood by reflecting it back (“So the hard part was feeling left out of the decision?”) before adding your own view.\nCarl Rogers developed the idea in counseling. It helps people feel heard, which tends to calm a conversation, though on its own it doesn’t solve the problem underneath.' },
+
+  paraphrasing: { t: 'Paraphrasing', m: ['paraphrasing', 'paraphrase', 'paraphrased'], nd: 'listen|back|said|heard|understand|words|reflect|own words',
+    d: 'Paraphrasing means saying back what someone said in your own words, to check you understood: “You’re saying the plans changed and nobody told you.”\nIt slows a conversation down in a good way and catches misunderstandings early. Asking “Did I get that right?” at the end gives the other person a chance to correct it.' },
+
+  istatement: { t: 'I-statements', m: ['I-statements', 'I-statement', 'I statements', 'I statement', '“I” statements'],
+    d: 'An I-statement describes your own experience instead of judging the other person: “I feel overwhelmed when plans change at the last minute” instead of “You always mess up the plans.”\nThey make it easier for the other person to listen. They work best when they are honest and specific, and less well when they are just blame in disguise (“I feel like you’re selfish”).' },
+
+  nvc: { t: 'Nonviolent Communication', m: ['Nonviolent Communication', 'NVC'], cs: true, ev: 'Early evidence',
+    d: 'Nonviolent Communication (NVC) is a method developed by Marshall Rosenberg. It has four steps: describe what happened without judgment, name your feeling, name the need behind it, and make a clear request.\nMany people find it helpful. Formal research is limited and mixed, and used rigidly it can sound scripted, so the spirit (honest, kind, specific) matters more than the exact words.' },
+
+  assertive: { t: 'Assertive or aggressive', m: ['assertiveness', 'assertively', 'assertive'],
+    d: 'Being assertive means saying what you think, feel and need clearly and respectfully, while respecting the other person’s right to do the same: “I can’t take this on this week.”\nAggressive means pushing your needs in a way that ignores or attacks the other person, through yelling, threats or put-downs. Passive means not saying what you need at all. Directness alone isn’t aggression. A clear “no” said calmly is assertive, even if it disappoints someone.' },
+
+  sarcasm: { t: 'Sarcasm', m: ['sarcasm', 'sarcastic', 'sarcastically'],
+    d: 'Sarcasm is saying the opposite of what you mean, usually in a mocking tone: “Oh, great job” when something went wrong.\nAmong friends it can be playful. In conflict it often comes across as contempt. It is also easy to miss in text and for people who take words literally, so it can cause misunderstandings that the speaker never intended.' },
+
+  prosody: { t: 'Prosody', m: ['prosody', 'prosodic'],
+    d: 'Prosody is the music of speech: rhythm, pitch, stress and tone. It is how “Fine” can mean fine, or very much not fine.\nPeople differ in how they use and read prosody. Some autistic people speak with flatter or different patterns, which can be misread as cold or bored when it isn’t.' },
+
+  flataffect: { t: 'Flat affect', m: ['flat affect', 'flat expression', 'flat tone'],
+    d: 'Flat affect means showing little emotion in the face or voice. It can come from wiring (many autistic people), tiredness, some medications, low mood, or simply a calm personality.\nIt is easy to read as cold, bored or uncaring. The difference is between what shows and what is felt. Someone with flat affect may feel a great deal. Asking (“How are you feeling about it?”) is more accurate than reading the face.' },
+
+  pragmatics: { t: 'Pragmatics', m: ['pragmatics', 'pragmatic language', 'social communication'],
+    d: 'Pragmatics is the part of language about how meaning depends on context: hints, politeness, taking turns, knowing that “Is it cold in here?” might mean “Please close the window.”\nPeople differ in how easily they read these unwritten rules. Some autistic people and people with language differences find pragmatics hard, which can lead to mix-ups that nobody intended.' },
+
+  idiom: { t: 'Idiom', m: ['idioms', 'idiom'],
+    d: 'An idiom is a phrase whose meaning isn’t clear from its words, like “break the ice” or “cross that bridge when we come to it.”\nIdioms can confuse people learning a language, literal thinkers and people from other cultures. Saying the plain meaning alongside them avoids puzzled looks.' },
+
+  context: { t: 'High-context and low-context', m: ['high-context', 'low-context', 'high context', 'low context'], nd: 'cultur|communicat|context|direct|indirect', ev: 'Moderate evidence',
+    d: 'In high-context communication, much of the meaning is left unsaid and understood from shared background, tone and situation. In low-context communication, meaning is mostly in the words themselves, said directly.\nAnthropologist Edward Hall introduced the terms for cultures, and families and people vary too. Many mix-ups between partners are really a high-context speaker and a low-context listener, or the other way around.' },
+
+  deescalation: { t: 'De-escalation', m: ['de-escalation', 'de-escalate', 'de-escalating', 'deescalate', 'deescalation'],
+    d: 'De-escalation means bringing the heat down in a tense moment, mostly through what is within your own control: a slower pace, a lower voice, fewer words, more space, sitting instead of standing, or a break with a return time.\nIt doesn’t mean giving in or dropping the issue. It means waiting until both people can actually listen.' },
+
+  kitchensink: { t: 'Kitchen-sinking', m: ['kitchen-sinking', 'kitchen sinking', 'kitchen-sink'],
+    d: 'Kitchen-sinking is bringing up every complaint at once during an argument, “everything but the kitchen sink,” so a talk about the dishes turns into a list of everything wrong.\nIt overwhelms the listener and makes solving anything nearly impossible. One topic at a time, with others parked for later, keeps it workable.' },
+
+  mediation: { t: 'Mediation', m: ['mediation', 'mediator', 'mediators', 'mediated'], nx: 'meditation|mediat\\w* (variable|effect|analysis)|statistic',
+    d: 'Mediation is a structured way of working out a disagreement with help from a neutral third person, the mediator, who helps both sides talk and find their own agreement.\nThe mediator doesn’t decide who is right. It is used for workplace disputes, divorce and family matters, and the skills behind it (listening, finding shared interests) work at home too.' },
+
+  negotiation: { t: 'Principled negotiation', m: ['principled negotiation', 'interest-based negotiation', 'interest-based', 'BATNA'], ev: 'Moderate evidence',
+    d: 'Principled negotiation, from Roger Fisher and William Ury’s book Getting to Yes, means focusing on interests (why each person wants something) instead of positions (what they say they want), and looking for options that serve both.\nBATNA stands for “best alternative to a negotiated agreement,” what you would do if no deal is reached. Knowing it keeps people from agreeing to something worse.' },
+
+  /* groups and society */
+  transactive: { t: 'Transactive memory', m: ['transactive memory'], ev: 'Moderate evidence',
+    d: 'Transactive memory is the shared memory system couples, families and teams build, where each person remembers some things and knows who remembers the rest. “Ask her, she knows the passwords.”\nDaniel Wegner described it. It is efficient, and it means the person holding the most is often carrying unseen work.' },
+
+  diffusion: { t: 'Diffusion of responsibility', m: ['diffusion of responsibility', 'bystander effect'], ev: 'Moderate evidence',
+    d: 'Diffusion of responsibility is the tendency for each person to feel less responsible when others are around who could also act. Everyone assumes someone else will do it.\nIt is part of the bystander effect studied by John Darley and Bibb Latané. At home, it is why “someone should take the trash out” rarely works and a named owner does.' },
+
+  socialloafing: { t: 'Social loafing', m: ['social loafing'], ev: 'Moderate evidence',
+    d: 'Social loafing is the tendency for people to put in less effort when working in a group than alone, especially when individual effort isn’t visible.\nMaking each person’s part clear and valued tends to reduce it. It is a feature of setups more than of lazy people.' },
+
+  groupthink: { t: 'Groupthink', m: ['groupthink'], ev: 'Mixed evidence',
+    d: 'Groupthink is when a group values agreement so much that people stop raising doubts, and bad decisions go unchallenged. Irving Janis described it in 1972.\nThe exact model has mixed support, but the warning stands: a group that never disagrees may be missing something.' },
+
+  pluralistic: { t: 'Pluralistic ignorance', m: ['pluralistic ignorance'], ev: 'Moderate evidence',
+    d: 'Pluralistic ignorance is when most people in a group privately disagree with something but assume everyone else agrees, so nobody speaks up.\nOne person saying “Actually, I’m not sure about this” often reveals that others felt the same.' },
+
+  ingroup: { t: 'In-group and out-group', m: ['in-group', 'out-group', 'ingroup', 'outgroup'], ev: 'Strong evidence',
+    d: 'An in-group is a group you feel part of. An out-group is one you don’t. Research by Henri Tajfel showed people quickly favor their own group, even when groups are formed on trivial grounds.\nIt is a normal human tendency, which makes it worth noticing when “us and them” starts shaping how we judge people.' },
+
+  socialidentity: { t: 'Social identity', m: ['social identity theory', 'social identity', 'social identities'], ev: 'Strong evidence',
+    d: 'Social identity is the part of who you are that comes from the groups you belong to: family, culture, faith, work, team, community.\nHenri Tajfel and John Turner’s social identity theory explains how belonging to groups shapes self-esteem and how we treat people inside and outside them.' },
+
+  minoritystress: { t: 'Minority stress', m: ['minority stress'], ev: 'Strong evidence',
+    d: 'Minority stress is the extra, ongoing stress people face from belonging to a stigmatized group: prejudice, rejection, hiding parts of yourself, and expecting to be treated badly.\nIlan Meyer developed the model for LGBTQ people, and it applies to other groups too. It helps explain health gaps without blaming the people affected.' },
+
+  collectivism: { t: 'Individualism and collectivism', m: ['individualism', 'collectivism', 'individualistic', 'collectivistic', 'collectivist'], ev: 'Moderate evidence',
+    d: 'Individualism puts personal goals, independence and self-expression first. Collectivism puts the group, family harmony and shared duty first. Cultures, families and people sit at different points between them.\nNeither is better. Many relationship tensions, like how much family should be involved in decisions, come from different places on this scale.' },
+
+  procedural: { t: 'Procedural justice', m: ['procedural justice', 'procedural fairness'], ev: 'Strong evidence',
+    d: 'Procedural justice is fairness in how decisions are made, not just in the result: being heard, having the process explained, and being treated with respect.\nResearch by Tom Tyler and others shows people accept outcomes they don’t love more readily when the process felt fair. That is true at home as much as in courts.' },
+
+  equity: { t: 'Equity and equality', m: ['equity theory', 'equity', 'equitable'], nx: 'home equity|private equity|equity (loan|line|stake|market)|negative equity', ev: 'Moderate evidence',
+    d: 'Equality means everyone gets the same. Equity means each person gets what is fair given their situation, which may not be the same.\nIn relationships, equity theory (Elaine Hatfield and others) suggests people feel best when what each gives and gets feels fair relative to the other, not necessarily equal in every task. A 60/40 split both people chose can feel fairer than an imposed 50/50.' },
+
+  contagion: { t: 'Emotional contagion', m: ['emotional contagion', 'emotions are contagious', 'mood contagion'], ev: 'Moderate evidence',
+    d: 'Emotional contagion is the way moods spread between people, often without anyone noticing: one person’s stress makes the room tense, one person’s laugh lightens it.\nElaine Hatfield, John Cacioppo and Richard Rapson studied it. It is one reason calming yourself first helps the other person calm down too.' },
+
+  compassionfatigue: { t: 'Compassion fatigue', m: ['compassion fatigue'], ev: 'Moderate evidence',
+    d: 'Compassion fatigue is emotional and physical exhaustion that can come from caring for people who are suffering, over a long time. Caregivers, nurses and helpers of all kinds describe it.\nIt can show as numbness, irritability or dread. It is a sign of the load, not of not caring.' },
+
+  caregiverburnout: { t: 'Caregiver burnout', m: ['caregiver burnout', 'carer burnout'],
+    d: 'Caregiver burnout is the exhaustion that can build up when someone looks after an ill, disabled or aging person for a long time without enough rest or help.\nIt is common and nothing to be ashamed of. Sharing tasks, regular breaks and asking specific people for specific help can lighten it.' },
+
+  empathytypes: { t: 'Cognitive and affective empathy', m: ['cognitive empathy', 'affective empathy', 'emotional empathy', 'empathic accuracy'], ev: 'Moderate evidence',
+    d: 'Cognitive empathy is understanding what someone else thinks or feels. Affective (emotional) empathy is feeling some of it with them.\nPeople can be strong in one and less so in the other. Someone may care deeply but miss subtle cues, or read cues well but stay calm inside. Neither means they don’t care.' },
+
+  socialisolation: { t: 'Social isolation and loneliness', m: ['social isolation', 'socially isolated'], ev: 'Strong evidence',
+    d: 'Social isolation means having few social contacts. Loneliness is the painful feeling that your connections aren’t enough. They overlap but aren’t the same: someone can be alone and content, or surrounded by people and lonely.\nResearch, including work by Julianne Holt-Lunstad, links both with poorer health over time.' },
+
+  accountability: { t: 'Accountability or blame', m: ['accountability', 'accountable for'],
+    d: 'Accountability means owning your part in what happened and doing something about it: “I forgot, and that left you stuck. I’ve set a reminder for next week.”\nBlame focuses on fault and punishment, often for the whole problem: “This is all your fault.” Accountability looks forward and can be shared. Blame looks backward and usually lands on one person. Asking for accountability is fair. Demanding someone carry all of it rarely is.' },
+
+  amends: { t: 'Making amends', m: ['make amends', 'making amends', 'amends'],
+    d: 'Making amends means going beyond saying sorry, to actually repairing what you can: replacing what was broken, changing a habit, or making up for lost time.\nIt shows the apology meant something. Sometimes the only amends possible is a changed pattern going forward.' },
+
+  forgiveness: { t: 'Forgiveness', m: ['forgiveness'], ev: 'Moderate evidence',
+    d: 'Forgiveness is letting go of resentment and the wish for payback toward someone who hurt you. It is mostly something that happens inside you.\nIt is different from excusing what happened, forgetting it or reconciling. You can forgive someone and still keep a boundary or choose not to be close again. Research links forgiving, when people are ready, with less stress, but it can’t be rushed or demanded.' },
+
+  restorative: { t: 'Restorative', m: ['restorative justice', 'restorative practice', 'restorative practices', 'restorative conversation', 'restorative'], nd: 'justice|practice|conversation|repair|harm|school|circle|approach',
+    d: 'Restorative practices focus on repairing harm and relationships instead of only punishing. The people involved talk about what happened, who was affected and what would help put it right.\nThey are used in schools, communities and justice systems, and the same questions work at home: What happened? Who was affected? What do we need to make it right?' },
+
+  misremember: { t: 'Lying or misremembering', m: ['misremembering', 'misremember', 'misremembered', 'false memories', 'false memory'], ev: 'Strong evidence',
+    d: 'Memory isn’t a recording. Each time we recall something we rebuild it, and details shift. Research by Elizabeth Loftus and others shows people can be completely sure about details that are wrong.\nSo when two people remember the same event differently, it is usually not lying. Lying means knowingly saying something false. Misremembering means believing something that isn’t accurate. A pattern of claims that are false and always convenient, especially when evidence is clear, points more toward lying. Writing plans and agreements down saves many of these arguments.' },
+
+  /* research words */
+  metaanalysis: { t: 'Meta-analysis', m: ['meta-analysis', 'meta-analyses', 'meta-analytic', 'meta analysis'],
+    d: 'A meta-analysis combines the results of many studies on the same question to get an overall answer that is more reliable than any single study.\nIt is only as good as the studies that go into it. If most are small or flawed, the combined answer can still be shaky.' },
+
+  systematic: { t: 'Systematic review', m: ['systematic review', 'systematic reviews'],
+    d: 'A systematic review gathers every study on a question using a set, published method, then weighs them carefully. Many include a meta-analysis.\nThey sit near the top of the evidence ladder because they reduce the chance of cherry-picking.' },
+
+  correlational: { t: 'Correlational', m: ['correlational', 'correlation is not causation', 'correlation does not mean causation', 'causation'],
+    d: 'A correlational study shows two things tend to go together, like more sleep and better mood. It can’t show that one causes the other.\nSomething else might cause both, or the cause might run the other way. That is why the site labels correlational findings carefully and doesn’t claim one thing leads to another unless experiments back it up.' },
+
+  observational: { t: 'Observational study', m: ['observational study', 'observational studies', 'observational research', 'observational'], nd: 'stud|research|data|evidence|finding',
+    d: 'An observational study watches what happens without changing anything, for example tracking how couples talk over many years.\nIt is often the only ethical way to study real life, but like correlational research, it can show patterns more easily than causes.' },
+
+  longitudinal: { t: 'Longitudinal study', m: ['longitudinal study', 'longitudinal studies', 'longitudinal research', 'longitudinal'],
+    d: 'A longitudinal study follows the same people over a long time, sometimes decades, measuring them again and again.\nIt shows how things change and which early patterns go with later outcomes. It is slower and harder than a one-time snapshot (a cross-sectional study), which is why fewer exist.' },
+
+  crosssectional: { t: 'Cross-sectional study', m: ['cross-sectional study', 'cross-sectional'],
+    d: 'A cross-sectional study measures a group at one point in time, like a snapshot. It can show differences between groups, but not how people change or what came first.' },
+
+  rct: { t: 'Randomized controlled trial', m: ['randomized controlled trial', 'randomised controlled trial', 'randomized controlled trials', 'randomized trial', 'RCTs', 'RCT'], cs: false,
+    d: 'A randomized controlled trial (RCT) randomly splits people into groups, gives one group the thing being tested and the other something else or nothing, then compares results.\nRandom assignment makes it the strongest single way to show cause and effect. Results still depend on who took part and how long they were followed.' },
+
+  replication: { t: 'Replication', m: ['replication crisis', 'failed to replicate', 'replication', 'replicated'], nd: 'stud|research|finding|result|effect|science|experiment',
+    d: 'Replication means repeating a study to see if the same result appears again. A finding that replicates is much more trustworthy.\nIn the 2010s, many well-known psychology findings failed to replicate, sometimes called the replication crisis. That is why the site labels evidence and prefers findings seen more than once.' },
+
+  qualitative: { t: 'Qualitative and quantitative', m: ['qualitative', 'quantitative'], nd: 'stud|research|data|method|interview|finding',
+    d: 'Quantitative research measures things with numbers, such as scores, counts and percentages. Qualitative research explores experiences in depth, usually through interviews or open answers.\nQualitative work is good for understanding what something is like and finding new questions. Quantitative work is good for testing how common or strong something is. Both are useful.' },
+
+  effectsize: { t: 'Effect size', m: ['effect size', 'effect sizes', 'small effect', 'modest effect'], nd: 'stud|research|finding|average|evidence|effect size',
+    d: 'Effect size tells you how big a difference or relationship is, not just whether it exists. A result can be “statistically significant” but tiny in practice.\nWhen the site says an effect is small or modest, it means it helps on average, but not by much and not for everyone.' },
+
+  placebo: { t: 'Placebo', m: ['placebo effect', 'placebo-controlled', 'placebo'],
+    d: 'A placebo is a treatment with no active ingredient, like a sugar pill. The placebo effect is the real improvement people sometimes feel just from expecting to get better.\nGood trials compare a treatment against a placebo to see whether it does more than expectation alone.' },
+
+  evidencebased: { t: 'Evidence-based', m: ['evidence base', 'evidence-based', 'evidence based'],
+    d: 'Evidence-based means supported by good research, ideally several well-designed studies with consistent results.\nThe phrase is sometimes used loosely in advertising. The site uses evidence labels (strong, moderate, early, mixed, weak) to show how solid the support for each idea is.' },
+
+  peerreview: { t: 'Peer review', m: ['peer-reviewed', 'peer reviewed', 'peer review'],
+    d: 'Peer review is when other experts check a study before it is published in a journal, looking for mistakes and weak reasoning.\nIt is an important filter, though not a guarantee. Flawed studies sometimes get through, which is why replication matters.' },
+
+  bigfive: { t: 'The Big Five', m: ['Big Five', 'five-factor model', 'conscientiousness', 'agreeableness', 'neuroticism', 'extraversion'], ev: 'Strong evidence',
+    d: 'The Big Five is the most widely researched model of personality. It describes five broad traits, each a range: openness to experience, conscientiousness, extraversion, agreeableness and neuroticism (emotional sensitivity to stress).\nEveryone sits somewhere on each range, and traits can shift slowly over life. They describe tendencies, not types, and none is good or bad on its own.' },
+
+  introversion: { t: 'Introversion and extraversion', m: ['introversion', 'introverts', 'introvert', 'introverted', 'extroversion', 'extroverts', 'extrovert', 'extroverted', 'extraverts', 'extravert'], ev: 'Strong evidence',
+    d: 'Introversion and extraversion describe where people tend to get energy. Many introverts recharge with quiet and fewer people. Many extraverts recharge with company and activity.\nIt is a range, not two boxes, and most people sit in the middle. Being introverted isn’t the same as being shy, and needing time alone isn’t rejection.' },
+
+  mbti: { t: 'Myers-Briggs (MBTI)', m: ['Myers-Briggs', 'MBTI'], ev: 'Weak evidence',
+    d: 'The Myers-Briggs Type Indicator (MBTI) sorts people into 16 types based on four pairs of preferences. It is very popular for team-building and self-reflection.\nResearch finds it less reliable than the Big Five: many people get a different type when they retake it, and traits aren’t really either-or. It can start conversations, but it shouldn’t decide anything important.' },
+
+  lovelanguages: { t: 'The five love languages', m: ['five love languages', 'love languages', 'love language'], ev: 'Weak evidence',
+    d: 'The five love languages, from Gary Chapman’s 1992 book, are words of affirmation, quality time, gifts, acts of service and physical touch. The idea is that people feel loved in different ways.\nA 2024 review by Emily Impett and colleagues found little support for the core claims, such as each person having one main language that must be matched. The useful part is simple: ask how someone likes to be shown care, and notice how they show it to you.' },
+
+  personalitydisorder: { t: 'Personality disorder', m: ['personality disorders', 'personality disorder'],
+    d: 'A personality disorder is a clinical diagnosis for long-lasting, inflexible patterns of thinking, feeling and relating that cause significant distress or problems across many parts of life.\nIt can only be assessed properly by a trained professional over time. Using these terms for an ex, a boss or a relative after a conflict is unfair and usually inaccurate. Describe the behavior instead.' },
+
+  impulsivity: { t: 'Impulsivity', m: ['impulsivity', 'impulsiveness', 'impulsive'],
+    d: 'Impulsivity is acting or speaking quickly without stopping to think it through, such as interrupting, buying on a whim, or saying the first thing that comes to mind.\nEveryone is impulsive sometimes, especially when tired or stressed. For some people, including many with ADHD, it is part of their wiring and takes deliberate support, like pauses and agreed signals, rather than willpower alone.' },
+
+  habituation: { t: 'Habituation', m: ['habituation', 'habituate', 'habituated'],
+    d: 'Habituation is getting used to something with repeated exposure, so you notice it less. A ticking clock fades into the background after a while.\nIt explains why we stop noticing a partner’s daily efforts, and why deliberately naming them helps.' },
+
+  thoughtsuppression: { t: 'Thought suppression', m: ['thought suppression', 'white bear', 'suppressing thoughts', 'suppress a thought'], ev: 'Moderate evidence',
+    d: 'Thought suppression is trying not to think about something. Daniel Wegner’s “white bear” studies found that trying hard not to think of a white bear made people think of it more.\nThat is why “just stop worrying” rarely works, and why noticing a thought and letting it pass usually does better.' },
+
+  implementation: { t: 'Implementation intentions', m: ['implementation intentions', 'implementation intention', 'if-then plans', 'if-then plan'], ev: 'Strong evidence',
+    d: 'An implementation intention is a specific if-then plan: “If it’s Sunday after dinner, then we do our weekly check-in.” Peter Gollwitzer’s research found these plans make people much more likely to follow through.\nThey work because the situation itself becomes the reminder.' },
+
+  cbt: { t: 'Cognitive behavioral therapy', m: ['cognitive behavioral therapy', 'cognitive behavioural therapy', 'cognitive-behavioral', 'cognitive-behavioural', 'CBT'], cs: true, ev: 'Strong evidence',
+    d: 'Cognitive behavioral therapy (CBT) is a well-researched talking therapy that looks at how thoughts, feelings and actions affect each other, and teaches practical ways to change unhelpful patterns.\nIt has strong evidence for anxiety, depression and many other problems, and many of its tools, like spotting thinking traps, are useful for anyone.' },
+
+  dbt: { t: 'Dialectical Behavior Therapy', m: ['Dialectical Behavior Therapy', 'Dialectical Behaviour Therapy', 'dialectical', 'DBT'], ev: 'Strong evidence',
+    d: 'Dialectical Behavior Therapy (DBT), developed by Marsha Linehan, combines acceptance and change. It teaches skills in mindfulness, handling distress, managing emotions and relationships.\n“Dialectical” means holding two things as true at once, such as “I’m doing my best” and “I can do better.” It is well supported, especially for very intense emotions.' },
+
+  act: { t: 'Acceptance and Commitment Therapy', m: ['Acceptance and Commitment Therapy', 'acceptance and commitment'], ev: 'Moderate evidence',
+    d: 'Acceptance and Commitment Therapy (ACT) helps people make room for difficult thoughts and feelings instead of fighting them, while taking steps toward what matters to them.\nIt was developed by Steven Hayes and has good support for a range of problems. Its tools focus on values and on not letting every thought be in charge.' },
+
+  mi: { t: 'Motivational interviewing', m: ['motivational interviewing'], ev: 'Strong evidence',
+    d: 'Motivational interviewing is a respectful way of talking with someone about change, drawing out their own reasons instead of pushing them. William Miller and Stephen Rollnick developed it.\nIt works because people tend to resist being told and to believe what they hear themselves say.' },
+
+  stageschange: { t: 'Stages of change', m: ['stages of change', 'transtheoretical model', 'transtheoretical'], ev: 'Mixed evidence',
+    d: 'The stages of change model, from James Prochaska and Carlo DiClemente, describes change as moving through stages: not yet thinking about it, thinking about it, preparing, acting, and keeping it up.\nIt is a useful way to meet people where they are. Research on whether people really move in these stages is mixed.' },
+
+  eft: { t: 'Emotionally Focused Therapy', m: ['Emotionally Focused Therapy', 'Emotionally Focused Couples Therapy', 'EFT'], cs: true, ev: 'Moderate evidence',
+    d: 'Emotionally Focused Therapy (EFT) is a couples therapy developed by Sue Johnson, based on attachment theory. It helps partners see the negative cycle they get stuck in and reach for each other in new ways.\nIt has good research support for improving relationship satisfaction.' },
+
+  behavioralactivation: { t: 'Behavioral activation', m: ['behavioral activation', 'behavioural activation'], ev: 'Strong evidence',
+    d: 'Behavioral activation is an approach to low mood that starts with doing small, valued or enjoyable activities, even before you feel like it, because action often comes before motivation.\nIt is simple and well supported.' },
+
+  locus: { t: 'Locus of control', m: ['locus of control'], ev: 'Moderate evidence',
+    d: 'Locus of control is how much you believe your life is shaped by your own actions (internal) versus outside forces like luck or other people (external). Julian Rotter described it.\nA healthy view usually mixes both: owning what you can influence and accepting what you can’t.' },
+
+  dualprocess: { t: 'Fast and slow thinking', m: ['dual-process', 'dual process', 'System 1', 'System 2'], ev: 'Moderate evidence',
+    d: 'Dual-process theories describe two modes of thinking: fast, automatic and intuitive (often called System 1), and slow, effortful and deliberate (System 2). Daniel Kahneman’s book Thinking, Fast and Slow made the idea famous.\nIn a heated moment, the fast mode takes over. That is one reason pausing before replying helps.' },
+
+  neuroplasticity: { t: 'Neuroplasticity', m: ['neuroplasticity', 'brain plasticity'], ev: 'Strong evidence',
+    d: 'Neuroplasticity is the brain’s ability to change and form new connections throughout life, through learning and experience.\nIt is real, though popular claims often exaggerate how fast or easy “rewiring your brain” is. Change usually comes from steady practice over time.' },
+
+  neuroception: { t: 'Neuroception', m: ['neuroception'], ev: 'Mixed evidence',
+    d: 'Neuroception is Stephen Porges’s term for the body’s automatic, below-awareness sense of whether a situation is safe or dangerous.\nIt is part of polyvagal theory, which is debated. The everyday point, that our bodies react before we consciously decide, is widely accepted.' },
+
+  parasympathetic: { t: 'Parasympathetic nervous system', m: ['parasympathetic nervous system', 'parasympathetic'], ev: 'Strong evidence',
+    d: 'The parasympathetic nervous system is the “rest and digest” branch of the nervous system. It slows the heart, aids digestion and helps the body recover after stress.\nSlow breathing with a longer out-breath is one of the simplest ways to engage it.' },
+
+  sympatheticns: { t: 'Sympathetic nervous system', m: ['sympathetic nervous system', 'sympathetic nerves'], ev: 'Strong evidence',
+    d: 'The sympathetic nervous system is the branch that readies the body for action: faster heart, quicker breathing, more alert. It drives the fight or flight response.\nIt is useful in danger and gets in the way of calm listening. (In everyday English “sympathetic” means kind, which is a different meaning.)' },
+
+  epistemic: { t: 'Epistemic humility', m: ['epistemic humility', 'intellectual humility', 'epistemic'], nx: 'Epistemic Verdict',
+    d: 'Epistemic means having to do with knowledge: what we know and how we know it. Epistemic humility, or intellectual humility, means remembering you might be wrong and staying open to other views.\nResearch links intellectual humility with more open, less defensive disagreement.' },
+
+  naiverealism: { t: 'Naive realism', m: ['naive realism', 'naïve realism'], ev: 'Moderate evidence',
+    d: 'Naive realism is the sense that we see the world as it really is, so anyone who disagrees must be uninformed, unreasonable or biased. Lee Ross described it.\nKnowing this trap makes it easier to ask “What are they seeing that I’m not?” instead of assuming bad faith.' },
+
+  hindsight: { t: 'Hindsight bias', m: ['hindsight bias'], ev: 'Strong evidence',
+    d: 'Hindsight bias is the “I knew it all along” feeling: after something happens, it seems more predictable than it was.\nIt makes people judge past choices, their own and others’, too harshly. “You should have seen it coming” is often hindsight talking.' },
+
+  halo: { t: 'Halo effect', m: ['halo effect', 'horn effect', 'horns effect'], ev: 'Moderate evidence',
+    d: 'The halo effect is when one good quality, like being attractive or friendly, makes us assume someone has other good qualities too. The horn effect is the reverse.\nIn long relationships, it can work either way: early warmth colors everything kindly, while built-up resentment colors everything harshly.' },
+
+  projection: { t: 'Projection', m: ['projection', 'projecting', 'projects onto', 'project onto'], nd: 'feel|onto|own|psych|defens|anger|blame|assum|partner',
+    nx: '(financial|sales|budget|population|map|screen|slide) projection',
+    d: 'Projection, in psychology, is seeing your own feelings or traits in someone else instead of in yourself, for example accusing a partner of being angry when you are the one who is upset.\nThe word is now often used as a quick comeback in arguments (“you’re projecting”), which rarely helps. Everyone projects a little. Noticing it in yourself is more useful than spotting it in others.' },
+
+  ambivalence: { t: 'Ambivalence', m: ['ambivalence', 'ambivalent'],
+    d: 'Ambivalence means having mixed or opposite feelings about the same thing at once, like wanting to stay and wanting to leave, or loving someone and being angry with them.\nIt is normal, especially around big decisions and family. Naming both sides often makes it easier to move forward.' },
+
+  reactivity: { t: 'Emotional reactivity', m: ['emotional reactivity', 'reactivity', 'reactive'], nd: 'emotion|stress|feel|anger|quick|calm|trigger|body|partner',
+    d: 'Emotional reactivity is how quickly and strongly someone responds to things that upset them. Highly reactive people feel things fast and big. Less reactive people take longer to get stirred up.\nIt is partly temperament and partly state. Anyone gets more reactive when tired, hungry or stressed.' },
+
+  innercritic: { t: 'Inner critic', m: ['inner critic', 'inner critics'],
+    d: 'The inner critic is the harsh voice in your head that judges, nags or puts you down, often repeating things you heard growing up.\nNoticing it as a voice, not the truth (“There’s my critic again”), gives you some distance from it.' },
+
+  selfregulation: { t: 'Self-regulation', m: ['self-regulation', 'self-regulate', 'self-regulating', 'emotion regulation', 'emotional regulation', 'emotion-regulation'], ev: 'Strong evidence',
+    d: 'Self-regulation is managing your own feelings, attention and actions, for example calming down after a shock, staying focused, or pausing before you snap.\nIt grows through childhood, often first through co-regulation with caring adults, and it is harder for everyone when tired, hungry or stressed.' },
+
+  chronotype: { t: 'Chronotype', m: ['chronotype', 'chronotypes', 'night owl', 'early bird'], ev: 'Strong evidence',
+    d: 'Your chronotype is your body’s natural timing for sleep and alertness: early bird, night owl or somewhere in between. It is partly genetic and shifts with age.\nA morning person and a night person may simply have different best hours for a hard talk, which is a scheduling question, not a character flaw.' },
+
+  bystander: { t: 'Bystander', m: ['bystander intervention'],
+    d: 'Bystander intervention means stepping in, safely, when you see something wrong happening, instead of assuming someone else will. Research on the bystander effect shows that the more people present, the less likely any one person is to act.\nSimply noticing that effect makes people more likely to help.' }
 };

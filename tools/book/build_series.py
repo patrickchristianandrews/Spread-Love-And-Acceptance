@@ -510,7 +510,7 @@ def meet_page(book, found=()):
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Professor Puddles</strong>, a raindrop in a mortarboard, gives most of the hints, and answers questions on the website.</span></li>' % hints.SVG_PUDDLES
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Tidbit</strong>, the quick, curious pup, points you at something to try.</span></li>' % hints.SVG_TIDBIT
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Sugarfoot</strong>, the slower, steadier pup, turns up when a page needs a calmer pace.</span></li>' % hints.SVG_SUGARFOOT
-    s += '</ul><p class="ps-meet-note">They keep to the lighter pages. Where a chapter talks about crisis, deep grief or being hurt, the pages stay quiet and plain.</p>'
+    s += '</ul><p class="ps-meet-note">They keep to the lighter pages.</p>'
     # voice17: the maker's own words, quoted exactly from /about.html (nothing here is written for him)
     s += ('<div class="ps-maker"><p class="ps-meet-h">From the person who made this</p>'
           '<blockquote><p>“I spent my career as a government auditor and audit manager in tax enforcement, internal controls and compliance.” '
