@@ -379,3 +379,18 @@ html.tol-only-steps .sp-page :is(.sp-catalog, .sp-supnote, .sp-try, .sp-studies,
 .sp-glance-row dt{ font:500 .875rem/1.5 var(--sp-ui, var(--tol-sans, system-ui, sans-serif)); color:#6B4F8A; }
 .sp-glance-row dd{ margin:0; font-size:.96rem; }
 @media (max-width:639px){ .sp-facts{ font-size:.82rem; } }
+/* the site's "copy link to this section" mark on headings: a full-size tap target */
+.sp-page h2 .tol-hl, .sp-page h3 .tol-hl{ min-width:44px; min-height:44px; vertical-align:middle; }
+.sp-readsmore{ margin:0; border:1px solid var(--sp-line); border-radius:16px; background:var(--sp-card); }
+.sp-readsmore > summary{ display:flex; align-items:center; min-height:52px; padding:.4rem 1rem; cursor:pointer; font:600 .98rem var(--sp-ui); color:var(--sp-deep); list-style:none; }
+.sp-readsmore > summary::-webkit-details-marker{ display:none; }
+.sp-readsmore > summary::before{ content:"+"; display:inline-grid; place-items:center; flex:none; width:1.5rem; height:1.5rem; margin-right:.6rem; border-radius:50%; background:var(--sp-lilac); font-weight:700; }
+.sp-readsmore[open] > summary::before{ content:"\2212"; }
+.sp-readsmore > .sp-reads{ padding:0 .8rem .8rem !important; }
+@media (max-width:479px){
+  .sp-page .sp-tools{ flex-wrap:nowrap; gap:.3rem; }
+  .sp-page .sp-tbtn, .sp-page .sp-tools .tol-share-btn{ padding:0 .6rem; gap:.3rem; font-size:.86rem; flex:1 1 auto; min-width:0; }
+  .sp-menu-wrap{ margin-left:0; flex:1 1 auto; display:flex; }
+  .sp-menu-wrap > .sp-tbtn{ width:100%; }
+  .sp-share-slot{ display:contents; }
+}

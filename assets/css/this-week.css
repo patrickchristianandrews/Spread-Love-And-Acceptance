@@ -40,14 +40,16 @@ html body .tw-card details.tw-fold ul.tw-list{ margin:.2rem 0 .2rem; }
 }
 
 /* ---------- buttons and links (UI font, the home page's shapes) ---------- */
-html body .tw-card p.tw-go, html body .tw-back p.tw-go{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .9rem; margin:.45rem 0 0; }
-html body .tw-btn{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.45rem 1.15rem; border-radius:999px; font:700 1rem/1.2 var(--tw-ui); text-decoration:none; cursor:pointer;
+html body .tw-card p.tw-go, html body .tw-back p.tw-go{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .9rem; margin:.3rem 0 0; }
+html body .tw-card p.tw-go .tw-btn{ margin:.2rem 0; }
+html body .tw-back p.tw-go{ margin:.25rem 0 .25rem; }
+html body .tw-btn{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.45rem 1.05rem; text-align:center; border-radius:999px; font:700 1rem/1.2 var(--tw-ui); text-decoration:none; cursor:pointer;
   color:#FFFFFF; background:var(--tw-acc); border:1.5px solid var(--tw-acc); box-shadow:none; }
 html body .tw-btn:hover{ background:var(--tw-acc-h); border-color:var(--tw-acc-h); }
 html body .tw-btn.is-soft{ color:#22496F; background:var(--tw-paper); }
 html body .tw-btn.is-soft:hover{ background:var(--tw-soft); border-color:var(--tw-acc); }
 html body .tw-btn[hidden]{ display:none; }
-html body .tw-link{ display:inline-flex; align-items:center; min-height:44px; padding:0; border:0; background:none; cursor:pointer; font:700 1rem/1.2 var(--tw-ui); color:var(--tw-acc); text-decoration:underline; text-underline-offset:3px; }
+html body .tw-link{ display:inline-block; min-height:44px; padding:.7rem 0; box-sizing:border-box; border:0; background:none; cursor:pointer; font:700 1rem/1.25 var(--tw-ui); color:var(--tw-acc); text-decoration:underline; text-underline-offset:3px; }
 html body .tw-link:hover{ color:var(--tw-acc-h); }
 html body .tw-card a.tw-link::after{ content:"\a0\2192"; }
 .tw-card a:focus-visible, .tw-card button:focus-visible, .tw-card summary:focus-visible, .tw-back a:focus-visible, .tw-back button:focus-visible, .tw-line button:focus-visible, .tw-line a:focus-visible, .tw-tabs button:focus-visible{ outline:3px solid var(--tw-acc); outline-offset:2px; border-radius:10px; }
@@ -56,15 +58,15 @@ html body .tw-card a.tw-link::after{ content:"\a0\2192"; }
 .h18 .h-week.is-away{ display:none; }
 .h18 .h-week .tw-card{ max-width:none; }
 html body .tw-back{ margin:.2rem 0 1rem; max-width:34rem; padding:.85rem 1rem .8rem; background:var(--tw-paper); }
-html body .tw-back h2.tw-back-h{ margin:0 0 .3rem; padding:0; border:0; background:none; box-shadow:none; max-width:none; font:600 1.15rem/1.2 var(--tw-head); letter-spacing:normal; text-transform:none; color:var(--tw-ink); }
+html body .tw-back h2.tw-back-h{ margin:0 0 .15rem; padding:0; border:0; background:none; box-shadow:none; max-width:none; font:700 .86rem/1.3 var(--tw-ui); letter-spacing:normal; text-transform:none; color:var(--tw-green); }
 html body .tw-back h2.tw-back-h::before, html body .tw-back h2.tw-back-h::after{ content:none !important; }
 html body .tw-back p.tw-step{ display:grid; gap:.1rem; margin:0 0 .15rem; }
 html body .tw-back p.tw-step strong{ font:700 1.02rem/1.3 var(--tw-ui); color:var(--tw-ink); }
 html body .tw-back p.tw-step span{ font:400 .98rem/1.45 var(--tw-read); color:var(--tw-muted); }
 html body .tw-back .tw-quiet{ font-weight:600; }
-html body .tw-back p.tw-install{ margin:.25rem 0 0; padding-top:.5rem; border-top:1px dashed var(--tw-line); font:400 .95rem/1.5 var(--tw-ui); color:var(--tw-ink); }
+html body .tw-back p.tw-install{ margin:0; padding-top:.4rem; border-top:1px dashed var(--tw-line); font:400 .95rem/1.5 var(--tw-ui); color:var(--tw-ink); }
 html body .tw-back p.tw-install a{ font-weight:700; color:var(--tw-acc); text-underline-offset:3px; white-space:nowrap; }
-html body .tw-back p.tw-small{ margin:.15rem 0 0; font:400 .92rem/1.4 var(--tw-ui); color:var(--tw-muted); }
+html body .tw-back p.tw-small{ margin:0; padding-top:.4rem; border-top:1px dashed var(--tw-line); font:400 .92rem/1.4 var(--tw-ui); color:var(--tw-muted); }
 html body .tw-back p.tw-small a{ font-weight:700; color:var(--tw-acc); text-underline-offset:3px; }
 html body .tw-back p.tw-say:empty{ display:none; }
 html body .tw-back p.tw-say{ font:400 .95rem/1.4 var(--tw-ui); color:var(--tw-muted); }
@@ -87,21 +89,21 @@ main.tw-page a.tw-btn.is-soft{ color:#22496F; }
 .tw-note{ padding:.5rem .8rem; border-radius:12px; background:var(--tw-soft); font:400 .98rem/1.45 var(--tw-ui); }
 .tw-tabs{ display:flex; flex-wrap:wrap; gap:.4rem; margin:1rem 0 .8rem; }
 .tw-tabs[hidden]{ display:none; }
-.tw-tabs button{ display:inline-flex; flex-direction:column; align-items:flex-start; gap:.05rem; min-height:44px; padding:.35rem .9rem; border-radius:14px; border:1.5px solid var(--tw-line); background:var(--tw-paper); color:var(--tw-ink); font:700 .95rem/1.2 var(--tw-ui); cursor:pointer; }
-.tw-tabs button .tw-tab-d{ font-weight:400; font-size:.82rem; color:var(--tw-muted); }
-.tw-tabs button[aria-pressed="true"]{ background:var(--tw-acc); border-color:var(--tw-acc); color:#FFFFFF; }
-.tw-tabs button[aria-pressed="true"] .tw-tab-d{ color:#E3EDF7; }
-.tw-tabs button:hover:not([aria-pressed="true"]){ border-color:var(--tw-acc); }
+html body main.tw-page .tw-tabs button{ display:inline-flex; flex-direction:column; align-items:flex-start; gap:.05rem; min-height:44px; padding:.35rem .9rem; border-radius:14px; border:1.5px solid var(--tw-line); background:var(--tw-paper); color:var(--tw-ink); font:700 .95rem/1.2 var(--tw-ui); cursor:pointer; opacity:1; text-shadow:none; }
+html body main.tw-page .tw-tabs button .tw-tab-d{ font-weight:400; font-size:.82rem; color:var(--tw-muted); }
+html body main.tw-page .tw-tabs button[aria-pressed="true"]{ background:var(--tw-acc); border-color:var(--tw-acc); color:#FFFFFF; }
+html body main.tw-page .tw-tabs button[aria-pressed="true"] .tw-tab-d{ color:#E3EDF7; }
+html body main.tw-page .tw-tabs button:hover:not([aria-pressed="true"]){ border-color:var(--tw-acc); }
 .tw-fine{ font:400 .95rem/1.5 var(--tw-ui); color:var(--tw-muted); }
 .tw-myweek{ padding:1rem 1.05rem; border-radius:18px; background:var(--tw-paper); border:1px solid var(--tw-line); }
 .tw-myweek.is-now{ border-color:var(--tw-acc); }
 
 /* ---------- "Add today to your week" (one small line in "What you got from this") ---------- */
 html body .tw-line{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .5rem; margin:.45rem 0 0 !important; padding:.55rem 0 0 !important; border-top:1px dashed var(--tw-line); max-width:none; font:400 .95rem/1.4 var(--tw-ui); color:var(--tw-ink); }
-html body .tw-line .tw-line-q{ flex:1 1 100%; }
-html body .tw-line .tw-pick{ display:flex; flex-wrap:wrap; gap:.3rem; }
+html body .tw-line .tw-line-q{ flex:1 1 100%; font-weight:600; }
+html body .tw-line .tw-pick{ display:flex; flex-wrap:wrap; gap:.25rem; }
 html body .tw-line .tw-pick[hidden], html body .tw-line .tw-line-q[hidden]{ display:none; }
-html body .tw-line .tw-pick button{ min-height:44px; padding:.3rem .75rem; border-radius:999px; border:1.5px solid var(--tw-acc); background:var(--tw-paper); color:#22496F; font:700 .9rem/1.2 var(--tw-ui); cursor:pointer; }
+html body .tw-line .tw-pick button{ min-height:44px; min-width:44px; padding:.3rem .6rem; border-radius:999px; border:1.5px solid var(--tw-acc); background:var(--tw-paper); color:#22496F; font:700 .88rem/1.2 var(--tw-ui); cursor:pointer; }
 html body .tw-line .tw-pick button:hover{ background:var(--tw-soft); }
 html body .tw-line .tw-line-say{ font:400 .95rem/1.4 var(--tw-ui); color:var(--tw-ink); }
 html body .tw-line .tw-line-say:empty{ display:none; }
@@ -113,3 +115,15 @@ html.tol-quiet .tw-line, html.tol-no-helpers .tw-line, html.tol-quiet .tw-back .
 
 @media (prefers-reduced-motion: reduce){ .tw-card *, .tw-back *, .tw-line *{ transition:none !important; animation:none !important; } }
 @media (max-width:420px){ html body .tw-card{ padding:.9rem .9rem .9rem; } html body .tw-back{ padding:.8rem .9rem; } }
+
+/* ---------- "Try this in 60 seconds": a small starter at the top of the main entry pages (one action, one button) ---------- */
+html body aside.tw-start{ --tw-ink:#2B2620; --tw-muted:#554E42; --tw-acc:#2B5B8C; --tw-acc-h:#214A72; --tw-green:#3E6B4C; --tw-ui:var(--d17-ui, var(--tol-sans, "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif));
+  box-sizing:border-box; max-width:40rem; margin:.7rem 0 1rem; padding:.7rem 1rem .6rem; border-radius:16px; background:#FFFDF8; border:1px solid #E4D9BE; border-left:4px solid #2B5B8C; color:var(--tw-ink); text-align:left; }
+html body aside.tw-start p{ max-width:none; margin:0; padding:0; background:none; box-shadow:none; }
+html body aside.tw-start p.tw-start-k{ margin:0 0 .1rem; font:700 .86rem/1.3 var(--tw-ui); letter-spacing:normal; text-transform:none; color:var(--tw-green); }
+html body aside.tw-start p.tw-start-t{ font:400 1.02rem/1.5 "Lora", Georgia, serif; color:var(--tw-ink); }
+html body aside.tw-start p.tw-start-go{ margin:.2rem 0 0; }
+html body aside.tw-start a.tw-start-b{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.45rem 1.1rem; border-radius:999px; font:700 1rem/1.2 var(--tw-ui); text-decoration:none; color:#FFFFFF; background:#2B5B8C; border:1.5px solid #2B5B8C; }
+html body aside.tw-start a.tw-start-b::after{ content:"\a0\2192"; }
+html body aside.tw-start a.tw-start-b:hover{ background:#214A72; border-color:#214A72; }
+html body aside.tw-start a.tw-start-b:focus-visible{ outline:3px solid #2B5B8C; outline-offset:2px; }

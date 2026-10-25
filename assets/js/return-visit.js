@@ -10,6 +10,9 @@
       visitor's previous day here, with "Got it" to put it away. It never names a page they visited.
    3. On tool, chapter and game pages, one line inside the "What you got from this" card (come-back.js, .cb-end):
       today's small minute, or that the next part opens tomorrow.
+   3b. (return26) Under that card, one more small line: "Add today to your week" with a one-tap weather, only when My week
+      has nothing for this week (assets/js/this-week.js, loaded when needed; at most once a day, never in Quiet mode).
+      When all seven parts are done the card also offers "Send this week's idea to someone" (the site's share sheet).
    4. Once, right after a part is done: an optional email sign-up (Buttondown, tag "small-days"), at most one
       email a week. Never on the first visit's first screen, never twice in a visit (window.TOLPrompt), never
       after "No thanks" (asked again after 60 days at the earliest), never once signed up.
@@ -36,6 +39,19 @@
   function today() { return ymd(new Date()); }
   function helpersOff() { return root.classList.contains('tol-no-helpers') || root.classList.contains('tol-quiet') || !!(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); }
   function still() { return root.classList.contains('tol-still') || !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  // return26: this-week.js (the weekly card's code: "Add today to your week", "Send this week's idea") loads only when one of them is needed
+  var twWait = null;
+  function weekKit(cb) {
+    if (window.TOLThisWeek) return cb(window.TOLThisWeek);
+    if (!twWait) {
+      twWait = [];
+      var sc = doc.createElement('script'); sc.src = '/assets/js/this-week.js'; sc.setAttribute('data-tw-kit', '');
+      sc.onload = function () { var q = twWait; twWait = null; q.forEach(function (f) { if (window.TOLThisWeek) f(window.TOLThisWeek); }); };
+      sc.onerror = function () { twWait = null; };
+      doc.head.appendChild(sc);
+    }
+    twWait.push(cb);
+  }
 
   /* ---------------------------------------------------------------- our one small record */
   var S = { p: { me: {}, with: {} }, set: '', last: '', prev: '', newSeen: '', nl: '' };
@@ -217,7 +233,8 @@
           (SETS[set].parts[showing - 1].go ? ' <a class="rt-go" href="' + esc(SETS[set].parts[showing - 1].go[0]) + '">' + esc(SETS[set].parts[showing - 1].go[1]) + '</a>' : '') + '</p>';
       } else if (!next) {
         html += '<p class="rt-fin">You did all seven. Pick the one that helped most and keep it going. Whenever you like, try the other set, or start this one again.</p>' +
-          '<p class="rt-btns"><button type="button" class="rt-btn" data-rt-set="' + (set === 'me' ? 'with' : 'me') + '">Try “' + SETS[set === 'me' ? 'with' : 'me'].name + '”</button> <button type="button" class="rt-link" data-rt-again>Start this set again</button></p>';
+          '<p class="rt-btns"><button type="button" class="rt-btn" data-rt-set="' + (set === 'me' ? 'with' : 'me') + '">Try “' + SETS[set === 'me' ? 'with' : 'me'].name + '”</button> <button type="button" class="rt-link" data-rt-again>Start this set again</button></p>' +
+          '<p class="rt-btns"><button type="button" class="rt-btn is-soft" data-rt-sendweek>Send this week’s idea to someone</button></p>';
       } else if (dt) {
         html += '<p class="rt-today">Today’s part is done: <strong>' + esc(SETS[set].parts[dt - 1].t) + '</strong>. Part ' + next + ' opens here tomorrow.</p>';
       }
@@ -257,6 +274,10 @@
 
     box.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b || !box.contains(b)) return;
+      if (b.hasAttribute('data-rt-sendweek')) {
+        weekKit(function (K) { K.needData(function () { var r = K.shareCurrent(); if (r === 'copied') b.textContent = 'Link copied'; }); });
+        return;
+      }
       if (b.hasAttribute('data-rt-set')) {
         set = b.getAttribute('data-rt-set'); S.set = set; save(); view = 0; openAfter = false; shared = null;
         draw('[data-rt-set="' + set + '"]'); return;
@@ -324,14 +345,14 @@
 
   /* ---------------------------------------------------------------- one line in "What you got from this" */
   function endLine(card) {
-    if (helpersOff() || !card || card.querySelector('.rt-tomorrow')) return;
+    if (helpersOff() || !card) return;
     var set = curSet(), next = nextPart(set), dt = doneToday(set), P = next ? SETS[set].parts[next - 1] : null, s;
     if (!started(set)) s = 'Want one small thing a day? <a href="/#small-days">Seven small days</a>, about a minute each.';
-    else if (!next) return;
+    else if (!next) s = '';
     else if (dt) s = 'Seven small days: part ' + next + ' opens tomorrow on the <a href="/#small-days">home page</a>.';
     else s = 'Your small minute today: <a href="/#small-days">part ' + next + ', ' + esc(P.t) + '</a>.';
-    var p = doc.createElement('p'); p.className = 'rt-tomorrow cb-mini'; p.innerHTML = s;
-    card.appendChild(p);
+    if (s && !card.querySelector('.rt-tomorrow')) { var p = doc.createElement('p'); p.className = 'rt-tomorrow cb-mini'; p.innerHTML = s; card.appendChild(p); }
+    weekKit(function (K) { K.addLine(card); });
   }
   function watchEnds() {
     var main = doc.querySelector('main'); if (!main || !('MutationObserver' in window)) return;

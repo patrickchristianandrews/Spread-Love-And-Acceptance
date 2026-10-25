@@ -69,7 +69,7 @@
       ? '<ul class="tw-list">' + items + '</ul><details class="tw-fold"><summary>Notice, and try it with someone</summary><ul class="tw-list">' + more + '</ul></details>'
       : '<ul class="tw-list">' + items + more + '</ul>';
     var go = '<p class="tw-go">' + (o.home
-      ? '<a class="tw-link" href="/this-week.html">The whole card, and earlier weeks</a>'
+      ? '<a class="tw-link" href="/this-week.html">See the whole card</a>'
       : '<a class="tw-link" href="/my-week.html">Your week in weather</a>') +
       ' <button type="button" class="tw-btn is-soft" data-tw-send hidden>Send this week’s idea to someone</button></p>';
     var kicker = (o.kicker || 'This week') + ', ' + info.label;
@@ -187,10 +187,10 @@
     return true;
   }
   function undoAdd() {
-    if (!lastAdd) return false;
+    if (!lastAdd || lastAdd.undone) return false;
     var s = readWeekStore();
     if (lastAdd.prev) s.drafts[lastAdd.start] = lastAdd.prev; else delete s.drafts[lastAdd.start];
-    var ok = lsSet(WEEK, JSON.stringify(s)); lastAdd = null; return ok;
+    var ok = lsSet(WEEK, JSON.stringify(s)); lastAdd.undone = true; return ok;
   }
 
   /* ---------------------------------------------------------------- 3. one line in "What you got from this" */
@@ -209,21 +209,28 @@
     pageShown = true;
     return true;
   }
+  function doneHTML(k) {
+    return 'Added: ' + esc(SKYNAME[k]) + ' for today. <a href="/my-week.html">See your week</a> <button type="button" class="tw-undo" data-tw-undo>Undo</button>';
+  }
   function addLine(card) {
-    if (!card || card.querySelector('.tw-line') || !lineWanted()) return;
+    if (!card || card.querySelector('.tw-line')) return;
+    // the card was redrawn (come-back.js) right after a tap: put the confirmation, and Undo, back
+    var again = lastAdd && lastAdd.sky && !lastAdd.undone;
+    if (!again && !lineWanted()) return;
     css();
     var p = doc.createElement('p'); p.className = 'tw-line cb-mini no-bubble';
-    p.innerHTML = '<span class="tw-line-q" id="tw-line-q">Add today to your week. Tap the weather that fits.</span> <span class="tw-pick" role="group" aria-labelledby="tw-line-q">' +
-      SKIES.map(function (s) { return '<button type="button" data-tw-sky="' + s[0] + '">' + s[1] + '</button>'; }).join('') + '</span>' +
+    p.innerHTML = '<span class="tw-line-q" id="tw-line-q">Add today to your week:</span> <span class="tw-pick" role="group" aria-labelledby="tw-line-q">' +
+      SKIES.map(function (s) { return '<button type="button" data-tw-sky="' + s[0] + '" aria-label="' + s[1] + '">' + (s[0] === 'partly' ? 'Partly' : s[1]) + '</button>'; }).join('') + '</span>' +
       '<span class="tw-line-say" role="status" aria-live="polite"></span>';
+    var pick = p.querySelector('.tw-pick'), q = p.querySelector('.tw-line-q'), say = p.querySelector('.tw-line-say');
+    if (again) { pick.hidden = true; q.hidden = true; say.innerHTML = doneHTML(lastAdd.sky); }
     p.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('button'); if (!b) return;
-      var say = p.querySelector('.tw-line-say'), pick = p.querySelector('.tw-pick'), q = p.querySelector('.tw-line-q');
       if (b.hasAttribute('data-tw-sky')) {
         var k = b.getAttribute('data-tw-sky');
         if (addToday(k)) {
-          S.ln.n = 0; save(); pick.hidden = true; q.hidden = true;
-          say.innerHTML = 'Added: ' + esc(SKYNAME[k]) + ' for today. <a href="/my-week.html">See your week</a> <button type="button" class="tw-undo" data-tw-undo>Undo</button>';
+          lastAdd.sky = k; S.ln.n = 0; save(); pick.hidden = true; q.hidden = true;
+          say.innerHTML = doneHTML(k);
           var u = say.querySelector('[data-tw-undo]'); if (u) try { u.focus(); } catch (x) {}
         } else say.textContent = 'This browser would not keep that, so nothing was saved.';
       } else if (b.hasAttribute('data-tw-undo')) {
@@ -262,7 +269,7 @@
       }
       var tabs = sec.querySelector('[data-tw-tabs]'), noteEl = sec.querySelector('[data-tw-note]');
       function draw(info, focus) {
-        fillCard(host, info, { kicker: info.n === cur.n ? 'This week' : (info.n === cur.n - 1 ? 'Last week' : 'Earlier'), force: true });
+        fillCard(host, info, { kicker: whenWord(cur.n - info.n), force: true });
         if (info.n === cur.n) myWeekPush(host, now);
         if (tabs) Array.prototype.forEach.call(tabs.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-tw-n') === String(info.n))); });
         if (focus) { var h = host.querySelector('.tw-h'); if (h) { h.setAttribute('tabindex', '-1'); try { h.focus({ preventScroll: true }); } catch (e) {} } }
@@ -315,9 +322,9 @@
   function bestStep(now, info) {
     var ds = daysState(), dow = now.getDay();
     if ((dow === 0 || dow === 1) && savedWeekCount() && !hasEntryThisWeek(now)) return { kind: 'week', h: 'Look back on your week', d: 'Tap the weather for each day. It takes about five minutes and stays on this device.', href: '/my-week.html', btn: 'Look back on your week' };
-    if (ds.next && !ds.doneToday && ds.count > 0) return { kind: 'days', h: 'Part ' + ds.next + ' of 7: ' + ds.title, d: 'Seven small days. A small thing to try today, about a minute.', href: '#small-days', btn: 'Do today’s part' };
+    if (ds.next && !ds.doneToday && ds.count > 0) return { kind: 'days', h: 'Seven small days, part ' + ds.next + ': ' + ds.title, d: 'A small thing to try today. It takes about a minute.', href: '#small-days', btn: 'Do today’s part' };
     var mw = midway(); if (mw) return mw;
-    if (ds.next && !ds.doneToday && ds.count === 0) return { kind: 'days', h: 'Part 1 of 7: ' + ds.title, d: 'Seven small days. One small thing a day, about a minute each.', href: '#small-days', btn: 'Try part 1' };
+    if (ds.next && !ds.doneToday && ds.count === 0) return { kind: 'days', h: 'Seven small days, part 1: ' + ds.title, d: 'One small thing a day, about a minute each.', href: '#small-days', btn: 'Try part 1' };
     return { kind: 'week-card', h: info.w.t, d: info.w.tr, href: '/this-week.html', btn: 'See this week’s idea', small: 'This week' };
   }
   function installLine() {
@@ -329,7 +336,7 @@
     var off = lsGet('tol-appbar-off'); if (off && /^\d{4}-\d\d-\d\d$/.test(off) && Date.now() - Date.parse(off) < 30 * DAY) return '';
     try { if (sessionStorage.getItem('tol-invite-seen')) return ''; } catch (e) {}
     var phone = G.innerWidth <= 760;
-    return '<p class="tw-install">Keep this site on your ' + (phone ? 'phone' : 'device') + '. It opens like an app, works offline, and nothing you type leaves your ' + (phone ? 'phone' : 'device') + '. <a href="/install.html">Show me how</a></p>';
+    return '<p class="tw-install">Keep this site on your ' + (phone ? 'phone' : 'device') + ', so it opens like an app. <a href="/install.html">Show me how</a></p>';
   }
   function snoozed() { return !!S.nn && Date.now() - Date.parse(S.nn) < 7 * DAY; }
 
@@ -341,8 +348,7 @@
     panel.innerHTML = '<h2 class="tw-back-h" id="tw-back-h">Welcome back</h2>' +
       '<p class="tw-step"><strong>' + esc(step.h) + '</strong><span>' + esc(step.d) + '</span></p>' +
       '<p class="tw-go"><a class="tw-btn" href="' + esc(step.href) + '">' + esc(step.btn) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>' +
-      installLine() +
-      (step.small ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>') +
+      (installLine() || (step.small ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>')) +
       '<p class="tw-say" role="status" aria-live="polite"></p>';
     if (quick && quick.nextSibling) intro.insertBefore(panel, quick.nextSibling); else intro.appendChild(panel);
     intro.classList.add('has-tw');
