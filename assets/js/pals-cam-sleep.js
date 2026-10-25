@@ -22,6 +22,11 @@
    - It respects the site's Quiet mode and sound switch (starts silent; a Sound button turns it on for this page).
    What it remembers: the timer, sound and dimmer choices (localStorage 'tol-sleepcam-v1'), on this device only.
    Nothing is sent anywhere. Draws the pals with pups.js (window.TOLPups).
+   sleep25: this file is the base cam. Three add-on files hang off the small hook list below (HK) through
+   TOLSleepCam.core() and TOLSleepCam.hook(): sleepcam-pets.js (fur babies drawn and animated in the room),
+   sleepcam-sounds.js (their sleep sounds, the overlay mixer, presets) and sleepcam-ui.js (the panels). If they
+   are missing or fail, the cam works exactly as before. Every bus goes through A.master, then A.fade (the sleep
+   timer), the mute, the low-cut, the high-cut, the gentle compressor and the soft clipper.
    window.TOLSleepCam exposes start/stop/state/trigger for tests. */
 (function () {
   'use strict';
@@ -71,7 +76,10 @@
   //   voices -> snore / bed / sfx buses -> fade -> mute -> rumble filter -> low-pass -> gentle compressor
   //   -> soft clipper (a safety net that only matters if something ever got loud) -> speakers.
   // Fades only ever use setTargetAtTime, so no volume change can jump or zipper.
-  var A = { c: null, fade: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: 0 };
+  var A = { c: null, fade: null, master: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: 0 };
+  // the hook list the add-on files register on; a failing hook can never break the cam
+  var HK = {};
+  function hk(name, a, b) { var fs = HK[name], r, out; if (!fs) return undefined; for (var i = 0; i < fs.length; i++) { try { r = fs[i](a, b); } catch (e) { r = undefined; } if (r && !out) out = r; } return out; }
   var HORIZON = 12;      // seconds of breathing scheduled ahead of now (so a slow timer or a busy tab can't starve the sound)
   var TRIM = 1.6;        // overall level after the compressor (sets how loud everything is, together; the sounds are balanced against each other below)
   var FADE_TC = 2.4;     // fade-in time constant (about 9 s to be fully in)
@@ -139,13 +147,15 @@
     var clip = c.createWaveShaper(); clip.curve = softCurve(); try { clip.oversample = '2x'; } catch (e) {}
     chain(A.fade, A.mute, rumble, tone, comp, trim, clip, c.destination);
     A.snore = gainNode(S.snore ? 1 : 0); A.bed = gainNode(1); A.sfx = gainNode(1);
-    A.snore.connect(A.fade); A.bed.connect(A.fade); A.sfx.connect(A.fade);
+    A.master = gainNode(1); A.master.connect(A.fade); // the overall volume slider lives here, before the sleep-timer fade
+    A.snore.connect(A.master); A.bed.connect(A.master); A.sfx.connect(A.master);
     A.bufs = { pinkA: makeNoise(c, 'pink', 23.1, 0.25), pinkB: makeNoise(c, 'pink', 31.7, 0.25), brownA: makeNoise(c, 'brown', 29.3, 0.25), brownB: makeNoise(c, 'brown', 41.9, 0.25), flut: makeNoise(c, 'flut', 23.3, 1), dropsA: makeDrops(c, 19.3, 3.2), dropsB: makeDrops(c, 27.1, 2.6) };
     // every noise loop also drifts in speed by a fraction of a percent, at random, so even the loop length never shows up as a repeat
     A.rateMod = gainNode(0.003); var rs = c.createBufferSource(); rs.buffer = A.bufs.flut; rs.loop = true; rs.playbackRate.value = 0.02; rs.start(c.currentTime, Math.random() * 20); rs.connect(A.rateMod);
     buildSnorers();
     // a barely-there floor of room air, so the sound never drops to digital silence between breaths (some speakers cut out and then pop when it does)
     var fl = gainNode(0.004); chain(loopSrc(A.bufs.pinkB), filt('lowpass', 500, 0.5), fl, A.bed);
+    hk('audioBuilt', A);
     return c;
   }
   // each pup's voice: a breath of air through two soft resonances, plus a faint low "purr" (a narrow band of
@@ -223,12 +233,13 @@
   function audioTick() {
     if (!S.on) return;
     S.T = (performance.now() - S.t0) / 1000;
-    planBreaths();
-    if (A.c && !S.ended) { syncClock(); sendBreaths(); }
+    planBreaths(); hk('plan', S.T);
+    if (A.c && !S.ended) { syncClock(); sendBreaths(); hk('tick', S.T); }
   }
   // ---- the sound bed (synthesized; a pair of different-length noise loops per layer, so it never repeats)
   function setBed(kind) {
     S.bed = kind; var pr = prefs(); pr.bed = kind; savePrefs(pr);
+    if (HK.bed) { hk('bed', kind); return; } // the mixer owns the sound beds when it is loaded
     var c = A.c; if (!c) return;
     var now = c.currentTime;
     if (A.bedNodes) { var old = A.bedNodes; old.g.gain.setTargetAtTime(0, now, 0.9); setTimeout(function () { try { old.stop(); } catch (e) {} }, 7000); A.bedNodes = null; }
@@ -570,10 +581,11 @@
     if (!g || !W) return;
     g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#0D0B16'; g.fillRect(0, 0, W, H);
     g.setTransform(geo.k * DPR, 0, 0, geo.k * DPR, geo.ox * DPR, geo.oy * DPR);
-    drawRoom(T);
+    drawRoom(T); hk('drawBack', g, T);
     // the pal further from the rug's middle is drawn first, so a sleepwalker in front of the rug is on top
     var order = ['tidbit', 'sugarfoot'].sort(function (a, b) { return PALS[a].y - PALS[b].y; });
     order.forEach(function (id) { drawPal(PALS[id], T); });
+    hk('draw', g, T);
     drawExtras(T);
     drawZs(T, dt);
     // the dimmer: the whole room fades toward black
@@ -599,7 +611,7 @@
     S.sinceDraw += dt;
     if (!document.hidden) {
       if (!S.ev && !S.ending && S.T >= S.nextEv) startEvent();
-      runEvent(dt);
+      runEvent(dt); hk('update', S.T, dt);
       // a pal in the middle of a happening isn't snoring (unless she's sleepwalking, dreaming or rolling over)
       ['tidbit', 'sugarfoot'].forEach(function (id) { if (!S.ev || S.ev.who !== id) PALS[id].asleep = true; });
       if (S.sinceDraw >= 1 / S.fps - 0.004) { render(S.T, S.sinceDraw); S.sinceDraw = 0; }
@@ -646,7 +658,7 @@
     S.on = true; S.ended = false; S.ending = 0; S.ev = null; S.zs = []; S.T = 0; S.t0 = performance.now(); S.last = 0;
     S.timerEnd = S.timerMin ? S.timerMin * 60 : 0;
     ['tidbit', 'sugarfoot'].forEach(function (id) { var p = PALS[id]; p.breaths = []; p.nextB = 0; p.asleep = true; p.homeDx = HOME[id].dx; p.x = homeX(p); });
-    scheduleNext(true);
+    scheduleNext(true); hk('start');
     clearInterval(A.sched); A.sched = setInterval(audioTick, 250); audioTick();
     if (S.soundOn) audioOn(true);
     requestWake();
@@ -661,13 +673,14 @@
     A.mute.gain.setTargetAtTime(1, t, 0.3);
     if (fresh) A.fade.gain.setTargetAtTime(1, t, FADE_TC);
     A.snore.gain.setTargetAtTime(S.snore ? 1 : 0, t, 0.4);
-    updateGates(); syncClock(); if (!A.bedNodes || A.bedNodes.kind !== S.bed) setBed(S.bed);
+    updateGates(); syncClock();
+    if (HK.mixOn) hk('mixOn'); else if (!A.bedNodes || A.bedNodes.kind !== S.bed) setBed(S.bed);
   }
   function audioOff() {
     if (!A.c) return;
     A.mute.gain.setTargetAtTime(0, A.c.currentTime, 0.3);
   }
-  function stopBed() { if (A.bedNodes) { var old = A.bedNodes; A.bedNodes = null; try { old.g.gain.setTargetAtTime(0, A.c.currentTime, 0.4); } catch (e) {} setTimeout(function () { try { old.stop(); } catch (e) {} }, 3000); } }
+  function stopBed() { hk('mixStop'); if (A.bedNodes) { var old = A.bedNodes; A.bedNodes = null; try { old.g.gain.setTargetAtTime(0, A.c.currentTime, 0.4); } catch (e) {} setTimeout(function () { try { old.stop(); } catch (e) {} }, 3000); } }
   function setSound(on) {
     S.soundOn = !!on;
     if (!S.on) return;
@@ -701,7 +714,7 @@
     if (!UI.root) return; UI.root.classList.remove('is-quiet'); clearTimeout(UI.quietT);
     UI.quietT = setTimeout(function () {
       var a = document.activeElement, kb = false; try { kb = !!(a && UI.root.contains(a) && a.matches(':focus-visible')); } catch (e) {}
-      if (!kb) UI.root.classList.add('is-quiet');
+      if (!kb && !S.hold) UI.root.classList.add('is-quiet');
     }, 4500);
   }
   function mountPage() {
@@ -714,6 +727,7 @@
     // the start screen's choices, remembered from last time
     function setRadio(name, v) { var el = document.querySelector('input[name="' + name + '"][value="' + v + '"]'); if (el) el.checked = true; }
     setRadio('spc-timer', String(pr.timer || 0)); setRadio('spc-bed', pr.bed || 'off');
+    hk('mount', UI);
     var sn = document.getElementById('spc-snore-opt'); if (sn) sn.checked = pr.snore !== false;
     // the site's sound setting (and Quiet mode) keep sound off by default here too; the person can still choose to hear the pups
     var snd = document.getElementById('spc-sound-opt'), sndNote = document.getElementById('spc-sound-note');
@@ -721,10 +735,10 @@
     syncSoundOpt(); window.addEventListener('pageshow', syncSoundOpt);
     function radio(name, d) { var el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : d; }
     startBtn.addEventListener('click', function () {
-      intro.hidden = true; root.hidden = false; document.documentElement.classList.add('spc-running');
+      intro.hidden = true; root.hidden = false; document.documentElement.classList.add('spc-running'); hk('enter');
       if (root.requestFullscreen && !document.fullscreenElement && window.matchMedia && window.matchMedia('(pointer: coarse)').matches) { try { var f = root.requestFullscreen(); if (f && f.catch) f.catch(function () {}); } catch (e) {} }
       resize();
-      start({ timer: +radio('spc-timer', '0'), bed: radio('spc-bed', 'off'), snore: sn ? sn.checked : true, sound: snd ? snd.checked : siteSoundOK() });
+      start({ timer: +radio('spc-timer', '0'), bed: document.querySelector('input[name="spc-bed"]') ? radio('spc-bed', 'off') : undefined, snore: sn ? sn.checked : true, sound: snd ? snd.checked : siteSoundOK() });
       syncButtons(); showControls();
       say(!S.soundOn ? 'Sound is off. Tap Sound to hear the pups.' : S.timerMin ? 'Goodnight. Everything fades out in ' + S.timerMin + ' minutes.' : 'Goodnight. Tap Exit when you want to stop.');
       setTimeout(function () { var b = root.querySelector('.spc-exit'); if (b) b.focus({ preventScroll: true }); }, 50);
@@ -745,7 +759,7 @@
     try { var mq = window.matchMedia('(prefers-reduced-motion: reduce)'); if (mq.addEventListener) mq.addEventListener('change', function () { S.calm = calmNow(); }); } catch (e) {}
     UI.dimBtn.addEventListener('click', function () { S.dim = !S.dim; var p = prefs(); p.dim = S.dim; savePrefs(p); syncButtons(); say(S.dim ? 'The room dims slowly' : 'The room stays as it is'); showControls(); });
     root.querySelector('.spc-exit').addEventListener('click', exitCam);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !root.hidden) { exitCam(); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !root.hidden) { if (hk('escape')) return; exitCam(); } });
     function wakeUp() {
       showControls();
       if (S.ended) { root.classList.remove('is-done'); var keep = { timer: 0, bed: S.bed, snore: S.snore, dim: S.dim, sound: S.soundOn }; start(keep); syncButtons(); say('The cam is back. Sleep timer off.'); }
@@ -753,7 +767,7 @@
     ['pointerdown', 'pointermove', 'keydown', 'focusin'].forEach(function (ev) { root.addEventListener(ev, function (e) { if (ev === 'pointermove' && e.pointerType === 'touch') return; wakeUp(); }); });
     window.addEventListener('resize', function () { if (!root.hidden) resize(); });
     function exitCam() {
-      stop(); root.hidden = true; intro.hidden = false; root.classList.remove('is-done'); document.documentElement.classList.remove('spc-running');
+      hk('exit'); stop(); root.hidden = true; intro.hidden = false; root.classList.remove('is-done'); document.documentElement.classList.remove('spc-running');
       if (document.fullscreenElement && document.exitFullscreen) { try { document.exitFullscreen(); } catch (e) {} }
       startBtn.focus();
     }
@@ -777,7 +791,17 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountPage); else mountPage();
 
+  // what the add-on files (pets, sounds, panels) are allowed to use
+  function core() {
+    return { S: S, A: A, G: G, PS: PS, TAU: TAU, UI: UI, clamp: clamp, mix: mix, sio: sio, seg: seg, rand: rand, hann: hann, swell: swell, breathCurve: breathCurve, play: play, lsGet: lsGet, lsSet: lsSet, calmNow: calmNow,
+      rr: rr, circ: circ, ell: ell, glow: glow, gainNode: gainNode, filt: filt, loopSrc: loopSrc, chain: chain, panner: panner, makeNoise: makeNoise, makeDrops: makeDrops, voice: voice,
+      aT: aT, syncClock: syncClock, actx: actx, siteSoundOK: siteSoundOK, say: say, showControls: showControls, syncButtons: syncButtons,
+      // the mixer tells the toolbar which single bed (rain, fan, brown) is playing, without starting anything
+      noteBed: function (kind) { S.bed = kind; var p = prefs(); p.bed = kind; savePrefs(p); syncButtons(); },
+      hold: function (on) { S.hold = !!on; if (on) showControls(); } };
+  }
   window.TOLSleepCam = {
+    core: core, hook: function (name, fn) { (HK[name] = HK[name] || []).push(fn); },
     start: start, stop: stop,
     trigger: function (type, who) { if (S.ev) { S.ev.t0 = S.T - S.ev.dur - 1; runEvent(0); } return startEvent(type, who); },
     state: function () { return { on: S.on, T: S.T, ev: S.ev ? S.ev.type : null, who: S.ev ? S.ev.who : null, next: S.nextEv, calm: S.calm, bed: S.bed, snore: S.snore, dim: S.dim, timer: S.timerMin, ending: !!S.ending, ended: S.ended, zs: S.zs.length,
