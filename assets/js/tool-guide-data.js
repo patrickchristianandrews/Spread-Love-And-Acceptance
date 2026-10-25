@@ -132,7 +132,7 @@ window.TOLToolGuideData = {
         ['mischkowski-kross-bushman-2012', 'A little distance cools anger (Mischkowski, Kross and Bushman, 2012).']
       ],
       idea: 'The house rules (one topic, facts not verdicts, one ask, wait before sending) and the private-link format are this site’s own.',
-      limits: 'Writing can’t carry a voice or a face. If it keeps going in circles, it’s time to talk, or to get outside help.',
+      limits: 'Writing can’t carry a voice or a face. If it keeps going in circles, it’s time to talk.',
       fair: ['Agree on the house rules together before you start.', 'Reply to what was written, not to what you guess was meant. Ask if unsure.'],
       privacy: 'Your draft and conversations are kept in this browser only once you type, and “Erase this conversation” removes them. Nothing is sent to this site. The link you send carries your words inside it, so anyone with the link can read it: send it only to the person it’s for.'
     },
@@ -234,7 +234,7 @@ window.TOLToolGuideData = {
         ['carrere-gottman-1999', 'How a talk starts shapes how it goes (Carrère and Gottman, 1999).']
       ],
       idea: 'The card’s layout and the ground rules are this site’s own.',
-      limits: 'A good time and a calm start help a lot, but some topics need more than one talk, or outside help.',
+      limits: 'A good time and a calm start help a lot, but some topics need more than one talk.',
       privacy: 'What you type on the card stays until you close the tab. If you tap the jobs on the card, they are kept in this browser (never who). “Don’t keep them” forgets them.'
     },
 
@@ -357,7 +357,7 @@ window.TOLToolGuideData = {
         ['schwarz-clore-1983', 'Our mood colors how we judge everything else that day (Schwarz and Clore, 1983).']
       ],
       idea: 'The weather picture and the tally are this site’s own; the scoring is written out on <a href="/method-and-limits.html">Method and limits</a>.',
-      limits: 'A reading of what you told it, not a measurement. If low days go on for weeks, talk to a doctor.',
+      limits: 'A reading of what you told it, not a measurement.',
       privacy: 'A reading is kept only if you choose to save it (up to 120 days), in this browser. The almanac can download or erase them.'
     },
 
@@ -500,7 +500,7 @@ window.TOLToolGuideData = {
         ['zaccaro-2018', 'Slow breathing is linked with feeling calmer and less anxious (Zaccaro and colleagues, 2018).']
       ],
       idea: 'The plan’s three parts and the “come back” check are this site’s own; the rule of thumb is on <a href="/method-and-limits.html">Method and limits</a>.',
-      limits: 'A personal plan, not a treatment. If anger or panic is often hard to manage, a doctor or counselor can help.',
+      limits: 'A personal plan, not a treatment.',
       privacy: 'The fill-in sheet keeps a draft in this browser only while “Keep a draft on this device” is ticked. Nothing is sent anywhere.'
     },
 
@@ -551,7 +551,7 @@ window.TOLToolGuideData = {
         ['balban-2023', 'Short daily breathing practice improved mood in one trial (Balban and colleagues, 2023).']
       ],
       idea: 'The garden and its breathing patterns are this site’s own.',
-      limits: 'A calm game. If anxiety or poor sleep goes on, talk to a doctor.',
+      limits: 'A calm game, not a treatment.',
       privacy: 'Your flowers and sound choice are kept in this browser. Nothing is sent anywhere.'
     },
 
@@ -862,7 +862,7 @@ window.TOLToolGuideData = {
         ['tannenbaum-cerasoli-2013', 'Regular structured look-backs help groups improve (Tannenbaum and Cerasoli, 2013).']
       ],
       idea: 'The roads, the order and the report are this site’s own. Each sheet’s own page says what it draws on.',
-      limits: 'Worksheets help you see and agree. They don’t replace talking, or outside help when it’s needed.',
+      limits: 'Worksheets help you see and agree. They don’t replace talking.',
       privacy: 'Nothing is kept unless you tick “Keep a draft on this device,” or “Use these names in the other tools” (which keeps just the names and jobs). Nothing is sent anywhere.'
     },
 

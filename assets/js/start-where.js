@@ -62,7 +62,7 @@
     { id:'coming-home', ico:'\uD83E\uDDF3', label:'Someone just came home after months away',
       say:'After a deployment, a long stretch of work away or a hospital stay, both of you have changed how things run. That is nobody\u2019s fault. Handing jobs back one at a time, with patience on both sides, helps everyone find their place again.',
       picks:[
-        ['/coming-home.html','Coming home after time apart','A handover week, finding your place, and where to get support.'],
+        ['/coming-home.html','Coming home after time apart','A handover week and finding your place.'],
         ['/workpapers/wp-03-one-owner-per-job.html','One owner per job','Decide together who owns what now.'],
         ['/check-ins.html','Check-ins','A calm, regular time to talk about how it\u2019s going.']
       ]},
@@ -131,8 +131,7 @@
       picks:[
         ['/grief.html#grief','Grief has no timetable','What grief can feel like, and what helps a little.'],
         ['/grief.html#new-chapter','A new chapter on your own','Running a home alone, and finding your feet, slowly.'],
-        ['/grief.html#hard-evening-h','For a hard evening','A few small things to do when the evening is long.'],
-        ['/grief.html#help','When to get more help','Who to talk to, and when.']
+        ['/grief.html#hard-evening-h','For a hard evening','A few small things to do when the evening is long.']
       ]},
     { id:'anxious', ico:'\uD83C\uDF3F', label:'Anxious or on edge today',
       say:'Anxiety is your body trying to keep you safe, a bit too hard. Start with your body, not your thoughts: one minute to see where you are, then one small step that fits.',
@@ -150,10 +149,10 @@
         ['/co-parenting.html','Separated co-parents','If you share the kids: calmer handoffs and short messages.']
       ]},
     { id:'anger', ico:'\uD83C\uDF21\uFE0F', label:'Losing your temper?',
-      say:'Wanting to stop is the biggest step. Most people can learn to catch the first sign in their body and pause before they shout. If your temper scares the people you live with, getting support for yourself is a strong, loving thing to do.',
+      say:'Wanting to stop is the biggest step. Most people can learn to catch the first sign in their body and pause before they shout. If your temper scares the people you live with, that is worth taking seriously, and a calm-down plan is a good place to start.',
       picks:[
         ['/upset-right-now.html','Upset right now?','Five minutes to pause, breathe and come back.'],
-        ['/parents.html#anger-help','Getting help for your anger','Your doctor, a counselor or a group, and what to try first.'],
+        ['/parents.html#anger-help','Calming your anger','A calm-down plan, and what to try first.'],
         ['/wp-11.html','The Calm-Down Kit','Write down your triggers and your own pause line ahead of time.']
       ]},
     { id:'sharing-a-room', ico:'\uD83D\uDECF\uFE0F', label:'Sharing a room or a dorm',
@@ -251,7 +250,7 @@
     { id:'teen', ico:'\uD83C\uDFA7', label:'I\u2019m a teen and home feels hard',
       say:'Fair enough. Growing up means you and the adults around you are both figuring out the new rules at the same time, and that gets loud. Here is stuff written for you, not about you.',
       picks:[
-        ['/teens.html','For teens','Parents, friends, feelings and dating, with places to get help.'],
+        ['/teens.html','For teens','Parents, friends, feelings and dating.'],
         ['/signal-translator.html','The Chat analyzer','Test a message before you send it.'],
         ['/frequency-journey.html','The arcade','When you just need a break.']
       ]},
@@ -266,7 +265,7 @@
       say:'Retirement, a loss, a parent who needs more care, a quiet house: big changes rearrange who does what and how people talk. Go gently. None of this has to be fixed today.',
       picks:[
         ['/retired-together.html','Retired and both home now','Sharing the house all day, handing over whole jobs, and finding your feet after work.'],
-        ['/grief.html','Grief and loss','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
+        ['/grief.html','Grief and loss','Loss, family after a loss, reconnecting, and starting a new chapter.'],
         ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
         ['#breathe','Breathe for a minute','A short pause, right here.']
       ]},

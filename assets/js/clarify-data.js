@@ -27,8 +27,7 @@
      0  "Sounds like an ordinary rough patch, or a one-off"  -> everyday tips
      1  "Worth a calm talk"                                    -> one tool and words to start
      2  "A pattern worth working on together"                  -> a plan: tools, worksheets, the six-week program
-     3  "Worth talking to someone outside the two of you"      -> a neutral note (a counsellor, a doctor, someone you
-                                                                 both trust), worded as an option
+     3  "A heavier pattern, worth a slower look"               -> a neutral note, worded as an option
      4  safety                                                 -> a short, neutral reply: the read, and no resources
 
    THE RULES (tools/clarify/test-clarify.js checks every one of them)
@@ -421,7 +420,7 @@
     'Sounds like an ordinary rough patch, or a one-off',
     'Worth a calm talk',
     'A pattern worth working on together',
-    'Worth talking to someone outside the two of you',
+    'A heavier pattern, worth a slower look',
     'Some of this sounds serious'
   ];
   var FLAG_WORDS = {
@@ -603,7 +602,7 @@
         links: [] }
     }
   };
-  var L3 = { body: 'Not because anything is wrong with either of you: some patterns are easier to shift with a neutral person in the room. A counselor, your doctor, or someone you both trust are all options, if they feel right.',
+  var L3 = { body: 'Not because anything is wrong with either of you: some patterns are easier to shift when you slow down, take one topic at a time, and each say what you need. Someone you both trust can help hold that conversation, if it feels right.',
     links: [] };
   // level 4: a short, neutral reply (the owner's decision: no resources, numbers or links)
   var SAFE = { body: 'That sounds really hard. This quick check is a small guide to this site, and it can’t help with this one.',

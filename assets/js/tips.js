@@ -260,7 +260,7 @@ window.TOL_TIPS = {
     ['gratitude', 'Thank the reliable thing.', 'The jobs that always get done are the ones nobody thanks. Name one today and say what it took.'],
     ['gratitude', 'Write down three good things.', 'Tonight, note three things that went well today, however small, and why they happened.'],
     ['gratitude', 'Thank your past self.', 'Think of something you did earlier that made today easier, and quietly thank yourself.'],
-    ['gratitude', 'Notice everyday comforts.', 'Running water, a warm jumper, a favorite mug. Take a moment to appreciate one.'],
+    ['gratitude', 'Notice everyday comforts.', 'Running water, a warm sweater, a favorite mug. Take a moment to appreciate one.'],
     ['gratitude', 'Say thanks out loud.', 'When you feel grateful for someone, tell them rather than just thinking it.'],
     ['gratitude', 'Savour a good moment.', 'When something nice happens, pause for a few seconds and really take it in.'],
     ['gratitude', 'Keep a gratitude jar.', 'Write small happy moments on slips of paper and pop them in a jar to read later.'],

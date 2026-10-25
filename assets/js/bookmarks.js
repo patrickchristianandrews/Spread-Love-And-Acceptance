@@ -606,6 +606,8 @@
     if (!btn || locked() || list().length || H.classList.contains('tol-no-helpers')) return;
     var t = typeOf(here), seen = parseInt(lsGet(HOW) || '0', 10);
     if (lsGet(HOW) === 'off' || seen >= 8 || t === 'game' || here === '/index.html') return;
+    // polish24a: one prompt at a time. On the first visit the "Would a calmer page help?" card is on this page, so this line waits for the next page
+    try { if (!lsGet('tol-comfort-offer') || D.querySelector('.tol-offer') || ssGet('tol-offer-seen') === location.pathname) return; } catch (e) {}
     var h1 = D.querySelector('main h1'); if (!h1) return;
     var after = h1.closest('header, .read-head, .bk-cover') || h1;
     if (!after.parentNode || !(D.querySelector('main') || D.body).contains(after)) return;

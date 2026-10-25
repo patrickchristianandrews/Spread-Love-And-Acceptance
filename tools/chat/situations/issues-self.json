@@ -123,8 +123,7 @@
       "steps": [
         "Write down everything on your plate, including the invisible stuff, so it’s out of your head and on paper.",
         "Mark each item: must do this week, can wait, or someone else could own it. Hand off or drop one item today.",
-        "Protect one small recovery moment daily (a walk, a quiet cup of tea, ten minutes in the Night Garden).",
-        "If this has lasted a long time or is affecting your health, it’s worth talking to a qualified professional."
+        "Protect one small recovery moment daily (a walk, a quiet cup of tea, ten minutes in the Night Garden)."
       ],
       "scripts": {
         "default": [
@@ -178,8 +177,7 @@
       "steps": [
         "Write the worry down in one or two sentences, plus the next small action, if there is one.",
         "Give it a time slot: “I’ll think about this at 5 p.m. for ten minutes.” When it pops up earlier, remind yourself it has a slot.",
-        "Settle your body first: a slow breath out, a short walk, or the Night Garden’s box breathing.",
-        "If worry is taking over your days or your sleep for weeks, a qualified professional can really help."
+        "Settle your body first: a slow breath out, a short walk, or the Night Garden’s box breathing."
       ],
       "scripts": {
         "default": [
@@ -205,8 +203,7 @@
       "going_other": "This is Pillar III, Read your state first. When someone is looping on a worry, reassurance often helps for a moment and then the loop starts again. Calm company and a concrete next step usually help more than arguing with the worry.",
       "steps_other": [
         "Listen and reflect the feeling first, before offering solutions.",
-        "Help turn the worry into one small next action, if there is one.",
-        "If worry is taking over {their} days for a long time, gently encourage talking to a qualified professional."
+        "Help turn the worry into one small next action, if there is one."
       ],
       "scripts_other": [
         "That sounds really stressful. Is there one small thing we could do about it tomorrow?",
@@ -232,7 +229,7 @@
         "Notice the critical thought and name it: “there’s the critic again.”",
         "Ask what you’d say to a friend in exactly this spot, and say it to yourself.",
         "Look for the setup piece: what load, timing or missing help made this hard?",
-        "If these thoughts are heavy and constant, please talk with someone you trust or a qualified professional."
+        "If these thoughts are heavy and constant, please talk with someone you trust."
       ],
       "scripts": {
         "default": [
@@ -259,7 +256,7 @@
       "steps_other": [
         "Listen first, without rushing to argue them out of it.",
         "Point gently to the setup: what load or circumstance made this hard?",
-        "If these thoughts seem heavy and constant, encourage {them} to talk with someone they trust or a qualified professional."
+        "If these thoughts seem heavy and constant, encourage {them} to talk with someone they trust."
       ],
       "scripts_other": [
         "You had a really heavy week. One slip doesn’t say anything bad about who you are.",

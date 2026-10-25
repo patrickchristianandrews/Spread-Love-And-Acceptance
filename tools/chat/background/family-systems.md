@@ -59,11 +59,11 @@ aka: cutting off family; emotional distance from family; no contact
 see: Differentiation of self; Boundaries with parents as an adult
 go: /library/life.html#family-systems | Family systems (Library)
 evidence: A concept from Bowen family systems theory describing managing tension through distance. Decisions about family contact are deeply personal and depend on circumstances.
-try: If you’re considering less contact, it may help to talk it through with someone you trust or a qualified professional first.
+try: If you’re considering less contact, it may help to talk it through with someone you trust first.
 
 In family systems thinking, emotional cutoff means managing unresolved tension by reducing or ending contact. Sometimes distance is a healthy choice. Sometimes it leaves old tension unresolved.
 
-There’s no single right answer, and only you can weigh your situation. If family relationships feel very painful, a qualified professional can help you think it through.
+There’s no single right answer, and only you can weigh your situation.
 
 Program: The program doesn’t tell anyone whether to keep or leave a relationship. It helps with the everyday setup and how you talk, within whatever relationship you choose.
 

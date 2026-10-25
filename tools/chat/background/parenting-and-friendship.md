@@ -141,6 +141,6 @@ try: “I’m here. Want to talk, or want me to bring dinner?”
 
 When a friend is going through something hard, being present often matters more than having the right words. Listening, practical help and staying in touch all count.
 
-If you’re worried about a friend’s safety or wellbeing, encourage them to reach out to someone who can help properly, like a qualified professional.
+If you’re worried about a friend’s safety or wellbeing, encourage them to tell someone they trust.
 
 Program: The Library’s social support entry goes deeper.

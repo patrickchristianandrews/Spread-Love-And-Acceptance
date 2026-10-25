@@ -42,7 +42,15 @@
         if (m && (m[2] === 'px' ? +m[1] < 13.6 : +m[1] < .85)) st.setProperty('font-size', m[2] === 'px' ? '14px' : '.875' + m[2], pri(st, 'font-size'));
       }
     }
-    function sheet(sh) { try { fix(sh.cssRules); } catch (e) {} }   // another site's stylesheet can't be read: nothing to do
+    // polish24c: a sheet is walked once (again only if rules were added to it), not on every pass: site.css alone has thousands of rules
+    var seenSheets = typeof WeakMap === 'function' ? new WeakMap() : null;
+    function sheet(sh) {
+      try {
+        var n = sh.cssRules ? sh.cssRules.length : -1;
+        if (seenSheets) { if (seenSheets.get(sh) === n) return; seenSheets.set(sh, n); }
+        fix(sh.cssRules);
+      } catch (e) {}   // another site's stylesheet can't be read: nothing to do
+    }
     function all() {
       if (document.body && document.body.classList.contains('is-game') && !document.body.classList.contains('pp-page')) return;
       for (var i = 0; i < document.styleSheets.length; i++) sheet(document.styleSheets[i]);
@@ -129,7 +137,7 @@
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
-      { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements and herbs: what the research says', note: 'Chamomile, magnesium, ashwagandha, St John’s wort, melatonin and more: what helps, side effects and what to check with a pharmacist' },
+      { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements and herbs: what the research says', note: 'Chamomile, magnesium, ashwagandha, St John’s wort, melatonin and more: what helps, side effects and interactions' },
       { href: '/ladder.html', code: 'New', title: 'My weather today: quick, 4 taps', note: 'The quick mode: find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, roommates, work and life changes' },
@@ -211,7 +219,7 @@
       { href: '/help-it-settle.html', code: 'New', title: 'Helping it settle', note: 'Where a big reaction comes from and the seven things in your own control' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'My weather today', note: 'How am I right now? Four quick taps, or one minute on your own conditions: a forecast, a talk window, what today is good for, and an optional 7-day log of your patterns' },
       { href: '/my-week.html', code: 'Weekly', title: 'Your week in weather', note: 'Tap the weather for each day, see your week as a weather report, and play with next week’s forecast. Saved only on this device.' },
-      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs: what the research says', note: 'What the research shows for common calming supplements, herbs and other approaches, with side effects, interactions and when to get help' },
+      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs: what the research says', note: 'What the research shows for common calming supplements, herbs and other approaches, with side effects and interactions' },
       { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Fight, flight and freeze, the vagus nerve, and what helps you settle' },
       { href: '/know-yourself.html', deep: true, code: 'New', title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today, and how to explain each one to others' },
       { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'What you’ve stopped checking in yourself, and a small monthly way to look again' },
@@ -308,12 +316,12 @@
       { href: '/book/understanding-8-loss.html', deep: true, code: '8', title: 'Loss, grief and big life changes', note: 'Grief in waves, losses nobody sees, and staying connected' },
       { href: '/book/understanding-9-minds.html', deep: true, code: '9', title: 'Minds that work differently', note: 'Autism, ADHD, sensory and learning differences, and meeting in the middle' },
       { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Values, meaning and a good life', note: 'What matters to you, and what philosophy offers everyday life' },
-      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, apologies that land, forgiveness, and when to get help' },
+      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, apologies that land, and forgiveness' },
       { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Helping others well', note: 'Support without fixing, kind limits, and not burning out' },
       { href: '/book/understanding-13-anger.html', deep: true, code: '13', title: 'Anger: what it’s for and what to do with it', note: 'What anger does in the body, the hot minutes, repair, and when anger becomes harm' },
       { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Personality, temperament and change', note: 'Dials, not boxes: the Big Five, temperament, and how people change with age' },
       { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Closeness and love', note: 'Love in many forms, being known, and love across ages and relationship types' },
-      { href: '/book/understanding-16-worry.html', deep: true, code: '16', title: 'Worry, low mood and trauma', note: 'How anxiety works, low mood vs depression, trauma, what helps and where to get help' },
+      { href: '/book/understanding-16-worry.html', deep: true, code: '16', title: 'Worry, low mood and trauma', note: 'How anxiety works, low mood vs depression, trauma and what helps' },
       { href: '/book/understanding-17-groups.html', deep: true, code: '17', title: 'Fitting in: groups, influence and culture', note: 'Conformity, obedience, us and them, culture, and disagreeing kindly' },
       { href: '/book/afterword.html', deep: true, code: 'After', title: 'Afterword: what the book adds up to', note: 'Six threads through the book, and where to go from here' },
       { sub: 'The book by topic' },
@@ -1466,7 +1474,10 @@
       if (body.hasAttribute('data-garden-nopals')) sceneQ += (sceneQ ? '&' : '?') + 'pals=off'; // the page has its own pals running about
       // home16b: the scenery stays, but the animals running about in it only where play is the point (home, play pages)
       else if (!ambientOk()) sceneQ += (sceneQ ? '&' : '?') + 'pals=off';
-      var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
+      // polish24c: the scene starts once the page has loaded and the browser is idle (the iframe's own colour shows meanwhile)
+      var gf = el('iframe', { class: 'tol-garden-bg', title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
+      var gardenSrc = '/garden-backdrop.html' + sceneQ;
+      whenIdle(function () { if (gf.parentNode && !gf.getAttribute('src')) gf.setAttribute('src', gardenSrc); });
       var veil = el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' });
       body.insertBefore(veil, body.firstChild);
       body.insertBefore(gf, body.firstChild);
@@ -1490,9 +1501,12 @@
 
     // mini dives: tap a term with the little water drop for a short explanation (dives.js)
     if (!body.hasAttribute('data-no-dives') && document.querySelector('main')) {
-      var dg = document.createElement('script'); dg.src = '/assets/js/dives-glossary.js';
-      dg.onload = function () { var dv = document.createElement('script'); dv.src = '/assets/js/dives.js'; document.head.appendChild(dv); };
-      document.head.appendChild(dg);
+      // polish24c: after the page has loaded and the browser is idle (the glossary is 460 KB and nothing on the first screen needs it)
+      whenIdle(function () {
+        var dg = document.createElement('script'); dg.src = '/assets/js/dives-glossary.js';
+        dg.onload = function () { var dv = document.createElement('script'); dv.src = '/assets/js/dives.js'; document.head.appendChild(dv); };
+        document.head.appendChild(dg);
+      });
     }
 
     // little buddies who cheer you on between the sections of a reading page (cheer.js)
@@ -1582,7 +1596,8 @@
     var rlMain = document.querySelector('main');
     if (rlMain && current !== '/research.html' && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         (/^\/(book|library)\//.test(current) || rlMain.hasAttribute('data-research') || (rlMain.classList.contains('read') && /\b(18|19|20)\d\d\b/.test(rlMain.textContent || '')))) {
-      loadScript('/assets/js/research-index.js').then(function () { return loadScript('/assets/js/research-links.js'); }).catch(function () {});
+      // polish24c: the index is 180 KB and the links are not needed for the first screen: after load, when the browser is idle
+      whenIdle(function () { loadScript('/assets/js/research-index.js').then(function () { return loadScript('/assets/js/research-links.js'); }).catch(function () {}); });
     }
 
     popBubbles();
@@ -1837,7 +1852,7 @@
     screenshots: 'screenshot', screensot: 'screenshot', screnshot: 'screenshot', sreenshot: 'screenshot', childhod: 'childhood', chilhood: 'childhood', childood: 'childhood',
     forgetfull: 'forgetful', forgot: 'forgot', rember: 'remember', remeber: 'remember', focuss: 'focus', foccus: 'focus', concentrait: 'concentrate', meltdowns: 'meltdown', meltown: 'meltdown' };
   // two words people often split that the site writes as one ("screen shot" → screenshot)
-  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up', 'pet name': 'petname', 'pet names': 'petname', 'inside joke': 'joke', 'inside jokes': 'joke', 'code word': 'codeword', 'code words': 'codeword', 'safe word': 'codeword', 'taken for granted': 'granted', 'take for granted': 'granted', 'taking for granted': 'granted', 'for granted': 'granted', 'gone stale': 'stale', 'in a rut': 'rut', 'on autopilot': 'autopilot', 'sent me this': 'sentthis', 'sent me a link': 'sentthis', 'sent me': 'sentthis', 'sent this': 'sentthis', 'works full time': 'fulltime', 'work full time': 'fulltime', 'working full time': 'fulltime', 'full time': 'fulltime', 'full-time': 'fulltime', 'paid work': 'fulltime', 'night feeds': 'nightfeeds', 'checks my phone': 'controlsafe', 'adhd and autistic': 'ndcouple', 'autistic and adhd': 'ndcouple', 'adhd girlfriend': 'ndcouple', 'adhd boyfriend': 'ndcouple', 'autistic girlfriend': 'ndcouple', 'autistic boyfriend': 'ndcouple', 'autistic partner': 'ndcouple', 'adhd partner': 'ndcouple', 'neurodivergent couple': 'ndcouple', 'neurodivergent relationship': 'ndcouple', 'rent late': 'rentlate', 'late rent': 'rentlate', 'rent is late': 'rentlate', 'rent being late': 'rentlate', 'pays rent late': 'rentlate', 'loo roll': 'rentlate', 'toilet roll': 'rentlate', 'caring for my dad': 'eldercare', 'caring for my mum': 'eldercare', 'caring for my mom': 'eldercare', 'caring for my father': 'eldercare', 'caring for my mother': 'eldercare', 'caring for dad': 'eldercare', 'looking after dad': 'eldercare', 'looking after my dad': 'eldercare', 'looking after mum': 'eldercare', 'looking after my mum': 'eldercare', 'looking after my mom': 'eldercare', 'elderly parent': 'eldercare', 'elderly parents': 'eldercare', 'aging parent': 'eldercare', 'ageing parent': 'eldercare', 'aging parents': 'eldercare', 'ageing parents': 'eldercare', 'parents fighting': 'teenmiddle', 'parents fight': 'teenmiddle', 'parents arguing': 'teenmiddle', 'parents argue': 'teenmiddle', 'stuck in the middle': 'teenmiddle', 'pick sides': 'teenmiddle', 'pick a side': 'teenmiddle', 'take sides': 'teenmiddle', 'hit me': 'controlsafe', 'hits me': 'controlsafe', 'punched the wall': 'controlsafe', 'punched a wall': 'controlsafe', 'threw my phone': 'controlsafe', 'scared of him': 'controlsafe', 'scared of her': 'controlsafe', 'afraid of him': 'controlsafe', 'afraid of her': 'controlsafe', 'smashed my': 'controlsafe', 'date night': 'datenight', 'check my phone': 'controlsafe', 'checking my phone': 'controlsafe', 'goes through my phone': 'controlsafe', 'reads my texts': 'controlsafe', 'controls the money': 'controlsafe', 'controls my money': 'controlsafe', 'gives me an allowance': 'controlsafe', 'see my friends': 'controlsafe', 'see friends': 'controlsafe', 'tracks my location': 'controlsafe', 'my passwords': 'controlsafe', 'reach out': 'reachout', 'reaching out': 'reachout', 'reaches out': 'reachout', 'phone calls': 'phonecalls', 'night shifts': 'nightfeeds', 'night shift': 'nightfeeds', 'night feed': 'nightfeeds', 'holiday schedule': 'holidayschedule', 'holiday schedules': 'holidayschedule', 'christmas schedule': 'holidayschedule', 'workpaper suite': 'workpapersuite', 'not my real dad': 'stepmom', 'not my real mom': 'stepmom', 'step parent': 'stepmom', 'step dad': 'stepmom', 'step mom': 'stepmom', 'mother in law': 'mother-in-law', 'mothers in law': 'mother-in-law', 'father in law': 'father-in-law', 'sister in law': 'sister-in-law', 'brother in law': 'brother-in-law', 'in laws': 'in-laws', 'in law': 'in-law', 'long distance': 'longdistance', 'time zone': 'timezone', 'time zones': 'timezone', 'money home': 'remittance', 'send money': 'remittance', 'sending money': 'remittance', 'sends money': 'remittance', 'need space': 'space', 'needs space': 'space', 'time out': 'timeout', 'high contrast': 'contrast', 'low vision': 'lowvision', 'week 0': 'weekzero', 'week zero': 'weekzero', 'outside help': 'outsidehelp', 'support group': 'outsidehelp', 'support groups': 'outsidehelp', 'find a therapist': 'outsidehelp', 'find a counsellor': 'outsidehelp', 'find a counselor': 'outsidehelp' };
+  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up', 'pet name': 'petname', 'pet names': 'petname', 'inside joke': 'joke', 'inside jokes': 'joke', 'code word': 'codeword', 'code words': 'codeword', 'safe word': 'codeword', 'taken for granted': 'granted', 'take for granted': 'granted', 'taking for granted': 'granted', 'for granted': 'granted', 'gone stale': 'stale', 'in a rut': 'rut', 'on autopilot': 'autopilot', 'sent me this': 'sentthis', 'sent me a link': 'sentthis', 'sent me': 'sentthis', 'sent this': 'sentthis', 'works full time': 'fulltime', 'work full time': 'fulltime', 'working full time': 'fulltime', 'full time': 'fulltime', 'full-time': 'fulltime', 'paid work': 'fulltime', 'night feeds': 'nightfeeds', 'checks my phone': 'controlsafe', 'adhd and autistic': 'ndcouple', 'autistic and adhd': 'ndcouple', 'adhd girlfriend': 'ndcouple', 'adhd boyfriend': 'ndcouple', 'autistic girlfriend': 'ndcouple', 'autistic boyfriend': 'ndcouple', 'autistic partner': 'ndcouple', 'adhd partner': 'ndcouple', 'neurodivergent couple': 'ndcouple', 'neurodivergent relationship': 'ndcouple', 'rent late': 'rentlate', 'late rent': 'rentlate', 'rent is late': 'rentlate', 'rent being late': 'rentlate', 'pays rent late': 'rentlate', 'loo roll': 'rentlate', 'toilet roll': 'rentlate', 'caring for my dad': 'eldercare', 'caring for my mum': 'eldercare', 'caring for my mom': 'eldercare', 'caring for my father': 'eldercare', 'caring for my mother': 'eldercare', 'caring for dad': 'eldercare', 'looking after dad': 'eldercare', 'looking after my dad': 'eldercare', 'looking after mum': 'eldercare', 'looking after my mum': 'eldercare', 'looking after my mom': 'eldercare', 'elderly parent': 'eldercare', 'elderly parents': 'eldercare', 'aging parent': 'eldercare', 'ageing parent': 'eldercare', 'aging parents': 'eldercare', 'ageing parents': 'eldercare', 'parents fighting': 'teenmiddle', 'parents fight': 'teenmiddle', 'parents arguing': 'teenmiddle', 'parents argue': 'teenmiddle', 'stuck in the middle': 'teenmiddle', 'pick sides': 'teenmiddle', 'pick a side': 'teenmiddle', 'take sides': 'teenmiddle', 'hit me': 'controlsafe', 'hits me': 'controlsafe', 'punched the wall': 'controlsafe', 'punched a wall': 'controlsafe', 'threw my phone': 'controlsafe', 'scared of him': 'controlsafe', 'scared of her': 'controlsafe', 'afraid of him': 'controlsafe', 'afraid of her': 'controlsafe', 'smashed my': 'controlsafe', 'date night': 'datenight', 'check my phone': 'controlsafe', 'checking my phone': 'controlsafe', 'goes through my phone': 'controlsafe', 'reads my texts': 'controlsafe', 'controls the money': 'controlsafe', 'controls my money': 'controlsafe', 'gives me an allowance': 'controlsafe', 'see my friends': 'controlsafe', 'see friends': 'controlsafe', 'tracks my location': 'controlsafe', 'my passwords': 'controlsafe', 'reach out': 'reachout', 'reaching out': 'reachout', 'reaches out': 'reachout', 'phone calls': 'phonecalls', 'night shifts': 'nightfeeds', 'night shift': 'nightfeeds', 'night feed': 'nightfeeds', 'holiday schedule': 'holidayschedule', 'holiday schedules': 'holidayschedule', 'christmas schedule': 'holidayschedule', 'workpaper suite': 'workpapersuite', 'not my real dad': 'stepmom', 'not my real mom': 'stepmom', 'step parent': 'stepmom', 'step dad': 'stepmom', 'step mom': 'stepmom', 'mother in law': 'mother-in-law', 'mothers in law': 'mother-in-law', 'father in law': 'father-in-law', 'sister in law': 'sister-in-law', 'brother in law': 'brother-in-law', 'in laws': 'in-laws', 'in law': 'in-law', 'long distance': 'longdistance', 'time zone': 'timezone', 'time zones': 'timezone', 'money home': 'remittance', 'send money': 'remittance', 'sending money': 'remittance', 'sends money': 'remittance', 'need space': 'space', 'needs space': 'space', 'time out': 'timeout', 'high contrast': 'contrast', 'low vision': 'lowvision', 'week 0': 'weekzero', 'week zero': 'weekzero' };
   // words that mean the same here: each term also matches these
   var SAME = { complacent: ['complacency', 'taking for granted', 'rut', 'stale', 'autopilot', 'coasting', 'drifted'], complacency: ['complacent', 'taking for granted', 'rut', 'stale', 'autopilot', 'coasting', 'drift'], granted: ['complacency', 'taking for granted', 'unthanked', 'appreciation'],
     autism: ['autistic', 'neurodivergent', 'wired differently', 'wiring', 'neurotype'], autistic: ['autism', 'neurodivergent', 'wired differently', 'wiring'],
@@ -2092,13 +2107,13 @@
     '/workpapers/fill/suite.html': { u: '/workpapers/fill/suite.html', t: 'The Workpaper Suite', d: 'Every worksheet in one place: pick your road, fill them in on screen, combine two people’s files, and make one report.', k: 'Tool' },
     '#palcam': { u: '#palcam', t: 'Check in on Tidbit & Sugarfoot (the pal cam)', d: 'Opens right here: a peek at the two pups, Tidbit and Sugarfoot, with little captions. You can turn the sound off.', k: 'Pups' }
   };
-  EXTRA['/parents.html#anger-help'] = { u: '/parents.html#anger-help', t: 'Getting help for your anger', d: 'If you’re yelling most days or your temper feels like it’s running you: what helps in the hot minutes, a calm-down plan, and coming back to repair. Wanting to change it is a strong, loving thing to do.', k: 'Guide' };
+  EXTRA['/parents.html#anger-help'] = { u: '/parents.html#anger-help', t: 'Calming your anger', d: 'If you’re yelling most days or your temper feels like it’s running you: what helps in the hot minutes, a calm-down plan, and coming back to repair. Wanting to change it is a strong, loving thing to do.', k: 'Guide' };
   EXTRA['/work.html#owner-list'] = { u: '/work.html#owner-list', t: 'Team one-owner list (at work, or with a business partner)', d: 'Every recurring job gets one owner and one backup, with a “who carries what” tally. For co-founders, co-owners and teams. Kept on this device.', k: 'Tool' };
   EXTRA['/work.html#neurodiversity'] = { u: '/work.html#neurodiversity', t: 'At work: ADHD, autism and neurodiversity', d: 'Written asks after meetings, one ask per message, protected focus time, and asking how people work best. Plain, direct words that help everyone.', k: 'Guide' };
   EXTRA['/turning-toward-in-depth.html#their-world'] = { u: '/turning-toward-in-depth.html#their-world', t: 'Questions to ask each other: know their world', d: '“What’s on your mind this week that I don’t know about?” Small questions that keep you up to date with each other, and how to really listen to the answer.', k: 'Guide' };
   EXTRA['/work.html#business-partners'] = { u: '/work.html#business-partners', t: 'Running a business together', d: 'For co-founders, co-owners and partners in a small business: one owner and a backup for every recurring job, a ten-minute weekly check-in, and thanking the admin out loud.', k: 'Guide' };
   EXTRA['/work.html#autistic-at-work'] = { u: '/work.html#autistic-at-work', t: 'If you’re autistic at work', d: 'Asking for written instructions, a quiet break, or less noise, and how plain, direct words can be heard the way you mean them.', k: 'Guide' };
-  EXTRA['/money-together.html#control'] = { u: '/money-together.html#control', t: '“Is it controlling if I ask him to check with me?”', d: 'A shared limit you both agreed is normal. Checking, allowances and fear are not: how to tell the difference, and where to get help.', k: 'Guide' };
+  EXTRA['/money-together.html#control'] = { u: '/money-together.html#control', t: '“Is it controlling if I ask him to check with me?”', d: 'A shared limit you both agreed is normal. Checking, allowances and fear are not. Here is how to tell the difference.', k: 'Guide' };
   EXTRA['/more-than-two.html#joining'] = { u: '/more-than-two.html#joining', t: 'Joining a home that ran before you', d: 'When you moved in with partners who already had their ways, and you feel like a guest: how to find your place and your share.', k: 'Guide' };
   EXTRA['/friends.html#after-baby'] = { u: '/friends.html#after-baby', t: 'When a friend has a baby', d: 'Staying close when a friend’s life changes: small, low-energy ways to keep in touch, from both sides.', k: 'Guide' };
   EXTRA['/on-my-own.html#part-time-parent'] = { u: '/on-my-own.html#part-time-parent', t: 'Part-time with your kids', d: 'When the kids are with you some days: weekend ideas, your own home rules, and the Sunday goodbye.', k: 'Guide' };
@@ -2115,7 +2130,7 @@
    ['/sharing-a-room.html#guests', 'Sharing a room: guests and overnight guests', 'When a roommate’s partner is always staying over: how often, how much notice, and how to say it kindly.', 'Guide'],
    ['/sharing-a-room.html#bring-it-up', 'How to bring it up if you hate confrontation', 'Words for raising a guest, noise or sleep problem with a roommate, calmly and once.', 'Guide'],
    ['/on-my-own.html#lonely', 'Loneliness and friends, after a breakup', 'Feeling lonely after a divorce or breakup, and small ways to rebuild friends and a week that feels like yours.', 'Guide'],
-   ['/parents.html#is-yelling-abuse', 'Is yelling abuse?', 'Yelling now and then, followed by a real repair, is not abuse. When it becomes a safety issue, and getting support.', 'Guide']
+   ['/parents.html#is-yelling-abuse', 'Is yelling abuse?', 'Yelling now and then, followed by a real repair, is not abuse. When it is a safety issue, and how to tell.', 'Guide']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // ---- round 13: whole questions people typed. Each rule reads the whole query first (before the word joins),
   // so "my ex makes decisions without me" means co-parenting, not the triad page. r13* names are internal only.
@@ -2258,7 +2273,7 @@
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   [['/co-parenting.html#who-decides', 'Co-parents: who decides what', 'When the other parent decides without you, or you feel shut out: name the joint decisions, agree a reply-by window, and keep it to one written channel.', 'Guide'],
    ['/co-parenting.html#parallel', 'When the other parent won’t cooperate', 'Parallel parenting: fewer joint decisions, short written messages, and your own calm home.', 'Guide'],
-   ['/coming-home.html#sleep', 'Sleep, nightmares and feeling on edge after coming home', 'Trouble sleeping since getting back, jumping at noises, feeling wired: what is common, what helps, and when to talk to someone.', 'Guide'],
+   ['/coming-home.html#sleep', 'Sleep, nightmares and feeling on edge after coming home', 'Trouble sleeping since getting back, jumping at noises, feeling wired: what is common and what helps.', 'Guide'],
    ['/book/understanding-1-feelings.html#not-brought-up', 'If you weren’t brought up to talk about feelings', 'Part Three, Chapter 1. Many people, often men, were never taught the words. Short, plain lines you could use, and why it’s never too late.', 'Book'],
    ['/book/understanding-4-communication.html#small-talk', 'Small talk has a job, and it can be short', 'Part Three, Chapter 4. Why small talk matters, why it is hard work for many people, and a few ready-made lines.', 'Book'],
    ['/workpapers/fill/wp-03.html?for=coparents', 'A list for two homes (one owner per job)', 'A fillable list for co-parents: the handoff bag, school, doctor, clubs. Each job has one owner. Kept on this device.', 'Tool'],
@@ -2306,10 +2321,10 @@
     '/foster-and-kinship.html': ['Raising a grandchild, foster or adopted child', 'For foster caregivers, adoptive parents and grandparents raising grandchildren: sharing the load, the social worker, and the children’s own story.'],
     '/adhd-kids.html': ['When a child has ADHD', 'For parents and grandparents: routines that help, what to say when they can’t sit still or forget everything, and looking after yourselves.'],
     '/grown-up-children.html': ['Grown-up children and parents', 'Boundaries with a parent you love: visits, drop-ins, unsolicited advice and the new baby, with words you could use.'],
-    '/coming-home.html': ['Coming home after time apart', 'After deployment, work away or a hospital stay: a handover week, finding your place again, and where to get support.'],
+    '/coming-home.html': ['Coming home after time apart', 'After deployment, work away or a hospital stay: a handover week and finding your place again.'],
     '/different-hours.html': ['Different hours', 'Night shifts, shift work and opposite schedules, or one of you works from home and seems always available.'],
     '/two-faiths.html': ['Two faiths, one family', 'Two faiths or cultures under one roof: holidays, naming and blessing a baby, family expectations, and what to tell the children.'],
-    '/coming-out.html': ['Coming out as an adult', 'Coming out to family, at work or with a partner: going at your pace, words you could use, and places to get support.'],
+    '/coming-out.html': ['Coming out as an adult', 'Coming out to family, at work or with a partner: going at your pace, and words you could use.'],
     '/on-my-own.html': ['On my own after a breakup or divorce', 'Building a life again, and part-time parenting when the kids are with you some days.'],
     '/for-counselors.html': ['For counselors, coaches and group leaders', 'How to use these free pages and tools with clients and groups.'],
     '/sharing-a-room.html': ['Sharing a room (dorm or apartment)', 'A room agreement to fill in together: guests, quiet hours, sleep and cleaning, and how to raise it kindly.'],
@@ -4712,6 +4727,12 @@
   var PALCAM_FILES = ['/assets/js/pups.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam.js'];
   var palCamP = null;
   function loadScript(src) { return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+  // polish24c: run something that is not needed for the first screen once the page has loaded and the browser is idle
+  // (the word-drop glossary, the garden behind the home page). Keeps the first paint and the first taps quick.
+  function whenIdle(fn) {
+    var go = function () { try { if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 }); else setTimeout(fn, 300); } catch (e) { fn(); } };
+    if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true });
+  }
   function loadPalCam() {
     if (window.TOLPalsCam) return Promise.resolve(window.TOLPalsCam);
     if (!palCamP) {
@@ -5035,7 +5056,7 @@
           '<button class="tol-btn" type="submit">Send me updates</button></div>' +
           '<p class="tol-msg" aria-live="polite"></p>' +
         '</form>' +
-        '<p class="tol-fine">Held by Buttondown and used only for program updates. Unsubscribe from any email. <a href="/legal/privacy-policy.html">Privacy policy</a></p>';
+        '<p class="tol-fine">Held by Buttondown and used only to send the updates you asked for. Unsubscribe from any email. <a href="/legal/privacy-policy.html">Privacy policy</a></p>';
       var lab0 = g.querySelector('label'), inp0 = g.querySelector('input');
       inp0.id = lab0.getAttribute('for');
       g.querySelector('form').addEventListener('submit', function (e) {

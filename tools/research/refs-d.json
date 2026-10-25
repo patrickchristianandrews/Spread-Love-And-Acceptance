@@ -431,7 +431,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/passionflower",
   "kind": "guideline",
-  "finding": "A small amount of research suggests oral passionflower might ease anxiety, including before surgery or dental work, but conclusions are not definite. It might interact with some anesthesia drugs, so it is best avoided before surgery unless a clinician recommends it.",
+  "finding": "A small amount of research suggests oral passionflower might ease anxiety, including before surgery or dental work, but conclusions are not definite. It might interact with some anesthesia drugs, so it is best avoided before surgery.",
   "strength": "early: little research.",
   "topics": [
    "supplements",
@@ -564,7 +564,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
   "kind": "guideline",
-  "finding": "Melatonin may help jet lag and shift-work sleep problems, but guidelines advise against it for long-term insomnia. Short-term use seems safe for most people. Long-term safety is less known. Amounts in products can differ from the label. People with epilepsy or on blood thinners should use it only with medical advice.",
+  "finding": "Melatonin may help jet lag and shift-work sleep problems, but guidelines advise against it for long-term insomnia. Short-term use seems safe for most people. Long-term safety is less known. Amounts in products can differ from the label. It can interact with epilepsy medicines and blood thinners.",
   "strength": "moderate: good for sleep timing, weak for insomnia.",
   "topics": [
    "supplements",
@@ -586,7 +586,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/",
   "kind": "guideline",
-  "finding": "In the UK, melatonin is a prescribed medicine. Most adults aged 55 or over can take it for short-term sleep problems. Younger adults and children can take it if a specialist recommends it. Tell a doctor first about liver or kidney problems or an autoimmune condition.",
+  "finding": "In the UK, melatonin is a prescribed medicine. Most adults aged 55 or over can take it for short-term sleep problems. Younger adults and children can take it if a specialist prescribes it. Liver or kidney problems and autoimmune conditions call for extra care.",
   "strength": "strong: official prescribing guidance.",
   "topics": [
    "supplements",
@@ -1014,7 +1014,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/",
   "kind": "guideline",
-  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS. Check with a doctor first if you have an eye condition or take medicines that make you sensitive to light.",
+  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS. An eye condition, or medicines that make you sensitive to light, can make a light box unsuitable.",
   "strength": "early: the NHS says there isn’t enough evidence to be sure light therapy works, though many people find it helps.",
   "topics": [
    "supplements",

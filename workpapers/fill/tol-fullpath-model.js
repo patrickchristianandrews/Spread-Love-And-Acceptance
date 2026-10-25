@@ -1987,7 +1987,6 @@
       var low = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
       if (low.length) sug(list(low.map(function (b) { return b.label; })) + (low.length === 1 ? ' is' : ' are') + ' running near empty. That is a signal to get more support, not a failing. Which part of the care could someone else take this week?');
       if (t && t.unowned.length) sug('Put one name next to each part of the care that doesn’t have one: ' + list(t.unowned.slice(0, 4)) + '.');
-      sug('For anything about health or medicines, follow the care team’s instructions. These pages are about who owns each task.');
       sug('At each handoff, say what the next person needs to know, in one or two lines.');
     }
     out.links = [['The Five Pillars', '/five-pillars.html'], ['Check-ins', '/check-ins.html'], ['The Chat analyzer', '/signal-translator.html'], ['CALC-01', '/is-the-setup-working.html']];

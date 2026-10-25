@@ -54,7 +54,7 @@
     ['Learn one neighbor’s name, and use it next time you see them.', 'me', '1', 'low', 0],
     ['Send them a small thing that reminded you of them: a link, a leaf, a photo of a cat. Some autistic people call this “penguin pebbling.”', 'fr pa si te', '1', 'low', 1],
     ['Learn one part of their routine and protect it: the same mug, the same seat, the same quiet first ten minutes home. Keeping it steady is care.', 'pa ch te ho', '1', 'low', 1],
-    ['Offer a quiet option before they need it: dimmer lights, a softer jumper, a quiet corner at a busy party.', 'ch te pa fr', '1', 'low', 1],
+    ['Offer a quiet option before they need it: dimmer lights, a softer sweater, a quiet corner at a busy party.', 'ch te pa fr', '1', 'low', 1],
     ['High-five, fist-bump or elbow-bump on the way out of the door. Every day, the same way.', 'ch te gr', '1', 'some', 1],
     ['A quick piggyback or “airplane,” stopping the moment they say stop.', 'ch', '1', 'lots', 0],
     ['Race them to the end of the street (and let the result be whatever it is).', 'ch te', '1', 'lots', 1],

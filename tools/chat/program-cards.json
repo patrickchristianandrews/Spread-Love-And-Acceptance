@@ -772,7 +772,7 @@
       "keys": [],
       "what": [
         "In Wavelength, the wiring step is optional, and you can select all that apply: Neurotypical, ADHD, Autistic, Dyslexic, Highly sensitive, Not sure yet, or Something else (with a box to name it). ADHD and Autistic together is often called AuDHD, and Wavelength says so. Your wiring only decides which options you see first in each part, and “Show options from other wiring types” opens the rest.",
-        "It’s self-identified, so no diagnosis is needed, and Wavelength is not a diagnosis or a test that measures you. If you’re not sure, the “Not sure which fits?” guide explains each type, with “you might relate if” examples and a “That’s me” button. If you’re curious about a formal assessment, a doctor or psychologist can help."
+        "It’s self-identified, so no diagnosis is needed, and Wavelength is not a diagnosis or a test that measures you. If you’re not sure, the “Not sure which fits?” guide explains each type, with “you might relate if” examples and a “That’s me” button."
       ],
       "how": [
         "Open Wavelength and tap Start. The wiring step comes first.",
@@ -1073,11 +1073,10 @@
       "how": [
         "Look at the pattern, not the label: what do they do, how often, and how do you feel around them?",
         "Notice whether it’s new or has always been there, and whether it’s getting worse.",
-        "If you’re worried about their health, say so kindly and suggest they see their doctor. A doctor or psychologist is the right person to assess it.",
-        "For yourself, a counselor can help you think it through, whatever the answer turns out to be."
+        "If you’re worried about their health, say so kindly, in your own words."
       ],
       "script": [
-        "I’ve noticed you’ve seemed really up and down lately, and I’m worried about you. Would you talk to your doctor about it? I’ll come with you if you like."
+        "I’ve noticed you’ve seemed really up and down lately, and I’m worried about you. Is there anything I can do to help? I’m here if you want to talk."
       ],
       "scriptLabels": [
         "If you’re worried about them"
@@ -1095,10 +1094,10 @@
       "name": "do I have PTSD?",
       "pat": "\\b(do i have|have i got|is (this|it)|could (this|it) be|am i|might i have|maybe i have)\\b.{0,25}\\b(ptsd|post traumatic|c ptsd|cptsd)\\b.{0,100}\\b(waking|wake up|nightmares?|jump\\w*|noises|on edge|since i got back|deploy\\w*|tour|military|army|navy|service|sleep\\w*)\\b|\\bptsd\\b.{0,80}\\b(waking up|wake up|nightmares?|jump\\w* at|noises|on edge|since i got back|deploy\\w*|tour)\\b",
       "what": [
-        "I can’t tell you that, and I won’t guess: nobody can diagnose PTSD from a chat. What you describe, waking up and jumping at noises, is common after a deployment or anything frightening. It is a common reaction, and nothing to be ashamed of. Help tends to work better when it starts early."
+        "I can’t tell you that, and I won’t guess: nobody can diagnose PTSD from a chat. What you describe, waking up and jumping at noises, is common after a deployment or anything frightening. It is a common reaction, and nothing to be ashamed of."
       ],
       "how": [
-        "Start with your doctor: tell them about the sleep and the jumpiness, and how long it has been going on.",
+        "Notice the pattern: how long the sleep trouble and the jumpiness have been going on, and what makes them better or worse.",
         "Meanwhile, make a pause plan together while things are calm: a word that means “I need a break,” and a time you’ll come back."
       ],
       "links": [
@@ -1212,11 +1211,9 @@
       "pat": "\\b(am i|are you saying (i m|im)|i think (i m|im|i am|i might be|i may be|i could be)|i might be|i may be|could i be|might i be|maybe (i m|im|i am)|do i have|do you think (i m|im|i am|i have)|tell me (if|whether) (i m|im|i am|i have)|can you tell (me )?(if|whether) (i m|im|i am|i have)|can you tell me)\\b.*\\b(autis[a-z]*|adhd|add|audhd|dyslexi[a-z]*|dyspraxi[a-z]*|neurodivergent|on the spectrum|aspergers?|ocd|bipolar|bpd|borderline( personality disorder)?|a personality disorder|ptsd|cptsd|c ptsd|depress[a-z]*|an anxiety disorder|a disorder|hsp|highly sensitive)\\b|\\bdiagnose (me|my|him|her|them|us)\\b|\\bgive me a diagnosis\\b|\\b(is|could) (my|our) [a-z]+ (be )?(autistic|adhd|on the spectrum|dyslexic|neurodivergent)\\b",
       "keys": [],
       "what": [
-        "I can’t tell you that, and I won’t guess. I can’t diagnose anyone, and nobody can tell from a chat. A clinician can, and asking is a sensible step, not a big drama."
+        "I can’t tell you that, and I won’t guess. I can’t diagnose anyone, and nobody can tell from a chat."
       ],
       "how": [
-        "To find one, start with your doctor, who can listen, rule out other causes and refer you to the right specialist.",
-        "The Outside help page explains how to find a qualified counselor, psychologist or psychiatrist, and what to ask.",
         "Whatever the answer, the Wiring Card helps anyone put how they’re wired, and what helps, into words.",
         "Wired Differently explains how different wiring can change the way words land, without labels."
       ],
@@ -1262,8 +1259,7 @@
       "how": [
         "Breathe out longer than you breathe in: in for 4, out for 6, for a minute or two.",
         "Move for a few minutes: walk, climb the stairs, shake out your arms.",
-        "Cool your face with cold water for up to 30 seconds (skip it if you have a heart condition).",
-        "If panic, feeling unreal or low mood keeps coming back, see a doctor."
+        "Cool your face with cold water for up to 30 seconds (skip it if you have a heart condition)."
       ],
       "links": [
         [
@@ -1273,10 +1269,6 @@
         [
           "Calm it now",
           "/nervous-system.html#now"
-        ],
-        [
-          "When to see a doctor",
-          "/nervous-system.html#doctor"
         ]
       ],
       "chips": [
@@ -1343,13 +1335,12 @@
       "pat": "\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron)\\b.{0,60}\\b(panic (attacks? )?(that )?(won t|wont|doesn t|doesnt|will not|does not|never) (stop|go away|end)|panic all the time|(low|down|depressed) for (weeks|months)|can t cope|cant cope|nothing helps|hopeless)\\b|\\b(panic (attacks? )?(that )?(won t|wont|doesn t|doesnt|never) (stop|go away)|(low|down|depressed) for (weeks|months))\\b.{0,60}\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron)\\b",
       "keys": [],
       "what": [
-        "I’m glad you asked. When panic won’t stop, or you’ve felt low for weeks, that’s more than a supplement can fix, and you deserve real help from a person.",
-        "Your doctor can help too, and it’s worth telling them about any herbs or supplements you take."
+        "I’m glad you asked. When panic won’t stop, or you’ve felt low for weeks, that’s more than a supplement can fix. The supplements page grades every option, and the options with the best evidence are slow breathing, movement, sleep and talking therapy, not pills."
       ],
       "links": [
         [
-          "Getting help: when it’s more than everyday stress",
-          "/calming-supplements.html#get-help"
+          "Every option, graded by evidence",
+          "/calming-supplements.html#browse"
         ]
       ],
       "chips": [],
@@ -1364,8 +1355,8 @@
       "pat": "\\b(st|saint) johns? ?s? ?wort\\b",
       "keys": [],
       "what": [
-        "Please don’t take it with an antidepressant without talking to your prescriber or pharmacist first. St John’s wort can clash with antidepressants such as SSRIs and cause serotonin syndrome, which can be dangerous.",
-        "It also stops birth control pills working properly, and affects blood thinners, HIV and transplant medicines. And never stop an antidepressant suddenly to switch. A pharmacist can check everything you take."
+        "Please don’t take it with an antidepressant. St John’s wort can clash with antidepressants such as SSRIs and cause serotonin syndrome, which can be dangerous.",
+        "It also stops birth control pills working properly, and affects blood thinners, HIV and transplant medicines. And never stop an antidepressant suddenly to switch."
       ],
       "links": [
         [
@@ -1389,7 +1380,7 @@
       "keys": [],
       "what": [
         "Small studies suggest ashwagandha may ease stress a little, but there are real safety warnings: rare liver injury has been reported, it may affect the thyroid, and there are concerns in pregnancy and breastfeeding. Denmark banned it in food supplements in 2023.",
-        "Please check with a pharmacist or doctor before taking it, especially alongside other medicines."
+        "Interactions with other medicines are the main concern, and the safety notes on the page list them."
       ],
       "links": [
         [
@@ -1413,7 +1404,7 @@
       "keys": [],
       "what": [
         "Kava may ease anxiety slightly, but it has been linked to rare, serious liver damage, including deaths. Never mix it with alcohol, or with sleeping or anxiety medicines. Most people are better off choosing something safer.",
-        "Please talk to a pharmacist or doctor first."
+        "The page lists the safety notes and the interactions."
       ],
       "links": [
         [
@@ -1437,7 +1428,7 @@
       "keys": [],
       "what": [
         "Melatonin is for sleep timing, such as jet lag or shift work, not for anxiety, and guidelines advise against it for long-term insomnia. In the UK it is a prescription medicine. In the US it is sold as a supplement, and the amount in the bottle can differ from the label.",
-        "I can’t advise on amounts. For children, talk to a doctor first. For adults, ask a pharmacist or doctor, especially alongside other medicines."
+        "I can’t advise on amounts. It is not well studied in children, and interactions with other medicines are the main adult concern."
       ],
       "links": [
         [
@@ -1461,7 +1452,7 @@
       "keys": [],
       "what": [
         "Maybe a little. A few small studies hint that chamomile may ease long-running worry, but the evidence is early, and it hasn’t been shown to help sleep.",
-        "As a tea it is likely safe, unless you are allergic to ragweed or related plants, or take warfarin. If you take other medicines, check with a pharmacist or doctor."
+        "As a tea it is likely safe, unless you are allergic to ragweed or related plants, or take warfarin. Other medicines can matter too, so read the safety notes."
       ],
       "links": [
         [
@@ -1481,7 +1472,7 @@
       "keys": [],
       "what": [
         "The research is weak: some small studies found a benefit for anxiety or sleep, but reviewers called the evidence poor quality. Too much from supplements causes diarrhea, and it isn’t right for everyone, for example with kidney problems.",
-        "Please check with a pharmacist or doctor before taking it, especially alongside other medicines."
+        "Interactions with other medicines matter, and the page lists them."
       ],
       "links": [
         [
@@ -1501,7 +1492,7 @@
       "keys": [],
       "what": [
         "There is little good research on CBD for everyday stress or anxiety so far. The only approved CBD medicine in the US is a purified prescription form for seizures linked to three rare conditions: Lennox-Gastaut syndrome, Dravet syndrome and tuberous sclerosis complex. The FDA warns CBD can harm the liver and change how other medicines work, including antidepressants and blood thinners.",
-        "Please check with a pharmacist or doctor first."
+        "The page lists the interactions and the safety notes."
       ],
       "links": [
         [
@@ -1524,7 +1515,7 @@
       "pat": "\\bhomeopath\\w*\\b",
       "keys": [],
       "what": [
-        "There is no good-quality evidence that homeopathy works for any health condition. If you use it, please don’t let it replace treatment that works, and tell your doctor or pharmacist what you take."
+        "There is no good-quality evidence that homeopathy works for any health condition. If you use it, please don’t let it replace treatment that works."
       ],
       "links": [
         [
@@ -1532,40 +1523,6 @@
           "/calming-supplements.html#homeopathy"
         ]
       ],
-      "chips": []
-    },
-    {
-      "id": "herbwords",
-      "name": "what to tell your doctor or pharmacist about supplements",
-      "pat": "\\b(what|how) (should|do|can|could) i (tell|say to|ask) (my |the |a )?(doctor|gp|pharmacist|prescriber|nurse)\\b.{0,40}\\b(supplements?|herbs?|herbal|vitamins?|cbd|ashwagandha|st johns|magnesium|melatonin|kava|valerian)\\b|\\b(tell|ask) (my |the |a )?(doctor|pharmacist|gp)\\b.{0,15}\\babout (my |the )?(supplements?|herbs?|vitamins?)\\b",
-      "what": [
-        "Tell them everything you take, including teas, gummies and vitamins, and ask before starting anything new. Here are words from the supplements page."
-      ],
-      "script": [
-        "I take [your medicine] every day. Is [the supplement] safe with it, and is there anything I should watch for?",
-        "I take sertraline and I’m thinking of trying St John’s wort. Is that safe together?",
-        "I’ve been taking ashwagandha for stress. Should I keep going, and do I need a blood test?"
-      ],
-      "scriptLabels": [
-        "To a pharmacist",
-        "An example",
-        "To your doctor"
-      ],
-      "links": [
-        [
-          "Words you could use (supplements)",
-          "/calming-supplements.html#words"
-        ],
-        [
-          "Staying safe",
-          "/calming-supplements.html#safety"
-        ]
-      ],
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "topic": true,
-      "keys": [],
       "chips": []
     },
     {
@@ -1578,7 +1535,7 @@
       "keys": [],
       "what": [
         "“Natural” doesn’t mean safe. Supplements aren’t checked like medicines before they are sold, and quality varies. A USP Verified or NSF mark means someone checked what is in the bottle.",
-        "Tell your pharmacist and doctor everything you take, and check with them before mixing anything with your medicines. Never mix sedating herbs with alcohol, sleeping pills, opioids or benzodiazepines."
+        "Supplements can change how medicines work, so mixing them with medicines is where most of the risk is. Never mix sedating herbs with alcohol, sleeping pills, opioids or benzodiazepines."
       ],
       "links": [
         [
@@ -1602,7 +1559,7 @@
       "keys": [],
       "what": [
         "The things with the best evidence are free: sleep, movement, slow breathing, less caffeine and alcohol, and talking to someone.",
-        "A few supplements, such as lavender oil capsules, lemon balm and L-theanine, have small, early studies, with small effects. Check with a pharmacist or doctor before trying any, especially alongside other medicines, and get help if anxiety is stopping your daily life."
+        "A few supplements, such as lavender oil capsules, lemon balm and L-theanine, have small, early studies, with small effects. Interactions with other medicines are the main risk with any of them."
       ],
       "links": [
         [
@@ -1612,10 +1569,6 @@
         [
           "The common ones, and what the research says",
           "/calming-supplements.html#common"
-        ],
-        [
-          "When it’s more than everyday stress",
-          "/calming-supplements.html#get-help"
         ]
       ],
       "chips": []
@@ -1630,19 +1583,20 @@
       "notPat": "\\b(anger|temper|yell\\w*|rage)\\b|\\b(can|could|will|would) you be\\b|\\bare you\\b",
       "keys": [],
       "what": [
-        "Good idea. A trained person can help in ways a self-help site can’t, and asking is a strong thing to do. Here’s how to find one."
-      ],
-      "how": [
-        "Ask your doctor for a referral: they often know local counselors, and what is covered.",
-        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits."
+        "That is outside what I can help with. This site is self-help and doesn’t list or recommend outside services. What it can do is help with the conversations and habits between you, like a check-in or a pause plan."
       ],
       "plain": [
-        "Ask your doctor who to see."
+        "This site doesn’t list outside services.",
+        "It can help with check-ins and pause plans."
       ],
       "links": [
         [
-          "For counselors, coaches and group leaders",
-          "/for-counselors.html"
+          "Check-ins: a calm place for a hard talk",
+          "/check-ins.html"
+        ],
+        [
+          "A pause plan for two",
+          "/pursue-withdraw.html#plan"
         ]
       ],
       "chips": []
@@ -1657,24 +1611,15 @@
       "notPat": "\\b(anger|temper|yell\\w*|rage)\\b",
       "keys": [],
       "what": [
-        "No. I’m a self-help guide, not a therapist. I can point you to pages, tools and ideas, but I can’t assess you, diagnose anything, or give the kind of care a trained person can. Here’s how to find one."
-      ],
-      "how": [
-        "Ask your doctor for a referral: they often know local counselors, and what is covered.",
-        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits."
+        "No. I’m a self-help guide, not a therapist. I can point you to pages, tools and ideas, but I can’t assess you, diagnose anything, or give the kind of care a trained person can."
       ],
       "plain": [
-        "No, I am not a therapist.",
-        "Ask your doctor who to see."
+        "No, I am not a therapist."
       ],
       "links": [
         [
           "Method and honest limits",
           "/method-and-limits.html"
-        ],
-        [
-          "For counselors, coaches and group leaders",
-          "/for-counselors.html"
         ]
       ],
       "chips": []
@@ -1751,16 +1696,14 @@
       "pat": "\\bnightmares?\\b.{0,50}\\bon edge\\b|\\bon edge\\b.{0,50}\\bnightmares?\\b|\\bptsd\\b|\\bpost traumatic\\b|\\bjumps? at (every )?(noises?|sounds?|loud|bangs?)\\b|\\bhypervigilan\\w*\\b|\\b(back|home) from (a |the |his |her |my )?(\\w+ )?(deployment|tour|war|combat|service|the army|the navy)\\b.{0,40}\\b(normal|nightmares?|on edge|sleep|jumpy|angry|changed|different)\\b|\\b(since|after) (his |her |my |the )?(deployment|tour|combat)\\b.{0,50}\\b(nightmares?|on edge|sleep|jumpy|angry|changed|different|distant)\\b|\\b(veteran|military|army|navy|soldier|service member|marine)\\b.{0,40}\\b(nightmares?|on edge|cant sleep|doesnt sleep|jumpy)\\b|\\bnightmares? (since|after) (his |her |my |the )?(deployment|tour|combat|getting back|coming home)\\b",
       "keys": [],
       "what": [
-        "Thank you for telling me. What you’re describing (nightmares, being on edge, jumping at noises, poor sleep) is common after deployment or anything frightening, and for many people it eases over the first weeks home. I can’t diagnose anyone, so I can’t say whether it’s PTSD. A doctor can, and there is good help for it."
+        "Thank you for telling me. What you’re describing (nightmares, being on edge, jumping at noises, poor sleep) is common after deployment or anything frightening, and for many people it eases over the first weeks home. I can’t diagnose anyone, so I can’t say whether it’s PTSD."
       ],
       "how": [
-        "See a doctor (or your unit’s medical team), especially if it lasts more than a month or gets in the way of sleep, work or home. Treatments for this work well.",
         "At home: keep sleep and meals regular, go easy on alcohol, and agree a signal for “I need a few minutes” when it gets too much."
       ],
       "plain": [
         "This is common after deployment.",
-        "I cannot diagnose it.",
-        "Please see a doctor."
+        "I cannot diagnose it."
       ],
       "links": [
         [
@@ -1849,8 +1792,7 @@
       ],
       "how": [
         "Make a pause plan while things are calm: a word that means “I need a break,” and a time you’ll come back.",
-        "When you feel it rising, step away, breathe out slower than you breathe in, then come back and repair.",
-        "Talk to your doctor about sleep and feeling on edge. Help works better when it starts early."
+        "When you feel it rising, step away, breathe out slower than you breathe in, then come back and repair."
       ],
       "script": [
         "I snapped at you earlier. That wasn’t your fault. I’m still getting used to being home, and I’m sorry."
@@ -1893,15 +1835,14 @@
       "id": "comehomesleep",
       "name": "sleep since coming home",
       "what": [
-        "Sleeping badly after coming home is very common, after a deployment or any time that was frightening or very hard. It’s not a weakness, and it’s worth raising with a doctor, because help tends to work better when it starts early."
+        "Sleeping badly after coming home is very common, after a deployment or any time that was frightening or very hard. It’s not a weakness."
       ],
       "how": [
         "Keep sleep and meals regular, and go easy on alcohol and late caffeine.",
-        "Slow breathing before bed helps many people: the Night Garden counts it for you.",
-        "See your doctor (or your unit’s medical team) if it lasts more than a few weeks, or comes with nightmares or feeling on edge."
+        "Slow breathing before bed helps many people: the Night Garden counts it for you."
       ],
       "script": [
-        "You’ve been sleeping badly since you got back. Would you be willing to talk to a doctor about it? I’ll come with you if you want."
+        "You’ve been sleeping badly since you got back. Is there anything that would make the nights easier? I’m happy to help."
       ],
       "scriptLabels": [
         "For a partner"
@@ -1992,10 +1933,6 @@
         [
           "Can’t sleep since I got back",
           "I can’t sleep since I got back"
-        ],
-        [
-          "Where to get support",
-          "Where can we get support after a deployment?"
         ]
       ],
       "sides": [
@@ -2303,7 +2240,7 @@
       "name": "is gaming addiction real?",
       "pat": "\\b(gaming|game|video game|phone|screen)s? (addiction|addict\\w*|disorder)\\b|\\baddict\\w* to (gaming|games|video games|his games|her games|the game|his phone|her phone|fortnite|the xbox|the playstation)\\b|\\boverreact\\w*\\b.{0,40}\\b(gam\\w*|games?|xbox|playstation)\\b|\\b(gam\\w*|games?|xbox|playstation)\\b.{0,40}\\boverreact\\w*\\b|\\b(game|games|gaming) (problem|issue)\\b.{0,20}\\b(real|addict\\w*|serious)\\b",
       "what": [
-        "It can be, for a small number of people. The gaming guide’s line is: if gaming or a phone is crowding out sleep, work, money or friends, and cutting back is hard even when you want to, that’s worth talking about with a doctor. It isn’t a character flaw, and help is there. For most couples, though, it’s about timing, not the hours."
+        "It can be, for a small number of people. The gaming guide’s line is: if gaming or a phone is crowding out sleep, work, money or friends, and cutting back is hard even when you want to, that’s worth taking seriously. It isn’t a character flaw. For most couples, though, it’s about timing, not the hours."
       ],
       "how": [
         "Check the four: sleep, work or school, money, friends. Is any of them being crowded out?",
@@ -2319,7 +2256,7 @@
       ],
       "links": [
         [
-          "Small habits that help both of you (and when to see a doctor)",
+          "Small habits that help both of you",
           "/gaming-and-time-together.html#habits"
         ],
         [
@@ -3049,7 +2986,7 @@
       "how": [
         "Ask for the reason behind one rule, at a calm moment, then suggest a deal: “10 on school nights, 11 on weekends?”",
         "You can say what you miss. Missing your old home or your family isn’t ungrateful.",
-        "You can ask your social worker, or an advocate, about things you want to change: seeing your family, keeping your old school or friends, or a house rule. You’re allowed to ask, and to ask again."
+        "You’re allowed to ask for things you want to change: seeing your family, keeping your old school or friends, or a house rule. You’re allowed to ask, and to ask again."
       ],
       "script": [
         "I know you’re doing a lot for me. Can we talk about the phone rule? I’ve got an idea.",
@@ -3226,7 +3163,7 @@
         "Stay calm and don’t argue about the laugh. Say what happens, once, and then do it.",
         "Tie the consequence to the rule and its reason: phone downstairs at 10, because sleep makes everything easier. Give it back at the time you said.",
         "Keep connection separate from consequences: one small daily moment with them that they can’t lose.",
-        "Agree the rules with any other caregiver first, so they hear one plan, and look again in two weeks. If they’re in care, your social worker can help with a plan that fits their history."
+        "Agree the rules with any other caregiver first, so they hear one plan, and look again in two weeks."
       ],
       "script": [
         "I’m not going to argue about it. The phone stays downstairs tonight, and you’ll have it back at 7 tomorrow. I still want to hear about your day."
@@ -3346,8 +3283,7 @@
       "how": [
         "Aim for predictable, not perfect: the same routines, the same goodnight, the same “see you after school” every day.",
         "Keep connection separate from behavior: one small daily moment with her that she can’t lose for bad behavior.",
-        "Name it without pressure: “You don’t have to trust us yet. We’re not going anywhere.”",
-        "Get support for you too: your social worker, a caregivers’ support group, and training on trauma and attachment."
+        "Name it without pressure: “You don’t have to trust us yet. We’re not going anywhere.”"
       ],
       "script": [
         "You don’t have to trust us yet. We’re staying, and we’ll keep showing up."
@@ -3573,11 +3509,10 @@
       "pat": "\\b(raising|bringing up|looking after|caring for|have custody of|got custody of) (my|our) (grandson|granddaughter|grandchild\\w*|grandkids?|niece|nephew|grandbaby)\\b|\\b(grandparent|grandma|grandmother|grandad|granddad|grandpa|grandfather|nan|nana|granny)s?\\b.{0,40}\\b(raising|bringing up|full time|custody|guardian\\w*)\\b|\\b(raising|bringing up|full time|custody of)\\b.{0,40}\\b(grandparent|grandson|granddaughter|grandchild\\w*|grandkids?)\\b|\\b(i m|im|i am) raising (him|her|them) (full time|on my own|myself|now)\\b|\\bkinship\\b",
       "keys": [],
       "what": [
-        "Raising a grandchild is a huge act of love, and it’s exhausting, often on top of worry and grief about their parent. You don’t have to do it alone, and there is help for exactly this."
+        "Raising a grandchild is a huge act of love, and it’s exhausting, often on top of worry and grief about their parent. You don’t have to do it alone."
       ],
       "how": [
-        "Look for kinship caregiver support: in the UK, the charity Kinship (kinship.org.uk) gives free advice. In the US, search “grandfamilies” or your state’s kinship navigator program.",
-        "Ask about money and legal help: you may be entitled to support, and a guardianship or custody order can make school and doctors easier.",
+        "Sort out the paperwork: a guardianship or custody order can make school and doctor visits easier.",
         "Keep routines simple and predictable. Children who have been through upheaval settle with sameness.",
         "Tell him what’s happening in words he can manage, and look after your own rest: one real break a week is part of caring for him."
       ],
@@ -3715,7 +3650,7 @@
       "how": [
         "Pick one thing you wish she understood, and say just that one thing, at a calm moment.",
         "Ask what she worries about, too. A rule is often a worry in disguise.",
-        "Find one other adult who does get you (a teacher, a school counselor, an aunt) and talk to them as well."
+        "Find one other adult who does get you (a teacher, an aunt, a coach) and talk to them as well."
       ],
       "script": [
         "Can I tell you one thing I wish you got about me? I’m not having a go."
@@ -3853,7 +3788,7 @@
       ],
       "how": [
         "You’re allowed to ask questions about what’s happening, and to say when you don’t want to talk about it.",
-        "Pick one adult you trust (your grandparent, a teacher, a school counselor) and tell them how you’re really doing.",
+        "Pick one adult you trust (your grandparent, a teacher or another relative) and tell them how you’re really doing.",
         "It’s okay to love your parent and still be upset with them."
       ],
       "links": [
@@ -5237,7 +5172,7 @@
         "Name the joint decisions: usually school, health and anything new and regular, like a club, a sport or a camp. Day-to-day things belong to whoever has the kids that day.",
         "Suggest a reply-by window: one of you asks by message, the other answers within 3 days. If there’s no answer by then, the one who asked can go ahead.",
         "Keep it to one written channel, so you can both find what was agreed.",
-        "Check your parenting plan. If it says nothing, or you can’t agree, a mediator or a family-law professional can help you write it down."
+        "Check your parenting plan. If it says nothing, or you can’t agree, write down what each of you thinks it should say."
       ],
       "script": [
         "I’d like us both to have a say in the big things. Could we agree that school, health and new activities are joint, and that we text first and reply within 3 days?"
@@ -6076,8 +6011,7 @@
         "Before any big decision, get some real rest if you can. Even a few days off can change how it looks.",
         "Tell your co-founder how tired you are, as a fact, not a verdict: “I’m running on empty, and I need us to change something.”",
         "Look at the load together: one owner and a backup for every recurring job, so it isn’t all on you.",
-        "If you’re thinking about leaving, the money, ownership or partnership agreement are a conversation for an accountant or a lawyer.",
-        "If the tiredness doesn’t lift, or you feel low most days, talk to your doctor."
+        "If you’re thinking about leaving, the money, ownership or partnership agreement are a conversation for an accountant or a lawyer."
       ],
       "script": [
         "I’m running on empty, and I’ve even thought about walking away. I don’t want to decide anything this tired. Can we sit down this week and look at who carries what?"
@@ -7241,7 +7175,7 @@
       "how": [
         "Notice what you actually want: peace for yourself, a relationship again, an apology, or distance.",
         "You can say “I’m not ready” and leave the door where it is, open or closed.",
-        "If anger is eating at you, talking it through with a counselor or someone you trust helps, for you, not for them."
+        "If anger is eating at you, talking it through with someone you trust helps, for you, not for them."
       ],
       "script": [
         "I’m not ready to talk about it yet. I’ll let you know if that changes."
@@ -9284,8 +9218,7 @@
         "Use something you’re good at: fixing, teaching, organizing, cooking for others.",
         "Keep a lunch or call going with a few old colleagues.",
         "Move most days, outside if you can.",
-        "At home, take one whole job that’s completely yours.",
-        "If you feel low most days for more than a couple of weeks, talk to your doctor."
+        "At home, take one whole job that’s completely yours."
       ],
       "script": [
         "I miss feeling useful. Can we work out one thing at home that’s completely mine, and I’ll find one thing outside the house too?"
@@ -9333,8 +9266,7 @@
       "how": [
         "Wired Differently explains autism, ADHD and other wiring in plain words, as differences, not flaws.",
         "If work is where it’s hardest, “If you’re autistic at work” has plain sentences for written asks, quiet breaks and being read as rude.",
-        "A Wiring Card can sum up how you work best, to share if and when you choose.",
-        "If you feel low most days, talk to your doctor too. That’s about how you’re feeling, not about being autistic."
+        "A Wiring Card can sum up how you work best, to share if and when you choose."
       ],
       "links": [
         [
@@ -9414,8 +9346,7 @@
         "Be as kind to yourself as you would be to a friend saying the same thing.",
         "Say it out loud to one person you trust: “I’ve been feeling low lately.”",
         "Give each day a small shape: one thing with other people, one thing you’re good at, some time outside.",
-        "Notice what helps even a little, and do more of that.",
-        "If you feel low most days for more than a couple of weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step."
+        "Notice what helps even a little, and do more of that."
       ],
       "script": [
         "I’ve been feeling a bit lost lately. I don’t need you to fix it, I just wanted you to know."
@@ -9423,8 +9354,7 @@
       "plain": [
         "Nothing is wrong with you for feeling this way.",
         "Big changes make most people feel low for a while.",
-        "Tell one person you trust.",
-        "If it lasts more than two weeks, see your doctor."
+        "Tell one person you trust."
       ],
       "links": [
         [
@@ -9465,7 +9395,7 @@
       ],
       "links": [
         [
-          "Getting help for your anger",
+          "Calming your anger",
           "/parents.html#anger-help"
         ],
         [
@@ -9500,7 +9430,7 @@
         "Agree a pause word together on a calm day: either of you can say it, and you step away for twenty minutes, then come back at a time you name.",
         "When you feel it rising, say “I’m getting too loud, I’m going to take a breath,” and step away before the words come out.",
         "Afterward, apologize for the specific thing, without a “but,” and say what you’ll do differently.",
-        "If it happens most days, or anyone at home is afraid of you, get support for yourself: your doctor or a counselor who does anger management."
+        "If it happens most days, or anyone at home is afraid of you, take that seriously: use the pause word every time, and build the Calm-Down Kit."
       ],
       "script": [
         "I yelled at you. That wasn’t fair, and it wasn’t about you. Next time I’ll step away when I feel it rising, and come back in twenty minutes."
@@ -9509,7 +9439,7 @@
         "Agree a pause word.",
         "Step away before you shout.",
         "Say sorry for the specific thing.",
-        "Get help if it happens a lot."
+        "Take it seriously if it happens a lot."
       ],
       "links": [
         [
@@ -9521,7 +9451,7 @@
           "/pursue-withdraw.html#plan"
         ],
         [
-          "Getting help for your anger",
+          "Calming your anger",
           "/parents.html#anger-help"
         ]
       ],
@@ -9533,29 +9463,28 @@
       "kind": "intent",
       "first": true,
       "newTopic": true,
-      "name": "getting help for your anger",
+      "name": "working on your anger",
       "pat": "\\b(therapist|therapy|counsel\\w*|anger management|classes|course|group|help|support)\\b.{0,30}\\b(for|with|about) (my )?(anger|temper|yelling|rage)\\b|\\banger management\\b|\\b(should|do) i (see|get|need) (a )?(therapist|counsel\\w*|help)\\b.{0,30}\\b(anger|temper|yell\\w*)\\b",
       "notPat": "",
       "keys": [],
       "what": [
-        "Yes: getting support for your anger is a strong, sensible step, and it’s good for your family. This site isn’t therapy, but here’s where people usually start."
+        "Yes: working on your anger is a strong, sensible step, and it’s good for your family. This site isn’t therapy, but here’s where people usually start."
       ],
       "how": [
-        "Your doctor: stress, sleep, alcohol and low mood all shorten a fuse, and a doctor can help with those and point you to local support.",
-        "Meanwhile, the Calm-Down Kit helps you spot your triggers and first warning signs, and the four steps on Upset right now? help in the moment."
+        "Stress, sleep, alcohol and low mood all shorten a fuse, so look after those first.",
+        "The Calm-Down Kit helps you spot your triggers and first warning signs, and the four steps on Upset right now? help in the moment."
       ],
       "script": [
-        "I’ve realized my temper is hurting my family, and I want help with it. Can you point me to someone who does anger management?"
+        "I’ve realized my temper is hurting my family, and I want to change it. Can we work out a pause word together?"
       ],
       "plain": [
-        "Yes, getting help is a good step.",
-        "Talk to your doctor.",
-        "Ask about counseling or an anger group.",
+        "Yes, working on it is a good step.",
+        "Look after sleep and stress first.",
         "Use the Calm-Down Kit meanwhile."
       ],
       "links": [
         [
-          "Getting help for your anger",
+          "Calming your anger",
           "/parents.html#anger-help"
         ],
         [
@@ -9587,7 +9516,7 @@
         "Moments that aren’t care still reach people: music from their younger years, old photos, a small ritual from before, holding hands.",
         "Songs often reach people even late in dementia, and singing along can be a real moment together.",
         "You can grieve and visit at the same time. Other people may not notice this kind of grief. It still counts.",
-        "Say it to someone safe: a friend, a caregivers’ group or a counselor."
+        "Say it to someone safe: a friend or someone in your family."
       ],
       "links": [
         [
@@ -9699,7 +9628,7 @@
         "No, it isn’t wrong. Many caregivers sometimes don’t want to go, or feel angry or resentful: at the illness, even at the person they care for. Then they feel guilty for feeling that way. These feelings are normal. They don’t mean you are a bad person. They are usually a sign that you are carrying too much for too long."
       ],
       "how": [
-        "Say it to someone safe: a friend, a support group or a counselor. Saying it out loud often makes it lighter.",
+        "Say it to someone safe: a friend or someone in your family. Saying it out loud often makes it lighter.",
         "Take real breaks, not only sleep. Something just for you, even an hour a week.",
         "Visits can be shorter and still count: a song, a photo, holding hands.",
         "Ask for one more helper. Resentment often means the load needs to be shared more widely."
@@ -9756,8 +9685,7 @@
       "how": [
         "Share the load by energy, not hours. Jobs that can be done from a chair or bed count.",
         "Agree good-day and bad-day owners, so nobody has to ask on a hard day.",
-        "Resentment and guilt are normal for caregivers: a sign you’re carrying too much for too long. Ask for one more helper.",
-        "The caregivers page lists where to get support and how to find services near you."
+        "Resentment and guilt are normal for caregivers: a sign you’re carrying too much for too long. Ask for one more helper."
       ],
       "links": [
         [
@@ -9795,7 +9723,7 @@
       "how": [
         "It’s normal to feel tired, sad, and sometimes impatient, then guilty. That’s a sign you need more support, not that you’re failing.",
         "Ask family for specific jobs with a time, including grown children far away: calls, paperwork, a regular phone call, paying for a sitter.",
-        "Look for respite: day centers, sitters, and caregiver support groups."
+        "Plan respite: a sitter for a few hours, or a relative who takes over for an afternoon."
       ],
       "script": [
         "I’m tired and I need more help with your mom. Could you take the insurance calls and call her every Sunday at six?"
@@ -9913,7 +9841,7 @@
         "Choose a calm time and say it simply: “I’m telling you because I love you and want you in my life. I’m bisexual, and [their name] is my partner.”",
         "Expect that first reactions aren’t always final ones. Give them time, and set one clear boundary: “I won’t stay if my partner is insulted. I’ll call you next week.”",
         "If your partner wants you to come out sooner, tell them what you need: “I want to, and I need to do it on my timing. Can you support me with that?”",
-        "Line up your own support: friends or a counselor."
+        "Line up your own support: friends who know."
       ],
       "script": [
         "I’m telling you because I love you and want you in my life. I’m bisexual, and [their name] is my partner. I don’t need you to have all the answers today."
@@ -9979,7 +9907,7 @@
       ],
       "how": [
         "Think through what you depend on them for (money, housing, a job, childcare) and make a backup for each before a big conversation.",
-        "Have your own people lined up for the day of the talk and the days after: a friend, a partner, a counselor.",
+        "Have your own people lined up for the day of the talk and the days after: a friend or a partner.",
         "First reactions often soften with time. Leave the door open (“I’ll call you next week”) without accepting cruelty."
       ],
       "script": [
@@ -9989,7 +9917,7 @@
         "Plan for money and housing first.",
         "Have friends ready to support you.",
         "First reactions can change.",
-        "Get help if it could be dangerous."
+        "Think about safety if it could be dangerous."
       ],
       "links": [
         [
@@ -10382,7 +10310,7 @@
         "Protect focus time: block it out, mute notifications, and batch messages.",
         "Ask for asks in writing after meetings (“Could you drop the actions in the chat?”).",
         "Share a short Wiring Card with your team or manager if you’re comfortable: how you work best, and what helps.",
-        "Disclosure is your choice. Where it applies, workplace adjustments are available. A doctor or HR can explain options."
+        "Disclosure is your choice. Where it applies, workplace adjustments are available."
       ],
       "script": [
         "I work best with the ask in writing. Could you drop the actions in the chat after the meeting?"
@@ -10425,7 +10353,7 @@
         "When one of them complains about the other to you, you can say a short line and change the subject.",
         "If they ask you to pass on messages, it’s okay to say no: “Can you tell them yourself?”",
         "Give yourself space when it’s loud: headphones, your room, a walk, a friend’s house.",
-        "Tell one adult you trust how it feels: a relative, a teacher or a school counselor.",
+        "Tell one adult you trust how it feels: a relative, a teacher or a coach.",
         "If the fighting ever scares you, or anyone gets hurt, that’s more than arguing. You can ask for help even if nobody is hurting you directly."
       ],
       "script": [
@@ -10504,7 +10432,7 @@
         "It’s good that you’re looking for someone to talk to. You don’t have to handle things alone."
       ],
       "how": [
-        "An adult you trust: a relative, a teacher, a school counselor, a coach or a friend’s parent. If the first person doesn’t help, tell someone else."
+        "An adult you trust: a relative, a teacher, a coach or a friend’s parent. If the first person doesn’t help, tell someone else."
       ],
       "script": [
         "Can I talk to you about something that’s been going on at home? I don’t need you to fix it, I just need someone to know."
@@ -12199,10 +12127,9 @@
       "pat": "\\b(respite|adult day|day program|sitter|break from caregiving|break from caring|caregiver support|support group)\\b|\\b(dementia|alzheimer\\w*)\\b.{0,40}\\b(help|support|exhausted|tired|break)\\b|\\bi need a break from (caring|caregiving|looking after)\\b",
       "keys": [],
       "what": [
-        "You deserve real breaks, and there is help made for exactly this. Getting support isn’t giving up on the person you care for. It’s how you keep going."
+        "You deserve real breaks. Taking them isn’t giving up on the person you care for. It’s how you keep going."
       ],
       "how": [
-        "Ask his or her doctor, or a hospital or clinic social worker, about respite care and what insurance or local programs cover.",
         "Pick one regular break and protect it, even two hours a week. Put a name on who covers it."
       ],
       "links": [
@@ -12290,7 +12217,7 @@
         "You should not do it all alone.",
         "Write down what the care involves.",
         "Ask each sibling for one clear job.",
-        "Get support for yourself too."
+        "Ask for a break for yourself too."
       ],
       "links": [
         [
@@ -12355,9 +12282,9 @@
       ],
       "how": [
         "Let the feeling be a signal, not a verdict: it’s telling you something needs to change in the setup, not in your heart.",
-        "You don’t have to say it to the person you care for. Say it to someone who can hold it: a friend, a support group, a counselor.",
+        "You don’t have to say it to the person you care for. Say it to someone who can hold it: a friend or someone in your family.",
         "Look for one thing to take off your plate this week, even a small one.",
-        "If the weight doesn’t lift, or you feel hopeless, please talk to a doctor or counselor."
+        "If the weight doesn’t lift, or you feel hopeless, please tell someone you trust today."
       ],
       "links": [
         [
@@ -12590,7 +12517,7 @@
         "A few quiet things for a hard evening: the Night Garden (slow breathing with a glowing light), calm music at a low volume, or a few pages on loneliness, in plain words.",
         "Give the evening a small shape: a call at the same time each week, a walk before dark, a meal at the table.",
         "See people, a little: a club, a class, a neighbor. Short, ordinary contact helps.",
-        "If the loneliness feels heavy most days, tell one person, or your doctor. Help works."
+        "If the loneliness feels heavy most days, tell one person you trust."
       ],
       "links": [
         [
@@ -12614,7 +12541,7 @@
         "Evenings alone can be long.",
         "Breathe slowly in the Night Garden.",
         "Call someone at the same time each week.",
-        "Tell your doctor if it feels heavy."
+        "Tell one person if it feels heavy."
       ]
     },
     {
@@ -12633,8 +12560,7 @@
       "how": [
         "There’s no schedule you should be keeping to. The path grief takes varies widely from person to person.",
         "Staying connected to the person who died is healthy: talking to them, keeping a few of their things, marking their birthday.",
-        "Enjoying something is not a betrayal of the person you lost.",
-        "If the weight doesn’t lift at all over many months, or you can’t manage daily life, talk to your doctor or a grief counselor. Asking for help doesn’t mean you loved them any less."
+        "Enjoying something is not a betrayal of the person you lost."
       ],
       "links": [
         [
@@ -12644,17 +12570,12 @@
         [
           "For a hard evening",
           "/grief.html#hard-evening"
-        ],
-        [
-          "When to get more help",
-          "/grief.html#help"
         ]
       ],
       "plain": [
         "Crying is part of grief.",
         "Good and hard hours both come.",
-        "There is no timeline.",
-        "If it does not lift for months, see a doctor."
+        "There is no timeline."
       ],
       "follow": [
         [
@@ -12876,15 +12797,13 @@
       "how": [
         "Try two or three minutes of slow breathing: the Night Garden counts it for you, dark and silent unless you turn sound on.",
         "Soft, steady sounds can help: Calm-Down Sounds play quietly for as long as you like.",
-        "If thoughts keep circling, write them on a piece of paper by the bed, so they can wait until morning.",
-        "If you’ve slept badly most nights for a few weeks, it’s worth mentioning to your doctor."
+        "If thoughts keep circling, write them on a piece of paper by the bed, so they can wait until morning."
       ],
       "script": [],
       "plain": [
         "Breathe slowly for a few minutes.",
         "Play a soft sound.",
-        "Write worries on paper.",
-        "See a doctor if it lasts weeks."
+        "Write worries on paper."
       ],
       "links": [
         [
@@ -13053,7 +12972,7 @@
         "Pick one person and send one easy message today, like “Saw this and thought of you.” Small, low-pressure contact counts.",
         "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
         "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
-        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor."
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please tell someone you trust today."
       ],
       "links": [
         [
@@ -13093,7 +13012,7 @@
         "Pick one person and send one easy message today, like “Saw this and thought of you.” Small, low-pressure contact counts.",
         "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
         "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
-        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor."
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please tell someone you trust today."
       ],
       "links": [
         [
@@ -13135,7 +13054,6 @@
       "how": [
         "First, safety: if you feel scared of them, or they hurt, threaten, watch or control you, that changes everything.",
         "If it’s more that things feel stuck or empty, it can help to write down what you want, what you’ve tried, and what would need to change for you to want to stay.",
-        "A couples counselor, or a counselor just for you, is the best place to work out a decision like this. Many people go on their own first.",
         "You don’t have to decide today. Taking care of your sleep and support while you think is part of deciding well."
       ],
       "links": [
@@ -13521,8 +13439,8 @@
       "how": [
         "Don’t criticize your ex back to the kids. Kids feel caught when either parent is put down, and they notice who doesn’t do it.",
         "If they repeat something, keep it short and warm: “I’m sorry you heard that. Grown-up problems are for grown-ups. I love you, and you never have to pick a side.”",
-        "Write down specific incidents with dates. If it’s affecting the children, talk to your lawyer, a family mediator, or a child counselor.",
-        "Look after yourself too: a friend or counselor who can hear your side means you don’t need the kids to."
+        "Write down specific incidents with dates.",
+        "Look after yourself too: a friend who can hear your side means you don’t need the kids to."
       ],
       "script": [
         "I’m sorry you heard that. Grown-up problems are for grown-ups. I love you, and you never have to pick a side."
@@ -14002,7 +13920,7 @@
       "how": [
         "You get to decide who you come out to, when, and how. There’s no deadline, and it’s okay to wait until you feel safe.",
         "If a parent mocks your pronouns or identity, one calm line can help, if you feel safe saying it: “I’m not asking you to understand everything today. I’m asking you not to make fun of me.” If it isn’t safe, you don’t have to say anything.",
-        "Find your people: a friend, a school counselor, a GSA club, or an online community you trust. One accepting adult makes a real difference."
+        "Find your people: a friend, a GSA club, or an online community you trust. One accepting adult makes a real difference."
       ],
       "links": [
         [
@@ -14071,7 +13989,7 @@
       "how": [
         "Give yourself somewhere to go when it gets loud: headphones, your room, a walk, a friend’s place, or a calm sound on this site.",
         "If you want to say something, pick a calm moment and keep it about you: “When you two shout, I feel scared and can’t sleep.” You don’t have to take sides.",
-        "Talk to someone outside it: a friend, a relative, a school counselor or coach.",
+        "Talk to someone outside it: a friend, a relative or a coach.",
         "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing."
       ],
       "links": [
@@ -16771,7 +16689,7 @@
       "how": [
         "Made for every kind of relationship and every kind of mind: couples, family, co-parents, friends, roommates, work, and people on their own.",
         "The book and the tools connect: each chapter points to the tool that puts it to work.",
-        "It’s honest about its limits: it’s self-help, not therapy, and it says when a counselor or doctor is the better choice."
+        "It’s honest about its limits: it’s self-help, not therapy."
       ],
       "links": [
         [
@@ -16941,8 +16859,7 @@
         "instead of therapy"
       ],
       "what": [
-        "No. This site isn’t therapy, counseling, diagnosis or treatment, and I’m not a counselor. It’s a shared, practical way to see the load, fix the setup and talk more kindly, built on ideas from psychology and systems. Every score describes the setup, never a person, and none of it is a clinical tool.",
-        "It can sit happily alongside professional support. If things feel heavy, unsafe or stuck, or have lasted a long time, please talk with a qualified professional."
+        "No. This site isn’t therapy, counseling, diagnosis or treatment, and I’m not a counselor. It’s a shared, practical way to see the load, fix the setup and talk more kindly, built on ideas from psychology and systems. Every score describes the setup, never a person, and none of it is a clinical tool."
       ],
       "links": [
         [
@@ -17842,7 +17759,7 @@
         "An optional part asks, in general, how a hard time felt, what helped you get through, and how it may show up now. Never what happened.",
         "Read your results, write one new rule you choose, and copy, print or save them. Nothing you type or choose is sent anywhere."
       ],
-      "results": "For each trait you get gentle guesses from your own answers: where it may have started, what it protected back then, what it may cost now, how to notice it in the moment, and one or two small things to try this week, with words to say. They’re possibilities, not facts about you. Most families were doing their best with what they had. Noticing where a rule came from isn’t blaming anyone. If a memory feels heavy, it’s okay to stop, and talking it through with a trained counselor can help.",
+      "results": "For each trait you get gentle guesses from your own answers: where it may have started, what it protected back then, what it may cost now, how to notice it in the moment, and one or two small things to try this week, with words to say. They’re possibilities, not facts about you. Most families were doing their best with what they had. Noticing where a rule came from isn’t blaming anyone. If a memory feels heavy, it’s okay to stop.",
       "ex": "Sam picked “I can’t rest until everything’s done.” Their answers showed being the responsible one in the school years, with “work comes first” as a home rule. The tool suggested one 15-minute rest before the list was done, and a new rule: “Rest is part of the work, not the prize for finishing it.”",
       "links": [
         [
@@ -19041,12 +18958,12 @@
         "~baby jobs",
         "postpartum"
       ],
-      "what": "A new baby adds a job nobody can see: keeping track of everything. When you are both tired, it lands on whoever notices first. The New baby page gives three small steps to keep that from landing on one of you by accident, and a note on when sad or anxious feelings are worth telling a doctor about.",
+      "what": "A new baby adds a job nobody can see: keeping track of everything. When you are both tired, it lands on whoever notices first. The New baby page gives three small steps to keep that from landing on one of you by accident, and a note on when sad or anxious feelings don’t lift.",
       "how": [
         "List every job, including the thinking part: the pediatrician visits, noticing the diapers are low, meals, the family chat, thank-you notes.",
         "Give each job one owner. That person does it and also remembers it.",
         "Review it once a week for ten minutes: what felt heavy, and one job to swap.",
-        "If sadness or anxiety lasts more than two weeks or gets heavier, tell a doctor or nurse."
+        "If sadness or anxiety lasts more than two weeks or gets heavier, please tell someone you trust today."
       ],
       "pillar": "Pillar I, See the whole load.",
       "links": [
@@ -19567,7 +19484,7 @@
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
         "Tell one person you trust, even in one line: “I’m having a hard day.”",
         "Make the day smaller: pick one small thing to do, and let the rest wait.",
-        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step."
+        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, please tell someone you trust today."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
@@ -19576,7 +19493,7 @@
         "I’m sorry you feel this way.",
         "Drink some water and eat something.",
         "Tell one person you trust.",
-        "If it lasts more than two weeks, see your doctor."
+        "If it lasts more than two weeks, tell someone you trust."
       ],
       "links": [
         [
@@ -19607,7 +19524,7 @@
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
         "Tell one person you trust, even in one line: “I’m having a hard day.”",
         "Make the day smaller: pick one small thing to do, and let the rest wait.",
-        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step."
+        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, please tell someone you trust today."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
@@ -19616,7 +19533,7 @@
         "I’m sorry you feel this way.",
         "Drink some water and eat something.",
         "Tell one person you trust.",
-        "If it lasts more than two weeks, see your doctor."
+        "If it lasts more than two weeks, tell someone you trust."
       ],
       "links": [
         [
@@ -19971,7 +19888,7 @@
         "part 3 chapter 11",
         "understanding people chapter 11"
       ],
-      "what": "Chapter 11 of Part Three is about healing after hurt: repair after small ruptures, apologies that land, what forgiveness is and is not, rebuilding trust, and when to get more help.",
+      "what": "Chapter 11 of Part Three is about healing after hurt: repair after small ruptures, apologies that land, what forgiveness is and is not, and rebuilding trust.",
       "how": [
         "Repair small ruptures soon: name it, own your part, say what you will do.",
         "Forgiveness is yours to give or not. It is not the same as trusting again."
@@ -20306,7 +20223,7 @@
         "Say it out loud when it’s done, or add it to the done list.",
         "When a hard feeling comes up, ask what it’s pointing at.",
         "Use Flip it to turn a complaint into a request, or a worry into a plan.",
-        "If it’s too heavy, a new way of looking at it is not the fix. Get support."
+        "If it’s too heavy, a new way of looking at it is not the fix. Rest first."
       ],
       "links": [
         [

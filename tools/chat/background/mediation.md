@@ -85,11 +85,11 @@ go: /is-this-for-you.html | Is this right for you?
 evidence: General guidance from mediation and counseling practice. There’s no single rule. The right help depends on the situation.
 try: “We keep getting stuck on this. Would you be open to having someone neutral help us talk it through?”
 
-If the same disagreement keeps going nowhere, if talking always escalates, or if decisions have big consequences (money, separation arrangements, care for a family member), a neutral third party can help. That might be a trusted friend, a workplace mediator, a professional mediator or a counselor.
+If the same disagreement keeps going nowhere, if talking always escalates, or if decisions have big consequences (money, separation arrangements, care for a family member), a neutral third party can help. That might be a trusted friend or a workplace mediator.
 
-Asking for outside help isn’t failure. It’s a way of protecting the relationship from a pattern you can’t break alone. If anything about the situation feels unsafe, please talk with a qualified professional.
+Asking for outside help isn’t failure. It’s a way of protecting the relationship from a pattern you can’t break alone.
 
-Program: The program isn’t therapy or mediation. It’s a practical, shared way to see the load and talk kindly, and it sits happily alongside professional support.
+Program: The program isn’t therapy or mediation. It’s a practical, shared way to see the load and talk kindly.
 
 ## Fighting fair
 aka: fair fighting; fighting fair rules; argue respectfully

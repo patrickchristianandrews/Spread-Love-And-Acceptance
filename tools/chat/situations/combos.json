@@ -4,7 +4,7 @@
     "kid+distance": {
       "reflect": "It’s hard when {them} goes quiet on you. Lots of parents of teens know that closed-door feeling, and it doesn’t mean the connection is gone.",
       "going": "This is Pillar IV (tune how you send and receive) and Pillar III (read your state first). For many teens, pulling back is a normal part of growing up: they’re working out who they are apart from you. Direct questions can feel like pressure, especially when they’re tired or stressed. Being steadily available, without an agenda, keeps the door open for when they’re ready.",
-      "steps": ["Be around without a mission: drives, cooking, walking the dog. Side-by-side time lowers the pressure.", "When they do share something small, turn toward it warmly and resist the urge to fix or lecture.", "Keep one small, reliable ritual, like a weekly breakfast out, that’s about being together, not about talking.", "If you’re worried about their safety or wellbeing, reach out to someone who can help, like their school or a qualified professional."],
+      "steps": ["Be around without a mission: drives, cooking, walking the dog. Side-by-side time lowers the pressure.", "When they do share something small, turn toward it warmly and resist the urge to fix or lecture.", "Keep one small, reliable ritual, like a weekly breakfast out, that’s about being together, not about talking."],
       "scripts": ["No need to talk. I’m going for a drive to get snacks, want to come? You can pick the music.", "I’m around if you ever want to talk, no pressure. And I’m proud of you."],
       "read": ["Talking with teenagers (Library)", "/library/life.html#teenagers"]
     },
@@ -42,7 +42,7 @@
     },
     "caregiving+overwhelm": {
       "reflect": "Caring for someone while carrying everything else is a lot, and running on empty is a sign the load needs more hands, not that you’re doing it wrong.",
-      "steps": ["Check your own battery today. A high score is a reason to ask for help, not to push harder.", "List the care jobs and give each one a named owner: family, friends, or services where possible.", "Protect one small daily break that’s just for you.", "If this has gone on a long time, a qualified professional or a caregiver support service can help you plan."]
+      "steps": ["Check your own battery today. A high score is a reason to ask for help, not to push harder.", "List the care jobs and give each one a named owner: family, friends, or services where possible.", "Protect one small daily break that’s just for you."]
     },
     "partner+load": {
       "steps": ["For one ordinary week, each of you writes down everything you do, including the thinking jobs: remembering, planning, noticing.", "Compare the lists at a calm time, as facts rather than a scorecard.", "Give each regular job one owner, the noticing included, and look again in a month."]

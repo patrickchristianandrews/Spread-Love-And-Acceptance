@@ -178,7 +178,7 @@ try: “I’m anxious about the talk tonight. Can we agree to keep it to one top
 
 Fear tends to be about something here and now. Anxiety tends to be about what might happen. Both show up in the body: a racing heart, tight chest, restlessness.
 
-Everyday anxiety before a hard conversation is very normal, and a bit of preparation helps. If anxiety is intense, frequent or getting in the way of life, it’s worth talking with a qualified professional.
+Everyday anxiety before a hard conversation is very normal, and a bit of preparation helps.
 
 Program: The Calm-Down Kit and the Night Garden’s box breathing are gentle ways to settle before a hard talk.
 
@@ -225,12 +225,12 @@ Program: The Lemonade Stand and WP-01 help you see the whole load. WP-02 helps y
 aka: helpless; powerless; nothing I do matters
 see: Small wins at home; Overwhelm as a feeling
 go: /library/motivation.html#small-wins | Small wins (Library)
-evidence: Research on perceived control suggests that feeling in control of even small things supports wellbeing. Persistent helplessness is worth talking to a professional about.
+evidence: Research on perceived control suggests that feeling in control of even small things supports wellbeing.
 try: “I can’t fix the whole thing, but I can decide what we have for dinner tonight.”
 
 Helplessness is the feeling that nothing you do will make a difference. It often grows when problems repeat and efforts seem to go nowhere.
 
-Finding one small thing within your control, and doing it, can gently push back against that feeling. Small wins add up. If helplessness is heavy or lasting, please reach out to someone you trust or a qualified professional.
+Finding one small thing within your control, and doing it, can gently push back against that feeling. Small wins add up. If helplessness is heavy or lasting, please tell someone you trust.
 
 Program: The Library’s small wins entry explains why tiny progress matters. WP-04 helps you see that a repeating problem is the setup, not you.
 
@@ -381,12 +381,12 @@ Program: WP-09 asks: are you answering their words, or an old argument? That que
 aka: flat; numb; empty; checked out
 see: Body clues of emotion; Helplessness
 go: /quick-checks.html#today | Today’s Weather
-evidence: Feeling flat or far away is a common response to stress and exhaustion. Persistent numbness or low mood is worth talking to a qualified professional about.
+evidence: Feeling flat or far away is a common response to stress and exhaustion.
 try: “I’m feeling a bit flat today. Not upset with anyone, just low on everything.”
 
 Sometimes, instead of feeling a lot, you feel very little: flat, far away, hard to get going. It’s often a sign of being depleted rather than of not caring.
 
-Telling others (“I’m flat today, it’s not about you”) prevents them from reading your quietness as distance or anger. If the flatness lasts a long time, please talk with someone you trust or a professional.
+Telling others (“I’m flat today, it’s not about you”) prevents them from reading your quietness as distance or anger. If the flatness lasts a long time, please talk with someone you trust.
 
 Program: Today’s Weather calls this “fogged in”: running on empty. It suggests what today is good for, and what to leave until the fog lifts.
 

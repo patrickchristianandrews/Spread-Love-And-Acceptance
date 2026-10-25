@@ -680,7 +680,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
           <dt>Just noting it</dt><dd>A one-off with a small effect, often already corrected. Noted, no plan needed.</dd>
           <dt>Small gap</dt><dd>A gap that could recur, with a limited effect. A quick fix with a named owner.</dd>
           <dt>Recurring gap</dt><dd>Recurring or clearly felt, or several small gaps in one area adding up. A full plan with a target date and a test, reviewed at the weekly wrap-up.</dd>
-          <dt>Stubborn gap</dt><dd>Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly with What keeps coming back? (WP-04). Consider a counselor.</dd>
+          <dt>Stubborn gap</dt><dd>Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly with What keeps coming back? (WP-04).</dd>
           <dt>Four parts</dt><dd>From a small gap up, every finding is written as condition (what happened), criteria (what was expected), cause (what in the arrangement allowed it), and effect (what it cost). The fact and the cause are kept apart, and neither can be a character word.</dd>
           <dt>Response</dt><dd>The receiving person logs Agree, Partly agree, or Disagree, in their own words and signed with their name, before a plan can move from Open to In progress. Revising a finding after that asks them to respond again.</dd>
           <dt>Closing</dt><dd>A plan is marked fixed with evidence that its test was met, and it closes only after holding through one monthly review. Closed findings become strengths.</dd>
@@ -2008,7 +2008,7 @@ function renderWork(){
       <div class="field"><label for="ff-due">Target date${strict?"":" (optional)"}</label><input type="date" id="ff-due" data-f="due" value="${esc(fd.due)}"></div>
     </div>
     <div class="field wide"><label for="ff-test">How we'll know it's fixed${strict?"":" (optional)"}</label><textarea id="ff-test" data-f="test" placeholder="A test you can check, like “the next five requests all name a time.”">${esc(fd.test)}</textarea></div>
-    ${fd.sev==="mat"?`<p class="warn">A stubborn gap: review it monthly alongside What keeps coming back? (WP-04), and consider bringing in a counselor or mediator. This tool is a heuristic, not a substitute.</p>`:""}`:""}
+    ${fd.sev==="mat"?`<p class="warn">A stubborn gap: review it monthly alongside What keeps coming back? (WP-04). This tool is a heuristic, not a substitute.</p>`:""}`:""}
     <ul class="errs" id="ff-errs" role="alert" tabindex="-1" hidden></ul>
     <div class="row" style="margin-top:16px"><button class="play" id="ff-save">${full?(editing?"Save revision":"Log finding"):(editing?"Save note":"Just note it")}</button><button class="ghost" id="ff-cancel">Cancel</button></div>`;
   w.oninput=w.onchange=ev=>{const t=ev.target;

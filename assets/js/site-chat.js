@@ -1392,7 +1392,7 @@
         // second time round: don't repeat the same block; ask what happened, and offer a person to talk to
         state.last = Object.assign({}, L, { nohelp: L.nohelp + 1 });
         return { blocks: [{ k: 'p', x: tried ? 'Got it. Tell me what happened when you tried it: what they said or did, and how it ended. Even one line helps, and I’ll suggest something different.' : 'I hear you. Tell me in one line what happened, or what you’d most like to change, and I’ll come at it differently.' },
-          { k: 'note', x: 'If it keeps going round in circles, a counselor or a calm third person you both trust can help you talk it through. It’s often what gets things unstuck.' }],
+          { k: 'note', x: 'If it keeps going round in circles, a calm third person you both trust can help you talk it through. It’s often what gets things unstuck.' }],
           chips: [{ label: 'Something smaller', q: 'Give me one thing to do' }, { label: 'Start over', q: 'Start over' }], kind: 'nohelp' };
       }
       if (L && L.kind === 'sit' && IDX.sit.issues[L.issue]) {
@@ -1411,7 +1411,7 @@
       var cc = careCard(state);
       nb.push({ k: 'p', x: tried ? 'Fair enough, you’ve already tried that. What happened when you did? Tell me in a sentence or two, and I’ll suggest something different.' : 'Sorry that didn’t help. Could you tell me a bit more in your own words, like who it’s with and what happened? I’ll try again from there.' });
       if (cc && cc.links && cc.links.length) { nb.push({ k: 'p', x: 'Or, if you’d rather read than talk, this page goes into it more gently and fully:' }); nb.push({ k: 'links', x: safeLinks(cc.links).slice(0, 1) }); }
-      nb.push({ k: 'note', x: 'Some things are bigger than any tool. If it feels that way, a counselor, your doctor, or someone you trust is a good next step.' + (cc && cc.id === 'grief' ? ' Many hospices run free bereavement groups, even if they didn’t care for your loved one.' : '') });
+      nb.push({ k: 'note', x: 'Some things are bigger than any tool. If it feels that way, someone you trust is a good next step.' });
       return { blocks: nb, chips: STARTERS.slice(0, 3), kind: 'nohelp' };
     }
     if (CV_NEXT.test(f) && L && L.kind === 'sit' && IDX.sit.issues[L.issue]) {
@@ -1437,7 +1437,7 @@
         state.care.next = n2 + 1; state.care.turn = state.turn || 0;
         if (n2 < lk.length) return { blocks: [{ k: 'p', x: n2 === 0 ? 'When you have a quiet moment, this goes further, at your own pace:' : 'And when you’re ready, this one too:' }, { k: 'links', x: [lk[n2]] },
           { k: 'p', x: 'There’s no order you have to follow, and no rush. One small thing a day is plenty.' }], chips: [{ label: 'And then what?', q: 'And then what?' }, { label: 'That didn’t help', q: 'That didn’t help' }], kind: 'care-more' };
-        return { blocks: [{ k: 'p', x: 'That’s all I’d suggest for now. If you’d like to talk it through with a person, a doctor, a counselor, or someone you trust is a good next step. You can also tell me more about what’s on your mind, and I’ll stay with it.' }], chips: [{ label: 'Start over', q: 'Start over' }], kind: 'care-more' };
+        return { blocks: [{ k: 'p', x: 'That’s all I’d suggest for now. If you’d like to talk it through with a person, someone you trust is a good next step. You can also tell me more about what’s on your mind, and I’ll stay with it.' }], chips: [{ label: 'Start over', q: 'Start over' }], kind: 'care-more' };
       }
       if (state.pend && state.pend.turn === (state.turn || 0) - 1 && (!L || L.kind !== 'sit')) {
         var pd = state.pend; state.pend = Object.assign({}, pd, { turn: state.turn || 0 });
@@ -1895,13 +1895,13 @@
   var DOSE_Q = /\b(what|which|how much|how many|right|safe|best|max\w*|recommended) (dose|dosage|amount|mg|milligrams?)\b|\b(dose|dosage) (of|for)\b|\bhow (much|many)\b.{0,25}\b(should|can|do|could) i (take|have|give)\b|\bhow (much|many) (mg|milligrams?|tablets?|capsules?|pills?|drops?)\b/;
   var MEDS_W = /\b(sertraline|fluoxetine|citalopram|escitalopram|paroxetine|venlafaxine|duloxetine|mirtazapine|prozac|zoloft|lexapro|celexa|paxil|effexor|cymbalta|ssris?|snris?|antidepressants?|anti depressants?|my (meds|medication|medicine|pills|tablets|prescription))\b/;
   var HERB_SSRI = {
-    herbstjohns: 'With an antidepressant such as an SSRI, St John’s wort can cause serotonin syndrome (shaking, confusion, stiffness), which can be life-threatening. Please don’t take it with yours unless your prescriber says so.',
-    herbcbd: 'CBD can change how other medicines work, including antidepressants and blood thinners, and it can harm the liver. Ask your pharmacist before taking it with yours.',
-    herbashwagandha: 'The supplements page doesn’t list a known clash between ashwagandha and SSRIs, but it has its own warnings (rare liver injury, possible thyroid effects), so check it with a pharmacist alongside your medicine.',
-    herbkava: 'Kava has rare but serious liver warnings, and it should never be mixed with alcohol or sedatives. Check with your pharmacist before taking it with any medicine.',
-    herbmelatonin: 'Melatonin can make you drowsy, and in the UK it’s prescription-only. Check with your pharmacist before taking it alongside your medicine.',
-    herbmagnesium: 'The page’s warnings for magnesium are about too much (over 350 mg a day from supplements can cause diarrhea) and kidney problems. Check with your pharmacist about taking it with your medicine.',
-    herbchamomile: 'Chamomile may interact with warfarin, and some people are allergic. Ask your pharmacist if you take any medicine.'
+    herbstjohns: 'With an antidepressant such as an SSRI, St John’s wort can cause serotonin syndrome (shaking, confusion, stiffness), which can be life-threatening. Please don’t take it with yours.',
+    herbcbd: 'CBD can change how other medicines work, including antidepressants and blood thinners, and it can harm the liver. That matters most if you take either.',
+    herbashwagandha: 'The supplements page doesn’t list a known clash between ashwagandha and SSRIs, but it has its own warnings (rare liver injury, possible thyroid effects), so read those before combining it with your medicine.',
+    herbkava: 'Kava has rare but serious liver warnings, and it should never be mixed with alcohol or sedatives. That matters if you take any medicine.',
+    herbmelatonin: 'Melatonin can make you drowsy, and in the UK it’s prescription-only. That matters if you take other medicine.',
+    herbmagnesium: 'The page’s warnings for magnesium are about too much (over 350 mg a day from supplements can cause diarrhea) and kidney problems. Both matter if you take other medicine.',
+    herbchamomile: 'Chamomile may interact with warfarin, and some people are allergic. That matters if you take any medicine.'
   };
   var TEEN_CUE = /\b(i m|im|i am) 1[0-7]( years old| yrs old| year old)?\b|\b(i m|im|i am|i ve been|ive been) (in|into) (foster care|care|a foster home|a placement)\b|\bmy (foster )?carers\b|\bmy foster (mum|mom|dad|parents|family|carer)\b|\bmy (nan|nana|nanna|gran|granny|grandma|grandad)\b.{0,30}\b(took|takes|taking|wont let|won t let|doesnt get|dont get|strict|rules|my phone|curfew)\b|\b(in|at) (year (7|8|9|10|11|12|13)|grade (6|7|8|9|10|11|12)|high school|middle school|secondary school|sixth form)\b/;
   var TF_PRINT = /\b(print|printable|printing|print out|printed|printer)\b/;
@@ -2071,11 +2071,11 @@
       if (c.id === 'angerstop' || c.id === 'angerhelp') r.blocks.splice(1, 0, { k: 'p', x: 'The honest line: losing your temper now and then, followed by a real repair, isn’t the same as abuse. It becomes a safety issue if people at home are afraid of you, if it comes with threats, name-calling, breaking or throwing things, or if it happens most days.' });
       // supplements: never a dose, and never “stop your medicine”
       if (/^herb/.test(c.id)) {
-        if (DOSE_Q.test(f)) r.blocks = [{ k: 'p', x: 'I can’t give doses. A pharmacist can tell you what’s safe with what you already take, and so can your doctor.' }].concat(r.blocks.filter(function (b) { return b.k === 'links'; }));
+        if (DOSE_Q.test(f)) r.blocks = [{ k: 'p', x: 'I can’t give doses, and the page doesn’t list any.' }].concat(r.blocks.filter(function (b) { return b.k === 'links'; }));
         if (MEDS_W.test(f)) {
-          var mx = HERB_SSRI[c.id] || 'Some herbs and supplements change how prescribed medicines work, so check this one with a pharmacist first.';
+          var mx = HERB_SSRI[c.id] || 'Some herbs and supplements change how prescribed medicines work, and the safety notes on the page cover this one.';
           var li = -1; r.blocks.forEach(function (b, bi) { if (b.k === 'links' && li < 0) li = bi; });
-          var add = [{ k: 'p', x: mx }, { k: 'p', x: (/\b(better than|instead of|rather than|replace|swap|switch|come off|stop (taking )?my)\b/.test(f) ? 'There’s no good evidence that a supplement works better than prescribed medicine. ' : '') + 'Never stop, swap or change a prescribed medicine without talking to your prescriber, and ask a pharmacist before adding anything to it. Some medicines need to be reduced slowly.' }];
+          var add = [{ k: 'p', x: mx }, { k: 'p', x: (/\b(better than|instead of|rather than|replace|swap|switch|come off|stop (taking )?my)\b/.test(f) ? 'There’s no good evidence that a supplement works better than prescribed medicine. ' : '') + 'A prescribed medicine should never be stopped, swapped or changed suddenly. Some medicines need to be reduced slowly.' }];
           if (li < 0) r.blocks = r.blocks.concat(add); else r.blocks.splice.apply(r.blocks, [li, 0].concat(add));
         }
       }
@@ -2521,7 +2521,7 @@
   function careReqReply(f) {
     if (OTHER_CONSEQ.test(f) && !CARE_REQ.test(f)) return { blocks: [
       { k: 'p', x: 'When someone tells you what they’ll do if something keeps happening, that’s a boundary, not a threat. It’s a hard thing to hear, and it tells you how much this matters to them.' },
-      { k: 'list', x: ['Take it seriously, and try not to argue with the boundary itself. Ask what’s behind it: “What’s it been like for you?”', 'Say what you can honestly do, and by when. Small and real beats big and vague.', 'If the thing is hard to change on your own, like drinking or gambling, getting support is part of the answer, not a sign of failure.', 'Agree a time to look at it again together.'] },
+      { k: 'list', x: ['Take it seriously, and try not to argue with the boundary itself. Ask what’s behind it: “What’s it been like for you?”', 'Say what you can honestly do, and by when. Small and real beats big and vague.', 'Agree a time to look at it again together.'] },
       { k: 'script', l: 'Words you could use', x: 'I hear you, and I know this has been hard on you. I don’t want to lose us. Here’s what I’m going to do this week, and I’d like us to talk again on Sunday about how it’s going.' },
       { k: 'links', x: [['Saying no, and hearing no', '/communication.html#saying-no']] }],
       chips: [{ label: 'Something else', q: 'Start over' }], kind: 'care', id: 'theirboundary' };
@@ -2934,7 +2934,7 @@
   var YELLED_AT = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( sometimes| often| still| just| really)? (yells|screams|shouts|swears|snaps|raises (his|her|their) voice) at me\b/;
   function yelledAtReply(f) {
     return { blocks: [{ k: 'p', x: 'Being yelled at hurts, even when it comes from stress, and it’s fair to want it to stop.' },
-      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, or it’s wearing you down, talking it through with a counselor can help.'] },
+      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, or it’s wearing you down, say so, kindly, at a calm moment.'] },
       { k: 'links', x: [['A pause plan for two', '/pursue-withdraw.html#plan']] }],
       chips: [{ label: 'What do I say?', q: 'What do I actually say?' }], kind: 'care', id: 'yelledat' };
   }
@@ -2950,7 +2950,7 @@
     var b = [{ k: 'p', x: 'Thank you for being honest. Saying it out loud is the first step to stopping it, and it can change. Violence is never okay.' },
       { k: 'list', x: ['Right now: when you feel it rising, leave the room or the house, and don’t go back until your body has calmed down. Distance first, words later.',
         'Breathe in for 4 and out for 6 until it eases. Cold water on your face helps.'] },
-      { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }];
+      { k: 'links', x: [['Calming your anger', '/parents.html#anger-help']] }];
     return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownviolent' };
   }
 
@@ -2962,7 +2962,7 @@
   var TERM_DEF = {
     gaslighting: 'Gaslighting is when someone keeps making you doubt your own memory or sense of what happened, for example by insisting that things you remember never happened, until you trust them more than yourself.',
     coercive: 'Coercive control is a pattern that takes away someone’s freedom bit by bit: watching them, limiting money or friends, threats, or rules they have to follow to avoid trouble. It can happen without any physical violence.',
-    narcissist: '“Narcissist” is often used for someone who seems self-centered and short on empathy. Narcissistic personality disorder is a real diagnosis, but only a clinician can make it, and nobody can from a chat. What they do, and how you feel around them, matters more than the label.',
+    narcissist: '“Narcissist” is often used for someone who seems self-centered and short on empathy. Narcissistic personality disorder is a real diagnosis, and nobody can make it from a chat. What they do, and how you feel around them, matters more than the label.',
     love: 'Love bombing is a rush of intense attention, gifts and promises early on, which can later be used to pull someone close and then control them.',
     trauma: 'A trauma bond is a strong attachment to someone who hurts you, often built from cycles of harm followed by kindness. It can make leaving or even seeing the pattern very hard, and it is not a sign of weakness.'
   };
@@ -2996,7 +2996,7 @@
     if (intent) return { blocks: [
       { k: 'p', x: 'Thank you for saying it instead of doing it. That matters. Right now, put distance between you: leave the room, or the house, and don’t go back until your body has calmed down. Nobody needs to be hurt, including you.' },
       { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk around the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.'] },
-      { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }],
+      { k: 'links', x: [['Calming your anger', '/parents.html#anger-help']] }],
       chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownagg' };
     var b = [{ k: 'p', x: 'Thank you for being honest about this. That takes courage, and it’s the first step to changing it. ' + (person ? 'Throwing things at someone, or putting hands on them, is serious: it frightens them, and someone can get hurt.' : 'Slamming doors, punching walls or throwing things is serious even when nobody is touched: it frightens the people who see it, and it’s a step closer to someone getting hurt.') + ' It isn’t a verdict on who you are, and it can change.' }];
     if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed, thrown things at or threatened anyone, that is abuse, and it has to stop.' });
@@ -3004,7 +3004,7 @@
     b.push({ k: 'list', x: ['When you feel it rising, step away first: leave the room, or go outside. Say “I’m getting too angry. I’m taking a break, and I’ll be back in twenty minutes.”',
       'Breathe in for 4 and out for 6 until your body slows down. Don’t go back until it has.',
       'Later, repair: “I scared you when I slammed the door. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.'] });
-    b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['Getting help with anger', '/parents.html#anger-help'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child']] });
+    b.push({ k: 'links', x: [['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['Calming your anger', '/parents.html#anger-help'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child']] });
     return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }, { label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }], kind: 'care', id: 'ownagg' };
   }
   // "what do I do when I'm about to yell", "I feel myself about to explode": the steps for right now, first
@@ -3017,9 +3017,8 @@
         'Breathe in for 4 and out for 6, five or six times. Cold water on your hands or face helps too.',
         'Come back when you’re calm and repair: “I’m sorry I got loud. That wasn’t fair to you. Let’s try again.”',
         'Later, notice your first warning signs (a tight jaw, a louder voice, heat in your face) and write them in the Calm-Down Kit, so you can step back sooner.'] },
-      { k: 'note', x: 'If it happens most days, or comes with throwing things, threats, or someone being scared of you, get support for yourself: your doctor, an Employee Assistance Program, or an anger-management group.' },
-      { k: 'links', x: [['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] }],
-      chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care', id: 'angernow' };
+      { k: 'links', x: [['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] }],
+      chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Working on my anger', q: 'where can i find help for my anger' }], kind: 'care', id: 'angernow' };
   }
   // "we both yell and sometimes shove each other": physical fights are a safety matter, whoever starts them
   var MUTUAL = /\b(we|we both|both of us)( (sometimes|often|always|end up|ended up|have|ve|get|got|just|even|kind of|kinda|started|start|both|then|also))* (shove|shoving|push|pushing|hit|hitting|slap|slapping|punch|punching|kick|kicking|grab|grabbing|scratch|scratching|bite|biting|get physical|got physical|physically fight|fight physically)\w*\b|\b(shove|push|hit|slap|punch|kick|grabb?|scratch|bite)\w* each other\b|\b(fights?|arguments?|rows?) (get|gets|got|getting|turn|turns|turned) physical\b|\bphysical fights?\b|\bwe (get|got) physical\b/;
@@ -3037,8 +3036,7 @@
       { k: 'list', x: ['Take full responsibility, with no “but”: “I did this. It was my choice, and it wasn’t your fault.”',
         'End the affair completely, and be open about that. Answer their questions honestly, even the hard ones, without blaming them or the relationship.',
         'Let them set the pace. Hurt, anger and questions often come in waves for months. That’s normal, not a sign it isn’t working.',
-        'Trust comes back through changed actions over time, not one big apology.',
-        'See a couples counselor who works with affairs: there are well-studied approaches for exactly this. A counselor for you alone can help you understand why it happened.'] },
+        'Trust comes back through changed actions over time, not one big apology.'] },
       { k: 'note', x: 'Whether to stay together is their choice as much as yours. You can’t earn forgiveness on a timeline.' },
       { k: 'links', x: [['Healing after hurt: rebuilding trust', '/book/understanding-11-healing-in-depth.html#trust'], ['An apology that takes responsibility', '/apology-languages.html#responsibility']] }],
       chips: [{ label: 'How do I apologize?', q: 'how do i say sorry so it lands' }], kind: 'care', id: 'infidelity' };
@@ -3047,8 +3045,7 @@
       { k: 'list', x: ['You don’t have to decide anything today, whether that’s staying or leaving.',
         'Look after the basics: sleep, food, and one person you trust to talk to.',
         'Ask the questions you need answered when you’re ready. You deserve honest answers.',
-        'If you both want to try, a couples counselor who works with affairs can help, and many couples do recover. A counselor just for you can help either way.',
-        'If you’re worried about your sexual health, a sexual health clinic can test you confidentially.'] },
+        'If you both want to try, many couples do recover. It starts with honesty and time.'] },
       { k: 'links', x: [['Healing after hurt', '/book/understanding-11-healing-in-depth.html#hurt'], ['Forgiveness, and what it isn’t', '/book/understanding-11-healing-in-depth.html#forgiveness']] }],
       chips: [], kind: 'care', id: 'infidelity' };
   }
@@ -3062,19 +3059,19 @@
   function medsFirst(q, x) {
     if (!x || !x.blocks || x.kind === 'safety' || !MEDS_SWAP.test(norm(q))) return x;
     if (/don’t stop, cut down or swap/.test(JSON.stringify(x.blocks))) return x;
-    x.blocks = [{ k: 'p', x: 'First, the important part: please don’t stop, cut down or swap a prescribed medicine without talking to your prescriber. Stopping suddenly can cause withdrawal and bring symptoms back, and some herbs interact with medicines. Your doctor or pharmacist can help you plan any change safely.' }].concat(x.blocks);
+    x.blocks = [{ k: 'p', x: 'First, the important part: please don’t stop, cut down or swap a prescribed medicine suddenly. Stopping suddenly can cause withdrawal and bring symptoms back, and some herbs interact with medicines.' }].concat(x.blocks);
     return x;
   }
   function selfHarmfulReply(f) {
     var hurt = /\b(hit|hits|slap\w*|punch\w*|shov\w*|push\w*|grab\w*|threat\w*|kick\w*|choke\w*|throw|threw)\b/.test(f);
     var b = [{ k: 'p', x: 'It took courage to ask that, and asking it usually means you want to do better. Here’s an honest answer.' },
-      { k: 'p', x: 'Yelling now and then, followed by a real repair, is not the same as abuse. It becomes a safety issue if your family is afraid of you, if it comes with threats, name-calling, breaking or throwing things, or control, or if it happens most days. If someone flinched or went quiet around you, take that seriously: not as a verdict on you, but as a sign to get support now.' }];
+      { k: 'p', x: 'Yelling now and then, followed by a real repair, is not the same as abuse. It becomes a safety issue if your family is afraid of you, if it comes with threats, name-calling, breaking or throwing things, or control, or if it happens most days. If someone flinched or went quiet around you, take that seriously: not as a verdict on you, but as a sign to pause and make a calm-down plan now.' }];
     if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it has to stop.' });
     b.push({ k: 'list', x: ['In the moment: stop, step back, say “I’m getting too loud, I’m going to take a breath,” and breathe for a minute.',
       'Afterward, repair: “I scared you when I yelled. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
       'Write your triggers and first warning signs in the Calm-Down Kit, so you can catch it earlier.'] });
-    b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Getting help with anger', '/parents.html#anger-help'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] });
-    return { blocks: b, chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care' };
+    b.push({ k: 'links', x: [['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Calming your anger', '/parents.html#anger-help'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] });
+    return { blocks: b, chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Working on my anger', q: 'where can i find help for my anger' }], kind: 'care' };
   }
   var AMBIG = [
     ['interrupt', /\bignor\w* (me|us)\b/, /\b(talk\w*|speak\w*|said|say|says|finish|interrupt\w*|cut|cuts|meetings?|conversations?|listen\w*|ideas?|words?|heard|opinion)\b/,

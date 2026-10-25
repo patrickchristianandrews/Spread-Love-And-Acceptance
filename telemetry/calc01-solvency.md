@@ -63,7 +63,7 @@ Band boundaries are round numbers chosen for legibility. A 0.69 and a 0.70 are t
 | Both high | Workload is shared and owned, and friction is getting repaired. Keep going. |
 | Solvency high, apex low | Structure is fine, repair isn't happening. Friction is being absorbed rather than processed. The lever is WP-09, not the treaty. |
 | Solvency low, apex higher | Repairing well around a structure that keeps generating the need for repair. The lever is the treaty, not the scripts. |
-| Both low | Structure and repair both under water. Worth considering outside help rather than another worksheet. |
+| Both low | Structure and repair both under water. Worth stepping back rather than adding another worksheet. |
 
 ## Defined edge cases
 
