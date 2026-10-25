@@ -1837,7 +1837,7 @@
     if (!asked || !(asked === tn || (about && asked === about) || (asked.length > 12 && tn.indexOf(asked) === 0) || (m && /^(this|this page|the page)$/.test(asked)))) return null;
     var docs = KB.docs.filter(function (d) { return !d.tip && !d.g && d.u.split('#')[0] === u; });
     if (!docs.length) return null;
-    var intro = docs.filter(function (d) { return /^in short$/i.test(d.h); })[0] || docs.filter(function (d) { return /#main$/.test(d.u); })[0] || docs[0];
+    var intro = docs.filter(function (d) { return /^(in short|the short version)$/i.test(d.h); })[0] || docs.filter(function (d) { return /#main$/.test(d.u); })[0] || docs[0];
     var seen = {}, secs = [];
     docs.forEach(function (d, i) {
       var a = d.u.split('#')[1] || '';
@@ -1846,7 +1846,7 @@
       if (h && !/^(words you could use|more for your situation|go deeper|ask professor puddles)$/i.test(h)) secs.push({ h: h, i: KB.docs.indexOf(d) });
     });
     var pc = state.pageTopic && cardById(state.pageTopic.id);
-    var b = [{ k: 'p', x: 'Here’s what “' + title + '” covers, in short:' }, passageBlock(KB.docs.indexOf(intro), [])];
+    var b = [{ k: 'p', x: 'Here’s what “' + title + '” covers:' }, passageBlock(KB.docs.indexOf(intro), [])];
     if (secs.length) { b.push({ k: 'p', x: 'It has sections on:' }); b.push({ k: 'list', x: secs.slice(0, 8).map(function (x) { return x.h; }) }); }
     b.push({ k: 'p', x: 'Which part would you like? Or tell me what’s going on, in your own words.' });
     state.last = { kind: 'card', q: title, topic: title, u: u };

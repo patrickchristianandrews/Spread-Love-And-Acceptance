@@ -223,7 +223,7 @@
     });
     Array.prototype.forEach.call(document.querySelectorAll('main details:not([open]):not([data-ti-opened])'), function (d) {
       var s = d.querySelector('summary'); if (!s) return;
-      if (/what to do|steps|in short|words (you could|to) (use|say)|try this|say it/i.test(s.textContent || '')) { d.open = true; d.setAttribute('data-ti-opened', ''); }
+      if (/what to do|steps|in short|the short version|words (you could|to) (use|say)|try this|say it/i.test(s.textContent || '')) { d.open = true; d.setAttribute('data-ti-opened', ''); }
     });
   }
 

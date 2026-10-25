@@ -69,7 +69,12 @@
      "bytes": 912856
     }
    },
-   "pages_printed": 68
+   "pages_printed": 68,
+   "cover": {
+    "width_in": 17.4031,
+    "height_in": 11.25,
+    "spine_in": 0.1531
+   }
   },
   "coloring-older": {
    "title": "Color and Calm with Tidbit and Sugarfoot",
@@ -87,7 +92,12 @@
      "bytes": 2998172
     }
    },
-   "pages_printed": 68
+   "pages_printed": 68,
+   "cover": {
+    "width_in": 17.4031,
+    "height_in": 11.25,
+    "spine_in": 0.1531
+   }
   }
  }
 }

@@ -401,10 +401,74 @@ def build_book(kind):
     return rec
 
 
+CB = {'younger': C.load_json(os.path.join(C.MS, 'coloring-younger.json')), 'older': C.load_json(os.path.join(C.MS, 'coloring-older.json'))}
+
+
+def crayon(P, x, y, s, col, rot=0):
+    P.at(x, y, s, rot=rot)
+    P.rect(-5, -34, 10, 56, col, r=1)
+    P.path('M-5 -34 L0 -48 L5 -34Z', col)
+    P.rect(-5.4, -22, 10.8, 5, '#FFFDF5', r=0.5, kind='flat')
+    P.close()
+
+
+def make_cover(kind, pages):
+    younger = kind == 'younger'
+    book = CB[kind]
+    w, h = 8.5, 11.0
+    sp = C.spine_in(pages, 'white')
+    B = C.BLEED
+    Wt, Ht = 2 * B + 2 * w + sp, h + 2 * B
+    P = A.Pen('color', sw=4.0 if younger else 3.2)
+    U = 100
+    wu, hu = Wt * U, Ht * U
+    fx, bx = (B + w + sp) * U, B * U
+    gid = C.grad(P, 'cv', [(0, '#8FD0F0'), (0.6, '#FFF1D2'), (1, '#BFE6A0')] if younger else [(0, '#6A52A0'), (0.55, '#C9A8E0'), (1, '#FFE4C4')])
+    P.raw('<rect width="%s" height="%s" fill="url(#%s)"/>' % (f(wu), f(hu), gid))
+    cols = ['#E25C4F', '#F2C14E', '#6FB36A', '#4B9CD3', '#9C83D0', '#F08DA8']
+    if younger:
+        A.sun(P, fx + 110, 600, 66); A.sky_cloud(P, fx + 690, 560, 2.2)
+        P.raw('<path d="M0 %s C%s %s %s %s %s %s V%s H0Z" fill="#A9DB84"/>' % (f(hu * .78), f(wu * .3), f(hu * .7), f(wu * .7), f(hu * .84), f(wu), f(hu * .76), f(hu)))
+        A.sugarfoot_front(P, fx + 250, 1040, 6.4, 'happy', 'smile', heart_=True)
+        A.tidbit_front(P, fx + 600, 1040, 6.4, 'happy', 'w')
+        for i, c in enumerate(cols):
+            crayon(P, fx + 130 + i * 118, 1125, 1.5, c, rot=-12 + i * 5)
+        A.puddles(P, bx + 150, 1000, 2.8, 'smile'); A.hopper(P, bx + 300, 1040, 2.8, expr='happy'); A.beep(P, bx + 450, 1040, 2.6)
+    else:
+        A.mandala_flower(P, fx + 425, 640, 280, 4, 12)
+        for (x, y, r) in ((fx + 80, 360, 18), (fx + 780, 340, 20), (fx + 140, 900, 14), (bx + 120, 260, 16), (bx + 700, 300, 14)):
+            A.star(P, x, y, r, '#FBE9A0', 'flat')
+        A.pup_side(P, 'tidbit', fx + 250, 1035, 5.0, 'walk', 'happy', ph=0.5)
+        A.pup_side(P, 'sugarfoot', fx + 620, 1040, 5.0, 'walk', 'happy', ph=0.2, flip=True)
+        for i, c in enumerate(cols):
+            crayon(P, bx + 100 + i * 100, 1110, 1.3, c, rot=-10 + i * 5)
+    bg = C.svg_wrap(P, wu, hu, 'bg')
+    nm = book['title'].replace('Color and Calm with ', 'Color and Calm with<br>').replace('Color with ', 'Color with<br>')
+    front = ('<div style="position:absolute;left:.5in;right:.5in;top:.5in;text-align:center">'
+             '<div style="font:700 12pt Andika;letter-spacing:.12em;color:#3A3350">%s &middot; BOOK %d</div>'
+             '<div style="font:800 %dpt/0.98 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.6px #2F3566;paint-order:stroke fill;margin-top:.12in">%s</div>'
+             '<div style="font:700 14pt/1.3 Andika;color:#2F3566;margin:.16in auto 0;width:6.6in;background:rgba(255,253,245,.85);border-radius:.22in;padding:.08in .2in">%s</div></div>'
+             '<div style="position:absolute;left:0;right:0;bottom:.3in;text-align:center"><span style="display:inline-block;background:rgba(255,253,245,.92);border-radius:.2in;padding:.05in .3in;font:700 17pt Andika;color:#2F3566">%s</span></div>'
+             ) % (C.esc(book['ages'].upper()), book['series_no'], 52 if younger else 46, nm, C.esc(book['subtitle']), C.esc(C.AUTHOR))
+    back = ('<div style="position:absolute;left:.7in;right:.7in;top:.7in;font-size:14pt;line-height:1.45;background:rgba(255,253,245,.92);border-radius:.25in;padding:.28in .35in;border:2.5px solid #E8D5A2">'
+            '<div style="font:800 20pt Fraunces,serif;margin-bottom:.12in;color:#3A3350">%s</div>%s'
+            '<p style="margin:.14in 0 0;font-size:11.5pt;color:#4A4033">%s &middot; Free to read online at %s</p></div>') % (
+        'Pick up a crayon.' if younger else 'Take a calm minute.', ''.join('<p style="margin:0 0 .1in">%s</p>' % C.esc(x) for x in book['back_cover']), C.esc(book['ages']), C.SITE)
+    html, info = C.cover_doc(book['title'], (w, h), pages, 'white', bg, front, back, '')
+    ident = 'coloring-' + kind
+    C.write(os.path.join(C.SRC, 'cover-%s.html' % ident), html)
+    meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}
+    meta['books'][ident]['cover'] = info
+    C.write(os.path.join(C.OUT, 'kids.json'), json.dumps(meta, indent=1) + '\n')
+    print('%s cover: spine %s in, %s x %s in' % (ident, info['spine_in'], info['width_in'], info['height_in']))
+
+
 def main():
     which = sys.argv[1:] or ['younger', 'older']
     for k in which:
-        build_book(k)
+        rec = build_book(k)
+        pages = rec.get('pages_planned') or 68
+        make_cover(k, pages)
 
 
 if __name__ == '__main__':
