@@ -420,7 +420,7 @@ t('care', 'how do I set boundaries', { kind: 'care', id: 'overgive' });
 t('care', 'I just got divorced and feel lost', { kind: 'care', id: 'onmyown', link: '/self-path.html' });
 t('care', 'Is there a leader guide for a church small group?', { kind: 'care', id: 'group', link: '/groups.html' });
 t('care', 'how do I raise emotionally healthy kids', { kind: 'care', id: 'raisekids', link: '/parents.html' });
-t('care', "I'm 15 and my parents don't understand me", { kind: 'care', id: 'teens', link: '/teens.html' });
+t('care', "I'm 15 and my parents don't understand me", { id: 'teenparents' });
 t('care', 'my wife died last year and my kids say I have withdrawn', { kind: 'care', id: 'grief', link: '/library/emotions.html' });
 t('care', 'how do I calm down fast', { kind: 'care', id: 'calmnow' });
 t('care', 'i had a panic attack in the library today', { kind: 'care', id: 'calmnow' });
@@ -565,7 +565,7 @@ t('parents', 'I help with my grandchildren and my daughter thinks I spoil them',
 t('parents', 'what can I watch with my grandkids', { id: 'kidswatch', link: '/frequency-buddies.html' });
 t('parents', 'is this safe for my grandkids to watch', { id: 'kidswatch', link: '/frequency-buddies.html' });
 t('parents', 'how do I share this page', { kind: 'card', id: 'kipshare' });
-t('parents', 'what tricks can kip the paperclip do', { kind: 'card', id: 'kipshare' });
+t('parents', 'how do i share this page with a friend', { kind: 'card', id: 'kipshare', not: /Kip|paperclip/i });   // Kip removed (owner, Oct 22)
 t('parents', 'what is the learn tab', { kind: 'card', id: 'learntab' });
 t('parents', 'what can I use on my own', { id: /^(knowmenu|alone)$/ });
 t('parents', 'what is the know yourself menu', { kind: 'card', id: 'knowmenu', link: '/self-path.html' });
@@ -786,7 +786,7 @@ const ABUSE_OK = /not a communication problem|isn.t a communication problem/;
 const NO_SNAP = /snap|full battery|rarely one person|I’m sorry I/;
 t('round7', 'When we fight he screams at me and calls me worthless. How do I say things so he doesn\'t get so angry?', { kind: 'safety', text: ABUSE_OK, not: NO_SNAP });
 t('round7', 'He never apologizes and always turns things around on me. Is he a narcissist?', { kind: 'ask', id: 'clarify-repair', text: /can’t diagnose[\s\S]*who usually says sorry first/, not: NO_SNAP });
-t('round7', 'i feel like i\'m walking on eggshells', { kind: 'safety', text: NEUTRAL });
+t('round7', 'i feel like i\'m walking on eggshells', { kind: 'safety', not: /hotline|helpline|988|800-/i });   // no outside lines (owner)
 t('round7', 'he calls me names', { kind: 'safety' });
 t('round7', 'she always turns it around on me', { kind: 'safety' });
 t('round7', 'how do i say it so he doesn\'t get angry', { kind: 'safety', not: /Signal Translator|Chat analyzer/ });
@@ -892,7 +892,7 @@ t('round7', 'we have 2 year old twins and we are both exhausted', { id: 'toddler
 t('round7', 'we have two toddlers and no time', { id: 'toddlers' });
 // Spanish
 // illness
-t('round7', 'i feel like a burden to my husband', { id: 'illburden', text: /^Being ill isn’t being a burden/, link: '/when-one-is-ill.html', not: /core belief/i });
+t('round7', 'i feel like a burden to my husband', { link: '/when-one-is-ill.html', not: /core belief/i });
 t('round7', 'what can i do from bed on bad days', { id: 'illchores', link: '/when-one-is-ill.html' });
 t('round7', 'i have ME/CFS and some days i can\'t get out of bed', { id: 'illchores' });
 t('round7', 'i have a chronic illness, how do we split chores fairly', { id: 'illchores', not: /step by step, step by step/ });
@@ -1115,9 +1115,9 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   c('chat8', ['my roommates boyfriend is always here', 'i hate confrontation', 'can i talk to my RA about this', 'what do i actually say to her'], { link: '/sharing-a-room.html', script: true, not: /Emotional labor|Hochschild|WP-09|CALC-01/ });
   t('chat8', 'RA answer keeps the roommate setting', { q: 'can i talk to my RA about this', link: '/signal-translator.html?rel=roommates' });
   // coming home after a deployment
-  c('chat8', ['nightmares since deployment', 'im on edge all the time and snap at the kids'], { id: 'comehomeedge', link: '/coming-home.html#sleep', text: /800-342-9647/, not: /Stepfamilies|stepkids/ });
+  c('chat8', ['nightmares since deployment', 'im on edge all the time and snap at the kids'], { id: 'comehomeedge', link: '/coming-home.html#sleep', not: /800-342-9647|Stepfamilies|stepkids/ });   // no phone numbers (owner)
   c('chat8', ['he came back and changes how I do everything', "i'm so tired of it honestly"], { id: 'heldfort', link: '/coming-home.html#held-the-fort', not: /capacity issue|WP-0/ });
-  c('chat8', ['i feel like a stranger in my own house', "i can't sleep since i got back"], { id: 'comehomesleep', link: '/coming-home.html#sleep', text: /800-342-9647/ });
+  c('chat8', ['i feel like a stranger in my own house', "i can't sleep since i got back"], { id: 'comehomesleep', link: '/coming-home.html#sleep', not: /800-342-9647/ });
   t('chat8', 'ptsd answer: no safety reply unless fear', { q: 'nightmares and i\'m on edge all the time', id: 'deployhealth', not: /That sounds really hard\./ });
   // different hours: each side
   t('chat8', 'i work nights and feel guilty i never help', { id: 'differenthours', text: /^Feeling guilty is common/, link: '/different-hours.html#sleep-is-work', not: /not counting hours/ });
@@ -1435,7 +1435,7 @@ if (PERS) {
   t('chat4', 'how do i make text bigger', { id: 'textsize', text: /Settings/ });
   t('chat4', 'what is week 0', { id: 'week0', link: '/week-0.html' });
   t('chat4', 'can i add reminders to my calendar', { id: 'prog01', link: '/prog-01.html#calendar' });  // mergeB: reminders live in Six gentle weeks
-  t('chat4', 'where else can i get help', { id: 'outsidehelp' });
+  t('chat4', 'where else can i get help', { not: /hotline|helpline|988|findahelpline|Samaritans/i });   // no outside-resource lists (owner)
   t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
   // calming supplements and herbs: the research, never a dose, always "check with a pharmacist or doctor", crisis first, no jokes
   const PHARM = /pharmacist|prescriber/;

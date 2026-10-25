@@ -9,7 +9,7 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v152';
+var VERSION = 'tol-v155';
 // A first visit saves only this small shell (so the offline page works). The full list below is saved only
 // once the site is installed as an app (site.js asks for it), so a visitor on a metered plan never
 // downloads megabytes they didn't ask for. Everything else is saved the first time it's used.
@@ -29,7 +29,7 @@ var CORE = [
   '/journeys.html', '/assets/js/journeys.js', '/assets/css/journeys.css', '/after-a-breakup.html', '/assets/js/remind.js',
   '/assets/js/conversation-reader-engine.js', '/assets/js/conversation-reader.js', '/assets/js/conversation-reader-ocr.js',
   '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
-  '/wavelength.html', '/assets/js/wavelength.js', '/assets/js/come-back.js', '/assets/css/come-back.css', '/assets/js/share-clip.js', '/assets/js/pick-up.js', '/growing-up.html', '/assets/js/roots.js', '/assets/js/lemonade-calc.js',
+  '/wavelength.html', '/assets/js/wavelength.js', '/assets/js/come-back.js', '/assets/css/come-back.css', '/assets/js/pick-up.js', '/growing-up.html', '/assets/js/roots.js', '/assets/js/lemonade-calc.js',
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js', '/assets/js/buddies-suggest.js',
   '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/assets/icons/icon-maskable-192.png', '/assets/icons/icon-maskable-512.png', '/assets/icons/apple-touch-icon-180.png', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/manifest.webmanifest',
   '/assets/css/book-series.css', '/assets/js/book-shop.js', '/workpapers/fill/wpf-print.js',

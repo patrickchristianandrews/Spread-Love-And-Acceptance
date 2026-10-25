@@ -79,7 +79,7 @@
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
     'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-lang', 'tol-save-tip', 'tol-dive-hint', 'tol-save-how', 'tol-sfx', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', 'tol-save-tip', 'tol-dive-hint', 'tol-save-how', 'tol-sfx', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
