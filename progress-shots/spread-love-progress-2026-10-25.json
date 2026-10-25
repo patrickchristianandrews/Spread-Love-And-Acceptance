@@ -1,0 +1,20 @@
+{
+ "format": "spread-love-progress",
+ "version": 1,
+ "created": "2026-10-25T01:39:41.433Z",
+ "site": "spreadloveandacceptance.com",
+ "encrypted": true,
+ "note": "Locked with a password. Open it on spreadloveandacceptance.com/on-this-device.html to restore.",
+ "kdf": {
+  "name": "PBKDF2",
+  "hash": "SHA-256",
+  "iterations": 310000,
+  "salt": "qoLvfzIHNpubqDrsfJmzhQ=="
+ },
+ "cipher": {
+  "name": "AES-GCM",
+  "bits": 256,
+  "iv": "CJfrHnHFchDQn/HI"
+ },
+ "data": "PgXL7tT2F3sHMG4Xo3N2d1RnoDI5aimu3uqJiAcHEg+dAXVYuszJijpTjUWKRa+FICo/0RyQQGS+adAnm/kepp5t+RL2G2EoCzAt3oJG+au16n9KbMfZas6C0NdhLfVA5rag+8TO7GOV1BixpQhxjto9stkejXN/j1DIDC0ycznnZN5oW2eK8tMggTZfex+N68lZUxhlCHizmKHmLOVjTqab+R4JAgaN6rdNaKCvAMb1jizF3P8NAx5XreJodcBSOuHPq+Mq0ZGE7yLA366VusvbIa0cCJHOVEuRocFRP0yH+bbgzfQ6M2yPx0m7Sx7qhpA+DkAmBzWFEl2K+hohw8JxrgLt5iQjOLYNLJOLVBUDWECGN1E2KKQEFvkL3KDK7zbNh1LPr015hEwnFQhGQ8tqunelVrvavVKw2K4A1O83l3pjDQGOKVYJMJ5O+IaOEeeFRjDSU+xwIu3Gw5d1C3yOrgVdhiEi1qJ6fPGcQlQk0fDUZQhOO17OKjh6xbDBeh+Av00fIMTls4AOTmDzEhXYN4yyzYCq3fze+B0o2lsPG4yriEVrj80lZUctMwU2mJun4yD+B/PWkt8wGjHsIjSiPyMfTAwNGm0eHBr2mO4s3nM73+Q5MNSp8iJeSPhWuSE4yO81RV/z5X1MhX3mRcmgNON6vgD7BnJJ5hJAVFwhL2H3uWw7dlI56WGJyc97tPXOGfWrhRntRHRqTUNdvDuoqFOYK6JwF0n16POhC4KZGI3U7l7Nn8kFJVnevEqlOc2bVXaEaiCefSDt6gpy3ILS5DW45lrcLW8XbZk67ovx/FWnzY1R1rDlvExlkPDcMx7/1Ldx1EXVfLPyZVTzgD+u4iqDzsKc3edXI5mBJ6AbywPlbJx9uMTDFS89jP3u+2Zji8uwdcd4LQaVheP1U83ifmqMmsYYX65DG7i5hvbe4VRjuTH7uBEs9saXEh+Yz0CBe6fAnAh3XvvLGFPq9+8HvAl/fyaLmyvq3uKc4tVmEvScde0x1j2hpKGjc3Kwt9oUt2tMFwic5IUUSzwd2Q2KG5uMnlwr5Q5wpdwreT7kkXz7dUI7kK+Vcc0De9STmF7y+by2Y52Hi/t0eBM/SctICKyxHi98jiGdP6ewP/wLneNfnhDrVTH30CULREpMgYBL16BKBE29SyrSyJUsj7l/+2nCSTsTyIErqnYdhFbQwIgv/YuWWyZT0ndG/9e4cXFBsFlZNretxCVPQ0JEpgl377Mc/H92pOLXBGCLUjut3WXV6h/KXj2jH0ujs2EDMv7lU0Ey1ZlaE59pCWr2od5mVann/VShbVGK3ptBBSg9iJpNIgG3nOWrK+Jz12O6UoMoDWtW5h9AnVEdFgQKn/BykR3z3hAN0JTj//9ruDV/KZ6P3z31/iI7737IxE/+FWnbjAxEgGo1mJO0/flEBzPHLPMahdU4vgmmRpgiA55zcWZO+yiKMPdCNXAwRvU5l2Alju9OUkRP8BK2Cx4Zu47OAzVEPqzumNLaNeaDuOqYmIZBxube/AgbazsFKYlENMil1F4zgt37RsHVQEpo/ULb5LwLdTKys39tz478fums+073bcQRwS39f9F1mC9/ORk+sXZrxRO1K2EXu9yXajb4yKfnGXSij2oRLH37LUbhRSHpFPcTpA=="
+}
