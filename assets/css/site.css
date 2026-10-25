@@ -3405,3 +3405,48 @@ html:not([data-theme="light"]):not(.tol-nodark) main .sh-first > li.is-main{ bac
 .tol-set-lock{ margin:.3rem 0 .6rem; line-height:1.5; }
 .tol-set-lock a{ display:inline-flex; align-items:center; min-height:44px; font-weight:700; color:var(--focus, #2B5B8C); text-underline-offset:3px; }
 .tol-set-lock small{ display:block; color:var(--ink-soft); font-size:.88rem; }
+
+/* ---------- menu23: each area opens as one panel with all of its lists showing, in columns ---------- */
+.tol-bar .tol-drop.is-mega{ max-width:none; min-width:0; padding:1rem 1.2rem .4rem; }
+.tol-mega-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:.3rem 1.2rem; padding:0 .2rem .75rem; margin-bottom:.8rem; border-bottom:1px solid var(--line); }
+.tol-mega-blurb{ margin:0; flex:1 1 22rem; font-size:.92rem; line-height:1.45; color:var(--ink-soft); }
+.tol-bar .tol-drop a.tol-mega-all, .tol-panel a.tol-mega-all{ display:inline-flex; padding:.35rem 0; font-weight:600; font-size:.95rem; color:var(--focus, #2B5B8C); text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+.tol-mega-cols{ columns:var(--cols, 4); column-gap:1.4rem; }
+.tol-mega-cols[data-n="1"]{ --cols:1; } .tol-mega-cols[data-n="2"]{ --cols:2; } .tol-mega-cols[data-n="3"]{ --cols:3; }
+.tol-mega-sec{ min-width:0; break-inside:avoid; margin:0 0 1rem; }
+.tol-mega-h{ margin:0 0 .3rem; padding:0 .5rem; font:600 .74rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase; color:var(--brass-ink, #7A5620); }
+.tol-mega-list{ list-style:none; margin:0; padding:0; }
+.tol-mega-list li{ margin:0; }
+.tol-bar .tol-drop a.tol-mega-a{ display:block; min-height:0; padding:.3rem .5rem; font-size:.95rem; line-height:1.3; border-radius:6px; }
+.tol-bar .tol-drop a.tol-mega-a:hover, .tol-bar .tol-drop a.tol-mega-a:focus-visible{ background:var(--paper-deep); }
+.tol-bar .tol-drop .tol-mega-a .tol-mi-n{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.tol-mega-more .tol-mi-t{ font-weight:600; color:var(--focus, #2B5B8C); font-size:.9rem; }
+.tol-mega-foot{ margin-top:.8rem; padding:.6rem .2rem 0; border-top:1px solid var(--line); }
+.tol-mega-note{ position:sticky; bottom:-.4rem; margin:.8rem -1.2rem -.4rem; padding:.55rem 1.4rem .6rem; min-height:1.2em; background:var(--paper-deep); border-top:1px solid var(--line);
+  font-size:.86rem; line-height:1.4; color:var(--ink-soft); font-style:italic; }
+.tol-mega-note.is-on{ color:var(--ink); font-style:normal; }
+.tol-drop.is-mega .tol-drop-more{ display:none !important; }
+/* the Menu panel (phones): the area you open shows all its lists, one under another, each page with its note */
+.tol-panel .tol-mega.is-panel{ padding:.1rem 0 .9rem; }
+.tol-mega-all-p{ margin:0 0 .4rem; }
+.tol-panel .tol-mega.is-panel .tol-mega-cols{ display:block; }
+.tol-panel .tol-mega.is-panel .tol-mega-sec{ margin:0 0 .9rem; }
+.tol-panel .tol-mega.is-panel .tol-mega-h{ padding:.35rem 0 .25rem; margin:0; border-bottom:1px solid var(--line); }
+.tol-panel a.tol-mega-a{ display:block; padding:.55rem .2rem; min-height:44px; box-sizing:border-box; color:var(--ink); text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+.tol-panel a.tol-mega-a:hover{ background:var(--paper-deep); }
+.tol-panel a.tol-mega-a .tol-mi-t{ display:block; font-weight:600; font-size:1rem; line-height:1.3; }
+.tol-panel a.tol-mega-a .tol-mi-n{ display:block; margin-top:.1rem; font-size:.84rem; line-height:1.35; color:var(--ink-soft); }
+@media (forced-colors: active){ .tol-mega-note{ background:Canvas; } }
+.tol-panel .tol-mega.is-panel .tol-mega-cols{ columns:auto; }
+/* menu23: on a laptop, Quiet and Save show just their pictures so all seven areas fit in the bar */
+@media (min-width:981px) and (max-width:1440px){
+  .tol-bar .tol-bar-quiet > span, .tol-bar .tol-save-btn .tol-save-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .tol-bar .tol-bar-quiet, .tol-bar .tol-save-btn{ padding-left:.6rem; padding-right:.6rem; }
+}
+@media (min-width:981px) and (max-width:1366px){
+  .tol-bar{ gap:.4rem; }
+  .tol-sections .tol-nav-item > button{ padding:.45rem .3rem; font-size:.87rem; }
+  .tol-nav-item > button::after{ margin-left:.2em; }
+  .tol-bar a.tol-es-link{ padding:.45rem .4rem; font-size:.92rem; }
+  .tol-brand{ font-size:.92rem; }
+}
