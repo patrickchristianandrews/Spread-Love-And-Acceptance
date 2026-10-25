@@ -1918,7 +1918,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '25 Oct · 1'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '25 Oct · 2'; // shown under the player, so we can tell which version a browser has
   var REC = '2610v'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -2024,10 +2024,10 @@
   // =====================================================================================================
   var KEY = 'tol-buddies-v1';
   // each episode as a video to download and watch offline (sizes in MB)
-  var DOWNLOADS = { s1e1: 19, s1e2: 20, s1e3: 18, s1e4: 19, s1e5: 17 };
+  var DOWNLOADS = { s1e1: 19, s1e2: 20, s1e3: 18, s1e4: 19, s1e5: 17, s2e1: 24, s2e2: 21, s2e3: 19 };
   // the same videos' lengths in seconds (theme song, episode, credits), for "Watch on your TV" (tv-cast.js):
   // the TV starts at the moment showing here
-  var VDUR = { s1e1: 905.05, s1e2: 886.47, s1e3: 870.93, s1e4: 875.36, s1e5: 906.98 };
+  var VDUR = { s1e1: 905.05, s1e2: 886.47, s1e3: 870.93, s1e4: 875.36, s1e5: 906.98, s2e1: 809.41, s2e2: 786.21, s2e3: 759.09 };
   var POSTERS = { 1: '/assets/img/frequency-buddies-season-1.jpg', 2: '/assets/img/frequency-buddies-season-2-teaser.jpg' };
   // tv-cast.js is loaded once, when a player is set up, so the button is ready before anyone taps it
   function withTv(cb) {
