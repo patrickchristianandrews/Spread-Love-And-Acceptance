@@ -160,9 +160,9 @@ def series_links(body, slug, namer, xref_add):
             return '<a%s>%s</a>%s' % (new_attrs, new_text, note)
         # a link that names the chapter by its title: add where it is (an ebook keeps the name, without the page)
         if in_here:
-            note = '<span class="pe-only pe-xref">%s</span>' % ((', %s, page %s' + tail if inner else ' (%s, page %s)') % (lab, page))
+            note = '<span class="pe-only pe-xref">%s</span>' % ((', %s, page %s' + tail if inner else ' (%s, page %s)') % ('<span class="pe-keep">%s</span>' % lab, page))
         else:
-            note = (', %s%s' + tail if inner else ' (%s%s)') % (lab, ('<span class="pe-only">, page %s</span>' % page) if page else '')
+            note = (', %s%s' + tail if inner else ' (%s%s)') % ('<span class="pe-keep">%s</span>' % lab, ('<span class="pe-only">, page %s</span>' % page) if page else '')  # book20: keep "Book 2, Chapter 7" on one line
         return '<a%s>%s</a>%s' % (new_attrs, text, note)
     return LINK_RE.sub(sub, body)
 

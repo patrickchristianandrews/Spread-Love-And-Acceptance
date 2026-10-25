@@ -900,7 +900,7 @@
     var I = {
       mpad: function (t, m, len, vol) { [[0, 'triangle', 0.5], [5, 'sine', 0.7]].forEach(function (v) { var o = osc(v[1], hz(m), t, t + len + 1.8), gn = gainTo(mus); o.detune.value = v[0]; var pk = vol * v[2]; gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(pk, t + Math.min(1.4, len * 0.35)); gn.gain.setValueAtTime(pk, t + len * 0.75); gn.gain.linearRampToValueAtTime(0.0001, t + len + 1.6); o.connect(gn); }); },
       mpluck: function (t, m, vol) { var o = osc('sine', hz(m), t, t + 1), gn = gainTo(mus); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.02); gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.9); o.connect(gn); },
-      amb: function (t, name, len, vol) { var b = BUF['amb:' + name]; if (!b) return; var sN = src(c.createBufferSource()), gn = gainTo(amb); sN.buffer = b; sN.loop = true; sN.connect(gn); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.6); gn.gain.setValueAtTime(vol, t + Math.max(0.6, len - 0.7)); gn.gain.linearRampToValueAtTime(0.0001, t + len); sN.start(t, (name.length * 1.7) % Math.max(1, b.duration - 1)); sN.stop(t + len + 0.1); },
+      amb: function (t, name, len, vol) { var b = BUF['amb:' + name]; if (!b) return; var sN = src(c.createBufferSource()), gn = gainTo(amb); sN.buffer = b; sN.loop = true; if (name === 'fire') { var lpA = c.createBiquadFilter(), lpB = c.createBiquadFilter(); lpA.type = lpB.type = 'lowpass'; lpA.frequency.value = lpB.frequency.value = 1400; lpA.Q.value = lpB.Q.value = 0.5; sN.connect(lpA); lpA.connect(lpB); lpB.connect(gn); } else sN.connect(gn); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.6); gn.gain.setValueAtTime(vol, t + Math.max(0.6, len - 0.7)); gn.gain.linearRampToValueAtTime(0.0001, t + len); sN.start(t, (name.length * 1.7) % Math.max(1, b.duration - 1)); sN.stop(t + len + 0.1); },
       pad: function (t, notes, len, vol) { notes.forEach(function (m) { [[-7, 'triangle', 0.5], [6, 'sine', 0.7]].forEach(function (v) { var o = osc(v[1], hz(m), t, t + len + 2.2), gn = gainTo(); o.detune.value = v[0]; env(gn, t, Math.min(1.6, len * 0.35), vol * v[2], len * 0.55, 1.8); o.connect(gn); }); }); },
       bass: function (t, m, len, vol) { var o = osc('triangle', hz(m), t, t + len + 0.4), gn = gainTo(); env(gn, t, 0.01, vol, len * 0.4, len * 0.5); o.connect(gn); var o2 = osc('sine', hz(m - 12), t, t + len + 0.4), g2 = gainTo(); env(g2, t, 0.01, vol * 0.8, len * 0.4, len * 0.5); o2.connect(g2); },
       pluck: function (t, m, vol) { var o = osc('triangle', hz(m), t, t + 0.8), gn = gainTo(); env(gn, t, 0.005, vol, 0.01, 0.5); o.connect(gn); },
@@ -1260,7 +1260,7 @@
     function preloadClips() { clipsLoad().then(function (m) { if (A.ctx) Object.keys(m).forEach(clipBuf); }); }   // every recorded line is ready before its moment, so the voices land on time
     function playClip(key) {
       var c = A.ctx; if (!c) return false;
-      var go = function (buf) { if (!buf || !P.playing) return; var s2 = c.createBufferSource(), gn = c.createGain(); s2.buffer = buf; gn.gain.value = 1.0; s2.connect(gn); gn.connect(c.destination); duck(true); s2.onended = function () { duck(false); }; s2.start(); A.live.push(s2); };
+      var go = function (buf) { if (!buf || !P.playing) return; var s2 = c.createBufferSource(), gn = c.createGain(); s2.buffer = buf; gn.gain.value = 0.85; s2.connect(gn); gn.connect(c.destination); duck(true); s2.onended = function () { duck(false); }; s2.start(); A.live.push(s2); };
       clipBuf(key).then(go); return true;
     }
     function speakNow() {
@@ -1469,7 +1469,7 @@
     })]).then(function () {
       var bus = makeChain(c, c.destination), I = kit(c, bus, function () {});
       score(!!calm).forEach(function (e) { fire(I, e, e[0]); });
-      scanLines(!!calm).forEach(function (ln) { var b = CB[ckey(ln.who === 'narr' ? 'narr' : ln.who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', ln.text)]; if (!b) return; var s2 = c.createBufferSource(), gn = c.createGain(); s2.buffer = b; gn.gain.value = 1.0; s2.connect(gn); gn.connect(c.destination); s2.start(ln.T + 0.04); });
+      scanLines(!!calm).forEach(function (ln) { var b = CB[ckey(ln.who === 'narr' ? 'narr' : ln.who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', ln.text)]; if (!b) return; var s2 = c.createBufferSource(), gn = c.createGain(); s2.buffer = b; gn.gain.value = 0.85; s2.connect(gn); gn.connect(c.destination); s2.start(ln.T + 0.04); });
       return c.startRendering();
     }).then(function (buf) {
       var n = buf.length, L = buf.getChannelData(0), R = buf.getChannelData(1), out = new DataView(new ArrayBuffer(44 + n * 4)), s = function (o, str) { for (var i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };

@@ -298,3 +298,4 @@ body { font-size: 11pt; line-height: 1.55; }
 
 /* book20: the one plain care line in the back matter (Books 1 to 3) */
 .ps-care-line { font-size: 0.9em; margin-top: 1.4em; }
+.pe-keep { white-space: nowrap; }

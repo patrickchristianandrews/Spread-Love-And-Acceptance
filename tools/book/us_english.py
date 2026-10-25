@@ -317,8 +317,19 @@ P = [
     (r'\b(second|two|three|four|five|six) (weeks?|days?|nights?|months?|times?) running\b', r'\1 \2 in a row'), (r'\bstopped him getting on\b', 'kept him from getting on'),
     (r'\bslept on the settee and had stopped answering the phone to his friends\b', 'slept on the couch and had stopped answering his friends’ calls'), (r'\bsettee\b', 'couch'),
     (r'\bgetting properly cross\b', 'getting really frustrated'), (r'\bI’ll come and get you at five to\b', 'I’ll come and get you in five minutes'), (r'\bcomes round\b', 'comes around'),
-    (r'\bcrosser\b', 'angrier'), (r'“I’ve a different view\b', '“I have a different view'), (r'\bthe only reason she turns up\b', 'the only reason she shows up'),
+    (r'\bWhen one of you is sick\b(?! or)', 'When one of you is sick or disabled'), (r'\bcrosser\b', 'angrier'), (r'“I’ve a different view\b', '“I have a different view'), (r'\bthe only reason she turns up\b', 'the only reason she shows up'),
     (r'\bbites his head off, properly,', 'bites his head off,'), (r'\bshop door\b', 'store door'), (r'\bnight-time\b', 'nighttime'), (r'\b([Ss])tep-parent', r'\1tepparent'),
+    # book20, bookqa20 round 3: shop, round, cross, tea (meal), tick
+    (r'\bhardware shop\b', 'hardware store'), (r'\bgoing to the shop\b', 'going to the store'), (r'\bOnline shop, ', 'Online grocery order, '), (r'\b([Bb])ig food shop\b', r'\1ig grocery run'),
+    (r'\bSaturday’s shop\b', 'Saturday’s grocery run'), (r'\bthe Sunday shop\b', 'the Sunday grocery run'), (r'\bin a shop\b', 'in a store'), (r'\bthe noisy shop\b', 'the noisy store'), (r'\bfood shop\b', 'grocery run'),
+    (r'\bthe jobs round people’s\b', 'the jobs around people’s'), (r'\bgoing round\b', 'going around'), (r'\btalking it round\b', 'talking it through'), (r'\bdrop dinner round\b', 'drop dinner off'),
+    (r'\bbuilt round\b', 'built around'), (r'\bthe other way round\b', 'the other way around'),
+    (r'\bI’m too cross to\b', 'I’m too angry to'), (r'\btired, cross message\b', 'tired, irritated message'), (r'\bextra close or cross\b', 'extra close or cranky'),
+    (r'\bAfter tea, at\b', 'After dinner, at'), (r'\bFriday tea together\b', 'Friday dinner together'), (r'\bTick the ones\b', 'Check the ones'), (r'\bThe cross goes next to\b', 'The ✗ goes next to'),
+    (r'\bwith the sums laid out\b', 'with the math laid out'),
+    (r'\bTick a job\b', 'Check off a job'), (r'\beach ticked job\b', 'each checked job'), (r'\bif you tick\b', 'if you check'), (r'\bcan tick off\b', 'can check off'), (r'\btick off\b', 'check off'),
+    (r'\b([Tt])ick\b(?= (the|a|each|every|one|it|them|this|that|your|any|whichever|what|which|yes|no|“))', lambda m: ('C' if m.group(1) == 'T' else 'c') + 'heck'), (r'\bticked\b', 'checked'),
+    (r'\bgoes round and round\b', 'goes around and around'), (r'\bround and round\b', 'around and around'), (r'\band round again\b', 'and around again'), (r'^round again\b', 'around again'), (r'\bslightly better tea\b', 'slightly better dinner'),
 ]
 
 

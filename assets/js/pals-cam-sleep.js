@@ -228,13 +228,14 @@
   function walk(p, ev, u, t0, t1, xa, xb, stepKey) {
     if (u < t0 || u > t1) return false;
     var q = sio(seg(u, t0, t1)); p.x = mix(xa, xb, q); p.pose = 'run'; p.face = xb >= xa ? 1 : -1; p.ph = (u - t0) * 6.5 / ev.k; p.lift = Math.abs(Math.sin(p.ph)) * 1.2;
+    p.y = -7 * Math.sin(Math.PI * q); // she goes round behind her sleeping pal, not through her
     var step = Math.floor((u - t0) * 2.1 / ev.k); if (once(ev, stepKey + step)) SFX.step();
     return true;
   }
   function runEvent(dt) {
     var ev = S.ev; if (!ev) return;
     var p = PALS[ev.who], o = PALS[ev.who === 'tidbit' ? 'sugarfoot' : 'tidbit'], u = (S.T - ev.t0) / ev.k, hx = homeX(p);
-    p.asleep = true; p.pose = 'lie'; p.rot = 0; p.lift = 0; p.side = false; p.tilt = 0; p.carry = false; p.x = hx; p.sy = 1; p.blink = true;
+    p.asleep = true; p.pose = 'lie'; p.rot = 0; p.lift = 0; p.side = false; p.tilt = 0; p.carry = false; p.x = hx; p.y = 0; p.sy = 1; p.blink = true;
     var fridgeX = S.cx + S.lay.fridge - 8, bowlX = S.cx + S.lay.bowl, couchX = S.cx + S.lay.couch + 96;
     switch (ev.type) {
       case 'fridge': {
