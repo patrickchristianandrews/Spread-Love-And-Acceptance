@@ -625,6 +625,7 @@
       { sub: 'Ways to read', area: 'read', all: '/book/download.html', allLabel: 'Books and downloads' },
       { href: '/book/topic-start-here.html', title: 'The book at a glance', note: 'Where to start, on your own or with others' },
       { href: '/book/download.html', title: 'Books, PDFs and downloads', note: 'Every book, PDF, worksheet, video and song in one place' },
+      { href: '/book/download.html#kids', title: 'Books for kids', note: 'A picture book, a chapter book and two coloring books' },
       { href: '/book/whole.html', title: 'The whole book on one page', note: 'Every part and chapter, to read straight through or print' },
       { href: '/book/for-yourself.html', title: 'The book for one person', note: 'Part One and the chapters for reading on your own' },
       { href: '/book/together.html', title: 'The book for two or more', note: 'The chapters for couples, families and roommates' },
