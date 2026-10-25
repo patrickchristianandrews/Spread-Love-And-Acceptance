@@ -718,7 +718,7 @@
   function workKept() { try { return localStorage.getItem('tol-work-keep') === '1'; } catch (e) { return false; } }
   // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
   // the honest limits, "is this for you?" and the page for someone who was sent a link.
-  var PLAIN = /^\/(grief|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|calming-supplements|nervous-system|for-counselors)\.html$/;
+  var PLAIN = /^\/(grief|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|calm-without-pills|calming-supplements|nervous-system|for-counselors)\.html$/;
   // Working pages (the tools and worksheets) are a calm workspace: no moving garden, pups or drifting bubbles beside a form.
   // The soft colour wash stays. Calm and play pages keep their garden.
   var WORKSPACE = /^\/(lemonade-stand|signal-translator|conversation-reader|carrier-wave-decoder|wiring-card|wavelength|quick-checks|chore-chart-for-couples|pursue-withdraw|family-obligations)\.html$|^\/workpapers\/|^\/wp-11(-in-depth)?\.html$|^\/tools\//;
@@ -1988,7 +1988,7 @@
     // nav21: the renamed reading pages (Psychology in plain words, once the Professor's Library; Philosophy for everyday life)
     library: ['/library.html', '/learn/index.html', '/research.html'], psychology: 'library', philosophy: ['/learn/index.html', '/library.html'], philosophers: 'philosophy',
     support: ['/support-languages.html', '/languages-of-connection.html'], supported: 'support', supportive: 'support', comfort: 'support', comforting: 'support',
-    supplement: ['/calming-supplements.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
+    supplement: ['/calm-without-pills.html#supplements-note'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', nintendo: 'gaming', fortnite: 'gaming', minecraft: 'gaming', esports: 'gaming', screentime: 'gaming', tiktok: 'gaming', scrolling: 'gaming', doomscrolling: 'gaming',
     coparenting: ['/co-parenting.html', '/on-my-own.html', '/parents.html#stepfamilies'], 'co-parenting': 'coparenting', 'co-parent': 'coparenting', 'co-parents': 'coparenting', coparent: 'coparenting', coparents: 'coparenting', custody: 'coparenting', handoff: 'coparenting', handoffs: 'coparenting', 'ex-husband': 'exbreak', 'ex-wife': 'exbreak', 'ex-partner': 'exbreak', ex: 'exbreak', exes: 'exbreak',
     exbreak: ['/after-a-breakup.html', '/on-my-own.html', '/co-parenting.html'], holidayschedule: 'coparenting', separated: 'coparenting', separation: 'coparenting',
@@ -2185,8 +2185,8 @@
     nightmare: 'r13homesleep', nightmares: 'r13homesleep', hypervigilant: 'r13homesleep',
     r13apart: ['/empty-nest.html', '/complacency.html', '/turning-toward.html', '/bonding.html'],
     r13longhours: ['/different-hours.html#long-days', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
-    anxiety: ['#breathe', '/calming-supplements.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
-    r13herbs: ['/calming-supplements.html', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
+    anxiety: ['#breathe', '/calm-without-pills.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
+    r13herbs: ['/calm-without-pills.html#supplements-note', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
     r13feelings: ['/book/understanding-1-feelings.html#not-brought-up', '/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
     handoffbag: ['/co-parenting.html#handoff-bag', '/workpapers/fill/wp-03.html?for=coparents', '/co-parenting.html'],
     r13fun: ['/bonding.html#ideas', '/gaming-and-time-together.html', '/turning-toward.html', '/pause-and-play.html'],
@@ -2224,7 +2224,7 @@
     checkin: ['/workpapers/wp-13-daily-check-in.html', '/check-ins.html', '/quick-checks.html'], 'check-in': 'checkin',
     energy: 'weather', tracker: 'weather', pause: ['/pursue-withdraw.html', '/upset-right-now.html', '/wp-11.html'], timeout: 'pause',
     // supplements and the nervous system (supp9)
-    calming: ['/calming-supplements.html', '/nervous-system.html', '/upset-right-now.html', '/night-garden.html'],
+    calming: ['/calm-without-pills.html', '/nervous-system.html', '/upset-right-now.html', '/night-garden.html'],
     '5-htp': 'supplement', tryptophan: 'supplement', iron: 'supplement', ginkgo: 'supplement', ginseng: 'supplement', hops: 'supplement', kanna: 'supplement', sceletium: 'supplement', skullcap: 'supplement',
     'black-cohosh': 'supplement', chasteberry: 'supplement', creatine: 'supplement', 'lions-mane': 'supplement', bacopa: 'supplement', 'weighted-blanket': 'supplement', 'light-therapy': 'supplement', vitamins: 'supplement', vitamin: 'supplement', remedies: 'supplement', remedy: 'supplement',
     'nervous-system': ['/nervous-system.html', '/ladder.html'], nervous: 'nervous-system', vagus: 'nervous-system', polyvagal: 'nervous-system', 'fight-or-flight': 'nervous-system', freeze: 'nervous-system', fawn: 'nervous-system',
@@ -3284,7 +3284,7 @@
     [/^\/(parents|grandparents|grown-up-children|foster-and-kinship|family-rifts|adhd-kids|co-parenting|family-obligations|on-my-own|caregivers|coming-out)\.html$/, ['family', 'talking', 'calm', 'selftalk']],
     [/^\/(work|appreciation-at-work|wiring-card|groups)\.html$/, ['work', 'talking', 'focus']],
     [/^\/(sharing-a-room|share-the-load|lemonade-stand|chore-chart-for-couples|invisible-labor-mental-load)\.html$/, ['home', 'talking', 'calm']],
-    [/^\/(calming-supplements|nervous-system|ladder|upset-right-now|wp-11|soundscapes)\.html$/, ['calm', 'body', 'sleep', 'rest']],
+    [/^\/(calm-without-pills|calming-supplements|nervous-system|ladder|upset-right-now|wp-11|soundscapes)\.html$/, ['calm', 'body', 'sleep', 'rest']],
     [/^\/grief\.html$/, ['selftalk', 'rest', 'body']]
   ];
   var tipLib = null, tipWaiting = [];

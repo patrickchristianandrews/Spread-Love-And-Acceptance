@@ -1,0 +1,115 @@
+/* this-week.css: "This week" (this-week.js, /this-week.html, the home page block) and the one-line "Add today to your week".
+   Light colors only: the site's dark mode turns the whole page (site.css), so these follow it. Calm cards, one accent
+   (the home page blue), 44px targets, no motion beyond a color change. */
+.tw-card, .tw-back, .tw-page, .tw-line{
+  --tw-ink:#2B2620; --tw-muted:#554E42; --tw-acc:#2B5B8C; --tw-acc-h:#214A72; --tw-soft:#EEF3F9; --tw-paper:#FFFDF8; --tw-line:#E4D9BE; --tw-green:#3E6B4C;
+  --tw-ui:var(--d17-ui, var(--tol-sans, "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif));
+  --tw-head:"Fraunces", Georgia, serif; --tw-read:"Lora", Georgia, serif;
+}
+.tw-card *, .tw-back *, .tw-page *{ box-sizing:border-box; }
+
+/* ---------- the card ---------- */
+html body .tw-card, html body .tw-back{ max-width:44rem; margin:0; padding:1rem 1.05rem 1rem; border-radius:20px; background:var(--tw-paper); border:1px solid var(--tw-line); color:var(--tw-ink); text-align:left; }
+@media (min-width:760px){ html body .tw-card{ padding:1.3rem 1.5rem 1.2rem; } }
+html body .tw-card p, html body .tw-back p{ max-width:none; margin:0; padding:0; background:none; box-shadow:none; }
+html body .tw-card .tw-k{ margin:0 0 .15rem; font:700 .86rem/1.3 var(--tw-ui); letter-spacing:normal; text-transform:none; color:var(--tw-green); }
+html body .tw-card h2.tw-h{ margin:0 0 .6rem; padding:0; border:0; background:none; box-shadow:none; max-width:none; font:600 clamp(1.3rem, 1.15rem + .7vw, 1.7rem)/1.2 var(--tw-head); letter-spacing:-.01em; text-transform:none; color:var(--tw-ink); text-wrap:balance; }
+html body .tw-card h2.tw-h::before, html body .tw-card h2.tw-h::after{ content:none !important; }
+html body .tw-card h2.tw-h:focus{ outline:none; }
+html body .tw-card h2.tw-h:focus-visible{ outline:3px solid var(--tw-acc); outline-offset:3px; border-radius:6px; }
+html body .tw-card ul.tw-list{ list-style:none; margin:0; padding:0; display:grid; gap:.7rem; }
+html body .tw-card ul.tw-list li.tw-item{ display:grid; gap:.1rem; margin:0; padding:0; width:auto; max-width:none !important; background:none; border:0; box-shadow:none; }
+html body .tw-card ul.tw-list li.tw-item::before{ content:none !important; }
+html body .tw-card .tw-l{ font:700 .84rem/1.3 var(--tw-ui); color:var(--tw-muted); }
+html body .tw-card .tw-t{ font:400 1.04rem/1.5 var(--tw-read); color:var(--tw-ink); }
+html body .tw-card .tw-t a.tw-more-link{ white-space:normal; color:var(--tw-acc); font:600 .95rem/1.4 var(--tw-ui); text-underline-offset:3px; }
+html body .tw-card a.tw-exlink{ display:grid; gap:.1rem; min-height:44px; padding:.55rem .8rem; border-radius:14px; text-decoration:none; color:var(--tw-ink); background:#FFFFFF; border:1px solid var(--tw-line); }
+html body .tw-card a.tw-exlink:hover{ border-color:var(--tw-acc); }
+html body .tw-card a.tw-exlink strong{ font:700 1.02rem/1.3 var(--tw-ui); color:var(--tw-ink); }
+html body .tw-card a.tw-exlink strong::after{ content:"\a0\2192"; color:var(--tw-acc); }
+html body .tw-card a.tw-exlink span{ font:400 .95rem/1.4 var(--tw-read); color:var(--tw-muted); }
+html body .tw-card details.tw-fold{ margin:.5rem 0 0; }
+html body .tw-card details.tw-fold > summary{ display:flex; align-items:center; gap:.4rem; min-height:44px; cursor:pointer; list-style:none; font:700 .98rem/1.3 var(--tw-ui); color:var(--tw-acc); }
+html body .tw-card details.tw-fold > summary::-webkit-details-marker{ display:none; }
+html body .tw-card details.tw-fold > summary::before{ content:"\25B8"; display:inline-block; }
+html body .tw-card details.tw-fold[open] > summary::before{ transform:rotate(90deg); }
+html body .tw-card details.tw-fold ul.tw-list{ margin:.2rem 0 .2rem; }
+@media (min-width:760px){
+  html body .tw-card ul.tw-list li.tw-item{ grid-template-columns:11rem 1fr; gap:.2rem 1rem; align-items:start; }
+  html body .tw-page .tw-card ul.tw-list li.tw-item{ grid-template-columns:12rem 1fr; }
+}
+
+/* ---------- buttons and links (UI font, the home page's shapes) ---------- */
+html body .tw-card p.tw-go, html body .tw-back p.tw-go{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .9rem; margin:.45rem 0 0; }
+html body .tw-btn{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.45rem 1.15rem; border-radius:999px; font:700 1rem/1.2 var(--tw-ui); text-decoration:none; cursor:pointer;
+  color:#FFFFFF; background:var(--tw-acc); border:1.5px solid var(--tw-acc); box-shadow:none; }
+html body .tw-btn:hover{ background:var(--tw-acc-h); border-color:var(--tw-acc-h); }
+html body .tw-btn.is-soft{ color:#22496F; background:var(--tw-paper); }
+html body .tw-btn.is-soft:hover{ background:var(--tw-soft); border-color:var(--tw-acc); }
+html body .tw-btn[hidden]{ display:none; }
+html body .tw-link{ display:inline-flex; align-items:center; min-height:44px; padding:0; border:0; background:none; cursor:pointer; font:700 1rem/1.2 var(--tw-ui); color:var(--tw-acc); text-decoration:underline; text-underline-offset:3px; }
+html body .tw-link:hover{ color:var(--tw-acc-h); }
+html body .tw-card a.tw-link::after{ content:"\a0\2192"; }
+.tw-card a:focus-visible, .tw-card button:focus-visible, .tw-card summary:focus-visible, .tw-back a:focus-visible, .tw-back button:focus-visible, .tw-line button:focus-visible, .tw-line a:focus-visible, .tw-tabs button:focus-visible{ outline:3px solid var(--tw-acc); outline-offset:2px; border-radius:10px; }
+
+/* ---------- the home page: the block, and "Welcome back" in the first screen ---------- */
+.h18 .h-week.is-away{ display:none; }
+.h18 .h-week .tw-card{ max-width:none; }
+html body .tw-back{ margin:.2rem 0 1rem; max-width:34rem; padding:.85rem 1rem .8rem; background:var(--tw-paper); }
+html body .tw-back h2.tw-back-h{ margin:0 0 .3rem; padding:0; border:0; background:none; box-shadow:none; max-width:none; font:600 1.15rem/1.2 var(--tw-head); letter-spacing:normal; text-transform:none; color:var(--tw-ink); }
+html body .tw-back h2.tw-back-h::before, html body .tw-back h2.tw-back-h::after{ content:none !important; }
+html body .tw-back p.tw-step{ display:grid; gap:.1rem; margin:0 0 .15rem; }
+html body .tw-back p.tw-step strong{ font:700 1.02rem/1.3 var(--tw-ui); color:var(--tw-ink); }
+html body .tw-back p.tw-step span{ font:400 .98rem/1.45 var(--tw-read); color:var(--tw-muted); }
+html body .tw-back .tw-quiet{ font-weight:600; }
+html body .tw-back p.tw-install{ margin:.25rem 0 0; padding-top:.5rem; border-top:1px dashed var(--tw-line); font:400 .95rem/1.5 var(--tw-ui); color:var(--tw-ink); }
+html body .tw-back p.tw-install a{ font-weight:700; color:var(--tw-acc); text-underline-offset:3px; white-space:nowrap; }
+html body .tw-back p.tw-small{ margin:.15rem 0 0; font:400 .92rem/1.4 var(--tw-ui); color:var(--tw-muted); }
+html body .tw-back p.tw-small a{ font-weight:700; color:var(--tw-acc); text-underline-offset:3px; }
+html body .tw-back p.tw-say:empty{ display:none; }
+html body .tw-back p.tw-say{ font:400 .95rem/1.4 var(--tw-ui); color:var(--tw-muted); }
+html body .tw-back p.tw-say:focus{ outline:none; }
+.h18 .h-intro.has-tw .h-resume.is-tip{ display:none; }   /* someone who has been here before does not need the how-to line too */
+.h18 .h-intro.has-tw .h-resume:not([hidden]):not(.is-tip) + .h-art{ display:none; }
+
+/* ---------- /this-week.html ---------- */
+body{ background:var(--paper, #F5EFDE); }
+main.tw-page{ max-width:44rem; margin:0 auto; padding:1.25rem 16px 4rem; font:400 1.0625rem/1.6 "Lora", Georgia, serif; color:var(--tw-ink); }
+main.tw-page h1{ margin:0 0 .5rem; font:600 clamp(1.9rem, 5vw, 2.6rem)/1.1 var(--tw-head); letter-spacing:-.01em; color:var(--tw-ink); }
+main.tw-page h2.tw-sec-h{ margin:0 0 .4rem; padding:0; border:0; font:600 1.35rem/1.2 var(--tw-head); color:var(--tw-ink); }
+main.tw-page p{ max-width:60ch; margin:0 0 .8rem; }
+main.tw-page a{ color:var(--tw-acc); text-underline-offset:3px; }
+main.tw-page a.tw-btn{ color:#FFFFFF; }
+main.tw-page a.tw-btn.is-soft{ color:#22496F; }
+.tw-code{ margin:0 0 .35rem !important; font:700 .9rem/1.3 var(--tw-ui); color:var(--tw-green); }
+.tw-intro{ font-size:1.12rem; color:var(--tw-muted); }
+.tw-sec{ margin:1.8rem 0 0; }
+.tw-note{ padding:.5rem .8rem; border-radius:12px; background:var(--tw-soft); font:400 .98rem/1.45 var(--tw-ui); }
+.tw-tabs{ display:flex; flex-wrap:wrap; gap:.4rem; margin:1rem 0 .8rem; }
+.tw-tabs[hidden]{ display:none; }
+.tw-tabs button{ display:inline-flex; flex-direction:column; align-items:flex-start; gap:.05rem; min-height:44px; padding:.35rem .9rem; border-radius:14px; border:1.5px solid var(--tw-line); background:var(--tw-paper); color:var(--tw-ink); font:700 .95rem/1.2 var(--tw-ui); cursor:pointer; }
+.tw-tabs button .tw-tab-d{ font-weight:400; font-size:.82rem; color:var(--tw-muted); }
+.tw-tabs button[aria-pressed="true"]{ background:var(--tw-acc); border-color:var(--tw-acc); color:#FFFFFF; }
+.tw-tabs button[aria-pressed="true"] .tw-tab-d{ color:#E3EDF7; }
+.tw-tabs button:hover:not([aria-pressed="true"]){ border-color:var(--tw-acc); }
+.tw-fine{ font:400 .95rem/1.5 var(--tw-ui); color:var(--tw-muted); }
+.tw-myweek{ padding:1rem 1.05rem; border-radius:18px; background:var(--tw-paper); border:1px solid var(--tw-line); }
+.tw-myweek.is-now{ border-color:var(--tw-acc); }
+
+/* ---------- "Add today to your week" (one small line in "What you got from this") ---------- */
+html body .tw-line{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .5rem; margin:.45rem 0 0 !important; padding:.55rem 0 0 !important; border-top:1px dashed var(--tw-line); max-width:none; font:400 .95rem/1.4 var(--tw-ui); color:var(--tw-ink); }
+html body .tw-line .tw-line-q{ flex:1 1 100%; }
+html body .tw-line .tw-pick{ display:flex; flex-wrap:wrap; gap:.3rem; }
+html body .tw-line .tw-pick[hidden], html body .tw-line .tw-line-q[hidden]{ display:none; }
+html body .tw-line .tw-pick button{ min-height:44px; padding:.3rem .75rem; border-radius:999px; border:1.5px solid var(--tw-acc); background:var(--tw-paper); color:#22496F; font:700 .9rem/1.2 var(--tw-ui); cursor:pointer; }
+html body .tw-line .tw-pick button:hover{ background:var(--tw-soft); }
+html body .tw-line .tw-line-say{ font:400 .95rem/1.4 var(--tw-ui); color:var(--tw-ink); }
+html body .tw-line .tw-line-say:empty{ display:none; }
+html body .tw-line .tw-line-say a{ font-weight:700; color:var(--tw-acc); text-underline-offset:3px; }
+html body .tw-line button.tw-undo{ min-height:44px; padding:0 .4rem; border:0; background:none; font:700 .95rem/1.2 var(--tw-ui); color:var(--tw-acc); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+
+/* ---------- Quiet mode and the helpers off: the same calm words, no extras ---------- */
+html.tol-quiet .tw-line, html.tol-no-helpers .tw-line, html.tol-quiet .tw-back .tw-install, html.tol-no-helpers .tw-back .tw-install{ display:none !important; }
+
+@media (prefers-reduced-motion: reduce){ .tw-card *, .tw-back *, .tw-line *{ transition:none !important; animation:none !important; } }
+@media (max-width:420px){ html body .tw-card{ padding:.9rem .9rem .9rem; } html body .tw-back{ padding:.8rem .9rem; } }

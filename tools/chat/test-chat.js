@@ -1046,7 +1046,7 @@ t('safety8', 'my kid said he doesnt want to be alive', { id: 'childcrisis', not:
 t('safety8', 'i want to die (still the crisis reply for me)', { q: 'i want to die', kind: 'safety', text: SUICIDE, not: /Ask directly/ });
 // prescribed medicine comes first
 const MEDS_OK = /^First, the important part: please don’t stop, cut down or swap a prescribed medicine suddenly\. Stopping suddenly can cause withdrawal/;
-t('safety8', 'should I take ashwagandha instead of my anxiety meds?', { text: MEDS_OK, link: '/calming-supplements.html' });
+t('safety8', 'should I take ashwagandha instead of my anxiety meds?', { text: MEDS_OK, link: '/calm-without-pills.html' });
 t('safety8', "can i stop my antidepressant and take st john's wort", { text: MEDS_OK });
 t('safety8', 'i want to come off my medication and use herbs', { text: MEDS_OK });
 t('safety8', 'is ashwagandha safe (no meds line)', { q: 'is ashwagandha safe', not: MEDS_OK });
@@ -1175,8 +1175,8 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   t('chat8', 'what does this site keep on my phone', { id: 'devicekeep', link: '/on-this-device.html', not: /phubbing|Phones and presence/i });
   t('chat8', 'teens still get the teen answer', { q: 'im 15 and gay and scared to come out', id: 'lgbtq' });
   // calm, naturally
-  t('chat8', 'what natural things actually help anxiety', { id: 'herbsanxiety', text: /sleep, movement, slow breathing/, link: '/calming-supplements.html#start', not: /Masking/ });
-  t('chat8', 'what helps anxiety naturally', { id: 'herbsanxiety', link: '/calming-supplements.html#start', not: /Masking/ });
+  t('chat8', 'what natural things actually help anxiety', { id: 'calmpills', text: /sleep, movement, slow breathing/, link: '/calm-without-pills.html#start', not: /Masking/ });
+  t('chat8', 'what helps anxiety naturally', { id: 'calmpills', link: '/calm-without-pills.html#start', not: /Masking/ });
   // talk deep: <question> answers the question; "keep it light" comes back up
   c('chat8', ['talk deep: why is small talk so hard for some people?'], { id: /smalltalkwhy|small-talk/, text: /unwritten/, not: /post-traumatic/i });  // chat9: small talk is a deep topic now
   t('chat8', 'talk deep: what is the double empathy problem?', { link: '/wired-differently', not: /^Deep mode on\. Short words/ });
@@ -1437,23 +1437,20 @@ if (PERS) {
   t('chat4', 'can i add reminders to my calendar', { id: 'prog01', link: '/prog-01.html#calendar' });  // mergeB: reminders live in Six gentle weeks
   t('chat4', 'where else can i get help', { not: /hotline|helpline|988|findahelpline|Samaritans/i });   // no outside-resource lists (owner)
   t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
-  // calming supplements and herbs: the research, never a dose, never a referral line (no "ask your pharmacist or doctor"), crisis first, no jokes
+  // supplements, herbs and drugs: not covered. One plain reply that gives no guidance, no dose, no product and no referral line, and points to the everyday habits and Calm down now. Crisis first, no jokes
   const PHARM = /pharmacist|prescriber|your doctor|a doctor|physician|check with/i;   // owner: no doctor/pharmacist lines
   const NODOSE = /\b\d+(\.\d+)? ?(mg|milligrams?|ml|mcg|g)\b|take (one|two|\d)/i;
-  [['is ashwagandha safe', 'herbashwagandha', '#ashwagandha'], ['ashwagandha side effects', 'herbashwagandha', '#ashwagandha'],
-   ["can I take st john's wort with my antidepressant", 'herbstjohns', '#st-johns-wort'], ['st johns wort and sertraline', 'herbstjohns', '#st-johns-wort'],
-   ['what herbs help anxiety', 'herbsanxiety', '#start'], ['natural remedies for anxiety', 'herbsanxiety', '#start'], ['best supplement for stress', 'herbsanxiety', '#start'],
-   ['does chamomile work', 'herbchamomile', '#chamomile'], ['chamomile tea for anxiety', 'herbchamomile', '#chamomile'],
-   ['is melatonin good for anxiety', 'herbmelatonin', '#melatonin'], ['melatonin for kids', 'herbmelatonin', '#melatonin'], ['how much melatonin should i take', 'herbmelatonin', '#melatonin'],
-   ['is kava safe', 'herbkava', '#kava'], ['does magnesium help anxiety', 'herbmagnesium', '#magnesium'], ['magnesium for sleep', 'herbmagnesium', '#magnesium'],
-   ['does CBD help anxiety', 'herbcbd', '#cbd'], ['does homeopathy work', 'herbhomeopathy', '#homeopathy'],
-   ['are supplements safe', 'herbmix', '#safety'], ['can I mix herbs with my medication', 'herbmix', '#safety'], ['does lavender help sleep', 'herbsanxiety', '#start']
-  ].forEach(([q, id, a]) => t('herbs', q, { id, link: '/calming-supplements.html' + a, not: new RegExp(NODOSE.source + '|' + FUNNY.source + '|' + PHARM.source, 'i') }));
-  t('herbs', "my panic won't stop, what herbs can i take (help first)", { q: "my panic won't stop, what herbs can i take", id: 'herbshelp', text: /more than a supplement can fix/, link: '/calming-supplements.html#browse', not: FUNNY });
-  t('herbs', "i've felt low for weeks, would st john's wort help (help first)", { q: "i've felt low for weeks, would st john's wort help", id: 'herbshelp', text: /more than a supplement can fix/, not: /doctor/ });
+  const NOGUIDE = /serotonin syndrome|liver|Lennox|Dravet|Silexan|warfarin|upper limit/i;   // none of the old supplement detail comes back
+  [["is ashwagandha safe"], ["ashwagandha side effects"], ["can I take st john's wort with my antidepressant"], ["st johns wort and sertraline"],
+   ['what herbs help anxiety'], ['natural remedies for anxiety'], ['best supplement for stress'], ['does chamomile work'], ['chamomile tea for anxiety'],
+   ['is melatonin good for anxiety'], ['melatonin for kids'], ['how much melatonin should i take'], ['is kava safe'], ['does magnesium help anxiety'], ['magnesium for sleep'],
+   ['does CBD help anxiety'], ['does homeopathy work'], ['are supplements safe'], ['can I mix herbs with my medication'], ['does lavender help sleep']
+  ].forEach(([q]) => t('herbs', q, { id: 'calmpills', text: /don’t give guidance on supplements, herbs or drugs/, link: '/calm-without-pills.html#start', not: new RegExp(NODOSE.source + '|' + FUNNY.source + '|' + PHARM.source + '|' + NOGUIDE.source, 'i') }));
+  t('herbs', "my panic won't stop, what herbs can i take (more than a habit)", { q: "my panic won't stop, what herbs can i take", id: 'calmpills', text: /more than an everyday habit can fix/, link: '/calm-without-pills.html#all', not: FUNNY });
+  t('herbs', "i've felt low for weeks, would st john's wort help (more than a habit)", { q: "i've felt low for weeks, would st john's wort help", id: 'calmpills', text: /more than an everyday habit can fix/, not: /doctor/ });
   t('herbs', 'i want to kill myself, should i take kava (crisis reply)', { q: 'i want to kill myself, should i take kava', kind: 'safety', text: SUICIDE, not: /Kava may ease/ });
-  c('herbs', ['tell me a joke', 'is ashwagandha safe'], { id: 'herbashwagandha', not: FUNNY });
-  t('herbs', 'ashwagandha is not spell-corrected', { q: 'is ashwagandah safe', id: 'herbashwagandha' });
+  c('herbs', ['tell me a joke', 'is ashwagandha safe'], { id: 'calmpills', not: FUNNY });
+  t('herbs', 'ashwagandha is not spell-corrected', { q: 'is ashwagandah safe', id: 'calmpills' });
 }
 
 // ---------------------------------------------------------------- re-test 2 (chat9): context across follow-ups, each speaker's own side,
@@ -1582,9 +1579,9 @@ if (PERS) {
   c('chat9', ['i yell at my kids', 'how do i make it right with them'], { id: 'yellkidsrepair', link: '/parents.html#repair-scared', not: /tower/ });
   ["i feel really anxious right now", "i'm so anxious", 'anxiety attack'].forEach(q => t('chat9', q, { id: 'calmnow', text: /slow down together/, link: '/upset-right-now.html', not: /Breathe button, on any page/ }));
   c('chat9', ['is ashwagandha safe', 'i feel really anxious right now'], { id: 'calmnow' });
-  t('chat9', 'SSRI + CBD: the interaction and the meds line', { q: 'i take sertraline, can i take CBD', id: 'herbcbd', text: /antidepressants[\s\S]*should never be stopped, swapped or changed suddenly/ });
-  t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'herbashwagandha', text: /no good evidence[\s\S]*should never be stopped, swapped or changed suddenly/ });
-  t('chat9', 'what dose: never a dose', { q: 'what dose of ashwagandha should i take', id: 'herbashwagandha', text: /^I can’t give doses/, not: /pharmacist|doctor/ });
+  t('chat9', 'SSRI + CBD: no guidance, and the meds line', { q: 'i take sertraline, can i take CBD', id: 'calmpills', text: /interact with prescribed medicines[\s\S]*should never be stopped, swapped or changed suddenly/ });
+  t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'calmpills', text: /should never be stopped, swapped or changed suddenly/ });
+  t('chat9', 'what dose: never a dose', { q: 'what dose of ashwagandha should i take', id: 'calmpills', text: /I can’t give doses, products or amounts/, not: /pharmacist|doctor/ });
   t('chat9', 'what to tell my doctor about supplements: no referral card any more', { q: 'what should i tell my doctor about supplements', not: /pharmacist|prescriber/i });
   t('chat9', 'adult bi and religious parents: adult answer', { q: 'im bi and scared to tell my parents, they are very religious', id: /lgbtadult|lgbtsafety/, link: '/coming-out.html', not: /GSA|For teens|misgender/i });
   t('chat9', 'states an adult age: adult coming out', { q: "i'm 31, not a teen. my partner is a woman and my parents are conservative christians", id: /lgbtadult|lgbtsafety/, not: /Talking with teenagers|Parenting styles/ });
@@ -1719,7 +1716,7 @@ t('chat10', 'living alone tips', { q: 'tips for living alone', id: 'livingalone'
 t('chat10', 'single still gets the on-your-own answer', { q: 'can i use this if im single', id: 'single' });
 t('chat10', 'nervous system', { q: 'what is the vagus nerve', id: 'nervoussystem', link: '/nervous-system.html' });
 t('chat10', 'fight or flight', { q: 'what is fight or flight', id: 'nervoussystem', link: '/nervous-system.html' });
-t('chat10', 'CBD: three rare conditions', { q: 'does CBD help with anxiety', id: 'herbcbd', text: /three rare conditions[\s\S]*Lennox-Gastaut[\s\S]*Dravet[\s\S]*tuberous sclerosis/, not: /two rare forms/, link: '/calming-supplements.html#cbd' });
+t('chat10', 'CBD: no product detail any more', { q: 'does CBD help with anxiety', id: 'calmpills', not: /Lennox|Dravet|tuberous/, link: '/calm-without-pills.html#start' });
 t('chat10', 'write it through', { q: 'what is write it through', kind: 'card', id: 'writeit', link: '/write-it-through.html' });
 t('chat10', 'how you take things in', { q: 'how do I make the site fit my mind', kind: 'card', id: 'takethingsin', link: '/how-you-take-things-in.html' });
 t('chat10', 'CALC-02', { q: 'what is CALC-02', kind: 'card', id: 'calc02', link: '/look-back-30-days.html' });

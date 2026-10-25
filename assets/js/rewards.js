@@ -138,7 +138,7 @@
   // That is any page marked data-sensitive, data-no-garden or data-no-cheer (outside the games), the
   // pages below, and the Signal Translator while it reads a message to family or a co-parent, or a
   // coming-out (or other personal news) message.
-  var TENDER = /^\/(coming-out|grief|someone-sent-you-this|calming-supplements|upset-right-now|growing-up|know-yourself|family-rifts|co-parenting)(-in-depth)?\.html$/;
+  var TENDER = /^\/(coming-out|grief|someone-sent-you-this|calm-without-pills|calming-supplements|upset-right-now|growing-up|know-yourself|family-rifts|co-parenting)(-in-depth)?\.html$/;
   var DISCLOSE = /\bi(?:'|\u2019)?m (?:(?:actually|really|also|finally ready to say i(?:'|\u2019)?m) )?(?:bi|bisexual|gay|lesbian|queer|trans|transgender|non-?binary|pan|pansexual|asexual|ace|aromantic|a trans (?:man|woman)|intersex)\b|\bi am (?:(?:actually|really|also) )?(?:bi|bisexual|gay|lesbian|queer|trans|transgender|non-?binary|pan|pansexual|asexual|ace|aromantic|intersex)\b|\bcom(?:e|ing) out\b|\bi(?:'ve| have) been diagnosed\b|\bi(?:'|\u2019)?m pregnant\b|\bi am pregnant\b/i;
   function tender() {
     if (typeof document === 'undefined' || !document.body) return false;

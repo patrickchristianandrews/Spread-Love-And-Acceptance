@@ -138,7 +138,7 @@
       picks:[
         ['/ladder.html','Where am I right now?','Four quick taps, then one calm step that fits.'],
         ['#breathe','Breathe for a minute','A short pause, right here.'],
-        ['/calming-supplements.html','Calming herbs and supplements','What the research says, honestly, and what to watch out for.'],
+        ['/calm-without-pills.html','Calm without pills','What helps, and what the research says.'],
         ['/wp-11.html','The Calm-Down Kit','Decide now what settles you, so it is ready next time.']
       ]},
     { id:'on-my-own', ico:'\uD83E\uDEB4', label:'On my own after a breakup',

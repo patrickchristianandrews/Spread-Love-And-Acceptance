@@ -140,46 +140,6 @@
   "src": "bonding.html .tol-try"
  },
  {
-  "t": "I take [your medicines]. I’m thinking of trying [the supplement]. Is it safe with what I take?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "Is this product tested by anyone independent, and is the amount on the label sensible?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "Does it make you sleepy, or affect the liver, kidneys or thyroid?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "I’m pregnant / breastfeeding / buying this for my child. Is it okay?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "I take sertraline and I’m thinking of trying St John’s wort. Is that safe together?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "I take [your medicine] every day. Is [the supplement] safe with it, and is there anything I should watch for?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "I’ve been taking ashwagandha for stress. Should I keep going, and do I need a blood test?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "I’m tired all the time. Could we check my iron, B12 and thyroid before I try supplements?",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "I’m trying a magnesium supplement for sleep. I’m telling you so you know what I take.",
-  "src": "calming-supplements.html .cs-say"
- },
- {
-  "t": "Thanks for caring. I’ll ask my pharmacist before I try anything new.",
-  "src": "calming-supplements.html .cs-say"
- },
- {
   "t": "Shall we put on your old records and just sit for a bit?",
   "src": "caregivers.html .cg-say"
  },
