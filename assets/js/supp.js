@@ -11,7 +11,7 @@
   if (!grid) return;
 
   var LIST_KEY = 'tol-supp-list';
-  var STEP = (window.matchMedia && matchMedia('(max-width:639px)').matches) ? 8 : 12, MAXCMP = 3;
+  var STEP = (window.matchMedia && matchMedia('(max-width:639px)').matches) ? 6 : 12, MAXCMP = 3;
   var EVL = { good: 'Good evidence', some: 'Some evidence', mixed: 'Mixed evidence', early: 'Early evidence', weak: 'Weak evidence', none: 'No good evidence' };
   var KINDS = ['supplement', 'herb', 'food', 'habit', 'practice', 'therapy'];
 
@@ -503,7 +503,7 @@
   (function () {
     var small = window.matchMedia && matchMedia('(max-width:759px)').matches;
     if (!small) return;
-    Array.prototype.forEach.call(D.querySelectorAll('.sp-fact:not([data-core])'), function (d) { d.open = false; });
+    Array.prototype.forEach.call(D.querySelectorAll('.sp-fact:not([data-core]), .sp-glance-d'), function (d) { d.open = false; });
   })();
 
   /* ------------------------------------------------------------------ start up */
