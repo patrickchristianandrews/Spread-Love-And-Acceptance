@@ -431,7 +431,7 @@
     var msg, btn = $('wk-save');
     if (!has) msg = 'Tap a weather for any day to begin. Nothing is saved until you do.';
     else if (!sv) msg = 'A draft is kept on this device as you go. Save it to add it to your list of weeks.';
-    else if (same) msg = 'Saved on this device.';
+    else if (same) msg = memOnly ? 'Saved for this visit only.' : 'Saved on this device.';
     else msg = 'You have changes that are not in your saved week yet.';
     if (memOnly) msg += ' This browser is not letting the page keep anything, so this stays only until you leave.';
     $('wk-state').textContent = msg;
@@ -548,7 +548,7 @@
       pts.push(Math.round(x * 10) / 10 + ',' + Math.round(y * 10) / 10);
       dots += '<i class="wk-dot" style="left:' + ((i + 0.5) / 7 * 100) + '%;bottom:' + r.b + '%;--i:' + i + '"></i>';
     });
-    return '<div class="wk-trend" aria-hidden="true"><svg viewBox="0 0 700 100" preserveAspectRatio="none"><polyline class="wk-line" pathLength="1" points="' + pts.join(' ') + '" fill="none" vector-effect="non-scaling-stroke"/></svg>' + dots + '<span class="wk-trend-t">brighter</span><span class="wk-trend-b">cloudier</span></div>';
+    return '<div class="wk-trend" aria-hidden="true"><div class="wk-trend-in"><svg viewBox="0 0 700 100" preserveAspectRatio="none"><polyline class="wk-line" pathLength="1" points="' + pts.join(' ') + '" fill="none" vector-effect="non-scaling-stroke"/></svg>' + dots + '</div><span class="wk-trend-t">brighter</span><span class="wk-trend-b">cloudier</span></div>';
   }
   function recapAlt(R) {
     return 'Chart of the week, brighter at the top. ' + R.rows.map(function (r) { return r.wd + ': ' + (r.k ? lc(SKY[r.k].name) : 'not filled in'); }).join('. ') + '.';
@@ -637,7 +637,7 @@
       '<text x="70" y="290" font-size="78" font-weight="bold" fill="#1F2A37">' + xml(R.headline || 'Your week') + '</text>';
     var y = 350;
     wrap(R.lead || '', 44).forEach(function (l) { s += '<text x="70" y="' + y + '" font-size="38" fill="#33404F">' + xml(l) + '</text>'; y += 52; });
-    var top = 470, cw = (W - 140) / 7;
+    var top = Math.max(y + 10, 440), cw = (W - 140) / 7;
     s += '<rect x="50" y="' + top + '" width="' + (W - 100) + '" height="420" rx="36" fill="#FFFFFF" fill-opacity="0.78"/>';
     R.rows.forEach(function (r, i) {
       var cx = 70 + cw * i + cw / 2;
@@ -653,8 +653,9 @@
     });
     var pts = R.rows.filter(function (r) { return r.k; }).map(function (r) { return (70 + cw * r.i + cw / 2) + ',' + (top + 395 - r.b * 1.1); });
     if (pts.length > 1) s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#2B5B8C" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity="0.55"/>';
-    var yy = top + 480;
+    var yy = top + 485;
     R.bullets.slice(0, 3).forEach(function (bl) {
+      if (yy > H - 230) return;
       wrap(bl, 62).slice(0, 3).forEach(function (l, li) { s += '<text x="' + (li ? 98 : 70) + '" y="' + yy + '" font-size="30" fill="#2A3544">' + (li ? '' : '• ') + xml(l) + '</text>'; yy += 42; });
       yy += 14;
     });
@@ -690,9 +691,9 @@
   var WORDS_MORE = ['Much less', 'Less', 'A little less', 'About usual', 'A little more', 'More', 'Much more'];
   var WORDS_LOAD = ['Much lighter', 'Lighter', 'A little lighter', 'About usual', 'A little heavier', 'Heavier', 'Much heavier'];
   var FX_SLIDE = [
-    { id: 'sleep', label: 'Sleep', per: { db: 3.2, dE: 0.45, dS: -0.25 }, words: WORDS_MORE, mult: true, ask: 'Sleep next week' },
-    { id: 'work', label: 'Workload', per: { db: -3, dE: -0.2, dS: 0.5 }, words: WORDS_LOAD, du: function (x) { return x > 0 ? 0.7 * x : 0; }, ask: 'Workload next week' },
-    { id: 'people', label: 'Time with people', per: { db: 2.4, dE: 0.1, dS: -0.1 }, words: WORDS_MORE, mult: true, ask: 'Time with people' }
+    { id: 'sleep', label: 'Sleep', per: { db: 2.8, dE: 0.45, dS: -0.25 }, words: WORDS_MORE, mult: true, ask: 'Sleep next week' },
+    { id: 'work', label: 'Workload', per: { db: -2.8, dE: -0.2, dS: 0.5 }, words: WORDS_LOAD, du: function (x) { return x > 0 ? 0.7 * x : 0; }, ask: 'Workload next week' },
+    { id: 'people', label: 'Time with people', per: { db: 2.2, dE: 0.1, dS: -0.1 }, words: WORDS_MORE, mult: true, ask: 'Time with people' }
   ];
   var FX_CHIP = [
     { id: 'event', label: 'Stressful event', max: 2, ask: 'A stressful event', hint: 'Tap a day once for small, twice for big, a third time to clear it.', off: { '-1': { db: -2.5, dS: 0.6, du: 1.5 }, '0': { db: -6, dE: -0.4, dS: 1.2, du: 2.5 }, '1': { db: -3, dS: 0.5, du: 1.5 } } },
@@ -1050,7 +1051,7 @@
         var keys = Object.keys(S.plans).sort(); while (keys.length > 10) delete S.plans[keys.shift()];
         persistNow(); renderPin(); renderVersus(); renderHello();
         toast('Plan pinned on this device. Come back when the week arrives to compare.');
-        $('fc-pin-btn').focus();
+        var ub = $('fc-unpin'); if (ub) ub.focus();
       } else if (e.target.closest('#fc-unpin')) {
         delete S.plans[fc.start]; persistNow(); renderPin(); renderVersus(); renderHello(); toast('Unpinned.');
         $('fc-pin-btn').focus();

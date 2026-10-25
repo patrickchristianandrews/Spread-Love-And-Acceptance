@@ -109,22 +109,26 @@
   <p class="wk-sec-p">Change what you expect next week and watch the days move. The shaded band is how sure the forecast is: it widens when the plan has big unknowns and narrows when it is steady.</p>
   <div id="fc-empty" class="wk-empty" hidden></div>
   <div id="fc-main" hidden>
-    <ol id="fc-strip" class="wk-fc-strip" aria-label="Forecast for the next 7 days"></ol>
-    <ul class="wk-legend" aria-hidden="true"><li><i class="lg-band"></i> likely range</li><li><i class="lg-pt"></i> forecast</li><li><i class="lg-tick"></i> with no changes</li></ul>
-    <p id="fc-sum" class="wk-lead2"></p>
-    <div class="wk-conf-wrap"><div class="wk-conf" aria-hidden="true"><i id="fc-conf-fill"></i></div><p id="fc-conf-t" class="wk-fine"></p></div>
     <div class="wk-fc-grid">
-      <div class="wk-panel">
+      <div class="wk-panel wk-adj-panel">
         <h3 class="wk-ph">Model adjusters</h3>
         <p class="wk-fine">Everything starts at &ldquo;about usual&rdquo;. Move anything that will be different next week.</p>
         <div id="fc-adj"></div>
       </div>
-      <div class="wk-panel">
-        <h3 class="wk-ph">Why the forecast looks this way</h3>
-        <p class="wk-fine">Tap a day in the strip above. Every part below is in brightness points, where 100 is a perfectly sunny day.</p>
-        <div id="fc-why" class="wk-why"></div>
-        <details class="wk-det"><summary>See every part for every day</summary><div class="wk-scroll" id="fc-matrix"></div></details>
-        <details class="wk-det"><summary>Show the math</summary><div id="fc-math"></div></details>
+      <div class="wk-fc-right" role="region" aria-label="The forecast and why it looks this way" tabindex="0">
+        <div class="wk-fc-top">
+          <ol id="fc-strip" class="wk-fc-strip" aria-label="Forecast for the next 7 days"></ol>
+          <ul class="wk-legend" aria-hidden="true"><li><i class="lg-band"></i> likely range</li><li><i class="lg-pt"></i> forecast</li><li><i class="lg-tick"></i> with no changes</li></ul>
+          <p id="fc-sum" class="wk-lead2"></p>
+          <div class="wk-conf-wrap"><div class="wk-conf" aria-hidden="true"><i id="fc-conf-fill"></i></div><p id="fc-conf-t" class="wk-fine"></p></div>
+        </div>
+        <div class="wk-panel wk-why-panel">
+          <h3 class="wk-ph">Why the forecast looks this way</h3>
+          <p class="wk-fine">Tap a day in the strip. Every part below is in brightness points, where 100 is a perfectly sunny day.</p>
+          <div id="fc-why" class="wk-why"></div>
+          <details class="wk-det"><summary>See every part for every day</summary><div class="wk-scroll" id="fc-matrix"></div></details>
+          <details class="wk-det"><summary>Show the math</summary><div id="fc-math"></div></details>
+        </div>
       </div>
     </div>
     <div class="wk-panel wk-help">
