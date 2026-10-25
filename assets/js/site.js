@@ -1495,7 +1495,7 @@
     }
 
     var lmain = document.querySelector('main');
-    // "In short" bullets on the long pages, and "Show me only the steps" (in-short.js)
+    // "The short version" bullets on the long pages, and "Show me only the steps" (in-short.js)
     if (lmain && !busyPage() && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 400) && !/^\/workpapers\//.test(current)) {
       var isc = document.createElement('script'); isc.src = '/assets/js/in-short.js'; document.head.appendChild(isc);
@@ -2070,7 +2070,7 @@
   // results that aren't pages
   var EXTRA = {
     '#breathe': { u: '#breathe', t: 'Breathe: a breathing break', d: 'Opens right here, on top of this page: box breathing, calm breathing or 4-7-8, for one, three or five minutes, with or without sound.', k: 'Tool' },
-    '#settings': { u: '#settings', t: 'Settings: text size, high contrast, Quiet mode', d: 'Bigger text, high contrast, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Long pages also have “In short” and “Show me only the steps.”', k: 'Settings' },
+    '#settings': { u: '#settings', t: 'Settings: text size, high contrast, Quiet mode', d: 'Bigger text, high contrast, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Long pages also have “The short version” and “Show me only the steps.”', k: 'Settings' },
     '/parents.html#stepfamilies': { u: '/parents.html#stepfamilies', t: 'Stepfamilies and blended families', d: 'Joining two families takes time. Who leads on rules, loyalty binds, names, a child who lives in two homes, and the stepparent’s own place.', k: 'Guide' },
     '/family-obligations.html#visits': { u: '/family-obligations.html#visits', t: 'In-laws: visits, long stays and elders', d: 'When a parent or in-law visits often or stays a long time: agree it together first, each of you speaks to your own family, and plan the visit before it starts.', k: 'Guide' },
     '/library/life.html#in-laws': { u: '/library/life.html#in-laws', t: 'In-laws (mother-in-law, father-in-law)', d: 'Two families meeting in one couple: loyalty to a parent is not disloyalty to a partner. What helps, in plain words.', k: 'Library' },
@@ -3563,9 +3563,9 @@
   // a card, a form field, or a bar fixed at the bottom of the screen (a privacy note, a
   // game's Full screen button). If it would, he drops his name and steps up just above it, and goes back
   // down once the way is clear again.
-  // Is any text someone could be reading (or an "In short" box) under this floating button's box? Samples a grid
+  // Is any text someone could be reading (or an "The short version" box) under this floating button's box? Samples a grid
   // of points over the box, and for each element found there checks where its words really are on screen.
-  var INSHORT = '.tol-inshort, [data-in-short], .pc-short, [aria-label="In short"], #results .verdict, #results details, .vbest, .rfoot';
+  var INSHORT = '.tol-inshort, [data-in-short], .pc-short, [aria-label="The short version"], #results .verdict, #results details, .vbest, .rfoot';
   function wordsUnder(r, self) {
     if (!r || !r.width) return false;
     var R = { left: r.left - 3, right: r.right + 3, top: r.top - 3, bottom: r.bottom + 3 }, seen = [], rng = document.createRange();
@@ -3597,7 +3597,7 @@
           }
         }
       }
-      // an "In short" box right beside him counts even where there are no words under him
+      // an "The short version" box right beside him counts even where there are no words under him
       if (!found) Array.prototype.some.call(document.querySelectorAll(INSHORT), function (b) { var q = b.getBoundingClientRect(); return (found = !!(q.width && q.left < R.right + 12 && q.right > R.left - 12 && q.top < R.bottom + 12 && q.bottom > R.top - 12)); });
     } catch (e) { found = false; }
     self.style.pointerEvents = was;
@@ -3641,7 +3641,7 @@
       }
       // never over words someone is reading: first he drops his name, then just his face, then he tucks into
       // the edge of the screen as a small tab (a tap or a keyboard focus still opens him), and comes back out
-      // as soon as the space beside the words is clear again. Beside an "In short" box he always tucks away.
+      // as soon as the space beside the words is clear again. Beside an "The short version" box he always tucks away.
       var face = false, peek = false;
       if (wordsUnder(r, fab)) {
         if (fab.classList.contains('is-named')) { fab.classList.remove('is-named'); r = fab.getBoundingClientRect(); }

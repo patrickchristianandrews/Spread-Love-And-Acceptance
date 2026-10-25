@@ -16,7 +16,7 @@
      limits   what it can't do
      fair     extra "Using it fairly" lines for this tool (added to the shared ones when two is true)
      privacy  what is kept, and where
-     problem, do, leave   (names12) the panel's "In short" answers: what it helps with, what you'll do, what you'll leave with.
+     problem, do, leave   (names12) the panel's "The short version" answers: what it helps with, what you'll do, what you'll leave with.
               Optional: when absent, the panel takes them from the tools registry (bestFor, does, gets) for the entry's reg,
               with the registry's "Based on" line (tools-registry.js BASIS). A page that is one mode of a place sets its own.
    Keep every line short, kind and honest. Nothing here claims clinical validation. */

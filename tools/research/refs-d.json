@@ -9,7 +9,7 @@
   "url": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/",
   "kind": "guideline",
   "finding": "The NHS self-help advice for anxiety includes regular exercise, relaxation and breathing exercises, good sleep, and cutting down on caffeine and alcohol, which can make anxiety and sleep worse.",
-  "strength": "moderate: official self-help advice built on research reviews; the advice is general, not tailored to one person.",
+  "strength": "moderate: official self-help advice built on research reviews. The advice is general, not tailored to one person.",
   "topics": [
    "supplements",
    "anxiety",
@@ -32,7 +32,7 @@
   "url": "https://doi.org/10.1136/bjsports-2022-106195",
   "kind": "review",
   "finding": "An overview of 97 reviews (1,039 trials, about 128,000 people) found physical activity reduced symptoms of depression, anxiety and distress compared with usual care, with medium-sized effects.",
-  "strength": "strong: a very large body of trials; the trials vary a lot in quality and type of exercise.",
+  "strength": "strong: a very large body of trials. The trials vary a lot in quality and type of exercise.",
   "topics": [
    "supplements",
    "anxiety",
@@ -56,7 +56,7 @@
   "url": "https://jyx.jyu.fi/handle/123456789/93572",
   "kind": "meta-analysis",
   "finding": "Across 218 trials (about 14,000 people), exercise helped depression. Walking or jogging, yoga and strength training did best, especially at higher intensity, and yoga and strength training were well tolerated.",
-  "strength": "strong: many trials; the authors note most could not blind people to what they were doing, so expectations may add to the effect.",
+  "strength": "strong: many trials. The authors note most could not blind people to what they were doing, so expectations may add to the effect.",
   "topics": [
    "supplements",
    "exercise"
@@ -102,7 +102,7 @@
   "url": "https://doi.org/10.1371/journal.pmed.1000316",
   "kind": "meta-analysis",
   "finding": "A meta-analysis of 148 studies (308,849 participants) found people with stronger social relationships had about 50% greater odds of survival over the study periods, consistently across age, sex and health status.",
-  "strength": "strong — large meta-analysis of observational studies; causation not established",
+  "strength": "strong, large meta-analysis of observational studies. Causation not established",
   "topics": [
    "social-support",
    "loneliness"
@@ -124,7 +124,7 @@
   "url": "https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science",
   "kind": "review",
   "finding": "NCCIH found some evidence that meditation, music, relaxation techniques and melatonin may ease anxiety, especially around medical procedures, but no complementary approach has been proven to treat anxiety disorders. Acupuncture and massage studies are mixed and often of low quality.",
-  "strength": "moderate: a careful official summary of reviews; much of the underlying research is small.",
+  "strength": "moderate: a careful official summary of reviews. Much of the underlying research is small.",
   "topics": [
    "supplements",
    "anxiety"
@@ -148,7 +148,7 @@
   "url": "https://www.nccih.nih.gov/health/stress-anxiety-and-sleep-problems-considering-complementary-approaches",
   "kind": "guideline",
   "finding": "A free plain-language guide that goes through relaxation, meditation, music, yoga, melatonin and herbal supplements for stress, anxiety and sleep, with what is known about whether each helps and is safe.",
-  "strength": "moderate: an official summary for the public; it describes the evidence rather than adding new studies.",
+  "strength": "moderate: an official summary for the public. It describes the evidence rather than adding new studies.",
   "topics": [
    "supplements",
    "stress",
@@ -169,7 +169,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/chamomile",
   "kind": "guideline",
-  "finding": "Studies have not produced enough reliable evidence to rate chamomile for specific conditions, though early studies hint at help for generalized anxiety. It is likely safe in tea amounts; people allergic to ragweed and related plants may react, and interactions with warfarin have been reported.",
+  "finding": "Studies have not produced enough reliable evidence to rate chamomile for specific conditions, though early studies hint at help for generalized anxiety. It is likely safe in tea amounts. People allergic to ragweed and related plants may react, and interactions with warfarin have been reported.",
   "strength": "early: mostly small studies.",
   "topics": [
    "supplements",
@@ -191,7 +191,7 @@
   "doi": null,
   "url": "https://pubmed.ncbi.nlm.nih.gov/27912875/",
   "kind": "study",
-  "finding": "People with generalized anxiety who improved on chamomile were then given either chamomile or a dummy pill. Fewer relapsed on chamomile, but the difference was not statistically clear; symptoms stayed lower on chamomile.",
+  "finding": "People with generalized anxiety who improved on chamomile were then given either chamomile or a dummy pill. Fewer relapsed on chamomile, but the difference was not statistically clear. Symptoms stayed lower on chamomile.",
   "strength": "early: one trial with 93 people in the randomized part.",
   "topics": [
    "supplements",
@@ -213,7 +213,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/lavender",
   "kind": "guideline",
-  "finding": "It is unclear whether lavender aromatherapy helps anxiety, stress, mood or sleep. Short-term use of oral lavender products at the doses studied for anxiety appears reasonably safe; side effects can include stomach upset, headache and burping.",
+  "finding": "It is unclear whether lavender aromatherapy helps anxiety, stress, mood or sleep. Short-term use of oral lavender products at the doses studied for anxiety appears reasonably safe. Side effects can include stomach upset, headache and burping.",
   "strength": "mixed: oral lavender oil has better evidence than smelling it.",
   "topics": [
    "supplements",
@@ -280,7 +280,7 @@
   "url": "https://doi.org/10.3390/nu9050429",
   "kind": "review",
   "finding": "Of eight studies of magnesium and anxiety, four found a benefit. The authors called the evidence suggestive for people prone to anxiety, but of poor quality.",
-  "strength": "early: poor-quality evidence, by the authors’ own judgement.",
+  "strength": "early: poor-quality evidence, by the authors’ own judgment.",
   "topics": [
    "supplements",
    "anxiety"
@@ -300,7 +300,7 @@
   "doi": null,
   "url": "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/",
   "kind": "guideline",
-  "finding": "The upper limit for adults is 350 mg a day from supplements and medicines (not food). Too much from supplements can cause diarrhea, nausea and cramps; extremely high amounts can cause serious heart problems.",
+  "finding": "The upper limit for adults is 350 mg a day from supplements and medicines (not food). Too much from supplements can cause diarrhea, nausea and cramps. Extremely high amounts can cause serious heart problems.",
   "strength": "strong: official intake guidance.",
   "topics": [
    "supplements",
@@ -322,7 +322,7 @@
   "url": "https://ods.od.nih.gov/factsheets/Ashwagandha-Consumer/",
   "kind": "guideline",
   "finding": "Ashwagandha appears safe for up to about three months, but longer-term safety is unclear. It has been linked to liver injury in some people, may affect thyroid function and thyroid medicines, and may interact with diabetes, blood pressure, sedative and immune-suppressing drugs. There are concerns in pregnancy and breastfeeding.",
-  "strength": "moderate: official summary; the liver reports are case reports.",
+  "strength": "moderate: official summary. The liver reports are case reports.",
   "topics": [
    "supplements",
    "herbs",
@@ -343,7 +343,7 @@
   "doi": null,
   "url": "https://www.ncbi.nlm.nih.gov/books/NBK548536/",
   "kind": "review",
-  "finding": "Liver injury has been reported in people taking products labelled as ashwagandha, usually 2 to 12 weeks after starting. Most cases were mild to moderate and got better, but rare cases of liver failure have been described.",
+  "finding": "Liver injury has been reported in people taking products labeled as ashwagandha, usually 2 to 12 weeks after starting. Most cases were mild to moderate and got better, but rare cases of liver failure have been described.",
   "strength": "moderate: case reports show it can happen, not how often.",
   "topics": [
    "supplements",
@@ -409,7 +409,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/valerian",
   "kind": "guideline",
-  "finding": "Evidence on valerian for sleep is inconsistent, and a 2017 sleep-medicine guideline advised against it for long-term insomnia. There is little evidence for anxiety. Short-term use seems safe for most adults; side effects include headache, stomach upset and vivid dreams.",
+  "finding": "Evidence on valerian for sleep is inconsistent, and a 2017 sleep-medicine guideline advised against it for long-term insomnia. There is little evidence for anxiety. Short-term use seems safe for most adults. Side effects include headache, stomach upset and vivid dreams.",
   "strength": "mixed: inconsistent studies for sleep.",
   "topics": [
    "supplements",
@@ -520,7 +520,7 @@
   "url": "https://www.nccih.nih.gov/health/st-johns-wort",
   "kind": "guideline",
   "finding": "St John’s wort is not consistently effective for depression and is not approved as a medicine for it in the US. It interacts with many medicines, including birth control pills and some antidepressants, where the mix can cause a dangerous rise in serotonin.",
-  "strength": "moderate: official summary; trial results are mixed.",
+  "strength": "moderate: official summary. Trial results are mixed.",
   "topics": [
    "supplements",
    "herbs",
@@ -564,7 +564,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
   "kind": "guideline",
-  "finding": "Melatonin may help jet lag and shift-work sleep problems, but guidelines advise against it for long-term insomnia. Short-term use seems safe for most people; long-term safety is less known. Amounts in products can differ from the label. People with epilepsy or on blood thinners should use it only with medical advice.",
+  "finding": "Melatonin may help jet lag and shift-work sleep problems, but guidelines advise against it for long-term insomnia. Short-term use seems safe for most people. Long-term safety is less known. Amounts in products can differ from the label. People with epilepsy or on blood thinners should use it only with medical advice.",
   "strength": "moderate: good for sleep timing, weak for insomnia.",
   "topics": [
    "supplements",
@@ -586,7 +586,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/",
   "kind": "guideline",
-  "finding": "In the UK, melatonin is a prescribed medicine. Most adults aged 55 or over can take it for short-term sleep problems; younger adults and children can take it if a specialist recommends it. Tell a doctor first about liver or kidney problems or an autoimmune condition.",
+  "finding": "In the UK, melatonin is a prescribed medicine. Most adults aged 55 or over can take it for short-term sleep problems. Younger adults and children can take it if a specialist recommends it. Tell a doctor first about liver or kidney problems or an autoimmune condition.",
   "strength": "strong: official prescribing guidance.",
   "topics": [
    "supplements",
@@ -716,7 +716,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/rhodiola",
   "kind": "guideline",
-  "finding": "There isn’t enough reliable evidence to show rhodiola helps any health problem, and most human research is low to moderate quality. It may be safe for up to 12 weeks; side effects include dizziness, headache, trouble sleeping and dry mouth.",
+  "finding": "There isn’t enough reliable evidence to show rhodiola helps any health problem, and most human research is low to moderate quality. It may be safe for up to 12 weeks. Side effects include dizziness, headache, trouble sleeping and dry mouth.",
   "strength": "early: little good research.",
   "topics": [
    "supplements",
@@ -801,7 +801,7 @@
   "doi": null,
   "url": "https://pubmed.ncbi.nlm.nih.gov/24424706/",
   "kind": "meta-analysis",
-  "finding": "Pooling the small trials, inositol did not clearly beat a dummy pill for depression, anxiety or obsessive-compulsive symptoms; there were weak hints of benefit in depression.",
+  "finding": "Pooling the small trials, inositol did not clearly beat a dummy pill for depression, anxiety or obsessive-compulsive symptoms. There were weak hints of benefit in depression.",
   "strength": "mixed: very few, small trials.",
   "topics": [
    "supplements",
@@ -950,7 +950,7 @@
   "url": "https://doi.org/10.1001/jama.2020.10224",
   "kind": "study",
   "finding": "In 18,353 adults aged 50 and over followed for about five years, vitamin D3 (2,000 IU a day) did not lower the risk of depression or improve mood compared with a dummy pill.",
-  "strength": "strong: a very large, long trial; most people in it were not low in vitamin D.",
+  "strength": "strong: a very large, long trial. Most people in it were not low in vitamin D.",
   "topics": [
    "supplements",
    "supplements"
@@ -1014,7 +1014,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/",
   "kind": "guideline",
-  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS; check with a GP first if you have an eye condition or take medicines that make you sensitive to light.",
+  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS. Check with a doctor first if you have an eye condition or take medicines that make you sensitive to light.",
   "strength": "early: the NHS says there isn’t enough evidence to be sure light therapy works, though many people find it helps.",
   "topics": [
    "supplements",
@@ -1036,7 +1036,7 @@
   "url": "https://pubmed.ncbi.nlm.nih.gov/24395196/",
   "kind": "meta-analysis",
   "finding": "Across 47 trials (3,515 people), mindfulness programs gave small improvements in anxiety, depression and pain. They were not better than other active treatments such as exercise.",
-  "strength": "moderate: careful review; effects were small.",
+  "strength": "moderate: careful review. Effects were small.",
   "topics": [
    "supplements",
    "calm",
@@ -1058,7 +1058,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety",
   "kind": "guideline",
-  "finding": "Research suggests yoga may ease anxiety and depression symptoms, but it is unclear whether it helps anxiety disorders. It is generally safe for healthy people with a qualified teacher; sprains and strains can happen.",
+  "finding": "Research suggests yoga may ease anxiety and depression symptoms, but it is unclear whether it helps anxiety disorders. It is generally safe for healthy people with a qualified teacher. Sprains and strains can happen.",
   "strength": "early: helpful for symptoms, unclear for disorders.",
   "topics": [
    "supplements",
@@ -1100,7 +1100,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/massage-therapy-what-you-need-to-know",
   "kind": "guideline",
-  "finding": "Massage may ease anxiety in some settings, but results are inconsistent and it has not been shown to treat generalized anxiety disorder. Risks are low; rare serious problems have been reported, mostly with vigorous massage.",
+  "finding": "Massage may ease anxiety in some settings, but results are inconsistent and it has not been shown to treat generalized anxiety disorder. Risks are low. Rare serious problems have been reported, mostly with vigorous massage.",
   "strength": "mixed: inconsistent results.",
   "topics": [
    "supplements",
@@ -1281,7 +1281,7 @@
   "mentioned_on": [],
   "verified": false,
   "verified_by": "Search found the record but not its anxiety results.",
-  "note": "Bacopa left out of the page: research is mostly about memory; anxiety evidence is thin and I could not confirm this trial’s anxiety result."
+  "note": "Bacopa left out of the page: research is mostly about memory. Anxiety evidence is thin and I could not confirm this trial’s anxiety result."
  },
  {
   "id": "nhmrc-2015-homeopathy",

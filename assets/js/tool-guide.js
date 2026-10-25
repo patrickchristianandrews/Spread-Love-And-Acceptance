@@ -41,7 +41,7 @@
     s.addEventListener('load', function () { cb(); });
     s.addEventListener('error', function () { /* no data: leave the placeholder empty */ });
   }
-  // names12: the registry gives the panel its "In short" answers and "Based on" line; load it when the page hasn't
+  // names12: the registry gives the panel its "The short version" answers and "Based on" line; load it when the page hasn't
   // (the panel still draws without it, from its own words)
   function ensureReg(cb) {
     if (window.TOLTools) { cb(); return; }
@@ -61,7 +61,7 @@
     var basis = t.basis || (r && window.TOLToolBasisHTML ? window.TOLToolBasisHTML(r) : '');
     if (!problem && !todo && !leave && !basis) return '';
     var row = function (k, v) { return v ? '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>' : ''; };
-    return '<section class="tg-short"><h3 class="tg-h">In short</h3><dl class="tg-qa">' +
+    return '<section class="tg-short"><h3 class="tg-h">The short version</h3><dl class="tg-qa">' +
       row('What it helps with', problem) + row('What you’ll do', todo + (todo && t.time ? ' <span class="tg-soft">' + t.time + '</span>' : '')) +
       row('What you’ll leave with', leave) + row('Based on', basis) + '</dl></section>';
   }

@@ -52,6 +52,42 @@
     "height_in": 9.25,
     "spine_in": 0.2072
    }
+  },
+  "coloring-younger": {
+   "title": "Color with Tidbit and Sugarfoot",
+   "trim_in": [
+    8.5,
+    11
+   ],
+   "paper": "white",
+   "pictures": 32,
+   "pages_planned": 68,
+   "files": {
+    "coloring-younger": {
+     "pdf": "coloring-younger.pdf",
+     "pages": 68,
+     "bytes": 912856
+    }
+   },
+   "pages_printed": 68
+  },
+  "coloring-older": {
+   "title": "Color and Calm with Tidbit and Sugarfoot",
+   "trim_in": [
+    8.5,
+    11
+   ],
+   "paper": "white",
+   "pictures": 32,
+   "pages_planned": 68,
+   "files": {
+    "coloring-older": {
+     "pdf": "coloring-older.pdf",
+     "pages": 68,
+     "bytes": 2998172
+    }
+   },
+   "pages_printed": 68
   }
  }
 }

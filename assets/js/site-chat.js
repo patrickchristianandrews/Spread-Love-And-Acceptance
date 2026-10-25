@@ -1667,7 +1667,7 @@
     var paras = [], bullets = [], link = null, script = null;
     (blocks || []).forEach(function (b) {
       if (b.k === 'script' && keepScript && !script) script = b;
-      if (b.k === 'p' && !b.mean && !/^(Here’s|The site|This part|Sure|Here you go|Related|It also|Another page|This may be|In short)/.test(b.x)) paras.push(b.x);
+      if (b.k === 'p' && !b.mean && !/^(Here’s|The site|This part|Sure|Here you go|Related|It also|Another page|This may be|The short version)/.test(b.x)) paras.push(b.x);
       if (b.k === 'list' && !bullets.length) bullets = b.x.slice(0, 3);
       if (b.k === 'passage') { paras.push((b.x || []).join(' ').replace(/^…\s*/, '').replace(/\s*…$/, '')); if (!link && b.u) link = [b.h, b.u]; }
       if (b.k === 'bg') paras.push((b.x || []).join(' '));
@@ -1681,7 +1681,7 @@
     bullets = bullets.map(function (t) { return whole(t); }).slice(0, script ? 2 : 3);
     if (!first && !bullets.length) return null;
     var out = [];
-    if (first) out.push({ k: 'p', x: 'In short: ' + first });
+    if (first) out.push({ k: 'p', x: 'The short version: ' + first });
     if (bullets.length) out.push({ k: 'list', x: bullets });
     if (script) out.push(script);
     if (link) out.push({ k: 'links', x: [link] });
@@ -1731,7 +1731,7 @@
     var R = state.lastReply, out = shortBlocks(R && R.blocks);
     state.brief = 1;  // and short from here on, until they ask for more
     if (!out) return { blocks: [{ k: 'p', x: 'There’s nothing above to shorten yet. I’ll keep my answers short from now on.' },
-      { k: 'p', x: 'Pages have short ways in too: a 🌱 Simple version and 📌 In short at the top of long pages.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+      { k: 'p', x: 'Pages have short ways in too: a 🌱 Simple version and 📌 The short version at the top of long pages.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
     state.fullReply = R;
     return { blocks: out, chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
   }

@@ -40,7 +40,7 @@
     { id: 'literal', group: 'main', name: 'Plain and literal', note: 'No hints, idioms or jokey helper lines. Plain wording where a page offers it, and the “what to do” lists open.' },
     { id: 'listen', group: 'main', name: 'Listen instead of read', note: 'The “Listen” buttons are bigger and easier to find. Your device’s own voice reads the page aloud.' },
     { id: 'big', group: 'main', name: 'Big text and calm', note: 'Extra large text and a still page.' },
-    { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has an “In short” box, a button turns it into a picture summary.' },
+    { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has an “The short version” box, a button turns it into a picture summary.' },
     { id: 'onething', group: 'main', name: 'One thing at a time', note: 'Pages made of numbered idea cards show one card at a time, with Back, Next and “3 of 7.” “Show all at once” is always there.' },
     { id: 'notimer', group: 'main', name: 'No timers or countdowns', note: 'Countdown clocks are hidden. Breathing counts stay, because they set the pace of a breath, not a deadline.' },
     { id: 'nosurprise', group: 'main', name: 'No surprises', note: 'No pop-ups, pop-in helpers, level-up cards or offers. The page stays still.' },
@@ -364,7 +364,7 @@
     });
   }
 
-  // ---- Pictures and summaries: the "In short" box as a picture (Professor Puddles' poster maker, or a plain card)
+  // ---- Pictures and summaries: the "The short version" box as a picture (Professor Puddles' poster maker, or a plain card)
   function inShortBox() {
     return Array.prototype.filter.call(document.querySelectorAll('main .tol-inshort, main [data-in-short]'), function (n) { return !inOwn(n) && n.querySelector('li'); })[0] || null;
   }
@@ -385,9 +385,9 @@
   }
   function pageTitle() { var h = document.querySelector('main h1'); return ((h && h.textContent) || document.title || '').replace(/\s+/g, ' ').trim().split(/[:|]/)[0].slice(0, 70); }
   function drawPicture(host, items) {
-    var spec = { layout: 'checklist', marker: 'number', kicker: 'In short', title: pageTitle(), items: items.map(function (t) { return { text: t }; }), source: path };
+    var spec = { layout: 'checklist', marker: 'number', kicker: 'The short version', title: pageTitle(), items: items.map(function (t) { return { text: t }; }), source: path };
     function plain() {
-      host.innerHTML = '<figure class="ti-piccard"><figcaption><span>In short</span>' + esc(spec.title) + '</figcaption><ol>' +
+      host.innerHTML = '<figure class="ti-piccard"><figcaption><span>The short version</span>' + esc(spec.title) + '</figcaption><ol>' +
         items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol></figure>';
     }
     function poster() {
@@ -472,7 +472,7 @@
     if (!Object.keys(ON).length || busyPage() || path === PAGE) return;
     apply();
     placeLink();
-    // some parts arrive a moment later (the "In short" box and the steps switch from in-short.js, the Listen buttons)
+    // some parts arrive a moment later (the "The short version" box and the steps switch from in-short.js, the Listen buttons)
     [150, 400, 1200, 2500, 4500].forEach(function (ms) { setTimeout(function () { apply(); foldsWhenKnown(ms >= 4500); }, ms); });
     if (has('place') && !HOME) {
       window.addEventListener('scroll', notePlace, { passive: true });

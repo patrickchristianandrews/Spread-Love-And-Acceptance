@@ -64,7 +64,7 @@
   // Fades only ever use setTargetAtTime, so no volume change can jump or zipper.
   var A = { c: null, fade: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: 0, dropT: 0 };
   var HORIZON = 12;      // seconds of breathing scheduled ahead of now (so a slow timer or a busy tab can't starve the sound)
-  var TRIM = 2.5;        // overall level (sets how loud everything is, together; the sounds are balanced against each other below)
+  var TRIM = 1.6;        // overall level after the compressor (sets how loud everything is, together; the sounds are balanced against each other below)
   var FADE_TC = 2.4;     // fade-in time constant (about 9 s to be fully in)
   var FADE_OUT = 90;     // sleep timer: seconds from the first fade to the dark room
   var END_TC = 16;       // sleep timer: time constant of the fade-out (down 49 dB after 90 s)
@@ -105,7 +105,7 @@
   function siteSoundOK() { return lsGet('tol-quiet') !== '1' && lsGet('tol-sound-off') !== '1'; }
   function gainNode(v) { var gn = A.c.createGain(); gn.gain.value = v; return gn; }
   function filt(type, f, q) { var fl = A.c.createBiquadFilter(); fl.type = type; fl.frequency.value = f; if (q != null) fl.Q.value = q; return fl; }
-  function loopSrc(buf, rate) { var s = A.c.createBufferSource(); s.buffer = buf; s.loop = true; if (rate) s.playbackRate.value = rate; s.start(A.c.currentTime, Math.random() * buf.duration); return s; }
+  function loopSrc(buf, rate) { var s = A.c.createBufferSource(); s.buffer = buf; s.loop = true; if (rate) s.playbackRate.value = rate; else if (A.rateMod) A.rateMod.connect(s.playbackRate); s.start(A.c.currentTime, Math.random() * buf.duration); return s; }
   function chain() { for (var i = 0; i < arguments.length - 1; i++) arguments[i].connect(arguments[i + 1]); return arguments[arguments.length - 1]; }
   function panner(v) { var pn = A.c.createStereoPanner ? A.c.createStereoPanner() : A.c.createGain(); if (pn.pan) pn.pan.value = v; return pn; }
   function actx() {
@@ -115,12 +115,14 @@
     var c = A.c;
     A.fade = gainNode(0); A.mute = gainNode(S.soundOn ? 1 : 0);
     var trim = gainNode(TRIM), rumble = filt('highpass', 32, 0.5), tone = filt('lowpass', 3600, 0.5);
-    var comp = c.createDynamicsCompressor(); comp.threshold.value = -36; comp.knee.value = 24; comp.ratio.value = 3; comp.attack.value = 0.08; comp.release.value = 0.7;
+    var comp = c.createDynamicsCompressor(); comp.threshold.value = -34; comp.knee.value = 12; comp.ratio.value = 2.5; comp.attack.value = 0.1; comp.release.value = 0.8;
     var clip = c.createWaveShaper(); clip.curve = softCurve(); try { clip.oversample = '2x'; } catch (e) {}
-    chain(A.fade, A.mute, trim, rumble, tone, comp, clip, c.destination);
+    chain(A.fade, A.mute, rumble, tone, comp, trim, clip, c.destination);
     A.snore = gainNode(S.snore ? 1 : 0); A.bed = gainNode(1); A.sfx = gainNode(1);
     A.snore.connect(A.fade); A.bed.connect(A.fade); A.sfx.connect(A.fade);
-    A.bufs = { pinkA: makeNoise(c, 'pink', 9.1, 0.25), pinkB: makeNoise(c, 'pink', 13.7, 0.25), brownA: makeNoise(c, 'brown', 11.3, 0.25), brownB: makeNoise(c, 'brown', 17.9, 0.25), flut: makeNoise(c, 'flut', 23.3, 1) };
+    A.bufs = { pinkA: makeNoise(c, 'pink', 23.1, 0.25), pinkB: makeNoise(c, 'pink', 31.7, 0.25), brownA: makeNoise(c, 'brown', 29.3, 0.25), brownB: makeNoise(c, 'brown', 41.9, 0.25), flut: makeNoise(c, 'flut', 23.3, 1) };
+    // every noise loop also drifts in speed by a fraction of a percent, at random, so even the loop length never shows up as a repeat
+    A.rateMod = gainNode(0.003); var rs = c.createBufferSource(); rs.buffer = A.bufs.flut; rs.loop = true; rs.playbackRate.value = 0.02; rs.start(c.currentTime, Math.random() * 20); rs.connect(A.rateMod);
     buildSnorers();
     // a barely-there floor of room air, so the sound never drops to digital silence between breaths (some speakers cut out and then pop when it does)
     var fl = gainNode(0.004); chain(loopSrc(A.bufs.pinkB), filt('lowpass', 500, 0.5), fl, A.bed);
@@ -220,18 +222,18 @@
       layer(B.pinkB, [filt('highpass', 650, 0.5), filt('lowpass', 3000, 0.5)], 0.55, 0.5);
       layer(B.pinkB, [filt('bandpass', 1300, 0.5)], 0.45, -0.2);
       layer(B.brownA, [filt('bandpass', 170, 0.6)], 0.35, 0.2);
-      lv = 0.5; dd.gain.value = 0.1;
+      lv = 0.024; dd.gain.value = 0.1;
     } else if (kind === 'fan') {
       layer(B.brownA, [filt('lowpass', 520, 0.5)], 0.6, -0.3);
       layer(B.brownB, [filt('lowpass', 520, 0.5)], 0.6, 0.3);
       layer(B.pinkA, [filt('bandpass', 380, 0.5), filt('lowpass', 900, 0.5)], 0.32, 0);
       layer(B.brownB, [filt('bandpass', 118, 9)], 0.9, 0);
-      lv = 0.5; dd.gain.value = 0.03;
+      lv = 0.0245; dd.gain.value = 0.03;
     } else {
       layer(B.brownA, [filt('lowpass', 480, 0.5)], 0.7, -0.45);
       layer(B.brownB, [filt('lowpass', 480, 0.5)], 0.7, 0.45);
       layer(B.brownA, [filt('lowpass', 300, 0.5)], 0.4, 0);
-      lv = 0.5; dd.gain.value = 0.02;
+      lv = 0.0233; dd.gain.value = 0.02;
     }
     // a slow, random swell in the bed (never periodic)
     var sw = add(B.flut, 0.012); chain(sw, dd, drift.gain); drift.connect(gn);
@@ -269,13 +271,13 @@
   // ---- the funny little moments: all soft, all rounded, none louder than a snore
   function B_() { return A.bufs; }
   var SFX = {
-    step: function () { if (!A.c) return; voice({ buf: B_().brownB, f: [['lowpass', rand(190, 260), 0.5]], a: 0.014, r: 0.1, pk: 0.06 * rand(0.7, 1.1), pan: rand(-0.15, 0.15) }); },
+    step: function () { if (!A.c) return; voice({ buf: B_().brownB, f: [['lowpass', rand(190, 260), 0.5]], a: 0.014, r: 0.1, pk: 0.038 * rand(0.7, 1.1), pan: rand(-0.15, 0.15) }); },
     rustle: function () { if (!A.c) return; var t = A.c.currentTime; for (var i = 0; i < 3; i++) voice({ t: t + i * rand(0.35, 0.55), buf: B_().pinkB, f: [['bandpass', rand(600, 900), 0.6], ['lowpass', 1400, 0.5]], a: 0.22, h: 0.1, r: 0.4, pk: 0.017 * rand(0.6, 1), pan: rand(-0.3, 0.3) }); },
-    fridge: function () { if (!A.c) return; var t = A.c.currentTime; voice({ t: t, buf: B_().brownA, f: [['lowpass', 170, 0.5]], a: 0.03, r: 0.25, pk: 0.054, pan: 0.5 }); voice({ t: t + 0.02, buf: B_().pinkA, f: [['bandpass', 520, 0.7], ['lowpass', 1000, 0.5]], a: 0.04, r: 0.12, pk: 0.0054, pan: 0.5 }); },
+    fridge: function () { if (!A.c) return; var t = A.c.currentTime; voice({ t: t, buf: B_().brownA, f: [['lowpass', 170, 0.5]], a: 0.03, r: 0.25, pk: 0.021, pan: 0.5 }); voice({ t: t + 0.02, buf: B_().pinkA, f: [['bandpass', 520, 0.7], ['lowpass', 1000, 0.5]], a: 0.04, r: 0.12, pk: 0.003, pan: 0.5 }); },
     hum: function (len) { if (!A.c) return; var t = A.c.currentTime; len = Math.max(3.5, len); voice({ t: t, buf: B_().brownA, f: [['bandpass', 100, 6]], a: 1.2, h: len - 2.4, r: 1.2, pk: 0.047, pan: 0.5 }); voice({ t: t, buf: B_().brownB, f: [['bandpass', 200, 9]], a: 1.4, h: len - 2.8, r: 1.4, pk: 0.013, pan: 0.5 }); },
     crunch: function () { if (!A.c) return; var t = A.c.currentTime, n = 2 + Math.floor(Math.random() * 2); for (var i = 0; i < n; i++) voice({ t: t + i * rand(0.12, 0.2), buf: B_().pinkA, f: [['bandpass', rand(800, 1300), 1], ['lowpass', 1700, 0.5]], a: 0.012, r: rand(0.06, 0.1), pk: 0.047 * rand(0.6, 1), pan: -0.2 }); },
     lap: function () { if (!A.c) return; voice({ buf: B_().pinkB, f: [['bandpass', 560, 3.2, 980], ['lowpass', 1600, 0.5]], a: 0.03, r: rand(0.07, 0.11), pk: 0.069 * rand(0.7, 1), pan: 0.2 }); },
-    bump: function () { if (!A.c) return; voice({ buf: B_().brownA, f: [['lowpass', 150, 0.5]], a: 0.015, r: 0.26, pk: 0.052, pan: -0.5 }); },
+    bump: function () { if (!A.c) return; voice({ buf: B_().brownA, f: [['lowpass', 150, 0.5]], a: 0.015, r: 0.26, pk: 0.04, pan: -0.5 }); },
     sigh: function (id) { if (!A.c) return; var pan = id === 'sugarfoot' ? 0.3 : -0.3; voice({ buf: B_().pinkA, f: [['bandpass', 820, 1.3, 470], ['lowpass', 1300, 0.5]], a: 0.45, h: 0.1, r: 0.95, pk: 0.02, pan: pan }); voice({ buf: B_().brownB, f: [['bandpass', id === 'sugarfoot' ? 190 : 250, 8, id === 'sugarfoot' ? 150 : 190]], a: 0.45, h: 0.1, r: 0.95, pk: 0.062, pan: pan }); },
     woof: function (id) { if (!A.c) return; var pan = id === 'sugarfoot' ? 0.3 : -0.3, f = id === 'sugarfoot' ? 170 : 240; voice({ buf: B_().brownA, f: [['bandpass', f, 9, f * 0.72]], a: 0.07, h: 0.06, r: 0.28, pk: 0.135, pan: pan }); voice({ buf: B_().pinkB, f: [['bandpass', f * 3, 1.2], ['lowpass', 900, 0.5]], a: 0.07, h: 0.04, r: 0.2, pk: 0.012, pan: pan }); }
   };

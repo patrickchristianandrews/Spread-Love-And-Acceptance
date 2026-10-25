@@ -1,4 +1,4 @@
-/* in-short.js — "In short": three plain bullets at the top of the long pages (the Full versions
+/* in-short.js — "The short version": three plain bullets at the top of the long pages (the Full versions
    and the Professor's Library), and a "Show me only the steps" switch on long pages.
    site.js loads this on those pages. Nothing is kept or sent. */
 (function () {
@@ -69,8 +69,8 @@
 
   if (S[path]) {
     var box = document.createElement('aside');
-    box.className = 'tol-inshort no-cheer'; box.setAttribute('aria-label', 'In short');
-    box.innerHTML = '<p class="tol-inshort-h"><span aria-hidden="true">&#128204;</span> In short</p><ul>' + S[path].map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>';
+    box.className = 'tol-inshort no-cheer'; box.setAttribute('aria-label', 'The short version');
+    box.innerHTML = '<p class="tol-inshort-h"><span aria-hidden="true">&#128204;</span> The short version</p><ul>' + S[path].map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>';
     place(box);
   }
 

@@ -9,7 +9,7 @@
     "url": "https://worlddatabaseofhappiness.eur.nl/publications/mood-misattribution-and-judgements-of-well-being-informative-and-directive-functions-of-affective-states-1841",
     "kind": "study",
     "finding": "People in a good mood (including people phoned on sunny days) rated their happiness and life satisfaction higher. A bad mood stopped lowering their ratings once their attention was drawn to an outside cause, such as the weather.",
-    "strength": "moderate: a classic demonstration of \"feelings as information\"; later large studies found the weather effect on life satisfaction to be very small.",
+    "strength": "moderate: a classic demonstration of \"feelings as information\". Later large studies found the weather effect on life satisfaction to be very small.",
     "topics": [
       "emotions",
       "feelings-as-information"
@@ -31,7 +31,7 @@
     "url": "https://doi.org/10.1093/mind/os-IX.34.188",
     "kind": "theory",
     "finding": "James argued that bodily changes follow directly from perceiving something exciting, and that our feeling of those bodily changes is the emotion.",
-    "strength": "debated: a founding theory; challenged by Cannon and others, but body–feeling links remain central in emotion science.",
+    "strength": "debated: a founding theory. Challenged by Cannon and others, but body–feeling links remain central in emotion science.",
     "topics": [
       "emotions",
       "interoception"
@@ -75,7 +75,7 @@
     "url": "https://doi.org/10.1038/nrn894",
     "kind": "review",
     "finding": "Described a pathway that carries signals about the body's internal state to the brain (including the insula), and proposed it underlies subjective feelings, emotion and self-awareness.",
-    "strength": "strong: a foundational, widely cited review; some proposals remain theoretical.",
+    "strength": "strong: a foundational, widely cited review. Some proposals remain theoretical.",
     "topics": [
       "interoception",
       "emotions"
@@ -97,7 +97,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5390700/",
     "kind": "theory",
     "finding": "Sets out the theory that the brain constantly predicts the body's needs and constructs emotions by making sense of body sensations using learned concepts.",
-    "strength": "debated: influential and actively tested; basic-emotion researchers disagree.",
+    "strength": "debated: influential and actively tested. Basic-emotion researchers disagree.",
     "topics": [
       "emotions",
       "interoception"
@@ -119,8 +119,8 @@
     "doi": "10.1111/j.1467-9280.2007.01916.x",
     "url": "https://doi.org/10.1111/j.1467-9280.2007.01916.x",
     "kind": "study",
-    "finding": "In a brain-imaging study, labelling the emotion in a picture reduced amygdala and other limbic responses compared with other ways of processing the image.",
-    "strength": "moderate: replicated lab finding; effects are modest and mostly measured with pictures in the lab.",
+    "finding": "In a brain-imaging study, labeling the emotion in a picture reduced amygdala and other limbic responses compared with other ways of processing the image.",
+    "strength": "moderate: replicated lab finding. Effects are modest and mostly measured with pictures in the lab.",
     "topics": [
       "emotions",
       "affect-labeling"
@@ -146,7 +146,7 @@
     "url": "https://doi.org/10.1177/1754073917742706",
     "kind": "review",
     "finding": "Reviewed evidence that naming a feeling can reduce its intensity even though it does not feel like regulating it at the time.",
-    "strength": "moderate: consistent lab evidence; the authors say understanding of how it works is still early.",
+    "strength": "moderate: consistent lab evidence. The authors say understanding of how it works is still early.",
     "topics": [
       "emotions",
       "affect-labeling"
@@ -167,7 +167,7 @@
     "doi": "10.1177/0956797612443830",
     "url": "https://doi.org/10.1177/0956797612443830",
     "kind": "study",
-    "finding": "Spider-fearful people who described their feelings in words while near a live spider showed lower skin-conductance arousal a week later than people who reappraised, distracted themselves or had exposure alone; self-reported fear did not differ between groups.",
+    "finding": "Spider-fearful people who described their feelings in words while near a live spider showed lower skin-conductance arousal a week later than people who reappraised, distracted themselves or had exposure alone. Self-reported fear did not differ between groups.",
     "strength": "early: a single small experiment.",
     "topics": [
       "emotions",
@@ -188,8 +188,8 @@
     "doi": "10.1037/0021-843X.95.3.274",
     "url": "https://doi.org/10.1037/0021-843X.95.3.274",
     "kind": "study",
-    "finding": "An early expressive-writing experiment in which students wrote about traumatic experiences over several days; it launched decades of research on whether writing about difficult experiences helps health and well-being.",
-    "strength": "moderate: launched a large literature; later meta-analyses find small average benefits.",
+    "finding": "An early expressive-writing experiment in which students wrote about traumatic experiences over several days. It launched decades of research on whether writing about difficult experiences helps health and well-being.",
+    "strength": "moderate: launched a large literature. Later meta-analyses find small average benefits.",
     "topics": [
       "emotions",
       "expressive-writing",
@@ -264,7 +264,7 @@
     "url": "https://dtg.sites.fas.harvard.edu/DANWEGNER/pub/Wegner,Schneider,Carter,&White%201987.pdf",
     "kind": "study",
     "finding": "People asked not to think of a white bear kept thinking of it, suggesting that trying to suppress a thought can backfire.",
-    "strength": "moderate: classic, widely replicated in broad form; size of the rebound varies.",
+    "strength": "moderate: classic, widely replicated in broad form. Size of the rebound varies.",
     "topics": [
       "emotions",
       "thought-suppression"
@@ -285,7 +285,7 @@
     "doi": null,
     "url": "https://ppw.kuleuven.be/okp/_pdf/Verduyn2015WELLA.pdf",
     "kind": "study",
-    "finding": "Of 27 emotions studied, sadness lasted longest, while shame, surprise, fear and disgust were among the shortest; long-lasting emotions tended to follow important events and involve rumination.",
+    "finding": "Of 27 emotions studied, sadness lasted longest, while shame, surprise, fear and disgust were among the shortest. Long-lasting emotions tended to follow important events and involve rumination.",
     "strength": "moderate: a single self-report study, consistent with other duration research.",
     "topics": [
       "emotions",
@@ -307,7 +307,7 @@
     "url": "https://catalogue.bnf.fr/ark:/12148/cb37435416b",
     "kind": "book",
     "finding": "Describes emotional contagion: people tend to mimic each other's faces, voices and postures, and that mimicry can shift their own feelings.",
-    "strength": "moderate: well supported face to face; online contagion effects are small.",
+    "strength": "moderate: well supported face to face. Online contagion effects are small.",
     "topics": [
       "emotions",
       "emotional-contagion"
@@ -352,7 +352,7 @@
     "doi": "10.1037/0022-3514.85.2.348",
     "url": "https://doi.org/10.1037/0022-3514.85.2.348",
     "kind": "study",
-    "finding": "Across five studies, people who habitually reappraised had better emotional experience, relationships and well-being; habitual suppression was linked to worse outcomes.",
+    "finding": "Across five studies, people who habitually reappraised had better emotional experience, relationships and well-being. Habitual suppression was linked to worse outcomes.",
     "strength": "strong: widely replicated, though costs of suppression vary across cultures.",
     "topics": [
       "emotions",
@@ -398,7 +398,7 @@
     "doi": "10.1177/0146167202289002",
     "url": "https://public.websites.umich.edu/~bbushman/PSPB02.pdf",
     "kind": "study",
-    "finding": "Angered people who hit a punching bag while thinking about the person who provoked them felt angrier afterwards than people who were distracted or did nothing.",
+    "finding": "Angered people who hit a punching bag while thinking about the person who provoked them felt angrier afterward than people who were distracted or did nothing.",
     "strength": "moderate: a single experiment, consistent with later meta-analytic work.",
     "topics": [
       "emotions",
@@ -424,7 +424,7 @@
     "url": "https://news.osu.edu/breathe-dont-vent-turning-down-the-heat-is-key-to-managing-anger/",
     "kind": "meta-analysis",
     "finding": "Across 154 studies, activities that calm the body (such as slow breathing, relaxation and mindfulness) reduced anger and aggression, while arousal-increasing activities showed little or no benefit.",
-    "strength": "moderate: a large meta-analysis; the authors say more research is needed. DOI not confirmed in search, so the link is the university news release.",
+    "strength": "moderate: a large meta-analysis. The authors say more research is needed. DOI not confirmed in search, so the link is the university news release.",
     "topics": [
       "emotions",
       "anger",
@@ -448,7 +448,7 @@
     "url": "https://karger.com/pps/article/22/2-6/255/280361/The-Prevalence-of-Alexithymic-Characteristics-in",
     "kind": "study",
     "finding": "Introduced the term \"alexithymia\" for difficulty finding words for feelings, along with a limited fantasy life, and found these traits more often in psychosomatic patients than in controls.",
-    "strength": "early: small clinical sample; historically important as the origin of the term.",
+    "strength": "early: small clinical sample. Historically important as the origin of the term.",
     "topics": [
       "emotions",
       "alexithymia"
@@ -489,7 +489,7 @@
     "doi": "10.1016/j.eurpsy.2018.09.004",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
     "kind": "meta-analysis",
-    "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+    "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants. Alexithymia is common in autism but not universal.",
     "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
     "topics": [
       "alexithymia",
@@ -513,7 +513,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3731793/",
     "kind": "review",
     "finding": "Argued that emotional difficulties seen in some autistic people are better explained by co-occurring alexithymia than by autism itself.",
-    "strength": "moderate: an influential hypothesis with growing support; still being tested.",
+    "strength": "moderate: an influential hypothesis with growing support. Still being tested.",
     "topics": [
       "alexithymia",
       "neurodiversity",
@@ -562,7 +562,7 @@
     "doi": null,
     "url": "https://find.library.upenn.edu/catalog/99549673503681",
     "kind": "book",
-    "finding": "Drawing on therapy sessions, Lewis distinguished shame, which centres on the whole self, from guilt, which centres on a specific act.",
+    "finding": "Drawing on therapy sessions, Lewis distinguished shame, which centers on the whole self, from guilt, which centers on a specific act.",
     "strength": "moderate: clinical observation that later research by Tangney and others built on.",
     "topics": [
       "self-worth",
@@ -608,8 +608,8 @@
     "doi": "10.1111/1467-8624.00509",
     "url": "https://doi.org/10.1111/1467-8624.00509",
     "kind": "study",
-    "finding": "In 608 school students, co-rumination (repeatedly going over problems with a friend) was linked both to closer friendships and to more depression and anxiety symptoms; girls co-ruminated more.",
-    "strength": "moderate: replicated mostly with adolescents; correlational.",
+    "finding": "In 608 school students, co-rumination (repeatedly going over problems with a friend) was linked both to closer friendships and to more depression and anxiety symptoms. Girls co-ruminated more.",
+    "strength": "moderate: replicated mostly with adolescents. Correlational.",
     "topics": [
       "emotions",
       "rumination"
@@ -657,7 +657,7 @@
     "doi": "10.1037/0003-066X.56.3.227",
     "url": "https://doi.org/10.1037/0003-066X.56.3.227",
     "kind": "review",
-    "finding": "Concluded that resilience is common and usually arises from ordinary human adaptive systems, such as relationships; the main threats are things that damage those systems.",
+    "finding": "Concluded that resilience is common and usually arises from ordinary human adaptive systems, such as relationships. The main threats are things that damage those systems.",
     "strength": "strong: influential review of developmental research.",
     "topics": [
       "resilience"
@@ -679,7 +679,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3122271/",
     "kind": "theory",
     "finding": "Proposed that positive emotions broaden attention and thinking and, over time, help build lasting personal resources.",
-    "strength": "moderate: influential, with experimental support for broadening; the separate \"positivity ratio\" claim was discredited.",
+    "strength": "moderate: influential, with experimental support for broadening. The separate \"positivity ratio\" claim was discredited.",
     "topics": [
       "emotions",
       "positive-emotions"
@@ -721,7 +721,7 @@
     "url": "https://doi.org/10.1177/1529100619832930",
     "kind": "review",
     "finding": "Concluded that facial movements are not reliable enough to infer a person's specific emotion across situations and cultures.",
-    "strength": "debated: a major review; basic-emotion researchers dispute parts of it.",
+    "strength": "debated: a major review. Basic-emotion researchers dispute parts of it.",
     "topics": [
       "emotions"
     ],
@@ -763,7 +763,7 @@
     "url": "https://doi.org/10.1126/science.1089134",
     "kind": "study",
     "finding": "Being left out of a virtual ball-tossing game increased activity in the anterior cingulate cortex, a region also involved in physical pain distress, in proportion to how upset people felt.",
-    "strength": "debated: influential small brain-imaging study; how closely social and physical pain overlap is still argued.",
+    "strength": "debated: influential small brain-imaging study. How closely social and physical pain overlap is still argued.",
     "topics": [
       "emotions",
       "healing",
@@ -785,8 +785,8 @@
     "doi": "10.1037/0022-3514.74.5.1225",
     "url": "https://doi.org/10.1037/0022-3514.74.5.1225",
     "kind": "study",
-    "finding": "Hurt feelings were triggered by events that signalled relational devaluation (feeling less valued by someone), usually by people the person knew well.",
-    "strength": "moderate: retrospective accounts; widely supported idea.",
+    "finding": "Hurt feelings were triggered by events that signaled relational devaluation (feeling less valued by someone), usually by people the person knew well.",
+    "strength": "moderate: retrospective accounts. Widely supported idea.",
     "topics": [
       "emotions",
       "healing"
@@ -806,7 +806,7 @@
     "doi": "10.1016/j.cub.2014.06.054",
     "url": "https://doi.org/10.1016/j.cub.2014.06.054",
     "kind": "review",
-    "finding": "Distinguished empathic distress (sharing someone's pain, which can overwhelm) from compassion (warm concern), which engage different brain networks; brief compassion training increased positive feelings.",
+    "finding": "Distinguished empathic distress (sharing someone's pain, which can overwhelm) from compassion (warm concern), which engage different brain networks. Brief compassion training increased positive feelings.",
     "strength": "early: promising lab studies with relatively small samples.",
     "topics": [
       "helping",
@@ -833,7 +833,7 @@
     "url": "https://www.routledge.com/Compassion-Fatigue-Coping-with-Secondary-Traumatic-Stress-Disorder-in-Those/Figley/p/book/9780876307595",
     "kind": "book",
     "finding": "An edited volume introducing \"compassion fatigue\" as a cost of helping traumatized people, distinguished from burnout and PTSD, with ideas for prevention.",
-    "strength": "moderate: a widely used clinical concept; measurement is debated.",
+    "strength": "moderate: a widely used clinical concept. Measurement is debated.",
     "topics": [
       "helping",
       "compassion-fatigue",
@@ -857,7 +857,7 @@
     "url": "https://doi.org/10.1037/0033-295X.107.3.411",
     "kind": "theory",
     "finding": "Proposed that under stress people, perhaps especially women, often respond by protecting others and seeking social connection (\"tend and befriend\"), not only fight or flight.",
-    "strength": "moderate: influential theory with supporting evidence; sex differences are debated.",
+    "strength": "moderate: influential theory with supporting evidence. Sex differences are debated.",
     "topics": [
       "stress"
     ],
@@ -877,7 +877,7 @@
     "doi": null,
     "url": "https://wellcomecollection.org/works/b5zr7tvm",
     "kind": "book",
-    "finding": "Set out the appraisal model: stress depends on judging whether something threatens you and whether you can cope; it also distinguished problem-focused from emotion-focused coping.",
+    "finding": "Set out the appraisal model: stress depends on judging whether something threatens you and whether you can cope. It also distinguished problem-focused from emotion-focused coping.",
     "strength": "strong: one of the most influential frameworks in stress research.",
     "topics": [
       "stress",
@@ -924,7 +924,7 @@
     "url": "https://doi.org/10.1016/j.biopsycho.2023.108589",
     "kind": "review",
     "finding": "Reviewed the evidence for each of polyvagal theory's five basic premises and argued that each is untenable or highly implausible.",
-    "strength": "debated: a strong critique; Porges and colleagues have responded.",
+    "strength": "debated: a strong critique. Porges and colleagues have responded.",
     "topics": [
       "stress",
       "polyvagal"
@@ -967,7 +967,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/8379800/",
     "kind": "theory",
     "finding": "Introduced \"allostatic load\": the cumulative wear and tear on the body from repeated or chronic stress responses.",
-    "strength": "moderate: a widely used framework; there is no single agreed way to measure it.",
+    "strength": "moderate: a widely used framework. There is no single agreed way to measure it.",
     "topics": [
       "stress",
       "allostatic-load"
@@ -1011,7 +1011,7 @@
     "url": "https://doi.org/10.1007/BF00844845",
     "kind": "study",
     "finding": "Everyday hassles predicted psychological symptoms better than major life events did, and still did after life events were taken into account.",
-    "strength": "moderate: a classic study; many later studies support the importance of daily hassles.",
+    "strength": "moderate: a classic study. Many later studies support the importance of daily hassles.",
     "topics": [
       "stress"
     ],
@@ -1030,7 +1030,7 @@
     "doi": null,
     "url": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf",
     "kind": "study",
-    "finding": "Air traffic controllers (33) and their wives reported over three days; after high-workload days the controllers were more socially withdrawn at home, especially when their wives were supportive.",
+    "finding": "Air traffic controllers (33) and their wives reported over three days. After high-workload days the controllers were more socially withdrawn at home, especially when their wives were supportive.",
     "strength": "moderate: a small, influential daily study of stress spillover.",
     "topics": [
       "stress",
@@ -1079,7 +1079,7 @@
     "url": "https://doi.org/10.1177/1948550613488952",
     "kind": "study",
     "finding": "In a 14-day daily study, people reported more conflict with their partner after poor nights of sleep, and conflicts were resolved best when both partners were well rested.",
-    "strength": "moderate: diary and lab evidence; correlational in part.",
+    "strength": "moderate: diary and lab evidence. Correlational in part.",
     "topics": [
       "stress",
       "sleep",
@@ -1128,7 +1128,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947/",
     "kind": "study",
     "finding": "In a month-long randomized trial of five minutes a day, breathing exercises improved mood more than mindfulness meditation, with cyclic sighing (long out-breaths) showing the largest benefits.",
-    "strength": "early: a single remote trial; needs replication.",
+    "strength": "early: a single remote trial. Needs replication.",
     "topics": [
       "stress",
       "calm",
@@ -1152,7 +1152,7 @@
     "url": "https://doi.org/10.1037/1076-8998.12.3.204",
     "kind": "study",
     "finding": "Identified four separate recovery experiences outside work: psychological detachment, relaxation, mastery and control.",
-    "strength": "strong: widely used measure; recovery research is extensive and consistent.",
+    "strength": "strong: widely used measure. Recovery research is extensive and consistent.",
     "topics": [
       "stress",
       "rest",
@@ -1176,7 +1176,7 @@
     "url": "https://doi.org/10.1111/jopy.12264",
     "kind": "study",
     "finding": "In a 12-day experience-sampling study, acting extraverted went with better mood at the time but more fatigue about three hours later, for introverts and extraverts alike.",
-    "strength": "early: small sample (48 people); the authors called for replication.",
+    "strength": "early: small sample (48 people). The authors called for replication.",
     "topics": [
       "stress",
       "rest",
@@ -1221,7 +1221,7 @@
     "doi": "10.1016/j.copsyc.2014.12.021",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/",
     "kind": "theory",
-    "finding": "Proposes that the brain expects to have supportive people around, which lowers perceived risk and effort; without them, coping takes more effort.",
+    "finding": "Proposes that the brain expects to have supportive people around, which lowers perceived risk and effort. Without them, coping takes more effort.",
     "strength": "moderate: a theory supported by a growing set of mostly small studies.",
     "topics": [
       "stress",
@@ -1266,7 +1266,7 @@
     "url": "https://doi.org/10.1016/j.bpsc.2017.12.004",
     "kind": "review",
     "finding": "A consensus review from the 2016 Interoception Summit on how to measure interoception and study its role in mental health.",
-    "strength": "moderate: expert consensus; the field is still developing reliable measures.",
+    "strength": "moderate: expert consensus. The field is still developing reliable measures.",
     "topics": [
       "interoception",
       "stress"
@@ -1286,8 +1286,8 @@
     "doi": "10.1002/cne.920180503",
     "url": "https://psychclassics.yorku.ca/Yerkes/Law/",
     "kind": "study",
-    "finding": "Studied how the strength of an electric shock affected how quickly dancing mice learned to avoid a black passage; later writers turned it into a general \"inverted U\" for arousal and performance.",
-    "strength": "debated: the original was an animal study; the popular human \"law\" is an oversimplification.",
+    "finding": "Studied how the strength of an electric shock affected how quickly dancing mice learned to avoid a black passage. Later writers turned it into a general \"inverted U\" for arousal and performance.",
+    "strength": "debated: the original was an animal study. The popular human \"law\" is an oversimplification.",
     "topics": [
       "stress"
     ],
@@ -1308,7 +1308,7 @@
     "url": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4",
     "kind": "study",
     "finding": "Introduced the Maslach Burnout Inventory, with three parts: emotional exhaustion, depersonalization and reduced personal accomplishment.",
-    "strength": "strong: the standard burnout measure; its overlap with depression is debated.",
+    "strength": "strong: the standard burnout measure. Its overlap with depression is debated.",
     "topics": [
       "burnout",
       "helping",
@@ -1355,7 +1355,7 @@
     "url": "https://doi.org/10.1037/0882-7974.18.2.250",
     "kind": "meta-analysis",
     "finding": "Across 84 studies, caregivers reported more stress and depression and lower well-being than non-caregivers, with smaller differences in physical health and larger differences for dementia caregivers.",
-    "strength": "strong: large meta-analysis; caregiving also brings positive aspects such as meaning.",
+    "strength": "strong: large meta-analysis. Caregiving also brings positive aspects such as meaning.",
     "topics": [
       "helping",
       "carer-burden",
@@ -1379,7 +1379,7 @@
     "url": "https://doi.org/10.1037/emo0000422",
     "kind": "study",
     "finding": "Hunger made people judge things more negatively in negative situations, and in the lab hungry people felt worse and judged a researcher more harshly, but mainly when they were not paying attention to their own feelings.",
-    "strength": "early: a few experiments; the authors argue hunger alone is not enough to cause \"hangriness\".",
+    "strength": "early: a few experiments. The authors argue hunger alone is not enough to cause \"hangriness\".",
     "topics": [
       "stress",
       "emotions"
@@ -1389,7 +1389,7 @@
     ],
     "verified": true,
     "verified_by": "https://collegearchive.unc.edu/?p=25108 ; https://www.carolinaaffectivescience.com/s/MacCormackLindquist_inpress_Emotion-938x.pdf",
-    "note": "Year given as the online publication year (June 2018), which the search confirmed; the print issue year could not be confirmed."
+    "note": "Year given as the online publication year (June 2018), which the search confirmed. The print issue year could not be confirmed."
   },
   {
     "id": "swami-2022",
@@ -1464,8 +1464,8 @@
     "doi": null,
     "url": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/Wood.Quinn_.Kashy_.2002_Habits_in_everyday_life.pdf",
     "kind": "study",
-    "finding": "In two diary studies with hourly reports, a large share of everyday behaviour was habitual (repeated in the same place, often while thinking about something else), and habits came with less stress than non-habitual actions.",
-    "strength": "strong: an influential diary study; supported by later habit research.",
+    "finding": "In two diary studies with hourly reports, a large share of everyday behavior was habitual (repeated in the same place, often while thinking about something else), and habits came with less stress than non-habitual actions.",
+    "strength": "strong: an influential diary study. Supported by later habit research.",
     "topics": [
       "habits",
       "change"
@@ -1487,8 +1487,8 @@
     "doi": "10.1177/0146167211419863",
     "url": "https://doi.org/10.1177/0146167211419863",
     "kind": "study",
-    "finding": "In field experiments on habitual eating, people with a strong cinema-popcorn habit ate stale popcorn about as much as fresh popcorn in a cinema, but not in a different setting: context cues drove the habit more than taste or intentions.",
-    "strength": "moderate: two field experiments; consistent with wider habit research.",
+    "finding": "In field experiments on habitual eating, people with a strong movie theater-popcorn habit ate stale popcorn about as much as fresh popcorn in a movie theater, but not in a different setting: context cues drove the habit more than taste or intentions.",
+    "strength": "moderate: two field experiments. Consistent with wider habit research.",
     "topics": [
       "habits",
       "change"
@@ -1508,8 +1508,8 @@
     "doi": "10.1002/ejsp.674",
     "url": "https://doi.org/10.1002/ejsp.674",
     "kind": "study",
-    "finding": "Following 96 volunteers who repeated a daily behaviour in the same context for 12 weeks, automaticity rose along a curve that levelled off; reaching 95% of each person's plateau took between 18 and 254 days, and missing a single day did not meaningfully set progress back.",
-    "strength": "moderate: small sample (82 gave usable data, with good model fit for fewer); widely cited and not yet closely replicated.",
+    "finding": "Following 96 volunteers who repeated a daily behavior in the same context for 12 weeks, automaticity rose along a curve that leveled off. Reaching 95% of each person's plateau took between 18 and 254 days, and missing a single day did not meaningfully set progress back.",
+    "strength": "moderate: small sample (82 gave usable data, with good model fit for fewer). Widely cited and not yet closely replicated.",
     "topics": [
       "habits",
       "change"
@@ -1538,7 +1538,7 @@
     "url": "https://doi.org/10.1080/14792779343000059",
     "kind": "theory",
     "finding": "Introduced implementation intentions: plans that link a goal-directed action to a situation you expect (\"when X happens, I will do Y\"). The paper reports experiments suggesting these plans make the chosen cue easier to notice and let the action start more automatically when the cue appears.",
-    "strength": "strong: the paper that introduced the idea; later reviews and meta-analyses found if-then plans help people act on their goals.",
+    "strength": "strong: the paper that introduced the idea. Later reviews and meta-analyses found if-then plans help people act on their goals.",
     "topics": [
       "habits",
       "change",
@@ -1590,7 +1590,7 @@
     "url": "https://doi.org/10.1016/S0065-2601(06)38002-1",
     "kind": "meta-analysis",
     "finding": "A meta-analysis of 94 independent tests found that forming if-then plans had a medium-to-large effect on reaching goals (d = .65).",
-    "strength": "strong: one of the more robust findings in behaviour change, though effects vary by task.",
+    "strength": "strong: one of the more robust findings in behavior change, though effects vary by task.",
     "topics": [
       "habits",
       "change",
@@ -1640,7 +1640,7 @@
     "url": "https://doi.org/10.1177/1745691616652873",
     "kind": "study",
     "finding": "A preregistered replication across 23 labs (2,141 participants) found an ego-depletion effect close to zero (d = 0.04, confidence interval including zero).",
-    "strength": "strong: large preregistered replication; the debate over ego depletion continues.",
+    "strength": "strong: large preregistered replication. The debate over ego depletion continues.",
     "topics": [
       "habits",
       "change",
@@ -1663,7 +1663,7 @@
     "url": "https://doi.org/10.1037/a0026545",
     "kind": "study",
     "finding": "Tracking people's desires through the day by smartphone, the researchers found that people high in trait self-control reported fewer temptations and conflicts, rather than resisting more often.",
-    "strength": "moderate: a large experience-sampling study; interpretation about avoiding temptation is the authors' suggestion.",
+    "strength": "moderate: a large experience-sampling study. Interpretation about avoiding temptation is the authors' suggestion.",
     "topics": [
       "habits",
       "change"
@@ -1684,7 +1684,7 @@
     "url": "https://identity.wellcomecollection.org/works/usu4u2um",
     "kind": "book",
     "finding": "Argues that small changes in how choices are presented (defaults, order, ease) can steer people toward better decisions without removing their freedom to choose.",
-    "strength": "moderate: influential; later meta-analyses find nudge effects vary widely and are smaller after accounting for publication bias.",
+    "strength": "moderate: influential. Later meta-analyses find nudge effects vary widely and are smaller after accounting for publication bias.",
     "topics": [
       "habits",
       "change"
@@ -1705,7 +1705,7 @@
     "doi": null,
     "url": "https://www.jstor.org/stable/41760530",
     "kind": "study",
-    "finding": "In decision experiments and in real choices of health plans and retirement programmes, people disproportionately stuck with the current option (status quo bias).",
+    "finding": "In decision experiments and in real choices of health plans and retirement programs, people disproportionately stuck with the current option (status quo bias).",
     "strength": "strong: a 2021 replication supported the bias in three of four original scenarios.",
     "topics": [
       "change"
@@ -1750,7 +1750,7 @@
     "url": "https://motivationalinterviewing.org/motivational-interviewing-preparing-people-change-addictive-behavior",
     "kind": "book",
     "finding": "The first full presentation of motivational interviewing: a way of talking about change that treats mixed feelings as normal and draws out the person's own reasons for change.",
-    "strength": "moderate: meta-analyses show modest positive effects across many behaviours, strongest in health settings.",
+    "strength": "moderate: meta-analyses show modest positive effects across many behaviors, strongest in health settings.",
     "topics": [
       "change",
       "helping"
@@ -1775,7 +1775,7 @@
     "doi": null,
     "url": "https://krimdok.uni-tuebingen.de/Record/27251005X",
     "kind": "book",
-    "finding": "An edited volume setting out the cognitive-behavioural relapse prevention model, including the \"abstinence violation effect\": after one slip, guilt and a sense of total failure can make a full relapse more likely.",
+    "finding": "An edited volume setting out the cognitive-behavioral relapse prevention model, including the \"abstinence violation effect\": after one slip, guilt and a sense of total failure can make a full relapse more likely.",
     "strength": "moderate: a foundational clinical model, widely used in addiction treatment.",
     "topics": [
       "change",
@@ -1798,7 +1798,7 @@
     "url": "https://doi.org/10.1177/0146167212445599",
     "kind": "study",
     "finding": "In four experiments, people encouraged to be self-compassionate about a failure or moral mistake were more motivated to improve (for example, studying longer for a retest) than people encouraged to boost their self-esteem.",
-    "strength": "moderate: well-cited experiments; part of a larger, mostly supportive literature.",
+    "strength": "moderate: well-cited experiments. Part of a larger, mostly supportive literature.",
     "topics": [
       "self-compassion",
       "self-worth",
@@ -1825,7 +1825,7 @@
     "doi": "10.1016/S0065-2601(08)60024-6",
     "url": "https://doi.org/10.1016/S0065-2601(08)60024-6",
     "kind": "theory",
-    "finding": "Proposed that people come to know their own attitudes and feelings partly by observing their own behaviour, much as an outside observer would.",
+    "finding": "Proposed that people come to know their own attitudes and feelings partly by observing their own behavior, much as an outside observer would.",
     "strength": "moderate: a classic theory with broad support in specific conditions.",
     "topics": [
       "change",
@@ -1847,7 +1847,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3150938/",
     "kind": "study",
     "finding": "Asking people about \"being a voter\" rather than \"voting\" increased interest in registering and, in two US statewide elections, increased turnout measured in official records.",
-    "strength": "debated: three small experiments; later replication attempts had mixed results.",
+    "strength": "debated: three small experiments. Later replication attempts had mixed results.",
     "topics": [
       "change",
       "identity"
@@ -1910,7 +1910,7 @@
     "doi": null,
     "url": "https://contextualscience.org/publications/hayes_strosahl_wilson_1999",
     "kind": "book",
-    "finding": "The first main book on acceptance and commitment therapy (ACT), which puts chosen values at the centre and teaches making room for difficult feelings while acting on what matters.",
+    "finding": "The first main book on acceptance and commitment therapy (ACT), which puts chosen values at the center and teaches making room for difficult feelings while acting on what matters.",
     "strength": "strong for ACT as a whole: meta-analyses find it effective for several problems, comparable to other established therapies.",
     "topics": [
       "values",
@@ -1933,7 +1933,7 @@
     "doi": "10.1037/0003-066X.55.1.68",
     "url": "https://doi.org/10.1037/0003-066X.55.1.68",
     "kind": "theory",
-    "finding": "Summarised self-determination theory: people are most motivated and well when three basic needs are met: autonomy, competence and relatedness.",
+    "finding": "Summarized self-determination theory: people are most motivated and well when three basic needs are met: autonomy, competence and relatedness.",
     "strength": "strong: one of the best-supported theories of motivation, tested across many settings and cultures.",
     "topics": [
       "values",
@@ -1966,8 +1966,8 @@
     "doi": "10.1080/15298860309032",
     "url": "https://doi.org/10.1080/15298860309032",
     "kind": "theory",
-    "finding": "Defined self-compassion as three parts: self-kindness instead of harsh judgement, common humanity instead of isolation, and mindfulness instead of over-identifying with painful feelings.",
-    "strength": "moderate: widely studied and promising; much research is correlational and the scale's structure is debated.",
+    "finding": "Defined self-compassion as three parts: self-kindness instead of harsh judgment, common humanity instead of isolation, and mindfulness instead of over-identifying with painful feelings.",
+    "strength": "moderate: widely studied and promising. Much research is correlational and the scale's structure is debated.",
     "topics": [
       "self-compassion",
       "self-worth"
@@ -1995,7 +1995,7 @@
     "url": "https://doi.org/10.1080/15298860309027",
     "kind": "study",
     "finding": "Developed and validated the Self-Compassion Scale, the questionnaire used in most self-compassion research.",
-    "strength": "moderate: widely used; some researchers question whether it mixes self-compassion with low self-criticism.",
+    "strength": "moderate: widely used. Some researchers question whether it mixes self-compassion with low self-criticism.",
     "topics": [
       "self-compassion",
       "self-worth"
@@ -2015,8 +2015,8 @@
     "doi": "10.1111/1529-1006.01431",
     "url": "https://doi.org/10.1111/1529-1006.01431",
     "kind": "review",
-    "finding": "A major review concluded that high self-esteem does not reliably cause better performance or relationships; for example, good school performance partly produces high self-esteem rather than the reverse.",
-    "strength": "strong: an influential review; later work suggests self-esteem has some modest prospective links with outcomes.",
+    "finding": "A major review concluded that high self-esteem does not reliably cause better performance or relationships. For example, good school performance partly produces high self-esteem rather than the reverse.",
+    "strength": "strong: an influential review. Later work suggests self-esteem has some modest prospective links with outcomes.",
     "topics": [
       "self-worth"
     ],
@@ -2038,7 +2038,7 @@
     "url": "https://doi.org/10.1037/bul0000138",
     "kind": "meta-analysis",
     "finding": "A meta-analysis of college students' perfectionism scores found perfectionism rose between 1989 and 2016, with the largest rise in the sense that others expect perfection.",
-    "strength": "moderate: questionnaire data from Western countries; does not explain why.",
+    "strength": "moderate: questionnaire data from Western countries. Does not explain why.",
     "topics": [
       "self-worth",
       "perfectionism"
@@ -2083,7 +2083,7 @@
     "url": "https://doi.org/10.1037/0022-3514.75.1.33",
     "kind": "study",
     "finding": "In six studies, children praised for intelligence cared more about looking good than learning, and after failure persisted less and performed worse than children praised for effort.",
-    "strength": "moderate: classic findings; wider growth-mindset interventions have had mixed results at scale.",
+    "strength": "moderate: classic findings. Wider growth-mindset interventions have had mixed results at scale.",
     "topics": [
       "self-worth",
       "parenting"
@@ -2172,7 +2172,7 @@
     "url": "https://search.worldcat.org/title/4238",
     "kind": "book",
     "finding": "Described five stages (denial, anger, bargaining, depression, acceptance) from work with dying patients.",
-    "strength": "debated: research on bereaved people does not find that most move through these stages in order; best read as feelings people may have.",
+    "strength": "debated: research on bereaved people does not find that most move through these stages in order. Best read as feelings people may have.",
     "topics": [
       "grief"
     ],
@@ -2304,7 +2304,7 @@
     "url": "https://www.routledge.com/Continuing-Bonds-New-Understandings-of-Grief/Klass-Nickman-Silverman/p/book/9781560323396",
     "kind": "book",
     "finding": "Challenged the idea that healthy mourning means cutting ties with the dead, showing across many groups that ongoing inner bonds with the deceased are common and often healthy.",
-    "strength": "moderate: influential; later research finds continuing bonds can comfort or distress depending on the person.",
+    "strength": "moderate: influential. Later research finds continuing bonds can comfort or distress depending on the person.",
     "topics": [
       "grief"
     ],
@@ -2349,7 +2349,7 @@
     "doi": "10.1037/h0037031",
     "url": "https://doi.org/10.1037/h0037031",
     "kind": "study",
-    "finding": "In a field study, men approached by an attractive female interviewer on a high, swaying suspension bridge were more likely to call her afterwards than men approached on a low, sturdy bridge; the authors read this as arousal from fear being mislabelled as attraction.",
+    "finding": "In a field study, men approached by an attractive female interviewer on a high, swaying suspension bridge were more likely to call her afterward than men approached on a low, sturdy bridge. The authors read this as arousal from fear being mislabelled as attraction.",
     "strength": "debated: a famous classic, but a replication by Kenrick and colleagues (1979) did not reproduce the attraction effect.",
     "topics": [
       "emotions",
@@ -2371,7 +2371,7 @@
     "url": "https://doi.org/10.1080/02699930143000239",
     "kind": "study",
     "finding": "In a diary study where people rated their emotions several times a day, those who distinguished their negative emotions more finely reported using more emotion-regulation strategies when feelings were intense.",
-    "strength": "moderate: an influential study that started a large literature on emotional granularity; mostly correlational.",
+    "strength": "moderate: an influential study that started a large literature on emotional granularity. Mostly correlational.",
     "topics": [
       "emotions",
       "emotional-granularity"
@@ -2401,7 +2401,7 @@
       "/book/understanding-1-feelings-in-depth.html#layers"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): citation (Journal of Family Psychology 10(3) 243-268) confirmed in reference lists; no DOI or stable page shown in the search."
+    "note": "NOT VERIFIED (re-checked by search): citation (Journal of Family Psychology 10(3) 243-268) confirmed in reference lists. No DOI or stable page shown in the search."
   },
   {
     "id": "siegel-1999",
@@ -2412,7 +2412,7 @@
     "doi": null,
     "url": "https://catalog.library.nashville.org/Record/CARL0000114962",
     "kind": "book",
-    "finding": "A book linking attachment, memory and brain development; it introduced the \"window of tolerance\", the range of arousal in which a person can feel strong emotion and still think and respond flexibly.",
+    "finding": "A book linking attachment, memory and brain development. It introduced the \"window of tolerance\", the range of arousal in which a person can feel strong emotion and still think and respond flexibly.",
     "strength": "theory: a widely used clinical metaphor rather than a tested construct.",
     "topics": [
       "stress",
@@ -2448,7 +2448,7 @@
       "/library/stress.html#polyvagal-theory"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): search found only Porges's lab page listing the 1995 paper; no DOI or journal page shown."
+    "note": "NOT VERIFIED (re-checked by search): search found only Porges's lab page listing the 1995 paper. No DOI or journal page shown."
   },
   {
     "id": "hogeveen-grafman-2021",
@@ -2470,7 +2470,7 @@
       "/wired-differently-in-depth.html#alexithymia"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): search did not find the Handbook chapter or PMC8456171; only related papers by the same group."
+    "note": "NOT VERIFIED (re-checked by search): search did not find the Handbook chapter or PMC8456171. Only related papers by the same group."
   },
   {
     "id": "west-2005",
@@ -2491,7 +2491,7 @@
       "/library/motivation.html#stages-of-change"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): search confirmed author, year, title and journal only via secondary coverage; no DOI or paper page."
+    "note": "NOT VERIFIED (re-checked by search): search confirmed author, year, title and journal only via secondary coverage. No DOI or paper page."
   },
   {
     "id": "lewis-rook-1999",
@@ -2513,7 +2513,7 @@
       "/book/understanding-6-change-in-depth.html#others"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): citation (Health Psychology 18, 63-71) confirmed on Karen Rook's faculty publications list; no DOI or paper page shown."
+    "note": "NOT VERIFIED (re-checked by search): citation (Health Psychology 18, 63-71) confirmed on Karen Rook's faculty publications list. No DOI or paper page shown."
   },
   {
     "id": "crocker-wolfe-2001",
@@ -2534,7 +2534,7 @@
       "/library/motivation.html#self-esteem"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): citation (Psychological Review 108(3), 593) confirmed in reference lists; no DOI or paper page shown."
+    "note": "NOT VERIFIED (re-checked by search): citation (Psychological Review 108(3), 593) confirmed in reference lists. No DOI or paper page shown."
   },
   {
     "id": "neff-vonk-2009",
@@ -2555,7 +2555,7 @@
       "/book/understanding-7-worth-in-depth.html#comparison"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): citation (Journal of Personality 77(1), 23-50) and main finding confirmed via secondary sources; no DOI or paper page shown."
+    "note": "NOT VERIFIED (re-checked by search): citation (Journal of Personality 77(1), 23-50) and main finding confirmed via secondary sources. No DOI or paper page shown."
   },
   {
     "id": "bonanno-2009",
@@ -2566,8 +2566,8 @@
     "doi": null,
     "url": "https://www.hachettebookgroup.com/titles/george-a-bonanno/the-other-side-of-sadness/9781541699373/",
     "kind": "book",
-    "finding": "A book summarising bereavement research: most people are resilient after a loss, grief tends to come and go rather than follow fixed stages, and only a minority develop long-lasting, severe grief.",
-    "strength": "strong: draws on Bonanno's well-replicated research on grief trajectories; written for a general audience.",
+    "finding": "A book summarizing bereavement research: most people are resilient after a loss, grief tends to come and go rather than follow fixed stages, and only a minority develop long-lasting, severe grief.",
+    "strength": "strong: draws on Bonanno's well-replicated research on grief trajectories. Written for a general audience.",
     "topics": [
       "grief",
       "resilience"
@@ -2577,7 +2577,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.publishersweekly.com/978-0-465-01360-9 ; https://search.worldcat.org/oclc/316825674 (Basic Books, New York, 2009) ; https://www.hachettebookgroup.com/titles/george-a-bonanno/the-other-side-of-sadness/9781541699373/",
-    "note": "Publisher page (Basic Books / Hachette) for the 2019 revised edition; replaces a trade-magazine listing."
+    "note": "Publisher page (Basic Books / Hachette) for the 2019 revised edition. Replaces a trade-magazine listing."
   },
   {
     "id": "prolonged-grief-2022",
@@ -2597,7 +2597,7 @@
       "/book/understanding-8-loss-in-depth.html#support"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): search found ICD-11 code 6B42 and DSM-5-TR criteria only via secondary sources (e.g. PMC10291380, PMC10881750); no official APA or WHO page shown."
+    "note": "NOT VERIFIED (re-checked by search): search found ICD-11 code 6B42 and DSM-5-TR criteria only via secondary sources (e.g. PMC10291380, PMC10881750). No official APA or WHO page shown."
   },
   {
     "id": "milton-2012",
@@ -2609,7 +2609,7 @@
     "url": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
     "kind": "theory",
     "finding": "A short conceptual paper arguing that misunderstanding between autistic and non-autistic people runs both ways: each side finds the other hard to read, so the problem lies between them, not only in the autistic person.",
-    "strength": "theory: no data in the paper itself; later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
+    "strength": "theory: no data in the paper itself. Later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
     "topics": [
       "autism",
       "neurodiversity",
@@ -2635,7 +2635,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy ; https://reframingautism.org.au/miltons-double-empathy-problem-a-summary-for-non-academics/",
-    "note": "Citation checked against reference lists; the DOI could not be confirmed, so none is given."
+    "note": "Citation checked against reference lists. The DOI could not be confirmed, so none is given."
   },
   {
     "id": "crompton-2020",
@@ -2647,7 +2647,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/",
     "kind": "study",
     "finding": "In \"diffusion chains\" where a story was passed along eight people (72 adults), all-autistic chains passed on as much detail as all-non-autistic chains, while mixed chains lost detail faster and reported lower rapport.",
-    "strength": "moderate: a careful experiment that supports the double empathy idea; modest sample and a single task.",
+    "strength": "moderate: a careful experiment that supports the double empathy idea. Modest sample and a single task.",
     "topics": [
       "neurodiversity",
       "autism",
@@ -2678,8 +2678,8 @@
     "doi": "10.1038/srep40700",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5286449/",
     "kind": "study",
-    "finding": "Across three studies, non-autistic observers formed less favourable first impressions of autistic children and adults from a few seconds of video, and were less willing to interact with them; the bias disappeared when they judged only transcripts of what was said.",
-    "strength": "moderate: three studies with consistent results; suggests style, not substance, drives the bias.",
+    "finding": "Across three studies, non-autistic observers formed less favorable first impressions of autistic children and adults from a few seconds of video, and were less willing to interact with them. The bias disappeared when they judged only transcripts of what was said.",
+    "strength": "moderate: three studies with consistent results. Suggests style, not substance, drives the bias.",
     "topics": [
       "neurodiversity",
       "autism",
@@ -2733,8 +2733,8 @@
     "doi": "10.1007/s10803-018-3792-6",
     "url": "https://doi.org/10.1007/s10803-018-3792-6",
     "kind": "study",
-    "finding": "Developed the 25-item Camouflaging Autistic Traits Questionnaire with 354 autistic and 478 non-autistic adults; it showed three factors, high internal consistency and links with autistic traits, anxiety, depression and wellbeing.",
-    "strength": "moderate: a widely used self-report measure; published online in 2018, in print in 2019.",
+    "finding": "Developed the 25-item Camouflaging Autistic Traits Questionnaire with 354 autistic and 478 non-autistic adults. It showed three factors, high internal consistency and links with autistic traits, anxiety, depression and wellbeing.",
+    "strength": "moderate: a widely used self-report measure. Published online in 2018, in print in 2019.",
     "topics": [
       "neurodiversity",
       "autism",
@@ -2755,8 +2755,8 @@
     "doi": "10.1089/aut.2019.0079",
     "url": "https://pubmed.ncbi.nlm.nih.gov/32851204/",
     "kind": "study",
-    "finding": "From 19 interviews and 19 public online accounts, analysed with autistic co-researchers, autistic burnout was defined as long-term exhaustion, loss of function and reduced tolerance to stimulus, arising from chronic life stress and a mismatch between expectations and abilities without enough support.",
-    "strength": "early: the first formal definition, from a qualitative community-based study; distinct from occupational burnout and depression in participants' accounts.",
+    "finding": "From 19 interviews and 19 public online accounts, analyzed with autistic co-researchers, autistic burnout was defined as long-term exhaustion, loss of function and reduced tolerance to stimulus, arising from chronic life stress and a mismatch between expectations and abilities without enough support.",
+    "strength": "early: the first formal definition, from a qualitative community-based study. Distinct from occupational burnout and depression in participants' accounts.",
     "topics": [
       "neurodiversity",
       "autism",
@@ -2786,7 +2786,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/15857859/",
     "kind": "theory",
     "finding": "Proposed \"monotropism\": autistic attention tends to be pulled strongly into a few interests at a time, and the authors argued this can explain the other diagnostic features of autism.",
-    "strength": "theory: an influential, autistic-led account; empirical testing is still limited.",
+    "strength": "theory: an influential, autistic-led account. Empirical testing is still limited.",
     "topics": [
       "neurodiversity",
       "autism",
@@ -2877,7 +2877,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/9248053/",
     "kind": "study",
     "finding": "Across seven studies, the authors identified a single core trait of sensory-processing sensitivity, partly independent of introversion and emotionality, and developed the 27-item Highly Sensitive Person Scale.",
-    "strength": "moderate: a widely used measure; later research supports the trait but debates its structure and overlap with neuroticism.",
+    "strength": "moderate: a widely used measure. Later research supports the trait but debates its structure and overlap with neuroticism.",
     "topics": [
       "neurodiversity",
       "sensory",
@@ -2923,7 +2923,7 @@
     "url": "https://doi.org/10.1037/dev0000406",
     "kind": "study",
     "finding": "Five studies with 3,581 UK children and adolescents developed the 12-item Highly Sensitive Child Scale and found that children fell into low, medium and high sensitivity groups.",
-    "strength": "moderate: large samples; self-report measure for ages 8 and up.",
+    "strength": "moderate: large samples. Self-report measure for ages 8 and up.",
     "topics": [
       "highly-sensitive-person",
       "sensory"
@@ -2943,8 +2943,8 @@
     "doi": "10.1037/0033-2909.121.1.65",
     "url": "https://pubmed.ncbi.nlm.nih.gov/9000892/",
     "kind": "theory",
-    "finding": "A theoretical review proposing that ADHD centres on a difficulty with behavioural inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
-    "strength": "moderate: highly influential theory; executive function difficulties are common in ADHD but not universal.",
+    "finding": "A theoretical review proposing that ADHD centers on a difficulty with behavioral inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
+    "strength": "moderate: highly influential theory. Executive function difficulties are common in ADHD but not universal.",
     "topics": [
       "neurodiversity",
       "adhd"
@@ -2967,7 +2967,7 @@
     "doi": "10.1037/0022-3514.70.6.1327",
     "url": "https://doi.org/10.1037/0022-3514.70.6.1327",
     "kind": "study",
-    "finding": "Three studies described rejection sensitivity: people who anxiously expect rejection read rejection into ambiguous behaviour, and in new couples this was linked with more relationship difficulty and less partner satisfaction.",
+    "finding": "Three studies described rejection sensitivity: people who anxiously expect rejection read rejection into ambiguous behavior, and in new couples this was linked with more relationship difficulty and less partner satisfaction.",
     "strength": "strong: a well-established construct with a large later literature.",
     "topics": [
       "neurodiversity",
@@ -2989,8 +2989,8 @@
     "doi": "10.1177/1362361315588200",
     "url": "https://doi.org/10.1177/1362361315588200",
     "kind": "study",
-    "finding": "A survey of 3,470 people in the UK autism community found no single preferred term: \"autism\" and \"on the autism spectrum\" were widely endorsed, and \"autistic\" was favoured by many autistic adults and families but much less by professionals.",
-    "strength": "moderate: large survey; preferences differ by group and country and change over time.",
+    "finding": "A survey of 3,470 people in the UK autism community found no single preferred term: \"autism\" and \"on the autism spectrum\" were widely endorsed, and \"autistic\" was favored by many autistic adults and families but much less by professionals.",
+    "strength": "moderate: large survey. Preferences differ by group and country and change over time.",
     "topics": [
       "neurodiversity",
       "autism",
@@ -3012,7 +3012,7 @@
     "doi": null,
     "url": "https://ssir.org/issue/winter-2017",
     "kind": "theory",
-    "finding": "An essay arguing that laws and programmes designed for disadvantaged groups, like kerb cuts made for wheelchair users, often end up benefiting everyone.",
+    "finding": "An essay arguing that laws and programs designed for disadvantaged groups, like curb cuts made for wheelchair users, often end up benefiting everyone.",
     "strength": "theory: a persuasive argument with examples, not a study.",
     "topics": [
       "neurodiversity",
@@ -3042,7 +3042,7 @@
       "/library/wiring.html#neurodiversity"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): search confirmed a 1998 UTS honours thesis titled \"Odd People In\", later reissued as a book (2016/2017); no stable record for the 1998 thesis or its full subtitle. Note: a 2024 letter in Autism (Botha et al.) argues the concept was developed collectively on the InLv list and the word was first printed by Harvey Blume (1998), so \"usually credited\" wording is right."
+    "note": "NOT VERIFIED (re-checked by search): search confirmed a 1998 UTS honors thesis titled \"Odd People In\", later reissued as a book (2016/2017); no stable record for the 1998 thesis or its full subtitle. Note: a 2024 letter in Autism (Botha et al.) argues the concept was developed collectively on the InLv list and the word was first printed by Harvey Blume (1998), so \"usually credited\" wording is right."
   },
   {
     "id": "kapp-2019",
@@ -3053,7 +3053,7 @@
     "doi": "10.1177/1362361319829628",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6728747/",
     "kind": "study",
-    "finding": "Interviews and focus groups with 32 autistic adults described stimming as a way to regulate overwhelming emotions and sensations, and as something that becomes accepted through understanding; participants objected to efforts to stop harmless stimming.",
+    "finding": "Interviews and focus groups with 32 autistic adults described stimming as a way to regulate overwhelming emotions and sensations, and as something that becomes accepted through understanding. Participants objected to efforts to stop harmless stimming.",
     "strength": "moderate: a qualitative study centring autistic voices.",
     "topics": [
       "neurodiversity",
@@ -3079,7 +3079,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008/",
     "kind": "study",
     "finding": "Focus groups with autistic adults described \"autistic inertia\", difficulty starting and stopping tasks in everyday life despite wanting to, shaped by both inner and outside factors and with broad effects on daily life and wellbeing.",
-    "strength": "early: the first study of its kind, led by an autistic researcher; qualitative.",
+    "strength": "early: the first study of its kind, led by an autistic researcher. Qualitative.",
     "topics": [
       "neurodiversity",
       "autism"
@@ -3100,7 +3100,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/27067453/",
     "kind": "review",
     "finding": "A review arguing that fear of the unknown, closely related to intolerance of uncertainty, may be a fundamental fear underlying anxiety and neuroticism.",
-    "strength": "theory: an influential review; the \"fundamental fear\" claim is a proposal, not settled.",
+    "strength": "theory: an influential review. The \"fundamental fear\" claim is a proposal, not settled.",
     "topics": [
       "neurodiversity",
       "anxiety"
@@ -3121,7 +3121,7 @@
     "doi": "10.1146/annurev.psych.52.1.141",
     "url": "https://doi.org/10.1146/annurev.psych.52.1.141",
     "kind": "review",
-    "finding": "Reviewed two traditions of well-being research: hedonic (pleasure and the absence of pain) and eudaimonic (meaning, self-realisation and full functioning), and how they diverge and complement each other.",
+    "finding": "Reviewed two traditions of well-being research: hedonic (pleasure and the absence of pain) and eudaimonic (meaning, self-realization and full functioning), and how they diverge and complement each other.",
     "strength": "strong: a highly cited review.",
     "topics": [
       "values",
@@ -3143,7 +3143,7 @@
     "url": "https://doi.org/10.1037/0022-3514.57.6.1069",
     "kind": "theory",
     "finding": "Proposed six dimensions of psychological well-being (self-acceptance, positive relations, autonomy, environmental mastery, purpose in life and personal growth) and tested them with 321 adults, finding that several were not captured by earlier happiness measures.",
-    "strength": "strong: the basis of the widely used Ryff scales; the six-factor structure is sometimes debated.",
+    "strength": "strong: the basis of the widely used Ryff scales. The six-factor structure is sometimes debated.",
     "topics": [
       "values",
       "meaning"
@@ -3209,7 +3209,7 @@
     "url": "https://doi.org/10.1080/17439760.2013.830764",
     "kind": "study",
     "finding": "In surveys of about 400 adults, happiness and meaningfulness overlapped but differed: good health and an easy life went with happiness but not meaning, while thinking more about the past and future went with more meaning but less happiness.",
-    "strength": "moderate: correlational surveys; widely cited.",
+    "strength": "moderate: correlational surveys. Widely cited.",
     "topics": [
       "values",
       "meaning"
@@ -3230,7 +3230,7 @@
     "url": "https://sites.duke.edu/culturelab/files/2021/07/Culture_and_the_Self_Implications_for_Cognition_Em.pdf",
     "kind": "theory",
     "finding": "Argued that cultures differ in how they construe the self, as independent or interdependent with others, and that this shapes cognition, emotion and motivation.",
-    "strength": "debated: hugely influential; later work questions how neatly cultures fit the two types and notes a heavy reliance on US-East Asian comparisons.",
+    "strength": "debated: hugely influential. Later work questions how neatly cultures fit the two types and notes a heavy reliance on US-East Asian comparisons.",
     "topics": [
       "values",
       "culture"
@@ -3251,7 +3251,7 @@
     "doi": null,
     "url": "https://cris.huji.ac.il/en/publications/universals-in-the-content-and-structure-of-values-theoretical-adv/",
     "kind": "theory",
-    "finding": "Using data from 20 countries, found that the meaning of a set of basic value types was broadly similar across most groups, and that values are organised by two dimensions into a circle of compatible and conflicting motivations.",
+    "finding": "Using data from 20 countries, found that the meaning of a set of basic value types was broadly similar across most groups, and that values are organized by two dimensions into a circle of compatible and conflicting motivations.",
     "strength": "strong: one of the most cited and replicated models of values.",
     "topics": [
       "values"
@@ -3339,7 +3339,7 @@
     "url": "https://search.worldcat.org/search?q=Social+support+an+interactional+view+Sarason+1990",
     "kind": "theory",
     "finding": "Proposed the “optimal matching” idea: support helps most when its type fits the problem, for example practical help for things you can change and comfort for things you can’t.",
-    "strength": "moderate: widely cited; later studies support the idea in part",
+    "strength": "moderate: widely cited. Later studies support the idea in part",
     "topics": [
       "support",
       "helping"
@@ -3363,7 +3363,7 @@
     "url": "https://doi.org/10.1037/0022-3514.79.6.953",
     "kind": "study",
     "finding": "In a daily diary study of couples where one partner was preparing for the bar exam, support the stressed partner noticed was linked with feeling worse, while support the partner gave but the recipient did not notice was linked with better adjustment.",
-    "strength": "moderate: a well-known diary study; later work suggests the effect depends on how support is given.",
+    "strength": "moderate: a well-known diary study. Later work suggests the effect depends on how support is given.",
     "topics": [
       "helping",
       "social-support",
@@ -3386,7 +3386,7 @@
     "doi": "10.1207/s15327957pspr0203_2",
     "url": "https://doi.org/10.1207/s15327957pspr0203_2",
     "kind": "theory",
-    "finding": "Proposed \"unmitigated communion\", focusing on others to the exclusion of oneself, and distinguished it from healthy caring; unmitigated communion, not communion, was linked to psychological distress.",
+    "finding": "Proposed \"unmitigated communion\", focusing on others to the exclusion of oneself, and distinguished it from healthy caring. Unmitigated communion, not communion, was linked to psychological distress.",
     "strength": "moderate: supported by a body of correlational research.",
     "topics": [
       "helping",
@@ -3429,8 +3429,8 @@
     "doi": null,
     "url": "https://pubmed.ncbi.nlm.nih.gov/24998511/",
     "kind": "review",
-    "finding": "A review of published studies in adults and adolescents, in the general population and in groups at higher risk. None found a significant rise in suicidal thoughts after people were asked about suicide; talking about it may even lower them.",
-    "strength": "moderate: a short review of a small number of studies that measured thoughts, not deaths; a 2018 meta-analysis reached a similar conclusion.",
+    "finding": "A review of published studies in adults and adolescents, in the general population and in groups at higher risk. None found a significant rise in suicidal thoughts after people were asked about suicide. Talking about it may even lower them.",
+    "strength": "moderate: a short review of a small number of studies that measured thoughts, not deaths. A 2018 meta-analysis reached a similar conclusion.",
     "topics": [
       "helping",
       "crisis"
@@ -3503,8 +3503,8 @@
     "doi": "10.1037/amp0000469",
     "url": "https://doi.org/10.1037/amp0000469",
     "kind": "study",
-    "finding": "Analysing CCTV footage of real public conflicts in three countries, the researchers found that at least one bystander intervened in most incidents, at similar rates across countries, and that more bystanders made intervention more likely.",
-    "strength": "strong: real-world footage across three countries; published online in 2019.",
+    "finding": "Analyzing CCTV footage of real public conflicts in three countries, the researchers found that at least one bystander intervened in most incidents, at similar rates across countries, and that more bystanders made intervention more likely.",
+    "strength": "strong: real-world footage across three countries. Published online in 2019.",
     "topics": [
       "helping",
       "bystander"
@@ -3533,7 +3533,7 @@
       "/book/understanding-12-helping-in-depth.html#receiving"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): citation (American Sociological Review 25(2), 161-178, April 1960) confirmed; DOI 10.2307/2092623 not shown and no JSTOR page in results."
+    "note": "NOT VERIFIED (re-checked by search): citation (American Sociological Review 25(2), 161-178, April 1960) confirmed. DOI 10.2307/2092623 not shown and no JSTOR page in results."
   },
   {
     "id": "flynn-bohns-2008",
@@ -3565,7 +3565,7 @@
     "url": "https://doi.org/10.1126/science.1150952",
     "kind": "study",
     "finding": "Spending more of one's income on others predicted greater happiness in a nationally representative survey and in a field study of windfall spending, and people randomly assigned to spend money on others were happier than those assigned to spend it on themselves.",
-    "strength": "moderate: influential; later replications suggest a smaller effect.",
+    "strength": "moderate: influential. Later replications suggest a smaller effect.",
     "topics": [
       "helping",
       "kindness"
@@ -3609,7 +3609,7 @@
     "url": "https://wellcomecollection.org/works/c5q8eupq",
     "kind": "book",
     "finding": "A book arguing that empathy, feeling what others feel, is biased toward people like us and can cloud judgment, and that reasoned compassion is a better guide to helping.",
-    "strength": "debated: a provocative argument; many researchers dispute how sharply empathy and compassion can be separated.",
+    "strength": "debated: a provocative argument. Many researchers dispute how sharply empathy and compassion can be separated.",
     "topics": [
       "helping",
       "compassion-fatigue"
@@ -3675,7 +3675,7 @@
     "url": "https://doi.org/10.1111/j.1467-9280.2009.02381.x",
     "kind": "study",
     "finding": "Measuring 122 students before and after a trauma, the researchers found that self-reported growth was largely unrelated to actual measured change, and perceived growth went with more distress while actual growth went with less.",
-    "strength": "moderate: an important prospective test; later studies also find small links between reported and actual growth.",
+    "strength": "moderate: an important prospective test. Later studies also find small links between reported and actual growth.",
     "topics": [
       "trauma",
       "healing"
@@ -3706,7 +3706,7 @@
       "/book/understanding-11-healing-in-depth.html#without-them"
     ],
     "verified": false,
-    "note": "NOT VERIFIED (re-checked by search): citation (Psychological Bulletin 136, 257-301) confirmed in reference lists; DOI not shown and no paper page found."
+    "note": "NOT VERIFIED (re-checked by search): citation (Psychological Bulletin 136, 257-301) confirmed in reference lists. DOI not shown and no paper page found."
   },
   {
     "id": "felitti-1998",
@@ -3717,8 +3717,8 @@
     "doi": "10.1016/S0749-3797(98)00017-8",
     "url": "https://doi.org/10.1016/S0749-3797(98)00017-8",
     "kind": "study",
-    "finding": "Of 13,494 adults at a large health plan sent a questionnaire, 9,508 responded; the more categories of childhood adversity people reported, the higher their risk of many adult health problems, in a graded relationship.",
-    "strength": "strong: a landmark, widely replicated finding at the population level; it does not predict individual outcomes.",
+    "finding": "Of 13,494 adults at a large health plan sent a questionnaire, 9,508 responded. The more categories of childhood adversity people reported, the higher their risk of many adult health problems, in a graded relationship.",
+    "strength": "strong: a landmark, widely replicated finding at the population level. It does not predict individual outcomes.",
     "topics": [
       "trauma"
     ],
@@ -3761,7 +3761,7 @@
     "doi": "10.1016/S0002-7138(09)62273-1",
     "url": "https://doi.org/10.1016/S0002-7138(09)62273-1",
     "kind": "study",
-    "finding": "The first “still face” study: when a mother kept a blank, unresponsive face, infants tried hard to re-engage her, then grew upset and withdrew; they recovered when she responded again.",
+    "finding": "The first “still face” study: when a mother kept a blank, unresponsive face, infants tried hard to re-engage her, then grew upset and withdrew. They recovered when she responded again.",
     "strength": "strong: the still-face effect has been replicated many times",
     "topics": [
       "repair",
@@ -3809,7 +3809,7 @@
     "doi": "10.1016/0272-4944(95)90001-2",
     "url": "https://doi.org/10.1016/0272-4944(95)90001-2",
     "kind": "theory",
-    "finding": "Set out attention restoration theory: effortful, directed attention gets fatigued, and environments such as nature, which hold attention effortlessly, help it recover; the paper links this with stress recovery.",
+    "finding": "Set out attention restoration theory: effortful, directed attention gets fatigued, and environments such as nature, which hold attention effortlessly, help it recover. The paper links this with stress recovery.",
     "strength": "moderate: supported by many studies, though effects vary and some measures replicate poorly.",
     "topics": [
       "stress",
@@ -3844,7 +3844,7 @@
     ],
     "verified": true,
     "verified_by": "https://pubmed.ncbi.nlm.nih.gov/5542557/ ; https://doi.org/10.1037/h0030377",
-    "note": "PMID 5542557; DOI confirmed via the PubMed record (no abstract there; the method is summarised from secondary sources)."
+    "note": "PMID 5542557; DOI confirmed via the PubMed record (no abstract there; the method is summarized from secondary sources)."
   },
   {
     "id": "mccrae-costa-1987",
@@ -3856,7 +3856,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/3820081/",
     "kind": "study",
     "finding": "Ratings of 275 adults by their peers showed the same five broad trait factors found in self-reports, and peers and the people themselves agreed moderately well. This helped establish the “Big Five” as a common map of personality.",
-    "strength": "strong: a foundational, widely replicated finding; the five factors are a description of how traits cluster, not a full theory of personality.",
+    "strength": "strong: a foundational, widely replicated finding. The five factors are a description of how traits cluster, not a full theory of personality.",
     "topics": [
       "personality"
     ],
@@ -3877,7 +3877,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/16435954/",
     "kind": "meta-analysis",
     "finding": "Pooling 92 long-term studies, people on average became more confident in social settings, more conscientious and more emotionally stable, especially between about 20 and 40, and traits kept changing in middle and old age.",
-    "strength": "strong: a large meta-analysis of longitudinal studies; averages hide big differences between individuals.",
+    "strength": "strong: a large meta-analysis of longitudinal studies. Averages hide big differences between individuals.",
     "topics": [
       "personality"
     ],
@@ -3941,7 +3941,7 @@
     "url": "https://doi.org/10.1037/bul0000365",
     "kind": "meta-analysis",
     "finding": "Who is more or less of a trait compared with others becomes steadier through childhood and levels off by about 25, while average levels keep shifting gently across life, with emotional stability rising most.",
-    "strength": "strong: a large, recent meta-analysis; it describes averages, not any one person.",
+    "strength": "strong: a large, recent meta-analysis. It describes averages, not any one person.",
     "topics": [
       "personality"
     ],
@@ -3962,7 +3962,7 @@
     "url": "https://wellcomecollection.org/works/epddh966",
     "kind": "book",
     "finding": "From the New York Longitudinal Study, which followed children from infancy, the authors described inborn differences in temperament, such as activity, regularity, adaptability and mood, and argued that how well a child’s temperament fits their surroundings matters (“goodness of fit”).",
-    "strength": "moderate: a classic, influential long-term study; later research refined the temperament dimensions.",
+    "strength": "moderate: a classic, influential long-term study. Later research refined the temperament dimensions.",
     "topics": [
       "personality",
       "temperament"
@@ -3973,6 +3973,6 @@
     ],
     "verified": true,
     "verified_by": "https://wellcomecollection.org/works/epddh966 ; https://lib.ecu.edu/catalog-preview/catalog/111191 (ISBN 0876301391)",
-    "note": "Link is a library catalogue record (Wellcome Collection)."
+    "note": "Link is a library catalog record (Wellcome Collection)."
   }
 ]

@@ -454,8 +454,8 @@ c('care', ['my roommates never do their chores', 'what should I do next'], { kin
 // the topic doesn't stick to unrelated follow-ups; "tl;dr" shortens the last answer
 c('care', ['my partner snapped at me', 'where did I leave off'], { kind: 'care', text: /last talking about being snapped at/ });
 t('care', 'where did I leave off (fresh)', { q: 'where did I leave off', kind: 'care', text: /starting fresh/ });
-c('care', ['i feel overwhelmed', 'tl;dr please'], { kind: 'short', text: /^In short: /, not: /Thanks for telling me more/ });
-c('care', ['what is the lemonade stand', 'make it shorter'], { kind: 'short', text: /^In short: / });
+c('care', ['i feel overwhelmed', 'tl;dr please'], { kind: 'short', text: /^The short version: /, not: /Thanks for telling me more/ });
+c('care', ['what is the lemonade stand', 'make it shorter'], { kind: 'short', text: /^The short version: / });
 c('care', ['my partner snapped at me', 'how do i make the text bigger'], { kind: 'care', id: 'textsize' });
 // household frictions, kindly
 t('care', 'i forget chores and my partner is upset', { kind: 'sit', id: 'partner+forgetting', text: /doesn’t mean you don’t care/, not: /log one week|Feeling hurt by that/ });
@@ -483,7 +483,7 @@ t('spelling', 'What stocks should I buy? (a real word stays)', { q: 'What stocks
 // ---------------------------------------------------------------- testers, round three (ADHD, autistic, dyslexic, highly sensitive)
 // ADHD: focus and long pages get the reading helps, never kids' screen rules; "where do I start" doesn't carry the last topic
 t('nt2', "I can't focus on long pages", { kind: 'care', id: 'focus', text: /Show me only the steps/, not: /[Ss]creen agreements|kids/, link: '/' });
-t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /In short[\s\S]*Simple version[\s\S]*Listen[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
+t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /The short version[\s\S]*Simple version[\s\S]*Listen[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
 c('nt2', ['What is a BIFF response?', "I can't focus on long pages"], { kind: 'care', id: 'focus', not: /[Ss]creen agreements|phones-and-presence/ });
 c('nt2', ["I can't focus on long pages", 'where do I start'], { kind: 'card', id: 'start', not: /phones-and-presence|Phones and presence/ });
 c('nt2', ['What is a BIFF response?', 'where do I start'], { kind: 'card', id: 'start', link: '/start-here.html' });
@@ -527,13 +527,13 @@ t('nt2', 'my partnr is mad at me', { kind: 'sit', id: 'partner+madatme', text: /
 t('nt2', 'im dislexic is this site ok for me', { kind: 'care', id: 'dyslexia', text: /Easy reading[\s\S]*Extra large[\s\S]*Simple version/, not2: /Listen/, not: /take things literally/ });
 t('nt2', 'can i use a screen shot', { kind: 'care', id: 'screenshot', text: /Choose screenshots/, link: '/signal-translator.html', not: /phone-free|attention/ });
 t('nt2', 'how do i make the writing biger (Extra large)', { q: 'how do i make the writing biger', kind: 'care', id: 'textsize', text: /Extra large/ });
-c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^In short: /, not: /## How to use it/ });
-c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'I feel overwhelmed'], { kind: 'sit', text: /^In short: /, not: /What might be going on/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^The short version: /, not: /## How to use it/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'I feel overwhelmed'], { kind: 'sit', text: /^The short version: /, not: /What might be going on/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'tell me more'], { kind: 'card', id: 'signal', text: /## How to use it/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'tell me more', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /## How to use it/ });
-c('nt2', ['make it shorter', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
-c('nt2', ['keep your answers short', 'my partner snapped at me'], { kind: 'sit', text: /^In short: I’m sorry\. Being snapped at/, script: true });
-t('nt2', 'too long didnt read (points to the short ways in)', { q: 'too long didnt read', kind: 'short', text: /Simple version[\s\S]*In short/ });
+c('nt2', ['make it shorter', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^The short version: / });
+c('nt2', ['keep your answers short', 'my partner snapped at me'], { kind: 'sit', text: /^The short version: I’m sorry\. Being snapped at/, script: true });
+t('nt2', 'too long didnt read (points to the short ways in)', { q: 'too long didnt read', kind: 'short', text: /Simple version[\s\S]*The short version/ });
 // highly sensitive: warm and on topic, and no words they didn't use
 t('nt2', "I feel everyone's moods", { kind: 'care', id: 'sensitive', text: /a lot to carry[\s\S]*is this mine/, not: /Mood Arbitrage|Emotions are usually short/ });
 t('nt2', "I'm so overwhelmed by noise and people, I just want to hide", { kind: 'care', id: 'overload', text: /Quiet button[\s\S]*Night Garden/, not: /school run|everything on your plate/ });
@@ -548,7 +548,7 @@ t('nt2', 'how does my childhood affect me now', { kind: 'card', id: 'roots', lin
 t('nt2', 'How do I use the root finder?', { kind: 'card', id: 'roots', steps: true });
 t('nt2', "my partner snapped at me and I can't stop crying", { kind: 'sit', id: 'partner+hurtbythem', text: /Crying when something hurts is a very human response/, not: /stupid/ });
 t('nt2', 'my partner snapped at me and I feel silly for crying', { kind: 'sit', text: /isn’t silly/, not: /stupid/ });
-c('nt2', ['can you talk slower, this is a lot', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
+c('nt2', ['can you talk slower, this is a lot', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^The short version: / });
 t('nt2', 'can you talk slower, this is a lot', { kind: 'care', id: 'brief', not: /pond/ });
 c('nt2', ['can you talk slower, this is a lot', 'I want to kill myself'], { kind: 'safety' });
 // a new question after a playbook starts fresh
