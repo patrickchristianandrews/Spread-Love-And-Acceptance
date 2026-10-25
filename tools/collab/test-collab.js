@@ -305,7 +305,7 @@ asyncChecks.push((async function () {
   const s2 = S([{ id: 'a', n: 'Alex', me: true, d: { s: 0.62 } }, { id: 'b', n: 'Sam', d: { s: 0.30 } }]);
   eq([s2.gap, s2.close, s2.high && s2.high.n], [0.32, false, 'Alex'], 'scores: the gap, and whose reads higher');
   ok(!/win|lose|better|worse/i.test(C.combine.gapWords(s2)), 'scores: the words name no winner');
-  ok(/isn’t a contest/.test(C.combine.gapWords(s2)), 'scores: the words say it isn’t a contest');
+  ok(/Nobody is at fault/.test(C.combine.gapWords(s2)), 'scores: the words say nobody is at fault');
   const s3 = S([{ n: 'A', d: { s: 0.5 } }, { n: 'B', d: { s: 0.55 } }, { n: 'C', d: {} }]);
   eq([s3.gap, s3.close], [0.05, true], 'scores: three people, one missing, the others close');
   ok(S([{ n: 'A', d: { s: 0.5 } }]).gap === null, 'scores: one score alone has no gap');

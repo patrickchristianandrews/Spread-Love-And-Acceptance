@@ -113,7 +113,7 @@ try: “If we get the chores sorted, we get our Sundays back” lands differentl
 
 How you describe an option changes how it feels. Framing a change as something you’ll gain together tends to invite cooperation. Framing it as a loss or threat tends to trigger defensiveness.
 
-This isn’t about spin. It’s about choosing honest words that point toward what you both want.
+The aim is to choose honest words that point toward what you both want.
 
 Program: Starting from a shared goal in a check-in is a gain frame: here’s what we’re building, together.
 

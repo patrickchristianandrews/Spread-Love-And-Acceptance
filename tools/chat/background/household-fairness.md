@@ -154,7 +154,7 @@ try: Ask: “Which jobs do I do only because I notice them first?” Those are t
 
 A noticing threshold is how much needs doing before you notice it. If yours is lower, you’ll spot the full trash can sooner, and do it sooner, again and again.
 
-That’s not a personality flaw in either person. It’s a setup that quietly assigns jobs. Making the noticing part of someone else’s job is the fix.
+It’s a setup that quietly assigns jobs, and it says nothing about either person’s character. Making the noticing part of someone else’s job is the fix.
 
 Program: This is a textbook Pillar V pattern. WP-03’s Accountable name is the person who notices.
 

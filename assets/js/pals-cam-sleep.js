@@ -71,7 +71,7 @@
   //   voices -> snore / bed / sfx buses -> fade -> mute -> rumble filter -> low-pass -> gentle compressor
   //   -> soft clipper (a safety net that only matters if something ever got loud) -> speakers.
   // Fades only ever use setTargetAtTime, so no volume change can jump or zipper.
-  var A = { c: null, fade: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: 0, dropT: 0 };
+  var A = { c: null, fade: null, mute: null, snore: null, bed: null, sfx: null, bufs: null, voices: {}, bedNodes: null, sched: 0, off: 0 };
   var HORIZON = 12;      // seconds of breathing scheduled ahead of now (so a slow timer or a busy tab can't starve the sound)
   var TRIM = 1.6;        // overall level after the compressor (sets how loud everything is, together; the sounds are balanced against each other below)
   var FADE_TC = 2.4;     // fade-in time constant (about 9 s to be fully in)
@@ -110,6 +110,17 @@
     for (i = x; i < n; i++) o[i] = d[i] * k;
     return buf;
   }
+  // soft raindrops: a loop of round-edged, low-passed little ticks at random places (wrapping around, so it is seamless), peak 1
+  function makeDrops(c, secs, perSec) {
+    var sr = c.sampleRate, n = Math.round(secs * sr), o = new Float32Array(n), cnt = Math.round(secs * perSec), i, j, at, len, a, lp, k, e, pk = 0;
+    for (i = 0; i < cnt; i++) {
+      at = Math.floor(Math.random() * n); len = Math.round(sr * rand(0.02, 0.06)); a = Math.exp(rand(-1.4, 0.3)); lp = 0; k = 1 - Math.exp(-TAU * rand(800, 2000) / sr);
+      for (j = 0; j < len; j++) { lp += k * ((Math.random() * 2 - 1) - lp); e = (j < sr * 0.005 ? hann(j / (sr * 0.005)) : 1) * Math.exp(-j / (len * 0.28)); o[(at + j) % n] += lp * e * a; }
+    }
+    for (i = 0; i < n; i++) pk = Math.max(pk, Math.abs(o[i]));
+    var buf = c.createBuffer(1, n, sr), d = buf.getChannelData(0); for (i = 0; i < n; i++) d[i] = o[i] / (pk || 1);
+    return buf;
+  }
   function softCurve() { var n = 2049, cv = new Float32Array(n), i, v; for (i = 0; i < n; i++) { v = (i / (n - 1)) * 2 - 1; cv[i] = Math.tanh(v * 2.2) / 2.2; } return cv; }
   function siteSoundOK() { return lsGet('tol-quiet') !== '1' && lsGet('tol-sound-off') !== '1'; }
   function gainNode(v) { var gn = A.c.createGain(); gn.gain.value = v; return gn; }
@@ -129,7 +140,7 @@
     chain(A.fade, A.mute, rumble, tone, comp, trim, clip, c.destination);
     A.snore = gainNode(S.snore ? 1 : 0); A.bed = gainNode(1); A.sfx = gainNode(1);
     A.snore.connect(A.fade); A.bed.connect(A.fade); A.sfx.connect(A.fade);
-    A.bufs = { pinkA: makeNoise(c, 'pink', 23.1, 0.25), pinkB: makeNoise(c, 'pink', 31.7, 0.25), brownA: makeNoise(c, 'brown', 29.3, 0.25), brownB: makeNoise(c, 'brown', 41.9, 0.25), flut: makeNoise(c, 'flut', 23.3, 1) };
+    A.bufs = { pinkA: makeNoise(c, 'pink', 23.1, 0.25), pinkB: makeNoise(c, 'pink', 31.7, 0.25), brownA: makeNoise(c, 'brown', 29.3, 0.25), brownB: makeNoise(c, 'brown', 41.9, 0.25), flut: makeNoise(c, 'flut', 23.3, 1), dropsA: makeDrops(c, 19.3, 3.2), dropsB: makeDrops(c, 27.1, 2.6) };
     // every noise loop also drifts in speed by a fraction of a percent, at random, so even the loop length never shows up as a repeat
     A.rateMod = gainNode(0.003); var rs = c.createBufferSource(); rs.buffer = A.bufs.flut; rs.loop = true; rs.playbackRate.value = 0.02; rs.start(c.currentTime, Math.random() * 20); rs.connect(A.rateMod);
     buildSnorers();
@@ -188,10 +199,10 @@
       var p = PALS[id], base = id === 'tidbit' ? 3.9 : 4.9;
       if (!p.nextB) { p.nextB = S.T + (id === 'tidbit' ? 0.4 : 1.9); p.per = base; p.mood = 0.8; }
       while (p.nextB < horizon) {
-        p.per = clamp(p.per + rand(-0.14, 0.14), base * 0.86, base * 1.16);
+        p.per = clamp(p.per + rand(-0.22, 0.22), base * 0.8, base * 1.24);
         p.mood = clamp(p.mood + rand(-0.1, 0.1) + (0.78 - p.mood) * 0.08, 0.5, 1);
-        var dur = p.per * rand(0.95, 1.05) + (Math.random() < 0.07 ? rand(0.5, 1.6) : 0), snoring = p.mood > 0.58 && Math.random() < 0.72;
-        var b = { t: p.nextB, dur: dur, vol: p.mood * rand(0.88, 1), snore: snoring ? rand(0.45, 1) : 0, exh: rand(0.3, 0.45), pitch: rand(0.94, 1.06), form: rand(0.92, 1.08), sent: false };
+        var deep = Math.random() < 0.06, dur = p.per * rand(0.93, 1.07) * (deep ? 1.25 : 1) + (Math.random() < 0.1 ? rand(0.5, 2.2) : 0), snoring = p.mood > 0.58 && Math.random() < 0.72;
+        var b = { t: p.nextB, dur: dur, vol: p.mood * rand(0.85, 1) * (deep ? 1.12 : 1), snore: snoring ? rand(0.45, 1) : 0, exh: rand(0.3, 0.45), pitch: rand(0.94, 1.06), form: rand(0.92, 1.08), sent: false };
         p.breaths.push(b); if (p.breaths.length > 14) p.breaths.shift();
         p.nextB += dur;
       }
@@ -213,7 +224,7 @@
     if (!S.on) return;
     S.T = (performance.now() - S.t0) / 1000;
     planBreaths();
-    if (A.c && !S.ended) { syncClock(); sendBreaths(); dropsTick(); }
+    if (A.c && !S.ended) { syncClock(); sendBreaths(); }
   }
   // ---- the sound bed (synthesized; a pair of different-length noise loops per layer, so it never repeats)
   function setBed(kind) {
@@ -231,6 +242,7 @@
       layer(B.pinkB, [filt('highpass', 450, 0.5), filt('lowpass', 2000, 0.5)], 0.55, 0.5);
       layer(B.pinkB, [filt('bandpass', 900, 0.5), filt('lowpass', 1800, 0.5)], 0.45, -0.2);
       layer(B.brownA, [filt('bandpass', 170, 0.6)], 0.35, 0.2);
+      layer(B.dropsA, [], 0.9, -0.6); layer(B.dropsB, [], 0.9, 0.6);
       lv = 0.0082; dd.gain.value = 0.1;
     } else if (kind === 'fan') {
       layer(B.brownA, [filt('lowpass', 520, 0.5)], 0.6, -0.3);
@@ -248,17 +260,6 @@
     var sw = add(B.flut, 0.012); chain(sw, dd, drift.gain); drift.connect(gn);
     gn.gain.setTargetAtTime(lv * (S.bedGain || 1), now, 1.4);
     A.bedNodes = { g: gn, kind: kind, level: lv, stop: function () { srcs.forEach(function (s) { try { s.stop(); } catch (e) {} }); try { gn.disconnect(); } catch (e) {} } };
-    A.dropT = Math.max(A.dropT, S.T + 0.5);
-  }
-  // soft, sparse raindrops on the bed, planned a few seconds ahead (round-edged and low-passed, never sharp)
-  function dropsTick() {
-    var bn = A.bedNodes; if (!bn || bn.kind !== 'rain' || !S.soundOn) return;
-    var horizon = S.T + 3, c = A.c;
-    while (A.dropT < horizon) {
-      A.dropT += -Math.log(1 - Math.random()) / 5.5;
-      if (A.dropT < S.T + 0.1) continue;
-      voice({ t: aT(A.dropT), buf: Math.random() < 0.5 ? A.bufs.pinkA : A.bufs.pinkB, f: [['bandpass', rand(900, 2000), 1.1], ['lowpass', 2200, 0.5]], a: 0.005, r: rand(0.025, 0.06), pk: rand(0.0015, 0.004), pan: rand(-0.7, 0.7), to: bn.g });
-    }
   }
   // one little shaped puff of filtered noise: the building block of every event sound
   function voice(o) {
@@ -285,10 +286,10 @@
     fridge: function () { if (!A.c) return; var t = A.c.currentTime; voice({ t: t, buf: B_().brownA, f: [['lowpass', 170, 0.5]], a: 0.03, r: 0.25, pk: 0.021, pan: 0.5 }); voice({ t: t + 0.02, buf: B_().pinkA, f: [['bandpass', 520, 0.7], ['lowpass', 1000, 0.5]], a: 0.04, r: 0.12, pk: 0.003, pan: 0.5 }); },
     hum: function (len) { if (!A.c) return; var t = A.c.currentTime; len = Math.max(3.5, len); voice({ t: t, buf: B_().brownA, f: [['bandpass', 100, 6]], a: 1.2, h: len - 2.4, r: 1.2, pk: 0.047, pan: 0.5 }); voice({ t: t, buf: B_().brownB, f: [['bandpass', 200, 9]], a: 1.4, h: len - 2.8, r: 1.4, pk: 0.013, pan: 0.5 }); },
     crunch: function () { if (!A.c) return; var t = A.c.currentTime, n = 2 + Math.floor(Math.random() * 2); for (var i = 0; i < n; i++) voice({ t: t + i * rand(0.12, 0.2), buf: B_().pinkA, f: [['bandpass', rand(800, 1300), 1], ['lowpass', 1700, 0.5]], a: 0.012, r: rand(0.06, 0.1), pk: 0.047 * rand(0.6, 1), pan: -0.2 }); },
-    lap: function () { if (!A.c) return; voice({ buf: B_().pinkB, f: [['bandpass', 560, 3.2, 980], ['lowpass', 1600, 0.5]], a: 0.03, r: rand(0.07, 0.11), pk: 0.069 * rand(0.7, 1), pan: 0.2 }); },
-    bump: function () { if (!A.c) return; voice({ buf: B_().brownA, f: [['lowpass', 150, 0.5]], a: 0.015, r: 0.26, pk: 0.04, pan: -0.5 }); },
-    sigh: function (id) { if (!A.c) return; var pan = id === 'sugarfoot' ? 0.3 : -0.3; voice({ buf: B_().pinkA, f: [['bandpass', 820, 1.3, 470], ['lowpass', 1300, 0.5]], a: 0.45, h: 0.1, r: 0.95, pk: 0.02, pan: pan }); voice({ buf: B_().brownB, f: [['bandpass', id === 'sugarfoot' ? 190 : 250, 8, id === 'sugarfoot' ? 150 : 190]], a: 0.45, h: 0.1, r: 0.95, pk: 0.062, pan: pan }); },
-    woof: function (id) { if (!A.c) return; var pan = id === 'sugarfoot' ? 0.3 : -0.3, f = id === 'sugarfoot' ? 170 : 240; voice({ buf: B_().brownA, f: [['bandpass', f, 9, f * 0.72]], a: 0.07, h: 0.06, r: 0.28, pk: 0.135, pan: pan }); voice({ buf: B_().pinkB, f: [['bandpass', f * 3, 1.2], ['lowpass', 900, 0.5]], a: 0.07, h: 0.04, r: 0.2, pk: 0.012, pan: pan }); }
+    lap: function () { if (!A.c) return; voice({ buf: B_().pinkB, f: [['bandpass', 560, 3.2, 980], ['lowpass', 1600, 0.5]], a: 0.03, r: rand(0.07, 0.11), pk: 0.055 * rand(0.7, 1), pan: 0.2 }); },
+    bump: function () { if (!A.c) return; voice({ buf: B_().brownA, f: [['lowpass', 150, 0.5]], a: 0.015, r: 0.26, pk: 0.026, pan: -0.5 }); },
+    sigh: function (id) { if (!A.c) return; var pan = id === 'sugarfoot' ? 0.3 : -0.3; voice({ buf: B_().pinkA, f: [['bandpass', 820, 1.3, 470], ['lowpass', 1300, 0.5]], a: 0.45, h: 0.1, r: 0.95, pk: 0.017, pan: pan }); voice({ buf: B_().brownB, f: [['bandpass', id === 'sugarfoot' ? 190 : 250, 8, id === 'sugarfoot' ? 150 : 190]], a: 0.45, h: 0.1, r: 0.95, pk: 0.05, pan: pan }); },
+    woof: function (id) { if (!A.c) return; var pan = id === 'sugarfoot' ? 0.3 : -0.3, f = id === 'sugarfoot' ? 170 : 240; voice({ buf: B_().brownA, f: [['bandpass', f, 9, f * 0.72]], a: 0.07, h: 0.06, r: 0.28, pk: 0.115, pan: pan }); voice({ buf: B_().pinkB, f: [['bandpass', f * 3, 1.2], ['lowpass', 900, 0.5]], a: 0.07, h: 0.04, r: 0.2, pk: 0.012, pan: pan }); }
   };
 
   // ------------------------------------------------------------------ the happenings
@@ -783,6 +784,7 @@
       pals: ['tidbit', 'sugarfoot'].map(function (id) { var p = PALS[id]; return { id: id, x: p.x, pose: p.pose, face: p.face, asleep: p.asleep, rot: p.rot }; }), audio: A.c ? A.c.state : 'none' }; },
     sound: function (on) { setSound(on); syncButtons(); },
     _skip: function (secs) { S.t0 -= secs * 1000; },
+    _hold: function () { S.nextEv = 1e9; }, // tests: no random happenings
     _sfx: function (name, arg) { return SFX[name] && SFX[name](arg); },
     _audio: function () { return A; }
   };

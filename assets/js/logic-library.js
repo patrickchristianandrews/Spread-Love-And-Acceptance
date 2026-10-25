@@ -76,7 +76,7 @@
     { id: 'leave-on-time', cat: 'plans', side: 'nd', t: 'Leaving exactly at the agreed time',
       looks: 'At 9 o’clock, as agreed, the person stands up and leaves, even though everyone else is staying and having fun.',
       chain: ['The finish time was part of what they agreed to', 'Their energy was planned to last until that time', 'Staying later spends energy that was set aside for tomorrow', 'Leaving on time keeps the deal they made with themselves and with you'],
-      an: ['A parking meter: when the time is up, it’s up, however nice the street is.', 'A shop that closes at six. It isn’t rude to its customers. It’s open when it said it would be.', 'Packing exactly enough food for a day’s walk: going on for another hour means walking hungry.'],
+      an: ['A parking meter: when the time is up, it’s up, however nice the street is.', 'A shop that closes at six is simply open when it said it would be.', 'Packing exactly enough food for a day’s walk: going on for another hour means walking hungry.'],
       fits: 'Agreeing a time and keeping it is honest and reliable. For many people who budget their energy carefully, an end time is what made it possible to say yes in the first place.',
       other: 'The host may wonder whether the person was enjoying themselves, or feel the evening was cut short. Friends may feel a little left behind.',
       say: '“I had a good time. Leaving at nine is what lets me say yes next time too.”',

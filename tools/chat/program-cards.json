@@ -1095,7 +1095,7 @@
       "name": "do I have PTSD?",
       "pat": "\\b(do i have|have i got|is (this|it)|could (this|it) be|am i|might i have|maybe i have)\\b.{0,25}\\b(ptsd|post traumatic|c ptsd|cptsd)\\b.{0,100}\\b(waking|wake up|nightmares?|jump\\w*|noises|on edge|since i got back|deploy\\w*|tour|military|army|navy|service|sleep\\w*)\\b|\\bptsd\\b.{0,80}\\b(waking up|wake up|nightmares?|jump\\w* at|noises|on edge|since i got back|deploy\\w*|tour)\\b",
       "what": [
-        "I can’t tell you that, and I won’t guess: nobody can diagnose PTSD from a chat. What you describe, waking up and jumping at noises, is common after a deployment or anything frightening. It isn’t a weakness, and it’s worth raising with a doctor. Help tends to work better when it starts early."
+        "I can’t tell you that, and I won’t guess: nobody can diagnose PTSD from a chat. What you describe, waking up and jumping at noises, is common after a deployment or anything frightening. It is a common reaction, and nothing to be ashamed of. Help tends to work better when it starts early."
       ],
       "how": [
         "Start with your doctor: tell them about the sleep and the jumpiness, and how long it has been going on.",
@@ -10074,7 +10074,7 @@
       ],
       "how": [
         "If it feels safe, try a short, calm chat with your roommate first, about the room, not about them.",
-        "If that doesn’t change anything, or you dread going back to your room, talk to your RA. It isn’t snitching. It’s using the help that’s there.",
+        "If that doesn’t change anything, or you dread going back to your room, talk to your RA. That is using the help that’s there.",
         "Ask the RA for a roommate agreement form, or a mediated conversation.",
         "If you ever feel unsafe in your room, go to residence staff right away."
       ],
@@ -11002,7 +11002,7 @@
       "notPat": "\\b(in law|inlaw|mother in law|father in law|parents visit|boss|coworker|teacher)\\b",
       "keys": [],
       "what": [
-        "This is one of the most common patterns couples get stuck in, and it belongs to both of you. One of you wants to sort it out now. The other needs time before they can talk well. The more one pushes, the more the other pulls back, and the more one pulls back, the more the other pushes. Neither of you is the problem; the pace mismatch is."
+        "This is one of the most common patterns couples get stuck in, and it belongs to both of you. One of you wants to sort it out now. The other needs time before they can talk well. The more one pushes, the more the other pulls back, and the more one pulls back, the more the other pushes. The pace mismatch is the problem, and neither of you is."
       ],
       "how": [
         "If you’re the one who wants to talk now: being walked away from really hurts, and it can feel like being shut out. Ask for a return time rather than an answer right now. A set time is your guarantee the topic isn’t being dropped.",
@@ -11154,7 +11154,7 @@
         "Talk about the day, not just the jobs: when do you each want time alone, time together and time out of the house?",
         "Re-divide whole jobs rather than “helping.” Owning a job (say, the grocery run and meals on Tuesdays) means doing it your way from start to finish, including noticing when it needs doing.",
         "When a job changes hands, agree what “done” means, then let the new owner do it their way. “You’re doing it wrong” is the fastest way to hand the job back.",
-        "The partner who has newly retired often needs a purpose outside the house too: a project, volunteering, friends, a regular commitment. That isn’t running away. It gives you both room.",
+        "The partner who has newly retired often needs a purpose outside the house too: a project, volunteering, friends, a regular commitment. It gives you both room.",
         "Check in for a few minutes each evening about how sharing the day felt."
       ],
       "script": [
@@ -12020,7 +12020,7 @@
       "notPat": "\\b(my|our|his|her|their) (kid|kids|son|daughter|child|children|toddler|teen|teenager|partner|husband|wife|boyfriend|girlfriend|friend|sister|brother|mom|mum|dad|roommate|coworker|boss)s? (has|had|have|is having|was having|keeps having|melted|melts)\\b|\\bwhat (is|s) a meltdown\\b",
       "keys": [],
       "what": [
-        "I’m sorry. A meltdown can feel awful, before, during and after, and at work it can feel even more exposed. It isn’t a character flaw or a choice. It’s what can happen when too much has built up for too long."
+        "I’m sorry. A meltdown can feel awful, before, during and after, and at work it can feel even more exposed. It’s what can happen when too much has built up for too long."
       ],
       "how": [
         "Right now, recovery comes first: somewhere quieter, some water, less light and noise, and no big decisions.",
@@ -13228,7 +13228,7 @@
       ],
       "how": [
         "Meet your partner privately first and agree a few house rules you both stand behind. Then you share them with your kids, so the rules come from their parent.",
-        "Ask your partner to lead with warmth for now and leave most discipline to you. That isn’t sidelining them. It’s how stepfamilies usually settle.",
+        "Ask your partner to lead with warmth for now and leave most discipline to you. It’s how stepfamilies usually settle.",
         "Give your partner a real role and say it out loud to the kids, like being in charge of Saturday breakfast or homework help.",
         "Make time just for the two of you, too. A steady couple makes the kids feel safer, not less loved."
       ],
@@ -13846,7 +13846,7 @@
       "how": [
         "Pick the moment: ask when nobody’s rushed or already annoyed.",
         "Say what you want and why, then offer something in return: “Can I stay till 11? I’ll text when I leave and be home by 11:15.”",
-        "If it blows up, step away and come back later. That isn’t losing. It’s how you get a better answer."
+        "If it blows up, step away and come back later. It’s how you get a better answer."
       ],
       "script": "Can we talk about this later tonight, when we’re both calmer?",
       "links": [
@@ -18880,7 +18880,7 @@
         "~hedonic adaptation",
         "~getting used to it"
       ],
-      "what": "Complacency is what happens when something has worked for a long time and you stop checking on it. It isn’t laziness or a lack of love. It’s a setup nobody has looked at lately. The Complacency guide covers the quiet signs, how it shows up in you, partners, family, friends, roommates and coworkers, how it differs from contentment and acceptance, and small, regular re-checks.",
+      "what": "Complacency is what happens when something has worked for a long time and you stop checking on it. It comes from a setup nobody has looked at lately, and it says nothing about laziness or love. The Complacency guide covers the quiet signs, how it shows up in you, partners, family, friends, roommates and coworkers, how it differs from contentment and acceptance, and small, regular re-checks.",
       "how": [
         "Notice the quiet signs: “fine” is the whole conversation, thanks has become a reflex, “we’ve always done it this way” is the reason.",
         "Ask one real question you don’t already know the answer to, and listen to all of it.",
@@ -20410,6 +20410,163 @@
       "kind": "intent",
       "keys": [],
       "chips": []
+    },
+    {
+      "id": "helpsettle",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "name": "helping someone settle",
+      "pat": "\\b(how (do|can|should) i|help me|how to|ways to|tips to|what can i do to) (calm|settle|de-?escalate|soothe|talk down)( down)? (him|her|them|my (partner|husband|wife|boyfriend|girlfriend|kid|kids|child|teen|son|daughter|mom|mum|dad|friend|coworker|boss)|someone|somebody|an? (angry|upset|stressed) (person|partner)|a (child|kid|teen))\\b|\\bde-?escalat\\w*\\b|\\b(my )?(partner|husband|wife|boyfriend|girlfriend|child|kid|teen|son|daughter|mom|mum|dad|friend|coworker|boss|he|she|they) (is|are|keeps|keep|was|were) (overreacting|over reacting|flipping out|blowing up|losing it|yelling|screaming|shouting)\\b|\\bhow (do|can) i stay calm when (he|she|they|my \\w+)\\b|\\bwhy (is|are|does|do) (he|she|they|my \\w+) (overreact|over react|react so (strongly|badly|big))\\b",
+      "keys": [
+        "helping it settle",
+        "help it settle",
+        "de-escalate",
+        "deescalate",
+        "de escalate",
+        "calm someone down",
+        "calm them down",
+        "overreaction",
+        "an overreaction"
+      ],
+      "what": [
+        "You can’t make another person calm down, but you can change the parts that are yours: your tone, pace, timing, the space between you, your breathing and your words. Those changes make it easier for them to settle.",
+        "A big reaction often has more than one source: a tired or hungry body, a heavy week, the meaning they heard, and sometimes something older."
+      ],
+      "how": [
+        "Steady yourself first: one long breath out, soften your face and shoulders.",
+        "Go lower and slower. Use fewer words and leave gaps.",
+        "Reflect what you see in a few words: “That sounds really hard.” Do not argue the facts yet.",
+        "Offer a choice and some space: “Talk now, or after dinner?”",
+        "If it keeps rising, pause with a time: “Let’s take twenty minutes. I’ll come find you at 8.” Then come back and repair first."
+      ],
+      "links": [
+        [
+          "Helping it settle",
+          "/help-it-settle.html"
+        ],
+        [
+          "Where a reaction can come from",
+          "/help-it-settle.html#sources"
+        ],
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Old hurts and new reactions",
+          "Why do old hurts make reactions bigger?"
+        ],
+        [
+          "I need to calm down right now",
+          "I need to calm down right now"
+        ]
+      ],
+      "plain": [
+        "Go lower and slower, and offer a choice."
+      ]
+    },
+    {
+      "id": "oldhurts",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "name": "old hurts and new reactions",
+      "pat": "\\b(why do|why does|how do|how can) (old|past|childhood) (hurts?|events?|trauma|wounds?|experiences?|memories) (make|cause|shape|affect|change|bring)\\b|\\b(trauma|past) (and|in|affecting|shaping) (my |our |the )?(reactions?|relationships?|conversations?|arguments?|overreactions?)\\b|\\bis (this|my reaction|it) (trauma|from (my )?(past|childhood|trauma))\\b|\\b(reactions?|overreactions?) (from|because of) (my |the )?(past|childhood|trauma)\\b|\\btrauma (across|through) (the )?(life|lifespan|ages|stages)\\b|\\b(triggered|trigger) (by|in) (a )?(conversation|argument|fight)\\b",
+      "keys": [
+        "old hurts and new reactions",
+        "old hurts",
+        "trauma and reactions",
+        "trauma across life stages",
+        "past events and reactions"
+      ],
+      "what": [
+        "Earlier events, at any age, can make certain reactions and misunderstandings more likely. The body learns from what happened to it, so when a moment resembles an old one it can react to the old one first. Having been through something hard is never anyone’s fault.",
+        "Hard events are common, and most people do not develop PTSD. You don’t need to know the cause or to have a diagnosis to notice the pattern, slow it down and take back some choice."
+      ],
+      "how": [
+        "Notice your first sign: a hot face, a held breath, a tight jaw.",
+        "Slow the body: breathe out longer than you breathe in for a minute or two.",
+        "Say it plainly: “This feels bigger than it should. I need a minute.”",
+        "Use a pause line with a return time: “I need 20 minutes. I’ll be back at 8.”",
+        "Tell people what helps, on a calm day."
+      ],
+      "links": [
+        [
+          "Old hurts and new reactions",
+          "/old-hurts-new-reactions.html"
+        ],
+        [
+          "Across the life stages",
+          "/old-hurts-new-reactions.html#stages"
+        ],
+        [
+          "Taking back control",
+          "/old-hurts-new-reactions.html#control"
+        ],
+        [
+          "Your nervous system, in plain words",
+          "/nervous-system.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Help someone settle",
+          "How do I calm someone down?"
+        ],
+        [
+          "Where am I right now?",
+          "What is the ladder?"
+        ]
+      ],
+      "plain": [
+        "Slow the body, say it plainly, and use a pause with a return time."
+      ]
+    },
+    {
+      "id": "labelpage",
+      "kind": "tool",
+      "name": "before you use a label",
+      "keys": [
+        "before you use a label",
+        "labels",
+        "using a label",
+        "borderline words",
+        "words used too fast",
+        "what counts as controlling",
+        "what counts as gaslighting",
+        "criteria for controlling",
+        "criteria for gaslighting",
+        "what has to be true before"
+      ],
+      "what": "Words like “controlling,” “gaslighting,” “manipulative,” “narcissistic” and “toxic” get used for ordinary friction, and that hurts people they do not fit. The page Before you use a label sets out, for 22 pairs of look-alikes, what has to be true together and over time, what is not enough on its own, questions that tell them apart, both views, and how to say what you mean without the label.",
+      "how": [
+        "Describe what happened and what it did to you, and make a request.",
+        "Look for a pattern over time, not one moment.",
+        "Ask what else could look the same: stress, overload, a different way of thinking, care shown clumsily."
+      ],
+      "links": [
+        [
+          "Before you use a label",
+          "/before-you-use-a-label.html"
+        ],
+        [
+          "Controlling",
+          "/before-you-use-a-label.html#controlling"
+        ],
+        [
+          "Gaslighting",
+          "/before-you-use-a-label.html#gaslighting"
+        ],
+        [
+          "Terms in plain words",
+          "/glossary.html"
+        ]
+      ]
     }
   ],
   "clarify": [

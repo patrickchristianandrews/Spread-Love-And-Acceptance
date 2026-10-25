@@ -73,7 +73,7 @@
         coworker: 'Thanks for the follow-up notes after every meeting. They keep us all on track.' },
       why: 'Reliable work gets used to. Thanks makes it visible again.' },
     { id: 'share', cat: 'Share your context', yards: 10, title: 'Share your side',
-      how: 'Say one honest thing about what has been going on for you lately, including your part in the quiet. This isn’t an excuse. It’s context, and they can’t see it unless you say it.',
+      how: 'Say one honest thing about what has been going on for you lately, including your part in the quiet. That is context, and they can’t see it unless you say it.',
       say: 'Try saying', lines: {
         self: 'Here’s what’s actually been going on for me, in one honest sentence: ___.',
         partner: 'I’ve been heads-down at work and I let our evenings slide. That’s on me, and it isn’t because I stopped caring.',

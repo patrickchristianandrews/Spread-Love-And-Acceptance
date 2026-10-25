@@ -20,7 +20,7 @@ go: /check-ins.html#ground | Check-in ground rules
 evidence: A standard facilitation technique for keeping meetings on track. There’s little formal research, but it’s widely used because it works simply.
 try: “That’s a real one, and it deserves its own time. Let’s put it on the list for Sunday.”
 
-When a second topic pops up in a hard talk, the parking lot is a note where it goes to wait safely. It isn’t dismissed. It’s scheduled. That lets you finish the first topic without the conversation sprawling into every old grievance.
+When a second topic pops up in a hard talk, the parking lot is a note where it goes to wait safely. It is scheduled for later. That lets you finish the first topic without the conversation sprawling into every old grievance.
 
 Keep the list somewhere both people can see (a note on the fridge or a shared phone note), and actually come back to it. A parking lot that never gets visited stops being trusted.
 

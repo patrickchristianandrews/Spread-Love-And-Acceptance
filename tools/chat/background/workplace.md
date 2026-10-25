@@ -115,7 +115,7 @@ try: “Would you prefer updates by email or in our one-on-one? And how much det
 
 Managing up means helping your working relationship with your manager go well: learning how they like to communicate, keeping them informed and raising problems early.
 
-It isn’t flattery. It’s the same as tuning to anyone’s wiring: finding the signal they receive best.
+It is the same as tuning to anyone’s wiring: finding the signal they receive best.
 
 Program: Pillar IV, Tune how you send and receive, works at work too. A Wiring Card can be shared with a manager.
 

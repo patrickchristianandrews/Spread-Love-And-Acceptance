@@ -1118,7 +1118,7 @@
     var g = res.gap.toFixed(2);
     if (res.close) return ('Your scores are close (a gap of ' + g + '). Neither of you is carrying much more than the other right now.');
     var who = res.high.me ? 'yours' : (res.high.n || 'one of yours') + '’s';
-    return o.words ? o.words(res, g) : ('A gap of ' + g + ': ' + who + ' reads higher right now. That isn’t a contest or anyone’s fault. It’s a reason to look at what’s on each plate this week.');
+    return o.words ? o.words(res, g) : ('A gap of ' + g + ': ' + who + ' reads higher right now. Nobody is at fault. It is a reason to look at what’s on each plate this week.');
   }
 
   // ---- the side-by-side view on the page (only text, never HTML)

@@ -9,7 +9,7 @@ go: /library/life.html#parenting-styles | Parenting styles (Library)
 evidence: John Gottman described emotion coaching in Raising an Emotionally Intelligent Child (1997). Research suggests children whose parents acknowledge and help name feelings tend to regulate emotions better.
 try: “You’re really disappointed we can’t go to the park. That makes sense. We can go tomorrow.”
 
-Emotion coaching means noticing a child’s feelings, naming them, accepting them, and then helping with limits and problem-solving. All feelings are allowed. Not all behaviors are.
+Emotion coaching means noticing a child’s feelings, naming them, accepting them, and then helping with limits and problem-solving. All feelings are allowed, not all behaviors are.
 
 It helps children learn to understand and manage their own emotions over time.
 

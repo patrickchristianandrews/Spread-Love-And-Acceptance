@@ -97,7 +97,7 @@ window.TOL_CREATOR_KB = {
       f: ['What is the constant audit?', 'How does Christian think differently?'] },
 
     { id: 'constant-audit', k: ['constant audit', 'never switches off', 'auditing the room', 'sensory', 'senses', 'notice everything', 'what it gives', 'what it costs', 'volume dial', 'overwhelm', 'loud places'],
-      a: ['Christian describes a part of them that never switches off: wherever they are, some part of them is auditing the room. The temperature, the light, a hum from a vent, who is standing where, a picture half an inch off level. In their words, “It is not vigilance and it is not anxiety. It is simply the resolution I receive at.”', 'It gives pattern recognition, vivid appreciation, early warning and deep focus. It costs fast fatigue, ordinary places like supermarkets that hurt, and a mind that never clocks off. “Both columns are the same mechanism.” What Christian can do is spend that attention on purpose, and protect it where it simply drains.'],
+      a: ['Christian describes a part of them that never switches off: wherever they are, some part of them is auditing the room. The temperature, the light, a hum from a vent, who is standing where, a picture half an inch off level. In their words, “It is simply the resolution I receive at.”', 'It gives pattern recognition, vivid appreciation, early warning and deep focus. It costs fast fatigue, ordinary places like supermarkets that hurt, and a mind that never clocks off. “Both columns are the same mechanism.” What Christian can do is spend that attention on purpose, and protect it where it simply drains.'],
       l: [['The Constant Audit', '/about.html#constant-audit']],
       f: ['What was masking like for Christian?', 'How did the program come from Christian’s life?'] },
 

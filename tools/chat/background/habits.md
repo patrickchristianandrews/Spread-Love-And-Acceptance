@@ -74,7 +74,7 @@ try: Ask: “What happens if nobody decides?” That’s your default, and it’
 
 A default is whatever happens when nobody makes an active choice. At home, defaults are powerful: the person who noticed first last time often becomes the person who does it forever.
 
-Changing a default on purpose (“trash are Jordan’s now, noticing included”) is often more effective than asking for help each time.
+Changing a default on purpose (“the trash is Jordan’s now, noticing included”) is often more effective than asking for help each time.
 
 Program: Pillar V, Notice the quiet incentives, is all about this. WP-03 turns defaults into named owners.
 
@@ -139,7 +139,7 @@ try: For some couples, a daily check-in becomes a keystone: it catches small pro
 
 A keystone habit is one that seems to make other good changes easier. Regular family dinners, a morning planning moment or a daily check-in can play this role.
 
-It isn’t guaranteed. It’s a useful question, though: which one small routine would make the biggest difference for us?
+It is not guaranteed, but it’s a useful question: which one small routine would make the biggest difference for us?
 
 Program: The 90-second daily check-in often acts as a keystone for households using the program.
 

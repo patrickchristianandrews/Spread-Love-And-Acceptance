@@ -182,7 +182,7 @@ TOLBuddies.episodes['s2e3'] = {
       { say: 'tidbit', to: 'lumi', text: 'Never? Okay. Step one: smell it. Step two: big bite. Step three: happy dance!', mood: 'silly', energy: 1.2, hold: 0.8 },
       { act: 'wiggle', who: 'tidbit', dur: 2 },
       { act: 'wiggle', who: 'lumi', dur: 2 },
-      { say: 'narrator', text: 'Tidbit and Lumi danced the honey bun dance, around and around. And over by the toffee stall, Sugarfoot felt a tiny little tug inside.', mood: 'calm', hold: 1 },
+      { say: 'narrator', text: 'Tidbit and Lumi danced the honey bun dance, round and round. And over by the toffee stall, Sugarfoot felt a tiny little tug inside.', mood: 'calm', hold: 1 },
       { act: 'think', who: 'sugarfoot', think: '💭', dur: 2.2 },
       { say: 'sugarfoot', to: 'self', text: 'Oh. So this is what it feels like. On the outside.', mood: 'sad', energy: 0.7, hold: 1 },
       { say: 'sugarfoot', to: 'self', text: 'Okay. Notice it. Then say it. Even if I’m not sure.', mood: 'calm', energy: 0.8, hold: 0.8 },

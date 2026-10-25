@@ -11,7 +11,7 @@ try: Each home keeps its own routines. Communication is written, brief and only 
 
 In parallel parenting, each parent runs their own home with little direct coordination, and communication is kept brief, written and focused on logistics. It’s often used when direct cooperation keeps leading to conflict.
 
-It isn’t a failure. It can protect children from ongoing tension, and some families move toward more cooperation over time.
+It can protect children from ongoing tension, and some families move toward more cooperation over time.
 
 Program: The co-parent road keeps messages short and factual, with one owner per task.
 

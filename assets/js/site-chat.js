@@ -1392,7 +1392,7 @@
         // second time round: don't repeat the same block; ask what happened, and offer a person to talk to
         state.last = Object.assign({}, L, { nohelp: L.nohelp + 1 });
         return { blocks: [{ k: 'p', x: tried ? 'Got it. Tell me what happened when you tried it: what they said or did, and how it ended. Even one line helps, and I’ll suggest something different.' : 'I hear you. Tell me in one line what happened, or what you’d most like to change, and I’ll come at it differently.' },
-          { k: 'note', x: 'If it keeps going round in circles, a counselor or a calm third person you both trust can help you talk it through. That isn’t a failure. It’s often what gets things unstuck.' }],
+          { k: 'note', x: 'If it keeps going round in circles, a counselor or a calm third person you both trust can help you talk it through. It’s often what gets things unstuck.' }],
           chips: [{ label: 'Something smaller', q: 'Give me one thing to do' }, { label: 'Start over', q: 'Start over' }], kind: 'nohelp' };
       }
       if (L && L.kind === 'sit' && IDX.sit.issues[L.issue]) {

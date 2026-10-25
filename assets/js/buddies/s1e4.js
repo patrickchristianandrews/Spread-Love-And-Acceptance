@@ -108,7 +108,7 @@ TOLBuddies.episodes['s1e4'] = {
       { music: 'gentle' },
       { place: { tidbit: 0.35, sugarfoot: 0.6 } },
       { act: 'carry', who: 'sugarfoot', item: 'soggykite', dur: 3 },
-      { say: 'narrator', text: 'The pals climbed around and around the lighthouse stairs, all the way to the very top.', mood: 'calm', hold: 1 },
+      { say: 'narrator', text: 'The pals climbed round and round the lighthouse stairs, all the way to the very top.', mood: 'calm', hold: 1 },
       { guest: 'robot', enter: 'right', name: 'Beep the robot' },
       { say: 'robot', to: 'both', text: 'Beep boop! Visitors! Welcome to the lighthouse. I am the lamp helper.', mood: 'happy', energy: 1.1, hold: 0.8 },
       { say: 'tidbit', to: 'robot', text: 'Beep! You work here now?', mood: 'surprised', hold: 0.8 },

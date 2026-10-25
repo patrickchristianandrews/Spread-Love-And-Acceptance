@@ -24,7 +24,7 @@ try: Instead of “What do you want to do about dinner?” try “Pasta or stir-
 
 Open questions can be hard when someone is tired, overwhelmed or finds decisions draining. A clear either-or or yes-or-no question lowers the effort.
 
-It isn’t about limiting choice. It’s about making the next step easy. You can always add “or something else?”
+The aim is to make the next step easy. You can always add “or something else?”
 
 Program: Wired Differently suggests asking about the body or actions (“more like tired, or more like annoyed?”) for people who find feelings hard to name.
 

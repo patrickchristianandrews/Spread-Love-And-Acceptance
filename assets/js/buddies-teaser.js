@@ -658,7 +658,7 @@
     onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 4.0, 4.9, 0.1), 0.08);
     say(g, sug, 'What a smooth flight!', u, 0.2, 1.4);
     say(g, tid, 'Wait… snakes?!', u, 1.6, 2.5);
-    say(g, tid, 'I have had it with these snakes on this…', u, 2.6, 4.0, { big: true });
+    say(g, tid, 'I have had it with these snakes on this—', u, 2.6, 4.0, { big: true });
     say(g, sug, '…PLANE! This lovely plane!', u, 4.1, 5.0, { big: true });
     say(g, tid, 'Hey, I was talking!', u, 5.0, 5.5);
     say(g, tid, '…on this lovely plane.', u, 5.6, 6.3);

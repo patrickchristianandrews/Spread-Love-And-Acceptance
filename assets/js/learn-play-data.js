@@ -582,7 +582,7 @@ window.TOLLearnPlayData = {
               ['“That landed a bit oddly for me. Give me a second.”', 'After a breath: “Did you mean that as a thank-you?” “Yes, sorry, I’m worn out.” Over in ten seconds.']] }
       ],
       e: [
-        { f: 'Philosophers call this deontological', s: 'Fair by promises means asking: did each person do the jobs they said they would?', x: 'You said you’d take Tuesday’s trash, so Tuesday’s trash are yours.' },
+        { f: 'Philosophers call this deontological', s: 'Fair by promises means asking: did each person do the jobs they said they would?', x: 'You said you’d take Tuesday’s trash, so Tuesday’s trash is yours.' },
         { f: 'This book calls the agreement being fair by the rules', s: 'Once a job has an owner, you judge the job by whether that owner did it.', x: 'If someone quietly covered for you, the job still has a question mark next to your name.' },
         { f: 'The idea is borrowed loosely from brain science', s: 'Not every comment needs a full-volume reaction. Let it settle first.', x: 'Say “give me a second” before answering a remark that stung.' }
       ]
@@ -758,7 +758,7 @@ window.TOLLearnPlayData = {
         { at: 'What it is, and what it isn', k: 'quiz', q: 'The page says a ledger only one person reads is…',
           o: [['Just a grudge with better formatting', true, 'Yes! A ledger works because both people read it, together.'],
               ['A good start on your own', false, 'Not quite. The self-discovery half is for you alone, but a shared ledger read by one person turns into a grudge.'],
-              ['The safest way to keep score', false, 'Not quite. This isn’t a scorecard at all. It describes the arrangement, never a person.']] },
+              ['The safest way to keep score', false, 'Not quite. It describes the arrangement, never a person.']] },
         { at: 'Who it’s for', k: 'sort', q: 'Good fit right now, or probably not?', bins: ['Likely a good fit', 'Probably not right now'],
           items: [['You want to understand why some moments hit harder than they should', 0], ['The same “who does more” argument keeps coming back', 0],
                   ['You’re hoping for proof that you’re right', 1, 'The page says this is the time to wait: it never gives a verdict on anyone.'],

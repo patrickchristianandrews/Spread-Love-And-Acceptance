@@ -9,7 +9,7 @@ go: /check-ins.html | Check-ins: hear it back before you answer
 evidence: Paraphrasing is a core skill in counseling and mediation training. Studies of listening suggest people feel more understood when they hear their words reflected, though the effect depends on sounding sincere rather than mechanical.
 try: “So the part that got to you wasn’t the dishes, it was feeling like you’re the only one who notices. Did I get that right?”
 
-Paraphrasing means putting what someone said into your own words and checking it back with them. It isn’t agreeing. It’s showing you heard, and giving them a chance to correct you before you respond.
+Paraphrasing means putting what someone said into your own words and checking it back with them. It shows you heard, and gives them a chance to correct you before you respond. It doesn’t mean you agree.
 
 Good paraphrases are short and focus on the heart of what was said, often including the feeling as well as the facts. A paraphrase that’s too long, or that sneaks in your own argument, stops working.
 

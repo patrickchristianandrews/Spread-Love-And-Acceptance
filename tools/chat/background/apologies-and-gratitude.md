@@ -89,7 +89,7 @@ try: “I got that wrong, I’ve made it right as best I can, and I’m allowed 
 
 After a mistake, some people stay stuck in guilt long after making amends. Self-forgiveness means accepting responsibility and then letting yourself move forward.
 
-It isn’t pretending it didn’t happen. It’s choosing to learn from it rather than punish yourself indefinitely.
+It is choosing to learn from what happened rather than punish yourself indefinitely.
 
 Program: The Library’s self-compassion entry goes deeper. The program’s whole approach is about fixing the setup, not punishing the person, including yourself.
 

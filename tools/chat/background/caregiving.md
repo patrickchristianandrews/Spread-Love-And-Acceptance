@@ -128,7 +128,7 @@ try: Name one thing that’s just yours this week, and protect time for it.
 
 Caregiving can gradually take over your identity until you’re “the caregiver” and little else. Keeping some parts of your life that aren’t about caring (friends, a hobby, work you enjoy) helps you stay yourself.
 
-It isn’t selfish. It’s part of being able to keep caring.
+It is part of being able to keep caring.
 
 Program: Know your own wiring and the self road in the Workpaper Suite are about understanding and caring for yourself.
 

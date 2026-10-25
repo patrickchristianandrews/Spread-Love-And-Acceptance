@@ -374,7 +374,7 @@
       tryThis: c => c[3] === 'E' ? 'When something feels unclear this week, ask one direct clarifying question instead of guessing.' : 'When a tone stings this week, pause and ask yourself: “Is this about me, or are they carrying something else?”',
       link: ['The Chat analyzer', '/signal-translator.html'] },
     { id: 'energy', title: 'Your energy and your senses', sub: 'What fills you up and what drains you', nt: NT_ENERGY,
-      intro: ['Every brain has things that fill it up and things that drain it. Neurodivergent brains often have less room for sensory input, social demands or switching tasks.', 'That isn’t a character flaw. It’s information you can plan around.'],
+      intro: ['Every brain has things that fill it up and things that drain it. Neurodivergent brains often have less room for sensory input, social demands or switching tasks.', 'That is information you can plan around.'],
       yours: c => c[0] === 'Q' ? 'Quick Sparks often run hot and then crash. Watch for the moment excitement tips into overdrive.' : 'Slow Simmers often drain quietly, so you can be running on empty before anyone notices, including you.',
       prompts: () => ['Name three things that fill you up.', 'Name three things that drain you fastest.', 'What’s one early sign that you’re running low?'],
       tryThis: () => 'Once a day this week, write one word for your energy. How much are you carrying? (WP-02) goes deeper: it shows how full your stress tank is today.',
