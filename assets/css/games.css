@@ -3,7 +3,7 @@
 
 :root{
   --g-board: linear-gradient(145deg, #FFF8EE 0%, #F6EEF8 55%, #EEF4FA 100%);
-  --g-edge: #E6D6EE; --g-tile: #FFFFFF; --g-ink: #3C3350; --g-soft: #8A6D8F;
+  --g-edge: #E6D6EE; --g-tile: #FFFFFF; --g-ink: #3C3350; --g-soft: #75597B; /* polish24a: was #8A6D8F, 4.2 : 1 on the cream */
   --g-accent: #D9C8F0; --g-accent-ink: #3C3350; --g-found: #BFE3CF; --g-empty: rgba(255,255,255,.55);
 }
 html[data-tiles="tiles-rose"]{ --g-board: linear-gradient(150deg, #FFF3F5 0%, #FBE3EA 100%); --g-edge: #F2C9D4; --g-tile: #FFFAFB; --g-ink: #6B2E45; --g-soft: #A65A76; --g-accent: #F4A6B8; --g-found: #F9D3DE; }

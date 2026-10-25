@@ -2,3 +2,37 @@
 # so this line publishes /.well-known/, where the Google Play app's ownership file
 # (assetlinks.json) must live. Nothing else about the site changes.
 include: [".well-known"]
+
+# polish24c: working files that were being published at their own addresses (internal notes, paywall and
+# dashboard setup docs, test screenshots and exports, a Python wheel, database schema, old manuscript drafts).
+# Nothing on the site links to any of them (checked with tools/checks/site-health.js). Jekyll leaves them out of
+# the published site; they stay in the repository. Do not list anything a page or script loads.
+exclude:
+  - README.md
+  - paywall-integration.md
+  - dashboard-setup.md
+  - manage-members.py
+  - qrcode-8.2-py3-none-any.whl
+  - wp-04.md
+  - wp-11.md
+  - suite-index.md
+  - b.pdf
+  - portraits.png
+  - fx-1280.png
+  - fx-390.png
+  - fx-bub.png
+  - fx-heart.png
+  - print12-site-1366-dark.png
+  - print12-site-1366-light.png
+  - print12-site-390-dark.png
+  - print12-site-390-light.png
+  - infrastructure
+  - notes
+  - manuscript
+  - supabase
+  - telemetry
+  - shots
+  - progress-shots
+  - node_modules
+  - Gemfile
+  - Gemfile.lock

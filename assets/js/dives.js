@@ -180,8 +180,9 @@
     'main .tol-dive:hover, main .tol-dive:focus-visible{ background:rgba(150,194,232,.28); }' +
     'main .tol-dive .tol-dive-i{ width:.72em; height:.72em; margin-left:.1em; vertical-align:.32em; }' +
     'html.tol-quiet main .tol-dive{ text-decoration-color:rgba(60,120,170,.7); }' +
-    '.tol-dive-hint{ display:flex; align-items:center; gap:.45rem; width:fit-content; max-width:100% !important; margin:.2rem 0 .7rem !important; padding:.2rem .2rem .2rem .7rem !important; border-radius:999px; background:#F2F8FD !important; border:1px solid #CFE2F2 !important; color:#2F5F8A; font-size:.9rem; line-height:1.35; box-shadow:none !important; }' +
+    '.tol-dive-hint{ display:flex; align-items:center; gap:.45rem; width:fit-content; max-width:100% !important; margin:.2rem 0 .7rem !important; padding:.2rem .2rem .2rem .7rem !important; border-radius:24px; background:#F2F8FD !important; border:1px solid #CFE2F2 !important; color:#2F5F8A; font-size:.9rem; line-height:1.35; box-shadow:none !important; }' +
     '.tol-dive-hint::before{ content:none !important; }' +
+    '.tol-dive-hint{ flex-wrap:nowrap !important; align-items:center; } .tol-dive-hint .tol-dive-hint-t{ flex:1 1 0; min-width:0; }' +
     '.tol-dive-hint .tol-dive-i{ flex:none; display:inline-block; width:1em; height:1em; margin:0; }' +
     '.tol-dive-hint-x{ flex:none; min-width:44px; min-height:44px; margin:-.4rem 0; padding:0; border:0; border-radius:999px; background:none; color:#2F5F8A; font:400 1.35rem/1 Georgia, serif; cursor:pointer; }' +
     '.tol-dive-hint-x:hover{ background:rgba(150,194,232,.25); }' +

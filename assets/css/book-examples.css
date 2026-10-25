@@ -57,7 +57,7 @@ figure.bk-ex .bk-ex-qn{ font-size:.8rem; color:var(--bkx-soft); margin:.2rem 0 0
 .bk-ex-chips{ list-style:none; margin:0 !important; padding:0 !important; display:flex; flex-wrap:wrap; gap:.3rem .35rem; }
 .bk-ex-chips li{
   margin:0; padding:.12rem .55rem; font-size:.8rem; line-height:1.45;
-  color:var(--bkx-soft); border:1px solid transparent; border-radius:999px; opacity:.72;
+  color:var(--bkx-soft); border:1px solid transparent; border-radius:999px; opacity:.9; /* polish24a: was .72 (3.7 : 1) */
 }
 .bk-ex-chips li.is-on{
   opacity:1; color:var(--bkx-hand); font-style:italic; font-size:.86rem;

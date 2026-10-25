@@ -6,16 +6,23 @@
 //   node tools/checks/site-health.js --verbose  # list every finding (default lists the first 15 per group)
 //   node tools/checks/site-health.js --warn     # also print advisories (never affect the exit code)
 //
-// Groups: js, jsonld, links, sitemap, og, manifest, sw, size, head
+// Groups: js, json, undef, jsonld, links, assets, sitemap, og, manifest, sw, exclude, size, head
 //   js        every .js file passes `node --check` (so no syntax error ships), and every inline <script>
 //             in the pages parses
+//   json      every .json and .webmanifest file parses
+//   undef     (needs eslint on PATH, skipped with a note if it is missing) a script calls a name that is defined nowhere,
+//             the kind of leftover that breaks a panel when a feature is removed (it caught a call to a deleted function in
+//             Settings). Cross-file TOL* globals and standard browser globals are allowed.
 //   jsonld    every <script type="application/ld+json"> parses; types have their required properties
 //   links     every internal href/src in the pages points to a file that exists, and every #anchor
 //             points to an id (or name) in the target page
+//   assets    every quoted root-relative file path (/assets/..., /book/..., /workpapers/...) in pages, scripts and styles
+//             points to a file that exists (catches a renamed image or script that only JS refers to)
 //   sitemap   every sitemap URL has a file, none is a noindex page; every indexable page is in the sitemap
 //   og        every og:image / twitter:image on this site exists on disk (and is a PNG/JPG/WebP)
 //   manifest  manifest.webmanifest parses, icons/screenshots/shortcut targets exist, icon sizes match the files
 //   sw        every file in sw.js SHELL and CORE exists on disk
+//   exclude   nothing in _config.yml's exclude list (files Jekyll keeps off the live site) is linked or loaded by a page or script
 //   size      no file over 5 MB outside assets/video, assets/audio and the book PDFs/ePubs
 //   head      each indexable page has one title, a description, a canonical, one h1 (advisories only)
 //
@@ -95,8 +102,14 @@ function checkJs() {
   const problems = [];
   const js = all.filter(f => /\.(js|mjs)$/.test(f));
   for (const f of js) {
-    const r = spawnSync(process.execPath, ['--check', path.join(ROOT, f)], { encoding: 'utf8' });
-    if (r.status !== 0) problems.push(f + '  ' + (r.stderr || '').split('\n').find(l => /Error/.test(l)));
+    // compiling in-process is the same test as `node --check` and much faster; a real module (.mjs) goes to node --check
+    if (f.endsWith('.mjs')) {
+      const r = spawnSync(process.execPath, ['--check', path.join(ROOT, f)], { encoding: 'utf8' });
+      if (r.status !== 0) problems.push(f + '  ' + (r.stderr || '').split('\n').find(l => /Error/.test(l)));
+      continue;
+    }
+    try { new vm.Script(read(f).replace(/^#!.*/, ''), { filename: f }); }
+    catch (e) { problems.push(f + '  ' + e.message); }
   }
   let inline = 0;
   for (const f of pages) {
@@ -116,13 +129,46 @@ function checkJs() {
   report('js', problems, js.length + ' files, ' + inline + ' inline scripts');
 }
 
+// ---------- json files ----------
+function checkJson() {
+  const problems = [];
+  const files = all.filter(f => /\.(json|webmanifest)$/.test(f));
+  for (const f of files) {
+    try { JSON.parse(read(f).replace(/^\uFEFF/, '')); }
+    catch (e) { problems.push(f + '  ' + e.message); }
+  }
+  report('json', problems, files.length + ' files');
+}
+
+// ---------- calls to names defined nowhere ----------
+const BROWSER_GLOBALS = ['window','document','navigator','location','localStorage','sessionStorage','console','setTimeout','clearTimeout','setInterval','clearInterval','requestAnimationFrame','cancelAnimationFrame','requestIdleCallback','cancelIdleCallback','fetch','URL','URLSearchParams','Promise','Image','Audio','AudioContext','webkitAudioContext','Blob','File','FileReader','FormData','XMLHttpRequest','MutationObserver','IntersectionObserver','ResizeObserver','PerformanceObserver','performance','getComputedStyle','matchMedia','CustomEvent','Event','KeyboardEvent','MouseEvent','TouchEvent','PointerEvent','WheelEvent','InputEvent','FocusEvent','ClipboardEvent','DragEvent','HTMLElement','HTMLMediaElement','HTMLInputElement','HTMLImageElement','HTMLVideoElement','HTMLAudioElement','HTMLCanvasElement','SVGElement','Node','Element','NodeFilter','DOMParser','XMLSerializer','DOMException','DOMRect','DOMMatrix','Path2D','ImageData','CanvasRenderingContext2D','Intl','JSON','Math','Date','Array','Object','String','Number','Boolean','RegExp','Error','TypeError','RangeError','Map','Set','WeakMap','WeakSet','Symbol','Uint8Array','Uint16Array','Uint32Array','Int8Array','Int16Array','Int32Array','Float32Array','Float64Array','ArrayBuffer','DataView','TextEncoder','TextDecoder','atob','btoa','encodeURIComponent','decodeURIComponent','encodeURI','decodeURI','parseInt','parseFloat','isNaN','isFinite','NaN','Infinity','undefined','alert','confirm','prompt','open','close','screen','history','crypto','caches','indexedDB','self','top','parent','AbortController','AbortSignal','Notification','OffscreenCanvas','createImageBitmap','CSS','SpeechSynthesisUtterance','speechSynthesis','MediaRecorder','MediaStream','Worker','BroadcastChannel','Response','Request','Headers','escape','unescape','queueMicrotask','structuredClone','getSelection','scrollTo','scrollBy','innerWidth','innerHeight','scrollY','scrollX','devicePixelRatio','visualViewport','Option','MediaMetadata','cast','chrome','gtag','dataLayer','module','require','exports','define','Tesseract','QRCode','BarcodeDetector','globalThis','BigInt','Reflect','Proxy','Function','eval','addEventListener','removeEventListener','dispatchEvent','importScripts','Highlight','SpeechRecognition','webkitSpeechRecognition','FontFace','CompressionStream','DecompressionStream','ReadableStream','Touch','WebGLRenderingContext','localStorage'];
+function checkUndef() {
+  const probe = spawnSync('eslint', ['--version'], { encoding: 'utf8' });
+  if (probe.status !== 0) { advise('undef', ['eslint is not on PATH, so the undefined-name check was skipped']); report('undef', [], 'skipped (no eslint)'); return; }
+  const os = require('os');
+  const cfg = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'sh-eslint-')), 'eslint.config.js');
+  fs.writeFileSync(cfg, 'module.exports=[{files:["**/*.js"],languageOptions:{ecmaVersion:2020,sourceType:"script",globals:' +
+    JSON.stringify(Object.fromEntries(BROWSER_GLOBALS.map(g => [g, 'readonly']))) + '},rules:{"no-undef":"error"}}];');
+  const files = all.filter(f => /^(assets\/js\/[^/]+|workpapers\/.*)\.js$/.test(f) && !/^assets\/js\/(chat-kb|search-index)\.js$/.test(f) && !/^assets\/js\/puzzles\//.test(f));
+  const r = spawnSync('eslint', ['-c', cfg, '--no-warn-ignored', '-f', 'json', ...files], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 28 });
+  let res; try { res = JSON.parse(r.stdout); } catch (e) { report('undef', ['eslint produced no readable result: ' + (r.stderr || '').slice(0, 200)]); return; }
+  const problems = [];
+  for (const f of res) for (const m of f.messages) {
+    if (m.ruleId !== 'no-undef') { if (m.fatal) problems.push(path.relative(ROOT, f.filePath) + ':' + m.line + '  ' + m.message); continue; }
+    const name = (m.message.match(/'([^']+)'/) || [])[1];
+    if (/^TOL[A-Za-z0-9]*$/.test(name)) continue;          // the site's own cross-file globals (each file guards its use)
+    problems.push(path.relative(ROOT, f.filePath) + ':' + m.line + '  ' + m.message);
+  }
+  report('undef', problems, files.length + ' files');
+}
+
 // ---------- json-ld ----------
 const REQUIRED = {
   WebPage: ['name'], Article: ['headline'], FAQPage: ['mainEntity'], Question: ['name', 'acceptedAnswer'],
   Answer: ['text'], BreadcrumbList: ['itemListElement'], ListItem: ['position'],
   Organization: ['name'], VideoObject: ['name', 'description', 'thumbnailUrl', 'uploadDate'],
   TVSeries: ['name'], TVEpisode: ['name'], Book: ['name'], Person: ['name'], WebSite: ['name', 'url'],
-  HowTo: ['name', 'step'], ImageObject: ['contentUrl'], CollectionPage: ['name'], ItemList: ['itemListElement'],
+  HowTo: ['name', 'step'], CollectionPage: ['name'], ItemList: ['itemListElement'],
 };
 function typesOf(n) { const t = n && n['@type']; return Array.isArray(t) ? t : (t ? [t] : []); }
 function walkLd(node, f, trail) {
@@ -145,6 +191,7 @@ function checkJsonLd() {
       if (!JSON.stringify(j).includes('schema.org')) problems.push(f + '  JSON-LD has no schema.org @context');
       walkLd(j, n => {
         for (const t of typesOf(n)) {
+          if (t === 'ImageObject' && !n.contentUrl && !n.url && Object.keys(n).some(k => k !== '@type' && k !== '@id')) problems.push(f + '  ImageObject has neither url nor contentUrl');
           const req = REQUIRED[t];
           if (!req) continue;
           // a bare reference like {"@type":"Organization","@id":"..."} is fine
@@ -171,6 +218,18 @@ function idsOf(rel) {
   }
   idCache.set(rel, ids);
   return ids;
+}
+// Anchors that a page's own script creates or handles at run time (not present in the static HTML). Add to this list
+// only when the page's JS really answers the hash; the check cannot see it.
+const DYNAMIC_ANCHORS = [
+  [/./, /^(settings|top|main|tol-main)$/],                        // site.js opens Settings; skip link targets
+  [/^contents\.html$/, /^contents-/],                             // site.js builds the section blocks
+  [/^lemonade-stand\.html$/, /^(money|hours|quick|quick-h|quick-baby|add-side)$/],   // lemonade-calc.js / lemonade-quick.js read the hash
+  [/^prog-01\.html$/, /^pt-tracker$/],                            // prog-tracker.js builds the card
+];
+function isDynamicAnchor(target, h) {
+  if (h.includes('=')) return true;                               // #side=..., #together=... carry state, not a place
+  return DYNAMIC_ANCHORS.some(([f, a]) => f.test(target) && a.test(h));
 }
 function checkLinks() {
   const problems = [], seen = new Set();
@@ -202,7 +261,7 @@ function checkLinks() {
         }
         if (hash && tag === 'a' && /\.html?$/.test(target)) {
           let h = hash; try { h = decodeURIComponent(h); } catch (e) { /* keep */ }
-          if (h === 'top' || /^(:~:|!)/.test(h)) continue;
+          if (h === 'top' || /^(:~:|!)/.test(h) || isDynamicAnchor(target, h)) continue;
           const ids = idsOf(target);
           if (ids && !ids.has(h)) problems.push(f + '  anchor ' + ref + '  (no #' + h + ' in ' + target + ')');
         }
@@ -210,6 +269,25 @@ function checkLinks() {
     }
   }
   report('links', problems, n + ' references');
+}
+
+// ---------- file paths named in code ----------
+function checkAssets() {
+  const problems = [], seen = new Set();
+  const scan = all.filter(f => /^(assets\/(js|css)\/|[^/]+\.html$|(book|library|learn|legal|workpapers|start|do)\/.*\.(html|js|css)$)/.test(f)
+    && !/^book\/(print|kids)\/src\//.test(f));
+  let n = 0;
+  const re = /["'(]((?:\/assets|\/workpapers|\/book|\/library|\/learn|\/store|\/data)\/[A-Za-z0-9_\-\/.]+\.(?:png|jpe?g|webp|svg|gif|mp4|mp3|m4a|wav|ogg|js|css|json|pdf|epub|woff2?|txt|html))(?=["')?#])/g;
+  for (const f of scan) {
+    const s = read(f);
+    for (const m of s.matchAll(re)) {
+      n++;
+      const u = m[1];
+      if (seen.has(f + u)) continue; seen.add(f + u);
+      if (!exists(u.slice(1))) problems.push(f + '  ' + u);
+    }
+  }
+  report('assets', problems, n + ' paths');
 }
 
 // ---------- sitemap ----------
@@ -233,6 +311,17 @@ function checkSitemap() {
     }
     if (mod && !/^\d{4}-\d{2}-\d{2}/.test(mod)) problems.push('bad lastmod ' + mod + ' on ' + loc);
     if (mod && mod > new Date(Date.now() + 864e5).toISOString().slice(0, 10)) problems.push('lastmod in the future ' + mod + ' on ' + loc);
+  }
+  // llms.txt and llms-full.txt name pages too: each must exist
+  for (const lf of ['llms.txt', 'llms-full.txt']) {
+    if (!exists(lf)) continue;
+    const seenL = new Set();
+    for (const [, u] of read(lf).matchAll(/\((https:\/\/spreadloveandacceptance\.com[^)\s]*)\)/g)) {
+      if (seenL.has(u)) continue; seenL.add(u);
+      let r = u.slice(SITE.length).split('#')[0].split('?')[0].replace(/^\//, '');
+      if (r === '' || r.endsWith('/')) r += 'index.html';
+      if (!exists(r)) problems.push(lf + ' names a page that does not exist: ' + u);
+    }
   }
   const dup = urls.length - set.size;
   if (dup) problems.push(dup + ' duplicate URLs');
@@ -362,6 +451,26 @@ function checkSw() {
   report('sw', problems, n + ' entries, ' + v);
 }
 
+// ---------- files kept off the live site ----------
+function checkExclude() {
+  const problems = [];
+  if (!exists('_config.yml')) { report('exclude', [], 'no _config.yml'); return; }
+  const cfg = read('_config.yml');
+  const m = cfg.match(/^exclude:\s*\n((?:[ \t]+-[^\n]*\n?)+)/m);
+  const list = m ? m[1].split('\n').map(l => (l.match(/^\s*-\s*(\S+)/) || [])[1]).filter(Boolean) : [];
+  const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const skipRef = f => /^(tools\/|_manuscripts\/|book\/print\/src\/|book\/kids\/src\/)/.test(f) || list.some(e => f === e || f.startsWith(e + '/'));
+  const scan = all.filter(f => /\.(html|js|css|xml|txt|json|webmanifest)$/.test(f) && !skipRef(f));
+  const res = list.filter(e => !/^(node_modules|Gemfile(\.lock)?)$/.test(e)).map(e => [e, new RegExp('(?:["\'=]|url\\()/?' + esc(e) + (e.includes('.') ? '(?![A-Za-z0-9_.-])' : '/'))]);   // a folder must be followed by a slash
+  for (const f of scan) {
+    if (/^assets\/js\/(chat-kb|search-index|chat-kb-bg)\.js$/.test(f)) continue;   // generated text that mentions file names in prose
+    const s = read(f);
+    for (const [e, re] of res) if (re.test(s)) problems.push(f + ' refers to ' + e + ', which _config.yml keeps off the site');
+  }
+  for (const e of list) if (!/^(node_modules|Gemfile(\.lock)?)$/.test(e) && !exists(e)) advise('exclude', ['_config.yml excludes ' + e + ' but it does not exist (harmless)']);
+  report('exclude', problems, list.length + ' entries');
+}
+
 // ---------- big files ----------
 function checkSize() {
   const problems = [];
@@ -400,12 +509,16 @@ function checkHead() {
 const t0 = Date.now();
 console.log('site-health: ' + pages.length + ' pages, ' + all.length + ' files\n');
 if (on('js')) checkJs();
+if (on('json')) checkJson();
+if (on('undef')) checkUndef();
 if (on('jsonld')) checkJsonLd();
 if (on('links')) checkLinks();
+if (on('assets')) checkAssets();
 if (on('sitemap')) checkSitemap();
 if (on('og')) checkOg();
 if (on('manifest')) checkManifest();
 if (on('sw')) checkSw();
+if (on('exclude')) checkExclude();
 if (on('size')) checkSize();
 if (on('head')) checkHead();
 if (WARN && advisories.length) { console.log('\nadvisories (do not fail the run):'); advisories.forEach(a => console.log('  ' + a)); }

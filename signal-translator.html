@@ -1165,6 +1165,7 @@ header.top .lede .lede-more{display:none}
 <script src="/assets/js/context-panel.js"></script>
 <script src="/assets/js/signal-engine.js"></script>
 <script src="/assets/js/clarify.js" defer></script>
+<script>/* polish24c: if the rules file did not arrive, say so instead of leaving buttons that do nothing */if(!window.SignalEngine){window.addEventListener("DOMContentLoaded",function(){var m=document.getElementById("main");if(!m)return;var p=document.createElement("p");p.setAttribute("role","alert");p.style.cssText="margin:1rem 0;padding:.8rem 1rem;border-radius:14px;border:1px solid #E5C9A0;background:#FFF6E6;color:#4A3A1F";p.textContent="This tool did not finish loading, so it can\u2019t run yet. Check your connection and reload the page.";m.insertBefore(p,m.firstChild);});}</script>
 <script>
 if(window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById("lookfor"), {intro:"This tool (for one message or a whole conversation) and the tone check in Rewind the talk both read wording with this same list, so the same words get the same reading in each. On top of it, for one message, it checks the shape of a sentence: orders, hints, labels, vague timing, a missing ask. It reads words only, never tone of voice or history, so every mark is a “may land as,” not a verdict."});
 (function(){

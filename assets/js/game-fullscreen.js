@@ -79,7 +79,14 @@
     var bg = '', n = el, c;
     while (n && n.nodeType === 1) { c = getComputedStyle(n).backgroundColor; var m = c && c.match(/rgba?\(([^)]*)\)/), al = m ? (m[1].split(',')[3] == null ? 1 : parseFloat(m[1].split(',')[3])) : 0; if (m && al >= 0.95) { bg = c; break; } n = n.parentNode; }
     el.style.setProperty('--tol-fs-bg', bg || '#F5EFDE');
-    el.style.setProperty('--tol-fs-ink', getComputedStyle(D.body).color || '#2B2620');
+    var ink = getComputedStyle(D.body).color || '#2B2620';
+    // polish24a: a dark game page can leave the body text black; pick a readable ink for the Play card from the card's own background
+    try {
+      var lum = function (css) { var q = css && css.match(/rgba?\(([^)]*)\)/); if (!q) return null; var v = q[1].split(',').slice(0, 3).map(function (x) { x = parseFloat(x) / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+      var lb = lum(bg || '#F5EFDE'), li = lum(ink);
+      if (lb != null && li != null) { var hi = Math.max(lb, li), lo = Math.min(lb, li); if ((hi + 0.05) / (lo + 0.05) < 4.5) ink = lb < 0.4 ? '#F4F0FA' : '#2B2620'; }
+    } catch (e) { /* keep the page's own color */ }
+    el.style.setProperty('--tol-fs-ink', ink);
   }
   function announce(txt) { if (cur && cur.live) cur.live.textContent = txt; }
   function fire(active, c) {

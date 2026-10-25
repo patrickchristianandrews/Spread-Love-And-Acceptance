@@ -1589,7 +1589,7 @@
         };
         document.head.appendChild(rs);
       };
-      document.head.appendChild(rl);
+      whenIdle(function () { document.head.appendChild(rl); });   // polish24c: it lands near the end of the page, so it can wait for idle
     }
 
     // research named in the reading ("Ross and Sicoly (1979)") links to its entry on /research.html (research-links.js; both files are local)
@@ -3011,7 +3011,8 @@
     var draw = function () { try { buildRelated(main, pl); } catch (e) {} };
     // the needs map (search-needs.js) suggests the next most useful page; the strip still shows without it
     var withNeeds = function () { var done = false, t = setTimeout(function () { if (!done) { done = true; draw(); } }, 2500); loadNeeds(function () { if (!done) { done = true; clearTimeout(t); draw(); } }); };
-    if (window.TOLTools) withNeeds(); else loadScript('/assets/js/tools-registry.js').then(withNeeds, withNeeds);
+    // polish24c: the strip sits at the end of the page, so it waits for the page to load and the browser to be idle
+    whenIdle(function () { if (window.TOLTools) withNeeds(); else loadScript('/assets/js/tools-registry.js').then(withNeeds, withNeeds); });
   }
   var GAME_PAGE = /^\/(frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|coin-pusher|night-garden|calm-visualizer|frequency-buddies-music-video-maker)\.html$/;
   function buildRelated(main, pl) {
@@ -3350,6 +3351,8 @@
       '<span aria-hidden="true">&#128274;</span><span><strong>Private by design.</strong> What you type or choose on this page stays on your device. It is never sent to us. ' +
       '<a href="/legal/privacy-policy.html#your-entries">More</a></span>');
     var head = main.querySelector('.read-head');
+    // polish24a: pages with their own title block (my-week and others) get the note after the title, like every other page, not above the breadcrumb
+    if (!head) { var h1p = main.querySelector('h1'); if (h1p) { var hh = h1p.closest('header, .bk-cover'); if (hh && main.contains(hh) && hh !== main) head = hh; } }
     if (head && head.parentNode) head.parentNode.insertBefore(note, head.nextSibling);
     else main.insertBefore(note, main.firstChild);
   }
@@ -4147,7 +4150,7 @@
       '<p class="tol-set-wxmsg" role="status" hidden></p>' +
       '<h3 class="tol-set-k">' + 'Passcode' + '</h3>' +
       '<p class="tol-set-lock"><a href="/on-this-device.html#lock">' + 'Lock the app with a passcode' + '</a> <small>' + 'A 4 to 6 digit passcode, or Face ID or a fingerprint, before anything shows' + '</small></p>' +
-      '<p class="tol-set-foot">' + 'These choices stay in this browser only.' + ' <button type="button" class="tol-set-reset">' + 'Back to the usual' + '</button> <a href="/on-this-device.html"' + (esPage() ? ' hreflang="en"' : '') + '>' + 'What’s stored on this device' + '</a></p>' +
+      '<p class="tol-set-foot">' + 'These choices stay in this browser only.' + ' <button type="button" class="tol-set-reset">' + 'Back to the usual' + '</button> <a href="/on-this-device.html">' + 'What’s stored on this device' + '</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
       var i = e.target;

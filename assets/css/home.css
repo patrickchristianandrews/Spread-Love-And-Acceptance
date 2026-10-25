@@ -196,3 +196,10 @@ html.tol-quiet .h18 .h-feat-art:not(.is-ep){ display:none !important; }
 .h18 .h-days .h-remind summary{ display:inline-flex; align-items:center; min-height:44px; cursor:pointer; list-style:none; font:700 .98rem/1.2 var(--h-ui); color:var(--h-acc); }
 .h18 .h-days .h-remind summary::-webkit-details-marker{ display:none; }
 .h18 .h-days .h-remind summary::before{ content:"\1F4C5"; margin-right:.45rem; }
+
+/* polish24a: in dark mode the home page's opening lines sit on the garden picture and went dim (2.2 to 2.8 : 1).
+   A soft halo in the light palette becomes a dark halo once the page is inverted, so the words keep a steady dark ground. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .h18 :is(.h-trust, .h-lede, .h-quick, .h-sub, .h-resume-how, .h-link){ text-shadow:0 0 3px #FFFDF7, 0 0 8px #FFFDF7, 0 0 14px rgba(255,253,247,.9); }
+}
+:root[data-theme="dark"] .h18 :is(.h-trust, .h-lede, .h-quick, .h-sub, .h-resume-how, .h-link){ text-shadow:0 0 3px #FFFDF7, 0 0 8px #FFFDF7, 0 0 14px rgba(255,253,247,.9); }
