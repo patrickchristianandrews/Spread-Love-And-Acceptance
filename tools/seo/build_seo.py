@@ -532,6 +532,8 @@ SEARCH.update({
  # return21 (wave21): the Contact page, and Email updates now promise at most one email a week
  'contact.html': ('Contact Us: Tell Us What Would Make This Better', 'Tell us what helped, what was confusing and what is missing. Email us, get one small idea a week by email, share the site or add it to your home screen.'),
  'membership.html': ('Email Updates: One Small Idea a Week (Optional)', 'Everything here is free, with no account. If you like, get at most one email a week: one small thing to try in a minute, and what is new on the site.'),
+ # media21 (wave21): the Sleeping Pals Cam
+ 'sleeping-pals-cam.html': ('Sleeping Pals Cam: Two Pups Asleep, for Bedtime', 'A calm night cam to go to bed with: two cartoon pups snoring softly, little z\'s floating up, a sleep timer and an optional rain, fan or brown-noise sound.'),
  # play21 (wave21): the Bears Dojo's music corner
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do and a music corner with instruments and long, slow songs.'),
 })

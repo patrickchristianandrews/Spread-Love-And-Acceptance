@@ -365,6 +365,7 @@
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episode after episode in a random order, and every episode to download' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now, or cast it to your TV' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Tidbit & Sugarfoot: Pal Cam TV', note: 'The pals live, all day, full screen or cast to your TV, with music and the sounds of each place' },
+      { href: '/sleeping-pals-cam.html', code: 'Sleep', title: 'Sleeping Pals Cam', note: 'Tidbit and Sugarfoot asleep and softly snoring, with a sleep timer, to fall asleep to' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Brain Breakers', note: 'Four instrumental pieces to see and feel, by Christian’s Lab' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework, for settling first (Pillar III)' }
@@ -420,7 +421,7 @@
       { href: '/install.html', title: 'Get the app', note: 'Its own icon, full screen, works offline' },
       { sub: 'What’s new', all: '/whats-new.html', allLabel: 'Everything new, with dates' },
       { href: '/support-languages.html', title: 'Support languages', note: 'New: what helps you, and them, through a hard time, with a short quiz' },
-      { href: '/frequency-buddies.html?ep=s1e4', title: 'Cartoon: Who Broke the Kite?', note: 'Frequency Buddies, episode 4: look at the setup before the blame' },
+      { href: '/frequency-buddies.html?ep=s1e4#episode-player', title: 'Cartoon: Who Broke the Kite?', note: 'Frequency Buddies, episode 4: look at the setup before the blame' },
       { href: '/nervous-system.html', title: 'Your nervous system, in plain words', note: 'The stress response, and what helps you settle' },
       { href: '/living-alone.html', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
       { href: '/refusals.html', title: 'Say no kindly', note: 'Kind, clear ways to turn something down' },
@@ -566,7 +567,8 @@
       { href: '/recheck-drive.html', title: 'The Re-check Drive', note: 'A calm football game made of small, kind acts' },
       { href: '/coin-pusher.html', title: 'Kindness Coin Pusher', note: 'A cozy coin pusher with a kind tip every few coins' },
       { sub: 'Frequency Buddies cartoon', area: 'media', all: '/frequency-buddies.html', allLabel: 'All the episodes' },
-      { href: '/frequency-buddies.html?ep=s1e4', title: 'Episode 4: Who Broke the Kite?', note: 'A favorite: when something breaks, look at the setup first' },
+      { href: '/frequency-buddies.html#trailer', title: 'Season 1 trailer', note: 'A quick look at every Season 1 episode' },
+      { href: '/frequency-buddies.html?ep=s1e4#episode-player', title: 'Episode 4: Who Broke the Kite?', note: 'A favorite: when something breaks, look at the setup first' },
       { href: '/frequency-buddies-live.html', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
       { href: '/frequency-buddies-shuffle.html', title: 'Episodes on shuffle', note: 'Episode after episode in a random order' },
       { href: '/frequency-buddies-music-video.html', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
@@ -577,7 +579,8 @@
       { href: '/calm-visualizer.html', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
       { href: '/soundscapes.html#background', title: 'Calm background sounds', note: 'Brown noise, a low hum and a soft flutter' },
       { href: '/echoes-of-gold.html', title: 'Echoes of Gold', note: 'The companion album' },
-      { href: '/pal-cam-tv.html', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
+      { href: '/pal-cam-tv.html', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
+      { href: '/sleeping-pals-cam.html', title: 'Sleeping Pals Cam', note: 'Tidbit and Sugarfoot asleep, to fall asleep to' }
     ]},
     { id: 'thebook', name: 'Read the book', title: 'Read the book', blurb: 'The book, free online: from the start, by part, on one page, by topic, or as PDFs and paperbacks.',
       all: '/book/index.html', allLabel: 'The book: contents and start reading', items: [
@@ -742,7 +745,7 @@
     'work': 'work appreciation-at-work workpapers/wp-09-say-it-so-it-lands library/teams coming-out different-hours groups for-counselors wiring-card',
     'life-changes': 'new-parent living-alone grown-up-children money-together coming-home when-one-is-ill caregivers empty-nest retired-together grief on-my-own coming-out library/life',
     'play': 'frequency-journey word-bloom quiet-crossword daily-ledger-crossword quiet-words recheck-drive pause-and-play keepsakes surprise night-garden bears-dojo coin-pusher',
-    'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
+    'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv sleeping-pals-cam podcast-index'
   };
   // pages that are never "outside your focus": the start, help and the site's own pages
   var FOCUS_NEUTRAL = /^\/(index|saved|contact|start-here|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|about|membership|install|sent-this|someone-sent-you-this|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
