@@ -211,10 +211,11 @@ def hint_html(h, markers=True, extra_cls=''):
     named = [ITEM[k] for k in (h.get('wp'), h.get('tool')) if k in ITEM]
     refs = ''.join(ref_line('wp', i) for i in named if i['kind'] == 'workpaper')
     refs += ''.join(ref_line('tool', i) for i in named if i['kind'] != 'workpaper')
-    s = ('<aside class="book-hint%s no-bubble no-cheer no-dive" data-no-bubble data-who="%s" aria-label="A hint from %s">'
+    # voice18: "print": false keeps a hint on the website only; the print books and ebooks leave it out (build_series.s_chapter)
+    s = ('<aside class="book-hint%s no-bubble no-cheer no-dive" data-no-bubble data-who="%s"%s aria-label="A hint from %s">'
          '<span class="bh-badge" aria-hidden="true">%s</span><div class="bh-body"><p class="bh-who">%s</p>'
          '<p class="bh-text">%s</p>%s</div></aside>') % (
-        (' ' + extra_cls) if extra_cls else '', who, esc(name), svg, esc(name), h['text'], refs)
+        (' ' + extra_cls) if extra_cls else '', who, ' data-print="no"' if h.get('print') is False else '', esc(name), svg, esc(name), h['text'], refs)
     return ('%s\n%s\n%s' % (START, s, END)) if markers else s
 
 

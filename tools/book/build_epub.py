@@ -20,7 +20,7 @@ back of the book). Then, for a reflowable ebook:
     missing, the SVG files go in as they are (valid EPUB 3; check them in Kindle Previewer).
   - One XHTML file per chapter and per front or back page, nav.xhtml (contents and landmarks), the cover image
     (book/print/cover-<id>-front.jpg) marked properties="cover-image", simple CSS that suits Kindle (no fixed
-    positions, no page sizes, no colours on text or backgrounds, relative sizes), no scripts.
+    positions, no page sizes, no colors on text or backgrounds, relative sizes), no scripts.
 The workbook has no ebook: its forms are made to be written in, and are free to print online (see listing_kdp.py).
 logicbook14: it also makes the pocket guide's ebook (book/print/epub/pocket-the-logic-behind-it.epub, from tools/book/pocket.py)
 and the Kindle box set (book/print/epub/boxset-complete-series.epub): Books 1 to 4 and the pocket guide in one EPUB, each
@@ -42,6 +42,9 @@ import subprocess
 import sys
 import tempfile
 import uuid
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import us_english  # noqa: E402  (books-final9: American English)
 import zipfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -89,6 +92,21 @@ FRIENDS = [('puddles', hints.SVG_PUDDLES, 'Professor Puddles, a cheerful raindro
 
 WARN = []
 
+
+
+def kindle_cover(bid):
+    """books-final9 (audit S2): KDP's ideal Kindle cover is 1600 x 2560 (1.6:1). The print fronts are 6 x 9 (1.5:1), so this
+    trims the sides evenly (about 0.19 in a side; every cover keeps its text well inside that) and scales to 1600 x 2560.
+    Writes book/print/cover-<id>-kindle.jpg and returns its path; the EPUB and the listing use it."""
+    from PIL import Image
+    src = os.path.join(ROOT, 'book', 'print', 'cover-%s-front.jpg' % bid)
+    out = os.path.join(ROOT, 'book', 'print', 'cover-%s-kindle.jpg' % bid)
+    im = Image.open(src).convert('RGB')
+    w, h = im.size
+    tw = min(w, int(round(h / 1.6)))
+    x0 = (w - tw) // 2
+    im.crop((x0, 0, x0 + tw, h)).resize((1600, 2560), Image.LANCZOS).save(out, 'JPEG', quality=90, optimize=True)
+    return out
 
 def warn(msg):
     WARN.append(msg)
@@ -335,7 +353,7 @@ class Images:
 
 
 def shrink_png(path):
-    """256 colours, no dithering: the flat drawings look the same at about a third of the size (Kindle charges
+    """256 colors, no dithering: the flat drawings look the same at about a third of the size (Kindle charges
     delivery by the megabyte). Uses Pillow when it is installed; without it the PNG stays as it is."""
     try:
         from PIL import Image
@@ -473,30 +491,26 @@ def book_docs(book, where):
     docs.append(Doc('title.xhtml', book['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · Book %d</p><h1 class="ps-title-t">%s</h1>'
         '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt="%s"/></p><p class="ps-title-a">by %s</p>'
-        '<p class="ps-title-p">%s<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        '<p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
         B.esc(SERIES_TITLE), n, B.esc(book['title']), B.esc(book['sub']), book['art'], B.esc(ART_ALT.get(book['art'], 'A small drawing.')), B.AUTHOR,
-        B.esc(PUBLISHER), SITE)))
+        SITE)))
     # copyright page: the print words, for an ebook
     cp = S.copyright_page(book)
     cp = swap(cp, 'First print edition, %s. Printed on demand.' % B.UPDATED, 'First ebook edition, %s.' % B.UPDATED, 'copyright')
-    # finalfix15: the ebook doesn't print the paperback's placeholder ("ISBN: [to be added] (paperback)"); a real paperback ISBN stays
-    cp = cp.replace('<p>ISBN: %s (paperback)</p>' % B.esc(S.CFG.get('isbn_placeholder', '[to be added]')), '')
-    if book.get('isbn_ebook'):
-        cp = swap(cp, 'First ebook edition, %s.</p>' % B.UPDATED, 'First ebook edition, %s.</p><p>ISBN %s (ebook)</p>' % (B.UPDATED, B.esc(book['isbn_ebook'])), 'copyright')
     cp = swap(cp, 'The print books are optional.', 'The print books and ebooks are optional.', 'copyright')
     cp = swap(cp, '<p>Set in Lora, Fraunces and IBM Plex Mono.</p>', '', 'copyright')
     cp = cp.replace('<section class="ps-copy pe-only">', '<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>', 1)
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     # contents: nav.xhtml (added later, after the title and copyright pages)
     docs.append(None)
-    # help now (kept word for word), then the three friends
+    # then the three friends
     # printfix13: "About this book, and how to use it", as in print but with links in place of page numbers and codes
     namer = S.namer_for(book)
     ebook_ref = lambda s_: (namer.ref(s_)[0], None)
     about = S.about_page(book, namer).replace('<section class="ps-about pe-only"', '<section class="ps-about"', 1)
     about = re.sub(r'<span class="ps-addr ps-about-u" data-full="([^"]+)">[^<]*</span>', r'<span class="ps-addr">\1</span>', about)
     about = swap(about, 'The code at the end of each chapter opens it on your phone.', 'The link at the end of each chapter opens it.', 'about page')
-    about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?”', r'it gives the book and the chapter, as in “\1”', about)
+    about, n_ = re.subn(r'it gives the book, the chapter and the page in that book, as in “(Book \d, Chapter 1)(?: \(page \d+\))?([.,]?)”', r'it gives the book and the chapter, as in “\1\2”', about)
     if not n_:
         warn('about page: text to change not found: it gives the book, the chapter and the page')
     docs.append(Doc('about.xhtml', 'About this book, and how to use it', about))
@@ -534,6 +548,7 @@ def book_docs(book, where):
         for x in S.front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 docs.append(Doc('numbers.xhtml', x['toc'], x['html']))
+    docs.append(Doc('ideas.xhtml', 'How the ideas connect', S.ideas_map(book, chs, epub=True)))
     docs.append(Doc('glossary.xhtml', 'Words used in this book', S.glossary_short(book, chs).replace('<section class="pe-back pe-gloss', '<section epub:type="glossary" class="pe-back pe-gloss', 1)))
     docs.append(Doc('notes.xhtml', 'Research notes', S.research_short(book, here).replace('<section class="pe-back ps-notes', '<section epub:type="bibliography" class="pe-back ps-notes', 1)))
     docs.append(Doc('series.xhtml', 'The series', series_page(book)))
@@ -552,7 +567,7 @@ def series_page(book):
         pocket_ = b.get('id') == S.POCKET['id']
         k = ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if pocket_ else 'Workbook')
         online = ('%s/book/%s.html' % (SITE, b['chapters'][0])) if b.get('chapters') else (SITE + S.LOGIC_PAGE if pocket_ else SITE + '/workpapers/fill/index.html')
-        links = ['<a href="%s">%s</a>' % (online, 'Read it free online' if b.get('chapters') else ('Every situation, free online' if pocket_ else 'Print or fill in the forms free online'))]
+        links = ['<a href="%s">%s</a>' % (online, 'Read it free online' if b.get('chapters') else ('Every situation, free online' if pocket_ else 'Print or fill out the forms free online'))]
         st = STORE_LINKS.get(b['id'], {})
         if st.get('kindle'):
             links.append('<a href="%s">Kindle edition</a>' % B.esc(st['kindle']))
@@ -562,7 +577,7 @@ def series_page(book):
               '<p class="ps-series-a">%s</p></li>') % (
             'is-this' if this else '', k, B.esc(b['title']), ' <em>(this book)</em>' if this else '', B.esc(b['line']), ' · '.join(links))
     s += ('</ol><p class="ps-series-note">All the books, in print and as ebooks: <a href="%s/book/#print-series">spreadloveandacceptance.com/book</a>. '
-          'The workbook is a print book only: its forms are made to be written in, and every one is free to print or fill in on the website.</p></section>') % SITE
+          'The workbook is a print book only: its forms are made to be written in, and every one is free to print or fill out on the website.</p></section>') % SITE
     return s
 
 
@@ -578,8 +593,8 @@ def free_page(book):
 
 # ---------- CSS: plain, relative, and kind to Kindle's own settings ----------
 CSS = '''/* Spread Love & Acceptance ebooks. Kindle-friendly on purpose: no fixed
-   positions, no page sizes, no text or background colours (so the reader's own light, sepia or dark page works),
-   relative sizes, colour only in thin rules (the book's colour: %(acc)s). */
+   positions, no page sizes, no text or background colors (so the reader's own light, sepia or dark page works),
+   relative sizes, color only in thin rules (the book's color: %(acc)s). */
 html, body { margin: 0; padding: 0; }
 body { line-height: 1.45; widows: 2; orphans: 2; }
 p { margin: 0 0 .7em; text-indent: 0; }
@@ -649,6 +664,15 @@ ol.ideas { list-style: none; padding-left: 0; }
 ol.ideas > li { margin: 0 0 1.6em; }
 .pe-ex, .pe-words, .pe-try { padding-left: .8em; border-left: 2px solid %(acc)s; }
 .yp-note, .locked-section, .pe-safe { border-left: 3px solid #9A9283; padding-left: .8em; }
+table.ps-about-t, table.bk-ex-t { table-layout: fixed; width: 100%%; }
+table.ps-about-t td, table.ps-about-t th, table.bk-ex-t td, table.bk-ex-t th { overflow-wrap: anywhere; word-break: break-word; }
+.two-ways { margin: 1em 0; padding: .6em .8em; border: 1px solid #CDBF98; border-left: 3px solid #8C7A4E; }
+.lg-two, .lg-fields { margin-top: .4em; }
+.side-note { margin: 1em 0; padding: .5em .8em; border-left: 3px solid #B7AA86; background: #F4F1E8; font-size: .9em; line-height: 1.45; }
+.side-note p { margin: 0; }
+.side-note .sn-h { font-weight: bold; }
+.side-note .sn-src { margin-top: .3em; font-size: .9em; }
+.side-note .sn-ev { font-style: italic; }
 .kind-h { font-size: .8em; letter-spacing: .06em; text-transform: uppercase; margin-top: 1.2em; }
 .table-wrap { margin: .6em 0 1em; }
 
@@ -759,7 +783,7 @@ figcaption { text-align: left; font-size: .88em; margin-top: .5em; }
 '''
 
 
-def xhtml(title, body, body_type='', lang='en-GB'):
+def xhtml(title, body, body_type='', lang='en-US'):
     bt = ' epub:type="%s"' % body_type if body_type else ''
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n'
             '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="%s" lang="%s">\n'
@@ -817,11 +841,8 @@ def opf(book, items, spine, modified, ident):
     md.append('<dc:creator id="author">%s</dc:creator>' % xesc(B.AUTHOR))
     md.append('<meta refines="#author" property="role" scheme="marc:relators">aut</meta>')
     md.append('<meta refines="#author" property="file-as">%s</meta>' % xesc(B.AUTHOR))
-    md.append('<dc:language>en-GB</dc:language>')
-    md.append('<dc:publisher id="publisher">%s</dc:publisher>' % xesc(PUBLISHER))
-    if IMPRINT:
-        md.append('<meta refines="#publisher" property="display-seq">1</meta><dc:contributor id="imprint">%s</dc:contributor>' % xesc(IMPRINT))
-        md.append('<meta refines="#imprint" property="role" scheme="marc:relators">pbl</meta>')
+    md.append('<dc:language>en-US</dc:language>')
+    # voice18 (owner): the Kindle "Publisher" field is left blank, so the EPUBs carry no publisher or imprint either
     md.append('<dc:rights>Text and pictures © 2026 %s. Every chapter is also free to read at spreadloveandacceptance.com.</dc:rights>' % xesc(B.AUTHOR))
     md.append('<dc:description>%s</dc:description>' % xesc(book.get('blurb', book['line'])))
     md.append('<dc:subject>Self-help</dc:subject><dc:subject>Relationships</dc:subject>')
@@ -838,7 +859,7 @@ def opf(book, items, spine, modified, ident):
     man = ''.join('<item id="%s" href="%s" media-type="%s"%s/>' % (i, h, t, (' properties="%s"' % p) if p else '') for i, h, t, p in items)
     sp = ''.join('<itemref idref="%s"%s/>' % (i, '' if lin else ' linear="no"') for i, lin in spine)
     guide = '<guide><reference type="cover" title="Cover" href="cover.xhtml"/><reference type="toc" title="Contents" href="nav.xhtml"/><reference type="text" title="Start" href="%s.xhtml"/></guide>' % book.get('start', book['chapters'][0])
-    return ('<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-GB" '
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-US" '
             'prefix="schema: http://schema.org/">\n<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">\n%s\n</metadata>\n<manifest>\n%s\n</manifest>\n'
             '<spine>\n%s\n</spine>\n%s\n</package>\n') % ('\n'.join(md), man.replace('/><', '/>\n<'), sp.replace('/><', '/>\n<'), guide)
 
@@ -921,13 +942,13 @@ def write_epub(book, docs, nav_at, used, pics, path, extra_files=None, nav_html=
             items.append(('nav', 'nav.xhtml', 'application/xhtml+xml', 'nav'))
             spine.append(('nav', True))
         body = serialize(d.root)
-        files[d.fname] = xhtml(d.title, body, d.body_type if d.body_type in ('bodymatter',) else '').encode('utf-8')
+        files[d.fname] = xhtml(us_english.us(d.title), us_english.us_html(body), d.body_type if d.body_type in ('bodymatter',) else '').encode('utf-8')  # books-final9: American English
         iid = 'x-' + re.sub(r'[^A-Za-z0-9-]', '-', d.fname[:-6])
         items.append((iid, d.fname, 'application/xhtml+xml', ''))
         spine.append((iid, True))
     files['css/book.css'] = (CSS % {'acc': acc}).encode('utf-8')
     items.append(('css', 'css/book.css', 'text/css', ''))
-    cover = os.path.join(ROOT, 'book', 'print', 'cover-%s-front.jpg' % book['id'])
+    cover = kindle_cover(book['id'])
     files['images/cover.jpg'] = open(cover, 'rb').read()
     items.append(('cover-image', 'images/cover.jpg', 'image/jpeg', 'cover-image'))
     for k, (name, src) in enumerate(sorted((extra_files or {}).items())):
@@ -996,7 +1017,7 @@ def check_epub(path, book):
         spine = [man[r.get('idref')][0] for r in pkg.findall('.//opf:spine/opf:itemref', NS)]
         md = pkg.find('opf:metadata', NS)
         txt = ET.tostring(md, encoding='unicode')
-        for need in ('belongs-to-collection', 'group-position', 'dcterms:modified', 'title-type', 'dc:language', 'dc:creator', 'dc:publisher', 'dc:identifier'):
+        for need in ('belongs-to-collection', 'group-position', 'dcterms:modified', 'title-type', 'dc:language', 'dc:creator', 'dc:identifier'):
             if need == 'group-position' and not book.get('n'):
                 continue  # the pocket guide and the box set carry the series name without a number
             if need.split(':')[-1] not in txt:
@@ -1103,22 +1124,18 @@ def build_boxset(built, images):
     docs.append(Doc('title.xhtml', bx['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s</p><h1 class="ps-title-t">%s</h1><p class="ps-title-s">%s</p>'
         '<p class="ps-title-art"><img src="images/art-%s.png" alt="Five books on a shelf in the series’ colours, with two smiling round friends and a heart."/></p>'
-        '<p class="ps-title-a">by %s</p><p class="ps-title-p">%s<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
-        B.esc(SERIES_TITLE), B.esc(bx['short_title']), B.esc(bx['sub']), bx['art'], B.AUTHOR, B.esc(PUBLISHER), SITE)))
+        '<p class="ps-title-a">by %s</p><p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        B.esc(SERIES_TITLE), B.esc(bx['short_title']), B.esc(bx['sub']), bx['art'], B.AUTHOR, SITE)))
     cp = ('<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>'
-          '<p><em>%s</em>. %s, in one ebook.<br/>By %s. Published by %s, spreadloveandacceptance.com.</p>'
-          '<p>Text and pictures © 2026 %s. First ebook edition, %s.</p>%s'
+          '<p><em>%s</em>. %s, in one ebook.<br/>By %s. Independently published.</p>'
+          '<p>Text and pictures © 2026 %s. First ebook edition, %s.</p>'
           '<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, and every situation in '
           '<em>%s</em> at spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print books and ebooks are optional.</p>'
           '<p><strong>Not therapy.</strong> These books are general education about people and relationships. They are not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counsellor or other trained professional, and they can’t know your situation.</p>'
-          '<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
-          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
-          'If you are in danger now, call your local emergency number.</p>'
+          'replacement for help from a doctor, counselor or other trained professional, and they can’t know your situation.</p>'
           '<p><strong>The examples are made up.</strong> The people in these books’ examples are made up; any likeness to real people is coincidence. None of them is a testimonial.</p>'
           '<p>Each book that follows keeps its own title page and copyright page.</p></section>') % (
-        B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.esc(PUBLISHER), B.AUTHOR, B.UPDATED,
-        ('<p>ISBN %s (ebook)</p>' % B.esc(bx['isbn_ebook'])) if bx.get('isbn_ebook') else '', B.esc(S.POCKET['title']), SITE)
+        B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.AUTHOR, B.UPDATED, B.esc(S.POCKET['title']))
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     for d in docs:
         d.root = transform(parse(pre(d.html)), images, set(), d.heading_shift)
@@ -1224,7 +1241,7 @@ def main():
         report = {}
     report.setdefault('books', {})
     report['about'] = ('Made by tools/book/build_epub.py (epub13, logicbook14): the Kindle ebooks (EPUB 3) of the print series, the pocket guide and the box set. '
-                       'Upload <id>.epub as the Kindle manuscript and cover-<id>-front.jpg as the Kindle cover. The workbook has no ebook (print only).')
+                       'Upload <id>.epub as the Kindle manuscript and cover-<id>-kindle.jpg (1600 x 2560) as the Kindle cover. The workbook has no ebook (print only).')
     fails = 0
     jobs = list(built)
     if extras:
@@ -1251,7 +1268,7 @@ def main():
         print('epub: %s.epub  %.2f MB, %d chapters, %d figures, %d filled-in examples, %d pictures, %d links out (%d to the site, all real pages), %d inside%s' % (
             b['id'], size / 1048576, len(b['chapters']), len(figs), len(exs), facts.get('images', 0), facts.get('links_out', 0),
             facts.get('site_links_checked', 0), facts.get('links_inside', 0), ('; EPUBCheck: ' + ec['summary']) if ec else ''))
-    report['workbook'] = 'No ebook: the workbook is print only. Its forms are made to be written in, and every one is free to print or fill in at spreadloveandacceptance.com/workpapers/fill/.'
+    report['workbook'] = 'No ebook: the workbook is print only. Its forms are made to be written in, and every one is free to print or fill out at spreadloveandacceptance.com/workpapers/fill/.'
     with open(os.path.join(OUT, 'epub.json'), 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=1, ensure_ascii=False)
         f.write('\n')

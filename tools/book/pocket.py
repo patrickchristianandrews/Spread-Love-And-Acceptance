@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """pocket.py: "The Logic Behind It", the series' pocket guide (logicbook14).
 
-A 5 x 8 in standard-colour paperback (72 to 80 pages) and a Kindle ebook, made from the situations in
+A 5 x 8 in standard-color paperback (72 to 80 pages) and a Kindle ebook, made from the situations in
 assets/js/logic-library.js (the same words as /the-logic-behind-it.html, with the print wording in
 tools/book/series-extras.json "overrides"), one situation to a page. tools/book/build_series.py calls build() for the
 print page (book/print/src/<id>.html) and its cover; tools/book/build_epub.py calls epub_docs() for the ebook and the
@@ -50,8 +50,11 @@ def item(iid, overrides=None):
     it = dict(next(x for x in lib()['items'] if x['id'] == iid))
     it['chain'], it['an'] = list(it['chain']), list(it['an'])
     for k, v in (overrides or {}).get(iid, {}).items():
-        if k.startswith('care'):
-            continue  # "With care" lines stay exactly as written
+        if k.startswith('care') and k != 'care_print':
+            continue  # "With care" lines stay exactly as written, except an explicit care_print (books-final9: the owner removed safety lines)
+        if k == 'care_print':
+            it['care'] = v
+            continue
         if '.' in k:
             f, n = k.split('.')
             it[f][int(n)] = v
@@ -101,30 +104,33 @@ def sections(p):
 
 # ---------- the words around the situations ----------
 SEC_INTRO = {
-    'plans': 'A plan does more than fix a time. For many people it is a map of the day, already walked through in the mind. When it changes at short notice, or was never quite made, the map has to be redrawn. These pages look at what that costs, and at the friendly plans that were never meant to happen at all.',
-    'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, reach for headphones or snap at a small question. These pages follow the logic of a battery that is running down, and what helps before it reaches empty.',
-    'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what is said. Others hint, soften and tease, and expect the hidden meaning to be heard. Both are systems, and either one can be learned, or simply asked about.',
-    'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, such as showing goodwill or sparing a feeling. These pages lay out those jobs in plain steps, along with the cost of keeping up appearances all day.',
-    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones to the same room. These pages look at asking for things in writing, starting late, agreeing in the meeting and disagreeing afterwards, and wrapping criticism in praise.',
-    'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again and giving advice nobody asked for each have a logic, and each has another side. These pages hold both.',
-    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or an outburst over a cup. None of these is a choice in the moment. These pages explain what is happening inside, and what helps afterwards.',
-    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid or one-sided. These pages show the logic, and a way to meet in the middle.',
-    'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means, how loud a family dinner gets, how plainly feedback is given and whether a full stop in a text is cross are all learned in a particular place, family or generation.',
+    'plans': 'A plan does more than fix a time. For a lot of people it’s a map of the day, already walked through in their head, and when it changes at short notice the map has to be redrawn on the spot. These pages are about what that costs, and about the friendly plans that were never really meant to happen at all. An economist would say the plan already spent some of the day’s budget; changing it spends more.',
+    'energy': 'Noise, crowds, hunger and a long week all draw on the same supply. When it runs low, people leave early, or put their headphones in, or snap at a small question. These pages follow a battery running down, and what helps before it hits empty. Neurobiology’s phrase for it is that your state sets the volume, and holistic practice, which has modest support, starts there, with the body.',
+    'talk': 'The same words can carry a plain meaning and a hidden one. Some people say exactly what they mean and hear exactly what’s said. Others hint, soften and tease, and expect the hidden meaning to be picked up. Both are systems. Either can be learned. Or you can just ask. Psychology’s short version is that intent isn’t impact.',
+    'social': 'Small talk, white lies and “How are you?” can look pointless from outside. Each one does a quiet job, like showing goodwill or sparing a feeling. These pages set out those jobs plainly, along with what it costs to keep up appearances all day. The art of debating would add: say the other person’s strongest point first.',
+    'work': 'Deadlines, meetings and feedback come with unwritten rules, and people bring different ones into the same room. These pages are about asking for things in writing, starting late, agreeing in the meeting and disagreeing by the elevators, and wrapping criticism in praise. Business and politics agree that every job needs an owner and every group a fair way to decide.',
+    'family': 'Close to home, a reaction lands harder, because it comes from someone who matters. Going quiet, asking again, giving advice nobody asked for. Each has a logic, and each has another side. Finance has a picture for it: a repair tops up a reserve of goodwill.',
+    'feelings': 'Big feelings can come out as a meltdown, a shutdown, a blank face or a fight about a mug. None of these is chosen in the moment. These pages are about what’s going on inside, and what helps afterward. Music explains a lot of it, because tone and tempo carry more than words, and a shared laugh can reset a heavy room (the research on laughter is modest).',
+    'routines': 'Sameness and deep interests are ways of saving energy and finding joy. From outside they can look rigid, or one-sided. These pages show the logic, and a way to meet in the middle. Behavioral science calls these habits that save effort; the setting matters too, and aromatherapy’s modest point is that a familiar scent or a quieter room can help some people settle.',
+    'rulebooks': 'A lot of friction comes from people following different rulebooks, each sure theirs is normal. What “seven o’clock” means. How loud a family dinner gets. How plainly feedback is given. Whether a period in a text is annoyed. All of it learned in a particular place, family or generation. Philosophy’s habit helps here: separate the fact from the guess.',
 }
 
 HOW = [
-    ('Dip in anywhere', 'Each page stands on its own. Use the contents, the section pages or “Find it fast” at the back to go straight to the situation in front of you.'),
-    ('Read it with the other person', 'A page can say what is hard to say in the moment. Hand it over, or read it together, and talk about the last two parts, the other side and the small step.'),
-    ('Use it both ways', 'Some pages may explain you, and some may explain the people around you. Either way, the aim is a fair view of both sides.'),
-    ('Scan for more', 'Each page has a code to the same situation on the website, free, with more pictures to choose from. The website has more than seventy situations and a box where you can type your own.'),
-    ('Build your own', 'The blank cards at the back walk you through the six parts for a reaction this guide doesn’t cover.'),
+    ('Dip in anywhere', 'Every page stands on its own. Use the contents, the section pages or “Find it fast” at the back to go straight to whatever’s in front of you.'),
+    ('Read it with the other person', 'A page can say what’s hard to say in the moment. Hand it over, or read it together, and talk about the last two parts, the other side and the small step.'),
+    ('Use it both ways', 'Some pages may explain you. Some may explain the people around you. Either way, the point is a fair view of both sides.'),
+    ('Scan for more', 'Each page has a code to the same situation on the website, free, with more pictures to choose from. The website has more than seventy situations, and a box where you can type your own.'),
+    ('Build your own', 'The blank cards at the back walk you through the six parts for a reaction this guide doesn’t cover. There will be plenty of those.'),
 ]
 
 LENS = [
     ('lens-why', 'Why a reaction can look odd', [
-        'A friend leaves the party without a goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they plainly aren’t. Seen from outside, each of these can look odd, rude or over the top.',
-        'Most of them have a logic behind them. It makes sense once you can see it, and it is usually a sensible answer to how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so other people fill the gap with a guess, and the guess is often unkind.',
-        'This guide puts the logic into words, one step at a time, so the reaction can be understood. It also gives the other person a fair way to respond, because every page includes their side too. I’m autistic myself, and as the About page on the website puts it, the social rules most people absorb without noticing had to be learned on purpose.',
+        'A friend leaves the party without saying goodbye. A colleague’s feedback lands like a slap. Someone says “I’m fine” when they very obviously aren’t. From outside, each of these can look odd, or rude, or a bit much, when it may be plain, direct speech or a tired body.',
+        'Most of them have a logic behind them. Once you can see it, it usually makes sense, given how someone is built, what they learned and what kind of day they’ve had. The trouble is that the logic is hidden, so the rest of us fill the gap with a guess. The guess is often unkind.',
+        'This guide puts the logic into words, a step at a time, and every page gives the other person’s side as well, because otherwise it wouldn’t be fair.',
+        {'sn': 'ross-greene-house-1977', 'title': 'Why our own way looks normal',
+         'text': 'In the studies that named the false consensus effect, people overestimated how many others would make the same choice they had, and saw the other choice as the odd one. It’s why a reaction unlike yours can look strange before it looks logical.',
+         'ev': 'Strong: replicated many times, though the size of the effect varies', 'cite': 'Ross, Greene and House (1977)'},
         'No page is a diagnosis or a label. People differ, and no group always does anything. The pages say “many people” or “some people” on purpose.',
     ]),
     ('lens-parts', 'The six parts', None),
@@ -132,20 +138,23 @@ LENS = [
         'Every situation carries one of three small tags.',
         None,
         'The tag says where a reaction is common. It never tells you what the person in front of you is.',
+        {'sn': 'milton-2012', 'title': 'The double empathy problem',
+         'text': 'The autistic researcher Damian Milton argued that misunderstanding between autistic and non-autistic people runs both ways: each finds the other hard to read, so the problem sits between them. His paper is an argument rather than an experiment; later studies support parts of it.',
+         'ev': 'Theory: no data in the paper itself. Later experiments support parts of it', 'cite': 'Milton (2012)'},
         'The pages about common social habits matter as much as the others. If you have ever been told you “should have known” what someone meant, it can be a relief to see that there was a system all along, and that it can be learned or simply asked about. And if you use those habits without thinking, seeing their logic written down shows where someone else might miss the signal.',
-        'The last section, “Different rulebooks”, is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
+        'The last section, “Different rulebooks,” is about habits learned in a particular place, family or generation. Two people can each be polite by their own rules and still upset each other.',
     ]),
     ('lens-care', 'Logic explains. It doesn’t excuse.', [
         'Knowing why a reaction happened doesn’t make its effects disappear. If a reaction hurts someone, the kind and logical next step is to say so, put it right and find a better step for next time.',
-        'Some pages have a line marked “With care”. It appears where a reaction can land hard on someone else, and it says what keeps things fair.',
+        'Some pages have a line marked “With care.” It appears where a reaction can land hard on someone else, and it says what keeps things fair.',
         'Seeing the other side doesn’t mean agreeing to everything the other person wants. A “no” or a limit given with care is part of looking after a relationship.',
         'If you’re reading a page with someone, start with the part about their side. People listen more easily once they feel understood.',
     ]),
 ]
 
 PARTS = [
-    ('What it looks like', 'One line in camera words, what a camera would see or hear. There is no “rude” and no “weird”, because a verdict closes the question before the logic can answer it.'),
-    ('The logic', 'Three or four short steps, each following from the one before. The chain starts with a plain fact about how things work, such as “Energy works like a budget”.'),
+    ('What it looks like', 'One line in camera words, what a camera would see or hear. There is no “rude” and no “weird,” because a verdict closes the question before the logic can answer it. Describe what happened instead: plain words, a door closed, a reply that came late.'),
+    ('The logic', 'Three or four short steps, each following from the one before. The chain starts with a plain fact about how things work, such as “Energy works like a budget.”'),
     ('It’s like', 'An everyday picture that works the same way inside. A phone on 3% shuts down the extras to protect the call, which is why it suits low energy so well.'),
     ('Why it fits', 'What makes the reaction reasonable, said fairly and without stretching it. Where research supports a page, the research notes at the back list it.'),
     ('The other side', 'What the other person may have felt or needed. This part keeps the lens fair, so nobody has to be the bad guy.'),
@@ -216,22 +225,18 @@ def puzzle_svg(color='currentColor', w=None):
 
 
 def copyright_html(p, S):
-    isbn = p.get('isbn') or S.CFG.get('isbn_placeholder', '[to be added]')
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += ('<p><em>%s: %s</em>. Part of the %s series.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>') % (
-        esc(p['title']), esc(p['sub']), esc(S.SERIES_TITLE), S.B.AUTHOR, esc(S.CFG.get('publisher', "Christian's Lab").replace("'", '’')))
-    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p><p>ISBN: %s (paperback)</p>' % (S.B.AUTHOR, S.B.UPDATED, esc(isbn))
+    s += ('<p><em>%s: %s</em>. Part of the %s series.<br>By %s. Independently published.</p>') % (
+        esc(p['title']), esc(p['sub']), esc(S.SERIES_TITLE), S.B.AUTHOR)
+    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand.</p>' % (S.B.AUTHOR, S.B.UPDATED)
     s += ('<p><strong>Free online, always.</strong> Every situation in this guide, and more than seventy in all, is free at '
           'spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print book is optional. You may copy pages of this guide '
-          'for personal use and for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % esc(p['title'])
+          'for personal use and for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % esc(p['title'])
     s += ('<p><strong>Not therapy.</strong> This guide is general education about people and relationships. It is not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation. No page labels anyone.</p>')
-    s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
-          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
-          'If you are in danger now, call your local emergency number.</p>') % S.SITE
+          'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation. No page labels anyone.</p>')
     s += ('<p><strong>The examples are made up.</strong> The situations in this guide are drawn from common patterns, and nobody in them is a real person; '
           'any likeness is coincidence. None of them is a testimonial.</p>')
-    s += '<p>The research the pages lean on is listed in short at the back, and in full at spreadloveandacceptance.com/research.</p>'
+    s += '<p>The research the pages lean on is listed briefly at the back, and in full at spreadloveandacceptance.com/research.</p>'
     s += '<p>Set in Lora, Fraunces and IBM Plex Mono.</p></div></section>'
     return s
 
@@ -239,7 +244,7 @@ def copyright_html(p, S):
 def title_html(p, S):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
-            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
         p['color'], S.mark('titlep'), esc(S.SERIES_TITLE), esc(p['kicker']), esc(p['title']), esc(p['sub']), S.series_site.art(p['art']), S.B.AUTHOR)
 
 
@@ -264,6 +269,10 @@ def lens_parts(S):
                 if x is None:
                     body += '<ul class="pk-tags">%s</ul>' % ''.join('<li><span class="pk-side pk-side-%s">%s</span> %s</li>' % (
                         k, esc(t), esc(d)) for k, (t, d) in zip(('nd', 'nt', 'all'), side_words()))
+                elif isinstance(x, dict):
+                    body += ('<aside class="side-note no-bubble no-cheer no-dive" data-no-bubble data-ref="%s" aria-label="Side note"><p><span class="sn-h">%s</span> %s</p>'
+                             '<p class="sn-src"><a href="/research.html#ref-%s">%s</a> <span class="sn-ev">· %s</span></p></aside>') % (
+                        x['sn'], esc(x['title']), esc(x['text']), x['sn'], esc(x['cite']), esc(x['ev']))
                 else:
                     body += '<p>%s</p>' % esc(x)
         out.append((key, title, '<section class="pk-front pk-lens" id="%s">%s<p class="pk-front-k">The six-part lens</p><h1>%s</h1>%s</section>' % (
@@ -278,8 +287,8 @@ def lens_html(S):
 def build_html(p, S):
     s = ('<section class="pk-back pk-build" id="build">%s<h1>Build your own</h1><p class="pk-lede">For a reaction this guide doesn’t cover, your own or someone else’s. '
          'It works best on a calm day, and better still with the other person.</p><ol class="pk-parts">%s</ol>'
-         '<p class="pk-small"><strong>Watch for verdict words.</strong> “Rude”, “lazy”, “selfish” and “dramatic” are guesses about a person. Swap them for what a camera '
-         'would see, and the logic has room to show itself. If a step needs “because they’re like that”, keep asking why.</p>'
+         '<p class="pk-small"><strong>Watch for verdict words.</strong> “Rude,” “lazy,” “selfish” and “dramatic” are guesses about a person. A late start may be about attention or energy, and blunt words may be a plain, direct style. Swap the verdict for what a camera '
+         'would see, describe what happened instead of the label, and the logic has room to show itself. If a step needs “because they’re like that,” keep asking why.</p>'
          '<p class="pk-small"><strong>Online, it makes a card.</strong> The website’s “Build your own” turns your six parts into a card you can save or share. '
          'Nothing you type is sent anywhere.</p></section>') % (S.mark('build'), ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), esc(d)) for t, d in BUILD_PROMPTS))
     for k in range(p.get('build_cards', 3)):
@@ -336,15 +345,20 @@ def notes_html(secs, S, nums, epub=False):
             for rid in it.get('refs', []):
                 if rid in R:
                     used.setdefault(rid, []).append(it)
+    # voice18: the two side notes on the lens pages
+    for key, title, paras in LENS:
+        for x in (paras or []):
+            if isinstance(x, dict) and x.get('sn') in R:
+                used.setdefault(x['sn'], []).append({'t': title, 'id': None, 'lens': key})
     rows = []
     for rid, its in sorted(used.items(), key=lambda kv: (R[kv[0]].get('authors', '').lower(), str(R[kv[0]].get('year', '')))):
         r = R[rid]
         t = (r.get('title') or '').strip()
         t = t if re.search(r'[.?!]$', t) else t + '.'
-        where = ', '.join('%s%s' % (esc(it['t']), '' if epub else ' (%s)' % S.pg('sit-' + it['id'])) for it in its)
+        where = ', '.join('%s%s' % (esc(it['t']), '' if epub else ' (%s)' % S.pg(it['lens'] if it.get('lens') else 'sit-' + it['id'])) for it in its)
         rows.append('<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span> <span class="pk-ref-w">%s</span></li>' % (
             esc(r.get('authors', '')), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(t), where))
-    return ('<section class="pk-back pk-notes" id="notes">%s<h1>Research notes</h1><p class="pk-lede">The %d studies and essays these pages lean on, in short, with the '
+    return ('<section class="pk-back pk-notes" id="notes">%s<h1>Research notes</h1><p class="pk-lede">The %d studies and essays these pages lean on, briefly, with the '
             'situations that use them. Each one was looked up and checked. The full list, with what each study found and how strong the finding is, is free at '
             'spreadloveandacceptance.com/research.</p><ul class="pe-refs ps-refs pk-refs">%s</ul></section>') % ('' if epub else S.mark('notes'), len(rows), ''.join(rows))
 
@@ -400,19 +414,19 @@ def build(S):
         toc.append(S.B.toc_row('sec-' + c['id'], str(i), esc(c['name']), 'is-ch', '%d situations' % len(its)))
         body.append(sec_html(i, c, its, S, nums))
         body += [sit_html(it, nums[it['id']], S, p.get('include_fits', True)) for it in its]
-    for key, title in (('build', 'Build your own'), ('find', 'Find it fast'), ('online', 'More, free online'), ('notes', 'Research notes'), ('series', 'The series'),
+    for key, title in (('build', 'Build your own'), ('find', 'Find it fast'), ('ideas', 'How the ideas connect'), ('online', 'More, free online'), ('notes', 'Research notes'), ('series', 'The series'),
                        ('jot', 'Your notes')):
         if key == 'jot' and p.get('notes_pages', 2) <= 0:
             continue
         toc.append(S.B.toc_row(key, '', esc(title), 'is-back'))
     front = title_html(p, S) + copyright_html(p, S)
-    front += '<nav class="pe-toc ps-toc pk-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (S.mark('contents'), ''.join(toc))
+    front += '<nav class="pe-toc ps-toc pk-toc is-long pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (S.mark('contents'), ''.join(toc))
     front += how_html(S) + lens_html(S)
-    back = build_html(p, S) + find_html(secs, S, nums) + online_html(p, S) + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
+    back = build_html(p, S) + find_html(secs, S, nums) + S.ideas_map(p, [], pocket_sections=[(c['id'], c['name']) for c, _x in secs]) + online_html(p, S) + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
     ol = [['Contents', 'contents', 0], ['How to use this guide', 'how', 0]] + [[t, k_, 0] for k_, t, _x in LENS]
     for c, its in secs:
         ol.append([c['name'], 'sec-' + c['id'], 0])
-    ol += [['Build your own', 'build', 0], ['Find it fast', 'find', 0], ['More, free online', 'online', 0], ['Research notes', 'notes', 0], ['The series', 'series', 0]]
+    ol += [['Build your own', 'build', 0], ['Find it fast', 'find', 0], ['How the ideas connect', 'ideas', 0], ['More, free online', 'online', 0], ['Research notes', 'notes', 0], ['The series', 'series', 0]]
     title = '%s: %s' % (p['title'], p['sub'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': S.B.AUTHOR, 'subject': p['line']}, ensure_ascii=False).replace('</', '<\\/')
@@ -443,16 +457,17 @@ def epub_docs(S, Doc, B):
     docs.append(Doc('title.xhtml', p['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · %s</p><h1 class="ps-title-t">%s</h1>'
         '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt="Two smiling round friends fit two jigsaw pieces together, with a heart above them."/></p>'
-        '<p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br/><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
+        '<p class="ps-title-a">by %s</p><p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
         esc(S.SERIES_TITLE), esc(p['kicker']), esc(p['title']), esc(p['sub']), p['art'], B.AUTHOR, S.SITE)))
     cp = copyright_html(p, S)
-    cp = cp.replace('First print edition, %s. Printed on demand.</p><p>ISBN: %s (paperback)</p>' % (B.UPDATED, esc(p.get('isbn') or S.CFG.get('isbn_placeholder', '[to be added]'))),
-                    'First ebook edition, %s.</p>%s' % (B.UPDATED, ('<p>ISBN %s (ebook)</p>' % esc(p['isbn_ebook'])) if p.get('isbn_ebook') else ''))
+    cp = cp.replace('First print edition, %s. Printed on demand.</p>' % B.UPDATED, 'First ebook edition, %s.</p>' % B.UPDATED)
     cp = cp.replace('The print book is optional.', 'The print book and ebook are optional.').replace('<p>Set in Lora, Fraunces and IBM Plex Mono.</p>', '')
     cp = cp.replace('<section class="ps-copy pe-only">', '<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>', 1)
     docs.append(Doc('copyright.xhtml', 'Copyright and notes', cp))
     docs.append(None)  # nav.xhtml
     how = how_html(S).replace('Use the contents, the section pages or “Find it fast” at the back', 'Use the contents or “Find it fast” at the back')
+    # voice18 (bookqa18 M9): an ebook has links, not codes
+    how = how.replace('<strong>Scan for more.</strong> Each page has a code to the same situation on the website,', '<strong>Tap for more.</strong> Each page links to the same situation on the website,')
     how = how.replace('Each page has a code to the same situation on the website', 'Each page links to the same situation on the website')
     docs.append(Doc('how.xhtml', 'How to use this guide', how))
     for key, title, h in lens_parts(S):
@@ -470,5 +485,6 @@ def epub_docs(S, Doc, B):
     docs.append(Doc('build.xhtml', 'Build your own', bh))
     docs.append(Doc('find.xhtml', 'Find it fast', find_html(secs, S, nums, epub=True)))
     docs.append(Doc('online.xhtml', 'More, free online', online_html(p, S, epub=True)))
+    docs.append(Doc('ideas.xhtml', 'How the ideas connect', S.ideas_map(p, [], epub=True, pocket_sections=[(c['id'], c['name']) for c, _x in secs])))
     docs.append(Doc('notes.xhtml', 'Research notes', notes_html(secs, S, nums, epub=True).replace('<section class="pk-back pk-notes"', '<section epub:type="bibliography" class="pk-back pk-notes"', 1)))
     return p, docs, chapters

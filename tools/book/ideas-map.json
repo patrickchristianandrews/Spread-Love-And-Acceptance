@@ -1,0 +1,407 @@
+{
+ "about": "voice18: \"How the ideas connect\", one page in each book (and in the pocket guide): the seven roots in the middle, the thirteen fields around them, and where each one comes up in that book. Fields and roots use the wording on /polymath.html. Made from voice18 twoways_data.py.",
+ "fields": [
+  {
+   "key": "NB",
+   "name": "Neurobiology",
+   "idea": "your state sets the volume"
+  },
+  {
+   "key": "PS",
+   "name": "Psychology",
+   "idea": "intent isn’t impact"
+  },
+  {
+   "key": "PH",
+   "name": "Philosophy",
+   "idea": "separate the fact from the guess"
+  },
+  {
+   "key": "DB",
+   "name": "The art of debating",
+   "idea": "separate the claim from the person"
+  },
+  {
+   "key": "PO",
+   "name": "Politics",
+   "idea": "a fair way to decide, and a say for everyone"
+  },
+  {
+   "key": "BS",
+   "name": "Behavioral science",
+   "idea": "habits beat good intentions"
+  },
+  {
+   "key": "EC",
+   "name": "Economics",
+   "idea": "attention is a budget"
+  },
+  {
+   "key": "FI",
+   "name": "Finance",
+   "idea": "every entry has two sides"
+  },
+  {
+   "key": "BU",
+   "name": "Business",
+   "idea": "one owner per job, and a simple check"
+  },
+  {
+   "key": "HT",
+   "name": "Holistic therapies",
+   "idea": "start with the body, then the argument"
+  },
+  {
+   "key": "LT",
+   "name": "Laughter therapy",
+   "idea": "a shared laugh tells the body it’s safe"
+  },
+  {
+   "key": "MU",
+   "name": "Music",
+   "idea": "tone and tempo carry more than the words"
+  },
+  {
+   "key": "AR",
+   "name": "Aromatherapy",
+   "idea": "the setting matters"
+  }
+ ],
+ "roots": [
+  {
+   "key": "BA",
+   "name": "Balance",
+   "line": "what flows in has to match what flows out"
+  },
+  {
+   "key": "SN",
+   "name": "Signal and noise",
+   "line": "what’s sent isn’t always what arrives"
+  },
+  {
+   "key": "FL",
+   "name": "Feedback loops",
+   "line": "small things repeated, with a check each time, shape the whole"
+  },
+  {
+   "key": "LC",
+   "name": "Limited capacity",
+   "line": "everything has a limit"
+  },
+  {
+   "key": "OS",
+   "name": "Ownership and structure",
+   "line": "work that belongs to everyone belongs to no one"
+  },
+  {
+   "key": "QI",
+   "name": "Quiet incentives",
+   "line": "things drift toward whatever the setup quietly rewards"
+  },
+  {
+   "key": "SS",
+   "name": "State and setting",
+   "line": "the same message lands differently depending on the state you’re in and the place you’re in"
+  }
+ ],
+ "weak": [
+  "HT",
+  "LT",
+  "AR"
+ ],
+ "chapters": {
+  "self-1-then": {
+   "fields": [
+    "PO",
+    "PH"
+   ],
+   "roots": [
+    "OS"
+   ]
+  },
+  "self-2-now": {
+   "fields": [
+    "NB",
+    "AR"
+   ],
+   "roots": [
+    "SS",
+    "LC"
+   ]
+  },
+  "self-3-next": {
+   "fields": [
+    "BS",
+    "FI"
+   ],
+   "roots": [
+    "FL",
+    "BA"
+   ]
+  },
+  "understanding-1-feelings": {
+   "fields": [
+    "MU",
+    "PS"
+   ],
+   "roots": [
+    "SS",
+    "SN"
+   ]
+  },
+  "understanding-7-worth": {
+   "fields": [
+    "DB",
+    "LT"
+   ],
+   "roots": [
+    "SN",
+    "BA"
+   ]
+  },
+  "understanding-14-personality": {
+   "fields": [
+    "EC",
+    "BU"
+   ],
+   "roots": [
+    "LC",
+    "OS"
+   ]
+  },
+  "understanding-9-minds": {
+   "fields": [
+    "HT"
+   ],
+   "roots": [
+    "SS",
+    "QI"
+   ]
+  },
+  "understanding-2-stress": {
+   "fields": [
+    "NB",
+    "EC"
+   ],
+   "roots": [
+    "LC",
+    "SS"
+   ]
+  },
+  "understanding-13-anger": {
+   "fields": [
+    "DB",
+    "MU"
+   ],
+   "roots": [
+    "SN",
+    "SS"
+   ]
+  },
+  "understanding-16-worry": {
+   "fields": [
+    "HT",
+    "AR"
+   ],
+   "roots": [
+    "SS",
+    "FL"
+   ]
+  },
+  "understanding-8-loss": {
+   "fields": [
+    "PH",
+    "LT"
+   ],
+   "roots": [
+    "BA",
+    "SS"
+   ]
+  },
+  "understanding-11-healing": {
+   "fields": [
+    "FI",
+    "PS"
+   ],
+   "roots": [
+    "BA",
+    "SN"
+   ]
+  },
+  "understanding-6-change": {
+   "fields": [
+    "BS",
+    "BU"
+   ],
+   "roots": [
+    "FL",
+    "QI"
+   ]
+  },
+  "understanding-10-values": {
+   "fields": [
+    "PO"
+   ],
+   "roots": [
+    "OS",
+    "QI"
+   ]
+  },
+  "chapter-1": {
+   "fields": [
+    "MU",
+    "NB"
+   ],
+   "roots": [
+    "SN",
+    "SS"
+   ]
+  },
+  "understanding-4-communication": {
+   "fields": [
+    "PS",
+    "DB"
+   ],
+   "roots": [
+    "SN",
+    "FL"
+   ]
+  },
+  "understanding-3-seeing": {
+   "fields": [
+    "PH",
+    "EC"
+   ],
+   "roots": [
+    "SN",
+    "LC"
+   ]
+  },
+  "understanding-5-belonging": {
+   "fields": [
+    "HT",
+    "LT"
+   ],
+   "roots": [
+    "SS",
+    "FL"
+   ]
+  },
+  "understanding-15-love": {
+   "fields": [
+    "FI",
+    "AR"
+   ],
+   "roots": [
+    "BA",
+    "FL"
+   ]
+  },
+  "understanding-17-groups": {
+   "fields": [
+    "PO",
+    "BS"
+   ],
+   "roots": [
+    "QI",
+    "OS"
+   ]
+  },
+  "understanding-12-helping": {
+   "fields": [
+    "BU",
+    "HT"
+   ],
+   "roots": [
+    "OS",
+    "LC"
+   ]
+  },
+  "preface": {
+   "fields": [
+    "FI",
+    "EC",
+    "BU"
+   ],
+   "roots": [
+    "BA",
+    "LC"
+   ]
+  },
+  "chapter-2": {
+   "fields": [
+    "PO"
+   ],
+   "roots": [
+    "OS",
+    "QI"
+   ]
+  },
+  "chapter-3": {
+   "fields": [
+    "NB",
+    "PS",
+    "AR"
+   ],
+   "roots": [
+    "SS",
+    "SN"
+   ]
+  },
+  "chapter-4": {
+   "fields": [
+    "PH",
+    "DB",
+    "MU"
+   ],
+   "roots": [
+    "BA",
+    "SN"
+   ]
+  },
+  "chapter-5": {
+   "fields": [
+    "BS",
+    "HT",
+    "LT"
+   ],
+   "roots": [
+    "FL",
+    "OS"
+   ]
+  }
+ },
+ "pocket": {
+  "plans": [
+   "EC"
+  ],
+  "energy": [
+   "NB",
+   "HT"
+  ],
+  "talk": [
+   "PS"
+  ],
+  "social": [
+   "DB"
+  ],
+  "work": [
+   "BU",
+   "PO"
+  ],
+  "family": [
+   "FI"
+  ],
+  "feelings": [
+   "MU",
+   "LT"
+  ],
+  "routines": [
+   "BS",
+   "AR"
+  ],
+  "rulebooks": [
+   "PH"
+  ]
+ }
+}

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """build_series.py: the print series of the book (print12). Its name is series_title in tools/book/series.json.
 
-A series of short colour books for print on demand (6 x 9 in, KDP "regular" trim, standard colour, white
+A series of short color books for print on demand (6 x 9 in, KDP "regular" trim, standard color, white
 paper), plus a separate workbook (8.5 x 11 in) with every workpaper in fill-in form. The books are made from the
 SHORT chapter versions; every chapter ends with a "Go deeper (free online)" line and a QR code to its full
-version. The series is set in tools/book/series.json (which chapters go in which book, titles, colours, back-cover
+version. The series is set in tools/book/series.json (which chapters go in which book, titles, colors, back-cover
 words, ISBNs once bought).
 
 Run from the repo root:
@@ -67,9 +67,9 @@ COL_PX = {'book': round((6 - 0.75 - 0.5) * 96), 'workbook': round((8.5 - 0.75 - 
 # (since 10 June 2025), minus printing.
 COSTS = {
     'kdp': {'fixed': 1.00, 'per_page': 0.0255, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
-            'note': 'KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)'},
+            'note': 'KDP Amazon.com, standard color, regular trim (72-600 pages): $1.00 + $0.0255 a page; royalty 60% at $9.99 and up, 50% below, minus printing; 40% in expanded distribution (not used)'},
     'kdp_large': {'fixed': 1.00, 'per_page': 0.0402, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
-                  'note': 'KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page'},
+                  'note': 'KDP Amazon.com, standard color, large trim (8.5 x 11): $1.00 + $0.0402 a page'},
     # finalfix15: black ink, large trim, 24 to 110 pages: a flat $2.84 a book on Amazon.com (KDP help G201834340, looked up
     # 18 October 2026). Above 110 pages KDP adds a per-page charge, so the build warns if the workbook ever gets that long.
     'kdp_bw_large': {'fixed': 2.84, 'per_page': 0.0, 'max_pages': 110, 'royalty': 0.60, 'royalty_low': 0.50, 'threshold': 9.99, 'expanded': 0.40,
@@ -87,6 +87,21 @@ LOGIC_PAGE = '/the-logic-behind-it.html'
 SERIES_CSS = '/book/print/print.css'
 WB_CSS = '/book/print/workbook.css'
 
+
+
+# books-final9 (owner decision, 20 Oct 2026): every print page is American English. The sources are converted already;
+# this catches words that come from site data the books reuse (the logic library, the workpaper sheets, tool option lists).
+import us_english  # noqa: E402
+_b_write = B.write
+
+
+def _us_write(path, s):
+    if path.endswith('.html'):
+        s = us_english.us_html(s)
+    return _b_write(path, s)
+
+
+B.write = _us_write
 
 def books():
     return CFG['books']
@@ -124,7 +139,7 @@ STUB_RE = re.compile(r'<meta http-equiv="refresh" content="\d+;\s*url=([^"]+)"',
 
 
 def unstub(url):
-    """printfix13: a code never opens a page that only forwards to another one: follow the forward"""
+    """printfix13: a code never opens a page that only forward to another one: follow the forward"""
     p = re.sub(r'^https://spreadloveandacceptance\.com', '', url)
     if not p.startswith('/'):
         return url
@@ -162,7 +177,7 @@ def check_qrs():
         elif frag and not re.search(r'\bid="%s"' % re.escape(frag), B.read(f)):
             bad.append('QR to a missing #%s: %s' % (frag, u))
         elif STUB_RE.search(B.read(f)[:4000]):
-            bad.append('QR to a page that only forwards: ' + u)
+            bad.append('QR to a page that only forward: ' + u)
     return bad
 
 
@@ -342,7 +357,8 @@ def logic_box(b):
     lab = LOGIC['labels']
     url = '%s?item=%s#find' % (LOGIC_PAGE, b['id'])
     row = lambda k, v, cls='': '<p class="lg-row%s"><span class="lg-l">%s</span> %s</p>' % (cls, esc(lab[k]), v)
-    steps = '<span class="lg-arr" aria-hidden="true"> → </span>'.join('<span class="lg-step">%s</span>' % esc(x) for x in b['logic'])
+    # books-final9 (owner: no arrows inside sentences): the chain reads as short plain sentences, one per step
+    steps = ' '.join('<span class="lg-step">%s</span>' % esc(x.rstrip('.') + '.') for x in b['logic'])
     s = '<aside class="lg-box no-bubble no-cheer no-dive" data-no-bubble aria-label="%s" id="lg-%s">' % (esc(LOGIC['kicker']), b['id'])
     # the code sits at the top right, so the box can run on across a page break between any two parts
     s += '<div class="lg-box-qr">%s</div>' % qr(url)
@@ -358,13 +374,44 @@ def logic_box(b):
 LOGIC_BEFORE = re.compile(r'<h[234]\b[^>]*\bid="(?:[a-z0-9-]+--)?(?:everyday|all-relationships|mix-ups)"')
 
 
+TW_ASIDE = re.compile(r'\s*<aside class="two-ways\b[^"]*"[^>]*>(.*?)</aside>', re.S)
+
+
+def two_ways_rows(inner):
+    """voice18: the chapter's "Two ways to read this" (its online aside) as rows for the one box per chapter"""
+    title = re.search(r'<p class="tw-t">(.*?)</p>', inner, re.S)
+    two = re.search(r'<p class="tw-two">(.*?)</p>', inner, re.S)
+    fields = re.search(r'<p class="tw-f"><strong>Where the fields meet\.</strong>\s*(.*?)</p>', inner, re.S)
+    rows = ''
+    if two:
+        rows += '<p class="lg-row lg-two"><span class="lg-l">Both directions</span> %s</p>' % two.group(1)
+    if fields:
+        rows += '<p class="lg-row lg-fields"><span class="lg-l">Where the fields meet</span> %s</p>' % fields.group(1)
+    return (title.group(1) if title else ''), rows
+
+
 def add_logic_boxes(body, slug):
     """each box goes before the chapter's "In everyday life" (or "You, in all your relationships", or "Common mix-ups"),
-    or at the end of the chapter when it has none of them"""
+    or at the end of the chapter when it has none of them. voice18 (owner): one side element per chapter, "Two ways to
+    read this": the chapter's two-way translation and its "where the fields meet" join the situation box, or make a box
+    of their own in the same style when the chapter has no situation"""
+    tw = TW_ASIDE.search(body)
+    tw_title, tw_rows = two_ways_rows(tw.group(1)) if tw else ('', '')
+    if tw:
+        body = body[:tw.start()] + body[tw.end():]
     boxes = logic_boxes(slug)
-    if not boxes:
+    if boxes:
+        h = ''.join(logic_box(b) for b in boxes)
+        if tw_rows:
+            k = h.rfind('<p class="lg-box-end">')
+            h = h[:k] + tw_rows + h[k:]
+    elif tw_rows:
+        import pocket
+        h = ('<aside class="lg-box tw-only no-bubble no-cheer no-dive" data-no-bubble aria-label="%s" id="tw-%s">'
+             '<p class="lg-box-k">%s<span>%s</span></p><p class="lg-box-t">%s</p>%s</aside>') % (
+            esc(LOGIC['kicker']), slug, pocket.puzzle_svg(), esc(LOGIC['kicker']), tw_title, tw_rows)
+    else:
         return body
-    h = ''.join(logic_box(b) for b in boxes)
     m = LOGIC_BEFORE.search(body)
     return (body[:m.start()] + h + body[m.start():]) if m else body + h
 
@@ -415,33 +462,28 @@ def s_chapter(e, book, here, where, namer=None, panels=False):
 def title_page(book):
     return ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s · Book %s</p>'
             '<p class="ps-title-t">%s</p><p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div>'
-            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+            '<div class="ps-title-by"><p class="ps-title-a">by %s</p><p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
         book['color'], mark('titlep'), esc(SERIES_TITLE), book['n'], esc(book['title']), esc(book['sub']),
         series_site.art(book['art']), B.AUTHOR)
 
 
 def copyright_page(book, workbook=False, bw=False):
-    # printfix13: the ISBN line is always there; until the owner buys ISBNs it carries the placeholder from series.json
-    # (finalfix15: from the one "isbn" block there; the workbook's black-and-white edition has its own)
-    isbn = '<p>ISBN: %s (paperback%s)</p>' % (esc((book.get('isbn_bw') if bw else book.get('isbn')) or CFG.get('isbn_placeholder', '[to be added]')),
-                                             ', black-and-white edition' if bw else '')
+    # voice18 (owner, bookqa18 M5): the paperbacks use KDP's free ISBNs, which KDP prints in the barcode, so no ISBN line here,
+    # and the imprint is KDP's "Independently published"
     what = 'this workbook' if workbook else 'this book'
     s = '<section class="ps-copy pe-only"><div class="ps-copy-in">'
-    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Published by %s, spreadloveandacceptance.com.</p>' % (
-        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR, esc(CFG.get('publisher', "Christian's Lab").replace("'", '’')))
-    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>%s' % (
-        B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '', isbn)
+    s += '<p><em>%s</em>%s: <em>%s</em>.<br>By %s. Independently published.</p>' % (
+        esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
+    s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>' % (
+        B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '')
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
-          'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com”.</p>') % (what, esc(SERIES_TITLE))
+          'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % (what, esc(SERIES_TITLE))
     s += ('<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>')
-    s += ('<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, '
-          'that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. '
-          'If you are in danger now, call your local emergency number.</p>') % SITE
+          'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>')
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
-        s += ('<p>The research the chapters mention is listed in short at the back. The full list, with what each study found and links, is at '
+        s += ('<p>The research the chapters mention is listed briefly at the back. The full list, with what each study found and links, is at '
               '<a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>') % SITE
     s += '<p>Set in Lora, Fraunces and IBM Plex Mono.</p></div></section>'
     return s
@@ -456,8 +498,8 @@ def meet_page(book, found=()):
     wp = next((hints.WP[k] for (kind, k) in found if kind == 'wp' and k in hints.WP), hints.WP.get('wp03'))
     tl = next((hints.TL[k] for (kind, k) in found if kind == 'tool' and k in hints.TL), None)
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
-    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s”. '
-          'Every workpaper is free to print or to fill in on the website, and the book gives a code to scan for each one. '
+    s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s.” '
+          'Every workpaper is free to print or to fill out on the website, and the book gives a code to scan for each one. '
           '<em>%s</em> has them all in one place, on big pages.</p>'
           '<p>%s <strong>A tool</strong> is a helper you use on the website%s. You use it and it gives you something back.</p>'
           '<p class="ps-meet-note">Workpapers and tools are kept in separate lists. Both are free and need no account, and what you '
@@ -468,13 +510,13 @@ def meet_page(book, found=()):
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Professor Puddles</strong>, a raindrop in a mortarboard, gives most of the hints, and answers questions on the website.</span></li>' % hints.SVG_PUDDLES
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Tidbit</strong>, the quick, curious pup, points you at something to try.</span></li>' % hints.SVG_TIDBIT
     s += '<li><span class="bh-badge" aria-hidden="true">%s</span><span><strong>Sugarfoot</strong>, the slower, steadier pup, turns up when a page needs a calmer pace.</span></li>' % hints.SVG_SUGARFOOT
-    s += '</ul><p class="ps-meet-note">They keep to the lighter pages. Where a chapter talks about crisis, deep grief or being hurt, the pages stay quiet and plain.</p>'
+    s += '</ul><p class="ps-meet-note">They keep to the lighter pages.</p>'
     # voice17: the maker's own words, quoted exactly from /about.html (nothing here is written for him)
     s += ('<div class="ps-maker"><p class="ps-meet-h">From the person who made this</p>'
           '<blockquote><p>“I spent my career as a government auditor and audit manager in tax enforcement, internal controls and compliance.” '
           '“Everyone else seemed to have been handed a set of instructions about being human that nobody ever gave me, so I went looking for them myself.” '
           '“Everything here exists so that you can do the same thing in far less time than it took me.”</p></blockquote>'
-          '<p class="ps-meet-note">Christian, quoted from the About page at spreadloveandacceptance.com/about. Where the chapters say “I”, '
+          '<p class="ps-meet-note">Christian, quoted from the About page at spreadloveandacceptance.com/about. Where the chapters say “I,” '
           'they speak for the website and these books; any fact about Christian in them comes from that page.</p></div></section>')
     return s
 
@@ -527,13 +569,14 @@ def about_page(book, namer):
             esc(lab), esc(B.SHORT[slug]), esc(B.short_address(B.href(slug))), esc(tail))
     s += ('<table class="ps-about-t"><thead><tr><th scope="col">Here</th><th scope="col">About</th><th scope="col">Free online at spreadloveandacceptance.com/book</th></tr></thead>'
           '<tbody>%s</tbody></table>') % rows
-    others = '; '.join('%s, <em>%s</em>, %s' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
-                       for b in books() if b is not book)
+    # books-final9: one plain sentence per book (no semicolon list)
+    others = ' '.join('%s, <em>%s</em>, is %s.' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
+                      for b in books() if b is not book)
     # a real example of a reference to another book: its first chapter and the page it starts on
     eb = next(b for b in books() if b['n'] == (2 if book['n'] != 2 else 1))
     epage = namer.other_page(eb['chapters'][0])
     example = 'Book %d, Chapter 1%s' % (eb['n'], (' (page %s)' % epage) if epage else '')
-    s += '<p>%s %s. %s.</p>' % (ab['series_lead'], others, ab['refs'].replace('{example}', example))
+    s += '<p>%s %s %s.</p>' % (ab['series_lead'], others, ab['refs'].replace('{example}', example))
     s += '<p class="ps-about-h">Five big ideas</p><p class="ps-about-small">%s</p><ul class="ps-about-ideas">%s</ul>' % (
         ab['ideas_lead'], ''.join('<li><strong>%s.</strong> %s</li>' % (esc(t), d) for t, d in ab['ideas']))
     s += '<p class="ps-about-small">%s %s</p></section>' % (ab['program'], esc(MADE_UP))
@@ -563,7 +606,7 @@ def research_short(book, here):
     n = sum(len(v) for v in notes.values())
     s = '<section class="pe-back ps-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (
         book['color'], book['tint'], mark('notes'))
-    s += ('<div class="ps-online-box">%s<p>The %d studies and books these chapters mention, in short. Each one was looked up and checked. The full list, '
+    s += ('<div class="ps-online-box">%s<p>The %d studies and books these chapters mention, briefly. Each one was looked up and checked. The full list, '
           'with what each study found, how strong the finding is and where to read it, is free online: '
           '<span class="ps-addr">spreadloveandacceptance.com/research</span>.</p></div>') % (qr('/research.html'), n)
     for slug in book['chapters']:
@@ -609,8 +652,8 @@ def series_items():
 def logic_free_page(book, epub=False):
     """logicbook14: one short page near the end of each book: the free situations online, and the pocket guide"""
     n = len(POCKET['items'])
-    words = ('<p class="pe-back-lede">The “Another way to see it” boxes in this book come from a free page on the website. It has more than seventy everyday '
-             'reactions that can look odd, rude or over the top from outside, each laid out in the same six parts, with the other person’s side and one small step.</p>'
+    words = ('<p class="pe-back-lede">Most of the “Two ways to read this” boxes in this book hold a situation from a free page on the website. It has more than seventy everyday '
+             'reactions that can look odd or over the top from outside, each laid out in the same six parts, with the other person’s side and one small step.</p>'
              '<p>You can type what happened in your own words and see the closest situations, pick another picture when the first doesn’t click, and build a card of '
              'your own. It is free, with no account, and what you type stays on your device.</p>'
              '<p>The pocket guide in this series, <em>%s</em>, collects %d of them in print, one to a page.</p>') % (esc(POCKET['title']), n)
@@ -621,6 +664,50 @@ def logic_free_page(book, epub=False):
             '<h1 class="pe-back-h">The Logic Behind It: more examples, free online</h1>%s'
             '<div class="ps-logic-code">%s<p><strong>Scan to open</strong>Or type the address.<span class="ps-addr">spreadloveandacceptance.com/the-logic-behind-it</span></p></div>'
             '</section>') % (book['color'], book['tint'], mark('logic'), __import__('pocket').puzzle_svg(), words, qr(LOGIC_PAGE))
+
+
+IDEAS = json.load(open(os.path.join(ROOT, 'tools', 'book', 'ideas-map.json'), encoding='utf-8'))
+
+
+def ideas_map(book, chs, epub=False, pocket_sections=None):
+    """voice18 (owner, polymath-lens.md): "How the ideas connect", one page. The seven roots in the middle, the thirteen
+    fields around them, with the chapters (or, in the pocket guide, the sections) where each comes up. Plain title, and
+    nothing about who wrote the book."""
+    where_f, where_r = {}, {}
+    if pocket_sections:
+        for sec_key, sec_label in pocket_sections:
+            for f in IDEAS['pocket'].get(sec_key, []):
+                where_f.setdefault(f, []).append(sec_label)
+    else:
+        for slug in chs:
+            c = IDEAS['chapters'].get(slug)
+            if not c:
+                continue
+            lab = chapter_label(slug, book)[0]
+            for f in c['fields']:
+                where_f.setdefault(f, []).append(lab)
+            for r in c['roots']:
+                where_r.setdefault(r, []).append(lab)
+    unit = 'In' if pocket_sections else 'Chapter'
+    def at(xs):
+        if not xs:
+            return ''
+        if pocket_sections:
+            return '<span class="ps-ideas-ch">In: %s</span>' % esc(', '.join(xs))
+        return '<span class="ps-ideas-ch">%s %s</span>' % ('Chapters' if len(xs) > 1 else 'Chapter', esc(', '.join(xs)))
+    cards = ''.join('<div class="ps-ideas-f"><b>%s</b>%s%s</div>' % (esc(f['name']), esc(f['idea'][0].upper() + f['idea'][1:]) + '.', at(where_f.get(f['key'], [])))
+                    for f in IDEAS['fields'])
+    roots = ''.join('<li><b>%s</b> %s%s</li>' % (esc(r['name']), esc(r['line']), (' <span class="ps-ideas-ch">%s</span>' % esc(', '.join(where_r[r['key']]))) if where_r.get(r['key']) else '')
+                    for r in IDEAS['roots'])
+    lede = ('Many fields of study turn up in %s, from music to economics, and underneath them the same seven roots keep showing through. Learn a root once and you '
+            'can carry it from one field to the next: if a budget needs a safety margin, so does a tired person.') % ('this guide' if pocket_sections else 'this book')
+    note = 'Holistic therapies, laughter and aromatherapy appear only in their plain, everyday parts. The research on them is modest or still growing.'
+    body = ('<p class="pe-back-lede">%s</p><div class="ps-ideas-map"><div class="ps-ideas-roots"><p class="ps-ideas-rk">The seven roots</p><ul>%s</ul></div>%s</div>'
+            '<p class="ps-ideas-note">%s</p>') % (esc(lede), roots, cards, esc(note))
+    if epub:
+        return '<section class="pe-back ps-ideas" id="ideas"><h1 class="pe-back-h">How the ideas connect</h1>%s</section>' % body
+    return ('<section class="pe-back ps-ideas no-bubble no-cheer no-dive" data-no-bubble id="ideas" style="--pc:%s;--pt:%s">%s'
+            '<h1 class="pe-back-h">How the ideas connect</h1>%s</section>') % (book['color'], book['tint'], mark('ideas'), body)
 
 
 def series_page(book):
@@ -662,8 +749,12 @@ def faq_page(book, namer, epub=False):
         return ''
     h = ''.join('<h2 class="ps-faq-q">%s</h2>%s' % (esc(q), a) for q, a in items)
     return ('<section class="pe-back ps-faq no-bubble" data-no-bubble id="faq" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Questions people ask</h1>'
-            '<p class="pe-back-lede">%s</p>%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
-                                                           _series_html(h, book, namer, epub, 'faq'))
+            '<p class="pe-back-lede">%s</p>%s%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
+                                                           _series_html(h, book, namer, epub, 'faq'), CARE_LINE if book['n'] in (1, 2, 3) else '')
+
+
+# book20 (owner, 24 Oct): plain suicide guidance once per book, in the back matter only, small and plain (Books 1 to 3)
+CARE_LINE = '<p class="ps-care-line">If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today.</p>'
 
 
 def month_page(book, namer, epub=False):
@@ -741,11 +832,11 @@ SHOWCASE = [
     ('ask', 'Ask Professor Puddles', 'Tell a cheerful raindrop professor what’s going on and get kind next steps and words to say. His answers are written in advance, never made up on the spot.', '/ask.html', 'puddles'),
     ('chat', 'The Chat analyzer', 'Check how a text may land before you send it, read one you got, or look at a whole chat to see where it turned.', '/signal-translator.html', 'chat'),
     ('journeys', 'Guided journeys', 'Three to six small steps for what’s going on, from the same argument again to a new blended family.', '/journeys.html', 'journey'),
-    ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill in on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
+    ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill out on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
     ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
     ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
-    ('coins', 'Kindness Coin Pusher', 'A cosy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
+    ('coins', 'Kindness Coin Pusher', 'A cozy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
     ('garden', 'The Night Garden', 'A calm breathing game. A flower blooms with every slow breath, and there are fireflies to guide and a lily pond to fill.', '/night-garden.html', 'garden'),
     ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
 ]
@@ -765,7 +856,7 @@ def showcase(book, epub=False):
     c = book['color']
     head = ('<p class="ps-sc-k">Free on the website</p><h1 class="ps-sc-h">Your book has a home online</h1>'
             '<p class="ps-sc-lede">Everything in this book is free at spreadloveandacceptance.com, along with tools that do the sums for you, '
-            'guided journeys, a raindrop professor with kind answers and a few cosy games. There is no account and no paid version.</p>')
+            'guided journeys, a raindrop professor with kind answers and a few cozy games. There is no account and no paid version.</p>')
     home = ('<div class="ps-sc-home">%s<p><strong>Start here</strong>Scan with your phone’s camera to open the home page.'
             '<span class="ps-addr">spreadloveandacceptance.com</span></p></div>') % ('' if epub else qr('/'))
 
@@ -786,7 +877,7 @@ def showcase(book, epub=False):
     s = '<div class="pe-verso-pad pe-only" data-for="free"></div>'
     s += ('<section class="pe-back ps-showcase ps-sc-left no-bubble" data-no-bubble id="free" style="--pc:%s;--pt:%s">%s%s%s'
           '<div class="ps-sc-grid">%s</div></section>') % (c, book['tint'], mark('free'), head, home, left)
-    s += ('<section class="pe-back ps-showcase ps-sc-right no-bubble" data-no-bubble style="--pc:%s;--pt:%s"><p class="ps-sc-k">Cosy, calm and free</p>'
+    s += ('<section class="pe-back ps-showcase ps-sc-right no-bubble" data-no-bubble style="--pc:%s;--pt:%s"><p class="ps-sc-k">Cozy, calm and free</p>'
           '<div class="ps-sc-grid">%s</div>%s</section>') % (c, book['tint'], right, promise)
     return s
 
@@ -807,7 +898,8 @@ def page_rules(book, here_order, back_keys):
     num = 'content:counter(page);font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:8.8pt;color:#2B2620;vertical-align:top;padding-top:2.6mm;border-top:.4pt solid #CDBF98;'
     edge = 'vertical-align:top;border-top:.4pt solid #CDBF98;'
     q = lambda t: '"%s"' % t.replace('\\', '').replace('"', '\\"')
-    verso = '%s · Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
+    # voice18 (bookqa18 M1): the short form on left pages, so the footer stays well clear of the gutter
+    verso = 'Book %d · %s' % (book['n'], book['title'])
 
     def rules(nm, recto):
         return ('@page %s:right{@bottom-left{content:%s;%s}@bottom-center{content:"";%s}@bottom-right{%stext-align:right}}'
@@ -830,7 +922,7 @@ def google_fonts():
 
 
 def head(title, css):
-    return ('<!doctype html>\n<html lang="en-GB">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    return ('<!doctype html>\n<html lang="en-US">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '<meta name="robots" content="noindex">\n<title>%s</title>\n'
             '%s\n<link rel="stylesheet" href="/assets/css/book-print.css">\n%s\n%s\n%s\n<link rel="stylesheet" href="%s">\n</head>\n') % (
         esc(title), google_fonts(), B.EX_CSS, front_back.STYLE, hints.CSS, css)
@@ -903,6 +995,7 @@ def build_book(book, where):
     extra.append(('wp-tools', 'Workpapers and tools in this book', wt_html))
     extra += numbers
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
+    extra.append(('ideas', 'How the ideas connect', ideas_map(book, chs)))
     back = [(k, t) for k, t, _h in extra] + [('notes', 'Research notes'), ('free', 'Free on the website'), ('logic', 'The Logic Behind It: more examples'),
                                              ('series', 'The series'), ('jot', 'Your notes')]
     for k, t in back:
@@ -968,13 +1061,27 @@ WB_SUMS = {'wp01', 'wp02', 'wp03', 'wp04', 'setup'}
 # printfix13: what each sheet's opening page says where no book chapter teaches it, and how to read the answers
 WB_EXPLAINED = {
     'wp12': ('Book 3, Chapter 1 (Why we get out of tune), and in full, free online at spreadloveandacceptance.com/workpapers/wp-12-same-moment-different-speeds',
-             'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so choose that moment for Part C. '
-             'A gap in speed is about pace and says nothing about how much either of you cares. If your answers barely differ, the friction may come '
-             'from somewhere else, such as tiredness or pressure from outside.'),
+             'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so that’s the moment for Part C. '
+             'A gap in speed is about pace. It says nothing about how much either of you cares. If your answers barely differ, the friction is probably coming '
+             'from somewhere else, tiredness or pressure from outside.'),
     'wp14': ('Book 4, Chapter 3 (Full tanks and different angles), and in full, free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
-             'In Part B, count the tense moments that fell on heavy days. If most of them did, outside pressure is doing much of the damage, and a plan for '
+             'In Part B, count the tense moments that fell on heavy days. If most did, outside pressure is doing a lot of the damage, and a plan for '
              'the pressure (Part D) will help more than talking about each other. If most came on light days, the friction really does start between you, '
-             'and Say it so it lands or the monthly look-back is a good next step.'),
+             'and Say it so it lands or the monthly look-back is the next thing to try.'),
+}
+# voice18: a short note before each workpaper's blank copies, in the books' voice (the people in them are made up)
+WB_NOTE = {
+    'wp02': 'Two minutes, about yourself and nobody else. You may be surprised by your own number. A score of 0.65 on a Tuesday tells you something about Tuesday and nothing whatsoever about your character.',
+    'wp11': 'Make this on a dull, ordinary day, ideally with a cup of tea. Trying to write a calm-down plan in the middle of a fight is like reading the instructions on a fire extinguisher while the pan is still burning.',
+    'wp09': 'For one thing that actually stung, not a list of grievances. It’s a check on your side of the conversation. Most people find the first draft of their reply is about twice as long as it needs to be.',
+    'wp13': 'Ninety seconds, once a day, both of you. It’s meant to be almost too small to bother with, which is exactly why it keeps going. If you miss a day, write nothing and carry on tomorrow.',
+    'wp12': 'Fill in your own rows first, before you look at theirs. Often one moment stands out a mile, bedtime, say, or the first ten minutes after someone gets home.',
+    'wp14': 'A line each evening, about your own day. At the end of the week, the question is simple. Was it us, or was it everything else? Quite often it was everything else.',
+    'wp01': 'One ordinary week. Write only what you did or saw yourself, including the thinking jobs, the remembering and the booking. Nobody fills in anybody else’s side, however sure they are.',
+    'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list, because they are the reason you’re doing this. A made-up example of how it tends to go: when Sian and Huw did theirs at the kitchen table, nineteen jobs went on the list and fourteen had a name within five minutes. The other five, which included the car registration and Huw’s mom’s birthday, took the rest of the evening, and the car registration turned out to be two weeks overdue.',
+    'setup': 'The sums from Book 4, done with a pencil. You’ll need a week of Who did what, your job list, and each person’s own tank score. If anyone’s tank is 0.60 or more, start there, whatever the total says.',
+    'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock. Another made-up example: Ifan and Kemal’s first look-back found the trash slipped three weeks out of four, every time on the week Kemal was on late shifts, so Ifan took the trash and Kemal took the Sunday shop. It took eleven minutes, most of it spent finding a pen.',
+    'wp15': 'The Sunday walk, the birthday breakfast, the silly thing you always say at the door. Every few months, see which are still alive. Nobody is to blame for one that faded.',
 }
 ALL_FOUND = {}
 
@@ -998,7 +1105,7 @@ def wb_sheet_fix(key, sh):
         sh = sh.replace('<p class="pe-ws-opts">Part B (optional), Kind ways to say no: say why the request is fair, say honestly what you have left, and offer something instead.</p>',
                         '<h3>Part B (optional): Kind ways to say no</h3><p class="pe-ws-opts">For a request you can’t take on this week: say why the request is fair, '
                         'say honestly what you have left, and offer something instead.</p><div class="wb-lines">%s</div>' % ('<div></div>' * 6))
-        sh = sh.replace('How the score works: “How the numbers work”, at the back.', 'How the score works: “How the numbers work”, page %s of this workbook.' % pg('numbers'))
+        sh = sh.replace('How the score works: “How the numbers work,” at the back.', 'How the score works: “How the numbers work,” page %s of this workbook.' % pg('numbers'))
     if key == 'wp15':
         sh = sh.replace('<h3>Part C: One to restart, or start</h3>',
                         '<h3>Part B: Count them</h3><div class="pe-ws-meta"><span>Alive ____</span><span>Fading ____</span><span>Stopped ____</span><span>New idea ____</span></div>'
@@ -1019,7 +1126,7 @@ SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the 
                '<div class="pe-ws-meta"><span>Hours, person A ____</span><span>Hours, person B ____</span><span>Total ____</span></div>'
                '<div class="pe-ws-meta"><span>A’s share: hours ÷ total × 100 = ____ %</span><span>B’s share = ____ %</span></div>'
                '<div class="pe-ws-meta"><span>Balance = 1 − (the gap between the two shares) ÷ 100 = ____</span></div>'
-               '<p class="pe-ws-opts">Three or more of you, or an uneven split you agreed on purpose: see “How the numbers work”.</p>'
+               '<p class="pe-ws-opts">Three or more of you, or an uneven split you agreed on purpose: see “How the numbers work.”</p>'
                '<h3>Part B: Ownership (does each job have a name?)</h3>'
                '<div class="pe-ws-meta"><span>Jobs with an owner ____</span><span>All jobs on the list ____</span><span>Ownership = owned ÷ all = ____</span></div>'
                '<h3>Part C: Stress tanks</h3>'
@@ -1032,12 +1139,12 @@ SETUP_SHEET = ('<section class="pe-ws-sheet"><div class="pe-ws-head"><h2>Is the 
                '<h3>Part E: The biggest shortfall</h3>'
                '<div class="pe-ws-meta"><span>Balance: 0.40 − ____ = ____</span><span>Ownership: 0.35 − ____ = ____</span><span>Tank: 0.25 − ____ = ____</span></div>'
                '<div class="pe-ws-meta"><span>The biggest one is ____________</span><span>One small change we’ll try ____________</span><span>Look again on ____</span></div>'
-               '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work”, at the back of this workbook.</p></section>')
+               '<p class="pe-ws-foot">It describes the setup, never a person. A worked example: “How the numbers work,” at the back of this workbook.</p></section>')
 
 
 def build_workbook(where, bw=False):
-    """the workbook (8.5 x 11 in). finalfix15: two editions from the same pages. The colour edition (workbook.html) and a
-    black-and-white interior (workbook-bw.html, bw=True), printed in shades of grey for KDP's cheaper black ink. Neither
+    """the workbook (8.5 x 11 in). finalfix15: two editions from the same pages. The color edition (workbook.html) and a
+    black-and-white interior (workbook-bw.html, bw=True), printed in shades of gray for KDP's cheaper black ink. Neither
     has blank pages: each workpaper's opening page follows the last sheet of the one before, so a two-page sheet that
     starts on a right-hand page runs on overleaf."""
     wb = CFG['workbook']
@@ -1064,7 +1171,7 @@ def build_workbook(where, bw=False):
         for s_ in ALL_FOUND.get(('wp', key), []):
             b = where.get(s_)
             if b:
-                lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].lower().replace('afterword', 'the afterword'), B.SHORT[s_])
+                lab = 'Book %d, %s (%s)' % (b['n'], chapter_label(s_, b)[1].replace('Afterword', 'the afterword'), B.SHORT[s_])  # books-final9: capital C, as everywhere else
                 if lab not in ins:
                     ins.append(lab)
         fill = ('/workpapers/fill/%s.html' % w['code'].lower()) if key != 'setup' else '/is-the-setup-working.html'
@@ -1077,12 +1184,14 @@ def build_workbook(where, bw=False):
         if key in WB_EXPLAINED:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(WB_EXPLAINED[key][0])
         elif ins:
-            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc('; '.join(ins[:4]))
+            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(' · '.join(ins[:4]))
         s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
-              'where you can also fill the form in on screen.</dd></div></dl>') % copies
+              'where you can also fill the form out on screen.</dd></div></dl>') % copies
+        if key in WB_NOTE:
+            s += '<p class="wb-note">%s</p>' % esc(WB_NOTE[key])
         if key in WB_EXPLAINED:
             s += '<p class="wb-read"><strong>How to read your answers.</strong> %s</p>' % esc(WB_EXPLAINED[key][1])
-        s += ('<div class="ps-online-box">%s<p><strong>Fill it in on screen, free.</strong> %s '
+        s += ('<div class="ps-online-box">%s<p><strong>Fill it out on screen, free.</strong> %s '
               '<span class="ps-addr">%s</span></p></div>') % (
             qr(fill), 'The online version does the sums for you and keeps what you type on your own device.' if key in WB_SUMS
             else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(B.short_address(fill)))
@@ -1107,33 +1216,32 @@ def build_workbook(where, bw=False):
     ol += [['Notes', 'wb-notes', 0], ['The series', 'series', 0]]
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
-             '<p class="ps-title-p">Christian’s Lab<br>spreadloveandacceptance.com</p></div></section>') % (
+             '<p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
         wb['color'], mark('titlep'), esc(SERIES_TITLE), esc(wb['title']), esc(wb['sub']), series_site.art(wb['art']), B.AUTHOR)
     front += copyright_page(book, workbook=True, bw=bw)
     front += '<nav class="pe-toc ps-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc))
     front += ('<section class="wb-how pe-only" id="wb-how">%s<h1>How to use this workbook</h1>'
-              '<p class="wb-lede">Every workpaper from the books, on big pages with room to write. Write in pencil if you like. There are no right answers, '
-              'and nothing here is a test.</p><ul class="wb-how-list">'
-              '<li><strong>One sheet, one go.</strong> Each workpaper starts with a short page: when to use it, how long it takes, who fills it in, and which book '
-              'explains it. Then come the blank copies, one after another.</li>'
-              '<li><strong>On your own, or together.</strong> Some sheets are only about you; fill those in for yourself, never for someone else. On shared sheets, '
-              'each person writes only their own rows.</li>'
-              '<li><strong>Describe what happened, not who someone is.</strong> The sheets look at the setup and the week, not at anyone’s character.</li>'
-              '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet in free on the website, where it does the sums and keeps '
+              '<p class="wb-lede">Every workpaper from the books, on big pages with room to write. Pencil is fine. Crossing out is fine. There are no right answers, '
+              'and nothing here is marked.</p><ul class="wb-how-list">'
+              '<li><strong>One sheet, one go.</strong> Each workpaper opens with a short page that says when to use it, how long it takes, who fills it in and which book '
+              'explains it. The blank copies follow, one after another.</li>'
+              '<li><strong>On your own, or together.</strong> Some sheets are only about you, so fill those in for yourself and never for anyone else. On shared sheets, '
+              'each person writes only their own rows, even when it’s very tempting to help.</li>'
+              '<li><strong>Write what happened.</strong> “Trash missed Tuesday” is useful. “Typical” is not. The sheets look at the setup and the week, and leave everyone’s character alone.</li>'
+              '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet out free on the website, where it does the sums and keeps '
               'what you type on your own device.</li>'
-              '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine. If you feel afraid of someone you live with, '
-              'a worksheet is not the answer: spreadloveandacceptance.com/safety lists free, private help.</li></ul>'
-              '<p class="wb-how-h">Six gentle weeks</p><p>If you want an order to follow, the six-week program puts the workpapers to work one small step a week. '
-              'The next page is a planner for it.</p></section>') % mark('wb-how')
-    weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', '—'),
+              '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
+              '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
+              'The next page is a planner for it. Most people miss a week somewhere. That’s built in.</p></section>') % mark('wb-how')
+    weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', 'None yet'),
              ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what · WP-13 daily check-in'),
              ('Week 2', 'Give every job one owner.', 'WP-03 One owner per job'),
              ('Week 3', 'Notice how much each of you is carrying.', 'WP-02 How much are you carrying?'),
              ('Week 4', 'Talk about it kindly.', 'WP-09 Say it so it lands · WP-11 Calm-Down Kit'),
              ('Week 5', 'Look at the pace and the pressure.', 'WP-12 Same moment, different speeds · WP-14 Is it us?'),
              ('Week 6', 'Make it last.', 'WP-04 What keeps coming back? · WP-15 rituals')]
-    front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Missing a week is fine; '
-              'pick it up again where you left off. The full program is free at spreadloveandacceptance.com/prog-01.</p>'
+    front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Miss one and you just carry on '
+              'where you left off. The full program is free at spreadloveandacceptance.com/prog-01.</p>'
               '<table class="wb-six-t"><thead><tr><th>Week</th><th>The step</th><th>Workpapers</th><th>Start date</th><th>Done</th></tr></thead><tbody>%s</tbody></table>'
               '<p class="wb-how-h">At the end: what changed?</p><div class="pe-ws-box wb-tall"><b>One thing that is easier now</b></div>'
               '<div class="pe-ws-box wb-tall"><b>One thing to keep an eye on</b></div></section>') % (
@@ -1203,14 +1311,14 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     others = ''.join('<li style="--bc:%s"><span>%s</span> %s</li>' % (b['color'], label(b), esc(b['title'])) for b in series_items())
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
     title = item.get('short_title') or item['title']
-    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.com/the-logic-behind-it') if pocket else (
+    free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.<wbr>com/<wbr>the-logic-behind-it') if pocket else (
         '%s/book/' % SITE, 'Free to read online', 'Every chapter, short and full, at spreadloveandacceptance.com/book')
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
                  '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
-                 '.cv-free { max-width: 2.6in; font-size: 7.8pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
+                 'div.cv-free { max-width: 2.25in; font-size: 7.3pt; } .cv-free .pe-qr { flex-basis: .82in; width: .82in; height: .82in; }') if pocket else ''
     return '''<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
 %(gfonts)s
 <style>
 %(fonts)s
@@ -1302,6 +1410,10 @@ def jobs():
               'cover': 'cover-' + POCKET['id'], 'title': POCKET['title'], 'n': 0, 'min_pages': 72, 'max_pages': 80})
     j.append({'id': BOXSET['id'], 'kind': 'front', 'trim': CFG['trim_in'], 'cover': 'cover-' + BOXSET['id'], 'title': BOXSET['title'], 'n': 0})
     j.append({'id': 'measure', 'kind': 'measure', 'trim': CFG['trim_in'], 'colPx': COL_PX['book'], 'only_when_named': True})
+    # voice18: the owner's pricing rule (series.json price_rule): build_pdfs.js sets the list price from the final page count
+    for x in j:
+        if 'price' in x and CFG.get('price_rule'):
+            x['price_rule'] = CFG['price_rule']
     return j
 
 
@@ -1335,7 +1447,7 @@ def main():
     if 'tailgating' in boxes:
         ERRORS.append('the road-rage tip is for the website only (logic-boxes.json)')
     B.write(os.path.join(SRC, 'series-src.json'), json.dumps({'jobs': jobs(), 'costs': COSTS, 'paper_in': PAPER_IN,
-                                                               'paper_note': 'KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)'}, indent=1) + '\n')
+                                                               'paper_note': 'KDP standard color (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)'}, indent=1) + '\n')
     # the series on /book/ (also made by build_book.py's build_home, so a full rebuild keeps it)
     series_site.patch_home(os.path.join(ROOT, 'book', 'index.html'))
     # owner17: and the four books on /book/download.html (page counts from book/print/series.json; run again after build_pdfs.js)
@@ -1357,6 +1469,12 @@ def main():
         POCKET['title'], pstats['situations'], pstats['sections'], pstats['sides']['nd'], pstats['sides']['nt'], pstats['sides']['all'], pstats['rulebooks']))
     print('series: %d "Another way to see it" boxes (%s)' % (len(LOGIC['boxes']), ', '.join('Book %d: %d' % (b['n'], len([x for x in LOGIC['boxes'] if x['book'] == b['n']])) for b in books())))
     print('series: %d QR codes, all checked against a page' % len(set(QRS)))
+    # voice18 (owner, bookqa18 M5): free KDP ISBNs, so no placeholder may ever be printed
+    import glob as _glob
+    for _f in _glob.glob(os.path.join(SRC, '*.html')):
+        _t = open(_f, encoding='utf-8').read()
+        if '[to be added]' in _t or re.search(r'ISBN:?\s*\[', _t):
+            ERRORS.append('%s prints an ISBN placeholder; the paperbacks use free KDP ISBNs and print no ISBN line' % os.path.basename(_f))
     if ERRORS:
         for err in ERRORS:
             print('series: ERROR', err)

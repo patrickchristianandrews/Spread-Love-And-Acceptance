@@ -45,7 +45,7 @@ def isbn(cfg, item_id, fmt):
 
 def put_isbns(cfg, item):
     """copies an item's ISBNs from the "isbn" block onto it, as the builders read them: isbn (the paperback; the workbook's
-    colour edition), isbn_bw (the workbook's black-and-white edition) and isbn_ebook"""
+    color edition), isbn_bw (the workbook's black-and-white edition) and isbn_ebook"""
     i = item['id']
     item['isbn'] = isbn(cfg, i, 'paperback') or isbn(cfg, i, 'paperback-colour')
     item['isbn_bw'] = isbn(cfg, i, 'paperback-bw')
@@ -138,10 +138,13 @@ def home_html():
                      '<a class="tol-btn is-quiet" href="/book/download.html#%s">%s</a></p>%s</div></li>') % (
             b['color'], cover_img(b['id'], 'Cover of Book %d, %s' % (b['n'], b['title'])), b['n'], esc(b['title']), esc(b['line']), meta, first,
             book_anchor(b), pdf_label(m), shop_row(b['id'])))
+    # voice18: the paperbacks under 100 pages (the pocket guide and the workbook) are grouped as the short editions,
+    # after the books, each under its own name
+    short = []
     w = c['workbook']
     m = made.get(w['id'], {})
     meta = 'Every workpaper, to fill in by hand' + (' · %d large pages' % m['pages'] if m.get('pages') else '')
-    rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+    short.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                  '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/workpapers/fill/index.html">Fill them in free online</a>%s</p>%s</div></li>') % (
         w['color'], cover_img(w['id'], 'Cover of %s' % w['title']), esc(w['title']), esc(w['line']), meta, free_pdf(w['id'], m), shop_row(w['id'])))
     try:
@@ -152,16 +155,19 @@ def home_html():
     if pk:
         m = made.get(pk['id'], {})
         meta = '%d everyday reactions, one to a page' % len(pk['items']) + (' · %d small pages' % m['pages'] if m.get('pages') else '')
-        rows.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+        short.insert(0, ('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                      '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/the-logic-behind-it.html">Every situation, free online</a>%s</p>%s</div></li>') % (
             pk['color'], cover_img(pk['id'], 'Cover of %s' % pk['title'], 768), esc(pk['title']), esc(pk['line']), meta, free_pdf(pk['id'], m), shop_row(pk['id'])))
     return ('%s\n%s\n<section class="bk-series no-bubble no-dive no-cheer" data-no-bubble id="print-series" aria-labelledby="series-h">'
             '<h2 id="series-h">The book in print</h2>'
-            '<p>The same chapters, as a series of short colour books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
+            '<p>The same chapters, as a series of short color books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
             'In print, each chapter is the short version, with a code to scan for the full one.</p>'
             '<p class="bk-series-note" data-shop-soon>Paperbacks: coming to Amazon soon. Everything here stays free to read online.</p>'
             '<p class="bk-series-note">' + EMAIL_LINE + ' ' + FREE_LINE + '</p>'
-            '<ol class="bk-series-list">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), JS, END)
+            '<ol class="bk-series-list">%s</ol>'
+            '<h3 class="bk-series-h3" id="short-editions">The short editions</h3>'
+            '<p class="bk-series-note">Two smaller companions to the books, each under a hundred pages: the pocket guide and the workbook.</p>'
+            '<ol class="bk-series-list bk-series-short">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), '\n'.join(short), JS, END)
 
 
 def patch_home(path):
@@ -277,7 +283,7 @@ def download_html():
         free.append(('<li class="bk-dl-book" id="workbook" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Workbook</p>'
                      '<h3>%s</h3><p class="bk-dl-book-line">Every workpaper in one PDF, on large pages, to print and fill in by hand. Each one is also free to fill in on screen.</p>'
                      '<p class="bk-dl-book-links"><a class="bk-dl-nomail" href="/book/print/%s" data-series="%s" download="%s"><span class="bk-dl-v">Download the workbook (PDF)</span>'
-                     '<span class="bk-dl-m" data-series-meta>%s</span></a>%s <a class="bk-dl-read" href="/workpapers/fill/index.html">Fill them in online</a></p></div></li>') % (
+                     '<span class="bk-dl-m" data-series-meta>%s</span></a>%s <a class="bk-dl-read" href="/workpapers/fill/index.html">Fill them out online</a></p></div></li>') % (
             w['color'], cover_img(w['id'], '').replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), esc(w['title']), esc(_file(w['id'], m)), esc(w['id']),
             _save_name(w['title']), _meta(m), bw_link))
     try:
@@ -295,8 +301,8 @@ def download_html():
                 pk['color'], cover_img(pk['id'], '', 768).replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), esc(pk['title']), esc(pk['line']),
                 esc(_file(pk['id'], m)), esc(pk['id']), _save_name(pk['title']), _meta(m)))
     out = ['%s\n%s' % (DL_START, DL_CSS),
-           '<section class="bk-dl-four" aria-labelledby="bk-dl-four-h"><h2 id="bk-dl-four-h">The four books</h2>'
-           '<p>The same four short books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
+           '<section class="bk-dl-four" aria-labelledby="bk-dl-four-h"><h2 id="bk-dl-four-h">The books</h2>'
+           '<p>The same short books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
            'Each chapter is the short version, with a code to scan for the full one.</p>'
            '<ul class="bk-dl-books no-bubble" data-no-bubble>%s</ul></section>' % '\n'.join(rows)]
     if free:

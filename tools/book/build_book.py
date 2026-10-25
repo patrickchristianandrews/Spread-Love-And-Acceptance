@@ -24,7 +24,7 @@ book/pdf/manifest.json; the next run of this script writes them into the package
 so printing from the browser shows the same numbers as the PDF.
 
 Change the order, a chapter's program links or the connection map below, then run it again.
-Afterwards run tools/seo/build_seo.py (new pages need their SEO lines there).
+Afterward run tools/seo/build_seo.py (new pages need their SEO lines there).
 """
 import glob
 import html
@@ -90,12 +90,12 @@ ORDER = [
         (8, 'loss', 'Grief in waves, losses nobody sees, and staying connected'),
         (9, 'minds', 'Autism, ADHD, sensory and learning differences, and meeting in the middle'),
         (10, 'values', 'What matters to you, and what philosophy offers everyday life'),
-        (11, 'healing', 'Repair, apologies that land, forgiveness, and when to get help'),
+        (11, 'healing', 'Repair, apologies that land, forgiveness and old hurts'),
         (12, 'helping', 'Support without fixing, kind limits, and not burning out'),
         (13, 'anger', 'What anger is for, the hot minutes, repair, and when it becomes harm'),
         (14, 'personality', 'Dials, not boxes: the Big Five, temperament, and how people change'),
         (15, 'love', 'Love in many forms, being known, and love across ages and relationship types'),
-        (16, 'worry', 'How anxiety works, low mood vs depression, trauma, what helps and where to get help'),
+        (16, 'worry', 'How anxiety works, low mood vs depression, trauma and what helps'),
         (17, 'groups', 'Conformity, obedience, us and them, culture, and disagreeing kindly'),
     ]
 ] + [
@@ -140,7 +140,7 @@ CONNECT = {
     'self-1-then': [('understanding-3-seeing', 'how a lens shapes what you notice in other people'),
                     ('understanding-5-belonging', 'how early trust and attachment carry into adult life'),
                     ('understanding-14-personality', 'which parts are temperament, and which can change'),
-                    ('understanding-11-healing', 'making peace with what happened, and when to get help')],
+                    ('understanding-11-healing', 'making peace with what happened, and with old hurts')],
     'self-2-now': [('understanding-9-minds', 'wiring differences: autism, ADHD and the senses'),
                    ('understanding-2-stress', 'why your weather changes how you hear things'),
                    ('chapter-3', 'the stress tank, used between two people'),
@@ -259,7 +259,7 @@ INDEX_TERMS = [
     ('balance (of the work)', r'balance'), ('battery', r'battery|batteries'), ('belonging', r'belong(?:ing)?'),
     ('bias', r'bias(?:es|ed)?'), ('bids for connection', r'bids?'), ('Big Five', r'Big Five', 1), ('blame', r'blam(?:e|ed|ing)'),
     ('boundaries, limits', r'boundar(?:y|ies)|kind limits?'), ('burnout', r'burn(?:out|ing out|ed out|t out)'),
-    ('bystander effect', r'bystanders?'), ('care, caring', r'caring|care work'), ('carers, caregiving', r'carers?|caregiv(?:er|ers|ing)'),
+    ('bystander effect', r'bystanders?'), ('care, caring', r'caring|care work'), ('caregivers, caregiving', r'carers?|caregiv(?:er|ers|ing)'),
     ('change', r'chang(?:e|es|ing)'), ('check-in', r'check-ins?'), ('closeness', r'closeness|intimacy'),
     ('communication', r'communicat(?:ion|e|ing)'), ('compassion', r'compassion(?:ate)?'), ('conflict', r'conflicts?'),
     ('conformity', r'conform(?:ity|ing|ed|s)?'), ('control, circle of', r'circle of control'), ('co-regulation', r'co-regulat(?:ion|e)'),
@@ -291,20 +291,20 @@ INDEX_TERMS = [
     ('us and them', r'us and them|in-groups?|out-groups?'), ('values', r'values'), ('vulnerability', r'vulnerab(?:le|ility)'),
     ('window of tolerance', r'window of tolerance'), ('wiring', r'wiring|wired'), ('worry', r'worr(?:y|ies|ied|ying)'),
     # people and relationships
-    ('adult children', r'grown-up (?:son|daughter|children|child)|adult children'), ('ageing, later life', r'later life|older (?:people|adults)|retire(?:d|ment)'),
+    ('adult children', r'grown-up (?:son|daughter|children|child)|adult children'), ('aging, later life', r'later life|older (?:people|adults)|retire(?:d|ment)'),
     ('babies, new parents', r'new parents?|new baby|babies|baby'), ('children', r'children|kids'), ('co-parenting', r'co-parent(?:s|ing)?|two homes'),
     ('couples', r'couples?'), ('coworkers', r'coworkers?|colleagues?'), ('divorce', r'divorce(?:d)?'), ('dorms, shared rooms', r'dorm(?:s|itory)?|roommates?'),
     ('empty nest', r'empty nest|left home'), ('ex-partners', r'ex-partners?|\bex\b'), ('faith', r'faith|prayer|church|mosque|synagogue|temple'),
     ('family', r'famil(?:y|ies)'), ('fathers, dads', r'fathers?|dads?'), ('foster care', r'foster(?:ing)?'), ('friends', r'friends?'),
-    ('grandparents', r'grandparents?|grandmother|grandfather|grandchild(?:ren)?|grandson|granddaughter'), ('housemates', r'housemates?|flatmates?'),
+    ('grandparents', r'grandparents?|grandmother|grandfather|grandchild(?:ren)?|grandson|granddaughter'), ('roommates', r'roommates?|housemates?|flatmates?'),
     ('in-laws', r'in-laws?'), ('kinship care', r'kinship'), ('managers', r'managers?'), ('marriage', r'marri(?:age|ed)'),
-    ('more than two partners', r'triads?|more than two partners|three partners'), ('mothers, mums', r'mothers?|mums?'), ('moving in', r'moving in|move in'),
+    ('more than two partners', r'triads?|more than two partners|three partners'), ('mothers, moms', r'mothers?|moms?|mums?'), ('moving in', r'moving in|move in'),
     ('neighbours', r'neighbours?'), ('parents', r'parents?|parenting'), ('partners', r'partners?'), ('siblings', r'siblings?|brothers?|sisters?'),
     ('single, living alone', r'living alone|lives alone|on your own|on my own'), ('step-parents', r'step-parents?|stepparents?|stepmum|stepdad'),
     ('teenagers', r'teen(?:s|ager|agers)?|teenage'), ('work, the workplace', r'workplace|at work|office'),
     # situations
     ('arguments', r'argu(?:ment|ments|e|ing|ed)'), ('breakups', r'break-?ups?'), ('chores', r'chores?|housework|dishes|laundry|bins'),
-    ('crisis lines', r'Samaritans|988|findahelpline|Lifeline|crisis'), ('debt, money worries', r'debts?'), ('exams', r'exams?'),
+    ('debt, money worries', r'debts?'), ('exams', r'exams?'),
     ('group chats', r'group chats?'), ('illness, long-term', r'ill(?:ness)?|chronic|long COVID|disab(?:led|ility)'), ('infidelity, affairs', r'affairs?'),
     ('money', r'money|budget|income|bills?|£'), ('online life', r'online|social media|phones?'), ('remote and hybrid work', r'remote|hybrid'),
     ('separation', r'separat(?:e|ed|ing|ion)'), ('shift work', r'shift work(?:ers?)?|night shifts?|late shifts?|on shifts'), ('suicide', r'suicid(?:e|al)|ending (?:your|their|my) life'),
@@ -918,7 +918,7 @@ def clean_for_whole(inner, slug, deep, here=None):
 PACKAGES = [
     ('whole', (1, 2, 3), 'The Whole Book', 'Every chapter, all three parts.'),
     ('for-yourself', (1, 3), 'The Book for One Person', 'Part One (self-discovery) and Part Three (understanding people): everything you can read and use on your own.'),
-    ('together', (2,), 'The Book for Two or More', 'Part Two (between us): sharing a home, work or care with partners, family, housemates, co-parents or coworkers.'),
+    ('together', (2,), 'The Book for Two or More', 'Part Two (between us): sharing a home, work or care with partners, family, roommates, co-parents or coworkers.'),
     ('understanding', (3,), 'Understanding People', 'Part Three on its own: how feelings, stress, trust, change, grief and love work.'),
 ]
 COVER = {
@@ -930,7 +930,7 @@ COVER = {
 BLURB = {
     'whole': 'A calm, practical book about the quiet work of sharing a life. It starts with you: where your lens came from, how you work today and who you are becoming. Then it looks at what happens between people who share a home, work or care. And it ends with how people work: feelings, stress, trust, change, loss, anger, love and the groups we belong to.',
     'for-yourself': 'A book you can read on your own. Part One helps you see where your lens came from, how you work today and who you are becoming. Part Three explains how people work: feelings, stress, trust, change, loss, anger, love and the groups we belong to, so the people around you make a little more sense.',
-    'together': 'A book for people who share a home, work or care: partners, family, housemates, co-parents and coworkers. Each chapter takes one idea, from the work nobody sees to a fair way to share it and a kind way to talk about it, and comes with a worksheet that puts it to use.',
+    'together': 'A book for people who share a home, work or care: partners, family, roommates, co-parents and coworkers. Each chapter takes one idea, from the work nobody sees to a fair way to share it and a kind way to talk about it, and comes with a worksheet that puts it to use.',
     'understanding': 'How people work, in plain words: feelings, stress, how we see each other, communication, trust, change, worth, loss, minds that work differently, values, repair, helping, anger, personality, love, worry and groups. Each chapter has everyday examples, words you could use and something small to try.',
 }
 
@@ -978,14 +978,12 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p><em>{ST}</em>: %s, %s.<br>By %s. Published by Spread Love &amp; Acceptance.</p>
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
 <p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “{ST}, spreadloveandacceptance.com” and don’t change it or sell it.</p>
-<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counsellor or other trained professional, and it can’t know your situation.</p>
-<p><strong>If you are not safe.</strong> If you feel afraid of someone you live with, or someone controls your money, phone or movements, that is not a problem to fix with a worksheet. <a href="%s/safety.html">spreadloveandacceptance.com/safety</a> lists free, private help. If you are in danger now, call your local emergency number.</p>
+<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
 </div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, mark('titlep'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
-                       book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE, SITE)
-    s += '\n' + fbk.get('help-now', '')
+                       book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE)
     # how to use this book
     parts_li = ''.join('<li style="--pc:%s"><strong>%s: %s.</strong> %s</li>' % (PCOL[p][0], PARTS[p][0], PARTS[p][1], esc(PARTS[p][2])) for p in parts)
     s += '''
@@ -1193,8 +1191,12 @@ def glossary_terms(text):
         ex = re.search(r'<p class="gl-ex">(.*?)</p>', body, re.S)
         words_ = [name.split(' (')[0]] + [a.strip() for a in (also or '').split(',') if len(a.strip()) > 3]
         hits = sum(len(re.findall(r'\b%s\b' % re.escape(w), text, re.I)) for w in words_[:4])
-        if hits >= 2:
-            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))),
+        # books-final9 (audit D-should 13): the headword itself must appear in the book, not only a related word
+        head = re.sub(r'^(?:the|a|an) ', '', words_[0], flags=re.I)
+        if hits >= 2 and re.search(r'\b%s\b' % re.escape(head), text, re.I):
+            if gid == 'calm-down-kit':  # audit D4: every chapter, WP-11 and the workbook call it the Calm-Down Kit
+                name = 'Calm-Down Kit'
+            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))).replace('Your calm-down plan (once called the Calm-Down Kit) is', 'Your Calm-Down Kit is'),
                         tool_names(uk(gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1))))) if ex else '', words_[0]))
     have = {x[1].lower() for x in out}
     for gid, name, d, rx in GLOSS_EXTRA:
@@ -1208,7 +1210,7 @@ def glossary_terms(text):
 GLOSS_OVERRIDE = {
     # printfix13: "load" means the shared work only; the personal score is the stress tank
     'battery': 'Your battery is how much energy you have left today. Full means you have room to spare; low means you’re running on empty. “How much are you carrying?” measures the other side of it, how full your stress tank is: a fuller tank means a lower battery.',
-    'workpaper': 'A page you fill in, on your own or with someone, about your own week or your own side. Every workpaper is free to print or to fill in on the website.',
+    'workpaper': 'A page you fill in, on your own or with someone, about your own week or your own side. Every workpaper is free to print or to fill out on the website.',
     'pressure': 'Pressure, in My weather today, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
 }
 # Words from the chapters (Part Three above all) that the site's glossary doesn't define: (id, word, definition,
@@ -1221,7 +1223,7 @@ GLOSS_EXTRA = [
     ('window-of-tolerance', 'Window of tolerance', 'The range in which you can feel strong feelings and still think and talk. Above it you are flooded or revved up; below it you shut down. A phrase from the psychiatrist Dan Siegel.', r'window of tolerance'),
     ('psychological-safety', 'Psychological safety', 'A shared sense in a group or team that you can speak up, ask a question or admit a mistake without being punished or embarrassed (Amy Edmondson).', r'psychological safety'),
     ('groupthink', 'Groupthink', 'When a close group wants agreement so much that doubts go unsaid and a poor decision goes ahead. Irving Janis named it in 1972.', r'groupthink'),
-    ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (6 to 12 months or more, depending on the guideline). It is treatable; a GP or doctor is a good first step.', r'prolonged grief'),
+    ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (6 to 12 months or more, depending on the guideline). It is treatable.', r'prolonged grief'),
     ('wave-code', 'Wave Code', 'Four letters from the style quiz in How you connect, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
     ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?, scored from 0 (empty) to 1 (full). Under 0.30 is light, 0.30 to 0.59 medium, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
     ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. My weather today calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
@@ -1236,7 +1238,7 @@ GLOSS_EXTRA = [
     ('parallel-parenting', 'Parallel parenting', 'Co-parenting with as little direct contact as possible: each home runs its own way, and messages stay short, polite and about the children.', r'parallel parenting'),
     ('kinship-care', 'Kinship care', 'When a grandparent, aunt, older sibling or family friend raises a child whose parents can’t.', r'kinship'),
     ('gatekeeping', 'Gatekeeping', 'Holding on to how a home or child-care job must be done, so the other person steps back. Researchers first described it in mothers (“maternal gatekeeping”), but anyone can do it.', r'gatekeep\w*'),
-    ('if-then-plan', 'If-then plan', 'A small plan written as “If this happens, then I will do that”, which makes a new habit easier to start (Peter Gollwitzer).', r'if-then'),
+    ('if-then-plan', 'If-then plan', 'A small plan written as “If this happens, then I will do that,” which makes a new habit easier to start (Peter Gollwitzer).', r'if-then'),
 ]
 
 
@@ -1274,14 +1276,10 @@ UK_WORDS = {'behavior': 'behaviour', 'behaviors': 'behaviours', 'behavioral': 'b
 
 
 def uk(text):
-    """British spelling for the book's own plain-words text (research findings, glossary lines); titles of
-    published works keep their own spelling."""
-    def sub(m):
-        w = m.group(0)
-        r = UK_WORDS[w.lower()]
-        return r[0].upper() + r[1:] if w[0].isupper() else r
-    parts = re.split(r'(<[^>]+>)', text or '')
-    return ''.join(x if x.startswith('<') else re.sub(r'\b(%s)\b' % '|'.join(UK_WORDS), sub, x, flags=re.I) for x in parts)
+    """books-final9 (owner decision, 20 Oct 2026): American English for the book's own plain-words text (research findings,
+    glossary lines). The name is kept so the callers stay the same; titles of published works keep their own spelling."""
+    import us_english
+    return us_english.us_html(text or '')
 
 
 def research_notes(here):
@@ -1297,18 +1295,33 @@ def research_notes(here):
     except Exception:
         fixes = {}
     by = {}
+    # voice18: the research side notes in a chapter (<aside class="side-note" data-ref="…">) list their study too
+    sn = {}
+    for c in here:
+        try:
+            sn[c] = set(re.findall(r'class="side-note[^"]*"[^>]*\bdata-ref="([^"]+)"', read(os.path.join(ROOT, 'book', c + '.html'))))
+        except Exception:
+            sn[c] = set()
     for r in refs:
         if r['id'] in fixes:
             f = fixes[r['id']]
             r = dict(r, **{k: f[k] for k in ('authors', 'title', 'venue', 'url', 'doi', 'finding', 'year', 'year_label') if k in f})
         if not r.get('verified') or 'wikipedia.org' in (r.get('url') or ''):
             continue
+        # books-final9 (owner: no UK services in the books): the UK health service pages are not listed
+        if r['id'].startswith('nhs-') or (r.get('authors') or '').strip().startswith('NHS'):
+            continue
+        if 'Mental Health Services Administration' in (r.get('authors') or ''):
+            r = dict(r, authors='SAMHSA')
         r['finding'] = uk(re.sub(r'\s*Only the citation[^.]*\.[^.]*\.', '', r.get('finding', '')))
         chs = []
         for m in r.get('mentioned_on', []):
             mm = re.match(r'/book/([a-z0-9-]+?)(?:-in-depth)?\.html', m)
             if mm and mm.group(1) in here and mm.group(1) not in chs:
                 chs.append(mm.group(1))
+        for c in here:
+            if r['id'] in sn.get(c, ()) and c not in chs:
+                chs.append(c)
         for c in chs:
             by.setdefault(c, {})[r['id']] = r
     return by
@@ -1608,7 +1621,7 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <header class="read-head"><p class="read-code">Everything in one place</p><h1>Books and downloads</h1></header>
 <p class="simple-lede">Every book, PDF, worksheet, video and song you can take with you, on one page. Reading and using everything on the site is free and never needs an email. The PDFs of the books, the workbook, the pocket guide and the workpapers ask for your email once on this device.</p>
 <nav class="bk-dl-jump no-bubble" data-no-bubble aria-label="On this page"><a href="#bk-dl-four-h">The four books</a><a href="#workbook">Workbook and pocket guide</a><a href="#everything">Short and full versions</a><a href="#dl-workpapers">Workpapers</a><a href="#dl-media">Videos and music</a><a href="#dl-app">The free app</a></nav>
-<p>Pick one of the four short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
+<p>Pick one of the short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
 <p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>

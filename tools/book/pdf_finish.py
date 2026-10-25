@@ -24,7 +24,7 @@ from pypdf.constants import PageLabelStyle
 
 
 # printfix13: the publisher's name only, no tool names or build paths, in every PDF
-CREATOR = 'Christian’s Lab'
+CREATOR = 'Christian'
 PRODUCER = 'Spread Love & Acceptance'
 
 
@@ -38,11 +38,20 @@ def info(w, job):
     })
 
 
-def tag(path, title, author='', subject=''):
-    """rewrite a PDF made straight by Chromium (a cover) with the same document information as the books"""
+def tag(path, title, author='', subject='', size=''):
+    """rewrite a PDF made straight by Chromium (a cover) with the same document information as the books.
+    voice18 (bookqa18 S1): size "W,H" in inches sets every page box to the exact computed cover size, since
+    Chromium rounds the page to 1/300 in."""
     r = PdfReader(path)
     w = PdfWriter()
     w.append(r, import_outline=False)
+    if size:
+        from pypdf.generic import NameObject, RectangleObject
+        wi, hi = (float(x) * 72 for x in size.split(','))
+        for pg in w.pages:
+            for k in ('/MediaBox', '/CropBox', '/TrimBox', '/BleedBox', '/ArtBox'):
+                if k == '/MediaBox' or k in pg:
+                    pg[NameObject(k)] = RectangleObject([0, 0, wi, hi])
     info(w, {'title': title, 'author': author, 'subject': subject})
     with open(path, 'wb') as f:
         w.write(f)
@@ -66,7 +75,7 @@ def outline(w, items, offset):
 def main():
     if sys.argv[1] == '--tag':
         # python3 tools/book/pdf_finish.py --tag file.pdf "Title" ["Author" ["Subject"]]
-        tag(*sys.argv[2:6])
+        tag(*sys.argv[2:7])
         print(json.dumps({'tagged': sys.argv[2]}))
         return
     job = json.load(open(sys.argv[1], encoding='utf-8'))
@@ -94,7 +103,13 @@ def main():
         last = len(w.pages) - 1
         w.set_page_label(last, last, prefix='Back cover')
     info(w, job)
-    outline(w, job.get('outline', []), off)
+    if job.get('kdp'):
+        # voice18 (bookqa18 M4): a file for KDP carries no bookmarks and no link annotations
+        for pg in w.pages:
+            if '/Annots' in pg:
+                del pg['/Annots']
+    else:
+        outline(w, job.get('outline', []), off)
     w.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)
     with open(job['screen'], 'wb') as f:
         w.write(f)

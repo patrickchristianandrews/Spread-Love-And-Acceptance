@@ -160,9 +160,9 @@ def series_links(body, slug, namer, xref_add):
             return '<a%s>%s</a>%s' % (new_attrs, new_text, note)
         # a link that names the chapter by its title: add where it is (an ebook keeps the name, without the page)
         if in_here:
-            note = '<span class="pe-only pe-xref">%s</span>' % ((', %s, page %s' + tail if inner else ' (%s, page %s)') % (lab, page))
+            note = '<span class="pe-only pe-xref">%s</span>' % ((', %s, page %s' + tail if inner else ' (%s, page %s)') % ('<span class="pe-keep">%s</span>' % lab, page))
         else:
-            note = (', %s%s' + tail if inner else ' (%s%s)') % (lab, ('<span class="pe-only">, page %s</span>' % page) if page else '')
+            note = (', %s%s' + tail if inner else ' (%s%s)') % ('<span class="pe-keep">%s</span>' % lab, ('<span class="pe-only">, page %s</span>' % page) if page else '')  # book20: keep "Book 2, Chapter 7" on one line
         return '<a%s>%s</a>%s' % (new_attrs, text, note)
     return LINK_RE.sub(sub, body)
 
@@ -180,7 +180,7 @@ def in_open_paren(s, end):
         pre = pre[starts[-1]:]
     t = html.unescape(re.sub(r'<[^>]+>', '', _PE_ONLY.sub('', pre)))
     if t.rstrip()[-1:] in ('?', '!'):
-        return False  # "Not safe at home? (…/safety)" keeps its own brackets: "home?, …" would read badly
+        return False  # a link ending in "?" keeps its own brackets: "…?, …" would read badly
     return t.count('(') > t.count(')')
 
 
@@ -308,6 +308,8 @@ def drop_sections(body, B):
     body = B.drop_element(body, r'<[a-z0-9]+\b[^>]*\bclass="[^"]*\bps-omit\b')
     body = B.drop_element(body, r'<h3 class="kind-h kind-h-reading"')
     body = B.drop_element(body, r'<ul class="kind-list kind-reading"')
+    # voice18 (bookqa18 M3): a "Reading on the website" heading left with nothing under it goes too
+    body = re.sub(r'<h2\b[^>]*>[^<]*</h2>((?:\s|<!--.*?-->)*)(?=<h[12]\b|</article>|</section>|$)', r'\1', body, flags=re.S)
     return body
 
 

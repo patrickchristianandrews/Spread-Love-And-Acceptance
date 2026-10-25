@@ -462,7 +462,9 @@ function seriesCosts(job, pages, C) {
   // finalfix15: a job can name its own cost model (the workbook's black-and-white edition: black ink, large trim)
   const kdp = (job.cost && C[job.cost]) || (large ? C.kdp_large : C.kdp);
   if (kdp.max_pages && pages > kdp.max_pages) console.log('  WARNING: %s has %d pages; the %s printing cost is for up to %d pages', job.id, pages, job.cost, kdp.max_pages);
-  const P = job.price;
+  // voice18: the owner's pricing rule: under 100 pages is the short line ($9.99), anything longer $14.99 (series.json price_rule)
+  const R = job.price_rule;
+  const P = R ? (pages < R.short_under_pages ? R.short_usd : R.regular_usd) : job.price;
   const kdpPrint = kdp.fixed + kdp.per_page * pages;
   const royalty = P >= (kdp.threshold || 0) ? kdp.royalty : (kdp.royalty_low || kdp.royalty);
   const row = net => ({ net: r2(net), pct: Math.round(net / P * 1000) / 10 });
@@ -471,7 +473,7 @@ function seriesCosts(job, pages, C) {
   return {
     list_price: P,
     kdp_amazon: Object.assign({ print: r2(kdpPrint), royalty_rate: royalty, how: `${Math.round(royalty * 100)}% x $${P.toFixed(2)} - ($${kdp.fixed.toFixed(2)} + ${pages} x $${kdp.per_page})` }, row(r2(royalty * P) - r2(kdpPrint))),
-    kdp_expanded: Object.assign({ print: r2(kdpPrint) }, row(r2(kdp.expanded * P) - r2(kdpPrint))),
+    kdp_expanded: Object.assign({ print: r2(kdpPrint), min_price: Math.ceil(r2(kdpPrint) / kdp.expanded * 100) / 100 }, row(r2(kdp.expanded * P) - r2(kdpPrint))),
   };
 }
 
@@ -524,7 +526,7 @@ async function makeCover(browser, job, pages) {
   fs.writeFileSync(path.join(SERIES_OUT, job.cover + '.pdf'), pdf);
   // printfix13: the same document information as the books (Chromium's own names would be left in otherwise)
   execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), '--tag', path.join(SERIES_OUT, job.cover + '.pdf'),
-    SERIES_TITLE + ': ' + job.title + ' (cover)', AUTHOR_NAME, 'Full-wrap cover: back, spine, front']);
+    SERIES_TITLE + ': ' + job.title + ' (cover)', AUTHOR_NAME, 'Full-wrap cover: back, spine, front', W + ',' + H]);
   const big = path.join(SERIES_OUT, job.cover + '-front.jpg');
   fs.writeFileSync(big, await shoot(1600 / (job.trim[0] * 96), 'jpg'));
   execFileSync('python3', ['-c', 'import sys\nfrom PIL import Image\nim = Image.open(sys.argv[1]); w = 480; h = round(im.height * w / im.width)\nim.convert("RGB").resize((w, h), Image.LANCZOS).save(sys.argv[2], quality=84, optimize=True, progressive=True)', big, path.join(SERIES_OUT, job.cover + '-front-small.jpg')]);
@@ -562,7 +564,7 @@ async function runSeries(browser, ctx) {
     const outline = (meta.outline || []).map(([t, k, l]) => [t, r.pagemap[k] || 0, l]);
     const jf = path.join(TMP, job.id + '-job.json');
     const out = path.join(SERIES_OUT, job.id + '.pdf');
-    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline }));
+    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline, kdp: true }));
     const f = JSON.parse(execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), jf]).toString().trim().split('\n').pop());
     const pages = f.interior_pages;
     const cov = job.cover ? await makeCover(browser, job, pages) : {};
