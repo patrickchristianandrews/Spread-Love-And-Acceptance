@@ -207,6 +207,11 @@
       kw: 'team workload business partner co-founder raci responsibilities team meeting standup weekly workload owner backup team tools: a job list and a weekly check-in team job list: one owner and a backup 10-minute team check-in' },
 
     // ---------- Health and body
+    { id: 'feelings', name: 'What am I feeling?', brand: '', href: '/what-am-i-feeling.html', type: 'self', also: ['calm'],
+      does: 'Gentle questions that help you notice what you might not have considered yet behind a feeling.',
+      gets: 'A map you can correct, a picture made from your answers, and one or two first steps.',
+      mins: 5, time: 'About 3 to 8 minutes', who: ['solo'], benefit: 'Find what may be behind a feeling, on your own device',
+      kw: 'feelings emotions why do i feel this way map picture overwhelmed irritable low mood what am i feeling' },
     { id: 'weather', name: 'My weather today', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
       modes: [['Quick: 4 taps', '/ladder.html'], ['Full forecast', '/quick-checks.html#today']],
       does: 'Tap four quick questions, or take a minute on your mood, sleep, body and what’s coming up.',

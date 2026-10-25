@@ -1,0 +1,188 @@
+/* emo-tool.css: the "What am I feeling?" page (/what-am-i-feeling.html).
+   Uses the site's color tokens, so light, dark (the site's inverted theme) and high contrast follow Settings.
+   Every control is at least 44px tall. Nothing moves on its own, so there is nothing to switch off for reduced motion. */
+
+.emo-page{ --emo-card:#FFFDF7; }
+.emo-page .emo-app, .emo-page .emo-app *{ box-sizing:border-box; }
+.emo-app{ margin:1rem 0 2rem; }
+.emo-app p, .emo-app li{ max-width:none !important; }
+.emo-honest{ margin:1rem 0 1.2rem; padding:.8rem 1rem; border-radius:16px; border:1px solid var(--line); background:var(--paper-deep); }
+.emo-honest p{ margin:.3rem 0 !important; font-size:.98rem; line-height:1.5; max-width:none !important; }
+
+/* the card every step lives in */
+.emo-card{ padding:1rem 1.1rem 1.1rem; border-radius:20px; border:1px solid var(--line); background:var(--emo-card); }
+.emo-card:focus{ outline:none; }
+.emo-stage{ margin:0 0 .5rem !important; font:500 .8rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); }
+.emo-prog{ margin:.2rem 0 1rem; }
+.emo-prog-t{ margin:0 0 .3rem !important; font-size:.93rem; color:var(--ink-soft); }
+.emo-bar{ height:.6rem; border-radius:999px; background:var(--line); overflow:hidden; }
+.emo-bar > span{ display:block; height:100%; border-radius:999px; background:var(--credit); }
+
+/* Professor Puddles, the guide */
+.emo-guide{ display:flex; gap:.7rem; align-items:flex-start; margin:0 0 .9rem; padding:.6rem .8rem; border-radius:16px; background:#EAF3FB; border:1px solid #C5DCEF; }
+.emo-guide svg{ width:44px; height:46px; flex:none; }
+.emo-guide p{ margin:0 !important; font-size:.97rem; line-height:1.5; color:#2B2620; }
+.emo-guide p b{ font-family:"Fraunces", Georgia, serif; }
+
+/* a question */
+.emo-q{ border:0; margin:0; padding:0; min-width:0; }
+.emo-q legend, .emo-qh{ float:left; width:100%; padding:0; margin:0 0 .4rem; font:600 1.2rem/1.35 "Fraunces", Georgia, serif; }
+.emo-q legend:focus, .emo-qh:focus{ outline:none; }
+.emo-q > *:not(legend){ clear:both; }
+.emo-help{ margin:.1rem 0 .7rem !important; font-size:.95rem; color:var(--ink-soft); line-height:1.45; }
+.emo-opts{ clear:both; display:grid; gap:.4rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.emo-opts label, .emo-wordgrid label{ display:flex; gap:.6rem; align-items:flex-start; min-height:44px; padding:.55rem .75rem; border-radius:12px; border:1px solid var(--line); background:var(--paper); cursor:pointer; font-size:.98rem; line-height:1.4; }
+.emo-opts label:hover, .emo-wordgrid label:hover{ border-color:var(--credit); }
+.emo-opts input, .emo-wordgrid input{ width:1.25rem; height:1.25rem; margin:.1rem 0 0; flex:none; accent-color:var(--credit); }
+.emo-opts input:focus-visible, .emo-wordgrid input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.emo-opts label:has(input:checked), .emo-wordgrid label:has(input:checked){ border-color:var(--credit); box-shadow:inset 0 0 0 1px var(--credit); background:var(--paper-deep); }
+.emo-wordset{ margin:.4rem 0 .8rem; padding:0; border:0; }
+.emo-wordset legend{ float:none; font:600 1rem/1.3 "Fraunces", Georgia, serif; margin:0 0 .3rem; }
+.emo-wordgrid{ display:grid; gap:.4rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+.emo-slider{ clear:both; margin:.4rem 0 .2rem; }
+.emo-slider input[type=range]{ width:100%; min-height:44px; accent-color:var(--credit); margin:0; }
+.emo-slider input[type=range]:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.emo-slider .emo-ends{ display:flex; justify-content:space-between; gap:1rem; font-size:.9rem; color:var(--ink-soft); }
+.emo-slider output{ display:block; margin:.1rem 0 .2rem; font:600 2rem/1.1 "Fraunces", Georgia, serif; }
+.emo-slider output small{ font:500 .9rem "Lora", Georgia, serif; color:var(--ink-soft); }
+.emo-textwrap{ clear:both; margin:.8rem 0 0; }
+.emo-textwrap label{ display:block; margin:0 0 .25rem; font-size:.95rem; font-weight:600; }
+.emo-text, .emo-add input, .emo-editrow input, .emo-mine textarea{ width:100%; min-height:44px; padding:.45rem .7rem; font:1rem/1.45 "Lora", Georgia, serif; color:var(--ink); background:var(--paper); border:1px solid var(--ink-soft); border-radius:12px; }
+.emo-text:focus-visible, .emo-add input:focus-visible, .emo-editrow input:focus-visible, .emo-mine textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* a guess to check */
+.emo-probe{ margin:0 0 .9rem; padding:.7rem .9rem; border-radius:14px; border:1px dashed var(--ink-soft); background:var(--paper); }
+.emo-probe .emo-k{ margin:0 0 .2rem !important; font:500 .78rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); }
+.emo-probe p{ margin:.2rem 0 !important; font-size:.98rem; line-height:1.5; }
+.emo-harm{ margin:.8rem 0 0 !important; padding:.65rem .85rem; border-radius:12px; border-left:4px solid var(--brass, #B07A1F); background:var(--paper-deep); font-size:1rem; line-height:1.5; }
+
+/* buttons */
+.emo-row{ display:flex; flex-wrap:wrap; gap:.5rem .7rem; align-items:center; margin:1rem 0 0 !important; }
+.emo-row.is-end{ margin-top:.7rem !important; }
+.emo-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid var(--credit); background:var(--credit); color:var(--paper); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+.emo-btn.is-quiet{ background:var(--paper); color:var(--credit); }
+.emo-btn.is-link{ border-color:transparent; background:transparent; color:var(--credit); text-decoration:underline; padding-left:.4rem; padding-right:.4rem; }
+.emo-btn.is-small{ min-height:44px; font-size:.9rem; padding:.3rem .8rem; }
+.emo-btn[disabled]{ opacity:.45; cursor:default; }
+.emo-btn:hover:not([disabled]){ filter:brightness(1.06); }
+.emo-btn:focus-visible, .emo-app summary:focus-visible, .emo-sw-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.emo-start{ display:grid; gap:.6rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin:1rem 0 .4rem; }
+.emo-start .emo-btn{ flex-direction:column; align-items:flex-start; border-radius:16px; padding:.7rem 1rem; text-align:left; gap:.1rem; }
+.emo-start .emo-btn small{ font:400 .9rem/1.3 "Lora", Georgia, serif; opacity:.92; }
+.emo-start .emo-btn.is-quiet small{ color:var(--ink-soft); opacity:1; }
+.emo-list{ margin:.4rem 0 .8rem; padding-left:1.2rem; }
+.emo-list li{ margin:.2rem 0; line-height:1.5; }
+
+/* the map */
+.emo-h3{ margin:1.1rem 0 .15rem !important; font:600 1.15rem/1.3 "Fraunces", Georgia, serif !important; }
+.emo-sub{ margin:0 0 .5rem !important; font-size:.95rem; color:var(--ink-soft); }
+.emo-items{ list-style:none; margin:.3rem 0 .6rem; padding:0 !important; display:grid; gap:.5rem; }
+.emo-item{ margin:0 !important; padding:.65rem .8rem; border-radius:14px; border:1px solid var(--line); border-left:6px solid var(--ic, #8A7456); background:var(--paper); }
+.emo-item.c-confirmed{ --ic:#3E7A4C; } .emo-item.c-likely{ --ic:#8A4FA8; } .emo-item.c-possible{ --ic:#C9A43B; } .emo-item.c-unknown{ --ic:#8E9BAA; }
+.emo-item .emo-tag{ display:inline-block; margin-right:.4rem; padding:.05rem .5rem; border-radius:999px; background:var(--paper-deep); font:500 .75rem/1.5 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+.emo-item .emo-text-t{ font-size:1rem; line-height:1.5; }
+.emo-item .emo-edited{ font-size:.85rem; color:var(--ink-soft); }
+.emo-ib{ display:flex; flex-wrap:wrap; gap:.2rem .5rem; margin:.3rem 0 0; align-items:center; }
+.emo-item details{ flex:1 1 100%; }
+.emo-item summary, .emo-card summary{ display:inline-flex; align-items:center; min-height:44px; cursor:pointer; font-weight:600; color:var(--credit); list-style:none; padding:0 .3rem; }
+.emo-item summary::-webkit-details-marker, .emo-card summary::-webkit-details-marker{ display:none; }
+.emo-item summary::before, .emo-card summary::before{ content:"+"; font-weight:700; width:1rem; }
+.emo-item details[open] > summary::before, .emo-card details[open] > summary::before{ content:"\2212"; }
+.emo-why{ margin:.1rem 0 .4rem; padding-left:1.2rem; font-size:.95rem; }
+.emo-why li{ margin:.15rem 0; }
+.emo-editrow{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.4rem 0 0; }
+.emo-editrow input{ flex:1 1 14rem; }
+.emo-empty{ margin:.2rem 0 .6rem !important; font-size:.95rem; color:var(--ink-soft); font-style:italic; }
+.emo-add{ margin:1rem 0 0; display:flex; flex-wrap:wrap; gap:.4rem; }
+.emo-add label{ flex:1 0 100%; font-weight:600; font-size:.95rem; }
+.emo-add input{ flex:1 1 14rem; }
+.emo-aside{ margin:.8rem 0 0; padding:.5rem .8rem; border-radius:12px; background:var(--paper-deep); font-size:.95rem; }
+.emo-aside ul{ list-style:none; margin:.2rem 0 0; padding:0 !important; }
+.emo-aside li{ display:flex; flex-wrap:wrap; gap:.3rem .6rem; align-items:center; margin:.1rem 0 !important; }
+.emo-balance{ margin:.5rem 0 0 !important; font-size:.95rem; color:var(--ink-soft); }
+
+/* the picture */
+.emo-figure{ margin:.4rem 0 .8rem; text-align:center; }
+.emo-canvas{ display:block; width:100%; max-width:640px; height:auto; aspect-ratio:1/1; margin:0 auto; border-radius:20px; border:1px solid var(--line); background:#F5EFDE; }
+.emo-cap{ margin:.5rem auto 0 !important; max-width:42rem; font-size:.95rem; color:var(--ink-soft); }
+.emo-legend{ list-style:none; margin:.6rem 0 1rem; padding:0 !important; display:grid; gap:.6rem; }
+.emo-leg{ display:grid; grid-template-columns:2.2rem 1fr; gap:.2rem .7rem; margin:0 !important; padding:.7rem .85rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); }
+.emo-num{ display:inline-flex; align-items:center; justify-content:center; width:2rem; height:2rem; border-radius:50%; border:1.6px solid var(--ink); font:600 .9rem "IBM Plex Mono", ui-monospace, monospace; background:var(--emo-card); }
+.emo-leg h4{ margin:0 0 .15rem !important; font:600 1.02rem/1.3 "Fraunces", Georgia, serif !important; display:flex; flex-wrap:wrap; gap:.2rem .5rem; align-items:center; }
+.emo-sw{ display:inline-block; width:1rem; height:1rem; border-radius:50%; border:1px solid rgba(43,38,32,.4); flex:none; }
+.emo-leg p{ margin:.2rem 0 !important; font-size:.97rem; line-height:1.5; }
+.emo-own{ font-style:italic; }
+.emo-swatches{ display:flex; flex-wrap:wrap; gap:.3rem; margin:.2rem 0 .5rem; }
+.emo-sw-btn{ width:44px; height:44px; padding:0; border-radius:50%; border:3px solid var(--paper); box-shadow:0 0 0 1px var(--ink-soft); cursor:pointer; }
+.emo-sw-btn[aria-pressed="true"]{ box-shadow:0 0 0 3px var(--ink); }
+.emo-swrow{ margin:.2rem 0; font-size:.93rem; }
+.emo-swrow b{ display:block; margin:.3rem 0 0; font-weight:600; }
+.emo-mine{ margin:.4rem 0; padding:.6rem .7rem; border-radius:12px; background:var(--paper-deep); }
+.emo-mine label{ display:block; font-weight:600; font-size:.95rem; margin:0 0 .25rem; }
+.emo-mine textarea{ min-height:5rem; }
+.emo-removed{ margin:.6rem 0 0; font-size:.95rem; }
+.emo-note{ margin:.7rem 0 0 !important; padding:.6rem .85rem; border-radius:12px; border:1px solid var(--line); background:var(--paper-deep); font-size:.97rem; line-height:1.5; }
+
+/* the plan */
+.emo-plan h3{ margin:1.3rem 0 .3rem !important; font:600 1.2rem/1.3 "Fraunces", Georgia, serif !important; }
+.emo-plan h3 .emo-n{ display:inline-block; min-width:1.6rem; color:var(--ink-soft); font:500 .85rem "IBM Plex Mono", ui-monospace, monospace; }
+.emo-plan p{ line-height:1.55; }
+.emo-contrib{ list-style:none; margin:.3rem 0 .6rem; padding:0 !important; display:grid; gap:.5rem; counter-reset:emo-c; }
+.emo-contrib > li{ margin:0 !important; padding:.65rem .85rem .5rem 2.6rem; position:relative; border-radius:14px; border:1px solid var(--line); background:var(--paper); counter-increment:emo-c; }
+.emo-contrib > li::before{ content:counter(emo-c); position:absolute; left:.7rem; top:.65rem; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--paper-deep); font:600 .85rem/1.5rem "IBM Plex Mono", ui-monospace, monospace; text-align:center; }
+.emo-contrib strong{ font-family:"Fraunces", Georgia, serif; }
+.emo-pill{ display:inline-block; margin-left:.4rem; padding:.02rem .5rem; border-radius:999px; background:var(--paper-deep); font:500 .75rem/1.6 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+.emo-contrib p{ margin:.25rem 0 !important; font-size:.95rem; }
+.emo-three{ display:grid; gap:.6rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin:.4rem 0; }
+.emo-col{ padding:.65rem .8rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); }
+.emo-col h4{ margin:0 0 .3rem !important; font:600 1rem/1.3 "Fraunces", Georgia, serif !important; }
+.emo-col ul{ list-style:none; margin:0; padding:0 !important; }
+.emo-col li{ margin:0 0 .5rem !important; font-size:.95rem; line-height:1.45; }
+.emo-mv{ display:flex; flex-wrap:wrap; gap:.1rem .2rem; margin-top:.1rem; }
+.emo-mv button{ font:500 .8rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.2rem .6rem; border-radius:999px; border:1px solid var(--line); background:var(--paper-deep); color:var(--ink); cursor:pointer; }
+.emo-mv button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.emo-steps{ list-style:none; margin:.3rem 0 .6rem; padding:0 !important; display:grid; gap:.7rem; }
+.emo-steps > li{ margin:0 !important; padding:.75rem .95rem; border-radius:16px; border:2px solid var(--credit); background:var(--emo-card); }
+.emo-steps h4{ margin:0 0 .25rem !important; font:600 1.08rem/1.3 "Fraunces", Georgia, serif !important; }
+.emo-steps p{ margin:.25rem 0 !important; font-size:.98rem; }
+.emo-steps .emo-fit{ color:var(--ink-soft); font-size:.93rem; }
+.emo-checkin{ margin:.6rem 0; padding:.8rem 1rem; border-radius:16px; border:1px solid var(--line); background:var(--paper-deep); }
+.emo-checkin .emo-opts{ grid-template-columns:repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+.emo-links{ list-style:none; margin:.3rem 0 .6rem; padding:0 !important; display:grid; gap:.3rem; }
+.emo-links li{ margin:0 !important; font-size:.97rem; }
+.emo-links a{ font-weight:600; }
+.emo-saved{ margin:.6rem 0 0 !important; font-size:.97rem; color:var(--credit); min-height:1.4em; }
+
+/* past sessions */
+.emo-sess{ list-style:none; margin:.5rem 0 1rem; padding:0 !important; display:grid; gap:.5rem; }
+.emo-sess > li{ margin:0 !important; padding:.65rem .85rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); }
+.emo-sess label{ display:flex; gap:.6rem; align-items:flex-start; min-height:44px; cursor:pointer; }
+.emo-sess input{ width:1.25rem; height:1.25rem; margin:.2rem 0 0; accent-color:var(--credit); flex:none; }
+.emo-sess input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.emo-cmp{ display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin:.6rem 0; }
+.emo-cmp > div{ padding:.7rem .85rem; border-radius:16px; border:1px solid var(--line); background:var(--paper); }
+.emo-cmp canvas{ display:block; width:100%; height:auto; aspect-ratio:1/1; border-radius:14px; border:1px solid var(--line); background:#F5EFDE; margin:.4rem 0; }
+.emo-cmp h4{ margin:0 !important; font:600 1.05rem/1.3 "Fraunces", Georgia, serif !important; }
+.emo-cmp ul{ margin:.3rem 0 .5rem; padding-left:1.2rem; font-size:.95rem; }
+
+/* sources table */
+.emo-table{ border-collapse:collapse; min-width:640px; width:100%; font-size:.95rem; }
+.emo-table th, .emo-table td{ padding:.5rem .6rem; border:1px solid var(--line); text-align:left; vertical-align:top; }
+.emo-table thead th{ background:var(--paper-deep); }
+
+.emo-print-only{ display:none; }
+@media (max-width:520px){
+  .emo-card{ padding:.85rem .85rem 1rem; border-radius:16px; }
+  .emo-q legend, .emo-qh{ font-size:1.1rem; }
+  .emo-leg{ grid-template-columns:1fr; }
+}
+@media print{
+  .emo-noprint, .emo-page .emo-honest, .emo-page .read-head ~ :not(.emo-app):not(main){ display:none !important; }
+  .emo-page > :not(.emo-app):not(.read-head){ display:none !important; }
+  .emo-app .emo-card{ border:0; padding:0; background:none; }
+  .emo-print-only{ display:block !important; margin:0 0 .6rem; font-size:.95rem; }
+  .emo-canvas{ max-width:15cm; break-inside:avoid; }
+  .emo-leg, .emo-steps > li, .emo-contrib > li, .emo-col{ break-inside:avoid; }
+  .emo-item details > *:not(summary){ display:block; }
+  details.emo-keep > *{ display:block !important; }
+}
