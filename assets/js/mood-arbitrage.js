@@ -55,22 +55,22 @@
 
   var SITUATIONS = {
     disagree: { name: 'A disagreement between us', text: 'Because the tension is between you, own your part in one sentence before anything else (“I got sharp about the money. I’m sorry.”), then set a time to finish the topic.',
-      agree: 'When one of us gets wound up, either can say ‘pause.’ We’ll take twenty minutes and come back at a set time.' },
+      agree: 'When one of us gets wound up, either can say “pause.” We’ll take twenty minutes and come back at a set time.' },
     elsewhere: { name: 'A hard day from somewhere else', text: 'This started somewhere else, so it isn’t yours to fix. Your job is company and a little relief, not solutions or advice.',
       agree: 'When one of us has had a hard day, we’ll say so early, and the other will hold new problems until the next day.' },
     load: { name: 'Too much on their plate', text: 'The weight is sitting on one person. Once it settles, share the load for real: one job moves to you, for good, with no reminders needed.',
       agree: 'Each recurring job gets one named owner, written down, so nobody carries the list alone. (<a href="/workpapers/wp-03-one-owner-per-job.html">One owner per job (WP-03)</a> helps.)' },
     sensory: { name: 'Too much noise, people or light', text: 'Change the place before anything else: a quieter room, outside, or leaving early. Keep words to a minimum until you’re out.',
-      agree: 'When a place gets too loud or busy for one of us, either can say ‘time to go,’ no explanation needed.' }
+      agree: 'When a place gets too loud or busy for one of us, either can say “time to go,” no explanation needed.' }
   };
 
   var RELS = {
     partner: { name: 'A partner', text: 'You probably know what comforts them. Use it, and check you’re not guessing from an old pattern.' },
     family: { name: 'Family', text: 'Old family roles come back fast. Speak to the person in front of you today, not to the argument from years ago.' },
     coparent: { name: 'A co-parent', text: 'Keep it calm, brief and about the kids and the logistics. Save anything bigger for a planned message.' },
-    roommate: { name: 'A roommate', text: 'Offer, don’t assume. Some roommates want company; others want their door closed.' },
+    roommate: { name: 'A roommate', text: 'Offer, don’t assume. Some roommates want company. Others want their door closed.' },
     coworker: { name: 'A coworker', text: 'Keep it light and professional. Skip touch, keep any humor gentle, and offer a practical hand or a later time to talk.' },
-    care: { name: 'Someone I care for', text: 'A slow, predictable routine is often the most calming move. Look after your own state as well; caring on an empty battery is hard on both of you.' },
+    care: { name: 'Someone I care for', text: 'A slow, predictable routine is often the most calming move. Look after your own state as well. Caring on an empty battery is hard on both of you.' },
     friend: { name: 'A friend', text: 'Ask what would help. “Do you want to vent, or do you want ideas?” is a friend’s best question.' }
   };
 
@@ -102,7 +102,7 @@
     p.sections.push({ h: 'If it doesn’t land', html: esc(m.ifNot) });
     p.sections.push({ h: '4. Stay with it', html: esc(STAY) });
     var ag = c.sit && SITUATIONS[c.sit] ? SITUATIONS[c.sit].agree : 'When one of us is having a hard moment, the other will ask “Company, quiet, or help with one thing?” before doing anything else.';
-    p.sections.push({ h: 'Afterwards: one agreement to suggest', html: '“' + ag + '”' });
+    p.sections.push({ h: 'Afterward: one agreement to suggest', html: '“' + ag + '”' });
     return p;
   }
 

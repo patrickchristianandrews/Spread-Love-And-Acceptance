@@ -57,11 +57,11 @@ aka: read receipts; seen but no reply; left on read
 see: Response time expectations; Texting norms that prevent fights
 go: /wiring-card.html | The Wiring Card
 evidence: A common source of anxiety in messaging. Research on read receipts is limited, but people report reading meaning into them.
-try: Decide together whether you use read receipts, and agree that “seen” doesn’t mean “ignoring you”.
+try: Decide together whether you use read receipts, and agree that “seen” doesn’t mean “ignoring you.”
 
 Read receipts show when a message has been seen, which can create pressure to reply instantly and worry when there’s no reply.
 
-Some people find them reassuring; others find them stressful. Agreeing on them (or turning them off) is a small kindness.
+Some people find them reassuring. Others find them stressful. Agreeing on them (or turning them off) is a small kindness.
 
 Program: The Wiring Card is a place to note preferences like this.
 

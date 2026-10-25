@@ -648,7 +648,7 @@
     acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-qrd': 'big', 'aria-pressed': 'false' }, 'Bigger'));
     acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-qrd-copy', 'data-qrd': 'copy' }, 'Copy link'));
     card.appendChild(acts);
-    card.appendChild(mk('p', { class: 'tsk-qrd-private' }, 'The code holds the link and nothing else. It is made on this device; nothing is uploaded.'));
+    card.appendChild(mk('p', { class: 'tsk-qrd-private' }, 'The code holds the link and nothing else. It is made on this device. Nothing is uploaded.'));
     card.appendChild(mk('p', { class: 'tsk-qrd-status', role: 'status', 'aria-live': 'polite' }));
     d.appendChild(card);
     d.addEventListener('click', function (e) {
@@ -961,7 +961,7 @@
     cacts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-go', 'data-go': 'ics' }, 'Download calendar file'));
     cacts.appendChild(mk('a', { class: 'tol-share-act tsk-go', 'data-go': 'gcal', target: '_blank', rel: 'noopener noreferrer' }, 'Google Calendar'));
     ca.appendChild(cacts);
-    ca.appendChild(mk('p', { class: 'tsk-small' }, 'The file works with Apple Calendar, Outlook and most phones. The reminder lives in your calendar; nothing is kept here.'));
+    ca.appendChild(mk('p', { class: 'tsk-small' }, 'The file works with Apple Calendar, Outlook and most phones. The reminder lives in your calendar. Nothing is kept here.'));
     wrapP.appendChild(ca);
     root.appendChild(wrapP);
 

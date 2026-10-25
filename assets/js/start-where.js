@@ -97,11 +97,11 @@
         ['/check-ins.html','Check-ins','Hear each other out before you decide.']
       ]},
     { id:'foster', ico:'\uD83E\uDDF8', label:'We foster, adopt, or I\u2019m raising a relative\u2019s child',
-      say:'Children who have moved homes often need time before they trust new adults, and that is not a sign you are doing it wrong. Calm routines, small promises kept, and support for you as the carer all matter.',
+      say:'Children who have moved homes often need time before they trust new adults, and that is not a sign you are doing it wrong. Calm routines, small promises kept, and support for you as the caregiver all matter.',
       picks:[
         ['/foster-and-kinship.html','Foster, adoptive and kinship families','Building trust, house rules, and support for grandparents and relatives raising a child.'],
         ['/parents.html','For parents','Big feelings, coming back after you yell, and teens.'],
-        ['/caregivers.html','Looking after you, too','Where carers can find a break and support.']
+        ['/caregivers.html','Looking after you, too','Where caregivers can find a break and support.']
       ]},
     { id:'raising-grandchild', ico:'\uD83D\uDC75', label:'I\u2019m raising my grandchild (or a relative\u2019s child)',
       say:'Stepping in to raise a grandchild or a relative\u2019s child is a big, loving thing, and it often comes with grief, tiredness and a lot of new rules at once. You don\u2019t have to get it all right. Calm routines, a few clear house rules, and support for you matter most.',
@@ -127,7 +127,7 @@
         ['/signal-translator.html','Check a first message','See how it might land before you send it.']
       ]},
     { id:'widowed', ico:'\uD83D\uDD6F', label:'I\u2019ve lost my husband, wife or partner',
-      say:'I\u2019m sorry. Grief after losing a partner has no timetable, and there is no right way to do it. Go gently. Nothing here has to be done today, and you don\u2019t have to do it alone.',
+      say:'I\u2019m sorry. Grief after losing a partner has no timeline, and there is no right way to do it. Go gently. Nothing here has to be done today, and you don\u2019t have to do it alone.',
       picks:[
         ['/grief.html#grief','Grief has no timetable','What grief can feel like, and what helps a little.'],
         ['/grief.html#new-chapter','A new chapter on your own','Running a home alone, and finding your feet, slowly.'],
@@ -153,7 +153,7 @@
       say:'Wanting to stop is the biggest step. Most people can learn to catch the first sign in their body and pause before they shout. If your temper scares the people you live with, getting support for yourself is a strong, loving thing to do.',
       picks:[
         ['/upset-right-now.html','Upset right now?','Five minutes to pause, breathe and come back.'],
-        ['/parents.html#anger-help','Getting help for your anger','Your doctor, a counsellor or a group, and what to try first.'],
+        ['/parents.html#anger-help','Getting help for your anger','Your doctor, a counselor or a group, and what to try first.'],
         ['/wp-11.html','The Calm-Down Kit','Write down your triggers and your own pause line ahead of time.']
       ]},
     { id:'sharing-a-room', ico:'\uD83D\uDECF\uFE0F', label:'Sharing a room or a dorm',
@@ -184,7 +184,7 @@
         ['/turning-toward.html','Turning toward','Gentle ways to stay close, even on a day in bed.']
       ]},
     { id:'empty-nest', ico:'\uD83C\uDFE1', label:'Kids grown and gone, it feels quiet',
-      say:'When the children leave, the house goes quiet and you can feel more like housemates. That is common after busy years, and it can become a good new chapter. Small daily moments of attention bring you back to each other.',
+      say:'When the children leave, the house goes quiet and you can feel more like roommates. That is common after busy years, and it can become a good new chapter. Small daily moments of attention bring you back to each other.',
       picks:[
         ['/empty-nest.html','Kids grown and gone','When the house is quiet between you, and how to start again.'],
         ['/workpapers/wp-13-daily-check-in.html','The 90-second daily check-in','The smallest habit here, and the one that lasts.'],
@@ -228,7 +228,7 @@
         ['/quick-checks.html#today','Today\u2019s Weather','Start today. Within two weeks, the almanac shows your patterns.']
       ]},
     { id:'give-too-much', ico:'\u2696', label:'I give more than I get back',
-      say:'Quiet resentment, a silent scorecard and being tired before the day starts are not character flaws. They are a sign the effort has been uneven for a while. Naming it is fair, and so is asking for things to change; the tools here help you show it plainly, without blame.',
+      say:'Quiet resentment, a silent scorecard and being tired before the day starts are not character flaws. They are a sign the effort has been uneven for a while. Naming it is fair, and so is asking for things to change. The tools here help you show it plainly, without blame.',
       picks:[
         ['/book/self-2-now-in-depth.html#control','Your circle of control, and matching energy','Signs you are over-giving, and how to match care and effort kindly.'],
         ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
@@ -263,7 +263,7 @@
         ['/signal-translator.html?use=work','The message checker','Test an email or chat message before you send it.']
       ]},
     { id:'grief', ico:'\uD83D\uDD4A', label:'Just retired, a loss, or a big life change',
-      say:'Retirement, a loss, a parent who needs more care, a quiet house: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
+      say:'Retirement, a loss, a parent who needs more care, a quiet house: big changes rearrange who does what and how people talk. Go gently. None of this has to be fixed today.',
       picks:[
         ['/retired-together.html','Retired and both home now','Sharing the house all day, handing over whole jobs, and finding your feet after work.'],
         ['/grief.html','Grief and loss','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],

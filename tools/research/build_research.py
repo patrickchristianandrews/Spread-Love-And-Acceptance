@@ -655,8 +655,8 @@ def build_page(refs, missing):
     body.append('<main class="read" id="main">')
     body.append('<header class="read-head"><p class="read-code">Library · Sources</p><h1>The research behind this site</h1></header>')
     body.append('''
-<aside class="tol-inshort no-cheer no-bubble" aria-label="In short">
-  <p class="tol-inshort-h"><span aria-hidden="true">&#128204;</span> In short</p>
+<aside class="tol-inshort no-cheer no-bubble" aria-label="The short version">
+  <p class="tol-inshort-h"><span aria-hidden="true">&#128204;</span> The short version</p>
   <ul>
     <li>These are the %(total)d studies, books and reviews this site leans on, each with what it found, in plain words.</li>
     <li>Every entry says how strong the evidence is, and links to where you can read more.</li>

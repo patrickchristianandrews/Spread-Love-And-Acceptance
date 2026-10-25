@@ -8,7 +8,7 @@
   "doi": null,
   "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
   "kind": "guideline",
-  "finding": "The FDA has approved one purified CBD medicine (Epidiolex), for seizures in Lennox-Gastaut syndrome, Dravet syndrome and, since 2020, tuberous sclerosis complex; it has not approved cannabis itself for any condition.",
+  "finding": "The FDA has approved one purified CBD medicine (Epidiolex), for seizures in Lennox-Gastaut syndrome, Dravet syndrome and, since 2020, tuberous sclerosis complex. It has not approved cannabis itself for any condition.",
   "strength": "strong: the regulator’s own statement of what it has approved.",
   "topics": [
    "supplements",
@@ -31,7 +31,7 @@
   "url": "https://doi.org/10.1007/s00406-022-01547-w",
   "kind": "meta-analysis",
   "finding": "Pooling all five placebo-controlled trials of the lavender oil capsule Silexan (1,213 adult outpatients, 10 weeks), anxiety scores fell more than on a dummy pill. All five trials were sponsored by the maker.",
-  "strength": "moderate: five randomized trials pooled, all funded by the manufacturer; results apply only to this product.",
+  "strength": "moderate: five randomized trials pooled, all funded by the manufacturer. Results apply only to this product.",
   "topics": [
    "supplements",
    "herbs",
@@ -54,7 +54,7 @@
   "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
   "kind": "guideline",
   "finding": "Forms of magnesium that dissolve well in liquid (aspartate, citrate, lactate and chloride) are absorbed somewhat better than magnesium oxide and sulfate, in small studies.",
-  "strength": "moderate: an official summary of research; the absorption studies are small.",
+  "strength": "moderate: an official summary of research. The absorption studies are small.",
   "topics": [
    "supplements",
    "supplement-safety"
@@ -74,7 +74,7 @@
   "doi": null,
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8053283/",
   "kind": "meta-analysis",
-  "finding": "Three small trials (151 older adults) found people fell asleep about 17 minutes sooner on magnesium than on a dummy pill, with no clear change in total sleep; the evidence was low to very low quality.",
+  "finding": "Three small trials (151 older adults) found people fell asleep about 17 minutes sooner on magnesium than on a dummy pill, with no clear change in total sleep. The evidence was low to very low quality.",
   "strength": "early: three small trials at moderate to high risk of bias.",
   "topics": [
    "supplements",
@@ -96,7 +96,7 @@
   "url": "https://doi.org/10.1016/j.jaac.2017.09.414",
   "kind": "study",
   "finding": "In a 13-week trial of 125 children (autistic, or with Smith-Magenis syndrome) with insomnia, a prescription prolonged-release melatonin helped them sleep longer and fall asleep sooner than a dummy pill.",
-  "strength": "moderate: one randomized, placebo-controlled trial, funded by the maker; long-term data come from follow-up studies.",
+  "strength": "moderate: one randomized, placebo-controlled trial, funded by the maker. Long-term data come from follow-up studies.",
   "topics": [
    "supplements",
    "sleep",
@@ -118,7 +118,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/providers/digest/adhd-and-complementary-health-approaches-science",
   "kind": "review",
-  "finding": "Summarises the research on complementary approaches for ADHD: omega-3 helps little if at all and less than medicine; melatonin may help sleep problems in children with ADHD; ginkgo and St John’s wort have not been shown to help.",
+  "finding": "Summarizes the research on complementary approaches for ADHD: omega-3 helps little if at all and less than medicine; melatonin may help sleep problems in children with ADHD; ginkgo and St John’s wort have not been shown to help.",
   "strength": "moderate: an official summary of reviews and trials.",
   "topics": [
    "supplements",
@@ -146,7 +146,7 @@
   "url": "https://www.nccih.nih.gov/health/providers/digest/autism-spectrum-disorder-and-complementary-health-approaches-science",
   "kind": "review",
   "finding": "Melatonin has evidence for sleep problems in autism; there isn’t enough evidence that omega-3 helps; secretin, chelation, hyperbaric oxygen and antifungals don’t help and may be dangerous; music therapy may help social interaction.",
-  "strength": "moderate: an official summary of reviews and trials; some of the research is older.",
+  "strength": "moderate: an official summary of reviews and trials. Some of the research is older.",
   "topics": [
    "supplements",
    "autism",
@@ -170,8 +170,8 @@
   "doi": null,
   "url": "https://pubmed.ncbi.nlm.nih.gov/37058600/",
   "kind": "review",
-  "finding": "There was little evidence that omega-3 or omega-6 supplements improve ADHD symptoms in children and teens; the trials were small, varied and short.",
-  "strength": "strong: a Cochrane review; the conclusion is that there is little benefit.",
+  "finding": "There was little evidence that omega-3 or omega-6 supplements improve ADHD symptoms in children and teens. The trials were small, varied and short.",
+  "strength": "strong: a Cochrane review. The conclusion is that there is little benefit.",
   "topics": [
    "supplements",
    "adhd"
@@ -192,8 +192,8 @@
   "doi": "10.1542/peds.2004-2164",
   "url": "https://pubmed.ncbi.nlm.nih.gov/15867048/",
   "kind": "study",
-  "finding": "In 117 children with dyspraxia (developmental coordination disorder), three months of omega-3 and omega-6 capsules did not improve movement skills, but reading, spelling and behaviour improved compared with olive-oil placebo capsules.",
-  "strength": "early: one randomized trial; not yet well replicated.",
+  "finding": "In 117 children with dyspraxia (developmental coordination disorder), three months of omega-3 and omega-6 capsules did not improve movement skills, but reading, spelling and behavior improved compared with olive-oil placebo capsules.",
+  "strength": "early: one randomized trial, not yet well replicated.",
   "topics": [
    "supplements",
    "neurodiversity"
@@ -235,7 +235,7 @@
   "doi": "10.1089/cap.2018.0146",
   "url": "https://doi.org/10.1089/cap.2018.0146",
   "kind": "study",
-  "finding": "In a six-week pilot of 54 children with ADHD, saffron and methylphenidate gave similar improvements in parent and teacher ratings; there was no placebo group.",
+  "finding": "In a six-week pilot of 54 children with ADHD, saffron and methylphenidate gave similar improvements in parent and teacher ratings. There was no placebo group.",
   "strength": "early: one small pilot without a placebo group.",
   "topics": [
    "supplements",
@@ -277,7 +277,7 @@
   "doi": null,
   "url": "https://medlineplus.gov/druginfo/natural/794.html",
   "kind": "guideline",
-  "finding": "Some people taking 5-HTP developed eosinophilia-myalgia syndrome (EMS), though it isn’t known whether 5-HTP or a contaminant caused it; it should not be combined with antidepressants or carbidopa, and should be avoided in pregnancy.",
+  "finding": "Some people taking 5-HTP developed eosinophilia-myalgia syndrome (EMS), though it isn’t known whether 5-HTP or a contaminant caused it. It should not be combined with antidepressants or carbidopa, and should be avoided in pregnancy.",
   "strength": "moderate: an official safety summary.",
   "topics": [
    "supplements",
@@ -298,7 +298,7 @@
   "doi": null,
   "url": "https://medlineplus.gov/druginfo/natural/326.html",
   "kind": "guideline",
-  "finding": "In 1989 an outbreak of eosinophilia-myalgia syndrome was traced mostly to L-tryptophan from one manufacturer; there is little reliable information on safety beyond 3 weeks, and it interacts with antidepressants.",
+  "finding": "In 1989 an outbreak of eosinophilia-myalgia syndrome was traced mostly to L-tryptophan from one manufacturer. There is little reliable information on safety beyond 3 weeks, and it interacts with antidepressants.",
   "strength": "moderate: an official safety summary.",
   "topics": [
    "supplements",
@@ -319,7 +319,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth",
   "kind": "guideline",
-  "finding": "At least 40 studies tested SAMe for depression and many showed benefits, but most were short, small and not high quality, so the evidence is not conclusive; people with bipolar disorder should use it only under supervision because it may worsen mania.",
+  "finding": "At least 40 studies tested SAMe for depression and many showed benefits, but most were short, small and not high quality, so the evidence is not conclusive. People with bipolar disorder should use it only under supervision because it may worsen mania.",
   "strength": "mixed: many small, short trials.",
   "topics": [
    "supplements"
@@ -339,7 +339,7 @@
   "doi": "10.3390/nu11092232",
   "url": "https://doi.org/10.3390/nu11092232",
   "kind": "meta-analysis",
-  "finding": "Across 16 trials of B-complex supplements taken for at least four weeks, people reported slightly less stress; there was no clear effect on depression or anxiety.",
+  "finding": "Across 16 trials of B-complex supplements taken for at least four weeks, people reported slightly less stress. There was no clear effect on depression or anxiety.",
   "strength": "moderate: a meta-analysis of randomized trials with a small effect and moderate differences between studies.",
   "topics": [
    "supplements",
@@ -382,7 +382,7 @@
   "url": "https://doi.org/10.1038/s41598-017-19096-x",
   "kind": "meta-analysis",
   "finding": "Children with ADHD had lower ferritin (stored iron) on average than other children, but similar blood iron and transferrin.",
-  "strength": "moderate: a meta-analysis of observational studies; it shows a link, not a cause.",
+  "strength": "moderate: a meta-analysis of observational studies. It shows a link, not a cause.",
   "topics": [
    "supplements",
    "adhd"
@@ -447,7 +447,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/ginkgo",
   "kind": "guideline",
-  "finding": "Ginkgo has not been shown to prevent dementia or help several other conditions; leaf extract is likely safe in moderate amounts, but it may raise bleeding risk with blood thinners, and the raw seeds are poisonous.",
+  "finding": "Ginkgo has not been shown to prevent dementia or help several other conditions. Leaf extract is likely safe in moderate amounts, but it may raise bleeding risk with blood thinners, and the raw seeds are poisonous.",
   "strength": "moderate: an official summary of research.",
   "topics": [
    "supplements",
@@ -469,7 +469,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/asian-ginseng",
   "kind": "guideline",
-  "finding": "Evidence on Asian ginseng for tiredness is mixed; short-term use seems safe for most people, insomnia is the most common side effect, and it may lower blood sugar and interact with some medicines.",
+  "finding": "Evidence on Asian ginseng for tiredness is mixed. Short-term use seems safe for most people, insomnia is the most common side effect, and it may lower blood sugar and interact with some medicines.",
   "strength": "moderate: an official summary of research.",
   "topics": [
    "supplements",
@@ -490,7 +490,7 @@
   "doi": null,
   "url": "https://publications.aston.ac.uk/id/eprint/31376",
   "kind": "study",
-  "finding": "In a crossover pilot, 36 young adults with mild stress, anxiety or low mood reported lower scores after four weeks of hops extract than after a dummy pill; morning cortisol did not change.",
+  "finding": "In a crossover pilot, 36 young adults with mild stress, anxiety or low mood reported lower scores after four weeks of hops extract than after a dummy pill. Morning cortisol did not change.",
   "strength": "early: one small pilot study.",
   "topics": [
    "supplements",
@@ -512,7 +512,7 @@
   "doi": null,
   "url": "https://pubmed.ncbi.nlm.nih.gov/21669584/",
   "kind": "study",
-  "finding": "24 adults with sleep problems who ate two kiwis an hour before bed for four weeks fell asleep faster and slept longer; there was no comparison group.",
+  "finding": "24 adults with sleep problems who ate two kiwis an hour before bed for four weeks fell asleep faster and slept longer. There was no comparison group.",
   "strength": "early: one small study without a control group.",
   "topics": [
    "supplements",
@@ -533,7 +533,7 @@
   "doi": "10.1055/s-0032-1315110",
   "url": "https://doi.org/10.1055/s-0032-1315110",
   "kind": "study",
-  "finding": "In a 15-week double-blind trial, people with generalized anxiety improved about as much on a standard Galphimia glauca extract as on lorazepam, with fewer side effects; the trials come from the group that developed the extract.",
+  "finding": "In a 15-week double-blind trial, people with generalized anxiety improved about as much on a standard Galphimia glauca extract as on lorazepam, with fewer side effects. The trials come from the group that developed the extract.",
   "strength": "early: trials from one research group, not independently repeated.",
   "topics": [
    "supplements",
@@ -577,7 +577,7 @@
   "doi": "10.1089/acm.2012.0185",
   "url": "https://doi.org/10.1089/acm.2012.0185",
   "kind": "study",
-  "finding": "Over three months, 37 healthy adults taking a standard sceletium extract showed no clinically important differences from placebo in vital signs, heart tracings or blood tests; the trial tested safety, not benefit.",
+  "finding": "Over three months, 37 healthy adults taking a standard sceletium extract showed no clinically important differences from placebo in vital signs, heart tracings or blood tests. The trial tested safety, not benefit.",
   "strength": "early: one small safety trial linked to the maker.",
   "topics": [
    "supplements",
@@ -641,7 +641,7 @@
   "doi": null,
   "url": "https://www.ncbi.nlm.nih.gov/books/NBK548757/",
   "kind": "guideline",
-  "finding": "Liver injury has been reported with products containing skullcap, sometimes leading to liver failure; most cases involved several herbs, and some products were adulterated with germander, a known liver toxin.",
+  "finding": "Liver injury has been reported with products containing skullcap, sometimes leading to liver failure. Most cases involved several herbs, and some products were adulterated with germander, a known liver toxin.",
   "strength": "moderate: case reports collected by the NIH liver-injury database.",
   "topics": [
    "supplements",
@@ -705,7 +705,7 @@
   "doi": null,
   "url": "https://painphysicianjournal.com/linkout?issn=1533-3159&page=353&vol=20",
   "kind": "meta-analysis",
-  "finding": "Across eight controlled trials, PEA reduced pain more than inactive comparisons; the trials were few, varied and often poor quality, and side effects were poorly reported.",
+  "finding": "Across eight controlled trials, PEA reduced pain more than inactive comparisons. The trials were few, varied and often poor quality, and side effects were poorly reported.",
   "strength": "early: a small meta-analysis of mostly low-quality trials.",
   "topics": [
    "supplements"
@@ -726,7 +726,7 @@
   "url": "https://www.cambridge.org/core/journals/british-journal-of-nutrition/article/creatine-supplementation-for-treating-symptoms-of-depression-a-systematic-review-and-metaanalysis/32402D649A44771955050ED518B6E564",
   "kind": "meta-analysis",
   "finding": "Across 11 trials (1,093 people), creatine did slightly better than placebo for depression, but the average effect was below what patients would notice and the evidence was very low certainty, with signs of bias.",
-  "strength": "early: very low certainty evidence; the true effect may be trivial or none.",
+  "strength": "early: very low certainty evidence. The true effect may be trivial or none.",
   "topics": [
    "supplements"
   ],
@@ -745,7 +745,7 @@
   "doi": null,
   "url": "https://doi.org/10.3389/fnut.2025.1641246",
   "kind": "review",
-  "finding": "Human research on lion’s mane is a handful of small trials, mostly on thinking and memory; mood benefits come mainly from animal studies, and the safety profile still needs establishing.",
+  "finding": "Human research on lion’s mane is a handful of small trials, mostly on thinking and memory. Mood benefits come mainly from animal studies, and the safety profile still needs establishing.",
   "strength": "early: few small human trials.",
   "topics": [
    "supplements"
@@ -765,7 +765,7 @@
   "doi": null,
   "url": "https://pubmed.ncbi.nlm.nih.gov/22747190/",
   "kind": "review",
-  "finding": "Across six 12-week trials, bacopa improved memory free recall in 9 of 17 tests; the authors called the evidence suggestive, not conclusive.",
+  "finding": "Across six 12-week trials, bacopa improved memory free recall in 9 of 17 tests. The authors called the evidence suggestive, not conclusive.",
   "strength": "early: a small number of short trials.",
   "topics": [
    "supplements",
@@ -807,7 +807,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/chasteberry",
   "kind": "guideline",
-  "finding": "Low to moderate quality studies suggest chasteberry might reduce PMS symptoms such as breast pain; it is generally well tolerated short term but may not be safe in pregnancy or with hormone-sensitive conditions.",
+  "finding": "Low to moderate quality studies suggest chasteberry might reduce PMS symptoms such as breast pain. It is generally well tolerated short term but may not be safe in pregnancy or with hormone-sensitive conditions.",
   "strength": "early: low to moderate quality studies.",
   "topics": [
    "supplements",
@@ -828,7 +828,7 @@
   "doi": "10.1016/s0002-9378(98)70377-1",
   "url": "https://doi.org/10.1016/s0002-9378(98)70377-1",
   "kind": "study",
-  "finding": "In a US trial of 466 women over three cycles, calcium carbonate lowered premenstrual symptom scores more than placebo by the second and third cycle; the placebo group also improved.",
+  "finding": "In a US trial of 466 women over three cycles, calcium carbonate lowered premenstrual symptom scores more than placebo by the second and third cycle. The placebo group also improved.",
   "strength": "early: one large randomized trial, not widely repeated.",
   "topics": [
    "supplements"
@@ -848,7 +848,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/black-cohosh",
   "kind": "guideline",
-  "finding": "Black cohosh may help hot flushes but not anxiety or low mood, and studies disagree; rare but serious liver damage has been reported with products labelled as black cohosh, and some contain the wrong herb.",
+  "finding": "Black cohosh may help hot flushes but not anxiety or low mood, and studies disagree. Rare but serious liver damage has been reported with products labeled as black cohosh, and some contain the wrong herb.",
   "strength": "mixed: studies disagree.",
   "topics": [
    "supplements",
@@ -892,8 +892,8 @@
   "doi": null,
   "url": "https://www.nhs.uk/conditions/pre-menstrual-syndrome/",
   "kind": "guideline",
-  "finding": "Regular exercise and plenty of sleep can help PMS; a GP can offer treatments including CBT, hormonal medicines and antidepressants if symptoms are severe.",
-  "strength": "moderate: official advice; the exercise trials are of poor quality.",
+  "finding": "Regular exercise and plenty of sleep can help PMS. A doctor can offer treatments including CBT, hormonal medicines and antidepressants if symptoms are severe.",
+  "strength": "moderate: official advice. The exercise trials are of poor quality.",
   "topics": [
    "complementary-health"
   ],
@@ -1000,7 +1000,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/post-traumatic-stress-disorder-ptsd/treatment/",
   "kind": "guideline",
-  "finding": "Talking therapies such as trauma-focused CBT and EMDR are the main treatments for PTSD; it is not clear exactly how EMDR works.",
+  "finding": "Talking therapies such as trauma-focused CBT and EMDR are the main treatments for PTSD. It is not clear exactly how EMDR works.",
   "strength": "moderate: official advice.",
   "topics": [
    "complementary-health",
@@ -1086,7 +1086,7 @@
   "doi": null,
   "url": "https://www.cambridge.org/core/journals/psychological-medicine/article/effect-of-heart-rate-variability-biofeedback-training-on-stress-and-anxiety-a-metaanalysis/A839E9C968E54774DF5C8FB186764EF0",
   "kind": "meta-analysis",
-  "finding": "Across 24 studies (484 people), training with heart-rate variability biofeedback reduced self-reported stress and anxiety, a large effect compared with controls; more well-controlled trials are needed.",
+  "finding": "Across 24 studies (484 people), training with heart-rate variability biofeedback reduced self-reported stress and anxiety, a large effect compared with controls. More well-controlled trials are needed.",
   "strength": "moderate: a meta-analysis of mostly small studies.",
   "topics": [
    "stress",
@@ -1193,7 +1193,7 @@
   "doi": "10.1186/1471-244X-8-41",
   "url": "https://doi.org/10.1186/1471-244X-8-41",
   "kind": "meta-analysis",
-  "finding": "Across 27 studies of relaxation training (progressive relaxation, autogenic training, applied relaxation and meditation), anxiety fell by a medium-to-large amount; many studies were not randomized.",
+  "finding": "Across 27 studies of relaxation training (progressive relaxation, autogenic training, applied relaxation and meditation), anxiety fell by a medium-to-large amount. Many studies were not randomized.",
   "strength": "moderate: a meta-analysis including uncontrolled studies.",
   "topics": [
    "anxiety",
@@ -1277,7 +1277,7 @@
   "url": "https://doi.org/10.1038/s41746-021-00400-z",
   "kind": "study",
   "finding": "In 2,115 first-year doctors wearing sleep trackers, more day-to-day variation in sleep went with more depressive symptoms, and steadier sleep with better next-day mood.",
-  "strength": "moderate: a large prospective study; it shows a link, not a cause.",
+  "strength": "moderate: a large prospective study. It shows a link, not a cause.",
   "topics": [
    "sleep"
   ],
@@ -1361,8 +1361,8 @@
   "doi": null,
   "url": "https://www.nice.org.uk/guidance/ng206",
   "kind": "guideline",
-  "finding": "Recommends person-centred energy management (pacing) and says not to offer programmes based on fixed, step-by-step increases in physical activity, such as graded exercise therapy.",
-  "strength": "moderate: a national guideline; the trial evidence for ME/CFS treatments is limited.",
+  "finding": "Recommends person-centered energy management (pacing) and says not to offer programs based on fixed, step-by-step increases in physical activity, such as graded exercise therapy.",
+  "strength": "moderate: a national guideline. The trial evidence for ME/CFS treatments is limited.",
   "topics": [
    "energy",
    "burnout"
@@ -1404,7 +1404,7 @@
   "doi": "10.1007/s00127-022-02332-9",
   "url": "https://doi.org/10.1007/s00127-022-02332-9",
   "kind": "review",
-  "finding": "Across 24 observational studies, adult pet owners were less socially isolated; only some studies found less loneliness.",
+  "finding": "Across 24 observational studies, adult pet owners were less socially isolated. Only some studies found less loneliness.",
   "strength": "mixed: observational studies with mixed results.",
   "topics": [
    "loneliness",
@@ -1447,7 +1447,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/medicines/methylphenidate-adults/side-effects-of-methylphenidate-for-adults/",
   "kind": "guideline",
-  "finding": "Common side effects of methylphenidate include trouble sleeping and loss of appetite; taking the last dose more than 6 hours before bed, and taking it with a meal, can help.",
+  "finding": "Common side effects of methylphenidate include trouble sleeping and loss of appetite. Taking the last dose more than 6 hours before bed, and taking it with a meal, can help.",
   "strength": "strong: official medicines information.",
   "topics": [
    "adhd"
@@ -1469,7 +1469,7 @@
   "doi": null,
   "url": "https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety",
   "kind": "guideline",
-  "finding": "Summarises research on acupuncture; results for anxiety are mixed and many studies are of poor quality, and it is generally safe with a qualified practitioner using sterile needles.",
+  "finding": "Summarizes research on acupuncture. Results for anxiety are mixed and many studies are of poor quality, and it is generally safe with a qualified practitioner using sterile needles.",
   "strength": "mixed: studies disagree and many are low quality.",
   "topics": [
    "complementary-health"
@@ -1489,7 +1489,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/advice-for-life-situations-and-events/bereavement/",
   "kind": "guideline",
-  "finding": "Advice and support for grief after a bereavement or loss, including when to see a GP and where to find bereavement support.",
+  "finding": "Advice and support for grief after a bereavement or loss, including when to see a doctor and where to find bereavement support.",
   "strength": "moderate: official advice.",
   "topics": [
    "grief"
@@ -1509,7 +1509,7 @@
   "doi": null,
   "url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet",
   "kind": "guideline",
-  "finding": "Stress is usually a response to an outside cause and fades when it ends; anxiety can continue without a threat. If symptoms won’t go away or interfere with daily life, it may be time to talk to a professional.",
+  "finding": "Stress is usually a response to an outside cause and fades when it ends. Anxiety can continue without a threat. If symptoms won’t go away or interfere with daily life, it may be time to talk to a professional.",
   "strength": "moderate: official advice.",
   "topics": [
    "stress",
@@ -1531,7 +1531,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/panic-disorder/",
   "kind": "guideline",
-  "finding": "See a GP if you have symptoms of panic disorder; they may examine you to rule out other conditions that could cause the symptoms.",
+  "finding": "See a doctor if you have symptoms of panic disorder. They may examine you to rule out other conditions that could cause the symptoms.",
   "strength": "moderate: official advice.",
   "topics": [
    "anxiety"
@@ -1552,7 +1552,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/",
   "kind": "guideline",
-  "finding": "Describes depersonalisation and derealisation; a GP may examine you and do tests to check for other causes, then refer you to a mental health specialist.",
+  "finding": "Describes depersonalisation and derealisation. A doctor may examine you and do tests to check for other causes, then refer you to a mental health specialist.",
   "strength": "moderate: official advice.",
   "topics": [
    "stress"
@@ -1572,7 +1572,7 @@
   "doi": null,
   "url": "https://www.ncbi.nlm.nih.gov/books/NBK538516/",
   "kind": "review",
-  "finding": "The autonomic nervous system controls organs automatically; its sympathetic and parasympathetic branches work in opposition to keep the body in balance, with a third, enteric, branch in the gut.",
+  "finding": "The autonomic nervous system controls organs automatically. Its sympathetic and parasympathetic branches work in opposition to keep the body in balance, with a third, enteric, branch in the gut.",
   "strength": "strong: a standard medical reference.",
   "topics": [
    "stress",
@@ -1634,7 +1634,7 @@
   "doi": null,
   "url": "https://theconversation.com/what-is-fawning-how-is-it-related-to-trauma-and-the-fight-or-flight-response-205024",
   "kind": "news",
-  "finding": "The word “fawn” was introduced by therapist Pete Walker in his 2013 book on complex PTSD to describe people-pleasing as a response to threat; there isn’t yet much research on it.",
+  "finding": "The word “fawn” was introduced by therapist Pete Walker in his 2013 book on complex PTSD to describe people-pleasing as a response to threat. There isn’t yet much research on it.",
   "strength": "theory: a popular clinical idea, not yet tested much.",
   "topics": [
    "stress",
@@ -1656,7 +1656,7 @@
   "url": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/",
   "kind": "guideline",
   "finding": "The NHS self-help advice for anxiety includes regular exercise, relaxation and breathing exercises, good sleep, and cutting down on caffeine and alcohol, which can make anxiety and sleep worse.",
-  "strength": "moderate: official self-help advice built on research reviews; the advice is general, not tailored to one person.",
+  "strength": "moderate: official self-help advice built on research reviews. The advice is general, not tailored to one person.",
   "topics": [
    "supplements",
    "anxiety",
@@ -1670,7 +1670,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/ (search result, Oct 2026)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "singh-2023",
@@ -1682,7 +1682,7 @@
   "url": "https://doi.org/10.1136/bjsports-2022-106195",
   "kind": "review",
   "finding": "An overview of 97 reviews (1,039 trials, about 128,000 people) found physical activity reduced symptoms of depression, anxiety and distress compared with usual care, with medium-sized effects.",
-  "strength": "strong: a very large body of trials; the trials vary a lot in quality and type of exercise.",
+  "strength": "strong: a very large body of trials. The trials vary a lot in quality and type of exercise.",
   "topics": [
    "supplements",
    "anxiety",
@@ -1695,7 +1695,7 @@
   ],
   "verified": true,
   "verified_by": "https://bjsm.bmj.com/content/bjsports/early/2023/07/11/bjsports-2022-106195.full.pdf ; https://www.unisa.edu.au/media-centre/Releases/2023/exercise-more-effective-than-medicines-to-manage-mental-health",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "zaccaro-2018",
@@ -1720,7 +1720,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137615/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "nccih-herb-drug",
@@ -1742,7 +1742,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science (search result, Oct 2026) ; https://www.ncbi.nlm.nih.gov/books/NBK548880/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "pittler-ernst-2003",
@@ -1765,7 +1765,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.cochrane.org/evidence/CD003383_kava-extract-treating-anxiety ; https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003383/information/th",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "nccih-st-johns-wort",
@@ -1777,7 +1777,7 @@
   "url": "https://www.nccih.nih.gov/health/st-johns-wort",
   "kind": "guideline",
   "finding": "St John’s wort is not consistently effective for depression and is not approved as a medicine for it in the US. It interacts with many medicines, including birth control pills and some antidepressants, where the mix can cause a dangerous rise in serotonin.",
-  "strength": "moderate: official summary; trial results are mixed.",
+  "strength": "moderate: official summary. Trial results are mixed.",
   "topics": [
    "supplements",
    "herbs",
@@ -1788,7 +1788,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/st-johns-wort ; https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth (search results, Oct 2026)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "nhs-sad-treatment",
@@ -1799,7 +1799,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/",
   "kind": "guideline",
-  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS; check with a GP first if you have an eye condition or take medicines that make you sensitive to light.",
+  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS. Check with a doctor first if you have an eye condition or take medicines that make you sensitive to light.",
   "strength": "early: the NHS says there isn’t enough evidence to be sure light therapy works, though many people find it helps.",
   "topics": [
    "supplements",
@@ -1810,7 +1810,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/ ; https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/ (search result, Oct 2026)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "holt-lunstad-2010",
@@ -1822,7 +1822,7 @@
   "url": "https://doi.org/10.1371/journal.pmed.1000316",
   "kind": "meta-analysis",
   "finding": "A meta-analysis of 148 studies (308,849 participants) found people with stronger social relationships had about 50% greater odds of survival over the study periods, consistently across age, sex and health status.",
-  "strength": "strong — large meta-analysis of observational studies; causation not established",
+  "strength": "strong, large meta-analysis of observational studies. Causation not established",
   "topics": [
    "social-support",
    "loneliness"
@@ -1832,7 +1832,7 @@
   ],
   "verified": true,
   "verified_by": "https://journals.plos.org/plosmedicine/article?id=10.1371%2Fjournal.pmed.1000316",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "swami-2022",
@@ -1854,7 +1854,7 @@
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9258883",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "balban-2023",
@@ -1866,7 +1866,7 @@
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947/",
   "kind": "study",
   "finding": "In a month-long randomized trial of five minutes a day, breathing exercises improved mood more than mindfulness meditation, with cyclic sighing (long out-breaths) showing the largest benefits.",
-  "strength": "early: a single remote trial; needs replication.",
+  "strength": "early: a single remote trial. Needs replication.",
   "topics": [
    "stress",
    "calm",
@@ -1877,7 +1877,7 @@
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947 ; https://hubermanlab.stanford.edu/publications/brief-structured-respiration-practices-enhance-mood-and-reduce-physiological-arousal",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "frattaroli-2006",
@@ -1900,7 +1900,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17073523/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "nccih-tai-chi",
@@ -1922,7 +1922,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know ; https://www.nccih.nih.gov/health/tips/tips-what-you-should-know-about-tai-chi-for-health (search result, Oct 2026)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "kinnaird-2019",
@@ -1933,7 +1933,7 @@
   "doi": "10.1016/j.eurpsy.2018.09.004",
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
   "kind": "meta-analysis",
-  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants. Alexithymia is common in autism but not universal.",
   "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
   "topics": [
    "alexithymia",
@@ -1946,7 +1946,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6331035/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "dunn-1997",
@@ -1969,7 +1969,7 @@
   ],
   "verified": true,
   "verified_by": "https://ouci.dntb.gov.ua/works/4082G0p4 (reference list with DOI)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "aron-aron-1997",
@@ -1981,7 +1981,7 @@
   "url": "https://pubmed.ncbi.nlm.nih.gov/9248053/",
   "kind": "study",
   "finding": "Across seven studies, the authors identified a single core trait of sensory-processing sensitivity, partly independent of introversion and emotionality, and developed the 27-item Highly Sensitive Person Scale.",
-  "strength": "moderate: a widely used measure; later research supports the trait but debates its structure and overlap with neuroticism.",
+  "strength": "moderate: a widely used measure. Later research supports the trait but debates its structure and overlap with neuroticism.",
   "topics": [
    "neurodiversity",
    "sensory",
@@ -1993,7 +1993,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9248053/ ; https://sensitivityresearch.com/publication/sensory-processing-sensitivity-and-its-relation-to-introversion-and-emotionality",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "mcewen-1998",
@@ -2015,7 +2015,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9428819/ ; https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/1260946",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "taylor-2000",
@@ -2027,7 +2027,7 @@
   "url": "https://doi.org/10.1037/0033-295X.107.3.411",
   "kind": "theory",
   "finding": "Proposed that under stress people, perhaps especially women, often respond by protecting others and seeking social connection (\"tend and befriend\"), not only fight or flight.",
-  "strength": "moderate: influential theory with supporting evidence; sex differences are debated.",
+  "strength": "moderate: influential theory with supporting evidence. Sex differences are debated.",
   "topics": [
    "stress"
   ],
@@ -2036,7 +2036,7 @@
   ],
   "verified": true,
   "verified_by": "https://taylorlab.psych.ucla.edu/wp-content/uploads/sites/5/2014/10/2000_Biobehavioral-responses-to-stress-in-females_tend-and-befriend.pdf ; https://www.deepdyve.com/lp/doc/tSvZ2obcc9",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "siegel-1999",
@@ -2047,7 +2047,7 @@
   "doi": null,
   "url": "https://catalog.library.nashville.org/Record/CARL0000114962",
   "kind": "book",
-  "finding": "A book linking attachment, memory and brain development; it introduced the \"window of tolerance\", the range of arousal in which a person can feel strong emotion and still think and respond flexibly.",
+  "finding": "A book linking attachment, memory and brain development. It introduced the \"window of tolerance\", the range of arousal in which a person can feel strong emotion and still think and respond flexibly.",
   "strength": "theory: a widely used clinical metaphor rather than a tested construct.",
   "topics": [
    "stress",
@@ -2059,7 +2059,7 @@
   ],
   "verified": true,
   "verified_by": "https://cmu.marmot.org/Record/.b1416257x ; https://catalog.library.nashville.org/Record/CARL0000114962 (New York: Guilford Press, c1999)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "grossman-2023",
@@ -2071,7 +2071,7 @@
   "url": "https://doi.org/10.1016/j.biopsycho.2023.108589",
   "kind": "review",
   "finding": "Reviewed the evidence for each of polyvagal theory's five basic premises and argued that each is untenable or highly implausible.",
-  "strength": "debated: a strong critique; Porges and colleagues have responded.",
+  "strength": "debated: a strong critique. Porges and colleagues have responded.",
   "topics": [
    "stress",
    "polyvagal"
@@ -2081,7 +2081,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/37230290/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "grossman-taylor-2007",
@@ -2104,7 +2104,7 @@
   ],
   "verified": true,
   "verified_by": "https://synapsesocial.com/papers/W2060699864 ; https://qigonginstitute.org/abstract-print/16846",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "coan-schaefer-davidson-2006",
@@ -2116,7 +2116,7 @@
   "url": "https://doi.org/10.1111/j.1467-9280.2006.01832.x",
   "kind": "study",
   "finding": "In an fMRI study, married women facing the threat of a mild shock showed less threat-related brain activity while holding their husband's hand than when alone.",
-  "strength": "moderate — small, much-cited brain-imaging study",
+  "strength": "moderate, small, much-cited brain-imaging study",
   "topics": [
    "social-support",
    "attachment"
@@ -2126,7 +2126,7 @@
   ],
   "verified": true,
   "verified_by": "DOI shown in citing references on journals.sagepub.com (e.g. https://journals.sagepub.com/doi/10.1177/1948550616646427)",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "yoo-walker-2007",
@@ -2148,7 +2148,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17956744 ; https://newsarchive.berkeley.edu/news/media/releases/2007/10/22_sleeploss.shtml",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "craig-2002",
@@ -2160,7 +2160,7 @@
   "url": "https://doi.org/10.1038/nrn894",
   "kind": "review",
   "finding": "Described a pathway that carries signals about the body's internal state to the brain (including the insula), and proposed it underlies subjective feelings, emotion and self-awareness.",
-  "strength": "strong: a foundational, widely cited review; some proposals remain theoretical.",
+  "strength": "strong: a foundational, widely cited review. Some proposals remain theoretical.",
   "topics": [
    "interoception",
    "emotions"
@@ -2170,7 +2170,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12154366/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "khalsa-2018",
@@ -2182,7 +2182,7 @@
   "url": "https://doi.org/10.1016/j.bpsc.2017.12.004",
   "kind": "review",
   "finding": "A consensus review from the 2016 Interoception Summit on how to measure interoception and study its role in mental health.",
-  "strength": "moderate: expert consensus; the field is still developing reliable measures.",
+  "strength": "moderate: expert consensus. The field is still developing reliable measures.",
   "topics": [
    "interoception",
    "stress"
@@ -2192,7 +2192,7 @@
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/29884281/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "butler-randall-2013",
@@ -2215,7 +2215,7 @@
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/1754073912451630 ; https://experts.arizona.edu/en/publications/emotional-coregulation-in-close-relationships/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  },
  {
   "id": "coan-sbarra-2015",
@@ -2226,7 +2226,7 @@
   "doi": "10.1016/j.copsyc.2014.12.021",
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/",
   "kind": "theory",
-  "finding": "Proposes that the brain expects to have supportive people around, which lowers perceived risk and effort; without them, coping takes more effort.",
+  "finding": "Proposes that the brain expects to have supportive people around, which lowers perceived risk and effort. Without them, coping takes more effort.",
   "strength": "moderate: a theory supported by a growing set of mostly small studies.",
   "topics": [
    "stress",
@@ -2237,6 +2237,6 @@
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/",
-  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+  "note": "Same work as in an earlier list. Repeated here only to add where it now shows up (supp9)."
  }
 ]

@@ -23,7 +23,7 @@
     flip: ['/small-wins.html#flip-it', 'Turn a complaint into a request', 'about 2 minutes', 'a complaint or worry turned into a request or a plan'],
     signal: ['/signal-translator.html', 'Chat analyzer', 'about 2 minutes', 'see how a message may land and a calmer version that keeps your ask, or paste a whole chat to see where it turned'],
     shifter: ['/carrier-wave-decoder.html?tab=their-side', 'See it from their side', 'about 5 minutes', 'their side of the moment, and questions to ask instead of guessing'],
-    decoder: ['/carrier-wave-decoder.html', 'After a talk went wrong: a step-by-step reset', 'about 20 minutes', 'work out what slipped, settle, and practise what to say next time'],
+    decoder: ['/carrier-wave-decoder.html', 'After a talk went wrong: a step-by-step reset', 'about 20 minutes', 'work out what slipped, settle, and practice what to say next time'],
     write: ['/write-it-through.html', 'Talk it through in writing', 'about 10 minutes, then a wait', 'one topic, facts not verdicts, one clear ask'],
     landit: ['/workpapers/wp-09-say-it-so-it-lands.html', 'Before you reply: say it so it lands', 'about 5 minutes', 'a fact, a feeling and one kind ask'],
     pause: ['/pursue-withdraw.html#plan-h', 'Make a pause plan for arguments (in Cool-down corner)', 'about 10 minutes', 'a pause word, a break length and a time to come back, agreed on a calm day'],
@@ -53,7 +53,7 @@
     wired: ['/wired-differently.html', 'Wired differently: how people hear the same words'],
     know: ['/know-yourself.html', 'Know your own wiring'],
     load: ['/share-the-load.html', 'Share the load: which tool to use first'],
-    roommates: ['/share-the-load.html#roommates', 'Roommates and housemates: chores, bills and a house meeting'],
+    roommates: ['/share-the-load.html#roommates', 'Roommates: chores, bills and a house meeting'],
     friends: ['/friends.html', 'Friends: when a friendship drifts'],
     parents: ['/parents.html', 'For parents: big feelings, siblings and teens'],
     grown: ['/grown-up-children.html', 'Grown-up children and parents'],
@@ -64,7 +64,7 @@
     thanks: ['/appreciation-at-work.html', 'Appreciation at work'],
     more: ['/more-than-two.html', 'More than two partners: sharing the load'],
     hours: ['/different-hours.html', 'Different hours: nights, shifts, and the one at home'],
-    exHouse: ['/examples.html#housemates', 'What small changes look like: housemates (made-up example)'],
+    exHouse: ['/examples.html#housemates', 'What small changes look like: roommates (made-up example)'],
     exSiblings: ['/examples.html#siblings', 'What small changes look like: adult siblings (made-up example)'],
     exWork: ['/examples.html#cofounders', 'What small changes look like: co-founders (made-up example)'],
     exPoly: ['/examples.html#poly', 'What small changes look like: a polyamorous home (made-up example)']
@@ -100,7 +100,7 @@
       ['text', 'A message went wrong', ['signal', 'landit', 'write'], 'friends', 'shifter'],
       ['no', 'I need to say no or set a limit', ['no', 'landit', 'write'], 'friends', 'carry']
     ]],
-    ['house', 'Housemates', 'it’s about housemates', true, [
+    ['house', 'Housemates', 'it’s about roommates', true, [
       ['chores', 'Chores and bills feel unfair', ['lemonq', 'lemonq', 'owner'], 'roommates', 'checkin'],
       ['room', 'Noise, guests, sleep or room rules', ['signal', 'room', 'room'], 'roommates', 'landit'],
       ['meeting', 'We need a house meeting', ['checkin', 'checkin', 'owner'], 'roommates', 'lemonq'],
@@ -183,7 +183,7 @@
       if (!alt || alt === pick) alt = x[2][slot === 0 ? 2 : 0];
       if (!alt || alt === pick) alt = x[4];
       var read = R[x[3]];
-      var because = 'Because you said ' + esc(w[2]) + ', “' + esc(quoteWhat(x[1])) + '”, and you have ' + esc(tm[2]) + '.';
+      var because = 'Because you said ' + esc(w[2]) + ', “' + esc(quoteWhat(x[1])) + ',” and you have ' + esc(tm[2]) + '.';
       var h = '<div class="sf-res" tabindex="-1">' +
         '<p class="sf-k">Your starting point</p>' + card(pick, true) +
         '<p class="sf-why">' + because + '</p>';

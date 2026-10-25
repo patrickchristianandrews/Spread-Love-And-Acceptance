@@ -356,7 +356,7 @@
       D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && noteBox && !noteBox.hidden) closeNote(); });
     }
     noteBox.innerHTML = '<label class="tol-sv-pop-h" for="tol-sv-notetext">' + (editing ? 'Your note' : 'A new note') +
-      '<small>' + (spot && spot.h ? 'Near “' + esc(spot.h) + '”. ' : '') + (spot ? 'A small dot will mark this paragraph.' : 'A small dot will sit beside the page title.') + '</small></label>' +
+      '<small>' + (spot && spot.h ? 'Near “' + esc(spot.h) + '.” ' : '') + (spot ? 'A small dot will mark this paragraph.' : 'A small dot will sit beside the page title.') + '</small></label>' +
       '<textarea id="tol-sv-notetext" rows="5" maxlength="' + NOTE_MAX + '" placeholder="What you want to remember, try, or ask about this. Kept only on this device."></textarea>' +
       '<p class="tol-sv-note-acts"><button type="button" class="tol-sv-cgo" data-nt="ok">Keep note</button>' +
       (editing ? '<button type="button" class="tol-sv-undo" data-nt="del">Delete</button>' : '') +

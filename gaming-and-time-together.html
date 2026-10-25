@@ -157,7 +157,7 @@
 <p class="simple-lede">Gaming is a real way to unwind, and for a lot of people it’s where their friends are. Phones are how we keep up with everyone. None of that is the problem. The trouble starts when one of you feels ignored and the other feels nagged. <strong>The goal isn’t less gaming. It’s both of you feeling chosen.</strong></p>
 
 <div class="try-this" data-in-short>
-  <p><strong>In short:</strong></p>
+  <p><strong>The short version:</strong></p>
   <ul>
     <li>Games and phones aren’t the enemy. Feeling invisible is.</li>
     <li>Give a heads-up before a long session, and use the breaks between matches for small check-ins.</li>
@@ -199,7 +199,7 @@
 </details>
 
 <h2 id="unwind">If gaming is how you unwind</h2>
-<p>After a long day, a game can be the thing that resets you, and online it is often where your friends are. That matters, and you don’t need to apologise for it. Your partner probably isn’t against your games. They want to feel noticed too.</p>
+<p>After a long day, a game can be the thing that resets you, and online it is often where your friends are. That matters, and you don’t need to apologize for it. Your partner probably isn’t against your games. They want to feel noticed too.</p>
 <details class="sf-more no-bubble" data-sf-for="unwind"><summary><span class="sf-shut-t">Read more</span><span class="sf-open-t">Show less</span> <span class="sf-min">· about 1 min</span><span class="sr-only">: If gaming is how you unwind</span></summary>
 <ul>
   <li><strong>Give a heads-up before a long session.</strong> “Raid tonight, probably till ten.” No surprises.</li>
@@ -243,7 +243,7 @@
 <ul>
   <li><strong>A heads-up before a long session,</strong> with a rough end time.</li>
   <li><strong>The “two more matches” rule.</strong> When one of you asks for time, finish two more matches (or the round), then come.</li>
-  <li><strong>One protected evening a week.</strong> No games and no scrolling, just the two of you, even if it’s only a takeaway and a walk.</li>
+  <li><strong>One protected evening a week.</strong> No games and no scrolling, just the two of you, even if it’s only takeout and a walk.</li>
   <li><strong>Phone-free dinner.</strong> Phones face down, or in another room.</li>
   <li><strong>Chores before the session.</strong> The dishes and your own jobs for the day are done before you log on, so nobody has to chase or keep score. Not sure whose job is whose? Make a quick list with <a href="/workpapers/fill/wp-03.html">one owner per job</a>.</li>
   <li><strong>Phones count too.</strong> Scrolling in bed, or a phone at every meal, feels the same to the person next to you. The same habits help.</li>
@@ -256,8 +256,8 @@
 <details class="sf-more no-bubble" data-sf-for="bonding"><summary><span class="sf-shut-t">Read more</span><span class="sf-open-t">Show less</span> <span class="sf-min">· about 2 min</span><span class="sr-only">: Bonding tips: games and phones can bring you closer too</span></summary>
 <ul>
   <li id="co-op"><strong>Play something together.</strong> A co-op game, a puzzle game, a party game with friends. Pick one that the less-keen player can enjoy too.</li>
-  <li id="watch-them-play"><strong>Watch them play for ten minutes and ask about it.</strong> “Who’s that? What are you trying to do?” Being curious about their world says “I’m interested in you”.</li>
-  <li id="teach-each-other"><strong>Teach each other.</strong> They show you their game; you show them your hobby. Being the beginner for a bit is a nice way to laugh together.</li>
+  <li id="watch-them-play"><strong>Watch them play for ten minutes and ask about it.</strong> “Who’s that? What are you trying to do?” Being curious about their world says “I’m interested in you.”</li>
+  <li id="teach-each-other"><strong>Teach each other.</strong> They show you their game. You show them your hobby. Being the beginner for a bit is a nice way to laugh together.</li>
   <li><strong>Share what you find, not just your time.</strong> Send each other the one video or meme that made you think of them.</li>
   <li><strong>Make a real goodnight.</strong> Phones down for the last ten minutes in bed, even on gaming nights.</li>
 </ul>
@@ -358,7 +358,7 @@
   }
   function full() { return dealText() + '\n\nOpen our deal: ' + link() + '\n(If you change anything, send a new link.)'; }
   // the box shows the deal itself; the long link is added only to what you copy or share
-  function render(save) { var t = dealText(); out.textContent = t.indexOf('\n') < 0 ? t + '\n(Fill in a line or two above. The grey words are only examples.)' : t; if (save !== false) keep(); }
+  function render(save) { var t = dealText(); out.textContent = t.indexOf('\n') < 0 ? t + '\n(Fill in a line or two above. The gray words are only examples.)' : t; if (save !== false) keep(); }
   function fromLink(o) {
     // their "Your name" is your "Their name": swap the two, so each phone reads from its own side
     var who = typeof o['td-n1'] === 'string' ? o['td-n1'].trim() : '';
@@ -367,7 +367,7 @@
     fill(o);
     var n = $('td-from');
     n.hidden = false;
-    n.textContent = (who ? who + ' shared' : 'Someone shared') + ' this deal with you. Change anything you like, then send it back with “Share it”.';
+    n.textContent = (who ? who + ' shared' : 'Someone shared') + ' this deal with you. Change anything you like, then send it back with “Share it.”';
     try { history.replaceState(null, '', location.pathname + location.search + '#deal'); } catch (e) {}
     setTimeout(function () { var d = $('deal'); if (d) d.scrollIntoView({ block: 'start' }); }, 300);
   }

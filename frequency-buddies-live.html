@@ -301,7 +301,7 @@
       var q = new chrome.cast.media.QueueLoadRequest(items); q.repeatMode = chrome.cast.media.RepeatMode.ALL;
       castState.textContent = 'Sending the station to the TV…';
       session.getSessionObj().queueLoad(q, function () {
-        castState.textContent = 'Live on ' + session.getCastDevice().friendlyName + '. You can close this page; the TV keeps playing.';
+        castState.textContent = 'Live on ' + session.getCastDevice().friendlyName + '. You can close this page. The TV keeps playing.';
         if (tuned && !v.paused) { v.pause(); paused = true; $('fbl-pause').textContent = '▶ Play'; setBehind(true); }
       }, function (err) { castState.textContent = 'The TV couldn’t start the station (' + (err && (err.description || err.code) || 'unknown') + '). Try Cast again in a minute.'; });
     } catch (e) { castState.textContent = 'The TV couldn’t start the station (' + e.message + ').'; }

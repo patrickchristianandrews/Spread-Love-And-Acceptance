@@ -558,7 +558,7 @@
       files = Array.prototype.filter.call(files || [], function (f) { return /^image\//.test(f.type); });
       if (!files.length) return;
       // not asked yet: ask first, then read
-      if (!savedSide()) { pending = files; readBtn.hidden = false; say('Which side are your messages on? Pick one above, then tap “Read the screenshot”.'); fs.scrollIntoView && fs.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+      if (!savedSide()) { pending = files; readBtn.hidden = false; say('Which side are your messages on? Pick one above, then tap “Read the screenshot.”'); fs.scrollIntoView && fs.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
       pending = null; readBtn.hidden = true;
       review.innerHTML = '';
       say('Loading the screenshot reader on this device…');

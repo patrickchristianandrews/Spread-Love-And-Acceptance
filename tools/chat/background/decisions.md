@@ -9,7 +9,7 @@ go: /library/life.html#joint-decisions | Joint decisions (Library)
 evidence: A decision heuristic popularized by Amazon’s Jeff Bezos (“one-way and two-way doors”). It’s a practical rule of thumb rather than a research finding.
 try: “This is a two-way door: let’s try the new chore split for a month and switch back if it’s not working.”
 
-Some decisions are easy to undo (a new routine, a restaurant choice); others aren’t (moving house, a big purchase). Reversible decisions can be made quickly and tested. Irreversible ones deserve more time and care.
+Some decisions are easy to undo (a new routine, a restaurant choice). Others aren’t (moving house, a big purchase). Reversible decisions can be made quickly and tested. Irreversible ones deserve more time and care.
 
 Treating reversible decisions as experiments takes pressure off both people.
 
@@ -19,7 +19,7 @@ Program: The monthly look-back (WP-04) treats household changes as experiments t
 aka: good enough decision; satisficer; maximizer
 see: Reversible and irreversible decisions; Analysis paralysis
 go: /library/motivation.html#decision-fatigue | Decision fatigue (Library)
-evidence: Herbert Simon introduced “satisficing” in the 1950s. Later research (for example, Barry Schwartz and colleagues) suggested “maximizers” who seek the best option are often less satisfied than “satisficers”.
+evidence: Herbert Simon introduced “satisficing” in the 1950s. Later research (for example, Barry Schwartz and colleagues) suggested “maximizers” who seek the best option are often less satisfied than “satisficers.”
 try: “Any restaurant that’s nearby and has a veggie option is fine tonight.”
 
 Satisficing means choosing the first option that’s good enough, rather than searching for the best one. For many everyday decisions, it saves time and stress, and people are often just as happy with the result.
@@ -45,20 +45,20 @@ Program: Pillar III, Read your state first: strong feelings in the moment can di
 aka: premortem; imagine it failed; what could go wrong
 see: Reversible and irreversible decisions; Retrospective for households
 go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
-evidence: Gary Klein described the pre-mortem (Harvard Business Review, 2007). It’s widely used in project planning; evidence is mostly practical.
+evidence: Gary Klein described the pre-mortem (Harvard Business Review, 2007). It’s widely used in project planning. Evidence is mostly practical.
 try: “Imagine it’s a month from now and the new chore plan has failed. What went wrong?”
 
 A pre-mortem imagines a plan has already failed and asks why. It surfaces likely problems before they happen, when they’re easy to plan around.
 
 It works well for new household routines, trips and projects.
 
-Program: The monthly look-back (WP-04) is the after version; a pre-mortem is the before version.
+Program: The monthly look-back (WP-04) is the after version. A pre-mortem is the before version.
 
 ## Sleep on it
 aka: sleep on it; wait before deciding; decide tomorrow
 see: The 10-10-10 question; Negotiating with deadlines
 go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
-evidence: Common advice. Research on emotion and decision-making suggests strong emotions and tiredness can affect choices; claims about “unconscious thought” helping decisions are debated.
+evidence: Common advice. Research on emotion and decision-making suggests strong emotions and tiredness can affect choices. Claims about “unconscious thought” helping decisions are debated.
 try: “This is a big one. Can we both sleep on it and decide tomorrow evening?”
 
 For big or emotional decisions, waiting a day often leads to a calmer choice. Strong feelings fade, and new considerations surface.
@@ -71,10 +71,10 @@ Program: WP-02 suggests putting off anything that doesn’t need deciding in the
 aka: consensus; consent decision making; no objections
 see: Decision rights at work; Deciding by domain at home
 go: /library/life.html#joint-decisions | Joint decisions (Library)
-evidence: Consent-based decision-making comes from sociocracy and similar approaches. It’s a practical method; research is limited.
-try: Instead of “does everyone love this?”, ask “can everyone live with this for a month?”
+evidence: Consent-based decision-making comes from sociocracy and similar approaches. It’s a practical method. Research is limited.
+try: Instead of “does everyone love this?” ask “can everyone live with this for a month?”
 
-Consensus means everyone agrees. Consent means nobody has a strong objection. Consent is often faster, especially in groups, because it asks “is this good enough to try?” rather than “is this everyone’s favorite?”.
+Consensus means everyone agrees. Consent means nobody has a strong objection. Consent is often faster, especially in groups, because it asks “is this good enough to try?” rather than “is this everyone’s favorite?”
 
 It works well for households and teams trying something new.
 
@@ -124,7 +124,7 @@ aka: deciding by values; what matters most; values in decisions
 see: Values clarification; The 10-10-10 question
 go: /library/motivation.html#values | Values (Library)
 evidence: Values-based approaches (for example, in acceptance and commitment therapy) suggest aligning choices with values supports wellbeing. This is general information.
-try: “We both value time together more than money right now. So the cheaper holiday, with more days, makes sense.”
+try: “We both value time together more than money right now. So the cheaper vacation, with more days, makes sense.”
 
 When options seem equal, asking “which fits what we care about most?” can break the tie. Naming shared values also makes it easier to accept a decision you didn’t fully love.
 
@@ -143,7 +143,7 @@ A plain list of pros and cons can mislead if every item counts equally. Weightin
 
 Doing it together also shows what matters to each person.
 
-Program: Useful for joint decisions; the Library’s joint decisions entry covers deciding together.
+Program: Useful for joint decisions. The Library’s joint decisions entry covers deciding together.
 
 ## Default decisions
 aka: default decisions; decide once; standing decisions

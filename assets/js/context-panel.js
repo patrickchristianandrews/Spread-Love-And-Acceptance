@@ -275,7 +275,7 @@
         understood: 'To be understood: say the fact and how it felt, then ask them to say back what they heard.',
         plan: 'To fix a plan: end with one specific question about what, when or who.',
         calm: 'To calm things: lead with what you agree on, keep it short, and suggest a pause if it’s heated.',
-        limit: 'To set a limit: say it once, kindly and clearly. A reason helps if you want to give one, and you don’t need to apologise for having it.',
+        limit: 'To set a limit: say it once, kindly and clearly. A reason helps if you want to give one, and you don’t need to apologize for having it.',
         repair: 'To repair: start with your part, then say what you hope for.',
         check: 'To check you’re reading it right: a short “did you mean…?” beats guessing.'
       } : {
@@ -378,7 +378,7 @@
         (state.people.length > 1 || i > 0 ? '<p class="tol-ctx-pk">Person ' + (i + 1) + ' <button type="button" class="tol-ctx-x" data-rm="' + i + '" aria-label="Remove person ' + (i + 1) + '">Remove</button></p>' : '') +
         chips('rel' + i, REL, false, p.rel, ' aria-label="Who they are to you' + (i ? ', person ' + (i + 1) : '') + '"') +
         '<div class="tol-ctx-age"' + (p.rel === 'child' ? '' : ' hidden') + '><p class="tol-ctx-h">How old?</p>' + chips('age' + i, AGE, false, p.age, ' aria-label="How old"') + '</div>' +
-        '<label class="tol-ctx-name"><span>Name or label (optional)</span><input type="text" maxlength="40" autocomplete="off" data-name="' + i + '" value="' + esc(p.name) + '" placeholder="e.g. Sam, or Mum"></label></div>';
+        '<label class="tol-ctx-name"><span>Name or label (optional)</span><input type="text" maxlength="40" autocomplete="off" data-name="' + i + '" value="' + esc(p.name) + '" placeholder="e.g. Sam, or Mom"></label></div>';
     }
     function render() {
       var m = modeOf(), people = state.people.length ? state.people : [{ rel: '', age: '', name: '' }];

@@ -9,7 +9,7 @@ go: /library/life.html#parenting-styles | Parenting styles (Library)
 evidence: John Gottman described emotion coaching in Raising an Emotionally Intelligent Child (1997). Research suggests children whose parents acknowledge and help name feelings tend to regulate emotions better.
 try: “You’re really disappointed we can’t go to the park. That makes sense. We can go tomorrow.”
 
-Emotion coaching means noticing a child’s feelings, naming them, accepting them, and then helping with limits and problem-solving. All feelings are allowed; not all behaviors are.
+Emotion coaching means noticing a child’s feelings, naming them, accepting them, and then helping with limits and problem-solving. All feelings are allowed, not all behaviors are.
 
 It helps children learn to understand and manage their own emotions over time.
 
@@ -22,7 +22,7 @@ go: /turning-toward.html | Turning Toward
 evidence: A popular phrase from parenting educators. It’s consistent with research suggesting children learn better when calm and connected.
 try: Kneel down, make gentle eye contact: “Hey, you seem upset. Let’s take a breath.” Then talk about the behavior.
 
-When a child is upset, trying to correct them straight away rarely works. A moment of connection first (a calm voice, getting to their level, naming the feeling) helps them settle enough to listen.
+When a child is upset, trying to correct them right away rarely works. A moment of connection first (a calm voice, getting to their level, naming the feeling) helps them settle enough to listen.
 
 The same idea works with adults: people hear feedback better when they feel connected.
 
@@ -32,7 +32,7 @@ Program: Pillar III, Read your state first, applies to children too: calm first,
 aka: natural consequences; logical consequences; consequences for kids
 see: Boundaries with kids; Emotion coaching
 go: /library/life.html#parenting-styles | Parenting styles (Library)
-evidence: These ideas come from Adlerian parenting (Rudolf Dreikurs and others). They’re widely used; research generally supports consistent, related consequences over harsh punishment.
+evidence: These ideas come from Adlerian parenting (Rudolf Dreikurs and others). They’re widely used. Research generally supports consistent, related consequences over harsh punishment.
 try: “If the bike is left out in the rain, it’ll get rusty.” Or: “If the toys aren’t put away, they go on the shelf until tomorrow.”
 
 Natural consequences happen on their own (forget your coat, feel cold). Logical consequences are set by adults but related to the behavior (misuse the tablet, lose it for the evening).

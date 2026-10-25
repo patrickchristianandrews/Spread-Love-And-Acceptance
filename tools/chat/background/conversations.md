@@ -20,7 +20,7 @@ go: /check-ins.html#ground | Check-in ground rules
 evidence: A standard facilitation technique for keeping meetings on track. There’s little formal research, but it’s widely used because it works simply.
 try: “That’s a real one, and it deserves its own time. Let’s put it on the list for Sunday.”
 
-When a second topic pops up in a hard talk, the parking lot is a note where it goes to wait safely. It isn’t dismissed. It’s scheduled. That lets you finish the first topic without the conversation sprawling into every old grievance.
+When a second topic pops up in a hard talk, the parking lot is a note where it goes to wait safely. It is scheduled for later. That lets you finish the first topic without the conversation sprawling into every old grievance.
 
 Keep the list somewhere both people can see (a note on the fridge or a shared phone note), and actually come back to it. A parking lot that never gets visited stops being trusted.
 
@@ -33,7 +33,7 @@ go: /library/conflict.html#one-topic | One topic (Library)
 evidence: Relationship researchers describe “kitchen-sinking” (throwing in every complaint) as a sign of escalating conflict. Keeping to one topic is common advice from couples researchers and mediators.
 try: “I want to stay on the holiday plan for now. Can we save the money stuff for Thursday?”
 
-A conversation about the bins that turns into a conversation about everything is almost impossible to finish well. One topic keeps it small enough to actually solve, and small wins build trust for the bigger ones.
+A conversation about the trash that turns into a conversation about everything is almost impossible to finish well. One topic keeps it small enough to actually solve, and small wins build trust for the bigger ones.
 
 If one topic keeps dragging others in, that’s useful information too: maybe the topics share a root, like a missing owner or a timing clash, worth its own conversation.
 
@@ -100,7 +100,7 @@ try: “Want to walk the dog with me?” rather than “We need to talk.”
 
 Some people talk more easily side by side than face to face: in the car, on a walk, while cooking or fixing something. Less eye contact and a shared task can make a conversation feel lower-stakes.
 
-This is especially useful with teenagers, with people who find direct eye contact uncomfortable, and with anyone who tenses up at “can we talk?”. The talk can be shorter and lighter, and it still counts.
+This is especially useful with teenagers, with people who find direct eye contact uncomfortable, and with anyone who tenses up at “can we talk?” The talk can be shorter and lighter, and it still counts.
 
 Program: Turning Toward is about small everyday moments rather than big sit-down talks. A side-by-side chat is a good example.
 
@@ -108,7 +108,7 @@ Program: Turning Toward is about small everyday moments rather than big sit-down
 aka: stop start continue; three questions review; start stop keep
 see: Rose, bud, thorn; Retrospective for households
 go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
-evidence: A common review format from workplace teams and teaching. It’s simple and widely used; there’s little formal research on it specifically.
+evidence: A common review format from workplace teams and teaching. It’s simple and widely used. There’s little formal research on it specifically.
 try: “Stop: leaving laundry in the machine overnight. Start: a Sunday menu plan. Continue: the daily check-in.”
 
 A quick way to review how something is going: what should we stop doing, start doing, and continue doing? It keeps a review practical and balanced, because “continue” makes room for what’s working.
@@ -126,7 +126,7 @@ try: “Rose: lunch with you. Bud: the trip next month. Thorn: that email from w
 
 Each person shares a rose (something good), a thorn (something hard) and a bud (something they’re looking forward to). It’s quick, gentle and works well at dinner, even with kids.
 
-It gives everyone a turn and naturally mixes good news with hard news, so nobody has to announce “I need to talk about something”.
+It gives everyone a turn and naturally mixes good news with hard news, so nobody has to announce “I need to talk about something.”
 
 Program: The 90-second daily check-in (WP-13) has a similar rhythm: how full you were today, one thing you appreciated, one small thing that didn’t feel great, and one thing that would help tomorrow.
 
@@ -178,6 +178,6 @@ try: “We both want Sundays to feel restful. Let’s figure out how to get ther
 
 Before discussing a disagreement, naming what you both want (a calm home, happy kids, a project that ships) reminds you that you’re on the same side, facing the problem together.
 
-It changes the question from “who wins?” to “how do we get there?”. Even when you disagree on the how, agreeing on the why makes the disagreement feel smaller.
+It changes the question from “who wins?” to “how do we get there?” Even when you disagree on the how, agreeing on the why makes the disagreement feel smaller.
 
 Program: The Check-ins opener says it out loud: “I am not against you. I do not think you meant harm. I want to sort out this one thing.”

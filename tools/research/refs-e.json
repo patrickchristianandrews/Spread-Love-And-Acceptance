@@ -9,7 +9,7 @@
     "url": "https://doi.org/10.1037/a0015652",
     "kind": "meta-analysis",
     "finding": "A meta-analysis of 41 samples found that men scored slightly higher than women on alexithymia (difficulty identifying and describing feelings), but the difference was small.",
-    "strength": "moderate — a meta-analysis with a consistent but small effect; self-report measures",
+    "strength": "moderate, a meta-analysis with a consistent but small effect. Self-report measures",
     "topics": [
       "emotions",
       "alexithymia",
@@ -31,8 +31,8 @@
     "doi": "10.1037/0022-3514.94.6.925",
     "url": "https://doi.org/10.1037/0022-3514.94.6.925",
     "kind": "study",
-    "finding": "Across 23 countries, cultures that placed more value on social order and hierarchy tended to report more suppression of emotions; cultures valuing individual autonomy and egalitarianism reported less.",
-    "strength": "moderate — large cross-cultural survey; country-level correlations, self-report",
+    "finding": "Across 23 countries, cultures that placed more value on social order and hierarchy tended to report more suppression of emotions. Cultures valuing individual autonomy and egalitarianism reported less.",
+    "strength": "moderate, large cross-cultural survey. Country-level correlations, self-report",
     "topics": [
       "emotions",
       "culture",
@@ -54,8 +54,8 @@
     "doi": "10.1038/s41467-018-05377-0",
     "url": "https://doi.org/10.1038/s41467-018-05377-0",
     "kind": "study",
-    "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
-    "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+    "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance. Rested people who briefly watched them felt lonelier too.",
+    "strength": "early, small experimental samples (18 in the main scanning study), one lab",
     "topics": [
       "sleep",
       "stress",
@@ -79,7 +79,7 @@
     "url": "https://doi.org/10.3389/fpsyg.2021.741421",
     "kind": "study",
     "finding": "Interviews with eight autistic children and young people explored burnout, inertia, meltdown and shutdown as separate experiences, what they feel like, and what others do that helps or makes them worse.",
-    "strength": "early — small qualitative study; builds on earlier work with autistic adults",
+    "strength": "early, small qualitative study. Builds on earlier work with autistic adults",
     "topics": [
       "autism",
       "meltdown",
@@ -102,8 +102,8 @@
     "doi": null,
     "url": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/",
     "kind": "study",
-    "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest; greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
-    "strength": "moderate — large survey, cross-sectional and self-report",
+    "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest. Greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
+    "strength": "moderate, large survey, cross-sectional and self-report",
     "topics": [
       "autism",
       "special-interests",
@@ -129,7 +129,7 @@
     "url": "https://doi.org/10.1177/1362361319853442",
     "kind": "study",
     "finding": "Interviews with eleven autistic women diagnosed at 40 or older explored how they made sense of a lifetime of feeling different and how the diagnosis changed their understanding of themselves.",
-    "strength": "early — small qualitative (IPA) study",
+    "strength": "early, small qualitative (IPA) study",
     "topics": [
       "autism",
       "diagnosis",
@@ -154,7 +154,7 @@
     "url": "https://doi.org/10.1016/j.jesp.2012.03.012",
     "kind": "study",
     "finding": "After being provoked, people who reflected on the moment from a distanced, “fly on the wall” view felt less angry and behaved less aggressively than people who relived it from their own point of view.",
-    "strength": "moderate — lab experiments with students",
+    "strength": "moderate, lab experiments with students",
     "topics": [
       "anger",
       "emotion-regulation",
@@ -177,7 +177,7 @@
     "url": "https://doi.org/10.1037/a0013965",
     "kind": "review",
     "finding": "A review of evidence that anger is usually an “approach” emotion: like eagerness, it moves people toward a goal or obstacle rather than away from it.",
-    "strength": "moderate — influential review; the approach view is debated (see replies in the same journal issue)",
+    "strength": "moderate, influential review. The approach view is debated (see replies in the same journal issue)",
     "topics": [
       "anger",
       "emotions",
@@ -199,7 +199,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/20018996/",
     "kind": "meta-analysis",
     "finding": "Across 96 studies and 139 treatment effects, psychological treatments for anger (such as CBT, skills training and relaxation) were generally effective, with considerable variation between treatments and studies.",
-    "strength": "moderate — large meta-analysis; varied study quality and settings",
+    "strength": "moderate, large meta-analysis. Varied study quality and settings",
     "topics": [
       "anger",
       "therapy",
@@ -222,7 +222,7 @@
     "url": "https://doi.org/10.1037/0022-3514.74.5.1238",
     "kind": "study",
     "finding": "Diary studies of everyday social interactions supported Reis and Shaver’s model: disclosing feelings, and feeling that the other person responded with understanding, both contributed to how intimate an interaction felt.",
-    "strength": "moderate — two diary studies with students",
+    "strength": "moderate, two diary studies with students",
     "topics": [
       "intimacy",
       "responsiveness",
@@ -245,8 +245,8 @@
     "doi": null,
     "url": "https://ggia.berkeley.edu/practice/36_questions_for_increasing_closeness",
     "kind": "study",
-    "finding": "Pairs of strangers who spent about 45 minutes on gradually deepening self-disclosure tasks (the “36 questions”) felt closer afterwards than pairs given small-talk tasks; matching on attitudes or expecting to like each other made no significant difference.",
-    "strength": "moderate — lab studies with students; creates temporary closeness, not lasting relationships",
+    "finding": "Pairs of strangers who spent about 45 minutes on gradually deepening self-disclosure tasks (the “36 questions”) felt closer afterward than pairs given small-talk tasks. Matching on attitudes or expecting to like each other made no significant difference.",
+    "strength": "moderate, lab studies with students. Creates temporary closeness, not lasting relationships",
     "topics": [
       "closeness",
       "self-disclosure",
@@ -261,7 +261,7 @@
     ],
     "verified": true,
     "verified_by": "https://stafforini.com/works/aron-1997-experimental-generation-interpersonal/ ; https://ggia.berkeley.edu/practice/practice_as_pdf/36_questions_for_increasing_closeness",
-    "note": "Link is the Greater Good in Action (UC Berkeley) page for the practice, which cites the study; the DOI (probably 10.1177/0146167297234003) was not shown directly in a search result. Must NOT be confused with aron-aron-1997 in the research index: the site links the in-text name directly."
+    "note": "Link is the Greater Good in Action (UC Berkeley) page for the practice, which cites the study. The DOI (probably 10.1177/0146167297234003) was not shown directly in a search result. Must NOT be confused with aron-aron-1997 in the research index: the site links the in-text name directly."
   },
   {
     "id": "acevedo-aron-2009",
@@ -273,7 +273,7 @@
     "url": "https://doi.org/10.1037/a0014226",
     "kind": "review",
     "finding": "Reviewing studies of short- and long-term relationships, the authors concluded that romantic love without obsession can last in long-term relationships and is linked with greater satisfaction and well-being.",
-    "strength": "moderate — review and meta-analysis of mostly self-report studies",
+    "strength": "moderate, review and meta-analysis of mostly self-report studies",
     "topics": [
       "love",
       "long-term-relationships",
@@ -296,8 +296,8 @@
     "doi": "10.1037/0003-066X.54.3.165",
     "url": "https://doi.org/10.1037/0003-066X.54.3.165",
     "kind": "theory",
-    "finding": "Proposes that perceived time left shapes social goals: when time feels open-ended people seek new information and contacts; when it feels limited they focus on fewer, emotionally meaningful relationships.",
-    "strength": "strong — widely supported theory, though causal tests are harder",
+    "finding": "Proposes that perceived time left shapes social goals: when time feels open-ended people seek new information and contacts. When it feels limited they focus on fewer, emotionally meaningful relationships.",
+    "strength": "strong, widely supported theory, though causal tests are harder",
     "topics": [
       "ageing",
       "relationships",
@@ -320,8 +320,8 @@
     "doi": null,
     "url": null,
     "kind": "study",
-    "finding": "People expected deep conversations with strangers to be more awkward and less enjoyable than they turned out to be; deeper talks created more connection and happiness than predicted.",
-    "strength": "moderate — a series of experiments",
+    "finding": "People expected deep conversations with strangers to be more awkward and less enjoyable than they turned out to be. Deeper talks created more connection and happiness than predicted.",
+    "strength": "moderate, a series of experiments",
     "topics": [
       "small-talk",
       "conversation",
@@ -332,7 +332,7 @@
     ],
     "verified": false,
     "verified_by": "https://www.lib.uchicago.edu/research/help/bibliographies/busfac/epley/ ; https://www.chicagobooth.edu/faculty/directory/e/nicholas-epley",
-    "note": "Authors, title, year, journal, volume and pages confirmed; no DOI or publisher page appeared in search results, so no link. The site names it in text without a link."
+    "note": "Authors, title, year, journal, volume and pages confirmed. No DOI or publisher page appeared in search results, so no link. The site names it in text without a link."
   },
   {
     "id": "malinowski-1923-phatic",
@@ -378,7 +378,7 @@
     ],
     "verified": false,
     "verified_by": "https://metapsychology.net/?p=2560 ; https://clarkrelationshiplab.yale.edu/sites/default/files/files/Close%20relationships.pdf",
-    "note": "Chapter and pages confirmed via a review and later citations; no stable link to the chapter itself. Named in text without a link (wrapped in .no-research)."
+    "note": "Chapter and pages confirmed via a review and later citations. No stable link to the chapter itself. Named in text without a link (wrapped in .no-research)."
   },
   {
     "id": "hofmann-2012-cbt",
@@ -389,8 +389,8 @@
     "doi": "10.1007/s10608-012-9476-1",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3584580/",
     "kind": "review",
-    "finding": "Reviewing 106 meta-analyses of cognitive behavioural therapy, found the strongest support for anxiety problems, bulimia, anger and general stress, with support across many other problems; few studies looked at groups such as ethnic minorities or people on low incomes.",
-    "strength": "strong — a review of many meta-analyses; quality of the underlying trials varies",
+    "finding": "Reviewing 106 meta-analyses of cognitive behavioral therapy, found the strongest support for anxiety problems, bulimia, anger and general stress, with support across many other problems. Few studies looked at groups such as ethnic minorities or people on low incomes.",
+    "strength": "strong, a review of many meta-analyses. Quality of the underlying trials varies",
     "topics": [
       "anxiety",
       "stress",
@@ -413,8 +413,8 @@
     "doi": "10.1371/journal.pone.0100100",
     "url": "https://doi.org/10.1371/journal.pone.0100100",
     "kind": "meta-analysis",
-    "finding": "Across 26 randomised trials (1,524 people), behavioural activation, planning and doing small valued activities, reduced depression more than control conditions, and at least as much as medication in the four trials that compared them.",
-    "strength": "moderate — consistent effects, but most studies were small or low quality with short follow-up",
+    "finding": "Across 26 randomized trials (1,524 people), behavioral activation, planning and doing small valued activities, reduced depression more than control conditions, and at least as much as medication in the four trials that compared them.",
+    "strength": "moderate, consistent effects, but most studies were small or low quality with short follow-up",
     "topics": [
       "stress",
       "depression",
@@ -438,7 +438,7 @@
     "url": "https://doi.org/10.1016/S2215-0366(17)30328-0",
     "kind": "study",
     "finding": "In 3,755 university students with insomnia, an online CBT course for sleep greatly reduced insomnia and also reduced paranoid thoughts and hallucinatory experiences compared with usual care, with better sleep explaining much of the change.",
-    "strength": "strong — very large randomised trial; students only, so results may not apply to everyone",
+    "strength": "strong, very large randomized trial. Students only, so results may not apply to everyone",
     "topics": [
       "sleep",
       "stress",
@@ -461,8 +461,8 @@
     "doi": "10.1016/j.socscimed.2013.09.013",
     "url": "https://doi.org/10.1016/j.socscimed.2013.09.013",
     "kind": "study",
-    "finding": "In population data on adults aged 50 and over followed for two to four years, belonging to fewer groups predicted more depression later; among people already depressed, joining one group was linked to a 24% lower risk of relapse and joining three to a 63% lower risk.",
-    "strength": "moderate — large longitudinal samples, but observational, so links rather than proof",
+    "finding": "In population data on adults aged 50 and over followed for two to four years, belonging to fewer groups predicted more depression later. Among people already depressed, joining one group was linked to a 24% lower risk of relapse and joining three to a 63% lower risk.",
+    "strength": "moderate, large longitudinal samples, but observational, so links rather than proof",
     "topics": [
       "belonging",
       "depression",
@@ -486,8 +486,8 @@
     "doi": "10.1016/j.brat.2014.04.006",
     "url": "https://doi.org/10.1016/j.brat.2014.04.006",
     "kind": "review",
-    "finding": "Describes exposure therapy for anxiety as building new learning that competes with old fear, and sets out ways to strengthen it, such as testing specific expectations, dropping safety behaviours and practising in varied settings.",
-    "strength": "moderate — theory-led clinical review drawing on lab and treatment research",
+    "finding": "Describes exposure therapy for anxiety as building new learning that competes with old fear, and sets out ways to strengthen it, such as testing specific expectations, dropping safety behaviors and practicing in varied settings.",
+    "strength": "moderate, theory-led clinical review drawing on lab and treatment research",
     "topics": [
       "anxiety",
       "stress",
@@ -511,7 +511,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/6615390/",
     "kind": "study",
     "finding": "People who described themselves as worriers and were taught to postpone worry to a set time and place each day reported less daily worry after four weeks than people given no treatment.",
-    "strength": "early — two small early studies; the method is now part of many CBT programmes",
+    "strength": "early, two small early studies. The method is now part of many CBT programs",
     "topics": [
       "anxiety",
       "stress",
@@ -534,8 +534,8 @@
     "doi": "10.1080/20008198.2017.1353383",
     "url": "https://doi.org/10.1080/20008198.2017.1353383",
     "kind": "study",
-    "finding": "In surveys of 68,894 adults in 24 countries, about 70% reported at least one traumatic event in their lives (3.2 on average); events involving interpersonal violence, such as sexual assault, carried the highest risk of PTSD.",
-    "strength": "strong — very large cross-national surveys; based on what people recalled and reported",
+    "finding": "In surveys of 68,894 adults in 24 countries, about 70% reported at least one traumatic event in their lives (3.2 on average). Events involving interpersonal violence, such as sexual assault, carried the highest risk of PTSD.",
+    "strength": "strong, very large cross-national surveys. Based on what people recalled and reported",
     "topics": [
       "stress",
       "trauma",
@@ -557,8 +557,8 @@
     "doi": "10.1017/S0033291717000708",
     "url": "https://doi.org/10.1017/S0033291717000708",
     "kind": "study",
-    "finding": "Across 26 surveys with 71,083 adults, lifetime PTSD was found in 3.9% of everyone and 5.6% of people exposed to trauma; about half of those with PTSD had lasting symptoms, and treatment-seeking was much lower in poorer countries.",
-    "strength": "strong — very large cross-national surveys; self-report diagnostic interviews",
+    "finding": "Across 26 surveys with 71,083 adults, lifetime PTSD was found in 3.9% of everyone and 5.6% of people exposed to trauma. About half of those with PTSD had lasting symptoms, and treatment-seeking was much lower in poorer countries.",
+    "strength": "strong, very large cross-national surveys. Self-report diagnostic interviews",
     "topics": [
       "stress",
       "trauma",
@@ -579,8 +579,8 @@
     "doi": "10.1002/14651858.CD000560",
     "url": "https://www.cochrane.org/evidence/CD000560_psychological-debriefing-preventing-post-traumatic-stress-disorder-ptsd",
     "kind": "review",
-    "finding": "Found no evidence that a single session of psychological debriefing after trauma prevented PTSD, and some evidence it may increase the risk for some people; the authors advised that compulsory debriefing should stop.",
-    "strength": "moderate — systematic review of 15 trials, many of poor quality",
+    "finding": "Found no evidence that a single session of psychological debriefing after trauma prevented PTSD, and some evidence it may increase the risk for some people. The authors advised that compulsory debriefing should stop.",
+    "strength": "moderate, systematic review of 15 trials, many of poor quality",
     "topics": [
       "stress",
       "trauma",
@@ -603,7 +603,7 @@
     "url": "https://ncsacw.acf.hhs.gov/userfiles/files/SAMHSA_Trauma.pdf",
     "kind": "guideline",
     "finding": "Sets out a working definition of trauma and six principles for trauma-informed services: safety; trustworthiness and transparency; peer support; collaboration; empowerment, voice and choice; and cultural, historical and gender issues.",
-    "strength": "theory — an official framework based on expert consensus, not a test of outcomes",
+    "strength": "theory, an official framework based on expert consensus, not a test of outcomes",
     "topics": [
       "stress",
       "trauma",
@@ -625,8 +625,8 @@
     "doi": null,
     "url": "https://www.nice.org.uk/guidance/ng222",
     "kind": "guideline",
-    "finding": "The NHS guideline for England on depression: recommends a choice of treatments made together with the person, including guided self-help, group or individual CBT and behavioural activation, group exercise, other talking therapies and antidepressants.",
-    "strength": "strong — an official guideline based on systematic reviews; some methods have been criticised",
+    "finding": "The NHS guideline for England on depression: recommends a choice of treatments made together with the person, including guided self-help, group or individual CBT and behavioral activation, group exercise, other talking therapies and antidepressants.",
+    "strength": "strong, an official guideline based on systematic reviews. Some methods have been criticized",
     "topics": [
       "stress",
       "depression",
@@ -650,7 +650,7 @@
     "url": "https://ueaeprints.uea.ac.uk/id/eprint/68116/",
     "kind": "meta-analysis",
     "finding": "Pooling 35 studies, estimated that about 27% of autistic adults had an anxiety disorder at the time (42% over their lifetime) and about 23% had depression (37% lifetime), with wide variation between studies.",
-    "strength": "moderate — meta-analysis; very varied methods and many clinical samples",
+    "strength": "moderate, meta-analysis. Very varied methods and many clinical samples",
     "topics": [
       "autism",
       "anxiety",
@@ -673,8 +673,8 @@
     "doi": "10.1037/h0093718",
     "url": "https://doi.org/10.1037/h0093718",
     "kind": "study",
-    "finding": "When a group of actors all gave the same obviously wrong answer about line lengths, participants went along on about a third of answers; about a quarter never went along, and conformity fell sharply when one other person gave the right answer.",
-    "strength": "moderate — classic, much-repeated finding; levels vary with culture and era (see Bond & Smith, 1996)",
+    "finding": "When a group of actors all gave the same obviously wrong answer about line lengths, participants went along on about a third of answers. About a quarter never went along, and conformity fell sharply when one other person gave the right answer.",
+    "strength": "moderate, classic, much-repeated finding. Levels vary with culture and era (see Bond & Smith, 1996)",
     "topics": [
       "belonging",
       "conformity",
@@ -698,7 +698,7 @@
     "url": "https://doi.org/10.1037/0033-2909.119.1.111",
     "kind": "meta-analysis",
     "finding": "Across 133 studies in 17 countries using Asch’s task, conformity was a reliable effect but varied: it had declined in the United States since the 1950s and was higher in more collectivist cultures.",
-    "strength": "strong — large meta-analysis of a single, standard task",
+    "strength": "strong, large meta-analysis of a single, standard task",
     "topics": [
       "belonging",
       "conformity",
@@ -721,7 +721,7 @@
     "url": "https://doi.org/10.1037/h0040525",
     "kind": "study",
     "finding": "Told by an experimenter to keep giving stronger electric shocks to a protesting learner (an actor; no shocks were real), 26 of 40 men continued to the highest level, many showing great distress.",
-    "strength": "debated — a famous result, partly replicated, but its procedure and meaning are disputed",
+    "strength": "debated, a famous result, partly replicated, but its procedure and meaning are disputed",
     "topics": [
       "belonging",
       "obedience",
@@ -743,8 +743,8 @@
     "doi": "10.1037/a0010932",
     "url": "https://doi.org/10.1037/a0010932",
     "kind": "study",
-    "finding": "A safer partial replication with 70 adults, stopping at the learner’s first protest, found obedience rates only slightly lower than Milgram’s 45 years earlier; seeing another person refuse did not reduce obedience.",
-    "strength": "moderate — careful replication, but only of the first part of the procedure",
+    "finding": "A safer partial replication with 70 adults, stopping at the learner’s first protest, found obedience rates only slightly lower than Milgram’s 45 years earlier. Seeing another person refuse did not reduce obedience.",
+    "strength": "moderate, careful replication, but only of the first part of the procedure",
     "topics": [
       "belonging",
       "obedience",
@@ -767,7 +767,7 @@
     "url": "https://doi.org/10.1371/journal.pbio.1001426",
     "kind": "theory",
     "finding": "Argues that the Milgram and Stanford prison studies do not show blind obedience: people went along when they identified with the authority and believed the cause was right, a pattern the authors call engaged followership.",
-    "strength": "theory — an influential reinterpretation drawing on social identity research",
+    "strength": "theory, an influential reinterpretation drawing on social identity research",
     "topics": [
       "belonging",
       "obedience",
@@ -790,7 +790,7 @@
     "url": "https://www.sciencenews.org/article/behind-shock-machine",
     "kind": "book",
     "finding": "Drawing on Milgram’s archives and interviews with participants, argues that the procedure varied more than reported and that many participants doubted the shocks were real, which calls the famous 65% figure into question.",
-    "strength": "debated — archival and journalistic critique; some reviewers questioned its objectivity",
+    "strength": "debated, archival and journalistic critique. Some reviewers questioned its objectivity",
     "topics": [
       "belonging",
       "obedience",
@@ -812,8 +812,8 @@
     "doi": null,
     "url": "https://alnap.org/help-library/resources/an-integrative-theory-of-intergroup-conflict/",
     "kind": "theory",
-    "finding": "Sets out social identity theory: part of our self-image comes from the groups we belong to, and we are motivated to see our groups positively, often by favouring them over others, even when groups are formed on trivial grounds.",
-    "strength": "strong — foundational theory with extensive later support",
+    "finding": "Sets out social identity theory: part of our self-image comes from the groups we belong to, and we are motivated to see our groups positively, often by favoring them over others, even when groups are formed on trivial grounds.",
+    "strength": "strong, foundational theory with extensive later support",
     "topics": [
       "belonging",
       "groups",
@@ -836,8 +836,8 @@
     "doi": "10.1037/0022-3514.64.2.243",
     "url": "https://doi.org/10.1037/0022-3514.64.2.243",
     "kind": "study",
-    "finding": "Students believed they were less comfortable with campus drinking than the average student; over time some men shifted their attitudes towards the imagined norm, and feeling out of step went with feeling alienated.",
-    "strength": "moderate — several studies at one university",
+    "finding": "Students believed they were less comfortable with campus drinking than the average student. Over time some men shifted their attitudes toward the imagined norm, and feeling out of step went with feeling alienated.",
+    "strength": "moderate, several studies at one university",
     "topics": [
       "belonging",
       "norms",
@@ -860,7 +860,7 @@
     "url": "https://find.library.upenn.edu/catalog/994278913503681",
     "kind": "book",
     "finding": "From surveys of employees of one multinational company in about 40 countries, described national differences on dimensions including individualism versus collectivism and power distance.",
-    "strength": "debated — hugely influential; criticised for treating nations as uniform and for its single-company sample",
+    "strength": "debated, hugely influential. Criticized for treating nations as uniform and for its single-company sample",
     "topics": [
       "culture",
       "values",
@@ -883,7 +883,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/11843550/",
     "kind": "meta-analysis",
     "finding": "Pooling many studies, found individualism–collectivism differences were often smaller and less consistent than assumed: European Americans were not more individualistic than African or Latino Americans, nor less collectivistic than Japanese or Korean participants.",
-    "strength": "strong — large meta-analysis; depends on attitude surveys whose cross-cultural meaning is debated",
+    "strength": "strong, large meta-analysis. Depends on attitude surveys whose cross-cultural meaning is debated",
     "topics": [
       "culture",
       "values",
@@ -905,8 +905,8 @@
     "doi": "10.1017/S0140525X0999152X",
     "url": "https://doi.org/10.1017/S0140525X0999152X",
     "kind": "review",
-    "finding": "Showed that most psychology research uses people from Western, educated, industrialised, rich and democratic societies, who are unusual compared with the rest of humanity on many measures, so findings may not generalise.",
-    "strength": "strong — wide-ranging review of comparative evidence",
+    "finding": "Showed that most psychology research uses people from Western, educated, industrialised, rich and democratic societies, who are unusual compared with the rest of humanity on many measures, so findings may not generalize.",
+    "strength": "strong, wide-ranging review of comparative evidence",
     "topics": [
       "culture",
       "values",
@@ -928,7 +928,7 @@
     "url": "https://csmapnyu.org/research/academic-research/emotion-shapes-the-diffusion-of-moralized-content-in-social-networks",
     "kind": "study",
     "finding": "In 563,312 social media posts about divisive political issues, each additional moral-emotional word was linked to about 20% more spread, mostly within like-minded networks rather than across them.",
-    "strength": "moderate — very large observational dataset from one platform and three issues",
+    "strength": "moderate, very large observational dataset from one platform and three issues",
     "topics": [
       "belonging",
       "groups",
@@ -952,7 +952,7 @@
     "url": "https://doi.org/10.1037/0022-3514.79.5.748",
     "kind": "study",
     "finding": "In an online ball-tossing game (1,486 people from 62 countries in the first study), being left out by computer-controlled “players” made people feel worse and lowered their sense of belonging.",
-    "strength": "strong — large samples; the Cyberball method has been widely replicated",
+    "strength": "strong, large samples. The Cyberball method has been widely replicated",
     "topics": [
       "belonging",
       "exclusion",
@@ -976,7 +976,7 @@
     "url": "https://researchportal.bath.ac.uk/en/publications/social-identity-self-esteem-and-mental-health-in-autism/",
     "kind": "study",
     "finding": "In 272 autistic and 267 non-autistic participants, autistic people who identified more strongly with other autistic people had higher self-esteem, which was in turn linked to lower anxiety and depression.",
-    "strength": "moderate — one cross-sectional survey; links, not proof of cause",
+    "strength": "moderate, one cross-sectional survey. Links, not proof of cause",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1000,8 +1000,8 @@
     "doi": "10.1111/j.1469-7610.2004.t01-1-00305.x",
     "url": "https://doi.org/10.1111/j.1469-7610.2004.t01-1-00305.x",
     "kind": "meta-analysis",
-    "finding": "Across 16 studies, about half of autistic children in Strange Situation studies were securely attached; autistic children were less often secure on average, but the difference disappeared in samples of children with higher mental development.",
-    "strength": "moderate — meta-analysis of small studies (287 children in the main analysis)",
+    "finding": "Across 16 studies, about half of autistic children in Strange Situation studies were securely attached. Autistic children were less often secure on average, but the difference disappeared in samples of children with higher mental development.",
+    "strength": "moderate, meta-analysis of small studies (287 children in the main analysis)",
     "topics": [
       "attachment",
       "autism",
@@ -1023,7 +1023,7 @@
     "url": "https://chicagoreference.com/ucp/books/book/chicago/A/bo3774473.html",
     "kind": "theory",
     "finding": "Added a fourth attachment pattern, disorganized/disoriented, for infants who seemed frightened or confused by the caregiver in the Strange Situation, with indices for coding it.",
-    "strength": "strong — foundational coding system, widely used in later research",
+    "strength": "strong, foundational coding system, widely used in later research",
     "topics": [
       "attachment",
       "family"
@@ -1044,8 +1044,8 @@
     "doi": "10.1037/0022-3514.88.6.969",
     "url": "https://doi.org/10.1037/0022-3514.88.6.969",
     "kind": "study",
-    "finding": "In three experiments, people who ruminated about a provocation, even for eight hours, were later more aggressive towards someone who only mildly annoyed them than people who were distracted.",
-    "strength": "moderate — three lab experiments with consistent results",
+    "finding": "In three experiments, people who ruminated about a provocation, even for eight hours, were later more aggressive toward someone who only mildly annoyed them than people who were distracted.",
+    "strength": "moderate, three lab experiments with consistent results",
     "topics": [
       "anger",
       "rumination",
@@ -1068,7 +1068,7 @@
     "url": "https://rascl.studentorg.berkeley.edu/assets/files/kross_etal_2005_ps.pdf",
     "kind": "study",
     "finding": "After recalling an anger-provoking experience, people who asked why they felt as they did from a self-distanced perspective showed less emotional reactivity than those who relived it through their own eyes.",
-    "strength": "moderate — two experiments; later work by the same group has supported self-distancing",
+    "strength": "moderate, two experiments. Later work by the same group has supported self-distancing",
     "topics": [
       "anger",
       "emotion-regulation",
@@ -1090,8 +1090,8 @@
     "doi": "10.1016/j.jacc.2008.11.044",
     "url": "https://doi.org/10.1016/j.jacc.2008.11.044",
     "kind": "meta-analysis",
-    "finding": "Anger and hostility were linked with a modestly higher risk of later coronary heart disease events, in both initially healthy people and people with heart disease; the link was no longer significant in studies that controlled for behaviours such as smoking.",
-    "strength": "moderate — meta-analysis of long-term studies; associations, not proof of cause",
+    "finding": "Anger and hostility were linked with a modestly higher risk of later coronary heart disease events, in both initially healthy people and people with heart disease. The link was no longer significant in studies that controlled for behaviors such as smoking.",
+    "strength": "moderate, meta-analysis of long-term studies. Associations, not proof of cause",
     "topics": [
       "anger",
       "emotions",
@@ -1114,7 +1114,7 @@
     "url": "https://doi.org/10.1093/eurheartj/ehu033",
     "kind": "meta-analysis",
     "finding": "Across nine case-crossover studies, the rate of heart attacks, strokes and arrhythmias was higher in the two hours after an outburst of anger than at other times, especially for people already at high risk.",
-    "strength": "moderate — consistent results across studies; based on patients’ recall of recent anger",
+    "strength": "moderate, consistent results across studies. Based on patients’ recall of recent anger",
     "topics": [
       "anger",
       "emotions",
@@ -1135,8 +1135,8 @@
     "doi": "10.1016/j.cpr.2003.09.006",
     "url": "https://doi.org/10.1016/j.cpr.2003.09.006",
     "kind": "meta-analysis",
-    "finding": "Across 23 controlled studies of adults with anger problems, anger treatments produced medium to large effects; cognitive approaches did well for long-standing (trait) anger, anger suppression and driving anger, and relaxation for in-the-moment anger.",
-    "strength": "moderate — meta-analysis of a modest number of studies",
+    "finding": "Across 23 controlled studies of adults with anger problems, anger treatments produced medium to large effects. Cognitive approaches did well for long-standing (trait) anger, anger suppression and driving anger, and relaxation for in-the-moment anger.",
+    "strength": "moderate, meta-analysis of a modest number of studies",
     "topics": [
       "anger",
       "anger-management",
@@ -1159,7 +1159,7 @@
     "url": "https://doi.org/10.1038/mp.2017.75",
     "kind": "meta-analysis",
     "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
-    "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
+    "strength": "moderate, large meta-analysis of lab tasks, which capture only part of daily life",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1181,8 +1181,8 @@
     "doi": "10.1136/adc.88.7.595",
     "url": "https://doi.org/10.1136/adc.88.7.595",
     "kind": "study",
-    "finding": "Proposed recognising “pathological demand avoidance” as a separate profile within the autism spectrum, based on 150 cases with an equal sex ratio, describing strong avoidance of everyday demands.",
-    "strength": "debated — an influential proposal, not included in the main diagnostic manuals",
+    "finding": "Proposed recognizing “pathological demand avoidance” as a separate profile within the autism spectrum, based on 150 cases with an equal sex ratio, describing strong avoidance of everyday demands.",
+    "strength": "debated, an influential proposal, not included in the main diagnostic manuals",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1205,7 +1205,7 @@
     "url": "https://doi.org/10.1177/13623613211034382",
     "kind": "review",
     "finding": "Reviewing 13 studies, found they nearly all relied on Newson’s original descriptions and mostly on parent reports, seldom considered other explanations such as anxiety, and none asked people with the profile about their own experience.",
-    "strength": "moderate — systematic review showing the evidence base is limited",
+    "strength": "moderate, systematic review showing the evidence base is limited",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1227,8 +1227,8 @@
     "doi": "10.1016/j.neubiorev.2011.12.008",
     "url": "https://doi.org/10.1016/j.neubiorev.2011.12.008",
     "kind": "review",
-    "finding": "Found that autistic people were, on average, less accurate at recognising and remembering face identity, especially when memory was involved, while processing faces in broadly the same way; whether the difficulty is specific to faces was unclear.",
-    "strength": "moderate — review of many behavioural studies; later reviews partly disagree on the details",
+    "finding": "Found that autistic people were, on average, less accurate at recognizing and remembering face identity, especially when memory was involved, while processing faces in broadly the same way. Whether the difficulty is specific to faces was unclear.",
+    "strength": "moderate, review of many behavioral studies. Later reviews partly disagree on the details",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1250,7 +1250,7 @@
     "doi": null,
     "url": "https://www.nhs.uk/conditions/face-blindness/",
     "kind": "guideline",
-    "finding": "Describes face blindness as difficulty recognising faces, often present from childhood and sometimes running in families; there is no treatment, but strategies such as recognising voices, hair or clothes, and telling people, can help.",
+    "finding": "Describes face blindness as difficulty recognizing faces, often present from childhood and sometimes running in families. There is no treatment, but strategies such as recognizing voices, hair or clothes, and telling people, can help.",
     "strength": "moderate: official health information for the public",
     "topics": [
       "face-recognition"
@@ -1273,8 +1273,8 @@
     "doi": "10.1177/1362361317729526",
     "url": "https://doi.org/10.1177/1362361317729526",
     "kind": "study",
-    "finding": "215 observers formed more favourable first impressions of autistic adults when told they were autistic, and observers who knew more about autism rated them more favourably.",
-    "strength": "moderate — one experiment with short recordings and student raters",
+    "finding": "215 observers formed more favorable first impressions of autistic adults when told they were autistic, and observers who knew more about autism rated them more favorably.",
+    "strength": "moderate, one experiment with short recordings and student raters",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1297,7 +1297,7 @@
     "url": "https://doi.org/10.1177/13623613251337504",
     "kind": "study",
     "finding": "In interviews with 12 adults diagnosed as autistic in adulthood, telling others helped some reach support, be more themselves and help others, but many had not been believed, which made them more cautious about telling.",
-    "strength": "early — small qualitative study",
+    "strength": "early, small qualitative study",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1320,7 +1320,7 @@
     "url": "https://pubs.asha.org/doi/10.1044/1092-4388(2006/021)",
     "kind": "review",
     "finding": "Across 23 studies (67 people aged 2 to 60), AAC did not hold back speech, and in many cases speech increased, though most studies lacked strong experimental control.",
-    "strength": "early — consistent direction, but small studies of limited quality",
+    "strength": "early, consistent direction, but small studies of limited quality",
     "topics": [
       "autism",
       "neurodiversity",
@@ -1366,7 +1366,7 @@
     "url": "https://www.asha.org/policy/ps2018-00352/",
     "kind": "guideline",
     "finding": "States that facilitated communication, where a helper supports the person’s hand or arm while they type or point, is discredited: research has found the messages come from the facilitator, and it should not be used.",
-    "strength": "strong — professional position statement based on decades of controlled testing",
+    "strength": "strong, professional position statement based on decades of controlled testing",
     "topics": [
       "neurodiversity",
       "aac",
@@ -1387,8 +1387,8 @@
     "doi": "10.1177/2156869318804297",
     "url": "https://doi.org/10.1177/2156869318804297",
     "kind": "study",
-    "finding": "In 111 autistic adults, everyday discrimination, internalised stigma and concealing being autistic predicted poorer mental health even after accounting for general stress, suggesting minority stress plays a part.",
-    "strength": "early — one cross-sectional survey of a modest sample",
+    "finding": "In 111 autistic adults, everyday discrimination, internalized stigma and concealing being autistic predicted poorer mental health even after accounting for general stress, suggesting minority stress plays a part.",
+    "strength": "early, one cross-sectional survey of a modest sample",
     "topics": [
       "autism",
       "neurodiversity",

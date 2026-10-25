@@ -89,11 +89,11 @@
   // until all of them have come up
   var FISH_FACTS = [
     ['A slow breath out, a little longer than the breath in, helps your body settle.', '/night-garden.html', 'Breathe in the Night Garden'],
-    ['Naming a feeling in a word or two, like “I’m frustrated”, can make it feel a little smaller.', '/know-yourself.html', 'Know your own wiring'],
+    ['Naming a feeling in a word or two, like “I’m frustrated,” can make it feel a little smaller.', '/know-yourself.html', 'Know your own wiring'],
     ['Small moments count. Answering someone’s “Look at this!” builds closeness over time.', '/turning-toward.html', 'Turning toward'],
     ['When your battery is low, the same words land harder. Check it before a hard talk.', '/workpapers/wp-02-how-much-are-you-carrying.html', 'Check your battery'],
     ['Saying back what you heard, before you answer, helps people feel listened to.', '/check-ins.html', 'Weekly check-ins'],
-    ['A pause with a return time, like “Can we pick this up at eight?”, isn’t running away.', '/upset-right-now.html', 'Upset right now?'],
+    ['A pause with a return time, like “Can we pick this up at eight?” isn’t running away.', '/upset-right-now.html', 'Upset right now?'],
     ['Work nobody sees still counts. Writing it down is the first step to sharing it.', '/book/preface.html', 'The work nobody sees'],
     ['You control your words and your effort, not how someone else responds.', '/book/self-2-now-in-depth.html#control', 'Your circle of control'],
     ['Love languages are a menu, not a label. Most people like more than one.', '/love-languages.html', 'Love languages'],
@@ -135,7 +135,7 @@
       nibAt = (!api.still() && wait > 3.5 && Math.random() < 0.75) ? 1.2 + Math.random() * (wait - 2.6) : 0;   // sometimes a little nibble first
     }
     function notYet() {
-      say.textContent = nib > 0 ? 'Just a nibble. Wait for the big dip, then reel in.' : 'Not yet. Keep an eye on the red bobber; when it really dips, Reel in! appears.';
+      say.textContent = nib > 0 ? 'Just a nibble. Wait for the big dip, then reel in.' : 'Not yet. Keep an eye on the red bobber. When it really dips, Reel in! appears.';
     }
     function reel() {
       if (st !== 'bite') { if (st === 'wait' || st === 'fly') notYet(); return; }

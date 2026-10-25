@@ -28,7 +28,7 @@ function extract() {
   const add = (q, src) => {
     q = q.replace(/^“|”$/g, '').trim();
     if (q.split(/\s+/).length < 4 || /…|\.\.\.|___/.test(q) || /[áéíóúñ¿¡]/.test(q)) return;
-    if (/^(?:try this|in short|why it helps|before you share|share or print|upset right now\?)/i.test(q)) return;
+    if (/^(?:try this|in short|the short version|why it helps|before you share|share or print|upset right now\?)/i.test(q)) return;
     const k = q.toLowerCase(); if (!out.has(k)) out.set(k, { t: q, src });
   };
   for (const f of files) {

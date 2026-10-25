@@ -17,7 +17,7 @@
       "going": "This is Pillar II, Fix the setup, not the person, with Pillar III, Read your state first. Starting is often the hardest part: the task feels bigger in your head than it is, your battery may be low, or your wiring may make switching tasks genuinely harder (common with ADHD and for many autistic people). Willpower isn’t the lever. A smaller first step and a better setup usually are.",
       "steps": [
         "Check your battery first. If it’s low, pick a tiny version of the task, or rest first on purpose.",
-        "Shrink the start: “put on gloves and wash three plates”, not “do the dishes”. Set a five-minute timer.",
+        "Shrink the start: “put on gloves and wash three plates,” not “do the dishes.” Set a five-minute timer.",
         "Tie it to a cue you already have (“after I make tea, I…”) and make the first step obvious, like leaving the gloves by the sink.",
         "Be kind to yourself about yesterday. Beating yourself up uses the energy you need to start."
       ],
@@ -128,7 +128,7 @@
       ],
       "scripts": {
         "default": [
-          "I’m at my limit this week. Could you take the school run on Tuesday and Thursday?",
+          "I’m at my limit this week. Could you take the school drop-off on Tuesday and Thursday?",
           "I can’t take that on right now. Could we look at it again next month?"
         ],
         "coworker": [
@@ -156,7 +156,7 @@
         "Keep hard conversations for a calmer week unless they can’t wait."
       ],
       "scripts_other": [
-        "You’ve got so much on. Can I take the school run and dinner on Thursday off your plate this week?",
+        "You’ve got so much on. Can I take the school drop-off and dinner on Thursday off your plate this week?",
         "What’s one thing I could fully take over for you this month?"
       ]
     },

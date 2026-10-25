@@ -38,10 +38,9 @@
   var PREFS = [
     { id: 'short', group: 'main', name: 'Short steps first', note: 'Long pages open on just the steps, with “Show the whole page” one tap away. Long side sections start folded, and the low-energy version opens where a page has one.' },
     { id: 'literal', group: 'main', name: 'Plain and literal', note: 'No hints, idioms or jokey helper lines. Plain wording where a page offers it, and the “what to do” lists open.' },
-    { id: 'listen', group: 'main', name: 'Listen instead of read', note: 'The “Listen” buttons are bigger and easier to find. Your device’s own voice reads the page aloud.' },
     { id: 'big', group: 'main', name: 'Big text and calm', note: 'Extra large text and a still page.' },
-    { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has an “In short” box, a button turns it into a picture summary.' },
-    { id: 'onething', group: 'main', name: 'One thing at a time', note: 'Pages made of numbered idea cards show one card at a time, with Back, Next and “3 of 7”. “Show all at once” is always there.' },
+    { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has a “short version” box, a button turns it into a picture summary.' },
+    { id: 'onething', group: 'main', name: 'One thing at a time', note: 'Pages made of numbered idea cards show one card at a time, with Back, Next and “3 of 7.” “Show all at once” is always there.' },
     { id: 'notimer', group: 'main', name: 'No timers or countdowns', note: 'Countdown clocks are hidden. Breathing counts stay, because they set the pace of a breath, not a deadline.' },
     { id: 'nosurprise', group: 'main', name: 'No surprises', note: 'No pop-ups, pop-in helpers, level-up cards or offers. The page stays still.' },
     { id: 'place', group: 'main', name: 'Keep my place', note: 'Each page remembers how far down you were. Next time, a small “Carry on where you were” link near the top takes you back.' },
@@ -60,13 +59,13 @@
   var TYPES = [
     { id: 'adhd', name: 'ADHD', prefs: ['short', 'onething', 'place', 'fewer'], wiring: ['adhd'] },
     { id: 'autistic', name: 'Autistic', prefs: ['literal', 'nosurprise', 'senses', 'expect'], wiring: ['autistic'] },
-    { id: 'dyslexic', name: 'Dyslexic', prefs: ['readable', 'ruler', 'listen'], wiring: ['dyslexic'] },
+    { id: 'dyslexic', name: 'Dyslexic', prefs: ['readable', 'ruler'], wiring: ['dyslexic'] },
     { id: 'dyspraxic', name: 'Dyspraxic (DCD)', prefs: ['targets', 'readable', 'place'], wiring: ['dyspraxic'] },
     { id: 'anxiety', name: 'Anxiety or OCD', prefs: ['notimer', 'reassure', 'nosurprise'], wiring: ['anxiety'] },
     { id: 'sensory', name: 'Sensory sensitivity', prefs: ['senses', 'nosurprise'], wiring: ['hsp'] },
     { id: 'lowenergy', name: 'Low energy or chronic illness', prefs: ['short', 'fewer'], wiring: [] },
     { id: 'memory', name: 'Brain injury or memory difficulties', prefs: ['place', 'checklist'], wiring: [] },
-    { id: 'esl', name: 'English isn’t my first language', prefs: ['literal', 'listen', 'simple'], wiring: [] },
+    { id: 'esl', name: 'English isn’t my first language', prefs: ['literal', 'simple'], wiring: [] },
     { id: 'lowvision', name: 'Older eyes or low vision', prefs: ['contrast', 'targets'], wiring: [] }
   ];
   var PREF_IDS = PREFS.map(function (p) { return p.id; }), TYPE_IDS = TYPES.map(function (t) { return t.id; });
@@ -223,7 +222,7 @@
     });
     Array.prototype.forEach.call(document.querySelectorAll('main details:not([open]):not([data-ti-opened])'), function (d) {
       var s = d.querySelector('summary'); if (!s) return;
-      if (/what to do|steps|in short|words (you could|to) (use|say)|try this|say it/i.test(s.textContent || '')) { d.open = true; d.setAttribute('data-ti-opened', ''); }
+      if (/what to do|steps|in short|the short version|words (you could|to) (use|say)|try this|say it/i.test(s.textContent || '')) { d.open = true; d.setAttribute('data-ti-opened', ''); }
     });
   }
 
@@ -364,7 +363,7 @@
     });
   }
 
-  // ---- Pictures and summaries: the "In short" box as a picture (Professor Puddles' poster maker, or a plain card)
+  // ---- Pictures and summaries: the "The short version" box as a picture (Professor Puddles' poster maker, or a plain card)
   function inShortBox() {
     return Array.prototype.filter.call(document.querySelectorAll('main .tol-inshort, main [data-in-short]'), function (n) { return !inOwn(n) && n.querySelector('li'); })[0] || null;
   }
@@ -385,9 +384,9 @@
   }
   function pageTitle() { var h = document.querySelector('main h1'); return ((h && h.textContent) || document.title || '').replace(/\s+/g, ' ').trim().split(/[:|]/)[0].slice(0, 70); }
   function drawPicture(host, items) {
-    var spec = { layout: 'checklist', marker: 'number', kicker: 'In short', title: pageTitle(), items: items.map(function (t) { return { text: t }; }), source: path };
+    var spec = { layout: 'checklist', marker: 'number', kicker: 'The short version', title: pageTitle(), items: items.map(function (t) { return { text: t }; }), source: path };
     function plain() {
-      host.innerHTML = '<figure class="ti-piccard"><figcaption><span>In short</span>' + esc(spec.title) + '</figcaption><ol>' +
+      host.innerHTML = '<figure class="ti-piccard"><figcaption><span>The short version</span>' + esc(spec.title) + '</figcaption><ol>' +
         items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol></figure>';
     }
     function poster() {
@@ -449,7 +448,7 @@
     if (!has('notimer')) return;
     var pc = document.getElementById('pause-clock');
     if (pc && !(pc.nextElementSibling && pc.nextElementSibling.classList.contains('ti-notimer-note'))) {
-      pc.after(el('p', { class: 'ti-notimer-note' }, 'Your pause is running. Take the time you need; there’s no clock to watch.'));
+      pc.after(el('p', { class: 'ti-notimer-note' }, 'Your pause is running. Take the time you need. There’s no clock to watch.'));
     }
   }
 
@@ -472,7 +471,7 @@
     if (!Object.keys(ON).length || busyPage() || path === PAGE) return;
     apply();
     placeLink();
-    // some parts arrive a moment later (the "In short" box and the steps switch from in-short.js, the Listen buttons)
+    // some parts arrive a moment later (the "The short version" box and the steps switch from in-short.js, the Listen buttons)
     [150, 400, 1200, 2500, 4500].forEach(function (ms) { setTimeout(function () { apply(); foldsWhenKnown(ms >= 4500); }, ms); });
     if (has('place') && !HOME) {
       window.addEventListener('scroll', notePlace, { passive: true });

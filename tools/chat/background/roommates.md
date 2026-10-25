@@ -3,17 +3,17 @@
 Practical notes for shared homes. These add to the Library’s roommates entry.
 
 ## Roommate agreement
-aka: roommate agreement; house agreement; flatmate agreement; roommate contract
+aka: roommate agreement; house agreement; roommate agreement; roommate contract
 see: House meetings for roommates; Quiet hours
 go: /lemonade-stand.html | The Lemonade Stand
-evidence: Many universities and housing organizations recommend written roommate agreements. They’re practical tools; evidence is anecdotal but consistent.
+evidence: Many universities and housing organizations recommend written roommate agreements. They’re practical tools. Evidence is anecdotal but consistent.
 try: One page: bills and due dates, chores and owners, quiet hours, guests, shared food, and how to raise problems.
 
 A roommate agreement is a short written list of how you’ll share the home: money, chores, noise, guests, food and how you’ll handle problems. It’s best made early, when everyone’s getting along.
 
 It doesn’t need to be legal or formal. The value is in talking through expectations before they clash.
 
-Program: The Lemonade Stand shows chores and bills for two to eight people; WP-03 gives each job an owner.
+Program: The Lemonade Stand shows chores and bills for two to eight people. WP-03 gives each job an owner.
 
 ## House meetings for roommates
 aka: house meeting; roommate meeting; flat meeting
@@ -46,7 +46,7 @@ aka: guests; overnight guests; partner staying over; visitors
 see: Roommate agreement; Quiet hours
 go: /relationships-in-depth.html#roommates | Where roommates start
 evidence: A frequent source of roommate conflict according to housing advisers. Clear agreements help.
-try: “Overnight guests are fine up to two nights a week with a heads-up; longer stays need a chat.”
+try: “Overnight guests are fine up to two nights a week with a heads-up. Longer stays need a chat.”
 
 Guests, especially partners who stay often, can change the feel of a shared home and the cost of utilities. Agreeing expectations in advance avoids resentment.
 
@@ -58,8 +58,8 @@ Program: A roommate agreement can include guest rules alongside chores and bills
 aka: shared groceries; food sharing; eating my food
 see: Roommate agreement; Money and fairness splits
 go: /lemonade-stand.html | The Lemonade Stand
-evidence: Practical guidance. Different households choose different systems; clarity matters more than the choice.
-try: Shared staples (milk, oil, toilet paper) from a kitty; everything else labeled or on your own shelf.
+evidence: Practical guidance. Different households choose different systems. Clarity matters more than the choice.
+try: Shared staples (milk, oil, toilet paper) from a kitty. Everything else labeled or on your own shelf.
 
 Some roommates share all food, some share staples, and some keep everything separate. Each can work, but mismatched expectations (“I thought we shared!”) cause friction.
 
@@ -67,18 +67,18 @@ Deciding which items are shared and how they’re paid for keeps it simple.
 
 Program: The Lemonade Stand’s money side can track shared grocery costs.
 
-## Cleaning rota for shared spaces
-aka: cleaning rota; cleaning schedule roommates; bathroom cleaning
+## Cleaning schedule for shared spaces
+aka: cleaning schedule; cleaning schedule roommates; bathroom cleaning
 see: Chore charts that work; Rotation or specialization
 go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
-evidence: Rotas are common in shared housing. Clear ownership and definitions of “clean” reduce disputes.
-try: Kitchen, bathroom and living room rotate weekly; each space has a short “done” checklist.
+evidence: Schedules are common in shared housing. Clear ownership and definitions of “clean” reduce disputes.
+try: Kitchen, bathroom and living room rotate weekly. Each space has a short “done” checklist.
 
-A cleaning rota assigns shared spaces to people in turn, with a clear definition of what counts as clean. Without one, shared spaces tend to be cleaned by whoever minds most.
+A cleaning schedule assigns shared spaces to people in turn, with a clear definition of what counts as clean. Without one, shared spaces tend to be cleaned by whoever minds most.
 
 A short checklist per space avoids arguments about standards.
 
-Program: WP-03 turns the rota into named owners; the Lemonade Stand shows how the time actually splits.
+Program: WP-03 turns the schedule into named owners. The Lemonade Stand shows how the time actually splits.
 
 ## Deposits and damage
 aka: security deposit; damage in shared house; moving out deposit
@@ -107,13 +107,13 @@ Agreeing this early, in the roommate agreement, avoids surprises.
 Program: A monthly house meeting is a natural place to raise upcoming changes.
 
 ## New roommate onboarding
-aka: new roommate; welcoming a new roommate; new flatmate
+aka: new roommate; welcoming a new roommate; new roommate
 see: Roommate agreement; House meetings for roommates
 go: /lemonade-stand.html | The Lemonade Stand
 evidence: Practical guidance. Clear expectations early prevent misunderstandings.
-try: Walk them through the house agreement, the rota and the bills, and ask what they’d like to add.
+try: Walk them through the house agreement, the schedule and the bills, and ask what they’d like to add.
 
-When someone new moves in, sharing the house agreement, rota and bill system early helps them settle in, and gives them a chance to suggest changes.
+When someone new moves in, sharing the house agreement, schedule and bill system early helps them settle in, and gives them a chance to suggest changes.
 
 Inviting their input makes the agreement feel shared rather than imposed.
 

@@ -33,7 +33,7 @@ aka: asking for help; how to ask for help; specific requests for help
 see: Care calendar; Explicit requests
 go: /relationships-in-depth.html#caregivers | Where caregivers start
 evidence: Caregiver guidance often notes that specific requests are more likely to get a yes than general ones. It matches research on helping behavior.
-try: “Could you take Mum to her Thursday appointment and stay for lunch?”
+try: “Could you take Mom to her Thursday appointment and stay for lunch?”
 
 “Let me know if you need anything” is kind, but hard to act on. Specific requests (“could you bring dinner on Tuesday?”) are easier to say yes to, and easier to follow through.
 
@@ -52,7 +52,7 @@ When siblings share care for a parent, it often falls mostly on one person, usua
 
 Long-distance siblings can own tasks that work remotely: bills, calls, paperwork, research.
 
-Program: WP-03 gives every care job one owner; the Lemonade Stand can show how the time splits.
+Program: WP-03 gives every care job one owner. The Lemonade Stand can show how the time splits.
 
 ## Respite and breaks for caregivers
 aka: respite; caregiver break; time off from caring
@@ -96,7 +96,7 @@ Program: Pillar IV: tune how you send and receive. Care goes better when it’s 
 ## Care roles reversing
 aka: caring for a parent; role reversal; parent child role reversal
 see: Dignity and preferences; Caregiver identity
-go: /library/life.html#ageing-parents | Ageing parents (Library)
+go: /library/life.html#aging-parents | Aging parents (Library)
 evidence: Research on adult children caring for parents describes complex feelings, including grief and role confusion. These feelings are common.
 try: “It’s strange for both of us that I’m helping you now. Can we figure out together what works?”
 
@@ -104,7 +104,7 @@ When adult children care for parents, roles can feel turned upside down. Both pe
 
 Naming the change gently, and keeping as much of the old relationship as possible (a shared hobby, a joke, a routine), helps.
 
-Program: The Library’s ageing parents entry goes deeper. Ambiguous loss, also in the Library, covers the grief of change.
+Program: The Library’s aging parents entry goes deeper. Ambiguous loss, also in the Library, covers the grief of change.
 
 ## Caring for a partner
 aka: partner caregiving; caring for my husband; caring for my wife; spouse caregiver
@@ -128,7 +128,7 @@ try: Name one thing that’s just yours this week, and protect time for it.
 
 Caregiving can gradually take over your identity until you’re “the caregiver” and little else. Keeping some parts of your life that aren’t about caring (friends, a hobby, work you enjoy) helps you stay yourself.
 
-It isn’t selfish. It’s part of being able to keep caring.
+It is part of being able to keep caring.
 
 Program: Know your own wiring and the self road in the Workpaper Suite are about understanding and caring for yourself.
 

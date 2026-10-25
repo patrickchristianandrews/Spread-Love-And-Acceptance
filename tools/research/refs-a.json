@@ -9,7 +9,7 @@
     "url": "https://doi.org/10.1016/S0065-2601(08)60108-2",
     "kind": "theory",
     "finding": "Founding statement of equity theory: people compare the ratio of what they put in to what they get out with someone else’s, and feel tension when the ratios differ.",
-    "strength": "strong — foundational and well supported in workplace research; more mixed in close relationships",
+    "strength": "strong, foundational and well supported in workplace research. More mixed in close relationships",
     "topics": [
       "equity",
       "fairness",
@@ -35,7 +35,7 @@
     "url": "https://elainehatfield.com/publications.html",
     "kind": "book",
     "finding": "Extended equity theory to close relationships: feeling under-benefited goes with anger and resentment, feeling over-benefited with guilt, and both with less satisfaction than feeling things are roughly fair.",
-    "strength": "moderate — influential; in loving relationships the evidence is more mixed than at work",
+    "strength": "moderate, influential. In loving relationships the evidence is more mixed than at work",
     "topics": [
       "equity",
       "fairness",
@@ -49,7 +49,7 @@
     ],
     "verified": true,
     "verified_by": "https://elainehatfield.com/publications.html ; https://econbiz.de/Record/equity-theory-and-research-hatfield-elaine/10004751926",
-    "note": "Author listed as Hatfield (formerly Walster) on her own publications page; the book is often cited as Walster, Walster & Berscheid (1978)."
+    "note": "Author listed as Hatfield (formerly Walster) on her own publications page. The book is often cited as Walster, Walster & Berscheid (1978)."
   },
   {
     "id": "walster-berscheid-walster-1973",
@@ -61,7 +61,7 @@
     "url": null,
     "kind": "theory",
     "finding": "Set out the four propositions of equity theory used in later relationship research.",
-    "strength": "moderate — classic theoretical paper",
+    "strength": "moderate, classic theoretical paper",
     "topics": [
       "equity",
       "fairness"
@@ -74,7 +74,7 @@
     ],
     "verified": false,
     "verified_by": "https://d.lib.msu.edu/etd/29800/FULL_TEXT/view",
-    "note": "Citation details confirmed by reference lists, but two targeted searches found no DOI or landing page. Optional companion to the 1978 book, which is verified; do not link until the DOI is checked."
+    "note": "Citation details confirmed by reference lists, but two targeted searches found no DOI or landing page. Optional companion to the 1978 book, which is verified. Do not link until the DOI is checked."
   },
   {
     "id": "clark-mills-1979",
@@ -86,7 +86,7 @@
     "url": "https://clarkrelationshiplab.yale.edu/sites/default/files/files/Interpersonal%20attraction%20in%20exchance%20and%20commual%20relationships.pdf",
     "kind": "study",
     "finding": "Distinguished communal relationships (benefits given in response to needs) from exchange relationships (benefits given in return for benefits). When people wanted a communal relationship, being repaid in kind reduced attraction.",
-    "strength": "strong — two experiments, widely replicated distinction",
+    "strength": "strong, two experiments, widely replicated distinction",
     "topics": [
       "fairness",
       "scorekeeping",
@@ -113,8 +113,8 @@
     "doi": null,
     "url": "https://www.penguinrandomhouse.com/books/310593/the-second-shift-by-arlie-hochschild",
     "kind": "book",
-    "finding": "Interviews and home observations of dual-earner couples with young children found that working mothers did much more of the housework and childcare, adding up to a large extra load over a year; many couples told themselves stories that the split was fair.",
-    "strength": "moderate — influential qualitative study; its figures describe its sample, though large time-use surveys confirm a persistent (narrowing) gap",
+    "finding": "Interviews and home observations of dual-earner couples with young children found that working mothers did much more of the housework and childcare, adding up to a large extra load over a year. Many couples told themselves stories that the split was fair.",
+    "strength": "moderate, influential qualitative study. Its figures describe its sample, though large time-use surveys confirm a persistent (narrowing) gap",
     "topics": [
       "invisible-work",
       "second-shift",
@@ -139,7 +139,7 @@
     "doi": null,
     "url": "https://search.worldcat.org/title/9280843",
     "kind": "book",
-    "finding": "Coined “emotional labor” from a study of flight attendants (and bill collectors) trained to display feelings at work; distinguished surface acting from deep acting.",
+    "finding": "Coined “emotional labor” from a study of flight attendants (and bill collectors) trained to display feelings at work. Distinguished surface acting from deep acting.",
     "strength": "strong as a concept",
     "topics": [
       "emotional-labour",
@@ -162,8 +162,8 @@
     "doi": "10.1177/0003122419859007",
     "url": "https://doi.org/10.1177/0003122419859007",
     "kind": "study",
-    "finding": "Interviews with 35 couples (70 interviews) identified four parts of household “cognitive labor”: anticipating needs, identifying options, deciding, and monitoring. Women did more of it overall, especially anticipating and monitoring; deciding was shared more equally. The work was often unseen by both partners.",
-    "strength": "moderate — rich qualitative study of a mostly college-educated sample; not population estimates",
+    "finding": "Interviews with 35 couples (70 interviews) identified four parts of household “cognitive labor”: anticipating needs, identifying options, deciding, and monitoring. Women did more of it overall, especially anticipating and monitoring. Deciding was shared more equally. The work was often unseen by both partners.",
+    "strength": "moderate, rich qualitative study of a mostly college-educated sample, not population estimates",
     "topics": [
       "invisible-work",
       "mental-load",
@@ -191,8 +191,8 @@
     "doi": "10.2307/800538",
     "url": "https://doi.org/10.2307/800538",
     "kind": "theory",
-    "finding": "Argued that everyday definitions of “work” leave out a great deal of effortful activity, especially unpaid domestic and volunteer work, so it goes unrecognised.",
-    "strength": "moderate — a conceptual framework supported by many qualitative studies rather than a single measurable variable",
+    "finding": "Argued that everyday definitions of “work” leave out a great deal of effortful activity, especially unpaid domestic and volunteer work, so it goes unrecognized.",
+    "strength": "moderate, a conceptual framework supported by many qualitative studies rather than a single measurable variable",
     "topics": [
       "invisible-work"
     ],
@@ -212,7 +212,7 @@
     "url": "https://doi.org/10.1086/494338",
     "kind": "study",
     "finding": "Named “kin work”: the cards, calls, visits, gifts and gatherings that keep extended families connected. In the families she studied, it was done mostly by women and often treated as effortless.",
-    "strength": "moderate — influential anthropological study; qualitative",
+    "strength": "moderate, influential anthropological study. Qualitative",
     "topics": [
       "invisible-work",
       "kin-work",
@@ -236,8 +236,8 @@
     "doi": "10.1037/0022-3514.37.3.322",
     "url": "https://doi.org/10.1037/0022-3514.37.3.322",
     "kind": "study",
-    "finding": "In five experiments (married couples, groups, basketball teams), people recalled more of their own contributions to joint work and took more responsibility than others gave them; spouses’ estimates of their own shares typically summed to more than 100 percent.",
-    "strength": "strong — classic, widely replicated",
+    "finding": "In five experiments (married couples, groups, basketball teams), people recalled more of their own contributions to joint work and took more responsibility than others gave them. Spouses’ estimates of their own shares typically summed to more than 100 percent.",
+    "strength": "strong, classic, widely replicated",
     "topics": [
       "invisible-work",
       "fairness",
@@ -266,8 +266,8 @@
     "doi": null,
     "url": "https://anderson-review.ucla.edu/wp-content/uploads/2021/03/Caruso-et_al_Undoing_Egocentrism_JPSP2006.pdf",
     "kind": "study",
-    "finding": "Group members (including academic co-authors) overstated their own share of the work; thinking about others’ contributions reduced the bias, but high contributors then felt less satisfied with the collaboration.",
-    "strength": "moderate — several experiments; shows that perspective-taking has costs as well as benefits",
+    "finding": "Group members (including academic co-authors) overstated their own share of the work. Thinking about others’ contributions reduced the bias, but high contributors then felt less satisfied with the collaboration.",
+    "strength": "moderate, several experiments. Shows that perspective-taking has costs as well as benefits",
     "topics": [
       "egocentric-bias",
       "fairness",
@@ -289,8 +289,8 @@
     "doi": null,
     "url": "https://scholarworks.gsu.edu/sociology_facpub/2",
     "kind": "study",
-    "finding": "Using 2006 survey data, egalitarian couples had sex as often, and were as satisfied with it, as conventional couples, unlike an earlier study based on older data; couples where the man did most of the housework reported less frequent and lower-quality sex.",
-    "strength": "moderate — one US sample of mostly lower- to middle-income couples with children; correlational",
+    "finding": "Using 2006 survey data, egalitarian couples had sex as often, and were as satisfied with it, as conventional couples, unlike an earlier study based on older data. Couples where the man did most of the housework reported less frequent and lower-quality sex.",
+    "strength": "moderate, one US sample of mostly lower- to middle-income couples with children. Correlational",
     "topics": [
       "fairness",
       "gender",
@@ -302,7 +302,7 @@
     ],
     "verified": true,
     "verified_by": "https://news.cornell.edu/node/286266 ; https://scholarworks.gsu.edu/sociology_facpub/2 ; https://daily.jstor.org/housework-gender-roles-sex/",
-    "note": "Volume/issue/pages from a faculty listing; DOI not confirmed. The GSU link is a repository copy (earlier working-paper version)."
+    "note": "Volume/issue/pages from a faculty listing. DOI not confirmed. The GSU link is a repository copy (earlier working-paper version)."
   },
   {
     "id": "coltrane-2000",
@@ -314,7 +314,7 @@
     "url": "https://doi.org/10.1111/j.1741-3737.2000.01208.x",
     "kind": "review",
     "finding": "A major review of household-labor research: how gender, paid work, income and attitudes shape who does routine family work, and how the division links to perceived fairness and wellbeing.",
-    "strength": "strong — widely cited review; representative source for the “long line of studies” the site mentions",
+    "strength": "strong, widely cited review. Representative source for the “long line of studies” the site mentions",
     "topics": [
       "division-of-labour",
       "gender",
@@ -326,7 +326,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.demographic-research.org/articles/volume/27/24/references ; https://stnv.idn.org.rs/article/view/704",
-    "note": "The site names Coltrane among researchers but cites no specific work; this review is offered as the read-more link."
+    "note": "The site names Coltrane among researchers but cites no specific work. This review is offered as the read-more link."
   },
   {
     "id": "kurdek-2007",
@@ -337,8 +337,8 @@
     "doi": "10.1177/0192513X06292019",
     "url": "https://doi.org/10.1177/0192513X06292019",
     "kind": "study",
-    "finding": "Among 43 gay and 36 lesbian couples where both partners worked full-time, household tasks were divided more evenly than is typical in heterosexual couples, often by negotiation and specialisation rather than gender.",
-    "strength": "moderate — small, non-random samples; consistent with other studies of same-sex couples",
+    "finding": "Among 43 gay and 36 lesbian couples where both partners worked full-time, household tasks were divided more evenly than is typical in heterosexual couples, often by negotiation and specialization rather than gender.",
+    "strength": "moderate, small, non-random samples. Consistent with other studies of same-sex couples",
     "topics": [
       "division-of-labour",
       "gender",
@@ -361,8 +361,8 @@
     "doi": "10.1111/jomf.12189",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4584401",
     "kind": "study",
-    "finding": "Time-diary data from dual-earner couples showed a gender gap in total work opening up after a first baby: mothers took on most of the added childcare without cutting their paid hours; survey reports overstated how equal things were.",
-    "strength": "moderate — careful longitudinal design; small, highly educated US sample",
+    "finding": "Time-diary data from dual-earner couples showed a gender gap in total work opening up after a first baby: mothers took on most of the added childcare without cutting their paid hours. Survey reports overstated how equal things were.",
+    "strength": "moderate, careful longitudinal design. Small, highly educated US sample",
     "topics": [
       "transition-to-parenthood",
       "gender",
@@ -385,8 +385,8 @@
     "doi": "10.2307/353894",
     "url": "https://scholarsarchive.byu.edu/facpub/4214",
     "kind": "study",
-    "finding": "Defined maternal gatekeeping along three dimensions and, in 622 dual-earner mothers, classified about one in five as gatekeepers; they did more family work each week and had less equal divisions of labor.",
-    "strength": "moderate — influential concept; later work stresses both gate-closing and gate-opening and warns against blaming mothers",
+    "finding": "Defined maternal gatekeeping along three dimensions and, in 622 dual-earner mothers, classified about one in five as gatekeepers. They did more family work each week and had less equal divisions of labor.",
+    "strength": "moderate, influential concept. Later work stresses both gate-closing and gate-opening and warns against blaming mothers",
     "topics": [
       "gatekeeping",
       "division-of-labour",
@@ -410,8 +410,8 @@
     "doi": "10.1037/0893-3200.22.3.389",
     "url": "https://doi.org/10.1037/0893-3200.22.3.389",
     "kind": "study",
-    "finding": "In 97 couples with infants, fathers were more involved in day-to-day care when mothers actively encouraged them (gate-opening); when mothers were highly critical (gate-closing), fathers’ own beliefs about involvement mattered less.",
-    "strength": "moderate — observational study of one US sample; correlational",
+    "finding": "In 97 couples with infants, fathers were more involved in day-to-day care when mothers actively encouraged them (gate-opening). When mothers were highly critical (gate-closing), fathers’ own beliefs about involvement mattered less.",
+    "strength": "moderate, observational study of one US sample. Correlational",
     "topics": [
       "gatekeeping",
       "coparenting",
@@ -435,7 +435,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/22642482",
     "kind": "study",
     "finding": "People who felt more appreciated by their romantic partners were more appreciative of their partners in return, and appreciation was linked with relationship maintenance and commitment.",
-    "strength": "moderate — several studies including longitudinal data; correlational",
+    "strength": "moderate, several studies including longitudinal data. Correlational",
     "topics": [
       "appreciation",
       "recognition",
@@ -459,8 +459,8 @@
     "doi": null,
     "url": "https://data.gesis.org/gesiskg/resource/zis-Deutsch1975Equity",
     "kind": "theory",
-    "finding": "Argued that equity is only one of several justice principles, alongside equality and need, and proposed when groups favour each: equality in cooperative relationships, equity in economic ones, need in caring ones.",
-    "strength": "moderate — influential theory; research broadly supports that the chosen principle depends on context",
+    "finding": "Argued that equity is only one of several justice principles, alongside equality and need, and proposed when groups favor each: equality in cooperative relationships, equity in economic ones, need in caring ones.",
+    "strength": "moderate, influential theory. Research broadly supports that the chosen principle depends on context",
     "topics": [
       "fairness",
       "justice",
@@ -472,7 +472,7 @@
     ],
     "verified": true,
     "verified_by": "https://data.gesis.org/gesiskg/resource/zis-Deutsch1975Equity",
-    "note": "DOI not confirmed; link is a GESIS bibliographic record. Replace with the Wiley page if found."
+    "note": "DOI not confirmed. Link is a GESIS bibliographic record. Replace with the Wiley page if found."
   },
   {
     "id": "thibaut-walker-1975",
@@ -484,7 +484,7 @@
     "url": "https://www.law.virginia.edu/node/127096",
     "kind": "book",
     "finding": "Founded procedural-justice research: people’s judgments of whether a decision process is fair (especially having a voice) shape how satisfied they are with the outcome.",
-    "strength": "strong — one of the more robust findings in social and organizational psychology, though early lab methods were criticised",
+    "strength": "strong, one of the more robust findings in social and organizational psychology, though early lab methods were criticized",
     "topics": [
       "procedural-justice",
       "fairness",
@@ -509,7 +509,7 @@
     "url": "https://search.library.wisc.edu/catalog/999911665202121",
     "kind": "theory",
     "finding": "Proposed that people use fair treatment as a mental shortcut when deciding whether to trust and cooperate with an authority or group.",
-    "strength": "moderate — influential theory with supporting experiments",
+    "strength": "moderate, influential theory with supporting experiments",
     "topics": [
       "procedural-justice",
       "fairness",
@@ -521,7 +521,7 @@
     ],
     "verified": true,
     "verified_by": "https://search.library.wisc.edu/catalog/999911665202121 ; https://digitalcommons.mtu.edu/business-fp/211",
-    "note": "Link is a library catalogue record for the edited volume."
+    "note": "Link is a library catalog record for the edited volume."
   },
   {
     "id": "papp-cummings-goeke-morey-2009",
@@ -533,7 +533,7 @@
     "url": "https://doi.org/10.1111/j.1741-3729.2008.00537.x",
     "kind": "study",
     "finding": "In home diary records of marital conflict, money was not the most frequent topic, but money conflicts were more pervasive, problematic and recurrent than other conflicts and more likely to stay unresolved.",
-    "strength": "moderate — diary design with one US community sample; correlational",
+    "strength": "moderate, diary design with one US community sample. Correlational",
     "topics": [
       "money",
       "conflict",
@@ -555,7 +555,7 @@
     "url": "https://scholarsarchive.byu.edu/facpub/4526",
     "kind": "study",
     "finding": "In US national survey data on about 4,500 couples, financial disagreements were the strongest of the disagreement types in predicting later divorce, for both wives and husbands.",
-    "strength": "moderate — large longitudinal sample; correlational",
+    "strength": "moderate, large longitudinal sample. Correlational",
     "topics": [
       "money",
       "conflict",
@@ -567,7 +567,7 @@
     ],
     "verified": true,
     "verified_by": "https://scholarsarchive.byu.edu/facpub/4526 ; https://blogs.ifas.ufl.edu/fycsdept/?p=117",
-    "note": "DOI shown by one source only; link uses the BYU repository copy."
+    "note": "DOI shown by one source only. Link uses the BYU repository copy."
   },
   {
     "id": "rick-small-finkel-2011",
@@ -578,8 +578,8 @@
     "doi": "10.1509/jmkr.48.2.228",
     "url": "https://www.kellogg.northwestern.edu/academics-research/research/detail/2011/fatal-fiscal-attraction-spendthrifts-and-tightwads-in-marriage",
     "kind": "study",
-    "finding": "Tightwads and spendthrifts tend to marry each other; the bigger the difference within a couple, the more conflict over money, which in turn predicts lower marital wellbeing.",
-    "strength": "moderate — several survey studies; correlational",
+    "finding": "Tightwads and spendthrifts tend to marry each other. The bigger the difference within a couple, the more conflict over money, which in turn predicts lower marital wellbeing.",
+    "strength": "moderate, several survey studies. Correlational",
     "topics": [
       "money",
       "couples",
@@ -601,7 +601,7 @@
     "url": "https://doi.org/10.4148/jft.v2i1.451",
     "kind": "study",
     "finding": "In 422 respondents, beliefs about money clustered into four “money scripts” (money avoidance, money worship, money status and money vigilance), several of which were linked with income and net worth.",
-    "strength": "early — a newer measure from one sample; the site rightly calls it “less established”",
+    "strength": "early, a newer measure from one sample. The site rightly calls it “less established”",
     "topics": [
       "money",
       "family-scripts"
@@ -621,8 +621,8 @@
     "doi": null,
     "url": "https://www.jstor.org/stable/352931",
     "kind": "study",
-    "finding": "In 76 rural Midwestern couples, financial pressure lowered marital quality indirectly, by increasing hostility and reducing warmth between spouses; this became a basis for the Family Stress Model.",
-    "strength": "moderate — small, homogeneous sample; the model has since been widely tested",
+    "finding": "In 76 rural Midwestern couples, financial pressure lowered marital quality indirectly, by increasing hostility and reducing warmth between spouses. This became a basis for the Family Stress Model.",
+    "strength": "moderate, small, homogeneous sample. The model has since been widely tested",
     "topics": [
       "money",
       "stress",
@@ -645,7 +645,7 @@
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3185375",
     "kind": "theory",
     "finding": "Set out a framework for coparenting (how parents work together as parents) with components such as childrearing agreement, support versus undermining, division of labor, and joint family management.",
-    "strength": "moderate — influential framework that guided later trials",
+    "strength": "moderate, influential framework that guided later trials",
     "topics": [
       "coparenting",
       "parenting",
@@ -668,7 +668,7 @@
     "url": "https://doi.org/10.1037/0893-3200.22.2.253",
     "kind": "study",
     "finding": "A randomized trial with 169 expectant first-time couples found that the Family Foundations classes, delivered before and after birth, improved coparenting and some aspects of parent and infant wellbeing at follow-up.",
-    "strength": "moderate — randomized trial; later trials broadly supportive",
+    "strength": "moderate, randomized trial. Later trials broadly supportive",
     "topics": [
       "coparenting",
       "transition-to-parenthood",
@@ -691,7 +691,7 @@
     "url": "https://doi.org/10.2307/1126611",
     "kind": "theory",
     "finding": "Described authoritarian, authoritative and permissive styles of parental control, arguing for “authoritative” parenting that combines warmth with firm, explained limits.",
-    "strength": "strong as a framework — many studies link authoritative parenting with good outcomes, mostly in Western, middle-class samples",
+    "strength": "strong as a framework, many studies link authoritative parenting with good outcomes, mostly in Western, middle-class samples",
     "topics": [
       "parenting",
       "parenting-styles"
@@ -712,7 +712,7 @@
     "url": "https://mpipsyl.disco.mpg.de/Record/MPIPL_cat.PL0011084",
     "kind": "review",
     "finding": "A major review that recast parenting styles along two dimensions, responsiveness and demandingness, adding a neglectful/uninvolved style to Baumrind’s three.",
-    "strength": "strong as a framework — widely used; styles are broad descriptions rather than precise categories",
+    "strength": "strong as a framework, widely used. Styles are broad descriptions rather than precise categories",
     "topics": [
       "parenting",
       "parenting-styles"
@@ -722,7 +722,7 @@
     ],
     "verified": true,
     "verified_by": "https://mpipsyl.disco.mpg.de/Record/MPIPL_cat.PL0011084 ; https://agris.fao.org/search/en/records/65dde6b74c5aef494fd6d65f",
-    "note": "Link is a library catalogue record; the volume editor (Hetherington) is from general knowledge and not shown in the search result."
+    "note": "Link is a library catalog record. The volume editor (Hetherington) is from general knowledge and not shown in the search result."
   },
   {
     "id": "doss-et-al-2009",
@@ -734,7 +734,7 @@
     "url": "https://doi.org/10.1037/a0013969",
     "kind": "study",
     "finding": "Following 218 couples over the first eight years of marriage, those who had a first child showed sudden declines in relationship quality after the birth, on average, compared with couples who did not.",
-    "strength": "moderate — strong longitudinal design; averages hide wide variation",
+    "strength": "moderate, strong longitudinal design. Averages hide wide variation",
     "topics": [
       "transition-to-parenthood",
       "parenting",
@@ -756,7 +756,7 @@
     "url": "https://doi.org/10.1111/j.1741-3737.2003.00574.x",
     "kind": "meta-analysis",
     "finding": "Across studies, parents reported lower marital satisfaction than non-parents, with the gap largest among mothers of infants.",
-    "strength": "moderate — meta-analysis of mostly cross-sectional studies; a later meta-analysis (Mitnick et al., 2009) found smaller effects",
+    "strength": "moderate, meta-analysis of mostly cross-sectional studies. A later meta-analysis (Mitnick et al., 2009) found smaller effects",
     "topics": [
       "transition-to-parenthood",
       "parenting",
@@ -778,7 +778,7 @@
     "url": "https://openlibrary.org/works/OL92708W",
     "kind": "book",
     "finding": "Based on the Becoming a Family Project, a long-term study of expectant couples, describes how strain and conflict between partners commonly rise across the transition to parenthood, and tests couples groups as prevention.",
-    "strength": "moderate — longitudinal study with a preventive intervention; modest sample",
+    "strength": "moderate, longitudinal study with a preventive intervention. Modest sample",
     "topics": [
       "transition-to-parenthood",
       "parenting",
@@ -799,8 +799,8 @@
     "doi": null,
     "url": "https://www.routledge.com/Surviving-and-Thriving-in-Stepfamily-Relationships-What-Works-and-What/Papernow/p/book/9780415894388",
     "kind": "book",
-    "finding": "Describes “stepfamily architecture” and five common challenges it creates, drawing on research and clinical experience; closeness between stepfamily members typically builds slowly.",
-    "strength": "moderate — practitioner synthesis of research and clinical experience, not a single study",
+    "finding": "Describes “stepfamily architecture” and five common challenges it creates, drawing on research and clinical experience. Closeness between stepfamily members typically builds slowly.",
+    "strength": "moderate, practitioner synthesis of research and clinical experience, not a single study",
     "topics": [
       "stepfamilies",
       "family",
@@ -823,7 +823,7 @@
     "url": "https://doi.org/10.1007/978-1-4899-7702-1",
     "kind": "review",
     "finding": "A research-based overview of stepfamily relationships, covering how they form and change, common dynamics, and interventions.",
-    "strength": "strong — scholarly synthesis by leading stepfamily researchers",
+    "strength": "strong, scholarly synthesis by leading stepfamily researchers",
     "topics": [
       "stepfamilies",
       "family"
@@ -833,7 +833,7 @@
     ],
     "verified": true,
     "verified_by": "https://link.springer.com/doi/10.1007/978-1-4899-7702-1 ; https://www.springer.com/978-1-4899-7700-7",
-    "note": "The site names Ganong and Coleman without a specific work; this book is the representative source."
+    "note": "The site names Ganong and Coleman without a specific work. This book is the representative source."
   },
   {
     "id": "hetherington-kelly-2002",
@@ -845,7 +845,7 @@
     "url": "https://wwnorton.co.uk/books/9780393324136-for-better-or-for-worse",
     "kind": "book",
     "finding": "Drawing on long-term studies of about 1,400 families, argues that most children of divorce and remarriage turn out reasonably well, with outcomes varying widely.",
-    "strength": "moderate — large longitudinal programme; popular book that drew some controversy",
+    "strength": "moderate, large longitudinal program. Popular book that drew some controversy",
     "topics": [
       "stepfamilies",
       "divorce",
@@ -867,8 +867,8 @@
     "doi": "10.1037/0893-3200.15.3.355",
     "url": "https://doi.org/10.1037/0893-3200.15.3.355",
     "kind": "meta-analysis",
-    "finding": "Updated a meta-analysis comparing children of divorced and continuously married parents; differences in wellbeing were small on average and persisted in studies from the 1990s.",
-    "strength": "strong — meta-analysis; correlational studies",
+    "finding": "Updated a meta-analysis comparing children of divorced and continuously married parents. Differences in wellbeing were small on average and persisted in studies from the 1990s.",
+    "strength": "strong, meta-analysis. Correlational studies",
     "topics": [
       "coparenting",
       "divorce",
@@ -879,7 +879,7 @@
     ],
     "verified": true,
     "verified_by": "https://mjms.mums.ac.ir/article_20195.html ; https://justice.gc.ca/eng/rp-pr/fl-lf/divorce/vcsdm-pvem/ref.html",
-    "note": "DOI from one reference list; end page shown as 370 in most sources (one says 365). Representative source for deep.json “Robert Emery, Paul Amato and others”."
+    "note": "DOI from one reference list. End page shown as 370 in most sources (one says 365). Representative source for deep.json “Robert Emery, Paul Amato and others.”"
   },
   {
     "id": "emery-1982",
@@ -891,7 +891,7 @@
     "url": null,
     "kind": "review",
     "finding": "Reviewed evidence that conflict between parents, in married and divorced families, is linked to children’s problems, and that the amount and type of conflict matter.",
-    "strength": "strong — classic review",
+    "strength": "strong, classic review",
     "topics": [
       "coparenting",
       "conflict",
@@ -902,7 +902,7 @@
     ],
     "verified": false,
     "verified_by": "https://justice.gc.ca/eng/rp-pr/fl-lf/divorce/2004_1/p3.html ; https://link.springer.com/article/10.1007/BF00913797",
-    "note": "Citation (author, year, title, journal, volume, pages) confirmed from reference lists, but two targeted searches found no DOI or landing page. Likely DOI 10.1037/0033-2909.92.2.310 — check before linking. Amato (2001) covers the same claim and is verified."
+    "note": "Citation (author, year, title, journal, volume, pages) confirmed from reference lists, but two targeted searches found no DOI or landing page. Likely DOI 10.1037/0033-2909.92.2.310, check before linking. Amato (2001) covers the same claim and is verified."
   },
   {
     "id": "pinquart-sorensen-2003",
@@ -913,8 +913,8 @@
     "doi": "10.1037/0882-7974.18.2.250",
     "url": "https://doi.org/10.1037/0882-7974.18.2.250",
     "kind": "meta-analysis",
-    "finding": "Across 84 studies, caregivers reported more stress and depression and lower wellbeing and self-efficacy than non-caregivers, with smaller differences in physical health; gaps were larger for dementia caregivers.",
-    "strength": "strong — large meta-analysis; correlational",
+    "finding": "Across 84 studies, caregivers reported more stress and depression and lower wellbeing and self-efficacy than non-caregivers, with smaller differences in physical health. Gaps were larger for dementia caregivers.",
+    "strength": "strong, large meta-analysis. Correlational",
     "topics": [
       "caregiving",
       "stress",
@@ -937,8 +937,8 @@
     "doi": "10.1093/geront/gnt065",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4155448",
     "kind": "study",
-    "finding": "Examined how sibling tension when a parent needs care relates to which sibling takes on caregiving and to perceptions that the mother favours some children.",
-    "strength": "moderate — survey of US families; correlational",
+    "finding": "Examined how sibling tension when a parent needs care relates to which sibling takes on caregiving and to perceptions that the mother favors some children.",
+    "strength": "moderate, survey of US families. Correlational",
     "topics": [
       "caregiving",
       "siblings",
@@ -962,7 +962,7 @@
     "url": "https://search.worldcat.org/oclc/1145305518",
     "kind": "book",
     "finding": "Draws on the Cornell Reconciliation Project, including a national survey on estrangement and interviews, to show family estrangement is more common than people assume and that some people reconcile.",
-    "strength": "moderate — survey plus interviews; popular book",
+    "strength": "moderate, survey plus interviews. Popular book",
     "topics": [
       "family",
       "estrangement",
@@ -986,7 +986,7 @@
     "url": "https://find.library.upenn.edu/catalog/999557963503681",
     "kind": "book",
     "finding": "Explains Bowen family systems theory (differentiation, triangles, roles passed across generations) and how to evaluate a family as an emotional unit.",
-    "strength": "debated — influential in family therapy; limited empirical testing",
+    "strength": "debated, influential in family therapy. Limited empirical testing",
     "topics": [
       "family-systems",
       "family"
@@ -1011,8 +1011,8 @@
     "doi": null,
     "url": "https://www.guilford.com/books/Rewriting-Family-Scripts/John-Byng-Hall/9781572300668",
     "kind": "book",
-    "finding": "Describes “family scripts” (repeated, often inherited patterns of interaction) and how families can rewrite them from a “secure family base”, drawing on attachment research.",
-    "strength": "early — clinical framework, supported more by clinical experience than experiments",
+    "finding": "Describes “family scripts” (repeated, often inherited patterns of interaction) and how families can rewrite them from a “secure family base,” drawing on attachment research.",
+    "strength": "early, clinical framework, supported more by clinical experience than experiments",
     "topics": [
       "family-scripts",
       "family"
@@ -1033,7 +1033,7 @@
     "url": "https://pubmed.ncbi.nlm.nih.gov/9680687",
     "kind": "meta-analysis",
     "finding": "Parent–child conflict became less frequent with age across adolescence, while the emotional intensity of conflicts rose from early to mid-adolescence.",
-    "strength": "strong — meta-analysis",
+    "strength": "strong, meta-analysis",
     "topics": [
       "parenting",
       "teenagers",
@@ -1044,7 +1044,7 @@
     ],
     "verified": true,
     "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9680687",
-    "note": "DOI from one source; PubMed link used."
+    "note": "DOI from one source. PubMed link used."
   },
   {
     "id": "roskam-raes-mikolajczak-2017",
@@ -1056,7 +1056,7 @@
     "url": "https://doi.org/10.3389/fpsyg.2017.00163",
     "kind": "study",
     "finding": "Developed a 22-item Parental Burnout Inventory with three factors (exhaustion, inefficacy and emotional distancing from one’s children), only moderately related to job burnout, parenting stress and depression.",
-    "strength": "early — a fast-growing field; measurement still being refined",
+    "strength": "early, a fast-growing field. Measurement still being refined",
     "topics": [
       "parental-burnout",
       "parenting",
@@ -1078,7 +1078,7 @@
     "url": "https://www.jstor.org/stable/3654637",
     "kind": "study",
     "finding": "Following couples for several years, found that conflict and poorer relationships with in-laws predicted later declines in marital success (stability, satisfaction and commitment).",
-    "strength": "moderate — longitudinal US sample; correlational",
+    "strength": "moderate, longitudinal US sample. Correlational",
     "topics": [
       "in-laws",
       "family",
@@ -1090,7 +1090,7 @@
     ],
     "verified": true,
     "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8133523 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC5006754/",
-    "note": "JSTOR ID and DOI from one reference listing; findings as described by later citing papers, not the abstract. Representative source for the site’s unattributed in-law claims."
+    "note": "JSTOR ID and DOI from one reference listing. Findings as described by later citing papers, not the abstract. Representative source for the site’s unattributed in-law claims."
   },
   {
     "id": "greenhaus-beutell-1985",
@@ -1101,8 +1101,8 @@
     "doi": null,
     "url": "https://researchdiscovery.drexel.edu/esploro/outputs/journalarticle/sources-of-conflict-between-work-and/991019184284304721",
     "kind": "theory",
-    "finding": "Reviewed the literature and described three forms of work–family conflict: time-based, strain-based and behaviour-based.",
-    "strength": "strong — foundational model; meta-analyses link work–family conflict with lower satisfaction",
+    "finding": "Reviewed the literature and described three forms of work–family conflict: time-based, strain-based and behavior-based.",
+    "strength": "strong, foundational model. Meta-analyses link work–family conflict with lower satisfaction",
     "topics": [
       "work-life",
       "work",
@@ -1113,7 +1113,7 @@
     ],
     "verified": true,
     "verified_by": "https://researchdiscovery.drexel.edu/esploro/outputs/journalarticle/sources-of-conflict-between-work-and/991019184284304721",
-    "note": "DOI not confirmed; link is the Drexel repository record."
+    "note": "DOI not confirmed. Link is the Drexel repository record."
   },
   {
     "id": "repetti-1989",
@@ -1125,7 +1125,7 @@
     "url": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf",
     "kind": "study",
     "finding": "In a daily study of air traffic controllers, after high-workload days they were more socially withdrawn and less emotionally expressive with their spouses that evening.",
-    "strength": "moderate — small daily-diary study; an early classic of “spillover” research",
+    "strength": "moderate, small daily-diary study. An early classic of “spillover” research",
     "topics": [
       "work-life",
       "stress",
@@ -1137,7 +1137,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf ; https://repettilab.psych.ucla.edu/?p=25",
-    "note": "DOI not confirmed; link is the PDF on the UCLA psychology site."
+    "note": "DOI not confirmed. Link is the PDF on the UCLA psychology site."
   },
   {
     "id": "neff-karney-2009",
@@ -1149,7 +1149,7 @@
     "url": "https://doi.org/10.1037/a0015663",
     "kind": "study",
     "finding": "Spouses under more stress outside the relationship reacted more strongly to everyday negative experiences within it.",
-    "strength": "moderate — daily-diary studies of newlyweds; correlational",
+    "strength": "moderate, daily-diary studies of newlyweds. Correlational",
     "topics": [
       "spillover",
       "stress",
@@ -1161,7 +1161,7 @@
     ],
     "verified": true,
     "verified_by": "https://sites.lifesci.ucla.edu/psych-marriagelab/wp-content/uploads/sites/213/2020/05/Neff__Karney_2009.220154529.pdf ; https://sites.utexas.edu/realproject/selected-publications/",
-    "note": "The site (book/chapter-3-in-depth.html#leftover) names Neff and Karney without a year; this is the closest-matching paper."
+    "note": "The site (book/chapter-3-in-depth.html#leftover) names Neff and Karney without a year. This is the closest-matching paper."
   },
   {
     "id": "chapman-white-2011",
@@ -1173,7 +1173,7 @@
     "url": "https://class.unt.edu/communication/publications/5-languages-appreciation-workplace-empowering-organizations-encouraging-people.html",
     "kind": "book",
     "finding": "Applies the love-languages idea to work: words of affirmation, quality time, acts of service, tangible gifts and appropriate physical touch, with an assessment tool.",
-    "strength": "early — popular, very little independent testing (as the site says)",
+    "strength": "early, popular, very little independent testing (as the site says)",
     "topics": [
       "appreciation",
       "work"
@@ -1186,7 +1186,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.publishersweekly.com/9780802461988 ; https://resourcecentre.tourism.gov.my/webopac/Record/0000008380/TOC ; https://class.unt.edu/communication/publications/5-languages-appreciation-workplace-empowering-organizations-encouraging-people.html",
-    "note": "First published 2011 (Publishers Weekly review June 2011; library catalogues 2011). The site cites it as 2012 — see fixnotes."
+    "note": "First published 2011 (Publishers Weekly review June 2011; library catalogs 2011). The site cites it as 2012, see fixnotes."
   },
   {
     "id": "kahn-et-al-1964",
@@ -1198,7 +1198,7 @@
     "url": "https://library.usi.edu/record/27150",
     "kind": "book",
     "finding": "Introduced role conflict and role ambiguity as major sources of work stress: not knowing clearly what is expected of you, or facing incompatible demands.",
-    "strength": "strong — foundational; later meta-analyses link role ambiguity with stress and lower job satisfaction",
+    "strength": "strong, foundational. Later meta-analyses link role ambiguity with stress and lower job satisfaction",
     "topics": [
       "role-ambiguity",
       "work",
@@ -1212,7 +1212,7 @@
     ],
     "verified": true,
     "verified_by": "https://library.usi.edu/record/27150 ; https://researchportal.hw.ac.uk/en/publications/role-stress-reexamined-an-investigation-of-role-stress-predictors/",
-    "note": "Link is a library catalogue record."
+    "note": "Link is a library catalog record."
   },
   {
     "id": "rizzo-house-lirtzman-1970",
@@ -1224,7 +1224,7 @@
     "url": "https://data.gesis.org/gesiskg/resource/zis-RizzoHouseLirtzman1970Role",
     "kind": "study",
     "finding": "Developed questionnaire measures of role conflict and role ambiguity, which became the most widely used scales in later research.",
-    "strength": "strong — measures used in most later role-stress research",
+    "strength": "strong, measures used in most later role-stress research",
     "topics": [
       "role-ambiguity",
       "work"
@@ -1234,7 +1234,7 @@
     ],
     "verified": true,
     "verified_by": "https://data.gesis.org/gesiskg/resource/zis-RizzoHouseLirtzman1970Role ; https://www.smlr.rutgers.edu/sites/default/files/Documents/Faculty-Staff-Docs/AMetaAnalysisandConceptualCritique.pdf",
-    "note": "DOI not confirmed; link is a GESIS bibliographic record."
+    "note": "DOI not confirmed. Link is a GESIS bibliographic record."
   },
   {
     "id": "darley-latane-1968",
@@ -1245,8 +1245,8 @@
     "doi": "10.1037/h0025589",
     "url": "https://doi.org/10.1037/h0025589",
     "kind": "study",
-    "finding": "Participants who believed others could also hear a person having a seizure were slower and less likely to help; the presence of others reduced each person’s sense of responsibility.",
-    "strength": "strong — classic and widely replicated, though weaker in clearly dangerous emergencies",
+    "finding": "Participants who believed others could also hear a person having a seizure were slower and less likely to help. The presence of others reduced each person’s sense of responsibility.",
+    "strength": "strong, classic and widely replicated, though weaker in clearly dangerous emergencies",
     "topics": [
       "diffusion-of-responsibility",
       "ownership",
@@ -1275,7 +1275,7 @@
     "url": "https://doi.org/10.1037/a0023304",
     "kind": "meta-analysis",
     "finding": "Across 105 effect sizes and over 7,700 participants, the bystander effect was reliable but weaker when situations were clearly dangerous.",
-    "strength": "strong — large meta-analysis",
+    "strength": "strong, large meta-analysis",
     "topics": [
       "diffusion-of-responsibility",
       "teams"
@@ -1296,8 +1296,8 @@
     "doi": "10.1037/0022-3514.37.6.822",
     "url": "https://doi.org/10.1037/0022-3514.37.6.822",
     "kind": "study",
-    "finding": "When clapping and shouting in groups, people put in less individual effort than alone, over and above losses from poor coordination: “social loafing”.",
-    "strength": "strong — classic, widely replicated",
+    "finding": "When clapping and shouting in groups, people put in less individual effort than alone, over and above losses from poor coordination: “social loafing.”",
+    "strength": "strong, classic, widely replicated",
     "topics": [
       "social-loafing",
       "teams",
@@ -1321,7 +1321,7 @@
     "url": "https://doi.org/10.1037/0022-3514.65.4.681",
     "kind": "meta-analysis",
     "finding": "Social loafing was reliable across many tasks and populations, and smaller when individual contributions could be identified or evaluated and when the task mattered to people.",
-    "strength": "strong — meta-analysis",
+    "strength": "strong, meta-analysis",
     "topics": [
       "social-loafing",
       "teams"
@@ -1331,7 +1331,7 @@
     ],
     "verified": true,
     "verified_by": "https://1cademy.com/node/social-loafing-a-meta-analytic-review-and-theoretical-integration/RJ0OX10oI1qz9cvc7O5l ; https://en.wikipedia.org/wiki/Social_loafing",
-    "note": "DOI matched to title only via an aggregator page; consistent with volume/issue/page from a second listing."
+    "note": "DOI matched to title only via an aggregator page. Consistent with volume/issue/page from a second listing."
   },
   {
     "id": "edmondson-1999",
@@ -1342,8 +1342,8 @@
     "doi": "10.2307/2666999",
     "url": "https://doi.org/10.2307/2666999",
     "kind": "study",
-    "finding": "In 51 teams at a manufacturing company, a shared belief that it was safe to take interpersonal risks (psychological safety) was linked with more team learning behaviour, which in turn was linked with performance.",
-    "strength": "strong — highly replicated construct, though most studies are correlational",
+    "finding": "In 51 teams at a manufacturing company, a shared belief that it was safe to take interpersonal risks (psychological safety) was linked with more team learning behavior, which in turn was linked with performance.",
+    "strength": "strong, highly replicated construct, though most studies are correlational",
     "topics": [
       "psychological-safety",
       "teams",
@@ -1371,7 +1371,7 @@
     "url": "https://rework.withgoogle.com/en/guides/understanding-team-effectiveness",
     "kind": "study",
     "finding": "Google’s internal research on what makes its teams effective reported that how members interact mattered more than who was on the team, with psychological safety the most important of five factors (with dependability, structure and clarity, meaning, and impact).",
-    "strength": "early — internal company research, not peer-reviewed; findings summarised by Google",
+    "strength": "early, internal company research, not peer-reviewed. Findings summarized by Google",
     "topics": [
       "psychological-safety",
       "teams",
@@ -1382,7 +1382,7 @@
     ],
     "verified": true,
     "verified_by": "https://rework.withgoogle.com/en/guides/understanding-team-effectiveness",
-    "note": "The re:Work page was confirmed; the “most important factor” ranking was confirmed only through secondary summaries of the guide."
+    "note": "The re:Work page was confirmed. The “most important factor” ranking was confirmed only through secondary summaries of the guide."
   },
   {
     "id": "kerth-2001",
@@ -1394,7 +1394,7 @@
     "url": "https://www.informit.com/store/project-retrospectives-a-handbook-for-team-reviews-9780133488579",
     "kind": "book",
     "finding": "Practitioner handbook on running project retrospectives, including the need for them to feel safe and the “Prime Directive” that everyone did the best job they could with what they knew.",
-    "strength": "early — practitioner method; evidence comes from wider research on debriefs",
+    "strength": "early, practitioner method. Evidence comes from wider research on debriefs",
     "topics": [
       "retrospectives",
       "teams"
@@ -1414,8 +1414,8 @@
     "doi": "10.1177/0018720812448394",
     "url": "https://pubmed.ncbi.nlm.nih.gov/23516804/",
     "kind": "meta-analysis",
-    "finding": "Across 46 samples, well-conducted debriefs improved effectiveness by roughly 20–25% on average compared with controls, for both teams and individuals; alignment, facilitation and structure helped.",
-    "strength": "strong — meta-analysis",
+    "finding": "Across 46 samples, well-conducted debriefs improved effectiveness by roughly 20–25% on average compared with controls, for both teams and individuals. Alignment, facilitation and structure helped.",
+    "strength": "strong, meta-analysis",
     "topics": [
       "retrospectives",
       "teams",
@@ -1436,8 +1436,8 @@
     "doi": "10.1017/CBO9781139062367",
     "url": "https://doi.org/10.1017/CBO9781139062367",
     "kind": "book",
-    "finding": "A theory of human error that sorts slips, lapses and mistakes, and introduced the layered-defences thinking behind the “Swiss cheese” model of accidents.",
-    "strength": "strong — foundational in safety science; the Swiss cheese model is criticised as too simple for complex systems",
+    "finding": "A theory of human error that sorts slips, lapses and mistakes, and introduced the layered-defenses thinking behind the “Swiss cheese” model of accidents.",
+    "strength": "strong, foundational in safety science. The Swiss cheese model is criticized as too simple for complex systems",
     "topics": [
       "blameless-reviews",
       "swiss-cheese",
@@ -1462,7 +1462,7 @@
     "url": "https://www.routledge.com/Managing-the-Risks-of-Organizational-Accidents/Reason/p/book/9781840141054",
     "kind": "book",
     "finding": "Describes how organisational accidents arise from latent conditions combining with front-line errors, and sets out ideas for a safety and “just” culture.",
-    "strength": "strong — foundational in safety science",
+    "strength": "strong, foundational in safety science",
     "topics": [
       "blameless-reviews",
       "just-culture",
@@ -1485,8 +1485,8 @@
     "doi": null,
     "url": "https://www.relbib.de/Record/1613173431",
     "kind": "book",
-    "finding": "Argues for a “just culture” that separates honest mistakes from reckless behaviour, and that who draws the line matters as much as where it is drawn.",
-    "strength": "moderate — influential practitioner-scholarly book; evidence mainly from case studies",
+    "finding": "Argues for a “just culture” that separates honest mistakes from reckless behavior, and that who draws the line matters as much as where it is drawn.",
+    "strength": "moderate, influential practitioner-scholarly book. Evidence mainly from case studies",
     "topics": [
       "blameless-reviews",
       "just-culture",
@@ -1498,7 +1498,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.relbib.de/Record/1613173431 ; https://www.proquest.com/docview/198026326",
-    "note": "Link is a library catalogue record."
+    "note": "Link is a library catalog record."
   },
   {
     "id": "beyer-et-al-2016-sre-postmortem",
@@ -1510,7 +1510,7 @@
     "url": "https://sre.google/sre-book/postmortem-culture/",
     "kind": "book",
     "finding": "Describes blameless postmortems: a written record of an incident, its impact, actions taken, root causes and follow-ups, focused on systems rather than blaming individuals.",
-    "strength": "early — industry practice guide, not research",
+    "strength": "early, industry practice guide, not research",
     "topics": [
       "blameless-reviews",
       "teams"
@@ -1520,7 +1520,7 @@
     ],
     "verified": true,
     "verified_by": "https://sre.google/sre-book/postmortem-culture/",
-    "note": "Chapter and URL confirmed; the editors’ names are from general knowledge and were not shown in the search result."
+    "note": "Chapter and URL confirmed. The editors’ names are from general knowledge and were not shown in the search result."
   },
   {
     "id": "haynes-et-al-2009",
@@ -1532,7 +1532,7 @@
     "url": "https://doi.org/10.1056/NEJMsa0810119",
     "kind": "study",
     "finding": "In a before-and-after study across eight hospitals in eight cities (7,688 patients), introducing the WHO Surgical Safety Checklist was followed by fewer deaths and major complications.",
-    "strength": "moderate — large but before-and-after (not randomized); later rollouts showed mixed results",
+    "strength": "moderate, large but before-and-after (not randomized). Later rollouts showed mixed results",
     "topics": [
       "checklists",
       "teams",
@@ -1554,7 +1554,7 @@
     "url": "https://doi.org/10.1056/NEJMsa1308261",
     "kind": "study",
     "finding": "After surgical checklists were mandated across 101 Ontario hospitals, there was no significant reduction in operative deaths or complications.",
-    "strength": "moderate — large population study; suggests implementation matters as much as the checklist",
+    "strength": "moderate, large population study. Suggests implementation matters as much as the checklist",
     "topics": [
       "checklists",
       "teams",
@@ -1576,7 +1576,7 @@
     "url": "https://dtg.sites.fas.harvard.edu/DANWEGNER/pub/Wegner,%20Giuliano,%20&%20Hertel%20(1985)%20Cognitive%20interdependence.pdf",
     "kind": "theory",
     "finding": "Proposed that close partners share the work of remembering (“transactive memory”): each relies on the other to know and recall certain things.",
-    "strength": "moderate — influential theory with supporting experiments in couples and teams",
+    "strength": "moderate, influential theory with supporting experiments in couples and teams",
     "topics": [
       "transactive-memory",
       "mental-load",
@@ -1599,7 +1599,7 @@
     "url": "https://alnap.org/help-library/resources/transactive-memory-a-contemporary-analysis-of-the-group-mind/",
     "kind": "theory",
     "finding": "Defined transactive memory as individual memory systems combined with the communication between people, so a group knows more than any one member.",
-    "strength": "moderate — foundational theory; supported by later team research",
+    "strength": "moderate, foundational theory. Supported by later team research",
     "topics": [
       "transactive-memory",
       "teams"
@@ -1621,7 +1621,7 @@
     "url": "https://doi.org/10.1037/0022-3514.74.3.659",
     "kind": "study",
     "finding": "Dating couples recalled more together than pairs of strangers, consistent with couples using an established system for who remembers what.",
-    "strength": "moderate — lab experiments with student couples",
+    "strength": "moderate, lab experiments with student couples",
     "topics": [
       "transactive-memory",
       "relationships"
@@ -1631,7 +1631,7 @@
     ],
     "verified": true,
     "verified_by": "https://en.wikipedia.org/wiki/Transactive_memory ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4419599/",
-    "note": "DOI/volume/pages from a reference list that gives the title as “Retrieval processes in transactive memory”; the exact final title (with or without “systems”) should be checked."
+    "note": "DOI/volume/pages from a reference list that gives the title as “Retrieval processes in transactive memory.” The exact final title (with or without “systems”) should be checked."
   },
   {
     "id": "risko-gilbert-2016",
@@ -1643,7 +1643,7 @@
     "url": "https://doi.org/10.1016/j.tics.2016.07.002",
     "kind": "review",
     "finding": "Reviewed how people use physical actions and tools (lists, reminders, notes) to reduce the mental demands of a task, what triggers offloading, and its consequences for memory.",
-    "strength": "moderate — review of a growing field",
+    "strength": "moderate, review of a growing field",
     "topics": [
       "cognitive-offloading",
       "mental-load"
@@ -1663,8 +1663,8 @@
     "doi": "10.1037/a0024192",
     "url": "https://doi.org/10.1037/a0024192",
     "kind": "study",
-    "finding": "Unfinished goals caused intrusive thoughts and interfered with other tasks; writing a specific plan for the goal removed these effects.",
-    "strength": "moderate — lab experiments; not yet widely replicated",
+    "finding": "Unfinished goals caused intrusive thoughts and interfered with other tasks. Writing a specific plan for the goal removed these effects.",
+    "strength": "moderate, lab experiments. Not yet widely replicated",
     "topics": [
       "cognitive-offloading",
       "mental-load",
@@ -1687,7 +1687,7 @@
     "url": "https://en.wikipedia.org/wiki/Zeigarnik_effect",
     "kind": "study",
     "finding": "Reported that people recalled interrupted tasks better than completed ones.",
-    "strength": "debated — later studies and a 2025 meta-analysis found the memory effect does not reliably replicate, while the tendency to resume interrupted tasks (Ovsiankina effect) holds up better",
+    "strength": "debated, later studies and a 2025 meta-analysis found the memory effect does not reliably replicate, while the tendency to resume interrupted tasks (Ovsiankina effect) holds up better",
     "topics": [
       "unfinished-tasks",
       "mental-load"
@@ -1697,7 +1697,7 @@
     ],
     "verified": true,
     "verified_by": "https://en.wikipedia.org/wiki/Zeigarnik_effect ; https://www.spektrum.de/lexikon/psychologie/zeigarnik-bluma-vulfowna/17085",
-    "note": "No DOI confirmed; Wikipedia page used as read-more (it links the original and translations)."
+    "note": "No DOI confirmed. Wikipedia page used as read-more (it links the original and translations)."
   },
   {
     "id": "ghibellini-meier-2025",
@@ -1709,7 +1709,7 @@
     "url": "https://doi.org/10.1057/s41599-025-05000-w",
     "kind": "meta-analysis",
     "finding": "Found no general memory advantage for interrupted tasks (the Zeigarnik effect), but a reliable tendency to resume interrupted tasks (the Ovsiankina effect).",
-    "strength": "strong — recent meta-analysis",
+    "strength": "strong, recent meta-analysis",
     "topics": [
       "unfinished-tasks",
       "mental-load"
@@ -1719,7 +1719,7 @@
     ],
     "verified": true,
     "verified_by": "https://ideas.repec.org/a/pal/palcom/v12y2025i1d10.1057_s41599-025-05000-w.html ; https://www.kog.psy.unibe.ch/e48276/e1785865/s41599-025-05000-w1_ger.pdf",
-    "note": "First names given as initials from general knowledge; title confirmed only as beginning “Interruption, recall and resumption” — confirm the full title before publishing. Supports the site’s “later reviews” statement."
+    "note": "First names given as initials from general knowledge. Title confirmed only as beginning “Interruption, recall and resumption”, confirm the full title before publishing. Supports the site’s “later reviews” statement."
   },
   {
     "id": "strathern-1997",
@@ -1730,8 +1730,8 @@
     "doi": null,
     "url": "https://cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB",
     "kind": "study",
-    "finding": "Anthropological commentary on the “audit explosion” in British universities; widely credited as the source of the popular phrasing of Goodhart’s law (when a measure becomes a target, it stops being a good measure).",
-    "strength": "moderate — essay/commentary, widely cited",
+    "finding": "Anthropological commentary on the “audit explosion” in British universities. Widely credited as the source of the popular phrasing of Goodhart’s law (when a measure becomes a target, it stops being a good measure).",
+    "strength": "moderate, essay/commentary, widely cited",
     "topics": [
       "goodharts-law",
       "measurement",
@@ -1744,7 +1744,7 @@
     ],
     "verified": true,
     "verified_by": "https://cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB ; https://ideas.repec.org/a/cup/eurrev/v5y1997i03p305-321_00.html",
-    "note": "Search did not show the quote itself; it is widely attributed to this paper."
+    "note": "Search did not show the quote itself. It is widely attributed to this paper."
   },
   {
     "id": "campbell-1979",
@@ -1756,7 +1756,7 @@
     "url": "https://jmde.journals.publicknowledgeproject.org/index.php/jmde_1/article/view/297",
     "kind": "theory",
     "finding": "Source of what is called “Campbell’s law”: the more a numerical social indicator is used to make decisions, the more it is open to distortion and the less well it measures what it was meant to.",
-    "strength": "moderate — widely documented in education, health and business",
+    "strength": "moderate, widely documented in education, health and business",
     "topics": [
       "goodharts-law",
       "measurement"
@@ -1766,7 +1766,7 @@
     ],
     "verified": true,
     "verified_by": "https://jmde.journals.publicknowledgeproject.org/index.php/jmde_1/article/view/297 ; https://explore.psychsafety.com/n/campbell-1979/",
-    "note": "Original 1979 volume/issue/pages from general knowledge, not confirmed; the free reprint (DOI 10.56645/jmde.v7i15.297) is the link. The wording of “Campbell’s law” is from general knowledge."
+    "note": "Original 1979 volume/issue/pages from general knowledge, not confirmed. The free reprint (DOI 10.56645/jmde.v7i15.297) is the link. The wording of “Campbell’s law” is from general knowledge."
   },
   {
     "id": "goodhart-1975",
@@ -1778,7 +1778,7 @@
     "url": "https://www.rba.gov.au/publications/rdp/1990/9013/conference-volumes.html",
     "kind": "theory",
     "finding": "The original source of “Goodhart’s law”: a statistical regularity tends to break down once authorities put pressure on it for control purposes.",
-    "strength": "moderate — an economist’s observation, later generalised; widely documented in practice",
+    "strength": "moderate, an economist’s observation, later generalized. Widely documented in practice",
     "topics": [
       "goodharts-law",
       "measurement"
@@ -1802,7 +1802,7 @@
     "url": "https://qualitysafety.bmj.com/content/23/4/290",
     "kind": "review",
     "finding": "Of 73 healthcare articles reporting the use of plan–do–study–act cycles, most did not report key features of the method, such as iterative cycles, small tests of change and real-time data.",
-    "strength": "strong — systematic review; shows the method is often named but not fully followed",
+    "strength": "strong, systematic review. Shows the method is often named but not fully followed",
     "topics": [
       "pdsa",
       "teams",
@@ -1825,7 +1825,7 @@
     "url": "https://doi.org/10.1037/h0022100",
     "kind": "review",
     "finding": "A review of about 50 studies of therapy, training, natural and laboratory groups proposed that groups pass through stages now known as forming, storming, norming and performing.",
-    "strength": "debated — widely taught, but later research finds many teams don’t follow a neat sequence",
+    "strength": "debated, widely taught, but later research finds many teams don’t follow a neat sequence",
     "topics": [
       "team-development",
       "teams"
@@ -1846,7 +1846,7 @@
     "url": "https://doi.org/10.1177/105960117700200404",
     "kind": "review",
     "finding": "Reviewed 22 later studies of the stage model, noting that only one directly tested it, and added a fifth stage, adjourning.",
-    "strength": "debated — the stage model has limited direct testing",
+    "strength": "debated, the stage model has limited direct testing",
     "topics": [
       "team-development",
       "teams"
@@ -1856,7 +1856,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.scinapse.io/papers/2100929472 ; https://socialsci.libretexts.org/Bookshelves/Communication/Public_Speaking/Public_Speaking_(Lumen_Learning)/14%3A_Small_Group_Communication/14.12%3A_The_Five_Development_Stages_of_Groups",
-    "note": "DOI from one reference list (Lumen Learning); volume, issue and pages confirmed by Scinapse."
+    "note": "DOI from one reference list (Lumen Learning). Volume, issue and pages confirmed by Scinapse."
   },
   {
     "id": "gersick-1988",
@@ -1868,7 +1868,7 @@
     "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Dynamics/Gersick_1988_Time_and_transition.pdf",
     "kind": "study",
     "finding": "Following eight project teams from first meeting to deadline, found a “punctuated equilibrium” pattern: long stretches of inertia broken by a burst of change near the midpoint of the team’s time, prompted by awareness of the deadline.",
-    "strength": "moderate — small qualitative field study; an influential alternative to stage models",
+    "strength": "moderate, small qualitative field study. An influential alternative to stage models",
     "topics": [
       "team-development",
       "teams"
@@ -1878,7 +1878,7 @@
     ],
     "verified": true,
     "verified_by": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Dynamics/Gersick_1988_Time_and_transition.pdf ; https://explore.psychsafety.com/n/gersick-1988/",
-    "note": "DOI (10.2307/256496) shown only by a blog, so not used; link is the MIT-hosted copy."
+    "note": "DOI (10.2307/256496) shown only by a blog, so not used. Link is the MIT-hosted copy."
   },
   {
     "id": "jehn-1995",
@@ -1889,8 +1889,8 @@
     "doi": "10.2307/2393638",
     "url": "https://doi.org/10.2307/2393638",
     "kind": "study",
-    "finding": "Distinguished relationship conflict (personal friction) from task conflict (disagreement about the work); relationship conflict was linked with lower satisfaction and performance, while task conflict could help on non-routine tasks.",
-    "strength": "moderate — influential distinction; later meta-analyses find task conflict is often less helpful than first thought",
+    "finding": "Distinguished relationship conflict (personal friction) from task conflict (disagreement about the work). Relationship conflict was linked with lower satisfaction and performance, while task conflict could help on non-routine tasks.",
+    "strength": "moderate, influential distinction. Later meta-analyses find task conflict is often less helpful than first thought",
     "topics": [
       "conflict",
       "teams",
@@ -1901,7 +1901,7 @@
     ],
     "verified": true,
     "verified_by": "https://findanexpert.unimelb.edu.au/scholarlywork/1360216-a-multimethod-examination-of-the-benefits-and-detriments-of-intragroup-conflict ; https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Negotiation_and_Conflict_Management/Jehn-ASQ-1995.pdf",
-    "note": "Findings summary is from general knowledge (the search confirmed citation and DOI, not the abstract); issue number (2) also from general knowledge."
+    "note": "Findings summary is from general knowledge (the search confirmed citation and DOI, not the abstract). Issue number (2) also from general knowledge."
   },
   {
     "id": "maslach-jackson-1981",
@@ -1913,7 +1913,7 @@
     "url": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4",
     "kind": "study",
     "finding": "Developed the Maslach Burnout Inventory, with three subscales: emotional exhaustion, depersonalization, and reduced personal accomplishment.",
-    "strength": "strong — the standard burnout measure, though its overlap with depression is debated",
+    "strength": "strong, the standard burnout measure, though its overlap with depression is debated",
     "topics": [
       "burnout",
       "work",
@@ -1927,7 +1927,7 @@
     ],
     "verified": true,
     "verified_by": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4 ; https://en.wikipedia.org/wiki/Maslach_Burnout_Inventory",
-    "note": "DOI not confirmed (likely 10.1002/job.4030020205); link is a ScienceOpen record."
+    "note": "DOI not confirmed (likely 10.1002/job.4030020205). Link is a ScienceOpen record."
   },
   {
     "id": "who-icd11-burnout-2019",
@@ -1939,7 +1939,7 @@
     "url": "https://www.who.int/news-room/detail/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases",
     "kind": "guideline",
     "finding": "ICD-11 includes burn-out as an occupational phenomenon, not a medical condition: a syndrome from chronic workplace stress that has not been successfully managed, with exhaustion, mental distance or cynicism about one’s job, and reduced professional efficacy. WHO says the term should not be used for other areas of life.",
-    "strength": "strong — official classification statement",
+    "strength": "strong, official classification statement",
     "topics": [
       "burnout",
       "work"
@@ -1961,7 +1961,7 @@
     "url": "https://scholars.huji.ac.il/node/1802",
     "kind": "meta-analysis",
     "finding": "Across 607 effect sizes, feedback improved performance on average, but in more than a third of cases it made performance worse, especially when it drew attention to the self rather than the task.",
-    "strength": "strong — large meta-analysis",
+    "strength": "strong, large meta-analysis",
     "topics": [
       "feedback",
       "work"
@@ -1971,7 +1971,7 @@
     ],
     "verified": true,
     "verified_by": "https://scholars.huji.ac.il/node/1802 ; https://explore.psychsafety.com/n/kluger-denisi-1996/ ; https://swov.nl/nl/publicatie/effects-feedback-interventions-performance-historical-review-meta-analysis-and",
-    "note": "DOI not confirmed (likely 10.1037/0033-2909.119.2.254); link is the author’s university page."
+    "note": "DOI not confirmed (likely 10.1037/0033-2909.119.2.254). Link is the author’s university page."
   },
   {
     "id": "lind-tyler-1988",
@@ -1983,7 +1983,7 @@
     "url": "https://doi.org/10.1007/978-1-4899-2115-4",
     "kind": "book",
     "finding": "Reviews theory and research on procedural justice and its implications for legal, political, interpersonal and work settings.",
-    "strength": "strong — standard scholarly synthesis",
+    "strength": "strong, standard scholarly synthesis",
     "topics": [
       "procedural-justice",
       "fairness"
@@ -1993,7 +1993,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.ojp.gov/ncjrs/virtual-library/abstracts/social-psychology-procedural-justice ; https://link.altmetric.com/details/11179059",
-    "note": "DOI from an Altmetric record. The site names Lind and Tyler without a specific work; this is the representative source."
+    "note": "DOI from an Altmetric record. The site names Lind and Tyler without a specific work. This is the representative source."
   },
   {
     "id": "bls-atus",
@@ -2004,7 +2004,7 @@
     "doi": null,
     "url": "https://www.bls.gov/tus/",
     "kind": "study",
-    "finding": "The federal survey of how, where and with whom Americans spend their time, including unpaid housework and childcare; it has run every year since 2003.",
+    "finding": "The federal survey of how, where and with whom Americans spend their time, including unpaid housework and childcare. It has run every year since 2003.",
     "strength": "strong: large national time-diary survey",
     "topics": [
       "time-use"
@@ -2027,7 +2027,7 @@
     "url": "https://eploes.lib2.uniwa.gr/Record/lib2_1%2F6426/Details?lng=el",
     "kind": "book",
     "finding": "Deming’s case for quality management, arguing that most problems come from the system people work in rather than from individual workers.",
-    "strength": "moderate — hugely influential management book, not a research study",
+    "strength": "moderate, hugely influential management book, not a research study",
     "topics": [
       "pdsa",
       "systems",
@@ -2040,6 +2040,6 @@
     ],
     "verified": true,
     "verified_by": "https://eploes.lib2.uniwa.gr/Record/lib2_1%2F6426/Details?lng=el ; https://biblio.co.uk/0262541157",
-    "note": "Link is a library catalogue record. The finding is a summary from general knowledge (search confirmed the publication only). The site attributes PDSA and “problems come from the system” to Deming without naming a work."
+    "note": "Link is a library catalog record. The finding is a summary from general knowledge (search confirmed the publication only). The site attributes PDSA and “problems come from the system” to Deming without naming a work."
   }
 ]

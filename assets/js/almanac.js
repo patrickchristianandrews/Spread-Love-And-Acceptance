@@ -218,7 +218,7 @@
       ax.hidden = n < 2;
     }
     $('al-cap').textContent = (a.length > n ? 'Your last ' + n + ' readings' : n === 1 ? 'Your one reading so far' : 'Your ' + n + ' readings') +
-      (n > 1 ? ', oldest on the left. One mark per reading; days without one are simply left out.' : '. More marks appear as you save more.');
+      (n > 1 ? ', oldest on the left. One mark per reading. Days without one are simply left out.' : '. More marks appear as you save more.');
   }
 
   /* ------------------------------------------------------------ the list of readings (the chart's text version) */
@@ -250,7 +250,7 @@
     $('al-empty').hidden = !!a.length;
     if (a.length) {
       $('al-intro').textContent = a.length + ' reading' + (a.length === 1 ? '' : 's') + ' saved' + (a.length > 1 ? ', from ' + nice(a[0].d, true) + ' to ' + nice(a[a.length - 1].d, true) : '') +
-        '. Kept in this browser only; nothing is uploaded. Save on any day you like: gaps don’t count against anything.';
+        '. Kept in this browser only. Nothing is uploaded. Save on any day you like: gaps don’t count against anything.';
       chart(a); table(a);
       $('trend').textContent = lastWeek(a);
       var p = $('pattern'); p.innerHTML = '';
@@ -302,7 +302,7 @@
     var f = finished();
     return JSON.stringify({
       format: 'tol-weather-almanac', version: 1, exported: new Date().toISOString(),
-      note: 'Your weather almanac from Spread Love & Acceptance, made on your device. "i" is the day tally from 0 to 100 (higher means a heavier day); it is not a score of you.',
+      note: 'Your weather almanac from Spread Love & Acceptance, made on your device. "i" is the day tally from 0 to 100 (higher means a heavier day). It is not a score of you.',
       readings: readings(), finished: f.dated.concat(f.undated)
     }, null, 2);
   }
@@ -362,7 +362,7 @@
       erase(); ask.hidden = true; draw();
       var st = $('fc-status'); if (st) st.textContent = 'Your saved weather readings, and the flowers they planted, were erased from this browser.';
       if (box.hidden) { var first = doc.querySelector('[data-sky]'); if (first) first.focus(); }
-      else { say('Your saved weather readings were erased from this browser. The things-finished list comes from other pages’ own notes; you can erase those on What’s stored on this device.'); $('erase').focus(); }
+      else { say('Your saved weather readings were erased from this browser. The things-finished list comes from other pages’ own notes. You can erase those on What’s stored on this device.'); $('erase').focus(); }
       doc.dispatchEvent(new CustomEvent('tol-almanac-erased'));
     });
     var rt = null, lastW = 0;

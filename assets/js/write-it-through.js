@@ -111,11 +111,11 @@
   var SORRY_FEELINGS = ['sorry', 'ashamed', 'regretful', 'embarrassed', 'worried', 'sad', 'hopeful'];
   var NOT_EG = ['I’m not saying you don’t care.', 'I’m not saying it’s all your fault.', 'I’m not angry with you as a person.', 'I’m not asking you to drop everything.', 'I’m not trying to win this. I want us to sort it out.'];
   var ASK_EG = {
-    partner: ['Could we agree who does the school run on Wednesdays?', 'Could you tell me when plans change, before the day?', 'Can we talk about this at the weekend, when we’re both rested?'],
+    partner: ['Could we agree who does the school drop-off on Wednesdays?', 'Could you tell me when plans change, before the day?', 'Can we talk about this on the weekend, when we’re both rested?'],
     coparent: ['Could we confirm the handover time by text the day before?', 'Can we agree on bedtimes for school nights at both homes?', 'Could you let me know about school events within a day of hearing?'],
     family: ['Could you text before you come over?', 'Can we agree who hosts this year, and next year?', 'Could we keep advice about the kids for when I ask?'],
     friend: ['Could you let me know if you can’t make it, before the day?', 'Can we split the costs evenly from now on?', 'Could we find a time to talk about it properly?'],
-    housemate: ['Could we each wash up our own things by bedtime?', 'Can we agree on quiet hours after eleven on weeknights?', 'Could we set up a rota for the bins?'],
+    housemate: ['Could we each wash up our own things by bedtime?', 'Can we agree on quiet hours after eleven on weeknights?', 'Could we set up a schedule for the trash?'],
     coworker: ['Could we agree one owner for the weekly report?', 'Can we set a time each week to hand over?', 'Could you copy me in when the plan changes?'],
     group: ['Could we each say which job we’ll own by Friday?', 'Can we find one evening to talk about this together?', 'Could we agree how we split shared costs?'],
     other: ['Could we agree on one thing to do differently?', 'Can we talk about this at a calm time this week?', 'Could you let me know what would help from your side?']
@@ -134,7 +134,7 @@
     yes: { label: 'Yes', write: 'Say yes', fact: null, feel: null, ask: ['Anything to add?', 'optional'], askHint: 'A word of thanks is plenty. For example: “Thank you for asking so clearly.”', askOptional: true, by: null, not: false,
       note: 'A plain yes is a gift. It goes into “What we agreed” on both phones.' },
     yesand: { label: 'Yes, and…', write: 'Say yes, and add one thing', fact: null, feel: 'How it landed for me', feelVerb: 'I feel', feelOptional: true, ask: ['And…', 'one thing to add'], askHint: 'For example: “And could we look at it again in a month?”', by: 'When I’d like a reply',
-      note: 'Your yes goes into “What we agreed”. The “and” is a new ask they can answer.' },
+      note: 'Your yes goes into “What we agreed.” The “and” is a new ask they can answer.' },
     notyet: { label: 'Not yet, can we…', write: 'Suggest another way', fact: ['What’s getting in the way', 'optional'], factOptional: true, factHint: 'For example: “Wednesdays I finish at six.”', feel: 'How it landed for me', feelVerb: 'I feel', feelOptional: true, ask: ['Can we…', 'what you suggest instead'], askHint: 'For example: “Can we swap: I take Thursdays and you take Wednesdays?”', by: 'When I’d like a reply',
       note: '“Not yet” keeps the door open. Suggest something they can say yes to.' },
     differ: { label: 'I see it differently', write: 'Give your side', fact: ['My side', 'facts only, one thing'], factHint: 'What you saw or knew, without a verdict on them. For example: “I thought we’d agreed I’d pay on the 8th.”', feel: 'How it landed for me', feelVerb: 'I felt', ask: ['What I’m asking for', 'one clear ask'], askHint: 'For example: “Could we write the date down this time, so we both know?”', by: 'When I’d like a reply',
@@ -397,11 +397,11 @@
     var sp = specOf(t), fact = t.f || '', txt = prose(t), an = all.an, has = function (id) { return !!(an && an.found && an.found[id]); };
     var sentences = fact ? fact.split(/[.!?]+\s/).filter(function (x) { return x.trim(); }).length : 0;
     var rows = [];
-    if (sp.fact && fact) rows.push([sentences <= 3 && !/\b(and another thing|on top of that|while we'?re at it|and also|plus,)\b/i.test(fact), 'One topic', 'This looks like more than one thing. Keep one; the rest can have its own message later.']);
+    if (sp.fact && fact) rows.push([sentences <= 3 && !/\b(and another thing|on top of that|while we'?re at it|and also|plus,)\b/i.test(fact), 'One topic', 'This looks like more than one thing. Keep one. The rest can have its own message later.']);
     rows.push([!['label', 'contempt', 'critic', 'dxlabel', 'motive'].some(has), 'Facts, not verdicts', 'A word here judges the person. Say what happened instead.']);
     rows.push([!has('absolute') && !/\b(always|never)\b/i.test(txt), 'No always or never', '“Always” and “never” invite an argument about the count. Name this one time.']);
     rows.push([!has('sarcasm') && !has('shout') && !has('caps') && !(an && an.allCaps) && !/\b[A-Z]{4,}\b/.test(txt), 'No sarcasm or ALL CAPS', 'Capitals and sarcasm read as shouting. Plain words land softer.']);
-    rows.push([!YOU_RE.test(txt) && !['madefeel', 'blameq'].some(has), 'No “you” accusations', 'Try “I felt…” instead of “you made me…” or “you don’t care”.']);
+    rows.push([!YOU_RE.test(txt) && !['madefeel', 'blameq'].some(has), 'No “you” accusations', 'Try “I felt…” instead of “you made me…” or “you don’t care.”']);
     if (sp.ask && !sp.askOptional) rows.push([!!t.a, 'Says what you’re asking for', 'Add one clear ask, so they know what you’d like.']);
     if (sp.by) rows.push([!!t.by, 'A reply-by time', 'Choose when you’d like a reply.']);
     return rows;
@@ -616,7 +616,7 @@
       else if (window.TOLShare && window.TOLShare.share) window.TOLShare.share({ title: 'A message for you', text: msg, url: link, private: true });
       else copyText(link).then(function (ok) { say(ok ? 'Link copied. Paste it into a message to them.' : 'Couldn’t copy here.'); });
     } else if (how === 'link') {
-      copyText(link).then(function (ok) { say(ok ? 'Link copied. Paste it into a message to ' + (to || 'them') + '.' : 'Couldn’t copy here. Try “Send the link”.'); });
+      copyText(link).then(function (ok) { say(ok ? 'Link copied. Paste it into a message to ' + (to || 'them') + '.' : 'Couldn’t copy here. Try “Send the link.”'); });
     } else if (how === 'text') {
       copyText(text).then(function (ok) { say(ok ? 'Message copied as plain text.' : 'Couldn’t copy here.'); });
     } else if (how === 'qr') {
@@ -724,7 +724,7 @@
     ], [
       'Read the whole message once.',
       'Read it a second time.',
-      'Find the part called “' + (specOf(t).ask ? specOf(t).ask[0].replace(/\?$/, '') : 'What I’m asking for') + '”. That is what they want an answer to.',
+      'Find the part called “' + (specOf(t).ask ? specOf(t).ask[0].replace(/\?$/, '') : 'What I’m asking for') + '.” That is what they want an answer to.',
       dueW ? 'You do not need to answer now. Answer by ' + dueW + '.' : 'You do not need to answer now.'
     ]));
     if (t.re) box.appendChild(el('p', { cls: 'wit-re' }, [el('strong', { text: 'Answering your ask: ' }), '“' + t.re + '”']));

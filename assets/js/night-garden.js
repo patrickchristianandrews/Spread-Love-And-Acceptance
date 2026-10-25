@@ -712,7 +712,7 @@
       var bp = chooseBreath();
       // the words always name the shape that is actually drawn (see drawBreath)
       h = { ico: HELP.breathe.ico, h: bName(bp) + ' in the garden',
-        short: 'A little star travels around ' + breathShape(bp) + ': <strong>' + breathDesc(bp) + '</strong>. ' + 'Breathe along with it; the number in the light counts each part for you.',
+        short: 'A little star travels around ' + breathShape(bp) + ': <strong>' + breathDesc(bp) + '</strong>. ' + 'Breathe along with it. The number in the light counts each part for you.',
         steps: [
         breathPath(bp),
         'The garden has several calm patterns and brings a different one on most visits. Every one breathes out for at least as long as it breathes in, and any holds are short and easy. If a pattern ever feels like a strain, just breathe your own way and watch the light.',

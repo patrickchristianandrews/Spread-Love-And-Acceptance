@@ -29,7 +29,7 @@
     'conflict': 'Getting through hard conversations, including when to take a break and how to come back.',
     'repair': 'Making things right after a rough moment, in a way the other person can take in.',
     'communication': 'Hearing each other properly, and asking for what you need.',
-    'anxiety': 'When worry colours what you hear, and ways to steady it.',
+    'anxiety': 'When worry colors what you hear, and ways to steady it.',
     'attachment': 'How our early bonds shape the way we reach for, and pull back from, the people we love.',
     'boundaries': 'Saying no, and saying what you need, without it turning into a fight.',
     'neurodiversity': 'Brains work in different ways. Knowing that makes getting along a lot easier.',

@@ -233,7 +233,7 @@
       var h = '<div class="rt-after">' +
         '<p class="rt-k">Tomorrow</p><p class="rt-tmw">Part ' + next + ': ' + esc(P.t) + '. It takes about a minute. Missing a day is fine. It waits for you here.</p>' +
         '<details class="rt-more"><summary>Remind me in my calendar</summary>' +
-          '<p class="rt-small">A five-minute event each day for the ' + (left === 1 ? 'last part' : left + ' parts left') + ', called “' + R_TITLE + '”, so it says nothing private. It lives in your calendar. Nothing is sent to us.</p>' +
+          '<p class="rt-small">A five-minute event each day for the ' + (left === 1 ? 'last part' : left + ' parts left') + ', called “' + R_TITLE + ',” so it says nothing private. It lives in your calendar. Nothing is sent to us.</p>' +
           '<p class="rt-row"><label for="' + id + '-time">Time</label> <input type="time" id="' + id + '-time" value="08:00" step="300" data-rt-time></p>' +
           '<p class="rt-row"><button type="button" class="rt-btn is-soft" data-rt-ics>Add to my calendar</button> <a class="rt-btn is-soft" data-rt-google href="#" target="_blank" rel="noopener">Google Calendar<span class="sr-only"> (opens in a new tab)</span></a></p>' +
           '<p class="rt-small" data-rt-ics-say role="status" aria-live="polite"></p>' +

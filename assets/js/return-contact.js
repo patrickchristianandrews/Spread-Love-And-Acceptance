@@ -59,7 +59,7 @@
     }
     function ready() {
       if (!note.value.trim() && !topics().length) {
-        say.textContent = 'Write a line in “Your note”, or pick what it’s about, first.';
+        say.textContent = 'Write a line in “Your note,” or pick what it’s about, first.';
         note.focus(); return false;
       }
       return true;
@@ -68,7 +68,7 @@
       e.preventDefault();
       if (!ready()) return;
       var href = 'mailto:' + TO + '?subject=' + encodeURIComponent(subject()) + '&body=' + encodeURIComponent(body());
-      say.textContent = 'Opening your email app with the note filled in. Nothing is sent until you press Send there. If nothing opened, use “Copy the note instead”.';
+      say.textContent = 'Opening your email app with the note filled in. Nothing is sent until you press Send there. If nothing opened, use “Copy the note instead.”';
       window.location.href = href;
     });
     $('ct-copy').addEventListener('click', function () {

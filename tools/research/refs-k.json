@@ -8,8 +8,8 @@
   "doi": "10.1177/0146167217733073",
   "url": "https://doi.org/10.1177/0146167217733073",
   "kind": "study",
-  "finding": "In four experiments, short spells of solitude lowered high-arousal feelings, both positive and negative, leaving people calmer; the effect needed actually being alone, and when people chose solitude it went with more relaxation and less stress.",
-  "strength": "moderate — four lab experiments with students; short solitude periods (about 15 minutes)",
+  "finding": "In four experiments, short spells of solitude lowered high-arousal feelings, both positive and negative, leaving people calmer. The effect needed actually being alone, and when people chose solitude it went with more relaxation and less stress.",
+  "strength": "moderate, four lab experiments with students. Short solitude periods (about 15 minutes)",
   "topics": [
    "solitude",
    "loneliness",
@@ -30,8 +30,8 @@
   "doi": "10.1177/0956797618783714",
   "url": "https://doi.org/10.1177/0956797618783714",
   "kind": "study",
-  "finding": "Across five studies, people underestimated how much their conversation partners liked them after first conversations; in first-year university roommates the gap lasted for most of the year.",
-  "strength": "moderate — five studies including lab and field samples; mostly students and adults in the US and UK",
+  "finding": "Across five studies, people underestimated how much their conversation partners liked them after first conversations. In first-year university roommates the gap lasted for most of the year.",
+  "strength": "moderate, five studies including lab and field samples, mostly students and adults in the US and UK",
   "topics": [
    "friendship",
    "first impressions",
@@ -52,8 +52,8 @@
   "doi": "10.1037/pspi0000402",
   "url": "https://doi.org/10.1037/pspi0000402",
   "kind": "study",
-  "finding": "In a series of preregistered experiments, people who reached out to someone in their social circle (a short message, a note or a small gift) consistently underestimated how much the recipient appreciated it; the gap was larger when the contact was more surprising.",
-  "strength": "moderate to strong — many preregistered experiments with thousands of participants; mostly US adults and students",
+  "finding": "In a series of preregistered experiments, people who reached out to someone in their social circle (a short message, a note or a small gift) consistently underestimated how much the recipient appreciated it. The gap was larger when the contact was more surprising.",
+  "strength": "moderate to strong, many preregistered experiments with thousands of participants, mostly US adults and students",
   "topics": [
    "friendship",
    "reaching out",
@@ -74,8 +74,8 @@
   "doi": "10.1007/s00127-022-02332-9",
   "url": "https://doi.org/10.1007/s00127-022-02332-9",
   "kind": "review",
-  "finding": "Across 24 observational studies, only some found pet owners less lonely or isolated; studies from the COVID-19 pandemic were more often positive than earlier ones, so the overall link between pets and loneliness is mixed.",
-  "strength": "moderate — systematic review of observational studies; cannot show cause and effect",
+  "finding": "Across 24 observational studies, only some found pet owners less lonely or isolated. Studies from the COVID-19 pandemic were more often positive than earlier ones, so the overall link between pets and loneliness is mixed.",
+  "strength": "moderate, systematic review of observational studies. Cannot show cause and effect",
   "topics": [
    "pets",
    "loneliness",
@@ -97,7 +97,7 @@
   "url": "https://wellcomecollection.org/works/wp45vzsp",
   "kind": "book",
   "finding": "A book arguing that loneliness is a biological signal, like hunger, that we need connection, and that chronic loneliness can trap people in isolation and harm health.",
-  "strength": "moderate — popular book summarizing the authors' and others' research",
+  "strength": "moderate, popular book summarizing the authors' and others' research",
   "topics": [
    "loneliness"
   ],
@@ -106,7 +106,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.publishersweekly.com/9780393061703 ; https://search.ub.tum.de/vufind/Record/DE-604.BV035327306 ; https://wellcomecollection.org/works/wp45vzsp",
-  "note": "Library catalogue record (Wellcome Collection, 2009 printing); replaces a trade-magazine listing."
+  "note": "Library catalog record (Wellcome Collection, 2009 printing). Replaces a trade-magazine listing."
  },
  {
   "id": "masicampo-baumeister-2011",
@@ -117,8 +117,8 @@
   "doi": "10.1037/a0024192",
   "url": "https://doi.org/10.1037/a0024192",
   "kind": "study",
-  "finding": "Unfinished goals caused intrusive thoughts and interfered with other tasks; writing a specific plan for the goal removed these effects.",
-  "strength": "moderate — lab experiments; not yet widely replicated",
+  "finding": "Unfinished goals caused intrusive thoughts and interfered with other tasks. Writing a specific plan for the goal removed these effects.",
+  "strength": "moderate, lab experiments. Not yet widely replicated",
   "topics": [
    "cognitive-offloading",
    "mental-load",
@@ -139,8 +139,8 @@
   "doi": "10.1038/s41467-018-05377-0",
   "url": "https://doi.org/10.1038/s41467-018-05377-0",
   "kind": "study",
-  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
-  "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance. Rested people who briefly watched them felt lonelier too.",
+  "strength": "early, small experimental samples (18 in the main scanning study), one lab",
   "topics": [
    "sleep",
    "stress",
@@ -163,7 +163,7 @@
   "url": "https://doi.org/10.1177/0265407518761225",
   "kind": "study",
   "finding": "Studies of adults who had recently moved and of students found that more hours spent together, especially in leisure, went with moving from acquaintance to closer friendship.",
-  "strength": "moderate — survey studies; hour estimates are rough",
+  "strength": "moderate, survey studies. Hour estimates are rough",
   "topics": [
    "friendship"
   ],
@@ -184,7 +184,7 @@
   "url": "https://doi.org/10.1177/0146167214529799",
   "kind": "study",
   "finding": "Students were happier and felt more belonging on days they interacted with more classmates than usual, and in community samples interactions with weak ties as well as close ties were linked with daily well-being.",
-  "strength": "moderate — diary studies, correlational",
+  "strength": "moderate, diary studies, correlational",
   "topics": [
    "weak-ties"
   ],
@@ -204,7 +204,7 @@
   "url": "https://doi.org/10.1177/1948550613502990",
   "kind": "study",
   "finding": "People who had a brief, friendly social exchange with a coffee-shop barista reported more belonging and positive mood than those who kept the exchange purely efficient.",
-  "strength": "early — one small field experiment",
+  "strength": "early, one small field experiment",
   "topics": [
    "weak-ties",
    "belonging"
@@ -224,8 +224,8 @@
   "doi": "10.1037/a0037323",
   "url": "https://doi.org/10.1037/a0037323",
   "kind": "study",
-  "finding": "Commuters asked to talk with a stranger on their train or bus reported a more positive journey than those told to sit in solitude, even though people predicted the opposite; misjudging how pleasant such talk would be keeps people apart.",
-  "strength": "moderate — field and lab experiments; replicated in later work",
+  "finding": "Commuters asked to talk with a stranger on their train or bus reported a more positive journey than those told to sit in solitude, even though people predicted the opposite. Misjudging how pleasant such talk would be keeps people apart.",
+  "strength": "moderate, field and lab experiments. Replicated in later work",
   "topics": [
    "weak-ties",
    "friendship"
@@ -245,8 +245,8 @@
   "doi": "10.1037/0033-2909.121.1.65",
   "url": "https://pubmed.ncbi.nlm.nih.gov/9000892/",
   "kind": "theory",
-  "finding": "A theoretical review proposing that ADHD centres on a difficulty with behavioural inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
-  "strength": "moderate: highly influential theory; executive function difficulties are common in ADHD but not universal.",
+  "finding": "A theoretical review proposing that ADHD centers on a difficulty with behavioral inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
+  "strength": "moderate: highly influential theory. Executive function difficulties are common in ADHD but not universal.",
   "topics": [
    "neurodiversity",
    "adhd"
@@ -267,7 +267,7 @@
   "url": "https://doi.org/10.1038/mp.2017.75",
   "kind": "meta-analysis",
   "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
-  "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
+  "strength": "moderate, large meta-analysis of lab tasks, which capture only part of daily life",
   "topics": [
    "autism",
    "neurodiversity",
@@ -289,7 +289,7 @@
   "url": "https://doi.org/10.1177/1745691614568352",
   "kind": "meta-analysis",
   "finding": "A meta-analysis linking loneliness, social isolation and living alone with a higher risk of earlier death.",
-  "strength": "strong — meta-analysis of observational studies",
+  "strength": "strong, meta-analysis of observational studies",
   "topics": [
    "loneliness"
   ],
@@ -309,7 +309,7 @@
   "url": "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf",
   "kind": "guideline",
   "finding": "A U.S. public-health advisory reporting that about half of U.S. adults experience measurable loneliness, linking poor social connection with higher risks of heart disease, stroke, dementia and early death, and proposing a national strategy to strengthen connection.",
-  "strength": "strong — official synthesis of research, though most underlying evidence is observational",
+  "strength": "strong, official synthesis of research, though most underlying evidence is observational",
   "topics": [
    "loneliness"
   ],
@@ -328,8 +328,8 @@
   "doi": "10.1177/1088868310377394",
   "url": "https://doi.org/10.1177/1088868310377394",
   "kind": "meta-analysis",
-  "finding": "A meta-analysis of loneliness interventions; it is cited for finding that approaches targeting unhelpful social thinking (maladaptive social cognition) showed larger effects than other approaches, and for calling for better-controlled trials.",
-  "strength": "strong — meta-analysis, though many included studies were small",
+  "finding": "A meta-analysis of loneliness interventions. It is cited for finding that approaches targeting unhelpful social thinking (maladaptive social cognition) showed larger effects than other approaches, and for calling for better-controlled trials.",
+  "strength": "strong, meta-analysis, though many included studies were small",
   "topics": [
    "loneliness"
   ],
@@ -349,7 +349,7 @@
   "url": "https://doi.org/10.1037/a0015663",
   "kind": "study",
   "finding": "Spouses under more stress outside the relationship reacted more strongly to everyday negative experiences within it.",
-  "strength": "moderate — daily-diary studies of newlyweds; correlational",
+  "strength": "moderate, daily-diary studies of newlyweds. Correlational",
   "topics": [
    "spillover",
    "stress",
@@ -361,7 +361,7 @@
   ],
   "verified": true,
   "verified_by": "https://sites.lifesci.ucla.edu/psych-marriagelab/wp-content/uploads/sites/213/2020/05/Neff__Karney_2009.220154529.pdf ; https://sites.utexas.edu/realproject/selected-publications/",
-  "note": "The site (book/chapter-3-in-depth.html#leftover) names Neff and Karney without a year; this is the closest-matching paper."
+  "note": "The site (book/chapter-3-in-depth.html#leftover) names Neff and Karney without a year. This is the closest-matching paper."
  },
  {
   "id": "repetti-1989",
@@ -373,7 +373,7 @@
   "url": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf",
   "kind": "study",
   "finding": "In a daily study of air traffic controllers, after high-workload days they were more socially withdrawn and less emotionally expressive with their spouses that evening.",
-  "strength": "moderate — small daily-diary study; an early classic of “spillover” research",
+  "strength": "moderate, small daily-diary study. An early classic of “spillover” research",
   "topics": [
    "work-life",
    "stress",
@@ -384,7 +384,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf ; https://repettilab.psych.ucla.edu/?p=25",
-  "note": "DOI not confirmed; link is the PDF on the UCLA psychology site."
+  "note": "DOI not confirmed. Link is the PDF on the UCLA psychology site."
  },
  {
   "id": "fiese-2002-rituals",
@@ -396,7 +396,7 @@
   "url": "https://doi.org/10.1037/0893-3200.16.4.381",
   "kind": "review",
   "finding": "A review of 32 publications found family routines and rituals were related to parenting competence, children's adjustment and marital satisfaction, while noting weak measurement and convenience samples.",
-  "strength": "moderate — qualitative review of mostly correlational studies",
+  "strength": "moderate, qualitative review of mostly correlational studies",
   "topics": [
    "rituals"
   ],
@@ -416,7 +416,7 @@
   "url": "https://doi.org/10.1080/03637759709376403",
   "kind": "study",
   "finding": "Interviews and questionnaires with married couples produced typologies of the everyday rituals people share in marriage (seven types) and in adult friendship (six types).",
-  "strength": "early — descriptive, qualitative study",
+  "strength": "early, descriptive, qualitative study",
   "topics": [
    "rituals",
    "maintenance",
@@ -438,7 +438,7 @@
   "url": "https://doi.org/10.1037/0022-3514.78.2.273",
   "kind": "study",
   "finding": "Couples who took part together in a novel, mildly challenging activity reported higher relationship quality afterward than couples who did a mundane task.",
-  "strength": "moderate — experiments with short-term lab effects; later studies mostly supportive",
+  "strength": "moderate, experiments with short-term lab effects. Later studies mostly supportive",
   "topics": [
    "complacency",
    "self-expansion",
@@ -459,8 +459,8 @@
   "doi": "10.1016/j.jesp.2007.07.001",
   "url": "https://doi.org/10.1016/j.jesp.2007.07.001",
   "kind": "study",
-  "finding": "Dating students who later broke up had predicted how upset they would feel; in the weeks after the breakup they felt less distress than they had forecast, and the people most in love overestimated it the most.",
-  "strength": "early — a small group (26 people who broke up) from a larger nine-month study of students",
+  "finding": "Dating students who later broke up had predicted how upset they would feel. In the weeks after the breakup they felt less distress than they had forecast, and the people most in love overestimated it the most.",
+  "strength": "early, a small group (26 people who broke up) from a larger nine-month study of students",
   "topics": [
    "loss",
    "breakups",
@@ -482,8 +482,8 @@
   "doi": "10.1177/0146167209352250",
   "url": "https://doi.org/10.1177/0146167209352250",
   "kind": "study",
-  "finding": "In three studies, people's sense of who they are changed after a breakup, and feeling less clear about who they are went with more emotional distress afterwards.",
-  "strength": "moderate — three studies, mostly with students; much of it correlational",
+  "finding": "In three studies, people's sense of who they are changed after a breakup, and feeling less clear about who they are went with more emotional distress afterward.",
+  "strength": "moderate, three studies, mostly with students. Much of it correlational",
   "topics": [
    "loss",
    "breakups",
@@ -506,7 +506,7 @@
   "url": "https://doi.org/10.1177/1948550614563085",
   "kind": "study",
   "finding": "Recently separated young adults (210) who reflected on their breakup more often over nine weeks grew clearer about who they were, and that clearer sense of self went with less intrusive breakup feelings and less loneliness.",
-  "strength": "moderate — one randomised study with young adults; the 'reflection' was taking part in research visits, not a therapy",
+  "strength": "moderate, one randomized study with young adults. The 'reflection' was taking part in research visits, not a therapy",
   "topics": [
    "loss",
    "breakups",
@@ -528,8 +528,8 @@
   "doi": "10.1177/0956797611429466",
   "url": "https://doi.org/10.1177/0956797611429466",
   "kind": "study",
-  "finding": "Divorcing adults (109) talked for four minutes about their separation; those who spoke about themselves with more self-compassion had less divorce-related distress in daily life, and the difference was still there nine months later.",
-  "strength": "moderate — one longitudinal study; it shows a link over time, not that self-compassion caused the recovery",
+  "finding": "Divorcing adults (109) talked for four minutes about their separation. Those who spoke about themselves with more self-compassion had less divorce-related distress in daily life, and the difference was still there nine months later.",
+  "strength": "moderate, one longitudinal study. It shows a link over time, not that self-compassion caused the recovery",
   "topics": [
    "self-compassion",
    "breakups",
@@ -552,7 +552,7 @@
   "url": "https://doi.org/10.1089/cyber.2012.0125",
   "kind": "study",
   "finding": "In a survey of 464 people, more checking of an ex's Facebook page went with more distress, more longing for the ex and less personal growth, even allowing for offline contact and personality.",
-  "strength": "early — one survey, mostly students; it shows a link, not cause and effect",
+  "strength": "early, one survey, mostly students. It shows a link, not cause and effect",
   "topics": [
    "loss",
    "breakups",
@@ -575,7 +575,7 @@
   "url": "https://doi.org/10.1037/xge0000360",
   "kind": "study",
   "finding": "After a breakup, thinking about an ex's less likeable sides lowered love feelings but also lowered mood for a while; distraction lifted mood without changing the feelings; all three ways reduced attention to the ex's photos.",
-  "strength": "early — a small lab study (24 people, mostly women), short-term effects only",
+  "strength": "early, a small lab study (24 people, mostly women), short-term effects only",
   "topics": [
    "loss",
    "breakups",
@@ -620,8 +620,8 @@
   "doi": "10.1038/s41467-018-05377-0",
   "url": "https://doi.org/10.1038/s41467-018-05377-0",
   "kind": "study",
-  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
-  "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance. Rested people who briefly watched them felt lonelier too.",
+  "strength": "early, small experimental samples (18 in the main scanning study), one lab",
   "topics": [
    "sleep",
    "stress",
@@ -645,7 +645,7 @@
   "url": "https://doi.org/10.1136/bjsports-2022-106195",
   "kind": "review",
   "finding": "An overview of 97 reviews (1,039 trials, about 128,000 people) found physical activity reduced symptoms of depression, anxiety and distress compared with usual care, with medium-sized effects.",
-  "strength": "strong: a very large body of trials; the trials vary a lot in quality and type of exercise.",
+  "strength": "strong: a very large body of trials. The trials vary a lot in quality and type of exercise.",
   "topics": [
    "supplements",
    "anxiety",
@@ -691,8 +691,8 @@
   "doi": "10.1080/15298860309032",
   "url": "https://doi.org/10.1080/15298860309032",
   "kind": "theory",
-  "finding": "Defined self-compassion as three parts: self-kindness instead of harsh judgement, common humanity instead of isolation, and mindfulness instead of over-identifying with painful feelings.",
-  "strength": "moderate: widely studied and promising; much research is correlational and the scale's structure is debated.",
+  "finding": "Defined self-compassion as three parts: self-kindness instead of harsh judgment, common humanity instead of isolation, and mindfulness instead of over-identifying with painful feelings.",
+  "strength": "moderate: widely studied and promising. Much research is correlational and the scale's structure is debated.",
   "topics": [
    "self-compassion",
    "self-worth"

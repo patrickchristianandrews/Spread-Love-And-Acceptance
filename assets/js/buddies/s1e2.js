@@ -7,7 +7,7 @@ TOLBuddies.episodes['s1e2'] = {
   title: 'Out of Tune',
   pillar: 'IV',
   blurb: 'The wind steals the park band\'s song, and the pals race across the city to find five humming pages before sunset.',
-  lesson: 'The same words can sound different to a pal, so say what you mean, then check how it landed.',
+  lesson: 'The same words can sound different from a pal, so say what you mean, then check how it landed.',
   next: 'A summit picnic on a snowy hill, a basket full of goodies, and one pup quietly carrying much too much.',
   chapters: [
     { title: 'The wind steals a song', beats: [

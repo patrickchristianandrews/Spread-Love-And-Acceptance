@@ -97,7 +97,7 @@ t('tools', 'What is the Professor’s Library?', { kind: 'card', id: 'library', 
 t('tools', 'Where can I find articles to read?', { kind: 'card', id: 'reading', link: '/reading.html' });
 t('tools', 'what does matching energy mean', { kind: 'card', id: 'control', link: '/book/self-2-now-in-depth.html#control' });
 t('tools', 'what is in my control', { kind: 'card', id: 'control' });
-t('tools', 'find me an article about stress', { kind: 'card', id: 'reading', text: /good articles on “stress”/, link: '/reading.html' });
+t('tools', 'find me an article about stress', { kind: 'card', id: 'reading', text: /good articles on “stress,”/, link: '/reading.html' });
 t('tools', 'any good articles on apologies?', { kind: 'card', id: 'reading', text: /apolog/i });
 t('tools', 'recommend something to read about ADHD', { kind: 'card', id: 'reading', text: /ADHD|attention/i });
 c('tools', ['find me an article about stress', 'more articles'], { kind: 'card', id: 'reading', text: /stress/ });
@@ -454,8 +454,8 @@ c('care', ['my roommates never do their chores', 'what should I do next'], { kin
 // the topic doesn't stick to unrelated follow-ups; "tl;dr" shortens the last answer
 c('care', ['my partner snapped at me', 'where did I leave off'], { kind: 'care', text: /last talking about being snapped at/ });
 t('care', 'where did I leave off (fresh)', { q: 'where did I leave off', kind: 'care', text: /starting fresh/ });
-c('care', ['i feel overwhelmed', 'tl;dr please'], { kind: 'short', text: /^In short: /, not: /Thanks for telling me more/ });
-c('care', ['what is the lemonade stand', 'make it shorter'], { kind: 'short', text: /^In short: / });
+c('care', ['i feel overwhelmed', 'tl;dr please'], { kind: 'short', text: /^The short version: /, not: /Thanks for telling me more/ });
+c('care', ['what is the lemonade stand', 'make it shorter'], { kind: 'short', text: /^The short version: / });
 c('care', ['my partner snapped at me', 'how do i make the text bigger'], { kind: 'care', id: 'textsize' });
 // household frictions, kindly
 t('care', 'i forget chores and my partner is upset', { kind: 'sit', id: 'partner+forgetting', text: /doesn’t mean you don’t care/, not: /log one week|Feeling hurt by that/ });
@@ -483,7 +483,7 @@ t('spelling', 'What stocks should I buy? (a real word stays)', { q: 'What stocks
 // ---------------------------------------------------------------- testers, round three (ADHD, autistic, dyslexic, highly sensitive)
 // ADHD: focus and long pages get the reading helps, never kids' screen rules; "where do I start" doesn't carry the last topic
 t('nt2', "I can't focus on long pages", { kind: 'care', id: 'focus', text: /Show me only the steps/, not: /[Ss]creen agreements|kids/, link: '/' });
-t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /In short[\s\S]*Simple version[\s\S]*Listen[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
+t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /The short version[\s\S]*Simple version[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
 c('nt2', ['What is a BIFF response?', "I can't focus on long pages"], { kind: 'care', id: 'focus', not: /[Ss]creen agreements|phones-and-presence/ });
 c('nt2', ["I can't focus on long pages", 'where do I start'], { kind: 'card', id: 'start', not: /phones-and-presence|Phones and presence/ });
 c('nt2', ['What is a BIFF response?', 'where do I start'], { kind: 'card', id: 'start', link: '/start-here.html' });
@@ -527,13 +527,13 @@ t('nt2', 'my partnr is mad at me', { kind: 'sit', id: 'partner+madatme', text: /
 t('nt2', 'im dislexic is this site ok for me', { kind: 'care', id: 'dyslexia', text: /Easy reading[\s\S]*Extra large[\s\S]*Simple version/, not2: /Listen/, not: /take things literally/ });
 t('nt2', 'can i use a screen shot', { kind: 'care', id: 'screenshot', text: /Choose screenshots/, link: '/signal-translator.html', not: /phone-free|attention/ });
 t('nt2', 'how do i make the writing biger (Extra large)', { q: 'how do i make the writing biger', kind: 'care', id: 'textsize', text: /Extra large/ });
-c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^In short: /, not: /## How to use it/ });
-c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'I feel overwhelmed'], { kind: 'sit', text: /^In short: /, not: /What might be going on/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^The short version: /, not: /## How to use it/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'I feel overwhelmed'], { kind: 'sit', text: /^The short version: /, not: /What might be going on/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'tell me more'], { kind: 'card', id: 'signal', text: /## How to use it/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'tell me more', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /## How to use it/ });
-c('nt2', ['make it shorter', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
-c('nt2', ['keep your answers short', 'my partner snapped at me'], { kind: 'sit', text: /^In short: I’m sorry\. Being snapped at/, script: true });
-t('nt2', 'too long didnt read (points to the short ways in)', { q: 'too long didnt read', kind: 'short', text: /Simple version[\s\S]*In short/ });
+c('nt2', ['make it shorter', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^The short version: / });
+c('nt2', ['keep your answers short', 'my partner snapped at me'], { kind: 'sit', text: /^The short version: I’m sorry\. Being snapped at/, script: true });
+t('nt2', 'too long didnt read (points to the short ways in)', { q: 'too long didnt read', kind: 'short', text: /Simple version[\s\S]*The short version/ });
 // highly sensitive: warm and on topic, and no words they didn't use
 t('nt2', "I feel everyone's moods", { kind: 'care', id: 'sensitive', text: /a lot to carry[\s\S]*is this mine/, not: /Mood Arbitrage|Emotions are usually short/ });
 t('nt2', "I'm so overwhelmed by noise and people, I just want to hide", { kind: 'care', id: 'overload', text: /Quiet button[\s\S]*Night Garden/, not: /school run|everything on your plate/ });
@@ -548,7 +548,7 @@ t('nt2', 'how does my childhood affect me now', { kind: 'card', id: 'roots', lin
 t('nt2', 'How do I use the root finder?', { kind: 'card', id: 'roots', steps: true });
 t('nt2', "my partner snapped at me and I can't stop crying", { kind: 'sit', id: 'partner+hurtbythem', text: /Crying when something hurts is a very human response/, not: /stupid/ });
 t('nt2', 'my partner snapped at me and I feel silly for crying', { kind: 'sit', text: /isn’t silly/, not: /stupid/ });
-c('nt2', ['can you talk slower, this is a lot', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
+c('nt2', ['can you talk slower, this is a lot', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^The short version: / });
 t('nt2', 'can you talk slower, this is a lot', { kind: 'care', id: 'brief', not: /pond/ });
 c('nt2', ['can you talk slower, this is a lot', 'I want to kill myself'], { kind: 'safety' });
 // a new question after a playbook starts fresh
@@ -836,7 +836,7 @@ t('round7', 'i miss my mum', { id: 'missing', not: /Never miss twice|habit/ });
 c('round7', ['i\'m raising my grandson and i\'m exhausted', 'he\'s on his phone all night'], { id: 'teenphone', not: /jealous|at dinner/ });
 // ADHD kids, grandparents, grown children
 t('round7', 'my grandson has ADHD, how should I talk to him', { id: 'adhdkids', link: '/adhd-kids.html' });
-t('round7', 'is ADHD real or just bad behaviour', { id: 'adhdkids', text: /^Yes, ADHD is real and well studied\. It is not bad behaviour or bad upbringing\./ });
+t('round7', 'is ADHD real or just bad behaviour', { id: 'adhdkids', text: /^Yes, ADHD is real and well studied\. It is not bad behavior or bad upbringing\./ });
 c('round7', ['my grandson has ADHD, how should I talk to him', 'he forgets everything I tell him'], { id: /^adhd/, link: '/adhd-kids.html', not: /plans fall through/ });  // chat9: the page's own “When they forget”
 c('round7', ['my grandson has ADHD, how should I talk to him', 'what do I say when he can\'t sit still'], { id: /^adhd/, text: /sit still/ });  // chat9: the page's own “When they can’t sit still”
 t('round7', 'what is ADHD in children, in plain words', { id: 'adhdkids', text: /ADHD is real/, link: '/adhd-kids.html', not: /fewer words/ });
@@ -1058,8 +1058,8 @@ t('safety8', 'do i have depression', { id: 'diagnose' });
 t('safety8', 'is my partner a narcissist', { text: /can’t diagnose/, not: /screamed at|worthless/ });
 t('safety8', 'He screams at me and calls me worthless. Is he a narcissist? (details kept)', { q: 'He screams at me and calls me worthless. Is he a narcissist?', kind: 'safety', text: /screamed at/ });
 // infidelity: honest, not shaming, healing after hurt
-t('safety8', 'I cheated on my wife and she found out. what now', { id: 'infidelity', text: /responsibility[\s\S]*couples counsellor/, link: '/book/understanding-11-healing-in-depth.html', not: /coming out|LGBTQ/i });
-t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /couples counsellor/ });
+t('safety8', 'I cheated on my wife and she found out. what now', { id: 'infidelity', text: /responsibility[\s\S]*couples counselor/, link: '/book/understanding-11-healing-in-depth.html', not: /coming out|LGBTQ/i });
+t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /couples counselor/ });
 t('safety8', 'my husband cheated on me', { id: 'infidelity', text: /isn’t your fault/, link: '/book/understanding-11-healing-in-depth.html' });
 t('safety8', 'i found out about her affair', { id: 'infidelity' });
 
@@ -1163,7 +1163,7 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   t('chat8', 'I need a quiet break at work, how do I say it', { id: 'autisticwork', script: true, not: /I’m autistic|legal right/ });
   t('chat8', 'what does STDE mean', { id: 'wl-archetypes', text: /^STDE, the Compass/, not: /QFDE/ });
   // coming out as an adult
-  const ADULT_OK = /friends or a counsellor/;
+  const ADULT_OK = /friends or a counselor/;
   t('chat8', 'how do i come out to my conservative parents', { id: 'lgbtadult', text: ADULT_OK, link: '/coming-out.html', not: /GSA|school counselor/ });
   t('chat8', 'lgbtq support line', { id: 'lgbtadult', text: ADULT_OK });
   t('chat8', 'is it safe to come out if my dad has a temper', { id: 'lgbtadult', link: '/coming-out.html#safety-first' });
@@ -1272,7 +1272,7 @@ if (PERS) {
     t('puddles', 'hi', { kind: 'chat' });
     t('puddles', 'what can you do (still the full help)', { q: 'what can you do', text: /talk deep/ });
     t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', text: /chore|job|split|share|Lemonade/i });
-    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match; I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
+    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match\. I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
     t('puddles', 'do you hallucinate', { kind: 'about', text: /I don’t make things up[\s\S]*that’s not it[\s\S]*not a therapist and can’t diagnose/ });
     t('puddles', 'are you AI?', { kind: 'about', text: /^No\. Every answer here was written in advance for this site\. I pick the best match/, not: /written (and checked )?by people|checked by people/ });
     t('puddles', 'who are you (says where answers come from)', { q: 'who are you', text: /I don’t make things up/ });
@@ -1607,7 +1607,7 @@ if (PERS) {
   t('chat9', 'carer losing patience and guilt (English)', { q: 'I lose patience with her and feel guilty', id: 'careresent' });
   t('chat9', 'carer asks grown children for help', { q: 'how I ask my children for more help', id: 'careadultkids', not: /teenagers|Baumrind/ });
   t('chat9', 'flatmates: group words', { q: 'my flatmates and I keep fighting about the bins and whose turn it is', not: /you both/ });
-  t('chat9', 'a rota instead of one owner', { q: 'can we do a rota instead of one owner?', id: 'houserota', text: /^Yes, a rota is fine/ });
+  t('chat9', 'a rota instead of one owner', { q: 'can we do a rota instead of one owner?', id: 'houserota', text: /^Yes, a schedule is fine/ });
   t('chat9', 'three people cleaning: a direct answer', { q: 'how do we split cleaning fairly with three people', id: 'housethree', text: /^With three of you/, not: /professor voice|Ahem/ });
   c('chat9', ['we have 2 year old twins', 'how do I show her what I do without a fight'], { id: 'showwhatido', link: '/lemonade-stand.html', not: /night feed/i });
   t('chat9', 'nobody notices what I do: all kinds of unseen work', { q: 'nobody notices what I do', id: 'nobodynotices', text: /thinking work[\s\S]*physical jobs[\s\S]*paid work/ });
@@ -1733,7 +1733,7 @@ t('chat10', 'the book: three parts, free', { q: 'tell me about the book', kind: 
 t('chat10', 'download the book', { q: 'can I download the book', id: 'bookdownload', link: '/book/download.html', text: /free PDF[\s\S]*ask for your email[\s\S]*without an email/ });
 t('chat10', 'the app: free, no App Store', { q: 'is there an app', kind: 'card', id: 'app', link: '/install.html', text: /free[\s\S]*Android[\s\S]*iPhone/, not: /coming soon|App Store version is coming/i });
 t('chat10', 'the app on iPhone', { q: 'how do I install the app on my iphone', kind: 'card', id: 'app', text: /Add to Home Screen/, not: /coming soon/i });
-t('chat10', 'no podcast', { q: 'is there a podcast', kind: 'card', id: 'podcast', text: /no podcast[\s\S]*Listen to this chapter/, not: /Kane and Christian Experience explores|Episode 1|coming soon/ });
+t('chat10', 'no podcast', { q: 'is there a podcast', kind: 'card', id: 'podcast', text: /no podcast/, not2: /Listen/, not: /Kane and Christian Experience explores|Episode 1|coming soon/ });
 t('chat10', 'no podcast in the preface steps', { q: 'how do I read the preface', not: /podcast/i });
 t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost anything', id: 'free', text: /^Everything here is free|Everything here is free/, not: /^Yes\. Everything/ });
 

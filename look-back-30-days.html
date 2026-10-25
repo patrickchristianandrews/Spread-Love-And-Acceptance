@@ -342,7 +342,7 @@
         <tbody>
           <tr><td>How the hours split</td><td>CALC-01's balance, <code>1 &minus; moved &divide; most</code>, 0 to 1. Higher is more even.</td><td>it moves by 0.10 or more</td><td>under 0.70</td></tr>
           <tr><td>Last-minute rescues</td><td>the count for the week</td><td>it moves by 1 a week or more</td><td>2 or more a week</td></tr>
-          <tr><td>How much each person is carrying</td><td>each person's WP-02 score, and their average (only when everyone's own score is there)</td><td>the average moves by 0.10 or more (each person's own line uses the same 0.10)</td><td>anyone at 0.60 or more (a high load on WP-02)</td></tr>
+          <tr><td>How much each person is carrying</td><td>each person's WP-02 score, and their average (only when everyone's own score is there)</td><td>the average moves by 0.10 or more (each person's own line uses the same 0.10)</td><td>anyone at 0:60 or more (a high load on WP-02)</td></tr>
           <tr><td>Jobs with an owner</td><td><code>jobs with an owner &divide; jobs on the list</code></td><td>it moves by 0.10 or more</td><td>under 0.70</td></tr>
         </tbody>
       </table>
@@ -355,7 +355,7 @@
 <pre>gap(person, after week k) = &Sigma; over weeks 1..k of ( their hours &minus; their share &times; everyone's hours )
 hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
       <p>Their share is an even share (1 &divide; people), or the split you agreed on. Weeks with no hours are skipped, so a blank week never counts as an even one. With two people, the hours to change hands is simply how far one person is over.</p>
-      <p><strong>Made-up example:</strong> Sam and Alex log 14 and 6 hours, then 13 and 7, then 11 and 9, then 10 and 10. Sam's running gap is +4, +7, +8, +8 hours. Over the month, 8 hours would have to change hands to even it out, and all of it built up in the first three weeks. The last week was even, which is the change working; the 8 hours already done stay done.</p>
+      <p><strong>Made-up example:</strong> Sam and Alex log 14 and 6 hours, then 13 and 7, then 11 and 9, then 10 and 10. Sam's running gap is +4, +7, +8, +8 hours. Over the month, 8 hours would have to change hands to even it out, and all of it built up in the first three weeks. The last week was even, which is the change working. The 8 hours already done stay done.</p>
     </div>
 
     <div class="spec-block">
@@ -379,8 +379,8 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
     <div class="spec-block">
       <h3>What it is not</h3>
       <ul class="plain">
-        <li>Not a verdict on who is the better partner, parent or housemate.</li>
-        <li>Not a tested clinical or statistical tool. It predicts nothing; it describes what you typed in.</li>
+        <li>Not a verdict on who is the better partner, parent or roommate.</li>
+        <li>Not a tested clinical or statistical tool. It predicts nothing. It describes what you typed in.</li>
         <li>Not a reason to decide a relationship's future. “The look-back says…” is a misuse. Its job is to give you a calm place to start.</li>
       </ul>
     </div>
@@ -597,7 +597,7 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
     else if (t.id === "keep"){
       keepOn = t.checked;
       if (keepOn){ save(); $("keep-status").textContent = "Kept in this browser only. Untick this, or press Erase, to remove it."; }
-      else { erase(); $("keep-status").textContent = "Not kept any more. Nothing from this look-back is stored on this device."; }
+      else { erase(); $("keep-status").textContent = "Not kept anymore. Nothing from this look-back is stored on this device."; }
     }
   });
   document.addEventListener("click", function(e){

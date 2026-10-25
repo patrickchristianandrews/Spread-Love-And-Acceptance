@@ -61,7 +61,7 @@ go: /library/connection.html#self-compassion | Self-compassion (Library)
 evidence: Research on self-talk suggests the way we speak to ourselves affects emotions and performance. Some studies suggest using your own name or “you” can create helpful distance.
 try: Swap “I’m such an idiot” for “You made a mistake. What’s the next step?”
 
-The way you talk to yourself shapes how you feel. Harsh self-talk (“I always mess up”) tends to drain motivation; kinder, practical self-talk (“that was hard, let’s try again”) supports it.
+The way you talk to yourself shapes how you feel. Harsh self-talk (“I always mess up”) tends to drain motivation. Kinder, practical self-talk (“that was hard, let’s try again”) supports it.
 
 Noticing your inner voice is the first step. Talking to yourself as you would to a friend is the second.
 
@@ -123,11 +123,11 @@ Program: Know your own wiring includes the strengths that come with different wi
 aka: stress signature; my stress signs; how I act under stress
 see: Body clues of emotion; Hot buttons
 go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
-evidence: A practical self-awareness idea. People show stress in different ways; noticing your own early signs helps.
+evidence: A practical self-awareness idea. People show stress in different ways. Noticing your own early signs helps.
 try: Finish the sentence: “When I’m stressed, I tend to…” Share it with someone close.
 
 Everyone has a stress signature: some get quiet, some get busy, some get snappy, some get funny. Knowing yours (and telling others) helps them read you correctly.
 
 It also gives you an early warning to check your battery.
 
-Program: WP-02 helps you check how much you’re carrying; the Wiring Card lets you share your signature with others.
+Program: WP-02 helps you check how much you’re carrying. The Wiring Card lets you share your signature with others.

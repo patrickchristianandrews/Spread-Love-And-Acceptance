@@ -7,11 +7,11 @@ aka: parallel parenting; low contact co-parenting; separate parenting
 see: BIFF responses; Co-parenting calendar
 go: /relationships-in-depth.html#co-parents | Where co-parents start
 evidence: Parallel parenting is a recognized approach for high-conflict separations, described by family courts and practitioners. It aims to reduce contact and conflict between parents.
-try: Each home keeps its own routines; communication is written, brief and only about the kids’ logistics.
+try: Each home keeps its own routines. Communication is written, brief and only about the kids’ logistics.
 
 In parallel parenting, each parent runs their own home with little direct coordination, and communication is kept brief, written and focused on logistics. It’s often used when direct cooperation keeps leading to conflict.
 
-It isn’t a failure. It can protect children from ongoing tension, and some families move toward more cooperation over time.
+It can protect children from ongoing tension, and some families move toward more cooperation over time.
 
 Program: The co-parent road keeps messages short and factual, with one owner per task.
 
@@ -19,7 +19,7 @@ Program: The co-parent road keeps messages short and factual, with one owner per
 aka: BIFF; brief informative friendly firm; replying to a hostile message
 see: Parallel parenting; Don’t fight by text
 go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
-evidence: BIFF (Brief, Informative, Friendly, Firm) was developed by Bill Eddy of the High Conflict Institute. It’s a practical method widely used in family law settings; formal research is limited.
+evidence: BIFF (Brief, Informative, Friendly, Firm) was developed by Bill Eddy of the High Conflict Institute. It’s a practical method widely used in family law settings. Formal research is limited.
 try: “Thanks for letting me know. I’ll have Sam ready at 5 on Friday. Have a good week.”
 
 A BIFF response is a reply to a hostile or emotional message that’s Brief, Informative, Friendly and Firm. It gives the needed information, ignores the bait, and doesn’t invite more argument.
@@ -46,7 +46,7 @@ aka: transition bag; kids’ bag between homes; what goes back and forth
 see: Co-parenting calendar; Handoffs between homes
 go: /relationships-in-depth.html#co-parents | Where co-parents start
 evidence: Practical advice from family educators. Having duplicates of basics in each home is commonly recommended to reduce stress.
-try: Keep toothbrushes, pajamas and basics in both homes; the bag carries school things, medicines and one comfort item.
+try: Keep toothbrushes, pajamas and basics in both homes. The bag carries school things, medicines and one comfort item.
 
 Moving between homes is easier when kids don’t have to pack everything each time. Duplicates of basics in both homes, and a short checklist for what travels, cut down on forgotten items and tense texts.
 
@@ -123,7 +123,7 @@ Program: The co-parent road includes a monthly look-back (WP-04) to catch what k
 aka: splitting kids’ costs; child expenses; school costs
 see: Money and fairness splits; Co-parenting calendar
 go: /lemonade-stand.html | The Lemonade Stand
-evidence: Practical guidance. Any legal arrangements come first; clear records reduce disputes.
+evidence: Practical guidance. Any legal arrangements come first. Clear records reduce disputes.
 try: A shared list of kid costs, receipts attached, reviewed at the monthly check-in.
 
 Extra costs (school trips, activities, clothes, devices) often cause friction between co-parents. Agreeing in advance which costs are shared, how, and how they’re recorded reduces arguments.

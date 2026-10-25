@@ -9,7 +9,7 @@
     "url": "https://doi.org/10.1111/j.1545-5300.1999.00293.x",
     "kind": "study",
     "finding": "In 124 newlywed couples, how the first three minutes of a conflict discussion went (more negative and less positive emotion) predicted which couples divorced over the next six years.",
-    "strength": "moderate — one research group's observational sample; striking but not widely replicated as a precise predictor",
+    "strength": "moderate, one research group's observational sample. Striking but not widely replicated as a precise predictor",
     "topics": [
       "soft-startup",
       "conflict",
@@ -36,7 +36,7 @@
     "url": "https://www.jstor.org/stable/353438",
     "kind": "study",
     "finding": "In a six-year study of newlyweds, husbands who accepted influence from their wives were more likely to have stable, happy marriages, while active-listening style paraphrasing during conflict was rare and did not predict outcomes.",
-    "strength": "moderate — one lab's observational sample of heterosexual newlyweds; the active-listening finding was debated",
+    "strength": "moderate, one lab's observational sample of heterosexual newlyweds. The active-listening finding was debated",
     "topics": [
       "accepting-influence",
       "active-listening",
@@ -61,7 +61,7 @@
     "url": "https://doi.org/10.1111/j.1545-5300.2004.00024.x",
     "kind": "study",
     "finding": "Observing 49 newlywed couples over dinner and in a conflict discussion, the authors linked turning toward each other's everyday bids with more positive emotion (such as humor and affection) during later conflict.",
-    "strength": "moderate — observational and correlational, small sample; direction of cause not established",
+    "strength": "moderate, observational and correlational, small sample. Direction of cause not established",
     "topics": [
       "bids",
       "turning-toward",
@@ -84,8 +84,8 @@
     "doi": "10.1037/0022-3514.63.2.221",
     "url": "https://doi.org/10.1037/0022-3514.63.2.221",
     "kind": "study",
-    "finding": "Following 73 couples from 1983 to 1987, couples whose conflict interactions were more negative than positive had more marital problems, lower satisfaction, poorer health and greater risk of separation; physiological arousal was measured alongside behavior.",
-    "strength": "moderate — influential longitudinal lab study with a small sample",
+    "finding": "Following 73 couples from 1983 to 1987, couples whose conflict interactions were more negative than positive had more marital problems, lower satisfaction, poorer health and greater risk of separation. Physiological arousal was measured alongside behavior.",
+    "strength": "moderate, influential longitudinal lab study with a small sample",
     "topics": [
       "four-horsemen",
       "flooding",
@@ -108,7 +108,7 @@
     "url": "https://www.routledge.com/What-Predicts-Divorce-The-Relationship-Between-Marital-Processes-and-Marital-Outcomes/Gottman/p/book/9781032539379",
     "kind": "book",
     "finding": "Gottman’s report of his long-term studies of couples, including “flooding”: feeling so physically overwhelmed in a conflict that listening and thinking become very hard.",
-    "strength": "moderate: large observational studies; some specific predictions have been debated",
+    "strength": "moderate: large observational studies. Some specific predictions have been debated",
     "topics": [
       "conflict",
       "flooding"
@@ -136,7 +136,7 @@
     "url": "https://doi.org/10.1080/03637751.2013.813632",
     "kind": "meta-analysis",
     "finding": "Pooling 74 studies (about 14,000 people), demand/withdraw was moderately associated with poorer relational, communicative and individual outcomes, similarly whichever partner demanded, and more strongly in distressed couples.",
-    "strength": "strong — large meta-analysis, though the associations are correlational",
+    "strength": "strong, large meta-analysis, though the associations are correlational",
     "topics": [
       "pursue-withdraw",
       "demand-withdraw"
@@ -159,7 +159,7 @@
     "url": "https://doi.org/10.1037/0022-006X.72.2.176",
     "kind": "study",
     "finding": "In a randomized trial with 134 seriously distressed couples, both integrative (acceptance-based) and traditional behavioral couple therapy produced similar rates of clinically significant improvement, with different patterns of change during treatment.",
-    "strength": "strong — randomized clinical trial",
+    "strength": "strong, randomized clinical trial",
     "topics": [
       "acceptance",
       "perpetual-problems",
@@ -183,8 +183,8 @@
     "doi": "10.1037/a0018132",
     "url": "https://doi.org/10.1037/a0018132",
     "kind": "study",
-    "finding": "Five-year follow-up of the same trial: both therapies helped many couples; integrative therapy showed an advantage in satisfaction through two years of follow-up, with many couples maintaining gains at five years.",
-    "strength": "strong — long follow-up of a randomized trial",
+    "finding": "Five-year follow-up of the same trial: both therapies helped many couples. Integrative therapy showed an advantage in satisfaction through two years of follow-up, with many couples maintaining gains at five years.",
+    "strength": "strong, long follow-up of a randomized trial",
     "topics": [
       "acceptance",
       "couple-therapy"
@@ -205,8 +205,8 @@
     "doi": "10.1080/10904018.2013.813234",
     "url": "https://doi.org/10.1080/10904018.2013.813234",
     "kind": "study",
-    "finding": "People who talked with a listener using active-listening responses felt more understood than those who received advice or simple acknowledgements; differences in satisfaction and liking were small.",
-    "strength": "moderate — one experiment with 115 participants and trained confederates, in first meetings rather than close relationships",
+    "finding": "People who talked with a listener using active-listening responses felt more understood than those who received advice or simple acknowledgements. Differences in satisfaction and liking were small.",
+    "strength": "moderate, one experiment with 115 participants and trained confederates, in first meetings rather than close relationships",
     "topics": [
       "active-listening",
       "listening"
@@ -229,7 +229,7 @@
     "url": "https://doi.org/10.1037/0022-3514.89.6.925",
     "kind": "study",
     "finding": "Across five experiments, people overestimated how well email recipients would detect their tone (such as sarcasm or seriousness), partly because they found it hard to step outside their own perspective.",
-    "strength": "strong — several experiments, widely cited",
+    "strength": "strong, several experiments, widely cited",
     "topics": [
       "texting-and-tone",
       "illusion-of-transparency"
@@ -256,7 +256,7 @@
     "url": "https://doi.org/10.1287/mnsc.32.5.554",
     "kind": "theory",
     "finding": "Proposed media richness theory: richer channels (face to face, then phone, then written) are better suited to ambiguous, equivocal messages.",
-    "strength": "moderate — influential theory; later research found people adapt to leaner media over time",
+    "strength": "moderate, influential theory. Later research found people adapt to leaner media over time",
     "topics": [
       "texting-and-tone",
       "media-richness"
@@ -278,8 +278,8 @@
     "doi": "10.1016/j.chb.2015.11.003",
     "url": "https://doi.org/10.1016/j.chb.2015.11.003",
     "kind": "study",
-    "finding": "Short text-message replies ending in a period were rated as less sincere than the same replies without one; the effect did not appear for handwritten notes.",
-    "strength": "early — one study with students; later work suggests the effect fades for longer messages",
+    "finding": "Short text-message replies ending in a period were rated as less sincere than the same replies without one. The effect did not appear for handwritten notes.",
+    "strength": "early, one study with students. Later work suggests the effect fades for longer messages",
     "topics": [
       "texting-and-tone"
     ],
@@ -300,7 +300,7 @@
     "url": "https://doi.org/10.1037/pspi0000097",
     "kind": "study",
     "finding": "In studies of live conversations, people who asked more questions, especially follow-up questions, were better liked by their partners and seen as more responsive.",
-    "strength": "moderate — several studies; a 2025 correction fixed minor reporting errors but an audit confirmed the conclusions",
+    "strength": "moderate, several studies. A 2025 correction fixed minor reporting errors but an audit confirmed the conclusions",
     "topics": [
       "asking-questions",
       "love-maps",
@@ -322,8 +322,8 @@
     "doi": "10.1111/ncmr.12073",
     "url": "https://doi.org/10.1111/ncmr.12073",
     "kind": "study",
-    "finding": "Testing six apology components with 755 participants, acknowledging responsibility was rated most important, then an offer of repair; a request for forgiveness mattered least. Apologies with more components were rated better.",
-    "strength": "moderate — two studies using written apology statements, so spoken apologies may differ",
+    "finding": "Testing six apology components with 755 participants, acknowledging responsibility was rated most important, then an offer of repair. A request for forgiveness mattered least. Apologies with more components were rated better.",
+    "strength": "moderate, two studies using written apology statements, so spoken apologies may differ",
     "topics": [
       "apology",
       "repair"
@@ -349,7 +349,7 @@
     "url": "https://doi.org/10.1016/j.jesp.2004.07.007",
     "kind": "study",
     "finding": "Apologies that came later in a conflict were more effective than early ones, and this was explained by the hurt person feeling heard and understood first.",
-    "strength": "early — two small studies (recalled conflicts and a hypothetical scenario)",
+    "strength": "early, two small studies (recalled conflicts and a hypothetical scenario)",
     "topics": [
       "apology",
       "timing"
@@ -370,7 +370,7 @@
     "url": "https://doi.org/10.1037/0021-9010.89.1.104",
     "kind": "study",
     "finding": "Trust was repaired more successfully when people apologized for competence-based violations but denied culpability for integrity-based violations, depending also on later evidence of guilt or innocence.",
-    "strength": "moderate — two experiments in a job-candidate scenario",
+    "strength": "moderate, two experiments in a job-candidate scenario",
     "topics": [
       "apology",
       "trust",
@@ -393,7 +393,7 @@
     "url": "https://doi.org/10.1037/a0035268",
     "kind": "meta-analysis",
     "finding": "Across 54 reports, people in explicit forgiveness interventions reported more forgiveness than untreated controls and than those in other treatments, along with larger improvements in depression, anxiety and hope than no treatment.",
-    "strength": "strong — meta-analysis, though forgiveness is measured in varied ways",
+    "strength": "strong, meta-analysis, though forgiveness is measured in varied ways",
     "topics": [
       "forgiveness"
     ],
@@ -415,7 +415,7 @@
     "url": "https://doi.org/10.1177/0146167211407077",
     "kind": "study",
     "finding": "In newlywed couples over four years, partners' aggression stayed stable toward more forgiving spouses but declined toward less forgiving ones, suggesting forgiveness can remove consequences that would discourage repeat offending.",
-    "strength": "moderate — longitudinal, correlational, newlywed sample",
+    "strength": "moderate, longitudinal, correlational, newlywed sample",
     "topics": [
       "forgiveness",
       "limits"
@@ -458,8 +458,8 @@
     "doi": null,
     "url": "https://pubmed.ncbi.nlm.nih.gov/18361676/",
     "kind": "study",
-    "finding": "Studies of newlyweds on benevolent (generous) interpretations of a partner's behavior; as the title indicates, such interpretations help with small problems but not with serious ones. Only the title and PubMed record were confirmed in search.",
-    "strength": "moderate — longitudinal newlywed studies",
+    "finding": "Studies of newlyweds on benevolent (generous) interpretations of a partner's behavior. As the title indicates, such interpretations help with small problems but not with serious ones. Only the title and PubMed record were confirmed in search.",
+    "strength": "moderate, longitudinal newlywed studies",
     "topics": [
       "positive-illusions",
       "limits"
@@ -479,8 +479,8 @@
     "doi": "10.1037/0022-3514.59.1.73",
     "url": "https://doi.org/10.1037/0022-3514.59.1.73",
     "kind": "study",
-    "finding": "Wife-demand/husband-withdraw was more common overall, but who demanded depended partly on whose issue was being discussed; the authors linked the pattern to social structure (who wants change) as well as gender.",
-    "strength": "moderate — influential observational study; later work finds topic predicts the demander role about as strongly as gender",
+    "finding": "Wife-demand/husband-withdraw was more common overall, but who demanded depended partly on whose issue was being discussed. The authors linked the pattern to social structure (who wants change) as well as gender.",
+    "strength": "moderate, influential observational study. Later work finds topic predicts the demander role about as strongly as gender",
     "topics": [
       "pursue-withdraw",
       "demand-withdraw"
@@ -506,7 +506,7 @@
     "url": "https://en.wikipedia.org/wiki/The_Seven_Principles_for_Making_Marriage_Work",
     "kind": "book",
     "finding": "A popular book translating Gottman's research into practice: love maps, fondness and admiration, turning toward bids, accepting influence, solving solvable problems, managing perpetual ones, and shared meaning.",
-    "strength": "moderate — practice framework drawing on his research rather than separately tested",
+    "strength": "moderate, practice framework drawing on his research rather than separately tested",
     "topics": [
       "love-maps",
       "bids",
@@ -533,7 +533,7 @@
     "url": "https://wwnorton.co.uk/books/9780393705959-the-science-of-trust",
     "kind": "book",
     "finding": "A book drawing on Gottman's lab research and game theory to argue that trust is built through emotional attunement in everyday moments, and describing how couples can repair it.",
-    "strength": "moderate — book-length synthesis of one research program",
+    "strength": "moderate, book-length synthesis of one research program",
     "topics": [
       "trust"
     ],
@@ -553,8 +553,8 @@
     "doi": "10.1037/a0032850",
     "url": "https://doi.org/10.1037/a0032850",
     "kind": "review",
-    "finding": "Showed that the mathematical modelling behind the claimed 'critical positivity ratio' (about 2.9 to 1, the so-called Losada ratio) was unfounded; the original paper's modelling claims were formally withdrawn.",
-    "strength": "strong — the critique was accepted and the original model retracted",
+    "finding": "Showed that the mathematical modeling behind the claimed 'critical positivity ratio' (about 2.9 to 1, the so-called Losada ratio) was unfounded. The original paper's modeling claims were formally withdrawn.",
+    "strength": "strong, the critique was accepted and the original model retracted",
     "topics": [
       "five-to-one",
       "limits"
@@ -576,7 +576,7 @@
     "url": "https://doi.org/10.1037/0022-3514.52.3.511",
     "kind": "study",
     "finding": "Two questionnaire studies proposed that adult romantic love is an attachment process: the share of adults in each of three attachment styles roughly matched infant figures, and the styles differed in how people experienced love, their views of self and others, and recalled relationships with parents.",
-    "strength": "strong — landmark paper; self-report and cross-sectional",
+    "strength": "strong, landmark paper. Self-report and cross-sectional",
     "topics": [
       "attachment"
     ],
@@ -601,7 +601,7 @@
     "url": "https://doi.org/10.1037/0022-3514.61.2.226",
     "kind": "study",
     "finding": "Proposed and tested a four-category model of adult attachment (secure, preoccupied, dismissing and fearful).",
-    "strength": "strong — highly influential; later work favors dimensions over categories",
+    "strength": "strong, highly influential. Later work favors dimensions over categories",
     "topics": [
       "attachment"
     ],
@@ -621,7 +621,7 @@
     "url": "https://labs.psychology.illinois.edu/~rcfraley/measures/brennan.html",
     "kind": "review",
     "finding": "A large factor-analytic study of all known self-report adult attachment measures found that they reduce to two broad dimensions: attachment anxiety and avoidance.",
-    "strength": "strong — the basis of the widely used two-dimension approach; self-report",
+    "strength": "strong, the basis of the widely used two-dimension approach. Self-report",
     "topics": [
       "attachment"
     ],
@@ -642,7 +642,7 @@
     "url": "https://doi.org/10.1037/pspp0000027",
     "kind": "study",
     "finding": "Taxometric analyses suggested that adult attachment differences are dimensional (degrees of anxiety and avoidance) rather than distinct types.",
-    "strength": "strong — large samples; consistent with the field's current consensus",
+    "strength": "strong, large samples. Consistent with the field's current consensus",
     "topics": [
       "attachment"
     ],
@@ -665,7 +665,7 @@
     "url": "https://vufind.lboro.ac.uk/Record/194760",
     "kind": "book",
     "finding": "The first volume of Bowlby's trilogy, setting out attachment theory: children's bond with caregivers is an evolved system for seeking safety and comfort.",
-    "strength": "strong — foundational theory, extensively supported in later research",
+    "strength": "strong, foundational theory, extensively supported in later research",
     "topics": [
       "attachment"
     ],
@@ -683,7 +683,7 @@
     ],
     "verified": true,
     "verified_by": "https://works.www.wellcomecollection.org/works/wu7gxjkb ; https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp (Hogarth Press / Basic Books, 1969) ; https://vufind.lboro.ac.uk/Record/194760",
-    "note": "Library catalogue record (Loughborough University) for the 1982 second edition; replaces a bookshop link."
+    "note": "Library catalog record (Loughborough University) for the 1982 second edition. Replaces a bookshop link."
   },
   {
     "id": "ainsworth-1978",
@@ -695,7 +695,7 @@
     "url": "https://search.worldcat.org/title/4194069",
     "kind": "book",
     "finding": "Reported the Strange Situation studies of infants and mothers and described secure and insecure attachment patterns.",
-    "strength": "strong — foundational, widely replicated method",
+    "strength": "strong, foundational, widely replicated method",
     "topics": [
       "attachment"
     ],
@@ -722,7 +722,7 @@
     "url": "https://doi.org/10.1111/j.1467-9280.2006.01832.x",
     "kind": "study",
     "finding": "In an fMRI study, married women facing the threat of a mild shock showed less threat-related brain activity while holding their husband's hand than when alone.",
-    "strength": "moderate — small, much-cited brain-imaging study",
+    "strength": "moderate, small, much-cited brain-imaging study",
     "topics": [
       "social-support",
       "attachment"
@@ -746,7 +746,7 @@
     "url": "https://doi.org/10.1177/09637214231217663",
     "kind": "review",
     "finding": "Reviewing the evidence, the authors concluded that the core assumptions of the five love languages (that people have one primary language and that matching languages improves relationships) are not well supported, while its underlying message of learning what a partner needs is sound.",
-    "strength": "strong — peer-reviewed review of the evidence",
+    "strength": "strong, peer-reviewed review of the evidence",
     "topics": [
       "love-languages"
     ],
@@ -767,7 +767,7 @@
     "url": "https://en.wikipedia.org/wiki/The_Five_Love_Languages",
     "kind": "book",
     "finding": "A counselor's book proposing five ways people express and prefer to receive love: words of affirmation, acts of service, receiving gifts, quality time and physical touch. It came from counseling experience, not research.",
-    "strength": "debated — very popular; research has not supported its core assumptions (see Impett, Park & Muise, 2024)",
+    "strength": "debated, very popular. Research has not supported its core assumptions (see Impett, Park & Muise, 2024)",
     "topics": [
       "love-languages"
     ],
@@ -797,7 +797,7 @@
     "url": "https://boulder.flatironslibrary.org/Record/.b16633180",
     "kind": "book",
     "finding": "Proposes that people look for different parts of an apology: expressing regret, accepting responsibility, making restitution, genuinely repenting and requesting forgiveness.",
-    "strength": "early — popular book with little direct research; Lewicki et al. (2016) tested similar components",
+    "strength": "early, popular book with little direct research. Lewicki et al. (2016) tested similar components",
     "topics": [
       "apology",
       "love-languages"
@@ -819,7 +819,7 @@
     "url": "https://class.unt.edu/communication/publications/5-languages-appreciation-workplace-empowering-organizations-encouraging-people.html",
     "kind": "book",
     "finding": "Applies the love-languages idea to the workplace, proposing that employees differ in how they prefer to receive appreciation.",
-    "strength": "early — popular practitioner book with very little independent research",
+    "strength": "early, popular practitioner book with very little independent research",
     "topics": [
       "appreciation",
       "work"
@@ -841,8 +841,8 @@
     "doi": "10.1037/0022-3514.84.2.377",
     "url": "https://doi.org/10.1037/0022-3514.84.2.377",
     "kind": "study",
-    "finding": "In three studies, people randomly assigned to list things they were grateful for generally reported higher well-being than comparison groups, though not on every measure; effects on positive mood were the most consistent.",
-    "strength": "moderate — classic experiments; later meta-analyses find small average effects",
+    "finding": "In three studies, people randomly assigned to list things they were grateful for generally reported higher well-being than comparison groups, though not on every measure. Effects on positive mood were the most consistent.",
+    "strength": "moderate, classic experiments. Later meta-analyses find small average effects",
     "topics": [
       "gratitude"
     ],
@@ -862,7 +862,7 @@
     "url": "https://doi.org/10.1111/j.1751-9004.2012.00439.x",
     "kind": "theory",
     "finding": "Sets out find-remind-and-bind theory: gratitude helps people find good relationship partners, reminds them of existing good relationships, and binds them closer, by fueling cycles of mutually responsive behavior.",
-    "strength": "moderate — theory paper drawing on diary, observational and some experimental studies",
+    "strength": "moderate, theory paper drawing on diary, observational and some experimental studies",
     "topics": [
       "gratitude",
       "appreciation"
@@ -889,7 +889,7 @@
     "url": "https://doi.org/10.1111/j.1475-6811.2010.01273.x",
     "kind": "study",
     "finding": "In a daily-diary study of cohabiting couples, feeling gratitude after a partner's thoughtful act predicted greater relationship connection and satisfaction the next day, for both partners.",
-    "strength": "moderate — daily diary, correlational",
+    "strength": "moderate, daily diary, correlational",
     "topics": [
       "gratitude"
     ],
@@ -909,8 +909,8 @@
     "doi": "10.1037/a0028723",
     "url": "https://doi.org/10.1037/a0028723",
     "kind": "study",
-    "finding": "Across cross-sectional, daily, observational and longitudinal studies, people who felt appreciated by their partners were more appreciative in return; appreciative partners were more responsive and committed, and more likely to still be together months later.",
-    "strength": "moderate — multi-method but mostly correlational",
+    "finding": "Across cross-sectional, daily, observational and longitudinal studies, people who felt appreciated by their partners were more appreciative in return. appreciative partners were more responsive and committed, and more likely to still be together months later.",
+    "strength": "moderate, multi-method but mostly correlational",
     "topics": [
       "gratitude",
       "appreciation",
@@ -933,8 +933,8 @@
     "doi": "10.1080/01973533.2017.1323638",
     "url": "https://doi.org/10.1080/01973533.2017.1323638",
     "kind": "meta-analysis",
-    "finding": "A series of meta-analyses (38 studies) found gratitude interventions improved outcomes such as happiness compared with neutral conditions, with smaller or no advantages over other positive activities; the author suggested their unique benefits may be overemphasized.",
-    "strength": "strong — meta-analysis; effects generally small",
+    "finding": "A series of meta-analyses (38 studies) found gratitude interventions improved outcomes such as happiness compared with neutral conditions, with smaller or no advantages over other positive activities. The author suggested their unique benefits may be overemphasized.",
+    "strength": "strong, meta-analysis. Effects generally small",
     "topics": [
       "gratitude"
     ],
@@ -954,7 +954,7 @@
     "url": "https://doi.org/10.1037/cou0000107",
     "kind": "meta-analysis",
     "finding": "A meta-analysis found gratitude interventions had small benefits for well-being compared with measurement-only controls and with alternative activities, with mixed results on other outcomes.",
-    "strength": "strong — meta-analysis; effects small",
+    "strength": "strong, meta-analysis. Effects small",
     "topics": [
       "gratitude"
     ],
@@ -973,8 +973,8 @@
     "doi": "10.1037/0022-3514.87.2.228",
     "url": "https://doi.org/10.1037/0022-3514.87.2.228",
     "kind": "study",
-    "finding": "Across four studies, telling others about good news was linked with higher daily positive mood and well-being beyond the event itself, especially when the listener responded actively and constructively; couples whose partners usually responded enthusiastically reported more intimacy and satisfaction.",
-    "strength": "strong — multiple studies, widely replicated; mostly correlational",
+    "finding": "Across four studies, telling others about good news was linked with higher daily positive mood and well-being beyond the event itself, especially when the listener responded actively and constructively. Couples whose partners usually responded enthusiastically reported more intimacy and satisfaction.",
+    "strength": "strong, multiple studies, widely replicated, mostly correlational",
     "topics": [
       "capitalization",
       "good-news"
@@ -1003,7 +1003,7 @@
     "url": "https://doi.org/10.1037/0022-3514.91.5.904",
     "kind": "study",
     "finding": "In 79 dating couples filmed sharing recent events, how partners responded to good news predicted relationship well-being and break-ups two months later more strongly than how they responded to bad news.",
-    "strength": "moderate — observational study with a modest sample",
+    "strength": "moderate, observational study with a modest sample",
     "topics": [
       "capitalization"
     ],
@@ -1023,7 +1023,7 @@
     "url": "https://worlddatabaseofhappiness.eur.nl/publications/hedonic-relativism-and-planning-the-good-society-244/",
     "kind": "theory",
     "finding": "Introduced the idea later called the hedonic treadmill: people adapt to improved circumstances, so gains in happiness tend to fade.",
-    "strength": "moderate — influential theory; later research shows adaptation is real but often incomplete and varies by event",
+    "strength": "moderate, influential theory. Later research shows adaptation is real but often incomplete and varies by event",
     "topics": [
       "complacency",
       "hedonic-adaptation"
@@ -1046,7 +1046,7 @@
     "url": "https://doi.org/10.1093/oxfordhb/9780195375343.013.0011",
     "kind": "review",
     "finding": "Reviews evidence that both joys and sorrows fade over time, discusses why people may adapt differently to positive and negative changes, and presents a model of how adaptation to positive changes might be slowed.",
-    "strength": "moderate — narrative review",
+    "strength": "moderate, narrative review",
     "topics": [
       "complacency",
       "hedonic-adaptation"
@@ -1068,7 +1068,7 @@
     "url": "https://doi.org/10.1037/0022-3514.78.2.273",
     "kind": "study",
     "finding": "Couples who took part together in a novel, mildly challenging activity reported higher relationship quality afterward than couples who did a mundane task.",
-    "strength": "moderate — experiments with short-term lab effects; later studies mostly supportive",
+    "strength": "moderate, experiments with short-term lab effects. Later studies mostly supportive",
     "topics": [
       "complacency",
       "self-expansion",
@@ -1098,7 +1098,7 @@
     "url": "https://libcat.library.tamu.edu/Record/in00000408876",
     "kind": "book",
     "finding": "Introduced the self-expansion model: people are motivated to grow by including a partner's perspectives, resources and identity in their sense of self.",
-    "strength": "moderate — influential theory with broad later support",
+    "strength": "moderate, influential theory with broad later support",
     "topics": [
       "self-expansion"
     ],
@@ -1119,7 +1119,7 @@
     "url": "https://doi.org/10.1111/j.1460-2466.1981.tb01201.x",
     "kind": "study",
     "finding": "An exploratory study of the private words, nicknames and phrases couples develop (personal idioms) and what they are used for in intimate talk.",
-    "strength": "early — descriptive, exploratory study",
+    "strength": "early, descriptive, exploratory study",
     "topics": [
       "shared-language",
       "maintenance"
@@ -1140,8 +1140,8 @@
     "doi": "10.1177/0265407593104009",
     "url": "https://doi.org/10.1177/0265407593104009",
     "kind": "study",
-    "finding": "In 154 married couples, more satisfied spouses reported using more private idioms; idiom use was highest early in marriage and declined across the life cycle.",
-    "strength": "early — one correlational study using recalled idioms",
+    "finding": "In 154 married couples, more satisfied spouses reported using more private idioms. Idiom use was highest early in marriage and declined across the life cycle.",
+    "strength": "early, one correlational study using recalled idioms",
     "topics": [
       "shared-language",
       "maintenance"
@@ -1165,7 +1165,7 @@
     "url": "https://doi.org/10.1080/03637759709376403",
     "kind": "study",
     "finding": "Interviews and questionnaires with married couples produced typologies of the everyday rituals people share in marriage (seven types) and in adult friendship (six types).",
-    "strength": "early — descriptive, qualitative study",
+    "strength": "early, descriptive, qualitative study",
     "topics": [
       "rituals",
       "maintenance",
@@ -1190,7 +1190,7 @@
     "url": "https://doi.org/10.1037/0893-3200.16.4.381",
     "kind": "review",
     "finding": "A review of 32 publications found family routines and rituals were related to parenting competence, children's adjustment and marital satisfaction, while noting weak measurement and convenience samples.",
-    "strength": "moderate — qualitative review of mostly correlational studies",
+    "strength": "moderate, qualitative review of mostly correlational studies",
     "topics": [
       "rituals"
     ],
@@ -1213,7 +1213,7 @@
     "url": "https://doi.org/10.1016/0022-1031(80)90007-4",
     "kind": "study",
     "finding": "Two studies tested the investment model: commitment to a relationship was predicted by satisfaction, the quality of alternatives and the size of investments.",
-    "strength": "strong — foundational, later confirmed by meta-analyses",
+    "strength": "strong, foundational, later confirmed by meta-analyses",
     "topics": [
       "commitment",
       "maintenance"
@@ -1236,8 +1236,8 @@
     "doi": "10.1111/1475-6811.00035",
     "url": "https://doi.org/10.1111/1475-6811.00035",
     "kind": "meta-analysis",
-    "finding": "A meta-analysis of 52 studies (11,582 participants) found satisfaction, quality of alternatives and investments each correlated with commitment, together explaining about two-thirds of its variance; commitment in turn predicted break-up.",
-    "strength": "strong — meta-analysis, updated by Tran et al. (2019) with similar conclusions",
+    "finding": "A meta-analysis of 52 studies (11,582 participants) found satisfaction, quality of alternatives and investments each correlated with commitment, together explaining about two-thirds of its variance. Commitment in turn predicted break-up.",
+    "strength": "strong, meta-analysis, updated by Tran et al. (2019) with similar conclusions",
     "topics": [
       "commitment"
     ],
@@ -1257,7 +1257,7 @@
     "url": "https://doi.org/10.1037/0022-3514.49.1.95",
     "kind": "study",
     "finding": "Described trust in close relationships as having three components, predictability, dependability and faith, and developed a self-report Trust Scale to measure them.",
-    "strength": "strong — landmark, highly cited model and measure",
+    "strength": "strong, landmark, highly cited model and measure",
     "topics": [
       "trust"
     ],
@@ -1279,8 +1279,8 @@
     "doi": null,
     "url": "https://pubmed.ncbi.nlm.nih.gov/8979384/",
     "kind": "study",
-    "finding": "Following dating couples over a year, relationships were most likely to last, even through conflicts and doubts, when partners idealized each other most; idealization predicted later gains in satisfaction and fewer conflicts.",
-    "strength": "moderate — longitudinal but correlational; later work shows limits when problems are serious",
+    "finding": "Following dating couples over a year, relationships were most likely to last, even through conflicts and doubts, when partners idealized each other most. Idealization predicted later gains in satisfaction and fewer conflicts.",
+    "strength": "moderate, longitudinal but correlational. Later work shows limits when problems are serious",
     "topics": [
       "positive-illusions"
     ],
@@ -1301,7 +1301,7 @@
     "url": "https://doi.org/10.1037/0022-3514.77.2.293",
     "kind": "study",
     "finding": "Across four studies, people whose partners saw and treated them in line with their ideal self moved closer to that ideal over time, and this affirmation was linked with better couple functioning and more stable relationships.",
-    "strength": "moderate — correlational and longitudinal, not experimental",
+    "strength": "moderate, correlational and longitudinal, not experimental",
     "topics": [
       "michelangelo-effect"
     ],
@@ -1322,7 +1322,7 @@
     "url": "https://doi.org/10.1016/S0065-2601(08)60357-3",
     "kind": "theory",
     "finding": "Reviewed the biases of the lay 'intuitive psychologist' and named the fundamental attribution error: underestimating situational causes and overestimating personal dispositions when explaining others' behavior.",
-    "strength": "strong — foundational and widely replicated, though weaker in some cultures",
+    "strength": "strong, foundational and widely replicated, though weaker in some cultures",
     "topics": [
       "fundamental-attribution-error",
       "perception"
@@ -1353,8 +1353,8 @@
     "doi": "10.1016/0022-1031(67)90034-0",
     "url": "https://doi.org/10.1016/0022-1031(67)90034-0",
     "kind": "study",
-    "finding": "In three experiments, people judged a speaker's true attitude from a speech; they tended to attribute the stated position to the speaker even when told the speaker had been assigned it.",
-    "strength": "strong — classic, widely replicated paradigm",
+    "finding": "In three experiments, people judged a speaker's true attitude from a speech. They tended to attribute the stated position to the speaker even when told the speaker had been assigned it.",
+    "strength": "strong, classic, widely replicated paradigm",
     "topics": [
       "fundamental-attribution-error"
     ],
@@ -1375,7 +1375,7 @@
     "url": "https://krimdok.uni-tuebingen.de/Record/1098932900",
     "kind": "theory",
     "finding": "Proposed the actor-observer hypothesis: people tend to explain their own actions by the situation and others' actions by their dispositions.",
-    "strength": "debated — Malle's 2006 meta-analysis found little overall support for the general claim",
+    "strength": "debated, Malle's 2006 meta-analysis found little overall support for the general claim",
     "topics": [
       "actor-observer"
     ],
@@ -1398,8 +1398,8 @@
     "doi": "10.1037/0033-2909.132.6.895",
     "url": "https://doi.org/10.1037/0033-2909.132.6.895",
     "kind": "meta-analysis",
-    "finding": "A meta-analysis of 173 studies found average actor-observer effects near zero; the asymmetry appeared only in some conditions (for example when actor and observer were intimates, or for negative events), with a reverse pattern for positive events.",
-    "strength": "strong — large meta-analysis",
+    "finding": "A meta-analysis of 173 studies found average actor-observer effects near zero. The asymmetry appeared only in some conditions (for example when actor and observer were intimates, or for negative events), with a reverse pattern for positive events.",
+    "strength": "strong, large meta-analysis",
     "topics": [
       "actor-observer"
     ],
@@ -1420,8 +1420,8 @@
     "doi": "10.4324/9780203773772-6",
     "url": "https://doi.org/10.4324/9780203773772-6",
     "kind": "theory",
-    "finding": "Described naive realism: people assume they see the world objectively, so those who disagree must be uninformed, irrational or biased — a dynamic that fuels conflict and misunderstanding.",
-    "strength": "strong — foundational account; its predictions are well replicated",
+    "finding": "Described naive realism: people assume they see the world objectively, so those who disagree must be uninformed, irrational or biased, a dynamic that fuels conflict and misunderstanding.",
+    "strength": "strong, foundational account. Its predictions are well replicated",
     "topics": [
       "naive-realism"
     ],
@@ -1451,7 +1451,7 @@
     "url": "https://doi.org/10.1177/0146167202286008",
     "kind": "study",
     "finding": "People, from students to airport travelers, readily saw common biases in others but rated themselves as less biased than their peers (the bias blind spot).",
-    "strength": "strong — replicated in many later studies",
+    "strength": "strong, replicated in many later studies",
     "topics": [
       "naive-realism",
       "bias-blind-spot"
@@ -1474,7 +1474,7 @@
     "url": "https://doi.org/10.1037/0022-3514.75.2.332",
     "kind": "study",
     "finding": "In several sets of studies, people overestimated how well others could read their internal states (for example, liars overestimated how detectable their lies were, and people thought their disgust showed more than it did).",
-    "strength": "strong — replicated and extended",
+    "strength": "strong, replicated and extended",
     "topics": [
       "illusion-of-transparency"
     ],
@@ -1501,8 +1501,8 @@
     "doi": null,
     "url": "https://www.sciencedirect.com/science/article/abs/pii/S0022103110002118",
     "kind": "study",
-    "finding": "In three experiments, people overestimated how well they communicated with friends and spouses, more than with strangers, and made more egocentric errors following a friend's directions; closeness seemed to relax the checking people do with strangers.",
-    "strength": "moderate — short report of three small experiments; later work extended it",
+    "finding": "In three experiments, people overestimated how well they communicated with friends and spouses, more than with strangers, and made more egocentric errors following a friend's directions. Closeness seemed to relax the checking people do with strangers.",
+    "strength": "moderate, short report of three small experiments. Later work extended it",
     "topics": [
       "closeness-communication-bias"
     ],
@@ -1526,7 +1526,7 @@
     "url": "https://doi.org/10.1037/pspa0000115",
     "kind": "study",
     "finding": "As the title states, a series of experiments found that imagining another person's perspective did not make people more accurate about what that person thought or felt, whereas getting their perspective directly (by asking) did.",
-    "strength": "strong — many experiments in one paper",
+    "strength": "strong, many experiments in one paper",
     "topics": [
       "perspective-taking"
     ],
@@ -1546,7 +1546,7 @@
     "url": "https://wellcomecollection.org/works/zh83qear",
     "kind": "book",
     "finding": "A book reviewing research on how people infer others' thoughts and feelings, and why this 'sixth sense' is more error-prone than we believe.",
-    "strength": "moderate — popular book summarizing peer-reviewed research",
+    "strength": "moderate, popular book summarizing peer-reviewed research",
     "topics": [
       "perspective-taking"
     ],
@@ -1556,7 +1556,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.publishersweekly.com/9780307595911 ; https://casbs.stanford.edu/mindwise-how-we-understand-what-others-think-believe-feel-and-want ; https://wellcomecollection.org/works/zh83qear",
-    "note": "Library catalogue record (Wellcome Collection); replaces a trade-magazine listing."
+    "note": "Library catalog record (Wellcome Collection). Replaces a trade-magazine listing."
   },
   {
     "id": "hastorf-cantril-1954",
@@ -1568,7 +1568,7 @@
     "url": "https://doi.org/10.1037/h0057880",
     "kind": "study",
     "finding": "Students from Princeton and Dartmouth watched the same rough football game and saw it very differently, for example in how many infractions each team committed.",
-    "strength": "moderate — classic single case study, widely cited",
+    "strength": "moderate, classic single case study, widely cited",
     "topics": [
       "naive-realism"
     ],
@@ -1589,7 +1589,7 @@
     "url": "https://doi.org/10.1177/0265407518761225",
     "kind": "study",
     "finding": "Studies of adults who had recently moved and of students found that more hours spent together, especially in leisure, went with moving from acquaintance to closer friendship.",
-    "strength": "moderate — survey studies; hour estimates are rough",
+    "strength": "moderate, survey studies. Hour estimates are rough",
     "topics": [
       "friendship"
     ],
@@ -1612,7 +1612,7 @@
     "url": "https://doi.org/10.1371/journal.pmed.1000316",
     "kind": "meta-analysis",
     "finding": "A meta-analysis of 148 studies (308,849 participants) found people with stronger social relationships had about 50% greater odds of survival over the study periods, consistently across age, sex and health status.",
-    "strength": "strong — large meta-analysis of observational studies; causation not established",
+    "strength": "strong, large meta-analysis of observational studies. Causation not established",
     "topics": [
       "social-support",
       "loneliness"
@@ -1637,7 +1637,7 @@
     "url": "https://doi.org/10.1177/1745691614568352",
     "kind": "meta-analysis",
     "finding": "A meta-analysis linking loneliness, social isolation and living alone with a higher risk of earlier death.",
-    "strength": "strong — meta-analysis of observational studies",
+    "strength": "strong, meta-analysis of observational studies",
     "topics": [
       "loneliness"
     ],
@@ -1657,7 +1657,7 @@
     "url": "https://wellcomecollection.org/works/wp45vzsp",
     "kind": "book",
     "finding": "A book arguing that loneliness is a biological signal, like hunger, that we need connection, and that chronic loneliness can trap people in isolation and harm health.",
-    "strength": "moderate — popular book summarizing the authors' and others' research",
+    "strength": "moderate, popular book summarizing the authors' and others' research",
     "topics": [
       "loneliness"
     ],
@@ -1669,7 +1669,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.publishersweekly.com/9780393061703 ; https://search.ub.tum.de/vufind/Record/DE-604.BV035327306 ; https://wellcomecollection.org/works/wp45vzsp",
-    "note": "Library catalogue record (Wellcome Collection, 2009 printing); replaces a trade-magazine listing."
+    "note": "Library catalog record (Wellcome Collection, 2009 printing). Replaces a trade-magazine listing."
   },
   {
     "id": "russell-peplau-ferguson-1978",
@@ -1680,8 +1680,8 @@
     "doi": "10.1207/s15327752jpa4203_11",
     "url": "https://doi.org/10.1207/s15327752jpa4203_11",
     "kind": "study",
-    "finding": "Introduced the original 20-item UCLA Loneliness Scale, which showed high internal consistency and links with self-reported loneliness; it was later revised.",
-    "strength": "strong — the most widely used loneliness measure (in revised forms)",
+    "finding": "Introduced the original 20-item UCLA Loneliness Scale, which showed high internal consistency and links with self-reported loneliness. It was later revised.",
+    "strength": "strong, the most widely used loneliness measure (in revised forms)",
     "topics": [
       "loneliness"
     ],
@@ -1700,8 +1700,8 @@
     "doi": "10.1177/1088868310377394",
     "url": "https://doi.org/10.1177/1088868310377394",
     "kind": "meta-analysis",
-    "finding": "A meta-analysis of loneliness interventions; it is cited for finding that approaches targeting unhelpful social thinking (maladaptive social cognition) showed larger effects than other approaches, and for calling for better-controlled trials.",
-    "strength": "strong — meta-analysis, though many included studies were small",
+    "finding": "A meta-analysis of loneliness interventions. It is cited for finding that approaches targeting unhelpful social thinking (maladaptive social cognition) showed larger effects than other approaches, and for calling for better-controlled trials.",
+    "strength": "strong, meta-analysis, though many included studies were small",
     "topics": [
       "loneliness"
     ],
@@ -1721,7 +1721,7 @@
     "url": "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf",
     "kind": "guideline",
     "finding": "A U.S. public-health advisory reporting that about half of U.S. adults experience measurable loneliness, linking poor social connection with higher risks of heart disease, stroke, dementia and early death, and proposing a national strategy to strengthen connection.",
-    "strength": "strong — official synthesis of research, though most underlying evidence is observational",
+    "strength": "strong, official synthesis of research, though most underlying evidence is observational",
     "topics": [
       "loneliness"
     ],
@@ -1740,8 +1740,8 @@
     "doi": null,
     "url": "https://www.neuroscience.ox.ac.uk/publications/945607",
     "kind": "study",
-    "finding": "Across primates, typical group size was predicted by relative neocortex size rather than by ecological variables; extrapolating to humans gave a rough group size of about 150, the origin of 'Dunbar's number'.",
-    "strength": "debated — influential; the human extrapolation has wide uncertainty and has been challenged (Lindenfors et al., 2021)",
+    "finding": "Across primates, typical group size was predicted by relative neocortex size rather than by ecological variables. Extrapolating to humans gave a rough group size of about 150, the origin of 'Dunbar's number'.",
+    "strength": "debated, influential. The human extrapolation has wide uncertainty and has been challenged (Lindenfors et al., 2021)",
     "topics": [
       "friendship",
       "dunbar-number"
@@ -1765,7 +1765,7 @@
     "url": "https://doi.org/10.1098/rsbl.2021.0158",
     "kind": "study",
     "finding": "Reanalysing primate brain and group-size data with modern methods gave estimates for human group size that varied widely with method and had very wide confidence intervals, so a specific figure like 150 is not supported.",
-    "strength": "moderate — methodological reanalysis; Dunbar and colleagues have disputed it",
+    "strength": "moderate, methodological reanalysis. Dunbar and colleagues have disputed it",
     "topics": [
       "dunbar-number"
     ],
@@ -1784,8 +1784,8 @@
     "doi": "10.1521/jscp.23.3.413.35460",
     "url": "https://doi.org/10.1521/jscp.23.3.413.35460",
     "kind": "study",
-    "finding": "Three studies identified four kinds of friendship maintenance behavior (positivity, supportiveness, openness and interaction); best friends did more of them, and both friends' maintenance predicted satisfaction and commitment.",
-    "strength": "moderate — survey studies, mostly students",
+    "finding": "Three studies identified four kinds of friendship maintenance behavior (positivity, supportiveness, openness and interaction). Best friends did more of them, and both friends' maintenance predicted satisfaction and commitment.",
+    "strength": "moderate, survey studies, mostly students",
     "topics": [
       "friendship",
       "maintenance"
@@ -1806,7 +1806,7 @@
     "url": "https://doi.org/10.1086/225469",
     "kind": "theory",
     "finding": "Argued that weak ties (acquaintances) are valuable because they bridge between close-knit groups and carry new information, for example about jobs.",
-    "strength": "strong — one of the most cited papers in sociology; supported by later work including a large 2022 experiment",
+    "strength": "strong, one of the most cited papers in sociology. Supported by later work including a large 2022 experiment",
     "topics": [
       "weak-ties",
       "friendship"
@@ -1827,7 +1827,7 @@
     "url": "https://doi.org/10.1177/0146167214529799",
     "kind": "study",
     "finding": "Students were happier and felt more belonging on days they interacted with more classmates than usual, and in community samples interactions with weak ties as well as close ties were linked with daily well-being.",
-    "strength": "moderate — diary studies, correlational",
+    "strength": "moderate, diary studies, correlational",
     "topics": [
       "weak-ties"
     ],
@@ -1847,7 +1847,7 @@
     "url": "https://doi.org/10.1177/1948550613502990",
     "kind": "study",
     "finding": "People who had a brief, friendly social exchange with a coffee-shop barista reported more belonging and positive mood than those who kept the exchange purely efficient.",
-    "strength": "early — one small field experiment",
+    "strength": "early, one small field experiment",
     "topics": [
       "weak-ties",
       "belonging"
@@ -1871,8 +1871,8 @@
     "doi": "10.1037/a0037323",
     "url": "https://doi.org/10.1037/a0037323",
     "kind": "study",
-    "finding": "Commuters asked to talk with a stranger on their train or bus reported a more positive journey than those told to sit in solitude, even though people predicted the opposite; misjudging how pleasant such talk would be keeps people apart.",
-    "strength": "moderate — field and lab experiments; replicated in later work",
+    "finding": "Commuters asked to talk with a stranger on their train or bus reported a more positive journey than those told to sit in solitude, even though people predicted the opposite. Misjudging how pleasant such talk would be keeps people apart.",
+    "strength": "moderate, field and lab experiments. Replicated in later work",
     "topics": [
       "weak-ties",
       "friendship"
@@ -1895,7 +1895,7 @@
     "url": "https://doi.org/10.1126/science.abl4476",
     "kind": "study",
     "finding": "Randomized experiments on LinkedIn's 'People You May Know' feature, covering over 20 million users, found that moderately weak ties were most valuable for job mobility, with diminishing returns for the very weakest ties.",
-    "strength": "strong — large-scale randomized experiments, though on one platform",
+    "strength": "strong, large-scale randomized experiments, though on one platform",
     "topics": [
       "weak-ties"
     ],
@@ -1915,7 +1915,7 @@
     "url": "https://doi.org/10.1037/0022-3514.79.6.953",
     "kind": "study",
     "finding": "In couples where one partner faced a stressful exam, support the recipient did not notice (reported by the giver but not the receiver) was linked with better adjustment, while noticed (visible) support was not.",
-    "strength": "moderate — diary study; later work shows effects depend on how support is given",
+    "strength": "moderate, diary study. Later work shows effects depend on how support is given",
     "topics": [
       "social-support",
       "invisible-support"
@@ -1941,7 +1941,7 @@
     "url": "https://doi.org/10.1037/0033-2909.98.2.310",
     "kind": "review",
     "finding": "A review arguing that social support protects (buffers) people from the harmful effects of stress, especially perceived availability of support, alongside general main effects of being socially integrated.",
-    "strength": "strong — highly influential review; later tests are mixed in some settings",
+    "strength": "strong, highly influential review. Later tests are mixed in some settings",
     "topics": [
       "social-support"
     ],
@@ -1961,7 +1961,7 @@
     "url": "https://libcat.library.tamu.edu/Record/in00000649568",
     "kind": "book",
     "finding": "A book on social support at work that distinguished emotional, instrumental, informational and appraisal support.",
-    "strength": "moderate — widely used framework",
+    "strength": "moderate, widely used framework",
     "topics": [
       "social-support"
     ],
@@ -1982,7 +1982,7 @@
     "url": "https://www.gsb.stanford.edu/news/research/flynn_ask.html",
     "kind": "study",
     "finding": "People asking for help underestimated, by as much as 50%, how many others would agree to a direct request, because they overlooked how awkward it feels to say no.",
-    "strength": "strong — several experiments and field studies, widely replicated since",
+    "strength": "strong, several experiments and field studies, widely replicated since",
     "topics": [
       "social-support",
       "asking-for-help"
@@ -2003,7 +2003,7 @@
     "url": "https://doi.org/10.1037/0033-2909.117.3.497",
     "kind": "review",
     "finding": "A major review arguing that the need to belong is a fundamental human motivation: people need frequent, pleasant contact within a few stable, caring relationships, and unmet belonging has wide emotional and cognitive costs.",
-    "strength": "strong — highly influential review",
+    "strength": "strong, highly influential review",
     "topics": [
       "belonging",
       "friendship"
@@ -2028,7 +2028,7 @@
     "url": "https://doi.org/10.1111/pere.12095",
     "kind": "study",
     "finding": "In 71 couples filmed talking about how they met, the share of time partners spent laughing together (beyond laughter overall) went with higher relationship quality, closeness and perceived support.",
-    "strength": "moderate — one observational study, correlational",
+    "strength": "moderate, one observational study, correlational",
     "topics": [
       "humour",
       "play"
@@ -2051,7 +2051,7 @@
     "url": "https://doi.org/10.1521/jscp.2011.30.2.163",
     "kind": "study",
     "finding": "In a lab stress task, people who received invalidating responses showed more negative emotion, higher heart rate and higher skin conductance over time than those who received validating responses.",
-    "strength": "moderate — lab experiment",
+    "strength": "moderate, lab experiment",
     "topics": [
       "validation"
     ],
@@ -2070,8 +2070,8 @@
     "doi": null,
     "url": "https://search.worldcat.org/title/670595",
     "kind": "book",
-    "finding": "A parenting book and course that popularised “I-messages”: describing your own feelings and the effect of a behaviour rather than blaming the other person.",
-    "strength": "mixed: widely taught; research on I-statements finds tone and context matter as much as wording",
+    "finding": "A parenting book and course that popularized “I-messages”: describing your own feelings and the effect of a behavior rather than blaming the other person.",
+    "strength": "mixed: widely taught. Research on I-statements finds tone and context matter as much as wording",
     "topics": [
       "i-statements"
     ],
@@ -2095,7 +2095,7 @@
     "url": "https://vufind.lboro.ac.uk/Record/562413",
     "kind": "book",
     "finding": "Describes Nonviolent Communication: expressing observations, feelings, needs and requests, and listening for the same in others.",
-    "strength": "early — widely used practice; few rigorous studies",
+    "strength": "early, widely used practice. Few rigorous studies",
     "topics": [
       "nvc"
     ],
@@ -2112,7 +2112,7 @@
     ],
     "verified": true,
     "verified_by": "Bookseller and library records: 1999 PuddleDancer first edition titled 'A Language of Compassion' (https://www.abebooks.com/first-edition/Nonviolent-Communication-Language-Compassion-Marshall-Rosenberg/31730622023/bd); later editions 'A Language of Life' (2003 2nd ed.; 3rd ed. https://www.harvard.com/book/9781892005281) ; https://vufind.lboro.ac.uk/Record/562413",
-    "note": "Library catalogue record (Loughborough University); replaces a bookshop link."
+    "note": "Library catalog record (Loughborough University). Replaces a bookshop link."
   },
   {
     "id": "stone-patton-heen-1999",
@@ -2124,7 +2124,7 @@
     "url": "https://www.penguinrandomhouse.com/books/331191/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/",
     "kind": "book",
     "finding": "A practitioner book from the Harvard Negotiation Project describing three conversations inside every hard conversation (what happened, feelings, identity) and the gap between intent and impact.",
-    "strength": "moderate — practice framework grounded in negotiation experience, not controlled studies",
+    "strength": "moderate, practice framework grounded in negotiation experience, not controlled studies",
     "topics": [
       "difficult-conversations",
       "intent-impact"
@@ -2136,7 +2136,7 @@
     ],
     "verified": true,
     "verified_by": "https://www.publishersweekly.com/978-0-670-88339-4 ; https://bemis2.marmot.org/Record/.b10989559 ; https://www.penguinrandomhouse.com/books/331191/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/",
-    "note": "Publisher page (Penguin Random House); replaces a trade-magazine listing."
+    "note": "Publisher page (Penguin Random House). Replaces a trade-magazine listing."
   },
   {
     "id": "markman-stanley-blumberg-1994",
@@ -2148,7 +2148,7 @@
     "url": "https://libcat.simmons.edu/Record/b1586957",
     "kind": "book",
     "finding": "A book based on the PREP couples program, teaching skills such as the speaker-listener technique for safer conflict.",
-    "strength": "moderate — PREP has been tested in trials with some positive and some mixed long-term results",
+    "strength": "moderate, PREP has been tested in trials with some positive and some mixed long-term results",
     "topics": [
       "speaker-listener",
       "prep"
@@ -2169,7 +2169,7 @@
     "url": "https://search.worldcat.org/oclc/7575986",
     "kind": "book",
     "finding": "Set out principled negotiation: separate people from the problem, focus on interests rather than positions, invent options for mutual gain, use objective criteria, and know your best alternative to a negotiated agreement (BATNA).",
-    "strength": "moderate — very influential practitioner framework informed by research; critics note it can underplay power differences",
+    "strength": "moderate, very influential practitioner framework informed by research. Critics note it can underplay power differences",
     "topics": [
       "negotiation",
       "interests-vs-positions"
@@ -2191,8 +2191,8 @@
     "doi": "10.1037/0022-3514.59.5.994",
     "url": "https://doi.org/10.1037/0022-3514.59.5.994",
     "kind": "study",
-    "finding": "People wrote stories about a time they angered someone and a time someone angered them; perpetrators and victims described the same kinds of event very differently, for example in how serious, understandable and finished the harm was.",
-    "strength": "moderate — classic narrative study, self-reported memories",
+    "finding": "People wrote stories about a time they angered someone and a time someone angered them. Perpetrators and victims described the same kinds of event very differently, for example in how serious, understandable and finished the harm was.",
+    "strength": "moderate, classic narrative study, self-reported memories",
     "topics": [
       "perception",
       "conflict",
@@ -2214,8 +2214,8 @@
     "doi": "10.1037/pst0000185",
     "url": "https://doi.org/10.1037/pst0000185",
     "kind": "meta-analysis",
-    "finding": "Across 11 studies (1,314 patients), repairing ruptures in the therapist-client relationship was moderately associated with better outcomes; training therapists in rupture repair did not show a significant effect on outcomes in 6 studies.",
-    "strength": "strong — meta-analysis, correlational for the main finding",
+    "finding": "Across 11 studies (1,314 patients), repairing ruptures in the therapist-client relationship was moderately associated with better outcomes. Training therapists in rupture repair did not show a significant effect on outcomes in 6 studies.",
+    "strength": "strong, meta-analysis, correlational for the main finding",
     "topics": [
       "repair"
     ],
@@ -2235,7 +2235,7 @@
     "url": "https://doi.org/10.1353/lan.1977.0041",
     "kind": "study",
     "finding": "Analyses of everyday conversation showed that 'repair' of trouble in speaking, hearing and understanding is a built-in, organized part of talk, and that people strongly prefer to correct themselves rather than be corrected.",
-    "strength": "strong — foundational conversation-analysis finding",
+    "strength": "strong, foundational conversation-analysis finding",
     "topics": [
       "repair",
       "communication"
@@ -2257,7 +2257,7 @@
     "url": "https://doi.org/10.1111/jcom.12029",
     "kind": "study",
     "finding": "A diary study found long-distance dating couples disclosed more and idealized each other more than geographically close couples, which helped them feel as intimate or more so, with effects varying by communication medium.",
-    "strength": "early — one diary study of student couples",
+    "strength": "early, one diary study of student couples",
     "topics": [
       "long-distance"
     ],
@@ -2278,7 +2278,7 @@
     "url": "https://doi.org/10.1016/j.chb.2015.07.058",
     "kind": "study",
     "finding": "In surveys of adults in romantic relationships, a partner's phone snubbing (phubbing) was linked with more conflict over phone use and, through that, lower relationship satisfaction, and indirectly with lower life satisfaction and more depressive symptoms.",
-    "strength": "moderate — cross-sectional surveys; replicated in several later studies",
+    "strength": "moderate, cross-sectional surveys. Replicated in several later studies",
     "topics": [
       "phubbing",
       "attention"
@@ -2300,7 +2300,7 @@
     "url": "https://doi.org/10.1037/0033-2909.107.1.3",
     "kind": "review",
     "finding": "A review finding that distressed spouses explain their partner's negative behavior in more blaming, global and stable ways than satisfied spouses, with experimental, clinical and longitudinal evidence suggesting these attributions may affect satisfaction.",
-    "strength": "strong — influential review; later longitudinal work suggests effects run both ways",
+    "strength": "strong, influential review. Later longitudinal work suggests effects run both ways",
     "topics": [
       "attributions",
       "perception"
@@ -2323,7 +2323,7 @@
     "url": "https://doi.org/10.1037/0022-006X.50.5.715",
     "kind": "study",
     "finding": "Developed the Relationship Belief Inventory, a measure of unrealistic relationship beliefs (such as 'disagreement is destructive' or 'partners should read each other's minds'), which were linked with lower relationship satisfaction.",
-    "strength": "moderate — widely used measure; correlational findings",
+    "strength": "moderate, widely used measure. Correlational findings",
     "topics": [
       "mind-reading",
       "relationship-beliefs"
@@ -2373,7 +2373,7 @@
     "url": "https://search.worldcat.org/search?q=Social+support+an+interactional+view+Sarason+1990",
     "kind": "theory",
     "finding": "Proposed the “optimal matching” idea: support helps most when its type fits the problem, for example practical help for things you can change and comfort for things you can’t.",
-    "strength": "moderate: widely cited; later studies support the idea in part",
+    "strength": "moderate: widely cited. Later studies support the idea in part",
     "topics": [
       "support",
       "helping"

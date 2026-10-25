@@ -165,7 +165,7 @@
         (canMic ? '<li><strong>Any device:</strong> choose Use my microphone. Turn the music up a little and keep this device near the speaker.</li>' : '') +
         '<li><strong>On a computer (Chrome or Edge):</strong> play your music in the Spotify Web Player (open.spotify.com) or another tab. Choose Use sound from a tab, pick that tab, and tick <em>Share tab audio</em>.</li></ol>' +
         '<p class="ym-honest">We can’t connect to your Spotify account directly: Spotify doesn’t let websites read the sound it plays. These two ways work with any music app.</p>' +
-        '<p>The sound is only measured, live, on this device to move the picture. It is never recorded, saved or sent. The microphone turns off when you press Stop listening or leave this page. On some phones, music from the same phone goes quiet while the microphone is on; if that happens, play it on another device nearby.</p>' +
+        '<p>The sound is only measured, live, on this device to move the picture. It is never recorded, saved or sent. The microphone turns off when you press Stop listening or leave this page. On some phones, music from the same phone goes quiet while the microphone is on. If that happens, play it on another device nearby.</p>' +
         '</details>';
       el.innerHTML = (uo.title === false ? '' : '<p class="ym-k">' + (uo.title || 'Or visualize your own music') + '</p>') +
         '<div class="ym-row" role="group" aria-label="Your own music">' +

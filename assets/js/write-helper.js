@@ -25,7 +25,7 @@
     family: { label: 'Family guilt', rel: 'family', when: 'next Sunday',
       ack: { warmer: 'I know how much it means to you when we’re all together, and I love that you want me there.', plainer: 'I know you’d like me to come.', firmer: 'I hear that you’d like me there.' },
       capacity: ['I don’t have it in me this weekend. I’m stretched thin, and I’d be poor company.', 'I’m not able to come this weekend.', 'Could I come for lunch {when} instead?', 'I can come {when}, if that works.'],
-      delegate: ['I can’t be the one who organises it this time.', 'I won’t be organising it this time.', 'Could one of the others take the lead? I’m happy to bring something.', 'Someone else will need to take the lead. I can bring something.'],
+      delegate: ['I can’t be the one who organizes it this time.', 'I won’t be organizing it this time.', 'Could one of the others take the lead? I’m happy to bring something.', 'Someone else will need to take the lead. I can bring something.'],
       later: ['I do want to see you, just not this weekend.', 'Not this weekend.', 'Let’s put {when} in the calendar now, so it’s settled.', 'I’ll come {when}. Let’s put it in the calendar.'],
       warm: 'I love you, and I’m not going anywhere.', firm: 'I’ve thought about it, and that’s my answer for now.' },
     friend: { label: 'A friend asking a favour', rel: 'friends', when: 'Saturday morning',
@@ -46,7 +46,7 @@
       delegate: ['This isn’t something I’m going to do.', 'I’m not going to do this.', 'Maybe someone else can help with it. I’m glad to think through who.', 'You’ll need to find another way. It won’t be me.'],
       later: ['I’m not changing my answer today.', 'Asking again won’t change my answer today.', 'If that changes, I’ll be the one to bring it up, maybe {when}.', 'If that changes, I’ll tell you. Please don’t ask again before then.'],
       warm: 'I care about you, and saying no is part of how I keep caring well.', firm: '',
-      extra: 'A no that gets pushed again and again is worth noticing. You can stop explaining; one calm repeat is enough.' },
+      extra: 'A no that gets pushed again and again is worth noticing. You can stop explaining. One calm repeat is enough.' },
     money: { label: 'Someone asking for money', rel: '', when: 'at the start of next month',
       ack: { warmer: 'I can hear how stressful money is for you right now, and I’m glad you felt you could ask me.', plainer: 'I can see money is tight for you right now.', firmer: 'I understand you need money.' },
       capacity: ['I’m not able to lend money right now. My own budget doesn’t have room.', 'I can’t lend money.', 'I could help in another way, like going through a budget with you.', 'I can help you look for other support.'],
@@ -134,7 +134,7 @@
     [/\b(?:dishes|washing[- ]up|the sink|plates|pans|mugs)\b/i, 'dishes', function () { return 'Could you wash your dishes the same day, so the sink is clear by bedtime?'; }],
     [/\b(?:guests?|friends? over|people over|boyfriend|girlfriend|partner) (?:\w+ ){0,4}?(?:over|stay(?:ing)?|round|until|till|after|past|at)\b|\bguests?\b/i, 'guests', function (t) { var tm = (t.match(/\b(?:until|till|after|past|at)\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?|midnight)/i) || [])[1]; return 'Could we agree a time guests leave on weeknights, like [midnight]?' + (tm ? ' ' + tm.replace(/\s+/g, '') + ' is too late for me when I have to be up.' : ''); }],
     [/\b(?:noise|noisy|loud|music|tv|telly|shouting|gaming)\b/i, 'noise', function (t) { var tm = (t.match(/\b(?:after|past|until|till|at)\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?|midnight)/i) || [])[1]; return 'Could you keep the noise down after ' + (tm ? tm.replace(/\s+/g, '') : '[a time]') + ' on weeknights?'; }],
-    [/\b(?:bins?|trash|rubbish|garbage|recycling)\b/i, 'the bins', function () { return 'Could you take the bins out on [bin day]?'; }],
+    [/\b(?:bins?|trash|rubbish|garbage|recycling)\b/i, 'the bins', function () { return 'Could you take the trash out on [trash day]?'; }],
     [/\b(?:bathroom|shower|toilet|loo)\b/i, 'the bathroom', function () { return 'Could we take turns cleaning the bathroom, starting with you on [a day]?'; }],
     [/\b(?:laundry|washing machine|dryer|clothes)\b/i, 'laundry', function () { return 'Could you move your laundry out when it’s done, by [a time]?'; }],
     [/\b(?:rent|bills?|money|owe[sd]?|pay(?:ing)? (?:me )?back)\b/i, 'money', function () { return 'Could you pay your share of [the bill] by [the date]?'; }],
@@ -168,7 +168,7 @@
       lines = ['What happened, in plain words:', '“' + t + '”', '', 'What you could say:', '“' + send + '”', '', 'Ask yourself: what do I want to happen next time? Put that in the gap.'];
     }
     if ((neg || alw) && tops.length > 1) lines = lines.concat(oneTopicNote(tops, t));
-    return { text: lines.join('\n'), send: send, why: 'Under most complaints is a request. One clear ask, with a time and a reason, is easier to say yes to than “you never”. (From John Gottman’s research on complaints versus criticism.)' };
+    return { text: lines.join('\n'), send: send, why: 'Under most complaints is a request. One clear ask, with a time and a reason, is easier to say yes to than “you never.” (From John Gottman’s research on complaints versus criticism.)' };
   }
   function worryFlip(t) {
     var m = t.match(/\bwhat if\s+(.+)$/i) || t.match(/\b(?:i'?m|i am|i feel)\s+(?:so\s+|really\s+|very\s+|a bit\s+)?(?:worried|scared|afraid|anxious|nervous|stressed)\s+(?:that|about|of)\s+(.+)$/i) || t.match(/\bworried\s+(?:that|about)\s+(.+)$/i);

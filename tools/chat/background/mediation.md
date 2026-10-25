@@ -9,7 +9,7 @@ try: A mediator might say: “Let me check I have both views. Sam, you need the 
 
 A mediator is a neutral third person who helps people in a disagreement talk to each other and find their own solution. They don’t decide who’s right, and they don’t impose an answer.
 
-Mediators mostly manage the process: ground rules, turn-taking, summarizing each side, spotting shared interests, and helping people move from positions (“I want X”) to what they actually need. Formal mediators are trained professionals; informally, a trusted friend or colleague sometimes plays a similar role.
+Mediators mostly manage the process: ground rules, turn-taking, summarizing each side, spotting shared interests, and helping people move from positions (“I want X”) to what they actually need. Formal mediators are trained professionals. Informally, a trusted friend or colleague sometimes plays a similar role.
 
 Program: The Check-ins guide borrows mediator moves you can use yourselves: one topic, same side, hear it back before you answer.
 
@@ -17,12 +17,12 @@ Program: The Check-ins guide borrows mediator moves you can use yourselves: one 
 aka: ground rules; conversation rules; rules for fighting fair
 see: What a mediator does; Fighting fair
 go: /check-ins.html#ground | Check-in ground rules
-evidence: Mediators and facilitators routinely set ground rules; research specifically on their effect is limited, but they give people a shared way to call a pause without blame.
-try: “No interrupting, no ‘always’ or ‘never’, one topic, and either of us can call a twenty-minute break.”
+evidence: Mediators and facilitators routinely set ground rules. Research specifically on their effect is limited, but they give people a shared way to call a pause without blame.
+try: “No interrupting, no ‘always’ or ‘never,’ one topic, and either of us can call a twenty-minute break.”
 
 Ground rules are a few simple agreements made before a hard talk: how you’ll take turns, what words to avoid, how to pause. Agreeing them in a calm moment gives you both something neutral to point to when things heat up.
 
-Keep the list short (three to five rules) and make them about behavior, not attitude. “No raised voices” is easier to keep than “be respectful”.
+Keep the list short (three to five rules) and make them about behavior, not attitude. “No raised voices” is easier to keep than “be respectful.”
 
 Program: The program’s ground rules are on the Check-ins page, and the Chat analyzer’s talking notes start with a similar opener.
 
@@ -56,7 +56,7 @@ Program: The monthly look-back (WP-04) and house meetings go better when each pe
 aka: helping two people make up; being the go-between; friend mediator
 see: What a mediator does; Triangulation
 go: /check-ins.html | Check-ins
-evidence: Informal third-party help is common and often useful; research also warns that go-betweens can get pulled into taking sides. Staying neutral is harder than it looks.
+evidence: Informal third-party help is common and often useful. Research also warns that go-betweens can get pulled into taking sides. Staying neutral is harder than it looks.
 try: “I’m not going to take sides. Would you both be up for sitting down together, and I’ll just help keep it to one topic?”
 
 Sometimes a friend, sibling or colleague helps two people talk. It can be very helpful if the helper stays neutral, sets a simple structure, and hands the solution back to the two people.
@@ -70,7 +70,7 @@ aka: shuttle diplomacy; passing messages; back and forth through someone
 see: Caucus; Triangulation
 go: /relationships-in-depth.html#family | Where families start
 evidence: Used in formal mediation when people can’t yet sit together. At home, relying on messengers tends to distort messages and keep conflict going.
-try: Instead of “Tell your dad…”, try messaging him directly: “Can we sort out the holiday plan, just us?”
+try: Instead of “Tell your dad…,” try messaging him directly: “Can we sort out the holiday plan, just us?”
 
 In formal settings, a mediator sometimes shuttles between people who can’t be in the same room. It can be a useful first step when tensions are very high.
 
@@ -82,7 +82,7 @@ Program: For co-parents, keep communication brief, factual and direct between th
 aka: getting outside help; bring in help; outside perspective
 see: What a mediator does; Informal mediation between friends or family
 go: /is-this-for-you.html | Is this right for you?
-evidence: General guidance from mediation and counseling practice. There’s no single rule; the right help depends on the situation.
+evidence: General guidance from mediation and counseling practice. There’s no single rule. The right help depends on the situation.
 try: “We keep getting stuck on this. Would you be open to having someone neutral help us talk it through?”
 
 If the same disagreement keeps going nowhere, if talking always escalates, or if decisions have big consequences (money, separation arrangements, care for a family member), a neutral third party can help. That might be a trusted friend, a workplace mediator, a professional mediator or a counselor.
@@ -115,7 +115,7 @@ Some words reliably raise the temperature: always, never, lazy, selfish, ridicul
 
 It isn’t about being cold. You can still say how you feel. It’s about making sure the facts part of your message is something the other person can agree is true.
 
-Program: WP-09 asks for the fact “in one sentence with no adjectives”. The Chat analyzer (whole chat) flags absolutes like “always” and “never”.
+Program: WP-09 asks for the fact “in one sentence with no adjectives.” The Chat analyzer (whole chat) flags absolutes like “always” and “never.”
 
 ## Family meetings
 aka: family meeting; household meeting; house meeting

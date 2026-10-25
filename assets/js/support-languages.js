@@ -85,7 +85,7 @@
       ['think', 'Someone helps me put it in order and pick what comes first.'],
       ['shift', 'A break doing something with my hands or body, then I start again.'],
       ['room', 'Quiet, with no one asking me questions.']]],
-    ['When I’m upset and someone asks “What’s wrong?”, I usually…', [
+    ['When I’m upset and someone asks “What’s wrong?” I usually…', [
       ['room', 'Need them to wait. I’ll talk once I’ve settled.'],
       ['hear', 'Feel relieved. I want to be asked.'],
       ['near', 'Want them to stay, even if I can’t explain yet.'],
@@ -221,7 +221,7 @@
         mk('span', { cls: 'sl-bar', role: 'img', 'aria-label': t.picks + ' of ' + APPEAR[t.k] + ' times you could pick it' }, [mk('span', { style: 'width:' + Math.max(pct, 3) + '%' })])]));
     });
     out.appendChild(bars);
-    out.appendChild(mk('p', { cls: 'sl-small', text: 'This is how you lean right now, not a type. It can change with the kind of stress, the day and the person. Based on ' + res.n + ' of ' + Q.length + ' answers.' }));
+    out.appendChild(mk('p', { cls: 'sl-small', text: 'This is how you lean right now, and it can change with the kind of stress, the day and the person. Based on ' + res.n + ' of ' + Q.length + ' answers.' }));
 
     // the share card
     out.appendChild(mk('h4', { text: 'Share it with someone close' }));

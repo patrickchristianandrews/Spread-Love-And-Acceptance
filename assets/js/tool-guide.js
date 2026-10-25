@@ -41,7 +41,7 @@
     s.addEventListener('load', function () { cb(); });
     s.addEventListener('error', function () { /* no data: leave the placeholder empty */ });
   }
-  // names12: the registry gives the panel its "In short" answers and "Based on" line; load it when the page hasn't
+  // names12: the registry gives the panel its "The short version" answers and "Based on" line; load it when the page hasn't
   // (the panel still draws without it, from its own words)
   function ensureReg(cb) {
     if (window.TOLTools) { cb(); return; }
@@ -61,7 +61,7 @@
     var basis = t.basis || (r && window.TOLToolBasisHTML ? window.TOLToolBasisHTML(r) : '');
     if (!problem && !todo && !leave && !basis) return '';
     var row = function (k, v) { return v ? '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>' : ''; };
-    return '<section class="tg-short"><h3 class="tg-h">In short</h3><dl class="tg-qa">' +
+    return '<section class="tg-short"><h3 class="tg-h">The short version</h3><dl class="tg-qa">' +
       row('What it helps with', problem) + row('What you’ll do', todo + (todo && t.time ? ' <span class="tg-soft">' + t.time + '</span>' : '')) +
       row('What you’ll leave with', leave) + row('Based on', basis) + '</dl></section>';
   }
@@ -150,7 +150,7 @@
     h += '<section class="tg-b"><h3 class="tg-h">What a useful result looks like</h3><p>' + t.result + '</p>' +
       '<p class="tg-ex" hidden></p></section>';
     if (t.next && t.next.length) {
-      h += '<section class="tg-b"><h3 class="tg-h">Afterwards</h3><ol class="tg-next">' + t.next.slice(0, 3).map(function (x) {
+      h += '<section class="tg-b"><h3 class="tg-h">Afterward</h3><ol class="tg-next">' + t.next.slice(0, 3).map(function (x) {
         return '<li><a href="' + esc(x[0]) + '">' + esc(x[1]) + '</a>' + (x[2] ? ' <span class="tg-soft">' + esc(x[2]) + '</span>' : '') + '</li>';
       }).join('') + '</ol></section>';
     }

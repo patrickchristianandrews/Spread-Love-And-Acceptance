@@ -9,20 +9,20 @@ go: /check-ins.html | Check-ins: hear it back before you answer
 evidence: Paraphrasing is a core skill in counseling and mediation training. Studies of listening suggest people feel more understood when they hear their words reflected, though the effect depends on sounding sincere rather than mechanical.
 try: “So the part that got to you wasn’t the dishes, it was feeling like you’re the only one who notices. Did I get that right?”
 
-Paraphrasing means putting what someone said into your own words and checking it back with them. It isn’t agreeing. It’s showing you heard, and giving them a chance to correct you before you respond.
+Paraphrasing means putting what someone said into your own words and checking it back with them. It shows you heard, and gives them a chance to correct you before you respond. It doesn’t mean you agree.
 
 Good paraphrases are short and focus on the heart of what was said, often including the feeling as well as the facts. A paraphrase that’s too long, or that sneaks in your own argument, stops working.
 
 It feels awkward at first. That’s normal. Most people find that one honest “did I get that?” slows a heated talk down more than any clever reply.
 
-Program: The Check-ins guide builds this in: one person says one fact and how it landed, the other says it back and asks, “Did I get that?”, then you swap.
+Program: The Check-ins guide builds this in: one person says one fact and how it landed, the other says it back and asks, “Did I get that?” then you swap.
 
 ## Summarizing a conversation
-aka: summarising; wrap-up summary; recap at the end
+aka: summarizing; wrap-up summary; recap at the end
 see: Paraphrasing; Written recaps after a talk; Ending a hard conversation well
 go: /check-ins.html | Check-ins
 evidence: A standard step in meeting facilitation and mediation. It’s practical wisdom more than a tested finding, but it reliably reduces “I thought we agreed…” moments.
-try: “Okay, so we agreed you’ll own the grocery list, I’ll own the bins, and we’ll look again at the end of the month. Anything I missed?”
+try: “Okay, so we agreed you’ll own the grocery list, I’ll own the trash, and we’ll look again at the end of the month. Anything I missed?”
 
 A summary pulls a whole conversation together into a few sentences: what each of you said matters, what you agreed, and what happens next. It’s different from paraphrasing one comment. It’s the wrap-up.
 
@@ -35,9 +35,9 @@ aka: clarifying question; checking what they meant; asking before assuming
 see: Paraphrasing; Open and closed questions; Assume positive intent
 go: /signal-translator.html | The Chat analyzer
 evidence: Clarifying is a basic listening skill taught in communication and conflict-resolution courses. Research on misunderstandings in text and speech suggests people overestimate how clearly their meaning comes across, which is why checking helps.
-try: “When you said ‘we need to talk about the weekend’, did you mean the plans, or how the chores went?”
+try: “When you said ‘we need to talk about the weekend,’ did you mean the plans, or how the chores went?”
 
-A clarifying question asks about meaning before you react: “Do you mean…?”, “Which part…?”, “When you say ‘always’, what are you thinking of?” It treats a confusing comment as a puzzle to solve together rather than an attack to defend against.
+A clarifying question asks about meaning before you react: “Do you mean…?” “Which part…?” “When you say ‘always,’ what are you thinking of?” It treats a confusing comment as a puzzle to solve together rather than an attack to defend against.
 
 The trick is tone. A clarifying question asked with a raised eyebrow sounds like a challenge. Asked with genuine curiosity, it tells the other person you want to get it right.
 
@@ -50,7 +50,7 @@ go: /turning-toward.html | Turning Toward
 evidence: The distinction is used widely in counseling, interviewing and teaching. It’s a practical tool, not a tested theory, and both kinds of question have their place.
 try: Instead of “Did you have a good day?” (closed), try “What was the best bit of your day?” (open).
 
-Closed questions can be answered with a word: yes, no, Tuesday. Open questions invite a fuller answer: “How did it go?”, “What was that like?”, “What would help?”
+Closed questions can be answered with a word: yes, no, Tuesday. Open questions invite a fuller answer: “How did it go?” “What was that like?” “What would help?”
 
 Open questions are good for connection and understanding. Closed questions are good for logistics and for tired people who don’t have many words left. A mix works best. If someone seems overwhelmed, switching to a simple either-or question can be a kindness.
 
@@ -102,11 +102,11 @@ go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A common tip in communication and negotiation training. It’s practical rather than research-tested, and the tone behind the words still matters more than the word itself.
 try: “I appreciate you cooking, and I’d love it if the pans got soaked before bed.”
 
-“I love you, but…” tends to erase the first half of the sentence. The listener braces for what comes after the “but”. Swapping in “and” lets both parts stand: the appreciation and the request can both be true.
+“I love you, but…” tends to erase the first half of the sentence. The listener braces for what comes after the “but.” Swapping in “and” lets both parts stand: the appreciation and the request can both be true.
 
-It won’t fix a harsh message on its own, and people notice if it’s used as a trick. As a habit, though, it keeps your good intentions from being cancelled by your grammar.
+It won’t fix a harsh message on its own, and people notice if it’s used as a trick. As a habit, though, it keeps your good intentions from being canceled by your grammar.
 
-Program: WP-09’s fact, feeling and ask pairs naturally with “and”: “The bin wasn’t out, and I felt a bit unseen, and could we pick a fixed day for it?”
+Program: WP-09’s fact, feeling and ask pairs naturally with “and”: “The trash wasn’t out, and I felt a bit unseen, and could we pick a fixed day for it?”
 
 ## Owning your part
 aka: taking responsibility; my part in it; accountability in conflict
@@ -115,7 +115,7 @@ go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: Taking responsibility for your own contribution is a common theme in conflict-resolution and couples research. It tends to lower defensiveness in the other person, though it works best when it’s genuine, not a bargaining chip.
 try: “I think my part in this was waiting until I was fed up before saying anything.”
 
-Most tangles have contributions on both sides. Naming your own part first (“I let this build up”, “I said it sharply”) makes it easier for the other person to lower their guard and look at theirs.
+Most tangles have contributions on both sides. Naming your own part first (“I let this build up,” “I said it sharply”) makes it easier for the other person to lower their guard and look at theirs.
 
 Owning your part isn’t taking all the blame, and it isn’t a trade (“I admitted mine, now you admit yours”). It’s just honest. It also keeps the focus on the setup and the pattern, not on who is the bad guy.
 
@@ -128,7 +128,7 @@ go: /signal-translator.html | The Chat analyzer
 evidence: Linguists and communication researchers describe how softeners change how requests land. Too much hedging can make a message unclear, so the balance matters.
 try: “It seems like the kitchen is getting away from us lately. What do you think?”
 
-Tentative language (“it seems to me”, “I wonder if”, “I might be wrong, but”) leaves room for the other person’s view. It’s useful when you’re making a guess about their feelings or motives, where certainty would be unfair.
+Tentative language (“it seems to me,” “I wonder if,” “I might be wrong, but”) leaves room for the other person’s view. It’s useful when you’re making a guess about their feelings or motives, where certainty would be unfair.
 
 Use it for interpretations, not for clear needs. “I wonder if maybe it might be nice to…” can blur an ask so much that it gets missed, especially by people who take words literally. State the ask plainly, and soften the guess.
 
@@ -151,17 +151,17 @@ Program: The Library’s entries on attribution errors explain why we default to
 aka: looping; closing the loop; checking you understood
 see: Paraphrasing; Summarizing a conversation
 go: /check-ins.html | Check-ins
-evidence: A technique from mediation practice, described in Amanda Ripley’s book High Conflict (2021). It’s a structured form of paraphrasing; evidence comes mostly from practitioners’ experience.
+evidence: A technique from mediation practice, described in Amanda Ripley’s book High Conflict (2021). It’s a structured form of paraphrasing. Evidence comes mostly from practitioners’ experience.
 try: “Let me see if I’ve got it: you’re not upset about the money itself, you’re upset that you found out after. Is that it, or is there more?”
 
 Looping means listening, saying back what you heard, and then asking whether you got it right, and repeating until the other person says yes. The loop is only closed when they feel understood, not when you think you’ve understood.
 
 It’s slower than a normal conversation, which is the point. It’s especially useful in conversations that keep going in circles, because people often repeat themselves when they don’t feel heard.
 
-Program: This is the same move as the Check-ins guide’s “hear it back before you answer”. Try it once in your next check-in, then swap.
+Program: This is the same move as the Check-ins guide’s “hear it back before you answer.” Try it once in your next check-in, then swap.
 
 ## Mirroring and labeling
-aka: mirroring; labelling; tactical empathy
+aka: mirroring; labeling; tactical empathy
 see: Paraphrasing; Naming feelings in others
 go: /check-ins.html | Check-ins
 evidence: Popularized by former FBI negotiator Chris Voss in Never Split the Difference (2016). It draws on counseling skills; research on the specific techniques is limited, and it works best when sincere rather than as a tactic.
@@ -193,7 +193,7 @@ go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A standard ground rule in facilitation, mediation and family meetings. It’s practical guidance rather than a research finding.
 try: Instead of “Everyone thinks you’re always late,” try “I’ve been feeling anxious when we’re late.”
 
-Speaking for yourself means talking about your own experience, not claiming to speak for “everyone”, “the family” or “any normal person”. Bringing in imaginary allies makes the other person feel ganged up on, and turns a conversation into a trial.
+Speaking for yourself means talking about your own experience, not claiming to speak for “everyone,” “the family” or “any normal person.” Bringing in imaginary allies makes the other person feel ganged up on, and turns a conversation into a trial.
 
 It also keeps you honest. You know your own experience. You can only guess at everyone else’s.
 
@@ -223,4 +223,4 @@ Some words sound like feelings but are really interpretations of what someone el
 
 Looking underneath for the plain feeling (hurt, lonely, scared, tired, frustrated) makes it easier to be heard. You can still describe what happened. Just keep the feeling about you.
 
-Program: WP-09 asks for “the feeling underneath, like tired or unseen”, then the fact and the ask.
+Program: WP-09 asks for “the feeling underneath, like tired or unseen,” then the fact and the ask.

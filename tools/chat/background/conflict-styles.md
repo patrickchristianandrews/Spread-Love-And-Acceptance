@@ -19,7 +19,7 @@ Program: The daily check-in (WP-13) is designed to keep small things small, by g
 aka: compromise; meeting halfway; when compromise fails
 see: Splitting the difference; Trading across issues
 go: /library/conflict.html#thomas-kilmann | Conflict modes (Library)
-evidence: Conflict research treats compromise as useful but not always best; collaborating on underlying interests can produce better solutions for important issues.
+evidence: Conflict research treats compromise as useful but not always best. Collaborating on underlying interests can produce better solutions for important issues.
 try: For something that matters deeply to both of you, try asking “what do we each really need here?” before splitting the difference.
 
 Compromise means each person gives up some of what they want. It’s quick and often fair, especially for small issues.
@@ -46,7 +46,7 @@ aka: escalation ladder; Glasl model; stages of conflict escalation
 see: Fighting fair; De-escalation phrases
 go: /library/conflict.html#escalation | Escalation (Library)
 evidence: Friedrich Glasl described nine stages of conflict escalation (1980s). It’s widely used in mediation training as a descriptive model.
-try: Notice early signs: “We’ve stopped talking about the bins and started talking about each other.”
+try: Notice early signs: “We’ve stopped talking about the trash and started talking about each other.”
 
 Conflicts tend to escalate in steps: from a disagreement about a topic, to hardened positions, to talking about each other instead of the issue, to trying to win at any cost.
 

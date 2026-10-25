@@ -81,7 +81,7 @@
     { u: '/book/self-2-now.html', code: 'Now', t: 'Who you are today', n: 'your wiring, your weather and your words',
       gain: 'You now know one way to read yourself before you speak: your wiring, how today is going, and one clear sentence about what helps.' },
     { u: '/book/self-3-next.html', code: 'Next', t: 'Who you are becoming', n: 'what matters to you, one small goal and a kind monthly look',
-      gain: 'You now know one way to grow towards something: pick what matters, one small step, a plan for the tired day, and a gentle look back.' },
+      gain: 'You now know one way to grow toward something: pick what matters, one small step, a plan for the tired day, and a gentle look back.' },
     { u: '/book/preface.html', code: 'Preface', t: 'The work nobody sees', n: 'why the unseen work at home deserves to be noticed',
       gain: 'You now know why the unseen work of a home is worth writing down: once both of you can see it, it can be shared and thanked.' },
     { u: '/book/chapter-1.html', code: 'Chapter I', t: 'Why we get out of tune', n: 'how pace, tone and urgency nudge two people out of step',
@@ -508,7 +508,7 @@
     '/how-it-works.html': { me: 'ten', with: 'ten', alt: 'examples' },
     '/is-this-for-you.html': { me: 'ten', with: 'ten', alt: 'examples' },
     '/examples.html': { me: 'ten', with: 'ten' },
-    '/someone-sent-you-this.html': { me: ['weather', 'one minute, just for you; nothing is shared'], with: ['weather', 'one minute, just for you; nothing is shared'] },
+    '/someone-sent-you-this.html': { me: ['weather', 'one minute, just for you. Nothing is shared'], with: ['weather', 'one minute, just for you. Nothing is shared'] },
     '/week-0.html': { me: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, at your own pace' }, with: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, together or each on your own' } },
     '/is-the-setup-working.html': { me: 'wp02', with: 'wp03' },
     '/turning-toward.html': { me: 'weather', with: 'daily' },
@@ -822,7 +822,7 @@
     function show() {
       var played = gamesPlayed(), other = null;
       GAMES.forEach(function (g) { if (!other && g[2] !== path && !played[g[1]] && g[2] !== '/night-garden.html') other = g; });
-      var next = other ? [other[2], other[1], '— another calm game, for next time'] : ['/pause-and-play.html', 'All the calm games', ''];
+      var next = other ? [other[2], other[1], ': another calm game, for next time'] : ['/pause-and-play.html', 'All the calm games', ''];
       if (!box) { box = endCard('What you got from this game'); placeAtEnd(main, box); }
       fillEnd(box, 'You just took a few calm minutes for yourself. That counts.', next, '');
     }
@@ -841,7 +841,7 @@
       w.forEach(function (e) { if (e[0] === lastId) ep = e; });
       ep = ep || w[w.length - 1];
       var ne = nextEpisode();
-      var next = ne ? ['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], ''] : ['/frequency-buddies-shuffle.html', 'Frequency Buddies Shuffle', '— your favourite moments, mixed up'];
+      var next = ne ? ['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], ''] : ['/frequency-buddies-shuffle.html', 'Frequency Buddies Shuffle', ': your favorite moments, mixed up'];
       if (!box) { box = endCard('What you got from Frequency Buddies'); var after = main.querySelector('[data-buddies-script]') || main.querySelector('.fbp-player'); if (after) after.after(box); else main.appendChild(box); }
       fillEnd(box, ep[2], next, '<span>' + w.length + ' of ' + EPISODES.length + ' episodes watched.</span> ');
       if (fresh) celebrate('ep:' + ep[0], 'An episode with the pals', false);

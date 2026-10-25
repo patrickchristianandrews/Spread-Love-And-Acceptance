@@ -35,7 +35,7 @@
     { id: 'work', slug: 'work-and-teams', name: 'Work and teams', blurb: 'Fair workloads and a short weekly round for a team or business.' },
     { id: 'health', slug: 'health-and-body', name: 'Health and body', blurb: 'Sleep, energy and how your body is doing today.' },
     { id: 'plan', slug: 'plan-together', name: 'Plan together', blurb: 'Agreements and plans you fill in once and both keep.' },
-    { id: 'learn', slug: 'learn', name: 'Learn', blurb: 'Ask a question, practise on an example, or see an idea move.' },
+    { id: 'learn', slug: 'learn', name: 'Learn', blurb: 'Ask a question, practice on an example, or see an idea move.' },
     { id: 'play', slug: 'play', name: 'Play', blurb: 'Calm games with no timers and no way to lose.' }
   ];
 
@@ -64,7 +64,7 @@
       modes: [['Step by step', '/carrier-wave-decoder.html'], ['See their side', '/carrier-wave-decoder.html?tab=their-side'], ['Rewind it together', '/carrier-wave-decoder.html#together']],
       does: 'Settle first, find where you went out of sync, look at their side, then shape one sentence to try again.',
       gets: 'Questions to ask instead of guessing, and one bridging sentence, checked before you use it.',
-      mins: 15, time: 'About 15 minutes; Their side alone about 5', who: ['solo', 'two'], benefit: 'Turn a talk that went sideways into a better second try, with their side in view',
+      mins: 15, time: 'About 15 minutes. Their side alone about 5', who: ['solo', 'two'], benefit: 'Turn a talk that went sideways into a better second try, with their side in view',
       kw: 'conversation went wrong out of sync misunderstanding argument repair reset their point of view perspective perspective shifter empathy other side why did they see it from their side after a talk went wrong: a step-by-step reset the carrier wave decoder see it from their side' },
     { id: 'checkin90', name: '90-second daily check-in', brand: '', href: '/workpapers/wp-13-daily-check-in.html', type: 'talk', also: ['plan', 'load'],
       does: 'One sentence each, once a day: how you are doing and what is coming up. No debating.',
@@ -86,16 +86,16 @@
     // consol12: the family plan card was always the same card's "Family" switch: 'familyplan' -> 'checkincard'
     { id: 'checkincard', name: 'Kitchen-table check-in', brand: '', href: '/check-ins.html#card', type: 'talk', also: ['plan', 'family'],
       modes: [['Weekly check-in', '/check-ins.html#card'], ['Family plan', '/check-ins.html?for=family#card']],
-      does: 'Once a week, go round: what went well, what felt heavy, one small change. Or agree visits, advice and routines as a family.',
+      does: 'Once a week, go around: what went well, what felt heavy, one small change. Or agree visits, advice and routines as a family.',
       gets: 'A check-in card to print, put on the fridge or send to each other’s phones.',
-      mins: 15, time: 'About 15 minutes a week; the family plan about 10', who: ['two', 'group'], benefit: 'Raise small things before they grow: a short, kind weekly talk, or a family plan',
+      mins: 15, time: 'About 15 minutes a week. The family plan about 10', who: ['two', 'group'], benefit: 'Raise small things before they grow: a short, kind weekly talk, or a family plan',
       kw: 'weekly check in house meeting family meeting talk once a week family plan card grandparents grown up children visits advice boundaries check-in card: weekly, or a family plan weekly check-in card family plan card' },
     // consol12: Stay close = the idea picker + the shared words list: 'touchstones' -> 'bonding'
     { id: 'bonding', name: 'Stay close', brand: 'the idea picker and touchstones', href: '/bonding.html#ideas', type: 'talk', also: ['family', 'play', 'plan'],
       modes: [['One small idea', '/bonding.html#ideas', '', '', '💡'], ['Our shared words and rituals', '/touchstones.html#ts-card-h', '', 'Shared words', '🪢']],
       does: 'Pick who it’s with, your time and your energy, for one small idea. Or list your inside jokes and little rituals.',
       gets: 'One doable idea at a time, or your list of shared words and one new one to try.',
-      mins: 1, time: 'About a minute; the list about 5', who: ['solo', 'two'], benefit: 'Feel closer without a big plan: one small idea, or the words that say “this is us”',
+      mins: 1, time: 'About a minute. The list about 5', who: ['solo', 'two'], benefit: 'Feel closer without a big plan: one small idea, or the words that say “this is us”',
       kw: 'bonding ideas closeness quality time things to do together date idea rituals inside jokes traditions shared language touchstones stay close: one small idea, or your shared words get one small bonding idea your shared words and rituals list touchstones' },
 
     // ---------- Know yourself
@@ -114,7 +114,7 @@
     { id: 'take-in', name: 'Read your way', brand: '', href: '/how-you-take-things-in.html', type: 'self', also: ['health'],
       does: 'Pick what fits: ADHD, autistic, dyslexic, or just what helps. Change it any time.',
       gets: 'A site that adapts on every page, set on this device only.',
-      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Make every page suit how your mind works: shorter steps, a calmer look, read-aloud',
+      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Make every page suit how your mind works: shorter steps, a calmer look, plainer words',
       kw: 'adhd autism dyslexia neurodivergent accessibility settings reading make the site fit your mind' },
     { id: 'rhythms', name: 'Rhythms side by side', brand: 'Frequency Calibration', href: '/tools/frequency-calibration.html', type: 'self', also: ['plan'],
       does: 'Each of you marks your natural pace for money, rest, decisions, check-ins and bouncing back.',
@@ -137,7 +137,7 @@
       kw: 'chore chart rota roster who owns what fridge list house rules jobs list two homes' },
     { id: 'whodid', name: 'Who did what this week: a one-week log', brand: '', href: '/workpapers/wp-01.html', type: 'load', also: [],
       does: 'Log who did what at home for one week, the invisible jobs too.',
-      gets: 'A week’s record to compare, plus three kind ways to say “not right now”.',
+      gets: 'A week’s record to compare, plus three kind ways to say “not right now.”',
       mins: 5, time: 'A few minutes a day for a week', who: ['two', 'group'], benefit: 'Real numbers instead of memory',
       kw: 'chore log diary tracker week record' },
     // the WP-02 worksheet: its tool card went into My weather today ('load-check' -> 'weather'), but the worksheet
@@ -175,9 +175,9 @@
         ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colours and tones', '/calm-visualizer.html', 'Just me', 'Slow colours', '🌀'],
         ['Relax and reset: every calm tool in one place', '/pause-and-play.html#relax', 'Just me', 'Relax and reset', '🌿'],
         ['Soften a tense moment', '/tools/soften-a-tense-moment.html', 'The two of us', '', '🤝'], ['Make a pause plan', '/pursue-withdraw.html#plan-h', 'The two of us', 'Pause plan', '⏸️']],
-      does: 'Right now: a pause line and a one-minute breathing pacer, or a breathing game, sounds or slow colours. Together: a pause plan.',
+      does: 'Right now: a pause line and a one-minute breathing pacer, or a breathing game, sounds or slow colors. Together: a pause plan.',
       gets: 'A calmer body, words to come back to the talk with, and a pause plan for next time.',
-      mins: 5, time: 'About 5 minutes; a pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time', top: 6,
+      mins: 5, time: 'About 5 minutes. A pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time', top: 6,
       kw: 'relax and reset relaxing tools relaxation calm tools breathing break wind down angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument calm down: right now, or before the next time upset right now? a 5-minute calm-down breathing game calm sounds and music soften a tense moment make a pause plan for arguments' },
     { id: 'calmkit', name: 'Calm-down plan', brand: 'the Calm-Down Kit', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
       does: 'On a calm day, decide your early signs, a pause signal and what settles you.',
@@ -201,9 +201,9 @@
     // consol12: 'team-owner', 'team-checkin' -> 'team' (both on /work.html; the check-in reads the list's names)
     { id: 'team', name: 'Team job list', brand: '', href: '/work.html#team-tools', type: 'work', also: ['load', 'talk'],
       modes: [['Owners and backups', '/work.html#owner-list', '', 'Job list', '📋'], ['The 10-minute weekly round', '/work.html#check-in', '', 'Weekly round', '🔄']],
-      does: 'List the jobs that keep coming round, each with an owner and a backup. Then, once a week, go round once.',
+      does: 'List the jobs that keep coming round, each with an owner and a backup. Then, once a week, go around once.',
       gets: 'A team list and a weekly round to print or share as one link, with a tally of who owns what.',
-      mins: 15, time: 'About 15 minutes; the check-in 10 a week', who: ['group'], benefit: 'No job lands on whoever notices first: owners, backups and a 10-minute weekly round',
+      mins: 15, time: 'About 15 minutes. The check-in 10 a week', who: ['group'], benefit: 'No job lands on whoever notices first: owners, backups and a 10-minute weekly round',
       kw: 'team workload business partner co-founder raci responsibilities team meeting standup weekly workload owner backup team tools: a job list and a weekly check-in team job list: one owner and a backup 10-minute team check-in' },
 
     // ---------- Health and body
@@ -254,7 +254,7 @@
         ['Watch two rhythms fall into step', '/tools/frequency-sync-visualizer.html', '', 'Two rhythms in step', '〰️'], ['Connect two fields of study', '/polymath.html#connect', '', 'Connect two fields', '🔗']],
       does: 'Try the core worksheets on a made-up household, see your learning map fill in, or watch two rhythms fall into step.',
       gets: 'A feel for how it all works before you use your own week. Nothing to sign up for, and no streaks.',
-      mins: 5, time: 'A few minutes each', who: ['solo'], benefit: 'Get a feel for it all first: practise on a made-up home, and watch ideas move',
+      mins: 5, time: 'A few minutes each', who: ['solo'], benefit: 'Get a feel for it all first: practice on a made-up home, and watch ideas move',
       kw: 'example practice demo playground quest map progress learning visualizer waves rhythm sync animation polymath fields connections learn and explore the workpaper playground the quest map' },
 
     // ---------- Play
@@ -264,7 +264,7 @@
       modes: [['All the games', '/pause-and-play.html', '', 'All games', '✨'], ['Six gentle arcade games, with a Home Run Derby', '/frequency-journey.html', '', 'Arcade', '🎵'], ['Word Bloom', '/word-bloom.html', '', 'Bloom', '🌼'],
         ['Quiet Words', '/quiet-words.html', '', 'Words', '🔍'], ['Crosswords: gentle levels', '/quiet-crossword.html', '', 'Crossword', '✏️'], ['Crosswords: newspaper daily', '/daily-ledger-crossword.html', '', 'Newspaper', '📰'],
         ['The Re-check Drive', '/recheck-drive.html', '', 'Re-check Drive', '🏈'], ['The Bears Dojo', '/bears-dojo.html', '', 'Bears Dojo', '🐻'], ['Kindness Coin Pusher', '/coin-pusher.html', '', 'Coin Pusher', '🪙'], ['Make a cartoon music video', '/frequency-buddies-music-video-maker.html', '', 'Music video', '🎬']],
-      does: 'Pick a game, or press “Pick one for me”, and play as long as you like.',
+      does: 'Pick a game, or press “Pick one for me,” and play as long as you like.',
       gets: 'A gentle break whenever you want one, with no timers and no way to lose.',
       mins: 5, time: 'Any length', who: ['solo', 'two'], benefit: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose',
       kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout baseball home run derby batting kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo coin pusher coins arcade machine tips collect characters music video maker cartoon create games: every calm game in one place pause & play' },
@@ -298,15 +298,15 @@
       sample: 'Biggest gap: weekend plans (one wants to settle it tonight, one wants a day to think). Agreement: “We decide by Thursday lunch.”' },
     static14: { o: 'other load', p: 'partner family housemates', best: 'a hard stretch when you keep snapping at each other',
       sample: 'The week’s pattern: four of five tense evenings came after a late work call. The plan: work phone off at 8.' },
-    rituals15: { o: 'plan fun', p: 'partner family friends work', best: 'feeling like you’ve drifted into flatmates', ex: 'ex-b3-rituals-team' },
+    rituals15: { o: 'plan fun', p: 'partner family friends work', best: 'feeling like you’ve drifted into roommates', ex: 'ex-b3-rituals-team' },
     checkincard: { o: 'talk plan', p: 'partner family housemates', best: 'small things that pile up, or kind limits with parents or grown children', ex: 'ex-checkin-linda-jordan' },
     bonding: { o: 'fun plan', p: 'partner family friends', best: 'wanting closeness with no energy for a big plan',
       sample: 'With a partner, 10 minutes, low energy: “Lie down and swap one high and one low from today.”' },
     wavelength: { o: 'self other talk', p: 'partner friends family work housemates', best: 'missing each other, or wanting people to know how to reach you', ex: 'ex-wavelength-mo' },
     roots: { o: 'self', p: '', best: 'a reaction that feels bigger than the moment',
-      sample: 'Trait: “I go quiet when someone raises their voice.” A grown-up reading: it kept me safe once; now I can say “give me ten minutes”.' },
+      sample: 'Trait: “I go quiet when someone raises their voice.” A grown-up reading: it kept me safe once. Now I can say “give me ten minutes.”' },
     'take-in': { o: 'self learn', p: '', best: 'pages that feel like too much to read',
-      sample: 'Picked: ADHD. Pages now show shorter steps, one thing at a time, with read-aloud on.' },
+      sample: 'Picked: ADHD. Pages now show shorter steps, one thing at a time, with plainer words on.' },
     rhythms: { o: 'other plan', p: 'partner housemates', best: 'a morning person and a night owl, or a saver and a spender, under one roof',
       sample: 'Money: one plans ahead, one spends as it comes. Agreement: a 10-minute money check every other Sunday.' },
     'lemon-quick': { o: 'load other plan', p: 'partner housemates family', best: 'the “who does more?” argument', ex: 'ex-lemonade-housemates' },
@@ -314,16 +314,16 @@
     whodid: { o: 'load', p: 'partner housemates family', best: 'swapping “I do everything” for a real week', ex: 'ex-wp01-marcus-theo' },
     keepscoming: { o: 'load plan', p: 'housemates partner family', best: 'the same argument coming back every month', ex: 'ex-wp04-triad' },
     chart: { o: 'load plan', p: 'partner housemates family', best: 'a chart everyone can see on the fridge',
-      sample: 'Bins: Sam, backup Jo. Done means: out by 7 on Tuesday night.' },
+      sample: 'Trash: Sam, backup Jo. Done means: out by 7 on Tuesday night.' },
     calmkit: { o: 'calm self plan', p: 'partner', best: 'knowing your early signs before the next heated moment', ex: 'ex-wp11-nell' },
     weather: { o: 'self calm', p: '', best: 'deciding whether now is a good time to talk', ex: 'ex-weather-joel' },
     suite: { o: 'plan load learn', p: 'partner family housemates work', best: 'doing the whole program properly, in order' },
     sixweeks: { o: 'plan learn', p: 'partner family housemates', best: 'a guided start, one small step a week' },
     progress: { o: 'plan', p: 'partner family housemates', best: 'seeing whether things are actually getting better' },
     ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box',
-      sample: 'You type: “my partner never helps with bedtime”. You get: kind next steps, words you could use, and two pages to read.' },
+      sample: 'You type: “my partner never helps with bedtime.” You get: kind next steps, words you could use, and two pages to read.' },
     start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
-      sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes’.”' },
+      sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes.’”' },
     pauseplay: { o: 'fun calm', p: 'family partner', best: 'a gentle break before you talk, or playing with kids with no way to lose',
       sample: 'Five minutes of Word Bloom before a hard talk: a few words found, a slower breath, nothing to win or lose.' },
     split: { o: 'load plan', p: 'partner housemates family', best: 'checking whether your split can last, and whether last month’s changes stuck', ex: 'ex-setup-rosemary-ken' },
@@ -332,7 +332,7 @@
     plans: { o: 'plan', p: 'partner family housemates', best: 'settling one thing once, kindly: holidays, a family event, gaming time, a shared room, shifts or a handover bag',
       sample: 'Room agreement: quiet after 11 on weeknights. Guests: a heads-up by the afternoon. Borrowing: ask first, every time.' },
     team: { o: 'load talk plan', p: 'work', best: 'a team or small business where jobs land on whoever notices first',
-      sample: 'Payroll: Ade, backup Ben, monthly. Check-in: Ben’s week 80% full; slipped: the website update, new owner Ade.' },
+      sample: 'Payroll: Ade, backup Ben, monthly. Check-in: Ben’s week 80% full. Slipped: the website update, new owner Ade.' },
     explore: { o: 'learn fun', p: '', best: 'trying the worksheets before using your own week, and seeing how far you’ve come',
       sample: 'A practice run on a made-up home: the worksheet shows most of the planning sits with one person, and suggests one shared list.' }
   };
@@ -376,7 +376,7 @@
   });
   var TYPE_OUT = { talk: 'talk', self: 'self', load: 'load', calm: 'calm', family: 'plan', work: 'load', health: 'self calm', plan: 'plan', learn: 'learn', play: 'fun' };
   T.forEach(function (t) {
-    var x = MORE[t.id] || {}, p = (x.p != null ? x.p : (t.who.indexOf('two') !== -1 ? 'partner' : '') + (t.who.indexOf('group') !== -1 ? ' family housemates work' : '')).split(/\s+/).filter(Boolean);
+    var x = MORE[t.id] || {}, p = (x.p != null ? x.p : (t.who.indexOf('two') !== -1 ? 'partner' : '') + (t.who.indexOf('group') !== -1 ? ' family roommates work' : '')).split(/\s+/).filter(Boolean);
     t.outcomes = (x.o || TYPE_OUT[t.type] || '').split(/\s+/).filter(Boolean);
     t.people = (t.who.indexOf('solo') !== -1 ? ['me'] : []).concat(p);
     if (t.bestFor == null) t.bestFor = x.best || '';

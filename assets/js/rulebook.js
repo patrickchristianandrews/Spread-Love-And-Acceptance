@@ -68,7 +68,7 @@
       '<button type="button" data-act="copy">Copy it</button>' +
       '<button type="button" data-act="erase" data-clear-confirm="everything you wrote in your rulebook" data-clear-keys="tol-rulebook tol-rulebook-tab">Erase</button></div>' +
       '<label class="rb-save"><input type="checkbox" data-act="keep"> <span>Keep on this device, so it’s here next time</span></label>' +
-      '<p class="rb-where">What you write stays in this browser tab only, and is gone when you close it, unless you tick “Keep on this device”. It is never sent anywhere. Erase clears it everywhere.</p>' +
+      '<p class="rb-where">What you write stays in this browser tab only, and is gone when you close it, unless you tick “Keep on this device.” It is never sent anywhere. Erase clears it everywhere.</p>' +
       '<p class="rb-status" role="status" aria-live="polite"></p>' +
       '</form>';
     host.innerHTML = html;
@@ -124,7 +124,7 @@
       html += '<li><strong>' + esc(l[1]) + '</strong><span class="a">' + esc((v.t || '').trim()) + '</span>' +
         '<span class="c">Do I still want this rule? ' + (c ? '<strong>' + c[1] + '</strong>' : 'Keep / Soften / Drop') + '</span></li>';
     });
-    html += '</ol><p class="c">From “Where your lens came from”, Spread Love &amp; Acceptance.</p></body></html>';
+    html += '</ol><p class="c">From “Where your lens came from,” Spread Love &amp; Acceptance.</p></body></html>';
     var fr = document.createElement('iframe');
     fr.setAttribute('aria-hidden', 'true'); fr.tabIndex = -1;
     fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';

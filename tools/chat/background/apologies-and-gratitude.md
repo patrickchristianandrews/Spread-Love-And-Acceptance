@@ -9,7 +9,7 @@ go: /library/conflict.html#apology-research | What makes an apology work (Librar
 evidence: A study by Roy Lewicki and colleagues (2016) looked at six parts of an apology and found acknowledging responsibility and offering to repair mattered most. Other research varies in which parts matter most.
 try: “I’m sorry I snapped at you. That was my stress, not your fault. Next time I’ll say I need a minute instead.”
 
-Apologies that work tend to include a clear “I’m sorry”, naming what you did, taking responsibility (without “but”), and saying what you’ll do differently or how you’ll make it right. An explanation can help, as long as it doesn’t turn into an excuse.
+Apologies that work tend to include a clear “I’m sorry,” naming what you did, taking responsibility (without “but”), and saying what you’ll do differently or how you’ll make it right. An explanation can help, as long as it doesn’t turn into an excuse.
 
 Short and sincere usually beats long and elaborate. The other person needs to hear that you understand how it landed.
 
@@ -22,7 +22,7 @@ go: /library/conflict.html#apology-research | What makes an apology work (Librar
 evidence: Communication researchers and etiquette writers widely describe these patterns. They tend to increase frustration rather than repair.
 try: Swap “I’m sorry you felt hurt” for “I’m sorry I said that. It was hurtful.”
 
-Some apologies sound like apologies but shift the blame: “I’m sorry you feel that way”, “I’m sorry if you were offended”, “I’m sorry, but you started it”. They often make things worse, because the other person feels unheard a second time.
+Some apologies sound like apologies but shift the blame: “I’m sorry you feel that way,” “I’m sorry if you were offended,” “I’m sorry, but you started it.” They often make things worse, because the other person feels unheard a second time.
 
 A real apology is about what you did, not about how they reacted.
 
@@ -32,7 +32,7 @@ Program: WP-09’s fact, feeling and ask can help: name the fact of what you did
 aka: saying sorry too much; apologizing constantly; sorry for everything
 see: Non-apologies; Self-talk
 go: /know-yourself.html | Know your own wiring
-evidence: Many people report apologizing reflexively. It’s commonly discussed in communication coaching; research on its effects is limited.
+evidence: Many people report apologizing reflexively. It’s commonly discussed in communication coaching. Research on its effects is limited.
 try: Swap “Sorry I’m late!” for “Thanks for waiting!”
 
 Some people apologize for everything: taking up space, asking questions, having needs. Over time, it can make real apologies mean less, and it can reflect a habit of making yourself small.
@@ -71,7 +71,7 @@ Program: The coworker road suggests keeping repair quick and professional.
 aka: accepting an apology; responding to sorry; how to respond to an apology
 see: Anatomy of an apology; Self-forgiveness
 go: /library/conflict.html#forgiveness | Forgiveness (Library)
-evidence: Research on forgiveness suggests accepting an apology is a process; people may need time. It’s okay not to be ready right away.
+evidence: Research on forgiveness suggests accepting an apology is a process. People may need time. It’s okay not to be ready right away.
 try: “Thank you for saying that. I need a little time, but I really appreciate it.”
 
 When someone apologizes, you don’t have to pretend everything is fine right away. Acknowledging the apology (“thank you for saying that”) respects their effort, even if you still need time.
@@ -89,7 +89,7 @@ try: “I got that wrong, I’ve made it right as best I can, and I’m allowed 
 
 After a mistake, some people stay stuck in guilt long after making amends. Self-forgiveness means accepting responsibility and then letting yourself move forward.
 
-It isn’t pretending it didn’t happen. It’s choosing to learn from it rather than punish yourself indefinitely.
+It is choosing to learn from what happened rather than punish yourself indefinitely.
 
 Program: The Library’s self-compassion entry goes deeper. The program’s whole approach is about fixing the setup, not punishing the person, including yourself.
 
@@ -176,7 +176,7 @@ aka: love languages; five love languages; love language
 see: Apology styles; Specific thanks
 go: /library/relationships.html#love-languages | Love languages (Library)
 evidence: Gary Chapman’s The Five Love Languages (1992) is very popular. Research testing it has found limited support for the idea of one main “language” per person.
-try: Instead of one “language”, ask: “What made you feel most cared for this week?”
+try: Instead of one “language,” ask: “What made you feel most cared for this week?”
 
 The love languages idea (words, time, gifts, acts of service, touch) is a helpful prompt for talking about what makes people feel cared for. The research, though, suggests most people value several, and matching languages doesn’t predict happiness much.
 

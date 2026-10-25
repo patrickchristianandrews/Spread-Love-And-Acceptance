@@ -9,7 +9,7 @@
   "url": "https://ci.nii.ac.jp/ncid/BA01493188",
   "kind": "book",
   "finding": "Set out a few “axioms” of communication, including that every message has a content level (what is said) and a relationship level (what it says about us), and that the relationship level often decides how the content is heard.",
-  "strength": "theory: influential in communication and family therapy; a framework rather than a tested finding",
+  "strength": "theory: influential in communication and family therapy. A framework rather than a tested finding",
   "topics": [
    "communication"
   ],
@@ -54,7 +54,7 @@
   "url": "https://search.worldcat.org/search?q=Social+support+an+interactional+view+Sarason+1990",
   "kind": "theory",
   "finding": "Proposed the “optimal matching” idea: support helps most when its type fits the problem, for example practical help for things you can change and comfort for things you can’t.",
-  "strength": "moderate: widely cited; later studies support the idea in part",
+  "strength": "moderate: widely cited. Later studies support the idea in part",
   "topics": [
    "support",
    "helping"
@@ -102,7 +102,7 @@
   "doi": "10.1016/S0002-7138(09)62273-1",
   "url": "https://doi.org/10.1016/S0002-7138(09)62273-1",
   "kind": "study",
-  "finding": "The first “still face” study: when a mother kept a blank, unresponsive face, infants tried hard to re-engage her, then grew upset and withdrew; they recovered when she responded again.",
+  "finding": "The first “still face” study: when a mother kept a blank, unresponsive face, infants tried hard to re-engage her, then grew upset and withdrew. They recovered when she responded again.",
   "strength": "strong: the still-face effect has been replicated many times",
   "topics": [
    "repair",
@@ -129,7 +129,7 @@
   "url": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
   "kind": "theory",
   "finding": "A short conceptual paper arguing that misunderstanding between autistic and non-autistic people runs both ways: each side finds the other hard to read, so the problem lies between them, not only in the autistic person.",
-  "strength": "theory: no data in the paper itself; later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
+  "strength": "theory: no data in the paper itself. Later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
   "topics": [
    "autism",
    "neurodiversity",
@@ -147,7 +147,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy ; https://reframingautism.org.au/miltons-double-empathy-problem-a-summary-for-non-academics/",
-  "note": "Citation checked against reference lists; the DOI could not be confirmed, so none is given."
+  "note": "Citation checked against reference lists. The DOI could not be confirmed, so none is given."
  },
  {
   "id": "tversky-kahneman-1973",
@@ -183,7 +183,7 @@
   "url": "https://www.jstor.org/stable/1914185",
   "kind": "study",
   "finding": "People weigh choices as gains and losses from where they stand now, and a loss feels bigger than a gain of the same size (“loss aversion”), which helps explain why change can feel risky even when it would help.",
-  "strength": "strong: one of the most cited papers in economics and psychology; the size of loss aversion varies across studies",
+  "strength": "strong: one of the most cited papers in economics and psychology. The size of loss aversion varies across studies",
   "topics": [
    "change",
    "decisions"
@@ -204,7 +204,7 @@
   "doi": "10.2307/2136404",
   "url": "https://pubmed.ncbi.nlm.nih.gov/6668417/",
   "kind": "study",
-  "finding": "Introduced the Perceived Stress Scale, a short questionnaire about how unpredictable, uncontrollable and overloaded your life has felt lately; scores went with symptoms of depression and illness.",
+  "finding": "Introduced the Perceived Stress Scale, a short questionnaire about how unpredictable, uncontrollable and overloaded your life has felt lately. Scores went with symptoms of depression and illness.",
   "strength": "strong: one of the most widely used stress questionnaires",
   "topics": [
    "stress",
@@ -228,7 +228,7 @@
   "url": "https://www.librarything.com/work/37187",
   "kind": "book",
   "finding": "Set out eight stages of life from infancy to old age, each with its own question or tension (for example trust against mistrust in infancy, identity against confusion in adolescence).",
-  "strength": "theory: very influential; a framework for reflection rather than a measured sequence",
+  "strength": "theory: very influential. A framework for reflection rather than a measured sequence",
   "topics": [
    "development",
    "life-stages"
@@ -251,7 +251,7 @@
   "url": "https://www.routledge.com/What-Predicts-Divorce-The-Relationship-Between-Marital-Processes-and-Marital-Outcomes/Gottman/p/book/9781032539379",
   "kind": "book",
   "finding": "Gottman’s report of his long-term studies of couples, including “flooding”: feeling so physically overwhelmed in a conflict that listening and thinking become very hard.",
-  "strength": "moderate: large observational studies; some specific predictions have been debated",
+  "strength": "moderate: large observational studies. Some specific predictions have been debated",
   "topics": [
    "conflict",
    "flooding"
@@ -276,7 +276,7 @@
   "doi": null,
   "url": "https://search.worldcat.org/title/9280843",
   "kind": "book",
-  "finding": "Coined “emotional labor” from a study of flight attendants (and bill collectors) trained to display feelings at work; distinguished surface acting from deep acting.",
+  "finding": "Coined “emotional labor” from a study of flight attendants (and bill collectors) trained to display feelings at work. Distinguished surface acting from deep acting.",
   "strength": "strong as a concept",
   "topics": [
    "emotional-labour",
@@ -296,8 +296,8 @@
   "doi": null,
   "url": "https://search.worldcat.org/title/670595",
   "kind": "book",
-  "finding": "A parenting book and course that popularised “I-messages”: describing your own feelings and the effect of a behaviour rather than blaming the other person.",
-  "strength": "mixed: widely taught; research on I-statements finds tone and context matter as much as wording",
+  "finding": "A parenting book and course that popularized “I-messages”: describing your own feelings and the effect of a behavior rather than blaming the other person.",
+  "strength": "mixed: widely taught. Research on I-statements finds tone and context matter as much as wording",
   "topics": [
    "i-statements"
   ],
@@ -393,7 +393,7 @@
   "doi": null,
   "url": "https://www.bls.gov/tus/",
   "kind": "study",
-  "finding": "The federal survey of how, where and with whom Americans spend their time, including unpaid housework and childcare; it has run every year since 2003.",
+  "finding": "The federal survey of how, where and with whom Americans spend their time, including unpaid housework and childcare. It has run every year since 2003.",
   "strength": "strong: large national time-diary survey",
   "topics": [
    "time-use"
@@ -413,7 +413,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/conditions/face-blindness/",
   "kind": "guideline",
-  "finding": "Describes face blindness as difficulty recognising faces, often present from childhood and sometimes running in families; there is no treatment, but strategies such as recognising voices, hair or clothes, and telling people, can help.",
+  "finding": "Describes face blindness as difficulty recognizing faces, often present from childhood and sometimes running in families. There is no treatment, but strategies such as recognizing voices, hair or clothes, and telling people, can help.",
   "strength": "moderate: official health information for the public",
   "topics": [
    "face-recognition"

@@ -567,7 +567,7 @@
       [qr, sms, mail, more, cp].forEach(function (b) { b.classList.toggle('is-off', !on); if (on) b.removeAttribute('aria-disabled'); else b.setAttribute('aria-disabled', 'true'); });
       sms.hidden = lg; qr.hidden = lg; cd.hidden = !lg;
       long.hidden = !lg;
-      long.textContent = lg ? ('This link is long (' + cur.length.toLocaleString() + ' characters), too long for a QR code or a text message to carry safely. Copy it as a code and paste it into a chat, or send it by email, which has no limit. On their side, they paste the code under “Got a code instead of a link?”.') : '';
+      long.textContent = lg ? ('This link is long (' + cur.length.toLocaleString() + ' characters), too long for a QR code or a text message to carry safely. Copy it as a code and paste it into a chat, or send it by email, which has no limit. On their side, they paste the code under “Got a code instead of a link?”') : '';
       sms.setAttribute('href', on ? smsHref(message(cur)) : '#');
       mail.setAttribute('href', on ? mailHref(subject(), message(cur) + '\n\n' + 'Nothing is uploaded: everything travels inside the link.') : '#');
       more.setAttribute('href', on ? 'https://wa.me/?text=' + encodeURIComponent(message(cur)) : '#');
@@ -588,7 +588,7 @@
       refresh();
       if (notReady(e)) return;
       if (c !== 'more') seen();
-      if (c === 'sms' || c === 'mail') { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); say(c === 'sms' ? 'Opening your messages app. If nothing opens, use “Copy link”.' : 'Opening your email. If nothing opens, use “Copy link”.'); return; }
+      if (c === 'sms' || c === 'mail') { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); say(c === 'sms' ? 'Opening your messages app. If nothing opens, use “Copy link.”' : 'Opening your email. If nothing opens, use “Copy link.”'); return; }
       if (c === 'qr') {
         var who = typeof opts.who === 'function' ? opts.who() : opts.who;
         withKit(function (K) { K.showQR(cur, { title: who ? ('Scan with ' + who + '’s phone') : 'Scan with the other phone', note: opts.qrNote || 'Open the camera on the other phone and point it at this code. It opens this page there, with your part in it.' }); });
@@ -608,14 +608,14 @@
               try { W.open(wa, '_blank', 'noopener'); } catch (x) {}
             });
           } catch (er) { try { W.open(wa, '_blank', 'noopener'); } catch (x) {} }
-        } else { fire(cur, 'whatsapp'); say('Opening WhatsApp. If nothing opens, use “Copy link”.'); }
+        } else { fire(cur, 'whatsapp'); say('Opening WhatsApp. If nothing opens, use “Copy link.”'); }
         if (opts.onSent) opts.onSent('more', cur);
         return;
       }
       if (c === 'copy' || c === 'code') {
         var t = c === 'code' ? codeOf(cur) : cur;
         copyText(t).then(function (ok) {
-          say(!ok ? 'Couldn’t copy here. Press and hold to copy by hand.' : c === 'code' ? 'Code copied. Paste it into a chat or a note. On their side, they paste it under “Got a code instead of a link?”.' : 'Link copied. Paste it into a message to them.');
+          say(!ok ? 'Couldn’t copy here. Press and hold to copy by hand.' : c === 'code' ? 'Code copied. Paste it into a chat or a note. On their side, they paste it under “Got a code instead of a link?”' : 'Link copied. Paste it into a message to them.');
           if (ok) { fire(cur, c); if (opts.onSent) opts.onSent(c, cur); }
         });
       }
@@ -889,7 +889,7 @@
           if (c.id === myId()) return;
           var n = c.n || 'Someone';
           if (c.kind === 'new') lines.push((n + '’s part is new here.'));
-          else if (c.kind === 'updated') lines.push(c.keys.length ? (n + ' changed: ' + c.keys.map(label).join(', ') + '.') : (n + ' sent it again; nothing in their part changed.'));
+          else if (c.kind === 'updated') lines.push(c.keys.length ? (n + ' changed: ' + c.keys.map(label).join(', ') + '.') : (n + ' sent it again. Nothing in their part changed.'));
           else if (c.kind === 'older') lines.push(('This link is older than what you already have from ' + n + ', so the newer part stays.'));
           else if (c.kind === 'same') lines.push(('Nothing new from ' + n + '.'));
         });
@@ -1118,7 +1118,7 @@
     var g = res.gap.toFixed(2);
     if (res.close) return ('Your scores are close (a gap of ' + g + '). Neither of you is carrying much more than the other right now.');
     var who = res.high.me ? 'yours' : (res.high.n || 'one of yours') + '’s';
-    return o.words ? o.words(res, g) : ('A gap of ' + g + ': ' + who + ' reads higher right now. That isn’t a contest or anyone’s fault. It’s a reason to look at what’s on each plate this week.');
+    return o.words ? o.words(res, g) : ('A gap of ' + g + ': ' + who + ' reads higher right now. Nobody is at fault. It is a reason to look at what’s on each plate this week.');
   }
 
   // ---- the side-by-side view on the page (only text, never HTML)

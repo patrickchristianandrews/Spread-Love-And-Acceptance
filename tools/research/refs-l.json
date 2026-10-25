@@ -9,7 +9,7 @@
   "url": "https://doi.org/10.1073/pnas.0707192105",
   "kind": "theory",
   "finding": "Argued, with a game-theory model, that hints and other indirect requests let a speaker make a request or offer while keeping plausible deniability, so both people can avoid an open refusal and the relationship stays safe.",
-  "strength": "theory: a model and argument, not a large experiment; a later paper by Lee and Pinker (2010) developed it further and others have debated it",
+  "strength": "theory: a model and argument, not a large experiment. A later paper by Lee and Pinker (2010) developed it further and others have debated it",
   "topics": [
    "indirect speech",
    "hints",
@@ -32,7 +32,7 @@
   "url": "https://doi.org/10.1016/j.tics.2012.08.009",
   "kind": "theory",
   "finding": "Proposed that autistic perception may lean less on prior expectations (“hypo-priors”) and more on the raw sensory input, which could help explain sensory differences and why an unpredictable world can feel overwhelming.",
-  "strength": "theory: an influential predictive-processing account; commentaries question how precisely it is specified, and testing is ongoing",
+  "strength": "theory: an influential predictive-processing account. Commentaries question how precisely it is specified, and testing is ongoing",
   "topics": [
    "predictive processing",
    "autism",
@@ -55,7 +55,7 @@
   "url": "https://doi.org/10.1177/1362361320932437",
   "kind": "meta-analysis",
   "finding": "Across 10 studies pooled in a meta-analysis (12 reviewed), finding uncertainty hard to bear was strongly linked with anxiety in autistic people (r = 0.62), a link of similar size to that found in non-autistic people.",
-  "strength": "moderate: a meta-analysis, but of a small number of studies with methodological concerns; correlational",
+  "strength": "moderate: a meta-analysis, but of a small number of studies with methodological concerns. Correlational",
   "topics": [
    "intolerance of uncertainty",
    "autism",
@@ -78,7 +78,7 @@
   "url": "https://doi.org/10.1177/0146167214529799",
   "kind": "study",
   "finding": "In studies tracking everyday interactions, people were happier and felt more belonging on days when they had more interactions with acquaintances (weak ties), not only with close friends and family.",
-  "strength": "moderate: diary-style studies with consistent results; correlational, so happier people may simply chat more",
+  "strength": "moderate: diary-style studies with consistent results. Correlational, so happier people may simply chat more",
   "topics": [
    "small talk",
    "weak ties",
@@ -144,8 +144,8 @@
   "doi": "10.1037/0033-2909.121.1.65",
   "url": "https://pubmed.ncbi.nlm.nih.gov/9000892/",
   "kind": "theory",
-  "finding": "A theoretical review proposing that ADHD centres on a difficulty with behavioural inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
-  "strength": "moderate: highly influential theory; executive function difficulties are common in ADHD but not universal.",
+  "finding": "A theoretical review proposing that ADHD centers on a difficulty with behavioral inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
+  "strength": "moderate: highly influential theory. Executive function difficulties are common in ADHD but not universal.",
   "topics": [
    "neurodiversity",
    "adhd"
@@ -165,8 +165,8 @@
   "doi": "10.1089/aut.2019.0079",
   "url": "https://pubmed.ncbi.nlm.nih.gov/32851204/",
   "kind": "study",
-  "finding": "From 19 interviews and 19 public online accounts, analysed with autistic co-researchers, autistic burnout was defined as long-term exhaustion, loss of function and reduced tolerance to stimulus, arising from chronic life stress and a mismatch between expectations and abilities without enough support.",
-  "strength": "early: the first formal definition, from a qualitative community-based study; distinct from occupational burnout and depression in participants' accounts.",
+  "finding": "From 19 interviews and 19 public online accounts, analyzed with autistic co-researchers, autistic burnout was defined as long-term exhaustion, loss of function and reduced tolerance to stimulus, arising from chronic life stress and a mismatch between expectations and abilities without enough support.",
+  "strength": "early: the first formal definition, from a qualitative community-based study. Distinct from occupational burnout and depression in participants' accounts.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -209,7 +209,7 @@
   "url": "https://doi.org/10.1177/1948550613488952",
   "kind": "study",
   "finding": "In a 14-day daily study, people reported more conflict with their partner after poor nights of sleep, and conflicts were resolved best when both partners were well rested.",
-  "strength": "moderate: diary and lab evidence; correlational in part.",
+  "strength": "moderate: diary and lab evidence. Correlational in part.",
   "topics": [
    "stress",
    "sleep",
@@ -231,7 +231,7 @@
   "url": "https://doi.org/10.1037/emo0000422",
   "kind": "study",
   "finding": "Hunger made people judge things more negatively in negative situations, and in the lab hungry people felt worse and judged a researcher more harshly, but mainly when they were not paying attention to their own feelings.",
-  "strength": "early: a few experiments; the authors argue hunger alone is not enough to cause \"hangriness\".",
+  "strength": "early: a few experiments. The authors argue hunger alone is not enough to cause \"hangriness\".",
   "topics": [
    "stress",
    "emotions"
@@ -241,7 +241,7 @@
   ],
   "verified": true,
   "verified_by": "https://collegearchive.unc.edu/?p=25108 ; https://www.carolinaaffectivescience.com/s/MacCormackLindquist_inpress_Emotion-938x.pdf",
-  "note": "Year given as the online publication year (June 2018), which the search confirmed; the print issue year could not be confirmed."
+  "note": "Year given as the online publication year (June 2018), which the search confirmed. The print issue year could not be confirmed."
  },
  {
   "id": "milton-2012",
@@ -253,7 +253,7 @@
   "url": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
   "kind": "theory",
   "finding": "A short conceptual paper arguing that misunderstanding between autistic and non-autistic people runs both ways: each side finds the other hard to read, so the problem lies between them, not only in the autistic person.",
-  "strength": "theory: no data in the paper itself; later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
+  "strength": "theory: no data in the paper itself. Later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
   "topics": [
    "autism",
    "neurodiversity",
@@ -264,7 +264,7 @@
   ],
   "verified": true,
   "verified_by": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy ; https://reframingautism.org.au/miltons-double-empathy-problem-a-summary-for-non-academics/",
-  "note": "Citation checked against reference lists; the DOI could not be confirmed, so none is given."
+  "note": "Citation checked against reference lists. The DOI could not be confirmed, so none is given."
  },
  {
   "id": "crompton-2020",
@@ -276,7 +276,7 @@
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/",
   "kind": "study",
   "finding": "In \"diffusion chains\" where a story was passed along eight people (72 adults), all-autistic chains passed on as much detail as all-non-autistic chains, while mixed chains lost detail faster and reported lower rapport.",
-  "strength": "moderate: a careful experiment that supports the double empathy idea; modest sample and a single task.",
+  "strength": "moderate: a careful experiment that supports the double empathy idea. Modest sample and a single task.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -297,8 +297,8 @@
   "doi": "10.1038/srep40700",
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5286449/",
   "kind": "study",
-  "finding": "Across three studies, non-autistic observers formed less favourable first impressions of autistic children and adults from a few seconds of video, and were less willing to interact with them; the bias disappeared when they judged only transcripts of what was said.",
-  "strength": "moderate: three studies with consistent results; suggests style, not substance, drives the bias.",
+  "finding": "Across three studies, non-autistic observers formed less favorable first impressions of autistic children and adults from a few seconds of video, and were less willing to interact with them. The bias disappeared when they judged only transcripts of what was said.",
+  "strength": "moderate: three studies with consistent results. Suggests style, not substance, drives the bias.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -319,8 +319,8 @@
   "doi": "10.1177/0956797618783714",
   "url": "https://doi.org/10.1177/0956797618783714",
   "kind": "study",
-  "finding": "Across five studies, people underestimated how much their conversation partners liked them after first conversations; in first-year university roommates the gap lasted for most of the year.",
-  "strength": "moderate — five studies including lab and field samples; mostly students and adults in the US and UK",
+  "finding": "Across five studies, people underestimated how much their conversation partners liked them after first conversations. In first-year university roommates the gap lasted for most of the year.",
+  "strength": "moderate, five studies including lab and field samples, mostly students and adults in the US and UK",
   "topics": [
    "friendship",
    "first impressions",
@@ -364,7 +364,7 @@
   "url": "https://doi.org/10.1038/mp.2017.75",
   "kind": "meta-analysis",
   "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
-  "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
+  "strength": "moderate, large meta-analysis of lab tasks, which capture only part of daily life",
   "topics": [
    "autism",
    "neurodiversity",
@@ -386,7 +386,7 @@
   "url": "https://pubmed.ncbi.nlm.nih.gov/15857859/",
   "kind": "theory",
   "finding": "Proposed \"monotropism\": autistic attention tends to be pulled strongly into a few interests at a time, and the authors argued this can explain the other diagnostic features of autism.",
-  "strength": "theory: an influential, autistic-led account; empirical testing is still limited.",
+  "strength": "theory: an influential, autistic-led account. Empirical testing is still limited.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -407,8 +407,8 @@
   "doi": "10.1037/0022-3514.63.2.221",
   "url": "https://doi.org/10.1037/0022-3514.63.2.221",
   "kind": "study",
-  "finding": "Following 73 couples from 1983 to 1987, couples whose conflict interactions were more negative than positive had more marital problems, lower satisfaction, poorer health and greater risk of separation; physiological arousal was measured alongside behavior.",
-  "strength": "moderate — influential longitudinal lab study with a small sample",
+  "finding": "Following 73 couples from 1983 to 1987, couples whose conflict interactions were more negative than positive had more marital problems, lower satisfaction, poorer health and greater risk of separation. Physiological arousal was measured alongside behavior.",
+  "strength": "moderate, influential longitudinal lab study with a small sample",
   "topics": [
    "four-horsemen",
    "flooding",
@@ -430,7 +430,7 @@
   "url": "https://doi.org/10.3389/fpsyg.2021.741421",
   "kind": "study",
   "finding": "Interviews with eight autistic children and young people explored burnout, inertia, meltdown and shutdown as separate experiences, what they feel like, and what others do that helps or makes them worse.",
-  "strength": "early — small qualitative study; builds on earlier work with autistic adults",
+  "strength": "early, small qualitative study. Builds on earlier work with autistic adults",
   "topics": [
    "autism",
    "meltdown",
@@ -452,7 +452,7 @@
   "doi": "10.1016/j.eurpsy.2018.09.004",
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
   "kind": "meta-analysis",
-  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants. Alexithymia is common in autism but not universal.",
   "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
   "topics": [
    "alexithymia",
@@ -475,7 +475,7 @@
   "url": "https://doi.org/10.1038/nrn894",
   "kind": "review",
   "finding": "Described a pathway that carries signals about the body's internal state to the brain (including the insula), and proposed it underlies subjective feelings, emotion and self-awareness.",
-  "strength": "strong: a foundational, widely cited review; some proposals remain theoretical.",
+  "strength": "strong: a foundational, widely cited review. Some proposals remain theoretical.",
   "topics": [
    "interoception",
    "emotions"
@@ -495,7 +495,7 @@
   "doi": "10.1037/0022-3514.70.6.1327",
   "url": "https://doi.org/10.1037/0022-3514.70.6.1327",
   "kind": "study",
-  "finding": "Three studies described rejection sensitivity: people who anxiously expect rejection read rejection into ambiguous behaviour, and in new couples this was linked with more relationship difficulty and less partner satisfaction.",
+  "finding": "Three studies described rejection sensitivity: people who anxiously expect rejection read rejection into ambiguous behavior, and in new couples this was linked with more relationship difficulty and less partner satisfaction.",
   "strength": "strong: a well-established construct with a large later literature.",
   "topics": [
    "neurodiversity",
@@ -518,7 +518,7 @@
   "url": "https://pubmed.ncbi.nlm.nih.gov/24480998/",
   "kind": "review",
   "finding": "A literature review found that trouble regulating emotions (quick, strong feelings that are hard to bring back down) is common in ADHD across the lifespan, with clinic studies of young people putting it at roughly a quarter to a half, and that it adds a lot to the day-to-day difficulty ADHD brings.",
-  "strength": "moderate: a widely cited review; the estimates come mostly from clinic samples, and how emotion dysregulation fits into ADHD is still debated.",
+  "strength": "moderate: a widely cited review. The estimates come mostly from clinic samples, and how emotion dysregulation fits into ADHD is still debated.",
   "topics": [
    "adhd",
    "emotions",
@@ -539,8 +539,8 @@
   "doi": null,
   "url": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/",
   "kind": "study",
-  "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest; greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
-  "strength": "moderate — large survey, cross-sectional and self-report",
+  "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest. Greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
+  "strength": "moderate, large survey, cross-sectional and self-report",
   "topics": [
    "autism",
    "special-interests",
@@ -564,7 +564,7 @@
   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008/",
   "kind": "study",
   "finding": "Focus groups with autistic adults described \"autistic inertia\", difficulty starting and stopping tasks in everyday life despite wanting to, shaped by both inner and outside factors and with broad effects on daily life and wellbeing.",
-  "strength": "early: the first study of its kind, led by an autistic researcher; qualitative.",
+  "strength": "early: the first study of its kind, led by an autistic researcher. Qualitative.",
   "topics": [
    "neurodiversity",
    "autism"
@@ -585,7 +585,7 @@
   "url": "https://doi.org/10.1037/0893-3200.16.4.381",
   "kind": "review",
   "finding": "A review of 32 publications found family routines and rituals were related to parenting competence, children's adjustment and marital satisfaction, while noting weak measurement and convenience samples.",
-  "strength": "moderate — qualitative review of mostly correlational studies",
+  "strength": "moderate, qualitative review of mostly correlational studies",
   "topics": [
    "rituals"
   ],
@@ -604,8 +604,8 @@
   "doi": "10.1177/0146167209352864",
   "url": "https://doi.org/10.1177/0146167209352864",
   "kind": "study",
-  "finding": "In 60 spouses from dual-earner couples, wives who described their homes in more stressful terms (clutter, unfinished projects) had flatter daily cortisol slopes and rising depressed mood across the day; wives whose descriptions were more restful had steeper slopes and falling depressed mood.",
-  "strength": "moderate — one small study of dual-earner couples; correlational",
+  "finding": "In 60 spouses from dual-earner couples, wives who described their homes in more stressful terms (clutter, unfinished projects) had flatter daily cortisol slopes and rising depressed mood across the day. Wives whose descriptions were more restful had steeper slopes and falling depressed mood.",
+  "strength": "moderate, one small study of dual-earner couples. Correlational",
   "topics": [
    "stress",
    "environment"
@@ -625,8 +625,8 @@
   "doi": "10.1037/1089-2680.5.4.323",
   "url": "https://doi.org/10.1037/1089-2680.5.4.323",
   "kind": "review",
-  "finding": "A wide review concluding that bad events, feedback, emotions and relationship behaviours usually have a bigger and longer-lasting effect than equally good ones.",
-  "strength": "strong — a widely cited review; the general pattern is accepted, with known exceptions",
+  "finding": "A wide review concluding that bad events, feedback, emotions and relationship behaviors usually have a bigger and longer-lasting effect than equally good ones.",
+  "strength": "strong, a widely cited review. The general pattern is accepted, with known exceptions",
   "topics": [
    "negativity-bias",
    "thinking"
@@ -647,7 +647,7 @@
   "url": "https://doi.org/10.1207/S15327957PSPR0504_2",
   "kind": "review",
   "finding": "A review proposing that people give negative events more weight than positive ones in several ways (negative potency, steeper negative gradients, negativity dominance and negative differentiation).",
-  "strength": "strong — an influential theoretical review",
+  "strength": "strong, an influential theoretical review",
   "topics": [
    "negativity-bias",
    "thinking"
@@ -668,7 +668,7 @@
   "url": "https://doi.org/10.1016/0022-1031(77)90049-X",
   "kind": "study",
   "finding": "In questionnaire studies and a sandwich-board study with students, people overestimated how many others would make the same choice they made, and saw the other choice as more unusual.",
-  "strength": "strong — the founding studies, replicated many times, though the size of the effect varies",
+  "strength": "strong, the founding studies, replicated many times, though the size of the effect varies",
   "topics": [
    "false-consensus",
    "thinking"

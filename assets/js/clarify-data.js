@@ -205,7 +205,7 @@
           A('any', 'No, it happens on good days too', 1)
         ]),
         qBoth(),
-        Q('repair', 'Afterwards', 'Afterwards, does one of you come back and make it right?', [
+        Q('repair', 'Afterwards', 'Afterward, does one of you come back and make it right?', [
           A('usually', 'Yes, usually', -2, ['repairs']),
           A('sometimes', 'Sometimes', 0),
           A('rarely', 'Rarely', 1),
@@ -216,7 +216,7 @@
     },
     limits: {
       title: 'A limit or a “no” that feels unfair',
-      why: 'A “no”, a limit or a request made out of care or respect for the relationship is a normal part of being close. A few answers help tell that apart from a limit that leaves someone cut off.',
+      why: 'A “no,” a limit or a request made out of care or respect for the relationship is a normal part of being close. A few answers help tell that apart from a limit that leaves someone cut off.',
       questions: [
         Q('about', 'What the limit is about', 'What is the limit mainly about?', [
           A('safety', 'Health, safety, or money we can’t afford', -2, ['care']),
@@ -277,7 +277,7 @@
     },
     recurring: {
       title: 'A topic that keeps coming back',
-      why: 'Every couple and family has a few topics that come back; many never fully go away, and that’s normal. A few answers help tell a familiar topic from one that is stuck.',
+      why: 'Every couple and family has a few topics that come back. Many never fully go away, and that’s normal. A few answers help tell a familiar topic from one that is stuck.',
       questions: [
         qHowLong('How long has this topic been coming back?'),
         Q('happens', 'When it comes up', 'When it comes up, what usually happens?', [
@@ -433,7 +433,7 @@
     care: 'The limit comes from care or respect for the relationship.',
     oneoff: 'It was a one-off.',
     context: 'Outside pressure seems to be part of it.',
-    repairs: 'It usually gets made right afterwards.',
+    repairs: 'It usually gets made right afterward.',
     often: 'It happens most of the time.',
     long: 'It has gone on for a year or more.',
     stuck: 'Talking hasn’t changed it yet.',
@@ -502,7 +502,7 @@
       .concat(BENIGN).forEach(function (f) { if (has(flags, f) && FLAG_WORDS[f]) lead.push(t(FLAG_WORDS[f], lang)); });
     res.reasons = lead.slice(0, 5);
     res.took = took;
-    if (res.notsure >= 3) res.reasons.push(t('Several answers were “not sure”. That’s fine: a calm talk can fill in the gaps.', lang));
+    if (res.notsure >= 3) res.reasons.push(t('Several answers were “not sure.” That’s fine: a calm talk can fill in the gaps.', lang));
     if (!res.answered && !res.reasons.length) res.reasons.push(t('No answers yet, so this is the everyday read.', lang));
     else if (!res.reasons.length) res.reasons.push(t(level ? 'Some of your answers point to something worth a closer look.'
       : 'Nothing in your answers points past an ordinary rough patch.', lang));
@@ -546,7 +546,7 @@
       l1: { body: 'Try the fact, the feeling and one small ask, at a calm time.',
         say: 'When we talked last night, I didn’t feel heard. Can we try again, one at a time?',
         links: [L('Say it so it lands (WP-09)', '/workpapers/fill/wp-09.html')] },
-      l2: { body: 'Pick one habit to change together, like hearing each other back before answering, and practise it on small topics first.',
+      l2: { body: 'Pick one habit to change together, like hearing each other back before answering, and practice it on small topics first.',
         links: [L('Say it so it lands (WP-09)', '/workpapers/fill/wp-09.html'), L('One wants to talk, one needs space', '/pursue-withdraw.html'), L('Seven calm steps out of the same fights', '/how-to-stop-fighting-with-your-partner.html')] }
     },
     limits: {
@@ -573,7 +573,7 @@
       l1: { body: 'Talk about how each of you likes to hear sorry, and agree that either of you can go first.',
         say: 'I’d like us both to be able to say sorry. Can we each name one thing we’d do differently next time?',
         links: [L('Apology languages', '/apology-languages.html')] },
-      l2: { body: 'After each rough moment, each of you names your own part, one fact each, before anything else. Practise it for a few weeks.',
+      l2: { body: 'After each rough moment, each of you names your own part, one fact each, before anything else. Practice it for a few weeks.',
         links: [L('Say it so it lands (WP-09)', '/workpapers/fill/wp-09.html'), L('Apology languages', '/apology-languages.html')] }
     },
     recurring: {
@@ -603,7 +603,7 @@
         links: [] }
     }
   };
-  var L3 = { body: 'Not because anything is wrong with either of you: some patterns are easier to shift with a neutral person in the room. A counsellor, your doctor, or someone you both trust are all options, if they feel right.',
+  var L3 = { body: 'Not because anything is wrong with either of you: some patterns are easier to shift with a neutral person in the room. A counselor, your doctor, or someone you both trust are all options, if they feel right.',
     links: [] };
   // level 4: a short, neutral reply (the owner's decision: no resources, numbers or links)
   var SAFE = { body: 'That sounds really hard. This quick check is a small guide to this site, and it can’t help with this one.',

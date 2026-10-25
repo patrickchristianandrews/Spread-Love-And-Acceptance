@@ -18,7 +18,7 @@
   var BG_URL = KB_URL.replace(/chat-kb\.js$/, 'chat-kb-bg.js');
   var STORE_KEY = 'tol-chat-v1';
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var HONEST_LINE = 'I don’t make things up: every answer comes from what’s already written on this site. I pick the best match; I don’t invent new answers. I can still pick the wrong topic, so if I miss, tell me “that’s not it”. I’m not a therapist and can’t diagnose.';
+  var HONEST_LINE = 'I don’t make things up: every answer comes from what’s already written on this site. I pick the best match. I don’t invent new answers. I can still pick the wrong topic, so if I miss, tell me “that’s not it.” I’m not a therapist and can’t diagnose.';
   // "can I trust your answers?", "do you hallucinate?", "are you AI?": where the answers come from, honestly
   var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you (say|tell me|tell|write)|anything you (say|tell me)|this chat|puddles|the professor)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real)|(is|are) (this|this thing|it|you|puddles|he|the professor|this chat|this bot|your answers) (actually |really |just |even |only )?(an? )?(real )?(ai|a i|bot|chatbot|chat ?gpt|gpt|robot|canned|scripted|real ai|real person|generative)|canned (answers|responses|replies|stuff)|(just|only) (canned|scripted|pre ?written|preset|pre ?set|copy ?paste)( answers| responses| replies)?|actually (an? )?ai|ai or (just |only )?(canned|scripted|a script|a person|real)|is (this|it) (a )?(real )?(ai|a i) or|(are|is) (these|the|your|his) (answers|replies|responses) (just |all |actually )?(scripted|canned|pre ?written|ai|generated|made by ai))\b/;
   // "what modes do you have?", "what is deep mode?": light and deep, explained
@@ -622,8 +622,8 @@
   var HIDE = /\b(hide|cover|delete|clear|erase|remove|wipe)\b.{0,30}\b(visit(ed)?|history|tracks|this site|that i (was|came)|my (searches|chat))\b|\b(private|incognito) (window|mode|browsing)\b|\bquick(ly)? exit\b|\bleave (this site )?quickly\b/;
   function hideReply() {
     return { blocks: [
-      { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off”, and this chat). The What’s stored on this device page has one button to erase all of it.' },
-      { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance”, and delete those entries.'] },
+      { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off,” and this chat). The What’s stored on this device page has one button to erase all of it.' },
+      { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance,” and delete those entries.'] },
       { k: 'links', x: [['What’s stored on this device', '/on-this-device.html']] }], chips: [], kind: 'safety' };
   }
 
@@ -639,7 +639,7 @@
     var detail = VERBAL_DETAIL.test(f);
     var b = [detail ? { k: 'p', x: 'I’m really glad you asked. Being screamed at, called names or made to feel worthless, or having things turned around so it’s always your fault, is serious. It isn’t a communication problem you can fix by wording things better, and it is not your fault.' }
       : { k: 'p', x: 'That’s a fair thing to wonder about. I can’t diagnose anyone, and nobody can from a chat. A label matters less than the pattern: what they do, and how you feel around them.' }];
-    if (detail && /narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologises and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
+    if (detail && /narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologizes and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
     b.push({ k: 'p', x: detail ? 'Some signs it has moved from ordinary conflict into control:' : 'Whatever the label, these are signs that it’s more than ordinary conflict:' });
     b.push({ k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] });
     return { blocks: b, chips: [{ label: 'Something else', q: 'Start over' }], kind: 'safety' };
@@ -739,7 +739,7 @@
       if (n.length === 1 && n[0] === Math.floor(n[0]) && n[0] >= 1 && n[0] <= 20) {
         var v1 = n[0] / 20;
         var bl1 = [{ k: 'p', x: 'If ' + n[0] + ' is your total (the five answers added up, out of 20), then ' + n[0] + ' ÷ 20 = ' + r2(v1) + '. ' + wp02Band(v1) }];
-        if (n[0] <= 4) bl1.push({ k: 'p', x: 'If you meant a single answer of ' + n[0] + ' (each one runs from 0 to 4), send me all five, like “my battery answers are ' + n[0] + ', 1, 2, 0, 2”, and I’ll add them up with you.' });
+        if (n[0] <= 4) bl1.push({ k: 'p', x: 'If you meant a single answer of ' + n[0] + ' (each one runs from 0 to 4), send me all five, like “my battery answers are ' + n[0] + ', 1, 2, 0, 2,” and I’ll add them up with you.' });
         bl1.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
         bl1.push({ k: 'links', x: [['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html']] });
         return { blocks: bl1, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How is it worked out?', q: 'Show me the math for WP-02' }], kind: 'calc', topic: 'battery score' };
@@ -749,7 +749,7 @@
           chips: [{ label: 'How does the Battery Meter work?', q: 'How do I use WP-02?' }], kind: 'calc' };
       }
       if (/\banswers?\b|\bscored?\b/.test(low) && n.length >= 2 && n.length < 5) {
-        return { blocks: [{ k: 'p', x: 'I can work that out for you, but I need all five answers, each from 0 to 4: ' + WP02_ITEMS.join(', ') + '. Try “my battery answers are 3, 2, 4, 1, 2”.' }], chips: [], kind: 'calc' };
+        return { blocks: [{ k: 'p', x: 'I can work that out for you, but I need all five answers, each from 0 to 4: ' + WP02_ITEMS.join(', ') + '. Try “my battery answers are 3, 2, 4, 1, 2.”' }], chips: [], kind: 'calc' };
       }
       return null;
     }
@@ -772,7 +772,7 @@
     }
     if ((isCalc || hasNamed >= 2) && hasNamed >= 2 && !(hasNamed === 2 && !isCalc && !/\b(balance|ownership)\b/.test(low))) {
       if (hasNamed < 3) {
-        return { blocks: [{ k: 'p', x: 'I can run a quick CALC-01 read, but I need all three numbers, each from 0 to 1: workload balance, ownership clarity, and the average load score. Something like “CALC-01: balance 0.6, ownership 0.5, battery 0.4”.' }],
+        return { blocks: [{ k: 'p', x: 'I can run a quick CALC-01 read, but I need all three numbers, each from 0 to 1: workload balance, ownership clarity, and the average load score. Something like “CALC-01: balance 0.6, ownership 0.5, battery 0.4.”' }],
           chips: [{ label: 'Where do the numbers come from?', q: 'How does CALC-01 work?' }], kind: 'calc' };
       }
       var bad = [wb, oc, as].concat(rf != null ? [rf] : []).some(function (x) { return isNaN(x) || x < 0 || x > 1; });
@@ -930,7 +930,7 @@
         chips.push({ label: lab.length > 46 ? lab.slice(0, 44).replace(/\s+\S*$/, '') + '…' : lab, doc: h.i });
       });
       var short = lq.length > 60 ? lq.slice(0, 57).replace(/\s+\S*$/, '') + '…' : lq;
-      b.push({ k: 'p', x: 'Sorry, that answer missed. ' + (chips.length ? 'For “' + short + '”, these are the next closest things I have. Or tell me what you were hoping for, in a few words, and I’ll try again.' : 'What were you hoping for? Tell me in a few words, and I’ll try again.') });
+      b.push({ k: 'p', x: 'Sorry, that answer missed. ' + (chips.length ? 'For “' + short + ',” these are the next closest things I have. Or tell me what you were hoping for, in a few words, and I’ll try again.' : 'What were you hoping for? Tell me in a few words, and I’ll try again.') });
     } else b.push({ k: 'p', x: 'Sorry, I’ve missed. What were you hoping for? Tell me in a few words, or pick one of these.' });
     b.push({ k: 'links', x: [['Find a page by who it’s for, or search the site', '/by-relationship.html']] });
     state.last = null;
@@ -1392,7 +1392,7 @@
         // second time round: don't repeat the same block; ask what happened, and offer a person to talk to
         state.last = Object.assign({}, L, { nohelp: L.nohelp + 1 });
         return { blocks: [{ k: 'p', x: tried ? 'Got it. Tell me what happened when you tried it: what they said or did, and how it ended. Even one line helps, and I’ll suggest something different.' : 'I hear you. Tell me in one line what happened, or what you’d most like to change, and I’ll come at it differently.' },
-          { k: 'note', x: 'If it keeps going round in circles, a counselor or a calm third person you both trust can help you talk it through. That isn’t a failure; it’s often what gets things unstuck.' }],
+          { k: 'note', x: 'If it keeps going round in circles, a counselor or a calm third person you both trust can help you talk it through. It’s often what gets things unstuck.' }],
           chips: [{ label: 'Something smaller', q: 'Give me one thing to do' }, { label: 'Start over', q: 'Start over' }], kind: 'nohelp' };
       }
       if (L && L.kind === 'sit' && IDX.sit.issues[L.issue]) {
@@ -1441,7 +1441,7 @@
       }
       if (state.pend && state.pend.turn === (state.turn || 0) - 1 && (!L || L.kind !== 'sit')) {
         var pd = state.pend; state.pend = Object.assign({}, pd, { turn: state.turn || 0 });
-        return { blocks: [{ k: 'p', x: 'I’m still with you on “' + pd.f + '”. To give you real steps, I need one more thing: what usually sets it off, or how does it tend to end? A few words is plenty. Or tap the closest one.' }], chips: pd.chips || STARTERS.slice(0, 3), kind: 'clarify' };
+        return { blocks: [{ k: 'p', x: 'I’m still with you on “' + pd.f + '.” To give you real steps, I need one more thing: what usually sets it off, or how does it tend to end? A few words is plenty. Or tap the closest one.' }], chips: pd.chips || STARTERS.slice(0, 3), kind: 'clarify' };
       }
     }
     // after a caregiving answer, "my daughter won't help" and "I resent him" stay about caregiving
@@ -1667,7 +1667,7 @@
     var paras = [], bullets = [], link = null, script = null;
     (blocks || []).forEach(function (b) {
       if (b.k === 'script' && keepScript && !script) script = b;
-      if (b.k === 'p' && !b.mean && !/^(Here’s|The site|This part|Sure|Here you go|Related|It also|Another page|This may be|In short)/.test(b.x)) paras.push(b.x);
+      if (b.k === 'p' && !b.mean && !/^(Here’s|The site|This part|Sure|Here you go|Related|It also|Another page|This may be|The short version)/.test(b.x)) paras.push(b.x);
       if (b.k === 'list' && !bullets.length) bullets = b.x.slice(0, 3);
       if (b.k === 'passage') { paras.push((b.x || []).join(' ').replace(/^…\s*/, '').replace(/\s*…$/, '')); if (!link && b.u) link = [b.h, b.u]; }
       if (b.k === 'bg') paras.push((b.x || []).join(' '));
@@ -1681,7 +1681,7 @@
     bullets = bullets.map(function (t) { return whole(t); }).slice(0, script ? 2 : 3);
     if (!first && !bullets.length) return null;
     var out = [];
-    if (first) out.push({ k: 'p', x: 'In short: ' + first });
+    if (first) out.push({ k: 'p', x: 'The short version: ' + first });
     if (bullets.length) out.push({ k: 'list', x: bullets });
     if (script) out.push(script);
     if (link) out.push({ k: 'links', x: [link] });
@@ -1725,13 +1725,13 @@
     if (c && c.plain) return { blocks: [{ k: 'p', x: 'Here it is in easy words.' }].concat(easyBlocks(c)), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
     var R = state.lastReply, out = shortBlocks(R && R.blocks, true);
     if (out) { state.fullReply = R; return { blocks: [{ k: 'p', x: 'Here it is in fewer words. I’ll keep my words short and simple from now on.' }].concat(out), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' }; }
-    return { blocks: [{ k: 'p', x: 'Yes. I’ll use short, simple words. Ask me anything.' }, { k: 'p', x: 'You can also turn on Easy reading and “Listen to this page” in Settings at the top.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+    return { blocks: [{ k: 'p', x: 'Yes. I’ll use short, simple words. Ask me anything.' }, { k: 'p', x: 'You can also turn on Easy reading in Settings at the top.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
   }
   function shorter(state) {
     var R = state.lastReply, out = shortBlocks(R && R.blocks);
     state.brief = 1;  // and short from here on, until they ask for more
     if (!out) return { blocks: [{ k: 'p', x: 'There’s nothing above to shorten yet. I’ll keep my answers short from now on.' },
-      { k: 'p', x: 'Pages have short ways in too: a 🌱 Simple version and 📌 In short at the top of long pages.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+      { k: 'p', x: 'Pages have short ways in too: a 🌱 Simple version and 📌 The short version at the top of long pages.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
     state.fullReply = R;
     return { blocks: out, chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
   }
@@ -1837,7 +1837,7 @@
     if (!asked || !(asked === tn || (about && asked === about) || (asked.length > 12 && tn.indexOf(asked) === 0) || (m && /^(this|this page|the page)$/.test(asked)))) return null;
     var docs = KB.docs.filter(function (d) { return !d.tip && !d.g && d.u.split('#')[0] === u; });
     if (!docs.length) return null;
-    var intro = docs.filter(function (d) { return /^in short$/i.test(d.h); })[0] || docs.filter(function (d) { return /#main$/.test(d.u); })[0] || docs[0];
+    var intro = docs.filter(function (d) { return /^(in short|the short version)$/i.test(d.h); })[0] || docs.filter(function (d) { return /#main$/.test(d.u); })[0] || docs[0];
     var seen = {}, secs = [];
     docs.forEach(function (d, i) {
       var a = d.u.split('#')[1] || '';
@@ -1846,7 +1846,7 @@
       if (h && !/^(words you could use|more for your situation|go deeper|ask professor puddles)$/i.test(h)) secs.push({ h: h, i: KB.docs.indexOf(d) });
     });
     var pc = state.pageTopic && cardById(state.pageTopic.id);
-    var b = [{ k: 'p', x: 'Here’s what “' + title + '” covers, in short:' }, passageBlock(KB.docs.indexOf(intro), [])];
+    var b = [{ k: 'p', x: 'Here’s what “' + title + '” covers:' }, passageBlock(KB.docs.indexOf(intro), [])];
     if (secs.length) { b.push({ k: 'p', x: 'It has sections on:' }); b.push({ k: 'list', x: secs.slice(0, 8).map(function (x) { return x.h; }) }); }
     b.push({ k: 'p', x: 'Which part would you like? Or tell me what’s going on, in your own words.' });
     state.last = { kind: 'card', q: title, topic: title, u: u };
@@ -1935,7 +1935,7 @@
     var link = pg ? [[pgT || TC.name, pg]] : safeLinks(TC.links).slice(0, 1);
     if (TF_PRINT.test(f)) return printReply(state, f, TC);
     if (TF_SOURCE.test(f) && n <= 16) {
-      return done({ blocks: [{ k: 'p', x: 'Yes. Every source this site uses is listed, with what it found in plain words, on The research behind this site.' + (pg ? ' The page on ' + (pgT || TC.name) + ' links its own sources at the bottom, under “More”.' : '') },
+      return done({ blocks: [{ k: 'p', x: 'Yes. Every source this site uses is listed, with what it found in plain words, on The research behind this site.' + (pg ? ' The page on ' + (pgT || TC.name) + ' links its own sources at the bottom, under “More.”' : '') },
         { k: 'links', x: [['The research behind this site', '/research.html']].concat(pg ? [[pgT || TC.name, pg + '#more']] : []) }], chips: [] });
     }
     // only for a message that doesn't start a new story ("my brother got dad's house in the will" is its own topic)
@@ -2006,7 +2006,7 @@
       return { blocks: [{ k: 'p', x: 'Keep it about the rhythm, not the scorecard: one example, how it felt, and one ask for a plan you both choose.' },
         { k: 'list', x: ['If you usually reach out: “I’ve been the one starting most of our calls, and I miss feeling chosen. Can we agree a rhythm, so it isn’t always on me?”',
           'If you call less: “I know you’ve been reaching out more. Work is heavy right now, and it isn’t about you. Can we pick our call days together, and I’ll start the Sunday one?”',
-          'Answer the person as well as the plan: if they asked “are we still on tonight?”, answer that first.'] },
+          'Answer the person as well as the plan: if they asked “are we still on tonight?” answer that first.'] },
         { k: 'links', x: safeLinks((ld && ld.links) || []).slice(0, 2) }], chips: [], kind: 'care', id: 'longdistance' };
     }
     // a short follow-up while we're on a topic ("i do all the meetings and paperwork" after fostering, "how do i get a say"
@@ -2238,7 +2238,7 @@
       { k: 'p', x: 'Here is what I’d say to your client, if they asked me themselves:' }];
     r.blocks = lead.concat(r.blocks);
     var lb = r.blocks.filter(function (x) { return x.k === 'links'; })[0];
-    var pro = [['For counsellors, coaches and group leaders', '/for-counselors.html']];
+    var pro = [['For counselors, coaches and group leaders', '/for-counselors.html']];
     if (lb) { if (!lb.x.some(function (l) { return l[1] === pro[0][1]; })) lb.x = pro.concat(lb.x); } else r.blocks.push({ k: 'links', x: pro });
     return r;
   }
@@ -2261,7 +2261,7 @@
     return { blocks: b, chips: [], kind: 'care', id: 'source' };
   }
   function unclearReply() {
-    return { blocks: [{ k: 'p', x: 'I didn’t catch that. Could you say it another way? A few words is plenty, like “chores” or “my partner snapped at me”.' }], chips: STARTERS, kind: 'unclear' };
+    return { blocks: [{ k: 'p', x: 'I didn’t catch that. Could you say it another way? A few words is plenty, like “chores” or “my partner snapped at me.”' }], chips: STARTERS, kind: 'unclear' };
   }
   // "What exactly does 'static' mean? Give a definition, not an example." → static, with no example
   function termQuery(q) {
@@ -2439,8 +2439,8 @@
     pick.forEach(function (x) { seen[x[1]] = 1; });
     state.art = { topic: aq.topic, seen: seen };
     var arts = pick.map(function (x) { var it = R.items[x[1]]; return { t: it[0], u: it[1], s: it[3], x: it[2] }; });
-    var b = [{ k: 'p', x: aq.topic ? 'Here are some good articles on “' + aq.topic + '”, hand-picked for this site from trusted sources. They open on the publisher’s own site.' :
-      'Here are a few good articles from the site’s hand-picked reading list. Tell me a topic (“stress”, “apologies”, “ADHD”, “chores”) and I’ll find ones that fit.' }];
+    var b = [{ k: 'p', x: aq.topic ? 'Here are some good articles on “' + aq.topic + ',” hand-picked for this site from trusted sources. They open on the publisher’s own site.' :
+      'Here are a few good articles from the site’s hand-picked reading list. Tell me a topic (“stress,” “apologies,” “ADHD,” “chores”) and I’ll find ones that fit.' }];
     b.push({ k: 'art', x: arts });
     // a page on this site about the same thing ("articles about ADHD in children" → When a child has ADHD)
     var site = null;
@@ -2527,7 +2527,7 @@
       chips: [{ label: 'Something else', q: 'Start over' }], kind: 'care', id: 'theirboundary' };
     if (OWN_CONSEQ.test(f) && !CARE_REQ.test(f)) return { blocks: [
       { k: 'p', x: 'Saying what you will do if something keeps happening is a boundary, not a threat. A threat tries to frighten someone into doing what you want. A boundary tells them what you need, and what you’ll do to look after yourself.' },
-      { k: 'list', x: ['Say it once, calmly, at a quiet time, not in the middle of a row.', 'Name the thing, not the person: “the lying”, “the drinking”, not “you’re a liar”.', 'Only say what you’re ready to do, and do it if it happens again. It’s there to look after you, not to punish them.', 'Leave room for them to change: say what would help, too.'] },
+      { k: 'list', x: ['Say it once, calmly, at a quiet time, not in the middle of a row.', 'Name the thing, not the person: “the lying,” “the drinking,” not “you’re a liar.”', 'Only say what you’re ready to do, and do it if it happens again. It’s there to look after you, not to punish them.', 'Leave room for them to change: say what would help, too.'] },
       { k: 'script', l: 'Words you could use', x: 'I love you, and I can’t keep going through this. If it happens again, I’ll need to step back for a while. I’m telling you now, calmly, so it isn’t a surprise, and because I want this to work.' },
       { k: 'note', x: 'If you’re ever afraid to say it, or afraid of how they’ll react, that’s different, and you deserve support with it.' },
       { k: 'links', x: [['Saying no, kindly and clearly', '/communication.html#saying-no']] }],
@@ -2570,7 +2570,7 @@
     return { blocks: [
       { k: 'p', x: lead },
       { k: 'p', x: own ? 'A request leaves room for them to say how it lands, and for you to hear it. A rule handed down with no room for “no” feels different. A calm talk turns most things like this into something you both agree.' : 'A request leaves room for you to say how it lands and to talk it through. A rule handed down with no room for “no” feels different. Most things like this sit in between, and a calm talk turns them into something you both agree.' },
-      { k: 'list', x: own ? ['Ask, don’t require: say why it matters to you, and ask if it works for them.', (ownPh ? 'Keep it small and clear: dinner only, not the whole evening.' : 'Make it easy to do: a one-word text counts.'), 'Be okay with “I’ll forget sometimes”, and let it go when they do.', 'Offer the same back, so it goes both ways.'] : ['Ask what’s behind it: “What worries you about it?” Listen to the answer before you explain your side.', 'Say what it costs you, plainly: “I was really looking forward to it,” or “I feel less trusted when…”.', 'Look for a version you can both live with: a quick text, meeting in a group, a time limit, an amount to check in over.', 'Agree it, try it for a few weeks, and look at it again together.'] },
+      { k: 'list', x: own ? ['Ask, don’t require: say why it matters to you, and ask if it works for them.', (ownPh ? 'Keep it small and clear: dinner only, not the whole evening.' : 'Make it easy to do: a one-word text counts.'), 'Be okay with “I’ll forget sometimes,” and let it go when they do.', 'Offer the same back, so it goes both ways.'] : ['Ask what’s behind it: “What worries you about it?” Listen to the answer before you explain your side.', 'Say what it costs you, plainly: “I was really looking forward to it,” or “I feel less trusted when….”', 'Look for a version you can both live with: a quick text, meeting in a group, a time limit, an amount to check in over.', 'Agree it, try it for a few weeks, and look at it again together.'] },
       { k: 'script', l: 'Words you could use', x: say }]
       .concat(/\b(angry|mad|furious|yells?|shouts?|snaps?|sulks?|cross|upset)\b/.test(f) ? [{ k: 'p', x: 'If there’s anger when it doesn’t happen, say that part too, calmly and at a quiet time: “I want to do this for you, and I also need it to be okay when I forget.” If saying no ever leads to a big row, days of silence, or you feel afraid, that’s different, and I can help with that too.' }] : [])
       .concat([{ k: 'note', x: CARE_LINE },
@@ -2746,7 +2746,7 @@
       if (!NOT_LIVE.test(vf) && !HARD.test(cvg0) && !FEAR_W.test(vf) && !CARE_BLOCK.test(cvg0) && (CARE_REQ.test(cvf0) || OWN_CONSEQ.test(cvf0) || OTHER_CONSEQ.test(cvf0))) { state.last = null; state.care = null; state.topic = null; return meant(careReqReply(cvf0), sp); }
       if (!NOT_LIVE.test(vf) && !DANGER.test(vf) && !HARD.test(cvg0) && !FEAR_W.test(vf) && !CONTROL.test(vf) && !WHERE_ALWAYS.test(cvf0) && limitAsk(cvf0, cvg0) && window.TOLClarifyData) {
         var lmt = /\b(money|wage|wages|salary|paycheck|pay|savings)\b/.test(cvf0) ? 'money' : 'limits';
-        var lq = cqStart(state, lmt, q0, [{ k: 'p', x: lmt === 'money' ? 'That sounds hard to live with. Agreeing limits on money together is normal; what matters is whether it goes both ways and you can say no. A few short questions will help me answer fairly, rather than guess.' : /\b(leave|dump|break up|end it|end things|walk out)\b/.test(cvf0) ? 'Being told they’ll leave if you see people puts you in a hard spot. Sometimes it comes from hurt or insecurity, and sometimes it starts to box you in. A few short questions will help me tell which, rather than guess.' : 'A request like that can come from care, or it can start to box you in. How it’s asked, and what happens when you say no, make the difference. A few short questions will help me tell which, rather than guess.' }],
+        var lq = cqStart(state, lmt, q0, [{ k: 'p', x: lmt === 'money' ? 'That sounds hard to live with. Agreeing limits on money together is normal. What matters is whether it goes both ways and you can say no. A few short questions will help me answer fairly, rather than guess.' : /\b(leave|dump|break up|end it|end things|walk out)\b/.test(cvf0) ? 'Being told they’ll leave if you see people puts you in a hard spot. Sometimes it comes from hurt or insecurity, and sometimes it starts to box you in. A few short questions will help me tell which, rather than guess.' : 'A request like that can come from care, or it can start to box you in. How it’s asked, and what happens when you say no, make the difference. A few short questions will help me tell which, rather than guess.' }],
           []);
         if (lq) { state.last = null; state.care = null; state.topic = null; return meant(lq, sp); }
       }
@@ -2779,7 +2779,7 @@
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null;
         // asked straight out whether he's AI, a bot or ChatGPT: a short, true "No"; otherwise he never brings AI up (owner)
         var askedAI = /\b(ai|a i|chat ?gpt|gpt|bot|chatbot|robot|generative|llm|language model|artificial intelligence)\b/.test(vf);
-        return { blocks: (askedAI ? [{ k: 'p', x: 'No. Every answer here was written in advance for this site. I pick the best match and show you where it comes from.' }, { k: 'p', x: 'I can still pick the wrong topic, so if I miss, tell me “that’s not it”. I’m not a therapist and can’t diagnose.' }]
+        return { blocks: (askedAI ? [{ k: 'p', x: 'No. Every answer here was written in advance for this site. I pick the best match and show you where it comes from.' }, { k: 'p', x: 'I can still pick the wrong topic, so if I miss, tell me “that’s not it.” I’m not a therapist and can’t diagnose.' }]
           : [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'Every answer here was written in advance for this site. I match what you say to the right page, tool or playbook, and show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }]).concat([{ k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }]), chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       // chit-chat: games in progress, jokes, riddles, "I'm bored", reactions, and a plain hand-off when something real comes up
@@ -2925,7 +2925,7 @@
   function handoffReply(f, kid) {
     var k = kid || 'your child';
     var b = [{ k: 'p', x: 'That sounds really stressful, and it isn’t something you can fix by choosing better words. It’s worth changing how handoffs work, for you and for ' + k + '.' },
-      { k: 'list', x: ['Keep handoffs short: times and bags only. Anything else goes by message, later.', 'Hand over somewhere public and busy, or through school or nursery, so you don’t have to meet at the door.', 'If something starts at the door, don’t answer it there: “Let’s do this by message,” and go.', 'Afterwards, tell ' + k + ' it isn’t their worry: “Grown-ups sometimes get cross. You’re not in trouble.”', 'Keep the messages, with dates. If it keeps happening, a mediator or family lawyer can help you set up calmer handoffs.'] },
+      { k: 'list', x: ['Keep handoffs short: times and bags only. Anything else goes by message, later.', 'Hand over somewhere public and busy, or through school or daycare, so you don’t have to meet at the door.', 'If something starts at the door, don’t answer it there: “Let’s do this by message,” and go.', 'Afterward, tell ' + k + ' it isn’t their worry: “Grown-ups sometimes get cross. You’re not in trouble.”', 'Keep the messages, with dates. If it keeps happening, a mediator or family lawyer can help you set up calmer handoffs.'] },
       { k: 'script', l: 'At the door', x: 'I’m not going to talk about this now. Message me later. Bye, ' + (kid || 'sweetheart') + ', see you Friday.' },
       { k: 'links', x: [['Four steps for calmer handoffs', '/co-parenting.html#handoff'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel']] }];
     return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How should we word texts?', q: 'We only text, how should we word things?' }], kind: 'care', id: 'handoff' };
@@ -2934,7 +2934,7 @@
   var YELLED_AT = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( sometimes| often| still| just| really)? (yells|screams|shouts|swears|snaps|raises (his|her|their) voice) at me\b/;
   function yelledAtReply(f) {
     return { blocks: [{ k: 'p', x: 'Being yelled at hurts, even when it comes from stress, and it’s fair to want it to stop.' },
-      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, or it’s wearing you down, talking it through with a counsellor can help.'] },
+      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, or it’s wearing you down, talking it through with a counselor can help.'] },
       { k: 'links', x: [['A pause plan for two', '/pursue-withdraw.html#plan']] }],
       chips: [{ label: 'What do I say?', q: 'What do I actually say?' }], kind: 'care', id: 'yelledat' };
   }
@@ -2962,7 +2962,7 @@
   var TERM_DEF = {
     gaslighting: 'Gaslighting is when someone keeps making you doubt your own memory or sense of what happened, for example by insisting that things you remember never happened, until you trust them more than yourself.',
     coercive: 'Coercive control is a pattern that takes away someone’s freedom bit by bit: watching them, limiting money or friends, threats, or rules they have to follow to avoid trouble. It can happen without any physical violence.',
-    narcissist: '“Narcissist” is often used for someone who seems self-centred and short on empathy. Narcissistic personality disorder is a real diagnosis, but only a clinician can make it, and nobody can from a chat. What they do, and how you feel around them, matters more than the label.',
+    narcissist: '“Narcissist” is often used for someone who seems self-centered and short on empathy. Narcissistic personality disorder is a real diagnosis, but only a clinician can make it, and nobody can from a chat. What they do, and how you feel around them, matters more than the label.',
     love: 'Love bombing is a rush of intense attention, gifts and promises early on, which can later be used to pull someone close and then control them.',
     trauma: 'A trauma bond is a strong attachment to someone who hurts you, often built from cycles of harm followed by kindness. It can make leaving or even seeing the pattern very hard, and it is not a sign of weakness.'
   };
@@ -2995,7 +2995,7 @@
     var person = /\b(hit|grab\w*|shov\w*|push\w*) (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)\b|\b(throw|threw|throwing) \w+ at (my|him|her|them)\b/.test(f), intent = HURT_INTENT.test(f);
     if (intent) return { blocks: [
       { k: 'p', x: 'Thank you for saying it instead of doing it. That matters. Right now, put distance between you: leave the room, or the house, and don’t go back until your body has calmed down. Nobody needs to be hurt, including you.' },
-      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk round the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.'] },
+      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk around the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.'] },
       { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }],
       chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownagg' };
     var b = [{ k: 'p', x: 'Thank you for being honest about this. That takes courage, and it’s the first step to changing it. ' + (person ? 'Throwing things at someone, or putting hands on them, is serious: it frightens them, and someone can get hurt.' : 'Slamming doors, punching walls or throwing things is serious even when nobody is touched: it frightens the people who see it, and it’s a step closer to someone getting hurt.') + ' It isn’t a verdict on who you are, and it can change.' }];
@@ -3005,7 +3005,7 @@
       'Breathe in for 4 and out for 6 until your body slows down. Don’t go back until it has.',
       'Later, repair: “I scared you when I slammed the door. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.'] });
     b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['Getting help with anger', '/parents.html#anger-help'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child']] });
-    return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }, { label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }], kind: 'care', id: 'ownagg' };
+    return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }, { label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }], kind: 'care', id: 'ownagg' };
   }
   // "what do I do when I'm about to yell", "I feel myself about to explode": the steps for right now, first
   var ANGER_NOW = /\b(in the moment|right then|right now|when) (when )?i (feel|can feel|notice) (it|my anger|the anger|myself) (rising|building|coming|boiling|getting (angry|mad))\b|\bi feel (it|my anger|the anger) (rising|building|coming on|boiling)\b|\b(i m|im|i am|when i m|when im|when i am|feel myself|i can feel myself|i feel like i m|i feel like im)( (just|really|so|about|going|gonna))* (about to|going to|gonna|ready to) (yell|shout|scream|snap|explode|lose it|blow up|lose my temper|lose my rag|boil over)\b|\bfeel myself (about to |going to |gonna )?(explode|exploding|snap|snapping|losing it|losing my temper|blowing up|boiling over)\b|^(i keep |i m |im |i am )?(losing|lose) my temper( with (the|my) (kids|children|son|daughter|partner|wife|husband|family))?$|\bbefore i (yell|shout|snap|explode|lose it|lose my temper)\b|^(about to|going to|gonna) (yell|shout|snap|explode|lose it)( at (the|my) (kids|children|son|daughter|partner|wife|husband))?$|\b(stop|calm down|calm myself) (myself )?(in the moment|before i (yell|shout|snap|explode))\b|^(so |ok |okay |but )?what (do|should|can) i (actually )?do in the moment$/;
@@ -3019,7 +3019,7 @@
         'Later, notice your first warning signs (a tight jaw, a louder voice, heat in your face) and write them in the Calm-Down Kit, so you can step back sooner.'] },
       { k: 'note', x: 'If it happens most days, or comes with throwing things, threats, or someone being scared of you, get support for yourself: your doctor, an Employee Assistance Program, or an anger-management group.' },
       { k: 'links', x: [['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] }],
-      chips: [{ label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care', id: 'angernow' };
+      chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care', id: 'angernow' };
   }
   // "we both yell and sometimes shove each other": physical fights are a safety matter, whoever starts them
   var MUTUAL = /\b(we|we both|both of us)( (sometimes|often|always|end up|ended up|have|ve|get|got|just|even|kind of|kinda|started|start|both|then|also))* (shove|shoving|push|pushing|hit|hitting|slap|slapping|punch|punching|kick|kicking|grab|grabbing|scratch|scratching|bite|biting|get physical|got physical|physically fight|fight physically)\w*\b|\b(shove|push|hit|slap|punch|kick|grabb?|scratch|bite)\w* each other\b|\b(fights?|arguments?|rows?) (get|gets|got|getting|turn|turns|turned) physical\b|\bphysical fights?\b|\bwe (get|got) physical\b/;
@@ -3038,16 +3038,16 @@
         'End the affair completely, and be open about that. Answer their questions honestly, even the hard ones, without blaming them or the relationship.',
         'Let them set the pace. Hurt, anger and questions often come in waves for months. That’s normal, not a sign it isn’t working.',
         'Trust comes back through changed actions over time, not one big apology.',
-        'See a couples counsellor who works with affairs: there are well-studied approaches for exactly this. A counsellor for you alone can help you understand why it happened.'] },
-      { k: 'note', x: 'Whether to stay together is their choice as much as yours. You can’t earn forgiveness on a timetable.' },
+        'See a couples counselor who works with affairs: there are well-studied approaches for exactly this. A counselor for you alone can help you understand why it happened.'] },
+      { k: 'note', x: 'Whether to stay together is their choice as much as yours. You can’t earn forgiveness on a timeline.' },
       { k: 'links', x: [['Healing after hurt: rebuilding trust', '/book/understanding-11-healing-in-depth.html#trust'], ['An apology that takes responsibility', '/apology-languages.html#responsibility']] }],
-      chips: [{ label: 'How do I apologise?', q: 'how do i say sorry so it lands' }], kind: 'care', id: 'infidelity' };
+      chips: [{ label: 'How do I apologize?', q: 'how do i say sorry so it lands' }], kind: 'care', id: 'infidelity' };
     return { blocks: [
       { k: 'p', x: 'I’m so sorry. Finding out about an affair is one of the most painful things that can happen in a relationship, and the shock can feel physical. What you’re feeling is a normal response to a real betrayal, and it isn’t your fault.' },
       { k: 'list', x: ['You don’t have to decide anything today, whether that’s staying or leaving.',
         'Look after the basics: sleep, food, and one person you trust to talk to.',
         'Ask the questions you need answered when you’re ready. You deserve honest answers.',
-        'If you both want to try, a couples counsellor who works with affairs can help, and many couples do recover. A counsellor just for you can help either way.',
+        'If you both want to try, a couples counselor who works with affairs can help, and many couples do recover. A counselor just for you can help either way.',
         'If you’re worried about your sexual health, a sexual health clinic can test you confidentially.'] },
       { k: 'links', x: [['Healing after hurt', '/book/understanding-11-healing-in-depth.html#hurt'], ['Forgiveness, and what it isn’t', '/book/understanding-11-healing-in-depth.html#forgiveness']] }],
       chips: [], kind: 'care', id: 'infidelity' };
@@ -3071,10 +3071,10 @@
       { k: 'p', x: 'Yelling now and then, followed by a real repair, is not the same as abuse. It becomes a safety issue if your family is afraid of you, if it comes with threats, name-calling, breaking or throwing things, or control, or if it happens most days. If someone flinched or went quiet around you, take that seriously: not as a verdict on you, but as a sign to get support now.' }];
     if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it has to stop.' });
     b.push({ k: 'list', x: ['In the moment: stop, step back, say “I’m getting too loud, I’m going to take a breath,” and breathe for a minute.',
-      'Afterwards, repair: “I scared you when I yelled. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
+      'Afterward, repair: “I scared you when I yelled. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
       'Write your triggers and first warning signs in the Calm-Down Kit, so you can catch it earlier.'] });
     b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Getting help with anger', '/parents.html#anger-help'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] });
-    return { blocks: b, chips: [{ label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care' };
+    return { blocks: b, chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care' };
   }
   var AMBIG = [
     ['interrupt', /\bignor\w* (me|us)\b/, /\b(talk\w*|speak\w*|said|say|says|finish|interrupt\w*|cut|cuts|meetings?|conversations?|listen\w*|ideas?|words?|heard|opinion)\b/,
@@ -3182,7 +3182,7 @@
   function igTurn(state, q, f) {
     // "make another": a new topic, never a picture of my own last reply
     if (/^(please )?(make|draw|do|create)( me| us)? another( one| infographic| picture| poster| graphic)?( please)?$/.test(f) || (state.lastKind === 'info' && /^(another|another one|one more)$/.test(f))) {
-      return { blocks: [{ k: 'p', x: 'Happy to! What should the next one be about? For example “the mental load”, “active listening” or “a good pause”.' }],
+      return { blocks: [{ k: 'p', x: 'Happy to! What should the next one be about? For example “the mental load,” “active listening” or “a good pause.”' }],
         chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Active listening', q: 'Make a step by step infographic about active listening' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify', id: 'ig-next' };
     }
     if (!IG_ASK.test(f)) return null;
@@ -3207,7 +3207,7 @@
         else if (L && L.card && cardById(L.card)) spec = IG.fromCard(cardById(L.card), rq.layout || null);
         else if (state.care && cardById(state.care.id) && (state.turn || 0) - state.care.turn <= 2) spec = IG.fromCard(cardById(state.care.id), rq.layout || null);
         if (!spec && LR && LR.blocks && LR.blocks.length) spec = IG.fromAnswer(LR.blocks, { title: (L && (L.topic || L.q)) || '' });
-        if (!spec) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load”, “fair isn’t always equal” or “me 60 them 40”.' }],
+        if (!spec) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load,” “fair isn’t always equal” or “me 60 them 40.”' }],
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }], kind: 'clarify' };
       } else {
         var tp = String(rq.topic || '').trim(), aud = '';
@@ -3215,7 +3215,7 @@
         var am = /^(.{3,}?)\s+(?:for|aimed at|suitable for)\s+((?:my |our |the )?(?:teen\w*|kids?|children|class(?:room)?|students|pupils|parents|couples|famil(?:y|ies)|grandparents|team|staff|colleagues|adults|older people|young people|beginners))$/i.exec(tp);
         if (am) { tp = am[1]; aud = am[2].replace(/^(my|our|the) /i, ''); }
         tp = tp.replace(/^(?:the |a |some )?(?:(?:simple|easy|basic|main|key|five|four|three|\d+) )?(?:steps?|stages?|tips?|rules?) (?:of|for|to|in)\s+/i, '').trim() || tp;
-        if (!tp) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load”, “fair isn’t always equal” or “me 60 them 40”.' }],
+        if (!tp) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load,” “fair isn’t always equal” or “me 60 them 40.”' }],
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify' };
         if (DANGER.test(norm(tp)) || VERBAL.test(norm(tp))) return null;
         spec = IG.fromKB(tp, KB, { layout: rq.layout });
@@ -3475,7 +3475,7 @@
     r.chips = (r.chips || []).slice(0, 4);
     r.chips.push({ label: 'Go deeper on this', q: 'Talk deep about ' + (h.t.id || dTitle(h.t)) });
     // a big question answered from loose search hits: say plainly that deep talk is the better place for it
-    if (h.big && !/^(card|card-more|sit|sit-more|term)$/.test(k)) r.blocks.splice(r.blocks.length && r.blocks[r.blocks.length - 1].fun ? r.blocks.length - 1 : r.blocks.length, 0, { k: 'p', x: 'That’s a big question. If you’d like, we can talk deep about it: what philosophers say, what research has found, and how it looks through an autistic lens. Tap “Go deeper on this”.' });
+    if (h.big && !/^(card|card-more|sit|sit-more|term)$/.test(k)) r.blocks.splice(r.blocks.length && r.blocks[r.blocks.length - 1].fun ? r.blocks.length - 1 : r.blocks.length, 0, { k: 'p', x: 'That’s a big question. If you’d like, we can talk deep about it: what philosophers say, what research has found, and how it looks through an autistic lens. Tap “Go deeper on this.”' });
     return r;
   }
 
@@ -3546,7 +3546,7 @@
       state.last = null;
       if (kn) { state.stAsk = null; return { blocks: [{ k: 'p', x: 'You’re ' + kn + '! I wrote it in my waterproof notebook. It stays on this device, and I forget it when you close the tab.' }], chips: [{ label: 'How are you?', q: 'How are you?' }, { label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', id: 'my_name', fun: 1 }; }
       state.stAsk = state.turn || 0;
-      return { blocks: [{ k: 'p', x: 'You haven’t told me yet! What should I call you? Say “my name is…”. It stays on this device, and I forget it when you close the tab.' }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', id: 'my_name', fun: 1 };
+      return { blocks: [{ k: 'p', x: 'You haven’t told me yet! What should I call you? Say “my name is….” It stays on this device, and I forget it when you close the tab.' }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', id: 'my_name', fun: 1 };
     }
     var nm = nameFrom(q0 || q);
     if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
@@ -3581,8 +3581,8 @@
     var on = deepOn(state);
     return { blocks: [{ k: 'p', x: 'Two modes, one raindrop. ' + (on ? 'We’re in deep mode right now.' : 'We’re in light mode right now.') },
       { k: 'list', x: ['Light mode, the usual one: ask about any tool, page or worry, and I’ll give you kind next steps, words you could use and the right page. Or just chat: jokes, riddles, fun facts.',
-        'Deep mode: say “talk deep”, or “talk deep: is honesty always kind?”, and we’ll think through a big question with philosophy, psychology and an autistic lens, tied back to the site. Say “keep it light” to come back up.',
-        'In either mode I can make you an infographic, like “make an infographic about the mental load”.'] },
+        'Deep mode: say “talk deep,” or “talk deep: is honesty always kind?” and we’ll think through a big question with philosophy, psychology and an autistic lens, tied back to the site. Say “keep it light” to come back up.',
+        'In either mode I can make you an infographic, like “make an infographic about the mental load.”'] },
       { k: 'p', x: 'Either way, safety comes first. If something sounds unsafe, I’ll say so plainly and point you to real help. ' + HONEST_LINE }],
       chips: [on ? { label: 'Keep it light', q: 'Keep it light' } : { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }, { label: 'Tell me a joke', q: 'Tell me a joke' }], kind: 'about', id: 'modes' };
   }
@@ -3913,7 +3913,7 @@
   function pzRiddleAnswer(state, fs) {
     var S = pzS(state), r = S.game.r, keys = (r.keys || []).map(stNorm);
     if (/\b(hint|clue)\b/.test(fs)) {
-      if (S.game.hinted) return pzR(state, [{ k: 'p', x: 'No more hints, I’m afraid. My notebook is closed. Have a guess, or say “I give up”.' }], [{ label: 'I give up', q: 'I give up' }], 'fun', 'pz-riddle');
+      if (S.game.hinted) return pzR(state, [{ k: 'p', x: 'No more hints, I’m afraid. My notebook is closed. Have a guess, or say “I give up.”' }], [{ label: 'I give up', q: 'I give up' }], 'fun', 'pz-riddle');
       S.game.hinted = 1;
       var a0 = stNorm(r.a).replace(/^(an?|the|your|all) /, '');
       return pzR(state, [{ k: 'p', x: 'A hint: it starts with the letter “' + a0.charAt(0).toUpperCase() + '”.' }], [{ label: 'I give up', q: 'I give up' }], 'fun', 'pz-riddle');
@@ -4343,8 +4343,8 @@
         { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
           'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
           'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.',
-          'Two ways to talk with me. Light mode is the usual one: questions like these, or just chat (“how are you?”, “tell me a joke”). Deep mode: say “talk deep” and we’ll think through a big question, like what love is, with philosophy, psychology and an autistic lens, tied back to the site. Say “keep it light” to come back up.',
-          'I can also make you an infographic on anything here: just ask, like “make an infographic about the mental load”, or “summarise this as an infographic” after an answer.'] },
+          'Two ways to talk with me. Light mode is the usual one: questions like these, or just chat (“how are you?” “tell me a joke”). Deep mode: say “talk deep” and we’ll think through a big question, like what love is, with philosophy, psychology and an autistic lens, tied back to the site. Say “keep it light” to come back up.',
+          'I can also make you an infographic on anything here: just ask, like “make an infographic about the mental load,” or “summarize this as an infographic” after an answer.'] },
         { k: 'p', x: HONEST_LINE + ' When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);
@@ -4440,7 +4440,7 @@
         var d = KB.docs[h.i], t = String(d.h || '').split(':')[0].replace(/[.!?…]+$/, '').trim(), key = t.toLowerCase();
         if (likely.length < 2 && !d.tip && !d.g && h.s >= 0.9 && t && t.length <= 60 && !likeSeen[key] && !HIDE_TITLE.test(t)) { likeSeen[key] = 1; likely.push({ t: t, i: h.i }); }
       });
-      var ask = likely.length === 2 ? ' Is it closer to “' + likely[0].t + '”, or “' + likely[1].t + '”? Or one of these?' : likely.length ? ' Is it closer to “' + likely[0].t + '”? Or one of these?' : ' Is it about sharing the load, getting along with someone, or calming down?';
+      var ask = likely.length === 2 ? ' Is it closer to “' + likely[0].t + ',” or “' + likely[1].t + '”? Or one of these?' : likely.length ? ' Is it closer to “' + likely[0].t + '”? Or one of these?' : ' Is it about sharing the load, getting along with someone, or calming down?';
       return { blocks: [{ k: 'p', x: 'I don’t have a page on that yet, and I’d rather not guess.' + (likely.length ? ask.replace(/ Or one of these\?$/, '') + ' Or tell me a bit more: who it’s about, and what happened.' : ' You could tell me a bit more: who it’s about, and what happened.' + ask) }],
         chips: likely.map(function (l) { return { label: l.t.length > 40 ? l.t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : l.t, doc: l.i }; }).concat(STARTERS).slice(0, 5), kind: 'none' };
     }

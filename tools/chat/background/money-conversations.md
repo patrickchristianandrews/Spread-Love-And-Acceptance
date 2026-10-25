@@ -107,24 +107,24 @@ Many families find simpler traditions, like a gift swap, reduce pressure.
 Program: Gift buying is kinkeeping, an invisible job worth an owner in WP-03.
 
 ## Kids and money conversations
-aka: allowance; pocket money; teaching kids about money
+aka: allowance; teaching kids about money
 see: Money histories; Natural and logical consequences
 go: /relationships-in-depth.html#family | Where families start
 evidence: Financial educators widely recommend talking about money with children in age-appropriate ways. Research on allowances is mixed.
-try: “We have this much for the holiday. Want to help plan how we spend it?”
+try: “We have this much for the vacation. Want to help plan how we spend it?”
 
-Talking openly about money, at a child’s level, helps them learn how it works. Some families use allowances; others involve kids in small budget decisions.
+Talking openly about money, at a child’s level, helps them learn how it works. Some families use allowances. Others involve kids in small budget decisions.
 
 Being honest (without burdening kids with adult worries) builds healthy habits.
 
-Program: The family road encourages age-sized jobs that kids fully own; money decisions can be part of that.
+Program: The family road encourages age-sized jobs that kids fully own. Money decisions can be part of that.
 
 ## Different money personalities
 aka: saver and spender; spender versus saver; money personalities
 see: Money histories; Different paces
 go: /tools/frequency-calibration.html | Frequency Calibration
 evidence: Research (for example, Rick and colleagues, 2011) suggests people often partner with others who have opposite spending tendencies, and that this difference can lead to conflict.
-try: “You like a cushion; I like to enjoy it now. Could we set aside savings first, then each have guilt-free money?”
+try: “You like a cushion. I like to enjoy it now. Could we set aside savings first, then each have guilt-free money?”
 
 One person likes to save, the other likes to spend: a very common pairing. Both approaches have value. Conflict comes when each treats their own way as the only sensible one.
 

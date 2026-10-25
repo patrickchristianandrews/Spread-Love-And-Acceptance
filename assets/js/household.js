@@ -385,7 +385,7 @@
           : 'Ticked. The names you type here will be offered in the other tools on this device. Nothing is sent anywhere.');
       } else {
         clear();
-        say('Forgotten. Your household isn’t kept on this device any more.');
+        say('Forgotten. Your household isn’t kept on this device anymore.');
       }
       // the page can remember the choice (so names it offers by default aren't offered again after an untick)
       if (typeof opts.onChange === 'function') { try { opts.onChange(box.checked); } catch (e) {} }

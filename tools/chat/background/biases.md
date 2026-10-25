@@ -74,7 +74,7 @@ go: /library/thinking.html | Thinking traps (Library)
 evidence: Hindsight bias is well documented (Baruch Fischhoff’s research in the 1970s): once we know an outcome, we think it was more predictable than it was.
 try: “It’s easy to say we should have left earlier now that we know about the traffic.”
 
-After something goes wrong, it often seems obvious in hindsight: “you should have known”. But at the time, the information may not have been clear at all.
+After something goes wrong, it often seems obvious in hindsight: “you should have known.” But at the time, the information may not have been clear at all.
 
 Hindsight bias makes us harsher on others and ourselves. Asking “what did we actually know at the time?” is fairer.
 
@@ -98,7 +98,7 @@ aka: recency effect; last week colors everything; recent memory
 see: Memory drift after an argument; Hindsight bias
 go: /book/chapter-2.html | Chapter II: Is the split working?
 evidence: Research on memory shows recent events are easier to recall and often get extra weight in judgments.
-try: One bad week of chores can make it feel like “you never help”, even after a good month.
+try: One bad week of chores can make it feel like “you never help,” even after a good month.
 
 What happened recently feels more important than what happened a while ago. One rough week can overshadow a good month, and one good gesture can overshadow weeks of imbalance.
 
@@ -136,7 +136,7 @@ Program: Pillar II reminds you to look at the setup. The Library’s thinking-tr
 aka: projecting; assuming they feel what I feel
 see: False consensus at home; Clarifying questions
 go: /library/thinking.html#false-consensus | False consensus (Library)
-evidence: In everyday use, projection means assuming others share our feelings or motives. Research on false consensus supports the general tendency; the classic psychoanalytic idea is more debated.
+evidence: In everyday use, projection means assuming others share our feelings or motives. Research on false consensus supports the general tendency. The classic psychoanalytic idea is more debated.
 try: “I’m assuming you’re annoyed because I would be. Are you?”
 
 Sometimes we assume other people feel what we’d feel in their place, or we read our own mood into their words. If you’re irritated, a neutral text can seem irritated too.
@@ -150,7 +150,7 @@ aka: everyone would agree; normal people do it this way; obviously
 see: Projection; Curse of knowledge in instructions
 go: /library/thinking.html#false-consensus | False consensus (Library)
 evidence: The false consensus effect (Ross, Greene and House, 1977) is well documented: we overestimate how much others share our views and habits.
-try: “I assumed everyone washes pans straight away. Clearly that’s just my family’s way.”
+try: “I assumed everyone washes pans right away. Clearly that’s just my family’s way.”
 
 We tend to think our own way of doing things is the normal way. Different families have different habits about cleaning, money, time and holidays, and each feels “obvious” to the people raised in it.
 
@@ -163,9 +163,9 @@ aka: curse of knowledge; obvious to me; unclear instructions
 see: False consensus at home; Clear yes or no questions
 go: /library/thinking.html#curse-of-knowledge | The curse of knowledge (Library)
 evidence: The curse of knowledge is well documented: once we know something, it’s hard to imagine not knowing it, so our explanations leave out steps.
-try: “Can you ‘do the bins’?” might mean three things to you (take out, rinse, new bags) and one to them.
+try: “Can you ‘take out the trash’?” might mean three things to you (take out, rinse, new bags) and one to them.
 
-When you know how something is done, it’s easy to give instructions that leave out the steps that seem obvious to you. Then the other person does it “wrong”, and both feel frustrated.
+When you know how something is done, it’s easy to give instructions that leave out the steps that seem obvious to you. Then the other person does it “wrong,” and both feel frustrated.
 
 Spelling out what “done” means (once, kindly) often solves recurring “you did it wrong” arguments.
 

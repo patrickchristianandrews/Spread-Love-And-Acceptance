@@ -46,7 +46,7 @@
    'get got gets getting keep keeps kept one some any all each every much many more most lot lots thing things stuff something anything ' +
    'dont doesnt didnt cant cannot wont isnt arent wasnt werent havent hasnt hadnt wouldnt couldnt shouldnt aint not no ' +
    'youre theyre hes shes thats whats theres lets ok okay please like liked likes liking want need ' +
-   'someone somebody person people react reacted reacts reaction reactions act acted acting behave behaves behaved behaviour behavior ' +
+   'someone somebody person people react reacted reacts reaction reactions act acted acting behave behaves behaved behavior behavior ' +
    'always never again every time times then than if because cause did does make makes made seem seems seemed think thinks thought ' +
    'explain understand logic behind sense mean means meant go goes going gone went').split(' ').forEach(function (w) { STOP[w] = 1; });
   // phrases that read as one idea
@@ -410,7 +410,7 @@
     ['Different rulebooks', ['An accent: it’s how they learned to say it.', 'Driving on the left or the right: neither is wrong.', 'Two plugs for the same electricity.']],
     ['Starting and stopping', ['A heavy train needing a long way to stop.', 'A car that only starts on a hill.', 'A flywheel: hard to start, hard to stop.']],
     ['Care in another language', ['Two languages for the same sentence.', 'A letter written in actions rather than ink.', 'A gift wrapped in awkward paper.']],
-    ['Order', ['Library books shelved by number.', 'A well-labelled toolbox.', 'Tools hung on their outlines on the wall.']]
+    ['Order', ['Library books shelved by number.', 'A well-labeled toolbox.', 'Tools hung on their outlines on the wall.']]
   ];
   var LABEL_WORDS = /\b(rude|weird|crazy|lazy|selfish|dramatic|childish|stupid|psycho|mental|insane|attention[- ]seeking|needy|cold|mean|nasty|over the top|ridiculous|pathetic|difficult)\b/i;
   var F = {}, buildOut = null, buildMsg = null;
@@ -423,9 +423,9 @@
   function mountBuild(host) {
     host.textContent = '';
     var form = mk('form', { cls: 'lg-build', 'aria-label': 'Build your own card' });
-    var f1 = field('looks', '1. What it looks like from outside', 'Camera words: what a camera would see or hear. No labels like “rude” or “weird”.', 'text', 'At the party, she left without saying goodbye.');
+    var f1 = field('looks', '1. What it looks like from outside', 'Camera words: what a camera would see or hear. No labels like “rude” or “weird.”', 'text', 'At the party, she left without saying goodbye.');
     var warn = mk('p', { cls: 'lg-warn', role: 'status' });
-    F.looks.addEventListener('input', function () { var m = LABEL_WORDS.exec(F.looks.value); warn.textContent = m ? '“' + m[0] + '” is a judgement, not something a camera sees. Try saying what happened instead.' : ''; });
+    F.looks.addEventListener('input', function () { var m = LABEL_WORDS.exec(F.looks.value); warn.textContent = m ? '“' + m[0] + '” is a judgment, not something a camera sees. Try saying what happened instead.' : ''; });
     f1.appendChild(warn);
     form.appendChild(f1);
     var fs = mk('fieldset', { cls: 'lg-fs' }, [mk('legend', { cls: 'lg-lab', text: '2. The logic chain' }), mk('p', { cls: 'lg-hint', text: 'Three or four short steps, each following from the one before. Start with a plain fact about how things work, and end with why the reaction makes sense.' })]);
@@ -448,10 +448,10 @@
     f3.appendChild(mk('p', { cls: 'lg-sublab', text: 'Need an idea? Pick a theme, then tap one to use it (or to add a second one):' }));
     f3.appendChild(themes); f3.appendChild(sugg);
     form.appendChild(f3);
-    form.appendChild(field('fits', '4. Why the reaction fits', 'What makes it reasonable, said fairly. “For many people…”, not “everyone” or “always”.', 'area'));
+    form.appendChild(field('fits', '4. Why the reaction fits', 'What makes it reasonable, said fairly. “For many people…,” not “everyone” or “always.”', 'area'));
     form.appendChild(field('other', '5. The other side', 'What the other person may have felt or needed. Nobody is the bad guy.', 'area'));
     form.appendChild(field('say', '6. One sentence to explain it', 'Something you could actually say out loud.', 'text', 'I had a good time. I just ran out of battery.'));
-    form.appendChild(field('step', 'And one small step that helps both people', 'Small enough to do this week.', 'text', 'Send a short text afterwards.'));
+    form.appendChild(field('step', 'And one small step that helps both people', 'Small enough to do this week.', 'text', 'Send a short text afterward.'));
     form.appendChild(field('t', 'A title for your card (optional)', 'A few words.', 'text', 'Leaving early'));
     buildMsg = mk('p', { cls: 'lg-warn', role: 'status' });
     form.appendChild(mk('div', { cls: 'lg-acts' }, [mk('button', { type: 'submit', cls: 'lg-btn lg-go', text: 'Make my card' }), btn('Clear', 'lg-quiet', function () { Object.keys(F).forEach(function (k) { F[k].value = ''; }); warn.textContent = ''; buildMsg.textContent = ''; buildOut.textContent = ''; })]));

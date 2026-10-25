@@ -20,7 +20,7 @@ aka: request or boundary; boundary versus rule; boundaries are not rules
 see: Kinds of boundaries; Boundaries without control
 go: /library/communication.html#boundaries | Boundaries (Library)
 evidence: A practical distinction discussed by many counselors. It helps avoid using the language of boundaries to control others.
-try: Request: “Please don’t call during work.” Boundary: “I don’t answer calls during work; I’ll call you back after 6.”
+try: Request: “Please don’t call during work.” Boundary: “I don’t answer calls during work. I’ll call you back after 6.”
 
 A request asks someone else to change what they do. A boundary says what you will do. Both are fine, but they’re different.
 
@@ -48,7 +48,7 @@ go: /workpapers/wp-01.html | WP-01: Kind ways to say no
 evidence: Assertiveness training has long used the “broken record” technique (calmly repeating your position). Consistency is widely recommended.
 try: “I understand. I’m still not able to host this year.” Repeat, kindly, as needed.
 
-Setting a boundary is one step; holding it is another. People may push back, especially at first. Calmly repeating your position, without over-explaining, is usually more effective than arguing.
+Setting a boundary is one step. Holding it is another. People may push back, especially at first. Calmly repeating your position, without over-explaining, is usually more effective than arguing.
 
 You don’t need to justify a boundary endlessly. One clear reason, if you want to give one, is enough.
 
@@ -104,7 +104,7 @@ Having a few phrases ready makes boundaries easier to say in the moment. Some ex
 
 Keep them short, kind and firm. Adding an alternative, where you have one, helps the other person move forward.
 
-Program: WP-01 includes scripts for different kinds of “not now”.
+Program: WP-01 includes scripts for different kinds of “not now.”
 
 ## Boundaries with kids
 aka: limits with kids; setting limits with children; kind but firm
