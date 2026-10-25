@@ -2191,7 +2191,10 @@
     setControls(GAMES[S.game]); hudLabels(GAMES[S.game].labels);
     drawBadge(); hud(); game.draw(0);
     say(GAMES[S.game].hint);
-    gaming(true); fitStage();
+    gaming(true);
+    // game24: every game starts full screen (the Exit button, Esc and Back leave it; the game pauses and waits in the page)
+    if (window.TOLFull) { try { TOLFull.enter($('ar-stage'), { name: GAMES[S.game].name, keepFocus: true }); } catch (e) { /* ignore */ } }
+    fitStage();
     startLoop(); try { wrap.focus({ preventScroll: true }); } catch (e) { wrap.focus(); }
     showStage();
     if (game.intro) game.intro();
@@ -2230,7 +2233,7 @@
     var h = $('ar-help'); if (h && G.help) h.textContent = G.help;
   }
   // the site header stays at the top of the screen; the game sits just under it
-  function headerH() { var b = D.querySelector('.tol-bar'); if (!b) return 0; var cs = getComputedStyle(b); if (cs.position !== 'sticky' && cs.position !== 'fixed') return 0; var r = b.getBoundingClientRect(); return r.bottom > 0 ? r.height : 0; }
+  function headerH() { if (window.TOLFull && TOLFull.active()) return 0; var b = D.querySelector('.tol-bar'); if (!b) return 0; var cs = getComputedStyle(b); if (cs.position !== 'sticky' && cs.position !== 'fixed') return 0; var r = b.getBoundingClientRect(); return r.bottom > 0 ? r.height : 0; }
   // size the playfield so the field and its controls fit on one screen (portrait: stacked; landscape touch: side by side)
   function fitStage() {
     var stage = $('ar-stage'), play = $('ar-play'), wrap = $('ar-wrap'), side = $('ar-side');
@@ -2250,12 +2253,14 @@
   }
   function showStage() {
     var stage = $('ar-stage'); if (!stage) return;
+    if (window.TOLFull && TOLFull.active()) return;
     var top = stage.getBoundingClientRect().top + (window.pageYOffset || 0) - headerH() - 6;
     try { window.scrollTo({ top: Math.max(0, top), behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, Math.max(0, top)); }
   }
   var fitT = 0;
   function onResize() { clearTimeout(fitT); fitT = setTimeout(function () { if (running) { fitStage(); cornerZone(); } }, 120); }
   function backToMenu() {
+    if (window.TOLFull) TOLFull.exit();
     clearIsm(); recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop(); gaming(false); syncBats();
     $('ar-overlay').hidden = true; $('ar-stage').hidden = true; $('ar-select').hidden = false; $('ar-wrap').style.width = '';
     try { $('ar-select').scrollIntoView({ block: 'start' }); } catch (e) { /* ignore */ }
@@ -2352,6 +2357,12 @@
     // /frequency-journey.html#derby opens the menu with the Home Run Derby picked
     if (location.hash === '#derby') { S.game = 'derby'; var dr = D.querySelector('input[name="ar-game"][value="derby"]'); if (dr) dr.checked = true; startLabel(); }
     D.addEventListener('keydown', onKey); D.addEventListener('keyup', onKeyUp);
+    // game24: entering or leaving full screen refits the field; leaving pauses the game where it is
+    D.addEventListener('tol-fullscreen', function (e) {
+      if (!running) return;
+      if (e.detail && e.detail.active === false && !paused && game && !ism && $('ar-overlay').hidden) { togglePause(true); say('Paused where you left it.'); }
+      fitStage(); cornerZone();
+    });
     window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize);
     // flow17: tapping the field around the Derby's "Play ball" card starts the game
     var ovl = $('ar-overlay'); if (ovl) ovl.addEventListener('click', function (e) { if (e.target === ovl) { var sw0 = $('ar-swing'); if (sw0 && sw0.classList.contains('is-wait')) swingNudge(); } });

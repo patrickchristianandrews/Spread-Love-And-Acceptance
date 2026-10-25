@@ -1,0 +1,120 @@
+{
+  "id": "picture-book",
+  "title": "Tidbit and Sugarfoot's Big Picnic",
+  "subtitle": "A read-aloud story about big feelings, sharing the load and saying sorry",
+  "series": "The Frequency Buddies Books",
+  "series_no": 1,
+  "author": "Christian",
+  "ages": "Ages 4 to 7",
+  "back_cover": [
+    "Tidbit zooms. Sugarfoot floats. Today is picnic day, and Tidbit is sure she can carry the whole basket by herself.",
+    "Then her paws get buzzy, her ears get hot, and a little gray cloud of Static drifts in. With help from Professor Puddles and a hill full of friends, Tidbit learns to listen to her body, ask for a hand, say sorry when she bumps the basket, and make it right.",
+    "A warm, funny read-aloud with a calm-down trick kids can copy, and a page of gentle talking points for grown-ups."
+  ],
+  "spreads": [
+    {
+      "id": "zoom",
+      "left": "Tidbit woke up zoom, zoom, zoom,\nand zipped around the living room.",
+      "right": "Sugarfoot woke up slow, slow, slow,\nand stretched her paws from head to toe."
+    },
+    {
+      "id": "plan",
+      "left": "\"Today is picnic day!\" said Tidbit.\n\"The whole Hollow is coming. I will pack EVERYTHING!\"",
+      "right": "\"Everything is a lot,\" said Sugarfoot kindly.\n\"Shall we pack it together?\"\nBut Tidbit was already zooming off to the pantry."
+    },
+    {
+      "id": "pack",
+      "left": "She packed the apples. She packed the pie.\nShe packed the pickles piled up high.\nShe packed the cheese and the cups and the cake,\nuntil the basket was ready to break.",
+      "right": "\"I can carry it ALL by myself!\" said Tidbit.\nShe tugged. She puffed. She wobbled.\nThe basket did not budge."
+    },
+    {
+      "id": "static",
+      "left": "Tidbit's paws got buzzy.\nHer ears got hot.\nHer tummy got tight as a knotted-up knot.",
+      "right": "A little gray cloud floated in through the door.\n\"Grumble,\" it said. \"Grumble, grumble, grrr.\"\nThat was Grumble, a cloud of Static.\nStatic is only noisy feelings, floating about."
+    },
+    {
+      "id": "puddles",
+      "left": "Professor Puddles came pitter-pattering by,\nwith his round little glasses and his hat held high.\n\"Good morning!\" he said.\n\"What is your body telling you?\"",
+      "right": "Tidbit stopped. She checked.\n\"Buzzy paws. Hot ears. A tight little tummy.\"\n\"Ah,\" said the Professor. \"A revved-up engine.\nGood noticing!\""
+    },
+    {
+      "id": "room",
+      "left": "Sugarfoot's body was telling her something else.\nHeavy paws. Droopy ears. A quiet, empty tummy.\nMumble, the shy little cloud, hid behind the bush,\nand Sugarfoot got very quiet too.",
+      "right": "\"I need some room,\" said Sugarfoot.\n\"Just a little while. Then I would love a hug.\"\nTidbit wanted to hug right away.\nBut she waited, one slow breath at a time."
+    },
+    {
+      "id": "calm",
+      "left": "\"Try this,\" said the Professor.\n\"Smell the flower, nice and slow.\nBlow the candle, out and low.\"",
+      "right": "Tidbit smelled the flower.\nTidbit blew the candle.\nSmell the flower. Blow the candle.\nHer paws stopped buzzing. Her ears cooled down.\nGrumble got smaller, and smaller, and smaller."
+    },
+    {
+      "id": "ask",
+      "left": "Then Tidbit did something brave.\n\"This basket is too heavy for me,\" she said.\n\"Can you help?\"",
+      "right": "\"Yes!\" said Sugarfoot.\n\"Yes!\" said Hopper.\n\"Yes!\" said Nutmeg, and Dot, and Ollie, and Lumi, and Beep,\nand all three ducklings, who said it very small."
+    },
+    {
+      "id": "jobs",
+      "left": "One job each. That is how it goes.\nBeep took the blanket. Hopper took the apples.\nNutmeg took the nuts. The ducklings took the napkins, one each.\nLumi lit the lantern path.",
+      "right": "The basket was light as a dandelion.\nDot had the slowest job, the bag of cracker crumbs,\nand nobody hurried her.\nSlow is a speed too."
+    },
+    {
+      "id": "oops",
+      "left": "Then Tidbit saw a butterfly.\nZOOM! She forgot where her feet were.\nShe forgot where the basket was.\nCRASH! BOOM! SPLAT!",
+      "right": "Apples rolled. The pie went flying.\nThe sandwiches squished flat as flat.\nEverybody went quiet.\nFuzz giggled. Tidbit's tummy dropped.\n\"That was me,\" she whispered."
+    },
+    {
+      "id": "sorry",
+      "left": "Tidbit took a slow breath.\n\"I'm sorry. I zoomed too fast and I knocked the basket.\nThat was my fault.\nWhat can I do to make it right?\"",
+      "right": "\"Help us catch the apples,\" said Hopper.\nSo she did. They all did.\nThe sandwiches were still yummy, just a little flat.\n\"Thank you for saying sorry,\" said Sugarfoot.\n\"Next time I will look before I zoom,\" said Tidbit."
+    },
+    {
+      "id": "clouds",
+      "left": "The clouds of Static drifted over to see.\nGrumble grumbled a little less.\nFuzz grabbed a cracker and zipped away.\nMumble peeked out from behind Beep.",
+      "right": "\"Static is just loud feelings looking for a friend,\"\nsaid Professor Puddles.\nFuzz tiptoed back and put the cracker in the middle\nas if nothing had happened.\nEverybody laughed, even Grumble."
+    },
+    {
+      "id": "night",
+      "left": "When the sun got low and the sky turned pink,\nTidbit gave a great big yawn.\n\"Can we walk home slow?\" she asked.\n\"My legs want a slow walk.\"",
+      "right": "\"Yes,\" said Sugarfoot. \"Slow it is.\"\nFast and slow, side by side,\nthey walked home under the Moon.\n\"Goodnight, Tidbit. Goodnight, Sugarfoot.\"\n\"Goodnight, Moon. Goodnight, everyone. Goodnight, Static.\""
+    }
+  ],
+  "calm_title": "Try it with Tidbit",
+  "calm_steps": [
+    ["Smell the flower", "Breathe in slowly through your nose, like you are smelling a flower."],
+    ["Blow the candle", "Breathe out slowly through your mouth, like you are blowing a candle without putting it out too fast."],
+    ["Do it again", "Smell the flower. Blow the candle. Three times is plenty."],
+    ["Ask your body", "What is my body telling me? Buzzy, heavy, or calm?"]
+  ],
+  "grownups": {
+    "title": "For grown-ups",
+    "paras": [
+      "This story is built around four small skills that children (and adults) can practice any day: noticing what the body is saying, asking for what you need, sharing a load by giving everyone one job, and repairing after a mistake.",
+      "Tidbit is a revved-up engine: fast, buzzy, hot-eared. Sugarfoot is running on empty: slow, heavy, quiet. Neither one is the better way to be. Each needs something different, and each is easier to help once she says what it is.",
+      "The Static clouds stand for noisy feelings. They are never villains. They drift in when a body is wound up or worn out, and they settle when someone slows down and listens.",
+      "Read it slowly, and stop where it helps. Let children name what each character's body is telling them before the story does."
+    ]
+  },
+  "talk_title": "Talk about it",
+  "talk": [
+    "What was Tidbit's body telling her when the basket would not move? What about Sugarfoot's?",
+    "Sugarfoot asked for room first and a hug later. What helps you when you feel heavy or upset?",
+    "Everyone had one job. Which job would you pick? Which job would be too big for one person?",
+    "Tidbit said three things when she knocked the basket: sorry, what happened, and how to make it right. What would you say?",
+    "Dot had the slowest job and nobody hurried her. Is it okay to be slow? Is it okay to be fast?",
+    "When Static floats in, what could you try first? Smell the flower, blow the candle?"
+  ],
+  "words_title": "Words to try",
+  "words": [
+    ["When you need something", "\"I need some room, then a hug.\"\n\"This is too heavy for me. Can you help?\"\n\"Can we go slow?\""],
+    ["When you bump or break something", "1. Say sorry.\n2. Say what happened: \"I zoomed too fast.\"\n3. Ask: \"What can I do to make it right?\""],
+    ["When someone else is upset", "\"Do you want room, or do you want me close?\"\n\"I can wait.\""]
+  ],
+  "find_title": "Find and count",
+  "find_items": [
+    "3 ducklings", "4 clouds of Static", "1 butterfly", "5 apples", "1 pie", "2 pups"
+  ],
+  "about_paras": [
+    "Tidbit and Sugarfoot live at spreadloveandacceptance.com, where they star in the Frequency Buddies cartoon, play games, and keep company in the Night Garden. Everything on the site is free to read and use.",
+    "The words in this book were drafted with an AI writing tool. The pictures were drawn by code, written with an AI tool, in the same style as the site's characters."
+  ]
+}

@@ -1231,3 +1231,98 @@ def mandala_flower(P, x, y, r, rings=3, petals=10, seed=0):
         a = math.radians(i * 45)
         P.circ(math.cos(a) * r * 0.09, math.sin(a) * r * 0.09, r * 0.025, '#111', kind='dark')
     P.close()
+
+
+# ---------------------------------------------------------------- more props (picnic food, candle, signs)
+def pie(P, x, y, s=1.0, rot=0, slice_=False):
+    P.at(x, y, s, rot=rot)
+    P.path('M-14 2 Q-14 -8 0 -8 Q14 -8 14 2 L11 8 L-11 8Z', '#E5B26A')
+    P.line('M-8 -2 L-5 4 M0 -4 L0 4 M8 -2 L5 4', '#B97F36', 1.2, kind='fine')
+    P.ell(0, -8, 14, 3, '#D9984A')
+    P.circ(0, -9, 3, '#C0392B')
+    P.close()
+
+
+def jar(P, x, y, s=1.0, col='#8CC66B', rot=0):
+    P.at(x, y, s, rot=rot)
+    P.rect(-6, -12, 12, 18, 'rgba(190,225,170,.9)' if P.mode == 'color' else '#fff', r=3)
+    P.rect(-6.5, -15, 13, 4, '#F2C14E', r=1.5)
+    for (dx, dy) in ((-2, -5), (2, 0), (-1, 2)):
+        P.ell(dx, dy, 1.6, 3.2, col, rot=20)
+    P.close()
+
+
+def cheese(P, x, y, s=1.0, rot=0):
+    P.at(x, y, s, rot=rot)
+    P.path('M-12 6 L12 6 L12 -4 L-12 0Z', '#F5C84C')
+    P.path('M-12 0 L12 -4 L8 -8 L-8 -5Z', '#FAE08A')
+    for (dx, dy, r) in ((-4, 3, 1.5), (4, 1, 1.2), (7, 4, 1)):
+        P.circ(dx, dy, r, '#D9A62E', kind='detail' if P.mode == 'line' else 'flat')
+    P.close()
+
+
+def cupcake(P, x, y, s=1.0, rot=0):
+    P.at(x, y, s, rot=rot)
+    P.path('M-7 2 L7 2 L5 10 L-5 10Z', '#F2A3B6')
+    P.path('M-8 2 Q-9 -6 0 -7 Q9 -6 8 2Z', '#FFF6E8')
+    P.circ(0, -9, 2.4, '#C0392B')
+    P.close()
+
+
+def cup(P, x, y, s=1.0, col='#9FC3E8', rot=0):
+    P.at(x, y, s, rot=rot)
+    P.path('M-5 -6 L5 -6 L4 5 L-4 5Z', col)
+    P.line('M5 -3 Q9 -3 8 1 Q7 3 4.5 2', col, 1.4, kind='fine')
+    P.close()
+
+
+def candle(P, x, y, s=1.0, lean=0.0, flame=True):
+    """an imaginary birthday candle: a small stick with a flame that leans when you blow"""
+    P.at(x, y, s)
+    P.rect(-4, -26, 8, 26, '#FFF3C4', r=2)
+    P.line('M-4 -18 L4 -14 M-4 -9 L4 -5', '#F08DA8', 1.6, kind='fine')
+    P.line('M0 -26 L0 -29', '#6B4A2E', 1.2)
+    if flame:
+        P.path('M0 -30 Q%s -38 %s -46 Q%s -36 %s -30Z' % (f(5 + lean * 6), f(lean * 12), f(-5 + lean * 3), f(0)), '#F7A53B')
+        P.path('M0 -31 Q%s -36 %s -41 Q%s -35 0 -31Z' % (f(2 + lean * 3), f(lean * 6), f(-2)), '#FFE873', kind='flat')
+    P.close()
+
+
+def sign(P, x, y, s=1.0, w=60, h=34):
+    P.at(x, y, s)
+    P.rect(-2.5, -4, 5, 30, '#8A6A4E', r=1.5)
+    P.rect(-w / 2, -h - 4, w, h, '#F7E3B5', r=4)
+    P.close()
+
+
+def speed_lines(P, x, y, n=3, length=60, gap=12, s=1.0):
+    P.at(x, y, s)
+    for i in range(n):
+        yy = (i - (n - 1) / 2.0) * gap
+        P.line('M0 %s L%s %s' % (f(yy), f(-length + i * 6), f(yy)), '#B9B2A6' if P.mode == 'color' else '#111', 1.6, kind='fine', cap='round')
+    P.close()
+
+
+def dust(P, x, y, s=1.0):
+    P.at(x, y, s)
+    for (dx, dy, r) in ((0, 0, 6), (-8, 3, 4.5), (-14, -1, 3.5)):
+        P.circ(dx, dy, r, '#EFE6D6' if P.mode == 'color' else '#fff', kind='flat' if P.mode == 'color' else 'shape')
+    P.close()
+
+
+def fizz_marks(P, x, y, r=40, n=8, s=1.0, col='#E9A93A'):
+    """little zigzag sparks around something that is revved up"""
+    P.at(x, y, s)
+    for i in range(n):
+        a = math.radians(i * 360.0 / n + 10)
+        x0, y0 = math.cos(a) * r, math.sin(a) * r
+        x1, y1 = math.cos(a) * (r + 14), math.sin(a) * (r + 14)
+        P.line('M%s %s L%s %s' % (f(x0), f(y0), f(x1), f(y1)), col, 2.0, kind='fine', cap='round')
+    P.close()
+
+
+def zz(P, x, y, s=1.0):
+    P.at(x, y, s)
+    for i, (dx, dy, k) in enumerate(((0, 0, 6), (10, -10, 8), (22, -22, 10))):
+        P.line('M%s %s l%s 0 l%s %s l%s 0' % (f(dx), f(dy), f(k), f(-k), f(k), f(k)), '#7C86B8', 1.6, kind='fine')
+    P.close()

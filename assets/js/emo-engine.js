@@ -339,7 +339,10 @@
       if (m.cat) { y.cat = m.cat; y.moved = true; }
       if (m.removed) removed.push(y); else out.push(y);
     });
-    (edits.added || []).forEach(function (a) { if (!a.removed) out.push({ id: a.id, cat: 'confirmed', text: a.text, why: ['You added this yourself.'], tag: 'Added by you', added: true }); });
+    (edits.added || []).forEach(function (a) {
+      var y = { id: a.id, cat: 'confirmed', text: a.text, why: ['You added this yourself.'], tag: 'Added by you', added: true };
+      if (a.removed) removed.push(y); else out.push(y);
+    });
     return { items: out, removed: removed, aside: map.aside };
   }
 
