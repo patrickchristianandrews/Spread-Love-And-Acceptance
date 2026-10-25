@@ -123,7 +123,7 @@ const CASES = [
   ['brown noise', ['/soundscapes.html#background', '/soundscapes.html']],
   ['calming music', ['/soundscapes.html']],
   ['breathing exercise', ['/night-garden.html', '/upset-right-now.html']],
-  ['supplements for anxiety', ['/calming-supplements.html']],
+  ['supplements for anxiety', ['/calm-without-pills.html']],
   ['sad', ['/quick-checks.html#today', '/small-wins.html']],
   ['i feel depressed', ['/quick-checks.html#today', '/small-wins.html']],
   ['exhausted', ['/quick-checks.html#today', '/workpapers/wp-02-how-much-are-you-carrying.html', '/quick-checks.html']],

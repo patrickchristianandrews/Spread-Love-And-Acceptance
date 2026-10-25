@@ -25,9 +25,12 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/journeys.css">
 <link rel="stylesheet" href="/assets/css/home.css">
+<link rel="stylesheet" href="/assets/css/this-week.css">
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/journeys.js" defer></script>
 <script src="/assets/js/home.js" defer></script>
+<script src="/assets/js/this-week-data.js" defer></script>
+<script src="/assets/js/this-week.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/">
@@ -171,11 +174,20 @@
 
 <!-- 2a. Seven small days (return21): one small thing a day that continues where you stopped, and what's new since the last
      visit (return-visit.js, loaded by site.js). The weekly calendar reminder sits with it. -->
-<section class="h-days tol-plain no-bubble no-dive" aria-label="Seven small days"><div data-return-today></div>
+<section class="h-days tol-plain no-bubble no-dive" id="small-days" aria-label="Seven small days"><div data-return-today></div>
   <details class="h-remind">
     <summary id="explore-h">A gentle weekly reminder, in your calendar</summary>
     <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
   </details>
+</section>
+
+<!-- 2a-2. This week (return26): the weekly card. this-week.js picks the right week from the date and adds the Send button. With
+     JavaScript off, the default week below still reads well (tools/this-week/render-fallback.js refreshes it). For someone who has been
+     here before, the same block becomes "Welcome back" in the first screen and this one steps aside. -->
+<section class="h-week tol-plain no-bubble no-dive" id="this-week" data-this-week="home" aria-label="This week">
+<!-- tw:start -->
+<div class="tw-card" data-tw-card data-tw-week="2026-10-26"><p class="tw-k">This week, Oct 26 to Nov 1</p><h2 class="tw-h" id="tw-h">Name the feeling</h2><ul class="tw-list"><li class="tw-item tw-try"><span class="tw-l">Try, about a minute</span><span class="tw-t">Finish this sentence, out loud or in your head: “Right now I feel…” One or two words is plenty.</span></li><li class="tw-item tw-ex"><span class="tw-l">Explore, a tool</span><a class="tw-exlink" href="/what-am-i-feeling.html"><strong>What am I feeling?</strong><span>Answer a few gentle questions and see a map of what may be behind a feeling.</span></a></li></ul><details class="tw-fold"><summary>Notice, and try it with someone</summary><ul class="tw-list"><li class="tw-item"><span class="tw-l">Notice</span><span class="tw-t">Notice where a feeling shows up first, such as your shoulders, your chest or your jaw.</span></li><li class="tw-item"><span class="tw-l">Try it with someone</span><span class="tw-t">Each share one feeling word at dinner. The only reply is “Thanks for telling me.”</span></li></ul></details><p class="tw-go"><a class="tw-link" href="/this-week.html">See the whole card</a> <button type="button" class="tw-btn is-soft" data-tw-send hidden>Send this week’s idea to someone</button></p></div>
+<!-- tw:end -->
 </section>
 
 <!-- 2b. nav21: two things worth a look: the languages (lang21) and Frequency Buddies episode 4, the owner's favorite -->

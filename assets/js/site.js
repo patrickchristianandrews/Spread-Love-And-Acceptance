@@ -137,7 +137,7 @@
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
-      { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements and herbs: what the research says', note: 'Chamomile, magnesium, ashwagandha, St John’s wort, melatonin and more: what helps, side effects and interactions' },
+      { href: '/calm-without-pills.html', code: 'New', title: 'Calm without pills: what actually helps', note: 'Movement, sleep, daylight, people and slow breathing, each with the research and every source' },
       { href: '/ladder.html', code: 'New', title: 'My weather today: quick, 4 taps', note: 'The quick mode: find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, roommates, work and life changes' },
@@ -219,7 +219,8 @@
       { href: '/help-it-settle.html', code: 'New', title: 'Helping it settle', note: 'Where a big reaction comes from and the seven things in your own control' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'My weather today', note: 'How am I right now? Four quick taps, or one minute on your own conditions: a forecast, a talk window, what today is good for, and an optional 7-day log of your patterns' },
       { href: '/my-week.html', code: 'Weekly', title: 'Your week in weather', note: 'Tap the weather for each day, see your week as a weather report, and play with next week’s forecast. Saved only on this device.' },
-      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs: what the research says', note: 'What the research shows for common calming supplements, herbs and other approaches, with side effects and interactions' },
+      { href: '/this-week.html', code: 'Weekly', title: 'This week', note: 'One small thing to try, one thing to explore, one thing to notice and one idea to try with someone. New every Monday.' },
+      { href: '/calm-without-pills.html', code: 'Guide', title: 'Calm without pills: what actually helps, and what the research says', note: 'What the research shows for everyday ways to ease stress, worry and poor sleep, with cautions and sources' },
       { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Fight, flight and freeze, the vagus nerve, and what helps you settle' },
       { href: '/know-yourself.html', deep: true, code: 'New', title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today, and how to explain each one to others' },
       { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'What you’ve stopped checking in yourself, and a small monthly way to look again' },
@@ -500,6 +501,7 @@
       { href: '/wavelength.html', plain: true, title: 'How you connect', note: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share.' },
       { href: '/quick-checks.html#today', plain: true, title: 'My weather today', note: 'Know if now is a good time to talk: four taps, or one minute on mood, sleep and energy.' },
       { href: '/my-week.html', plain: true, title: 'Your week in weather', note: 'Look back on your week as a weather report, then plan next week with a forecast you can adjust.' },
+      { href: '/this-week.html', plain: true, title: 'This week', note: 'A calm weekly card: something to try, explore, notice and try with someone. The last four weeks stay open.' },
       { href: '/growing-up.html#roots-h', plain: true, title: 'Old rules, new choices', note: 'Choose which old rules to keep: look gently at where a reaction started.' },
       { href: '/wiring-card.html', plain: true, title: 'How to talk to me: a card', note: 'One page on how you take in words, what silence means, and what to avoid.' },
       { href: '/tools/frequency-calibration.html', plain: true, title: 'Rhythms side by side', note: 'Stop different rhythms feeling like a fight: money, rest and decisions, side by side.' },
@@ -607,7 +609,7 @@
       { href: '/ladder.html', title: 'My weather today: 4 quick taps', note: 'Find where you are right now, and a next step that fits' },
       { href: '/night-garden.html', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/tools/soften-a-tense-moment.html', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
-      { href: '/calming-supplements.html', title: 'Calming supplements and herbs', note: 'What the research says, and what to check first' },
+      { href: '/calm-without-pills.html', title: 'Calm without pills', note: 'What actually helps, and what the research says' },
       { sub: 'Games', all: '/pause-and-play.html', allLabel: 'All the calm games' },
       { href: '/frequency-journey.html', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six gentle classic games, including a Home Run Derby' },
       { href: '/bears-dojo.html', title: 'The Bears Dojo', note: 'A temple garden to wander and a bear to build' },
@@ -718,7 +720,7 @@
   function workKept() { try { return localStorage.getItem('tol-work-keep') === '1'; } catch (e) { return false; } }
   // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
   // the honest limits, "is this for you?" and the page for someone who was sent a link.
-  var PLAIN = /^\/(grief|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|calming-supplements|nervous-system|for-counselors)\.html$/;
+  var PLAIN = /^\/(grief|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|calm-without-pills|calming-supplements|nervous-system|for-counselors)\.html$/;
   // Working pages (the tools and worksheets) are a calm workspace: no moving garden, pups or drifting bubbles beside a form.
   // The soft colour wash stays. Calm and play pages keep their garden.
   var WORKSPACE = /^\/(lemonade-stand|signal-translator|conversation-reader|carrier-wave-decoder|wiring-card|wavelength|quick-checks|chore-chart-for-couples|pursue-withdraw|family-obligations)\.html$|^\/workpapers\/|^\/wp-11(-in-depth)?\.html$|^\/tools\//;
@@ -1988,7 +1990,7 @@
     // nav21: the renamed reading pages (Psychology in plain words, once the Professor's Library; Philosophy for everyday life)
     library: ['/library.html', '/learn/index.html', '/research.html'], psychology: 'library', philosophy: ['/learn/index.html', '/library.html'], philosophers: 'philosophy',
     support: ['/support-languages.html', '/languages-of-connection.html'], supported: 'support', supportive: 'support', comfort: 'support', comforting: 'support',
-    supplement: ['/calming-supplements.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
+    supplement: ['/calm-without-pills.html#supplements-note'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', nintendo: 'gaming', fortnite: 'gaming', minecraft: 'gaming', esports: 'gaming', screentime: 'gaming', tiktok: 'gaming', scrolling: 'gaming', doomscrolling: 'gaming',
     coparenting: ['/co-parenting.html', '/on-my-own.html', '/parents.html#stepfamilies'], 'co-parenting': 'coparenting', 'co-parent': 'coparenting', 'co-parents': 'coparenting', coparent: 'coparenting', coparents: 'coparenting', custody: 'coparenting', handoff: 'coparenting', handoffs: 'coparenting', 'ex-husband': 'exbreak', 'ex-wife': 'exbreak', 'ex-partner': 'exbreak', ex: 'exbreak', exes: 'exbreak',
     exbreak: ['/after-a-breakup.html', '/on-my-own.html', '/co-parenting.html'], holidayschedule: 'coparenting', separated: 'coparenting', separation: 'coparenting',
@@ -2185,8 +2187,8 @@
     nightmare: 'r13homesleep', nightmares: 'r13homesleep', hypervigilant: 'r13homesleep',
     r13apart: ['/empty-nest.html', '/complacency.html', '/turning-toward.html', '/bonding.html'],
     r13longhours: ['/different-hours.html#long-days', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
-    anxiety: ['#breathe', '/calming-supplements.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
-    r13herbs: ['/calming-supplements.html', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
+    anxiety: ['#breathe', '/calm-without-pills.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
+    r13herbs: ['/calm-without-pills.html#supplements-note', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
     r13feelings: ['/book/understanding-1-feelings.html#not-brought-up', '/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
     handoffbag: ['/co-parenting.html#handoff-bag', '/workpapers/fill/wp-03.html?for=coparents', '/co-parenting.html'],
     r13fun: ['/bonding.html#ideas', '/gaming-and-time-together.html', '/turning-toward.html', '/pause-and-play.html'],
@@ -2224,7 +2226,7 @@
     checkin: ['/workpapers/wp-13-daily-check-in.html', '/check-ins.html', '/quick-checks.html'], 'check-in': 'checkin',
     energy: 'weather', tracker: 'weather', pause: ['/pursue-withdraw.html', '/upset-right-now.html', '/wp-11.html'], timeout: 'pause',
     // supplements and the nervous system (supp9)
-    calming: ['/calming-supplements.html', '/nervous-system.html', '/upset-right-now.html', '/night-garden.html'],
+    calming: ['/calm-without-pills.html', '/nervous-system.html', '/upset-right-now.html', '/night-garden.html'],
     '5-htp': 'supplement', tryptophan: 'supplement', iron: 'supplement', ginkgo: 'supplement', ginseng: 'supplement', hops: 'supplement', kanna: 'supplement', sceletium: 'supplement', skullcap: 'supplement',
     'black-cohosh': 'supplement', chasteberry: 'supplement', creatine: 'supplement', 'lions-mane': 'supplement', bacopa: 'supplement', 'weighted-blanket': 'supplement', 'light-therapy': 'supplement', vitamins: 'supplement', vitamin: 'supplement', remedies: 'supplement', remedy: 'supplement',
     'nervous-system': ['/nervous-system.html', '/ladder.html'], nervous: 'nervous-system', vagus: 'nervous-system', polyvagal: 'nervous-system', 'fight-or-flight': 'nervous-system', freeze: 'nervous-system', fawn: 'nervous-system',
@@ -3284,7 +3286,7 @@
     [/^\/(parents|grandparents|grown-up-children|foster-and-kinship|family-rifts|adhd-kids|co-parenting|family-obligations|on-my-own|caregivers|coming-out)\.html$/, ['family', 'talking', 'calm', 'selftalk']],
     [/^\/(work|appreciation-at-work|wiring-card|groups)\.html$/, ['work', 'talking', 'focus']],
     [/^\/(sharing-a-room|share-the-load|lemonade-stand|chore-chart-for-couples|invisible-labor-mental-load)\.html$/, ['home', 'talking', 'calm']],
-    [/^\/(calming-supplements|nervous-system|ladder|upset-right-now|wp-11|soundscapes)\.html$/, ['calm', 'body', 'sleep', 'rest']],
+    [/^\/(calm-without-pills|calming-supplements|nervous-system|ladder|upset-right-now|wp-11|soundscapes)\.html$/, ['calm', 'body', 'sleep', 'rest']],
     [/^\/grief\.html$/, ['selftalk', 'rest', 'body']]
   ];
   var tipLib = null, tipWaiting = [];

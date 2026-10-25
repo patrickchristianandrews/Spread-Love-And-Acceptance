@@ -17,7 +17,7 @@
    "sleep"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#start"
+   "/calm-without-pills.html#start"
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/ (search result, Oct 2026)"
@@ -40,8 +40,8 @@
    "exercise"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#start",
-   "/calming-supplements.html#exercise"
+   "/calm-without-pills.html#start",
+   "/calm-without-pills.html#exercise"
   ],
   "verified": true,
   "verified_by": "https://bjsm.bmj.com/content/bjsports/early/2023/07/11/bjsports-2022-106195.full.pdf ; https://www.unisa.edu.au/media-centre/Releases/2023/exercise-more-effective-than-medicines-to-manage-mental-health"
@@ -62,8 +62,8 @@
    "exercise"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#exercise",
-   "/calming-supplements.html#studies",
+   "/calm-without-pills.html#exercise",
+   "/calm-without-pills.html#studies",
    "/book/understanding-16-worry.html#basics",
    "/book/understanding-16-worry-in-depth.html#basics"
   ],
@@ -87,7 +87,7 @@
    "breathing"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#start"
+   "/calm-without-pills.html#start"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137615/"
@@ -108,7 +108,7 @@
    "loneliness"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#connection",
+   "/calm-without-pills.html#connection",
    "/book/understanding-16-worry-in-depth.html#basics"
   ],
   "verified": true,
@@ -130,10 +130,10 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#other",
-   "/calming-supplements.html#acupuncture",
-   "/calming-supplements.html#massage",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#all",
+   "/calm-without-pills.html#acupuncture",
+   "/calm-without-pills.html#massage",
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science (search result, Oct 2026)"
@@ -155,7 +155,7 @@
    "sleep"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/stress-anxiety-and-sleep-problems-considering-complementary-approaches (search result, Oct 2026)"
@@ -176,9 +176,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#chamomile"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/chamomile (search result, Oct 2026)"
  },
@@ -198,9 +196,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#chamomile"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27912875/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC5646235/"
  },
@@ -221,8 +217,7 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#lavender",
-   "/calming-supplements.html#aromatherapy"
+   "/calm-without-pills.html#aromatherapy"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/lavender (search result, Oct 2026)"
@@ -243,9 +238,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#lavender"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/31792285/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6889391/"
  },
@@ -264,9 +257,7 @@
    "supplements",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#l-theanine"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://publications.aston.ac.uk/id/eprint/41068 ; https://researchprofiles.canberra.edu.au/en/publications/the-effects-of-green-tea-amino-acid-l-theanine-consumption-on-the/"
  },
@@ -285,9 +276,7 @@
    "supplements",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#magnesium"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.mdpi.com/2072-6643/9/5/429 ; https://eprints.whiterose.ac.uk/115878/"
  },
@@ -306,9 +295,7 @@
    "supplements",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#magnesium"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/ ; https://ods.od.nih.gov/pdf/factsheets/magnesium-consumer.pdf"
  },
@@ -328,9 +315,7 @@
    "herbs",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#ashwagandha"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://ods.od.nih.gov/factsheets/Ashwagandha-Consumer/?print=1 (search result, Oct 2026)"
  },
@@ -350,9 +335,7 @@
    "herbs",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#ashwagandha"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.ncbi.nlm.nih.gov/books/NBK548536/ (search result, Oct 2026)"
  },
@@ -372,9 +355,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#ashwagandha"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://journals.findlay.edu/index.php/gh/article/download/261/218 ; https://biolayne.com/reps/issue-14/ashwagandha-supplementation-for-stress-and-anxiety/"
  },
@@ -394,9 +375,7 @@
    "herbs",
    "regulation"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#ashwagandha"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://nutraingredients.com/Article/2023/05/17/Growing-concerns-over-safety-of-ashwagandha-in-EU-member-states ; https://www.nutritioninsight.com/news/regulatory-update-spotlight-on-international-authorities-response-to-ashwagandha-safety-concerns.html"
  },
@@ -416,9 +395,7 @@
    "herbs",
    "sleep"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#valerian"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/valerian (search result, Oct 2026)"
  },
@@ -438,9 +415,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#passionflower"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://nccih.nih.gov/health/passionflower?nav=govd (search result, Oct 2026)"
  },
@@ -460,9 +435,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#lemon-balm"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://dro.deakin.edu.au/articles/journal_contribution/The_effects_of_lemon_balm_Melissa_officinalis_L_on_depression_and_anxiety_in_clinical_trials_A_systematic_review_and_meta-analysis/21021742 ; https://research.bond.edu.au/en/publications/the-effects-of-lemon-balm-melissa-officinalis-l-on-depression-and/"
  },
@@ -482,9 +455,7 @@
    "herbs",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#kava"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/kava (search result, Oct 2026)"
  },
@@ -504,9 +475,7 @@
    "herbs",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#kava"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.cochrane.org/evidence/CD003383_kava-extract-treating-anxiety ; https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003383/information/th"
  },
@@ -527,8 +496,7 @@
    "supplement-safety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#st-johns-wort",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/st-johns-wort ; https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth (search results, Oct 2026)"
@@ -549,8 +517,7 @@
    "supplement-safety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#st-johns-wort",
-   "/calming-supplements.html#safety"
+   "/calm-without-pills.html#supplements-note"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science (search result, Oct 2026) ; https://www.ncbi.nlm.nih.gov/books/NBK548880/"
@@ -571,9 +538,7 @@
    "sleep",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#melatonin"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know ; https://www.nccih.nih.gov/health/sleep-disorders-and-complementary-health-approaches (search results, Oct 2026)"
  },
@@ -593,9 +558,7 @@
    "sleep",
    "regulation"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#melatonin"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/ (search result, Oct 2026)"
  },
@@ -614,9 +577,7 @@
    "supplements",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#cbd"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis (search result, Oct 2026)"
  },
@@ -635,9 +596,7 @@
    "supplements",
    "regulation"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#cbd"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm611046.htm ; https://www.scientificamerican.com/article/fda-approves-countrys-first-marijuana-based-medicine"
  },
@@ -657,8 +616,7 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#omega-3",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2702216 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6324500/"
@@ -678,9 +636,7 @@
    "supplements",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#omega-3"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/ (search result, Oct 2026)"
  },
@@ -701,8 +657,7 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#saffron",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://research.bond.edu.au/en/publications/effect-of-saffron-supplementation-on-symptoms-of-depression-and-a/ ; https://pure.bond.edu.au/ws/files/31402310/Effect_of_saffron_supplementation_on_symptoms_of_depression_and_anxiety.pdf"
@@ -722,9 +677,7 @@
    "supplements",
    "herbs"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#rhodiola"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://nccih.nih.gov/health/rhodiola (search result, Oct 2026)"
  },
@@ -743,9 +696,7 @@
    "supplements",
    "herbs"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#curcumin"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/28236605/"
  },
@@ -765,9 +716,7 @@
    "herbs",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#curcumin"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/turmeric (search result, Oct 2026)"
  },
@@ -786,9 +735,7 @@
    "supplements",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#inositol"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://www.unboundmedicine.com/medline/citation/7793450/full_citation ; https://www.ovid.com/journals/ajps/abstract/00000465-199507000-00023"
  },
@@ -807,9 +754,7 @@
    "supplements",
    "anxiety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#inositol"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24424706/ ; https://pure.fujita-hu.ac.jp/en/publications/a-meta-analysis-of-inositol-for-depression-and-anxiety-disorders/"
  },
@@ -828,9 +773,7 @@
    "supplements",
    "sleep"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#glycine"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://link.springer.com/article/10.1111/j.1479-8425.2007.00262.x"
  },
@@ -849,9 +792,7 @@
    "supplements",
    "sleep"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#tart-cherry"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3133468 ; https://www.nutritionaloutlook.com/view/pilot-study-tart-cherry-may-help-insomniacs"
  },
@@ -871,9 +812,7 @@
    "herbs",
    "stress"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#holy-basil"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/28400848/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5376420/"
  },
@@ -892,9 +831,7 @@
    "supplements",
    "supplements"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#zinc"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/32829928/"
  },
@@ -913,9 +850,7 @@
    "supplements",
    "supplement-safety"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#zinc"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://ods.od.nih.gov/factsheets/Zinc-Consumer/ (search result, Oct 2026)"
  },
@@ -934,9 +869,7 @@
    "supplements",
    "supplements"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#probiotics"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6584030 ; https://www.gutmicrobiotaforhealth.com/a-new-meta-analysis-of-controlled-clinical-trials-shows-the-antidepressant-and-anxiolytic-potential-of-probiotics"
  },
@@ -956,8 +889,7 @@
    "supplements"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#vitamin-d",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7403921/ ; https://read.qxmd.com/doi/10.1001/jama.2020.10224"
@@ -977,9 +909,7 @@
    "supplements",
    "supplements"
   ],
-  "mentioned_on": [
-   "/calming-supplements.html#nac"
-  ],
+  "mentioned_on": [],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27137430/ ; https://www.psychiatrist.com/jcp/n-acetylcysteine-depressive-symptoms-functionality/"
  },
@@ -1000,7 +930,7 @@
    "nature"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#nature"
+   "/calm-without-pills.html#nature"
   ],
   "verified": true,
   "verified_by": "https://repository.derby.ac.uk/item/93x3y/effects-of-shinrin-yoku-forest-bathing-and-nature-therapy-on-mental-health-a-systematic-review-and-meta-analysis"
@@ -1021,7 +951,7 @@
    "sleep"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#daylight"
+   "/calm-without-pills.html#daylight"
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/ ; https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/ (search result, Oct 2026)"
@@ -1043,8 +973,8 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#mindfulness",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#mindfulness",
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24395196/ ; https://stafforini.com/works/goyal-2014-meditation-programs-for/"
@@ -1065,7 +995,7 @@
    "calm"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#yoga"
+   "/calm-without-pills.html#yoga"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety ; https://www.nccih.nih.gov/health/anxiety-and-complementary-health-approaches (search results, Oct 2026)"
@@ -1086,7 +1016,7 @@
    "calm"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#tai-chi"
+   "/calm-without-pills.html#tai-chi"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know ; https://www.nccih.nih.gov/health/tips/tips-what-you-should-know-about-tai-chi-for-health (search result, Oct 2026)"
@@ -1107,7 +1037,7 @@
    "calm"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#massage"
+   "/calm-without-pills.html#massage"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/massage-therapy-what-you-need-to-know (search result, Oct 2026)"
@@ -1129,7 +1059,7 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#music"
+   "/calm-without-pills.html#music"
   ],
   "verified": true,
   "verified_by": "https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know (search result, Oct 2026)"
@@ -1150,7 +1080,7 @@
    "complementary-health"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#homeopathy"
+   "/calm-without-pills.html#homeopathy"
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/tests-and-treatments/homeopathy/ (search result, Oct 2026)"
@@ -1172,8 +1102,8 @@
    "supplement-safety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#safety",
-   "/calming-supplements.html#studies"
+   "/calm-without-pills.html#supplements-note",
+   "/calm-without-pills.html#studies"
   ],
   "verified": true,
   "verified_by": "https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements (search result, Oct 2026)"
@@ -1195,7 +1125,7 @@
    "supplement-safety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#safety"
+   "/calm-without-pills.html#supplements-note"
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/tests-and-treatments/herbal-medicines-and-complementary-therapies/ (search result, Oct 2026)"
@@ -1216,7 +1146,7 @@
    "regulation"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#safety"
+   "/calm-without-pills.html#supplements-note"
   ],
   "verified": true,
   "verified_by": "https://www.gov.uk/drug-safety-update/introduction-of-the-traditional-herbal-registration-certification-mark ; https://www.gov.uk/apply-for-a-traditional-herbal-registration-thr"
@@ -1237,7 +1167,7 @@
    "supplement-safety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#safety"
+   "/calm-without-pills.html#supplements-note"
   ],
   "verified": true,
   "verified_by": "https://www.usp.org/verification-services/dietary-supplements-verification-program ; https://www.usp.org/frequently-asked-questions/usp-verification-services"
@@ -1258,7 +1188,7 @@
    "supplement-safety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#safety"
+   "/calm-without-pills.html#supplements-note"
   ],
   "verified": true,
   "verified_by": "https://www.nsf.org/testing/health/nutritional-supplements-cosmetics-personal-care-products/product-and-ingredient-certification ; https://blog.ansi.org/ansi/nsf-ansi-173-2024-dietary-supplements/"

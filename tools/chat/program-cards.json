@@ -1327,251 +1327,38 @@
       ]
     },
     {
-      "id": "herbshelp",
+      "id": "calmpills",
       "kind": "intent",
       "first": true,
       "newTopic": true,
-      "name": "calming supplements, when it is more than everyday stress",
-      "pat": "\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron)\\b.{0,60}\\b(panic (attacks? )?(that )?(won t|wont|doesn t|doesnt|will not|does not|never) (stop|go away|end)|panic all the time|(low|down|depressed) for (weeks|months)|can t cope|cant cope|nothing helps|hopeless)\\b|\\b(panic (attacks? )?(that )?(won t|wont|doesn t|doesnt|never) (stop|go away)|(low|down|depressed) for (weeks|months))\\b.{0,60}\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron)\\b",
+      "name": "calm without pills (supplements, herbs and drugs are not covered)",
+      "pat": "\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|kanna|sceletium|skullcap|black cohosh|ginkgo|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|cannabidiol|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron|5 ?htp|omega 3|fish oil|tart cherry|probiotics?)\\b|\\b(what|which|any|best|good|do|does|can)\\b.{0,25}\\b(vitamins?|teas?)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|worry|calm\\w*|nerves|relax\\w*|sleep)\\b|\\b(natural|naturally|without (pills|medication|meds|drugs)|non ?drug|drug free)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|calm\\w*|nerves|worry|sleep|panic)\\b|\\b(anxiety|anxious|stress|nerves|worry|sleep|panic)\\b.{0,30}\\b(natural|naturally|without (pills|medication|meds))\\b",
       "keys": [],
       "what": [
-        "I’m glad you asked. When panic won’t stop, or you’ve felt low for weeks, that’s more than a supplement can fix. The supplements page grades every option, and the options with the best evidence are slow breathing, movement, sleep and talking therapy, not pills."
+        "I don’t give guidance on supplements, herbs or drugs, and I can’t give doses, products or amounts. The evidence for them is mixed and keeps changing, and some of them interact with prescribed medicines. A prescribed medicine should never be stopped, swapped or changed suddenly.",
+        "The things with the best evidence are free: sleep, movement, slow breathing, less caffeine and alcohol, and people. If panic won’t stop or low mood has lasted for weeks, that is more than an everyday habit can fix on its own, and talking therapy has some of the strongest evidence."
       ],
       "links": [
         [
-          "Every option, graded by evidence",
-          "/calming-supplements.html#browse"
+          "Calm without pills: start with these three",
+          "/calm-without-pills.html#start"
+        ],
+        [
+          "All the everyday approaches, with their evidence",
+          "/calm-without-pills.html#all"
+        ],
+        [
+          "Calm down now",
+          "/pause-and-play.html#relax"
         ]
       ],
-      "chips": [],
+      "chips": [
+        [
+          "I need to calm down right now",
+          "I need to calm down right now"
+        ]
+      ],
       "safety": true
-    },
-    {
-      "id": "herbstjohns",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "St John’s wort and other medicines",
-      "pat": "\\b(st|saint) johns? ?s? ?wort\\b",
-      "keys": [],
-      "what": [
-        "Please don’t take it with an antidepressant. St John’s wort can clash with antidepressants such as SSRIs and cause serotonin syndrome, which can be dangerous.",
-        "It also stops birth control pills working properly, and affects blood thinners, HIV and transplant medicines. And never stop an antidepressant suddenly to switch."
-      ],
-      "links": [
-        [
-          "St John’s wort: what the research says",
-          "/calming-supplements.html#st-johns-wort"
-        ],
-        [
-          "Safety: mixing supplements and medicines",
-          "/calming-supplements.html#safety"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbashwagandha",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "ashwagandha",
-      "pat": "\\bashwagandha\\b",
-      "keys": [],
-      "what": [
-        "Small studies suggest ashwagandha may ease stress a little, but there are real safety warnings: rare liver injury has been reported, it may affect the thyroid, and there are concerns in pregnancy and breastfeeding. Denmark banned it in food supplements in 2023.",
-        "Interactions with other medicines are the main concern, and the safety notes on the page list them."
-      ],
-      "links": [
-        [
-          "Ashwagandha: what the research says",
-          "/calming-supplements.html#ashwagandha"
-        ],
-        [
-          "Supplement safety",
-          "/calming-supplements.html#safety"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbkava",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "kava",
-      "pat": "\\bkava\\b",
-      "keys": [],
-      "what": [
-        "Kava may ease anxiety slightly, but it has been linked to rare, serious liver damage, including deaths. Never mix it with alcohol, or with sleeping or anxiety medicines. Most people are better off choosing something safer.",
-        "The page lists the safety notes and the interactions."
-      ],
-      "links": [
-        [
-          "Kava: what the research says",
-          "/calming-supplements.html#kava"
-        ],
-        [
-          "Supplement safety",
-          "/calming-supplements.html#safety"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbmelatonin",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "melatonin",
-      "pat": "\\bmelatonin\\b",
-      "keys": [],
-      "what": [
-        "Melatonin is for sleep timing, such as jet lag or shift work, not for anxiety, and guidelines advise against it for long-term insomnia. In the UK it is a prescription medicine. In the US it is sold as a supplement, and the amount in the bottle can differ from the label.",
-        "I can’t advise on amounts. It is not well studied in children, and interactions with other medicines are the main adult concern."
-      ],
-      "links": [
-        [
-          "Melatonin: what the research says",
-          "/calming-supplements.html#melatonin"
-        ],
-        [
-          "Supplement safety",
-          "/calming-supplements.html#safety"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbchamomile",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "chamomile",
-      "pat": "\\bchamomile\\b",
-      "keys": [],
-      "what": [
-        "Maybe a little. A few small studies hint that chamomile may ease long-running worry, but the evidence is early, and it hasn’t been shown to help sleep.",
-        "As a tea it is likely safe, unless you are allergic to ragweed or related plants, or take warfarin. Other medicines can matter too, so read the safety notes."
-      ],
-      "links": [
-        [
-          "Chamomile: what the research says",
-          "/calming-supplements.html#chamomile"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbmagnesium",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "magnesium",
-      "pat": "\\bmagnesium\\b",
-      "keys": [],
-      "what": [
-        "The research is weak: some small studies found a benefit for anxiety or sleep, but reviewers called the evidence poor quality. Too much from supplements causes diarrhea, and it isn’t right for everyone, for example with kidney problems.",
-        "Interactions with other medicines matter, and the page lists them."
-      ],
-      "links": [
-        [
-          "Magnesium: what the research says",
-          "/calming-supplements.html#magnesium"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbcbd",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "CBD",
-      "pat": "\\b(cbd|cannabidiol)\\b",
-      "keys": [],
-      "what": [
-        "There is little good research on CBD for everyday stress or anxiety so far. The only approved CBD medicine in the US is a purified prescription form for seizures linked to three rare conditions: Lennox-Gastaut syndrome, Dravet syndrome and tuberous sclerosis complex. The FDA warns CBD can harm the liver and change how other medicines work, including antidepressants and blood thinners.",
-        "The page lists the interactions and the safety notes."
-      ],
-      "links": [
-        [
-          "CBD: what the research says",
-          "/calming-supplements.html#cbd"
-        ],
-        [
-          "Supplement safety",
-          "/calming-supplements.html#safety"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbhomeopathy",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "homeopathy",
-      "pat": "\\bhomeopath\\w*\\b",
-      "keys": [],
-      "what": [
-        "There is no good-quality evidence that homeopathy works for any health condition. If you use it, please don’t let it replace treatment that works."
-      ],
-      "links": [
-        [
-          "Homeopathy: what the research says",
-          "/calming-supplements.html#homeopathy"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbmix",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "are supplements and herbs safe, and mixing them with medicines",
-      "pat": "\\b(are|is) (supplements?|herbs?|herbal (remedies|supplements?|teas?)|natural remed\\w*|natural supplements?)\\b.{0,15}\\b(safe|dangerous|ok|okay|regulated|tested)\\b|\\b(mix|mixing|take|taking|combine|combining)\\b.{0,25}\\b(herbs?|herbal \\w+|supplements?|natural remed\\w*)\\b.{0,25}\\b(with|and|alongside)\\b.{0,25}\\b(medication|medicine|meds|pills?|prescription|antidepressants?|sleeping pills?)\\b|\\bnatural (means|doesn t mean|does not mean) safe\\b",
-      "keys": [],
-      "what": [
-        "“Natural” doesn’t mean safe. Supplements aren’t checked like medicines before they are sold, and quality varies. A USP Verified or NSF mark means someone checked what is in the bottle.",
-        "Supplements can change how medicines work, so mixing them with medicines is where most of the risk is. Never mix sedating herbs with alcohol, sleeping pills, opioids or benzodiazepines."
-      ],
-      "links": [
-        [
-          "Supplement safety",
-          "/calming-supplements.html#safety"
-        ],
-        [
-          "Calming supplements and herbs: what the research says",
-          "/calming-supplements.html"
-        ]
-      ],
-      "chips": []
-    },
-    {
-      "id": "herbsanxiety",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "herbs and supplements for anxiety or stress",
-      "pat": "\\b(what|which|any|best|good|do|does|can)\\b.{0,25}\\b(herbs?|herbal \\w+|supplements?|natural remed\\w*|vitamins?|teas?)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|worry|calm\\w*|nerves|relax\\w*|sleep)\\b|\\b(natural remed\\w*|herbal remed\\w*|calming (supplements?|herbs?|teas?)|herbs? for (anxiety|stress|sleep)|supplements? for (anxiety|stress|sleep))|\\b(lavender|lemon balm|l ?theanine|valerian|passionflower|rhodiola|saffron)\\b.{0,30}\\b(help|helps|work|works|safe|anxiety|stress|sleep|calm\\w*|take|taking|oil|capsules?|tea|supplements?|pills?)\\b|\\b(take|taking|try|trying)\\b.{0,15}\\b(lavender|lemon balm|l ?theanine|valerian|passionflower|rhodiola|saffron)\\b|\\b(natural|naturally|without (pills|medication|meds|drugs)|non ?drug|drug free)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|calm\\w*|nerves|worry)\\b|\\b(anxiety|anxious|stress|nerves|worry)\\b.{0,30}\\b(natural|naturally|without (pills|medication|meds))\\b",
-      "keys": [],
-      "what": [
-        "The things with the best evidence are free: sleep, movement, slow breathing, less caffeine and alcohol, and talking to someone.",
-        "A few supplements, such as lavender oil capsules, lemon balm and L-theanine, have small, early studies, with small effects. Interactions with other medicines are the main risk with any of them."
-      ],
-      "links": [
-        [
-          "Calming supplements and herbs: start here",
-          "/calming-supplements.html#start"
-        ],
-        [
-          "The common ones, and what the research says",
-          "/calming-supplements.html#common"
-        ]
-      ],
-      "chips": []
     },
     {
       "id": "findcounsellor",

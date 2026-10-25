@@ -160,7 +160,7 @@
     couple: /partner|couple|marri|spouse|husband|wife|love|relationship|dating|romantic|together|empty-nest|money-together|two-faiths|long-distance|different-hours|when-one-is-ill|coming-home|more-than-two|how-to-stop-fighting/
   };
   // pages about one kind of relationship that isn't a romantic couple, and pages for someone on their own
-  var NOT_COUPLE = /\/(teens|friends|foster-and-kinship|grandparents|grown-up-children|family-rifts|parents|adhd-kids|co-parenting|on-my-own|grief|sharing-a-room|work|appreciation-at-work|groups|caregivers|family-obligations|self-path|know-yourself|growing-up|wired-differently|wavelength|wiring-card|quick-checks|ladder|calming-supplements|for-teachers|for-counselors)(-in-depth)?\.html|\/book\/(self-|understanding-)/;
+  var NOT_COUPLE = /\/(teens|friends|foster-and-kinship|grandparents|grown-up-children|family-rifts|parents|adhd-kids|co-parenting|on-my-own|grief|sharing-a-room|work|appreciation-at-work|groups|caregivers|family-obligations|self-path|know-yourself|growing-up|wired-differently|wavelength|wiring-card|quick-checks|ladder|calm-without-pills|calming-supplements|for-teachers|for-counselors)(-in-depth)?\.html|\/book\/(self-|understanding-)/;
   // on a page about one kind of relationship, an article has to be about that too (or about looking after
   // yourself, which fits anyone); otherwise the card stays away rather than suggest something off-topic
   var PAGE_NEED = [
