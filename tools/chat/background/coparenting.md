@@ -102,7 +102,7 @@ try: “Your dad loves you a lot. We just do things differently in our two homes
 
 Children often feel that criticism of a parent is partly criticism of them. Speaking neutrally or kindly about the other parent, even when it’s hard, protects them.
 
-Venting belongs with adult friends or a professional, not with the children.
+Venting belongs with adult friends, not with the children.
 
 Program: Pillar IV, Tune how you send and receive: children pick up tone even more than words.
 

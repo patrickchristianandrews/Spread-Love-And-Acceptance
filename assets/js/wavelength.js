@@ -773,7 +773,7 @@
           '<h3>Not sure which fits? A quick guide</h3>' +
           '<p class="wl-small">Read through and select any that sound like you. Many people have more than one. ADHD and autism often show up together, dyslexia often overlaps with ADHD, and being highly sensitive can go with any of them.</p>' +
           NEUROTYPES.map(t => '<div class="wl-gitem"><div class="wl-ghead"><strong>' + t.label + '</strong><button type="button" class="wl-gpick" data-gnt="' + t.id + '" aria-pressed="' + (S.nts.indexOf(t.id) >= 0) + '" aria-label="' + t.label + ': that’s me">' + (S.nts.indexOf(t.id) >= 0 ? '✓ Selected' : 'That’s me') + '</button></div><p>' + t.about + '</p><p class="wl-small"><em>You might relate if:</em> ' + t.relate + '</p></div>').join('') +
-          '<p class="wl-small">This guide isn’t a diagnosis. Your wiring here is self-identified, and you can change it anytime. If you’re curious about a formal assessment, a doctor or psychologist can help.</p>' +
+          '<p class="wl-small">This guide isn’t a diagnosis. Your wiring here is self-identified, and you can change it anytime.</p>' +
           '<p class="wl-small">Want to go deeper first? <a href="/wired-differently.html">Wired Differently</a> shows how differently wired people hear the same words, and <a href="/know-yourself.html">Know your own wiring</a> helps you tell what’s you, what life taught you and what’s just today.</p>' +
         '</div>' +
       '</section>';

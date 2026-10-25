@@ -89,7 +89,7 @@ try: Same rough time each night: dim the lights, put the phone away, a few pages
 
 A wind-down routine is a predictable set of calming steps before bed. Doing the same few things in the same order signals to your body that the day is ending.
 
-It’s also a good time not to start hard conversations. Late-night talks often go badly simply because everyone is tired. If sleep problems last or affect daily life, it’s worth talking to a qualified professional.
+It’s also a good time not to start hard conversations. Late-night talks often go badly simply because everyone is tired.
 
 Program: The soundscapes and the Night Garden are gentle options for winding down. Pillar III suggests saving big topics for a better time.
 

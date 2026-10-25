@@ -115,3 +115,8 @@
   .spc-swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .spc-sw-name { font-size: .66rem; }
 }
+
+/* polish24a: a way back to the rest of the site at the top of this stand-alone night page */
+.spc-start .spc-back { margin: 0 0 .4rem; max-width: none; text-align: left; font-size: .95rem; }
+.spc-start .spc-back a { display: inline-flex; align-items: center; min-height: 44px; padding-right: .5rem; color: var(--soft); text-underline-offset: 3px; }
+.spc-start .spc-back a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }

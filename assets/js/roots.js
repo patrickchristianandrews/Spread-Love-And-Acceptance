@@ -7,7 +7,7 @@
 (function () {
   'use strict';
   var KEY_TAB = 'tol-roots-tab', KEY_DEVICE = 'tol-roots-v1';
-  var HEAVY = 'If a memory feels heavy, it’s okay to stop here. Talking it through with a trained counselor can help, on your own or with someone you trust.';
+  var HEAVY = 'If a memory feels heavy, it’s okay to stop here. You can come back to it another day, or talk it through with someone you trust.';
   var NOBLAME = 'Most families were doing their best with what they had. Noticing where a rule came from isn’t blaming anyone. If that doesn’t fit your story, that’s okay too.';
 
   /* ---------------------------------------------------------------- the life stages */
@@ -557,7 +557,7 @@
     var who = hYes('who'), helped = S.h.helped.map(function (id) { return find(HELPED, id)[1].toLowerCase(); });
     if (!felt.length && !signs.length && !who && !helped.length) return '';
     var h = '<div class="rw-card"><h4>Hard times, and how they may show up now</h4>';
-    if (signs.length >= 3) h += '<p class="rw-heavy">These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counselor, on your own or with someone you trust. You’re not alone in this.</p>';
+    if (signs.length >= 3) h += '<p class="rw-heavy">These are common after hard times, and they make sense. Many people find it helps to talk them through with someone they trust. You’re not alone in this.</p>';
     if (who || helped.length) {
       h += '<h5>What helped you get through</h5>';
       if (who) h += '<p>You had someone you could go to. This is part of how you got through, and steady people are still worth leaning on.</p>';
@@ -583,7 +583,7 @@
     if (helped.length) out.push('- ' + cap(and(helped)) + ' helped me get through.');
     felt.forEach(function (f) { out.push('- ' + cap(f.phrase) + ': ' + f.grow + ' ' + f.then + ' ' + f.now + ' Notice: ' + f.notice + ' Try: ' + f.tryit); });
     signs.forEach(function (g) { out.push('- ' + g.name + ': ' + g.text + ' Try: ' + g.tryit); });
-    if (signs.length >= 3) out.push('These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counselor, on your own or with someone you trust.');
+    if (signs.length >= 3) out.push('These are common after hard times, and they make sense. Many people find it helps to talk them through with someone they trust.');
     out.push('');
     return out;
   }

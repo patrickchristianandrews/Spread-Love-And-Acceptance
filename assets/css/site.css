@@ -1945,7 +1945,7 @@ html[data-theme="dark"]:not(.tol-nodark) .tol-wash{ opacity:.5; }
 @media (max-width:560px){ .tol-depth-who{ display:none; } .depth-bar.tol-depth{ padding:.85rem .9rem; } }
 
 /* ---------- Search the site (in the menu panel; the bar's Search button opens it) ---------- */
-.tol-bar button.tol-search-btn{ display:inline-flex; align-items:center; gap:.35rem; margin-left:.25rem; }
+.tol-bar button.tol-search-btn{ display:inline-flex; align-items:center; gap:.35rem; margin-left:.25rem; flex:0 0 auto; white-space:nowrap; }   /* polish24a: never squeezed under Save; the bar folds it away when it is crowded */
 .tol-bar button.tol-search-btn svg{ flex:none; }
 @media (max-width:980px){ .tol-bar button.tol-search-btn{ margin-left:auto; } .tol-bar .tol-contents-btn{ margin-left:0; } }
 @media (max-width:420px){ .tol-bar button.tol-search-btn span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; } .tol-bar button.tol-search-btn{ padding:.5rem .6rem; } }
@@ -3450,3 +3450,106 @@ html:not([data-theme="light"]):not(.tol-nodark) main .sh-first > li.is-main{ bac
   .tol-bar a.tol-es-link{ padding:.45rem .4rem; font-size:.92rem; }
   .tol-brand{ font-size:.92rem; }
 }
+
+/* =========================================================================================================
+   polish24a: small, shared visual fixes found by the page crawler (kept together here so they are easy to review)
+   ========================================================================================================= */
+/* the opening cards and notes (calmer-page offer, "What's on this page", share row, tips) share one left edge with the text,
+   instead of floating in the middle of a wider column */
+main.read > :is(.tol-offer, .tol-onpage, .tol-fbs-wrap, .tol-share-row, .tol-tip, .cb-nx, .tol-dive-hint){ margin-left:0 !important; margin-right:auto !important; }
+/* the full-width menu panel on a phone has no stray dark rule down its left edge */
+@media (max-width:640px){ .tol-panel{ border-left-width:0 !important; } }
+/* book labels in a pastel accent: the same hue, darkened enough to read on the paper (they were 2.2 to 2.8 : 1) */
+html .bk-dl .bk-dl-book-k{ color:color-mix(in srgb, var(--bc, #5A5346) 52%, #2B2620); }
+/* tap targets on a phone or tablet: the footer's links and switches, the logo, "Add to your home screen" were 17 to 37px tall */
+@media (max-width:820px), (pointer:coarse){
+  .tol-foot-links a, .tol-foot-guides a{ display:inline-flex; align-items:center; min-height:44px; }
+  .tol-foot-links, .tol-foot-guides{ row-gap:0; }
+  .tol-bar .tol-brand{ min-height:44px; }  /* height only: a min-width here lets the name shrink under Quiet */
+  .tol-foot .tol-still-btn, .tol-foot .tol-set-btn, .tol-foot .tol-install-link{ min-height:44px; }
+  .tol-foot .tol-install-link{ display:inline-flex; align-items:center; }
+}
+/* older pages still carry their own small footer under the site footer: one footer is enough */
+body:has(> .tol-foot) > footer:not([class]){ display:none; }
+/* the "Ask him about..." card button keeps its white label on the blue pill on pages with their own look (it was dark on blue, 2.2 : 1) */
+html.tol-own-look body :is(a, button).tol-pud-card-go{ color:#fff !important; }
+/* the first-visit "Would a calmer page help?" card: a little tighter, so it takes less of a phone's first screen */
+.tol-offer{ padding:.7rem .9rem; }
+.tol-offer .tol-offer-row{ margin-top:.45rem; gap:.4rem; }
+main .tol-offer .tol-offer-more, .tol-offer .tol-offer-more{ margin-top:.1rem !important; }
+main.read .tol-offer p, html body .tol-offer p{ line-height:1.5 !important; font-size:.95rem; }
+/* print: the page's helper buttons (Share, Show me only the steps) never print */
+@media print{ html:not(#_) body main.read > :is(.tol-steps-toggle, .tsk-top-row){ display:none !important; } }
+/* Start here: the highlighted first option (li.is-main) is a light card, not a second blue pill around it.
+   The shared ".is-main" button style was painting the list item itself blue and round. */
+html:not(#_) body main .sh-first > li.is-main{ background:transparent !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; min-height:0 !important; padding:0 !important; color:inherit !important; display:block !important; text-align:left !important; font:inherit !important; letter-spacing:normal !important; }
+html:not(#_) body main .sh-first > li.is-main > a{ text-align:left; }
+/* Which part of the program to use: the recommended card is a card with a stronger edge, not a blue pill */
+html:not(#_) body main .ph-list > li.is-main{ display:block !important; background:rgba(255,251,242,.95) !important; color:var(--ink, #2B2620) !important; border:2px solid #2B5B8C !important; border-radius:18px !important; padding:1rem 1.15rem 1.05rem !important; box-shadow:none !important; min-height:0 !important; text-align:left !important; font:inherit !important; letter-spacing:normal !important; }
+/* Frequency Buddies on a phone: while the start or end card is showing, the stage is taller so the whole card fits
+   (it was a square the card spilled out of, with "Play the episode" cut off at the top) */
+@media (max-width:600px){ html body .fb-player:not(.is-fs):not(.is-stream) .fb-stage:has(> .fb-ov:not([hidden])){ aspect-ratio:3 / 4 !important; max-height:none !important; } }
+/* the "Which part sounds like you?" choices: rounded cards, so a three-line choice is not a blob */
+html:not(#_) body button.sw-opt{ border-radius:22px !important; }
+/* "What's on this page": the label sits at the left with the line under it (it was centered on a phone) */
+html body .tol-onpage > summary{ align-items:flex-start !important; text-align:left !important; }
+html body .tol-onpage .tol-onpage-k, html body .tol-onpage .tol-onpage-peek{ text-align:left !important; align-self:stretch; }
+/* more 44px targets on a phone or tablet: the breadcrumb's short links, list links that were 21px tall, small round buttons */
+@media (max-width:820px), (pointer:coarse){
+  .tol-where a{ min-width:44px; }
+  .tl-wp-list li > a, .try-this p > a{ display:inline-flex; align-items:center; min-height:44px; }
+  .tol-pud-card-go, button.tsw-x, a.tsw-x{ min-height:44px; min-width:44px; }
+  button.tsk-line{ min-width:44px; min-height:44px; margin:-11px; display:inline-flex; align-items:center; justify-content:center; }
+}
+@media (max-width:820px), (pointer:coarse){
+  .tol-foot-links a, .tol-foot-guides a{ min-width:44px; }
+  a.bk-dl-read, a.fb-one{ display:inline-flex; align-items:center; min-height:44px; }
+  .fb-chaps li > button, .fb-chaps button{ min-height:44px; }
+}
+/* the "whole part on one page" book pages carry the print edition's side-note box (a narrow floated column); on screen it is the full-width tinted aside */
+@media screen{
+  main.read .pe-body .side-note{ float:none; clear:none; width:auto; max-width:40rem; margin:1.2rem 0; padding:.65rem .95rem .7rem; border-left:4px solid #B7AA86; border-radius:0 12px 12px 0; background:#F4F1E8; font-size:.93rem; line-height:1.55; }
+  main.read .pe-body .side-note .sn-h{ display:inline; font-size:inherit; line-height:inherit; margin:0 .2rem 0 0; color:#6B5A2E; }
+  main.read .pe-body .side-note .sn-src{ margin-top:.35rem; font-size:.85rem; line-height:1.45; }
+}
+/* the two columns of idea cards are always equal (one wide card could push the other into a thin strip: a hint was one word wide) */
+@media (min-width:721px){ .read ol.ideas{ grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); } }
+/* Frequency Journey game cards: "Your best" runs under the whole card (it fell into the picture's column and squeezed the words to a thin strip) */
+.ar-card .ar-best{ grid-column:1 / -1; }
+@media (min-width:960px){
+  .ar-fs:nth-of-type(2) .ar-card{ grid-template-columns:1fr; justify-items:center; text-align:center; }
+  .ar-fs:nth-of-type(2) .ar-card canvas{ grid-row:auto; }
+}
+/* multi-line round shapes become rounded cards (a wrapped row of game tabs and the weather-mode buttons were oval blobs) */
+html body nav.gm-switch{ border-radius:28px !important; }
+html:not(#_) body button.hm-mode{ border-radius:24px !important; }
+/* inline code (web addresses in a list) wraps instead of running past the screen edge */
+main :not(pre) > code{ overflow-wrap:anywhere; }
+@media (max-width:820px), (pointer:coarse){
+  .dig{ min-height:44px; align-items:center; }
+  p.bk-ex-link > a, p.bh-ref > a, a.tol-depth-name, .tol-chbar a, .tol-chbar button, .tol-chbar-nav a{ display:inline-flex; align-items:center; min-height:44px; }
+  label.tol-mp-vol > input[type="range"]{ min-height:44px; }
+}
+/* last 44px targets on a phone: the logo link (padding, never a min-width), the chapter bar's "Show the extras", contents rows, small cards' buttons and chips */
+@media (max-width:479px){ html body .tol-bar .tol-brand{ padding-left:4px; padding-right:4px; margin-left:-4px; } }
+@media (max-width:820px), (pointer:coarse){
+  html body button.tol-chbar-x, html body .tol-chbar button{ min-height:44px !important; }
+  .lib-toc li > a{ display:flex; align-items:center; min-height:44px; }
+  html body button.tol-pud-card-go, html body a.tol-mp-full, html body a.tr-chip, html body .gl-tiers > button{ min-height:44px !important; }
+  p.bk-ex-link > a{ min-width:44px; justify-content:center; }
+  span.pe-use-t > a{ display:inline-flex; align-items:center; min-height:44px; }
+}
+html:not(#_) body :is(button.rung, button.mode-card, button.wpf-ready-chip){ border-radius:22px !important; }
+@media (max-width:820px), (pointer:coarse){
+  .tide-chips button, button.gl-rand, button.gl-next, .xw-today > button, button#ng-sound-welcome{ min-height:44px; }
+  a.mcm-full{ display:inline-flex; align-items:center; min-height:44px; }
+  .gl-az a{ display:inline-flex; align-items:center; min-height:44px; min-width:44px; justify-content:center; }
+  .sl-table th > a{ display:inline-flex; align-items:center; min-height:44px; }
+}
+@media (max-width:820px), (pointer:coarse){
+  .book-end-use li > a, ul.pg-jump li > a, p.bt-read > a, p.br-top > a, .tl-guide li > a{ display:inline-flex; align-items:center; min-height:44px; }
+}
+/* the Save button's spoken " this page": hidden by a class (an inline style is refused on the fill-in workpaper pages' strict security policy) */
+.tol-sv-sr{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; }
+/* the whole-part book pages: the brass part labels were 4.2 : 1 on the tinted part card; a touch darker */
+main.read.whole :is(.pe-part-k, .pe-part-l, .pe-part-list a > span:first-child){ color:#7A5620; }

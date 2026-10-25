@@ -228,3 +228,12 @@ html:is(.tol-quiet, .tol-still) .tol-sv-ndot-i{ transition:none; }
 .sv-page .sv-note-new{ margin-top:.6rem; }
 html.tol-quiet .sv-page .sv-ndot{ background:#8F7E62; box-shadow:none; }
 @media print{ html body .tol-sv-ndot, html body .tol-sv-ndot.is-inline, html body h1 .tol-sv-ndot.is-inline, .tol-sv-ndots, .tol-sv-npop{ display:none !important; } }
+
+/* polish24a: the "how to save" line is one quiet, compact note under the title, not a tall box with loose lines */
+main.read p.tol-sv-how, p.tol-sv-how{ font-size:.88rem !important; line-height:1.45 !important; padding:.35rem .3rem .35rem .8rem !important; margin:.5rem 0 .9rem !important; }
+.tol-sv-how .tol-sv-how-t{ padding-top:.1rem; }
+.tol-sv-how .tol-sv-howgo{ min-height:0; line-height:1.3; padding-top:.02rem; padding-bottom:.02rem; }
+.tol-sv-how .tol-sv-x{ margin:-.35rem -.3rem -.35rem 0; }
+/* polish24a: the three "how to save" steps are plain lines of text with the number beside them (each word used to become its own flex column) */
+.sv-page .sv-steps li{ display:block; position:relative; padding-left:2.5rem !important; min-height:1.8rem; }
+.sv-page .sv-steps .sv-n{ position:absolute; left:0; top:.05rem; }

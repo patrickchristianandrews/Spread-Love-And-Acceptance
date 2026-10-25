@@ -265,7 +265,7 @@
     }
     if (pick.key === 'as' && pick.heavy && pick.heavy.length && pick.status !== 'worse') why = pick.heavy.map(function (p) { return p.name; }).join(' and ') + (pick.heavy.length === 1 ? ' is' : ' are') + ' still at a high load (0.60 or more on How much are you carrying?). That is about the load, not the person.';
     var out = { key: pick.key, why: why, text: text, link: s.link };
-    if (setup && setup.endBand.key === 'low' && setup.change < SHIFT.wb) out.extra = 'If it still feels stuck after a month of trying, outside support, like a counselor or a trusted mediator, is worth considering.';
+    if (setup && setup.endBand.key === 'low' && setup.change < SHIFT.wb) out.extra = 'If it still feels stuck after a month of trying, pick the one gap that matters most and change only that.';
     return out;
   }
 

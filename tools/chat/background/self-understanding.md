@@ -102,7 +102,7 @@ try: Keep a one-word mood note each day for two weeks, and look for patterns wit
 
 Moods often follow patterns: time of day, days of the week, sleep, workload or particular people. Noticing patterns helps you plan around them.
 
-If mood changes are intense or worrying, it’s worth talking to a qualified professional.
+If mood changes are intense or worrying, tell someone you trust.
 
 Program: Today’s Weather keeps a private almanac on your device so you can spot your own patterns.
 

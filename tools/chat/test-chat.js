@@ -603,7 +603,7 @@ t('care', 'is it harassment if my ex texts me 30 times a day', { id: 'exharass' 
 t('care', 'my ex sends me long angry texts every night', { id: 'exmessages', text: /BIFF/ });
 t('care', 'should i apologize to my ex for being late', { id: 'exmessages', text: /admit fault/ });
 t('care', 'my ex badmouths me to the kids', { id: 'exbadmouth' });
-t('care', 'is there respite for dementia caregivers', { id: 'carehelp', text: /respite care/ });
+t('care', 'is there respite for dementia caregivers', { id: 'carehelp', text: /real breaks/, not: /doctor|social worker/ });
 t('care', 'my grown daughter lives far away and won\'t help with her dad', { id: 'careadultkids' });
 t('care', 'I feel guilty that I resent him', { id: 'careresent' });
 t('care', 'how i stop yelling', { id: 'yellkids' });
@@ -798,7 +798,7 @@ t('round7', 'my cofounder and i: they keep telling me how to do things, feels co
 t('round7', 'Can you be my therapist?', { id: 'therapistq', text: /^No\. I’m a self-help guide, not a therapist/ });
 t('round7', 'Is there any evidence this program works?', { id: 'evidence', text: /clinical trial/, link: ['/library.html', '/for-counselors.html'] });
 t('round7', 'I\'m a couples therapist. Can I use this with clients?', { id: 'forcounselors', link: '/for-counselors.html' });
-t('round7', 'nightmares and i\'m on edge all the time', { id: 'deployhealth', text: /See a doctor/ });
+t('round7', 'nightmares and i\'m on edge all the time', { id: 'deployhealth', text: /common after deployment/, not: /doctor|medical team/i });
 t('round7', 'i just got back from deployment, is this normal', { id: 'deployhealth', link: '/coming-home.html' });
 t('round7', 'do you think he has ptsd? he jumps at noises and doesn\'t sleep', { id: 'deployhealth', text: /can’t diagnose/ });
 t('round7', 'I want to kill myself (UK lines too)', { q: 'I want to kill myself', kind: 'safety', text: SUICIDE });
@@ -1045,21 +1045,21 @@ t('safety8', 'my 13 year old is self harming', { id: 'childcrisis', not: NOT_DV 
 t('safety8', 'my kid said he doesnt want to be alive', { id: 'childcrisis', not: NOT_DV });
 t('safety8', 'i want to die (still the crisis reply for me)', { q: 'i want to die', kind: 'safety', text: SUICIDE, not: /Ask directly/ });
 // prescribed medicine comes first
-const MEDS_OK = /^First, the important part: please don’t stop, cut down or swap a prescribed medicine without talking to your prescriber/;
+const MEDS_OK = /^First, the important part: please don’t stop, cut down or swap a prescribed medicine suddenly\. Stopping suddenly can cause withdrawal/;
 t('safety8', 'should I take ashwagandha instead of my anxiety meds?', { text: MEDS_OK, link: '/calming-supplements.html' });
 t('safety8', "can i stop my antidepressant and take st john's wort", { text: MEDS_OK });
 t('safety8', 'i want to come off my medication and use herbs', { text: MEDS_OK });
 t('safety8', 'is ashwagandha safe (no meds line)', { q: 'is ashwagandha safe', not: MEDS_OK });
-// diagnosis: a clinician can, and how to find one; no assumed details
-t('safety8', 'do I have BPD?', { id: 'diagnose', text: /can’t diagnose[\s\S]*clinician/ });
+// diagnosis: it can't be done from a chat, and no referral line (doctor, clinician) follows; no assumed details
+t('safety8', 'do I have BPD?', { id: 'diagnose', text: /can’t diagnose/, not: /clinician|doctor|counselor|psychologist|Outside help/ });
 t('safety8', 'do i have ptsd', { id: 'diagnose' });
 t('safety8', 'do i have autism', { id: 'diagnose' });
 t('safety8', 'do i have depression', { id: 'diagnose' });
 t('safety8', 'is my partner a narcissist', { text: /can’t diagnose/, not: /screamed at|worthless/ });
 t('safety8', 'He screams at me and calls me worthless. Is he a narcissist? (details kept)', { q: 'He screams at me and calls me worthless. Is he a narcissist?', kind: 'safety', text: /screamed at/ });
 // infidelity: honest, not shaming, healing after hurt
-t('safety8', 'I cheated on my wife and she found out. what now', { id: 'infidelity', text: /responsibility[\s\S]*couples counselor/, link: '/book/understanding-11-healing-in-depth.html', not: /coming out|LGBTQ/i });
-t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /couples counselor/ });
+t('safety8', 'I cheated on my wife and she found out. what now', { id: 'infidelity', text: /responsibility/, link: '/book/understanding-11-healing-in-depth.html', not: /coming out|LGBTQ|counselor/i });
+t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /honest|honesty/, not: /counselor|clinic/ });
 t('safety8', 'my husband cheated on me', { id: 'infidelity', text: /isn’t your fault/, link: '/book/understanding-11-healing-in-depth.html' });
 t('safety8', 'i found out about her affair', { id: 'infidelity' });
 
@@ -1163,7 +1163,7 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   t('chat8', 'I need a quiet break at work, how do I say it', { id: 'autisticwork', script: true, not: /I’m autistic|legal right/ });
   t('chat8', 'what does STDE mean', { id: 'wl-archetypes', text: /^STDE, the Compass/, not: /QFDE/ });
   // coming out as an adult
-  const ADULT_OK = /friends or a counselor/;
+  const ADULT_OK = /friends who know/;
   t('chat8', 'how do i come out to my conservative parents', { id: 'lgbtadult', text: ADULT_OK, link: '/coming-out.html', not: /GSA|school counselor/ });
   t('chat8', 'lgbtq support line', { id: 'lgbtadult', text: ADULT_OK });
   t('chat8', 'is it safe to come out if my dad has a temper', { id: 'lgbtadult', link: '/coming-out.html#safety-first' });
@@ -1264,7 +1264,7 @@ if (PERS) {
     t('puddles', 'hi my husband yells at me', { id: 'yelledat', not: FUNNY });  // chat9: ordinary help first, one gentle line
     t('puddles', 'my name is Sam', { kind: 'chat', text: /Sam/ });
     c('puddles', ['let\'s just chat', 'pizza'], { kind: 'chat' });
-    t('puddles', "i'm tired of everything goes to care", { q: "i'm tired of everything", kind: 'care', id: 'feelinglow', text: /talk to your doctor/ });
+    t('puddles', "i'm tired of everything goes to care", { q: "i'm tired of everything", kind: 'care', id: 'feelinglow', text: /tell someone you trust/, not: /doctor/ });
     t('puddles', "I'm Sam (a name, said the short way)", { q: "I'm Sam", kind: 'chat', text: /Sam/ });
     t('puddles', "I'm Tired (a feeling, not a name)", { q: "I'm Tired", kind: 'chat', not: /meet you, Tired/ });
     c('puddles', ['my name is Sam', 'how are you'], { kind: 'chat', not: /\{name\}/ });
@@ -1437,8 +1437,8 @@ if (PERS) {
   t('chat4', 'can i add reminders to my calendar', { id: 'prog01', link: '/prog-01.html#calendar' });  // mergeB: reminders live in Six gentle weeks
   t('chat4', 'where else can i get help', { not: /hotline|helpline|988|findahelpline|Samaritans/i });   // no outside-resource lists (owner)
   t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
-  // calming supplements and herbs: the research, never a dose, always "check with a pharmacist or doctor", crisis first, no jokes
-  const PHARM = /pharmacist|prescriber/;
+  // calming supplements and herbs: the research, never a dose, never a referral line (no "ask your pharmacist or doctor"), crisis first, no jokes
+  const PHARM = /pharmacist|prescriber|your doctor|a doctor|physician|check with/i;   // owner: no doctor/pharmacist lines
   const NODOSE = /\b\d+(\.\d+)? ?(mg|milligrams?|ml|mcg|g)\b|take (one|two|\d)/i;
   [['is ashwagandha safe', 'herbashwagandha', '#ashwagandha'], ['ashwagandha side effects', 'herbashwagandha', '#ashwagandha'],
    ["can I take st john's wort with my antidepressant", 'herbstjohns', '#st-johns-wort'], ['st johns wort and sertraline', 'herbstjohns', '#st-johns-wort'],
@@ -1448,9 +1448,9 @@ if (PERS) {
    ['is kava safe', 'herbkava', '#kava'], ['does magnesium help anxiety', 'herbmagnesium', '#magnesium'], ['magnesium for sleep', 'herbmagnesium', '#magnesium'],
    ['does CBD help anxiety', 'herbcbd', '#cbd'], ['does homeopathy work', 'herbhomeopathy', '#homeopathy'],
    ['are supplements safe', 'herbmix', '#safety'], ['can I mix herbs with my medication', 'herbmix', '#safety'], ['does lavender help sleep', 'herbsanxiety', '#start']
-  ].forEach(([q, id, a]) => t('herbs', q, { id, link: '/calming-supplements.html' + a, text: id === 'herbhomeopathy' ? /doctor or pharmacist/ : PHARM, not: new RegExp(NODOSE.source + '|' + FUNNY.source, 'i') }));
-  t('herbs', "my panic won't stop, what herbs can i take (help first)", { q: "my panic won't stop, what herbs can i take", id: 'herbshelp', text: /Your doctor can help/, link: '/calming-supplements.html#get-help', not: FUNNY });
-  t('herbs', "i've felt low for weeks, would st john's wort help (help first)", { q: "i've felt low for weeks, would st john's wort help", id: 'herbshelp', text: /Your doctor can help/ });
+  ].forEach(([q, id, a]) => t('herbs', q, { id, link: '/calming-supplements.html' + a, not: new RegExp(NODOSE.source + '|' + FUNNY.source + '|' + PHARM.source, 'i') }));
+  t('herbs', "my panic won't stop, what herbs can i take (help first)", { q: "my panic won't stop, what herbs can i take", id: 'herbshelp', text: /more than a supplement can fix/, link: '/calming-supplements.html#browse', not: FUNNY });
+  t('herbs', "i've felt low for weeks, would st john's wort help (help first)", { q: "i've felt low for weeks, would st john's wort help", id: 'herbshelp', text: /more than a supplement can fix/, not: /doctor/ });
   t('herbs', 'i want to kill myself, should i take kava (crisis reply)', { q: 'i want to kill myself, should i take kava', kind: 'safety', text: SUICIDE, not: /Kava may ease/ });
   c('herbs', ['tell me a joke', 'is ashwagandha safe'], { id: 'herbashwagandha', not: FUNNY });
   t('herbs', 'ashwagandha is not spell-corrected', { q: 'is ashwagandah safe', id: 'herbashwagandha' });
@@ -1477,10 +1477,10 @@ if (PERS) {
   t('safety9', 'threat of self-harm to control (adult)', { q: 'my partner says he will kill himself if I leave', kind: 'safety', id: 'threatself', text: NEUTRAL, not: /teacher/ });
   t('safety9', 'threat of self-harm to control (boyfriend)', { q: 'my boyfriend threatened to kill himself if i break up with him', kind: 'safety', id: 'threatself', text: NEUTRAL });
   t('safety9', "I'm the one who gets violent: help for them", { q: "I'm the one who gets violent sometimes. how do I stop", id: 'ownviolent', not: /If someone is hurting, threatening, watching or controlling you/ });
-  t('safety9', 'is my wife bipolar? no diagnosis', { q: 'is my wife bipolar?', id: 'diagnoseother', text: /can’t diagnose anyone[\s\S]*doctor/ });
+  t('safety9', 'is my wife bipolar? no diagnosis', { q: 'is my wife bipolar?', id: 'diagnoseother', text: /can’t diagnose anyone/, not: /doctor|psychologist|counselor/ });
   t('safety9', 'is my husband a psychopath? no diagnosis', { q: 'is my husband a psychopath', text: /can’t diagnose/ });
   t('safety9', 'is my husband autistic? no diagnosis', { q: 'is my husband autistic', id: 'diagnoseother' });
-  [['gaslighting', /doubt your own memory/], ['coercive control', /freedom bit by bit/], ['narcissist', /only a clinician can make it/]]
+  [['gaslighting', /doubt your own memory/], ['coercive control', /freedom bit by bit/], ['narcissist', /nobody can make it from a chat/]]
     .forEach(([q, x]) => t('safety9', q, { id: 'safetyterm', text: x }));
   // ordinary conflict: ordinary help first, one gentle line at most, and no lock into safety mode
   t('safety9', 'my husband yells at me: ordinary help, one gentle line', { q: 'hi my husband yells at me', id: 'yelledat', text: /pause word/, not: /signs it.s more than ordinary conflict|moved from ordinary conflict/ });
@@ -1525,11 +1525,11 @@ if (PERS) {
   t('chat9', 'gaming, ignored side: lonely first', { q: 'he plays video games all night and ignores me', id: 'gaming', text: /^That sounds lonely/, link: '/gaming-and-time-together.html#ignored' });
   c('chat9', ['he plays video games all night and ignores me', 'honestly i also do all the cleaning'], { id: 'gamingchores', link: '/workpapers/wp-03-one-owner-per-job.html', not: /being reminded about chores/ });
   c('chat9', ['he plays video games all night and ignores me', 'ok but how do i say it without him getting defensive'], { id: 'gamingtalk', text: /timing/, link: '/gaming-and-time-together.html#talking' });
-  t('chat9', 'gaming addiction: the doctor note', { q: 'is gaming addiction a real thing or is she overreacting', id: 'gamingaddiction', text: /doctor/, not: /^Gaming is a real way to rest/ });
+  t('chat9', 'gaming addiction: worth taking seriously, no referral', { q: 'is gaming addiction a real thing or is she overreacting', id: 'gamingaddiction', text: /worth taking seriously/, not: /^Gaming is a real way to rest|doctor/ });
   t('chat9', 'gamer side unchanged', { q: 'my gf says i game too much', id: 'gaming', text: /don’t need to apologize/ });
   c('chat9', ['he came back and changes how I do everything'], { id: 'comehome', text: /You carried everything for months/, link: '/coming-home.html#held-the-fort' });
   t('chat9', 'the returning side', { q: 'i feel like a stranger in my own house', id: 'comehome', text: /^Feeling like a stranger/, link: '/coming-home.html#returning' });
-  t('chat9', 'ptsd question: coming-home help, no Wiring Card', { q: 'do i have ptsd? i keep waking up and jumping at noises', id: 'ptsdq', text: /can’t tell you that[\s\S]*doctor/, link: '/coming-home.html#sleep', chip: /pause plan/, not: /Wiring Card|Wired Differently/ });
+  t('chat9', 'ptsd question: coming-home help, no Wiring Card', { q: 'do i have ptsd? i keep waking up and jumping at noises', id: 'ptsdq', text: /can’t tell you that/, link: '/coming-home.html#sleep', chip: /pause plan/, not: /Wiring Card|Wired Differently|doctor/ });
   t('chat9', 'how to talk about feelings: the speaker’s own side', { q: 'how to talk about feelings', id: 'feelingstalk', text: /one fact and one feeling/, not: /To a partner who shows care by doing|Thank you for sorting the car/ });
   t('chat9', 'partner who doesn’t talk: the other side', { q: "my husband doesn't talk about his feelings", id: 'feelingstalk', text: /show love by doing/ });
   t('chat9', 'not liking feelings talk: care by doing, no labels', { q: "I don't like talking about feelings", id: 'nofeelingstalk', text: /^That’s okay/, not: /alexithymia|autis/i });
@@ -1582,10 +1582,10 @@ if (PERS) {
   c('chat9', ['i yell at my kids', 'how do i make it right with them'], { id: 'yellkidsrepair', link: '/parents.html#repair-scared', not: /tower/ });
   ["i feel really anxious right now", "i'm so anxious", 'anxiety attack'].forEach(q => t('chat9', q, { id: 'calmnow', text: /slow down together/, link: '/upset-right-now.html', not: /Breathe button, on any page/ }));
   c('chat9', ['is ashwagandha safe', 'i feel really anxious right now'], { id: 'calmnow' });
-  t('chat9', 'SSRI + CBD: the interaction and the meds line', { q: 'i take sertraline, can i take CBD', id: 'herbcbd', text: /antidepressants[\s\S]*Never stop, swap or change a prescribed medicine/ });
-  t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'herbashwagandha', text: /no good evidence[\s\S]*Never stop, swap or change/ });
-  t('chat9', 'what dose: never a dose', { q: 'what dose of ashwagandha should i take', id: 'herbashwagandha', text: /^I can’t give doses\. A pharmacist/ });
-  t('chat9', 'what to tell my doctor about supplements', { q: 'what should i tell my doctor about supplements', id: 'herbwords', script: true, link: '/calming-supplements.html#words' });
+  t('chat9', 'SSRI + CBD: the interaction and the meds line', { q: 'i take sertraline, can i take CBD', id: 'herbcbd', text: /antidepressants[\s\S]*should never be stopped, swapped or changed suddenly/ });
+  t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'herbashwagandha', text: /no good evidence[\s\S]*should never be stopped, swapped or changed suddenly/ });
+  t('chat9', 'what dose: never a dose', { q: 'what dose of ashwagandha should i take', id: 'herbashwagandha', text: /^I can’t give doses/, not: /pharmacist|doctor/ });
+  t('chat9', 'what to tell my doctor about supplements: no referral card any more', { q: 'what should i tell my doctor about supplements', not: /pharmacist|prescriber/i });
   t('chat9', 'adult bi and religious parents: adult answer', { q: 'im bi and scared to tell my parents, they are very religious', id: /lgbtadult|lgbtsafety/, link: '/coming-out.html', not: /GSA|For teens|misgender/i });
   t('chat9', 'states an adult age: adult coming out', { q: "i'm 31, not a teen. my partner is a woman and my parents are conservative christians", id: /lgbtadult|lgbtsafety/, not: /Talking with teenagers|Parenting styles/ });
   t('chat9', 'shared wifi: device privacy', { q: 'can my parents see what i look at on here? we share wifi', id: /wifiprivacy|devicekeep/ });
@@ -1647,7 +1647,7 @@ if (PERS) {
   c('care10', ['is it fair that I do all the cooking'], { kind: 'ask', id: 'clarify-load', text: /How long has the split/, chip: /A year or more/ });
   c('care10', ['is it fair that I do all the cooking', 'Not sure'], { kind: 'ask', id: 'clarify-load', text: /reason it’s this way/, chip: /^Not sure$/ });
   c('care10', ['is it fair that I do all the cooking', 'A year or more', 'Not that I know of', 'One of us feels worn down or resentful', 'Yes, but nothing has changed', 'No, not really'],
-    { kind: 'read', id: 'clarify-load', text: /someone outside the two of you[\s\S]*not a verdict/, not: DV10 });
+    { kind: 'read', id: 'clarify-load', text: /heavier pattern[\s\S]*not a verdict/, not: DV10 });
   c('care10', ['is it fair that I do all the cooking', 'A few weeks, or less', 'Yes, something for now: illness, a new baby, a new job, exams, a move', 'We both seem fine with it', 'Yes, and it’s getting better', 'Yes, it evens out'],
     { kind: 'read', text: /ordinary rough patch/, not: DV10 });
   c('care10', ['is it fair that I do all the cooking', 'just tell me'], { kind: 'read', text: /everyday read/, not: DV10 });
@@ -2082,7 +2082,7 @@ if (PERSONA) {
   t(G, 'midnight and i\'m tempted to message her even though we broke up', { id: 'exstoptext' });
   // 4. feeling hopeless: the safety reply as it was, with the adult help page (the teen page only for a teen)
   ['honestly i feel kind of hopeless tonight', 'i feel so hopeless', 'im feeling really low tonight'].forEach(q =>
-    t(G, q, { id: 'feelinglow', text: /talk to your doctor/, check: noLink(/teens\.html/) }));
+    t(G, q, { id: 'feelinglow', text: /tell someone you trust/, not: /doctor/, check: noLink(/teens\.html/) }));
   t(G, 'a teen feeling hopeless gets the teen page', { q: 'i\'m 15 and honestly i feel kind of hopeless tonight', id: 'feelinglowteen', link: '/teens.html#help' });
   t(G, 'wanting to die is still the danger reply', { q: 'i feel hopeless and i want to die', kind: 'safety', text: SUICIDE });
   // 5. grief: evenings get the grief page's hard-evening list, and a grieving person is never told "I won't repeat them"

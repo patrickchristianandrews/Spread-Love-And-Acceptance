@@ -23,7 +23,7 @@
     var g = read('tol-night-garden-v1') || {};
     var consts = Array.isArray(g.consts) ? g.consts : [], ded = g.dedic || {};
     var xw = read('tol-xw-v1') || {}, np = read('tol-np-v1') || {}, bloom = read('tol-bloom-v1') || {};
-    var qw = +(localStorage.getItem('tol-qw-done') || 0);
+    var qw = 0; try { qw = +(localStorage.getItem('tol-qw-done') || 0); } catch (e) {}   // storage can be blocked (private mode, site data off)
     var got = (R ? R.ladder : []).filter(function (u) { return st.unlocked.indexOf(u.id) !== -1; });
     var wonders = got.filter(function (u) { return u.id.indexOf('garden-flies-') !== 0; }), flies = got.length - wonders.length;
 

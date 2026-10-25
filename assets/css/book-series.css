@@ -5,7 +5,7 @@
 .bk-series-note { font-style: italic; color: var(--ink-soft); }
 .bk-series-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: 1.1rem; }
 .bk-sb { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 1rem; align-items: start; margin: 0; padding: 0 0 1.1rem; border-bottom: 1px dotted var(--line); max-width: none; }
-.bk-sb-cover { display: block; width: 112px; height: auto; aspect-ratio: 2 / 3; border-radius: 4px; border: 1px solid var(--line); box-shadow: 0 2px 6px rgba(0, 0, 0, .12); background: var(--paper-deep, #F3EEE2); }
+.bk-sb-cover { display: block; width: 112px; height: auto; aspect-ratio: auto 2 / 3; /* polish24a: the real shape once loaded (the workbook and pocket guide are not 2:3) */ border-radius: 4px; border: 1px solid var(--line); box-shadow: 0 2px 6px rgba(0, 0, 0, .12); background: var(--paper-deep, #F3EEE2); }
 .bk-sb-body { min-width: 0; }
 .bk-sb-k { margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--bc, var(--brass)); }
 :root[data-theme="dark"] .bk-sb-k { color: var(--ink-soft); }

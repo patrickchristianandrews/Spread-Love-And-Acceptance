@@ -65,7 +65,12 @@
     var picks = main.querySelectorAll(':scope > .read-head, :scope > .tol-listen, :scope > .depth-bar, :scope > .tol-depth, :scope > .tol-private, :scope > .tol-offer, :scope > .tol-pillars, :scope > .lp-trail');
     return picks.length ? picks[picks.length - 1] : null;
   }
-  function place(node) { var a = after(); if (a) a.after(node); else main.insertBefore(node, main.firstChild); }
+  function place(node) {
+    var a = after();
+    // polish24a: a page with its own title block and no .read-head gets this after the title, not above the breadcrumb
+    if (!a) { var h1 = main.querySelector('h1'), hd = h1 && (h1.closest('header, .bk-cover') || (h1.parentNode === main ? h1 : null)); if (hd && hd !== main && main.contains(hd)) a = hd; }
+    if (a) a.after(node); else main.insertBefore(node, main.firstChild);
+  }
 
   if (S[path]) {
     var box = document.createElement('aside');

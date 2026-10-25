@@ -1,6 +1,6 @@
 # Caregiving logistics
 
-Practical, non-medical notes. For health questions, talk with a qualified professional.
+Practical, non-medical notes.
 
 ## Care calendar
 aka: care calendar; caregiving schedule; shared care schedule

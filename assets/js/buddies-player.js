@@ -1930,7 +1930,10 @@
   }
   function clipBuf(ep, k) {
     var id = ep + '/' + k; if (CL.bufs[id]) return CL.bufs[id];
-    var c = auEnsure(); if (!c) return Promise.resolve(null);
+    // polish24a: decode the little clips without starting the page's sound engine before anyone has tapped (it logged a browser warning each time).
+    // A decoded buffer plays in any audio context.
+    var c = AU.ctx;
+    if (!c) { try { c = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 1, 44100); } catch (e) { return Promise.resolve(null); } }
     CL.bufs[id] = fetch(CL.base + id + '.mp3?v=' + REC).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
       if (!ab) return null;
       return new Promise(function (ok) { try { c.decodeAudioData(ab, ok, function () { ok(null); }); } catch (e) { ok(null); } });

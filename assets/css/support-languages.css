@@ -89,10 +89,18 @@
 .sl-fold > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:16px; }
 .sl-fold > .sl-fold-body{ padding:0 1rem .9rem; }
 .sl-fold-body p, .sl-fold-body li{ font-size:.97rem; line-height:1.55; max-width:none !important; }
-.sl-fold-body h4{ margin:.8rem 0 .2rem !important; font:600 .98rem/1.3 "Fraunces", Georgia, serif !important; }
+.sl-fold-body :is(h3, h4){ margin:.8rem 0 .2rem !important; font:600 .98rem/1.3 "Fraunces", Georgia, serif !important; }  /* polish24a: sub-headings in a fold are h3 (they were h4 straight under an h2) */
 .sl-fold-body ul{ margin:.2rem 0 .5rem; padding-left:1.2rem; }
 
 @media print{
   .sl-quiz-form, .sl-row, .tcol{ display:none !important; }
   .sl-card details, .sl-fold{ border:0; }
 }
+
+/* polish24a: the "Where to go next" list on these pages uses the same card rows as the calming-supplements page (the rows were plain bullets with the title and its line run together) */
+.cs-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+.cs-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+.cs-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+.cs-links a:hover{ border-color:var(--credit); }
+.cs-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+.cs-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }

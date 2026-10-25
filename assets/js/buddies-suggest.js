@@ -196,7 +196,7 @@
       'font-weight:600;font-size:.95rem;color:#5B3A1E;text-decoration:none;background:rgba(255,255,255,.85);border:1px solid #EBC9A0;transition:background .15s ease,border-color .15s ease;}',
       '.tol-fbs .tol-fbs-go:hover{background:#FFF3E0;border-color:#D9A56B;}',
       '.tol-fbs .tol-fbs-go:focus-visible{outline:2px solid var(--focus,#2B5B8C);outline-offset:2px;}',
-      '.tol-fbs-go b{display:inline-flex;align-items:center;justify-content:center;width:1.35rem;height:1.35rem;border-radius:50%;background:#E9A15C;color:#fff;font-size:.62rem;padding-left:.1rem;}',
+      '.tol-fbs-go b{display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;border-radius:50%;background:#E9A15C;color:#fff;font-size:.74rem;padding-left:.1rem;}',
       '.tol-fbs .tol-fbs-note{margin-top:.35rem !important;font-size:.8rem;line-height:1.45;color:var(--ink-soft,#5A5346);}',
       // a phone: the words get the whole width, and the little picture tucks into the top corner
       '@media (max-width:560px){.tol-fbs{display:block;padding:.9rem 1rem 1rem;border-radius:24px;}',

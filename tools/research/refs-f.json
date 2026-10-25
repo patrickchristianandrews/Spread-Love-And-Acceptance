@@ -892,7 +892,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/conditions/pre-menstrual-syndrome/",
   "kind": "guideline",
-  "finding": "Regular exercise and plenty of sleep can help PMS. A doctor can offer treatments including CBT, hormonal medicines and antidepressants if symptoms are severe.",
+  "finding": "Regular exercise and plenty of sleep can help PMS. Treatments for severe symptoms include CBT, hormonal medicines and antidepressants.",
   "strength": "moderate: official advice. The exercise trials are of poor quality.",
   "topics": [
    "complementary-health"
@@ -1021,7 +1021,7 @@
   "doi": null,
   "url": "https://oxfordhealth.nhs.uk/ohspic/problems/ocd/",
   "kind": "guideline",
-  "finding": "The evidence-based psychological treatment for OCD is individual CBT including exposure and response prevention (ERP) with a therapist.",
+  "finding": "The evidence-based psychological treatment for OCD is individual CBT including exposure and response prevention (ERP).",
   "strength": "moderate: NHS service guidance reflecting national guidelines.",
   "topics": [
    "anxiety"
@@ -1481,26 +1481,6 @@
   "verified_by": "https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety (search result, Oct 2026)"
  },
  {
-  "id": "nhs-bereavement",
-  "authors": "NHS (National Health Service, England)",
-  "year": null,
-  "title": "Bereavement",
-  "venue": "NHS mental health advice (nhs.uk)",
-  "doi": null,
-  "url": "https://www.nhs.uk/mental-health/advice-for-life-situations-and-events/bereavement/",
-  "kind": "guideline",
-  "finding": "Advice and support for grief after a bereavement or loss, including when to see a doctor and where to find bereavement support.",
-  "strength": "moderate: official advice.",
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/calming-supplements.html#browse"
-  ],
-  "verified": true,
-  "verified_by": "https://www.nhs.uk/mental-health/advice-for-life-situations-and-events/bereavement/ (search result, Oct 2026)"
- },
- {
   "id": "nimh-so-stressed-out",
   "authors": "National Institute of Mental Health (NIMH)",
   "year": 2022,
@@ -1509,15 +1489,14 @@
   "doi": null,
   "url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet",
   "kind": "guideline",
-  "finding": "Stress is usually a response to an outside cause and fades when it ends. Anxiety can continue without a threat. If symptoms won’t go away or interfere with daily life, it may be time to talk to a professional.",
+  "finding": "Stress is usually a response to an outside cause and fades when it ends. Anxiety can continue without a threat.",
   "strength": "moderate: official advice.",
   "topics": [
    "stress",
    "anxiety"
   ],
   "mentioned_on": [
-   "/nervous-system.html#stress-response",
-   "/nervous-system.html#doctor"
+   "/nervous-system.html#stress-response"
   ],
   "verified": true,
   "verified_by": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet (search result, Oct 2026)"
@@ -1531,37 +1510,16 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/panic-disorder/",
   "kind": "guideline",
-  "finding": "See a doctor if you have symptoms of panic disorder. They may examine you to rule out other conditions that could cause the symptoms.",
+  "finding": "Describes panic disorder and its symptoms, which can overlap with those of other conditions.",
   "strength": "moderate: official advice.",
   "topics": [
    "anxiety"
   ],
   "mentioned_on": [
-   "/calming-supplements.html#browse",
-   "/nervous-system.html#doctor"
+   "/calming-supplements.html#browse"
   ],
   "verified": true,
   "verified_by": "https://www.nhs.uk/mental-health/conditions/panic-disorder/ (search result, Oct 2026)"
- },
- {
-  "id": "nhs-dissociative-disorders",
-  "authors": "NHS (National Health Service, England)",
-  "year": null,
-  "title": "Dissociative disorders",
-  "venue": "NHS website (nhs.uk)",
-  "doi": null,
-  "url": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/",
-  "kind": "guideline",
-  "finding": "Describes depersonalisation and derealisation. A doctor may examine you and do tests to check for other causes, then refer you to a mental health specialist.",
-  "strength": "moderate: official advice.",
-  "topics": [
-   "stress"
-  ],
-  "mentioned_on": [
-   "/nervous-system.html#doctor"
-  ],
-  "verified": true,
-  "verified_by": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/ (search result, Oct 2026)"
  },
  {
   "id": "statpearls-autonomic-nervous-system",
@@ -1799,7 +1757,7 @@
   "doi": null,
   "url": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/",
   "kind": "guideline",
-  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS. Check with a doctor first if you have an eye condition or take medicines that make you sensitive to light.",
+  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS. An eye condition, or medicines that make you sensitive to light, can make a light box unsuitable.",
   "strength": "early: the NHS says there isn’t enough evidence to be sure light therapy works, though many people find it helps.",
   "topics": [
    "supplements",

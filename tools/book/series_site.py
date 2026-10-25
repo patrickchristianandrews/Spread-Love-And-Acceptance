@@ -98,6 +98,13 @@ def check_blurbs():
     return out
 
 
+def chap_label(b):
+    ch = b['chapters']
+    after = ch[-1] == 'afterword'
+    n = len(ch) - (1 if after else 0)
+    return '%d chapters and an afterword' % n if after else '%d chapters' % n
+
+
 def cover_img(item_id, alt, h=720):
     small = 'book/print/cover-%s-front-small.jpg' % item_id
     if os.path.exists(os.path.join(ROOT, small)):
@@ -129,7 +136,7 @@ def home_html():
     rows = []
     for b in c['books']:
         m = made.get(b['id'], {})
-        meta = '%d chapters' % len(b['chapters'])
+        meta = chap_label(b)
         if m.get('pages'):
             meta += ' · %d pages in print' % m['pages']
         first = '/book/%s.html' % b['chapters'][0]
@@ -146,7 +153,7 @@ def home_html():
     meta = 'Every workpaper, to fill in by hand' + (' · %d large pages' % m['pages'] if m.get('pages') else '')
     short.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                  '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/workpapers/fill/index.html">Fill them in free online</a>%s</p>%s</div></li>') % (
-        w['color'], cover_img(w['id'], 'Cover of %s' % w['title']), esc(w['title']), esc(w['line']), meta, free_pdf(w['id'], m), shop_row(w['id'])))
+        w['color'], cover_img(w['id'], 'Cover of %s' % w['title'], 621), esc(w['title']), esc(w['line']), meta, free_pdf(w['id'], m), shop_row(w['id'])))
     try:
         with open(os.path.join(HERE, 'series-extras.json'), encoding='utf-8') as f:
             pk = json.load(f)['pocket']
@@ -263,12 +270,12 @@ def download_html():
         f = _file(b['id'], m)
         if not os.path.exists(os.path.join(ROOT, 'book', 'print', f)):
             continue
-        rows.append(('<li class="bk-dl-book" id="%s" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Book %d · %d chapters</p>'
+        rows.append(('<li class="bk-dl-book" id="%s" style="--bc:%s">%s<div class="bk-dl-book-body"><p class="bk-dl-book-k">Book %d · %s</p>'
                      '<h3>%s</h3><p class="bk-dl-book-line">%s</p><p class="bk-dl-book-links">'
                      '<a class="bk-dl-file" href="/book/print/%s" data-dl="%s" data-series="%s" data-name="Book %d, %s" download="%s">'
                      '<span class="bk-dl-v">Download Book %d (PDF)</span><span class="bk-dl-m" data-series-meta>%s</span></a> '
                      '<a class="bk-dl-read" href="/book/%s.html">Read it free online</a></p></div></li>') % (
-            book_anchor(b), b['color'], cover_img(b['id'], '').replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), b['n'], len(b['chapters']),
+            book_anchor(b), b['color'], cover_img(b['id'], '').replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), b['n'], chap_label(b),
             esc(b['title']), esc(b['line']), esc(f), esc(b['id']), esc(b['id']), b['n'], esc(b['title']), _save_name(b['title'], b['n']),
             b['n'], _meta(m), b['chapters'][0]))
     free = []
@@ -284,7 +291,7 @@ def download_html():
                      '<h3>%s</h3><p class="bk-dl-book-line">Every workpaper in one PDF, on large pages, to print and fill in by hand. Each one is also free to fill in on screen.</p>'
                      '<p class="bk-dl-book-links"><a class="bk-dl-nomail" href="/book/print/%s" data-series="%s" download="%s"><span class="bk-dl-v">Download the workbook (PDF)</span>'
                      '<span class="bk-dl-m" data-series-meta>%s</span></a>%s <a class="bk-dl-read" href="/workpapers/fill/index.html">Fill them out online</a></p></div></li>') % (
-            w['color'], cover_img(w['id'], '').replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), esc(w['title']), esc(_file(w['id'], m)), esc(w['id']),
+            w['color'], cover_img(w['id'], '', 621).replace('class="bk-sb-cover"', 'class="bk-dl-book-cover"'), esc(w['title']), esc(_file(w['id'], m)), esc(w['id']),
             _save_name(w['title']), _meta(m), bw_link))
     try:
         with open(os.path.join(HERE, 'series-extras.json'), encoding='utf-8') as fh:
