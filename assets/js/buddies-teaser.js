@@ -951,8 +951,9 @@
   var SCAN = {};
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   // the recorded voices (one mp3 per line, listed in index.json): when a line has one, the little talking-voice stand-in stays quiet
+  var CLIPV = '24a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
   var CLIPMAP = null, CLIPP = null;
-  function clipsLoad() { return CLIPP || (CLIPP = fetch('/assets/audio/buddies/s2teaser/index.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIPMAP = m || {}; return CLIPMAP; }).catch(function () { CLIPMAP = {}; return CLIPMAP; })); }
+  function clipsLoad() { return CLIPP || (CLIPP = fetch('/assets/audio/buddies/s2teaser/index.json?v=' + CLIPV, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIPMAP = m || {}; return CLIPMAP; }).catch(function () { CLIPMAP = {}; return CLIPMAP; })); }
   function hasClip(who, text) { return !!(CLIPMAP && CLIPMAP[ckey(who === 'narr' ? 'narr' : who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text)]); }
   function scanLines(calm) {
     var key = calm ? 'c' : 'n'; if (SCAN[key]) return SCAN[key];
@@ -1254,7 +1255,7 @@
     function duck(on) { try { if (A.master && A.ctx) A.master.gain.setTargetAtTime(on ? 0.5 : 0.9, A.ctx.currentTime, 0.05); } catch (e) {} }
     function clipBuf(key) {
       var c = A.ctx; if (!c) return null;
-      if (!CLIP.bufs[key]) CLIP.bufs[key] = fetch('/assets/audio/buddies/s2teaser/' + key + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } }) : null; }).catch(function () { return null; });
+      if (!CLIP.bufs[key]) CLIP.bufs[key] = fetch('/assets/audio/buddies/s2teaser/' + key + '.mp3?v=' + CLIPV).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } }) : null; }).catch(function () { return null; });
       return CLIP.bufs[key];
     }
     function preloadClips() { clipsLoad().then(function (m) { if (A.ctx) Object.keys(m).forEach(clipBuf); }); }   // every recorded line is ready before its moment, so the voices land on time
@@ -1465,7 +1466,7 @@
     var sr = 44100, c = new OAC(2, Math.ceil(sr * DUR), sr);
     var CB = {};
     return Promise.all([loadSamples(c), clipsLoad().then(function (m) {   // the recorded voices go into the video's soundtrack too
-      return Promise.all(Object.keys(m).map(function (k) { return fetch('/assets/audio/buddies/s2teaser/' + k + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? c.decodeAudioData(ab) : null; }).then(function (b) { CB[k] = b; }).catch(function () {}); }));
+      return Promise.all(Object.keys(m).map(function (k) { return fetch('/assets/audio/buddies/s2teaser/' + k + '.mp3?v=' + CLIPV).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? c.decodeAudioData(ab) : null; }).then(function (b) { CB[k] = b; }).catch(function () {}); }));
     })]).then(function () {
       var bus = makeChain(c, c.destination), I = kit(c, bus, function () {});
       score(!!calm).forEach(function (e) { fire(I, e, e[0]); });
