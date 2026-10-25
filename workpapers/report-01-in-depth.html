@@ -512,7 +512,7 @@
   </section>
 
   <footer class="sheet-footer">
-    Spread Love &amp; Acceptance &middot; REPORT-01 &middot; The Full Read &middot; Runs locally; nothing saved or sent
+    Spread Love &amp; Acceptance &middot; REPORT-01 &middot; The Full Read &middot; Runs locally. Nothing saved or sent
   </footer>
 
 </main>
@@ -887,7 +887,7 @@
         $("name-a").value = hh.people[0] || "Person A";
         if (hh.people[1]) $("name-b").value = hh.people[1];
         renderReport();
-        return HH.addedLine(Math.min(hh.people.length, 2), 0) + (hh.people.length > 2 ? " This ledger has room for two people; the first two are filled in." : "");
+        return HH.addedLine(Math.min(hh.people.length, 2), 0) + (hh.people.length > 2 ? " This ledger has room for two people. The first two are filled in." : "");
       },
       focus: function(){ return $("name-a"); }
     });

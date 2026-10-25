@@ -285,9 +285,9 @@
     <p class="sheet-tagline"><strong>A place to start a conversation, not a verdict.</strong> A low score doesn't blame anyone, and a high score doesn't mean anyone should stop speaking up. Only have totals? Try the <a href="/workpapers/calculators/is-the-setup-working-quick.html">quick read</a>.</p>
     <details class="no-print">
       <summary>More about this calculator</summary>
-      <p class="sheet-tagline">It works for any group that shares a load: partners, families, roommates, co-carers, a small team at work. The idea is borrowed from accounting: can the setup carry its own weight?</p>
+      <p class="sheet-tagline">It works for any group that shares a load: partners, families, roommates, co-caregivers, a small team at work. The idea is borrowed from accounting: can the setup carry its own weight?</p>
       <p class="sheet-tagline pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work. Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and the retuning count uses <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
-      <p class="sheet-tagline">The maths comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
+      <p class="sheet-tagline">The math comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
     </details>
     <nav class="toc no-print" aria-label="On this page">
       <a href="#state">Check your state</a>
@@ -305,7 +305,7 @@
   <!-- ================= STATE ================= -->
   <section id="state" aria-labelledby="state-h">
     <div class="section-head"><p class="part-label">Step zero</p><h2 id="state-h">Check your state</h2></div>
-    <p>Before you read a number about how you share the load, notice how you feel right now. The same number lands differently when you're calm than when you're tired or wound up. This is a check on yourself only. It never changes the score; it changes whether today is the day to act on it.</p>
+    <p>Before you read a number about how you share the load, notice how you feel right now. The same number lands differently when you're calm than when you're tired or wound up. This is a check on yourself only. It never changes the score. It changes whether today is the day to act on it.</p>
     <div class="ladder" role="group" aria-label="How do you feel right now?">
       <button type="button" class="rung" data-state="calm" aria-pressed="false"><b>Calm and connected</b><span>Clear skies. I can hear feedback without bracing.</span></button>
       <button type="button" class="rung" data-state="revved" aria-pressed="false"><b>Revved up</b><span>Gusty. Tense, quick to argue, on edge.</span></button>
@@ -444,7 +444,7 @@
       </div>
 
       <div class="nums-only">
-      <h3 style="font-size:1rem;">The maths, step by step</h3>
+      <h3 style="font-size:1rem;">The math, step by step</h3>
       <div class="math" id="math" tabindex="0" role="region" aria-label="The math, step by step">No read yet.</div>
       </div>
 
@@ -470,13 +470,13 @@
 
     <details class="no-print">
       <summary>Optional: push scores toward the ends of the scale</summary>
-      <p style="font-size:0.9rem;">This runs the same total through an S-shaped curve centred at 0.5: <code>1 / (1 + e^(&minus;6 &times; (raw &minus; 0.5)))</code>. Middling reads move further from the middle. It doesn't make the score more accurate, and reads taken with it can't be compared with reads taken without it. It's off by default.</p>
+      <p style="font-size:0.9rem;">This runs the same total through an S-shaped curve centered at 0.5: <code>1 / (1 + e^(&minus;6 &times; (raw &minus; 0.5)))</code>. Middling reads move further from the middle. It doesn't make the score more accurate, and reads taken with it can't be compared with reads taken without it. It's off by default.</p>
       <label class="check"><input type="checkbox" id="sigmoid"> Use the S-curve</label>
     </details>
 
     <details class="no-print">
       <summary>Advanced: change the weights</summary>
-      <p style="font-size:0.9rem;">These weights are a judgement, not a research finding. They say an uneven load matters a little more than unclear ownership, and both matter more than everyday stress. If you change them, new reads can't be compared with old ones.</p>
+      <p style="font-size:0.9rem;">These weights are a judgment, not a research finding. They say an uneven load matters a little more than unclear ownership, and both matter more than everyday stress. If you change them, new reads can't be compared with old ones.</p>
       <div class="scroll-x">
       <table>
         <thead><tr><th>Part</th><th class="num">Setup score</th><th class="num">Overall score</th></tr></thead>
@@ -554,7 +554,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
 <pre>(0.60 &times; 0.40) + (0.75 &times; 0.35) + ((1 &minus; 0.40) &times; 0.25)
 =    0.24      +     0.2625     +        0.15
 =    0.6525  &rarr;  0.65, needs a look</pre>
-      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average stress-tank score of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
+      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all, so an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average stress-tank score of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
       <p><strong>An agreed split.</strong> If two people agree on 60/40 (say one works longer hours outside the home) and log 6 and 4 hours, nothing needs to move, so balance is 1.00. Against an even split the same week would score 0.80. Use the agreed split only if everyone really agreed to it, and say so when you share the read.</p>
     </div>
 
@@ -594,7 +594,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
         <li><strong>Both high:</strong> the load is shared and owned, and rough moments get repaired. Keep going.</li>
         <li><strong>Setup score high, overall score lower (by 0.08 or more):</strong> the setup is fine, but repair isn't happening. Work on <a href="/workpapers/fill/wp-09.html">WP-09</a>, not the job list.</li>
         <li><strong>Overall score high, setup score lower (by 0.08 or more):</strong> you repair well, but the setup keeps creating the friction. Work on the <a href="/workpapers/fill/wp-03.html">job list</a>.</li>
-        <li><strong>Both below 0.40:</strong> the setup and the repair are both struggling. Another worksheet may not be what helps most; outside support, like a counsellor or a trusted mediator, is worth considering.</li>
+        <li><strong>Both below 0.40:</strong> the setup and the repair are both struggling. Another worksheet may not be what helps most. Outside support, like a counselor or a trusted mediator, is worth considering.</li>
       </ul>
     </div>
 
@@ -866,7 +866,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
       return o;
     }
     d.innerHTML = '<div class="formula">Ownership = jobs with an owner ÷ all jobs</div><div>' + owned + ' ÷ ' + total + ' jobs' + (total - owned ? ' (' + (total - owned) + ' still without an owner)' : '') + '</div>' +
-      (everyoneA.length ? '<div>The helper is "everyone together" for: ' + esc(everyoneA.join(", ")) + '. That’s fine; the owner is the one who sees it through.</div>' : '') +
+      (everyoneA.length ? '<div>The helper is "everyone together" for: ' + esc(everyoneA.join(", ")) + '. That’s fine. The owner is the one who sees it through.</div>' : '') +
       (o.conc.flag ? '<div class="err-note" style="color:var(--ink);">Who’s carrying more right now: ' + esc(nameOf(o.conc.top)) + ' owns ' + o.conc.count + ' of the ' + o.conc.total + ' jobs with a named person (' + C.pct(o.conc.share) + '). Ownership reads whether jobs have names, not how they are spread, so read the two together.</div>' : '') +
       '<div><span class="out' + (o.value < 0.5 ? " warn" : "") + '">' + f2(o.value) + '</span> <span class="formula">ownership</span></div>';
     return o;
@@ -982,7 +982,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     m += "  1 − stress (1 − " + fg(as) + ") × " + w.sol.as.toFixed(2) + " = " + fg(sol.parts.as) + "\n";
     m += "  total      " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "\n";
     if (useSig) m += "  S-curve    1 / (1 + e^(−6 × (" + sol.value.toFixed(4) + " − 0.5))) = " + solV.toFixed(4) + "\n";
-    m += "  shown as   " + f2(solV) + "  → " + sb.short + "\n  (inputs are shown to three decimals, so each line adds up; the cards above round to two)\n\nOVERALL SCORE\n";
+    m += "  shown as   " + f2(solV) + "  → " + sb.short + "\n  (inputs are shown to three decimals, so each line adds up, and the cards above round to two)\n\nOVERALL SCORE\n";
     if (ap.rebalanced){
       m += "  no rough moments, so retuning is left out and the rest is divided by " + ap.divisor.toFixed(2) + "\n";
       m += "  (" + fg(ap.parts.wb) + " + " + fg(ap.parts.oc) + " + " + fg(ap.parts.as) + ") ÷ " + ap.divisor.toFixed(2) + " = " + ap.value.toFixed(4) + "\n";
@@ -1028,7 +1028,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     else base = "It needs a rethink, together: the setup is asking too much as it is. That's about the setup, not anyone's effort or worth. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>. Plan a calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together, rather than another one-off patch.";
     var extra = "";
     if (o.everyoneA && o.everyoneA.length) extra += "<p>Jobs where everyone is accountable often drift to whoever notices first. Consider naming one person to notice each of them.</p>";
-    if (sb.key === "low" && ab.key === "low") extra += "<p>Both scores are low at once. Another worksheet may not be what helps most; it may be worth asking someone neutral that everyone trusts to help you rework the setup together.</p>";
+    if (sb.key === "low" && ab.key === "low") extra += "<p>Both scores are low at once. Another worksheet may not be what helps most. It may be worth asking someone neutral that everyone trusts to help you rework the setup together.</p>";
     extra += "<p>Keep going: <a href=\"/workpapers/fill/suite.html\">build your Workpaper Suite</a> or track the weeks in <a href=\"/workpapers/report-01.html\">Your progress, week by week</a>.</p>";
 
     var mode = currentState ? STATE_COPY[currentState].mode : "go";

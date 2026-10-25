@@ -130,7 +130,7 @@ fieldset.q legend + *{ clear:both; }
 <div class="kicker">Quick check</div>
 <h1 style="font-size:1.8rem;">The 2-minute snapshot</h1>
 <p class="lede">Seven questions about how a shared load is set up, and how it bends when things get heavy.</p>
-<p class="pillar-note"><small>The snapshot looks through all <a href="/five-pillars.html">Five Pillars</a>: <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a>, <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>, <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> and <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>. Questions 1 to 3 are about the setup, and questions 4 to 6 are about how it bends; each question shows the pillar it draws on. In you: an honest look at what you carry. Between you and others: a pattern you can change together, not a fault in anyone.</small></p>
+<p class="pillar-note"><small>The snapshot looks through all <a href="/five-pillars.html">Five Pillars</a>: <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a>, <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>, <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> and <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>. Questions 1 to 3 are about the setup, and questions 4 to 6 are about how it bends. Each question shows the pillar it draws on. In you: an honest look at what you carry. Between you and others: a pattern you can change together, not a fault in anyone.</small></p>
 <p>This is not a test and not a diagnosis. It's your view, today. It works best when each person takes it on their own and then you compare. Nothing you pick is saved or sent.</p>
 
 <div class="who">
@@ -259,7 +259,7 @@ var AREAS = {
   },
   stretched: {
     name: "Carrying a lot right now",
-    desc: function(g){ return "The setup is unclear or uneven, and it's hard to adjust when things get heavy. For " + g + ", that's a lot to hold at once. It says nothing about anyone's effort or worth; it says the setup needs attention first."; },
+    desc: function(g){ return "The setup is unclear or uneven, and it's hard to adjust when things get heavy. For " + g + ", that's a lot to hold at once. It says nothing about anyone's effort or worth. It says the setup needs attention first."; },
     action: "Start small. Each person does the two-minute How much are you carrying? (WP-02) so you pick a calm moment. Then name the one job that would cause the biggest problem if it were missed, and agree who owns it this week.",
     pillar: "This starts with Pillar III, Read your state first, then Pillar II, one owner per job.",
     links: [["How much are you carrying? (WP-02)", "/workpapers/fill/wp-02.html"], ["One owner per job (WP-03)", "/workpapers/fill/wp-03.html"], ["Calm-down plan (WP-11)", "/wp-11.html"]]
@@ -321,7 +321,7 @@ $("snapshot-form").addEventListener("submit", function(e){
   // not the steady area: a few optional questions first, so the read is fair (clarify.js)
   if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: key !== "steady" });
   $("result-links").innerHTML = A.links.map(function(l){ return '<li><a href="' + l[1] + '">' + esc(l[0]) + '</a></li>'; }).join("") +
-    '<li><a href="/five-pillars.html">The Five Pillars, in plain words</a></li><li><a href="/do/workpaper-playground.html">Practise in the Workpaper Playground</a></li>';
+    '<li><a href="/five-pillars.html">The Five Pillars, in plain words</a></li><li><a href="/do/workpaper-playground.html">Practice in the Workpaper Playground</a></li>';
   var L = ["My 2-minute snapshot (Spread Love & Acceptance)", "About: " + $("group").options[$("group").selectedIndex].text, "", "Area: " + A.name, A.desc(g), "",
     "The setup: " + setup + " of 6. How it bends: " + flex + " of 6.", "My word: " + picks.word[0], "", "My answers:"];
   QUESTIONS.forEach(function(q){ L.push("- " + q.q + " " + picks[q.id][0]); });

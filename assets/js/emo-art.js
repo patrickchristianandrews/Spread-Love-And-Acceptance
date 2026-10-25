@@ -222,8 +222,8 @@
       var a = R() * Math.PI * 2, b = a + Math.PI + (R() - 0.5) * 1.6, r1 = 386, sx = CX + Math.cos(a) * r1, sy = CY + 10 + Math.sin(a) * r1, tx = CX + Math.cos(b) * r1, ty = CY + 10 + Math.sin(b) * r1;
       var c1x, c1y, c2x, c2y;
       if (e.knot) { c1x = kx + (R() - 0.5) * 40; c1y = ky + (R() - 0.5) * 40; c2x = kx + (R() - 0.5) * 40; c2y = ky + (R() - 0.5) * 40; }
-      else { c1x = CX + (R() - 0.5) * coreR * 1.6; c1y = CY + (R() - 0.5) * coreR * 1.6; c2x = CX + (R() - 0.5) * coreR * 1.6; c2y = CY + (R() - 0.5) * coreR * 1.6; }
-      ctx.strokeStyle = rgba(e.color, 0.55 + R() * 0.3); ctx.lineWidth = 1.4 + R() * 1.2;
+      else { var rr = coreR * (1.35 + R() * 0.5), s1 = (R() < 0.5 ? 1 : -1) * (0.8 + R() * 0.5); c1x = CX + Math.cos(a + s1) * rr; c1y = CY + Math.sin(a + s1) * rr; c2x = CX + Math.cos(b - s1) * rr; c2y = CY + Math.sin(b - s1) * rr; }
+      ctx.strokeStyle = rgba(e.color, 0.4 + R() * 0.3); ctx.lineWidth = 1.2 + R() * 1.1;
       ctx.beginPath(); ctx.moveTo(sx, sy); ctx.bezierCurveTo(c1x, c1y, c2x, c2y, tx, ty); ctx.stroke();
       if (!first) first = { x: CX + Math.cos(a) * 330, y: CY + 10 + Math.sin(a) * 330 };
     }
@@ -282,7 +282,7 @@
     o = o || {};
     var px = o.px || canvas.width, ctx = canvas.getContext('2d'); if (!ctx) return [];
     var sc = px / W; ctx.setTransform(sc, 0, 0, sc, 0, 0);
-    var R = rng(o.seed || 1), by = {}; parts.forEach(function (e) { (by[e.kind] = by[e.kind] || []).push(e); by[e.id] = e; });
+    var R = rng(o.seed || 1), by = {}; parts.forEach(function (e) { (by[e.kind] = by[e.kind] || []).push(e); });
     var core = by.core ? by.core[0] : null, coreR = core ? 92 + (core.n || 5) * 8.5 : 120, at = {};
     drawBg(ctx, R);
     var gap = by.opening ? { a: -0.95, w: 0.36 } : null;

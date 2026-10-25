@@ -21,6 +21,7 @@ import re
 
 INK = '#2B2620'
 TAU = math.pi * 2
+_UID = 0
 
 
 def _hex(c):
@@ -88,8 +89,10 @@ class Pen:
         return ''.join(self.out)
 
     def id(self, p='k'):
-        self.uid += 1
-        return '%s%d' % (p, self.uid)
+        # ids are unique across the whole program: pages share one HTML document, and a repeated id would pick the first gradient
+        global _UID
+        _UID += 1
+        return '%s%d' % (p, _UID)
 
     # ---- paint for a shape
     def _w(self, k=1.0):

@@ -19,7 +19,7 @@
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   function load() { try { var o = JSON.parse(lsGet(KEY) || 'null'); if (o && Array.isArray(o.sessions)) return o; } catch (e) {} return { sessions: [] }; }
-  function save() { return lsSet(KEY, JSON.stringify(store)); }
+  function save() { if (!store.sessions.length) { try { localStorage.removeItem(KEY); } catch (e) {} return true; } return lsSet(KEY, JSON.stringify(store)); }
   function $(sel, root) { return (root || app).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || app).querySelectorAll(sel)); }
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }

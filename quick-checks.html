@@ -287,7 +287,7 @@
       <div class="step">
         <p class="step-n">Step 1 of 8 &middot; required</p>
         <h2 id="ladder">The sky</h2>
-        <p class="step-hint" id="ladder-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else. Hard to tell? That&#39;s common. Pick the nearest one; you can change it any time.</p>
+        <p class="step-hint" id="ladder-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else. Hard to tell? That&#39;s common. Pick the nearest one. You can change it any time.</p>
         <div class="rungs" role="group" aria-labelledby="ladder" aria-describedby="ladder-hint">
           <button class="rung" type="button" data-sky="clear" aria-pressed="false"><span class="ico" aria-hidden="true">&#9728;</span><strong>Clear<em>Calm and connected</em></strong><span class="d">Breath is easy, shoulders aren&#39;t braced, and you can hear something hard without defending yourself.</span></button>
           <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Revved up</em></strong><span class="d">You feel keyed up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
@@ -476,7 +476,7 @@
         <details class="how">
           <summary>How this reading works</summary>
           <p>It&#39;s a rough tally of what you told it, not a measurement. The sky sets the starting point. Heavy pressure, a short night, a lot of people time, body needs and open worries each add a little. A step you skip counts as a small, middle amount. The talk window mostly follows the sky: clear skies are good for talking, gusty skies say wait a little, and fog says leave it for another day.</p>
-          <p>The tally runs from 0 to 100, and <strong>higher means a heavier day</strong>. Under 45 reads as lots of room today, 45 to 64 as some room, and 65 or more as very little room. The numbers stay hidden unless you tick &ldquo;Show the numbers behind this&rdquo;.</p>
+          <p>The tally runs from 0 to 100, and <strong>higher means a heavier day</strong>. Under 45 reads as lots of room today, 45 to 64 as some room, and 65 or more as very little room. The numbers stay hidden unless you tick &ldquo;Show the numbers behind this.&rdquo;</p>
         </details>
 
         <div class="actions">
@@ -486,7 +486,7 @@
           <button class="btn is-primary" type="button" id="save">Save today to my almanac</button>
           <button class="btn" type="button" id="reset">Start over</button>
         </div>
-        <p class="save-note">&ldquo;Share my forecast&rdquo; copies a short heads-up you can paste into a message yourself; nothing is sent from this page. Saving is optional: your almanac keeps this reading in this browser only (in its local storage), never on a server, along with the readings from other days you saved (up to 120), and you can download it or erase it at any time.</p>
+        <p class="save-note">&ldquo;Share my forecast&rdquo; copies a short heads-up you can paste into a message yourself. Nothing is sent from this page. Saving is optional: your almanac keeps this reading in this browser only (in its local storage), never on a server, along with the readings from other days you saved (up to 120), and you can download it or erase it at any time.</p>
         <p class="msg" id="msg" role="status" aria-live="polite"></p>
         <details class="wx-together no-print" id="wx-together">
           <summary>Today side by side with someone? Only if you both want to</summary>
@@ -539,10 +539,10 @@
           <button class="btn al-erase" type="button" id="erase" data-clear-confirm="your weather almanac (your saved readings)" data-clear-keys="tol-weather-v1">Erase my almanac</button>
         </div>
         <div class="al-confirm" id="al-confirm" role="group" aria-labelledby="al-confirm-q" hidden>
-          <p id="al-confirm-q"><strong>Erase every saved weather reading from this browser?</strong> There&#8217;s no copy anywhere else, so this can&#8217;t be undone. (The things-finished list stays; it belongs to other pages.)</p>
+          <p id="al-confirm-q"><strong>Erase every saved weather reading from this browser?</strong> There&#8217;s no copy anywhere else, so this can&#8217;t be undone. (The things-finished list stays because it belongs to other pages.)</p>
           <div class="actions"><button class="btn is-primary" type="button" id="al-yes">Yes, erase my readings</button><button class="btn" type="button" id="al-no">No, keep them</button></div>
         </div>
-        <p class="save-note">Downloads are made right here on this device and go only where you save them. A .csv opens in any spreadsheet; a .json keeps every detail.</p>
+        <p class="save-note">Downloads are made right here on this device and go only where you save them. A .csv opens in any spreadsheet. A .json keeps every detail.</p>
       </div>
       <p class="msg" id="al-msg" role="status" aria-live="polite"></p>
     </section>

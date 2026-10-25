@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     results.innerHTML = html;
     if (!q) count.textContent = 'Every page on the site, ' + shown + ' in all.';
-    else if (!shown) count.textContent = 'Nothing on the site matches “' + q + '”. Try a shorter word, or clear the box to see every page.';
+    else if (!shown) count.textContent = 'Nothing on the site matches “' + q + '.” Try a shorter word, or clear the box to see every page.';
     else count.textContent = shown + (shown === 1 ? ' page matches' : ' pages match') + ' “' + q + '”.';
   }
   input.addEventListener('input', render);

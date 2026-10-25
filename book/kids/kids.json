@@ -1,0 +1,26 @@
+{
+ "books": {
+  "picture-book": {
+   "pages": 40,
+   "paper": "premium",
+   "trim_in": [
+    8.5,
+    8.5
+   ],
+   "cover": {
+    "width_in": 17.3439,
+    "height_in": 8.75,
+    "spine_in": 0.0939
+   },
+   "title": "Tidbit and Sugarfoot's Big Picnic",
+   "files": {
+    "picture-book": {
+     "pdf": "picture-book.pdf",
+     "pages": 40,
+     "bytes": 1536662
+    }
+   },
+   "pages_printed": 40
+  }
+ }
+}
