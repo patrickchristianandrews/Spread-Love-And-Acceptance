@@ -11,7 +11,7 @@
   if (!grid) return;
 
   var LIST_KEY = 'tol-supp-list';
-  var STEP = 12, MAXCMP = 3;
+  var STEP = (window.matchMedia && matchMedia('(max-width:639px)').matches) ? 8 : 12, MAXCMP = 3;
   var EVL = { good: 'Good evidence', some: 'Some evidence', mixed: 'Mixed evidence', early: 'Early evidence', weak: 'Weak evidence', none: 'No good evidence' };
   var KINDS = ['supplement', 'herb', 'food', 'habit', 'practice', 'therapy'];
 
@@ -498,6 +498,13 @@
     setTimeout(function () { mo.disconnect(); if (!shareSlot.children.length) shareSlot.classList.add('is-empty'); }, 9000);
   }
   var tries = 0; (function poll() { adopt(); if (++tries < 16) setTimeout(poll, 500); })();
+
+  // "Staying safe": every fact is open on a wide screen; on a phone the three that matter most start open and the rest are one tap away
+  (function () {
+    var small = window.matchMedia && matchMedia('(max-width:759px)').matches;
+    if (!small) return;
+    Array.prototype.forEach.call(D.querySelectorAll('.sp-fact:not([data-core])'), function (d) { d.open = false; });
+  })();
 
   /* ------------------------------------------------------------------ start up */
   // links written as ?condition=sleep&neurotype=adhd (also ?cond=, ?nt=, ?type=, ?evidence=, ?q=)
