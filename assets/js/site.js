@@ -1332,7 +1332,7 @@
     // mark19 (restored by nav21): "Save": keep this page, or your place in the book, for later (bookmarks.js wires it up, /saved.html lists them)
     if (!/^\/(404|offline|garden-backdrop|pal-cam-tv|saved)\.html$/.test(current) && !inFrameNow()) {
       bar.appendChild(el('button', { type: 'button', class: 'tol-save-btn no-bubble', title: 'Save this page for later' },
-        '<svg class="tol-sv-ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11a1 1 0 0 1 1 1v16l-6.5-4.2-6.5 4.2v-16a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="tol-save-t">Save</span><span class="tol-sv-sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> this page</span>'));
+        '<svg class="tol-sv-ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11a1 1 0 0 1 1 1v16l-6.5-4.2-6.5 4.2v-16a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="tol-save-t">Save</span><span class="tol-sv-sr"> this page</span>'));
     }
     if (!inFrameNow()) loadScript('/assets/js/bookmarks.js').catch(function () {});
     // owner17: in the installed app, Share sits in the bar from the first paint (app-bar.js wires it up and styles it)

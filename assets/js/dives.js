@@ -196,7 +196,9 @@
     '.tol-dive-card .tol-dive-chat{ min-height:44px; }' +
     '.tol-dive-card .tol-dive-x{ width:44px; height:44px; top:8px; right:8px; }';
   function addCss() {
-    if (document.getElementById('tol-dive-css')) return;
+    if (document.getElementById('tol-dive-css') || window.__tolDiveCss) return;
+    // polish24a: a constructed stylesheet, so pages with a strict Content-Security-Policy (the fill-in workpapers) still get the dotted words and cards
+    try { if (document.adoptedStyleSheets && window.CSSStyleSheet && CSSStyleSheet.prototype.replaceSync) { var sh = new CSSStyleSheet(); sh.replaceSync(CSS); document.adoptedStyleSheets = document.adoptedStyleSheets.concat([sh]); window.__tolDiveCss = 1; return; } } catch (e) { /* fall back to a style element */ }
     var st = document.createElement('style'); st.id = 'tol-dive-css'; st.textContent = CSS; document.head.appendChild(st);
   }
   function makeBtn(key, word) {
