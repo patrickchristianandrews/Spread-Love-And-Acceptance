@@ -1918,7 +1918,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '13 Oct · 1'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '25 Oct · 1'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -2025,6 +2025,17 @@
   var KEY = 'tol-buddies-v1';
   // each episode as a video to download and watch offline (sizes in MB)
   var DOWNLOADS = { s1e1: 19, s1e2: 20, s1e3: 18, s1e4: 19, s1e5: 17 };
+  // the same videos' lengths in seconds (theme song, episode, credits), for "Watch on your TV" (tv-cast.js):
+  // the TV starts at the moment showing here
+  var VDUR = { s1e1: 905.05, s1e2: 886.47, s1e3: 870.93, s1e4: 875.36, s1e5: 906.98 };
+  var POSTERS = { 1: '/assets/img/frequency-buddies-season-1.jpg', 2: '/assets/img/frequency-buddies-season-2-teaser.jpg' };
+  // tv-cast.js is loaded once, when a player is set up, so the button is ready before anyone taps it
+  function withTv(cb) {
+    if (!HAS_DOM) return; if (window.TOLCast) { cb(window.TOLCast); return; }
+    var s = document.querySelector('script[src^="/assets/js/tv-cast.js"]');
+    if (!s) { s = document.createElement('script'); s.src = '/assets/js/tv-cast.js'; s.async = true; document.head.appendChild(s); }
+    s.addEventListener('load', function () { if (window.TOLCast) cb(window.TOLCast); });
+  }
   function memGet() { try { var o = JSON.parse(localStorage.getItem(KEY) || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
   function memSet(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) { /* private mode: fine */ } }
   var CSS = '' +
@@ -2074,6 +2085,7 @@
     '.fb-stage:has(.fb-ov:not([hidden])) .fb-tap{display:none}' +
     '.fb-under{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0 0}.fb-under .fb-b{text-decoration:none}.fb-player a.fb-b,.fb-player a.fb-b:visited{color:#FFF6E6}.fb-player a.fb-b.is-main,.fb-player a.fb-b.is-main:visited{color:#2B2140}.fb-player a.fb-b:hover{color:#FFFFFF}.fb-player a.fb-dl{display:inline-flex;align-items:center;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.45)}.fb-player a.fb-dl[hidden]{display:none}.fb-player:fullscreen .fb-under,.fb-player.is-full .fb-under,.fb-player.is-stream .fb-under{display:none}' +
     '@media (max-width:600px){.fb-ctrl .fb-full .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}}' +
+    '.fb-player .fb-tvmsg{margin:-.2rem 0 0;padding:.5rem .75rem;border-radius:12px;background:rgba(255,255,255,.1);color:#F2EAFB}.fb-player .fb-tvmsg .fb-b{font-size:.88rem}.fb-player.is-fs .fb-tvmsg,.fb-player.is-stream .fb-tvmsg,.fb-player.is-stream .fb-tv{display:none!important}' +
     '.fb-ovc .fb-cn{margin:.1rem auto .75rem;padding:.55rem .75rem;border-radius:12px;background:rgba(255,255,255,.1);border-left:3px solid #BFE3D6;text-align:left;font-size:.92rem;line-height:1.45;color:#F2EAFB}' +
     '.fb-ovc .fb-cn b{color:#CDEFE2}' +
     '@media (max-width:600px){.fb-ovc .fb-cn{font-size:.86rem;padding:.45rem .6rem;margin-bottom:.5rem}}' +
@@ -2163,6 +2175,32 @@
     var $ = function (s) { return host.querySelector(s); };
     var cv = $('.fb-cv'), g = cv.getContext('2d'), stageEl = $('.fb-stage'), capEl = $('.fb-cap'), whoEl = $('.fb-who'), lineEl = $('.fb-line'), fill = $('.fb-fill'), trackEl = $('.fb-track'), timeEl = $('.fb-time');
     var skipBtn = $('.fb-skip'), playBtn = $('.fb-play'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
+    // ---------- "Watch on your TV": the episode's MP4, from the moment showing here (tv-cast.js) ----------
+    var tv = null;
+    function tvPos(D) {
+      var OPEN = SONG.open.dur, CLOSE = SONG.close.dur - SONG.close.base;
+      if (P.th) return P.th.kind === 'open' ? Math.max(0, P.th.t) : Math.max(0, D - CLOSE + (P.th.t - SONG.close.base));
+      if (!P.dir || !P.started || P.dir.ended) return 0;
+      var t = P.dir.time(), T = P.dir.total || 1; if (t < 1) return 0;
+      return OPEN + clamp(t / T, 0, 1) * Math.max(0, D - OPEN - CLOSE);
+    }
+    function tvItem(id, at) {
+      var ep = B.episodes[id], ce = catalogEntry(id) || {}, D = VDUR[id]; if (!D) return null;
+      var s = (ep && ep.season) || +String(id).replace(/^s(\d+).*/, '$1') || 1;
+      return { url: '/assets/video/frequency-buddies-' + id + '.mp4', title: 'Frequency Buddies', subtitle: 'Season ' + s + ', Episode ' + ((ep && ep.number) || ce.n || '') + ': ' + ((ep && ep.title) || ce.title || ''), poster: POSTERS[s] || POSTERS[1], position: at ? tvPos(D) : 0 };
+    }
+    function tvRest() {
+      var out = []; CATALOG.forEach(function (s) { var at = -1; s.eps.forEach(function (e, i) { if (e.id === P.id) at = i; }); if (at < 0) return; s.eps.slice(at + 1).forEach(function (e) { var it = tvItem(e.id, false); if (it) { it.n = e.n; out.push(it); } }); });
+      return out;
+    }
+    if (!P.stream) withTv(function (T) {
+      if (tv || !host.isConnected) return;
+      tv = T.button({ className: 'fb-b fb-tv', smallClass: 'fb-b', msgClass: 'fb-tvmsg',
+        getMedia: function () { return tvItem(P.id, true); }, getQueue: tvRest,
+        queueLabel: function (r) { var s = (P.ep && P.ep.season) || 1; return '▶ Then play the rest of Season ' + s + ' (' + (r.length === 1 ? 'episode ' + r[0].n : 'episodes ' + r[0].n + ' to ' + r[r.length - 1].n) + ')'; },
+        onCasting: function () { if (P.playing) pause(); } });
+      var ctl = $('.fb-ctrl'); ctl.insertBefore(tv.btn, $('.fb-full')); ctl.parentNode.insertBefore(tv.msg, ctl.nextSibling);
+    });
     var W = 0, H = 0, DPR = 1;
     function resize() {
       var r = stageEl.getBoundingClientRect(); DPR = Math.max(0.6, Math.min(2, window.devicePixelRatio || 1) * (P.q || 1)); // P.q: lowered on slow devices
@@ -2780,6 +2818,7 @@
       P.dir = makeDirector(P.stage, ep, hooks);
       $('.fb-title').textContent = ep.title;
       var dl = host.querySelector('.fb-dl');
+      if (tv) tv.refresh();
       if (dl) { var mb = DOWNLOADS[P.id]; dl.hidden = !mb; if (mb) { dl.href = '/assets/video/frequency-buddies-' + P.id + '.mp4'; dl.setAttribute('download', 'Frequency Buddies - Episode ' + (ep.number || '') + ' - ' + String(ep.title).replace(/[\\/:*?"<>|]/g, '') + '.mp4'); dl.textContent = '⬇ Download this episode (MP4, ' + mb + ' MB)'; } }
       cv.setAttribute('aria-label', 'Animated story: ' + ep.title + '. ' + ep.blurb);
       var ol = host.querySelector('.fb-chaps ol'), est = estimate(ep); ol.innerHTML = '';

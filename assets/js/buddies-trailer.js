@@ -442,6 +442,20 @@
     // the length, as soon as it's known (without loading any sound)
     build().then(function () { progress(); paint(); UI.big.setAttribute('aria-label', 'Play the Season 1 trailer, ' + fmt(TL.dur)); }).catch(function () {});
     UI.api = { play: play, pause: pause, seek: seek };
+    // "Watch on your TV": the trailer's MP4, from the moment showing here (tv-cast.js)
+    withTv(function (T) {
+      if (UI.tv) return;
+      UI.tv = T.button({ className: 'fbt-b fbt-tv', smallClass: 'fbt-b', msgClass: 'fbt-tvmsg',
+        getMedia: function () { var d = TL ? TL.dur : 72; return { url: '/assets/video/frequency-buddies-season-1-trailer.mp4', title: 'Frequency Buddies', subtitle: 'The Season 1 trailer', poster: '/assets/img/frequency-buddies-season-1.jpg', position: UI.T > 0.5 && UI.T < d - 1 ? UI.T : 0 }; },
+        onCasting: function () { if (UI.playing) pause(); } });
+      var ctl = $('.fbt-ctrl'); ctl.insertBefore(UI.tv.btn, UI.dl); ctl.parentNode.insertBefore(UI.tv.msg, ctl.nextSibling);
+    });
+  }
+  function withTv(cb) {
+    if (window.TOLCast) { cb(window.TOLCast); return; }
+    var s = document.querySelector('script[src^="/assets/js/tv-cast.js"]');
+    if (!s) { s = document.createElement('script'); s.src = '/assets/js/tv-cast.js'; s.async = true; document.head.appendChild(s); }
+    s.addEventListener('load', function () { if (window.TOLCast) cb(window.TOLCast); });
   }
   function auto() {
     var el = document.querySelector('[data-buddies-trailer]');
