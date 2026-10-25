@@ -47,31 +47,40 @@ def strip_code(t):
 
 
 def texts():
+    """(name, text) for every string in the kids sources"""
     out = []
-    pb = C.load_json(os.path.join(C.MS, 'picture-book.json'))
 
-    def walk(o, path):
+    def walk(o, prefix, path=''):
         if isinstance(o, str):
-            out.append(('picture-book:' + path, o))
+            out.append((prefix + ':' + path, o))
         elif isinstance(o, list):
             for i, x in enumerate(o):
-                walk(x, '%s[%d]' % (path, i))
+                walk(x, prefix, '%s[%d]' % (path, i))
         elif isinstance(o, dict):
             for k, v in o.items():
-                walk(v, path + '.' + k)
-    walk(pb, '')
+                walk(v, prefix, path + '.' + k)
+    walk(C.load_json(os.path.join(C.MS, 'picture-book.json')), 'picture-book')
     for fp in sorted(glob.glob(os.path.join(C.MS, 'chapter-book', '*.md'))):
         out.append(('chapter-book:' + os.path.basename(fp), open(fp, encoding='utf-8').read()))
-    cb = C.load_json(os.path.join(C.MS, 'chapter-book', '00-book.json'))
-    walk(cb, '')
-    out = [(n.replace('picture-book:', 'picture-book:') if n.startswith('picture-book') else n, t) for n, t in out]
-    for name in ('coloring-younger.json', 'coloring-older.json'):
-        p = os.path.join(C.MS, name)
+    walk(C.load_json(os.path.join(C.MS, 'chapter-book', '00-book.json')), 'chapter-book-meta')
+    for name in ('coloring-younger', 'coloring-older'):
+        p = os.path.join(C.MS, name + '.json')
         if os.path.exists(p):
-            walk(C.load_json(p), '')
-            out[-1:] = out[-1:]
-            # label the walk results by file
-            out = [(n if ':' in n and not n.startswith(':') else name + ':' + n, t) for n, t in out]
+            walk(C.load_json(p), name)
+    return out
+
+
+def built_texts():
+    """the visible words of the built print pages (covers, copyright pages and every line the builders add), without styles and scripts"""
+    out = []
+    for fp in sorted(glob.glob(os.path.join(C.SRC, '*.html'))):
+        if 'art-sheet' in fp:
+            continue
+        h = open(fp, encoding='utf-8').read()
+        h = re.sub(r'<style.*?</style>|<script.*?</script>|<svg.*?</svg>', ' ', h, flags=re.S)
+        h = re.sub(r'<[^>]+>', ' ', h)
+        import html as _h
+        out.append(('built:' + os.path.basename(fp), _h.unescape(re.sub(r'\s+', ' ', h))))
     return out
 
 
@@ -101,7 +110,8 @@ def reading(text):
 def main():
     bad = []
     items = texts()
-    for name, t in items:
+    extra = built_texts()
+    for name, t in items + extra:
         plain = strip_code(t)
         for label, rx in PATTERNS:
             for m in re.finditer(rx, plain, re.I if label not in ('stock phrase',) else 0):
@@ -115,7 +125,7 @@ def main():
                 if conv != plain:
                     a, b = plain.split(), conv.split()
                     ok = {('nana', 'grandma'), ('rung', 'called'), ('rang', 'called')}
-                    diffs = [(x, y) for x, y in zip(a, b) if x != y and (x.lower().strip('.,"\'?!'), y.lower().strip('.,"\'?!')) not in ok][:4]
+                    diffs = [(x, y) for x, y in zip(a, b) if x != y and (x.lower().strip('.,"\'?!\u201c\u201d\u2018\u2019'), y.lower().strip('.,"\'?!\u201c\u201d\u2018\u2019')) not in ok][:4]
                     if diffs:
                         bad.append((name, 'us_english would change', str(diffs)))
             except Exception:

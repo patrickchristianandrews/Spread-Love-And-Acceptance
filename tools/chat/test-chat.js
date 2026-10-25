@@ -483,7 +483,7 @@ t('spelling', 'What stocks should I buy? (a real word stays)', { q: 'What stocks
 // ---------------------------------------------------------------- testers, round three (ADHD, autistic, dyslexic, highly sensitive)
 // ADHD: focus and long pages get the reading helps, never kids' screen rules; "where do I start" doesn't carry the last topic
 t('nt2', "I can't focus on long pages", { kind: 'care', id: 'focus', text: /Show me only the steps/, not: /[Ss]creen agreements|kids/, link: '/' });
-t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /The short version[\s\S]*Simple version[\s\S]*Listen[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
+t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /The short version[\s\S]*Simple version[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
 c('nt2', ['What is a BIFF response?', "I can't focus on long pages"], { kind: 'care', id: 'focus', not: /[Ss]creen agreements|phones-and-presence/ });
 c('nt2', ["I can't focus on long pages", 'where do I start'], { kind: 'card', id: 'start', not: /phones-and-presence|Phones and presence/ });
 c('nt2', ['What is a BIFF response?', 'where do I start'], { kind: 'card', id: 'start', link: '/start-here.html' });
@@ -1733,7 +1733,7 @@ t('chat10', 'the book: three parts, free', { q: 'tell me about the book', kind: 
 t('chat10', 'download the book', { q: 'can I download the book', id: 'bookdownload', link: '/book/download.html', text: /free PDF[\s\S]*ask for your email[\s\S]*without an email/ });
 t('chat10', 'the app: free, no App Store', { q: 'is there an app', kind: 'card', id: 'app', link: '/install.html', text: /free[\s\S]*Android[\s\S]*iPhone/, not: /coming soon|App Store version is coming/i });
 t('chat10', 'the app on iPhone', { q: 'how do I install the app on my iphone', kind: 'card', id: 'app', text: /Add to Home Screen/, not: /coming soon/i });
-t('chat10', 'no podcast', { q: 'is there a podcast', kind: 'card', id: 'podcast', text: /no podcast[\s\S]*Listen to this chapter/, not: /Kane and Christian Experience explores|Episode 1|coming soon/ });
+t('chat10', 'no podcast', { q: 'is there a podcast', kind: 'card', id: 'podcast', text: /no podcast/, not2: /Listen/, not: /Kane and Christian Experience explores|Episode 1|coming soon/ });
 t('chat10', 'no podcast in the preface steps', { q: 'how do I read the preface', not: /podcast/i });
 t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost anything', id: 'free', text: /^Everything here is free|Everything here is free/, not: /^Yes\. Everything/ });
 

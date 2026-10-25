@@ -5,7 +5,17 @@ Grandpa Lou arrived on Saturday morning in the back of a rented truck, sitting o
 
 "He's not supposed to ride like that," Dad muttered, as the truck pulled into the driveway. But Grandpa Lou climbed down with one hand on the tailgate and one raised in the air, like a king arriving at a very small kingdom, and called out, "Forecast for today! Bright, with a ninety percent chance of boxes!"
 
-Wren was standing on the front steps with her arms folded. She had planned to look neutral. Then he spotted her and his whole face went up like a window shade, and she felt her arms unfold on their own.
+Wren stood on the front steps with her arms folded and Theo beside her, headphones around his neck. She had planned to look neutral.
+
+"Boxes are not weather," said Theo.
+
+"Fair point, son," said Grandpa Lou. "That was a metaphor."
+
+Theo considered this. "Okay. Please tell me when you are doing a metaphor. If I am not sure, I will ask."
+
+"Deal," said Grandpa Lou, and shook his hand, which Theo allowed for exactly two seconds.
+
+Then Grandpa Lou spotted her, and his whole face went up like a window shade, and she felt her arms unfold on their own.
 
 "There she is. The weather girl."
 

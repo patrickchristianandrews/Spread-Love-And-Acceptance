@@ -1328,7 +1328,7 @@ const REFRAMES = [
      }
      return c.voc ? c.voc+", "+lowerFirst(out) : out; },
    recv:{mean:(m,c)=>OLDDAYS_RE.test(c.text) ? "They're comparing this with how things used to be. Often that means it feels new or strange to them, more than a judgment on you." : "This sounds like hurt, said by pulling back. They may feel pushed out, or that their help isn't wanted. Underneath, they probably want to be close.",
-     reply:(m,c)=>OLDDAYS_RE.test(c.text) ? "I know it was different then. It's not about you, it's just what works for us now. Could we find a way that suits us both?" : "I'm sorry that stung. You are wanted. Could we find a time that suits us both?"}},
+     reply:(m,c)=>OLDDAYS_RE.test(c.text) ? "I know it was different then. This isn't about you. It's just what works for us now. Could we find a way that suits us both?" : "I'm sorry that stung. You are wanted. Could we find a time that suits us both?"}},
   {id:"guests", re:/\b(?:can|could|would) (?:your|you(?:r)?) (boyfriend|girlfriend|partner|friend|bf|gf)\s+(?:maybe |please |just |possibly )*(?:not|stop) (?:stay(?:ing)?|sleep(?:ing)?|com(?:e|ing)) over (?:every|each) night\b|\b(?:your|ur) (boyfriend|girlfriend|partner|bf|gf) is (?:here|over|staying (?:here|over)) (?:every|each) (?:single )?night\b/i,
    why:"A plain, kind ask about how many nights, with a heads-up, gives them something to agree to. \"Maybe\" and shouting both make it easy to shrug off.",
    send:()=>"Could we agree on a few nights a week for overnight guests, with a heads-up text? I'm not sleeping well.",

@@ -4114,7 +4114,6 @@
       sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
       sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
       '<h3 class="tol-set-k">' + 'Reading' + '</h3>' +
-      '<p class="tol-set-aloud"><small>' + 'Read pages aloud: tap “Listen” near the top of any chapter or guide. Your device’s own voice reads it, nothing is sent anywhere.' + '</small></p>' +
       '<fieldset><legend>' + 'Font' + '</legend>' + radio('font', 'data-font-opt', 'usual', 'The usual') + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">' + 'Easy to read' + '</span>') + '</fieldset>' +
       '<fieldset><legend>' + 'Spacing' + '</legend>' + radio('space', 'data-space-opt', 'usual', 'The usual') + radio('space', 'data-space-opt', 'wide', 'Roomy') + '</fieldset>' +
       '<fieldset class="tol-set-tints"><legend>' + 'Page tint' + ' <small class="tol-set-tintnote" hidden>' + '(resting while high contrast is on)' + '</small></legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +

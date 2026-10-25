@@ -185,7 +185,7 @@
   function hud() {
     if (!game) return;
     $('ar-score').textContent = game.score; $('ar-level').textContent = game.level;
-    var b = Math.max(getBest(), game.score); $('ar-best').textContent = b;
+    var b = game.practice ? getBest() : Math.max(getBest(), game.score); $('ar-best').textContent = b;   // practice never touches the best
   }
   // the three numbers over the field; the Derby counts home runs and pitches instead
   function hudLabels(L) {

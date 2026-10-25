@@ -17,19 +17,15 @@
     "picture-book": {
      "pdf": "picture-book.pdf",
      "pages": 40,
-     "bytes": 1544505
-    }
-   },
-   "pages_printed": 40
-  },
-  "picture-book-screen": {
-   "files": {
+     "bytes": 1544805
+    },
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
      "pages": 40,
-     "bytes": 1545982
+     "bytes": 1546223
     }
-   }
+   },
+   "pages_printed": 40
   },
   "chapter-book": {
    "title": "Turn Down the Static",
@@ -43,7 +39,7 @@
     "chapter-book": {
      "pdf": "chapter-book.pdf",
      "pages": 92,
-     "bytes": 891549
+     "bytes": 892582
     }
    },
    "pages_printed": 92,

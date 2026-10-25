@@ -1,16 +1,25 @@
-/* pals-cam-sleep.js — the Sleeping Pals Cam (sleeping-pals-cam.html): Tidbit and Sugarfoot fast asleep in a
+/* pals-cam-sleep.js: the Sleeping Pals Cam (sleeping-pals-cam.html): Tidbit and Sugarfoot fast asleep in a
    dim, warm room at night, something to go to bed to.
    - Each pup breathes and lightly snores in her own rhythm (Tidbit a little quicker and higher, Sugarfoot
      slower and deeper), and little z's float up as she breathes out.
    - Now and then, never on a schedule (every few minutes on average, picked at random), one of them does
      something: pads to the refrigerator for a bone, has a drink of water, rolls onto her back, turns around
      and settles again, kicks in a dream, scoots closer, or sleepwalks a little circle and bumps into the couch.
-   - Optional soft sound bed (rain, a fan or brown noise), a sleep timer that fades everything out, a dimmer
+   - Optional soft sound bed (rain, a fan or brown noise), a sleep timer that fades everything out slowly, a dimmer
      that brings the room close to black, and the screen kept awake while it runs (where the browser allows).
    - Calm motion (the device's reduce-motion setting, or the site's "Keep the page still" / Quiet mode):
      fewer, slower happenings and slower z's. Nothing ever flashes.
-   All the sound is made right here with Web Audio (plus the site's own rain recording and, in a dream, a
-   muffled bark), with smooth fades on every sound, so nothing clicks.
+   THE SOUND (rebuilt to be soothing): all of it is made right here with Web Audio from filtered noise shaped by
+   slow, rounded envelopes. There are no raw oscillators and no recordings, and nothing is a short loop.
+   - Snores: a breath of soft air through two warm resonances, plus (on some breaths) a faint low purr and a
+     shallow, random flutter. Breath length, pitch, strength and "snore or plain breath" all vary breath to
+     breath and drift over a minute or so, so it never repeats. Tidbit sits a little higher, Sugarfoot lower.
+   - The funny moments (paws, a lap of water, a fridge hum, a muffled boof, a little sigh) are quiet and rounded,
+     each measured to stay below the loudest snore.
+   - Beds are synthesized (long noise loops that also drift in speed), balanced to sit a little under the snores.
+   - Safety: low-pass, a gentle compressor and a soft clipper at the end; every volume change is a setTarget
+     fade, so nothing jumps or zippers. It fades in over about 9 s and the sleep timer fades out over 90 s.
+   - It respects the site's Quiet mode and sound switch (starts silent; a Sound button turns it on for this page).
    What it remembers: the timer, sound and dimmer choices (localStorage 'tol-sleepcam-v1'), on this device only.
    Nothing is sent anywhere. Draws the pals with pups.js (window.TOLPups).
    window.TOLSleepCam exposes start/stop/state/trigger for tests. */
@@ -218,22 +227,22 @@
     function add(buf, rate) { var s = loopSrc(buf, rate); srcs.push(s); return s; }
     function layer(buf, filters, level, pan) { var s = add(buf); var out = gainNode(level); filters.unshift(s); filters.push(out); chain.apply(null, filters); var pn = panner(pan || 0); out.connect(pn); pn.connect(drift); }
     if (kind === 'rain') {
-      layer(B.pinkA, [filt('highpass', 650, 0.5), filt('lowpass', 3000, 0.5)], 0.55, -0.5);
-      layer(B.pinkB, [filt('highpass', 650, 0.5), filt('lowpass', 3000, 0.5)], 0.55, 0.5);
-      layer(B.pinkB, [filt('bandpass', 1300, 0.5)], 0.45, -0.2);
+      layer(B.pinkA, [filt('highpass', 450, 0.5), filt('lowpass', 2000, 0.5)], 0.55, -0.5);
+      layer(B.pinkB, [filt('highpass', 450, 0.5), filt('lowpass', 2000, 0.5)], 0.55, 0.5);
+      layer(B.pinkB, [filt('bandpass', 900, 0.5), filt('lowpass', 1800, 0.5)], 0.45, -0.2);
       layer(B.brownA, [filt('bandpass', 170, 0.6)], 0.35, 0.2);
-      lv = 0.024; dd.gain.value = 0.1;
+      lv = 0.0082; dd.gain.value = 0.1;
     } else if (kind === 'fan') {
       layer(B.brownA, [filt('lowpass', 520, 0.5)], 0.6, -0.3);
       layer(B.brownB, [filt('lowpass', 520, 0.5)], 0.6, 0.3);
       layer(B.pinkA, [filt('bandpass', 380, 0.5), filt('lowpass', 900, 0.5)], 0.32, 0);
       layer(B.brownB, [filt('bandpass', 118, 9)], 0.9, 0);
-      lv = 0.0245; dd.gain.value = 0.03;
+      lv = 0.011; dd.gain.value = 0.03;
     } else {
-      layer(B.brownA, [filt('lowpass', 480, 0.5)], 0.7, -0.45);
-      layer(B.brownB, [filt('lowpass', 480, 0.5)], 0.7, 0.45);
+      layer(B.brownA, [filt('lowpass', 560, 0.5), filt('highpass', 40, 0.5)], 0.7, -0.45);
+      layer(B.brownB, [filt('lowpass', 560, 0.5), filt('highpass', 40, 0.5)], 0.7, 0.45);
       layer(B.brownA, [filt('lowpass', 300, 0.5)], 0.4, 0);
-      lv = 0.0233; dd.gain.value = 0.02;
+      lv = 0.0105; dd.gain.value = 0.02;
     }
     // a slow, random swell in the bed (never periodic)
     var sw = add(B.flut, 0.012); chain(sw, dd, drift.gain); drift.connect(gn);
@@ -248,7 +257,7 @@
     while (A.dropT < horizon) {
       A.dropT += -Math.log(1 - Math.random()) / 5.5;
       if (A.dropT < S.T + 0.1) continue;
-      voice({ t: aT(A.dropT), buf: Math.random() < 0.5 ? A.bufs.pinkA : A.bufs.pinkB, f: [['bandpass', rand(1100, 2600), 1.1], ['lowpass', 3000, 0.5]], a: 0.005, r: rand(0.025, 0.06), pk: rand(0.004, 0.011), pan: rand(-0.7, 0.7), to: bn.g });
+      voice({ t: aT(A.dropT), buf: Math.random() < 0.5 ? A.bufs.pinkA : A.bufs.pinkB, f: [['bandpass', rand(900, 2000), 1.1], ['lowpass', 2200, 0.5]], a: 0.005, r: rand(0.025, 0.06), pk: rand(0.0015, 0.004), pan: rand(-0.7, 0.7), to: bn.g });
     }
   }
   // one little shaped puff of filtered noise: the building block of every event sound

@@ -32,7 +32,7 @@
     ':root{--tol-fs-bar:' + BAR + 'px}',
     '.tol-fs-bar,.tol-fs-gate{display:none}',
     /* the full screen container */
-    '.tol-fs-on{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:0!important;border:0!important;box-sizing:border-box!important;z-index:2147483000!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background-color:var(--paper,#F5EFDE)!important;color:var(--ink,#2B2620);padding:calc(var(--tol-fs-bar) + env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-right,0px) + 10px) calc(env(safe-area-inset-bottom,0px) + 10px) calc(env(safe-area-inset-left,0px) + 10px)!important}',
+    '.tol-fs-on{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:0!important;border:0!important;box-sizing:border-box!important;z-index:2147483000!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background-color:var(--tol-fs-bg,var(--paper,#F5EFDE))!important;color:var(--tol-fs-ink,var(--ink,#2B2620));padding:calc(var(--tol-fs-bar) + env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-right,0px) + 10px) calc(env(safe-area-inset-bottom,0px) + 10px) calc(env(safe-area-inset-left,0px) + 10px)!important}',
     '.tol-fs-on:focus{outline:none}',
     'html.tol-fs-lock,html.tol-fs-lock body{overflow:hidden!important}',
     'html.tol-fs-lock .tol-bar,html.tol-fs-lock .tol-bar *{visibility:hidden!important}',
@@ -47,12 +47,12 @@
     /* the small "Full screen" row that shows in the page (not in full screen) */
     '.tol-fs-row{display:flex;justify-content:flex-end;margin:0 0 .4rem;grid-column:1/-1}',
     '.tol-fs-on .tol-fs-row,.tol-fs-gated>.tol-fs-row{display:none!important}',
-    '.tol-fs-row .tol-fs-open{min-height:44px;padding:.35rem 1rem!important;margin:0!important;border-radius:999px!important;border:2px solid var(--brass,#A8792F)!important;background:var(--paper,#F5EFDE)!important;color:var(--ink,#2B2620)!important;font:700 .95rem/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;cursor:pointer;touch-action:manipulation}',
+    '.tol-fs-row .tol-fs-open{min-height:44px;padding:.35rem 1rem!important;margin:0!important;border-radius:999px!important;border:2px solid var(--brass,#A8792F)!important;background:var(--tol-fs-bg,var(--paper,#F5EFDE))!important;color:var(--tol-fs-ink,var(--ink,#2B2620))!important;font:700 .95rem/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;cursor:pointer;touch-action:manipulation}',
     '.tol-fs-row .tol-fs-open:focus-visible{outline:3px solid var(--focus,#2B5B8C);outline-offset:2px}',
     /* the Play card laid over a board that has no Start button */
     '.tol-fs-gated{position:relative!important;min-height:min(78vh,540px)}',
-    '.tol-fs-gated>.tol-fs-gate{display:flex;position:absolute;inset:0;z-index:30;align-items:center;justify-content:center;padding:1rem;background:rgba(245,239,222,.9);background:color-mix(in srgb,var(--paper,#F5EFDE) 90%,transparent);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border-radius:inherit}',
-    '.tol-fs-gate-card{max-width:26rem;text-align:center;padding:1.3rem 1.2rem;border-radius:18px;background:var(--paper,#F5EFDE);color:var(--ink,#2B2620);border:2px solid var(--brass,#A8792F);box-shadow:0 8px 28px rgba(0,0,0,.18)}',
+    '.tol-fs-gated>.tol-fs-gate{display:flex;position:absolute;inset:0;z-index:30;align-items:center;justify-content:center;padding:1rem;background:rgba(245,239,222,.9);background:color-mix(in srgb,var(--tol-fs-bg,var(--paper,#F5EFDE)) 90%,transparent);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border-radius:inherit}',
+    '.tol-fs-gate-card{max-width:26rem;text-align:center;padding:1.3rem 1.2rem;border-radius:18px;background:var(--tol-fs-bg,var(--paper,#F5EFDE));color:var(--tol-fs-ink,var(--ink,#2B2620));border:2px solid var(--brass,#A8792F);box-shadow:0 8px 28px rgba(0,0,0,.18)}',
     '.tol-fs-gate-t{margin:0 0 .35rem;font:800 1.45rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}',
     '.tol-fs-gate-p{margin:0 0 1rem;font:500 1rem/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}',
     '.tol-fs-gate .tol-fs-play{min-height:56px;min-width:12rem;padding:.6rem 1.8rem!important;margin:0!important;border-radius:999px!important;border:3px solid var(--ink,#2B2620)!important;background:#FFD84D!important;color:#1E1B24!important;font:800 1.25rem/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;cursor:pointer;touch-action:manipulation}',
@@ -73,6 +73,13 @@
   function kick() {
     kickT.forEach(clearTimeout); kickT = [];
     [0, 60, 250, 700].forEach(function (ms) { kickT.push(setTimeout(function () { try { W.dispatchEvent(new Event('resize')); } catch (e) { /* ignore */ } }, ms)); });
+  }
+  // the page's own colors (a game page can be dark on its own): the full screen box and the Play card use them, so text stays readable
+  function pageColors(el) {
+    var bg = '', n = el, c;
+    while (n && n.nodeType === 1) { c = getComputedStyle(n).backgroundColor; var m = c && c.match(/rgba?\(([^)]*)\)/), al = m ? (m[1].split(',')[3] == null ? 1 : parseFloat(m[1].split(',')[3])) : 0; if (m && al >= 0.95) { bg = c; break; } n = n.parentNode; }
+    el.style.setProperty('--tol-fs-bg', bg || '#F5EFDE');
+    el.style.setProperty('--tol-fs-ink', getComputedStyle(D.body).color || '#2B2620');
   }
   function announce(txt) { if (cur && cur.live) cur.live.textContent = txt; }
   function fire(active, c) {
@@ -124,6 +131,7 @@
     if (cur && cur.el === el) { if (opts.name) { ensureUI(el, opts.name); } return Promise.resolve(cur.mode); }
     if (cur) exitNow(false);
     var ui = ensureUI(el, opts.name || (el._tolFs && el._tolFs.name) || (el.getAttribute('aria-label') || ''));
+    pageColors(el);
     var r = el.getBoundingClientRect();
     var c = cur = { el: el, mode: 'overlay', ph: null, y: W.pageYOffset || 0, inerts: [], pushed: false, hadGaming: D.body.classList.contains('tol-gaming'), live: ui.live, gateOff: false };
     // hold the element's place in the page so nothing jumps while it is out of the flow
@@ -175,7 +183,7 @@
 
   /* ---------- listeners that apply to every game ---------- */
   D.addEventListener('keydown', function (e) {
-    if (cur && (e.key === 'Escape' || e.key === 'Esc') && !e.defaultPrevented) { e.preventDefault(); exit(); }
+    if (cur && (e.key === 'Escape' || e.key === 'Esc') && !e.defaultPrevented) { e.preventDefault(); e.stopPropagation(); exit(); }   // the game's own Esc (pause) does not also fire
   }, true);
   W.addEventListener('popstate', function () {
     if (popping) { popping = false; return; }
@@ -200,6 +208,7 @@
     var b = el_('button', 'tol-fs-play', '▶ Play'); b.type = 'button';
     card.appendChild(b); g.appendChild(card);
     var kids = [];
+    pageColors(el);
     el.classList.add('tol-fs-gated');
     Array.prototype.forEach.call(el.children, function (k) { if (k !== g && !/^(SCRIPT|STYLE)$/.test(k.tagName) && !k.inert) { try { k.inert = true; kids.push(k); } catch (e) { /* ignore */ } } });
     // the game may add its own pieces later; they wait behind the card too (the card covers them)

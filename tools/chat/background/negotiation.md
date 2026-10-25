@@ -61,7 +61,7 @@ try: “I really hate cleaning the bathroom but don’t mind cooking. You hate c
 
 People care about different things by different amounts. Instead of splitting every job 50/50, you can trade: each person takes more of what they mind less, in exchange for less of what they dread.
 
-This often feels fairer than equal splits, because it respects preferences. The key is being honest about what you actually mind, and checking the overall load still feels reasonable.
+This often feels fairer than equal splits, because it respects preferences. It works best when you are honest about what you actually mind, and check that the overall load still feels reasonable.
 
 Program: WP-03 is the perfect place to do this: when giving each job an owner, ask who minds it least, not just whose turn it is.
 

@@ -20,7 +20,7 @@ const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..', '..');
 const OUT = path.join(ROOT, 'book', 'kids');
 const PORT = process.env.KIDS_PORT || '8673';
-const [mode, id, outName] = process.argv.slice(2);
+const [mode, id, outName, recId] = process.argv.slice(2);
 
 function readJson(f, d) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return d; } }
 function pageCount(f) { const m = /Pages:\s+(\d+)/.exec(execFileSync('pdfinfo', [f]).toString()); return m ? +m[1] : 0; }
@@ -42,7 +42,7 @@ async function open(browser, url, vp) {
   const browser = await chromium.launch({ executablePath: fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined });
   const kids = readJson(path.join(OUT, 'kids.json'), {});
   kids.books = kids.books || {};
-  const rec = kids.books[id] = kids.books[id] || {};
+  const rec = (mode === 'interior' || mode === 'cover') ? (kids.books[recId || id] = kids.books[recId || id] || {}) : {};
   if (mode === 'interior') {
     const src = `http://127.0.0.1:${PORT}/book/kids/src/${id}.html`;
     const { ctx, page } = await open(browser, src);
@@ -55,7 +55,7 @@ async function open(browser, url, vp) {
     const key = outName || id;
     rec.files = rec.files || {};
     rec.files[key] = { pdf: key + '.pdf', pages, bytes: fs.statSync(out).size };
-    if (!outName || !/screen/.test(outName)) rec.pages_printed = pages;
+    if (!recId) rec.pages_printed = pages;
     console.log(id, key, pages, 'pages', (fs.statSync(out).size / 1048576).toFixed(2) + ' MB');
   } else if (mode === 'cover') {
     const src = `http://127.0.0.1:${PORT}/book/kids/src/cover-${id}.html`;
@@ -81,9 +81,35 @@ async function open(browser, url, vp) {
     await ctx2.close();
     execFileSync('python3', ['-c', 'import sys\nfrom PIL import Image\nim = Image.open(sys.argv[1]).convert("RGB")\nw = 480; h = round(im.height * w / im.width)\nim.resize((w, h), Image.LANCZOS).save(sys.argv[2], quality=84, optimize=True, progressive=True)\n# the Kindle cover: 1600 x 2560 (1:1.6), the front centered on a matching band of its own top and bottom colors\nW2 = 1600; H2 = 2560\nbg = im.getpixel((5, 5))\nbot = im.getpixel((5, im.height - 5))\nk = Image.new("RGB", (W2, H2), bg)\nfor y in range(H2):\n    t = y / (H2 - 1)\n    k.paste(tuple(round(bg[i] * (1 - t) + bot[i] * t) for i in range(3)), (0, y, W2, y + 1))\nim2 = im if im.width == W2 else im.resize((W2, round(im.height * W2 / im.width)), Image.LANCZOS)\nk.paste(im2, (0, (H2 - im2.height) // 2))\nk.save(sys.argv[3], quality=90, optimize=True, progressive=True)', big, path.join(OUT, 'cover-' + id + '-front-small.jpg'), path.join(OUT, 'cover-' + id + '-kindle.jpg')]);
     console.log(id, 'cover', W + ' x ' + H + ' in');
+  } else if (mode === 'shots') {
+    // shots <html name in book/kids/src, no .html> <css selector> <out dir under book/kids/src> <target width px> <jpg|png>
+    const [, name, selector, outDir, widthPx, fmt] = process.argv.slice(2);
+    const src = `http://127.0.0.1:${PORT}/book/kids/src/${name}.html`;
+    const { ctx, page } = await open(browser, src, { width: 1400, height: 1400, dsf: 1 });
+    const els = await page.locator(selector).all();
+    const dir = path.join(OUT, 'src', outDir);
+    fs.mkdirSync(dir, { recursive: true });
+    let n = 0;
+    for (const el of els) {
+      const box = await el.boundingBox();
+      const dsf = (+widthPx) / box.width;
+      const label = (await el.getAttribute('data-name')) || (await el.getAttribute('data-page')) || String(n);
+      const c2 = await browser.newContext({ viewport: { width: Math.ceil(box.width) + 4, height: Math.ceil(box.height) + 4 }, deviceScaleFactor: dsf });
+      const p2 = await c2.newPage();
+      await p2.route('**/*', r => (r.request().url().startsWith('http://127.0.0.1:' + PORT + '/') ? r.continue() : r.abort()));
+      await p2.goto(src, { waitUntil: 'load' });
+      await p2.evaluate(async () => { await Promise.all([...document.fonts].map(f => f.load().catch(() => null))); await document.fonts.ready; });
+      const el2 = (await p2.locator(selector).all())[n];
+      const pad = String(label).padStart(2, '0');
+      await el2.screenshot({ path: path.join(dir, (fmt === 'png' ? 'img-' : 'page-') + pad + '.' + fmt), ...(fmt === 'png' ? { type: 'png' } : { type: 'jpeg', quality: 88 }) });
+      await c2.close();
+      n++;
+    }
+    await ctx.close();
+    console.log('shots', name, n, 'files in', dir);
   } else {
-    console.log('usage: print_kids.js interior|cover <id> [out-name]');
+    console.log('usage: print_kids.js interior|cover|shots <id> [out-name]');
   }
-  fs.writeFileSync(path.join(OUT, 'kids.json'), JSON.stringify(kids, null, 1) + '\n');
+  if (mode === 'interior' || mode === 'cover') fs.writeFileSync(path.join(OUT, 'kids.json'), JSON.stringify(kids, null, 1) + '\n');
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

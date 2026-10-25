@@ -38,9 +38,8 @@
   var PREFS = [
     { id: 'short', group: 'main', name: 'Short steps first', note: 'Long pages open on just the steps, with “Show the whole page” one tap away. Long side sections start folded, and the low-energy version opens where a page has one.' },
     { id: 'literal', group: 'main', name: 'Plain and literal', note: 'No hints, idioms or jokey helper lines. Plain wording where a page offers it, and the “what to do” lists open.' },
-    { id: 'listen', group: 'main', name: 'Listen instead of read', note: 'The “Listen” buttons are bigger and easier to find. Your device’s own voice reads the page aloud.' },
     { id: 'big', group: 'main', name: 'Big text and calm', note: 'Extra large text and a still page.' },
-    { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has an “The short version” box, a button turns it into a picture summary.' },
+    { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has a “short version” box, a button turns it into a picture summary.' },
     { id: 'onething', group: 'main', name: 'One thing at a time', note: 'Pages made of numbered idea cards show one card at a time, with Back, Next and “3 of 7.” “Show all at once” is always there.' },
     { id: 'notimer', group: 'main', name: 'No timers or countdowns', note: 'Countdown clocks are hidden. Breathing counts stay, because they set the pace of a breath, not a deadline.' },
     { id: 'nosurprise', group: 'main', name: 'No surprises', note: 'No pop-ups, pop-in helpers, level-up cards or offers. The page stays still.' },
@@ -60,13 +59,13 @@
   var TYPES = [
     { id: 'adhd', name: 'ADHD', prefs: ['short', 'onething', 'place', 'fewer'], wiring: ['adhd'] },
     { id: 'autistic', name: 'Autistic', prefs: ['literal', 'nosurprise', 'senses', 'expect'], wiring: ['autistic'] },
-    { id: 'dyslexic', name: 'Dyslexic', prefs: ['readable', 'ruler', 'listen'], wiring: ['dyslexic'] },
+    { id: 'dyslexic', name: 'Dyslexic', prefs: ['readable', 'ruler'], wiring: ['dyslexic'] },
     { id: 'dyspraxic', name: 'Dyspraxic (DCD)', prefs: ['targets', 'readable', 'place'], wiring: ['dyspraxic'] },
     { id: 'anxiety', name: 'Anxiety or OCD', prefs: ['notimer', 'reassure', 'nosurprise'], wiring: ['anxiety'] },
     { id: 'sensory', name: 'Sensory sensitivity', prefs: ['senses', 'nosurprise'], wiring: ['hsp'] },
     { id: 'lowenergy', name: 'Low energy or chronic illness', prefs: ['short', 'fewer'], wiring: [] },
     { id: 'memory', name: 'Brain injury or memory difficulties', prefs: ['place', 'checklist'], wiring: [] },
-    { id: 'esl', name: 'English isn’t my first language', prefs: ['literal', 'listen', 'simple'], wiring: [] },
+    { id: 'esl', name: 'English isn’t my first language', prefs: ['literal', 'simple'], wiring: [] },
     { id: 'lowvision', name: 'Older eyes or low vision', prefs: ['contrast', 'targets'], wiring: [] }
   ];
   var PREF_IDS = PREFS.map(function (p) { return p.id; }), TYPE_IDS = TYPES.map(function (t) { return t.id; });

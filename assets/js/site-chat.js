@@ -1725,7 +1725,7 @@
     if (c && c.plain) return { blocks: [{ k: 'p', x: 'Here it is in easy words.' }].concat(easyBlocks(c)), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
     var R = state.lastReply, out = shortBlocks(R && R.blocks, true);
     if (out) { state.fullReply = R; return { blocks: [{ k: 'p', x: 'Here it is in fewer words. I’ll keep my words short and simple from now on.' }].concat(out), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' }; }
-    return { blocks: [{ k: 'p', x: 'Yes. I’ll use short, simple words. Ask me anything.' }, { k: 'p', x: 'You can also turn on Easy reading and “Listen to this page” in Settings at the top.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+    return { blocks: [{ k: 'p', x: 'Yes. I’ll use short, simple words. Ask me anything.' }, { k: 'p', x: 'You can also turn on Easy reading in Settings at the top.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
   }
   function shorter(state) {
     var R = state.lastReply, out = shortBlocks(R && R.blocks);
