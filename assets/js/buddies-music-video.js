@@ -1524,7 +1524,22 @@
       });
     }
     function recStop(cancel) { if (!P.rec || !P.rec.mr) return; P.rec.cancelled = !!cancel; try { if (P.rec.mr.state !== 'inactive') P.rec.mr.stop(); } catch (e) {} }
+    // ---------- "Watch on your TV": the music video's MP4, from the moment showing here (tv-cast.js) ----------
+    if (!opts.plan && !opts.startHtml && !opts.noTv) withTv(function (T) { // not in the music video maker (a made video has no MP4)
+      if (P.tv) return;
+      P.tv = T.button({ className: 'fbmv-b fbmv-tv', smallClass: 'fbmv-b', msgClass: 'fbmv-tvmsg',
+        getMedia: function () { var t = songT(); return { url: '/assets/video/frequency-buddies-music-video.mp4', title: 'Frequency Buddies', subtitle: 'The theme song music video', poster: '/assets/img/frequency-buddies-season-1.jpg', position: P.ended || t < 0.5 || t > DUR - 1 ? 0 : t }; },
+        onCasting: function () { if (P.playing) pause(); } });
+      var ctl = $('.fbmv-ctrl'); ctl.insertBefore(P.tv.btn, $('.fbmv-full')); ctl.parentNode.insertBefore(P.tv.msg, ctl.nextSibling);
+    });
     window.TOLMusicVideo.player = { refresh: function () { if (!P.playing) paint(); }, record: record, recStop: recStop, recSupported: recSupported, recording: function () { return !!P.rec; }, share: doShare, flash: flash, showStart: function () { startOv.hidden = false; },  play: play, pause: pause, seek: seek, state: function () { return { t: songT(), playing: P.playing, ended: P.ended, calm: P.calm, sound: P.sound, audio: useAudio, errors: P.errors, frames: P.frames.slice(), q: P.q, px: [W, H] }; } };
+  }
+  // tv-cast.js is loaded once, when the player is set up, so the button is ready before anyone taps it
+  function withTv(cb) {
+    if (window.TOLCast) { cb(window.TOLCast); return; }
+    var s = document.querySelector('script[src^="/assets/js/tv-cast.js"]');
+    if (!s) { s = document.createElement('script'); s.src = '/assets/js/tv-cast.js'; s.async = true; document.head.appendChild(s); }
+    s.addEventListener('load', function () { if (window.TOLCast) cb(window.TOLCast); });
   }
   window.TOLMusicVideo.mount = mount; window.TOLMusicVideo.share = share;
   function auto() { var el = document.querySelector('[data-music-video]'); if (el && !el.__mv) { el.__mv = 1; mount(el); } }
