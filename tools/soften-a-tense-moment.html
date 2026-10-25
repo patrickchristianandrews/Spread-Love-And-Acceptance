@@ -540,7 +540,7 @@
       var x=ctxPanel?ctxPanel.get():null, cx=x&&!TOLContext.isEmpty(x)?TOLContext.read(x,{text:'',mode:'read'}):null, F=cx?cx.flags:{};
       var me=(x&&x.me||[]).filter(function(v){return v!=='fine';});
       var first=me.length?'<p><strong>First, though:</strong> you said you’re '+M.esc(me.join(' and '))+' today. Settle for a few minutes before you try, or say you’ll come back.</p>'
-        :'<p><strong>First, though:</strong> check your own state. If you're wound up too, settle for a few minutes before you try.</p>';
+        :'<p><strong>First, though:</strong> check your own state. If you&#39;re wound up too, settle for a few minutes before you try.</p>';
       var later=F.recurring?'<p><strong>Later:</strong> this keeps coming back, so pick a calm time to talk it through, not now. <a href="/workpapers/wp-04-what-keeps-coming-back.html">What keeps coming back (WP-04)</a></p>':'';
       var work=F.work?'<p><strong>At work:</strong> keep it practical and brief. Offer a short break or to pick it up later, and skip anything personal.</p>':'';
       out.innerHTML=(cx&&cx.safety?TOLContext.usedHTML(cx):'')+'<h3>'+M.esc(m.title)+'</h3>'+
