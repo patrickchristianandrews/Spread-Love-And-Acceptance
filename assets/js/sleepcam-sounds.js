@@ -126,7 +126,7 @@
         if (b.sent || b.t - S.T >= HORIZON) return; b.sent = true;
         var t = K.aT(b.t), D = b.dur, sn = b.snore; if (t < c.currentTime + 0.1) return;
         var pin = rc.air * b.vol * (0.72 + 0.28 * sn), pout = pin * b.exh, pre = Math.max(t - 0.4, c.currentTime + 0.01);
-        v.f1.frequency.setValueAtTime(rc.a1 * v.pm * b.form, pre); v.f2.frequency.setValueAtTime(rc.a2 * v.pm * b.form, pre);
+        if (D > 2.6) { v.f1.frequency.setValueAtTime(rc.a1 * v.pm * b.form, pre); v.f2.frequency.setValueAtTime(rc.a2 * v.pm * b.form, pre); } // quick small breaths keep their color (fewer timeline events)
         play(v.airEnv.gain, K.breathCurve(D, pin, pout), t, D * 0.9);
         if (rc.tone && sn > 0.05) {
           v.dep.gain.setValueAtTime(0.05 + 0.08 * sn, pre);

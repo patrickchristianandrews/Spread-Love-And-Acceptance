@@ -21,8 +21,8 @@
   // ------------------------------------------------------------------ what can be added
   var KINDS = [
     { id: 'dog', label: 'Dog', w: 54, sc: 1, per: 4.3 }, { id: 'cat', label: 'Cat', w: 46, sc: 1, per: 3.3 },
-    { id: 'rabbit', label: 'Rabbit', w: 42, sc: 1, per: 1.8 }, { id: 'guinea', label: 'Guinea pig', w: 40, sc: 1, per: 1.35 },
-    { id: 'hamster', label: 'Hamster', w: 36, sc: 1.2, per: 0.95, wheel: 30 }, { id: 'bird', label: 'Bird', w: 32, sc: 0.98, per: 2.6 },
+    { id: 'rabbit', label: 'Rabbit', w: 42, sc: 1, per: 2.2 }, { id: 'guinea', label: 'Guinea pig', w: 40, sc: 1, per: 1.7 },
+    { id: 'hamster', label: 'Hamster', w: 36, sc: 1.2, per: 1.5, wheel: 30 }, { id: 'bird', label: 'Bird', w: 32, sc: 0.98, per: 2.6 },
     { id: 'ferret', label: 'Ferret', w: 64, sc: 1, per: 2.9 }, { id: 'lizard', label: 'Lizard or reptile', w: 76, sc: 1, per: 6.5 },
     { id: 'horse', label: 'Horse', w: 88, sc: 0.8, per: 6.8 }, { id: 'other', label: 'Other', w: 40, sc: 1, per: 3.5 }
   ];
