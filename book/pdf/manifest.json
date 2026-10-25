@@ -3,7 +3,7 @@
   "pages": 154,
   "interior_pages": 152,
   "blank_pages": 2,
-  "bytes": 2128744,
+  "bytes": 2129825,
   "title": "Spread Love & Acceptance: For two or more (short version)",
   "pagemap": {
    "half": 1,
@@ -200,7 +200,7 @@
   },
   "print": {
    "interior": "print/together-interior.pdf",
-   "interior_bytes": 2051654,
+   "interior_bytes": 2052736,
    "cover": "print/together-cover.pdf",
    "cover_bytes": 77442
   }
@@ -209,7 +209,7 @@
   "pages": 256,
   "interior_pages": 254,
   "blank_pages": 2,
-  "bytes": 3540796,
+  "bytes": 3540857,
   "title": "Spread Love & Acceptance: For two or more (full version)",
   "pagemap": {
    "half": 1,
@@ -465,7 +465,7 @@
   },
   "print": {
    "interior": "print/together-in-depth-interior.pdf",
-   "interior_bytes": 3463127,
+   "interior_bytes": 3463188,
    "cover": "print/together-in-depth-cover.pdf",
    "cover_bytes": 77459
   }
@@ -474,7 +474,7 @@
   "pages": 500,
   "interior_pages": 498,
   "blank_pages": 3,
-  "bytes": 6243492,
+  "bytes": 6245012,
   "title": "Spread Love & Acceptance: The whole book (short version)",
   "pagemap": {
    "half": 1,
@@ -732,7 +732,7 @@
    "ix-how-you-connect-wave-code": "21, 30, 34, 46, 49, 280, 303, 354, 356–358, 361, 363, 368, 414–415",
    "ix-identity": "22, 289, 395",
    "ix-if-then-plans": "48, 52, 59, 247",
-   "ix-illness-long-term": "43, 101, 274, 317, 426",
+   "ix-illness-long-term": "43, 101, 124, 141, 156, 274, 317, 332, 426",
    "ix-in-laws": "73, 404",
    "ix-infidelity-affairs": "318",
    "ix-is-the-setup-working-for-everyone": "98–99",
@@ -850,7 +850,7 @@
   },
   "print": {
    "interior": "print/whole-interior.pdf",
-   "interior_bytes": 6168850,
+   "interior_bytes": 6170370,
    "cover": "print/whole-cover.pdf",
    "cover_bytes": 73582
   }
@@ -859,7 +859,7 @@
   "pages": 826,
   "interior_pages": 824,
   "blank_pages": 4,
-  "bytes": 9226941,
+  "bytes": 9226756,
   "title": "Spread Love & Acceptance: The whole book (full version)",
   "pagemap": {
    "half": 1,
@@ -1097,7 +1097,7 @@
    "ix-buber-martin": "200, 202, 370, 385, 594, 660",
    "ix-buddha-buddhism": "30, 32, 95, 207, 233, 311, 319, 321, 326, 337, 352, 364, 388, 411, 462, 464, 488, 544, 563, 573, 581, 598, 616, 646, 685",
    "ix-burnout": "338, 354, 444, 466, 489, 499, 509–510, 516–517, 519, 532–533, 582, 589, 600–601, 607, 610–611, 689, 697",
-   "ix-bystander-effect": "178, 603–604, 607, 610",
+   "ix-bystander-effect": "178, 603–604, 608, 610",
    "ix-calm-down-kit": "64, 90–92, 101, 105, 150, 164, 215, 217, 233, 255, 329–331, 333, 353, 355–356, 614, 619, 622–623, 636, 701, 735, 740, 753",
    "ix-care-caring": "215, 223, 322, 589, 591, 608, 612",
    "ix-caregivers-caregiving": "57, 61, 93, 111, 147, 172, 178, 182, 216, 247, 254, 280, 295, 353, 409–410, 601–602",
@@ -1171,7 +1171,7 @@
    "ix-groupthink": "719, 722",
    "ix-guilt": "84, 226, 253, 308, 319, 443, 454, 457–459, 467, 470, 472–476, 492, 497, 522, 588, 668, 687, 692, 699, 729",
    "ix-habits": "21, 78, 88–89, 164, 172, 177, 254, 293, 303, 431–437, 439, 441–443, 447, 449, 451–453, 710, 729, 757",
-   "ix-helping": "30, 526, 589–591, 594–595, 597, 599, 601–602, 606–611, 629, 735–736, 750",
+   "ix-helping": "30, 526, 589–591, 594–595, 597, 599, 601–602, 606–609, 611, 629, 735–736, 750",
    "ix-hochschild-arlie": "112, 114, 116, 118, 173",
    "ix-hope": "29, 86, 97–98, 400, 407, 433, 450–451, 486, 570, 579, 642, 674, 686, 711, 733",
    "ix-how-much-are-you-carrying": "55–56, 72, 80, 170, 172, 181–183, 185, 207–208, 210, 214–215, 237, 274, 333, 345, 590, 599, 735, 740, 749",
@@ -1308,27 +1308,27 @@
    "ix-wired-differently": "48, 67, 80, 148–149, 318, 330, 377, 403, 522, 532",
    "ix-wiring": "21, 23, 48–53, 55, 59, 63, 67, 69–71, 76–77, 79–80, 97, 148–149, 163, 167, 330, 355, 377, 397, 403, 435, 513–514, 522, 532–534, 655–656, 726, 735, 737–739",
    "ix-wood-wendy": "88, 433–434",
-   "ix-work-the-workplace": "70, 179, 376, 397, 404, 473, 512, 549–550, 555, 608, 632, 644, 697, 722",
+   "ix-work-the-workplace": "70, 179, 376, 397, 404, 473, 512, 549–550, 555, 609, 632, 644, 697, 722",
    "ix-worry": "154, 240, 316, 350, 356, 394, 413, 424, 555, 557, 678–682, 685–687, 695–699, 701, 728, 738",
    "ix-your-lens": "18–19, 24, 42–43, 47, 378, 498, 733, 737–739"
   },
   "print": {
    "interior": "print/whole-in-depth-interior.pdf",
-   "interior_bytes": 9150971,
+   "interior_bytes": 9150786,
    "cover": "print/whole-in-depth-cover.pdf",
    "cover_bytes": 73593
   }
  },
  "sample": {
   "pages": 72,
-  "bytes": 1033507,
+  "bytes": 1033541,
   "title": "Spread Love & Acceptance: a sample"
  },
  "for-yourself": {
   "pages": 368,
   "interior_pages": 366,
   "blank_pages": 2,
-  "bytes": 4617668,
+  "bytes": 4618137,
   "title": "Spread Love & Acceptance: For one person (short version)",
   "pagemap": {
    "half": 1,
@@ -1642,7 +1642,7 @@
   },
   "print": {
    "interior": "print/for-yourself-interior.pdf",
-   "interior_bytes": 4547466,
+   "interior_bytes": 4547935,
    "cover": "print/for-yourself-cover.pdf",
    "cover_bytes": 70045
   }
@@ -1651,7 +1651,7 @@
   "pages": 592,
   "interior_pages": 590,
   "blank_pages": 2,
-  "bytes": 6201220,
+  "bytes": 6200828,
   "title": "Spread Love & Acceptance: For one person (full version)",
   "pagemap": {
    "half": 1,
@@ -1823,7 +1823,7 @@
    "ix-buber-martin": "168, 183, 393, 459",
    "ix-buddha-buddhism": "26, 28, 91, 109, 117, 119, 124, 135, 150, 162, 186, 209, 261, 263, 287, 343, 362, 372, 380, 397, 415, 445, 484",
    "ix-burnout": "136, 152, 242, 265, 288, 298, 308–309, 315–316, 318, 331–332, 381, 388, 399–400, 406, 409–410, 488, 496",
-   "ix-bystander-effect": "402–403, 406, 409",
+   "ix-bystander-effect": "402–403, 407, 409",
    "ix-calm-down-kit": "60, 86–88, 97, 101, 127–129, 131, 151, 153–154, 413, 418, 421–422, 435, 500, 526, 530, 536",
    "ix-care-caring": "120, 388, 390, 407, 411",
    "ix-caregivers-caregiving": "37, 53, 57, 70, 89, 151, 153, 207–208, 268, 389, 400–401, 406, 464, 534",
@@ -2022,13 +2022,13 @@
    "ix-wired-differently": "44, 63, 76, 116, 128, 175, 201, 321, 331",
    "ix-wiring": "17, 19, 44–49, 51, 59, 63, 65–67, 72–73, 75–76, 93, 128, 153, 175, 195, 201, 233, 312–313, 321, 331–333, 454–455, 525–529",
    "ix-wood-wendy": "84, 231–232",
-   "ix-work-the-workplace": "66, 174, 195, 202, 272, 311, 348–349, 354, 407, 431, 443, 496, 521",
+   "ix-work-the-workplace": "66, 174, 195, 202, 272, 311, 348–349, 354, 408, 431, 443, 496, 521",
    "ix-worry": "114, 148, 154, 192, 211, 222, 354, 356, 477–481, 484–486, 493–497, 528",
    "ix-your-lens": "14–15, 20, 38–39, 43, 176, 297, 527–529"
   },
   "print": {
    "interior": "print/for-yourself-in-depth-interior.pdf",
-   "interior_bytes": 6130119,
+   "interior_bytes": 6129727,
    "cover": "print/for-yourself-in-depth-cover.pdf",
    "cover_bytes": 70057
   }
@@ -2037,7 +2037,7 @@
   "pages": 320,
   "interior_pages": 318,
   "blank_pages": 2,
-  "bytes": 4004052,
+  "bytes": 4004494,
   "title": "Spread Love & Acceptance: Understanding people (short version)",
   "pagemap": {
    "half": 1,
@@ -2320,7 +2320,7 @@
   },
   "print": {
    "interior": "print/understanding-interior.pdf",
-   "interior_bytes": 3930512,
+   "interior_bytes": 3930954,
    "cover": "print/understanding-cover.pdf",
    "cover_bytes": 73375
   }
@@ -2329,7 +2329,7 @@
   "pages": 498,
   "interior_pages": 496,
   "blank_pages": 2,
-  "bytes": 5020764,
+  "bytes": 5020556,
   "title": "Spread Love & Acceptance: Understanding people (full version)",
   "pagemap": {
    "half": 1,
@@ -2477,7 +2477,7 @@
    "ix-buber-martin": "78, 93, 303, 369",
    "ix-buddha-buddhism": "19, 27, 29, 34, 46, 60, 72, 96, 119, 171, 173, 197, 253, 272, 282, 290, 307, 325, 355, 394",
    "ix-burnout": "46, 62, 152, 175, 198, 208, 218–219, 225–226, 228, 241–242, 291, 298, 309–310, 316, 319–320, 398, 406",
-   "ix-bystander-effect": "312–313, 316, 319",
+   "ix-bystander-effect": "312–313, 317, 319",
    "ix-calm-down-kit": "37–39, 41, 61, 63–64, 323, 328, 331–332, 345, 410, 436, 440, 445",
    "ix-care-caring": "30, 298, 300, 317, 321",
    "ix-caregivers-caregiving": "61, 63, 117–118, 178, 299, 310–311, 316, 374, 443",
@@ -2579,7 +2579,7 @@
    "ix-mill-john-stuart": "251, 305, 338, 420",
    "ix-milton-damian": "30, 77, 105, 213, 251, 274",
    "ix-mistakes": "15, 18, 125, 128, 135, 152, 162–164, 168, 170–173, 175–177, 179–180, 182, 201, 252, 263, 274, 280, 308, 319, 427–428",
-   "ix-money": "22, 43, 48, 51, 109, 128, 198, 224, 230, 239, 246, 250, 254, 257, 261, 264, 287, 289–290, 293, 300, 309–310, 314, 318, 339, 367, 389, 396, 405, 422, 441",
+   "ix-money": "22, 43, 48, 51, 109, 128, 198, 224, 230, 239, 246, 250, 254, 257, 261, 264, 287, 289–290, 293, 300, 309–310, 314, 319, 339, 367, 389, 396, 405, 422, 441",
    "ix-monotropism": "56, 63, 70, 143, 208, 220, 228, 241",
    "ix-monthly-look-back": "115, 161, 231, 266, 271, 412",
    "ix-more-than-two-partners": "383",
@@ -2669,13 +2669,13 @@
    "ix-wired-differently": "26, 38, 85, 111, 231, 241",
    "ix-wiring": "38, 63, 85, 105, 111, 143, 222–223, 231, 241–243, 364–365, 435",
    "ix-wood-wendy": "141–142",
-   "ix-work-the-workplace": "84, 105, 112, 182, 221, 258–259, 264, 317, 341, 353, 406, 431",
+   "ix-work-the-workplace": "84, 105, 112, 182, 221, 258–259, 264, 318, 341, 353, 406, 431",
    "ix-worry": "24, 58, 64, 102, 121, 132, 264, 266, 387–391, 394–396, 403–407, 438",
    "ix-your-lens": "38, 85–86, 138, 184, 186, 207, 365"
   },
   "print": {
    "interior": "print/understanding-in-depth-interior.pdf",
-   "interior_bytes": 4946523,
+   "interior_bytes": 4946315,
    "cover": "print/understanding-in-depth-cover.pdf",
    "cover_bytes": 73388
   }

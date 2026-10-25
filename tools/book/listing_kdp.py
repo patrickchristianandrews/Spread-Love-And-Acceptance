@@ -95,7 +95,7 @@ L = {
     'book-3-understanding-each-other': {
         'hook': 'Two people can care about each other and still fall out of tune.',
         'body': [
-            'One wants to talk now; the other needs an hour. A comment meant lightly lands hard. This book is about understanding the people around you: at home, in families, with friends, at work and in every group you belong to.',
+            'One wants to talk now, and the other needs an hour. A comment meant lightly lands hard. This book is about understanding the people around you: at home, in families, with friends, at work and in every group you belong to.',
             'It explains how pace and tone pull people apart, how communication really works, and why two people can see the same moment so differently. It looks at why we need to belong, how trust grows and is rebuilt, how love takes many forms, and the quiet pull of groups. It ends with helping others well, with kind limits and without burning out.',
         ],
         'inside': ['Why we get out of tune, and how to get back', 'How communication works: meaning, listening and repair', 'How we see each other: perception, bias and the stories we tell',
@@ -124,7 +124,7 @@ L = {
             'Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the math laid out.',
             'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.',
         ],
-        'inside': ['10 workpapers and a paper setup score, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page; longer sheets run over two pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
+        'inside': ['10 workpapers and a paper setup score, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page, longer sheets over two pages', 'A six-week planner and lined pages for notes', 'Large 8.5 × 11 in pages'],
         'cats': ['Books › Self-Help › Relationships', 'Books › Parenting & Relationships › Marriage & Adult Relationships', 'Books › Self-Help › Communication & Social Skills'],
         'alt': ['Books › Self-Help › Stress Management', 'Books › Parenting & Relationships › Family Relationships', 'Books › Self-Help › Personal Transformation'],
         'kw': ['communication workbook for couples', 'relationship worksheets for couples', 'chore chart for couples and families', 'self help workbook for adults',
@@ -180,7 +180,7 @@ def description(item, d, kind='book'):
     if kind == 'workbook':
         h += '<p>The sheets describe what happened, never who someone is. Fill them out on your own or together. On shared sheets each person writes only their own rows.</p>'
     elif kind == 'pocket':
-        h += ('<p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction; it never excuses harm, '
+        h += ('<p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction. It never excuses harm, '
               'and the pages say so where it matters.</p>')
         h += '<p><b>Part of a series.</b> %s is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p>' % esc(SERIES)
     elif kind == 'boxset':
