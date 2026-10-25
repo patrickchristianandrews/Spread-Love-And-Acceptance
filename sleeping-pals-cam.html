@@ -61,6 +61,7 @@
   @media (max-width: 420px) { .spc-ctl button { padding: .45rem .7rem; font-size: .92rem; } }
   @media (prefers-reduced-motion: reduce) { .spc-ctl, .spc-hint { transition: none; } }
 </style>
+<link rel="stylesheet" href="/assets/css/sleepcam.css">
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/sleeping-pals-cam.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/sleeping-pals-cam.html">
@@ -117,7 +118,7 @@
 <main class="spc-start" id="spc-start">
   <p class="spc-k">Bedtime</p>
   <h1>Sleeping Pals Cam</h1>
-  <p>Tidbit and Sugarfoot, fast asleep. Soft snores, a few floating z’s, and now and then a funny little midnight moment.</p>
+  <p>Tidbit and Sugarfoot, fast asleep. Soft snores, a few floating z’s, and now and then a funny little midnight moment. Add your own fur babies, and mix the soft sounds that help you sleep.</p>
   <canvas id="spc-preview" role="img" aria-label="Tidbit and Sugarfoot asleep on a rug in a dim room at night, with little z's floating up"></canvas>
   <div class="spc-opts">
     <fieldset>
@@ -129,20 +130,12 @@
         <label><input type="radio" name="spc-timer" value="60">60 min</label>
       </div>
     </fieldset>
-    <fieldset>
-      <legend>Sound bed</legend>
-      <div class="spc-row">
-        <label><input type="radio" name="spc-bed" value="off">None</label>
-        <label><input type="radio" name="spc-bed" value="rain">Soft rain</label>
-        <label><input type="radio" name="spc-bed" value="fan">Fan</label>
-        <label><input type="radio" name="spc-bed" value="brown">Brown noise</label>
-      </div>
-    </fieldset>
     <div class="spc-checks">
       <label class="spc-check"><input type="checkbox" id="spc-sound-opt" checked>Play sound</label>
       <label class="spc-check"><input type="checkbox" id="spc-snore-opt" checked>Soft snoring</label>
     </div>
     <p class="spc-note" id="spc-sound-note" hidden>Your site settings have sounds off (Quiet mode or the sound switch), so this starts silent. Tick Play sound if you want to hear the pups. That choice stays on this page only.</p>
+    <div class="spc-panels" id="spc-panels"></div>
   </div>
   <button type="button" class="spc-go" id="spc-go">Start the Sleeping Pals Cam</button>
   <p>The sound starts very softly and stays low. When the timer ends, it fades out slowly and the room goes dark.</p>
@@ -153,14 +146,20 @@
   <div class="spc-ctl" role="toolbar" aria-label="Sleeping Pals Cam controls">
     <button type="button" class="spc-timer">⏲ Timer off</button>
     <button type="button" class="spc-bed">🌧 No sound bed</button>
+    <button type="button" class="spc-mix-btn">🎚 Mix</button>
+    <button type="button" class="spc-pets-btn">🐾 Fur babies</button>
     <button type="button" class="spc-sound" aria-pressed="true">🔈 Sound on</button>
     <button type="button" class="spc-snore" aria-pressed="true">💤 Snores on</button>
     <button type="button" class="spc-dim" aria-pressed="true">🌙 Dimmer on</button>
     <button type="button" class="spc-exit">✕ Exit</button>
   </div>
   <p class="spc-hint" aria-live="polite"></p>
+  <div class="spc-sheet" id="spc-sheet" role="region" aria-label="Fur babies and sleep sounds" hidden><div class="spc-sheet-in"></div></div>
 </div>
 <script src="/assets/js/pups.js"></script>
 <script src="/assets/js/pals-cam-sleep.js"></script>
+<script src="/assets/js/sleepcam-pets.js"></script>
+<script src="/assets/js/sleepcam-sounds.js"></script>
+<script src="/assets/js/sleepcam-ui.js"></script>
 </body>
 </html>

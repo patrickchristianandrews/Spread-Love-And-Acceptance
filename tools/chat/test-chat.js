@@ -97,7 +97,7 @@ t('tools', 'What is the Professor’s Library?', { kind: 'card', id: 'library', 
 t('tools', 'Where can I find articles to read?', { kind: 'card', id: 'reading', link: '/reading.html' });
 t('tools', 'what does matching energy mean', { kind: 'card', id: 'control', link: '/book/self-2-now-in-depth.html#control' });
 t('tools', 'what is in my control', { kind: 'card', id: 'control' });
-t('tools', 'find me an article about stress', { kind: 'card', id: 'reading', text: /good articles on “stress”/, link: '/reading.html' });
+t('tools', 'find me an article about stress', { kind: 'card', id: 'reading', text: /good articles on “stress,”/, link: '/reading.html' });
 t('tools', 'any good articles on apologies?', { kind: 'card', id: 'reading', text: /apolog/i });
 t('tools', 'recommend something to read about ADHD', { kind: 'card', id: 'reading', text: /ADHD|attention/i });
 c('tools', ['find me an article about stress', 'more articles'], { kind: 'card', id: 'reading', text: /stress/ });
@@ -836,7 +836,7 @@ t('round7', 'i miss my mum', { id: 'missing', not: /Never miss twice|habit/ });
 c('round7', ['i\'m raising my grandson and i\'m exhausted', 'he\'s on his phone all night'], { id: 'teenphone', not: /jealous|at dinner/ });
 // ADHD kids, grandparents, grown children
 t('round7', 'my grandson has ADHD, how should I talk to him', { id: 'adhdkids', link: '/adhd-kids.html' });
-t('round7', 'is ADHD real or just bad behaviour', { id: 'adhdkids', text: /^Yes, ADHD is real and well studied\. It is not bad behaviour or bad upbringing\./ });
+t('round7', 'is ADHD real or just bad behaviour', { id: 'adhdkids', text: /^Yes, ADHD is real and well studied\. It is not bad behavior or bad upbringing\./ });
 c('round7', ['my grandson has ADHD, how should I talk to him', 'he forgets everything I tell him'], { id: /^adhd/, link: '/adhd-kids.html', not: /plans fall through/ });  // chat9: the page's own “When they forget”
 c('round7', ['my grandson has ADHD, how should I talk to him', 'what do I say when he can\'t sit still'], { id: /^adhd/, text: /sit still/ });  // chat9: the page's own “When they can’t sit still”
 t('round7', 'what is ADHD in children, in plain words', { id: 'adhdkids', text: /ADHD is real/, link: '/adhd-kids.html', not: /fewer words/ });
@@ -1058,8 +1058,8 @@ t('safety8', 'do i have depression', { id: 'diagnose' });
 t('safety8', 'is my partner a narcissist', { text: /can’t diagnose/, not: /screamed at|worthless/ });
 t('safety8', 'He screams at me and calls me worthless. Is he a narcissist? (details kept)', { q: 'He screams at me and calls me worthless. Is he a narcissist?', kind: 'safety', text: /screamed at/ });
 // infidelity: honest, not shaming, healing after hurt
-t('safety8', 'I cheated on my wife and she found out. what now', { id: 'infidelity', text: /responsibility[\s\S]*couples counsellor/, link: '/book/understanding-11-healing-in-depth.html', not: /coming out|LGBTQ/i });
-t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /couples counsellor/ });
+t('safety8', 'I cheated on my wife and she found out. what now', { id: 'infidelity', text: /responsibility[\s\S]*couples counselor/, link: '/book/understanding-11-healing-in-depth.html', not: /coming out|LGBTQ/i });
+t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /couples counselor/ });
 t('safety8', 'my husband cheated on me', { id: 'infidelity', text: /isn’t your fault/, link: '/book/understanding-11-healing-in-depth.html' });
 t('safety8', 'i found out about her affair', { id: 'infidelity' });
 
@@ -1163,7 +1163,7 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   t('chat8', 'I need a quiet break at work, how do I say it', { id: 'autisticwork', script: true, not: /I’m autistic|legal right/ });
   t('chat8', 'what does STDE mean', { id: 'wl-archetypes', text: /^STDE, the Compass/, not: /QFDE/ });
   // coming out as an adult
-  const ADULT_OK = /friends or a counsellor/;
+  const ADULT_OK = /friends or a counselor/;
   t('chat8', 'how do i come out to my conservative parents', { id: 'lgbtadult', text: ADULT_OK, link: '/coming-out.html', not: /GSA|school counselor/ });
   t('chat8', 'lgbtq support line', { id: 'lgbtadult', text: ADULT_OK });
   t('chat8', 'is it safe to come out if my dad has a temper', { id: 'lgbtadult', link: '/coming-out.html#safety-first' });
@@ -1272,7 +1272,7 @@ if (PERS) {
     t('puddles', 'hi', { kind: 'chat' });
     t('puddles', 'what can you do (still the full help)', { q: 'what can you do', text: /talk deep/ });
     t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', text: /chore|job|split|share|Lemonade/i });
-    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match; I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
+    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match\. I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
     t('puddles', 'do you hallucinate', { kind: 'about', text: /I don’t make things up[\s\S]*that’s not it[\s\S]*not a therapist and can’t diagnose/ });
     t('puddles', 'are you AI?', { kind: 'about', text: /^No\. Every answer here was written in advance for this site\. I pick the best match/, not: /written (and checked )?by people|checked by people/ });
     t('puddles', 'who are you (says where answers come from)', { q: 'who are you', text: /I don’t make things up/ });
@@ -1607,7 +1607,7 @@ if (PERS) {
   t('chat9', 'carer losing patience and guilt (English)', { q: 'I lose patience with her and feel guilty', id: 'careresent' });
   t('chat9', 'carer asks grown children for help', { q: 'how I ask my children for more help', id: 'careadultkids', not: /teenagers|Baumrind/ });
   t('chat9', 'flatmates: group words', { q: 'my flatmates and I keep fighting about the bins and whose turn it is', not: /you both/ });
-  t('chat9', 'a rota instead of one owner', { q: 'can we do a rota instead of one owner?', id: 'houserota', text: /^Yes, a rota is fine/ });
+  t('chat9', 'a rota instead of one owner', { q: 'can we do a rota instead of one owner?', id: 'houserota', text: /^Yes, a schedule is fine/ });
   t('chat9', 'three people cleaning: a direct answer', { q: 'how do we split cleaning fairly with three people', id: 'housethree', text: /^With three of you/, not: /professor voice|Ahem/ });
   c('chat9', ['we have 2 year old twins', 'how do I show her what I do without a fight'], { id: 'showwhatido', link: '/lemonade-stand.html', not: /night feed/i });
   t('chat9', 'nobody notices what I do: all kinds of unseen work', { q: 'nobody notices what I do', id: 'nobodynotices', text: /thinking work[\s\S]*physical jobs[\s\S]*paid work/ });
