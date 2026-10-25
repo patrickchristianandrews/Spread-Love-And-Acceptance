@@ -12,7 +12,7 @@
       "name": "the book in print",
       "pat": "\\b(paperback|paper back|hardback|hard copy|printed (book|books|copy|copies|version|edition)|print (edition|version|copy|copies)|physical (book|books|copy|copies)|book in print|books in print|kindle|e ?book)\\b|\\bbuy (the|a|this|your|these) (book|books)\\b|\\border (the|a) (book|copy)\\b|\\b(book|books) on amazon\\b",
       "what": [
-        "Every chapter is free to read online, with no account. Each of the four books is also a free PDF (we ask for your email once, on this device, before the first download; the workbook, the pocket guide and the workpapers use the same step). The book page also shows the series in print: the same chapters as short color books (162, 160, 156 and 156 pages), plus a bound workbook and a pocket guide. Paperbacks are coming to Amazon; “The book in print” there has the latest."
+        "Every chapter is free to read online, with no account. Each of the four books is also a free PDF (we ask for your email once, on this device, before the first download; the workbook, the pocket guide and the workpapers use the same step). The book page also shows the series in print: the same chapters as short color books (162, 160, 156 and 156 pages), plus a bound workbook and a pocket guide. Paperbacks are coming to Amazon. “The book in print” there has the latest."
       ],
       "how": [
         "Read free online: every chapter, any time.",
@@ -861,7 +861,7 @@
         "After your Wave Code, sixteen self-discovery chapters open up on your results. Each has a short reading written for your answers (and a note for the wiring you picked), three journal prompts and one thing to try this week. You can mark each one done and see how many you’ve explored."
       ],
       "how": [
-        "Seven for your Wave Code: Meeting your own speed; How you make sense of things; Finding your voice; How you listen and receive; Your energy and your senses (what fills you up and what drains you); The masks and the scripts; Asking for what helps.",
+        "Seven for your Wave Code: meeting your own speed, how you make sense of things, finding your voice, how you listen and receive, your energy and your senses (what fills you up and what drains you), the masks and the scripts, and asking for what helps.",
         "Nine for the inputs of learning: one for each input, from learning through words to learning through big questions and meaning, each with how it connects to the others.",
         "Your journal answers stay in your browser. They’re kept on this device only if you tick “Keep my answers and journal on this device,” and “Copy my journal” copies them all."
       ],
@@ -11002,7 +11002,7 @@
       "notPat": "\\b(in law|inlaw|mother in law|father in law|parents visit|boss|coworker|teacher)\\b",
       "keys": [],
       "what": [
-        "This is one of the most common patterns couples get stuck in, and it belongs to both of you. One of you wants to sort it out now; the other needs time before they can talk well. The more one pushes, the more the other pulls back, and the more one pulls back, the more the other pushes. Neither of you is the problem; the pace mismatch is."
+        "This is one of the most common patterns couples get stuck in, and it belongs to both of you. One of you wants to sort it out now. The other needs time before they can talk well. The more one pushes, the more the other pulls back, and the more one pulls back, the more the other pushes. Neither of you is the problem; the pace mismatch is."
       ],
       "how": [
         "If you’re the one who wants to talk now: being walked away from really hurts, and it can feel like being shut out. Ask for a return time rather than an answer right now. A set time is your guarantee the topic isn’t being dropped.",
@@ -14337,7 +14337,7 @@
       ],
       "what": "Say it so it lands (WP-09) is a quick self-check to run before you answer something that stung, so what you say is something the other person can actually hear. It only looks at your own next message.",
       "how": [
-        "Before you speak, find three things: the fact, in one sentence with no adjectives; the feeling underneath, like tired or unseen; and the ask, what you want to happen next.",
+        "Before you speak, find three things: the fact, in one sentence with no adjectives. The feeling underneath, like tired or unseen; and the ask, what you want to happen next.",
         "If your sentence is a judgment on the person (“you always…”), swap it for one fact and one ask.",
         "Before you react, weigh what you heard: is it about a specific task? Would it read the same if you weren’t stretched? Could a neutral meaning fit?",
         "If you’re stretched or unsure, pause first."
@@ -14382,7 +14382,7 @@
         "In the moment: check your battery, say your line, do your first calming step.",
         "Check your battery again before going back."
       ],
-      "results": "It uses your battery score from How much are you carrying? (WP-02) to decide when to go back: under 0.50, go back at the time you said; between 0.50 and 0.60, do another round; still 0.60 or more after two rounds, pick a new time and say when. When you go back, start with one small, simple task first.",
+      "results": "It uses your battery score from How much are you carrying? (WP-02) to decide when to go back: under 0.50, go back at the time you said. Between 0.50 and 0.60, do another round. Still 0.60 or more after two rounds, pick a new time and say when. When you go back, start with one small, simple task first.",
       "ex": "A pause line: “I’m getting too wound up to listen well. I’m going for a ten-minute walk, and I’ll be back at 7:30 to finish this.”",
       "pillar": "Pillar III, Read your state first.",
       "script": [
@@ -14883,7 +14883,7 @@
         "Keep a private almanac on your device if you’d like to spot patterns."
       ],
       "results": "The forecast is a rough tally of what you told it, not a measurement. The sky sets the starting point, and heavy pressure, a short night, lots of people time, body needs and open worries each add a little. A closed talk window means “not now,” never “never.” Weather isn’t a grade or a diagnosis: conditions pass.",
-      "ex": "Gusty sky, heavy pressure and a short night might give you: good hours for simple tasks and a walk; leave the budget talk until tomorrow; say “I’m running low today, can we talk tomorrow?”",
+      "ex": "Gusty sky, heavy pressure and a short night might give you: good hours for simple tasks and a walk. Leave the budget talk until tomorrow. Say “I’m running low today, can we talk tomorrow?”",
       "pillar": "Pillar III, Read your state first.",
       "links": [
         [
