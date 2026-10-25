@@ -1,5 +1,5 @@
 # Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
-# Made exactly the way Season 1 was: the open-source Kokoro model's af_heart voice (Apache 2.0), reshaped per character with the WORLD vocoder, using the pitch, pace, tone color and melody measured from Season 1's own recordings (see the Frequency Buddies voice table). A few lines are spoken a little faster so they fit their moment on screen.
+# Made with the same voices as Season 1, found by matching Season 1's own recordings with speaker-embedding models (voice24): Tidbit is Kokoro's af_heart reshaped with the WORLD vocoder (formant warp 1.18), Sugarfoot is 65% af_heart plus 35% af_nicole (warp 1.16), the narrator is plain af_heart. Pitch and pace follow Season 1's mood table. A few lines are spoken a little faster so they fit their moment on screen.
 # To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
