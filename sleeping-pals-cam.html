@@ -35,6 +35,8 @@
   .spc-row label:has(input:checked) { background: #F4EEFF; color: #2A2340; border-color: #F4EEFF; }
   .spc-row label:has(input:focus-visible), .spc-check:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
   .spc-check input { width: 20px; height: 20px; margin: 0 .55rem 0 0; accent-color: #CFC2F5; }
+  .spc-checks { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .spc-note { font-size: .95rem !important; line-height: 1.45 !important; max-width: none !important; }
   .spc-go { min-height: 56px; padding: .8rem 2.1rem; border: 0; border-radius: 999px; background: #F4EEFF; color: #2A2340; font: 600 1.2rem Lora, Georgia, serif; cursor: pointer; }
   .spc-go:hover { background: #fff; }
   .spc-go:focus-visible, .spc-start a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
@@ -136,10 +138,14 @@
         <label><input type="radio" name="spc-bed" value="brown">Brown noise</label>
       </div>
     </fieldset>
-    <label class="spc-check"><input type="checkbox" id="spc-snore-opt" checked>Soft snoring</label>
+    <div class="spc-checks">
+      <label class="spc-check"><input type="checkbox" id="spc-sound-opt" checked>Play sound</label>
+      <label class="spc-check"><input type="checkbox" id="spc-snore-opt" checked>Soft snoring</label>
+    </div>
+    <p class="spc-note" id="spc-sound-note" hidden>Your site settings have sounds off (Quiet mode or the sound switch), so this starts silent. Tick Play sound if you want to hear the pups. That choice stays on this page only.</p>
   </div>
   <button type="button" class="spc-go" id="spc-go">Start the Sleeping Pals Cam</button>
-  <p>When the timer ends, the sound fades out and the room goes dark.</p>
+  <p>The sound starts very softly and stays low. When the timer ends, it fades out slowly and the room goes dark.</p>
   <p class="spc-links"><a href="/pal-cam-tv.html">The daytime Pal Cam</a> <a href="/frequency-buddies.html">Frequency Buddies</a> <a href="/">Back to the site</a></p>
 </main>
 <div class="spc-cam" id="spc-cam" hidden>
@@ -147,6 +153,7 @@
   <div class="spc-ctl" role="toolbar" aria-label="Sleeping Pals Cam controls">
     <button type="button" class="spc-timer">⏲ Timer off</button>
     <button type="button" class="spc-bed">🌧 No sound bed</button>
+    <button type="button" class="spc-sound" aria-pressed="true">🔈 Sound on</button>
     <button type="button" class="spc-snore" aria-pressed="true">💤 Snores on</button>
     <button type="button" class="spc-dim" aria-pressed="true">🌙 Dimmer on</button>
     <button type="button" class="spc-exit">✕ Exit</button>
