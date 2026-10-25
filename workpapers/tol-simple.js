@@ -34,7 +34,7 @@
       'Small and often': {
         at: 'Ninety seconds a day', k: 'quiz', q: 'Why a short check-in every day, instead of one long talk at the weekend?',
         o: [['Small things get said while they’re still small', true, 'Yes! A little each day keeps you in step, so nothing piles up.'],
-            ['So there’s more to argue about at the weekend', false, 'Not quite. The idea is that there’s no big pile left to argue about.'],
+            ['So there’s more to argue about on the weekend', false, 'Not quite. The idea is that there’s no big pile left to argue about.'],
             ['Because longer talks aren’t allowed', false, 'Not quite. Bigger things simply wait for the weekly catch-up.']]
       }
     },

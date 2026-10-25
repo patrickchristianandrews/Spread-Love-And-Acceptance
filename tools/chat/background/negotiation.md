@@ -5,7 +5,7 @@ aka: anchoring; first offer; anchor
 see: Making the first offer; Framing gains and losses
 go: /library/conflict.html#principled-negotiation | Principled negotiation (Library)
 evidence: Anchoring is one of the best-replicated findings in judgment research, going back to Tversky and Kahneman (1974). Its size in real negotiations varies with how much people know about fair values.
-try: If a housemate opens with “I’ll pay 20% of the rent for the small room,” that number becomes the reference point, even if 30% might be fairer.
+try: If a roommate opens with “I’ll pay 20% of the rent for the small room,” that number becomes the reference point, even if 30% might be fairer.
 
 The first number or proposal put on the table tends to pull the final agreement toward it. People adjust from the anchor, but usually not enough.
 
@@ -18,11 +18,11 @@ aka: first offer; who goes first; opening proposal
 see: Anchoring in negotiation; Using fair standards
 go: /lemonade-stand.html | The Lemonade Stand
 evidence: Negotiation research generally finds that making the first offer can help when you have good information, because of anchoring. It can backfire if you know little about fair values.
-try: “Based on the hours we logged, I’d suggest I take the cooking and you take laundry and bins. What do you think?”
+try: “Based on the hours we logged, I’d suggest I take the cooking and you take laundry and trash. What do you think?”
 
 Going first lets you set the frame, which is helpful when you’ve done your homework. If you’re unsure what’s fair, it can be wiser to ask for the other person’s view first or gather facts together.
 
-At home, a first offer works best when it’s explained, not just stated: “here’s what I suggest, and here’s why”. It invites a counter-proposal rather than a standoff.
+At home, a first offer works best when it’s explained, not just stated: “here’s what I suggest, and here’s why.” It invites a counter-proposal rather than a standoff.
 
 Program: Bring the Lemonade Stand split to the conversation, so any first offer is grounded in the week you both actually had.
 
@@ -48,7 +48,7 @@ try: One roommate wants quiet by 10, the other by midnight. Anything from 10 to 
 
 The zone of possible agreement is the overlap between what each side can accept. If there’s overlap, a deal is possible. If there isn’t, you need to change the question, often by adding other issues or looking at underlying interests.
 
-Thinking this way turns a standoff into a search: where could we both be okay? It also reminds you that “no overlap” today might mean “different options”, not “impossible”.
+Thinking this way turns a standoff into a search: where could we both be okay? It also reminds you that “no overlap” today might mean “different options,” not “impossible.”
 
 Program: Frequency Calibration does something similar for rhythms: it shows the gap between your natural pace in each area, and suggests one agreement to close it.
 
@@ -148,11 +148,11 @@ aka: chore preferences; who minds it least; dread ranking
 see: Trading across issues; Chore charts that work
 go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: A practical application of integrative negotiation to housework. There’s no strong research on this specific method, but preference-based trades generally improve satisfaction.
-try: Each of you ranks the jobs from “don’t mind” to “really dread”, then start by giving each person their “don’t mind” jobs.
+try: Each of you ranks the jobs from “don’t mind” to “really dread,” then start by giving each person their “don’t mind” jobs.
 
 Instead of dividing chores by turns or tradition, each person rates how much they mind each job. Jobs one person doesn’t mind (and the other dreads) are easy wins.
 
-Dreaded-by-everyone jobs can rotate, be shared, be done together, or sometimes be outsourced. The time each job takes still matters, so check the overall split afterwards.
+Dreaded-by-everyone jobs can rotate, be shared, be done together, or sometimes be outsourced. The time each job takes still matters, so check the overall split afterward.
 
 Program: Put the ranking next to the Lemonade Stand hours, then give each job one owner in WP-03.
 

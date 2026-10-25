@@ -197,11 +197,11 @@
             if (f && navigator.canShare && navigator.canShare({ files: [f] })) d.files = [f];
             navigator.share(d).then(function () { say('Shared.'); }, function (err) {
               if (err && err.name === 'AbortError') return;
-              copyIt(d.text).then(function (ok) { say(ok ? 'Copied instead. Paste it wherever you like.' : 'Couldn’t share here. Try “Save image”.'); });
+              copyIt(d.text).then(function (ok) { say(ok ? 'Copied instead. Paste it wherever you like.' : 'Couldn’t share here. Try “Save image.”'); });
             });
             return;
           }
-          copyIt(text + (url ? '\n' + url : '')).then(function (ok) { say(ok ? 'Sharing isn’t available here, so the words and link are copied. Use “Save image” for the picture.' : 'Couldn’t share here. Try “Save image”.'); });
+          copyIt(text + (url ? '\n' + url : '')).then(function (ok) { say(ok ? 'Sharing isn’t available here, so the words and link are copied. Use “Save image” for the picture.' : 'Couldn’t share here. Try “Save image.”'); });
         } else if (k === 'print') {
           if (o.print) o.print(); else window.print();
         }
@@ -286,7 +286,7 @@
     // "Show more jobs"
     ['tidy', 'home', 'Tidying up'],
     ['floors', 'home', 'Vacuuming & floors', 'Vacuuming and floors'],
-    ['bins', 'home', ['Rubbish, bins & recycling', 'Trash & recycling']],
+    ['bins', 'home', ['Trash & recycling', 'Trash & recycling']],
     ['sheets', 'home', 'Changing the sheets'],
     ['folding', 'home', 'Folding & putting away', 'Folding and putting away'],
     ['mealplan', 'home', 'Meal planning & the grocery list', 'Meal planning'],
@@ -312,7 +312,7 @@
     ['parties', 'kids', 'Kids’ playdates & parties', 'Playdates and parties'],
     ['nightfeeds', 'baby', 'Night feeds'],
     ['oncall', 'baby', 'On call at night (the one listening out)', 'On call at night (listening out)'],
-    ['nappies', 'baby', 'Nappies & diapers', 'Nappies and diapers'],
+    ['nappies', 'baby', 'Diapers', 'Nappies and diapers'],
     ['bottles', 'baby', 'Bottles, pump parts & sterilizing', 'Bottles and sterilizing'],
     ['solobaby', 'baby', 'Looking after the baby on my own (while the other is at work)', 'Solo baby care (while the other is at work)'],
     ['meds', 'care', 'Medicines & refills', 'Medicines and refills'],
@@ -335,7 +335,7 @@
     ['calendar', 'think', 'Keeping the family calendar'],
     ['backup', 'think', 'Childcare & backup plans', 'Childcare and backup plans'],
     ['checking', 'think', 'Checking that things got done'],
-    ['trips', 'think', 'Trips & holiday planning', 'Planning trips and holidays'],
+    ['trips', 'think', 'Trips & vacation planning', 'Planning trips and holidays'],
     ['checkin', 'think', 'Checking in on how people are'],
     ['peace', 'think', 'Keeping the peace'],
     ['paid', 'work', 'Paid work'],
@@ -497,7 +497,7 @@
     box.innerHTML = '';
     if (q.askMe) {
       var ask = document.createElement('div'); ask.className = 'lq-askme'; ask.setAttribute('role', 'group'); ask.setAttribute('aria-labelledby', 'lq-askme-h');
-      ask.innerHTML = '<p id="lq-askme-h"><strong>' + esc('Which of you is using this?') + '</strong> ' + esc('These names were kept on this device. Tap your own, so the right one says “Your name”.') + '</p><div class="lq-pick">' +
+      ask.innerHTML = '<p id="lq-askme-h"><strong>' + esc('Which of you is using this?') + '</strong> ' + esc('These names were kept on this device. Tap your own, so the right one says “Your name.”') + '</p><div class="lq-pick">' +
         q.people.map(function (_, i) { return typed(i) ? '<button type="button" class="lq-w" style="--pc:' + COLORS[i] + '" data-lq-askme="' + i + '">' + esc(typed(i)) + '</button>' : ''; }).join('') + '</div>';
       box.appendChild(ask);
     }
@@ -756,7 +756,7 @@
     addJob(id, true); inp.value = '';
     var r = document.querySelector('#lq-list .lq-row[data-id="' + cssq(id) + '"] .lq-w');
     if (r) { goTo(r, 'center'); r.focus({ preventScroll: true }); }
-    status(('Added “' + label(id) + '”. Tap who mostly does it.'));
+    status(('Added “' + label(id) + '.” Tap who mostly does it.'));
   }
 
   /* ---------- "Show more jobs" ---------- */
@@ -1085,14 +1085,14 @@
             return '<button type="button" class="lq-w" data-x="s' + o[0] + '" data-lq-split="' + o[0] + '" aria-pressed="' + (q.split === o[0]) + '">' + esc(t) + '</button>';
           }).join('') + '</div><p class="lq-mini" id="lq-split-line" aria-live="polite"></p>';
       } else {
-        h += '<p class="lq-mini">' + esc('A split you choose (like 40/35/25) is in “Go deeper: count the hours”, below.') + '</p>';
+        h += '<p class="lq-mini">' + esc('A split you choose (like 40/35/25) is in “Go deeper: count the hours,” below.') + '</p>';
       }
       box.innerHTML = h;
       if (foc) { var f = box.querySelector('[data-x="' + foc + '"]'); if (f) f.focus({ preventScroll: true }); }
     }
     // the lines that change as you go (the boxes themselves stay put while you type)
     var wl = $('lq-weigh-line'), shW = homeShares();
-    if (wl) wl.textContent = shW ? ('Another way to count it: by how often each job comes round (a daily job about five times a weekly one, a monthly one a quarter) and how long it takes where you said, the home and thinking jobs come to about ' + q.people.map(function (_, i) { return nm(i) + ' ' + shW[i] + '%'; }).join(' · ') + (multiView() ? ', as ' + say(q.me) + ' see' + (typed(q.me) ? 's' : '') + ' it.' : ', as you see it.') + ' Change “How often” or “Roughly how long?” on any job above. The words in the picture still go by your taps.') : '';
+    if (wl) wl.textContent = shW ? ('Another way to count it: by how often each job comes around (a daily job about five times a weekly one, a monthly one a quarter) and how long it takes where you said, the home and thinking jobs come to about ' + q.people.map(function (_, i) { return nm(i) + ' ' + shW[i] + '%'; }).join(' · ') + (multiView() ? ', as ' + say(q.me) + ' see' + (typed(q.me) ? 's' : '') + ' it.' : ', as you see it.') + ' Change “How often” or “Roughly how long?” on any job above. The words in the picture still go by your taps.') : '';
     var sl = $('lq-split-line');
     if (sl) {
       var sh = homeShares(), want = q.split ? +q.split : 0, txt = '';
@@ -1148,7 +1148,7 @@
     if (nb) {
       var added = ['nightshift', 'recovery'].filter(function (id) { if (q.list.indexOf(id) >= 0) return false; q.list.push(id); return true; });
       save(); renderList(); renderMore(); renderResult();
-      status(added.length ? 'Added night shifts and the sleep after them, under “Work, nights & recovery”. They count as work, not rest. Tap who works nights; “Go deeper” counts the hours.' : 'Night shifts are already on the list.');
+      status(added.length ? 'Added night shifts and the sleep after them, under “Work, nights & recovery.” They count as work, not rest. Tap who works nights. “Go deeper” counts the hours.' : 'Night shifts are already on the list.');
       var r = document.querySelector('#lq-list .lq-row[data-id="nightshift"] .lq-w'); if (r) { goTo(r, 'center'); r.focus({ preventScroll: true }); }
     }
   });
@@ -1280,7 +1280,7 @@
       '<ul class="lq-cmp-next">' +
       (elder ? '<li><a href="/family-obligations.html#visits">' + esc('Caring for a parent at home? Supporting family: visits, long stays and elders' + ' →') + '</a><span>' + esc('Words for both of you, and one owner for each part of the care.') + '</span></li>' : '') +
       '<li><a href="/journeys.html#busy2">' + esc('For tonight: Busy? Five minutes together' + ' →') + '</a><span>' + esc('Small, low-energy things to do once the day is done.') + '</span></li>' +
-      '<li><a href="' + esc(wp01Link(diff)) + '">' + esc(('Next: log the ' + (n === 1 ? 'job' : n + ' jobs') + ' you see differently for a week') + ' →') + '</a><span>' + esc(('“Who did what”, with ' + (n === 1 ? 'that job' : 'those jobs') + ' already on it.')) + '</span></li>' +
+      '<li><a href="' + esc(wp01Link(diff)) + '">' + esc(('Next: log the ' + (n === 1 ? 'job' : n + ' jobs') + ' you see differently for a week') + ' →') + '</a><span>' + esc(('“Who did what,” with ' + (n === 1 ? 'that job' : 'those jobs') + ' already on it.')) + '</span></li>' +
       '<li><a href="/signal-translator.html?rel=partner" data-lq-st="' + esc(stText(o, diff)) + '">' + esc('Check how you’ll bring it up' + ' →') + '</a><span>' + esc('The Chat analyzer, with a first line ready to change.') + '</span></li>' +
       (babyOn() ? '<li><a href="/new-parent.html">' + esc('New baby: when you’re both running on empty' + ' →') + '</a><span>' + esc('Splitting the nights, and one clear ask at 3am.') + '</span></li>' : '') + '</ul>';
   }
@@ -1371,7 +1371,7 @@
     var box = $('lq-send'); if (!box) return;
     var n = tally(q.me).n, main = '', more = '';
     if (n && q.askMe) {
-      var h0 = '<p class="lq-mini">' + esc('To send it, first tap your own name under “Which of you is using this?”, above.') + '</p>';
+      var h0 = '<p class="lq-mini">' + esc('To send it, first tap your own name under “Which of you is using this?” above.') + '</p>';
       if (box.getAttribute('data-h') !== h0) { box.setAttribute('data-h', h0); box.innerHTML = h0; }
       return;
     }
@@ -1834,7 +1834,7 @@
     goTo(bar);
     if (msg) {
       msg.textContent = !jobs.length ? 'Your names are in. Add jobs from the task library below.'
-        : r && r.added ? 'Your names and ' + r.added + (r.added === 1 ? ' job are' : ' jobs are') + ' on the list below. Your own times are filled in where you said you do a job (half where you share it); change them to fit your week. Everyone else fills in their own side.'
+        : r && r.added ? 'Your names and ' + r.added + (r.added === 1 ? ' job are' : ' jobs are') + ' on the list below. Your own times are filled in where you said you do a job (half where you share it). Change them to fit your week. Everyone else fills in their own side.'
         : 'Those jobs are already on the list below.';
     }
     var b = $('back-quick'); if (b) b.focus({ preventScroll: true });
@@ -1863,7 +1863,7 @@
     else { q.list = q.list.filter(function (id) { return !isKidJob(id); }); delete q.baby; }
     save(); renderAll();
     if (quiet) return;
-    status(q.kids ? 'Added the kids’ jobs: bedtime, school or nursery runs, and keeping track of their stuff. A baby under 1? Tap “Baby under 1?” for the night feeds and bottles. More are under “Show more jobs”.'
+    status(q.kids ? 'Added the kids’ jobs: bedtime, school or daycare drop-offs, and keeping track of their stuff. A baby under 1? Tap “Baby under 1?” for the night feeds and bottles. More are under “Show more jobs.”'
       : 'The kids’ jobs are off the list.');
   }
   // "Baby under 1?": night feeds, on call at night, bottles and nappies go straight on the list, and school runs come
@@ -1882,7 +1882,7 @@
     }
     save(); renderAll();
     if (quiet) return;
-    status(on ? ('Added night feeds, on call at night, bottles and nappies.' + (tookSchool ? ' School or nursery runs came off: it’s under “Show more jobs” if you have older kids too.' : '') + ' The nights get their own bar.')
+    status(on ? ('Added night feeds, on call at night, bottles and diapers.' + (tookSchool ? ' School or daycare drop-offs came off: it’s under “Show more jobs” if you have older kids too.' : '') + ' The nights get their own bar.')
       : 'The baby jobs nobody has answered are off the list.');
   }
   function settleQuick() {
@@ -1899,13 +1899,13 @@
     var sel = document.querySelectorAll('#lq-names [data-lq-pt]'), last = sel[sel.length - 1];
     var inp = last && last.closest('.lq-name').querySelector('input');
     if (inp && !inp.value) inp.focus({ preventScroll: true }); else if (last) last.focus({ preventScroll: true });
-    status('Type the name of whoever lives here part of the time, then pick “Here every other weekend” (or half the time) under it. They get a smaller fair share; no hours needed.');
+    status('Type the name of whoever lives here part of the time, then pick “Here every other weekend” (or half the time) under it. They get a smaller fair share. No hours needed.');
   }
   // "/lemonade-stand.html#quick-baby" (from the New baby page): the quick look with the baby jobs already on
   function babyLink() {
     if (!q.baby) setBaby(true, true);
     try { history.replaceState(null, '', location.pathname + location.search + '#quick'); } catch (e) {}
-    status('The baby jobs are on the list: night feeds, on call at night, bottles and nappies. Tap who mostly does each one.');
+    status('The baby jobs are on the list: night feeds, on call at night, bottles and diapers. Tap who mostly does each one.');
   }
   // an element's own words, leaving anything added inside it (like a heading's "#" link) in place
   function ownText(el) { return el.nodeType === 1 && el.children.length && el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild : el; }

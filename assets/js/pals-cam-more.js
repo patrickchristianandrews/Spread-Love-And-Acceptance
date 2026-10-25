@@ -453,7 +453,7 @@
     front: function (g, A) { if (A.t < 4200) return; var m = A.head(1), n = A.R ? 5 : 8, gather = A.e(4200, 5400); for (var i = 0; i < n; i++) { var a = i / n * TAU + A.t / 1200, r = 24 + (i % 3) * 8, x = mix(A.cx + Math.sin(i * 2.3) * 100, m.x + 20 + Math.cos(a) * r, gather), y = mix(40 + i * 12, m.y + 10 + Math.sin(a) * r * 0.6, gather), gl = 0.5 + 0.5 * Math.sin(A.t / 500 + i); A.U.circle(g, x, y, 5, 'rgba(255,240,140,' + (0.2 * gl).toFixed(2) + ')'); A.U.circle(g, x, y, 1.6, 'rgba(255,248,180,' + (0.6 + 0.4 * gl).toFixed(2) + ')'); } } });
 
   add({ id: 'snailhelp', name: 'Snail crossing', kind: 'sweet', dur: 8200,
-    cap: 'A snail needs to cross the path. Sugarfoot gives it a lift', punch: [3000, 'Crossing guard Tidbit holds up the traffic (there is no traffic).'],
+    cap: 'A snail needs to cross the path. Sugarfoot gives it a ride', punch: [3000, 'Crossing guard Tidbit holds up the traffic (there is no traffic).'],
     at: function (A) { return [A.cx + 10, A.cx - A.span + 30]; },
     run: function (A, T, S) {
       var c = A.cx, sp = A.span;
@@ -475,7 +475,7 @@
     } });
 
   add({ id: 'grumblecloud', name: 'The grumbly cloud', kind: 'sweet', dur: 7800,
-    cap: 'A little grey cloud drifts in, grumbling to itself', punch: [4400, 'One Sugarfoot hug later: a happy pink cloud raining confetti.'],
+    cap: 'A little gray cloud drifts in, grumbling to itself', punch: [4400, 'One Sugarfoot hug later: a happy pink cloud raining confetti.'],
     run: function (A, T, S) {
       A.say(T, '?', 1200, 1900); if (A.in(1200, 2200)) T.x = A.x0 - 8 * A.e(1200, 1600);
       A.say(S, 'Aww.', 2000, 2800);
@@ -1002,7 +1002,7 @@
     back: function (g, A) { var U = A.U, c = A.cx, y = A.G + 2, sw = Math.sin(A.t / 900) * 6 * A.e(2400, 3400); [c - 84, c + 84].forEach(function (x) { U.rr(g, x - 3, y - 70, 6, 72, 2, '#8A6340'); }); g.strokeStyle = '#F7A8C2'; g.lineWidth = 4; g.beginPath(); g.moveTo(c - 82, y - 60); g.quadraticCurveTo(c + sw, y - (A.t > 2400 && A.t < 7000 ? 0 : 16), c + 82, y - 60); g.stroke(); g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 1; g.stroke(); } });
 
   add({ id: 'umbrelladrop', name: 'Cloud elevator', kind: 'surprising', time: 'day', dur: 8800,
-    cap: 'A friendly cloud floats down and gives them a lift. Up, up…', punch: [3400, 'Umbrellas open! A slow, swaying float back down.'],
+    cap: 'A friendly cloud floats down and gives them a ride. Up, up…', punch: [3400, 'Umbrellas open! A slow, swaying float back down.'],
     run: function (A, T, S) {
       var up = A.e(1400, 3000), down = A.e(3400, 7000), h = 150 * up * (1 - down);
       if (A.t < 1400) { A.hop(T, 900, 500, 30); A.hop(S, 1100, 500, 30); if (A.t > 1400) {} }

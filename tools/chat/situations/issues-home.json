@@ -18,7 +18,7 @@
       ],
       "reflect": "It sounds like you’re carrying a lot, and much of it is the kind of work nobody sees: remembering, planning, noticing.",
       "reflect_self": "It sounds like you’re carrying a lot, and much of it is the kind of work nobody sees: remembering, planning, noticing.",
-      "going": "This is Pillar I, See the whole load. Invisible work (the remembering, the planning, the noticing) doesn’t look like “doing the dishes”, so it rarely gets counted, by {them} or even by you. Often it isn’t that {they} don’t care. They may simply not see it, because you catch it first. And the job quietly becomes yours because you notice it first (that’s Pillar V, the quiet pull of defaults).",
+      "going": "This is Pillar I, See the whole load. Invisible work (the remembering, the planning, the noticing) doesn’t look like “doing the dishes,” so it rarely gets counted, by {them} or even by you. Often it isn’t that {they} don’t care. They may simply not see it, because you catch it first. And the job quietly becomes yours because you notice it first (that’s Pillar V, the quiet pull of defaults).",
       "steps": [
         "For one ordinary week, write down everything you do, including the thinking jobs: remembering the dentist, noticing the milk is low, planning the weekend.",
         "Ask {them} to log their own week too, separately, without comparing yet.",
@@ -37,7 +37,7 @@
         ],
         "coworker": [
           "A lot of the coordinating on this project is invisible, like tracking deadlines and chasing updates. Could we list who owns each of those, so it isn’t all defaulting to me?",
-          "Can we add ‘tracking the follow-ups’ as its own task with a named owner? It’s taking more of my time than it looks like."
+          "Can we add “tracking the follow-ups” as its own task with a named owner? It’s taking more of my time than it looks like."
         ],
         "roommate": [
           "Can we list everything it takes to keep the place running this week, even the small stuff like buying soap, and see how it splits? I think a lot of it has drifted to me without anyone meaning it to."
@@ -67,7 +67,7 @@
         "the mental load",
         "What is the mental load?"
       ],
-      "ex": "Sam felt they did “everything”. After a week of logging, it turned out Sam did about 60% of the hours, but nearly all of the remembering: birthdays, bills, the vet. They moved “notice when we’re low on groceries” to Alex as a whole job, noticing included. The hours barely changed, but Sam’s head felt much lighter."
+      "ex": "Sam felt they did “everything.” After a week of logging, it turned out Sam did about 60% of the hours, but nearly all of the remembering: birthdays, bills, the vet. They moved “notice when we’re low on groceries” to Alex as a whole job, noticing included. The hours barely changed, but Sam’s head felt much lighter."
     },
     "fairness": {
       "label": "sharing chores fairly",
@@ -184,20 +184,20 @@
       "reflect": "Living with a different idea of “clean enough” can be really grating, especially when you’re the one who notices first.",
       "going": "This is mostly Pillar V, Notice the quiet incentives. People honestly notice mess at different levels. Whoever notices first ends up cleaning first, and over time that becomes their job without anyone agreeing to it. {Them} may simply not see the mess you see, which isn’t the same as not caring.",
       "steps": [
-        "Agree on a “good enough” standard for shared spaces, in plain words, like “sink empty by bedtime”.",
-        "Give each shared space or job one owner, instead of “whoever minds most”.",
+        "Agree on a “good enough” standard for shared spaces, in plain words, like “sink empty by bedtime.”",
+        "Give each shared space or job one owner, instead of “whoever minds most.”",
         "Keep your own space to your own standard, and let the shared standard be a middle one you both can live with."
       ],
       "scripts": {
         "default": [
-          "I think we notice mess at different levels, and I end up cleaning because I see it first. Could we agree what ‘clean enough’ means for the kitchen, and who owns it?",
+          "I think we notice mess at different levels, and I end up cleaning because I see it first. Could we agree what “clean enough” means for the kitchen, and who owns it?",
           "Could we pick one clear rule for shared spaces, like dishes done before bed? It would save us both a lot of back and forth."
         ],
         "kid": [
-          "Your room is your space, within reason. The living room is shared, so let’s agree what ‘tidy enough’ looks like there, and one job that’s yours."
+          "Your room is your space, within reason. The living room is shared, so let’s agree what “tidy enough” looks like there, and one job that’s yours."
         ],
         "roommate": [
-          "Can we agree on a simple standard for the kitchen and bathroom, and a rota for who owns each week? I’ll write it up."
+          "Can we agree on a simple standard for the kitchen and bathroom, and a schedule for who owns each week? I’ll write it up."
         ]
       },
       "path": [
@@ -258,7 +258,7 @@
         "money styles and limits",
         "What are money styles?"
       ],
-      "ex": "Three housemates kept arguing about who owed what. They listed every shared cost on the Lemonade Stand’s money side, agreed everything was due by the 1st, and set a reminder. The numbers did the talking, and the arguments mostly stopped."
+      "ex": "Three roommates kept arguing about who owed what. They listed every shared cost on the Lemonade Stand’s money side, agreed everything was due by the 1st, and set a reminder. The numbers did the talking, and the arguments mostly stopped."
     },
     "reliability": {
       "label": "follow-through and flaking",
@@ -275,7 +275,7 @@
       "reflect": "It’s frustrating to count on someone and then have plans fall through, especially when it keeps happening.",
       "going": "This touches Pillar II (fix the setup) and Pillar III (read your state). Follow-through problems are very often about setup and capacity rather than caring: overloaded calendars, no written plan, time blindness, or a different sense of how firm a plan is. That said, your frustration is real, and it’s fair to ask for something steadier.",
       "steps": [
-        "Pick the one pattern that matters most (for example, last-minute cancelling), rather than listing everything.",
+        "Pick the one pattern that matters most (for example, last-minute canceling), rather than listing everything.",
         "Ask for a specific, small change with a time attached, like a heads-up by noon.",
         "Make the plan visible: a shared calendar entry, a reminder, or a quick written confirmation the day before."
       ],
@@ -307,7 +307,7 @@
         "why plans slip",
         "What is the planning fallacy?"
       ],
-      "ex": "A friend kept cancelling last minute. Instead of stewing, Mia said, “I miss you, and cancellations are hard for me. Could we plan a little lighter, like a walk, so it’s easier to keep?” Shorter plans turned out to be easier to keep for both of them."
+      "ex": "A friend kept canceling last minute. Instead of stewing, Mia said, “I miss you, and cancellations are hard for me. Could we plan a little lighter, like a walk, so it’s easier to keep?” Shorter plans turned out to be easier to keep for both of them."
     },
     "appreciation": {
       "label": "feeling taken for granted",
@@ -331,7 +331,7 @@
       "scripts": {
         "default": [
           "It would mean a lot to me if you noticed some of the behind-the-scenes stuff I do, like sorting the bills. A quick thanks goes a long way for me.",
-          "Thank you for taking the bins out today. It meant I could get to bed earlier."
+          "Thank you for taking the trash out today. It meant I could get to bed earlier."
         ],
         "coworker": [
           "I’d appreciate a quick shout-out in the team update when I’ve done the coordinating. It helps people know who to come to.",
@@ -408,7 +408,7 @@
         "why groups drop the ball",
         "What is diffusion of responsibility?"
       ],
-      "ex": "Three roommates argued about the bins for months. At one 20-minute house meeting they listed 14 jobs on the Lemonade Stand, and each took ownership of a few. The bins now have one owner, a backup for holidays, and nobody has had to ask since."
+      "ex": "Three roommates argued about the trash for months. At one 20-minute house meeting they listed 14 jobs on the Lemonade Stand, and each took ownership of a few. The trash now has one owner, a backup for vacations, and nobody has had to ask since."
     },
     "handoffs": {
       "label": "tense handoffs between homes",
@@ -484,7 +484,7 @@
       "steps": [
         "Check your own battery today: the five questions in How much are you carrying? (WP-02) take a minute. If it’s high, that’s a reason to ask for help, not to push harder.",
         "List the care jobs and give each one a named owner, including other family, friends or services where you can.",
-        "Ask for one specific kind of help, with a time, rather than “more help”."
+        "Ask for one specific kind of help, with a time, rather than “more help.”"
       ],
       "scripts": {
         "default": [
@@ -530,19 +530,19 @@
       "going": "This is Pillar II (fix the setup, not the person). Memory is a poor place to keep chores, especially on busy or tiring days. The fix usually lives outside your head: a cue at the right moment, one clear owner, and a finish line you can see. It also helps to tell {them} what’s going on, so a slip doesn’t get read as not caring.",
       "going_self": "This is Pillar II (fix the setup, not the person). Memory is a poor place to keep chores, especially on busy or tiring days. The fix usually lives outside your head: a cue at the right moment, one clear owner, and a finish line you can see.",
       "steps": [
-        "Pick the one task that slips most, and tie it to something that already happens: the bins go out when the dishwasher goes on.",
+        "Pick the one task that slips most, and tie it to something that already happens: the trash goes out when the dishwasher goes on.",
         "Put the reminder where the task is, not in your head: a note on the door, a phone alarm named after the task, or a shared list.",
         "Tell {them} it’s a memory slip, not a priority slip, and ask which kind of reminder would feel okay."
       ],
       "steps_self": [
-        "Pick the one task that slips most, and tie it to something that already happens: the bins go out when the dishwasher goes on.",
+        "Pick the one task that slips most, and tie it to something that already happens: the trash goes out when the dishwasher goes on.",
         "Put the reminder where the task is, not in your head: a note on the door, a phone alarm named after the task, or a shared list.",
         "Go easy on yourself about the slips. Shame makes starting harder, not easier."
       ],
       "scripts": {
         "default": [
-          "I’m sorry I forgot the bins. That’s on me, and it’s not that I don’t care. Could we set up a reminder that works for both of us?",
-          "Would it be okay to send me a quick text on Tuesday nights about the bins? It really helps me."
+          "I’m sorry I forgot the trash. That’s on me, and it’s not that I don’t care. Could we set up a reminder that works for both of us?",
+          "Would it be okay to send me a quick text on Tuesday nights about the trash? It really helps me."
         ]
       },
       "reflect_other": "It’s tiring when things you’re counting on keep getting forgotten, especially when you end up doing them yourself.",
@@ -553,7 +553,7 @@
         "Give that task one clear owner, including the remembering part, and look at it again in two weeks."
       ],
       "scripts_other": [
-        "The bins got missed again, and I ended up doing them. Could we find a reminder that works for you, like an alarm on Tuesday nights?",
+        "The trash got missed again, and I ended up doing them. Could we find a reminder that works for you, like an alarm on Tuesday nights?",
         "I know it’s not that you don’t care. What would help you remember the laundry, without me having to nag?"
       ],
       "path": [

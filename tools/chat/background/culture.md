@@ -6,7 +6,7 @@ These are broad patterns. Every person is an individual, so use them as question
 aka: high context; low context; implicit communication; explicit communication
 see: Direct is not rude; Saving face
 go: /library/conflict.html#culture-and-conflict | Culture and conflict (Library)
-evidence: Anthropologist Edward T. Hall described high- and low-context cultures (Beyond Culture, 1976). It’s a useful lens but has been criticized as too broad; individuals vary widely within any culture.
+evidence: Anthropologist Edward T. Hall described high- and low-context cultures (Beyond Culture, 1976). It’s a useful lens but has been criticized as too broad. Individuals vary widely within any culture.
 try: “In my family, if you didn’t say no, you meant yes. In yours, silence might mean no. Let’s check.”
 
 In low-context communication, meaning is mostly in the words: say it plainly. In high-context communication, much of the meaning is in context, tone and what’s left unsaid.
@@ -35,7 +35,7 @@ go: /library/conflict.html#culture-and-conflict | Culture and conflict (Library)
 evidence: Geert Hofstede and others described differences between more individualist and more collectivist cultures. The framework is influential but criticized for overgeneralizing.
 try: “In my family, decisions were made together with the grandparents. How was it in yours?”
 
-Some cultures emphasize personal choice and independence; others emphasize family and group harmony. These differences shape expectations about decisions, obligations to family, and how conflict is handled.
+Some cultures emphasize personal choice and independence. Others emphasize family and group harmony. These differences shape expectations about decisions, obligations to family, and how conflict is handled.
 
 In mixed-culture relationships, neither approach is wrong. Naming expectations helps.
 
@@ -48,7 +48,7 @@ go: /tools/frequency-calibration.html | Frequency Calibration
 evidence: Edward T. Hall described “monochronic” (one thing at a time, schedules) and “polychronic” (many things at once, flexible timing) orientations. Individuals vary within cultures.
 try: “Is 7 o’clock ‘7 sharp’ or ‘around 7’ for you?”
 
-People differ in how they treat time: some see schedules as firm and lateness as disrespectful; others see time as flexible and relationships as the priority.
+People differ in how they treat time: some see schedules as firm and lateness as disrespectful. Others see time as flexible and relationships as the priority.
 
 Clarifying what a time means (“sharp” or “roughly”) avoids a lot of friction.
 
@@ -91,7 +91,7 @@ Expectations about hosting (how often, how much food, how long guests stay, whet
 
 Talking about them before big gatherings saves misunderstandings.
 
-Program: Hosting creates invisible work; the Lemonade Stand can make it visible.
+Program: Hosting creates invisible work. The Lemonade Stand can make it visible.
 
 ## Ways of showing care
 aka: showing love differently; cultural expressions of care; acts of care
@@ -123,8 +123,8 @@ Program: Open questions (in the communication notes) are a good place to start.
 aka: generation gap; generational differences; older and younger
 see: Boundaries with parents as an adult; Texting norms that prevent fights
 go: /relationships-in-depth.html#family | Where families start
-evidence: Research on generational differences is mixed; many supposed differences are smaller than stereotypes suggest. Life stage often matters as much as generation.
-try: “You call; I text. Could we do a quick call on Sundays and texts in between?”
+evidence: Research on generational differences is mixed. Many supposed differences are smaller than stereotypes suggest. Life stage often matters as much as generation.
+try: “You call. I text. Could we do a quick call on Sundays and texts in between?”
 
 Different generations may have different norms about phones, work, gender roles, directness and privacy. Stereotypes are often exaggerated, but real differences in habits can cause friction.
 

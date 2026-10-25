@@ -60,7 +60,7 @@
   var DZ_KEYS = Object.keys(DISGUISES);
 
   var WORDS = {
-    start: ['Hi! One idea at a time.', 'Take your time, there’s no rush.', 'So glad you’re here.', 'We’ll go slowly together.', 'Oh hello! Nobody recognises me in this.'],
+    start: ['Hi! One idea at a time.', 'Take your time, there’s no rush.', 'So glad you’re here.', 'We’ll go slowly together.', 'Oh hello! Nobody recognizes me in this.'],
     mid: ['You’re doing beautifully.', 'Proud of you for reading this.', 'Little steps still count.', 'Breathe out, then keep going.', 'This part is worth it.',
       'You’re getting the hang of it.', 'Nice and steady.', 'Curious is a great way to be.', 'A small break is fine too.', 'You and your people are worth this.',
       'Tap a water drop if a word feels deep.', 'Look how far you’ve come!', 'I’m not a character in a disguise. Who said that?'],

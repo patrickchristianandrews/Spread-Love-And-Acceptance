@@ -150,7 +150,7 @@
     h += '<section class="tg-b"><h3 class="tg-h">What a useful result looks like</h3><p>' + t.result + '</p>' +
       '<p class="tg-ex" hidden></p></section>';
     if (t.next && t.next.length) {
-      h += '<section class="tg-b"><h3 class="tg-h">Afterwards</h3><ol class="tg-next">' + t.next.slice(0, 3).map(function (x) {
+      h += '<section class="tg-b"><h3 class="tg-h">Afterward</h3><ol class="tg-next">' + t.next.slice(0, 3).map(function (x) {
         return '<li><a href="' + esc(x[0]) + '">' + esc(x[1]) + '</a>' + (x[2] ? ' <span class="tg-soft">' + esc(x[2]) + '</span>' : '') + '</li>';
       }).join('') + '</ol></section>';
     }

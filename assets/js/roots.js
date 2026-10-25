@@ -7,8 +7,8 @@
 (function () {
   'use strict';
   var KEY_TAB = 'tol-roots-tab', KEY_DEVICE = 'tol-roots-v1';
-  var HEAVY = 'If a memory feels heavy, it’s okay to stop here. Talking it through with a trained counsellor can help, on your own or with someone you trust.';
-  var NOBLAME = 'Most families were doing their best with what they had; noticing where a rule came from isn’t blaming anyone. If that doesn’t fit your story, that’s okay too.';
+  var HEAVY = 'If a memory feels heavy, it’s okay to stop here. Talking it through with a trained counselor can help, on your own or with someone you trust.';
+  var NOBLAME = 'Most families were doing their best with what they had. Noticing where a rule came from isn’t blaming anyone. If that doesn’t fit your story, that’s okay too.';
 
   /* ---------------------------------------------------------------- the life stages */
   var STAGES = [
@@ -151,8 +151,8 @@
       cost: 'Now it can shrink your space, make small things feel like your fault, and leave people unsure when you really mean it.',
       notice: '“Sorry” comes out before you’ve had a thought, often with a quick tight feeling in your chest or a smile you don’t feel.',
       tryit: ['Swap one “sorry” a day for “thank you”: “Thanks for waiting” instead of “Sorry I’m late.”'],
-      say: 'I’m not going to apologise for asking. I’d just like to know.',
-      rule: ['If something’s wrong, it’s probably my fault.', 'I apologise when I’ve done something, not to make a moment smaller.'],
+      say: 'I’m not going to apologize for asking. I’d just like to know.',
+      rule: ['If something’s wrong, it’s probably my fault.', 'I apologize when I’ve done something, not to make a moment smaller.'],
       links: ['signal', 'rulebook', 'lenscheck'] },
     { id: 'rest', label: 'I can’t rest until everything’s done',
       roots: 'r:responsible r:helper r:achiever r:carer u:work u:rest u:notice u:best p:helpful p:results t:rest c:money c:ill c:pressure c:away m:busy',
@@ -200,7 +200,7 @@
       protect: 'If the grown-ups were stretched thin, needing very little may have been a way to help, or to keep from being turned down.',
       cost: 'Now you may carry too much alone, and the people close to you don’t get the chance to show up for you.',
       notice: '“I’ll just do it myself” arrives before you’ve even asked, or a hot feeling of being a bother.',
-      tryit: ['Ask for one small, specific thing this week, like “Can you grab milk on the way home?”, and notice what happens.'],
+      tryit: ['Ask for one small, specific thing this week, like “Can you grab milk on the way home?” and notice what happens.'],
       say: 'I could use a hand with this. Would you take the dishes tonight?',
       rule: ['Needing help makes me a burden.', 'Asking clearly is fair. People who care about me can say yes or no.'],
       links: ['signal', 'wiringcard', 'rulebook'] },
@@ -209,7 +209,7 @@
       typical: 'It often grows where mistakes brought trouble, or where you were compared, picked on or under pressure.',
       protect: 'If mistakes were met with trouble, or you were compared or picked on, shielding yourself fast may have kept you from being hurt.',
       cost: 'Now even kind feedback can land like an attack, and small notes turn into big arguments.',
-      notice: 'Heat in your face, a fast “but…”, or the urge to explain before they’ve finished.',
+      notice: 'Heat in your face, a fast “but…,” or the urge to explain before they’ve finished.',
       tryit: ['Next time you get feedback, say “Let me think about that,” and answer an hour later.', 'Run the words through the Chat analyzer to hear them without the old sting.'],
       say: 'Part of me wants to defend myself. Give me a minute so I can actually hear you.',
       rule: ['Mistakes mean I’m bad.', 'I can own a mistake without being one.'],
@@ -229,7 +229,7 @@
       typical: 'It often grows where a lot changed early, or changes arrived without warning.',
       protect: 'If a lot changed when you were young, holding on to what stayed the same may have been how you felt safe.',
       cost: 'Now new things can feel risky even when they’re good for you, and you may miss chances or feel stuck.',
-      notice: 'Dread when someone says “What if we…?”, or finding reasons to wait before you’ve thought it through.',
+      notice: 'Dread when someone says “What if we…?” or finding reasons to wait before you’ve thought it through.',
       tryit: ['Try one tiny change this week, on purpose and with an end date: a new route, a new recipe.', 'Plan the calm part first with the Calm-Down Kit.'],
       say: 'I’m slow with changes. Can we try it for two weeks and then look again?',
       rule: ['Change means losing something.', 'I can go slowly with change and still say yes to it.'],
@@ -239,7 +239,7 @@
       typical: 'It often grows where you did a lot that wasn’t seen, or where fairness was hard to come by.',
       protect: 'If you did a lot without it being seen, keeping count may have been how you made sure you weren’t forgotten.',
       cost: 'Now a quiet tally can turn into resentment the other person doesn’t even know about.',
-      notice: 'The thought “I always…” or “they never…”, and a tight jaw while you do a job.',
+      notice: 'The thought “I always…” or “they never…,” and a tight jaw while you do a job.',
       tryit: ['Put the count on paper instead of in your head: the Lemonade Stand shows who does what, without blame.', 'Swap rulebooks on a calm day about “whoever notices, does it.”'],
       say: 'I’ve been keeping a quiet count, and that isn’t fair to either of us. Can we split this out loud?',
       rule: ['Whoever notices, does it.', 'Each job gets one owner, by choice.'],
@@ -547,7 +547,7 @@
       return h + '</div></div>';
     }
     h = '<h3 class="rw-h" tabindex="-1">Hard times, in general: how it may show up now</h3>' +
-      '<p>These are signs to notice, not a diagnosis. Many people recognise one or two.</p>' +
+      '<p>These are signs to notice, not a diagnosis. Many people recognize one or two.</p>' +
       '<p class="rw-heavy">' + HEAVY + '</p>';
     SIGNS.forEach(function (g) { h += answerGroup(g.id, g.q); });
     return h;
@@ -557,7 +557,7 @@
     var who = hYes('who'), helped = S.h.helped.map(function (id) { return find(HELPED, id)[1].toLowerCase(); });
     if (!felt.length && !signs.length && !who && !helped.length) return '';
     var h = '<div class="rw-card"><h4>Hard times, and how they may show up now</h4>';
-    if (signs.length >= 3) h += '<p class="rw-heavy">These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counsellor, on your own or with someone you trust. You’re not alone in this.</p>';
+    if (signs.length >= 3) h += '<p class="rw-heavy">These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counselor, on your own or with someone you trust. You’re not alone in this.</p>';
     if (who || helped.length) {
       h += '<h5>What helped you get through</h5>';
       if (who) h += '<p>You had someone you could go to. This is part of how you got through, and steady people are still worth leaning on.</p>';
@@ -583,7 +583,7 @@
     if (helped.length) out.push('- ' + cap(and(helped)) + ' helped me get through.');
     felt.forEach(function (f) { out.push('- ' + cap(f.phrase) + ': ' + f.grow + ' ' + f.then + ' ' + f.now + ' Notice: ' + f.notice + ' Try: ' + f.tryit); });
     signs.forEach(function (g) { out.push('- ' + g.name + ': ' + g.text + ' Try: ' + g.tryit); });
-    if (signs.length >= 3) out.push('These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counsellor, on your own or with someone you trust.');
+    if (signs.length >= 3) out.push('These are common after hard times, and they make sense. Many people find it helps to talk them through with a trained counselor, on your own or with someone you trust.');
     out.push('');
     return out;
   }
@@ -601,7 +601,7 @@
       '<h5>How to notice it in the moment</h5><p>' + esc(t.notice) + '</p>' +
       '<h5>Try this week</h5><ul>' + t.tryit.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') +
       '<li>Words to try: <span class="rw-say">“' + esc(t.say) + '”</span></li>' +
-      '<li>A new rule you might choose: instead of “' + esc(t.rule[0].replace(/\.$/, '')) + '”, try <strong>“' + esc(t.rule[1]) + '”</strong> ' +
+      '<li>A new rule you might choose: instead of “' + esc(t.rule[0].replace(/\.$/, '')) + ',” try <strong>“' + esc(t.rule[1]) + '”</strong> ' +
       '<button type="button" class="rw-btn is-link" data-act="userule" data-old="' + esc(t.rule[0]) + '" data-new="' + esc(t.rule[1]) + '">Use this in My new rules</button></li></ul>' +
       linkHtml(t.links) + '</div>';
     return h;
@@ -704,7 +704,7 @@
       out.push('How to notice it: ' + t.notice);
       out.push('Try this week:'); t.tryit.forEach(function (x) { out.push('- ' + x); });
       out.push('- Words to try: “' + t.say + '”');
-      out.push('- A new rule: instead of “' + t.rule[0].replace(/\.$/, '') + '”, “' + t.rule[1] + '”');
+      out.push('- A new rule: instead of “' + t.rule[0].replace(/\.$/, '') + ',” “' + t.rule[1] + '”');
       out.push('');
     });
     if (S.traits.indexOf('other') > -1 && S.other.trim()) {
@@ -725,7 +725,7 @@
       out.push('');
     }
     out.push(NOBLAME);
-    out.push('From “Where your lens came from”, Spread Love & Acceptance. This is self-reflection, not therapy or a diagnosis.');
+    out.push('From “Where your lens came from,” Spread Love & Acceptance. This is self-reflection, not therapy or a diagnosis.');
     return out.join('\n');
   }
   function printIt() {

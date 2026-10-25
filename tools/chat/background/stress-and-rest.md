@@ -22,7 +22,7 @@ go: /library/life.html#work-life | Work and home (Library)
 evidence: Research on work-family spillover shows stress from one area often carries into another, including into how partners treat each other at home.
 try: “Rough day at work. Give me fifteen minutes to reset, and then I’m all yours.”
 
-Stress from one part of life often leaks into another. A hard day at work can come out as snapping at home; a tense morning at home can color the whole workday.
+Stress from one part of life often leaks into another. A hard day at work can come out as snapping at home. A tense morning at home can color the whole workday.
 
 Noticing spillover (“this isn’t about you, it’s the day I had”) helps protect the people around you, and helps them not take it personally.
 
@@ -50,7 +50,7 @@ try: Pick one thing tonight that is truly restful for you: a walk, a game, a bat
 
 Rest isn’t just stopping. Real recovery tends to come from switching off mentally, relaxing your body, getting absorbed in something different, and having some say over your own time.
 
-What recovers you is personal. Some people recharge alone, others with company; some with quiet, others with movement.
+What recovers you is personal. Some people recharge alone, others with company. Some with quiet, others with movement.
 
 Program: Frequency Calibration includes rest and recovery as one of the five rhythms. The Night Garden and Pause & Play are made for small recovery moments.
 
@@ -130,7 +130,7 @@ Moving your body, even briefly, can help shift a tense or flat state: a short wa
 
 A slow walk is one of the calming steps suggested in the Calm-Down Kit for heated moments.
 
-Program: The Calm-Down Kit (WP-11) asks you to pick two calming steps in advance; movement is a common choice.
+Program: The Calm-Down Kit (WP-11) asks you to pick two calming steps in advance. Movement is a common choice.
 
 ## Walk and talk for hard topics
 aka: walking meeting; talk while walking; walk and talk
@@ -165,7 +165,7 @@ go: /quick-checks.html#today | Today’s Weather
 evidence: A practical coaching exercise, not a research tool. It helps people notice patterns they might miss.
 try: For one week, mark each activity with a plus (gave energy) or a minus (drained it). Look for patterns.
 
-An energy audit is a simple look at what fills your battery and what drains it. Some tasks are draining for everyone; others drain some people and energize others.
+An energy audit is a simple look at what fills your battery and what drains it. Some tasks are draining for everyone. Others drain some people and energize others.
 
 Seeing your own pattern helps you plan: put draining tasks when you’re fresher, protect recovery time, and swap jobs with people who mind them less.
 

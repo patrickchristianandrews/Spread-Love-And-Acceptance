@@ -159,7 +159,7 @@
     } });
 
   add({ id: 'tailchase', name: 'Tail chase', kind: 'silly', dur: 6800,
-    cap: 'Tidbit chases her own tail… round and round', punch: [3800, 'Got it! Now the whole garden is spinning.'],
+    cap: 'Tidbit chases her own tail… around and around', punch: [3800, 'Got it! Now the whole garden is spinning.'],
     run: function (A, T, S) {
       A.say(T, '?', 100, 700); T.tilt = A.t < 600 ? 0.3 : 0;
       if (A.t > 600 && A.t < 3800) { var p = eio(A.p(600, 3800)); T.face = Math.cos(TAU * 3 * p); T.x = A.x0 + Math.sin(TAU * 3 * p) * 8; T.pose = 'run'; T.ph = A.t / 40; T.wag = 4; }

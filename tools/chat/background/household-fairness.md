@@ -3,10 +3,10 @@
 These add practical detail to the Library’s fairness entries.
 
 ## Chore charts that work
-aka: chore chart; chore rota; chore schedule; cleaning schedule
+aka: chore chart; chore schedule; chore schedule; cleaning schedule
 see: Rotation or specialization; Negotiating household jobs by preference
 go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
-evidence: Practical advice drawn from household and parenting guidance. There’s little formal research on specific chart designs; clear ownership and visibility are the common threads.
+evidence: Practical advice drawn from household and parenting guidance. There’s little formal research on specific chart designs. Clear ownership and visibility are the common threads.
 try: One sheet on the fridge: each job, how often, who owns it, and what “done” looks like.
 
 The chore charts that last tend to share a few features: every job has a named owner, the list is visible, “done” is clearly defined, and the chart is reviewed occasionally rather than rewritten weekly.
@@ -19,7 +19,7 @@ Program: WP-03 is a chore chart with two names per job: who does it and who keep
 aka: rotate chores; take turns; specialize; fixed jobs
 see: Chore charts that work; Negotiating household jobs by preference
 go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
-evidence: Both approaches are common. Specialization lets people get good at a job and avoids re-deciding; rotation spreads dreaded jobs. No single approach is best for every household.
+evidence: Both approaches are common. Specialization lets people get good at a job and avoids re-deciding. Rotation spreads dreaded jobs. No single approach is best for every household.
 try: Fixed owners for most jobs, and a rotation just for the two jobs everyone dislikes.
 
 Some households give each job a permanent owner (specialization). Others rotate jobs each week. Fixed owners reduce reminders and let each person build a routine. Rotation shares the unpleasant jobs and means everyone knows how to do everything.
@@ -32,20 +32,20 @@ Program: WP-03 works with either. If you rotate, write down whose week it is, so
 aka: conception planning execution; plan do follow through; whole job ownership; CPE
 see: The Fair Play card idea; Kinkeeping
 go: /library/fairness.html#mental-load | The mental load (Library)
-evidence: Eve Rodsky’s book Fair Play (2019) describes owning a task’s “conception, planning and execution”. It’s a practical framework rather than a research finding, but it matches research on the mental load.
+evidence: Eve Rodsky’s book Fair Play (2019) describes owning a task’s “conception, planning and execution.” It’s a practical framework rather than a research finding, but it matches research on the mental load.
 try: Owning “school lunches” means noticing supplies are low, planning the week, shopping, and packing, not just packing when asked.
 
 Many jobs have hidden parts: noticing it needs doing, planning it, and then doing it. When one person does the noticing and planning and hands out the doing, the load looks shared but isn’t.
 
 Handing over a whole job, from noticing to finishing, is often what actually lightens the load.
 
-Program: WP-03 asks for a Responsible and an Accountable name; for jobs like this, make sure the owner owns the noticing too.
+Program: WP-03 asks for a Responsible and an Accountable name. For jobs like this, make sure the owner owns the noticing too.
 
 ## The Fair Play card idea
 aka: Fair Play; Fair Play cards; Eve Rodsky
 see: Planning, doing and following through; Chore charts that work
 go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
-evidence: Fair Play is a popular book and card system by Eve Rodsky (2019). It’s practical guidance, not a research study. Many households find the ideas useful; others find the system too detailed.
+evidence: Fair Play is a popular book and card system by Eve Rodsky (2019). It’s practical guidance, not a research study. Many households find the ideas useful. Others find the system too detailed.
 try: Write each household job on a card, deal them out based on preference and capacity, and revisit the deal every few months.
 
 Fair Play turns household jobs into cards that partners “deal” between them, with each card including the full job from noticing to finishing. The idea is to make invisible work visible and to hand over whole jobs.
@@ -71,7 +71,7 @@ Program: WP-01 logs invisible jobs like this. The Library’s invisible work ent
 aka: holiday stress; holiday planning load; Christmas load
 see: Kinkeeping; Planning, doing and following through
 go: /library/life.html#holidays | Holidays (Library)
-evidence: Research on holiday stress and household labor suggests holiday preparation often falls unevenly. Specific figures vary by study.
+evidence: Research on vacation stress and household labor suggests holiday preparation often falls unevenly. Specific figures vary by study.
 try: Six weeks before: list every holiday job (gifts, cards, food, travel), give each one an owner, and put it in the calendar.
 
 Holidays bring a burst of extra work: gifts, cards, food, travel, hosting, family coordination. Much of it is planning and remembering, and it often falls to one person by default.
@@ -124,7 +124,7 @@ aka: redoing their work; my way or else; correcting how they do it
 see: Lowering standards on purpose; IKEA effect
 go: /library/fairness.html#gatekeeping | Gatekeeping (Library)
 evidence: Research on “maternal gatekeeping” and household labor suggests criticism of how others do tasks can discourage their involvement. It applies to anyone who guards a job.
-try: If it’s their job, let it be done their way, as long as it meets the agreed “done”.
+try: If it’s their job, let it be done their way, as long as it meets the agreed “done.”
 
 When one person redoes or criticizes how someone else does a job, the other person often stops trying. Then the first person ends up doing it all, and resents it.
 
@@ -152,7 +152,7 @@ go: /library/fairness.html#anticipation-and-noticing | Noticing and anticipating
 evidence: Related research on attention and household labor suggests the person who notices tasks first often ends up doing them. The concept is well discussed, if not precisely measured.
 try: Ask: “Which jobs do I do only because I notice them first?” Those are the ones to hand over as whole jobs.
 
-A noticing threshold is how much needs doing before you notice it. If yours is lower, you’ll spot the full bin sooner, and do it sooner, again and again.
+A noticing threshold is how much needs doing before you notice it. If yours is lower, you’ll spot the full trash can sooner, and do it sooner, again and again.
 
 That’s not a personality flaw in either person. It’s a setup that quietly assigns jobs. Making the noticing part of someone else’s job is the fix.
 
@@ -163,7 +163,7 @@ aka: thank you for invisible work; appreciating mental load; noticing effort
 see: Kinkeeping; Specific thanks
 go: /turning-toward.html | Turning Toward
 evidence: Research links appreciation with relationship satisfaction and with feeling that work is fair. Thanks for specific, unseen work may be especially meaningful.
-try: “Thanks for remembering Mum’s birthday. I know that takes planning.”
+try: “Thanks for remembering Mom’s birthday. I know that takes planning.”
 
 Invisible work rarely gets thanked because nobody sees it. A specific thank-you for planning, remembering or smoothing things over shows you noticed, and noticing is half of what people want.
 
@@ -182,13 +182,13 @@ Some households pay for help with certain jobs (cleaning, laundry, meal kits, ya
 
 It’s a budget decision and a values decision, and not everyone can or wants to. Even without money, a job can be simplified or dropped.
 
-Program: The Lemonade Stand shows which jobs take the most time; that’s where outsourcing or simplifying would help most.
+Program: The Lemonade Stand shows which jobs take the most time. That’s where outsourcing or simplifying would help most.
 
 ## Money and fairness splits
 aka: splitting costs fairly; 50 50 or by income; proportional split
 see: Yours, mine and ours accounts; Using fair standards
 go: /lemonade-stand.html | The Lemonade Stand
-evidence: Different couples and housemates use different fairness rules (equal, by income, by use). No one method is right; what matters most in research on fairness is that people agree the rule is fair.
+evidence: Different couples and roommates use different fairness rules (equal, by income, by use). No one method is right. What matters most in research on fairness is that people agree the rule is fair.
 try: Try both: calculate a 50/50 split and an income-based split, and talk about which feels fair to both.
 
 Shared costs can be split equally, in proportion to income, or by use (for example, bigger room pays more). Each is fair by a different standard.

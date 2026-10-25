@@ -85,7 +85,7 @@
       ['think', 'Someone helps me put it in order and pick what comes first.'],
       ['shift', 'A break doing something with my hands or body, then I start again.'],
       ['room', 'Quiet, with no one asking me questions.']]],
-    ['When I’m upset and someone asks “What’s wrong?”, I usually…', [
+    ['When I’m upset and someone asks “What’s wrong?” I usually…', [
       ['room', 'Need them to wait. I’ll talk once I’ve settled.'],
       ['hear', 'Feel relieved. I want to be asked.'],
       ['near', 'Want them to stay, even if I can’t explain yet.'],

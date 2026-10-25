@@ -1300,7 +1300,7 @@
     var on = musOn();
     b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span class="pc-lbl"> Music</span> <span class="pc-st">' + (on ? 'On' : 'Off') + '</span>';
     b.setAttribute('aria-label', on ? 'Music is on. Turn the background music off' : 'Music is off. Turn on gentle background music');
-    b.title = MUS() && !MUS().has(setting && setting.id) ? 'This scene is quiet for now; more music is on the way' : '';
+    b.title = MUS() && !MUS().has(setting && setting.id) ? 'This scene is quiet for now. More music is on the way' : '';
   }
   function syncSndBtn() {
     var b = ov && ov.querySelector('.pc-snd'); if (!b) return;
@@ -1541,7 +1541,7 @@
     var narrow = window.matchMedia && window.matchMedia('(max-width:420px)').matches;
     var sndLbl = narrow ? '🔊 On' : '🔊 Sound On', musLbl = narrow ? '🎵' : '🎵 Music';
     t.innerHTML = '<b>Sound is on.</b> You’ll hear soft barks, little chimes, playful game sounds (coins, cards, dice and a small bell), and quiet sounds of the place, like birds or waves. ' +
-      (musOn() ? 'Music is on too; tap <b>' + musLbl + ' On</b> to turn it off. ' : 'Music stays off unless you turn it on with <b>' + musLbl + '</b>. ') + 'Tap <b>' + sndLbl + '</b> at the top, or “Turn sound off” here, to stop the sounds anytime.';
+      (musOn() ? 'Music is on too. Tap <b>' + musLbl + ' On</b> to turn it off. ' : 'Music stays off unless you turn it on with <b>' + musLbl + '</b>. ') + 'Tap <b>' + sndLbl + '</b> at the top, or “Turn sound off” here, to stop the sounds anytime.';
   }
   function soundNow() { return SND() ? SND().on() : soundOn() && !quietOn(); }
   function open(opts) {

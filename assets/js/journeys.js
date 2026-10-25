@@ -67,7 +67,7 @@
       ] },
     // home16b: "I need to calm down" for someone on their own (or who hasn't said) starts here, not with a two-person journey
     { id: 'settle', who: 'solo', title: 'Calm down, on your own', len: 'A few minutes now, and ten on a calm day',
-      intro: 'For when your body is wound up and nobody else needs to be part of it. Settle first; think it through later.',
+      intro: 'For when your body is wound up and nobody else needs to be part of it. Settle first. Think it through later.',
       leave: 'a calmer body now, a pause you can use anywhere, and your own plan for next time',
       back: { q: 'A week on: when it got hard, what helped you settle? Add it to your plan.', id: 'calmkit', f: '/wp-11.html', go: 'Open your calm-down plan' },
       steps: [
@@ -77,7 +77,7 @@
         { k: 'wp', id: 'calmkit', f: '/wp-11.html', mins: 10, do: 'On a calm day, write down your early signs and what settles you.', leave: 'Your own calm-down plan for next time' }
       ] },
     { id: 'family', who: 'solo', title: 'Family conflict: your terms, kindly', len: 'About a week, before a family event or a hard visit',
-      intro: 'For grown-up families: siblings, parents, in-laws. Start on your own; bring others in only if they’re willing.',
+      intro: 'For grown-up families: siblings, parents, in-laws. Start on your own. Bring others in only if they’re willing.',
       leave: 'your terms for the next event, kind ways to say no, and a family plan if others want one',
       back: { q: 'Did your terms hold at the event? Adjust them here.', id: 'terms', f: '/family-rifts.html#terms', go: 'Adjust your terms' },
       steps: [
@@ -99,7 +99,7 @@
         { k: 'wp', id: 'keepscoming', f: '/workpapers/wp-04-what-keeps-coming-back.html', mins: 15, do: 'Once a month: spot what keeps coming back, and fix one thing.', leave: 'A monthly look-back sheet' },
         { k: 'tool', id: 'logic', f: '/the-logic-behind-it.html#find', mins: 5, do: 'When their reaction (or yours) still puzzles you, type what happened and see the logic behind it, with their side too.', leave: 'One sentence to explain it, and one small step for both of you' }
       ] },
-    { id: 'space', who: 'two', title: 'One wants to talk now, one needs space', len: 'A few days; the plan takes ten minutes',
+    { id: 'space', who: 'two', title: 'One wants to talk now, one needs space', len: 'A few days. The plan takes ten minutes',
       intro: 'When one of you chases and the other pulls away. A way to pause that doesn’t feel like walking out, and a way back.',
       leave: 'words for the pattern, a calm-down for the moment, and a pause plan you both agreed',
       back: { q: 'Did you use the pause plan? Adjust it here.', id: 'pause', f: '/pursue-withdraw.html#plan-h', go: 'Adjust the pause plan' },
@@ -134,11 +134,11 @@
         { k: 'wp', id: 'checkin90', f: '/workpapers/wp-13-daily-check-in.html', mins: 2, do: 'If you live together: one sentence each, once a day.', leave: 'A tiny daily habit' }
       ] },
     { id: 'close', who: 'two', title: 'Feel close again', len: 'Two weeks, a little each day',
-      intro: 'For long-term couples who have drifted into “fine”. Small things, often, rather than one big gesture.',
+      intro: 'For long-term couples who have drifted into “fine.” Small things, often, rather than one big gesture.',
       leave: 'one small idea a week, your shared words and rituals, a time-together deal and one daily habit',
       back: { q: 'Did you do the small thing? Pick the next one.', id: 'bonding', f: '/bonding.html?who=partner#ideas', go: 'Pick the next small thing' },
       steps: [
-        { k: 'read', t: 'When “fine” goes unchecked', f: '/complacency.html#try-today', mins: 5, do: 'Notice what has slipped into “fine”.', leave: 'One thing you’d like back' },
+        { k: 'read', t: 'When “fine” goes unchecked', f: '/complacency.html#try-today', mins: 5, do: 'Notice what has slipped into “fine.”', leave: 'One thing you’d like back' },
         { k: 'tool', id: 'bonding', f: '/bonding.html?who=partner#ideas', mins: 2, do: 'Get one small idea that fits your time and energy.', leave: 'One small thing to do together this week' },
         { k: 'tool', id: 'touchstones', f: '/touchstones.html#ts-card-h', mins: 10, do: 'Write down your shared words, jokes and rituals.', leave: 'Your touchstones list' },
         { k: 'tool', id: 'deal', f: '/gaming-and-time-together.html#deal-h', mins: 10, do: 'Agree a small time-together deal, phones and games included.', leave: 'A time-together deal you both chose' },
@@ -201,7 +201,7 @@
       ['Retired, and both home now', '/retired-together.html', 'Routines, handing over whole jobs, and time apart'],
       ['The kids have left home', '/empty-nest.html', 'Finding each other again in a quieter house'],
       ['One of us is ill', '/when-one-is-ill.html', 'Sharing the load when one of you has less energy'],
-      ['Caring for someone we love', '/caregivers.html', 'When they can’t share the load back, after a stroke, with dementia, or in a care home'],
+      ['Caring for someone we love', '/caregivers.html', 'When they can’t share the load back, after a stroke, with dementia, or in a nursing home'],
       ['We’ve lost someone', '/grief.html', 'Grief, and a new chapter']] },
     // flow17: two more short "which is closest?" lists for the home page's "With someone" choices
     { id: 'quietsocial', label: 'We need different things at home', choose: [

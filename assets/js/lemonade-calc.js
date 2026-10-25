@@ -123,12 +123,12 @@
   function isNightSleep(j) { return !j.ex && /recovery sleep|sleep after (?:a |my |the )?(?:night )?shifts?/.test(low(j.name)); }
   // The task library: [name, typical amount, how often, unit ('m' minutes, default, or 'h' hours)]
   var LIB = {
-    home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], [UKISH ? 'Rubbish, bins & recycling' : 'Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
+    home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], [UKISH ? 'Trash & recycling' : 'Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
     food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'wkd'], ['Clearing out the fridge', 20, 'week']],
     laundry: [['Washing & drying', 20, 'few'], ['Folding & putting away', 25, 'few'], ['Towels & bedding', 20, 'week'], ['Ironing & mending', 30, 'week']],
-    kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week'], [SOLO_KIDS, 8, 'wkd', 'h']],
+    kids: [['Getting kids up & ready', 30, 'day'], ['Daycare drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week'], [SOLO_KIDS, 8, 'wkd', 'h']],
     care: [['Personal care (washing, dressing)', 30, 'day'], ['Medicines & refills', 10, 'day'], ['Health appointments & calls for them', 90, 'month'], ['Pacing support (planning the day around energy)', 15, 'day'], ['Being on call for a partner who is unwell', 4, 'few', 'h'], ['Meals in bed & bringing what is needed', 20, 'day']],
-    baby: [['Night feeds', 90, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
+    baby: [['Night feeds', 90, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, diapers & wipes', 20, 'week']],
     pets: [['Feeding & fresh water', 10, 'day'], ['Dog walks', 30, 'day'], ['Litter, cage or tank cleaning', 15, 'few'], ['Grooming & baths', 30, 'month'], ['Vet visits & pet supplies', 60, 'month']],
     money: [['Paying bills', 20, 'week'], ['Budget & checking accounts', 30, 'week'], ['Splitting shared costs', 15, 'week'], ['Taxes & receipts', 90, 'month'], ['Comparing plans & renewals', 60, 'month']],
     admin: [['Mail & home email', 15, 'few'], ['School forms & sign-ups', 20, 'week'], ['Calls & customer service', 30, 'week'], ['Insurance & documents', 45, 'month'], ['Licenses & registrations', 30, 'month'], ['Filing & keeping papers in order', 30, 'month']],
@@ -137,7 +137,7 @@
     car: [['Gas & car wash', 20, 'week'], ['Car service & tires', 90, 'month'], ['Small fixes around the home', 45, 'week'], ['Waiting in for repair people', 60, 'month'], ['Filters, bulbs & smoke alarm batteries', 20, 'month']],
     yard: [['Mowing', 45, 'week'], ['Weeding & watering', 30, 'week'], ['Raking leaves', 60, 'week'], ['Shoveling snow', 30, 'week'], ['Plants & garden', 20, 'week']],
     social: [['Keeping in touch with family', 30, 'week'], ['Keeping up with both families & in-laws', 20, 'week'], ['Birthdays & holidays', 60, 'month'], ['Thank-you notes & messages', 15, 'week'], ['Hosting & visitors', 120, 'month'], ['Planning time with friends', 20, 'week'], ['Kids’ playdates & parties', 60, 'month']],
-    mental: [['Keeping the family calendar', 15, 'few'], ['Noticing what’s running low', 10, 'day'], ['Planning the week ahead', 30, 'week'], ['Remembering dates & deadlines', 10, 'day'], ['Childcare & backup plans', 30, 'week'], ['Checking that things got done', 10, 'day'], ['Trips & holiday planning', 120, 'month']],
+    mental: [['Keeping the family calendar', 15, 'few'], ['Noticing what’s running low', 10, 'day'], ['Planning the week ahead', 30, 'week'], ['Remembering dates & deadlines', 10, 'day'], ['Childcare & backup plans', 30, 'week'], ['Checking that things got done', 10, 'day'], ['Trips & vacation planning', 120, 'month']],
     emotional: [['Keeping the peace', 15, 'day'], ['Checking in on how people are', 15, 'day'], ['Calming a hard moment', 20, 'few'], ['Listening & support', 30, 'few'], ['Smoothing things over with family', 30, 'week']],
     work: [['Paid work', 40, 'week', 'h'], [NIGHT_SHIFT, 12, 'few', 'h'], [NIGHT_SLEEP, 7, 'few', 'h'], ['Commute', 30, 'wkd'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'wkd'], ['Home but on call (deliveries, repairs, dog)', 4, 'week', 'h'], ['A side job', 5, 'week', 'h']],
     rest: [['Time to myself', 30, 'day'], ['A walk or moving my body', 30, 'few'], ['Hobbies', 60, 'week'], ['Time with friends', 120, 'week'], ['Quiet time doing nothing', 20, 'day'], ['A full day off', 8, 'month', 'h'], [PACING, 2, 'day', 'h']]
@@ -286,7 +286,7 @@
   function waitText(w, what) {
     var see = what === 'bills' ? (state.planning ? 'to see the plan' : 'to see who owes whom') : 'to see the split';
     // a side just added on a new device, and nobody has said who's holding it yet: that question first
-    if (state.me < 0 && document.getElementById('who-ask')) return 'First, tap your name under “Who are you?”, so this device knows whose side it holds.';
+    if (state.me < 0 && document.getElementById('who-ask')) return 'First, tap your name under “Who are you?” so this device knows whose side it holds.';
     var me = state.me, mine = me >= 0 && w.indexOf(me) >= 0, rest = w.filter(function (i) { return i !== me; }), restNamed = waitNames(rest);
     if (mine) {
       return 'Waiting for your side' + (placeholder(state.people[me]) ? '' : ', ' + nameOf(me)) + '. Fill in your own ' + (what === 'bills' ? 'amounts' : 'hours') + ' above ' + see +
@@ -295,7 +295,7 @@
     var named = waitNames(w);
     // children are never waited for: a grown-up's side carries their part
     var kidsNote = state.kid.some(Boolean) ? ' Children’s parts come in with a grown-up’s side.' : '';
-    if (!named.length || named.length < w.length) return 'Waiting for the other side' + (w.length > 1 ? 's' : '') + '. Send your side (“' + W.send() + '”, above) ' + see + '.' + kidsNote;
+    if (!named.length || named.length < w.length) return 'Waiting for the other side' + (w.length > 1 ? 's' : '') + '. Send your side (“' + W.send() + ',” above) ' + see + '.' + kidsNote;
     return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your side ' + see + '.' + kidsNote;
   }
   // Two people say "my partner"; three or more say "the others", "someone's", "any of you"
@@ -314,7 +314,7 @@
     set('add-code-q', many() ? 'Someone sent you their side? Paste it here' : 'Someone sent you their side? Paste it here');
     set('other-ways-t', 'On the other device, open the Lemonade Stand, tap “' + W.add() + '” and paste the code, or open the file.');
     set('checked-who', many() ? 'Optional, and any of you can tick it.' : 'Optional, and either of you can tick it.');
-    set('data-send-t', '“' + W.send() + '” makes a link, a code or a file on your device; it only goes where you send it yourself. In a link, your side sits after the “#”, which browsers never send to a server, and the page clears it from the address bar once it’s read.');
+    set('data-send-t', '“' + W.send() + '” makes a link, a code or a file on your device. It only goes where you send it yourself. In a link, your side sits after the “#,” which browsers never send to a server, and the page clears it from the address bar once it’s read.');
     set('how-send-t', 'On ' + (many() ? 'more than one phone' : 'two phones') + ', tap “' + W.send() + '” on one and “' + W.add() + '” on the other.');
   }
   // "Kai’s side", or "their side" when it doesn't say who sent it
@@ -532,7 +532,7 @@
     markEdited(); renderRows(); recalc();
     status('Counted once now: ' + (parts.some(function (x) { return x.kind === 'call'; }) ? 'night feeds count only outside on-call nights' : '') +
       (parts.some(function (x) { return x.kind === 'call'; }) && parts.some(function (x) { return x.kind === 'solo'; }) ? ', and ' : '') +
-      (parts.some(function (x) { return x.kind === 'solo'; }) ? 'daytime feeds, nappies, bottles and settling count only outside time on your own with the baby' : '') + '. Each row can count it on top again.');
+      (parts.some(function (x) { return x.kind === 'solo'; }) ? 'daytime feeds, diapers, bottles and settling count only outside time on your own with the baby' : '') + '. Each row can count it on top again.');
   }
   function isOnCall(j) { return !j.ex && /^on call at night/.test(low(j.name)); }
   function isNightFeed(j) { return !j.ex && /^night feeds?\b/.test(low(j.name)); }
@@ -770,13 +770,13 @@
     if (askI >= 0) {
       ask = document.createElement('p'); ask.className = 'row-cue ls-ask';
       ask.textContent = num(item.v[askI]) > 0 ? 'This one is on your list already, with ' + (solo() ? 'your' : nameOf(askI) + '’s') + ' time in. Change it here if it’s not right.'
-        : 'This one is on your list already. How often do you do this? Pick it under “How often”, then type your own time.';
+        : 'This one is on your list already. How often do you do this? Pick it under “How often,” then type your own time.';
     }
     // looking after the baby on your own: the feeds and nappies in those hours are part of it
     var solo1 = null;
     if (isSoloCare(item)) {
       solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note';
-      solo1.textContent = 'Counted as home work, in the split and in “Home + paid work”, the same way paid work counts for the one at work. ' + (isBabySolo(item) ? 'Feeds, nappies and naps' : 'Meals, naps and play') + ' in these hours are part of it, so count those jobs only for the rest of the day.';
+      solo1.textContent = 'Counted as home work, in the split and in “Home + paid work,” the same way paid work counts for the one at work. ' + (isBabySolo(item) ? 'Feeds, diapers and naps' : 'Meals, naps and play') + ' in these hours are part of it, so count those jobs only for the rest of the day.';
     }
     if (isNightShift(item) || isNightSleep(item)) {
       solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note';
@@ -1024,7 +1024,7 @@
           delete item.fa;
           revalidate(item); markEdited(); renderRows(); recalc();
           var r = rowFor(item), f = r && r.querySelector('select[aria-label="How often"], select.ls-pfreq[data-fk^="fq' + (o[0] >= 0 ? o[0] : 0) + '-"]'); if (f) f.focus();
-          status(o[0] < 0 ? 'Everyone on “' + (item.name.trim() || 'this job') + '” is ' + FREQ_LABEL[fa.to].toLowerCase() + ' now.' : 'Only ' + nameOf(o[0]) + ' is ' + FREQ_LABEL[fa.to].toLowerCase() + ' on “' + (item.name.trim() || 'this job') + '”; the others keep ' + FREQ_LABEL[fa.was].toLowerCase() + '.');
+          status(o[0] < 0 ? 'Everyone on “' + (item.name.trim() || 'this job') + '” is ' + FREQ_LABEL[fa.to].toLowerCase() + ' now.' : 'Only ' + nameOf(o[0]) + ' is ' + FREQ_LABEL[fa.to].toLowerCase() + ' on “' + (item.name.trim() || 'this job') + '.” The others keep ' + FREQ_LABEL[fa.was].toLowerCase() + '.');
         });
         faG.appendChild(b);
       });
@@ -1055,7 +1055,7 @@
           b.setAttribute('aria-pressed', String(!on));
           if (!on) sideCue(i, cue);
           markEdited(); refreshInputs(); recalc();
-          status(on ? 'Took ' + nameOf(i) + '’s time off “' + (item.name || 'this job') + '”.' : 'Filled in ' + nameOf(i) + '’s time for “' + (item.name || 'this job') + '”. Change it to fit your week.');
+          status(on ? 'Took ' + nameOf(i) + '’s time off “' + (item.name || 'this job') + '”.' : 'Filled in ' + nameOf(i) + '’s time for “' + (item.name || 'this job') + '.” Change it to fit your week.');
         });
         pg.appendChild(b);
       });
@@ -1071,7 +1071,7 @@
     persBox.appendChild(document.createTextNode(' My own family or personal life (counted on its own, not in the shared split)'));
     function showPers() {
       persTag.hidden = solo() || !item.personal;
-      persTag.textContent = 'Own family or personal: counted on its own, not in the shared split. If it’s for the whole home (like keeping up with both families), untick it under “More”.';
+      persTag.textContent = 'Own family or personal: counted on its own, not in the shared split. If it’s for the whole home (like keeping up with both families), untick it under “More.”';
     }
     persIn.addEventListener('change', function () {
       own(); item.personal = persIn.checked; showPers(); markEdited(); renderOwners(); recalc();
@@ -1261,7 +1261,7 @@
     function showKind() {
       wLab.hidden = item.kind !== 'own';
       kindNote.textContent = planTot ? 'The whole bill each month. The plan below splits it by the shares you set, or evenly.' : item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'An agreed amount, like family support: kept on the list so it’s seen, but not split and not owed.'
-        : item.kind === 'savings' ? 'A savings goal: kept on the list and in each person’s total, never split and never owed between you. Like “Our savings, 200 a month”.'
+        : item.kind === 'savings' ? 'A savings goal: kept on the list and in each person’s total, never split and never owed between you. Like “Our savings, 200 a month.”'
         : item.kind === 'income' ? 'Pay or other money coming in, not a cost. Optional: with money coming in listed, the summary shows what’s left after the costs.' : '';
       kindNote.hidden = !kindNote.textContent;
       amts.querySelectorAll('.pname[data-k="b"]').forEach(function (sp) { sp.textContent = billWho(item, +sp.dataset.i); var bi = sp.parentNode.querySelector('input'); if (bi) bi.setAttribute('aria-label', billAria(item, +sp.dataset.i)); });
@@ -1311,7 +1311,7 @@
       var named = others.filter(function (i) { return !placeholder(state.people[i]); }).map(nameOf);
       var mine = placeholder(state.people[me]) ? 'Your column is the one that isn’t shaded.' : 'Your column is ' + nameOf(me) + '’s.';
       note.textContent = mine + ' ' + (others.length === 1 && named.length ? named[0] + '’s shaded column is for ' + named[0] + '; leave it.'
-        : named.length === others.length ? 'The shaded columns (' + joinNames(named.map(function (x) { return x + '’s'; })) + ') are for them; leave those.' : 'The shaded columns are for the others; leave those.');
+        : named.length === others.length ? 'The shaded columns (' + joinNames(named.map(function (x) { return x + '’s'; })) + ') are for them. Leave those.' : 'The shaded columns are for the others. Leave those.');
     }
   }
   function relabel() {
@@ -1366,7 +1366,7 @@
       box.innerHTML = '';
       var c = CAT[libCat];
       var hint = $('lib-hint');
-      if (hint) hint.textContent = libCat === 'baby' ? 'Night time counts. If one of you is on call, listening out while the other sleeps, count those hours too. A young baby often feeds 2 or 3 times a night, 30 to 40 minutes each, so night feeds start at 90 minutes; change it to fit.' :
+      if (hint) hint.textContent = libCat === 'baby' ? 'Night time counts. If one of you is on call, listening out while the other sleeps, count those hours too. A young baby often feeds 2 or 3 times a night, 30 to 40 minutes each, so night feeds start at 90 minutes. Change it to fit.' :
         c.k === 'work' ? 'Work and school hours are shown beside your home jobs, never mixed into them. Work nights? Add “Night shift” and “Recovery sleep after a night shift”: both count as part of your work week, not as rest.' :
         c.k === 'rest' ? 'Rest counts too. It shows how much room your week has to recover. Living with an illness? Pacing and symptom rest is how it’s managed: it’s needed, not idle time.' :
         libCat === 'care' ? 'Caring for a partner who is ill, disabled or recovering. It’s home work, counted in the split. Whatever the person being cared for still does, from bed or on good days, counts too.' :
@@ -1392,7 +1392,7 @@
   function addAs() { return solo() ? 0 : state.asSet ? state.as : state.asPick ? -1 : state.me >= 0 ? state.me : -1; }
   function libTask(name) { var m = libMatch(name); return m ? m.t : null; }
   // "New baby starter pack": the core baby jobs in one tap
-  var BABY_PACK = ['Night feeds', 'Daytime feeds & pumping', 'Nappies & diapers', 'Bottles, pump parts & sterilizing', 'Settling, rocking & naps', 'Baby laundry', 'Tracking feeds, sleep & supplies'];
+  var BABY_PACK = ['Night feeds', 'Daytime feeds & pumping', 'Diapers', 'Bottles, pump parts & sterilizing', 'Settling, rocking & naps', 'Baby laundry', 'Tracking feeds, sleep & supplies'];
   function addBabyPack() {
     var me = addAs(), added = [], hadEx = anyExample();
     state.jobs = state.jobs.filter(function (j) { return !j.ex; });
@@ -1405,7 +1405,7 @@
       state.jobs.push(j); added.push(nm);
     });
     markEdited(); renderRows(); renderLibTasks(); renderOwners(); recalc();
-    status((added.length ? 'Added ' + added.length + ' baby job' + (added.length === 1 ? '' : 's') + (me >= 0 ? ' with typical times for ' + (solo() ? 'you' : nameOf(me)) + '. Change them to fit your week.' : '. Tap who does each one to fill in the typical time.') + (hadEx ? ' The grey example is cleared.' : '')
+    status((added.length ? 'Added ' + added.length + ' baby job' + (added.length === 1 ? '' : 's') + (me >= 0 ? ' with typical times for ' + (solo() ? 'you' : nameOf(me)) + '. Change them to fit your week.' : '. Tap who does each one to fill in the typical time.') + (hadEx ? ' The gray example is cleared.' : '')
       : 'The baby starter pack is already on your list.') + (!solo() && !state.compact ? ' On a phone? “Just the 3 steps” keeps it short.' : ''));
   }
   // "Split the nights": two night shifts, each with one owner, on the fridge list
@@ -1452,9 +1452,9 @@
     renderRows(); renderLibTasks(); renderOwners(); recalc();
     var amt = t[1] + (j.unit === 'h' ? ' hours ' : ' minutes ') + FREQ_SHORT[t[2]];
     status((me >= 0 ? 'Added “' + t[0] + '” with about ' + amt + (solo() ? '' : ' for ' + nameOf(me)) + '. Change it to fit your week.'
-      : 'Added “' + t[0] + '”. Tap who does it to fill in about ' + amt + '.') +
-      (pers ? ' It’s counted as each person’s own family time, not in the shared split; change that under “More”.' : '') +
-      (hadEx ? ' The grey example is cleared.' : ''));
+      : 'Added “' + t[0] + '.” Tap who does it to fill in about ' + amt + '.') +
+      (pers ? ' It’s counted as each person’s own family time, not in the shared split. Change that under “More.”' : '') +
+      (hadEx ? ' The gray example is cleared.' : ''));
   }
   function renderAsRow() {
     var box = $('as-row'); if (!box) return;
@@ -1487,7 +1487,7 @@
           if (state.me === i) { status('This device is set to ' + (i === -2 ? 'filling it in together' : nameOf(i) + '’s side') + '. Tap another name to change it.'); return; }
           state.me = i; cued = {}; firstSide = -1;
           renderMeRow(); renderAsRow(); renderSend(); renderRows(); recalc();
-          status(state.me === -1 ? 'Okay. Nobody picked.' : state.me === -2 ? 'Filling it in together. Each of you checks your own numbers.' : 'Thanks, ' + nameOf(i) + '. ' + (addAs() === i ? 'Jobs you add from the library fill in your time. ' : '') + 'Other people’s columns are shaded as theirs; you can still type there if you need to.');
+          status(state.me === -1 ? 'Okay. Nobody picked.' : state.me === -2 ? 'Filling it in together. Each of you checks your own numbers.' : 'Thanks, ' + nameOf(i) + '. ' + (addAs() === i ? 'Jobs you add from the library fill in your time. ' : '') + 'Other people’s columns are shaded as theirs. You can still type there if you need to.');
         });
         box.appendChild(b);
       });
@@ -1540,7 +1540,7 @@
           if (moved) renderRows();
           recalc();
           status((state.part[i] < 1 ? nameOf(i) + ' counts for the nights they’re here (' + nightsWord(nightsOf(i)) + ').' : nameOf(i) + ' counts as a full share again.') +
-            (moved ? ' ' + nameOf(i) + '’s ' + (moved === 1 ? 'job is' : moved + ' jobs are') + ' set to “' + (nightsOf(i) === 4 ? 'Every other weekend' : FREQ_LABEL[eowBack] ) + '” now; change any of them under “How often”.' : ''));
+            (moved ? ' ' + nameOf(i) + '’s ' + (moved === 1 ? 'job is' : moved + ' jobs are') + ' set to “' + (nightsOf(i) === 4 ? 'Every other weekend' : FREQ_LABEL[eowBack] ) + '” now. Change any of them under “How often.”' : ''));
         });
         l.appendChild(sel);
         var kl = document.createElement('label'); kl.className = 'ls-check ls-kid';
@@ -1654,7 +1654,7 @@
     // a number that can't be counted (negative, not a number, more than a week) holds the read back,
     // so a typo never turns into "100% done by them"
     if (anyBad(state.jobs)) return 'One of the numbers above isn’t counted yet (it’s marked under its row). Fix it to see how the work is split. Nothing is guessed in the meantime.';
-    if (s === 0) return anyExample() ? 'Add some hours of your own to see how the work is split. The grey numbers are only an example, so nothing is counted yet.' : 'Add some hours above to see how the work is split.';
+    if (s === 0) return anyExample() ? 'Add some hours of your own to see how the work is split. The gray numbers are only an example, so nothing is counted yet.' : 'Add some hours above to see how the work is split.';
     var wait = waitingFor();
     if (wait.length) return waitText(wait);
     var p = shares(t), n = t.length, even = 100 / n, lean = invLean();
@@ -1923,7 +1923,7 @@
   function stretchRead(s) {
     if (s.load <= 0) return { k: '', t: 'Add a few jobs, your work hours and some rest to see how your week reads.' };
     var share = s.load / WAKING, pct = Math.round(share * 100);
-    var restNote = s.rest <= 0 ? ' You haven’t logged any rest yet. If there is some, add it from “Rest & recharging”.' :
+    var restNote = s.rest <= 0 ? ' You haven’t logged any rest yet. If there is some, add it from “Rest & recharging.”' :
       s.rest < 3.5 ? ' Rest is thin on the list (' + hrs(s.rest) + ' a week), so it may be worth protecting a little more.' : '';
     if (share < 0.5) return { k: 'roomy', t: 'Looks sustainable: about ' + pct + '% of a waking week (' + hrs(s.load) + ' of about ' + WAKING + ' h) is spoken for, which leaves real room.' + restNote };
     if (share < 0.7) return { k: 'full', t: 'Full but workable: about ' + pct + '% of a waking week (' + hrs(s.load) + ' of about ' + WAKING + ' h) is spoken for.' + restNote };
@@ -1982,7 +1982,7 @@
         return '<li><div class="ls-cat-top"><span>' + esc(nameOf(i)) + '</span><span class="ls-num">' + hrs(home[i]) + '</span></div>' +
           bar([{ v: seen, c: COLORS[i] }, { v: inv[i], c: COLORS[i], cls: 'is-inv' }]) +
           '<p class="ls-mini">' + hrs(seen) + ' of jobs you can see · ' + hrs(inv[i]) + ' of thinking and emotional work' + (allInv > 0 && !wait.length && inv[i] > 0 ? ' (' + Math.round(inv[i] / allInv * 100) + '% of all the thinking and emotional work)' : '') + '</p></li>';
-      }).join('') + '</ul>' + (allInv > 0 ? '' : '<p class="ls-mini">No thinking or emotional work counted yet. Open “More” on a job, or add from “Planning & remembering” and “Emotional work”.</p>') + planTip(inv, wait);
+      }).join('') + '</ul>' + (allInv > 0 ? '' : '<p class="ls-mini">No thinking or emotional work counted yet. Open “More” on a job, or add from “Planning & remembering” and “Emotional work.”</p>') + planTip(inv, wait);
     }
     var nc = noticeCounts(), nb = $('r-notice');
     nb.textContent = noticeLine(nc);
@@ -1993,7 +1993,7 @@
     var careSolo = state.jobs.filter(function (j) { return isSoloCare(j) && kindOf(j) === 'home' && state.people.some(function (_, i) { return jobH(j, i) > 0; }); });
     var soloCare = careSolo.length > 0, soloWho = careSolo.some(isBabySolo) ? 'the baby' : 'the kids';
     var wholeLead = !gap.length && sum(work) > 0 && sum(home) > 0 ? 'Across home and paid work' + (soloCare ? ' (time on your own with ' + soloWho + ' included)' : '') + ': ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '.' : '';
-    var wholeMore = (soloCare ? 'Looking after ' + soloWho + ' on your own counts as work here, the same as paid work. ' : '') + 'This doesn’t change the home split; it shows the whole week.' +
+    var wholeMore = (soloCare ? 'Looking after ' + soloWho + ' on your own counts as work here, the same as paid work. ' : '') + 'This doesn’t change the home split. It shows the whole week.' +
       (zeroPaid ? ' Hours don’t show energy, health or caring, so a smaller number here is never a measure of a person.' : '');
     var whole = wholeLead ? wholeLead + ' ' + wholeMore : '';
     var ww = $('whole-week'), wwOn = !!(whole && differ && !wait.length);
@@ -2254,7 +2254,7 @@
     var rb = $('r-read'); rb.textContent = rd.t; rb.setAttribute('data-k', rd.k);
     // the invisible part, made visible
     var ib = $('r-inv');
-    if (s.inv <= 0) ib.innerHTML = '<p class="ls-mini">No invisible work counted yet. Open “More” on a job, or add tasks from “Planning & remembering” and “Emotional work”. It’s often the part nobody sees, you included.</p>';
+    if (s.inv <= 0) ib.innerHTML = '<p class="ls-mini">No invisible work counted yet. Open “More” on a job, or add tasks from “Planning & remembering” and “Emotional work.” It’s often the part nobody sees, you included.</p>';
     else {
       var items = state.jobs.filter(function (j) { return kindOf(j) === 'home' && invH(j, 0) > 0; }).sort(function (a, b) { return invH(b, 0) - invH(a, 0); }).slice(0, 5);
       ib.innerHTML = '<p>About <strong>' + hrs(s.inv) + '</strong> of your week is work nobody sees: noticing, planning, remembering and keeping the peace. That’s ' + Math.round(s.inv / (s.home || 1) * 100) + '% of your home and life jobs.</p>' +
@@ -2445,7 +2445,7 @@
     // flow17: the common starter chips only on an empty list (never beside a list someone sent, where "Groceries" next to "Grocery shopping" read as two jobs)
     var common = !names.length && !ownersList().length;
     if (common) {
-      (UKISH ? ['Dishes', 'Bins & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Loo roll & supplies']
+      (UKISH ? ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Toilet paper & supplies']
         : ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies']).forEach(addName);
       var hint = document.createElement('p'); hint.className = 'ls-panel-note'; hint.style.flexBasis = '100%'; hint.style.margin = '0';
       hint.textContent = 'Common ones to start with (jobs you list above show up here too):';
@@ -2530,7 +2530,7 @@
             var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
             b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'osb' + idx + '_' + k + '_' + i);
             b.setAttribute('aria-pressed', String(bl.w === i)); b.textContent = nameOf(i);
-            b.addEventListener('click', function () { bl.w = bl.w === i ? -1 : i; renderOwners(); save(); status(bl.w === i ? nameOf(i) + ' owns “' + o.name + '”, ' + (bl.t || 'that block') + '.' : 'No owner for ' + (bl.t || 'that block') + ' yet.'); });
+            b.addEventListener('click', function () { bl.w = bl.w === i ? -1 : i; renderOwners(); save(); status(bl.w === i ? nameOf(i) + ' owns “' + o.name + ',” ' + (bl.t || 'that block') + '.' : 'No owner for ' + (bl.t || 'that block') + ' yet.'); });
             row.appendChild(b);
           });
           li.appendChild(row);
@@ -2634,8 +2634,8 @@
     renderKeepAsk();
   }
   // what "done" could look like, by the kind of job (only a hint in the box)
-  var DONE_PH = [[/dish|kitchen|wash.?up/, 'sink empty, counters wiped'], [/laundr|washing|folding|iron|sheets|towel/, 'washed, dried and put away'], [/bin|trash|rubbish|recycl/, 'out on bin night, new bag in'],
-    [/bathroom|loo|toilet|shower/, 'sink, loo and shower wiped'], [/grocer|shopping|food shop/, 'the fridge stocked from the list'], [/cook|dinner|meal|lunch|breakfast/, 'food on the table, pans soaking'],
+  var DONE_PH = [[/dish|kitchen|wash.?up/, 'sink empty, counters wiped'], [/laundr|washing|folding|iron|sheets|towel/, 'washed, dried and put away'], [/bin|trash|rubbish|recycl/, 'out on trash night, new bag in'],
+    [/bathroom|loo|toilet|shower/, 'sink, bathroom and shower wiped'], [/grocer|shopping|food shop/, 'the fridge stocked from the list'], [/cook|dinner|meal|lunch|breakfast/, 'food on the table, pans soaking'],
     [/bill|budget|tax|receipt|insur|renew/, 'paid or filed by the due date'], [/vacuum|hoover|floor|tidy|clean/, 'floors clear in every room'], [/appoint|calendar|dates|deadline/, 'booked, and in the shared calendar'],
     [/pet|feed|litter|vet/, 'bowls full, water fresh'], [/walk|dog/, 'two walks, bags restocked'], [/garden|plant|lawn|mow|weed/, 'watered and tidy'], [/school|kids|bedtime|homework|bath/, 'done, and the next day’s things ready'],
     [/supplies|running low|restock|loo roll|toilet paper/, 'spares in the cupboard'], [/car|repair|fix/, 'booked or fixed, and said so']];
@@ -3127,7 +3127,7 @@
     state.agreed.on = true; state.agreed.p = o.p.map(String); var src = offerSrc(o); if (src) state.agreed.src = src; else delete state.agreed.src; delete state.agreedOffer;
     openMoreOpts();
     renderAgreed(); recalc();
-    status('Using ' + splitShort(o.p.map(function (x) { return (parseFloat(x) || 0) / 100; })) + '. Once you’ve ' + (many() ? 'all' : 'both') + ' looked it over, tick “' + checkedLabel() + '”, and it reads as the split you agreed.');
+    status('Using ' + splitShort(o.p.map(function (x) { return (parseFloat(x) || 0) / 100; })) + '. Once you’ve ' + (many() ? 'all' : 'both') + ' looked it over, tick “' + checkedLabel() + ',” and it reads as the split you agreed.');
     var a = $('agreed-on'); if (a) a.focus();
   });
   if ($('agreed-offer-no')) $('agreed-offer-no').addEventListener('click', function () {
@@ -3291,7 +3291,7 @@
   $('keep-device').addEventListener('change', function (e) {
     keep = e.target.checked;
     if (keep) { try { sessionStorage.removeItem(KEEP_NO); } catch (err) {} save(); status('Kept on this device only. Press “Erase” any time to remove it.'); }
-    else { try { localStorage.removeItem(KEY); sessionStorage.setItem(KEEP_NO, '1'); } catch (err) {} status('No longer kept. Nothing from the stand is on this device now; it stays in this tab until you close it.'); }
+    else { try { localStorage.removeItem(KEY); sessionStorage.setItem(KEEP_NO, '1'); } catch (err) {} status('No longer kept. Nothing from the stand is on this device now. It stays in this tab until you close it.'); }
     renderKeepAsk();
     renderKeepAsk(); renderTrend();
   });
@@ -3382,7 +3382,7 @@
   function togetherSheet(url, line) {
     var C = window.TOLCollab; if (!C || !C.sendSheet) return false;
     C.sendSheet({ heading: 'Send it', url: url, title: 'Lemonade Stand', text: line, subject: 'Our Lemonade Stand',
-      qrNote: 'It opens their Lemonade Stand with a preview first. Nothing is added until they tap “Add to my stand”.' });
+      qrNote: 'It opens their Lemonade Stand with a preview first. Nothing is added until they tap “Add to my stand.”' });
     return true;
   }
   function low(x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().toLowerCase(); }
@@ -3393,7 +3393,7 @@
     var idx = state.people.map(function (_, i) { return i; }).filter(function (i) { return !placeholder(state.people[i]) || hasData(i); });
     if (idx.some(function (i) { return placeholder(state.people[i]); })) return { error: 'Give everyone a name first (tap a name above), so the other device knows whose times are whose.' };
     if (!idx.length) return { error: 'Type your names first (tap a name above), then send your side.' };
-    if (!realJobs().length && !realBills().length && !ownersList().length) return { error: 'Add a job, a bill or a fridge-list job first. The grey example is never sent.' };
+    if (!realJobs().length && !realBills().length && !ownersList().length) return { error: 'Add a job, a bill or a fridge-list job first. The gray example is never sent.' };
     // a line with time on it but no name would arrive as "a line with no name": ask for its name first
     var noName = realJobs().filter(function (j) { return !j.name.trim(); }).length + realBills().filter(function (b) { return !b.name.trim(); }).length;
     if (noName) return { error: (noName === 1 ? 'One line has' : noName + ' lines have') + ' a time or an amount but no name yet. Type what ' + (noName === 1 ? 'it is' : 'each one is') + ' (like “Dishes”), so the other device knows which job it is.', noName: true };
@@ -3715,7 +3715,7 @@
     if (out.ownDiff) bits.push('a different owner on ' + joinNames(out.ownDiff.map(function (n) { return '“' + n + '”'; })) + ' (both are shown on the fridge list, so you can pick)');
     if (out.own) bits.push(out.own + ' fridge-list job' + (out.own === 1 ? '' : 's') + ' with ' + (out.own === 1 ? 'its owner' : 'their owners'));
     if (out.split) bits.push('the split set on ' + fromWord(d) + ' (' + out.split + '), so you both see the same “who puts in what”');
-    if (out.plan) bits.push('“We’re planning, not settling up”, as on their device');
+    if (out.plan) bits.push('“We’re planning, not settling up,” as on their device');
     if (out.goal) bits.push('the goal “' + out.goal + '”');
     return (bits.length ? 'Done: ' + bits.join(', ') + '.' : 'Everything from ' + fromWord(d) + ' was already here.') +
       (out.offer && state.agreedOffer ? ' ' + offerWords(state.agreedOffer) + ' “Use it?” is just under the result.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their device.' : '') +
@@ -3802,7 +3802,7 @@
     var box = $('send-box'); if (!box || box.hidden) return;
     var d = sideData(), code = $('send-code'), acts = $('send-acts'), who = $('send-who');
     who.hidden = state.me >= 0;
-    if (!who.hidden) who.textContent = 'Tip: tap your own name under “Who’s filling in on this device?”, so the code and the file carry your name.';
+    if (!who.hidden) who.textContent = 'Tip: tap your own name under “Who’s filling in on this device?” so the code and the file carry your name.';
     if (d.error) { code.value = ''; code.hidden = true; acts.hidden = true; $('send-msg').textContent = d.error; renderFull(); return; }
     $('send-msg').textContent = '';
     var json = JSON.stringify(d);
@@ -3872,7 +3872,7 @@
   }
   if ($('send-qr')) $('send-qr').addEventListener('click', function () {
     renderSend(); if (!$('send-code').value) return;
-    var json = sendLink.json, o = { title: 'Scan with the other phone', note: 'Your side opens on their Lemonade Stand with a preview first. Nothing is added until they tap “Add to my stand”.' };
+    var json = sendLink.json, o = { title: 'Scan with the other phone', note: 'Your side opens on their Lemonade Stand with a preview first. Nothing is added until they tap “Add to my stand.”' };
     if (sendLink.url) { qrShow(sendLink.url, o); return; }
     packSide(json).then(function (pk) { if (sendLink.json === json) sendLink.url = sideLink(pk); qrShow(sideLink(pk), o); });
   });
@@ -3885,7 +3885,7 @@
       a.href = URL.createObjectURL(blob); a.download = name; a.rel = 'noopener';
       document.body.appendChild(a); a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-      sideStatus('send-msg', 'Saved as ' + name + '. Send the file to ' + W.them() + '; on their device they tap “' + W.add() + '”, then “Open their file”.');
+      sideStatus('send-msg', 'Saved as ' + name + '. Send the file to ' + W.them() + '; on their device they tap “' + W.add() + ',” then “Open their file.”');
     } catch (e) { sideStatus('send-msg', 'Couldn’t save a file here. Copy the code instead.'); }
   });
   function review(text, note, kindSaid) {
@@ -3920,16 +3920,16 @@
     if (d.household) li.push('This is a household names code: names and jobs only, with no times.');
     if (!d.household && d.own.length) li.push('Fridge list: ' + d.own.length + ' job' + (d.own.length === 1 ? '' : 's') + (d.own.some(function (o) { return o.w; }) ? ', with ' + (d.own.filter(function (o) { return o.w; }).length === d.own.length ? 'an owner each' : 'owners where they’re picked') : '') + ' (' + d.own.slice(0, 3).map(function (o) { return o.n; }).join(', ') + (d.own.length > 3 ? ' and more' : '') + ').');
     var fromLink = kindSaid === 'link';
-    var said = d.household ? 'Recognised: a household names code (names and jobs, no times).' : fromLink ? '' : kindSaid === 'pasted-link' ? 'Recognised: ' + sideOf(d) + ' (a link).' : (/LEMON1:/i.test(String(text)) ? 'Recognised: ' + sideOf(d) + ' (a code).' : /^\s*\{/.test(String(text)) ? 'Recognised: ' + sideOf(d) + ' (a file).' : '');
+    var said = d.household ? 'Recognized: a household names code (names and jobs, no times).' : fromLink ? '' : kindSaid === 'pasted-link' ? 'Recognized: ' + sideOf(d) + ' (a link).' : (/LEMON1:/i.test(String(text)) ? 'Recognized: ' + sideOf(d) + ' (a code).' : /^\s*\{/.test(String(text)) ? 'Recognized: ' + sideOf(d) + ' (a file).' : '');
     // opened from a link: just the preview and "Add to my stand" (the paste box steps aside; nothing to warn about)
     var paste = $('add-paste'); if (paste) paste.hidden = fromLink;
-    if (fromLink) note = sentLine(d) + ' Look it over below, then tap “Add to my stand”.' + (typeof note === 'string' && /still here/.test(note) ? ' (It isn’t added yet.)' : '');
+    if (fromLink) note = sentLine(d) + ' Look it over below, then tap “Add to my stand.”' + (typeof note === 'string' && /still here/.test(note) ? ' (It isn’t added yet.)' : '');
     var html = (said ? '<p class="ls-mini ls-recog">' + esc(said) + '</p>' : '') +
       (!d.household && tabStart === 'kept' && realJobs().length ? '<p class="ls-mini">Your stand kept on this device is here, so their side is added to it.</p>' : '') +
       '<p class="ls-mini-p"><strong>From ' + esc(fromWord(d)) + ':</strong> ' + esc(joinNames(d.people)) + ' · ' + d.jobs.length + ' job' + (d.jobs.length === 1 ? '' : 's') + ', ' + d.bills.length + ' bill' + (d.bills.length === 1 ? '' : 's') + '.</p>' +
       '<ul class="ls-mini-list">' + li.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
     if (conf.length) {
-      html += '<h3 class="ls-h3">Different numbers on the same line</h3><p class="ls-mini">Nothing is replaced unless you say so. “Keep both” adds their numbers as a second line, marked “from ' + esc(fromWord(d)) + '”, so you can talk it through.</p><ol class="ls-plan-list">' +
+      html += '<h3 class="ls-h3">Different numbers on the same line</h3><p class="ls-mini">Nothing is replaced unless you say so. “Keep both” adds their numbers as a second line, marked “from ' + esc(fromWord(d)) + ',” so you can talk it through.</p><ol class="ls-plan-list">' +
         conf.map(function (r, k) {
           var nm = r.inc.n || 'A line with no name';
           return '<li><span class="ls-plan-n">' + esc(nm) + (r.bill ? ' (bill)' : '') + '</span>' + r.diffs.map(function (x) { return '<p class="ls-mini">' + esc(x.txt) + '</p>'; }).join('') +
@@ -4113,18 +4113,18 @@
     // "Household names on another phone?": the names and home jobs as a code (household.js)
     if (HH.transfer) {
       var hhMove = HH.transfer({ collect: hhCollect, label: 'Household names on another device?', onLoad: function (d) {
-        var msg = 'Recognised: a household names code. ' + hhUse(d).replace('from your household', 'from the other device');
+        var msg = 'Recognized: a household names code. ' + hhUse(d).replace('from your household', 'from the other device');
         setTimeout(function () { askWho(hhMove); }, 0);
-        return msg + (HH.isLinked('lemonade') ? '' : ' To keep them for the other tools too, tick “Use these names in the other tools”.');
+        return msg + (HH.isLinked('lemonade') ? '' : ' To keep them for the other tools too, tick “Use these names in the other tools.”');
       }, onOther: function (text) {
         // a partner's side (a link, a code or a file's text) pasted here: it belongs under "Add my partner's side"
         if (!/LEMON1:|#side=[zj]|"app"\s*:\s*"lemonade"/i.test(String(text || '')) && !togetherSide(text)) return '';
         $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
         $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
         $('add-code').value = String(text).trim();
-        review(String(text), 'Look it over, then tap “Add to my stand”.');
+        review(String(text), 'Look it over, then tap “Add to my stand.”');
         var sd = $('sides'); if (sd) sd.scrollIntoView({ block: 'start', behavior: 'smooth' });
-        return 'Recognised: that’s someone’s side of the stand, not a household names code, so it’s opened under “' + W.add() + '” for you to look over.';
+        return 'Recognized: that’s someone’s side of the stand, not a household names code, so it’s opened under “' + W.add() + '” for you to look over.';
       } });
       peopleBox.appendChild(hhMove);
     }
@@ -4218,7 +4218,7 @@
     if (sides && body && body.firstElementChild !== sides) body.insertBefore(sides, body.firstElementChild);
     $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
     $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
-    review(t, 'It’s still here, not added yet. Look it over below, then tap “Add to my stand”.', isSideLink(t) ? 'link' : '');
+    review(t, 'It’s still here, not added yet. Look it over below, then tap “Add to my stand.”', isSideLink(t) ? 'link' : '');
     if (sides) { sides.scrollIntoView({ block: 'start' }); settle(sides); }
   }
   fromHash();
@@ -4293,7 +4293,7 @@
     else if (n) {
       try { sessionStorage.setItem(KEEP_NO, '1'); } catch (err) {}
       renderKeepAsk();
-      status('Okay. It stays in this tab only. “How your data is kept”, near the end, can keep it any time.');
+      status('Okay. It stays in this tab only. “How your data is kept,” near the end, can keep it any time.');
     }
   });
 
@@ -4393,7 +4393,7 @@
         state.me = i; cued = {}; firstSide = -1;
         renderMeRow(); renderAsRow(); renderSend(); renderRows(); recalc();
         box.remove();
-        status('Thanks, ' + nameOf(i) + '. Your column is the one to fill in; the others are shaded.');
+        status('Thanks, ' + nameOf(i) + '. Your column is the one to fill in. The others are shaded.');
         var f = rowsEl.querySelector('input[data-fk^="' + i + '-"]'); if (f) { f.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus({ preventScroll: true }); }
       });
       g.appendChild(b);
@@ -4635,7 +4635,7 @@
   // "We're planning, not settling up"
   if ($('planning-on')) $('planning-on').addEventListener('change', function (e) {
     state.planning = e.target.checked; renderRows(); relabel(); recalc();
-    status(state.planning ? 'Planning: the summary says what each of you puts in, with no “paid” or “owes”.' : 'Settling up: the summary says who paid what, and who owes whom.');
+    status(state.planning ? 'Planning: the summary says what each of you puts in, with no “paid” or “owes.”' : 'Settling up: the summary says who paid what, and who owes whom.');
   });
   // Nothing typed is ever sent anywhere, but a tab closed before "Keep it" loses the stand: say so first. The draft
   // stays in this tab on its own (Back, a reload, or a link to another page here keeps it), so a link inside the site

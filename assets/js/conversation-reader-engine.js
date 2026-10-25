@@ -198,7 +198,7 @@
     // "I'm going to slap you", "I know where you live": read flatly, a threat (message-patterns.js harm()).
     // With a game or a "lol" around it, probably a joke, and still worth a second look
     harm:     { label: 'Could read as a threat', heat: 4, tone: 'hot',
-                hear: 'Words about hurting someone, or a veiled warning (“I know where you live”, “keep talking and see what happens”), can frighten the person reading, whatever was meant. In writing there’s no smile to show it’s a joke.',
+                hear: 'Words about hurting someone, or a veiled warning (“I know where you live,” “keep talking and see what happens”), can frighten the person reading, whatever was meant. In writing there’s no smile to show it’s a joke.',
                 instead: 'Leave the threat out and say the feeling underneath it: “I’m really frustrated with you right now.”' },
     harmplay: { label: 'Could read as a threat, if it isn’t a shared joke', heat: 1.5, tone: 'tense',
                 hear: 'This is probably a joke between you (a game, or a laugh around it). The words alone can’t show the grin, so on a hard day it could land as a real threat.',
@@ -250,16 +250,16 @@
                 hear: '“You should,” “you need to” and “why can’t you” land as orders or blame, so they invite pushback.',
                 instead: 'Turn it into a request: “Could you…?”' },
     history:  { label: 'Bringing in the past', heat: 1.5, tone: 'tense',
-                hear: 'Bringing in other times (“last time”, “remember when”) widens one topic into many. Nobody can answer all of them at once.',
+                hear: 'Bringing in other times (“last time,” “remember when”) widens one topic into many. Nobody can answer all of them at once.',
                 instead: 'Keep to one topic. Write the others down for another day.' },
     shouting: { label: 'Shouting in text', heat: 1, tone: 'tense',
                 hear: 'Capitals and stacked punctuation (!!, ?!) read as shouting.',
                 instead: 'Use normal capitals and one punctuation mark.' },
     vague:    { label: 'Vague timing', heat: 0.5, tone: 'note',
-                hear: '“Later”, “soon” or “when you get a chance” can mean tonight to one person and next week to the other. That gap is where a lot of friction starts.',
+                hear: '“Later,” “soon” or “when you get a chance” can mean tonight to one person and next week to the other. That gap is where a lot of friction starts.',
                 instead: 'Name a time: “by Thursday evening.”' },
     short:    { label: 'Very short reply', heat: 1, tone: 'note',
-                hear: 'A one-word reply (“ok”, “k”, “fine.”) can mean “got it, I’m busy” or “I’m upset.” The word is the same, so the reader guesses, usually from their own mood. After a long message it can land as “I don’t care,” even when it means “I’m overwhelmed.”',
+                hear: 'A one-word reply (“ok,” “k,” “fine.”) can mean “got it, I’m busy” or “I’m upset.” The word is the same, so the reader guesses, usually from their own mood. After a long message it can land as “I don’t care,” even when it means “I’m overwhelmed.”',
                 instead: 'Add the missing half: “Ok, sounds good!” or “Ok. I need a minute, I’ll reply properly tonight.”' },
     repair:   { label: 'Repair attempt', heat: -2, tone: 'good',
                 hear: 'This is an offer to cool things down: an apology, agreeing with part of it, or asking to pause. Repair attempts are one of the most important parts of a hard conversation.',
@@ -269,10 +269,10 @@
     feeling:  { label: '“I feel” statement', heat: -1, tone: 'good',
                 hear: 'Saying what’s happening for you, without blame, is easier to hear than a statement about the other person.' },
     idiom:    { label: 'Figure of speech', heat: 0, tone: 'note',
-                hear: 'A figure of speech says one thing and means another. Most people translate it without thinking; some take it at its word, especially in writing.',
+                hear: 'A figure of speech says one thing and means another. Most people translate it without thinking. Some take it at its word, especially in writing.',
                 instead: 'Say the plain meaning instead.' },
     literal:  { label: 'Taking the words at their word', heat: 0, tone: 'note',
-                hear: 'This takes the last message exactly at its word. Some people mean “forget it” literally; others say it when they’re hurt and hope the other person keeps trying. The words alone don’t carry which.',
+                hear: 'This takes the last message exactly at its word. Some people mean “forget it” literally. Others say it when they’re hurt and hope the other person keeps trying. The words alone don’t carry which.',
                 instead: 'If you’re not sure which was meant, ask once: “Do you want me to drop it, or keep talking?”' },
     brief:    { label: 'A short reply after a hard message', heat: 0, tone: 'note',
                 hear: 'After a sharp message, a short reply is often someone protecting themselves or needing a moment. That’s okay. It isn’t the problem in the thread.',
@@ -766,7 +766,7 @@
       var lx = r.literal[r.literal.length - 1], idiomMine = r.turns[lx.at].mine;
       moves.push({ key: 'literal', title: 'A figure of speech was taken at its word',
         say: '“' + lx.phrase + '” usually means ' + lx.means + '. The reply read it literally. Neither person did anything wrong: the words just meant two things.',
-        script: idiomMine ? 'When I said “' + lx.phrase + '”, I meant ' + lx.means + '. I should have just said that plainly.' : 'I took “' + lx.phrase + '” literally. Did you mean ' + lx.means + '? Could you tell me directly what you’d like?' });
+        script: idiomMine ? 'When I said “' + lx.phrase + ',” I meant ' + lx.means + '. I should have just said that plainly.' : 'I took “' + lx.phrase + '” literally. Did you mean ' + lx.means + '? Could you tell me directly what you’d like?' });
     }
     if (r.trend === 'shutdown') {
       moves.push({ key: 'pause', title: 'Someone has pulled back. Give it time, then come back',

@@ -125,7 +125,7 @@
     var id = 'tol-rm-once-' + (++onceN);
     host.classList.add('tol-remind', 'no-bubble', 'no-cheer');
     host.innerHTML =
-      '<p class="tol-rm-p">One reminder in your own calendar on ' + niceDate(new Date(+p[1], +p[2] - 1, +p[3])) + '. It just says “' + ONCE_TITLE + '”, so it says nothing private to anyone who sees your calendar. It lives in your calendar; nothing is sent to us.</p>' +
+      '<p class="tol-rm-p">One reminder in your own calendar on ' + niceDate(new Date(+p[1], +p[2] - 1, +p[3])) + '. It just says “' + ONCE_TITLE + ',” so it says nothing private to anyone who sees your calendar. It lives in your calendar. Nothing is sent to us.</p>' +
       '<div class="tol-rm-row"><label for="' + id + '-t">Time</label><input type="time" id="' + id + '-t" value="19:30" step="300"></div>' +
       '<div class="tol-rm-row">' +
         '<button type="button" class="tol-rm-b" data-rm="ics">Add to my calendar</button>' +
@@ -152,7 +152,7 @@
     host.classList.add('tol-remind', 'no-bubble', 'no-cheer');
     host.innerHTML =
       '<h2 class="tol-rm-h" id="' + id + '-h">Come back gently, once a week</h2>' +
-      '<p class="tol-rm-p">Pick a day and a time, and add a ten-minute reminder to your own calendar. It repeats every week and just says “' + TITLE + '”. Nothing is sent to us.</p>' +
+      '<p class="tol-rm-p">Pick a day and a time, and add a ten-minute reminder to your own calendar. It repeats every week and just says “' + TITLE + '.” Nothing is sent to us.</p>' +
       '<div class="tol-rm-row">' +
         '<label for="' + id + '-d">Day</label><select id="' + id + '-d">' + DAYS.map(function (d, i) { return '<option value="' + i + '"' + (i === 0 ? ' selected' : '') + '>' + d + '</option>'; }).join('') + '</select>' +
         '<label for="' + id + '-t">Time</label><select id="' + id + '-t" data-ten-more="1">' + TIMES.map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === '19:30' ? ' selected' : '') + '>' + t[1] + '</option>'; }).join('') +
@@ -178,7 +178,7 @@
     tIn.addEventListener('change', refresh); tIn.addEventListener('input', refresh); refresh();
     host.querySelector('[data-rm="ics"]').addEventListener('click', function () {
       download(calendar('Weekly reminder', [event({ uid: uid(), start: when(), minutes: 10, rrule: 'FREQ=WEEKLY', title: TITLE, note: what + '\n' + to, url: to })]), 'ten-minutes-for-me.ics');
-      msg.textContent = 'Your calendar file is ready. Open it to add “' + TITLE + '”, every ' + DAYS[+dSel.value] + ' at ' + niceTime(hm()) + '.';
+      msg.textContent = 'Your calendar file is ready. Open it to add “' + TITLE + ',” every ' + DAYS[+dSel.value] + ' at ' + niceTime(hm()) + '.';
     });
   }
 
@@ -207,7 +207,7 @@
       '</div>' +
       '<details class="tol-rm-more"><summary>Outlook on the web: one link a week</summary><ul data-rm="outlook"></ul></details>' +
       '<p class="tol-rm-msg" role="status" aria-live="polite"></p>' +
-      '<p class="tol-rm-small">Nothing is sent anywhere by this site. The calendar file is made on your device; open it and your phone or computer adds the events (Apple Calendar, Outlook and most phones). The Google and Outlook buttons open your own calendar in a new tab with the details filled in, and you choose whether to save them there. The title just says “' + SIX_TITLE + '”, so it says nothing private to anyone who glances at your calendar.</p>';
+      '<p class="tol-rm-small">Nothing is sent anywhere by this site. The calendar file is made on your device; open it and your phone or computer adds the events (Apple Calendar, Outlook and most phones). The Google and Outlook buttons open your own calendar in a new tab with the details filled in, and you choose whether to save them there. The title just says “' + SIX_TITLE + ',” so it says nothing private to anyone who glances at your calendar.</p>';
     var dSel = host.querySelector('#' + id + '-d'), tIn = host.querySelector('#' + id + '-t'), wSel = host.querySelector('#' + id + '-w');
     var g = host.querySelector('[data-rm="google"]'), ol = host.querySelector('[data-rm="outlook"]'), list = host.querySelector('.tol-rm-dates'), msg = host.querySelector('.tol-rm-msg');
     function hm() { var m = /^(\d\d):(\d\d)/.exec(tIn.value || ''); return m ? m[1] + ':' + m[2] : '19:30'; }

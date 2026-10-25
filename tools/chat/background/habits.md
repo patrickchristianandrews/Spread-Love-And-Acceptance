@@ -7,7 +7,7 @@ go: /library/motivation.html#habits-and-cues | Habits and cues (Library)
 evidence: The idea builds on research on implementation intentions and cues. The phrase “habit stacking” was popularized by writers including James Clear (Atomic Habits, 2018). Evidence for the specific technique is mostly indirect.
 try: “After I pour my morning coffee, I’ll check the family calendar for today.”
 
-Habit stacking means attaching a new habit to one you already do every day. The existing habit becomes the cue: “After I brush my teeth, I’ll…”, “When I sit down for dinner, we’ll…”.
+Habit stacking means attaching a new habit to one you already do every day. The existing habit becomes the cue: “After I brush my teeth, I’ll…,” “When I sit down for dinner, we’ll….”
 
 It works because it removes the need to remember. The old habit reminds you. Choose an anchor that happens reliably at the right time and place.
 
@@ -18,7 +18,7 @@ aka: tiny habits; start small; make it tiny; small habits
 see: Habit stacking; The two-minute start
 go: /library/motivation.html#habit-formation | Habit formation (Library)
 evidence: BJ Fogg describes the approach in Tiny Habits (2019): start with a very small behavior, anchor it, and celebrate. Research generally supports starting small, though Fogg’s specific method has limited formal testing.
-try: Instead of “clean the kitchen every night”, start with “wipe one counter after dinner”.
+try: Instead of “clean the kitchen every night,” start with “wipe one counter after dinner.”
 
 A tiny habit is a version of a behavior so small it feels almost silly: one push-up, one sentence in a journal, one dish. Tiny habits are easy to start on low-energy days, and they can grow naturally.
 
@@ -30,7 +30,7 @@ Program: This is Pillar II, Fix the setup, not the person: make the setup easy i
 aka: two minute rule; just two minutes; start for two minutes
 see: Tiny habits; Procrastination and the first step
 go: /library/motivation.html#procrastination | Procrastination (Library)
-evidence: A popular productivity guideline. David Allen’s “two-minute rule” (Getting Things Done, 2001) says to do tasks taking under two minutes right away; James Clear suggests scaling a habit down to two minutes. Both are practical tips rather than research findings.
+evidence: A popular productivity guideline. David Allen’s “two-minute rule” (Getting Things Done, 2001) says to do tasks taking under two minutes right away. James Clear suggests scaling a habit down to two minutes. Both are practical tips rather than research findings.
 try: “I’ll just do two minutes of the laundry pile. I can stop after that.”
 
 Starting is often the hardest part. Committing to just two minutes lowers the barrier, and once you’ve started, continuing is often easier than you expected.
@@ -44,9 +44,9 @@ aka: making the first step obvious; first step; next action
 see: The two-minute start; Tiny habits
 go: /library/motivation.html#procrastination | Procrastination (Library)
 evidence: Research on procrastination links it to how unpleasant or unclear a task feels. Breaking tasks into concrete next steps is a widely used strategy.
-try: Not “sort the taxes” but “find last year’s folder and put it on the table”.
+try: Not “sort the taxes” but “find last year’s folder and put it on the table.”
 
-Big, vague tasks invite avoidance. A clear, concrete first step (“open the email”, “put the gloves by the sink”) is much easier to start.
+Big, vague tasks invite avoidance. A clear, concrete first step (“open the email,” “put the gloves by the sink”) is much easier to start.
 
 Writing the very next physical action often unsticks tasks that have been sitting for weeks.
 
@@ -59,7 +59,7 @@ go: /library/motivation.html#habits-and-cues | Habits and cues (Library)
 evidence: Research on habits and on choice architecture suggests small changes in the environment (what’s easy, visible or in the way) can shift behavior more reliably than intentions alone.
 try: Put a laundry basket where clothes actually land, and a hook where keys actually get dropped.
 
-Our surroundings nudge us all day. If the laundry basket is in another room, clothes pile on the chair. If the bin is full and awkward, the rubbish waits.
+Our surroundings nudge us all day. If the laundry basket is in another room, clothes pile on the chair. If the trash is full and awkward, the trash waits.
 
 Making the helpful thing easy (and the unhelpful thing a little harder) often works better than reminders. It also takes blame out of it: the setup is doing the work.
 
@@ -74,7 +74,7 @@ try: Ask: “What happens if nobody decides?” That’s your default, and it’
 
 A default is whatever happens when nobody makes an active choice. At home, defaults are powerful: the person who noticed first last time often becomes the person who does it forever.
 
-Changing a default on purpose (“bins are Jordan’s now, noticing included”) is often more effective than asking for help each time.
+Changing a default on purpose (“trash are Jordan’s now, noticing included”) is often more effective than asking for help each time.
 
 Program: Pillar V, Notice the quiet incentives, is all about this. WP-03 turns defaults into named owners.
 
@@ -111,7 +111,7 @@ go: /prog-01.html | PROG-01: Six gentle weeks
 evidence: Research on behavior change (for example, the stages-of-change model) treats lapses as a normal part of the process rather than failure.
 try: “We stopped the daily check-ins over the holidays. Let’s just start again tonight.”
 
-Most people who build a habit fall off at some point: holidays, illness, a busy season. Restarting is part of the process, not a sign it didn’t work.
+Most people who build a habit fall off at some point: vacations, illness, a busy season. Restarting is part of the process, not a sign it didn’t work.
 
 When you restart, start smaller than before, and don’t try to make up for lost time.
 
@@ -148,9 +148,9 @@ aka: celebrate; celebrating progress; reward yourself
 see: Tiny habits; Small wins at home
 go: /library/motivation.html#small-wins | Small wins (Library)
 evidence: BJ Fogg recommends an immediate small celebration to help habits stick. Research on small wins (Teresa Amabile and Steven Kramer) links noticing progress with motivation.
-try: After finishing the laundry: a fist pump, a “nice!”, or a cup of tea.
+try: After finishing the laundry: a fist pump, a “nice!” or a cup of tea.
 
-A small moment of celebration right after doing a new habit (a smile, a “yes!”, a tick on the chart) helps connect the action with a good feeling.
+A small moment of celebration right after doing a new habit (a smile, a “yes!” a tick on the chart) helps connect the action with a good feeling.
 
 For households and teams, celebrating together (“we did the check-in every day this week!”) builds shared pride.
 
@@ -167,7 +167,7 @@ When a household is stuck on big problems, starting with a small, fixable one bu
 
 It also makes the harder conversations easier, because you’ve proved to each other you can agree.
 
-Program: WP-04 sorts repeat problems; start with the ones that just need a clear owner.
+Program: WP-04 sorts repeat problems. Start with the ones that just need a clear owner.
 
 ## Routines versus habits
 aka: routines; habits and routines; daily routines
@@ -176,7 +176,7 @@ go: /library/motivation.html#habit-formation | Habit formation (Library)
 evidence: Researchers generally define habits as automatic responses to cues, while routines are sequences we still choose. The two overlap in everyday life.
 try: A morning routine (make bed, breakfast, check calendar) can slowly turn into a habit that runs on autopilot.
 
-A routine is a regular sequence you choose to follow; a habit is something that has become automatic. Routines are often how habits start.
+A routine is a regular sequence you choose to follow. A habit is something that has become automatic. Routines are often how habits start.
 
 For people who find switching tasks hard, predictable routines can reduce the mental effort of each day. For people who love variety, a light routine with room for change often works better.
 

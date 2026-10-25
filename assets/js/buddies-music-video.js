@@ -28,7 +28,7 @@
   var LYRICS = [
     [4.07, 'both', 'Tune in, turn it up, here we go!'],
     [8.94, 'tidbit', 'Yo, it’s Tidbit, black mask, eyebrows tan,'], [11.33, 'tidbit', 'first one out the door with a big ol’ plan!'],
-    [13.25, 'tidbit', 'Tail on spin, I’m a zoom-zoom pup,'], [14.92, 'tidbit', 'if the sky gets grey, I’m still lookin’ up!'],
+    [13.25, 'tidbit', 'Tail on spin, I’m a zoom-zoom pup,'], [14.92, 'tidbit', 'if the sky gets gray, I’m still lookin’ up!'],
     [16.6, 'sugarfoot', 'And I’m Sugarfoot, white paws, slow and sweet,'], [18.67, 'sugarfoot', 'I take my time with my four little feet.'],
     [20.43, 'sugarfoot', 'When it gets too loud, I take a breath,'], [22.42, 'sugarfoot', 'say what I feel, then I try my best!'],
     [24.34, 'both', 'Different, different, that’s okay,'], [27.29, 'both', 'we find the way together every day!'],

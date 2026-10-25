@@ -168,7 +168,7 @@
       else if (v < 0 || v > 1) res.error = 'A stress tank score runs from 0 to 1 (the five answers added up, then divided by 20).';
     });
     if (res.error) return res;
-    if (res.missing.length) { res.error = 'Waiting on ' + res.missing.length + ' stress tank score' + (res.missing.length === 1 ? '' : 's') + '. Each person fills in their own; it is never worked out for someone else.'; return res; }
+    if (res.missing.length) { res.error = 'Waiting on ' + res.missing.length + ' stress tank score' + (res.missing.length === 1 ? '' : 's') + '. Each person fills in their own. It is never worked out for someone else.'; return res; }
     var v = scores.map(num);
     res.value = sum(v) / v.length;
     return res;
@@ -233,7 +233,7 @@
         text: 'Give one more job an owner (the person who does it and sees it through). Ownership would go from ' + f2(o.oc) + ' to ' + f2((own + 1) / t) + '.',
         link: ['One owner per job', '/workpapers/fill/wp-03.html'] });
       if (t - own > 1) out.push({ key: 'oc-all', gain: (1 - o.oc) * w.oc, full: true,
-        text: 'Naming owners for all ' + (t - own) + ' unowned jobs would add ' + fg((1 - o.oc) * w.oc) + '. Keep them on the list until they have names; deleting them only hides them.' });
+        text: 'Naming owners for all ' + (t - own) + ' unowned jobs would add ' + fg((1 - o.oc) * w.oc) + '. Keep them on the list until they have names. Deleting them only hides them.' });
     }
     if (o.as !== null && o.as > 0) {
       var drop = Math.min(0.10, o.as);

@@ -9,11 +9,11 @@ go: /wiring-card.html | The Wiring Card
 evidence: Guidance from autistic self-advocates and communication research on the double empathy problem. Explicit requests help many people, not only neurodivergent people.
 try: Not “It would be nice if the garage got cleaned sometime” but “Could you help me clean the garage on Saturday at 10?”
 
-Hints, hopes and indirect suggestions (“the bins are getting full…”) are easily missed, especially by people who take words literally. An explicit request says who, what and when.
+Hints, hopes and indirect suggestions (“the trash is getting full…”) are easily missed, especially by people who take words literally. An explicit request says who, what and when.
 
 It isn’t rude to be clear. For many people, a clear ask feels respectful: it tells them exactly how to help.
 
-Program: The Wiring Card lets people say “please ask me directly”. Wired Differently explains why hints can miss.
+Program: The Wiring Card lets people say “please ask me directly.” Wired Differently explains why hints can miss.
 
 ## Clear yes or no questions
 aka: yes or no questions; closed questions for clarity; either or questions
@@ -24,7 +24,7 @@ try: Instead of “What do you want to do about dinner?” try “Pasta or stir-
 
 Open questions can be hard when someone is tired, overwhelmed or finds decisions draining. A clear either-or or yes-or-no question lowers the effort.
 
-It isn’t about limiting choice. It’s about making the next step easy. You can always add “or something else?”.
+It isn’t about limiting choice. It’s about making the next step easy. You can always add “or something else?”
 
 Program: Wired Differently suggests asking about the body or actions (“more like tired, or more like annoyed?”) for people who find feelings hard to name.
 
@@ -87,7 +87,7 @@ go: /turning-toward.html | Turning Toward
 evidence: Described widely by autistic people as a way of sharing and bonding. Research on autistic social connection increasingly recognizes it as a genuine form of connection.
 try: When a loved one excitedly explains their interest, try: “Tell me more. What’s the coolest part?”
 
-Info-dumping means sharing lots of details about something you love. For many autistic people, it’s a way of showing care and inviting connection, like saying “this matters to me, and I want to share it with you”.
+Info-dumping means sharing lots of details about something you love. For many autistic people, it’s a way of showing care and inviting connection, like saying “this matters to me, and I want to share it with you.”
 
 Receiving it warmly, even briefly, is a powerful form of turning toward. It’s okay to say kindly when you need a break.
 
@@ -110,8 +110,8 @@ Program: The Library’s monotropism entry explains how some attention works in 
 aka: parallel play; being together separately; quiet company
 see: Body doubling; Info-dumping as connection
 go: /turning-toward.html | Turning Toward
-evidence: The term comes from child development research; adults (especially many autistic people) use it for being together while doing separate activities. It’s a described preference rather than a studied intervention.
-try: Sit together on the sofa, each reading or gaming, with no pressure to talk.
+evidence: The term comes from child development research. Adults (especially many autistic people) use it for being together while doing separate activities. It’s a described preference rather than a studied intervention.
+try: Sit together on the couch, each reading or gaming, with no pressure to talk.
 
 Parallel play means spending time in the same space while doing separate things. For many people it’s restful connection: company without the demands of conversation.
 
@@ -130,7 +130,7 @@ Body doubling means doing a task while someone else is present, either doing the
 
 It’s a simple, kind way to help someone who struggles to get going, without taking the task over.
 
-Program: For situations like “I can’t get myself to start”, a body double can be a great first step.
+Program: For situations like “I can’t get myself to start,” a body double can be a great first step.
 
 ## Time blindness
 aka: time blindness; losing track of time; always late ADHD

@@ -277,24 +277,24 @@
     // confirmed by you: what was said directly
     var fp = feelPhrase(S), cant = has(S, 's_feel:cant');
     if (fp) it('c:feel', 'confirmed', 'You feel ' + fp + (cant ? ', and something else you can’t name yet' : '') + '.', ['You picked ' + quoteList(feelWords(S).map(function (f) { return f.t; })) + (picked(S, 's_words').length ? ', and the words ' + quoteList(picked(S, 's_words').map(function (x) { return x.split(':')[1]; })) : '') + '.'], { tag: 'Feeling' });
-    else if (cant) it('c:feel', 'confirmed', 'You feel something you can’t name yet. That’s common, and the picture can hold it without a name.', ['You picked “I can’t name it”.'], { tag: 'Feeling' });
+    else if (cant) it('c:feel', 'confirmed', 'You feel something you can’t name yet. That’s common, and the picture can hold it without a name.', ['You picked “I can’t name it.”'], { tag: 'Feeling' });
     var n = num(S, 's_int'); if (n !== null) it('c:int', 'confirmed', 'It’s about ' + n + ' out of 10 right now.', ['You set the strength to ' + n + '.'], { tag: 'Feeling' });
     var dur = val(S, 's_dur'); var dOpt = dur && optOf(SCREEN.s_dur, dur); if (dOpt) it('c:dur', 'confirmed', dOpt.line, ['You picked “' + dOpt.t + '”.'], { tag: 'Feeling' });
     var bodyN = picked(S, 's_body').filter(function (x) { return x !== 'none'; }).map(function (x) { return sayOf(optOf(SCREEN.s_body, x)); });
-    if (bodyN.length) it('c:body', 'confirmed', 'You notice it in your body as ' + list(bodyN) + '.', ['You picked these in “Where do you notice it?”.'], { tag: 'Body' });
+    if (bodyN.length) it('c:body', 'confirmed', 'You notice it in your body as ' + list(bodyN) + '.', ['You picked these in “Where do you notice it?”'], { tag: 'Body' });
     var ab = val(S, 's_about'), abT = txt(S, 's_about'), area = val(S, 's_area');
     if (ab === 'one') it('c:about', 'confirmed', 'You think it’s mostly about ' + (D.areaShort[area] || 'one thing or one person') + '.' + (abT ? ' In your words: “' + abT + '”.' : ''), ['You picked “One thing or one person”' + (D.areaShort[area] ? ' and “' + optOf(SCREEN.s_area, area).t + '”' : '') + '.'], { tag: 'What it’s about' });
-    else if (ab === 'many') it('c:about', 'confirmed', 'It feels like lots of things at once.' + (abT ? ' In your words: “' + abT + '”.' : ''), ['You picked “Lots of things at once”.'], { tag: 'What it’s about' });
-    else if (ab === 'nothing') it('c:about', 'confirmed', 'You can’t point to one cause.' + (abT ? ' In your words: “' + abT + '”.' : ''), ['You picked “Nothing I can point to”.'], { tag: 'What it’s about' });
+    else if (ab === 'many') it('c:about', 'confirmed', 'It feels like lots of things at once.' + (abT ? ' In your words: “' + abT + '”.' : ''), ['You picked “Lots of things at once.”'], { tag: 'What it’s about' });
+    else if (ab === 'nothing') it('c:about', 'confirmed', 'You can’t point to one cause.' + (abT ? ' In your words: “' + abT + '”.' : ''), ['You picked “Nothing I can point to.”'], { tag: 'What it’s about' });
     else if (abT) it('c:about', 'confirmed', 'In your words, it’s about “' + abT + '”.', ['You wrote this yourself.'], { tag: 'What it’s about' });
     var th = txt(S, 'd_thought'); if (th) it('c:thought', 'confirmed', 'The thought that keeps coming back: “' + th + '”.', ['You wrote this yourself.'], { tag: 'Thoughts' });
     if (harm(S)) it('c:harm', 'confirmed', 'You mentioned thoughts of hurting yourself or not wanting to be here. ' + D.harmLine, ['You told me this, in a tap or in your own words.'], { tag: 'Important' });
-    if (val(S, 'c_interp') === 'no') it('c:sure', 'confirmed', 'You’re fairly sure of your read of what happened. That counts.', ['You answered “No, I’m fairly sure of my read”.'], { tag: 'Thoughts' });
+    if (val(S, 'c_interp') === 'no') it('c:sure', 'confirmed', 'You’re fairly sure of your read of what happened. That counts.', ['You answered “No, I’m fairly sure of my read.”'], { tag: 'Thoughts' });
     var good = picked(S, 's_good').filter(function (g) { return D.good[g]; }).map(function (g) { return D.good[g]; }), gT = txt(S, 's_good');
-    if (good.length || gT) it('c:good', 'confirmed', 'Going okay: ' + list(good.concat(gT ? ['“' + gT + '”'] : [])) + '.', ['You picked these under “What’s going okay”.'], { tag: 'What holds you' });
+    if (good.length || gT) it('c:good', 'confirmed', 'Going okay: ' + list(good.concat(gT ? ['“' + gT + '”'] : [])) + '.', ['You picked these under “What’s going okay.”'], { tag: 'What holds you' });
     var bf = txt(S, 'd_before'); if (bf) it('c:before', 'confirmed', 'What helped before: “' + bf + '”.', ['You wrote this yourself.'], { tag: 'What holds you' });
     var wish = picked(S, 's_wish').map(function (w) { return D.wishWords[w]; }).filter(Boolean), wT = txt(S, 's_wish');
-    if (wish.length || wT) it('c:wish', 'confirmed', 'You’d like ' + list(wish.concat(wT ? ['“' + wT + '”'] : [])) + '.', ['You picked these under “What would be different?”.'], { tag: 'What you want' });
+    if (wish.length || wT) it('c:wish', 'confirmed', 'You’d like ' + list(wish.concat(wT ? ['“' + wT + '”'] : [])) + '.', ['You picked these under “What would be different?”'], { tag: 'What you want' });
 
     // likely contributors and possible connections: factors
     ranked.forEach(function (f) {
@@ -384,7 +384,7 @@
     if (f('tension')) el({ id: 'p-tension', kind: 'person', style: 'jagged', title: 'A figure with a jagged line', color: '#B5655A', meaning: 'A figure joined to the middle by a jagged line, for tension or distance with someone close. It shows the strain between you. It says nothing about who that person is.', why: why('tension') });
     if (f('unheard')) el({ id: 'p-unheard', kind: 'person', style: 'broken', title: 'A figure with a broken line', color: '#9C7FA6', meaning: 'A figure with a broken line between you, for not feeling heard or appreciated.', why: why('unheard') });
     if (f('lonely')) el({ id: 'p-lonely', kind: 'person', style: 'far', title: 'A figure far away', color: '#5F9598', meaning: 'A figure far off along a dotted line, for feeling lonely or left out.', why: why('lonely') });
-    if (ids['c:good'] && has(S, 's_good:people')) el({ id: 'p-support', kind: 'person', style: 'warm', title: 'Warm figures close by', color: '#E0A458', meaning: 'Two warm figures close to the middle, for someone who helps or gets you.', why: ['You picked “Someone who helps or gets me”.'] });
+    if (ids['c:good'] && has(S, 's_good:people')) el({ id: 'p-support', kind: 'person', style: 'warm', title: 'Warm figures close by', color: '#E0A458', meaning: 'Two warm figures close to the middle, for someone who helps or gets you.', why: ['You picked “Someone who helps or gets me.”'] });
     // pressure from outside
     if (f('unfair')) el({ id: 'wedges', kind: 'wedges', title: 'Wedges pressing in', color: '#A35D6A', meaning: 'Soft wedges pressing in from the edges, for being treated unfairly. They start outside the frame because this comes from outside you.', why: why('unfair') });
     // reserves ring
@@ -516,7 +516,7 @@
     }
     for (var m = 0; m < C.length && steps.length < max; m++) if (take(C[m], true)) break;
     if (!steps.length || (steps.length === 1 && harm(S) && ids['c:harm'])) {
-      steps.push({ t: 'Name it in a word or two', d: 'Once today, stop and finish the sentence “Right now I feel…”. One or two words is plenty.', link: ['/quick-checks.html#today', 'My weather today'], sig: 'You can name the feeling a little faster next time.', from: 'A starting point', why: 'The map is still thin, and putting a feeling into words is a small, safe place to start.', whyList: [] });
+      steps.push({ t: 'Name it in a word or two', d: 'Once today, stop and finish the sentence “Right now I feel….” One or two words is plenty.', link: ['/quick-checks.html#today', 'My weather today'], sig: 'You can name the feeling a little faster next time.', from: 'A starting point', why: 'The map is still thin, and putting a feeling into words is a small, safe place to start.', whyList: [] });
     }
     // how you'll know it helped
     var sig = steps.map(function (s) { return s.sig; }).filter(Boolean);

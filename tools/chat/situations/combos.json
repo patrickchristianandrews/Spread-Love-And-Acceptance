@@ -11,8 +11,8 @@
     "kid+fairness": {
       "reflect": "Getting kids to pitch in without a daily battle is one of the most common family struggles there is.",
       "going": "This is Pillar II, Fix the setup, not the person. Kids and teens resist jobs that feel random or nagged, and do better with a few real jobs they fully own, with clear standards and a set time. Reminding every day turns you into the job’s real owner.",
-      "steps": ["Give each kid one or two real, age-sized jobs that are fully theirs, noticing included.", "Agree the standard and the time together (“bins out by 8 on Tuesday”), and write it where everyone sees it.", "Let natural consequences and a calm check-in do the work, rather than repeated reminders."],
-      "scripts": ["You’re old enough to own a real job in this house. Which of these would you like to be yours?", "The deal was bins out by 8. It’s 8:15. What do you need to make it happen?"]
+      "steps": ["Give each kid one or two real, age-sized jobs that are fully theirs, noticing included.", "Agree the standard and the time together (“trash out by 8 on Tuesday”), and write it where everyone sees it.", "Let natural consequences and a calm check-in do the work, rather than repeated reminders."],
+      "scripts": ["You’re old enough to own a real job in this house. Which of these would you like to be yours?", "The deal was trash out by 8. It’s 8:15. What do you need to make it happen?"]
     },
     "coworker+interrupt": {
       "going": "This is Pillar IV, Tune how you send and receive. In meetings, fast thinkers often jump in to build on an idea, and may not notice it cuts someone off. Quieter, more careful speakers lose their thread and their turn. It’s a mismatch in conversational rhythm, and it can be fixed with a small agreement rather than a confrontation."

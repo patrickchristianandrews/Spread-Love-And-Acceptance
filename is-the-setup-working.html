@@ -439,8 +439,8 @@
       <label class="num-toggle no-print"><input type="checkbox" id="show-nums"> Show the numbers</label>
       <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
       <div class="scores">
-        <div class="score-box"><span class="lbl">How the setup is working &middot; balance + ownership + stress</span><div class="val na" id="solvency-val">&mdash;</div><span class="num nums-only" id="solvency-num"></span><div class="band" id="solvency-band">Waiting on inputs.</div></div>
-        <div class="score-box"><span class="lbl">With repairs counted &middot; adds retuning (the overall score)</span><div class="val na" id="apex-val">&mdash;</div><span class="num nums-only" id="apex-num"></span><div class="band" id="apex-band">Waiting on inputs.</div></div>
+        <div class="score-box"><span class="lbl">How the setup is working &middot; balance + ownership + stress</span><div class="val na" id="solvency-val">n/a</div><span class="num nums-only" id="solvency-num"></span><div class="band" id="solvency-band">Waiting on inputs.</div></div>
+        <div class="score-box"><span class="lbl">With repairs counted &middot; adds retuning (the overall score)</span><div class="val na" id="apex-val">n/a</div><span class="num nums-only" id="apex-num"></span><div class="band" id="apex-band">Waiting on inputs.</div></div>
       </div>
 
       <div class="nums-only">
@@ -541,7 +541,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
           <tr><td>Balance</td><td><code>1 &minus; moved &divide; most</code>, where <code>moved = &frac12; &times; &Sigma; |share &minus; target share|</code> and <code>most = 1 &minus; the smallest target share</code>. The target is an even share (1 &divide; people) unless you choose an agreed split. With two people and an even target, it equals <code>1 &minus; |pctA &minus; pctB| &divide; 100</code>.</td><td><a href="/workpapers/fill/wp-01.html">WP-01</a></td></tr>
           <tr><td>Ownership</td><td><code>jobs with an owner &divide; all jobs listed</code>. Measures how clear ownership is, not how fair it is.</td><td><a href="/workpapers/fill/wp-03.html">WP-03</a></td></tr>
           <tr><td>Stress</td><td>Each person: <code>their five 0&ndash;4 answers added up &divide; 20</code>. Then the average across everyone. Counted as <code>1 &minus; stress</code>.</td><td><a href="/workpapers/fill/wp-02.html">WP-02</a></td></tr>
-          <tr><td>Retuning</td><td><code>moments retuned &divide; rough moments</code>, capped at 1.00. No value when there were no rough moments. Overall score only.</td><td><a href="/workpapers/fill/wp-09.html">WP-09</a></td></tr>
+          <tr><td>Retuning</td><td><code>moments retuned &divide; rough moments</code>, capped at 1:00. No value when there were no rough moments. Overall score only.</td><td><a href="/workpapers/fill/wp-09.html">WP-09</a></td></tr>
         </tbody>
       </table>
       </div>
@@ -567,7 +567,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
           <tr><td>Balance</td><td class="num">0.40</td><td class="num">0.35</td><td>Highest, because an unshared load keeps building up whether anyone notices or not.</td></tr>
           <tr><td>Ownership</td><td class="num">0.35</td><td class="num">0.30</td><td>Close behind, because work with no owner falls to whoever notices first, every time. That turns a fixable imbalance into a repeating one.</td></tr>
           <tr><td>1 &minus; stress</td><td class="num">0.25</td><td class="num">0.20</td><td>Lowest of the three, because it changes most from week to week. One week of bad sleep shouldn't dominate the read.</td></tr>
-          <tr><td>Retuning</td><td class="num">&mdash;</td><td class="num">0.15</td><td>Overall score only, and small, because it's a simple self-count that's easy to overstate.</td></tr>
+          <tr><td>Retuning</td><td class="num">n/a</td><td class="num">0.15</td><td>Overall score only, and small, because it's a simple self-count that's easy to overstate.</td></tr>
         </tbody>
       </table>
       </div>
@@ -605,7 +605,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
         <li><strong>No jobs listed:</strong> ownership has no value, rather than 0.00.</li>
         <li><strong>Anyone's stress-tank card incomplete:</strong> no read at all. A score is never worked out from some people's answers standing in for everyone's.</li>
         <li><strong>No rough moments:</strong> retuning has no value. The overall score uses the other three weights divided by 0.85, so they still add up to 1.00, and the read says so.</li>
-        <li><strong>More retunes than rough moments:</strong> retuning stops at 1.00.</li>
+        <li><strong>More retunes than rough moments:</strong> retuning stops at 1:00.</li>
         <li><strong>Agreed shares that don't add up to 100%:</strong> no balance until they do.</li>
       </ul>
     </div>
@@ -757,7 +757,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
   }
 
   function whoOptions(sel){
-    var o = '<option value="">— nobody yet</option>';
+    var o = '<option value="">Nobody yet</option>';
     for (var i = 0; i < nPeople(); i++) o += '<option value="' + i + '"' + (String(sel) === String(i) ? " selected" : "") + '>' + esc(nameOf(i)) + '</option>';
     o += '<option value="all"' + (sel === "all" ? " selected" : "") + '>Everyone together</option>';
     return o;
@@ -778,7 +778,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
       var h = '<div class="bat-card" role="group" aria-labelledby="bat-h-' + p + '"><h4 id="bat-h-' + p + '" data-name-card="' + p + '">' + esc(nameOf(p)) + '</h4>';
       FACTORS.forEach(function(f, k){
         var v = S.bat[p][k];
-        var opts = '<option value="">—</option>';
+        var opts = '<option value="">Choose</option>';
         for (var x = 0; x <= 4; x++) opts += '<option value="' + x + '"' + (String(v) === String(x) ? " selected" : "") + '>' + x + '</option>';
         h += '<div class="bat-row"><label for="bat-' + p + '-' + k + '">' + f + '</label><select id="bat-' + p + '-' + k + '" data-b-p="' + p + '" data-b-k="' + k + '">' + opts + '</select></div>';
       });
@@ -827,7 +827,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
 
     var d = $("wb-derive");
     if (b.value === null){
-      d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + badHtml + '<div>' + esc(b.error) + '</div><div><span class="out na">—</span></div>';
+      d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + badHtml + '<div>' + esc(b.error) + '</div><div><span class="out na">n/a</span></div>';
       return b;
     }
     var steps = badHtml + "<ol>";
@@ -862,7 +862,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     o.conc = C.concentration(byR, 3);
     var d = $("oc-derive");
     if (o.value === null){
-      d.innerHTML = '<div class="formula">Ownership = jobs with an owner ÷ all jobs</div><div>' + esc(o.error) + '</div><div><span class="out na">—</span></div>';
+      d.innerHTML = '<div class="formula">Ownership = jobs with an owner ÷ all jobs</div><div>' + esc(o.error) + '</div><div><span class="out na">n/a</span></div>';
       return o;
     }
     d.innerHTML = '<div class="formula">Ownership = jobs with an owner ÷ all jobs</div><div>' + owned + ' ÷ ' + total + ' jobs' + (total - owned ? ' (' + (total - owned) + ' still without an owner)' : '') + '</div>' +
@@ -878,7 +878,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
       var out = $("bat-out-" + p);
       if (!b){
         var filled = pts.filter(function(x){ return x !== ""; }).length;
-        if (out) out.textContent = "— (" + filled + " of 5 answered)";
+        if (out) out.textContent = "n/a (" + filled + " of 5 answered)";
         return null;
       }
       if (out) out.textContent = b.points + " ÷ 20 = " + f2(b.value) + " · " + C.wp02Band(b.value).label;
@@ -888,7 +888,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     var d = $("as-derive");
     if (s.value === null){
       var who = s.missing.map(nameOf);
-      d.innerHTML = '<div class="formula">Stress = the average of everyone’s stress-tank score</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">—</span></div>';
+      d.innerHTML = '<div class="formula">Stress = the average of everyone’s stress-tank score</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">n/a</span></div>';
       return s;
     }
     d.innerHTML = '<div class="formula">Stress = the average of everyone’s stress-tank score</div><div>(' + scores.map(f2).join(" + ") + ') ÷ ' + scores.length + ' = ' + (C.sum(scores) / scores.length).toFixed(3) + '</div>' +
@@ -909,13 +909,13 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     [["friction", pf], ["retunes", pr]].forEach(function(x){ if (x[1]) $(x[0]).setAttribute("aria-invalid", "true"); else $(x[0]).removeAttribute("aria-invalid"); });
     var r = C.retuning(pr ? "" : S.retunes, pf ? "" : S.friction);
     var d = $("rf-derive"), notes = [pf, pr].filter(Boolean);
-    if (r.value !== null && r.capped) notes.push("You counted " + r.retunes + " retunes but only " + r.friction + " rough moments. You can’t retune more moments than there were, so retuning is capped at 1.00. Worth checking the two numbers.");
+    if (r.value !== null && r.capped) notes.push("You counted " + r.retunes + " retunes but only " + r.friction + " rough moments. You can’t retune more moments than there were, so retuning is capped at 1:00. Worth checking the two numbers.");
     var nh = notes.length ? '<div class="err-note">' + notes.map(esc).join("<br>") + '</div>' : "";
     if (r.value === null){
       d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + esc(r.note) + '</div><div><span class="out na">n/a</span></div>';
       return r;
     }
-    d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + r.retunes + ' ÷ ' + r.friction + (r.capped ? " (capped at 1.00)" : "") + '</div><div><span class="out' + (r.value < 0.5 ? " warn" : "") + '">' + f2(r.value) + '</span> <span class="formula">retuning</span></div>';
+    d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + r.retunes + ' ÷ ' + r.friction + (r.capped ? " (capped at 1:00)" : "") + '</div><div><span class="out' + (r.value < 0.5 ? " warn" : "") + '">' + f2(r.value) + '</span> <span class="formula">retuning</span></div>';
     return r;
   }
 

@@ -413,7 +413,7 @@
       var i = -1; store.sessions.forEach(function (y, k) { if (y.id === x.id) i = k; });
       if (i >= 0) store.sessions[i] = x; else { store.sessions.push(x); if (store.sessions.length > MAXS) store.sessions.shift(); }
       S.savedId = x.id;
-      say('emo-saved', save() ? 'Saved on this device. Find it under “Past sessions”, and delete it anytime.' : 'Your browser wouldn’t let this page save. Nothing was kept.');
+      say('emo-saved', save() ? 'Saved on this device. Find it under “Past sessions,” and delete it anytime.' : 'Your browser wouldn’t let this page save. Nothing was kept.');
     },
     restart: function () { S = null; compare = null; app.dataset.phase = 'intro'; first = false; render(); },
     'open-s': function (t) { var id = t.getAttribute('data-id'), x = store.sessions.filter(function (y) { return y.id === id; })[0]; if (x) { fromSaved(x); render(); } },

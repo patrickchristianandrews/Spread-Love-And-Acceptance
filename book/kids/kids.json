@@ -17,10 +17,41 @@
     "picture-book": {
      "pdf": "picture-book.pdf",
      "pages": 40,
-     "bytes": 1536662
+     "bytes": 1544505
     }
    },
    "pages_printed": 40
+  },
+  "picture-book-screen": {
+   "files": {
+    "picture-book-screen": {
+     "pdf": "picture-book-screen.pdf",
+     "pages": 40,
+     "bytes": 1545982
+    }
+   }
+  },
+  "chapter-book": {
+   "title": "Turn Down the Static",
+   "trim_in": [
+    6,
+    9
+   ],
+   "paper": "white",
+   "chapters": 11,
+   "files": {
+    "chapter-book": {
+     "pdf": "chapter-book.pdf",
+     "pages": 92,
+     "bytes": 891549
+    }
+   },
+   "pages_printed": 92,
+   "cover": {
+    "width_in": 12.4572,
+    "height_in": 9.25,
+    "spine_in": 0.2072
+   }
   }
  }
 }

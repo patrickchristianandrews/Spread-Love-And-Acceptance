@@ -90,11 +90,11 @@
   ];
   // a short, calm note shown before each episode plays: what happens that might feel big
   var NOTES = {
-    s1e1: 'A far-off rumble of thunder at the end of chapter 2, and a big storm in chapter 4 (lightning shows as a soft glow). A swaying rope bridge that the pals cross slowly and together. The storm knocks the treehouse down and Sugarfoot cries; the pals snap at each other, then say sorry and rebuild it better.',
+    s1e1: 'A far-off rumble of thunder at the end of chapter 2, and a big storm in chapter 4 (lightning shows as a soft glow). A swaying rope bridge that the pals cross slowly and together. The storm knocks the treehouse down and Sugarfoot cries. The pals snap at each other, then say sorry and rebuild it better.',
     s1e2: 'The wind blows the song pages away, and the pals try to reach them from a windy rooftop. One pal snaps ("Why won\u2019t you just help?"), and they misunderstand each other for a while, then say sorry and make up.',
     s1e3: 'One pal quietly carries far too much and gets very tired. Stepping stones across a shallow creek, and soft falling snow. The pals argue and Sugarfoot cries a little, then they rest in a warm cabin and share the load.',
-    s1e4: 'The pals\u2019 kite falls into the waves; they don\u2019t go in after it, and Hopper the frog swims out to help. They blame each other for a while, have a cozy dream under the sea, then find out what really broke.',
-    s1e5: 'At night in the forest, the pals take a wrong turn, their lantern grows dim, and they argue. They are never in the pitch dark; they say sorry, rest, and the moon helps them find the way.',
+    s1e4: 'The pals\u2019 kite falls into the waves. They don\u2019t go in after it, and Hopper the frog swims out to help. They blame each other for a while, have a cozy dream under the sea, then find out what really broke.',
+    s1e5: 'At night in the forest, the pals take a wrong turn, their lantern grows dim, and they argue. They are never in the pitch dark. They say sorry, rest, and the moon helps them find the way.',
     s2e1: 'The pals sail out of sight of land, the waves get big, and Sugarfoot is scared of the deep water. The pals snap at each other, then say sorry. Later Tidbit misses home, and gets a hug.',
     s2e2: 'The pals argue about who did more work. Thick fog rolls in and they lose sight of each other for a little while, though they can always hear each other. A trail of lanterns brings them back together.',
     s2e3: 'Tidbit feels left out when Sugarfoot and a new friend hit it off. She gets loud, knocks over some books, says unkind things and runs off to the harbor. They talk it through, say sorry and make room for everyone.'

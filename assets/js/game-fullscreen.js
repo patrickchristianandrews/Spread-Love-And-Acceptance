@@ -35,6 +35,8 @@
     '.tol-fs-on{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:0!important;border:0!important;box-sizing:border-box!important;z-index:2147483000!important;overflow:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background-color:var(--paper,#F5EFDE)!important;color:var(--ink,#2B2620);padding:calc(var(--tol-fs-bar) + env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-right,0px) + 10px) calc(env(safe-area-inset-bottom,0px) + 10px) calc(env(safe-area-inset-left,0px) + 10px)!important}',
     '.tol-fs-on:focus{outline:none}',
     'html.tol-fs-lock,html.tol-fs-lock body{overflow:hidden!important}',
+    'html.tol-fs-lock .tol-bar,html.tol-fs-lock .tol-bar *{visibility:hidden!important}',
+    'html.tol-fs-lock body>*:not(.tol-fs-ph):not(script):not(style):not(:has(.tol-fs-on)){visibility:hidden!important}',
     '.tol-fs-on .gm-switch,.tol-fs-on .tol-fs-hide{display:none!important}',
     '.tol-fs-on>.tol-fs-bar{display:flex;position:fixed;top:0;left:0;right:0;z-index:2147483600;box-sizing:border-box;height:calc(var(--tol-fs-bar) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) calc(env(safe-area-inset-right,0px) + 8px) 0 calc(env(safe-area-inset-left,0px) + 14px);align-items:center;justify-content:space-between;gap:.6rem;background:#1E1B24;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.35);font:600 .95rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}',
     '.tol-fs-bar .tol-fs-title{color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.92}',

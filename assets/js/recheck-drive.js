@@ -49,7 +49,7 @@
       say: 'Try asking', lines: {
         self: 'What do I want more of this month, and what have I been putting up with?',
         grown: 'What’s the best thing that happened to you this week? I’d love to hear all about it.',
-        neighbor: 'How have you been keeping? I realise I never asked how your summer went.',
+        neighbor: 'How have you been keeping? I realize I never asked how your summer went.',
         partner: 'What’s on your mind this week that I don’t know about?',
         us: 'Take turns: what’s on your mind this week that the other one doesn’t know about?',
         relative: 'What’s something about your life now that I don’t know much about?',
@@ -64,7 +64,7 @@
         self: ['Thank you for keeping going with the things nobody sees.', 'Well done for keeping the garden going. The tomatoes finally came up.'],
         partner: ['Thank you for handling the school forms. I know that took real effort.', 'Thank you for coming with me to the doctor’s appointment. It went well, and it helped to have you there.', 'Thank you for keeping the garden going. The tomatoes finally came up, and that’s down to you.'],
         grown: 'Thank you for the call on Sunday. Hearing your news was the best part of my week.',
-        neighbor: 'Thank you for taking my bins in while I was away. It was a real kindness.',
+        neighbor: 'Thank you for bringing my trash cans in while I was away. It was a real kindness.',
         us: 'Take turns: one specific thank-you each, for something from this week.',
         relative: 'Thank you for always remembering everyone’s birthday. I notice it.',
         young: 'I saw how patient you were today. Thank you.',
@@ -110,7 +110,7 @@
         self: 'I’ve noticed I’ve stopped checking on ___. I’d like to take a kind look at it this month.',
         partner: 'Nothing’s wrong. I’ve noticed we haven’t asked each other much lately, and part of that is me. What’s it been like for you?',
         us: 'Nothing’s wrong. We’ve both stopped asking each other much lately. What has each of us noticed?',
-        relative: 'I realised we mostly talk about logistics. I’d like to hear how you’re really doing.',
+        relative: 'I realized we mostly talk about logistics. I’d like to hear how you’re really doing.',
         young: 'I might be picturing you as you were a year ago. I’d like to catch up.',
         friend: 'It’s been a while, and I’ve let it slide. I’d love to catch up.',
         housemate: 'The way we do this hasn’t changed in a while. Could we check whether it still works for everyone?',
@@ -153,13 +153,13 @@
   var KID = {
     state: { cat: 'Check how you feel', title: 'Check how you feel first', how: 'Before a real talk, take a breath. Are you tired, cross or in a hurry? Then wait for a calmer moment. Waiting is part of the play.', why: 'How you feel changes how your words come out.' },
     notice: { cat: 'Notice', title: 'Notice one small thing', how: 'Pick one small thing you’ve noticed lately, like you’ve both been busy, or you haven’t laughed together much. Just notice it. You don’t have to fix it yet.', why: 'Noticing is the first step.' },
-    ask: { cat: 'Ask', title: 'Ask a question you don’t know the answer to', how: 'Ask it, then listen to the whole answer. No fixing and no “when I was your age”. People keep changing, kids most of all.', why: 'A real question helps you know them as they are now.' },
-    thank: { cat: 'Thank', title: 'Say one thank-you, and say what for', how: 'Say exactly what they did, like “you fed the cat without being asked”. Saying what for shows you really noticed.', why: 'Kind things we’re used to get noticed again.' },
+    ask: { cat: 'Ask', title: 'Ask a question you don’t know the answer to', how: 'Ask it, then listen to the whole answer. No fixing and no “when I was your age.” People keep changing, kids most of all.', why: 'A real question helps you know them as they are now.' },
+    thank: { cat: 'Thank', title: 'Say one thank-you, and say what for', how: 'Say exactly what they did, like “you fed the cat without being asked.” Saying what for shows you really noticed.', why: 'Kind things we’re used to get noticed again.' },
     share: { cat: 'Your side', title: 'Tell them how your week has been', how: 'Say one true thing about how your week has been, and how that might have made you busy or grumpy. They can’t know unless you tell them.', why: 'Now they don’t have to guess how you’re doing.' },
     theirs: { cat: 'Their side', title: 'Ask how things have been for them', how: 'Ask how things have been for them, then listen to all of it. Try not to argue or explain. Their side is the other half of the story.', why: 'You need both sides to understand each other.' },
     listen: { cat: 'Listen', title: 'Say back what you heard', how: 'When they answer, say back what you heard before you reply, and check you got it right.', why: 'Feeling heard comes before getting an answer.' },
-    raise: { cat: 'Bring it up kindly', title: 'Bring something up kindly', how: 'Pick a calm time. Say what you’ve noticed, your own part, and ask a question. No “you always” or “you never”. You’re on the same team.', why: 'Kind words open the door without a fight.' },
-    touchstone: { cat: 'Shared joke', title: 'Bring back a shared joke', how: 'Use a silly word, a joke, a song or a story that only the two of you share. A few words can say “we’re a team”.', why: 'Shared jokes say “we’re us”.' },
+    raise: { cat: 'Bring it up kindly', title: 'Bring something up kindly', how: 'Pick a calm time. Say what you’ve noticed, your own part, and ask a question. No “you always” or “you never.” You’re on the same team.', why: 'Kind words open the door without a fight.' },
+    touchstone: { cat: 'Shared joke', title: 'Bring back a shared joke', how: 'Use a silly word, a joke, a song or a story that only the two of you share. A few words can say “we’re a team.”', why: 'Shared jokes say “we’re us.”' },
     recheck: { cat: 'Catch-up', title: 'Plan a regular catch-up', how: 'Pick a day and a small, easy thing, like a walk or a snack together. Put it on the calendar now.', why: 'A regular catch-up keeps you close.' },
     change: { cat: 'Try one thing', title: 'Agree one small thing to try', how: 'Pick one small thing you’ll both try, say who does what, and pick a day to see how it went.', why: 'One small thing you keep is better than a big list.' }
   };
@@ -346,11 +346,11 @@
   // How far along the drive is, without football words: about how many small plays are left to score.
   function plainWords(y) {
     if (plainOn()) {
-      if (y >= KICK) return 'You’ve done enough small, kind things to finish this round. Press “Finish this round”, or keep going.';
+      if (y >= KICK) return 'You’ve done enough small, kind things to finish this round. Press “Finish this round,” or keep going.';
       var pt = (y - START) / (KICK - START), lf = Math.max(1, Math.ceil((KICK - y) / 7)), wd = ['', 'one', 'two', 'three', 'four', 'five', 'six'];
       return (pt < 0.15 ? 'You’re just getting started' : pt < 0.4 ? 'You’re about a third of the way' : pt < 0.6 ? 'You’re about halfway' : 'You’re most of the way there') + ': about ' + (wd[lf] || lf) + ' more small ' + (lf === 1 ? 'thing' : 'things') + ' to finish this round.';
     }
-    if (y >= KICK) return 'In plain words: you’ve done enough small, kind things to score. Press “Kick the field goal”, or keep going.';
+    if (y >= KICK) return 'In plain words: you’ve done enough small, kind things to score. Press “Kick the field goal,” or keep going.';
     var part = (y - START) / (KICK - START), left = Math.max(1, Math.ceil((KICK - y) / 7));
     var where = part < 0.15 ? 'you’re just getting started' : part < 0.4 ? 'you’re about a third of the way' : part < 0.6 ? 'you’re about halfway' : 'you’re most of the way there';
     var words = ['', 'one', 'two', 'three', 'four', 'five', 'six'];

@@ -678,11 +678,11 @@ def cover(pages=PAGES):
     A.static_cloud(P, 'grumble', fx + 760, 560, 2.2, 'happy', fizz=False)
     A.butterfly(P, fx + 480, 520, 2.4)
     # back: the friends in a row
-    A.puddles(P, bx + 140, 800, 2.2, 'smile')
-    A.hopper(P, bx + 300, 805, 2.0, expr='happy')
-    A.nutmeg(P, bx + 420, 805, 2.0, expr='happy')
-    A.ducklings(P, bx + 540, 805, 1.1)
-    A.beep(P, bx + 640, 805, 1.8)
+    A.puddles(P, bx + 120, 800, 2.2, 'smile')
+    A.hopper(P, bx + 250, 805, 2.0, expr='happy')
+    A.nutmeg(P, bx + 360, 805, 2.0, expr='happy')
+    A.ducklings(P, bx + 470, 805, 1.0)
+    A.beep(P, bx + 565, 805, 1.7)
     bg = C.svg_wrap(P, wu, hu, 'bg')
     front = ('<div style="position:absolute;left:.45in;right:.45in;top:.4in;text-align:center">'
              '<div style="font:700 11.5pt Andika;letter-spacing:.08em;color:#3A3350">%s &middot; BOOK %d</div>'

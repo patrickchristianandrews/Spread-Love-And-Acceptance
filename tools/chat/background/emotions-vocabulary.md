@@ -9,9 +9,9 @@ try: If “bad” is all you can find, look at the wheel: is it closer to sad, s
 
 An emotion wheel arranges feeling words in rings: a few broad feelings in the middle (like happy, sad, angry, scared), with more specific words further out (like content, lonely, irritated, anxious). You start with the broad word and move outward to find a better fit.
 
-It’s useful when you only have “fine”, “bad” or “stressed” to hand. More precise words help you understand what you need, and help others understand you.
+It’s useful when you only have “fine,” “bad” or “stressed” to hand. More precise words help you understand what you need, and help others understand you.
 
-Program: The Library’s entry on emotional granularity explains why precise feeling words help. WP-09 asks for “the feeling underneath”, and the wheel is a handy way to find it.
+Program: The Library’s entry on emotional granularity explains why precise feeling words help. WP-09 asks for “the feeling underneath,” and the wheel is a handy way to find it.
 
 ## Primary and secondary emotions
 aka: primary emotions; secondary emotions; the feeling under the feeling
@@ -33,7 +33,7 @@ go: /quick-checks.html#today | Today’s Weather
 evidence: Rating intensity is used in many coaching and counseling settings. It’s a self-report tool, not a measurement, but it helps people notice change.
 try: “I’m about a 7 out of 10 frustrated right now, so I’d like to wait before we talk.”
 
-Rating a feeling from 1 to 10 turns a vague storm into something you can track and share. A 3 is “noticeable”; an 8 is “hard to think past”. Numbers can be easier to say than words, especially in a tense moment.
+Rating a feeling from 1 to 10 turns a vague storm into something you can track and share. A 3 is “noticeable.” An 8 is “hard to think past.” Numbers can be easier to say than words, especially in a tense moment.
 
 It also shows you when a feeling is fading, which it usually does, and helps you judge whether now is the time for a talk.
 
@@ -61,7 +61,7 @@ try: “My jaw is tight and my shoulders are up. I’m more wound up than I thou
 
 Emotions often show up in the body before we have words: a tight chest, a hot face, a clenched jaw, a sinking stomach, restless legs. Learning your own early signs gives you a head start to pause before a reaction takes over.
 
-Everyone’s map is different. Some people notice very little in their body, especially when stressed; that’s okay, and it can be practiced gently.
+Everyone’s map is different. Some people notice very little in their body, especially when stressed. That’s okay, and it can be practiced gently.
 
 Program: The Calm-Down Kit asks where you feel it first. The Library’s entry on interoception goes deeper.
 
@@ -115,7 +115,7 @@ Resentment is a slow-building feeling that something unfair keeps happening, oft
 
 It’s best treated as information, not as a character flaw. It usually points to invisible work, an unbalanced setup or a need that hasn’t been said out loud. Saying it early, and kindly, stops it hardening.
 
-Program: The Preface calls the pile of unseen work “unbilled debt”. The Lemonade Stand and WP-01 help make it visible before it turns into resentment.
+Program: The Preface calls the pile of unseen work “unbilled debt.” The Lemonade Stand and WP-01 help make it visible before it turns into resentment.
 
 ## Hurt
 aka: hurt feelings; feeling hurt; wounded
@@ -126,7 +126,7 @@ try: “When you laughed at my idea in front of everyone, I felt hurt. I don’t
 
 Hurt is the pain of feeling let down, dismissed or not valued by someone you care about. Because it feels vulnerable, many people show anger or silence instead.
 
-Saying “I felt hurt” is often more effective than saying “you were rude”, because it invites the other person to care rather than to defend.
+Saying “I felt hurt” is often more effective than saying “you were rude,” because it invites the other person to care rather than to defend.
 
 Program: The Check-ins guide suggests saying one fact and how it landed, then letting them say it back.
 
@@ -161,7 +161,7 @@ aka: envious; envy versus jealousy; comparing
 see: Social media and comparison at home; Mixed feelings
 go: /library/life.html#social-comparison | Social comparison (Library)
 evidence: Researchers distinguish envy (wanting what someone else has) from jealousy (fearing losing someone to a rival). Both are common and normal.
-try: “I felt envious when I saw their holiday photos. Maybe I just need a break too.”
+try: “I felt envious when I saw their vacation photos. Maybe I just need a break too.”
 
 Envy is wanting something another person has: their time off, their job, their calm household. It’s a normal feeling, and it can point to something you want more of.
 
@@ -219,7 +219,7 @@ Overwhelm is the feeling that there’s more than you can handle: too many tasks
 
 It’s usually a signal about load, not about your ability. Getting everything out of your head onto paper, and choosing one thing, is often the first way through.
 
-Program: The Lemonade Stand and WP-01 help you see the whole load; WP-02 helps you notice how full your battery is.
+Program: The Lemonade Stand and WP-01 help you see the whole load. WP-02 helps you notice how full your battery is.
 
 ## Helplessness
 aka: helpless; powerless; nothing I do matters
@@ -328,7 +328,7 @@ Program: The program’s whole approach is hopeful: problems usually live in the
 ## Amusement
 aka: amused; laughter; finding it funny
 see: Joy; Humor that repairs
-go: /library/communication.html#humour | Humor (Library)
+go: /library/communication.html#humor | Humor (Library)
 evidence: Research suggests shared laughter can ease tension and build closeness, though humor at someone’s expense has the opposite effect.
 try: When a small tension breaks into a shared laugh, let it. It’s a good sign.
 
@@ -349,7 +349,7 @@ A light joke, a silly face or a shared reference can signal “we’re okay” i
 
 If the other person is really hurt, humor can feel dismissive. Then a sincere word works better.
 
-Program: The Library’s repair-attempts entry covers the many small ways people signal “let’s not fight”.
+Program: The Library’s repair-attempts entry covers the many small ways people signal “let’s not fight.”
 
 ## Impatience
 aka: impatient; can’t wait; hurry
@@ -369,7 +369,7 @@ aka: feeling defensive; getting defensive; defensive reaction
 see: Hurt; Owning your part
 go: /library/relationships.html#four-horsemen | The four horsemen (Library)
 evidence: Relationship research lists defensiveness as a common pattern in escalating conflict. Taking some responsibility is the usual antidote.
-try: Notice the urge to say “but I…”, pause, and try: “You’re right that I forgot. Let me fix it.”
+try: Notice the urge to say “but I…,” pause, and try: “You’re right that I forgot. Let me fix it.”
 
 Feeling defensive is a natural response to feeling criticized or blamed. The body tenses, and the mind rushes to explain, justify or counter-attack.
 

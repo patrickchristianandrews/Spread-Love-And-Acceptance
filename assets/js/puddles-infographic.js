@@ -668,7 +668,7 @@
     else if (lay === 'compare') {
       [sp.left || {}, sp.right || {}].forEach(function (s) { out.push((s.label || '') + ': ' + strArr(s.items).join('; ')); });
       if (sp.bridge) out.push(sp.bridge);
-    } else if (lay === 'dos-donts') (sp.pairs || []).forEach(function (p) { out.push((sp.leftLabel || 'Instead of') + ' “' + p[0] + '”, ' + (sp.rightLabel || 'try').toLowerCase() + ': “' + p[1] + '”'); });
+    } else if (lay === 'dos-donts') (sp.pairs || []).forEach(function (p) { out.push((sp.leftLabel || 'Instead of') + ' “' + p[0] + ',” ' + (sp.rightLabel || 'try').toLowerCase() + ': “' + p[1] + '”'); });
     else if (lay === 'split') {
       var data = sp.data || [], tot = data.reduce(function (n, d) { return n + (+d.value || 0); }, 0) || 1;
       data.forEach(function (d) { out.push(d.name + ': ' + (sp.unit === '%' ? '' : fmtNum(d.value) + (sp.unit ? ' ' + sp.unit : '') + ', ') + Math.round(d.value / tot * 100) + '%'); });

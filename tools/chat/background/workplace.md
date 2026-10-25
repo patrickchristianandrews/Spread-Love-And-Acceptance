@@ -87,7 +87,7 @@ go: /library/communication.html#feedback | Feedback (Library)
 evidence: Research suggests specific feedback requests get more useful answers than general ones. Feedback-seeking is linked with learning, though the relationship is complex.
 try: “What’s one thing I could do differently in these client calls?”
 
-A general “any feedback?” usually gets “all good!”. A specific question (“what’s one thing I could improve in my reports?”) gets something useful.
+A general “any feedback?” usually gets “all good!” A specific question (“what’s one thing I could improve in my reports?”) gets something useful.
 
 Asking regularly makes feedback feel normal, not alarming, for both sides.
 
@@ -176,7 +176,7 @@ aka: remote work connection; hybrid teams; working from home team
 see: Status updates that help; Texting norms that prevent fights
 go: /relationships-in-depth.html#coworkers | Where coworkers and teams start
 evidence: Research on remote work suggests people can feel more isolated and misread tone more often in text-heavy teams. Deliberate connection helps.
-try: Start meetings with a quick round of “one good thing this week”.
+try: Start meetings with a quick round of “one good thing this week.”
 
 Remote and hybrid teams lose the small, casual moments that build trust in an office. Messages carry less tone, so misunderstandings rise.
 
@@ -191,7 +191,7 @@ go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Research on burnout links chronic workload imbalance with exhaustion. Raising workload early, with facts, is widely recommended.
 try: “Here’s what’s on my plate this sprint. If this new project is a priority, which of these should move?”
 
-When work piles up, a conversation with facts (a list of current tasks and their time) goes better than a general “I’m swamped”. It lets your manager help you prioritize.
+When work piles up, a conversation with facts (a list of current tasks and their time) goes better than a general “I’m swamped.” It lets your manager help you prioritize.
 
 Asking “what should move?” rather than “can I say no?” frames it as a shared problem.
 

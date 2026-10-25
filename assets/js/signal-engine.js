@@ -249,7 +249,7 @@ const F = [
    what:"\"On purpose\" says you know why they did it. They can only argue about their motive, and the thing you need gets lost.",
    fix:"Leave the motive out. Say what happened and what you'd like: \"Plans have landed on my weekends a few times. Can we check the calendar first?\""},
   {id:"blunt", name:"Blunt opener (\"That is incorrect\")", kind:"static", re:null,
-   what:"\"That is incorrect\" is clear, and many listeners still hear it as cold, or as a mark against them. The fact is fine; the opener carries the edge.",
+   what:"\"That is incorrect\" is clear, and many listeners still hear it as cold, or as a mark against them. The fact is fine. The opener carries the edge.",
    fix:"Keep the fact and soften the opener: \"Quick correction: the deadline is Friday, not Thursday.\""},
   {id:"closer", name:"Closes the topic", kind:"static", re:null,
    what:"\"We'll decide ourselves\" is fair, and it can still sound like a door closing on someone who cares.",
@@ -279,7 +279,7 @@ const F = [
    fix:"Drop \"just,\" \"obviously\" and \"easy.\" What's easy for one wiring can be real work for another."},
   {id:"intens", name:"Intensifier (\"literally,\" \"seriously\")", kind:"static",
    re:/\b(?:literally|seriously(?![?!]*$))\b/gi,
-   what:"\"Literally\" and \"seriously\" turn up the volume. Most listeners hear frustration; a literal listener may take the words at face value and check whether they're exactly true.",
+   what:"\"Literally\" and \"seriously\" turn up the volume. Most listeners hear frustration. A literal listener may take the words at face value and check whether they're exactly true.",
    fix:"Drop the intensifier and say the plain size of it: \"I got home ten minutes ago.\""},
   {id:"urgent", name:"Time pressure without a reason", kind:"static",
    re:/\b(?:right now|immediately|this instant|this second|this minute|asap|a\.s\.a\.p|hurry(?: up)?|urgent(?:ly)?|drop everything)\b|\bnow!+/gi,
@@ -880,7 +880,7 @@ const ADD = {
   swear:[2,"They're very angry. What did I do, and what do they want?","The anger is clear. The request, if there is one, isn't."],
   hostile:[3,"My last nerve? Done with me? What do they want me to do?","Fed-up lines and idioms may be read literally, and they don't contain an ask to act on."],
   intens:[1,"Literally? Is that exactly true?","Intensifiers may be taken at face value and checked for accuracy."],
-  period:[0,"A full stop. That's just punctuation.","Many autistic readers take punctuation as punctuation, not as mood."],
+  period:[0,"A period. That's just punctuation.","Many autistic readers take punctuation as punctuation, not as mood."],
   critic:[1,"Something went wrong. Which thing, and what should I do now?","Correction lands best with the specific thing and the next step."],
   already:[1,"I missed it. Where is it?","Pointing back to a message doesn't say which part matters."],
   stopask:[2,"Stop asking, but I still don't have an answer.","The question stays open, and open questions keep looping."],
@@ -915,12 +915,12 @@ const ADD = {
  adhd:{
   count:[3,"Here's my whole record again.","For many ADHD adults, a count lands on years of similar comments, not on this one miss."],
   excuse:[1,"I get it. But I'm still the one left holding it.","Even a listener who shares the struggle can hear that the fix is now theirs."],
-  swear:[3,"I've messed up badly again.","Anger in the words lands on a long history of being told off."],
+  swear:[3,"I've messed up badly again.","Anger in the words lands on a long history of being scolded."],
   hostile:[3,"They're done with me.","A fed-up line can sound like rejection, which many ADHD adults feel very sharply."],
   intens:[1,"They're really annoyed with me.","The intensifier carries the frustration."],
   pointed:[2,"I dropped it again, and now it's on the record.","For many ADHD adults a missed message is a familiar slip. A pointer to it can land as shame, which makes the reply harder to start."],
   nudge:[2,"I forgot something. What was it?","\"Any update?\" with no details sends the listener hunting for what they missed."],
-  heat:[3,"Proof I always fail.","\"For once\" lands on the whole history of being told off, not on today's task."],
+  heat:[3,"Proof I always fail.","\"For once\" lands on the whole history of being scolded, not on today's task."],
   oblig:[3,"Pressure. And pressure makes starting harder, not easier.","Many ADHD adults hear \"you need to\" as the voice of every teacher and boss who said it before. The shame can lead to freezing or putting it off, which can look like refusal but isn't."],
   should:[2,"Another thing I'm failing at.","\"Should\" can land as a reminder of every other should."],
   shouldhave:[2,"Another failure I can't undo.","The honest answer is often \"I forgot,\" which feels like confessing a flaw."],
@@ -1268,7 +1268,7 @@ const REFRAMES = [
   {id:"treat", re:/\byou treat(?:ed|s|ing)? me like (?:the |a |an |your |some )?(help|maid|servant|cleaner|nanny|babysitter|slave|housekeeper|staff|employee|secretary|assistant|skivvy|doormat|child|kid|idiot|[a-z]+)\b/i,
    why:"\"You treat me like the help\" is a label, so the listener argues with the label. The feeling (taken for granted) and one fair split can actually be answered.",
    send:(m,c)=>/\b(?:job|work|working)\b(?:\s+too)?/i.test(c.text) && /\btoo\b/i.test(c.text) ? "I'm working too, and when the house jobs default to me, I feel taken for granted. Can we split [one job, like the dog walks]?" : /^(?:child|kid|idiot)$/i.test(m[1]) ? "When [what happened], I felt talked down to. Could you [one specific thing] next time?" : "I've been feeling taken for granted lately. Can we split [one job, like the dog walks]?",
-   recv:{mean:"This sounds like they feel taken for granted. The label is the hurt talking; underneath is usually a wish for a fairer split.", reply:"I don't want you to feel that way. Which job would help most if I took it?"}},
+   recv:{mean:"This sounds like they feel taken for granted. The label is the hurt talking. Underneath is usually a wish for a fairer split.", reply:"I don't want you to feel that way. Which job would help most if I took it?"}},
   {id:"suits", re:/\b(?:i guess )?i'm (?:only|just) your (?:\w+) when it suits you\b|\bwhen(?:ever)? it suits you\b|\bi guess i'm (?:only|just) (?:your|a|the)\b[^.!?]*/i,
    why:"\"Only when it suits you\" is an accusation, so the listener defends themselves. Saying you miss them and asking for a little time says what you need.",
    send:(m,c)=>c.work ? "I've been feeling a bit left out of things lately. Could we find ten minutes this week to catch up?" : "I miss you and I've been feeling a bit left out. Could we find ten minutes this week?",
@@ -1298,17 +1298,17 @@ const REFRAMES = [
      return /gaslight/.test(v) ? "When you said [what they said], it didn't match how I remember it, and I came away doubting myself. Can we go over what happened, one thing at a time?" : "I'm feeling pressured about [the thing]. I'd like to decide in my own time. Can we talk about it once I've thought it through?"; },
    recv:{mean:"They feel their memory or their choices aren't being respected. Underneath is usually a wish to be believed, or to have room to decide.", reply:"I don't want you to feel that way. Can you tell me what happened, as you remember it?"}},
   {id:"notmum", re:/\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b[^.!?]*/i,
-   why:"\"You're not my mum\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
+   why:"\"You're not my mom\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
    send:(m,c)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
-     const who = w==="mum"||w==="mother" ? "Mum" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mum or Dad]";
+     const who = w==="mum"||w==="mother" ? "Mum" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mom or Dad]";
      // "so stop acting like it", "stop treating me like a kid": the ask stays, said as what they'd like
-     if(NOT_PARENT_ASK.test(c.text)) return "I know you're looking after me. I miss "+(who==="[Mum or Dad]" ? "[Mum or Dad]" : who)+", and I'd like to be treated more like my age. Can we talk about it?";
+     if(NOT_PARENT_ASK.test(c.text)) return "I know you're looking after me. I miss "+(who==="[Mum or Dad]" ? "[Mom or Dad]" : who)+", and I'd like to be treated more like my age. Can we talk about it?";
      return "I'm not angry at you. I'm just missing "+who+" today. I need some space right now, can we talk later?"; },
-   recv:{mean:"This hurts to hear. Often it's grief talking, or missing a parent, or feeling crowded and told what to do. It doesn't mean you don't matter to them.", reply:(m,c)=>NOT_PARENT_ASK.test(c.text) ? "I'm not trying to replace your mum or dad. Can we talk about what would feel fair for your age?" : "Okay. I'll give you some space. I'm here when you want to talk."}},
+   recv:{mean:"This hurts to hear. Often it's grief talking, or missing a parent, or feeling crowded and told what to do. It doesn't mean you don't matter to them.", reply:(m,c)=>NOT_PARENT_ASK.test(c.text) ? "I'm not trying to replace your mom or dad. Can we talk about what would feel fair for your age?" : "Okay. I'll give you some space. I'm here when you want to talk."}},
   {id:"nowyou", re:/(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*[.!?]*(?:\s*after (?:you|everything you|all you|what you) [^.!?]*[.!?]*)?|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b[^.!?]*/i,
    why:"A sharp question or an \"after you…\" says the hurt as blame, so the listener defends the past. Saying the hurt plainly, and what you need before you talk, can actually be heard.",
    send:(m,c)=>"I'm still hurt "+grievanceOf(c.text)+". If we talk, I need us to start there.",
-   recv:{mean:"They're still hurt about what happened before. The edge is the hurt; it doesn't have to mean the door is shut for good.", reply:"You're right to be hurt. I'm not asking you to talk before you're ready. I'm here when you are."}},
+   recv:{mean:"They're still hurt about what happened before. The edge is the hurt. It doesn't have to mean the door is shut for good.", reply:"You're right to be hurt. I'm not asking you to talk before you're ready. I'm here when you are."}},
   {id:"hurtguilt", re:new RegExp(WITHDRAW_RE.source+"|"+OLDDAYS_RE.source, "i"),
    why:"Pulling back (\"I won't bother then\") or \"in my day\" says the hurt sideways, so it may land as guilt and the listener gets defensive. Saying the feeling plainly, and asking what would suit them, keeps you close.",
    send:(m,c)=>{
@@ -2047,7 +2047,7 @@ const CHANGE_WHY = {
   dots:{g:"Trailing dots leave the listener guessing what you didn't say.", anxiety:"An unfinished thought tends to get filled in with the worst case."},
   disclaim:{g:"A disclaimer like this announces a hit and asks the listener not to mind it. Without it, the point can land on its own.", anxiety:"The disclaimer is often heard as \"brace yourself.\"", autistic:"The literal words (\"no offense\") and the message point different ways, which is confusing."},
   minim:{g:"\"Just,\" \"simply\" and \"obviously\" say the task should be easy. If it isn't easy for them, the word adds shame.", adhd:"For many ADHD listeners, \"just do it\" skips the hard part, which is starting.", autistic:"\"Just\" can hide steps that need spelling out.", dyspraxic:"What looks simple can cost real planning and effort."},
-  again:{g:"\"Again,\" \"still\" and \"even\" point at a pattern. Taking them out keeps the talk on this one time, which the listener can actually do something about.", adhd:"For many ADHD listeners, \"again\" lands on the whole history of being told off, not on today."},
+  again:{g:"\"Again,\" \"still\" and \"even\" point at a pattern. Taking them out keeps the talk on this one time, which the listener can actually do something about.", adhd:"For many ADHD listeners, \"again\" lands on the whole history of being scolded, not on today."},
   sarcasm:{g:"Sarcasm carries the real message in tone, the opposite of the words. Saying the real feeling plainly means it can't be missed or over-heard.", autistic:"Sarcasm may be taken literally, so the real message never arrives."},
   guilt:{g:"Guilt framing asks for payment for past effort. Naming your load plainly, and asking for one thing, is honest and easier to say yes to."},
   threat:{g:"An \"if you don't… then I'll…\" sentence puts the relationship on the line over a task. The ask stays, the threat goes. If there is a real limit, say it once, calmly, at a calm time, as your own plan and not as leverage.", autistic:"Conditional statements are often taken literally, and remembered.", anxiety:"An ultimatum confirms the deepest worry, that the bond is at risk.", trauma:"Threats go straight to the alarm."},
@@ -2079,7 +2079,7 @@ const CHANGE_WHY = {
   defend:{g:"\"I said…\" defends you before anyone has blamed you. Saying the fact on its own keeps it information, not a counter-argument."},
   brushoff:{g:"\"Whatever\" or \"I don't care\" can mean \"either is fine\" or \"I'm upset.\" Saying which one you mean stops the listener guessing, usually wrong.", anxiety:"A brush-off is often heard as anger or pulling away.", autistic:"A brush-off may be taken at its word."},
   dxlabel:{g:"A diagnosis used as a put-down is an insult, and it lands on everyone who has that diagnosis. The rewrite leaves it out and keeps what you actually want to say."},
-  harm:{g:"Words about hurting someone, or a veiled warning, can frighten the person reading, whatever was meant. The threat is left out completely, and the feeling underneath it is said instead, with anything else you asked for kept.", trauma:"Threatening words can register as danger straight away, even as a joke.", autistic:"A threat may be taken literally."},
+  harm:{g:"Words about hurting someone, or a veiled warning, can frighten the person reading, whatever was meant. The threat is left out completely, and the feeling underneath it is said instead, with anything else you asked for kept.", trauma:"Threatening words can register as danger right away, even as a joke.", autistic:"A threat may be taken literally."},
   violent:{g:"\"I'll kill you\" is an exaggeration, but in writing it can read as a real threat. The rewrite says the true size of it and keeps what you want.", autistic:"An exaggerated threat may be taken literally.", trauma:"Violent words can set off alarm even when they're clearly not meant."},
   selfput:{g:"Calling yourself stupid pulls the listener into reassuring you. The rewrite keeps the apology and what happened, and leaves the put-down out."},
   overhedge:{g:"A stack of softeners hides the ask. One softener is enough to keep it kind, and the ask stays clear."},
@@ -2101,7 +2101,7 @@ const CHANGE_WHY = {
   insult:{g:"Name-calling is a verdict on the person, and a verdict can't be fixed. The rewrite drops it and keeps what happened and what you'd like.", adhd:"Labels echo years of similar comments and can shut the conversation down."},
   idiom:{g:"A figure of speech says one thing and means another. The plain words mean exactly what you mean, for every listener.", autistic:"Figures of speech may be taken literally, especially under stress.", dld:"Figurative language can be hard to decode."},
   intens:{g:"\"Literally\" and \"seriously\" add volume, not information. Without them the sentence says the same thing, calmly.", autistic:"An intensifier may be taken at face value and checked for accuracy."},
-  count:{g:"Counting the misses (\"third time,\" \"again\") reads as a record being kept, so people hear blame and stop reading for the fix. The days and the impact carry the pattern on their own. If it keeps happening with one person, raise it with them on their own, not in the channel.", adhd:"For many ADHD listeners, a count lands on the whole history of being told off, not on the one fix that's needed.", anxiety:"A running count can sound like a case being built, and gets replayed."},
+  count:{g:"Counting the misses (\"third time,\" \"again\") reads as a record being kept, so people hear blame and stop reading for the fix. The days and the impact carry the pattern on their own. If it keeps happening with one person, raise it with them on their own, not in the channel.", adhd:"For many ADHD listeners, a count lands on the whole history of being scolded, not on the one fix that's needed.", anxiety:"A running count can sound like a case being built, and gets replayed."},
   guys:{g:"\"Guys\" at the start of a correction can read as a call-out to the whole group, and not everyone hears themselves in it. The message works without it."},
   workask:{g:"\"Sort it out\" doesn't say who, or what done looks like, so everyone can assume someone else has it. Asking to agree one owner, by a day, gives the group one clear thing to say yes to."},
   impact:{g:"Saying when it happened and what it affected keeps it about the work, not about a person. People can fix a process they can see."},
@@ -3502,8 +3502,8 @@ const SHARED_READ = {
  autistic:{contempt:[2,"Something's wrong, and I'm not sure what I did.","The mocking may be read literally, or felt without knowing its cause. Either way, the actual request is missing."],
      passiveag:[2,"Some of us? Which of us? What do they want me to do?","The request is hidden under politeness, so it may simply not be decoded as a request."],
      stonewall:[2,"Not now means when?","A pause with no end point leaves the plan open, which is hard to hold."]},
- adhd:{contempt:[3,"Here we go. I've failed again.","Many ADHD adults have heard a lot of criticism; a put-down lands on the whole history."],
-     passiveag:[2,"I missed something, again.","The edge lands fast; the actual ask, if there is one, may not."],
+ adhd:{contempt:[3,"Here we go. I've failed again.","Many ADHD adults have heard a lot of criticism. A put-down lands on the whole history."],
+     passiveag:[2,"I missed something, again.","The edge lands fast. The actual ask, if there is one, may not."],
      stonewall:[2,"I'll forget to come back to this.","Without a set time, the conversation can slip away, and it looks like not caring."]},
  anxiety:{contempt:[3,"They can't stand me.","A put-down is heard as rejection, which is much bigger than the moment."],
      passiveag:[3,"They're angry with me and won't say it.","The unspoken part gets filled in with the worst case, and replayed later."],
@@ -3573,7 +3573,7 @@ Object.assign(CHECK, {
 Object.assign(CHANGE_WHY, {
   legal:{g:"A threat of court or custody turns a parenting problem into a fight to win, and messages like this are often saved and shown later. The worry underneath can be said on its own. If there is a real legal step, it goes through the proper channel, not a message.", anxiety:"A threat about the children goes straight to the biggest fear a parent has."},
   kidsfirst:{g:"Telling the children first puts them in the middle. Agreeing together on what they hear protects them, and keeps the adults on the same side of it."},
-  safefact:{g:"The fact is said once, in your own words, without \"again\". Nothing is added, so the worry and the ask for a habit stay just as clear and just as direct.", adhd:"For many ADHD listeners, \"again\" lands on every time they have been told off. The plain fact is easier to hear, and easier to act on.", hsp:"A highly sensitive listener tends to feel the blame more than the words. The plain fact keeps the focus on keeping everyone safe.", trauma:"Blame about the past can feel like danger. The plain fact keeps it about safety, not about who failed."},
+  safefact:{g:"The fact is said once, in your own words, without \"again\". Nothing is added, so the worry and the ask for a habit stay just as clear and just as direct.", adhd:"For many ADHD listeners, \"again\" lands on every time they have been scolded. The plain fact is easier to hear, and easier to act on.", hsp:"A highly sensitive listener tends to feel the blame more than the words. The plain fact keeps the focus on keeping everyone safe.", trauma:"Blame about the past can feel like danger. The plain fact keeps it about safety, not about who failed."},
   safety:{g:"The worry is real and worth saying. A habit (\"every time\") keeps everyone safe going forward. A deadline or a blame word would only cover this one time.", adhd:"A cue in the right place (a note by the door) works better than trying harder to remember."},
   sarcasm:{g:"Sarcasm carries the real message in the tone, which a text doesn't have. Said plainly, the hurt underneath can actually be answered."},
   plain:{g:"The automatic rewrite of this part didn't come out as clear English, so it's left as a blank for your own words. Short and plain is best."}
@@ -3612,7 +3612,7 @@ const SELF_MEANT = {
     minimal:"you may have meant \"fine,\" or \"ask me later.\" Your tone would carry the rest, and they may not hear it.", ominous:"you probably meant something serious, worded this way to signal its weight.",
     vtime:"you probably meant a soft deadline, often sooner than the words say.", softno:"you may have meant a polite no.", joke:"you were probably signaling friendliness."},
   autistic:{as:"an autistic person", d:"you most likely meant the words as stated. Many autistic people prefer direct, precise language (National Autistic Society).",
-    minimal:"you probably meant literally that, without social padding.", period:"you almost certainly meant the full stop as plain punctuation.",
+    minimal:"you probably meant literally that, without social padding.", period:"you almost certainly meant the period as plain punctuation.",
     blameq:"you may have meant it as a real question, wanting the reason, not an apology.", absolute:"you may have meant it precisely, or you may be overloaded. Naming one specific time helps them hear it.",
     critic:"you probably meant it about the task, not about them.", long:"you probably added the detail out of care or accuracy, not to lecture.",
     tone:"you may be genuinely unsure what their face or tone is saying.", label:"you may have been overloaded when you wrote it. Naming what specifically went wrong helps them hear it."},
@@ -3664,7 +3664,7 @@ const DIG_READ = {
      jab:[3,"I've failed them, and they resent me.","A dig leaves an anxious listener replaying it, and looking for proof."],
      motive:[2,"They think I'm a bad person.","Being accused of meaning harm is hard to put down."],
      blunt:[2,"I've got it wrong, and now they're annoyed.","A blunt correction can feel like a judgment."],
-     closer:[2,"They don't want me involved any more.","A closed door is filled in with the worst case."]},
+     closer:[2,"They don't want me involved anymore.","A closed door is filled in with the worst case."]},
  adhd:{withdraw:[2,"I've messed up again, and now they're hurt.","Guilt lands on old shame, fast."], olddays:[2,"Nothing I do is the right way.","A comparison echoes years of being told to do it properly."],
      menace:[3,"This is out of control.","A threat lands fast and loud."],
      jab:[2,"Nothing I do is ever enough.","A scorecard echoes years of being told they didn't try hard enough."],
@@ -3739,8 +3739,8 @@ REFRAMES.forEach(r=>{ CHANGE_WHY["rf_"+r.id] = {g:r.why}; });
   const LENS = {
     dyslexic:"Dyslexia mostly changes how much reading costs, not how this lands, so it may land the way it would for most listeners.",
     dyspraxic:"Dyspraxia mostly affects planning and doing, so the words themselves may land the way they would for most listeners.",
-    apd:"Heard out loud, the words may be harder to catch in full; the edge usually still comes through.",
-    dld:"Longer or indirect wording can take more effort to process; the edge usually still comes through.",
+    apd:"Heard out loud, the words may be harder to catch in full. The edge usually still comes through.",
+    dld:"Longer or indirect wording can take more effort to process. The edge usually still comes through.",
     tourette:"Tourette doesn't change how words land, so this may land the way it would for most listeners.",
     alex:"Naming the feeling may be hard, but the edge in the words is still felt.",
     ocd:"An unclear or loaded message can set off checking or a need for reassurance.",
@@ -3940,7 +3940,7 @@ const GLOSS = {
   heat:"words that show you're fed up", sarcasm:"it may mean the opposite of the words",
   idiom:"a saying that doesn't mean what the words say", contempt:"it can sound like you look down on them",
   passiveag:"anger said in a hidden way", stonewall:"it ends the talk without saying when you'll come back",
-  minimal:"a very short answer that can sound cold", period:"in a text, a full stop on a short reply can sound cold",
+  minimal:"a very short answer that can sound cold", period:"in a text, a period on a short reply can sound cold",
   ellipsis:"\"...\" can sound like something is left unsaid", shout:"capital letters or \"!!!\" read as shouting",
   calm:"telling someone how to feel", invalid:"saying their feelings are wrong",
   multi:"many requests at once", long:"a lot to read at once", questions:"many questions at once",
@@ -3951,7 +3951,7 @@ const GLOSS = {
   demand:"asking for an answer right away", butc:"praise, then \"but\"",
   already:"it says \"I told you before\"", hedge:"an unsure answer", softno:"a \"no\" that sounds like \"maybe\"",
 defend:"explaining yourself before they've blamed you", stopask:"\"stop asking\"", tic:"commenting on a movement or sound they may not control",
-  nowhen:"a request with no time", brushoff:"it can sound like you don't care, or like quiet hurt; ask which",
+  nowhen:"a request with no time", brushoff:"it can sound like you don't care, or like quiet hurt. Ask which",
   dxlabel:"a diagnosis used as an insult", violent:"violent words, even as a joke",
   selfput:"you put yourself down", legal:"a threat about court or the children",
   kidsfirst:"the children were told before the adults talked", overhedge:"so soft the request gets lost",
@@ -4106,7 +4106,7 @@ function verdictBase(an, sc, rw, opts){
   { const mild = an.staticIds.every(id=>MILD_IDS.includes(id));
     return {id:"hurt", mild, text: (an.safety ? "Your worry is fair, but this might hurt. " : mild ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (mild ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")}; }
   if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
-    return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
+    return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me canceling. It's work, not you. Call Sunday at 7?\u201d"};
   // "okay" needs positive evidence: nothing risky fired, and nothing the checker can't read with confidence
   { const lc = lowConfidence(an); if(lc) return lc; }
   if(an.staticIds && an.staticIds.length)
@@ -4146,13 +4146,13 @@ function harmRewrite(an, log, W){
 }
 /* "okay" never sounds like a guarantee: the words looked fine, and the rest is theirs to judge */
 const OK_TEXT = "Nothing here stood out as harsh. Tone and history still matter.";
-const UNSURE_TEXT = "Hard to tell from the words alone. Read flatly, this could sound like a threat. If it's a joke you both share, it may be fine; if not, it could frighten or upset them.";
+const UNSURE_TEXT = "Hard to tell from the words alone. Read flatly, this could sound like a threat. If it's a joke you both share, it may be fine. If not, it could frighten or upset them.";
 /* A threat of harm or a veiled warning: what it may do, and a calmer way to say what's meant.
    A game, "lol" or an emoji makes it "probably playful", and still not "okay". */
 function harmVerdict(an){
   const h = an && an.harm; if(!h || !an.found || !an.found.harm) return null;
   const others = ["label","contempt","swear","hostile","dxlabel","control","legal"].some(id=>an.found[id]);
-  if(h.playful && !others) return {id:"unsure", threat:true, playful:true, addContext:true, text:"Probably playful, but hard to tell from the words alone. Read flatly, this could sound like a threat. If it's a joke you both share, it's likely fine; if not, it could frighten or upset them."};
+  if(h.playful && !others) return {id:"unsure", threat:true, playful:true, addContext:true, text:"Probably playful, but hard to tell from the words alone. Read flatly, this could sound like a threat. If it's a joke you both share, it's likely fine. If not, it could frighten or upset them."};
   if(h.kind==="idiom" && !others) return {id:"unsure", threat:true, addContext:true, text: UNSURE_TEXT};
   return {id:"fight", threat:true, harm:true, addContext:true, text: h.kind==="veiled"
     ? "Read flatly, this sounds like a warning, or a threat. Even if you don't mean it that way, it could feel frightening. If you're angry, say that instead: \u201cI'm really frustrated with you right now.\u201d"
@@ -4198,7 +4198,7 @@ function lowConfidence(an){
   }
   const m = t.match(RISK_AT_YOU), clause = t.slice(Math.max(0, m.index-30), m.index+m[0].length+20);
   if(RISK_OK.test(clause) && !/[🔪🗡🔫💣🪓☠⚰]/u.test(m[0])) return null;
-  return {id:"unsure", lowConfidence:true, addContext:true, text:"Hard to tell from the words alone. Some of this could read as harsh, or as a threat. If you're sure how they'll take it, it may be fine; if not, say plainly what you mean."};
+  return {id:"unsure", lowConfidence:true, addContext:true, text:"Hard to tell from the words alone. Some of this could read as harsh, or as a threat. If you're sure how they'll take it, it may be fine. If not, say plainly what you mean."};
 }
 
 /* "It's my money too, stop policing what I spend": a money fight, and sometimes a sign of control.
@@ -4521,7 +4521,7 @@ function rewrite(an, opts){
   let rw = exMode(rewriteBase(an, opts), opts);
   if(opts.answer==="upset" && !rw.danger && !rw.harm && !an.control && (rw.unchanged || noEvidence(an))){
     const main = "I'm upset with you right now. [What happened, and what you need.]";
-    const v0 = {id:"main", label:"Say the feeling", why:"You said you're upset with them. Saying that plainly can be heard and answered; a line that sounds like a warning can't.", text:main};
+    const v0 = {id:"main", label:"Say the feeling", why:"You said you're upset with them. Saying that plainly can be heard and answered. A line that sounds like a warning can't.", text:main};
     rw = {main, primary:v0, variants:[v0, {id:"pause", label:"Take a break first", why:"If you're too upset to say it calmly, a break is the safest thing you can send.", text:"I'm too upset to talk well right now. I'm going to take a break, and come back to this at [a time]."}], changes:[], ask:null, list:"", unchanged:false, upset:true};
     return rw;
   }
@@ -4538,7 +4538,7 @@ function rewrite(an, opts){
   else if(F.goal==="plan") gtext = endDot(base)+(an.missing.when || !an.asks.length ? " What time works for you?" : "");
   else if(F.goal==="understood") gtext = endDot(base)+" Could you tell me what you heard, so I know it came across the way I mean it?";
   if(F.goal && GOAL_LABEL[F.goal]) rw.goal = {id:F.goal, label:GOAL_LABEL[F.goal], why:GOAL_WHY[F.goal], text:gtext};
-  if(F.recurring){ rw.calmTime = "This keeps coming up, and I'd like to sort it properly. Can we talk about it at [a calm time], not over text?"; rw.variants.splice(1, 0, {id:"calmtime", label:"Suggest a calm time to talk", why:"This topic keeps coming back. A text rarely settles it; a calm talk at a good time can.", text: rw.calmTime}); }
+  if(F.recurring){ rw.calmTime = "This keeps coming up, and I'd like to sort it properly. Can we talk about it at [a calm time], not over text?"; rw.variants.splice(1, 0, {id:"calmtime", label:"Suggest a calm time to talk", why:"This topic keeps coming back. A text rarely settles it. A calm talk at a good time can.", text: rw.calmTime}); }
   if(F.parentLimit && !F.goal && (an.parentLimit || an.care || an.found.oblig || an.found.impera)){
     gtext = endDot(base)+(/\b(?:because|so that|since)\b/i.test(base) ? "" : " That's because [the reason].")+" [When it ends, or what would change it.]";
     rw.goal = {id:"parentlimit", label:"The limit, with the reason", why:"A limit lands better with the reason, and when it ends or what would change it. It stays a limit, said with care.", text:gtext};

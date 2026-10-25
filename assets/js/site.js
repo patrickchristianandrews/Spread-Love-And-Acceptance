@@ -168,7 +168,7 @@
       { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check and parallel parenting' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
-      { href: '/install.html', code: '', title: 'Get the app', note: 'Android now; on iPhone, add it to your Home Screen from Safari. Its own icon, full screen, works offline' },
+      { href: '/install.html', code: '', title: 'Get the app', note: 'Android now. On iPhone, add it to your Home Screen from Safari. Its own icon, full screen, works offline' },
       { href: '/program.html', code: '', title: 'Which part of the program to use', note: 'Six weeks, the Workpaper Suite, the package and report, and the indexes: which to use when' },
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
       { href: '/five-pillars.html', deep: true, code: '', title: 'The Five Pillars', note: 'The five ideas under everything here, how each works inside you and between you and others, and where each one shows up' },
@@ -227,7 +227,7 @@
       { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cozy 3D coin pusher: every five coins bring a short, useful tip, and medallions of every character on the site ride along. Nothing to buy' },
       { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six gentle classic games with Tidbit and Sugarfoot: a maze chase, a crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
-      { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
+      { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe. No timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels, made for playing on a phone' },
       { href: '/daily-ledger-crossword.html', code: 'New', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick 5x5 Mini to a Big Sunday 13x13' },
@@ -499,7 +499,7 @@
       { href: '/write-it-through.html', plain: true, title: 'Write it through', note: 'Sort out a big topic in writing, at your own pace: one topic, one clear ask.' },
       { href: '/carrier-wave-decoder.html', plain: true, title: 'Rewind the talk', note: 'Turn a talk that went sideways into a better second try, with their side in view.' },
       { href: '/check-ins.html#card', plain: true, title: 'Kitchen-table check-in', note: 'Raise small things before they grow: a short, kind weekly talk, or a family plan.' },
-      { href: '/bonding.html#ideas', plain: true, title: 'Stay close', note: 'Feel closer without a big plan: one small idea, or the words that say “this is us”.' },
+      { href: '/bonding.html#ideas', plain: true, title: 'Stay close', note: 'Feel closer without a big plan: one small idea, or the words that say “this is us.”' },
       { href: '/ask.html', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { sub: 'Home, plans and practice', all: '/tools.html#home-and-family', allLabel: 'All home, family and work tools' },
       { href: '/lemonade-stand.html#quick', plain: true, title: 'Who does what?', note: 'Settle “who does more?” with facts, not blame: tap who does each job, then compare.' },
@@ -2068,7 +2068,7 @@
   // results that aren't pages
   var EXTRA = {
     '#breathe': { u: '#breathe', t: 'Breathe: a breathing break', d: 'Opens right here, on top of this page: box breathing, calm breathing or 4-7-8, for one, three or five minutes, with or without sound.', k: 'Tool' },
-    '#settings': { u: '#settings', t: 'Settings: text size, high contrast, Quiet mode', d: 'Bigger text, high contrast, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Long pages also have “In short” and “Show me only the steps”.', k: 'Settings' },
+    '#settings': { u: '#settings', t: 'Settings: text size, high contrast, Quiet mode', d: 'Bigger text, high contrast, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Long pages also have “In short” and “Show me only the steps.”', k: 'Settings' },
     '/parents.html#stepfamilies': { u: '/parents.html#stepfamilies', t: 'Stepfamilies and blended families', d: 'Joining two families takes time. Who leads on rules, loyalty binds, names, a child who lives in two homes, and the stepparent’s own place.', k: 'Guide' },
     '/family-obligations.html#visits': { u: '/family-obligations.html#visits', t: 'In-laws: visits, long stays and elders', d: 'When a parent or in-law visits often or stays a long time: agree it together first, each of you speaks to your own family, and plan the visit before it starts.', k: 'Guide' },
     '/library/life.html#in-laws': { u: '/library/life.html#in-laws', t: 'In-laws (mother-in-law, father-in-law)', d: 'Two families meeting in one couple: loyalty to a parent is not disloyalty to a partner. What helps, in plain words.', k: 'Library' },
@@ -2091,15 +2091,15 @@
   EXTRA['/more-than-two.html#joining'] = { u: '/more-than-two.html#joining', t: 'Joining a home that ran before you', d: 'When you moved in with partners who already had their ways, and you feel like a guest: how to find your place and your share.', k: 'Guide' };
   EXTRA['/friends.html#after-baby'] = { u: '/friends.html#after-baby', t: 'When a friend has a baby', d: 'Staying close when a friend’s life changes: small, low-energy ways to keep in touch, from both sides.', k: 'Guide' };
   EXTRA['/on-my-own.html#part-time-parent'] = { u: '/on-my-own.html#part-time-parent', t: 'Part-time with your kids', d: 'When the kids are with you some days: weekend ideas, your own home rules, and the Sunday goodbye.', k: 'Guide' };
-  EXTRA['/workpapers/fill/wp-03.html'] = { u: '/workpapers/fill/wp-03.html', t: 'One owner per job: house rules and lists (fill in)', d: 'A fillable list with ready-made groups, including house rules for a family and two homes. Kept on this device; print or save a PDF.', k: 'Tool' };
-  EXTRA['#print'] = { u: '#print', t: 'Print this page', d: 'Prints the page you’re on. Book chapters and guides have “Print this page” beside “Share”, or press Ctrl+P (⌘P on a Mac). Worksheets and the chore chart have their own Print buttons.', k: 'Print' };
+  EXTRA['/workpapers/fill/wp-03.html'] = { u: '/workpapers/fill/wp-03.html', t: 'One owner per job: house rules and lists (fill in)', d: 'A fillable list with ready-made groups, including house rules for a family and two homes. Kept on this device. Print or save a PDF.', k: 'Tool' };
+  EXTRA['#print'] = { u: '#print', t: 'Print this page', d: 'Prints the page you’re on. Book chapters and guides have “Print this page” beside “Share,” or press Ctrl+P (⌘P on a Mac). Worksheets and the chore chart have their own Print buttons.', k: 'Print' };
   [['/co-parenting.html#handoff-bag', 'A handoff-bag checklist (co-parents)', 'What travels with the children between homes: medicines and the inhaler with a note of the last dose, school things, the comfort toy. One list both homes use.', 'Guide'],
    ['/family-rifts.html#money', 'When grief and money get tangled', 'A parent has died, there’s a will or a house, and old roles come back. Keeping the money talk separate, and when a family mediator helps.', 'Guide'],
-   ['/family-rifts.html#not-ready', '“I’m not ready”, or “I don’t have to”', 'Forgiving is not the same as reconciling. You can say not yet, yes with terms, or no for now.', 'Guide'],
+   ['/family-rifts.html#not-ready', '“I’m not ready,” or “I don’t have to”', 'Forgiving is not the same as reconciling. You can say not yet, yes with terms, or no for now.', 'Guide'],
    ['/teens.html#family-care', 'For teens: living with grandparents, family or foster parents', 'Living with your grandma or grandpa, an aunt or foster parents: house rules, phones, feeling understood, and missing your mom or dad.', 'Teens'],
    ['/teens.html#parent-away', 'For teens: when a parent is away, ill, or in treatment', 'Missing your mom or dad, worrying about them, and who you can talk to.', 'Teens'],
    ['/teens.html#lgbtq', 'For teens: being yourself at home', 'Coming out, or not yet, to parents and family, at your own pace and safely.', 'Teens'],
-   ['/foster-and-kinship.html#kinship', 'Raising a grandchild or a relative’s child', 'Kinship carers, grandparents raising grandchildren: the change in roles, the child’s parents, and support.', 'Guide'],
+   ['/foster-and-kinship.html#kinship', 'Raising a grandchild or a relative’s child', 'Kinship caregivers, grandparents raising grandchildren: the change in roles, the child’s parents, and support.', 'Guide'],
    ['/more-than-two.html#long-hours', 'The partner who works long hours', 'In a home of three or more, when one partner works long hours and feels left out of plans and decisions.', 'Guide'],
    ['/sharing-a-room.html#guests', 'Sharing a room: guests and overnight guests', 'When a roommate’s partner is always staying over: how often, how much notice, and how to say it kindly.', 'Guide'],
    ['/sharing-a-room.html#bring-it-up', 'How to bring it up if you hate confrontation', 'Words for raising a guest, noise or sleep problem with a roommate, calmly and once.', 'Guide'],
@@ -2292,7 +2292,7 @@
     '/more-than-two.html': ['More than two partners at home', 'For polyamorous families, triads and throuples: sharing the load between three or more, and joining a home without feeling like a guest.'],
     '/gaming-and-time-together.html': ['Gaming, phones and time together', 'When one of you games or scrolls all night: a calm talk with no blame, and a small “time together deal” to fill in.'],
     '/money-together.html': ['Money together', 'Saver and spender, moving in together, wedding costs and family expectations, and how to tell normal limits from control.'],
-    '/foster-and-kinship.html': ['Raising a grandchild, foster or adopted child', 'For foster carers, adoptive parents and grandparents raising grandchildren: sharing the load, the social worker, and the children’s own story.'],
+    '/foster-and-kinship.html': ['Raising a grandchild, foster or adopted child', 'For foster caregivers, adoptive parents and grandparents raising grandchildren: sharing the load, the social worker, and the children’s own story.'],
     '/adhd-kids.html': ['When a child has ADHD', 'For parents and grandparents: routines that help, what to say when they can’t sit still or forget everything, and looking after yourselves.'],
     '/grown-up-children.html': ['Grown-up children and parents', 'Boundaries with a parent you love: visits, drop-ins, unsolicited advice and the new baby, with words you could use.'],
     '/coming-home.html': ['Coming home after time apart', 'After deployment, work away or a hospital stay: a handover week, finding your place again, and where to get support.'],
@@ -2306,7 +2306,7 @@
     '/family-rifts.html': ['Family rifts and estrangement', 'Adult brothers and sisters, a will, a favorite child, years of silence: reaching out, or deciding you’re not ready.'],
     '/when-one-is-ill.html': ['When one of you is ill', 'Chronic illness, disability, long Covid or ME/CFS: sharing the load when one of you has fewer spoons, without either of you feeling a burden.'],
     '/someone-sent-you-this.html': ['Someone sent you this?', 'What this site is in three lines. You don’t have to do anything, nothing you type leaves your phone, and there are messages to send someone else.'],
-    '/examples.html': ['What small changes look like', 'Made-up examples built from common patterns: a couple, roommates, siblings, co-parents, friends, co-founders, a poly home, a kinship carer and someone on their own.'],
+    '/examples.html': ['What small changes look like', 'Made-up examples built from common patterns: a couple, roommates, siblings, co-parents, friends, co-founders, a poly home, a kinship caregiver and someone on their own.'],
     '/week-0.html': ['Week 0: a gentle start', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'],
     '/workpapers/wp-12-same-moment-different-speeds.html': ['WP-12: Same moment, different speeds', 'When one of you wants to sort it now and the other needs time: five everyday moments, your gaps in plain words, and one small agreement.'],
     '/workpapers/wp-14-is-it-us-or-everything-else.html': ['WP-14: Is it us, or is it everything else?', 'A one-week log: outside pressure in one column, tense moments between you in the other, so outside strain stops getting blamed on each other.'],
@@ -2825,7 +2825,7 @@
           // never a blank box: say so, and keep the full list of pages in view
           if (window.console) console.warn('search:', err);
           shownFor = null; list.hidden = true; list.innerHTML = ''; if (idx) idx.hidden = false;
-          note.textContent = 'Search had a hiccup with “' + q + '”. Try another word, or browse the sections below.';
+          note.textContent = 'Search had a hiccup with “' + q + '.” Try another word, or browse the sections below.';
           return;
         }
         if (namedPage(R, M.best)) { M.best = null; bestU = {}; bestEl.hidden = true; bestEl.innerHTML = ''; }
@@ -3678,7 +3678,7 @@
     }
     function opts(topic) {
       return { name: PUDDLES.name, svg: PUDDLES.svg, color: PUDDLES.color, topic: topic || '',
-        greeting: ('Hello! I’m Professor Puddles. Curious about something on “' + shortTitle(title, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.') };
+        greeting: ('Hello! I’m Professor Puddles. Curious about something on “' + shortTitle(title, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out.” I answer from this site’s pages, and what you type stays on this device.') };
     }
     var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': 'Ask Professor Puddles about this page', title: 'Ask Professor Puddles' },
       '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + 'Ask Professor Puddles' + '</span>');
@@ -3709,13 +3709,13 @@
 
   // A little card from Professor Puddles partway through the course pages: "chat about this?"
   var PUD_LINES = [
-    ['Got a question bubbling up?', 'I’m a drop of pure curiosity. Let’s chat about “{t}”.'],
-    ['Want to dive in together?', 'No question is too small, and no puddle too deep. Ask me about “{t}”.'],
-    ['Pssst. Stuck on a word?', 'I read every page of this site (twice, with my glasses on). Let’s chat about “{t}”.'],
-    ['Want a little splash of help?', 'Ask me anything about “{t}”, in your own words.'],
-    ['Thinking about this one?', 'Me too! I’m positively drip-ping with answers about “{t}”.'],
+    ['Got a question bubbling up?', 'I’m a drop of pure curiosity. Let’s chat about “{t}.”'],
+    ['Want to dive in together?', 'No question is too small, and no puddle too deep. Ask me about “{t}.”'],
+    ['Pssst. Stuck on a word?', 'I read every page of this site (twice, with my glasses on). Let’s chat about “{t}.”'],
+    ['Want a little splash of help?', 'Ask me anything about “{t},” in your own words.'],
+    ['Thinking about this one?', 'Me too! I’m positively drip-ping with answers about “{t}.”'],
     ['Would a chat help it sink in?', 'I’ll answer from the pages themselves, with a link to read more. Shall we talk about “{t}”?'],
-    ['Office hours are open!', 'The Professor is in, and it’s always a good time to chat about “{t}”.']
+    ['Office hours are open!', 'The Professor is in, and it’s always a good time to chat about “{t}.”']
   ];
   function buildPuddlesCards(body) {
     var main = document.querySelector('main.read');
@@ -3813,7 +3813,7 @@
       '</div>' +
       (pref && (pref === 'full') !== isFull ? '<p class="tol-depth-pref">Last time you chose the ' + (pref === 'full' ? 'full' : 'simple') + ' version. It’s one tap away above.</p>' : '') +
       '<details class="tol-depth-more"><summary>How the two versions, “Dig deeper” links and mini dives fit together</summary>' +
-        '<p><strong>Both versions teach the same idea.</strong> The simple one gives you the gist; the full one adds the detail. You can switch at any time, and nothing is lost or graded.</p>' +
+        '<p><strong>Both versions teach the same idea.</strong> The simple one gives you the gist. The full one adds the detail. You can switch at any time, and nothing is lost or graded.</p>' +
         '<p><strong>“Dig deeper” links</strong> on the simple cards jump straight to the matching part of the full version, so you only go deep where you want to.</p>' +
         '<p><strong>Mini dives <span aria-hidden="true">💧</span></strong>: words with a dotted line and a little water drop open a short explanation right on the page. Tap one to wade in a step at a time, from the shore to the deep end, then close it and carry on where you were. The deepest step links to the page with everything on it.</p>' +
         '<p>Stuck on anything, in either version? <a href="/ask.html">Ask Professor Puddles</a>.</p>' +
@@ -4951,7 +4951,7 @@
     function done() {
       unlock();
       try { localStorage.removeItem('tol-join-pending'); } catch (e) {}
-      say(CONFIG.openAll ? 'You’re on the list. At most one email a week: one small idea and anything new. The newsletter may send a confirmation email first; confirming keeps you on it.' : 'You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email; confirming keeps you on the update list.', 'ok');
+      say(CONFIG.openAll ? 'You’re on the list. At most one email a week: one small idea and anything new. The newsletter may send a confirmation email first. Confirming keeps you on it.' : 'You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email. Confirming keeps you on the update list.', 'ok');
       applyState(true);
     }
     // The newsletter couldn't be reached (offline, blocked, or the service is down). Everything still

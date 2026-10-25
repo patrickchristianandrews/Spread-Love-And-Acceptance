@@ -74,7 +74,7 @@
         { q: 'You tend to notice…', a: 'Patterns and how things connect', b: 'Specific details other people miss' }],
       chips: {
         general: [['I connect ideas that seem unrelated', 1], ['I like the plan written down', -1], ['I learn by doing more than reading', 0]],
-        adhd: [['I see the whole picture fast, but lose the middle steps', 1], ['New ideas light me up; routine drains me', 1], ['I need it chunked into small, visible steps', -1], ['Out of sight really is out of mind', 0]],
+        adhd: [['I see the whole picture fast, but lose the middle steps', 1], ['New ideas light me up. Routine drains me', 1], ['I need it chunked into small, visible steps', -1], ['Out of sight really is out of mind', 0]],
         autistic: [['I notice details and patterns others overlook', -1], ['I like knowing the exact rules and reasons', -1], ['I think in systems: how all the parts fit', 1], ['Vague plans make me uneasy', -1], ['I think most clearly inside my special interests', 0]],
         dyslexic: [['I’m a big-picture, 3D thinker', 1], ['I solve problems in creative, unexpected ways', 1], ['Diagrams and examples beat paragraphs', 0], ['Long written steps blur together for me', 0]],
         sensitive: [['I think deeply before I act', 0], ['I pick up on small details in a room or a person', -1], ['I weigh how a choice will affect everyone', 1]] } },
@@ -116,7 +116,7 @@
   /* ---------- the Wave Code ---------- */
   const LETTERS = {
     Q: { name: 'Quick Spark', axis: 'Pace', what: 'Thinks fast and out loud. Ideas show up mid-sentence, and talking is part of thinking.', gift: 'Energy, momentum and great brainstorming.', watch: 'committing before the slower parts of you catch up', tune: 'Let them think aloud without treating every idea as a final answer. If you need time, say “let me think and get back to you.”' },
-    S: { name: 'Slow Simmer', axis: 'Pace', what: 'Processes inside before speaking. The first answer isn’t always the best one; the good thoughts arrive later.', gift: 'Depth, steadiness and well-considered decisions.', watch: 'agreeing in the moment just to fill the silence', tune: 'Give a heads-up before big talks, and accept “I need time to think” as a real answer, not avoidance.' },
+    S: { name: 'Slow Simmer', axis: 'Pace', what: 'Processes inside before speaking. The first answer isn’t always the best one. The good thoughts arrive later.', gift: 'Depth, steadiness and well-considered decisions.', watch: 'agreeing in the moment just to fill the silence', tune: 'Give a heads-up before big talks, and accept “I need time to think” as a real answer, not avoidance.' },
     F: { name: 'Forest', axis: 'Lens', what: 'Sees the big picture first: patterns, purpose and how everything connects.', gift: 'Vision and creative problem-solving.', watch: 'skipping the middle steps on the way to the vision', tune: 'Start with the why. Then help with the steps without making them feel scattered.' },
     T: { name: 'Trees', axis: 'Lens', what: 'Starts with the specifics: steps, facts and exact details.', gift: 'Precision, follow-through and noticing what others miss.', watch: 'getting stuck when a plan stays vague', tune: 'Be concrete. “Sometime soon” means far less to them than “Saturday at 10.”' },
     D: { name: 'Direct', axis: 'Sending', what: 'Says it plainly. Honesty is how they show respect.', gift: 'Clarity, and no guessing games.', watch: 'landing harder than you mean to', tune: 'Listen to the words, not an imagined tone. Bluntness usually isn’t anger.' },
@@ -146,9 +146,9 @@
   };
   const PAIR_TIPS = [
     'One of you thinks out loud and one thinks inside. The Quick Spark can say “I’m just brainstorming,” and the Slow Simmer can say “I’ll come back to this by tonight.”',
-    'Forest wants the why; Trees wants the how. Start with the big picture, then agree on the first concrete step together.',
+    'Forest wants the why. Trees wants the how. Start with the big picture, then agree on the first concrete step together.',
     'Direct can sound harsh to Nuanced, and Nuanced can sound vague to Direct. Agree that plain words aren’t anger, and soft words still count.',
-    'Explicit needs it spelled out; Attuned hears the tone first. Say what you mean, and say it kindly. Here, both matter.'
+    'Explicit needs it spelled out. Attuned hears the tone first. Say what you mean, and say it kindly. Here, both matter.'
   ];
 
   /* ---------- the nine inputs of learning ---------- */
@@ -167,8 +167,8 @@
       prompts: ['When something upsets you, do you need to understand it before you can feel it? What happens if you can’t?', 'When has a clear number or fact calmed a disagreement for you?', 'Where might someone read your problem-solving as not caring, when you meant the opposite?'],
       tryThis: 'Write down who did what at home for one week with Who does what? Notice whether seeing real numbers changes how the topic feels.', link: ['Who does what?', '/lemonade-stand.html'],
       fit: { autistic: 'Many Autistic people think in systems and rules. Knowing the exact reasons can turn worry into calm.', adhd: 'Many ADHD folks love solving a puzzle but stall on repetitive steps. Turning a chore into a system or a game can help.' } },
-    { id: 'pictures', icon: '🖼️', name: 'Pictures and space', g: 'Visual-spatial', short: 'Images, diagrams, colour, maps and where things are.',
-      how: 'You think in pictures. Diagrams, colours, maps and seeing where things are make ideas click.',
+    { id: 'pictures', icon: '🖼️', name: 'Pictures and space', g: 'Visual-spatial', short: 'Images, diagrams, color, maps and where things are.',
+      how: 'You think in pictures. Diagrams, colors, maps and seeing where things are make ideas click.',
       send: 'Show it. Sketch it, map it, or use a picture or visible list instead of a long explanation.',
       intro: ['Visual-spatial people often see an idea before they can explain it. A messy explanation turns clear the moment someone draws a box and an arrow.', 'In relationships, this input notices a lot: a tidy room, a new haircut, a face that doesn’t match the words. It also means visual clutter can be genuinely draining.'],
       prompts: ['What’s something you only understood once you saw it drawn or shown?', 'How does the look of your home affect your mood?', 'If you drew your week as a picture, what would it look like?'],
@@ -177,7 +177,7 @@
     { id: 'body', icon: '🤲', name: 'Hands and movement', g: 'Bodily-kinesthetic', short: 'Doing, touching, moving and making.',
       how: 'You learn by doing. Something makes sense once your hands and body have tried it.',
       send: 'Show it by doing it side by side. A hug, a walk-and-talk, or helping with the task says more than a speech.',
-      intro: ['Some people learn by reading the manual. Body-first people learn by taking the thing apart. Movement isn’t a distraction for them; it’s how thinking happens.', 'In relationships, care often shows up as actions: fixing, carrying, cooking, a hand on the back. When those actions go unseen, it can feel like the care itself went unseen.'],
+      intro: ['Some people learn by reading the manual. Body-first people learn by taking the thing apart. Movement isn’t a distraction for them. It’s how thinking happens.', 'In relationships, care often shows up as actions: fixing, carrying, cooking, a hand on the back. When those actions go unseen, it can feel like the care itself went unseen.'],
       prompts: ['Where do you feel stress first in your body?', 'What do you understand better after doing it once than after hearing it ten times?', 'How do you show care through actions? Does the other person notice?'],
       tryThis: 'Have one hard conversation this week while walking side by side instead of sitting face to face. Notice the difference.',
       fit: { adhd: 'Many ADHD folks think better while moving. Fidgeting, pacing or a walk can help you listen, not distract you.', autistic: 'For many Autistic people, stimming is a body-first way of settling. It helps you stay present.' } },
@@ -212,7 +212,7 @@
     { id: 'meaning', icon: '✨', name: 'Big questions and meaning', g: 'Existential', short: 'Purpose, values and the why behind everything.',
       how: 'You learn when something connects to meaning: values, purpose and the bigger questions about life.',
       send: 'Connect it to why it matters: your shared values, your future, and what you’re building together.',
-      intro: ['Meaning-first people need to know how something fits into the bigger story. A task with no purpose feels heavy; the same task tied to a value feels light.', 'In relationships, this input asks “what are we building?” and can feel lonely when daily life is all logistics and no meaning.'],
+      intro: ['Meaning-first people need to know how something fits into the bigger story. A task with no purpose feels heavy. The same task tied to a value feels light.', 'In relationships, this input asks “what are we building?” and can feel lonely when daily life is all logistics and no meaning.'],
       prompts: ['What three values would you want your home to be known for?', 'When did a small, ordinary task suddenly feel meaningful?', 'What question about life have you been carrying lately?'],
       tryThis: 'Share one value with someone close to you, and connect one weekly chore to it: “I cook because feeding us is how I show we matter.”',
       fit: { adhd: 'Many ADHD folks find it far easier to do what feels meaningful. Linking a dull task to its why can help you start.', sensitive: 'Highly sensitive people often think deeply about meaning and are moved by beauty and big ideas.' } }
@@ -301,7 +301,7 @@
     { when: [['wired', 'hint']], f: 'ps', p: 4, t: 'Hints can go unheard, then turn into disappointment.', d: 'If you tend to hint, a literal listener may miss it completely, and you may feel let down by someone who never knew. Try saying one plain ask, out loud, once.', l: ['Say it so it lands (WP-09)', '/workpapers/wp-09-say-it-so-it-lands.html'] },
     { when: [['wired', 'thinkfirst'], ['drains', 'openconflict']], f: 'bs', p: 3, t: 'You need time to answer, and you hate leaving things open.', d: 'Those two pull against each other. The answer is a named time: “Can I think about it and come back to you at eight?” It gives you room without leaving the disagreement hanging.', l: ['Chapter III: later, not never', '/book/chapter-3.html'] },
     { when: [['wired', 'thinkloud']], f: 'ps', p: 4, t: 'Thinking out loud can sound like deciding.', d: 'When you process by talking, others may take a half-formed idea as a firm plan, or as criticism. A quick “I’m thinking out loud here” changes how every sentence after it is heard.', l: ['Chapter I: what was meant and what was heard', '/book/chapter-1.html'] },
-    { when: [['wired', 'plans'], ['drains', 'change']], f: 'nb', p: 3, t: 'A heads-up can turn a change from a jolt into a shrug.', d: 'For a planner, a sudden change isn’t just inconvenient; it lands in the body first. Asking for even ten minutes’ warning, by name, is a small request with a big effect.', l: ['My weather today', '/quick-checks.html#today'] },
+    { when: [['wired', 'plans'], ['drains', 'change']], f: 'nb', p: 3, t: 'A heads-up can turn a change from a jolt into a shrug.', d: 'For a planner, a sudden change isn’t just inconvenient. It lands in the body first. Asking for even ten minutes’ warning, by name, is a small request with a big effect.', l: ['My weather today', '/quick-checks.html#today'] },
     { when: [['wired', 'senses']], f: 'ar', p: 3, t: 'Where and when you talk is part of the conversation.', d: 'If noise, light or crowds wear you out, a hard talk in a busy room starts with your energy already low. Suggest a quiet place and a calm time for anything important.', l: ['Chapter IV: giving a comment time to land', '/book/chapter-4.html'] },
     { when: [['drains', 'noise']], f: 'ar', p: 3, t: 'Busy places use up your energy before anyone says a word.', d: 'Leaving room to settle after a crowded day (even ten quiet minutes) can make the evening feel completely different.', l: ['Breathe or the Night Garden', '/night-garden.html'] },
     { when: [['stretched', 'short'], ['now', 'busy']], f: 'nb', p: 3, t: 'Some of the snap may be leftover stress, not this moment.', d: 'A busy season fills your stress tank before you get home. A reaction three sizes too big is often leftover stress meeting a small moment. Saying “Heads up, I’m carrying a lot today” changes how everything after it lands.', l: ['Chapter III: full tanks', '/book/chapter-3.html'] },
@@ -312,7 +312,7 @@
     { when: [['unseen', 'dates']], f: 'fi', p: 1, t: 'That’s unbilled debt.', d: 'Remembering dates and appointments is work that gets done but never written down. Over months, it builds up like a debt only one person can see. Writing down one week of it with Who did what (WP-01) often surprises everyone.', l: ['Who did what (WP-01)', '/workpapers/wp-01.html'] },
     { when: [['unseen', 'lowon']], f: 'bu', p: 5, t: 'Jobs drift to whoever notices first.', d: 'If you’re the one who notices what’s running low, the job of noticing has probably become yours by default, without anyone deciding it. Giving it a named owner (even if that’s still you) makes it visible.', l: ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'] },
     { when: [['unseen', 'peace']], f: 'ps', p: 1, t: 'Keeping the peace is work, too.', d: 'Smoothing things over and steering conversations somewhere calmer takes real energy, and it usually goes unthanked because when it works, nothing seems to happen.', l: ['The kinds of unseen work', '/book/preface-in-depth.html'] },
-    { when: [['unseen', 'mood']], f: 'nb', p: 3, t: 'Reading the room all day can fill your stress tank quietly.', d: 'If you’re always tracking how everyone else feels, your own state can slip off the list. Checking in with yourself first isn’t selfish; it’s how you keep reading the room well.', l: ['My weather today', '/quick-checks.html#today'] },
+    { when: [['unseen', 'mood']], f: 'nb', p: 3, t: 'Reading the room all day can fill your stress tank quietly.', d: 'If you’re always tracking how everyone else feels, your own state can slip off the list. Checking in with yourself first isn’t selfish. It’s how you keep reading the room well.', l: ['My weather today', '/quick-checks.html#today'] },
     { when: [['values', 'fair'], ['unseen', '*']], f: 'ec', p: 1, t: 'Fairness starts with seeing the whole load.', d: 'If fairness matters to you and some of your work goes unseen, a shared page of who does what is the kindest first step. Facts on one page calm this conversation down fast.', l: ['Who does what?', '/lemonade-stand.html'] },
     { when: [['now', 'caring']], f: 'ht', p: 3, t: 'People who care for others often stop counting their own needs.', d: 'Pick one thing from “What fills me up” and give it a real time this week, written down like any other appointment.', l: ['Caring for someone', '/relationships-in-depth.html'] },
     { when: [['now', 'kids'], ['unseen', '*']], f: 'bu', p: 2, t: 'Family logistics run like a small business.', d: 'School forms, lunches and birthday gifts are recurring jobs. Each one runs better with one named owner than with “whoever remembers.”', l: ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'] },
@@ -329,12 +329,12 @@
   const NT_ENERGY = {
     adhd: 'Many ADHD folks recharge through novelty, movement and interest, and drain fast on boring-but-necessary tasks. Low energy for chores isn’t laziness. It’s a brain that runs on interest.',
     autistic: 'Many Autistic people drain from social demands, noise and unpredictability, and recharge through time alone, routine and special interests. Long stretches of pushing through can leave you running on empty.',
-    dyslexic: 'Many Dyslexic folks spend extra effort on reading and writing all day, so they can be more tired by evening than anyone realises.',
+    dyslexic: 'Many Dyslexic folks spend extra effort on reading and writing all day, so they can be more tired by evening than anyone realizes.',
     sensitive: 'Highly sensitive people take in more of everything, so busy, loud days cost more and need real recovery.',
-    general: 'Every brain has its own pattern of what fills it up and what drains it, labelled or not. Learning yours stops you from treating tiredness like a moral failing.'
+    general: 'Every brain has its own pattern of what fills it up and what drains it, labeled or not. Learning yours stops you from treating tiredness like a moral failing.'
   };
   const NT_MASK = {
-    adhd: 'ADHD masking often looks like over-preparing, over-apologising, or working twice as hard to look “together.”',
+    adhd: 'ADHD masking often looks like over-preparing, over-apologizing, or working twice as hard to look “together.”',
     autistic: 'Autistic masking can include scripting conversations, copying other people’s expressions and hiding stims. Unmasking slowly, in safe places, is part of self-discovery for many.',
     dyslexic: 'Many Dyslexic people learned to hide reading struggles, dodge reading aloud, or carry old school labels that never fit.',
     sensitive: 'Sensitive people often learn to hide how much they feel so they’ll seem easygoing.',
@@ -347,7 +347,7 @@
         ? 'As a Quick Spark, your thinking often happens out loud and in motion. The risk isn’t that you’re too much. It’s that others may treat your brainstorms as decisions, or that you commit before the slower parts of you catch up.'
         : 'As a Slow Simmer, your best thoughts often arrive after the conversation ends. The risk isn’t that you’re behind. It’s agreeing to things in the moment just to fill the silence, then quietly disagreeing later.',
       prompts: () => ['When were you last told to speed up or slow down? How did it feel?', 'When does thinking feel easiest for you: what time of day, place or situation?', 'What’s one decision you’d like more room for, whether that’s more time or more talking it out?'],
-      tryThis: c => c[0] === 'Q' ? 'Label your ideas out loud this week: “just brainstorming” or “I’ve decided.” Notice how people respond.' : 'Practise one sentence this week: “Let me think and get back to you by ___.” Then come back with your answer when you said you would.',
+      tryThis: c => c[0] === 'Q' ? 'Label your ideas out loud this week: “just brainstorming” or “I’ve decided.” Notice how people respond.' : 'Practice one sentence this week: “Let me think and get back to you by ___.” Then come back with your answer when you said you would.',
       link: ['Find your natural rhythms', '/tools/frequency-calibration.html'] },
     { id: 'lens', title: 'How you make sense of things', sub: 'Your lens: the whole picture or the pieces',
       intro: ['Your lens is the first thing your mind reaches for when something new arrives: the shape of the whole, or the pieces right in front of you.', 'Knowing your lens helps you ask for information the way you actually take it in, instead of blaming yourself when it doesn’t stick.'],
@@ -411,7 +411,7 @@
   ];
   const CONNECTIONS = [
     ['words', 'people', 1, 'Conversation', 'Talking it through is both at once. Words are the main road between people.'],
-    ['pictures', 'nature', 1, 'Noticing the world', 'Both are about seeing what’s around you: shapes, colours and patterns.'],
+    ['pictures', 'nature', 1, 'Noticing the world', 'Both are about seeing what’s around you: shapes, colors and patterns.'],
     ['logic', 'pictures', 1, 'Charts and maps', 'A diagram is logic you can see.'],
     ['sound', 'body', 1, 'Rhythm', 'Rhythm lives in the body: dancing, tapping, walking in step to music.'],
     ['self', 'meaning', 1, 'Finding your why', 'Reflection leads to purpose. You find what matters by looking inward.'],
@@ -429,22 +429,22 @@
     ['words', 'body', 3, 'Hands help talking', 'Gesturing helps people find words, and fidgeting helps many people, especially with ADHD, listen better.'],
     ['self', 'nature', 3, 'Thinking outdoors', 'Many people reflect best outside, where quieter surroundings let inner thoughts surface.'],
     ['words', 'nature', 3, 'Naming things', 'Knowing the names of things helps you notice more of them.'],
-    ['sound', 'pictures', 3, 'Seeing sound', 'Many people picture music as shapes or colours, and good design has rhythm too.'],
-    ['pictures', 'self', 4, 'Inner pictures differ', 'Some people see vivid images in their mind; others see none at all, which is called aphantasia. Memory and imagination feel very different from the inside.'],
-    ['sound', 'self', 4, 'Not everyone has an inner voice', 'Some people think in words they hear inside; others think in images, feelings or nothing word-like. Two partners may literally think in different formats.'],
+    ['sound', 'pictures', 3, 'Seeing sound', 'Many people picture music as shapes or colors, and good design has rhythm too.'],
+    ['pictures', 'self', 4, 'Inner pictures differ', 'Some people see vivid images in their mind. Others see none at all, which is called aphantasia. Memory and imagination feel very different from the inside.'],
+    ['sound', 'self', 4, 'Not everyone has an inner voice', 'Some people think in words they hear inside. Others think in images, feelings or nothing word-like. Two partners may literally think in different formats.'],
     ['nature', 'meaning', 4, 'Awe', 'A big sky or an old tree can make people feel part of something larger. Noticing leads to meaning.'],
     ['logic', 'people', 4, 'Numbers protect people', 'Putting chores into minutes takes blame out of the conversation. That’s why Who does what? works.'],
     ['body', 'meaning', 4, 'Rituals', 'A goodnight kiss or a Sunday walk is a small action, but the agreement behind it gives it meaning.'],
     ['words', 'pictures', 4, 'Metaphor', 'A metaphor is a picture made of words. The radio, the ledger and the lemonade stand in this program are all drawings in language.'],
     ['sound', 'meaning', 4, 'Songs hold moments', 'Music carries meaning words can’t, which is why songs mark weddings, farewells and memories.'],
-    ['logic', 'body', 4, 'Routines become muscle memory', 'Once a routine is practised, it runs without thinking. A good chore system turns into habit and frees the mind.'],
+    ['logic', 'body', 4, 'Routines become muscle memory', 'Once a routine is practiced, it runs without thinking. A good chore system turns into habit and frees the mind.'],
     ['body', 'people', 5, 'Unseen care', 'Care sent through actions, like cooking, fixing or noticing, often goes unreceived by a words-first partner. Much unseen work is love sent on a channel the other person isn’t tuned to.'],
     ['sound', 'nature', 5, 'Static drains everything', 'Hums, beeps and clutter quietly tax the nervous system, which narrows every other input. Fixing the room fixes the signal.'],
     ['meaning', 'people', 5, 'An “us”', 'Shared meaning turns two separate lives into an us. People who name what they’re building together can weather far more daily friction.'],
     ['logic', 'self', 5, 'Feelings as facts', 'Writing down your own minutes, or how full your stress tank is, turns a vague feeling into a fact you can share without blame.'],
     ['pictures', 'people', 5, 'Faces are pictures', 'Many misunderstandings come from a face that doesn’t match the words, or from people, often Autistic, whose faces don’t show feelings the expected way.'],
     ['words', 'meaning', 5, 'Naming creates meaning', 'Giving something a name, like unbilled debt, makes invisible things easier to talk about. That’s the whole idea behind this program.'],
-    ['nature', 'body', 5, 'You are nature', 'Your nervous system has seasons, rhythms and limits like every living thing. Rest isn’t laziness; it’s part of being alive.'],
+    ['nature', 'body', 5, 'You are nature', 'Your nervous system has seasons, rhythms and limits like every living thing. Rest isn’t laziness. It’s part of being alive.'],
     ['pictures', 'meaning', 5, 'Symbols', 'A ring, a photo, a drawing on the fridge. Pictures hold meaning where you can see it every day.']
   ];
   const WAVE_LINKS = { Q: ['body', 'sound', 'people'], S: ['self', 'meaning', 'words'], F: ['pictures', 'meaning', 'nature'], T: ['logic', 'body', 'nature'], D: ['words', 'logic'], N: ['people', 'sound'], E: ['words', 'logic'], A: ['sound', 'people', 'body'] };
@@ -720,7 +720,7 @@
         '<p>Find out how you think, how you share and how you take things in. Then share your Wave Code so the people close to you can tune in.</p>' +
         (ARRIVE.quick && !codeDone() ? '<div class="wl-nav wl-quickrow"><span></span><button type="button" class="wl-btn" id="wl-quick">Just my Wave Code (about 2 minutes)</button></div>' +
           '<p class="wl-small">Twelve either/or taps for your four letters. The rest stays optional, and you can add it after your result.</p>' : '') +
-        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, a short note about you, is optional. Your Wave Code is four letters: a simple way to describe what you prefer, not a test that measures you. Afterwards there are short chapters to read about your answers, if you like.</p>' +
+        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, a short note about you, is optional. Your Wave Code is four letters: a simple way to describe what you prefer, not a test that measures you. Afterward there are short chapters to read about your answers, if you like.</p>' +
         '<p class="wl-small">Fill it in about yourself. If you want to understand someone else, ask them to take it too, then compare.</p>' +
         (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of this quiz. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
         (NOTICE ? '<p class="wl-mine" role="status">' + NOTICE + '</p>' : '') +
@@ -1353,7 +1353,7 @@
         (mine.length ? '<p class="wl-mine"><strong>Your inputs:</strong> ' + mine.map(nm).join(', ') + '.' + (top ? ' Your strongest is ' + nm(top.id) + '.' : '') + (myPairs.length ? ' They link to each other in ' + myPairs.length + ' way' + (myPairs.length > 1 ? 's' : '') + ', listed under “Your connections” further down.' : '') + '</p>'
           : '<p class="wl-mine">You haven’t picked your inputs yet. You can still explore everything here, or go back and choose them with Change answers.</p>') +
         '<h3>The connection map</h3>' +
-        '<p>Each line is a connection, coloured by level. Tap an input to see only its links, or pick a level. Inputs you chose have a green ring.</p>' +
+        '<p>Each line is a connection, colored by level. Tap an input to see only its links, or pick a level. Inputs you chose have a green ring.</p>' +
         '<div class="wl-chips" role="group" aria-label="Filter by level"><button type="button" class="wl-chip" data-lv="0" aria-pressed="' + !lv + '">All levels</button>' + LEVELS.map(L => '<button type="button" class="wl-chip" data-lv="' + L.n + '" aria-pressed="' + (lv === L.n) + '"><span class="wl-sw" style="background:' + L.color + '"></span>' + L.n + '. ' + L.name + '</button>').join('') + '</div>' +
         '<div class="wl-mapbox">' + connMap() + '</div>' +
         '<div class="wl-chips" role="group" aria-label="Focus on one input"><button type="button" class="wl-chip" data-focus="" aria-pressed="' + !f + '">Every input</button>' + INPUTS.map(x => '<button type="button" class="wl-chip" data-focus="' + x.id + '" aria-pressed="' + (f === x.id) + '">' + x.icon + ' ' + x.name + '</button>').join('') + '</div>' +

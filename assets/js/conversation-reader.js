@@ -175,19 +175,19 @@
     r.unanswered.forEach(function (u) {
       var t = r.turns[u.at];
       // "they always write short": a one-word reply is how they text, not a brush-off
-      if (u.flat && cx && cx.flags.shortStyle) { notes.push('<strong>A short reply.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '” and the reply was “' + esc(snip(u.flat, 20)) + '”. You said they usually write short, so this is probably how they text, not a brush-off. If the answer matters, ask once more, kindly.'); return; }
-      notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : u.flat ? ', and the reply was only “' + esc(snip(u.flat, 20)) + '”. A one-word reply can mean yes, or “I’m upset”, so it’s worth checking which.' : ', and the reply went somewhere else.'));
+      if (u.flat && cx && cx.flags.shortStyle) { notes.push('<strong>A short reply.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '” and the reply was “' + esc(snip(u.flat, 20)) + '.” You said they usually write short, so this is probably how they text, not a brush-off. If the answer matters, ask once more, kindly.'); return; }
+      notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : u.flat ? ', and the reply was only “' + esc(snip(u.flat, 20)) + '.” A one-word reply can mean yes, or “I’m upset,” so it’s worth checking which.' : ', and the reply went somewhere else.'));
     });
     (r.literal || []).forEach(function (x) {
       var a = r.turns[x.at], b = r.turns[x.reply];
-      notes.push('<strong>A figure of speech taken at its word.</strong> ' + esc(a.mine ? 'You' : a.who) + ' said “' + esc(x.phrase) + '”, which usually means ' + esc(x.means) + '. The reply (“' + esc(snip(b.text, 50)) + '”) read it literally. That’s a fair reading of the words; saying the plain meaning avoids it.');
+      notes.push('<strong>A figure of speech taken at its word.</strong> ' + esc(a.mine ? 'You' : a.who) + ' said “' + esc(x.phrase) + ',” which usually means ' + esc(x.means) + '. The reply (“' + esc(snip(b.text, 50)) + '”) read it literally. That’s a fair reading of the words. Saying the plain meaning avoids it.');
     });
     r.drift.forEach(function (i) {
       notes.push('<strong>Another topic came in</strong> at message ' + (i + 1) + ' (“' + esc(snip(r.turns[i].text, 60)) + '”). Sticking to one topic at a time makes it easier to answer.');
     });
     r.bids.forEach(function (b) {
       var a = r.turns[b.at], c = r.turns[b.reply];
-      notes.push('<strong>Good news met with a flat reply.</strong> ' + esc(a.mine ? 'You' : a.who) + ' shared “' + esc(snip(a.text, 60)) + '” and the reply was “' + esc(snip(c.text, 30)) + '”. Everyday moments like this build or wear down connection more than the big arguments do.');
+      notes.push('<strong>Good news met with a flat reply.</strong> ' + esc(a.mine ? 'You' : a.who) + ' shared “' + esc(snip(a.text, 60)) + '” and the reply was “' + esc(snip(c.text, 30)) + '.” Everyday moments like this build or wear down connection more than the big arguments do.');
     });
     r.gaps.forEach(function (g) {
       var h = Math.round(g.mins / 60);
@@ -260,7 +260,7 @@
       (r.topicGuess ? ' It looks like it’s about <strong>' + esc(r.topicGuess) + '</strong>. Right? If not, the read still holds.' : r.topic ? ' It seems to be about <strong>' + esc(r.topic) + '</strong>.' : r.topicUnsure ? ' The words don’t make it clear what it’s mostly about, so the Reader won’t guess.' : '') + '</p>');
     var startWarm = t[0].heat >= 1.2;
     var story = 'It starts ' + (startWarm ? 'already tense' : 'calm') + '. ';
-    if (r.turned > 0) story += 'It turns at <strong>message ' + (r.turned + 1) + '</strong>, from ' + (t[r.turned].mine ? 'you' : esc(t[r.turned].who)) + ': “' + esc(snip(t[r.turned].text, 70)) + '”. ';
+    if (r.turned > 0) story += 'It turns at <strong>message ' + (r.turned + 1) + '</strong>, from ' + (t[r.turned].mine ? 'you' : esc(t[r.turned].who)) + ': “' + esc(snip(t[r.turned].text, 70)) + '.” ';
     else if (r.turned === 0) story += 'The first message already carries a lot of heat. ';
     else if (r.peak < 1.5 && endsCalm) story += 'It never really heats up. ';
     else if (r.peak < 3) story += 'There’s no one big turn, but some tension creeps in. ';
@@ -277,8 +277,8 @@
     if (r.hottest && (r.hottest.me || r.hottest.them) && r.peak >= 1.5) parts.push(hottest(r, them));
     // a line that reads as a threat is named first: it matters more than how the rest of the chat went
     var hReal = (r.harm || []).filter(function (h) { return !h.playful; })[0], hPlay = (r.harm || []).filter(function (h) { return h.playful; })[0];
-    if (hReal) parts.push('<p class="cr-note cr-threat"><strong>Message ' + (hReal.at + 1) + ' could read as a threat:</strong> “' + esc(snip(hReal.text, 80)) + '”. Read flatly, words like that can frighten someone, whatever was meant. That matters more than how the rest of the chat went. <a class="cr-ctx-open" href="#cr-ctx">Add context</a> if you know more.</p>');
-    else if (hPlay) parts.push('<p class="cr-note"><strong>Message ' + (hPlay.at + 1) + ' could read as a threat if it isn’t a shared joke:</strong> “' + esc(snip(hPlay.text, 80)) + '”. The words alone can’t show the grin.</p>');
+    if (hReal) parts.push('<p class="cr-note cr-threat"><strong>Message ' + (hReal.at + 1) + ' could read as a threat:</strong> “' + esc(snip(hReal.text, 80)) + '.” Read flatly, words like that can frighten someone, whatever was meant. That matters more than how the rest of the chat went. <a class="cr-ctx-open" href="#cr-ctx">Add context</a> if you know more.</p>');
+    else if (hPlay) parts.push('<p class="cr-note"><strong>Message ' + (hPlay.at + 1) + ' could read as a threat if it isn’t a shared joke:</strong> “' + esc(snip(hPlay.text, 80)) + '.” The words alone can’t show the grin.</p>');
     if (r.crossedThem) parts.push('<p class="cr-note">A put-down isn’t the same as a disagreement. You can take their real point seriously and still say the put-down wasn’t okay.</p>');
     else if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
     return '<h2>What happened</h2>' + parts.join('');
@@ -383,8 +383,8 @@
     if (form === 'text') return 'Text strips out tone of voice, so a neutral message can read as sharp and a joke can read as a jab. ' +
       (hot ? 'Once it’s this tense, more texting rarely helps. Suggest a call or talking in person, and name a time.' : 'Keep hard topics short, and move them to a call if they start to heat up.');
     if (form === 'email') return 'In email, put the one thing that matters in the first two lines, answer their question before adding your own, and leave anything written while upset in drafts overnight.';
-    if (form === 'phone') return 'This is written from memory, so it’s your recollection; the other person may remember it differently. Use it to prepare, not to prove. On the phone, pace carries a lot: slow down and leave pauses.';
-    return 'This is written from memory, so it’s your recollection; the other person may remember it differently. Use it to prepare for the next conversation, not to prove what happened in the last one.';
+    if (form === 'phone') return 'This is written from memory, so it’s your recollection. The other person may remember it differently. Use it to prepare, not to prove. On the phone, pace carries a lot: slow down and leave pauses.';
+    return 'This is written from memory, so it’s your recollection. The other person may remember it differently. Use it to prepare for the next conversation, not to prove what happened in the last one.';
   }
 
   // ---------- Controls ----------

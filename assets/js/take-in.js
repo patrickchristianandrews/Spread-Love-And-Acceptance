@@ -41,7 +41,7 @@
     { id: 'listen', group: 'main', name: 'Listen instead of read', note: 'The “Listen” buttons are bigger and easier to find. Your device’s own voice reads the page aloud.' },
     { id: 'big', group: 'main', name: 'Big text and calm', note: 'Extra large text and a still page.' },
     { id: 'pictures', group: 'main', name: 'Pictures and summaries', note: 'Where a page has an “In short” box, a button turns it into a picture summary.' },
-    { id: 'onething', group: 'main', name: 'One thing at a time', note: 'Pages made of numbered idea cards show one card at a time, with Back, Next and “3 of 7”. “Show all at once” is always there.' },
+    { id: 'onething', group: 'main', name: 'One thing at a time', note: 'Pages made of numbered idea cards show one card at a time, with Back, Next and “3 of 7.” “Show all at once” is always there.' },
     { id: 'notimer', group: 'main', name: 'No timers or countdowns', note: 'Countdown clocks are hidden. Breathing counts stay, because they set the pace of a breath, not a deadline.' },
     { id: 'nosurprise', group: 'main', name: 'No surprises', note: 'No pop-ups, pop-in helpers, level-up cards or offers. The page stays still.' },
     { id: 'place', group: 'main', name: 'Keep my place', note: 'Each page remembers how far down you were. Next time, a small “Carry on where you were” link near the top takes you back.' },
@@ -449,7 +449,7 @@
     if (!has('notimer')) return;
     var pc = document.getElementById('pause-clock');
     if (pc && !(pc.nextElementSibling && pc.nextElementSibling.classList.contains('ti-notimer-note'))) {
-      pc.after(el('p', { class: 'ti-notimer-note' }, 'Your pause is running. Take the time you need; there’s no clock to watch.'));
+      pc.after(el('p', { class: 'ti-notimer-note' }, 'Your pause is running. Take the time you need. There’s no clock to watch.'));
     }
   }
 

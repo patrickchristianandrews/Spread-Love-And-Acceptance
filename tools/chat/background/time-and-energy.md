@@ -11,7 +11,7 @@ The Eisenhower matrix sorts tasks by urgency and importance. Important but not u
 
 Urgent but unimportant tasks can often be delegated or simplified.
 
-Program: Today’s Weather tells you what today is good for; the matrix helps you choose what to do with it.
+Program: Today’s Weather tells you what today is good for. The matrix helps you choose what to do with it.
 
 ## Time blocking
 aka: time blocking; calendar blocking; blocking time
@@ -95,7 +95,7 @@ Program: The Library’s task-switching entry explains why switching costs energ
 aka: Parkinson’s law; work expands to fill time
 see: Time blocking; Buffers between tasks
 go: /library/thinking.html#planning-fallacy | The planning fallacy (Library)
-evidence: C. Northcote Parkinson wrote in 1955 that “work expands so as to fill the time available for its completion”. It began as a humorous observation, not a scientific law.
+evidence: C. Northcote Parkinson wrote in 1955 that “work expands so as to fill the time available for its completion.” It began as a humorous observation, not a scientific law.
 try: “Let’s give the garage clean-out two hours, not the whole Saturday.”
 
 Tasks often stretch to fill whatever time you give them. Setting a reasonable time limit can make a task feel more manageable and leave room for rest.
@@ -150,8 +150,8 @@ go: /tools/frequency-calibration.html | Frequency Calibration
 evidence: The program’s Frequency Framework describes pace mismatch as a common, blameless source of friction. General research on individual differences (for example in chronotype and processing speed) supports the idea that people naturally run at different speeds.
 try: “You like to decide fast and I like to think overnight. Could we agree that big things get a day?”
 
-People run at different paces: some talk, decide and reply quickly; others need more time. Neither is wrong, but a mismatch can feel like pressure on one side and stalling on the other.
+People run at different paces: some talk, decide and reply quickly. Others need more time. Neither is wrong, but a mismatch can feel like pressure on one side and stalling on the other.
 
 Naming the difference and agreeing a middle rhythm (a set time to decide, a regular check-in) usually works better than each person pushing their own speed.
 
-Program: Frequency Calibration maps your natural pace across five areas and suggests agreements. Chapter I explains how small pace differences create a “squeal”.
+Program: Frequency Calibration maps your natural pace across five areas and suggests agreements. Chapter I explains how small pace differences create a “squeal.”

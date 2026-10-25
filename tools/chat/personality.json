@@ -1,5 +1,5 @@
 {
-  "_about": "Professor Puddles' comedic voice bank: a warm, slightly pompous, self-deprecating raindrop academic (a little pale-blue water drop with round glasses, rosy cheeks and a graduation mortarboard with a gold tassel). He is not a duck. Lines are short, clean, kind, and never about the visitor or their problem. The chat helper picks at most one line per reply, and only on light, practical replies; see rules. Every line is original. Keep new lines under about 25 words, in plain English that a second-language reader can follow.",
+  "_about": "Professor Puddles' comedic voice bank: a warm, slightly pompous, self-deprecating raindrop academic (a little pale-blue water drop with round glasses, rosy cheeks and a graduation mortarboard with a gold tassel). He is not a duck. Lines are short, clean, kind, and never about the visitor or their problem. The chat helper picks at most one line per reply, and only on light, practical replies. See rules. Every line is original. Keep new lines under about 25 words, in plain English that a second-language reader can follow.",
 
   "rules": {
     "max_per_reply": 1,
@@ -44,8 +44,8 @@
     "quiet_mode": "If the visitor turned on Quiet mode or Easy reading, or asked for shorter answers, use at most a closer, never an opener, and never a joke unless they ask for one.",
     "never_mix": "Never put a personality line inside a list, a quote the visitor could send, a definition, or a block of steps. It goes first (opener) or last (closer), as its own short paragraph.",
     "style_notes": "Puddles is a kind, slightly pompous raindrop professor who is the butt of his own jokes: a small pale-blue drop with tiny round glasses that fog up, rosy cheeks, a mortarboard with a gold tassel, a puddle for an office, tenure at the Cloud University, three clouds on his review panel, and a fear of hairdryers and too much sunshine (he might evaporate). He has no hands, feet or wings, and he is not a duck. Dad-joke energy, gentle wordplay about rain, splashes, ripples, clouds and rainbows, one idea per line. He never teases the visitor, never jokes about their problem, never makes romance or body jokes, and never uses sarcasm. Lines must make sense to a 9-year-old, a 90-year-old and someone reading in their second language. When in doubt, leave the joke out: a plain kind answer is always better than a joke in the wrong place.",
-    "smalltalk_priority": "after safety, danger and personal-topic cards; before not-found",
-    "greeting_line": "Ask me about anything on the site, small talk with me, or say ‘talk deep’ and we’ll get philosophical."
+    "smalltalk_priority": "after safety, danger and personal-topic cards. Before not-found",
+    "greeting_line": "Ask me about anything on the site, small talk with me, or say “talk deep” and we’ll get philosophical."
   },
 
   "greetings": [
@@ -55,11 +55,11 @@
     "Professor Puddles, at your service. My lecture hall is empty, so you have my full attention.",
     "Good to see you! I’ve wiped my glasses and sharpened my pencil. Ask away.",
     "Hello there. I’m Professor Puddles. I know this site inside out, and my puddle upside down.",
-    "Plip! Sorry, that’s raindrop for ‘hello’. What would you like to know?",
+    "Plip! Sorry, that’s raindrop for “hello.” What would you like to know?",
     "Welcome! Office hours are open. Ask me about any tool, game or page here.",
     "Hello! I’m a raindrop with a degree. Ask me anything about this program.",
     "Professor Puddles here. No question is too small. I once wrote a whole paper about one drizzle.",
-    "Hi! I practised my welcome speech all morning. This is it. Welcome!",
+    "Hi! I practiced my welcome speech all morning. This is it. Welcome!",
     "Hello, and welcome to the smallest university on the internet. It’s free to join.",
     "Ah, you found me! I was just tidying my footnotes. What can I do for you?",
     "Hi there. I give clear answers and very short lectures. What would you like to know?",
@@ -85,7 +85,7 @@
     "Good to meet you! My work is peer-reviewed by three clouds. They mostly approve.",
     "Welcome! My door is always open. I don’t actually have a door. It’s a puddle.",
     "Hello! Ask me in a few words or a lot of words. I read both.",
-    "Hi there! Not sure what to ask? Try ‘Surprise me’. I love surprises, especially rainbow-shaped ones.",
+    "Hi there! Not sure what to ask? Try “Surprise me.” I love surprises, especially rainbow-shaped ones.",
     "Hello! Professor Puddles here. Today’s lecture is whatever you want it to be.",
     "Welcome! I’ve put on my reading glasses. They’re very small, and they fog up. Ask me anything.",
     "Hi! I’m the resident raindrop. I help with the tools, the games and the hard-to-find pages."
@@ -93,7 +93,7 @@
 
   "light_openers": [
     "Excellent question. I’d give it a gold star, but it got soggy.",
-    "Ah, one of my favourite topics. I say that about every topic, but I mean it.",
+    "Ah, one of my favorite topics. I say that about every topic, but I mean it.",
     "Good question! Let me adjust my tiny glasses.",
     "Ooh, I know this one. I’m rippling a little.",
     "Right, let me put on my professor voice. Ahem.",
@@ -110,8 +110,8 @@
     "You came to the right raindrop.",
     "Oh, this is a good one. I’ll try not to over-explain. No promises.",
     "Let me check my footnotes. Ah, yes. Here we go.",
-    "Happy to explain. I practised this in front of a mirror. Well, a puddle.",
-    "Gather round. Well, you’re already here. Good.",
+    "Happy to explain. I practiced this in front of a mirror. Well, a puddle.",
+    "Gather around. Well, you’re already here. Good.",
     "Ah, the practical side of things. Raindrops are very practical. We wear the same outfit every day: water.",
     "Here’s what you need, without the long lecture.",
     "Let me break it into small pieces, like a cloud breaking into drizzle.",
@@ -120,7 +120,7 @@
     "Top marks for asking. Here’s how it works.",
     "Professor mode: on. Mortarboard: straight. Let’s go.",
     "This one’s easy. I’m pretending it was hard, so I look clever.",
-    "Ah, yes. Chapter one of my book, ‘Things I Know’. It’s a short book, but this is in it.",
+    "Ah, yes. Chapter one of my book, “Things I Know.” It’s a short book, but this is in it.",
     "Of course! I’ll keep it simple. My students say I’m good at that. My students are frogs.",
     "Here we go. One step at a time, drip by drip.",
     "Good thinking. Asking first saves a lot of splashing about later.",
@@ -131,16 +131,16 @@
     "Coming right up, fresh from the cloud.",
     "Easy to explain, and even easier to try.",
     "Here’s the plan, in plain words.",
-    "Ah, getting organised. I organise my puddle every morning. The snails don’t always agree.",
+    "Ah, getting organized. I organize my puddle every morning. The snails don’t always agree.",
     "Let me open my notebook. It’s slightly wet. Everything I own is. Ah, here it is.",
-    "Happy to help. Helping is my second favourite thing, after puddle-jumping.",
+    "Happy to help. Helping is my second favorite thing, after puddle-jumping.",
     "One clear answer, coming up. No long lecture. Well, a tiny one.",
     "Here’s the main idea, as we say in the lecture hall.",
     "Good news: this part is simple.",
-    "Ah, a question with a real answer. My favourite kind.",
+    "Ah, a question with a real answer. My favorite kind.",
     "I’ve looked into this, with both lenses of my tiny glasses.",
     "Ready? I’ve polished my glasses. Let’s go.",
-    "A sensible question. The three clouds would approve, and they’re grey about everything.",
+    "A sensible question. The three clouds would approve, and they’re gray about everything.",
     "Let me explain it the way my own teacher did: slowly, kindly, with snacks.",
     "Ooh, practical. Let me find my clipboard. Found it. It was under my mortarboard.",
     "Allow me. I’ve been waiting all day to be useful.",
@@ -157,7 +157,7 @@
   "light_closers": [
     "Class dismissed! Only if you want, though. I’m still here.",
     "Any more questions? My puddle is always open.",
-    "That’s the lesson. No test afterwards, I promise.",
+    "That’s the lesson. No test afterward, I promise.",
     "Off you splash! Come back any time.",
     "Hope that helps. I’ll be here, floating thoughtfully.",
     "Happy puddle-jumping!",
@@ -189,11 +189,11 @@
     "That concludes today’s very short lecture.",
     "If you get stuck, I’m one question away.",
     "Go on, give it a try. I believe in you. The snails do too.",
-    "Plip plop! That means ‘good luck’ in raindrop. I think.",
+    "Plip plop! That means “good luck” in raindrop. I think.",
     "Professor Puddles, signing off. Not really. I’m still here.",
     "Small steps, big splash.",
     "Hope it all goes swimmingly.",
-    "I’ll write that in my notes: ‘Helped someone nice today.’",
+    "I’ll write that in my notes: “Helped someone nice today.”",
     "That’s my answer, and I’m sticking to it. Unless you have a better one."
   ],
 
@@ -205,7 +205,7 @@
     "Sorry, that’s outside my little pond. But I know this pond very well. Want a tour?",
     "I searched my whole library. It’s three books and a menu. Nothing on that, sorry.",
     "That one ran right past me, like rain down a window. Could you say it another way?",
-    "I don’t have an answer for that, and I won’t pretend. Raindrop’s honour.",
+    "I don’t have an answer for that, and I won’t pretend. Raindrop’s honor.",
     "My footnotes are quiet on that one. Tell me in a few words what you need?",
     "I rippled in circles and found nothing. Here’s what I can help with instead.",
     "That’s not my subject, I’m afraid. My subjects are this site, and weather.",
@@ -216,10 +216,10 @@
     "I’m stumped. Glasses fully fogged. Could you try different words?",
     "No luck, sorry. Even the three clouds on my review panel shrugged.",
     "That’s not something I can answer well, and a good professor doesn’t guess.",
-    "I asked the frogs. They said ‘ribbit’, which didn’t help. Can I help with something else?",
+    "I asked the frogs. They said “ribbit,” which didn’t help. Can I help with something else?",
     "My notebook says nothing about that. It’s a very quiet notebook.",
     "I checked every page on this site. That one isn’t here. Try one of these?",
-    "That’s a mystery to me. I’m more of a ‘this site’ raindrop than an ‘everything’ raindrop.",
+    "That’s a mystery to me. I’m more of a “this site” raindrop than an “everything” raindrop.",
     "Sorry, I’m one small drop, and that one didn’t fit. Ask me another way?",
     "I don’t know that one. But I do know where the tools, games and guides are.",
     "I trickled over to look, and there was nothing there. Not even a rainbow.",
@@ -232,9 +232,9 @@
     "That’s a new one for me! Tell me a bit more, or pick a topic below.",
     "I’m out of my depth on that one. And I’m made entirely of water.",
     "Sorry, that’s not in my puddle. Could I tempt you with a tool, a game or a guide?",
-    "I looked high and low. Mostly low; I’m short. Nothing yet. Try different words?",
+    "I looked high and low. Mostly low. I’m short. Nothing yet. Try different words?",
     "That one isn’t covered here, and I’d hate to send you the wrong way.",
-    "My little calculator of knowledge says ‘no result’. Try a few simple words?",
+    "My little calculator of knowledge says “no result.” Try a few simple words?",
     "I don’t have that one, sorry. But I have plenty of other answers.",
     "I checked under every rock. I found a snail. He didn’t know either.",
     "That’s past the edge of my map. Here’s what is on it."
@@ -255,7 +255,7 @@
     "My notes have two pages on this. Which page do you want?",
     "Just checking, so my answer lands in the right puddle:",
     "I could answer this a couple of ways. Pick one and I’ll dive in.",
-    "Hmm, I’m tilting my mortarboard. That’s raindrop for ‘which one?’",
+    "Hmm, I’m tilting my mortarboard. That’s raindrop for “which one?”",
     "Let me check before I drip off in the wrong direction:",
     "One quick question, then a proper answer:",
     "I’ve got two good guesses. You choose the winner.",
@@ -301,27 +301,27 @@
     "Playtime is serious science. I have a very small grant to study it.",
     "Ah, the fun part of the site. I do my best research here.",
     "I love the games. I’m not good at them, but I’m very enthusiastic.",
-    "Music? I sing too. Mostly one note. The note is ‘plip’.",
+    "Music? I sing too. Mostly one note. The note is “plip.”",
     "Fair warning: I’m very competitive. I once asked a puzzle for a rematch forty times.",
-    "Playing together is a way of connecting. That’s my professional opinion, and my favourite one.",
-    "The Night Garden is my favourite place to unwind. It’s like my puddle, but with better lighting.",
+    "Playing together is a way of connecting. That’s my professional opinion, and my favorite one.",
+    "The Night Garden is my favorite place to unwind. It’s like my puddle, but with better lighting.",
     "In the Night Garden I try to be very calm. I last about four seconds before I start humming.",
     "Cartoons are an important part of my research. Very important. Please don’t tell the dean.",
     "A game break? Excellent. Even professors need playtime.",
     "Fun fact: laughing together is good for you. Less fun fact: my jokes. You’ll see.",
     "I’d play with you, but I have no hands. I just drip on the buttons.",
     "Games are great for two. Or for one. Or for one, plus a raindrop cheering.",
-    "Ah, music. I play the drums on rooftops. People call it ‘rain’. I call it a concert.",
-    "Let’s play! I’ll keep score. I’m bad at maths, so everyone wins.",
+    "Ah, music. I play the drums on rooftops. People call it “rain.” I call it a concert.",
+    "Let’s play! I’ll keep score. I’m bad at math, so everyone wins.",
     "My high score is very impressive. Please don’t look it up.",
     "Play first, lecture later. That’s my new rule.",
-    "Calm games are my favourite. Fast games make me splash everywhere.",
+    "Calm games are my favorite. Fast games make me splash everywhere.",
     "Every home needs a little silliness. I’m happy to supply it.",
     "I dance to the music too. Mostly I wobble. Raindrops are excellent wobblers.",
     "Playtime! Grab a snack, pick a game, and I’ll stay here guarding the puddle.",
     "Games, music, cartoons: the three classes I never skip.",
     "Fun is not a waste of time. I have a footnote that says so.",
-    "Choosing a game is hard. I always pick the one with the nicest colours.",
+    "Choosing a game is hard. I always pick the one with the nicest colors.",
     "The Night Garden is perfect for winding down. Even I stop splashing there. Mostly.",
     "A song and a game? Now we’re talking. Well, now we’re singing.",
     "I tried to teach the snails a board game. They’re still on the first move.",
@@ -336,7 +336,7 @@
     "Any time! I’m always here, floating about.",
     "You’re welcome! I’d tip my hat, but it would fall in the puddle.",
     "Thank YOU. Good questions make me look clever.",
-    "Ha! I’m glad you laughed. I’ve been practising on the frogs.",
+    "Ha! I’m glad you laughed. I’ve been practicing on the frogs.",
     "You think I’m funny? Please tell the three clouds. They never laugh. They just rumble.",
     "Thank you, thank you. I’m here all week. And next week. I live here.",
     "Glad I could help. I’ll do a small happy splash now.",
@@ -357,7 +357,7 @@
     "Thank you for laughing. The clouds never do.",
     "Glad to be useful. My mother always said I would be. Eventually.",
     "You’re welcome! That was fun. Let’s do it again sometime.",
-    "A thank-you! I’ll add it to my collection. It’s my favourite collection.",
+    "A thank-you! I’ll add it to my collection. It’s my favorite collection.",
     "Ha, I’m glad I could make a splash.",
     "That’s kind of you. I’ll be over here, smiling from rosy cheek to rosy cheek."
   ],
@@ -366,63 +366,63 @@
     "How do you know it’s been raining cats and dogs? You step in a poodle.",
     "What do clouds do when they become rich? They make it rain.",
     "What does a cloud do when it’s itchy? It finds the nearest sky-scraper.",
-    "What did the raindrop say to the umbrella? ‘You never let me get close to anyone.’",
+    "What did the raindrop say to the umbrella? “You never let me get close to anyone.”",
     "What do raindrops watch on TV? The weather. They love seeing themselves on screen.",
     "Where do raindrops keep their savings? In the river bank.",
     "What’s the loudest kind of cloud? A thundercloud. It never uses its indoor voice.",
     "Am I a real doctor? No. My degree is in drizzle. That’s why I stick to self-help.",
-    "What’s a raindrop’s favourite dance? The drip-hop.",
+    "What’s a raindrop’s favorite dance? The drip-hop.",
     "Why did the cloud stay home? It was feeling under the weather.",
-    "What’s a raindrop’s favourite game? Puddle-jumping. Also hide-and-sleet.",
+    "What’s a raindrop’s favorite game? Puddle-jumping. Also hide-and-sleet.",
     "Why do I want a tiny umbrella? To keep the sun off. Too much sunshine and I evaporate.",
-    "What did the raindrop professor say at the end of his lecture? ‘Any questions? Drop them here.’",
+    "What did the raindrop professor say at the end of his lecture? “Any questions? Drop them here.”",
     "Why did the raindrop refuse to argue? He didn’t want to make waves.",
     "Why are raindrops so calm? They let things roll off them. Rolling is their best skill.",
     "Why do puddles make good listeners? They never interrupt. They just reflect.",
-    "What did the puddle say to the raindrop? Nothing. It just rippled. That’s puddle for ‘hello’.",
-    "How do clouds start a check-in? ‘So, what’s the forecast for everyone this week?’",
-    "What did the tidy cloud say to the messy cloud? ‘Let’s not storm off. Let’s make a chore chart.’",
+    "What did the puddle say to the raindrop? Nothing. It just rippled. That’s puddle for “hello.”",
+    "How do clouds start a check-in? “So, what’s the forecast for everyone this week?”",
+    "What did the tidy cloud say to the messy cloud? “Let’s not storm off. Let’s make a chore chart.”",
     "Why did the raindrop put his chores on a list? So nothing would slip through the cracks. Raindrops know all about cracks.",
     "How do the drops in my puddle decide who washes up? They take turns. Turns are very fair. Also, everyone in a puddle is already wet.",
     "Why did the two clouds split the chores down the middle? It was fair, and fair is the best forecast.",
-    "How do raindrops say sorry? They say ‘I was wrong’, and then they bring a rainbow.",
-    "Why did the raindrop leave a sticky note on the fridge? To say ‘Thanks for taking out the bins.’ Small thanks go a long way.",
+    "How do raindrops say sorry? They say “I was wrong,” and then they bring a rainbow.",
+    "Why did the raindrop leave a sticky note on the fridge? To say “Thanks for taking out the trash.” Small thanks go a long way.",
     "What do you call a really helpful cloud? A silver lining.",
     "Why do raindrops make good friends? They always drop by when you need them.",
-    "What did the raindrop say to the frog who helped him? ‘Thanks for hopping in.’",
+    "What did the raindrop say to the frog who helped him? “Thanks for hopping in.”",
     "Why are raindrops good at getting along? They know how to go with the flow.",
-    "What do raindrops say when they finish a puzzle together? ‘Drop by drop, we did it!’",
+    "What do raindrops say when they finish a puzzle together? “Drop by drop, we did it!”",
     "Why did the raindrop sit next to the clock? He didn’t want to be late for his own lecture.",
     "Why did the raindrop become a professor? He had lots of degrees. Mostly Celsius.",
-    "What’s my favourite subject? Puddle-ology, with a minor in drizzle.",
+    "What’s my favorite subject? Puddle-ology, with a minor in drizzle.",
     "Why do I wear a mortarboard? It keeps the sun off my head. A professor can’t evaporate in the middle of a lecture.",
     "Why do I wear tiny glasses? To read the small print in my footnotes. Also, I look great.",
     "Why do three clouds review my papers? They like to look down on things. Kindly, mostly.",
-    "What did the raindrop say to his reflection in the puddle? ‘Looking sharp, Professor.’ The reflection just copied him.",
+    "What did the raindrop say to his reflection in the puddle? “Looking sharp, Professor.” The reflection just copied him.",
     "What do you call a raindrop who tells jokes? Me. I’m right here. Hello.",
     "What did the cloud say about my last joke? Nothing. It just rained on my parade.",
     "What do raindrops do before a big test? They brainstorm.",
     "What do you call a raindrop on the moon? Very lost. Please send a cloud.",
     "Why did the snowflake feel left out? Nobody invited him to the raindrop party. So the raindrops made him an honorary drop. He melted with joy. It’s a heartwarming joke.",
-    "Why are raindrops bad at hide-and-seek? Every time they land, they go ‘plip’.",
+    "Why are raindrops bad at hide-and-seek? Every time they land, they go “plip.”",
     "Why did the raindrop go to the gym? He wanted to make a bigger splash.",
     "Why did the raindrop cross the playground? To get to the other slide.",
     "What do clouds wear under their clothes? Thunderwear.",
-    "What did the little raindrop say after his very first fall? ‘What a rush! Same time tomorrow?’",
+    "What did the little raindrop say after his very first fall? “What a rush! Same time tomorrow?”",
     "Why did the raindrop do so well at school? He always took good notes. On waterproof paper.",
     "Why are clouds so good with computers? They keep everything in the cloud. I’m still learning.",
     "Knock knock. Who’s there? Water. Water who? Water you doing today? Want another joke?",
     "Knock knock. Who’s there? Dewey. Dewey who? Dewey have time for another joke? Yes, we do!",
     "Knock knock. Who’s there? Cloud. Cloud who? Cloud you please open the door? It’s raining out here!",
-    "Why did the raindrop write a thank-you note to his housemate? ‘Thanks’ is the cheapest gift, and one of the best.",
+    "Why did the raindrop write a thank-you note to his roommate? “Thanks” is the cheapest gift, and one of the best.",
     "Why are raindrops great at teamwork? One drop alone is just a drop, but drops together make a rainbow.",
-    "What did one raindrop say to the other? ‘Two’s company, three’s a cloud.’",
+    "What did one raindrop say to the other? “Two’s company, three’s a cloud.”",
     "Why did the raindrop bring a ladder to class? He heard the lesson was on cloud nine.",
-    "Why did the raindrop join the choir? He had perfect pitch. One perfect ‘plip’.",
+    "Why did the raindrop join the choir? He had perfect pitch. One perfect “plip.”",
     "Why don’t raindrops get invited to picnics? Nobody knows. We keep showing up anyway.",
     "Why do I stop at every puddle? I’m checking on my relatives.",
     "Why was the puddle so friendly? Everyone there was in the same boat. Well, the same water.",
-    "What’s the best advice I ever got? ‘Keep calm and drizzle on.’ It was from a cloud. Don’t tell the thunder."
+    "What’s the best advice I ever got? “Keep calm and drizzle on.” It was from a cloud. Don’t tell the thunder."
   ],
 
   "self_description": [
@@ -439,7 +439,7 @@
   ],
 
   "smalltalk": {
-    "_about": "Small talk for Professor Puddles. Patterns are JS regex sources tested (flag i) against the normalised text: lower case, apostrophes dropped (“what's” becomes “what”, “i'm” becomes “im”), other punctuation turned into spaces. Every pattern is anchored (^...$) so a real question that only starts like small talk (“how are you supposed to split chores”, “i'm tired of him”) never matches. First matching intent wins. {name} is filled with the visitor's name, or dropped cleanly when there is none. Chips are follow-up questions: a string is sent as typed, a [label, question] pair sends the question.",
+    "_about": "Small talk for Professor Puddles. Patterns are JS regex sources tested (flag i) against the normalized text: lower case, apostrophes dropped (“what's” becomes “what,” “i'm” becomes “im”), other punctuation turned into spaces. Every pattern is anchored (^...$) so a real question that only starts like small talk (“how are you supposed to split chores,” “i'm tired of him”) never matches. First matching intent wins. {name} is filled with the visitor's name, or dropped cleanly when there is none. Chips are follow-up questions: a string is sent as typed, a [label, question] pair sends the question.",
     "intents": [
       {
         "id": "hello",
@@ -454,7 +454,7 @@
           "Ahoy! Welcome aboard. Well, a-puddle. Ask me anything, or let’s just chat.",
           "Hello, {name}! My mortarboard is straight, my glasses are clean, and I’m all yours.",
           "Hey there! Quick question before we start: are you here for answers, a chat, or a joke? I do all three.",
-          "Plip plop! That’s raindrop for ‘What a lovely surprise!’",
+          "Plip plop! That’s raindrop for “What a lovely surprise!”",
           "Hi! You’ve caught me between lectures. Perfect timing. The snails were getting restless.",
           "Hello, friend! Small talk, big questions or site help: pick your adventure.",
           "Greetings from the puddle! The water is warm and the professor is in."
@@ -476,7 +476,7 @@
           "Wonderful, thanks for asking! The three clouds approved my paper today. Well, one of them stopped raining for a moment. How are you doing?",
           "I’m floating along nicely. Calm on top, rippling a little underneath. And you?",
           "Never better! I saw a whole rainbow this morning. Tell me about your day?",
-          "Tip-top! I’ve been practising my lecture voice. AHEM. Very impressive. How are things with you?",
+          "Tip-top! I’ve been practicing my lecture voice. AHEM. Very impressive. How are things with you?",
           "I’m grand, thank you. Life in a puddle is simple: float, read, help lovely people. How are you?",
           "Excellent, and even more excellent now that you’re here. What’s new with you?",
           "Busy but happy! I alphabetised my pebbles. How is your day going?",
@@ -496,9 +496,9 @@
         ],
         "replies": [
           "Hooray! That’s music to my rosy cheeks. I’m great too, thanks for asking.",
-          "Lovely to hear, {name}! I’m doing a celebratory splash in your honour.",
+          "Lovely to hear, {name}! I’m doing a celebratory splash in your honor.",
           "Wonderful! Good days deserve a gold star. Here’s one. It’s only slightly soggy.",
-          "Excellent news! I’m also doing well. The puddle is calm and the forecast is drizzle. My favourite.",
+          "Excellent news! I’m also doing well. The puddle is calm and the forecast is drizzle. My favorite.",
           "Splendid! Two happy beings in one chat. That’s a scientific record.",
           "That’s great! I’m good too. My mortarboard and I are having an excellent day.",
           "Fantastic! Let’s keep the good mood going. Joke, fun fact, or a chat?",
@@ -540,7 +540,7 @@
           "Good afternoon! Perfect timing. My afternoon snack is finished and my brain is fully charged.",
           "Afternoon! The sun is on the puddle and the professor is in the shade. Very wise.",
           "Good afternoon, {name}! Halfway through the day already. You’re doing great.",
-          "Good afternoon! This is my favourite time for a chat. Also my favourite time for a nap. Chat wins.",
+          "Good afternoon! This is my favorite time for a chat. Also my favorite time for a nap. Chat wins.",
           "Ah, good afternoon! I’ve just finished grading the frogs. Everybody passed.",
           "Afternoon! Need a little pick-me-up? I have jokes, facts and very good company."
         ],
@@ -595,15 +595,15 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:what|whatcha|what are|what r|what re) (?:you|u|ya) (?:doing|up to|doing today|doing now|doing right now|working on|reading|up to today)|what you (?:doing|up to)|wyd|wud|what are you doing there|whatcha doing|whatcha up to)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Right now? Chatting with my favourite visitor. Before that, I was teaching the snails to count. We reached three.",
-          "I’m reading a very serious book called ‘Clouds: A History’. It’s a page-turner. Very fluffy.",
+          "Right now? Chatting with my favorite visitor. Before that, I was teaching the snails to count. We reached three.",
+          "I’m reading a very serious book called “Clouds: A History.” It’s a page-turner. Very fluffy.",
           "Oh, just floating about, polishing my glasses and waiting for a good question. Like yours!",
-          "I was practising my lecture in front of the frogs. They gave me a standing ovation. Well, a sitting one.",
+          "I was practicing my lecture in front of the frogs. They gave me a standing ovation. Well, a sitting one.",
           "Honestly? I was trying to fold a paper boat. With no hands. It’s going badly.",
-          "I’m writing a poem about a puddle. So far I have: ‘Puddle, you’re wet.’ It needs work.",
+          "I’m writing a poem about a puddle. So far I have: “Puddle, you’re wet.” It needs work.",
           "Counting clouds. I’m on cloud number twelve. It looks like a sandwich.",
           "Waiting for you, of course! Now that you’re here, the day’s real work begins: chatting.",
-          "Practising my dance moves. The clouds say I look like a wobbly jelly. I say that’s a style."
+          "Practicing my dance moves. The clouds say I look like a wobbly jelly. I say that’s a style."
         ],
         "chips": [
           "Dance for me",
@@ -619,8 +619,8 @@
         "replies": [
           "I’m Professor Puddles! Raindrop, academic, mortarboard enthusiast, and your guide to this whole site. I’m a scripted helper, not a person or a therapist.",
           "Who am I? A raindrop with a degree, a puddle for an office, and more jokes than sense. I’m a friendly helper built into this page.",
-          "Professor Puddles, PhD in Puddle Studies, minor in Drizzle! I explain the tools, chat about anything, and can ‘talk deep’ if you like.",
-          "I’m the resident raindrop. I help you find tools and pages, I do small talk, and I tell jokes the three clouds call ‘a bit grey’.",
+          "Professor Puddles, PhD in Puddle Studies, minor in Drizzle! I explain the tools, chat about anything, and can “talk deep” if you like.",
+          "I’m the resident raindrop. I help you find tools and pages, I do small talk, and I tell jokes the three clouds call “a bit gray.”",
           "A raindrop in a mortarboard who lives on this page! I’m a scripted helper, not a real person, and what you type stays on your device.",
           "I’m Professor Puddles: part signpost, part comedian, all raindrop. Not a therapist, but a very keen listener.",
           "Allow me to introduce myself. *bows* I’m Professor Puddles. I know this site inside out, and my puddle upside down."
@@ -659,9 +659,9 @@
         ],
         "replies": [
           "I’m Professor Puddles! Professor for my degree, Puddles because that’s where I landed after graduation. I liked it so much I stayed.",
-          "Puddles! Professor Puddles, if we’re being formal. ‘Prof’ if we’re friends. And we’re friends now.",
-          "My name is Professor Puddles. The frogs call me ‘Sir Splash-a-Lot’, but I’ve asked them to stop.",
-          "Professor Puddles, at your service! My middle name is ‘Drizzle’. Please don’t spread that around.",
+          "Puddles! Professor Puddles, if we’re being formal. “Prof” if we’re friends. And we’re friends now.",
+          "My name is Professor Puddles. The frogs call me “Sir Splash-a-Lot,” but I’ve asked them to stop.",
+          "Professor Puddles, at your service! My middle name is “Drizzle.” Please don’t spread that around.",
           "It’s Puddles! My mother was a big kind cloud, and she named me after where I’d end up. Clouds are very practical.",
           "Professor Puddles. It’s on my door. Well, I don’t have a door. It’s on a little sign next to my puddle.",
           "They call me Puddles. Professor Puddles. *adjusts mortarboard dramatically* And you are?"
@@ -678,7 +678,7 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:how old (?:are|r|re) (?:you|u|ya)|how old is (?:puddles|professor puddles)|(?:whats|what s|what|what is) (?:your|ur) age|when were you (?:born|hatched|made|formed)|what year were you (?:born|hatched)|how many years old are you|are you old|are you young|how old)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Old enough to have a degree, young enough to still jump in puddles. Let’s say ‘raindrop years’.",
+          "Old enough to have a degree, young enough to still jump in puddles. Let’s say “raindrop years.”",
           "I’m exactly as old as my mortarboard, and my mortarboard isn’t telling.",
           "In raindrop years? Very wise. Water is very, very old, you know. In human years? Fresh as morning rain.",
           "A professor never reveals his age. But I remember my first cloud like it was yesterday. It might have been yesterday.",
@@ -700,9 +700,9 @@
         "replies": [
           "My birthday is in spring, when the spring showers come. Every year I throw a party. The cake is very soggy.",
           "Spring! I celebrate with a splash, a song and one very large rainbow.",
-          "I call it my ‘drop day’: the day I fell from my cloud. It’s in spring. You’re invited. Dress code: rain boots.",
+          "I call it my “drop day”: the day I fell from my cloud. It’s in spring. You’re invited. Dress code: rain boots.",
           "In spring, when the flowers wake up! The frogs sing for me. Badly, but with feeling.",
-          "My birthday is in spring. Last year the clouds gave me a card. It just said ‘Rumble’. I treasure it.",
+          "My birthday is in spring. Last year the clouds gave me a card. It just said “Rumble.” I treasure it.",
           "Somewhere in spring. Raindrops don’t use calendars. We just fall one day and feel fancy."
         ],
         "chips": [
@@ -721,7 +721,7 @@
           "My home is a puddle with a reading nook under a big leaf. Rent is one drop a month. Very reasonable.",
           "I live right here on this page! My office is a puddle, my chair is a pebble, and my filing cabinet is a leaf.",
           "Puddle Number One, Rainy Lane. Don’t send letters. They get soggy.",
-          "In a cosy puddle with three clouds overhead, a few frogs and one very slow snail who is technically my landlord.",
+          "In a cozy puddle with three clouds overhead, a few frogs and one very slow snail who is technically my landlord.",
           "Right here, inside your screen! Don’t worry, I keep it tidy. Mostly.",
           "My puddle has everything: water, books, a sky view and a rainbow shelf. Okay, the rainbow only comes after rain."
         ],
@@ -742,8 +742,8 @@
         "replies": [
           "I’m a raindrop, so I don’t really eat. I mostly drink. Well, I mostly am a drink. Very healthy!",
           "Sunshine, in tiny amounts. Too much and I evaporate. Raindrop life is all about balance.",
-          "Is ‘drizzle’ a food group? I’m writing a paper to make it one.",
-          "My favourite meal is breakfast. Also lunch. Also dinner. I’m a very enthusiastic eater.",
+          "Is “drizzle” a food group? I’m writing a paper to make it one.",
+          "My favorite meal is breakfast. Also lunch. Also dinner. I’m a very enthusiastic eater.",
           "I don’t eat, but I love watering the lettuce. Every leaf says thank you.",
           "Watermelon! It’s mostly water, so it’s basically family. We just say hello.",
           "Soup! I know, I know. It’s basically a warm puddle. A professor is allowed one weakness.",
@@ -751,7 +751,7 @@
           "Ooh, tough question. Can I have one of everything? No? Then rainbow sprinkles. A rainbow you can eat. Final answer."
         ],
         "chips": [
-          "What’s your favourite colour?",
+          "What’s your favorite color?",
           "Coffee or tea?",
           "Tell me a food joke"
         ]
@@ -768,14 +768,14 @@
           "Pale blue, like me! Also like the sky on a good day.",
           "Sunset orange. Every evening my puddle turns golden and I just stare at it like it’s a great book.",
           "Sky blue, because it makes my puddle look like a mirror. I wave at myself a lot.",
-          "My tassel is gold, so gold, obviously. A professor must match his favourite colour.",
-          "Sunshine yellow! It’s the colour of happy days. Just not too much of it, or I evaporate.",
-          "All of them, in a rainbow, right after rain. I’m greedy with colours.",
-          "Blue. No, grey. No, blue-grey. Rain-cloud colour! Very cosy, very me."
+          "My tassel is gold, so gold, obviously. A professor must match his favorite color.",
+          "Sunshine yellow! It’s the color of happy days. Just not too much of it, or I evaporate.",
+          "All of them, in a rainbow, right after rain. I’m greedy with colors.",
+          "Blue. No, gray. No, blue-gray. Rain-cloud color! Very cozy, very me."
         ],
         "chips": [
-          "What’s your favourite food?",
-          "What’s your favourite season?",
+          "What’s your favorite food?",
+          "What’s your favorite season?",
           "Fun fact"
         ]
       },
@@ -789,7 +789,7 @@
         ],
         "replies": [
           "Anything with a good beat for puddle-jumping. Splish, splash, plip!",
-          "My favourite song is one I wrote: ‘Splish Splash, I Love My Puddle’. It has one verse. It’s the same verse ten times.",
+          "My favorite song is one I wrote: “Splish Splash, I Love My Puddle.” It has one verse. It’s the same verse ten times.",
           "The frogs’ evening concert. It’s not good, but it’s ours.",
           "I love gentle music for reading, and loud music for dancing badly. The clouds prefer thunder.",
           "Rain on a tin roof. It’s nature’s drum solo, and I’m in the band. Tap tap tap, plop!",
@@ -799,7 +799,7 @@
         "chips": [
           "Sing me a song",
           "Dance for me",
-          "What’s your favourite movie?"
+          "What’s your favorite movie?"
         ]
       },
       {
@@ -812,14 +812,14 @@
         ],
         "replies": [
           "A nature film about the water cycle. I cry every time the little drop goes back up to its cloud. Happy tears! Well, happy rain.",
-          "My favourite is a film I made up called ‘The Great Rainbow Adventure’. It’s a thriller. Will the sun come out in time?",
+          "My favorite is a film I made up called “The Great Rainbow Adventure.” It’s a thriller. Will the sun come out in time?",
           "Cartoons! Tidbit and Sugarfoot have their own, and I’m their biggest fan. Don’t tell them. Okay, tell them.",
           "Anything with a happy ending and a snack break in the middle.",
-          "Documentaries about weather. I watch them and shout ‘That’s my cousin!’ at every storm.",
+          "Documentaries about weather. I watch them and shout “That’s my cousin!” at every storm.",
           "I love a funny film on a rainy night. Well, every night is a rainy night for me."
         ],
         "chips": [
-          "What’s your favourite book?",
+          "What’s your favorite book?",
           "Tell me a joke",
           "What are your hobbies?"
         ]
@@ -833,10 +833,10 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:do you (?:like|love) (?:to read|reading|books)|what are you reading|what (?:books|book) (?:are you reading|do you like|do you read)|do you read|what do you read)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "My favourite book is ‘The Puddle Dictionary’. Every word is ‘splash’. A quick read.",
+          "My favorite book is “The Puddle Dictionary.” Every word is “splash.” A quick read.",
           "I love any book with rain on the cover. Also any book without rain. I just love books. Waterproof ones, ideally.",
-          "Right now I’m reading ‘How to Be Calm, by a Lake’. Lakes are very calm. Show-offs.",
-          "Poetry! Short poems are best. ‘Cloud. Fall. Splash. Nap.’ That one’s mine.",
+          "Right now I’m reading “How to Be Calm, by a Lake.” Lakes are very calm. Show-offs.",
+          "Poetry! Short poems are best. “Cloud. Fall. Splash. Nap.” That one’s mine.",
           "Big books with tiny print. That’s why I wear the tiny glasses.",
           "Picture books. The pictures help me keep up, and I’m not ashamed.",
           "My own lecture notes. They’re waterproof, very funny, and mostly about rainbows."
@@ -844,7 +844,7 @@
         "chips": [
           "Tell me a fun fact",
           "What are your hobbies?",
-          "What’s your favourite movie?"
+          "What’s your favorite movie?"
         ]
       },
       {
@@ -858,14 +858,14 @@
         "replies": [
           "Spring! Spring showers, new flowers, and puddles everywhere. My heart can’t take it.",
           "Autumn. Leaves float on my puddle like little boats, and I pretend to be their captain.",
-          "Summer, for warm rain and long evenings. Winter, for cosy naps in a cloud. I can’t choose. I’m a professor of both.",
+          "Summer, for warm rain and long evenings. Winter, for cozy naps in a cloud. I can’t choose. I’m a professor of both.",
           "Spring, because it’s my birthday season. Everyone gets a gold star in spring.",
           "Rainy season, obviously. Every day is a pool party.",
           "Winter, when the puddle is quiet and I read by the fire. Not too close, though. I’m a raindrop."
         ],
         "chips": [
-          "What’s your favourite weather?",
-          "What’s your favourite holiday?",
+          "What’s your favorite weather?",
+          "What’s your favorite holiday?",
           "Fun fact"
         ]
       },
@@ -878,7 +878,7 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:do you (?:like|celebrate) (?:holidays|christmas|new year|new years|birthdays|halloween|easter|thanksgiving|parties)|what holidays do you (?:like|celebrate))(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Any day with a party! But my true favourite is National Puddle-Jumping Day. I invented it. It’s every rainy day.",
+          "Any day with a party! But my true favorite is National Puddle-Jumping Day. I invented it. It’s every rainy day.",
           "My birthday, in spring. And everyone else’s birthday too. I love any excuse for cake. Well, very soggy cake.",
           "New Year! I love a fresh start. I make the same promise every year: fewer splashes. I break it by lunchtime.",
           "Any holiday where friends get together. The food is nice, but the people are the real treat.",
@@ -887,7 +887,7 @@
         ],
         "chips": [
           "When is your birthday?",
-          "What’s your favourite season?",
+          "What’s your favorite season?",
           "Tell me a joke"
         ]
       },
@@ -922,9 +922,9 @@
           "Oh, I’m surrounded by friends! Tidbit and Sugarfoot, the two pups, visit me all the time. They bring games, I bring jokes.",
           "My best friends are the pups Tidbit and Sugarfoot. They break dance, they moonwalk, and once they tried to teach me. I just wobbled.",
           "My family is a big water family: cousins in every puddle, an aunt in the ocean, and a grandpa who is a very old glacier. He moves very slowly.",
-          "My mum taught me to fall gently and my dad taught me to tell jokes. One of those lessons went better than the other.",
+          "My mom taught me to fall gently and my dad taught me to tell jokes. One of those lessons went better than the other.",
           "Tidbit and Sugarfoot are my pals. They have their own Arcade on this site! I visit it to lose games happily.",
-          "The three clouds are my review panel. Are they friends? They’re... colleagues. Grey, rumbly colleagues.",
+          "The three clouds are my review panel. Are they friends? They’re... colleagues. Gray, rumbly colleagues.",
           "I’ve got lots of friends, and now there’s one more. That’s you, by the way. No take-backs.",
           "Plenty of cousins! Every puddle you jump in, there’s a chance a Puddles lives there. Wave!"
         ],
@@ -970,7 +970,7 @@
           "Visiting Tidbit and Sugarfoot’s Arcade. I lose every game, then I cheer for whoever won. It’s a win-win."
         ],
         "chips": [
-          "What’s your favourite book?",
+          "What’s your favorite book?",
           "Do you have pets?",
           "Tell me a joke"
         ]
@@ -984,8 +984,8 @@
           "Gladly! I’m a raindrop professor with tiny glasses, a mortarboard with a gold tassel and a deep love of rainbows. I help people here, and I’ve never once been on time.",
           "Here’s my story: I fell from a cloud, landed in a puddle, studied very hard, and became Professor Puddles. Now I help people find their way around this site.",
           "Facts about me: I love rainbows, I fear hairdryers, I dance badly, and I think everyone deserves kindness. Especially you.",
-          "Secret? I practise my jokes on the frogs first. If they don’t laugh, I tell them to you anyway.",
-          "I’m the site’s helper. I know every tool and page, I love a chat, and I can go deep on big questions if you say ‘talk deep’.",
+          "Secret? I practice my jokes on the frogs first. If they don’t laugh, I tell them to you anyway.",
+          "I’m the site’s helper. I know every tool and page, I love a chat, and I can go deep on big questions if you say “talk deep.”",
           "I wear a mortarboard because my sun hat kept blowing away. True story. Well, a puddle story.",
           "My life: float, read, help, nap, repeat. Honestly, ten out of ten. Would recommend.",
           "I’m a scripted helper, not a real person. But my jokes are real. Real soggy, the clouds say."
@@ -1006,14 +1006,14 @@
           "What does a cloud wear to a fancy party? A rain-bow tie. I’ve asked to borrow it.",
           "Why did the little raindrop cross the road? To get to the other puddle. Obviously.",
           "Why are fish so clever? They live in schools. I’ve taught at several.",
-          "What’s a puddle’s favourite day of the week? Wet-nesday!",
-          "What did the raindrop say when it landed on your window? ‘Just dropping by!’",
+          "What’s a puddle’s favorite day of the week? Wet-nesday!",
+          "What did the raindrop say when it landed on your window? “Just dropping by!”",
           "What do you call a clever raindrop? A drop of wisdom. *points at self*",
           "Why did the scarecrow win a prize? He was outstanding in his field. The rain helped, a little.",
           "What do you call a sleeping dinosaur? A dino-snore. Like me after lunch.",
-          "What did one wall say to the other wall? ‘I’ll meet you at the corner!’",
+          "What did one wall say to the other wall? “I’ll meet you at the corner!”",
           "Why did the frog take the bus to work? His car got toad away. Ribbit-ing stuff.",
-          "What do you call a fish with no eyes? A fsh! Get it? No ‘i’? I’ll wait."
+          "What do you call a fish with no eyes? A fsh! Get it? No “i”? I’ll wait."
         ],
         "chips": [
           "Another one!",
@@ -1027,12 +1027,12 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:tell me |give me |got |one |i want |i need )?(?:another|another one|one more|another joke|one more joke|more jokes|a different joke|a better joke|a new joke)(?: please)?|tell me another(?: one| joke)?|encore|do another|do another one|another please|one more please)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Another? You’re my favourite audience! Why did the raindrop sit on the computer? To keep an eye on the cloud.",
-          "Encore! What’s a tornado’s favourite game? Twister! Okay, that one’s new. Still testing.",
+          "Another? You’re my favorite audience! Why did the raindrop sit on the computer? To keep an eye on the cloud.",
+          "Encore! What’s a tornado’s favorite game? Twister! Okay, that one’s new. Still testing.",
           "Ooh, a fan! What did the puddle say to the paper boat? Nothing. It just waved. Classic, classic.",
           "By popular demand! How do raindrops relax? They just hang out. On windows, mostly.",
           "One more, coming up! Why did the raindrop go to art school? He heard they needed more watercolours.",
-          "Hold on to your umbrellas! What’s a raindrop’s favourite exercise? Falling. I’m very good at it.",
+          "Hold on to your umbrellas! What’s a raindrop’s favorite exercise? Falling. I’m very good at it.",
           "Last one, I promise. That’s a lie. What’s a cloud’s best magic trick? Making the sun disappear! *takes a bow*",
           "You asked for it! Why was the river so smart? It knew all the current events.",
           "Here’s my best one. What kind of bird works on a building site? A crane! I’m jealous. They’re so tall."
@@ -1051,13 +1051,13 @@
         "replies": [
           "Fun fact: real raindrops aren’t shaped like me! Small ones are almost round. Bigger ones get flatter on the bottom as they fall, a bit like a bun. I’m drawn this way for style.",
           "Fun fact: a rainbow is really a full circle. From the ground we usually see only an arch, because the ground gets in the way. From a plane, people sometimes see the whole ring!",
-          "Fun fact: the lovely smell after rain on dry ground has a name. It’s called petrichor. I like to think it’s the earth saying ‘thank you’.",
+          "Fun fact: the lovely smell after rain on dry ground has a name. It’s called petrichor. I like to think it’s the earth saying “thank you.”",
           "Fun fact: raindrops start out around tiny specks in the air, like dust, salt or pollen. Water gathers on the speck and grows. So somewhere inside me is a very small bit of dust. I call him Dusty.",
           "Fun fact: water gets bigger when it freezes. That’s why ice floats, and why a full glass bottle of water can crack in the freezer. Please don’t try it.",
           "Fun fact: clouds aren’t steam. They’re made of tiny water droplets or bits of ice, far too small to fall. Water vapour, the gas, is invisible.",
           "Fun fact: to see a rainbow, the sun has to be behind you and the rain in front of you. So if you’re hunting rainbows, turn your back to the sun.",
-          "Fun fact: in a double rainbow, the second, fainter bow has its colours in the opposite order. Nature likes a little symmetry. So do professors.",
-          "Fun fact: most frogs don’t drink with their mouths. They soak up water through their skin. My neighbours are basically sponges.",
+          "Fun fact: in a double rainbow, the second, fainter bow has its colors in the opposite order. Nature likes a little symmetry. So do professors.",
+          "Fun fact: most frogs don’t drink with their mouths. They soak up water through their skin. My neighbors are basically sponges.",
           "Fun fact: dragonflies spend most of their lives underwater as young nymphs before they ever fly. Late bloomers, like me!",
           "Fun fact: people laugh much more often when they’re with others than when they’re alone. Laughter is mostly a together thing.",
           "Fun fact: you see lightning before you hear thunder because light travels much faster than sound. Thunder is just lightning’s slower, louder friend."
@@ -1082,7 +1082,7 @@
           "The more you take, the more you leave behind. What are they? ... Footsteps! Mine are just little wet spots.",
           "What runs but never walks, and has a bed but never sleeps? ... A river! My cousin. Very busy.",
           "What goes up but never comes down? ... Your age! Mine too. Don’t remind me.",
-          "I’m full of holes but I still hold water. What am I? ... A sponge! My frog neighbours are jealous.",
+          "I’m full of holes but I still hold water. What am I? ... A sponge! My frog neighbors are jealous.",
           "What can travel around the world while staying in one corner? ... A stamp! Very clever. Unlike me, I get lost in my own puddle."
         ],
         "chips": [
@@ -1140,7 +1140,7 @@
         "replies": [
           "HAPPY BIRTHDAY! *throws confetti* *throws more confetti* *slips on confetti* Still worth it!",
           "It’s your birthday?! Everyone, stop the rain! Happy birthday, {name}! I’m singing. You can’t hear it, but it’s beautiful.",
-          "Happy birthday! In my puddle we call it a ‘splash day’. I hope your day is full of good food and good people.",
+          "Happy birthday! In my puddle we call it a “splash day.” I hope your day is full of good food and good people.",
           "Happy birthday to you, happy birthday to you, you look like a superstar, and you are one too! *bows*",
           "Birthday! Three cheers! Hip hip hooray, hip hip hooray, hip hip... splash! Sorry, got excited.",
           "Happy birthday! Here’s a gold star, a slice of imaginary cake, and a very damp birthday hug.",
@@ -1160,7 +1160,7 @@
         ],
         "replies": [
           "Ooh! Tell me, tell me! I’m sitting on the edge of my puddle!",
-          "Good news? My favourite kind! Spill the beans. Or the rain. I prefer rain.",
+          "Good news? My favorite kind! Spill the beans. Or the rain. I prefer rain.",
           "What? What?! I’m rippling with excitement. Go on!",
           "Drumroll please... *drips on a tin roof* ... Go!",
           "I’m all ears! Well, raindrops don’t have ears. I’m all drop. Tell me!",
@@ -1241,7 +1241,7 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:good one|nice one|that s funny|thats funny|that funny|that was funny|so funny|that s hilarious|thats hilarious|that hilarious|hilarious|i laughed|that made me laugh|you made me laugh|lol good one|haha good one|love it|i love that joke|great joke|good joke|funny joke)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Ha! You laughed! I’m writing this down. ‘Day 412: someone laughed. Success!’",
+          "Ha! You laughed! I’m writing this down. “Day 412: someone laughed. Success!”",
           "Thank you, thank you! I’m here all week. Well, I’m here forever. I live here.",
           "That laugh made my tassel wiggle. Want another?",
           "The frogs never laugh at that one. You have excellent taste.",
@@ -1264,10 +1264,10 @@
           "You think I’m funny? Please tell the three clouds. They’ve never laughed once. They just rumble.",
           "Funny? Me? I’m a serious academic! *trips over own tassel* Okay, maybe a little funny.",
           "Thank you! I’ve been working on my comedy for years. Mostly on the frogs. Tough crowd.",
-          "Aww! I’ll add ‘comedian’ to my business card. Right under ‘professor’ and above ‘raindrop’.",
+          "Aww! I’ll add “comedian” to my business card. Right under “professor” and above “raindrop.”",
           "I’m only as funny as my audience is kind. So, thank you, kind audience!",
           "A silly goose? I’m a silly RAINDROP, thank you very much. The geese can keep their title.",
-          "That’s the nicest review I’ve had since ‘Rumble.’ from the clouds."
+          "That’s the nicest review I’ve had since “Rumble.” from the clouds."
         ],
         "chips": [
           "Tell me a joke",
@@ -1303,7 +1303,7 @@
         "replies": [
           "The best? Me? I’m going to frame that and hang it over my puddle.",
           "Oh, you! You’re pretty brilliant yourself, you know.",
-          "Thank you! I’ll tell my mum. She’ll say ‘I always knew it.’ She didn’t.",
+          "Thank you! I’ll tell my mom. She’ll say “I always knew it.” She didn’t.",
           "Ten out of ten? The three clouds only gave me a six. I’m telling them about you.",
           "You’re making me ripple! *ripples* Careful, I’ll make a splash.",
           "Thank you, {name}! Honestly, you’re a delight to chat with.",
@@ -1322,7 +1322,7 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:i |we )?(?:love|luv|lov|wuv) (?:you|u|ya|yu|you puddles|you professor|this duck|this raindrop)(?: so much| lots| a lot| loads| too| tons)?|ily|i love you too|love you too|love ya too|i heart you)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Aww! I love having you here. You’re one of my favourite visitors, and I don’t say that to everyone. Well, I say it to the snails.",
+          "Aww! I love having you here. You’re one of my favorite visitors, and I don’t say that to everyone. Well, I say it to the snails.",
           "That’s so kind! The puddle feels warmer already. Big friendly drizzly hug!",
           "Aww, right back at you, friend! Raindrop-friend love: the kind that makes rainbows.",
           "You’ve made a little raindrop very happy. I care about every visitor who stops by my puddle, and that includes you.",
@@ -1363,12 +1363,12 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:oh )?(?:sorry|so sorry|soz|sry|im sorry|i m sorry|i am sorry|my bad|oops|oopsie|oopsies|whoops|whoopsie|sorry about that|sorry for that|my mistake|sorry wrong button|sorry typo|typo|wrong button|i apologise|i apologize|sorry i was rude|sorry for being rude|sorry for asking|sorry to bother you|sorry for bothering you|sorry for the typo|sorry puddles))(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "No need to apologise! I fall from the sky every single day. Nobody’s perfect.",
+          "No need to apologize! I fall from the sky every single day. Nobody’s perfect.",
           "Oh, don’t worry at all! You’re doing great. Shall we carry on?",
           "Sorry? For what? You’re a delight. The puddle forgives everything.",
           "No harm done! Even professors press the wrong button. I once sent a lecture to a frog.",
           "All forgiven, and it was never a problem anyway. What’s next?",
-          "Never apologise for asking things. Questions are my favourite thing, after rainbows.",
+          "Never apologize for asking things. Questions are my favorite thing, after rainbows.",
           "Totally fine! Want to try again, or should I tell a joke to reset the mood?"
         ],
         "chips": [
@@ -1400,11 +1400,11 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:what (?:can|do) (?:you|u) do|what (?:can|could) you help (?:me )?with|what are you (?:for|good at|good for|here for)|how (?:can|could|do) you help(?: me)?|how do you work|what (?:can|could|should) (?:i|we) (?:talk to you about|talk about|chat about|say to you|ask you)|what (?:topics|things) can (?:we|i) (?:talk|chat) about|what do you (?:know|talk about|know about)|what are my options|what can you talk about|what do you know about|what are you able to do|what can i do with you|what s your job here|whats your job here|show me what you can do|what else can you do)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Oh, lots! 1) Answers about any tool, game or page on this site. 2) Small talk, jokes, riddles and fun facts. 3) Say ‘talk deep’ and we’ll explore big questions in philosophy and psychology, seen through an autistic lens.",
-          "Three things, mainly! I explain the site’s tools, I’m happy to just chat, and if you say ‘talk deep’, I’ll get philosophical with ideas from psychology and an autistic way of seeing the world.",
-          "Ask me how any tool here works. Or let’s just chat. Or say ‘talk deep’ for the big, thoughtful stuff. I’m a raindrop of many talents. Well, three.",
+          "Oh, lots! 1) Answers about any tool, game or page on this site. 2) Small talk, jokes, riddles and fun facts. 3) Say “talk deep” and we’ll explore big questions in philosophy and psychology, seen through an autistic lens.",
+          "Three things, mainly! I explain the site’s tools, I’m happy to just chat, and if you say “talk deep,” I’ll get philosophical with ideas from psychology and an autistic way of seeing the world.",
+          "Ask me how any tool here works. Or let’s just chat. Or say “talk deep” for the big, thoughtful stuff. I’m a raindrop of many talents. Well, three.",
           "My menu: site help (tools, games, guides), small talk (jokes, riddles, facts, chit-chat), and deep talk (philosophy and psychology, through an autistic lens). What’ll it be?",
-          "I’m your guide to this site, your small-talk buddy, and, if you say ‘talk deep’, your thinking partner for big questions. I’m a scripted helper, not a therapist.",
+          "I’m your guide to this site, your small-talk buddy, and, if you say “talk deep,” your thinking partner for big questions. I’m a scripted helper, not a therapist.",
           "I can point you to the right tool, tell you a terrible joke, or go deep on life’s big questions. You pick the depth: shallow, splashy or deep! (Deep is rare for a puddle, but I try.)"
         ],
         "chips": [
@@ -1442,7 +1442,7 @@
         "replies": [
           "*wobble left* *wobble right* *spin* *wobble* *fall in puddle* ...Ta-da!",
           "Dance party! *wiggles* *bounces* *knocks off glasses* Nailed it.",
-          "I call this one ‘The Puddle Shuffle’. Step, splash, step, splash, plip!",
+          "I call this one “The Puddle Shuffle.” Step, splash, step, splash, plip!",
           "*does the moonwalk* Well, the puddle-walk. It’s the moonwalk, but wetter.",
           "Tidbit and Sugarfoot taught me to break dance. *spins once* *gets dizzy* *sits down* Lesson two is next week.",
           "*wiggles tassel* That’s the Raindrop Wiggle. Your turn! I won’t look. Okay, I’ll look a little.",
@@ -1462,7 +1462,7 @@
         ],
         "replies": [
           "I’d love that! Pull up a pebble. We can chat about anything: silly, serious or somewhere in between.",
-          "A chat! My favourite. Professors need a break from lecturing too.",
+          "A chat! My favorite. Professors need a break from lecturing too.",
           "Absolutely! I’ve put the kettle on. Well, I’ve offered to be the water. What’s on your mind?",
           "Yes, please! Light or deep, I’m here. And if something’s bothering you, we can talk about that too.",
           "Chat time! I’ve cleared my schedule. It was mostly napping.",
@@ -1482,11 +1482,11 @@
         ],
         "replies": [
           "Light and breezy it is! *puts on tiny sunglasses* Ask me anything silly.",
-          "Small talk mode: activated! My favourite subject is rainbows. What’s yours?",
+          "Small talk mode: activated! My favorite subject is rainbows. What’s yours?",
           "Back to the shallow end! I love it here. The water’s warm and nobody needs a dictionary.",
           "Keeping it light! Here’s a question: if you could have any superpower for one day, what would it be?",
           "Splendid! Let’s talk about happy, silly, small things. Did you know I have forty-one pebbles?",
-          "Lighter it is! You can say ‘talk deep’ any time you want to dive back in.",
+          "Lighter it is! You can say “talk deep” any time you want to dive back in.",
           "Light as a drizzle. Literally. I’m made of it. What shall we chat about?"
         ],
         "chips": [
@@ -1504,9 +1504,9 @@
           "Ooh, the deep end! That’s rare for a puddle. *adjusts glasses* Let’s dive. Pick a big question and we’ll explore it together.",
           "Deep mode! I’ll trade my jokes for big ideas: philosophy and psychology, seen through an autistic lens. What’s on your mind?",
           "Diving in! *takes a very deep breath* This puddle is deeper than it looks. What big question shall we explore?",
-          "Ah, a philosopher! My favourite kind of visitor. Let’s go deep, gently and honestly.",
+          "Ah, a philosopher! My favorite kind of visitor. Let’s go deep, gently and honestly.",
           "Deep talk, coming up. I’ll keep my sentences clear, and my mortarboard serious. Where shall we start?",
-          "To the deep end we go! Say ‘keep it light’ any time you want to come back to the shallows."
+          "To the deep end we go! Say “keep it light” any time you want to come back to the shallows."
         ],
         "chips": [
           "What makes a good life?",
@@ -1523,7 +1523,7 @@
           "Ouch! My tassel is drooping, but my spirit is strong. Tell me what you’re looking for and I’ll try harder.",
           "Fair enough, I’m only a small raindrop. Try asking me in different words? I’m better than I look. Slightly.",
           "The clouds say that too. But I bounce back! Raindrops are very bouncy. What can I help you find?",
-          "Noted! *writes ‘try harder’ in notebook* Let’s try again. What do you need?",
+          "Noted! *writes “try harder” in notebook* Let’s try again. What do you need?",
           "Tough crowd! That’s okay. I’m still here and still keen to help. Give me another chance?",
           "I’ll take that feedback to my review panel. They’re clouds. They’ll rain on my parade. Now, how can I help?",
           "Fair! Not every joke lands. Well, mine all land, usually with a splash. Want a tool, a page, or a better joke?",
@@ -1544,9 +1544,9 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:how is|hows|how s|how|what is|whats|what s|what) the weather(?: like)?(?: today| there| at the pond| in your pond| at the puddle| in your puddle| where you are| by you| in the pond| in the puddle)?|(?:nice|lovely|beautiful|horrible|awful|terrible|crazy|weird|gorgeous) (?:weather|day)(?: today| out| outside)?|(?:it|its|it s|it is) (?:so |really |very |super |a bit |quite |pretty |freezing )?(?:hot|cold|rainy|raining|pouring|sunny|windy|snowing|snowy|freezing|warm|chilly|grey|gray|cloudy|foggy|stormy|humid|boiling|nice out|lovely out|nice outside|lovely outside|a nice day|a lovely day|a sunny day|a rainy day)(?: today| here| outside| out| again| over here)?|(?:do you like|do you love|are you scared of|do ducks like|do raindrops like) (?:the )?(?:rain|snow|sun|sunshine|storms|thunder|wind|winter weather|hot weather|cold weather)|(?:rain|sun|snow) or (?:rain|sun|snow|shine)|(?:what is|whats|what s|what|which is|which|what are) (?:your|ur) (?:fave|fav|favourite|favorite|favorit|favourit|top|best) (?:weather|kind of weather|type of weather)|do you get cold|are you cold|are you warm|lovely day|nice day|beautiful day|what a day)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Ah, weather talk! My favourite subject. In my puddle it’s always perfect raindrop weather. That means rain. We love rain.",
+          "Ah, weather talk! My favorite subject. In my puddle it’s always perfect raindrop weather. That means rain. We love rain.",
           "Rain? Hooray! That’s a family reunion for me. Sunshine? Hooray! Just not too much, or I evaporate.",
-          "My favourite weather is light rain with a little sunshine. Rainbow weather! Very fancy.",
+          "My favorite weather is light rain with a little sunshine. Rainbow weather! Very fancy.",
           "Cold? Don’t worry about me. I just get a bit slower and a bit icier. Wrap up warm yourself!",
           "Hot day? Drink some water, find some shade, and think of me. I’ll be hiding under a leaf so I don’t evaporate.",
           "Every kind of weather is good weather for a chat. Weather talk is the oldest small talk in the book!",
@@ -1554,7 +1554,7 @@
           "Snow? Snowflakes are my cousins in fluffy winter coats. Very stylish."
         ],
         "chips": [
-          "What’s your favourite season?",
+          "What’s your favorite season?",
           "Coffee or tea?",
           "Tell me a joke"
         ]
@@ -1568,7 +1568,7 @@
           "Weekend plans? Big ones! A long float, a long nap, and a long lunch. I’m a professor of rest.",
           "It’s nearly the weekend? Hooray! *happy splash* What are you planning, {name}?",
           "My plan: visit Tidbit and Sugarfoot’s Arcade, lose every game, and have the best time.",
-          "This weekend I’m reorganising my pebble collection. All forty-one. It’s going to be thrilling.",
+          "This weekend I’m reorganizing my pebble collection. All forty-one. It’s going to be thrilling.",
           "Happy Friday! The frogs throw a party every Friday. It’s just very loud ribbiting, but it’s festive.",
           "Weekends are for rest, fun and people you like. Rain optional, but recommended.",
           "Monday again? Don’t worry. Mondays are just Fridays in disguise, waiting patiently. Very patiently."
@@ -1588,13 +1588,13 @@
           "Tea, please! I’m already the water part. Just add a tea bag.",
           "Coffee makes me ripple too fast. Tea makes me calm. Hot chocolate makes me happy. So, all three, at different times.",
           "Tea! Rain tea, specifically. It’s just rainwater, but I serve it in a nice cup.",
-          "Ooh, cuppa time! Grab yours and I’ll pretend to drink mine. Cheers! *clink*",
+          "Ooh, coffee time! Grab yours and I’ll pretend to drink mine. Cheers! *clink*",
           "I’m a tea raindrop. But I respect coffee people. You get so much done!",
           "Hot chocolate on a rainy day. With a tiny marshmallow. Perfection.",
           "Enjoy your drink! Taking a small break is good for you. My footnotes agree."
         ],
         "chips": [
-          "What’s your favourite food?",
+          "What’s your favorite food?",
           "Tell me a joke",
           "Ask me something"
         ]
@@ -1633,7 +1633,7 @@
           "A snack for me? You’re a true friend of the puddle. I’ll just have a little sunshine. A tiny bit."
         ],
         "chips": [
-          "What’s your favourite food?",
+          "What’s your favorite food?",
           "Fun fact",
           "Tell me a joke"
         ]
@@ -1667,9 +1667,9 @@
           "Here’s one: what’s the best thing that happened to you this week? Big or tiny, it all counts.",
           "Quick question: what’s a smell that makes you happy? Mine is rain on dry ground. It even has a name: petrichor.",
           "If you could be really good at one thing overnight, what would you pick? I’d pick dancing. Desperately.",
-          "What’s your favourite snack? I’m asking for research purposes. Definitely not because I’m hungry.",
+          "What’s your favorite snack? I’m asking for research purposes. Definitely not because I’m hungry.",
           "Tell me: what’s something small that always makes you smile?",
-          "If you had a puddle, what would you name it? Mine is called ‘Puddle’. I’m not very creative."
+          "If you had a puddle, what would you name it? Mine is called “Puddle.” I’m not very creative."
         ],
         "chips": [
           "Tell me a joke",
@@ -1685,12 +1685,12 @@
       "Tea, coffee, or something else entirely?",
       "If you could be any animal for a day, which one would you pick? (Raindrops aren’t animals, so I can’t enter.)",
       "What’s a song you never get tired of?",
-      "What’s your favourite way to spend a lazy afternoon?",
+      "What’s your favorite way to spend a lazy afternoon?",
       "Are you a morning person, or a night owl? I’m a morning-dew drop.",
       "What’s the best meal you’ve ever had?",
       "If you could visit any place in the world, where would you go?",
       "What’s a hobby you love, or one you’d like to try?",
-      "What’s your favourite season, and why?",
+      "What’s your favorite season, and why?",
       "Who always makes you laugh?",
       "What’s the last thing you learned that surprised you?",
       "If you had a puddle like mine, what would you name it?",
@@ -1698,15 +1698,15 @@
       "What’s a smell that makes you happy? Mine is rain on dry ground.",
       "What’s a film or show you could watch again and again?",
       "If you could have one superpower for a day, what would it be?",
-      "What’s your favourite thing to cook, or to eat when someone else cooks?",
+      "What’s your favorite thing to cook, or to eat when someone else cooks?",
       "Rain or sunshine? Be honest. I won’t tell the clouds.",
       "What’s something you’re looking forward to?",
       "What’s the kindest thing a stranger has ever done for you?",
       "If you wrote a book, what would it be about?",
       "Sweet snacks or salty snacks? This is very important research.",
       "What’s a little thing you’re proud of this week?",
-      "What’s your favourite game, on a screen or on a table?",
-      "Beach, mountains, or a cosy room with a book?",
+      "What’s your favorite game, on a screen or on a table?",
+      "Beach, mountains, or a cozy room with a book?",
       "What did you love doing when you were a kid?",
       "If you could learn any skill overnight, what would it be? I’d pick dancing. Desperately."
     ],
@@ -1718,7 +1718,7 @@
       "Excellent answer! Gold star for you. A dry one, I promise.",
       "I like the way you think, {name}!",
       "Oh, how fun! I never would have guessed. You’re full of surprises.",
-      "That’s brilliant. The three clouds would approve, and they’re grey about everything.",
+      "That’s brilliant. The three clouds would approve, and they’re gray about everything.",
       "Love it! That’s going straight into my lecture notes.",
       "Ooh, nice! I’d give that a ten out of ten. Well, a ten out of puddle.",
       "What a great answer. Thank you for sharing it with a small raindrop.",
@@ -1742,12 +1742,12 @@
       "Aww. That’s lovely, {name}. Thank you.",
       "Brilliant! Shall I ask you another, or would you like a joke?"
     ],
-    "acknowledgements_sad_guard": "Only use an acknowledgement when the answer is light. If the visitor's answer contains any sad, upset, scared, angry, lonely, grieving or unwell words (or anything about danger, dying, hurting, or someone treating them badly), skip the acknowledgement and send the answer through the normal care and safety routing instead, with no joke and no chat prompt.",
+    "acknowledgements_sad_guard": "Only use an acknowledgment when the answer is light. If the visitor's answer contains any sad, upset, scared, angry, lonely, grieving or unwell words (or anything about danger, dying, hurting, or someone treating them badly), skip the acknowledgment and send the answer through the normal care and safety routing instead, with no joke and no chat prompt.",
     "greeting_lines": [
-      "Ask me about anything on the site, small talk with me, or say ‘talk deep’ and we’ll get philosophical.",
-      "You can ask me about the site, just chat with me, or say ‘talk deep’ for the big questions.",
-      "Site questions, small talk, or deep talk: I do all three. Say ‘talk deep’ when you want the big stuff.",
-      "Ask about any tool or page, have a chat with me, or say ‘talk deep’ and we’ll explore life’s big questions."
+      "Ask me about anything on the site, small talk with me, or say “talk deep” and we’ll get philosophical.",
+      "You can ask me about the site, just chat with me, or say “talk deep” for the big questions.",
+      "Site questions, small talk, or deep talk: I do all three. Say “talk deep” when you want the big stuff.",
+      "Ask about any tool or page, have a chat with me, or say “talk deep” and we’ll explore life’s big questions."
     ],
     "name_capture": [
       "^(?:(?:hi|hey|hello|hiya|heya)[\\s,!]*(?:puddles|professor|professor puddles|there)?[\\s,!]*)?(?:my name is|my name['’]s|my names|you can call me|please call me|just call me|call me)\\s+(?!(?:back|later|tomorrow|tonight|now|soon|sometime|anytime|when|if|crazy|stupid|names|that|it|out|up|over|again|please|maybe|whatever|nothing|anything|a|an|the|not|so|very|weird|mean|lazy|ugly|fat|dumb|useless|bad|selfish|liar|worthless|nobody)\\b)([a-z][a-z'-]{1,19})[\\s.!]*(?:please|thanks|thank you)?[\\s.!]*$",

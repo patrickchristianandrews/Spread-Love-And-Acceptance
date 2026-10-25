@@ -70,7 +70,7 @@
     { id: 'sleep', e: '🌙', name: 'Sleep', full: 'Getting ready for sleep', hint: 'Winding down for bed',
       carrier: 150, from: 7, to: 2.5, band: 'delta', glide: 8, bed: 'brown', breath: [4, 1, 7, 1], style: 'nebula', len: 20,
       pal: ['#04061A', '#3E4AA8', '#6B5BB8', '#E8D9A8'], cols: 'deep indigo and moonlight',
-      desc: 'Deep indigo sky and slow stars that dim as the session goes on. The beat slows right down. Fine to fall asleep; it fades out by itself.' }
+      desc: 'Deep indigo sky and slow stars that dim as the session goes on. The beat slows right down. Fine to fall asleep. It fades out by itself.' }
   ];
   var IDLE = { id: 'idle', pal: ['#14163A', '#7A6FD8', '#4FA3C8', '#F2C6DC'], style: 'liquid', breath: [4, 0, 6, 0], carrier: 200, from: 10, to: 10 };
   var AFTER = [
@@ -80,7 +80,7 @@
   var CHEER = [
     'You gave yourself a few quiet minutes. That counts.',
     'Notice how your body feels right now, so you can find your way back here.',
-    'Calm is a skill, and you just practised it.',
+    'Calm is a skill, and you just practiced it.',
     'Whatever you feel now is okay. Feelings are weather. They pass.'
   ];
   function feel(id) { for (var i = 0; i < FEEL.length; i++) if (FEEL[i].id === id) return FEEL[i]; return null; }
@@ -827,7 +827,7 @@
     if (!f || id === 'unwind' || id === 'sleep') {
       msg.textContent = (id === 'sleep' ? 'Sleep well. ' : id === 'unwind' ? 'Lovely. Let yourself keep unwinding. ' : 'That’s lovely to hear. ') + cheer;
     } else {
-      msg.textContent = 'Thanks for noticing. Still feeling ' + f.name.toLowerCase() + ' is okay; some days it takes a little longer. ' + cheer;
+      msg.textContent = 'Thanks for noticing. Still feeling ' + f.name.toLowerCase() + ' is okay. Some days it takes a little longer. ' + cheer;
       var go = document.createElement('button'); go.type = 'button'; go.className = 'cv-btn'; go.id = 'cv-end-go';
       go.textContent = 'A round for “' + f.name + '”'; go.addEventListener('click', function () { openSetup(id); });
       $('cv-again').parentNode.appendChild(go);

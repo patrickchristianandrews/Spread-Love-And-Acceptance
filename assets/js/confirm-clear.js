@@ -140,7 +140,7 @@
     }
     function backupBox() {
       var box = mk('div', { class: 'tcc-backup' });
-      box.appendChild(mk('p', null, 'Want to keep a copy first? Save a backup file. It stays with you; nothing is sent to us.'));
+      box.appendChild(mk('p', null, 'Want to keep a copy first? Save a backup file. It stays with you. Nothing is sent to us.'));
       var row = mk('p', { class: 'tcc-row' });
       var lab = mk('label', { for: 'tcc-pw' }, 'Password for the backup (optional)');
       var pw = mk('input', { id: 'tcc-pw', type: 'password', autocomplete: 'new-password', autocapitalize: 'off', spellcheck: 'false' });
