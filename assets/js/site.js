@@ -206,6 +206,9 @@
       { href: '/how-you-take-things-in.html', code: 'New', title: 'How you take things in', note: 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts. Stays on your device' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Workpapers', title: 'Workpapers for you', note: 'The “Just me” road: the worksheets for the self path, in order, fillable and printable' },
       { href: '/what-am-i-feeling.html', code: 'New', title: 'What am I feeling?', note: 'Gentle questions, a map of what may be behind a feeling, and a picture made from your answers. On this device, not AI' },
+      { href: '/before-you-use-a-label.html', code: 'New', title: 'Before you use a label', note: 'Plain criteria for controlling, gaslighting, manipulative, toxic and 18 look-alikes: what must be there, what is not enough, and how to say it without the label' },
+      { href: '/old-hurts-new-reactions.html', code: 'New', title: 'Old hurts and new reactions', note: 'How events from childhood to later life can shape a reaction, how to recognize it without labels, and taking back control' },
+      { href: '/help-it-settle.html', code: 'New', title: 'Helping it settle', note: 'Where a big reaction comes from and the seven things in your own control' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'My weather today', note: 'How am I right now? Four quick taps, or one minute on your own conditions: a forecast, a talk window, what today is good for, and an optional 7-day log of your patterns' },
       { href: '/my-week.html', code: 'Weekly', title: 'Your week in weather', note: 'Tap the weather for each day, see your week as a weather report, and play with next week’s forecast. Saved only on this device.' },
       { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs: what the research says', note: 'What the research shows for common calming supplements, herbs and other approaches, with side effects, interactions and when to get help' },
@@ -477,6 +480,7 @@
     { id: 'yourself', name: 'Yourself', title: 'Know yourself', blurb: 'Understand your own reactions, needs and wiring, with plain guides and quick self-discovery tools.',
       all: '/explore.html?need=self', allLabel: 'Everything on knowing yourself', items: [
       { sub: 'Start with you', area: 'self' },
+      { href: '/old-hurts-new-reactions.html', title: 'Old hurts and new reactions', note: 'How the past shapes a reaction at every stage of life, and how to take back control' },
       { href: '/self-path.html', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
       { href: '/know-yourself.html', deep: true, title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today' },
       { href: '/growing-up.html', deep: true, title: 'Where your lens came from', note: 'How growing up shapes what you expect, and which rules to keep' },
@@ -573,6 +577,7 @@
       { href: '/library/life.html', title: 'Family, money and life changes', note: 'In-laws, money and big changes' },
       { href: '/library/teams.html', title: 'Systems and teams', note: 'Fair systems for teams and households' },
       { sub: 'Big ideas and research', area: 'read' },
+      { href: '/before-you-use-a-label.html', title: 'Before you use a label', note: 'What has to be true before words like controlling or gaslighting apply' },
       { href: '/learn/index.html', deep: true, title: 'Philosophy for everyday life', note: 'Old stories with useful ideas inside, like the Second Arrow' },
       { href: '/research.html', title: 'The research behind the site', note: 'The studies, books and reviews, in plain words' },
       { href: '/reading.html', title: 'Articles worth reading', note: 'Hand-picked articles from trusted sources' },
@@ -588,6 +593,7 @@
     { id: 'play', name: 'Calm & play', title: 'Calm, play, watch & listen', blurb: 'Calm down now, play a gentle game, watch the pups’ cartoon or put on calm music. No timers and no way to lose.',
       all: '/explore.html?need=calm', allLabel: 'See everything calm, to play, watch or hear', items: [
       { sub: 'Calm down now', tt: 'calm', all: '/pause-and-play.html#relax', allLabel: 'Every calm tool in one place' },
+      { href: '/help-it-settle.html', title: 'Helping it settle', note: 'What you can change in your own tone, pace, timing, space, body and words' },
       { href: '/upset-right-now.html', title: 'Upset right now?', note: 'Pause, breathe and come back to it in five minutes' },
       { href: '/pause-and-play.html#relax', title: 'Relax and reset', note: 'A breathing break, a silent wind-down, slow colors and calm sounds' },
       { href: '/ladder.html', title: 'My weather today: 4 quick taps', note: 'Find where you are right now, and a next step that fits' },
