@@ -3490,7 +3490,7 @@ html:not(#_) body main .ph-list > li.is-main{ display:block !important; backgrou
    (it was a square the card spilled out of, with "Play the episode" cut off at the top) */
 @media (max-width:600px){ html body .fb-player:not(.is-fs):not(.is-stream) .fb-stage:has(> .fb-ov:not([hidden])){ aspect-ratio:3 / 4 !important; max-height:none !important; } }
 /* the "Which part sounds like you?" choices: rounded cards, so a three-line choice is not a blob */
-.sw-opt{ border-radius:22px !important; }
+html:not(#_) body button.sw-opt{ border-radius:22px !important; }
 /* "What's on this page": the label sits at the left with the line under it (it was centered on a phone) */
 html body .tol-onpage > summary{ align-items:flex-start !important; text-align:left !important; }
 html body .tol-onpage .tol-onpage-k, html body .tol-onpage .tol-onpage-peek{ text-align:left !important; align-self:stretch; }
@@ -3522,6 +3522,27 @@ html body .tol-onpage .tol-onpage-k, html body .tol-onpage .tol-onpage-peek{ tex
 }
 /* multi-line round shapes become rounded cards (a wrapped row of game tabs and the weather-mode buttons were oval blobs) */
 html body nav.gm-switch{ border-radius:28px !important; }
-html body button.hm-mode{ border-radius:24px !important; }
+html:not(#_) body button.hm-mode{ border-radius:24px !important; }
 /* inline code (web addresses in a list) wraps instead of running past the screen edge */
 main :not(pre) > code{ overflow-wrap:anywhere; }
+@media (max-width:820px), (pointer:coarse){
+  .dig{ min-height:44px; align-items:center; }
+  p.bk-ex-link > a, p.bh-ref > a, a.tol-depth-name, .tol-chbar a, .tol-chbar button, .tol-chbar-nav a{ display:inline-flex; align-items:center; min-height:44px; }
+  label.tol-mp-vol > input[type="range"]{ min-height:44px; }
+}
+/* last 44px targets on a phone: the logo link (padding, never a min-width), the chapter bar's "Show the extras", contents rows, small cards' buttons and chips */
+@media (max-width:479px){ html body .tol-bar .tol-brand{ padding-left:4px; padding-right:4px; margin-left:-4px; } }
+@media (max-width:820px), (pointer:coarse){
+  html body button.tol-chbar-x, html body .tol-chbar button{ min-height:44px !important; }
+  .lib-toc li > a{ display:flex; align-items:center; min-height:44px; }
+  html body button.tol-pud-card-go, html body a.tol-mp-full, html body a.tr-chip, html body .gl-tiers > button{ min-height:44px !important; }
+  p.bk-ex-link > a{ min-width:44px; justify-content:center; }
+  span.pe-use-t > a{ display:inline-flex; align-items:center; min-height:44px; }
+}
+html:not(#_) body :is(button.rung, button.mode-card, button.wpf-ready-chip){ border-radius:22px !important; }
+@media (max-width:820px), (pointer:coarse){
+  .tide-chips button, button.gl-rand, button.gl-next, .xw-today > button, button#ng-sound-welcome{ min-height:44px; }
+  a.mcm-full{ display:inline-flex; align-items:center; min-height:44px; }
+  .gl-az a{ display:inline-flex; align-items:center; min-height:44px; min-width:44px; justify-content:center; }
+  .sl-table th > a{ display:inline-flex; align-items:center; min-height:44px; }
+}

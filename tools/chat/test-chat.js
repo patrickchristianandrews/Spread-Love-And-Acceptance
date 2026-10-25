@@ -603,7 +603,7 @@ t('care', 'is it harassment if my ex texts me 30 times a day', { id: 'exharass' 
 t('care', 'my ex sends me long angry texts every night', { id: 'exmessages', text: /BIFF/ });
 t('care', 'should i apologize to my ex for being late', { id: 'exmessages', text: /admit fault/ });
 t('care', 'my ex badmouths me to the kids', { id: 'exbadmouth' });
-t('care', 'is there respite for dementia caregivers', { id: 'carehelp', text: /respite care/ });
+t('care', 'is there respite for dementia caregivers', { id: 'carehelp', text: /real breaks/, not: /doctor|social worker/ });
 t('care', 'my grown daughter lives far away and won\'t help with her dad', { id: 'careadultkids' });
 t('care', 'I feel guilty that I resent him', { id: 'careresent' });
 t('care', 'how i stop yelling', { id: 'yellkids' });
@@ -1582,8 +1582,8 @@ if (PERS) {
   c('chat9', ['i yell at my kids', 'how do i make it right with them'], { id: 'yellkidsrepair', link: '/parents.html#repair-scared', not: /tower/ });
   ["i feel really anxious right now", "i'm so anxious", 'anxiety attack'].forEach(q => t('chat9', q, { id: 'calmnow', text: /slow down together/, link: '/upset-right-now.html', not: /Breathe button, on any page/ }));
   c('chat9', ['is ashwagandha safe', 'i feel really anxious right now'], { id: 'calmnow' });
-  t('chat9', 'SSRI + CBD: the interaction and the meds line', { q: 'i take sertraline, can i take CBD', id: 'herbcbd', text: /antidepressants[\s\S]*Never stop, swap or change a prescribed medicine/ });
-  t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'herbashwagandha', text: /no good evidence[\s\S]*Never stop, swap or change/ });
+  t('chat9', 'SSRI + CBD: the interaction and the meds line', { q: 'i take sertraline, can i take CBD', id: 'herbcbd', text: /antidepressants[\s\S]*should never be stopped, swapped or changed suddenly/ });
+  t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'herbashwagandha', text: /no good evidence[\s\S]*should never be stopped, swapped or changed suddenly/ });
   t('chat9', 'what dose: never a dose', { q: 'what dose of ashwagandha should i take', id: 'herbashwagandha', text: /^I can’t give doses/, not: /pharmacist|doctor/ });
   t('chat9', 'what to tell my doctor about supplements: no referral card any more', { q: 'what should i tell my doctor about supplements', not: /pharmacist|prescriber/i });
   t('chat9', 'adult bi and religious parents: adult answer', { q: 'im bi and scared to tell my parents, they are very religious', id: /lgbtadult|lgbtsafety/, link: '/coming-out.html', not: /GSA|For teens|misgender/i });
@@ -1647,7 +1647,7 @@ if (PERS) {
   c('care10', ['is it fair that I do all the cooking'], { kind: 'ask', id: 'clarify-load', text: /How long has the split/, chip: /A year or more/ });
   c('care10', ['is it fair that I do all the cooking', 'Not sure'], { kind: 'ask', id: 'clarify-load', text: /reason it’s this way/, chip: /^Not sure$/ });
   c('care10', ['is it fair that I do all the cooking', 'A year or more', 'Not that I know of', 'One of us feels worn down or resentful', 'Yes, but nothing has changed', 'No, not really'],
-    { kind: 'read', id: 'clarify-load', text: /someone outside the two of you[\s\S]*not a verdict/, not: DV10 });
+    { kind: 'read', id: 'clarify-load', text: /heavier pattern[\s\S]*not a verdict/, not: DV10 });
   c('care10', ['is it fair that I do all the cooking', 'A few weeks, or less', 'Yes, something for now: illness, a new baby, a new job, exams, a move', 'We both seem fine with it', 'Yes, and it’s getting better', 'Yes, it evens out'],
     { kind: 'read', text: /ordinary rough patch/, not: DV10 });
   c('care10', ['is it fair that I do all the cooking', 'just tell me'], { kind: 'read', text: /everyday read/, not: DV10 });
