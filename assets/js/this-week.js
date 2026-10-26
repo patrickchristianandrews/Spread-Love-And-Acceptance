@@ -378,7 +378,7 @@
     var prim = m && m.primary || null, also = m ? m.open.filter(function (p) { return p !== prim; }).slice(0, 2) : [], step = null, extra = null;
     var bs = bestStep(now, info);
     if (bs.path && m && m.all.some(function (p) { return samePath(p.u, bs.path); })) bs = bestStepNoChapter(now, info);
-    if (prim) { if ((bs.kind === 'days' || bs.kind === 'week') && also.length < 2) extra = bs; } else step = bs;
+    step = bs;   // the best next step always comes first; the places you left off come last
     return { prim: prim, also: also, step: step, extra: extra, m: m };
   }
   function bestStepNoChapter(now, info) {
@@ -389,20 +389,17 @@
   function panelHTML(now, info) {
     var P = resumeParts(now, info), prim = P.prim, step = P.step, any = !!(prim || P.also.length);
     var h = '<h2 class="tw-back-h" id="tw-back-h">Welcome back</h2>';
-    if (prim) {
-      h += '<p class="tw-step"><span>' + esc(R().detail(prim)) + '</span></p>' +
-        '<p class="tw-go"><a class="tw-btn rs-cont" href="' + esc(R().href(prim)) + '">Continue: ' + esc(ptitle(prim)) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>';
-    } else {
-      h += '<p class="tw-step"><strong>' + esc(step.h) + '</strong><span>' + esc(step.d) + '</span></p>' +
-        '<p class="tw-go"><a class="tw-btn" href="' + esc(step.href) + '">' + esc(step.btn) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>';
+    h += '<p class="tw-step"><strong>' + esc(step.h) + '</strong><span>' + esc(step.d) + '</span></p>' +
+      '<p class="tw-go"><a class="tw-btn" href="' + esc(step.href) + '">' + esc(step.btn) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>';
+    h += (installLine() || (step.small ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>'));
+    if (any) {   // last: pick up where you left off
+      h += '<div class="rs-last"><h3 class="rs-last-h">Pick up where you left off</h3>';
+      if (prim) h += '<p class="tw-step rs-step"><span>' + esc(R().detail(prim)) + '</span></p>' +
+        '<p class="tw-go"><a class="tw-btn rs-cont" href="' + esc(R().href(prim)) + '">Continue: ' + esc(ptitle(prim)) + '</a></p>';
+      if (P.also.length) h += '<ul class="rs-also" aria-label="Also">' + P.also.map(alsoItem).join('') + '</ul>';
+      h += '<p class="rs-priv"><span>Remembered on this device only.</span>' + (prim ? '<button type="button" class="rs-x" data-rs-rm="' + esc(prim.u) + '" aria-label="Remove ' + esc(ptitle(prim)) + ' from what is remembered">Remove</button>' : '') +
+        '<button type="button" class="rs-x" data-rs-forget>Forget these</button></p></div>';
     }
-    if (P.also.length || P.extra) {
-      h += '<ul class="rs-also" aria-label="Also">' + P.also.map(alsoItem).join('') +
-        (P.extra ? '<li class="rs-also-i is-plain"><span class="rs-also-k">Also</span><a class="rs-also-a" href="' + esc(P.extra.href) + '">' + esc(P.extra.kind === 'days' ? P.extra.h : P.extra.btn) + '</a></li>' : '') + '</ul>';
-    }
-    h += (installLine() || (prim || (step && step.small) ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>'));
-    if (any) h += '<p class="rs-priv"><span>Remembered on this device only.</span>' + (prim ? '<button type="button" class="rs-x" data-rs-rm="' + esc(prim.u) + '" aria-label="Remove ' + esc(ptitle(prim)) + ' from what is remembered">Remove</button>' : '') +
-      '<button type="button" class="rs-x" data-rs-forget>Forget these</button></p>';
     h += '<p class="tw-say" role="status" aria-live="polite"></p>';
     return { html: h, paths: [prim].concat(P.also).filter(Boolean).map(function (p) { return p.u; }).concat(step && step.path ? [step.path] : []) };
   }
