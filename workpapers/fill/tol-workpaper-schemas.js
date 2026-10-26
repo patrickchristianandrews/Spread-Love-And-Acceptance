@@ -1256,7 +1256,7 @@
     },
     caregivers: {
       purpose: 'A living agreement that gives every regular part of the care one owner: the person who does it and sees it through, so "whenever someone can" becomes a plan. If you like, add a helper who covers or notices if it slips. The helper is optional.',
-      note: "Fill it in together with whoever shares the care. This is about who owns each task, not medical advice. Remove rows that don't apply and add the ones that do.",
+      note: "Fill it in together with whoever shares the care. This is about who owns each task. Remove rows that don't apply and add the ones that do.",
       rows: [
         { task: 'Appointments: booking, getting there, notes', freq: 'As needed' },
         { task: 'Medications: keeping the list and schedule up to date', freq: 'Ongoing', notes: 'As the care team directs' },

@@ -1254,7 +1254,7 @@
     b.push({ k: 'h', x: 'What might be going on' });
     b.push(going);
     if (P.path.length) { b.push({ k: 'h', x: 'A short path on the site' }); b.push({ k: 'links', x: P.path }); }
-    b.push({ k: 'note', x: 'You know your situation best. This is general guidance from the program, not counseling or a professional opinion.' });
+    b.push({ k: 'note', x: 'You know your situation best. This is general guidance from the program, not counseling.' });
     // flatmates, housemates, "three of us": group words, never "you both"
     if (/\b(flatmates|housemates|roommates|three of us|four of us|five of us|the others|all of us|everyone in the (house|flat))\b/.test(state.curF || '') || noun === '#group') {
       var grp = function (t) { return String(t).replace(/\bso you both\b/g, 'so all of you').replace(/\byou both\b/g, 'all of you').replace(/\bboth of you\b/g, 'all of you').replace(/\beither of you\b/g, 'any of you').replace(/\bYou both\b/g, 'All of you').replace(/\bthe two of you\b/g, 'all of you'); };

@@ -155,7 +155,7 @@ window.TOL_CREATOR_KB = {
       l: [['The Podcast', '/podcast-index.html']] },
 
     { id: 'therapist', k: ['therapist', 'counselor', 'counsellor', 'psychologist', 'licensed', 'qualified', 'credentials', 'certified', 'doctor', 'professional', 'expert'],
-      a: ['Christian’s professional background is as a government auditor and audit manager. Christian has studied psychology, neurobiology and the other fields deeply, out of a need to understand how people work rather than to collect credentials.', 'The program is self-help and general guidance. It isn’t counseling or therapy, and it doesn’t replace a qualified professional.'],
+      a: ['Christian’s professional background is as a government auditor and audit manager. Christian has studied psychology, neurobiology and the other fields deeply, out of a need to understand how people work rather than to collect credentials.', 'The program is self-help and general guidance. It isn’t counseling or therapy.'],
       l: [['The full story', '/about.html']] },
 
     { id: 'contact', k: ['contact', 'email christian', 'reach christian', 'get in touch', 'message christian', 'talk to christian', 'write to'],

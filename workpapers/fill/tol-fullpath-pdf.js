@@ -667,7 +667,7 @@
     lay.y = 170;
     lay.para('Not a verdict. ' + (m.lens || 'Each read describes the setup, never a person.'), { font: 'Times-Italic', size: 10.5, color: C.soft, after: 8 });
     lay.callout('Everything stays on your device', ['This report was made in your browser from what you entered. Nothing was sent anywhere or stored. Keep the file somewhere private, like any personal notes.'], C.creditSoft, { size: 9 });
-    lay.callout('A fair read, never a verdict', [m.road === 'self' ? 'It describes your conditions and your setup, never your worth. It is not a diagnosis and makes no health claims.' : 'It describes the setup between you, never any one person. It is not a diagnosis, makes no health claims, and is never evidence or a performance record.'], C.lav, { size: 9, titleColor: C.ink });
+    lay.callout('A fair read, never a verdict', [m.road === 'self' ? 'It describes your conditions and your setup, never your worth. It is not a diagnosis.' : 'It describes the setup between you, never any one person. It is not a diagnosis, and is never evidence or a performance record.'], C.lav, { size: 9, titleColor: C.ink });
     if (m.stateNote) lay.callout('Before you read on', [m.stateNote], C.butter, { size: 9, titleColor: C.ink });
     lay.h2('How to read this report', 90, C.butter);
     lay.bullets([
@@ -921,7 +921,7 @@
     });
     doc.marks = [{ title: 'Cover', level: 0, page: 0 }, { title: 'Contents', level: 0, page: contentsPage }].concat(toc.map(function (e) { return { title: e.t, level: 0, page: e.page }; }));
     footers(doc, fitLine('Spread Love & Acceptance  ·  Full path report  ·  ' + m.roadLabel + '  ·  made on your device ' + niceDate(m.date), 'Helvetica', 6.8, W - 80),
-      fitLine('Everything stays on your device. Not a verdict, not a diagnosis, no health claims. It describes the setup, never a person.', 'Helvetica', 6.8, W - 80));
+      fitLine('Everything stays on your device. Not a verdict, not a diagnosis. It describes the setup, never a person.', 'Helvetica', 6.8, W - 80));
     return doc.output();
   }
 

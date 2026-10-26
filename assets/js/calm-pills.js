@@ -114,7 +114,7 @@
     var o = byId[curId]; if (!o) return;
     var u = location.origin + location.pathname;
     pr.innerHTML = '<div class="sp-pr-item"><h2>' + o.nameHtml + '</h2><p><span class="sp-ev">' + EVL[o.ev] + '</span> · ' + esc(o.kindLabel) + '</p><dl><dt>Studied in</dt><dd>' + esc(o.studied) + '</dd>' +
-      (o.forms ? '<dt>Forms</dt><dd>' + esc(o.forms) + '</dd>' : '') + '</dl>' + (o.body ? o.body.innerHTML : '') + '</div><p class="sp-pr-foot">From Spread Love &amp; Acceptance, Calm without pills: ' + esc(u) + '#' + o.id + '. General information from published research, not medical advice. Last checked: October 2026.</p>';
+      (o.forms ? '<dt>Forms</dt><dd>' + esc(o.forms) + '</dd>' : '') + '</dl>' + (o.body ? o.body.innerHTML : '') + '</div><p class="sp-pr-foot">From Spread Love &amp; Acceptance, Calm without pills: ' + esc(u) + '#' + o.id + '. General information from published research. Last checked: October 2026.</p>';
   }
   function printNow() { fillPrint(); H.classList.add('sp-printing'); setTimeout(function () { window.print(); setTimeout(function () { if (!/Mobi|Android/i.test(navigator.userAgent)) endPrint(); }, 300); }, 30); }
   function endPrint() { H.classList.remove('sp-printing'); if (pr) pr.innerHTML = ''; }

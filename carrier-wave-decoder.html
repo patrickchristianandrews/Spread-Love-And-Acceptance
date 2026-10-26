@@ -2008,7 +2008,7 @@ function renderWork(){
       <div class="field"><label for="ff-due">Target date${strict?"":" (optional)"}</label><input type="date" id="ff-due" data-f="due" value="${esc(fd.due)}"></div>
     </div>
     <div class="field wide"><label for="ff-test">How we'll know it's fixed${strict?"":" (optional)"}</label><textarea id="ff-test" data-f="test" placeholder="A test you can check, like “the next five requests all name a time.”">${esc(fd.test)}</textarea></div>
-    ${fd.sev==="mat"?`<p class="warn">A stubborn gap: review it monthly alongside What keeps coming back? (WP-04). This tool is a heuristic, not a substitute.</p>`:""}`:""}
+    ${fd.sev==="mat"?`<p class="warn">A stubborn gap: review it monthly alongside What keeps coming back? (WP-04).</p>`:""}`:""}
     <ul class="errs" id="ff-errs" role="alert" tabindex="-1" hidden></ul>
     <div class="row" style="margin-top:16px"><button class="play" id="ff-save">${full?(editing?"Save revision":"Log finding"):(editing?"Save note":"Just note it")}</button><button class="ghost" id="ff-cancel">Cancel</button></div>`;
   w.oninput=w.onchange=ev=>{const t=ev.target;

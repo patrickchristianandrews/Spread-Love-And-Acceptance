@@ -123,7 +123,7 @@ Program: REPORT-01 keeps a week-by-week record of your household numbers, which 
 aka: deciding by values; what matters most; values in decisions
 see: Values clarification; The 10-10-10 question
 go: /library/motivation.html#values | Values (Library)
-evidence: Values-based approaches (for example, in acceptance and commitment therapy) suggest aligning choices with values supports wellbeing. This is general information.
+evidence: Values-based approaches (for example, in acceptance and commitment therapy) suggest aligning choices with values supports wellbeing.
 try: “We both value time together more than money right now. So the cheaper vacation, with more days, makes sense.”
 
 When options seem equal, asking “which fits what we care about most?” can break the tie. Naming shared values also makes it easier to accept a decision you didn’t fully love.

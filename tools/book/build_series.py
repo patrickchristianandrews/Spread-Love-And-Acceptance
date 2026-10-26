@@ -490,8 +490,8 @@ def copyright_page(book, workbook=False, bw=False):
 
 
 MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
-# book26: the same two sentences as the KDP listing's AI disclosure (Text: drafted with AI writing tools, reviewed and edited many times; Images: drawn by code written with an AI tool)
-HOW_MADE = '<p><strong>How it was made.</strong> The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The pictures were drawn by code that was written with an AI tool.</p>'
+# book26: the same two sentences as the KDP listing's AI disclosure (Text: AI-generated, drafted with AI writing tools; Images: AI-generated, drawn by code written with an AI tool)
+HOW_MADE = '<p><strong>How it was made.</strong> The words were drafted with AI writing tools. The pictures were drawn by code that was written with an AI tool.</p>'
 
 
 def meet_page(book, found=()):

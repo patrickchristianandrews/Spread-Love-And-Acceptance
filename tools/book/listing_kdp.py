@@ -252,8 +252,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
-| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
+| Text | **Yes**: AI-generated, for the entire work (choose the editing level that is true; only you know it) | The words were drafted with AI writing tools. The copyright page says the same. |
+| Images | **Yes**: AI-generated, for the entire work (choose the editing level that is true; only you know it) | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -475,7 +475,7 @@ def main():
             'description_html': desc, 'category_1': d['cats'][0], 'category_2': d['cats'][1], 'category_3': d['cats'][2],
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
             **{'keyword_%d' % (i + 1): k for i, k in enumerate(d['kw'])},
-            'ai_text': 'Yes: entire work, extensive editing [OWNER]', 'ai_images': 'Yes: entire work, extensive editing [OWNER]', 'ai_translations': 'No',
+            'ai_text': 'Yes: AI-generated, entire work [OWNER: choose the true editing level]', 'ai_images': 'Yes: AI-generated, entire work [OWNER: choose the true editing level]', 'ai_translations': 'No',
             'isbn': 'Get a free KDP ISBN', 'ink_paper': 'Black & white, white' if bw else 'Standard color, white', 'trim': {'workbook': '8.5 x 11 in', 'pocket': '5 x 8 in'}.get(kind, '6 x 9 in'),
             'bleed': 'No bleed', 'cover_finish': 'Matte', 'pages': pages, 'interior_file': 'book/print/%s.pdf' % bid, 'cover_file': 'book/print/cover-%s.pdf' % bid, 'low_content': 'No',
             'price_usd': '%.2f' % price,

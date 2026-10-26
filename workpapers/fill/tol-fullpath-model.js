@@ -1583,7 +1583,7 @@
     model.fair = [
       'Not a verdict. This report describes the setup and what was written down, never anyone’s worth, effort or love.',
       R.solo ? 'It reads your conditions, not your character. Patterns are weather, not identity.' : 'No blame. A gap in the setup is a gap in the setup, not a failing of the person who kept covering it.',
-      'Not diagnostic, and not a health tool. It can’t tell you what is going on inside anyone, and it makes no health claims.',
+      'Not diagnostic, and not a health tool. It can’t tell you what is going on inside anyone.',
       'Rule-of-thumb numbers. The bands are round numbers chosen to be easy to read. A 0.69 and a 0.70 are the same week.',
       'It only knows what was entered. Anything left blank says "not filled in" rather than guessing.'
     ];

@@ -1,6 +1,6 @@
 # Stress, rest and sleep basics
 
-General, everyday information only. Not health or medical advice.
+General, everyday information only.
 
 ## Stress versus pressure
 aka: stress and pressure; good stress; helpful stress
@@ -84,7 +84,7 @@ Program: The parking lot idea from Check-ins is similar: a topic waits safely un
 aka: wind down; bedtime routine for adults; evening routine
 see: Worry time; Sleep and irritability at home
 go: /soundscapes.html | The soundscapes
-evidence: Sleep researchers commonly recommend a regular, relaxing pre-sleep routine as part of general good sleep habits. This is general information, not medical advice.
+evidence: Sleep researchers commonly recommend a regular, relaxing pre-sleep routine as part of general good sleep habits.
 try: Same rough time each night: dim the lights, put the phone away, a few pages of a book or a calm soundscape.
 
 A wind-down routine is a predictable set of calming steps before bed. Doing the same few things in the same order signals to your body that the day is ending.
@@ -97,7 +97,7 @@ Program: The soundscapes and the Night Garden are gentle options for winding dow
 aka: tired and snappy; short sleep and mood; sleep debt
 see: A wind-down routine; Hungry, tired and snappy
 go: /library/stress.html#sleep-and-mood | Sleep and mood (Library)
-evidence: Research consistently links short sleep with worse mood and more conflict in relationships. This is general information, not medical advice.
+evidence: Research consistently links short sleep with worse mood and more conflict in relationships.
 try: “I slept badly, so I might be short today. Let’s keep the big stuff for tomorrow.”
 
 After a short night, most people are more irritable, less patient and quicker to read things as negative. Couples and families often argue more after bad sleep.
@@ -123,7 +123,7 @@ Program: The Library covers HALT and hangry in depth. Today’s Weather asks abo
 aka: moving to reset; walk it off; physical activity for mood
 see: Micro-breaks; Walk and talk for hard topics
 go: /wp-11.html | WP-11: The Calm-Down Kit
-evidence: Research generally finds physical activity is linked with better mood. This is general information, not medical or exercise advice.
+evidence: Research generally finds physical activity is linked with better mood.
 try: When you’re too wound up to talk, a brisk ten-minute walk around the block before coming back.
 
 Moving your body, even briefly, can help shift a tense or flat state: a short walk, stretching, dancing to one song, carrying laundry up the stairs.

@@ -2688,7 +2688,7 @@
       care: {
         h1: 'One owner per job: sharing the care', title: 'One owner per job: sharing the care',
         lede: 'Who owns each part of the care when one of you looks after the other: medicines, appointments, paperwork, the nights, and a break for the main carer. Give each one an owner (grown-up children and friends can own jobs too), so nobody has to ask twice.',
-        note: 'Fill it in together with whoever shares the care. This is about who owns each job, not medical advice. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Caring for a husband, wife or partner.',
+        note: 'Fill it in together with whoever shares the care. This is about who owns each job. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Caring for a husband, wife or partner.',
         fridge: 'Who owns what in the care', hrsCol: true,
         rows: [['Medicines and the pill box (as the care team directs)', Wk], ['Book and go along to medical appointments', AN], ['Insurance and paperwork', Mo], ['Night care and night-time calls', D], ['Sunday call with the family', Wk], ['Book respite: a break for the main carer', Mo], ['Pick up prescriptions', AN], ['Groceries and meals', Wk]],
       },

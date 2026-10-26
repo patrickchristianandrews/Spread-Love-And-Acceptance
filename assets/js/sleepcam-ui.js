@@ -165,7 +165,7 @@
       });
     });
     REF.mixSum = h('span', { class: 'spc-sum' });
-    REF.honest = h('p', { class: 'spc-note spc-honest', text: 'This is a personal preference tool, not medical advice, and sounds do not work the same for everyone.' });
+    REF.honest = h('p', { class: 'spc-note spc-honest', text: 'This is a personal preference tool, and sounds do not work the same for everyone.' });
     REF.safe = h('div', { class: 'spc-safe' }, [h('h3', { text: 'For homes with pets' }), h('ul', {}, [
       h('li', { text: 'Keep the volume low, and turn a sound off if an animal seems bothered by it.' }),
       h('li', { text: 'Animals hear higher pitches than people do, so with pets in the room the higher-pitched sounds start off.' }),
@@ -273,7 +273,7 @@
     var sec = h('details', { class: 'spc-sec', id: 'spc-sec-pick' }, [
       h('summary', {}, [h('span', { class: 'spc-sec-t', text: 'What helps you sleep best?' })]),
       h('div', { class: 'spc-sec-body' }, [
-        REF.honest2 = h('p', { class: 'spc-note spc-honest', text: 'This is a personal preference tool, not medical advice, and sounds do not work the same for everyone.' }),
+        REF.honest2 = h('p', { class: 'spc-note spc-honest', text: 'This is a personal preference tool, and sounds do not work the same for everyone.' }),
         h('fieldset', { class: 'spc-fs' }, [h('legend', { text: 'What gets in the way of sleep? Tap any that fit.' }), chips(M.sit, sit, show)]),
         h('fieldset', { class: 'spc-fs' }, [h('legend', { text: 'What has worked for you before? (optional)' }), chips(M.worked, worked, show)]),
         REF.rec

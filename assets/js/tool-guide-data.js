@@ -538,7 +538,7 @@ window.TOLToolGuideData = {
       leave: 'A few slower breaths, with no timer and nothing to lose.',
       pages: ['/night-garden.html'],
       when: 'At the end of a long day, or when your thoughts are busy and you want a few quiet minutes.',
-      notWhen: 'Not a treatment, and it doesn’t replace talking to someone.',
+      notWhen: 'Not a treatment.',
       time: 'As long as you like. Two minutes is enough to feel a difference for many people.',
       result: 'A few slow breaths, a flower or two bloomed, and a calmer body.',
       next: [

@@ -1,6 +1,6 @@
 # Money conversations
 
-General information about talking about money together. Not financial advice.
+General information about talking about money together.
 
 ## Money dates
 aka: money date; money check-in; monthly money talk
