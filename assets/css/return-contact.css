@@ -66,3 +66,7 @@
   .ct-btns .ct-btn, .register-form button{ width:100%; }
   .ct-row button{ width:100%; }
 }
+.ct-h3{ margin:1rem 0 .35rem; font-size:1.02rem; }
+.ct-list{ margin:0 0 .8rem; padding-left:1.25rem; }
+.ct-list li{ margin:.25rem 0; }
+.ct-card .ct-addr{ font-weight:600; overflow-wrap:anywhere; }
