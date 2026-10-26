@@ -106,7 +106,7 @@
   function themName(c, poss) { var n = c && c.them; return n ? (poss ? n + '’s' : n) : (poss ? 'their' : 'the other person'); }
 
   // ---------------------------------------------------------------- what each kind of message asks for
-  var REL = { partner: 'Partner', coparent: 'Co-parent or ex', family: 'Family', friend: 'Friend', housemate: 'Housemate', coworker: 'Coworker', group: 'More than one person', other: 'Someone else' };
+  var REL = { partner: 'Partner', coparent: 'Co-parent or ex', family: 'Family', friend: 'Friend', housemate: 'Roommate', coworker: 'Coworker', group: 'More than one person', other: 'Someone else' };
   var FEELINGS = ['tired', 'rushed', 'frustrated', 'unseen', 'taken for granted', 'overwhelmed', 'stretched thin', 'worried', 'hurt', 'disappointed', 'left out', 'alone with it', 'confused', 'embarrassed', 'annoyed', 'sad', 'on edge', 'hopeful', 'grateful'];
   var SORRY_FEELINGS = ['sorry', 'ashamed', 'regretful', 'embarrassed', 'worried', 'sad', 'hopeful'];
   var NOT_EG = ['I’m not saying you don’t care.', 'I’m not saying it’s all your fault.', 'I’m not angry with you as a person.', 'I’m not asking you to drop everything.', 'I’m not trying to win this. I want us to sort it out.'];

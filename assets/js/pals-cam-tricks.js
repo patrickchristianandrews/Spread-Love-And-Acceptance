@@ -132,7 +132,7 @@
       { k: 'Kindest habit', v: 'Stopping mid-zoom to help anyone who looks lost' }
     ],
     sugarfoot: [
-      { k: 'Favorite snack', v: 'A warm biscuit, shared with Tidbit' },
+      { k: 'Favorite snack', v: 'A warm cookie, shared with Tidbit' },
       { k: 'Superpower', v: 'Hugs that make the whole day better' },
       { k: 'Secret talent', v: 'Balancing a teacup on her nose' },
       { k: 'Favorite time of day', v: 'Night, under the stars' },

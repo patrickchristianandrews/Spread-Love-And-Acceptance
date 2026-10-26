@@ -16,7 +16,7 @@
   minutes or hours, each person's time, and, optionally, the thinking part (noticing, planning,
   remembering) in minutes and who notices first.
   Money tab (optional, group only): one line per cost, what each person paid, in the currency picked
-  ($, £, € or another symbol). Each cost is shared (split evenly, by half shares, or by the split you
+  ($ or another symbol you type). Each cost is shared (split evenly, by half shares, or by the split you
   agreed), one person's own (left out of the settle-up), an agreed amount like family support (listed,
   not split), a savings goal (kept, never owed), or money coming in (optional: shows what's left). The
   summary leads with each person's total, then the settle-up.
@@ -106,7 +106,6 @@
     if ((!reg || reg === 'US') && TZ_REG[tz]) reg = TZ_REG[tz];
     return { reg: reg === 'UK' ? 'GB' : reg, lang: lang };
   }
-  var REGION = regionGuess(), UKISH = REGION.reg === 'GB' || REGION.reg === 'IE';
   // Daytime care on your own while the other parent is at work: home work, counted in the split and in
   // "Home + paid work", the same way paid work is counted for the one at work
   var SOLO_CARE = 'Looking after the baby on my own (while the other is at work)';
@@ -123,7 +122,7 @@
   function isNightSleep(j) { return !j.ex && /recovery sleep|sleep after (?:a |my |the )?(?:night )?shifts?/.test(low(j.name)); }
   // The task library: [name, typical amount, how often, unit ('m' minutes, default, or 'h' hours)]
   var LIB = {
-    home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], [UKISH ? 'Trash & recycling' : 'Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
+    home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], ['Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
     food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'wkd'], ['Clearing out the fridge', 20, 'week']],
     laundry: [['Washing & drying', 20, 'few'], ['Folding & putting away', 25, 'few'], ['Towels & bedding', 20, 'week'], ['Ironing & mending', 30, 'week']],
     kids: [['Getting kids up & ready', 30, 'day'], ['Daycare drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week'], [SOLO_KIDS, 8, 'wkd', 'h']],
@@ -231,18 +230,9 @@
   // the words for each kind of cost in the money summary
   var KIND_WORD = { shared: 'shared bills', own: 'own costs', agreed: 'family support', savings: 'savings' };
   var COST_KINDS = ['shared', 'own', 'agreed', 'savings'];
-  // The money sign: a calm guess from the browser's language, changeable on the Money tab
-  var EURO = /^(AT|BE|CY|DE|EE|ES|FI|FR|GR|HR|IE|IT|LT|LU|LV|MT|NL|PT|SI|SK)$/;
-  var OTHER_CUR = { IN: '₹', JP: '¥', CN: '¥', KR: '₩', SE: 'kr', NO: 'kr', DK: 'kr', CH: 'CHF', ZA: 'R', PL: 'zł', BR: 'R$', NG: '₦', PH: '₱' };
-  var CUR_PICK = ['$', '£', '€'];
-  function defaultCur() {
-    var reg = REGION.reg, lang = REGION.lang;
-    if (reg === 'GB') return '£';
-    if (EURO.test(reg)) return '€';
-    if (OTHER_CUR[reg]) return OTHER_CUR[reg];
-    if (!reg && /^(de|fr|es|it|nl|fi|pt|el|sk|sl|et|lv|lt|ga|mt|hr)$/.test(lang)) return '€';
-    return '$';
-  }
+  // The money sign: dollars, changeable on the Money tab to any sign you type (this is a US tool, so there are no pound or euro choices)
+  var CUR_PICK = ['$'];
+  function defaultCur() { return '$'; }
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function num(x) { var n = parseFloat(x); return isFinite(n) && n > 0 ? n : 0; }
@@ -440,8 +430,7 @@
     // tasks from the library start with no one's time ("pick who") unless someone chose a person
     if (!state.asSet || typeof state.as !== 'number' || state.as >= n || state.as < -1) { state.as = -1; state.asSet = false; }
     if (typeof state.me !== 'number' || state.me >= n || state.me < -2) state.me = -1;
-    // a money sign nobody picked (not here, not on the other device) follows this browser, so an older
-    // stand that started as "$" on a UK phone shows "£"
+    // a money sign nobody picked (not here, not on the other device) is the dollar sign
     if (typeof state.cur !== 'string' || !state.cur.trim() || !state.curSet) { state.cur = defaultCur(); state.curSet = false; }
     state.cur = state.cur.trim().slice(0, 4);
     state.checked = !!state.checked;
@@ -1177,7 +1166,7 @@
     requestAnimationFrame(function () { autoGrow(ta); });
     return row;
   }
-  // "Tom paid (£)", "Tom puts in (£)" for savings, "Tom brings in (£)" for money coming in
+  // "Tom paid ($)", "Tom puts in ($)" for savings, "Tom brings in ($)" for money coming in
   // (planning, not settling up: "Tom puts in" for every cost, nothing "paid" yet)
   function billWho(b, i) { return nameOf(i) + (b.kind === 'income' ? ' brings in' : b.kind === 'savings' || state.planning ? ' puts in' : ' paid') + ' (' + state.cur + ')'; }
   // the input's spoken name, with the real name: "Sophie, amount paid ($)"
@@ -1798,7 +1787,7 @@
     }).join('; ') + '.');
     return out.join('\n');
   }
-  // Money with the sign picked on the Money tab ("$", "£", "€" or your own, like "kr" or "CHF").
+  // Money with the sign picked on the Money tab ("$" or your own, like "kr" or "CHF").
   function cash(n) { var c = state.cur || '$'; return (/[A-Za-z]$/.test(c) ? c + ' ' : c) + money(n); }
   function joinNames(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
   // Who pays whom to reach each person's share (fair[i]): those who paid under their share pay those
@@ -2445,8 +2434,7 @@
     // flow17: the common starter chips only on an empty list (never beside a list someone sent, where "Groceries" next to "Grocery shopping" read as two jobs)
     var common = !names.length && !ownersList().length;
     if (common) {
-      (UKISH ? ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Toilet paper & supplies']
-        : ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies']).forEach(addName);
+      ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies'].forEach(addName);
       var hint = document.createElement('p'); hint.className = 'ls-panel-note'; hint.style.flexBasis = '100%'; hint.style.margin = '0';
       hint.textContent = 'Common ones to start with (jobs you list above show up here too):';
       box.appendChild(hint);

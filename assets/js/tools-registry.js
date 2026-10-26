@@ -172,7 +172,7 @@
     // owner17: the calm tools are also gathered on one page, Relax and reset (/pause-and-play.html#relax), a mode here.
     { id: 'calm', name: 'Cool-down corner', brand: '', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
       modes: [['Upset right now? A 5-minute calm-down', '/upset-right-now.html', 'Just me', 'Upset right now?', '🫧'], ['Breathing game', '/night-garden.html', 'Just me', '', '🌙'],
-        ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colours and tones', '/calm-visualizer.html', 'Just me', 'Slow colours', '🌀'],
+        ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colors and tones', '/calm-visualizer.html', 'Just me', 'Slow colors', '🌀'],
         ['Relax and reset: every calm tool in one place', '/pause-and-play.html#relax', 'Just me', 'Relax and reset', '🌿'],
         ['Soften a tense moment', '/tools/soften-a-tense-moment.html', 'The two of us', '', '🤝'], ['Make a pause plan', '/pursue-withdraw.html#plan-h', 'The two of us', 'Pause plan', '⏸️']],
       does: 'Right now: a pause line and a one-minute breathing pacer, or a breathing game, sounds or slow colors. Together: a pause plan.',
@@ -250,7 +250,7 @@
       kw: 'start beginner first time new here quick start start in 10 minutes' },
     // consol12: 'playground', 'quest', 'sync', 'connect' -> 'explore'
     { id: 'explore', name: 'Learn by doing', brand: 'the Workpaper Playground, the quest map and more', href: '/do/index.html', type: 'learn', also: ['load', 'play'],
-      modes: [['Practise the worksheets on an example', '/do/index.html', '', 'Practise on an example', '🧪'], ['Your learning map', '/quest.html', '', 'Learning map', '🗺️'],
+      modes: [['Practice the worksheets on an example', '/do/index.html', '', 'Practice on an example', '🧪'], ['Your learning map', '/quest.html', '', 'Learning map', '🗺️'],
         ['Watch two rhythms fall into step', '/tools/frequency-sync-visualizer.html', '', 'Two rhythms in step', '〰️'], ['Connect two fields of study', '/polymath.html#connect', '', 'Connect two fields', '🔗']],
       does: 'Try the core worksheets on a made-up household, see your learning map fill in, or watch two rhythms fall into step.',
       gets: 'A feel for how it all works before you use your own week. Nothing to sign up for, and no streaks.',

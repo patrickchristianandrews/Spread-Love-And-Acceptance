@@ -94,7 +94,7 @@
     { id: 'hint', name: 'Hint instead of an ask', group: 'edge', heat: 1.5,
       re: /\bit(?:'d| would) be (?:nice|great|good|lovely|helpful|amazing) if (?:someone|somebody|anyone|you|people|the)\b|\b(?:someone|somebody) (?:should|needs to|could|has to|might want to) [a-z]+|\bi wish (?:someone|somebody|anyone) would\b|\bmust be nice to [a-z]+/g,
       what: 'A hint (“it would be nice if someone helped”) puts the request in the subtext. Some readers decode it; others hear a complaint with nothing they can say yes to.',
-      fix: 'Ask directly, with a when: “Could you take the bins out tonight?”',
+      fix: 'Ask directly, with a when: “Could you take the trash out tonight?”',
       ex: ['It would be nice if someone helped around here.'] },
     { id: 'opener', name: 'Opener with no topic', group: 'door', heat: 1.5,
       re: /\b(?:we|i) (?:need|have) to (?:talk|chat)(?! about| at| tonight| tomorrow| later| after| when| once)\b|\bcan we talk(?= *[?.!]|$)|\bwe need to have a (?:talk|chat|conversation)(?! about)\b/g,

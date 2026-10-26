@@ -497,12 +497,12 @@
    "site": false,
    "relOk": false,
    "replies": [
-    "Films! I love a good film, especially ones with rain in them. Every dramatic moment has rain. I’m basically a film star.",
+    "Movies! I love a good movie, especially ones with rain in them. Every dramatic moment has rain. I’m basically a movie star.",
     "TV talk! My favorite program is the weather forecast. The suspense is unbearable.",
     "I watched a nature documentary once. There was a whole river in it. I was star-struck.",
     "Ooh, a good story on a screen. Popcorn, a blanket, and someone to shush. Perfect.",
     "Tidbit and Sugarfoot have their own cartoons, you know: Frequency Buddies. I’m told I make a cameo. I’m told nothing of the sort, but I live in hope.",
-    "I love a film where everyone gets caught in the rain and then realizes something important. Very true to life.",
+    "I love a movie where everyone gets caught in the rain and then realizes something important. Very true to life.",
     "Binge-watching is just like rain: once it starts, you might as well enjoy it."
    ],
    "thing": [
@@ -510,10 +510,10 @@
     "Ooh, {thing}. I’ve added it to my “must watch through a window” list."
    ],
    "asks": [
-    "What’s a film you could watch again and again?",
+    "What’s a movie you could watch again and again?",
     "What are you watching at the moment?",
-    "Cozy comfort film or edge-of-your-seat thriller?",
-    "If they made a film of your life, what would it be called?",
+    "Cozy comfort movie or edge-of-your-seat thriller?",
+    "If they made a movie of your life, what would it be called?",
     "What’s the best thing you’ve watched this year?"
    ],
    "callbacks": [
@@ -630,7 +630,7 @@
     "Are you competitive, or just here for the snacks?",
     "Board games or video games?",
     "What game could you play for hours?",
-    "I know rock, paper, scissors and a tiny quiz. Fancy a quick game with me?"
+    "I know rock, paper, scissors and a tiny quiz. Want a quick game with me?"
    ],
    "callbacks": [
     "Played any more {thing} since we talked?",
@@ -1054,7 +1054,7 @@
    "site": false,
    "relOk": false,
    "replies": [
-    "Seasons! My favorite is autumn: crunchy leaves, cozy sweaters, and rain. Lots of lovely rain.",
+    "Seasons! My favorite is fall: crunchy leaves, cozy sweaters, and rain. Lots of lovely rain.",
     "Spring is lovely. Showers, blossoms, and ducklings. I get very emotional about ducklings.",
     "Summer is my nemesis season. Too much sun. I spend it hiding in the shade with a fan. Well, near a fan.",
     "Winter turns my cousins into snowflakes. Very glamorous. I sometimes freeze into a little ice rink. Also glamorous.",
@@ -1157,9 +1157,9 @@
   "Why did the cookie go to the doctor? It was feeling a bit crummy.",
   "What do you call a sleeping dinosaur? A dino-snore.",
   "How does a penguin build its house? Igloos it together.",
-  "Why did the golfer bring two pairs of trousers? In case he got a hole in one.",
+  "Why did the golfer bring two pairs of pants? In case he got a hole in one.",
   "What do you call a dog magician? A labracadabrador.",
-  "Why are lifts so good at telling jokes? They work on many levels.",
+  "Why are elevators so good at telling jokes? They work on many levels.",
   "What did the ocean say to the beach? Nothing. It just waved.",
   "Why did the teddy bear say no to pudding? It was already stuffed.",
   "What do you call a fish with no eyes? A fsh.",
@@ -1182,7 +1182,7 @@
   "What time is it when a duck wakes up? The quack of dawn.",
   "What do ducks watch on TV? Duckumentaries.",
   "Why did the duck cross the road? It was the chicken’s day off.",
-  "Why did the coffee call the police? It got mugged.",
+  "Why did the coffee file a complaint? It got mugged.",
   "I asked the kettle how it was doing. It said it was just letting off steam.",
   "Why are puddles such good listeners? They reflect on everything you say.",
   "What’s a puddle’s favorite game? Hide and seep.",
@@ -1461,7 +1461,7 @@
   "Fun fact: a day on Venus is longer than its year. It spins very slowly.",
   "Fun fact: water covers about 71 percent of Earth’s surface. I like those numbers.",
   "Fun fact: most of the world’s fresh water is frozen in ice caps and glaciers.",
-  "Fun fact: a big fluffy cloud can hold hundreds of tonnes of water. It just spreads it out very, very thinly.",
+  "Fun fact: a big fluffy cloud can hold hundreds of tons of water. It just spreads it out very, very thinly.",
   "Fun fact: snowflakes almost always have six sides or six arms. It’s down to the way water molecules fit together.",
   "Fun fact: koalas can sleep up to about 20 hours a day. My kind of schedule.",
   "Fun fact: hummingbirds can fly backward.",
@@ -1544,7 +1544,7 @@
    "pick": "Talk to animals. I have so many questions for the ducks."
   },
   {
-   "q": "Would you rather live where it’s always spring, or always autumn?",
+   "q": "Would you rather live where it’s always spring, or always fall?",
    "a": "spring",
    "b": "autumn",
    "aw": [
@@ -2089,14 +2089,14 @@
    "why": "The giraffe. Great for spotting rain clouds early."
   },
   {
-   "q": "At sea level, water boils at how many degrees Celsius?",
+   "q": "At sea level, water boils at how many degrees Fahrenheit?",
    "opts": [
     "50",
     "100",
     "150"
    ],
    "a": 1,
-   "why": "100 degrees Celsius. I try not to think about it."
+   "why": "212 degrees Fahrenheit. I try not to think about it."
   },
   {
    "q": "Which instrument usually has 88 keys?",
@@ -2559,9 +2559,9 @@
    "Of course. A small, kind distraction coming up. You can always come back to the other thing later, if you want to."
   ],
   "better": [
-   "That’s lovely to hear. I’m really glad. Fancy a joke to lighten things up, or shall we just chat?",
+   "That’s lovely to hear. I’m really glad. Want a joke to lighten things up, or shall we just chat?",
    "Oh, good. That makes my puddle feel brighter. Want something light now, like a joke or a riddle?",
-   "I’m so glad. Whenever you’re ready, we can keep things light. Fancy a joke?"
+   "I’m so glad. Whenever you’re ready, we can keep things light. Want a joke?"
   ],
   "upset_joke": [
    "I can do that. First, though: you sound like you’re having a hard time. Do you want to talk about it, or would a gentle joke help right now?",

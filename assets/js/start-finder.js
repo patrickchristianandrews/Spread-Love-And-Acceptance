@@ -100,7 +100,7 @@
       ['text', 'A message went wrong', ['signal', 'landit', 'write'], 'friends', 'shifter'],
       ['no', 'I need to say no or set a limit', ['no', 'landit', 'write'], 'friends', 'carry']
     ]],
-    ['house', 'Housemates', 'it’s about roommates', true, [
+    ['house', 'Roommates', 'it’s about roommates', true, [
       ['chores', 'Chores and bills feel unfair', ['lemonq', 'lemonq', 'owner'], 'roommates', 'checkin'],
       ['room', 'Noise, guests, sleep or room rules', ['signal', 'room', 'room'], 'roommates', 'landit'],
       ['meeting', 'We need a house meeting', ['checkin', 'checkin', 'owner'], 'roommates', 'lemonq'],

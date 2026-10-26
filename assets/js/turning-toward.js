@@ -6,7 +6,7 @@
 
   var WHO = [['partner', 'Partner'], ['family', 'Family'], ['friend', 'Friend'], ['roommate', 'Roommate'],
              ['coparent', 'Co-parent'], ['coworker', 'Coworker'], ['caregiver', 'Someone I care for'],
-             ['grandchild', 'Grown child or grandchild'], ['neighbor', 'Neighbour']];
+             ['grandchild', 'Grown child or grandchild'], ['neighbor', 'Neighbor']];
 
   // One small moment per day. msg: a message to send, by relationship (default covers the rest).
   var SPARKS = [
@@ -168,7 +168,7 @@
       msg: { default: 'Small good news: [the doctor’s appointment went well / the tomatoes finally came up]. What’s your good thing this week?',
              grandchild: 'Lovely to hear from you. My good thing this week: [one small thing]. What’s yours?' } },
     { key: 'rituals', title: 'Make the call they’d love to get',
-      todo: 'Ring a grandchild, an old friend or a neighbor just to hear their news. Ask about one thing they mentioned last time.',
+      todo: 'Ask a grandchild, an old friend or a neighbor for their news. Ask about one thing they mentioned last time.',
       msg: { default: 'Just calling to hear your news. How did [the thing you mentioned] go?',
              grandchild: 'Thinking of you! How did [the match / the exam / the new job] go? Call me when you have a minute.' } },
     { key: 'bids', title: 'Turn toward a reach you missed',

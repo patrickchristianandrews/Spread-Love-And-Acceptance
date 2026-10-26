@@ -59,7 +59,7 @@
   // ---------- the words for each filter
   var DO = [['calm', 'Calm down'], ['talk', 'Talk better'], ['self', 'Self-discovery'], ['other', 'Understand someone'],
     ['load', 'Share the load fairly'], ['plan', 'Plan together'], ['learn', 'Learn'], ['fun', 'Have fun']];
-  var WHO = [['me', 'On my own'], ['partner', 'With a partner'], ['family', 'Family and kids'], ['housemates', 'Housemates'], ['work', 'Work or team'], ['friends', 'Friends']];
+  var WHO = [['me', 'On my own'], ['partner', 'With a partner'], ['family', 'Family and kids'], ['housemates', 'Roommates'], ['work', 'Work or team'], ['friends', 'Friends']];
   var TIME = [['2', 'About 2 min'], ['10', 'About 10 min'], ['long', 'Longer']];
   var LABEL = {}; [DO, WHO, TIME].forEach(function (g) { g.forEach(function (x) { LABEL[x[0]] = x[1]; }); });
   function timeOf(t) { return t.mins <= 3 ? '2' : t.mins <= 12 ? '10' : 'long'; }

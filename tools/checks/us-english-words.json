@@ -1029,16 +1029,26 @@
    "fix": "9:30 a.m."
   },
   {
-   "re": "\\b\\d{1,2}(?:st|nd|rd|th)? (?:of )?(?:January|February|March|April|May|June|July|August|September|October|November|December)\\b",
-   "fix": "October 26, 2026"
-  },
-  {
    "re": "\\b(?:Mon|Tue|Tues|Wed|Thu|Thurs|Fri|Sat|Sun)\\.? \\d{1,2} (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b",
    "fix": "Oct 26"
   },
   {
    "re": "\\b(?:Mr|Mrs|Ms|Dr)\\b(?![.’\\'])(?= [A-Z])",
    "fix": "Mr. Mrs. Dr. with a period",
+   "cs": true
+  },
+  {
+   "re": "\\bGPs?\\b",
+   "fix": "doctor",
+   "cs": true
+  },
+  {
+   "re": "(?<!first )\\bmates?\\b(?! (?:of|in)\\b)",
+   "fix": "friend / buddy"
+  },
+  {
+   "re": "\\b\\d{1,2}(?:st|nd|rd|th)? (?:of )?(?:January|February|March|April|June|July|August|September|October|November|December)\\b|\\b\\d{1,2}(?:st|nd|rd|th)? (?:of )?May\\b",
+   "fix": "October 26, 2026",
    "cs": true
   },
   {
@@ -1054,7 +1064,7 @@
    "fix": "soccer"
   },
   {
-   "re": "\\b(?:washing-up|washing up|the washing|washing line|tumble dryer|hoover\\w*|kitchen roll|bin bag|hob|airing cupboard|council house|council flat|estate agent|letting agent|allotment|duvets)\\b(?<!duvets)",
+   "re": "\\b(?:washing-up|washing up|the washing\\b(?! machine)|washing line|tumble dryer|hoover\\w*|kitchen roll|bin bag|hob|airing cupboard|council house|council flat|estate agent|letting agent|allotment|duvets)\\b(?<!duvets)",
    "fix": "US home word"
   },
   {
@@ -1090,7 +1100,7 @@
    "fix": "-ize"
   },
   {
-   "re": "\\b(?:analys|paralys|catalys|dialys|hydrolys)(?:e|ed|es|ing|er|ers)\\b",
+   "re": "\\b(?:analys|paralys|catalys|dialys|hydrolys)(?:e|ed|ing|er|ers)\\b",
    "fix": "-yze"
   },
   {
@@ -1106,11 +1116,11 @@
    "fix": "US form (toward, learned, ...)"
   },
   {
-   "re": "\\bmum\\b|\\bmums\\b|\\bmummy\\b|\\bmam\\b|\\bgrandad\\w*|\\bgranny\\b|\\bgran\\b|\\bnana\\b|\\bnan\\b|\\bauntie\\b",
+   "re": "\\bmum\\b|\\bmums\\b|\\bmummy\\b|\\bmam\\b|\\bgrandad\\w*|\\bgranny\\b|\\bgran\\b|\\bnana\\b|\\b(?:my|your|his|her|their|our|I’m your) nan\\b|\\bauntie\\b",
    "fix": "mom/grandpa/grandma/aunt"
   },
   {
-   "re": "\\b(?:flat|flats)\\b(?= (?:share|mate|mates|above|below|where|in|with|near|was|is)\\b)|\\b(?:our|their|her|his|your|my|a shared|a new|first|empty|small|tiny|upstairs|downstairs) flat\\b(?! (?:out|on|no|and|tone|voice|face|answer|affect|line|fee|rate|white|surface|stare|“|battery|tire))",
+   "re": "\\b(?:flat|flats)\\b(?= (?:share|mate|mates|above|below|where)\\b)|\\b(?:our|their|her|his|your|my|a shared|a new|first|empty|small|tiny|upstairs|downstairs) flat\\b(?! (?:out|on|no|and|tone|voice|face|answer|affect|line|fee|rate|white|surface|stare|“|battery|tire))",
    "fix": "apartment"
   },
   {
@@ -1126,11 +1136,11 @@
    "fix": "line"
   },
   {
-   "re": "\\b(?:pavement|pavements|lorry|lorries|petrol|motorway|motorways|roundabout|roundabouts|dual carriageway|zebra crossing|bonnet|car boot|number plate|handbrake|gear stick|learner driver|kerbside|layby|lay-by|flyover|ring road|pelican crossing|slip road)\\b",
+   "re": "\\b(?:pavement|pavements|lorry|lorries|petrol|motorway|motorways|dual carriageway|zebra crossing|bonnet|car boot|number plate|handbrake|gear stick|learner driver|kerbside|layby|lay-by|flyover|ring road|pelican crossing|slip road)\\b",
    "fix": "US road word"
   },
   {
-   "re": "\\b(?:biscuit|biscuits|sweets|crisps|takeaway|takeaways|fizzy|chip shop|chippy|fry-up|sausage roll|bangers and mash|jam sandwich|elevenses|teatime|tea time|cuppa|brew)\\b(?<!brew)",
+   "re": "\\b(?:biscuits|sweets|crisps|takeaway|takeaways|chip shop|chippy|fry-up|sausage roll|bangers and mash|jam sandwich|elevenses|teatime|tea time|cuppa|brew)\\b(?<!brew)",
    "fix": "US food word"
   },
   {
@@ -1138,15 +1148,15 @@
    "fix": "US clothing / baby word"
   },
   {
-   "re": "\\b(?:telly|mobile phones?|mobiles|sat nav|satnav|postbox|post box|postcode|postman|post a letter|fortnight|fortnightly|bank holiday|half term|half-term|term time|term-time|sixth form|a-levels?|gcses?|nhs|gp|gps|a&e|uni|freshers|headteacher|head teacher|deputy head|form tutor|reception class|primary school|secondary school|state school|public school|grammar school|prep school|school run|packed lunch|dinner lady|tuck shop|staffroom|prefects?|swot|sixth-former|undergrad)\\b(?<!gps)",
+   "re": "\\b(?:telly|mobile phones?|mobiles|sat nav|satnav|postbox|post box|postcode|postman|post a letter|fortnight|fortnightly|bank holiday|half term|half-term|term time|term-time|sixth form|a-levels?|gcses?|nhs|a&e|uni|freshers|headteacher|head teacher|deputy head|form tutor|reception class|primary school|secondary school|state school|public school|grammar school|prep school|school run|packed lunch|dinner lady|tuck shop|staffroom|prefects?|swot|sixth-former|undergrad)\\b(?<!gps)",
    "fix": "US school / services word"
   },
   {
-   "re": "\\b(?:mate|mates|bloke|blokes|lads?|lass|lasses|innit|cheerio|blimey|crikey|bollocks|bugger|bloody|sod|sodding|arse|wanker|git|prat|pillock|plonker|muppet|numpty|barmy|bonkers|dodgy|naff|brilliant|smashing|spiffing|skint|quid|fiver|tenner|pence|knackered|gutted|chuffed|cheesed off|gobsmacked|whinge|whinging|nicked|cadge|skive|skiving|poorly|peaky|bunged up|butty|sarnie|nosh|peckish|tipsy|squiffy|sloshed|legless|hammered|bladdered|faff|faffing|tosser|daft|cheeky|reckon|reckons|reckoned|taking the mickey|take the mickey|whinge|lark|tosh|gormless|nowt|owt|summat)\\b",
+   "re": "\\b(?:bloke|blokes|lads?|lass|lasses|innit|cheerio|blimey|crikey|bollocks|bugger|bloody|sod|sodding|arse|wanker|git|prat|pillock|plonker|muppet|numpty|barmy|bonkers|dodgy|naff|brilliant|smashing|spiffing|skint|quid|fiver|tenner|pence|knackered|gutted|chuffed|cheesed off|gobsmacked|whinge|whinging|nicked|cadge|skive|skiving|peaky|bunged up|butty|sarnie|nosh|peckish|tipsy|squiffy|sloshed|legless|hammered|bladdered|faff|faffing|tosser|daft|cheeky|reckon|reckons|reckoned|taking the mickey|take the mickey|whinge|lark|tosh|gormless|nowt|owt|summat)\\b",
    "fix": "British slang"
   },
   {
-   "re": "\\b(?:provisional\\s+driving\\s+licence|mentioned\\s+in\\s+despatches|hundreds\\-and\\-thousands|central\\s+heating\\s+boiler|sticky\\-backed\\s+plastic|chartered\\s+accountant|compulsory\\s+purchase|provisional\\s+licence|reverse\\s+charge\\s+call|postage\\s+and\\s+packing|communication\\s+cord|national\\s+insurance|sleeping\\s+policeman|release\\s+on\\s+licence|self\\-raising\\s+flour|community\\s+payback|chinagraph\\s+pencil|tuppenny\\-ha'penny|big\\s+girl's\\s+blouse|chesterfield\\s+sofa|washing\\-up\\s+liquid|recorded\\s+delivery|trading\\s+standards|bubble\\s+and\\s+squeak|flight\\s+lieutenant|industrial\\s+action|on\\s+the\\s+back\\s+foot|selling\\-out\\s+shop|bob's\\s+your\\s+uncle|bureau\\s+de\\s+change|sixes\\s+and\\s+sevens|building\\s+society|dual\\s+carriageway|toad\\-in\\-the\\-hole|sleeping\\s+partner|shopping\\s+trolley|send\\s+to\\s+coventry|swimming\\s+costume|stone\\s+the\\s+crows|turf\\s+accountant|squadron\\s+leader|telephone\\s+kiosk|package\\s+holiday|suck\\s+it\\s+and\\s+see|pissing\\s+it\\s+down|approved\\s+school|driving\\s+licence|legacy\\s+accounts|identity\\s+parade|go\\s+pear\\-shaped|belisha\\s+beacon|transport\\s+cafe|donkey's\\s+years|reel\\s+of\\s+cotton|anti\\-clockwise|heath\\s+robinson|suspender\\s+belt|extension\\s+lead|blues\\s+and\\s+twos|door\\s+furniture|council\\s+estate|people\\s+carrier|pillar\\-box\\s+red|poste\\s+restante|zebra\\s+crossing|life\\s+assurance|throw\\s+a\\s+wobbly|skirting\\s+board|turn\\-indicator|jiggery\\-pokery|knacker's\\s+yard|black\\s+pudding|electric\\s+fire|sandwich\\s+cake|arse\\s+over\\s+tit|hire\\s+purchase|bits\\s+and\\s+bobs|sticky\\s+wicket|lollipop\\s+lady|council\\s+house|white\\s+pudding|group\\s+captain|brass\\s+monkeys|green\\s+fingers|french\\s+letter|economy\\s+class|take\\s+the\\s+piss|telerecording|shanks's\\s+pony|jacket\\s+potato|drink\\-driving|codd's\\s+wallop|dress\\s+circle|fire\\s+brigade|bog\\-standard|tipping\\s+down|fairy\\s+lights|postal\\s+order|mexican\\s+wave|white\\s+coffee|double\\s+first|ex\\-directory|child\\-minder|jam\\s+sandwich|tommy\\s+atkins|agony\\s+column|number\\s+plate|cop\\s+off\\s+with|estate\\s+agent|costermonger|thruppennies|boiled\\s+sweet|toffee\\s+apple|toffee\\-nosed|fish\\s+fingers|holidaymaker|spotted\\s+dick|people\\s+mover|karno's\\s+army|kitchen\\s+roll|ponce\\s+around|engaged\\s+tone|nail\\s+varnish|icing\\s+sugar|pritt\\-stick|auntie\\s+beeb|soap\\s+dodger|agony\\s+uncle|paper\\s+round|brown\\s+bread|call\\s+minder|elastoplast|greengrocer|cack\\-handed|ponce\\s+about|clapped\\s+out|counterfoil|wage\\s+packet|launderette|on\\s+the\\s+piss|browned\\s+off|pear\\-shaped|high\\s+street|jerry\\-built|other\\s+ranks|off\\-the\\-peg|carriageway|wellingtons|drawing\\s+pin|candy\\s+floss|dustbin\\s+man|off\\-licence|retail\\s+park|fizzy\\s+drink|cotton\\s+wool|answerphone|invigilator|guard's\\s+van|counterpane|jumble\\s+sale|ironmongery|never\\-never|chimney\\s+pot|rumpy\\s+pumpy|letter\\s+box|gor\\s+blimey|pillar\\s+box|road\\-works|cor\\s+blimey|cotton\\s+bud|kirby\\s+grip|fairy\\s+cake|jump\\s+leads|page\\s+three|estate\\s+car|argy\\-bargy|mole\\s+grips|jerrybuilt|nissen\\s+hut|codswallop|cuddly\\s+toy|whip\\-round|bugger\\s+all|petrolhead|agony\\s+aunt|loudhailer|windscreen|tapping\\s+up|up\\s+himself|action\\s+man|chip\\s+shop|up\\s+sticks|paki\\s+shop|sun\\s+cream|serviette|clingfilm|ice\\s+lolly|courgette|gob\\-shite|panda\\s+car|scrumping|secateurs|rat\\-arsed|truncheon|knackered|ponce\\s+off|fortnight|sellotape|rodgering|phone\\s+box|tea\\s+towel|slowcoach|semibreve|orientate|newsagent|slip\\s+road|freephone|pushchair|bone\\-idle|cafetière|charwoman|dustcart|cats\\s+eye|buggered|hold\\-all|sweet\\s+fa|old\\s+bill|balls\\-up|quids\\s+in|charlady|y\\-fronts|trainers|post\\s+box|press\\-up|motorway|bog\\s+roll|bollocks|tuppence|postcode|smeghead|pisshead|squaddie|takeaway|car\\s+park|car\\s+hire|crotchet|milliard|knackers|cool\\s+box|the\\s+beeb|punch\\-up|scrubber|oughtn't|bristols|turn\\-ups|car\\s+boot|slaphead|naff\\s+off|spiffing|pushbike|slapper|geordie|squidgy|legless|postbox|fairing|scouser|chuffed|sat\\s+nav|go\\-slow|red\\s+top|plonker|chunder|shafted|wellies|fag\\s+end|tits\\s+up|bum\\s+bag|tipp\\-ex|cagoule|sod\\s+off|chunter|flypast|thickie|rozzers|rashers|scrumpy|dustman|autocue|rubbish|chinwag|goolies|brekkie|dodgems|clanger|amongst|wazzock|funfair|dustbin|g\\s+clamp|cock\\-up|crisps|titfer|tenner|spawny|postie|coster|crikey|advert|punnet|minger|hoover|muppet|smalls|brolly|ranker|quango|sannie|lodger|parkie|learnt|nicked|petrol|nicker|munter|cockup|slippy|spliff|footie|sarnie|abseil|draper|moggie|gaffer|peeler|numpty|whilst|monged|biccie|blimey|barney|bedsit|brekky|wanker|carer|fiver|barmy|artic|bikky|dekko|butty|bloke|telly|lorry|shite|kecks|gobby|offie|moggy|maths|minge|parky|arsed|dodgy|bicky|lurgy|botty|ponce|jemmy|cuppa|divvy|skint|welly|pikey|ropey|sarny|taffy|feck|gaol|kazi|poxy|beeb|doss|arse|giro|pram|paki|nosh|cack|cleg|rota|taff|mong|biro|berk|bint|pleb|caff|burk|nowt|chav)\\b",
+   "re": "\\b(?:provisional\\s+driving\\s+licence|mentioned\\s+in\\s+despatches|hundreds\\-and\\-thousands|central\\s+heating\\s+boiler|sticky\\-backed\\s+plastic|chartered\\s+accountant|reverse\\s+charge\\s+call|compulsory\\s+purchase|provisional\\s+licence|postage\\s+and\\s+packing|release\\s+on\\s+licence|self\\-raising\\s+flour|communication\\s+cord|national\\s+insurance|sleeping\\s+policeman|trading\\s+standards|bubble\\s+and\\s+squeak|industrial\\s+action|recorded\\s+delivery|chesterfield\\s+sofa|washing\\-up\\s+liquid|big\\s+girl's\\s+blouse|tuppenny\\-ha'penny|community\\s+payback|chinagraph\\s+pencil|flight\\s+lieutenant|bob's\\s+your\\s+uncle|dual\\s+carriageway|toad\\-in\\-the\\-hole|swimming\\s+costume|selling\\-out\\s+shop|building\\s+society|on\\s+the\\s+back\\s+foot|shopping\\s+trolley|sixes\\s+and\\s+sevens|bureau\\s+de\\s+change|send\\s+to\\s+coventry|sleeping\\s+partner|package\\s+holiday|telephone\\s+kiosk|turf\\s+accountant|approved\\s+school|legacy\\s+accounts|identity\\s+parade|squadron\\s+leader|pissing\\s+it\\s+down|stone\\s+the\\s+crows|suck\\s+it\\s+and\\s+see|driving\\s+licence|go\\s+pear\\-shaped|transport\\s+cafe|door\\s+furniture|anti\\-clockwise|throw\\s+a\\s+wobbly|council\\s+estate|life\\s+assurance|skirting\\s+board|heath\\s+robinson|donkey's\\s+years|zebra\\s+crossing|people\\s+carrier|knacker's\\s+yard|poste\\s+restante|pillar\\-box\\s+red|extension\\s+lead|turn\\-indicator|belisha\\s+beacon|reel\\s+of\\s+cotton|suspender\\s+belt|blues\\s+and\\s+twos|jiggery\\-pokery|jacket\\s+potato|brass\\s+monkeys|economy\\s+class|sandwich\\s+cake|lollipop\\s+lady|take\\s+the\\s+piss|electric\\s+fire|sticky\\s+wicket|telerecording|arse\\s+over\\s+tit|french\\s+letter|shanks's\\s+pony|hire\\s+purchase|codd's\\s+wallop|council\\s+house|white\\s+pudding|drink\\-driving|bits\\s+and\\s+bobs|green\\s+fingers|black\\s+pudding|group\\s+captain|people\\s+mover|agony\\s+column|kitchen\\s+roll|cop\\s+off\\s+with|dress\\s+circle|thruppennies|child\\-minder|toffee\\-nosed|costermonger|white\\s+coffee|fire\\s+brigade|number\\s+plate|ponce\\s+around|nail\\s+varnish|estate\\s+agent|fairy\\s+lights|spotted\\s+dick|boiled\\s+sweet|toffee\\s+apple|double\\s+first|mexican\\s+wave|tommy\\s+atkins|engaged\\s+tone|ex\\-directory|jam\\s+sandwich|bog\\-standard|fish\\s+fingers|postal\\s+order|karno's\\s+army|tipping\\s+down|holidaymaker|answerphone|on\\s+the\\s+piss|ironmongery|brown\\s+bread|greengrocer|candy\\s+floss|carriageway|counterfoil|other\\s+ranks|clapped\\s+out|call\\s+minder|launderette|retail\\s+park|elastoplast|auntie\\s+beeb|off\\-the\\-peg|jumble\\s+sale|browned\\s+off|pritt\\-stick|counterpane|guard's\\s+van|drawing\\s+pin|wage\\s+packet|jerry\\-built|high\\s+street|soap\\s+dodger|paper\\s+round|invigilator|chimney\\s+pot|ponce\\s+about|fizzy\\s+drink|pear\\-shaped|cotton\\s+wool|rumpy\\s+pumpy|icing\\s+sugar|wellingtons|off\\-licence|cack\\-handed|never\\-never|dustbin\\s+man|agony\\s+uncle|letter\\s+box|up\\s+himself|jump\\s+leads|mole\\s+grips|argy\\-bargy|cotton\\s+bud|kirby\\s+grip|page\\s+three|tapping\\s+up|gor\\s+blimey|road\\-works|estate\\s+car|cor\\s+blimey|fairy\\s+cake|codswallop|cuddly\\s+toy|nissen\\s+hut|petrolhead|action\\s+man|loudhailer|bugger\\s+all|windscreen|agony\\s+aunt|whip\\-round|jerrybuilt|pillar\\s+box|panda\\s+car|semibreve|paki\\s+shop|serviette|pushchair|sun\\s+cream|tea\\s+towel|scrumping|truncheon|orientate|bone\\-idle|knackered|ice\\s+lolly|charwoman|cafetière|courgette|gob\\-shite|slip\\s+road|ponce\\s+off|fortnight|slowcoach|rodgering|secateurs|newsagent|freephone|up\\s+sticks|phone\\s+box|chip\\s+shop|clingfilm|rat\\-arsed|sellotape|cats\\s+eye|pisshead|hold\\-all|tuppence|the\\s+beeb|spiffing|scrubber|dustcart|postcode|buggered|smeghead|motorway|trainers|bog\\s+roll|balls\\-up|pushbike|charlady|naff\\s+off|takeaway|cool\\s+box|turn\\-ups|post\\s+box|sweet\\s+fa|oughtn't|bollocks|car\\s+boot|slaphead|crotchet|car\\s+hire|car\\s+park|old\\s+bill|y\\-fronts|punch\\-up|bristols|quids\\s+in|press\\-up|milliard|knackers|squaddie|slapper|rubbish|chuffed|cock\\-up|fag\\s+end|tipp\\-ex|dustbin|plonker|squidgy|fairing|amongst|tits\\s+up|chinwag|chunter|sat\\s+nav|brekkie|thickie|dustman|shafted|funfair|flypast|rozzers|postbox|rashers|dodgems|legless|cagoule|scouser|red\\s+top|g\\s+clamp|wellies|geordie|goolies|chunder|autocue|sod\\s+off|clanger|bum\\s+bag|scrumpy|go\\-slow|wazzock|blimey|petrol|brolly|whilst|biccie|learnt|cockup|crisps|peeler|advert|titfer|hoover|punnet|monged|nicker|bedsit|munter|brekky|moggie|slippy|quango|nicked|postie|wanker|smalls|numpty|parkie|sarnie|spawny|ranker|coster|tenner|gaffer|footie|draper|spliff|minger|sannie|abseil|barney|muppet|crikey|sarny|bicky|lurgy|cuppa|skint|butty|kecks|lorry|arsed|welly|artic|moggy|ponce|shite|ropey|botty|carer|gobby|bikky|dekko|minge|offie|barmy|bloke|maths|jemmy|dodgy|telly|divvy|fiver|taffy|parky|pikey|nowt|nosh|cleg|giro|burk|bint|caff|pleb|taff|chav|cack|berk|arse|biro|rota|paki|feck|beeb|gaol|mong|pram|poxy|kazi)\\b",
    "fix": "British term: see tools/checks/us-english-words.json"
   }
  ],
@@ -2836,16 +2846,16 @@
    "re": "\\bemergency (?:number|numbers|services?|room|rooms|department|line|contact|contacts|hotline|call|calls|helpline|dispatch)\\b|\\bpolice (?:station|officer|report|number)\\b|\\bparamedics?\\b"
   },
   {
-   "re": "\\bhot ?lines?\\b|\\bcrisis (?:line|lines|text|chat|service|services|center|centre|team|hotline|counselor|counsellor)\\b|\\bhelp ?lines?\\b|\\bwarm ?lines?\\b|\\btext line\\b|\\bchat line\\b|\\bsupport line\\b|\\bsamaritans\\b|\\b(?:Lifeline|Childline|Crisis Text|Trevor Project|Trans Lifeline)\\b"
+   "re": "\\bhot ?lines?\\b|\\bcrisis (?:line|lines|text|chat|service|services|center|centre|team|hotline|counselor|counsellor)\\b|\\bhelp ?lines?\\b|\\btext line\\b|\\bchat line\\b|\\bsamaritans\\b|\\b(?:Lifeline|Childline|Crisis Text|Trevor Project|Trans Lifeline)\\b"
   },
   {
    "re": "\\bdial(?:s|ed|ing|led|ling)?\\b(?!ogue)"
   },
   {
-   "re": "\\b(?:call|phone|ring|telephone|text|dial)(?:s|ed|ing)? (?:a |an |the |your |my |their |someone |somebody |anyone |any |one of |them |him |her |us |me |for |to get |to ask for )?(?:friend|friends|family|relative|sibling|sister|brother|parent|mom|dad|mother|father|doctor|dr|gp|therapist|counselor|counsellor|nurse|clinic|pharmacist|lawyer|attorney|someone you trust|someone you know|someone close|someone safe|someone who|a trusted|a loved one|your loved|a professional|a crisis|a support|support|help|helpline|hotline|emergency|police|ambulance|the police|911|a number|the number|your gp)\\b"
+   "re": "\\b(?:call|phone|ring|telephone|dial)(?:s|ing)? (?:a |an |the |your |my |their |someone |somebody |anyone |any |one of |them |him |her |us |me |for |to get |to ask for )?(?:friend|friends|family member|relative|doctor|dr|gp|therapist|counselor|counsellor|nurse|clinic|pharmacist|lawyer|attorney|someone you trust|someone you know|someone close|someone safe|someone who|a trusted|a loved one|your loved|a professional|a crisis|a support|support|help|helpline|hotline|emergency|police|ambulance|the police|911|a number|the number|your gp)\\b"
   },
   {
-   "re": "\\b(?:call|phone|ring|dial|text)(?:s|ed|ing)? (?:for|to get|and ask for|to ask for) (?:help|support|advice|backup)\\b|\\bcall (?:for|out for) help\\b|\\bask for help by (?:calling|phoning|texting)\\b|\\breach out by (?:phone|text|calling)\\b|\\bgive (?:them|him|her|someone|a friend) a call\\b|\\bgive (?:them|him|her) a ring\\b|\\bphone a friend\\b|\\bcall a friend\\b|\\bcall your (?:doctor|therapist|mom|dad|sister|brother)\\b|\\bcall someone (?:you|who)\\b"
+   "re": "\\b(?:call|phone|ring|dial)(?:s|ing)? (?:for|to get|and ask for|to ask for) (?:help|support|advice|backup)\\b|\\bcall (?:for|out for) help\\b|\\bask for help by (?:calling|phoning|texting)\\b|\\breach out by (?:phone|text|calling)\\b|\\bgive (?:them|him|her|someone|a friend) a call\\b|\\bgive (?:them|him|her) a ring\\b|\\bphone a friend\\b|\\bcall a friend\\b|\\bcall your (?:doctor|therapist|mom|dad|sister|brother)\\b|\\bcall someone (?:you|who)\\b"
   }
  ],
  "researchers": [],

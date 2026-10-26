@@ -312,7 +312,7 @@
     ['parties', 'kids', 'Kids’ playdates & parties', 'Playdates and parties'],
     ['nightfeeds', 'baby', 'Night feeds'],
     ['oncall', 'baby', 'On call at night (the one listening out)', 'On call at night (listening out)'],
-    ['nappies', 'baby', 'Diapers', 'Nappies and diapers'],
+    ['nappies', 'baby', 'Diapers', 'Diapers'],
     ['bottles', 'baby', 'Bottles, pump parts & sterilizing', 'Bottles and sterilizing'],
     ['solobaby', 'baby', 'Looking after the baby on my own (while the other is at work)', 'Solo baby care (while the other is at work)'],
     ['meds', 'care', 'Medicines & refills', 'Medicines and refills'],

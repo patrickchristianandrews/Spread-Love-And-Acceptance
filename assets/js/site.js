@@ -320,7 +320,7 @@
       { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, apologies that land, and forgiveness' },
       { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Helping others well', note: 'Support without fixing, kind limits, and not burning out' },
       { href: '/book/understanding-13-anger.html', deep: true, code: '13', title: 'Anger: what it’s for and what to do with it', note: 'What anger does in the body, the hot minutes, repair, and when anger becomes harm' },
-      { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Personality, temperament and change', note: 'Dials, not boxes: the Big Five, temperament, and how people change with age' },
+      { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Personality, temperament and change', note: 'Sliders, not boxes: the Big Five, temperament, and how people change with age' },
       { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Closeness and love', note: 'Love in many forms, being known, and love across ages and relationship types' },
       { href: '/book/understanding-16-worry.html', deep: true, code: '16', title: 'Worry, low mood and trauma', note: 'How anxiety works, low mood vs depression, trauma and what helps' },
       { href: '/book/understanding-17-groups.html', deep: true, code: '17', title: 'Fitting in: groups, influence and culture', note: 'Conformity, obedience, us and them, culture, and disagreeing kindly' },
@@ -1193,7 +1193,7 @@
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*Spread Love.*$/, '');
     if (!t) return;
-    if (inDepth) t += ' (full version)';
+    if (inDepth) t += /^\/book\//.test(location.pathname) ? ' (expanded version)' : ' (full version)';
     var u = location.pathname, list = [];
     try { list = JSON.parse(lsGet('tol-recent') || '[]') || []; } catch (e) { list = []; }
     list = list.filter(function (r) { return r && r.u !== u; });
@@ -2251,7 +2251,7 @@
   [['living alone|live alone|living on my own|live on my own|living by myself|live by myself|first flat|first apartment|my own place', 'livingalone'],
    ['make friends|making friends|new friends|new city|friends as an adult', 'adultfriends'],
    ['body doubling|body double|executive function', 'bodydoubling'],
-   ['check in buddy|spare key|emergency contact', 'checkinbuddy'],
+   ['check in buddy|spare key|health info card', 'checkinbuddy'],
    ['nervous system|fight or flight|fight-or-flight|vagus nerve', 'nervous-system'],
    ['all tools|every tool|list of tools|tools by type', 'tools'],
    ['everything on this site|whole site|site map|all pages|every page', 'everything'],
@@ -2269,8 +2269,8 @@
    ['/living-alone.html#home', 'A home that runs itself', 'The one-person mental load: bills, admin and the jobs nobody reminds you about.', 'Guide'],
    ['/living-alone.html#friends', 'Making friends as an adult', 'Why it takes repetition and time, and small invitations that turn faces into friends.', 'Guide'],
    ['/living-alone.html#twenties', 'Friendships in your 20s', 'After school or college, group chats, moving cities and friend breakups.', 'Guide'],
-   ['/living-alone.html#help', 'A “people I can call” list', 'Asking for help without a partner, with a list to copy.', 'Guide'],
-   ['/living-alone.html#safety-basics', 'Safety basics for living alone', 'A check-in buddy, a spare key and an emergency contact card. Practical, not alarming.', 'Guide'],
+   ['/living-alone.html#help', 'A “people I can ask” list', 'Asking for help without a partner, with a list to copy.', 'Guide'],
+   ['/living-alone.html#safety-basics', 'Safety basics for living alone', 'A check-in buddy, a spare key and a health info card. Practical, not alarming.', 'Guide'],
    ['/living-alone.html#neurodivergent', 'Living alone when you’re neurodivergent', 'Body doubling, routines that run themselves, and help with the admin.', 'Guide']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   [['/co-parenting.html#who-decides', 'Co-parents: who decides what', 'When the other parent decides without you, or you feel shut out: name the joint decisions, agree a reply-by window, and keep it to one written channel.', 'Guide'],
@@ -2884,7 +2884,7 @@
             var p = h.p, act = p.u.charAt(0) === '#';
             var kind = act ? p.k : G.kind;
             return '<li><a href="' + esc(act ? '#' : p.u) + '"' + (act ? ' data-find-act="' + esc(p.u.slice(1)) + '"' : '') + ' data-kind="' + esc(kind || 'page') + '"><span class="tol-find-t">' + markTerms(p.t, used) +
-              (act ? (kind ? ' <small class="tol-find-kind">' + esc(kind) + '</small>' : '') : kindTag(kind)) + (p.f ? ' <small>Full version</small>' : '') + '</span>' +
+              (act ? (kind ? ' <small class="tol-find-kind">' + esc(kind) + '</small>' : '') : kindTag(kind)) + (p.f ? ' <small>' + (/^\/book\//.test(p.u) ? 'Expanded version' : 'Full version') + '</small>' : '') + '</span>' +
               '<span class="tol-find-s">' + markTerms(act ? p.d : snippet(p, used), used) + '</span></a></li>';
           }).join('');
         }).join('');
@@ -3104,7 +3104,7 @@
     xb.addEventListener('click', function () { lsSet('tol-book-extras', extrasOn() ? '' : '1'); syncX(); });
     syncX();
     if (here.deep) nav.querySelector('.tol-chbar-nav').appendChild(el('a', { class: 'tol-chbar-ver', href: inDepth ? here.href : deepHref(here) },
-      inDepth ? 'Short version' : 'Full version'));
+      inDepth ? 'Book text' : 'Expanded version'));
     nav.querySelector('.tol-chbar-nav').appendChild(xb);
     var head = main.querySelector('.read-head');
     if (head) head.appendChild(nav); else main.insertBefore(nav, main.firstChild);

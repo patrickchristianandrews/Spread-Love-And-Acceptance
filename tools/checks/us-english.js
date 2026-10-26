@@ -283,6 +283,7 @@ for (const rel of files) {
           if (m[0] === '') { G.rx.lastIndex++; continue; }
           const fx = fixFor(G, m[0]);
           if (rule === 'british' && hasUsVariant(t, fx)) continue;
+          if (/^\d{1,2}:\d\d$/.test(m[0]) && /value="/.test(t.slice(Math.max(0, m.index - 12), m.index))) continue;  // <input type=time> values are 24-hour by definition
           if (allowed(rel, rule, t, m[0])) continue;
           findings.push({ rule, file: rel, line: s.line, kind: s.kind, hit: m[0], ctx: t.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40), fix: fx, text: JSON_OUT ? s.text : undefined });
         }

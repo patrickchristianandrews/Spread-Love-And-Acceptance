@@ -153,7 +153,7 @@
       "blunt": {
         "looks": "You asked what she thought of your draft. She tells you. “The second half doesn’t work.” Period.",
         "fits": "For many autistic people, saying what they mean plainly is the honest, respectful option. Research on the “double empathy problem” suggests mix-ups between differently wired people run both ways, so the plain speaker isn’t the only one missing signals.",
-        "step": "Add one warm line before the fact, such as “There’s a lot here I like.” The listener can ask for it too. “Start with one thing that works, then tell me straight.”",
+        "step": "Add one warm sentence before the fact, such as “There’s a lot here I like.” The listener can ask for it too. “Start with one thing that works, then tell me straight.”",
         "other": "Words land on feelings as well as facts. If you spent two weeks on that second half, “it doesn’t work” can sound a lot like “you don’t work.”",
         "chain": [
           "The aim is to help the work be right",
@@ -199,7 +199,7 @@
       },
       "no-eye-contact": {
         "step": "Check understanding with words instead of eyes, with the listener summing up one line of what they heard. Hard talks can happen side by side, on a walk or in the car.",
-        "looks": "While you’re talking, he looks at the table, or out of the window, or at his own hands, anywhere really except at you.",
+        "looks": "While you’re talking, he looks at the table, or out the window, or at his own hands, anywhere really except at you.",
         "other": "Most of us were taught that eye contact means “I’m with you.” Without it, it’s very easy to feel ignored, or think they’re bored, or hiding something.",
         "chain": [
           "Eyes carry a huge amount of information",
@@ -302,7 +302,7 @@
       },
       "love-in-deeds": {
         "step": "Agree one word and one deed. The doer says “I love you” on the way out, and the talker notices the deeds out loud.",
-        "looks": "Stan hardly ever says “I love you.” He does fix the bike, fill the car and make the lunches from home at ten to seven every morning.",
+        "looks": "Stan hardly ever says “I love you.” He does fix the bike, fill the car and make the lunches from home at 6:50 every morning.",
         "other": "If you hear love mainly in words, you can feel unloved while surrounded by kind acts, which is a strange and lonely place to be.",
         "chain": [
           "Love can be said or done",
@@ -400,7 +400,7 @@
         "an.0": "A recipe that says “a pinch,” when everyone’s pinch is different.",
         "step": "Say which kind of time you mean, such as “Seven sharp, the table is booked” or “Any time after seven.”",
         "other": "The one who came at seven sharp sat with the wine going warm and the food going cold, wondering whether they mattered less.",
-        "looks": "Dinner at seven. Bayo arrives at seven, on the dot, with wine. Shelley arrives at twenty to eight and thinks she’s on time.",
+        "looks": "Dinner at seven. Bayo arrives at seven, on the dot, with wine. Shelley arrives at 7:40 and thinks she’s on time.",
         "chain": [
           "“Seven o’clock” gets read through a local rule",
           "In some families it means seven exactly, in others “from seven”",

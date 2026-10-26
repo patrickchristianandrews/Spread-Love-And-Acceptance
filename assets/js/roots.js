@@ -35,7 +35,7 @@
     ['helper', 'The helper', 'the helper'], ['peace', 'The peacekeeper', 'the peacekeeper'], ['responsible', 'The responsible one', 'the responsible one'],
     ['quiet', 'The quiet one', 'the quiet one'], ['funny', 'The funny one', 'the funny one'], ['achiever', 'The achiever', 'the achiever'],
     ['carer', 'The one who looked after a parent or siblings', 'the one who looked after others'], ['invisible', 'The invisible one', 'the invisible one'],
-    ['strong', 'The strong one', 'the strong one'], ['planner', 'The planner', 'the one who planned and organised'], ['none', 'None of these', '']];
+    ['strong', 'The strong one', 'the strong one'], ['planner', 'The planner', 'the one who planned and organized'], ['none', 'None of these', '']];
   var CHANGES_CHILD = [
     ['move', 'Moving home', 'you moved'], ['sibling', 'A new sibling', 'a new sibling arrived'], ['split', 'Parents splitting up', 'your parents split up'],
     ['away', 'A parent away a lot', 'a parent was away a lot'], ['money', 'Money worries', 'there were money worries'], ['ill', 'Illness in the family', 'someone in the family was ill'],
@@ -109,7 +109,7 @@
       text: 'Your alarm may have learned to stay on, because once it needed to.', tryit: 'When calm feels uneasy, put both feet on the floor and make your out-breath slower than your in-breath. Check your battery with Today’s Weather.', links: ['weather', 'calm'] },
     { id: 'back', q: 'Do some tones of voice, sounds, smells or places bring an old feeling right back?', name: 'Old feelings coming right back',
       text: 'The feeling may be older than the moment. Chapter III calls this leftover stress.', tryit: 'Say to yourself, “This feeling is from then. I’m here now,” and step away for a minute if you can.', links: ['ch3'] },
-    { id: 'bigger', q: 'Do you react more strongly than a moment seems to deserve, and only realise it later?', name: 'Reacting bigger than the moment',
+    { id: 'bigger', q: 'Do you react more strongly than a moment seems to deserve, and only realize it later?', name: 'Reacting bigger than the moment',
       text: 'Part of the reaction may belong to an older moment.', tryit: 'Once you’ve settled, try the one-minute lens check, and if it helps, a repair: “That was bigger than what you did. Part of it is older than us.”', links: ['lenscheck'] },
     { id: 'rest', q: 'Is it hard to rest, slow down or let others help?', name: 'Finding it hard to rest or be helped',
       text: 'Staying busy and self-reliant may once have kept things steady.', tryit: 'Take one short rest on purpose before the list is done, and accept one offer of help.', links: ['weather', 'rulebook'] },
@@ -144,7 +144,7 @@
   /* ---------------------------------------------------------------- traits: where they often start, and what helps
      roots: r: role, u: rule, p: praised for, t: trouble for, c: change, m: mood */
   var TRAITS = [
-    { id: 'apologize', label: 'I over-apologise',
+    { id: 'apologize', label: 'I over-apologize',
       roots: 'r:peace r:quiet r:invisible r:helper u:fuss u:good u:peace u:mistakes t:mistakes t:loud t:asking p:easy m:tense m:unpredict c:split',
       typical: 'It often grows in homes where keeping things calm mattered a lot, or where mistakes or big feelings brought trouble.',
       protect: 'Saying sorry first may have calmed things down fast, or kept trouble from starting.',

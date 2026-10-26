@@ -1026,7 +1026,7 @@
       var one = (c.how || []).filter(function (x) { var m = /^([A-Z]{4}), the ([^:]+):/.exec(x); return m && (new RegExp('\\b' + m[1].toLowerCase() + '\\b').test(state.curF || '') || new RegExp('\\bthe ' + m[2].toLowerCase() + '\\b').test(state.curF || '')); });
       if (one.length === 1) {
         state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name };
-        return { blocks: [{ k: 'p', x: one[0] }, { k: 'p', x: 'Each of the four letters is one dial of how you take in and share things. An archetype is a picture of how someone tends to think, talk and listen, not a box.' }, { k: 'links', x: safeLinks(c.links).slice(0, 2) }],
+        return { blocks: [{ k: 'p', x: one[0] }, { k: 'p', x: 'Each of the four letters is one slider of how you take in and share things. An archetype is a picture of how someone tends to think, talk and listen, not a box.' }, { k: 'links', x: safeLinks(c.links).slice(0, 2) }],
           chips: [{ label: 'What do the letters mean?', q: 'What do the Wave Code letters mean?' }, { label: 'All sixteen archetypes', q: 'List all 16 Wavelength archetypes' }], kind: 'card', id: c.id };
       }
     }
@@ -2925,7 +2925,7 @@
   function handoffReply(f, kid) {
     var k = kid || 'your child';
     var b = [{ k: 'p', x: 'That sounds really stressful, and it isn’t something you can fix by choosing better words. It’s worth changing how handoffs work, for you and for ' + k + '.' },
-      { k: 'list', x: ['Keep handoffs short: times and bags only. Anything else goes by message, later.', 'Hand over somewhere public and busy, or through school or daycare, so you don’t have to meet at the door.', 'If something starts at the door, don’t answer it there: “Let’s do this by message,” and go.', 'Afterward, tell ' + k + ' it isn’t their worry: “Grown-ups sometimes get cross. You’re not in trouble.”', 'Keep the messages, with dates. If it keeps happening, a mediator or family lawyer can help you set up calmer handoffs.'] },
+      { k: 'list', x: ['Keep handoffs short: times and bags only. Anything else goes by message, later.', 'Hand over somewhere public and busy, or through school or daycare, so you don’t have to meet at the door.', 'If something starts at the door, don’t answer it there: “Let’s do this by message,” and go.', 'Afterward, tell ' + k + ' it isn’t their worry: “Grown-ups sometimes get angry. You’re not in trouble.”', 'Keep the messages, with dates. If it keeps happening, write down a calmer plan for the handoffs together.'] },
       { k: 'script', l: 'At the door', x: 'I’m not going to talk about this now. Message me later. Bye, ' + (kid || 'sweetheart') + ', see you Friday.' },
       { k: 'links', x: [['Four steps for calmer handoffs', '/co-parenting.html#handoff'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel']] }];
     return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How should we word texts?', q: 'We only text, how should we word things?' }], kind: 'care', id: 'handoff' };

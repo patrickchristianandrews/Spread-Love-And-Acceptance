@@ -393,7 +393,7 @@
     "Why are raindrops good at getting along? They know how to go with the flow.",
     "What do raindrops say when they finish a puzzle together? “Drop by drop, we did it!”",
     "Why did the raindrop sit next to the clock? He didn’t want to be late for his own lecture.",
-    "Why did the raindrop become a professor? He had lots of degrees. Mostly Celsius.",
+    "Why did the raindrop become a professor? He had lots of degrees. Mostly Fahrenheit.",
     "What’s my favorite subject? Puddle-ology, with a minor in drizzle.",
     "Why do I wear a mortarboard? It keeps the sun off my head. A professor can’t evaporate in the middle of a lecture.",
     "Why do I wear tiny glasses? To read the small print in my footnotes. Also, I look great.",
@@ -794,7 +794,7 @@
           "I love gentle music for reading, and loud music for dancing badly. The clouds prefer thunder.",
           "Rain on a tin roof. It’s nature’s drum solo, and I’m in the band. Tap tap tap, plop!",
           "Happy songs! The kind you can’t help humming. I hum all day. The snails have complained.",
-          "Gentle lullabies. And, secretly, those old film songs about singing and dancing in the rain. They’re about my whole family!"
+          "Gentle lullabies. And, secretly, those old movie songs about singing and dancing in the rain. They’re about my whole family!"
         ],
         "chips": [
           "Sing me a song",
@@ -811,12 +811,12 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:do you (?:like|watch) (?:movies|films|tv|television|cartoons)|what do you watch|what (?:movies|films|shows) do you (?:like|watch))(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "A nature film about the water cycle. I cry every time the little drop goes back up to its cloud. Happy tears! Well, happy rain.",
-          "My favorite is a film I made up called “The Great Rainbow Adventure.” It’s a thriller. Will the sun come out in time?",
+          "A nature movie about the water cycle. I cry every time the little drop goes back up to its cloud. Happy tears! Well, happy rain.",
+          "My favorite is a movie I made up called “The Great Rainbow Adventure.” It’s a thriller. Will the sun come out in time?",
           "Cartoons! Tidbit and Sugarfoot have their own, and I’m their biggest fan. Don’t tell them. Okay, tell them.",
           "Anything with a happy ending and a snack break in the middle.",
           "Documentaries about weather. I watch them and shout “That’s my cousin!” at every storm.",
-          "I love a funny film on a rainy night. Well, every night is a rainy night for me."
+          "I love a funny movie on a rainy night. Well, every night is a rainy night for me."
         ],
         "chips": [
           "What’s your favorite book?",
@@ -1524,7 +1524,7 @@
           "Fair enough, I’m only a small raindrop. Try asking me in different words? I’m better than I look. Slightly.",
           "The clouds say that too. But I bounce back! Raindrops are very bouncy. What can I help you find?",
           "Noted! *writes “try harder” in notebook* Let’s try again. What do you need?",
-          "Tough crowd! That’s okay. I’m still here and still keen to help. Give me another chance?",
+          "Tough crowd! That’s okay. I’m still here and still happy to help. Give me another chance?",
           "I’ll take that feedback to my review panel. They’re clouds. They’ll rain on my parade. Now, how can I help?",
           "Fair! Not every joke lands. Well, mine all land, usually with a splash. Want a tool, a page, or a better joke?",
           "Sorry I missed the mark! I’m a scripted helper, so the right words help me a lot. Tell me what you need?"
@@ -1696,7 +1696,7 @@
       "If you had a puddle like mine, what would you name it?",
       "Cats, dogs, frogs, or something else?",
       "What’s a smell that makes you happy? Mine is rain on dry ground.",
-      "What’s a film or show you could watch again and again?",
+      "What’s a movie or show you could watch again and again?",
       "If you could have one superpower for a day, what would it be?",
       "What’s your favorite thing to cook, or to eat when someone else cooks?",
       "Rain or sunshine? Be honest. I won’t tell the clouds.",

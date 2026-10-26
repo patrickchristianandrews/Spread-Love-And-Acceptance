@@ -13,6 +13,7 @@ commas inside closing quotes). This module holds one ordered list of rules and a
 The rules are phrase-level where a word has a British meaning only in some contexts (a "row" is a fight, but a row of
 a table stays a row). Research titles in reference lists keep their published spelling."""
 import io
+import os
 import json
 import re
 import sys
@@ -397,6 +398,44 @@ def us(t):
     return _us(t)
 
 
+# book26 (wave 27): the site-wide British spelling list (tools/checks/us-english-words.json, kept by the us-english check) is applied too,
+# plus a few phrases (day-month dates, "ten to seven", "out of the window").
+_BSJ = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'checks', 'us-english-words.json')
+try:
+    _BS = {k.lower(): v for k, v in json.load(open(_BSJ, encoding='utf-8')).get('britishSpellings', {}).items() if k.lower() != v.lower()}
+except Exception:
+    _BS = {}
+_BSRX = re.compile(r'\b(' + '|'.join(sorted((re.escape(k) for k in _BS), key=len, reverse=True)) + r')\b', re.I) if _BS else None
+_MON = 'January|February|March|April|May|June|July|August|September|October|November|December'
+_DATE = re.compile(r'\b(\d{1,2}) (' + _MON + r')( \d{4})?\b')
+_TIMEOF = re.compile(r'\b(at|by|until|around|about|before|after) (five|ten|twenty|twenty-five|quarter) to (one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b')
+
+
+def _bs(m):
+    w = m.group(1); v = _BS[w.lower()]
+    return _case(w, v)
+
+
+_HRS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
+_MIN = {'five': 55, 'ten': 50, 'twenty': 40, 'twenty-five': 35, 'quarter': 45}
+
+
+def _timeof(m):
+    h = (_HRS.index(m.group(3)) + 11) % 12 + 1
+    return '%s %d:%02d' % (m.group(1), h, _MIN[m.group(2)])
+
+
+def _more(t):
+    if _BSRX:
+        t = _BSRX.sub(_bs, t)
+    t = _DATE.sub(lambda m: '%s %s%s' % (m.group(2), m.group(1), (',' + m.group(3)) if m.group(3) else ''), t)
+    t = _TIMEOF.sub(_timeof, t)
+    t = re.sub(r'\bout of the window\b', 'out the window', t)
+    t = re.sub(r'\b(a|one|the) warm line\b', r'\1 warm sentence', t)
+    return t
+
+
+
 def _us(t):
     if not t or not t.strip():
         return t
@@ -406,6 +445,7 @@ def _us(t):
         t = rx.sub(rep, t)
     t = _WORDS.sub(_words, t)
     t = _ISE.sub(_ise, t)
+    t = _more(t)
     t = _quotes(t)
     return t
 

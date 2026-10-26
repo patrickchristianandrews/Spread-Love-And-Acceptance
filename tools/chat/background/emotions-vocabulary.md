@@ -230,7 +230,7 @@ try: “I can’t fix the whole thing, but I can decide what we have for dinner 
 
 Helplessness is the feeling that nothing you do will make a difference. It often grows when problems repeat and efforts seem to go nowhere.
 
-Finding one small thing within your control, and doing it, can gently push back against that feeling. Small wins add up. If helplessness is heavy or lasting, please tell someone you trust.
+Finding one small thing within your control, and doing it, can gently push back against that feeling. Small wins add up. 
 
 Program: The Library’s small wins entry explains why tiny progress matters. WP-04 helps you see that a repeating problem is the setup, not you.
 

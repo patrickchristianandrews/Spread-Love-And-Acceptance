@@ -244,7 +244,7 @@
         { t: 'Start (or continue) Six gentle weeks', u: '/prog-01.html', m: 20, why: 'one small session a week', tag: 'book' },
         { t: 'All the How you connect chapters', u: '/wavelength.html', m: 25, why: 'the full picture of how you take things in', tag: 'self' },
         { t: 'Watch an episode together: ' + ne[1], u: '/frequency-buddies.html?ep=' + ne[0], m: 16, why: 'Tidbit and Sugarfoot, for the whole family', tag: 'kids' },
-        { t: nc.code + ' in full, with the longer version', u: nc.u.replace(/\.html$/, '-in-depth.html'), m: 20, why: nc.n, tag: 'book' }
+        { t: nc.code + ' in the expanded version', u: nc.u.replace(/\.html$/, '-in-depth.html'), m: 20, why: nc.n, tag: 'book' }
       ]
     };
     // add the menu launcher's ideas (same list as "How much time do you have?" in the menu)

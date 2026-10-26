@@ -46,7 +46,7 @@ aka: recovery; rest and recovery; recharging
 see: Micro-breaks; Transition rituals after work
 go: /night-garden.html | The Night Garden
 evidence: Research on recovery from work stress points to four helpful experiences: detaching mentally, relaxing, doing something absorbing, and feeling in control of your free time.
-try: Pick one thing tonight that is truly restful for you: a walk, a game, a bath, a call with a friend.
+try: Pick one thing tonight that is truly restful for you: a walk, a game, a bath, a favorite song.
 
 Rest isn’t just stopping. Real recovery tends to come from switching off mentally, relaxing your body, getting absorbed in something different, and having some say over your own time.
 

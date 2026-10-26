@@ -204,7 +204,7 @@
           A('any', 'No, it happens on good days too', 1)
         ]),
         qBoth(),
-        Q('repair', 'Afterwards', 'Afterward, does one of you come back and make it right?', [
+        Q('repair', 'Afterward', 'Afterward, does one of you come back and make it right?', [
           A('usually', 'Yes, usually', -2, ['repairs']),
           A('sometimes', 'Sometimes', 0),
           A('rarely', 'Rarely', 1),

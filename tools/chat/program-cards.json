@@ -3394,7 +3394,7 @@
       ],
       "how": [
         "If a visit is canceled, say it plainly and kindly, and don’t promise the next one will happen.",
-        "Keep that evening light: a favorite meal, a film, no big talks and no new rules.",
+        "Keep that evening light: a favorite meal, a movie, no big talks and no new rules.",
         "Never criticize his parent, even when you’re upset about what happened. He may hear it as criticism of him.",
         "Don’t ask for a full report. Let him tell you if and when he wants to."
       ],
@@ -3665,8 +3665,7 @@
       "how": [
         "If you can reach them, tell them: a short message, a voice note, or a call.",
         "If you can’t, it can help to write to them anyway, or to talk about them with someone who knows them.",
-        "Keep one small thing that connects you: a photo, a song, a ritual.",
-        "If missing them comes with worry (they’re ill, away or in treatment), tell someone you trust how you’re doing."
+        "Keep one small thing that connects you: a photo, a song, a ritual."
       ],
       "links": [
         [
@@ -5524,7 +5523,7 @@
       ],
       "how": [
         "Give them a corner that’s theirs: a drawer, a shelf, their own mug, a poster they chose.",
-        "Build a few rituals they can count on: pancake Saturday, the same park, a film night.",
+        "Build a few rituals they can count on: pancake Saturday, the same park, a movie night.",
         "Let them invite a friend over sometimes.",
         "Leave room for ordinary, boring time. It often turns into the best talks."
       ],
@@ -6934,7 +6933,7 @@
         "Count the caregiver’s load too, and find them some support."
       ],
       "script": [
-        "Today’s a bed day for me. I can do the online shop and the calls from here. Could you do the cooking tonight?"
+        "Today’s a bed day for me. I can do the online grocery order and the calls from here. Could you do the cooking tonight?"
       ],
       "links": [
         [
@@ -7250,7 +7249,7 @@
       "how": [
         "Keep the last hour calm and simple: a meal, a show, packing the bag together.",
         "Say when you’ll next see them, and when you’ll talk before then.",
-        "Plan something for yourself afterward, like a call with a friend or a walk.",
+        "Plan something for yourself afterward, like a walk or a favorite show.",
         "Stay close between visits: a short call at the same time each week, a photo, a question about the thing they care about."
       ],
       "script": [
@@ -7824,7 +7823,7 @@
       "how": [
         "Say the hours out loud: lab, work, travel. It’s easier to agree a rule when everyone sees the same week.",
         "Pick a rule together: equal jobs, jobs by time available, or a swap during deadline weeks.",
-        "The busy person can own jobs that fit their week, like the weekend clean or the online shop.",
+        "The busy person can own jobs that fit their week, like the weekend clean or the online grocery order.",
         "Look at it again in a month."
       ],
       "script": [
@@ -9789,9 +9788,8 @@
       ],
       "how": [
         "If it feels safe, try a short, calm chat with your roommate first, about the room, not about them.",
-        "If that doesn’t change anything, or you dread going back to your room, talk to your RA. That is using the help that’s there.",
-        "Ask the RA for a roommate agreement form, or a mediated conversation.",
-        "If you ever feel unsafe in your room, go to residence staff right away."
+        "If that doesn’t change anything, or you dread going back to your room, talk to your RA. That is what RAs are there for.",
+        "Ask the RA for a roommate agreement form, or a mediated conversation."
       ],
       "script": [
         "Hi, my roommate’s partner stays over most nights and I’m not sleeping. I’ve tried to raise it. Could you help us make a room agreement?"
@@ -9799,8 +9797,7 @@
       "plain": [
         "You can talk to your RA.",
         "Try a calm chat first if it feels safe.",
-        "Ask for a room agreement.",
-        "Get help right away if you feel unsafe."
+        "Ask for a room agreement."
       ],
       "links": [
         [
@@ -10140,8 +10137,7 @@
         "When one of them complains about the other to you, you can say a short line and change the subject.",
         "If they ask you to pass on messages, it’s okay to say no: “Can you tell them yourself?”",
         "Give yourself space when it’s loud: headphones, your room, a walk, a friend’s house.",
-        "Tell one adult you trust how it feels: a relative, a teacher or a coach.",
-        "If the fighting ever scares you, or anyone gets hurt, that’s more than arguing. You can ask for help even if nobody is hurting you directly."
+        "Say how it feels in one honest sentence, to the parent you feel safest with, when things are calm."
       ],
       "script": [
         "I love you both and I’m not picking a side. Please don’t ask me to.",
@@ -10150,8 +10146,7 @@
       "plain": [
         "It is not your job to fix it.",
         "You can love both of them.",
-        "You do not have to pick a side.",
-        "Tell an adult you trust."
+        "You do not have to pick a side."
       ],
       "links": [
         [
@@ -10216,16 +10211,18 @@
       "notPat": "",
       "keys": [],
       "what": [
-        "It’s good that you’re looking for someone to talk to. You don’t have to handle things alone."
+        "It takes courage to want to talk about something hard at home. You don’t have to have it all figured out first."
       ],
       "how": [
-        "An adult you trust: a relative, a teacher, a coach or a friend’s parent. If the first person doesn’t help, tell someone else."
+        "Start with one sentence about what is going on. You can write it down first, then read it out or hand it over.",
+        "Pick a calm moment, and say what you do and don’t want: “I don’t need you to fix it. I just need you to listen.”"
       ],
       "script": [
         "Can I talk to you about something that’s been going on at home? I don’t need you to fix it, I just need someone to know."
       ],
       "plain": [
-        "Talk to an adult you trust."
+        "Start with one sentence.",
+        "Say what you need: “I just need you to listen.”"
       ],
       "links": [
         [
@@ -10590,7 +10587,7 @@
       ],
       "how": [
         "Ask for one clear, small thing. Hints can be easy to miss: “Can we walk together on Sunday morning?” is easier to say yes to than “We never spend time together.”",
-        "Keep it small: a walk, a meal, a short drive, a film. Put it in the calendar. Then do it.",
+        "Keep it small: a walk, a meal, a short drive, a movie. Put it in the calendar. Then do it.",
         "Try something new for the two of you now and then. New things together tend to bring back some of the early spark.",
         "Notice and say thank you when they do say yes. That makes the next yes easier."
       ],
@@ -12189,9 +12186,9 @@
       ],
       "how": [
         "Write it, don’t send it. Type it in your notes, not in your chat with them, and read it again in the morning.",
-        "Sleep on it. If you still want to send it after a night’s sleep and a talk with a friend, you’re choosing, not reacting.",
+        "Sleep on it. If you still want to send it after a night’s sleep, you’re choosing, not reacting.",
         "If you agreed on no contact, you made that choice on a clearer day. You can lean on it tonight.",
-        "Text a friend instead, and mute or archive the chat with your ex so it isn’t the first thing you see. Muting is a kind choice for you, not a statement to them.",
+        "Mute or archive the chat with your ex so it isn’t the first thing you see. Muting is a kind choice for you, not a statement to them.",
         "If you can’t sleep, a few minutes of slow breathing in the Night Garden can help."
       ],
       "links": [
@@ -12221,8 +12218,7 @@
         "Wanting to text an ex is very common.",
         "Wait until morning.",
         "Write the words down instead.",
-        "Put the phone away for the night.",
-        "Text a friend."
+        "Put the phone away for the night."
       ],
       "follow": [
         [
@@ -12703,12 +12699,12 @@
         "Loneliness after a split is very common, especially in the evenings and on weekends without the kids. It’s a signal, a bit like hunger, telling you that you need people. It isn’t a sign that something is wrong with you."
       ],
       "how": [
-        "Send one easy message today. It doesn’t need to be a big catch-up: “Saw this and thought of you. Fancy a coffee next week?”",
+        "Send one easy message today. It doesn’t need to be a big catch-up: “Saw this and thought of you. Want a coffee next week?”",
         "Some couple friends may drift, and some will stay. It’s okay to make new ones.",
         "Regular beats big. A weekly thing with the same faces builds friendships faster than one big night out."
       ],
       "script": [
-        "Saw this and thought of you. Fancy a coffee next week?"
+        "Saw this and thought of you. Want a coffee next week?"
       ],
       "links": [
         [
@@ -13577,8 +13573,8 @@
       "page": "/teens.html",
       "pageChips": [
         [
-          "My nan doesn’t get me",
-          "I live with my nan and she doesn’t get me"
+          "My grandma doesn’t get me",
+          "I live with my grandma and she doesn’t get me"
         ],
         [
           "They took my phone",
@@ -15761,7 +15757,7 @@
       ],
       "what": "Chapter I explains why two kind, reasonable people can end up in a tangle neither started, and how to get back in step. The tangle often isn’t about the words but the tone underneath: like two radios slightly out of tune, making a crackle neither makes alone. It’s free to read.",
       "how": [
-        "Read the simple version, then the full chapter.",
+        "Read the simple version, then the expanded chapter.",
         "Try the Carrier Wave Decoder the next time a conversation squeals."
       ],
       "pillar": "Mostly Pillar IV, with help from Pillar III.",
@@ -15933,10 +15929,10 @@
         "manuscript",
         "the chapters"
       ],
-      "what": "The book, Spread Love & Acceptance, is free to read here, with nothing to sign up for: 26 chapters in three parts, and an afterword. Part One is about yourself, Part Two is about sharing a life fairly (between us), and Part Three is about understanding people. Every chapter has a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try.",
+      "what": "The book, Spread Love & Acceptance, is free to read here, with nothing to sign up for: 26 chapters in three parts, and an afterword. Part One is about yourself, Part Two is about sharing a life fairly (between us), and Part Three is about understanding people. Every chapter has the book text (about 10 to 15 minutes) and an expanded version with the research, more examples and more to try.",
       "how": [
         "Start with Part One, Then, or open the contents and pick what fits.",
-        "Read the short version first. The full version is there when you want more.",
+        "Read the book text first. The expanded version is there when you want more.",
         "Each chapter ends with what to remember, the chapters it connects to, and the steps and worksheets that go with it."
       ],
       "pillar": "Part Two’s chapters each name their main pillar.",
@@ -18749,8 +18745,7 @@
       "how": [
         "List every job, including the thinking part: the pediatrician visits, noticing the diapers are low, meals, the family chat, thank-you notes.",
         "Give each job one owner. That person does it and also remembers it.",
-        "Review it once a week for ten minutes: what felt heavy, and one job to swap.",
-        "If sadness or anxiety lasts more than two weeks or gets heavier, please tell someone you trust today."
+        "Review it once a week for ten minutes: what felt heavy, and one job to swap."
       ],
       "pillar": "Pillar I, See the whole load.",
       "links": [
@@ -19056,7 +19051,7 @@
         "how is the book organized",
         "how is the book structured"
       ],
-      "what": "The book now starts with you. Part One, “The most important: yourself,” has three short sections: Then (where your lens came from), Now (your wiring, your weather and your words) and Next (what matters to you, one small goal, tiny steps and a kind monthly look at yourself). Part Two, “Between us,” is the Preface and Chapters I to V on sharing the work, talking, fairness and the monthly look-back. Part Three, “Keeping it warm,” is a reading list of guides: love languages, complacency, turning toward and check-ins. You can read in any order, and each page has a short version and a full one.",
+      "what": "The book now starts with you. Part One, “The most important: yourself,” has three short sections: Then (where your lens came from), Now (your wiring, your weather and your words) and Next (what matters to you, one small goal, tiny steps and a kind monthly look at yourself). Part Two, “Between us,” is the Preface and Chapters I to V on sharing the work, talking, fairness and the monthly look-back. Part Three, “Keeping it warm,” is a reading list of guides: love languages, complacency, turning toward and check-ins. You can read in any order, and each chapter has the book text and an expanded version.",
       "how": [
         "Start with Then if you like to begin at the beginning, or Now if you want to read yourself first.",
         "Take Next when you want to choose one small thing to grow toward.",
@@ -19269,18 +19264,14 @@
       ],
       "how": [
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
-        "Tell one person you trust, even in one line: “I’m having a hard day.”",
-        "Make the day smaller: pick one small thing to do, and let the rest wait.",
-        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, please tell someone you trust today."
+        "Make the day smaller: pick one small thing to do, and let the rest wait."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
       ],
       "plain": [
         "I’m sorry you feel this way.",
-        "Drink some water and eat something.",
-        "Tell one person you trust.",
-        "If it lasts more than two weeks, tell someone you trust."
+        "Drink some water and eat something."
       ],
       "links": [
         [
@@ -19309,18 +19300,14 @@
       ],
       "how": [
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
-        "Tell one person you trust, even in one line: “I’m having a hard day.”",
-        "Make the day smaller: pick one small thing to do, and let the rest wait.",
-        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, please tell someone you trust today."
+        "Make the day smaller: pick one small thing to do, and let the rest wait."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
       ],
       "plain": [
         "I’m sorry you feel this way.",
-        "Drink some water and eat something.",
-        "Tell one person you trust.",
-        "If it lasts more than two weeks, tell someone you trust."
+        "Drink some water and eat something."
       ],
       "links": [
         [
@@ -19759,9 +19746,9 @@
         "part 3 chapter 14",
         "understanding people chapter 14"
       ],
-      "what": "Chapter 14 of Part Three is about personality as dials, not boxes: the Big Five, temperament, introverts and extraverts, how people change with age, and living with different people.",
+      "what": "Chapter 14 of Part Three is about personality as sliders, not boxes: the Big Five, temperament, introverts and extraverts, how people change with age, and living with different people.",
       "how": [
-        "Think of traits as dials, not boxes.",
+        "Think of traits as sliders, not boxes.",
         "People do change with age, slowly, and mostly for the better."
       ],
       "links": [

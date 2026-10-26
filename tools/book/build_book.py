@@ -1312,7 +1312,7 @@ def research_notes(here):
             continue
         if 'Mental Health Services Administration' in (r.get('authors') or ''):
             r = dict(r, authors='SAMHSA')
-        r['finding'] = uk(re.sub(r'\s*Only the citation[^.]*\.[^.]*\.', '', r.get('finding', '')))
+        r['finding'] = uk(re.sub(r'\s*Only the citation[^.]*\.[^.]*\.', '', r.get('finding', ''))).replace('The NHS guideline for England', 'A national guideline for England')
         chs = []
         for m in r.get('mentioned_on', []):
             mm = re.match(r'/book/([a-z0-9-]+?)(?:-in-depth)?\.html', m)

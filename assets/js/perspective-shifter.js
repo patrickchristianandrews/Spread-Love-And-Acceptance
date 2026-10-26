@@ -52,7 +52,7 @@
           // family only: the things that sit under a long rift (shown when "Family" is picked)
           ['will', 'A will, money or a house', 'A will, money or a family house is rarely only about money. It can feel like a verdict on who mattered, and who was trusted.', 'family'],
           ['grief', 'Grief for a parent', 'Grief can come out as anger, or as silence. Some of what you saw may have been them missing someone, not a judgment of you.', 'family'],
-          ['favour', 'Felt like the less-favoured one', 'If they grew up feeling like the less-favored one, an old hurt may have been speaking. Even a small slight can echo years of it.', 'family']] }
+          ['favour', 'Felt like the less-favored one', 'If they grew up feeling like the less-favored one, an old hurt may have been speaking. Even a small slight can echo years of it.', 'family']] }
   ];
   var SEE = [
     { id: 'theysaw', t: 'They may have seen or known things you didn’t', o: [['load', 'their whole day and workload', '', 'norift'], ['carry', 'what they were carrying at the time', '', 'rift'], ['told', 'what someone else told them about it', '', 'rift'], ['msg', 'a message, call or news you didn’t see'], ['planned', 'something they had already planned or done'], ['where', 'how it looked from where they stood'], ['promise', 'a promise someone else made them'], ['feel', 'how they were feeling inside']] },

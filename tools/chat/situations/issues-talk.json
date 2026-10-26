@@ -92,7 +92,7 @@
       "steps": ["Name the pattern privately and kindly, at a calm moment, not in the middle of it.", "Ask for something specific: “let me finish my point, then I’d love your take.”", "In the moment, use a friendly, steady line to hold your turn, and keep going."],
       "scripts": {
         "default": ["I’ve noticed I sometimes get cut off before I finish. It’s probably not on purpose, but I’d love to get my whole thought out before you jump in.", "Hang on, let me finish this bit, and then I really want to hear what you think."],
-        "coworker": ["In meetings, I sometimes lose my point when I get interrupted. Could you give me a moment to finish? I’ll do the same for you.", "I’d like to finish this point, and then I’m keen to hear your view.", "Could we use a round-robin in the next meeting so everyone gets a full turn?"],
+        "coworker": ["In meetings, I sometimes lose my point when I get interrupted. Could you give me a moment to finish? I’ll do the same for you.", "I’d like to finish this point, and then I’m eager to hear your view.", "Could we use a round-robin in the next meeting so everyone gets a full turn?"],
         "kid": ["I want to hear all of what you’re saying. Can we take turns: you finish, then me?"]
       },
       "path": [["The Chat analyzer", "/signal-translator.html"], ["Check-ins: hear it back before you answer", "/check-ins.html"], ["Workplace communication (Library)", "/library/communication.html#workplace-communication"]],

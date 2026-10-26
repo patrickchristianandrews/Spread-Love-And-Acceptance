@@ -33,6 +33,11 @@ sledge sledges allotment allotments nappy nappies cot cots lorry lorries petrol 
 fortnight aeroplane maths pram prams crisps trainers courgette courgettes aubergine aubergines
 caravan caravans jab jabs rubbish trousers wellies holidaymaker hoover flatmate postcode
 anyways gens tor toby col cos ere nowt aye amongst whilst learnt spelt dreamt burnt spoilt
+lass lasses auntie granny daft tenner quid fiver windscreen motorway motorways advert adverts artefact artefacts yoghurt yoghurts
+savoury ageing hypothesise hypothesises hypothesised labourer labourers orthopaedic analogue moulding towards afterwards upwards downwards
+onwards inwards outwards backwards forwards draper swot punnet cuppa knickers waistcoat dodgy legless pavement pavements postbox
+chuffed knackered gutted skint cheeky brolly boffin bonkers barmy telly cinema cinemas housemate housemates flatmates
+sellotape biro hoovering nappies takeaway takeaways sweets biscuit biscuits fizzy trainers jumper autumn fortnight
 '''.split())
 # abbreviations, word fragments and odd forms that make poor answers
 ODD = set('''
@@ -157,9 +162,17 @@ AMERICAN_WORDS = {
     'realised': 'realized', 'organisation': 'organization', 'apologised': 'apologized', 'caravan': 'camper', 'caravans': 'campers',
     'dustbin': 'trash can', 'rubbish': 'trash', 'aeroplane': 'airplane', 'aeroplanes': 'airplanes',
     'ladybird': 'ladybug', 'ladybirds': 'ladybugs', 'postbox': 'mailbox', 'pavement': 'sidewalk', 'motorway': 'highway',
+    'towards': 'toward', 'afterwards': 'afterward', 'upwards': 'upward', 'downwards': 'downward', 'inwards': 'inward', 'outwards': 'outward',
+    'onwards': 'onward', 'backwards': 'backward', 'forwards': 'forward', 'cinema': 'movie theater', 'cinemas': 'movie theaters',
+    'savoury': 'savory', 'yoghurt': 'yogurt', 'hypothesise': 'hypothesize', 'hypothesises': 'hypothesizes', 'hypothesised': 'hypothesized',
+    'granny': 'grandma', 'ageing': 'aging', 'artefact': 'artifact', 'artefacts': 'artifacts', 'draught': 'draft', 'draughts': 'drafts',
+    'advert': 'ad', 'adverts': 'ads', 'labourer': 'laborer', 'labourers': 'laborers', 'orthopaedic': 'orthopedic', 'analogue': 'analog',
+    'moulding': 'molding', 'windscreen': 'windshield', 'waistcoat': 'vest', 'knickers': 'underpants', 'telly': 'TV', 'cuppa': 'cup of tea',
+    'tenner': 'ten-dollar bill', 'quid': 'dollar', 'fiver': 'five-dollar bill', 'daft': 'silly', 'swot': 'grind', 'draper': 'cloth merchant',
+    'pavements': 'sidewalks', 'motorways': 'highways', 'synthetic': 'man-made', 'whilst': 'while',
 }
 # words kept in clues on purpose even though they look British (autumn is fine in American English too)
-AMERICAN_OK = {'autumn', 'holiday', 'torch', 'film', 'queue'}
+AMERICAN_OK = {'holiday'}
 
 
 def americanize(text):

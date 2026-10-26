@@ -405,7 +405,7 @@
   var THEMES = [
     ['Energy', ['A phone at 3% switching off everything but the call.', 'A car pulling into the services before the fuel light comes on.', 'A handful of spoons: each task costs one, and today there were fewer.']],
     ['Too much at once', ['Too many tabs open: everything slows and the fan gets loud.', 'A sink overflowing when the tap stays on.', 'A juggler handed one more ball.']],
-    ['Plans and maps', ['A sat nav recalculating mid-journey.', 'Reading the whole recipe before you start cooking.', 'A pilot’s pre-flight checklist.']],
+    ['Plans and maps', ['A GPS recalculating mid-trip.', 'Reading the whole recipe before you start cooking.', 'A pilot’s pre-flight checklist.']],
     ['Protection', ['A smoke alarm that goes off for toast.', 'A circuit breaker tripping to stop a fire.', 'A computer starting in safe mode.']],
     ['Different rulebooks', ['An accent: it’s how they learned to say it.', 'Driving on the left or the right: neither is wrong.', 'Two plugs for the same electricity.']],
     ['Starting and stopping', ['A heavy train needing a long way to stop.', 'A car that only starts on a hill.', 'A flywheel: hard to start, hard to stop.']],

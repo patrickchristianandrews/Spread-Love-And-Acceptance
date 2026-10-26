@@ -261,9 +261,9 @@ SEARCH.update({
  'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the two-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
- 'book/index.html': ('The Book: Free to Read Online', 'Read the whole free book in order, like any book: 24 chapters in three parts on yourself, sharing a life, and understanding people. Short and full versions, or all of it on one page to print.'),
- 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
- 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
+ 'book/index.html': ('The Book: Free to Read Online', 'Read the whole free book in order, like any book: 24 chapters in three parts on yourself, sharing a life, and understanding people. Book text and expanded versions, or all of it on one page to print.'),
+ 'book/whole.html': ('The Whole Book on One Page (Book Text)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
+ 'book/whole-in-depth.html': ('The Whole Book on One Page (Expanded Versions)', 'Every chapter of the book in its expanded version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/preface.html': ('Preface: The work nobody sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
  'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in pace, tone and what we expect add up, plus how to get back in tune.'),
  'book/chapter-2.html': ('Chapter II: Is the split working?', 'Chapter II: a fair way to ask whether the division of labor at home is working for everyone, counting time, effort and the invisible jobs, never blame.'),
@@ -460,14 +460,14 @@ SEARCH.update({
  # the book
  'book/index.html': ('Free Self-Help Book Online: Spread Love & Acceptance', 'Read the whole self-help book free online: 26 chapters in three parts on yourself, sharing a life fairly and understanding people. No sign-up, no account.'),
  'book/download.html': ('Books and Downloads: Every PDF, Worksheet, Video and Song', 'Every book, PDF, worksheet, video and song you can take with you, on one page. Read and use everything free online; PDFs ask for your email once.'),
- 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
- 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of the book in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
+ 'book/whole.html': ('The Whole Book on One Page (Book Text)', 'Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.'),
+ 'book/whole-in-depth.html': ('The Whole Book on One Page (Expanded Versions)', 'Every chapter of the book in its expanded version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/for-yourself.html': ('The Book for One Person: Know Yourself, Understand People', 'Part One (yourself) and Part Three (understanding people) of the free book on one page: everything you can read and use on your own. No sign-up.'),
- 'book/for-yourself-in-depth.html': ('The Book for One Person (Full Versions)', 'Part One and Part Three of the free book in their full versions, on one page: the research, more examples and more to try on your own. No sign-up.'),
+ 'book/for-yourself-in-depth.html': ('The Book for One Person (Expanded Versions)', 'Part One and Part Three of the free book in their expanded versions, on one page: the research, more examples and more to try on your own. No sign-up.'),
  'book/together.html': ('The Book for Two or More: Sharing a Home Fairly', 'Part Two of the free book on one page: sharing a home, work or care fairly with partners, family, roommates, co-parents or coworkers. No sign-up.'),
- 'book/together-in-depth.html': ('The Book for Two or More (Full Versions)', 'Part Two of the free book in its full versions, on one page: the invisible work, getting back in tune, a fair split and the monthly look-back. No sign-up.'),
+ 'book/together-in-depth.html': ('The Book for Two or More (Expanded Versions)', 'Part Two of the free book in its expanded versions, on one page: the invisible work, getting back in tune, a fair split and the monthly look-back. No sign-up.'),
  'book/understanding.html': ('Understanding People: How Feelings, Stress and Trust Work', 'Part Three of the free book on one page: seventeen short chapters on how feelings, stress, trust, change, grief, anger and love work. No sign-up.'),
- 'book/understanding-in-depth.html': ('Understanding People (Full Versions)', 'Part Three of the free book in its full versions, on one page: seventeen chapters through psychology, philosophy and an autistic lens. No sign-up.'),
+ 'book/understanding-in-depth.html': ('Understanding People (Expanded Versions)', 'Part Three of the free book in its expanded versions, on one page: seventeen chapters through psychology, philosophy and an autistic lens. No sign-up.'),
  'book/self-1-then-in-depth.html': ('Know Yourself, Then, in Depth: Where Your Lens Came From', None),
  'book/self-2-now-in-depth.html': ('Know Yourself, Now, in Depth: Wiring, State and Words', None),
  'book/self-3-next-in-depth.html': ('Know Yourself, Next, in Depth: Who You Are Becoming', None),
@@ -643,7 +643,7 @@ BOOK_ID = SITE + '/book/#book'
 BOOK_DESC = ('A free self-help book in three parts, 26 chapters in all, and an afterword: knowing yourself (three chapters); sharing a '
              'life, a home or a job fairly and kindly (the Preface and Chapters I to V); and understanding people, seventeen chapters '
              'on how feelings, stress, trust, change, grief, healing, anger, personality, worry, groups and love work.')
-# The book as free PDF files (book/download.html), each in a short and a full version
+# The book as free PDF files (book/download.html), each as the book text and an expanded version
 BOOK_PDFS = [('The whole book', 'whole'), ('The book for one person (Parts One and Three)', 'for-yourself'),
              ('The book for two or more (Part Two)', 'together'), ('Understanding People (Part Three)', 'understanding')]
 

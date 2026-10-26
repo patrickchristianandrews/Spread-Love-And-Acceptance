@@ -723,7 +723,7 @@ const NT = {
    sarcasm:[2,"Caught it instantly, and it stings.","Stronger activation of awareness and empathy regions in response to emotional faces was found in highly sensitive people (Acevedo et al.)."],
    label:[2,"Deeply hurt.","Labels land hard."],
    tone:[1,"Now I'm self-conscious.","Attention on delivery adds to the load."],
-   ellipsis:[1,"Something is off.","Subtle cues get noticed and dwelt on."],
+   ellipsis:[1,"Something is off.","Subtle cues get noticed and dwelled on."],
    demand:[2,"Too much pressure.","Pressure adds stimulation."],
    period:[1,"That felt clipped.","Small shifts in tone get noticed."],
    calm:[1,"My reaction is being policed.","It dismisses the input."],
@@ -972,10 +972,10 @@ const ADD = {
  hsp:{
   swear:[3,"That hit hard, and I'll feel it all day.","Strong language registers strongly, and for a long time."],
   hostile:[3,"That's overwhelming.","Hostility lands with full force on a sensitive listener."],
-  pointed:[2,"That had an edge.","Small shifts in tone at work get noticed and dwelt on."],
+  pointed:[2,"That had an edge.","Small shifts in tone at work get noticed and dwelled on."],
   heat:[2,"That stung.","The heat in the words registers before the request does."],
   oblig:[2,"That felt sharp.","The pressure in the word registers before the request does."],
-  again:[2,"It's been building up.","Small words that point to a pattern get noticed and dwelt on."],
+  again:[2,"It's been building up.","Small words that point to a pattern get noticed and dwelled on."],
   disclaim:[2,"Here it comes.","The disclaimer is felt as a warning."],
   madefeel:[2,"Their feeling is mine to fix.","Deep empathy can turn a feeling into a responsibility."],
   compare:[2,"Deeply stung.","Comparisons land hard."],
@@ -1115,7 +1115,7 @@ function commandOf(sentence){
 
 /* "Why is this still not done?" -> the thing, and the state it should be in */
 const NOTDONE_RE = /^(.*?)\bwhy (?:is|are|isn't|aren't|hasn't|haven't|was|were) (this|that|it|these|those|the [\w -]+?|my [\w -]+?|our [\w -]+?|your [\w -]+?) (?:still )?(?:not )?(?:been )?(done|finished|ready|sent|fixed|here|in|up|live|merged|submitted|signed|paid|booked|updated|back|out|shipped|approved|reviewed)\b[?!.]*$/i;
-const HINT_OBJ = {trash:"take out the trash", garbage:"take out the garbage", bin:"take out the bin", bins:"take out the bins", recycling:"take out the recycling", dishes:"do the dishes", sink:"do the dishes", laundry:"do the laundry"};
+const HINT_OBJ = {trash:"take out the trash", garbage:"take out the garbage", bin:"take out the trash", bins:"take out the trash", recycling:"take out the recycling", dishes:"do the dishes", sink:"do the dishes", laundry:"do the laundry"};
 
 /* the ask inside a sentence, if any: {text, kind} */
 function askOf(sentence, feats){
@@ -1300,7 +1300,7 @@ const REFRAMES = [
   {id:"notmum", re:/\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b[^.!?]*/i,
    why:"\"You're not my mom\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
    send:(m,c)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
-     const who = w==="mum"||w==="mother" ? "Mum" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mom or Dad]";
+     const who = w==="mum"||w==="mother" ? "Mom" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mom or Dad]";
      // "so stop acting like it", "stop treating me like a kid": the ask stays, said as what they'd like
      if(NOT_PARENT_ASK.test(c.text)) return "I know you're looking after me. I miss "+(who==="[Mum or Dad]" ? "[Mom or Dad]" : who)+", and I'd like to be treated more like my age. Can we talk about it?";
      return "I'm not angry at you. I'm just missing "+who+" today. I need some space right now, can we talk later?"; },

@@ -94,7 +94,7 @@ pillars: IV, II
 aka: conflict styles, competing, collaborating, compromising, avoiding, accommodating, dual concern
 nut: Kenneth Thomas and Ralph Kilmann described five ways people handle conflict, based on how much they push for their own concerns and how much they attend to the other person’s: competing, collaborating, compromising, avoiding and accommodating.
 deep:
-Imagine two dials: assertiveness (how much I pursue what I need) and cooperativeness (how much I help you get what you need). High on both is collaborating: working to meet both sets of needs. High assertiveness with low cooperation is competing. Low assertiveness with high cooperation is accommodating. Low on both is avoiding. Somewhere in the middle is compromising: each gives a little.
+Imagine two sliders: assertiveness (how much I pursue what I need) and cooperativeness (how much I help you get what you need). High on both is collaborating: working to meet both sets of needs. High assertiveness with low cooperation is competing. Low assertiveness with high cooperation is accommodating. Low on both is avoiding. Somewhere in the middle is compromising: each gives a little.
 
 None of these is always right. Avoiding can be wise for trivial things or when someone is flooded. Accommodating is kind when the issue matters much more to the other person. Competing makes sense in emergencies. Collaborating takes time, so it suits important, recurring issues, like how a household shares its work.
 

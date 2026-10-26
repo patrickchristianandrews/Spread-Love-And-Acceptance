@@ -93,7 +93,7 @@
   var SOLO = {
     calm: { what: 'Breathing is easy, and your head feels steady. Calm doesn’t mean happy: you can be calm and sad, or calm and firm.',
       helps: ['A good window for the thing you’ve been putting off. Pick one.', 'Write down what’s on your mind, before a busy day buries it.', 'Notice what helped you get here today (sleep, food, a walk), so you can do more of it.'],
-      pause: 'I’m having a decent day. Fancy a call or a coffee this week?',
+      pause: 'I’m having a decent day. Want a call or a coffee this week?',
       when: 'Good for one thing that matters, or for getting in touch with someone you’ve been meaning to call.',
       short: 'A good window for one thing that matters.' },
     revved: { helps: ['Breathe out slowly, longer than you breathe in, for one minute. The breathing pacer counts it for you.', 'Move: a short walk, the stairs, or a physical job like the dishes.', 'Write the thing down instead of acting on it. Read it again later.'],

@@ -87,7 +87,7 @@
     return { m: DEFAULT_MIN[e.type] || 10, known: false };
   }
   var REL_IDS = { 'just-me': 1, couples: 1, friends: 1, family: 1, 'co-parents': 1, housemates: 1, work: 1, 'life-changes': 1 };
-  var REL_NAME = { 'just-me': 'Just me', couples: 'Couples', friends: 'Friends', family: 'Family', 'co-parents': 'Co-parents', housemates: 'Housemates', work: 'Work', 'life-changes': 'Life changes' };
+  var REL_NAME = { 'just-me': 'Just me', couples: 'Couples', friends: 'Friends', family: 'Family', 'co-parents': 'Co-parents', housemates: 'Roommates', work: 'Work', 'life-changes': 'Life changes' };
   var CALM = /calm|breath|night-garden|ladder|upset-right-now|wp-11|soften|soundscapes|calm-visualizer|supplement|sleep|anxi|settle|soothe|bears-dojo/;
   var HEALTH = /supplement|herb|illness|\bill\b|sleep|health|disab|low energy|nervous system|burn-?out|adhd|autis|sensory|dyslex|anxi|medic|caring for someone/;
   var HEALTH_PAGE = /^\/(calm-without-pills|calming-supplements|when-one-is-ill|caregivers|adhd-kids|night-garden|ladder|upset-right-now|wp-11|how-you-take-things-in|neurodivergent-relationships|wired-differently)\.html$|^\/book\/understanding-(2-stress|9-minds)/;
