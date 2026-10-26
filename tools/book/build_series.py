@@ -271,7 +271,7 @@ def s_end(e, book, here, where, remember=None):
             qr(u), B.absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', B.addr_html(B.short_address(u)))
     s += '</ul></div>'
     deep = B.href(e[0], True)
-    s += ('<div class="ps-deeper">%s<p><strong>Go deeper (free online)</strong> The full chapter, with the research, more examples and more '
+    s += ('<div class="ps-deeper">%s<p><strong>Go deeper (free online)</strong> The expanded version of this chapter, with the research, more examples and more '
           'to try: <a href="%s"><span class="ps-addr">%s</span></a></p></div>') % (qr(deep), B.absolute(deep), B.addr_html(B.short_address(deep)))
     s += '</aside>'
     return s
