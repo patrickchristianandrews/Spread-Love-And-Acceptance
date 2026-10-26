@@ -658,7 +658,7 @@
     onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 4.0, 4.9, 0.1), 0.08);
     say(g, sug, 'What a smooth flight!', u, 0.2, 1.4);
     say(g, tid, 'Wait… snakes?!', u, 1.6, 2.5);
-    say(g, tid, 'I have had it with these snakes on this—', u, 2.6, 4.0, { big: true });
+    say(g, tid, 'I have had it with these snakes on this…', u, 2.6, 4.0, { big: true });
     say(g, sug, '…PLANE! This lovely plane!', u, 4.1, 5.0, { big: true });
     say(g, tid, 'Hey, I was talking!', u, 5.0, 5.5);
     say(g, tid, '…on this lovely plane.', u, 5.6, 6.3);
@@ -951,7 +951,7 @@
   var SCAN = {};
   function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   // the recorded voices (one mp3 per line, listed in index.json): when a line has one, the little talking-voice stand-in stays quiet
-  var CLIPV = '24a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
+  var CLIPV = '27a'; // bump whenever the teaser recordings are redone, so no browser plays an old copy
   var CLIPMAP = null, CLIPP = null;
   function clipsLoad() { return CLIPP || (CLIPP = fetch('/assets/audio/buddies/s2teaser/index.json?v=' + CLIPV, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIPMAP = m || {}; return CLIPMAP; }).catch(function () { CLIPMAP = {}; return CLIPMAP; })); }
   function hasClip(who, text) { return !!(CLIPMAP && CLIPMAP[ckey(who === 'narr' ? 'narr' : who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text)]); }
@@ -975,7 +975,7 @@
   function score(calm) {
     var E = [], H = calm ? 0.55 : 1;
     function ev() { E.push(Array.prototype.slice.call(arguments)); }
-    function talk() {}   // the little synthetic voice blips are gone: every line now gets a real recorded pup sound instead
+    function talk() {}   // the little voice blips are gone: every line now gets a real recorded pup sound instead
     function hit(t, big) { if (big) ev(t, 'boom', 0.3 * H); }
     // cold open: crickets, a soft chord, then everything goes quiet... and a rumble
     ev(0, 'pad', [57, 64, 67, 71], 7.6, 0.03);

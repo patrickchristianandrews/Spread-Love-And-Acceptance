@@ -6,6 +6,7 @@
 //   node tools/checks/us-english.js --rule=ai,calling   # only these rules
 //   node tools/checks/us-english.js --skip=book,legal   # leave out top-level areas (comma list of path prefixes)
 //   node tools/checks/us-english.js --summary       # counts per rule and per area only
+//   node tools/checks/us-english.js --no-allow      # ignore the allowlist (shows what it hides)
 //   node tools/checks/us-english.js --dump=out.tsv  # write every extracted visible string (file, kind, text)
 //
 // Rules (word lists live in us-english-words.json, justified exceptions in us-english-allow.json):
@@ -38,6 +39,7 @@ const JSON_OUT = opt('json');
 const WORDS = JSON.parse(fs.readFileSync(path.join(__dirname, 'us-english-words.json'), 'utf8'));
 let ALLOW = [];
 try { ALLOW = JSON.parse(fs.readFileSync(path.join(__dirname, 'us-english-allow.json'), 'utf8')).allow || []; } catch (e) { /* no allowlist */ }
+if (args.includes('--no-allow')) ALLOW = [];   // show everything the allowlist is hiding
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__', 'notes', 'architecture', 'infrastructure', 'supabase', 'telemetry', 'manuscript', 'shots', 'progress-shots', 'snapshot', '_manuscripts', 'samples', 'store-private']);
 // Private notes, tests, build scripts and generated lists that are not shown as written.
@@ -232,6 +234,7 @@ const CHARACTERS = new Set((WORDS.characters || []).map(s => s.toLowerCase()));
 
 function headingIsName(t) {
   // "<First>", "<First> <Last>", "<First> and <First>", "<First>'s ...", "<First> and the ..." with the first word a known first name.
+  if (/^[A-Z][A-Za-z'’-]+,\s/.test(t)) return false;   // "Surname, A. B. (2001)" is a citation, not a person used as a title
   const w = t.replace(/^[\d.)\s]+/, '').split(/\s+/);
   const first = w[0].replace(/[’']s$/, '').replace(/[^A-Za-z]/g, '').toLowerCase();
   if (!first || !FIRST.has(first) || NOT_NAME_HEAD.has(first) || CHARACTERS.has(first)) return false;
@@ -245,7 +248,7 @@ function allowed(file, rule, text, hit) {
     if (a.file && !(file === a.file || (a.file.endsWith('/') && file.startsWith(a.file)))) continue;
     if (a.hits && !(hit && a.hits.includes(hit.toLowerCase()))) continue;
     if (a.match && !(text.includes(a.match) || (hit && hit.includes(a.match)))) continue;
-    return true;
+    a.used = true; return true;
   }
   return false;
 }
@@ -320,5 +323,7 @@ for (const rule of ['british', 'ai', 'calling', 'researcher', 'heading']) {
   L.slice(0, lim).forEach(f => console.log(`   ${f.file}:${f.line || ''} [${f.kind}] "${f.hit}" in "${f.ctx.replace(/\s+/g, ' ')}"` + (f.fix ? '  -> ' + f.fix : '')));
   if (L.length > lim) console.log(`   ... ${L.length - lim} more (use --verbose)`);
 }
+const stale = ALLOW.filter(a => !a.used && !SKIPP.length && !ONLY);
+if (stale.length) console.log(`note: ${stale.length} allowlist entr${stale.length === 1 ? 'y' : 'ies'} no longer match anything (delete them from us-english-allow.json): ` + stale.map(a => a.file + ' [' + a.rule + (a.hits ? ' ' + a.hits.join(',') : '') + ']').join('; '));
 console.log(`scanned ${files.length} files; ${total} finding(s)`);
 process.exit(total ? 1 : 0);

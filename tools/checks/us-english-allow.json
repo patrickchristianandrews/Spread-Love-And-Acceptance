@@ -50,6 +50,297 @@
     "dials"
    ],
    "why": "word-game answer for a clock or radio face; nothing to do with phoning"
+  },
+  {
+   "file": "research.html",
+   "rule": "british",
+   "hits": [
+    "behaviour",
+    "behavioural",
+    "behaviours",
+    "catalogue",
+    "daft",
+    "generalised",
+    "mate",
+    "modelling",
+    "nhs",
+    "randomised",
+    "reanalysing",
+    "signalling",
+    "uni"
+   ],
+   "why": "Published title of a paper, journal, agency or source, cited exactly as published (proper-name citation). Includes web addresses such as catalogue.bnf.fr and the NHS as a named source."
+  },
+  {
+   "file": "research.html",
+   "rule": "british",
+   "hits": [
+    "quarter to"
+   ],
+   "match": "quarter to a half",
+   "why": "\"a quarter to a half\" is a range of fractions, not a time."
+  },
+  {
+   "file": "calm-without-pills.html",
+   "rule": "british",
+   "hits": [
+    "nhs"
+   ],
+   "why": "The NHS is cited by name as the source of the guidance (proper-name citation)."
+  },
+  {
+   "file": "nervous-system.html",
+   "rule": "british",
+   "hits": [
+    "nhs"
+   ],
+   "why": "The NHS is cited by name as the source of the guidance (proper-name citation)."
+  },
+  {
+   "file": "wired-differently-in-depth.html",
+   "rule": "british",
+   "hits": [
+    "nhs"
+   ],
+   "why": "The NHS is cited by name as the source of the guidance (proper-name citation)."
+  },
+  {
+   "file": "signal-translator.html",
+   "rule": "british",
+   "hits": [
+    "nhs"
+   ],
+   "why": "The NHS is cited by name as the source of the guidance (proper-name citation)."
+  },
+  {
+   "file": "assets/js/signal-engine.js",
+   "rule": "british",
+   "hits": [
+    "nhs"
+   ],
+   "why": "The NHS is cited by name as the source of the guidance (proper-name citation)."
+  },
+  {
+   "file": "assets/js/signal-engine.js",
+   "rule": "british",
+   "hits": [
+    "mum"
+   ],
+   "why": "Code: matches the word \"mum\" in what a visitor typed; the shown name is Mom."
+  },
+  {
+   "file": "assets/js/logic-lens.js",
+   "rule": "british",
+   "why": "Synonym lists the lens matches against what a visitor types; British variants are there on purpose so they still match. Never shown."
+  },
+  {
+   "file": "assets/js/tools-registry.js",
+   "rule": "british",
+   "hits": [
+    "housemates",
+    "rota"
+   ],
+   "why": "Search keywords and ids, matched against what a visitor types. Never shown."
+  },
+  {
+   "file": "assets/js/roots.js",
+   "rule": "british",
+   "hits": [
+    "carer"
+   ],
+   "why": "Root ids (r:carer). Never shown."
+  },
+  {
+   "file": "assets/js/lemonade-calc.js",
+   "rule": "british",
+   "hits": [
+    "bins",
+    "hoovering"
+   ],
+   "why": "Keys of the job-name table, matched against what a visitor types. Never shown."
+  },
+  {
+   "file": "assets/js/lemonade-quick.js",
+   "rule": "british",
+   "hits": [
+    "bins",
+    "nappies"
+   ],
+   "why": "Row ids matched against what a visitor types; the shown labels are Trash & recycling and Diapers."
+  },
+  {
+   "file": "assets/js/site-chat.js",
+   "rule": "british",
+   "hits": [
+    "jumper",
+    "mum",
+    "mummy"
+   ],
+   "why": "Matching tables: words a visitor may type mapped to the American word. Never shown."
+  },
+  {
+   "file": "assets/js/message-patterns.js",
+   "rule": "british",
+   "hits": [
+    "rubbish"
+   ],
+   "why": "Typo-correction table: misspelling mapped to the word."
+  },
+  {
+   "file": "assets/js/write-helper.js",
+   "rule": "british",
+   "hits": [
+    "bins"
+   ],
+   "why": "Topic key and a regex alternative matched against typed text. The shown request says trash."
+  },
+  {
+   "file": "assets/js/creator-kb.js",
+   "rule": "british",
+   "hits": [
+    "counsellor"
+   ],
+   "why": "Keyword list that also holds the American spelling; matches what a visitor types."
+  },
+  {
+   "file": "assets/js/learn-play.js",
+   "rule": "british",
+   "hits": [
+    "bins"
+   ],
+   "why": "CSS class name (lp-bins). Never shown."
+  },
+  {
+   "file": "assets/js/launch-pups.js",
+   "rule": "british",
+   "hits": [
+    "forwards"
+   ],
+   "why": "CSS animation fill mode."
+  },
+  {
+   "file": "assets/js/perspective-shifter.js",
+   "rule": "british",
+   "hits": [
+    "favour"
+   ],
+   "why": "Card id. The shown text says less-favored."
+  },
+  {
+   "file": "assets/js/recheck-drive.js",
+   "rule": "british",
+   "hits": [
+    "housemate"
+   ],
+   "why": "Option id. The shown label says roommate."
+  },
+  {
+   "file": "assets/js/clock-weather.js",
+   "rule": "british",
+   "hits": [
+    "celsius"
+   ],
+   "why": "Unit key chosen by the device language. US devices get Fahrenheit."
+  },
+  {
+   "file": "assets/js/pals-cam.js",
+   "rule": "british",
+   "hits": [
+    "celsius"
+   ],
+   "why": "Unit key chosen by the device language. US devices get Fahrenheit."
+  },
+  {
+   "file": "assets/js/conversation-reader.js",
+   "rule": "british",
+   "hits": [
+    "unlabelled"
+   ],
+   "why": "Internal state name. Never shown."
+  },
+  {
+   "file": "assets/js/conversation-reader-engine.js",
+   "rule": "british",
+   "hits": [
+    "unlabelled"
+   ],
+   "why": "Internal state name. Never shown."
+  },
+  {
+   "file": "assets/js/confirm-clear.js",
+   "rule": "british",
+   "hits": [
+    "cancelled"
+   ],
+   "why": "Internal state name. Never shown."
+  },
+  {
+   "file": "assets/js/puddles-infographic.js",
+   "rule": "british",
+   "hits": [
+    "cancelled"
+   ],
+   "why": "Internal result code. Never shown."
+  },
+  {
+   "file": "assets/js/reading-list.js",
+   "rule": "british",
+   "hits": [
+    "housemates"
+   ],
+   "why": "Title of a Psychology Today article, cited exactly as published."
+  },
+  {
+   "file": "assets/js/creator-chat.js",
+   "rule": "ai",
+   "hits": [
+    "bot"
+   ],
+   "why": "CSS class name (tide-bot) for the speech bubble. Never shown."
+  },
+  {
+   "file": "tools/collab/test-collab.js",
+   "rule": "*",
+   "why": "Test script; its sample strings are deliberate."
+  },
+  {
+   "file": "assets/js/progress.js",
+   "rule": "british",
+   "hits": [
+    "afterwards",
+    "cancelled"
+   ],
+   "why": "File owned by the lead (wave 27): \"afterwards\" is a visible word in one message; \"cancelled\" is an internal state name. Lead to decide, then delete this entry."
+  },
+  {
+   "file": "assets/js/site.js",
+   "rule": "ai",
+   "match": "an AI chat",
+   "why": "MENU label owned by the lead (wave 27): \"Why use this instead of an article or an AI chat?\" should become \"Why use this instead of reading an article?\". Delete this entry after the change."
+  },
+  {
+   "file": "assets/js/site.js",
+   "rule": "calling",
+   "hits": [
+    "dials"
+   ],
+   "why": "MENU note owned by the lead (wave 27): \"Dials, not boxes, and how people change\" should become \"Sliders, not boxes, ...\" (book chapter 14 title must match). Delete this entry after the change."
+  },
+  {
+   "file": "assets/js/site.js",
+   "rule": "british",
+   "hits": [
+    "housemates"
+   ],
+   "why": "Search keyword list that also holds roommates."
+  },
+  {
+   "file": "assets/js/tools-page.js",
+   "rule": "british",
+   "hits": [
+    "housemates"
+   ],
+   "why": "Search keyword list that also holds roommates."
   }
  ]
 }

@@ -1,5 +1,5 @@
 # Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
-# Made with the same voices as Season 1, found by matching Season 1's own recordings with speaker-embedding models (voice24): Tidbit is Kokoro's af_heart reshaped with the WORLD vocoder (formant warp 1.18), Sugarfoot is 65% af_heart plus 35% af_nicole (warp 1.16), the narrator is plain af_heart. Pitch and pace follow Season 1's mood table. A few lines are spoken a little faster so they fit their moment on screen.
+# Made with the same voices as Season 1. Pitch and pace follow Season 1's mood table. A few lines are spoken a little faster so they fit their moment on screen.
 # To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
@@ -38,7 +38,7 @@ d22515e8	sugarfoot	2.5	Why is it always me?
 649a70d9	sugarfoot	1.25	At least it’s cherry.
 94b52fdd	sugarfoot	2.5	What a smooth flight!
 57507fd9	tidbit	1.88	Wait… snakes?!
-81dcd6c7	tidbit	2.88	I have had it with these snakes on this—
+53dc8e5d	tidbit	2.88	I have had it with these snakes on this…
 c9f33b3a	sugarfoot	1.88	…PLANE! This lovely plane!
 9c9a30b0	tidbit	1.13	Hey, I was talking!
 a3ff1633	tidbit	1.5	…on this lovely plane.
