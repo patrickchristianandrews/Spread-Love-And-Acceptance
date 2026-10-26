@@ -202,18 +202,18 @@ talk:
 - Are there ways we could be generous together?
 - How does money feel different when spent on others?
 
-@@ savoring | Savouring good moments
+@@ savoring | Savoring good moments
 pillars: V, III
-aka: savoring, savouring, enjoying the moment, appreciating good times, Bryant
-nut: Savouring means deliberately noticing and extending good experiences, looking forward to them, enjoying them fully in the moment, and remembering them afterwards.
+aka: savoring, savoring, enjoying the moment, appreciating good times, Bryant
+nut: Savoring means deliberately noticing and extending good experiences, looking forward to them, enjoying them fully in the moment, and remembering them afterwards.
 deep:
-Fred Bryant and Joseph Veroff described savouring as the positive counterpart to coping. Where coping deals with bad events, savouring amplifies good ones.
+Fred Bryant and Joseph Veroff described savoring as the positive counterpart to coping. Where coping deals with bad events, savoring amplifies good ones.
 
-Savouring techniques include sharing good moments with others, taking a mental snapshot, slowing down, and reminiscing together. Couples who reminisce about good times often report feeling closer.
+Savoring techniques include sharing good moments with others, taking a mental snapshot, slowing down, and reminiscing together. Couples who reminisce about good times often report feeling closer.
 
-Savouring is a natural antidote to negativity bias and busy routines. It doesn’t require new experiences, just more attention to the good ones that are already happening.
+Savoring is a natural antidote to negativity bias and busy routines. It doesn’t require new experiences, just more attention to the good ones that are already happening.
 research:
-Bryant and Veroff’s *Savoring* was published in 2007. Studies link savouring tendencies with greater wellbeing, and some interventions show small benefits. Research on shared reminiscence in couples, for example by Bryant and colleagues, suggests it can increase positive feelings.
+Bryant and Veroff’s *Savoring* was published in 2007. Studies link savoring tendencies with greater wellbeing, and some interventions show small benefits. Research on shared reminiscence in couples, for example by Bryant and colleagues, suggests it can increase positive feelings.
 links:
 /turning-toward.html#good-news | Turning Toward: good news
 /pause-and-play.html | Pause and play
@@ -275,7 +275,7 @@ Researchers who study adaptation suggest that variety and appreciation can slow 
 
 Complacency is not the same as contentment or acceptance. Contentment can look closely at what is good and enjoy it. Complacency does not look. A small, regular re-check, such as a real question and a specific thank-you each week, is a practical counter. It should stay light: a look, not a trial.
 
-Telling yourself everything is fine can also be a way of staying safe in a relationship where someone feels afraid or controlled. That is not complacency, and it calls for support from someone trusted.
+Telling yourself everything is fine can also be a way of staying safe in a relationship where someone feels afraid or controlled. That is not complacency.
 research:
 Brickman and Campbell’s 1971 chapter introduced the hedonic treadmill. Lyubomirsky’s 2011 review, “Hedonic adaptation to positive and negative experiences,” summarizes evidence that people often adapt to positive changes quickly. Aron and colleagues (2000) found that couples who took part in novel, mildly challenging activities together reported better relationship quality than couples who did pleasant, familiar ones. Effects are modest, and this research is still developing.
 links:

@@ -1,0 +1,55 @@
+{
+ "allow": [
+  {
+   "file": "assets/js/puzzles/",
+   "rule": "british",
+   "hits": [
+    "bin",
+    "bins",
+    "axe",
+    "axes",
+    "lark",
+    "liter",
+    "liters",
+    "kilometer",
+    "kilometers",
+    "kilogram",
+    "kilograms",
+    "brilliant",
+    "mate",
+    "mates",
+    "reckon",
+    "reckoned",
+    "greyhound",
+    "pavement",
+    "pavements",
+    "bonnet",
+    "coriander",
+    "postman",
+    "prefect",
+    "undergrad",
+    "knelt",
+    "taffy",
+    "nana",
+    "secondary school",
+    "cotton wool",
+    "legless",
+    "pear-shaped",
+    "dressing gown",
+    "hammered",
+    "biscuits",
+    "peeler"
+   ],
+   "why": "word-game answers and dictionary glosses that are ordinary American English too (a storage bin, a hat bonnet, saltwater taffy, a lark, liters in a science clue, 'a brilliant light')"
+  },
+  {
+   "file": "assets/js/puzzles/",
+   "rule": "calling",
+   "hits": [
+    "dial",
+    "dials"
+   ],
+   "why": "word-game answer for a clock or radio face; nothing to do with phoning"
+  }
+ ]
+}

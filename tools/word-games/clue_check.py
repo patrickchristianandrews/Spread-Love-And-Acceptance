@@ -35,10 +35,19 @@ caravan caravans jab jabs rubbish trousers wellies holidaymaker hoover flatmate 
 anyways gens tor toby col cos ere nowt aye amongst whilst learnt spelt dreamt burnt spoilt
 lass lasses auntie granny daft tenner quid fiver windscreen motorway motorways advert adverts artefact artefacts yoghurt yoghurts
 savoury ageing hypothesise hypothesises hypothesised labourer labourers orthopaedic analogue moulding towards afterwards upwards downwards
-onwards inwards outwards backwards forwards draper swot punnet cuppa knickers waistcoat dodgy legless pavement pavements postbox
+onwards inwards outwards backwards forwards draper swot punnet cuppa knickers waistcoat dodgy legless postbox
 chuffed knackered gutted skint cheeky brolly boffin bonkers barmy telly cinema cinemas housemate housemates flatmates
-sellotape biro hoovering nappies takeaway takeaways sweets biscuit biscuits fizzy trainers jumper autumn fortnight
+sellotape biro hoovering nappies takeaway takeaways sweets fizzy autumn fortnight
+enrol enrols synthetic chatbot
 '''.split())
+# every British-only spelling the site's checker knows (tools/checks/us-english-words.json, one list for the whole site)
+try:
+    import json as _json
+    import os as _os
+    _W = _json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'checks', 'us-english-words.json'), encoding='utf-8'))
+    BRITISH |= {k for k in _W.get('britishSpellings', {}) if k.isalpha() and k not in ('axe', 'axes')}
+except (OSError, ValueError):
+    pass
 # abbreviations, word fragments and odd forms that make poor answers
 ODD = set('''
 ben cox mag sup lux mike josh khan cole brad hank mack milo jimmy billy molly trump maria brit baba dame semi prof grad lite bong babe blah ness ling sept thou fiat jeep rave poker karma abbey baron canon sworn naked nude nudes quasi amir silva twitter tweet viral pic pics gee ref refs fab
@@ -169,7 +178,7 @@ AMERICAN_WORDS = {
     'advert': 'ad', 'adverts': 'ads', 'labourer': 'laborer', 'labourers': 'laborers', 'orthopaedic': 'orthopedic', 'analogue': 'analog',
     'moulding': 'molding', 'windscreen': 'windshield', 'waistcoat': 'vest', 'knickers': 'underpants', 'telly': 'TV', 'cuppa': 'cup of tea',
     'tenner': 'ten-dollar bill', 'quid': 'dollar', 'fiver': 'five-dollar bill', 'daft': 'silly', 'swot': 'grind', 'draper': 'cloth merchant',
-    'pavements': 'sidewalks', 'motorways': 'highways', 'synthetic': 'man-made', 'whilst': 'while',
+    'pavements': 'sidewalks', 'motorways': 'highways', 'synthetic': 'man-made', 'whilst': 'while', 'queues': 'lines', 'lass': 'girl', 'lasses': 'girls',
 }
 # words kept in clues on purpose even though they look British (autumn is fine in American English too)
 AMERICAN_OK = {'holiday'}

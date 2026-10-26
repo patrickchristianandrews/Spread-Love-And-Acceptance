@@ -20,7 +20,7 @@
 // allowlist), JSON string values, Markdown and text lines. Not scanned: comments, <style>, file names, URLs, code identifiers,
 // and files named in SKIP_FILES (private notes, tests, build scripts).
 //
-// Allowlist entries: { "file": "path or prefix/", "rule": "british|ai|...|*", "match": "text that must appear in the hit (optional)", "why": "reason" }
+// Allowlist entries: { "file": "path or prefix/", "rule": "british|ai|...|*", "match": "text that must appear in the string (optional)", "hits": ["lowercase hit", ...] (optional), "why": "reason" }
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -243,6 +243,7 @@ function allowed(file, rule, text, hit) {
   for (const a of ALLOW) {
     if (a.rule !== '*' && a.rule !== rule) continue;
     if (a.file && !(file === a.file || (a.file.endsWith('/') && file.startsWith(a.file)))) continue;
+    if (a.hits && !(hit && a.hits.includes(hit.toLowerCase()))) continue;
     if (a.match && !(text.includes(a.match) || (hit && hit.includes(a.match)))) continue;
     return true;
   }

@@ -49,7 +49,7 @@
       move: ['side', 'spin', 'mirror', 'conga', 'free', 'jump', 'pose'], stage: ['classic', 'turntable', 'classic', 'split', 'turntable', 'classic', 'lift'],
       role: { tidbit: 'lead', sugarfoot: 'lead', robot: 'lead', puddles: 'backup', owl: 'horns', frog: 'keys', ducklings: 'chorus', moon: 'lead' },
       fit: { '*': ['astro'], tidbit: ['astro', 'astro', 'astro', 'sparkle', 'astro', 'astro', 'royal'], sugarfoot: ['astro', 'astro', 'astro', 'sparkle', 'astro', 'astro', 'royal'] } }); } },
-    { id: 'camp', name: 'Cosy campfire', make: function () { return plan({ title: 'Cosy campfire',
+    { id: 'camp', name: 'Cozy campfire', make: function () { return plan({ title: 'Cozy campfire',
       back: ['campfire', 'campfire', 'campfire', 'night', 'campfire', 'snow', 'campfire'], light: ['warm', 'spot', 'warm', 'warm', 'warm', 'cool', 'warm'], fx: [S, S, H, H | S, S, S, H | S],
       move: ['side', 'side', 'mirror', 'side', 'mirror', 'conga', 'pose'], stage: ['classic', 'classic', 'classic', 'classic', 'classic', 'classic', 'classic'],
       role: { tidbit: 'lead', sugarfoot: 'lead', owl: 'horns', squirrel: 'guitar', snail: 'chorus', ducklings: 'chorus', puddles: 'backup', moon: 'lead' },

@@ -14,9 +14,9 @@ It is easy to assume that happy couples, families or teams don’t argue. Resear
 
 Conflict can even be useful. It brings hidden needs into the open, forces unfair arrangements to be renegotiated, and can leave people understanding each other better. Avoiding every disagreement can mean problems pile up unseen, which is one reason the program encourages writing things down early rather than waiting for an explosion.
 
-What tends to make conflict harmful is a set of recognisable patterns: attacks on character rather than on problems, contempt, escalating tit-for-tat, stonewalling, and fights that are repeated but never resolved. The good news is that each of these has a learnable alternative.
+What tends to make conflict harmful is a set of recognizable patterns: attacks on character rather than on problems, contempt, escalating tit-for-tat, stonewalling, and fights that are repeated but never resolved. The good news is that each of these has a learnable alternative.
 research:
-Couples researchers including John Gottman, Thomas Bradbury and Frank Fincham have long reported that the way conflict is handled predicts relationship outcomes better than how often it happens. Organisational researchers have made a similar distinction between task conflict (about the work) and relationship conflict (personal friction); a 2003 meta-analysis by Carsten De Dreu and Laurie Weingart found both were associated with lower team performance on average, which later work has refined, suggesting task conflict can help in some conditions, especially where trust is high.
+Couples researchers including John Gottman, Thomas Bradbury and Frank Fincham have long reported that the way conflict is handled predicts relationship outcomes better than how often it happens. Organizational researchers have made a similar distinction between task conflict (about the work) and relationship conflict (personal friction); a 2003 meta-analysis by Carsten De Dreu and Laurie Weingart found both were associated with lower team performance on average, which later work has refined, suggesting task conflict can help in some conditions, especially where trust is high.
 links:
 /book/chapter-1.html | Why we get out of tune (Chapter I)
 /check-ins.html | Check-ins
@@ -30,7 +30,7 @@ pillars: II, IV
 aka: principled negotiation, Getting to Yes, Fisher and Ury, needs behind positions
 nut: A position is what someone says they want; an interest is why they want it. Negotiators Roger Fisher and William Ury argued that looking beneath positions to interests opens up solutions that satisfy both people.
 deep:
-“I want the window open” and “I want it closed” are positions. Behind them might be interests: fresh air for one, no draught for the other. Once the interests are clear, options appear that neither position allowed, like opening a window in the next room.
+“I want the window open” and “I want it closed” are positions. Behind them might be interests: fresh air for one, no draft for the other. Once the interests are clear, options appear that neither position allowed, like opening a window in the next room.
 
 At home this matters a lot. “You need to do the dishes straight after dinner” may be about not waking up to a messy kitchen, or about feeling that one person always ends up doing it. “I’ll do them later” may be about needing to rest after a long day. Arguing about timing rarely helps; talking about the underlying needs often does.
 
@@ -400,11 +400,11 @@ nut: People care not only about outcomes but about whether the process was fair:
 deep:
 In studies of courts, workplaces and families, people who felt heard were more accepting of decisions, even ones that went against them. This is sometimes called the voice effect.
 
-Fair process has a few recognisable features: everyone gets a say, the same rules apply to everyone, decisions are based on accurate information, there is a way to correct mistakes, and people are treated with dignity.
+Fair process has a few recognizable features: everyone gets a say, the same rules apply to everyone, decisions are based on accurate information, there is a way to correct mistakes, and people are treated with dignity.
 
 At home, this suggests that how chores or money decisions are made matters as much as the split itself. A rota imposed by one person may be resented even if it is objectively fair; the same rota agreed together is more likely to hold.
 research:
-John Thibaut and Laurens Walker introduced procedural justice research in 1975. Allan Lind and Tom Tyler developed it further, and Lind’s fairness heuristic theory (2001) suggests people use fair treatment as a shortcut for deciding whether to trust an authority or group. The effect of perceived procedural fairness on acceptance of outcomes is one of the more robust findings in social and organisational psychology.
+John Thibaut and Laurens Walker introduced procedural justice research in 1975. Allan Lind and Tom Tyler developed it further, and Lind’s fairness heuristic theory (2001) suggests people use fair treatment as a shortcut for deciding whether to trust an authority or group. The effect of perceived procedural fairness on acceptance of outcomes is one of the more robust findings in social and organizational psychology.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job: agreeing means clear (WP-03)
 /book/chapter-4.html | Two kinds of fair (Chapter IV)

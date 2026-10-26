@@ -1336,7 +1336,7 @@ def ref_html(r):
     if len(shown) > 70 and not r.get('doi'):
         shown = re.sub(r'^([^/]+).*', r'\1', shown)
     link = (' <a class="pe-ref-u" href="%s">%s</a>' % (esc(url), '/<wbr>'.join(esc(x) for x in shown.split('/')))) if url else ''
-    venue = (' <span class="pe-ref-v">%s.</span>' % esc(r['venue'].rstrip('.'))) if r.get('venue') else ''
+    venue = (' <span class="pe-ref-v">%s.</span>' % esc(__import__('us_english')._DATE.sub(lambda m: '%s %s%s' % (m.group(2), m.group(1), (',' + m.group(3)) if m.group(3) else ''), r['venue'].rstrip('.')))) if r.get('venue') else ''
     return '<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span>%s <span class="pe-ref-f">%s</span>%s</li>' % (
         au, esc(str(yr)), t, venue, esc(r.get('finding', '')), link)
 

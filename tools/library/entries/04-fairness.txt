@@ -211,10 +211,10 @@ talk:
 - What does “good enough” look like for our most-contested chores?
 - Which job would you be willing to hand over, method and all?
 
-@@ strategic-incompetence | “Weaponised incompetence” and learned helplessness at home
+@@ strategic-incompetence | “Weaponized incompetence” and learned helplessness at home
 pillars: II, V
 aka: weaponized incompetence, strategic incompetence, pretending not to know how, doing it badly on purpose
-nut: “Weaponised incompetence” is a popular term for doing a task badly so you won’t be asked again. It names something real, but it is not a research concept, and it is often a misreading of inexperience or mismatched standards.
+nut: “Weaponized incompetence” is a popular term for doing a task badly so you won’t be asked again. It names something real, but it is not a research concept, and it is often a misreading of inexperience or mismatched standards.
 deep:
 The idea spread on social media: someone shrinks the jumper in the wash, and so never gets asked to do the laundry again. It resonated because many people have experienced tasks drifting back to them.
 
@@ -222,7 +222,7 @@ But it is worth being careful with the label. Often what looks deliberate is act
 
 A more useful approach is practical: agree on the standard, allow a learning period, hand over the whole job including the thinking, and let the owner own it. If the pattern continues after that, it is a conversation about fairness, not about skill.
 research:
-There is no established research literature on “weaponised incompetence” as such. Related concepts include social loafing (reduced effort in groups), research on gender and housework skills, and gatekeeping. Attribution research warns that assuming bad intentions from others’ behavior is a common and often mistaken bias.
+There is no established research literature on “weaponized incompetence” as such. Related concepts include social loafing (reduced effort in groups), research on gender and housework skills, and gatekeeping. Attribution research warns that assuming bad intentions from others’ behavior is a common and often mistaken bias.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)

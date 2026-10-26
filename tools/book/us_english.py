@@ -402,9 +402,16 @@ def us(t):
 # plus a few phrases (day-month dates, "ten to seven", "out of the window").
 _BSJ = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'checks', 'us-english-words.json')
 try:
-    _BS = {k.lower(): v for k, v in json.load(open(_BSJ, encoding='utf-8')).get('britishSpellings', {}).items() if k.lower() != v.lower()}
+    _WJ = json.load(open(_BSJ, encoding='utf-8'))
+    _BS = {k.lower(): v for k, v in _WJ.get('britishSpellings', {}).items() if k.lower() != v.lower()}
+    # the plain one-word entries of the "british" list too (acknowledgement, counsellor, pavement, ...)
+    for _x in _WJ.get('british', []):
+        _m = re.fullmatch(r"\\b([A-Za-z]+)\\b", _x.get('re', ''))
+        if _m and re.fullmatch(r"[A-Za-z' -]+", _x.get('fix', '')) and _m.group(1).lower() != _x['fix'].lower():
+            _BS.setdefault(_m.group(1).lower(), _x['fix'])
 except Exception:
     _BS = {}
+_BS.setdefault('acknowledgements', 'acknowledgments')
 _BSRX = re.compile(r'\b(' + '|'.join(sorted((re.escape(k) for k in _BS), key=len, reverse=True)) + r')\b', re.I) if _BS else None
 _MON = 'January|February|March|April|May|June|July|August|September|October|November|December'
 _DATE = re.compile(r'\b(\d{1,2}) (' + _MON + r')( \d{4})?\b')
@@ -420,6 +427,14 @@ _HRS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 
 _MIN = {'five': 55, 'ten': 50, 'twenty': 40, 'twenty-five': 35, 'quarter': 45}
 
 
+_TIMEOF2 = re.compile(r'\b(Five|Ten|Twenty|Twenty-five|Quarter|five|ten|twenty|twenty-five|quarter) to (one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)(?=[.,;:!?”\"])')
+
+
+def _timeof2(m):
+    h = (_HRS.index(m.group(2)) + 11) % 12 + 1
+    return '%d:%02d' % (h, _MIN[m.group(1).lower()])
+
+
 def _timeof(m):
     h = (_HRS.index(m.group(3)) + 11) % 12 + 1
     return '%s %d:%02d' % (m.group(1), h, _MIN[m.group(2)])
@@ -430,6 +445,8 @@ def _more(t):
         t = _BSRX.sub(_bs, t)
     t = _DATE.sub(lambda m: '%s %s%s' % (m.group(2), m.group(1), (',' + m.group(3)) if m.group(3) else ''), t)
     t = _TIMEOF.sub(_timeof, t)
+    t = _TIMEOF2.sub(_timeof2, t)
+    t = t.replace('different units, miles and kilometers, for the same distance', 'different units for the same distance')
     t = re.sub(r'\bout of the window\b', 'out the window', t)
     t = re.sub(r'\b(a|one|the) warm line\b', r'\1 warm sentence', t)
     return t

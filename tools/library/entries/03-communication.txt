@@ -334,7 +334,7 @@ pillars: IV
 aka: fixing, giving advice, problem solving, emotional support, do you want help or listening
 nut: When someone shares a problem, they might want solutions, or they might want to be heard. Offering the wrong one can feel like not being listened to. Asking which is wanted is a simple, powerful habit.
 deep:
-Some people show care by solving problems; others by listening and empathising. Neither is better, but a mismatch can be painful: the fixer feels rejected when advice is brushed off, and the sharer feels dismissed when handed solutions.
+Some people show care by solving problems; others by listening and empathizing. Neither is better, but a mismatch can be painful: the fixer feels rejected when advice is brushed off, and the sharer feels dismissed when handed solutions.
 
 Research on social support distinguishes emotional support (comfort, understanding), informational support (advice), and practical support (help with tasks). Different situations and people call for different kinds.
 

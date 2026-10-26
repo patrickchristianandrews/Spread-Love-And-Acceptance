@@ -55,7 +55,7 @@ talk:
 @@ repair-attempts | Repair attempts
 pillars: IV, III
 aka: repair, making up, de-escalation, olive branch
-nut: A repair attempt is anything that stops a conversation from spiralling: a joke, a touch, “can we start again?”, “I’m getting overwhelmed.” What seems to matter most is not whether people fight, but whether repairs get made and accepted.
+nut: A repair attempt is anything that stops a conversation from spiraling: a joke, a touch, “can we start again?”, “I’m getting overwhelmed.” What seems to matter most is not whether people fight, but whether repairs get made and accepted.
 deep:
 Repair attempts are often clumsy. They can be a silly face, an awkward “okay, okay, I hear you,” a hand on the arm, or asking for a pause. What makes them work is less about their polish and more about whether the other person is able to receive them. That depends heavily on how much goodwill there is in the background.
 
@@ -269,7 +269,7 @@ nut: Caryl Rusbult’s investment model says commitment grows from three things:
 deep:
 Satisfaction matters, but it isn’t the whole story. People also weigh what they would have without the relationship and what they have put in: time, shared friends, a home, memories, identity. High investment and few appealing alternatives can keep commitment strong even through dissatisfied patches.
 
-Commitment in turn shapes behavior. Committed partners are more likely to accommodate (respond constructively when the other behaves badly), to make sacrifices, and to see their relationship in a favourable light. These are the kinds of habits that help relationships through rough stretches.
+Commitment in turn shapes behavior. Committed partners are more likely to accommodate (respond constructively when the other behaves badly), to make sacrifices, and to see their relationship in a favorable light. These are the kinds of habits that help relationships through rough stretches.
 
 The model applies to friendships, jobs and other commitments too. It can be a useful, non-judgemental lens for understanding why people stay in or leave situations.
 research:

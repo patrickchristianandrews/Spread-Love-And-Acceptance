@@ -50,7 +50,7 @@ Storm watching: storm thunder lightning rain wind cloud flash rumble window cozy
 # ---- seasons and times
 First signs of spring: spring bud blossom lamb daffodil crocus snowdrop nest robin rain shoot green fresh bloom tulip
 Summer vacation: summer vacation beach sandcastle swim sun ice_cream picnic camp hike lemonade shorts sandals hat fan
-Fall walk: autumn leaves acorn chestnut squirrel mushroom crunch gold red orange harvest pumpkin apple mist scarf
+Fall walk: fall leaves acorn chestnut squirrel mushroom crunch gold red orange harvest pumpkin apple mist scarf
 Winter warmth: winter fire blanket cocoa scarf mittens hat boots snow frost candle soup quilt slippers wool
 Harvest time: harvest wheat barley corn apple pumpkin squash basket farmer tractor barn hay field festival bread orchard
 Early morning: morning dawn coffee toast alarm yawn stretch sunrise birdsong dew shower breakfast newspaper kettle fresh
@@ -79,7 +79,7 @@ Garden tools: spade fork rake hoe trowel shears hose watering_can wheelbarrow gl
 In the greenhouse: greenhouse seedling tray pot compost glass tomato pepper cucumber vine water warm light cutting sprout
 Pond garden: pond lily frog newt fish reed iris dragonfly pump fountain stone moss water ripple heron
 Blossom: blossom cherry apple petal pink white bloom bud spring branch bee breeze orchard pollen scent
-Autumn leaves: leaf maple oak red gold orange brown crunch pile rake fall twirl drift bonfire acorn season
+Fall leaves: leaf maple oak red gold orange brown crunch pile rake fall twirl drift bonfire acorn season
 Seeds and sowing: seed sow soil water sprout shoot root leaf grow sunlight patience label tray row packet
 Flower shop: florist bouquet vase ribbon rose tulip lily carnation daisy wreath stem wrap card scent bloom
 
@@ -351,7 +351,7 @@ Words for light: light glow shine gleam beam ray spark flicker flash twinkle gli
 
 # ---- more nature
 Leaves and bark: leaf bark branch twig trunk root sap bud stem vein needle cone acorn seed ring
-Mushrooms: mushroom fungus cap stem gill spore toadstool puffball chanterelle forest moss log damp autumn ring
+Mushrooms: mushroom fungus cap stem gill spore toadstool puffball chanterelle forest moss log damp fall ring
 Lichen and moss: moss lichen fern stone wall log damp shade green soft carpet forest bark rock spore
 Pebbles and stones: pebble stone rock boulder flint granite marble slate shingle cobble gravel sand beach river smooth
 Clouds and sky watching: sky cloud shape drift float puff wisp blue gray white lie grass dream imagine watch
@@ -378,7 +378,7 @@ Spice rack: cinnamon nutmeg ginger clove cumin paprika turmeric saffron pepper c
 Kitchen scales: scales weigh flour sugar butter gram ounce cup spoon measure recipe bowl jug bake cake
 Sleepover snacks: snack flashlight blanket cookie popcorn chocolate milk cake fruit whisper giggle secret pillow fort friends
 Summer fruits: strawberry raspberry cherry peach apricot plum melon watermelon nectarine berry currant gooseberry blueberry grape fig
-Autumn harvest: pumpkin squash apple pear plum blackberry nut chestnut corn potato onion carrot mushroom cider
+Fall harvest: pumpkin squash apple pear plum blackberry nut chestnut corn potato onion carrot mushroom cider
 
 # ---- home and family
 Family gathering: family grandma grandpa aunt uncle cousin sister brother baby table meal photo hug story laughter
@@ -452,7 +452,7 @@ The water cycle: water vapor cloud rain snow river ocean evaporate condense flow
 Atoms and molecules: atom molecule element proton neutron electron nucleus bond compound carbon oxygen hydrogen gas liquid solid
 Microscope world: microscope lens slide cell sample focus magnify tiny bacteria pollen crystal fiber leaf hair zoom
 Stargazing: stargazing telescope star planet moon comet meteor constellation galaxy night dark sky blanket flask chart
-Seasons science: season orbit tilt axis equinox solstice spring summer autumn winter daylight warmth sun earth year
+Seasons science: season orbit tilt axis equinox solstice spring summer fall winter daylight warmth sun earth year
 Trees and wood: timber plank log bark grain knot ring branch trunk sap resin oak pine beech maple
 Ocean depths: ocean deep trench whale squid octopus anglerfish current dark pressure submarine coral reef diver sonar
 Clouds up close: cumulus stratus cirrus nimbus fog haze mist drizzle droplet vapor sky layer wisp puff anvil

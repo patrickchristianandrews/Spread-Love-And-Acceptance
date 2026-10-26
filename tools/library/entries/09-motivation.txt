@@ -156,7 +156,7 @@ In household terms, “we’ll share more” is vague. “Each of us will cook t
 
 Goals can also backfire. Very narrow goals can make people ignore things that aren’t measured, and goals that feel imposed can undermine motivation. Goals work best when agreed together and reviewed kindly.
 research:
-Locke and Latham’s goal-setting theory was summarized in their 1990 book and a 2002 review. It is one of the most replicated theories in organisational psychology. The SMART acronym (specific, measurable, achievable, relevant, time-bound) comes from management writing, notably George Doran in 1981, rather than directly from the research. Lisa Ordóñez and colleagues (2009) discussed the side effects of goal setting.
+Locke and Latham’s goal-setting theory was summarized in their 1990 book and a 2002 review. It is one of the most replicated theories in organizational psychology. The SMART acronym (specific, measurable, achievable, relevant, time-bound) comes from management writing, notably George Doran in 1981, rather than directly from the research. Lisa Ordóñez and colleagues (2009) discussed the side effects of goal setting.
 links:
 /book/chapter-2.html | Is the split working? (Chapter II)
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
@@ -271,7 +271,7 @@ pillars: II, V
 aka: WOOP, mental contrasting, wish outcome obstacle plan, positive thinking, Oettingen
 nut: Mental contrasting means imagining a desired future and then the obstacles in the way. Combined with if–then plans (WOOP: Wish, Outcome, Obstacle, Plan), it tends to work better than positive fantasy alone.
 deep:
-Gabriele Oettingen found that simply fantasising about a positive future can reduce the energy people put into achieving it, as if the mind treats the fantasy as partly achieved. Contrasting the wish with realistic obstacles helps people commit to goals that are feasible and let go of ones that aren’t.
+Gabriele Oettingen found that simply fantasizing about a positive future can reduce the energy people put into achieving it, as if the mind treats the fantasy as partly achieved. Contrasting the wish with realistic obstacles helps people commit to goals that are feasible and let go of ones that aren’t.
 
 WOOP combines this with implementation intentions: What is my wish? What is the best outcome? What is the main obstacle inside me? What is my plan when that obstacle shows up (if–then)?
 
@@ -311,7 +311,7 @@ pillars: V, I
 aka: decision fatigue, too many choices, choice overload, what's for dinner, deciding everything
 nut: Making lots of decisions can feel draining, and having too many options can sometimes make choosing harder. Both ideas are popular; the research is more mixed than headlines suggest.
 deep:
-A famous study found that parole judges granted fewer favourable rulings as sessions went on, rising again after breaks. It was widely cited as evidence of decision fatigue. Critics pointed out that case order wasn’t random, which could explain the pattern.
+A famous study found that parole judges granted fewer favorable rulings as sessions went on, rising again after breaks. It was widely cited as evidence of decision fatigue. Critics pointed out that case order wasn’t random, which could explain the pattern.
 
 The jam study by Sheena Iyengar and Mark Lepper found shoppers were more likely to buy when offered six jams than twenty-four. Later meta-analyses found the “too much choice” effect averages close to zero, but appears under certain conditions, such as when options are hard to compare or people don’t know what they want.
 

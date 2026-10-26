@@ -79,7 +79,7 @@
   dive('connection', 'bids turning appreciation goodnews stresstalk rituals pll fourparts resync closing bondsignal');
   dive('conflict', 'checkins groundrules onetopic parkit complaint softstart stonewalling defensiveness contempt regroup notagainst saferoom conflictneeds perpetual');
   dive('repair', 'repair talkingnotes');
-  dive('communication', 'tone filter factsbox intentimpact validation acknowledgement speakerlistener acceptinfluence rebuttal subtext bothsides gottman');
+  dive('communication', 'tone filter factsbox intentimpact validation acknowledgment speakerlistener acceptinfluence rebuttal subtext bothsides gottman');
   dive('boundaries', 'refusal threemoves boundary');
   dive('neurodiversity', 'neurotypical neurodivergent neurodev doubleempathy overload gating masking hsp alexithymia wired card tenrules');
   dive('autism', 'autistic');

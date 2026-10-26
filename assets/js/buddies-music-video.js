@@ -68,7 +68,7 @@
   ];
   var OPT = {
     back: [['night', 'Starry night'], ['sunset', 'Sunset'], ['rainbow', 'Rainbow lights'], ['party', 'Disco party'], ['sea', 'Beach'], ['snow', 'Snowy hills'], ['space', 'Outer space'], ['campfire', 'Campfire'], ['finale', 'Starburst']],
-    light: [['party', 'Party colours'], ['warm', 'Warm and golden'], ['cool', 'Cool blues'], ['spot', 'One spotlight'], ['rainbow', 'Rainbow beams']],
+    light: [['party', 'Party colors'], ['warm', 'Warm and golden'], ['cool', 'Cool blues'], ['spot', 'One spotlight'], ['rainbow', 'Rainbow beams']],
     fx: [['confetti', 'Confetti'], ['hearts', 'Hearts'], ['fireworks', 'Fireworks'], ['bubbles', 'Bubbles'], ['sparkles', 'Sparkles']],
     move: [['side', 'Side step'], ['spin', 'Spin'], ['jump', 'Jump'], ['slide', 'Slide'], ['mirror', 'Mirror'], ['conga', 'Conga line'], ['free', 'Freestyle'], ['pose', 'Big pose']],
     stage: [['classic', 'Classic stage'], ['split', 'Split stage'], ['turntable', 'Turntable'], ['lift', 'Big lift'], ['risers', 'Side risers']],

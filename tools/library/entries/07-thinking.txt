@@ -205,7 +205,7 @@ links:
 talk:
 - When has a strong feeling turned out to have a different cause than you thought?
 - How can we honor feelings while still checking the facts?
-- What else might be colouring how you feel today?
+- What else might be coloring how you feel today?
 
 @@ spotlight-effect | The spotlight effect and the illusion of transparency
 pillars: IV
@@ -303,7 +303,7 @@ links:
 /workpapers/wp-01.html | Who did what (WP-01)
 /book/chapter-5.html | Weekly check-ins miss patterns (Chapter V)
 talk:
-- What recent event is colouring your view of a bigger pattern?
+- What recent event is coloring your view of a bigger pattern?
 - How could we check our impressions against a record?
 - What good patterns might we be forgetting because they’re not vivid?
 
