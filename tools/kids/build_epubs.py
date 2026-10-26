@@ -71,8 +71,8 @@ def pb_pages():
     t[1] = '%s. Half title, with Peach and Lilac sharing a heart.' % B['title']
     t[2] = 'This book belongs to. A line to write your name. Professor Puddles and Tidbit wave from a green hill.'
     t[3] = '%s. %s. By %s. Tidbit and Sugarfoot with a picnic basket.' % (B['title'], B['subtitle'], B['author'])
-    t[4] = 'Copyright and how this book was made. Independently published. Text and pictures 2026 Christian. The words were drafted with an AI writing tool. The pictures were drawn by code that was written with an AI tool.'
-    t[5] = 'Meet the friends: Tidbit, Sugarfoot, Professor Puddles, Ollie, Dot, Hopper, Nutmeg, Lumi, Beep, the ducklings, the Moon and the Static clouds.'
+    t[4] = 'Copyright. Independently published. Text and pictures 2026 Christian. The characters and the story are original to this site.'
+    t[5] = 'Who is in this story: Tidbit, Sugarfoot, Professor Puddles, Ollie, Dot, Hopper, Nutmeg, Lumi, Beep, the ducklings, the Moon and the Static clouds.'
     for i, sp in enumerate(B['spreads']):
         n = 6 + 2 * i
         t[n] = '%s %s' % (sp['left'].replace('\n', ' '), ART_ALT[sp['id']])
@@ -83,7 +83,7 @@ def pb_pages():
     t[35] = B['talk_title'] + '. ' + ' '.join('%d. %s' % (i + 1, q) for i, q in enumerate(B['talk']))
     t[36] = B['words_title'] + '. ' + ' '.join('%s. %s' % (a, b.replace('\n', ' ')) for a, b in B['words'])
     t[37] = B['find_title'] + ': ' + ', '.join(B['find_items']) + '. A picnic blanket with apples, a pie, ducklings, the four Static clouds and the two pups.'
-    t[38] = 'About these friends. ' + ' '.join(B['about_paras'])
+    t[38] = 'About this book. ' + ' '.join(B['about_paras'])
     t[39] = 'The End. Goodnight, everyone. Tidbit and Sugarfoot asleep under the Moon.'
     t[40] = 'Thank you for reading. More at %s.' % C.SITE
     return [(n, t[n]) for n in range(1, 41)]
@@ -124,7 +124,7 @@ def build_picture_epub():
         manifest.append('<item id="i%02d" href="images/page-%02d.jpg" media-type="image/jpeg"/>' % (n, n))
         side = 'right' if n % 2 == 1 else 'left'
         spine.append('<itemref idref="p%02d" properties="rendition:page-spread-%s"/>' % (n, side))
-    toc = [(1, 'Half title'), (3, 'Title page'), (5, 'Meet the friends'), (6, 'The story'), (32, 'Try it with Tidbit'), (34, 'For grown-ups'), (35, 'Talk about it'), (36, 'Words to try'), (37, 'Find and count'), (38, 'About these friends'), (39, 'The End')]
+    toc = [(1, 'Half title'), (3, 'Title page'), (5, 'Who is in this story'), (6, 'The story'), (32, 'Smell the flower, blow the candle'), (34, 'For grown-ups'), (35, 'Talk about it'), (36, 'Words to try'), (37, 'Find and count'), (38, 'About this book'), (39, 'The End')]
     nav = ('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en-US" xml:lang="en-US"><head><meta charset="utf-8"/><title>Contents</title></head>\n'
            '<body><nav epub:type="toc" id="toc"><h1>Contents</h1><ol>%s</ol></nav><nav epub:type="landmarks" hidden="hidden"><ol><li><a epub:type="cover" href="page-03.xhtml">Cover and title</a></li><li><a epub:type="bodymatter" href="page-06.xhtml">Start of the story</a></li></ol></nav></body></html>\n') % ''.join(
         '<li><a href="page-%02d.xhtml">%s</a></li>' % (n, xesc(t)) for n, t in toc)
@@ -223,9 +223,8 @@ def build_chapter_epub():
     copy = xhtml('Copyright', '<div class="small"><p><em>%s</em>, Book %d: <em>%s</em>. By %s. Independently published.</p>'
                  '<p>Text and pictures &#169; 2026 %s. First edition, %s.</p>'
                  '<p><strong>Free online, always.</strong> The characters in this book live at %s, where everything is free to read and use, with no account and no paid version. You may copy pages for personal use and for non-commercial teaching, with credit to &#8220;%s.&#8221;</p>'
-                 '<p><strong>How it was made.</strong> The words were drafted with an AI writing tool. The pictures were drawn by code that was written with an AI tool. The story and characters are original to this site.</p>'
-                 '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial.</p>'
-                 '<p><strong>Not therapy.</strong> This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p></div>' % (
+                 '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial. The story and characters are original to this site.</p>'
+                 '<p>This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p></div>' % (
                      xesc(B['series']), B['series_no'], xesc(B['title']), xesc(C.AUTHOR), xesc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE))
     docs.append(('copyright', 'copyright.xhtml', 'Copyright', copy))
     for i, ch in enumerate(chs):

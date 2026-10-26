@@ -3,7 +3,7 @@ ill: star
 
 Grandpa Lou found his apartment in the second week of December.
 
-He announced it at Sunday breakfast, standing at the head of the table with a plate of pancakes held aloft like a trophy. "Ground floor," he said. "Three blocks from the park. Two windows, one radiator that sounds like a sea lion, and a landlord who owns a barometer. I signed the lease on Friday. I move in on the fifteenth of January."
+He announced it at Sunday breakfast, standing at the head of the table with a plate of pancakes held aloft like a trophy. "First floor," he said. "Three blocks from the park. Two windows, one radiator that sounds like a sea lion, and a landlord who owns a barometer. I signed the lease on Friday. I move in on the fifteenth of January."
 
 For a second, nobody said anything.
 
@@ -53,7 +53,7 @@ The group chat had a pinned message now, at the top, with all seven rules, and a
 
 Mateo had invited everybody to the roller rink, and Josie had invited everybody to the same roller rink on the same day, and neither of them had checked with the other, which Imani said was the most Four Corners thing that had ever happened.
 
-The Friday sleepover had never been canceled. It had only been moved, three times, to when everybody was ready. Now it was the second Saturday of every month, and Imani's nana made peach cobbler, and nobody was ever left alone with a muted phone.
+The Friday sleepover had never been canceled. It had only been moved, three times, to when everybody was ready. Now it was the second Saturday of every month, and Imani's grandma made peach cobbler, and nobody was ever left alone with a muted phone.
 
 On Wren's first night back in her old room, she lay in her bed under the crooked glow-in-the-dark star, in the quiet, and found that she could not sleep.
 
@@ -101,7 +101,7 @@ She went back to her room and plugged in the machine and pressed the button. The
 
 Outside, it had started to rain for real.
 
-She listened to both rains at once, the one on the machine and the one on the roof. They did not quite match. Somehow it did not matter. She let the sound wash over her, the way you do when you are on the green rung and the radios are off and the house is full of people you love.
+She listened to both rains at once, the one on the machine and the one on the roof. They did not match exactly. Somehow it did not matter. She let the sound wash over her, the way you do when you are on the green rung and the radios are off and the house is full of people you love.
 
 *Forecast,* she thought, drifting. *Partly cloudy. A chance of static. Everyone accounted for.*
 

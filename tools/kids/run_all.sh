@@ -34,4 +34,6 @@ node $P/print_kids.js shots picture-book-screen ".pg" epub-pb 1600 jpg
 node $P/print_kids.js shots chapter-art-sheet ".art-item" epub-cb 920 png
 python3 $P/build_epubs.py epub
 python3 $P/check_pdfs.py
+# the one American-English and house-rules audit over everything a reader sees (needs NODE_PATH for spell.js: see tools/kids/spell.js)
+if [ -n "$KIDS_SPELL_NODE_PATH" ]; then NODE_PATH="$KIDS_SPELL_NODE_PATH" python3 $P/us_audit.py "$@" || { echo "us_audit found problems"; exit 1; }; else echo "skipped us_audit (set KIDS_SPELL_NODE_PATH to a folder with nspell and dictionary-en)"; fi
 echo "built."

@@ -437,9 +437,8 @@ def front_html():
     copy = ('<section class="front copy"><p><em>%s</em>, Book %d: <em>%s</em>.<br>By %s. Independently published.</p>'
             '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand, with a black-and-white interior.</p>'
             '<p><strong>Free online, always.</strong> The characters in this book live at %s, where everything is free to read and use, with no account and no paid version. The print book is optional. You may copy pages of this book for personal use and for non-commercial teaching, with credit to “%s.”</p>'
-            '<p><strong>How it was made.</strong> The words were drafted with an AI writing tool. The pictures were drawn by code that was written with an AI tool. The story and characters are original to this site.</p>'
-            '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial.</p>'
-            '<p><strong>Not therapy.</strong> This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p>'
+            '<p><strong>Made up.</strong> Wren, Theo and their family and friends are made up. Nobody in this book is a real person, and none of it is a testimonial. The story and characters are original to this site.</p>'
+            '<p>This is a story. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your family.</p>'
             '<p>Set in Lora, Fraunces and Andika (SIL Open Font License).</p></section>') % (
         C.esc(BOOK['series']), BOOK['series_no'], C.esc(t), C.esc(C.AUTHOR), C.esc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE)
     return half + cast + title + copy

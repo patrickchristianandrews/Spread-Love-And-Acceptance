@@ -78,12 +78,24 @@
       "right": "\"Yes,\" said Sugarfoot. \"Slow it is.\"\nFast and slow, side by side,\nthey walked home under the Moon.\n\"Goodnight, Tidbit. Goodnight, Sugarfoot.\"\n\"Goodnight, Moon. Goodnight, everyone. Goodnight, Static.\""
     }
   ],
-  "calm_title": "Try it with Tidbit",
+  "calm_title": "Smell the flower, blow the candle",
   "calm_steps": [
-    ["Smell the flower", "Breathe in slowly through your nose, like you are smelling a flower."],
-    ["Blow the candle", "Breathe out slowly through your mouth, like you are blowing a candle without putting it out too fast."],
-    ["Do it again", "Smell the flower. Blow the candle. Three times is plenty."],
-    ["Ask your body", "What is my body telling me? Buzzy, heavy, or calm?"]
+    [
+      "Smell the flower",
+      "Breathe in slowly through your nose, like you are smelling a flower."
+    ],
+    [
+      "Blow the candle",
+      "Breathe out slowly through your mouth, like you are blowing a candle without putting it out too fast."
+    ],
+    [
+      "Do it again",
+      "Smell the flower. Blow the candle. Three times is plenty."
+    ],
+    [
+      "Ask your body",
+      "What is my body telling me? Buzzy, heavy, or calm?"
+    ]
   ],
   "grownups": {
     "title": "For grown-ups",
@@ -105,16 +117,30 @@
   ],
   "words_title": "Words to try",
   "words": [
-    ["When you need something", "\"I need some room, then a hug.\"\n\"This is too heavy for me. Can you help?\"\n\"Can we go slow?\""],
-    ["When you bump or break something", "1. Say sorry.\n2. Say what happened: \"I zoomed too fast.\"\n3. Ask: \"What can I do to make it right?\""],
-    ["When someone else is upset", "\"Do you want room, or do you want me close?\"\n\"I can wait.\""]
+    [
+      "When you need something",
+      "\"I need some room, then a hug.\"\n\"This is too heavy for me. Can you help?\"\n\"Can we go slow?\""
+    ],
+    [
+      "When you bump or break something",
+      "1. Say sorry.\n2. Say what happened: \"I zoomed too fast.\"\n3. Ask: \"What can I do to make it right?\""
+    ],
+    [
+      "When someone else is upset",
+      "\"Do you want room, or do you want me close?\"\n\"I can wait.\""
+    ]
   ],
   "find_title": "Find and count",
   "find_items": [
-    "3 ducklings", "4 clouds of Static", "1 butterfly", "5 apples", "1 pie", "2 pups"
+    "3 ducklings",
+    "4 clouds of Static",
+    "1 butterfly",
+    "5 apples",
+    "1 pie",
+    "2 pups"
   ],
   "about_paras": [
     "Tidbit and Sugarfoot live at spreadloveandacceptance.com, where they star in the Frequency Buddies cartoon, play games, and keep company in the Night Garden. Everything on the site is free to read and use.",
-    "The words in this book were drafted with an AI writing tool. The pictures were drawn by code, written with an AI tool, in the same style as the site's characters."
+    "There is a chapter book for ages 9 to 12 and two coloring books with the same friends."
   ]
 }

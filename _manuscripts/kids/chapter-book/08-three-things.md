@@ -36,7 +36,7 @@ It was not easy. But it was something. She was learning that waiting could be a 
 At 11:30, the group chat buzzed. She looked. It was Imani.
 
 ::: chat
-Imani: hey. are you free to call this afternoon? no pressure
+Imani: hey. are you free to talk this afternoon? no pressure
 Wren: i'd like that. can it be 7:30? i have to do something first
 Imani: yes of course. 7:30 works
 :::

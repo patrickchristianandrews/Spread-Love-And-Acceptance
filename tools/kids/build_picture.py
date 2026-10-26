@@ -493,8 +493,8 @@ def pg_copyright():
         '<em>%s</em>, Book %d: <em>%s</em>.<br>By %s. Independently published.' % (C.esc(BOOK['series']), BOOK['series_no'], C.esc(BOOK['title']), C.esc(C.AUTHOR)),
         'Text and pictures © 2026 %s. First print edition, %s. Printed on demand.' % (C.esc(C.AUTHOR), C.UPDATED),
         '<strong>Free online, always.</strong> Tidbit, Sugarfoot and their friends live at %s, where everything is free to read and use, with no account and no paid version. The print book is optional. You may copy pages of this book for personal use and for non-commercial teaching, with credit to “%s.”' % (C.SITE, C.SITE),
-        '<strong>How it was made.</strong> The words were drafted with an AI writing tool. The pictures were drawn by code that was written with an AI tool. Characters and story are original to this site.',
-        '<strong>Not therapy.</strong> This is a story for sharing. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your child.',
+        'The characters and the story are original to this site.',
+        'This is a story for sharing. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your child.',
         'Set in Andika, Fraunces and Lora (SIL Open Font License).',
     ]
     inner = '<div class="center small" style="top:1.6in;text-align:left;font-size:9.5pt">%s</div>' % ''.join('<p style="margin:0 0 .14in">%s</p>' % x for x in p)
@@ -530,12 +530,12 @@ def pg_cast():
                 for j, w in enumerate(('grumble', 'fuzz', 'mumble', 'drift')):
                     A.static_cloud(P, w, cx - 54 + (j % 2) * 108, cy - 50 + (j // 2) * 48, 1.7, 'happy', fizz=False)
             label(P, cx, cy + 36, name, 19, 'middle', bg=False, col='#3A3350')
-    inner = '<div class="center" style="top:.55in"><h2 style="font-size:28pt">Meet the friends</h2></div>'
+    inner = '<div class="center" style="top:.55in"><h2 style="font-size:28pt">Who is in this story</h2></div>'
     return pagebox(5, inner, simple_art(art, 'r'))
 
 
 def pg_calm(spread_first):
-    """pages 32 and 33: a spread, 'Try it with Tidbit', four steps"""
+    """pages 32 and 33: a spread with the four breathing steps"""
     P = pen()
     sky(P, '#CDEBFA', '#FFF0D6')
     ground(P, 690, '#A9DB84')
@@ -611,7 +611,7 @@ def pg_find():
 
 
 def pg_about():
-    body = '<div class="gu"><h2>About these friends</h2>%s</div>' % ''.join('<p>%s</p>' % C.esc(p) for p in BOOK['about_paras'])
+    body = '<div class="gu"><h2>About this book</h2>%s</div>' % ''.join('<p>%s</p>' % C.esc(p) for p in BOOK['about_paras'])
     return pagebox(38, body, deco(38, [(A.sugarfoot_front, 250, 3.4, {'expr': 'happy', 'mouth_': 'smile'}), (A.tidbit_front, 580, 3.4, {'expr': 'happy', 'mouth_': 'w'})]))
 
 

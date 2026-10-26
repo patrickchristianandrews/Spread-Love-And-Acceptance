@@ -4,12 +4,12 @@ ill: phone
 The text came in at 7:12 on Monday morning, while Wren was standing in the hallway holding a toothbrush.
 
 ::: chat
-Imani: sleepover friday?? my place. nana is making peach cobbler
+Imani: sleepover friday?? my place. grandma is making peach cobbler
 Josie: YES
 Mateo: obviously. i will bring the good controller
 :::
 
-She looked at it for a while. A sleepover at Imani's was one of the best things a person could be invited to. Imani's nana made cobbler with a crust like a cloud, and Imani's dad let them stay up until the second movie ended. Wren would normally have typed three exclamation points before the toothbrush was even in her mouth.
+She looked at it for a while. A sleepover at Imani's was one of the best things a person could be invited to. Imani's grandma made cobbler with a crust like a cloud, and Imani's dad let them stay up until the second movie ended. Wren would normally have typed three exclamation points before the toothbrush was even in her mouth.
 
 But her chest still felt like a sock drawer somebody had dumped out on the floor. She typed.
 

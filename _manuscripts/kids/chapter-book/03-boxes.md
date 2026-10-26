@@ -101,7 +101,7 @@ Wren looked at Grandpa, ready for a joke. But he answered the question exactly a
 
 Theo thought about this. "Thank you," he said. "Most people say yes."
 
-"Most people say yes to make you feel better," said Grandpa Lou. "I'd rather tell you the weather as it is. It's more useful."
+"Most people say yes to make you feel better," said Grandpa Lou. "I prefer telling you the weather as it is. It's more useful."
 
 Something shifted in Theo's face. It was a small shift, like a curtain moving in a window. "That's what I like about clouds," he said.
 

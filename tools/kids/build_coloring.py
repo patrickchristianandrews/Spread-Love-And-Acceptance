@@ -266,16 +266,17 @@ def y_cast(P):
     A.moon(P, 700, 900, 2.3, 'calm', glow=False)
 
 
-YOUNGER = [
-    ('Tidbit zooms', y_tidbit_zoom), ('Sugarfoot', y_sugarfoot), ('Best friends', y_both), ('Professor Puddles', y_puddles),
-    ('Ollie the owl', y_ollie), ('Dot the snail', y_dot), ('Hopper the frog', y_hopper), ('Nutmeg the squirrel', y_nutmeg),
-    ('Lumi and her lantern', y_lumi), ('Beep the robot', y_beep), ('The ducklings', y_ducklings), ('The Moon', y_moon),
-    ('Grumble', _cloud('grumble', 'grumpy')), ('Fuzz', _cloud('fuzz')), ('Mumble', _cloud('mumble')), ('Drift', _cloud('drift')),
-    ('Peach and Lilac', y_peach), ('The bunny', y_bunny), ('The hedgehog', y_hedgehog), ('Butterfly and flowers', y_butterfly),
-    ('The picnic basket', y_basket), ('Puddle Hollow', y_cottage), ('A walk home', y_walk), ('Sugarfoot sleeps', y_sleep),
-    ('Blow the candle', y_candle), ('Smell the flower', y_flower), ('Sharing a heart', y_heart), ('A rainy day', y_rain),
-    ('Fireflies', y_fireflies), ('The lily pond', y_pond), ('Picnic time', y_group), ('Goodnight', y_goodnight),
-]
+_CAPTIONS = (C.load_json(os.path.join(C.MS, 'coloring-younger.json')) or {}).get('captions', [])
+YOUNGER = list(zip(_CAPTIONS, [
+    y_tidbit_zoom, y_sugarfoot, y_both, y_puddles,
+    y_ollie, y_dot, y_hopper, y_nutmeg,
+    y_lumi, y_beep, y_ducklings, y_moon,
+    _cloud('grumble', 'grumpy'), _cloud('fuzz'), _cloud('mumble'), _cloud('drift'),
+    y_peach, y_bunny, y_hedgehog, y_butterfly,
+    y_basket, y_cottage, y_walk, y_sleep,
+    y_candle, y_flower, y_heart, y_rain,
+    y_fireflies, y_pond, y_group, y_goodnight,
+]))
 # the cast page replaces nothing: it is the first page after the title (a sheet of everyone to color)
 YOUNGER_PAGE_SW = 5.2
 
@@ -345,10 +346,9 @@ def copyright_page(kind):
          '<p>Pictures © 2026 %s. First print edition, %s. Printed on demand, with a black-and-white interior.</p>'
          '<p><strong>The back of every picture is blank</strong>, so markers will not soak through to the next one. Slide a sheet of paper under the page you are coloring.</p>'
          '<p><strong>Free online, always.</strong> The characters live at %s, where everything is free to read and use, with no account and no paid version. This print book is optional. You may copy pages for personal use and for non-commercial teaching, with credit to “%s.”</p>'
-         '<p><strong>How it was made.</strong> The pictures were drawn by code that was written with an AI tool, in the same style as the characters on the site. %s</p>'
+         '<p><strong>Original.</strong> The characters and the pictures are original to this site.</p>'
          '<p>Set in Fraunces and Andika (SIL Open Font License).</p></div>') % (
-        C.esc(C.SERIES), n, C.esc(name), C.esc(C.AUTHOR), C.esc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE,
-        '' if younger else 'The phrases were drafted with an AI writing tool.')
+        C.esc(C.SERIES), n, C.esc(name), C.esc(C.AUTHOR), C.esc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE)
     return page(s)
 
 

@@ -1,17 +1,17 @@
 # Read It Again
 ill: call
 
-Wren took the call on the back steps, with Sugarfoot beside her and her breath making small clouds in the cold.
+Wren talked to Imani on the back steps, with Sugarfoot beside her and her breath making small clouds in the cold.
 
 She had practiced this one too. She had written a list on the back of her hand in pen: *1. Say I'm sorry for going quiet. 2. Ask about the K. 3. Listen.* The ink had smudged a bit, but the numbers were still there.
 
-Imani picked up on the first ring.
+Imani answered right away.
 
 "Hi," said Imani.
 
 "Hi."
 
-There was a pause, the awkward kind. Wren could hear a television somewhere on Imani's end, and a pot clanking, and someone laughing, which had to be Imani's nana.
+There was a pause, the awkward kind. Wren could hear a television somewhere on Imani's end, and a pot clanking, and someone laughing, which had to be Imani's grandma.
 
 "I'm sorry I went quiet," Wren said, before she could lose her nerve. "And I'm sorry I muted the chat. And that I said 'fine' like a hundred times. I wasn't fine. Things at home got really loud, and I didn't know how to say so, and I took it out on everyone."
 
@@ -35,7 +35,7 @@ There was a long silence on the line.
 
 "No?"
 
-"I was at the bus stop. It was freezing. I had these huge mittens on, and I was typing with one thumb and holding my backpack in the other arm, and the bus was coming." She was talking fast. "I'd just read your message and I thought, *oh no, she's sad, I should call her.* But I couldn't because the bus was there, and I wanted to say 'okay, I'm here, we'll talk later.' And all I had time for was a k."
+"I was at the bus stop. It was freezing. I had these huge mittens on, and I was typing with one thumb and holding my backpack in the other arm, and the bus was coming." She was talking fast. "I'd just read your message and I thought, *oh no, she's sad, I should talk to her.* But I couldn't because the bus was there, and I wanted to say 'okay, I'm here, we'll talk later.' And all I had time for was a k."
 
 Wren stared at the dog. "That's... not what it looked like at all."
 
@@ -51,9 +51,9 @@ Wren stared at the dog. "That's... not what it looked like at all."
 
 "Because I was upset," said Wren. "And tired, and hungry, and I thought all the worst things before I could think any other thing."
 
-"That happens to me too. Like, constantly." Imani's voice went soft. "You know what my nana says? She says a message only has half the meaning in it. The other half is in the person reading it."
+"That happens to me too. Like, constantly." Imani's voice went soft. "You know what my grandma says? She says a message only has half the meaning in it. The other half is in the person reading it."
 
-"Your nana is a genius."
+"Your grandma is a genius."
 
 "She's very modest about it." A pause, and then Imani said, more carefully: "Wren? When you said 'fine' so many times, it did sound like fine, so I didn't know. If you'd said 'I'm not okay and I don't want to talk about it,' I'd have said, 'Okay, I'm here.' I would have been completely fine with that."
 
@@ -65,13 +65,13 @@ Wren sat with that for a moment. It was a very simple idea, and it had not cross
 
 "I'll say it next time. 'I'm not okay and I don't want to talk about it yet.'"
 
-"And I'll write back a real sentence," said Imani. "Not a k. I promise. Or if I'm in a hurry, I'll write 'k, worried, will call.'"
+"And I'll write back a real sentence," said Imani. "Not a k. I promise. Or if I'm in a hurry, I'll write 'k, worried, will talk later.'"
 
 Wren laughed again, harder this time, with the cold air on her teeth. "A worried k. I'm going to put that on a shirt."
 
 ---
 
-"So," said Imani. "Mateo wants to talk to you. He's here. He was too scared to call. Is that okay? Or do you want to wait?"
+"So," said Imani. "Mateo wants to talk to you. He's here. He was too scared to start. Is that okay? Or do you want to wait?"
 
 Wren thought about it. She was a little tired, but not empty. Her body was a green rung, or close to it: heart slow, ears normal, mind at about half-speed.
 
@@ -119,13 +119,13 @@ Everybody laughed at that, even Wren. It felt like warm water poured over cold h
 
 "Okay," said Imani. "Let's make some rules. Because I think we need them."
 
-They did it right there, on the call, with Wren writing on the back of her other hand. It took about ten minutes. Josie, who had mostly been quiet, said she wanted one too: when people got loud, she froze up, and she needed someone to say her name gently and wait. They wrote that one down first.
+They did it right there, on the phone, with Wren writing on the back of her other hand. It took about ten minutes. Josie, who had mostly been quiet, said she wanted one too: when people got loud, she froze up, and she needed someone to say her name gently and wait. They wrote that one down first.
 
 By the time they were done, the list was long and a little silly. It said:
 
 ::: rules
 If a message could be read two ways, ask "did you mean it like that?"
-If it's long or hard, call. Don't type.
+If it's long or hard, talk out loud. Don't type.
 "Fine" is allowed. After "fine," someone asks "fine, or need a minute?"
 "Not about you" is a real sentence. Use it.
 Nobody makes jokes about anybody's family. Family is not a bit.
@@ -139,7 +139,7 @@ Wren read it back aloud. It sounded absurd and true.
 
 "No," said Mateo. "Yes. Actually, yes."
 
-When the call ended, Wren sat for a minute on the steps in the dark. Sugarfoot, who had listened to the whole thing with her head on her paws, looked up at her with an expression of mild approval.
+When they hung up, Wren sat for a minute on the steps in the dark. Sugarfoot, who had listened to the whole thing with her head on her paws, looked up at her with an expression of mild approval.
 
 "Yes, I know," Wren told her. "A worried k."
 

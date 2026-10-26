@@ -1,0 +1,21 @@
+# Words the en_US dictionary does not know that are fine here, one per line, with the reason after a #.
+buzzy      # informal, from "buzzy paws" in the story
+hm         # an interjection in the dialogue
+grrr       # a sound the cloud makes
+haha       # typed laughter in the group chats
+lol        # typed laughter in the group chats
+idk        # typed shorthand in the group chats
+im         # typed "I'm" in the group chats
+k          # the one-letter message the chapter is about
+tmrw       # typed shorthand in the group chats
+matty      # a nickname in a group chat
+friday     # lowercase on purpose in a typed chat message
+whatever's # contraction in dialogue
+else's     # possessive of "somebody else"
+unknotted  # the knot in her chest coming undone
+corkboard  # one word in American usage
+ish        # from "Mom-ish" (the suffix after the hyphen)
+andika     # the name of a font
+fraunces   # the name of a font
+sil        # SIL Open Font License
+spreadloveandacceptance  # the site address

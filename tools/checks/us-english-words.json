@@ -1,1 +1,1205 @@
-{"british":[],"ai":[],"calling":[],"researchers":[],"firstNames":[],"headingNotNames":[],"characters":[]}
+{
+ "british": [
+  {
+   "re": "\\backnowledgement\\b",
+   "fix": "acknowledgment"
+  },
+  {
+   "re": "\\badvert\\b",
+   "fix": "ad"
+  },
+  {
+   "re": "\\badverts\\b",
+   "fix": "ads"
+  },
+  {
+   "re": "\\baeroplane\\b",
+   "fix": "airplane"
+  },
+  {
+   "re": "\\baeroplanes\\b",
+   "fix": "airplanes"
+  },
+  {
+   "re": "\\bafterwards\\b",
+   "fix": "afterward"
+  },
+  {
+   "re": "\\bageing\\b",
+   "fix": "aging"
+  },
+  {
+   "re": "\\ballotment\\b",
+   "fix": "community garden plot"
+  },
+  {
+   "re": "\\ballotments\\b",
+   "fix": "community garden plots"
+  },
+  {
+   "re": "\\baluminium\\b",
+   "fix": "aluminum"
+  },
+  {
+   "re": "\\bamongst\\b",
+   "fix": "among"
+  },
+  {
+   "re": "\\banaesthetic\\b",
+   "fix": "anesthetic"
+  },
+  {
+   "re": "\\banalyse\\b",
+   "fix": "analyze"
+  },
+  {
+   "re": "\\banalysed\\b",
+   "fix": "analyzed"
+  },
+  {
+   "re": "\\banalyser\\b",
+   "fix": "analyzer"
+  },
+  {
+   "re": "\\banalysers\\b",
+   "fix": "analyzers"
+  },
+  {
+   "re": "\\banalysing\\b",
+   "fix": "analyzing"
+  },
+  {
+   "re": "\\barmour\\b",
+   "fix": "armor"
+  },
+  {
+   "re": "\\baubergine\\b",
+   "fix": "eggplant"
+  },
+  {
+   "re": "\\baubergines\\b",
+   "fix": "eggplants"
+  },
+  {
+   "re": "\\bbackwards\\b",
+   "fix": "backward"
+  },
+  {
+   "re": "\\bbehaviour\\b",
+   "fix": "behavior"
+  },
+  {
+   "re": "\\bbehavioural\\b",
+   "fix": "behavioral"
+  },
+  {
+   "re": "\\bbehaviourally\\b",
+   "fix": "behaviorally"
+  },
+  {
+   "re": "\\bbehaviours\\b",
+   "fix": "behaviors"
+  },
+  {
+   "re": "\\bbiro\\b",
+   "fix": "pen"
+  },
+  {
+   "re": "\\bbiros\\b",
+   "fix": "pens"
+  },
+  {
+   "re": "\\bbloke\\b",
+   "fix": "guy"
+  },
+  {
+   "re": "\\bblokes\\b",
+   "fix": "guys"
+  },
+  {
+   "re": "\\bbrolly\\b",
+   "fix": "umbrella"
+  },
+  {
+   "re": "\\bburnt\\b",
+   "fix": "burned"
+  },
+  {
+   "re": "\\bcalibre\\b",
+   "fix": "caliber"
+  },
+  {
+   "re": "\\bcancelled\\b",
+   "fix": "canceled"
+  },
+  {
+   "re": "\\bcancelling\\b",
+   "fix": "canceling"
+  },
+  {
+   "re": "\\bcandour\\b",
+   "fix": "candor"
+  },
+  {
+   "re": "\\bcatalogue\\b",
+   "fix": "catalog"
+  },
+  {
+   "re": "\\bcatalogues\\b",
+   "fix": "catalogs"
+  },
+  {
+   "re": "\\bcatalyse\\b",
+   "fix": "catalyze"
+  },
+  {
+   "re": "\\bcentre\\b",
+   "fix": "center"
+  },
+  {
+   "re": "\\bcentred\\b",
+   "fix": "centered"
+  },
+  {
+   "re": "\\bcentres\\b",
+   "fix": "centers"
+  },
+  {
+   "re": "\\bchannelled\\b",
+   "fix": "channeled"
+  },
+  {
+   "re": "\\bcheque\\b",
+   "fix": "check"
+  },
+  {
+   "re": "\\bcheques\\b",
+   "fix": "checks"
+  },
+  {
+   "re": "\\bchuffed\\b",
+   "fix": "thrilled"
+  },
+  {
+   "re": "\\bcinema\\b",
+   "fix": "movie theater"
+  },
+  {
+   "re": "\\bcinemas\\b",
+   "fix": "movie theaters"
+  },
+  {
+   "re": "\\bcolour\\b",
+   "fix": "color"
+  },
+  {
+   "re": "\\bcoloured\\b",
+   "fix": "colored"
+  },
+  {
+   "re": "\\bcolourful\\b",
+   "fix": "colorful"
+  },
+  {
+   "re": "\\bcolouring\\b",
+   "fix": "coloring"
+  },
+  {
+   "re": "\\bcolours\\b",
+   "fix": "colors"
+  },
+  {
+   "re": "\\bcoriander\\b",
+   "fix": "cilantro"
+  },
+  {
+   "re": "\\bcosier\\b",
+   "fix": "cozier"
+  },
+  {
+   "re": "\\bcosy\\b",
+   "fix": "cozy"
+  },
+  {
+   "re": "\\bcounselled\\b",
+   "fix": "counseled"
+  },
+  {
+   "re": "\\bcounselling\\b",
+   "fix": "counseling"
+  },
+  {
+   "re": "\\bcounsellor\\b",
+   "fix": "counselor"
+  },
+  {
+   "re": "\\bcounsellors\\b",
+   "fix": "counselors"
+  },
+  {
+   "re": "\\bcourgette\\b",
+   "fix": "zucchini"
+  },
+  {
+   "re": "\\bcourgettes\\b",
+   "fix": "zucchini"
+  },
+  {
+   "re": "\\bcreche\\b",
+   "fix": "daycare"
+  },
+  {
+   "re": "\\bcrisps\\b",
+   "fix": "chips"
+  },
+  {
+   "re": "\\bcrèche\\b",
+   "fix": "daycare"
+  },
+  {
+   "re": "\\bcuppa\\b",
+   "fix": "cup of coffee"
+  },
+  {
+   "re": "\\bdefence\\b",
+   "fix": "defense"
+  },
+  {
+   "re": "\\bdefences\\b",
+   "fix": "defenses"
+  },
+  {
+   "re": "\\bdialled\\b",
+   "fix": "dialed"
+  },
+  {
+   "re": "\\bdialling\\b",
+   "fix": "dialing"
+  },
+  {
+   "re": "\\bdownwards\\b",
+   "fix": "downward"
+  },
+  {
+   "re": "\\bdraught\\b",
+   "fix": "draft"
+  },
+  {
+   "re": "\\bdraughts\\b",
+   "fix": "drafts"
+  },
+  {
+   "re": "\\bdraughty\\b",
+   "fix": "drafty"
+  },
+  {
+   "re": "\\bdreamt\\b",
+   "fix": "dreamed"
+  },
+  {
+   "re": "\\bendeavour\\b",
+   "fix": "endeavor"
+  },
+  {
+   "re": "\\benrol\\b",
+   "fix": "enroll"
+  },
+  {
+   "re": "\\benrolment\\b",
+   "fix": "enrollment"
+  },
+  {
+   "re": "\\benrols\\b",
+   "fix": "enrolls"
+  },
+  {
+   "re": "\\bfavour\\b",
+   "fix": "favor"
+  },
+  {
+   "re": "\\bfavourable\\b",
+   "fix": "favorable"
+  },
+  {
+   "re": "\\bfavourably\\b",
+   "fix": "favorably"
+  },
+  {
+   "re": "\\bfavoured\\b",
+   "fix": "favored"
+  },
+  {
+   "re": "\\bfavouring\\b",
+   "fix": "favoring"
+  },
+  {
+   "re": "\\bfavourite\\b",
+   "fix": "favorite"
+  },
+  {
+   "re": "\\bfavourites\\b",
+   "fix": "favorites"
+  },
+  {
+   "re": "\\bfavours\\b",
+   "fix": "favors"
+  },
+  {
+   "re": "\\bfibre\\b",
+   "fix": "fiber"
+  },
+  {
+   "re": "\\bfiver\\b",
+   "fix": "five dollars"
+  },
+  {
+   "re": "\\bflatmate\\b",
+   "fix": "roommate"
+  },
+  {
+   "re": "\\bflatmates\\b",
+   "fix": "roommates"
+  },
+  {
+   "re": "\\bflavour\\b",
+   "fix": "flavor"
+  },
+  {
+   "re": "\\bflavours\\b",
+   "fix": "flavors"
+  },
+  {
+   "re": "\\bfoetus\\b",
+   "fix": "fetus"
+  },
+  {
+   "re": "\\bfortnightly\\b",
+   "fix": "every two weeks"
+  },
+  {
+   "re": "\\bforwards\\b",
+   "fix": "forward"
+  },
+  {
+   "re": "\\bfreshers\\b",
+   "fix": "freshmen"
+  },
+  {
+   "re": "\\bfuelled\\b",
+   "fix": "fueled"
+  },
+  {
+   "re": "\\bfuelling\\b",
+   "fix": "fueling"
+  },
+  {
+   "re": "\\bfulfil\\b",
+   "fix": "fulfill"
+  },
+  {
+   "re": "\\bfulfilment\\b",
+   "fix": "fulfillment"
+  },
+  {
+   "re": "\\bfulfils\\b",
+   "fix": "fulfills"
+  },
+  {
+   "re": "\\bgrandad\\b",
+   "fix": "grandpa"
+  },
+  {
+   "re": "\\bgrandads\\b",
+   "fix": "grandpas"
+  },
+  {
+   "re": "\\bgrey\\b",
+   "fix": "gray"
+  },
+  {
+   "re": "\\bgreyish\\b",
+   "fix": "grayish"
+  },
+  {
+   "re": "\\bgreys\\b",
+   "fix": "grays"
+  },
+  {
+   "re": "\\bharbour\\b",
+   "fix": "harbor"
+  },
+  {
+   "re": "\\bhonour\\b",
+   "fix": "honor"
+  },
+  {
+   "re": "\\bhonoured\\b",
+   "fix": "honored"
+  },
+  {
+   "re": "\\bhonours\\b",
+   "fix": "honors"
+  },
+  {
+   "re": "\\bhoover\\b",
+   "fix": "vacuum"
+  },
+  {
+   "re": "\\bhoovered\\b",
+   "fix": "vacuumed"
+  },
+  {
+   "re": "\\bhoovering\\b",
+   "fix": "vacuuming"
+  },
+  {
+   "re": "\\bhousemate\\b",
+   "fix": "roommate"
+  },
+  {
+   "re": "\\bhousemates\\b",
+   "fix": "roommates"
+  },
+  {
+   "re": "\\bhumour\\b",
+   "fix": "humor"
+  },
+  {
+   "re": "\\bhumoured\\b",
+   "fix": "humored"
+  },
+  {
+   "re": "\\bhumours\\b",
+   "fix": "humors"
+  },
+  {
+   "re": "\\binstil\\b",
+   "fix": "instill"
+  },
+  {
+   "re": "\\binstils\\b",
+   "fix": "instills"
+  },
+  {
+   "re": "\\binwards\\b",
+   "fix": "inward"
+  },
+  {
+   "re": "\\bjabs\\b",
+   "fix": "shots"
+  },
+  {
+   "re": "\\bjewellery\\b",
+   "fix": "jewelry"
+  },
+  {
+   "re": "\\bjudgement\\b",
+   "fix": "judgment"
+  },
+  {
+   "re": "\\bjudgements\\b",
+   "fix": "judgments"
+  },
+  {
+   "re": "\\bkerb\\b",
+   "fix": "curb"
+  },
+  {
+   "re": "\\bkerbs\\b",
+   "fix": "curbs"
+  },
+  {
+   "re": "\\bkilometre\\b",
+   "fix": "kilometer"
+  },
+  {
+   "re": "\\bkilometres\\b",
+   "fix": "kilometers"
+  },
+  {
+   "re": "\\bknackered\\b",
+   "fix": "exhausted"
+  },
+  {
+   "re": "\\blabelled\\b",
+   "fix": "labeled"
+  },
+  {
+   "re": "\\blabelling\\b",
+   "fix": "labeling"
+  },
+  {
+   "re": "\\blabour\\b",
+   "fix": "labor"
+  },
+  {
+   "re": "\\blaboured\\b",
+   "fix": "labored"
+  },
+  {
+   "re": "\\blaunderette\\b",
+   "fix": "laundromat"
+  },
+  {
+   "re": "\\blearnt\\b",
+   "fix": "learned"
+  },
+  {
+   "re": "\\blevelled\\b",
+   "fix": "leveled"
+  },
+  {
+   "re": "\\blevelling\\b",
+   "fix": "leveling"
+  },
+  {
+   "re": "\\blicence\\b",
+   "fix": "license"
+  },
+  {
+   "re": "\\blitre\\b",
+   "fix": "liter"
+  },
+  {
+   "re": "\\blitres\\b",
+   "fix": "liters"
+  },
+  {
+   "re": "\\blorries\\b",
+   "fix": "trucks"
+  },
+  {
+   "re": "\\blorry\\b",
+   "fix": "truck"
+  },
+  {
+   "re": "\\bmanoeuvre\\b",
+   "fix": "maneuver"
+  },
+  {
+   "re": "\\bmanoeuvres\\b",
+   "fix": "maneuvers"
+  },
+  {
+   "re": "\\bmanoeuvring\\b",
+   "fix": "maneuvering"
+  },
+  {
+   "re": "\\bmarvellous\\b",
+   "fix": "marvelous"
+  },
+  {
+   "re": "\\bmaths\\b",
+   "fix": "math"
+  },
+  {
+   "re": "\\bmeagre\\b",
+   "fix": "meager"
+  },
+  {
+   "re": "\\bmetre\\b",
+   "fix": "meter"
+  },
+  {
+   "re": "\\bmetres\\b",
+   "fix": "meters"
+  },
+  {
+   "re": "\\bmodelled\\b",
+   "fix": "modeled"
+  },
+  {
+   "re": "\\bmodelling\\b",
+   "fix": "modeling"
+  },
+  {
+   "re": "\\bmotorway\\b",
+   "fix": "highway"
+  },
+  {
+   "re": "\\bmotorways\\b",
+   "fix": "highways"
+  },
+  {
+   "re": "\\bmould\\b",
+   "fix": "mold"
+  },
+  {
+   "re": "\\bmouldy\\b",
+   "fix": "moldy"
+  },
+  {
+   "re": "\\bmoult\\b",
+   "fix": "molt"
+  },
+  {
+   "re": "\\bmum\\b",
+   "fix": "mom"
+  },
+  {
+   "re": "\\bmummy\\b",
+   "fix": "mommy"
+  },
+  {
+   "re": "\\bmums\\b",
+   "fix": "moms"
+  },
+  {
+   "re": "\\bnappies\\b",
+   "fix": "diapers"
+  },
+  {
+   "re": "\\bnappy\\b",
+   "fix": "diaper"
+  },
+  {
+   "re": "\\bneighbour\\b",
+   "fix": "neighbor"
+  },
+  {
+   "re": "\\bneighbourhood\\b",
+   "fix": "neighborhood"
+  },
+  {
+   "re": "\\bneighbourhoods\\b",
+   "fix": "neighborhoods"
+  },
+  {
+   "re": "\\bneighbouring\\b",
+   "fix": "neighboring"
+  },
+  {
+   "re": "\\bneighbours\\b",
+   "fix": "neighbors"
+  },
+  {
+   "re": "\\bodour\\b",
+   "fix": "odor"
+  },
+  {
+   "re": "\\boestrogen\\b",
+   "fix": "estrogen"
+  },
+  {
+   "re": "\\boffence\\b",
+   "fix": "offense"
+  },
+  {
+   "re": "\\boffences\\b",
+   "fix": "offenses"
+  },
+  {
+   "re": "\\bonwards\\b",
+   "fix": "onward"
+  },
+  {
+   "re": "\\boutwards\\b",
+   "fix": "outward"
+  },
+  {
+   "re": "\\bpaediatric\\b",
+   "fix": "pediatric"
+  },
+  {
+   "re": "\\bpaediatrician\\b",
+   "fix": "pediatrician"
+  },
+  {
+   "re": "\\bparalyse\\b",
+   "fix": "paralyze"
+  },
+  {
+   "re": "\\bparalysed\\b",
+   "fix": "paralyzed"
+  },
+  {
+   "re": "\\bparalysing\\b",
+   "fix": "paralyzing"
+  },
+  {
+   "re": "\\bparlour\\b",
+   "fix": "parlor"
+  },
+  {
+   "re": "\\bpavement\\b",
+   "fix": "sidewalk"
+  },
+  {
+   "re": "\\bpavements\\b",
+   "fix": "sidewalks"
+  },
+  {
+   "re": "\\bpetrol\\b",
+   "fix": "gas"
+  },
+  {
+   "re": "\\bplough\\b",
+   "fix": "plow"
+  },
+  {
+   "re": "\\bpractise\\b",
+   "fix": "practice"
+  },
+  {
+   "re": "\\bpractised\\b",
+   "fix": "practiced"
+  },
+  {
+   "re": "\\bpractises\\b",
+   "fix": "practices"
+  },
+  {
+   "re": "\\bpractising\\b",
+   "fix": "practicing"
+  },
+  {
+   "re": "\\bprams\\b",
+   "fix": "strollers"
+  },
+  {
+   "re": "\\bpretence\\b",
+   "fix": "pretense"
+  },
+  {
+   "re": "\\bprogramme\\b",
+   "fix": "program"
+  },
+  {
+   "re": "\\bprogrammes\\b",
+   "fix": "programs"
+  },
+  {
+   "re": "\\bpushchair\\b",
+   "fix": "stroller"
+  },
+  {
+   "re": "\\bpyjamas\\b",
+   "fix": "pajamas"
+  },
+  {
+   "re": "\\bquarrelled\\b",
+   "fix": "quarreled"
+  },
+  {
+   "re": "\\bquarrelling\\b",
+   "fix": "quarreling"
+  },
+  {
+   "re": "\\bquid\\b",
+   "fix": "dollars"
+  },
+  {
+   "re": "\\broadworks\\b",
+   "fix": "road work"
+  },
+  {
+   "re": "\\brotas\\b",
+   "fix": "schedules"
+  },
+  {
+   "re": "\\brumour\\b",
+   "fix": "rumor"
+  },
+  {
+   "re": "\\brumours\\b",
+   "fix": "rumors"
+  },
+  {
+   "re": "\\bsceptic\\b",
+   "fix": "skeptic"
+  },
+  {
+   "re": "\\bsceptical\\b",
+   "fix": "skeptical"
+  },
+  {
+   "re": "\\bscepticism\\b",
+   "fix": "skepticism"
+  },
+  {
+   "re": "\\bsceptics\\b",
+   "fix": "skeptics"
+  },
+  {
+   "re": "\\bsecateurs\\b",
+   "fix": "pruning shears"
+  },
+  {
+   "re": "\\bsellotape\\b",
+   "fix": "tape"
+  },
+  {
+   "re": "\\bsignalled\\b",
+   "fix": "signaled"
+  },
+  {
+   "re": "\\bsignalling\\b",
+   "fix": "signaling"
+  },
+  {
+   "re": "\\bskilful\\b",
+   "fix": "skillful"
+  },
+  {
+   "re": "\\bskilfully\\b",
+   "fix": "skillfully"
+  },
+  {
+   "re": "\\bskint\\b",
+   "fix": "broke"
+  },
+  {
+   "re": "\\bsmelt\\b",
+   "fix": "smelled"
+  },
+  {
+   "re": "\\bsmoulder\\b",
+   "fix": "smolder"
+  },
+  {
+   "re": "\\bsmouldering\\b",
+   "fix": "smoldering"
+  },
+  {
+   "re": "\\bsolicitor\\b",
+   "fix": "lawyer"
+  },
+  {
+   "re": "\\bsolicitors\\b",
+   "fix": "lawyers"
+  },
+  {
+   "re": "\\bsombre\\b",
+   "fix": "somber"
+  },
+  {
+   "re": "\\bspectre\\b",
+   "fix": "specter"
+  },
+  {
+   "re": "\\bspelt\\b",
+   "fix": "spelled"
+  },
+  {
+   "re": "\\bspoilt\\b",
+   "fix": "spoiled"
+  },
+  {
+   "re": "\\bstorey\\b",
+   "fix": "story"
+  },
+  {
+   "re": "\\bstoreys\\b",
+   "fix": "stories"
+  },
+  {
+   "re": "\\btakeaway\\b",
+   "fix": "takeout"
+  },
+  {
+   "re": "\\btakeaways\\b",
+   "fix": "takeouts"
+  },
+  {
+   "re": "\\bteatime\\b",
+   "fix": "dinnertime"
+  },
+  {
+   "re": "\\btelly\\b",
+   "fix": "TV"
+  },
+  {
+   "re": "\\btenner\\b",
+   "fix": "ten dollars"
+  },
+  {
+   "re": "\\btheatre\\b",
+   "fix": "theater"
+  },
+  {
+   "re": "\\btheatres\\b",
+   "fix": "theaters"
+  },
+  {
+   "re": "\\btotalled\\b",
+   "fix": "totaled"
+  },
+  {
+   "re": "\\btowards\\b",
+   "fix": "toward"
+  },
+  {
+   "re": "\\btrainers\\b",
+   "fix": "sneakers"
+  },
+  {
+   "re": "\\btravelled\\b",
+   "fix": "traveled"
+  },
+  {
+   "re": "\\btraveller\\b",
+   "fix": "traveler"
+  },
+  {
+   "re": "\\btravellers\\b",
+   "fix": "travelers"
+  },
+  {
+   "re": "\\btravelling\\b",
+   "fix": "traveling"
+  },
+  {
+   "re": "\\btunnelling\\b",
+   "fix": "tunneling"
+  },
+  {
+   "re": "\\btyre\\b",
+   "fix": "tire"
+  },
+  {
+   "re": "\\btyres\\b",
+   "fix": "tires"
+  },
+  {
+   "re": "\\bunfavourable\\b",
+   "fix": "unfavorable"
+  },
+  {
+   "re": "\\bupwards\\b",
+   "fix": "upward"
+  },
+  {
+   "re": "\\bvigour\\b",
+   "fix": "vigor"
+  },
+  {
+   "re": "\\bwaistcoat\\b",
+   "fix": "vest"
+  },
+  {
+   "re": "\\bwellies\\b",
+   "fix": "rain boots"
+  },
+  {
+   "re": "\\bwhilst\\b",
+   "fix": "while"
+  },
+  {
+   "re": "\\bwhinge\\b",
+   "fix": "whine"
+  },
+  {
+   "re": "\\bwhingeing\\b",
+   "fix": "whining"
+  },
+  {
+   "re": "\\bwilful\\b",
+   "fix": "willful"
+  },
+  {
+   "re": "\\bwindscreen\\b",
+   "fix": "windshield"
+  },
+  {
+   "re": "\\bwoollen\\b",
+   "fix": "woolen"
+  },
+  {
+   "re": "\\bgrey(?:s|ish|er|est|hound)?\\b",
+   "fix": "gray"
+  },
+  {
+   "re": "\\b(?:colour|honour|favour|humour|neighbour|labour|flavour|rumour|harbour|vigour|odour|armour|parlour|rigour|saviour|splendour|valour|clamour|glamour|endeavour|behaviour|savour|tumour|vapour|fervour)\\w*",
+   "fix": "-or"
+  },
+  {
+   "re": "\\b\\w*(?:centre|theatre|fibre|litre|metre|sombre|meagre|calibre|spectre|lustre|manoeuvre|saltpetre|reconnoitre)s?\\b",
+   "fix": "-er"
+  },
+  {
+   "re": "\\b(?:defence|offence|pretence|licence|practise|practised|practises|practising)\\w*",
+   "fix": "-se/-ce"
+  },
+  {
+   "re": "\\b(?:judgement|acknowledgement|ageing|fulfil|fulfils|fulfilment|enrolment|skilful|wilful|instil|windscreen)s?\\b",
+   "fix": "US spelling"
+  },
+  {
+   "re": "\\b(?:travell|cancell|labell|modell|fuell|signall|levell|marvell|counsell|dialled|quarrell|channell|tunnell|totall|woollen|jewell|equall|swivell|shovell|snorkell|pedall)\\w*",
+   "fix": "single l"
+  },
+  {
+   "re": "\\b[A-Za-z]{3,}(?:isation|isations)\\b",
+   "fix": "-ization"
+  },
+  {
+   "re": "\\b(?:realis|organis|apologis|recognis|criticis|prioritis|summaris|normalis|minimis|maximis|categoris|memoris|personalis|visualis|sympathis|utilis|stabilis|generalis|finalis|socialis|specialis|characteris|authoris|familiaris|energis|harmonis|mobilis|rationalis|standardis|idealis|legitimis|scrutinis|agonis|patronis|jeopardis|fantasis|hypnotis|traumatis|moralis|conceptualis|catastrophis|demonis|romanticis|internalis|externalis|polaris|sanitis|synchronis|theoris|optimis|customis|neutralis|empathis|verbalis|randomis|popularis|capitalis|itemis|mesmeris|globalis|institutionalis|hospitalis|immunis|vandalis|stigmatis|marginalis|sensitis|desensitis|legalis|centralis|decentralis|criminalis|monopolis|dramatis|economis|equalis|formalis|humanis|localis|naturalis|penalis|publicis|strategis|subsidis|symbolis|tantalis|urbanis|vaporis|womanis|scandalis|sterilis|colonis|digitalis|evangelis|fertilis|fraternis|galvanis|idolis|immortalis|mechanis|memorialis|modernis|ostracis|pasteuris|plagiaris|politicis|pressuris|privatis|proselytis|pulveris|regularis|reorganis|revitalis|satiris|sermonis|sexualis|sensationalis|signalis|solemnis|stylis|systematis|temporis|trivialis|unionis|valoris|victimis|emphasis)(?:e|ed|es|ing|er|ers|able)\\b",
+   "fix": "-ize"
+  },
+  {
+   "re": "\\b(?:analys|paralys|catalys|dialys|hydrolys)(?:e|ed|es|ing|er|ers)\\b",
+   "fix": "-yze"
+  },
+  {
+   "re": "\\b(?:catalogue|catalogues|dialogue|dialogues|analogue|prologue|epilogue|monologue)\\b",
+   "fix": "US spelling (dialog only for UI)"
+  },
+  {
+   "re": "\\b(?:aeroplane|aluminium|storey|storeys|plough|draught|draughts|pyjamas|jewellery|kilometre|manoeuvr\\w*|paediatr\\w*|anaesthe\\w*|oestr\\w*|haem\\w*|foetus|foetal|diarrhoea|oesophag\\w*|leukaemia|anaemi\\w*|encyclopaedia|orthopaedic|gynaecolog\\w*|mediaeval|archaeolog\\w*|faeces|coeliac|diarrhoea|sulphur|sulphate|tonne|tonnes|mustachio|moustache|maths|cheque|cheques|kerb|kerbs|tyre|tyres|axe|axes|sceptic\\w*|mould\\w*|smoulder\\w*|moult\\w*|cosy|cosier|cosiest|programme|programmes)\\b",
+   "fix": "US spelling"
+  },
+  {
+   "re": "\\b(?:whilst|amongst|amidst|towards|afterwards|backwards|forwards|upwards|downwards|onwards|inwards|outwards|learnt|spelt|dreamt|burnt|spoilt|smelt|leapt|knelt|dwelt|earnt|gotten hold)\\b",
+   "fix": "US form"
+  },
+  {
+   "re": "\\bmum\\b|\\bmums\\b|\\bmummy\\b|\\bmam\\b|\\bgrandad\\w*|\\bgranny\\b|\\bgran\\b|\\bnana\\b|\\bnan\\b|\\bauntie\\b",
+   "fix": "mom/grandpa/grandma/aunt"
+  },
+  {
+   "re": "\\b(?:flat|flats)\\b(?= (?:share|mate|mates|above|below|where|in|with|near|was|is)\\b)|\\b(?:our|their|her|his|your|my|a shared|a new|first|empty|small|tiny|upstairs|downstairs) flat\\b(?! (?:out|on|no|and|tone|voice|face|answer|affect|line|fee|rate|white|surface|stare|“|battery|tire))",
+   "fix": "apartment"
+  },
+  {
+   "re": "\\b(?:flatmates?|housemates?|house-?share|bedsit|maisonette)\\b",
+   "fix": "roommate / apartment"
+  },
+  {
+   "re": "\\b(?:rubbish|bin|bins|dustbin|wheelie bin|skip)\\b(?! (?:file|folder|result))",
+   "fix": "trash"
+  },
+  {
+   "re": "\\b(?:queue|queues|queued|queuing|queueing)\\b",
+   "fix": "line"
+  },
+  {
+   "re": "\\b(?:lift|lifts)\\b(?= (?:to the|up to|in the building|is broken|broke|was broken|button))|\\b(?:the|a|in the) lift\\b(?! (?:it|of|in|that|this|up|them|him|her|your|my|their|his|you|off|to|a|the|and|or|from|with|for|as|was|were|is|are|can|will|means|so|but|our|an|one|some|any|each|every|all|more|any))",
+   "fix": "elevator"
+  },
+  {
+   "re": "\\b(?:pavement|pavements|lorry|lorries|petrol|motorway|motorways|roundabout|roundabouts|dual carriageway|zebra crossing|bonnet|boot of the car|car boot|windscreen|number plate|indicator|handbrake|gear stick|learner driver|kerbside|layby|lay-by|flyover|underpass|ring road|bypass|pelican crossing|tarmac|diversion|slip road|junction)\\b",
+   "fix": "US road word"
+  },
+  {
+   "re": "\\b(?:biscuit|biscuits|sweets|crisps|chips and|takeaway|takeaways|fizzy|squash|jelly and|marmite|porridge|pudding|puddings|afters|tea time|teatime|elevenses|fry-up|full english|sausage roll|bangers|mash|chippy|chip shop|fish and chips|beans on toast|crumpet|scone|scones|jam sandwich|ribena|lemonade)\\b(?<!lemonade)",
+   "fix": "US food word"
+  },
+  {
+   "re": "\\b(?:trainers|jumper|jumpers|trousers|knickers|pants and|waistcoat|dressing gown|wellies|wellingtons|plimsolls|pinafore|anorak|cardigan|braces|vest and|tights and|nappy|nappies|dummy|cot|pram|pushchair|buggy|nursery|crèche|creche|kindergarten teacher)\\b",
+   "fix": "US clothing / baby word"
+  },
+  {
+   "re": "\\b(?:telly|mobile phone|mobile|mobiles|sat nav|satnav|postbox|post box|postcode|postman|postal|post a letter|parcel|parcels|letterbox|fortnight|fortnightly|bank holiday|half term|half-term|term time|term-time|sixth form|a-levels?|gcses?|nhs|gp|gps|a&e|uni|freshers|undergrad|headteacher|head teacher|deputy head|form tutor|reception class|year [0-9]+|primary school|secondary school|state school|public school|grammar school|comprehensive|prep school|boarding school|school run|packed lunch|dinner lady|tuck shop|playtime|break time|staff room|staffroom|caretaker|prefect|prefects|detention|swot|sixth-former)\\b(?<!sat nav)",
+   "fix": "US school / services word"
+  },
+  {
+   "re": "\\bhave a go\\b|\\bgive it a go\\b|\\bhaving a go\\b|\\bhad a go\\b",
+   "fix": "give it a try"
+  },
+  {
+   "re": "\\bat the weekend\\b|\\bat weekends\\b|\\bin hospital\\b|\\bat university\\b|\\bin future\\b|\\bstraight away\\b|\\bdifferent to\\b|\\btake a decision\\b",
+   "fix": "US phrasing"
+  },
+  {
+   "re": "\\bout of the window\\b|\\bMonday to Friday\\b|\\bten to (?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\\b|\\bhalf past\\b|\\bquarter past\\b|\\b(?:five|ten|twenty|twenty-five) past\\b|\\bquarter to\\b|\\bon a course\\b",
+   "fix": "US time / phrasing"
+  },
+  {
+   "re": "£|€|\\bpounds? sterling\\b|\\bpence\\b|\\beuros?\\b",
+   "fix": "$ only"
+  },
+  {
+   "re": "\\b(?:[01]?\\d|2[0-3]):[0-5]\\d ?(?:hrs|hours)\\b|\\b(?:1[3-9]|2[0-3]):[0-5]\\d\\b(?! ?[ap]\\.?m)",
+   "fix": "12-hour times"
+  },
+  {
+   "re": "\\b\\d{1,2}\\.\\d{2} ?(?:am|pm|a\\.m\\.|p\\.m\\.)",
+   "fix": "9:30 a.m."
+  },
+  {
+   "re": "\\b\\d{1,2}(?:st|nd|rd|th)? (?:of )?(?:January|February|March|April|May|June|July|August|September|October|November|December)\\b",
+   "fix": "October 26, 2026"
+  },
+  {
+   "re": "\\b(?:Mon|Tue|Tues|Wed|Thu|Thurs|Fri|Sat|Sun)\\.? \\d{1,2} (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b",
+   "fix": "Oct 26"
+  },
+  {
+   "re": "\\b(?:Mr|Mrs|Ms|Dr)\\b(?![.’\\'])(?= [A-Z])",
+   "fix": "Mr. Mrs. Dr. with a period"
+  },
+  {
+   "re": "\\b(?:kilometres?|kilometers?|km|kg|kilograms?|grams?|litres?|liters?|millilitres?|celsius|centigrade)\\b",
+   "fix": "miles / pounds / cups / Fahrenheit"
+  },
+  {
+   "re": "\\b\\d+ ?°C\\b|\\b\\d+ degrees C\\b",
+   "fix": "Fahrenheit"
+  },
+  {
+   "re": "\\b(?:colour|favourite|neighbour)\\b",
+   "fix": "US spelling"
+  },
+  {
+   "re": "\\b(?:cheeky|dodgy|gutted|chuffed|knackered|skint|bloke|blokes|brolly|cuppa|telly|loo|nicked|sorted out|sort it out|sorted it|reckon|reckons|reckoned|innit|bollocks|bugger|blimey|crikey|cheerio|tosh|twee|taking the mickey|take the mickey|mickey|taking the piss|faff|faffing|gormless|lark|larking|skive|skiving|swot|tosser|wanker|plonker|numpty|barmy|daft|potty|naff|spiffing|smashing|jolly good|bob\\'s your uncle|bits and bobs|odds and sods|whinge|whinging|nowt|owt|summat|ta-ra|ta ra)\\b",
+   "fix": "British slang"
+  },
+  {
+   "re": "\\bcheers\\b(?! to)",
+   "fix": "thanks"
+  },
+  {
+   "re": "\\bfootball\\b(?= (?:pitch|boots|match|club|team|fan|fans|ground|stadium|season))|\\bthe footie\\b|\\bfooty\\b",
+   "fix": "soccer"
+  },
+  {
+   "re": "\\b(?:washing-up|washing up|the washing|washing line|tumble dryer|hoover|hoovering|kitchen roll|bin bag|hob|cooker hood|fitted sheet|duvet|duvets|eiderdown|airing cupboard|boiler|immersion|radiator|skirting|loft|garage forecourt|front garden|back garden|garden shed|allotment|patio doors|french windows|conservatory|semi-detached|terraced|bungalow|council house|council flat|estate agent|letting agent|landlady|tenancy|deposit protection|freehold|leasehold|stamp duty|mortgage advisor)\\b",
+   "fix": "US home word"
+  },
+  {
+   "re": "\\b(?:high street|town centre|city centre|shopping centre|car park|carpark|pub|pubs|off-licence|offie|chemist|chemists|newsagent|newsagents|greengrocer|fishmonger|ironmonger|corner shop|post office|launderette|dry cleaner\\'s|cash machine|cashpoint|hole in the wall|till|tills|checkout girl|shop assistant|shopkeeper|shopping trolley|carrier bag|carrier bags|bag for life|tin|tins|jar of|packet|packets|tube of|bin liner|cling film|tin foil|greaseproof|baking tray|roasting tin|cake tin|swiss roll|cling-film)\\b(?<!till)",
+   "fix": "US shop word"
+  }
+ ],
+ "ai": [
+  {
+   "re": "\\bA\\.? ?I\\.?(?![\\w.])(?<!\\bA\\.I)",
+   "cs": true
+  },
+  {
+   "re": "\\bAIs?\\b",
+   "cs": true
+  },
+  {
+   "re": "\\bA\\.I\\.",
+   "cs": true
+  },
+  {
+   "re": "artificial[- ]intelligence|machine[- ]learning|deep[- ]learning|language[- ]models?|large language|\\bLLMs?\\b|chat ?bots?|\\bbots?\\b|ChatGPT|\\bGPT\\b|\\bGPT-?\\d|OpenAI|Anthropic|Claude(?![a-z])(?! Steele)|Gemini|Copilot|Midjourney|DALL.?E|Stable Diffusion|neural (?:net|network|networks)|generative|auto-?generated|computer[- ]generated|generated by|synthetic|synthesi[sz]ed (?:voice|speech)|text[- ]to[- ]speech|\\bTTS\\b|deepfake|\\balgorithms?\\b|robotic voice|virtual assistant|smart assistant"
+  }
+ ],
+ "calling": [
+  {
+   "re": "\\b911\\b|\\b999\\b|\\b112\\b(?! px)|\\b988\\b|\\b0?800[ -]?\\d"
+  },
+  {
+   "re": "\\bemergency (?:number|numbers|services?|room|rooms|department|line|contact|hotline|call|calls|helpline|dispatch)\\b|\\bER\\b(?= (?:visit|doctor))|\\bambulance\\b|\\bparamedics?\\b|\\bpolice\\b(?= (?:station|officer|report|number))"
+  },
+  {
+   "re": "\\bhot ?lines?\\b|\\bcrisis (?:line|lines|text|chat|service|services|center|centre|team|hotline|counselor|counsellor)\\b|\\bhelp ?lines?\\b|\\bwarm ?lines?\\b|\\btext line\\b|\\bchat line\\b|\\bsupport line\\b|\\bsamaritans\\b|\\b(?:Lifeline|Childline|Crisis Text|Trevor Project|Trans Lifeline)\\b"
+  },
+  {
+   "re": "\\bdial(?:s|ed|ing|led|ling)?\\b(?! (?:in|up|down|back|it up)\\b)(?!ogue)"
+  },
+  {
+   "re": "\\b(?:call|phone|ring|telephone|text|dial)(?:s|ed|ing)? (?:a |an |the |your |my |their |someone |somebody |anyone |any |one of |them |him |her |us |me |for |to get |to ask for )?(?:friend|friends|family|relative|sibling|sister|brother|parent|mom|dad|mother|father|doctor|dr|gp|therapist|counselor|counsellor|nurse|clinic|pharmacist|lawyer|attorney|someone you trust|someone you know|someone close|someone safe|someone who|a trusted|a loved one|your loved|a professional|a crisis|a support|support|help|helpline|hotline|emergency|police|ambulance|the police|911|a number|the number|your gp)\\b"
+  },
+  {
+   "re": "\\b(?:call|phone|ring|dial|text)(?:s|ed|ing)? (?:for|to get|and ask for|to ask for) (?:help|support|advice|backup)\\b|\\bcall (?:for|out for) help\\b|\\bask for help by (?:calling|phoning|texting)\\b|\\breach out by (?:phone|text|calling)\\b|\\bgive (?:them|him|her|someone|a friend) a call\\b|\\bgive (?:them|him|her) a ring\\b|\\bphone a friend\\b|\\bcall a friend\\b|\\bcall your (?:doctor|therapist|mom|dad|sister|brother)\\b|\\bcall someone (?:you|who)\\b"
+  }
+ ],
+ "researchers": [],
+ "firstNames": [],
+ "headingNotNames": [],
+ "characters": []
+}

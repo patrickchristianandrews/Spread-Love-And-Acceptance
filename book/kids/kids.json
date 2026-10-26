@@ -30,8 +30,8 @@
   "chapter-book": {
    "title": "Turn Down the Static",
    "trim_in": [
-    6,
-    9
+    6.0,
+    9.0
    ],
    "paper": "white",
    "chapters": 11,

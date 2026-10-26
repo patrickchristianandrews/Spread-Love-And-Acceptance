@@ -138,7 +138,7 @@ def md_title(t):
     row('Edition number', '1')
     row('Author', 'Christian (first name only, as on the cover) [OWNER]', 'Christian')
     row('Publisher / imprint', 'Nothing to type: with a free KDP ISBN, KDP shows "Independently published"', 'Leave blank')
-    row('Contributors', 'None. (How the text and pictures were made goes in "AI disclosure", not here.)', 'None')
+    row('Contributors', 'None', 'None')
     row('Publishing rights', '"I own the copyright and I hold the necessary publishing rights."')
     row('Primary audience', 'Sexually explicit images or title: **No**. Reading age: **%d to %d**. Grade range (if asked): %s.' % (t['ages'][0], t['ages'][1], t['grades']))
     row('Primary marketplace', 'Amazon.com')
@@ -167,9 +167,11 @@ def md_title(t):
     A('')
     A('No other authors, brands or claims like "best" or "new". Words already in the title and series are left out. [OWNER]')
     A('')
-    A('### Content details: AI disclosure (KDP requires an answer)')
+    A('### PRIVATE UPLOAD NOTE: the KDP form question about AI use')
     A('')
-    A('KDP asks whether AI-based tools were used to create the **text**, the **images**, or **translations**. KDP\'s definitions: *AI-generated* means an AI-based tool created the content, even if you edited it afterward (this must be disclosed). *AI-assisted* means you created it and used AI to edit, check or brainstorm (this does not need to be disclosed).')
+    A('**Answer this in the KDP form. It is not printed in the book, on the cover or on the product page, and it is not shown on the site.** Keep this section out of anything readers see.')
+    A('')
+    A('KDP asks whether AI-based tools were used to create the **text**, the **images**, or **translations**. KDP\'s own definitions: content created by an AI-based tool counts as AI-generated even if you edited it afterward (it must be disclosed), and content you created yourself and only checked or improved with AI is AI-assisted (it does not need to be disclosed).')
     A('')
     A('Honest answers for this title, as it was made [OWNER: confirm; only you know how much you changed by hand]:')
     A('')
@@ -184,7 +186,7 @@ def md_title(t):
     A('| Images | **Yes, AI-generated** | Every picture is drawn by a program (SVG drawn by code in the style of the site\'s characters). The program was written with an AI tool and nobody drew the pictures by hand. Say so even though no image model was used: an AI-based tool created the work. |')
     A('| Translations | **No** | English only. |')
     A('')
-    A('The answers are seen by Amazon, not printed on the product page. The copyright page says the same thing in plain words, so the book and the form agree.')
+    A('The answers are seen by Amazon only. The books themselves say nothing about how they were made, so the form is the one place this is stated. Answer it truthfully.')
     A('')
     A('### Print details')
     A('')
@@ -267,8 +269,8 @@ def listing():
              '- **Order a proof copy of every paperback before you publish.** Check the color (picture book), the bleed edges, the margins, the blank backs and the spine.',
              '- **The picture book needs premium color.** It has 40 pages, and KDP\'s standard color starts at 72. The other three are black ink, so the interiors are plain grays and black.',
              '- **The coloring books are print only.** The picture book and the chapter book also have Kindle files (EPUB).',
-             '- **The text is American English** (checked by tools/kids/lint_kids.py against the site\'s language rules: no dashes as punctuation, no semicolons, no "not X but Y" frames, no British spellings, no hotlines or referral lines).',
-             '- **How it was made is stated plainly** on each copyright page and in the AI disclosure below. Nothing in the listings claims a human wrote or drew what a program did.',
+             '- **The text is American English** (checked by tools/kids/lint_kids.py and tools/kids/us_audit.py against the site\'s language rules: no dashes as punctuation, no semicolons, no "not X but Y" frames, no British spellings or words, no hotline, emergency or call-for-help wording, no names of experts, no names in headings).',
+             '- **One private note.** Each title has a section called "PRIVATE UPLOAD NOTE: the KDP form question about AI use". It tells you what to answer in Amazon\'s own form. Nothing in the books, the covers, the descriptions or the site mentions it.',
              '', '---', '']
     totals = {}
     for t in TITLES:

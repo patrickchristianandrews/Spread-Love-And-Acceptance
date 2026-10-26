@@ -23,8 +23,8 @@ It had come back to life all afternoon.
 Mateo: i messed up today. i was trying to help and i made it worse
 Mateo: wren if you're reading this im sorry. you can pick whatever job you want. you can pick ALL the jobs
 Josie: nobody has to pick all the jobs lol
-Imani: matty its ok
-Imani: we all got loud. wren is it ok if we call you tomorrow
+Imani: matty its okay
+Imani: we all got loud. wren is it okay if we talk to you tomorrow
 :::
 
 Her eyes burned. There was a lump in her throat the size of a walnut. She had wanted so badly for them to say this. And now they had, and all she could think was that she'd been unfair, and everybody had seen it, and maybe they'd say it was okay only because they felt sorry for her.
@@ -57,7 +57,7 @@ Buzz. Josie had sent a heart.
 
 Buzz. Mateo, a sad face with a tear.
 
-Buzz. Imani: *so can we call tmrw??*
+Buzz. Imani: *so can we talk tmrw??*
 
 Each one made a little pulse of blue on the ceiling. Wren watched her own hands tremble. Under the covers it was too hot, but she didn't want to move. *Just one more. I just have to say the right thing.* She did not know what the right thing was, and the harder she looked for it, the more it slid away.
 
