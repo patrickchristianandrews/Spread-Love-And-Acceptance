@@ -479,8 +479,8 @@ def copyright_page(book, workbook=False, bw=False):
     s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
           'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % (what, esc(SERIES_TITLE))
-    s += ('<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a '
-          'replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>')
+    s += '<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis or a treatment, and it can’t know your situation.</p>'
+    s += HOW_MADE
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
         s += ('<p>The research the chapters mention is listed briefly at the back. The full list, with what each study found and links, is at '
@@ -490,6 +490,8 @@ def copyright_page(book, workbook=False, bw=False):
 
 
 MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
+# book26: the same two sentences as the KDP listing's AI disclosure (Text: drafted with AI writing tools, reviewed and edited many times; Images: drawn by code written with an AI tool)
+HOW_MADE = '<p><strong>How it was made.</strong> The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The pictures were drawn by code that was written with an AI tool.</p>'
 
 
 def meet_page(book, found=()):

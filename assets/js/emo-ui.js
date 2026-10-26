@@ -4,12 +4,15 @@
 
    localStorage key: tol-emo-v1  { sessions: [ { id, at, path, ans, edits, art, planEd, seed } ] }
    It is written only when someone taps "Save this session on this device". "Delete" and "Delete all" remove it.
-   Nothing else is stored: unfinished answers live in the page and go when it closes. */
+   Unfinished answers live in the page and go when it closes, unless the person taps "Save my place" on a question:
+   then the answers so far (never the words typed into a box) are kept in tol-emo-draft-v1 { v, at, path, cur, hist, ans }
+   so the start screen can offer "Pick up your questions". It is removed when the questions are finished, or with
+   "Delete the saved questions", or by erasing the site's data. */
 (function () {
   'use strict';
   var E = window.EMO_ENGINE, ART = window.EMO_ART, app = document.getElementById('emo-app');
   if (!E || !app) return;
-  var D = E.D, KEY = 'tol-emo-v1', MAXS = 20;
+  var D = E.D, KEY = 'tol-emo-v1', DRAFT = 'tol-emo-draft-v1', MAXS = 20;
   var NAMES = ['Blue', 'Teal', 'Green', 'Olive', 'Gold', 'Orange', 'Red', 'Rose', 'Purple', 'Brown', 'Gray', 'Navy'];
   var STAGE = {}; D.stages.forEach(function (s) { STAGE[s.id] = s; });
   var S = null, first = true, store = load(), compare = null;
@@ -20,6 +23,14 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   function load() { try { var o = JSON.parse(lsGet(KEY) || 'null'); if (o && Array.isArray(o.sessions)) return o; } catch (e) {} return { sessions: [] }; }
   function save() { if (!store.sessions.length) { try { localStorage.removeItem(KEY); } catch (e) {} return true; } return lsSet(KEY, JSON.stringify(store)); }
+  function draft() {
+    try {
+      var d = JSON.parse(lsGet(DRAFT) || 'null');
+      if (!d || d.v !== 1 || (d.path !== 'quick' && d.path !== 'thorough') || !d.ans || typeof d.ans !== 'object' || !E.SCREEN[d.cur] || !Array.isArray(d.hist)) return null;
+      return d;
+    } catch (e) { return null; }
+  }
+  function dropDraft() { try { localStorage.removeItem(DRAFT); } catch (e) {} }
   function $(sel, root) { return (root || app).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || app).querySelectorAll(sel)); }
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
@@ -55,6 +66,9 @@
         '<button type="button" class="emo-btn" data-act="start" data-path="quick"><span>The quick version</span><small>About 3 minutes</small></button>' +
         '<button type="button" class="emo-btn is-quiet" data-act="start" data-path="thorough"><span>The thorough version</span><small>Up to 8 minutes</small></button>' +
       '</div>' +
+      (draft() ? '<div class="emo-row"><button type="button" class="emo-btn" data-act="pick-up">Pick up your questions</button>' +
+        '<button type="button" class="emo-btn is-quiet" data-act="draft-del">Delete the saved questions</button></div>' +
+        '<p class="emo-help" id="emo-dmsg" role="status">Saved on this device when you tapped “Save my place.” Only your taps are kept, never the words you typed.</p>' : '') +
       (n ? '<p class="emo-row is-end"><button type="button" class="emo-btn is-quiet" data-act="hist">Past sessions on this device (' + n + ')</button></p>' : '') +
       '</div>';
   }
@@ -110,7 +124,8 @@
       '<button type="button" class="emo-btn" data-act="next">' + (isLast ? 'See what I’m hearing' : 'Continue') + '</button>' +
       '<button type="button" class="emo-btn is-quiet" data-act="idk">I don’t know</button>' +
       '<button type="button" class="emo-btn is-quiet" data-act="skip">Skip</button></div>';
-    h += '<p class="emo-row is-end"><button type="button" class="emo-btn is-link" data-act="stop">Stop and see what we have</button></p>';
+    h += '<p class="emo-row is-end"><button type="button" class="emo-btn is-link" data-act="stop">Stop and see what we have</button> ' +
+      '<button type="button" class="emo-btn is-link" data-act="keep">Save my place and come back later</button></p><p class="emo-help" id="emo-keepmsg" role="status"></p>';
     return h + '</div>';
   }
   function collect(sc) {
@@ -130,7 +145,7 @@
     S.ans[id] = v;
     if (text) S.ans[id + ':t'] = text; else delete S.ans[id + ':t'];
     S.hist.push(id); S.cur = E.nextScreen(S, id); prune();
-    if (!S.cur) S.phase = 'map';
+    if (!S.cur) { S.phase = 'map'; dropDraft(); }
     render();
   }
   function harmCheck() {
@@ -379,7 +394,19 @@
     next: function () { var c = collect(E.SCREEN[S.cur]); answer(c.v, c.text); },
     idk: function () { var c = collect(E.SCREEN[S.cur]); answer('idk', ''); void c; },
     skip: function () { answer('skip', ''); },
-    stop: function () { var sc = E.SCREEN[S.cur], c = collect(sc); if (c.v !== 'skip') { S.ans[S.cur] = c.v; if (c.text) S.ans[S.cur + ':t'] = c.text; } S.hist.push(S.cur); S.cur = null; S.phase = 'map'; render(); },
+    stop: function () { var sc = E.SCREEN[S.cur], c = collect(sc); if (c.v !== 'skip') { S.ans[S.cur] = c.v; if (c.text) S.ans[S.cur + ':t'] = c.text; } S.hist.push(S.cur); S.cur = null; S.phase = 'map'; dropDraft(); render(); },
+    keep: function () {
+      var sc = E.SCREEN[S.cur], c = collect(sc), ans = {};
+      if (c.v !== 'skip') S.ans[S.cur] = c.v;
+      Object.keys(S.ans).forEach(function (k) { if (!/:t$/.test(k)) ans[k] = S.ans[k] === 'text' ? 'skip' : S.ans[k]; });   // never the words typed into a box
+      var ok = lsSet(DRAFT, JSON.stringify({ v: 1, at: new Date().toISOString(), path: S.path, cur: S.cur, hist: S.hist.slice(), ans: ans }));
+      say('emo-keepmsg', ok ? 'Saved on this device. Close this page whenever you like. The start screen will offer “Pick up your questions.”' : 'Your browser wouldn’t let this page save. Nothing was kept.');
+    },
+    'pick-up': function () {
+      var d = draft(); if (!d) { render(); return; }
+      S = newSession(d.path); S.ans = d.ans; S.hist = d.hist.filter(function (id) { return E.SCREEN[id]; }); S.cur = d.cur; compare = null; render();
+    },
+    'draft-del': function () { dropDraft(); render(); },
     'back-q': function () { if (!S.hist.length) return; S.cur = S.hist.pop(); S.phase = 'ask'; render(); },
     confirm: function (t) { var id = t.closest('[data-id]').getAttribute('data-id'); (S.edits.items[id] = S.edits.items[id] || {}).cat = 'confirmed'; S.keepScroll = true; render(); },
     edit: function (t) { S.editing = t.closest('[data-id]').getAttribute('data-id'); S.focus = '#emo-ed'; S.keepScroll = true; render(); },

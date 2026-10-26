@@ -252,8 +252,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -443,7 +443,7 @@ def main():
             md.append('### Kindle extras\n')
             md.append('| Field | Answer |\n|---|---|')
             ep = EPUB.get(bid, {})
-            what = {'pocket': '%d sections, %d situations' % (ep.get('chapters') or 0, len(POCKET['items'])), 'boxset': '5 books, %d chapters and sections' % (ep.get('chapters') or 0)}.get(kind, '%d chapters' % len(item.get('chapters', [])))
+            what = {'pocket': '%d sections, %d situations' % (ep.get('chapters') or 0, len(POCKET['items'])), 'boxset': '5 books, %d chapters and sections' % (ep.get('chapters') or 0)}.get(kind, series_site.chap_label(item))
             md.append('| Manuscript (ebook) file | **book/print/epub/%s.epub** (EPUB 3, reflowable, %.2f MB, %s%s). Made by tools/book/build_epub.py. |' % (
                 bid, k_mb, what, ('; EPUBCheck: ' + ep['epubcheck']['summary']) if (ep.get('epubcheck') or {}).get('summary') else ''))
             md.append('| Kindle cover file | book/print/cover-%s-kindle.jpg (%s, the %s; also inside the EPUB) |' % (

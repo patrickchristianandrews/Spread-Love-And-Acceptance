@@ -262,6 +262,12 @@
     }
     return null;
   }
+  // where the top of the page would sit for a place (resume.js scrolls there itself, smoothly)
+  function spotTop(s) {
+    var b = spotEl(s);
+    if (b) return Math.max(0, absTop(b) - barBottom() - 18);
+    return s && typeof s.f === 'number' ? Math.max(0, s.f * Math.max(0, D.documentElement.scrollHeight - window.innerHeight)) : null;
+  }
   function goSpot(s, opts) {
     opts = opts || {};
     var b = spotEl(s), top;
@@ -870,7 +876,7 @@
     D.head.appendChild(l);
   }
   window.TOLSaved = { list: list, find: find, isSaved: isSaved, save: save, remove: remove, setNote: setNote, notesOf: notesOf, addNote: addNote, editNote: editNote, deleteNote: deleteNote, renderDots: renderDots, lastRead: lastRead, lastAll: lastAll,
-    spotNow: spotNow, goSpot: goSpot, typeOf: typeOf, cleanUrl: cleanUrl, renderList: renderList, openNote: openNote, KEYS: { saved: KEY, last: LAST, tip: TIP, how: HOW } };
+    spotNow: spotNow, goSpot: goSpot, spotTop: spotTop, typeOf: typeOf, cleanUrl: cleanUrl, renderList: renderList, openNote: openNote, KEYS: { saved: KEY, last: LAST, tip: TIP, how: HOW } };
   function start() {
     css(function () {
       var tries = 0;
@@ -884,6 +890,8 @@
         try { howLine(); } catch (e) {}
         try { dotsSetup(); } catch (e) {}
         setTimeout(maybeTip, 2500);
+        // "Continue where you left off" (resume.js) is loaded here so it runs on every page the Save button does
+        if (!window.TOLResume && !D.querySelector('script[src^="/assets/js/resume.js"]')) { var rs = D.createElement('script'); rs.src = '/assets/js/resume.js'; rs.async = true; D.head.appendChild(rs); }
       })();
     });
   }

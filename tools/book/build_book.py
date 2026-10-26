@@ -299,7 +299,7 @@ INDEX_TERMS = [
     ('grandparents', r'grandparents?|grandmother|grandfather|grandchild(?:ren)?|grandson|granddaughter'), ('roommates', r'roommates?|housemates?|flatmates?'),
     ('in-laws', r'in-laws?'), ('kinship care', r'kinship'), ('managers', r'managers?'), ('marriage', r'marri(?:age|ed)'),
     ('more than two partners', r'triads?|more than two partners|three partners'), ('mothers, moms', r'mothers?|moms?|mums?'), ('moving in', r'moving in|move in'),
-    ('neighbours', r'neighbours?'), ('parents', r'parents?|parenting'), ('partners', r'partners?'), ('siblings', r'siblings?|brothers?|sisters?'),
+    ('neighbors', r'neighbou?rs?'), ('parents', r'parents?|parenting'), ('partners', r'partners?'), ('siblings', r'siblings?|brothers?|sisters?'),
     ('single, living alone', r'living alone|lives alone|on your own|on my own'), ('step-parents', r'step-parents?|stepparents?|stepmum|stepdad'),
     ('teenagers', r'teen(?:s|ager|agers)?|teenage'), ('work, the workplace', r'workplace|at work|office'),
     # situations
@@ -978,7 +978,8 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p><em>{ST}</em>: %s, %s.<br>By %s. Published by Spread Love &amp; Acceptance.</p>
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
 <p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “{ST}, spreadloveandacceptance.com” and don’t change it or sell it.</p>
-<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis, treatment or a replacement for help from a doctor, counselor or other trained professional, and it can’t know your situation.</p>
+<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis or a treatment, and it can’t know your situation.</p>
+<p><strong>How it was made.</strong> The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The pictures were drawn by code that was written with an AI tool.</p>
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>

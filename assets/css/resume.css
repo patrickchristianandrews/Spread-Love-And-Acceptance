@@ -1,0 +1,63 @@
+/* resume.css: "Continue where you left off" (resume.js, this-week.js). The "Also" links and the privacy line inside the
+   Welcome back panel, the "Where you left off" list on /this-week.html, the small "Back where you were" note on a chapter or
+   guide, and the "Resume at 4:12" bar above the Frequency Buddies player.
+   Light colors only: the site's dark mode turns the whole page (site.css), so these follow it. 44px targets, no motion
+   beyond a color change. */
+.rs-where, .rs-note, .rs-ep, .tw-back{
+  --rs-ink:#2B2620; --rs-muted:#554E42; --rs-acc:#2B5B8C; --rs-acc-h:#214A72; --rs-soft:#EEF3F9; --rs-paper:#FFFDF8; --rs-line:#E4D9BE;
+  --rs-ui:var(--d17-ui, var(--tol-sans, "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif));
+  --rs-read:"Lora", Georgia, serif; --rs-head:"Fraunces", Georgia, serif;
+}
+
+/* ---------- inside the Welcome back panel ---------- */
+html body .tw-back a.tw-btn.rs-cont{ justify-content:flex-start; text-align:left; border-radius:22px; padding:.5rem 1.05rem; max-width:100%; flex:0 1 auto; overflow-wrap:anywhere; }
+html body .tw-back ul.rs-also{ list-style:none; margin:.15rem 0 .2rem; padding:.35rem 0 0; border-top:1px dashed var(--rs-line); display:grid; gap:0; }
+html body .tw-back ul.rs-also li.rs-also-i{ display:grid; grid-template-columns:auto minmax(0, 1fr) auto; align-items:center; gap:0 .55rem; margin:0; padding:0 0 .25rem; max-width:none; background:none; border:0; font:400 .95rem/1.35 var(--rs-ui); color:var(--rs-ink); }
+html body .tw-back ul.rs-also li.rs-also-i::before{ content:none !important; }
+html body .tw-back .rs-also-k{ font-weight:700; color:var(--rs-muted); }
+html body .tw-back .rs-also-a{ display:inline-flex; align-items:center; min-height:44px; font-weight:700; color:var(--rs-acc); text-underline-offset:3px; overflow-wrap:anywhere; }
+html body .tw-back .rs-also-d{ grid-column:2 / 4; margin-top:-.45rem; color:var(--rs-muted); font-size:.9rem; }
+html body .tw-back ul.rs-also li.is-plain .rs-also-a{ grid-column:2 / 4; }
+html body .tw-back p.rs-priv{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .7rem; margin:0; padding-top:.2rem; border-top:1px dashed var(--rs-line); font:400 .92rem/1.4 var(--rs-ui); color:var(--rs-muted); }
+html body button.rs-x{ display:inline-flex; align-items:center; min-height:44px; padding:0; border:0; background:none; cursor:pointer; font:700 .92rem/1.2 var(--rs-ui); color:var(--rs-acc); text-decoration:underline; text-underline-offset:3px; }
+html body button.rs-x:hover{ color:var(--rs-acc-h); }
+.rs-where a:focus-visible, .rs-where button:focus-visible, .rs-note a:focus-visible, .rs-note button:focus-visible, .rs-ep button:focus-visible, .tw-back button.rs-x:focus-visible, .tw-back a.rs-also-a:focus-visible{ outline:3px solid var(--rs-acc); outline-offset:2px; border-radius:10px; }
+
+/* ---------- /this-week.html: Where you left off ---------- */
+.rs-where{ color:var(--rs-ink); }
+.rs-where .rs-lede, .rs-where .rs-fine{ max-width:60ch; margin:0 0 .6rem; font:400 1rem/1.5 var(--rs-read); color:var(--rs-muted); }
+.rs-where .rs-fine{ font:400 .92rem/1.5 var(--rs-ui); margin:.2rem 0 0; }
+.rs-where .rs-fine a{ color:var(--rs-acc); text-underline-offset:3px; }
+.rs-where ul.rs-list{ list-style:none; margin:0; padding:0; display:grid; gap:.55rem; max-width:44rem; }
+.rs-where li.rs-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.3rem .8rem; margin:0; padding:.6rem .85rem; background:var(--rs-paper); border:1px solid var(--rs-line); border-radius:16px; max-width:none; }
+.rs-where li.rs-row::before{ content:none !important; }
+.rs-where .rs-row-main{ display:grid; gap:.1rem; flex:1 1 14rem; min-width:0; }
+.rs-where .rs-row-t{ font:700 1.02rem/1.3 var(--rs-ui); color:var(--rs-ink); overflow-wrap:anywhere; }
+.rs-where .rs-row-d{ font:400 .92rem/1.4 var(--rs-ui); color:var(--rs-muted); }
+.rs-where .rs-row-acts{ display:flex; align-items:center; gap:.4rem; }
+.rs-where .rs-foot{ margin:.3rem 0 0; }
+.rs-where .rs-say{ margin:.3rem 0 0; font:400 .95rem/1.4 var(--rs-ui); color:var(--rs-muted); }
+.rs-where .rs-say:empty{ display:none; }
+.rs-where .rs-say:focus{ outline:none; }
+
+/* ---------- "Back where you were" (a chapter or guide that scrolled back) ---------- */
+.rs-note{ position:fixed; left:50%; top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 64px)) + .6rem); transform:translateX(-50%); z-index:984;
+  display:flex; align-items:center; gap:.3rem; width:max-content; max-width:calc(100vw - 24px); padding:.2rem .35rem .2rem 1rem; border-radius:999px;
+  background:rgba(234,241,249,.98); border:1.5px solid #9DB9D8; box-shadow:0 8px 24px rgba(36,66,94,.16); color:var(--rs-ink); font:400 .95rem/1.3 var(--rs-ui); }
+.rs-note .rs-note-t{ display:flex; flex-wrap:wrap; align-items:center; gap:0 .5rem; }
+.rs-note .rs-note-b{ min-height:44px; padding:0 .8rem; border:0; background:none; cursor:pointer; font:700 .95rem/1.2 var(--rs-ui); color:var(--rs-acc); text-decoration:underline; text-underline-offset:3px; }
+.rs-note .rs-note-x{ flex:none; width:44px; height:44px; border:0; background:none; cursor:pointer; font:400 1.4rem/1 var(--rs-ui); color:var(--rs-muted); border-radius:50%; }
+@media (max-width:420px){ .rs-note{ border-radius:18px; } }
+
+/* ---------- Frequency Buddies: Resume at 4:12 ---------- */
+.rs-ep{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .7rem; box-sizing:border-box; max-width:60rem; margin:0 0 .7rem; padding:.55rem .9rem; border-radius:16px; background:var(--rs-paper); border:1px solid var(--rs-line); border-left:4px solid var(--rs-acc); color:var(--rs-ink); font:400 1rem/1.4 var(--rs-ui); }
+.rs-ep .rs-ep-t{ flex:1 1 14rem; }
+.rs-ep button{ min-height:44px; padding:.4rem 1rem; border-radius:999px; cursor:pointer; font:700 1rem/1.2 var(--rs-ui); }
+.rs-ep .rs-ep-go{ color:#FFFFFF; background:var(--rs-acc); border:1.5px solid var(--rs-acc); }
+.rs-ep .rs-ep-go:hover{ background:var(--rs-acc-h); border-color:var(--rs-acc-h); }
+.rs-ep .rs-ep-top{ color:#22496F; background:var(--rs-paper); border:1.5px solid var(--rs-acc); }
+.rs-ep .rs-ep-top:hover{ background:var(--rs-soft); }
+
+/* ---------- Quiet mode and a still page: the same words, no movement ---------- */
+html.tol-quiet .rs-note, html.tol-still .rs-note{ transition:none !important; }
+@media (prefers-reduced-motion: reduce){ .rs-where *, .rs-note, .rs-ep *{ transition:none !important; animation:none !important; } }
