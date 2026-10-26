@@ -817,7 +817,7 @@
     // the same questions for a team (a short stand-up) or for housemates
     var oth = null;
     if (sec.others && sec.others.length) {
-      oth = h('details', { className: 'wpf-tonight-others' }, [h('summary', { text: 'Doing this as a team, or with housemates?' })]);
+      oth = h('details', { className: 'wpf-tonight-others' }, [h('summary', { text: 'Doing this as a team, or with roommates?' })]);
       sec.others.forEach(function (o) { oth.appendChild(h('p', { className: 'wpf-help' }, [h('strong', { text: o[0] + ': ' }), o[1]])); });
     }
     var grid = h('div', { className: 'wpf-tonight-people' });
@@ -846,7 +846,7 @@
       grid.appendChild(fs);
     });
     box.appendChild(grid);
-    // tools16: "Doing this as a team, or with housemates?" comes after the boxes, so the first box is higher up
+    // tools16: "Doing this as a team, or with roommates?" comes after the boxes, so the first box is higher up
     if (oth) box.appendChild(oth);
     if (three) box.appendChild(h('div', { className: 'wpf-share-btns' }, [h('button', { type: 'button', className: 'wpf-add', 'data-action': 'tonight-copy', 'data-table': sec.id, text: 'Copy tonight\u2019s answers' })]));
     return box;
@@ -2665,7 +2665,7 @@
       },
       foster: {
         h1: 'One owner per job: caring for a child in care', title: 'One owner per job: caring for a child in care',
-        lede: 'Who owns which job when you care for a child or young person: the meetings, the logs, contact and the being-there afterwards, as well as the everyday jobs. Give each one an owner, or decide it together, so the hidden work is on the list too.',
+        lede: 'Who owns which job when you care for a child or young person: the meetings, the logs, contact and the being-there afterward, as well as the everyday jobs. Give each one an owner, or decide it together, so the hidden work is on the list too.',
         note: 'Start with the jobs that come with a child in care, then add the everyday ones from the task library below. Agreeing house rules with a young person? Add them from \u201cHouse rules for us\u201d: each needs someone who keeps to it, but rules aren\u2019t counted as load. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
         fridge: 'Who owns what', hrsCol: true,
         rows: [['Social worker visits', Mo], ['Reviews and meetings', AN], ['Daily log and placement paperwork', D], ['Contact visits and calls with their family', Wk], ['School liaison (designated teacher, plans)', AN], ['Being there after contact', AN], ['Health and therapy appointments', AN], ['Training and support group', Mo]]
@@ -2687,10 +2687,10 @@
       },
       care: {
         h1: 'One owner per job: sharing the care', title: 'One owner per job: sharing the care',
-        lede: 'Who owns each part of the care when one of you looks after the other: medicines, appointments, paperwork, the nights, and a break for the main carer. Give each one an owner (grown-up children and friends can own jobs too), so nobody has to ask twice.',
+        lede: 'Who owns each part of the care when one of you looks after the other: medicines, appointments, paperwork, the nights, and a break for the main caregiver. Give each one an owner (grown-up children and friends can own jobs too), so nobody has to ask twice.',
         note: 'Fill it in together with whoever shares the care. This is about who owns each job. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Caring for a husband, wife or partner.',
         fridge: 'Who owns what in the care', hrsCol: true,
-        rows: [['Medicines and the pill box (as the care team directs)', Wk], ['Book and go along to medical appointments', AN], ['Insurance and paperwork', Mo], ['Night care and night-time calls', D], ['Sunday call with the family', Wk], ['Book respite: a break for the main carer', Mo], ['Pick up prescriptions', AN], ['Groceries and meals', Wk]],
+        rows: [['Medicines and the pill box (as the care team directs)', Wk], ['Book and go along to medical appointments', AN], ['Insurance and paperwork', Mo], ['Night care and night-time calls', D], ['Sunday call with the family', Wk], ['Book respite: a break for the main caregiver', Mo], ['Pick up prescriptions', AN], ['Groceries and meals', Wk]],
       },
       ill: {
         h1: 'One owner per job, with a bad-day backup', title: 'One owner per job, with a bad-day backup',

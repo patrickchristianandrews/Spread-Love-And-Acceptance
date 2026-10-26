@@ -341,6 +341,52 @@
     "housemates"
    ],
    "why": "Search keyword list that also holds roommates."
+  },
+  {
+   "file": "library/communication.html",
+   "rule": "british",
+   "hits": [
+    "daft"
+   ],
+   "why": "Richard Daft, the researcher (a surname)."
+  },
+  {
+   "file": "tools/library/entries/03-communication.txt",
+   "rule": "british",
+   "hits": [
+    "daft"
+   ],
+   "why": "Richard Daft, the researcher (a surname)."
+  },
+  {
+   "file": "tools/research/",
+   "rule": "british",
+   "hits": [
+    "behaviour",
+    "behavioural",
+    "behaviours",
+    "catalogue",
+    "daft",
+    "generalised",
+    "mate",
+    "modelling",
+    "nhs",
+    "randomised",
+    "reanalysing",
+    "signalling",
+    "uni",
+    "ageing",
+    "industrialised",
+    "fibres",
+    "honours",
+    "humour",
+    "amongst",
+    "quarter to",
+    "organisational",
+    "28 may",
+    "acknowledgements"
+   ],
+   "why": "Published titles, journals and agencies cited exactly as published (these files are the source of research.html). \"quarter to a half\" is a range of fractions."
   }
  ]
 }

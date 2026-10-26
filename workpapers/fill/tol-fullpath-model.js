@@ -157,8 +157,8 @@
       wps: ['WP-03', 'WP-09', 'WP-13', 'WP-01', 'WP-04', 'WP-02', 'WP-11'], calc: true
     },
     caregivers: {
-      label: 'Caregivers', roles: ['You', 'Sibling or co-carer'], more: 'Co-carer',
-      one: 'co-carer', many: 'co-carers', group2: 'the two of you', groupN: 'everyone sharing the care', setting: 'in the care',
+      label: 'Caregivers', roles: ['You', 'Sibling or co-caregiver'], more: 'Co-caregiver',
+      one: 'co-caregiver', many: 'co-caregivers', group2: 'the two of you', groupN: 'everyone sharing the care', setting: 'in the care',
       meeting: 'the handoff check-in', work: 'the parts of the care', task: 'part of the care', tasks: 'parts of the care',
       wps: ['WP-02', 'WP-03', 'WP-11', 'WP-13', 'WP-09', 'WP-01', 'WP-04'], calc: true
     }
@@ -2529,7 +2529,7 @@
       when: function (F) { return F.w1 && F.w1.sinks.length >= 2 && F.w1.sinks[0].share >= 0.4 ? F.w1.sinks[0] : null; },
       find: function (s) { return q(s.task) + ' took ' + minText(s.min) + ', ' + pc(s.share) + ' of all the logged time.'; },
       why: 'When one job takes this much, a small change to how it is done (batching, sharing, a simpler standard) moves the whole picture.',
-      rec: function (s, F, v) { if (CARE_TASK_RE.test(s.task)) return { h: 'week', title: 'Share the hours of ' + q(s.task), first: 'Caring for someone can\u2019t be made smaller, but it can be shared: agree together on one stretch of it each week that someone else takes, so ' + (F.w1 && F.w1.sinks ? 'the person doing most of it' : 'the main carer') + ' gets real time off.', script: '\u201cThis takes most of the hours. Which stretch could someone else take each week?\u201d', link: linkOf('WP-01'), working: 'Someone else takes one stretch every week, and it holds.' }; return { h: 'month', title: 'Make ' + q(s.task) + ' smaller', first: 'Ask whether ' + q(s.task) + ' could be batched, split, or done to a simpler standard.', script: '“This one takes the most time. Is there an easier version we’d both be happy with?”', link: linkOf('WP-01'), working: 'Its share of the logged time drops below 40%.' }; } },
+      rec: function (s, F, v) { if (CARE_TASK_RE.test(s.task)) return { h: 'week', title: 'Share the hours of ' + q(s.task), first: 'Caring for someone can\u2019t be made smaller, but it can be shared: agree together on one stretch of it each week that someone else takes, so ' + (F.w1 && F.w1.sinks ? 'the person doing most of it' : 'the main caregiver') + ' gets real time off.', script: '\u201cThis takes most of the hours. Which stretch could someone else take each week?\u201d', link: linkOf('WP-01'), working: 'Someone else takes one stretch every week, and it holds.' }; return { h: 'month', title: 'Make ' + q(s.task) + ' smaller', first: 'Ask whether ' + q(s.task) + ' could be batched, split, or done to a simpler standard.', script: '“This one takes the most time. Is there an easier version we’d both be happy with?”', link: linkOf('WP-01'), working: 'Its share of the logged time drops below 40%.' }; } },
     { id: 'everyone-hides', pillar: 'I', src: ['WP-01'], pri: 4, title: '"Everyone" hides who did what',
       when: function (F) { return F.n >= 2 && F.w1 && F.w1.total > 0 && F.w1.everyone / F.w1.total >= 0.3 ? { share: F.w1.everyone / F.w1.total } : null; },
       find: function (d) { return pc(d.share) + ' of the logged minutes were marked "Everyone", which splits them evenly on paper.'; },
@@ -2756,7 +2756,7 @@
       when: function (F) { return F.c.wp11 && F.bat.high.length && !(F.c.wp11.first || F.c.wp11.second) ? { who: F.bat.high } : null; },
       find: function (d, F) { return (F.solo ? 'Your load is high' : list(lbl(d.who)) + (d.who.length === 1 ? '’s load is' : '’s loads are') + ' high') + ', and no settling defaults are chosen on WP-11 yet.'; },
       why: 'Choosing in the moment is hardest exactly when you need it. Two defaults picked on a calm day make the pause automatic.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Pick two settling defaults today', first: 'Choose two from the list on WP-11 (breathing 4 in and 6 out is a good first one) and write a pause line.', script: '“I need twenty minutes. I’m not leaving the conversation; I’ll be back at half past.”', link: linkOf('WP-11'), working: 'The next hard moment has a pause in it instead of a raised voice.', plan: { title: 'Your calm-down kit', wp: 'WP-11', do: 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', pillar: 'III' } }; } },
+      rec: function (d, F, v) { return { h: 'now', title: 'Pick two settling defaults today', first: 'Choose two from the list on WP-11 (breathing 4 in and 6 out is a good first one) and write a pause line.', script: '“I need twenty minutes. I’m not leaving the conversation; I’ll be back at 7:30.”', link: linkOf('WP-11'), working: 'The next hard moment has a pause in it instead of a raised voice.', plan: { title: 'Your calm-down kit', wp: 'WP-11', do: 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', pillar: 'III' } }; } },
     { id: 'pause-partial', pillar: 'III', src: ['WP-11'], pri: 4, title: 'Not everyone has a pause line yet',
       when: function (F) { if (!(F.n >= 2 && F.c.wp11 && F.c.wp11.filled)) return null; var miss = F.pp.filter(function (p) { return !p.pause; }); return miss.length && miss.length < F.n ? { miss: miss } : null; },
       find: function (d) { return 'Pause lines are still to write for ' + list(lbl(d.miss)) + '.'; },
@@ -3125,7 +3125,7 @@
       fix: 'Check that week’s entry.' },
     { id: 'weather-order', where: 'Weather log', level: 'note',
       when: function (F) { return F.wx.outOfOrder ? true : null; },
-      text: function () { return 'The weather log dates aren’t in order, so the trend may read backwards.'; },
+      text: function () { return 'The weather log dates aren’t in order, so the trend may read backward.'; },
       fix: 'Put the earliest week first.' },
     { id: 'weather-gap', where: 'Weather log', level: 'note',
       when: function (F) { var ws = F.wx.weeks.map(function (w) { return w.w; }); if (ws.length < 2) return null; var miss = []; for (var k = ws[0] + 1; k < ws[ws.length - 1]; k++) if (ws.indexOf(k) < 0) miss.push(k); return miss.length ? miss : null; },

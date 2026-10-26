@@ -1,6 +1,6 @@
 /* emo-tool.css: the "What am I feeling?" page (/what-am-i-feeling.html).
    Uses the site's color tokens, so light, dark (the site's inverted theme) and high contrast follow Settings.
-   Every control is at least 44px tall. Nothing moves on its own, so there is nothing to switch off for reduced motion. */
+   Every control is at least 44px tall. The only movement is a gentle one-second fade-in of the picture, and only for people who have not asked for reduced motion. */
 
 .emo-page{ --emo-card:#FFFDF7; }
 .emo-page .emo-app, .emo-page .emo-app *{ box-sizing:border-box; }
@@ -103,7 +103,12 @@
 
 /* the picture */
 .emo-figure{ margin:.4rem 0 .8rem; text-align:center; }
-.emo-canvas{ display:block; width:100%; max-width:640px; height:auto; aspect-ratio:1/1; margin:0 auto; border-radius:20px; border:1px solid var(--line); background:#F5EFDE; }
+/* the picture is a framed piece: the frame, the mat and the title card are painted inside the canvas, so they keep their true colors in dark mode */
+.emo-canvas{ display:block; width:100%; max-width:720px; height:auto; aspect-ratio:1/1; margin:0 auto; border-radius:3px; border:0; background:#16131C; box-shadow:0 10px 26px rgba(40,25,70,.22); }
+@keyframes emo-reveal{ from{ opacity:0; transform:scale(.985); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion:no-preference){ .emo-canvas.is-reveal{ animation:emo-reveal 1s ease-out both; } }
+.emo-titlebox{ max-width:720px; margin:.8rem auto 0; }
+.emo-titlebox label{ display:block; margin:0 0 .25rem; font-size:.95rem; font-weight:600; }
 .emo-cap{ margin:.5rem auto 0 !important; max-width:42rem; font-size:.95rem; color:var(--ink-soft); }
 .emo-legend{ list-style:none; margin:.6rem 0 1rem; padding:0 !important; display:grid; gap:.6rem; }
 .emo-leg{ display:grid; grid-template-columns:2.2rem 1fr; gap:.2rem .7rem; margin:0 !important; padding:.7rem .85rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); }
@@ -161,7 +166,7 @@
 .emo-sess input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .emo-cmp{ display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin:.6rem 0; }
 .emo-cmp > div{ padding:.7rem .85rem; border-radius:16px; border:1px solid var(--line); background:var(--paper); }
-.emo-cmp canvas{ display:block; width:100%; height:auto; aspect-ratio:1/1; border-radius:14px; border:1px solid var(--line); background:#F5EFDE; margin:.4rem 0; }
+.emo-cmp canvas{ display:block; width:100%; height:auto; aspect-ratio:1/1; border-radius:3px; border:0; background:#16131C; margin:.4rem 0; box-shadow:0 6px 16px rgba(40,25,70,.2); }
 .emo-cmp h4{ margin:0 !important; font:600 1.05rem/1.3 "Fraunces", Georgia, serif !important; }
 .emo-cmp ul{ margin:.3rem 0 .5rem; padding-left:1.2rem; font-size:.95rem; }
 
@@ -181,7 +186,7 @@
   .emo-page > :not(.emo-app):not(.read-head){ display:none !important; }
   .emo-app .emo-card{ border:0; padding:0; background:none; }
   .emo-print-only{ display:block !important; margin:0 0 .6rem; font-size:.95rem; }
-  .emo-canvas{ max-width:15cm; break-inside:avoid; }
+  .emo-canvas{ max-width:15cm; break-inside:avoid; box-shadow:none; animation:none !important; }
   .emo-leg, .emo-steps > li, .emo-contrib > li, .emo-col{ break-inside:avoid; }
   .emo-item details > *:not(summary){ display:block; }
   details.emo-keep > *{ display:block !important; }

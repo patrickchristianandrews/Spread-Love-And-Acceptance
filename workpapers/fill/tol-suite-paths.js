@@ -169,10 +169,10 @@
     },
     roommates: {
       what: 'A shared, factual picture of a shared home: who does which chore, who owns what, and the things that keep coming back.',
-      lens: 'Each read describes the house setup, never a housemate. Facts, not impressions.',
+      lens: 'Each read describes the house setup, never a roommate. Facts, not impressions.',
       together: ['How to read it at a house meeting', 'Bring the at-a-glance page to the next house meeting. Start with one thanks each, then one chore to rebalance. No call-outs: every point goes through fact, feeling and ask.'],
       look: ['Chores with no named owner.', 'Chores that one person always ends up doing.', 'The problem that comes back every month.', 'Points that would land better as fact, feeling and ask.'],
-      talk: ['Which chore should rotate, and how often?', 'What is one thing a housemate did this week that helped?', 'What house rule would make evenings easier?', 'What keeps coming back, and who will own it?'],
+      talk: ['Which chore should rotate, and how often?', 'What is one thing a roommate did this week that helped?', 'What house rule would make evenings easier?', 'What keeps coming back, and who will own it?'],
       ask: { 'WP-03': 'Did everyone agree to their chore at the meeting?', 'WP-13': 'What was each person’s one thanks this week?', 'WP-01': 'What does the log show that nobody mentioned?', 'WP-04': 'Which repeat problem needs a new owner?', 'WP-09': 'Would this point land as a request, not a call-out?', 'WP-02': 'Was it the house, or your own load?', 'WP-11': 'What settles you when the house is noisy?' },
       keep: 'Kind words around the house',
       close: 'A home runs well when everyone can see the same picture. You’ve drawn it together.'
@@ -190,7 +190,7 @@
     caregivers: {
       what: 'A caring, factual picture of the care you share: each part of the care and its owner, the strain on the people giving it, and the handoffs between you.',
       lens: 'Each read describes how the care is shared, never how much anyone loves the person they care for.',
-      together: ['How to read it with a sibling or co-carer', 'Read the strain pages first, gently. Then look at the care owners together and choose one part of the care to rebalance. Running near empty is a signal to get more support, not a failing.'],
+      together: ['How to read it with a sibling or co-caregiver', 'Read the strain pages first, gently. Then look at the care owners together and choose one part of the care to rebalance. Running near empty is a signal to get more support, not a failing.'],
       look: ['Parts of the care with no clear owner.', 'Loads at 0.60 or above for more than a few days.', 'Handoffs where something got missed.', 'What keeps slipping every month.'],
       talk: ['Which part of the care is heaviest right now, and who could share it?', 'What support could we ask for from outside the family?', 'How should we hand over between visits?', 'What does each of us need to keep going?'],
       ask: { 'WP-02': 'How many days this week was anyone’s load at 0.60 or above?', 'WP-03': 'Does every appointment, medicine and call have one name next to it?', 'WP-11': 'What settles you when you’re too tired to talk well?', 'WP-13': 'What should the next person know at handoff?', 'WP-01': 'What does a full week of care actually involve?', 'WP-09': 'Is this ask one topic, kindly put?', 'WP-04': 'What keeps slipping, and what help would fix it?' },
@@ -421,7 +421,7 @@
     {
       id: 'caregivers', label: 'Caregivers', icon: '☘', color: '#E3EEC9',
       blurb: 'Sharing the care of a parent or loved one, often with siblings.',
-      people: ['You', 'Sibling or co-carer'],
+      people: ['You', 'Sibling or co-caregiver'],
       groups: [
         { along: A('preface','weather','garden'), title: 'Start here', note: 'Caregiver strain builds quietly.', stops: [
           { wp: 'WP-02', why: 'Makes caregiver strain visible before it runs you empty.', again: 'Another day' },

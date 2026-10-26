@@ -593,7 +593,7 @@
         intro: 'Use it on one thing that actually stung.',
         fields: [
           { id: 'raw', label: 'Raw reaction', type: 'textarea', help: 'Optional, and just for you. It is left out of the PDF and of any file you save to share (a draft, Save my progress) unless you tick the box.', privateOptIn: 'Include my raw reaction in the PDF and in saved files' },
-          { id: 'fact', label: "What's the fact underneath this? (One sentence, no adjectives.)", type: 'textarea', help: 'For example: "The bins went out late on Tuesday." One event, no "always" or "you never".' },
+          { id: 'fact', label: "What's the fact underneath this? (One sentence, no adjectives.)", type: 'textarea', help: 'For example: "The trash went out late on Tuesday." One event, no "always" or "you never".' },
           { id: 'feeling', label: "What's the feeling underneath this? (Frustrated, tired, unseen, rushed…)", type: 'textarea', chips: FEELINGS, chipsLabel: 'Tap a word to add it', help: 'For example: "I felt rushed and a bit alone with it." A feeling about you, not a verdict about them.' },
           { id: 'ask', label: "What's the actual ask? (What do you want to happen next, specifically?)", type: 'textarea', help: 'For example: "Could we set a reminder for Monday nights?" Something the other person can say yes to.' }
         ]
@@ -747,7 +747,7 @@
       },
       {
         id: 'lines', type: 'table', title: 'Part A: My pause line',
-        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Say how you are, how long you need, and when you\'ll be back: "I\'m at capacity. I need ten minutes. I\'ll be back at quarter past."',
+        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Say how you are, how long you need, and when you\'ll be back: "I\'m at capacity. I need ten minutes. I\'ll be back at 7:15."',
         fixedRows: ['In my words'],
         columns: [
           { id: 'line', label: 'Pause line', type: 'textarea', w: 4 }
@@ -825,13 +825,13 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'Each day',
-        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Stress tank: "Today my stress tank was about light / medium / high." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a housemate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. When you can, do it face to face or on a call (in the evening, or at the shift change), and kindly.',
+        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Stress tank: "Today my stress tank was about light / medium / high." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a roommate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. When you can, do it face to face or on a call (in the evening, or at the shift change), and kindly.',
         addLabel: 'Add a row',
         personDays: DAYS,
         // shown under "Just tonight's check-in": the same questions, for a team or for housemates
         others: [
           ['A team', 'Make it a 5-minute stand-up, at the start or end of the day. Go round once, one sentence each, with the same questions: how full is your stress tank (light, medium or high), one thank-you to someone on the team, one thing that got in the way (a process, not a person), and one thing that would help tomorrow. Anything bigger goes to a follow-up, not the stand-up. A \u201chigh\u201d is useful information, never a complaint.'],
-          ['Housemates', 'Once or twice a week is plenty, at a time you\u2019re all home, like Sunday evening. Same questions, one sentence each. Keep the thing that didn\u2019t feel great about a shared thing (the bins, the noise, the bills), never someone\u2019s character. Jobs that keep slipping go on One owner per job (WP-03).']
+          ['Roommates', 'Once or twice a week is plenty, at a time you\u2019re all home, like Sunday evening. Same questions, one sentence each. Keep the thing that didn\u2019t feel great about a shared thing (the trash, the noise, the bills), never someone\u2019s character. Jobs that keep slipping go on One owner per job (WP-03).']
         ],
         columns: [
           { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
@@ -1053,10 +1053,10 @@
         id: 'plan', type: 'fields', title: 'Part D: One plan for the pressure',
         intro: 'Outside pressure rarely goes away because you talked about it. What helps is facing it on the same side: a way to flag a heavy day, and a few things you’ll go easy on until it passes.',
         fields: [
-          { id: 'pName', label: 'The pressure we’re facing right now', type: 'text', placeholder: 'e.g. the deadline at work, Mum’s hospital visits' },
+          { id: 'pName', label: 'The pressure we’re facing right now', type: 'text', placeholder: 'e.g. the deadline at work, Mom’s hospital visits' },
           { id: 'pFlag', label: 'How we’ll flag a heavy day', type: 'text', placeholder: 'e.g. “Rough day, not you” when I walk in' },
           { id: 'pEase', label: 'What we’ll go easy on until it passes', type: 'text', placeholder: 'e.g. simple dinners, no big decisions on weeknights' },
-          { id: 'pHelp', label: 'One bit of outside help we could ask for (optional)', type: 'text', placeholder: 'e.g. a friend covers one school run' }
+          { id: 'pHelp', label: 'One bit of outside help we could ask for (optional)', type: 'text', placeholder: 'e.g. a friend covers one school drop-off' }
         ]
       },
       {
@@ -1099,7 +1099,7 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: 'Do it together, somewhere comfortable, in about fifteen minutes. List the small things you share, and include the ones that stopped. Daily: a coffee, a goodbye at the door, a goodnight text. Weekly: a walk, a takeaway night, a Sunday call. Yearly: birthdays, a trip, a tradition. Nobody is to blame for one that lapsed.'
+        text: 'Do it together, somewhere comfortable, in about fifteen minutes. List the small things you share, and include the ones that stopped. Daily: a coffee, a goodbye at the door, a goodnight text. Weekly: a walk, a takeout night, a Sunday call. Yearly: birthdays, a trip, a tradition. Nobody is to blame for one that lapsed.'
       },
       {
         id: 'rituals', type: 'table', title: 'Part A: Our rituals, big and small',
@@ -1148,7 +1148,7 @@
   // filled-in example"). The rest of the examples live in tol-workpaper-library.js, which loads after
   // this file; its TOL_WORKPAPER_EXAMPLE is wrapped so these three are answered here.
   function exNames(road) {
-    return { apart: ['Diego', 'Lena'], family: ['Dana', 'Chris'], coparents: ['Mum', 'Dad'], roommates: ['Ana', 'Ben'], coworkers: ['Sam', 'Priya'], caregivers: ['Maya', 'Leo'], friends: ['You', 'Kim'], self: ['You', 'Sam'] }[road] || ['Alex', 'Jordan'];
+    return { apart: ['Diego', 'Lena'], family: ['Dana', 'Chris'], coparents: ['Mom', 'Dad'], roommates: ['Ana', 'Ben'], coworkers: ['Sam', 'Priya'], caregivers: ['Maya', 'Leo'], friends: ['You', 'Kim'], self: ['You', 'Sam'] }[road] || ['Alex', 'Jordan'];
   }
   var EXTRA_EX = {
     'WP-12': function (road) {
@@ -1178,7 +1178,7 @@
             ['Mon', P[0], 'A lot', 'Work deadline, bad sleep', 'Snapped about the dishes', 'Outside pressure'],
             ['Mon', P[1], 'A little', 'Money', '', ''],
             ['Wed', P[0], 'A lot', 'Work deadline', 'Felt ignored at dinner', 'Some of both'],
-            ['Thu', P[1], 'A lot', 'Mum in hospital', 'Short with each other about the weekend', 'Outside pressure'],
+            ['Thu', P[1], 'A lot', 'Mom in the hospital', 'Short with each other about the weekend', 'Outside pressure'],
             ['Sat', P[0], 'None', '', 'The same old argument about the car', 'Between us']] },
           { title: 'Parts B to D: the week, and the plan', lines: [
             '3 of 4 tense moments came on a day when someone had a lot of outside pressure.',
@@ -1196,13 +1196,13 @@
         parts: [
           { title: 'Part A: our rituals', head: ['Ritual', 'How often', 'How it’s doing', 'What it gives us, or what got in the way'], rows: [
             ['Coffee together before work', 'Daily', 'Alive', 'Ten quiet minutes before the day starts'],
-            ['Friday takeaway and a film', 'Weekly', 'Fading', 'Phones come out; one of us falls asleep'],
+            ['Friday takeout and a movie', 'Weekly', 'Fading', 'Phones come out; one of us falls asleep'],
             ['Sunday walk', 'Weekly', 'Stopped', 'Stopped when Saturday shifts started'],
             ['Birthday breakfast in bed', 'Yearly', 'Alive', 'We both still look forward to it'],
             ['Try one new place a month', 'Monthly', 'New idea', P[1] + '’s idea']] },
           { title: 'Parts C and D: restart one, let one go', lines: [
             'Restart: the Sunday walk. Smallest version: twenty minutes round the park after lunch. ' + P[0] + ' suggests it this Sunday.',
-            'Let go, with thanks: Thursday quiz night. It was great when we lived near the pub.'] }
+            'Let go, with thanks: Thursday quiz night. It was great when we lived near the bar.'] }
         ],
         note: 'One restart at a time. In three months, look again.'
       };
@@ -1382,7 +1382,7 @@
         note: { text: 'This kit is all about you. The pause plan is the one part you might share with someone close.' },
         lines: {
           title: 'Part A: My pause line',
-          intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need ten minutes. I\'ll come back to this at quarter past."',
+          intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need ten minutes. I\'ll come back to this at 7:15."',
           columns: [{ id: 'line', label: 'Pause line', type: 'textarea', w: 4 }]
         },
         plan: { title: 'My pause plan (yours to share, if you like)', fields: [

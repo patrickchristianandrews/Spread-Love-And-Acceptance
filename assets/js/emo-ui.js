@@ -13,7 +13,7 @@
   var E = window.EMO_ENGINE, ART = window.EMO_ART, app = document.getElementById('emo-app');
   if (!E || !app) return;
   var D = E.D, KEY = 'tol-emo-v1', DRAFT = 'tol-emo-draft-v1', MAXS = 20;
-  var NAMES = ['Blue', 'Teal', 'Green', 'Olive', 'Gold', 'Orange', 'Red', 'Rose', 'Purple', 'Brown', 'Gray', 'Navy'];
+  var NAMES = D.swatchNames || ['Blue', 'Sky', 'Teal', 'Green', 'Lime', 'Gold', 'Orange', 'Coral', 'Red', 'Rose', 'Magenta', 'Purple', 'Navy', 'Silver'];
   var STAGE = {}; D.stages.forEach(function (s) { STAGE[s.id] = s; });
   var S = null, first = true, store = load(), compare = null;
 
@@ -42,7 +42,7 @@
 
   /* ------------------------------------------------------------------ a session */
   function newSession(path) {
-    return { id: uid(), at: new Date().toISOString(), path: path, ans: {}, cur: null, hist: [], edits: { items: {}, added: [] }, art: { removed: {}, color: {}, label: {} },
+    return { id: uid(), at: new Date().toISOString(), path: path, ans: {}, cur: null, hist: [], edits: { items: {}, added: [] }, art: { removed: {}, color: {}, label: {}, title: '' },
       planEd: { ctl: {} }, numbers: true, phase: 'ask', savedId: null, editing: null, openArt: null };
   }
   function seed() { return E.seedOf(S); }
@@ -228,29 +228,44 @@
     var parts = artParts(), gone = Object.keys(S.art.removed).filter(function (k) { return S.art.removed[k]; });
     var h = '<div class="emo-card" data-phase="art"><p class="emo-print-only">A picture from my answers, ' + esc(nice(S.at)) + '. Made on spreadloveandacceptance.com. It stays on this device.</p>';
     h += '<h2 class="emo-qh" id="emo-h" tabindex="-1">Your picture</h2>';
-    h += '<p class="emo-help emo-noprint">Every shape comes from something you told me. The list under the picture says what each one stands for, in plain words. Change anything that’s off.</p>';
-    h += '<div class="emo-figure"><canvas id="emo-canvas" class="emo-canvas" width="1350" height="1350" role="img" aria-label="A calm picture made from your answers, with ' + parts.length + ' numbered parts. The list below it describes every part in words.">The list below describes the picture in words.</canvas>' +
+    h += '<p class="emo-help emo-noprint">This is an abstract painting. Its colors and shapes follow the mood of your answers, and every mark comes from something you told me. The list under the picture says what each one stands for, in plain words. Change anything that’s off.</p>';
+    h += '<div class="emo-figure"><canvas id="emo-canvas" class="emo-canvas" width="1350" height="1350" role="img" aria-label="' + esc(E.artAlt(S, parts.length)) + '">The list below describes the picture in words.</canvas>' +
       '<p class="emo-cap"><strong>' + esc(D.disclaimer) + '</strong></p></div>';
-    h += '<div class="emo-row emo-noprint"><button type="button" class="emo-btn" data-act="png">Save the image (PNG)</button><button type="button" class="emo-btn is-quiet" data-act="print">Print</button>' +
-      '<button type="button" class="emo-btn is-quiet" data-act="numbers" aria-pressed="' + S.numbers + '">' + (S.numbers ? 'Hide the numbers' : 'Show the numbers') + '</button></div>';
+    h += '<div class="emo-titlebox emo-noprint"><label for="emo-title">Title on the little card under the picture (optional)</label><input class="emo-text" id="emo-title" type="text" maxlength="60" autocomplete="off" placeholder="' + esc(defaultTitle(S.at)) + '" value="' + esc(S.art.title || '') + '"></div>';
+    h += '<div class="emo-row emo-noprint"><button type="button" class="emo-btn" data-act="png">Save the image (PNG)</button>' + (canShare() ? '<button type="button" class="emo-btn is-quiet" data-act="share">Share the image</button>' : '') + '<button type="button" class="emo-btn is-quiet" data-act="print">Print</button>' +
+      '<button type="button" class="emo-btn is-quiet" data-act="numbers" aria-pressed="' + S.numbers + '">' + (S.numbers ? 'Hide the numbers' : 'Show the numbers') + '</button></div><p class="emo-help emo-noprint" id="emo-shmsg" role="status"></p>';
     h += '<h3 class="emo-h3">What each part means for you</h3>' + legendHTML(parts);
     if (gone.length) h += '<p class="emo-removed emo-noprint">Removed from the picture: ' + gone.map(function (k) { return '<button type="button" class="emo-btn is-small is-link" data-act="art-back" data-id="' + esc(k) + '">Put back ' + esc(k.replace(/^stone-|^p-/, '').replace(/-/g, ' ')) + '</button>'; }).join(' ') + '</p>';
     h += '<p class="emo-note">Colors are personal associations. A color or shape here means what you say it means, nothing more.</p>';
     h += '<div class="emo-row emo-noprint"><button type="button" class="emo-btn" data-act="to-plan">Go to my plan</button><button type="button" class="emo-btn is-quiet" data-act="to-map">Back to the map</button></div>';
     return h + '</div>';
   }
+  function defaultTitle(iso) { var d = new Date(iso); return 'Untitled, ' + (isNaN(d) ? new Date().getFullYear() : d.getFullYear()); }
+  function artOpts(st, px, numbers) { return { seed: E.seedOf(st), numbers: numbers, px: px, mood: E.moodOf(st), title: st.art && st.art.title, date: st.at }; }
+  // sized to the screen (no more than 1350 pixels across), so it draws quickly on a phone and stays sharp
+  function artPx(c) { var w = c.clientWidth || 640, d = Math.min(window.devicePixelRatio || 1, 3); return Math.max(720, Math.min(1350, Math.round(w * d))); }
   function drawCanvas() {
     var c = $('#emo-canvas'); if (!c || !ART) return;
-    try { ART.draw(c, artParts(), { seed: seed(), numbers: S.numbers, px: c.width }); } catch (e) { if (window.console) console.error(e); }
+    var px = artPx(c); c.width = c.height = px;
+    try { ART.draw(c, artParts(), artOpts(S, px, S.numbers)); } catch (e) { if (window.console) console.error(e); }
+    if (S.reveal) { S.reveal = false; c.classList.add('is-reveal'); }
+  }
+  var redrawQ = 0;
+  function redrawSoon() { if (redrawQ) return; redrawQ = (window.requestAnimationFrame || setTimeout)(function () { redrawQ = 0; if (S && S.phase === 'art') drawCanvas(); }); }
+  function canShare() {
+    try { return !!(navigator.share && navigator.canShare && typeof File === 'function' && navigator.canShare({ files: [new File(['x'], 'a.png', { type: 'image/png' })] })); } catch (e) { return false; }
   }
   function wrap(ctx, text, w) {
     var words = String(text).split(/\s+/), lines = [], cur = '';
     words.forEach(function (wd) { var t = cur ? cur + ' ' + wd : wd; if (ctx.measureText(t).width > w && cur) { lines.push(cur); cur = wd; } else cur = t; });
     if (cur) lines.push(cur); return lines;
   }
-  function exportPng() {
+  // the saved image: the framed painting at 1800 pixels (or the most this device allows), then the plain-words list beneath it
+  function exportPng(share) {
     var parts = artParts(), size = 1800, pad = 70, fs = 30, lh = 42, art = document.createElement('canvas');
-    art.width = art.height = size; ART.draw(art, parts, { seed: seed(), numbers: true, px: size });
+    art.width = art.height = size;
+    if (!art.getContext('2d')) { size = 1350; art.width = art.height = size; }
+    ART.draw(art, parts, artOpts(S, size, true));
     var m = document.createElement('canvas').getContext('2d'); m.font = fs + 'px Georgia, serif';
     var rows = parts.map(function (e, i) { return wrap(m, (i + 1) + '.  ' + e.title + '. ' + (e.own ? 'In your words: ' + e.own : e.meaning), size - pad * 2); });
     var cap = wrap(m, D.disclaimer + ' Made on spreadloveandacceptance.com on ' + short(S.at) + '. Nothing was sent anywhere.', size - pad * 2);
@@ -261,7 +276,14 @@
     rows.forEach(function (r) { r.forEach(function (ln, k) { ctx.fillText(ln, pad + (k ? 46 : 0), y); y += lh; }); y += 16; });
     y += 20; ctx.font = 'italic ' + fs + 'px Georgia, serif'; cap.forEach(function (ln) { ctx.fillText(ln, pad, y); y += lh; });
     function done(url, rev) { var a = document.createElement('a'); a.href = url; a.download = 'my-feelings-picture.png'; document.body.appendChild(a); a.click(); a.remove(); if (rev) setTimeout(function () { URL.revokeObjectURL(url); }, 4000); }
-    if (out.toBlob) out.toBlob(function (b) { if (b) done(URL.createObjectURL(b), true); else done(out.toDataURL('image/png')); }, 'image/png'); else done(out.toDataURL('image/png'));
+    function give(b) {
+      if (share && b && canShare()) {
+        var file = new File([b], 'my-feelings-picture.png', { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) { navigator.share({ files: [file], title: 'My picture' }).then(function () { say('emo-shmsg', 'Shared.'); }, function () { say('emo-shmsg', 'Nothing was shared.'); }); return; }
+      }
+      if (b) done(URL.createObjectURL(b), true); else done(out.toDataURL('image/png'));
+    }
+    if (out.toBlob) out.toBlob(give, 'image/png'); else give(null);
   }
 
   /* ------------------------------------------------------------------ the plan */
@@ -312,7 +334,7 @@
   }
 
   /* ------------------------------------------------------------------ past sessions */
-  function sessState(x) { return { id: x.id, at: x.at, path: x.path, ans: x.ans, edits: x.edits || { items: {}, added: [] }, art: x.art || { removed: {}, color: {}, label: {} }, planEd: x.planEd || { ctl: {} }, numbers: true }; }
+  function sessState(x) { return { id: x.id, at: x.at, path: x.path, ans: x.ans, edits: x.edits || { items: {}, added: [] }, art: x.art || { removed: {}, color: {}, label: {}, title: '' }, planEd: x.planEd || { ctl: {} }, numbers: true }; }
   function sumOf(x) {
     var st = sessState(x), save = S; S = st; var fin = curMap(), sm = E.summary(st, fin), parts = artParts(); S = save;
     return { st: st, fin: fin, sm: sm, parts: parts };
@@ -372,7 +394,7 @@
     if (S && S.phase === 'art') drawCanvas();
     if (compare && !S) $$('canvas[data-cmp]').forEach(function (c) {
       var x = compare.filter(function (y) { return y.id === c.getAttribute('data-cmp'); })[0], save = S, r;
-      S = sessState(x); try { r = artParts(); ART.draw(c, r, { seed: E.seedOf(S), numbers: false, px: c.width }); } catch (e) {} S = save;
+      S = sessState(x); try { r = artParts(); ART.draw(c, r, artOpts(S, c.width, false)); } catch (e) {} S = save;
     });
     if (S && S.phase === 'ask') harmCheck();
     var f = S && S.focus ? $(S.focus) : null; if (S) S.focus = null;
@@ -422,7 +444,7 @@
       S.keepScroll = true; render();
     },
     undo: function (t) { var id = t.getAttribute('data-id'); if (S.edits.items[id]) delete S.edits.items[id].removed; var a = S.edits.added.filter(function (x) { return x.id === id; })[0]; if (a) a.removed = false; S.keepScroll = true; render(); },
-    'to-art': function () { S.phase = 'art'; render(); },
+    'to-art': function () { S.phase = 'art'; S.reveal = true; render(); },
     'to-plan': function () { S.phase = 'plan'; render(); },
     'to-map': function () { S.phase = 'map'; render(); },
     color: function (t) { var k = t.getAttribute('data-key'); S.art.color[k] = t.getAttribute('data-c'); var open = $$('.emo-leg details[open]').map(function (d) { return d.parentNode.parentNode.id; }); S.keepScroll = true; render(); open.forEach(function (id) { var d = $('#' + id + ' details:nth-of-type(2)'); if (d) d.open = true; }); var b = $('[data-key="' + k + '"][data-c="' + S.art.color[k] + '"]'); if (b) b.focus({ preventScroll: true }); },
@@ -432,7 +454,8 @@
     'own-cancel': function () { S.openArt = null; S.keepScroll = true; render(); },
     'art-back': function (t) { delete S.art.removed[t.getAttribute('data-id')]; S.keepScroll = true; render(); },
     numbers: function () { S.numbers = !S.numbers; S.keepScroll = true; render(); S.focus = null; var b = $('[data-act="numbers"]'); if (b) b.focus({ preventScroll: true }); },
-    png: function () { exportPng(); },
+    png: function () { exportPng(false); },
+    share: function () { exportPng(true); },
     print: function () { window.print(); },
     mv: function (t) { S.planEd.ctl[t.getAttribute('data-id')] = t.getAttribute('data-to'); var plan = E.buildPlan(S, curMap(), S.planEd), box = $('#emo-ctl'); box.innerHTML = ctlHTML(plan); var b = $('#emo-ctl [data-id="' + t.getAttribute('data-id') + '"]'); if (b) b.focus({ preventScroll: true }); },
     save: function () {
@@ -485,6 +508,7 @@
     var t = e.target;
     if (t.id === 'emo-range') { var o = $('#emo-out'); o.innerHTML = t.value + ' <small>out of 10</small>'; t.setAttribute('aria-valuetext', t.value + ' out of 10'); }
     else if (t.id === 'emo-text') harmCheck();
+    else if (t.id === 'emo-title') { S.art.title = t.value.slice(0, 60); redrawSoon(); }
   });
   app.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.id === 'emo-text') { e.preventDefault(); acts.next(); }

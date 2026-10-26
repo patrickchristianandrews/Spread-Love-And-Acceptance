@@ -60,15 +60,7 @@
   "src": "after-a-breakup-in-depth.html .gp-say"
  },
  {
-  "t": "We’ve split up. I don’t need advice yet. Could you text me in the evenings this week?",
-  "src": "after-a-breakup.html .gp-say"
- },
- {
   "t": "Today I only need to get through today.",
-  "src": "after-a-breakup.html .gp-say"
- },
- {
-  "t": "This really hurts, and it makes sense that it hurts.",
   "src": "after-a-breakup.html .gp-say"
  },
  {
@@ -78,6 +70,22 @@
  {
   "t": "I can learn from what went wrong without deciding I’m the problem.",
   "src": "after-a-breakup.html .gp-say"
+ },
+ {
+  "t": "I really want to message my ex right now. Can you talk me out of it for ten minutes?",
+  "src": "after-a-breakup.html .gp-say"
+ },
+ {
+  "t": "I can miss them and still not send it.",
+  "src": "after-a-breakup.html .gp-say"
+ },
+ {
+  "t": "We’ve split up. I don’t need advice yet. Could you text me in the evenings this week?",
+  "src": "after-a-breakup.html .sf-say"
+ },
+ {
+  "t": "This really hurts, and it makes sense that it hurts.",
+  "src": "after-a-breakup.html .sf-say"
  },
  {
   "t": "I’m sorry I raised my voice. It wasn’t fair to you.",
@@ -132,12 +140,24 @@
   "src": "bonding.html .tol-try"
  },
  {
-  "t": "Fancy a walk? No agenda.",
+  "t": "Want to take a walk? No agenda.",
   "src": "bonding.html .tol-try"
  },
  {
   "t": "Tell me everything about it. I’ve got time.",
   "src": "bonding.html .tol-try"
+ },
+ {
+  "t": "Pick one to begin.",
+  "src": "calm-without-pills.html .sp-try-msg"
+ },
+ {
+  "t": "I’m finding the visits hard on my own. Could one of you come with me on Sundays?",
+  "src": "caregivers.html .cg-say"
+ },
+ {
+  "t": "What does a good day look like for her now? I’d like to visit at that time.",
+  "src": "caregivers.html .cg-say"
  },
  {
   "t": "Shall we put on your old records and just sit for a bit?",
@@ -148,16 +168,16 @@
   "src": "caregivers.html .cg-say"
  },
  {
-  "t": "Could you sit with Mum on Thursday afternoon for two hours? I need to see my own doctor.",
-  "src": "caregivers.html .cg-say"
- },
- {
-  "t": "Here’s how Mum was this week. I need one thing from you: could you take the pharmacy run on Fridays?",
-  "src": "caregivers.html .cg-say"
- },
- {
   "t": "I have three questions. The first is about her sleep. Is it all right if I write down your answers?",
   "src": "caregivers.html .cg-say"
+ },
+ {
+  "t": "Here’s how Mom was this week. I need one thing from you: could you take the pharmacy run on Fridays?",
+  "src": "caregivers.html .sf-say"
+ },
+ {
+  "t": "Could you sit with Mom on Thursday afternoon for two hours? I need a little time to myself.",
+  "src": "caregivers.html .sf-say"
  },
  {
   "t": "I’ve been feeling stretched, and I don’t think either of us can see everything the other does. Could we fill in this chart together on Sunday, over coffee?",
@@ -172,10 +192,6 @@
   "src": "co-parenting.html .pr-say"
  },
  {
-  "t": "I don’t want to argue over text. Can we keep this to the dentist on Tuesday?",
-  "src": "co-parenting.html .pr-say"
- },
- {
   "t": "I’m so glad you’re here. Snack first, then cards, or do you just want to chill for a bit?",
   "src": "co-parenting.html .pr-say"
  },
@@ -185,10 +201,18 @@
  },
  {
   "t": "Hi. Homework’s done. She’s had dinner. Pick-up is Sunday at five.",
-  "src": "co-parenting.html .sx-say"
+  "src": "co-parenting.html .sf-say"
+ },
+ {
+  "t": "I don’t want to argue over text. Can we keep this to the dentist on Tuesday?",
+  "src": "co-parenting.html .sf-say"
  },
  {
   "t": "Can we put that on Thursday’s check-in?",
+  "src": "co-parenting.html .sx-say"
+ },
+ {
+  "t": "Pick-up has been after 5:30 three times this month, and Mia waits at the window. If you’re running more than 15 minutes late, text me by 4:30 so I can tell her.",
   "src": "co-parenting.html .sx-say"
  },
  {
@@ -224,7 +248,7 @@
   "src": "coming-home.html .gp-say"
  },
  {
-  "t": "You’ve been sleeping badly since you got back. Would you be willing to talk to a doctor about it? I’ll come with you if you want.",
+  "t": "You’ve been sleeping badly since you got back. Is there anything that would make the nights easier? I’m happy to help.",
   "src": "coming-home.html .gp-say"
  },
  {
@@ -300,7 +324,7 @@
   "src": "communication.html .tol-try"
  },
  {
-  "t": "I’m getting too heated to listen well. I need twenty minutes. I’ll come back at half past and we’ll finish this.",
+  "t": "I’m getting too heated to listen well. I need twenty minutes. I’ll come back at 8:30 and we’ll finish this.",
   "src": "communication.html .tol-try"
  },
  {
@@ -336,7 +360,7 @@
   "src": "communication.html .tol-try"
  },
  {
-  "t": "I noticed you rebooked the dentist after it got cancelled. Thank you. That took something off my plate.",
+  "t": "I noticed you rebooked the dentist after it got canceled. Thank you. That took something off my plate.",
   "src": "communication.html .tol-try"
  },
  {
@@ -380,7 +404,7 @@
   "src": "communication.html .tol-try"
  },
  {
-  "t": "Can we go round, so each of us says how the week felt before we decide anything?",
+  "t": "Can we go around, so each of us says how the week felt before we decide anything?",
   "src": "communication.html .tol-try"
  },
  {
@@ -412,7 +436,7 @@
   "src": "communication.html .tol-try"
  },
  {
-  "t": "I’ve been rubbish at replying. It isn’t you. I’d love a short walk soon, if you’re up for it.",
+  "t": "I’ve been terrible at replying. It isn’t you. I’d love a short walk soon, if you’re up for it.",
   "src": "communication.html .tol-try"
  },
  {
@@ -464,7 +488,7 @@
   "src": "communication.html (inline)"
  },
  {
-  "t": "I realised I haven’t asked you anything I didn’t already know the answer to in a while. What’s on your mind that I don’t know about?",
+  "t": "I realized I haven’t asked you anything I didn’t already know the answer to in a while. What’s on your mind that I don’t know about?",
   "src": "complacency-in-depth.html .cx-say"
  },
  {
@@ -472,7 +496,7 @@
   "src": "complacency-in-depth.html .cx-say"
  },
  {
-  "t": "Nothing’s wrong. I just realised I haven’t asked you anything real in a while, and I miss it. What’s on your mind?",
+  "t": "Nothing’s wrong. I just realized I haven’t asked you anything real in a while, and I miss it. What’s on your mind?",
   "src": "complacency-in-depth.html .cx-say"
  },
  {
@@ -520,7 +544,7 @@
   "src": "different-hours.html .gp-say"
  },
  {
-  "t": "Rough night, I’m wiped. The bins are out. Can we talk about the weekend at dinner on Thursday?",
+  "t": "Rough night, I’m wiped. The trash is out. Can we talk about the weekend at dinner on Thursday?",
   "src": "different-hours.html .gp-say"
  },
  {
@@ -532,20 +556,12 @@
   "src": "different-hours.html .gp-say"
  },
  {
-  "t": "When the new rota comes out, can we pick our together time first, before anything else goes in?",
+  "t": "When the new schedule comes out, can we pick our together time first, before anything else goes in?",
   "src": "different-hours.html .gp-say"
  },
  {
   "t": "I left you a note on the kettle. Breakfast together when you’re up? Your breakfast, my lunch.",
   "src": "different-hours.html .gp-say"
- },
- {
-  "t": "The house feels very quiet. I would like us to spend more time together. Can we eat dinner together, without phones?",
-  "src": "empty-nest.html .en-say"
- },
- {
-  "t": "Can we try a short check-in every evening this week? Only 90 seconds.",
-  "src": "empty-nest.html .en-say"
  },
  {
   "t": "Thank you for making my lunch today. It made my day easier.",
@@ -572,7 +588,7 @@
   "src": "empty-nest.html .en-say"
  },
  {
-  "t": "When I say ‘I’m fine’, sometimes I am not. Please ask me one more time.",
+  "t": "When I say ‘I’m fine,’ sometimes I am not. Please ask me one more time.",
   "src": "empty-nest.html .en-say"
  },
  {
@@ -586,6 +602,14 @@
  {
   "t": "I am getting upset. Can we stop for now and talk after dinner?",
   "src": "empty-nest.html .en-say"
+ },
+ {
+  "t": "The house feels very quiet. I would like us to spend more time together. Can we eat dinner together, without phones?",
+  "src": "empty-nest.html .sf-say"
+ },
+ {
+  "t": "Can we try a short check-in every evening this week? Only 90 seconds.",
+  "src": "empty-nest.html .sf-say"
  },
  {
   "t": "Helping my parents isn’t optional for me. I’d like us to agree a monthly amount together, so it’s planned, not a surprise every month.",
@@ -692,19 +716,11 @@
   "src": "for-counselors.html .fc-say"
  },
  {
-  "t": "Mum’s getting help for an illness that makes it hard to stop drinking. It’s not because of anything you did.",
+  "t": "Mom’s getting help for an illness that makes it hard to stop drinking. It’s not because of anything you did.",
   "src": "foster-and-kinship.html .gp-say"
  },
  {
-  "t": "You can miss her and be cross with her. Both are allowed here.",
-  "src": "foster-and-kinship.html .gp-say"
- },
- {
-  "t": "I’m your nan, and right now I’m also the one who sets the rules. I’ll always tell you why.",
-  "src": "foster-and-kinship.html .gp-say"
- },
- {
-  "t": "You can be angry with me. I’m still here, and I’m not going anywhere because of this.",
+  "t": "I’m your grandma, and right now I’m also the one who sets the rules. I’ll always tell you why.",
   "src": "foster-and-kinship.html .gp-say"
  },
  {
@@ -740,6 +756,14 @@
   "src": "foster-and-kinship.html .gp-say"
  },
  {
+  "t": "You can be angry with me. I’m still here, and I’m not going anywhere because of this.",
+  "src": "foster-and-kinship.html .sf-say"
+ },
+ {
+  "t": "You can miss her and be upset with her. Both are allowed here.",
+  "src": "foster-and-kinship.html .sf-say"
+ },
+ {
   "t": "The story text appears here when the episode loads.",
   "src": "frequency-buddies.html .fbp-script-body"
  },
@@ -760,7 +784,7 @@
   "src": "friends.html .pg-say"
  },
  {
-  "t": "The new job is eating me alive. You’re still one of my favourite people. Can I call you Sunday while I walk?",
+  "t": "The new job is eating me alive. You’re still one of my favorite people. Can I call you Sunday while I walk?",
   "src": "friends.html .pg-say"
  },
  {
@@ -784,7 +808,7 @@
   "src": "friends.html .pg-say"
  },
  {
-  "t": "I miss our group. Shall we fix one call a month, same day, so it doesn’t depend on anyone organising?",
+  "t": "I miss our group. Shall we fix one call a month, same day, so it doesn’t depend on anyone organizing?",
   "src": "friends.html .pg-say"
  },
  {
@@ -792,15 +816,7 @@
   "src": "friends.html .pg-say"
  },
  {
-  "t": "Can I grab you between matches? Just five minutes.",
-  "src": "gaming-and-time-together.html .pg-say"
- },
- {
   "t": "I’m not asking you to stop gaming. I miss us. Could Thursday be ours?",
-  "src": "gaming-and-time-together.html .pg-say"
- },
- {
-  "t": "Gaming is how I switch off and see my friends. I still want time with you. Which evening should be ours?",
   "src": "gaming-and-time-together.html .pg-say"
  },
  {
@@ -830,6 +846,14 @@
  {
   "t": "Can you show me how this game works? I’ll probably be terrible, but I’d like to play one with you.",
   "src": "gaming-and-time-together.html .pg-say"
+ },
+ {
+  "t": "Can I grab you between matches? Just five minutes.",
+  "src": "gaming-and-time-together.html .sf-say"
+ },
+ {
+  "t": "Gaming is how I switch off and see my friends. I still want time with you. Which evening should be ours?",
+  "src": "gaming-and-time-together.html .sf-say"
  },
  {
   "t": "You’re right, I’ll text first. When suits you?",
@@ -872,7 +896,7 @@
   "src": "grandparents.html .gp-say"
  },
  {
-  "t": "I love helping. I can’t do Fridays any more. Could we look at the week together?",
+  "t": "I love helping. I can’t do Fridays anymore. Could we look at the week together?",
   "src": "grandparents.html .gp-say"
  },
  {
@@ -880,11 +904,7 @@
   "src": "grandparents.html .gp-say"
  },
  {
-  "t": "I’ve been quiet because I miss them, not because of you.",
-  "src": "grief.html .gf-say"
- },
- {
-  "t": "Some days I want to talk about your dad (or your mum), and some days I can’t. It isn’t about you either way.",
+  "t": "Some days I want to talk about your dad (or your mom), and some days I can’t. It isn’t about you either way.",
   "src": "grief.html .gf-say"
  },
  {
@@ -904,10 +924,6 @@
   "src": "grief.html .gf-say"
  },
  {
-  "t": "Could you help me with something? I’d also just like the company.",
-  "src": "grief.html .gf-say"
- },
- {
   "t": "I don’t know what to say, but I’m here. Would you like to talk about her, or would you just like some company?",
   "src": "grief.html .gf-say"
  },
@@ -916,8 +932,12 @@
   "src": "grief.html .gf-say"
  },
  {
-  "t": "How are things at home?",
-  "src": "groups.html .gr-say"
+  "t": "I’ve been quiet because I miss them, not because of you.",
+  "src": "grief.html .sf-say"
+ },
+ {
+  "t": "Could you help me with something? I’d also just like the company.",
+  "src": "grief.html .sf-say"
  },
  {
   "t": "Thank you for telling me.",
@@ -968,7 +988,7 @@
   "src": "grown-up-children.html .gp-say"
  },
  {
-  "t": "Can we agree what we want for visits first? Then I’ll talk to my mum, and you talk to yours.",
+  "t": "Can we agree what we want for visits first? Then I’ll talk to my mom, and you talk to yours.",
   "src": "grown-up-children.html .gp-say"
  },
  {
@@ -1080,7 +1100,7 @@
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "Thursday is my soup-and-a-film night. Want to make it a regular thing?",
+  "t": "Thursday is my soup-and-a-movie night. Want to make it a regular thing?",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
@@ -1096,7 +1116,7 @@
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "I really enjoyed chatting last week. Fancy a coffee after the session?",
+  "t": "I really enjoyed chatting last week. Want a coffee after the session?",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
@@ -1152,15 +1172,15 @@
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "I’ve got a small operation next month and need a lift home. Could you do it? Say no if it’s tricky.",
+  "t": "I’ve got a small operation next month and need a ride home. Could you do it? Say no if it’s tricky.",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "I’m making a list of people I can call in an emergency. Could I put you on it? Happy to be on yours.",
+  "t": "I’m making a list of people I can ask for a hand with practical things. Could I put you on it? Happy to be on yours.",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "I’m bad at asking for help, so I’m practising. Could you help me move a wardrobe on Saturday?",
+  "t": "I’m bad at asking for help, so I’m practicing. Could you help me move a dresser on Saturday?",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
@@ -1180,7 +1200,7 @@
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "If I ever end up in hospital, could you look after Biscuit? I’ve written everything down.",
+  "t": "If I ever end up in the hospital, could you look after Biscuit? I’ve written everything down.",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
@@ -1212,24 +1232,12 @@
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
-  "t": "I live alone and I’ve been feeling very low and cut off for a while.",
-  "src": "living-alone-in-depth.html .gp-say"
- },
- {
   "t": "I’m managing, and I’d love help with the car insurance. Your dad always did it.",
   "src": "living-alone-in-depth.html .gp-say"
  },
  {
   "t": "I’d like to do it myself. Could you sit with me the first time?",
   "src": "living-alone-in-depth.html .gp-say"
- },
- {
-  "t": "This is a lonely moment, not a lonely life. Who could I message?",
-  "src": "living-alone.html .gp-say"
- },
- {
-  "t": "I love living on my own, and I’d still love to see you more. Fancy a regular thing?",
-  "src": "living-alone.html .gp-say"
  },
  {
   "t": "I actually really like it. I just make sure I see people.",
@@ -1252,7 +1260,7 @@
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "I really enjoyed chatting last week. Do you fancy a coffee after next time?",
+  "t": "I really enjoyed chatting last week. Want to get coffee after next time?",
   "src": "living-alone.html .gp-say"
  },
  {
@@ -1272,7 +1280,7 @@
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "I miss our group. Shall we set one call a month, same day, so it doesn’t rely on anyone organising?",
+  "t": "I miss our group. Shall we set one call a month, same day, so it doesn’t rely on anyone organizing?",
   "src": "living-alone.html .gp-say"
  },
  {
@@ -1280,7 +1288,7 @@
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "Could we do a body-double call on Sunday? I’ll do my post, you do your thing.",
+  "t": "Could we do a body-double call on Sunday? I’ll do my mail, you do your thing.",
   "src": "living-alone.html .gp-say"
  },
  {
@@ -1292,15 +1300,15 @@
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "I’ve got a small procedure next month and need a lift home. Could you do it? Say no if it’s tricky.",
+  "t": "I’ve got a small procedure next month and need a ride home. Could you do it? Say no if it’s tricky.",
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "I’m putting together a list of people I could call in an emergency. Could I put you on it? Happy to be on yours.",
+  "t": "I’m putting together a list of people I could ask for a hand with practical things. Could I put you on it? Happy to be on yours.",
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "I’m not great at asking for help, so I’m practising. Could you give me a hand moving a sofa on Saturday?",
+  "t": "I’m not great at asking for help, so I’m practicing. Could you give me a hand moving a couch on Saturday?",
   "src": "living-alone.html .gp-say"
  },
  {
@@ -1312,7 +1320,7 @@
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "If I’m ever stuck in hospital, could you feed the cat? I’ll write everything down.",
+  "t": "If I’m ever stuck in the hospital, could you feed the cat? I’ll write everything down.",
   "src": "living-alone.html .gp-say"
  },
  {
@@ -1332,8 +1340,12 @@
   "src": "living-alone.html .gp-say"
  },
  {
-  "t": "I’ve been the one starting most of our calls, and I miss feeling chosen. Can we agree a rhythm, so it isn’t always on me?",
-  "src": "long-distance.html .ld-say"
+  "t": "This is a lonely moment, not a lonely life. Who could I message?",
+  "src": "living-alone.html .sf-say"
+ },
+ {
+  "t": "I love living on my own, and I’d still love to see you more. Want to make it a regular thing?",
+  "src": "living-alone.html .sf-say"
  },
  {
   "t": "I need a bit less phone time in busy weeks. It isn’t you, and I don’t want you to feel you’re always the one reaching out. Could we do short calls on weekdays, a long one on Sunday, and I’ll start the Sunday one?",
@@ -1341,10 +1353,6 @@
  },
  {
   "t": "Want to cook the same thing on Sunday and eat together on video? I’ll send you the recipe.",
-  "src": "long-distance.html .ld-say"
- },
- {
-  "t": "I don’t want to hang up on a bad note. Can we stop here, and talk again tomorrow at eight, your time?",
   "src": "long-distance.html .ld-say"
  },
  {
@@ -1358,6 +1366,14 @@
  {
   "t": "I’d love some time just the two of us this visit, as well as seeing everyone. Can we keep Saturday free?",
   "src": "long-distance.html .ld-say"
+ },
+ {
+  "t": "I’ve been the one starting most of our calls, and I miss feeling chosen. Can we agree a rhythm, so it isn’t always on me?",
+  "src": "long-distance.html .sf-say"
+ },
+ {
+  "t": "I don’t want to hang up on a bad note. Can we stop here, and talk again tomorrow at eight, your time?",
+  "src": "long-distance.html .sf-say"
  },
  {
   "t": "When you took over bedtime so I could finish that report, I felt relieved and looked after. Thank you.",
@@ -1396,7 +1412,7 @@
   "src": "love-languages-in-depth.html .ll-say"
  },
  {
-  "t": "I’m touched out today. It is not about you. Can I have a hand to hold on the sofa later?",
+  "t": "I’m touched out today. It is not about you. Can I have a hand to hold on the couch later?",
   "src": "love-languages-in-depth.html .ll-say"
  },
  {
@@ -1408,7 +1424,7 @@
   "src": "love-languages-in-depth.html .ll-say"
  },
  {
-  "t": "I realise you show care by fixing things. Thank you. What would help me feel it just as much is ten minutes of undivided attention.",
+  "t": "I realize you show care by fixing things. Thank you. What would help me feel it just as much is ten minutes of undivided attention.",
   "src": "love-languages-in-depth.html .ll-say"
  },
  {
@@ -1448,7 +1464,7 @@
   "src": "money-together.html .pg-say"
  },
  {
-  "t": "A big wedding matters a lot to my parents. Can we find a version that honours them and fits our plan? I’ll talk to them.",
+  "t": "A big wedding matters a lot to my parents. Can we find a version that honors them and fits our plan? I’ll talk to them.",
   "src": "money-together.html .pg-say"
  },
  {
@@ -1492,19 +1508,27 @@
   "src": "more-than-two.html .pg-say"
  },
  {
+  "t": "Do you want ideas, or just listening?",
+  "src": "neurodivergent-relationships.html .sf-say"
+ },
+ {
+  "t": "Sorry, I lost the last part. Can you say it again?",
+  "src": "neurodivergent-relationships.html .sf-say"
+ },
+ {
+  "t": "I’m tired, not cross. Could you take the next feed so I can sleep for three hours?",
+  "src": "new-parent.html .sf-say"
+ },
+ {
   "t": "Can you own the doctor’s appointments, and I’ll own supplies and meals this week?",
-  "src": "new-parent.html .sx-say"
+  "src": "new-parent.html .sf-say"
  },
  {
   "t": "I’m running on empty, and I don’t want to fight about this now. Can we talk at nap time tomorrow?",
   "src": "new-parent.html .sx-say"
  },
  {
-  "t": "I’m tired, not cross. Could you take the next feed so I can sleep for three hours?",
-  "src": "new-parent.html .sx-say"
- },
- {
-  "t": "Baby’s asleep. Ten minutes on the sofa, no baby talk?",
+  "t": "Baby’s asleep. Ten minutes on the couch, no baby talk?",
   "src": "new-parent.html .sx-say"
  },
  {
@@ -1540,7 +1564,7 @@
   "src": "new-relationship-in-depth.html .gp-say"
  },
  {
-  "t": "I’m not going to share my location. It isn’t about trust. It’s just how I like things.",
+  "t": "I’d rather not share my location. It’s just how I like things.",
   "src": "new-relationship-in-depth.html .gp-say"
  },
  {
@@ -1624,7 +1648,7 @@
   "src": "new-relationship-in-depth.html .gp-say"
  },
  {
-  "t": "I’ve been rubbish at keeping in touch since I met Ana. I miss you. Coffee this week?",
+  "t": "I’ve been terrible at keeping in touch since I met Ana. I miss you. Coffee this week?",
   "src": "new-relationship-in-depth.html .gp-say"
  },
  {
@@ -1632,7 +1656,7 @@
   "src": "new-relationship-in-depth.html .gp-say"
  },
  {
-  "t": "Nobody is replacing your mum. I’d like you to meet someone who makes me happy, when you’re ready.",
+  "t": "Nobody is replacing your mom. I’d like you to meet someone who makes me happy, when you’re ready.",
   "src": "new-relationship-in-depth.html .gp-say"
  },
  {
@@ -1692,7 +1716,7 @@
   "src": "new-relationship.html .gp-say"
  },
  {
-  "t": "Let’s have a word that means ‘I’m ready to go’.",
+  "t": "Let’s have a word that means ‘I’m ready to go.’",
   "src": "new-relationship.html .gp-say"
  },
  {
@@ -1728,7 +1752,7 @@
   "src": "new-relationship.html .gp-say"
  },
  {
-  "t": "Nobody is replacing your mum. I’d like you to meet someone who makes me happy.",
+  "t": "Nobody is replacing your mom. I’d like you to meet someone who makes me happy.",
   "src": "new-relationship.html .gp-say"
  },
  {
@@ -1736,11 +1760,11 @@
   "src": "on-my-own.html .gp-say"
  },
  {
-  "t": "Saw this and thought of you. Fancy a coffee next week?",
+  "t": "Saw this and thought of you. Want a coffee next week?",
   "src": "on-my-own.html .gp-say"
  },
  {
-  "t": "I’m building a flat-pack wardrobe on Saturday. Pizza’s on me if you fancy helping.",
+  "t": "I’m building a flat-pack dresser on Saturday. Pizza’s on me if you fancy helping.",
   "src": "on-my-own.html .gp-say"
  },
  {
@@ -1804,7 +1828,7 @@
   "src": "parents.html .pr-say"
  },
  {
-  "t": "Tell me more. I’m listening, and I won’t get cross.",
+  "t": "Tell me more. I’m listening, and I won’t get angry.",
   "src": "parents.html .pr-say"
  },
  {
@@ -1824,7 +1848,7 @@
   "src": "parents.html .pr-say"
  },
  {
-  "t": "I’m not trying to replace your mum. I’d just like us to get along.",
+  "t": "I’m not trying to replace your mom. I’d just like us to get along.",
   "src": "parents.html .pr-say"
  },
  {
@@ -1848,7 +1872,7 @@
   "src": "pursue-withdraw.html .pw-say"
  },
  {
-  "t": "I’m not leaving you. I’m leaving the argument for half an hour. I’ll be back at quarter to nine, and we’ll pick it up.",
+  "t": "I’m not leaving you. I’m leaving the argument for half an hour. I’ll be back at 8:45, and we’ll pick it up.",
   "src": "pursue-withdraw.html .pw-say"
  },
  {
@@ -1864,7 +1888,7 @@
   "src": "refusals.html .pg-say"
  },
  {
-  "t": "I’ll take this, just not until Saturday. I can’t do it well right now, and a rushed version isn’t a favour to either of us.",
+  "t": "I’ll take this, just not until Saturday. I can’t do it well right now, and a rushed version isn’t a favor to either of us.",
   "src": "refusals.html .pg-say"
  },
  {
@@ -1876,11 +1900,15 @@
   "src": "relationships.html .tol-try"
  },
  {
-  "t": "I think I’ve been hovering because I don’t quite know what to do with myself yet. It isn’t about you. I’m going to find something for Tuesday and Thursday mornings.",
+  "t": "I don’t want to just help. Which whole job could I take off you?",
   "src": "retired-together.html .rt-say"
  },
  {
   "t": "I love having you home. I also need my mornings, the way I had them before. Could we keep them, and have lunch together most days?",
+  "src": "retired-together.html .rt-say"
+ },
+ {
+  "t": "I think I’ve been hovering because I don’t quite know what to do with myself yet. It isn’t about you. I’m going to find something for Tuesday and Thursday mornings.",
   "src": "retired-together.html .rt-say"
  },
  {
@@ -1924,10 +1952,6 @@
   "src": "share-the-load.html .sx-say"
  },
  {
-  "t": "Can we talk about guests? I need the room to myself by 11 on weeknights. What works for you?",
-  "src": "sharing-a-room.html .rm-say"
- },
- {
   "t": "I like having them around sometimes. Could we agree on two nights a week, with a text the day before?",
   "src": "sharing-a-room.html .rm-say"
  },
@@ -1956,8 +1980,12 @@
   "src": "sharing-a-room.html .rm-say"
  },
  {
+  "t": "Can we talk about guests? I need the room to myself by 11 on weeknights. What works for you?",
+  "src": "sharing-a-room.html .sf-say"
+ },
+ {
   "t": "Hey, can we find ten minutes this week to agree a few room things, like guests staying over? Nothing’s wrong, I’d just rather we sort it early than let it get awkward.",
-  "src": "sharing-a-room.html <q>"
+  "src": "sharing-a-room.html .sf-say"
  },
  {
   "t": "I didn’t do all of it. I did the first part, and that counts.",
@@ -1968,7 +1996,7 @@
   "src": "small-wins.html .tol-try"
  },
  {
-  "t": "Thanks for sorting the bins this week. I noticed, and it helped.",
+  "t": "Thanks for handling the trash this week. I noticed, and it helped.",
   "src": "small-wins.html .tol-try"
  },
  {
@@ -2024,11 +2052,11 @@
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "Your mum said screens off at eight. I’m just passing it on.",
+  "t": "Your mom said screens off at eight. I’m just passing it on.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "You can love your mum and still like hanging out with me. You don’t have to pick.",
+  "t": "You can love your mom and still like hanging out with me. You don’t have to pick.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
@@ -2068,11 +2096,11 @@
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "This drawer is yours. Nobody touches it while you’re at your mum’s.",
+  "t": "This drawer is yours. Nobody touches it while you’re at your mom’s.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "Can we agree pocket money and birthday budgets for all the kids, so nobody feels left out?",
+  "t": "Can we agree allowance and birthday budgets for all the kids, so nobody feels left out?",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
@@ -2092,7 +2120,7 @@
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "I’m not trying to be your mum. I’d like us to be friendly, and I know she matters to you.",
+  "t": "I’m not trying to be your mom. I’d like us to be friendly, and I know she matters to you.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
@@ -2100,7 +2128,7 @@
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "You can call me Bev. I’ve got a biscuit tin with your name on it.",
+  "t": "You can call me Bev. I’ve got a cookie jar with your name on it.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
@@ -2108,7 +2136,7 @@
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "I love you, and I love that you’re close to your kids. Sometimes I feel like a lodger. Can we talk about one small thing that would help?",
+  "t": "I love you, and I love that you’re close to your kids. Sometimes I feel like a boarder. Can we talk about one small thing that would help?",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
@@ -2120,28 +2148,52 @@
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "This is Alex, my partner. Alex is on the pickup list and can be contacted in an emergency.",
+  "t": "This is Alex, my partner. Alex is on the pickup list and can be reached if something comes up.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "Some families have a mum and a dad, some have two mums, some have a stepdad. Ours has all of us.",
+  "t": "Some families have a mom and a dad, some have two moms, some have a stepdad. Ours has all of us.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "We keep having the same fight about the kids. I don’t think either of us is wrong. Could we see someone who knows stepfamilies?",
+  "t": "We keep having the same fight about the kids. I don’t think either of us is wrong. Could we sit down this weekend and each pick one small change?",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "Things have been hard at home. That isn’t your fault. We’re getting some help to make it better.",
+  "t": "Things have been hard at home. That isn’t your fault. We’re working on making it better.",
   "src": "stepfamily-in-depth.html .gp-say"
  },
  {
-  "t": "You’ll always have your mum and your dad. Sam is someone extra, not someone instead.",
+  "t": "You’ll always have your mom and your dad. Sam is someone extra, not someone instead.",
   "src": "stepfamily.html .gp-say"
  },
  {
   "t": "Hi, I’m Jo. Nice to meet you. They’ve been telling me all about the football.",
   "src": "stepfamily.html .gp-say"
+ },
+ {
+  "t": "When I’m stressed, the thing that helps most is a bit of time alone first, then a hug. What helps you?",
+  "src": "support-languages.html .sf-say"
+ },
+ {
+  "t": "Do you want me to just listen, or help you figure it out?",
+  "src": "support-languages.html .sf-say"
+ },
+ {
+  "t": "When you’re really stressed, what helps most, and what makes it worse?",
+  "src": "support-languages.html (inline)"
+ },
+ {
+  "t": "Phone charges in the kitchen at 10:30 on school nights, and I get it back at 7. Weekends, 11:30.",
+  "src": "teens.html .tn-say"
+ },
+ {
+  "t": "Home by 10 on school nights and 11 on Fridays and Saturdays. If I’m going to be late, I text before, not after.",
+  "src": "teens.html .tn-say"
+ },
+ {
+  "t": "Let’s try it for two weeks. If it goes well, can we talk about half an hour later?",
+  "src": "teens.html .tn-say"
  },
  {
   "t": "I’m too heated to talk well right now. Can we try again after dinner?",
@@ -2156,7 +2208,7 @@
   "src": "teens.html .tn-say"
  },
  {
-  "t": "I’m not angry at you. I’m just missing Mum today.",
+  "t": "I’m not angry at you. I’m just missing Mom today.",
   "src": "teens.html .tn-say"
  },
  {
@@ -2168,7 +2220,7 @@
   "src": "teens.html .tn-say"
  },
  {
-  "t": "Can we talk about Mum? I keep thinking about her.",
+  "t": "Can we talk about Mom? I keep thinking about her.",
   "src": "teens.html .tn-say"
  },
  {
@@ -2216,6 +2268,10 @@
   "src": "teens.html .tn-say"
  },
  {
+  "t": "I had a good time. When my battery is gone I need to go quickly, before it runs out completely.",
+  "src": "the-logic-behind-it.html .sf-say"
+ },
+ {
   "t": "Do you still like it when I call you that? Or would you like a new one?",
   "src": "touchstones.html .ll-say"
  },
@@ -2248,7 +2304,7 @@
   "src": "two-faiths.html .gp-say"
  },
  {
-  "t": "Mum, we’ve decided together, and I know how much this means to you. I’d love you to be part of the day.",
+  "t": "Mom, we’ve decided together, and I know how much this means to you. I’d love you to be part of the day.",
   "src": "two-faiths.html .gp-say"
  },
  {
@@ -2264,7 +2320,7 @@
   "src": "two-faiths.html .gp-say"
  },
  {
-  "t": "You belong to both our families. You get Nani’s stories and Granny’s songs, and both our festivals.",
+  "t": "You belong to both our families. You get Nani’s stories and Grandma’s songs, and both our festivals.",
   "src": "two-faiths.html .gp-say"
  },
  {
@@ -2376,7 +2432,7 @@
   "src": "work.html .wk-say"
  },
  {
-  "t": "I’m at capacity. I need ten minutes. I’ll be back at quarter past and we can pick this up.",
+  "t": "I’m at capacity. I need ten minutes. I’ll be back at 7:15 and we can pick this up.",
   "src": "wp-11-in-depth.html .script-line"
  },
  {

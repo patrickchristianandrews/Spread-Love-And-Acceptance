@@ -2322,13 +2322,14 @@ if (PERSONA) {
   t(G, '10 minutes together tonight, nothing heavy', { id: 'coupletonight' });
 }
 
-// owner: Puddles never brings up AI unless asked
+// owner: Puddles never says the word AI, not even when asked straight out (the answer is “I’m a program on this page, not a person.”)
 {
+  const NOAI_WORDS = /\b(AI|A\.I\.|generative|ChatGPT|chatbot|language model)\b/;   // owner: the site never says these words, even when asked
   const NOAI = (r, rs, text) => /\b(AI|A\.I\.|generative|ChatGPT)\b/.test(text) ? 'mentions AI unprompted' : '';
   ['hi', 'what can you do', 'who are you', 'how does this work', 'are you real', 'are you a real person', 'is this private', 'can i trust you', 'do you make things up', 'tell me about yourself', 'what are you', 'help', 'why use this site instead of an article', 'how does the chat analyzer work', 'is the chat analyzer smart', 'who made this site', 'start here', 'what is this site'].forEach(q =>
     t('noai', q, { check: NOAI }));
-  t('noai', 'asked straight out: a short, true no', { q: 'are you chatgpt?', text: /^No\. Every answer here was written in advance/ });
-  t('noai', 'asked straight out: is it AI', { q: 'is this AI', text: /^No\./ });
+  t('noai', 'asked straight out: a short, true answer', { q: 'are you chatgpt?', text: /^I’m a program on this page, not a person\. Every answer here was written in advance/, not: NOAI_WORDS });
+  t('noai', 'asked straight out: is it AI', { q: 'is this AI', text: /^I’m a program on this page, not a person\./, not: NOAI_WORDS });
 }
 
 // ---------------------------------------------------------------- run

@@ -102,7 +102,7 @@ try: Keep a one-word mood note each day for two weeks, and look for patterns wit
 
 Moods often follow patterns: time of day, days of the week, sleep, workload or particular people. Noticing patterns helps you plan around them.
 
-
+A small note is enough: one word for the mood and one line about the day. After a couple of weeks the pattern is easier to see.
 
 Program: Today’s Weather keeps a private almanac on your device so you can spot your own patterns.
 
