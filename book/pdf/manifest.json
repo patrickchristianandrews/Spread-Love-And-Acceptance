@@ -3,7 +3,7 @@
   "pages": 154,
   "interior_pages": 152,
   "blank_pages": 2,
-  "bytes": 2126424,
+  "bytes": 2126434,
   "title": "Spread Love & Acceptance: For two or more (paperback text)",
   "pagemap": {
    "half": 1,
@@ -203,7 +203,7 @@
   "pages": 256,
   "interior_pages": 254,
   "blank_pages": 2,
-  "bytes": 3540389,
+  "bytes": 3540380,
   "title": "Spread Love & Acceptance: For two or more (expanded version)",
   "pagemap": {
    "half": 1,
@@ -462,7 +462,7 @@
   "pages": 500,
   "interior_pages": 498,
   "blank_pages": 3,
-  "bytes": 6240470,
+  "bytes": 6240860,
   "title": "Spread Love & Acceptance: The whole book (paperback text)",
   "pagemap": {
    "half": 1,
@@ -684,7 +684,7 @@
    "ix-epictetus": "298",
    "ix-erikson-erik": "22–23",
    "ix-ex-partners": "52, 123, 167, 266–267, 311",
-   "ix-exams": "91, 171, 268, 280, 355, 381–382, 386",
+   "ix-exams": "91, 170, 268, 280, 355, 381–382, 386",
    "ix-expectations": "220–221",
    "ix-fairness": "47, 72, 75, 103, 116, 126–130, 138–139, 141–142, 297, 306, 402, 405, 413, 416",
    "ix-faith": "73, 76, 86, 267, 304, 353, 391, 395",
@@ -842,7 +842,7 @@
   "pages": 826,
   "interior_pages": 824,
   "blank_pages": 4,
-  "bytes": 9224570,
+  "bytes": 9224646,
   "title": "Spread Love & Acceptance: The whole book (expanded version)",
   "pagemap": {
    "half": 1,
@@ -1301,7 +1301,7 @@
   "pages": 368,
   "interior_pages": 366,
   "blank_pages": 2,
-  "bytes": 4616164,
+  "bytes": 4616487,
   "title": "Spread Love & Acceptance: For one person (paperback text)",
   "pagemap": {
    "half": 1,
@@ -1476,7 +1476,7 @@
    "ix-epictetus": "196",
    "ix-erikson-erik": "18–19",
    "ix-ex-partners": "48, 65, 164–165, 209",
-   "ix-exams": "69, 166, 178, 253, 279–280, 284",
+   "ix-exams": "68, 166, 178, 253, 279–280, 284",
    "ix-expectations": "118–119",
    "ix-fairness": "43, 195, 204, 300, 303",
    "ix-faith": "165, 202, 251, 289, 293",
@@ -1619,7 +1619,7 @@
   "pages": 592,
   "interior_pages": 590,
   "blank_pages": 2,
-  "bytes": 6199518,
+  "bytes": 6199599,
   "title": "Spread Love & Acceptance: For one person (expanded version)",
   "pagemap": {
    "half": 1,
@@ -2000,7 +2000,7 @@
   "pages": 320,
   "interior_pages": 318,
   "blank_pages": 2,
-  "bytes": 4002674,
+  "bytes": 4003046,
   "title": "Spread Love & Acceptance: Understanding people (paperback text)",
   "pagemap": {
    "half": 1,
@@ -2151,7 +2151,7 @@
    "ix-empty-nest": "127, 159, 229",
    "ix-epictetus": "152",
    "ix-ex-partners": "21, 120–121, 165",
-   "ix-exams": "25, 122, 134, 209, 235–236, 240",
+   "ix-exams": "24, 122, 134, 209, 235–236, 240",
    "ix-expectations": "74–75",
    "ix-fairness": "21–22, 29, 43, 53, 64–66, 68, 73, 90, 112, 123, 143, 148–149, 151, 158, 160, 163, 166, 168, 174, 195, 197, 200, 208, 212, 242, 251, 257, 259",
    "ix-faith": "121, 158, 207, 245, 249",
@@ -2287,7 +2287,7 @@
   "pages": 498,
   "interior_pages": 496,
   "blank_pages": 2,
-  "bytes": 5019042,
+  "bytes": 5019119,
   "title": "Spread Love & Acceptance: Understanding people (expanded version)",
   "pagemap": {
    "half": 1,

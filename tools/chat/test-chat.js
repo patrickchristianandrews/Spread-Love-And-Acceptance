@@ -1740,7 +1740,7 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
   const ASK = {
     'I feel like I do everything at home': { kind: 'sit', link: '/lemonade-stand.html' },
     'My best friend never texts back since she had her baby': { id: 'friends', link: '/friends.html' },
-    'My housemate never does the dishes': { id: 'roommate+fairness' },
+    'My roommate never does the dishes': { id: 'roommate+fairness' },
     'My co-parent changes the schedule at the last minute': { id: 'coparent+reliability' },
     'My coworker keeps interrupting me': { id: 'coworker+interrupt' },
     'My teenager won’t talk to me': { id: 'kid+distance' },
@@ -1751,13 +1751,12 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
     'Is there a game we can play together?': { id: 'gamefortwo', link: '/recheck-drive.html' },
     'I need to calm down right now': { id: 'calmnow' },
     'Where do I start?': { id: 'start', link: '/start-here.html' },
-    'How do I tell my mum to text before visiting?': { id: 'familyboundary', link: '/grown-up-children.html' },
+    'How do I tell my mom to text before visiting?': { id: 'familyboundary', link: '/grown-up-children.html' },
     'Help me say no to extra work': { id: 'refusals', link: '/refusals.html' },
     'How do I ask my partner for more help at home?': { kind: 'sit', script: true },
     'Give me words to ask for a pause': { id: 'wp11', script: true },
-    'How do I apologise so it lands?': { id: 'apologylang' },
+    'How do I apologize so it lands?': { id: 'apologylang' },
     'How do I say sorry to my sister?': { id: 'family+repair', script: true },
-    'How are you, Professor?': { kind: 'chat', id: 'how_are_you' },
     'Let’s just chat': { kind: 'chat' },
     'Tell me a joke': { kind: 'fun' },
     'Tell me a riddle': { kind: 'fun', id: 'pz-riddle' },  // chat11: the answer comes on the next turn
@@ -1773,7 +1772,7 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
     'Make an infographic about the mental load': { kind: 'info', info: true },
     'Draw me a picture of fair vs equal': { kind: 'info', info: 'compare' },
     'Make an infographic about taking a good pause': { kind: 'info', info: true },
-    'Make an infographic about one wants to talk and one needs space': { kind: 'info', info: 'cycle', link: '/pursue-withdraw.html' },
+    'Make an infographic about when one wants to talk and one needs space': { kind: 'info', info: 'cycle', link: '/pursue-withdraw.html' },
     'Make an infographic about love languages': { kind: 'info', info: true, link: '/love-languages.html' },
     'Make a checklist infographic about a calm check-in': { kind: 'info', info: 'checklist' },
     'Make me a chart: me 60 them 40': { kind: 'info', info: 'split' },
@@ -1782,8 +1781,7 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
     'Why isn’t fair always 50/50?': { link: ['/library/', '/share-the-load.html'] },
     'What is a bid for connection?': { link: '/glossary.html#bid' },
     'What does flooded mean?': { link: '/glossary.html#flooded' },
-    'What does my battery score mean?': { id: 'wp02' },
-    'What is the Signal Translator for?': { id: 'signal', link: '/signal-translator.html' }
+    'What does my battery score mean?': { id: 'wp02' }
   };
   let page = '';
   try { page = require('fs').readFileSync(require('path').join(__dirname, '..', '..', 'ask.html'), 'utf8'); } catch (e) { page = ''; }

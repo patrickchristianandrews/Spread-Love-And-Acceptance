@@ -2030,7 +2030,7 @@
   var DOWNLOADS = { s1e1: 19, s1e2: 20, s1e3: 18, s1e4: 19, s1e5: 17, s2e1: 24, s2e2: 21, s2e3: 19 };
   // the same videos' lengths in seconds (theme song, episode, credits), for "Watch on your TV" (tv-cast.js):
   // the TV starts at the moment showing here
-  var VDUR = { s1e1: 905.05, s1e2: 886.47, s1e3: 870.93, s1e4: 875.36, s1e5: 906.98, s2e1: 809.41, s2e2: 786.21, s2e3: 759.09 };
+  var VDUR = { s1e1: 905.05, s1e2: 886.47, s1e3: 870.93, s1e4: 873.79, s1e5: 906.98, s2e1: 809.41, s2e2: 785.67, s2e3: 758.71 };
   var POSTERS = { 1: '/assets/img/frequency-buddies-season-1.jpg', 2: '/assets/img/frequency-buddies-season-2-teaser.jpg' };
   // tv-cast.js is loaded once, when a player is set up, so the button is ready before anyone taps it
   function withTv(cb) {

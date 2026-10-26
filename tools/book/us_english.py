@@ -208,7 +208,7 @@ P = [
     (r'\b(Mr|Mrs|Ms|Dr)\b(?!\.)', r'\1.'), (r'\bthe new lad\b', 'the new guy'), (r'\blads\b', 'guys'), (r'\blad\b', 'guy'), (r'\blass\b', 'girl'),
     (r'\bmates\b', 'friends'), (r'\bmate\b', 'buddy'), (r'\breckons\b', 'thinks'), (r'\breckon\b', 'think'), (r'\bcheeky\b', 'playful'),
     (r'\bBit gutted not to be asked\b', 'Kind of bummed not to be asked'), (r'\ba bit gutted\b', 'a little hurt'), (r'\bgutted\b', 'crushed'),
-    (r'“All right\?', '“You okay?'), (r'\bYou all right\?', 'You okay?'), (r'\bthe friend everyone rings\b', 'the friend everyone calls'),
+    (r'“All right\?', '“You okay?'), (r'\bYou all right\?', 'You okay?'), (r'\bthe friend everyone rings\b', 'the friend everyone turns to'),
     (r'\brang round\b', 'called around'), (r'\b([Rr])ang\b', lambda m: _case(m.group(1) + 'x', 'called')), (r'\brung\b', 'called'),
     (r'\b([Rr])ing(s|ing)? (?!a bell)(me|him|her|you|them|us|back|his|their|the|a|my|your|our)\b', lambda m: _case(m.group(1) + 'x', 'call' + (m.group(2) or '')) + ' ' + m.group(3)),
     (r'\bthat you ring\b', 'that you call'), (r'\bstart ringing\b', 'start calling'), (r'\bkeeps ringing\b', 'keeps calling'),
@@ -263,7 +263,7 @@ P = [
     (r'\bcarers’\b', 'caregivers’'), (r'\bcarers\b', 'caregivers'), (r'\bcarer\b', 'caregiver'), (r'\bgarage-forecourt\b', 'gas-station'),
     (r'\bfish fingers\b', 'fish sticks'), (r'\bfish finger\b', 'fish stick'), (r'\bgym kit\b', 'gym clothes'), (r'\bswim kit\b', 'swimsuit'),
     (r'\bthe cricket club\b', 'the golf club'), (r'\borange squash\b', 'orange drink'), (r'\bloading her boot\b', 'loading her trunk'), (r'\bthe boot\b(?= of the car)', 'the trunk'),
-    (r'\b([Tt])he friend everyone rings\b', r'\1he friend everyone calls'), (r'\bto ring\b', 'to call'), (r'\bor ring\b', 'or call'), (r'\bwho to ring\b', 'who to call'),
+    (r'\b([Tt])he friend everyone rings\b', r'\1he friend everyone turns to'), (r'\bto ring\b', 'to call'), (r'\b(friend|brother|sister|daughter|son|mom|dad|she|he|they) (rings|rang)\b', lambda m: m.group(1)+(' calls' if m.group(2)=='rings' else ' called')), (r'\bwe ring and visit\b', 'we call and visit'), (r'\bfunction room\b', 'party room'), (r'\bor ring\b', 'or call'), (r'\bwho to ring\b', 'who to call'),
     (r'\bof a term\b', 'of a semester'), (r'\bdark garden\b', 'dark backyard'), (r'\bstarted quite enjoying\b', 'started to enjoy'),
     (r'\brevise\b(?= (every|for|at|tonight|on))', 'study'), (r'\bward round\b', 'hospital rounds'), (r'\bcurry and the quiz on the TV\b', 'takeout and a game show on TV'),
     # book20 (books-final9, bookqa20 round): the last British words and settings
