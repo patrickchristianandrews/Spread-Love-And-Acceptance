@@ -2,7 +2,7 @@
    only, so the Welcome back panel (home page) and /this-week.html can offer to pick up again.
 
    What a place is: { u: address, k: kind, t: plain title, at: when (ms), done, f, s, ep, pos, tot }.
-     k: 'chapter' (book chapter), 'guide', 'tool', 'workpaper', 'game', 'episode' (Frequency Buddies), 'week' (My week), 'feel' (What am I feeling?)
+     k: 'chapter' (book chapter), 'guide', 'tool', 'workpaper', 'game', 'episode' (Frequency Buddies), 'week' (My week), 'feel' (Paint Your Feelings)
      f/s: how far down a chapter or guide they got (0 to 1) and where: { id: the section above the top of the screen, off: pixels below it, f }
      done: a chapter or guide read to the end, or an episode that ended
      ep/pos/tot: the episode id, and the playback position and length in seconds
@@ -17,7 +17,7 @@
    "Back where you were" note and a Start from the top button. Without #resume nothing moves, so the browser's own scroll
    restoring, links with a #part and the Save button's "Mark my place" (bookmarks.js, which keeps its own "Pick up where you
    stopped?" line) are left alone. If a place was marked by hand more recently, that spot is used. An episode shows a
-   "Resume at 4:12" button above the player (buddies-player.js: TOLBuddiesPlayer.resumeAt). What am I feeling? keeps its own
+   "Resume at 4:12" button above the player (buddies-player.js: TOLBuddiesPlayer.resumeAt). Paint Your Feelings keeps its own
    saved questions (emo-ui.js, only when the visitor taps "Save my place"); this list only points to the page.
 
    window.TOLResume: { enabled, places, visible, model, remove, forget, href, detail, ago, kindName, onChange }. */

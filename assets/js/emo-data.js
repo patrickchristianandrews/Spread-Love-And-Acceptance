@@ -1,4 +1,4 @@
-/* emo-data.js: the questions, patterns, steps and words behind "What am I feeling?" (/what-am-i-feeling.html).
+/* emo-data.js: the questions, patterns, steps and words behind "Paint Your Feelings" (/what-am-i-feeling.html).
    Plain data, no logic. emo-engine.js reads it to choose the next question, build the map, the picture and the plan.
    Nothing here is sent anywhere. It also loads in Node (module.exports) so the persona tests can run without a browser.
 

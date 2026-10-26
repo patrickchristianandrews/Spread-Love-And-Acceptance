@@ -1,4 +1,4 @@
-/* emo-ui.js: the screens of "What am I feeling?" (/what-am-i-feeling.html).
+/* emo-ui.js: the screens of "Paint Your Feelings" (/what-am-i-feeling.html).
    Questions, the "Here's what I'm hearing" map, the picture with its legend, the plan, and the optional history.
    It runs on simple written-out rules (emo-engine.js), and nothing is sent anywhere.
 
