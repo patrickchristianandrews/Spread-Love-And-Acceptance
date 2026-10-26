@@ -560,8 +560,8 @@ def book_docs(book, where):
 
 def series_page(book):
     s = '<section class="pe-back ps-series" id="series"><h1 class="pe-back-h">The series</h1>'
-    s += ('<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order. Every chapter is also free to read '
-          'online, in a short and a full version.</p><ol class="ps-series-list">') % B.esc(SERIES_TITLE)
+    s += ('<p class="pe-back-lede">%s is a series of books. Each one stands on its own; read them in any order. Every chapter is also free to read '
+          'online, with an expanded version that adds the research, more examples and more to try.</p><ol class="ps-series-list">') % B.esc(SERIES_TITLE)
     for b in S.series_items():
         this = b.get('id') == book.get('id')
         pocket_ = b.get('id') == S.POCKET['id']

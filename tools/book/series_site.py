@@ -151,7 +151,7 @@ def home_html():
     w = c['workbook']
     m = made.get(w['id'], {})
     meta = 'Every workpaper, to fill in by hand' + (' · %d large pages' % m['pages'] if m.get('pages') else '')
-    short.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+    short.append(('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Workbook</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                  '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/workpapers/fill/index.html">Fill them in free online</a>%s</p>%s</div></li>') % (
         w['color'], cover_img(w['id'], 'Cover of %s' % w['title'], 621), esc(w['title']), esc(w['line']), meta, free_pdf(w['id'], m), shop_row(w['id'])))
     try:
@@ -162,18 +162,18 @@ def home_html():
     if pk:
         m = made.get(pk['id'], {})
         meta = '%d everyday reactions, one to a page' % len(pk['items']) + (' · %d small pages' % m['pages'] if m.get('pages') else '')
-        short.insert(0, ('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Short edition · Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
+        short.insert(0, ('<li class="bk-sb" style="--bc:%s">%s<div class="bk-sb-body"><p class="bk-sb-k">Pocket guide</p><h3>%s</h3><p class="bk-sb-line">%s</p>'
                      '<p class="bk-sb-meta">%s</p><p class="bk-sb-links"><a class="tol-btn" href="/the-logic-behind-it.html">Every situation, free online</a>%s</p>%s</div></li>') % (
             pk['color'], cover_img(pk['id'], 'Cover of %s' % pk['title'], 768), esc(pk['title']), esc(pk['line']), meta, free_pdf(pk['id'], m), shop_row(pk['id'])))
     return ('%s\n%s\n<section class="bk-series no-bubble no-dive no-cheer" data-no-bubble id="print-series" aria-labelledby="series-h">'
             '<h2 id="series-h">The book in print</h2>'
-            '<p>The same chapters, as a series of short color books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
-            'In print, each chapter is the short version, with a code to scan for the full one.</p>'
+            '<p>The same chapters, as a series of color books that each stand on their own, plus a workbook with every workpaper and a pocket guide. '
+            'In print, each chapter holds the core of the chapter, with a code to scan for the expanded version.</p>'
             '<p class="bk-series-note" data-shop-soon>Paperbacks: coming to Amazon soon. Everything here stays free to read online.</p>'
             '<p class="bk-series-note">' + EMAIL_LINE + ' ' + FREE_LINE + '</p>'
             '<ol class="bk-series-list">%s</ol>'
-            '<h3 class="bk-series-h3" id="short-editions">The short editions</h3>'
-            '<p class="bk-series-note">Two smaller companions to the books, each under a hundred pages: the pocket guide and the workbook.</p>'
+            '<h3 class="bk-series-h3" id="companions">The workbook and the pocket guide</h3>'
+            '<p class="bk-series-note">Two companions to the books: the pocket guide and the workbook.</p>'
             '<ol class="bk-series-list bk-series-short">%s</ol></section>\n%s\n%s') % (START, CSS, '\n'.join(rows), '\n'.join(short), JS, END)
 
 
@@ -309,8 +309,8 @@ def download_html():
                 esc(_file(pk['id'], m)), esc(pk['id']), _save_name(pk['title']), _meta(m)))
     out = ['%s\n%s' % (DL_START, DL_CSS),
            '<section class="bk-dl-four" aria-labelledby="bk-dl-four-h"><h2 id="bk-dl-four-h">The books</h2>'
-           '<p>The same short books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
-           'Each chapter is the short version, with a code to scan for the full one.</p>'
+           '<p>The same books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
+           'Each chapter holds the core of the chapter, with a code to scan for the expanded version.</p>'
            '<ul class="bk-dl-books no-bubble" data-no-bubble>%s</ul></section>' % '\n'.join(rows)]
     if free:
         out.append('<section class="bk-dl-free" aria-labelledby="bk-dl-free-h"><h2 id="bk-dl-free-h">The workbook and the pocket guide</h2>'

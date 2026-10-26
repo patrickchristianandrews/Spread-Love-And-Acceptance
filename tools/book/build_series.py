@@ -476,8 +476,8 @@ def copyright_page(book, workbook=False, bw=False):
         esc(SERIES_TITLE), (', Book %d' % book['n']) if not workbook else '', esc(book['title']), B.AUTHOR)
     s += '<p>Text and pictures © 2026 %s. First print edition, %s. Printed on demand%s.</p>' % (
         B.AUTHOR, B.UPDATED, ', with a black-and-white interior' if bw else '')
-    s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, in a short and a '
-          'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
+    s += ('<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, with an expanded '
+          'version that adds the research, more examples and more to try, and with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
           'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % (what, esc(SERIES_TITLE))
     s += '<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis or a treatment, and it can’t know your situation.</p>'
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
@@ -711,7 +711,7 @@ def ideas_map(book, chs, epub=False, pocket_sections=None):
 
 def series_page(book):
     s = '<section class="pe-back ps-series no-bubble" data-no-bubble id="series" style="--pc:%s">%s<h1 class="pe-back-h">The series</h1>' % (book['color'], mark('series'))
-    s += '<p class="pe-back-lede">%s is a series of short books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(SERIES_TITLE)
+    s += '<p class="pe-back-lede">%s is a series of books. Each one stands on its own; read them in any order.</p><ol class="ps-series-list">' % esc(SERIES_TITLE)
     for b in series_items():
         this = b.get('id') == book.get('id')
         k = ('Book %d' % b['n']) if b.get('n') else ('Pocket guide' if b.get('id') == POCKET['id'] else 'Workbook')
@@ -722,7 +722,7 @@ def series_page(book):
 
 
 FREE_LINKS = [
-    ('/book/', 'The whole book, free', 'Every chapter, in a short and a full version. Read it, search it, or download a free PDF.'),
+    ('/book/', 'The whole book, free', 'Every chapter, as in the paperbacks and in an expanded version. Read it, search it, or download a free PDF.'),
     ('/research.html', 'All the research', 'Every study the book mentions, what it found, how strong it is, and links.'),
     ('/glossary.html', 'Words used in the book', 'Each of the book’s own words, in one plain sentence.'),
     ('/workpapers/fill/index.html', 'Fill in the workpapers', 'Every workpaper on screen. It does the math, and what you type stays on your device.'),
@@ -833,7 +833,7 @@ SHOWCASE = [
     ('journeys', 'Guided journeys', 'Three to six small steps for what’s going on, from the same argument again to a new blended family.', '/journeys.html', 'journey'),
     ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill out on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
-    ('deep', 'The full chapters', 'Each chapter in this book has a fuller version online, with more research, more examples and more to try.', '/book/', 'book'),
+    ('deep', 'The expanded version', 'Each chapter in this book has an expanded version online, with more research, more examples and more to try.', '/book/', 'book'),
     ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
     ('coins', 'Kindness Coin Pusher', 'A cozy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
     ('garden', 'The Night Garden', 'A calm breathing game. A flower blooms with every slow breath, and there are fireflies to guide and a lily pond to fill.', '/night-garden.html', 'garden'),
@@ -1311,7 +1311,7 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
     title = item.get('short_title') or item['title']
     free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.<wbr>com/<wbr>the-logic-behind-it') if pocket else (
-        '%s/book/' % SITE, 'Free to read online', 'Every chapter, short and full, at spreadloveandacceptance.com/book')
+        '%s/book/' % SITE, 'Free to read online', 'Every chapter, plus its expanded version, at spreadloveandacceptance.com/book')
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
                  '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '
