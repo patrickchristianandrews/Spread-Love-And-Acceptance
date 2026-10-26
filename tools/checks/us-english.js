@@ -46,7 +46,11 @@ const SKIP_FILES = new Set([
   'tools/checks/us-english.js', 'tools/checks/us-english-words.json', 'tools/checks/us-english-allow.json',
   'tools/checks/site-health.js', 'tools/checks/no-removed-content.js', 'tools/search/test-search.js', 'sw.js',
   'assets/js/puzzles/bloom-dict.js', 'tools/chat/common-words.txt',
+  // built from the sources that are scanned (rebuild them with their builders; do not edit by hand)
+  'assets/js/chat-kb.js', 'assets/js/chat-kb-bg.js', 'assets/js/search-index.js', 'assets/js/search-needs.js', 'assets/js/research-index.js',
 ]);
+// JSON/JS keys whose values are phrases the code matches against what a visitor types (never shown), not text.
+const MATCH_KEYS = new Set(['keys', 'pat', 'notPat', 'patterns', 'match', 're', 'rx', 'cues', 'themPat', 'enter_phrases', 'exit_phrases', 'say', 'syn', 'aw', 'bw', 'nouns', 'kw', 'only', 'pick', 'section_for_kind', 'section_for_ask', 'match_order', 'lens_labels', 'words', 'roots', 'aliases', 'alias', 'id', 'kind', 'pillar', 'page', 'safety_topic_ids', 'defaultWho']);
 const SKIP_PREFIX = ['tools/word-games/', 'tools/book/', 'tools/kids/', 'tools/buddies/', 'tools/progress/', 'tools/journeys/mk', 'assets/vendor/', 'book/print/', 'workpapers/fill/', 'assets/audio/', 'assets/video/', 'assets/fonts/', 'tools/seo/', 'tools/library/', 'tools/research/', 'tools/search/build', 'tools/chat/build', 'tools/signal/', 'tools/this-week/', 'tools/reading/', 'tools/reader/', 'tools/places/'];
 const EXT = /\.(html|js|json|md|txt|webmanifest)$/;
 
@@ -77,6 +81,7 @@ const META = /<meta\s[^>]*>/gi;
 const HEADING_TAGS = /^(h[1-6]|summary|caption|legend|dt|th)$/i;
 
 function jsonStrings(v, key, out, kind) {
+  if (MATCH_KEYS.has(key)) return;
   if (typeof v === 'string') { out.push({ kind, text: v, key }); return; }
   if (Array.isArray(v)) { v.forEach(x => jsonStrings(x, key, out, kind)); return; }
   if (v && typeof v === 'object') for (const k of Object.keys(v)) { if (/^(@context|@type|@id|url|sameAs|image|logo|href|id|key|src|icon|contentUrl|embedUrl|thumbnailUrl|mainEntityOfPage|inLanguage|datePublished|dateModified|isbn|identifier)$/.test(k)) continue; jsonStrings(v[k], k, out, kind); }
@@ -235,18 +240,30 @@ function allowed(file, rule, text, hit) {
   return false;
 }
 
+// CSS rules, selectors, class lists, identifiers and regex source are code, not text a reader sees.
+function isCodeLike(t) {
+  if (/^[.#\[][\w-]/.test(t) || /[{};]\s*[\w-]+\s*:|\{[^}]*:[^}]*;/.test(t)) return true;
+  if (!/\s/.test(t) && /[-_.#:=\\|()\[\]]/.test(t)) return true;
+  if (/\\[bdswBDSW]|\(\?[:=!<]|\[\^|\|[\w(]/.test(t)) return true;
+  return false;
+}
+
 const files = walk(ROOT, []).sort();
 const findings = []; // {rule,file,line,kind,hit,ctx}
 const dump = [];
 const URLISH = /https?:\/\/\S+|\b[\w.-]+\.(?:com|org|net|io|gov|edu)(?:\/\S*)?|\b[\w-]+\.(?:html|js|css|json|png|jpg|webp|mp3|mp4|svg|pdf)\b/g;
-const seen = new Set();
+let seen = new Set();
 for (const rel of files) {
+  seen = new Set();
   let strs;
   try { strs = extract(rel); } catch (e) { console.error('extract failed for', rel, e.message); continue; }
   for (const s of strs) {
     if (DUMP) dump.push([s.file, s.line || 0, s.kind, s.text.replace(/\t|\n/g, ' ')].join('\t'));
-    const key = rel + '\u0000' + s.text + '\u0000' + s.kind;
-    const t = s.text.replace(URLISH, ' ');
+    const key = s.kind + '\u0000' + s.text;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (/^js|^json$/.test(s.kind) && isCodeLike(s.text)) continue;
+    const t = /[./:]/.test(s.text) ? s.text.replace(URLISH, ' ') : s.text;
     const run = r => !ONLY || ONLY.has(r);
     for (const rule of ['british', 'ai', 'calling', 'researcher']) {
       if (!run(rule)) continue;

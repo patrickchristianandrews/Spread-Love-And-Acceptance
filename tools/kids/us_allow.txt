@@ -19,3 +19,25 @@ andika     # the name of a font
 fraunces   # the name of a font
 sil        # SIL Open Font License
 spreadloveandacceptance  # the site address
+i'd        # typed "I'd" in a group chat
+i'm        # typed "I'm" in a group chat
+pitter     # from "pitter-pattering"
+rrrrrrrrr  # the sound of the drill
+# words that are British only in some senses, checked in context (the audit lists them each run so a new use gets a look):
+call       # "I'd call that credentials", "called a meeting", "called out": no one is told to call anyone
+called     # the same
+calling    # "calling me a baby", "calling the person a name"
+dinner     # the evening meal (American)
+fall       # "a pancake to fall"
+flat       # "squished flat", "a flat, tired feeling" (not an apartment)
+garden     # the Night Garden, a name on the site
+okay       # narrative and chat both use "okay"
+phone      # the phone itself
+phones     # the phones
+rang       # a bell rang
+ring       # a key ring for the cards; "the Mom-ish ring" of a thought
+round      # "round glasses" (the shape)
+rung       # a rung of the ladder
+sorted     # "sorted the pile"
+tap        # "a drum to a tap"
+tea        # "a cup of tea" (fine in American English)

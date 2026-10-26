@@ -74,6 +74,7 @@ FAIL[-1] = ('British wording or spelling', r'\b(?:' + '|'.join(w.replace('?', ''
 REVIEW = r'\b(?:flat|round|garden|gardens|shop|shops|film|films|football|post|chips|jam|boot|boots|tap|taps|lift|bill|holiday|holidays|rather|quite|fall|ring|rang|rung|call|called|calls|calling|phone|phones|ok|okay|okey|sorted|keen|proper|ground|tea|dinner|supper|loo|bin)\b'
 
 # ---- headings and captions
+VOID = {'br', 'img', 'hr', 'input', 'meta', 'link', 'source', 'col', 'area', 'base', 'wbr'}
 HEADING_TAGS = {'h1', 'h2', 'h3', 'h4', 'figcaption', 'summary'}
 HEADING_CLASSES = {'cap', 'try-h', 'rules-h', 'chap-n', 'who-h', 'h'}
 
@@ -97,6 +98,12 @@ class Visible(HTMLParser):
                 self.attrs.append(a[k])
         cls = set((a.get('class') or '').split())
         head = tag in HEADING_TAGS or bool(cls & HEADING_CLASSES)
+        if tag in VOID:
+            if tag == 'br':
+                self.text.append(' ')
+                if self.cur is not None:
+                    self.cur.append(' ')
+            return   # a void tag (br, img, meta ...) has no end tag, so it must not go on the stack
         self.stack.append((tag, head))
         if head:
             self.cur = []

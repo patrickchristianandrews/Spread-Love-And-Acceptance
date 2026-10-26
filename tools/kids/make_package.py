@@ -10,6 +10,7 @@ Every number in the listing (pages, spine, cost, royalty) is computed here from 
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -113,14 +114,34 @@ TAGS = {
 KINDLE = {'picture-book': 4.99, 'chapter-book': 4.99}
 
 
+def names(t):
+    """the stable file names in the package (every one starts with kids-, so the package can be merged with the adult one)"""
+    pre = {'picture-book': 'kids-picture-book', 'chapter-book': 'kids-chapter-book', 'coloring-younger': 'kids-coloring-book-younger', 'coloring-older': 'kids-coloring-book-older'}[t['id']]
+    d = {'dir': pre, 'interior': pre + '-interior.pdf', 'wrap': pre + '-cover-wrap.pdf', 'front': pre + '-cover-front.jpg', 'front_small': pre + '-cover-front-small.jpg',
+         'kindle': pre + '-cover-kindle.jpg', 'epub': (pre + '.epub') if t['epub'] else None, 'screen': (pre + '-screen.pdf') if t['id'] == 'picture-book' else None}
+    return d
+
+
+def pdfinfo(path):
+    out = subprocess.run(['pdfinfo', path], capture_output=True, text=True).stdout
+    pages = int(re.search(r'Pages:\s+(\d+)', out).group(1))
+    m = re.search(r'Page size:\s+([\d.]+) x ([\d.]+) pts', out)
+    return pages, round(float(m.group(1)) / 72, 3), round(float(m.group(2)) / 72, 3)
+
+
 def md_title(t):
-    pages = K[t['id']].get('pages_printed') or K[t['id']].get('pages_planned') or K[t['id']].get('pages')
+    pages, _w, _h = pdfinfo(os.path.join(C.OUT, t['interior']))   # the real page count, from the PDF itself
+    assert pages == CHK[t['id']]['pages'], (t['id'], pages)
+    cpages, cw, ch = pdfinfo(os.path.join(C.OUT, t['cover']))
+    assert cpages == 1
+    N = names(t)
     rec = K[t['id']]
     cover = rec['cover']
     cost = C.print_cost(t['kind'], pages)
     price = price_for(pages, cost)
     roy, rate = C.royalty(price, cost)
-    sp = cover['spine_in']
+    sp = round(pages * C.PAPER[t['paper']], 4)
+    assert abs(sp - cover['spine_in']) < 0.0002 and abs(cw - cover['width_in']) < 0.01 and abs(ch - cover['height_in']) < 0.01, ('cover does not match the page count', t['id'], sp, cover, cw, ch)
     out = []
     A = out.append
     A('## Book %d: %s' % (t['n'], t['name']))
@@ -197,8 +218,9 @@ def md_title(t):
     A('| Print options | Ink and paper: **%s**. Trim: **%s**. Bleed: **%s**. Cover finish: **Matte**%s. |' % (t['ink'], t['trim'], t['bleed'], ' (calmer, less glare; choose glossy only if the proof looks dull)' if t['id'] != 'picture-book' else ' (glossy is also fine for a picture book; order a proof of each if unsure)'))
     A('| Page count | **%d** (KDP reads it from the file; even, as KDP prints in sheets) |' % pages)
     A('| Spine width | **%s in** (%s) = %d pages x %s in. Spine text: %s |' % (sp, '%.2f mm' % (sp * 25.4), pages, C.PAPER[t['paper']], 'none (KDP prints spine text only above 79 pages%s)' % ('; this book is under, so the spine is plain color' if pages <= 79 else '; at %.3f in the spine is too thin for readable text, so none is printed' % sp)))
-    A('| Manuscript file | `%s`%s |' % (t['interior'], ' (page size %.3f x %.3f in: the 8.5 in square plus 0.125 in bleed on the outside, top and bottom)' % (CHK[t['id']]['size_in'][0], CHK[t['id']]['size_in'][1]) if t['bleed'] == 'Bleed' else ' (page size %.1f x %.1f in, no bleed; every line is inside the 0.5 in safe margin)' % tuple(CHK[t['id']]['size_in'])))
-    A('| Cover file | `%s` (full wrap %s x %s in: 0.125 in bleed on all four sides, back, %s in spine, front; the 2 x 1.2 in barcode area at the bottom right of the back is left clear) |' % (t['cover'], cover['width_in'], cover['height_in'], sp))
+    A('| Manuscript file (upload this) | `%s`%s |' % (N['interior'], ' (page size %.3f x %.3f in: the 8.5 in square plus 0.125 in bleed on the outside, top and bottom)' % (CHK[t['id']]['size_in'][0], CHK[t['id']]['size_in'][1]) if t['bleed'] == 'Bleed' else ' (page size %.1f x %.1f in, no bleed; every line is inside the 0.5 in safe margin)' % tuple(CHK[t['id']]['size_in'])))
+    A('| Cover file (upload this, "I have a print-ready PDF cover") | `%s` (full wrap %s x %s in: 0.125 in bleed on all four sides, back, %s in spine, front; the 2 x 1.2 in barcode area at the bottom right of the back is left clear) |' % (N['wrap'], cw, ch, sp))
+    A('| Front cover picture (for ads, Author Central, social posts) | `%s` (1600 px wide JPG) |' % N['front'])
     LC = {'picture-book': 'Every page is original artwork, and the story has words on every spread.', 'chapter-book': 'It is a full story of about 16,000 words.', 'coloring-younger': 'Every picture page is original artwork, with a blank page behind it so markers do not soak through.', 'coloring-older': 'Every picture page is original artwork, with a blank page behind it so markers do not soak through.'}
     A('| Is this a low-content book? | **No.** ' + LC[t['id']] + ' Check KDP\'s current definition on the Paperback Content screen and answer as it defines the term. [OWNER] |')
     A('| Large-print book? | No |')
@@ -233,12 +255,12 @@ def md_title(t):
         A('| Field | Answer |')
         A('|---|---|')
         if t['id'] == 'picture-book':
-            A('| Manuscript (ebook) file | **epub/%s** (EPUB 3 **fixed layout**, 40 pages as 1600 x 1600 px images, %.2f MB, page-spread properties so tablets show two-page spreads; the words of each page are in the image\'s alt text; EPUBCheck: 0 fatals, 0 errors, 0 warnings, 0 infos). |' % (t['epub'], epub_mb))
+            A('| Manuscript (ebook) file | **%s** (EPUB 3 **fixed layout**, 40 pages as 1600 x 1600 px images, %.2f MB, page-spread properties so tablets show two-page spreads; the words of each page are in the image\'s alt text; EPUBCheck: 0 fatals, 0 errors, 0 warnings, 0 infos). |' % (N['epub'], epub_mb))
             A('| Why an EPUB, and not Kindle Kids\' Book Creator | Amazon retired Kindle Kids\' Book Creator and Kindle Comic Creator in 2025 and now takes new fixed-layout children\'s books as KPF (made in Kindle Create) or as EPUB. This EPUB is the file to upload. Open it in Amazon\'s free **Kindle Previewer** (children\'s book / fixed layout view) before publishing. If Kindle Previewer shows a problem, import `picture-book-screen.pdf` into Kindle Create instead and export a KPF: the pictures and words are the same. [OWNER] |')
-            A('| Kindle cover file | `cover-picture-book-front.jpg` (1600 x 1600 px, the square front cover; KDP accepts it) |')
+            A('| Kindle cover file (upload this) | `%s` (1600 x 2560 px: the square front cover centered on the sky and grass colors, the 1.6:1 shape KDP prefers; the square front `%s` is also fine if you prefer it) |' % (N['kindle'], N['front']))
         else:
-            A('| Manuscript (ebook) file | **epub/%s** (EPUB 3, reflowable, %.2f MB, 11 chapters, spot pictures as PNG; EPUBCheck: 0 fatals, 0 errors, 0 warnings, 0 infos). |' % (t['epub'], epub_mb))
-            A('| Kindle cover file | `cover-chapter-book-kindle.jpg` (1600 x 2560 px, the 1.6:1 shape KDP prefers; also inside the EPUB) |')
+            A('| Manuscript (ebook) file | **%s** (EPUB 3, reflowable, %.2f MB, 11 chapters, spot pictures as PNG; EPUBCheck: 0 fatals, 0 errors, 0 warnings, 0 infos). |' % (N['epub'], epub_mb))
+            A('| Kindle cover file (upload this) | `%s` (1600 x 2560 px, the 1.6:1 shape KDP prefers; also inside the EPUB) |' % N['kindle'])
         A('| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |')
         A('| Kindle price | **$%.2f**, 70%% royalty (the 70%% band is $2.99 to $12.99): 70%% x $%.2f = $%.2f, minus delivery (%.2f MB x $0.15 = $%.2f) = **$%.2f** a copy. [OWNER] |' % (kp, kp, round(0.7 * kp, 2), epub_mb, deliv, round(0.7 * kp - deliv, 2)))
         A('| KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and the story\'s characters and the books\' ideas are free on the website. |')
@@ -248,7 +270,7 @@ def md_title(t):
     else:
         A('### Kindle')
         A('')
-        A('**None.** A coloring book is made to be written in. Its pictures are art on a page, not text that can reflow, and KDP can turn away ebooks that are mostly images with nothing to read. The free PDF on the website is the way to print it at home.')
+        A('**This title is print only: there is no Kindle edition and no EPUB.** A coloring book is made to be written in. Its pictures are art on a page, not text that can reflow, and KDP can turn away ebooks that are mostly images with nothing to read. The free PDF on the website is the way to print it at home. A Kindle-shaped cover picture (`%s`, 1600 x 2560 px) is in the package for ads and previews only; you do not upload it to KDP.' % N['kindle'])
         A('')
     A('### Taglines for ads (short and true)')
     A('')
@@ -258,6 +280,54 @@ def md_title(t):
     A('---')
     A('')
     return '\n'.join(out), dict(pages=pages, price=price, cost=cost, royalty=roy, spine=sp)
+
+
+def launch_steps():
+    return ['## Launch steps (the same for each title; the Kindle steps only for the picture book and the chapter book)', '',
+            '1. Sign in to KDP (kdp.amazon.com) and choose **Create**, then **Paperback**. Do the titles one at a time, in series order.',
+            '2. **Paperback Details:** language English; title, subtitle and series name and number as in the title\'s section below; author **Christian**; description (paste the HTML block); the two reading-age numbers; the 7 keywords; the 3 categories; answer the audience questions as shown.',
+            '3. **Paperback Content:** choose **Get a free KDP ISBN**; set the print options exactly as in the title\'s table (ink and paper, trim, bleed, matte cover); upload the manuscript PDF; choose the print-ready PDF cover and upload the cover file; answer the AI-use question from the PRIVATE UPLOAD NOTE (it is a form question only); open the **Print Previewer** and fix anything it flags (it should flag nothing; the bleed, margins and fonts were checked).',
+            '4. **Paperback Rights & Pricing:** all territories; the list price in the title\'s table for Amazon.com, then let KDP suggest the other marketplaces; leave **Expanded distribution** off. Check that KDP\'s printing cost matches the one in the table (if it differs, KDP\'s figure wins and the royalty changes).',
+            '5. **Order a proof copy** of the paperback. Check the color (picture book), the edges, the margins, the blank backs (coloring books), the spine and the barcode corner. Approve it, then **Publish**. Review takes up to a few days.',
+            '6. **Kindle edition (picture book and chapter book only):** from the Bookshelf choose **Create Kindle eBook**, or **Create Kindle eBook edition** on the published paperback. Use the same title, subtitle, series, author, description, keywords and categories. Upload the **EPUB** as the manuscript and the Kindle cover JPG. Open it in **Kindle Previewer** (children\'s book view for the picture book) and check every page. Set the Kindle price from the table, leave **KDP Select** off and **DRM** off, and publish. KDP links the Kindle and paperback editions on one page when the title and author match.',
+            '7. **The coloring books are print only.** There is no Kindle step and no EPUB for them.',
+            '8. When both editions of a title are live, add the title to the series page (KDP: **Add to series**), and send the links to the lead for the site.',
+            '', '---', '']
+
+
+def at_a_glance(totals):
+    out = ['## At a glance', '',
+           '| # | Title | Subtitle | Series | Author |', '|---|---|---|---|---|']
+    for t in TITLES:
+        out.append('| %d | %s | %s | The Frequency Buddies Books, number %d | Christian |' % (t['n'], t['name'], t['sub'], t['n']))
+    out += ['', '| # | Reading age | Grade range | Trim | Ink and paper | Bleed | Pages (from pdfinfo) | Spine | List price | Printing cost | Royalty |', '|---|---|---|---|---|---|---|---|---|---|---|']
+    for t in TITLES:
+        i = totals[t['id']]
+        out.append('| %d | %d to %d | %s | %s | %s | %s | %d | %s in | $%.2f | $%.2f | $%.2f |' % (t['n'], t['ages'][0], t['ages'][1], t['grades'], t['trim'].split(' (')[0], t['ink'], t['bleed'], i['pages'], i['spine'], i['price'], i['cost'], i['royalty']))
+    out += ['', 'Kindle: the picture book and the chapter book have an EPUB; **the two coloring books are print only.**', '', '---', '']
+    return out
+
+
+def upload_names(totals):
+    out = ['## Upload file names (every file is in this package; every name starts with kids-)', '']
+    for t in TITLES:
+        N = names(t)
+        out.append('**%s** (folder `%s/`)' % (t['name'], N['dir']))
+        out.append('')
+        out.append('- Paperback manuscript: `%s` (%d pages)' % (N['interior'], totals[t['id']]['pages']))
+        out.append('- Paperback cover, full wrap: `%s`' % N['wrap'])
+        out.append('- Front cover picture: `%s` (and `%s`, 480 px, for the site)' % (N['front'], N['front_small']))
+        if N['epub']:
+            out.append('- Kindle manuscript: `%s`' % N['epub'])
+            out.append('- Kindle cover: `%s`' % N['kindle'])
+        else:
+            out.append('- Kindle manuscript: **none, this title is print only**')
+            out.append('- Kindle-shaped cover picture (ads and previews only, not uploaded to KDP): `%s`' % N['kindle'])
+        if N['screen']:
+            out.append('- Reading copy with no bleed (for the website, not for KDP): `%s`' % N['screen'])
+        out.append('')
+    out += ['---', '']
+    return out
 
 
 def listing():
@@ -272,11 +342,15 @@ def listing():
              '- **The text is American English** (checked by tools/kids/lint_kids.py and tools/kids/us_audit.py against the site\'s language rules: no dashes as punctuation, no semicolons, no "not X but Y" frames, no British spellings or words, no hotline, emergency or call-for-help wording, no names of experts, no names in headings).',
              '- **One private note.** Each title has a section called "PRIVATE UPLOAD NOTE: the KDP form question about AI use". It tells you what to answer in Amazon\'s own form. Nothing in the books, the covers, the descriptions or the site mentions it.',
              '', '---', '']
-    totals = {}
+    totals, sections = {}, []
     for t in TITLES:
-        s, info = md_title(t)
-        parts.append(s)
+        sec, info = md_title(t)
+        sections.append(sec)
         totals[t['id']] = info
+    parts += launch_steps()
+    parts += at_a_glance(totals)
+    parts += upload_names(totals)
+    parts += sections
     parts.append('## Printing cost summary')
     parts.append('')
     parts.append('| Title | Pages | Trim and ink | Printing cost | List price | Royalty a copy |')
@@ -351,79 +425,121 @@ def previews():
 def stage():
     if os.path.isdir(STAGE):
         shutil.rmtree(STAGE)
-    root = os.path.join(STAGE)
-    dirs = {'picture-book': 'picture-book', 'chapter-book': 'chapter-book', 'coloring-younger': 'coloring-book-younger', 'coloring-older': 'coloring-book-older'}
+    os.makedirs(STAGE)
     for t in TITLES:
-        d = os.path.join(root, dirs[t['id']])
-        os.makedirs(d, exist_ok=True)
-        shutil.copy(os.path.join(C.OUT, t['interior']), os.path.join(d, t['interior']))
-        shutil.copy(os.path.join(C.OUT, t['cover']), os.path.join(d, t['cover']))
-        shutil.copy(os.path.join(C.OUT, t['front']), os.path.join(d, t['front']))
-        shutil.copy(os.path.join(C.OUT, t['front'].replace('-front.jpg', '-front-small.jpg')), os.path.join(d, t['front'].replace('-front.jpg', '-front-small.jpg')))
+        N = names(t)
+        d = os.path.join(STAGE, N['dir'])
+        os.makedirs(d)
+        shutil.copy(os.path.join(C.OUT, t['interior']), os.path.join(d, N['interior']))
+        shutil.copy(os.path.join(C.OUT, t['cover']), os.path.join(d, N['wrap']))
+        shutil.copy(os.path.join(C.OUT, t['front']), os.path.join(d, N['front']))
+        shutil.copy(os.path.join(C.OUT, t['front'].replace('-front.jpg', '-front-small.jpg')), os.path.join(d, N['front_small']))
+        shutil.copy(os.path.join(C.OUT, t['front'].replace('-front.jpg', '-kindle.jpg')), os.path.join(d, N['kindle']))
         if t['epub']:
-            shutil.copy(os.path.join(C.OUT, 'epub', t['epub']), os.path.join(d, t['epub']))
-        if t['id'] == 'chapter-book':
-            shutil.copy(os.path.join(C.OUT, 'cover-chapter-book-kindle.jpg'), os.path.join(d, 'cover-chapter-book-kindle.jpg'))
-        if t['id'] == 'picture-book':
-            shutil.copy(os.path.join(C.OUT, 'picture-book-screen.pdf'), os.path.join(d, 'picture-book-screen.pdf'))
+            shutil.copy(os.path.join(C.OUT, 'epub', t['epub']), os.path.join(d, N['epub']))
+        if N['screen']:
+            shutil.copy(os.path.join(C.OUT, 'picture-book-screen.pdf'), os.path.join(d, N['screen']))
     previews()
+    # the previews folder gets the kids- prefix on every file
+    pdir = os.path.join(STAGE, 'previews')
+    kp = os.path.join(STAGE, 'kids-previews')
+    os.makedirs(kp)
+    for f in sorted(os.listdir(pdir)):
+        shutil.move(os.path.join(pdir, f), os.path.join(kp, f if f.startswith('kids-') else 'kids-' + f))
+    os.rmdir(pdir)
+    # the files the website uses (replace these in book/kids/ on the site)
+    site = os.path.join(STAGE, 'kids-site-files', 'book', 'kids')
+    os.makedirs(site)
+    for f in ('picture-book-screen.pdf', 'chapter-book.pdf', 'coloring-younger.pdf', 'coloring-older.pdf', 'cover-picture-book-front-small.jpg', 'cover-chapter-book-front-small.jpg', 'cover-coloring-younger-front-small.jpg', 'cover-coloring-older-front-small.jpg'):
+        shutil.copy(os.path.join(C.OUT, f), os.path.join(site, f))
     # sources
-    src = os.path.join(root, 'sources')
+    src = os.path.join(STAGE, 'kids-sources')
     shutil.copytree(os.path.join(C.ROOT, '_manuscripts', 'kids'), os.path.join(src, '_manuscripts', 'kids'))
     shutil.copytree(os.path.join(C.ROOT, 'tools', 'kids'), os.path.join(src, 'tools', 'kids'), ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
-    for name in ('kids.json', 'checks.json'):
-        shutil.copy(os.path.join(C.OUT, name), os.path.join(root, name))
+    shutil.copy(os.path.join(C.OUT, 'kids.json'), os.path.join(STAGE, 'kids-build-info.json'))
+    shutil.copy(os.path.join(C.OUT, 'checks.json'), os.path.join(STAGE, 'kids-pdf-checks.json'))
+
+
+def listing_pdf(md_text, out_pdf):
+    import markdown
+    body = markdown.markdown(md_text, extensions=['tables', 'fenced_code', 'sane_lists'])
+    fonts = os.path.join(HERE, 'fonts')
+    css = """
+@font-face{font-family:Andika;src:url('file://%(f)s/Andika-Regular.ttf');font-weight:400}
+@font-face{font-family:Andika;src:url('file://%(f)s/Andika-Bold.ttf');font-weight:700}
+@font-face{font-family:Andika;src:url('file://%(f)s/Andika-Italic.ttf');font-style:italic}
+@font-face{font-family:Fraunces;src:url('file://%(f)s/Fraunces-Bold.ttf');font-weight:700}
+body{font-family:Andika,sans-serif;font-size:9.4pt;line-height:1.45;color:#222}
+h1,h2,h3{font-family:Fraunces,serif;color:#1d2a4a;page-break-after:avoid}
+h1{font-size:20pt} h2{font-size:15pt;border-bottom:1.5px solid #c9b98c;padding-bottom:2px;margin-top:20px} h3{font-size:11.5pt;margin-top:14px}
+table{border-collapse:collapse;width:100%%;margin:6px 0 10px;font-size:8.2pt;page-break-inside:auto} tr{page-break-inside:avoid}
+td,th{border:1px solid #b9b2a2;padding:3px 5px;vertical-align:top;overflow-wrap:anywhere} th{background:#efe8d6}
+pre,code{font-family:ui-monospace,monospace;font-size:8pt} pre{background:#f6f3ea;border:1px solid #d9d1bd;border-radius:4px;padding:6px 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+hr{border:0;border-top:1px solid #d9d1bd;margin:14px 0} li{margin:2px 0}
+""" % {'f': fonts}
+    tmp = os.path.join(DEST, 'tmp-listing.html')
+    C.write(tmp, '<!doctype html><html lang="en-US"><head><meta charset="utf-8"><title>Kids titles, KDP listing</title><style>%s</style></head><body>%s</body></html>' % (css, body))
+    env = dict(os.environ)
+    subprocess.run(['node', os.path.join(HERE, 'md_to_pdf.js'), tmp, out_pdf], check=True, env=env)
+    os.remove(tmp)
+    subprocess.run(['python3', os.path.join(HERE, 'pdf_meta.py'), out_pdf, 'Kids titles: KDP listing', 'Christian'], check=True)
 
 
 def readme(totals):
-    lines = ['Spread Love & Acceptance: the kids titles, KDP package', '=' * 62, '', 'Read CHANGES.md first: it lists what changed in this version.', '',
-             'What is in each folder:',
-             '  picture-book/        interior PDF (print, with 0.125 in bleed), screen PDF (no bleed), full-wrap cover PDF, front cover JPG, fixed-layout EPUB',
-             '  chapter-book/        interior PDF, full-wrap cover PDF, front cover JPG, Kindle cover JPG, reflowable EPUB',
-             '  coloring-book-younger/, coloring-book-older/   interior PDF, full-wrap cover PDF, front cover JPG (print only)',
-             '  previews/            PNG pictures: every picture-book spread, sample pages, all four full-wrap covers',
-             '  listing-kids-kdp.md  every KDP field for all four titles, with the printing cost math',
-             '  sources/             the manuscripts (JSON and Markdown) and the builders (tools/kids), with the fonts (SIL Open Font License)',
-             '  kids.json, checks.json   page counts, spines and the readiness checks',
-             '', 'Upload order for each paperback: Paperback Content (manuscript PDF, then the cover PDF "I have a print-ready PDF cover"), Paperback Details, Rights and Pricing.',
-             'Order a proof copy of each book before you publish.', '', 'The numbers:']
+    lines = ['Spread Love & Acceptance: the kids titles, KDP package', '=' * 62, '',
+             'Read kids-CHANGES.md first: it lists what changed in this version.', '',
+             'Everything here is for four titles (The Frequency Buddies Books). Every file name starts with kids-.', '',
+             'Start with the listing: kids-listing-kdp.pdf (or the same text as kids-listing-kdp.md). It has the launch steps, every KDP field, the prices, the upload file names and the private note for the KDP form.', '',
+             'Folders (one per title):']
+    for t in TITLES:
+        N = names(t)
+        lines.append('  %s/   %s, %s, %s, %s, %s%s' % (N['dir'], N['interior'], N['wrap'], N['front'], N['kindle'], (N['epub'] + ', ') if N['epub'] else '', 'EPUB: none (print only)' if not N['epub'] else ''))
+    lines += ['  kids-previews/   PNG pictures of the books and the four full-wrap covers',
+              '  kids-site-files/book/kids/   the eight files the website uses (copy them over book/kids/ on the site)',
+              '  kids-sources/   the manuscripts and the builders, with the fonts (SIL Open Font License)',
+              '  kids-build-info.json, kids-pdf-checks.json   page counts, spines and the readiness checks',
+              '', 'The numbers (page counts are read from the PDFs with pdfinfo):']
     for t in TITLES:
         i = totals[t['id']]
         lines.append('  %-42s %3d pages, spine %.4f in, printing $%.2f, list $%.2f, royalty $%.2f' % (t['name'], i['pages'], i['spine'], i['cost'], i['price'], i['royalty']))
-    lines += ['', 'To rebuild: start a local server on port 8673 from the repo root and run  bash tools/kids/run_all.sh  then  python3 tools/kids/make_package.py <folder>.']
+    lines += ['', 'The two coloring books are print only (no Kindle edition, no EPUB). The picture book and the chapter book each have an EPUB.',
+              'Order a proof copy of each paperback before you publish.',
+              '', 'To rebuild: start a local server on port 8673 from the repo root and run  bash tools/kids/run_all.sh  then  python3 tools/kids/make_package.py <folder> --changes <CHANGES.md>.']
     return '\n'.join(lines) + '\n'
 
 
 def main():
-    """usage: make_package.py <dest folder> [--changes CHANGES.md]   (a CHANGES file is put first in the package and beside it)"""
+    """usage: make_package.py <dest folder> [--changes CHANGES.md]"""
     args = sys.argv[1:]
-    changes = None
-    if '--changes' in args:
-        i = args.index('--changes')
-        changes = args[i + 1]
+    changes = args[args.index('--changes') + 1] if '--changes' in args else None
     os.makedirs(DEST, exist_ok=True)
     text, totals = listing()
     stage()
-    C.write(os.path.join(DEST, 'listing-kids-kdp.md'), text)
-    C.write(os.path.join(STAGE, 'listing-kids-kdp.md'), text)
-    C.write(os.path.join(STAGE, 'README.txt'), readme(totals))
+    C.write(os.path.join(DEST, 'kids-listing-kdp.md'), text)
+    C.write(os.path.join(STAGE, 'kids-listing-kdp.md'), text)
+    listing_pdf(text, os.path.join(DEST, 'kids-listing-kdp.pdf'))
+    shutil.copy(os.path.join(DEST, 'kids-listing-kdp.pdf'), os.path.join(STAGE, 'kids-listing-kdp.pdf'))
+    C.write(os.path.join(STAGE, 'kids-README.txt'), readme(totals))
     if changes:
-        shutil.copy(changes, os.path.join(STAGE, 'CHANGES.md'))
+        shutil.copy(changes, os.path.join(STAGE, 'kids-CHANGES.md'))
         shutil.copy(changes, os.path.join(DEST, 'CHANGES.md'))
     out = os.path.join(DEST, ZIPNAME)
     if os.path.exists(out):
         os.remove(out)
     root = 'Spread-Love-and-Acceptance-kids-KDP-package'
+    first = ['kids-CHANGES.md'] if changes else []
+    first += ['kids-README.txt', 'kids-listing-kdp.pdf', 'kids-listing-kdp.md']
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
-        if changes:
-            z.write(os.path.join(STAGE, 'CHANGES.md'), os.path.join(root, 'CHANGES.md'))   # first in the zip
+        for f in first:
+            z.write(os.path.join(STAGE, f), os.path.join(root, f))   # the first entries in the zip
         for dp, dn, fn in os.walk(STAGE):
             dn.sort()
             for f in sorted(fn):
                 full = os.path.join(dp, f)
-                if changes and os.path.relpath(full, STAGE) == 'CHANGES.md':
+                rel = os.path.relpath(full, STAGE)
+                if rel in first:
                     continue
-                z.write(full, os.path.join(root, os.path.relpath(full, STAGE)))
+                z.write(full, os.path.join(root, rel))
     print('zip:', out, round(os.path.getsize(out) / 1048576, 1), 'MB')
     print(json.dumps(totals, indent=1))
 

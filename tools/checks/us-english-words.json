@@ -1005,94 +1005,6 @@
    "fix": "woolen"
   },
   {
-   "re": "\\bgrey(?:s|ish|er|est|hound)?\\b",
-   "fix": "gray"
-  },
-  {
-   "re": "\\b(?:colour|honour|favour|humour|neighbour|labour|flavour|rumour|harbour|vigour|odour|armour|parlour|rigour|saviour|splendour|valour|clamour|glamour|endeavour|behaviour|savour|tumour|vapour|fervour)\\w*",
-   "fix": "-or"
-  },
-  {
-   "re": "\\b\\w*(?:centre|theatre|fibre|litre|metre|sombre|meagre|calibre|spectre|lustre|manoeuvre|saltpetre|reconnoitre)s?\\b",
-   "fix": "-er"
-  },
-  {
-   "re": "\\b(?:defence|offence|pretence|licence|practise|practised|practises|practising)\\w*",
-   "fix": "-se/-ce"
-  },
-  {
-   "re": "\\b(?:judgement|acknowledgement|ageing|fulfil|fulfils|fulfilment|enrolment|skilful|wilful|instil|windscreen)s?\\b",
-   "fix": "US spelling"
-  },
-  {
-   "re": "\\b(?:travell|cancell|labell|modell|fuell|signall|levell|marvell|counsell|dialled|quarrell|channell|tunnell|totall|woollen|jewell|equall|swivell|shovell|snorkell|pedall)\\w*",
-   "fix": "single l"
-  },
-  {
-   "re": "\\b[A-Za-z]{3,}(?:isation|isations)\\b",
-   "fix": "-ization"
-  },
-  {
-   "re": "\\b(?:realis|organis|apologis|recognis|criticis|prioritis|summaris|normalis|minimis|maximis|categoris|memoris|personalis|visualis|sympathis|utilis|stabilis|generalis|finalis|socialis|specialis|characteris|authoris|familiaris|energis|harmonis|mobilis|rationalis|standardis|idealis|legitimis|scrutinis|agonis|patronis|jeopardis|fantasis|hypnotis|traumatis|moralis|conceptualis|catastrophis|demonis|romanticis|internalis|externalis|polaris|sanitis|synchronis|theoris|optimis|customis|neutralis|empathis|verbalis|randomis|popularis|capitalis|itemis|mesmeris|globalis|institutionalis|hospitalis|immunis|vandalis|stigmatis|marginalis|sensitis|desensitis|legalis|centralis|decentralis|criminalis|monopolis|dramatis|economis|equalis|formalis|humanis|localis|naturalis|penalis|publicis|strategis|subsidis|symbolis|tantalis|urbanis|vaporis|womanis|scandalis|sterilis|colonis|digitalis|evangelis|fertilis|fraternis|galvanis|idolis|immortalis|mechanis|memorialis|modernis|ostracis|pasteuris|plagiaris|politicis|pressuris|privatis|proselytis|pulveris|regularis|reorganis|revitalis|satiris|sermonis|sexualis|sensationalis|signalis|solemnis|stylis|systematis|temporis|trivialis|unionis|valoris|victimis|emphasis)(?:e|ed|es|ing|er|ers|able)\\b",
-   "fix": "-ize"
-  },
-  {
-   "re": "\\b(?:analys|paralys|catalys|dialys|hydrolys)(?:e|ed|es|ing|er|ers)\\b",
-   "fix": "-yze"
-  },
-  {
-   "re": "\\b(?:catalogue|catalogues|dialogue|dialogues|analogue|prologue|epilogue|monologue)\\b",
-   "fix": "US spelling (dialog only for UI)"
-  },
-  {
-   "re": "\\b(?:aeroplane|aluminium|storey|storeys|plough|draught|draughts|pyjamas|jewellery|kilometre|manoeuvr\\w*|paediatr\\w*|anaesthe\\w*|oestr\\w*|haem\\w*|foetus|foetal|diarrhoea|oesophag\\w*|leukaemia|anaemi\\w*|encyclopaedia|orthopaedic|gynaecolog\\w*|mediaeval|archaeolog\\w*|faeces|coeliac|diarrhoea|sulphur|sulphate|tonne|tonnes|mustachio|moustache|maths|cheque|cheques|kerb|kerbs|tyre|tyres|axe|axes|sceptic\\w*|mould\\w*|smoulder\\w*|moult\\w*|cosy|cosier|cosiest|programme|programmes)\\b",
-   "fix": "US spelling"
-  },
-  {
-   "re": "\\b(?:whilst|amongst|amidst|towards|afterwards|backwards|forwards|upwards|downwards|onwards|inwards|outwards|learnt|spelt|dreamt|burnt|spoilt|smelt|leapt|knelt|dwelt|earnt|gotten hold)\\b",
-   "fix": "US form"
-  },
-  {
-   "re": "\\bmum\\b|\\bmums\\b|\\bmummy\\b|\\bmam\\b|\\bgrandad\\w*|\\bgranny\\b|\\bgran\\b|\\bnana\\b|\\bnan\\b|\\bauntie\\b",
-   "fix": "mom/grandpa/grandma/aunt"
-  },
-  {
-   "re": "\\b(?:flat|flats)\\b(?= (?:share|mate|mates|above|below|where|in|with|near|was|is)\\b)|\\b(?:our|their|her|his|your|my|a shared|a new|first|empty|small|tiny|upstairs|downstairs) flat\\b(?! (?:out|on|no|and|tone|voice|face|answer|affect|line|fee|rate|white|surface|stare|“|battery|tire))",
-   "fix": "apartment"
-  },
-  {
-   "re": "\\b(?:flatmates?|housemates?|house-?share|bedsit|maisonette)\\b",
-   "fix": "roommate / apartment"
-  },
-  {
-   "re": "\\b(?:rubbish|bin|bins|dustbin|wheelie bin|skip)\\b(?! (?:file|folder|result))",
-   "fix": "trash"
-  },
-  {
-   "re": "\\b(?:queue|queues|queued|queuing|queueing)\\b",
-   "fix": "line"
-  },
-  {
-   "re": "\\b(?:lift|lifts)\\b(?= (?:to the|up to|in the building|is broken|broke|was broken|button))|\\b(?:the|a|in the) lift\\b(?! (?:it|of|in|that|this|up|them|him|her|your|my|their|his|you|off|to|a|the|and|or|from|with|for|as|was|were|is|are|can|will|means|so|but|our|an|one|some|any|each|every|all|more|any))",
-   "fix": "elevator"
-  },
-  {
-   "re": "\\b(?:pavement|pavements|lorry|lorries|petrol|motorway|motorways|roundabout|roundabouts|dual carriageway|zebra crossing|bonnet|boot of the car|car boot|windscreen|number plate|indicator|handbrake|gear stick|learner driver|kerbside|layby|lay-by|flyover|underpass|ring road|bypass|pelican crossing|tarmac|diversion|slip road|junction)\\b",
-   "fix": "US road word"
-  },
-  {
-   "re": "\\b(?:biscuit|biscuits|sweets|crisps|chips and|takeaway|takeaways|fizzy|squash|jelly and|marmite|porridge|pudding|puddings|afters|tea time|teatime|elevenses|fry-up|full english|sausage roll|bangers|mash|chippy|chip shop|fish and chips|beans on toast|crumpet|scone|scones|jam sandwich|ribena|lemonade)\\b(?<!lemonade)",
-   "fix": "US food word"
-  },
-  {
-   "re": "\\b(?:trainers|jumper|jumpers|trousers|knickers|pants and|waistcoat|dressing gown|wellies|wellingtons|plimsolls|pinafore|anorak|cardigan|braces|vest and|tights and|nappy|nappies|dummy|cot|pram|pushchair|buggy|nursery|crèche|creche|kindergarten teacher)\\b",
-   "fix": "US clothing / baby word"
-  },
-  {
-   "re": "\\b(?:telly|mobile phone|mobile|mobiles|sat nav|satnav|postbox|post box|postcode|postman|postal|post a letter|parcel|parcels|letterbox|fortnight|fortnightly|bank holiday|half term|half-term|term time|term-time|sixth form|a-levels?|gcses?|nhs|gp|gps|a&e|uni|freshers|undergrad|headteacher|head teacher|deputy head|form tutor|reception class|year [0-9]+|primary school|secondary school|state school|public school|grammar school|comprehensive|prep school|boarding school|school run|packed lunch|dinner lady|tuck shop|playtime|break time|staff room|staffroom|caretaker|prefect|prefects|detention|swot|sixth-former)\\b(?<!sat nav)",
-   "fix": "US school / services word"
-  },
-  {
    "re": "\\bhave a go\\b|\\bgive it a go\\b|\\bhaving a go\\b|\\bhad a go\\b",
    "fix": "give it a try"
   },
@@ -1109,7 +1021,7 @@
    "fix": "$ only"
   },
   {
-   "re": "\\b(?:[01]?\\d|2[0-3]):[0-5]\\d ?(?:hrs|hours)\\b|\\b(?:1[3-9]|2[0-3]):[0-5]\\d\\b(?! ?[ap]\\.?m)",
+   "re": "\\b(?:1[3-9]|2[0-3]):[0-5]\\d\\b(?! ?[ap]\\.?m)|\\b(?:[01]?\\d|2[0-3]):[0-5]\\d ?(?:hrs|hours)\\b",
    "fix": "12-hour times"
   },
   {
@@ -1126,39 +1038,112 @@
   },
   {
    "re": "\\b(?:Mr|Mrs|Ms|Dr)\\b(?![.’\\'])(?= [A-Z])",
-   "fix": "Mr. Mrs. Dr. with a period"
+   "fix": "Mr. Mrs. Dr. with a period",
+   "cs": true
   },
   {
-   "re": "\\b(?:kilometres?|kilometers?|km|kg|kilograms?|grams?|litres?|liters?|millilitres?|celsius|centigrade)\\b",
-   "fix": "miles / pounds / cups / Fahrenheit"
+   "re": "\\b(?:kilometres?|kilometers?|kilograms?|litres?|liters?|millilitres?|celsius|centigrade)\\b|\\b\\d+ ?(?:km|kg|ml)\\b",
+   "fix": "miles / pounds / cups"
   },
   {
    "re": "\\b\\d+ ?°C\\b|\\b\\d+ degrees C\\b",
    "fix": "Fahrenheit"
   },
   {
-   "re": "\\b(?:colour|favourite|neighbour)\\b",
-   "fix": "US spelling"
-  },
-  {
-   "re": "\\b(?:cheeky|dodgy|gutted|chuffed|knackered|skint|bloke|blokes|brolly|cuppa|telly|loo|nicked|sorted out|sort it out|sorted it|reckon|reckons|reckoned|innit|bollocks|bugger|blimey|crikey|cheerio|tosh|twee|taking the mickey|take the mickey|mickey|taking the piss|faff|faffing|gormless|lark|larking|skive|skiving|swot|tosser|wanker|plonker|numpty|barmy|daft|potty|naff|spiffing|smashing|jolly good|bob\\'s your uncle|bits and bobs|odds and sods|whinge|whinging|nowt|owt|summat|ta-ra|ta ra)\\b",
-   "fix": "British slang"
-  },
-  {
-   "re": "\\bcheers\\b(?! to)",
-   "fix": "thanks"
-  },
-  {
-   "re": "\\bfootball\\b(?= (?:pitch|boots|match|club|team|fan|fans|ground|stadium|season))|\\bthe footie\\b|\\bfooty\\b",
+   "re": "\\bfootball\\b(?= (?:pitch|boots|match|club|team|fan|fans|ground|stadium|season))|\\bfooty\\b",
    "fix": "soccer"
   },
   {
-   "re": "\\b(?:washing-up|washing up|the washing|washing line|tumble dryer|hoover|hoovering|kitchen roll|bin bag|hob|cooker hood|fitted sheet|duvet|duvets|eiderdown|airing cupboard|boiler|immersion|radiator|skirting|loft|garage forecourt|front garden|back garden|garden shed|allotment|patio doors|french windows|conservatory|semi-detached|terraced|bungalow|council house|council flat|estate agent|letting agent|landlady|tenancy|deposit protection|freehold|leasehold|stamp duty|mortgage advisor)\\b",
+   "re": "\\b(?:washing-up|washing up|the washing|washing line|tumble dryer|hoover\\w*|kitchen roll|bin bag|hob|airing cupboard|council house|council flat|estate agent|letting agent|allotment|duvets)\\b(?<!duvets)",
    "fix": "US home word"
   },
   {
-   "re": "\\b(?:high street|town centre|city centre|shopping centre|car park|carpark|pub|pubs|off-licence|offie|chemist|chemists|newsagent|newsagents|greengrocer|fishmonger|ironmonger|corner shop|post office|launderette|dry cleaner\\'s|cash machine|cashpoint|hole in the wall|till|tills|checkout girl|shop assistant|shopkeeper|shopping trolley|carrier bag|carrier bags|bag for life|tin|tins|jar of|packet|packets|tube of|bin liner|cling film|tin foil|greaseproof|baking tray|roasting tin|cake tin|swiss roll|cling-film)\\b(?<!till)",
+   "re": "\\b(?:high street|town centre|city centre|shopping centre|car park|carpark|pub|pubs|off-licence|offie|chemist|chemists|newsagent|newsagents|greengrocer|ironmonger|corner shop|launderette|cashpoint|carrier bag|carrier bags|cling film|shopping trolley)\\b",
    "fix": "US shop word"
+  },
+  {
+   "re": "\\bgrey(?:s|ish|er|est|hound)?\\b",
+   "fix": "gray"
+  },
+  {
+   "re": "\\b(?:colour|honour|favour|humour|neighbour|labour|flavour|rumour|harbour|vigour|odour|armour|parlour|rigour|saviour|splendour|valour|clamour|glamour|endeavour|behaviour|savour|tumour|vapour|fervour|candour|labour)\\w*",
+   "fix": "-or"
+  },
+  {
+   "re": "\\b\\w*(?:centre|theatre|fibre|litre|metre|sombre|meagre|calibre|spectre|lustre|manoeuvre|saltpetre|reconnoitre)s?\\b",
+   "fix": "-er"
+  },
+  {
+   "re": "\\b(?:defence|offence|pretence|licence|practise|practised|practises|practising)\\w*",
+   "fix": "-se/-ce"
+  },
+  {
+   "re": "\\b(?:judgement|acknowledgement|ageing|fulfil|fulfils|fulfilment|enrolment|skilful|wilful|instil|windscreen)s?\\b",
+   "fix": "US spelling"
+  },
+  {
+   "re": "\\b(?:travel|cancel|label|model|fuel|signal|level|marvel|counsel|dial|quarrel|channel|tunnel|total|equal|swivel|shovel|pedal|jewel|woolen|rival|cudgel|worship|kidnap|focus|bias)(?:led|ling|ler|lers|lor|lors|lous|llery)\\b|\\b(?:woollen|jewellery|marvellous)\\b",
+   "fix": "single l"
+  },
+  {
+   "re": "\\b(?:realis|organis|apologis|recognis|criticis|prioritis|summaris|normalis|minimis|maximis|categoris|memoris|personalis|visualis|sympathis|utilis|stabilis|generalis|finalis|socialis|specialis|characteris|authoris|familiaris|energis|harmonis|mobilis|rationalis|standardis|idealis|legitimis|scrutinis|agonis|patronis|jeopardis|fantasis|hypnotis|traumatis|moralis|conceptualis|catastrophis|demonis|romanticis|internalis|externalis|polaris|sanitis|synchronis|theoris|optimis|customis|neutralis|empathis|verbalis|randomis|popularis|capitalis|itemis|mesmeris|globalis|institutionalis|hospitalis|immunis|vandalis|stigmatis|marginalis|sensitis|desensitis|legalis|centralis|decentralis|criminalis|monopolis|dramatis|economis|equalis|formalis|humanis|localis|naturalis|penalis|publicis|strategis|subsidis|symbolis|tantalis|urbanis|vaporis|womanis|scandalis|sterilis|colonis|digitalis|evangelis|fertilis|fraternis|galvanis|idolis|immortalis|mechanis|memorialis|modernis|ostracis|pasteuris|plagiaris|politicis|pressuris|privatis|proselytis|pulveris|regularis|reorganis|revitalis|satiris|sermonis|sexualis|sensationalis|signalis|solemnis|stylis|systematis|temporis|trivialis|unionis|valoris|victimis|overgeneralis|depersonalis|derealis|mentalis|individualis|rehabilitis|incentivis|operationalis|hypothesis|contextualis|conceptualis|commercialis|accessoris|characteris|crystallis|dehumanis|desensitis|digitis|disorganis|emphasis|equalis|externalis|feminis|fictionalis|harmonis|hospitalis|ionis|jeopardis|lionis|magnetis|materialis|maximis|mythologis|nationalis|neutralis|normalis|objectivis|orchestrat|pluralis|prioritis|professionalis|ritualis|romanticis|sloganis|sociologis|spiritualis|subsidis|sympathis|tokenis|traumatis|trivialis|universalis|urbanis|utilis|vocalis)(?:e|ed|es|ing|er|ers|able|ation|ations)\\b",
+   "fix": "-ize"
+  },
+  {
+   "re": "\\b(?:analys|paralys|catalys|dialys|hydrolys)(?:e|ed|es|ing|er|ers)\\b",
+   "fix": "-yze"
+  },
+  {
+   "re": "\\b(?:catalogue|catalogues|analogue|prologue|epilogue|monologue|dialogue|dialogues)\\b",
+   "fix": "US spelling (dialog only for UI)"
+  },
+  {
+   "re": "\\b(?:aeroplane|aluminium|storey|storeys|plough|draught|draughts|draughty|pyjamas|jewellery|kilometre\\w*|manoeuvr\\w*|paediatr\\w*|anaesthe\\w*|oestr\\w*|haem\\w*|foetus|foetal|diarrhoea|oesophag\\w*|leukaemia|anaemi\\w*|encyclopaedia|orthopaedic|gynaecolog\\w*|mediaeval|archaeolog\\w*|faeces|coeliac|sulphur|sulphate|tonne|tonnes|moustache|maths|cheque|cheques|kerb|kerbs|tyre|tyres|sceptic\\w*|mould\\w*|smoulder\\w*|moult\\w*|cosy|cosier|cosiest|programme|programmes|centimetre\\w*|millimetre\\w*|fibres?|orientated|aluminium|speciality|specialities|artefacts?|cypher|connexion|gaol|gaoler|grey|inflexion|manoeuvre|mum|plaice|sulphide|syphon|tranquillity|vice versa)\\b",
+   "fix": "US spelling"
+  },
+  {
+   "re": "\\b(?:whilst|amongst|amidst|towards|afterwards|backwards|forwards|upwards|downwards|onwards|inwards|outwards|learnt|spelt|dreamt|burnt|spoilt|smelt|leapt|knelt|dwelt|earnt)\\b",
+   "fix": "US form (toward, learned, ...)"
+  },
+  {
+   "re": "\\bmum\\b|\\bmums\\b|\\bmummy\\b|\\bmam\\b|\\bgrandad\\w*|\\bgranny\\b|\\bgran\\b|\\bnana\\b|\\bnan\\b|\\bauntie\\b",
+   "fix": "mom/grandpa/grandma/aunt"
+  },
+  {
+   "re": "\\b(?:flat|flats)\\b(?= (?:share|mate|mates|above|below|where|in|with|near|was|is)\\b)|\\b(?:our|their|her|his|your|my|a shared|a new|first|empty|small|tiny|upstairs|downstairs) flat\\b(?! (?:out|on|no|and|tone|voice|face|answer|affect|line|fee|rate|white|surface|stare|“|battery|tire))",
+   "fix": "apartment"
+  },
+  {
+   "re": "\\b(?:flatmates?|housemates?|house-?share|houseshare|bedsit|maisonette)\\b",
+   "fix": "roommate / apartment"
+  },
+  {
+   "re": "\\b(?:rubbish|bin|bins|dustbin|wheelie bin)\\b",
+   "fix": "trash"
+  },
+  {
+   "re": "\\b(?:queue|queues|queued|queuing|queueing)\\b",
+   "fix": "line"
+  },
+  {
+   "re": "\\b(?:pavement|pavements|lorry|lorries|petrol|motorway|motorways|roundabout|roundabouts|dual carriageway|zebra crossing|bonnet|car boot|number plate|handbrake|gear stick|learner driver|kerbside|layby|lay-by|flyover|ring road|pelican crossing|slip road)\\b",
+   "fix": "US road word"
+  },
+  {
+   "re": "\\b(?:biscuit|biscuits|sweets|crisps|takeaway|takeaways|fizzy|chip shop|chippy|fry-up|sausage roll|bangers and mash|jam sandwich|elevenses|teatime|tea time|cuppa|brew)\\b(?<!brew)",
+   "fix": "US food word"
+  },
+  {
+   "re": "\\b(?:trainers|jumper|jumpers|trousers|knickers|waistcoat|dressing gown|wellies|wellingtons|plimsolls|pinafore|nappy|nappies|pram|prams|pushchair|crèche|creche)\\b",
+   "fix": "US clothing / baby word"
+  },
+  {
+   "re": "\\b(?:telly|mobile phones?|mobiles|sat nav|satnav|postbox|post box|postcode|postman|post a letter|fortnight|fortnightly|bank holiday|half term|half-term|term time|term-time|sixth form|a-levels?|gcses?|nhs|gp|gps|a&e|uni|freshers|headteacher|head teacher|deputy head|form tutor|reception class|primary school|secondary school|state school|public school|grammar school|prep school|school run|packed lunch|dinner lady|tuck shop|staffroom|prefects?|swot|sixth-former|undergrad)\\b(?<!gps)",
+   "fix": "US school / services word"
+  },
+  {
+   "re": "\\b(?:cheers|mate|mates|bloke|blokes|lads?|lass|lasses|innit|cheerio|blimey|crikey|bollocks|bugger|bloody|sod|sodding|arse|wanker|git|prat|pillock|plonker|muppet|numpty|barmy|bonkers|dodgy|naff|brilliant|smashing|spiffing|skint|quid|fiver|tenner|pence|knackered|gutted|chuffed|cheesed off|gobsmacked|whinge|whinging|nicked|cadge|skive|skiving|poorly|peaky|bunged up|butty|sarnie|nosh|peckish|tipsy|squiffy|sloshed|legless|hammered|bladdered|faff|faffing|tosser|daft|cheeky|reckon|reckons|reckoned|taking the mickey|take the mickey|whinge|lark|tosh|gormless|nowt|owt|summat)\\b",
+   "fix": "British slang"
   }
  ],
  "ai": [
@@ -1175,21 +1160,21 @@
    "cs": true
   },
   {
-   "re": "artificial[- ]intelligence|machine[- ]learning|deep[- ]learning|language[- ]models?|large language|\\bLLMs?\\b|chat ?bots?|\\bbots?\\b|ChatGPT|\\bGPT\\b|\\bGPT-?\\d|OpenAI|Anthropic|Claude(?![a-z])(?! Steele)|Gemini|Copilot|Midjourney|DALL.?E|Stable Diffusion|neural (?:net|network|networks)|generative|auto-?generated|computer[- ]generated|generated by|synthetic|synthesi[sz]ed (?:voice|speech)|text[- ]to[- ]speech|\\bTTS\\b|deepfake|\\balgorithms?\\b|robotic voice|virtual assistant|smart assistant"
+   "re": "artificial[- ]intelligence|machine[- ]learning|deep[- ]learning|language[- ]models?|large language|\\bLLMs?\\b|chat ?bots?|\\bbots?\\b|ChatGPT|\\bGPT\\b|\\bGPT-?\\d|OpenAI|Anthropic|Claude(?![a-z])(?! Steele)|Gemini|Copilot|Midjourney|DALL.?E|Stable Diffusion|neural (?:net|network|networks)|generative|auto-?generated|computer[- ]generated|generated by|synthetic|synthesi[sz]ed (?:voice|speech)|text[- ]to[- ]speech|\\bTTS\\b|deepfake|robotic voice|virtual assistant|smart assistant"
   }
  ],
  "calling": [
   {
-   "re": "\\b911\\b|\\b999\\b|\\b112\\b(?! px)|\\b988\\b|\\b0?800[ -]?\\d"
+   "re": "\\b911\\b|\\b988\\b|\\b999\\b(?= (?:emergency|police|call))|\\b1[ -]?800[ -]\\d"
   },
   {
-   "re": "\\bemergency (?:number|numbers|services?|room|rooms|department|line|contact|hotline|call|calls|helpline|dispatch)\\b|\\bER\\b(?= (?:visit|doctor))|\\bambulance\\b|\\bparamedics?\\b|\\bpolice\\b(?= (?:station|officer|report|number))"
+   "re": "\\bemergency (?:number|numbers|services?|room|rooms|department|line|contact|contacts|hotline|call|calls|helpline|dispatch)\\b|\\bpolice (?:station|officer|report|number)\\b|\\bparamedics?\\b"
   },
   {
    "re": "\\bhot ?lines?\\b|\\bcrisis (?:line|lines|text|chat|service|services|center|centre|team|hotline|counselor|counsellor)\\b|\\bhelp ?lines?\\b|\\bwarm ?lines?\\b|\\btext line\\b|\\bchat line\\b|\\bsupport line\\b|\\bsamaritans\\b|\\b(?:Lifeline|Childline|Crisis Text|Trevor Project|Trans Lifeline)\\b"
   },
   {
-   "re": "\\bdial(?:s|ed|ing|led|ling)?\\b(?! (?:in|up|down|back|it up)\\b)(?!ogue)"
+   "re": "\\bdial(?:s|ed|ing|led|ling)?\\b(?!ogue)"
   },
   {
    "re": "\\b(?:call|phone|ring|telephone|text|dial)(?:s|ed|ing)? (?:a |an |the |your |my |their |someone |somebody |anyone |any |one of |them |him |her |us |me |for |to get |to ask for )?(?:friend|friends|family|relative|sibling|sister|brother|parent|mom|dad|mother|father|doctor|dr|gp|therapist|counselor|counsellor|nurse|clinic|pharmacist|lawyer|attorney|someone you trust|someone you know|someone close|someone safe|someone who|a trusted|a loved one|your loved|a professional|a crisis|a support|support|help|helpline|hotline|emergency|police|ambulance|the police|911|a number|the number|your gp)\\b"
