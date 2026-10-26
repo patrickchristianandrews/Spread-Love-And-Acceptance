@@ -401,7 +401,7 @@
     } });
 
   add({ id: 'blanketfort', name: 'Blanket fort', kind: 'sweet', dur: 9200,
-    cap: 'Sugarfoot builds a cozy blanket fort, big enough for two', punch: [5600, 'Fairy lights on. The coziest place in the world.'],
+    cap: 'Sugarfoot builds a cozy blanket fort, big enough for two', punch: [5600, 'String lights on. The coziest place in the world.'],
     run: function (A, T, S) {
       var c = A.cx;
       if (A.in(600, 2800)) { S.x = mix(A.x1, c + 50, A.e(600, 1200)); S.pose = Math.floor(A.t / 350) % 2 ? 'bow' : 'run'; S.ph = 0; }

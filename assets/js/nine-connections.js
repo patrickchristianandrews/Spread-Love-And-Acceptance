@@ -5,7 +5,7 @@
 window.TOL_NINE = {
   fields: [
     ['nb', 'Neurobiology'], ['ps', 'Psychology'], ['ph', 'Philosophy'], ['db', 'The art of debating'], ['po', 'Politics'],
-    ['bs', 'Behavioural science'], ['ec', 'Economics'], ['fi', 'Finance'], ['bu', 'Business'], ['ht', 'Holistic therapies'],
+    ['bs', 'Behavioral science'], ['ec', 'Economics'], ['fi', 'Finance'], ['bu', 'Business'], ['ht', 'Holistic therapies'],
     ['la', 'Laughter therapy'], ['mu', 'Music'], ['ar', 'Aromatherapy']
   ],
   roots: { balance: 'balance', signal: 'signal and noise', loops: 'feedback loops', capacity: 'limited capacity', owner: 'ownership and structure', incent: 'quiet incentives', state: 'state and setting' },

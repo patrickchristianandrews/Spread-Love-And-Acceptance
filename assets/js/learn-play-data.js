@@ -89,7 +89,7 @@ window.TOLLearnPlayData = {
         { f: 'A ledger does one thing well', s: 'A ledger is just a shared list of what really happened, with no judging.', x: 'Two roommates each list a week of chores, then read both lists together.' },
         { f: 'Systems thinking looks at how a result is produced', s: 'When the same problem keeps happening, look at how things are set up before looking at the people.', x: 'The recycling keeps getting forgotten because the trash can lives in the garage, not because anyone is careless.' },
         { f: 'Signal theory describes what happens', s: 'Two people running at slightly different speeds make “static,” even when nobody did anything wrong.', x: 'One of you wants to decide tonight, the other needs until Sunday. Agreeing on Sunday clears it.' },
-        { f: 'Behavioural economics studies how defaults', s: 'Small defaults quietly decide things for us, like whoever notices a job first keeping it forever.', x: 'You bought the coffee filters once. Now everyone assumes it’s your job.' }
+        { f: 'Behavioral economics studies how defaults', s: 'Small defaults quietly decide things for us, like whoever notices a job first keeping it forever.', x: 'You bought the coffee filters once. Now everyone assumes it’s your job.' }
       ]
     },
 
@@ -406,7 +406,7 @@ window.TOLLearnPlayData = {
       t: 'Chapter IV: Two kinds of fair', g: 'p5', n: '/book/chapter-5.html',
       m: [
         { at: 'two kinds of fair', k: 'sort', q: 'Fair by results, or fair by promises?', bins: ['Fair by results', 'Fair by promises'],
-          items: [['“It all got done. Who cares who did it?”', 0], ['“You said you’d handle the trash.”', 1], ['Whoever’s free does it', 0], ['A fixed rota', 1]] },
+          items: [['“It all got done. Who cares who did it?”', 0], ['“You said you’d handle the trash.”', 1], ['Whoever’s free does it', 0], ['A fixed schedule', 1]] },
         { at: 'Once a job has an owner', k: 'quiz', q: 'The trash is yours on the job list. Someone quietly covered for you. Judged by promises, what now?',
           o: [['It’s your job, so it’s worth a kind word and a look at the setup', true, 'Yes. Looking to the owner protects the person who keeps filling the gaps.'],
               ['It got done, so all good', false, 'Not quite. That’s fair by results. Once a job has an owner, look to the owner.']] },
@@ -434,7 +434,7 @@ window.TOLLearnPlayData = {
                   [4, 'A real pattern', 'Three or four ticks in a month is a real pattern, not a fluke.', '🔁']] },
         { at: 'Sort each repeat', k: 'sort', q: 'Which kind of repeat is it?', bins: ['No clear owner', 'Owner can’t keep up', 'Short-term cause'],
           items: [['Everyone thought someone else was taking the recycling down', 0], ['The owner is swamped this term', 1],
-                  ['It slipped while one of you was travelling', 2], ['Nobody ever agreed who would call the landlord', 0]] },
+                  ['It slipped while one of you was traveling', 2], ['Nobody ever agreed who would call the landlord', 0]] },
         { at: 'Count the gaps', k: 'gap', q: 'Fill the gap with the book’s own word.',
           s: 'Write down how many jobs had no clear owner. If that number ___ month by month, the setup is working.', o: ['falls', 'rises', 'doubles'], a: 0,
           say: 'Yes! If it rises, something bigger has changed, and it’s worth a talk.' },
@@ -1007,7 +1007,7 @@ window.TOLLearnPlayData = {
       m: [
         { at: 'Interests versus positions', k: 'sort', q: 'Position or interest?', bins: ['Position (what I want)', 'Interest (why I want it)'],
           items: [['“I want the window open.”', 0], ['Fresh air', 1], ['“The dishes need doing straight after dinner.”', 0], ['Not waking up to a messy kitchen', 1], ['Needing to rest after a long day', 1]] },
-        { at: 'One topic at a time', k: 'quiz', q: 'Mid-talk about the school run, “and last month you…” comes up. What helps?',
+        { at: 'One topic at a time', k: 'quiz', q: 'Mid-talk about the school drop-off, “and last month you…” comes up. What helps?',
           o: [['Park it on a list for its own time', true, 'Yes! Parking isn’t dismissing. It says that matters too, and deserves its own time.'],
               ['Deal with everything now, while you’re at it', false, 'Not quite. That’s kitchen-sinking. Each extra item widens the argument until nothing can be settled.'],
               ['Pretend it never came up', false, 'Not quite. Park it with a plan to come back, so it doesn’t keep flooding in.']] },

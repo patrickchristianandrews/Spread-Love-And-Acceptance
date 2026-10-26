@@ -446,7 +446,7 @@
     } });
 
   add({ id: 'moonwalk', name: 'The moonwalk', kind: 'cool', dur: 7400,
-    cap: 'Sugarfoot has been practising her moonwalk', punch: [4400, 'Tidbit gets the hang of it. Smooth!'],
+    cap: 'Sugarfoot has been practicing her moonwalk', punch: [4400, 'Tidbit gets the hang of it. Smooth!'],
     at: function (A) { return [A.cx - A.span + 8, A.cx + A.span - 8]; },
     run: function (A, T, S) {
       var c = A.cx, sp = A.span;

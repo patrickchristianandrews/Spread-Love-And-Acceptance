@@ -148,7 +148,7 @@ window.TOL_CHEER = {
     ['Why do little jobs drift to one person?', '/five-pillars.html#quiet-incentives', 'Notice the quiet incentives'],
     ['Want a cozy shelf of more to read?', '/library.html', 'The Professor’s Library'],
     ['Hungry for more? There’s a reading list.', '/reading.html', 'Further Reading'],
-    ['Want a slow, calm minute with soft colors?', '/calm-visualizer.html', 'Slow colours and tones'],
+    ['Want a slow, calm minute with soft colors?', '/calm-visualizer.html', 'Slow colors and tones'],
     ['Fancy a quick arcade game with Tidbit and Sugarfoot?', '/frequency-journey.html', 'Tidbit and Sugarfoot’s Arcade'],
     ['A hard talk goes smoother in a kind order.', '/check-ins.html#order', 'The order of a check-in'],
     ['Talk got bumpy? There’s a kind way to regroup.', '/check-ins.html#regroup', 'How to regroup'],

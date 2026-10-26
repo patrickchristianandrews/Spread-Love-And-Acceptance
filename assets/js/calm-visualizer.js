@@ -22,8 +22,8 @@
   var STYLES = [
     { id: 'tunnel', name: 'Tunnel', ico: '🌀', say: 'a slow flight down a glowing tunnel' },
     { id: 'kaleido', name: 'Kaleidoscope', ico: '🔮', say: 'a slowly opening kaleidoscope' },
-    { id: 'nebula', name: 'Nebula', ico: '🌌', say: 'drifting through soft clouds of colour and stars' },
-    { id: 'liquid', name: 'Liquid', ico: '🫧', say: 'swirling liquid colour' },
+    { id: 'nebula', name: 'Nebula', ico: '🌌', say: 'drifting through soft clouds of color and stars' },
+    { id: 'liquid', name: 'Liquid', ico: '🫧', say: 'swirling liquid color' },
     { id: 'mandala', name: 'Mandala', ico: '🪷', say: 'glowing geometry turning slowly in space' }
   ];
   // what the beat ends at: a plain word for the pace, and the range it sits in

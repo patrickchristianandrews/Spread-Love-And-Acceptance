@@ -1211,7 +1211,7 @@ const SRC = {
   gottman:["Gottman Institute: flooding, a break, and a return time","https://www.gottman.com/blog/flooding-and-conflict-avoidance/"],
   gottman20:["Gottman Institute: a break of at least 20 minutes, and not more than 24 hours","https://www.gottman.com/blog/manage-conflict-part-4/"],
   crompton:["Crompton et al. (2020): information transfer between autistic and non-autistic people","https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/"],
-  nature25:["Nature Human Behaviour (2025): large replication of the diffusion-chain study","https://www.nature.com/articles/s41562-025-02163-z"]
+  nature25:["Nature Human Behavior (2025): large replication of the diffusion-chain study","https://www.nature.com/articles/s41562-025-02163-z"]
 };
 
 /* ============================================================
@@ -1631,7 +1631,7 @@ function paintRelSet(){
   let ch = $("#relChips");
   if(!ch){ ch = document.createElement("div"); ch.id = "relChips"; ch.className = "relchips no-bubble"; ch.setAttribute("role","group"); ch.setAttribute("aria-label","Who it's for"); const ph = $("#phrase"); if(ph && ph.parentNode) ph.parentNode.insertBefore(ch, ph.nextSibling); }
   ch.hidden = got;
-  const CHIPS = [["partner","Partner"],["ex","An ex"],["coparent","Co-parent"],["roommate","Flatmate"],["family","Family"],["coworker","Coworker"]];
+  const CHIPS = [["partner","Partner"],["ex","An ex"],["coparent","Co-parent"],["roommate","Roommate"],["family","Family"],["coworker","Coworker"]];
   // one Tab stop for the whole row (arrow keys move along it), so Translate stays close to the box
   const onIdx = Math.max(0, CHIPS.findIndex(c=>c[0]===relId));
   ch.innerHTML = '<span class="relchips-k" id="relChipsK">Who&rsquo;s it for?</span>'+CHIPS.map((c,i)=>'<button type="button" data-relq="'+c[0]+'" aria-pressed="'+(relId===c[0])+'" tabindex="'+(i===onIdx?0:-1)+'">'+c[1]+'</button>').join('')+'<button type="button" class="relchips-more" id="relChipsMore" tabindex="-1">More&hellip;</button>';
@@ -2773,7 +2773,7 @@ function run(){
   if(E.moneyControl && E.moneyControl(text)) vtop+='<p class="small st-money"><b>If you&rsquo;re made to account for every purchase,</b> that can be a sign of control, not just a money disagreement. <a href="/money-together.html#control">When a money plan becomes control</a>.</p>';
   else if(!notReady && (relId==="family" || (!relId && RIFT.test(text))) && (LONG_GAP.test(text) || RIFT.test(text))) vtop+='<p class="small st-rift"><b>Reaching out after a long silence?</b> Two gentle checks: does it own your part, not just that &ldquo;things got ugly&rdquo;? And is it easy for them to say no, or not yet? A line like &ldquo;I know I played a part in it&rdquo; and &ldquo;No pressure to answer&rdquo; can help. More in <a href="/family-rifts.html#reaching-out">Family rifts: reaching out after a long silence</a>.</p>';
   // "you're not my mum": often grief talking
-  if(NOT_PARENT.test(text)){ const pw = (text.match(/\bnot my (?:real )?(mum|mom|mother|dad|father)\b/i)||["","Mum"])[1].toLowerCase(); const who = pw==="mom" ? "Mom" : /dad|father/.test(pw) ? "Dad" : "Mum";
+  if(NOT_PARENT.test(text)){ const pw = (text.match(/\bnot my (?:real )?(mum|mom|mother|dad|father)\b/i)||["","Mom"])[1].toLowerCase(); const who = pw==="mom" ? "Mom" : /dad|father/.test(pw) ? "Dad" : "Mom";
     vtop+='<p class="small st-grief"><b>Often this is grief talking.</b> '+(/\bstop\b|can.t tell me/i.test(text) ? 'You can still ask for what you need: &ldquo;I miss '+who+', and I&rsquo;d like to be treated more like my age.&rdquo;' : 'Try: &ldquo;I&rsquo;m not angry at you. I&rsquo;m just missing '+who+' today.&rdquo;')+' Living with grandparents, a caregiver or other family? The <a href="/teens.html">teen page</a> has more.</p>'; }
   if(relId==="friend" && (found.jab || ONLY_ONE.test(text))) vtop+='<p class="small"><b>It hurts to feel like the only one reaching out.</b> Saying you miss them, and asking for one small thing, usually lands better than keeping score.</p>';
   if(an.control && an.control.kind==="fear") vtop+='<p class="vhelp"><b>What you&rsquo;ve written says someone feels afraid or controlled.</b> That matters much more than the wording, and a softer version can&rsquo;t fix it.</p>';
@@ -2806,7 +2806,7 @@ function run(){
   if(vtop.indexOf('<!--stcx-->')!==-1) vtop = vtop.replace('<!--stcx-->', cxh);
   vtop+='</div>';
   let sum='<details class="cr-drop"><summary><span class="cr-drop-t">How it may be heard, and other ways to say it</span></summary><div class="cr-drop-b"><div class="takeaway" id="takeaway">';
-  sum+='<div class="rhead"><h2 id="rTitle">The takeaway</h2>'+pairLine+'</div>';
+  sum+='<div class="rhead"><h2 id="rTitle">The takeout</h2>'+pairLine+'</div>';
   sum+='<div class="tk-heard"><span class="tk-k">HOW IT MAY BE HEARD'+(top?(top.b==="general"?' &middot; BY MOST LISTENERS':' &middot; IF '+esc(B.toUpperCase())+' IS '+esc(WIRING_SHORT(top.b).toUpperCase())):'')+'</span><p class="quote">&ldquo;'+esc(perceived)+'&rdquo;</p><p class="small"><b>Why:</b> '+esc(heardWhy)+'</p>';
   if(heard.length>1) sum+='<p class="small"><b>Also possible:</b> '+heard.slice(1).map(e=>'&ldquo;'+esc(e.h)+'&rdquo; ('+esc(FBY[e.fid].name.toLowerCase())+')').join(" &middot; ")+'</p>';
   sum+='<p class="small">That uses '+(general?'a general reading':esc(B)+'\'s wiring')+' and the conditions you set: '+esc(cond.join(", "))+'. It is a may, not a verdict.'+(general?' If you know how the listener\'s brain works (their wiring, like ADHD or autism), pick it under More options to sharpen it.':'')+'</p></div>';
@@ -2821,13 +2821,13 @@ function run(){
   sum+='<div class="cue'+(cue.id==="stop"?' stop':'')+'"><b>'+esc(cue.label)+'.</b> '+esc(cue.when)+' '+esc(cue.how)+'</div>';
   if(bstate==="d") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is shut down. Even the clearest version is best saved for later.</p>';
   else if(bstate==="s" && lvl[0]!=="clear") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is mobilized. Consider waiting, or say only the first sentence now.</p>';
-  sum+='<div class="actions"><button class="ghost" type="button" id="copyTake">Copy the takeaway</button></div></div></div></details>';
+  sum+='<div class="actions"><button class="ghost" type="button" id="copyTake">Copy the takeout</button></div></div></div></details>';
 
   const why1 = (()=>{ const c = rw.changes.find(x=>x.why); const w = plain && plain.fair ? plain.text.split(/(?<=\.)\s/)[0] : c ? c.why.split(/(?<=[.!?])\s/)[0] : (plain ? plain.text : ""); return w; })();
   const brief = '<div class="verdict st-brief st-brief-keep">'+(rw.unchanged
       ? '<p class="vk">Your words</p><p class="vbest">'+esc(text)+'</p><p class="why1">'+esc(plain ? plain.text : "Nothing here stood out as harsh. Tone and history still matter.")+'</p>'
       : '<p class="vk">Say it like this</p><p class="vbest">'+phHTML(opts[0].say)+'</p>'+simpleLine(opts[0].say)+(why1?'<p class="why1"><b>Why:</b> '+esc(why1)+'</p>':'')+'<div class="actions" style="margin:0"><button class="go" type="button" id="copyBrief" data-say="'+esc(opts[0].say)+'">Copy this</button></div>')+'</div>';
-  let h = '<h2 id="rTitle" class="sr-only st-brief-keep" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + briefRow() + vtop + brief + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
+  let h = '<h2 id="rTitle" class="sr-only st-brief-keep" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + briefRow() + vtop + brief + sum.replace('<h2 id="rTitle">The takeout</h2>','<h3>The takeout</h3>');
   h += '<p class="drops-h">The full read, if you want it</p>';
   h += drop("Your sentence, taken apart", staticIds.length+" to look at"+(goodIds.length?" · "+goodIds.length+" worth keeping":""), p1, false, false);
   h += drop("How it may land for "+esc(B), "may sound "+soundOf(lvl, mildLvl), p2, false, false);
@@ -3680,7 +3680,7 @@ sync();
   // ?rel=co-parents (also family, friends, partners, coworkers, roommates, business): start with that relationship chosen, and show it
   (function () { try {
     var r = (new URLSearchParams(location.search).get('rel') || '').toLowerCase().replace(/[^a-z-]/g, '');
-    var MAP = { 'ex': 'ex', 'an-ex': 'ex', 'exes': 'ex', 'my-ex': 'ex', 'co-parents': 'coparent', 'coparents': 'coparent', 'co-parent': 'coparent', 'coparent': 'coparent', 'family': 'family', 'friends': 'friend', 'friend': 'friend', 'partners': 'partner', 'partner': 'partner', 'couples': 'partner', 'coworkers': 'coworker', 'co-workers': 'coworker', 'coworker': 'coworker', 'work': 'coworker', 'roommates': 'roommate', 'roommate': 'roommate', 'housemates': 'roommate', 'managers': 'manager', 'manager': 'manager', 'caregivers': 'caregiver', 'caregiver': 'caregiver', 'carers': 'caregiver', 'business': 'business', 'business-partners': 'business', 'co-owners': 'business', 'cofounders': 'business', 'co-founders': 'business' };
+    var MAP = { 'ex': 'ex', 'an-ex': 'ex', 'exes': 'ex', 'my-ex': 'ex', 'co-parents': 'coparent', 'coparents': 'coparent', 'co-parent': 'coparent', 'coparent': 'coparent', 'family': 'family', 'friends': 'friend', 'friend': 'friend', 'partners': 'partner', 'partner': 'partner', 'couples': 'partner', 'coworkers': 'coworker', 'co-workers': 'coworker', 'coworker': 'coworker', 'work': 'coworker', 'roommates': 'roommate', 'roommate': 'roommate', 'roommates': 'roommate', 'managers': 'manager', 'manager': 'manager', 'caregivers': 'caregiver', 'caregiver': 'caregiver', 'carers': 'caregiver', 'business': 'business', 'business-partners': 'business', 'co-owners': 'business', 'cofounders': 'business', 'co-founders': 'business' };
     var v = MAP[r], sel = document.getElementById('relSel');
     if (v && sel && [].some.call(sel.options, function (o) { return o.value === v; })) { sel.value = v; sel.dispatchEvent(new Event('change', { bubbles: true })); }
   } catch (e) {} })();

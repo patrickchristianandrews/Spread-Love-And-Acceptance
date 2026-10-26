@@ -147,11 +147,11 @@
   var PLAN = [['keep', 'Keep'], ['handoff', 'Hand off'], ['drop', 'Drop'], ['simplify', 'Simplify'], ['schedule', 'Schedule']];
 
   // the same job under its UK and US names (a UK phone and a US phone still match it up)
-  var SAME_JOB = { 'trash & recycling': 'bins', 'rubbish, bins & recycling': 'bins' };
+  var SAME_JOB = { 'trash & recycling': 'bins', 'trash, bins & recycling': 'bins' };
   function jobKey(n) { var l = low(n); return SAME_JOB[l] || l; }
   // the fridge list's chips: one chip for one job, however it was written ("Trash and recycling" and
   // "Trash & recycling", "Groceries" and "Grocery shopping", "Vacuuming" and "Vacuuming and floors")
-  var CHIP_SAME = { 'trash and recycling': 'bins', 'rubbish bins and recycling': 'bins', 'bins and recycling': 'bins', 'taking out the bins': 'bins', 'taking out the trash': 'bins',
+  var CHIP_SAME = { 'trash and recycling': 'bins', 'trash bins and recycling': 'bins', 'bins and recycling': 'bins', 'taking out the bins': 'bins', 'taking out the trash': 'bins',
     'grocery shopping': 'groceries', 'food shopping': 'groceries', 'groceries': 'groceries', 'vacuuming': 'floors', 'vacuuming and floors': 'floors', 'hoovering': 'floors', 'floors': 'floors',
     'dishes': 'dishes', 'dishes and kitchen reset': 'dishes', 'laundry': 'laundry', 'washing and drying': 'laundry', 'feeding the pets': 'petfeed', 'feeding and fresh water': 'petfeed',
     'restocking supplies': 'supplies', 'restocking soap paper and supplies': 'supplies', 'loo roll and supplies': 'supplies', 'bedtime': 'bedtime', 'bedtime routine': 'bedtime',

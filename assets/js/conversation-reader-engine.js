@@ -668,7 +668,7 @@
   var EVENTS = [
     { re: /\b(?:miss(?:ed)? (?:our|the|my|your|a|this) (?:call|facetime|video call|phone call)|waited up\b|(?:didn'?t|never|forgot to) (?:call|ring|facetime)\b|no call\b|stood me up on the call)/i, topic: 'the missed call', fact: 'When our call didn’t happen', ask: 'Could we agree a time for our calls, and text if it has to move?' },
     { re: /\b(?:(?:you(?:'re| are| were)|ur|she was|he was|they were) (?:\w+ )?late|late again|running late|waited (?:for )?(?:\d+|forty|thirty|twenty|an hour|ages))\b/i, topic: 'being late', fact: 'When you were late', ask: 'Could you text me if you’re running late?' },
-    { re: /\b(?:cancel(?:l?ed|led|ling|s)?|bailed|flaked)\b/i, topic: 'the cancelled plan', fact: 'When the plan got cancelled', ask: 'Could we pick a new time and keep it?' },
+    { re: /\b(?:cancel(?:l?ed|led|ling|s)?|bailed|flaked)\b/i, topic: 'the canceled plan', fact: 'When the plan got canceled', ask: 'Could we pick a new time and keep it?' },
     { re: /\b(?:(?:didn'?t|never|don'?t) (?:text|reply|answer|write)(?:ed)?(?: me)?(?: back)?|left me on read|ignor(?:ed|ing) my (?:texts|messages|calls))\b/i, topic: 'not hearing back', fact: 'When I didn’t hear back', ask: 'Could you send a quick text when you’re busy, so I know?' },
     { re: /\bforgot (?:my|our|the) (?:birthday|anniversary)\b/i, topic: 'the forgotten day', fact: 'When the day was forgotten', ask: 'Could we put the dates we care about in a shared calendar?' }
   ];

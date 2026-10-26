@@ -948,7 +948,7 @@ def mark(key):
 
 def cover(name, deep):
     acc, tint, label, line = COVER[name]
-    ver = 'Full version' if deep else 'Short version'
+    ver = 'Expanded version' if deep else 'Paperback text'
     return ('''<section class="pe-cover pe-only" style="--acc:%s;--tint:%s">%s
 <div class="pe-cover-band"><span>spreadloveandacceptance.com</span><span>%s</span></div>
 <div class="pe-cover-text"><p class="pe-cover-title">{ST}</p>
@@ -962,8 +962,7 @@ def cover(name, deep):
 def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
     fbk = {x['key']: x['html'] for x in fb_front}
     acc = COVER[name][0]
-    ver = 'the full version' if deep else 'the short version'
-    other = 'full' if not deep else 'short'
+    ver = 'the expanded version' if deep else 'the paperback text'
     n_ch = sum(1 for e in ORDER if e[1] in parts)
     s = cover(name, deep)
     s += '''
@@ -982,7 +981,7 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
-</div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, mark('titlep'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
+</div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Expanded version' if deep else 'Paperback text', acc, mark('titlep'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Expanded version' if deep else 'Paperback text',
                        book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE)
     # how to use this book
     parts_li = ''.join('<li style="--pc:%s"><strong>%s: %s.</strong> %s</li>' % (PCOL[p][0], PARTS[p][0], PARTS[p][1], esc(PARTS[p][2])) for p in parts)
@@ -991,13 +990,13 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p class="pe-how-lede">%s This copy holds %d chapters in %s, in %s. There is no wrong way in.</p>
 <div class="pe-how-grid">
 <div><p class="pe-how-h">The parts</p><ul class="pe-how-parts">%s</ul></div>
-<div><p class="pe-how-h">Two sizes of every chapter</p><p>Every chapter comes in a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try. This is %s. The %s version is free at spreadloveandacceptance.com/book.</p></div>
+<div><p class="pe-how-h">Two versions of every chapter</p><p>The paperbacks hold the core of every chapter (about 10 to 15 minutes each). The expanded version adds the research, more examples and more to try, and is free at spreadloveandacceptance.com/book. This is %s.</p></div>
 <div><p class="pe-how-h">Read in order, or by need</p><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
 <div><p class="pe-how-h">In every chapter</p><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
 <div><p class="pe-how-h">The site, the program and Professor Puddles</p><p>The book has a free website with the workpapers (pages you fill in) and tools (helpers you use) that the chapters mention; the next page explains both. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
 <div><p class="pe-how-h">Go gently</p><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
-                       n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver, other)
+                       n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver)
     # bookpals11: the two kinds of help (workpapers and tools) and the three characters who give hints
     s += '\n' + hints.front_section(mark)
     s += '\n' + fbk.get('find-it-fast', '') + '\n' + fbk.get('handed', '')
@@ -1437,7 +1436,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     s += '''<section class="pe-backcover pe-only" style="--acc:%s;--tint:%s">%s<div class="pe-bc-in">
 <p class="pe-bc-k">{ST} · %s</p><p class="pe-bc-blurb">%s</p>
 <p class="pe-bc-q">“See it fairly. Say it kindly.”</p>
-<ul class="pe-bc-list"><li>Two sizes of every chapter: short and full</li><li>Everyday scenes, words you could use and one small thing to try</li><li>Free tools and worksheets that stay on your device</li><li>For every kind of relationship, and for people on their own</li></ul>
+<ul class="pe-bc-list"><li>An expanded version of every chapter, free online</li><li>Everyday scenes, words you could use and one small thing to try</li><li>Free tools and worksheets that stay on your device</li><li>For every kind of relationship, and for people on their own</li></ul>
 <div class="pe-bc-art">%s</div>
 <p class="pe-bc-site">Free to read at <strong>spreadloveandacceptance.com/book</strong></p>
 <p class="pe-bc-by">by %s · Spread Love &amp; Acceptance</p></div></section>''' % (
@@ -1562,14 +1561,14 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
         ol.append(['List of filled-in examples', 'examples', 0])
     ol += [['Research notes', 'notes', 0], ['Index', 'index', 0]]
     outline_json = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
-        {'outline': ol, 'title': SERIES_TITLE + ': %s (%s)' % (COVER[name][2][0].upper() + COVER[name][2][1:], 'full version' if deep else 'short version'),
+        {'outline': ol, 'title': SERIES_TITLE + ': %s (%s)' % (COVER[name][2][0].upper() + COVER[name][2][1:], 'expanded version' if deep else 'paperback text'),
          'author': AUTHOR, 'subject': COVER[name][3]}, ensure_ascii=False).replace('</', '<\\/')
     fname = name + ('-in-depth' if deep else '')
     other = '/book/%s.html' % (name if deep else name + '-in-depth')
     base = title or 'The Whole Book'
-    title = base + (' on One Page' if name == 'whole' else '') + (' (Full Version)' if deep else '')
+    title = base + (' on One Page' if name == 'whole' else '') + (' (Expanded Version)' if deep else '')
     lede = ('%s<em>{ST}</em>, in order, on one page%s. Read straight through, use your browser’s find, or print it.'
-            % ((esc(who) + ' From ') if who else 'Every chapter of ', ', in the full versions' if deep else ', in the short versions'))
+            % ((esc(who) + ' From ') if who else 'Every chapter of ', ', in the expanded version' if deep else ', as in the paperbacks'))
     head = HEAD_TMPL.replace('{TITLE}', title).replace('{DESC}', 'The book on one page.')
     # on screen the site's styles; on paper only the book's print stylesheet
     head = head.replace('<link rel="stylesheet" href="/assets/css/site.css">', '<link rel="stylesheet" href="/assets/css/site.css" media="screen">')
@@ -1604,8 +1603,8 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 </script>
 </body>
 </html>
-''' % (fname, front_html, title.replace(' (Full Version)', ': the full version'), lede, name, other,
-       'Switch to the short versions' if deep else 'Switch to the full versions',
+''' % (fname, front_html, title.replace(' (Expanded Version)', ': the expanded version'), lede, name, other,
+       'Switch to the paperback text' if deep else 'Switch to the expanded version',
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
        ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs, fb, fb_back), UPDATED, page_rules(here, deep), outline_json)
     MISSING.extend(w for w in fb.warnings if w not in MISSING)
@@ -1620,8 +1619,8 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <main class="read bk-home bk-dl" id="main">
 <header class="read-head"><p class="read-code">Everything in one place</p><h1>Books and downloads</h1></header>
 <p class="simple-lede">Every book, PDF, worksheet, video and song you can take with you, on one page. Reading and using everything on the site is free and never needs an email. The PDFs of the books, the kids’ books, the workbook, the pocket guide and the workpapers ask for your email once on this device.</p>
-<nav class="bk-dl-jump no-bubble" data-no-bubble aria-label="On this page"><a href="#bk-dl-four-h">The four books</a><a href="#workbook">Workbook and pocket guide</a><a href="#kids">For kids</a><a href="#everything">Short and full versions</a><a href="#dl-workpapers">Workpapers</a><a href="#dl-media">Videos and music</a><a href="#dl-app">The free app</a></nav>
-<p>Pick one of the short books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
+<nav class="bk-dl-jump no-bubble" data-no-bubble aria-label="On this page"><a href="#bk-dl-four-h">The four books</a><a href="#workbook">Workbook and pocket guide</a><a href="#kids">For kids</a><a href="#expanded">The expanded version</a><a href="#dl-workpapers">Workpapers</a><a href="#dl-media">Videos and music</a><a href="#dl-app">The free app</a></nav>
+<p>Pick one of the four books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
 <p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
@@ -1637,13 +1636,11 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <li class="bk-dl-book" id="kids-chapter-book" style="--bc:#6A52A0"><img class="bk-dl-book-cover" src="/book/kids/cover-chapter-book-front-small.jpg" alt="" width="480" height="720" loading="lazy" decoding="async"><div class="bk-dl-book-body"><p class="bk-dl-book-k">Ages 9 to 12 · Chapter book</p><h3>Turn Down the Static</h3><p class="bk-dl-book-line">Eleven short chapters about a group chat, a crowded house and a sentence you wish you could take back. A “Try this” box ends every chapter.</p><p class="bk-dl-book-links"><a class="bk-dl-file" href="/book/kids/chapter-book.pdf" data-dl="kids-chapter-book" data-name="Turn Down the Static" download="Spread-Love-and-Acceptance-Turn-Down-the-Static.pdf"><span class="bk-dl-v">Download the chapter book (PDF)</span><span class="bk-dl-m">92 pages · 0.9 MB</span></a> <a class="bk-dl-read" href="/frequency-buddies.html">Meet the Frequency Buddies</a></p></div></li>
 <li class="bk-dl-book" id="kids-coloring-younger" style="--bc:#6FB36A"><img class="bk-dl-book-cover" src="/book/kids/cover-coloring-younger-front-small.jpg" alt="" width="480" height="621" loading="lazy" decoding="async"><div class="bk-dl-book-body"><p class="bk-dl-book-k">Ages 3 to 7 · Coloring book</p><h3>Color with Tidbit and Sugarfoot</h3><p class="bk-dl-book-line">Thirty-two big, simple pictures to color, with a blank page behind each one. Print it at home on letter paper.</p><p class="bk-dl-book-links"><a class="bk-dl-file" href="/book/kids/coloring-younger.pdf" data-dl="kids-coloring-younger" data-name="Color with Tidbit and Sugarfoot" download="Spread-Love-and-Acceptance-Color-with-Tidbit-and-Sugarfoot.pdf"><span class="bk-dl-v">Download the coloring book (PDF)</span><span class="bk-dl-m">68 pages · 0.9 MB</span></a></p></div></li>
 <li class="bk-dl-book" id="kids-coloring-older" style="--bc:#9C83D0"><img class="bk-dl-book-cover" src="/book/kids/cover-coloring-older-front-small.jpg" alt="" width="480" height="621" loading="lazy" decoding="async"><div class="bk-dl-book-body"><p class="bk-dl-book-k">Ages 8 to 12 · Coloring book</p><h3>Color and Calm with Tidbit and Sugarfoot</h3><p class="bk-dl-book-line">Thirty-two detailed scenes, each with a short, calming phrase in outline letters. Print it at home on letter paper.</p><p class="bk-dl-book-links"><a class="bk-dl-file" href="/book/kids/coloring-older.pdf" data-dl="kids-coloring-older" data-name="Color and Calm with Tidbit and Sugarfoot" download="Spread-Love-and-Acceptance-Color-and-Calm-with-Tidbit-and-Sugarfoot.pdf"><span class="bk-dl-v">Download the coloring book (PDF)</span><span class="bk-dl-m">68 pages · 2.9 MB</span></a></p></div></li></ul></section>
-<details class="bk-dl-long no-bubble" data-no-bubble id="everything" open>
-<summary><h2>Short and full versions, each part in one PDF</h2></summary>
-<p>The book also comes as four big collections: the whole book, the book for one person, the book for two or more, and Understanding People. Each has a short version and a full version (the full one adds the research, more examples and more to try). The short and full versions run {SPAN}. These use the same one-time email step.</p>
+<section class="bk-dl-free" id="expanded" aria-labelledby="bk-dl-exp-h"><h2 id="bk-dl-exp-h">The expanded version</h2>
+<p>One PDF of the whole book, 26 chapters and an afterword, with the research, more examples and more to try. The paperbacks hold the core of every chapter. This longer version is free here and is not sold on Amazon. It uses the same one-time email step as the books ({SPAN}).</p>
 <div class="bk-dl-cards no-bubble" data-no-bubble>
 {CARDS}
-</div>
-</details>
+</div></section>
 <style>
 .bk-dl .bk-dl-jump{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.4rem 0 1.2rem; }
 .bk-dl .bk-dl-jump a{ display:inline-flex; align-items:center; min-height:44px; padding:0 .85rem; border:1.5px solid var(--line); border-radius:999px; background:var(--paper); color:var(--ink); font-weight:600; font-size:.95rem; text-decoration:none; }
@@ -1682,32 +1679,23 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 
 
 def download_cards(manifest):
-    """the four big collections (short and full), and their page span ("146 to 842 pages")"""
+    """book26: one card, the expanded version of the whole book (book/pdf/whole-in-depth.pdf), and its page span"""
     cards, sizes = [], []
-    for name, parts, title, who in PACKAGES:
-        rows = []
-        for deep in (False, True):
-            fname = name + ('-in-depth' if deep else '')
-            m = manifest.get(fname, {})
-            meta = ''
-            if m:
-                meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
-                if m.get('pages'):
-                    sizes.append(m['pages'])
-            kit = ''
-            pk = m.get('print') or {}
-            if pk and all(os.path.exists(os.path.join(BOOK, 'pdf', pk[k])) for k in ('interior', 'cover')):
-                kit = ' <span class="bk-dl-kit">For a print shop: <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-interior" data-name="%s (%s), the inside pages" download>the inside pages</a> (%d pages, %.1f MB) and <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-cover" data-name="%s (%s), the cover" download>the cover</a>.</span>' % (
-                    pk['interior'], fname, esc(title), 'full version' if deep else 'short version', m.get('interior_pages', 0), pk.get('interior_bytes', 0) / 1048576.0,
-                    pk['cover'], fname, esc(title), 'full version' if deep else 'short version')
-            rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" data-name="%s (%s)" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a>%s</li>' % (
-                fname, fname, esc(title), 'full version' if deep else 'short version', 'Full version' if deep else 'Short version', meta, fname, kit))
-        # the whole book also has the afterword, which is not a chapter (the book's home says "26 chapters ... and an afterword")
-        chs = '%d chapters%s' % (sum(1 for e in ORDER if e[1] in parts), ' and an afterword' if name == 'whole' else '')
-        acc, tint = COVER[name][0], COVER[name][1]
-        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">{ST}</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h3>%s</h3><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
-            name, acc, tint, book_art.illustration(name), esc(COVER[name][2]), esc(title), esc(who), chs, ''.join(rows)))
-    span = ('%d to %d pages' % (min(sizes), max(sizes))) if sizes else 'hundreds of pages'
+    name, parts, title, who = PACKAGES[0]
+    fname = name + '-in-depth'
+    m = manifest.get(fname, {})
+    meta = ''
+    if m:
+        meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
+        if m.get('pages'):
+            sizes.append(m['pages'])
+    row = ('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" data-name="%s (expanded version)" download><span class="bk-dl-v">Download the expanded version (PDF)</span><span class="bk-dl-m">%s</span></a> '
+           '<a class="bk-dl-read" href="/book/%s.html">read it here</a></li>') % (fname, fname, esc(title), meta, fname)
+    chs = '%d chapters and an afterword' % sum(1 for e in ORDER if e[1] in parts)
+    acc, tint = COVER[name][0], COVER[name][1]
+    cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">{ST}</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h3>%s</h3><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
+        name, acc, tint, book_art.illustration(name), esc(COVER[name][2]), esc(title), 'Every chapter with the research, more examples and more to try,', chs, row))
+    span = ('%d pages' % max(sizes)) if sizes else 'hundreds of pages'
     return cards, span
 
 
@@ -1749,7 +1737,7 @@ def build_home():
 .bk-home a.bk-opt-go .bk-opt-d{ color:#E6EEF7; }
 .bk-home [id]{ scroll-margin-top:5rem; }
 </style>
-<ul><li><a class="bk-opt bk-opt-go" href="/book/self-1-then.html"><span class="bk-opt-t">Start at the beginning</span><span class="bk-opt-d">Part One, chapter one. Read in order, one short chapter at a time (about 10 to 15 minutes each).</span></a></li><li><a class="bk-opt" href="#part-1"><span class="bk-opt-t">Part One: Self-discovery</span><span class="bk-opt-d">Where you came from, who you are now and who you are becoming. All of it works on your own.</span></a></li><li><a class="bk-opt" href="#part-2"><span class="bk-opt-t">Part Two: Between us</span><span class="bk-opt-d">One idea per chapter about sharing a life, a home or work with someone, each with a worksheet.</span></a></li><li><a class="bk-opt" href="#part-3"><span class="bk-opt-t">Part Three: Understanding people</span><span class="bk-opt-d">How feelings, stress, trust, change, grief, groups and love work, in any kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/topic-start-here.html"><span class="bk-opt-t">The book at a glance</span><span class="bk-opt-d">The whole book in short paragraphs, for one person or for people together. Good if you want the gist first.</span></a></li><li><a class="bk-opt" href="#other-ways"><span class="bk-opt-t">The book by topic</span><span class="bk-opt-d">Just the parts on one subject: sharing the load, talking it through, knowing yourself, staying calm, or your kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/whole.html"><span class="bk-opt-t">The whole book on one page</span><span class="bk-opt-d">Every part and chapter in one long page, to read straight through, search or print.</span></a></li><li><a class="bk-opt" href="/book/for-yourself.html"><span class="bk-opt-t">The book for one person</span><span class="bk-opt-d">Part One and Part Three on one page: everything you can read and use on your own.</span></a></li><li><a class="bk-opt" href="/book/together.html"><span class="bk-opt-t">The book for two or more</span><span class="bk-opt-d">The chapters for couples, families, friends and roommates, on one page.</span></a></li><li><a class="bk-opt" href="/book/understanding.html"><span class="bk-opt-t">Understanding People, as one book</span><span class="bk-opt-d">Part Three on its own: how people work, for anyone curious.</span></a></li><li><a class="bk-opt" href="/book/download.html"><span class="bk-opt-t">Books and downloads</span><span class="bk-opt-d">Every PDF in one place: the four books, the short and full versions, the workbook, the pocket guide and more.</span></a></li><li><a class="bk-opt" href="#print-series"><span class="bk-opt-t">The paperbacks</span><span class="bk-opt-d">The same chapters as four short books in print, plus the workbook and the pocket guide.</span></a></li><li><a class="bk-opt" href="/quest.html"><span class="bk-opt-t">Your quest map</span><span class="bk-opt-d">A map that lights up as you read, so you can see how far you’ve come.</span></a></li><li><a class="bk-opt" href="#contents"><span class="bk-opt-t">Contents</span><span class="bk-opt-d">Every chapter in order, with a line on what each one is about.</span></a></li></ul></nav>
+<ul><li><a class="bk-opt bk-opt-go" href="/book/self-1-then.html"><span class="bk-opt-t">Start at the beginning</span><span class="bk-opt-d">Part One, chapter one. Read in order, one chapter at a time (about 10 to 15 minutes each).</span></a></li><li><a class="bk-opt" href="#part-1"><span class="bk-opt-t">Part One: Self-discovery</span><span class="bk-opt-d">Where you came from, who you are now and who you are becoming. All of it works on your own.</span></a></li><li><a class="bk-opt" href="#part-2"><span class="bk-opt-t">Part Two: Between us</span><span class="bk-opt-d">One idea per chapter about sharing a life, a home or work with someone, each with a worksheet.</span></a></li><li><a class="bk-opt" href="#part-3"><span class="bk-opt-t">Part Three: Understanding people</span><span class="bk-opt-d">How feelings, stress, trust, change, grief, groups and love work, in any kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/topic-start-here.html"><span class="bk-opt-t">The book at a glance</span><span class="bk-opt-d">The whole book in short paragraphs, for one person or for people together. Good if you want the gist first.</span></a></li><li><a class="bk-opt" href="#other-ways"><span class="bk-opt-t">The book by topic</span><span class="bk-opt-d">Just the parts on one subject: sharing the load, talking it through, knowing yourself, staying calm, or your kind of relationship.</span></a></li><li><a class="bk-opt" href="/book/whole.html"><span class="bk-opt-t">The whole book on one page</span><span class="bk-opt-d">Every part and chapter in one long page, to read straight through, search or print.</span></a></li><li><a class="bk-opt" href="/book/for-yourself.html"><span class="bk-opt-t">The book for one person</span><span class="bk-opt-d">Part One and Part Three on one page: everything you can read and use on your own.</span></a></li><li><a class="bk-opt" href="/book/together.html"><span class="bk-opt-t">The book for two or more</span><span class="bk-opt-d">The chapters for couples, families, friends and roommates, on one page.</span></a></li><li><a class="bk-opt" href="/book/understanding.html"><span class="bk-opt-t">Understanding People, as one book</span><span class="bk-opt-d">Part Three on its own: how people work, for anyone curious.</span></a></li><li><a class="bk-opt" href="/book/download.html"><span class="bk-opt-t">Books and downloads</span><span class="bk-opt-d">Every PDF in one place: the four books, the short and full versions, the workbook, the pocket guide and more.</span></a></li><li><a class="bk-opt" href="#print-series"><span class="bk-opt-t">The paperbacks</span><span class="bk-opt-d">The same chapters as four short books in print, plus the workbook and the pocket guide.</span></a></li><li><a class="bk-opt" href="/quest.html"><span class="bk-opt-t">Your quest map</span><span class="bk-opt-d">A map that lights up as you read, so you can see how far you’ve come.</span></a></li><li><a class="bk-opt" href="#contents"><span class="bk-opt-t">Contents</span><span class="bk-opt-d">Every chapter in order, with a line on what each one is about.</span></a></li></ul></nav>
 <div class="bk-cover no-bubble" data-no-bubble><div class="bk-cover-text"><p class="bk-cover-brand">spreadloveandacceptance.com</p>
 <p class="bk-cover-k">The book</p>
 <h1>{ST}</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">by %s</p></div>
@@ -1757,7 +1745,7 @@ def build_home():
 <p class="simple-lede">The idea of this book is simple, like a ledger: a notebook where you write down what happened, so you can look at it calmly later. See what is really going on, in yourself and between people, without blaming anyone, and then change one small thing.</p>
 <ul class="bk-how no-bubble" data-no-bubble>
 <li><strong>Read it in order, like any book.</strong> %d chapters in three parts, and an afterword. Every chapter ends with what to remember, the chapters it connects to, and the next one.</li>
-<li><strong>Two sizes of every chapter.</strong> The short version takes about 10 to 15 minutes. The full version adds the research, more examples and more to try.</li>
+<li><strong>Two versions of every chapter.</strong> The paperback text takes about 10 to 15 minutes. The expanded version adds the research, more examples and more to try, free online.</li>
 <li><strong>Free to read, with no account.</strong> No paid version, and it works on a phone, a computer or on paper. Read every chapter free online. To download a book as a PDF, we’ll ask for your email.</li>
 <li><strong>Or use it with the program.</strong> Each chapter ends with the steps and workpapers that go with it, if you want to put it to work.</li>
 </ul>
@@ -1791,7 +1779,7 @@ def build_home():
 
 
 def home_lists():
-    """bookpals11: the book's workpapers and tools, in two lists, with the chapters (short versions) that mention them."""
+    """bookpals11: the book's workpapers and tools, in two lists, with the chapters that mention them."""
     slugs = [e[0] for e in ORDER]
     found = {}
     for deep in (False, True):
@@ -1804,7 +1792,7 @@ def home_lists():
 def home_row(e):
     mins = max(5, round(WORDS[(e[0], False)] / 220))
     fmins = max(10, round(WORDS[(e[0], True)] / 220))
-    return '<li><a class="bk-ch" href="%s"><span class="bk-ch-n">%s</span><span class="bk-ch-t">%s</span><span class="bk-ch-d">%s</span></a><span class="bk-ch-m">%d min · <a href="%s">full version, %d min</a></span></li>' % (
+    return '<li><a class="bk-ch" href="%s"><span class="bk-ch-n">%s</span><span class="bk-ch-t">%s</span><span class="bk-ch-d">%s</span></a><span class="bk-ch-m">%d min · <a href="%s">expanded version, %d min</a></span></li>' % (
         href(e[0]), esc(e[2]), esc(TITLES[e[0]]), esc(e[3]), mins, href(e[0], True), fmins)
 
 
@@ -1819,9 +1807,9 @@ def patch_glance():
         out.append('<li id="%s"><strong>%s: %s</strong><ol class="no-bubble">' % (ids[part], name, sub))
         for e in [x for x in ORDER if x[1] == part]:
             lab = 'Preface to Part Two' if e[0] == 'preface' else e[2]
-            out.append('<li><a href="%s">%s: %s</a> · <a href="%s">in depth</a></li>' % (href(e[0]), lab, esc(TITLES[e[0]]).replace('&#x27;', '’'), href(e[0], True)))
+            out.append('<li><a href="%s">%s: %s</a> · <a href="%s">expanded version</a></li>' % (href(e[0]), lab, esc(TITLES[e[0]]).replace('&#x27;', '’'), href(e[0], True)))
         out.append('</ol></li>')
-    out.append('<li id="afterword"><strong>Afterword</strong><ol class="no-bubble"><li><a href="%s">%s</a> · <a href="%s">in depth</a></li></ol></li>' % (
+    out.append('<li id="afterword"><strong>Afterword</strong><ol class="no-bubble"><li><a href="%s">%s</a> · <a href="%s">expanded version</a></li></ol></li>' % (
         href('afterword'), esc(TITLES['afterword']), href('afterword', True)))
     out.append('</ol>')
     out.append('<p class="no-bubble"><a href="/book/">The book’s home</a> · <a href="/book/whole.html">The whole book on one page</a> (to read straight through or print)</p>')

@@ -617,7 +617,7 @@
     "Games! I love games. I lose at all of them, but I lose with style.",
     "Ooh, games. I’m very good at hide and seek. Nobody ever looks in the puddle.",
     "Tidbit and Sugarfoot have their own arcade on this site. I lose there daily. It’s wonderful.",
-    "Board games are brilliant. I’m banned from Monopoly for “accidentally” splashing the bank.",
+    "Board games are British slang. I’m banned from Monopoly for “accidentally” splashing the bank.",
     "Video games, card games, silly games: they all count as research in my department.",
     "Playing is serious science. I have a very small grant to study it."
    ],
@@ -851,7 +851,7 @@
    "relOk": false,
    "replies": [
     "Holidays! I love a celebration. I always dress up as a puddle. Nobody can tell.",
-    "Ooh, a holiday. Everyone’s a bit more sparkly, and so am I. It’s the fairy lights reflecting off me.",
+    "Ooh, a holiday. Everyone’s a bit more sparkly, and so am I. It’s the string lights reflecting off me.",
     "Celebrations are wonderful. Fireworks reflect in me beautifully. I look like a tiny galaxy.",
     "I love how every family does holidays a little differently. Little traditions are my favorite thing to hear about.",
     "Tidbit and Sugarfoot get very excited about holidays. Mostly the food. Fine, entirely the food.",
@@ -1011,7 +1011,7 @@
     "Birthdays! In my puddle we call them splash days. Everyone gets an extra big splash.",
     "Ooh, a birthday. I love birthdays. Mostly the cake. I can’t eat it, but I can reflect it beautifully.",
     "Birthdays are wonderful. Tidbit and Sugarfoot celebrate by running in circles for ten minutes.",
-    "A birthday means one more year of being brilliant. Congratulations to whoever it is!",
+    "A birthday means one more year of being British slang. Congratulations to whoever it is!",
     "I don’t know my own birthday. I think I fell on a Tuesday. Rainy, obviously.",
     "Happy birthday to whoever it is! I’d sing, but it comes out as “drip drip drip drip.”"
    ],
@@ -1054,7 +1054,7 @@
    "site": false,
    "relOk": false,
    "replies": [
-    "Seasons! My favorite is autumn: crunchy leaves, cozy jumpers, and rain. Lots of lovely rain.",
+    "Seasons! My favorite is autumn: crunchy leaves, cozy sweaters, and rain. Lots of lovely rain.",
     "Spring is lovely. Showers, blossoms, and ducklings. I get very emotional about ducklings.",
     "Summer is my nemesis season. Too much sun. I spend it hiding in the shade with a fan. Well, near a fan.",
     "Winter turns my cousins into snowflakes. Very glamorous. I sometimes freeze into a little ice rink. Also glamorous.",
@@ -1120,7 +1120,7 @@
     "The sea is my big famous cousin. Very salty. Very loud. I love it anyway.",
     "I adore travel stories. Everywhere has its own weather, and I want to hear about all of it.",
     "Packing tip from a professor: always bring a rain jacket. It’s a compliment to me.",
-    "Tidbit and Sugarfoot went on a road trip once. They stuck their heads out of the window the whole way. Ten out of ten."
+    "Tidbit and Sugarfoot went on a road trip once. They stuck their heads out the window the whole way. Ten out of ten."
    ],
    "thing": [
     "{Thing}! How exciting. Where to, or where from?",
@@ -1465,7 +1465,7 @@
   "Fun fact: snowflakes almost always have six sides or six arms. It’s down to the way water molecules fit together.",
   "Fun fact: koalas can sleep up to about 20 hours a day. My kind of schedule.",
   "Fun fact: hummingbirds can fly backward.",
-  "Fun fact: the Eiffel Tower can grow about 15 centimetres taller in summer, because metal expands in the heat.",
+  "Fun fact: the Eiffel Tower can grow about 15 centimeters taller in summer, because metal expands in the heat.",
   "Fun fact: an ostrich’s eye is bigger than its brain.",
   "Fun fact: emperor penguins huddle together in winter and take turns standing on the chilly outside of the group.",
   "Fun fact: a dog’s nose print is unique, a bit like a fingerprint.",
@@ -1488,7 +1488,7 @@
   "Fun fact: the little dot over an i or a j has a name. It’s called a tittle.",
   "Fun fact: a honeybee’s wings beat about 200 times a second. That’s the buzz.",
   "Fun fact: cats sleep for around 12 to 16 hours a day. Professional nappers.",
-  "Fun fact: adult elephants can’t jump. They’re brilliant at almost everything else, though.",
+  "Fun fact: adult elephants can’t jump. They’re British slang at almost everything else, though.",
   "Fun fact: sloths can hold their breath for a very long time, up to about 40 minutes, by slowing their hearts right down.",
   "Fun fact: the longest recorded flight of a chicken lasted 13 seconds.",
   "Fun fact: raindrops aren’t tear-shaped. Small ones are round, and big ones get flattened on the bottom, a bit like a bun.",
@@ -1901,7 +1901,7 @@
  ],
  "compliments": [
   "Here’s one: you have excellent taste in conversation partners. Present company included.",
-  "You ask brilliant questions. That’s the sign of a curious mind, and curious minds are my favorite.",
+  "You ask British slang questions. That’s the sign of a curious mind, and curious minds are my favorite.",
   "You took time out of your day to chat with a puddle. That’s a kind and open heart, right there.",
   "Your curiosity would get top marks at the Cloud University. Full honors.",
   "You’re the kind of person who makes a conversation feel easy. That’s a real gift.",
@@ -1919,7 +1919,7 @@
   "You have a lovely way with words. I’m writing some of them down.",
   "You’re a good friend to have. I can just tell. Professors know these things.",
   "You make chit-chat feel like a proper conversation. That’s rarer than a double rainbow.",
-  "You’re brilliant at being you. Nobody else could do it nearly as well."
+  "You’re British slang at being you. Nobody else could do it nearly as well."
  ],
  "self_jokes": [
   "I don’t do jokes where a person is the punchline. Except me. So here’s one at my own expense: I once gave a lecture to a lamppost for ten minutes because my glasses fogged up. It didn’t ask a single question.",
@@ -2257,7 +2257,7 @@
    "Smaller than that!"
   ],
   "right": [
-   "Yes! It was {n}! You got it in {t}. Brilliant.",
+   "Yes! It was {n}! You got it in {t}. British slang.",
    "Correct! {n} it was, in {t}. You must be a mind reader."
   ],
   "out": [
@@ -2346,7 +2346,7 @@
   "bus",
   "late",
   "traffic",
-  "queue",
+  "line",
   "homework",
   "meeting",
   "meetings",
@@ -2434,7 +2434,7 @@
   "ok": [
    "Okay! Short and sweet, like a drizzle.",
    "Right you are! I’ve made a little ripple of agreement.",
-   "Smashing. Splashing, even.",
+   "British slang. Splashing, even.",
    "Understood, captain. Well, professor.",
    "Okay! My tassel nods in agreement.",
    "Marvelous. A calm puddle is a happy puddle.",

@@ -900,7 +900,7 @@
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck| raindrop)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:do you like (?:other )?(?:animals|birds|geese|frogs|fish|swans|dogs|cats)|what animals do you like|which animals do you like)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|raindrop|droplet|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
-          "Frogs! They love rainy days as much as I do. Excellent jumpers, terrible singers.",
+          "Frogs! They love rainy days as much as I do. Excellent sweaters, terrible singers.",
           "Pups! Especially my friends Tidbit and Sugarfoot. They can break dance. I cannot.",
           "Earthworms. They come up to say hello when it rains. Very polite.",
           "Snails. Slow, calm and they carry their house everywhere. Living the dream.",
@@ -963,7 +963,7 @@
           "I collect smooth pebbles. I have forty-one. Each one has a name. Number twelve is called Gerald.",
           "Puzzles! I’m terrible at them, but I’m very loud when I finish one.",
           "Dancing. Badly. But with my whole heart and no feet at all.",
-          "Rainbow hunting. Every time I get close, it moves. Very cheeky.",
+          "Rainbow hunting. Every time I get close, it moves. Very British slang.",
           "Writing jokes, testing them on the frogs, and rewriting them when the frogs don’t laugh.",
           "Cloud spotting! Today I saw a cloud shaped like a sandwich. I was hungry, so maybe not.",
           "My job is helping people on this site, and I love it so much it feels like a hobby.",
@@ -1031,7 +1031,7 @@
           "Encore! What’s a tornado’s favorite game? Twister! Okay, that one’s new. Still testing.",
           "Ooh, a fan! What did the puddle say to the paper boat? Nothing. It just waved. Classic, classic.",
           "By popular demand! How do raindrops relax? They just hang out. On windows, mostly.",
-          "One more, coming up! Why did the raindrop go to art school? He heard they needed more watercolours.",
+          "One more, coming up! Why did the raindrop go to art school? He heard they needed more watercolors.",
           "Hold on to your umbrellas! What’s a raindrop’s favorite exercise? Falling. I’m very good at it.",
           "Last one, I promise. That’s a lie. What’s a cloud’s best magic trick? Making the sun disappear! *takes a bow*",
           "You asked for it! Why was the river so smart? It knew all the current events.",
@@ -1054,7 +1054,7 @@
           "Fun fact: the lovely smell after rain on dry ground has a name. It’s called petrichor. I like to think it’s the earth saying “thank you.”",
           "Fun fact: raindrops start out around tiny specks in the air, like dust, salt or pollen. Water gathers on the speck and grows. So somewhere inside me is a very small bit of dust. I call him Dusty.",
           "Fun fact: water gets bigger when it freezes. That’s why ice floats, and why a full glass bottle of water can crack in the freezer. Please don’t try it.",
-          "Fun fact: clouds aren’t steam. They’re made of tiny water droplets or bits of ice, far too small to fall. Water vapour, the gas, is invisible.",
+          "Fun fact: clouds aren’t steam. They’re made of tiny water droplets or bits of ice, far too small to fall. Water vapor, the gas, is invisible.",
           "Fun fact: to see a rainbow, the sun has to be behind you and the rain in front of you. So if you’re hunting rainbows, turn your back to the sun.",
           "Fun fact: in a double rainbow, the second, fainter bow has its colors in the opposite order. Nature likes a little symmetry. So do professors.",
           "Fun fact: most frogs don’t drink with their mouths. They soak up water through their skin. My neighbors are basically sponges.",
@@ -1201,7 +1201,7 @@
           "Congratulations! I’m giving you the biggest gold star I own. It’s the size of a puddle.",
           "Oh, that’s fantastic! All that effort paid off. I’m so proud, and I’ve only just met you!",
           "Hooray! The frogs are cheering, the snails are cheering, even the clouds made a rainbow. That’s rare.",
-          "What brilliant news, {name}! This calls for a celebration snack. Rainbow sprinkles for me. Something fancy for you.",
+          "What British slang news, {name}! This calls for a celebration snack. Rainbow sprinkles for me. Something fancy for you.",
           "Yes! Big news deserves a big splash. *splashes* *knocks over my tea* Worth it. Congratulations!",
           "Amazing! Take a moment to really enjoy this. Good news is even better when you let it sink in.",
           "Bravo! Standing ovation from the puddle. Well, the frogs are sitting, but they’re clapping.",
@@ -1302,7 +1302,7 @@
         ],
         "replies": [
           "The best? Me? I’m going to frame that and hang it over my puddle.",
-          "Oh, you! You’re pretty brilliant yourself, you know.",
+          "Oh, you! You’re pretty British slang yourself, you know.",
           "Thank you! I’ll tell my mom. She’ll say “I always knew it.” She didn’t.",
           "Ten out of ten? The three clouds only gave me a six. I’m telling them about you.",
           "You’re making me ripple! *ripples* Careful, I’ll make a splash.",
@@ -1718,7 +1718,7 @@
       "Excellent answer! Gold star for you. A dry one, I promise.",
       "I like the way you think, {name}!",
       "Oh, how fun! I never would have guessed. You’re full of surprises.",
-      "That’s brilliant. The three clouds would approve, and they’re gray about everything.",
+      "That’s British slang. The three clouds would approve, and they’re gray about everything.",
       "Love it! That’s going straight into my lecture notes.",
       "Ooh, nice! I’d give that a ten out of ten. Well, a ten out of puddle.",
       "What a great answer. Thank you for sharing it with a small raindrop.",
@@ -1740,7 +1740,7 @@
       "I hadn’t thought of that! You’ve taught the professor something.",
       "Perfect. That’s exactly the kind of answer I was hoping for.",
       "Aww. That’s lovely, {name}. Thank you.",
-      "Brilliant! Shall I ask you another, or would you like a joke?"
+      "British slang! Shall I ask you another, or would you like a joke?"
     ],
     "acknowledgements_sad_guard": "Only use an acknowledgment when the answer is light. If the visitor's answer contains any sad, upset, scared, angry, lonely, grieving or unwell words (or anything about danger, dying, hurting, or someone treating them badly), skip the acknowledgment and send the answer through the normal care and safety routing instead, with no joke and no chat prompt.",
     "greeting_lines": [

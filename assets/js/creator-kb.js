@@ -58,7 +58,7 @@ window.TOL_CREATOR_KB = {
       a: ['Philosophy is the discipline Christian returns to most, especially epistemology, the study of how we know what we claim to know. In Christian’s words: “In a conflict, almost nothing being asserted is actually knowledge. It’s inference, memory, and pattern-matching, all wearing the costume of fact.” Ethics did the other half: it set what a ledger is not allowed to do.', 'That’s why the program scores an arrangement, never a person, and why each person’s needs carry equal weight as a starting principle (Chapter IV’s fair by the rules).'],
       l: [['The thirteen inputs', '/about.html#curriculum']], f: ['How did behavioral science shape the program?'] },
 
-    { id: 'behavioral', k: ['behavioral science', 'behavioural science', 'behavior', 'willpower', 'habits', 'discipline', 'check-in', 'check in', 'wp-13', 'phase-locked loop', '90 second', 'ninety second'],
+    { id: 'behavioral', k: ['behavioral science', 'behavioral science', 'behavior', 'willpower', 'habits', 'discipline', 'check-in', 'check in', 'wp-13', 'phase-locked loop', '90 second', 'ninety second'],
       a: ['Christian’s hardest lesson here: willpower collapses exactly when you need it most. Every resolution evaporated the moment Christian was depleted. What survived wasn’t discipline. It was structure that didn’t need discipline to run.', 'It became the 90-second daily check-in (WP-13): deliberately too small to skip, because small and frequent beats big and rare. In Christian’s words: “A system that only works when both people are at their best isn’t a system.”'],
       l: [['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html']], f: ['How did neurobiology shape the program?'] },
 

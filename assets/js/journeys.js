@@ -212,7 +212,7 @@
       ['A parent or in-law lives with us', '/family-obligations.html#visits', 'Visits, long stays and an elder at home, planned together'],
       ['Caring for a parent at home', '/caregivers.html', 'When they can’t share the load back'],
       ['Fighting with my parents (I’m under 18)', '/teens.html#curfew-phone', 'Curfew, your phone, and getting heard'],
-      ['Flatmate or housemate trouble', '/sharing-a-room.html#bring-it-up', 'Bring it up without a row, and a house agreement'],
+      ['Roommate or roommate trouble', '/sharing-a-room.html#bring-it-up', 'Bring it up without a row, and a house agreement'],
       ['Raising a child who isn’t mine', '/foster-and-kinship.html#kinship', 'A grandchild, a foster child or a relative’s child']] }
   ];
 

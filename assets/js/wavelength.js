@@ -292,7 +292,7 @@
     });
   }
   // connections you might not have noticed: every [step, choice] in `when` must be picked ('*' = anything in that step)
-  const F = { ps: 'Psychology', ph: 'Philosophy', bs: 'Behavioural science', nb: 'Neurobiology', ec: 'Economics', bu: 'Business', fi: 'Finance', ht: 'Holistic practice', ar: 'The senses' };
+  const F = { ps: 'Psychology', ph: 'Philosophy', bs: 'Behavioral science', nb: 'Neurobiology', ec: 'Economics', bu: 'Business', fi: 'Finance', ht: 'Holistic practice', ar: 'The senses' };
   const PIL = { 1: ['Pillar I, See the whole load', 'see-the-load'], 2: ['Pillar II, Fix the setup, not the person', 'fix-the-setup'], 3: ['Pillar III, Read your state first', 'read-your-state'],
     4: ['Pillar IV, Tune how you send and receive', 'tune-signals'], 5: ['Pillar V, Notice the quiet incentives', 'quiet-incentives'] };
   const INSIGHTS = [

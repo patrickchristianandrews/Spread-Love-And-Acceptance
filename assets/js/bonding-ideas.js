@@ -200,7 +200,7 @@
     ['Write a letter to a friend you have drifted from, and post it.', 'me fr', 'wknd 10', 'low', 0]
   ];
 
-  var WHO = { pa: 'a partner', ch: 'a child', te: 'a teen', fr: 'a friend', pr: 'a parent', si: 'a sibling', gr: 'a grandparent or grandchild', ho: 'a housemate', co: 'a coworker', me: 'just you' };
+  var WHO = { pa: 'a partner', ch: 'a child', te: 'a teen', fr: 'a friend', pr: 'a parent', si: 'a sibling', gr: 'a grandparent or grandchild', ho: 'a roommate', co: 'a coworker', me: 'just you' };
   var TIME = { '1': 'About a minute', '10': 'About ten minutes', eve: 'An evening', wknd: 'A weekend' };
   var TIME_ORDER = { '1': 0, '10': 1, eve: 2, wknd: 3 };
   var ENERGY = { low: 'Low energy', some: 'Some energy', lots: 'Lots of energy' };

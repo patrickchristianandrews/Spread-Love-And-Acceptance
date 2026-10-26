@@ -411,7 +411,7 @@
 
   /* ---------------- Done list ---------------- */
   var KEY = 'tol-small-wins', MAX = 300;
-  var WHO = { '': '', partner: 'With a partner', friend: 'With a friend', family: 'With family', kids: 'With the kids', home: 'With housemates', work: 'At work' };
+  var WHO = { '': '', partner: 'With a partner', friend: 'With a friend', family: 'With family', kids: 'With the kids', home: 'With roommates', work: 'At work' };
   function load() {
     try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(a) ? a.filter(function (w) { return w && typeof w.t === 'string'; }) : []; } catch (e) { return []; }
   }

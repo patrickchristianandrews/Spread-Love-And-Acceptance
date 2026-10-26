@@ -33,6 +33,7 @@ const opt = n => { const a = args.find(x => x.startsWith('--' + n + '=')); retur
 const ONLY = opt('rule') ? new Set(opt('rule').split(',')) : null;
 const SKIPP = opt('skip') ? opt('skip').split(',') : [];
 const DUMP = opt('dump');
+const JSON_OUT = opt('json');
 
 const WORDS = JSON.parse(fs.readFileSync(path.join(__dirname, 'us-english-words.json'), 'utf8'));
 let ALLOW = [];
@@ -217,6 +218,14 @@ if (WORDS.researchers && WORDS.researchers.length) {
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   RULES.researcher = combine([{ re: "(?<![A-Za-z’'-])(?:" + WORDS.researchers.map(esc).join('|') + ")(?![A-Za-z])", cs: true }]);
 }
+// A keyword list that already holds the American word (for example "roommates housemates") is matching data, not prose.
+function hasUsVariant(text, fix) {
+  if (!fix) return false;
+  const low = text.toLowerCase();
+  return String(fix).split(/ \/ | or /).some(a => /^[a-z' -]{3,}$/i.test(a.trim()) && new RegExp('\\b' + a.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(low));
+}
+const SPELL = new Map(Object.entries(WORDS.britishSpellings || {}));
+const TOKEN = /[A-Za-z][A-Za-z’'-]*/g;
 const FIRST = new Set((WORDS.firstNames || []).map(s => s.toLowerCase()));
 const NOT_NAME_HEAD = new Set((WORDS.headingNotNames || []).map(s => s.toLowerCase()));
 const CHARACTERS = new Set((WORDS.characters || []).map(s => s.toLowerCase()));
@@ -263,6 +272,7 @@ for (const rel of files) {
     if (seen.has(key)) continue;
     seen.add(key);
     if (/^js|^json$/.test(s.kind) && isCodeLike(s.text)) continue;
+    if (s.kind === 'attr:value') continue;
     const t = /[./:]/.test(s.text) ? s.text.replace(URLISH, ' ') : s.text;
     const run = r => !ONLY || ONLY.has(r);
     for (const rule of ['british', 'ai', 'calling', 'researcher']) {
@@ -271,15 +281,25 @@ for (const rel of files) {
         G.rx.lastIndex = 0; let m;
         while ((m = G.rx.exec(t))) {
           if (m[0] === '') { G.rx.lastIndex++; continue; }
+          const fx = fixFor(G, m[0]);
+          if (rule === 'british' && hasUsVariant(t, fx)) continue;
           if (allowed(rel, rule, t, m[0])) continue;
-          findings.push({ rule, file: rel, line: s.line, kind: s.kind, hit: m[0], ctx: t.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40), fix: fixFor(G, m[0]) });
+          findings.push({ rule, file: rel, line: s.line, kind: s.kind, hit: m[0], ctx: t.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40), fix: fx, text: JSON_OUT ? s.text : undefined });
         }
+      }
+    }
+    if (run('british') && SPELL.size) {
+      TOKEN.lastIndex = 0; let tm;
+      while ((tm = TOKEN.exec(t))) {
+        const w = tm[0].toLowerCase().replace(/’/g, "'").replace(/'s$/, '');
+        if (SPELL.has(w) && !t.toLowerCase().match(new RegExp('\\b' + SPELL.get(w) + '\\b')) && !allowed(rel, 'british', t, tm[0])) findings.push({ rule: 'british', file: rel, line: s.line, kind: s.kind, hit: tm[0], ctx: t.slice(Math.max(0, tm.index - 40), tm.index + tm[0].length + 40), fix: SPELL.get(w), text: JSON_OUT ? s.text : undefined });
       }
     }
     if (run('heading') && /^heading:/.test(s.kind) && headingIsName(s.text) && !allowed(rel, 'heading', s.text, s.text)) findings.push({ rule: 'heading', file: rel, line: s.line, kind: s.kind, hit: s.text.slice(0, 60), ctx: s.text.slice(0, 100) });
   }
 }
 if (DUMP) fs.writeFileSync(DUMP, dump.join('\n') + '\n');
+if (JSON_OUT) fs.writeFileSync(JSON_OUT, JSON.stringify(findings));
 
 // ---------- report ----------
 const area = f => (f.includes('/') ? f.split('/')[0] : '(root pages)');

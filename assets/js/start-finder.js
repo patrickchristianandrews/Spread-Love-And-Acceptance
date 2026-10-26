@@ -48,7 +48,7 @@
   var R = {
     fighting: ['/how-to-stop-fighting-with-your-partner.html', 'How to stop fighting: seven calm steps'],
     pursue: ['/pursue-withdraw.html', 'One wants to talk now, one needs space'],
-    invisible: ['/invisible-labor-mental-load.html', 'Invisible labour and the mental load'],
+    invisible: ['/invisible-labor-mental-load.html', 'Invisible labor and the mental load'],
     complacency: ['/complacency.html', 'Complacency: why “it’s fine” stops being checked'],
     wired: ['/wired-differently.html', 'Wired differently: how people hear the same words'],
     know: ['/know-yourself.html', 'Know your own wiring'],

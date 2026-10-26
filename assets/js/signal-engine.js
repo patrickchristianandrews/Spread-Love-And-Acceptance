@@ -1460,7 +1460,7 @@ function analyze(textIn, opts){
     const h=hits[i]; if(h.id!=="ominous") continue;
     const se=sentOf(h); const rest=text.slice(h.e, se.e);
     if(/\b(?:about|regarding|re:|to (?:discuss|go over|review|talk about|look at)|on (?:the|your|my|our) \w+)/i.test(rest)) hits.splice(i,1);
-    // "I need to tell you something. I'm bisexual, and…": the topic follows straight away
+    // "I need to tell you something. I'm bisexual, and…": the topic follows right away
     else if(words(text.slice(se.e))>=6) hits.splice(i,1);
   }
   // a nudge with a topic and a time is a fine follow-up
@@ -2734,7 +2734,7 @@ function rewriteSentence(s, ctx, note, an, W){
     const span = (m[2].match(/\bfor [^.!?]{1,25}$|\b(?:tonight|today|tomorrow)\b/i)||[""])[0].toLowerCase() || "for [how long]";
     const homeAsk = /\b(?:be|get|come) (?:home|back)\b/i.test(m[1]);
     const cons = phoneAsk ? "If I can't reach you, the phone stays home next time."
-      : (homeAsk ? "If you're not back " : "If it isn't done ")+(given ? "by then" : /\bnow\b/i.test(m[1]) ? "straight away" : "by [a time]")+", "+(thing ? "the "+thing.toLowerCase()+" stays with me "+span : "you'll be staying in "+span)+".";
+      : (homeAsk ? "If you're not back " : "If it isn't done ")+(given ? "by then" : /\bnow\b/i.test(m[1]) ? "right away" : "by [a time]")+", "+(thing ? "the "+thing.toLowerCase()+" stays with me "+span : "you'll be staying in "+span)+".";
     note("consequence", m[2].replace(/[.!\s]+$/,""), cons);
     ctx.noAsk = true; ctx.consequence = true;
     return ask+" "+cons;

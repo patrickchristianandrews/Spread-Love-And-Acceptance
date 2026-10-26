@@ -631,11 +631,11 @@
         ],
         [
           "I share a flat",
-          "My flatmate and I need to split the chores"
+          "My roommate and I need to split the chores"
         ],
         [
           "I care for a parent",
-          "I care for my mum and I’m worn out"
+          "I care for my mom and I’m worn out"
         ]
       ],
       "name": "who this site is for",
@@ -1365,7 +1365,7 @@
       "kind": "intent",
       "first": true,
       "newTopic": true,
-      "name": "finding a counsellor or therapist",
+      "name": "finding a counselor or therapist",
       "pat": "\\b(how|where) (do|can|could|should) (i|we) (find|get|look for|see) (a |an |some )?(good |local |cheap |affordable |free )?(therapist|therapy|counsel\\w*|couples counsel\\w*|couples therapist|psychologist|professional help)\\b|\\bfind (a|an) (therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b|\\b(i|we) (want|need|would like) (to see )?(a |an )?(therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b",
       "notPat": "\\b(anger|temper|yell\\w*|rage)\\b|\\b(can|could|will|would) you be\\b|\\bare you\\b",
       "keys": [],
@@ -3417,7 +3417,7 @@
         "Visits can bring up a lot. You don’t have to talk about it. I’m around if you want to."
       ],
       "scriptLabels": [
-        "When a visit is cancelled",
+        "When a visit is canceled",
         "The evening after"
       ],
       "plain": [
@@ -3440,7 +3440,7 @@
         "Find one other adult who does get you (a teacher, an aunt, a coach) and talk to them as well."
       ],
       "script": [
-        "Can I tell you one thing I wish you got about me? I’m not having a go."
+        "Can I tell you one thing I wish you got about me? I’m not giving it a try."
       ],
       "scriptLabels": [
         "Words you could use"
@@ -4267,11 +4267,11 @@
       "pageChips": [
         [
           "Boundaries without hurting her",
-          "How do I set boundaries with my mum without hurting her?"
+          "How do I set boundaries with my mom without hurting her?"
         ],
         [
           "She drops in without asking",
-          "How do I tell my mum to text before visiting?"
+          "How do I tell my mom to text before visiting?"
         ],
         [
           "She says I’m keeping the baby from her",
@@ -6529,7 +6529,7 @@
         ],
         [
           "A grandparent wants a say",
-          "My mum keeps saying the baby must be raised Muslim"
+          "My mom keeps saying the baby must be raised Muslim"
         ],
         [
           "A name for both faiths",
@@ -7016,7 +7016,7 @@
       "kind": "intent",
       "first": true,
       "newTopic": true,
-      "name": "the favourite child",
+      "name": "the favorite child",
       "pat": "\\b(was|is|were|always been) (always )?(the |mum |mom |dad |their |her |his )?(favou?rite|golden child|favou?red one|favou?red)\\b|\\bfavou?ritism\\b|\\bgolden child\\b|\\b(dad|mum|mom|father|mother|parents?)\\b.{0,25}\\b(always )?(loved|liked|preferred|favou?red|spoiled|spoilt) (him|her|them|my (brother|sister)) (more|best|better)\\b|\\b(loved|liked|preferred) (him|her|my (brother|sister)) (more|best)\\b",
       "keys": [],
       "what": [
@@ -7817,7 +7817,7 @@
       "keys": [],
       "chips": [],
       "id": "housefair",
-      "name": "when one housemate has much longer hours",
+      "name": "when one roommate has much longer hours",
       "what": [
         "It can, yes. Fair doesn’t have to mean equal: some houses split jobs by the time each person has, and some keep it equal and swap in heavy weeks. What matters is that all of you agree the rule."
       ],
@@ -7858,7 +7858,7 @@
     },
     {
       "id": "houserota",
-      "name": "a rota instead of one owner",
+      "name": "a schedule instead of one owner",
       "pat": "\\b(rota|rotation|rotate|take turns|taking turns|chore wheel)\\b.{0,40}\\b(instead|rather than|or|vs|versus)\\b.{0,30}\\b(one owner|an owner|owners?|one person)\\b|\\b(can|could|should) we (do|use|have|make) a (rota|rotation|chore wheel)\\b|\\b(is a|does a) rota (work|ok|okay|better)\\b",
       "what": [
         "Yes, a schedule is fine, and lots of shared houses use one. Each job still needs one clear owner each week, so nothing falls between people."
@@ -8121,7 +8121,7 @@
       "topic": true,
       "keys": [],
       "chips": [],
-      "name": "if a flatmate reacts badly or says no",
+      "name": "if a roommate reacts badly or says no",
       "pat": "\\b(zzqx_never_matches)\\b",
       "what": [
         "If they get annoyed when you bring it up, or say no, that doesn’t mean you were wrong to ask. A bit of defensiveness at first is common, and it often settles after a day."
@@ -8244,7 +8244,7 @@
       "topic": true,
       "keys": [],
       "chips": [],
-      "name": "bringing something up with a flatmate",
+      "name": "bringing something up with a roommate",
       "pat": "^(?=.*\\b(kitchen|flat|flatmates?|housemates?|roommates?|room ?mates?|dorm|halls|shared house|house ?share|student house)\\b).*\\b(scared|afraid|nervous|worried|anxious|dread\\w*|terrified|hate confrontation|hate conflict)\\b.{0,60}\\b(hate me|awkward|weird|fall out|make it worse|cross with me|mad at me|angry with me|angry at me|upset with me|bring (it |this |that )?up|say something|confront\\w*)\\b|\\b(how|what) (do|should|can|could) i (say|bring (it|this) up|raise (it|this)|tell|text|word)\\b.{0,30}\\b(my )?(flatmates?|housemates?|roommates?|room ?mates?)\\b",
       "what": [
         "Lots of people would rather put up with something for months than have one awkward talk. But a small, calm talk early is much kinder, to both of you, than a big one later. Asking isn’t an attack, and it isn’t snitching."
@@ -9877,7 +9877,7 @@
       "kind": "intent",
       "first": true,
       "newTopic": true,
-      "name": "a housemate paying rent late",
+      "name": "a roommate paying rent late",
       "pat": "\\b(rent|bills?|share|money)\\b.{0,30}\\b(late|behind|short|not paid|hasn t paid|hasnt paid|owes|owing)\\b.{0,40}\\b(housemate|flatmate|roommate|flat|house|landlord|awkward|bring (it )?up)?|\\b(housemate|flatmate|roommate)s?\\b.{0,40}\\b(late|behind|owes|hasn t paid|hasnt paid|never pays|doesn t pay|doesnt pay)\\b",
       "notPat": "\\b(husband|wife|partner|boyfriend|girlfriend)\\b",
       "keys": [],
@@ -13585,8 +13585,8 @@
           "My carers took my phone again"
         ],
         [
-          "I miss my mum",
-          "I miss my mum, she’s away"
+          "I miss my mom",
+          "I miss my mom, she’s away"
         ],
         [
           "My parents keep fighting",

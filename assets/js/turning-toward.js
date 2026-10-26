@@ -103,7 +103,7 @@
     { key: 'their-world', title: 'Ask about a dream',
       todo: 'Ask about something they’d love to do one day. Get curious about why it matters to them.',
       msg: { default: 'If you could do anything next year, what would it be?' } },
-    { key: 'their-world', title: 'Learn their favourite right now',
+    { key: 'their-world', title: 'Learn their favorite right now',
       todo: 'Ask what they’re loving at the moment: a song, a show, a food. Try it yourself.',
       msg: { default: 'What are you loving right now? Song, show, snack, anything. I need a recommendation.' } },
     { key: 'their-world', title: 'Ask about their people',

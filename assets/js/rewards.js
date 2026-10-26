@@ -22,7 +22,7 @@
     ['garden-bridge', 'A little bridge', '🪵', 'A wooden footbridge over the pond, the best spot for a hug.', '/assets/img/keepsakes/bridge.svg'],
     ['garden-blossom', 'A blossom tree', '🌸', 'A cherry tree on the far bank. Its petals drift across every page and land on whoever is near.'],
     ['garden-aurora', 'Aurora', '🌌', 'Ribbons of light across the sky. Everyone stops to look up.'],
-    ['garden-lights', 'Fairy lights', '✨', 'Warm little lights strung between the trees. They glow brighter as the animals pass underneath.'],
+    ['garden-lights', 'String lights', '✨', 'Warm little lights strung between the trees. They glow brighter as the animals pass underneath.'],
     ['garden-balloon', 'A hot-air balloon', '🎈', 'A striped balloon drifts across the sky, and the plane waves hello.'],
     ['garden-hammock', 'A hammock', '🌿', 'A hammock between the trees, for naps after all that playing.', '/assets/img/keepsakes/hammock.svg'],
     ['garden-rainbow', 'Rainbow lanterns', '🏮', 'The Night Garden’s lanterns rise in every pastel color.'],

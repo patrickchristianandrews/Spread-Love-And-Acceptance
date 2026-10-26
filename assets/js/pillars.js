@@ -22,7 +22,7 @@
     { id: 'tune-signals', roman: 'IV', name: 'Tune how you send and receive', short: 'Tune the signal', field: 'Signal theory',
       you: 'Know your own wiring, pace and how you hear things.',
       us: 'Translate across different wiring and tone. A mismatch is tuning, not a failing.' },
-    { id: 'quiet-incentives', roman: 'V', name: 'Notice the quiet incentives', short: 'Quiet incentives', field: 'Behavioural economics',
+    { id: 'quiet-incentives', roman: 'V', name: 'Notice the quiet incentives', short: 'Quiet incentives', field: 'Behavioral economics',
       you: 'Spot the defaults and shortcuts that steer your own choices.',
       us: 'See how unclaimed jobs drift to one person, and how fairness and thanks keep things steady.' }
   ];

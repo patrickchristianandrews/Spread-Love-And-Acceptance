@@ -333,7 +333,7 @@
   var PLAIN_TOPIC = { 'invisible-work': 'invisible work and fair shares', stress: 'stress and burnout', calm: 'calming down', connection: 'small moments of connection',
     conflict: 'arguments and taking a break', repair: 'making up and saying sorry', communication: 'listening and saying it well', anxiety: 'anxiety and worry',
     attachment: 'attachment and trust', boundaries: 'boundaries and saying no', neurodiversity: 'minds that work differently', autism: 'autism', adhd: 'ADHD',
-    'self-compassion': 'being kind to yourself', family: 'family life', teams: 'housemates and coworkers', habits: 'habits and small changes', gratitude: 'gratitude and kindness' };
+    'self-compassion': 'being kind to yourself', family: 'family life', teams: 'roommates and coworkers', habits: 'habits and small changes', gratitude: 'gratitude and kindness' };
   /* ---------- the card ---------- */
   function card(opts) {
     opts = opts || {};

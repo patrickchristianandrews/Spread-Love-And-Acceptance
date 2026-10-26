@@ -49,7 +49,11 @@ const OUT = path.join(ROOT, 'book', 'pdf');
 const NAMES = ['whole', 'for-yourself', 'together', 'understanding'];
 const SITE = 'https://spreadloveandacceptance.com';
 const FONTS = new Map();
-const PRINT_KIT = process.env.BOOK_PRINT_KIT !== '0';
+// book26: the print-shop kit (book/pdf/print/) is retired; set BOOK_PRINT_KIT=1 only to try it out
+const PRINT_KIT = process.env.BOOK_PRINT_KIT === '1';
+// book26: the one PDF kept for download is the expanded version of the whole book; the other collections are still laid out
+// (their page numbers feed the contents and index of the one-page versions) but their PDF files are removed after each run
+const KEEP_PDF = new Set(['whole-in-depth']);
 const PRINT_OUT = path.join(OUT, 'print');
 // the book's one name (print12): series_title in tools/book/series.json
 const SERIES_TITLE = JSON.parse(fs.readFileSync(path.join(__dirname, 'series.json'), 'utf8')).series_title;
@@ -607,14 +611,17 @@ async function runSeries(browser, ctx) {
     manifest[file] = { pages: f.screen_pages, interior_pages: f.interior_pages, blank_pages: r.blanks + f.padded, bytes: f.bytes, title: (r.meta || {}).title || file, pagemap: r.pagemap };
     if (PRINT_KIT) manifest[file].print = { interior: 'print/' + file + '-interior.pdf', interior_bytes: f.interior_bytes, cover: 'print/' + file + '-cover.pdf', cover_bytes: f.cover_bytes };
     console.log(file, f.screen_pages, 'pages (interior', f.interior_pages + ')', (f.bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');
+    if (!KEEP_PDF.has(file) && !ONLY.length) { try { fs.unlinkSync(path.join(OUT, file + '.pdf')); } catch (e) {} }
   }
-  if (!ONLY.length || ONLY.includes('sample')) {
+  if (false) {  // the sample PDF is retired (nothing linked to it)
     const r = await makeBook(ctx, 'whole', { sample: true });
     r.meta = Object.assign({}, r.meta, { title: SERIES_TITLE + ': a sample', outline: [] });
     const f = finish('sample', r, false);
     manifest.sample = { pages: f.screen_pages, bytes: f.bytes, title: SERIES_TITLE + ': a sample' };
     console.log('sample', f.screen_pages, 'pages', (f.bytes / 1048576).toFixed(1) + ' MB');
   }
+  delete manifest.sample;
+  for (const k of Object.keys(manifest)) delete (manifest[k] || {}).print;
   fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 1) + '\n');
   await browser.close();
   fs.rmSync(TMP, { recursive: true, force: true });

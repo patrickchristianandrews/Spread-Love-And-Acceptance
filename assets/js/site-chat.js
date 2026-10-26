@@ -1698,7 +1698,7 @@
     [/\bvalidat(e|es|ing)\b/g, 'show you understand'], [/\bvalidation\b/g, 'showing you understand'], [/\bturn(ing)? toward\b/g, 'respond$1 to'],
     [/\bbids? for (attention|connection)\b/g, 'small ways of reaching for you'], [/\bdynamics?\b/g, 'pattern'], [/\bhold(ing)? the fort\b/g, 'keep$1 things going'],
     [/\bpitch in\b/g, 'help'], [/\bin the loop\b/g, 'told'], [/\bout of the loop\b/g, 'not told'], [/\bwears on\b/g, 'hurts'], [/\bwear on\b/g, 'hurt'], [/\bloaded\b/g, 'tense'],
-    [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgement'],
+    [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgment'],
     [/\bsorting (out )?the\b/g, 'fixing the'], [/\bsort(ing)? out\b/g, 'fix$1'], [/\bturning up\b/g, 'being there'], [/\bturn up\b/g, 'come'], [/\bproviding\b/g, 'earning money for the family'],
     [/\blow[- ]pressure\b/g, 'easy'], [/\bunwind\b/g, 'relax'], [/\bwind down\b/g, 'relax'], [/\bflooded\b/g, 'too upset to think'], [/\bstart to finish\b/g, 'from start to end'],
     [/\bside by side\b/g, 'next to each other'], [/\brhythm\b/g, 'habit'], [/\bcheck in\b/g, 'talk for a few minutes'], [/\bcheck-ins?\b/g, 'short talks'],
@@ -3252,7 +3252,7 @@
     if (!r.blocks.some(function (b) { return b.k === 'list' || b.k === 'script' || b.k === 'h'; })) return r;
     if (/\/safety\.html/.test(JSON.stringify(r.blocks))) return r;
     r.chips = r.chips || [];
-    if (r.chips.length < 5) r.chips.push({ label: 'Make this an infographic', q: 'Summarise this as an infographic' });
+    if (r.chips.length < 5) r.chips.push({ label: 'Make this an infographic', q: 'Summarize this as an infographic' });
     return r;
   }
 
@@ -3476,7 +3476,7 @@
     return r;
   }
 
-  // ---------- small talk: "how are you?", "what's your favourite food?", "my name is Sam", "let's just chat"
+  // ---------- small talk: "how are you?", "what's your favorite food?", "my name is Sam", "let's just chat"
   // Only after the safety checks and the topic cards, and only when nothing about someone's life is in the message:
   // "how are you supposed to split chores" is still about chores. The name someone gives stays in this tab only.
   function nameFill(x, name) {
@@ -3808,7 +3808,7 @@
       if (!w.dislike && /\b(?:i|we) (?:really |absolutely |just |totally )?(?:love|adore|am obsessed with|m obsessed with|m a big fan of|am a big fan of)\b/.test(fs) && w.thing && !PZ_GENERIC.test(w.thing) && !S.mem.fav) {
         S.mem.fav = { thing: w.thing, topic: t.id }; S.at.fav = state.turn || 0; pzSave(state);
       }
-      // a line that already asks something ("Christmas! What's your favourite part of it?") needs no second question, unless a callback is due
+      // a line that already asks something ("Christmas! What's your favorite part of it?") needs no second question, unless a callback is due
       var cbk = /\?\s*$/.test(b[0].x) ? pzCallback(state) : null;
       if (cbk !== '') b.push({ k: 'p', x: cbk || pzAskBack(state, t) });
     }
@@ -4061,7 +4061,7 @@
     var P = PZ(), M = P.memory || {}, S = pzS(state), name = chatName(state), parts = [];
     if (name) parts.push('your name');
     if (S.mem.pet) parts.push(S.mem.pet + '’s name');
-    if (S.mem.fav) parts.push('your favourite');
+    if (S.mem.fav) parts.push('your favorite');
     if (!parts.length) return pzR(state, [{ k: 'p', x: M.keep_nothing }], pzChips(state, []), 'chat', 'pz-keep');
     if (!pzPerks()) return { blocks: [{ k: 'p', x: M.keep_no }, { k: 'links', x: [['What this site keeps on your device, and how saving works', '/on-this-device.html']] }], chips: pzChips(state, []), kind: 'chat', id: 'pz-keep', fun: 1 };
     S.kept = 1; pzSave(state);

@@ -41,7 +41,7 @@ window.TOL_DIVES = {
     ctx: { '/is-the-setup-working.html': 'Here it’s an instruction: when you enter hours, count the planning, remembering and keeping track too, or the balance score will look fairer than it is.', '/workpapers/wp-01.html': 'This log is where invisible work first gets a row: the “noticed and handled” column.', '/library/': 'This Library theme gathers the research. The program’s own tools for it are Who did what (WP-01) and Who does what? (once called the Lemonade Stand).', '/turning-toward.html': 'Here the angle is thanks: a specific thank-you is the quickest way unseen work becomes seen.', '/relationships.html': 'Between partners it’s usually heaviest. Roommates and coworkers have it too, just with different jobs on the list.', '/book/chapter-4.html': 'Chapter IV’s warning: help that stays silent turns into unseen work, so say out loud when you cover for someone.' } },
 
   ledger: { t: 'A shared ledger', m: ['shared ledger', 'working ledger', 'a set of books'],
-    s: 'Ever argued about who did the school run more, each of you sure of a different number? A shared ledger is one page both of you can read, so the talk starts from the same facts.',
+    s: 'Ever argued about who did the school drop-off more, each of you sure of a different number? A shared ledger is one page both of you can read, so the talk starts from the same facts.',
     f: 'For you, it replaces a memory that quietly rounds in your favor. Between people, each person writes only their own side, then you read both together. It works for partners, roommates splitting rent, or siblings sharing care for a parent.',
     w: 'The book borrows accounting words on purpose, because accounting can describe a system without blaming anyone. A ledger that doesn’t balance isn’t evil. It’s information. The goal isn’t a perfect 50/50, it’s a picture you both agree is true. This is Pillar I, See the whole load.',
     x: 'Double-entry bookkeeping, described in print by Luca Pacioli in 1494, rests on one idea: every entry has two sides, and a book only counts as balanced when both sides are recorded. The Preface turns that into a rule for home: each person fills in their own column, and neither writes the other’s.\nThat rule is also a defense against a well-studied bias. People tend to remember their own contributions more readily than their partner’s, simply because they were there for their own. Ross and Sicoly’s 1979 study of couples found each person’s estimated share of chores often added up to more than 100 percent. Writing things down as they happen is the cheapest fix for that.\nIn the program the ledger is a handful of pages: Who did what (WP-01, the week’s log), Who does what? (hours side by side), One owner per job (WP-03, who owns each job) and REPORT-01 (where the figures sit together over time).',
@@ -1356,7 +1356,7 @@ window.TOL_DIVES = {
 
 
 
-  affectlabel: { t: 'Affect labeling', m: ['affect labeling', 'affect labelling', 'name it to tame it'], ev: 'Moderate evidence',
+  affectlabel: { t: 'Affect labeling', m: ['affect labeling', 'affect labeling', 'name it to tame it'], ev: 'Moderate evidence',
     d: 'Affect labeling means putting a feeling into words, such as “I’m frustrated” or “that scared me.” Saying it often takes a little of the heat out.\nBrain imaging studies by Matthew Lieberman and colleagues found naming a feeling was linked with calmer activity in threat areas. Daniel Siegel’s phrase “name it to tame it” comes from the same idea.\nIt works best when the word is your own and it fits. Being handed a feeling-word by someone else can feel like being corrected.' },
 
   reappraisal: { t: 'Reappraisal', m: ['cognitive reappraisal', 'reappraisal', 'reappraise', 'reframing', 'reframe', 'reframed'], ev: 'Strong evidence',
@@ -1465,7 +1465,7 @@ window.TOL_DIVES = {
   autburnout: { t: 'Autistic burnout', m: ['autistic burnout'], ev: 'Early evidence',
     d: 'Autistic burnout is a long period of deep exhaustion, lower tolerance for sensory input and loss of skills, often after months or years of masking and coping with too much.\nIt was described first by autistic adults and is now being studied (Raymaker and colleagues, 2020). It is different from job burnout, though they can overlap. Rest, less masking and less demand are what people report helping most.' },
 
-  burnout: { t: 'Burnout', m: ['burnout', 'burned out', 'burnt out', 'burn out'], ev: 'Moderate evidence',
+  burnout: { t: 'Burnout', m: ['burnout', 'burned out', 'burned out', 'burn out'], ev: 'Moderate evidence',
     d: 'Burnout is deep exhaustion from long-term stress that hasn’t eased, often with feeling detached or cynical and a sense that your effort makes no difference.\nThe World Health Organization describes it in relation to work, but people use it for caregiving and home life too. A weekend off rarely fixes it. Changing the load, the support and the rhythm usually has to be part of the answer.' },
 
   spoons: { t: 'Spoon theory', m: ['spoon theory', 'spoons'], nd: 'energy|spoon theory|chronic|run out|left|enough|day|tired|ill',
@@ -1575,7 +1575,7 @@ window.TOL_DIVES = {
   eudaimonic: { t: 'Eudaimonic well-being', m: ['eudaimonic', 'eudaimonia'],
     d: 'Eudaimonic well-being is the kind of “good life” that comes from meaning, growth and living by your values, as opposed to pleasure alone (hedonic well-being).\nThe word eudaimonia comes from Aristotle, often translated as flourishing. Psychologists study both kinds, and most people need some of each.' },
 
-  savoring: { t: 'Savoring', m: ['savoring', 'savouring', 'savor the', 'savour the'], ev: 'Moderate evidence',
+  savoring: { t: 'Savoring', m: ['savoring', 'savouring', 'savor the', 'savor the'], ev: 'Moderate evidence',
     d: 'Savoring means deliberately noticing and staying with a good moment, such as a warm drink, a shared laugh or good news, instead of rushing past it.\nResearch by Fred Bryant links it with more positive feelings. Telling someone about a good moment is one way to savor it twice.' },
 
   broaden: { t: 'Broaden-and-build', m: ['broaden-and-build', 'broaden and build'], ev: 'Moderate evidence',
@@ -1881,7 +1881,7 @@ window.TOL_DIVES = {
   compassionfatigue: { t: 'Compassion fatigue', m: ['compassion fatigue'], ev: 'Moderate evidence',
     d: 'Compassion fatigue is emotional and physical exhaustion that can come from caring for people who are suffering, over a long time. Caregivers, nurses and helpers of all kinds describe it.\nIt can show as numbness, irritability or dread. It is a sign of the load, not of not caring.' },
 
-  caregiverburnout: { t: 'Caregiver burnout', m: ['caregiver burnout', 'carer burnout'],
+  caregiverburnout: { t: 'Caregiver burnout', m: ['caregiver burnout', 'caregiver burnout'],
     d: 'Caregiver burnout is the exhaustion that can build up when someone looks after an ill, disabled or aging person for a long time without enough rest or help.\nIt is common and nothing to be ashamed of. Sharing tasks, regular breaks and asking specific people for specific help can lighten it.' },
 
   empathytypes: { t: 'Cognitive and affective empathy', m: ['cognitive empathy', 'affective empathy', 'emotional empathy', 'empathic accuracy'], ev: 'Moderate evidence',
@@ -1922,7 +1922,7 @@ window.TOL_DIVES = {
   crosssectional: { t: 'Cross-sectional study', m: ['cross-sectional study', 'cross-sectional'],
     d: 'A cross-sectional study measures a group at one point in time, like a snapshot. It can show differences between groups, but not how people change or what came first.' },
 
-  rct: { t: 'Randomized controlled trial', m: ['randomized controlled trial', 'randomised controlled trial', 'randomized controlled trials', 'randomized trial', 'RCTs', 'RCT'], cs: false,
+  rct: { t: 'Randomized controlled trial', m: ['randomized controlled trial', 'randomized controlled trial', 'randomized controlled trials', 'randomized trial', 'RCTs', 'RCT'], cs: false,
     d: 'A randomized controlled trial (RCT) randomly splits people into groups, gives one group the thing being tested and the other something else or nothing, then compares results.\nRandom assignment makes it the strongest single way to show cause and effect. Results still depend on who took part and how long they were followed.' },
 
   replication: { t: 'Replication', m: ['replication crisis', 'failed to replicate', 'replication', 'replicated'], nd: 'stud|research|finding|result|effect|science|experiment',
@@ -1973,7 +1973,7 @@ window.TOL_DIVES = {
   cbt: { t: 'Cognitive behavioral therapy', m: ['cognitive behavioral therapy', 'cognitive-behavioral', 'CBT'], cs: true, ev: 'Strong evidence',
     d: 'Cognitive behavioral therapy (CBT) is a well-researched talking therapy that looks at how thoughts, feelings and actions affect each other, and teaches practical ways to change unhelpful patterns.\nIt has strong evidence for anxiety, depression and many other problems, and many of its tools, like spotting thinking traps, are useful for anyone.' },
 
-  dbt: { t: 'Dialectical Behavior Therapy', m: ['Dialectical Behavior Therapy', 'Dialectical Behaviour Therapy', 'dialectical', 'DBT'], ev: 'Strong evidence',
+  dbt: { t: 'Dialectical Behavior Therapy', m: ['Dialectical Behavior Therapy', 'Dialectical Behavior Therapy', 'dialectical', 'DBT'], ev: 'Strong evidence',
     d: 'Dialectical Behavior Therapy (DBT), developed by Marsha Linehan, combines acceptance and change. It teaches skills in mindfulness, handling distress, managing emotions and relationships.\n“Dialectical” means holding two things as true at once, such as “I’m doing my best” and “I can do better.” It is well supported, especially for very intense emotions.' },
 
   act: { t: 'Acceptance and Commitment Therapy', m: ['Acceptance and Commitment Therapy', 'acceptance and commitment'], ev: 'Moderate evidence',

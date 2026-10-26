@@ -32,7 +32,7 @@
     '/workpapers/wp-13-daily-check-in.html': {
       // plain words on the simple page; the circuit picture stays on the full version
       'Small and often': {
-        at: 'Ninety seconds a day', k: 'quiz', q: 'Why a short check-in every day, instead of one long talk at the weekend?',
+        at: 'Ninety seconds a day', k: 'quiz', q: 'Why a short check-in every day, instead of one long talk on the weekend?',
         o: [['Small things get said while they’re still small', true, 'Yes! A little each day keeps you in step, so nothing piles up.'],
             ['So there’s more to argue about on the weekend', false, 'Not quite. The idea is that there’s no big pile left to argue about.'],
             ['Because longer talks aren’t allowed', false, 'Not quite. Bigger things simply wait for the weekly catch-up.']]

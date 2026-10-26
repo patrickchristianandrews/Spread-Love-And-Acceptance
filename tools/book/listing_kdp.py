@@ -69,7 +69,7 @@ L = {
     'book-1-know-yourself-kindly': {
         'hook': 'Before you can share a life well, it helps to understand your own.',
         'body': [
-            'This short, warm book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time?',
+            'This warm book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time?',
             'Along the way it explains, in plain words, how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how minds work differently, from ADHD and autism to sensory and learning differences.',
         ],
         'inside': ['Where your lens came from, and the rulebook from home', 'Your wiring, your weather and your words', 'Who you are becoming: one small goal and a kind monthly look at yourself',
@@ -154,7 +154,7 @@ L[POCKET['id']] = {
            'small talk white lies and hints', 'cross cultural communication differences', 'empathy and seeing the other side', 'why my partner goes quiet in arguments'],
 }
 L[BOXSET['id']] = {
-    'hook': 'The whole series in one Kindle edition: four short books and a pocket guide.',
+    'hook': 'The whole series in one Kindle edition: four books and a pocket guide.',
     'body': [
         'Book 1, Know Yourself Kindly, starts with you: where your way of seeing things came from, your wiring, your feelings, your worth and how minds work differently. Book 2, Heal and Steady, is for the heavy days of stress, anger, worry, grief and repair. Book 3, Understanding Each Other, looks at how we hear, see and belong to each other, at home and in every group.',
         'Book 4, Share the Load, makes the unseen work at home visible and offers a fair, kind way to share it. The Logic Behind It, a pocket guide, lays out the reasoning behind thirty-eight everyday reactions that can look odd or rude from outside, with the other person’s side and one small step.',
@@ -182,14 +182,15 @@ def description(item, d, kind='book'):
     elif kind == 'pocket':
         h += ('<p>No page labels or diagnoses anyone, and the situations are made up from common patterns. Logic explains a reaction. It never excuses harm, '
               'and the pages say so where it matters.</p>')
-        h += '<p><b>Part of a series.</b> %s is a series of short books that each stand on their own. This pocket guide goes with them, or on its own.</p>' % esc(SERIES)
+        h += '<p><b>Part of a series.</b> %s is a series of books that each stand on their own. This pocket guide goes with them, or on its own.</p>' % esc(SERIES)
     elif kind == 'boxset':
         h += ('<p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try. Three friendly characters, Professor Puddles, '
               'Tidbit and Sugarfoot, drop in with hints on the lighter pages.</p>')
     else:
         h += ('<p>Each chapter has everyday scenes (all made up), words you could use and one small thing to try this week. Three friendly characters, Professor Puddles, '
               'Tidbit and Sugarfoot, drop in with hints, and keep to the lighter pages.</p>')
-        h += '<p><b>Part of a series.</b> %s is a series of short books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p>' % esc(SERIES)
+        h += '<p><b>Part of a series.</b> %s is a series of books that each stand on their own, plus a workbook with every form and a pocket guide. Read them in any order.</p>' % esc(SERIES)
+        h += '<p>Each chapter holds the core of the idea. An expanded version of every chapter, with the research, more examples and more to try, is free to read online.</p>'
     if kind == 'pocket':
         h += '<p><i>This guide is general education, not therapy or a diagnosis.</i></p>'
     elif kind == 'boxset':
@@ -480,7 +481,7 @@ def main():
     md.append('''- **Module 1, the series banner:** the six front covers side by side, with one line under each ("Start with yourself", "For the heavy days", "Between people", "The work nobody sees", "Every form, all in one", "The logic behind a reaction").
 - **Module 2, what a chapter looks like:** three panels: a short made-up scene, "Words you could use", and a "Two ways to read this" box, each as a cropped page image.
 - **Module 3, meet the three friends:** Professor Puddles, Tidbit and Sugarfoot, with one gentle hint each.
-- **Module 4, free online:** "Every chapter is also free online, in a short and a full version, with no account." (Words only; KDP doesn't allow web addresses in A+ content.)
+- **Module 4, free online:** "The expanded version of every chapter is free online, with no account." (Words only; KDP doesn't allow web addresses in A+ content.)
 - **Module 5, the workbook and the pocket guide:** a filled-in example sheet beside a blank one, and one page of the pocket guide.
 Keep every image free of prices, review quotes and claims like "bestseller". [OWNER]
 ''')
@@ -493,7 +494,7 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 - For Kindle, KDP shows about the first 10%%. The EPUBs keep the same short front matter: title, copyright, contents, About this book, Find it fast, then the three friends, so Chapter 1 comes early.
 ''' % POCKET_FIRST)
     md.append('## Author Central bio (short, warm and true)\n')
-    md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of short books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
+    md.append('''> Christian spent a career as a government auditor and audit manager, walking into complicated situations and finding out calmly what had really happened, without looking for someone to blame. They brought the same habit home, to the quiet, everyday work of sharing a life, and built Spread Love & Acceptance: a free website and a series of books about understanding yourself and the people you share a home, work or care with. Everything on the site is free, needs no account, and stays on your own device.
 
 [OWNER: confirm every detail (the About page uses they/them for Christian), and whether you want a photo. Keep it to things that are true and that you're happy to share.]
 ''')
@@ -508,9 +509,14 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 - Three categories per format: [KDP help, categories](https://kdp.amazon.com/en_US/help/topic/G200652170); category paths: [Smart KDP category finder](https://smartkdp.com/tools/kdp-category-finder), [PublishRank KDP category list](https://publishrank.io/learn/categories/kdp-category-list). The picker changes; confirm each path there.
 - Keyword rules (7 boxes, 50 characters, no author or brand names, no repeats of the title): [publishing.co.uk](https://publishing.co.uk/guides/how-to-choose-kdp-keywords/); [Book Bolt](https://bookbolt.io/navigating-amazons-updated-keyword-policies-for-kdp-a-friendly-guide-for-authors/).
 ''')
-    with open(os.path.join(OUT, 'listing-kdp.md'), 'w', encoding='utf-8') as f:
+    # book26: the listing is private business notes, not part of the published site, so it is only written when KDP_LISTING_OUT names a folder
+    LOUT = os.environ.get('KDP_LISTING_OUT')
+    if not LOUT:
+        print('listing: built %d rows (set KDP_LISTING_OUT=<folder> to write listing-kdp.md and .csv)' % len(rows)); return
+    os.makedirs(LOUT, exist_ok=True)
+    with open(os.path.join(LOUT, 'listing-kdp.md'), 'w', encoding='utf-8') as f:
         f.write('\n'.join(md) + '\n')
-    with open(os.path.join(OUT, 'listing-kdp.csv'), 'w', encoding='utf-8', newline='') as f:
+    with open(os.path.join(LOUT, 'listing-kdp.csv'), 'w', encoding='utf-8', newline='') as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
@@ -528,14 +534,14 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 
 
 TAGLINES = {
-    'book-1-know-yourself-kindly': ['Get to know yourself, kindly.', 'Where your lens came from, and who you are becoming.', 'Feelings, worth and wiring, in plain words.', 'Short chapters. One small thing to try each week.'],
+    'book-1-know-yourself-kindly': ['Get to know yourself, kindly.', 'Where your lens came from, and who you are becoming.', 'Feelings, worth and wiring, in plain words.', 'Chapters you can finish in one sitting. One small thing to try each week.'],
     'book-2-heal-and-steady': ['For the heavy days.', 'Stress, anger, worry and grief, explained gently.', 'Find your footing again, one small step at a time.', 'No blame. Just steadier days.'],
     'book-3-understanding-each-other': ['Care about each other and still out of tune? Start here.', 'How words land, and how to get back in step.', 'Belonging, love and kinder disagreements.', 'For couples, families, friends and teams.'],
     'book-4-share-the-load': ['See the work nobody sees.', 'Fix the setup, not the person.', 'A fair, kind way to share the chores.', 'For couples, families, roommates and teams.'],
     'workbook': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it out on your own or together.', 'The same forms are free online; this one is for your shelf.'],
     POCKET['id']: ['Why did they react like that?', 'Thirty-eight everyday reactions, and the logic behind each one.', 'Both sides of the story, on a single page.', 'Small enough for a pocket. Kind enough to hand over.'],
     'workbook-bw': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it out on your own or together.', 'The same forms are free online; this one is for your shelf.'],
-    BOXSET['id']: ['The whole series in one Kindle edition.', 'Four short books and a pocket guide.', 'Know yourself, steady yourself, understand each other, share the load.', 'Every chapter is also free to read online.'],
+    BOXSET['id']: ['The whole series in one Kindle edition.', 'Four books and a pocket guide.', 'Know yourself, steady yourself, understand each other, share the load.', 'Every chapter is also free to read online.'],
 }
 
 if __name__ == '__main__':

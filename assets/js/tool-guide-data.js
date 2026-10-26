@@ -723,7 +723,7 @@ window.TOLToolGuideData = {
       result: 'A printed chart on the fridge with every job, one owner each, and a weekly note: what went well, what slipped, one thing to change.',
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job, on screen', 'a fillable version'],
-        ['/invisible-labor-mental-load.html', 'Invisible labour and the mental load', 'what to put on the chart'],
+        ['/invisible-labor-mental-load.html', 'Invisible labor and the mental load', 'what to put on the chart'],
         ['/workpapers/wp-13-daily-check-in.html', 'A 90-second daily check-in', 'small fixes as you go']
       ],
       research: [
