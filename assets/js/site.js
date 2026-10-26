@@ -213,7 +213,7 @@
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step: your battery, your wiring, what settles you and kind words, on your own' },
       { href: '/how-you-take-things-in.html', code: 'New', title: 'How you take things in', note: 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts. Stays on your device' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Workpapers', title: 'Workpapers for you', note: 'The “Just me” road: the worksheets for the self path, in order, fillable and printable' },
-      { href: '/what-am-i-feeling.html', code: 'New', title: 'What am I feeling?', note: 'Gentle questions, a map of what may be behind a feeling, and a picture made from your answers. On this device, not AI' },
+      { href: '/what-am-i-feeling.html', code: 'New', title: 'What am I feeling?', note: 'Gentle questions, a map of what may be behind a feeling, and a picture made from your answers. Runs on this device and sends nothing' },
       { href: '/before-you-use-a-label.html', code: 'New', title: 'Before you use a label', note: 'Plain criteria for controlling, gaslighting, manipulative, toxic and 18 look-alikes: what must be there, what is not enough, and how to say it without the label' },
       { href: '/old-hurts-new-reactions.html', code: 'New', title: 'Old hurts and new reactions', note: 'How events from childhood to later life can shape a reaction, how to recognize it without labels, and taking back control' },
       { href: '/help-it-settle.html', code: 'New', title: 'Helping it settle', note: 'Where a big reaction comes from and the seven things in your own control' },
@@ -1615,7 +1615,7 @@
     rememberPage(body);
     progNote();
     if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); }
-    // return21: Seven small days, New since your last visit, and the "tomorrow" line (return-visit.js adds its own stylesheet;
+    // return21: Seven small days and the "tomorrow" line (return-visit.js adds its own stylesheet;
     // it does nothing on a page without [data-return-today] except one line inside .cb-end cards, and skips data-sensitive and data-no-return pages)
     if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var rtv = document.createElement('script'); rtv.src = '/assets/js/return-visit.js'; document.head.appendChild(rtv); } // time picker, "What you got from this" (come-back.js)
     palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)

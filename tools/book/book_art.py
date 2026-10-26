@@ -22,7 +22,7 @@ BRASS = '#A8792F'
 
 
 def buddy(cx, cy, size, tone, rot=0, look=0):
-    """One round buddy, centred on (cx, cy), `size` wide. look: -1 left, 0 ahead, 1 right."""
+    """One round buddy, centered on (cx, cy), `size` wide. look: -1 left, 0 ahead, 1 right."""
     fill, stroke = TONES[tone]
     k = size / 80.0
     fx = 40 + look * 4
@@ -91,7 +91,7 @@ def heart_book(cx, cy, width):
 
 
 def puzzle_piece(cx, cy, size, tone, knob_right=True):
-    """a jigsaw piece, centred on (cx, cy): a knob on its right side, or a socket on its left"""
+    """a jigsaw piece, centered on (cx, cy): a knob on its right side, or a socket on its left"""
     fill, stroke = TONES[tone]
     k = size / 30.0
     d = ('M-15 -15H15V-5C21 -6 24 -3 24 0S21 6 15 5V15H-15Z' if knob_right else

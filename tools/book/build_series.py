@@ -480,7 +480,6 @@ def copyright_page(book, workbook=False, bw=False):
           'full version, with no account and no paid version. The print books are optional. You may copy pages of %s for personal use and '
           'for non-commercial teaching, with credit to “%s, spreadloveandacceptance.com.”</p>') % (what, esc(SERIES_TITLE))
     s += '<p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis or a treatment, and it can’t know your situation.</p>'
-    s += HOW_MADE
     s += '<p><strong>The examples are made up.</strong> %s None of them is a testimonial.</p>' % esc(MADE_UP)
     if not workbook:
         s += ('<p>The research the chapters mention is listed briefly at the back. The full list, with what each study found and links, is at '
@@ -490,8 +489,6 @@ def copyright_page(book, workbook=False, bw=False):
 
 
 MADE_UP = 'The people in this book’s examples are made up; any likeness to real people is coincidence.'
-# book26: the same two sentences as the KDP listing's AI disclosure (Text: AI-generated, drafted with AI writing tools; Images: AI-generated, drawn by code written with an AI tool)
-HOW_MADE = '<p><strong>How it was made.</strong> The words were drafted with AI writing tools. The pictures were drawn by code that was written with an AI tool.</p>'
 
 
 def meet_page(book, found=()):
@@ -728,7 +725,7 @@ FREE_LINKS = [
     ('/book/', 'The whole book, free', 'Every chapter, in a short and a full version. Read it, search it, or download a free PDF.'),
     ('/research.html', 'All the research', 'Every study the book mentions, what it found, how strong it is, and links.'),
     ('/glossary.html', 'Words used in the book', 'Each of the book’s own words, in one plain sentence.'),
-    ('/workpapers/fill/index.html', 'Fill in the workpapers', 'Every workpaper on screen. It does the sums, and what you type stays on your device.'),
+    ('/workpapers/fill/index.html', 'Fill in the workpapers', 'Every workpaper on screen. It does the math, and what you type stays on your device.'),
 ]
 
 
@@ -857,7 +854,7 @@ def showcase(book, epub=False):
     print (and a link in the ebook)."""
     c = book['color']
     head = ('<p class="ps-sc-k">Free on the website</p><h1 class="ps-sc-h">Your book has a home online</h1>'
-            '<p class="ps-sc-lede">Everything in this book is free at spreadloveandacceptance.com, along with tools that do the sums for you, '
+            '<p class="ps-sc-lede">Everything in this book is free at spreadloveandacceptance.com, along with tools that do the math for you, '
             'guided journeys, a raindrop professor with kind answers and a few cozy games. There is no account and no paid version.</p>')
     home = ('<div class="ps-sc-home">%s<p><strong>Start here</strong>Scan with your phone’s camera to open the home page.'
             '<span class="ps-addr">spreadloveandacceptance.com</span></p></div>') % ('' if epub else qr('/'))
@@ -1081,8 +1078,8 @@ WB_NOTE = {
     'wp14': 'A line each evening, about your own day. At the end of the week, the question is simple. Was it us, or was it everything else? Quite often it was everything else.',
     'wp01': 'One ordinary week. Write only what you did or saw yourself, including the thinking jobs, the remembering and the booking. Nobody fills in anybody else’s side, however sure they are.',
     'wp03': 'A name next to every regular job, and a second name if you like for someone who notices when it slips. Leave the jobs nobody owns on the list, because they are the reason you’re doing this. A made-up example of how it tends to go: when Sian and Huw did theirs at the kitchen table, nineteen jobs went on the list and fourteen had a name within five minutes. The other five, which included the car registration and Huw’s mom’s birthday, took the rest of the evening, and the car registration turned out to be two weeks overdue.',
-    'setup': 'The sums from Book 4, done with a pencil. You’ll need a week of Who did what, your job list, and each person’s own tank score. If anyone’s tank is 0.60 or more, start there, whatever the total says.',
-    'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock. Another made-up example: Ifan and Kemal’s first look-back found the trash slipped three weeks out of four, every time on the week Kemal was on late shifts, so Ifan took the trash and Kemal took the Sunday shop. It took eleven minutes, most of it spent finding a pen.',
+    'setup': 'The math from Book 4, done with a pencil. You’ll need a week of Who did what, your job list, and each person’s own tank score. If anyone’s tank is 0.60 or more, start there, whatever the total says.',
+    'wp04': 'Once a month, twenty minutes, something nice to drink. Start with one thing that went well. You’re looking for the jobs that keep slipping, and nobody is in the dock. Another made-up example: Ifan and Kemal’s first look-back found the trash slipped three weeks out of four, every time on the week Kemal was on late shifts, so Ifan took the trash and Kemal took the Sunday grocery run. It took eleven minutes, most of it spent finding a pen.',
     'wp15': 'The Sunday walk, the birthday breakfast, the silly thing you always say at the door. Every few months, see which are still alive. Nobody is to blame for one that faded.',
 }
 ALL_FOUND = {}
@@ -1195,7 +1192,7 @@ def build_workbook(where, bw=False):
             s += '<p class="wb-read"><strong>How to read your answers.</strong> %s</p>' % esc(WB_EXPLAINED[key][1])
         s += ('<div class="ps-online-box">%s<p><strong>Fill it out on screen, free.</strong> %s '
               '<span class="ps-addr">%s</span></p></div>') % (
-            qr(fill), 'The online version does the sums for you and keeps what you type on your own device.' if key in WB_SUMS
+            qr(fill), 'The online version does the math for you and keeps what you type on your own device.' if key in WB_SUMS
             else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(B.short_address(fill)))
         s += '</section>'
         for c in range(1, copies + 1):
@@ -1230,7 +1227,7 @@ def build_workbook(where, bw=False):
               '<li><strong>On your own, or together.</strong> Some sheets are only about you, so fill those in for yourself and never for anyone else. On shared sheets, '
               'each person writes only their own rows, even when it’s very tempting to help.</li>'
               '<li><strong>Write what happened.</strong> “Trash missed Tuesday” is useful. “Typical” is not. The sheets look at the setup and the week, and leave everyone’s character alone.</li>'
-              '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet out free on the website, where it does the sums and keeps '
+              '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet out free on the website, where it does the math and keeps '
               'what you type on your own device.</li>'
               '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
               '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '

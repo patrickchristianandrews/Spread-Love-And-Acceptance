@@ -19,7 +19,7 @@
   var STORE_KEY = 'tol-chat-v1';
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var HONEST_LINE = 'I don’t make things up: every answer comes from what’s already written on this site. I pick the best match. I don’t invent new answers. I can still pick the wrong topic, so if I miss, tell me “that’s not it.” I’m not a therapist and can’t diagnose.';
-  // "can I trust your answers?", "do you hallucinate?", "are you AI?": where the answers come from, honestly
+  // "can I trust your answers?", "do you make things up?", "are you a person?": where the answers come from, honestly
   var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you (say|tell me|tell|write)|anything you (say|tell me)|this chat|puddles|the professor)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real)|(is|are) (this|this thing|it|you|puddles|he|the professor|this chat|this bot|your answers) (actually |really |just |even |only )?(an? )?(real )?(ai|a i|bot|chatbot|chat ?gpt|gpt|robot|canned|scripted|real ai|real person|generative)|canned (answers|responses|replies|stuff)|(just|only) (canned|scripted|pre ?written|preset|pre ?set|copy ?paste)( answers| responses| replies)?|actually (an? )?ai|ai or (just |only )?(canned|scripted|a script|a person|real)|is (this|it) (a )?(real )?(ai|a i) or|(are|is) (these|the|your|his) (answers|replies|responses) (just |all |actually )?(scripted|canned|pre ?written|ai|generated|made by ai))\b/;
   // "what modes do you have?", "what is deep mode?": light and deep, explained
   var MODES_Q = /\b(what|which) (modes?|ways (to|of) (chat|talk)\w*) (do you have|have you got|are there|can (i|we) (use|pick|choose))\b|^(what|which) modes( are there)?$|\bwhat (is|s|are) (the )?(deep mode|talk deep|deep talk|light mode|small talk mode)\b|\bdifference between (small talk|light mode|light talk|light) and (deep|talk deep|deep talk|deep mode)\b|\bhow (do|does) (talk deep|deep mode|deep talk|small talk mode) work\b|\b(explain|tell me about) (your|the) modes\b/;
@@ -2777,9 +2777,9 @@
       if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && YELLED_AT.test(vf) && !VERBAL_STRONG.test(vf) && !VERBAL_NOT.test(vf)) { state.last = null; state.care = null; state.fearSeen = true; return meant(yelledAtReply(vf), sp); }
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null;
-        // asked straight out whether he's AI, a bot or ChatGPT: a short, true "No"; otherwise he never brings AI up (owner)
-        var askedAI = /\b(ai|a i|chat ?gpt|gpt|bot|chatbot|robot|generative|llm|language model|artificial intelligence)\b/.test(vf);
-        return { blocks: (askedAI ? [{ k: 'p', x: 'No. Every answer here was written in advance for this site. I pick the best match and show you where it comes from.' }, { k: 'p', x: 'I can still pick the wrong topic, so if I miss, tell me “that’s not it.” I’m not a therapist and can’t diagnose.' }]
+        // asked straight out whether he is a person, a robot or a program: a short, true answer (owner: no talk of how it is built)
+        var askedAI = /\b(ai|a i|chat ?gpt|gpt|bot|chatbot|robot|generative|llm|language model|artificial intelligence|human|person|computer|machine)\b/.test(vf) || /\bare you real\b/.test(vf);
+        return { blocks: (askedAI ? [{ k: 'p', x: 'I’m a program on this page, not a person. Every answer here was written in advance for this site. I pick the best match and show you where it comes from.' }, { k: 'p', x: 'I can still pick the wrong topic, so if I miss, tell me “that’s not it.” I’m not a therapist and can’t diagnose.' }]
           : [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'Every answer here was written in advance for this site. I match what you say to the right page, tool or playbook, and show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }]).concat([{ k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }]), chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       // chit-chat: games in progress, jokes, riddles, "I'm bored", reactions, and a plain hand-off when something real comes up
@@ -4628,8 +4628,8 @@
     r.chips = (r.chips || []).filter(function (c) { return !/^(WP|CALC|REPORT|PROG)-\d+\b/.test(c.label); }).map(function (c) { var l = clean(c.label); return l === c.label ? c : Object.assign({}, c, { label: l }); });
     return r;
   }
-  // owner: Puddles never brings up AI himself. Page excerpts that compare the site with AI chats lose those sentences
-  // unless the person asked about AI, bots or ChatGPT.
+  // owner: Puddles never talks about how he is built. Page excerpts that compare the site with other kinds of tools lose those
+  // sentences unless the person asked.
   var AI_ASKED = /\b(ai|a i|chat ?gpt|gpt|bot|chatbot|robot|generative|llm|language model|artificial intelligence)\b/;
   function noAI(r, q) {
     if (!r || !r.blocks || r.kind === 'safety' || AI_ASKED.test(fold(q))) return r;

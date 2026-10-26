@@ -9,7 +9,7 @@
   "file": "tools/book/examples/ex-rulebook-nadia.html",
   "tool": "/growing-up.html#home",
   "title": "The rulebook from home",
-  "who": "Nadia, on her own",
+  "who": "A person on their own",
   "relationship": "someone on their own",
   "versions": [
    "short",
@@ -26,7 +26,7 @@
   "file": "tools/book/examples/ex-weather-joel.html",
   "tool": "/quick-checks.html#today",
   "title": "My weather today",
-  "who": "Joel, on his own, after a short night",
+  "who": "A person on their own, after a short night",
   "relationship": "someone on their own",
   "versions": [
    "short",
@@ -43,7 +43,7 @@
   "file": "tools/book/examples/ex-wiring-ife.html",
   "tool": "/wiring-card.html",
   "title": "“How to talk to me” card",
-  "who": "Ife, made on her own to give to a friend",
+  "who": "Made alone, to give to a friend",
   "relationship": "someone on their own",
   "versions": [
    "short",
@@ -60,7 +60,7 @@
   "file": "tools/book/examples/ex-selfpath-sam.html",
   "tool": "/self-path.html#steps",
   "title": "The self path, step by step",
-  "who": "Sam, on their own, two weeks in",
+  "who": "A person on their own, two weeks in",
   "relationship": "someone on their own",
   "versions": [
    "short",
@@ -77,7 +77,7 @@
   "file": "tools/book/examples/ex-wp11-nell.html",
   "tool": "/workpapers/fill/wp-11.html?road=self",
   "title": "The Calm-Down Kit, just for me",
-  "who": "Nell, on her own",
+  "who": "A person on their own",
   "relationship": "someone on their own",
   "versions": [
    "short",
@@ -94,7 +94,7 @@
   "file": "tools/book/examples/ex-wp01-marcus-theo.html",
   "tool": "/workpapers/fill/wp-01.html",
   "title": "Who did what",
-  "who": "Marcus and Theo, a couple",
+  "who": "A couple",
   "relationship": "a couple (two men)",
   "versions": [
    "short",
@@ -111,7 +111,7 @@
   "file": "tools/book/examples/ex-wp13-priya-dev.html",
   "tool": "/workpapers/fill/wp-13.html?for=shifts",
   "title": "The 90-second daily check-in",
-  "who": "Priya and Dev, a couple on different shifts",
+  "who": "A couple on different shifts",
   "relationship": "a couple on different shifts",
   "versions": [
    "short",
@@ -128,7 +128,7 @@
   "file": "tools/book/examples/ex-setup-rosemary-ken.html",
   "tool": "/workpapers/calculators/is-the-setup-working-quick.html",
   "title": "Is the setup working for everyone?",
-  "who": "Rosemary and Ken, retired, married 41 years",
+  "who": "A retired couple, married 41 years",
   "relationship": "an older couple",
   "versions": [
    "short",
@@ -145,7 +145,7 @@
   "file": "tools/book/examples/ex-lemonade-housemates.html",
   "tool": "/lemonade-stand.html#quick-h",
   "title": "Who does what? Quick look",
-  "who": "Wren, Josh and Mei, roommates (Wren’s view)",
+  "who": "Three roommates (one roommate’s view)",
   "relationship": "roommates (three)",
   "versions": [
    "short",
@@ -162,7 +162,7 @@
   "file": "tools/book/examples/ex-room-kayla-bea.html",
   "tool": "/sharing-a-room.html#agreement",
   "title": "Our room agreement",
-  "who": "Kayla and Bea, first-year roommates",
+  "who": "First-year roommates",
   "relationship": "roommates sharing a room",
   "versions": [
    "short",
@@ -179,7 +179,7 @@
   "file": "tools/book/examples/ex-wp02-rosa.html",
   "tool": "/workpapers/fill/wp-02.html",
   "title": "How much are you carrying?",
-  "who": "Rosa, who shares her mom’s care with her brother",
+  "who": "A sister who shares her mom’s care with her brother",
   "relationship": "adult siblings caring for a parent",
   "versions": [
    "short",
@@ -196,7 +196,7 @@
   "file": "tools/book/examples/ex-perspective-hana.html",
   "tool": "/carrier-wave-decoder.html?tab=their-side",
   "title": "Rewind the talk: see their side",
-  "who": "Hana, about her friend Lou",
+  "who": "A person thinking about a friend",
   "relationship": "friends",
   "versions": [
    "short",
@@ -213,7 +213,7 @@
   "file": "tools/book/examples/ex-wp03-foster.html",
   "tool": "/workpapers/fill/wp-03.html?for=foster",
   "title": "One owner per job",
-  "who": "Dee and Mark, foster caregivers",
+  "who": "Foster caregivers",
   "relationship": "foster caregivers",
   "versions": [
    "short",
@@ -230,7 +230,7 @@
   "file": "tools/book/examples/ex-lemonade-money-grace-ruth.html",
   "tool": "/lemonade-stand.html",
   "title": "Who does what? The Money tab",
-  "who": "Grace and Ruth, a couple with different incomes",
+  "who": "A couple with different incomes",
   "relationship": "a couple (two women)",
   "versions": [
    "short",
@@ -247,7 +247,7 @@
   "file": "tools/book/examples/ex-wp09-carla.html",
   "tool": "/workpapers/fill/wp-09.html",
   "title": "Say it so it lands",
-  "who": "Carla, who runs a café with her business partner Femi",
+  "who": "Two business partners who run a café",
   "relationship": "business partners",
   "versions": [
    "short",
@@ -264,7 +264,7 @@
   "file": "tools/book/examples/ex-wp04-triad.html",
   "tool": "/workpapers/fill/wp-04.html",
   "title": "What keeps coming back?",
-  "who": "Ash, Robin and Jules, a triad sharing a home",
+  "who": "Three partners sharing a home",
   "relationship": "a triad (three partners)",
   "versions": [
    "short",
@@ -281,7 +281,7 @@
   "file": "tools/book/examples/ex-wp03-coparents.html",
   "tool": "/workpapers/fill/wp-03.html?for=coparents",
   "title": "One owner per job: a list for two homes",
-  "who": "Laura and Dan, co-parents in two homes",
+  "who": "Co-parents in two homes",
   "relationship": "co-parents (two homes)",
   "versions": [
    "short",
@@ -298,7 +298,7 @@
   "file": "tools/book/examples/ex-checkin-linda-jordan.html",
   "tool": "/check-ins.html#card",
   "title": "Kitchen-table check-in: this week",
-  "who": "Linda and her grown-up son Jordan, who live together",
+  "who": "A parent and her grown-up son, who live together",
   "relationship": "a parent and adult child",
   "versions": [
    "short",
@@ -315,7 +315,7 @@
   "file": "tools/book/examples/ex-ladder-mike.html",
   "tool": "/quick-checks.html#ladder",
   "title": "The ladder (the sky, in My weather today)",
-  "who": "Mike, who cares for his wife, Ann",
+  "who": "A man who cares for his wife",
   "relationship": "a partner caring for a partner",
   "versions": [
    "short",
@@ -332,7 +332,7 @@
   "file": "tools/book/examples/ex-signal-zoe.html",
   "tool": "/signal-translator.html",
   "title": "Chat analyzer",
-  "who": "Zoe, texting her oldest friend, who moved abroad",
+  "who": "A person texting an old friend who moved abroad",
   "relationship": "long-distance friends",
   "versions": [
    "short",
@@ -349,7 +349,7 @@
   "file": "tools/book/examples/ex-reader-dana-raj.html",
   "tool": "/signal-translator.html#conversation",
   "title": "Chat analyzer: a whole conversation",
-  "who": "Dana and Raj, coworkers on the same project",
+  "who": "Coworkers on the same project",
   "relationship": "coworkers",
   "versions": [
    "short",
@@ -366,7 +366,7 @@
   "file": "tools/book/examples/ex-pauseplan-imani-kwame.html",
   "tool": "/pursue-withdraw.html#plan",
   "title": "Our pause plan",
-  "who": "Imani and Kwame, married ten years",
+  "who": "A couple married ten years",
   "relationship": "a married couple",
   "versions": [
    "short",
@@ -383,7 +383,7 @@
   "file": "tools/book/examples/ex-smallwins-bernie.html",
   "tool": "/small-wins.html#done-h",
   "title": "Your done list",
-  "who": "Bernie, 71, living on his own",
+  "who": "A man of 71, living on his own",
   "relationship": "someone on their own (older)",
   "versions": [
    "short",
@@ -400,7 +400,7 @@
   "file": "tools/book/examples/ex-wiring-tom.html",
   "tool": "/wiring-card.html",
   "title": "“How to talk to me” card, for work",
-  "who": "Tom, autistic, for his new manager",
+  "who": "An autistic employee, for a new manager",
   "relationship": "a coworker and his manager",
   "versions": [
    "short",
@@ -417,7 +417,7 @@
   "file": "tools/book/examples/ex-write-carys-owen.html",
   "tool": "/write-it-through.html#write",
   "title": "Write it through",
-  "who": "Carys, writing to her brother Owen",
+  "who": "A sister writing to her brother",
   "relationship": "adult siblings",
   "versions": [
    "short",
@@ -434,7 +434,7 @@
   "file": "tools/book/examples/ex-wp03-care.html",
   "tool": "/workpapers/fill/wp-03.html?for=care",
   "title": "One owner per job: sharing the care",
-  "who": "Margaret and Alan, with their daughter Sue",
+  "who": "An older couple and their grown-up daughter",
   "relationship": "an older couple and their grown-up daughter",
   "versions": [
    "short",
@@ -451,7 +451,7 @@
   "file": "tools/book/examples/ex-wp11-pat.html",
   "tool": "/workpapers/fill/wp-11.html",
   "title": "The Calm-Down Kit",
-  "who": "Pat, a grandmother raising her grandson Jay, 13",
+  "who": "A grandmother raising her 13-year-old grandson",
   "relationship": "a kinship caregiver and a teen",
   "versions": [
    "short",
@@ -468,7 +468,7 @@
   "file": "tools/book/examples/ex-wavelength-mo.html",
   "tool": "/wavelength.html",
   "title": "How you connect: the style quiz",
-  "who": "Mo, before moving in with his friend Callum",
+  "who": "A person before moving in with a friend",
   "relationship": "friends moving in together",
   "versions": [
    "short",
@@ -485,7 +485,7 @@
   "file": "tools/book/examples/ex-deal-jamal-tess.html",
   "tool": "/gaming-and-time-together.html#deal",
   "title": "Our time-together deal",
-  "who": "Jamal and Tess, a couple; Jamal games most evenings",
+  "who": "A couple; one partner games most evenings",
   "relationship": "a young couple",
   "versions": [
    "short",
@@ -502,7 +502,7 @@
   "file": "tools/book/examples/ex-houserules-shona-kai.html",
   "tool": "/workpapers/fill/wp-03.html?for=house-rules",
   "title": "House rules for us",
-  "who": "Shona and her son Dexter, 15",
+  "who": "A parent and her 15-year-old son",
   "relationship": "a parent and teen",
   "versions": [
    "short",
@@ -519,7 +519,7 @@
   "file": "tools/book/examples/ex-familyplan-amaka.html",
   "tool": "/check-ins.html?for=family#card",
   "title": "Kitchen-table check-in: family plan",
-  "who": "Amaka and Chris, new parents, with Chris’s parents",
+  "who": "New parents, with one partner’s parents",
   "relationship": "new parents and grandparents",
   "versions": [
    "short",
@@ -536,7 +536,7 @@
   "file": "tools/book/examples/ex-b2-wp01-hollie-gareth.html",
   "tool": "/workpapers/fill/wp-01.html",
   "title": "Who did what, with small children",
-  "who": "Hollie and Gareth, parents of a toddler and a baby; Gareth works shifts",
+  "who": "Parents of a toddler and a baby; one works shifts",
   "relationship": "parents of small children (one on shifts)",
   "versions": [
    "short",
@@ -553,7 +553,7 @@
   "file": "tools/book/examples/ex-b3-weather-esme.html",
   "tool": "/quick-checks.html#today",
   "title": "My weather today",
-  "who": "Esme, 29, after a worrying message from her manager",
+  "who": "A 29-year-old after a worrying message from her manager",
   "relationship": "coworkers",
   "versions": [
    "short",
@@ -570,7 +570,7 @@
   "file": "tools/book/examples/ex-b3-flip-hamish.html",
   "tool": "/small-wins.html#flip-it",
   "title": "Flip it",
-  "who": "Hamish, 44, after a mistake at work",
+  "who": "A 44-year-old after a mistake at work",
   "relationship": "coworkers",
   "versions": [
    "short",
@@ -587,7 +587,7 @@
   "file": "tools/book/examples/ex-b3-write-edith.html",
   "tool": "/write-it-through.html#write",
   "title": "Write it through",
-  "who": "Edith, 74, widowed, writing to her grown-up son and daughter",
+  "who": "A 74-year-old widow writing to her grown-up children",
   "relationship": "a parent and grown-up children",
   "versions": [
    "short",
@@ -604,7 +604,7 @@
   "file": "tools/book/examples/ex-b3-rituals-team.html",
   "tool": "/workpapers/fill/wp-15.html",
   "title": "Keep your little rituals alive",
-  "who": "Lachlan and Sunita, who lead a hybrid team together",
+  "who": "Two leaders of a hybrid team",
   "relationship": "coworkers",
   "versions": [
    "short",
@@ -621,7 +621,7 @@
   "file": "tools/book/examples/ex-b3-flip-tolu.html",
   "tool": "/small-wins.html#flip-it",
   "title": "Flip it",
-  "who": "Tolu, 17, worrying about an exam at 1am",
+  "who": "A 17-year-old worrying about an exam at 1am",
   "relationship": "someone on their own (a teenager)",
   "versions": [
    "short",

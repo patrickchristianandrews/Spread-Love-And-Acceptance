@@ -1132,7 +1132,6 @@ def build_boxset(built, images):
           '<p><strong>Free online, always.</strong> Every chapter of the series is free to read at spreadloveandacceptance.com/book, and every situation in '
           '<em>%s</em> at spreadloveandacceptance.com/the-logic-behind-it, with no account and no paid version. The print books and ebooks are optional.</p>'
           '<p><strong>Not therapy.</strong> These books are general education about people and relationships. They are not a diagnosis or a treatment, and they can’t know your situation.</p>'
-          '<p><strong>How it was made.</strong> The words were drafted with AI writing tools. The pictures were drawn by code that was written with an AI tool.</p>'
           '<p><strong>The examples are made up.</strong> The people in these books’ examples are made up; any likeness to real people is coincidence. None of them is a testimonial.</p>'
           '<p>Each book that follows keeps its own title page and copyright page.</p></section>') % (
         B.esc(bx['title']), B.esc(bx['sub']), B.AUTHOR, B.AUTHOR, B.UPDATED, B.esc(S.POCKET['title']))

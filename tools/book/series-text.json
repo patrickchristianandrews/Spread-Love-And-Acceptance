@@ -138,7 +138,7 @@
    ],
    [
     "There are three or more of us. Does any of this still work?",
-    "<p>Yes. Roommates, families with older children and teams can all use the same pages. Compare each person’s share with an even share, which is 100 divided by the number of people, or with the split you agreed. “How the numbers work” at the back of this book (page {page:numbers}) shows the sums.</p>"
+    "<p>Yes. Roommates, families with older children and teams can all use the same pages. Compare each person’s share with an even share, which is 100 divided by the number of people, or with the split you agreed. “How the numbers work” at the back of this book (page {page:numbers}) shows the math.</p>"
    ],
    [
     "One of us works much longer paid hours. Is it fair to count only housework?",
@@ -160,7 +160,7 @@
  },
  "jobs": {
   "title": "A list of jobs to start from",
-  "lede": "Most homes share some of these. Tick the ones that happen in yours, cross out the rest and add your own at the bottom. Then give each ticked job one owner and, if you like, a backstop who notices if it slips, as in <a href=\"/book/chapter-2.html\">Is the split working?</a>. The same list is in the Quick look tool on the website, under <a href=\"/lemonade-stand.html#quick\">Who does what? Quick look</a>, and the workpaper <a href=\"/workpapers/wp-03-one-owner-per-job.html\">One owner per job</a> has room for the names.",
+  "lede": "Most homes share some of these. Check the ones that happen in yours, cross out the rest and add your own at the bottom. Then give each checked job one owner and, if you like, a backstop who notices if it slips, as in <a href=\"/book/chapter-2.html\">Is the split working?</a>. The same list is in the Quick look tool on the website, under <a href=\"/lemonade-stand.html#quick\">Who does what? Quick look</a>, and the workpaper <a href=\"/workpapers/wp-03-one-owner-per-job.html\">One owner per job</a> has room for the names.",
   "groups": [
    [
     "Home and food",
@@ -188,7 +188,7 @@
      "Paying bills",
      "Budget and checking accounts",
      "Taxes and receipts",
-     "Post and home email",
+     "Mail and home email",
      "Phone calls and customer service",
      "Insurance and documents",
      "Renewals and switching plans",
@@ -344,14 +344,14 @@
      [
       "“I’m getting wound up. Can we stop for twenty minutes and come back at eight?”",
       "“That came out sharper than I meant. Let me try again.”",
-      "“My tank is pretty full today, so I might sound crosser than I feel.”",
+      "“My tank is pretty full today, so I might sound angrier than I feel.”",
       "“What did you hear me say?”"
      ]
     ],
     [
      "Handing over a job",
      [
-      "“Could you own the trash from now on, from noticing they’re full to putting them out?”",
+      "“Could you own the trash from now on, from noticing it’s full to putting it out?”",
       "“It’s yours now, so do it your way. I’ll only step in if you ask.”",
       "“I’ll be the backstop this month. If it slips, I’ll mention it once, gently.”"
      ]
@@ -359,7 +359,7 @@
     [
      "Saying no kindly",
      [
-      "“That’s a fair ask. I can’t take it on this week, but I could do Saturday’s shop instead.”",
+      "“That’s a fair ask. I can’t take it on this week, but I could do Saturday’s grocery run instead.”",
       "“I’m at my limit. Can we look at what else could drop?”"
      ]
     ],

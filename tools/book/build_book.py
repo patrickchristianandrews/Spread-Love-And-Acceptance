@@ -979,7 +979,6 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
 <p><strong>Free to read and share.</strong> You may print, copy and share this book for personal use and for non-commercial teaching, as long as you credit “{ST}, spreadloveandacceptance.com” and don’t change it or sell it.</p>
 <p><strong>Not therapy.</strong> This book is general education about people and relationships. It is not a diagnosis or a treatment, and it can’t know your situation.</p>
-<p><strong>How it was made.</strong> The words were drafted with AI writing tools. The pictures were drawn by code that was written with an AI tool.</p>
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
@@ -1662,7 +1661,7 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <ul class="bk-dl-links">
 <li><a href="/workpapers/fill/">Fill in a workpaper</a><span>Each workpaper on its own, with a PDF and a fillable PDF</span></li>
 <li><a href="/workpapers/fill/suite.html">All the worksheets for your situation, in order</a><span>Every worksheet for your situation as one PDF, with a report at the end</span></li>
-<li><a href="/workpapers/fill/suite.html#full-path">The full path package</a><span>One fillable PDF for your whole road: fill it in any PDF app, bring it back, and get one report</span></li>
+<li><a href="/workpapers/fill/suite.html#full-path">The full path package</a><span>One fillable PDF for your whole road: fill it out in any PDF app, bring it back, and get one report</span></li>
 </ul></section>
 <section class="bk-dl-more" id="dl-media" aria-labelledby="dl-media-h"><h2 id="dl-media-h">Videos and music</h2>
 <p>These download right away, with no email.</p>

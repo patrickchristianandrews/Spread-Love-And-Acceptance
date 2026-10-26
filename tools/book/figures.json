@@ -151,7 +151,7 @@
   "src": "/assets/img/book/next-steps.svg",
   "width": 540,
   "height": 834,
-  "alt": "Seven stepping stones from “what matters to me?” to “look back kindly,” with an arrow going round again.",
+  "alt": "Seven stepping stones from “what matters to me?” to “look back kindly,” with an arrow going around again.",
   "caption": "A kind plan for change in seven small steps. If the plan isn’t working, change the plan, not your opinion of yourself.",
   "versions": [
    "short",
@@ -370,7 +370,7 @@
   "width": 540,
   "height": 1018,
   "alt": "A grid of jobs by week with crosses where a job slipped, then three kinds of gap with what to do about each, then counting and closing the month.",
-  "caption": "The monthly look-back: mark the month, sort each repeat, count and close. The cross goes next to a job, never a person.",
+  "caption": "The monthly look-back: mark the month, sort each repeat, count and close. The ✗ goes next to a job, never a person.",
   "versions": [
    "short",
    "full"

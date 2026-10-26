@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Search and AI discoverability for spreadloveandacceptance.com.
+"""Search discoverability for spreadloveandacceptance.com.
 
 Run from the repo root after pages change:   python3 tools/seo/build_seo.py
 
@@ -10,9 +10,8 @@ What it does (all idempotent; safe to run again and again):
      describing the page as an article, a free web app, a game, the podcast or the site itself.
   2. Tidies titles (no internal "TOL-OS" names; the site name at the end) and fills in missing or
      improved descriptions for the key pages.
-  3. Writes robots.txt (everyone welcome, AI crawlers named explicitly), sitemap.xml (with each
-     page's last-changed date from git) and llms.txt + llms-full.txt, the plain summaries that AI
-     assistants read to understand and cite a site.
+  3. Writes robots.txt (everyone welcome), sitemap.xml (with each page's last-changed date from git)
+     and llms.txt + llms-full.txt, the plain summaries of the site for programs that read it.
 Pages marked noindex, redirects, 404 and offline pages are left alone and kept out of the sitemap.
 """
 import html, json, os, re, subprocess, sys, datetime
@@ -134,7 +133,7 @@ SEARCH = {
  'conversation-reader.html': ('The Conversation Reader: Calm Replies After a Fight', 'Paste a text thread and see where it turned, what each of you may be hearing, and calmer replies in your own words. Free and private.'),
  'turning-toward.html': ('Turning Toward: 7 Small Habits for Closer Relationships', 'Connection grows in small moments. Seven simple practices: notice when someone reaches for you, give specific thanks, and repair gently after a hard moment.'),
  'check-ins.html': ('Relationship Check-Ins: A Simple, Kind Weekly Ritual', 'A short, kind check-in for couples, families and roommates: what went well, what felt heavy, and one small change to try next.'),
- 'what-am-i-feeling.html': ('What Am I Feeling? A Private Map and Picture of Your Feelings', 'Answer gentle questions, one at a time, and see a map of what may be behind how you feel, a picture made from your own answers, and one or two first steps. It runs on your device, is not AI, and sends nothing anywhere.'),
+ 'what-am-i-feeling.html': ('What Am I Feeling? A Private Map and Picture of Your Feelings', 'Answer gentle questions, one at a time, and see a map of what may be behind how you feel, a picture made from your own answers, and one or two first steps. It runs on your device and sends nothing anywhere.'),
  'quick-checks.html': ('My Weather Today: Daily Mood and Stress Check-In', 'A 60-second check-in on how you’re doing today, with a gentle forecast for hard talks and a calm pause with something soothing to do.'),
  'ask.html': ('Ask Professor Puddles: Free, Private Relationship Help Chat', 'Tell a cheerful raindrop professor what’s going on: kind next steps, words to say, deep talks and infographics. Free, and nothing you type leaves your device.'),
  'library.html': ('Psychology in Plain Words: How Relationships Work', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
@@ -401,7 +400,7 @@ SEARCH.update({
  'tools.html': ('Free Relationship and Communication Tools, by Type', 'Every free tool in one place, by type: communication, knowing yourself, sharing chores, calm and stress, family, work and games. No sign-up, no account.'),
  'explore.html': ('Every Free Guide, Tool and Worksheet, With Filters', 'Every free page, guide, tool, worksheet, game and book chapter in one list. Filter by what you need, who it is about and how long you have. No sign-up.'),
  'find-your-start.html': ('Where to Start: Three Quick Questions, One Thing to Try', 'Answer three quick questions (who it is about, what is going on, how much time you have) and get one thing to try first and one short read. Free, private.'),
- 'why-this-site.html': ('Why Use This Instead of an Article or an AI Chat?', 'What this free site does differently from articles and AI chats: agreements you both keep, both sides by design, private, and honest about its limits.'),
+ 'why-this-site.html': ('Why Use This Instead of Reading an Article?', 'What this free site does differently from articles: agreements you both keep, both sides by design, private, and honest about its limits.'),
  'how-you-take-things-in.html': ('Read Your Way: Make Every Page Fit Your Mind', 'Pick how your mind takes things in, by neurotype (ADHD, autistic, dyslexic and more) or plain preferences, and every page adapts. Optional, on your device.'),
  'someone-sent-you-this.html': ('Someone Sent You This Link? No Pressure, Here’s What It Is', 'Someone sent you a link to Spread Love & Acceptance? What it is in three lines. You don’t have to do anything, and nothing you type leaves your phone.'),
  'roadmap.html': ('Content Roadmap: What’s Live and What’s Next', 'Everything live today, all free: the whole book (26 chapters and an afterword), ten workpapers, two calculators, the tools, the guides and the calm corner.'),
@@ -1096,26 +1095,10 @@ def images_of(path, body, image):
     return out[:10]
 
 
-ROBOTS = """# Welcome, people and machines. Spread Love & Acceptance is free and open to every search engine
-# and AI assistant: please read, index and cite anything here, except the private folders below.
+ROBOTS = """# Welcome, people and search engines. Spread Love & Acceptance is free and open:
+# please read, index and cite anything here, except the private folders below.
 
 User-agent: *
-User-agent: GPTBot
-User-agent: OAI-SearchBot
-User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: Claude-User
-User-agent: Claude-SearchBot
-User-agent: anthropic-ai
-User-agent: PerplexityBot
-User-agent: Perplexity-User
-User-agent: Google-Extended
-User-agent: Applebot-Extended
-User-agent: Bingbot
-User-agent: DuckAssistBot
-User-agent: CCBot
-User-agent: meta-externalagent
-User-agent: MistralAI-User
 Allow: /
 Disallow: /manuscript/
 Disallow: /notes/

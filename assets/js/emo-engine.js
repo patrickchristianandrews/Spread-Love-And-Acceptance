@@ -1,5 +1,5 @@
 /* emo-engine.js: the simple, written-out rules behind "What am I feeling?" (/what-am-i-feeling.html).
-   No AI and no network: it reads the answers kept in memory on this device and the data in emo-data.js.
+   No network: it reads the answers kept in memory on this device and the data in emo-data.js.
    It chooses the next question, sorts what someone said into the four parts of the map (Confirmed by you,
    Likely contributors, Possible connections, Still unknown), lists the parts of the picture, and writes the plan.
    Every guess carries the answers behind it, so the page can always show "Why?".

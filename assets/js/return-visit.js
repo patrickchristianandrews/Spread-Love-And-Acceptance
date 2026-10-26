@@ -6,8 +6,7 @@
       opens tomorrow, with a calendar reminder for the days left, a link to do tomorrow's part together, and a
       "Do the next one now" button for anyone who would rather not wait. Missing days never resets anything:
       the dots count parts done, never days in a row, and nothing ever says "you missed".
-   2. "New since your last visit": on the same host, a short list from /whats-new.html of what went live after the
-      visitor's previous day here, with "Got it" to put it away. It never names a page they visited.
+   2. (Removed: the "New since your last visit" box on the home page. What's new stays one tap away in the menu.)
    3. On tool, chapter and game pages, one line inside the "What you got from this" card (come-back.js, .cb-end):
       today's small minute, or that the next part opens tomorrow.
    3b. (return26) Under that card, one more small line: "Add today to your week" with a one-tap weather, only when My week
@@ -312,37 +311,6 @@
     });
   }
 
-  /* ---------------------------------------------------------------- "New since your last visit" */
-  function newSince(host) {
-    if (helpersOff() || !S.prev || !window.fetch || !window.DOMParser) return;
-    var since = S.newSeen && S.newSeen > S.prev ? S.newSeen : S.prev;
-    fetch('/whats-new.html', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (html) {
-      if (!html) return;
-      var d = new DOMParser().parseFromString(html, 'text/html'), items = [], seen = {}, newest = '';
-      Array.prototype.forEach.call(d.querySelectorAll('a.wn-card'), function (a) {
-        var t = a.querySelector('time[datetime]'), dt = t && t.getAttribute('datetime'), href = a.getAttribute('href') || '';
-        var st = a.querySelector('strong'), name = st ? st.textContent.replace(/\b(NEW|MORE)\b/g, '').replace(/\s+/g, ' ').trim() : '';
-        if (!dt || !name || href.charAt(0) !== '/' || seen[href]) return;
-        if (dt > newest) newest = dt;
-        if (dt > since) { seen[href] = 1; items.push({ u: href, t: name, d: dt }); }
-      });
-      if (!items.length) return;
-      items.sort(function (a, b) { return a.d < b.d ? 1 : -1; });
-      var box = doc.createElement('aside');
-      box.className = 'rt-new tol-plain no-bubble no-cheer';
-      box.setAttribute('aria-label', 'New since your last visit');
-      box.innerHTML = '<p class="rt-k">New since your last visit</p><ul class="rt-new-list">' +
-        items.slice(0, 3).map(function (x) { return '<li><a href="' + esc(x.u) + '">' + esc(x.t) + '</a></li>'; }).join('') + '</ul>' +
-        '<p class="rt-row">' + '<a href="/whats-new.html">' + (items.length > 3 ? 'See everything new' : 'All of What’s new') + '</a> ' +
-        '<button type="button" class="rt-link" data-rt-gotit>Got it</button></p>';
-      box.querySelector('[data-rt-gotit]').addEventListener('click', function () {
-        S.newSeen = newest > today() ? newest : today(); save();
-        var card = host.querySelector('.rt-card'); box.remove(); if (card) try { card.focus({ preventScroll: true }); } catch (e) {}
-      });
-      host.insertBefore(box, host.firstChild);
-    }).catch(function () {});
-  }
-
   /* ---------------------------------------------------------------- one line in "What you got from this" */
   function endLine(card) {
     if (helpersOff() || !card) return;
@@ -372,7 +340,7 @@
     if (doc.body && (doc.body.hasAttribute('data-sensitive') || doc.body.hasAttribute('data-no-return'))) return;
     var hosts = doc.querySelectorAll('[data-return-today]');
     css();
-    Array.prototype.forEach.call(hosts, function (h) { if (h.getAttribute('data-rt-on')) return; h.setAttribute('data-rt-on', '1'); Card(h); newSince(h); });
+    Array.prototype.forEach.call(hosts, function (h) { if (h.getAttribute('data-rt-on')) return; h.setAttribute('data-rt-on', '1'); Card(h); });
     watchEnds();
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
@@ -380,6 +348,6 @@
   window.TOLReturn = {
     state: function () { return JSON.parse(JSON.stringify(S)); },
     sets: SETS,
-    mount: function (h) { if (h && !h.getAttribute('data-rt-on')) { css(); h.setAttribute('data-rt-on', '1'); Card(h); newSince(h); } }
+    mount: function (h) { if (h && !h.getAttribute('data-rt-on')) { css(); h.setAttribute('data-rt-on', '1'); Card(h); } }
   };
 })();

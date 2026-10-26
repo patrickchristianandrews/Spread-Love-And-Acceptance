@@ -244,21 +244,6 @@ def kindle_net(price, mb):
     return 0.35 * price, 35
 
 
-AI_TEXT = '''KDP asks three separate questions: did you use AI-based tools to create the **text**, the **images**, or **translations**? KDP's own definitions:
-- **AI-generated** means an AI-based tool created the actual content, *even if you edited it a lot afterward*. This must be disclosed.
-- **AI-assisted** means you created the content yourself and used AI to edit, check, brainstorm or improve it. This does not need to be disclosed.
-
-Honest answers for this book, as it was made [OWNER: confirm; only you know your own process]:
-
-| Question | Answer to choose | Why |
-|---|---|---|
-| Text | **Yes**: AI-generated, for the entire work (choose the editing level that is true; only you know it) | The words were drafted with AI writing tools. The copyright page says the same. |
-| Images | **Yes**: AI-generated, for the entire work (choose the editing level that is true; only you know it) | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
-| Translations | **No** | The book is in English only. |
-
-The answers are seen by Amazon, not printed on the product page.
-'''
-
 SELECT_NO = ('**No.** Select needs the ebook to be exclusive to Amazon in digital form, and every chapter is free on your website and in free PDFs. Pros you give up: '
              'Kindle Unlimited page reads, 5 free-promotion days or Countdown Deals per 90 days. Cons you avoid: 90-day auto-renewing exclusivity, and having to take '
              'the free online book down.')
@@ -370,7 +355,7 @@ def main():
         row('Author', 'Christian (first name only, as on the cover; Author Central lets you add a surname later) [OWNER]', 'Christian')
         row('Publisher', 'Nothing to type: with a free KDP ISBN, KDP shows "Independently published"', 'Leave blank (decided)')
         row('Imprint', '"Independently published" (set by KDP with the free KDP ISBN; the title and copyright pages say the same)', 'Leave blank')
-        row('Contributors', 'None. (How the text and pictures were made goes in "AI disclosure", not here.) [OWNER]', 'None')
+        row('Contributors', 'None. [OWNER]', 'None')
         row('Publishing rights', '"I own the copyright and I hold the necessary publishing rights."', 'the same')
         row('Primary audience', 'Sexually explicit images or title: **No**. Reading age: leave blank (adults).', 'the same')
         row('Primary marketplace', 'Amazon.com', 'Amazon.com')
@@ -389,8 +374,6 @@ def main():
         for i, (k, n, bad) in enumerate(kw_ok(item, d), 1):
             md.append('| %d | %s | %d%s |' % (i, k, n, (' (repeats: %s)' % ', '.join(bad)) if bad else ''))
         md.append('\nNo other authors, brands, program names or claims like "best" or "new". Words already in the title, subtitle and series are left out, because Amazon indexes those already. Keywords are never shown to readers, so they use the spellings US shoppers type (apologize, labor), the same American spellings the books use. [OWNER]\n')
-        md.append('### Content details: AI disclosure (KDP requires an answer)\n')
-        md.append(AI_TEXT)
         if has_print:
             md.append('### Print details%s\n' % (' (the workbook is large trim)' if kind == 'workbook' else (' (the pocket guide is 5 × 8 in)' if kind == 'pocket' else '')))
             trim = {'workbook': '8.5 × 11 in (21.59 × 27.94 cm)', 'pocket': '5 × 8 in (12.7 × 20.32 cm)'}.get(kind, '6 × 9 in (15.24 × 22.86 cm)')
@@ -475,7 +458,6 @@ def main():
             'description_html': desc, 'category_1': d['cats'][0], 'category_2': d['cats'][1], 'category_3': d['cats'][2],
             'alt_category_1': d['alt'][0], 'alt_category_2': d['alt'][1], 'alt_category_3': d['alt'][2],
             **{'keyword_%d' % (i + 1): k for i, k in enumerate(d['kw'])},
-            'ai_text': 'Yes: AI-generated, entire work [OWNER: choose the true editing level]', 'ai_images': 'Yes: AI-generated, entire work [OWNER: choose the true editing level]', 'ai_translations': 'No',
             'isbn': 'Get a free KDP ISBN', 'ink_paper': 'Black & white, white' if bw else 'Standard color, white', 'trim': {'workbook': '8.5 x 11 in', 'pocket': '5 x 8 in'}.get(kind, '6 x 9 in'),
             'bleed': 'No bleed', 'cover_finish': 'Matte', 'pages': pages, 'interior_file': 'book/print/%s.pdf' % bid, 'cover_file': 'book/print/cover-%s.pdf' % bid, 'low_content': 'No',
             'price_usd': '%.2f' % price,
@@ -523,7 +505,6 @@ Keep every image free of prices, review quotes and claims like "bestseller". [OW
 - 70% Kindle band $2.99 to $12.99 from July 7, 2026 (35% outside it), delivery fee: [KDP eBook list price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560); [Authors Guild statement](https://authorsguild.org/news/statement-on-amazon-kdp-raising-70-percent-royalty-ceiling/); [Publishers Lunch](https://lunch.publishersmarketplace.com/2026/07/kdp-raises-price-ceiling-for-70-percent-royalty-rate-for-the-first-time/).
 - KDP Select exclusivity and benefits: [Reedsy](https://reedsy.com/blog/guide/kdp/kdp-select); [Scribe Media](https://scribemedia.com/kdp-select/).
 - Content free on the web is accepted from the copyright owner: [KDP content guidelines](https://kdp.amazon.com/en_US/help/topic/G200672390).
-- AI disclosure definitions (AI-generated vs AI-assisted; text, images, translations): [KDP content guidelines, reposted](https://www.lesswrong.com/posts/4csaBfAgiyzrFXvEj/amazon-kdp-ai-content-guidelines).
 - Three categories per format: [KDP help, categories](https://kdp.amazon.com/en_US/help/topic/G200652170); category paths: [Smart KDP category finder](https://smartkdp.com/tools/kdp-category-finder), [PublishRank KDP category list](https://publishrank.io/learn/categories/kdp-category-list). The picker changes; confirm each path there.
 - Keyword rules (7 boxes, 50 characters, no author or brand names, no repeats of the title): [publishing.co.uk](https://publishing.co.uk/guides/how-to-choose-kdp-keywords/); [Book Bolt](https://bookbolt.io/navigating-amazons-updated-keyword-policies-for-kdp-a-friendly-guide-for-authors/).
 ''')
@@ -551,9 +532,9 @@ TAGLINES = {
     'book-2-heal-and-steady': ['For the heavy days.', 'Stress, anger, worry and grief, explained gently.', 'Find your footing again, one small step at a time.', 'No blame. Just steadier days.'],
     'book-3-understanding-each-other': ['Care about each other and still out of tune? Start here.', 'How words land, and how to get back in step.', 'Belonging, love and kinder disagreements.', 'For couples, families, friends and teams.'],
     'book-4-share-the-load': ['See the work nobody sees.', 'Fix the setup, not the person.', 'A fair, kind way to share the chores.', 'For couples, families, roommates and teams.'],
-    'workbook': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it in on your own or together.', 'The same forms are free online; this one is for your shelf.'],
+    'workbook': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it out on your own or together.', 'The same forms are free online; this one is for your shelf.'],
     POCKET['id']: ['Why did they react like that?', 'Thirty-eight everyday reactions, and the logic behind each one.', 'Both sides of the story, on a single page.', 'Small enough for a pocket. Kind enough to hand over.'],
-    'workbook-bw': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it in on your own or together.', 'The same forms are free online; this one is for your shelf.'],
+    'workbook-bw': ['Every form, all in one place.', 'Room to write, and spare copies for the weeks ahead.', 'Fill it out on your own or together.', 'The same forms are free online; this one is for your shelf.'],
     BOXSET['id']: ['The whole series in one Kindle edition.', 'Four short books and a pocket guide.', 'Know yourself, steady yourself, understand each other, share the load.', 'Every chapter is also free to read online.'],
 }
 

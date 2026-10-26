@@ -242,7 +242,7 @@
       does: 'Type what’s going on in your own words, the way you’d say it to a friend.',
       gets: 'Kind next steps, words you could use, and the right pages, made only from this site.',
       mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Get kind next steps for your exact situation: type it the way you’d tell a friend', top: 2,
-      kw: 'chat chatbot ask question help puddles assistant ask a question in your own words' },
+      kw: 'chat ask question help puddles assistant ask a question in your own words' },
     { id: 'start10', name: 'Ten-minute start', brand: '', href: '/start-in-10-minutes.html', type: 'learn', also: ['self'],
       does: 'Four small steps, alone or with someone: your weather, one short read, one pattern, one thing to try.',
       gets: 'A short “here’s what I got” summary to keep or screenshot.',

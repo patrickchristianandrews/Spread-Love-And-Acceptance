@@ -297,13 +297,17 @@ def launch_steps():
 
 def at_a_glance(totals):
     out = ['## At a glance', '',
-           '| # | Title | Subtitle | Series | Author |', '|---|---|---|---|---|']
+           'Series for all four: **The Frequency Buddies Books**. Author for all four: **Christian**.', '', '| # | Title | Subtitle | Series no. |', '|---|---|---|---|']
     for t in TITLES:
-        out.append('| %d | %s | %s | The Frequency Buddies Books, number %d | Christian |' % (t['n'], t['name'], t['sub'], t['n']))
-    out += ['', '| # | Reading age | Grade range | Trim | Ink and paper | Bleed | Pages (from pdfinfo) | Spine | List price | Printing cost | Royalty |', '|---|---|---|---|---|---|---|---|---|---|---|']
+        out.append('| %d | %s | %s | %d |' % (t['n'], t['name'], t['sub'], t['n']))
+    out += ['', '| # | Reading age | Grade range | Trim | Ink and paper | Bleed | Pages (from pdfinfo) |', '|---|---|---|---|---|---|---|']
     for t in TITLES:
         i = totals[t['id']]
-        out.append('| %d | %d to %d | %s | %s | %s | %s | %d | %s in | $%.2f | $%.2f | $%.2f |' % (t['n'], t['ages'][0], t['ages'][1], t['grades'], t['trim'].split(' (')[0], t['ink'], t['bleed'], i['pages'], i['spine'], i['price'], i['cost'], i['royalty']))
+        out.append('| %d | %d to %d | %s | %s | %s | %s | %d |' % (t['n'], t['ages'][0], t['ages'][1], t['grades'], t['trim'].split(' (')[0], t['ink'], t['bleed'], i['pages']))
+    out += ['', '| # | Spine width | List price | Printing cost | Royalty per copy |', '|---|---|---|---|---|']
+    for t in TITLES:
+        i = totals[t['id']]
+        out.append('| %d | %s in | $%.2f | $%.2f | $%.2f |' % (t['n'], i['spine'], i['price'], i['cost'], i['royalty']))
     out += ['', 'Kindle: the picture book and the chapter book have an EPUB; **the two coloring books are print only.**', '', '---', '']
     return out
 
@@ -363,7 +367,7 @@ def listing():
     parts.append('')
     parts.append('## Free PDFs on the site')
     parts.append('')
-    parts.append('The website is free, so each title can be a free PDF on /book/download.html behind the same one-time email step as the adult books (the lead has the exact HTML). Recommended: **offer all four**. The picture book and the chapter book are stories families will read aloud together, the coloring books are made to be printed at home, and none of it takes sales from a paperback buyer who wants the bound, proofed book. If you would rather keep the picture book print-only, remove its list item; nothing else changes.')
+    parts.append('The website is free, so each title can be a free PDF on /book/download.html behind the same one-time email step as the adult books (the lead has the exact HTML). Recommended: **offer all four**. The picture book and the chapter book are stories families will read aloud together, the coloring books are made to be printed at home, and none of it takes sales from a paperback buyer who wants the bound, proofed book. If you prefer to keep the picture book print-only, remove its list item; nothing else changes.')
     parts.append('')
     return '\n'.join(parts), totals
 
@@ -472,7 +476,7 @@ def listing_pdf(md_text, out_pdf):
 body{font-family:Andika,sans-serif;font-size:9.4pt;line-height:1.45;color:#222}
 h1,h2,h3{font-family:Fraunces,serif;color:#1d2a4a;page-break-after:avoid}
 h1{font-size:20pt} h2{font-size:15pt;border-bottom:1.5px solid #c9b98c;padding-bottom:2px;margin-top:20px} h3{font-size:11.5pt;margin-top:14px}
-table{border-collapse:collapse;width:100%%;margin:6px 0 10px;font-size:8.2pt;page-break-inside:auto} tr{page-break-inside:avoid}
+table{border-collapse:collapse;width:100%%;margin:6px 0 10px;font-size:7.8pt;page-break-inside:auto} tr{page-break-inside:avoid}
 td,th{border:1px solid #b9b2a2;padding:3px 5px;vertical-align:top;overflow-wrap:anywhere} th{background:#efe8d6}
 pre,code{font-family:ui-monospace,monospace;font-size:8pt} pre{background:#f6f3ea;border:1px solid #d9d1bd;border-radius:4px;padding:6px 8px;white-space:pre-wrap;overflow-wrap:anywhere}
 hr{border:0;border-top:1px solid #d9d1bd;margin:14px 0} li{margin:2px 0}

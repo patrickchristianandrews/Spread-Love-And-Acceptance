@@ -25,7 +25,7 @@
     },
     "section_for_ask": {
       "first open of the chat": "greetings",
-      "who are you / what are you / are you a bot / are you a real professor": "self_description",
+      "who are you / what are you / are you a real person / are you a real professor": "self_description",
       "tell me a joke / another joke / make me laugh": "jokes",
       "lol / haha / you're funny / good one": "thanks_replies",
       "games, music, cartoons, videos, the Arcade, the Night Garden, Pause & Play": "game_and_play",

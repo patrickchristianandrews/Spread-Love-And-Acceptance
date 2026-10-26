@@ -65,7 +65,7 @@
     "overrides_about": "Print and ebook wording only (the online library keeps its own): field, or field.N for one step of the chain or one analogy. They bring each page to at most one \"X, not Y\" and fewer colons, as the series style asks. \"care\" lines are never changed.",
     "overrides": {
       "plan-changed": {
-        "an.0": "A GPS recalculating while you’re already on the highway. For a moment it has no route at all.",
+        "an.0": "A navigation app recalculating while you’re already on the highway. For a moment it has no route at all.",
         "looks": "Ten to seven. “Oh, change of plan, we’re meeting at the other place, and Jo’s coming!” Mel says “Great.” Then she says almost nothing for the next hour.",
         "other": "To the person who changed it, it was nothing much, maybe even a nice surprise. Now they feel their good idea has been treated like bad news.",
         "chain": [
@@ -138,7 +138,7 @@
         ]
       },
       "cancel-tired": {
-        "looks": "Friday, 4:52pm. “So sorry, I can’t do tonight x.” The table’s booked for seven thirty.",
+        "looks": "Friday, 4:52pm. “So sorry, I can’t do tonight.” The table’s booked for seven thirty.",
         "fits": "Rest is what makes good company possible. Sometimes the kindest thing a tired person can offer is a better evening later.",
         "say": "“I’m empty, not uninterested. Can we pick a new day now?”",
         "an.0": "Pulling into a rest stop when you’re too tired to drive safely.",
@@ -148,7 +148,7 @@
           "This week used all of it up",
           "Going out on empty means turning up in body only"
         ],
-        "step": "Cancel as early as you can, and put a new date in the same message. If it keeps happening, make the plans lighter, a walk, say, or takeout on the sofa where nobody has to put proper shoes on."
+        "step": "Cancel as early as you can, and put a new date in the same message. If it keeps happening, make the plans lighter, a walk, say, or takeout on the couch where nobody has to put proper shoes on."
       },
       "blunt": {
         "looks": "You asked what she thought of your draft. She tells you. “The second half doesn’t work.” Period.",
@@ -163,7 +163,7 @@
         ]
       },
       "im-fine": {
-        "an.0": "A “Back in 10 minutes” sign on a shop door.",
+        "an.0": "A “Back in 10 minutes” sign on a store door.",
         "looks": "A rough day is written all over his face, and every question gets the same two words. “I’m fine.”",
         "other": "People who take words at face value believe it, then get blamed for not noticing. Others feel shut out, or keep asking and seem nosy.",
         "chain": [
@@ -258,7 +258,7 @@
       "written-please": {
         "say": "“I ask for it in writing so I get it right first time. I trust what we agreed.”",
         "step": "After a chat, send a two-line summary. “So I’m doing X by Friday. Right?” The manager only has to reply “Yes.”",
-        "looks": "Ten-minute briefing, lots of nodding. At the end: “Sorry, could you just pop that in an email?”",
+        "looks": "Ten-minute briefing, lots of nodding. At the end: “Sorry, could you put that in an email?”",
         "other": "The manager may hear “I don’t trust what you said,” or just one more job at five o’clock.",
         "chain": [
           "Spoken words vanish as they’re said",
@@ -280,7 +280,7 @@
       },
       "disagree-later": {
         "say": "“I raised it afterward so it would be heard. I wasn’t going behind anyone’s back.”",
-        "step": "Teams can offer both routes. “Say it now, or message me after.” Quiet disagreers can say “I’ve a different view, I’ll send it after.”",
+        "step": "Teams can offer both routes. “Say it now, or message me after.” Quiet disagreers can say “I have a different view, I’ll send it after.”",
         "looks": "Nods all the way through the meeting. Then, by the elevators, quietly: “Between you and me, I don’t think it’ll work.”",
         "other": "If you value saying things openly, it can look two-faced, and the meeting itself starts to feel like a bit of a performance.",
         "chain": [
@@ -350,7 +350,7 @@
         "step": "During one: fewer words, less noise, more space, and safety first. Afterward, rest. The calm talk about early signs can wait for another day, sometimes a week.",
         "looks": "Suddenly he’s shouting, or crying, or running, and it looks far, far bigger than whatever just happened.",
         "an.0": "A bath overflowing because the faucet was never turned off.",
-        "other": "Frightening, if you’re the one standing nearby. Embarrassing, if it’s in a shop. And people very often feel it must be their fault, and don’t know what to do with their hands.",
+        "other": "Frightening, if you’re the one standing nearby. Embarrassing, if it’s in a store. And people very often feel it must be their fault, and don’t know what to do with their hands.",
         "chain": [
           "Input keeps coming, noise and demands and change",
           "The brain’s buffer fills up",
@@ -375,7 +375,7 @@
       "last-straw": {
         "fits": "Stress builds up and makes small things feel bigger. The reaction belongs to the whole day.",
         "step": "Say “I’m nearly full today” early, before the mug. Afterward, apologize for the size of it, and talk about the mug another time, if it still matters.",
-        "looks": "One mug, left on the side, after a long, long day. And off she goes.",
+        "looks": "One mug, left on the counter, after a long, long day. And off she goes.",
         "an.0": "The last drop of rain that makes the gutter overflow.",
         "other": "Whoever left the mug gets the whole day poured over them. That feels unfair, because it is.",
         "chain": [
@@ -410,7 +410,7 @@
       "loud-family": {
         "looks": "Your first dinner at his family’s. Everyone talking at once, at full volume, over each other. To you it sounds exactly like a fight.",
         "an.0": "A Saturday market, where the shouting is how business gets done.",
-        "other": "Someone from a quieter home can sit through a whole dinner without getting a word in, and go home sure everyone was cross. By that family’s standards it was a lovely evening.",
+        "other": "Someone from a quieter home can sit through a whole dinner without getting a word in, and go home sure everyone was upset. By that family’s standards it was a lovely evening.",
         "chain": [
           "Every family has its own volume, and its own rules for whose turn it is",
           "In some homes, talking over each other means everyone’s involved",
@@ -452,7 +452,7 @@
         ]
       },
       "alone-after-people": {
-        "looks": "The visitors’ car is barely off the drive and he’s already halfway up the stairs. The bedroom door shuts. Quietly, but it shuts.",
+        "looks": "The visitors’ car is barely out of the driveway and he’s already halfway up the stairs. The bedroom door shuts. Quietly, but it shuts.",
         "an.0": "Wringing out a sponge so it can hold water again.",
         "other": "His partner wanted to go over the whole afternoon together, who said what about whose new kitchen. Now she’s on her own with the dishes, wondering what she did.",
         "chain": [

@@ -206,10 +206,11 @@ def kindle_pricing_rows(it):
 
 def ai_section():
     return [
-        'KDP asks, on the Content screen of every book, whether you used AI-based tools to create the book’s **texts**, **images** or **translations**. You answer each one separately. The answer is for Amazon and is not shown on the product page.',
-        '**What the words mean (KDP’s definitions, as reported in October 2026):** “AI-generated” means an AI tool created the actual words or pictures, even if you then edited them heavily. That must be disclosed. “AI-assisted” means you created the work yourself and used AI only to brainstorm, edit, check or improve it. That does not need to be disclosed.',
+        '**PRIVATE. Answer this in the KDP form. It is not printed in the book, and it is not shown on the site or on the product page.**',
+        'KDP asks, on the Content screen of every book, whether you used AI-based tools to create the book’s **texts**, **images** or **translations**. You answer each one separately. The answer is for Amazon only.',
+        '**What the words mean (KDP’s definitions, as reported in October 2026):** “AI-generated” means an AI tool created the actual words or pictures, even if you then edited them. That must be disclosed. “AI-assisted” means you created the work yourself and used AI only to brainstorm, edit, check or improve it. That does not need to be disclosed.',
         '**The choices for each question** (as reported, so check the screen) are “None,” “Some sections, with minimal or no editing,” “Some sections, with extensive editing,” “Entire work, with minimal or no editing” and “Entire work, with extensive editing.”',
-        '**[OWNER] Only you can answer, because only you know how each book was made.** Answer truthfully. For your own reference, the build notes (listing-kdp.md) record that the words were drafted with AI writing tools and that the covers, characters and figures are drawn by code written with an AI tool. Each book’s copyright page (“How it was made”) says the same, in the same words. That makes texts and images “AI-generated” for the entire work; on each screen, choose the editing level that is true (only you know how much you edited). Translations: “None.” Never answer “None” or “No” on texts or images to make a book look more human-made than it is.',
+        '**[OWNER] Only you can answer, because only you know how each book was made.** Answer truthfully. The words were drafted with AI writing tools, and the covers, characters and figures are drawn by code written with an AI tool. That makes the texts and the images “AI-generated” for the entire work; on each screen, choose the editing level that is true (only you know how much you edited). Translations: “None.” Never answer “None” or “No” on texts or images to make a book look more human-made than it is.',
     ]
 
 

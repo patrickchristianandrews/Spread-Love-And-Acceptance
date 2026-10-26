@@ -137,7 +137,7 @@ REG_MISSES = []
 
 
 def _reg_kind(item):
-    """The registry's kind for a catalogue item: by its id ("reg"), its exact address, or its page."""
+    """The registry's kind for a catalog item: by its id ("reg"), its exact address, or its page."""
     if not REGISTRY:
         return None
     by_id = {r['id']: r for r in REGISTRY}
@@ -152,7 +152,7 @@ def _reg_kind(item):
 
 
 def _sort(declared_wp, declared_tools):
-    """Put every catalogue item in the list its registry kind says (items the registry doesn't list keep
+    """Put every catalog item in the list its registry kind says (items the registry doesn't list keep
     the list they are declared in)."""
     wps, tls = [], []
     for item, declared in [(w, 'workpaper') for w in declared_wp] + [(t, 'tool') for t in declared_tools]:
@@ -351,7 +351,7 @@ def tag(kind, item=None):
 def meet_html(print_edition):
     """The two kinds of help and the three characters. print_edition: the wording for the printed book."""
     blank = (' The blank workpapers are also at the back of this book, one page each, to copy.' if print_edition
-             else ' You can fill them in on screen or print them.')
+             else ' You can fill them out on screen or print them.')
     ex_wp, ex_tool = WP.get('wp03'), TL.get('chat')
     s = '<div class="bh-meet">'
     s += '<div class="bh-kinds">'
@@ -404,7 +404,7 @@ def lists_html(found, chapter_ref, h='h2'):
     tls = _list_items('tool', TOOLS, found, chapter_ref)
     s = ''
     if wps:
-        s += '<%s class="wt-h wt-h-wp">Workpapers mentioned in this book</%s><p class="wt-lede">Pages to fill in, on your own or together.</p><ul class="wt-list wt-list-wp">%s</ul>' % (h, h, ''.join(wps))
+        s += '<%s class="wt-h wt-h-wp">Workpapers mentioned in this book</%s><p class="wt-lede">Pages to fill out, on your own or together.</p><ul class="wt-list wt-list-wp">%s</ul>' % (h, h, ''.join(wps))
     if tls:
         s += '<%s class="wt-h wt-h-tool">Tools mentioned in this book</%s><p class="wt-lede">Interactive helpers to use on the site.</p><ul class="wt-list wt-list-tool">%s</ul>' % (h, h, ''.join(tls))
     return s

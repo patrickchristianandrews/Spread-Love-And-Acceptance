@@ -1,6 +1,6 @@
 /* emo-ui.js: the screens of "What am I feeling?" (/what-am-i-feeling.html).
    Questions, the "Here's what I'm hearing" map, the picture with its legend, the plan, and the optional history.
-   It runs on simple written-out rules (emo-engine.js), not AI, and nothing is sent anywhere.
+   It runs on simple written-out rules (emo-engine.js), and nothing is sent anywhere.
 
    localStorage key: tol-emo-v1  { sessions: [ { id, at, path, ans, edits, art, planEd, seed } ] }
    It is written only when someone taps "Save this session on this device". "Delete" and "Delete all" remove it.

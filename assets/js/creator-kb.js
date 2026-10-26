@@ -15,7 +15,7 @@ window.TOL_CREATOR_KB = {
   hello: 'Hi, I’m Tide. Ask me anything about Christian, who made this site: their story, how they think, and how the program grew out of it. I only know about Christian, and what you type stays on your device.',
   starters: ['Who is Christian?', 'Is Christian a polymath?', 'Which fields did Christian study?', 'How does Christian think differently?', 'How did the program come from Christian’s life?'],
   entries: [
-    { id: 'tide', k: ['who are you', 'what are you', 'what is tide', 'why tide', 'your name', 'are you a person', 'are you real', 'are you ai', 'are you a bot', 'what can you do', 'what do you know', 'help'],
+    { id: 'tide', k: ['who are you', 'what are you', 'what is tide', 'why tide', 'your name', 'are you a person', 'are you real', 'are you a robot', 'are you a program', 'what can you do', 'what do you know', 'help'],
       a: ['I’m Tide, a small helper that only knows about Christian, the creator of Spread Love & Acceptance. I answer from what Christian has shared on the About pages and the polymath page, and nothing else.', 'I work entirely on your device: what you type isn’t sent anywhere, and it’s gone when you leave the page. For questions about the tools, the book or a situation you’re in, Professor Puddles on the Ask page is the one to talk to.'],
       l: [['Ask Professor Puddles about the program', '/ask.html']],
       f: ['Who is Christian?', 'Is Christian a polymath?'] },

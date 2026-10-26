@@ -465,13 +465,6 @@ def build():
     if os.environ.get('PAD_BLANK') == '1':
         body += '<section class="back" style="break-before:page"><p>&nbsp;</p></section>'
     C.write(os.path.join(C.SRC, 'chapter-book.html'), C.doc(BOOK['title'], CSS, body))
-    # the spot illustrations on their own (for the EPUB)
-    for k in ILLS:
-        P = pen()
-        ILLS[k](P)
-        s = svgdoc(P, label=ALT[k]).replace('class="spot" ', 'width="920" height="460" ')
-        # the EPUB images use a font stack that falls back to sans-serif
-        C.write(os.path.join(C.SRC, 'art', 'chapter-%s.svg' % k), '<?xml version="1.0" encoding="UTF-8"?>\n' + s + '\n')
     meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}
     rec = meta.setdefault('books', {}).setdefault('chapter-book', {})
     rec['title'] = BOOK['title']

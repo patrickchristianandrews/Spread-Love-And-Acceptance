@@ -233,7 +233,7 @@
   function lc(s) { return String(s).toLowerCase(); }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
-  /* ---------------------------------------------------------------- the recap, by fixed rules (no AI, nothing leaves the device) */
+  /* ---------------------------------------------------------------- the recap, by fixed rules (nothing leaves the device) */
   function bandWord(b) {
     return b >= 82 ? 'A sunny week' : b >= 66 ? 'Mostly sunny' : b >= 52 ? 'Mixed skies' : b >= 40 ? 'Clouds with some showers' : 'A stormy stretch';
   }
