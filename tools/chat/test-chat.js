@@ -1264,7 +1264,7 @@ if (PERS) {
     t('puddles', 'hi my husband yells at me', { id: 'yelledat', not: FUNNY });  // chat9: ordinary help first, one gentle line
     t('puddles', 'my name is Sam', { kind: 'chat', text: /Sam/ });
     c('puddles', ['let\'s just chat', 'pizza'], { kind: 'chat' });
-    t('puddles', "i'm tired of everything goes to care", { q: "i'm tired of everything", kind: 'care', id: 'feelinglow', text: /tell someone you trust/, not: /doctor/ });
+    t('puddles', "i'm tired of everything goes to care", { q: "i'm tired of everything", kind: 'care', id: 'feelinglow', text: /one small thing/, not: /doctor|tell someone you trust|tell one person/i });   // wave 27: only the suicide line carries “tell someone you trust”
     t('puddles', "I'm Sam (a name, said the short way)", { q: "I'm Sam", kind: 'chat', text: /Sam/ });
     t('puddles', "I'm Tired (a feeling, not a name)", { q: "I'm Tired", kind: 'chat', not: /meet you, Tired/ });
     c('puddles', ['my name is Sam', 'how are you'], { kind: 'chat', not: /\{name\}/ });
@@ -2077,7 +2077,7 @@ if (PERSONA) {
   t(G, 'midnight and i\'m tempted to message her even though we broke up', { id: 'exstoptext' });
   // 4. feeling hopeless: the safety reply as it was, with the adult help page (the teen page only for a teen)
   ['honestly i feel kind of hopeless tonight', 'i feel so hopeless', 'im feeling really low tonight'].forEach(q =>
-    t(G, q, { id: 'feelinglow', text: /tell someone you trust/, not: /doctor/, check: noLink(/teens\.html/) }));
+    t(G, q, { id: 'feelinglow', text: /one small thing/, not: /doctor|tell someone you trust|tell one person/i, check: noLink(/teens\.html/) }));
   t(G, 'a teen feeling hopeless gets the teen page', { q: 'i\'m 15 and honestly i feel kind of hopeless tonight', id: 'feelinglowteen', link: '/teens.html#help' });
   t(G, 'wanting to die is still the danger reply', { q: 'i feel hopeless and i want to die', kind: 'safety', text: SUICIDE });
   // 5. grief: evenings get the grief page's hard-evening list, and a grieving person is never told "I won't repeat them"
