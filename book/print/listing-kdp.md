@@ -79,8 +79,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -192,8 +192,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -305,8 +305,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -418,8 +418,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -455,7 +455,7 @@ The non-US prices are rounded local equivalents a little above $14.99, so the 60
 
 | Field | Answer |
 |---|---|
-| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.06 MB, 6 chapters; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
+| Manuscript (ebook) file | **book/print/epub/book-4-share-the-load.epub** (EPUB 3, reflowable, 1.06 MB, 5 chapters and an afterword; EPUBCheck: Messages: 0 fatals / 0 errors / 0 warnings / 0 infos). Made by tools/book/build_epub.py. |
 | Kindle cover file | book/print/cover-book-4-share-the-load-kindle.jpg (1600 × 2560 px, the 1.6:1 shape KDP prefers, the the paperback front, trimmed slightly at the sides; also inside the EPUB) |
 | ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |
 | Publisher | Leave blank (decided). |
@@ -538,8 +538,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -673,8 +673,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.
@@ -777,8 +777,8 @@ Honest answers for this book, as it was made [OWNER: confirm; only you know your
 
 | Question | Answer to choose | Why |
 |---|---|---|
-| Text | **Yes**: "Entire work, with extensive editing" | The chapters were drafted with AI writing tools and then reviewed and edited many times. |
-| Images | **Yes**: "Entire work, with extensive editing" | The covers, characters and figures are drawn by code that was written with an AI tool. |
+| Text | **Yes**: "Entire work, with extensive editing" | The words were drafted with AI writing tools and then reviewed and edited many times, under the author’s direction. The copyright page says the same. |
+| Images | **Yes**: "Entire work, with extensive editing" | The pictures (covers, characters and figures) were drawn by code that was written with an AI tool. The copyright page says the same. |
 | Translations | **No** | The book is in English only. |
 
 The answers are seen by Amazon, not printed on the product page.

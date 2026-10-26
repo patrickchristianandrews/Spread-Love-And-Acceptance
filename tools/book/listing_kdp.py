@@ -443,7 +443,7 @@ def main():
             md.append('### Kindle extras\n')
             md.append('| Field | Answer |\n|---|---|')
             ep = EPUB.get(bid, {})
-            what = {'pocket': '%d sections, %d situations' % (ep.get('chapters') or 0, len(POCKET['items'])), 'boxset': '5 books, %d chapters and sections' % (ep.get('chapters') or 0)}.get(kind, series_site.chap_label(item))
+            what = {'pocket': '%d sections, %d situations' % (ep.get('chapters') or 0, len(POCKET['items'])), 'boxset': '5 books, %d chapters and sections' % (ep.get('chapters') or 0)}.get(kind) or (series_site.chap_label(item) if item.get('chapters') else '0 chapters')
             md.append('| Manuscript (ebook) file | **book/print/epub/%s.epub** (EPUB 3, reflowable, %.2f MB, %s%s). Made by tools/book/build_epub.py. |' % (
                 bid, k_mb, what, ('; EPUBCheck: ' + ep['epubcheck']['summary']) if (ep.get('epubcheck') or {}).get('summary') else ''))
             md.append('| Kindle cover file | book/print/cover-%s-kindle.jpg (%s, the %s; also inside the EPUB) |' % (
