@@ -10,7 +10,7 @@
       a saved week, a chapter left halfway). Exactly one best next step, in this order: look back on your week
       (Sunday and Monday, with a saved week and nothing for this week yet), today's part of Seven small days, a
       chapter or the self path they were partway through, part 1 of Seven small days, or this week's card. It never
-      says "you missed" or counts days. "Not now" keeps it quiet for a week (the plain card below stays). On the
+      blames or counts days. "Not now" keeps it quiet for a week (the plain card below stays). On the
       second or third day it adds one line about keeping the site on the home screen (/install.html), never a pop-up.
       In Quiet mode the install line is left out. It reads keys other parts of the site already keep and writes nothing
       until "Not now" is tapped.
@@ -20,6 +20,14 @@
       three days with no tap. Never in Quiet mode.
    4. "Send this week's idea to someone": the site's own share sheet (TOLShareKit.shareText, else TOLShare, else the
       device's share menu, else copy) with a kind default message. One person at a time (private share).
+
+   5. "Continue where you left off" (resume26). resume.js (loaded on every page by bookmarks.js, and here when it is not there yet)
+      keeps the last three places on this device (tol-resume-v1). The Welcome back panel then shows one primary button,
+      "Continue: <title>", for the most recent place that is not finished, and up to two quieter "Also" links. If the most
+      recent place was finished (read to the end, episode ended), the best next step above stays the main button and the
+      unfinished places become the "Also" links. Each place has a Remove button, and "Forget these" clears all of them. The
+      panel says plainly that this is remembered on this device only. /this-week.html lists the same places in "Where you
+      left off". Nothing is written here; the panel only reads. Never guilt, never a count of days.
 
    Keys: tol-thisweek-v1 { nn: the date "Not now" was tapped, ln: { d, n, off } for the one line } and, only after a tap
    on the weather, a draft day in tol-week-v1. Nothing is sent anywhere. No analytics. Exposes window.TOLThisWeek;
@@ -116,6 +124,21 @@
     if (doc.querySelector('link[data-this-week]')) return;
     var l = doc.createElement('link'); l.rel = 'stylesheet'; l.href = '/assets/css/this-week.css'; l.setAttribute('data-this-week', '');
     doc.head.appendChild(l);
+  }
+  function R() { return G.TOLResume || null; }
+  function resumeTag() {   // resume.js is on every page already (bookmarks.js); start loading it here too, so it arrives with this file's data
+    var s = doc.querySelector('script[src^="/assets/js/resume.js"]');
+    if (!s && !G.TOLResume) { s = doc.createElement('script'); s.src = '/assets/js/resume.js'; s.async = true; doc.head.appendChild(s); }
+    return s;
+  }
+  // cb runs once resume.js is ready (or has failed, or is slow: then cb(false) now, and cb(true) again if it still arrives)
+  function whenResume(cb) {
+    if (G.TOLResume) return cb(true);
+    var s = resumeTag(), done = false, timedOut = false;
+    function fin() { if (done) return; done = true; cb(!!G.TOLResume); }
+    function late() { if (timedOut && G.TOLResume) cb(true); }
+    if (s) { s.addEventListener('load', fin); s.addEventListener('load', late); s.addEventListener('error', fin); }
+    setTimeout(function () { timedOut = true; fin(); }, 2500);
   }
   function needData(cb) {
     if (G.TOL_THIS_WEEK) return cb();
@@ -284,6 +307,7 @@
       }
       if (noteEl && note) { noteEl.textContent = note; noteEl.hidden = false; }
       draw(shown, false);
+      placesSection(sec);
     });
   }
 
@@ -301,6 +325,7 @@
   function hasHistory() {
     var o = lj('tol-return-v1') || {}, days = lj('tol-visit-days');
     if (o.prev || (Array.isArray(days) && days.length >= 2)) return true;
+    try { if (R() && R().visible().length) return true; } catch (e) {}
     if (!recentOff()) return false;
     var last = lj('tol-lastread'), saved = lj('tol-saved');
     return daysState().count > 0 || savedWeekCount() > 0 || !!(last && typeof last === 'object' && Object.keys(last).length) || !!(Array.isArray(saved) && saved.length);
@@ -340,36 +365,126 @@
   }
   function snoozed() { return !!S.nn && Date.now() - Date.parse(S.nn) < 7 * DAY; }
 
+  /* the places from resume.js: "Continue: <title>" and up to two "Also" links */
+  function ptitle(p) { return p.t || R().kindName(p); }
+  function samePath(a, b) { return String(a || '').split('#')[0].split('?')[0] === String(b || '').split('#')[0].split('?')[0]; }
+  function alsoItem(p) {
+    return '<li class="rs-also-i"><span class="rs-also-k">Also</span><a class="rs-also-a" href="' + esc(R().href(p)) + '">' + esc(ptitle(p)) + '</a>' +
+      '<button type="button" class="rs-x" data-rs-rm="' + esc(p.u) + '" aria-label="Remove ' + esc(ptitle(p)) + ' from what is remembered">Remove</button>' +
+      '<span class="rs-also-d">' + esc(R().detail(p)) + '</span></li>';
+  }
+  function resumeParts(now, info) {   // what the panel shows, from the places and the best next step
+    var m = null; try { m = R() ? R().model() : null; } catch (e) {}
+    var prim = m && m.primary || null, also = m ? m.open.filter(function (p) { return p !== prim; }).slice(0, 2) : [], step = null, extra = null;
+    var bs = bestStep(now, info);
+    if (bs.path && m && m.all.some(function (p) { return samePath(p.u, bs.path); })) bs = bestStepNoChapter(now, info);
+    if (prim) { if ((bs.kind === 'days' || bs.kind === 'week') && also.length < 2) extra = bs; } else step = bs;
+    return { prim: prim, also: also, step: step, extra: extra, m: m };
+  }
+  function bestStepNoChapter(now, info) {
+    var ds = daysState();
+    if (ds.next && !ds.doneToday && ds.count === 0) return { kind: 'days', h: 'Seven small days, part 1: ' + ds.title, d: 'One small thing a day, about a minute each.', href: '#small-days', btn: 'Try part 1' };
+    return { kind: 'week-card', h: info.w.t, d: info.w.tr, href: '/this-week.html', btn: 'See this week’s idea', small: 'This week' };
+  }
+  function panelHTML(now, info) {
+    var P = resumeParts(now, info), prim = P.prim, step = P.step, any = !!(prim || P.also.length);
+    var h = '<h2 class="tw-back-h" id="tw-back-h">Welcome back</h2>';
+    if (prim) {
+      h += '<p class="tw-step"><span>' + esc(R().detail(prim)) + '</span></p>' +
+        '<p class="tw-go"><a class="tw-btn rs-cont" href="' + esc(R().href(prim)) + '">Continue: ' + esc(ptitle(prim)) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>';
+    } else {
+      h += '<p class="tw-step"><strong>' + esc(step.h) + '</strong><span>' + esc(step.d) + '</span></p>' +
+        '<p class="tw-go"><a class="tw-btn" href="' + esc(step.href) + '">' + esc(step.btn) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>';
+    }
+    if (P.also.length || P.extra) {
+      h += '<ul class="rs-also" aria-label="Also">' + P.also.map(alsoItem).join('') +
+        (P.extra ? '<li class="rs-also-i is-plain"><span class="rs-also-k">Also</span><a class="rs-also-a" href="' + esc(P.extra.href) + '">' + esc(P.extra.kind === 'days' ? P.extra.h : P.extra.btn) + '</a></li>' : '') + '</ul>';
+    }
+    h += (installLine() || (prim || (step && step.small) ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>'));
+    if (any) h += '<p class="rs-priv"><span>Remembered on this device only.</span>' + (prim ? '<button type="button" class="rs-x" data-rs-rm="' + esc(prim.u) + '" aria-label="Remove ' + esc(ptitle(prim)) + ' from what is remembered">Remove</button>' : '') +
+      '<button type="button" class="rs-x" data-rs-forget>Forget these</button></p>';
+    h += '<p class="tw-say" role="status" aria-live="polite"></p>';
+    return { html: h, paths: [prim].concat(P.also).filter(Boolean).map(function (p) { return p.u; }).concat(step && step.path ? [step.path] : []) };
+  }
+
+  var panelRedraw = null;
   function welcome(sec, info, now) {
     if (root.style.visibility === 'hidden' || doc.querySelector('.tp-lock') || !hasHistory() || snoozed()) return;
     var intro = doc.querySelector('.h-intro'); if (!intro) return;
-    var step = bestStep(now, info), quick = intro.querySelector('.h-quick');
+    var quick = intro.querySelector('.h-quick');
     var panel = doc.createElement('section'); panel.className = 'tw-back'; panel.id = 'tw-back'; panel.setAttribute('aria-labelledby', 'tw-back-h');
-    panel.innerHTML = '<h2 class="tw-back-h" id="tw-back-h">Welcome back</h2>' +
-      '<p class="tw-step"><strong>' + esc(step.h) + '</strong><span>' + esc(step.d) + '</span></p>' +
-      '<p class="tw-go"><a class="tw-btn" href="' + esc(step.href) + '">' + esc(step.btn) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>' +
-      (installLine() || (step.small ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>')) +
-      '<p class="tw-say" role="status" aria-live="polite"></p>';
+    if (R()) { try { R().css(); } catch (e) {} }
+    function dedupe(paths) {   // a place shown here need not also show under "Pick up where you left off"
+      var box = doc.getElementById('pick-up'); if (!box || !paths.length) return;
+      Array.prototype.forEach.call(box.querySelectorAll('.h-resume-item'), function (a) {
+        var u = (a.getAttribute('href') || '').split('#')[0];
+        if (paths.indexOf(u) >= 0) { var li = a.closest('li'); if (li) li.remove(); }
+      });
+      if (!box.querySelector('.h-resume-item') && !box.classList.contains('is-tip')) box.hidden = true;
+    }
+    function draw(say) {
+      var out = panelHTML(now, info);
+      panel.innerHTML = out.html; dedupe(out.paths);
+      if (say) { var keep = panel.querySelector('.tw-say'); keep.textContent = say; keep.setAttribute('tabindex', '-1'); try { keep.focus({ preventScroll: true }); } catch (e) {} }
+    }
+    draw('');
+    panelRedraw = function () { if (panel.parentNode && R()) draw(''); };
     if (quick && quick.nextSibling) intro.insertBefore(panel, quick.nextSibling); else intro.appendChild(panel);
     intro.classList.add('has-tw');
     sec.classList.add('is-away');   // the card below stays out of sight while this panel is the block
-    // a chapter shown here need not also show under "Pick up where you left off"
-    if (step.path) {
-      var box = doc.getElementById('pick-up');
-      if (box) {
-        Array.prototype.forEach.call(box.querySelectorAll('.h-resume-item'), function (a) { if ((a.getAttribute('href') || '').split('#')[0] === step.path) { var li = a.closest('li'); if (li) li.remove(); } });
-        if (!box.querySelector('.h-resume-item') && !box.classList.contains('is-tip')) box.hidden = true;
+    function leave() { intro.classList.remove('has-tw'); sec.classList.remove('is-away'); }
+    panel.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('button'); if (!b) return;
+      if (b.hasAttribute('data-tw-notnow')) {
+        S.nn = ymd(new Date()); save();
+        panel.innerHTML = '<p class="tw-say" role="status" aria-live="polite" tabindex="-1">Okay. This stays quiet for a week.</p>';
+        leave();
+        var keep = panel.querySelector('.tw-say'); try { keep.focus({ preventScroll: true }); } catch (x) {}
+        setTimeout(function () { panel.remove(); }, 4000);
+      } else if (b.hasAttribute('data-rs-rm') || b.hasAttribute('data-rs-forget')) {
+        try { if (b.hasAttribute('data-rs-forget')) R().forget(); else R().remove(b.getAttribute('data-rs-rm')); } catch (x) {}
+        if (!hasHistory()) { panel.remove(); leave(); return; }
+        draw(b.hasAttribute('data-rs-forget') ? 'Done. Nothing is remembered now.' : 'Removed.');
       }
-    }
-    panel.querySelector('[data-tw-notnow]').addEventListener('click', function () {
-      S.nn = ymd(new Date()); save();
-      var keep = panel.querySelector('.tw-say');
-      panel.querySelector('.tw-step').remove(); panel.querySelector('.tw-go').remove();
-      Array.prototype.forEach.call(panel.querySelectorAll('.tw-install, .tw-small, .tw-back-h'), function (n) { n.remove(); });
-      keep.textContent = 'Okay. This stays quiet for a week.';
-      intro.classList.remove('has-tw'); sec.classList.remove('is-away');
-      keep.setAttribute('tabindex', '-1'); try { keep.focus({ preventScroll: true }); } catch (e) {}
-      setTimeout(function () { panel.remove(); }, 4000);
+    });
+  }
+
+  /* ---------------------------------------------------------------- /this-week.html: "Where you left off" */
+  function placesSection(sec) {
+    whenResume(function () {
+      var Q = R(); if (!Q || doc.getElementById('where-you-left-off')) return;
+      var host = doc.createElement('section'); host.className = 'rs-where tw-sec'; host.id = 'where-you-left-off'; host.setAttribute('aria-labelledby', 'rs-where-h');
+      function row(p) {
+        var open = !Q.isDone(p);
+        return '<li class="rs-row"><span class="rs-row-main"><strong class="rs-row-t">' + esc(ptitle(p)) + '</strong><span class="rs-row-d">' + esc(Q.detail(p)) + '</span></span>' +
+          '<span class="rs-row-acts"><a class="tw-btn' + (open ? '' : ' is-soft') + ' rs-go" href="' + esc(Q.href(p)) + '" aria-label="' + (open ? 'Continue: ' : 'Open: ') + esc(ptitle(p)) + '">' + (open ? 'Continue' : 'Open') + '</a>' +
+          '<button type="button" class="rs-x" data-rs-rm="' + esc(p.u) + '" aria-label="Remove ' + esc(ptitle(p)) + ' from what is remembered">Remove</button></span></li>';
+      }
+      function draw(say) {
+        var all = Q.visible();
+        if (!all.length) {
+          if (!say) { host.remove(); return; }
+          host.innerHTML = '<p class="rs-say" role="status" tabindex="-1">' + esc(say) + '</p>';
+          try { host.querySelector('.rs-say').focus({ preventScroll: true }); } catch (e) {}
+          setTimeout(function () { host.remove(); }, 5000); return;
+        }
+        host.innerHTML = '<h2 class="tw-sec-h" id="rs-where-h">Where you left off</h2>' +
+          '<p class="rs-lede">The last few places you were in, so you can pick up again. They are remembered on this device only, and nothing you type is kept.</p>' +
+          '<ul class="rs-list">' + all.map(row).join('') + '</ul>' +
+          '<p class="rs-foot"><button type="button" class="rs-x" data-rs-forget>Forget these</button></p>' +
+          '<p class="rs-fine">To stop this, turn on “Stop remembering pages I visit” or use Quiet mode. <a href="/on-this-device.html">Yours, on this device</a> shows what is kept.</p>' +
+          '<p class="rs-say" role="status" aria-live="polite" tabindex="-1">' + esc(say || '') + '</p>';
+        if (say) { try { host.querySelector('.rs-say').focus({ preventScroll: true }); } catch (e) {} }
+      }
+      draw('');
+      if (!host.firstChild) return;
+      Q.css();
+      sec.parentNode.insertBefore(host, sec);
+      host.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('button'); if (!b) return;
+        if (b.hasAttribute('data-rs-forget')) { Q.forget(); draw('Done. Nothing is remembered now.'); }
+        else if (b.hasAttribute('data-rs-rm')) { Q.remove(b.getAttribute('data-rs-rm')); draw('Removed.'); }
+      });
     });
   }
 
@@ -379,12 +494,13 @@
       var now = new Date(), info = weekInfo(now), host = sec.querySelector('[data-tw-card]') || sec;
       fillCard(host, info, { home: true, kicker: 'This week' });
       myWeekPush(host, now);
-      try { welcome(sec, info, now); } catch (e) {}
+      whenResume(function () { try { if (panelRedraw) panelRedraw(); else welcome(sec, info, now); } catch (e) {} });
     });
   }
 
   function start() {
     var home = doc.querySelector('[data-this-week="home"]'), page = doc.querySelector('[data-this-week="page"]');
+    if (home || page) resumeTag();
     if (home) initHome(home);
     if (page) initPage(page);
   }
@@ -393,6 +509,6 @@
   G.TOLThisWeek = {
     weekInfo: weekInfo, archive: archive, cardHTML: cardHTML, share: function (i) { return share(i || weekInfo(new Date())); },
     shareCurrent: function () { return share(weekInfo(new Date())); }, addLine: addLine, addToday: addToday, undoAdd: undoAdd,
-    needData: needData, shareInfo: shareInfo, bestStep: function () { return bestStep(new Date(), weekInfo(new Date())); }
+    needData: needData, shareInfo: shareInfo, whenResume: whenResume, bestStep: function () { return bestStep(new Date(), weekInfo(new Date())); }
   };
 })(typeof window !== 'undefined' ? window : globalThis);

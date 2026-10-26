@@ -2844,6 +2844,14 @@
     var pk = window.TOLPalsCam && window.TOLPalsCam.loadPacks ? window.TOLPalsCam.loadPacks().catch(function () {}) : Promise.resolve();
     Promise.all([loadEpisode(P.id), pk]).then(function (r) { ready(r[0]); });
     API._p = P; API._showEnd = showEnd;
+    // jump to a moment (seconds) and play from there; resume.js's "Resume at 4:12" button uses this
+    API.resumeAt = function (t) {
+      if (!P.dir || !(t >= 0)) return false;
+      if (P.th) endTheme(false);
+      endOv.hidden = true; startOv.hidden = true; P.started = true;
+      P.dir.seekTime(Math.min(t, Math.max(0, P.dir.total - 2))); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch;
+      renderChapter(); paint(0); progress(); play(); return true;
+    };
     API._music = function () { return { mood: AU.mood, cur: MF.cur, cue: MF.cue }; };
     API.record = recStart; API.stopRecording = recStop; API.recording = function () { return !!P.rec; }; API.recordSupported = recSupported;
     API.thumbnail = thumbnail; API.switchTo = function (id) { switchTo(id, false); }; API.shuffleNext = function () { switchTo(shufflePick(P.id), true); }; API._themeTick = function (dt) { themeTick(dt); }; API._startTheme = startTheme; // (for tests and the preview video)

@@ -83,7 +83,7 @@
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
     [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
-    ['tol-calm-try', 'calm'], ['tol-thisweek-v1', 'reading'], ['tol-sleepcam-pets-v1', 'sleepcam'], ['tol-sleepcam-mixes-v1', 'sleepcam'], ['tol-weather-v1', 'weather'], ['tol-week-v1', 'weather'], ['tol-prog01-v1', 'six'], ['tol-wpf-keep:', 'sheets'], ['tol-keep-off:', 'sheetset'],
+    ['tol-calm-try', 'calm'], ['tol-resume-v1', 'reading'], ['tol-emo-draft-v1', 'reading'], ['tol-thisweek-v1', 'reading'], ['tol-sleepcam-pets-v1', 'sleepcam'], ['tol-sleepcam-mixes-v1', 'sleepcam'], ['tol-weather-v1', 'weather'], ['tol-week-v1', 'weather'], ['tol-prog01-v1', 'six'], ['tol-wpf-keep:', 'sheets'], ['tol-keep-off:', 'sheetset'],
     ['tol-keepask-kept', 'sheetset'], ['tol-roots-v1', 'roots'], ['tol-wiring-card', 'wiring'],
     ['tol-wavelength-v1', 'wave'], ['tol-wavelength-people-v1', 'wave'], ['tol-heartprint-v1', 'wave'], ['tol-pawprint-v1', 'wave'],
     ['tol-lemonade-stand-v2', 'lemon'], ['tol-lemonade-quick', 'lemon'], ['tol-lemonade-mode', 'lemonset'],
