@@ -3,14 +3,14 @@
 #pillars: II, IV
 #blurb: Negotiation, de-escalation, repair, apology, mediation and fair process, from research and practice.
 #pillarnote: Conflict resolution sits across Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive. In you, it means knowing your own interests, your usual conflict style and your early signs of heat. Between you, it means turning a fight about who is right into a shared problem with a fair process, clear agreements and a way back. Timeouts and flooding belong to Pillar III, Read your state first, and fairness rules to Pillar I, See the whole load.
-#intro: Conflict isn’t a sign that something is broken. It is what happens when two people with real needs share a life, a house or a job. The fields of negotiation, mediation and couples research have learned a lot about how disagreements go well or badly. These entries gather the most useful ideas, from the first sentence of a hard conversation to the repair afterwards, and end with some common flashpoints: chores, money, time, family and work.
+#intro: Conflict isn’t a sign that something is broken. It is what happens when two people with real needs share a life, a house or a job. The fields of negotiation, mediation and couples research have learned a lot about how disagreements go well or badly. These entries gather the most useful ideas, from the first sentence of a hard conversation to the repair afterward, and end with some common flashpoints: chores, money, time, family and work.
 
 @@ conflict-is-normal | Why conflict is normal, and what makes it harmful
 pillars: II, IV
 aka: disagreement, arguing, is fighting normal, healthy conflict
 nut: Disagreement is a normal part of any close relationship. What tends to cause harm is not conflict itself but how it is handled: contempt, escalation, and conflicts that never get repaired or resolved.
 deep:
-It is easy to assume that happy couples, families or teams don’t argue. Research doesn’t support that. Many stable relationships have plenty of disagreement. What they tend to have alongside it is warmth, respect and a way back afterwards.
+It is easy to assume that happy couples, families or teams don’t argue. Research doesn’t support that. Many stable relationships have plenty of disagreement. What they tend to have alongside it is warmth, respect and a way back afterward.
 
 Conflict can even be useful. It brings hidden needs into the open, forces unfair arrangements to be renegotiated, and can leave people understanding each other better. Avoiding every disagreement can mean problems pile up unseen, which is one reason the program encourages writing things down early rather than waiting for an explosion.
 
@@ -51,7 +51,7 @@ pillars: II, I
 aka: separate the people from the problem, invent options, objective criteria, mutual gain
 nut: Getting to Yes sets out four principles: separate the people from the problem, focus on interests not positions, invent options for mutual gain, and use fair, objective criteria.
 deep:
-Separating the people from the problem means treating the relationship and the issue as two different things. You can be warm to the person and firm about the issue. At home, this sounds like “I love you, and I still need us to sort out the bins.”
+Separating the people from the problem means treating the relationship and the issue as two different things. You can be warm to the person and firm about the issue. At home, this sounds like “I love you, and I still need us to deal with the trash.”
 
 Inventing options means brainstorming before judging. Many disagreements are stuck because the first two ideas on the table were the only ones considered. Listing five or six possibilities, including silly ones, loosens things up.
 
@@ -76,7 +76,7 @@ nut: BATNA stands for “best alternative to a negotiated agreement”: what you
 deep:
 In business, a BATNA might be another supplier. In everyday life, it is the fallback: if we can’t agree who cooks on weekdays, the fallback might be simple meals, or taking turns by default. Thinking about the fallback in advance reduces panic and makes it easier to be generous.
 
-At home it is important to use the idea gently. The point isn’t to threaten (“fine, I’ll just stop cooking”). It is to notice that most household disagreements have reasonable fallbacks, which lowers the stakes. A sensible shared fallback can even be agreed in advance, like a default rota that applies whenever a week gets chaotic.
+At home it is important to use the idea gently. The point isn’t to threaten (“fine, I’ll just stop cooking”). It is to notice that most household disagreements have reasonable fallbacks, which lowers the stakes. A sensible shared fallback can even be agreed in advance, like a default schedule that applies whenever a week gets chaotic.
 
 It can also help to think about the other person’s alternatives. If their fallback is really poor (for example, they have no time at all on weekdays), that is information about what a fair deal needs to include.
 research:
@@ -260,7 +260,7 @@ nut: Kitchen-sinking means pulling every grievance into one argument. It makes t
 deep:
 When someone feels hurt, related memories come flooding in: “and last month you…,” “and your mother…” It is understandable, but each extra item widens the argument until nothing can be settled.
 
-A helpful habit is to name the topic at the start (“I want to talk about the school run on Thursdays”) and to park anything else that comes up on a list for later. Parking is not dismissing. It says “that matters too, and it deserves its own time.”
+A helpful habit is to name the topic at the start (“I want to talk about the school drop-off on Thursdays”) and to park anything else that comes up on a list for later. Parking is not dismissing. It says “that matters too, and it deserves its own time.”
 
 If old issues keep flooding into new arguments, that is itself information: there may be unresolved hurts that need their own conversation, possibly with help.
 research:
@@ -324,7 +324,7 @@ Non-apologies are familiar: “I’m sorry if you were offended,” “Mistakes 
 
 Timing matters too. An apology that comes before the hurt person has had a chance to explain how they feel can feel premature. Listening first, then apologizing, often works better.
 research:
-A 2016 study by Roy Lewicki, Beth Polin and Robert Lount tested six apology components and found acknowledgement of responsibility was rated most important, followed by an offer of repair, while a request for forgiveness mattered least. Cynthia Frantz and Courtney Bennigson (2005) found that apologies were more effective when they came later in a conversation, after the hurt person felt heard. These are experimental studies, often using written scenarios, so real-life effects may differ.
+A 2016 study by Roy Lewicki, Beth Polin and Robert Lount tested six apology components and found acknowledgment of responsibility was rated most important, followed by an offer of repair, while a request for forgiveness mattered least. Cynthia Frantz and Courtney Bennigson (2005) found that apologies were more effective when they came later in a conversation, after the hurt person felt heard. These are experimental studies, often using written scenarios, so real-life effects may differ.
 links:
 /check-ins.html#regroup | Check-ins: regrouping
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
@@ -402,7 +402,7 @@ In studies of courts, workplaces and families, people who felt heard were more a
 
 Fair process has a few recognizable features: everyone gets a say, the same rules apply to everyone, decisions are based on accurate information, there is a way to correct mistakes, and people are treated with dignity.
 
-At home, this suggests that how chores or money decisions are made matters as much as the split itself. A rota imposed by one person may be resented even if it is objectively fair; the same rota agreed together is more likely to hold.
+At home, this suggests that how chores or money decisions are made matters as much as the split itself. A schedule imposed by one person may be resented even if it is objectively fair; the same schedule agreed together is more likely to hold.
 research:
 John Thibaut and Laurens Walker introduced procedural justice research in 1975. Allan Lind and Tom Tyler developed it further, and Lind’s fairness heuristic theory (2001) suggests people use fair treatment as a shortcut for deciding whether to trust an authority or group. The effect of perceived procedural fairness on acceptance of outcomes is one of the more robust findings in social and organizational psychology.
 links:

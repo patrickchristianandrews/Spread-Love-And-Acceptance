@@ -315,7 +315,7 @@ A famous study found that parole judges granted fewer favorable rulings as sessi
 
 The jam study by Sheena Iyengar and Mark Lepper found shoppers were more likely to buy when offered six jams than twenty-four. Later meta-analyses found the “too much choice” effect averages close to zero, but appears under certain conditions, such as when options are hard to compare or people don’t know what they want.
 
-Whatever the precise mechanism, many people carrying the mental load describe exhaustion from constant small decisions: what’s for dinner, which plumber, what gift. Sharing decision-making, not just doing tasks, and creating defaults (like a weekly meal rota) can reduce the load.
+Whatever the precise mechanism, many people carrying the mental load describe exhaustion from constant small decisions: what’s for dinner, which plumber, what gift. Sharing decision-making, not just doing tasks, and creating defaults (like a weekly meal schedule) can reduce the load.
 research:
 Shai Danziger, Jonathan Levav and Liora Avnaim-Pesso published the parole study in 2011; Keren Weinshall-Margel and John Shapard challenged it. Iyengar and Lepper published the jam study in 2000. Benjamin Scheibehenne, Rainer Greifeneder and Peter Todd’s 2010 meta-analysis found a mean effect near zero; Alexander Chernev and colleagues (2015) identified conditions that make choice overload more likely.
 links:

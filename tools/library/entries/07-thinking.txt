@@ -294,7 +294,7 @@ nut: The availability heuristic means we judge how often something happens by ho
 deep:
 Amos Tversky and Daniel Kahneman showed that people estimate frequency by ease of recall. If you can quickly think of several times your partner was late, lateness feels constant, even if most times they were punctual.
 
-Last week’s argument is more available than last month’s calm. The one time the bins were forgotten is more vivid than the fifty times they weren’t. This skews conversations about patterns.
+Last week’s argument is more available than last month’s calm. The one time the trash was forgotten is more vivid than the fifty times they weren’t. This skews conversations about patterns.
 
 Records correct for this. A simple log of what happened over a month gives a more balanced picture than memory alone, and is kinder to both people.
 research:

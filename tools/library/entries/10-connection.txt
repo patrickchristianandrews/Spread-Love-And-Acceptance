@@ -47,10 +47,10 @@ talk:
 
 @@ capitalization | Responding to good news
 pillars: IV
-aka: capitalization, capitalisation, active constructive responding, sharing good news, celebrating together
+aka: capitalization, active constructive responding, sharing good news, celebrating together
 nut: How people respond when you share good news matters as much as how they respond to bad news. Enthusiastic, engaged responses (active-constructive) are linked with closer relationships.
 deep:
-Shelly Gable described four ways of responding to good news. Active-constructive: enthusiastic and engaged (“That’s brilliant! Tell me how it happened!”). Passive-constructive: quiet support (“That’s nice”). Active-destructive: pointing out downsides (“That’ll mean more work”). Passive-destructive: ignoring or changing the subject (“What’s for dinner?”).
+Shelly Gable described four ways of responding to good news. Active-constructive: enthusiastic and engaged (“That’s great! Tell me how it happened!”). Passive-constructive: quiet support (“That’s nice”). Active-destructive: pointing out downsides (“That’ll mean more work”). Passive-destructive: ignoring or changing the subject (“What’s for dinner?”).
 
 Only active-constructive responses were consistently associated with better relationships. The other three, even the mildly supportive one, left people feeling less understood.
 
@@ -205,7 +205,7 @@ talk:
 @@ savoring | Savoring good moments
 pillars: V, III
 aka: savoring, savoring, enjoying the moment, appreciating good times, Bryant
-nut: Savoring means deliberately noticing and extending good experiences, looking forward to them, enjoying them fully in the moment, and remembering them afterwards.
+nut: Savoring means deliberately noticing and extending good experiences, looking forward to them, enjoying them fully in the moment, and remembering them afterward.
 deep:
 Fred Bryant and Joseph Veroff described savoring as the positive counterpart to coping. Where coping deals with bad events, savoring amplifies good ones.
 
@@ -357,7 +357,7 @@ nut: Play isn’t just for children. Adults who make time for playful activity, 
 deep:
 Play is activity done for its own sake: games, jokes, silliness, creative projects. It often involves novelty and shared laughter, both of which support connection.
 
-Many adults find that play gets squeezed out by responsibilities. Yet playful moments can be small: a silly song while washing up, a quick game, a shared joke. They don’t need to be planned events.
+Many adults find that play gets squeezed out by responsibilities. Yet playful moments can be small: a silly song while doing the dishes, a quick game, a shared joke. They don’t need to be planned events.
 
 Play also has a place in conflict: playful teasing (when both enjoy it) and shared laughter can be powerful repair attempts. Research on playfulness in adults links it with relationship satisfaction.
 research:

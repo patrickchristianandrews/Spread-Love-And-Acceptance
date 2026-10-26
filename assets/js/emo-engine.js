@@ -398,7 +398,7 @@
   // the short description a screen reader gets for the picture
   function artAlt(S, nParts) {
     var m = moodOf(S), lead = m.fams[0], more = m.fams.slice(1, 3).map(lookOf);
-    return 'An abstract painting made from your answers, in a ' + moodWords(m).join(', ') + ' mood: ' + lookOf(lead) + (more.length ? ', layered with ' + list(more) : '') + '. It has ' + nParts + ' numbered part' + (nParts === 1 ? '' : 's') + '. The list below it describes each part in words.';
+    return 'An abstract painting made from your answers. Its mood reads as ' + list(moodWords(m)) + ': ' + lookOf(lead) + (more.length ? ', layered with ' + list(more) : '') + '. It has ' + nParts + ' numbered part' + (nParts === 1 ? '' : 's') + '. The list below it describes each part in words.';
   }
 
   /* ------------------------------------------------------------------ the picture: one part per thing the person said */
@@ -418,8 +418,9 @@
     }).sort(function (a, b) { return (b.w - a.w); });
     if (cant || !fams.length) fams.push({ id: 'cant', color: D.cantName.color, words: [], t: 'something without a name yet', edge: 'cloud', motif: 'mist', variant: null, w: 0.6, edgeSay: D.cantName.shape, poem: D.cantName.poem });
     var strength = n === null ? 5 : n;
-    var edgeLines = fams.map(function (x) { return cap(x.edgeSay.replace(/^(a|an|the) /, 'the ')).replace(/^The /, 'The ') + ': ' + (x.id === 'cant' ? 'a feeling you can’t name yet' : lc(x.t)) + '.'; });
-    edgeLines = fams.map(function (x, i) { var sh = x.edgeSay; return 'The ' + sh.replace(/^(a|an|the) /i, '') + ': ' + (x.id === 'cant' ? 'a feeling you can’t name yet' : lc(x.t)) + (i === 0 && fams.length > 1 ? ' (the strongest voice in the picture)' : '') + '.'; });
+    var edgeLines = fams.map(function (x) {
+      return 'The ' + x.edgeSay.replace(/^(a|an|the) /i, '') + ': ' + x.poem + ' (' + (x.id === 'cant' ? 'a feeling you can’t name yet' : lc(x.t) + (x.words.length ? ', ' + list(x.words.slice(0, 2)) : '')) + ').';
+    });
     el({ id: 'core', kind: 'core', title: 'The heart of the picture', fams: fams, n: strength, mood: mood,
       meaning: (fw.length ? 'How you feel right now: ' + feelPhrase(S) + '. ' : 'How you feel right now, even without a name for it. ') +
         (n !== null ? 'The strength you gave it, ' + n + ' out of 10, sets how bold and large it is. ' : 'You didn’t give it a strength, so it’s painted at a middle strength. ') + 'The mood of your answers (' + list(moodWords(mood)) + ') shapes the whole picture. ' + edgeLines.join(' '),

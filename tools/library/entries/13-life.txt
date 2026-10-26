@@ -215,7 +215,7 @@ Care for aging parents often falls unevenly among siblings: the one who lives cl
 
 The same tools that help households help here: listing all the tasks (appointments, finances, visits, calls), giving each an owner, and reviewing regularly. Siblings who live far away can own tasks that can be done remotely, like managing bills or researching services.
 
-For couples, a partner’s caring role changes the household. Talking about what has shifted, and adjusting other responsibilities, helps prevent the carer from being overwhelmed.
+For couples, a partner’s caring role changes the household. Talking about what has shifted, and adjusting other responsibilities, helps prevent the caregiver from being overwhelmed.
 research:
 Research on family caregiving, including meta-analyses by Martin Pinquart and Silvia Sörensen, finds that caregiving is associated with more stress, and that support from family matters. Research on sibling caregiving (for example by Jill Suitor and Karl Pillemer) finds that unequal division is common and linked to tension.
 links:
@@ -256,7 +256,7 @@ nut: Roommates face the same issues as couples, like chores, money, noise and gu
 deep:
 Roommate conflicts often grow from small things: dishes left in the sink, noise at night, a guest who stays too long. Without clear agreements, each person relies on their own assumptions.
 
-Agreements that help include a chore rota with clear owners, rules for shared costs, quiet hours, guest policies, and a regular short house meeting. Writing these down makes them fairer and easier to revisit.
+Agreements that help include a chore schedule with clear owners, rules for shared costs, quiet hours, guest policies, and a regular short house meeting. Writing these down makes them fairer and easier to revisit.
 
 Diffusion of responsibility is a particular risk in shared houses: when a job belongs to everyone, it belongs to no one. Assigning owners is especially helpful.
 research:

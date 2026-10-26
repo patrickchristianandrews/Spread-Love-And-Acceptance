@@ -256,7 +256,7 @@ pillars: IV
 aka: introvert, extravert, extrovert, social battery, needing alone time, recharging
 nut: Introversion and extraversion describe how people tend to respond to social stimulation. Extraverts often feel energized by company; introverts often need quiet to recharge. Most people are somewhere in between.
 deep:
-Introversion isn’t shyness (which is about social anxiety) or dislike of people. Introverts can enjoy company very much and still need time alone afterwards.
+Introversion isn’t shyness (which is about social anxiety) or dislike of people. Introverts can enjoy company very much and still need time alone afterward.
 
 In relationships, differences can be misread. An extravert may feel rejected when an introvert partner wants a quiet evening; the introvert may feel pressured by a full social calendar. Agreeing on a rhythm, such as some evenings in, some out, and recovery time after big events, helps.
 

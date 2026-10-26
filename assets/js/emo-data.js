@@ -28,7 +28,7 @@
     { id: 'sad', t: 'Sad or low', words: ['down', 'disappointed', 'discouraged', 'grieving', 'heavy-hearted', 'hopeless'], color: '#2F6BFF', edge: 'droop', motif: 'drip',
       mood: { turb: 0.32, energy: 0.2, open: 0.3, weight: 0.88 }, shape: 'tall blue verticals and slow drips', poem: 'the heaviness that keeps pouring down, with one warm light still on', look: 'tall deep-blue verticals and slow drips, with one warm glow' },
     { id: 'anxious', t: 'Worried or anxious', words: ['nervous', 'on edge', 'uneasy', 'dread', 'insecure', 'panicky'], color: '#FFB400', edge: 'tremble', motif: 'shatter',
-      mood: { turb: 0.88, energy: 0.82, open: 0.22, weight: 0.5 }, shape: 'dense crossing lines and sharp fragments', poem: 'the mind that will not stop checking and rechecking', look: 'dense crossing lines and sharp fragments in electric color' },
+      mood: { turb: 0.88, energy: 0.82, open: 0.22, weight: 0.5 }, shape: 'dense crossing lines and sharp fragments', poem: 'the mind that keeps checking and rechecking', look: 'dense crossing lines and sharp fragments in electric color' },
     { id: 'angry', t: 'Angry or irritated', words: ['annoyed', 'frustrated', 'resentful', 'impatient', 'fed up', 'bitter'], color: '#E8203A', edge: 'spiky', motif: 'slash',
       mood: { turb: 0.9, energy: 0.9, open: 0.35, weight: 0.62 }, shape: 'bold diagonal slashes of red and orange', poem: 'the irritation that keeps cutting in', look: 'bold diagonal red and orange slashes against deep cobalt' },
     { id: 'over', t: 'Overwhelmed', words: ['swamped', 'scattered', 'stretched thin', 'frozen', 'behind on everything'], color: '#7B3FF2', edge: 'rings', motif: 'shatter',

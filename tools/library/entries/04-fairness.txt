@@ -216,7 +216,7 @@ pillars: II, V
 aka: weaponized incompetence, strategic incompetence, pretending not to know how, doing it badly on purpose
 nut: “Weaponized incompetence” is a popular term for doing a task badly so you won’t be asked again. It names something real, but it is not a research concept, and it is often a misreading of inexperience or mismatched standards.
 deep:
-The idea spread on social media: someone shrinks the jumper in the wash, and so never gets asked to do the laundry again. It resonated because many people have experienced tasks drifting back to them.
+The idea spread on social media: someone shrinks the sweater in the wash, and so never gets asked to do the laundry again. It resonated because many people have experienced tasks drifting back to them.
 
 But it is worth being careful with the label. Often what looks deliberate is actually inexperience (the person hasn’t built the skill), unclear standards (nobody said how it should be done), or gatekeeping (their attempts were corrected until they stopped trying). Assigning bad intent tends to make conversations defensive.
 
@@ -273,7 +273,7 @@ talk:
 
 @@ appreciation-and-recognition | Recognition and appreciation
 pillars: V, I
-aka: feeling appreciated, recognition, being thanked, unappreciated, acknowledgement
+aka: feeling appreciated, recognition, being thanked, unappreciated, acknowledgment
 nut: Feeling that your contributions are seen and valued is one of the strongest predictors of feeling that things are fair. Recognition costs little and changes a lot.
 deep:
 People often put up with a lot of work when they feel appreciated for it. The same load, unacknowledged, feels much heavier. Recognition can be a thank-you, a specific comment (“I noticed you sorted the car insurance, thank you”), or simply the other person knowing what was done.

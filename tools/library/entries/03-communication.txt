@@ -80,7 +80,7 @@ Invalidation is the opposite: “You’re overreacting,” “It’s not a big d
 research:
 Linehan developed the concept within dialectical behavior therapy in the 1990s, and wrote about levels of validation in 1997. Laboratory studies, including one by Chad Shenk and Alan Fruzzetti (2011), found that being validated during a stressful task was associated with lower negative emotion and lower physiological arousal than being invalidated. The broader idea connects with research on perceived responsiveness in relationships.
 links:
-/check-ins-in-depth.html#acknowledge | Check-ins: acknowledgement
+/check-ins-in-depth.html#acknowledge | Check-ins: acknowledgment
 /wired-differently.html#double-empathy | Wired Differently: feeling understood across differences
 talk:
 - What is something you say to reassure that might land as invalidating?
@@ -253,7 +253,7 @@ pillars: IV
 aka: complaining, criticism, how to complain, raising a problem
 nut: A complaint is about a specific behavior; criticism is about the person’s character. Complaints are healthy and necessary. Criticism tends to make people defensive.
 deep:
-“I was frustrated that the bins weren’t taken out last night” is a complaint. “You never take responsibility for anything” is criticism. The first can be solved; the second invites a defense.
+“I was frustrated that the trash wasn’t taken out last night” is a complaint. “You never take responsibility for anything” is criticism. The first can be solved; the second invites a defense.
 
 Words like “always” and “never,” and phrases like “what kind of person…”, usually signal criticism. They turn one event into a verdict.
 

@@ -52,7 +52,7 @@ nut: When responsibility is shared among several people, each person feels less 
 deep:
 John Darley and Bibb Latané found that people were less likely to help in an emergency when they believed others were also present. Each person assumed someone else would act. They called this diffusion of responsibility.
 
-The same dynamic appears in everyday life. In a shared house, the bin that “everyone” should empty is often left overflowing. In a family, the task “we” need to do slips until one person, often the same one each time, gives in and does it.
+The same dynamic appears in everyday life. In a shared house, the trash can that “everyone” should empty is often left overflowing. In a family, the task “we” need to do slips until one person, often the same one each time, gives in and does it.
 
 Naming a specific person as responsible counters this. It isn’t about blame; it is about making sure someone clearly feels the job is theirs.
 research:
@@ -275,7 +275,7 @@ Walter Shewhart and W. Edwards Deming developed the cycle in the twentieth centu
 
 At home, this takes pressure off decisions. Instead of arguing about the perfect chore system, try one for two weeks, then review. If it doesn’t work, adjust. Nobody has to be right in advance.
 
-Framing changes as experiments also makes them easier to agree to. “Let’s try it for a fortnight” is less threatening than “this is how it will be.”
+Framing changes as experiments also makes them easier to agree to. “Let’s try it for two weeks” is less threatening than “this is how it will be.”
 research:
 Deming popularized the cycle from the 1950s. PDSA is widely used in healthcare quality improvement. A 2014 systematic review by Michael Taylor and colleagues found that many healthcare projects claiming to use PDSA didn’t follow it fully, suggesting it is easy to name and harder to do well.
 links:
@@ -291,7 +291,7 @@ pillars: II
 aka: five whys, root cause, root cause analysis, why does this keep happening
 nut: The five whys is a simple technique from Toyota: when something goes wrong, ask “why?” repeatedly to move from the surface problem to an underlying cause. It is useful but can oversimplify.
 deep:
-Suppose the bins weren’t taken out. Why? Nobody remembered. Why? It wasn’t on anyone’s list. Why? We never assigned it. Why? It used to be done by someone who moved out. The fix is now clear: assign an owner.
+Suppose the trash wasn’t taken out. Why? Nobody remembered. Why? It wasn’t on anyone’s list. Why? We never assigned it. Why? It used to be done by someone who moved out. The fix is now clear: assign an owner.
 
 The technique helps move conversations from blame to systems. Most recurring problems have causes in how things are set up.
 

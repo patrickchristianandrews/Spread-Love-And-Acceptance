@@ -211,7 +211,7 @@ pillars: I, III
 aka: expressive writing, journaling, diary, writing about feelings, Pennebaker
 nut: Writing about thoughts and feelings for a short time over a few days has been studied since the 1980s. The effects on wellbeing are real but small on average, and vary a lot between people and settings.
 deep:
-James Pennebaker asked people to write for about fifteen to twenty minutes on a few consecutive days about difficult experiences. Many reported feeling better afterwards, and some studies found other benefits. The idea is that putting experiences into words helps people organize and make sense of them.
+James Pennebaker asked people to write for about fifteen to twenty minutes on a few consecutive days about difficult experiences. Many reported feeling better afterward, and some studies found other benefits. The idea is that putting experiences into words helps people organize and make sense of them.
 
 Writing also has a simpler benefit: it creates a record. Memories shift and blur, especially around conflict. A few notes written at the time capture what happened before it turns into a story.
 
