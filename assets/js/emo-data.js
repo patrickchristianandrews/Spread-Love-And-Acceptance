@@ -19,21 +19,41 @@
   var D = {};
 
   /* ------------------------------------------------------------------ feelings */
-  // color: a suggestion only (people change it in the picture); edge: how the picture draws the shape's outline
+  // color: the hero color of the family's part of the picture, a suggestion only (people change it in the picture).
+  // mood: how the feeling reads in the picture, each 0 to 1: turb (calm to turbulent), energy (slow to quick),
+  //   open (closed in to open), weight (light to heavy). motif: which kind of painted shapes it brings.
+  // shape / poem: the legend line, "The tall verticals and slow drips: the heaviness that keeps pouring down."
+  // look: the same thing in a few words for the picture's description.   edge / edgeSay: kept from the earlier drawing.
   D.families = [
-    { id: 'sad', t: 'Sad or low', words: ['down', 'disappointed', 'discouraged', 'grieving', 'heavy-hearted', 'hopeless'], color: '#6F8FB8', edge: 'droop', edgeSay: 'soft, heavy-bottomed edge' },
-    { id: 'anxious', t: 'Worried or anxious', words: ['nervous', 'on edge', 'uneasy', 'dread', 'insecure', 'panicky'], color: '#C9A43B', edge: 'tremble', edgeSay: 'fine, trembling edge with faint rings' },
-    { id: 'angry', t: 'Angry or irritated', words: ['annoyed', 'frustrated', 'resentful', 'impatient', 'fed up', 'bitter'], color: '#C8553D', edge: 'spiky', edgeSay: 'spiky edge' },
-    { id: 'over', t: 'Overwhelmed', words: ['swamped', 'scattered', 'stretched thin', 'frozen', 'behind on everything'], color: '#8C6BB1', edge: 'rings', edgeSay: 'overlapping rings' },
-    { id: 'numb', t: 'Numb or flat', words: ['blank', 'disconnected', 'empty', 'bored', 'going through the motions'], color: '#9C9C96', edge: 'flat', edgeSay: 'smooth, muted shape' },
-    { id: 'lonely', t: 'Lonely', words: ['left out', 'misunderstood', 'unseen', 'homesick', 'isolated'], color: '#5F9598', edge: 'drift', edgeSay: 'shape drifting a little apart' },
-    { id: 'hurt', t: 'Hurt', words: ['let down', 'rejected', 'embarrassed', 'betrayed', 'taken for granted'], color: '#C27A93', edge: 'crack', edgeSay: 'shape with a fine crack' },
-    { id: 'guilt', t: 'Guilty or ashamed', words: ['regretful', 'not good enough', 'like a burden', 'exposed'], color: '#8A7456', edge: 'dense', edgeSay: 'dense, darker center' },
-    { id: 'tired', t: 'Worn out', words: ['drained', 'burned out', 'foggy', 'sleepy', 'running on fumes'], color: '#8E9BAA', edge: 'soft', edgeSay: 'faded, soft edge' },
-    { id: 'restless', t: 'Restless', words: ['antsy', 'keyed up', 'can’t settle', 'jittery'], color: '#D2843F', edge: 'scatter', edgeSay: 'shape with small sparks around it' },
-    { id: 'okay', t: 'Okay or calm', words: ['content', 'relieved', 'grateful', 'hopeful', 'peaceful'], color: '#77A784', edge: 'glow', edgeSay: 'soft glow' }
+    { id: 'sad', t: 'Sad or low', words: ['down', 'disappointed', 'discouraged', 'grieving', 'heavy-hearted', 'hopeless'], color: '#2F6BFF', edge: 'droop', motif: 'drip',
+      mood: { turb: 0.32, energy: 0.2, open: 0.3, weight: 0.88 }, shape: 'tall blue verticals and slow drips', poem: 'the heaviness that keeps pouring down, with one warm light still on', look: 'tall deep-blue verticals and slow drips, with one warm glow' },
+    { id: 'anxious', t: 'Worried or anxious', words: ['nervous', 'on edge', 'uneasy', 'dread', 'insecure', 'panicky'], color: '#FFB400', edge: 'tremble', motif: 'shatter',
+      mood: { turb: 0.88, energy: 0.82, open: 0.22, weight: 0.5 }, shape: 'dense crossing lines and sharp fragments', poem: 'the mind that will not stop checking and rechecking', look: 'dense crossing lines and sharp fragments in electric color' },
+    { id: 'angry', t: 'Angry or irritated', words: ['annoyed', 'frustrated', 'resentful', 'impatient', 'fed up', 'bitter'], color: '#E8203A', edge: 'spiky', motif: 'slash',
+      mood: { turb: 0.9, energy: 0.9, open: 0.35, weight: 0.62 }, shape: 'bold diagonal slashes of red and orange', poem: 'the irritation that keeps cutting in', look: 'bold diagonal red and orange slashes against deep cobalt' },
+    { id: 'over', t: 'Overwhelmed', words: ['swamped', 'scattered', 'stretched thin', 'frozen', 'behind on everything'], color: '#7B3FF2', edge: 'rings', motif: 'shatter',
+      mood: { turb: 0.82, energy: 0.62, open: 0.18, weight: 0.84 }, shape: 'layers piling on layers, with rings that overlap', poem: 'too much arriving all at once', look: 'layers piling on layers, with overlapping rings' },
+    { id: 'numb', t: 'Numb or flat', words: ['blank', 'disconnected', 'empty', 'bored', 'going through the motions'], color: '#8E9AC8', edge: 'flat', motif: 'field',
+      mood: { turb: 0.08, energy: 0.08, open: 0.25, weight: 0.5 }, shape: 'large, quiet fields of color with one bright thread', poem: 'the stillness where feeling went quiet, and the one thin line that is still awake', look: 'large quiet fields of color with one bright thread' },
+    { id: 'lonely', t: 'Lonely', words: ['left out', 'misunderstood', 'unseen', 'homesick', 'isolated'], color: '#00B3A4', edge: 'drift', motif: 'void',
+      mood: { turb: 0.28, energy: 0.25, open: 0.35, weight: 0.6 }, shape: 'a wide, open field with one small light far away', poem: 'all that space, and one small light at the edge of it', look: 'a wide open field with one small light far away' },
+    { id: 'hurt', t: 'Hurt', words: ['let down', 'rejected', 'embarrassed', 'betrayed', 'taken for granted'], color: '#FF4F9A', edge: 'crack', motif: 'fracture',
+      mood: { turb: 0.55, energy: 0.4, open: 0.35, weight: 0.7 }, shape: 'a rose-colored field split by a thin gold crack', poem: 'the place that was cut, and the gold that is already seeping into it', look: 'a rose and violet field split by a thin gold crack' },
+    { id: 'guilt', t: 'Guilty or ashamed', words: ['regretful', 'not good enough', 'like a burden', 'exposed'], color: '#C21FB5', edge: 'dense', motif: 'weight',
+      mood: { turb: 0.5, energy: 0.28, open: 0.12, weight: 0.9 }, shape: 'dense, pressing shapes that darken toward the middle', poem: 'the weight you keep pressing on yourself, with one ember underneath', look: 'dense plum and crimson shapes pressing in, with one ember at the middle' },
+    { id: 'tired', t: 'Worn out', words: ['drained', 'burned out', 'foggy', 'sleepy', 'running on fumes'], color: '#38B6FF', edge: 'soft', motif: 'wash',
+      mood: { turb: 0.15, energy: 0.08, open: 0.4, weight: 0.72 }, shape: 'wide, sagging washes of blue and lavender', poem: 'the tiredness that sits under everything', look: 'wide sagging washes of blue, lavender and pink' },
+    { id: 'restless', t: 'Restless', words: ['antsy', 'keyed up', 'can’t settle', 'jittery'], color: '#FF6A13', edge: 'scatter', motif: 'burst',
+      mood: { turb: 0.72, energy: 0.88, open: 0.6, weight: 0.18 }, shape: 'scattered sparks and quick, jittery strokes', poem: 'the energy with nowhere to land yet', look: 'scattered sparks and quick strokes of orange, yellow and turquoise' },
+    { id: 'okay', t: 'Okay or calm', words: ['content', 'relieved', 'grateful', 'hopeful', 'peaceful'], color: '#2BC36B', edge: 'glow', motif: 'wash',
+      mood: { turb: 0.1, energy: 0.4, open: 0.85, weight: 0.14 }, shape: 'wide, glowing washes that run from cool to warm', poem: 'the steadier ground, and a little light on it', look: 'wide glowing washes that run from cool blue to warm peach' }
   ];
-  D.cantName = { id: 'cant', t: 'I can’t name it', color: '#B3A996' };
+  D.families.forEach(function (f) { f.edgeSay = f.shape; });
+  // when "Okay or calm" comes with real lift (strong, or words like hopeful and grateful), the picture bursts into color instead
+  D.joy = { id: 'okay', shape: 'bursting rings and confetti-like petals of warm color', poem: 'the lift of something good', look: 'bursting rings and confetti-like petals in warm yellow, pink and turquoise',
+    mood: { turb: 0.3, energy: 0.85, open: 0.95, weight: 0.08 }, words: ['grateful', 'hopeful', 'content'] };
+  D.cantName = { id: 'cant', t: 'I can’t name it', color: '#9B8CFF', motif: 'mist', mood: { turb: 0.35, energy: 0.3, open: 0.5, weight: 0.45 },
+    shape: 'soft, overlapping veils with a dotted edge', poem: 'a feeling that has no name yet, and does not need one', look: 'soft overlapping veils of pearl, lilac and aqua' };
 
   /* ------------------------------------------------------------------ stages */
   D.stages = [
@@ -377,8 +397,9 @@
     clear: 'knowing what to do next', capable: 'feeling capable again', fun: 'some fun', fair: 'things feeling fair', space: 'room to breathe'
   };
 
-  /* ------------------------------------------------------------------ colors people can pick from (calm, all readable) */
-  D.swatches = ['#6F8FB8', '#5F9598', '#77A784', '#A9B86B', '#C9A43B', '#D2843F', '#C8553D', '#C27A93', '#8C6BB1', '#8A7456', '#9C9C96', '#3F5A7A'];
+  /* ------------------------------------------------------------------ colors people can pick from (bright, and each one readable as a swatch) */
+  D.swatches = ['#2F6BFF', '#38B6FF', '#00B3A4', '#2BC36B', '#A6D61F', '#FFB400', '#FF6A13', '#FF6F61', '#E8203A', '#FF4F9A', '#C21FB5', '#7B3FF2', '#1E2FA8', '#8E9AC8'];
+  D.swatchNames = ['Blue', 'Sky', 'Teal', 'Green', 'Lime', 'Gold', 'Orange', 'Coral', 'Red', 'Rose', 'Magenta', 'Purple', 'Navy', 'Silver'];
 
   /* ------------------------------------------------------------------ the always-there links */
   D.links = [
