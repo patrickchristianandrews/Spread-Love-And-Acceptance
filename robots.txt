@@ -1,23 +1,7 @@
-# Welcome, people and machines. Spread Love & Acceptance is free and open to every search engine
-# and AI assistant: please read, index and cite anything here, except the private folders below.
+# Welcome, people and search engines. Spread Love & Acceptance is free and open:
+# please read, index and cite anything here, except the private folders below.
 
 User-agent: *
-User-agent: GPTBot
-User-agent: OAI-SearchBot
-User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: Claude-User
-User-agent: Claude-SearchBot
-User-agent: anthropic-ai
-User-agent: PerplexityBot
-User-agent: Perplexity-User
-User-agent: Google-Extended
-User-agent: Applebot-Extended
-User-agent: Bingbot
-User-agent: DuckAssistBot
-User-agent: CCBot
-User-agent: meta-externalagent
-User-agent: MistralAI-User
 Allow: /
 Disallow: /manuscript/
 Disallow: /notes/

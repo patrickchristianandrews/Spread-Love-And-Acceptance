@@ -36,7 +36,7 @@ Key facts:
 - [Ways In: Everything Is Free and Open](https://spreadloveandacceptance.com/ways-in.html): Everything here is free, with no account, no sign-up and no paid version. Email updates are optional.
 - [Week 0: A Gentle Start to the Six Weeks](https://spreadloveandacceptance.com/week-0.html): Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.
 - [What’s new](https://spreadloveandacceptance.com/whats-new.html): Everything newly added to the site, and everything that’s grown: new pages, new games, new sounds, and parts of the program that go deeper than before.
-- [Why Use This Instead of an Article or an AI Chat?](https://spreadloveandacceptance.com/why-this-site.html): What this free site does differently from articles and AI chats: agreements you both keep, both sides by design, private, and honest about its limits.
+- [Why Use This Instead of Reading an Article?](https://spreadloveandacceptance.com/why-this-site.html): What this free site does differently from articles: agreements you both keep, both sides by design, private, and honest about its limits.
 
 ## Guides to common questions
 - [How to Apologize So It Lands: The Apology Languages](https://spreadloveandacceptance.com/apology-languages.html): The five apology languages as a menu of what makes a good apology, what research says works best, words to use and how to ask what helps. Free.
@@ -75,7 +75,6 @@ Key facts:
 - [The 2-minute snapshot](https://spreadloveandacceptance.com/snapshot/snapshot-diagnostic-snapshot-interactive.html): Seven quick questions about how a shared load is set up and how it bends under pressure. You get one of four areas, the scoring shown openly.
 - [Are Your Rhythms in Step? Frequency Calibration](https://spreadloveandacceptance.com/tools/frequency-calibration.html): A worksheet for two people to map their rhythms for money, rest, decisions, check-ins and recovery, and see where they match and where they drift apart.
 - [Frequency Sync Visualizer](https://spreadloveandacceptance.com/tools/frequency-sync-visualizer.html): A calm picture of two rhythms drifting into step: the idea behind the 90-second daily check-in (WP-13).
-- [Soften a Tense Moment, Level 2: The Full Toolkit](https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html): Level 2 of “Soften a tense moment”: a plan builder that turns your state, their state, the situation and the relationship into a printable plan, plus five.
 - [Soften a Tense Moment, Level 1: The Introduction](https://spreadloveandacceptance.com/tools/soften-a-tense-moment.html): Level 1 of “Soften a tense moment”: settle yourself first, read the state someone else is in (wound up, shut down or scattered).
 - [Turning Toward: 7 Small Habits for Closer Relationships](https://spreadloveandacceptance.com/turning-toward.html): Connection grows in small moments. Seven simple habits for love and appreciation: notice when someone reaches for you, say specific thanks, repair gently.
 - [Wavelength: A 2-Minute Quiz on How You Talk and Listen](https://spreadloveandacceptance.com/wavelength.html): A free two-minute quiz on how you like to talk and listen. Get your four-letter Wave Code, compare it with someone and make a card for work. Free.
@@ -182,7 +181,7 @@ Key facts:
 - [Chapter 11: Healing after hurt](https://spreadloveandacceptance.com/book/understanding-11-healing.html): How hurt heals: repair after small ruptures, apologies that land, what forgiveness is and is not, and rebuilding trust.
 - [Chapter 12: Helping others well](https://spreadloveandacceptance.com/book/understanding-12-helping.html): How to help without taking over: ask what help is wanted, listen first, keep kind limits, help in a crisis, and look after yourself so you last.
 - [Anger: What It’s For and What to Do, Chapter 13](https://spreadloveandacceptance.com/book/understanding-13-anger.html): What anger is for, what it does in the body, steps for the hot minutes, why venting backfires, how to repair, and when anger becomes harm.
-- [Personality and Temperament: Chapter 14](https://spreadloveandacceptance.com/book/understanding-14-personality.html): Personality as dials, not boxes: the Big Five, temperament, introverts and extraverts, how people change with age, and living with different people.
+- [Personality and Temperament: Chapter 14](https://spreadloveandacceptance.com/book/understanding-14-personality.html): Personality as sliders, not boxes: the Big Five, temperament, introverts and extraverts, how people change with age, and living with different people.
 - [Closeness and Love: How Intimacy Grows, Chapter 15](https://spreadloveandacceptance.com/book/understanding-15-love.html): How closeness grows: love in many forms, intimacy as being known, feeling understood, attachment in adult love, and love across ages and relationships.
 - [Worry, Low Mood and Trauma: Chapter 16](https://spreadloveandacceptance.com/book/understanding-16-worry.html): How worry and anxiety work, low mood versus depression, what trauma is and isn’t, what helps day to day, and how to support someone.
 - [Fitting In: Groups, Influence and Culture, Chapter 17](https://spreadloveandacceptance.com/book/understanding-17-groups.html): Why fitting in pulls so hard: conformity, obedience, us and them, norms, family culture, groups online, and how to stay yourself and disagree kindly.
@@ -209,7 +208,7 @@ Key facts:
 - [The Book at a Glance: Where to Start](https://spreadloveandacceptance.com/book/topic-start-here.html): The whole book in short paragraphs, one per part and chapter, on your own or with others, with the best first steps and tools to start with.
 - [The Book on Talking It Through](https://spreadloveandacceptance.com/book/topic-talk-it-through.html): Every part of the book about talking kindly, cut down to just that: getting back in tune, reading your own state.
 - [Understanding People: How Feelings, Stress and Trust Work](https://spreadloveandacceptance.com/book/understanding.html): Part Three of the free book on one page: seventeen short chapters on how feelings, stress, trust, change, grief, anger and love work. No sign-up.
-- [The Whole Book on One Page (Short Versions)](https://spreadloveandacceptance.com/book/whole.html): Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.
+- [The Whole Book on One Page (Book Text)](https://spreadloveandacceptance.com/book/whole.html): Every chapter of the book, in order, on one page: read straight through, search it or print it. Free to read, with no account.
 
 ## Psychology in plain words, philosophy and further reading
 - [The Frequency Framework: Getting Back in Step](https://spreadloveandacceptance.com/frequency-framework.html): Two people can each run on their own rhythm for money, rest, decisions, talking and values.
