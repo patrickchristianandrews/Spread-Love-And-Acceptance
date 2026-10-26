@@ -346,91 +346,151 @@
     return { items: out, removed: removed, aside: map.aside };
   }
 
+  /* ------------------------------------------------------------------ the mood of the picture */
+  // The picture is an abstract painting whose look follows a simple mood read from the answers:
+  //   turb (calm 0 to turbulent 1), energy (slow to quick), open (closed in to open), weight (light to heavy),
+  //   amp (how bold: from the 0 to 10 strength), and the feelings that lead it, strongest first.
+  // It is an interpretive picture of what the person said, never a measurement.
+  function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  function joyOf(S) {
+    var n = num(S, 's_int'), w = picked(S, 's_words'), sc = 0, en = num(S, 'd_energy');
+    if (n !== null && n >= 6) sc += 0.5;
+    if (w.indexOf('okay:grateful') >= 0 || w.indexOf('okay:hopeful') >= 0) sc += 0.35;
+    if (has(S, 's_good:laugh')) sc += 0.25;
+    if (en !== null && en >= 7) sc += 0.2;
+    return sc >= 0.5;
+  }
+  function moodOf(S) {
+    var fw = feelWords(S), n = num(S, 's_int'), it = n === null ? 0.5 : n / 10, list = [];
+    fw.forEach(function (x, i) {
+      var f = FAM[x.id], joy = x.id === 'okay' && joyOf(S), src = joy ? D.joy : f;
+      list.push({ id: x.id, motif: joy ? 'burst' : f.motif, variant: joy ? 'joy' : null, mood: src.mood, w: 1 + 0.45 * Math.min(3, x.words.length), i: i });
+    });
+    if (has(S, 's_feel:cant') || !list.length) list.push({ id: 'cant', motif: D.cantName.motif, variant: null, mood: D.cantName.mood, w: list.length ? 0.6 : 1, i: 99 });
+    list.sort(function (a, b) { return (b.w - a.w) || (a.i - b.i); });
+    list = list.slice(0, 4);
+    var tw = 0, m = { turb: 0, energy: 0, open: 0, weight: 0 };
+    list.forEach(function (x, i) { var w = x.w * (i ? 0.8 : 1.15); tw += w; for (var k in m) m[k] += x.mood[k] * w; });
+    for (var k in m) m[k] /= tw;
+    m.turb *= 0.65 + 0.7 * it; m.energy *= 0.7 + 0.6 * it;
+    // what else the answers say
+    var en = num(S, 'd_energy'); if (en !== null) m.energy = m.energy * 0.65 + (en / 10) * 0.35;
+    m.energy -= Math.min(0.15, bodyLow(S).length * 0.04);
+    var bd = picked(S, 's_body');
+    if (bd.indexOf('heavy') >= 0) { m.weight += 0.12; m.energy -= 0.05; }
+    if (bd.indexOf('chest') >= 0 || bd.indexOf('buzz') >= 0) { m.turb += 0.08; m.energy += 0.06; }
+    if (bd.indexOf('tears') >= 0) m.weight += 0.05;
+    var dur = val(S, 's_dur'); if (dur === 'month') m.weight += 0.08; else if (dur === 'comes') m.turb += 0.05;
+    var ld = num(S, 'd_load'); if (ld !== null && ld >= 8) { m.turb += 0.08; m.weight += 0.06; }
+    var good = picked(S, 's_good').filter(function (g) { return D.good[g]; }).length;
+    m.open += Math.min(0.18, good * 0.06) + (picked(S, 's_wish').length || txt(S, 's_wish') ? 0.08 : 0) - (has(S, 's_good:hard') ? 0.1 : 0);
+    for (var j in m) m[j] = clamp(m[j], 0, 1);
+    m.amp = 0.55 + 0.65 * it; m.fams = list.map(function (x) { return { id: x.id, motif: x.motif, variant: x.variant, w: x.w }; });
+    return m;
+  }
+  function moodWords(m) {
+    var w = [m.turb < 0.28 ? 'calm' : m.turb < 0.55 ? 'unsettled' : 'turbulent', m.energy < 0.3 ? 'slow' : m.energy > 0.65 ? 'energetic' : 'steady'];
+    if (m.weight > 0.65) w.push('heavy'); else if (m.weight < 0.3) w.push('light');
+    w.push(m.open > 0.65 ? 'open' : m.open < 0.3 ? 'closed in' : 'partly open');
+    return w;
+  }
+  function lookOf(x) { return x.id === 'cant' ? D.cantName.look : (x.variant === 'joy' ? D.joy.look : FAM[x.id].look); }
+  // the short description a screen reader gets for the picture
+  function artAlt(S, nParts) {
+    var m = moodOf(S), lead = m.fams[0], more = m.fams.slice(1, 3).map(lookOf);
+    return 'An abstract painting made from your answers, in a ' + moodWords(m).join(', ') + ' mood: ' + lookOf(lead) + (more.length ? ', layered with ' + list(more) : '') + '. It has ' + nParts + ' numbered part' + (nParts === 1 ? '' : 's') + '. The list below it describes each part in words.';
+  }
+
   /* ------------------------------------------------------------------ the picture: one part per thing the person said */
-  var STONE_COLORS = ['#8C7B6B', '#7E8A84', '#A08C72', '#9A8296', '#8D8F6E', '#A38672', '#7F8799', '#96806E'];
+  var STONE_COLORS = ['#3B2EA8', '#B3126B', '#007F86', '#D1380C', '#1F4FD8', '#6A1BB5', '#0F8A5F', '#C2185B'];
   function buildArt(S, fin) {
     var els = [], ids = {}; fin.items.forEach(function (x) { ids[x.id] = x; });
-    var F = factorScores(S);
+    var F = factorScores(S), mood = moodOf(S);
     function f(fid) { return ids['f:' + fid] ? F[fid] : null; }
     function why(fid) { var x = ids['f:' + fid]; return x ? x.why : []; }
     function el(o) { els.push(o); }
-    // the center: the feeling
+    // the center: the feeling, strongest first
     var fw = ids['c:feel'] ? feelWords(S) : [], n = ids['c:int'] ? num(S, 's_int') : null, cant = has(S, 's_feel:cant') && !!ids['c:feel'];
-    var fams = fw.map(function (x) { return { id: x.id, color: x.color, words: x.words, t: x.t, edge: FAM[x.id].edge, edgeSay: FAM[x.id].edgeSay }; });
-    if (cant || !fams.length) fams.push({ id: 'cant', color: D.cantName.color, words: [], t: 'something without a name yet', edge: 'cloud', edgeSay: 'soft cloud with a dotted outline' });
+    var byId = {}; mood.fams.forEach(function (x) { byId[x.id] = x; });
+    var fams = fw.map(function (x) {
+      var mf = byId[x.id] || {}, d = mf.variant === 'joy' ? D.joy : FAM[x.id];
+      return { id: x.id, color: x.color, words: x.words, t: x.t, edge: FAM[x.id].edge, motif: mf.motif || FAM[x.id].motif, variant: mf.variant || null, w: mf.w || 1, edgeSay: d.shape, poem: d.poem };
+    }).sort(function (a, b) { return (b.w - a.w); });
+    if (cant || !fams.length) fams.push({ id: 'cant', color: D.cantName.color, words: [], t: 'something without a name yet', edge: 'cloud', motif: 'mist', variant: null, w: 0.6, edgeSay: D.cantName.shape, poem: D.cantName.poem });
     var strength = n === null ? 5 : n;
-    var edgeLines = fams.map(function (x) { return 'The ' + x.edgeSay + ' stands for ' + (x.id === 'cant' ? 'a feeling you can’t name yet' : lc(x.t)) + '.'; });
-    el({ id: 'core', kind: 'core', title: 'The shape in the middle', fams: fams, n: strength,
+    var edgeLines = fams.map(function (x) { return cap(x.edgeSay.replace(/^(a|an|the) /, 'the ')).replace(/^The /, 'The ') + ': ' + (x.id === 'cant' ? 'a feeling you can’t name yet' : lc(x.t)) + '.'; });
+    edgeLines = fams.map(function (x, i) { var sh = x.edgeSay; return 'The ' + sh.replace(/^(a|an|the) /i, '') + ': ' + (x.id === 'cant' ? 'a feeling you can’t name yet' : lc(x.t)) + (i === 0 && fams.length > 1 ? ' (the strongest voice in the picture)' : '') + '.'; });
+    el({ id: 'core', kind: 'core', title: 'The heart of the picture', fams: fams, n: strength, mood: mood,
       meaning: (fw.length ? 'How you feel right now: ' + feelPhrase(S) + '. ' : 'How you feel right now, even without a name for it. ') +
-        (n !== null ? 'Its size shows the strength you gave it, ' + n + ' out of 10. ' : 'You didn’t give it a strength, so it’s drawn at a middle size. ') + edgeLines.join(' '),
+        (n !== null ? 'The strength you gave it, ' + n + ' out of 10, sets how bold and large it is. ' : 'You didn’t give it a strength, so it’s painted at a middle strength. ') + 'The mood of your answers (' + list(moodWords(mood)) + ') shapes the whole picture. ' + edgeLines.join(' '),
       why: [].concat(ids['c:feel'] ? ids['c:feel'].why : [], ids['c:int'] ? ids['c:int'].why : []), color: fams[0].color, multi: true });
     // threads: each small irritant
     if (f('irritants')) {
       var th = threadOpts(S).map(sayOf), dsO = optOf(SCREEN.d_small, val(S, 'd_small') || ''), extra = dsO && dsO.n ? Math.max(0, dsO.n - th.length) : 0;
       var accIt = patternOn(ids, 'acc'), knot = !!accIt;
-      el({ id: 'threads', kind: 'threads', title: 'The thin threads', count: Math.min(14, Math.max(1, th.length + extra)), knot: knot, color: '#9A6A5C',
-        meaning: (th.length + extra) + ' thin thread' + (th.length + extra === 1 ? '' : 's') + ' cross the middle, one for each small thing that gets in your way' + (th.length ? ': ' + list(th) : '') + (extra ? ', plus ' + extra + ' more from today' : '') + '.' +
-          (knot ? ' They meet in a small knot because the accumulation pattern seemed to fit when you checked it.' : ''),
+      el({ id: 'threads', kind: 'threads', title: 'The fine crossing lines', count: Math.min(14, Math.max(1, th.length + extra)), knot: knot, color: '#FF6F61',
+        meaning: (th.length + extra) + ' fine line' + (th.length + extra === 1 ? '' : 's') + ' cross the picture, one for each small thing that gets in your way' + (th.length ? ': ' + list(th) : '') + (extra ? ', plus ' + extra + ' more from today' : '') + '.' +
+          (knot ? ' They tangle into one small knot because the “small things adding up” idea seemed to fit when you checked it.' : ''),
         why: why('irritants') });
     }
     // stones: weight carried
     var si = 0;
     ['workload', 'caregiving', 'money', 'home', 'roles', 'jobinsecurity', 'meaning', 'obligations', 'othercrisis', 'healthchange'].forEach(function (fid) {
       var x = f(fid); if (!x) return;
-      el({ id: 'stone-' + fid, kind: 'stone', fid: fid, title: 'A stone: ' + lc(x.label), weight: Math.min(6, x.score), color: STONE_COLORS[si++ % STONE_COLORS.length],
-        meaning: 'A stone at the bottom for ' + lc(x.label) + '. Stones are weight you carry, and this one’s size follows how strongly your answers pointed to it.', why: why(fid) });
+      el({ id: 'stone-' + fid, kind: 'stone', fid: fid, title: 'A deep, heavy shape: ' + lc(x.label), weight: Math.min(6, x.score), color: STONE_COLORS[si++ % STONE_COLORS.length],
+        meaning: 'A dense, rounded shape of deep color low in the picture, for ' + lc(x.label) + '. Heavy shapes stand for weight you carry, and this one’s size follows how strongly your answers pointed to it.', why: why(fid) });
     });
     // people
-    if (f('tension')) el({ id: 'p-tension', kind: 'person', style: 'jagged', title: 'A figure with a jagged line', color: '#B5655A', meaning: 'A figure joined to the middle by a jagged line, for tension or distance with someone close. It shows the strain between you. It says nothing about who that person is.', why: why('tension') });
-    if (f('unheard')) el({ id: 'p-unheard', kind: 'person', style: 'broken', title: 'A figure with a broken line', color: '#9C7FA6', meaning: 'A figure with a broken line between you, for not feeling heard or appreciated.', why: why('unheard') });
-    if (f('lonely')) el({ id: 'p-lonely', kind: 'person', style: 'far', title: 'A figure far away', color: '#5F9598', meaning: 'A figure far off along a dotted line, for feeling lonely or left out.', why: why('lonely') });
-    if (ids['c:good'] && has(S, 's_good:people')) el({ id: 'p-support', kind: 'person', style: 'warm', title: 'Warm figures close by', color: '#E0A458', meaning: 'Two warm figures close to the middle, for someone who helps or gets you.', why: ['You picked “Someone who helps or gets me.”'] });
+    if (f('tension')) el({ id: 'p-tension', kind: 'person', style: 'jagged', title: 'A sharp zigzag to a bright shard', color: '#E8203A', meaning: 'A sharp zigzag line joins the middle of the picture to a small shard of color, for tension or distance with someone close. It shows the strain between you. It says nothing about who that person is.', why: why('tension') });
+    if (f('unheard')) el({ id: 'p-unheard', kind: 'person', style: 'broken', title: 'A line with a gap in it', color: '#7B3FF2', meaning: 'A line with a gap in it runs from the middle toward a small round glow, for not feeling heard or appreciated. The gap is where the message gets lost.', why: why('unheard') });
+    if (f('lonely')) el({ id: 'p-lonely', kind: 'person', style: 'far', title: 'One small light far away', color: '#00B3A4', meaning: 'A small round light sits far off near the edge, joined to the middle by a thin dotted trail, for feeling lonely or left out. The empty space around it is part of the picture.', why: why('lonely') });
+    if (ids['c:good'] && has(S, 's_good:people')) el({ id: 'p-support', kind: 'person', style: 'warm', title: 'Two warm lights close by', color: '#FFB400', meaning: 'Two warm, glowing shapes rest close to the middle, for someone who helps or gets you.', why: ['You picked “Someone who helps or gets me.”'] });
     // pressure from outside
-    if (f('unfair')) el({ id: 'wedges', kind: 'wedges', title: 'Wedges pressing in', color: '#A35D6A', meaning: 'Soft wedges pressing in from the edges, for being treated unfairly. They start outside the frame because this comes from outside you.', why: why('unfair') });
+    if (f('unfair')) el({ id: 'wedges', kind: 'wedges', title: 'Bold wedges pushing in from the edges', color: '#E8203A', meaning: 'Bold wedges of color push in from the edges, for being treated unfairly. They start outside the frame because this comes from outside you.', why: why('unfair') });
     // reserves ring
     var bodyF = ['sleep', 'energy', 'hunger', 'recovery', 'pain', 'movement'].filter(function (k) { return f(k); });
     if (bodyF.length || ids['p:deplete']) {
       var en = num(S, 'd_energy'), fillPart = en !== null ? en / 10 : Math.max(0.15, 0.7 - bodyF.length * 0.12);
-      el({ id: 'ring', kind: 'ring', title: 'The ring around the middle', fill: fillPart, color: '#6FA3A0',
-        meaning: 'A ring around the middle for your reserves. It’s about ' + Math.round(fillPart * 100) + '% full' + (en !== null ? ', from the energy you gave today (' + en + ' out of 10)' : ', an estimate from your answers') + '. The empty part stands for ' + (list(bodyF.map(function (k) { return lc(F[k].label); })) || 'low reserves') + '.',
+      el({ id: 'ring', kind: 'ring', title: 'The thin circle around the middle', fill: fillPart, color: '#00B3A4',
+        meaning: 'A fine circle drawn around the middle, for your reserves. It’s about ' + Math.round(fillPart * 100) + '% filled with bright color' + (en !== null ? ', from the energy you gave today (' + en + ' out of 10)' : ', an estimate from your answers') + '. The empty part stands for ' + (list(bodyF.map(function (k) { return lc(F[k].label); })) || 'low reserves') + '.',
         why: [].concat.apply([], bodyF.map(why)).concat(ids['p:deplete'] ? ids['p:deplete'].why : []) });
     }
     // thoughts
     var innerF = ['replay', 'worryahead', 'highbar', 'mindread', 'comparing'].filter(function (k) { return f(k); });
-    if (innerF.length) el({ id: 'haze', kind: 'haze', title: 'Pale wisps above', count: innerF.length, color: '#A8A5B8',
-      meaning: 'Pale wisps drifting above the middle, for thoughts on repeat: ' + list(innerF.map(function (k) { return lc(F[k].label); })) + '.', why: [].concat.apply([], innerF.map(why)) });
-    if (ids['p:interp']) el({ id: 'story', kind: 'story', title: 'A dashed outline', color: '#7A7287',
-      meaning: 'A dashed outline around the middle, for the story layer: the part of it that may be a guess about why. It’s dashed because it may or may not be true.', why: ids['p:interp'].why });
+    if (innerF.length) el({ id: 'haze', kind: 'haze', title: 'Pale ribbons drifting above', count: innerF.length, color: '#38B6FF',
+      meaning: 'Pale, drifting ribbons above the middle, for thoughts on repeat: ' + list(innerF.map(function (k) { return lc(F[k].label); })) + '.', why: [].concat.apply([], innerF.map(why)) });
+    if (ids['p:interp']) el({ id: 'story', kind: 'story', title: 'A thin dashed loop', color: '#7B3FF2',
+      meaning: 'A thin dashed loop around the middle, for the story layer: the part of it that may be a guess about why. It’s dashed because it may or may not be true.', why: ids['p:interp'].why });
     // needs
     var cupsN = (f('unmet') ? needOpts(S).length : 0) + (f('torn') ? 1 : 0);
-    if (cupsN) el({ id: 'cups', kind: 'cups', title: 'Empty cups', count: Math.min(8, cupsN), torn: !!f('torn'), color: '#7C8FB0',
-      meaning: 'Empty cups on the right, one for each thing you’ve been going without' + (f('unmet') ? ': ' + list(needOpts(S).map(function (o) { return o.need; })) : '') + (f('torn') ? (f('unmet') ? '. One is split in two, for feeling torn between two things you want' : ': this one is split in two, for feeling torn between two things you want') : '') + '.',
+    if (cupsN) el({ id: 'cups', kind: 'cups', title: 'Open curves, left empty', count: Math.min(8, cupsN), torn: !!f('torn'), color: '#2F6BFF',
+      meaning: 'Open, empty curves on the right, one for each thing you’ve been going without' + (f('unmet') ? ': ' + list(needOpts(S).map(function (o) { return o.need; })) : '') + (f('torn') ? (f('unmet') ? '. One is split in two, for feeling torn between two things you want' : ': this one is split in two, for feeling torn between two things you want') : '') + '.',
       why: why('unmet').concat(why('torn')) });
     // change and not knowing
     var chF = ['change', 'anniversary', 'pattern'].filter(function (k) { return f(k); });
-    if (chF.length) el({ id: 'horizon', kind: 'horizon', title: 'A ground line with a step in it', color: '#8D9C86',
-      meaning: 'A ground line with a step in it, for ' + list(chF.map(function (k) { return lc(F[k].label); })) + '. The ground shifts where life has shifted.', why: [].concat.apply([], chF.map(why)) });
-    if (f('waiting') || f('jobinsecurity')) el({ id: 'fog', kind: 'fog', title: 'A band of mist', color: '#AEB9C2',
-      meaning: 'A band of mist across the lower part, for ' + list([f('waiting') ? 'waiting on news or not knowing' : '', f('jobinsecurity') ? 'work or income that feels uncertain' : '']) + '.', why: why('waiting').concat(why('jobinsecurity')) });
+    if (chF.length) el({ id: 'horizon', kind: 'horizon', title: 'A bold line with a step in it', color: '#2BC36B',
+      meaning: 'A bold horizontal line with a step in it, for ' + list(chF.map(function (k) { return lc(F[k].label); })) + '. The ground shifts where life has shifted.', why: [].concat.apply([], chF.map(why)) });
+    if (f('waiting') || f('jobinsecurity')) el({ id: 'fog', kind: 'fog', title: 'A soft band of mist', color: '#8E9AC8',
+      meaning: 'A soft band of mist across the lower part, for ' + list([f('waiting') ? 'waiting on news or not knowing' : '', f('jobinsecurity') ? 'work or income that feels uncertain' : '']) + '.', why: why('waiting').concat(why('jobinsecurity')) });
     // surroundings
-    if (f('sensory')) el({ id: 'speckle', kind: 'speckle', title: 'A fine speckle at the edges', density: Math.min(1, F.sensory.score / 5), color: '#9B8F80', meaning: 'A fine speckle around the edges, for noise, light and crowding where you spend your day.', why: why('sensory') });
-    if (f('digital')) el({ id: 'pings', kind: 'pings', title: 'Small squares near the top', count: Math.min(12, 3 + Math.round(F.digital.score * 1.5)), color: '#7E90A6', meaning: 'Small squares scattered near the top, for messages and alerts pulling at your attention.', why: why('digital') });
+    if (f('sensory')) el({ id: 'speckle', kind: 'speckle', title: 'Fine splatter near the edges', density: Math.min(1, F.sensory.score / 5), color: '#1E2FA8', meaning: 'Fine ink splatter around the edges, for noise, light and crowding where you spend your day.', why: why('sensory') });
+    if (f('digital')) el({ id: 'pings', kind: 'pings', title: 'Small bright squares near the top', count: Math.min(12, 3 + Math.round(F.digital.score * 1.5)), color: '#2F6BFF', meaning: 'Small bright squares scattered near the top, for messages and alerts pulling at your attention.', why: why('digital') });
     // spillover
     if (ids['p:spill']) {
       var sp = spillParts(S);
-      el({ id: 'bridge', kind: 'bridge', title: 'A ribbon toward the middle', color: '#C48B5C', from: sp.others[0] || 'work',
-        meaning: 'A ribbon reaching the middle from below, for stress that may be spilling over from ' + (list(sp.others.map(function (a) { return AREA_SAY[a]; })) || 'another part of life') + ' into ' + (sp.area ? AREA_SAY[sp.area] : 'the rest of your day') + '.', why: ids['p:spill'].why });
+      el({ id: 'bridge', kind: 'bridge', title: 'A ribbon of color reaching toward the middle', color: '#FF6A13', from: sp.others[0] || 'work',
+        meaning: 'A ribbon of color sweeps in toward the middle from below, for stress that may be spilling over from ' + (list(sp.others.map(function (a) { return AREA_SAY[a]; })) || 'another part of life') + ' into ' + (sp.area ? AREA_SAY[sp.area] : 'the rest of your day') + '.', why: ids['p:spill'].why });
     }
     // what holds you
     var goodL = picked(S, 's_good').filter(function (g) { return D.good[g] && g !== 'people'; });
-    if (ids['c:good'] && (goodL.length || txt(S, 's_good'))) el({ id: 'anchors', kind: 'anchors', title: 'Small lights at the bottom', count: Math.max(1, goodL.length + (txt(S, 's_good') ? 1 : 0)), color: '#D9A441',
-      meaning: 'Small lights low on the left, for what’s going okay: ' + list(goodL.map(function (g) { return D.good[g]; }).concat(txt(S, 's_good') ? ['“' + txt(S, 's_good') + '”'] : [])) + '.', why: ids['c:good'].why });
+    if (ids['c:good'] && (goodL.length || txt(S, 's_good'))) el({ id: 'anchors', kind: 'anchors', title: 'Small points of gold light', count: Math.max(1, goodL.length + (txt(S, 's_good') ? 1 : 0)), color: '#FFB400',
+      meaning: 'Small points of gold light low on the left, for what’s going okay: ' + list(goodL.map(function (g) { return D.good[g]; }).concat(txt(S, 's_good') ? ['“' + txt(S, 's_good') + '”'] : [])) + '.', why: ids['c:good'].why });
     // what you want: the opening
-    if (ids['c:wish']) el({ id: 'opening', kind: 'opening', title: 'An opening with light', color: '#F0BE5E',
-      meaning: 'An opening in the frame with light coming in, and a path of small dots toward it, for what you want: ' + ids['c:wish'].text.replace(/^You’d like /, '').replace(/\.$/, '') + '.', why: ids['c:wish'].why });
+    if (ids['c:wish']) el({ id: 'opening', kind: 'opening', title: 'A glow of light coming in', color: '#FFB400',
+      meaning: 'A wide glow of light enters from the edge, with a trail of gold dots leading toward it, for what you want: ' + ids['c:wish'].text.replace(/^You’d like /, '').replace(/\.$/, '') + '.', why: ids['c:wish'].why });
     // things the person added
     var added = fin.items.filter(function (x) { return x.added; });
-    if (added.length) el({ id: 'added', kind: 'added', title: 'Small diamonds', count: Math.min(6, added.length), color: '#6E8B74', meaning: 'Small diamonds near the middle, for things you added yourself: ' + list(added.map(function (a) { return '“' + a.text + '”'; })) + '.', why: ['You added these on the map.'] });
+    if (added.length) el({ id: 'added', kind: 'added', title: 'Small gold diamonds', count: Math.min(6, added.length), color: '#FFB400', meaning: 'Small gold diamonds near the middle, for things you added yourself: ' + list(added.map(function (a) { return '“' + a.text + '”'; })) + '.', why: ['You added these on the map.'] });
     return els;
   }
   // the person's own changes to the picture: remove a part, change its color, or say what it means in their words
@@ -541,7 +601,7 @@
   var E = { D: D, SCREEN: SCREEN, has: has, picked: picked, num: num, txt: txt, val: val, skipped: skipped, list: list, cap: cap, sentence: sentence,
     active: active, firstScreen: firstScreen, nextScreen: nextScreen, activeList: activeList, screenText: screenText, screenOpts: screenOpts,
     strengths: strengths, chosenProbes: chosenProbes, probeResult: probeResult, factorScores: factorScores, rankFactors: rankFactors,
-    buildMap: buildMap, applyEdits: applyEdits, buildArt: buildArt, applyArt: applyArt, buildPlan: buildPlan, summary: summary,
+    buildMap: buildMap, applyEdits: applyEdits, buildArt: buildArt, moodOf: moodOf, moodWords: moodWords, artAlt: artAlt, applyArt: applyArt, buildPlan: buildPlan, summary: summary,
     harmIn: harmIn, harm: harm, feelWords: feelWords, feelPhrase: feelPhrase, seedOf: seedOf, topDomains: topDomains };
   if (typeof module === 'object' && module.exports) module.exports = E; else root.EMO_ENGINE = E;
 })(typeof window !== 'undefined' ? window : this);
