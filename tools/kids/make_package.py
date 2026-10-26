@@ -20,7 +20,7 @@ sys.path.insert(0, HERE)
 import kids_common as C  # noqa: E402
 from PIL import Image  # noqa: E402
 
-DEST = sys.argv[1] if len(sys.argv) > 1 else os.path.join(C.OUT, 'package')
+DEST = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith('--') else os.path.join(C.OUT, 'package')
 STAGE = os.path.join(DEST, 'stage')
 ZIPNAME = 'Spread-Love-and-Acceptance-kids-KDP-package.zip'
 K = C.load_json(os.path.join(C.OUT, 'kids.json'), {})['books']
@@ -376,7 +376,7 @@ def stage():
 
 
 def readme(totals):
-    lines = ['Spread Love & Acceptance: the kids titles, KDP package (kids22)', '=' * 62, '',
+    lines = ['Spread Love & Acceptance: the kids titles, KDP package', '=' * 62, '', 'Read CHANGES.md first: it lists what changed in this version.', '',
              'What is in each folder:',
              '  picture-book/        interior PDF (print, with 0.125 in bleed), screen PDF (no bleed), full-wrap cover PDF, front cover JPG, fixed-layout EPUB',
              '  chapter-book/        interior PDF, full-wrap cover PDF, front cover JPG, Kindle cover JPG, reflowable EPUB',
@@ -395,20 +395,35 @@ def readme(totals):
 
 
 def main():
+    """usage: make_package.py <dest folder> [--changes CHANGES.md]   (a CHANGES file is put first in the package and beside it)"""
+    args = sys.argv[1:]
+    changes = None
+    if '--changes' in args:
+        i = args.index('--changes')
+        changes = args[i + 1]
     os.makedirs(DEST, exist_ok=True)
     text, totals = listing()
     stage()
     C.write(os.path.join(DEST, 'listing-kids-kdp.md'), text)
     C.write(os.path.join(STAGE, 'listing-kids-kdp.md'), text)
     C.write(os.path.join(STAGE, 'README.txt'), readme(totals))
+    if changes:
+        shutil.copy(changes, os.path.join(STAGE, 'CHANGES.md'))
+        shutil.copy(changes, os.path.join(DEST, 'CHANGES.md'))
     out = os.path.join(DEST, ZIPNAME)
     if os.path.exists(out):
         os.remove(out)
+    root = 'Spread-Love-and-Acceptance-kids-KDP-package'
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
+        if changes:
+            z.write(os.path.join(STAGE, 'CHANGES.md'), os.path.join(root, 'CHANGES.md'))   # first in the zip
         for dp, dn, fn in os.walk(STAGE):
+            dn.sort()
             for f in sorted(fn):
                 full = os.path.join(dp, f)
-                z.write(full, os.path.join('Spread-Love-and-Acceptance-kids-KDP-package', os.path.relpath(full, STAGE)))
+                if changes and os.path.relpath(full, STAGE) == 'CHANGES.md':
+                    continue
+                z.write(full, os.path.join(root, os.path.relpath(full, STAGE)))
     print('zip:', out, round(os.path.getsize(out) / 1048576, 1), 'MB')
     print(json.dumps(totals, indent=1))
 

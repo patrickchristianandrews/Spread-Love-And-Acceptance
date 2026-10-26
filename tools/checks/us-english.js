@@ -198,17 +198,19 @@ function extract(rel) {
 }
 
 // ---------- rules ----------
-const compile = list => list.map(r => (typeof r === 'string' ? { re: r } : r)).map(r => ({ src: r.re, fix: r.fix, flags: r.cs ? 'g' : 'gi', rx: new RegExp(r.re, r.cs ? 'g' : 'gi') }));
-const RULES = {
-  british: compile(WORDS.british),
-  ai: compile(WORDS.ai),
-  calling: compile(WORDS.calling),
-  researcher: [],
-};
+// Each rule is one combined regex (fast); on a hit the individual entry that matched is looked up for its suggested fix.
+const compile = list => list.map(r => (typeof r === 'string' ? { re: r } : r)).map(r => ({ src: r.re, fix: r.fix, cs: !!r.cs, rx: new RegExp(r.re, r.cs ? 'g' : 'gi') }));
+function combine(list) {
+  const items = compile(list);
+  const ci = items.filter(r => !r.cs), cs = items.filter(r => r.cs);
+  const mk = (arr, flags) => (arr.length ? { rx: new RegExp(arr.map(r => '(?:' + r.src + ')').join('|'), flags), items: arr } : null);
+  return [mk(ci, 'gi'), mk(cs, 'g')].filter(Boolean);
+}
+function fixFor(group, hit) { for (const r of group.items) { const x = new RegExp('^(?:' + r.src + ')$', r.cs ? '' : 'i'); if (x.test(hit)) return r.fix; } for (const r of group.items) { if (new RegExp(r.src, r.cs ? '' : 'i').test(hit)) return r.fix; } return undefined; }
+const RULES = { british: combine(WORDS.british), ai: combine(WORDS.ai), calling: combine(WORDS.calling), researcher: [] };
 if (WORDS.researchers && WORDS.researchers.length) {
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const names = WORDS.researchers.map(esc).join('|');
-  RULES.researcher = compile([{ re: '(?<![A-Za-z’\'-])(' + names + ')(?![A-Za-z]| ?(?:Ave|Street|St\\b|Road))', cs: true }]);
+  RULES.researcher = combine([{ re: "(?<![A-Za-z’'-])(?:" + WORDS.researchers.map(esc).join('|') + ")(?![A-Za-z])", cs: true }]);
 }
 const FIRST = new Set((WORDS.firstNames || []).map(s => s.toLowerCase()));
 const NOT_NAME_HEAD = new Set((WORDS.headingNotNames || []).map(s => s.toLowerCase()));
@@ -248,19 +250,16 @@ for (const rel of files) {
     const run = r => !ONLY || ONLY.has(r);
     for (const rule of ['british', 'ai', 'calling', 'researcher']) {
       if (!run(rule)) continue;
-      for (const R of RULES[rule]) {
-        R.rx.lastIndex = 0; let m;
-        while ((m = R.rx.exec(t))) {
-          if (m[0] === '') { R.rx.lastIndex++; continue; }
-          const ctx = t.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40);
+      for (const G of RULES[rule]) {
+        G.rx.lastIndex = 0; let m;
+        while ((m = G.rx.exec(t))) {
+          if (m[0] === '') { G.rx.lastIndex++; continue; }
           if (allowed(rel, rule, t, m[0])) continue;
-          findings.push({ rule, file: rel, line: s.line, kind: s.kind, hit: m[0], ctx, fix: R.fix });
+          findings.push({ rule, file: rel, line: s.line, kind: s.kind, hit: m[0], ctx: t.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40), fix: fixFor(G, m[0]) });
         }
       }
     }
-    if (run('heading') && /^heading:|^attr:(title|aria-label)$|^js$/.test(s.kind) === false ? false : run('heading') && /^heading:/.test(s.kind)) {
-      if (headingIsName(s.text) && !allowed(rel, 'heading', s.text, s.text)) findings.push({ rule: 'heading', file: rel, line: s.line, kind: s.kind, hit: s.text.slice(0, 60), ctx: s.text.slice(0, 100) });
-    }
+    if (run('heading') && /^heading:/.test(s.kind) && headingIsName(s.text) && !allowed(rel, 'heading', s.text, s.text)) findings.push({ rule: 'heading', file: rel, line: s.line, kind: s.kind, hit: s.text.slice(0, 60), ctx: s.text.slice(0, 100) });
   }
 }
 if (DUMP) fs.writeFileSync(DUMP, dump.join('\n') + '\n');

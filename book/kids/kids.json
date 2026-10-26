@@ -17,12 +17,12 @@
     "picture-book": {
      "pdf": "picture-book.pdf",
      "pages": 40,
-     "bytes": 1544805
+     "bytes": 1543267
     },
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
      "pages": 40,
-     "bytes": 1546223
+     "bytes": 1544685
     }
    },
    "pages_printed": 40
@@ -30,8 +30,8 @@
   "chapter-book": {
    "title": "Turn Down the Static",
    "trim_in": [
-    6.0,
-    9.0
+    6,
+    9
    ],
    "paper": "white",
    "chapters": 11,
@@ -39,7 +39,7 @@
     "chapter-book": {
      "pdf": "chapter-book.pdf",
      "pages": 92,
-     "bytes": 892582
+     "bytes": 891780
     }
    },
    "pages_printed": 92,
@@ -62,7 +62,7 @@
     "coloring-younger": {
      "pdf": "coloring-younger.pdf",
      "pages": 68,
-     "bytes": 912856
+     "bytes": 901108
     }
    },
    "pages_printed": 68,
@@ -85,7 +85,7 @@
     "coloring-older": {
      "pdf": "coloring-older.pdf",
      "pages": 68,
-     "bytes": 2998172
+     "bytes": 2998098
     }
    },
    "pages_printed": 68,
