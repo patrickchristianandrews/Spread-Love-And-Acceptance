@@ -54,7 +54,7 @@ const SKIP_FILES = new Set([
 ]);
 // JSON/JS keys whose values are phrases the code matches against what a visitor types (never shown), not text.
 const MATCH_KEYS = new Set(['keys', 'pat', 'notPat', 'patterns', 'match', 're', 'rx', 'cues', 'themPat', 'enter_phrases', 'exit_phrases', 'say', 'syn', 'aw', 'bw', 'nouns', 'kw', 'only', 'pick', 'section_for_kind', 'section_for_ask', 'match_order', 'lens_labels', 'words', 'roots', 'aliases', 'alias', 'id', 'kind', 'pillar', 'page', 'safety_topic_ids', 'defaultWho']);
-const SKIP_PREFIX = ['tools/word-games/', 'tools/book/', 'tools/kids/', 'tools/buddies/', 'tools/progress/', 'tools/journeys/mk', 'assets/vendor/', 'book/print/', 'workpapers/fill/', 'assets/audio/', 'assets/video/', 'assets/fonts/', 'tools/seo/', 'tools/library/', 'tools/research/', 'tools/search/build', 'tools/chat/build', 'tools/signal/', 'tools/this-week/', 'tools/reading/', 'tools/reader/', 'tools/places/'];
+const SKIP_PREFIX = ['tools/word-games/', 'tools/book/', 'tools/kids/', 'assets/vendor/', 'book/print/', 'assets/audio/', 'assets/video/', 'assets/fonts/'];
 const EXT = /\.(html|js|json|md|txt|webmanifest)$/;
 
 function walk(dir, out) {

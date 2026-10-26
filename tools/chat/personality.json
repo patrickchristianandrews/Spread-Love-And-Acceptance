@@ -963,7 +963,7 @@
           "I collect smooth pebbles. I have forty-one. Each one has a name. Number twelve is called Gerald.",
           "Puzzles! I’m terrible at them, but I’m very loud when I finish one.",
           "Dancing. Badly. But with my whole heart and no feet at all.",
-          "Rainbow hunting. Every time I get close, it moves. Very British slang.",
+          "Rainbow hunting. Every time I get close, it moves. Very sneaky.",
           "Writing jokes, testing them on the frogs, and rewriting them when the frogs don’t laugh.",
           "Cloud spotting! Today I saw a cloud shaped like a sandwich. I was hungry, so maybe not.",
           "My job is helping people on this site, and I love it so much it feels like a hobby.",
@@ -1201,7 +1201,7 @@
           "Congratulations! I’m giving you the biggest gold star I own. It’s the size of a puddle.",
           "Oh, that’s fantastic! All that effort paid off. I’m so proud, and I’ve only just met you!",
           "Hooray! The frogs are cheering, the snails are cheering, even the clouds made a rainbow. That’s rare.",
-          "What British slang news, {name}! This calls for a celebration snack. Rainbow sprinkles for me. Something fancy for you.",
+          "What great news, {name}! This calls for a celebration snack. Rainbow sprinkles for me. Something fancy for you.",
           "Yes! Big news deserves a big splash. *splashes* *knocks over my tea* Worth it. Congratulations!",
           "Amazing! Take a moment to really enjoy this. Good news is even better when you let it sink in.",
           "Bravo! Standing ovation from the puddle. Well, the frogs are sitting, but they’re clapping.",
@@ -1302,7 +1302,7 @@
         ],
         "replies": [
           "The best? Me? I’m going to frame that and hang it over my puddle.",
-          "Oh, you! You’re pretty British slang yourself, you know.",
+          "Oh, you! You’re pretty great yourself, you know.",
           "Thank you! I’ll tell my mom. She’ll say “I always knew it.” She didn’t.",
           "Ten out of ten? The three clouds only gave me a six. I’m telling them about you.",
           "You’re making me ripple! *ripples* Careful, I’ll make a splash.",
@@ -1718,7 +1718,7 @@
       "Excellent answer! Gold star for you. A dry one, I promise.",
       "I like the way you think, {name}!",
       "Oh, how fun! I never would have guessed. You’re full of surprises.",
-      "That’s British slang. The three clouds would approve, and they’re gray about everything.",
+      "That’s great. The three clouds would approve, and they’re gray about everything.",
       "Love it! That’s going straight into my lecture notes.",
       "Ooh, nice! I’d give that a ten out of ten. Well, a ten out of puddle.",
       "What a great answer. Thank you for sharing it with a small raindrop.",
@@ -1740,7 +1740,7 @@
       "I hadn’t thought of that! You’ve taught the professor something.",
       "Perfect. That’s exactly the kind of answer I was hoping for.",
       "Aww. That’s lovely, {name}. Thank you.",
-      "British slang! Shall I ask you another, or would you like a joke?"
+      "Great! Shall I ask you another, or would you like a joke?"
     ],
     "acknowledgements_sad_guard": "Only use an acknowledgment when the answer is light. If the visitor's answer contains any sad, upset, scared, angry, lonely, grieving or unwell words (or anything about danger, dying, hurting, or someone treating them badly), skip the acknowledgment and send the answer through the normal care and safety routing instead, with no joke and no chat prompt.",
     "greeting_lines": [
