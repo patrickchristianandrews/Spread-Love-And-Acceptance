@@ -1,4 +1,4 @@
-/* emo-art.js: paints the personal picture for "What am I feeling?" (/what-am-i-feeling.html) on a canvas.
+/* emo-art.js: paints the personal picture for "Paint Your Feelings" (/what-am-i-feeling.html) on a canvas.
    It is an abstract painting, framed and matted like a piece in a gallery, with a small title card.
    The look follows the mood of the answers (calm to turbulent, slow to quick, closed in to open, light to heavy)
    and the colors of the feelings, so different answers give clearly different pictures.

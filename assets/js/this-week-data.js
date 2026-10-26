@@ -16,7 +16,7 @@
     weeks: [
       { t: 'Name the feeling',
         tr: 'Finish this sentence, out loud or in your head: “Right now I feel…” One or two words is plenty.',
-        k: 'Tool', et: 'What am I feeling?', en: 'Answer a few gentle questions and see a map of what may be behind a feeling.', eu: '/what-am-i-feeling.html',
+        k: 'Tool', et: 'Paint Your Feelings', en: 'Answer a few gentle questions and see a map of what may be behind a feeling.', eu: '/what-am-i-feeling.html',
         no: 'Notice where a feeling shows up first, such as your shoulders, your chest or your jaw.',
         wi: 'Each share one feeling word at dinner. The only reply is “Thanks for telling me.”' },
       { t: 'Check your weather',

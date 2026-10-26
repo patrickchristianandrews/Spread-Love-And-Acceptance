@@ -207,7 +207,7 @@
       kw: 'team workload business partner co-founder raci responsibilities team meeting standup weekly workload owner backup team tools: a job list and a weekly check-in team job list: one owner and a backup 10-minute team check-in' },
 
     // ---------- Health and body
-    { id: 'feelings', name: 'What am I feeling?', brand: '', href: '/what-am-i-feeling.html', type: 'self', also: ['calm'],
+    { id: 'feelings', name: 'Paint Your Feelings', brand: '', href: '/what-am-i-feeling.html', type: 'self', also: ['calm'],
       does: 'Gentle questions that help you notice what you might not have considered yet behind a feeling.',
       gets: 'A map you can correct, a picture made from your answers, and one or two first steps.',
       mins: 5, time: 'About 3 to 8 minutes', who: ['solo'], benefit: 'Find what may be behind a feeling, on your own device',
