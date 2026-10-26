@@ -210,7 +210,7 @@
     { id: 'feelings', name: 'Paint Your Feelings', brand: '', href: '/what-am-i-feeling.html', type: 'self', also: ['calm'],
       does: 'Gentle questions that help you notice what you might not have considered yet behind a feeling.',
       gets: 'A map you can correct, a picture made from your answers, and one or two first steps.',
-      mins: 5, time: 'About 3 to 8 minutes', who: ['solo'], benefit: 'Find what may be behind a feeling, on your own device',
+      mins: 5, time: 'About 3 to 8 minutes', who: ['solo'], benefit: 'Find what may be behind a feeling, on your own device', top: 1,
       kw: 'feelings emotions why do i feel this way map picture overwhelmed irritable low mood what am i feeling' },
     { id: 'weather', name: 'My weather today', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
       modes: [['Quick: 4 taps', '/ladder.html'], ['Full forecast', '/quick-checks.html#today']],
@@ -282,7 +282,7 @@
   // Our judgement from everything the program covers: how many people face the need, how fast the tool helps,
   // whether one person can use it alone, and how often people are likely to look for it. Never shown on the page.
   var USEFUL = {
-    signal: 10, ask: 10, 'lemon-quick': 9, calm: 9, weather: 8, wavelength: 8,
+    signal: 10, ask: 10, feelings: 10, 'lemon-quick': 9, calm: 9, weather: 8, wavelength: 8,
     write: 7, decoder: 7, checkincard: 7, bonding: 7, split: 7, start10: 7,
     roots: 6, 'take-in': 6, plans: 6,
     rhythms: 5, team: 5, pauseplay: 5,
