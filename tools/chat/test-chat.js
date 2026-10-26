@@ -1274,7 +1274,7 @@ if (PERS) {
     t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', text: /chore|job|split|share|Lemonade/i });
     t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from what’s already written on this site\. I pick the best match\. I don’t invent new answers/, not: /written (and checked )?by people|checked by people/, link: '/method-and-limits.html' });
     t('puddles', 'do you hallucinate', { kind: 'about', text: /I don’t make things up[\s\S]*that’s not it[\s\S]*not a therapist and can’t diagnose/ });
-    t('puddles', 'are you AI?', { kind: 'about', text: /^No\. Every answer here was written in advance for this site\. I pick the best match/, not: /written (and checked )?by people|checked by people/ });
+    t('puddles', 'are you AI?', { kind: 'about', text: /^I’m a program on this page, not a person\. Every answer here was written in advance for this site\. I pick the best match/, not: /written (and checked )?by people|checked by people/ });
     t('puddles', 'who are you (says where answers come from)', { q: 'who are you', text: /I don’t make things up/ });
   }
   // deep talk (deep.json): three lenses, put together; safety, care and someone's own situation always first; no jokes
