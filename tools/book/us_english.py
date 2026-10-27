@@ -209,7 +209,7 @@ P = [
     (r'\bmates\b', 'friends'), (r'\bmate\b', 'buddy'), (r'\breckons\b', 'thinks'), (r'\breckon\b', 'think'), (r'\bcheeky\b', 'playful'),
     (r'\bBit gutted not to be asked\b', 'Kind of bummed not to be asked'), (r'\ba bit gutted\b', 'a little hurt'), (r'\bgutted\b', 'crushed'),
     (r'“All right\?', '“You okay?'), (r'\bYou all right\?', 'You okay?'), (r'\bthe friend everyone rings\b', 'the friend everyone turns to'),
-    (r'\brang round\b', 'called around'), (r'\b([Rr])ang\b', lambda m: _case(m.group(1) + 'x', 'called')), (r'\brung\b', 'called'),
+    (r'\brang round\b', 'called around'), (r'\b([Rr])ang\b(?! (a |the )?(bell|out|true)|\.)', lambda m: _case(m.group(1) + 'x', 'called')),
     (r'\b([Rr])ing(s|ing)? (?!a bell)(me|him|her|you|them|us|back|his|their|the|a|my|your|our)\b', lambda m: _case(m.group(1) + 'x', 'call' + (m.group(2) or '')) + ' ' + m.group(3)),
     (r'\bthat you ring\b', 'that you call'), (r'\bstart ringing\b', 'start calling'), (r'\bkeeps ringing\b', 'keeps calling'),
     (r'\btells the children off\b', 'scolds the children'), (r'\btold (him|her|them|me|us|you) off\b', r'scolded \1'), (r'\btold off\b', 'scolded'),
@@ -331,6 +331,24 @@ P = [
     (r'\bTick a job\b', 'Check off a job'), (r'\beach ticked job\b', 'each checked job'), (r'\bif you tick\b', 'if you check'), (r'\bcan tick off\b', 'can check off'), (r'\btick off\b', 'check off'),
     (r'\b([Tt])ick\b(?= (the|a|each|every|one|it|them|this|that|your|any|whichever|what|which|yes|no|“))', lambda m: ('C' if m.group(1) == 'T' else 'c') + 'heck'), (r'\bticked\b', 'checked'),
     (r'\bgoes round and round\b', 'goes around and around'), (r'\bround and round\b', 'around and around'), (r'\band round again\b', 'and around again'), (r'^round again\b', 'around again'), (r'\bslightly better tea\b', 'slightly better dinner'),
+    # book28 (proofreader): British words, customs and formats found in the final read. Context-free where a word has no US use.
+    (r'\bCV\b', 'resume'), (r'\bhalf-three\b', '3:30'), (r'\bparents’ evenings?\b', 'parent-teacher conferences'), (r'\bterraces? (with|house)\b', 'row house \\1'),
+    (r'\bcanteens?\b', 'cafeteria'), (r'\btombola\b', 'raffle'), (r'\bsummer fairs?\b', 'summer carnival'), (r'\bsoft play\b', 'indoor playground'),
+    (r'\bhosepipes?\b', 'garden hose'), (r'\bfelt-tips?\b', 'markers'), (r'\bstandard lamp\b', 'floor lamp'), (r'\bmeal deal\b', 'lunch combo'),
+    (r'\bthe lead is still on\b', 'the leash is still on'), (r'\bon (a|the|his|her|their) lead\b', r'on \1 leash'), (r'\btoast rack\b', 'toaster'),
+    (r'\bcustard creams?\b', 'cookie'), (r'\bunder-fives\b', 'preschoolers'), (r'\bgas board\b', 'gas company'), (r'\bsomebody near the back tuts\b', 'somebody near the back huffs'),
+    (r'\bbowls club\b', 'bowling league'), (r'\bI’ve not been\b', 'I haven’t been'), (r'\bit feels a bit mad\b', 'it feels a bit nuts'),
+    (r'\bhot water bottles?\b', 'heating pad'), (r'\bplaygroups?\b', 'preschool group'), (r'\bchurch hall\b', 'church basement'), (r'\bfloor polish\b', 'floor wax'),
+    (r'\bwax jacket\b', 'canvas jacket'), (r'\bstiles?\b(?= ?[.,;])', 'fence gate'), (r'\bchristenings?\b', 'baptism'), (r'\bRadio [1-6]\b', 'the radio'),
+    (r'\bOrdnance Survey\b', 'USGS'), (r'\bSnowdonia\b', 'the Adirondacks'), (r'\bLeith\b', 'Somerville'), (r'\bCarlisle\b', 'Pittsburgh'),
+    (r'\bnon-uniform day\b', 'dress-down day'), (r'\bbroadband\b', 'internet'), (r'\b(out of|in) the dock\b', r'\1 the hot seat'), (r'\bstands out a mile\b', 'stands out'),
+    (r'\b([Mm])inds (his|her|their|my|your|our) (grand\w+|kids|children|nephew|niece|sister|brother)\b', lambda m: m.group(1) + 'inds ' + m.group(2) + ' ' + m.group(3) if False else ('Watches' if m.group(1) == 'M' else 'watches') + ' ' + m.group(2) + ' ' + m.group(3)),
+    (r'\ba missed film\b', 'a missed movie'), (r'\bin a dog’s dinner\b', 'in a dog’s food'), (r'\b(Hiding|hiding) a tablet\b', r'\1 a pill'),
+    (r'\bgoing quiet in a row\b', 'going quiet in an argument'), (r'\bseven-year-old at home with a temperature\b', 'seven-year-old at home with a fever'),
+    (r'\bhad got (what|there|the|a|an|used|better|worse|to|into|out|shorter|bigger|smaller)\b', r'had gotten \1'), (r'\bhas got (shorter|better|worse|bigger|smaller|nicer)\b', r'has gotten \1'),
+    (r'\b(sent|send|leave|leaves|left|arrive|arrives|arrived|start|starts|started|finish|finishes|finished) (the [a-z]+ )?(at|by) (\d{1,2})\.([0-5]\d)\b(?!\.\d)', lambda m: '%s %s%s %s:%s' % (m.group(1), m.group(2) or '', m.group(3), m.group(4), m.group(5))),
+    (r'\bleave at (\d{1,2})\.([0-5]\d) in the\b', r'leave at \1:\2 in the'),
+    (r'\bwellbeing\b', 'well-being'), (r'\bWellbeing\b', 'Well-being'),
 ]
 
 

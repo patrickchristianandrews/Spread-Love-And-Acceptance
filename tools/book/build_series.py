@@ -226,8 +226,8 @@ def s_open(e, book):
     return ('<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble>%s<p class="ch-num" aria-hidden="true">%s</p>'
             '<p class="ch-kicker">%s</p>'
             '<h2 class="ch-title">%s</h2><p class="ch-intro">%s</p>'
-            '<div class="ch-in"><p class="ch-in-k">In this chapter</p><ol class="ch-in-list">%s</ol></div></header>') % (
-        mark(e[0]), esc(num), esc(kicker), esc(ch_title(e[0])), lede(e[0]), lis)
+            '<div class="ch-in"><p class="ch-in-k">%s</p><ol class="ch-in-list">%s</ol></div></header>') % (
+        mark(e[0]), esc(num), esc(kicker), esc(ch_title(e[0])), lede(e[0]), 'In this afterword' if e[0] == 'afterword' else 'In this chapter', lis)
 
 
 def s_end(e, book, here, where, remember=None):
@@ -605,7 +605,7 @@ def research_short(book, here):
     n = sum(len(v) for v in notes.values())
     s = '<section class="pe-back ps-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (
         book['color'], book['tint'], mark('notes'))
-    s += ('<div class="ps-online-box">%s<p>The %d studies and books these chapters mention, briefly. Each one was looked up and checked. The full list, '
+    s += ('<div class="ps-online-box">%s<p>The %d references these chapters draw on, briefly. Each one was looked up and checked. The full list, '
           'with what each study found, how strong the finding is and where to read it, is free online: '
           '<span class="ps-addr">spreadloveandacceptance.com/research</span>.</p></div>') % (qr('/research.html'), n)
     for slug in book['chapters']:
@@ -949,7 +949,7 @@ def build_book(book, where):
     for i, slug in enumerate(chs):
         e = B.entry(slug)
         num, lab = chapter_label(slug, book)
-        toc.append(B.toc_row(slug, esc(num or 'After'), esc(ch_title(slug)), 'is-ch'))
+        toc.append(B.toc_row(slug, esc(num or 'Afterword'), esc(ch_title(slug)), 'is-ch'))
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
         art = s_chapter(e, book, here, where, namer, panels=True)
@@ -1063,7 +1063,7 @@ WB_EXPLAINED = {
              'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so that’s the moment for Part C. '
              'A gap in speed is about pace. It says nothing about how much either of you cares. If your answers barely differ, the friction is probably coming '
              'from somewhere else, tiredness or pressure from outside.'),
-    'wp14': ('Book 4, Chapter 3 (Full tanks and different angles), and in full, free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
+    'wp14': ('Built on the stress tank in Book 4, Chapter 3 (Full tanks and different angles). Full instructions are free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
              'In Part B, count the tense moments that fell on heavy days. If most did, outside pressure is doing a lot of the damage, and a plan for '
              'the pressure (Part D) will help more than talking about each other. If most came on light days, the friction really does start between you, '
              'and Say it so it lands or the monthly look-back is the next thing to try.'),
@@ -1183,7 +1183,7 @@ def build_workbook(where, bw=False):
         if key in WB_EXPLAINED:
             s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(WB_EXPLAINED[key][0])
         elif ins:
-            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(' · '.join(ins[:4]))
+            s += '<div><dt>Explained in</dt><dd>%s</dd></div>' % esc(' · '.join(ins[:5]))
         s += ('<div><dt>Copies here</dt><dd>%d, one after the other. Photocopy them for your own use, or print more free from the website, '
               'where you can also fill the form out on screen.</dd></div></dl>') % copies
         if key in WB_NOTE:
@@ -1332,7 +1332,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 .cv-back-trim { position: absolute; left: var(--bleed); top: var(--bleed); width: var(--w); height: var(--h); }
 .cv-rules { position: absolute; inset: 0; width: 100%%; height: 100%%; }
 .cv-band { position: absolute; left: 0; right: 0; top: 0; height: 0.62in; background: var(--acc); color: #FFFDF8; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 0.42in 0.14in 0.6in; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .16em; text-transform: uppercase; }
-.cv-front .cv-band { top: calc(-1 * var(--bleed)); height: calc(0.62in + var(--bleed)); }
+.cv-front .cv-band { top: calc(-1 * var(--bleed)); right: calc(-1 * var(--bleed)); height: calc(0.62in + var(--bleed)); padding-right: calc(0.42in + var(--bleed)); }
 .cv-band span:last-child { font-family: "Lora", serif; font-style: italic; text-transform: none; letter-spacing: 0; font-size: 8.5pt; }
 .cv-text { position: absolute; left: 0.6in; right: 0.45in; top: 1.02in; }
 .cv-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 8.4pt; letter-spacing: .2em; text-transform: uppercase; color: var(--acc); margin: 0 0 0.12in; }

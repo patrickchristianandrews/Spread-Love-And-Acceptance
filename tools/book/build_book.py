@@ -1039,8 +1039,8 @@ def chapter_open(e, deep):
     kicker = chapter_name(e) if part != 4 else 'Afterword'
     return '''<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble data-part="%d">%s<p class="ch-num" aria-hidden="true">%s</p><p class="ch-kicker">%s</p>
 <h2 class="ch-title">%s</h2><p class="ch-intro">%s</p>
-<div class="ch-in"><p class="ch-in-k">In this chapter</p><ol class="ch-in-list">%s</ol></div></header>''' % (
-        part, mark(e[0]), esc(big_label(e)), esc(kicker), esc(TITLES[e[0]]), LEDES[e[0]], lis)
+<div class="ch-in"><p class="ch-in-k">%s</p><ol class="ch-in-list">%s</ol></div></header>''' % (
+        part, mark(e[0]), esc(big_label(e)), esc(kicker), esc(TITLES[e[0]]), LEDES[e[0]], 'In this afterword' if part == 4 else 'In this chapter', lis)
 
 
 def qr_slot(url):
@@ -1301,6 +1301,12 @@ def research_notes(here):
             sn[c] = set(re.findall(r'class="side-note[^"]*"[^>]*\bdata-ref="([^"]+)"', read(os.path.join(ROOT, 'book', c + '.html'))))
         except Exception:
             sn[c] = set()
+        # book28 (proofreader): a study cited inline in the chapter text (a link to research.html#ref-ID) is listed too
+        for suffix in ('',):
+            try:
+                sn[c] |= set(re.findall(r'research\.html#ref-([a-z0-9-]+)', read(os.path.join(ROOT, 'book', c + suffix + '.html'))))
+            except Exception:
+                pass
     for r in refs:
         if r['id'] in fixes:
             f = fixes[r['id']]
@@ -1401,7 +1407,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     # research notes
     n_refs = sum(len(v) for v in notes.values())
     s += '<section class="pe-back pe-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (col, mark('notes'))
-    s += '<p class="pe-back-lede">The %d studies and books the chapters mention, chapter by chapter, each with what it found in plain words and where to read it. Each entry was looked up and checked: most against the paper itself or its abstract, some (mostly older books) against a publisher’s or library’s record. Unchecked works are left out. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
+    s += '<p class="pe-back-lede">The %d references the chapters draw on, chapter by chapter, each with what it found in plain words and where to read it. Each entry was looked up and checked: most against the paper itself or its abstract, some (mostly older books) against a publisher’s or library’s record. Unchecked works are left out. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
     if fb is not None:
         s += front_back.reading_research(fb)
     for e in ORDER:

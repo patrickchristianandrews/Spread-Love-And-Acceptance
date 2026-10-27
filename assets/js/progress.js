@@ -845,7 +845,7 @@
     c.appendChild(acts); c.appendChild(msg);
     var forgot = mk('details', { class: 'tp-forgot' });
     forgot.appendChild(mk('summary', null, 'Forgot your passcode?'));
-    forgot.appendChild(mk('p', null, 'It can’t be reset: it’s kept only on this device, and we never see it. You can erase everything this site keeps here and start fresh. A backup file can bring your progress back afterwards.'));
+    forgot.appendChild(mk('p', null, 'It can’t be reset: it’s kept only on this device, and we never see it. You can erase everything this site keeps here and start fresh. A backup file can bring your progress back afterward.'));
     forgot.appendChild(btn('Erase everything on this device', 'is-danger', function () {
       confirmClear({ what: 'everything this site keeps on this device', keys: '*',
         doneText: 'Cleared. Nothing you saved is left on this device, and the lock is off.',

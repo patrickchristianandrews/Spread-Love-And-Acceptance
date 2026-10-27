@@ -44,7 +44,7 @@ import sys  # noqa: E402
 sys.path.insert(0, HERE)
 from build_series import WB, POCKET, BOXSET, COSTS  # noqa: E402  (the workbook's sheets, the pocket guide and the box set)
 
-# Kindle: the 70% band on Amazon.com is $2.99 to $12.99 since 7 July 2026; delivery is $0.15 a megabyte
+# Kindle: the 70% band on Amazon.com is $2.99 to $9.99 (book28: the lower, safe figure); delivery is $0.15 a megabyte
 KINDLE_PRICE = 5.99
 KINDLE_MB = 3.0  # used only when an EPUB has not been built yet; KDP shows the real file size [OWNER]
 try:
@@ -146,7 +146,7 @@ L[POCKET['id']] = {
     ],
     'inside': ['38 situations, one to a page, in nine short sections', 'On every page: what it looks like, the logic in steps, an everyday picture, why it fits, the other side, one sentence and one small step',
                '“With care” notes where a reaction can land hard on someone else', 'A short introduction to the six-part lens, and why logic explains but never excuses',
-               'Blank cards to work out a reaction of your own', 'A QR code on each page that opens the same situation online'],
+               'Blank cards to work out a reaction of your own', 'A code or link on each page that opens the same situation online'],
     'cats': ['Books › Self-Help › Communication & Social Skills', 'Books › Health, Fitness & Dieting › Psychology & Counseling › Social Psychology & Interactions',
              'Books › Self-Help › Relationships › Interpersonal Relations'],
     'alt': ['Books › Health, Fitness & Dieting › Mental Health › Neuropsychology', 'Books › Parenting & Relationships › Family Relationships', 'Books › Self-Help › Emotions'],
@@ -239,8 +239,8 @@ def expanded_text(c, price):
 
 
 def kindle_net(price, mb):
-    """70% band ($2.99 to $12.99 on Amazon.com since July 7, 2026): 70% x price - delivery ($0.15 a MB); 35% outside it, with no delivery fee"""
-    if 2.99 <= price <= 12.99:
+    """70% band ($2.99 to $9.99 on Amazon.com): 70% x price - delivery ($0.15 a MB); 35% outside it, with no delivery fee"""
+    if 2.99 <= price <= 9.99:
         return 0.70 * price - 0.15 * mb, 70
     return 0.35 * price, 35
 

@@ -1102,6 +1102,176 @@
   {
    "re": "\\b(?:provisional\\s+driving\\s+licence|mentioned\\s+in\\s+despatches|central\\s+heating\\s+boiler|hundreds\\-and\\-thousands|sticky\\-backed\\s+plastic|chartered\\s+accountant|postage\\s+and\\s+packing|compulsory\\s+purchase|provisional\\s+licence|reverse\\s+charge\\s+call|self\\-raising\\s+flour|communication\\s+cord|national\\s+insurance|sleeping\\s+policeman|release\\s+on\\s+licence|community\\s+payback|recorded\\s+delivery|industrial\\s+action|trading\\s+standards|flight\\s+lieutenant|washing\\-up\\s+liquid|tuppenny\\-ha'penny|bubble\\s+and\\s+squeak|big\\s+girl's\\s+blouse|chesterfield\\s+sofa|chinagraph\\s+pencil|selling\\-out\\s+shop|sleeping\\s+partner|bureau\\s+de\\s+change|dual\\s+carriageway|swimming\\s+costume|send\\s+to\\s+coventry|building\\s+society|sixes\\s+and\\s+sevens|bob's\\s+your\\s+uncle|toad\\-in\\-the\\-hole|shopping\\s+trolley|on\\s+the\\s+back\\s+foot|stone\\s+the\\s+crows|identity\\s+parade|package\\s+holiday|pissing\\s+it\\s+down|legacy\\s+accounts|squadron\\s+leader|suck\\s+it\\s+and\\s+see|turf\\s+accountant|approved\\s+school|driving\\s+licence|telephone\\s+kiosk|belisha\\s+beacon|go\\s+pear\\-shaped|extension\\s+lead|blues\\s+and\\s+twos|transport\\s+cafe|jiggery\\-pokery|poste\\s+restante|throw\\s+a\\s+wobbly|zebra\\s+crossing|life\\s+assurance|heath\\s+robinson|council\\s+estate|turn\\-indicator|suspender\\s+belt|skirting\\s+board|anti\\-clockwise|reel\\s+of\\s+cotton|people\\s+carrier|knacker's\\s+yard|door\\s+furniture|donkey's\\s+years|pillar\\-box\\s+red|hire\\s+purchase|codd's\\s+wallop|black\\s+pudding|brass\\s+monkeys|bits\\s+and\\s+bobs|lollipop\\s+lady|sandwich\\s+cake|drink\\-driving|sticky\\s+wicket|take\\s+the\\s+piss|jacket\\s+potato|arse\\s+over\\s+tit|telerecording|french\\s+letter|green\\s+fingers|white\\s+pudding|economy\\s+class|electric\\s+fire|council\\s+house|group\\s+captain|shanks's\\s+pony|jam\\s+sandwich|engaged\\s+tone|postal\\s+order|nail\\s+varnish|fire\\s+brigade|people\\s+mover|estate\\s+agent|costermonger|tommy\\s+atkins|tipping\\s+down|number\\s+plate|toffee\\s+apple|thruppennies|child\\-minder|white\\s+coffee|agony\\s+column|boiled\\s+sweet|spotted\\s+dick|double\\s+first|kitchen\\s+roll|karno's\\s+army|ex\\-directory|cop\\s+off\\s+with|bog\\-standard|fairy\\s+lights|dress\\s+circle|fish\\s+fingers|mexican\\s+wave|toffee\\-nosed|ponce\\s+around|holidaymaker|dustbin\\s+man|drawing\\s+pin|invigilator|brown\\s+bread|wage\\s+packet|chimney\\s+pot|counterfoil|candy\\s+floss|jumble\\s+sale|wellingtons|agony\\s+uncle|pear\\-shaped|other\\s+ranks|carriageway|pritt\\-stick|cotton\\s+wool|ponce\\s+about|counterpane|call\\s+minder|jerry\\-built|off\\-the\\-peg|rumpy\\s+pumpy|icing\\s+sugar|paper\\s+round|fizzy\\s+drink|high\\s+street|off\\-licence|launderette|guard's\\s+van|greengrocer|cack\\-handed|retail\\s+park|answerphone|on\\s+the\\s+piss|never\\-never|browned\\s+off|clapped\\s+out|elastoplast|auntie\\s+beeb|soap\\s+dodger|ironmongery|bugger\\s+all|tapping\\s+up|road\\-works|whip\\-round|action\\s+man|windscreen|codswallop|kirby\\s+grip|jump\\s+leads|cor\\s+blimey|up\\s+himself|petrolhead|gor\\s+blimey|cotton\\s+bud|fairy\\s+cake|loudhailer|pillar\\s+box|jerrybuilt|argy\\-bargy|agony\\s+aunt|mole\\s+grips|cuddly\\s+toy|nissen\\s+hut|estate\\s+car|page\\s+three|letter\\s+box|rodgering|pushchair|bone\\-idle|secateurs|semibreve|truncheon|serviette|gob\\-shite|fortnight|courgette|charwoman|clingfilm|slip\\s+road|phone\\s+box|ice\\s+lolly|slowcoach|tea\\s+towel|sellotape|ponce\\s+off|paki\\s+shop|chip\\s+shop|up\\s+sticks|cafetière|freephone|knackered|sun\\s+cream|rat\\-arsed|newsagent|orientate|panda\\s+car|scrumping|cool\\s+box|crotchet|press\\-up|motorway|scrubber|car\\s+hire|quids\\s+in|smeghead|hold\\-all|y\\-fronts|milliard|cats\\s+eye|car\\s+park|squaddie|punch\\-up|trainers|spiffing|oughtn't|turn\\-ups|post\\s+box|bristols|tuppence|postcode|knackers|naff\\s+off|pushbike|the\\s+beeb|buggered|dustcart|balls\\-up|old\\s+bill|charlady|pisshead|sweet\\s+fa|slaphead|bog\\s+roll|car\\s+boot|bollocks|rozzers|tipp\\-ex|sod\\s+off|legless|dustman|chinwag|bum\\s+bag|cagoule|dodgems|thickie|wazzock|chunder|plonker|autocue|chunter|scrumpy|scouser|postbox|tits\\s+up|shafted|geordie|fairing|flypast|dustbin|funfair|brekkie|g\\s+clamp|rubbish|amongst|sat\\s+nav|fag\\s+end|go\\-slow|chuffed|squidgy|clanger|red\\s+top|cock\\-up|rashers|goolies|slapper|wellies|nicked|spliff|brolly|sarnie|muppet|bedsit|minger|footie|coster|blimey|hoover|wanker|peeler|gaffer|monged|moggie|cockup|advert|munter|crisps|whilst|brekky|quango|barney|parkie|nicker|abseil|spawny|ranker|titfer|numpty|punnet|slippy|sannie|smalls|learnt|tenner|draper|postie|crikey|petrol|biccie|moggy|barmy|divvy|welly|bikky|butty|taffy|lurgy|fiver|jemmy|botty|ponce|maths|skint|offie|cuppa|artic|lorry|telly|sarny|pikey|dekko|kecks|gobby|bloke|carer|arsed|ropey|bicky|dodgy|minge|parky|shite|arse|kazi|chav|mong|nosh|feck|biro|burk|beeb|berk|gaol|pram|pleb|cack|caff|paki|poxy|giro|cleg|rota|taff|nowt|bint)\\b",
    "fix": "British term: see tools/checks/us-english-words.json"
+  },
+  {
+   "re": "\\bCV\\b(?!-)",
+   "fix": "resume",
+   "cs": true
+  },
+  {
+   "re": "\\bhalf-three\\b",
+   "fix": "3:30"
+  },
+  {
+   "re": "\\bparents[’']? evenings?\\b",
+   "fix": "parent-teacher conference"
+  },
+  {
+   "re": "\\bterrace(d)? (house|with)\\b",
+   "fix": "row house"
+  },
+  {
+   "re": "\\bcanteens?\\b",
+   "fix": "cafeteria"
+  },
+  {
+   "re": "\\btombola\\b",
+   "fix": "raffle"
+  },
+  {
+   "re": "\\bsummer fairs?\\b",
+   "fix": "summer carnival"
+  },
+  {
+   "re": "\\bsoft play\\b",
+   "fix": "indoor playground"
+  },
+  {
+   "re": "\\bhosepipes?\\b",
+   "fix": "garden hose"
+  },
+  {
+   "re": "\\bfelt-tips?\\b",
+   "fix": "markers"
+  },
+  {
+   "re": "\\bstandard lamp\\b",
+   "fix": "floor lamp"
+  },
+  {
+   "re": "\\bmeal deal\\b",
+   "fix": "lunch combo"
+  },
+  {
+   "re": "\\bon (a|the|his|her) lead\\b",
+   "fix": "on a leash"
+  },
+  {
+   "re": "\\btoast rack\\b",
+   "fix": "toaster"
+  },
+  {
+   "re": "\\bcustard creams?\\b",
+   "fix": "cookie"
+  },
+  {
+   "re": "\\bunder-fives\\b",
+   "fix": "preschoolers"
+  },
+  {
+   "re": "\\bgas board\\b",
+   "fix": "gas company"
+  },
+  {
+   "re": "\\btuts\\b",
+   "fix": "huffs"
+  },
+  {
+   "re": "\\bbowls club\\b",
+   "fix": "bowling league"
+  },
+  {
+   "re": "\\bI[’']ve not (been|had|got)\\b",
+   "fix": "I haven't"
+  },
+  {
+   "re": "\\bhot water bottles?\\b",
+   "fix": "heating pad"
+  },
+  {
+   "re": "\\bplaygroups?\\b",
+   "fix": "preschool group"
+  },
+  {
+   "re": "\\bchurch hall\\b",
+   "fix": "church basement"
+  },
+  {
+   "re": "\\bfloor polish\\b",
+   "fix": "floor wax"
+  },
+  {
+   "re": "\\bwax jacket\\b",
+   "fix": "canvas jacket"
+  },
+  {
+   "re": "\\bRadio [1-6]\\b",
+   "fix": "the radio"
+  },
+  {
+   "re": "\\bOrdnance Survey\\b",
+   "fix": "USGS"
+  },
+  {
+   "re": "\\bSnowdonia\\b",
+   "fix": "a US place"
+  },
+  {
+   "re": "\\bLeith\\b",
+   "fix": "a US place"
+  },
+  {
+   "re": "\\bCarlisle\\b",
+   "fix": "a US place"
+  },
+  {
+   "re": "\\bnon-uniform day\\b",
+   "fix": "dress-down day"
+  },
+  {
+   "re": "\\bbroadband\\b",
+   "fix": "internet"
+  },
+  {
+   "re": "\\b(out of|in) the dock\\b",
+   "fix": "blamed",
+   "cs": true
+  },
+  {
+   "re": "\\bstands out a mile\\b",
+   "fix": "stands out"
+  },
+  {
+   "re": "\\bminds (his|her|their|my|your) (grand\\w+|kids|children)\\b",
+   "fix": "watches"
+  },
+  {
+   "re": "\\bmissed film\\b",
+   "fix": "missed movie"
+  },
+  {
+   "re": "\\bgoing quiet in a row\\b",
+   "fix": "going quiet in an argument"
+  },
+  {
+   "re": "\\bhad got (what|there|the|a|an)\\b",
+   "fix": "had gotten"
+  },
+  {
+   "re": "\\bextra time in exams\\b",
+   "fix": "extra time on tests"
+  },
+  {
+   "re": "\\bPE teacher\\b",
+   "fix": "gym teacher"
+  },
+  {
+   "re": "\\bpick-up\\b(?= now)",
+   "fix": "pickup"
+  },
+  {
+   "re": "\\bin a dog[’']s dinner\\b",
+   "fix": "in a dog's food"
   }
  ],
  "britishSpellings": {

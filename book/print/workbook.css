@@ -57,6 +57,8 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-sheet .pe-ws-t { margin: 0 0 3mm; }
 .wb-sheet .pe-ws-t thead { display: table-header-group; }
 .wb-sheet .pe-ws-t tr { break-inside: avoid; }
+/* book28: a day with two people is two rows; the pair stays on one page */
+.wb-sheet .pe-ws-t.is-pairs tbody tr:nth-child(odd) { break-after: avoid; page-break-after: avoid; }
 .wb-sheet .pe-ws-t th { font-size: 7.6pt; padding: 1.6mm 1.8mm; }
 .wb-sheet .pe-ws-t td { height: 10mm; font-size: 9pt; }
 .wb-sheet .pe-ws-t.is-short td { height: 9mm; }

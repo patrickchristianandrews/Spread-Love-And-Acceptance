@@ -52,7 +52,7 @@ const SKIP_FILES = new Set([
   'README.md', 'dashboard-setup.md', 'paywall-integration.md', 'suite-index.md', 'wp-04.md', 'wp-11.md', 'manage-members.py',
   'tools/chat/README.md', 'tools/chat/persona.md', 'tools/chat/test-chat.js', 'tools/chat/chat-sandbox.js', 'tools/chat/coverage.js',
   'tools/checks/us-english.js', 'tools/checks/us-english-words.json', 'tools/checks/us-english-allow.json',
-  'tools/checks/site-health.js', 'tools/checks/no-removed-content.js', 'tools/search/test-search.js', 'sw.js',
+  'tools/checks/site-health.js', 'tools/checks/no-removed-content.js', 'tools/checks/tool-showcase-check.js', 'tools/search/test-search.js', 'sw.js',
   'assets/js/puzzles/bloom-dict.js', 'tools/chat/common-words.txt',
   // built from the sources that are scanned (rebuild them with their builders; do not edit by hand)
   'assets/js/chat-kb.js', 'assets/js/chat-kb-bg.js', 'assets/js/search-index.js', 'assets/js/search-needs.js', 'assets/js/research-index.js',

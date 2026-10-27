@@ -86,13 +86,11 @@
 <body data-no-cheer data-no-pupvisits data-no-buddies data-no-fullpath data-no-private-note>
 <main class="read is-wide tl-wide" id="main">
 <header class="read-head"><p class="read-code">Start here · All tools</p><h1>All tools</h1></header>
-<p class="simple-lede tl-intro">Every free tool on this site, in one place. Pick what you need, or just try something. What you type stays on your device.</p>
-
 <!-- What do you want help with? Six big choices that filter the tools below (tools-page.js draws the tiles from tool-art.js). Hidden without JavaScript:
      the plain lists further down hold every tool. -->
 <section class="tl-hero tol-plain no-bubble no-dive" id="help-with" aria-labelledby="tl-hero-h" data-tl-hero hidden>
   <h2 class="tl-hero-h" id="tl-hero-h">What do you want help with?</h2>
-  <p class="tl-hero-s">Tap one to see the tools that fit. Tap it again to see them all.</p>
+  <p class="tl-hero-s">Every tool here is free, and what you type stays on your device. Tap one to see the tools that fit, or tap it again to see them all.</p>
   <div class="tl-intents" role="group" aria-labelledby="tl-hero-h" data-tl-intents></div>
   <p class="tl-progress no-bubble" data-tl-progress hidden></p>
 </section>
@@ -141,6 +139,9 @@
   <p class="tl-fine">How we picked them: <a href="#how-ordered">see how &ldquo;Most useful first&rdquo; works</a>.</p>
 </section>
 
+<!-- where the site's one-time "Would a calmer page help?" card goes, so the tiles stay on the first screen -->
+<div data-offer-slot></div>
+
 <section class="tl-box tl-guide no-bubble" id="not-sure" aria-labelledby="tl-guide-h">
   <h2 class="tl-h" id="tl-guide-h">Not sure where to start?</h2>
   <p class="tl-sub">Take a one-minute look, follow a short path, or let us point you to one tool.</p>
@@ -159,6 +160,7 @@
       <button type="button" class="tl-btn" data-tl-tour-next>Next &rarr;</button>
     </div>
   </div>
+  <div data-steps-slot></div>
   <h3 class="tl-ph" id="tl-paths-solo-h">Self-discovery paths</h3>
   <p class="tl-sub">On your own: two or three tools, in order, with one line on why.</p>
   <ul class="tl-paths" aria-labelledby="tl-paths-solo-h" data-tl-paths-solo></ul>

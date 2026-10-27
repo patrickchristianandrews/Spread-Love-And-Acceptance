@@ -162,7 +162,9 @@ def illustration(kind):
         g.append(buddy(164, 82, 60, 'butter', 6, -1))
         g.append(heart_book(100, 76, 92))
         g.append(heart(100, 10, 16) + spark(34, 26, 12) + spark(166, 24, 10) + spark(140, 8, 6, '#EE8FA6'))
-    return '<svg class="pe-art" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">%s</svg>' % ''.join(g)
+    # book28 (proofreader): the open ledger of Books 3 and 4 is wider and ran past the bottom of the 200 x 150 box, so the box is taller for them
+    vh = {'together': 166, 'load': 166, 'whole': 154}.get(kind, 150)
+    return '<svg class="pe-art" viewBox="0 0 200 %d" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">%s</svg>' % (vh, ''.join(g))
 
 
 def part_mark(part):

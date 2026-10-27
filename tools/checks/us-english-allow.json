@@ -307,24 +307,9 @@
    "file": "assets/js/progress.js",
    "rule": "british",
    "hits": [
-    "afterwards",
     "cancelled"
    ],
-   "why": "File owned by the lead (wave 27): \"afterwards\" is a visible word in one message; \"cancelled\" is an internal state name. Lead to decide, then delete this entry."
-  },
-  {
-   "file": "assets/js/site.js",
-   "rule": "ai",
-   "match": "an AI chat",
-   "why": "MENU label owned by the lead (wave 27): \"Why use this instead of an article or an AI chat?\" should become \"Why use this instead of reading an article?\". Delete this entry after the change."
-  },
-  {
-   "file": "assets/js/site.js",
-   "rule": "calling",
-   "hits": [
-    "dials"
-   ],
-   "why": "MENU note owned by the lead (wave 27): \"Dials, not boxes, and how people change\" should become \"Sliders, not boxes, ...\" (book chapter 14 title must match). Delete this entry after the change."
+   "why": "\"cancelled\" is an internal state name, not visible text."
   },
   {
    "file": "assets/js/site.js",
