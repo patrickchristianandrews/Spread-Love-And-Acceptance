@@ -200,7 +200,7 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-month-t td:nth-child(3) { width: 26%; font-size: 8pt; }
 .ps-month-t td:last-child { width: 8mm; }
 .ps-jobs { break-before: page; }
-.ps-jobs-key { font-size: 7.8pt; color: var(--soft); margin: 0 0 2mm; }
+.ps-jobs-key { font-size: 7.8pt; color: var(--soft); margin: 0 0 2mm; break-after: avoid; page-break-after: avoid; }
 .ps-jobs-cols { column-count: 2; column-gap: 6mm; }
 .ps-jobs-g { break-inside: avoid; margin: 0 0 2.6mm; }
 .ps-jobs-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 0 1mm; border-bottom: .6pt solid var(--pc); padding-bottom: .6mm; }
@@ -294,6 +294,13 @@ body { font-size: 11pt; line-height: 1.55; }
 .pk-book .ps-ideas-roots { grid-column: 1 / -1; grid-row: auto; padding: 1.8mm 2.2mm; }
 .pk-book .ps-ideas-roots li { font-size: 6.6pt; margin-bottom: .8mm; }
 .pk-book .ps-ideas-f b { font-size: 7pt; }
+/* book28: the pocket guide's map keeps all thirteen fields and the closing line on one page (two-column roots, tighter cards) */
+.pk-book .ps-ideas-roots ul { columns: 2; column-gap: 4mm; }
+.pk-book .ps-ideas-roots li { break-inside: avoid; }
+.pk-book .ps-ideas-f { padding: 1mm 1.6mm; }
+.pk-book .ps-ideas-map { gap: 1.1mm; }
+.pk-book .ps-ideas .pe-back-lede { margin-bottom: 2mm; }
+.pk-book .ps-ideas-note { margin-top: 2mm !important; }
 .ps-ideas { break-before: page; }
 
 /* book20: the one plain care line in the back matter (Books 1 to 3) */
