@@ -64,7 +64,7 @@ ORDER = [
     ('self-2-now', 1, 'Now', 'Your wiring, your weather and your words, and what is fair to you',
      [('The self path: get to know your wiring', '/self-path.html#wiring'), ('How much are you carrying? A quick stress check', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
     ('self-3-next', 1, 'Next', 'What matters to you, one small goal, tiny steps and a kind monthly look at yourself',
-     [('The self path, step by step', '/self-path.html#steps'), ('The Calm-Down Kit: a plan for heated moments', '/wp-11.html')]),
+     [('The self path, step by step', '/self-path.html#steps'), ('The Calm-Down Kit', '/wp-11.html')]),
     ('preface', 2, 'Preface', 'The quiet, unseen work of running a shared life, and why it deserves to be noticed',
      [('Six-week program, week 1: see the work that’s already happening', '/prog-01.html#week-1'), ('Who did what', '/workpapers/wp-01.html')]),
     ('chapter-1', 2, 'Chapter I', 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune',

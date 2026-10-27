@@ -3,7 +3,7 @@
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
    "kind": "book",
-   "bytes": 1267584,
+   "bytes": 1267558,
    "mb": 1.21,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
@@ -39,8 +39,8 @@
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
    "kind": "book",
-   "bytes": 1151093,
-   "mb": 1.1,
+   "bytes": 1145006,
+   "mb": 1.09,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
    "figures": 9,
@@ -75,7 +75,7 @@
   "pocket-the-logic-behind-it": {
    "file": "book/print/epub/pocket-the-logic-behind-it.epub",
    "kind": "pocket",
-   "bytes": 319338,
+   "bytes": 319251,
    "mb": 0.3,
    "identifier": "urn:uuid:33b0bed3-99e8-53b0-8a56-024abff9a832",
    "chapters": 9,
@@ -93,7 +93,7 @@
   "boxset-complete-series": {
    "file": "book/print/epub/boxset-complete-series.epub",
    "kind": "boxset",
-   "bytes": 3965051,
+   "bytes": 3966542,
    "mb": 3.78,
    "identifier": "urn:uuid:53207083-e866-53c9-a95c-fc8c179971bd",
    "chapters": 36,

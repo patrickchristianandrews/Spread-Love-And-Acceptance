@@ -699,8 +699,12 @@ def ideas_map(book, chs, epub=False, pocket_sections=None):
     roots = ''.join('<li><b>%s</b> %s%s</li>' % (esc(r['name']), esc(r['line']), (' <span class="ps-ideas-ch">%s</span>' % esc(', '.join(where_r[r['key']]))) if where_r.get(r['key']) else '')
                     for r in IDEAS['roots'])
     lede = ('Many fields of study turn up in %s, from music to economics, and underneath them the same seven roots keep showing through. Learn a root once and you '
-            'can carry it from one field to the next: if a budget needs a safety margin, so does a tired person.') % ('this guide' if pocket_sections else 'this book')
+            'can carry it from one field to the next: if a budget needs a safety margin, so does a tired person.') % ('this book')
+    if pocket_sections:  # book28: one short paragraph, so the whole map and its closing line fit on one pocket page
+        lede = 'Many fields of study turn up in this guide, from music to economics, and the same seven roots run underneath them.'
     note = 'Holistic therapies, laughter and aromatherapy appear only in their plain, everyday parts. The research on them is modest or still growing.'
+    if pocket_sections:
+        note = 'Holistic therapies, laughter and aromatherapy appear only in their plain, everyday parts. The research on them is modest.'
     body = ('<p class="pe-back-lede">%s</p><div class="ps-ideas-map"><div class="ps-ideas-roots"><p class="ps-ideas-rk">The seven roots</p><ul>%s</ul></div>%s</div>'
             '<p class="ps-ideas-note">%s</p>') % (esc(lede), roots, cards, esc(note))
     if epub:
