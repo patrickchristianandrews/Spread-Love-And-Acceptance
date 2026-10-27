@@ -99,12 +99,8 @@
     weather: '<circle cx="36" cy="38" r="16" fill="{y}"{s}/><path d="M36 10v6M10 38h6M17 19l4 4M55 19l-4 4M17 57l4-4" stroke="{i}" stroke-width="2.6" stroke-linecap="round"/>' +
       '<path d="M32 76h44a14 14 0 0 0 1.500-27.900A19 19 0 0 0 42 52a12 12 0 0 0-10 24z" fill="{c}"{s}/>',
 
-    ask: '<path d="M18 38C8 40 8 62 22 66c-2-10 0-20-4-28zM78 38c10 2 10 24-4 28 2-10 0-20 4-28z" fill="{a}"{s}/>' +
-      '<ellipse cx="48" cy="56" rx="27" ry="25" fill="{c}"{s}/>' +
-      '<rect x="22" y="22" width="52" height="8" rx="2" fill="{i}"/><path d="M34 22V12l14-6 14 6v10z" fill="{i}"/><path d="M76 24v14" stroke="{y}" stroke-width="3" stroke-linecap="round"/><circle cx="76" cy="40" r="3.500" fill="{y}"/>' +
-      '<circle cx="37" cy="52" r="9" fill="#fff" fill-opacity=".7"{s}/><circle cx="59" cy="52" r="9" fill="#fff" fill-opacity=".7"{s}/><path d="M46 52h4" stroke="{i}" stroke-width="2.6"/>' +
-      '<circle cx="37" cy="53" r="3" fill="{i}"/><circle cx="59" cy="53" r="3" fill="{i}"/>' +
-      '<ellipse cx="48" cy="66" rx="6" ry="4.500" fill="{i}"/><path d="M48 70v4M42 75q6 5 12 0" fill="none" stroke="{i}" stroke-width="2.4" stroke-linecap="round"/>',
+    // Professor Puddles is always the same raindrop with the cap and glasses (same drawing as the Ask button, PUDDLES_SVG in site.js)
+    ask: '<svg x="6" y="4" width="84" height="88" viewBox="-4 -14 88 92" overflow="visible"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>',
 
     start10: '<path d="M40 8h16" stroke="{i}" stroke-width="4" stroke-linecap="round"/><path d="M48 8v10" stroke="{i}" stroke-width="3.4"/>' +
       '<circle cx="48" cy="54" r="32" fill="{c}"{s}/><path d="M48 54V24a30 30 0 0 1 26 15z" fill="{a}"/><circle cx="48" cy="54" r="32" fill="none"{s}/>' +
