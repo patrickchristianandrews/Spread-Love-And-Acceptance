@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return '<li><a class="tol-row" href="' + it.href + '">' +
       '<span class="tol-code">' + hl(it.code || '') + '</span>' +
       '<span class="tol-title">' + hl(it.title) + (it.note ? '<small>' + hl(it.note) + '</small>' : '') + '</span>' +
-      '<span class="tol-access">' + (it.paid ? (member ? 'unlocked' : 'members') : '') + '</span></a></li>';
+      '<span class="tol-access">' + (it.paid && !(TOL.config && TOL.config.openAll) ? (member ? 'open' : 'members') : '') + '</span></a></li>';
   }
 
   if (scored.length) {
@@ -203,8 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
         items.map(function (p) { return row(p, q); }).join('') + '</ol></div>';
     });
     results.innerHTML = html;
-    if (!q) count.textContent = 'Every page on the site, ' + shown + ' in all.';
-    else if (!shown) count.textContent = 'Nothing on the site matches “' + q + '.” Try a shorter word, or clear the box to see every page.';
+    if (!q) count.textContent = 'The main pages of the site, ' + shown + ' in all.';
+    else if (!shown) count.textContent = 'Nothing on the site matches “' + q + '.” Try a shorter word, or clear the box to see the whole list.';
     else count.textContent = shown + (shown === 1 ? ' page matches' : ' pages match') + ' “' + q + '”.';
   }
   input.addEventListener('input', render);

@@ -44,7 +44,7 @@
     var seen = {}, cel = [];
     if (o.seen && typeof o.seen === 'object') Object.keys(o.seen).forEach(function (id) { if (META[id] && /^\d{4}-\d\d-\d\d$/.test(o.seen[id])) seen[id] = o.seen[id]; });
     if (Array.isArray(o.cel)) o.cel.forEach(function (n) { if (n === 1 || n === 5) cel.push(n); });
-    return { v: 1, seen: seen, cel: cel };
+    return { v: 1, seen: seen, cel: cel, real: o.real === true };
   }
   function write(o) { if (!stopped()) lsSet(KEY, JSON.stringify(o)); }
   function seen() { return stopped() ? {} : read().seen; }
@@ -66,9 +66,11 @@
     return { isNew: isNew, count: n };
   }
   // the first and the fifth tool each get one small, soft moment. Returns 1 or 5 when one is due (never in Quiet mode), else 0.
+  // QA28 C9: only after a real use (something typed, picked or pressed in a tool), never just for opening a page: see markUsed()
   function milestone() {
     if (helpersOff() || stopped()) return 0;
     var o = read(), n = Object.keys(o.seen).length;
+    if (!o.real) return 0;
     if (n >= 5 && o.cel.indexOf(5) < 0) return 5;
     if (n >= 1 && o.cel.indexOf(1) < 0) return 1;
     return 0;
@@ -77,6 +79,22 @@
     var o = read(); [1, 5].forEach(function (k) { if (k <= m && o.cel.indexOf(k) < 0) o.cel.push(k); }); write(o);
   }
   var CELE = { 1: 'That is your first tool tried. A good start.', 5: 'Five tools tried. You are finding what fits.' };
+  // the first real use of a tool (a button pressed, a box filled in, a result shown): remembered once, and a "Try another tool" row already
+  // on the page gets its small first/fifth-tool line then
+  function markUsed() {
+    if (stopped()) return;
+    var o = read();
+    if (!o.real) { o.real = true; write(o); }
+    var m = milestone();
+    if (!m) return;
+    Array.prototype.forEach.call(doc.querySelectorAll('.ts-row'), function (row) {
+      if (row.querySelector('.ts-cele')) return;
+      var p = doc.createElement('p'); p.className = 'ts-cele'; p.setAttribute('role', 'status'); p.textContent = CELE[m];
+      row.insertBefore(p, row.firstChild);
+      if (!still()) row.classList.add('ts-pulse');
+    });
+    setTimeout(function () { shown(m); }, 0);
+  }
   function countLine(n, t) {
     if (!n) return 'There are ' + t + ' tools here, all free. Start anywhere.';
     var x = 'You’ve tried ' + n + ' of ' + t + ' tools. ';
@@ -259,12 +277,23 @@
     if (host) { var go = function () { try { initRail(host); } catch (e) {} }; if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 150); }
     // opened a tool's own page: write it down
     var id = idForPath(location.pathname);
-    if (id && !host) mark(id);
+    if (id && !host) {
+      mark(id);
+      // a real use: a box filled in or a button pressed inside the page's own content (never a link, the menu or this row)
+      var arm = function (e) {
+        var t = e.target; if (!t || !t.closest || !t.closest('main')) return;
+        if (e.type === 'keydown' && /^(Tab|Shift|Escape|Alt|Control|Meta)$/.test(e.key)) return;
+        if (!t.closest('button, input, textarea, select, summary, canvas, [role="button"]') || t.closest('.ts-end, .ts-row, nav, header, footer, .tol-pud-card, [data-tc-go]')) return;
+        ['pointerdown', 'keydown', 'input', 'change'].forEach(function (n) { doc.removeEventListener(n, arm, true); });
+        markUsed();
+      };
+      ['pointerdown', 'keydown', 'input', 'change'].forEach(function (n) { doc.addEventListener(n, arm, true); });
+    }
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
 
   window.TOLToolSpot = { META: META, seen: seen, isSeen: isSeen, mark: mark, count: count, total: total, daily: daily, others: others, nextFor: nextFor,
-    cardHTML: cardHTML, rowHTML: rowHTML, milestone: milestone, shown: shown, cele: CELE, countLine: countLine, ensureCss: ensureCss, onChange: onChange,
+    cardHTML: cardHTML, rowHTML: rowHTML, milestone: milestone, shown: shown, markUsed: markUsed, cele: CELE, countLine: countLine, ensureCss: ensureCss, onChange: onChange,
     idForPath: idForPath, stopped: stopped, tags: tags, whoChip: whoChip, timeChip: timeChip, shareAttrs: shareAttrs, helpersOff: helpersOff, still: still,
     last: function () { return last; }, icons: { clock: IC_CLOCK, who: IC_WHO, share: IC_SHARE, tick: IC_TICK } };
 })();

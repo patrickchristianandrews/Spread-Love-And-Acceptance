@@ -64,7 +64,7 @@ OVERRIDE = {
     'index.html': (
         'Spread Love & Acceptance · Free self-help for calm, kind relationships',
         'Free, kind self-help for understanding yourself and the people you love: tools for fair, calm relationships, '
-        'kinder conversations and appreciation, gentle games, breathing and calm soundscapes. Everything stays on your device.'),
+        'kinder conversations and appreciation, calm games, breathing and calm soundscapes. Everything stays on your device.'),
     'start-here.html': (None,
         'New here? Start with the one idea behind Spread Love & Acceptance: understand yourself first, then share the load '
         'kindly. The best first steps, free tools and a six-week path for calmer, kinder relationships.'),
@@ -126,7 +126,7 @@ OVERRIDE = {
 # search-led titles and descriptions: what people type, in plain words (title without the site name)
 SEARCH = {
  'index.html': ('Understand Yourself, Understand Each Other: Free Self-Help', 'Free, kind lessons and tools for self-help and healing: how communication, relationships and the mind work, and what to do about it. Private, no sign-up.'),
- 'start-here.html': ('Start Here: Fairer, Kinder Relationships, Step by Step', 'New here? The one idea behind it all, the best first tools and a gentle six-week path to fairer chores and kinder conversations at home.'),
+ 'start-here.html': ('Start Here: Fairer, Kinder Relationships, Step by Step', 'New here? The one idea behind it all, the best first tools and a six-week path to fairer chores and kinder conversations at home.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole load, fix the setup not the person, read your state first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Family and Roommates', 'Fair ways to share chores, kinder words and calmer check-ins for partners, families, co-parents, friends, roommates, coworkers and caregivers.'),
  'signal-translator.html': ('The Signal Translator: a tone checker for texts', 'The Signal Translator, a free tone checker: type a text or message and see how it may land, what they may hear, and a kinder, clearer way to say it. Private, on your device.'),
@@ -199,7 +199,7 @@ SEARCH = {
 SEARCH.update({
  # home and start
  'index.html': ('Understand Yourself, Understand Each Other: Free Self-Help', 'Free, kind lessons and tools for self-help and healing: how communication, relationships and the mind work, and what to do about it. Private, no sign-up.'),
- 'start-here.html': ('Start Here: Fair Chores, Calm Talks, Kinder Relationships', 'New here? The one idea behind it all, the best free first tools, and a gentle six-week path to fairer chores, fewer fights and kinder talks at home.'),
+ 'start-here.html': ('Start Here: Fair Chores, Calm Talks, Kinder Relationships', 'New here? The one idea behind it all, the best free first tools, and a six-week path to fairer chores, fewer fights and kinder talks at home.'),
  'recheck-drive.html': ('The Re-check Drive: A Calm Football Game for Keeping Things Alive', 'A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal on screen.'),
  'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole mental load, fix the setup instead of the person, read your stress first, and tune how you talk.'),
@@ -536,6 +536,16 @@ SEARCH.update({
  'sleeping-pals-cam.html': ('Sleeping Pals Cam: Two Pups and Your Fur Babies Asleep, for Bedtime', 'A calm night cam to go to bed with: Tidbit and Sugarfoot asleep, your own fur babies, a mixer of soft sounds (rain, ocean, fan, brown noise, lullabies) and a sleep timer.'),
  # play21 (wave21): the Bears Dojo's music corner
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do and a music corner with instruments and long, slow songs.'),
+})
+
+# fixB28 (QA 28): complete titles of 60 characters or fewer, so none of them is cut with "…" in search results and chat citations;
+# and the names the tools page and the menu now use (Calm games, Learn by doing)
+SEARCH.update({
+ 'what-am-i-feeling.html': ('Paint Your Feelings: A Private Map of How You Feel', 'Answer a few plain questions, one at a time, and see a map of what may be behind how you feel, an abstract painting made from your own answers, and one or two first steps. It runs on your device and sends nothing anywhere.'),
+ 'make-a-plan.html': ('Plan It Once: Free Templates for Agreements You Both Keep', 'Pick a template for holidays, a family event, screen time, a shared room, different work hours or a handoff between two homes. Fill it in alone or together, then send it as a link.'),
+ 'sleeping-pals-cam.html': ('Sleeping Pals Cam: Two Pups Asleep, for Bedtime', 'A calm night cam to go to bed with: Tidbit and Sugarfoot asleep, your own fur babies, a mixer of soft sounds (rain, ocean, fan, brown noise, lullabies) and a sleep timer.'),
+ 'pause-and-play.html': ('Calm Games and a Place to Relax: Pause & Play, Free', 'Relax with a breathing break, a silent wind-down, slow colors, calm music and sounds, or play a calm game with no timers and no way to lose.'),
+ 'do/index.html': ('Learn by Doing: Practice the Worksheets on an Example', 'Try the core worksheets on a made-up household first, see your learning map fill in, or watch two rhythms fall into step. Nothing to sign up for.'),
 })
 
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results

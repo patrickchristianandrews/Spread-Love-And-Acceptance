@@ -366,7 +366,7 @@
   function snoozed() { return !!S.nn && Date.now() - Date.parse(S.nn) < 7 * DAY; }
 
   /* the places from resume.js: "Continue: <title>" and up to two "Also" links */
-  function ptitle(p) { return p.t || R().kindName(p); }
+  function ptitle(p) { return (R().name && R().name(p)) || p.t || R().kindName(p); }
   function samePath(a, b) { return String(a || '').split('#')[0].split('?')[0] === String(b || '').split('#')[0].split('?')[0]; }
   function alsoItem(p) {
     return '<li class="rs-also-i"><span class="rs-also-k">Also</span><a class="rs-also-a" href="' + esc(R().href(p)) + '">' + esc(ptitle(p)) + '</a>' +
@@ -386,19 +386,22 @@
     if (ds.next && !ds.doneToday && ds.count === 0) return { kind: 'days', h: 'Seven small days, part 1: ' + ds.title, d: 'One small thing a day, about a minute each.', href: '#small-days', btn: 'Try part 1' };
     return { kind: 'week-card', h: info.w.t, d: info.w.tr, href: '/this-week.html', btn: 'See this week’s idea', small: 'This week' };
   }
-  function panelHTML(now, info) {
+  function panelHTML(now, info, openLast) {
     var P = resumeParts(now, info), prim = P.prim, step = P.step, any = !!(prim || P.also.length);
     var h = '<h2 class="tw-back-h" id="tw-back-h">Welcome back</h2>';
     h += '<p class="tw-step"><strong>' + esc(step.h) + '</strong><span>' + esc(step.d) + '</span></p>' +
       '<p class="tw-go"><a class="tw-btn" href="' + esc(step.href) + '">' + esc(step.btn) + '</a> <button type="button" class="tw-link tw-quiet" data-tw-notnow>Not now</button></p>';
     h += (installLine() || (step.small ? '' : '<p class="tw-small">This week: <a href="/this-week.html">' + esc(info.w.t) + '</a></p>'));
     if (any) {   // last: pick up where you left off
-      h += '<div class="rs-last"><h3 class="rs-last-h">Pick up where you left off</h3>';
+      // QA28 C8: with two or more places it is one short row to open (the same content and order inside), so the home choices stay on the first screen
+      var count = (prim ? 1 : 0) + P.also.length, fold = count >= 2, first = prim || P.also[0];
+      h += fold ? '<details class="rs-last is-fold"' + (openLast ? ' open' : '') + '><summary class="rs-last-sum"><span class="rs-last-h">Pick up where you left off</span><span class="rs-last-n">' + esc(ptitle(first)) + ' and ' + (count - 1) + ' more</span></summary>'
+        : '<div class="rs-last"><h3 class="rs-last-h">Pick up where you left off</h3>';
       if (prim) h += '<p class="tw-step rs-step"><span>' + esc(R().detail(prim)) + '</span></p>' +
         '<p class="tw-go"><a class="tw-btn rs-cont" href="' + esc(R().href(prim)) + '">Continue: ' + esc(ptitle(prim)) + '</a></p>';
       if (P.also.length) h += '<ul class="rs-also" aria-label="Also">' + P.also.map(alsoItem).join('') + '</ul>';
       h += '<p class="rs-priv"><span>Remembered on this device only.</span>' + (prim ? '<button type="button" class="rs-x" data-rs-rm="' + esc(prim.u) + '" aria-label="Remove ' + esc(ptitle(prim)) + ' from what is remembered">Remove</button>' : '') +
-        '<button type="button" class="rs-x" data-rs-forget>Forget these</button></p></div>';
+        '<button type="button" class="rs-x" data-rs-forget>Forget these</button></p>' + (fold ? '</details>' : '</div>');
     }
     h += '<p class="tw-say" role="status" aria-live="polite"></p>';
     return { html: h, paths: [prim].concat(P.also).filter(Boolean).map(function (p) { return p.u; }).concat(step && step.path ? [step.path] : []) };
@@ -420,7 +423,7 @@
       if (!box.querySelector('.h-resume-item') && !box.classList.contains('is-tip')) box.hidden = true;
     }
     function draw(say) {
-      var out = panelHTML(now, info);
+      var was = panel.querySelector('details.rs-last'), out = panelHTML(now, info, !!(was && was.open));
       panel.innerHTML = out.html; dedupe(out.paths);
       if (say) { var keep = panel.querySelector('.tw-say'); keep.textContent = say; keep.setAttribute('tabindex', '-1'); try { keep.focus({ preventScroll: true }); } catch (e) {} }
     }
@@ -447,8 +450,19 @@
   }
 
   /* ---------------------------------------------------------------- /this-week.html: "Where you left off" */
+  // QA28 B7: the names of tools as they are called now (resume.js shows them instead of the title that was stored)
+  function whenNames(cb) {
+    if (G.TOLToolForPage || G.TOLToolArt) return cb();
+    var s = doc.createElement('script'), done = false;
+    function fin() { if (!done) { done = true; cb(); } }
+    s.src = '/assets/js/tools-registry.js'; s.async = true; s.onload = fin; s.onerror = fin; doc.head.appendChild(s);
+    setTimeout(fin, 2000);
+  }
   function placesSection(sec) {
-    whenResume(function () {
+    whenResume(function () { whenNames(function () { placesDraw(sec); }); });
+  }
+  function placesDraw(sec) {
+    (function () {
       var Q = R(); if (!Q || doc.getElementById('where-you-left-off')) return;
       var host = doc.createElement('section'); host.className = 'rs-where tw-sec'; host.id = 'where-you-left-off'; host.setAttribute('aria-labelledby', 'rs-where-h');
       function row(p) {
@@ -482,7 +496,7 @@
         if (b.hasAttribute('data-rs-forget')) { Q.forget(); draw('Done. Nothing is remembered now.'); }
         else if (b.hasAttribute('data-rs-rm')) { Q.remove(b.getAttribute('data-rs-rm')); draw('Removed.'); }
       });
-    });
+    })();
   }
 
   function initHome(sec) {

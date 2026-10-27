@@ -16366,6 +16366,93 @@
       ]
     },
     {
+      "id": "toolcount",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "how many tools",
+      "pat": "\\bhow many (free |different )?tools\\b|\\b(number|count|total) of (the )?tools\\b",
+      "keys": [
+        "how many tools"
+      ],
+      "what": [
+        "There are 20 tools on this site, and every one is free. They help you check a text before you send it, share out the work at home, paint a feeling, calm down, and more.",
+        "Each one says what it does, what you get and about how long it takes."
+      ],
+      "how": [
+        "Start with the six most useful, at the top of the Tools page.",
+        "Or filter by what you want help with, and by who it is for."
+      ],
+      "links": [
+        [
+          "All tools, by type",
+          "/tools.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Which tool fits me?",
+          "Which tool fits my situation?"
+        ]
+      ],
+      "topic": false
+    },
+    {
+      "id": "pupslook",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "name": "what Tidbit and Sugarfoot look like",
+      "pat": "\\b(what|how) (do|does|did) (tidbit|sugarfoot|the pups?|tidbit and sugarfoot|the two pups|they) look( like)?\\b|\\b(describe|picture) (tidbit|sugarfoot|the pups|the two pups|tidbit and sugarfoot)\\b|\\bwhat (kind|sort) of (animals?|dogs?|pups?|creatures?) (is|are) (tidbit|sugarfoot|they|tidbit and sugarfoot)\\b|\\b(is|are) (tidbit|sugarfoot|tidbit and sugarfoot|they) (a )?(dogs?|pups?|puppies)\\b",
+      "keys": [],
+      "what": [
+        "Tidbit and Sugarfoot are two pups who are best friends. Tidbit is the leaner one, with folded ears, round tan dots above her eyes, tan cheeks and legs, and a collar with a gold heart tag. Sugarfoot is the stockier one, with long drop ears, tan brows, a cream muzzle and big white toes."
+      ],
+      "how": [
+        "You can meet them in the Frequency Buddies cartoon.",
+        "In Tidbit and Sugarfoot’s Arcade you can play as either one."
+      ],
+      "links": [
+        [
+          "Frequency Buddies",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Tidbit and Sugarfoot’s Arcade",
+          "/frequency-journey.html"
+        ]
+      ],
+      "chips": [],
+      "topic": false
+    },
+    {
+      "id": "paint",
+      "kind": "tool",
+      "name": "Paint Your Feelings",
+      "keys": [
+        "paint your feelings",
+        "paint my feelings",
+        "paint a feeling",
+        "paint feelings",
+        "what am i feeling"
+      ],
+      "what": "Paint Your Feelings is a tool that asks a few short questions, one at a time, then shows a map of what may be behind how you feel and a painting made from your answers. The quick version takes about 3 minutes and the thorough one up to 8. It runs on your device, and nothing is kept unless you choose to save a session.",
+      "how": [
+        "Finish the sentence “Right now I feel…” in your head, then answer the first question.",
+        "Skip any question, say “I don’t know,” or go back whenever you like.",
+        "At the end, confirm, change or reject each part of the summary.",
+        "Look at your painting. A list says what each color and shape stands for, and you can change any of it.",
+        "Save the session only if you want to see it again later."
+      ],
+      "results": "The map has four groups: what you confirmed, likely contributors, possible connections, and what is still unknown. Every guess is only a guess. It does not diagnose anything, and you decide what fits.",
+      "links": [
+        [
+          "Paint Your Feelings",
+          "/what-am-i-feeling.html"
+        ]
+      ]
+    },
+    {
       "id": "alltools",
       "kind": "intent",
       "name": "all tools, by type",

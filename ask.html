@@ -328,8 +328,10 @@
     var about = (location.search.match(/[?&]about=([^&]*)/) || [])[1];
     try { about = about ? decodeURIComponent(about.replace(/\+/g, ' ')).slice(0, 120) : ''; } catch (e) { about = ''; }
     var chat = null;
-    if (window.TOLChat) chat = window.TOLChat.mount(host, about ? { topic: about,
-      greeting: 'Hello! I’m Professor Puddles. You were reading “' + about + ',” so let’s start there. Ask me anything else about it in your own words.' } : {});
+    var art = window.TOLPuddlesArt || {};   // the same raindrop as everywhere else (site.js)
+    var mopts = { name: art.name || 'Professor Puddles', svg: art.svg || '', color: art.color || '#CFE6FA' };
+    if (about) { mopts.topic = about; mopts.greeting = 'Hello! I’m Professor Puddles. You were reading “' + about + ',” so let’s start there. Ask me anything else about it in your own words.'; }
+    if (window.TOLChat) chat = window.TOLChat.mount(host, mopts);
     // ?q=<their words> (from the site search's "Ask Professor Puddles in your words"): put them in the box, ready to send.
     // It stays on this device: nothing is asked or sent until they press Send. On touch the box isn't focused (no keyboard over the chat).
     var q0 = (location.search.match(/[?&]q=([^&]*)/) || [])[1];

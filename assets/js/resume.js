@@ -116,6 +116,19 @@
   function spotted(p) { return !!(READING[p.k] && p.s && (p.f || 0) >= 0.04 && !p.done); }
   function isDone(p) { return p.k === 'week' ? !weekDraft() : !!p.done; }
   function kindName(p) { return KINDS[p.k] || 'Page'; }
+  // QA28 B7: the title is stored when a place is saved, so a tool renamed since would keep its old name here for up to 30 days.
+  // A tool's own page is shown by its current name from the site's tool list (tool-art.js on the home page, or tools-registry.js).
+  function name(p) {
+    if (!p || (p.k !== 'tool' && p.k !== 'feel')) return p && p.t || '';
+    var u = String(p.u || '').split(/[?#]/)[0], n = '';
+    try {
+      var f = G.TOLToolForPage && G.TOLToolForPage(u);
+      if (f && f.tool && !f.mode && f.tool.name && f.tool.kind !== 'workpaper') n = f.tool.name;
+      var A = G.TOLToolArt;
+      if (!n && A && A.meta && A.order) A.order.forEach(function (id) { var m = A.meta[id]; if (!n && m && m.n && String(m.h || '').split(/[?#]/)[0] === u) n = m.n; });
+    } catch (e) {}
+    return plain(n || p.t, 90);
+  }
   function href(p) {
     if (spotted(p)) return p.u + '#resume';
     if (p.k === 'episode' && p.ep) return p.u + '?ep=' + p.ep;
@@ -318,7 +331,7 @@
   /* ---------------------------------------------------------------- start */
   if (stopped()) lsDel(KEY);   // "Stop remembering pages I visit" also clears this list
   G.TOLResume = {
-    KEY: KEY, SKIP: SKIP, enabled: enabled, places: places, visible: visible, model: model, remove: remove, forget: forget, href: href, detail: detail,
+    KEY: KEY, SKIP: SKIP, enabled: enabled, places: places, visible: visible, model: model, remove: remove, forget: forget, href: href, detail: detail, name: name,
     ago: ago, kindName: kindName, isDone: isDone, mmss: mmss, onChange: function (f) { hooks.push(f); }, css: css
   };
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', startRecording); else startRecording();

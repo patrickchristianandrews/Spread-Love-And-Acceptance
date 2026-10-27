@@ -183,7 +183,7 @@
 .read .tl-wp-list{ display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.35rem 1rem; margin:0 0 .9rem !important; }
 .read .tl-wp-list li{ display:flex; flex-direction:column; gap:.05rem; padding:.35rem 0 !important; border-bottom:1px dashed #E6DAF3 !important; font-size:.93rem; line-height:1.4; }
 .tl-wp-list a{ font-weight:600; }
-.tl-wp-c{ display:inline-block; margin-right:.2rem; padding:0 .4rem; border-radius:6px; font:500 .74rem/1.5 "IBM Plex Mono", ui-monospace, monospace; color:#6B4A12; background:#FFF0D9; text-decoration:none; }
+.tl-wp-c{ display:inline-block; white-space:nowrap; margin-right:.2rem; padding:0 .4rem; border-radius:6px; font:500 .74rem/1.5 "IBM Plex Mono", ui-monospace, monospace; color:#6B4A12; background:#FFF0D9; text-decoration:none; }
 .tl-wp-d{ font-size:.86rem; color:var(--ink-soft, #5A5346); }
 .tl-wp-ways{ margin:0; }
 @media (max-width:640px){ .read .tl-wp-list{ grid-template-columns:1fr; } }

@@ -1271,6 +1271,8 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
   background:#2F5F8A; color:#fff; font:600 .9rem "Lora", Georgia, serif; text-decoration:none; }
 a.tol-pud-card-go:hover, button.tol-pud-card-go:hover{ background:#264E73; }
 .tol-pud-end{ margin:2.2rem 0 1rem; }
+.tol-pud-card-drop{ display:inline-grid; place-items:center; width:1.45em; height:1.45em; border-radius:50%; background:#fff; flex:none; }
+.tol-pud-card-drop svg{ width:1.2em; height:1.2em; overflow:visible; }
 @media print{ .tol-pud-end{ display:none !important; } }
 @media (max-width:420px){ .tol-pud-card{ grid-template-columns:1fr; } .tol-pud-card-art{ grid-row:auto; width:3rem; height:3rem; } }
 
@@ -2187,6 +2189,11 @@ html[data-theme="dark"]:not(.tol-nodark) :is(.tol-bar, .tol-panel, .tol-set, .to
 @media (prefers-color-scheme: dark){
   html:not([data-theme="light"]):not(.tol-nodark) :is(.tol-bar, .tol-panel, .tol-set, .tol-foot, .tol-listen) :is(button, a) svg{ filter:none !important; }
 }
+/* ...but the Professor's drawing is a picture, not a line icon: it is turned back like every other picture, so he is pale blue in dark mode too */
+html[data-theme="dark"]:not(.tol-nodark) :is(.tol-bar, .tol-panel, .tol-set, .tol-foot, .tol-listen) :is(button, a) .tol-help-art svg{ filter:invert(1) hue-rotate(180deg) !important; }
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]):not(.tol-nodark) :is(.tol-bar, .tol-panel, .tol-set, .tol-foot, .tol-listen) :is(button, a) .tol-help-art svg{ filter:invert(1) hue-rotate(180deg) !important; }
+}
 .tol-bar button.tol-search-btn svg circle, .tol-bar button.tol-search-btn svg path{ stroke:currentColor; }
 
 /* Today's Weather on a phone: the little cloud keeps its words, just above Breathe */
@@ -2912,6 +2919,8 @@ small.tol-mi-n{ display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit
 .tol-panel-quick a:hover{ background:var(--paper-deep); }
 .tol-panel-quick a[aria-current="page"]{ border-color:var(--brass); }
 .tol-panel-quick a:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-qi{ display:inline-grid; place-items:center; flex:none; width:20px; height:20px; color:var(--focus, #2B5B8C); }
+.tol-qi svg{ display:block; width:20px; height:20px; }
 @media (min-width:700px){ .tol-panel-quick ul{ grid-template-columns:repeat(3, 1fr); } }
 @media print{ .tol-panel-quick{ display:none !important; } }
 .tol-panel :is(.tol-panel-tools button, .tol-panel-tools a, .tol-panel-focus button, .tol-panel-focus a){ min-height:44px; box-sizing:border-box; }

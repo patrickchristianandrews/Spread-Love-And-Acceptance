@@ -22,6 +22,7 @@
   function put(code, h1) {
     var c = document.querySelector('[data-ms-code]'), h = document.querySelector('[data-ms-h1]');
     if (c) c.textContent = code; if (h) h.textContent = h1;
+    try { document.dispatchEvent(new CustomEvent('tol-title-ready')); } catch (e) {}   // the page's Ask Professor Puddles card reads the real name
   }
   function crumbs(parts) {
     return '<nav class="tol-where ms-where no-bubble" aria-label="Where you are"><ol><li><a href="/index.html">Home</a></li>' +

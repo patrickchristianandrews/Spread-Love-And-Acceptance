@@ -191,3 +191,17 @@
   .emo-item details > *:not(summary){ display:block; }
   details.emo-keep > *{ display:block !important; }
 }
+
+/* QA28 C3: on a phone the research table stacks into one block per idea, so nothing is cut off or needs sideways scrolling */
+@media (max-width:640px){
+  .table-wrap:has(> .emo-table){ overflow-x:visible; }
+  .emo-table{ min-width:0; }
+  .emo-table thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .emo-table, .emo-table tbody, .emo-table tr, .emo-table td{ display:block; width:auto; }
+  .emo-table tr{ padding:.7rem 0; border-bottom:1px solid var(--line); }
+  .emo-table tbody tr:last-child{ border-bottom:0; }
+  .emo-table td, main .table-wrap .emo-table td{ padding:.15rem 0; border:0 !important; height:auto; }
+  .emo-table td:first-child{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; }
+  .emo-table td:nth-child(3){ font-size:.9rem; color:var(--ink-soft, #5A5346); }
+  .emo-table td:nth-child(3)::before{ content:"How strong: "; font-weight:600; }
+}

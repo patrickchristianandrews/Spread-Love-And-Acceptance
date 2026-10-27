@@ -141,7 +141,7 @@
     { solo: 1, t: 'Understanding your own wiring', s: 'How you take things in, and why', steps: [
       ['wavelength', 'Twelve quick questions on how you think, talk and listen.'],
       ['wiring', 'Turn it into a one-page card other people can use.'],
-      ['roots', 'Look gently at where a reaction you don’t like may have started.']] },
+      ['roots', 'See where a reaction you don’t like may have started.']] },
     { solo: 1, t: 'Feeling overwhelmed', s: 'When everything feels like too much', steps: [
       ['weather', 'Four taps: calm, revved up or running on empty?'],
       ['ask', 'Type what’s going on, the way you’d tell a friend.'],

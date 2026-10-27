@@ -397,6 +397,44 @@
    ],
    "match": "quarter to a half",
    "why": "\"a quarter to a half\" is a range of fractions in a research finding, not a time."
+  },
+  {
+   "file": "assets/js/lemonade-calc.js",
+   "rule": "british",
+   "hits": [
+    "loo roll"
+   ],
+   "match": "loo roll and supplies",
+   "why": "A search phrase a British visitor might type, matched to the US word \"supplies\". It is never shown."
+  },
+  {
+   "file": "assets/js/site.js",
+   "rule": "british",
+   "hits": [
+    "loo roll",
+    "toilet roll"
+   ],
+   "match": "loo roll",
+   "why": "Search-phrase joins: what a British visitor might type is mapped to the US word. Not shown as page text."
+  },
+  {
+   "file": "tools/chat/program-cards.json",
+   "rule": "british",
+   "hits": [
+    "loo roll",
+    "toilet roll"
+   ],
+   "match": "loo roll",
+   "why": "Question patterns that match British wording a visitor might type; the answers use US wording."
+  },
+  {
+   "file": "assets/js/site.js",
+   "rule": "british",
+   "hits": [
+    "toilet roll"
+   ],
+   "match": "toilet roll",
+   "why": "Search-phrase join: what a British visitor might type is mapped to the US word. Not shown as page text."
   }
  ]
 }

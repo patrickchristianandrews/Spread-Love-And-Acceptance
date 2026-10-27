@@ -112,6 +112,19 @@
     if (!t || /^Spread Love/i.test(t)) { var h = D.querySelector('main h1, h1'); t = h ? h.textContent : t; }
     return plain(t, 140) || here;
   }
+  // QA28 B7: a title is stored when a page is saved, so a tool that was renamed since keeps its old name there. For a tool's own page
+  // the current name comes from the site's tool list (tools-registry.js, or tool-art.js on the home page), never from what was stored.
+  function toolName(u) {
+    var p = norm(String(u || '').split(/[?#]/)[0]), n = '', A = window.TOLToolArt;
+    try {
+      var f = window.TOLToolForPage && window.TOLToolForPage(p);
+      if (f && f.tool && !f.mode && f.tool.name && f.tool.kind !== 'workpaper') n = f.tool.name;
+      if (!n && A && A.meta && A.order) A.order.forEach(function (id) { var m = A.meta[id]; if (!n && m && m.n && String(m.h || '').split(/[?#]/)[0] === p) n = m.n; });
+    } catch (e) {}
+    return n;
+  }
+  function freshTitle(u, t) { return toolName(u) || t; }
+  function haveNames() { return !!(window.TOLToolForPage || window.TOLToolArt); }
   function isChapter() { return CHAPTER.test(here) && !!D.querySelector('main'); }
   function isReading() {
     if (isChapter()) return true;
@@ -776,7 +789,7 @@
       html += '<section class="sv-group" aria-labelledby="sv-g-' + g[0] + '"><h2 id="sv-g-' + g[0] + '">' + g[1] + ' <span class="sv-c">' + (items.length + extra.length) + '</span></h2><ul class="sv-list">';
       items.forEach(function (x) {
         var base = keyOf(x.url), open = base + (x.spot ? SPOT_HASH : (x.url.indexOf('#') > 0 ? x.url.slice(x.url.indexOf('#')) : ''));
-        var ns = notesOf(x).slice().reverse(), title = esc(x.title || x.url);
+        var ns = notesOf(x).slice().reverse(), title = esc(freshTitle(x.url, x.title) || x.url);
         html += '<li class="sv-item" data-url="' + esc(x.url) + '">' +
           '<div class="sv-main"><a class="sv-title" href="' + esc(open) + '">' + title + '</a>' +
           '<p class="sv-meta">Saved ' + esc(dayText(x.at)) + (x.spot ? ' · <span class="sv-spot">' + ICON + 'Your place' + (x.spot.h ? ': near “' + esc(x.spot.h) + '”' : '') + '</span>' : '') +
@@ -814,6 +827,7 @@
     var msg = D.getElementById('sv-msg');
     function say(h) { if (msg) msg.innerHTML = h; }
     renderList(host);
+    if (!haveNames()) { var rg = D.createElement('script'); rg.src = '/assets/js/tools-registry.js'; rg.onload = function () { renderList(host); }; D.head.appendChild(rg); }
     hooks.push(function () { renderList(host); });
     window.addEventListener('storage', function (e) { if (e.key === KEY || e.key === LAST || e.key === null) renderList(host); });
     host.addEventListener('click', function (e) {
@@ -877,6 +891,19 @@
   }
   window.TOLSaved = { list: list, find: find, isSaved: isSaved, save: save, remove: remove, setNote: setNote, notesOf: notesOf, addNote: addNote, editNote: editNote, deleteNote: deleteNote, renderDots: renderDots, lastRead: lastRead, lastAll: lastAll,
     spotNow: spotNow, goSpot: goSpot, spotTop: spotTop, typeOf: typeOf, cleanUrl: cleanUrl, renderList: renderList, openNote: openNote, KEYS: { saved: KEY, last: LAST, tip: TIP, how: HOW } };
+  // the home page's "Pick up where you left off" list (home.js draws it from the saved titles): current names for renamed tools
+  function homeNames() {
+    if (!/^\/(index\.html)?$/.test(location.pathname)) return;
+    var n = 0;
+    (function go() {
+      var items = D.querySelectorAll('.h-resume-item');
+      if (!items.length) { if (++n < 12) setTimeout(go, 400); return; }
+      Array.prototype.forEach.call(items, function (a) {
+        var nm = toolName((a.getAttribute('href') || '').split('#')[0]), t = a.querySelector('.h-resume-t');
+        if (nm && t) t.textContent = nm;
+      });
+    })();
+  }
   function start() {
     css(function () {
       var tries = 0;
@@ -885,6 +912,7 @@
         setupButton();
         menuLink();
         savedPage();
+        homeNames();
         arriveAtSpot();
         chapterSetup();
         try { howLine(); } catch (e) {}

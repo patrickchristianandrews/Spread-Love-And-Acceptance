@@ -100,7 +100,7 @@
       '<path d="M32 76h44a14 14 0 0 0 1.500-27.900A19 19 0 0 0 42 52a12 12 0 0 0-10 24z" fill="{c}"{s}/>',
 
     // Professor Puddles is always the same raindrop with the cap and glasses (same drawing as the Ask button, PUDDLES_SVG in site.js)
-    ask: '<svg x="6" y="4" width="84" height="88" viewBox="-4 -14 88 92" overflow="visible"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>',
+    ask: '<svg x="5.4" y="-12.8" width="96.6" height="101.2" viewBox="-4 -14 88 92" overflow="visible"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>',
 
     start10: '<path d="M40 8h16" stroke="{i}" stroke-width="4" stroke-linecap="round"/><path d="M48 8v10" stroke="{i}" stroke-width="3.4"/>' +
       '<circle cx="48" cy="54" r="32" fill="{c}"{s}/><path d="M48 54V24a30 30 0 0 1 26 15z" fill="{a}"/><circle cx="48" cy="54" r="32" fill="none"{s}/>' +
@@ -144,7 +144,7 @@
       p: ['/workpapers/calculators/is-the-setup-working-quick.html', '/is-the-setup-working.html', '/workpapers/calculators/look-back-30-days-quick.html', '/look-back-30-days.html'],
       m: 5, w: 'two group', ty: 'load', al: 'plan', o: 'load plan', u: 7, top: 0, i: 'load',
       pr: 'Find out whether your split can last.', a: '#4DAA7E', t: '#DDF3E7', k: '#236C4B' },
-    calm: { n: 'Cool-down corner', h: '/upset-right-now.html', p: ['/upset-right-now.html', '/tools/soften-a-tense-moment.html'], m: 5, w: 'solo two', ty: 'calm', al: 'talk health play family', o: 'calm talk', u: 9, top: 6, i: 'calm',
+    calm: { n: 'Upset right now?', h: '/upset-right-now.html', p: ['/upset-right-now.html', '/tools/soften-a-tense-moment.html'], m: 5, w: 'solo two', ty: 'calm', al: 'talk health play family', o: 'calm talk', u: 9, top: 6, i: 'calm',
       pr: 'Settle down in five minutes, then come back kinder.', a: '#4DAFB6', t: '#D9F1F2', k: '#1B6A70' },
     plans: { n: 'Plan it once', h: '/make-a-plan.html', p: ['/make-a-plan.html'], m: 10, w: 'solo two', ty: 'plan', al: 'family load', o: 'plan', u: 6, top: 0, i: 'connect load',
       pr: 'Decide it once, kindly, and both keep it.', a: '#B068AE', t: '#F5E2F4', k: '#763774' },
@@ -156,11 +156,11 @@
       pr: 'Four taps to learn if now is a good time to talk.', a: '#F0B02E', t: '#DFEFFB', k: '#245F93', tm: '2026-12-31' },
     ask: { n: 'Ask Professor Puddles', h: '/ask.html', p: ['/ask.html'], m: 2, w: 'solo', ty: 'learn', al: 'talk', o: 'learn talk self other', u: 10, top: 2, i: 'feel kind',
       pr: 'Say what’s going on and get kind next steps.', a: '#9275C4', t: '#ECE6F6', k: '#553E8E' },
-    start10: { n: 'Ten-minute start', h: '/start-in-10-minutes.html', p: ['/start-in-10-minutes.html'], m: 10, w: 'solo two', ty: 'learn', al: 'self', o: 'learn self', u: 7, top: 0, i: 'self',
+    start10: { n: 'Start in 10 minutes', h: '/start-in-10-minutes.html', p: ['/start-in-10-minutes.html'], m: 10, w: 'solo two', ty: 'learn', al: 'self', o: 'learn self', u: 7, top: 0, i: 'self',
       pr: 'Ten minutes, four small steps, and something to keep.', a: '#E86F5F', t: '#FDE4DF', k: '#A3342A' },
     explore: { n: 'Learn by doing', h: '/do/index.html', p: ['/do/index.html', '/quest.html', '/tools/frequency-sync-visualizer.html'], m: 5, w: 'solo', ty: 'learn', al: 'load play', o: 'learn fun', u: 4, top: 0, i: 'load self',
       pr: 'Practice on a made-up home before you try your own.', a: '#5B9BD5', t: '#DEEAF7', k: '#2A5E97' },
-    pauseplay: { n: 'Gentle games', h: '/pause-and-play.html',
+    pauseplay: { n: 'Calm games', h: '/pause-and-play.html',
       p: ['/pause-and-play.html', '/frequency-journey.html', '/word-bloom.html', '/quiet-words.html', '/quiet-crossword.html', '/daily-ledger-crossword.html', '/recheck-drive.html', '/bears-dojo.html', '/coin-pusher.html', '/frequency-buddies-music-video-maker.html'],
       m: 5, c: 'Any time', w: 'solo two', ty: 'play', al: 'calm', o: 'fun calm', u: 5, top: 0, i: 'calm',
       pr: 'Take a breather with games that have no way to lose.', a: '#4B9FD0', t: '#DCEEF8', k: '#1F6591' }
@@ -169,10 +169,10 @@
 
   // What do you want help with? (the six tiles on /tools.html). art: the tool whose picture stands for it
   var INTENTS = [
-    { id: 'calm', label: 'Calm down', sub: 'Settle first, talk later', art: 'calm' },
-    { id: 'kind', label: 'Say it kindly', sub: 'Words that land well', art: 'signal' },
+    { id: 'calm', label: 'Calm down right now', sub: 'Settle first, talk later', art: 'calm' },
+    { id: 'kind', label: 'Say something hard, well', sub: 'Words that land well', art: 'signal' },
     { id: 'feel', label: 'Understand a feeling', sub: 'Name what is going on', art: 'feelings' },
-    { id: 'load', label: 'Share the load', sub: 'Make it fair for everyone', art: 'split' },
+    { id: 'load', label: 'Share the load at home', sub: 'Make it fair for everyone', art: 'split' },
     { id: 'self', label: 'Know myself', sub: 'How you tick', art: 'roots' },
     { id: 'connect', label: 'Connect', sub: 'Feel closer', art: 'bonding' }
   ];

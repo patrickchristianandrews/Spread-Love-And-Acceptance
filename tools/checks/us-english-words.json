@@ -1272,6 +1272,18 @@
   {
    "re": "\\bin a dog[’']s dinner\\b",
    "fix": "in a dog's food"
+  },
+  {
+   "re": "\\b(?:toilet|loo|bathroom) roll\\b",
+   "fix": "toilet paper"
+  },
+  {
+   "re": "\\bdish(?:es)? liquid\\b|\\bwashing[- ]up liquid\\b",
+   "fix": "dish soap"
+  },
+  {
+   "re": "\\bnon-?judgemental\\b|\\bjudgemental\\b",
+   "fix": "nonjudgmental / judgmental"
   }
  ],
  "britishSpellings": {

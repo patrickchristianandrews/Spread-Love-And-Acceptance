@@ -107,9 +107,9 @@
       mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share', top: 4,
       kw: 'communication quiz personality quiz wave code style test archetype compare wiring card neurodivergent adhd autistic how i communicate card love languages care card appreciation what i need know how you connect: a quiz and two cards communication style quiz wavelength the wiring card how i like to be spoken to what feels like care to me care card the logic behind it why did they react like that explain my reaction autistic logic they think im rude analogy small talk why people do that' },
     { id: 'roots', name: 'Old rules, new choices', brand: 'Roots & Wings', href: '/growing-up.html#roots-h', type: 'self', also: [],
-      does: 'Tap through one trait or reaction, and where it may have started, in a few gentle steps.',
+      does: 'Tap through one trait or reaction, and where it may have started, in a few short steps.',
       gets: 'A fairer, grown-up reading of an old rule, and small ways to work with it now.',
-      mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Choose which old rules to keep: look gently at where a reaction started',
+      mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Choose which old rules to keep: see where a reaction started',
       kw: 'childhood growing up why do i react old rules where a reaction comes from roots & wings' },
     { id: 'take-in', name: 'Read your way', brand: '', href: '/how-you-take-things-in.html', type: 'self', also: ['health'],
       does: 'Pick what fits: ADHD, autistic, dyslexic, or just what helps. Change it any time.',
@@ -170,7 +170,7 @@
     // ---------- Calm and stress
     // consol12: one calm place. 'upset', 'garden', 'music', 'drift', 'soften', 'pause' -> 'calm'. Each mode keeps its own page.
     // owner17: the calm tools are also gathered on one page, Relax and reset (/pause-and-play.html#relax), a mode here.
-    { id: 'calm', name: 'Cool-down corner', brand: '', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
+    { id: 'calm', name: 'Upset right now?', brand: 'the Cool-down corner', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
       modes: [['Upset right now? A 5-minute calm-down', '/upset-right-now.html', 'Just me', 'Upset right now?', '🫧'], ['Breathing game', '/night-garden.html', 'Just me', '', '🌙'],
         ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colors and tones', '/calm-visualizer.html', 'Just me', 'Slow colors', '🌀'],
         ['Relax and reset: every calm tool in one place', '/pause-and-play.html#relax', 'Just me', 'Relax and reset', '🌿'],
@@ -178,7 +178,7 @@
       does: 'Right now: a pause line and a one-minute breathing pacer, or a breathing game, sounds or slow colors. Together: a pause plan.',
       gets: 'A calmer body, words to come back to the talk with, and a pause plan for next time.',
       mins: 5, time: 'About 5 minutes. A pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time', top: 6,
-      kw: 'relax and reset relaxing tools relaxation calm tools breathing break wind down angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument calm down: right now, or before the next time upset right now? a 5-minute calm-down breathing game calm sounds and music soften a tense moment make a pause plan for arguments' },
+      kw: 'cool-down corner relax and reset relaxing tools relaxation calm tools breathing break wind down angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument calm down: right now, or before the next time upset right now? a 5-minute calm-down breathing game calm sounds and music soften a tense moment make a pause plan for arguments' },
     { id: 'calmkit', name: 'Calm-down plan', brand: 'the Calm-Down Kit', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
       does: 'On a calm day, decide your early signs, a pause signal and what settles you.',
       gets: 'Your own plan for heated moments, to keep on your phone or print.',
@@ -208,7 +208,7 @@
 
     // ---------- Health and body
     { id: 'feelings', name: 'Paint Your Feelings', brand: '', href: '/what-am-i-feeling.html', type: 'self', also: ['calm'],
-      does: 'Gentle questions that help you notice what you might not have considered yet behind a feeling.',
+      does: 'A few plain questions that help you notice what you might not have considered yet behind a feeling.',
       gets: 'A map you can correct, a picture made from your answers, and one or two first steps.',
       mins: 5, time: 'About 3 to 8 minutes', who: ['solo'], benefit: 'Find what may be behind a feeling, on your own device', top: 1,
       kw: 'feelings emotions why do i feel this way map picture overwhelmed irritable low mood what am i feeling' },
@@ -226,7 +226,7 @@
       gets: 'Your filled-in sheets, and a report written from your answers: findings, things worth a second look, and a plan.',
       mins: 45, time: 'About 45 minutes, in parts', who: ['solo', 'two', 'group'], benefit: 'Everything in one place, in the right order',
       kw: 'workpapers worksheets pdf fill in suite full path package report' },
-    { id: 'sixweeks', name: 'Six gentle weeks', brand: '', href: '/prog-01.html', type: 'plan', also: ['load'],
+    { id: 'sixweeks', name: 'Six-week program', brand: '', href: '/prog-01.html', type: 'plan', also: ['load'],
       does: 'One small step a week, in order, alone or with anyone you share a home with. Start with a five-minute week 0, and add a reminder for each week to your own calendar.',
       gets: 'A before-and-after look at the end. Missing a week is fine.',
       mins: 30, time: 'About 30 minutes a week', who: ['solo', 'two', 'group'], benefit: 'A guided start, one week at a time',
@@ -243,11 +243,11 @@
       gets: 'Kind next steps, words you could use, and the right pages, made only from this site.',
       mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Get kind next steps for your exact situation: type it the way you’d tell a friend', top: 2,
       kw: 'chat ask question help puddles assistant ask a question in your own words' },
-    { id: 'start10', name: 'Ten-minute start', brand: '', href: '/start-in-10-minutes.html', type: 'learn', also: ['self'],
+    { id: 'start10', name: 'Start in 10 minutes', brand: '', href: '/start-in-10-minutes.html', type: 'learn', also: ['self'],
       does: 'Four small steps, alone or with someone: your weather, one short read, one pattern, one thing to try.',
       gets: 'A short “here’s what I got” summary to keep or screenshot.',
       mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'The quickest way in: four small steps, and a “here’s what I got” to keep',
-      kw: 'start beginner first time new here quick start start in 10 minutes' },
+      kw: 'start beginner first time new here quick start ten-minute start start in 10 minutes' },
     // consol12: 'playground', 'quest', 'sync', 'connect' -> 'explore'
     { id: 'explore', name: 'Learn by doing', brand: 'the Workpaper Playground, the quest map and more', href: '/do/index.html', type: 'learn', also: ['load', 'play'],
       modes: [['Practice the worksheets on an example', '/do/index.html', '', 'Practice on an example', '🧪'], ['Your learning map', '/quest.html', '', 'Learning map', '🗺️'],
@@ -260,12 +260,12 @@
     // ---------- Play
     // consol12: every game is a mode of the games place, not a card of its own:
     // 'arcade', 'wordbloom', 'quietwords', 'crosswords', 'drive', 'dojo', 'mvmaker' -> 'pauseplay'
-    { id: 'pauseplay', name: 'Gentle games', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
-      modes: [['All the games', '/pause-and-play.html', '', 'All games', '✨'], ['Six gentle arcade games, with a Home Run Derby', '/frequency-journey.html', '', 'Arcade', '🎵'], ['Word Bloom', '/word-bloom.html', '', 'Bloom', '🌼'],
-        ['Quiet Words', '/quiet-words.html', '', 'Words', '🔍'], ['Crosswords: gentle levels', '/quiet-crossword.html', '', 'Crossword', '✏️'], ['Crosswords: newspaper daily', '/daily-ledger-crossword.html', '', 'Newspaper', '📰'],
+    { id: 'pauseplay', name: 'Calm games', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
+      modes: [['All the games', '/pause-and-play.html', '', 'All games', '✨'], ['Six classic arcade games, with a Home Run Derby', '/frequency-journey.html', '', 'Arcade', '🎵'], ['Word Bloom', '/word-bloom.html', '', 'Bloom', '🌼'],
+        ['Quiet Words', '/quiet-words.html', '', 'Words', '🔍'], ['Crosswords: five levels, from easy up', '/quiet-crossword.html', '', 'Crossword', '✏️'], ['Crosswords: newspaper daily', '/daily-ledger-crossword.html', '', 'Newspaper', '📰'],
         ['The Re-check Drive', '/recheck-drive.html', '', 'Re-check Drive', '🏈'], ['The Bears Dojo', '/bears-dojo.html', '', 'Bears Dojo', '🐻'], ['Kindness Coin Pusher', '/coin-pusher.html', '', 'Coin Pusher', '🪙'], ['Make a cartoon music video', '/frequency-buddies-music-video-maker.html', '', 'Music video', '🎬']],
       does: 'Pick a game, or press “Pick one for me,” and play as long as you like.',
-      gets: 'A gentle break whenever you want one, with no timers and no way to lose.',
+      gets: 'A short break whenever you want one, with no timers and no way to lose.',
       mins: 5, time: 'Any length', who: ['solo', 'two'], benefit: 'Take a breather before you talk: arcade, word games and crosswords, with no way to lose',
       kw: 'games calm games play surprise me random pick one for me arcade pac maze frogger breakout baseball home run derby batting kids word game anagram spelling word bloom word search quiet words crossword mini puzzle daily newspaper easy crossword daily ledger football complacency kindness re-check drive bears garden build a bear dojo coin pusher coins arcade machine tips collect characters music video maker cartoon create games: every calm game in one place pause & play' },
   ];
@@ -324,7 +324,7 @@
       sample: 'You type: “my partner never helps with bedtime.” You get: kind next steps, words you could use, and two pages to read.' },
     start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
       sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes.’”' },
-    pauseplay: { o: 'fun calm', p: 'family partner', best: 'a gentle break before you talk, or playing with kids with no way to lose',
+    pauseplay: { o: 'fun calm', p: 'family partner', best: 'a short break before you talk, or playing with kids with no way to lose',
       sample: 'Five minutes of Word Bloom before a hard talk: a few words found, a slower breath, nothing to win or lose.' },
     split: { o: 'load plan', p: 'partner housemates family', best: 'checking whether your split can last, and whether last month’s changes stuck', ex: 'ex-setup-rosemary-ken' },
     calm: { o: 'calm talk', p: 'partner family', best: 'a fight that’s getting worse, now or next time',
@@ -391,7 +391,7 @@
   var ALIASES = {
     sounds: 'music',            // Calm-down sounds -> Calm sounds and music (/soundscapes.html#background)
     package: 'suite',           // the package and report -> Your worksheets, in order, with a report (#full-path)
-    week0: 'sixweeks',          // Week 0 -> Six gentle weeks (its calendar reminders are on /prog-01.html#calendar)
+    week0: 'sixweeks',          // Week 0 -> Six-week program (its calendar reminders are on /prog-01.html#calendar)
     minicross: 'crosswords',    // Quiet Crossword -> Crosswords, "Gentle levels"
     dailycross: 'crosswords',   // the Daily Ledger Crossword -> Crosswords, "Newspaper daily"
     surprise: 'pauseplay',      // Surprise me is a site-wide button now; the games hub has "Pick one for me"

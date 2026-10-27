@@ -309,7 +309,7 @@ talk:
 
 @@ emotional-safety | Emotional safety
 pillars: IV, III
-aka: feeling safe, emotional safety, safe to speak, safe space
+aka: feeling safe, emotional safety, safe to speak, a safe place to talk
 nut: Emotional safety is the sense that you can be honest, including about feelings and needs, without being mocked, punished or rejected. It is the ground on which difficult conversations become possible.
 deep:
 When people feel emotionally safe, they share more, admit mistakes more easily and listen better. When they don’t, they hide, defend or go quiet, and the other person often reads that as not caring.

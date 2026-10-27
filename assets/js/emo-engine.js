@@ -430,7 +430,7 @@
       var th = threadOpts(S).map(sayOf), dsO = optOf(SCREEN.d_small, val(S, 'd_small') || ''), extra = dsO && dsO.n ? Math.max(0, dsO.n - th.length) : 0;
       var accIt = patternOn(ids, 'acc'), knot = !!accIt;
       el({ id: 'threads', kind: 'threads', title: 'The fine crossing lines', count: Math.min(14, Math.max(1, th.length + extra)), knot: knot, color: '#FF6F61',
-        meaning: (th.length + extra) + ' fine line' + (th.length + extra === 1 ? '' : 's') + ' cross the picture, one for each small thing that gets in your way' + (th.length ? ': ' + list(th) : '') + (extra ? ', plus ' + extra + ' more from today' : '') + '.' +
+        meaning: (th.length + extra) + ' fine line' + (th.length + extra === 1 ? '' : 's') + (th.length + extra === 1 ? ' crosses' : ' cross') + ' the picture, one for each small thing that gets in your way' + (th.length ? ': ' + list(th) : '') + (extra ? ', plus ' + extra + ' more from today' : '') + '.' +
           (knot ? ' They tangle into one small knot because the “small things adding up” idea seemed to fit when you checked it.' : ''),
         why: why('irritants') });
     }

@@ -422,12 +422,12 @@
     { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? Find your first step, keep your place, and get in touch.',
       all: '/explore.html', allLabel: 'See everything on this site', items: [
       { sub: 'First steps', id: 'first-steps',
-        desc: 'Not sure where to begin? Take a one-minute tour, answer three questions, or follow a short guided journey to the page that fits you.',
+        desc: 'Not sure where to begin? Take a one-minute tour, answer three questions, or pick your situation and get a few small steps.',
         short: 'Your best first step, in a minute or less.' },
       { href: '/start-here.html', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/start-here.html#three-questions', title: 'Not sure? Three questions', note: 'Three taps to the one page that fits' },
       { href: '/journeys.html', title: 'Guided journeys', note: 'Tell us what’s going on and follow 3 to 6 small steps' },
-      { href: '/start-in-10-minutes.html', title: 'Ten-minute start', note: 'Today’s weather, one idea, one card and one thing logged' },
+      { href: '/start-in-10-minutes.html', title: 'Start in 10 minutes', note: 'Today’s weather, one idea, one card and one thing logged' },
       { href: '/examples.html', title: 'What small changes look like', note: 'Made-up examples for many kinds of relationship' },
       { href: '/someone-sent-you-this.html', title: 'Someone sent you this?', note: 'What it is in three lines, with no pressure' },
       { href: '/surprise.html', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
@@ -458,7 +458,7 @@
       { sub: 'The fine print', id: 'fine-print',
         desc: 'The privacy policy, the rules for using the site, the refund policy, and a plain note that everything here is free.',
         short: 'Privacy, terms, refunds and free access.' },
-      { href: '/legal/privacy-policy.html', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
+      { href: '/legal/privacy-policy.html', title: 'Privacy policy', note: 'What’s collected, who sees it, and your rights' },
       { href: '/legal/terms-of-service.html', title: 'Terms of service', note: 'The rules for using this free site' },
       { href: '/legal/refund-policy.html', title: 'Refund policy', note: 'Everything here is free, so there is nothing to refund' },
       { href: '/ways-in.html', title: 'Ways in', note: 'Everything is free: no account, no paid version' }
@@ -515,7 +515,7 @@
       { href: '/coming-home.html', title: 'Coming home after time apart', note: 'After deployment, work away or a hospital stay' },
       { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To family, at work or with a partner' }
     ]},
-    { id: 'yourself', name: 'Yourself', title: 'Know yourself', blurb: 'Understand your own reactions, needs and wiring, with plain guides and quick self-discovery tools.',
+    { id: 'yourself', name: 'Yourself', title: 'Yourself', blurb: 'Understand your own reactions, needs and wiring, with plain guides and quick self-discovery tools.',
       all: '/explore.html?need=self', allLabel: 'Everything on knowing yourself', items: [
       { sub: 'Start with you', id: 'start-with-you', area: 'self',
         desc: 'Plain guides to how your past shapes your reactions, how your nervous system works, and small ways to look at yourself kindly.',
@@ -530,12 +530,12 @@
       { sub: 'Self-discovery tools', id: 'self-tools', area: 'self', hub: '/tools.html#self-discovery', hubLabel: 'All self-discovery tools',
         desc: 'Quick, private tools: paint your feelings, check your weather today, take a two-minute style quiz, or make a card on how to talk to you.',
         short: 'Quizzes, check-ins and cards, all private.' },
-      { href: '/what-am-i-feeling.html', plain: true, title: 'Paint Your Feelings', note: 'Find what may be behind a feeling: gentle questions, a map you can correct, a picture of your answers and one or two first steps.' },
+      { href: '/what-am-i-feeling.html', plain: true, title: 'Paint Your Feelings', note: 'Find what may be behind a feeling: plain questions, a map you can correct, a picture of your answers and one or two first steps.' },
       { href: '/wavelength.html', plain: true, title: 'How you connect', note: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share.' },
       { href: '/quick-checks.html#today', plain: true, title: 'My weather today', note: 'Know if now is a good time to talk: four taps, or one minute on mood, sleep and energy.' },
       { href: '/my-week.html', plain: true, title: 'Your week in weather', note: 'Look back on your week as a weather report, then plan next week with a forecast you can adjust.' },
       { href: '/this-week.html', plain: true, title: 'This week', note: 'A calm weekly card: something to try, explore, notice and try with someone. The last four weeks stay open.' },
-      { href: '/growing-up.html#roots-h', plain: true, title: 'Old rules, new choices', note: 'Choose which old rules to keep: look gently at where a reaction started.' },
+      { href: '/growing-up.html#roots-h', plain: true, title: 'Old rules, new choices', note: 'Choose which old rules to keep: see where a reaction started.' },
       { href: '/wiring-card.html', plain: true, title: 'How to talk to me: a card', note: 'One page on how you take in words, what silence means, and what to avoid.' },
       { href: '/tools/frequency-calibration.html', plain: true, title: 'Rhythms side by side', note: 'Stop different rhythms feeling like a fight: money, rest and decisions, side by side.' },
       { href: '/communication-style-quiz.html', title: 'Communication style quiz', note: 'What the quiz looks at, and how to use your result' },
@@ -572,10 +572,10 @@
     { id: 'workpapers', name: 'Workpapers', title: 'Workpapers', blurb: 'Short worksheets to fill in, print or keep on this device, alone or together.',
       all: '/workpapers/fill/suite.html', allLabel: 'See all the worksheets, in order', items: [
       { sub: 'Where to begin', id: 'begin', area: 'load',
-        desc: 'Start with a five-minute Week 0, follow six gentle weeks, or fill in any worksheet and save it as a PDF on your device.',
-        short: 'Week 0, six gentle weeks, and the full suite.' },
-      { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a gentle start', note: 'Five minutes before the six weeks' },
-      { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
+        desc: 'Start with a five-minute Week 0, follow the six-week program, or fill in any worksheet and save it as a PDF on your device.',
+        short: 'Week 0, the six-week program, and the full suite.' },
+      { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a short start', note: 'Five minutes before the six weeks' },
+      { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six-week program', note: 'One worksheet a week, in order' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Suite', title: 'Workpapers for you', note: 'The “Just me” road: worksheets in order, fillable and printable' },
       { href: '/workpapers/fill/index.html', title: 'Fill in a workpaper', note: 'Type straight into any worksheet and save it as a PDF on your device' },
       { href: '/workpapers/fill/suite.html', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one PDF of everything, with a report written from your answers' },
@@ -660,10 +660,10 @@
       { href: '/groups.html', title: 'Leading a group', note: 'Six sessions with discussion questions and handouts' },
       { href: '/for-counselors.html', title: 'For counselors and coaches', note: 'Using the free pages and tools with clients' }
     ]},
-    { id: 'play', name: 'Calm & play', title: 'Calm, play, watch & listen', blurb: 'Calm down now, play a gentle game, watch the pups’ cartoon or put on calm music. No timers and no way to lose.',
+    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm down now, play a calm game, watch the pups’ cartoon or put on calm music. No timers and no way to lose.',
       all: '/explore.html?need=calm', allLabel: 'See everything calm, to play, watch or hear', items: [
       { sub: 'Calm down now', id: 'calm', tt: 'calm', hub: '/pause-and-play.html#relax', hubLabel: 'Every calm tool in one place',
-        desc: 'Breathe, settle and find your next step. Gentle, quick and never timed, with nothing to win or lose.',
+        desc: 'Breathe, settle and find your next step. Quick, never timed, with nothing to win or lose.',
         short: 'Breathe, settle, and find a next step.' },
       { href: '/help-it-settle.html', title: 'Helping it settle', note: 'What you can change in your own tone, pace, timing, space, body and words' },
       { href: '/upset-right-now.html', title: 'Upset right now?', note: 'Pause, breathe and come back to it in five minutes' },
@@ -673,13 +673,13 @@
       { href: '/tools/soften-a-tense-moment.html', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { href: '/calm-without-pills.html', title: 'Calm without pills', note: 'What actually helps, and what the research says' },
       { sub: 'Games', id: 'games', hub: '/pause-and-play.html', hubLabel: 'All the calm games',
-        desc: 'Gentle word games, crosswords, a coin pusher and an arcade of classics. No timers and no way to lose.',
+        desc: 'Calm word games, crosswords, a coin pusher and an arcade of classics. No timers and no way to lose.',
         short: 'Word games, crosswords and a cozy arcade.' },
-      { href: '/frequency-journey.html', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six gentle classic games, including a Home Run Derby' },
+      { href: '/frequency-journey.html', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six classic games, including a Home Run Derby' },
       { href: '/bears-dojo.html', title: 'The Bears Dojo', note: 'A temple garden to wander and a bear to build' },
       { href: '/word-bloom.html', title: 'Word Bloom', note: 'Swipe across the petals to spell words' },
-      { href: '/quiet-words.html', title: 'Quiet Words', note: 'A gentle word search with a new theme each time' },
-      { href: '/quiet-crossword.html', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels' },
+      { href: '/quiet-words.html', title: 'Quiet Words', note: 'A calm word search with a new theme each time' },
+      { href: '/quiet-crossword.html', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five levels' },
       { href: '/daily-ledger-crossword.html', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
       { href: '/recheck-drive.html', title: 'The Re-check Drive', note: 'A calm football game made of small, kind acts' },
       { href: '/coin-pusher.html', title: 'Kindness Coin Pusher', note: 'A cozy coin pusher with a kind tip every few coins' },
@@ -716,7 +716,7 @@
       { href: '/book/for-yourself.html', title: 'The book for one person', note: 'Part One and the chapters for reading on your own' },
       { href: '/book/together.html', title: 'The book for two or more', note: 'The chapters for couples, families and roommates' },
       { href: '/book/understanding.html', title: 'Understanding People, as one book', note: 'Part Three on its own' },
-      { sub: 'Part One: Yourself', id: 'part-one', area: 'read',
+      { sub: 'Part One: Self-discovery', id: 'part-one', area: 'read',
         desc: 'Where you came from, who you are today and who you are becoming, for reading on your own.',
         short: 'Your past, your present and your next steps.' },
       { href: '/book/self-1-then.html', deep: true, title: 'Where you came from', note: 'Growing up, old rules and what life taught you' },
@@ -1300,6 +1300,17 @@
     lsSet('tol-recent', JSON.stringify(list.slice(0, 6)));
   }
 
+  // QA28 C7: the quick links in the menu use small line drawings (they follow the text color) instead of emoji
+  var QI = function (d) { return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false">' + d + '</svg>'; };
+  var QICON = {
+    chat: QI('<path d="M4 5h16v11H9l-5 4z"/>'),
+    ask: QI('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.6 2.6 0 1 1 3.6 2.4c-.7.4-1.1.9-1.1 1.8"/><path d="M12 17h.01"/>'),
+    calm: QI('<path d="M4 9c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1M4 14c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/>'),
+    book: QI('<path d="M12 6v14M12 6c-2-1.5-5-2-8-1.5V18c3-.5 6 0 8 2 2-2 5-2.5 8-2V4.5c-3-.5-6 0-8 1.5z"/>'),
+    down: QI('<path d="M12 4v11M7.5 11l4.5 4.5 4.5-4.5M5 20h14"/>'),
+    save: QI('<path d="M7 4h10v16l-5-4-5 4z"/>'),
+    mail: QI('<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/>')
+  };
   function openPanel(sectionId, toSearch, full) {
     lastFocus = document.activeElement;
     var pu = panel.querySelector('[data-pickup="menu"]');
@@ -1455,18 +1466,18 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     // the most used tool, one tap away, right under search (the Chat analyzer: one message or a whole chat)
-    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + 'Chat analyzer: check a text before you send it' + '</a>'));
+    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span class="tol-qi" aria-hidden="true">' + QICON.chat + '</span> ' + 'Chat analyzer: check a text before you send it' + '</a>'));
     // the whole site at a glance, one tap each: the directories first, then what most people come for
     // (the sections below hold everything else)
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': 'The whole site at a glance' },
       '<p class="tol-panel-quick-h">' + 'Most asked for' + '</p><ul>' +
-      [['/start-here.html#three-questions', '&#10067;', 'Not sure? Three questions'],
-       ['/ladder.html', '&#127807;', 'Calm down now'],
-       ['/book/index.html', '&#128214;', 'Read the book'],
-       ['/book/download.html', '&#128229;', 'Books and downloads'],
-       ['/saved.html', '&#128278;', 'Saved for later'],
-       ['/contact.html', '&#9993;&#65039;', 'Contact us']
-      ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === '/ladder.html' ? ' data-panel-breathe' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
+      [['/start-here.html#three-questions', 'ask', 'Not sure? Three questions'],
+       ['/ladder.html', 'calm', 'Calm down now'],
+       ['/book/index.html', 'book', 'Read the book'],
+       ['/book/download.html', 'down', 'Books and downloads'],
+       ['/saved.html', 'save', 'Saved for later'],
+       ['/contact.html', 'mail', 'Contact us']
+      ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === '/ladder.html' ? ' data-panel-breathe' : '') + '><span class="tol-qi" aria-hidden="true">' + QICON[q[1]] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
     // home16b: "Calm down now" opens the one-minute Breathe break right here first (the 4-tap check is one tap on, in Topics)
     panel.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[data-panel-breathe]'), b = document.querySelector('.tol-breathe-btn');
@@ -1493,6 +1504,12 @@
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
+    });
+
+    // QA28 C7: "Skip to content" is behind the open menu: if focus ever lands on it, it goes back to the panel
+    document.addEventListener('focusin', function (e) {
+      if (panel.hidden || !e.target || !e.target.classList || !e.target.classList.contains('tol-skip')) return;
+      var c = panel.querySelector('.tol-close'); if (c) c.focus({ preventScroll: true });
     });
 
     // Simple pages get their cute dressing and a gentle reminder (see site.css)
@@ -2447,7 +2464,7 @@
     '/living-alone.html': ['Living on your own, living well', 'Any age, any reason: alone is not lonely, a home that runs itself, making friends as an adult, asking for help, and safety basics.'],
     '/research.html': ['The research behind this site', 'The studies, books and reviews behind the site: what each found, in plain words, and how strong the evidence is.']
   };
-  var TOOL_URL = /^\/(upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device|make-a-plan)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
+  var TOOL_URL = /^\/(upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device|make-a-plan|what-am-i-feeling)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
 
   // the words the site uses, with how often, for "Did you mean"
   var REAL = null, indexed = {};
@@ -2784,6 +2801,17 @@
       tokens: Q
     };
   }
+  // QA28 D2: a page called exactly what was typed ("paint your feelings") comes first in the list, ahead of pages that only mention it
+  function exactFirst(hits, q) {
+    var nq = fold(q).replace(/[^a-z0-9]+/g, ' ').trim();
+    if (!nq || hits.length < 2) return hits;
+    var at = -1;
+    hits.forEach(function (h, i) {
+      if (at >= 0 || !h.p || h.p.u.charAt(0) === '#') return;
+      [h.p.h, h.p.t].forEach(function (nm) { if (at < 0 && nm && fold(String(nm).split(/\s*[:·|]\s*/)[0]).replace(/[^a-z0-9]+/g, ' ').trim() === nq) at = i; });
+    });
+    return at > 0 ? [hits[at]].concat(hits.slice(0, at), hits.slice(at + 1)) : hits;
+  }
   // someone typed a page's own name ("night garden"): that page leads, not a guess at their problem
   function namedPage(R, best) {
     var h = R && R.hits && R.hits[0], terms = (R && R.used) || [];
@@ -2799,7 +2827,7 @@
         var R = null; try { R = data ? smartSearch(data, q) : null; } catch (e) { R = null; }
         if (namedPage(R, M.best)) { M.best = null; urls = []; }
         // the same order the list shows: each kind (tools, workpapers, pages) together
-        var hits = R ? [].concat.apply([], groupByKind(R.hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); }).map(function (G) { return G.items; })).map(function (h) { return h.p.u; }) : [];
+        var hits = R ? [].concat.apply([], groupByKind(exactFirst(R.hits, q), function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); }).map(function (G) { return G.items; })).map(function (h) { return h.p.u; }) : [];
         var bp = {}; urls.forEach(function (u) { bp[u.split(/[?#]/)[0]] = 1; });
         if (R) R.hits.forEach(function (h) { var u = h.p.u; if (/[?#]/.test(u) && u.charAt(0) === '/' && kindOf(u, h.p.k) === 'Tool') bp[u.split(/[?#]/)[0]] = 1; });
         hits.forEach(function (u) { if (urls.indexOf(u) === -1 && !(u.indexOf('#') === -1 && u.indexOf('?') === -1 && bp[u])) urls.push(u); });
@@ -2915,7 +2943,7 @@
   function buildSearch() {
     var box = el('div', { class: 'tol-find', role: 'search' },
       '<label for="tol-find-q">' + 'Search the site' + '</label>' +
-      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + 'Describe what’s going on, e.g. “we argue about chores”' + '" aria-describedby="tol-find-note">' +
+      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + 'Search, or say what’s going on' + '" aria-describedby="tol-find-note">' +
       '<p class="tol-find-note" id="tol-find-note" aria-live="polite"></p>' +
       '<div class="tol-find-help" hidden></div><div class="tol-find-best" hidden></div><div class="tol-find-none" hidden></div>' +
       '<ol class="tol-find-results" hidden></ol>');
@@ -2976,6 +3004,7 @@
         // never a dead end: nothing found, so the closest needs, the finder, Professor Puddles and everything
         noneEl.innerHTML = !hits.length && !M.best ? needsFallbackHTML(q, M) : ''; noneEl.hidden = !!(hits.length || M.best);
         // tools, workpapers and pages to read each sit together (in the order they first appear), each labelled
+        hits = exactFirst(hits, q);
         var groups = groupByKind(hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); });
         var GH = { Tool: 'Tools', Workpaper: 'Workpapers', '': 'Guides and pages' };
         list.innerHTML = groups.map(function (G) {
@@ -3521,6 +3550,7 @@
     '<path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>';
   var PUDDLES = { name: 'Professor Puddles', svg: PUDDLES_SVG, color: '#CFE6FA',
     greeting: 'Hello! I’m Professor Puddles. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
+  window.TOLPuddlesArt = { name: PUDDLES.name, svg: PUDDLES_SVG, color: PUDDLES.color };   // QA28 A1: the embedded chat on /ask.html shows the same raindrop
   // the hello bubble, at the top of the home page: in full on the first visit, a small chip after that;
   // "Not now" shrinks it to a small chip for the rest of the visit, so it's never lost
   function buildPuddles(body) {
@@ -3589,7 +3619,7 @@
     html.classList.add('tol-one-fab');
     var wrap = el('div', { class: 'tol-help no-bubble no-print' });
     var btn = el('button', { type: 'button', class: 'tol-help-fab', 'aria-expanded': 'false', 'aria-haspopup': 'true' },
-      '<span class="tol-help-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-help-t">' + 'Help' + '</span>');
+      '<span class="tol-help-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-help-t">' + 'Ask' + '</span>');
     var menu = el('div', { class: 'tol-help-menu', role: 'menu', hidden: '' });
     function item(label, target) {
       var b = el('button', { type: 'button', role: 'menuitem', class: 'tol-help-item' }, label);
@@ -3601,10 +3631,10 @@
       var a = avail(); menu.textContent = '';
       if (a.pud) menu.appendChild(item('Ask Professor Puddles', pud));
       if (a.br) menu.appendChild(item('Breathe for a minute', br));
-      btn.setAttribute('aria-label', a.pud && a.br ? 'Help: ask Professor Puddles, or breathe for a minute'
+      btn.setAttribute('aria-label', a.pud && a.br ? 'Ask Professor Puddles, or breathe for a minute'
         : a.pud ? 'Ask Professor Puddles' : 'Breathe: a one-minute calm break');
       wrap.hidden = !a.pud && !a.br;
-      var t = btn.querySelector('.tol-help-t'); if (t) t.textContent = a.pud && a.br ? 'Help' : a.pud ? 'Ask Puddles' : 'Breathe';
+      var t = btn.querySelector('.tol-help-t'); if (t) t.textContent = a.pud ? 'Ask' : 'Breathe';   // QA28 A3: one visible word for him, on the phone bar and the desktop corner
       // design17: in the phone's top bar it is one labelled "Ask" button that opens Professor Puddles straight away
       // (Breathe is in the Menu as "Calm down now", or press and hold this button); nothing to show without him
       if (docked()) {
@@ -3794,9 +3824,12 @@
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || document.querySelector('.pc-ov.is-tv')) return;
     var main = document.querySelector('main'); if (!main) return;
     // the page's own title: the h1 without any <small> subtitle tucked inside it (so "Look back over 30 days" doesn't run into "The 30-Day Look-Back")
-    var h1 = main.querySelector('h1'), title = '';
-    if (h1) { var h1c = h1.cloneNode(true); Array.prototype.forEach.call(h1c.querySelectorAll('small, .sub, .tol-sub, [aria-hidden="true"]'), function (n) { n.remove(); }); title = h1c.textContent.replace(/\s+/g, ' ').trim(); }
-    if (!title) title = document.title.split('·')[0].trim();
+    function pageTitle() {
+      var h1 = main.querySelector('h1'), t = '';
+      if (h1) { var h1c = h1.cloneNode(true); Array.prototype.forEach.call(h1c.querySelectorAll('small, .sub, .tol-sub, [aria-hidden="true"]'), function (n) { n.remove(); }); t = h1c.textContent.replace(/\s+/g, ' ').trim(); }
+      return t || document.title.split('·')[0].trim();
+    }
+    var title = pageTitle();
     // a short form for the "Ask him about" button: cut long titles at a word, never mid-word
     function shortTitle(t, max) {
       t = t.replace(/[?.!:]+$/, '');
@@ -3830,8 +3863,16 @@
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
         (('<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
-        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(shortTitle(title, 60)) + '”' : 'Ask Professor Puddles') + '</button>')));
-      endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title && current !== '/index.html' ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); /* the home page's headline isn't a topic: just say hello */ });
+        '<button type="button" class="tol-pud-card-go"></button>')));
+      var endBtn = endBox.querySelector('button');
+      // QA28 C2: the label uses the page's real title, read again when a page sets its own (the menu's list pages fill theirs in after load)
+      function endLabel() {
+        title = pageTitle();
+        endBtn.innerHTML = '<span class="tol-pud-card-drop" aria-hidden="true">' + PUDDLES_SVG + '</span> ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(shortTitle(title, 60)) + '”' : 'Ask Professor Puddles');
+      }
+      endLabel();
+      document.addEventListener('tol-title-ready', endLabel);
+      endBtn.addEventListener('click', function () { title = pageTitle(); openPud(opts(title && current !== '/index.html' ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); /* the home page's headline isn't a topic: just say hello */ });
       main.appendChild(endBox);
     }
 

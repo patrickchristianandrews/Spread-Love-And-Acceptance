@@ -37,7 +37,7 @@
   function copy(o) { return JSON.parse(JSON.stringify(o)); }
   function nice(iso) { var d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }); }
   function short(iso) { var d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-  var DROP = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>';
+  var DROP = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>';
   function guide(html) { return '<div class="emo-guide no-bubble">' + DROP + '<p><b>Professor Puddles</b><br>' + html + '</p></div>'; }
 
   /* ------------------------------------------------------------------ a session */
@@ -85,10 +85,13 @@
   function askHTML() {
     var sc = E.SCREEN[S.cur], tx = E.screenText(S, sc), v = S.ans[S.cur], T = totalQs(), idx = Math.max(1, T.list.indexOf(S.cur) + 1);
     var st = STAGE[sc.stage], prev = S.hist.length ? E.SCREEN[S.hist[S.hist.length - 1]] : null, h = '';
+    // QA28 C5: the number of questions grows as options are picked, so no "of about N" is shown, and the bar never steps back
     var pct = Math.min(100, Math.round(idx / T.total * 100));
+    if (typeof S._peak === 'number' && S._peak > pct) pct = S._peak;
+    S._peak = pct;
     h += '<div class="emo-card" data-phase="ask">';
     h += '<p class="emo-stage">' + esc(st.t) + '</p>';
-    h += '<div class="emo-prog"><p class="emo-prog-t" id="emo-pt">Question ' + idx + ' of about ' + T.total + '</p><div class="emo-bar" role="progressbar" aria-labelledby="emo-pt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>';
+    h += '<div class="emo-prog"><p class="emo-prog-t" id="emo-pt">Question ' + idx + '</p><div class="emo-bar" role="progressbar" aria-labelledby="emo-pt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>';
     if (!prev || prev.stage !== sc.stage) h += guide(esc(st.guide));
     var name = 'emo-opt', picks = Array.isArray(v) ? v : (typeof v === 'string' ? [v] : []);
     if (sc.type === 'probe') {

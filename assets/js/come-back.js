@@ -12,8 +12,9 @@
    It mostly reads what the site already keeps here (recent pages, Check yourself petals, garden
    levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest. It reads and
    writes tol-mode-v1 (Just me / With someone) and the "one thing to try" in tol-ten-v1 (Start in 10 minutes).
-   Tool pages also get a small "Try another tool" row (two tools that fit what was just used, and a link to /tools.html), and opening a
-   tool's page writes its id and the date into tol-tools-seen-v1 (tool-spotlight.js, the "Tried" check). Both stay out with the helpers
+   Every tool page (all 20 in tool-art.js, including Old rules, new choices and Learn by doing, which keep no other extras) ends with a small
+   "Try another tool" row (two tools that fit what was just used, and a link to /tools.html), and opening a tool's page writes its id and the
+   date into tol-tools-seen-v1 (tool-spotlight.js, the "Tried" check). The one exception is /upset-right-now.html. Both stay out with the helpers
    hidden or Quiet mode on (the record is still kept quietly), and nothing is written with "Stop remembering pages I visit".
    No streaks to keep, no timers, nothing to lose: pick up anytime. Nothing is sent anywhere.
    "Hide the helpers" and Quiet mode hide the extras (the time picker stays); a still page never moves.
@@ -47,7 +48,10 @@
 
   // pages that are full-screen, tender, or private: nothing extra here
   var SKIP = /^\/(night-garden|garden-backdrop|pal-cam-tv|calm-visualizer|soundscapes|keepsakes|on-this-device|membership|dashboard|404|offline|growing-up|growing-up-in-depth|know-yourself|know-yourself-in-depth|privacy-policy|refund-policy|terms-of-service|telemetry|sent-this)\.html$|^\/(legal|workpapers\/fill|store|supabase|do|snapshot)\//;
-  if (SKIP.test(path) || (doc.body && doc.body.hasAttribute('data-sensitive')) || (doc.body && doc.body.hasAttribute('data-no-comeback'))) return;
+  // QA28 D1: these two are tools too (Old rules, new choices; Learn by doing). They keep no end cards or next steps, but opening them is
+  // written down as "tried" and they end with the same "Try another tool" row as every other tool.
+  var TOOL_ONLY = /^\/(growing-up\.html|do\/index\.html)$/, toolOnly = TOOL_ONLY.test(path);
+  if ((SKIP.test(path) && !toolOnly) || (doc.body && doc.body.hasAttribute('data-sensitive')) || (doc.body && doc.body.hasAttribute('data-no-comeback'))) return;
 
   /* ---------------------------------------------------------------- our one small record */
   var S = { time: null, sit: null, days: [], read: {}, did: {}, fin: {}, earned: {}, tiny: {}, visits: 0 };
@@ -844,8 +848,11 @@
         box = endCard();
         if (T.atEnd || anchor === main) placeAtEnd(main, box); else anchor.after(box);
         fillEnd(box, T.gain, null, '');
-        toolKit(function (K) { toolRowHTML(K, function (h) { if (!box.querySelector('.ts-row')) box.insertAdjacentHTML('beforeend', h); }); });
         nextUnder(box);
+        // QA28 D1: "Try another tool" is one row at the end of the page (toolRow), shown from the start; it sits under this card, above the next step
+        var tr = main.querySelector(':scope > .ts-end');
+        if (tr && box.parentNode === main) { box.after(tr); if (panel && panel.parentNode === main) tr.after(panel); }
+        toolKit(function (K) { K.markUsed(); });   // a result is a real use of the tool
         if (!S.did[path]) { S.did[path] = Date.now(); save(); }
         celebrate('tool:' + path, 'You tried ' + T.t, true);
       }
@@ -916,10 +923,11 @@
     if (isHome) return homePage(main);
     mainEl = main;
     if (TOOL_PAGES[path]) toolKit(function () {});   // tool-spotlight.js writes this tool down (the "Tried" check on /tools.html)
+    if (toolOnly) { if (!helpersOff()) toolRow(main); return; }
     // one recommended next step, also with the helpers hidden (it is the way on, not an extra)
     if (wantsNext(main)) buildPanel(main);
     if (helpersOff()) return;
-    if (TOOL_PAGES[path] && !TOOLS[path]) toolRow(main);
+    if (TOOL_PAGES[path]) toolRow(main);
     if (bookIdx(simplePath) >= 0) return bookPage(main);
     if (TOOLS[path]) return toolPage(main);
     if (path === '/frequency-buddies.html') return buddiesPage(main);
