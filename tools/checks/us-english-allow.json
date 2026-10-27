@@ -372,6 +372,31 @@
     "acknowledgements"
    ],
    "why": "Published titles, journals and agencies cited exactly as published (these files are the source of research.html). \"quarter to a half\" is a range of fractions."
+  },
+  {
+   "file": "book/",
+   "rule": "british",
+   "hits": [
+    "behaviour",
+    "behavioural",
+    "behaviours",
+    "catalogue",
+    "daft",
+    "modelling",
+    "randomised",
+    "signalling",
+    "uni"
+   ],
+   "why": "Book research notes and reference lists: published titles, journal names, agencies and URL fragments cited exactly as published (for example Behaviour Research and Therapy, a randomised controlled trial), and the author surname Daft (Daft and Lengel, 1986). The books' own prose is American."
+  },
+  {
+   "file": "book/",
+   "rule": "british",
+   "hits": [
+    "quarter to"
+   ],
+   "match": "quarter to a half",
+   "why": "\"a quarter to a half\" is a range of fractions in a research finding, not a time."
   }
  ]
 }

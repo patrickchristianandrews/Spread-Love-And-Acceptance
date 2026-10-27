@@ -753,17 +753,17 @@
   ]
  },
  {
-  "id": "fig-u14-dials",
+  "id": "fig-u14-sliders",
   "chapter": "understanding-14-personality",
   "number": "14.1",
   "after_id": null,
   "idea": 1,
-  "after_id_full": "dials",
+  "after_id_full": "sliders",
   "src": "/assets/img/book/u14-dials.svg",
   "width": 540,
   "height": 895,
   "alt": "Five rows, one per Big Five trait, each a line between two plain-language ends with a hump showing most people near the middle.",
-  "caption": "Traits work like dials, and most people sit near the middle of each. Illustrative shapes.",
+  "caption": "Traits work like sliders, and most people sit near the middle of each. Illustrative shapes.",
   "versions": [
    "short",
    "full"

@@ -70,10 +70,10 @@ L = {
         'hook': 'Before you can share a life well, it helps to understand your own.',
         'body': [
             'This warm book starts with you. Where did your way of seeing things come from: the home you grew up in, the old rules, the things life taught you? How are you wired today: your energy, your weather, the words that land and the ones that sting? And who are you becoming, one small step at a time?',
-            'Along the way it explains, in plain words, how feelings work, why your worth is not a score, why personality is more like a set of dials than a box, and how minds work differently, from ADHD and autism to sensory and learning differences.',
+            'Along the way it explains, in plain words, how feelings work, why your worth is not a score, why personality is more like a set of sliders than a box, and how minds work differently, from ADHD and autism to sensory and learning differences.',
         ],
         'inside': ['Where your lens came from, and the rulebook from home', 'Your wiring, your weather and your words', 'Who you are becoming: one small goal and a kind monthly look at yourself',
-                   'How feelings work, and naming what you feel', 'Self-worth, shame and a kinder inner voice', 'Personality and temperament: dials, not boxes', 'Minds that work differently, and meeting in the middle'],
+                   'How feelings work, and naming what you feel', 'Self-worth, shame and a kinder inner voice', 'Personality and temperament: sliders, not boxes', 'Minds that work differently, and meeting in the middle'],
         'cats': ['Books › Self-Help › Personal Transformation', 'Books › Self-Help › Emotions', 'Books › Health, Fitness & Dieting › Psychology & Counseling › Personality'],
         'alt': ['Books › Self-Help › Self-Esteem', 'Books › Health, Fitness & Dieting › Mental Health › Neuropsychology', 'Books › Politics & Social Sciences › Philosophy › Ethics & Morality'],
         'kw': ['self discovery book for adults', 'self worth and self compassion', 'understanding emotions and feelings', 'adult adhd and autism self understanding',

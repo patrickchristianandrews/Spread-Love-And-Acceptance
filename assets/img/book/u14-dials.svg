@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 895" width="540" height="895" role="img" aria-labelledby="fig-u14-dials-t fig-u14-dials-d" font-family="Lora, Georgia, serif" fill="#2B2620">
-<title id="fig-u14-dials-t">Five traits, each a dial, not a box</title>
-<desc id="fig-u14-dials-d">Five rows, one for each of the Big Five traits: openness, conscientiousness, extraversion, agreeableness, and emotional stability (the other end is called neuroticism). Each row is a line between two plain-language ends, with a hump showing that most people sit near the middle. A dot marks one made-up person on each dial. Every trait has gifts and costs at both ends, and people change across life.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 895" width="540" height="895" role="img" aria-labelledby="fig-u14-sliders-t fig-u14-sliders-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u14-sliders-t">Five traits, each a slider, not a box</title>
+<desc id="fig-u14-sliders-d">Five rows, one for each of the Big Five traits: openness, conscientiousness, extraversion, agreeableness, and emotional stability (the other end is called neuroticism). Each row is a line between two plain-language ends, with a hump showing that most people sit near the middle. A dot marks one made-up person on each slider. Every trait has gifts and costs at both ends, and people change across life.</desc>
 
 <rect x="1" y="1" width="538" height="893" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
-<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Traits are dials, not boxes</text>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Traits are sliders, not boxes</text>
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Most people sit near the middle of each one.</text>
 <text x="28" y="124" font-size="20" font-weight="bold" fill="#2F5F8A">Openness</text>
 <polygon points="40,182.0 40,181.1 48,180.8 55,180.5 63,180.1 71,179.6 78,179.0 86,178.3 94,177.4 101,176.5 109,175.4 117,174.1 124,172.6 132,171.0 140,169.3 147,167.3 155,165.2 163,163.0 170,160.7 178,158.3 186,155.8 193,153.3 201,150.9 209,148.6 216,146.3 224,144.3 232,142.5 239,140.9 247,139.7 255,138.7 262,138.2 270,138.0 278,138.2 285,138.7 293,139.7 301,140.9 308,142.5 316,144.3 324,146.3 331,148.6 339,150.9 347,153.3 354,155.8 362,158.3 370,160.7 377,163.0 385,165.2 393,167.3 400,169.3 408,171.0 416,172.6 423,174.1 431,175.4 439,176.5 446,177.4 454,178.3 462,179.0 469,179.6 477,180.1 485,180.5 492,180.8 500,181.1 500,182.0" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>

@@ -93,7 +93,7 @@ ORDER = [
         (11, 'healing', 'Repair, apologies that land, forgiveness and old hurts'),
         (12, 'helping', 'Support without fixing, kind limits, and not burning out'),
         (13, 'anger', 'What anger is for, the hot minutes, repair, and when it becomes harm'),
-        (14, 'personality', 'Dials, not boxes: the Big Five, temperament, and how people change'),
+        (14, 'personality', 'Sliders, not boxes: the Big Five, temperament, and how people change'),
         (15, 'love', 'Love in many forms, being known, and love across ages and relationship types'),
         (16, 'worry', 'How anxiety works, low mood vs depression, trauma and what helps'),
         (17, 'groups', 'Conformity, obedience, us and them, culture, and disagreeing kindly'),
@@ -207,7 +207,7 @@ CONNECT = {
                              ('self-1-then', 'losses that shaped your lens')],
     'understanding-9-minds': [('self-2-now', 'getting to know your own wiring'),
                               ('chapter-1', 'pace, tone and meeting in the middle'),
-                              ('understanding-14-personality', 'dials, not boxes'),
+                              ('understanding-14-personality', 'sliders, not boxes'),
                               ('understanding-4-communication', 'saying it so it lands for different minds')],
     'understanding-10-values': [('self-3-next', 'turning values into one small goal'),
                                 ('chapter-4', 'two kinds of fair'),
@@ -1223,7 +1223,7 @@ GLOSS_EXTRA = [
     ('psychological-safety', 'Psychological safety', 'A shared sense in a group or team that you can speak up, ask a question or admit a mistake without being punished or embarrassed (Amy Edmondson).', r'psychological safety'),
     ('groupthink', 'Groupthink', 'When a close group wants agreement so much that doubts go unsaid and a poor decision goes ahead. Irving Janis named it in 1972.', r'groupthink'),
     ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (6 to 12 months or more, depending on the guideline).', r'prolonged grief'),
-    ('wave-code', 'Wave Code', 'Four letters from the style quiz in How you connect, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
+    ('wave-code', 'Wave Code', 'Four letters from the style quiz in How you connect, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a slider today: a shorthand for preferences, not a personality type.', r'Wave Code'),
     ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?, scored from 0 (empty) to 1 (full). Under 0.30 is light, 0.30 to 0.59 medium, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
     ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. My weather today calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
     ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book works the same way: see what is really going on, without blame, then change one small thing.', r'ledger'),
@@ -1590,7 +1590,7 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
 %s
 <header class="read-head no-print"><p class="read-code">The book</p><h1>%s</h1></header>
 <p class="simple-lede no-print">%s</p>
-<p class="whole-actions no-print no-bubble"><a class="tol-btn" href="/book/download.html#%s">Download the PDF</a> <button type="button" class="tol-btn is-quiet" onclick="window.print()">Print</button> <a class="tol-btn is-quiet" href="%s">%s</a> <a class="tol-btn is-quiet" href="/book/">The book’s home</a></p>
+<p class="whole-actions no-print no-bubble"><a class="tol-btn" href="/book/download.html#expanded">Download the expanded version (PDF)</a> <button type="button" class="tol-btn is-quiet" onclick="window.print()">Print</button> <a class="tol-btn is-quiet" href="%s">%s</a> <a class="tol-btn is-quiet" href="/book/">The book’s home</a></p>
 <p class="whole-note no-print">About %d minutes of reading in all. Your browser keeps your place if you come back to this page.</p>
 <nav class="whole-toc no-bubble no-print" id="contents" aria-label="Contents"><h2>Contents</h2><ol>%s</ol></nav>
 %s
@@ -1609,7 +1609,7 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 </script>
 </body>
 </html>
-''' % (fname, front_html, title.replace(' (Expanded Version)', ': the expanded version'), lede, name, other,
+''' % (fname, front_html, title.replace(' (Expanded Version)', ': the expanded version'), lede, other,
        'Switch to the paperback text' if deep else 'Switch to the expanded version',
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
        ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs, fb, fb_back), UPDATED, page_rules(here, deep), outline_json)
