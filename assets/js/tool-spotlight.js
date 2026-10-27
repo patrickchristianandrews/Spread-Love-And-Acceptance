@@ -9,8 +9,8 @@
       "Stop remembering pages I visit" (tol-recent-off): nothing is written and nothing is shown as tried.
       Quiet mode and "Hide the helpers": the record is still kept quietly, but there is no home rail, no "Try another tool" row, no tags
       and no milestone moment.
-   2. The home page's "Tools worth trying" rail (<section data-tool-rail hidden>): a Tool of the day (the same for everyone on a given
-      day, rotating, skipping tools tried in the last 14 days when there is another) and a few others the person has not tried yet.
+   2. The home page's "Tool of the day" (<section data-tool-rail hidden>): one tool, the same for everyone on a given day, rotating,
+      skipping tools tried in the last 14 days when there is another (home28: one tool written out plainly, no longer a rail of cards).
    3. The "Try another tool" row at the end of tool pages (come-back.js asks for it): two tools that fit what was just used.
    4. Shared card (cardHTML) used by the rail, by /tools.html's cards and by "Start here".
    No streaks, no counts of days, no "you haven't": a count of tools tried, shown warmly and only as a count.
@@ -231,16 +231,21 @@
   var HOME_SKIP = ['signal', 'lemon-quick', 'calm', 'feelings', 'team'];   // already on the home page, or not for it
   function initRail(host) {
     if (helpersOff()) return;
-    var list = host.querySelector('[data-wt-list]'), sub = host.querySelector('[data-wt-sub]');
+    var list = host.querySelector('[data-wt-list]');
     if (!list) return;
+    // home28: one Tool of the day, written out plainly (not a row of cards): its name, what you get, how long, and one button
     function draw() {
       if (helpersOff()) { host.hidden = true; return; }
-      var day = daily({ skip: HOME_SKIP }), more = others(4, { skip: HOME_SKIP, not: [day] }), n = count(), t = total();
-      var cele = milestone();
-      list.innerHTML = [day].concat(more).filter(Boolean).map(function (id, i) {
-        return '<li>' + cardHTML(id, { variant: 'rail', ribbon: i === 0 ? 'Tool of the day' : '' }) + '</li>';
-      }).join('') + '<li class="wt-end"><a class="wt-all" href="/tools.html"><span>See all ' + t + ' tools</span></a></li>';
-      if (sub) sub.textContent = cele ? CELE[cele] : (n ? 'A new pick every day. You’ve tried ' + n + ' of ' + t + '.' : 'A new pick every day. Each one takes a few minutes.');
+      var id = daily({ skip: HOME_SKIP }), m = id && META[id], n = count(), t = total(), cele = milestone();
+      if (!m) { host.hidden = true; return; }
+      var c = A.accent(id);
+      list.innerHTML = '<div class="wt-f no-dive" data-id="' + esc(id) + '" style="--tc-a:' + c.a + ';--tc-t:' + c.t + ';--tc-k:' + c.k + '">' +
+        '<a class="wt-f-art" href="' + esc(m.h) + '" tabindex="-1" aria-hidden="true" data-tc-go="' + esc(id) + '">' + A.svg(id, { size: 96 }) + '</a>' +
+        '<div class="wt-f-body"><h3 class="wt-f-name">' + esc(m.n) + '</h3>' +
+        '<p class="wt-f-pr">' + esc(m.pr) + '</p>' +
+        '<p class="wt-f-meta">' + esc(timeChip(m)) + ' &middot; ' + esc(whoChip(m.w)) + (isSeen(id) ? ' &middot; You have tried this one' : '') + '</p>' +
+        '<p class="wt-f-go"><a class="wt-f-btn" href="' + esc(m.h) + '" data-tc-go="' + esc(id) + '">Try it<span class="sr-only">: ' + esc(m.n) + '</span></a>' +
+        '<span class="wt-f-count" role="status">' + esc(cele ? CELE[cele] : (n ? 'You have tried ' + n + ' of ' + t + '.' : 'A new one every day.')) + '</span></p></div></div>';
       if (cele) { host.classList.toggle('ts-pulse', !still()); setTimeout(function () { shown(cele); }, 1500); }
       host.hidden = false;
     }

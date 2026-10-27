@@ -19,16 +19,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<!-- home18: a calm front door. This visit's one prompt is taken here, so no pop-up, app line or invitation shows on arrival
+<!-- home28: the front door asks one question, "What do you want to do today?". home18: a calm front door. This visit's one prompt is taken here, so no pop-up, app line or invitation shows on arrival
      (site.js's one-prompt rule), the same as the /start/ pages. -->
 <script>try { if (!sessionStorage.getItem('tol-prompt')) sessionStorage.setItem('tol-prompt', 'start'); } catch (e) {}</script>
 <link rel="stylesheet" href="/assets/css/site.css">
-<link rel="stylesheet" href="/assets/css/journeys.css">
 <link rel="stylesheet" href="/assets/css/home.css">
 <link rel="stylesheet" href="/assets/css/tool-spotlight.css">
 <link rel="stylesheet" href="/assets/css/this-week.css">
 <script src="/assets/js/site.js" defer></script>
-<script src="/assets/js/journeys.js" defer></script>
 <script src="/assets/js/home.js" defer></script>
 <script src="/assets/js/tool-art.js" defer></script>
 <script src="/assets/js/tool-spotlight.js" defer></script>
@@ -93,150 +91,111 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","alternateName":["Spread Love and Acceptance","spreadloveandacceptance"],"url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","@id":"https://spreadloveandacceptance.com/#logo","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","contentUrl":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","caption":"Spread Love & Acceptance"},"image":{"@id":"https://spreadloveandacceptance.com/#logo"},"email":"spreadloveandacceptance@gmail.com","slogan":"See it fairly. Say it kindly.","description":"Spread Love & Acceptance is a young, independent start-up building a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, gentle games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.","founder":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"knowsAbout":["self-help","relationships","love and acceptance","kindness","appreciation","communication in relationships","mental load","invisible labor","division of labor at home","household chores for couples","calm","breathing exercises","mindfulness","neurodiversity","neurodivergent relationships","self-discovery"]},{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html","jobTitle":"Creator of Spread Love & Acceptance","worksFor":{"@id":"https://spreadloveandacceptance.com/#org"},"description":"Christian (they/them) created Spread Love & Acceptance after working as a government auditor."},{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","alternateName":["Spread Love and Acceptance"],"url":"https://spreadloveandacceptance.com/","description":"Free self-help for calmer, fairer relationships: share chores and the mental load, check how a text lands, calm down and understand yourself. No sign-up.","inLanguage":"en-US","publisher":{"@id":"https://spreadloveandacceptance.com/#org"},"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://spreadloveandacceptance.com/explore.html?q={search_term_string}"},"query-input":"required name=search_term_string"}},{"@id":"https://spreadloveandacceptance.com/#page","name":"Free Self-Help for Relationships · Spread Love & Acceptance","headline":"Free Self-Help for Relationships · Spread Love & Acceptance","description":"Free self-help for calmer, fairer relationships: share chores and the mental load, check how a text lands, calm down and understand yourself. No sign-up.","url":"https://spreadloveandacceptance.com/","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-29","dateModified":"2026-10-26","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage","about":{"@id":"https://spreadloveandacceptance.com/#org"}}]}</script>
 <!-- seo:end -->
 </head>
-<body class="h18-page" data-no-offer data-no-share data-no-reading data-no-listen data-no-where data-no-related data-no-fullpath data-no-tip data-no-learnplay data-no-cheer data-no-pillars data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-dives data-no-comeback data-no-weather data-no-private-note data-no-line-share data-no-wash data-no-pudcards>
+<body class="h18-page" data-no-garden data-no-offer data-no-share data-no-reading data-no-listen data-no-where data-no-related data-no-fullpath data-no-tip data-no-learnplay data-no-cheer data-no-pillars data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-dives data-no-comeback data-no-weather data-no-private-note data-no-line-share data-no-wash data-no-pudcards>
 <main class="read is-wide h18" id="main">
 <!-- tells site.js not to add its own Professor Puddles hello here (the header's Ask is enough) -->
 <span class="hh-pud" hidden></span>
 
-<!-- 1. The first screen: what this is, who it's for, and the one thing to do: "What's going on?" (journeys.js answers each choice right here) -->
+<!-- 1. The first screen has one job: choose what you want to do. A returning visitor sees "Welcome back" (this-week.js fills the slot) above it. -->
 <section class="h-hero tol-plain no-bubble no-dive" id="top" data-h18-top aria-labelledby="hero-h">
+  <div class="h-welcome" data-welcome-slot></div>
   <div class="h-intro">
-    <h1 class="h-h1" id="hero-h">Get along better with others, and with yourself.</h1>
-    <p class="h-lede">Kind, practical help for <strong>couples, families and roommates</strong>, and for <strong>knowing yourself better</strong>. Nothing you type leaves your device.</p>
-    <ul class="h-trust" aria-label="Good to know"><li>Free</li><li>Private</li><li>No sign-up</li></ul>
-    <p class="h-quick"><a href="/signal-translator.html">Got a tense text? <strong>Check it before you send</strong></a></p>
-    <div class="h-resume" id="pick-up" hidden aria-labelledby="resume-h"><h2 class="h-resume-h" id="resume-h">Pick up where you left off</h2><ul class="h-resume-list"></ul><p class="h-resume-more"><a class="h-link" href="/saved.html">All your saved places</a></p></div>
-    <div class="h-art" aria-hidden="true"><img src="/assets/img/home/pals-pups.webp" alt="" width="719" height="193" decoding="async"></div>
+    <h1 class="h-h1" id="hero-h">What do you want to <span class="h-mark">do</span> today?</h1>
+    <p class="h-lede">Free, private, no sign-up. Tools, guides and games for getting along with the people in your life, and with yourself. What you type stays on your device.</p>
   </div>
-  <section class="h-pick tol-plain no-bubble no-dive" id="whats-going-on" data-journey-pick="home" aria-labelledby="wgo-h">
-    <div class="jb" data-journey-back hidden></div>
-    <h2 class="h-h2" id="wgo-h">What&rsquo;s going on?</h2>
-    <p class="h-sub">Tap the closest for one small thing to do now.</p>
-    <div class="h-mode" data-tol-mode role="group" aria-label="Who is this for today?">
-      <button type="button" data-mode="with" aria-pressed="false">With someone</button>
-      <button type="button" data-mode="me" aria-pressed="false">Just me</button>
+  <div class="h-want" id="what-to-do">
+<!-- intents:start -->
+    <div class="h-group h-group-mind">
+      <h2 class="h-group-k" id="hg-mind">Something is on my mind</h2>
+      <ul class="h-wants" aria-labelledby="hg-mind">
+        <li><a class="h-want" href="/do.html?want=feeling"><span class="h-want-t">Understand a feeling</span><span class="h-want-n">Name it, paint it, and see what may be under it.</span></a></li>
+        <li><a class="h-want" href="/do.html?want=say-it"><span class="h-want-t">Say something hard, well</span><span class="h-want-n">Check a text before it goes, or rewind a talk that went sideways.</span></a></li>
+        <li><a class="h-want" href="/do.html?want=calm"><span class="h-want-t">Calm down right now</span><span class="h-want-n">Five minutes to breathe, pause, and come back to it.</span></a></li>
+        <li><a class="h-want" href="/do.html?want=load"><span class="h-want-t">Share the load at home</span><span class="h-want-n">Find out who does what, then split it fairly.</span></a></li>
+      </ul>
     </div>
-    <!-- eight choices in each view. data-fallback: where a choice goes if this copy of journeys.js has no answer for it -->
-    <ul class="wgo-opts">
-      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="argument" href="/journeys.html?for=argument#pick">We keep having the same argument</a></li>
-      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="chores" href="/journeys.html?for=chores#pick">Chores feel unfair</a></li>
-      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="drift" href="/journeys.html?for=drift#pick">We&rsquo;ve drifted apart</a></li>
-      <li data-mode-show="with" hidden data-fallback="/wiring-card.html"><a class="wgo-opt" data-wgo="quietsocial" href="/journeys.html?for=quietsocial#pick">We need different things at home</a></li>
-      <li data-mode-show="with" hidden data-fallback="/by-relationship.html"><a class="wgo-opt" data-wgo="homefam" href="/journeys.html?for=homefam#pick">Home and family</a></li>
-      <li data-mode-show="none me"><a class="wgo-opt" href="/teens.html#curfew-phone">Fighting with my parents (under 18)</a></li>
-      <li data-mode-show="none me"><a class="wgo-opt" data-wgo="myself" href="/journeys.html?for=myself#pick">I want to understand myself</a></li>
-      <li data-mode-show="none me"><a class="wgo-opt" data-wgo="breakup" href="/journeys.html?for=breakup#pick">I&rsquo;m going through a breakup</a></li>
-      <li data-mode-show="me" hidden><a class="wgo-opt" href="/grief.html">I&rsquo;ve lost someone</a></li>
-      <li data-mode-show="me" hidden><a class="wgo-opt" data-wgo="family" href="/journeys.html?for=family#pick">Family stuff</a></li>
-      <li data-mode-show="me" hidden><a class="wgo-opt" href="/foster-and-kinship.html#kinship">Raising a child who isn&rsquo;t mine</a></li>
-      <li data-mode-show="none with"><a class="wgo-opt" data-wgo="life" href="/journeys.html?for=life#pick">Our life has changed</a></li>
-      <li data-mode-show="none me with"><a class="wgo-opt" href="/caregivers.html">Caring for someone</a></li>
-      <li data-mode-show="me with" hidden><a class="wgo-opt" data-wgo="busy" href="/journeys.html?for=busy#pick">I only have five minutes</a></li>
-    </ul>
-    <div class="wgo-out" id="wgo-out" hidden></div>
-    <p class="h-pick-more"><a class="h-link" href="/by-relationship.html">By relationship</a> <a class="h-link" href="/journeys.html">All situations</a></p>
-  </section>
-  <script>
-  /* With someone / Just me: one choice, kept on this device (tol-mode-v1, as before), changeable any time; tap it again to
-     clear it. It runs here, before the page is drawn, so the right eight choices show with no jump. */
-  (function () {
-    var KEY = 'tol-mode-v1', host = document.getElementById('whats-going-on'), box = host && host.querySelector('[data-tol-mode]');
-    if (!host) return;
-    function get() { try { var m = localStorage.getItem(KEY); return m === 'me' || m === 'with' ? m : ''; } catch (e) { return ''; } }
-    function apply() {
-      var m = get() || 'none', out = document.getElementById('wgo-out');
-      Array.prototype.forEach.call(host.querySelectorAll('[data-mode-show]'), function (el) { el.hidden = (' ' + el.getAttribute('data-mode-show') + ' ').indexOf(' ' + m + ' ') === -1; });
-      if (box) Array.prototype.forEach.call(box.querySelectorAll('[data-mode]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
-      var on = host.querySelector('[data-wgo][aria-pressed="true"]');
-      if (on && on.closest('li') && on.closest('li').hidden && out) { out.hidden = true; on.setAttribute('aria-pressed', 'false'); }
-    }
-    apply();
-    if (box) box.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-mode]'); if (!b) return;
-      var m = b.getAttribute('data-mode'), now = get() === m ? '' : m;
-      try { if (now) localStorage.setItem(KEY, now); else localStorage.removeItem(KEY); } catch (x) {}
-      apply();
-      try { document.dispatchEvent(new CustomEvent('tol-mode', { detail: { mode: now } })); } catch (x) {}
-    });
-    document.addEventListener('tol-mode', apply);
-    window.addEventListener('storage', function (e) { if (e.key === KEY) apply(); });
-  })();
-  </script>
+    <div class="h-group h-group-time">
+      <h2 class="h-group-k" id="hg-time">I have some time</h2>
+      <ul class="h-wants" aria-labelledby="hg-time">
+        <li><a class="h-want" href="/do.html?want=learn"><span class="h-want-t">Learn something new</span><span class="h-want-n">Ten-minute lessons, a practice home, and a six-week plan.</span></a></li>
+        <li><a class="h-want" href="/do.html?want=read"><span class="h-want-t">Read something</span><span class="h-want-n">The free book, plain-language guides, and the research behind them.</span></a></li>
+        <li><a class="h-want" href="/do.html?want=create"><span class="h-want-t">Get creative</span><span class="h-want-n">Paint a feeling, get a poster from Professor Puddles, color, or build a music video.</span></a></li>
+        <li><a class="h-want" href="/do.html?want=play"><span class="h-want-t">Play or watch something</span><span class="h-want-n">Home Run Derby, word games, and the Frequency Buddies cartoon.</span></a></li>
+      </ul>
+    </div>
+<!-- intents:end -->
+    <p class="h-notsure">None of these? <a href="/ask.html">Tell Professor Puddles what&rsquo;s going on</a>, or <a href="/explore.html">browse everything</a>.</p>
+  </div>
 </section>
 
-<!-- 2. Three tools most people start with -->
-<section class="h-toolsec tol-plain no-bubble no-dive" id="tools" aria-labelledby="tools-h">
-  <h2 class="h-h2" id="tools-h">Or start with a tool</h2>
-  <ul class="h-tools">
-    <li><a class="h-tool" href="/signal-translator.html"><span class="h-tool-i" aria-hidden="true"><img src="/assets/img/mascots/two-bubbles.svg" alt="" width="40" height="40" loading="lazy" decoding="async"></span><span class="h-tool-t">Check a text before you send it</span><span class="h-tool-n">See how it may land, and a clearer way to say it. It&rsquo;s part of the Chat analyzer.</span></a></li>
-    <li><a class="h-tool" href="/lemonade-stand.html#quick"><span class="h-tool-i" aria-hidden="true"><img src="/assets/img/mascots/balanced-heart.svg" alt="" width="40" height="40" loading="lazy" decoding="async"></span><span class="h-tool-t">Who does what at home?</span><span class="h-tool-n">Tap through the jobs, each on your own phone, then compare.</span></a></li>
-    <li><a class="h-tool" href="/upset-right-now.html"><span class="h-tool-i" aria-hidden="true"><img src="/assets/img/mascots/heart-bubble.svg" alt="" width="40" height="40" loading="lazy" decoding="async"></span><span class="h-tool-t">Upset right now?</span><span class="h-tool-n">Calm down in five minutes: breathe, pause, then come back to it.</span></a></li>
+<!-- 1b. Pick up where you left off: only when something is saved and the Welcome back panel is not showing it (home.js) -->
+<section class="h-resume tol-plain no-bubble no-dive" id="pick-up" hidden aria-labelledby="resume-h"><h2 class="h-h2 h-resume-h" id="resume-h">Pick up where you left off</h2><ul class="h-resume-list"></ul><p class="h-resume-more"><a class="h-link" href="/saved.html">All your saved places</a></p></section>
+
+<!-- 2. Or start from the situation (journeys.html answers each one with a short list of small steps) -->
+<section class="h-sit tol-plain no-bubble no-dive" id="whats-going-on" aria-labelledby="wgo-h">
+  <div class="h-sit-head">
+    <h2 class="h-h2" id="wgo-h">Or start from what&rsquo;s going on</h2>
+    <p class="h-sub">Pick the closest one. It leads to a short list of small steps.</p>
+  </div>
+  <ul class="h-sit-list">
+    <li><a href="/journeys.html?for=argument#pick">We keep having the same argument</a></li>
+    <li><a href="/journeys.html?for=chores#pick">Chores feel unfair</a></li>
+    <li><a href="/journeys.html?for=drift#pick">We&rsquo;ve drifted apart</a></li>
+    <li><a href="/journeys.html?for=myself#pick">I want to understand myself</a></li>
+    <li><a href="/journeys.html?for=breakup#pick">I&rsquo;m going through a breakup</a></li>
+    <li><a href="/grief.html">I&rsquo;ve lost someone</a></li>
+    <li><a href="/teens.html#curfew-phone">I&rsquo;m fighting with my parents (under 18)</a></li>
+    <li><a href="/caregivers.html">I&rsquo;m caring for someone</a></li>
+    <li><a href="/journeys.html?for=life#pick">Our life has changed</a></li>
+    <li><a href="/journeys.html?for=busy#pick">I only have five minutes</a></li>
   </ul>
-  <p class="h-more"><a class="h-link" href="/tools.html">All tools</a> <a class="h-link" href="/pause-and-play.html">Relax and reset</a></p>
+  <p class="h-more"><a class="h-link" href="/journeys.html">All situations</a> <a class="h-link" href="/by-relationship.html">By relationship</a></p>
 </section>
 
-<!-- 2a. Seven small days (return21): one small thing a day that continues where you stopped, and what's new since the last
-     visit (return-visit.js, loaded by site.js). The weekly calendar reminder sits with it. -->
-<section class="h-days tol-plain no-bubble no-dive" id="small-days" aria-label="Seven small days"><div data-return-today></div>
-  <details class="h-remind">
-    <summary id="explore-h">A gentle weekly reminder, in your calendar</summary>
-    <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
-  </details>
-</section>
-
-<!-- 2a-2. This week (return26): the weekly card. this-week.js picks the right week from the date and adds the Send button. With
-     JavaScript off, the default week below still reads well (tools/this-week/render-fallback.js refreshes it). For someone who has been
-     here before, the same block becomes "Welcome back" in the first screen and this one steps aside. -->
-<section class="h-week tol-plain no-bubble no-dive" id="this-week" data-this-week="home" aria-label="This week">
+<!-- 3. Seven small days (return21) and this week's card (return26). Seven small days is drawn by return-visit.js (loaded by site.js);
+     the weekly card is plain HTML that this-week.js refreshes (tools/this-week/render-fallback.js). For someone who has been here before,
+     the weekly card is inside "Welcome back" above, and this one steps aside. -->
+<section class="h-small tol-plain no-bubble no-dive" aria-labelledby="small-h">
+  <h2 class="h-h2" id="small-h">A minute here and there</h2>
+  <div class="h-small-grid">
+    <div class="h-days" id="small-days"><div data-return-today></div>
+      <details class="h-remind">
+        <summary id="explore-h">Add a weekly reminder to your calendar</summary>
+        <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
+      </details>
+    </div>
+    <div class="h-week" id="this-week" data-this-week="home" aria-label="This week">
 <!-- tw:start -->
 <div class="tw-card" data-tw-card data-tw-week="2026-10-26"><p class="tw-k">This week, Oct 26 to Nov 1</p><h2 class="tw-h" id="tw-h">Name the feeling</h2><ul class="tw-list"><li class="tw-item tw-try"><span class="tw-l">Try, about a minute</span><span class="tw-t">Finish this sentence, out loud or in your head: “Right now I feel…” One or two words is plenty.</span></li><li class="tw-item tw-ex"><span class="tw-l">Explore, a tool</span><a class="tw-exlink" href="/what-am-i-feeling.html"><strong>Paint Your Feelings</strong><span>Answer a few gentle questions and see a map of what may be behind a feeling.</span></a></li></ul><details class="tw-fold"><summary>Notice, and try it with someone</summary><ul class="tw-list"><li class="tw-item"><span class="tw-l">Notice</span><span class="tw-t">Notice where a feeling shows up first, such as your shoulders, your chest or your jaw.</span></li><li class="tw-item"><span class="tw-l">Try it with someone</span><span class="tw-t">Each share one feeling word at dinner. The only reply is “Thanks for telling me.”</span></li></ul></details><p class="tw-go"><a class="tw-link" href="/this-week.html">See the whole card</a> <button type="button" class="tw-btn is-soft" data-tw-send hidden>Send this week’s idea to someone</button></p></div>
 <!-- tw:end -->
-</section>
-
-<!-- 2a-3. Tools worth trying (tools27): a Tool of the day and a few more the visitor has not tried yet (tool-spotlight.js, tool-art.js). Hidden
-     until it is drawn, so nothing moves; it stays out in Quiet mode and with the helpers hidden. -->
-<section class="h-wtsec tol-plain no-bubble no-dive" id="tools-worth-trying" data-tool-rail hidden aria-labelledby="wtt-h">
-  <h2 class="h-h2" id="wtt-h">Tools worth trying</h2>
-  <p class="h-sub" data-wt-sub>A new pick every day. Each one takes a few minutes.</p>
-  <ul class="wt-rail" data-wt-list></ul>
-  <p class="h-more"><a class="h-link" href="/tools.html">See all tools</a></p>
-</section>
-
-<!-- 2b. nav21: two things worth a look: the languages (lang21) and Frequency Buddies episode 4, the owner's favorite -->
-<section class="h-featsec tol-plain no-bubble no-dive" id="worth-a-look" aria-labelledby="feat-h">
-  <h2 class="h-h2" id="feat-h">Worth a look</h2>
-  <ul class="h-feats">
-    <li><a class="h-feat" href="/what-am-i-feeling.html" data-h-feat="feelings"><span class="h-feat-art" aria-hidden="true"><img src="/assets/img/mascots/heart-bubble.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></span><span class="h-feat-txt"><span class="h-feat-k">New: private and on your device</span><span class="h-feat-t">Paint Your Feelings</span><span class="h-feat-n">Answer a few gentle questions and see what may be behind a feeling: a map you can correct, a picture of your answers, and one or two first steps.</span></span></a></li>
-    <li><a class="h-feat" href="/support-languages.html" data-h-feat="languages"><span class="h-feat-art" aria-hidden="true"><img src="/assets/img/mascots/bubble-heart.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></span><span class="h-feat-txt"><span class="h-feat-k">New: a language of our own</span><span class="h-feat-t">Support languages</span><span class="h-feat-n">What helps when you&rsquo;re having a hard time: room, closeness, a plan or a hand? Find your top two in ten questions.</span></span></a></li>
-    <li data-work-hide><a class="h-feat" href="/frequency-buddies.html?ep=s1e4#episode-player"><span class="h-feat-art is-ep" aria-hidden="true"><img src="/assets/img/frequency-buddies-season-1.jpg" alt="" width="128" height="72" loading="lazy" decoding="async"><span class="h-feat-play">&#9654;</span></span><span class="h-feat-txt"><span class="h-feat-k">Cartoon, episode 4</span><span class="h-feat-t">Who Broke the Kite?</span><span class="h-feat-n">A seaside kite race, a snapped string, and two pals who look at how things were set up before they blame each other.</span></span></a></li>
-  </ul>
-  <p class="h-more"><a class="h-link" href="/languages-of-connection.html">All the languages, side by side</a> <a class="h-link" href="/frequency-buddies.html" data-work-hide>Every episode</a></p>
-</section>
-
-<!-- 3. A 2-minute break: Tidbit and Sugarfoot's games, one tap each -->
-<section class="h-play tol-plain no-bubble no-dive" id="friends" aria-labelledby="friends-h">
-  <div class="h-play-head">
-    <h2 class="h-h2" id="friends-h">Take a 2-minute break</h2>
-    <p class="h-sub">Play a quick game. One tap to start.</p>
+    </div>
   </div>
-  <ul class="h-games">
-    <li><a class="h-game" href="/frequency-journey.html#derby"><span class="h-game-art" aria-hidden="true"><img src="/assets/img/home/pal-tidbit.webp" alt="" width="294" height="145" loading="lazy" decoding="async"></span><span class="h-game-txt"><span class="h-game-t">Home Run Derby</span><span class="h-game-n">Swing with Tidbit</span></span></a></li>
-    <li><a class="h-game" href="/frequency-journey.html"><span class="h-game-art" aria-hidden="true"><img src="/assets/img/home/pal-sugarfoot.webp" alt="" width="309" height="142" loading="lazy" decoding="async"></span><span class="h-game-txt"><span class="h-game-t">The pups&rsquo; arcade</span><span class="h-game-n">Six games with Sugarfoot</span></span></a></li>
-    <li><a class="h-game" href="/coin-pusher.html"><span class="h-game-art" aria-hidden="true"><svg viewBox="0 0 64 64" width="48" height="48" aria-hidden="true" focusable="false"><ellipse cx="32" cy="54" rx="19" ry="4" fill="#E9D3A6" opacity=".8"/><circle cx="40" cy="36" r="15" fill="#E7B84C" stroke="#B9862A" stroke-width="2"/><circle cx="28" cy="29" r="19" fill="#F4C95D" stroke="#C9952E" stroke-width="2.4"/><circle cx="28" cy="29" r="13.5" fill="none" stroke="#E0AE45" stroke-width="1.6" stroke-dasharray="2 2.6"/><path d="M28 37.5c-6.2-4.1-9-7-9-10.4a4.7 4.7 0 0 1 9-1.7a4.7 4.7 0 0 1 9 1.7c0 3.4-2.8 6.3-9 10.4z" fill="#E86F8E"/><ellipse cx="21" cy="20" rx="4" ry="2.2" fill="#fff" opacity=".55" transform="rotate(-30 21 20)"/></svg></span><span class="h-game-txt"><span class="h-game-t">Coin pusher</span><span class="h-game-n">Kind tips fall out</span></span></a></li>
-  </ul>
 </section>
 
-<!-- 4. One idea from the book, in one minute: a different one each day (lines from the book itself), then the next, then the book -->
+<!-- 4. Tool of the day (tool-spotlight.js draws one; hidden until then, and out in Quiet mode and with the helpers hidden) -->
+<section class="h-wtsec tol-plain no-bubble no-dive" id="tools-worth-trying" data-tool-rail hidden aria-labelledby="wtt-h">
+  <h2 class="h-h2" id="wtt-h">Tool of the day</h2>
+  <div class="wt-feat" data-wt-list></div>
+  <p class="h-more"><a class="h-link" href="/tools.html">All the tools</a></p>
+</section>
+
+<!-- 5. One idea from the book, a different one each day, and the four books -->
 <section class="h-ideasec tol-plain no-bubble no-dive" id="books" aria-labelledby="books-h">
-  <h2 class="h-h2" id="books-h">One idea in one minute</h2>
+  <h2 class="h-h2" id="books-h">An idea from the book</h2>
   <div class="h-idea" data-h18-idea>
     <div class="h-idea-body" aria-live="polite">
       <h3 class="h-idea-t" data-idea-t>Nobody has to be wrong.</h3>
-      <p class="h-idea-n" data-idea-n>Two radios that both work perfectly will still crackle if they’re slightly off, and arguing about whose fault the static is won’t clear it.</p>
+      <p class="h-idea-n" data-idea-n>Two radios that both work perfectly will still crackle if they&rsquo;re slightly off, and arguing about whose fault the static is won&rsquo;t clear it.</p>
       <p class="h-idea-from">From the book: <a data-idea-a href="/book/chapter-1.html">Chapter I: Why we get out of tune</a></p>
     </div>
     <p class="h-idea-go"><button type="button" class="h-btn" data-idea-next>Read the next one</button> <a class="h-link" href="/book/index.html">Read the book free</a> <a class="h-link" href="/book/download.html">Books and downloads</a></p>
   </div>
+  <a class="h-series" href="/book/index.html" aria-label="The four books, free to read online">
+    <img src="/assets/img/home/cover-book-1-240.webp" alt="Book 1: Know Yourself Kindly" width="240" height="360" loading="lazy" decoding="async">
+    <img src="/assets/img/home/cover-book-2-240.webp" alt="Book 2: Heal and Steady" width="240" height="360" loading="lazy" decoding="async">
+    <img src="/assets/img/home/cover-book-3-240.webp" alt="Book 3: Understanding Each Other" width="240" height="360" loading="lazy" decoding="async">
+    <img src="/assets/img/home/cover-book-4-240.webp" alt="Book 4: Share the Load" width="240" height="360" loading="lazy" decoding="async">
+  </a>
   <script>
   /* today's idea (one a day, the same for everyone), drawn before the page shows, so nothing jumps; "Read the next one" moves on */
   (function () {
@@ -255,9 +214,14 @@
   </script>
 </section>
 
-<!-- 5. Who made this (the weekly calendar reminder moved up beside Seven small days) -->
-<section class="h-back tol-plain no-bubble no-dive" id="explore" aria-label="Who made this">
-  <p class="h-made">Made by Christian, kindly and independently. <a href="/about.html">Who built this, and why</a></p>
+<!-- 6. Who made this -->
+<section class="h-back tol-plain no-bubble no-dive" id="explore" aria-labelledby="made-h">
+  <div class="h-made">
+    <h2 class="h-h2" id="made-h">Who made this</h2>
+    <p>I&rsquo;m Christian. I spent my career as a government auditor, and the problems were almost never the ones anybody could see. They were the jobs nobody had written down. Homes work the same way, so I built a place to write them down, and then added games, because nobody should have to be serious all day.</p>
+    <p>It&rsquo;s free, I run it myself, and nothing you type leaves your device. <a href="/about.html">Read my story</a>.</p>
+  </div>
+  <div class="h-art" aria-hidden="true"><img src="/assets/img/home/pals-pups.webp" alt="" width="719" height="193" loading="lazy" decoding="async"></div>
 </section>
 
 </main>

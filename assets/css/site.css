@@ -3432,6 +3432,7 @@ html:not([data-theme="light"]):not(.tol-nodark) main .sh-first > li.is-main{ bac
 /* the Menu panel (phones): the area you open shows its cards one under another, each with a short line */
 .tol-panel .tol-mega.is-panel{ padding:.1rem 0 .9rem; }
 .tol-mega-all-p{ margin:0 0 .5rem; }
+.tol-panel a.tol-mega-all{ white-space:normal; }
 .tol-panel .tol-mega.is-panel .tol-mega-cols{ display:grid; grid-template-columns:minmax(0, 1fr); gap:.6rem; padding:0; }
 .tol-panel .tol-card{ padding:.6rem .8rem .5rem; border-top-width:3px; border-radius:10px; }
 .tol-panel .tol-card .tol-card-h{ font-size:1rem; margin-bottom:.15rem; }

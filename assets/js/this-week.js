@@ -407,7 +407,7 @@
   var panelRedraw = null;
   function welcome(sec, info, now) {
     if (root.style.visibility === 'hidden' || doc.querySelector('.tp-lock') || !hasHistory() || snoozed()) return;
-    var intro = doc.querySelector('.h-intro'); if (!intro) return;
+    var intro = doc.querySelector('[data-welcome-slot]') || doc.querySelector('.h-intro'); if (!intro) return;   // home28: the slot above the question
     var quick = intro.querySelector('.h-quick');
     var panel = doc.createElement('section'); panel.className = 'tw-back'; panel.id = 'tw-back'; panel.setAttribute('aria-labelledby', 'tw-back-h');
     if (R()) { try { R().css(); } catch (e) {} }

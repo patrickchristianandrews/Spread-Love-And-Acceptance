@@ -1,4 +1,4 @@
-/* tool-spotlight.css: the shared tool card (.tc), the home page's "Tools worth trying" rail (.wt-*), and the "Try another tool" row at the
+/* tool-spotlight.css: the shared tool card (.tc), the home page's Tool of the day (.wt-f), and the "Try another tool" row at the
    end of tool pages (.ts-*). Used with tool-art.js and tool-spotlight.js. Light colors only: dark mode is the site's page-wide inversion,
    and site.css turns inline svg back, so the pictures keep their colors. Each card sets --tc-a (accent), --tc-t (tint), --tc-k (dark accent
    for text and buttons, 4.5:1 or better on white and on the tint).
@@ -84,22 +84,23 @@
 .tc--rail .tc-go{ width:100%; }
 .tc.is-day{ border-color:var(--tc-a); border-width:2px; background:linear-gradient(180deg, var(--tc-t) 0, var(--tc-card) 42%); }
 
-/* ---------- the home page's rail: scrolls sideways on a phone, a row of four on a laptop ---------- */
+/* ---------- the home page's Tool of the day (home28): one tool, written out plainly ---------- */
 [data-tool-rail][hidden]{ display:none !important; }
 html.tol-quiet [data-tool-rail], html.tol-no-helpers [data-tool-rail]{ display:none !important; }
-.wt-rail{ display:flex; gap:12px; margin:0 -16px !important; padding:6px 16px 14px !important; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x proximity; scroll-padding:0 16px; -webkit-overflow-scrolling:touch; list-style:none; }
-.wt-rail > li{ flex:0 0 min(76%, 17rem); scroll-snap-align:start; display:flex !important; margin:0; padding:0; }
-.wt-rail > li > .tc{ width:100%; }
-.wt-rail > li.wt-end{ flex:0 0 min(46%, 10rem); }
-.wt-all{ display:flex; align-items:center; justify-content:center; text-align:center; width:100%; min-height:100%; box-sizing:border-box; padding:16px; border:2px dashed #CFC3E3; border-radius:22px; text-decoration:none; font:700 1rem/1.3 var(--tc-ui); color:#3C3354; background:#FFFDF7; }
-.wt-all span::after{ content:"\00a0\2192"; }
-.wt-all:hover{ border-color:#7F66AE; background:#F7F2FC; }
-@media (min-width:700px){ .wt-rail{ margin:0 -24px !important; padding-left:24px !important; padding-right:24px !important; scroll-padding:0 24px; } }
-@media (min-width:900px){
-  .wt-rail{ display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; margin:0 !important; padding:6px 0 10px !important; overflow:visible; }
-  .wt-rail > li, .wt-rail > li.wt-end{ flex:none; }
-  .wt-rail > li:nth-child(5), .wt-rail > li.wt-end{ display:none !important; }
-}
+.wt-f{ display:grid; grid-template-columns:auto minmax(0, 1fr); gap:0 1.3rem; align-items:center; max-width:46rem; }
+.wt-f-art{ display:block; width:96px; height:96px; }
+.wt-f-art svg{ display:block; width:96px; height:96px; }
+.wt-f-body{ min-width:0; }
+.wt-f .wt-f-name{ margin:0 0 .15rem !important; padding:0 !important; border:0 !important; background:none !important; font:500 clamp(1.5rem, 1.25rem + 1vw, 2rem)/1.12 "Fraunces", Georgia, serif !important; letter-spacing:-.01em; text-transform:none !important; color:#2B2620 !important; }
+.wt-f .wt-f-pr{ margin:0 0 .3rem !important; max-width:none !important; font:400 1.06rem/1.5 "Lora", Georgia, serif; color:#2B2620; }
+.wt-f .wt-f-meta{ margin:0 0 .55rem !important; font:400 .95rem/1.4 var(--tc-ui); color:#554E42; }
+.wt-f .wt-f-go{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem 1rem; margin:0 !important; }
+.wt-f-btn{ display:inline-flex; align-items:center; min-height:44px; padding:.45rem 1.25rem; border-radius:999px; text-decoration:none; font:700 1rem/1.2 var(--tc-ui); color:#fff; background:var(--tc-k, #2B5B8C); border:1.5px solid var(--tc-k, #2B5B8C); }
+.wt-f-btn::after{ content:"\00a0\2192"; }
+.wt-f-btn:hover{ filter:brightness(.92); }
+.wt-f-btn:focus-visible{ outline:3px solid var(--tc-focus, #2B5B8C); outline-offset:3px; }
+.wt-f-count{ font:400 .92rem/1.4 var(--tc-ui); color:#554E42; }
+@media (max-width:520px){ .wt-f{ grid-template-columns:64px minmax(0, 1fr); gap:0 .9rem; align-items:start; } .wt-f-art, .wt-f-art svg{ width:64px; height:64px; } }
 
 /* ---------- "Try another tool" at the end of a tool page: small, and quiet ---------- */
 .ts-row{ position:relative; margin:.8rem 0 0; padding:.7rem 0 0; border-top:1px dashed #D9C8F0; border-radius:12px; }
