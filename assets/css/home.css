@@ -46,8 +46,8 @@ html body main.read.h18 .h-btn:hover{ background:var(--h-acc-soft); }
   .h18 .h-intro{ grid-template-columns:minmax(0, 8fr) minmax(0, 4fr); align-items:end; }
   .h18 .h-lede{ padding-bottom:.5rem; }
 }
-.h18 .h-want{ display:grid; gap:0 clamp(2rem, 5vw, 4.5rem); }
-@media (min-width:900px){ .h18 .h-want{ grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); align-items:start; } .h18 .h-want .h-notsure{ grid-column:1 / -1; } }
+.h18 .h-choose{ display:grid; gap:0 clamp(2rem, 5vw, 4.5rem); }
+@media (min-width:900px){ .h18 .h-choose{ grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); align-items:start; } .h18 .h-choose .h-notsure{ grid-column:1 / -1; } }
 .h18 .h-group{ margin:0 0 1.2rem; }
 html body main.read.h18 .h-group-k{ margin:0 0 .35rem; padding:0; font:italic 500 1.2rem/1.3 var(--h-head); letter-spacing:0; text-transform:none; color:var(--h-acc); background:none; border:0; }
 .h18 .h-wants{ display:block; }
