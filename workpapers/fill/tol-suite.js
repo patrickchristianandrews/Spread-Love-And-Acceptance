@@ -1480,7 +1480,7 @@
     });
   }
 
-  /* ------------------------------------------------------------ Six gentle weeks: this week's pages */
+  /* ------------------------------------------------------------ Six-week program: this week's pages */
   // On the six-week program, the top of the page walks through one week at a time: that week's pages,
   // what to read alongside, "Done for this week" and the next week. Which weeks are done is the same
   // record as the tracker on /prog-01.html (tol-prog01-v1, this device only; erase it there), and it is
@@ -1506,7 +1506,7 @@
     var wi = S.week - 1, w = weeks[wi], done = progDone(S.week);
     box.hidden = false;
     box.innerHTML = '';
-    box.appendChild(h('p', { className: 'ws-flow-k' }, ['Six gentle weeks · ', h('a', { href: '/prog-01.html', text: 'about the six weeks' }), ' · ', h('a', { href: '/week-0.html', text: 'Week 0' })]));
+    box.appendChild(h('p', { className: 'ws-flow-k' }, ['Six-week program · ', h('a', { href: '/prog-01.html', text: 'about the six weeks' }), ' · ', h('a', { href: '/week-0.html', text: 'Week 0' })]));
     var pills = h('div', { className: 'ws-flow-weeks', role: 'group', 'aria-label': 'Choose a week' });
     for (var i = 1; i <= total; i++) {
       var d = progDone(i);
@@ -1650,7 +1650,7 @@
     // the locks
     Array.prototype.forEach.call(document.querySelectorAll('.ws-lockable'), function (sec) {
       var needsWork = sec.getAttribute('data-unlock') === 'work';
-      setLock(sec, needsWork ? !work : !road, !road ? 'Pick a road above to unlock this.' : 'Fill in or bring in at least one sheet to write your report.');
+      setLock(sec, needsWork ? !work : !road, !road ? 'Pick a road above to start this.' : 'Fill in or bring in at least one sheet to write your report.');
     });
     // the buttons say what they will make
     var fb = $('ws-fillable'), fn = $('ws-fillable-note');

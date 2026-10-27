@@ -139,7 +139,7 @@ window.TOL_CHEER = {
     ['Want to be walked through it, one week at a time?', '/prog-01.html', 'The 6-week program'],
     ['All your workpapers, gathered in the order that fits you.', '/workpapers/fill/suite.html', 'Your worksheets, in order'],
     ['Got a question? Professor Puddles loves those.', '/ask.html', 'Chat with Professor Puddles'],
-    ['Need a gentle break from reading?', '/pause-and-play.html', 'Gentle games'],
+    ['Need a gentle break from reading?', '/pause-and-play.html', 'Calm games'],
     ['A few minutes of sound can settle a busy mind.', '/soundscapes.html', 'Calm sounds and music'],
     ['The quiet jobs count too. That’s Pillar I.', '/five-pillars.html#see-the-load', 'See the whole load'],
     ['Less blame, better plans. That’s Pillar II.', '/five-pillars.html#fix-the-setup', 'Fix the setup, not the person'],
@@ -199,7 +199,7 @@ window.TOL_CHEER = {
     ['Let it all settle with a slow, calm minute.', '/calm-visualizer.html', 'Drift, the calm visualizer'],
     ['Try one small kind move today.', '/turning-toward.html', 'Turning toward'],
     ['Looking for something to read next?', '/reading.html', 'Further Reading'],
-    ['All that reading? A calm game might feel nice.', '/pause-and-play.html', 'Gentle games']
+    ['All that reading? A calm game might feel nice.', '/pause-and-play.html', 'Calm games']
   ],
   // lines that fit a part of the site (the page's section, from data-sec, or the /book/ and /workpapers/ folders)
   topics: {

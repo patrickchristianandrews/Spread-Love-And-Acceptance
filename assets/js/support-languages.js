@@ -13,7 +13,7 @@
 
   // ------------------------------------------------------------------ the seven support languages
   var L = {
-    room:    { name: 'Give me room', tag: 'Space to settle', one: 'time on your own to settle, then coming back',
+    room:    { name: 'Give me room', tag: 'Time to settle', one: 'time on your own to settle, then coming back',
                ask: 'I need about half an hour on my own to settle. You haven’t done anything wrong. I’ll come find you at 8.',
                offer: 'Take the time you need. I’ll be in the kitchen when you’re ready.',
                looks: 'like being shut out',

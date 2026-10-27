@@ -383,7 +383,7 @@
     control: { t: 'Claim one decision about tomorrow', d: 'Choose one part of tomorrow that’s yours to decide (when you take a break, what you eat, the order you do things) and decide it.', link: ['/make-a-plan.html', 'Plan it once'], sig: 'One part of the day felt like yours.' },
     values: { t: 'Do one small thing that fits what matters to you', d: 'Pick one small action this week that fits something you care about, even ten minutes of it.', link: ['/growing-up.html#roots-h', 'Old rules, new choices'], sig: 'You did one thing that felt like you.' },
     progress: { t: 'Finish one small thing today', d: 'Pick a task small enough to finish today, and finish it.', link: ['/small-wins.html', 'Small wins'], sig: 'You can point to one thing that’s done.' },
-    fun: { t: 'Put one fun thing in the week', d: 'Schedule one thing just for fun this week, with no goal attached.', link: ['/pause-and-play.html', 'Gentle games'], sig: 'You laughed or lost track of time once this week.' },
+    fun: { t: 'Put one fun thing in the week', d: 'Schedule one thing just for fun this week, with no goal attached.', link: ['/pause-and-play.html', 'Calm games'], sig: 'You laughed or lost track of time once this week.' },
     fair: { t: 'Look at how things are shared, with facts', d: 'For one week, jot down who does what. Facts make a fairness talk calmer later, if you want one.', link: ['/lemonade-stand.html#quick', 'Who does what?'], sig: 'You have a clearer picture of how things are shared.' }
   };
 

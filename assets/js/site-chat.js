@@ -3980,7 +3980,7 @@
     var P = PZ(), L = pzPick(state, P.bored_links || []), line = pzPick(state, P.bored);
     var b = [{ k: 'p', x: line }];
     // a line that promises the arcade links the arcade (and the calm games), never only the Night Garden (puddles16)
-    b.push({ k: 'links', x: [['Tidbit and Sugarfoot’s Arcade', '/frequency-journey.html'], ['Home Run Derby', '/frequency-journey.html#derby'], ['Gentle games (Pause & Play)', '/pause-and-play.html']] });
+    b.push({ k: 'links', x: [['Tidbit and Sugarfoot’s Arcade', '/frequency-journey.html'], ['Home Run Derby', '/frequency-journey.html#derby'], ['Calm games (Pause & Play)', '/pause-and-play.html']] });
     return pzR(state, b, [{ label: 'Rock, paper, scissors', q: 'Rock paper scissors' }, { label: 'Quiz me', q: 'Quiz me' }, { label: 'Would you rather…', q: 'Would you rather' }, { label: 'Tell me a riddle', q: 'Tell me a riddle' }], 'fun', 'pz-bored', 'bored');
   }
   function pzRpsStart(state) {

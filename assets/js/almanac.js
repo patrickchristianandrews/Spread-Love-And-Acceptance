@@ -98,7 +98,7 @@
     var pg = json('tol-prog01-v1');
     if (pg && pg.on && Array.isArray(pg.done) && pg.done.length) {
       var wk = pg.done.slice().sort(function (a, b) { return a - b; });
-      undated.push({ what: 'Six gentle weeks: week' + (wk.length > 1 ? 's ' : ' ') + wk.join(', ') + ' ticked' });
+      undated.push({ what: 'Six-week program: week' + (wk.length > 1 ? 's ' : ' ') + wk.join(', ') + ' ticked' });
     }
     var ls = json('tol-lemonade-stand-v2');
     if (ls && !ls.example && Array.isArray(ls.weeks)) ls.weeks.forEach(function (w) { if (w && /^\d{4}-\d{2}-\d{2}$/.test(w.d || '')) out.push({ d: w.d, what: 'Lemonade Stand: saved a week' }); });

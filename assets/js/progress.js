@@ -109,7 +109,7 @@
     ten: ['*', 'Start in 10 minutes'],
     weather: ['*', 'Today’s Weather almanac'],
     sleepcam: ['*', 'Sleeping Pals Cam: your fur babies and sleep mixes'],
-    six: ['*', 'Six gentle weeks'],
+    six: ['*', 'Six-week program'],
     sheets: ['*', 'Worksheets you kept'],
     sheetset: ['', 'Worksheet keeping choices'],
     roots: ['*', 'Roots & Wings'],

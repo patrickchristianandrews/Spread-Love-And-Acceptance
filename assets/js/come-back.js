@@ -284,7 +284,7 @@
       ],
       30: [
         { t: 'Walk one road through your worksheets, in order', u: '/workpapers/fill/suite.html', m: 25, why: 'one fillable path, at your own pace', tag: 'load' },
-        { t: 'Start (or continue) Six gentle weeks', u: '/prog-01.html', m: 20, why: 'one small session a week', tag: 'book' },
+        { t: 'Start (or continue) Six-week program', u: '/prog-01.html', m: 20, why: 'one small session a week', tag: 'book' },
         { t: 'All the How you connect chapters', u: '/wavelength.html', m: 25, why: 'the full picture of how you take things in', tag: 'self' },
         { t: 'Watch an episode together: ' + ne[1], u: '/frequency-buddies.html?ep=' + ne[0], m: 16, why: 'Tidbit and Sugarfoot, for the whole family', tag: 'kids' },
         { t: nc.code + ' in the expanded version', u: nc.u.replace(/\.html$/, '-in-depth.html'), m: 20, why: nc.n, tag: 'book' }
@@ -490,7 +490,7 @@
     if (tools.indexOf('/wavelength.html') === -1) c.push(['/wavelength.html', 'Find your Wave Code', 'how you think, talk and listen']);
     if (nc) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
     if (ne) c.push(['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
-    c.push(['/prog-01.html', 'Six gentle weeks', 'one small session a week']);
+    c.push(['/prog-01.html', 'Six-week program', 'one small session a week']);
     // the first idea in your focus, if Focus mode is on and one fits
     return c.filter(function (x) { return fits(x[0]); })[0] || c[0];
   }
@@ -528,7 +528,7 @@
     wp09: ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'a fact, a feeling and a kind ask'],
     kit: ['/wp-11.html', 'Calm-down plan', 'what you notice first, and what settles you'],
     daily: ['/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in', 'a tiny daily habit to share'],
-    six: ['/week-0.html', 'Six gentle weeks, starting with week 0', 'five minutes on what the six weeks are, alone or with anyone'],
+    six: ['/week-0.html', 'Six-week program, starting with week 0', 'five minutes on what the six weeks are, alone or with anyone'],
     examples: ['/examples.html', 'Made-up examples', 'small changes in different kinds of relationships'],
     pause: ['/pursue-withdraw.html', 'One wants to talk now, one needs space', 'both sides, and a pause plan'],
     turning: ['/turning-toward.html', 'Turning toward', 'seven small habits for staying close']
@@ -552,7 +552,7 @@
     '/is-this-for-you.html': { me: 'ten', with: 'ten', alt: 'examples' },
     '/examples.html': { me: 'ten', with: 'ten' },
     '/someone-sent-you-this.html': { me: ['weather', 'one minute, just for you. Nothing is shared'], with: ['weather', 'one minute, just for you. Nothing is shared'] },
-    '/week-0.html': { me: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, at your own pace' }, with: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, together or each on your own' } },
+    '/week-0.html': { me: { u: '/prog-01.html', t: 'Six-week program: week 1', n: 'one small session, at your own pace' }, with: { u: '/prog-01.html', t: 'Six-week program: week 1', n: 'one small session, together or each on your own' } },
     '/is-the-setup-working.html': { me: 'wp02', with: 'wp03' },
     '/turning-toward.html': { me: 'weather', with: 'daily' },
     '/small-wins.html': { me: 'weather', with: 'turning' },

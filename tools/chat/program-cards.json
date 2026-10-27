@@ -8964,7 +8964,7 @@
       ],
       "how": [
         "Choose “Us, together” at the start and take turns.",
-        "For something quieter side by side, Gentle games (Pause & Play) has calm games you can pass the phone for."
+        "For something quieter side by side, Calm games (Pause & Play) has calm games you can pass the phone for."
       ],
       "plain": [
         "Play the Re-check Drive together.",
@@ -8981,7 +8981,7 @@
           "/turning-toward.html"
         ],
         [
-          "Gentle games (Pause & Play): calm games to pass the phone",
+          "Calm games (Pause & Play): calm games to pass the phone",
           "/pause-and-play.html"
         ]
       ],
@@ -11351,7 +11351,7 @@
         "start in ten minutes"
       ],
       "what": [
-        "Here’s what fits in a few minutes. Pick one, or follow Ten-minute start for a guided first visit."
+        "Here’s what fits in a few minutes. Pick one, or follow Start in 10 minutes for a guided first visit."
       ],
       "how": [
         "1 minute: Today’s Weather, a quick read on how you are today.",
@@ -14376,11 +14376,11 @@
     {
       "id": "prog01",
       "kind": "tool",
-      "name": "PROG-01, Six gentle weeks",
+      "name": "PROG-01, Six-week program",
       "keys": [
         "prog01",
         "prog 01",
-        "six gentle weeks",
+        "six weeks",
         "6 week program",
         "six week program",
         "~6 week",
@@ -14409,7 +14409,7 @@
       "pillar": "All Five Pillars, in order.",
       "links": [
         [
-          "PROG-01: Six gentle weeks",
+          "PROG-01: Six-week program",
           "/prog-01.html"
         ],
         [
@@ -15038,7 +15038,7 @@
           "/night-garden.html"
         ],
         [
-          "Gentle games (Pause & Play)",
+          "Calm games (Pause & Play)",
           "/pause-and-play.html"
         ]
       ]
@@ -15046,7 +15046,7 @@
     {
       "id": "pauseplay",
       "kind": "tool",
-      "name": "Gentle games (Pause & Play)",
+      "name": "Calm games (Pause & Play)",
       "keys": [
         "pause and play",
         "pause play",
@@ -15058,9 +15058,9 @@
         "games every calm game",
         "every calm game",
         "games hub",
-        "gentle games"
+        "calm games"
       ],
-      "what": "Gentle games (Pause & Play) is every calm game in one place: gentle games for when your mind needs a rest. Drift, the Night Garden, Tidbit and Sugarfoot’s Arcade, Word Bloom, Crosswords (gentle levels or a newspaper daily), Quiet Words, the Bears Dojo, the Re-check Drive and the music video maker. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
+      "what": "Calm games (Pause & Play) is every calm game in one place: calm games for when your mind needs a rest. Drift, the Night Garden, Tidbit and Sugarfoot’s Arcade, Word Bloom, Crosswords (gentle levels or a newspaper daily), Quiet Words, the Bears Dojo, the Re-check Drive and the music video maker. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
       "how": [
         "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a quick arcade round (Tidbit and Sugarfoot’s Arcade).",
         "Play a few minutes to settle before a hard conversation, or to wind down at night.",
@@ -15069,7 +15069,7 @@
       "pillar": "Mostly Pillar III, Read your state first: settle, then talk.",
       "links": [
         [
-          "Gentle games (Pause & Play)",
+          "Calm games (Pause & Play)",
           "/pause-and-play.html"
         ],
         [
@@ -16117,7 +16117,7 @@
         "before week one",
         "before week 1"
       ],
-      "what": "Week 0 is a five-minute start before the six weeks: what the program is, how much time it takes, who it’s for, and a pace that suits you. Calendar reminders you set yourself now live in Six gentle weeks. Nothing is sent anywhere.",
+      "what": "Week 0 is a five-minute start before the six weeks: what the program is, how much time it takes, who it’s for, and a pace that suits you. Calendar reminders you set yourself now live in Six-week program. Nothing is sent anywhere.",
       "how": [
         "Read what the six weeks involve, and pick a pace that fits your life.",
         "Add the reminders to your own calendar, if you like.",
@@ -16129,7 +16129,7 @@
           "/week-0.html"
         ],
         [
-          "Six gentle weeks: calendar reminders",
+          "Six-week program: calendar reminders",
           "/prog-01.html#calendar"
         ],
         [
@@ -16333,7 +16333,7 @@
         "One minute on Today’s Weather to see how you’re doing today.",
         "Read the Preface, The work nobody sees (free).",
         "Start a who-did-what list today, in Who did what (WP-01) or on the Lemonade Stand. Just today’s jobs is plenty.",
-        "Later, follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01).",
+        "Later, follow the Workpaper Suite for your road, or the six weeks (PROG-01).",
         "Not sure? Start here has three quick questions that suggest one thing to try first."
       ],
       "links": [
@@ -16863,7 +16863,7 @@
           "/program-overview.html"
         ],
         [
-          "PROG-01: Six gentle weeks",
+          "PROG-01: Six-week program",
           "/prog-01.html"
         ],
         [
@@ -16883,11 +16883,11 @@
         "time commitment"
       ],
       "what": [
-        "Not long, on purpose. Today’s Weather takes about a minute, How much are you carrying? a minute or two, the daily check-in 90 seconds, and a week of Who did what a few minutes a day. One owner per job is one sit-down, and the monthly look-back maybe half an hour. The guided program runs six gentle weeks, one worksheet a week."
+        "Not long, on purpose. Today’s Weather takes about a minute, How much are you carrying? a minute or two, the daily check-in 90 seconds, and a week of Who did what a few minutes a day. One owner per job is one sit-down, and the monthly look-back maybe half an hour. The guided program runs six weeks, one worksheet a week."
       ],
       "links": [
         [
-          "PROG-01: Six gentle weeks",
+          "PROG-01: Six-week program",
           "/prog-01.html"
         ],
         [
@@ -18020,7 +18020,7 @@
         "Music + Behavioral science (feedback loops): A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep. In the program: The 90-second daily check-in (WP-13).",
         "Music + Holistic therapies (state and setting): Music therapy is a recognized form of care: singing, drumming and listening help people settle, feel connected and find words. In the program: The Calm-Down Kit (WP-11).",
         "Music + Aromatherapy (state and setting): Sound and scent both set the mood of a room before anyone speaks. A playlist in the kitchen does what a candle does. In the program: Brain Breakers.",
-        "Music + Laughter therapy (state and setting): Laughter is rhythm too: breath, bounce and sound, in time with other people. A shared laugh and a shared song both say “we’re in step.” In the program: Gentle games (Pause & Play).",
+        "Music + Laughter therapy (state and setting): Laughter is rhythm too: breath, bounce and sound, in time with other people. A shared laugh and a shared song both say “we’re in step.” In the program: Calm games (Pause & Play).",
         "Laughter therapy + Psychology (state and setting): A shared laugh tells the body “we’re safe.” Research on couples suggests that gentle humor during a disagreement can help calm it down. In the program: Turning Toward.",
         "Laughter therapy + Neurobiology (state and setting): Laughing is linked with looser muscles and lower stress afterward. It’s a quick way to let the body know the alarm can stand down. In the program: The Calm-Down Kit (WP-11).",
         "Laughter therapy + Holistic therapies (state and setting): Laughter yoga and therapeutic humor are part of the holistic toolkit: a whole-body reset that costs nothing. In the program: The Night Garden."
@@ -18088,7 +18088,7 @@
         "Politics + Finance (balance): A budget is a political document: it shows what a group values. A week’s chores and hours are a household budget, and they show the same thing. In the program: Who did what (WP-01).",
         "Music + Business (ownership and structure): An orchestra works because every player has a part and someone sets the tempo: one owner per job, and one shared beat. In the program: One owner per job (WP-03).",
         "Laughter therapy + Behavioral science (feedback loops): A small, shared bit of silliness gets repeated and sticks. The in-joke is a habit that keeps closeness going. In the program: Turning Toward.",
-        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. In the program: Gentle games (Pause & Play).",
+        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. In the program: Calm games (Pause & Play).",
         "Laughter therapy + Business (feedback loops): Teams that can laugh together tend to find it easier to say hard things early, while they’re still small. In the program: Check-ins.",
         "Laughter therapy + Aromatherapy (state and setting): A warm, softly lit, relaxed room makes laughter easier. The senses set the mood for play as much as for calm. In the program: Brain Breakers."
       ],
@@ -18591,7 +18591,7 @@
           "/bears-dojo.html"
         ],
         [
-          "Gentle games (Pause & Play)",
+          "Calm games (Pause & Play)",
           "/pause-and-play.html"
         ]
       ]

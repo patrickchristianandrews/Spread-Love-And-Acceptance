@@ -107,7 +107,7 @@ Program: The daily check-in is designed to be small enough to pick straight back
 ## Restarting after a break
 aka: starting again; fell off the wagon; relapse is normal
 see: Never miss twice; Fresh starts
-go: /prog-01.html | PROG-01: Six gentle weeks
+go: /prog-01.html | PROG-01: Six-week program
 evidence: Research on behavior change (for example, the stages-of-change model) treats lapses as a normal part of the process rather than failure.
 try: “We stopped the daily check-ins over the holidays. Let’s just start again tonight.”
 

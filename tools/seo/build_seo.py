@@ -34,7 +34,7 @@ SKIP_FILES = {'404.html', 'offline.html'}
 
 ABOUT_ORG = ('Spread Love & Acceptance is a young, independent start-up building a free, '
              'growing suite of self-help tools for understanding yourself and sharing life kindly with the people '
-             'around you. It brings together practical relationship tools, gentle games, calm breathing and sound '
+             'around you. It brings together practical relationship tools, calm games, calm breathing and sound '
              'spaces, and a plain-language library, with new tools and content added all the time. Everything you '
              'type stays on your device.')
 
@@ -137,7 +137,7 @@ SEARCH = {
  'quick-checks.html': ('My Weather Today: Daily Mood and Stress Check-In', 'A 60-second check-in on how you’re doing today, with a gentle forecast for hard talks and a calm pause with something soothing to do.'),
  'ask.html': ('Ask Professor Puddles: Free, Private Relationship Help Chat', 'Tell a cheerful raindrop professor what’s going on: kind next steps, words to say, deep talks and infographics. Free, and nothing you type leaves your device.'),
  'library.html': ('Psychology in Plain Words: How Relationships Work', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
- 'pause-and-play.html': ('Relax and Play: Calm Tools and Gentle Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colors, calm music and sounds, or play a calm game with no timers and no way to lose.'),
+ 'pause-and-play.html': ('Relax and Play: Calm Tools and Calm Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colors, calm music and sounds, or play a calm game with no timers and no way to lose.'),
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Game', 'A peaceful garden at night: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. A free, calm game.'),
  'calm-visualizer.html': ('Drift: A Calm Visualizer With Soft Tones', 'Tell Drift how you feel, put on headphones and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes.'),
@@ -163,7 +163,7 @@ SEARCH = {
  'wp-13.html': ('90-Second Daily Check-In for Couples (WP-13)', 'A 90-second daily check-in for couples and roommates: how you’re doing, what’s coming up, and one small way to help.'),
  'lemonade-stand.html': ('Who Did What This Week? A Simple Chore Tracker', 'A friendly chore tracker for the week: note who did what, see the balance at a glance, and talk about it without blame.'),
  'is-the-setup-working.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.'),
- 'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.'),
+ 'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six-week program, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.'),
  'wired-differently.html': ('Wired Differently: Neurodiversity in Relationships', 'How different minds can hear the same words differently, and simple ways to share plans, chores and feedback so they land for everyone.'),
  'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Understand how you take in plans, change and feedback, and how to explain what helps you to the people you live and work with.'),
  'wavelength.html': ('Wavelength: Free Communication Style Quiz and Self-Discovery Guide', 'A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.'),
@@ -236,11 +236,11 @@ SEARCH.update({
  'wp-11.html': ('Calm-Down Kit: A Plan for Heated Moments (WP-11)', 'Make a simple calm-down plan before you need it: your early signs, a pause signal, what helps you settle, and how to come back to the talk kindly and on time.'),
  'wp-11-sound-toolkit.html': ('Calm-Down Sounds: Brown Noise, a Low Hum and More', 'Three simple background sounds to try as part of your calm-down plan: a low hum, a soft flutter and brown noise. Free in your browser, and a matter of taste.'),
  'workpapers/calculators/is-the-setup-working-quick.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the household load is working for everyone.'),
- 'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the mental load, give every chore an owner, check your stress and how you talk, then look at what has changed.'),
+ 'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six-week program, one worksheet a week: see the mental load, give every chore an owner, check your stress and how you talk, then look at what has changed.'),
  'tools/frequency-calibration.html': ('Are Your Rhythms in Step? Frequency Calibration', 'A worksheet for two people to map their rhythms for money, rest, decisions, check-ins and recovery, and see where they match and where they drift apart.'),
  'snapshot/index.html': ('A 2-Minute Snapshot of How Your Household Shares the Load', 'A gentle two-minute look at how the shared load is set up at home and how it bends, for couples, families, roommates and teams. Not a test or a diagnosis.'),
  # calm, games and media
- 'pause-and-play.html': ('Relax and Play: Calm Tools and Gentle Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colors, calm music and sounds, or play a calm game with no timers and no way to lose.'),
+ 'pause-and-play.html': ('Relax and Play: Calm Tools and Calm Games, Free', 'Relax and reset with a breathing break, a silent wind-down, slow colors, calm music and sounds, or play a calm game with no timers and no way to lose.'),
  'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Exercise Game', 'A breathing exercise you can play: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. Free, calm, no timers.'),
  'calm-visualizer.html': ('Drift: Calm Visuals and Soft Tones to Unwind', 'Tell Drift how you feel, put on headphones, and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes of calm.'),
@@ -329,7 +329,7 @@ SEARCH.update({
  'calm-without-pills.html': ('Calm Without Pills: What Helps, and What Research Says', 'Everyday ways to ease stress, worry and poor sleep, from movement and daylight to slow breathing, each with the research and every source.'),
  'someone-sent-you-this.html': ('Someone Sent You This Link? What This Free Site Is, and What’s Here', 'Someone sent you a link to Spread Love & Acceptance? What it is in three lines, what you’ll find here, and no pressure: nothing you type leaves your device.'),
  'examples.html': ('Examples: Small Changes in Different Kinds of Relationships', 'Made-up examples built from common patterns: a couple, roommates, siblings, co-parents, friends, co-founders, a poly home, a kinship caregiver and someone on their own.'),
- 'week-0.html': ('Week 0: A Gentle Start to the Six Weeks', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, why missing a week is fine, and one small thing to do now.'),
+ 'week-0.html': ('Week 0: A Gentle Start to the Six Weeks', 'Five minutes before the six weeks: what each week is, how long it takes, doing it alone or with anyone, why missing a week is fine, and one small thing to do now.'),
  'research.html': ('The Research Behind This Site, in Plain Words', 'The studies, books and reviews behind this free self-help site: what each found, in plain words, how strong the evidence is, and a link to read more.'),
  'start-in-10-minutes.html': ('Start in 10 Minutes', 'Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern or each say one thing, then pick one small change. Private, no sign-up.'),
  'grandparents.html': ('For Grandparents: Help Without Taking Over', 'Free, gentle help for grandparents: share childcare fairly, agree on house rules with your adult children, say no kindly, and stay close to your grandkids.'),
@@ -487,7 +487,7 @@ SEARCH.update({
  # the rest of this round's new and changed pages
  'communication.html': ('Effective Communication: A Complete, Plain Guide', 'A free, plain guide to effective communication: how to listen, say what you need, pick a good time, have hard talks and repair after a fight.'),
  'bonding.html': ('Bonding Ideas: How Closeness Grows, for Any Relationship', 'How closeness grows, from research on bids, responsiveness and play, plus a free idea picker for partners, kids, teens, friends, family and coworkers.'),
- 'week-0.html': ('Week 0: A Gentle Start to the Six Weeks', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'),
+ 'week-0.html': ('Week 0: A Gentle Start to the Six Weeks', 'Five minutes before the six weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'),
  'perspective-shifter.html': ('See It From Their Side: A Free Perspective-Taking Tool', 'Step into the other person’s side of a moment: their day, their wiring, what they could see and what they could not. A free, private tool.'),
  'start-in-10-minutes.html': ('Start in 10 Minutes: Four Small Steps', 'Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern, then pick one small change. No sign-up.'),
  # descriptions that ran past 155 characters, rewritten so nothing is cut mid-thought
@@ -1139,7 +1139,7 @@ def write_sitemap(report):
 
 
 GROUPS = [
-    ('Start here', r'^(contact|index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0)'),
+    ('Start here', r'^(contact|index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0|do\.html|what-am-i-feeling)'),
     ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz'
                                    r'|love-languages|apology-languages|support-languages|languages-of-connection|appreciation-at-work|touchstones|nervous-system|calm-without-pills|calming-supplements|living-alone|stepfamily|new-relationship|small-wins|growing-up)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),

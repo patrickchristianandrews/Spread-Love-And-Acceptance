@@ -1,6 +1,6 @@
 # Spread Love & Acceptance
 
-> Spread Love & Acceptance is a young, independent start-up building a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, gentle games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.
+> Spread Love & Acceptance is a young, independent start-up building a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, calm games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.
 
 Key facts:
 - Website: https://spreadloveandacceptance.com/ . Free to use: every page, tool and chapter is open to everyone, with no sign-up, no account and no paid version. Email updates are optional.
@@ -25,7 +25,7 @@ Key facts:
 - [Read Your Way: Make Every Page Fit Your Mind](https://spreadloveandacceptance.com/how-you-take-things-in.html): Pick how your mind takes things in, by neurotype (ADHD, autistic, dyslexic and more) or plain preferences, and every page adapts. Optional, on your device.
 - [Is This Right for You? What It Is and Isn’t](https://spreadloveandacceptance.com/is-this-for-you.html): A free self-help program for your own stress and reactions, and a fair way for two people to see what each carries at home. Education, not counseling.
 - [Email Updates: One Small Idea a Week (Optional)](https://spreadloveandacceptance.com/membership.html): Everything here is free, with no account. If you like, get at most one email a week: one small thing to try in a minute, and what is new on the site.
-- [Which part of the program to use](https://spreadloveandacceptance.com/program.html): The program in one place: six gentle weeks, the Workpaper Suite, the package and report, the fill-in worksheets and the indexes, and which one to use when.
+- [Which part of the program to use](https://spreadloveandacceptance.com/program.html): The program in one place: six weeks, the Workpaper Suite, the package and report, the fill-in worksheets and the indexes, and which one to use when.
 - [Relationship Tools for Couples, Families and Roommates](https://spreadloveandacceptance.com/relationships.html): Free ways to share chores fairly, use kinder words and hold calmer check-ins, for couples, families, co-parents, friends, roommates.
 - [Your Self-Discovery Path, Step by Step](https://spreadloveandacceptance.com/self-path.html): The self-discovery path: understand your own load, rhythms and reactions first, with a few short worksheets and free tools you can use on your own.
 - [Sent This by Someone? What They Can and Can’t See](https://spreadloveandacceptance.com/sent-this.html): Someone sent you Spread Love & Acceptance? What they can and can’t see, what stays yours, and kind ways to say yes, not yet or no.
@@ -34,7 +34,7 @@ Key facts:
 - [Start in 10 Minutes: Four Small Steps](https://spreadloveandacceptance.com/start-in-10-minutes.html): Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern, then pick one small change. No sign-up.
 - [All Free Tools: Start on Your Own, Then Together](https://spreadloveandacceptance.com/tools.html): Every free tool in one place, the ones you can use on your own first. Filter by what you want to do, who it is for and your time. No sign-up, no account.
 - [Ways In: Everything Is Free and Open](https://spreadloveandacceptance.com/ways-in.html): Everything here is free, with no account, no sign-up and no paid version. Email updates are optional.
-- [Week 0: A Gentle Start to the Six Weeks](https://spreadloveandacceptance.com/week-0.html): Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.
+- [Week 0: A Gentle Start to the Six Weeks](https://spreadloveandacceptance.com/week-0.html): Five minutes before the six weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.
 - [What’s new](https://spreadloveandacceptance.com/whats-new.html): Everything newly added to the site, and everything that’s grown: new pages, new games, new sounds, and parts of the program that go deeper than before.
 - [Why Use This Instead of Reading an Article?](https://spreadloveandacceptance.com/why-this-site.html): What this free site does differently from articles: agreements you both keep, both sides by design, private, and honest about its limits.
 
@@ -85,7 +85,7 @@ Key facts:
 ## Worksheets (the Workpaper Suite)
 - [Learn by Doing: Practice the Worksheets on an Example](https://spreadloveandacceptance.com/do/): Try the core worksheets on a made-up household first, see your learning map fill in, or watch two rhythms fall into step. Nothing to sign up for.
 - [Workpaper Playground](https://spreadloveandacceptance.com/do/workpaper-playground.html): Practice the core worksheets on a worked example: log a week (WP-01), check your stress tank (WP-02).
-- [A Six-Week Guided Program for Fairer Chores](https://spreadloveandacceptance.com/prog-01.html): Six gentle weeks, one worksheet a week: see the mental load, give every chore an owner, check your stress and how you talk, then look at what has changed.
+- [A Six-Week Guided Program for Fairer Chores](https://spreadloveandacceptance.com/prog-01.html): Six-week program, one worksheet a week: see the mental load, give every chore an owner, check your stress and how you talk, then look at what has changed.
 - [Program Overview](https://spreadloveandacceptance.com/program-overview.html): How the program fits together: the chapters explain the ideas and the worksheets put them to use.
 - [Suite Index](https://spreadloveandacceptance.com/suite-index.html): The official list of what’s built today. If something is listed here, it’s live and ready to use. If it isn’t listed, it isn’t live yet.
 - [Is the Setup Working for Everyone? A Fair-Split Calculator](https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html): Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the load works for everyone.

@@ -1234,7 +1234,7 @@ def build_workbook(where, bw=False):
               '<li><strong>Need more copies?</strong> Copy a page for your own use, or fill the sheet out free on the website, where it does the math and keeps '
               'what you type on your own device.</li>'
               '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
-              '<p class="wb-how-h">Six gentle weeks</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
+              '<p class="wb-how-h">Six-week program</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
               'The next page is a planner for it. Most people miss a week somewhere. That’s built in.</p></section>') % mark('wb-how')
     weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', 'None yet'),
              ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what · WP-13 daily check-in'),

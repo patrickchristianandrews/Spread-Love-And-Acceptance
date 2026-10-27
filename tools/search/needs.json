@@ -60,7 +60,7 @@
     "ten-minute start": ["start in 10 minutes", "ten minute start"],
     "learn by doing": ["learn and explore", "workpaper playground", "quest map"],
     "agreement": ["agreements", "make a plan", "plan together", "template", "templates", "acuerdo"],
-    "games": ["game", "calm games", "gentle games", "pause and play", "juegos"],
+    "games": ["game", "calm games", "calm games", "pause and play", "juegos"],
     "five": ["5"],
     "ten": ["10"]
   },
@@ -143,7 +143,7 @@
     {"id": "supplements", "l": "Calming supplements", "say": ["does ashwagandha work", "supplements for anxiety", "magnesium for sleep", "chamomile tea for stress", "herbal remedies for anxiety"], "go": [["/calm-without-pills.html", "What actually helps, and what the research says. Supplements and herbs are not covered in depth."]]},
     {"id": "sad", "l": "Feeling sad or low", "say": ["i feel sad", "feeling down", "i feel depressed", "i feel low", "crying all the time", "bad day", "having a rough day"], "go": [["/quick-checks.html#today", "A gentle check on how you are, and one step that fits."], ["/small-wins.html", "Small wins, and turning hard feelings into something kinder."]]},
     {"id": "tired", "l": "Exhausted", "say": ["i'm exhausted", "so tired all the time", "no energy", "running on empty", "my battery is flat"], "go": [["/quick-checks.html#today", "Check your energy and what is coming up today."], ["/workpapers/wp-02-how-much-are-you-carrying.html", "See how much you are carrying."]]},
-    {"id": "bored", "l": "Something to take my mind off it", "say": ["i'm bored", "something to take my mind off things", "relaxing game", "calm game", "game with no timer", "distract me", "gentle games"], "go": [["/pause-and-play.html", "Every calm game in one place. No timers, no way to lose."], ["/word-bloom.html", "A relaxing word game."], ["/surprise.html", "Surprise me."]]},
+    {"id": "bored", "l": "Something to take my mind off it", "say": ["i'm bored", "something to take my mind off things", "relaxing game", "calm game", "game with no timer", "distract me", "calm games"], "go": [["/pause-and-play.html", "Every calm game in one place. No timers, no way to lose."], ["/word-bloom.html", "A relaxing word game."], ["/surprise.html", "Surprise me."]]},
     {"id": "crossword", "l": "A crossword", "say": ["crossword puzzle", "daily crossword", "mini crossword", "easy crossword"], "go": [["/quiet-crossword.html", "Small, friendly crosswords, or the daily one."]]},
     {"id": "word-games", "l": "A word game", "say": ["word search", "word game", "anagram game", "spelling game"], "go": [["/quiet-words.html", "A calm word search."], ["/word-bloom.html", "Swipe letters to find hidden words."]]},
     {"id": "arcade", "l": "Arcade games", "say": ["arcade games", "retro games", "maze game", "brick breaker"], "go": [["/frequency-journey.html", "Six gentle arcade games with the pups."]]},

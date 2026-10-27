@@ -671,7 +671,7 @@ window.TOLToolGuideData = {
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'Move repeats to the job list', 'anything that comes up more than twice'],
         ['/turning-toward.html', 'Turning toward', 'more small daily habits'],
-        ['/week-0.html', 'Six gentle weeks', 'if you’d like a little structure']
+        ['/week-0.html', 'Six-week program', 'if you’d like a little structure']
       ],
       research: [
         ['laurenceau-1998-intimacy', 'Sharing how you feel, and feeling heard, both make a moment feel close (Laurenceau and colleagues, 1998).'],
@@ -849,11 +849,11 @@ window.TOLToolGuideData = {
       pages: ['/workpapers/fill/suite.html', '/full-path.html'],
       two: true,
       when: 'When you’d like to work through several worksheets in a sensible order for your situation (just you, a couple, a household, co-parents, a team), and get one report at the end. Fill them in one at a time, or all of them in one PDF (“Full path package”).',
-      notWhen: 'Not all in one sitting. One sheet a week is plenty; <a href="/prog-01.html">Six gentle weeks</a> paces it for you.',
+      notWhen: 'Not all in one sitting. One sheet a week is plenty; <a href="/prog-01.html">Six-week program</a> paces it for you.',
       time: 'Each sheet takes 5 to 30 minutes. The whole road takes a few weeks.',
       result: 'Your filled-in sheets in one PDF you can type into or print, and a report written for your road: findings, things worth a second look, and a short plan.',
       next: [
-        ['/prog-01.html', 'Six gentle weeks', 'one sheet a week, with calendar reminders'],
+        ['/prog-01.html', 'Six-week program', 'one sheet a week, with calendar reminders'],
         ['/is-the-setup-working.html', 'Is the setup working for everyone?', 'see how the split is going'],
         ['/method-and-limits.html', 'How the scores work', 'the plain rules behind each one']
       ],
@@ -1123,7 +1123,7 @@ window.TOLToolGuideData = {
       time: 'An hour or more, in parts.',
       result: 'One PDF with your filled-in sheets and a report: what stands out, what’s worth a second look, and a short plan.',
       next: [
-        ['/prog-01.html', 'Six gentle weeks', 'the same sheets, one a week'],
+        ['/prog-01.html', 'Six-week program', 'the same sheets, one a week'],
         ['/method-and-limits.html', 'How the scores work', 'the plain rules behind each one'],
         ['/workpapers/fill/suite.html', 'All the worksheets on screen', 'fill them in here instead']
       ],
@@ -1136,7 +1136,7 @@ window.TOLToolGuideData = {
     },
 
     'six-weeks': {
-      name: 'Six gentle weeks',
+      name: 'Six-week program',
       reg: 'sixweeks',
       pages: ['/prog-01.html'],
       two: true,
@@ -1159,16 +1159,16 @@ window.TOLToolGuideData = {
     },
 
     'week-0': {
-      name: 'Week 0: a five-minute start to Six gentle weeks',
+      name: 'Week 0: a five-minute start to Six-week program',
       pages: ['/week-0.html'],
       when: 'Before the six weeks: five minutes to see what they are, how long each takes, and to add a reminder for each week to your own calendar.',
       notWhen: 'Nothing to fill in yet, and nothing to get right.',
       time: 'About 5 minutes.',
       result: 'You know what each week asks, and six reminders are in your own calendar (you add them; the site doesn’t send anything).',
       next: [
-        ['/prog-01.html', 'Six gentle weeks: week 1', 'one small step'],
+        ['/prog-01.html', 'Six-week program: week 1', 'one small step'],
         ['/workpapers/wp-01.html', 'Who did what this week', 'the week 1 sheet'],
-        ['/start-in-10-minutes.html', 'Ten-minute start', 'if you’d rather just try one thing']
+        ['/start-in-10-minutes.html', 'Start in 10 minutes', 'if you’d rather just try one thing']
       ],
       research: [
         ['gollwitzer-sheeran-2006', 'A set time and place makes follow-through more likely (Gollwitzer and Sheeran, 2006).']
@@ -1278,7 +1278,7 @@ window.TOLToolGuideData = {
       leave: 'What shifted, what didn’t, and one next step. It reads the setup, never a person.',
       pages: ['/look-back-30-days.html', '/workpapers/calculators/look-back-30-days-quick.html'],
       two: true,
-      when: 'After about a month of using the worksheets or the six gentle weeks, to see whether what you changed is changing anything.',
+      when: 'After about a month of using the worksheets or the six weeks, to see whether what you changed is changing anything.',
       notWhen: 'Not as a verdict on a person. Not after one week: one week can be a fluke.',
       time: 'About 5 minutes for the quick look-back; 15 for the full one.',
       result: 'A plain list of what shifted and what didn’t, and one next step.',

@@ -42,7 +42,7 @@
     care: ['/love-languages.html#ll-card-h', 'How you connect: what feels like care, a card', 'about 5 minutes', 'the specific small things that make you feel cared for'],
     touch: ['/touchstones.html#ts-card-h', 'Stay close: your shared words and rituals', 'about 5 minutes', 'the jokes, names and rituals that say “we’re us”'],
     rhythms: ['/tools/frequency-calibration.html', 'Compare your daily rhythms', 'about 10 minutes', 'where your pace for money, plans and rest differs, and one small agreement each'],
-    six: ['/week-0.html', 'Six gentle weeks, starting with week 0', 'five minutes, then one small step a week', 'a gentle structure, alone or with anyone']
+    six: ['/week-0.html', 'Six-week program, starting with week 0', 'five minutes, then one small step a week', 'a gentle structure, alone or with anyone']
   };
   // [address, title]
   var R = {

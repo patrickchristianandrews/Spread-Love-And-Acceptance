@@ -1,4 +1,4 @@
-/* prog-tracker.js — "Six gentle weeks" (PROG-01) progress, kept only on this device.
+/* prog-tracker.js — "Six-week program" (PROG-01) progress, kept only on this device.
    - On /prog-01.html and /prog-01-in-depth.html: a week bar ("Week N of 6"), and a small tracker
      that is OFF until someone turns it on. Once on, it keeps a start date and which weeks are done
      in this browser's storage (key tol-prog01-v1). "Erase" removes it completely and turns it off.

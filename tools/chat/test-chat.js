@@ -1434,7 +1434,7 @@ if (PERS) {
   t('chat4', 'how do I turn on high contrast', { id: 'textsize', text: /High contrast/ });
   t('chat4', 'how do i make text bigger', { id: 'textsize', text: /Settings/ });
   t('chat4', 'what is week 0', { id: 'week0', link: '/week-0.html' });
-  t('chat4', 'can i add reminders to my calendar', { id: 'prog01', link: '/prog-01.html#calendar' });  // mergeB: reminders live in Six gentle weeks
+  t('chat4', 'can i add reminders to my calendar', { id: 'prog01', link: '/prog-01.html#calendar' });  // mergeB: reminders live in Six-week program
   t('chat4', 'where else can i get help', { not: /hotline|helpline|988|findahelpline|Samaritans/i });   // no outside-resource lists (owner)
   t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
   // supplements, herbs and drugs: not covered. One plain reply that gives no guidance, no dose, no product and no referral line, and points to the everyday habits and Calm down now. Crisis first, no jokes
@@ -2022,9 +2022,9 @@ if (PERSONA) {
   t('chat11', 'How am I right now?', { q: 'how am i right now check', id: 'weather', text: /My weather today/, link: '/quick-checks.html' });
   t('chat11', 'Self-discovery: know your own wiring', { q: 'what is self-discovery', link: ['/know-yourself.html', '/self-path.html'], text: /Self-discovery/ });
   t('chat11', 'the Crosswords', { q: 'tell me about the crosswords', id: /quietcross|dailycross/, text: /Crosswords/ });
-  t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /Gentle games/ });
+  t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /Calm games/ });
   t('chat11', 'find your starting point is now on Start here', { q: 'find your starting point', id: 'start', link: '/start-here.html' });
-  t('chat11', 'calendar reminders live in Six gentle weeks', { q: 'can i add reminders to my calendar', id: 'prog01', link: '/prog-01.html#calendar' });
+  t('chat11', 'calendar reminders live in Six-week program', { q: 'can i add reminders to my calendar', id: 'prog01', link: '/prog-01.html#calendar' });
   t('chat11', 'the Text message checker is the Chat analyzer', { q: 'what is the text message checker', id: 'signal', text: /Chat analyzer/, link: '/signal-translator.html' });
   t('chat11', 'a whole chat: the Chat analyzer', { q: 'can I paste a whole chat?', id: 'reader', link: '/signal-translator.html#conversation' });
   // consol12: the Chat analyzer's "Help me write it", and one place for plan templates
@@ -2035,7 +2035,7 @@ if (PERSONA) {
   // names12: the 19 places' new names; the book is "Spread Love & Acceptance"
   t('chat11', 'Rewind the talk', { q: 'what is rewind the talk', id: 'decoder', text: /Rewind the talk/ });
   t('chat11', 'My weather today', { q: 'what is my weather today', id: 'weather', text: /My weather today/ });
-  t('chat11', 'Gentle games', { q: 'what are the gentle games', id: 'pauseplay', text: /Gentle games/ });
+  t('chat11', 'Calm games', { q: 'what are the calm games', id: 'pauseplay', text: /Calm games/ });
   t('chat11', 'Plan it once', { q: 'what is plan it once', id: 'makeplan', text: /Plan it once/ });
   t('chat11', 'Who does what?', { q: 'what is the lemonade stand', id: 'lemonade', link: '/lemonade-stand.html', check: r => replyLinks(r).length && /Who does what\?/.test(JSON.stringify(r.blocks)) ? '' : 'no new name in the links' });
   t('chat11', 'the book is Spread Love & Acceptance', { q: 'what is the book', id: 'book', text: /Spread Love & Acceptance/, not: /Objective Ledger/ });

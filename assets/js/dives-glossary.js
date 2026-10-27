@@ -957,7 +957,7 @@ window.TOL_DIVES = {
     x: 'Recurrence rate = gaps that came back ÷ gaps fixed. Service teams track the same idea as a reopen rate, and quality engineers watch it as a sign that a fix treated a symptom rather than a root cause.\nThe threshold, more than half across the recorded months, is a practical line, not a research finding. It triggers the “Fixes aren’t holding” finding, which reads from What keeps coming back? (WP-04).\nIt works together with the structural gap count: a falling count with low recurrence is real progress. A falling count with high recurrence suggests problems are being moved around. Toyota’s “five whys” is a good way to dig into a recurring gap before reassigning it again.',
     u: '/workpapers/report-01-in-depth.html#monthly', l: 'REPORT-01: add a month', lt: 'What gets recorded each month, and how recurrence is worked out.' },
 
-  prog: { t: 'PROG-01: the 6-week program', m: ['PROG-01', '6-Week Program', 'six gentle weeks'],
+  prog: { t: 'PROG-01: the 6-week program', m: ['PROG-01', '6-Week Program', 'six weeks'],
     s: 'Not sure where to start, and a bit overwhelmed by all the pages? PROG-01 walks you through it, one week at a time, for six weeks.',
     f: 'For you, you don’t need week one to be perfect before starting week two. Between people, the other person joining is optional but helpful. Many start alone with a week of logging, and the other joins for the job list.',
     w: 'Week 1, foundation and a self-audit. Week 2, ownership. Week 3, the numbers and your batteries. Week 4, communication and tone. Week 5, getting in sync with the daily loop. Week 6, making it last. It ends with a second read you can compare with the first.',
@@ -1311,7 +1311,7 @@ window.TOL_DIVES = {
     f: 'For you, the games count the levels you finish, and every few levels something new and calm appears in the garden behind every page: a swing, koi, a little bridge. Between people, a few minutes of play is a lovely way to settle before a hard talk.',
     w: 'It’s a gentle nudge to take calm breaks, not a score to chase. There are no timers and no way to lose. The point isn’t to collect as much as possible. It’s to make a pause feel worth coming back to.',
     x: 'Research on casual games has linked short sessions with improved mood and lower stress in some studies, though results vary. The key design elements are low stakes, no time pressure and a clear, small task that fits in a few minutes.\nThe games sit under Pillar III: they’re a way to change your state before you talk, the play version of regulate first, negotiate second.\nThe surprise items arrive at slightly uneven intervals, so there’s no fixed target to grind toward, and nothing is lost by stopping.',
-    u: '/pause-and-play.html', l: 'Open Gentle games', lt: 'All the calm games in one place, and what grows in the garden as you play.' },
+    u: '/pause-and-play.html', l: 'Open Calm games', lt: 'All the calm games in one place, and what grows in the garden as you play.' },
 
   soundscapes: { t: 'Brain Breakers (Soundscapes)', m: ['Soundscape Catalog', 'Soundscapes', 'Brain Breakers'],
     s: 'A soft, floating instrumental playing while you fill in the weekly log makes it feel a little more like a quiet ritual and a little less like paperwork. That’s what Brain Breakers are for.',

@@ -228,7 +228,7 @@
     dSel.addEventListener('change', refresh); tIn.addEventListener('change', refresh); tIn.addEventListener('input', refresh); wSel.addEventListener('change', refresh); refresh();
     host.querySelector('[data-rm="ics"]').addEventListener('click', function () {
       var p = plan();
-      download(calendar('Six gentle weeks', p.map(function (x) {
+      download(calendar('Six-week program', p.map(function (x) {
         return event({ uid: uid(x.week), start: x.start, minutes: mins, title: SIX_TITLE + ' (week ' + x.week + ')', note: note(x.week), url: weekUrl(x.week) });
       })), 'six-gentle-weeks.ics');
       msg.textContent = 'Your calendar file is ready: ' + p.length + (p.length === 1 ? ' event' : ' events') + ', every ' + DAYS[+dSel.value] + ' at ' + niceTime(hm()) + ', starting ' + niceDate(p[0].start) + '. Open it to add them.';
