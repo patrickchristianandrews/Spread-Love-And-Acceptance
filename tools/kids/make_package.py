@@ -63,7 +63,7 @@ DESC = {
     'picture-book': ('<p><b>Tidbit zooms. Sugarfoot floats. Today is picnic day, and Tidbit is sure she can carry the whole basket by herself.</b></p>'
                      '<p>Then her paws get buzzy, her ears get hot, and a little gray cloud of Static floats in the door. With help from Professor Puddles and a hill full of friends, Tidbit learns to listen to her body, ask for a hand, say sorry when she bumps the basket, and make it right.</p>'
                      '<p>A warm, funny read-aloud with rhymes, repeating lines and a calm-down trick children can copy: smell the flower, blow the candle.</p>'
-                     '<p><b>Inside this book</b></p><ul><li>Noticing what your body is telling you (buzzy paws, heavy paws, calm)</li><li>Asking for what you need: \"room first, then a hug\"</li><li>One job each, so the basket gets light</li><li>Saying sorry in three steps and making it right</li><li>Gentle, funny clouds of Static that only want a friend</li><li>A \"Try it with Tidbit\" breathing page, a find-and-count page, and a page of questions and words for grown-ups</li></ul>'
+                     '<p><b>Inside this book</b></p><ul><li>Noticing what your body is telling you (buzzy paws, heavy paws, calm)</li><li>Asking for what you need: \"room first, then a hug\"</li><li>One job each, so the basket gets light</li><li>Saying sorry in three steps and making it right</li><li>Gentle, funny clouds of Static that only want a friend</li><li>A calm-down breathing page, a find-and-count page, and a page of questions and words for grown-ups</li></ul>'
                      '<p>40 full-color pages, 8.5 x 8.5 inches. For ages 4 to 7, and for anyone who reads aloud.</p>'
                      '<p><b>Part of The Frequency Buddies Books.</b> Tidbit, Sugarfoot and their friends also star in a chapter book for ages 9 to 12 and two coloring books.</p>'),
     'chapter-book': ('<p><b>Wren Alvarez has one rule about her bedroom, written in glitter pen on the door: KNOCK FIRST.</b></p>'
@@ -262,7 +262,7 @@ def md_title(t):
             A('| Manuscript (ebook) file | **%s** (EPUB 3, reflowable, %.2f MB, 11 chapters, spot pictures as PNG; EPUBCheck: 0 fatals, 0 errors, 0 warnings, 0 infos). |' % (N['epub'], epub_mb))
             A('| Kindle cover file (upload this) | `%s` (1600 x 2560 px, the 1.6:1 shape KDP prefers; also inside the EPUB) |' % N['kindle'])
         A('| ISBN | Leave blank. Amazon gives the Kindle edition an ASIN. |')
-        A('| Kindle price | **$%.2f**, 70%% royalty (the 70%% band is $2.99 to $12.99): 70%% x $%.2f = $%.2f, minus delivery (%.2f MB x $0.15 = $%.2f) = **$%.2f** a copy. [OWNER] |' % (kp, kp, round(0.7 * kp, 2), epub_mb, deliv, round(0.7 * kp - deliv, 2)))
+        A('| Kindle price | **$%.2f**, 70%% royalty (the 70%% band is $2.99 to $9.99; a price outside it earns 35%%, so both Kindle prices stay inside it): 70%% x $%.2f = $%.2f, minus delivery (%.2f MB x $0.15 = $%.2f) = **$%.2f** a copy. [OWNER] |' % (kp, kp, round(0.7 * kp, 2), epub_mb, deliv, round(0.7 * kp - deliv, 2)))
         A('| KDP Select | **No.** Select needs the ebook to be exclusive to Amazon in digital form, and the story\'s characters and the books\' ideas are free on the website. |')
         A('| DRM | **No DRM.** |')
         A('| Categories and keywords | The same as the paperback |')

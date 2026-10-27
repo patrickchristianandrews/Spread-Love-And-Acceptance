@@ -183,7 +183,7 @@
     var c = A.accent(id), tried = isSeen(id), tg = tags(id), v = o.variant || 'grid';
     var flags = (o.ribbon ? '<span class="tc-flag is-day">' + esc(o.ribbon) + '</span>' : '') + tg.map(function (t) { return '<span class="tc-flag' + (t === 'New' ? ' is-new' : ' is-try') + '">' + esc(t) + '</span>'; }).join('') +
       '<span class="tc-tried"' + (tried ? '' : ' hidden') + '>' + IC_TICK + '<span>Tried</span></span>';
-    return '<article class="tc tc--' + v + (tried ? ' is-tried' : '') + (o.ribbon ? ' is-day' : '') + '" data-id="' + esc(id) + '" data-href="' + esc(m.h) + '" style="--tc-a:' + c.a + ';--tc-t:' + c.t + ';--tc-k:' + c.k + '">' +
+    return '<article class="tc no-dive tc--' + v + (tried ? ' is-tried' : '') + (o.ribbon ? ' is-day' : '') + '" data-id="' + esc(id) + '" data-href="' + esc(m.h) + '" style="--tc-a:' + c.a + ';--tc-t:' + c.t + ';--tc-k:' + c.k + '">' +
       '<a class="tc-art" href="' + esc(m.h) + '" tabindex="-1" aria-hidden="true" data-tc-go="' + esc(id) + '">' + A.svg(id, { size: v === 'rail' ? 64 : 96 }) + '</a>' +
       '<div class="tc-body"><div class="tc-flags">' + flags + '</div>' +
       '<h3 class="tc-name">' + esc(m.n) + '</h3>' +
@@ -203,7 +203,7 @@
         '<span class="ts-n-t"><span class="ts-n-name">' + esc(m.n) + '</span><span class="ts-n-pr">' + esc(m.pr) + '</span></span><span class="ts-n-time">' + esc(timeChip(m)) + '</span></a></li>';
     }).join('');
     if (cele) setTimeout(function () { shown(cele); }, 0);
-    return '<div class="ts-row' + (cele && !still() ? ' ts-pulse' : '') + '" role="group" aria-label="Try another tool">' +
+    return '<div class="ts-row no-dive' + (cele && !still() ? ' ts-pulse' : '') + '" role="group" aria-label="Try another tool">' +
       (cele ? '<p class="ts-cele" role="status">' + esc(CELE[cele]) + '</p>' : '') +
       '<p class="ts-k">Try another tool</p><ul class="ts-list">' + li + '</ul><p class="ts-all"><a href="/tools.html">See all tools</a></p></div>';
   }
@@ -260,6 +260,6 @@
 
   window.TOLToolSpot = { META: META, seen: seen, isSeen: isSeen, mark: mark, count: count, total: total, daily: daily, others: others, nextFor: nextFor,
     cardHTML: cardHTML, rowHTML: rowHTML, milestone: milestone, shown: shown, cele: CELE, countLine: countLine, ensureCss: ensureCss, onChange: onChange,
-    idForPath: idForPath, tags: tags, whoChip: whoChip, timeChip: timeChip, shareAttrs: shareAttrs, helpersOff: helpersOff, still: still,
+    idForPath: idForPath, stopped: stopped, tags: tags, whoChip: whoChip, timeChip: timeChip, shareAttrs: shareAttrs, helpersOff: helpersOff, still: still,
     last: function () { return last; }, icons: { clock: IC_CLOCK, who: IC_WHO, share: IC_SHARE, tick: IC_TICK } };
 })();

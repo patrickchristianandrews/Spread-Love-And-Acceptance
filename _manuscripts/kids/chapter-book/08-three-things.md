@@ -109,7 +109,7 @@ So she scooted over, and Tidbit scrambled up and wedged herself into the gap bet
 
 Later, they made the cards.
 
-It was Theo's idea. They sat on the floor of the room with markers and a stack of index cards. Wren drew the pictures and Theo wrote the words. By nine o'clock, they had a deck of eight. There were three that matched the ladder: a green card (*CALM AND CONNECTED*), an orange card (*REVVED UP*), and a gray one (*RUNNING ON EMPTY*). There was a card that said *I NEED A MINUTE. BACK AT ____.* There was one that said *NOT ABOUT YOU,* with a little drawing of Grumble holding up both hands. There was *ROOM, PLEASE* and *STAY CLOSE, PLEASE.* And a last one, Wren's idea, in purple: *CAN YOU HEAR ME OUT BEFORE YOU HELP?*
+It was Theo's idea. They sat on the floor of the room with markers and a stack of index cards. Wren drew the pictures and Theo wrote the words. By seven o'clock, they had a deck of eight. There were three that matched the ladder: a green card (*CALM AND CONNECTED*), an orange card (*REVVED UP*), and a gray one (*RUNNING ON EMPTY*). There was a card that said *I NEED A MINUTE. BACK AT ____.* There was one that said *NOT ABOUT YOU,* with a little drawing of Grumble holding up both hands. There was *ROOM, PLEASE* and *STAY CLOSE, PLEASE.* And a last one, Wren's idea, in purple: *CAN YOU HEAR ME OUT BEFORE YOU HELP?*
 
 "That's the card for me," she said.
 

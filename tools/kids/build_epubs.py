@@ -86,7 +86,7 @@ def pb_pages():
     t[38] = 'About this book. ' + ' '.join(B['about_paras'])
     t[39] = 'The End. Goodnight, everyone. Tidbit and Sugarfoot asleep under the Moon.'
     t[40] = 'Thank you for reading. More at %s.' % C.SITE
-    return [(n, t[n]) for n in range(1, 41)]
+    return [(n, C.curly(t[n])) for n in range(1, 41)]
 
 
 def write_zip(path, files, mimetype_first=True):
@@ -237,9 +237,9 @@ def build_chapter_epub():
     gu = xhtml('For grown-ups', '<h2>For grown-ups</h2>'
                '<p>This story follows one eleven-year-old through a crowded few months: a room that stops being hers, a group chat that goes wrong, a project that goes sideways, and a sentence she wishes she could take back. Each chapter ends with a short box of things to try.</p>'
                '<p>The ideas underneath come from the free site at %s. The ladder (calm and connected, revved up, running on empty) is a simple way to notice where the body is. A message has only half its meaning in the words. A job has the doing and the noticing. A pause needs a time to come back. An apology is three things, and the other person sets the pace. Theo and Wren are wired differently, and each one has to learn the other&#8217;s language. Neither is wrong.</p>'
-               '<p>Some questions to talk about together: Where was each character on the ladder in the group chat chapter? What did &#8220;k&#8221; mean to Imani, and what did it mean to Wren? Which job on your own list is invisible? What would a green card, an orange card and a gray card say in your house?</p>' % C.SITE)
+               '<p>Some questions to talk about together: Where was each character on the ladder in the group chat chapter? What did &#8220;k&#8221; mean to Imani, and what did it mean to Wren? Which job on your own list is invisible?</p>' % C.SITE)
     docs.append(('grownups', 'grownups.xhtml', 'For grown-ups', gu))
-    about = xhtml('About this book', '<h2>About this book</h2>%s<p>Free to read online at %s</p>' % (''.join('<p>%s</p>' % xesc(p) for p in B['about_paras']), C.SITE))
+    about = xhtml('About this book', '<h2>About this book</h2>%s' % ''.join('<p>%s</p>' % xesc(p) for p in B['about_paras']))
     docs.append(('about', 'about.xhtml', 'About this book', about))
     for did, href, t, body in docs:
         files.append(('OEBPS/' + href, body))

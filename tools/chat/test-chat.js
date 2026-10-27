@@ -731,7 +731,7 @@ t('retest4', 'we\'ve had a rough week', { kind: 'care', id: 'roughweek', not: /R
 t('retest4', 'i feel stuck in the middle of my mum and stepdad', { kind: 'care', id: 'teenmiddle', not: /You love your kids/ });
 t('retest4', 'my mum makes me pick sides', { kind: 'care', id: 'teenmiddle' });
 t('retest4', 'me and my little brother fight constantly', { kind: 'care', id: 'teensibling', not: /money/i });
-t('retest4', 'im 15 who can i talk to', { kind: 'care', id: 'teentalk', text: /adult you trust/ });
+t('retest4', 'im 15 who can i talk to', { kind: 'care', id: 'teentalk', text: /one sentence/, not: /adult you trust|tell (an|one) adult|tell someone/i });   // wave 27: no referral lines
 t('retest4', 'what if it gets scary at home', { kind: 'safety', text: NEUTRAL });
 t('retest4', 'i dont feel safe at home', { kind: 'safety' });
 t('retest4', 'my stepdad scares me sometimes', { kind: 'safety' });

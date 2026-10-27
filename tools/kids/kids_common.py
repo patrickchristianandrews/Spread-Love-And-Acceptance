@@ -10,6 +10,7 @@ KDP numbers (looked up October 2026, see the listing file for sources):
 import html
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -96,10 +97,54 @@ def royalty(price, cost):
     return round(round(rate * price + 1e-9, 2) - cost, 2), rate
 
 
+_CLOSERS = ('</em>', '</strong>', '</span>', '</b>', '</i>', '</a>')
+_BLOCKS = re.compile(r'(<style\b.*?</style>|<svg\b.*?</svg>|<script\b.*?</script>)', re.S | re.I)
+
+
+def _curl(t, prev):
+    """straight quotes and apostrophes in plain text to curly ones; prev is the character before this text"""
+    out = []
+    for i, ch in enumerate(t):
+        before = out[-1] if out else prev
+        if ch == '"':
+            out.append('\u201c' if (before.isspace() or before in '([{\u2018\u2014') else '\u201d')
+        elif ch == "'":
+            out.append('\u2018' if ((before.isspace() or before in '([{\u201c') and t[i + 1:i + 2].isalpha() and t[i + 1:i + 3].lower() not in ('ti', 'tw')) else '\u2019')
+        else:
+            out.append(ch)
+    return ''.join(out)
+
+
+def curly(s):
+    """curly quotes for a plain text (alt text, metadata shown to readers)"""
+    return _curl(s, ' ')
+
+
+def curly_html(h):
+    """curly quotes for every text node of an HTML page, leaving tags, attributes, CSS and SVG alone"""
+    out = []
+    for n, chunk in enumerate(_BLOCKS.split(h)):
+        if n % 2:
+            out.append(chunk)
+            continue
+        prev = ' '
+        for part in re.split(r'(<[^>]+>)', chunk):
+            if part.startswith('<') and part.endswith('>'):
+                out.append(part)
+                if part.lower() not in _CLOSERS:
+                    prev = ' '
+            else:
+                t = part.replace('&quot;', '"').replace('&#x27;', "'").replace('&#39;', "'")
+                t = _curl(t, prev)
+                out.append(t)
+                prev = t[-1:] or prev
+    return ''.join(out)
+
+
 def doc(title, css, body, lang='en-US'):
     return ('<!doctype html>\n<html lang="%s">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '<meta name="robots" content="noindex">\n<title>%s</title>\n<style>\n%s\n%s\n</style>\n</head>\n<body>\n%s\n</body>\n</html>\n') % (
-        lang, esc(title), FONT_CSS, css, body)
+        lang, esc(title), FONT_CSS, css, curly_html(body))
 
 
 def cover_doc(title, trim, pages, paper, bg_svg, front_html, back_html, spine_html='', css_extra=''):

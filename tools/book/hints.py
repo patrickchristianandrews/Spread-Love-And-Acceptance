@@ -385,17 +385,35 @@ def front_section(mark):
 
 
 def _list_items(kind, items, found, chapter_ref):
-    out = []
+    """One line per tool or workpaper NAME and address: two catalog items that carry the same name and the same printed address
+    (the tabs of one page) are one line, with the chapters of both (book28: one name per link)."""
+    merged, order = {}, []
     for it in items:
         where = found.get((kind, it['key']))
         if not where:
             continue
+        k = (it['name'], short_address(it))
+        if k not in merged:
+            merged[k] = (it, [])
+            order.append(k)
+        for s_ in where:
+            if s_ not in merged[k][1]:
+                merged[k][1].append(s_)
+    out = []
+    for k in order:
+        it, where = merged[k]
+        refs = [chapter_ref(s_) for s_ in where]
+        if len(where) > 1:
+            def _pg(r):
+                m = re.search(r'page (\d+)', r)
+                return int(m.group(1)) if m else 0
+            if all(_pg(r) for r in refs):
+                refs = sorted(refs, key=_pg)
         addr = short_address(it)
-        k = wp_label(it) if kind == 'wp' else 'Tool'
+        lab = wp_label(it) if kind == 'wp' else 'Tool'
         out.append('<li><p class="wt-name"><span class="bh-k">%s</span><span class="bh-c">: </span><a href="%s" data-u="%s">%s</a>'
                    '<span class="wt-u"> %s</span></p><p class="wt-in">In: %s</p></li>' % (
-                       esc(k), esc(it['href']), esc(addr), esc(it['name']), addr_html(addr),
-                       ', '.join(chapter_ref(s) for s in where)))
+                       esc(lab), esc(it['href']), esc(addr), esc(it['name']), addr_html(addr), ', '.join(refs)))
     return out
 
 

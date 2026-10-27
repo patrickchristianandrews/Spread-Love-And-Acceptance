@@ -80,7 +80,7 @@
         "say": "“I misjudge time. You matter to me, and I’m working on it.”",
         "step": "Set the alarm for leaving, not arriving, and text “Leaving now” as you go. Whoever’s waiting can agree a time to start without you.",
         "looks": "Twenty after, and here they are at the door with their coat half on and a breathless apology, for the third time this month. They plainly care, and they are also plainly late.",
-        "other": "Waiting tells the waiting person they matter less, whatever was meant. It costs them real time, sometimes a cold dinner or a missed film, and over months it wears down trust.",
+        "other": "Waiting tells the waiting person they matter less, whatever was meant. It costs them real time, sometimes a cold dinner or a missed movie, and over months it wears down trust.",
         "chain": [
           "Some minds have two settings for time, “now” and “not now”",
           "“Not now” turns into “now” all at once, with no warning in between",
@@ -292,7 +292,7 @@
       "feedback-sandwich": {
         "step": "Ask straight out, “What’s the one thing I should change?” If you’re giving it, say the fix clearly first, then one true good thing.",
         "looks": "“Great energy! The whole report needs rewriting. Lovely formatting, though!”",
-        "an.0": "Hiding a tablet in a dog’s dinner.",
+        "an.0": "Hiding a pill in a dog’s food.",
         "other": "A literal listener may miss the middle entirely, or learn to distrust praise because it always seems to come before bad news.",
         "chain": [
           "Criticism on its own makes people defensive",

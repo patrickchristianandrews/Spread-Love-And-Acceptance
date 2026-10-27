@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<link rel="stylesheet" href="/assets/css/tool-spotlight.css">
 <link rel="stylesheet" href="/assets/css/tools-page.css">
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/tools.html">
@@ -83,11 +84,18 @@
 <!-- seo:end -->
 </head>
 <body data-no-cheer data-no-pupvisits data-no-buddies data-no-fullpath data-no-private-note>
-<main class="read" id="main">
+<main class="read is-wide tl-wide" id="main">
 <header class="read-head"><p class="read-code">Start here · All tools</p><h1>All tools</h1></header>
-<p class="simple-lede tl-intro">Every free tool on this site, in sections by type. The sections you can use on your own come first, so you can try things for yourself and invite someone later if you want. What you type stays on your device.</p>
+<p class="simple-lede tl-intro">Every free tool on this site, in one place. Pick what you need, or just try something. What you type stays on your device.</p>
 
-<p class="tl-journeys no-bubble"><a href="/journeys.html">Not sure? Follow a guided journey &rarr;</a> Tell us what&rsquo;s going on and get 3 to 6 small steps.</p>
+<!-- What do you want help with? Six big choices that filter the tools below (tools-page.js draws the tiles from tool-art.js). Hidden without JavaScript:
+     the plain lists further down hold every tool. -->
+<section class="tl-hero tol-plain no-bubble no-dive" id="help-with" aria-labelledby="tl-hero-h" data-tl-hero hidden>
+  <h2 class="tl-hero-h" id="tl-hero-h">What do you want help with?</h2>
+  <p class="tl-hero-s">Tap one to see the tools that fit. Tap it again to see them all.</p>
+  <div class="tl-intents" role="group" aria-labelledby="tl-hero-h" data-tl-intents></div>
+  <p class="tl-progress no-bubble" data-tl-progress hidden></p>
+</section>
 
 <section class="tl-box tl-show-box no-bubble" id="find" aria-labelledby="tl-find-h">
   <h2 class="sr-only" id="tl-find-h">Find a tool</h2>
@@ -126,10 +134,10 @@
   </details>
 </section>
 
-<section class="tl-box tl-top no-bubble" id="start-here" aria-labelledby="tl-top-h" data-tl-top hidden>
-  <h2 class="tl-h" id="tl-top-h">Start here: 6 tools you can use on your own</h2>
-  <p class="tl-sub">The most useful places to begin, just for you. Nothing here needs anyone else.</p>
-  <ol data-tl-top-list></ol>
+<section class="tl-top tl-start tol-plain no-bubble no-dive" id="start-here" aria-labelledby="tl-top-h" data-tl-top hidden>
+  <h2 class="tl-h" id="tl-top-h">Start here</h2>
+  <p class="tl-sub">Six good first steps. Each one works on your own, and none needs anyone else.</p>
+  <ul class="tl-startgrid" data-tl-top-list></ul>
   <p class="tl-fine">How we picked them: <a href="#how-ordered">see how &ldquo;Most useful first&rdquo; works</a>.</p>
 </section>
 
@@ -138,6 +146,7 @@
   <p class="tl-sub">Take a one-minute look, follow a short path, or let us point you to one tool.</p>
   <div class="tl-ways">
     <button type="button" class="tl-btn is-main" aria-expanded="false" aria-controls="tl-tour" data-tl-tour-open hidden>Take the 60-second tour</button>
+    <a class="tl-btn" href="/journeys.html">Follow a guided journey</a>
     <a class="tl-btn" href="/start-here.html#three-questions">Answer 3 quick questions</a>
     <a class="tl-btn" href="/ask.html?about=All%20tools">Ask Professor Puddles which tool fits</a>
   </div>
@@ -278,6 +287,8 @@
 <p class="tl-end">Looking for guides and reading as well? <a href="/explore.html">Everything on this site</a> lists every page with filters for who it&rsquo;s about and how long you have. To see or erase what the tools keep, open <a href="/on-this-device.html">What&rsquo;s stored on this device</a>.</p>
 </main>
 <script src="/assets/js/tools-registry.js"></script>
+<script src="/assets/js/tool-art.js"></script>
+<script src="/assets/js/tool-spotlight.js"></script>
 <script src="/assets/js/tools-page.js"></script>
 </body>
 </html>

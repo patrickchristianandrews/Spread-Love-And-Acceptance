@@ -497,7 +497,7 @@ def pg_copyright():
         'This is a story for sharing. It is general education about feelings and getting along, not a diagnosis or treatment, and it cannot know your child.',
         'Set in Andika, Fraunces and Lora (SIL Open Font License).',
     ]
-    inner = '<div class="center small" style="top:1.6in;text-align:left;font-size:9.5pt">%s</div>' % ''.join('<p style="margin:0 0 .14in">%s</p>' % x for x in p)
+    inner = '<div class="center small" style="top:1.6in;text-align:left;font-size:10.5pt">%s</div>' % ''.join('<p style="margin:0 0 .14in">%s</p>' % x for x in p)
     return pagebox(4, inner, '')
 
 

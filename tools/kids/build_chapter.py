@@ -454,8 +454,8 @@ def back_html():
     s.append('<section class="back rt"><h2>For grown-ups</h2>'
              '<p>This story follows one eleven-year-old through a crowded few months: a room that stops being hers, a group chat that goes wrong, a project that goes sideways, and a sentence she wishes she could take back. Each chapter ends with a short box of things to try.</p>'
              '<p>The ideas underneath come from the free site at %s. The ladder (calm and connected, revved up, running on empty) is a simple way to notice where the body is. A message has only half its meaning in the words. A job has the doing and the noticing. A pause needs a time to come back. An apology is three things, and the other person sets the pace. Theo and Wren are wired differently, and each one has to learn the other’s language. Neither is wrong.</p>'
-             '<p>Some questions to talk about together: Where was each character on the ladder in the group chat chapter? What did “k” mean to Imani, and what did it mean to Wren? Which job on your own list is invisible? What would a green card, an orange card and a gray card say in your house?</p></section>' % C.SITE)
-    s.append('<section class="back"><h2>About this book</h2>%s<p>Free to read online at %s</p></section>' % (''.join('<p>%s</p>' % C.esc(p) for p in BOOK['about_paras']), C.SITE))
+             '<p>Some questions to talk about together: Where was each character on the ladder in the group chat chapter? What did “k” mean to Imani, and what did it mean to Wren? Which job on your own list is invisible?</p></section>' % C.SITE)
+    s.append('<section class="back"><h2>About this book</h2>%s</section>' % ''.join('<p>%s</p>' % C.esc(p) for p in BOOK['about_paras']))
     return '\n'.join(s)
 
 
@@ -463,7 +463,7 @@ def build():
     chs = chapters()
     body = front_html() + toc_html(chs) + '\n'.join(chapter_html(i + 1, c) for i, c in enumerate(chs)) + back_html()
     if os.environ.get('PAD_BLANK') == '1':
-        body += '<section class="back" style="break-before:page"><p>&nbsp;</p></section>'
+        body += '<div style="page:front;break-before:page"><p>&nbsp;</p></div>'   # a true blank last page: no page number
     C.write(os.path.join(C.SRC, 'chapter-book.html'), C.doc(BOOK['title'], CSS, body))
     meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}
     rec = meta.setdefault('books', {}).setdefault('chapter-book', {})

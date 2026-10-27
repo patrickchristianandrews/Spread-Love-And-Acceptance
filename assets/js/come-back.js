@@ -12,6 +12,9 @@
    It mostly reads what the site already keeps here (recent pages, Check yourself petals, garden
    levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest. It reads and
    writes tol-mode-v1 (Just me / With someone) and the "one thing to try" in tol-ten-v1 (Start in 10 minutes).
+   Tool pages also get a small "Try another tool" row (two tools that fit what was just used, and a link to /tools.html), and opening a
+   tool's page writes its id and the date into tol-tools-seen-v1 (tool-spotlight.js, the "Tried" check). Both stay out with the helpers
+   hidden or Quiet mode on (the record is still kept quietly), and nothing is written with "Stop remembering pages I visit".
    No streaks to keep, no timers, nothing to lose: pick up anytime. Nothing is sent anywhere.
    "Hide the helpers" and Quiet mode hide the extras (the time picker stays); a still page never moves.
    In Focus mode (site.js, window.TOLFocus) plans and "Next time" ideas keep to the chosen areas where they can. */
@@ -130,6 +133,42 @@
     return false;
   }
   function toolsTried() { return Object.keys(TOOLS).filter(toolTried); }
+
+  /* ---------------------------------------------------------------- tools27: the tool showcase kit
+     tool-art.js and tool-spotlight.js load only on the pages of a tool (the list below is the union of every tool's pages in tool-art.js;
+     tools/checks/tool-showcase-check.js keeps the two the same). Opening one of them writes the tool's id and the date down
+     (tol-tools-seen-v1, never with "Stop remembering pages I visit"). At the end of the page, "Try another tool" suggests two more. */
+  var TOOL_PAGES = {};
+  ['/signal-translator.html', '/write-it-through.html', '/carrier-wave-decoder.html', '/check-ins.html', '/bonding.html', '/wavelength.html', '/wiring-card.html', '/growing-up.html', '/how-you-take-things-in.html', '/tools/frequency-calibration.html', '/lemonade-stand.html', '/workpapers/calculators/is-the-setup-working-quick.html', '/is-the-setup-working.html', '/workpapers/calculators/look-back-30-days-quick.html', '/look-back-30-days.html', '/upset-right-now.html', '/tools/soften-a-tense-moment.html', '/make-a-plan.html', '/work.html', '/what-am-i-feeling.html', '/quick-checks.html', '/ask.html', '/start-in-10-minutes.html', '/do/index.html', '/quest.html', '/tools/frequency-sync-visualizer.html', '/pause-and-play.html', '/frequency-journey.html', '/word-bloom.html', '/quiet-words.html', '/quiet-crossword.html', '/daily-ledger-crossword.html', '/recheck-drive.html', '/bears-dojo.html', '/coin-pusher.html', '/frequency-buddies-music-video-maker.html'].forEach(function (u) { TOOL_PAGES[u] = 1; });
+  var kitWait = null;
+  function toolKit(cb) {
+    if (window.TOLToolSpot) return cb(window.TOLToolSpot);
+    if (!kitWait) {
+      kitWait = [];
+      ['/assets/js/tool-art.js', '/assets/js/tool-spotlight.js'].forEach(function (src, i) {
+        var sc = doc.createElement('script'); sc.src = src; sc.async = false;
+        if (i) sc.onload = function () { var q = kitWait || []; kitWait = null; q.forEach(function (f) { if (window.TOLToolSpot) f(window.TOLToolSpot); }); };
+        sc.onerror = function () { kitWait = null; };
+        doc.head.appendChild(sc);
+      });
+    }
+    if (kitWait) kitWait.push(cb);
+  }
+  // two tools that fit this one, in a small card at the end of a tool page (the six tools with a "What you got from this" card show it inside that card)
+  function toolRowHTML(K, then) {
+    var id = K.idForPath(path);
+    if (!id || (id === 'pauseplay' && path !== '/pause-and-play.html') || /^\/upset-right-now\.html$/.test(path)) return;
+    var h = K.rowHTML(id); if (!h) return;
+    K.ensureCss(); then(h);
+  }
+  function toolRow(main) {
+    toolKit(function (K) {
+      toolRowHTML(K, function (h) {
+        var box = el('aside', { class: 'ts-end cb-extra tol-plain no-bubble no-dive no-cheer' }, h);
+        if (panel && panel.parentNode === main) main.insertBefore(box, panel); else placeAtEnd(main, box);
+      });
+    });
+  }
 
   var GAMES = [['words', 'Quiet Words', '/quiet-words.html'], ['bloom', 'Word Bloom', '/word-bloom.html'], ['crossword', 'Quiet Crossword', '/quiet-crossword.html'],
     ['journey', 'Tidbit and Sugarfoot’s Arcade', '/frequency-journey.html'], ['pond', 'The Night Garden', '/night-garden.html'], ['fireflies', 'The Night Garden', '/night-garden.html']];
@@ -805,6 +844,7 @@
         box = endCard();
         if (T.atEnd || anchor === main) placeAtEnd(main, box); else anchor.after(box);
         fillEnd(box, T.gain, null, '');
+        toolKit(function (K) { toolRowHTML(K, function (h) { if (!box.querySelector('.ts-row')) box.insertAdjacentHTML('beforeend', h); }); });
         nextUnder(box);
         if (!S.did[path]) { S.did[path] = Date.now(); save(); }
         celebrate('tool:' + path, 'You tried ' + T.t, true);
@@ -875,9 +915,11 @@
     var main = doc.querySelector('main') || doc.querySelector('[role="main"]'); if (!main) return;
     if (isHome) return homePage(main);
     mainEl = main;
+    if (TOOL_PAGES[path]) toolKit(function () {});   // tool-spotlight.js writes this tool down (the "Tried" check on /tools.html)
     // one recommended next step, also with the helpers hidden (it is the way on, not an extra)
     if (wantsNext(main)) buildPanel(main);
     if (helpersOff()) return;
+    if (TOOL_PAGES[path] && !TOOLS[path]) toolRow(main);
     if (bookIdx(simplePath) >= 0) return bookPage(main);
     if (TOOLS[path]) return toolPage(main);
     if (path === '/frequency-buddies.html') return buddiesPage(main);

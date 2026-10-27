@@ -23,7 +23,7 @@
 <text x="114" y="348.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">medium</text>
 <text x="114" y="236.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">high</text>
 <text x="203" y="316.32" font-size="22" font-weight="bold" text-anchor="middle">0.55</text>
-<text x="312" y="168.32" font-size="19" font-weight="bold" fill="#5A5346">Sam today</text>
+<text x="312" y="168.32" font-size="19" font-weight="bold" fill="#5A5346">One day’s reading</text>
 <rect x="312" y="184.32" width="18" height="18" rx="3" fill="#8FB59A" stroke="#5A5346" stroke-width="1"/>
 <text x="340" y="199.32" font-size="18"><tspan x="340" dy="0">Time pressure</tspan><tspan x="340" dy="23.04">today</tspan></text>
 <text x="510" y="199.32" font-size="19" font-weight="bold" text-anchor="end">4</text>

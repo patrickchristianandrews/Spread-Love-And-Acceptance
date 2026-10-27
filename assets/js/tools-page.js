@@ -7,6 +7,10 @@
    - "Show me:" (a real <select>) restricts the page to one section, scrolls to it and puts it in the address
      (?type=communication), so it can be linked. Each section's "Show only these" link does the same. Old links still work:
      #communication, #self-discovery, #know-yourself, #health-and-body, and ?type=talk (a registry type id).
+   - "What do you want help with?" (tools27): six big tiles (Calm down, Say it kindly, Understand a feeling, Share the load, Know myself,
+     Connect) that filter the tools (?want=calm), then "Start here" and the tool cards. The cards, their pictures, the "Tried" check, the New
+     and Try me tags and the Share button come from tool-spotlight.js and tool-art.js, which keep one small record on this device
+     (tol-tools-seen-v1: tool ids and dates). The page shows "You've tried 6 of 20 tools" with warm words, never a streak.
    - "Start here": the six most useful tools a person can use alone.
    - "Not sure where to start?": a 60-second tour, guided paths, the three questions and Professor Puddles.
    - More filters (what you want to do, who it's for, how much time, words) combine with the type, and
@@ -14,17 +18,19 @@
    - "Most useful first" is one plain score: the registry's `useful` (our judgement of how widely and quickly a tool
      helps, and how often people look for it), plus our "Start here" picks; on a tie, tools you can use alone first.
      Never shown on the page.
-   Nothing is stored or sent. */
+   Nothing is sent. The only thing stored is the tried list above (tool-spotlight.js). */
 (function () {
   'use strict';
   var ALL = window.TOLTools, TYPES = window.TOLToolTypes;
   var list = document.querySelector('[data-tl-list]');
-  if (!list || !ALL || !TYPES) return;
+  var K = window.TOLToolSpot, TA = window.TOLToolArt;
+  if (!list || !ALL || !TYPES || !K || !TA) return;
   // tools only: workpapers (kind 'workpaper') are listed in their own section and never ranked with the tools
   var TOOLS = ALL.filter(function (t) { return t.kind !== 'workpaper'; }), WPS = ALL.filter(function (t) { return t.kind === 'workpaper'; });
   var byId = window.TOLToolById || function (id) { for (var i = 0; i < ALL.length; i++) if (ALL[i].id === id) return ALL[i]; return null; };
 
   function $(s, r) { return (r || document).querySelector(s); }
+  var hero = document.querySelector('[data-tl-hero]') || document.createElement('div'), progEl = document.querySelector('[data-tl-progress]');
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
@@ -88,11 +94,47 @@
   // ---------- Start here: the six most useful a person can use alone
   var TOP = TOOLS.filter(solo).sort(SORTS.useful).slice(0, 6);
   var topBox = $('[data-tl-top]');
-  $('[data-tl-top-list]').innerHTML = TOP.map(function (t) {
-    return '<li><a class="tl-pick" href="' + esc(t.href) + '"><span class="tl-pick-n">' + esc(t.name) + '</span>' +
-      '<span class="tl-pick-w">' + esc(t.benefit) + '.</span><span class="tl-pick-t">' + esc(t.time) + (both(t) ? ' · invite someone later if you like' : ' · on your own') + '</span></a></li>';
-  }).join('');
+  function drawTop() {
+    $('[data-tl-top-list]').innerHTML = TOP.map(function (t) {
+      return '<li>' + (K.META[t.id] ? K.cardHTML(t.id, { variant: 'start' }) :
+        '<article class="tc tc--start"><div class="tc-body"><h3 class="tc-name">' + esc(t.name) + '</h3><div class="tc-promise">' + esc(t.benefit) + '.</div></div><div class="tc-acts"><a class="tc-go" href="' + esc(t.href) + '">Try it</a></div></article>') + '</li>';
+    }).join('');
+  }
+  drawTop(); K.ensureCss();
   topBox.hidden = !TOP.length;
+
+  // ---------- "What do you want help with?": six big tiles that filter the cards
+  function drawHero() {
+    var n = {}; TOOLS.forEach(function (t) { ((TA.meta[t.id] || {}).i || '').split(' ').forEach(function (w) { if (w) n[w] = (n[w] || 0) + 1; }); });
+    $('[data-tl-intents]').innerHTML = TA.INTENTS.map(function (w) {
+      var c = TA.accent(w.art);
+      return '<button type="button" class="ih" data-want="' + w.id + '" aria-pressed="false" style="--tc-a:' + c.a + ';--tc-t:' + c.t + ';--tc-k:' + c.k + '">' +
+        '<span class="ih-art">' + TA.svg(w.art, { size: 64 }) + '</span><span class="ih-t"><span class="ih-l">' + esc(w.label) + '</span><span class="ih-s">' + esc(w.sub) + '</span></span>' +
+        '<span class="ih-n">' + (n[w.id] || 0) + ' tools</span><span class="ih-ok" aria-hidden="true"></span></button>';
+    }).join('');
+    hero.hidden = false;
+  }
+  // "You've tried 6 of 20 tools": warm and quiet, a count and never a streak. Not shown when the site is told to stop remembering pages.
+  var celeTimer = 0;
+  function drawProgress() {
+    if (!progEl) return;
+    var t = K.total(), n = K.count();
+    if (K.stopped()) { progEl.hidden = true; return; }
+    var cele = K.milestone(), dots = TA.order.map(function (id) {
+      var c = TA.accent(id); return '<i class="tl-dot' + (K.isSeen(id) ? ' is-on' : '') + '" style="--tc-a:' + c.a + '"></i>';
+    }).join('');
+    progEl.innerHTML = '<span class="tl-dots" aria-hidden="true">' + dots + '</span><span class="tl-prog-t" role="status">' + esc(cele ? K.cele[cele] : K.countLine(n, t)) + '</span>';
+    progEl.classList.toggle('ts-pulse', !!cele && !K.still());
+    progEl.hidden = false;
+    if (cele) { clearTimeout(celeTimer); celeTimer = setTimeout(function () { K.shown(cele); }, 2500); }
+  }
+  drawHero(); drawProgress();
+  hero.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-want]'); if (!b) return;
+    var w = b.getAttribute('data-want'); S.want = S.want === w ? '' : w;
+    sync(); apply(true, true);
+    if (S.want) goTo(results);
+  });
 
   // ---------- guided paths: the ones on your own first
   var PATHS = [
@@ -231,7 +273,8 @@
   $('[data-tl-show]').hidden = false; $('[data-tl-jump]').hidden = true;
   moreEl.hidden = false; $('[data-tl-bar]').hidden = false;
 
-  var S = { q: '', do: [], who: [], time: [], type: '', sort: 'useful' };
+  var S = { q: '', do: [], who: [], time: [], type: '', sort: 'useful', want: '' };
+  var WANT = {}; TA.INTENTS.forEach(function (w) { WANT[w.id] = w; });
   var VALID = { do: DO.map(function (x) { return x[0]; }), who: WHO.map(function (x) { return x[0]; }), time: TIME.map(function (x) { return x[0]; }) };
   function readUrl() {
     try {
@@ -243,15 +286,17 @@
         S[k] = v.filter(function (s, i) { return VALID[k].indexOf(s) !== -1 && v.indexOf(s) === i; });
       });
       S.type = secFor(u.get('type') || '');
+      S.want = own(WANT, u.get('want') || '') ? u.get('want') : '';
       S.sort = own(SORTS, u.get('sort') || '') ? u.get('sort') : 'useful';
     } catch (e) {}
     // an old link to a type's #part (/tools.html#calm-and-stress, #know-yourself) opens that section on its own
     var h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
     if (secFor(h)) S.type = secFor(h);
-    return !!S.type;
+    return !!S.type || !!S.want;
   }
   function sync() {
     qEl.value = S.q; typeSel.value = S.type; sortSel.value = S.sort;
+    $$('[data-want]', hero).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-want') === S.want)); });
     $$('.tl-filters input[type="checkbox"][name]').forEach(function (i) { i.checked = (S[i.name] || []).indexOf(i.value) !== -1; });
   }
   function active() {
@@ -259,6 +304,7 @@
     S.do.forEach(function (v) { a.push(['do', v, LABEL[v]]); });
     S.who.forEach(function (v) { a.push(['who', v, LABEL[v]]); });
     S.time.forEach(function (v) { a.push(['time', v, LABEL[v]]); });
+    if (S.want) a.push(['want', S.want, 'Help with: ' + WANT[S.want].label]);
     if (S.type) a.push(['type', S.type, 'Only ' + SEC[S.type].name]);
     if (S.q) a.push(['q', S.q, '“' + S.q + '”']);
     return a;
@@ -288,31 +334,32 @@
     if (S.who.length && !S.who.some(function (w) { return (t.people || []).indexOf(w) !== -1; })) return false;
     if (S.time.length && S.time.indexOf(timeOf(t)) === -1) return false;
     if (S.type && secOf(t) !== S.type) return false;
+    if (S.want && !((TA.meta[t.id] || {}).i || '').split(' ').some(function (w) { return w === S.want; })) return false;
     if (S.q && !needHit(t)) { var words = fold(S.q).split(/\s+/).filter(Boolean); if (!words.every(function (w) { return t.hay.indexOf(w) !== -1; })) return false; }
     return true;
   }
 
   // ---------- cards
   var openEx = {}, exCache = {};
-  function card(t) {
+  // the details sit under the card, folded: what it helps with, what you do, what you leave with, the modes and an example
+  var openDet = {};
+  function details(t) {
     var modes = t.modes && t.modes.length > 1 ? '<span class="tl-modes"><b>Modes:</b> ' + t.modes.map(function (m) { return '<a href="' + esc(m[1]) + '">' + esc(m[0]) + '</a>'; }).join(' · ') + '</span>' : '';
     var hasEx = !!(t.example || t.sample), exId = 'tl-ex-' + t.id;
-    // names12: the name and the line under it, then three plain answers (what it helps with, what you'll do and how long,
-    // what you'll leave with) and an honest "Based on" line (tools-registry.js BASIS)
     var basis = window.TOLToolBasisHTML ? window.TOLToolBasisHTML(t) : '';
     var qa = function (k, v) { return v ? '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>' : ''; };
-    return '<li data-id="' + esc(t.id) + '">' +
-      '<a class="tl-card" href="' + esc(t.href) + '"><span class="tl-name">' + esc(t.name) + '</span>' +
-      (t.benefit ? '<span class="tl-tag">' + esc(t.benefit) + '</span>' : '') +
-      (t.brand ? '<span class="tl-brand">also called ' + esc(t.brand) + '</span>' : '') + '</a>' +
+    return '<details class="tc-d" data-d="' + esc(t.id) + '"' + (openDet[t.id] ? ' open' : '') + '><summary>What it does, and an example</summary><div class="tc-d-in">' +
+      (t.brand ? '<span class="tl-brand">also called ' + esc(t.brand) + '</span>' : '') +
       '<dl class="tl-qa">' + qa('Helps with', esc(t.bestFor)) + qa('What you’ll do', esc(t.does) + (t.time ? ' <span class="tl-dur">' + esc(t.time) + '</span>' : '')) +
-      qa('You’ll leave with', esc(t.gets)) + qa('Based on', basis) + '</dl>' + modes +
-      '<span class="tl-meta"><span class="tl-m' + (solo(t) ? ' tl-solo' : '') + '">' + esc(whoText(t)) + '</span>' +
-      '</span>' +
-      '<span class="tl-acts">' + (hasEx ? '<button type="button" class="tl-exbtn" aria-expanded="false" aria-controls="' + exId + '" data-ex="' + esc(t.id) + '">See an example</button>' : '') +
-      '<a class="tl-open" href="' + esc(t.href) + '" tabindex="-1" aria-hidden="true">Open&nbsp;&rarr;</a></span>' +
-      (hasEx ? '<div class="tl-ex" id="' + exId + '" hidden></div>' : '') + '</li>';
+      qa('You’ll leave with', esc(t.gets)) + qa('Who it’s for', esc(whoText(t))) + qa('Based on', basis) + '</dl>' + modes +
+      (hasEx ? '<span class="tl-acts"><button type="button" class="tl-exbtn" aria-expanded="false" aria-controls="' + exId + '" data-ex="' + esc(t.id) + '">See an example</button></span><div class="tl-ex" id="' + exId + '" hidden></div>' : '') +
+      '</div></details>';
   }
+  function card(t) {
+    if (!K.META[t.id]) return '<li data-id="' + esc(t.id) + '"><article class="tc tc--grid"><div class="tc-body"><h3 class="tc-name">' + esc(t.name) + '</h3><div class="tc-promise">' + esc(t.benefit) + '.</div></div><div class="tc-acts"><a class="tc-go" href="' + esc(t.href) + '">Try it</a></div></article></li>';
+    return '<li data-id="' + esc(t.id) + '">' + K.cardHTML(t.id, { variant: 'grid', share: true, more: details(t) }) + '</li>';
+  }
+  list.addEventListener('toggle', function (e) { var d = e.target; if (d && d.classList && d.classList.contains('tc-d')) { if (d.open) openDet[d.getAttribute('data-d')] = 1; else delete openDet[d.getAttribute('data-d')]; } }, true);
   // each section shows its matching tools as cards, in the chosen order; a section with none is hidden
   var divideEl = $('[data-tl-divide]', list);
   function render(shown) {
@@ -410,6 +457,7 @@
     if (write) {
       try {
         var p = new URLSearchParams();
+        if (S.want) p.set('want', S.want);
         if (S.type) p.set('type', S.type);
         ['do', 'who', 'time'].forEach(function (k) { if (S[k].length) p.set(k, S[k].join(',')); });
         if (S.q) p.set('q', S.q); if (S.sort !== 'useful') p.set('sort', S.sort);
@@ -437,9 +485,9 @@
     else if (scrollTo) goTo(scrollTo.hidden ? results : scrollTo);
   }
   function remove(k, v) {
-    if (k === 'type') S.type = ''; else if (k === 'q') S.q = '';
+    if (k === 'type') S.type = ''; else if (k === 'q') S.q = ''; else if (k === 'want') S.want = '';
     else S[k] = S[k].filter(function (x) { return x !== v; });
-    sync(); apply(true, k === 'type');
+    sync(); apply(true, k === 'type' || k === 'want');
   }
   document.addEventListener('click', function (e) {
     var p = e.target.closest && e.target.closest('.tl-pill'); if (!p) return;
@@ -467,12 +515,13 @@
   qEl.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
     clearTimeout(tmr); S.q = qEl.value.trim().slice(0, 80); apply(true);
-    var first = list.querySelector('a.tl-card'); if (first && S.q) { e.preventDefault(); location.href = first.getAttribute('href'); }
+    var first = list.querySelector('a.tc-go'); if (first && S.q) { e.preventDefault(); location.href = first.getAttribute('href'); }
   });
-  function clearAll() { var had = !!S.type; S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; sync(); apply(true, had); }
+  function clearAll() { var had = !!S.type || !!S.want; S.want = ''; S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; sync(); apply(true, had); }
   resetBtn.addEventListener('click', function () { clearAll(); typeSel.focus({ preventScroll: true }); });
   $('[data-tl-empty-reset]').addEventListener('click', function () { clearAll(); typeSel.focus(); });
 
+  K.onChange(function () { drawTop(); drawProgress(); apply(false); });
   var restricted = readUrl(); sync(); apply(false);
   if (S.do.length || S.who.length || S.time.length) moreEl.open = true;
   // a link with ?type= or an old type #part opens on that section; any other #part (#workpapers, #start-here) works as usual

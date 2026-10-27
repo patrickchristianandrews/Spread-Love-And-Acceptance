@@ -182,7 +182,7 @@ SIDE_TAG = {'nd': 'Common for many neurodivergent people', 'nt': 'A common socia
 def side_words():
     return [(SIDE_TAG['nd'], 'a reaction many neurodivergent people have, explained for people who don’t share it, such as headphones at dinner or a long talk about one interest.'),
             (SIDE_TAG['nt'], 'a habit many people find natural, explained in plain logic for anyone who finds it baffling, such as small talk, “I’m fine” and hints.'),
-            (SIDE_TAG['all'], 'a reaction anyone can have, such as snapping when hungry or going quiet in a row.')]
+            (SIDE_TAG['all'], 'a reaction anyone can have, such as snapping when hungry or going quiet in an argument.')]
 
 
 # ---------- print ----------
