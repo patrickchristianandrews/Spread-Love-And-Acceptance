@@ -435,6 +435,28 @@
    ],
    "match": "toilet roll",
    "why": "Search-phrase join: what a British visitor might type is mapped to the US word. Not shown as page text."
+  },
+  {
+   "file": "assets/js/brain-data.js",
+   "rule": "british",
+   "hits": [
+    "behaviour",
+    "behavioural",
+    "generalised",
+    "randomised"
+   ],
+   "why": "Published titles and journals of papers, cited exactly as published (proper-name citations on the Brain Map page)."
+  },
+  {
+   "file": "brain-map.html",
+   "rule": "british",
+   "hits": [
+    "behaviour",
+    "behavioural",
+    "generalised",
+    "randomised"
+   ],
+   "why": "Published titles and journals of papers, cited exactly as published (proper-name citations on the Brain Map page)."
   }
  ]
 }

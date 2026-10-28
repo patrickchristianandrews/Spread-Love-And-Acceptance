@@ -29,6 +29,11 @@ const NEUTRAL = /^That sounds really hard\. I’m a small guide to this site, an
 const SUICIDE = /^I’m really glad you said something\. If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today, and don’t stay alone with it\.$/;
 const GONE = require('../checks/no-removed-content.js').PATTERNS;
 
+// ---------------------------------------------------------------- the Brain Map
+t('brainmap', 'What is the Brain Map?', { kind: 'card', id: 'brainmap', link: '/brain-map.html', text: /group averages/ });
+t('brainmap', 'How does the brain differ in autism?', { kind: 'care', id: 'braindiffers', link: '/brain-map.html', text: /cannot diagnose/ });
+t('brainmap', 'which part of the brain does anxiety affect', { kind: 'care', id: 'braindiffers', link: '/brain-map.html', text: /group averages/ });
+
 // ---------------------------------------------------------------- every tool
 t('tools', 'What is the Lemonade Stand?', { kind: 'card', id: 'lemonade', link: '/lemonade-stand.html' });
 t('tools', 'How do I use the lemonade stand?', { kind: 'card', id: 'lemonade', steps: true });

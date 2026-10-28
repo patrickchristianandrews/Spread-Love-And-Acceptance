@@ -12,7 +12,7 @@
    It mostly reads what the site already keeps here (recent pages, Check yourself petals, garden
    levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest. It reads and
    writes tol-mode-v1 (Just me / With someone) and the "one thing to try" in tol-ten-v1 (Start in 10 minutes).
-   Every tool page (all 20 in tool-art.js, including Old rules, new choices and Learn by doing, which keep no other extras) ends with a small
+   Every tool page (all 21 in tool-art.js, including Old rules, new choices and Learn by doing, which keep no other extras) ends with a small
    "Try another tool" row (two tools that fit what was just used, and a link to /tools.html), and opening a tool's page writes its id and the
    date into tol-tools-seen-v1 (tool-spotlight.js, the "Tried" check). The one exception is /upset-right-now.html. Both stay out with the helpers
    hidden or Quiet mode on (the record is still kept quietly), and nothing is written with "Stop remembering pages I visit".
@@ -143,7 +143,7 @@
      tools/checks/tool-showcase-check.js keeps the two the same). Opening one of them writes the tool's id and the date down
      (tol-tools-seen-v1, never with "Stop remembering pages I visit"). At the end of the page, "Try another tool" suggests two more. */
   var TOOL_PAGES = {};
-  ['/signal-translator.html', '/write-it-through.html', '/carrier-wave-decoder.html', '/check-ins.html', '/bonding.html', '/wavelength.html', '/wiring-card.html', '/growing-up.html', '/how-you-take-things-in.html', '/tools/frequency-calibration.html', '/lemonade-stand.html', '/workpapers/calculators/is-the-setup-working-quick.html', '/is-the-setup-working.html', '/workpapers/calculators/look-back-30-days-quick.html', '/look-back-30-days.html', '/upset-right-now.html', '/tools/soften-a-tense-moment.html', '/make-a-plan.html', '/work.html', '/what-am-i-feeling.html', '/quick-checks.html', '/ask.html', '/start-in-10-minutes.html', '/do/index.html', '/quest.html', '/tools/frequency-sync-visualizer.html', '/pause-and-play.html', '/frequency-journey.html', '/word-bloom.html', '/quiet-words.html', '/quiet-crossword.html', '/daily-ledger-crossword.html', '/recheck-drive.html', '/bears-dojo.html', '/coin-pusher.html', '/frequency-buddies-music-video-maker.html'].forEach(function (u) { TOOL_PAGES[u] = 1; });
+  ['/signal-translator.html', '/write-it-through.html', '/carrier-wave-decoder.html', '/check-ins.html', '/bonding.html', '/wavelength.html', '/wiring-card.html', '/growing-up.html', '/how-you-take-things-in.html', '/tools/frequency-calibration.html', '/lemonade-stand.html', '/workpapers/calculators/is-the-setup-working-quick.html', '/is-the-setup-working.html', '/workpapers/calculators/look-back-30-days-quick.html', '/look-back-30-days.html', '/upset-right-now.html', '/tools/soften-a-tense-moment.html', '/make-a-plan.html', '/work.html', '/what-am-i-feeling.html', '/quick-checks.html', '/ask.html', '/start-in-10-minutes.html', '/do/index.html', '/quest.html', '/tools/frequency-sync-visualizer.html', '/pause-and-play.html', '/frequency-journey.html', '/word-bloom.html', '/quiet-words.html', '/quiet-crossword.html', '/daily-ledger-crossword.html', '/recheck-drive.html', '/bears-dojo.html', '/coin-pusher.html', '/frequency-buddies-music-video-maker.html', '/brain-map.html'].forEach(function (u) { TOOL_PAGES[u] = 1; });
   var kitWait = null;
   function toolKit(cb) {
     if (window.TOLToolSpot) return cb(window.TOLToolSpot);

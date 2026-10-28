@@ -111,6 +111,11 @@
       '<rect x="40" y="56" width="16" height="24" rx="8" fill="{y}"{s}/><rect x="24" y="50" width="12" height="12" rx="2" fill="{t}"{s}/><rect x="62" y="50" width="12" height="12" rx="2" fill="{t}"{s}/>' +
       '<path d="M74 14v10M69 19h10" stroke="{i}" stroke-width="2.6" stroke-linecap="round"/><path d="M14 20v6M11 23h6" stroke="{i}" stroke-width="2.4" stroke-linecap="round"/>',
 
+    brainmap: '<path d="M20 62C8 54 8 36 20 28C23 16 40 10 51 15C61 8 78 13 81 27C91 33 91 52 80 61C75 72 61 73 54 67C45 73 30 72 20 62Z" fill="{c}"{s}/>' +
+      '<path d="M33 28c7 4 7 10 0 15M50 20c-5 6-1 12 6 14M66 29c-6 4-6 11 0 15M30 52c8-4 14 0 17 6M52 47c6-2 12 2 14 9" fill="none" stroke="{a}" stroke-width="3.4" stroke-linecap="round"/>' +
+      '<path d="M54 72c1-7 9-9 16-6 7 3 8 11 2 15-5 3-13 2-18-3z" fill="{y}"{s}/><path d="M46 72v12" stroke="{i}" stroke-width="3.2" stroke-linecap="round"/>' +
+      '<circle cx="74" cy="22" r="9" fill="{k}"{s}/><path d="M74 17.500v9M69.500 22h9" stroke="{i}" stroke-width="2.600" stroke-linecap="round"/>',
+
     pauseplay: '<path d="M24 28h48c10 0 16 8 18 22l3 18c1 8-8 12-14 6L66 62H30L19 74c-6 6-15 2-14-6l3-18c2-14 8-22 16-22z" fill="{c}"{s}/>' +
       '<path d="M26 38v14M19 45h14" stroke="{a}" stroke-width="5" stroke-linecap="round"/>' +
       '<circle cx="66" cy="40" r="5" fill="{a}"{s}/><circle cx="76" cy="50" r="5" fill="{y}"{s}/>' +
@@ -158,6 +163,8 @@
       pr: 'Say what’s going on and get kind next steps.', a: '#9275C4', t: '#ECE6F6', k: '#553E8E' },
     start10: { n: 'Start in 10 minutes', h: '/start-in-10-minutes.html', p: ['/start-in-10-minutes.html'], m: 10, w: 'solo two', ty: 'learn', al: 'self', o: 'learn self', u: 7, top: 0, i: 'self',
       pr: 'Ten minutes, four small steps, and something to keep.', a: '#E86F5F', t: '#FDE4DF', k: '#A3342A' },
+    brainmap: { n: 'Brain Map', h: '/brain-map.html', p: ['/brain-map.html'], m: 5, w: 'solo two', ty: 'learn', al: 'self', o: 'learn self other', u: 6, top: 0, i: 'self feel',
+      pr: 'See how brains differ on average, and what helps.', a: '#3A8FA0', t: '#DDF0F3', k: '#1B6272', ad: '2026-10-28' },
     explore: { n: 'Learn by doing', h: '/do/index.html', p: ['/do/index.html', '/quest.html', '/tools/frequency-sync-visualizer.html'], m: 5, w: 'solo', ty: 'learn', al: 'load play', o: 'learn fun', u: 4, top: 0, i: 'load self',
       pr: 'Practice on a made-up home before you try your own.', a: '#5B9BD5', t: '#DEEAF7', k: '#2A5E97' },
     pauseplay: { n: 'Calm games', h: '/pause-and-play.html',
@@ -165,7 +172,7 @@
       m: 5, c: 'Any time', w: 'solo two', ty: 'play', al: 'calm', o: 'fun calm', u: 5, top: 0, i: 'calm',
       pr: 'Take a breather with games that have no way to lose.', a: '#4B9FD0', t: '#DCEEF8', k: '#1F6591' }
   };
-  var ORDER = ['signal', 'write', 'decoder', 'checkincard', 'bonding', 'wavelength', 'roots', 'take-in', 'rhythms', 'lemon-quick', 'split', 'calm', 'plans', 'team', 'feelings', 'weather', 'ask', 'start10', 'explore', 'pauseplay'];
+  var ORDER = ['signal', 'write', 'decoder', 'checkincard', 'bonding', 'wavelength', 'roots', 'take-in', 'rhythms', 'lemon-quick', 'split', 'calm', 'plans', 'team', 'feelings', 'weather', 'ask', 'start10', 'explore', 'brainmap', 'pauseplay'];
 
   // What do you want help with? (the six tiles on /tools.html). art: the tool whose picture stands for it
   var INTENTS = [

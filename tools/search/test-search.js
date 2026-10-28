@@ -57,6 +57,11 @@ const CASES = [
   ['partner is social and I need alone time', ['/wiring-card.html', '/the-logic-behind-it.html#l-alone-after-people']],
   ['we just moved in together and I need quiet and routine', ['/wiring-card.html', '/the-logic-behind-it.html#l-alone-after-people']],
   ['texts misread', ['/signal-translator.html', '/different-hours.html#talking']],
+  // brain map: how the brain differs
+  ['how does the brain differ in autism', ['/brain-map.html']],
+  ['anxiety brain amygdala', ['/brain-map.html']],
+  ['brain map', ['/brain-map.html']],
+  ['adhd brain', ['/brain-map.html']],
   ['teen phone', ['/teens.html#curfew-phone', '/parents.html#teens']],
   ['5 minutes together', ['/journeys.html#busy2']],
   ['quick thing tonight', ['/journeys.html#busy2']],

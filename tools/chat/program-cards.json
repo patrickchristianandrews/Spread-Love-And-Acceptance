@@ -16376,7 +16376,7 @@
         "how many tools"
       ],
       "what": [
-        "There are 20 tools on this site, and every one is free. They help you check a text before you send it, share out the work at home, paint a feeling, calm down, and more.",
+        "There are 21 tools on this site, and every one is free. They help you check a text before you send it, share out the work at home, paint a feeling, calm down, and more.",
         "Each one says what it does, what you get and about how long it takes."
       ],
       "how": [
@@ -16451,6 +16451,61 @@
           "/what-am-i-feeling.html"
         ]
       ]
+    },
+    {
+      "id": "brainmap",
+      "kind": "tool",
+      "name": "Brain Map",
+      "keys": [
+        "brain map",
+        "the brain map",
+        "map of the brain",
+        "brain page",
+        "how wiring differs"
+      ],
+      "what": "Brain Map is an explorable picture of the brain. You can tap a part, like the prefrontal cortex or the amygdala, or pick one or more ways of being wired (autistic, ADHD, anxiety, depression, trauma and PTSD, OCD or dyslexia) and see where research finds average differences. Each one comes with what it can feel like from the inside, how it can look from the outside, what tends to help, and three things others can try. It is a map of group averages, with a lot of overlap between people, and it cannot diagnose anyone.",
+      "how": [
+        "Pick one or more chips under “Pick a way of being wired,” or tap a part of the brain.",
+        "Switch between the outside view and the inside view to see the deeper parts.",
+        "Use the Sliders tab to see which parts light up when you turn one up or down, and Compare two to see two maps side by side.",
+        "Every finding has a strength label, Strong, Moderate or Early, and a source you can open."
+      ],
+      "results": "The markers show where research finds a difference on average: more active, less active, smaller or thinner, larger or thicker, connected differently, or more variable. These are small to moderate differences in group averages. People with the same label differ a lot, and brains change with experience, sleep, support and treatment.",
+      "links": [
+        [
+          "Brain Map",
+          "/brain-map.html"
+        ]
+      ]
+    },
+    {
+      "id": "braindiffers",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "how brains differ",
+      "pat": "\\b(how|what|why|where|which)\\b.{0,40}\\b(brains?)\\b.{0,40}\\b(differ\\w*|different\\w*|wired|wiring|look like|scans?|regions?|parts?|structure)\\b|\\b(brains?)\\b.{0,25}\\b(differ\\w*|different\\w*) (in|for|with|between)\\b|\\b(autistic|autism|adhd|anxiety|anxious|depress\\w*|ptsd|trauma|ocd|dyslexi\\w*) brains?\\b.{0,30}\\b(differ\\w*|different\\w*|scans?|look like|wired)\\b|\\bbrain (scans?|imaging|differences)\\b|\\b(which|what) part of the brain\\b.{0,40}\\b(autis\\w*|adhd|anxi\\w*|depress\\w*|ptsd|trauma|ocd|dyslexi\\w*)\\b|\\bmap of the brain\\b|^(the )?(adhd|autistic|dyslexic|anxious|depressed|ocd|ptsd) brain( map)?$",
+      "keys": [],
+      "what": [
+        "Research finds small average differences in the brain between groups, with a lot of overlap between people. For example, in large scan studies the hippocampus is slightly smaller on average in people with depression or PTSD, and parts of the striatum and the amygdala are slightly smaller on average in ADHD and in autism. In anxiety and PTSD, the amygdala and the insula tend to be more active when people handle feared or emotional things. In dyslexia, the left-side reading areas tend to be less active during reading.",
+        "Those are group averages. People who share a label differ a lot from each other, brains change with experience, sleep, support and treatment, and a scan cannot diagnose anyone. A difference is not damage, and it is not anyone’s fault."
+      ],
+      "how": [
+        "Open the Brain Map, pick one or more ways of being wired, and see the findings part by part, with how sure the research is for each one.",
+        "Each one also says what it can feel like, how it can look from the outside, what tends to help, and three things others can try."
+      ],
+      "links": [
+        [
+          "Brain Map",
+          "/brain-map.html"
+        ],
+        [
+          "Differences in wiring, in the Library",
+          "/library/wiring.html"
+        ]
+      ],
+      "chips": [],
+      "topic": false
     },
     {
       "id": "alltools",

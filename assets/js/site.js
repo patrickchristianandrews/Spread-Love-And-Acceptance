@@ -226,6 +226,7 @@
       { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'What you’ve stopped checking in yourself, and a small monthly way to look again' },
       { href: '/growing-up.html', deep: true, code: 'New', title: 'Where your lens came from', note: 'How each stage of growing up shapes what you expect of yourself and others, and how to choose which rules to keep' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
+      { href: '/brain-map.html', code: 'New', title: 'Brain Map: how wiring differs', note: 'An explorable brain: where research finds average differences in autism, ADHD, anxiety, depression, trauma, OCD and dyslexia, what it can feel like, and what helps' },
       { href: '/wiring-card.html', code: 'Tool', title: 'How to talk to me: a card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
       { href: '/wavelength.html', code: 'New', title: 'How you connect', note: 'How you think, talk and listen: pick your wiring, find your four-letter Wave Code and archetype, and read sixteen self-discovery chapters' },
       { href: '/workpapers/wp-02-how-much-are-you-carrying.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'What you’re already carrying, separate from what just happened', paid: true },
@@ -540,10 +541,11 @@
       { href: '/tools/frequency-calibration.html', plain: true, title: 'Rhythms side by side', note: 'Stop different rhythms feeling like a fight: money, rest and decisions, side by side.' },
       { href: '/communication-style-quiz.html', title: 'Communication style quiz', note: 'What the quiz looks at, and how to use your result' },
       { sub: 'Minds that work differently', id: 'minds', area: 'self',
-        desc: 'ADHD, autistic and AuDHD partners, families and friends, and how differently wired people hear the same words.',
-        short: 'ADHD, autism and being wired differently.' },
+        desc: 'ADHD, autistic and AuDHD partners, families and friends, how differently wired people hear the same words, and an explorable map of the brain.',
+        short: 'ADHD, autism, being wired differently, a brain map.' },
       { href: '/neurodivergent-relationships.html', title: 'Neurodivergent relationships', note: 'ADHD, autistic and AuDHD partners, families and friends' },
-      { href: '/wired-differently.html', deep: true, title: 'Wired Differently', note: 'How differently wired people hear the same words' }
+      { href: '/wired-differently.html', deep: true, title: 'Wired Differently', note: 'How differently wired people hear the same words' },
+      { href: '/brain-map.html', title: 'Brain Map: how wiring differs', note: 'Tap the brain to see where research finds average differences, and what helps' }
     ]},
     { id: 'tools', name: 'Tools', title: 'Tools', blurb: 'Hands-on tools for talking things through, sharing the load and making plans. Each one says what you get.',
       all: '/tools.html', allLabel: 'See all tools', items: [
@@ -2464,7 +2466,7 @@
     '/living-alone.html': ['Living on your own, living well', 'Any age, any reason: alone is not lonely, a home that runs itself, making friends as an adult, asking for help, and safety basics.'],
     '/research.html': ['The research behind this site', 'The studies, books and reviews behind the site: what each found, in plain words, and how strong the evidence is.']
   };
-  var TOOL_URL = /^\/(upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device|make-a-plan|what-am-i-feeling)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
+  var TOOL_URL = /^\/(upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device|make-a-plan|what-am-i-feeling|brain-map)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
 
   // the words the site uses, with how often, for "Did you mean"
   var REAL = null, indexed = {};

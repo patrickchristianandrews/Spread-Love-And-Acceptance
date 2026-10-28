@@ -1,0 +1,764 @@
+[
+ {
+  "id": "schmaal-2016-subcortical-mdd",
+  "authors": "Schmaal, L., Veltman, D. J., van Erp, T. G. M., et al.",
+  "year": 2016,
+  "title": "Subcortical brain alterations in major depressive disorder: findings from the ENIGMA Major Depressive Disorder working group",
+  "venue": "Molecular Psychiatry, 21(6), 806–812",
+  "doi": "10.1038/mp.2015.69",
+  "url": "https://doi.org/10.1038/mp.2015.69",
+  "kind": "meta-analysis",
+  "finding": "Pooling scans from 1,728 people with major depression and 7,199 comparison people at 15 sites, the hippocampus was smaller on average in the depression group (a very small effect, about 1 percent). The difference was clearest in people with repeated episodes and in those whose depression began before age 21, and not seen in people in their first episode.",
+  "strength": "strong: one of the largest pooled scan studies of depression. The effect is small, the groups overlap almost completely, and a scan study cannot say which came first.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "depression",
+   "hippocampus",
+   "mri",
+   "neuroplasticity"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI, sample sizes and the hippocampus result (Cohen's d about -0.14, driven by recurrent depression) confirmed in the abstract records at Erasmus MC (pure.eur.nl) and the University of Melbourne."
+ },
+ {
+  "id": "schmaal-2017-cortical-mdd",
+  "authors": "Schmaal, L., Hibar, D. P., Sämann, P. G., et al.",
+  "year": 2017,
+  "title": "Cortical abnormalities in adults and adolescents with major depression based on brain scans from 20 cohorts worldwide in the ENIGMA Major Depressive Disorder working group",
+  "venue": "Molecular Psychiatry, 22(6), 900–909",
+  "doi": "10.1038/mp.2016.60",
+  "url": "https://doi.org/10.1038/mp.2016.60",
+  "kind": "meta-analysis",
+  "finding": "In scans of 2,148 people with major depression and 7,957 comparison people, adults with depression had slightly thinner cortex on average in the orbitofrontal cortex, the anterior and posterior cingulate, the insula and the temporal lobes (small effects, about 0.1 of a standard deviation). Adolescents showed a smaller total surface area instead.",
+  "strength": "strong: a very large pooled scan study. The effects are small and the groups overlap almost completely.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "depression",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: sample sizes, regions, effect-size range (Cohen's d about -0.10 to -0.14) and DOI confirmed in the abstract records at Lübeck and Delft repositories and the University of Melbourne."
+ },
+ {
+  "id": "logue-2018-hippocampus-ptsd",
+  "authors": "Logue, M. W., van Rooij, S. J. H., Dennis, E. L., et al.",
+  "year": 2018,
+  "title": "Smaller hippocampal volume in posttraumatic stress disorder: a multisite ENIGMA-PGC study",
+  "venue": "Biological Psychiatry, 83(3), 244–253",
+  "doi": "10.1016/j.biopsych.2017.09.006",
+  "url": "https://doi.org/10.1016/j.biopsych.2017.09.006",
+  "kind": "meta-analysis",
+  "finding": "Across 16 groups of researchers and 1,868 people, those with current PTSD had slightly smaller hippocampi on average than trauma-exposed people without PTSD (a small effect, about 0.17 of a standard deviation). The amygdala difference was smaller still and did not hold up after correcting for the number of regions tested.",
+  "strength": "strong: a large pooled analysis with a fair comparison group (people who had also been through trauma). The effect is small and a scan study cannot say whether it was there before the trauma.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "trauma",
+   "hippocampus",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, volume and pages, DOI 10.1016/j.biopsych.2017.09.006, sample (1,868 people, 794 with PTSD, 16 cohorts), hippocampus d = -0.17 and the amygdala result confirmed in the abstract records at Beth Israel Deaconess and Houston Methodist."
+ },
+ {
+  "id": "hoogman-2017-adhd-subcortical",
+  "authors": "Hoogman, M., Bralten, J., Hibar, D. P., et al.",
+  "year": 2017,
+  "title": "Subcortical brain volume differences in participants with attention deficit hyperactivity disorder in children and adults: a cross-sectional mega-analysis",
+  "venue": "The Lancet Psychiatry, 4(4), 310–319",
+  "doi": "10.1016/S2215-0366(17)30049-4",
+  "url": "https://doi.org/10.1016/S2215-0366(17)30049-4",
+  "kind": "meta-analysis",
+  "finding": "In 1,713 people with ADHD and 1,529 comparison people at 23 sites (ages 4 to 63), the nucleus accumbens, amygdala, caudate, hippocampus and putamen were slightly smaller on average in the ADHD group (very small effects, about 0.1 to 0.2 of a standard deviation). The pallidum and thalamus did not differ.",
+  "strength": "strong: a very large pooled scan study. The effects are very small and the groups overlap almost completely.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "adhd",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI, sample size and effect sizes (accumbens d = -0.15, amygdala -0.19, caudate -0.11, hippocampus -0.11, putamen -0.14; pallidum and thalamus no difference) confirmed in the abstract records at VU Amsterdam and UMC Utrecht."
+ },
+ {
+  "id": "hoogman-2019-adhd-cortex",
+  "authors": "Hoogman, M., Muetzel, R., Guimaraes, J. P., et al.",
+  "year": 2019,
+  "title": "Brain imaging of the cortex in ADHD: a coordinated analysis of large-scale clinical and population-based samples",
+  "venue": "American Journal of Psychiatry, 176(7), 531–542",
+  "doi": "10.1176/appi.ajp.2019.18091033",
+  "url": "https://doi.org/10.1176/appi.ajp.2019.18091033",
+  "kind": "meta-analysis",
+  "finding": "Comparing the cortex of 2,246 people with ADHD and 1,934 comparison people from 36 centers, the authors found small average differences in cortical thickness and surface area. Measures of the cortex also related, more weakly, to ADHD symptoms in people in the general population, which fits the view that ADHD sits at one end of a continuum.",
+  "strength": "strong: a large coordinated analysis. The differences are small and not found in every age group.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "adhd",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, volume and pages, DOI and the design (ENIGMA-ADHD, 36 centers, 2,246 cases and 1,934 controls, plus the NeuroIMAGE family sample) confirmed in repository records at TU Delft, Reading and Maastricht. The abstract's region-by-region results were not read, so none are quoted here."
+ },
+ {
+  "id": "vanrooij-2018-enigma-asd",
+  "authors": "van Rooij, D., Anagnostou, E., Arango, C., et al.",
+  "year": 2018,
+  "title": "Cortical and subcortical brain morphometry differences between patients with autism spectrum disorder and healthy individuals across the lifespan: results from the ENIGMA ASD working group",
+  "venue": "American Journal of Psychiatry, 175(4), 359–369",
+  "doi": "10.1176/appi.ajp.2017.17010100",
+  "url": "https://doi.org/10.1176/appi.ajp.2017.17010100",
+  "kind": "meta-analysis",
+  "finding": "Scans of 1,571 autistic people and 1,651 comparison people (ages 2 to 64, 49 sites) showed small average differences: slightly smaller pallidum, putamen, amygdala and nucleus accumbens, slightly thicker frontal cortex and slightly thinner temporal cortex (effect sizes about 0.1 to 0.2 of a standard deviation). The differences in cortical thickness were largest around adolescence.",
+  "strength": "strong: the largest scan study of autism to date. The effects are very small, the groups overlap almost completely, and autistic people differ widely from each other.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "autism",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1176/appi.ajp.2017.17010100 (resolves to this paper), sample, regions, direction (frontal thicker, temporal thinner) and effect-size ranges confirmed across the University of Minnesota, Copenhagen and eScholarship records."
+ },
+ {
+  "id": "boedhoe-2017-ocd-subcortical",
+  "authors": "Boedhoe, P. S. W., Schmaal, L., Abe, Y., et al.",
+  "year": 2017,
+  "title": "Distinct subcortical volume alterations in pediatric and adult OCD: a worldwide meta- and mega-analysis",
+  "venue": "American Journal of Psychiatry, 174(1), 60–69",
+  "doi": "10.1176/appi.ajp.2016.16020201",
+  "url": "https://doi.org/10.1176/appi.ajp.2016.16020201",
+  "kind": "meta-analysis",
+  "finding": "Pooling scans from 1,830 people with OCD and 1,759 comparison people, adults with OCD had slightly smaller hippocampi and slightly larger pallidums on average (about 0.13 and 0.16 of a standard deviation), while children with OCD who were not taking medicine had larger thalamus volumes (about 0.38). The adult and child patterns differed.",
+  "strength": "strong: a large pooled analysis. The effects are small to moderate and the groups overlap a great deal; medicine use affected the results.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "ocd",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, volume and pages, DOI 10.1176/appi.ajp.2016.16020201 (resolves to this paper), sample and the adult hippocampus (d = -0.13), pallidum (d = 0.16) and unmedicated pediatric thalamus (d = 0.38) results confirmed in repository records (Universitat de Barcelona, Healio summary)."
+ },
+ {
+  "id": "boedhoe-2018-ocd-cortical",
+  "authors": "Boedhoe, P. S. W., Schmaal, L., Abe, Y., et al.",
+  "year": 2018,
+  "title": "Cortical abnormalities associated with pediatric and adult obsessive-compulsive disorder: findings from the ENIGMA Obsessive-Compulsive Disorder working group",
+  "venue": "American Journal of Psychiatry, 175(5), 453–462",
+  "doi": "10.1176/appi.ajp.2017.17050485",
+  "url": "https://doi.org/10.1176/appi.ajp.2017.17050485",
+  "kind": "meta-analysis",
+  "finding": "In scans of 1,905 people with OCD and 1,760 comparison people from 27 sites, the inferior parietal cortex was slightly thinner in both adults and children with OCD. Adults also showed a smaller surface area in one part of the temporal cortex. Effect sizes ranged from about 0.1 to 0.3 of a standard deviation.",
+  "strength": "strong: a large pooled analysis. The effects are small and medicine use affected some results.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "ocd",
+   "mri"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI, sample (1,905 and 1,760, 27 sites) and findings (parietal cortex thinner in adults and children, d from -0.10 to -0.33) confirmed in the abstract on PubMed (PMID 29377733) and eScholarship."
+ },
+ {
+  "id": "etkin-wager-2007-anxiety",
+  "authors": "Etkin, A., & Wager, T. D.",
+  "year": 2007,
+  "title": "Functional neuroimaging of anxiety: a meta-analysis of emotional processing in PTSD, social anxiety disorder, and specific phobia",
+  "venue": "American Journal of Psychiatry, 164(10), 1476–1488",
+  "doi": "10.1176/appi.ajp.2007.07030504",
+  "url": "https://doi.org/10.1176/appi.ajp.2007.07030504",
+  "kind": "meta-analysis",
+  "finding": "Pooling brain-activity studies, people with PTSD, social anxiety disorder or a specific phobia showed, on average, more activity in the amygdala and the insula than comparison people while handling emotional material, similar to what happens in healthy people during fear learning. Only in PTSD were the front-of-brain areas that help settle feelings (parts of the cingulate and the ventromedial prefrontal cortex) less active.",
+  "strength": "moderate: a pooled analysis of many small studies from before 2007. Later work generally agrees, but individual studies vary and the groups overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "anxiety",
+   "trauma",
+   "amygdala",
+   "insula"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: citation, volume and pages, DOI 10.1176/appi.ajp.2007.07030504, and the amygdala and insula findings plus the PTSD-specific cingulate and ventromedial prefrontal result confirmed at ajp.psychiatryonline.org, read.qxmd.com and PubMed Central (PMC3318959)."
+ },
+ {
+  "id": "hayes-2012-ptsd-meta",
+  "authors": "Hayes, J. P., Hayes, S. M., & Mikedis, A. M.",
+  "year": 2012,
+  "title": "Quantitative meta-analysis of neural activity in posttraumatic stress disorder",
+  "venue": "Biology of Mood & Anxiety Disorders, 2, 9",
+  "doi": "10.1186/2045-5380-2-9",
+  "url": "https://doi.org/10.1186/2045-5380-2-9",
+  "kind": "meta-analysis",
+  "finding": "Pooling 26 brain-activity studies, people with PTSD showed more activity on average in the middle and dorsal anterior cingulate and (when region-of-interest studies were included) the amygdala, and less activity in the ventromedial prefrontal cortex and the inferior frontal gyrus than comparison people.",
+  "strength": "moderate: a pooled analysis of 26 studies. Results depend on the task and on which comparison group was used, and the groups overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "trauma",
+   "amygdala"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, article 9, DOI 10.1186/2045-5380-2-9 and the findings (more activity in mid and dorsal anterior cingulate and amygdala, less in ventromedial prefrontal cortex and inferior frontal gyrus) confirmed at Springer and PubMed Central (PMC3430553)."
+ },
+ {
+  "id": "shin-liberzon-2010-fear-circuits",
+  "authors": "Shin, L. M., & Liberzon, I.",
+  "year": 2010,
+  "title": "The neurocircuitry of fear, stress, and anxiety disorders",
+  "venue": "Neuropsychopharmacology, 35(1), 169–191",
+  "doi": "10.1038/npp.2009.83",
+  "url": "https://doi.org/10.1038/npp.2009.83",
+  "kind": "review",
+  "finding": "A review of animal and human work on fear circuits. In PTSD, social anxiety and specific phobia the amygdala tends to respond more strongly to cues tied to the fear, and the insula is often more active across several anxiety disorders. In PTSD the rostral anterior cingulate and nearby ventromedial prefrontal cortex tend to respond less. The authors note it is not yet clear which differences come first.",
+  "strength": "moderate: an expert review that agrees with the pooled analyses. It cannot say what causes what.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "anxiety",
+   "trauma",
+   "amygdala"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1038/npp.2009.83 and the main conclusions confirmed at PubMed Central (PMC3055419) and Houston Methodist scholars page."
+ },
+ {
+  "id": "cortese-2012-adhd-fmri",
+  "authors": "Cortese, S., Kelly, C., Chabernaud, C., et al.",
+  "year": 2012,
+  "title": "Toward systems neuroscience of ADHD: a meta-analysis of 55 fMRI studies",
+  "venue": "American Journal of Psychiatry, 169(10), 1038–1055",
+  "doi": "10.1176/appi.ajp.2012.11101521",
+  "url": "https://doi.org/10.1176/appi.ajp.2012.11101521",
+  "kind": "meta-analysis",
+  "finding": "Pooling 55 brain-activity studies, people with ADHD showed on average less activation in the frontoparietal (control) and ventral attention networks, and more activation in the default network and some sensory and motor areas, than comparison people. The differences were seen even without other conditions or past stimulant use.",
+  "strength": "moderate: a pooled analysis of 55 mostly small studies. Task choice matters, and the groups overlap a great deal.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "adhd",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, volume and pages, DOI 10.1176/appi.ajp.2012.11101521, and the network results confirmed at PubMed (PMID 22983386) and PubMed Central (PMC3879048)."
+ },
+ {
+  "id": "richlan-2009-dyslexia-meta",
+  "authors": "Richlan, F., Kronbichler, M., & Wimmer, H.",
+  "year": 2009,
+  "title": "Functional abnormalities in the dyslexic brain: a quantitative meta-analysis of neuroimaging studies",
+  "venue": "Human Brain Mapping, 30(10), 3299–3308",
+  "doi": "10.1002/hbm.20752",
+  "url": "https://doi.org/10.1002/hbm.20752",
+  "kind": "meta-analysis",
+  "finding": "Pooling 17 brain-activity studies of reading, people with dyslexia showed on average less activity in the left inferior parietal, superior temporal, middle and inferior temporal, and fusiform areas, and in the left inferior frontal gyrus, together with more activity in the primary motor cortex and anterior insula, which may be a way of working around the difficulty.",
+  "strength": "moderate: a pooled analysis of 17 studies, with later reviews pointing the same way. Study sizes were small and the groups overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "dyslexia",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1002/hbm.20752 and the underactivation and overactivation results confirmed at PubMed Central (PMC2989182) and the Frontiers follow-up review (PMC3340948)."
+ },
+ {
+  "id": "gabrieli-2009-dyslexia",
+  "authors": "Gabrieli, J. D. E.",
+  "year": 2009,
+  "title": "Dyslexia: a new synergy between education and cognitive neuroscience",
+  "venue": "Science, 325(5938), 280–283",
+  "doi": "10.1126/science.1171999",
+  "url": "https://doi.org/10.1126/science.1171999",
+  "kind": "review",
+  "finding": "A review explaining that dyslexia often comes from difficulty linking the sounds of speech to letters, that brain studies of children with dyslexia show less engagement of the left temporoparietal cortex during reading, and that good teaching changes both reading and the brain's response. It argues that early, evidence-based teaching could prevent most reading failure.",
+  "strength": "moderate: an influential expert review. The brain findings are averages with large overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "dyslexia",
+   "neuroplasticity"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: author, journal, volume and pages, DOI 10.1126/science.1171999 and the abstract's three main points confirmed at PubMed (PMID 19608907) and the SAO/NASA record."
+ },
+ {
+  "id": "temple-2003-dyslexia-remediation",
+  "authors": "Temple, E., Deutsch, G. K., Poldrack, R. A., et al.",
+  "year": 2003,
+  "title": "Neural deficits in children with dyslexia ameliorated by behavioral remediation: evidence from functional MRI",
+  "venue": "Proceedings of the National Academy of Sciences, 100(5), 2860–2865",
+  "doi": "10.1073/pnas.0030098100",
+  "url": "https://doi.org/10.1073/pnas.0030098100",
+  "kind": "study",
+  "finding": "In 20 children with dyslexia aged 8 to 12, a language and listening training program improved reading and language scores, and brain activity during sound-based tasks rose in the left temporoparietal cortex and left inferior frontal gyrus, moving closer to the pattern seen in typical readers.",
+  "strength": "early: one small study with no matched untreated group of children with dyslexia. It shows the brain responds to teaching but cannot say how much.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "dyslexia",
+   "neuroplasticity"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1073/pnas.0030098100, sample and findings confirmed at PubMed Central (PMC151431) and MIT's Gabrieli Lab page."
+ },
+ {
+  "id": "galuschka-2014-reading-treatments",
+  "authors": "Galuschka, K., Ise, E., Krick, K., & Schulte-Körne, G.",
+  "year": 2014,
+  "title": "Effectiveness of treatment approaches for children and adolescents with reading disabilities: a meta-analysis of randomized controlled trials",
+  "venue": "PLoS ONE, 9(2), e89900",
+  "doi": "10.1371/journal.pone.0089900",
+  "url": "https://doi.org/10.1371/journal.pone.0089900",
+  "kind": "meta-analysis",
+  "finding": "Pooling 22 randomized trials, teaching that builds explicit links between sounds and letters (phonics) was the one approach with a clearly confirmed benefit for reading and spelling in children and adolescents with reading difficulties. The authors concluded that even severe reading and spelling difficulties can be improved with the right teaching.",
+  "strength": "moderate: 22 randomized trials, but many were small, and other approaches had fewer studies, so they are not proven not to work.",
+  "topics": [
+   "brain-wiring",
+   "dyslexia",
+   "reading",
+   "teaching"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and article number, DOI 10.1371/journal.pone.0089900 and the 22-trial result confirmed in the records of the University of Munich repository and EconPapers."
+ },
+ {
+  "id": "benSasson-2009-sensory-asd",
+  "authors": "Ben-Sasson, A., Hen, L., Fluss, R., et al.",
+  "year": 2009,
+  "title": "A meta-analysis of sensory modulation symptoms in individuals with autism spectrum disorders",
+  "venue": "Journal of Autism and Developmental Disorders, 39(1), 1–11",
+  "doi": "10.1007/s10803-008-0593-3",
+  "url": "https://doi.org/10.1007/s10803-008-0593-3",
+  "kind": "meta-analysis",
+  "finding": "Pooling 14 studies, autistic people reported or showed more sensory differences than comparison groups. The gap was largest for under-responding to sensations, then over-responding, then seeking sensations. The differences were largest in children aged 6 to 9.",
+  "strength": "strong: a pooled analysis, backed by an update and by later reviews. Most studies relied on parent or self report.",
+  "topics": [
+   "brain-wiring",
+   "autism",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1007/s10803-008-0593-3, and the 14-study result confirmed at PubMed (PMID 18512135) and the University of Haifa record."
+ },
+ {
+  "id": "robertson-baroncohen-2017-sensory",
+  "authors": "Robertson, C. E., & Baron-Cohen, S.",
+  "year": 2017,
+  "title": "Sensory perception in autism",
+  "venue": "Nature Reviews Neuroscience, 18(11), 671–684",
+  "doi": "10.1038/nrn.2017.112",
+  "url": "https://doi.org/10.1038/nrn.2017.112",
+  "kind": "review",
+  "finding": "A review arguing that sensory experience is a central part of autism, noting that unusual sensory experience may affect as many as nine in ten autistic people, across all the senses, and discussing what is known about how sensory processing works differently.",
+  "strength": "moderate: an expert review. The explanations for why are still being tested.",
+  "topics": [
+   "brain-wiring",
+   "autism",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1038/nrn.2017.112 and the abstract confirmed at Cambridge Neuroscience and Peeref; the nine-in-ten figure is from the full text as quoted in the search summary."
+ },
+ {
+  "id": "hull-2016-rsfc-asd",
+  "authors": "Hull, J. V., Jacokes, Z. J., Torgerson, C. M., Irimia, A., & Van Horn, J. D.",
+  "year": 2017,
+  "title": "Resting-state functional connectivity in autism spectrum disorders: a review",
+  "venue": "Frontiers in Psychiatry, 7, 205",
+  "doi": "10.3389/fpsyt.2016.00205",
+  "url": "https://doi.org/10.3389/fpsyt.2016.00205",
+  "kind": "review",
+  "finding": "A review of brain-connectivity studies in autism. Studies have reported more connectivity, less connectivity, or a mix, and the authors link the differences between studies to age, sex, scan design and the wide variation among autistic people.",
+  "strength": "moderate: a review whose main message is that results are mixed.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "autism",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors' group, journal, article 205, DOI 10.3389/fpsyt.2016.00205 and the over-, under- or mixed-connectivity summary confirmed at PubMed Central (PMC5209637) and Peeref."
+ },
+ {
+  "id": "holiga-2019-asd-connectivity",
+  "authors": "Holiga, Š., Hipp, J. F., Chatham, C. H., et al.",
+  "year": 2019,
+  "title": "Patients with autism spectrum disorders display reproducible functional connectivity alterations",
+  "venue": "Science Translational Medicine, 11(481), eaat9223",
+  "doi": "10.1126/scitranslmed.aat9223",
+  "url": "https://doi.org/10.1126/scitranslmed.aat9223",
+  "kind": "study",
+  "finding": "In several large data sets, autistic people showed a reproducible pattern of differences in how brain regions work together. The pattern was only moderately linked to day-to-day traits and overlapped a lot with comparison people, so the authors say it is not usable for diagnosis.",
+  "strength": "moderate: replicated across several data sets, with a large overlap between groups.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "autism",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors' group, journal, volume and article number, DOI 10.1126/scitranslmed.aat9223, and the authors' own statement about overlap and limited diagnostic use confirmed at King's College London Pure and bioRxiv."
+ },
+ {
+  "id": "woodward-2017-thalamus-asd",
+  "authors": "Woodward, N. D., Giraldo-Chica, M., Rogers, B., & Cascio, C. J.",
+  "year": 2017,
+  "title": "Thalamocortical dysconnectivity in autism spectrum disorder: an analysis of the Autism Brain Imaging Data Exchange",
+  "venue": "Biological Psychiatry: Cognitive Neuroscience and Neuroimaging, 2(1), 76–84",
+  "doi": null,
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5455796/",
+  "kind": "study",
+  "finding": "Comparing 228 autistic people with 228 matched comparison people, the thalamus was more strongly connected on average with prefrontal, temporal and sensory-motor cortex in the autism group, most clearly in adolescents. Other studies have found less connectivity in some thalamus pathways, so the direction is not settled.",
+  "strength": "early: one data set, and other studies point in mixed directions.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "autism",
+   "thalamus",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, sample sizes (228 and 228) and findings confirmed at PubMed Central (PMC5455796) and the Vanderbilt-hosted PDF."
+ },
+ {
+  "id": "stoodley-2014-cerebellum",
+  "authors": "Stoodley, C. J.",
+  "year": 2014,
+  "title": "Distinct regions of the cerebellum show gray matter decreases in autism, ADHD, and developmental dyslexia",
+  "venue": "Frontiers in Systems Neuroscience, 8, 92",
+  "doi": "10.3389/fnsys.2014.00092",
+  "url": "https://doi.org/10.3389/fnsys.2014.00092",
+  "kind": "meta-analysis",
+  "finding": "Pooling scan studies of autism (17), ADHD (10) and dyslexia (10), no cerebellar area was larger in any group, and each condition had smaller gray matter in a different part of the cerebellum, with no overlap between conditions.",
+  "strength": "early: a pooled analysis of mostly small scan studies; the sizes are modest and the groups overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "autism",
+   "adhd",
+   "dyslexia",
+   "cerebellum"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: author, journal, volume and article number, DOI 10.3389/fnsys.2014.00092, study counts and findings confirmed at PubMed Central (PMC4033133) and Frontiers."
+ },
+ {
+  "id": "menon-2011-triple-network",
+  "authors": "Menon, V.",
+  "year": 2011,
+  "title": "Large-scale brain networks and psychopathology: a unifying triple network model",
+  "venue": "Trends in Cognitive Sciences, 15(10), 483–506",
+  "doi": "10.1016/j.tics.2011.08.003",
+  "url": "https://doi.org/10.1016/j.tics.2011.08.003",
+  "kind": "review",
+  "finding": "Proposed that problems in how three large networks switch on and off, the salience, frontoparietal and default networks, show up across many conditions, with the salience network acting as a switch between the other two.",
+  "strength": "moderate: an influential model that has guided much research. It is a framework to test, not a settled finding.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: author, journal, volume and pages, DOI 10.1016/j.tics.2011.08.003 and the three-network description confirmed at PubMed (PMID 21908230) and in the author's later commentary (PMC6345251)."
+ },
+ {
+  "id": "kaiser-2015-depression-networks",
+  "authors": "Kaiser, R. H., Andrews-Hanna, J. R., Wager, T. D., & Pizzagalli, D. A.",
+  "year": 2015,
+  "title": "Large-scale network dysfunction in major depressive disorder: a meta-analysis of resting-state functional connectivity",
+  "venue": "JAMA Psychiatry, 72(6), 603–611",
+  "doi": "10.1001/jamapsychiatry.2015.0071",
+  "url": "https://doi.org/10.1001/jamapsychiatry.2015.0071",
+  "kind": "meta-analysis",
+  "finding": "Pooling 27 data sets (556 people with depression and 518 comparison people), depression was linked on average to less connectivity within the frontoparietal control network and between it and a network that directs attention to the outside world.",
+  "strength": "moderate: a pooled analysis of mostly small studies; the differences are modest and the groups overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "depression",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1001/jamapsychiatry.2015.0071, sample and the frontoparietal result confirmed at PubMed Central (PMC4456260) and PubMed (PMID 25785575). Default-network findings were not confirmed and are not quoted."
+ },
+ {
+  "id": "hamilton-2012-depression-fmri",
+  "authors": "Hamilton, J. P., Etkin, A., Furman, D. J., et al.",
+  "year": 2012,
+  "title": "Functional neuroimaging of major depressive disorder: a meta-analysis and new integration of baseline activation and neural response data",
+  "venue": "American Journal of Psychiatry, 169(7), 693–703",
+  "doi": "10.1176/appi.ajp.2012.11071105",
+  "url": "https://doi.org/10.1176/appi.ajp.2012.11071105",
+  "kind": "meta-analysis",
+  "finding": "In response to negative material, people with depression showed on average more activity in the amygdala, insula and dorsal anterior cingulate cortex, and less in the dorsal striatum and dorsolateral prefrontal cortex, than comparison people.",
+  "strength": "moderate: a pooled analysis of many small studies; results depend on the task, and the groups overlap.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "depression",
+   "amygdala"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1176/appi.ajp.2012.11071105 and the regions confirmed in the abstract at ajp.psychiatryonline.org."
+ },
+ {
+  "id": "milad-rauch-2012-ocd-circuits",
+  "authors": "Milad, M. R., & Rauch, S. L.",
+  "year": 2012,
+  "title": "Obsessive-compulsive disorder: beyond segregated cortico-striatal pathways",
+  "venue": "Trends in Cognitive Sciences, 16(1), 43–51",
+  "doi": "10.1016/j.tics.2011.11.003",
+  "url": "https://doi.org/10.1016/j.tics.2011.11.003",
+  "kind": "review",
+  "finding": "A review arguing that OCD involves more than the loops linking the front of the brain, the striatum and the thalamus: the orbitofrontal cortex, the dorsal anterior cingulate and circuits through the amygdala also matter, and learning that a fear is no longer needed (extinction) may work differently.",
+  "strength": "moderate: an expert review of imaging and treatment studies. It describes circuits that appear involved, and cannot say what causes what.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "ocd",
+   "networks"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1016/j.tics.2011.11.003 and the abstract confirmed at PubMed (PMID 22138231) and PubMed Central (PMC4955838)."
+ },
+ {
+  "id": "menzies-2008-ocd-model",
+  "authors": "Menzies, L., Chamberlain, S. R., Laird, A. R., et al.",
+  "year": 2008,
+  "title": "Integrating evidence from neuroimaging and neuropsychological studies of obsessive-compulsive disorder: the orbitofronto-striatal model revisited",
+  "venue": "Neuroscience & Biobehavioral Reviews, 32(3), 525–549",
+  "doi": "10.1016/j.neubiorev.2007.09.005",
+  "url": "https://doi.org/10.1016/j.neubiorev.2007.09.005",
+  "kind": "review",
+  "finding": "A review and pooled analysis of brain-imaging studies of OCD. It tests the long-standing idea of an orbitofrontal-striatal loop and proposes a wider picture that includes other areas, including parts of the parietal cortex.",
+  "strength": "moderate: an expert review and pooled analysis from before the large scan studies.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "ocd"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1016/j.neubiorev.2007.09.005 and the abstract's claims confirmed at PubMed Central (PMC2889493)."
+ },
+ {
+  "id": "pole-2007-ptsd-physiology",
+  "authors": "Pole, N.",
+  "year": 2007,
+  "title": "The psychophysiology of posttraumatic stress disorder: a meta-analysis",
+  "venue": "Psychological Bulletin, 133(5), 725–746",
+  "doi": "10.1037/0033-2909.133.5.725",
+  "url": "https://doi.org/10.1037/0033-2909.133.5.725",
+  "kind": "meta-analysis",
+  "finding": "Pooling studies of the body's responses, adults with PTSD had a faster heart rate than adults without PTSD at rest, during startle tests and when reminded of the trauma. Heart rate was among the most consistent differences. Most studies were of male veterans.",
+  "strength": "moderate: a pooled analysis of many studies, but one limited to the groups that were studied most.",
+  "topics": [
+   "brain-wiring",
+   "trauma",
+   "body",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: author, journal, volume and pages, DOI 10.1037/0033-2909.133.5.725 (resolves to this paper), study counts and heart-rate results confirmed at PubMed Central records and data.zhenzhi.com abstract."
+ },
+ {
+  "id": "mansson-2016-cbt-plasticity",
+  "authors": "Månsson, K. N. T., Salami, A., Frick, A., et al.",
+  "year": 2016,
+  "title": "Neuroplasticity in response to cognitive behavior therapy for social anxiety disorder",
+  "venue": "Translational Psychiatry, 6, e727",
+  "doi": "10.1038/tp.2015.218",
+  "url": "https://doi.org/10.1038/tp.2015.218",
+  "kind": "study",
+  "finding": "In 26 people with social anxiety disorder who had nine weeks of internet-delivered cognitive behavioral therapy, the amygdala's volume and its response to criticism both fell on average, and the drop in volume tracked the drop in anxiety. A comparison treatment did not show the same changes.",
+  "strength": "early: one small trial, though it shows that the brain responds to effective treatment.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "anxiety",
+   "neuroplasticity",
+   "amygdala"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors' group, journal, volume and article number, DOI 10.1038/tp.2015.218, design and results confirmed at PubMed (PMID 26836415) and PubMed Central (PMC4872422)."
+ },
+ {
+  "id": "maguire-2000-taxi-hippocampus",
+  "authors": "Maguire, E. A., Gadian, D. G., Johnsrude, I. S., et al.",
+  "year": 2000,
+  "title": "Navigation-related structural change in the hippocampi of taxi drivers",
+  "venue": "Proceedings of the National Academy of Sciences, 97(8), 4398–4403",
+  "doi": "10.1073/pnas.070039597",
+  "url": "https://doi.org/10.1073/pnas.070039597",
+  "kind": "study",
+  "finding": "The back part of the hippocampus was larger on average in London taxi drivers than in comparison people, and it was larger the longer someone had driven a taxi, which suggests the adult brain changes with long experience.",
+  "strength": "moderate: a classic study with many follow-ups on brain change. It links experience and size and cannot prove one caused the other.",
+  "topics": [
+   "brain-wiring",
+   "brain-imaging",
+   "neuroplasticity",
+   "hippocampus"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1073/pnas.070039597, and the posterior hippocampus result confirmed at PubMed Central (PMC18253) and UCL's copy."
+ },
+ {
+  "id": "panagiotidi-2017-adhd-sensory",
+  "authors": "Panagiotidi, M., Overton, P. G., & Stafford, T.",
+  "year": 2017,
+  "title": "The relationship between ADHD traits and sensory sensitivity in the general population",
+  "venue": "Comprehensive Psychiatry, 80, 179–185",
+  "doi": null,
+  "url": "https://eprints.whiterose.ac.uk/123425/",
+  "kind": "study",
+  "finding": "In an online survey of 234 adults, more ADHD traits went with more reported sensory difficulties in every sense, suggesting sensory differences may be part of the ADHD picture.",
+  "strength": "early: a single survey of adults from the general population, with self-report only.",
+  "topics": [
+   "brain-wiring",
+   "adhd",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, sample (234 participants) and the main correlation confirmed at the White Rose repository (eprints.whiterose.ac.uk/123425) and Salford repository."
+ },
+ {
+  "id": "cortese-2018-adhd-medications",
+  "authors": "Cortese, S., Adamo, N., Del Giovane, C., et al.",
+  "year": 2018,
+  "title": "Comparative efficacy and tolerability of medications for attention-deficit hyperactivity disorder in children, adolescents, and adults: a systematic review and network meta-analysis",
+  "venue": "The Lancet Psychiatry, 5(9), 727–738",
+  "doi": "10.1016/S2215-0366(18)30269-4",
+  "url": "https://doi.org/10.1016/S2215-0366(18)30269-4",
+  "kind": "meta-analysis",
+  "finding": "Pooling 133 double-blind trials, medicines for ADHD reduced core symptoms in the short term. Taking both benefit and side effects into account, methylphenidate (for children and teenagers) and amphetamines (for adults) came out as the preferred first choices. The authors called for studies of long-term effects.",
+  "strength": "strong: a large analysis of 133 randomized trials, but short-term, and the long-term evidence is thin.",
+  "topics": [
+   "brain-wiring",
+   "adhd",
+   "treatment"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1016/S2215-0366(18)30269-4, number of trials and the main conclusion confirmed in the University of Bern (BORIS), Nottingham and Healio records."
+ },
+ {
+  "id": "olatunji-2013-ocd-cbt",
+  "authors": "Olatunji, B. O., Davis, M. L., Powers, M. B., & Smits, J. A. J.",
+  "year": 2013,
+  "title": "Cognitive-behavioral therapy for obsessive-compulsive disorder: a meta-analysis of treatment outcome and moderators",
+  "venue": "Journal of Psychiatric Research, 47(1), 33–41",
+  "doi": "10.1016/j.jpsychires.2012.08.020",
+  "url": "https://doi.org/10.1016/j.jpsychires.2012.08.020",
+  "kind": "meta-analysis",
+  "finding": "Pooling 16 randomized trials (756 people), cognitive behavioral therapy, centered on exposure and response prevention, reduced OCD symptoms much more than control conditions right after treatment, with a smaller but lasting benefit at follow-up.",
+  "strength": "strong: pooled randomized trials with a large effect. Follow-up results are smaller and the trials vary in quality.",
+  "topics": [
+   "brain-wiring",
+   "ocd",
+   "treatment"
+  ],
+  "mentioned_on": [
+   "/brain-map.html#sources"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-28: authors, journal, volume and pages, DOI 10.1016/j.jpsychires.2012.08.020, and the 16-trial result (g = 1.39 after treatment, 0.43 at follow-up) confirmed in the abstract records."
+ }
+]

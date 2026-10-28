@@ -56,6 +56,7 @@ SECTION_KEYWORDS = [
      ['communication tool', 'tone checker', 'how a message lands', 'repair after an argument', 'reconciliation', 'neurodiversity', 'listening', 'connection']),
     (r'^(workpapers|wp-|calc01|lemonade|quick-checks|full-path|do/|snapshot|dashboard|suite-index|prog-01)',
      ['chore chart', 'fair division of labor', 'household workload', 'mental load worksheet', 'stress check', 'calm-down plan', 'daily check-in', 'free worksheets']),
+    (r'^brain-map', ['brain map', 'how the brain differs', 'brain differences', 'autism', 'ADHD', 'anxiety', 'depression', 'PTSD', 'OCD', 'dyslexia', 'neurodiversity', 'mental health', 'what helps']),
     (r'^wavelength', ['communication style quiz', 'personality type quiz', 'neurodivergent', 'ADHD', 'autistic', 'AuDHD', 'how you think, talk and listen', 'self-discovery journal']),
 ]
 
@@ -546,6 +547,7 @@ SEARCH.update({
  'sleeping-pals-cam.html': ('Sleeping Pals Cam: Two Pups Asleep, for Bedtime', 'A calm night cam to go to bed with: Tidbit and Sugarfoot asleep, your own fur babies, a mixer of soft sounds (rain, ocean, fan, brown noise, lullabies) and a sleep timer.'),
  'pause-and-play.html': ('Calm Games and a Place to Relax: Pause & Play, Free', 'Relax with a breathing break, a silent wind-down, slow colors, calm music and sounds, or play a calm game with no timers and no way to lose.'),
  'do/index.html': ('Learn by Doing: Practice the Worksheets on an Example', 'Try the core worksheets on a made-up household first, see your learning map fill in, or watch two rhythms fall into step. Nothing to sign up for.'),
+ 'brain-map.html': ('Brain Map: How Wiring Differs', 'An explorable map of the brain. See where research finds average differences in autism, ADHD, anxiety, depression, trauma, OCD and dyslexia, and what helps.'),
 })
 
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results
@@ -1142,7 +1144,7 @@ GROUPS = [
     ('Start here', r'^(contact|index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0|do\.html|what-am-i-feeling)'),
     ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz'
                                    r'|love-languages|apology-languages|support-languages|languages-of-connection|appreciation-at-work|touchstones|nervous-system|calm-without-pills|calming-supplements|living-alone|stepfamily|new-relationship|small-wins|growing-up)'),
-    ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),
+    ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|brain-map|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
     ('Frequency Buddies, a cartoon about feelings for all ages', r'^frequency-buddies'),

@@ -105,6 +105,9 @@ GROUPS = [
      'Autism, ADHD, sensory differences, and meeting in the middle.',
      'neurodiversity autism adhd double-empathy masking sensory monotropism highly-sensitive-person stimming '
      'energy rejection-sensitivity accessibility language'),
+    ('brain', 'Brains and wiring: how groups differ on average',
+     'Brain-scan and brain-activity studies of autism, ADHD, anxiety, depression, trauma, OCD and dyslexia, read as small average differences with a lot of overlap, and what helps.',
+     'brain-wiring'),
     ('values', 'Values, meaning and a good life',
      'What matters to people, and how culture and outlook shape it.',
      'values meaning personality culture control'),
@@ -123,6 +126,7 @@ TAG_NAMES = {
     'time-use': 'time use', 'just-culture': 'just culture', 'pursue-withdraw': 'pursue and withdraw',
     'demand-withdraw': 'demand and withdraw', 'texting-and-tone': 'texts and tone',
     'second-shift': 'the second shift', 'weak-ties': 'casual ties', 'invisible-support': 'quiet support',
+    'brain-wiring': 'brains and wiring', 'brain-imaging': 'brain imaging', 'mri': 'MRI', 'ocd': 'OCD', 'ptsd': 'PTSD',
 }
 
 STRENGTH = OrderedDict([

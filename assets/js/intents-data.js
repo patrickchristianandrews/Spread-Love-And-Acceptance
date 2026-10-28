@@ -17,6 +17,8 @@
       picks: [
         { href: '/what-am-i-feeling.html', title: 'Paint Your Feelings', time: '5 min', cta: 'Paint a feeling',
           why: 'A few questions turn a muddy feeling into a bright painting of your answers, a map of what may be behind it, and one or two first steps. It all stays on your device.' },
+        { href: '/brain-map.html', title: 'Brain Map', time: '5 min', cta: 'See how brains differ',
+          why: 'Why does the same noisy store, hard text or 3 a.m. feel so different from one person to the next? Pick a way of being wired and see what research finds and what it can feel like.' },
         { href: '/quick-checks.html#today', title: 'My weather today', time: '1 min', cta: 'Check my weather',
           why: 'Four taps, or one minute on mood, sleep and energy, tell you whether now is a good time to talk.' },
         { href: '/workpapers/wp-02-how-much-are-you-carrying.html', title: 'How much are you carrying?', time: '2 min', cta: 'Take the stress check',
@@ -86,9 +88,11 @@
           why: 'No idea which tool to use first? This puts them in order.' }
       ] },
     { slug: 'learn', group: 'time', title: 'Learn something new',
-      line: 'Ten-minute lessons, a practice home, and a six-week plan.',
+      line: 'Ten-minute lessons, a map of the brain, a practice home and a six-week plan.',
       lead: 'Pick how much time you have. Each of these ends with something you can use the same day.',
       picks: [
+        { href: '/brain-map.html', title: 'Brain Map', time: '5 min', cta: 'Explore the brain',
+          why: 'Tap a brain, or pick autistic, ADHD, anxiety, depression, trauma, OCD or dyslexic wiring, and see where research finds average differences, what it can feel like, and what helps.' },
         { href: '/start-in-10-minutes.html', title: 'Start in 10 minutes', time: '10 min', cta: 'Start the ten minutes',
           why: 'The quickest way in: four small steps, and a summary you can keep.' },
         { href: '/#small-days', title: 'Seven small days', time: 'About a minute a day', cta: 'See today’s part',

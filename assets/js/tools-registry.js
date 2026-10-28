@@ -256,6 +256,11 @@
       gets: 'A feel for how it all works before you use your own week. Nothing to sign up for, and no streaks.',
       mins: 5, time: 'A few minutes each', who: ['solo'], benefit: 'Get a feel for it all first: practice on a made-up home, and watch ideas move',
       kw: 'example practice demo playground quest map progress learning visualizer waves rhythm sync animation polymath fields connections learn and explore the workpaper playground the quest map' },
+    { id: 'brainmap', name: 'Brain Map', brand: '', href: '/brain-map.html', type: 'learn', also: ['self'],
+      does: 'Tap a brain, or pick a way of being wired: autistic, ADHD, anxiety, depression, trauma, OCD or dyslexic. Move five sliders, or compare two.',
+      gets: 'Where research finds average differences, what it can feel like, what tends to help, and three things others can try.',
+      mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'See how brains differ on average: tap the brain, pick a way of being wired, find what helps',
+      kw: 'brain map brain autism autistic adhd anxiety depression ptsd trauma ocd dyslexia neurodivergent neurodiversity brain scan amygdala prefrontal cortex hippocampus how does the brain differ wiring mental health conditions compare average sliders explorable brain how wiring differs' },
 
     // ---------- Play
     // consol12: every game is a mode of the games place, not a card of its own:
@@ -286,7 +291,7 @@
     write: 7, decoder: 7, checkincard: 7, bonding: 7, split: 7, start10: 7,
     roots: 6, 'take-in': 6, plans: 6,
     rhythms: 5, team: 5, pauseplay: 5,
-    explore: 4
+    explore: 4, brainmap: 6
   };
   var MORE = {
     signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, one that stung, or a text argument you keep rereading', ex: 'ex-signal-zoe' },
@@ -333,6 +338,8 @@
       sample: 'Room agreement: quiet after 11 on weeknights. Guests: a heads-up by the afternoon. Borrowing: ask first, every time.' },
     team: { o: 'load talk plan', p: 'work', best: 'a team or small business where jobs land on whoever notices first',
       sample: 'Payroll: Ade, backup Ben, monthly. Check-in: Ben’s week 80% full. Slipped: the website update, new owner Ade.' },
+    brainmap: { o: 'learn self other', p: 'partner family friends', best: 'wondering why a noisy store, a hard text or 3 a.m. feels so different for you or for someone close',
+      sample: 'Pick ADHD wiring and Anxiety: the map shows where research finds average differences, what it can feel like, and three things others can try.' },
     explore: { o: 'learn fun', p: '', best: 'trying the worksheets before using your own week, and seeing how far you’ve come',
       sample: 'A practice run on a made-up home: the worksheet shows most of the planning sits with one person, and suggests one shared list.' }
   };
@@ -361,6 +368,7 @@
     ask: ['idea', '', ''],
     start10: ['idea', '', ''],
     explore: ['idea', '', ''],
+    brainmap: ['own', 'how brains differ on average between groups, with large overlap', 'vanrooij-2018-enigma-asd'],
     pauseplay: ['idea', '', '']
   };
   // ---------- Tools and workpapers are kept apart (owner: "Keep work papers and tools separate").
