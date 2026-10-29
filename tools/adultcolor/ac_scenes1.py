@@ -99,3 +99,271 @@ def s_nook(pg):
             x = 140 + i * 38
             pg.line(Path().M(x, 1022 if sg else 930).L(x, 1032 if sg else 920), W3)
     pot(pg, 120, 668 + 0, 0, 0) if False else None
+
+
+# ================================================================ the lighthouse
+def house(pg, x, base, w, h, roof_h, door=True, chimney=True, windows=1):
+    """a cottage seen from the front (x = left edge)"""
+    top = base - h
+    if chimney:
+        pg.shape(rrect(x + w * 0.68, top - roof_h * 0.9, w * 0.12, roof_h * 0.9 + 6, 2), W2)
+    pg.shape(rrect(x, top, w, h, 2), W2)
+    roof = rpoly([(x - 10, top + 3), (x + w / 2, top - roof_h), (x + w + 10, top + 3)], 4)
+    pg.shape(roof, W2)
+    for i in range(1, 4):
+        t = i / 4
+        pg.line(Path().M(x - 10 + (w / 2 + 10) * t, top + 3 - (roof_h + 3) * t).L(x + w + 10 - (w / 2 + 10) * t, top + 3 - (roof_h + 3) * t), W3)
+    if door:
+        dw = w * 0.22
+        pg.shape(Path().M(x + w * 0.2, base).L(x + w * 0.2, base - h * 0.5).C(x + w * 0.2, base - h * 0.64, x + w * 0.2 + dw, base - h * 0.64, x + w * 0.2 + dw, base - h * 0.5).L(x + w * 0.2 + dw, base).Z(), W2)
+        pg.circle(x + w * 0.2 + dw * 0.8, base - h * 0.28, 2.6, W3)
+    for k in range(windows):
+        wx = x + w * (0.58 if windows == 1 else 0.58 + k * 0.2) - 6
+        ws = min(w * 0.2, h * 0.34)
+        pg.shape(rrect(wx, top + h * 0.28, ws, ws, 2), W2)
+        pg.line(Path().M(wx + ws / 2, top + h * 0.28).L(wx + ws / 2, top + h * 0.28 + ws), W3)
+        pg.line(Path().M(wx, top + h * 0.28 + ws / 2).L(wx + ws, top + h * 0.28 + ws / 2), W3)
+
+
+def rock(pg, x, y, w, h, seed=0):
+    pts = [(x - w / 2, y), (x - w * 0.46, y - h * 0.55), (x - w * 0.15, y - h), (x + w * 0.3, y - h * 0.9), (x + w / 2, y - h * 0.3), (x + w * 0.4, y)]
+    pg.shape(blob(pts, closed=True, k=0.8), W2)
+    pg.line(curve([(x - w * 0.2, y - h * 0.25), (x - w * 0.05, y - h * 0.5), (x + w * 0.1, y - h * 0.45)]), W3)
+
+
+def s_lighthouse(pg):
+    """a lighthouse at dusk on a rocky point: beams, a cottage, a fence, the sea and a small sailboat"""
+    from ac_mandala import crescent
+    cx = 570
+    # sky
+    pg.shape(crescent(48, 40, 22).xf(mat(190, 190, 1, False, -20)), W2)
+    for (x, y, r) in ((300, 120, 12), (120, 320, 10), (700, 140, 14), (110, 110, 9), (350, 330, 9)):
+        sparkle(pg, x, y, r)
+    cloud(pg, 220, 420, 190, 70)
+    cloud(pg, 690, 470, 150, 60)
+    # sea
+    sea = Path().M(FX, 800).L(FX + FW, 800).L(FX + FW, FY + FH).L(FX, FY + FH).Z()
+    pg.shape(sea, W2)
+    pg.clip(sea)
+    y = 836
+    row = 0
+    while y < 1060:
+        x = FX - 30 + (22 if row % 2 else 0)
+        P = Path()
+        while x < FX + FW + 40:
+            P.M(x, y).C(x + 11, y - 13, x + 33, y - 13, x + 44, y)
+            x += 66
+        pg.line(P, W3)
+        y += 26
+        row += 1
+    pg.endclip()
+    # the sailboat
+    bx, by = 160, 868
+    pg.shape(Path().M(bx - 44, by).C(bx - 30, by + 22, bx + 30, by + 22, bx + 44, by).Z(), W2)
+    pg.line(Path().M(bx, by).L(bx, by - 92), W2)
+    pg.shape(Path().M(bx + 4, by - 90).C(bx + 40, by - 60, bx + 46, by - 28, bx + 40, by - 6).L(bx + 4, by - 6).Z(), W2)
+    pg.shape(Path().M(bx - 4, by - 80).L(bx - 4, by - 6).L(bx - 36, by - 6).C(bx - 30, by - 30, bx - 18, by - 56, bx - 4, by - 80).Z(), W2)
+    # the beams
+    for sg in (-1, 1):
+        far = 40 if sg < 0 else FX + FW
+        P = Path().M(cx + sg * 22, 266).L(far, 150 if sg < 0 else 160).L(far, 400 if sg < 0 else 380).L(cx + sg * 22, 286).Z()
+        pg.shape(P, W2)
+        pg.clip(P)
+        for k in range(1, 4):
+            pg.line(Path().M(cx + sg * 22, 276).L(far, (150 + (250 * k / 4)) if sg < 0 else (160 + 220 * k / 4)), W3)
+        pg.endclip()
+    # the cliff
+    cliff = Path().M(180, 960).C(190, 880, 230, 830, 300, 812).C(380, 790, 460, 786, 540, 784).C(640, 778, 740, 790, FX + FW, 822).L(FX + FW, 940).C(700, 980, 620, 940, 540, 972).C(460, 1000, 380, 960, 300, 985).C(240, 1000, 190, 990, 180, 960).Z()
+    pg.shape(cliff, W2)
+    pg.clip(cliff)
+    for (x, y, w, h) in ((240, 930, 90, 60), (330, 960, 100, 70), (440, 940, 110, 60), (560, 960, 120, 80), (680, 930, 100, 70), (760, 900, 90, 60), (400, 880, 80, 50), (610, 880, 100, 50)):
+        rock(pg, x, y, w, h)
+    pg.endclip()
+    pg.line(Path().M(300, 812).C(380, 790, 460, 786, 540, 784), W2)
+    grass(pg, 250, 760, 800, 14, 30, 16, 1.0, 5)
+    # the cottage and the fence
+    house(pg, 250, 806, 150, 80, 56)
+    for i in range(6):
+        x = 420 + i * 22
+        pg.shape(rrect(x - 4, 760, 8, 46, 3), W3)
+    pg.line(Path().M(414, 772).L(536, 772), W2)
+    pg.line(Path().M(414, 792).L(536, 792), W2)
+    # the tower
+    base, top = 790, 330
+    hw0, hw1 = 82, 48
+
+    def xl(y):
+        return cx - (hw1 + (hw0 - hw1) * (y - top) / (base - top))
+
+    def xr(y):
+        return cx + (hw1 + (hw0 - hw1) * (y - top) / (base - top))
+    tower = Path().M(xl(base), base).L(xl(top), top).L(xr(top), top).L(xr(base), base).Z()
+    pg.shape(tower, W2)
+    ys = [base, 680, 572, 462, top]
+    for k in range(1, 4):
+        yy = ys[k]
+        pg.line(Path().M(xl(yy), yy).L(xr(yy), yy), W2)
+    for k, yy in enumerate((628, 520, 410)):
+        pg.shape(Path().M(cx - 10, yy + 18).L(cx - 10, yy - 4).C(cx - 10, yy - 20, cx + 10, yy - 20, cx + 10, yy - 4).L(cx + 10, yy + 18).Z(), W2)
+    pg.shape(Path().M(cx - 18, base).L(cx - 18, base - 38).C(cx - 18, base - 62, cx + 18, base - 62, cx + 18, base - 38).L(cx + 18, base).Z(), W2)
+    for k, (ya, yb) in enumerate(((base, 680), (572, 462))):
+        for t in (0.25, 0.5, 0.75):
+            pass
+    # the gallery and lantern room
+    pg.shape(rrect(xl(top) - 22, top - 6, (xr(top) - xl(top)) + 44, 14, 3), W2)
+    for i in range(9):
+        x = xl(top) - 16 + i * ((xr(top) - xl(top)) + 32) / 8
+        pg.line(Path().M(x, top - 6).L(x, top - 40), W3)
+    pg.line(Path().M(xl(top) - 16, top - 40).L(xr(top) + 16, top - 40), W2)
+    room = rrect(cx - 40, top - 82, 80, 76, 3)
+    pg.shape(room, W2)
+    pg.shape(rrect(cx - 40, top - 82, 80, 76, 3), W2)
+    pg.line(Path().M(cx - 14, top - 82).L(cx - 14, top - 6), W2)
+    pg.line(Path().M(cx + 14, top - 82).L(cx + 14, top - 6), W2)
+    pg.circle(cx, top - 44, 12, W3)
+    pg.shape(Path().M(cx - 48, top - 82).C(cx - 48, top - 126, cx + 48, top - 126, cx + 48, top - 82).Z(), W2)
+    pg.shape(rrect(cx - 7, top - 142, 14, 22, 5), W2)
+    pg.circle(cx, top - 150, 8, W2)
+
+
+# ================================================================ the tea table
+def teapot(pg, x, y, s=1.0):
+    """a round teapot standing on y (x = centre of the body)"""
+    k = s
+    # spout, handle, then the body, lid and knob
+    pg.shape(Path().M(x + 62 * k, y - 38 * k).C(x + 92 * k, y - 50 * k, x + 96 * k, y - 84 * k, x + 118 * k, y - 94 * k).L(x + 128 * k, y - 84 * k).C(x + 116 * k, y - 76 * k, x + 112 * k, y - 46 * k, x + 70 * k, y - 20 * k).Z(), W2)
+    hp = Path().M(x - 58 * k, y - 78 * k).C(x - 108 * k, y - 92 * k, x - 112 * k, y - 22 * k, x - 62 * k, y - 28 * k)
+    pg.line(hp, 11 * k)
+    pg.line(hp, 8 * k, color='#fff')
+    pg.shape(Path().M(x - 66 * k, y - 48 * k).C(x - 66 * k, y - 112 * k, x + 66 * k, y - 112 * k, x + 66 * k, y - 48 * k).C(x + 66 * k, y - 6 * k, x + 40 * k, y, x + 28 * k, y).L(x - 28 * k, y).C(x - 40 * k, y, x - 66 * k, y - 6 * k, x - 66 * k, y - 48 * k).Z(), W2)
+    pg.shape(Path().M(x - 40 * k, y - 100 * k).C(x - 30 * k, y - 124 * k, x + 30 * k, y - 124 * k, x + 40 * k, y - 100 * k).Z(), W2)
+    pg.circle(x, y - 130 * k, 8 * k, W2)
+    # a painted band: a row of small flowers
+    pg.line(Path().M(x - 56 * k, y - 62 * k).C(x - 20 * k, y - 50 * k, x + 20 * k, y - 50 * k, x + 56 * k, y - 62 * k), W3)
+    for dx in (-30, 0, 30):
+        pg.circle(x + dx * k, y - 40 * k + (0 if dx else 3 * k), 6 * k, W3)
+
+
+def cup(pg, x, y, s=1.0):
+    """a cup on a saucer (x = centre, y = the bottom of the saucer)"""
+    k = s
+    pg.shape(ell(x, y - 6 * k, 56 * k, 11 * k), W2)
+    hp = Path().M(x + 36 * k, y - 46 * k).C(x + 62 * k, y - 50 * k, x + 62 * k, y - 22 * k, x + 34 * k, y - 22 * k)
+    pg.line(hp, 8.5 * k)
+    pg.line(hp, 5.5 * k, color='#fff')
+    pg.shape(Path().M(x - 40 * k, y - 56 * k).L(x + 40 * k, y - 56 * k).C(x + 38 * k, y - 20 * k, x + 20 * k, y - 10 * k, x, y - 10 * k).C(x - 20 * k, y - 10 * k, x - 38 * k, y - 20 * k, x - 40 * k, y - 56 * k).Z(), W2)
+    pg.shape(ell(x, y - 56 * k, 40 * k, 8 * k), W2)
+    pg.line(Path().M(x - 34 * k, y - 38 * k).C(x - 12 * k, y - 30 * k, x + 12 * k, y - 30 * k, x + 34 * k, y - 38 * k), W3)
+
+
+def cupcake(pg, x, y, w=54, h=64):
+    """a cupcake standing on y (x = centre): a pleated paper, swirled icing and a cherry"""
+    pg.shape(Path().M(x - w / 2, y - h * 0.5).L(x + w / 2, y - h * 0.5).L(x + w * 0.38, y).L(x - w * 0.38, y).Z(), W2)
+    for i in range(1, 5):
+        t = i / 5
+        pg.line(Path().M(x - w / 2 + w * t, y - h * 0.5).L(x - w * 0.38 + w * 0.76 * t, y), W3)
+    pg.shape(Path().M(x - w * 0.56, y - h * 0.48).C(x - w * 0.6, y - h * 0.7, x - w * 0.4, y - h * 0.72, x - w * 0.3, y - h * 0.82).C(x - w * 0.34, y - h * 1.0, x + w * 0.34, y - h * 1.0, x + w * 0.3, y - h * 0.82).C(x + w * 0.4, y - h * 0.72, x + w * 0.6, y - h * 0.7, x + w * 0.56, y - h * 0.48).Z(), W2)
+    pg.line(Path().M(x - w * 0.42, y - h * 0.62).C(x - w * 0.1, y - h * 0.56, x + w * 0.1, y - h * 0.56, x + w * 0.42, y - h * 0.62), W3)
+    pg.circle(x, y - h * 1.06, w * 0.12, W2)
+
+
+def tart(pg, x, y, w=64, h=34):
+    """a fruit tart: a fluted shell with berries"""
+    pg.shape(Path().M(x - w / 2, y - h * 0.7).L(x + w / 2, y - h * 0.7).L(x + w * 0.4, y).L(x - w * 0.4, y).Z(), W2)
+    pg.shape(ell(x, y - h * 0.7, w / 2, h * 0.28), W2)
+    for dx in (-0.22, 0, 0.22):
+        pg.circle(x + dx * w, y - h * 0.72 + (3 if dx else -3), w * 0.1, W3)
+
+
+def macaron(pg, x, y, w=50):
+    pg.shape(Path().M(x - w / 2, y - 10).C(x - w / 2, y - 24, x + w / 2, y - 24, x + w / 2, y - 10).Z(), W2)
+    pg.shape(rrect(x - w * 0.44, y - 10, w * 0.88, 8, 4), W3)
+    pg.shape(Path().M(x - w / 2, y + 0).C(x - w / 2, y + 14, x + w / 2, y + 14, x + w / 2, y + 0).Z(), W2)
+
+
+def s_tea(pg):
+    """a tea table with a lace cloth, a teapot, cups, and a three-tier stand of cakes, in front of a window"""
+    cx = CX
+    # the window behind
+    w = window_arch(250, 610, 120, 560)
+    pg.shape(w, W1)
+    g = window_arch(264, 596, 134, 548)
+    pg.shape(g, W2)
+    pg.clip(g)
+    cloud(pg, 360, 250, 150, 60)
+    cloud(pg, 500, 380, 130, 54)
+    round_tree(pg, 300, 548, 150, 100, W2, leaf=False)
+    round_tree(pg, 560, 548, 180, 120, W2, leaf=False)
+    pg.endclip()
+    pg.shape(rrect(424, 140, 12, 410, 4), W2)
+    pg.shape(rrect(262, 330, 336, 12, 4), W2)
+    from ac_scenes1 import curtain
+    curtain(pg, -1, 112, 250, 100, 600, 420)
+    curtain(pg, 1, 748, 610, 100, 600, 420)
+    pg.line(Path().M(100, 100).L(760, 100), W1)
+    for x in (96, 764):
+        pg.circle(x, 100, 9, W2)
+    # the table
+    cloth_top = 724
+    cloth = Path().M(100, cloth_top).C(120, cloth_top - 46, 740, cloth_top - 46, 760, cloth_top)
+    cloth.L(780, 990)
+    n = 9
+    for i in range(n):
+        xa = 780 - i * (700 / n)
+        cloth.C(xa - 12, 1020, xa - 700 / n + 12, 1020, xa - 700 / n, 990)
+    cloth.L(100, cloth_top).Z()
+    pg.shape(ell(cx, cloth_top - 8, 330, 56).xf((1, 0, 0, 1, 0, 0)), W2)
+    pg.shape(cloth, W2) if False else None
+    body = Path().M(100, cloth_top - 8).C(100, cloth_top + 40, 760 - 330 + 330, cloth_top + 40, 760, cloth_top - 8)
+    # a plain skirt under the top
+    skirt = Path().M(100, cloth_top - 8).C(130, cloth_top + 60, 730, cloth_top + 60, 760, cloth_top - 8).L(770, 1010)
+    for i in range(10):
+        xa = 770 - i * 68
+        skirt.C(xa - 8, 1036, xa - 60, 1036, xa - 68, 1010)
+    skirt.L(90, 1010).Z()
+    pg.shape(skirt, W2)
+    pg.clip(skirt)
+    for i in range(1, 10):
+        x = 90 + i * 68
+        pg.line(Path().M(x, cloth_top + 30).C(x + 8, cloth_top + 150, x - 8, 900, x + 2, 1030), W3)
+    for i in range(24):
+        x = 108 + i * 28
+        pg.circle(x, 960, 4.5, W3)
+    pg.line(Path().M(90, 940).L(770, 940), W3)
+    pg.line(Path().M(90, 980).L(770, 980), W3)
+    pg.endclip()
+    pg.shape(ell(cx, cloth_top - 8, 330, 54), W2)
+    pg.line(ell(cx, cloth_top - 8, 304, 46), W3)
+    for k in range(32):
+        a = k * TAU / 32
+        x, y = cx + 317 * math.cos(a), cloth_top - 8 + 50 * math.sin(a)
+        pg.circle(x, y, 3.4, W3)
+    # the cake stand
+    yb = cloth_top - 22
+    pg.shape(ell(cx, yb - 12, 100, 20), W2)
+    pg.shape(rrect(cx - 8, yb - 190, 16, 180, 4), W2)
+    for (yy, ww) in ((yb - 12, 120), (yb - 100, 100), (yb - 180, 74)):
+        pg.shape(ell(cx, yy, ww, 17), W2)
+        pg.shape(Path().M(cx - ww, yy).C(cx - ww + 4, yy + 18, cx + ww - 4, yy + 18, cx + ww, yy).C(cx + ww - 4, yy + 12, cx - ww + 4, yy + 12, cx - ww, yy).Z(), W3)
+    cupcake(pg, cx - 56, yb - 16, 46, 54)
+    cupcake(pg, cx + 54, yb - 16, 46, 54)
+    tart(pg, cx - 4, yb - 8, 56, 30)
+    macaron(pg, cx - 34, yb - 104, 38)
+    macaron(pg, cx + 34, yb - 104, 38)
+    tart(pg, cx, yb - 114, 46, 26)
+    cupcake(pg, cx, yb - 188, 40, 46)
+    # teapot, cups, sugar bowl, flowers
+    teapot(pg, 210, cloth_top - 10, 1.15)
+    cup(pg, 590, cloth_top - 6, 1.1)
+    cup(pg, 400, cloth_top + 20, 0.95)
+    pg.shape(Path().M(660, cloth_top - 14).L(740, cloth_top - 14).C(742, cloth_top + 6, 730, cloth_top + 10, 720, cloth_top + 10).L(680, cloth_top + 10).C(670, cloth_top + 10, 658, cloth_top + 6, 660, cloth_top - 14).Z(), W2)
+    pg.shape(ell(700, cloth_top - 14, 40, 7), W2)
+    pg.shape(Path().M(670, cloth_top - 18).C(670, cloth_top - 52, 730, cloth_top - 52, 730, cloth_top - 18).Z(), W2)
+    pg.circle(700, cloth_top - 56, 6, W2)
+    from ac_botan import daisy
+    pot_x = 520
+    pg.shape(Path().M(pot_x - 20, cloth_top + 6).L(pot_x + 20, cloth_top + 6).L(pot_x + 14, cloth_top - 44).L(pot_x - 14, cloth_top - 44).Z(), W2)
+    for (dx, dy, a) in ((-24, -110, 20), (0, -130, 0), (24, -106, -20)):
+        stem(pg, [(pot_x, cloth_top - 44), (pot_x + dx * 0.3, cloth_top - 70), (pot_x + dx * 0.8, cloth_top - 90), (pot_x + dx, cloth_top + dy + 20)], 5, 4)
+    for (dx, dy) in ((-24, -110), (0, -130), (24, -106)):
+        daisy(pg, pot_x + dx, cloth_top + dy, 24, 0.2, 10)
