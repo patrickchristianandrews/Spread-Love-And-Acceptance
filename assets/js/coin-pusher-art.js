@@ -15,7 +15,7 @@
   var TAU = Math.PI * 2;
 
   // ---------- the world (units: one coin is 0.92 across)
-  var W = { HX: 4.2, ZB: -5, ZE: 4.2, R: 0.46, T: 0.13, SHELF: 0.26, PF_MIN: -3.4, PF_MAX: -1.0, SLOT_Y: 2.9, SLOT_Z: -4.05, PITCH: 0.93, DIST: 26 };
+  var W = { HX: 4.2, ZB: -5, ZE: 4.2, R: 0.46, T: 0.13, SHELF: 0.26, PF_MIN: -3.4, PF_MAX: -1.0, SLOT_Y: 2.1, SLOT_Z: -4.05, PITCH: 1.12, DIST: 26, WALL: 3.5, MQ0: 3.4, MQ1: 5.1, PILLAR: 4.3, PW: 0.8 };
 
   // ---------- small colour helpers
   function rgb(h) { h = String(h).replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); var n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
@@ -442,11 +442,14 @@
   // ---------- figures: the collectible on its little brass base, cached
   var figCache = {}, silCache = {};
   function plinth(g, small) {
-    var rx = small ? 24 : 30, ry = small ? 6 : 7.5;
-    g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(50, 88.5, rx + 3, ry, 0, 0, TAU); g.fill();
-    var gr = g.createLinearGradient(50 - rx, 0, 50 + rx, 0); gr.addColorStop(0, '#9C7330'); gr.addColorStop(0.35, '#F3D891'); gr.addColorStop(0.6, '#D4A94E'); gr.addColorStop(1, '#7A5620');
-    g.fillStyle = gr; g.beginPath(); g.ellipse(50, 87, rx, ry, 0, 0, TAU); g.fill();
-    var tp = g.createRadialGradient(46, 83, 2, 50, 85, rx); tp.addColorStop(0, '#FFF0C0'); tp.addColorStop(1, '#D4A94E'); g.fillStyle = tp; g.beginPath(); g.ellipse(50, 85.2, rx - 1.6, ry - 1.4, 0, 0, TAU); g.fill();
+    var rx = small ? 25 : 30, ry = small ? 10.5 : 12.5, ty = 79;   // the top of the base: a flat disc seen from above and in front
+    g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(50, ty + 7, rx + 4, ry + 2.5, 0, 0, TAU); g.fill();
+    var sg = g.createLinearGradient(50 - rx, 0, 50 + rx, 0); sg.addColorStop(0, '#8A6424'); sg.addColorStop(0.3, '#E3BE6A'); sg.addColorStop(0.6, '#C99A3E'); sg.addColorStop(1, '#6E4E1C');
+    g.fillStyle = sg; g.beginPath(); g.ellipse(50, ty + 5, rx, ry, 0, 0, TAU); g.fill(); g.fillRect(50 - rx, ty, rx * 2, 5);
+    g.beginPath(); g.ellipse(50, ty + 5, rx, ry, 0, 0, TAU); g.fill();
+    var tp = g.createRadialGradient(44, ty - 3, 2, 50, ty, rx); tp.addColorStop(0, '#FFF3C8'); tp.addColorStop(0.7, '#E6C46E'); tp.addColorStop(1, '#C99A3E');
+    g.fillStyle = tp; g.beginPath(); g.ellipse(50, ty, rx, ry, 0, 0, TAU); g.fill();
+    g.strokeStyle = 'rgba(120,80,20,.45)'; g.lineWidth = 1; g.beginPath(); g.ellipse(50, ty, rx - 3, ry - 2.2, 0, 0, TAU); g.stroke();
   }
   function figure(id, px) {
     var key = id + '@' + px; if (figCache[key]) return figCache[key];
@@ -488,7 +491,7 @@
     g.strokeStyle = rgba(S.mark, 0.42); g.lineWidth = Math.max(1, rpx * 0.07); g.beginPath(); g.ellipse(cx, cy, rpx * 0.74, ry * 0.74, 0, 0, TAU); g.stroke();
     g.strokeStyle = 'rgba(255,255,255,.4)'; g.beginPath(); g.ellipse(cx, cy + 0.7, rpx * 0.74, ry * 0.74, 0, Math.PI * 0.1, Math.PI * 0.8); g.stroke();
     if (rpx >= 7) {
-      g.save(); g.translate(cx, cy); g.scale(1, ky); g.rotate(k * Math.PI / 2 + (k ? 0.2 : 0)); var s = rpx * 0.34;
+      g.save(); g.translate(cx, cy); g.scale(1, ky); g.rotate([0, 0.38, -0.38, Math.PI + 0.2][k & 3]); var s = rpx * 0.34;
       g.fillStyle = rgba(S.mark, 0.62);
       if (S.emb === 'star') { starPath(g, 0, 0, s * 1.25, s * 0.55, 5); g.fill(); }
       else if (S.emb === 'cloud') { g.beginPath(); g.arc(-s * 0.55, s * 0.2, s * 0.5, 0, TAU); g.arc(0, -s * 0.15, s * 0.7, 0, TAU); g.arc(s * 0.55, s * 0.2, s * 0.5, 0, TAU); g.rect(-s * 0.55, s * 0.1, s * 1.1, s * 0.6); g.fill(); }
@@ -511,7 +514,7 @@
   function camera(w, h) {
     var P = W.PITCH, sp = Math.sin(P), cp = Math.cos(P), Dd = W.DIST, T = [0, 0.8, -0.4], C = [0, T[1] + Dd * sp, T[2] + Dd * cp];
     function raw(x, y, z) { var vy = y - C[1], vz = z - C[2]; var zc = -vy * sp - vz * cp, yc = vy * cp - vz * sp; return [x / zc, yc / zc, 1 / zc]; }
-    var fitPts = [[-5.4, 7.7, W.ZB - 0.6], [5.4, 7.7, W.ZB - 0.6], [-5.4, -2.7, W.ZE + 2.7], [5.4, -2.7, W.ZE + 2.7]];
+    var fitPts = [[-(W.HX + W.PW), W.MQ1 + 0.2, W.ZB - 0.6], [W.HX + W.PW, W.MQ1 + 0.2, W.ZB - 0.6], [-(W.HX + W.PW), -2.7, W.ZE + 2.7], [W.HX + W.PW, -2.7, W.ZE + 2.7]];
     var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
     fitPts.forEach(function (p) { var r = raw(p[0], p[1], p[2]); x0 = Math.min(x0, r[0]); x1 = Math.max(x1, r[0]); y0 = Math.min(y0, r[1]); y1 = Math.max(y1, r[1]); });
     var m = Math.max(6, Math.min(w, h) * 0.015);
@@ -540,8 +543,13 @@
     for (var i = 0; i < Math.max(6, h / 7); i++) { var yy = y + rnd() * h; g.strokeStyle = rnd() < 0.5 ? 'rgba(30,12,4,' + (a * 0.6) + ')' : 'rgba(255,220,170,' + (a * 0.5) + ')'; g.lineWidth = 0.6 + rnd() * 1.6; g.beginPath(); g.moveTo(x, yy); g.bezierCurveTo(x + w * 0.3, yy + (rnd() - 0.5) * 5, x + w * 0.7, yy + (rnd() - 0.5) * 5, x + w, yy + (rnd() - 0.5) * 3); g.stroke(); }
     g.restore();
   }
+  // the look for the day or the night: the wood and felt go a little deeper after dark
+  function pal(theme, dark) {
+    var T0 = THEMES[theme] || THEMES.walnut; if (!dark) return T0;
+    var o = {}; for (var k in T0) o[k] = T0[k]; o.wood = [dk(T0.wood[0], 0.3), dk(T0.wood[1], 0.32)]; o.felt = [dk(T0.felt[0], 0.2), dk(T0.felt[1], 0.24)]; o.sign = [dk(T0.sign[0], 0.1), dk(T0.sign[1], 0.1)]; return o;
+  }
   function paintBack(g, cam, theme, dark) {
-    var TH = THEMES[theme] || THEMES.walnut, w = cam.w, h = cam.h, rnd = seeded(7), HX = W.HX, ZB = W.ZB, ZE = W.ZE, P = cam.project;
+    var TH = pal(theme, dark), w = cam.w, h = cam.h, rnd = seeded(7), HX = W.HX, ZB = W.ZB, ZE = W.ZE, P = cam.project;
     // the room
     var bgG = g.createLinearGradient(0, 0, 0, h);
     if (dark) { bgG.addColorStop(0, '#2A2040'); bgG.addColorStop(0.55, '#1C162B'); bgG.addColorStop(1, '#120E1C'); } else { bgG.addColorStop(0, '#FBEBD0'); bgG.addColorStop(0.6, '#F3DDB6'); bgG.addColorStop(1, '#E6C795'); }
@@ -549,22 +557,24 @@
     for (var i = 0; i < 16; i++) { var bx = rnd() * w, by = rnd() * h, br = (0.05 + rnd() * 0.09) * Math.min(w, h) * 1.2, ba = dark ? 0.1 + rnd() * 0.12 : 0.18 + rnd() * 0.18; var cols = dark ? ['#FFC46B', '#F29AB8', '#8FA8FF', '#FFE7A0'] : ['#FFFFFF', '#FFE3B0', '#FFC9A8', '#FFF4D8']; var bg2 = g.createRadialGradient(bx, by, br * 0.2, bx, by, br); bg2.addColorStop(0, rgba(cols[i % 4], ba)); bg2.addColorStop(0.8, rgba(cols[i % 4], ba * 0.8)); bg2.addColorStop(1, rgba(cols[i % 4], 0)); g.fillStyle = bg2; g.beginPath(); g.arc(bx, by, br, 0, TAU); g.fill(); }
     var wallA = dark ? TH.nightWall : TH.wall;
     // the cabinet's rear box and the back wall
-    var wall = quad(g, cam, [-HX, 0, ZB], [HX, 0, ZB], [HX, 5.5, ZB], [-HX, 5.5, ZB], lin(g, P(0, 5.5, ZB), P(0, 0, ZB), [[0, wallA[0]], [1, wallA[1]]]));
+    var wall = quad(g, cam, [-HX, 0, ZB], [HX, 0, ZB], [HX, W.WALL, ZB], [-HX, W.WALL, ZB], lin(g, P(0, W.WALL, ZB), P(0, 0, ZB), [[0, wallA[0]], [1, wallA[1]]]));
     // faint hearts and dots on the wall
     g.save(); g.beginPath(); g.moveTo(wall[0][0], wall[0][1]); g.lineTo(wall[1][0], wall[1][1]); g.lineTo(wall[2][0], wall[2][1]); g.lineTo(wall[3][0], wall[3][1]); g.closePath(); g.clip();
-    for (var r = 0; r < 6; r++) for (var c = 0; c < 9; c++) { var wx = -HX + 0.5 + c * 1.0 + (r % 2) * 0.5, wy = 0.7 + r * 0.8, pp = P(wx, wy, ZB); g.fillStyle = dark ? 'rgba(255,230,180,.06)' : 'rgba(150,90,40,.07)'; if ((r + c) % 3 === 0) heartPath(g, pp[0], pp[1], pp[2] * 0.14); else { g.beginPath(); g.arc(pp[0], pp[1], pp[2] * 0.06, 0, TAU); } g.fill(); }
+    for (var r = 0; r < 5; r++) for (var c = 0; c < 9; c++) { var wx = -HX + 0.5 + c * 1.0 + (r % 2) * 0.5, wy = 0.6 + r * 0.8, pp = P(wx, wy, ZB); g.fillStyle = dark ? 'rgba(255,230,180,.06)' : 'rgba(150,90,40,.07)'; if ((r + c) % 3 === 0) heartPath(g, pp[0], pp[1], pp[2] * 0.14); else { g.beginPath(); g.arc(pp[0], pp[1], pp[2] * 0.06, 0, TAU); } g.fill(); }
+    var hp = P(0, 1.55, ZB); g.save(); g.translate(hp[0], hp[1]); g.scale(1, 0.62); g.fillStyle = dark ? 'rgba(255,200,150,.11)' : 'rgba(226,85,106,.16)'; heartPath(g, 0, 0, hp[2] * 1.15); g.fill(); g.strokeStyle = dark ? 'rgba(233,196,111,.4)' : 'rgba(185,132,40,.5)'; g.lineWidth = Math.max(2, hp[2] * 0.07); g.stroke(); g.restore();
+    [[-2.6, 2.6], [2.6, 2.6], [-3.1, 1.0], [3.1, 1.0]].forEach(function (q, i) { var sp = P(q[0], q[1], ZB); g.fillStyle = dark ? 'rgba(255,240,190,.5)' : 'rgba(185,132,40,.3)'; starPath(g, sp[0], sp[1], sp[2] * (i < 2 ? 0.2 : 0.14), sp[2] * 0.08, 5); g.fill(); });
     var shade = g.createLinearGradient(0, wall[3][1], 0, wall[0][1] + (wall[0][1] - wall[3][1]) * 0.1); shade.addColorStop(0, 'rgba(30,10,0,.22)'); shade.addColorStop(0.35, 'rgba(30,10,0,0)'); g.fillStyle = shade; g.fillRect(0, wall[3][1], w, wall[0][1] - wall[3][1] + 20);
     g.restore();
     // the pillars (outer wood), back to front: inner face, then top, then front
     [-1, 1].forEach(function (sd) {
-      var xi = sd * HX, xo = sd * (HX + 1.05), zb = ZB - 0.5, zf = ZE + 0.35, top = 6.3;
+      var xi = sd * HX, xo = sd * (HX + W.PW), zb = ZB - 0.5, zf = ZE + 0.35, top = W.PILLAR;
       var inner = quad(g, cam, [xi, 0, zb], [xi, 0, zf], [xi, top, zf], [xi, top, zb], lin(g, P(xi, 3, zb), P(xi, 3, zf), [[0, dk(TH.wood[1], 0.35)], [1, TH.wood[1]]]));
       quad(g, cam, [xi, top, zb], [xi, top, zf], [xo, top, zf], [xo, top, zb], lin(g, P(xi, top, zb), P(xo, top, zf), [[0, lt(TH.wood[0], 0.25)], [1, TH.wood[0]]]));
       var fr = quad(g, cam, [xi, 0, zf], [xo, 0, zf], [xo, top, zf], [xi, top, zf], lin(g, P(xi, 0, zf), P(xi, top, zf), [[0, TH.wood[1]], [1, TH.wood[0]]]));
       woodGrain(g, rnd, Math.min(fr[0][0], fr[1][0]), fr[2][1], Math.abs(fr[1][0] - fr[0][0]), fr[0][1] - fr[2][1], TH.wood[0], 0.35);
       // brass trim up the inside edge, and a row of studs
       var t0 = P(xi, 0.05, zf), t1 = P(xi, top, zf); g.strokeStyle = TH.trim; g.lineWidth = Math.max(2, t0[2] * 0.09); g.beginPath(); g.moveTo(t0[0], t0[1]); g.lineTo(t1[0], t1[1]); g.stroke(); g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 1; g.beginPath(); g.moveTo(t0[0] - sd, t0[1]); g.lineTo(t1[0] - sd, t1[1]); g.stroke();
-      for (var k = 0; k < 7; k++) { var sp = P(sd * (HX + 0.52), 0.6 + k * 0.85, zf); var sg = g.createRadialGradient(sp[0] - 1, sp[1] - 1, 0.5, sp[0], sp[1], sp[2] * 0.12); sg.addColorStop(0, lt(TH.trim, 0.6)); sg.addColorStop(1, dk(TH.trim, 0.3)); g.fillStyle = sg; g.beginPath(); g.arc(sp[0], sp[1], Math.max(1.5, sp[2] * 0.1), 0, TAU); g.fill(); }
+      for (var k = 0; k < 6; k++) { var sp = P(sd * (HX + W.PW * 0.5), 0.6 + k * 0.85, zf); var sg = g.createRadialGradient(sp[0] - 1, sp[1] - 1, 0.5, sp[0], sp[1], sp[2] * 0.12); sg.addColorStop(0, lt(TH.trim, 0.6)); sg.addColorStop(1, dk(TH.trim, 0.3)); g.fillStyle = sg; g.beginPath(); g.arc(sp[0], sp[1], Math.max(1.5, sp[2] * 0.1), 0, TAU); g.fill(); }
       // a soft shadow where the wall meets the deck
       var s0 = P(xi, 0, ZB), s1 = P(xi, 0, ZE), sg2 = g.createLinearGradient(sd < 0 ? s0[0] : s0[0] - 24, 0, sd < 0 ? s0[0] + 24 : s0[0], 0); sg2.addColorStop(sd < 0 ? 0 : 1, 'rgba(0,0,0,.3)'); sg2.addColorStop(sd < 0 ? 1 : 0, 'rgba(0,0,0,0)'); g.fillStyle = sg2; g.beginPath(); g.moveTo(s0[0], s0[1]); g.lineTo(s1[0], s1[1]); g.lineTo(s1[0] + sd * -26, s1[1]); g.lineTo(s0[0] + sd * -14, s0[1]); g.closePath(); g.fill();
     });
@@ -583,19 +593,20 @@
     // inner shadow along the back wall
     var bs = g.createLinearGradient(0, P(0, 0, ZB)[1], 0, P(0, 0, ZB + 2.5)[1]); bs.addColorStop(0, 'rgba(0,0,0,.35)'); bs.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = bs; g.fillRect(0, P(0, 0, ZB)[1], w, P(0, 0, ZB + 2.5)[1] - P(0, 0, ZB)[1]);
     g.restore();
+    var lc = P(0, W.MQ0, ZB + 0.2), lg = g.createRadialGradient(lc[0], lc[1], 0, lc[0], lc[1] + lc[2] * 1.2, lc[2] * 4.6); lg.addColorStop(0, rgba(TH.glow, dark ? 0.42 : 0.34)); lg.addColorStop(1, rgba(TH.glow, 0)); g.fillStyle = lg; g.fillRect(0, lc[1], w, lc[2] * 5);
     // the marquee box across the top, with its brass frame (the sign and the bulbs are drawn live)
-    var mq = quad(g, cam, [-HX - 1.05, 5.25, ZB + 0.9], [HX + 1.05, 5.25, ZB + 0.9], [HX + 1.05, 7.4, ZB + 0.9], [-HX - 1.05, 7.4, ZB + 0.9], lin(g, P(0, 7.4, ZB), P(0, 5.25, ZB), [[0, lt(TH.wood[0], 0.2)], [1, TH.wood[1]]]));
-    quad(g, cam, [-HX - 1.05, 7.4, ZB + 0.9], [HX + 1.05, 7.4, ZB + 0.9], [HX + 1.05, 7.4, ZB - 0.5], [-HX - 1.05, 7.4, ZB - 0.5], lin(g, P(0, 7.4, ZB + 0.9), P(0, 7.4, ZB - 0.5), [[0, lt(TH.wood[0], 0.3)], [1, TH.wood[0]]]));
-    quad(g, cam, [-HX - 1.05, 5.25, ZB + 0.9], [HX + 1.05, 5.25, ZB + 0.9], [HX + 1.05, 5.25, ZB + 0.3], [-HX - 1.05, 5.25, ZB + 0.3], 'rgba(0,0,0,.4)');
+    var mq = quad(g, cam, [-HX - W.PW, W.MQ0, ZB + 0.9], [HX + W.PW, W.MQ0, ZB + 0.9], [HX + W.PW, W.MQ1, ZB + 0.9], [-HX - W.PW, W.MQ1, ZB + 0.9], lin(g, P(0, W.MQ1, ZB), P(0, W.MQ0, ZB), [[0, lt(TH.wood[0], 0.2)], [1, TH.wood[1]]]));
+    quad(g, cam, [-HX - W.PW, W.MQ1, ZB + 0.9], [HX + W.PW, W.MQ1, ZB + 0.9], [HX + W.PW, W.MQ1, ZB - 0.5], [-HX - W.PW, W.MQ1, ZB - 0.5], lin(g, P(0, W.MQ1, ZB + 0.9), P(0, W.MQ1, ZB - 0.5), [[0, lt(TH.wood[0], 0.3)], [1, TH.wood[0]]]));
+    quad(g, cam, [-HX - W.PW, W.MQ0, ZB + 0.9], [HX + W.PW, W.MQ0, ZB + 0.9], [HX + W.PW, W.MQ0, ZB + 0.3], [-HX - W.PW, W.MQ0, ZB + 0.3], 'rgba(0,0,0,.4)');
     woodGrain(g, rnd, mq[0][0], mq[2][1], mq[1][0] - mq[0][0], mq[0][1] - mq[2][1], TH.wood[0], 0.3);
     // the drop rail: a brass bar with a slot, where the coin goes in
     var r0 = P(-HX, W.SLOT_Y + 0.3, W.SLOT_Z - 0.35), r1 = P(HX, W.SLOT_Y + 0.3, W.SLOT_Z - 0.35); g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = Math.max(5, r0[2] * 0.3); g.lineCap = 'round'; g.beginPath(); g.moveTo(r0[0] + 3, r0[1] + 3); g.lineTo(r1[0] - 3, r1[1] + 3); g.stroke();
     g.strokeStyle = lin(g, [r0[0], r0[1] - 4], [r0[0], r0[1] + 6], [[0, lt(TH.trim, 0.55)], [0.5, TH.trim], [1, dk(TH.trim, 0.35)]]); g.lineWidth = Math.max(4, r0[2] * 0.22); g.beginPath(); g.moveTo(r0[0] + 3, r0[1]); g.lineTo(r1[0] - 3, r1[1]); g.stroke();
     g.fillStyle = '#2A1810'; g.beginPath(); g.ellipse((r0[0] + r1[0]) / 2, r0[1], (r1[0] - r0[0]) * 0.46, Math.max(1.4, r0[2] * 0.05), 0, 0, TAU); g.fill();
-    return { sign: { tl: P(-HX - 0.55, 7.0, ZB + 0.92), tr: P(HX + 0.55, 7.0, ZB + 0.92), bl: P(-HX - 0.55, 5.55, ZB + 0.92), br: P(HX + 0.55, 5.55, ZB + 0.92) } };
+    return { sign: { tl: P(-HX - W.PW * 0.5, W.MQ1 - 0.28, ZB + 0.92), tr: P(HX + W.PW * 0.5, W.MQ1 - 0.28, ZB + 0.92), bl: P(-HX - W.PW * 0.5, W.MQ0 + 0.28, ZB + 0.92), br: P(HX + W.PW * 0.5, W.MQ0 + 0.28, ZB + 0.92) } };
   }
   function paintFront(g, cam, theme, dark) {
-    var TH = THEMES[theme] || THEMES.walnut, w = cam.w, h = cam.h, HX = W.HX, ZB = W.ZB, ZE = W.ZE, P = cam.project, rnd = seeded(21);
+    var TH = pal(theme, dark), w = cam.w, h = cam.h, HX = W.HX, ZB = W.ZB, ZE = W.ZE, P = cam.project, rnd = seeded(21);
     // the lip and the drop-off into the tray
     var lip = quad(g, cam, [-HX, 0.0, ZE], [HX, 0.0, ZE], [HX, -0.2, ZE + 0.35], [-HX, -0.2, ZE + 0.35], lin(g, P(0, 0, ZE), P(0, -0.2, ZE + 0.35), [[0, lt(TH.trim, 0.6)], [1, dk(TH.trim, 0.2)]]));
     quad(g, cam, [-HX, -0.2, ZE + 0.35], [HX, -0.2, ZE + 0.35], [HX, -1.55, ZE + 0.35], [-HX, -1.55, ZE + 0.35], lin(g, P(0, -0.2, ZE), P(0, -1.55, ZE), [[0, 'rgba(0,0,0,.55)'], [1, 'rgba(0,0,0,.85)']]));
@@ -606,14 +617,14 @@
   }
   // the front cabinet, glass and bezel: drawn over the coins (the tray pile is drawn between paintFront and this)
   function paintGlass(g, cam, theme, dark) {
-    var TH = THEMES[theme] || THEMES.walnut, w = cam.w, h = cam.h, HX = W.HX, ZB = W.ZB, ZE = W.ZE, P = cam.project, rnd = seeded(33);
-    var front = quad(g, cam, [-HX - 1.05, -1.55, ZE + 2.7], [HX + 1.05, -1.55, ZE + 2.7], [HX + 1.05, -2.7, ZE + 2.7], [-HX - 1.05, -2.7, ZE + 2.7], lin(g, P(0, -1.55, ZE), P(0, -2.7, ZE), [[0, TH.wood[0]], [1, TH.wood[1]]]));
-    var rim = quad(g, cam, [-HX - 1.05, -1.1, ZE + 2.7], [HX + 1.05, -1.1, ZE + 2.7], [HX + 1.05, -1.55, ZE + 2.7], [-HX - 1.05, -1.55, ZE + 2.7], lin(g, P(0, -1.1, ZE), P(0, -1.55, ZE), [[0, lt(TH.trim, 0.55)], [0.5, TH.trim], [1, dk(TH.trim, 0.3)]]));
+    var TH = pal(theme, dark), w = cam.w, h = cam.h, HX = W.HX, ZB = W.ZB, ZE = W.ZE, P = cam.project, rnd = seeded(33);
+    var front = quad(g, cam, [-HX - W.PW, -1.55, ZE + 2.7], [HX + W.PW, -1.55, ZE + 2.7], [HX + W.PW, -2.7, ZE + 2.7], [-HX - W.PW, -2.7, ZE + 2.7], lin(g, P(0, -1.55, ZE), P(0, -2.7, ZE), [[0, TH.wood[0]], [1, TH.wood[1]]]));
+    var rim = quad(g, cam, [-HX - W.PW, -1.1, ZE + 2.7], [HX + W.PW, -1.1, ZE + 2.7], [HX + W.PW, -1.55, ZE + 2.7], [-HX - W.PW, -1.55, ZE + 2.7], lin(g, P(0, -1.1, ZE), P(0, -1.55, ZE), [[0, lt(TH.trim, 0.55)], [0.5, TH.trim], [1, dk(TH.trim, 0.3)]]));
     woodGrain(g, rnd, front[0][0], front[0][1], front[1][0] - front[0][0], front[3][1] - front[0][1], TH.wood[0], 0.3);
     var pl = P(0, -2.1, ZE + 2.7); g.fillStyle = lin(g, [pl[0], pl[1] - 12], [pl[0], pl[1] + 12], [[0, lt(TH.trim, 0.5)], [1, dk(TH.trim, 0.2)]]); var pw = pl[2] * 2.8, ph = pl[2] * 0.62; rrect(g, pl[0] - pw / 2, pl[1] - ph / 2, pw, ph, ph * 0.3); g.fill(); g.strokeStyle = 'rgba(0,0,0,.3)'; g.lineWidth = 1; g.stroke();
     g.fillStyle = 'rgba(60,30,10,.75)'; g.font = '600 ' + Math.max(8, ph * 0.42) + 'px Fraunces, Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('Kindness Coin Pusher', pl[0], pl[1] + 1);
     // the glass over the window: a soft sheen and two streaks
-    var a = P(-HX, 5.4, ZB), b = P(HX, 5.4, ZB), c = P(HX, -0.1, ZE), d = P(-HX, -0.1, ZE);
+    var a = P(-HX, W.WALL, ZB), b = P(HX, W.WALL, ZB), c = P(HX, -0.1, ZE), d = P(-HX, -0.1, ZE);
     g.save(); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.lineTo(c[0], c[1]); g.lineTo(d[0], d[1]); g.closePath(); g.clip();
     var sh = g.createLinearGradient(0, a[1], 0, d[1]); sh.addColorStop(0, 'rgba(255,255,255,.16)'); sh.addColorStop(0.3, 'rgba(255,255,255,.03)'); sh.addColorStop(0.75, 'rgba(255,255,255,0)'); sh.addColorStop(1, 'rgba(255,255,255,.07)'); g.fillStyle = sh; g.fillRect(a[0], a[1], b[0] - a[0], d[1] - a[1]);
     var span = b[0] - a[0], hh = d[1] - a[1];
@@ -622,5 +633,5 @@
     g.restore();
   }
 
-  window.TOLCoinArt = { W: W, SETS: SETS, ITEMS: ITEMS, byId: byId, THEMES: THEMES, SKINS: SKINS, KINDS: KINDS, MARQUEE: MARQUEE, figure: figure, silhouette: silhouette, coin: coin, shadow: shadow, camera: camera, paintBack: paintBack, paintFront: paintFront, paintGlass: paintGlass, mix: mix, lt: lt, dk: dk, rgba: rgba, mk: mk, heartPath: heartPath, starPath: starPath };
+  window.TOLCoinArt = { W: W, SETS: SETS, ITEMS: ITEMS, byId: byId, THEMES: THEMES, SKINS: SKINS, KINDS: KINDS, MARQUEE: MARQUEE, figure: figure, silhouette: silhouette, coin: coin, shadow: shadow, camera: camera, pal: pal, paintBack: paintBack, paintFront: paintFront, paintGlass: paintGlass, mix: mix, lt: lt, dk: dk, rgba: rgba, mk: mk, heartPath: heartPath, starPath: starPath };
 })();

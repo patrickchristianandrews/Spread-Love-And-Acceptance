@@ -159,7 +159,7 @@
         { href: '/frequency-journey.html#derby', title: 'Home Run Derby', time: '2 min', cta: 'Swing with Tidbit',
           why: 'One thing to do with your thumbs. Every level is new, and there is no game over.' },
         { href: '/coin-pusher.html', title: 'Kindness Coin Pusher', time: '3 min', cta: 'Drop a coin',
-          why: 'Watch coins fall. Helpful tips show up as the coins drop.' },
+          why: 'Watch coins fall, find little prizes, and let a short, useful tip slip out of the jar.' },
         { href: '/word-bloom.html', title: 'Word Bloom', time: '2 min a level', cta: 'Swipe the petals',
           why: 'Your brain wants words instead of people. Swipe across a wheel of letters to find the hidden ones.' },
         { href: '/quiet-crossword.html', title: 'Quiet Crossword', time: '5 min', cta: 'Start a crossword',

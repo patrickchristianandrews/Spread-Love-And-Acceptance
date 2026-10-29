@@ -81,7 +81,7 @@ body { font-size: 11pt; line-height: 1.55; }
 /* books-final9 (audit C3): no multi-column container at all (columns: 1 still made one, and Chromium overprinted a
    reference that broke across a page); plain block flow keeps each reference whole */
 .ps-refs { columns: auto; column-count: auto; column-width: auto; font-size: 7.8pt; line-height: 1.36; }
-.ps-refs li { margin: 0 0 1.1mm; padding-left: 3mm; text-indent: -3mm; break-inside: avoid; page-break-inside: avoid; }
+.ps-refs li { margin: 0 0 .9mm; padding-left: 3mm; text-indent: -3mm; break-inside: avoid; page-break-inside: avoid; }
 .ps-notes .pe-notes-h { font-size: 10.2pt; margin: 3.6mm 0 1.4mm; }
 .ps-series-list { list-style: none; padding: 0; margin: 0 0 4mm; }
 .ps-series-list li { display: flex; gap: 3mm; align-items: baseline; padding: 2.4mm 0 2.4mm 3mm; border-left: 2.4pt solid var(--bc); border-bottom: .4pt solid #E2D6B6; }

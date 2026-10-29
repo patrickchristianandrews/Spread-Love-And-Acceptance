@@ -211,7 +211,7 @@
         wi: 'Send them that one thing in a text, with no ask attached.' },
       { t: 'Play for two minutes',
         tr: 'Play something for two minutes with no goal. Notice whether your shoulders loosen.',
-        k: 'Game', et: 'Kindness Coin Pusher', en: 'Helpful tips show up as the coins drop.', eu: '/coin-pusher.html',
+        k: 'Game', et: 'Kindness Coin Pusher', en: 'A tip jar of short, useful tips opens as the coins drop.', eu: '/coin-pusher.html',
         no: 'Notice what playing does to your mood, and how fast it happens.',
         wi: 'Play one round of anything together, and let the other person choose.' },
       { t: 'Money talk',

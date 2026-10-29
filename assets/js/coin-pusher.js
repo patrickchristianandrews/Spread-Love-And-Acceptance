@@ -227,7 +227,7 @@
       }
       if (a.st === 1) {
         if (a.y <= surf + 0.002 && a.vy <= 0) {
-          var iv = -a.vy; a.y = surf;
+          var iv = -a.vy; a.y = surf; if (surf > bs + 0.01 && !a.k) { a.vx += rnd(-0.7, 0.7); a.vz += rnd(-0.5, 0.5); }
           if (iv > 2.6 && a.bn < 2 && a.e > 0.06) { a.vy = iv * a.e; a.bn++; a.sp += 0.6; a.wr += rnd(-4, 4); if (iv > 3.4) { if (a.k) { impacts++; impactV = Math.max(impactV, 0.9); landV = Math.max(landV, 1); } else landV = Math.max(landV, Math.min(1, iv / 9)); } }
           else { a.st = 0; a.vy = 0; a.vx *= 0.5; a.vz *= 0.5; a.bn = 0; if (iv > 1.2) landV = Math.max(landV, a.k ? 1 : Math.min(1, iv / 8)); if (a.k) a.wob = 1; }
         }
@@ -237,7 +237,7 @@
           if (a.y < surf) a.y = Math.min(surf, a.y + 0.06);
           if (sup) {
             var off = supD / sup.r; var cp = Math.min(1, 9 * DT); a.vx += (sup.vx - a.vx) * cp; a.vz += (sup.vz - a.vz) * cp;
-            if (off > 0.5) { var ux = (a.x - sup.x) / (supD || 1), uz = (a.z - sup.z) / (supD || 1), sl = 7 * (off - 0.5); a.vx += ux * sl * DT * 60 * 0.12; a.vz += uz * sl * DT * 60 * 0.12; a.tilt = Math.min(0.5, (off - 0.5) * 1.1); } else a.tilt *= 0.9;
+            if (a.y > bs + 2.6 * T && !a.k) { var tx = (a.x - sup.x) || rnd(-1, 1), tz = (a.z - sup.z) || rnd(-1, 1), tl = Math.sqrt(tx * tx + tz * tz) || 1; a.vx += tx / tl * 1.6 * 0.12 * 60 * DT * 6; a.vz += tz / tl * 1.6 * 0.12 * 60 * DT * 6; a.tilt = 0.35; } else if (off > 0.5) { var ux = (a.x - sup.x) / (supD || 1), uz = (a.z - sup.z) / (supD || 1), sl = 7 * (off - 0.5); a.vx += ux * sl * DT * 60 * 0.12; a.vz += uz * sl * DT * 60 * 0.12; a.tilt = Math.min(0.5, (off - 0.5) * 1.1); } else a.tilt *= 0.9;
           } else {
             if (bs === SH && vf > 0 && a.y <= SH + 0.02) { var c2 = Math.min(1, 16 * DT); a.vz += (vf - a.vz) * c2; }   // the shelf drags what lies on it forward
             if (!a.k) a.tilt *= 0.9;
@@ -288,7 +288,7 @@
     grd.addColorStop(0, 'rgba(255,250,225,1)'); grd.addColorStop(0.25, 'rgba(255,226,150,.95)'); grd.addColorStop(0.5, 'rgba(255,190,90,.35)'); grd.addColorStop(1, 'rgba(255,170,60,0)'); bg.fillStyle = grd; bg.fillRect(0, 0, br2 * 6, br2 * 6);
   }
   function paintSign(msg) {
-    if (!scene) return; var th = A.THEMES[themeId()];
+    if (!scene) return; var th = A.pal(themeId(), mode === 'night');
     signCv = signCv || A.mk(1024, 190); var c = signCv.getContext('2d'); c.clearRect(0, 0, 1024, 190);
     var gr = c.createLinearGradient(0, 0, 0, 190); gr.addColorStop(0, th.sign[0]); gr.addColorStop(1, th.sign[1]); c.fillStyle = gr; c.beginPath(); c.roundRect ? c.roundRect(6, 6, 1012, 178, 26) : c.rect(6, 6, 1012, 178); c.fill();
     c.strokeStyle = th.trim; c.lineWidth = 7; c.stroke(); c.strokeStyle = 'rgba(255,255,255,.25)'; c.lineWidth = 2; c.beginPath(); c.roundRect ? c.roundRect(16, 16, 992, 158, 20) : c.rect(16, 16, 992, 158); c.stroke();
@@ -405,7 +405,7 @@
     g.globalAlpha = 1;
   }
   function drawShelf() {
-    var P = cam.project, th = A.THEMES[themeId()], a = P(-HX, SH, ZB), b = P(HX, SH, ZB), c = P(HX, SH, pf), d = P(-HX, SH, pf), e = P(-HX, 0, pf), f = P(HX, 0, pf);
+    var P = cam.project, th = A.pal(themeId(), mode === 'night'), a = P(-HX, SH, ZB), b = P(HX, SH, ZB), c = P(HX, SH, pf), d = P(-HX, SH, pf), e = P(-HX, 0, pf), f = P(HX, 0, pf);
     var gr = g.createLinearGradient(0, a[1], 0, d[1]); gr.addColorStop(0, A.dk(th.wood[1], 0.15)); gr.addColorStop(1, th.wood[0]);
     g.fillStyle = gr; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.lineTo(c[0], c[1]); g.lineTo(d[0], d[1]); g.closePath(); g.fill();
     g.fillStyle = A.dk(th.wood[1], 0.1); g.beginPath(); g.moveTo(d[0], d[1]); g.lineTo(c[0], c[1]); g.lineTo(f[0], f[1]); g.lineTo(e[0], e[1]); g.closePath(); g.fill();
@@ -441,7 +441,7 @@
     if (a.ty === 'big') { /* the big lucky coin is simply a bigger coin (its radius is bigger) */ }
   }
   function drawPrize(a) {
-    var P = cam.project, base = P(a.x, a.y, a.z), wu = (a.r * 2) / 0.58, px = Math.max(24, Math.round(wu * base[2] / 8) * 8), spr = A.figure(a.pid, Math.min(256, px)), size = wu * base[2];
+    var P = cam.project, base = P(a.x, a.y, a.z), wu = (a.r * 2) / (a.sz === 'charm' ? 0.5 : 0.6), px = Math.max(24, Math.round(wu * base[2] / 8) * 8), spr = A.figure(a.pid, Math.min(256, px)), size = wu * base[2];
     var sh = A.shadow(a.r * base[2] * 1.05); g.globalAlpha = a.st === 1 ? 0.35 : 0.6; var gp = P(a.x, 0, a.z); g.drawImage(sh.c, gp[0] - sh.ox, gp[1] - sh.oy); g.globalAlpha = 1;
     // teeter: the nearer the edge, the more it leans and wobbles
     var lean = a.st === 2 ? a.tilt : Math.min(0.6, a.over * 0.7), wob = (calm ? 0 : Math.sin(clock * 14 + a.sp * 3) * 0.045 * (a.over > 0.1 ? Math.min(1, a.over * 2) : 0)) + (calm ? 0 : Math.sin(clock * 22) * 0.05 * a.wob);
@@ -477,7 +477,7 @@
       if (evKind === 'zoom') ty = 'bouncy';
       else if (clock - lastSurprise > 14 && Math.random() < 0.05) { ty = ['bouncy', 'bouncy', 'heavy', 'big', 'rainbow'][(Math.random() * 5) | 0]; lastSurprise = clock; var nm = { bouncy: 'A bouncy coin!', heavy: 'A heavy coin: it shoves.', big: 'A big lucky coin!', rainbow: 'A rainbow coin: worth 3.' }[ty]; evChip(nm, 2.6); say(nm); }
     }
-    var a = spawn(x + rnd(-0.03, 0.03), SLOT_Z + rnd(-0.05, 0.1), SLOT_Y, ty); if (!a) return false;
+    var a = spawn(x + rnd(-0.1, 0.1), SLOT_Z + rnd(-0.1, 0.25), SLOT_Y, ty); if (!a) return false;
     a.st = 1; a.vy = -0.4; a.wr = rnd(-6, 6); a.vx = rnd(-0.05, 0.05);
     if (calm && !o.free) pushIdle = Math.max(pushIdle, PERIOD * 1.7);
     if (!o.free) {
@@ -692,16 +692,16 @@
   // ---------------------------------------------------------------- the page: HUD, goals, gift, jar, shelf, cabinet, tips
   function updateHud() {
     var c = $('#cp-coins'); if (c) c.textContent = st.coins;
-    var m = $('#cp-meter'); if (m) m.textContent = st.meter + ' / ' + METER_N;
+    var m = $('#cp-meter'); if (m) m.textContent = st.meter + '/' + METER_N;
     var bar = $('#cp-mbar-i'); if (bar) { bar.style.width = (st.meter / METER_N * 100) + '%'; bar.parentNode.setAttribute('aria-valuenow', String(st.meter)); bar.parentNode.setAttribute('aria-valuetext', st.meter + ' of ' + METER_N + ' coins'); }
-    var f = $('#cp-found'); if (f) f.textContent = foundCount() + ' of ' + A.ITEMS.length;
+    var f = $('#cp-found'); if (f) f.textContent = foundCount() + '/' + A.ITEMS.length;
     var sn = $('#cp-shelf-n'); if (sn) sn.textContent = foundCount() + ' of ' + A.ITEMS.length;
     updateLanes(); renderJar();
   }
   function updateLanes() {
     var l = $('#cp-lane-l'), r = $('#cp-lane-r'), j = $('#cp-jar-s');
-    if (l) l.textContent = (evKind === 'nap' ? 'napping' : st.lane.l + ' of ' + LANE_N); if (r) r.textContent = (evKind === 'zoom' ? 'zooming' : st.lane.r + ' of ' + LANE_N);
-    if (j) j.textContent = st.coins >= JAR_OPEN ? (st.opt.tips ? st.jar + ' of ' + JAR_N : 'tips off') : st.coins + ' of ' + JAR_OPEN + ' coins';
+    if (l) l.textContent = (evKind === 'nap' ? 'napping' : st.lane.l + '/' + LANE_N); if (r) r.textContent = (evKind === 'zoom' ? 'zooming' : st.lane.r + '/' + LANE_N);
+    if (j) j.textContent = st.coins >= JAR_OPEN ? (st.opt.tips ? Math.min(st.jar, JAR_N) + '/' + JAR_N : 'tips off') : st.coins + '/' + JAR_OPEN;
   }
   function toolbarSync() {
     var b;
@@ -752,8 +752,8 @@
   function renderJar() {
     var s = $('#cp-jar-status'), s2 = $('#cp-jar-s2'), bar = $('#cp-jar-bar'), box = bar ? bar.parentNode : null, open = st.coins >= JAR_OPEN;
     if (s) s.textContent = open ? (st.opt.tips ? 'The tip jar is open. A short tip slips out every ' + JAR_N + ' coins, and sooner after a big cascade.' : 'The tip jar is open, and tips are off. Turn them on in More options.') : 'Collect ' + JAR_OPEN + ' coins to open the tip jar.';
-    if (s2) s2.textContent = open ? st.jar + ' of ' + JAR_N + ' coins toward the next tip' : st.coins + ' of ' + JAR_OPEN + ' coins';
-    var v = open ? st.jar : st.coins, mx = open ? JAR_N : JAR_OPEN; if (bar) { bar.style.width = Math.min(100, v / mx * 100) + '%'; box.setAttribute('aria-valuenow', String(Math.min(v, mx))); box.setAttribute('aria-valuemax', String(mx)); }
+    if (s2) s2.textContent = open ? Math.min(st.jar, JAR_N) + ' of ' + JAR_N + ' coins toward the next tip' : st.coins + ' of ' + JAR_OPEN + ' coins';
+    var v = open ? Math.min(st.jar, JAR_N) : st.coins, mx = open ? JAR_N : JAR_OPEN; if (bar) { bar.style.width = Math.min(100, v / mx * 100) + '%'; box.setAttribute('aria-valuenow', String(Math.min(v, mx))); box.setAttribute('aria-valuemax', String(mx)); }
     var btn = $('#cp-tipnow'); if (btn) btn.hidden = !open;
     var lt = $('#cp-latest'); if (lt) { var tp = latest || (st.tips.length ? tipById(st.tips[st.tips.length - 1]) : null); lt.hidden = !tp; if (tp) { var L = toolLink(tp); $('#cp-latest-t').textContent = tp.t; $('#cp-latest-b').textContent = tp.b; $('#cp-latest-go').innerHTML = '<a href="' + esc(L.href) + '">Read more: ' + esc(L.name) + ' <span aria-hidden="true">→</span></a>'; } }
     jarCanvas(); updateLanes();
@@ -954,7 +954,7 @@
     var c = calmOn(); if (c === calm && true) { toolbarSync(); return; } calm = c; if (calm) { parts.forEach(function (p) { partFree.push(p); }); parts = []; fxShake = 0; zoomAmt = 1; }
     toolbarSync(); signMsg = ''; if (evKind) { tsTarget = evKind === 'nap' ? (calm ? 0.8 : 0.5) : 1; speedMul = evKind === 'zoom' ? (calm ? 1.3 : 1.9) : 1; }
   }
-  function applyMode() { var m = modeNow(); mode = m; main.setAttribute('data-mode', m); sceneKey = ''; buildScene(); jarCanvas(); trayDirty = true; }
+  function applyMode() { var m = modeNow(); mode = m; main.setAttribute('data-mode', m); sceneKey = ''; buildScene(); jarCanvas(); trayDirty = true; toolbarSync(); }
   doc.addEventListener('tol-still', function () { applyCalm(); }); window.addEventListener('tol-quiet', function () { if (!soundAllowed() && !st.opt.qon) { /* silent until the player turns it on here */ } if (st.opt.calm == null) applyCalm(); toolbarSync(); });
   try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { if (st.opt.thm === 'auto') applyMode(); }); window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', function () { if (st.opt.calm == null) applyCalm(); }); } catch (e) {}
   try { new MutationObserver(function () { if (st.opt.thm === 'auto') { var m = modeNow(); if (m !== mode) applyMode(); } }).observe(root, { attributes: true, attributeFilter: ['data-theme', 'class'] }); } catch (e) {}
@@ -1010,8 +1010,8 @@
     var base = items.slice(); for (var k = 0; k < 16; k++) { var u = base[(Math.random() * base.length) | 0]; if (u && u.z < ZE - 1.2) { var top = spawn(u.x + rnd(-0.12, 0.12), u.z + rnd(-0.12, 0.12), u.y + T, 'coin'); if (top) top.rk = (Math.random() * 4) | 0; } }
     st.pend.forEach(function (id, i) { var a = spawnPrize(id, -2.4 + i * 2.4 + rnd(-0.3, 0.3), ZE - 2.4 + rnd(-0.3, 0.3), 0); if (a) a.st = 0; });
     pushT = PERIOD * 0.5; pf = pusherAt(pushT); pfPrev = pf;
-    var oldCalm = calm; calm = false; for (var s = 0; s < 360; s++) step(); calm = oldCalm; pushT = 0; pf = pusherAt(0); pfPrev = pf; pushIdle = 0;
-    for (var i = items.length - 1; i >= 0; i--) { var q = items[i]; if (q.st === 2) { freeList.push(q); items[i] = items[items.length - 1]; items.pop(); } else { q.vx = q.vz = 0; q.wr = 0; if (q.st === 1) { q.st = 0; q.vy = 0; } } }
+    var oldCalm = calm; calm = false; for (var s = 0; s < 1250; s++) step(); calm = oldCalm; pushT = 0; pf = pusherAt(0); pfPrev = pf; pushIdle = 0;
+    for (var i = items.length - 1; i >= 0; i--) { var q = items[i]; if (q.st === 2 || (!q.k && q.z > ZE - 0.6)) { freeList.push(q); items[i] = items[items.length - 1]; items.pop(); } else { q.vx = q.vz = 0; q.wr = 0; q.tilt = 0; if (q.st === 1) { q.st = 0; q.vy = 0; } } }
     silent = false;
   }
   function init() {
@@ -1020,6 +1020,7 @@
     // the row of games starts at the beginning, so every game shows on a phone
     var row = doc.querySelector('.gm-switch'); if (row) { var touched = false; ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (ev) { row.addEventListener(ev, function () { touched = true; }, { passive: true }); }); var s0 = function () { if (!touched && row.scrollWidth > row.clientWidth + 1) row.scrollLeft = 0; }; s0(); if (doc.readyState === 'complete') { setTimeout(s0, 0); setTimeout(s0, 900); } else window.addEventListener('load', function () { setTimeout(s0, 0); setTimeout(s0, 900); }); }
     main.classList.add('is-ready'); flush(); startLoop();
+    if (!st.drops && !DEBUG_ALL) setTimeout(function () { if (!st.drops) evChip('Tap, or drag and let go, to drop a coin', 4); }, 900);
     if (DEBUG_ALL) setTimeout(function () { st.trophy = Date.now(); finale(); }, 900);
   }
   // make sure the stage has a size before the first scene (fonts and the fullscreen wrap can move things)
@@ -1046,6 +1047,7 @@
     cabinet: function (id) { st.cab.theme = id; sceneKey = ''; buildScene(); }, skin: function (id) { st.cab.skin = id; trayDirty = true; },
     setCalm: function (v) { st.opt.calm = v ? 1 : 0; applyCalm(); }, setMode: function (v) { st.opt.thm = v; applyMode(); },
     pause: setPaused, flush: function () { flush(); }, aim: function (x) { aimTo(x); return aimX; },
+    debug: function () { return { pf: pf, vf: vf, items: items.map(function (a) { return [a.x, a.z, a.y, a.st, a.k, a.r, a.h, a.ty]; }) }; },
     describe: describe, count: function () { return { items: items.length, free: freeList.length, parts: parts.length, pfree: partFree.length, timers: laterList.length }; }
   };
 })();
