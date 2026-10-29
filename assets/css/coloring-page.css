@@ -1,0 +1,54 @@
+/* coloring-page.css: /coloring-page.html, a coloring page at random. Same type and colors as the do pages: Fraunces for the
+   big words, Lora for reading, one accent. Light colors only: dark mode is the site's inversion filter, which also keeps the
+   picture black on white. When printing with the browser's own Print, only the picture prints, at full letter size. */
+:root{
+  --cp-ink:#2B2620; --cp-muted:#554E42; --cp-acc:#2B5B8C; --cp-acc-h:#214A72; --cp-paper:#FAF6EB; --cp-wash:#F1EADA; --cp-line:#E4D9BE;
+  --cp-ui:var(--d17-ui, var(--tol-sans, "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif));
+  --cp-head:"Fraunces", Georgia, serif; --cp-read:"Lora", Georgia, serif;
+}
+html body.cp-page{ margin:0; background:var(--cp-paper); }
+html body main.read.cpg{ background:none; border:0; border-radius:0; box-shadow:none; max-width:56rem; margin:0 auto; padding:clamp(1rem, 3vw, 2.4rem) 16px 3rem; box-sizing:border-box; }
+@media (min-width:700px){ html body main.read.cpg{ padding-left:28px; padding-right:28px; } }
+.cpg p, .cpg h1, .cpg li{ max-width:none; }
+html body main.read.cpg :is(p, h1, h2){ --bb-fill:transparent; --bb-edge:transparent; --bb-shadow:none; }
+html body main.read.cpg .cpg-h1{ margin:0 0 .6rem; padding:0; border:0; background:none; font:500 clamp(2.1rem, 1.4rem + 3.6vw, 3.6rem)/1.05 var(--cp-head); letter-spacing:-.024em; color:var(--cp-ink); text-wrap:balance; }
+.cpg .cpg-lead{ margin:0 0 1.6rem; max-width:40rem !important; font:400 clamp(1.08rem, 1.02rem + .4vw, 1.25rem)/1.55 var(--cp-read); color:var(--cp-muted); }
+
+.cpg-who{ margin:0 0 1.2rem; padding:0; border:0; min-width:0; }
+.cpg-who legend{ margin:0 0 .6rem; padding:0; font:700 1rem/1.3 var(--cp-ui); color:var(--cp-ink); }
+.cpg-chips{ display:flex; flex-wrap:wrap; gap:.5rem; }
+.cpg-chip{ position:relative; display:inline-flex; }
+.cpg-chip input{ position:absolute; opacity:0; width:1px; height:1px; }
+.cpg-chip span{ display:inline-flex; align-items:center; gap:.4rem; min-height:44px; padding:.35rem 1rem; border:2px solid var(--cp-line); border-radius:999px; background:#fff; font:600 1rem/1.2 var(--cp-ui); color:var(--cp-ink); cursor:pointer; }
+.cpg-chip small{ font-weight:400; font-size:.88em; color:var(--cp-muted); }
+.cpg-chip input:checked + span{ border-color:var(--cp-acc); background:var(--cp-acc); color:#fff; }
+.cpg-chip input:checked + span small{ color:#fff; }
+.cpg-chip input:focus-visible + span{ outline:3px solid var(--cp-acc); outline-offset:2px; }
+
+.cpg-go-row{ margin:0 0 1.6rem; }
+.cpg-go, .cpg-btn{ display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:.6rem 1.3rem; border:2px solid var(--cp-acc); border-radius:10px; background:#fff; color:var(--cp-acc); font:700 1.05rem/1.2 var(--cp-ui); text-decoration:none; cursor:pointer; }
+.cpg-go, .cpg-btn-main{ background:var(--cp-acc); color:#fff; }
+.cpg-go{ min-height:56px; padding:.8rem 1.6rem; font-size:1.15rem; }
+.cpg-go:hover, .cpg-btn-main:hover{ background:var(--cp-acc-h); border-color:var(--cp-acc-h); }
+.cpg-btn:not(.cpg-btn-main):hover{ background:#EEF3F9; }
+.cpg-go:focus-visible, .cpg-btn:focus-visible, .cpg-tip a:focus-visible{ outline:3px solid var(--cp-acc); outline-offset:3px; }
+
+.cpg-result{ display:grid; gap:1rem; }
+.cpg-sheet{ margin:0; padding:clamp(.6rem, 2vw, 1.2rem); border-radius:10px; background:var(--cp-wash); }
+.cpg-sheet img{ display:block; width:100%; max-width:30rem; height:auto; margin:0 auto; background:#fff; box-shadow:0 1px 3px rgba(43,38,32,.18), 0 6px 18px rgba(43,38,32,.08); }
+.cpg-cap{ display:grid; gap:.2rem; max-width:30rem; margin:.8rem auto 0; text-align:center; }
+.cpg-words{ font:italic 500 1.15rem/1.35 var(--cp-head); color:var(--cp-ink); }
+.cpg-from{ font:400 .95rem/1.4 var(--cp-ui); color:var(--cp-muted); }
+.cpg-actions{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; }
+.cpg .cpg-tip{ margin:0; text-align:center; font:400 1rem/1.5 var(--cp-read); color:var(--cp-muted); }
+.cpg-tip a{ color:var(--cp-acc); font-weight:600; text-underline-offset:3px; }
+.cpg-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+@media print{
+  @page{ size:8.5in 11in; margin:0; }
+  html body.cp-page{ background:#fff; }
+  body.cp-page > *:not(main), .cpg > *:not(.cpg-tool), .cpg-tool > *:not(.cpg-result), .cpg-result > *:not(.cpg-sheet), .cpg-cap{ display:none !important; }
+  html body main.read.cpg{ max-width:none; padding:0; margin:0; }
+  .cpg-sheet{ padding:0; background:none; }
+  .cpg-sheet img{ width:8.5in; max-width:none; height:11in; box-shadow:none; }
+}
