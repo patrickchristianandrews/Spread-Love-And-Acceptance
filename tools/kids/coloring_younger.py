@@ -632,8 +632,6 @@ def s_garden(ink):
     ground_deco(ink, 26, 900, 935, [], 3, kinds=('tuft', 'flower'))
     sky_bits(ink, birds=((330, 110), (440, 150), (560, 290)), butter=((470, 400, 15), (150, 330, -10), (690, 600, 20)))
     pr.puff(ink, 430, 230, 0.7, n=3)
-    pr.fence(ink, 380, 790, 800, 44)
-    pr.tree(ink, 640, 790, 0.7)
     frame_end(ink)
 
 

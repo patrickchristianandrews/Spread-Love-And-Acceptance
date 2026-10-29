@@ -3,14 +3,14 @@
 
 A mandala is rings of repeated motifs around one centre. Every motif is a closed, white-filled Bezier shape drawn in local
 coordinates (the radial direction is +x, the sideways direction is y) and turned into place n times, so the symmetry is exact.
-Rings are drawn from the outside in or from the inside out as each design needs, and later shapes hide earlier lines."""
+Neighbouring shapes share their feet exactly, so every cell between them is closed. Later shapes hide earlier lines."""
 import math
 from ac_core import *
 
 
 # ---------------------------------------------------------------- motifs (local: base at the origin, pointing +x)
 def m_petal(L, W, belly=1.0):
-    """a pointed petal: widest about a third of the way up"""
+    """a pointed petal, widest about a third of the way up (W is the half width)"""
     P = Path().M(0, 0)
     P.C(L * 0.12, -W * 1.05 * belly, L * 0.62, -W * 0.85 * belly, L, 0)
     P.C(L * 0.62, W * 0.85 * belly, L * 0.12, W * 1.05 * belly, 0, 0).Z()
@@ -18,7 +18,7 @@ def m_petal(L, W, belly=1.0):
 
 
 def m_round(L, W):
-    """a round-tipped petal (a U)"""
+    """a round-tipped petal (a U with a narrow foot)"""
     P = Path().M(0, -W * 0.35)
     P.C(L * 0.5, -W * 0.65, L * 0.98, -W * 1.0, L, 0)
     P.C(L * 0.98, W * 1.0, L * 0.5, W * 0.65, 0, W * 0.35).Z()
@@ -26,19 +26,19 @@ def m_round(L, W):
 
 
 def m_drop(L, W):
-    """a teardrop with its round end away from the base and its point at the base"""
+    """a teardrop: its point at the base, its round end away"""
     P = Path().M(0, 0)
-    P.C(L * 0.25, -W * 0.15, L * 0.55, -W * 1.1, L * 0.78, -W * 0.8)
-    P.C(L * 1.02, -W * 0.5, L * 1.02, W * 0.5, L * 0.78, W * 0.8)
-    P.C(L * 0.55, W * 1.1, L * 0.25, W * 0.15, 0, 0).Z()
+    P.C(L * 0.25, -W * 0.15, L * 0.5, -W * 1.0, L * 0.76, -W * 0.8)
+    P.C(L * 1.02, -W * 0.55, L * 1.02, W * 0.55, L * 0.76, W * 0.8)
+    P.C(L * 0.5, W * 1.0, L * 0.25, W * 0.15, 0, 0).Z()
     return P
 
 
 def m_drop_out(L, W):
-    """a teardrop with its round end at the base and its point away"""
+    """a teardrop: its round end at the base, its point away"""
     P = Path().M(L, 0)
-    P.C(L * 0.78, -W * 0.2, L * 0.55, -W * 1.0, L * 0.22, -W * 0.85)
-    P.C(-L * 0.04, -W * 0.7, -L * 0.04, W * 0.7, L * 0.22, W * 0.85)
+    P.C(L * 0.78, -W * 0.2, L * 0.55, -W * 1.0, L * 0.24, -W * 0.85)
+    P.C(-L * 0.04, -W * 0.7, -L * 0.04, W * 0.7, L * 0.24, W * 0.85)
     P.C(L * 0.55, W * 1.0, L * 0.78, W * 0.2, L, 0).Z()
     return P
 
@@ -51,116 +51,53 @@ def m_eye(L, W):
     return Path().M(0, 0).C(L * 0.3, -W * 1.25, L * 0.7, -W * 1.25, L, 0).C(L * 0.7, W * 1.25, L * 0.3, W * 1.25, 0, 0).Z()
 
 
-def m_heart(L, W):
-    """a heart pointing outward (point at the far end)"""
-    P = heart_path(0, 0, 1.0)
-    return at(P, L * 0.5, 0, -90, 1.0).xf(mat(0, 0, 1.0, False, 0, 1.0)) if False else at(heart_path(0, 0, 1.0).xf(mat(0, 0, 1, False, 0)), 0, 0, 0, 1.0) if False else _heart_local(L, W)
-
-
-def _heart_local(L, W):
-    h = heart_path(0, 0, 1.0)             # point down at (0, 0.95); lobes at the top
-    # turn so the point faces +x, scale to length L and width W
-    P = h.xf(mat(0, 0, 1, False, -90))
-    P = P.xf(mat(0, 0, 1, False, 0))
-    # now the point is at (0.95, 0) and the lobes at x about -1
-    sx, sy = L / 2.0, W
-    P = P.xf((sx, 0, 0, sy, L / 2.0 - 0.05 * sx, 0))
-    return P
-
-
-def m_leaf(L, W):
-    return leaf_path(L, W)
-
-
 def m_paisley(L, W, curl=1.0):
-    """a paisley (a plump drop whose tail curls to one side)"""
+    """a paisley: a plump drop whose tail curls to one side"""
+    s = curl
     P = Path().M(0, 0)
-    P.C(L * 0.05, -W * 1.4, L * 0.5, -W * 1.5, L * 0.82, -W * 0.7)
-    P.C(L * 1.0, -W * 0.25 * curl - 0, L * 1.02, W * 0.9 * curl, L * 0.9, W * 1.1 * curl)
-    P.C(L * 0.92, W * 0.5 * curl, L * 0.8, W * 0.1, L * 0.62, W * 0.35)
-    P.C(L * 0.4, W * 0.8, L * 0.12, W * 0.9, 0, 0).Z()
+    P.C(L * 0.04, -W * 1.5 * s, L * 0.5, -W * 1.7 * s, L * 0.8, -W * 0.9 * s)
+    P.C(L * 1.02, -W * 0.3 * s, L * 1.04, W * 0.9 * s, L * 0.9, W * 1.15 * s)
+    P.C(L * 0.92, W * 0.55 * s, L * 0.8, W * 0.12 * s, L * 0.6, W * 0.3 * s)
+    P.C(L * 0.4, W * 0.75 * s, L * 0.12, W * 0.8 * s, 0, 0).Z()
     return P
 
 
-def m_crescent(L, W):
-    P = Path().M(0, -W)
-    P.C(L * 0.9, -W * 1.0, L * 0.9, W * 1.0, 0, W)
-    P.C(L * 0.5, W * 0.6, L * 0.5, -W * 0.6, 0, -W).Z()
-    return P
+def m_star(R, r=None, n=5, rnd=None):
+    r = R * 0.45 if r is None else r
+    pts = [polar(R if i % 2 == 0 else r, -PI / 2 + i * PI / n) for i in range(2 * n)]
+    return rpoly(pts, R * 0.1 if rnd is None else rnd)
 
 
-def m_arch(L, W):
-    """a tall arch with a flat base"""
-    return Path().M(0, -W).C(L * 0.9, -W, L * 0.9, W, 0, W).Z()
-
-
-def m_tri(L, W):
-    return rpoly([(0, -W), (L, 0), (0, W)], min(L, W) * 0.1)
-
-
-def m_floret(R, n=5, hole=0.28):
-    """a small flower of n round petals around a centre circle of radius R*hole, local origin at its middle"""
-    parts = []
-    for i in range(n):
-        a = i * TAU / n
-        parts.append(at(m_round(R * 0.8, R * 0.34), 0, 0, math.degrees(a)).xf(mat(0, 0, 1)).xf((1, 0, 0, 1, 0, 0)) if False else at(m_round(R, R * 0.36), math.cos(a) * R * 0.18, math.sin(a) * R * 0.18, math.degrees(a)))
-    return parts
-
-
-# ---------------------------------------------------------------- placing
+# ---------------------------------------------------------------- ring builders
 def put(pg, P, cx, cy, a, w=W2, fill='#fff'):
     pg.shape(at_rad(P, cx, cy, a), w, fill)
 
 
-def ring_free(pg, motif, cx, cy, r, n, a0=0.0, w=W2, inner=None, inner_w=W3):
-    """n copies of a motif (base at radius r), turned to point outward. inner is an optional second path drawn on top"""
-    for k in range(n):
-        a = a0 + k * TAU / n
-        put(pg, motif, cx, cy, a, w)
-        if inner is not None:
-            pg.line(at_rad(inner, cx, cy, a), inner_w)
-
-
-def ring_in(pg, motif, cx, cy, r, n, a0=0.0, w=W2, inner=None, inner_w=W3):
-    """as ring_free, but the motif points to the centre; r is where its base is"""
-    for k in range(n):
-        a = a0 + k * TAU / n
-        P = at(motif, r, 0, 180)  # flip: base at r, pointing inward
-        pg.shape(at_rad(P, cx, cy, a), w)
-        if inner is not None:
-            pg.line(at_rad(at(inner, r, 0, 180), cx, cy, a), inner_w)
-
-
 def ring_at(pg, motif, cx, cy, r, n, a0=0.0, w=W2, inner=None, rot=0.0, inner_w=W3):
-    """n copies with the motif's base at radius r, pointing outward"""
+    """n copies of a motif with its base at radius r, pointing outward (rot turns it 180 to point inward)"""
     for k in range(n):
         a = a0 + k * TAU / n
-        P = at(motif, r, 0, rot)
-        pg.shape(at_rad(P, cx, cy, a), w)
+        pg.shape(at_rad(at(motif, r, 0, rot), cx, cy, a), w)
         if inner is not None:
             pg.line(at_rad(at(inner, r, 0, rot), cx, cy, a), inner_w)
 
 
-def circ_ring(pg, cx, cy, r, w=W2, dash=None):
-    pg.line(circ(cx, cy, r), w, dash)
+def circ_ring(pg, cx, cy, r, w=W2):
+    pg.line(circ(cx, cy, r), w)
 
 
 def disk(pg, cx, cy, r, w=W2):
     pg.shape(circ(cx, cy, r), w)
 
 
-def dots(pg, cx, cy, r, n, a0=0.0, dr=2.0, solid=True, w=W3):
+def dots(pg, cx, cy, r, n, a0=0.0, dr=1.7, solid=True, w=W3):
     for k in range(n):
-        a = a0 + k * TAU / n
-        x, y = polar(r, a, cx, cy)
-        if solid:
-            pg.dot(x, y, dr)
-        else:
-            pg.circle(x, y, dr, w)
+        x, y = polar(r, a0 + k * TAU / n, cx, cy)
+        pg.dot(x, y, dr) if solid else pg.circle(x, y, dr, w)
 
 
 def band_petals(pg, cx, cy, r0, r1, n, a0=0.0, bulge=1.0, w=W2, vein=False):
-    """pointed petals sharing base points on the circle r0, tips on r1 (cells between them stay open)"""
+    """pointed petals that share their feet on the circle r0 and reach r1; the cells between them stay open"""
     h = PI / n
     B1, B2 = polar(r0, -h), polar(r0, h)
     t = r1 - r0 * math.cos(h)
@@ -173,54 +110,53 @@ def band_petals(pg, cx, cy, r0, r1, n, a0=0.0, bulge=1.0, w=W2, vein=False):
         a = a0 + k * TAU / n
         pg.shape(at_rad(P, cx, cy, a), w)
         if vein:
-            pg.line(at_rad(Path().M(r0 + t * 0.22, 0).L(r0 + t * 0.7, 0), cx, cy, a), W3)
+            pg.line(at_rad(Path().M(r0 + t * 0.25, 0).L(r0 + t * 0.72, 0), cx, cy, a), W3)
 
 
-def band_round(pg, cx, cy, r0, r1, n, a0=0.0, w=W2, inner=0.0):
-    """round-topped petals sharing base points on r0"""
+def band_round(pg, cx, cy, r0, r1, n, a0=0.0, w=W2, vein=False, spread=1.0):
+    """round-topped petals that share their feet on r0. spread 1.0 lets neighbours just touch; more makes them overlap"""
     h = PI / n
     B1, B2 = polar(r0, -h), polar(r0, h)
     t = r1 - r0
+    lat = max(abs(B1[1]), PI * (r0 + r1) / 2 / n * spread * 0.98)
     P = Path().M(*B1)
-    P.C(B1[0] + t * 0.75, B1[1] * 1.05, r1, B1[1] * 0.6, r1, 0)
-    P.C(r1, -B1[1] * 0.6, B2[0] + t * 0.75, B2[1] * 1.05, B2[0], B2[1])
+    P.C(B1[0] + t * 0.30, -lat * 1.05, r1 - t * 0.02, -lat * 0.9, r1, 0)
+    P.C(r1 - t * 0.02, lat * 0.9, B2[0] + t * 0.30, lat * 1.05, B2[0], B2[1])
     arc_to(P, r0, h, -h)
     P.Z()
     for k in range(n):
         a = a0 + k * TAU / n
         pg.shape(at_rad(P, cx, cy, a), w)
-        if inner:
-            Q = Path().M(r0 + t * 0.22, 0).C(r0 + t * 0.4, -B1[1] * 0, r0 + t * 0.6, 0, r0 + t * inner, 0)
-            pg.line(at_rad(Q, cx, cy, a), W3)
+        if vein:
+            pg.line(at_rad(Path().M(r0 + t * 0.25, 0).L(r0 + t * 0.7, 0), cx, cy, a), W3)
 
 
-def band_scallop(pg, cx, cy, r0, r1, n, a0=0.0, w=W2, fill='#fff', dot=False):
-    """arches that sit on the circle r0 and reach to r1; neighbours share their feet"""
+def band_scallop(pg, cx, cy, r0, r1, n, a0=0.0, w=W2, dot=False, inward=False):
+    """arches that stand on the circle r0 and reach r1; neighbours share their feet. inward=True hangs them toward the centre"""
     h = PI / n
     B1, B2 = polar(r0, -h), polar(r0, h)
-    t = r1 - r0 * math.cos(h)
+    t = (r1 - r0 * math.cos(h)) if not inward else (r1 - r0 * math.cos(h))
     P = Path().M(*B1)
-    P.C(B1[0] + t * 1.32, B1[1] * 1.0, B2[0] + t * 1.32, B2[1] * 1.0, B2[0], B2[1])
+    P.C(B1[0] + t * 1.32, B1[1], B2[0] + t * 1.32, B2[1], B2[0], B2[1])
     arc_to(P, r0, h, -h)
     P.Z()
     for k in range(n):
         a = a0 + k * TAU / n
-        pg.shape(at_rad(P, cx, cy, a), w, fill)
+        pg.shape(at_rad(P, cx, cy, a), w)
         if dot:
-            x, y = polar(r0 + t * 0.52, a, cx, cy)
-            pg.circle(x, y, max(2.6, t * 0.16), W3)
+            x, y = polar(r0 + t * 0.5, a, cx, cy)
+            pg.circle(x, y, max(2.8, min(abs(t), r0 * h) * 0.2), W3)
 
 
-def band_tri(pg, cx, cy, r0, r1, n, a0=0.0, w=W2, inner=False):
-    """a ring of sharp teeth (triangles) on the circle r0"""
+def band_tri(pg, cx, cy, r0, r1, n, a0=0.0, w=W2):
+    """a ring of pointed teeth standing on the circle r0"""
     h = PI / n
     B1, B2 = polar(r0, -h), polar(r0, h)
     P = Path().M(*B1).L(r1, 0).L(*B2)
     arc_to(P, r0, h, -h)
     P.Z()
     for k in range(n):
-        a = a0 + k * TAU / n
-        pg.shape(at_rad(P, cx, cy, a), w)
+        pg.shape(at_rad(P, cx, cy, a0 + k * TAU / n), w)
 
 
 def spokes(pg, cx, cy, r0, r1, n, a0=0.0, w=W3):
@@ -229,77 +165,268 @@ def spokes(pg, cx, cy, r0, r1, n, a0=0.0, w=W3):
         pg.line(Path().M(*polar(r0, a, cx, cy)).L(*polar(r1, a, cx, cy)), w)
 
 
-def lace(pg, cx, cy, r, n, depth, a0=0.0, w=W2, r_dot=0):
-    """a ring of linked arcs (a chain of scallops hanging inward) on radius r"""
+def polar_cells(pg, cx, cy, r0, r1, n, a0=0.0, w=W2, motif=None, mscale=0.5):
+    """one ring of a polar grid: n cells between circles r0 and r1, with an optional small motif in each"""
+    h = TAU / n
+    for k in range(n):
+        a = a0 + k * h
+        P = Path()
+        arc_to(P, r1, a, a + h, cx, cy, move=True)
+        P.L(*polar(r0, a + h, cx, cy))
+        arc_to(P, r0, a + h, a, cx, cy)
+        P.Z()
+        pg.shape(P, w)
+        if motif:
+            mx, my = polar((r0 + r1) / 2, a + h / 2, cx, cy)
+            wd = (r0 + r1) / 2 * h
+            s = min(wd, r1 - r0) * mscale
+            if motif == 'circle':
+                pg.circle(mx, my, s * 0.5, W3)
+            elif motif == 'eye':
+                pg.shape(at_rad(m_eye(s * 1.6, s * 0.55).xf(mat(-s * 0.8, 0, 1)), mx, my, a + h / 2), W3)
+            elif motif == 'diamond':
+                pg.shape(at_rad(m_diamond(s * 1.7, s * 0.7).xf(mat(-s * 0.85, 0, 1)), mx, my, a + h / 2), W3)
+
+
+def lace(pg, cx, cy, r, n, depth, a0=0.0, w=W2, dr=0.0):
+    """a chain of arcs, each hanging toward the centre from two feet on the circle r"""
     h = PI / n
     for k in range(n):
         a = a0 + k * TAU / n
-        p0 = polar(r, a - h, cx, cy)
-        p1 = polar(r, a + h, cx, cy)
-        mid = polar(r - depth, a, cx, cy)
-        P = Path().M(*p0).C(*lerp(p0, mid, 0.9), *lerp(p1, mid, 0.9), *p1)
-        pg.line(P, w)
-        if r_dot:
-            pg.circle(*polar(r - depth * 0.45, a, cx, cy), r_dot, W3)
+        p0, p1 = polar(r, a - h, cx, cy), polar(r, a + h, cx, cy)
+        m = polar(r - depth, a, cx, cy)
+        pg.line(Path().M(*p0).C(*lerp(p0, m, 1.2), *lerp(p1, m, 1.2), *p1), w)
+        if dr:
+            pg.circle(*polar(r - depth * 0.42, a, cx, cy), dr, W3)
 
 
-def star_poly(pg, cx, cy, R, r, n, a0=-PI / 2, w=W2, rnd=0.0):
-    pts = []
-    for i in range(2 * n):
-        a = a0 + i * PI / n
-        pts.append(polar(R if i % 2 == 0 else r, a, cx, cy))
-    pg.shape(rpoly(pts, rnd) if rnd else Path().M(*pts[0]).__class__(Path().M(*pts[0]).s + [('L', p) for p in pts[1:]] + [('Z',)]), w)
+def flower(pg, x, y, R, n=8, a0=0.0, w=W2, core=0.3, ring=True):
+    """a flower head: n round petals around a disk"""
+    band_round(pg, x, y, R * core, R, n, a0, w, vein=R > 40)
+    if ring and R * core > 11:
+        pg.circle(x, y, R * core * 0.5, W3)
 
 
-def poly_pts(pts, rnd=0.0):
-    if rnd:
-        return rpoly(pts, rnd)
-    P = Path().M(*pts[0])
-    for p in pts[1:]:
-        P.L(*p)
+def crescent(R, rb, d):
+    """a crescent moon: the circle of radius R minus the circle rb centred d to the right"""
+    x = (d * d + R * R - rb * rb) / (2 * d)
+    y = math.sqrt(max(0.0, R * R - x * x))
+    th = math.atan2(y, x)
+    ph = math.atan2(y, x - d)
+    P = Path()
+    arc_to(P, R, -th, th - TAU, 0, 0, move=True)
+    arc_to(P, rb, ph, TAU - ph, d, 0)
     return P.Z()
 
 
-def rosette(pg, cx, cy, r, n, a0=0.0, layers=2, w=W2):
-    """a flower middle: layers of petals getting smaller, then a disk"""
-    for l in range(layers):
-        rr = r * (1 - l * 0.34)
-        nn = n
-        off = a0 + (PI / nn if l % 2 else 0)
-        ring_free(pg, m_petal(rr, rr * (PI / nn) * 0.95), cx, cy, 0, nn, off, w)
-    disk(pg, cx, cy, r * (1 - layers * 0.34) * 0.55 + 4, w)
+def corner_set(pg, kind, r, w=W2):
+    """a quarter ornament in each corner of the frame (the frame clip trims it)"""
+    for (x, y) in ((FX, FY), (FX + FW, FY), (FX, FY + FH), (FX + FW, FY + FH)):
+        if kind == 'scallop':
+            band_scallop(pg, x, y, r * 0.66, r, 8 * round(TAU * r * 0.66 / 36 / 8), 0)
+            circ_ring(pg, x, y, r * 0.66, W2)
+            band_round(pg, x, y, r * 0.22, r * 0.6, 8 * round(TAU * r * 0.4 / 40 / 8), 0, W3)
+        elif kind == 'petal':
+            band_petals(pg, x, y, r * 0.5, r, 16, 0)
+            band_petals(pg, x, y, r * 0.2, r * 0.5, 8, PI / 8, w=W3)
+        elif kind == 'dots':
+            circ_ring(pg, x, y, r, W2)
+            circ_ring(pg, x, y, r * 0.72, W3)
+            dots(pg, x, y, r * 0.86, 8 * round(TAU * r * 0.86 / 30 / 8), 0, 1.6)
+            band_petals(pg, x, y, r * 0.2, r * 0.72, 8, 0, w=W3)
+        elif kind == 'star':
+            circ_ring(pg, x, y, r, W2)
+            band_tri(pg, x, y, r * 0.55, r * 0.97, 16, 0, W3)
+            circ_ring(pg, x, y, r * 0.55, W2)
+            band_round(pg, x, y, r * 0.12, r * 0.4, 8, 0, W3)
+        elif kind == 'lace':
+            circ_ring(pg, x, y, r, W2)
+            lace(pg, x, y, r, 8 * round(TAU * r / 56 / 8), r * 0.22, 0, W2, dr=3.2)
+            band_petals(pg, x, y, r * 0.35, r * 0.74, 16, 0, w=W3)
 
 
-def mini_flower(pg, x, y, R, n=5, a0=0.0, w=W3, center=True):
-    """five or six round petals around a small disk (a decoration, drawn small)"""
-    for i in range(n):
-        a = a0 + i * TAU / n
-        e = ell(R * 0.62, 0, R * 0.46, R * 0.32)
-        pg.shape(at_rad(e, x, y, a), w)
-    if center:
-        pg.circle(x, y, R * 0.28, w)
+# ============================================================== the designs
+def m_lotus(pg):
+    """layers of petals, back to front, inside a ring of arches"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    band_scallop(pg, cx, cy, 296, 330, 40, 0)
+    band_petals(pg, cx, cy, 252, 296, 40, PI / 40, vein=True)
+    ring_at(pg, m_petal(134, 39), cx, cy, 112, 20, 0, inner=Path().M(26, 0).L(108, 0))
+    ring_at(pg, m_petal(120, 42), cx, cy, 78, 20, PI / 20, inner=Path().M(24, 0).L(94, 0))
+    ring_at(pg, m_petal(104, 38), cx, cy, 40, 14, 0, inner=Path().M(22, 0).L(80, 0))
+    ring_at(pg, m_petal(58, 24), cx, cy, 16, 8, PI / 8)
+    disk(pg, cx, cy, 24)
+    dots(pg, cx, cy, 12, 8, 0, 1.6)
+    corner_set(pg, 'scallop', 170)
 
 
-def corner_sprays(pg, kind, size):
-    """quarter ornaments in the four corners, clipped by the frame"""
-    for (x, y, rot) in ((FX + 9, FY + 9, 0), (FX + FW - 9, FY + 9, 90), (FX + FW - 9, FY + FH - 9, 180), (FX + 9, FY + FH - 9, 270)):
-        pass
+def m_sun(pg):
+    """a sun: rays, round petals, arches with dots and a ring of teeth"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    dots(pg, cx, cy, 316, 96, 0, 1.6)
+    circ_ring(pg, cx, cy, 300, W2)
+    band_tri(pg, cx, cy, 266, 298, 48, 0)
+    band_scallop(pg, cx, cy, 214, 266, 32, 0, dot=True)
+    band_round(pg, cx, cy, 168, 214, 32, PI / 32, vein=True)
+    band_tri(pg, cx, cy, 80, 168, 16, 0)
+    ring_at(pg, m_drop(56, 12), cx, cy, 90, 16, 0, w=W3)
+    band_round(pg, cx, cy, 34, 80, 16, PI / 16, w=W2)
+    pg.circle(cx, cy, 34, W2)
+    pg.circle(cx, cy, 18, W3)
+    corner_set(pg, 'star', 160)
 
 
-# ============================================================== the ten designs
-def lotus(pg):
-    cx, cy = CX, CY - 10
-    R = 330
-    circ_ring(pg, cx, cy, R + 4, W1)
-    band_scallop(pg, cx, cy, R - 34, R, 36, 0, dot=False)
-    # back petals, big to small
-    ring_at(pg, m_petal(150, 40), cx, cy, 120, 18, 0, inner=Path().M(25, 0).L(110, 0))
-    # second layer
-    ring_at(pg, m_petal(130, 46), cx, cy, 70, 12, PI / 12, inner=Path().M(22, 0).L(100, 0))
-    ring_at(pg, m_petal(88, 38), cx, cy, 36, 12, 0, inner=Path().M(20, 0).L(64, 0))
-    disk(pg, cx, cy, 44)
-    mini_flower(pg, cx, cy, 52, 8, 0.0)
-    dots(pg, cx, cy, 20, 8, 0, 1.6)
+def m_paisley_ring(pg):
+    """twelve paisleys swirling round a flower, with drops and arches outside"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    circ_ring(pg, cx, cy, 304, W3)
+    dots(pg, cx, cy, 318, 72, 0, 1.6)
+    band_scallop(pg, cx, cy, 258, 300, 24, PI / 24, dot=True)
+    ring_at(pg, m_drop_out(44, 14), cx, cy, 212, 24, 0, w=W2)
+    pais = m_paisley(124, 30)
+    inner = m_paisley(124, 30).xf(mat(18, 0, 0.66)) 
+    ring_at(pg, pais, cx, cy, 76, 12, 0, inner=inner, inner_w=W3)
+    band_petals(pg, cx, cy, 30, 78, 12, PI / 12, w=W2)
+    disk(pg, cx, cy, 30)
+    mini = band_round(pg, cx, cy, 11, 22, 6, 0, W3)
+    corner_set(pg, 'lace', 170)
 
 
-# the designs are added to DESIGNS in designs.py once they look right
+def m_compass(pg):
+    """an eight-point star with smaller points between, ringed by diamonds"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    band_scallop(pg, cx, cy, 300, 330, 48, 0)
+    band_tri(pg, cx, cy, 266, 298, 48, PI / 48)
+    ring_at(pg, m_diamond(32, 13), cx, cy, 232, 32, PI / 32, w=W2)
+    circ_ring(pg, cx, cy, 230, W2)
+    circ_ring(pg, cx, cy, 266, W2)
+    ring_at(pg, m_petal(150, 24), cx, cy, 20, 16, PI / 16, w=W2)
+    ring_at(pg, m_petal(168, 32), cx, cy, 20, 8, PI / 8, inner=Path().M(70, 0).L(150, 0))
+    ring_at(pg, m_petal(210, 34), cx, cy, 20, 8, 0, inner=Path().M(90, 0).L(190, 0))
+    for k in range(8):
+        a = k * TAU / 8 + PI / 16
+        x, y = polar(190, a, cx, cy)
+        mini = None
+    for k in range(16):
+        a = k * TAU / 16 + PI / 32
+    band_round(pg, cx, cy, 24, 60, 8, PI / 8)
+    pg.circle(cx, cy, 24, W2)
+    pg.circle(cx, cy, 12, W3)
+    corner_set(pg, 'dots', 150)
+
+
+def m_wheel(pg):
+    """a polar grid, each ring cut into more cells than the one inside, a small shape in every cell"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 334, W1)
+    rings = [(40, 90, 8, 'diamond'), (90, 138, 12, 'circle'), (138, 188, 16, 'eye'), (188, 238, 20, 'circle'), (238, 286, 24, 'diamond'), (286, 328, 28, 'circle')]
+    for i, (r0, r1, n, mo) in enumerate(rings):
+        polar_cells(pg, cx, cy, r0, r1, n, 0 if i % 2 == 0 else TAU / n / 2, W2, mo, 0.5)
+    pg.circle(cx, cy, 40, W2)
+    flower(pg, cx, cy, 38, 8, 0)
+    corner_set(pg, 'petal', 160)
+
+
+def m_sunflower(pg):
+    """a sunflower: seeds in a golden-angle spiral, two rows of petals, leaves, scallops"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    band_scallop(pg, cx, cy, 302, 330, 44, 0)
+    # leaves between
+    for k in range(8):
+        a = k * TAU / 8 + PI / 8
+        draw_leaf(pg, *polar(190, a, cx, cy), math.degrees(a), 104, 28, curl=0.35 * (1 if k % 2 else -1), veins=3)
+    ring_at(pg, m_petal(112, 25), cx, cy, 118, 28, 0, inner=Path().M(30, 0).L(86, 0))
+    ring_at(pg, m_petal(98, 27), cx, cy, 112, 28, PI / 28, inner=Path().M(26, 0).L(74, 0))
+    pg.shape(circ(cx, cy, 116), W2)
+    ga = PI * (3 - math.sqrt(5))
+    c = 13.2
+    N = int((106 / c) ** 2)
+    for i in range(N, 0, -1):
+        r = c * math.sqrt(i)
+        a = i * ga
+        x, y = polar(r, a, cx, cy)
+        pg.circle(x, y, 4.2 + 0.035 * r, W3)
+    pg.circle(cx, cy, 5.0, W3)
+    corner_set(pg, 'scallop', 140)
+
+
+def m_frost(pg):
+    """a six-fold snowflake: arms with branches, eyes between them, scallops and a hexagon in the middle"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    dots(pg, cx, cy, 316, 72, 0, 1.6)
+    band_scallop(pg, cx, cy, 276, 312, 36, 0)
+    circ_ring(pg, cx, cy, 276, W2)
+    for k in range(6):
+        am = k * TAU / 6 + PI / 6
+        pg.shape(at_rad(m_eye(150, 36).xf(mat(120, 0, 1)), cx, cy, am), W2)
+        pg.circle(*polar(195, am, cx, cy), 13, W3)
+        pg.line(at_rad(Path().M(135, 0).L(166, 0), cx, cy, am), W3)
+        pg.line(at_rad(Path().M(224, 0).L(255, 0), cx, cy, am), W3)
+    for k in range(6):
+        a = k * TAU / 6
+        for t, L, W in ((120, 74, 17), (180, 56, 13)):
+            for sg in (-1, 1):
+                x, y = polar(t, a, cx, cy)
+                draw_leaf(pg, x, y, math.degrees(a) + sg * 48, L, W, veins=0, mid=True)
+        pg.shape(at_rad(m_petal(226, 23), cx, cy, a).xf((1, 0, 0, 1, 0, 0)), W2)
+        pg.line(at_rad(Path().M(70, 0).L(200, 0), cx, cy, a), W3)
+    hx = [polar(58, i * TAU / 6 + PI / 6, cx, cy) for i in range(6)]
+    pg.shape(rpoly(hx, 7), W2)
+    flower(pg, cx, cy, 44, 6, PI / 6, core=0.34)
+    corner_set(pg, 'star', 150)
+
+
+def m_garland(pg):
+    """eight flowers on a ring, with leaves between them and a small flower in the middle"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    dots(pg, cx, cy, 316, 64, 0, 1.6)
+    circ_ring(pg, cx, cy, 300, W2)
+    for k in range(8):
+        a = k * TAU / 8 + PI / 8
+        draw_leaf(pg, *polar(150, a, cx, cy), math.degrees(a), 140, 30, curl=0.2, veins=4)
+    for k in range(8):
+        a = k * TAU / 8
+        draw_leaf(pg, *polar(180, a, cx, cy), math.degrees(a), 40, 11, veins=0, mid=False)
+    for k in range(8):
+        a = k * TAU / 8
+        x, y = polar(232, a, cx, cy)
+        flower(pg, x, y, 74, 8, a, core=0.34)
+    for k in range(8):
+        a = k * TAU / 8 + PI / 8
+        x, y = polar(110, a, cx, cy)
+        flower(pg, x, y, 38, 6, a, core=0.34, ring=False)
+    band_petals(pg, cx, cy, 20, 64, 16, 0)
+    disk(pg, cx, cy, 20)
+    corner_set(pg, 'dots', 150)
+
+
+def m_moon(pg):
+    """a moon and stars: a crescent in the middle, a ring of stars, rays and arches"""
+    cx, cy = CX, CY
+    circ_ring(pg, cx, cy, 332, W1)
+    for k in range(24):
+        a = k * TAU / 24
+        L = 56 if k % 2 == 0 else 34
+        pg.shape(at_rad(m_petal(L, 11 if k % 2 == 0 else 9), cx, cy, a).xf(mat(0, 0, 1)), W2) if False else None
+    band_tri(pg, cx, cy, 276, 330, 24, 0)
+    band_scallop(pg, cx, cy, 232, 276, 24, PI / 24, dot=True)
+    circ_ring(pg, cx, cy, 228, W2)
+    for k in range(12):
+        a = k * TAU / 12
+        x, y = polar(188, a, cx, cy)
+        pg.shape(m_star(31, 13).xf(mat(x, y, 1, False, math.degrees(a) + 90)), W2)
+    dots(pg, cx, cy, 188, 12, PI / 12, 2.4, solid=False)
+    band_petals(pg, cx, cy, 120, 150, 24, 0, w=W2)
+    circ_ring(pg, cx, cy, 150, W2)
+    pg.shape(circ(cx, cy, 120), W2)
+    pg.shape(crescent(86, 74, 40).xf(mat(cx - 22, cy, 1, False, -25)), W2)
+    for (x, y, r) in ((60, -40, 18), (78, 20, 11), (40, 62, 9)):
+        pg.shape(m_star(r, r * 0.44).xf(mat(cx + x - 6, cy + y - 4, 1)), W3)
+    corner_set(pg, 'petal', 150)
