@@ -1,0 +1,60 @@
+{
+ "title": "Color and Breathe",
+ "subtitle": "An Adult Coloring Book of Mandalas, Gardens and Quiet Scenes for Calm and Focus",
+ "trim_in": [
+  8.5,
+  11
+ ],
+ "paper": "white",
+ "designs": 40,
+ "pages_planned": 88,
+ "odd_design_pages": [
+  7,
+  9,
+  11,
+  13,
+  15,
+  17,
+  19,
+  21,
+  23,
+  25,
+  27,
+  29,
+  31,
+  33,
+  35,
+  37,
+  39,
+  41,
+  43,
+  45,
+  47,
+  49,
+  51,
+  53,
+  55,
+  57,
+  59,
+  61,
+  63,
+  65,
+  67,
+  69,
+  71,
+  73,
+  75,
+  77,
+  79,
+  81,
+  83,
+  85
+ ],
+ "files": {
+  "interior": {
+   "pdf": "coloring-adult.pdf",
+   "pages": 88,
+   "bytes": 3516361
+  }
+ }
+}

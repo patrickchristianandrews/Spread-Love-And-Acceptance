@@ -115,10 +115,16 @@ def sample_path(P, n=60):
 class Pg:
     """one page of line art"""
 
-    def __init__(self):
+    def __init__(self, palette=None):
         self.o = []
         self.defs = []
         self.n = 0
+        self.pal = palette       # a list of colors: only the cover uses it (the interior is gray only)
+        self.pi = 0
+
+    def ring(self):
+        """the next ring of a mandala takes the next color of the palette (cover only)"""
+        self.pi += 1
 
     def nid(self, p='c'):
         Pg._U = getattr(Pg, '_U', 0) + 1
@@ -145,6 +151,8 @@ class Pg:
             self.line(Path().M(xs0, below).L(xs1, below), W2)
 
     def shape(self, P, w=W2, fill='#fff'):
+        if self.pal and fill == '#fff':
+            fill = self.pal[self.pi % len(self.pal)]
         d = P if isinstance(P, str) else pd(P)
         self.o.append('<path d="%s" fill="%s" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-linecap="round"/>' % (d, fill, INK, f(w)))
 

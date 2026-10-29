@@ -292,6 +292,21 @@ PATTERNS = {
 }
 
 
+# patterns that leave slivers or tiny cells (the overlapping-circle net, leaf rows, crescents, the triangle grid) are drawn as safer ones,
+# and no pattern is drawn tighter than 24 units (0.24 in) between repeats, so every cell stays easy to color
+_ALIAS = {'petals': 'circles', 'leaves': 'bubbles', 'tri': 'hex', 'crescents': 'stars'}
+
+
+def _clamped(fn, lo):
+    return lambda x0, y0, x1, y1, g: fn(x0, y0, x1, y1, max(g, lo))
+
+
+for _k, _v in _ALIAS.items():
+    PATTERNS[_k] = PATTERNS[_v]
+for _k in list(PATTERNS):
+    PATTERNS[_k] = _clamped(PATTERNS[_k], 22 if _k in ('beads', 'stars', 'waves', 'weave', 'chevron', 'chevron') else 26)
+
+
 def bbox_of(P):
     xs, ys = [], []
     for pts, _c in P.flatten(8.0):
@@ -395,7 +410,7 @@ def z_orbit(pg):
 def z_quilt(pg):
     """a quilt of diamonds: a tilted grid, each diamond with its own pattern, in a plain border"""
     x0, y0 = FX + 30, FY + 40
-    cols, rows = 4, 6
+    cols, rows = 3, 5
     dw, dh = (FW - 60) / cols, (FH - 80) / rows * 1.0
     kinds = ['scales', 'circles', 'hex', 'lattice', 'petals', 'waves', 'diamonds', 'rings', 'tri', 'squares', 'beads', 'leaves',
              'crescents', 'stars', 'chevron', 'spiral', 'weave', 'bubbles', 'scales', 'hex', 'circles', 'rings', 'waves', 'petals']
@@ -414,7 +429,7 @@ def z_quilt(pg):
         if cxx - dw / 2 < FX + 18 or cxx + dw / 2 > FX + FW - 18 + 2:
             pass
         reg = Path().M(cxx, cyy - dh / 2).L(cxx + dw / 2, cyy).L(cxx, cyy + dh / 2).L(cxx - dw / 2, cyy).Z()
-        fill_region(pg, reg, kinds[used % len(kinds)], 20, [0, 90, 45, -45][used % 4], w=W2)
+        fill_region(pg, reg, kinds[used % len(kinds)], 26, [0, 90, 45, -45][used % 4], w=W2)
         used += 1
     pg.endclip()
     pg.line(rrect(FX + 22, FY + 26, FW - 44, FH - 52, 22), W2)
@@ -427,7 +442,7 @@ def z_leaf(pg):
     top, bot = cy - L / 2, cy + L / 2
     outline = Path().M(cx, bot).C(cx - 330, bot - 200, cx - 330, top + 250, cx, top).C(cx + 330, top + 250, cx + 330, bot - 200, cx, bot).Z()
     pg.clip(rrect(FX + 9, FY + 9, FW - 18, FH - 18, 13))
-    pg.line(p_circles(FX, FY, FX + FW, FY + FH, 36), W3)
+    pg.line(p_stars(FX, FY, FX + FW, FY + FH, 58), W3)
     pg.endclip()
     pg.shape(outline, W1)
     kinds = ['scales', 'diamonds', 'hex', 'petals', 'waves', 'circles', 'rings', 'chevron']
@@ -464,11 +479,14 @@ def z_rainbow(pg):
         arc_to(P, ri, TAU, PI, cx, cy)
         P.Z()
         fill_region(pg, P, kinds[k], 18, 0 if k not in (1,) else 0)
-    # the middle: a little half disk with a flower
+    # the middle: a little half disk, and clouds at the two feet of the rainbow
     P = Path()
     arc_to(P, 56, PI, TAU, cx, cy, move=True)
     P.Z()
     pg.shape(P, W2)
+    from ac_props import cloud
+    cloud(pg, cx - 330 + 40, cy + 10, 130, 60)
+    cloud(pg, cx + 330 - 40, cy + 10, 130, 60)
     # clouds at the feet
     for sg in (-1, 1):
         for (dx, dy, r) in ((0, 0, 40), (44, 6, 30), (-44, 6, 30)):

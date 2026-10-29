@@ -3,7 +3,7 @@
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
    "kind": "book",
-   "bytes": 1269567,
+   "bytes": 1269685,
    "mb": 1.21,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
@@ -21,7 +21,7 @@
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
    "kind": "book",
-   "bytes": 1111543,
+   "bytes": 1111544,
    "mb": 1.06,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
@@ -39,7 +39,7 @@
   "book-3-understanding-each-other": {
    "file": "book/print/epub/book-3-understanding-each-other.epub",
    "kind": "book",
-   "bytes": 1153339,
+   "bytes": 1153340,
    "mb": 1.1,
    "identifier": "urn:uuid:cdba7485-19da-58b3-aaa6-cf107f00030f",
    "chapters": 7,
@@ -93,7 +93,7 @@
   "boxset-complete-series": {
    "file": "book/print/epub/boxset-complete-series.epub",
    "kind": "boxset",
-   "bytes": 3986791,
+   "bytes": 3986719,
    "mb": 3.8,
    "identifier": "urn:uuid:53207083-e866-53c9-a95c-fc8c179971bd",
    "chapters": 36,

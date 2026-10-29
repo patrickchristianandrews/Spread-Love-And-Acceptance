@@ -218,43 +218,36 @@ def fiddlehead(pg, x, y, R, a0=0.0, w=8):
 # ============================================================== the pages
 def b_wreath(pg):
     """a laurel wreath: two branches of leaves climbing from the bottom, flowers at the top, berries and a butterfly"""
-    cx, cy = CX, CY - 10
-    R = 238
-    # the branches (stems) and leaves
+    cx, cy = CX, CY - 6
+    R = 252
     for sg in (-1, 1):
-        n = 12
+        n = 11
         for k in range(n):
-            th = PI / 2 - sg * (k + 0.5) * (PI * 0.96) / n   # from the bottom up each side
+            th = PI / 2 - sg * (k + 0.5) * (PI * 0.93) / n
             px, py = polar(R, th, cx, cy)
-            d = th - sg * PI / 2        # travel direction (tangent)
+            d = th - sg * PI / 2
             for out in (1, -1):
-                a = math.degrees(d) + out * 36
-                L = 92 - k * 1.2
-                draw_leaf(pg, px, py, a, L, 25, curl=-out * 0.25 * sg, veins=3)
-    # the stem ring on top of leaf bases
-    P = Path()
-    arc_to(P, R, PI / 2 + 0.1, PI / 2 - 0.1 + TAU * 0.0 - 0.0, cx, cy, move=True) if False else None
+                a = math.degrees(d) + out * 38
+                L = 100 - k * 1.6
+                draw_leaf(pg, px, py, a, L, 28, curl=-out * 0.25 * sg, veins=3)
     for sg in (-1, 1):
-        a0, a1 = PI / 2, PI / 2 - sg * PI * 0.98
         Q = Path()
-        arc_to(Q, R, a0, a1, cx, cy, move=True)
-        pg.shape(ribbon(sample_path(Q)[::4] + [sample_path(Q)[-1]], 7, 4, n=30), W2)
-    # berries
-    for (th, sg) in ((PI / 2 - 0.75, 1), (PI / 2 + 0.75, 1), (-0.2, 1), (PI + 0.2, 1)):
-        px, py = polar(R + 0.0, th, cx, cy)
-        berry_sprig(pg, px, py, 66, math.degrees(th) + (35 if sg > 0 else -35), 3)
-    # the flowers at the top
+        arc_to(Q, R, PI / 2, PI / 2 - sg * PI * 0.97, cx, cy, move=True)
+        pts = sample_path(Q)
+        pg.shape(ribbon(pts[::4] + [pts[-1]], 8, 4, n=30), W2)
+    # berry sprigs on the outside of the branches
+    for (th, a) in ((PI / 2 - 0.9, -52), (PI / 2 + 0.9, -128), (0.35, -56), (PI - 0.35, -124), (-0.55, -40), (PI + 0.55, -140)):
+        px, py = polar(R + 8, th, cx, cy)
+        berry_sprig(pg, px, py, 70, math.degrees(th) + (28 if th < PI / 2 else -28) * 0, 3)
     fx, fy = cx, cy - R - 4
-    daisy(pg, fx - 62, fy + 18, 42, 0.2, 12)
-    daisy(pg, fx + 64, fy + 18, 42, 0.5, 12)
-    poppy(pg, fx, fy - 6, 58, 0.3)
-    # at the bottom: a small bow of leaves
-    draw_leaf(pg, cx, cy + R + 8, 110, 64, 17, 0.3, 3)
-    draw_leaf(pg, cx, cy + R + 8, 70, 64, 17, -0.3, 3)
-    # inside the wreath: a butterfly and a few small flowers
-    butterfly(pg, cx, cy - 10, 84, 0)
-    for (x, y) in ((cx - 130, cy + 110), (cx + 130, cy + 110), (cx - 140, cy - 120), (cx + 140, cy - 120)):
-        cosmos(pg, x, y, 26, 0.3)
+    daisy(pg, fx - 80, fy + 22, 48, 0.2, 12)
+    daisy(pg, fx + 82, fy + 22, 48, 0.5, 12)
+    poppy(pg, fx, fy - 8, 68, 0.3)
+    draw_leaf(pg, cx, cy + R + 10, 112, 74, 20, 0.3, 3)
+    draw_leaf(pg, cx, cy + R + 10, 68, 74, 20, -0.3, 3)
+    butterfly(pg, cx, cy - 6, 118, 0)
+    for (x, y) in ((cx - 150, cy + 130), (cx + 150, cy + 130), (cx - 160, cy - 130), (cx + 160, cy - 130)):
+        cosmos(pg, x, y, 34, 0.3)
 
 
 # ---------------------------------------------------------------- more parts
@@ -298,8 +291,9 @@ def watering_can(pg, x, y, s=1.0):
     k = s
     body = rrect(x - 70 * k, y - 100 * k, 120 * k, 100 * k, 16 * k)
     # handle
-    pg.line(Path().M(x - 60 * k, y - 92 * k).C(x - 126 * k, y - 104 * k, x - 126 * k, y - 20 * k, x - 66 * k, y - 18 * k), 7 * k)
-    pg.line(Path().M(x - 60 * k, y - 92 * k).C(x - 126 * k, y - 104 * k, x - 126 * k, y - 20 * k, x - 66 * k, y - 18 * k), 4.5 * k).__class__ if False else None
+    hp = Path().M(x - 60 * k, y - 92 * k).C(x - 126 * k, y - 104 * k, x - 126 * k, y - 20 * k, x - 66 * k, y - 18 * k)
+    pg.line(hp, 12 * k)
+    pg.line(hp, 9 * k, color='#fff')
     # spout
     sp = Path().M(x + 44 * k, y - 28 * k).L(x + 128 * k, y - 104 * k).L(x + 140 * k, y - 94 * k).L(x + 50 * k, y - 66 * k).Z()
     pg.shape(sp, W2)
@@ -379,19 +373,18 @@ def b_fern(pg):
 def b_meadow(pg):
     """a meadow: stems of different heights with daisies, poppies, tulips, bellflowers and lavender, a butterfly and a bee"""
     gy = 1020
-    # back row
-    back = [(160, 560, 'bell', 22), (300, 520, 'lav', 0), (560, 540, 'lav', 0), (700, 580, 'bell', 22), (430, 470, 'tulip', 0)]
+    back = [(120, 470, 'bell', 36), (250, 380, 'lav', 0), (350, 520, 'bell', 32), (560, 400, 'lav', 0), (690, 480, 'bell', 36), (440, 330, 'tulip', 0), (160, 280, 'lav', 0), (730, 300, 'lav', 0)]
     for (x, y, kind, R) in back:
-        c = stem_leafed(pg, (x, gy), (x, y + (30 if kind == 'lav' else 18)), bend=18 * (1 if x < 430 else -1), leaves=1, leaf=(46, 12), w0=7, w1=5)
+        stem_leafed(pg, (x, gy), (x, y + (30 if kind == 'lav' else 18)), bend=18 * (1 if x < 430 else -1), leaves=1, leaf=(60, 14), w0=8, w1=5)
         if kind == 'bell':
-            bellflower(pg, x, y, R * 1.6, 0.2)
+            bellflower(pg, x, y, R * 1.5, 0.2)
         elif kind == 'lav':
-            lavender(pg, x, y + 90, 90, -90, 8, 11)
+            lavender(pg, x, y + 96, 100, -90, 9, 12)
         else:
-            tulip(pg, x, y + 40, 70, 90, 0)
-    front = [(110, 760, 'daisy', 46), (250, 700, 'poppy', 56), (400, 780, 'cosmos', 50), (540, 690, 'daisy', 50), (690, 770, 'poppy', 52), (330, 620, 'daisy', 36), (630, 600, 'cosmos', 34)]
+            tulip(pg, x, y + 46, 84, 110, 0)
+    front = [(118, 780, 'daisy', 58), (270, 700, 'poppy', 70), (420, 800, 'cosmos', 62), (560, 690, 'daisy', 62), (700, 790, 'poppy', 66), (340, 600, 'daisy', 44), (640, 590, 'cosmos', 44), (200, 900, 'cosmos', 44), (520, 910, 'daisy', 44)]
     for (x, y, kind, R) in front:
-        stem_leafed(pg, (x + (x - 430) * 0.1, gy), (x, y), bend=22 * (1 if x % 2 else -1), leaves=2, leaf=(78, 22), w0=9, w1=6)
+        stem_leafed(pg, (x + (x - 430) * 0.1, gy), (x, y), bend=22 * (1 if x % 2 else -1), leaves=2, leaf=(96, 28), w0=10, w1=6)
     for (x, y, kind, R) in front:
         if kind == 'daisy':
             daisy(pg, x, y, R, 0.1)
@@ -400,70 +393,77 @@ def b_meadow(pg):
         else:
             cosmos(pg, x, y, R, 0.2)
     grass(pg, FX + 12, FX + FW - 12, gy, 36, 90, 15, 1.0)
-    butterfly(pg, 560, 400, 70, -12)
-    bee(pg, 220, 370, 40, -20)
-    pg.line(Path().M(236, 380).C(280, 420, 300, 330, 340, 370), W3, dash='1 7')
+    butterfly(pg, 560, 200, 80, -12)
+    bee(pg, 230, 170, 46, -20)
+    pg.line(Path().M(250, 182).C(300, 220, 320, 130, 370, 170), W3, dash='1 7')
 
 
 def b_gate(pg):
-    """a garden gate in an arch of roses, between two stone pillars, with a path and flowers"""
+    """a garden gate in an arched opening of a brick wall, roses over the arch, a path and a garden beyond"""
+    from ac_zen import fill_region
     cx = CX
-    gy = 990
-    # the garden seen through the gate: hills, bushes and a winding path
-    hill = Path().M(200, 760).C(260, 640, 360, 620, 430, 650).C(520, 620, 610, 650, 660, 760).L(660, 940).L(200, 940).Z()
-    pg.shape(hill, W2)
-    pg.shape(Path().M(205, 700).C(240, 640, 300, 640, 330, 700).C(350, 650, 400, 650, 420, 720).Z(), W3) if False else None
-    # sun
-    pg.circle(cx, 590, 34, W2)
-    for k in range(12):
-        a = k * TAU / 12
-        pg.line(Path().M(*polar(44, a, cx, 590)).L(*polar(60, a, cx, 590)), W2)
-    # the path
-    path = Path().M(cx - 18, 740).C(cx - 60, 800, cx + 60, 840, cx - 30, 900).L(cx - 150, 990).L(cx + 150, 990).C(cx + 50, 900, cx + 120, 840, cx + 24, 790).C(cx + 14, 770, cx + 10, 750, cx + 12, 740).Z()
+    gy = 1000
+    # sky and trees behind the wall
+    pg.circle(660, 170, 40, W2)
+    for k in range(16):
+        a = k * TAU / 16
+        pg.line(Path().M(*polar(52, a, 660, 170)).L(*polar(70 if k % 2 == 0 else 62, a, 660, 170)), W2)
+    from ac_props import cloud, round_tree
+    cloud(pg, 220, 180, 220, 84)
+    for (x, h, w) in ((150, 250, 170), (330, 200, 140), (560, 230, 160), (730, 280, 180)):
+        round_tree(pg, x, 600, h, w, W2, leaf=True)
+    # the wall
+    wall = rrect(FX + 9, 590, FW - 18, gy - 590 + 40, 0)
+    fill_region(pg, wall, 'bricks', 44, 0, W2)
+    pg.shape(rrect(FX + 9, 574, FW - 18, 24, 3), W2)
+    # the arched opening, with the garden beyond
+    ox0, ox1, oy = 262, 598, 720
+    r = (ox1 - ox0) / 2
+    opening = Path().M(ox0, gy + 10).L(ox0, oy)
+    arc_to(opening, r, PI, TAU, cx, oy)
+    opening.L(ox1, gy + 10).Z()
+    pg.shape(opening, W1)
+    pg.clip(opening)
+    pg.shape(Path().M(ox0, 800).C(ox0 + 60, 740, ox0 + 160, 730, cx, 770).C(cx + 90, 730, ox1 - 40, 740, ox1, 800).L(ox1, gy).L(ox0, gy).Z(), W2)
+    round_tree(pg, 340, 800, 110, 80, W2, leaf=False)
+    round_tree(pg, 520, 800, 130, 90, W2, leaf=False)
+    path = Path().M(cx - 14, 800).C(cx - 40, 850, cx + 40, 880, cx - 30, 930).L(cx - 90, gy).L(cx + 110, gy).C(cx + 30, 930, cx + 90, 880, cx + 20, 840).C(cx + 12, 826, cx + 12, 812, cx + 14, 800).Z()
     pg.shape(path, W2)
-    for (x, y, rx, ry) in ((cx - 20, 800, 24, 8), (cx + 6, 850, 30, 10), (cx - 40, 910, 40, 12), (cx + 40, 950, 46, 13), (cx - 70, 972, 50, 12)):
-        pg.shape(ell(x, y, rx, ry), W3)
-    # the gate: two rails and pickets, an arched top
-    r_out, r_in = 232, 214
-    ctr = (cx, 600)
-    for i in range(-5, 6):
-        x = cx + i * 36
-        top = ctr[1] - math.sqrt(max(0.0, r_in ** 2 - (x - cx) ** 2)) + 8
-        spear = Path().M(x - 8, gy - 4).L(x - 8, top + 22).L(x, top - 6).L(x + 8, top + 22).L(x + 8, gy - 4).Z()
-        pg.shape(spear, W2)
-    for yy in (700, 860):
-        pg.shape(rrect(cx - 214, yy, 428, 16, 6), W2)
-    arch = Path()
-    arc_to(arch, r_out, PI, TAU, ctr[0], ctr[1], move=True)
-    arch.L(*polar(r_in, TAU, ctr[0], ctr[1]))
-    arc_to(arch, r_in, TAU, PI, ctr[0], ctr[1])
-    arch.Z()
-    pg.shape(arch, W2)
-    # pillars
+    pg.endclip()
+    # the gate: bars, two rails and scrolls at the top
+    for i in range(-3, 4):
+        x = cx + i * 40
+        top = oy - math.sqrt(max(0.0, (r - 12) ** 2 - (x - cx) ** 2)) + 6
+        pg.shape(Path().M(x - 5, gy + 6).L(x - 5, top + 14).L(x, top - 8).L(x + 5, top + 14).L(x + 5, gy + 6).Z(), W2)
+    for yy in (760, 900):
+        pg.shape(rrect(ox0 + 6, yy, ox1 - ox0 - 12, 14, 5), W2)
     for sg in (-1, 1):
-        px = cx + sg * 290
-        pg.shape(rrect(px - 62, 520, 124, gy - 520, 6), W2)
-        for j in range(8):
-            yy = 560 + j * 56
-            pg.line(Path().M(px - 62, yy).L(px + 62, yy), W3)
-            for i in range(2):
-                off = 31 if j % 2 else 0
-                pg.line(Path().M(px - 62 + off + 62 * i, yy).L(px - 62 + off + 62 * i, yy + 56), W3) if (off + 62 * i) < 124 else None
-        pg.shape(rrect(px - 76, 496, 152, 36, 6), W2)
-        pg.shape(Path().M(px - 52, 496).C(px - 52, 450, px + 52, 450, px + 52, 496).Z(), W2)
-        pg.circle(px, 452, 14, W2)
-    # roses climbing over the arch and the pillars
-    leaves = [(-200, 470, -120), (-140, 395, -75), (-60, 372, -30), (60, 372, 30), (140, 395, 75), (200, 470, 120)]
-    for (dx, y, a) in leaves:
-        draw_leaf(pg, cx + dx, y + 40, a - 90, 70, 20, 0.2, 3)
-        draw_leaf(pg, cx + dx + 10, y + 36, a - 20, 60, 17, -0.2, 3)
-    for (dx, y, R) in ((-232, 560, 34), (-170, 420, 36), (-80, 372, 32), (0, 360, 38), (84, 376, 32), (178, 424, 36), (236, 560, 34)):
-        rose(pg, cx + dx, y + 26, R, dx * 0.01)
-    for (dx, y) in ((-250, 650), (250, 650), (-300, 940), (300, 940)):
-        draw_leaf(pg, cx + dx, y, -90 if dx < 0 else -90, 70, 20, 0.3, 3)
-    grass(pg, FX + 12, FX + FW - 12, gy + 28, 26, 60, 15, 3.0)
-    for (x, y, R) in ((150, 950, 30), (700, 950, 30), (110, 890, 24), (740, 890, 24)):
-        daisy(pg, x, y, R, 0.2, 10)
+        pg.circle(cx + sg * 80, 830, 26, W2)
+        pg.circle(cx + sg * 80, 830, 11, W3)
+    pg.circle(cx, 830, 26, W2)
+    pg.circle(cx, 830, 11, W3)
+    ring = Path()
+    arc_to(ring, r - 6, PI, TAU, cx, oy, move=True)
+    pg.line(ring, W1)
+    # roses over the arch and up the wall
+    for k in range(9):
+        a = PI + (k + 0.5) * PI / 9
+        x, y = polar(r + 22, a, cx, oy)
+        draw_leaf(pg, x, y, math.degrees(a) + 90 - 40, 60, 17, 0.2, 2)
+        draw_leaf(pg, x, y, math.degrees(a) + 90 + 150, 60, 17, -0.2, 2)
+    for k in range(9):
+        a = PI + (k + 0.5) * PI / 9
+        x, y = polar(r + 22, a, cx, oy)
+        rose(pg, x, y, 30 if k in (0, 4, 8) else 24, k)
+    for (x, y, R) in ((ox0 - 40, 840, 28), (ox0 - 90, 930, 26), (ox1 + 40, 830, 28), (ox1 + 90, 920, 26)):
+        draw_leaf(pg, x, y, -70, 62, 18, 0.2, 2)
+        draw_leaf(pg, x, y, -110, 62, 18, -0.2, 2)
+        rose(pg, x, y, R, x)
+    for (x, y, R) in ((140, 980, 32), (230, 1000, 26), (630, 1000, 26), (720, 980, 32)):
+        draw_leaf(pg, x, y + 20, -120, 60, 15, 0.2, 2)
+        draw_leaf(pg, x, y + 20, -60, 60, 15, -0.2, 2)
+        daisy(pg, x, y, R, 0.2, 11)
+    grass(pg, FX + 12, FX + FW - 12, FY + FH - 6, 20, 52, 15, 3.0)
 
 
 def b_herbs(pg):
@@ -522,7 +522,9 @@ def b_herbs(pg):
     pg.line(Path().M(FX + 22, shelf1 + 10).L(FX + FW - 22, shelf1 + 10), W3)
     for sg in (-1, 1):
         bx = CX + sg * 250
-        pg.shape(Path().M(bx - 10, shelf1 + 26).L(bx + 10, shelf1 + 26).L(bx + 10, shelf1 + 84).C(bx + 10, shelf1 + 114, bx + sg * 50, shelf1 + 128, bx + sg * 62, shelf1 + 128).C(bx + sg * 20, shelf1 + 90, bx - 10, shelf1 + 100, bx - 10, shelf1 + 80).Z(), W2)
+        pg.shape(Path().M(bx - 40, shelf1 + 26).L(bx + 40, shelf1 + 26).L(bx + 40, shelf1 + 36).L(bx - 40, shelf1 + 86).Z(), W2) if False else None
+        pg.shape(Path().M(bx - 36, shelf1 + 26).L(bx + 36, shelf1 + 26).L(bx + 36, shelf1 + 110).Z(), W2) if sg > 0 else pg.shape(Path().M(bx - 36, shelf1 + 26).L(bx + 36, shelf1 + 26).L(bx - 36, shelf1 + 110).Z(), W2)
+        pg.line(Path().M(bx - 22 * sg, shelf1 + 36).L(bx + 22 * sg, shelf1 + 36 + 0), W3) if False else None
     # lower shelf
     pot(pg, 170, shelf2 - 0, 150, 110)
     pg.shape(ell(170, shelf2 - 122, 70, 26), W2)   # a low plant: a rounded succulent
