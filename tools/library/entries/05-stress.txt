@@ -84,7 +84,7 @@ research:
 Siegel introduced the concept in *The Developing Mind* (1999). It is widely used by therapists, particularly in trauma-informed practice, as a teaching metaphor. It is not a measured scientific construct with its own body of experimental evidence, but it fits well with established research on arousal, attention and emotion regulation.
 links:
 /quick-checks.html#ladder | The nervous-system self-check
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - What pushes each of us toward the top or bottom of our window?
@@ -107,7 +107,7 @@ research:
 Porges published the theory in 1995 and his book *The Polyvagal Theory* in 2011. Paul Grossman and Edwin Taylor critiqued its assumptions in 2007, and Grossman published a detailed critique in 2023 arguing that its core premises are not supported. Porges and colleagues have responded. The theory has limited direct experimental testing, and it is best treated as a clinical metaphor rather than established physiology.
 links:
 /quick-checks.html#ladder | The nervous-system self-check (the ladder)
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /nervous-system.html#polyvagal | Your nervous system, in plain words: polyvagal theory, honestly
 talk:
 - Is the idea of different “states” useful for you, whatever the biology?
@@ -231,7 +231,7 @@ research:
 James Coan, Hillary Schaefer and Richard Davidson published the hand-holding study in 2006. Coan and David Sbarra set out social baseline theory in 2015. Emily Butler and Ashley Randall reviewed emotional co-regulation in couples in 2013. Most studies are small and lab-based, but the overall pattern is consistent.
 links:
 /check-ins.html | Check-ins
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /night-garden.html | The Night Garden
 talk:
 - What helps you settle when you’re with someone you trust?

@@ -203,7 +203,7 @@ research:
 Research on stimming from autistic perspectives, for example a 2019 qualitative study by Steven Kapp and colleagues, describes it as a coping and self-regulation mechanism. Research on fidgeting and attention in ADHD suggests movement may help some people concentrate. The evidence base is largely qualitative.
 links:
 /wired-differently.html | Wired Differently
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 talk:
 - What small movements help each of us think or calm down?
 - Are there any habits that bother the other person? Could we find a swap?

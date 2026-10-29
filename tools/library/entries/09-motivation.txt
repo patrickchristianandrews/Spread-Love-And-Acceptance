@@ -58,7 +58,7 @@ They can also be used for difficult moments: “If I notice I’m getting floode
 research:
 Peter Gollwitzer introduced the concept in 1993 and summarized it in an influential 1999 review. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behavior change research, though effects vary by task and setting.
 links:
-/wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
+/wp-11.html | Calm-down plan: decide now, while you’re calm (WP-11)
 /workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Is there a vague goal we could turn into an if–then plan?
@@ -279,7 +279,7 @@ For couples, WOOP can structure a goal conversation: “We wish for calmer eveni
 research:
 Oettingen’s *Rethinking Positive Thinking* (2014) summarizes research on mental contrasting. Studies have found WOOP helps with various goals, though effects vary and many studies are small. It fits with the stronger evidence for implementation intentions.
 links:
-/wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
+/wp-11.html | Calm-down plan: decide now, while you’re calm (WP-11)
 /book/chapter-5.html | The monthly look-back (Chapter V)
 talk:
 - What is one wish we share for our home life?

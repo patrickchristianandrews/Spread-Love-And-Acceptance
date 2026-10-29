@@ -44,7 +44,7 @@
       ] },
     { id: 'know', who: 'solo', title: 'Know yourself in a week', len: 'One week, about 10 minutes a day',
       intro: 'Six short looks at how you work. Nothing here needs anyone else.',
-      leave: 'your communication style, a care card, a one-page “how to talk to me” card, one pattern you understand better and the logic behind one of your reactions',
+      leave: 'your communication style, a care card, a one-page “how I like to be spoken to” card, one pattern you understand better and the logic behind one of your reactions',
       back: { q: 'A week on: which result surprised you most? Share one with someone you trust, if you like.', href: '/together.html#share', go: 'Share a result' },
       steps: [
         { k: 'tool', id: 'weather', f: '/quick-checks.html#today', mins: 1, do: 'Check your mood and energy today, in four taps.', leave: 'Today’s reading, and what tends to help on days like it' },

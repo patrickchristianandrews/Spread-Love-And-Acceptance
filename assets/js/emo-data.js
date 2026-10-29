@@ -341,7 +341,7 @@
       steps: [{ t: 'Notice if the feeling follows the change', d: 'For a week, jot down how you feel and anything about the change (time of day, a new dose, your cycle). A note on your phone is enough.', link: ['/nervous-system.html#interoception', 'Reading your body'], sig: 'You can see whether the feeling follows a pattern.' }] },
     replay: { label: 'Replaying something that happened', kind: 'inner', ctl: 'mine', art: 'haze',
       unsure: 'Going over something can help you make sense of it, or keep it hot. Which one depends on how it’s done.',
-      steps: [{ t: 'Tell it as if it happened to a friend', d: 'When the replay starts, try describing it in the third person: “They felt hurt because…” It gives a little distance.', link: ['/upset-right-now.html', 'Cool-down corner'], sig: 'The replay is shorter, or less sharp.' }] },
+      steps: [{ t: 'Tell it as if it happened to a friend', d: 'When the replay starts, try describing it in the third person: “They felt hurt because…” It gives a little distance.', link: ['/upset-right-now.html', 'Upset right now?'], sig: 'The replay is shorter, or less sharp.' }] },
     worryahead: { label: 'Worry about what’s coming', kind: 'inner', ctl: 'mine', art: 'haze',
       unsure: 'Some worry is useful planning. It’s hard to tell from here how much is.',
       steps: [{ t: 'Write the worry, then one thing you can do', d: 'Write the worry in one line. Under it, write one thing you can do about it this week, and when you’ll look at it again.', link: ['/wp-11.html', 'Calm-down plan'], sig: 'The worry comes up less often between looks.' }] },
@@ -403,7 +403,7 @@
 
   /* ------------------------------------------------------------------ the always-there links */
   D.links = [
-    ['/upset-right-now.html', 'Cool-down corner', 'Settle in five minutes when it’s running hot.'],
+    ['/upset-right-now.html', 'Upset right now?', 'Settle in five minutes when it’s running hot.'],
     ['/wp-11.html', 'Calm-down plan', 'Decide ahead of time what settles you.'],
     ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'A fact, a feeling and a kind ask.'],
     ['/support-languages.html', 'Support languages', 'What helps you, and the people around you, through a hard time.'],

@@ -41,3 +41,7 @@ rung       # a rung of the ladder
 sorted     # "sorted the pile"
 tap        # "a drum to a tap"
 tea        # "a cup of tea" (fine in American English)
+ground     # "feel your feet on the ground" (the floor or earth, not a British sense)
+s'mores    # the campfire snack
+wheee      # a happy cry on the sled
+treehouse  # a house built in a tree

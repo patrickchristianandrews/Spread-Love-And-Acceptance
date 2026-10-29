@@ -413,7 +413,7 @@ def build(S):
         toc.append(S.B.toc_row('sec-' + c['id'], str(i), esc(c['name']), 'is-ch', '%d situations' % len(its)))
         body.append(sec_html(i, c, its, S, nums))
         body += [sit_html(it, nums[it['id']], S, p.get('include_fits', True)) for it in its]
-    for key, title in (('build', 'Build your own'), ('find', 'Find it fast'), ('ideas', 'How the ideas connect'), ('online', 'More, free online'), ('notes', 'Research notes'), ('series', 'The series'),
+    for key, title in (('build', 'Build your own'), ('find', 'Find it fast'), ('ideas', 'How the ideas connect'), ('online', 'More, free online'), ('alltools', 'All the free tools'), ('notes', 'Research notes'), ('series', 'The series'),
                        ('jot', 'Your notes')):
         if key == 'jot' and p.get('notes_pages', 2) <= 0:
             continue
@@ -421,11 +421,11 @@ def build(S):
     front = title_html(p, S) + copyright_html(p, S)
     front += '<nav class="pe-toc ps-toc pk-toc is-long pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (S.mark('contents'), ''.join(toc))
     front += how_html(S) + lens_html(S)
-    back = build_html(p, S) + find_html(secs, S, nums) + S.ideas_map(p, [], pocket_sections=[(c['id'], c['name']) for c, _x in secs]) + online_html(p, S) + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
+    back = build_html(p, S) + find_html(secs, S, nums) + S.ideas_map(p, [], pocket_sections=[(c['id'], c['name']) for c, _x in secs]) + online_html(p, S) + S.alltools_pages(p, kind='pocket') + notes_html(secs, S, nums) + series_html(p, S) + jot_html(p, S)
     ol = [['Contents', 'contents', 0], ['How to use this guide', 'how', 0]] + [[t, k_, 0] for k_, t, _x in LENS]
     for c, its in secs:
         ol.append([c['name'], 'sec-' + c['id'], 0])
-    ol += [['Build your own', 'build', 0], ['Find it fast', 'find', 0], ['How the ideas connect', 'ideas', 0], ['More, free online', 'online', 0], ['Research notes', 'notes', 0], ['The series', 'series', 0]]
+    ol += [['Build your own', 'build', 0], ['Find it fast', 'find', 0], ['How the ideas connect', 'ideas', 0], ['More, free online', 'online', 0], ['All the free tools', 'alltools', 0], ['Research notes', 'notes', 0], ['The series', 'series', 0]]
     title = '%s: %s' % (p['title'], p['sub'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': S.B.AUTHOR, 'subject': p['line']}, ensure_ascii=False).replace('</', '<\\/')
@@ -484,6 +484,7 @@ def epub_docs(S, Doc, B):
     docs.append(Doc('build.xhtml', 'Build your own', bh))
     docs.append(Doc('find.xhtml', 'Find it fast', find_html(secs, S, nums, epub=True)))
     docs.append(Doc('online.xhtml', 'More, free online', online_html(p, S, epub=True)))
+    docs.append(Doc('alltools.xhtml', 'All the free tools', S.alltools_pages(p, kind='pocket', epub=True)))
     docs.append(Doc('ideas.xhtml', 'How the ideas connect', S.ideas_map(p, [], epub=True, pocket_sections=[(c['id'], c['name']) for c, _x in secs])))
     docs.append(Doc('notes.xhtml', 'Research notes', notes_html(secs, S, nums, epub=True).replace('<section class="pk-back pk-notes"', '<section epub:type="bibliography" class="pk-back pk-notes"', 1)))
     return p, docs, chapters

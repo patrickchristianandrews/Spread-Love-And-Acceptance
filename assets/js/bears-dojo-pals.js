@@ -106,7 +106,7 @@
     ['A tiny daily check-in keeps small things small.', '/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in'],
     ['Thank-yous land best when they’re specific: “thanks for remembering the dentist.”', '/turning-toward.html#thanks', 'Saying thanks'],
     ['Some of how you react was learned growing up, and you get to choose which old rules to keep.', '/growing-up.html', 'Where your lens came from'],
-    ['Rest isn’t a reward for finishing. It’s what makes the next thing possible.', '/wp-11.html', 'The Calm-Down Kit']
+    ['Rest isn’t a reward for finishing. It’s what makes the next thing possible.', '/wp-11.html', 'Calm-down plan']
   ];
   var factBag = [];
   function nextFact() { if (!factBag.length) factBag = shuffleFacts(FISH_FACTS.slice()); return factBag.pop(); }

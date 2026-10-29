@@ -68,7 +68,7 @@
         next: function () { return 'Pick the line where you differ most, and each say one thing that helps you there.'; } },
       open: function (d, n, id) { return C.link(C.envelope({ tool: 'wavelength', id: id, name: n, d: { c: d.c } }), '/wavelength.html'); },
       openLabel: ['Open the full comparison in Wavelength'] },
-    { id: 'wiring', title: ['Your “how to talk to me” card'], v: 1,
+    { id: 'wiring', title: ['Your “how I like to be spoken to” card'], v: 1,
       get: function (store) {
         var s = J(store.ss('tol-wiring-draft')) || J(store.ls('tol-wiring-card')), a = s && s.A;
         if (!a) return null;
@@ -85,7 +85,7 @@
       sub: function (d) { return ((d.count || 0) + ((d.count || 0) === 1 ? ' thing that helps you' : ' things that help you') + (d.wave ? ' · Wave Code ' + d.wave : '')); },
       view: { kind: 'fields', fields: [{ k: 'wave', en: 'Wave Code' }, { k: 'count', en: 'Things that help, on the card' }],
         shape: function (d) { return { wave: d.wave || '', count: d.count != null ? String(d.count) : '' }; },
-        next: function () { return 'Open the cards side by side on the “how to talk to me” card page, and each read the other’s “what helps” out loud.'; } },
+        next: function () { return 'Open the cards side by side on the “how I like to be spoken to” card page, and each read the other’s “what helps” out loud.'; } },
       open: function (d) { return (W ? W.location.origin : 'https://spreadloveandacceptance.com') + '/wiring-card.html#card=' + encodeURIComponent(d.code); },
       openLabel: ['Open both cards side by side'] },
     { id: 'care', title: ['Your care card (what feels like care right now)'], v: 1,

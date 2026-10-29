@@ -16,7 +16,7 @@
       picks:[
         ['/night-garden.html','The Night Garden','A calm place to breathe and play for a few minutes. No sign-up, nothing to lose.'],
         ['/quick-checks.html#today','Today\u2019s Weather','One minute, and it tells you what today is actually good for.'],
-        ['/wp-11.html','The Calm-Down Kit','Decide now what settles you, so it is ready when it is needed.']
+        ['/wp-11.html','Calm-down plan','Decide now what settles you, so it is ready when it is needed.']
       ]},
     { id:'caring', ico:'\uD83D\uDC9B', label:'I\u2019m looking after someone I love',
       say:'Caring for a parent, or for a husband, wife or partner after surgery or an illness, can get heavy quietly. Start with your own battery, because you matter here too. Then try one small thing today: a one-minute break, or asking one person for one specific help, like \u201cCould you do Thursday\u2019s drive?\u201d',
@@ -139,7 +139,7 @@
         ['/ladder.html','Where am I right now?','Four quick taps, then one calm step that fits.'],
         ['#breathe','Breathe for a minute','A short pause, right here.'],
         ['/calm-without-pills.html','Calm without pills','What helps, and what the research says.'],
-        ['/wp-11.html','The Calm-Down Kit','Decide now what settles you, so it is ready next time.']
+        ['/wp-11.html','Calm-down plan','Decide now what settles you, so it is ready next time.']
       ]},
     { id:'on-my-own', ico:'\uD83E\uDEB4', label:'On my own after a breakup',
       say:'After a breakup or divorce, the house, the week and the jobs all change at once. Go gently. Start with your own energy, then build a simple routine that is yours, including the days the kids are with you if you share them.',
@@ -153,7 +153,7 @@
       picks:[
         ['/upset-right-now.html','Upset right now?','Five minutes to pause, breathe and come back.'],
         ['/parents.html#anger-help','Calming your anger','A calm-down plan, and what to try first.'],
-        ['/wp-11.html','The Calm-Down Kit','Write down your triggers and your own pause line ahead of time.']
+        ['/wp-11.html','Calm-down plan','Write down your triggers and your own pause line ahead of time.']
       ]},
     { id:'sharing-a-room', ico:'\uD83D\uDECF\uFE0F', label:'Sharing a room or a dorm',
       say:'Sharing a room is close quarters, and small things like lights, noise and guests add up fast. A short room agreement, made early and checked again later, saves a lot of awkward moments.',

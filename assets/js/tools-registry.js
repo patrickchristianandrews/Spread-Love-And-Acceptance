@@ -101,7 +101,7 @@
     // ---------- Know yourself
     // consol12: three short cards about you, to share: 'wiring', 'carecard' -> 'wavelength'
     { id: 'wavelength', name: 'How you connect', brand: 'Wavelength, the Wiring Card and the care card', href: '/wavelength.html', type: 'self', also: ['talk', 'work'],
-      modes: [['The 2-minute style quiz', '/wavelength.html', '', 'Style quiz', '🌊'], ['How to talk to me: a card', '/wiring-card.html', '', 'How to talk to me', '🪪'], ['What feels like care: a card', '/love-languages.html#ll-card-h', '', 'What feels like care', '💛'], ['The logic behind a reaction', '/the-logic-behind-it.html', '', 'The logic behind it', '🧩']],
+      modes: [['The 2-minute style quiz', '/wavelength.html', '', 'Style quiz', '🌊'], ['How I like to be spoken to: a card', '/wiring-card.html', '', 'How I like to be spoken to', '🪪'], ['What feels like care: a card', '/love-languages.html#ll-card-h', '', 'What feels like care', '💛'], ['The logic behind a reaction', '/the-logic-behind-it.html', '', 'The logic behind it', '🧩']],
       does: 'Answer twelve quick either-or questions. Then, if you like, make a card on how to talk to you and one on what feels like care, or see the logic behind a reaction that gets misread.',
       gets: 'Your style in plain words, two cards to copy, print or share, and a side-by-side compare.',
       mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'Stop people guessing how to reach you: a 2-minute style quiz, plus two cards to share', top: 4,
@@ -170,16 +170,16 @@
     // ---------- Calm and stress
     // consol12: one calm place. 'upset', 'garden', 'music', 'drift', 'soften', 'pause' -> 'calm'. Each mode keeps its own page.
     // owner17: the calm tools are also gathered on one page, Relax and reset (/pause-and-play.html#relax), a mode here.
-    { id: 'calm', name: 'Upset right now?', brand: 'the Cool-down corner', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
+    { id: 'calm', name: 'Upset right now?', brand: '', href: '/upset-right-now.html', type: 'calm', also: ['talk', 'health', 'play', 'family'],
       modes: [['Upset right now? A 5-minute calm-down', '/upset-right-now.html', 'Just me', 'Upset right now?', '🫧'], ['Breathing game', '/night-garden.html', 'Just me', '', '🌙'],
-        ['Calm sounds and music', '/soundscapes.html', 'Just me', 'Sounds and music', '🎧'], ['Slow colors and tones', '/calm-visualizer.html', 'Just me', 'Slow colors', '🌀'],
+        ['Brain Breakers: calm music and background sounds', '/soundscapes.html', 'Just me', 'Brain Breakers', '🎧'], ['Slow colors and tones', '/calm-visualizer.html', 'Just me', 'Slow colors', '🌀'],
         ['Relax and reset: every calm tool in one place', '/pause-and-play.html#relax', 'Just me', 'Relax and reset', '🌿'],
         ['Soften a tense moment', '/tools/soften-a-tense-moment.html', 'The two of us', '', '🤝'], ['Make a pause plan', '/pursue-withdraw.html#plan-h', 'The two of us', 'Pause plan', '⏸️']],
       does: 'Right now: a pause line and a one-minute breathing pacer, or a breathing game, sounds or slow colors. Together: a pause plan.',
       gets: 'A calmer body, words to come back to the talk with, and a pause plan for next time.',
       mins: 5, time: 'About 5 minutes. A pause plan about 10', who: ['solo', 'two'], benefit: 'Stop a fight getting worse: settle in five minutes now, or plan a kinder pause for next time', top: 6,
-      kw: 'cool-down corner relax and reset relaxing tools relaxation calm tools breathing break wind down angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument calm down: right now, or before the next time upset right now? a 5-minute calm-down breathing game calm sounds and music soften a tense moment make a pause plan for arguments' },
-    { id: 'calmkit', name: 'Calm-down plan', brand: 'the Calm-Down Kit', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
+      kw: 'relax and reset relaxing tools relaxation calm tools breathing break wind down angry upset fight right now calm down breathe yelling breathing exercise breathe game night garden relax music instrumental brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound visualizer binaural wind down drift tense mood bad mood soften defuse time out break pause word one wants to talk one needs space pursue withdraw stonewall argument calm down: right now, or before the next time upset right now? a 5-minute calm-down breathing game brain breakers soften a tense moment make a pause plan for arguments' },
+    { id: 'calmkit', name: 'Calm-down plan', brand: '', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
       does: 'On a calm day, decide your early signs, a pause signal and what settles you.',
       gets: 'Your own plan for heated moments, to keep on your phone or print.',
       mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'A plan ready before you need it',
@@ -212,12 +212,12 @@
       gets: 'A map you can correct, a picture made from your answers, and one or two first steps.',
       mins: 5, time: 'About 3 to 8 minutes', who: ['solo'], benefit: 'Find what may be behind a feeling, on your own device', top: 1,
       kw: 'feelings emotions why do i feel this way map picture overwhelmed irritable low mood what am i feeling' },
-    { id: 'weather', name: 'My weather today', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
+    { id: 'weather', name: 'My weather today', brand: 'Today’s Weather and the quick 4 taps', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
       modes: [['Quick: 4 taps', '/ladder.html'], ['Full forecast', '/quick-checks.html#today']],
       does: 'Tap four quick questions, or take a minute on your mood, sleep, body and what’s coming up.',
       gets: 'Calm, revved up or running on empty, with what helps right now, and a private log if you want one.',
       mins: 1, time: '20 seconds to a minute', who: ['solo'], benefit: 'Know if now is a good time to talk: four taps, or one minute on mood, sleep and energy', top: 5,
-      kw: 'mood tracker mood check in energy sleep daily check today weather almanac nervous system ladder where am i right now state stressed shut down overwhelmed stress check battery burnout load how full load check how am i right now? a mood and energy check todays weather the nervous system ladder where am i right now?' },
+      kw: 'mood tracker mood check in energy sleep daily check today weather almanac the ladder where am i right now state stressed shut down overwhelmed stress check battery burnout load how full load check how am i right now? a mood and energy check todays weather the ladder where am i right now?' },
 
     // ---------- Plan together
     { id: 'suite', name: 'Your worksheets, in order, with a report', brand: 'the Workpaper Suite, and the package and report', href: '/workpapers/fill/suite.html', type: 'plan', also: ['load', 'self'],
@@ -247,7 +247,7 @@
       does: 'Four small steps, alone or with someone: your weather, one short read, one pattern, one thing to try.',
       gets: 'A short “here’s what I got” summary to keep or screenshot.',
       mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'The quickest way in: four small steps, and a “here’s what I got” to keep',
-      kw: 'start beginner first time new here quick start ten-minute start start in 10 minutes' },
+      kw: 'start beginner first time new here quick start ten minutes start in 10 minutes' },
     // consol12: 'playground', 'quest', 'sync', 'connect' -> 'explore'
     { id: 'explore', name: 'Learn by doing', brand: 'the Workpaper Playground, the quest map and more', href: '/do/index.html', type: 'learn', also: ['load', 'play'],
       modes: [['Practice the worksheets on an example', '/do/index.html', '', 'Practice on an example', '🧪'], ['Your learning map', '/quest.html', '', 'Learning map', '🗺️'],
@@ -397,7 +397,7 @@
   // Tools that were merged keep their old ids: each old id points at the tool it now lives in, so a link,
   // a guide panel or a saved reference that names the old id still finds the right card.
   var ALIASES = {
-    sounds: 'music',            // Calm-down sounds -> Calm sounds and music (/soundscapes.html#background)
+    sounds: 'music',            // Calm-down sounds -> Brain Breakers (/soundscapes.html#background)
     package: 'suite',           // the package and report -> Your worksheets, in order, with a report (#full-path)
     week0: 'sixweeks',          // Week 0 -> Six-week program (its calendar reminders are on /prog-01.html#calendar)
     minicross: 'crosswords',    // Quiet Crossword -> Crosswords, "Gentle levels"

@@ -28,8 +28,9 @@ K = C.load_json(os.path.join(C.OUT, 'kids.json'), {})['books']
 CHK = C.load_json(os.path.join(C.OUT, 'checks.json'), {})
 PB = C.load_json(os.path.join(C.MS, 'picture-book.json'))
 CB = C.load_json(os.path.join(C.MS, 'chapter-book', '00-book.json'))
-CY = C.load_json(os.path.join(C.MS, 'coloring-younger.json'))
-CO = C.load_json(os.path.join(C.MS, 'coloring-older.json'))
+import coloring_text as CT  # noqa: E402  (the coloring books' own words, kids29: both books star only Tidbit and Sugarfoot)
+CY = dict(C.load_json(os.path.join(C.MS, 'coloring-younger.json')) or {}, title=CT.YOUNGER['title'], subtitle=CT.YOUNGER['subtitle'], back_cover=CT.YOUNGER['back_cover'])
+CO = dict(C.load_json(os.path.join(C.MS, 'coloring-older.json')) or {}, title=CT.OLDER['title'], subtitle=CT.OLDER['subtitle'], back_cover=CT.OLDER['back_cover'])
 
 # the owner's price rule: $9.99 under 100 pages, $14.99 from 100 pages (unless printing cost needs more)
 def price_for(pages, cost):
@@ -65,31 +66,31 @@ DESC = {
                      '<p>A warm, funny read-aloud with rhymes, repeating lines and a calm-down trick children can copy: smell the flower, blow the candle.</p>'
                      '<p><b>Inside this book</b></p><ul><li>Noticing what your body is telling you (buzzy paws, heavy paws, calm)</li><li>Asking for what you need: \"room first, then a hug\"</li><li>One job each, so the basket gets light</li><li>Saying sorry in three steps and making it right</li><li>Gentle, funny clouds of Static that only want a friend</li><li>A calm-down breathing page, a find-and-count page, and a page of questions and words for grown-ups</li></ul>'
                      '<p>40 full-color pages, 8.5 x 8.5 inches. For ages 4 to 7, and for anyone who reads aloud.</p>'
-                     '<p><b>Part of The Frequency Buddies Books.</b> Tidbit, Sugarfoot and their friends also star in a chapter book for ages 9 to 12 and two coloring books.</p>'),
+                     '<p><b>Part of The Frequency Buddies Books.</b> Tidbit and Sugarfoot also star in a chapter book for ages 9 to 12 and two coloring books.</p>'),
     'chapter-book': ('<p><b>Wren Alvarez has one rule about her bedroom, written in glitter pen on the door: KNOCK FIRST.</b></p>'
                      '<p>Then Grandpa Lou moves in, her room becomes his, and Wren ends up sharing with her little brother Theo, who wears headphones at dinner, counts ceiling tiles when things get loud, and takes everything exactly the way it is said.</p>'
                      '<p>At the same time, the group chat blows up. One word, \"fine\", lands like a slap. A group project turns into a shouting match. And the one person Wren needs to say sorry to may need some room first.</p>'
                      '<p>Funny, warm and honest, with two dogs named Tidbit and Sugarfoot, a grandfather who has opinions about weather, and a map for the days when your body is loud and your words come out wrong.</p>'
                      '<p><b>Inside this book</b></p><ul><li>Eleven short chapters, about 16,000 words, with a picture at the start of each</li><li>Misread messages, and how to ask \"did you mean it like that?\"</li><li>Fair shares at home, including the invisible work of remembering</li><li>Feelings and what to do with them: the ladder of calm, revved up and running on empty</li><li>Apology and repair, with three things to say and time to let it land</li><li>Two ways of being wired, and two people learning each other’s language</li><li>A short \"Try this\" box at the end of every chapter, and a page for grown-ups</li></ul>'
                      '<p>For ages 9 to 12, with no scary parts.</p><p><b>Part of The Frequency Buddies Books.</b></p>'),
-    'coloring-younger': ('<p><b>Thirty-two big, simple pictures for little hands.</b></p>'
-                         '<p>Tidbit and Sugarfoot, Professor Puddles, Ollie the owl, Dot the snail, Hopper the frog, Nutmeg, Lumi, Beep, the ducklings, the Moon, the four clouds of Static, Peach and Lilac, and more. Thick, clear lines leave plenty of room for crayons and chunky markers.</p>'
-                         '<p>Every picture is on its own page, with a blank page behind it so markers do not soak through to the next one.</p>'
-                         '<p>For ages 3 to 7. A good companion to the read-aloud story <i>Tidbit and Sugarfoot’s Big Picnic</i>.</p><p><b>Part of The Frequency Buddies Books.</b></p>'),
-    'coloring-older': ('<p><b>Thirty-two detailed scenes with borders, patterns and a short, calming phrase in outline letters to color in.</b></p>'
-                       '<p>Breathe in slowly. Take a minute. Say what you need. Say sorry and make it right. Tidbit, Sugarfoot, Professor Puddles, the Frequency Buddies and the clouds of Static are all here, in scenes with hills, skies, mandala flowers and patterns to fill.</p>'
-                       '<p>Color a whole page, or just the part you like. Every picture has a blank page behind it, so markers do not soak through.</p>'
-                       '<p>A calm, screen-free break for ages 8 to 12, and a good companion to the chapter book <i>Turn Down the Static</i>.</p><p><b>Part of The Frequency Buddies Books.</b></p>'),
+    'coloring-younger': ('<p><b>Thirty-two big, bright pictures of Tidbit and Sugarfoot, the two best friends from the Frequency Buddies books.</b></p>'
+                         '<p>Zoom across a hill with Tidbit, give Sugarfoot a free hug, splash in a puddle, fly a kite, blast off in a rocket, build a pillow fort and tuck in for the night. Every page is two pups and one big, joyful scene, with thick, clear lines and plenty of room for crayons and chunky markers.</p>'
+                         '<p><b>Inside this book</b></p><ul><li>32 pictures to color, each with a short, funny line from the pups</li><li>A meet-the-friends page, a color-test page and a note for grown-ups</li><li>Find-it games on some pages: find the hearts, the bones, the ball, the stars and more</li><li>A blank page behind every picture, so markers do not soak through to the next one</li><li>A Great job certificate to sign at the end</li></ul>'
+                         '<p>68 pages, 8.5 x 11 inches, black and white. For ages 3 to 7. A good companion to the read-aloud story <i>Tidbit and Sugarfoot’s Big Picnic</i>.</p><p><b>Part of The Frequency Buddies Books.</b></p>'),
+    'coloring-older': ('<p><b>Thirty-two detailed, calming scenes of Tidbit and Sugarfoot, with patterns to fill and a short calm prompt on every page.</b></p>'
+                       '<p>Visit a lighthouse, a treehouse, a rainy window, a night garden, a sleepy town, a carnival and a snow globe, each one drawn in layers with fine lines, mandalas, zentangle-style patterns and tiny hidden hearts and paw prints to find.</p>'
+                       '<p><b>Inside this book</b></p><ul><li>32 detailed scenes with decorative borders and plenty of open space to color</li><li>A short, plain calm prompt on every page, such as \"Breathe in while the light turns. Breathe out as it passes.\"</li><li>A meet-the-friends page, a color-test page and a note before you begin</li><li>A blank page behind every picture, so markers do not soak through</li><li>A certificate to sign at the end</li></ul>'
+                       '<p>68 pages, 8.5 x 11 inches, black and white. A calm, screen-free break for ages 8 to 12, and a good companion to the chapter book <i>Turn Down the Static</i>.</p><p><b>Part of The Frequency Buddies Books.</b></p>'),
 }
 KEYWORDS = {
     'picture-book': ['read aloud story about feelings for kids', 'social emotional learning picture book', 'calm down breathing for children', 'sharing and taking turns story',
                      'saying sorry and making it right', 'dog friends bedtime story ages 4 to 7', 'big feelings anger and worry kids book'],
     'chapter-book': ['middle grade novel about feelings and friends', 'group chat misunderstandings for kids', 'grandparent moves in family story', 'story about brothers and sisters getting along',
                      'coping with change realistic fiction kids', 'tween book kindness and apology', 'books for ages 9 to 12 about emotions'],
-    'coloring-younger': ['coloring book for toddlers and preschoolers', 'big simple pictures coloring kids', 'dog and animal coloring pages', 'calming activity for little kids',
-                         'crayon coloring book blank back pages', 'cute characters coloring book gift', 'coloring book ages 3 to 7'],
-    'coloring-older': ['coloring book with calming phrases for kids', 'mindful coloring for tweens', 'detailed coloring pages ages 8 to 12', 'feelings and coping skills coloring',
-                       'relaxation activity for kids screen free', 'patterns and mandalas for kids', 'positive phrases coloring tween'],
+    'coloring-younger': ['coloring book for toddlers and preschoolers', 'dog coloring book for kids', 'cute puppy coloring pages ages 3 to 7', 'big simple pictures coloring kids',
+                         'find it games coloring book', 'crayon coloring book blank back pages', 'coloring book gift for little kids'],
+    'coloring-older': ['coloring book with calming prompts for kids', 'mindful coloring for tweens', 'detailed dog coloring pages ages 8 to 12', 'zentangle patterns and mandalas for kids',
+                       'hidden objects coloring book kids', 'relaxation activity for kids screen free', 'cozy scenes coloring book tween'],
 }
 CATS = {
     'picture-book': [('Children\'s Books > Growing Up & Facts of Life > Emotions & Feelings', 'Children\'s Books > Literature & Fiction > Animal Fiction'),
@@ -108,8 +109,8 @@ CATS = {
 TAGS = {
     'picture-book': ['Zoom. Slow. Together.', 'A calm-down trick kids can copy.', 'Big feelings, small clouds, one very big picnic.', 'Read it slowly. Stop where it helps.'],
     'chapter-book': ['One word can sound like a slap. Wren is about to find out.', 'Two kids, two dogs, one crowded house.', 'For the days when your body is loud and your words come out wrong.'],
-    'coloring-younger': ['Thirty-two friends to color.', 'A blank page behind every picture.', 'Big lines for little hands.'],
-    'coloring-older': ['Color a calm minute.', 'Detailed scenes and short phrases to keep.', 'A screen-free break for ages 8 to 12.'],
+    'coloring-younger': ['Thirty-two joyful pictures of two best friends.', 'A blank page behind every picture.', 'Big lines for little hands.'],
+    'coloring-older': ['Color a calm minute.', 'Detailed scenes, patterns and a calm prompt on every page.', 'A screen-free break for ages 8 to 12.'],
 }
 KINDLE = {'picture-book': 4.99, 'chapter-book': 4.99}
 
@@ -201,9 +202,9 @@ def md_title(t):
     if t['id'] in ('picture-book', 'chapter-book'):
         A('| Text | **Yes, AI-generated.** Pick "with editing" only if you edited it yourself | The story was drafted by an AI writing tool (Claude) from your brief, then revised in rounds against the site\'s language rules and a simulated reader review. |')
     elif t['id'] == 'coloring-older':
-        A('| Text | **Yes, AI-generated** (the 32 short phrases and the back cover) | The phrases were drafted by an AI writing tool from the site\'s ideas. |')
+        A('| Text | **Yes, AI-generated** (the 32 calm prompts and the back cover) | The prompts were drafted by an AI writing tool from the site\'s ideas. |')
     else:
-        A('| Text | **Yes, AI-generated** (the back cover and captions, a few words) | Almost no text: picture names and the back cover were drafted by an AI writing tool. |')
+        A('| Text | **Yes, AI-generated** (the 32 short captions and the back cover) | Almost no text: the captions, the find-it prompts and the back cover were drafted by an AI writing tool. |')
     A('| Images | **Yes, AI-generated** | Every picture is drawn by a program (SVG drawn by code in the style of the site\'s characters). The program was written with an AI tool and nobody drew the pictures by hand. Say so even though no image model was used: an AI-based tool created the work. |')
     A('| Translations | **No** | English only. |')
     A('')

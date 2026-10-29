@@ -22,7 +22,8 @@
 //   og        every og:image / twitter:image on this site exists on disk (and is a PNG/JPG/WebP)
 //   manifest  manifest.webmanifest parses, icons/screenshots/shortcut targets exist, icon sizes match the files
 //   sw        every file in sw.js SHELL and CORE exists on disk
-//   exclude   nothing in _config.yml's exclude list (files Jekyll keeps off the live site) is linked or loaded by a page or script
+//   exclude   nothing in _config.yml's exclude list (files Jekyll keeps off the live site) is linked or loaded by a page or script;
+//             and (polish29) tools/'s sub-folders and _manuscripts/ ARE left out, while sitemap pages and tools/*.html pages are not hidden
 //   size      no file over 5 MB outside assets/video, assets/audio and the book PDFs/ePubs
 //   head      each indexable page has one title, a description, a canonical, one h1 (advisories only)
 //
@@ -457,18 +458,39 @@ function checkExclude() {
   if (!exists('_config.yml')) { report('exclude', [], 'no _config.yml'); return; }
   const cfg = read('_config.yml');
   const m = cfg.match(/^exclude:\s*\n((?:[ \t]+-[^\n]*\n?)+)/m);
-  const list = m ? m[1].split('\n').map(l => (l.match(/^\s*-\s*(\S+)/) || [])[1]).filter(Boolean) : [];
+  const raw = m ? m[1].split('\n').map(l => (l.match(/^\s*-\s*(\S+)/) || [])[1]).filter(Boolean).map(e => e.replace(/^["']|["']$/g, '')) : [];
+  const list = raw.map(e => e.replace(/\/$/, ''));
+  const plain = list.filter(e => !/[*?\[]/.test(e));
   const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const skipRef = f => /^(tools\/|_manuscripts\/|book\/print\/src\/|book\/kids\/src\/)/.test(f) || list.some(e => f === e || f.startsWith(e + '/'));
+  const skipRef = f => /^(tools\/|_manuscripts\/|book\/print\/src\/|book\/kids\/src\/)/.test(f) || plain.some(e => f === e || f.startsWith(e + '/'));
   const scan = all.filter(f => /\.(html|js|css|xml|txt|json|webmanifest)$/.test(f) && !skipRef(f));
-  const res = list.filter(e => !/^(node_modules|Gemfile(\.lock)?)$/.test(e)).map(e => [e, new RegExp('(?:["\'=]|url\\()/?' + esc(e) + (e.includes('.') ? '(?![A-Za-z0-9_.-])' : '/'))]);   // a folder must be followed by a slash
+  const res = plain.filter(e => !/^(node_modules|Gemfile(\.lock)?)$/.test(e)).map(e => [e, new RegExp('(?:["\'=]|url\\()/?' + esc(e) + (e.includes('.') ? '(?![A-Za-z0-9_.-])' : '/'))]);   // a folder must be followed by a slash
   for (const f of scan) {
     if (/^assets\/js\/(chat-kb|search-index|chat-kb-bg)\.js$/.test(f)) continue;   // generated text that mentions file names in prose
     const s = read(f);
     for (const [e, re] of res) if (re.test(s)) problems.push(f + ' refers to ' + e + ', which _config.yml keeps off the site');
   }
-  for (const e of list) if (!/^(node_modules|Gemfile(\.lock)?)$/.test(e) && !exists(e)) advise('exclude', ['_config.yml excludes ' + e + ' but it does not exist (harmless)']);
-  report('exclude', problems, list.length + ' entries');
+  for (const e of plain) if (!/^(node_modules|Gemfile(\.lock)?)$/.test(e) && !exists(e)) advise('exclude', ['_config.yml excludes ' + e + ' but it does not exist (harmless)']);
+
+  // polish29: Jekyll's own rule (3.10, what GitHub Pages runs): an entry hides a file when it matches as a glob or when the
+  // file's path starts with it. A page that a sitemap lists or that sits directly in tools/ must not be hidden by it, and the
+  // internal folders must be: tools/ (build and test scripts, owner notes) and _manuscripts/ must not be published.
+  const globRe = e => new RegExp('^' + e.replace(/[.+${}()|\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
+  const hides = f => raw.some(e => globRe(e).test(f) || f.startsWith(e));
+  const pages = new Set(all.filter(f => /^tools\/[^/]+\.html$/.test(f)));
+  const smx = exists('sitemap.xml') ? read('sitemap.xml') : '';
+  for (const mm of smx.matchAll(/<loc>https?:\/\/[^/<]+(\/[^<]*)<\/loc>/g)) {
+    const p = mm[1].replace(/^\//, '');
+    const f = p === '' ? 'index.html' : (all.includes(p) ? p : (all.includes(p + '.html') ? p + '.html' : p.replace(/\/$/, '') + '/index.html'));
+    if (all.includes(f)) pages.add(f);
+  }
+  for (const f of pages) if (hides(f)) problems.push('_config.yml exclude hides a published page: ' + f);
+  if (!hides('_manuscripts/x.md')) problems.push('_config.yml does not exclude _manuscripts/ (internal book drafts would be published)');
+  // everything under tools/ is internal except the pages directly in it and the book examples the tool pages fetch
+  const toolPublic = f => /^tools\/[^/]+\.html$/.test(f) || f === 'tools/book/examples.json' || f.startsWith('tools/book/examples/') || f.startsWith('tools/kids/fonts/');
+  for (const f of all) if (f.startsWith('tools/') && !toolPublic(f) && !hides(f)) problems.push('_config.yml does not exclude ' + f + ' (internal tooling would be published)');
+  for (const f of all) if (toolPublic(f) && hides(f)) problems.push('_config.yml exclude hides ' + f + ', which the site needs');
+  report('exclude', problems, raw.length + ' entries, tools/ sub-folders and _manuscripts/ left out');
 }
 
 // ---------- big files ----------

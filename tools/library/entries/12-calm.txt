@@ -3,7 +3,7 @@
 #pillars: III
 #blurb: Slow breathing, mindfulness, nature, music, breaks, phones, mind-wandering and flow, with modest, honest claims.
 #pillarnote: Calm and attention is Pillar III, Read your state first. In you, it offers ways to notice and shift your state: slow breathing, grounding, rest and attention. Between you, it helps you choose better moments to talk, protect each other’s recovery time and be present rather than half-listening.
-#intro: The program has a calm-down kit, a night garden and a soundscape library. These entries set out what research says about the ideas behind them: some tools have reasonable evidence for short-term calm, some are popular but little studied, and none are treatments. The aim is to help you choose what might suit you, knowing what is established and what is simply pleasant.
+#intro: The program has a calm-down plan, a night garden and a soundscape library. These entries set out what research says about the ideas behind them: some tools have reasonable evidence for short-term calm, some are popular but little studied, and none are treatments. The aim is to help you choose what might suit you, knowing what is established and what is simply pleasant.
 
 @@ slow-breathing | Slow breathing
 pillars: III
@@ -18,7 +18,7 @@ Slow breathing is useful because it can be done anywhere, quickly, without anyon
 research:
 A 2018 systematic review by Andrea Zaccaro and colleagues found that slow breathing was associated with changes in heart-rate variability and with increased comfort, relaxation and alertness, and reduced arousal, though many studies were small. Paul Lehrer and Richard Gevirtz (2014) reviewed resonance-frequency breathing and biofeedback. Effects are real but modest, and most studies measure short-term changes.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /night-garden.html | The Night Garden
 talk:
 - Have you ever tried slow breathing when stressed? Did it help?
@@ -38,7 +38,7 @@ As with all breathing tools, it helps to practice when calm, so it is familiar w
 research:
 Box breathing is widely taught but has little direct research compared with slow breathing more generally. A 2023 study by Melis Yilmaz Balban and colleagues compared several breathing practices and mindfulness over a month and found all improved mood, with cyclic sighing (a longer exhale) showing somewhat larger effects than box breathing in that small study.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /night-garden.html | The Night Garden
 talk:
 - Does holding your breath feel calming or uncomfortable?
@@ -58,7 +58,7 @@ It has become popular partly through podcasts. The research behind it is promisi
 research:
 Peng Li and colleagues, including Jack Feldman and Mark Krasnow, identified brain circuits that control sighing in mice (2016). Balban and colleagues’ 2023 study in *Cell Reports Medicine* randomized about a hundred participants to five minutes a day of cyclic sighing, box breathing, cyclic hyperventilation or mindfulness meditation for a month; all groups improved in mood, with cyclic sighing showing the greatest improvement in positive feelings. It is one study, and replication is needed.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /quick-checks.html#ladder | The nervous-system self-check
 talk:
 - Do you notice yourself sighing when stressed?
@@ -78,7 +78,7 @@ Other grounding methods include holding something cold, naming objects in the ro
 research:
 Grounding techniques are widely used by therapists, but specific methods like 5-4-3-2-1 have little direct research. They draw on principles from mindfulness and attentional control, which have more evidence. They are best seen as practical, low-risk tools.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /night-garden.html | The Night Garden
 talk:
 - Which senses help you feel most present?
@@ -98,7 +98,7 @@ PMR can be helpful before sleep or after a stressful day. It also builds awarene
 research:
 Jacobson published *Progressive Relaxation* in 1929 (second edition 1938). Research over decades, including meta-analyses, supports PMR for reducing self-reported anxiety and stress, with moderate effects in many studies. It is often used as part of broader stress-management programs.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /night-garden.html | The Night Garden
 talk:
 - Where in your body do you hold tension?
@@ -119,7 +119,7 @@ research:
 A 2014 meta-analysis by Madhav Goyal and colleagues found moderate evidence that meditation programs improved anxiety, depression and pain, with effects similar to other active approaches rather than superior. Nicholas Van Dam and colleagues’ 2018 paper “Mind the Hype” warned about overstated claims and inconsistent definitions. Research on mindfulness in couples is limited but generally positive.
 links:
 /night-garden.html | The Night Garden
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 talk:
 - Have you tried mindfulness? What was it like?
 - Does sitting still with your thoughts help or make things worse for you?

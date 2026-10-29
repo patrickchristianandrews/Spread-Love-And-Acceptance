@@ -196,7 +196,7 @@
     return null;
   }
   function whoLabel(i) { return String(S.names[i] || '').trim() || roleLabel(i); }
-  // Children on the road (Family, Co-parents): the sheets about yourself (stress tank scores, calm-down kits)
+  // Children on the road (Family, Co-parents): the sheets about yourself (stress tank scores, calm-down plans)
   // and the shared average wait only for the adults. "Never ask a child to keep track of what a parent does."
   var KID_ROADS = { family: true, coparents: true };
   function kidsOn() { return !!S.path && !!KID_ROADS[S.path.id]; }
@@ -437,7 +437,7 @@
         kidsFit();
         var kb = h('input', { type: 'checkbox', id: 'ws-kid-' + i, 'data-kid': String(i), autocomplete: 'off' });
         kb.checked = !!S.kids[i];
-        cell.appendChild(h('label', { className: 'ws-kid', for: 'ws-kid-' + i, title: 'Children aren\u2019t asked to fill in a stress tank score or a calm-down kit, and the shared numbers don\u2019t wait for them.' }, [kb, ' Child']));
+        cell.appendChild(h('label', { className: 'ws-kid', for: 'ws-kid-' + i, title: 'Children aren\u2019t asked to fill in a stress tank score or a calm-down plan, and the shared numbers don\u2019t wait for them.' }, [kb, ' Child']));
         // lives here part of the time (a child who lives in two homes, a partner who works away):
         // the nights out of 14, kept by name, so the report reads a fair share for the nights they're here
         var nightsNow = nightsOf(nm), sel = h('select', { id: 'ws-nights-' + i, 'data-nights': String(i), autocomplete: 'off' });
@@ -822,7 +822,7 @@
   function suiteBase() { return global.location.origin + global.location.pathname + SUITE_HASH; }
   function suiteJson() { var o = snapshot(true, !linkPrivate); o.saved = String(o.saved || "").slice(0, 10); return JSON.stringify(o); }
   // Personal notes stay out of a link unless the person ticks "Include private notes": the note on How much
-  // are you carrying?, and the Calm-Down Kit apart from the pause plan you agree together.
+  // are you carrying?, and the calm-down plan apart from the pause plan you agree together.
   var linkPrivate = false;
   var KIT_SHARED = { name: 1, date: 1, planWord: 1, planMin: 1, planBack: 1, planFirst: 1 };
   function personalOut(code, st) {
@@ -1740,7 +1740,7 @@
     $('ws-sheet-title').focus();
   }
 
-  // Someone else's own sheet (a stress tank score, a calm-down kit) that came in from their file or link: it is
+  // Someone else's own sheet (a stress tank score, a calm-down plan) that came in from their file or link: it is
   // theirs to change, so it opens read-only here. "This is mine" unlocks it (the same person's other device).
   function othersOwn(en) {
     if (!perPerson(en.workpaper) || !en.from || !en.from.by) return false;
@@ -1930,7 +1930,7 @@
   var held = null;
   function roadHasWork() { return S.stops.some(function (st) { return st.entries.some(filled); }); }
   function differentRoad(id) { return id && pathById(id) && S.path && S.path.id !== id && roadHasWork(); }
-  // A one-person sheet (a stress tank score, a calm-down kit) saved on another device says which place it had
+  // A one-person sheet (a stress tank score, a calm-down plan) saved on another device says which place it had
   // there (person 0, 1 …). Each device can list the same people in a different order (Diego's: A = Diego;
   // Lena's: A = Lena), so the place is turned back into the name it had there, and matched by name here.
   function personByName(en, there, names) {
@@ -2278,7 +2278,7 @@
       if (k != null) {
         kidsFit(); S.kids[+k] = e.target.checked;
         syncRoadPeople(); changed(); renderRoad();
-        say(whoLabel(+k) + (e.target.checked ? ' is marked as a child: no stress tank score or calm-down kit is asked of them, and the shared numbers don\u2019t wait for them.' : ' is marked as an adult.'));
+        say(whoLabel(+k) + (e.target.checked ? ' is marked as a child: no stress tank score or calm-down plan is asked of them, and the shared numbers don\u2019t wait for them.' : ' is marked as an adult.'));
         return;
       }
       // (after this event has run its course: on a phone the tap that blurred the box comes right after it)
@@ -2439,7 +2439,7 @@
     // "Include private notes in the link": off unless ticked, and only for this link
     var sendRow = sendB && sendB.closest('.ws-send-row');
     if (sendRow && !$('ws-link-private')) {
-      var pl = h('label', { className: 'ws-link-private' }, [h('input', { type: 'checkbox', id: 'ws-link-private', autocomplete: 'off' }), ' Include private notes in the link (the note on How much are you carrying?, and the Calm-Down Kit beyond the pause plan). Left out unless you tick this.']);
+      var pl = h('label', { className: 'ws-link-private' }, [h('input', { type: 'checkbox', id: 'ws-link-private', autocomplete: 'off' }), ' Include private notes in the link (the note on How much are you carrying?, and the calm-down plan beyond the pause plan). Left out unless you tick this.']);
       sendRow.parentNode.insertBefore(h('p', { className: 'ws-send-private' }, [pl]), sendRow.nextSibling);
       $('ws-link-private').addEventListener('change', function (e) { linkPrivate = e.target.checked; suiteLinkSoon(); });
     }

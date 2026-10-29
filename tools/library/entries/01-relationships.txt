@@ -46,7 +46,7 @@ The four horsemen come from Gottman and Robert Levenson’s longitudinal studies
 links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /check-ins.html#ground | Check-ins: ground rules
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 talk:
 - Which of the four do you each slip into most when you’re tired? (Just your own.)
 - What does a gentle startup sound like for a topic you often argue about?
@@ -69,7 +69,7 @@ Gottman’s research describes the success or failure of repair attempts as one 
 links:
 /check-ins.html#regroup | Check-ins: regrouping after a rough patch
 /book/chapter-1.html | Why we get out of tune (Chapter I)
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 talk:
 - What do each of us already do when we want to make up? Does the other person notice it?
 - Would a shared code word or signal help us? What would it be?
@@ -108,7 +108,7 @@ The most useful response is surprisingly simple: stop and take a proper break. G
 research:
 Gottman and Levenson measured heart rate, skin conductance and other signals while couples talked, and found that high physiological arousal went along with worse conversations and worse long-term outcomes. The idea that the body needs time to settle is consistent with what is known about the stress response in general. The specific twenty-minute figure is a practical guideline from that work rather than a precisely tested cut-off, and it will vary from person to person.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#ladder | The nervous-system self-check
 talk:
@@ -235,7 +235,7 @@ research:
 Andrew Christensen and colleagues studied the demand–withdraw pattern from the late 1980s, including a 1990 paper by Christensen and Christopher Heavey showing that the person seeking change tends to be the one who demands. Later meta-analyses have linked the pattern to lower relationship satisfaction. Emotionally focused therapy, developed by Sue Johnson and Leslie Greenberg, puts cycles like this at its center and has a reasonable evidence base from clinical trials.
 links:
 /check-ins.html#order | Check-ins: taking turns in order
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /frequency-framework.html | The Frequency Framework: different rhythms
 talk:
 - On which topics does each of us tend to pursue, and on which to withdraw?

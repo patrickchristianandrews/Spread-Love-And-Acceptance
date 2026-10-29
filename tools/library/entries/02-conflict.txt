@@ -83,7 +83,7 @@ research:
 The term was introduced in *Getting to Yes* (1981). Negotiation research generally finds that parties with better alternatives achieve better outcomes and that thinking about alternatives helps people avoid agreeing to deals worse than no deal. In close relationships, researchers would stress that framing matters: fallbacks framed as threats tend to damage trust.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job: changing it on purpose (WP-03)
-/wp-11.html | The Calm-Down Kit: deciding while calm (WP-11)
+/wp-11.html | Calm-down plan: deciding while calm (WP-11)
 talk:
 - What is our default when a week gets too busy for the usual plan?
 - Is there a fallback we could agree on now, while calm?
@@ -163,7 +163,7 @@ Stepping off needs only one person to decline to match. Lowering your voice, ack
 research:
 Dean Pruitt and Sung Hee Kim describe escalation and conflict spirals in *Social Conflict* (third edition, 2004). Couples researchers, including Gottman and Gayla Margolin, documented negative reciprocity in observational studies from the 1970s onward, finding it more pronounced in distressed couples. These are well-established patterns.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /check-ins.html#ground | Check-ins: ground rules
 /book/chapter-1-in-depth.html#squeal | Chapter I in depth: the squeal
 talk:
@@ -184,8 +184,8 @@ The return is as important as the pause. Coming back when promised builds trust 
 research:
 Timeouts are a standard technique in couples therapy and anger-management programs. Gottman’s physiological research supports the idea that flooding impairs listening and that it takes time to recover; he recommends breaks of at least around twenty minutes. The effectiveness of timeouts has mostly been studied as part of broader programs rather than alone, so evidence for the technique on its own is limited but consistent with what is known about stress physiology.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
-/wp-11-in-depth.html#reentry | The Calm-Down Kit in depth: coming back
+/wp-11.html | Calm-down plan (WP-11)
+/wp-11-in-depth.html#reentry | Calm-down plan in depth: coming back
 /night-garden.html | The Night Garden: a calm place to breathe
 talk:
 - What words would each of us use to ask for a timeout?
@@ -205,7 +205,7 @@ It is also worth agreeing that either person can call a pause without it being t
 research:
 Gottman’s lab measured physiological arousal in conflict, and research on the stress response broadly supports the idea that high arousal narrows attention and makes flexible thinking harder. Slow breathing has modest evidence for reducing feelings of stress and arousal in the short term. The specific signs and thresholds vary a lot between people.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /quick-checks.html#ladder | The nervous-system self-check
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:

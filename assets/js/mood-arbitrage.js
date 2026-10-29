@@ -49,8 +49,8 @@
 
   var YOU = {
     steady: { name: 'Steady', text: 'You’re steady, and that’s what makes the move possible. Take one slow breath and go.' },
-    up: { name: 'Wound up too', text: 'You’re wound up too, and two wound-up people make more static, not less. Settle first: step away for a few minutes and breathe out slowly. Use a holding line: “I want to help with this, and I need five minutes first.” The <a href="/wp-11.html">Calm-Down Kit (WP-11)</a> has your own list for this.' },
-    low: { name: 'Running low', text: 'You’re running low. You can still offer something small and honest: “I’m wiped out, and I’m here. Can we sort this properly tomorrow?” Look after your own battery too; the <a href="/wp-11.html">Calm-Down Kit (WP-11)</a> is built for this.' }
+    up: { name: 'Wound up too', text: 'You’re wound up too, and two wound-up people make more static, not less. Settle first: step away for a few minutes and breathe out slowly. Use a holding line: “I want to help with this, and I need five minutes first.” The <a href="/wp-11.html">Calm-down plan (WP-11)</a> has your own list for this.' },
+    low: { name: 'Running low', text: 'You’re running low. You can still offer something small and honest: “I’m wiped out, and I’m here. Can we sort this properly tomorrow?” Look after your own battery too; the <a href="/wp-11.html">Calm-down plan (WP-11)</a> is built for this.' }
   };
 
   var SITUATIONS = {

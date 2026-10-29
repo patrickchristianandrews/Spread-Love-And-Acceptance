@@ -82,3 +82,13 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-two.wb-k-wp01 .pe-ws-t td { height: 8.6mm; }
 /* the paper setup score lies open across two facing pages */
 .wb-k-setup h3 { margin-top: 5mm; }
+
+/* book29: the one-page "All the free tools" (tools, then workpapers and plans, three columns) */
+.ps-alltools-one { break-before: page; }
+.ps-alltools-one .ps-tg { grid-template-columns: repeat(3, 1fr); gap: 0 4mm; }
+.ps-alltools-one .ps-tg-c { padding: 1.2mm 0; gap: 2mm; }
+.ps-alltools-one .ps-tg-c .pe-qr, .ps-alltools-one .ps-tg-c .pe-qr svg { width: 13.4mm; height: 13.4mm; flex-basis: 13.4mm; }
+.ps-alltools-one .ps-tg-t b { font-size: 7.8pt; }
+.ps-alltools-one .ps-tg-d { font-size: 6.8pt; }
+.ps-alltools-one .ps-tg-u { font-size: 5.6pt; }
+.ps-alltools-one .ps-tg-h { margin-top: 3.4mm; }

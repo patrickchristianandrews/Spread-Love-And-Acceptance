@@ -287,7 +287,8 @@ def free_form(url):
     if not m or '/fill/' in path:
         return None
     f = '/workpapers/fill/wp-%s.html' % m.group(1)
-    return f if os.path.exists(os.path.join(ROOT, f.lstrip('/'))) else None
+    q = re.search(r'\?((?:for|road)=[a-z0-9-]+)', url)  # book29: a worked example taken from a variant opens that variant
+    return (f + ('?' + q.group(1) if q else '')) if os.path.exists(os.path.join(ROOT, f.lstrip('/'))) else None
 
 
 WP_LINE_RE = re.compile(r'<p class="bh-ref bh-wp"><span class="bh-k">([^<]*)</span><span class="bh-c">: </span><a href="([^"]+)"[^>]*>(.*?)</a><span class="bh-u">.*?</span></p>', re.S)
@@ -605,7 +606,7 @@ def research_short(book, here):
     n = sum(len(v) for v in notes.values())
     s = '<section class="pe-back ps-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (
         book['color'], book['tint'], mark('notes'))
-    s += ('<div class="ps-online-box">%s<p>The %d references these chapters draw on, briefly. Each one was looked up and checked. The full list, '
+    s += ('<div class="ps-online-box">%s<p>The %d entries these chapters draw on, briefly. Each one was looked up and checked. The full list, '
           'with what each study found, how strong the finding is and where to read it, is free online: '
           '<span class="ps-addr">spreadloveandacceptance.com/research</span>.</p></div>') % (qr('/research.html'), n)
     for slug in book['chapters']:
@@ -711,6 +712,65 @@ def ideas_map(book, chs, epub=False, pocket_sections=None):
         return '<section class="pe-back ps-ideas" id="ideas"><h1 class="pe-back-h">How the ideas connect</h1>%s</section>' % body
     return ('<section class="pe-back ps-ideas no-bubble no-cheer no-dive" data-no-bubble id="ideas" style="--pc:%s;--pt:%s">%s'
             '<h1 class="pe-back-h">How the ideas connect</h1>%s</section>') % (book['color'], book['tint'], mark('ideas'), body)
+
+
+# ---------- book29: "All the free tools" (every entry of assets/js/tools-registry.js, with a code, a line and the short address) ----------
+_REG_ALL = []
+
+
+def registry_all():
+    """the registry as [{id, kind, name, href, wp}], read with node (the single source of truth for what the site offers)"""
+    if not _REG_ALL:
+        import subprocess
+        js = ("global.window={};require(process.argv[1]);process.stdout.write(JSON.stringify((window.TOLTools||[]).map(function(t){"
+              "return {id:t.id,kind:t.kind,name:t.name,href:t.href,wp:t.wp||''};})))")
+        out = subprocess.run(['node', '-e', js, os.path.join(ROOT, 'assets', 'js', 'tools-registry.js')], capture_output=True, text=True, timeout=60)
+        _REG_ALL.extend(json.loads(out.stdout or '[]'))
+    return _REG_ALL
+
+
+def tools_short():
+    return json.load(open(os.path.join(HERE, 'tools-short.json'), encoding='utf-8'))
+
+
+def tools_cell(r, lines, epub=False):
+    if epub:
+        return ('<div class="ps-tg-c"><div class="ps-tg-t"><b><a href="%s">%s%s</a></b><span class="ps-tg-d">%s</span></div></div>') % (
+            esc(B.absolute(r['href'])), ('%s ' % esc(r['wp'])) if r.get('wp') else '', esc(r['name']), esc(lines.get(r['id'], '')))
+    return ('<div class="ps-tg-c">%s<div class="ps-tg-t"><b>%s%s</b><span class="ps-tg-d">%s</span><span class="ps-tg-u">%s</span></div></div>') % (
+        qr(r['href']), ('<i>%s</i> ' % esc(r['wp'])) if r.get('wp') else '', esc(r['name']), esc(lines.get(r['id'], '')), B.addr_html(B.short_address(r['href'])))
+
+
+def alltools_pages(book, kind='book', epub=False):
+    """Two pages in a book (the tools, then the workpapers and plans), one page in the workbook. Every registry entry, none left out:
+    a build error says which one is missing from the short-lines file."""
+    reg = dict((r['id'], r) for r in registry_all())
+    T = tools_short()
+    lines = T['lines']
+    tools = [r for r in reg.values() if r['kind'] == 'tool']
+    wps = [r for r in reg.values() if r['kind'] != 'tool']
+    for grp, order in ((tools, T['order_tools']), (wps, T['order_workpapers'])):
+        ids = set(r['id'] for r in grp)
+        if ids != set(order) or any(i not in lines for i in ids):
+            ERRORS.append('All the free tools: tools-short.json does not match the registry (missing %s, extra %s)' % (
+                sorted(ids - set(order)) or sorted(i for i in ids if i not in lines), sorted(set(order) - ids)))
+    tl = [reg[i] for i in T['order_tools'] if i in reg]
+    wl = [reg[i] for i in T['order_workpapers'] if i in reg]
+    lede = ('Every tool on the website, free, with no account. ' + ('Tap a name to open it. ' if epub else 'Point your phone’s camera at a code to open it. ') + 'What you type stays on your device.')
+    wlede = ('The worksheets and plans on the website, free to fill out on screen or print. They are kept apart from the tools above, and every one has a code.')
+    col, tint = book['color'], book['tint']
+    if kind == 'workbook':
+        body = ('<h1 class="pe-back-h">All the free tools</h1><p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools</h2><div class="ps-tg">%s</div>'
+                '<h2 class="ps-tg-h">Workpapers and plans</h2><div class="ps-tg">%s</div>') % (
+            esc(lede), ''.join(tools_cell(r, lines, epub) for r in tl), ''.join(tools_cell(r, lines, epub) for r in wl))
+        return ('<section class="pe-back ps-alltools ps-alltools-one" id="alltools" style="--pc:%s;--pt:%s">%s%s</section>') % (col, tint, mark('alltools'), body)
+    p1 = ('<section class="pe-back ps-alltools" id="alltools" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools</h1>'
+          '<p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools: helpers you use on the site</h2><div class="ps-tg">%s</div></section>') % (
+        col, tint, mark('alltools'), esc(lede), ''.join(tools_cell(r, lines, epub) for r in tl))
+    p2 = ('<section class="pe-back ps-alltools ps-alltools-wp" id="allworkpapers" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools, continued</h1>'
+          '<p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Workpapers: pages you fill in</h2><div class="ps-tg">%s</div></section>') % (
+        col, tint, mark('allworkpapers'), esc(wlede), ''.join(tools_cell(r, lines, epub) for r in wl))
+    return p1 + p2
 
 
 def series_page(book):
@@ -832,14 +892,14 @@ def _icon(kind, c):
 
 SHOWCASE = [
     # (key, title, words, link, art)
-    ('ask', 'Ask Professor Puddles', 'Tell a cheerful raindrop professor what’s going on and get kind next steps and words to say. His answers are written in advance, never made up on the spot.', '/ask.html', 'puddles'),
+    ('ask', 'Ask Professor Puddles', 'Tell a cheerful raindrop professor what’s going on and get kind next steps and words to say. His answers come only from what this site already says.', '/ask.html', 'puddles'),
     ('chat', 'The Chat analyzer', 'Check how a text may land before you send it, read one you got, or look at a whole chat to see where it turned.', '/signal-translator.html', 'chat'),
     ('journeys', 'Guided journeys', 'Three to six small steps for what’s going on, from the same argument again to a new blended family.', '/journeys.html', 'journey'),
     ('forms', 'Every workpaper, free to print', 'All the forms in the series, to print or to fill out on screen and save as a PDF on your own device.', '/workpapers/fill/index.html', 'form'),
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
     ('deep', 'The expanded version', 'Each chapter in this book has an expanded version online, with more research, more examples and more to try.', '/book/', 'book'),
     ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
-    ('coins', 'Kindness Coin Pusher', 'A cozy 3D coin pusher. Every five coins that drop bring a short, useful tip.', '/coin-pusher.html', 'coin'),
+    ('coins', 'Kindness Coin Pusher', 'A cozy 3D coin pusher. A short, useful tip slides up now and then as the coins drop.', '/coin-pusher.html', 'coin'),
     ('garden', 'The Night Garden', 'A calm breathing game. A flower blooms with every slow breath, and there are fireflies to guide and a lily pond to fill.', '/night-garden.html', 'garden'),
     ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
 ]
@@ -996,6 +1056,7 @@ def build_book(book, where):
         if ('>%s</a>' % esc(nm)) not in wt_html:
             ERRORS.append('Book %d: "Workpapers and tools in this book" leaves out %s, which the book points to' % (book['n'], nm))
     extra.append(('wp-tools', 'Workpapers and tools in this book', wt_html))
+    extra.append(('alltools', 'All the free tools', alltools_pages(book)))
     extra += numbers
     extra.append(('glossary', 'Words used in this book', glossary_short(book, chs, ''.join(a for _s, a in arts))))
     extra.append(('ideas', 'How the ideas connect', ideas_map(book, chs)))
@@ -1214,9 +1275,10 @@ def build_workbook(where, bw=False):
             secs.append(front_back.add_section_marks(x['html'], mark))
             toc.append(B.toc_row('numbers', '', esc(x['toc']), 'is-back'))
             ol.append([x['toc'], 'numbers', 0])
+    toc.append(B.toc_row('alltools', '', 'All the free tools', 'is-back'))
     toc.append(B.toc_row('wb-notes', '', 'Notes', 'is-back'))
     toc.append(B.toc_row('series', '', 'The series', 'is-back'))
-    ol += [['Notes', 'wb-notes', 0], ['The series', 'series', 0]]
+    ol += [['All the free tools', 'alltools', 0], ['Notes', 'wb-notes', 0], ['The series', 'series', 0]]
     front = ('<section class="ps-title pe-only" style="--acc:%s">%s<div class="ps-title-top"><p class="ps-title-k">%s</p><p class="ps-title-t">%s</p>'
              '<p class="ps-title-s">%s</p></div><div class="ps-title-art">%s</div><div class="ps-title-by"><p class="ps-title-a">by %s</p>'
              '<p class="ps-title-p">Independently published<br>spreadloveandacceptance.com</p></div></section>') % (
@@ -1236,22 +1298,24 @@ def build_workbook(where, bw=False):
               '<li><strong>Go gently.</strong> If a sheet stirs up something heavy, stop. A “not right now” is fine.</li></ul>'
               '<p class="wb-how-h">Six-week program</p><p>If you’d like an order to follow, the six-week program uses the workpapers one small step a week. '
               'The next page is a planner for it. Most people miss a week somewhere. That’s built in.</p></section>') % mark('wb-how')
-    weeks = [('Week 0', 'Five minutes: read the planner, pick a start day.', 'None yet'),
-             ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what · WP-13 daily check-in'),
+    weeks = [('Week 0', 'Five minutes: get your bearings.', 'None yet'),
+             ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what'),
              ('Week 2', 'Give every job one owner.', 'WP-03 One owner per job'),
              ('Week 3', 'Notice how much each of you is carrying.', 'WP-02 How much are you carrying?'),
-             ('Week 4', 'Talk about it kindly.', 'WP-09 Say it so it lands · WP-11 Calm-Down Kit'),
-             ('Week 5', 'Look at the pace and the pressure.', 'WP-12 Same moment, different speeds · WP-14 Is it us?'),
-             ('Week 6', 'Make it last.', 'WP-04 What keeps coming back? · WP-15 rituals')]
+             ('Week 4', 'Talk about it kindly.', 'WP-09 Say it so it lands · WP-11 Calm-down plan'),
+             ('Week 5', 'Get back in step.', 'WP-13 90-second daily check-in'),
+             ('Week 6', 'Make it last.', 'WP-01 again · WP-04 What keeps coming back? (optional)')]
     front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Miss one and you just carry on '
               'where you left off. The full program is free at spreadloveandacceptance.com/prog-01.</p>'
               '<table class="wb-six-t"><thead><tr><th>Week</th><th>The step</th><th>Workpapers</th><th>Start date</th><th>Done</th></tr></thead><tbody>%s</tbody></table>'
+              '<p class="wb-more">When you want more after the six weeks: WP-12 Same moment, different speeds, WP-14 Is it us, or is it everything else? and WP-15 Keep your little rituals alive.</p>'
               '<p class="wb-how-h">At the end: what changed?</p><div class="pe-ws-box wb-tall"><b>One thing that is easier now</b></div>'
               '<div class="pe-ws-box wb-tall"><b>One thing to keep an eye on</b></div></section>') % (
         mark('wb-six'), ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td></td><td><span class="pe-ws-tick"></span></td></tr>' % (esc(a), esc(b_), esc(c)) for a, b_, c in weeks))
+    alltools = alltools_pages(wb, kind='workbook')
     notes = '<section class="wb-notes pe-only" id="wb-notes">%s<h1>Notes</h1><div class="wb-lines">%s</div></section>' % (mark('wb-notes'), '<div></div>' * 21)
     # the notes pages make the page count even, so no blank page is added at the end (series.json "notes_pages")
-    notes += ''.join('<section class="wb-notes pe-only"><div class="wb-lines">%s</div></section>' % ('<div></div>' * 24) for _ in range(wb.get('notes_pages', 4) - 1))
+    notes += ''.join('<section class="wb-notes pe-only"><div class="wb-lines">%s</div></section>' % ('<div></div>' * 24) for _ in range(wb.get('notes_pages', 4) - 2))  # book29: the tools page takes one of the notes pages
     sp = series_page(book).replace(' (this book)', '')
     title = '%s: %s%s' % (SERIES_TITLE, wb['title'], ' (black-and-white edition)' if bw else '')
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
@@ -1260,7 +1324,7 @@ def build_workbook(where, bw=False):
     rh = ('%s · %s' % (SERIES_TITLE, wb['title'].split(':')[0])).replace('"', '\\"')
     rules = '<style media="print">@page :right{@bottom-left{content:"%s"}}@page :left{@bottom-right{content:"%s"}}@page pe-front{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}@page pe-blank{@bottom-left{content:none;border:0}@bottom-center{content:none;border:0}@bottom-right{content:none;border:0}}</style>' % (rh, rh)
     page += '<body class="whole-book pe-book pe-series pe-workbook%s" data-pe="workbook">\n<main class="read whole" id="main">\n%s\n%s\n%s\n%s\n</main>\n%s\n%s\n%s%s\n</body>\n</html>\n' % (
-        ' wb-bw' if bw else '', front, '\n'.join(secs), notes, sp, rules, outline, QR_SCRIPT, GRAY_SCRIPT if bw else '')
+        ' wb-bw' if bw else '', front, '\n'.join(secs), alltools + notes, sp, rules, outline, QR_SCRIPT, GRAY_SCRIPT if bw else '')
     B.write(os.path.join(SRC, 'workbook-bw.html' if bw else 'workbook.html'), page)
 
 

@@ -271,7 +271,7 @@ window.TOLLearnPlayData = {
           s: 'A ritual that only happens when things are good isn’t a ___ yet.', o: ['ritual', 'habit', 'holiday'], a: 0,
           say: 'Yes! Keep rituals small enough to survive a bad week.' },
         { at: 'wired differently', k: 'quiz', q: 'Bids and warmth look different for different wiring. What’s the fix?',
-          o: [['Ask each other, and write the answers down', true, 'Yes! A How to talk to me card is a good place to keep them.'],
+          o: [['Ask each other, and write the answers down', true, 'Yes! A How I like to be spoken to card is a good place to keep them.'],
               ['Assume the quiet one doesn’t care', false, 'Not quite. Someone may show care through practical help or shared interests instead of small talk.'],
               ['Stop making bids', false, 'Not quite. Keep reaching. Just learn what counts as a bid for each of you.']] }
       ],
@@ -889,7 +889,7 @@ window.TOLLearnPlayData = {
         { at: 'Ten rules', k: 'sort', q: 'Does this follow the ten rules?', bins: ['Follows the rules', 'Doesn’t'],
           items: [['“Could you pay the bill by Friday?”', 0], ['“It would be nice if someone paid the bill.”', 1, 'Say the request as a request, with a real time.'],
                   ['“You’re so irresponsible.”', 1, 'Describe the behavior, never the person.'], ['“What did you take from that?”', 0], ['A sarcastic joke in a serious talk', 1, 'Leave sarcasm out of anything serious.']] },
-        { at: 'Make a Wiring Card', k: 'quiz', q: 'When is the best time to share a “how to talk to me” card?',
+        { at: 'Make a Wiring Card', k: 'quiz', q: 'When is the best time to share a “how I like to be spoken to” card?',
           o: [['On an ordinary day, before a hard conversation', true, 'Yes! Tell each other how you’re built before a hard talk, not during one.'],
               ['In the middle of an argument, to prove your point', false, 'Not quite. It isn’t a contract or evidence. Share it on a calm day.'],
               ['Only once, and never update it', false, 'Not quite. It changes with your state. When you’re depleted, every line gets stricter.']] }

@@ -244,7 +244,7 @@
     if (sb < 0.30) return ['Light', 'Whatever is coming up is probably about the thing itself.'];
     if (sb < 0.45) return ['Medium, on the lighter side', 'You\'re carrying a bit more than usual. Fine for most things; go gently with anything big.'];
     if (sb < 0.60) return ['Medium, on the heavier side', solo ? 'Go gently, and leave big decisions for when you have more room.' : 'Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'];
-    if (sb < 0.80) return ['High', 'Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.'];
+    if (sb < 0.80) return ['High', 'Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the calm-down plan (WP-11) is made for this.'];
     return ['Very high', solo ? 'Today is for looking after yourself and the basics. Let anything that can wait, wait, and pick a time to come back to it.' : 'Today is for looking after yourself and the basics. Say "not today" to anything that can wait, and name a time instead.'];
   }
   // solo: worded for one person on their own, with no shared average
@@ -709,8 +709,8 @@
   }
   W['wp-11'] = {
     code: 'WP-11',
-    title: 'The Calm-Down Kit',
-    plain: 'The Calm-Down Kit',
+    title: 'Calm-down plan',
+    plain: 'Calm-down plan',
     slug: 'The-Calm-Down-Kit',
     purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. Everyone fills in their own kit, about themselves, and keeps it. The pause plan is the one part you agree on together and share. Fill in Part A on an ordinary day, not a hard one.',
     people: false,

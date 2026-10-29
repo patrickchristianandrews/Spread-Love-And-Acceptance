@@ -27,7 +27,7 @@
     'WP-03': 'One owner per job',
     'WP-04': 'What keeps coming back?',
     'WP-09': 'Say it so it lands',
-    'WP-11': 'The Calm-Down Kit',
+    'WP-11': 'Calm-down plan',
     'WP-13': 'The 90-second daily check-in'
   };
 
@@ -394,7 +394,7 @@
         ] }
       ],
       next: 'At the next house meeting, fill in One owner per job together.',
-      care: 'The shared sheets hold everyone in the house. The load check and the calm-down kit are each person\u2019s own, filled in about themselves.'
+      care: 'The shared sheets hold everyone in the house. The load check and the calm-down plan are each person\u2019s own, filled in about themselves.'
     },
     {
       id: 'coworkers', label: 'Coworkers', icon: '⚙', color: '#D6EEF0',

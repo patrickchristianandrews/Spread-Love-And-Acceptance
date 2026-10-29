@@ -31,7 +31,7 @@
         "family": ["For the reunion, could each household take one piece? We’ll do the booking if someone can sort food and someone does the schedule."],
         "partner": ["Could we split the trip planning? I’ll handle the booking if you take the packing list and the drive."]
       },
-      "path": [["Who does what? (the Lemonade Stand): list the jobs, see the split", "/lemonade-stand.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Where friends start", "/relationships-in-depth.html#friends"]],
+      "path": [["Who does what?: list the jobs, see the split", "/lemonade-stand.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Where friends start", "/relationships-in-depth.html#friends"]],
       "deeper": ["one owner per job", "What is WP-03?"],
       "ex": "Six friends were planning a cabin weekend, and Marco was doing everything. He posted a list of seven jobs in the group chat and wrote, “Grab one by Friday!” By Thursday every job had a name next to it, and Marco only had the booking.",
       "tonight": "post a short list of the trip jobs in the group chat and ask everyone to claim one by a set day."
@@ -156,7 +156,7 @@
       "scripts": {
         "default": ["I want to do this well. Right now I have the report, the launch and the onboarding. If I take this on, which one should move?", "Could we agree on priorities for this week? I’d rather tell you now than miss something later.", "Would a short update from me every Thursday help? That way you’d always know where things stand without needing to check."]
       },
-      "path": [["Who does what? (the Lemonade Stand): make the load visible", "/lemonade-stand.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Work disagreements (Library)", "/library/conflict.html#work-disagreements"]],
+      "path": [["Who does what?: make the load visible", "/lemonade-stand.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Work disagreements (Library)", "/library/conflict.html#work-disagreements"]],
       "deeper": ["role clarity at work", "What is role ambiguity?"],
       "ex": "Tasha’s manager kept adding “quick” tasks. She started replying, “Sure. Right now I have A, B and C. Which should move?” Her manager usually picked one to drop, and twice said, “Oh, I didn’t realize you had all that.”",
       "tonight": "write a quick list of everything on your plate, with rough hours, so you have it ready for tomorrow."
@@ -317,7 +317,7 @@
       "scripts": {
         "default": ["I think we just notice mess differently, and that’s okay. Could we agree what “done” looks like for the kitchen, so neither of us has to guess?", "The living room matters most to me. If we keep that one tidy by bedtime, I can let the rest go.", "Can we pick a standard we can both live with, and each own a few jobs?"]
       },
-      "path": [["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Chores disagreements (Library)", "/library/conflict.html#chores-disagreements"], ["Who does what? (the Lemonade Stand)", "/lemonade-stand.html"]],
+      "path": [["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Chores disagreements (Library)", "/library/conflict.html#chores-disagreements"], ["Who does what?", "/lemonade-stand.html"]],
       "deeper": ["one owner per job", "What is WP-03?"],
       "ex": "Alex saw crumbs everywhere. Jordan honestly didn’t. They agreed on just two rules, counters wiped and dishes in by 10, and Jordan owned the kitchen on weeknights. Alex stopped re-cleaning, Jordan stopped feeling nagged.",
       "tonight": "name the one spot at home that matters most to you, and what “done” looks like there."
@@ -404,7 +404,7 @@
       "path": [
         ["Frequency Buddies: feelings stories to watch together",
           "/frequency-buddies.html"],
-        ["Cool-down corner: Night Garden, a slow breathing game to share",
+        ["Upset right now?: Night Garden, a slow breathing game to share",
           "/night-garden.html"],
         ["One owner per job (WP-03)",
           "/workpapers/wp-03-one-owner-per-job.html"]

@@ -55,7 +55,7 @@ Program: This fits Pillar III, Read your state first. The daily check-in (WP-13)
 ## Coming back after a break
 aka: returning after a timeout; resuming a conversation; after a pause
 see: Timeboxing a conversation; Conflict escalation ladder
-go: /wp-11.html | WP-11: The Calm-Down Kit
+go: /wp-11.html | WP-11: Calm-down plan
 evidence: Couples research suggests breaks during flooded arguments help only if people actually calm down (rather than rehearsing grievances) and come back. The returning part is what builds trust.
 try: “I’m back. Thanks for the space. Can we start with just the plan for tomorrow?”
 
@@ -63,7 +63,7 @@ A pause only works if it ends. Coming back at the time you named shows the break
 
 When you return, start small and gentle: thank them for the space, restate the one topic, and maybe begin with something easy you can agree on. Diving straight back into the hardest point often reignites things.
 
-Program: The Calm-Down Kit (WP-11) uses your battery score to decide when to go back, and suggests starting with one small, simple task first.
+Program: Calm-down plan (WP-11) uses your battery score to decide when to go back, and suggests starting with one small, simple task first.
 
 ## Ending a hard conversation well
 aka: ending on a good note; closing a conversation; wrapping up a talk

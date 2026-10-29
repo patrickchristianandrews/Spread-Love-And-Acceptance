@@ -390,7 +390,7 @@
       yours: () => { const w = chosenWords('helps'); return w.length ? 'You said these help you: ' + w.map(x => x.charAt(0).toLowerCase() + x.slice(1)).join('; ') + '. Pick one to ask for out loud this week.' : 'You didn’t pick anything in the “What helps me” part yet. Use Change answers on your results to add a few, then come back here.'; },
       prompts: () => ['Finish this sentence: “I work best when ___.”', 'Finish this sentence: “When I’m overwhelmed, it helps if you ___.”', 'Finish this sentence: “Something I need that I’ve never asked for is ___.”'],
       tryThis: () => 'Share your Wave Code and one of these sentences with someone you trust. Keep the shape simple: say what’s going on, state the need, and offer one specific way they can help.',
-      link: ['Make a “how to talk to me” card', '/wiring-card.html'] }
+      link: ['Make a “how I like to be spoken to” card', '/wiring-card.html'] }
   ];
   CHAPTERS.forEach(c => { c.group = 'code'; });
   INPUTS.forEach(x => CHAPTERS.push({
@@ -944,9 +944,9 @@
   function who2(myName, theirName) { return { me: myName ? myName : 'You', them: theirName ? theirName : 'Them' }; }
   // tools16: after a comparison with someone (or arriving from a couples or friends page) the next steps are ones for two people
   function nextLine() {
-    if (ARRIVE.friends) return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html">Swap “how to talk to me” cards</a> · <a href="/friends.html#both">Small rituals for friends</a> · <a href="/signal-translator.html">Check a message</a></p>';
-    if (S.their || ARRIVE.couple) return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second check-in together</a> · <a href="/wiring-card.html">Swap “how to talk to me” cards</a> · <a href="/recheck-drive.html">Something light together: the Re-check Drive (Us, together)</a></p>';
-    return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your “how to talk to me” card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>';
+    if (ARRIVE.friends) return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html">Swap “how I like to be spoken to” cards</a> · <a href="/friends.html#both">Small rituals for friends</a> · <a href="/signal-translator.html">Check a message</a></p>';
+    if (S.their || ARRIVE.couple) return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second check-in together</a> · <a href="/wiring-card.html">Swap “how I like to be spoken to” cards</a> · <a href="/recheck-drive.html">Something light together: the Re-check Drive (Us, together)</a></p>';
+    return '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your “how I like to be spoken to” card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>';
   }
   function compareHTML(mine, theirs, myName, theirName) {
     const n = who2(myName, theirName);
@@ -955,7 +955,7 @@
       '<p><strong>' + esc(n.me) + ': ' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '. <strong>' + esc(n.them) + ': ' + theirs + '</strong>, ' + lower(ARCHETYPES[theirs][0]) + '.</p>' +
       '<p>' + countLine(mine, theirs) + '</p>' +
       AXES.map((ax, i) => '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '</strong><br>' + pairTip(mine, theirs, i) + '</div>').join('') +
-      '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your “how to talk to me” cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
+      '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your “how I like to be spoken to” cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
       (ARRIVE.friends
         ? '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> agree one small ritual, like a monthly call or a voice note on Sundays. <a href="/friends.html#both">Ideas for friends</a>.</p>'
         : '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second daily check-in together</a>, or pick one small habit from <a href="/turning-toward.html">Turning Toward</a>.</p>') +
@@ -966,7 +966,7 @@
     const n = who2(myName, theirName);
     return ['Our Wave Codes, side by side', n.me + ': ' + mine + ', ' + lower(ARCHETYPES[mine][0]), n.them + ': ' + theirs + ', ' + lower(ARCHETYPES[theirs][0]), '', CMP_FRAME, countLine(mine, theirs), '']
       .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i)))
-      .concat(['', 'Next: make your “how to talk to me” cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT,
+      .concat(['', 'Next: make your “how I like to be spoken to” cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT,
         (ARRIVE.friends ? 'One small thing to try together: agree one small ritual, like a monthly call or a voice note on Sundays (spreadloveandacceptance.com/friends.html).'
           : 'One small thing to try together: the 90-second daily check-in (spreadloveandacceptance.com/workpapers/fill/wp-13.html), or one small habit from Turning Toward (spreadloveandacceptance.com/turning-toward.html).')]).join('\n');
   }

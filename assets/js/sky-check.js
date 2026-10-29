@@ -1,4 +1,4 @@
-/* sky-check.js: the quick mode of "How am I right now?": four taps on the Nervous System Ladder.
+/* sky-check.js: the quick mode of "How am I right now?": four taps up the ladder.
    One copy of the check, used in two places:
      /ladder.html                     the quick check's own page (with the rungs, words to say and "If you feel afraid")
      /quick-checks.html?mode=sky      the "Quick: 4 taps" mode next to the full forecast (Today's Weather)

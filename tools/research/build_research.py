@@ -126,6 +126,7 @@ TAG_NAMES = {
     'time-use': 'time use', 'just-culture': 'just culture', 'pursue-withdraw': 'pursue and withdraw',
     'demand-withdraw': 'demand and withdraw', 'texting-and-tone': 'texts and tone',
     'second-shift': 'the second shift', 'weak-ties': 'casual ties', 'invisible-support': 'quiet support',
+    'ageing': 'aging', 'behavioural-activation': 'behavioral activation', 'carer-burden': 'caregiver burden',
     'brain-wiring': 'brains and wiring', 'brain-imaging': 'brain imaging', 'mri': 'MRI', 'ocd': 'OCD', 'ptsd': 'PTSD',
 }
 
@@ -743,7 +744,7 @@ def build_page(refs, missing):
 <ul class="rs-links no-bubble">
   <li><a href="/library.html"><strong>The Professor’s Library</strong><span>Each idea explained in plain words, with what the research says and its limits.</span></a></li>
   <li><a href="/method-and-limits.html"><strong>Method and limits</strong><span>How the site’s scores work, written out, with their cut-offs.</span></a></li>
-  <li><a href="/for-counselors.html"><strong>For counsellors, coaches and group leaders</strong><span>What this site is and isn’t, and the tools that work as homework.</span></a></li>
+  <li><a href="/for-counselors.html"><strong>For counselors, coaches and group leaders</strong><span>What this site is and isn’t, and the tools that work as homework.</span></a></li>
   <li><a href="/is-this-for-you.html"><strong>Is this right for you?</strong><span>Who the site is for, and when to look for other help.</span></a></li>
 </ul>
 <p>Spotted a mistake? Research moves on, and we would rather be corrected than be wrong. The links above go to the publisher, a library record or a trusted summary, and open in a new tab.</p>

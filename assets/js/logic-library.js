@@ -660,7 +660,7 @@
       looks: 'Asked one question about trains, someone talks for twenty minutes.',
       chain: ['The interest is where they feel most themselves', 'Sharing it is sharing themselves', 'Detail is the gift', 'A long explanation is an invitation in'],
       an: ['Showing someone round your garden, bed by bed.', 'Sharing a playlist song by song.', 'A tour guide who loves the building.'],
-      fits: 'For many autistic people, special interests bring real joy and are linked with wellbeing. Sharing them is a way of connecting.',
+      fits: 'For many autistic people, special interests bring real joy. In one survey, people who were more motivated by their interest reported higher well-being. Sharing them is a way of connecting.',
       other: 'The listener may feel lost, trapped, or that they can’t get a word in.',
       say: '“When I go on about this, I’m sharing something I love with you. Tell me if you need a break.”',
       step: 'Start with a five-minute version and ask “Want more?” Listeners can say “Tell me the best bit” or “Can we pause and come back?”',

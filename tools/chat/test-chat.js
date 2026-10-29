@@ -1535,7 +1535,7 @@ if (PERS) {
   t('chat9', 'how to talk about feelings: the speaker’s own side', { q: 'how to talk about feelings', id: 'feelingstalk', text: /one fact and one feeling/, not: /To a partner who shows care by doing|Thank you for sorting the car/ });
   t('chat9', 'partner who doesn’t talk: the other side', { q: "my husband doesn't talk about his feelings", id: 'feelingstalk', text: /show love by doing/ });
   t('chat9', 'not liking feelings talk: care by doing, no labels', { q: "I don't like talking about feelings", id: 'nofeelingstalk', text: /^That’s okay/, not: /alexithymia|autis/i });
-  t('chat9', 'long hours, no time: time together', { q: 'I work long hours, no time', id: 'longhoursnotime', not: /Word Bloom|Calm-Down Kit/ });
+  t('chat9', 'long hours, no time: time together', { q: 'I work long hours, no time', id: 'longhoursnotime', not: /Word Bloom|Calm-down plan/ });
   t('chat9', 'everything is fine (kept)', { q: 'my wife says we are not close, but everything is fine', id: 'feelsfine' });
   // C: routing
   t('chat9', 'sibling + dad’s house + christening: rifts, not faith', { q: 'he got dads house and now wants me at his kids christening like nothing happened', id: 'riftevent', link: '/family-rifts.html', not: /interfaith|Eid|Faith often/ });
@@ -2023,7 +2023,7 @@ if (PERSONA) {
   // ---- 11. merged tools and "Self-discovery" (mergeA, mergeB)
   t('chat11', 'the Perspective Shifter is now a step of After a talk went wrong', { q: 'what is the perspective shifter', id: 'pshift', link: '/carrier-wave-decoder.html?tab=their-side', text: /See their side|Their side/ });
   t('chat11', 'After a talk went wrong', { q: 'after a talk went wrong', id: 'decoder', text: /Rewind the talk/, link: '/carrier-wave-decoder.html' });
-  t('chat11', 'the Sound Toolkit is now Calm sounds and music', { q: 'what is the sound toolkit', id: 'soundscapes', link: '/soundscapes.html', text: /Calm sounds and music/ });
+  t('chat11', 'the Sound Toolkit is now Brain Breakers', { q: 'what is the sound toolkit', id: 'soundscapes', link: '/soundscapes.html', text: /Brain Breakers/ });
   t('chat11', 'How am I right now?', { q: 'how am i right now check', id: 'weather', text: /My weather today/, link: '/quick-checks.html' });
   t('chat11', 'Self-discovery: know your own wiring', { q: 'what is self-discovery', link: ['/know-yourself.html', '/self-path.html'], text: /Self-discovery/ });
   t('chat11', 'the Crosswords', { q: 'tell me about the crosswords', id: /quietcross|dailycross/, text: /Crosswords/ });

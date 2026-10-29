@@ -319,6 +319,8 @@ def _match(href):
     for t in same:
         if '#' in t['href'] and frag and t['href'].split('#', 1)[1] == frag:
             return ('tool', t['key'])
+        if frag and frag in (t.get('frags') or []):  # book29: a named part of the same tool (the ladder is a step of My weather today)
+            return ('tool', t['key'])
     plain = [t for t in same if '#' not in t['href']]
     if plain:
         return ('tool', plain[0]['key'])
@@ -552,7 +554,7 @@ def split_lists(s, element_end, warn=None, tag=''):
             if not groups[k]:
                 continue
             h, sub = KIND_HEADS[k]
-            out.append('<h3 class="kind-h kind-h-%s">%s <span class="kind-sub">%s</span></h3>' % (k, h, sub))
+            out.append('<h3 class="kind-h kind-h-%s">%s<span class="kind-colon">:</span> <span class="kind-sub">%s</span></h3>' % (k, h, sub))
             out.append('<ul class="%s">' % ' '.join(x for x in (ul_cls, 'kind-list', 'kind-' + k) if x))
             out.extend('  ' + li for li in groups[k])
             out.append('</ul>')

@@ -1,70 +1,16 @@
-/* coin-pusher-data.js — the words and friends for the Kindness Coin Pusher (/coin-pusher.html).
-   window.TOLCoinData = { tips, chars, drawMedallion(canvas, char) }
-   tips:  { id, tier (1 everyday · 2 deeper · 3 rare), t (title), b (one or two plain sentences),
-            tool (a tools-registry id: the link's name and address come from window.TOLToolById when it is there),
-            href (the page, used when there is no tool or to point at one part of it), label (the link's name without the registry) }
-   chars: every character on the site, with where each one lives. Nothing here is stored or sent. */
+/* coin-pusher-data.js — the friends for the Kindness Coin Pusher (/coin-pusher.html) and the Arcade's Derby dancers.
+   window.TOLCoinData = { chars, drawMedallion(canvas, char), drawChar(ctx, char, size), drawPuddlesShapes(ctx) }
+   chars: every character on the site, with where each one lives. The tips moved to coin-pusher-tips.js (window.TOLCoinTips).
+   drawPuddlesShapes draws Professor Puddles from the same shapes as the site's own picture of him (PUDDLES_SVG in site.js),
+   in that picture's own units (x -4 to 84, y -14 to 78). Nothing here is stored or sent. */
 (function () {
   'use strict';
-
-  var tips = [
-    // ---------- everyday tips (a small push)
-    { id: 'setup', tier: 1, t: 'Fix the setup, not the person', b: 'When the same thing keeps going wrong, look at the setup before the person: who owns it, when it happens, and how anyone would know it’s done.', href: '/five-pillars.html#p2-h', label: 'The Five Pillars: fix the setup, not the person' },
-    { id: 'state', tier: 1, t: 'Check your state first', b: 'Before a hard talk, ask yourself: am I hungry, tired or already wound up? If so, it’s a later talk, not a never talk. The same goes for them.', tool: 'weather', label: 'My weather today' },
-    { id: 'pauseline', tier: 1, t: 'A pause needs a return time', b: 'If it’s getting heated, say when you’ll come back: “I need to stop. I’ll come back at eight.” A pause with a time is a promise, not a door shutting.', tool: 'pause', href: '/pursue-withdraw.html#plan-h', label: 'Make a pause plan' },
-    { id: 'outbreath', tier: 1, t: 'Breathe out longer than in', b: 'In for 4, out for 6, for a minute or two. It’s one of the simplest ways to help your body settle before you say anything.', href: '/nervous-system.html#now', label: 'Calm your nervous system now' },
-    { id: 'owner', tier: 1, t: 'One owner per job', b: 'A job that belongs to everyone belongs to no one. Give each job one owner and one backup, and write it down where you can both see it.', tool: 'owner', label: 'One owner per job' },
-    { id: 'askhelp', tier: 1, t: 'Ask for help plainly', b: 'Help is easier to give when the ask is clear: what, by when, and what done looks like. “Can you take the trash out by Tuesday night?” works better than “You never help.”', href: '/invisible-labor-mental-load.html#words', label: 'Words that help when you bring it up' },
-    { id: 'kindno', tier: 1, t: 'A kind no', b: '“I can’t do Saturday, but I could do Sunday morning.” A no that comes with something you can offer is easier to hear, and easier to say.', tool: 'refusals', href: '/signal-translator.html#write-no', label: 'Say no kindly' },
-    { id: 'thanks', tier: 1, t: 'Make your thank-you specific', b: '“Thanks for filling the car up, it made my morning easier” lands better than a general “thanks for everything.” Name the thing and what it did for you.', href: '/turning-toward.html#tt-title', label: 'Say one specific thank-you' },
-    { id: 'bids', tier: 1, t: 'Notice the small reach', b: 'When someone shares a small thing, like “look at that bird,” turning toward it for a moment counts. Closeness is mostly built from these.', href: '/turning-toward.html', label: 'Turning toward' },
-    { id: 'land', tier: 1, t: 'Read it as they might', b: 'Before you send a message that matters, read it as if you were tired and worried. If one word could sting, change that one word.', tool: 'signal', label: 'Chat analyzer' },
-    { id: 'daily', tier: 1, t: 'Ninety seconds a day', b: 'One sentence each: how I’m doing, and what’s coming up. Small things stay small when they get said early.', tool: 'checkin90', label: '90-second daily check-in' },
-    { id: 'weekly', tier: 1, t: 'A short weekly check-in', b: 'Once a week: what went well, what felt heavy, and one small change to try. Keep it short and kind, and end on something good.', tool: 'checkincard', label: 'Check-in card' },
-    { id: 'invisible', tier: 1, t: 'Put the invisible work on the list', b: 'Noticing, remembering and planning are real work. When you list who does what, write those down too, not just the doing.', href: '/invisible-labor-mental-load.html#examples', label: 'What counts as invisible labor?' },
-    { id: 'speeds', tier: 1, t: 'Agree on a when, not just a what', b: 'If one of you decides fast and the other needs time, agree when you’ll decide: “Let’s settle it by Thursday lunch.” Both speeds get respected.', tool: 'pace12', label: 'Same moment, different speeds' },
-    { id: 'tryagain', tier: 1, t: 'Repair early and small', b: '“That came out wrong. Can I try again?” A small repair in the moment saves a long one later, and either of you can start it.', href: '/apology-languages.html', label: 'Apology languages' },
-    { id: 'ask', tier: 1, t: 'Ask for what you need', b: '“Could you cook on Tuesdays?” is easier to say yes to than “You never cook.” Turn the complaint into the request hiding inside it.', tool: 'flip', href: '/signal-translator.html#write-ask', label: 'Ask for a change' },
-    { id: 'everything', tier: 1, t: 'Is it us, or is it everything else?', b: 'A hard week can feel like a hard relationship. Check the outside pressure first: work, sleep, money, health. Then decide what’s really between you.', tool: 'static14', label: 'Is it us, or is it everything else?' },
-    { id: 'ritual', tier: 1, t: 'Keep one little ritual', b: 'A Sunday walk, a goodnight text, tea at the same time. Small things done on purpose keep you close when life is busy.', tool: 'rituals15', label: 'Keep your little rituals alive' },
-    { id: 'upset', tier: 1, t: 'Upset right now?', b: 'Say a pause line, breathe out slowly for a minute, then move apart for twenty minutes and come back on time. You don’t have to solve anything yet.', tool: 'upset', label: 'Upset right now?' },
-    { id: 'fair', tier: 1, t: 'Fair isn’t always 50/50', b: 'A fair split doesn’t have to mean equal jobs. It means both of you think it can last. Check it together, with real numbers.', tool: 'split', label: 'Check the split' },
-    { id: 'once', tier: 1, t: 'Settle it once, in writing', b: 'A room rule, a vacation plan, who packs the bag. Agree on it once, write it down, and the same talk stops coming back.', tool: 'plans', label: 'Make a plan together' },
-    { id: 'battery', tier: 1, t: 'Tired isn’t a character flaw', b: 'Snapping when you’re worn out says more about your battery than your heart. Give the other person the same allowance you’d want.', href: '/five-pillars.html#p3-h', label: 'The Five Pillars: read your state first' },
-    { id: 'move', tier: 1, t: 'Move for a few minutes', b: 'A short walk, the stairs, shaking out your arms. Moving is one of the best-studied ways to ease stress, and it needs nothing you don’t have.', href: '/nervous-system.html#now', label: 'Calm your nervous system now' },
-
-    // ---------- deeper tips (5 or more coins in one push)
-    { id: 'pursue', tier: 2, t: 'Talk now, or need space? Both are real', b: 'If one of you wants to talk now and the other needs space, neither is wrong. On a calm day, agree how a pause works and when you’ll come back.', href: '/pursue-withdraw.html#both', label: 'One of you wants to talk now, the other needs space' },
-    { id: 'kit', tier: 2, t: 'Make your calm plan on a calm day', b: 'Write down your early signs, two things that settle you, and your pause line, while you’re calm. In the moment, you only have to follow it.', tool: 'calmkit', label: 'Calm-down plan' },
-    { id: 'comesback', tier: 2, t: 'The argument that keeps coming back', b: 'If the same fight returns every month, the setup is probably feeding it. Look back once a month and change one thing about how it’s set up.', tool: 'keepscoming', label: 'What keeps coming back?' },
-    { id: 'log', tier: 2, t: 'Write down one ordinary week', b: 'Instead of arguing about who does more, log one real week. Real numbers end a lot of guessing, and they often surprise both people.', tool: 'whodid', label: 'Who did what this week' },
-    { id: 'recheck', tier: 2, t: 'Re-check what used to work', b: 'Things that worked for years can quietly stop working. A small monthly re-check catches it early, before anyone feels taken for granted.', href: '/complacency.html', label: 'Complacency' },
-    { id: 'oldrule', tier: 2, t: 'When a reaction feels too big', b: 'If a reaction feels bigger than the moment, it may be an old rule from long ago. Ask kindly: is this rule still helping me now?', tool: 'roots', label: 'Where a reaction comes from' },
-    { id: 'card', tier: 2, t: 'Tell people how to reach you', b: 'People take words in differently. A short card on how you like hard things said saves both of you a lot of guessing.', tool: 'wavelength', label: 'Know how you connect' },
-    { id: 'coreg', tier: 2, t: 'Calm is catching', b: 'One settled person can help another settle: sitting nearby, a slower voice, a glass of water. You don’t need the right words to help.', href: '/nervous-system.html#co-regulation', label: 'Calming together' },
-    { id: 'lands', tier: 2, t: 'Before you reply to something that stung', b: 'Ask two questions: what do I want them to understand, and what do I want to happen next? Then say only what serves those.', tool: 'sayit', label: 'Say it so it lands' },
-    { id: 'hours', tier: 2, t: 'Different hours, one handover', b: 'If you work different hours, keep a short written handover, so neither of you has to carry everything in your head.', href: '/different-hours.html', label: 'When you work different hours' },
-    { id: 'team', tier: 2, t: 'At work, too: one owner and a backup', b: 'Jobs that land on whoever notices first wear the noticers out. Name an owner, a backup and how often it happens.', tool: 'team', label: 'Team tools' },
-    { id: 'writing', tier: 2, t: 'Some talks go better in writing', b: 'If a topic goes wrong every time you say it out loud, take turns in writing. Both people get time to think before they answer.', tool: 'write', label: 'Talk it through in writing' },
-    { id: 'whole', tier: 2, t: 'See the whole load together', b: 'Before deciding who should do more, put everything both of you do on one page. It’s hard to be fair about work you can’t see.', tool: 'lemon-quick', label: 'Who does what at home' },
-    { id: 'restate', tier: 2, t: 'Say their side first', b: 'Put their point into your own words until they say “yes, that’s it.” Then make yours. People listen better once they feel heard.', tool: 'perspective', label: 'Rewind the talk: their side' },
-
-    // ---------- rare tips (9 or more coins in one push)
-    { id: 'incentives', tier: 3, t: 'Notice the quiet incentives', b: 'Things drift toward whatever the setup quietly rewards. If whoever notices a job always ends up doing it, noticing gets punished. Change the setup, not the person.', href: '/five-pillars.html#p5-h', label: 'The Five Pillars: notice the quiet incentives' },
-    { id: 'columns', tier: 3, t: 'Both columns on one page', b: 'Some work is done but never written down: the remembering, the smoothing-over. The fix isn’t a bill. It’s getting both people’s work onto one page, in the same units.', href: '/book/preface-in-depth.html#unbilled-debt', label: 'The book: unbilled debt' },
-    { id: 'window', tier: 3, t: 'Know your window', b: 'Everyone has a range where they can think and listen. Outside it, the best talk is a later talk. Learn the signs that you’re leaving yours.', href: '/nervous-system.html#window', label: 'The window of tolerance' },
-    { id: 'slack', tier: 3, t: 'Leave some room in the week', b: 'A home running at full stretch has no room for an ordinary bad day. Keep one evening a week with nothing planned.', href: '/polymath.html#roots', label: 'The polymath way: one root, many branches' },
-    { id: 'loops', tier: 3, t: 'Small and often beats big and rare', b: 'A few minutes every week does more than one big talk a year. Small habits, checked each time, shape the whole home.', href: '/polymath.html#roots', label: 'The polymath way: feedback loops' },
-    { id: 'impact', tier: 3, t: 'What you meant, and how it landed', b: 'Both can be true at once. Try: “I didn’t mean it that way, and I can see it hurt.” Neither person has to be wrong for it to be fixed.', tool: 'signal', label: 'Chat analyzer' },
-    { id: 'yourself', tier: 3, t: 'Start with yourself', b: 'The one person you can change today is you. One small change on your side often shifts the whole pattern between two people.', href: '/learn/index.html', label: 'Stories from Philosophy' },
-    { id: 'ownwords', tier: 3, t: 'When it doesn’t fit a box', b: 'Describe your situation in your own words. Professor Puddles can point you to the parts of the site that fit it, privately.', tool: 'ask', label: 'Ask Professor Puddles' }
-  ];
 
   // every character on the site, and where each one lives
   var chars = [
     { id: 'puddles', name: 'Professor Puddles', emo: '💧', ring: '#7FB2D6', home: '/ask.html', where: 'Ask Professor Puddles', line: 'A cheerful raindrop professor who knows the whole site, and loves a good question.' },
     { id: 'tidbit', name: 'Tidbit', emo: '🐶', ring: '#C98A4F', pup: 'collar', home: '/frequency-journey.html', where: 'Tidbit and Sugarfoot’s Arcade', line: 'The leaner pup with the black mask and the big smile. First to every treat.' },
-    { id: 'sugarfoot', name: 'Sugarfoot', emo: '🐶', ring: '#A45C2E', pup: 'drop', home: '/frequency-journey.html', where: 'Tidbit and Sugarfoot’s Arcade', line: 'The stocky pup with floppy ears, white feet and a gentle wag for everyone.' },
+    { id: 'sugarfoot', name: 'Sugarfoot', emo: '🐶', ring: '#A45C2E', pup: 'drop', home: '/frequency-journey.html', where: 'Tidbit and Sugarfoot’s Arcade', line: 'The stocky pup with floppy ears, white feet and a friendly wag for everyone.' },
     { id: 'ollie', name: 'Ollie the owl', emo: '🦉', ring: '#9C8466', home: '/frequency-buddies.html', where: 'Frequency Buddies', line: 'A wise owl from the cartoon, and a very good listener.' },
     { id: 'dot', name: 'Dot the snail', emo: '🐌', ring: '#C7A6D9', home: '/frequency-buddies.html', where: 'Frequency Buddies', line: 'Takes her time, and always gets there in the end.' },
     { id: 'hopper', name: 'Hopper the frog', emo: '🐸', ring: '#7DB07A', home: '/frequency-buddies.html', where: 'Frequency Buddies', line: 'One big hop, then a long, happy sit.' },
@@ -95,6 +41,27 @@
     g.fillStyle = 'rgba(240,120,130,.45)';
     g.beginPath(); g.ellipse(x - s * 0.55, y + s * 0.18, s * 0.14, s * 0.08, 0, 0, 7); g.ellipse(x + s * 0.55, y + s * 0.18, s * 0.14, s * 0.08, 0, 0, 7); g.fill();
   }
+  // Professor Puddles, shape for shape the same as PUDDLES_SVG in site.js (the drop, a shine, round glasses, a smile, cheeks, a little cap)
+  var PUD_DROP = typeof Path2D === 'function' ? new Path2D('M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z') : null;
+  function drawPuddlesShapes(g) {
+    g.save();
+    if (PUD_DROP) { g.fillStyle = '#CFE6FA'; g.fill(PUD_DROP); g.strokeStyle = '#7FB2E0'; g.lineWidth = 2.6; g.stroke(PUD_DROP); }
+    g.save(); g.translate(30, 30); g.rotate(-25 * Math.PI / 180); g.globalAlpha = 0.6; g.fillStyle = '#fff'; g.beginPath(); g.ellipse(0, 0, 5, 3, 0, 0, 7); g.fill(); g.restore();
+    g.fillStyle = 'rgba(255,255,255,.35)'; g.strokeStyle = '#3A3350'; g.lineWidth = 1.8;
+    g.beginPath(); g.arc(31, 46, 6.2, 0, 7); g.fill(); g.stroke(); g.beginPath(); g.arc(49, 46, 6.2, 0, 7); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(37.2, 46); g.lineTo(42.8, 46); g.stroke();
+    g.fillStyle = '#2B2620'; g.beginPath(); g.arc(31, 46.5, 2.4, 0, 7); g.fill(); g.beginPath(); g.arc(49, 46.5, 2.4, 0, 7); g.fill();
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(31.9, 45.6, 0.8, 0, 7); g.fill(); g.beginPath(); g.arc(49.9, 45.6, 0.8, 0, 7); g.fill();
+    g.strokeStyle = '#2B2620'; g.lineWidth = 2.2; g.lineCap = 'round'; g.beginPath(); g.moveTo(35, 56); g.quadraticCurveTo(40, 60.5, 45, 56); g.stroke();
+    g.fillStyle = 'rgba(242,163,182,.85)'; g.beginPath(); g.ellipse(23, 55, 3.6, 2.2, 0, 0, 7); g.fill(); g.beginPath(); g.ellipse(57, 55, 3.6, 2.2, 0, 0, 7); g.fill();
+    // the cap: translate(-9 15) rotate(-20 40 10) scale(.82)
+    g.translate(-9, 15); g.translate(40, 10); g.rotate(-20 * Math.PI / 180); g.translate(-40, -10); g.scale(0.82, 0.82);
+    g.fillStyle = '#3A3350'; g.beginPath(); g.moveTo(18, 10); g.lineTo(40, 1); g.lineTo(62, 10); g.lineTo(40, 19); g.closePath(); g.fill();
+    g.fillStyle = '#4A4266'; g.beginPath(); g.moveTo(29, 14.5); g.lineTo(29, 20.5); g.bezierCurveTo(32, 23.5, 48, 23.5, 51, 20.5); g.lineTo(51, 14.5); g.lineTo(40, 19); g.closePath(); g.fill();
+    g.strokeStyle = '#F4D26B'; g.lineWidth = 1.6; g.lineCap = 'butt'; g.beginPath(); g.moveTo(60, 10); g.lineTo(60, 21); g.stroke();
+    g.fillStyle = '#F4D26B'; g.beginPath(); g.arc(60, 22.5, 2.3, 0, 7); g.fill();
+    g.restore();
+  }
   function drawChar(g, c, S) {
     var cx = S / 2, cy = S / 2, u = S / 256;
     if (c.pup && window.TOLPups) {
@@ -103,19 +70,7 @@
       g.restore(); return;
     }
     if (c.id === 'puddles') {
-      // a raindrop with round glasses and a little mortarboard
-      g.fillStyle = '#8EC5EA'; g.beginPath(); g.moveTo(cx, cy - 78 * u);
-      g.bezierCurveTo(cx + 22 * u, cy - 40 * u, cx + 62 * u, cy + 4 * u, cx + 58 * u, cy + 34 * u);
-      g.bezierCurveTo(cx + 54 * u, cy + 76 * u, cx - 54 * u, cy + 76 * u, cx - 58 * u, cy + 34 * u);
-      g.bezierCurveTo(cx - 62 * u, cy + 4 * u, cx - 22 * u, cy - 40 * u, cx, cy - 78 * u); g.fill();
-      g.fillStyle = 'rgba(255,255,255,.55)'; g.beginPath(); g.ellipse(cx - 26 * u, cy - 6 * u, 9 * u, 18 * u, 0.5, 0, 7); g.fill();
-      g.strokeStyle = '#3A3550'; g.lineWidth = 5 * u;
-      g.beginPath(); g.arc(cx - 20 * u, cy + 26 * u, 15 * u, 0, 7); g.moveTo(cx + 35 * u, cy + 26 * u); g.arc(cx + 20 * u, cy + 26 * u, 15 * u, 0, 7); g.moveTo(cx - 5 * u, cy + 24 * u); g.lineTo(cx + 5 * u, cy + 24 * u); g.stroke();
-      g.fillStyle = '#2B2620'; g.beginPath(); g.arc(cx - 20 * u, cy + 26 * u, 5 * u, 0, 7); g.arc(cx + 20 * u, cy + 26 * u, 5 * u, 0, 7); g.fill();
-      g.lineWidth = 4 * u; g.beginPath(); g.arc(cx, cy + 46 * u, 10 * u, 0.2 * Math.PI, 0.8 * Math.PI); g.stroke();
-      g.fillStyle = '#3A3550'; g.beginPath(); g.moveTo(cx - 40 * u, cy - 62 * u); g.lineTo(cx, cy - 78 * u); g.lineTo(cx + 40 * u, cy - 62 * u); g.lineTo(cx, cy - 48 * u); g.closePath(); g.fill();
-      g.strokeStyle = '#E2B04A'; g.lineWidth = 3 * u; g.beginPath(); g.moveTo(cx + 2 * u, cy - 64 * u); g.lineTo(cx + 30 * u, cy - 52 * u); g.lineTo(cx + 30 * u, cy - 30 * u); g.stroke();
-      return;
+      var k = S / 140; g.save(); g.translate(cx - 40 * k, cy - 34 * k); g.scale(k, k); drawPuddlesShapes(g); g.restore(); return;
     }
     if (c.draw === 'cloud') {
       g.fillStyle = c.col;
@@ -178,5 +133,5 @@
     g.strokeStyle = 'rgba(255,255,255,.45)'; g.lineWidth = S * 0.02; g.beginPath(); g.arc(cx, cx, R * 0.92, 3.6, 4.6); g.stroke();
   }
 
-  window.TOLCoinData = { tips: tips, chars: chars, drawMedallion: drawMedallion, drawChar: drawChar };   // drawChar: the arcade's Derby borrows the friends for its super hits
+  window.TOLCoinData = { chars: chars, drawMedallion: drawMedallion, drawChar: drawChar, drawPuddlesShapes: drawPuddlesShapes };   // drawChar: the arcade's Derby borrows the friends for its super hits
 })();

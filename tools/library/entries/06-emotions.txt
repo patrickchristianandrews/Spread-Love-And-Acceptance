@@ -34,11 +34,11 @@ Gross’s process model lays out a sequence. Situation selection: choosing wheth
 
 Strategies earlier in the sequence often work better and cost less effort. Choosing a good time for a conversation is easier than staying calm through a badly timed one.
 
-The program’s tools act at different points: the weather check helps with situation selection, the calm-down kit helps with modification and response, and the tone filter works on attention and interpretation.
+The program’s tools act at different points: the weather check helps with situation selection, the calm-down plan helps with modification and response, and the tone filter works on attention and interpretation.
 research:
 Gross published the process model in 1998 and it has become the dominant framework in emotion regulation research, with a large body of experimental and correlational work. Researchers now emphasize flexibility: using different strategies for different situations seems more important than any single “best” strategy.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /quick-checks.html#today | Today’s Weather
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
@@ -179,7 +179,7 @@ Talking about anger calmly is different from venting. Describing what made you a
 research:
 Brad Bushman’s 2002 experiment found that people who hit a punching bag while thinking about someone who had provoked them became more aggressive, not less. A 2024 meta-analysis by Sophie Kjærvik and Bushman found that arousal-decreasing activities reduced anger, while arousal-increasing ones, such as some vigorous activities used for venting, did not reliably help.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /quick-checks.html#ladder | The nervous-system self-check
 talk:
 - What is usually underneath your anger: hurt, fear, tiredness, unfairness?
@@ -199,7 +199,7 @@ Co-rumination, described by Amanda Rose, is when friends or partners repeatedly 
 research:
 Nolen-Hoeksema published her response styles theory in 1991 and many studies followed. Rose introduced co-rumination in 2002, with research mostly on adolescents showing it is linked both to friendship closeness and to anxiety and depressive symptoms. Research on rumination is extensive and generally consistent.
 links:
-/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11.html | Calm-down plan (WP-11)
 /night-garden.html | The Night Garden
 talk:
 - Do you tend to replay arguments? What helps you stop?

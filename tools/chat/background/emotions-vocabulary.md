@@ -55,7 +55,7 @@ Program: Know your own wiring helps you sort where a feeling comes from: your wi
 ## Body clues of emotion
 aka: body signals; where I feel it; physical signs of feelings
 see: Feelings intensity scale; Stress versus pressure
-go: /wp-11.html | WP-11: The Calm-Down Kit
+go: /wp-11.html | WP-11: Calm-down plan
 evidence: Research on interoception (sensing your body’s internal state) suggests people vary a lot in how well they notice body signals. Noticing can be practiced.
 try: “My jaw is tight and my shoulders are up. I’m more wound up than I thought.”
 
@@ -63,7 +63,7 @@ Emotions often show up in the body before we have words: a tight chest, a hot fa
 
 Everyone’s map is different. Some people notice very little in their body, especially when stressed. That’s okay, and it can be practiced gently.
 
-Program: The Calm-Down Kit asks where you feel it first. The Library’s entry on interoception goes deeper.
+Program: Calm-down plan asks where you feel it first. The Library’s entry on interoception goes deeper.
 
 ## Frustration
 aka: frustrated; fed up; exasperated
@@ -154,7 +154,7 @@ After a public mistake, it’s natural to replay it and imagine everyone else is
 
 A useful move is to turn the replay into one practical step (an apology, a fix, a note for next time) and then give yourself permission to stop.
 
-Program: If replaying becomes a habit, the Library’s rumination entry and the Calm-Down Kit can help settle it.
+Program: If replaying becomes a habit, the Library’s rumination entry and the calm-down plan can help settle it.
 
 ## Envy
 aka: envious; envy versus jealousy; comparing
@@ -172,7 +172,7 @@ Program: The Library’s social comparison entry explains why comparison often m
 ## Anxiety and fear
 aka: fear versus anxiety; anxious; scared; afraid
 see: Worry versus problem-solving; Dread
-go: /wp-11.html | WP-11: The Calm-Down Kit
+go: /wp-11.html | WP-11: Calm-down plan
 evidence: Psychologists often describe fear as a response to a present threat and anxiety as a response to a possible future one. This is general information, not a diagnosis.
 try: “I’m anxious about the talk tonight. Can we agree to keep it to one topic and take a break if it gets heavy?”
 
@@ -180,7 +180,7 @@ Fear tends to be about something here and now. Anxiety tends to be about what mi
 
 Everyday anxiety before a hard conversation is very normal, and a bit of preparation helps.
 
-Program: The Calm-Down Kit and the Night Garden’s box breathing are gentle ways to settle before a hard talk.
+Program: Calm-down plan and the Night Garden’s box breathing are gentle ways to settle before a hard talk.
 
 ## Worry versus problem-solving
 aka: worry versus planning; productive worry; worrying
@@ -401,4 +401,4 @@ Anger often points to something that feels unfair, disrespectful or blocked. The
 
 Pausing until the intensity drops, then naming the unfairness clearly and calmly, usually gets further than acting in the heat.
 
-Program: The Library’s anger entry goes deeper, including the myth that venting helps. The Calm-Down Kit (WP-11) helps you plan the pause.
+Program: The Library’s anger entry goes deeper, including the myth that venting helps. Calm-down plan (WP-11) helps you plan the pause.

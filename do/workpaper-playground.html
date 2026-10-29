@@ -236,7 +236,7 @@ function calc(){
   $("wp02-out").innerHTML = !bt ? "Answer all five to see the score." :
     '<div class="mono">' + S.bat.join(" + ") + " = " + bt.points + " points ÷ 20</div>" +
     '<div>Your stress tank: <span class="big' + (bt.value >= 0.6 ? " low" : bt.value >= 0.3 ? " mid" : "") + '">' + f2(bt.value) + '</span> ' + ({ low: "light", mid: "medium", high: "high" })[C.wp02Band(bt.value).key] + '</div>' +
-    "<div>" + ({ low: "Whatever comes up is probably about the thing itself. A fine time to talk.", mid: "Before a hard conversation, say it out loud: “Heads up, I’m carrying more than usual today.”", high: "Put off anything that doesn’t need deciding in the next hour. Pick a time to come back. The <a href=\"/wp-11.html\">Calm-Down Kit (WP-11)</a> helps." })[C.wp02Band(bt.value).key] + "</div>" +
+    "<div>" + ({ low: "Whatever comes up is probably about the thing itself. A fine time to talk.", mid: "Before a hard conversation, say it out loud: “Heads up, I’m carrying more than usual today.”", high: "Put off anything that doesn’t need deciding in the next hour. Pick a time to come back. The <a href=\"/wp-11.html\">Calm-down plan (WP-11)</a> helps." })[C.wp02Band(bt.value).key] + "</div>" +
     '<div class="mono">Higher means heavier. Bands: under 0.30 light, 0.30 up to 0.60 medium, 0.60 or more high.</div>';
   // WP-03
   var owned = S.raci.filter(function(r){ return r[1] !== "" && r[2] !== ""; }).length;

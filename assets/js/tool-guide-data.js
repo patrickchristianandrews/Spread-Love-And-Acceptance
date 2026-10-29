@@ -56,7 +56,7 @@ window.TOLToolGuideData = {
         ['crompton-2020', 'People who are wired differently can miss each other’s meaning more than people wired alike (Crompton and colleagues, 2020).']
       ],
       idea: 'The levels (from kind to very sharp), the patterns it looks for and the rewrite rules are this site’s own fixed rules. It doesn’t invent anything new each time.',
-      limits: 'It reads the words only, not tone of voice, emoji habits or your history together. In our tests it read 92 of 101 held-out everyday messages the way people expected. Adding context (who they are, how they usually write, what you want) helps, and it still can\u2019t know everything. It is rule-based and will sometimes be wrong. Check its reading against what you know about the person. Not a test of anyone.',
+      limits: 'It reads the words only, not tone of voice, emoji habits or your history together. In our tests it matched the hand labels on about 9 in 10 fresh, made-up everyday messages. Adding context (who they are, how they usually write, what you want) helps, and it still can\u2019t know everything. It is rule-based and will sometimes be wrong. Check its reading against what you know about the person. Not a test of anyone.',
       privacy: 'The checking happens on this device. What you type is not sent anywhere. Only your view settings are kept in this browser.'
     },
 
@@ -161,7 +161,7 @@ window.TOLToolGuideData = {
     },
 
     'soften-a-tense-moment': {
-      name: 'Cool-down corner · Soften a tense moment',
+      name: 'Upset right now? · Soften a tense moment',
       reg: 'soften',
       problem: 'Someone near you is in a bad mood',
       'do': 'Settle yourself, read the state someone else is in, and pick one small move.',
@@ -187,7 +187,7 @@ window.TOLToolGuideData = {
     },
 
     'pause-plan': {
-      name: 'Cool-down corner · Make a pause plan',
+      name: 'Upset right now? · Make a pause plan',
       reg: 'pause',
       problem: 'When one of you wants to talk now and the other needs space',
       'do': 'Agree on a calm day how either of you can take a break, and when you come back.',
@@ -296,7 +296,7 @@ window.TOLToolGuideData = {
       time: 'About 2 minutes for your code; 10 more for the optional extras.',
       result: 'A four-letter code for your pace, big picture or details, how you say things and how you take things in, with plain sentences like “Give me the headline first, then the details.”',
       next: [
-        ['/wiring-card.html', 'Make a “how to talk to me” card', 'one page you can hand to someone'],
+        ['/wiring-card.html', 'Make a “how I like to be spoken to” card', 'one page you can hand to someone'],
         ['/self-path.html', 'Your self path', 'small steps on your own'],
         ['/check-ins.html', 'Share one thing you learned', 'in a short, calm talk']
       ],
@@ -312,7 +312,7 @@ window.TOLToolGuideData = {
     },
 
     'wiring-card': {
-      name: 'How you connect · How to talk to me: a card',
+      name: 'How you connect · How I like to be spoken to: a card',
       reg: 'wiring',
       problem: 'Telling people how to reach you, without a long talk',
       'do': 'Pick what helps words reach you, what your silence means and what to avoid.',
@@ -393,7 +393,7 @@ window.TOLToolGuideData = {
       result: 'A few small things you now know about yourself in your own words, for example “I take things in best in writing” or “my stress tank is fullest on Sunday nights.”',
       next: [
         ['/wavelength.html', 'Find your communication style', 'how you think, talk and listen'],
-        ['/wiring-card.html', 'Make a “how to talk to me” card', 'to share when you’re ready'],
+        ['/wiring-card.html', 'Make a “how I like to be spoken to” card', 'to share when you’re ready'],
         ['/book/topic-know-yourself.html', 'The book on knowing yourself', 'the reading that goes with it']
       ],
       research: [
@@ -505,7 +505,7 @@ window.TOLToolGuideData = {
     },
 
     'upset-right-now': {
-      name: 'Cool-down corner · Upset right now? A 5-minute calm-down',
+      name: 'Upset right now? A 5-minute calm-down',
       reg: 'upset',
       problem: 'Right now, in the middle of an argument',
       'do': 'A pause line with a return time, a one-minute breathing pacer, and how to come back.',
@@ -531,7 +531,7 @@ window.TOLToolGuideData = {
     },
 
     'night-garden': {
-      name: 'Cool-down corner · Breathing game',
+      name: 'Upset right now? · Breathing game',
       reg: 'garden',
       problem: 'Slowing your breathing without counting',
       'do': 'Breathe slowly to make flowers bloom and fireflies gather.',
@@ -1017,7 +1017,7 @@ window.TOLToolGuideData = {
     },
 
     'calm-sounds': {
-      name: 'Cool-down corner · Calm sounds and music',
+      name: 'Upset right now? · Brain Breakers',
       reg: 'music',
       problem: 'A few minutes away from words',
       'do': 'Two ways to press play while you settle: four instrumental pieces with a visualizer, or a plain background sound (a low hum, a soft flutter or brown noise).',
@@ -1039,7 +1039,7 @@ window.TOLToolGuideData = {
     },
 
     'drift': {
-      name: 'Cool-down corner · Slow colors and tones',
+      name: 'Upset right now? · Slow colors and tones',
       reg: 'drift',
       problem: 'Winding down before sleep',
       'do': 'Pick how you feel. Slow colors, kind words and gentle tones keep you company (headphones help).',

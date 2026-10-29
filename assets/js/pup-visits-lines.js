@@ -160,7 +160,7 @@ window.TOL_PUP_LINES = {
       'Knowing what drains you helps you plan kinder days.',
       ['Make a little card about how you’re built, to share with your people.', '/wiring-card.html', 'Wiring Card'],
       ['How much are you carrying? Check before a hard talk.', '/workpapers/wp-02-how-much-are-you-carrying.html', 'Battery check'],
-      ['Build your own calm-down kit for rough moments.', '/wp-11.html', 'The Calm-Down Kit'],
+      ['Build your own calm-down plan for rough moments.', '/wp-11.html', 'Calm-down plan'],
       ['Every brain is wired a bit differently. That’s okay!', '/wired-differently.html', 'Wired Differently']
     ],
     relationships: [
@@ -276,14 +276,14 @@ window.TOL_PUP_LINES = {
     ]],
     ['retun|repair|rough moment|after a fight|make up', [
       'This bit is about repair. Coming back after a rough moment is brave.',
-      ['A calm-down kit helps before you come back to it.', '/wp-11.html', 'The Calm-Down Kit']
+      ['A calm-down plan helps before you come back to it.', '/wp-11.html', 'Calm-down plan']
     ]],
     ['look-?back|monthly|month|audit|sign-?off|log\\b|tally', [
       ['Once a month, look back kindly. What went well?', '/book/chapter-5.html', 'The monthly look-back'],
       'Start the look-back with what went right. Then the tricky bits feel lighter.'
     ]],
     ['calm|feeling|breath|settle|pause', [
-      ['Build a little calm-down kit for the rough moments.', '/wp-11.html', 'The Calm-Down Kit'],
+      ['Build a little calm-down plan for the rough moments.', '/wp-11.html', 'Calm-down plan'],
       'Name the feeling. Just saying “I’m frustrated” can help it feel smaller.'
     ]],
     ['week \\d|7-day|seven days|first steps?|start with', [

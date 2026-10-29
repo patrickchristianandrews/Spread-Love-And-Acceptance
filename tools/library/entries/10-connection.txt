@@ -78,7 +78,7 @@ research:
 Neff published her definition and scale in 2003. Juliana Breines and Serena Chen (2012) found that self-compassion increased motivation to improve after a failure. Neff and Christopher Germer developed Mindful Self-Compassion training, with trials showing benefits. Some researchers, for example Peter Muris, have questioned whether the scale mixes self-compassion with low self-criticism, and debate continues about its structure.
 links:
 /relationships.html#yourself | How it fits: yourself
-/wp-11.html | The Calm-Down Kit: it is for you (WP-11)
+/wp-11.html | Calm-down plan: it is for you (WP-11)
 talk:
 - How do you talk to yourself when you make a mistake?
 - What would you say to a friend in the same situation?

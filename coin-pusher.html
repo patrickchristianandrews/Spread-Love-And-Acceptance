@@ -13,47 +13,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
 <!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/upset-right-now\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
-<title>Kindness Coin Pusher</title>
-<meta name="description" content="A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride.">
+<title>Kindness Coin Pusher: A Cozy Arcade With Helpful Tips</title>
+<meta name="description" content="A cozy 3D coin pusher that shows helpful tips as the coins drop, and medallions of every character on the site ride along. Free, nothing to buy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/coin-pusher.css">
-<style>
-/* game19: celebration banner, combo counter, Skip the show, the trophy (motion: transforms and opacity only; calm turns it off) */
-.cp-banner{ position:absolute; left:0; right:0; top:60%; z-index:4; display:flex; align-items:center; gap:.7rem; width:max-content; max-width:calc(100% - 24px); margin:0 auto; padding:.6rem 1.1rem .6rem .7rem; border-radius:20px;
-  background:rgba(43,22,26,.9); color:#FFF3DC; border:2px solid #E9C46F; box-shadow:0 10px 30px rgba(40,20,10,.35); transform:translateY(-50%) scale(.6); opacity:0; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .25s; pointer-events:none; }
-.cp-banner.is-up{ transform:translateY(-50%) scale(1); opacity:1; }
-.cp-banner[hidden]{ display:none; }
-.cp-banner img{ width:64px; height:64px; flex:0 0 auto; }
-.cp-banner img[hidden]{ display:none; }
-.cp-banner p{ margin:0; }
-.cp-banner-k{ font:500 .74rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:#E9C46F; }
-.cp-banner-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.35rem; line-height:1.15; }
-.cp-banner.t2{ border-color:#B9A2D9; }
-.cp-banner.t3{ border-color:#8EC5EA; box-shadow:0 0 0 4px rgba(142,197,234,.35), 0 10px 30px rgba(40,20,10,.35); }
-.cp-banner.t4{ border-color:#F2A98A; box-shadow:0 0 0 4px rgba(242,169,138,.4), 0 0 40px rgba(255,200,120,.5); }
-.cp-banner.t4 .cp-banner-t, .cp-banner.t5 .cp-banner-t{ font-size:1.55rem; }
-.cp-banner.t5{ border:3px solid transparent; background:linear-gradient(rgba(43,22,26,.92), rgba(43,22,26,.92)) padding-box, linear-gradient(90deg, #E9C46F, #F2A98A, #B9A2D9, #8EC5EA, #7DB07A) border-box; box-shadow:0 0 50px rgba(255,210,140,.6); }
-.cp-banner.t4.is-up:not(.is-calm), .cp-banner.t5.is-up:not(.is-calm){ animation:cp-bob 1.2s ease-in-out infinite alternate; }
-@keyframes cp-bob{ to{ transform:translateY(-54%) scale(1.04) rotate(-1deg); } }
-.cp-banner.is-calm{ transition:none; transform:translateY(-50%); }
-.cp-combo{ position:absolute; left:50%; bottom:12px; z-index:4; margin:0; padding:.25rem .9rem; border-radius:999px; transform:translateX(-50%); background:rgba(43,22,26,.85); color:#FFE7B0; font:700 1.1rem "Fraunces", Georgia, serif; pointer-events:none; white-space:nowrap; }
-.cp-combo[hidden]{ display:none; }
-.cp-combo[data-lvl="2"]{ color:#2A1B14; background:#E9C46F; }
-.cp-combo[data-lvl="3"]{ color:#2A1B14; background:linear-gradient(90deg, #E9C46F, #F2A98A, #B9A2D9); font-size:1.25rem; }
-.cp-combo[data-lvl="0"]{ font-size:.95rem; color:#FFF3DC; }
-.cp-combo.is-pop{ animation:cp-combo-pop .3s ease-out; }
-@keyframes cp-combo-pop{ 0%{ transform:translateX(-50%) scale(1.35); } 100%{ transform:translateX(-50%) scale(1); } }
-.cp .cp-skipshow{ position:absolute; right:10px; bottom:10px; z-index:5; }
-.cp .cp-skipshow[hidden]{ display:none; }
-.cp-trophy{ display:block; width:120px; height:120px; margin:0 auto .3rem; }
-.cp-trophy-note{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .6rem; margin:.2rem 0 .6rem; font-weight:600; }
-.cp-trophy-note[hidden]{ display:none; }
-@media (max-width:640px){ .cp-banner{ padding:.5rem .8rem .5rem .5rem; gap:.5rem; } .cp-banner img{ width:48px; height:48px; } .cp-banner-t{ font-size:1.1rem; } .cp-banner.t4 .cp-banner-t, .cp-banner.t5 .cp-banner-t{ font-size:1.2rem; } }
-html.tol-quiet .cp-banner, html.tol-quiet .cp-combo{ animation:none !important; transition:none !important; }
-</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -61,8 +27,10 @@ html.tol-quiet .cp-banner, html.tol-quiet .cp-combo{ animation:none !important; 
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/tools-registry.js" defer></script>
 <script src="/assets/js/pups.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script src="/assets/js/coin-pusher-data.js" defer></script>
+<script src="/assets/js/coin-pusher-tips.js" defer></script>
+<script src="/assets/js/coin-pusher-art.js" defer></script>
+<script src="/assets/js/coin-pusher-sfx.js" defer></script>
 <script src="/assets/js/game-fullscreen.js" defer></script>
 <script src="/assets/js/coin-pusher.js" defer></script>
 <!-- seo:start -->
@@ -100,8 +68,8 @@ html.tol-quiet .cp-banner, html.tol-quiet .cp-combo{ animation:none !important; 
 <link rel="apple-touch-startup-image" href="/assets/icons/splash/splash-2064x2752.png" media="(device-width: 1032px) and (device-height: 1376px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 <link rel="apple-touch-startup-image" href="/assets/icons/splash/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="Kindness Coin Pusher">
-<meta property="og:description" content="A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride.">
+<meta property="og:title" content="Kindness Coin Pusher: A Cozy Arcade With Helpful Tips">
+<meta property="og:description" content="A cozy 3D coin pusher that shows helpful tips as the coins drop, and medallions of every character on the site ride along. Free, nothing to buy.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/coin-pusher.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -111,106 +79,169 @@ html.tol-quiet .cp-banner, html.tol-quiet .cp-combo{ animation:none !important; 
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Kindness Coin Pusher">
-<meta name="twitter:description" content="A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride.">
+<meta name="twitter:title" content="Kindness Coin Pusher: A Cozy Arcade With Helpful Tips">
+<meta name="twitter:description" content="A cozy 3D coin pusher that shows helpful tips as the coins drop, and medallions of every character on the site ride along. Free, nothing to buy.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/coin-pusher.html#page","name":"Kindness Coin Pusher","headline":"Kindness Coin Pusher","description":"A cozy 3D coin pusher. Every coin that drops fills a kindness meter and brings a short, useful tip, and medallions of every character on the site ride.","url":"https://spreadloveandacceptance.com/coin-pusher.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-18","dateModified":"2026-10-26","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Calm games","item":"https://spreadloveandacceptance.com/pause-and-play.html"},{"@type":"ListItem","position":3,"name":"Kindness Coin Pusher","item":"https://spreadloveandacceptance.com/coin-pusher.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/coin-pusher.html#page","name":"Kindness Coin Pusher: A Cozy Arcade With Helpful Tips","headline":"Kindness Coin Pusher: A Cozy Arcade With Helpful Tips","description":"A cozy 3D coin pusher that shows helpful tips as the coins drop, and medallions of every character on the site ride along. Free, nothing to buy.","url":"https://spreadloveandacceptance.com/coin-pusher.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-18","dateModified":"2026-10-27","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Calm games","item":"https://spreadloveandacceptance.com/pause-and-play.html"},{"@type":"ListItem","position":3,"name":"Kindness Coin Pusher: A Cozy Arcade With Helpful Tips","item":"https://spreadloveandacceptance.com/coin-pusher.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body class="is-game" data-no-tip data-no-breathe data-no-weather data-no-garden data-no-wash data-no-private-note>
-<main class="cp" id="cp">
+<main class="cp" id="cp" data-mode="day">
   <a class="cp-skip" href="#cp-drop">Skip to the Drop a coin button</a>
   <header class="cp-head">
     <p class="cp-kicker">A cozy arcade</p>
     <h1>Kindness Coin Pusher</h1>
-    <p class="cp-intro cp-intro-short">Tap the machine to drop a coin. Push all 22 friends over the edge for the biggest party on the site.</p>
+    <p class="cp-intro cp-intro-short">Tap or drag to aim, tap to drop, and push the little prizes over the edge to fill your shelf.</p>
     <details class="cp-how">
       <summary>How it works</summary>
-      <p class="cp-intro">Tap the machine where you want a coin to drop, or use Left, Right and Drop a coin. The pusher slides back and forth, and every coin that falls off the front edge fills the kindness meter: every three put a coin back in your cup. Now and then a medallion with one of the site’s 22 friends rides in with your coins. Push it over the edge to put that friend on your shelf. Each new friend brings a celebration that gets bigger as your shelf fills, and finding all 22 brings the big finale and a trophy. Once in a while, a short, useful tip slides up (at most one every few minutes, never in the middle of a celebration). Every tip is kept in “Tips you’ve found” below the machine, and the Tips button turns them off. There’s no money here and nothing to buy. Your coins refill by themselves, and everything stays on this device.</p>
+      <div class="cp-how-body">
+        <p><b>Aim and drop.</b> Tap anywhere on the machine, or drag left and right and let go. Keep Drop pressed for a quick stream of coins. On a keyboard, use the left and right arrow keys to aim and Space to drop.</p>
+        <p><b>The shelf.</b> A wooden shelf slides back and forth and nudges the coins toward the front edge. Every coin that tips over into the tray counts. Every 30 coins fill the kindness meter and send a prize in.</p>
+        <p><b>Prizes.</b> There are 50 collectibles in 8 sets, from Tidbit, Sugarfoot and Professor Puddles to lucky charms, gems and a cozy corner. The sparkle level (1 to 4) only says how often a prize shows up. Finish a set to earn a new cabinet look or coin style. Nothing is ever for sale.</p>
+        <p><b>Bonus lanes.</b> Coins that tip into Sugarfoot’s sleepy corner on the left bring a slow, sleepy cascade. Coins in Tidbit’s bouncy zone on the right bring a burst of zoomies.</p>
+        <p><b>The tip jar.</b> After 40 coins, the tip jar opens. Every so often a short, useful tip slips out, with a link to the page it comes from. Turn it off any time.</p>
+        <p><b>Calm by design.</b> No money, no timers, no way to lose, and no streaks. Calm effects turns down the particles and the shaking, and it starts on if your device asks for less motion. Everything is saved only on this device.</p>
+      </div>
     </details>
   </header>
 <!-- place:pauseplay style=gm --><nav class="gm-switch no-print no-bubble" aria-label="Calm games: every game"><a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Calm games">✨</a><a class="gm-tab" href="/frequency-journey.html">🎵 Arcade</a><a class="gm-tab" href="/word-bloom.html">🌼 Bloom</a><a class="gm-tab" href="/quiet-words.html">🔍 Words</a><a class="gm-tab" href="/quiet-crossword.html">✏️ Crossword</a><a class="gm-tab" href="/daily-ledger-crossword.html">📰 Newspaper</a><a class="gm-tab" href="/recheck-drive.html">🏈 Re-check Drive</a><a class="gm-tab" href="/bears-dojo.html">🐻 Bears Dojo</a><a class="gm-tab" href="/coin-pusher.html" aria-current="page">🪙 Coin Pusher</a><a class="gm-tab" href="/frequency-buddies-music-video-maker.html">🎬 Music video</a></nav><!-- /place:pauseplay -->
 
   <noscript><p class="cp-intro">The coin pusher needs JavaScript to draw the machine. Everything it does happens on your device.</p></noscript>
 
-  <section class="cp-machine" aria-labelledby="cp-machine-h">
+  <div class="cp-layout">
+  <div class="cp-main">
+  <section class="cp-machine" id="cp-machine" aria-labelledby="cp-machine-h">
     <h2 class="sr-only" id="cp-machine-h">The machine</h2>
-    <div class="cp-hud" aria-hidden="true">
-      <span class="cp-chip">🪙 <b id="cp-cup">0</b> in your cup</span>
-      <span class="cp-chip">💛 Meter <b id="cp-meter">0</b></span>
+    <div class="cp-hud">
+      <p class="cp-chip cp-chip-coins"><span aria-hidden="true" class="cp-coinicon"></span><span class="cp-chip-l">Coins</span> <b id="cp-coins">0</b></p>
+      <div class="cp-chip cp-chip-meter"><span class="cp-chip-l" id="cp-meter-l">Kindness meter</span><span class="cp-mbar" role="progressbar" aria-labelledby="cp-meter-l" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" aria-valuetext="0 of 30 coins"><span id="cp-mbar-i"></span></span><b id="cp-meter">0 / 30</b></div>
+      <a class="cp-chip cp-chip-link" href="#cp-shelf-h"><span aria-hidden="true">✦</span> Prizes <b id="cp-found">0 of 50</b></a>
+      <button type="button" class="cp-pill cp-pausebtn" id="cp-pause" aria-pressed="false">Pause</button>
     </div>
-    <div class="cp-stage" id="cp-stage" tabindex="0" role="group" aria-roledescription="coin pusher" aria-label="A cozy coin pusher in a wood and brass cabinet. Tap where to drop a coin, or use the left and right arrow keys to aim and Space to drop.">
-      <canvas class="cp-fx" id="cp-fx" aria-hidden="true"></canvas>
-      <div class="cp-banner" id="cp-banner" hidden aria-hidden="true"><img id="cp-banner-img" alt="" width="72" height="72" hidden><div><p class="cp-banner-k" id="cp-banner-k"></p><p class="cp-banner-t" id="cp-banner-t"></p></div></div>
+    <div class="cp-stage" id="cp-stage" tabindex="0" role="group" aria-roledescription="coin pusher" aria-label="Coin pusher machine. Tap or drag to aim, tap to drop a coin. The left and right arrow keys aim, and Space drops." aria-describedby="cp-desc">
+      <canvas class="cp-canvas" id="cp-canvas" aria-hidden="true"></canvas>
       <p class="cp-combo" id="cp-combo" hidden aria-hidden="true"></p>
-      <button type="button" class="cp-pill cp-skipshow" id="cp-skipshow" hidden>Skip the show</button>
+      <div class="cp-banner" id="cp-banner" hidden aria-hidden="true"><canvas class="cp-banner-art" id="cp-banner-art" width="120" height="120"></canvas><div class="cp-banner-txt"><p class="cp-banner-k" id="cp-banner-k"></p><p class="cp-banner-t" id="cp-banner-t"></p><p class="cp-banner-s" id="cp-banner-s"></p></div></div>
       <div class="cp-card" id="cp-card" hidden>
         <p class="cp-card-k" id="cp-card-k"></p>
         <h3 class="cp-card-t" id="cp-card-t"></h3>
         <div class="cp-card-b" id="cp-card-b"></div>
         <button type="button" class="cp-card-x" id="cp-card-x" aria-label="Close this card"><span aria-hidden="true">×</span></button>
       </div>
+      <button type="button" class="cp-giftbtn" id="cp-giftbtn" hidden aria-label="Open today’s free gift"><span aria-hidden="true" class="cp-gifticon"></span><span class="cp-gift-l">Gift</span></button>
+      <div class="cp-paused" id="cp-paused" hidden><p>Paused</p><button type="button" class="cp-go" id="cp-resume">Keep playing</button></div>
+      <p class="cp-evt" id="cp-evt" hidden aria-hidden="true"></p>
     </div>
     <div class="cp-controls">
-      <button type="button" class="cp-pill cp-aim" id="cp-left" aria-label="Aim left"><span aria-hidden="true">◀</span> Left</button>
-      <button type="button" class="cp-go" id="cp-drop">Drop a coin</button>
-      <button type="button" class="cp-pill cp-aim" id="cp-right" aria-label="Aim right">Right <span aria-hidden="true">▶</span></button>
+      <button type="button" class="cp-aimbtn" id="cp-left" aria-label="Aim left"><span aria-hidden="true">◀</span></button>
+      <button type="button" class="cp-go cp-drop" id="cp-drop" aria-describedby="cp-drop-help"><span class="cp-drop-t">Drop a coin</span><span class="cp-drop-h" id="cp-drop-help">keep it pressed for a stream</span></button>
+      <button type="button" class="cp-aimbtn" id="cp-right" aria-label="Aim right"><span aria-hidden="true">▶</span></button>
     </div>
-    <p class="cp-empty" id="cp-empty" hidden>Your cup is empty for now. It refills by itself, one coin every 8 seconds: a nice moment to stretch or look out the window.</p>
-    <div class="cp-meter-box">
-      <p class="cp-meter-label"><b>Kindness meter</b> <span id="cp-next">3 more coins over the edge for a free coin</span></p>
-      <div class="cp-meter" role="progressbar" aria-label="Coins toward a free coin" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span id="cp-meter-bar"></span></div>
-      <p class="cp-note"><span id="cp-refill">Your cup is full.</span> Friends found: <b id="cp-found">0</b>. Tips found: <b id="cp-tips-n">0</b>. <span id="cp-tipnext"></span></p>
-    </div>
+    <ul class="cp-lanes" aria-label="Bonus lanes and the tip jar">
+      <li class="cp-lane cp-lane-nap"><span class="cp-lane-n">Sugarfoot’s sleepy corner</span> <b id="cp-lane-l">0 of 5</b></li>
+      <li class="cp-lane cp-lane-zoom"><span class="cp-lane-n">Tidbit’s bouncy zone</span> <b id="cp-lane-r">0 of 5</b></li>
+      <li class="cp-lane cp-lane-jar"><span class="cp-lane-n">Tip jar</span> <b id="cp-jar-s">closed</b></li>
+    </ul>
     <div class="cp-bar" role="group" aria-label="Machine options">
       <button type="button" class="cp-pill" id="cp-sound" aria-pressed="false">Sound: <b>off</b></button>
-      <button type="button" class="cp-pill" id="cp-music" aria-pressed="false">Music: <b>off</b></button>
-      <button type="button" class="cp-pill" id="cp-view" aria-pressed="false">View: <b>3D</b></button>
-      <button type="button" class="cp-pill" id="cp-tipsbtn" aria-pressed="true">Tips: <b>on</b></button>
+      <button type="button" class="cp-pill" id="cp-calm" aria-pressed="false">Calm effects: <b>off</b></button>
+      <button type="button" class="cp-pill" id="cp-theme">Look: <b>Auto</b></button>
+      <button type="button" class="cp-pill" id="cp-more" aria-expanded="false" aria-controls="cp-sheet">More options</button>
     </div>
-    <p class="cp-note cp-center" id="cp-quiet-note" hidden>Quiet mode is on, or site sounds are off in Settings, so the machine stays silent.</p>
-    <p class="cp-note cp-center" id="cp-calm-note" hidden>“Keep the page still” is on, so you’re seeing the calm, flat view: no shaking, no confetti, and the pusher only moves after you drop a coin. Celebrations are a short, still banner.</p>
-    <p class="sr-only" id="cp-live" aria-live="polite"></p>
+    <div class="cp-sheet" id="cp-sheet" role="group" aria-label="More options" hidden>
+      <label class="cp-vol" for="cp-vol"><span>Volume</span><input type="range" id="cp-vol" min="0" max="100" step="5" value="70"><output id="cp-vol-o" for="cp-vol">70%</output></label>
+      <div class="cp-sheet-row">
+        <button type="button" class="cp-pill" id="cp-amb" aria-pressed="true">Machine hum: <b>on</b></button>
+        <button type="button" class="cp-pill" id="cp-music" aria-pressed="false">Music: <b>off</b></button>
+        <button type="button" class="cp-pill" id="cp-buzz" aria-pressed="false">Buzz on drops: <b>off</b></button>
+        <button type="button" class="cp-pill" id="cp-tipsbtn" aria-pressed="true">Tips: <b>on</b></button>
+        <button type="button" class="cp-pill" id="cp-describe">Describe the machine</button>
+      </div>
+      <p class="cp-note" id="cp-quiet-note" hidden>Quiet mode is on, so the machine stays silent and still. You can turn sound on here anyway, or turn Quiet mode off in Settings.</p>
+      <p class="cp-note" id="cp-save-note" hidden>This browser is not letting the game save, so your progress will last only until you close this page.</p>
+    </div>
+    <p class="sr-only" id="cp-desc">A coin pusher machine seen from the front and above. Coins drop from a slot at the back. A wooden shelf slides back and forth along the floor and pushes the coins toward the front edge. Coins and prizes that tip over the edge land in the tray, and the tray has three parts: Sugarfoot’s sleepy corner on the left, the middle, and Tidbit’s bouncy zone on the right. Use the Describe the machine button for what is on the machine right now.</p>
+    <p class="sr-only" id="cp-live" aria-live="polite" aria-atomic="true"></p>
   </section>
 
   <section class="cp-break" id="cp-break" hidden aria-labelledby="cp-break-h">
     <h2 id="cp-break-h">You’ve been here about ten minutes</h2>
-    <p>A good moment for a pause: a stretch, a glass of water, or a look out the window. The machine will wait, and your coins keep refilling.</p>
+    <p>Good moment for a stretch, a glass of water, or a look out the window. The machine will wait.</p>
     <div class="cp-row"><button type="button" class="cp-go" id="cp-break-rest">Take a break</button><button type="button" class="cp-pill" id="cp-break-ok">Keep playing</button></div>
   </section>
   <section class="cp-rest" id="cp-rest" hidden aria-labelledby="cp-rest-h">
     <h2 id="cp-rest-h" tabindex="-1">Taking a break</h2>
-    <p>The machine is resting too. Breathe out slowly, a few times. Come back whenever you like.</p>
+    <p>The machine is resting too. Breathe out slowly a few times. Come back whenever you like.</p>
     <button type="button" class="cp-go" id="cp-rest-back">Back to the machine</button>
   </section>
 
   <section class="cp-celebrate" id="cp-celebrate" hidden aria-labelledby="cp-cel-h">
-    <canvas class="cp-trophy" id="cp-trophy" width="160" height="160" role="img" aria-label="A gold trophy with a heart and the words All 22"></canvas>
-    <h2 id="cp-cel-h" tabindex="-1">You found every friend on the site</h2>
+    <canvas class="cp-trophy" id="cp-trophy" width="160" height="160" role="img" aria-label="A gold trophy with a heart and the words All 50"></canvas>
+    <h2 id="cp-cel-h" tabindex="-1">You found all 50 collectibles</h2>
     <p class="cp-note" id="cp-cel-when"></p>
-    <div class="cp-cel-friends" id="cp-cel-friends" aria-hidden="true"></div>
-    <p>Professor Puddles, Tidbit, Sugarfoot, the Frequency Buddies, the Night Garden friends, your Dojo bear, Kip, Peach and Lilac, and all four little clouds of Static are on your shelf. Thank you for playing gently. Each of them lives somewhere on this site, and every one of those places is about the same thing: seeing each other fairly, and holding on kindly.</p>
+    <p>Every set on the prize shelf is complete, and every cabinet look and coin style is yours. Thank you for stopping by. Come back whenever you feel like a few coins.</p>
     <div class="cp-row"><button type="button" class="cp-go tol-share-btn" id="cp-share">Share the coin pusher</button><button type="button" class="cp-pill" id="cp-replay">Replay the moment</button><button type="button" class="cp-pill" id="cp-cel-close">Back to the machine</button></div>
   </section>
+  </div>
+
+  <aside class="cp-side" aria-label="Today and the tip jar">
+    <section class="cp-panel cp-today" aria-labelledby="cp-today-h">
+      <h2 id="cp-today-h">Today</h2>
+      <div class="cp-giftbox" id="cp-giftbox">
+        <p class="cp-giftline" id="cp-giftline">A free gift is waiting.</p>
+        <button type="button" class="cp-go" id="cp-gift">Open today’s gift</button>
+      </div>
+      <h3 class="cp-h3">Tiny goals</h3>
+      <ul class="cp-goals" id="cp-goals"></ul>
+      <p class="cp-note">Just for fun. Nothing is lost if you skip them, and tomorrow brings new ones.</p>
+    </section>
+    <section class="cp-panel cp-jar" aria-labelledby="cp-jar-h">
+      <h2 id="cp-jar-h">Tip jar</h2>
+      <div class="cp-jar-row"><canvas class="cp-jar-art" id="cp-jar-art" width="96" height="120" aria-hidden="true"></canvas><div><p class="cp-jar-s" id="cp-jar-status">Collect 40 coins to open the tip jar.</p><div class="cp-meter" role="progressbar" aria-labelledby="cp-jar-s2" aria-valuemin="0" aria-valuemax="25" aria-valuenow="0"><span id="cp-jar-bar"></span></div><p class="cp-note" id="cp-jar-s2">0 of 40 coins</p></div></div>
+      <div class="cp-latest" id="cp-latest" hidden><p class="cp-latest-k">Latest tip</p><p class="cp-latest-t" id="cp-latest-t"></p><p class="cp-latest-b" id="cp-latest-b"></p><p class="cp-latest-go" id="cp-latest-go"></p></div>
+      <div class="cp-row cp-row-l"><button type="button" class="cp-pill" id="cp-tipnow" hidden>Read a tip now</button></div>
+    </section>
+  </aside>
+  </div>
 
   <p class="cp-note cp-center cp-gaming"><a href="/gaming-and-time-together.html">Arguing about gaming at home? A no-blame guide for both of you <span aria-hidden="true">→</span></a></p>
 
+  <section class="cp-shelf-wrap" aria-labelledby="cp-shelf-h">
+    <h2 id="cp-shelf-h">Prize shelf</h2>
+    <p class="cp-note"><b id="cp-shelf-n">0 of 50</b> found. Sparkle level shows how often a prize shows up: <span class="cp-sp" aria-hidden="true">✦</span> is common, <span class="cp-sp" aria-hidden="true">✦✦✦✦</span> is rare. Every prize can be found by playing, and nothing costs anything. Tap a friend you’ve found to visit where they live.</p>
+    <p class="cp-trophy-note" id="cp-trophy-note" hidden><span aria-hidden="true">🏆</span> Trophy: all 50 found, <span id="cp-trophy-date"></span>. <button type="button" class="cp-pill" id="cp-replay2">Replay the moment</button></p>
+    <div id="cp-sets"></div>
+  </section>
+
+  <section class="cp-cab-wrap" aria-labelledby="cp-cab-h">
+    <h2 id="cp-cab-h">Your cabinet</h2>
+    <p class="cp-note">Finish a set on the prize shelf to earn a new look for the machine, a new coin style, and new lines for the marquee. They are only for looks and change nothing about the game.</p>
+    <h3 class="cp-h3">Cabinet look</h3>
+    <div class="cp-choices" id="cp-themes" role="group" aria-label="Cabinet look"></div>
+    <h3 class="cp-h3">Coin style</h3>
+    <div class="cp-choices" id="cp-skins" role="group" aria-label="Coin style"></div>
+    <p class="cp-note"><button type="button" class="cp-pill" id="cp-marq" aria-pressed="true">Marquee lines: <b>on</b></button> <span id="cp-marq-n"></span></p>
+  </section>
+
   <section class="cp-tips-wrap" aria-labelledby="cp-tips-h">
     <h2 id="cp-tips-h">Tips you’ve found</h2>
-    <p class="cp-note" id="cp-tips-none">None yet. The first one comes after a minute or two of play.</p>
+    <p class="cp-note" id="cp-tips-none">None yet. The tip jar opens after 40 coins.</p>
+    <p class="cp-note" id="cp-tips-count" hidden></p>
     <ul class="cp-tips" id="cp-tips"></ul>
   </section>
 
-  <section class="cp-shelf-box-wrap" aria-labelledby="cp-shelf-h">
-    <h2 id="cp-shelf-h">Your shelf of friends</h2>
-    <p class="cp-trophy-note" id="cp-trophy-note" hidden><span aria-hidden="true">🏆</span> Trophy: every friend found, <span id="cp-trophy-date"></span>. <button type="button" class="cp-pill" id="cp-replay2">Replay the moment</button></p>
-    <p class="cp-note">Every character on the site is in the machine somewhere. Tap a friend you’ve found to visit where they live. Medallions turn up at random, but never more than a few coins apart, so everyone can find them all.</p>
-    <ul class="cp-shelf" id="cp-shelf"></ul>
+  <section class="cp-about" aria-labelledby="cp-about-h">
+    <h2 id="cp-about-h">What this is</h2>
+    <p class="cp-note">A cozy arcade, not a casino: no real money, nothing to buy, no timers, and no prizes worth anything but a smile. Your coins, prizes, goals and settings are kept only in this browser, on this device, and nothing is sent anywhere. Once the page has loaded, it works without a connection.</p>
+    <div class="cp-row" id="cp-reset-row"><button type="button" class="cp-pill" id="cp-reset">Start over</button></div>
+    <div class="cp-confirm" id="cp-confirm" role="alertdialog" aria-labelledby="cp-confirm-h" aria-describedby="cp-confirm-d" hidden>
+      <p id="cp-confirm-h"><b>Start over?</b></p>
+      <p id="cp-confirm-d">This clears your coins, prizes, cabinet looks, goals and tips on this device. It can’t be undone.</p>
+      <div class="cp-row"><button type="button" class="cp-go" id="cp-confirm-yes">Yes, start over</button><button type="button" class="cp-pill" id="cp-confirm-no">Keep my game</button></div>
+    </div>
   </section>
-
-  <p class="cp-note cp-center">A cozy arcade, not a casino: no real money, nothing to buy, no prizes worth anything but a smile. Your coins, friends and tips are kept only in this browser, on this device.</p>
-  <p class="cp-center"><button type="button" class="cp-pill" id="cp-reset">Start over</button></p>
 </main>
+
 </body>
 </html>

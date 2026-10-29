@@ -91,7 +91,7 @@ In a common cycle, one person pushes to talk and the other pulls back, which mak
 
 Naming the cycle together (“we’re doing our thing again”) and agreeing a pause-and-return plan often breaks it.
 
-Program: The Calm-Down Kit (WP-11) gives the withdrawing person a clear pause line, and the pursuing person a time.
+Program: Calm-down plan (WP-11) gives the withdrawing person a clear pause line, and the pursuing person a time.
 
 ## Conflict in front of others
 aka: arguing in public; fighting in front of kids; conflict in front of friends

@@ -31,7 +31,7 @@ Program: WP-09’s “ask” works best when it serves the real need.
 ## Hot buttons
 aka: triggers; hot buttons; what sets me off
 see: Body clues of emotion; Temperament and character
-go: /wp-11.html | WP-11: The Calm-Down Kit
+go: /wp-11.html | WP-11: Calm-down plan
 evidence: “Trigger” in everyday use means something that sets off a strong reaction. Noticing patterns is a common step in many approaches to emotion regulation.
 try: Write down the last three times you reacted strongly. What did they have in common?
 
@@ -39,7 +39,7 @@ Most people have a few hot buttons: situations or words that set off a bigger re
 
 Knowing yours doesn’t mean others must avoid them forever. It helps you notice the reaction early, and explain it to others.
 
-Program: The Calm-Down Kit asks what tends to set you off, and where you feel it first.
+Program: Calm-down plan asks what tends to set you off, and where you feel it first.
 
 ## Temperament and character
 aka: temperament; character; nature and nurture; personality basics

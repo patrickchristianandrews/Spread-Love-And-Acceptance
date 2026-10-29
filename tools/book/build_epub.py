@@ -548,6 +548,7 @@ def book_docs(book, where):
         for x in S.front_back.back_sections(ctx):
             if x['key'] == 'numbers':
                 docs.append(Doc('numbers.xhtml', x['toc'], x['html']))
+    docs.append(Doc('alltools.xhtml', 'All the free tools', S.alltools_pages(book, epub=True)))
     docs.append(Doc('ideas.xhtml', 'How the ideas connect', S.ideas_map(book, chs, epub=True)))
     docs.append(Doc('glossary.xhtml', 'Words used in this book', S.glossary_short(book, chs).replace('<section class="pe-back pe-gloss', '<section epub:type="glossary" class="pe-back pe-gloss', 1)))
     docs.append(Doc('notes.xhtml', 'Research notes', S.research_short(book, here).replace('<section class="pe-back ps-notes', '<section epub:type="bibliography" class="pe-back ps-notes', 1)))
@@ -729,6 +730,10 @@ figcaption { text-align: left; font-size: .88em; margin-top: .5em; }
 
 /* back of the book */
 .pe-back-lede, .pe-fb-lede, .wt-lede { font-style: italic; }
+.ps-tg-c { margin: 0 0 .7em; }
+.ps-tg-t b { font-weight: bold; }
+.ps-tg-d { display: block; font-size: .92em; }
+.ps-tg-h { font-size: 1.1em; margin: 1em 0 .5em; }
 .ps-online-box { border: 1px solid %(acc)s; padding: .5em .8em .1em; margin: 0 0 1em; }
 .pe-notes-h { font-size: 1.05em; }
 .ps-refs { list-style: none; padding-left: 0; font-size: .9em; }

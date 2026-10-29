@@ -60,15 +60,15 @@ PCOL = {1: ('#3E6B4C', '#E2F0E6'), 2: ('#94671F', '#F6ECD2'), 3: ('#2B5B8C', '#E
 # (slug, part, short label, note, program links [(text, href)]). Part 4 is the afterword (back matter).
 ORDER = [
     ('self-1-then', 1, 'Then', 'Where your lens came from: growing up, old rules and what life taught you',
-     [('The self path: see where your lens came from', '/self-path.html#lens')]),
+     [('Your self-discovery path: see where your lens came from', '/self-path.html#lens')]),
     ('self-2-now', 1, 'Now', 'Your wiring, your weather and your words, and what is fair to you',
-     [('The self path: get to know your wiring', '/self-path.html#wiring'), ('How much are you carrying? A quick stress check', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
+     [('Your self-discovery path: get to know your wiring', '/self-path.html#wiring'), ('How much are you carrying? A quick stress check', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
     ('self-3-next', 1, 'Next', 'What matters to you, one small goal, tiny steps and a kind monthly look at yourself',
-     [('The self path, step by step', '/self-path.html#steps'), ('The Calm-Down Kit', '/wp-11.html')]),
+     [('Your self-discovery path, step by step', '/self-path.html#steps'), ('Calm-down plan', '/wp-11.html')]),
     ('preface', 2, 'Preface', 'The quiet, unseen work of running a shared life, and why it deserves to be noticed',
      [('Six-week program, week 1: see the work that’s already happening', '/prog-01.html#week-1'), ('Who did what', '/workpapers/wp-01.html')]),
     ('chapter-1', 2, 'Chapter I', 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune',
-     [('Six-week program, week 1', '/prog-01.html#week-1'), ('The 90-second daily check-in', '/workpapers/wp-13-daily-check-in.html')]),
+     [('Six-week program, week 5: get back in step', '/prog-01.html#week-5'), ('The 90-second daily check-in', '/workpapers/wp-13-daily-check-in.html')]),
     ('chapter-2', 2, 'Chapter II', 'A simple way to see whether the way you share the work can last',
      [('Six-week program, week 2: give every job one owner', '/prog-01.html#week-2'), ('One owner per job', '/workpapers/wp-03-one-owner-per-job.html')]),
     ('chapter-3', 2, 'Chapter III', 'How much of a reaction is leftover stress, and the seven angles people see things from',
@@ -100,7 +100,7 @@ ORDER = [
     ]
 ] + [
     ('afterword', 4, 'Afterword', 'Six threads through the book, and where to go from here',
-     [('The self path', '/self-path.html'), ('The six-week program', '/prog-01.html')]),
+     [('Your self-discovery path', '/self-path.html'), ('The six-week program', '/prog-01.html')]),
 ]
 
 # short names for running footers, the connection lists and the index of the print edition
@@ -224,7 +224,7 @@ CONNECT = {
     'understanding-13-anger': [('chapter-3', 'leftover stress behind a reaction'),
                                ('understanding-1-feelings', 'feelings as signals'),
                                ('understanding-11-healing', 'repair after the hot minutes'),
-                               ('self-3-next', 'a Calm-Down Kit made on a calm day')],
+                               ('self-3-next', 'a Calm-down plan made on a calm day')],
     'understanding-14-personality': [('self-2-now', 'your wiring today'),
                                      ('self-1-then', 'temperament and how you grew up'),
                                      ('understanding-9-minds', 'minds that work differently'),
@@ -309,7 +309,7 @@ INDEX_TERMS = [
     ('money', r'money|budget|income|bills?|£'), ('online life', r'online|social media|phones?'), ('remote and hybrid work', r'remote|hybrid'),
     ('separation', r'separat(?:e|ed|ing|ion)'), ('shift work', r'shift work(?:ers?)?|night shifts?|late shifts?|on shifts'), ('suicide', r'suicid(?:e|al)|ending (?:your|their|my) life'),
     # tools and the book's own words
-    ('Calm-Down Kit', r'Calm-Down Kit', 1), ('daily check-in (90 seconds)', r'90-second'), ('How much are you carrying?', r'How much are you carrying', 1),
+    ('Calm-down plan', r'Calm-down plan', 1), ('daily check-in (90 seconds)', r'90-second'), ('How much are you carrying?', r'How much are you carrying', 1),
     ('Who does what? (the page)', r'Who does what\?', 1), ('monthly look-back', r'look-backs?'), ('One owner per job', r'One owner per job', 1),
     # (no "Professor Puddles" entry: he signs a hint on most pages now, so the list of pages would say nothing)
     ('Say it so it lands', r'Say it so it lands', 1), ('Rewind the talk', r'Rewind the talk', 1),
@@ -838,6 +838,7 @@ def patch_chapter(i, deep):
         FIGCOUNT[ver] = sum(1 for f in FIGS if f['chapter'] == 'front' and ver in (f.get('versions') or ['short', 'full']))
     s, FIGCOUNT[ver] = renumber_figs(s, FIGCOUNT[ver])
     s = with_example_css(s)
+    s = paper_line(s, e[0])
     blk = end_block(i, deep)
     anchor = '<p class="last-updated'
     k = s.rfind(anchor)
@@ -1105,7 +1106,8 @@ def short_address(url):
     if url.startswith('/'):
         path = re.sub(r'[#?].*$', '', url)
         path = re.sub(r'(?:/index)?\.html$', '', path)
-        return 'spreadloveandacceptance.com' + (path if path != '/' else '')
+        q = re.search(r'\?((?:for|road)=[a-z0-9-]+)', url)  # book29: a variant of a workpaper prints its variant
+        return 'spreadloveandacceptance.com' + (path if path != '/' else '') + ('?' + q.group(1) if q else '')
     m = re.match(r'https?://(?:www\.)?([^/#?]+)', url)
     return m.group(1) if m else ''
 
@@ -1193,9 +1195,9 @@ def glossary_terms(text):
         # books-final9 (audit D-should 13): the headword itself must appear in the book, not only a related word
         head = re.sub(r'^(?:the|a|an) ', '', words_[0], flags=re.I)
         if hits >= 2 and re.search(r'\b%s\b' % re.escape(head), text, re.I):
-            if gid == 'calm-down-kit':  # audit D4: every chapter, WP-11 and the workbook call it the Calm-Down Kit
-                name = 'Calm-Down Kit'
-            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))).replace('Your calm-down plan (once called the Calm-Down Kit) is', 'Your Calm-Down Kit is'),
+            if gid == 'calm-down-kit':  # book29: every chapter, WP-11, the site and the workbook call it the Calm-down plan
+                name = 'Calm-down plan'
+            out.append((gid, tool_names(name), tool_names(uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else ''))).replace('Your calm-down plan (once called the Calm-Down Kit) is', 'Your Calm-down plan is').replace('Your Calm-Down Kit is', 'Your Calm-down plan is'),
                         tool_names(uk(gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1))))) if ex else '', words_[0]))
     have = {x[1].lower() for x in out}
     for gid, name, d, rx in GLOSS_EXTRA:
@@ -1227,7 +1229,7 @@ GLOSS_EXTRA = [
     ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?, scored from 0 (empty) to 1 (full). Under 0.30 is light, 0.30 to 0.59 medium, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
     ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. My weather today calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
     ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book works the same way: see what is really going on, without blame, then change one small thing.', r'ledger'),
-    ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),
+    ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25, chosen by hand, not worked out from data), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),
     ('backstop', 'Backstop', 'The second name on a job: someone who notices if it slipped and checks in kindly. Not a supervisor. A job counts as owned once it has an owner; the backstop is a good habit on top.', r'backstops?'),
     ('second-arrow', 'Second arrow', 'The extra pain we add on top of a hard moment, such as being angry at ourselves for being sad. The first arrow is the event; the second is what we tell ourselves about it (a Buddhist image).', r'second arrow'),
     ('mental-load', 'Mental load', 'The noticing, planning and remembering behind running a shared life: knowing the shoes are too small, booking the appointment, keeping the list. It is real work, even though nobody sees it.', r'mental load'),
@@ -1407,7 +1409,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     # research notes
     n_refs = sum(len(v) for v in notes.values())
     s += '<section class="pe-back pe-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (col, mark('notes'))
-    s += '<p class="pe-back-lede">The %d references the chapters draw on, chapter by chapter, each with what it found in plain words and where to read it. Each entry was looked up and checked: most against the paper itself or its abstract, some (mostly older books) against a publisher’s or library’s record. Unchecked works are left out. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
+    s += '<p class="pe-back-lede">The %d entries the chapters draw on, chapter by chapter, each with what it found in plain words and where to read it. Each entry was looked up and checked: most against the paper itself or its abstract, some (mostly older books) against a publisher’s or library’s record. Unchecked works are left out. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
     if fb is not None:
         s += front_back.reading_research(fb)
     for e in ORDER:
@@ -1771,7 +1773,7 @@ def build_home():
 <ul>
 <li><a href="/book/topic-start-here.html">The book at a glance</a>: the whole book in short paragraphs, for one person or for people together.</li>
 <li>The book by topic: <a href="/book/topic-share-the-load.html">sharing the load</a>, <a href="/book/topic-talk-it-through.html">talking it through</a>, <a href="/book/topic-know-yourself.html">knowing yourself</a>, <a href="/book/topic-calm.html">staying calm</a> and <a href="/book/topic-by-relationship.html">by relationship</a>.</li>
-<li><a href="/self-path.html">The self path</a> and <a href="/prog-01.html">the six-week program</a>: the book put to work, a step at a time.</li>
+<li><a href="/self-path.html">Your self-discovery path</a> and <a href="/prog-01.html">the six-week program</a>: the book put to work, a step at a time.</li>
 <li><a href="/research.html">Research and references</a>: the studies the chapters mention, with links to read more.</li>
 </ul>
 <p class="last-updated no-bubble">Last updated: %s</p>
@@ -1795,11 +1797,50 @@ def home_lists():
     return hints.lists_html(found, lambda s_: '<a href="%s">%s</a>' % (href(s_), esc(SHORT[s_])), 'h3')
 
 
+PAPER_RE = re.compile(r'<!-- book-paper:start -->.*?<!-- book-paper:end -->\n?', re.S)
+_PAPER = {}
+
+
+def paper_map():
+    """slug -> (book label, chapter label) for the paperbacks (tools/book/series.json): the print chapter numbers differ from the site's"""
+    if not _PAPER:
+        d = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'series.json'), encoding='utf-8'))
+        for b in d['books']:
+            k = 0
+            for sl in b['chapters']:
+                if sl == 'afterword':
+                    _PAPER[sl] = ('Book %d, %s' % (b['n'], b['title']), 'the afterword')
+                else:
+                    k += 1
+                    _PAPER[sl] = ('Book %d, %s' % (b['n'], b['title']), 'Chapter %d' % k)
+    return _PAPER
+
+
+def paper_text(slug):
+    m = paper_map().get(slug)
+    if not m:
+        return ''
+    return 'In the paperbacks: %s, %s.' % ((m[0], m[1]) if m[1] != 'the afterword' else (m[0], 'the afterword'))
+
+
+def paper_line(s, slug):
+    """"In the paperbacks: Book 2, Heal and Steady, Chapter 1." under the lede of each chapter page (screen only)"""
+    s = PAPER_RE.sub('', s)
+    t = paper_text(slug)
+    if not t:
+        return s
+    blk = '<!-- book-paper:start --><p class="book-paper no-bubble no-print" style="font-size:.92rem;color:#5A5346;margin:.2rem 0 1rem">%s</p><!-- book-paper:end -->\n' % esc(t)
+    m = re.search(r'<p class="simple-lede">.*?</p>\n?', s, re.S)
+    if not m:
+        return s
+    return s[:m.end()] + blk + s[m.end():]
+
+
 def home_row(e):
     mins = max(5, round(WORDS[(e[0], False)] / 220))
     fmins = max(10, round(WORDS[(e[0], True)] / 220))
-    return '<li><a class="bk-ch" href="%s"><span class="bk-ch-n">%s</span><span class="bk-ch-t">%s</span><span class="bk-ch-d">%s</span></a><span class="bk-ch-m">%d min · <a href="%s">expanded version, %d min</a></span></li>' % (
-        href(e[0]), esc(e[2]), esc(TITLES[e[0]]), esc(e[3]), mins, href(e[0], True), fmins)
+    return '<li><a class="bk-ch" href="%s"><span class="bk-ch-n">%s</span><span class="bk-ch-t">%s</span><span class="bk-ch-d">%s</span></a><span class="bk-ch-m">%d min · <a href="%s">expanded version, %d min</a>%s</span></li>' % (
+        href(e[0]), esc(e[2]), esc(TITLES[e[0]]), esc(e[3]), mins, href(e[0], True), fmins, (' · in the paperbacks: ' + esc(paper_map()[e[0]][0]) + ', ' + esc(paper_map()[e[0]][1])) if e[0] in paper_map() else '')
 
 
 # ---------- 5. the reading-order list on "The book at a glance" ----------

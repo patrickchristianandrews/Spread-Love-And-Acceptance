@@ -407,7 +407,7 @@
     doc.heart(R - 42, 86, 32, '#FFFFFF');
     doc.text(L + 20, 78, enc('SPREAD LOVE & ACCEPTANCE  ·  FULL PATH PACKAGE  ·  VERSION ' + FP.VERSION), 'Helvetica-Bold', 7.8, C.ink);
     doc.text(L + 20, 112, enc('My full path: ' + roadName), 'Times-Bold', 24, C.ink);
-    wrap(road.solo ? 'Every page for understanding yourself, in one place: your stress tank score, your calm-down kit, how words reach you, and kind ways to say no.'
+    wrap(road.solo ? 'Every page for understanding yourself, in one place: your stress tank score, your calm-down plan, how words reach you, and kind ways to say no.'
       : 'Every workpaper for this road, in one place, plus the CALC-01 inputs and a page to get ready for your report.', 'Times-Italic', 11, W - 110).slice(0, 3).forEach(function (ln, k) { doc.text(L + 20, 134 + k * 13.5, ln, 'Times-Italic', 11, C.ink); });
     var names = FP.namesOf(data).filter(Boolean);
     doc.text(L, 190, enc((names.length ? 'For ' + (names.length > 1 ? names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1] : names[0]) + '  ·  ' : '') + (road.solo ? 'Just me' : data.people + ' people') + '  ·  made ' + niceDate()), 'Helvetica', 9.5, C.soft);

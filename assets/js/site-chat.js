@@ -216,7 +216,7 @@
       bgNames: bgNames, cardKeys: cardKeys, sit: sit, bg: null, first: first, vocab: vocab, fixTo: fixTo, terms: terms, idioms: idioms };
   }
 
-  // one-word other names too common to mean the term ("what is calm?" isn't the Calm-Down Kit)
+  // one-word other names too common to mean the term ("what is calm?" isn't the calm-down plan)
   var GENERIC_ALIAS = {};
   'wait closed log calm settle settings card quiet still font spacing listen dyslexia adhd autistic autism wp reader translator overwhelmed boundary level garden calculator weather forecast noise mask dive dives childhood tidbit sugarfoot pups raci responsible owner workload wired pace rhythm carrier'
     .split(' ').forEach(function (w) { GENERIC_ALIAS[w] = 1; });
@@ -733,7 +733,7 @@
         if (top.length) blocks.push({ k: 'p', x: 'If you answered in the page’s order, the heaviest part right now is ' + top.join(' and ') + '. That’s worth naming, even just to yourself.' });
         blocks.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
         blocks.push({ k: 'links', x: safeLinks([['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html'],
-          v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['My weather today (Today’s Weather)', '/quick-checks.html#today']]) });
+          v >= 0.3 ? ['WP-11: Calm-down plan', '/wp-11.html'] : ['My weather today (Today’s Weather)', '/quick-checks.html#today']]) });
         return { blocks: blocks, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How does this feed CALC-01?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'battery score' };
       }
       var one = n.filter(function (x) { return x <= 1; });
@@ -785,7 +785,7 @@
       var bad = [wb, oc, as].concat(rf != null ? [rf] : []).some(function (x) { return isNaN(x) || x < 0 || x > 1; });
       if (bad) return { blocks: [{ k: 'p', x: 'Each CALC-01 input runs from 0 to 1 (or 0% to 100%). Could you check the numbers and send them again?' }], chips: [], kind: 'calc' };
       var tW = 0.4 * wb, tO = 0.35 * oc, tA = 0.25 * (1 - as), sol = tW + tO + tA, band = calcBand(sol);
-      var gaps = [['workload balance', 0.4 - tW, 'the Lemonade Stand or WP-01', '/lemonade-stand.html'], ['ownership clarity', 0.35 - tO, 'WP-03, One owner per job', '/workpapers/wp-03-one-owner-per-job.html'], ['the batteries (stress)', 0.25 - tA, 'WP-02 and the Calm-Down Kit', '/workpapers/wp-02-how-much-are-you-carrying.html']];
+      var gaps = [['workload balance', 0.4 - tW, 'the Lemonade Stand or WP-01', '/lemonade-stand.html'], ['ownership clarity', 0.35 - tO, 'WP-03, One owner per job', '/workpapers/wp-03-one-owner-per-job.html'], ['the batteries (stress)', 0.25 - tA, 'WP-02 and the calm-down plan', '/workpapers/wp-02-how-much-are-you-carrying.html']];
       gaps.sort(function (a, b) { return b[1] - a[1]; });
       var out = [
         { k: 'p', x: 'Here’s the setup score with your numbers: 0.40 × ' + r2(wb) + ' (balance) + 0.35 × ' + r2(oc) + ' (ownership) + 0.25 × (1 − ' + r2(as) + ') (battery, flipped) = ' + r3(tW) + ' + ' + r3(tO) + ' + ' + r3(tA) + ' = ' + r2(sol) + '.' },
@@ -810,7 +810,7 @@
           { k: 'p', x: 'Out of ' + (a + b) + ' hours, that’s ' + Math.round(pa) + '% and ' + Math.round(pb) + '%. Workload balance is 1 − |' + Math.round(pa) + ' − ' + Math.round(pb) + '| ÷ 100 = ' + r2(wbv) + ' (1.00 means perfectly even, 0.00 means completely one-sided).' },
           { k: 'p', x: 'The math doesn’t care who carries more, only that the load isn’t shared. For three or more people, the Lemonade Stand and CALC-01 work it out from everyone’s hours for you.' },
           { k: 'note', x: 'Pillar I, See the whole load. ' + NOT_VERDICT },
-          { k: 'links', x: [['Who does what? (the Lemonade Stand)', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html']] }],
+          { k: 'links', x: [['Who does what?', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html']] }],
           chips: [{ label: 'What do I do with this?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'workload balance' };
       }
     }
@@ -3027,8 +3027,8 @@
         'Say the pause line out loud: “I’m getting too loud, I’m going to take a breath.” With a child, add “You’re not in trouble. I’m calming down.”',
         'Breathe in for 4 and out for 6, five or six times. Cold water on your hands or face helps too.',
         'Come back when you’re calm and repair: “I’m sorry I got loud. That wasn’t fair to you. Let’s try again.”',
-        'Later, notice your first warning signs (a tight jaw, a louder voice, heat in your face) and write them in the Calm-Down Kit, so you can step back sooner.'] },
-      { k: 'links', x: [['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] }],
+        'Later, notice your first warning signs (a tight jaw, a louder voice, heat in your face) and write them in the calm-down plan, so you can step back sooner.'] },
+      { k: 'links', x: [['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['Calm-down plan', '/workpapers/fill/wp-11.html']] }],
       chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Working on my anger', q: 'where can i find help for my anger' }], kind: 'care', id: 'angernow' };
   }
   // "we both yell and sometimes shove each other": physical fights are a safety matter, whoever starts them
@@ -3080,8 +3080,8 @@
     if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it has to stop.' });
     b.push({ k: 'list', x: ['In the moment: stop, step back, say “I’m getting too loud, I’m going to take a breath,” and breathe for a minute.',
       'Afterward, repair: “I scared you when I yelled. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
-      'Write your triggers and first warning signs in the Calm-Down Kit, so you can catch it earlier.'] });
-    b.push({ k: 'links', x: [['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Calming your anger', '/parents.html#anger-help'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] });
+      'Write your triggers and first warning signs in the calm-down plan, so you can catch it earlier.'] });
+    b.push({ k: 'links', x: [['Is yelling abuse? (and calming your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Calming your anger', '/parents.html#anger-help'], ['Calm-down plan', '/workpapers/fill/wp-11.html']] });
     return { blocks: b, chips: [{ label: 'How do I apologize?', q: 'how do i apologize to my family for yelling' }, { label: 'Working on my anger', q: 'where can i find help for my anger' }], kind: 'care' };
   }
   var AMBIG = [
@@ -4262,7 +4262,7 @@
       if (idm) return idiomReply(state, idm);
       var tq = termQuery(q), tf = tq && termFor(tq.target);
       // a term, unless a tool or page with its own card has that name ("Drift, the calm visualizer", "the Lemonade Stand")
-      // or the term was only found by another name ("WP-11" is the Calm-Down Kit card); "carrier wave" is the idea, not the Decoder
+      // or the term was only found by another name ("WP-11" is the calm-down plan card); "carrier wave" is the idea, not the Decoder
       var tc = tf && matchCard(norm(tq.target));
       // a card named "Who does what? (the Lemonade Stand)" is the Lemonade Stand too: its name, the part before the brackets, or the part inside
       var tcNames = tc ? (function (n) { var m = /^(.*?)\s*\((?:once |also called |a step of )?(.*?)\)\s*$/.exec(n); return [n, m && m[1], m && m[2]].filter(Boolean).map(termKey); })(String(tc.name || '').split(',')[0]) : [];

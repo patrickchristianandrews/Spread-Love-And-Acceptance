@@ -83,7 +83,7 @@
       "path": [
         ["How much are you carrying? (WP-02)",
           "/workpapers/wp-02-how-much-are-you-carrying.html"],
-        ["The Calm-Down Kit (WP-11)",
+        ["Calm-down plan (WP-11)",
           "/wp-11.html"],
         ["Self-discovery: know your own wiring",
           "/know-yourself.html"]
@@ -137,9 +137,9 @@
       "path": [
         ["How much are you carrying? (WP-02)",
           "/workpapers/wp-02-how-much-are-you-carrying.html"],
-        ["Who does what? (the Lemonade Stand): see the whole load",
+        ["Who does what?: see the whole load",
           "/lemonade-stand.html"],
-        ["Cool-down corner: The Night Garden",
+        ["Upset right now?: The Night Garden",
           "/night-garden.html"]
       ],
       "deeper": [
@@ -187,9 +187,9 @@
       },
       "scriptLabel": "Something to tell yourself",
       "path": [
-        ["Cool-down corner: The Night Garden (box breathing)",
+        ["Upset right now?: The Night Garden (box breathing)",
           "/night-garden.html"],
-        ["The Calm-Down Kit (WP-11)",
+        ["Calm-down plan (WP-11)",
           "/wp-11.html"],
         ["Rumination (Library)",
           "/library/emotions.html#rumination"]

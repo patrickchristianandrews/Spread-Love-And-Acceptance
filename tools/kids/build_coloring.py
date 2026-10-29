@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""build_coloring.py: the two coloring books (kids22).
+"""build_coloring.py: the two coloring books (kids29), both starring only Tidbit and Sugarfoot.
 
     python3 tools/kids/build_coloring.py            writes book/kids/src/coloring-younger.html, coloring-older.html and their covers
 
-Younger: 32 big, simple outlines (thick lines, one main friend and a little scenery). Older: 32 finer scenes with borders,
-patterns and a short calming phrase in outline letters. Every picture is on a right-hand page; the page behind it is blank so
-markers cannot bleed through. Pages are 8.5 x 11 in, black ink, no bleed (every line stays 0.5 in inside the edge).
-The drawings come from tools/kids/kids_art.py in its 'line' mode (white shapes, one black stroke width, nothing filled).
+Younger (ages 3 to 7): 32 big, bright pictures, each in a rounded frame with a short joke from the pups on a banner, and a find-it
+game on some pages. Older (ages 8 to 12): 32 detailed, calming scenes in ornamental borders with patterns, tiny hidden hearts and
+paw prints, and a short calm prompt in the margin.
+Page plan (68 pages, every picture on a right-hand page with a blank page behind it so markers cannot bleed through):
+    1 title (with "This book belongs to")      2 Meet Tidbit and Sugarfoot, a note for grown-ups, a color test
+    3, 5 ... 65  the 32 pictures, each followed by its blank back
+    67 the certificate                        68 the copyright page
+Pages are 8.5 x 11 in, black ink, no bleed (every line stays 0.5 in inside the edge). The drawings come from cute.py (the engine),
+cast.py (the two pups), props*.py (scenery) and pat.py (patterns and borders): all hand-built vector art.
 """
 import json
 import math
@@ -15,298 +20,93 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import kids_art as A  # noqa: E402
 import kids_common as C  # noqa: E402
-from kids_art import f  # noqa: E402
+import coloring_text as T  # noqa: E402
+import cute as Q  # noqa: E402
+from cute import Ink, rrect, blob, curve, Path, circ, ell, fit, heart_path, star_path, rpoly, capsule  # noqa: E402
+import cast  # noqa: E402
+import pat  # noqa: E402
+import props as pr  # noqa: E402
+import props2 as p2  # noqa: E402
+import props3 as p3  # noqa: E402
+import props_o as po  # noqa: E402
+import coloring_younger as CY  # noqa: E402
+import coloring_older as CO  # noqa: E402
 
 PW, PHT = 850, 1100   # units: 100 a inch
 
-
-def pen(sw):
-    return A.Pen('line', sw=sw)
-
-
-# ------------------------------------------------------------------ simple scenery
-def ground(P, y=930, x0=70, x1=780, wiggle=18):
-    P.raw('<path d="M%s %s Q%s %s %s %s T%s %s T%s %s" fill="none" stroke="#111" stroke-width="%s" stroke-linecap="round"/>' % (
-        x0, y, x0 + 90, y - wiggle, x0 + 180, y, x0 + 360, y, x1, y, P.sw))
-
-
-def base(P, sun=True, cloud=True, grass=True, flowers=True, y=930):
-    if sun:
-        A.sun(P, 705, 175, 62, face=True)
-    if cloud:
-        A.sky_cloud(P, 160, 170, 2.0)
-    ground(P, y)
-    if grass:
-        for x in (110, 300, 560, 740):
-            A.grass(P, x, y + 40, 2.2)
-    if flowers:
-        A.flower(P, 120, y + 28, 2.6, '#fff', '#fff', 6, stem=True)
-        A.flower(P, 730, y + 28, 2.6, '#fff', '#fff', 5, stem=True)
-
-
-def big(P, fn, x, y, s, *a, **k):
-    fn(P, x, y, s, *a, **k)
-
-
-# ------------------------------------------------------------------ the younger book: 32 pictures
-def y_tidbit_zoom(P):
-    base(P, flowers=False)
-    A.speed_lines(P, 120, 700, 4, 150, 34, 2.4)
-    A.pup_side(P, 'tidbit', 470, 880, 8.4, 'run', 'happy', ph=0.9, wag=0.3)
-
-
-def y_sugarfoot(P):
-    base(P)
-    A.sugarfoot_front(P, 425, 900, 9.6, 'happy', 'smile', heart_=True)
-
-
-def y_both(P):
-    base(P, cloud=False)
-    A.sugarfoot_front(P, 250, 900, 6.8, 'happy', 'smile')
-    A.tidbit_front(P, 590, 900, 6.8, 'happy', 'w')
-    A.heart(P, 425, 560, 3.0)
-
-
-def y_puddles(P):
-    base(P)
-    A.puddles(P, 425, 900, 8.2, 'happy', mouth_='open')
-    A.puddle(P, 650, 925, 90, 16)
-
-
-def y_ollie(P):
-    base(P, sun=False, flowers=False)
-    P.raw('<path d="M60 760 Q420 720 790 770" fill="none" stroke="#111" stroke-width="%s" stroke-linecap="round"/>' % (P.sw * 2.4))
-    A.ollie(P, 425, 770, 9.2, branch=False, expr='happy')
-    A.star(P, 150, 300, 40, '#fff', 'shape'); A.star(P, 700, 380, 30, '#fff', 'shape')
-
-
-def y_dot(P):
-    base(P)
-    A.dot_snail(P, 425, 880, 13.5, expr='happy')
-
-
-def y_hopper(P):
-    P.raw('<path d="M70 880 Q425 830 780 880" fill="none" stroke="#111" stroke-width="%s" stroke-linecap="round"/>' % P.sw)
-    A.lily(P, 425, 860, 14, flower_=True)
-    A.hopper(P, 380, 835, 13.5, expr='happy')
-    A.sun(P, 700, 190, 62); A.sky_cloud(P, 160, 180, 2.0)
-
-
-def y_nutmeg(P):
-    base(P)
-    A.nutmeg(P, 400, 900, 12.5)
-    A.circ(P, 640, 880, 22, '#fff') if False else None
-    P.at(660, 880, 1.0); P.ell(0, 0, 26, 32, '#fff'); P.path('M-26 -8 Q0 -40 26 -8Z', '#fff'); P.close()
-
-
-def y_lumi(P):
-    base(P, sun=False, flowers=False)
-    A.star(P, 130, 240, 36, '#fff', 'shape'); A.star(P, 700, 300, 44, '#fff', 'shape'); A.star(P, 650, 150, 26, '#fff', 'shape')
-    A.lumi(P, 425, 900, 7.4, lantern=True)
-
-
-def y_beep(P):
-    base(P)
-    A.beep(P, 425, 900, 9.4, arm_up=True)
-
-
-def y_ducklings(P):
-    base(P, flowers=False)
-    A.ducklings(P, 425, 880, 10.2)
-    A.puddle(P, 425, 915, 280, 20)
-
-
-def y_moon(P):
-    P.raw('<rect x="0" y="0" width="1" height="1" fill="none"/>')
-    for (x, y, r) in ((140, 190, 36), (720, 220, 30), (210, 800, 28), (690, 760, 40), (430, 130, 22)):
-        A.star(P, x, y, r, '#fff', 'shape')
-    A.moon(P, 425, 520, 9.5, 'calm', glow=False)
-
-
-def _cloud(who, mood=None):
-    def fn(P):
-        base(P, sun=False, cloud=False, flowers=False)
-        A.sky_cloud(P, 140, 160, 1.6); A.sky_cloud(P, 700, 240, 1.2)
-        A.static_cloud(P, who, 425, 560, 24, mood, fizz=True)
-    return fn
-
-
-def y_peach(P):
-    base(P, cloud=False)
-    A.peach_lilac(P, 425, 900, 6.4)
-    for (x, y, s) in ((130, 480, 3.4), (720, 420, 3.0), (660, 700, 2.4)):
-        A.sparkle(P, x, y, s)
-
-
-def y_bunny(P):
-    base(P)
-    A.bunny(P, 425, 900, 13.5, happy=True)
-
-
-def y_hedgehog(P):
-    base(P, sun=False)
-    A.hedgehog(P, 425, 880, 14.5, expr='happy')
-    A.mushroom(P, 150, 910, 4.0); A.mushroom(P, 700, 915, 3.2)
-
-
-def y_butterfly(P):
-    A.sun(P, 705, 175, 62)
-    ground(P, 930)
-    A.butterfly(P, 425, 560, 22)
-    for (x, y, s) in ((130, 930, 4.6), (260, 940, 5.2), (590, 940, 5.0), (730, 930, 4.4)):
-        A.flower(P, x, y - 60, s, '#fff', '#fff', 6, stem=True)
-
-
-def y_basket(P):
-    base(P, flowers=False)
-    A.basket(P, 425, 880, 11.5, full=True)
-    for (x, y) in ((150, 700), (700, 640)):
-        A.apple(P, x, y, 5.0)
-
-
-def y_cottage(P):
-    base(P, flowers=False)
-    A.house(P, 425, 900, 8.6)
-    A.fence(P, 70, 780, 925, 90)
-    A.tree(P, 700, 900, 3.0)
-
-
-def y_walk(P):
-    base(P, flowers=False)
-    A.pup_side(P, 'tidbit', 235, 890, 6.4, 'walk', 'happy', ph=0.5)
-    A.pup_side(P, 'sugarfoot', 640, 890, 6.4, 'walk', 'happy', ph=0.2, flip=True)
-    A.basket(P, 440, 760, 4.2, full=True)
-
-
-def y_sleep(P):
-    for (x, y, r) in ((150, 200, 34), (700, 260, 30), (600, 130, 22)):
-        A.star(P, x, y, r, '#fff', 'shape')
-    A.moon(P, 640, 330, 3.4, 'calm', glow=False)
-    ground(P, 900)
-    A.pup_side(P, 'sugarfoot', 390, 880, 10.2, 'sleep', 'sleep')
-
-
-def y_candle(P):
-    base(P, flowers=False)
-    A.tidbit_front(P, 330, 900, 8.2, 'calm', 'blow')
-    A.candle(P, 690, 890, 8.0, lean=1.0)
-    for (x, y, r) in ((545, 560, 26), (610, 480, 36), (690, 400, 46)):
-        P.circ(x, y, r, '#fff')
-
-
-def y_flower(P):
-    base(P, flowers=False)
-    A.tidbit_front(P, 330, 900, 8.4, 'sleep', 'smile')
-    A.flower(P, 640, 560, 12, '#fff', '#fff', 6, stem=True)
-
-
-def y_heart(P):
-    base(P, sun=False)
-    A.heart(P, 425, 420, 9.0)
-    A.tidbit_front(P, 220, 920, 5.6, 'happy', 'w')
-    A.sugarfoot_front(P, 640, 920, 5.6, 'happy', 'smile')
-
-
-def y_rain(P):
-    A.sky_cloud(P, 425, 190, 5.0)
-    for x in range(260, 620, 60):
-        P.line('M%s 280 l-10 44' % x, '#111', kind='fine')
-    A.puddles(P, 425, 880, 7.4, 'happy')
-    A.puddle(P, 425, 910, 300, 22)
-    A.puddle(P, 700, 940, 90, 12)
-
-
-def y_fireflies(P):
-    for (x, y, r) in ((130, 210, 34), (710, 180, 26)):
-        A.star(P, x, y, r, '#fff', 'shape')
-    A.moon(P, 650, 330, 2.6, 'calm', glow=False)
-    ground(P, 920)
-    A.pup_side(P, 'tidbit', 380, 890, 7.4, 'sit', 'happy')
-    for (x, y) in ((200, 560), (320, 420), (560, 560), (690, 650), (150, 740), (500, 340)):
-        A.firefly(P, x, y, 4.2)
-
-
-def y_pond(P):
-    P.ell(425, 800, 360, 130, '#fff')
-    A.lily(P, 250, 800, 5.6); A.lily(P, 590, 840, 5.2)
-    A.hopper(P, 250, 780, 7.2, expr='happy')
-    A.ducklings(P, 500, 700, 3.6)
-    A.sun(P, 705, 170, 60); A.sky_cloud(P, 150, 180, 2.0)
-    for x in (110, 740):
-        A.grass(P, x, 930, 3.0)
-
-
-def y_group(P):
-    base(P, flowers=False)
-    A.blanket(P, 425, 900, 700, 150, 1.0, '#111')
-    A.sugarfoot_front(P, 215, 860, 5.0, 'happy', 'smile')
-    A.tidbit_front(P, 425, 860, 5.0, 'happy', 'w')
-    A.puddles(P, 630, 860, 4.2, 'happy')
-    A.basket(P, 540, 960, 2.2, full=True) if False else None
-
-
-def y_goodnight(P):
-    for (x, y, r) in ((140, 190, 34), (720, 220, 30), (200, 540, 22), (680, 520, 24)):
-        A.star(P, x, y, r, '#fff', 'shape')
-    A.moon(P, 425, 330, 5.2, 'calm', glow=False)
-    ground(P, 900)
-    A.pup_side(P, 'tidbit', 250, 880, 5.6, 'sleep', 'sleep')
-    A.pup_side(P, 'sugarfoot', 640, 885, 5.6, 'lie', 'sleep', flip=True, mouth_='smile')
-
-
-def y_cast(P):
-    ground(P, 960, 60, 790)
-    A.pup_side(P, 'tidbit', 150, 480, 3.4, 'stand', 'happy')
-    A.pup_side(P, 'sugarfoot', 420, 480, 3.4, 'stand', 'happy')
-    A.puddles(P, 690, 480, 3.0, 'happy')
-    A.ollie(P, 130, 760, 3.4, branch=False); A.dot_snail(P, 330, 760, 4.6); A.hopper(P, 500, 760, 4.8); A.nutmeg(P, 670, 780, 4.2)
-    A.lumi(P, 150, 1010, 2.4); A.beep(P, 320, 1010, 3.0); A.ducklings(P, 520, 1010, 2.6)
-    A.moon(P, 700, 900, 2.3, 'calm', glow=False)
-
-
-_CAPTIONS = (C.load_json(os.path.join(C.MS, 'coloring-younger.json')) or {}).get('captions', [])
-YOUNGER = list(zip(_CAPTIONS, [
-    y_tidbit_zoom, y_sugarfoot, y_both, y_puddles,
-    y_ollie, y_dot, y_hopper, y_nutmeg,
-    y_lumi, y_beep, y_ducklings, y_moon,
-    _cloud('grumble', 'grumpy'), _cloud('fuzz'), _cloud('mumble'), _cloud('drift'),
-    y_peach, y_bunny, y_hedgehog, y_butterfly,
-    y_basket, y_cottage, y_walk, y_sleep,
-    y_candle, y_flower, y_heart, y_rain,
-    y_fireflies, y_pond, y_group, y_goodnight,
-]))
-# the cast page replaces nothing: it is the first page after the title (a sheet of everyone to color)
-YOUNGER_PAGE_SW = 5.2
-
-
-# ------------------------------------------------------------------ the older book: 32 scenes with a phrase each (in coloring_older.py)
-from coloring_older import OLDER, OLDER_PAGE_SW  # noqa: E402
-
+try:
+    from fontTools.ttLib import TTFont
+    _FONT = TTFont(os.path.join(HERE, 'fonts', 'Fraunces-ExtraBold.ttf'))
+    _CMAP = _FONT.getBestCmap()
+    _HMTX = _FONT['hmtx']
+    _UPM = _FONT['head'].unitsPerEm
+except Exception:  # pragma: no cover
+    _FONT = None
+
+
+def em_width(text):
+    """the width of a text in ems, in Fraunces ExtraBold (an estimate of 0.56 em a letter when the font cannot be read)"""
+    if _FONT is None:
+        return 0.56 * len(text)
+    return sum(_HMTX[_CMAP.get(ord(c), _CMAP[ord('n')])][0] for c in text) / _UPM
+
+
+def caption_font(text, width_pt=395.0, big=27.0, small=19.0):
+    """(size in pt, lines): one line when it fits at 'small' or more, else two lines"""
+    w = em_width(text)
+    one = width_pt / w
+    if one >= small:
+        return min(big, one), [text]
+    words = text.split(' ')
+    best = None
+    for i in range(1, len(words)):
+        a, b = ' '.join(words[:i]), ' '.join(words[i:])
+        m = max(em_width(a), em_width(b))
+        if best is None or m < best[0]:
+            best = (m, [a, b])
+    return min(21.0, width_pt / best[0]), best[1]
+
+
+# ---------------------------------------------------------------- page chrome
 CSS = '''
 @page { size: 8.5in 11in; margin: 0; }
 html, body { margin: 0; padding: 0; background: #fff; }
 .pg { position: relative; width: 8.5in; height: 11in; overflow: hidden; page-break-after: always; break-after: page; background: #fff; font-family: "Andika", sans-serif; color: #111; }
 .pg:last-child { page-break-after: auto; break-after: auto; }
 .pg > svg.art { position: absolute; left: 0; top: 0; width: 8.5in; height: 11in; display: block; }
-.cap { position: absolute; left: .6in; right: .6in; text-align: center; font-family: "Fraunces", serif; font-weight: 800; color: #fff; -webkit-text-stroke: .8pt #111; paint-order: stroke fill; letter-spacing: .035em; }
-.cap.small { font-size: 24pt; bottom: .5in; }
-.cap.phrase { line-height: 1.1; top: 9.42in; height: .86in; display: flex; align-items: center; justify-content: center; left: 1.0in; right: 1.0in; }
-.cap.top { top: .5in; bottom: auto; }
-.pg .t { position: absolute; left: .9in; right: .9in; text-align: center; }
+.cap { position: absolute; left: 1.35in; right: 1.35in; top: 9.62in; height: .76in; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  font-family: "Fraunces", serif; font-weight: 800; color: #151515; line-height: 1.05; letter-spacing: .005em; }
+.cap span.l { display: block; white-space: nowrap; }
+.cap .b { display: inline-block; }
+.badge { position: absolute; display: flex; align-items: center; justify-content: center; text-align: center; font-family: "Andika", sans-serif; font-weight: 700; font-size: 14.5pt; line-height: 1.08; color: #111; }
+.prompt { position: absolute; left: 1.1in; right: 1.1in; top: 9.66in; height: .7in; display: flex; align-items: center; justify-content: center; text-align: center; font-family: "Lora", serif; font-style: italic; font-size: 13pt; line-height: 1.25; color: #1b1b1b; }
+.t { position: absolute; left: .7in; right: .7in; text-align: center; }
 h1 { font-family: "Fraunces", serif; font-weight: 800; margin: 0; }
-.copy { font-size: 10.5pt; line-height: 1.5; position: absolute; left: 1.1in; right: 1.1in; top: 2.2in; text-align: left; }
+.outline { color: #fff; -webkit-text-stroke: 2.2pt #111; paint-order: stroke fill; }
+.ttl { font-family: "Fraunces", serif; font-weight: 800; }
+.bl { font-family: "Fraunces", serif; font-weight: 800; }
+.lbl { font-family: "Fraunces", serif; font-weight: 800; font-size: 22pt; text-align: center; }
+.sm { font-family: "Andika", sans-serif; font-weight: 700; font-size: 14pt; line-height: 1.25; text-align: center; }
+.gu { font-family: "Andika", sans-serif; font-size: 12.5pt; line-height: 1.4; text-align: center; }
+.gu b { font-family: "Fraunces", serif; font-weight: 800; font-size: 15pt; display: block; margin-bottom: .04in; }
+.copy { font-size: 10.5pt; line-height: 1.5; position: absolute; left: 1.1in; right: 1.1in; top: 1.4in; text-align: left; }
 .copy p { margin: 0 0 .16in; }
-.outline { color: #fff; -webkit-text-stroke: 1.4pt #111; paint-order: stroke fill; }
 '''
 
 
-def svg_page(P):
-    return '<svg xmlns="http://www.w3.org/2000/svg" class="art" viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid meet">%s</svg>' % (PW, PHT, P.svg())
+def esc(s):
+    return C.esc(s)
 
 
-def page(inner, art=''):
+def svg_page(ink):
+    return '<svg xmlns="http://www.w3.org/2000/svg" class="art" viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid meet" role="img" aria-label="%s">%s</svg>' % (PW, PHT, '%s', ink.svg())
+
+
+def page(inner, ink=None, alt=''):
+    art = ''
+    if ink is not None:
+        art = '<svg xmlns="http://www.w3.org/2000/svg" class="art" viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid meet" role="img" aria-label="%s">%s</svg>' % (PW, PHT, esc(alt), ink.svg())
     return '<section class="pg">%s%s</section>' % (art, inner)
 
 
@@ -314,161 +114,228 @@ def blank():
     return '<section class="pg"></section>'
 
 
+def bounce(text, amp=2.5):
+    """words with a little bounce, for titles and captions (each word nudged up or down and tilted a hair).
+    Whole words are kept in one piece, so the text stays easy to read, search and check."""
+    out = []
+    for i, w in enumerate(text.split(' ')):
+        dy = [0, -amp, 0, amp * 0.6][i % 4]
+        rot = [-1.6, 1.0, 1.6, -1.0][i % 4]
+        out.append('<span style="display:inline-block;transform:translateY(%.1fpt) rotate(%.1fdeg)">%s</span>' % (dy, rot, esc(w)))
+    return ' '.join(out)
+
+
+# ---------------------------------------------------------------- the younger caption banners
+def banner(ink, style, cx=425, y0=960, h=78, w=620):
+    x0 = cx - w / 2
+    with ink.fig(0, 0) as g:
+        if style == 'ribbon':
+            for sgn in (-1, 1):
+                ex = cx + sgn * (w / 2 + 38)
+                g.part(blob([(cx + sgn * (w / 2 - 20), y0 + 14, 'c'), (ex + sgn * 6, y0 + 14, 'c'), (ex - sgn * 18, y0 + h / 2 + 14, 'c'), (ex + sgn * 6, y0 + h + 14, 'c'), (cx + sgn * (w / 2 - 20), y0 + h + 14, 'c')], k=0.3))
+            g.part(rrect(x0, y0, w, h, 12))
+            for sgn in (-1, 1):
+                g.line(Path().M(cx + sgn * (w / 2 - 26), y0 + 6).L(cx + sgn * (w / 2 - 26), y0 + h - 6), w=ink.dw * 0.8, dash='1 9')
+        elif style == 'bubble':
+            g.part(rrect(x0 - 10, y0, w + 20, h, 38))
+            g.part(rpoly([(cx - 22, y0 + 4), (cx + 22, y0 + 4), (cx + 4, y0 - 24)], 5), under=True)
+        elif style == 'scallop':
+            P = Path().M(x0, y0 + 10)
+            n = 14
+            d = w / n
+            for i in range(n):
+                P.C(x0 + i * d + d * 0.2, y0 - 8, x0 + i * d + d * 0.8, y0 - 8, x0 + (i + 1) * d, y0 + 10)
+            P.L(x0 + w, y0 + h - 10)
+            for i in range(n):
+                P.C(x0 + w - i * d - d * 0.2, y0 + h + 8, x0 + w - i * d - d * 0.8, y0 + h + 8, x0 + w - (i + 1) * d, y0 + h - 10)
+            P.Z()
+            g.part(P)
+        else:  # plaque
+            g.part(rrect(x0, y0, w, h, 16))
+            g.part(rrect(x0 + 10, y0 + 8, w - 20, h - 16, 10), under=False, w=ink.dw * 0.9)
+            for sgn in (-1, 1):
+                g.part(circ(cx + sgn * (w / 2 + 14), y0 + h / 2, 12), under=True)
+
+
+def younger_scene_page(i, fn, meta):
+    ink = CY.new_ink(i + 1)
+    fn(ink)
+    banner(ink, ('ribbon', 'bubble', 'scallop', 'plaque')[i % 4])
+    html = ''
+    cap = meta['caption']
+    size, lines = caption_font(cap)
+    html += '<div class="cap" style="font-size:%.1fpt">%s</div>' % (size, ''.join('<span class="l">%s</span>' % bounce(l, 1.4) for l in lines))
+    if meta.get('game'):
+        bx, by = (700, 128) if meta.get('badge', 'r') == 'r' else (150, 128)
+        rx, ry = 82, 52
+        with ink.fig(0, 0) as g:
+            P = Path()
+            n = 20
+            for k in range(n):
+                a0 = k * math.tau / n
+                a1 = (k + 1) * math.tau / n
+                am = (a0 + a1) / 2
+                if k == 0:
+                    P.M(bx + rx * math.cos(a0), by + ry * math.sin(a0))
+                P.C(bx + (rx + 9) * math.cos(am - 0.06), by + (ry + 8) * math.sin(am - 0.06), bx + (rx + 9) * math.cos(am + 0.06), by + (ry + 8) * math.sin(am + 0.06), bx + rx * math.cos(a1), by + ry * math.sin(a1))
+            P.Z()
+            g.part(P)
+        words = meta['game'].replace('Find ', 'Find<br>', 1)
+        html += '<div class="badge" style="left:%.2fin;top:%.2fin;width:%.2fin;height:%.2fin">%s</div>' % ((bx - rx) / 100, (by - ry) / 100, 2 * rx / 100, 2 * ry / 100, words)
+    return page(html, ink, meta['alt'])
+
+
+def older_scene_page(i, fn, meta):
+    ink = CO.o_ink(i + 1)
+    fn(ink)
+    # a small flourish each side of the prompt
+    with ink.fig(0, 0, outline=False) as g:
+        for sgn in (-1, 1):
+            g.part(Q.Path().M(0, 0).L(0, 0), w=0.1) if False else None
+            g.line(curve([(425 + sgn * 330, 1000), (425 + sgn * 345, 992), (425 + sgn * 360, 1000), (425 + sgn * 375, 1008)]), w=ink.dw * 1.1)
+    with ink.fig(95, 1000, 1.0) as g:
+        g.part(cast.sparkle4(0, 0, 10, 0.3), w=ink.dw * 0.9)
+    with ink.fig(755, 1000, 1.0) as g:
+        g.part(cast.sparkle4(0, 0, 10, 0.3), w=ink.dw * 0.9)
+    html = '<div class="prompt">%s</div>' % esc(meta['prompt'])
+    return page(html, ink, meta['alt'])
+
+
+# ---------------------------------------------------------------- the front and back pages
 def title_page(kind):
-    if kind == 'younger':
-        h = 'Color with Tidbit and Sugarfoot'
-        sub = 'A big coloring book of friends, for ages 3 to 7'
-        P = pen(5.2)
-        A.sugarfoot_front(P, 250, 880, 5.8, 'happy', 'smile', heart_=True)
-        A.tidbit_front(P, 600, 880, 5.8, 'happy', 'w')
-        A.sun(P, 705, 330, 50); A.sky_cloud(P, 140, 360, 1.8)
-        ground(P, 905, 60, 790)
+    younger = kind == 'younger'
+    X = T.YOUNGER if younger else T.OLDER
+    rect = (62, 300, 726, 636)
+    if younger:
+        ink = CY.new_ink(90)
+        CY.frame_begin(ink, rect=rect)
+        pr.rainbow(ink, 425, 690, 310, 4, 36)
+        pr.puff(ink, 150, 450, 0.9, n=4)
+        pr.puff(ink, 700, 430, 0.9, n=4)
+        CY.hills(ink, 770, 850)
+        Q.fit(ink, lambda i, x, y, s: cast.pup_hug(i, x, y, s, 'happy', 'happy'), (110, 440, 740, 900), 'bottom')
+        for (x, y, r, rot) in ((150, 380, 22, -12), (700, 360, 24, 14), (300, 345, 16, 8), (560, 340, 18, -6)):
+            pr.heart(ink, x, y, r, rot)
+        CY.frame_end(ink)
+        tstyle = 'font-size:44pt;line-height:1.02'
+        top = '.5in'
     else:
-        h = 'Color and Calm with Tidbit and Sugarfoot'
-        sub = 'Detailed scenes and short, calming phrases, for ages 8 to 12'
-        P = pen(3.4)
-        A.pup_side(P, 'tidbit', 250, 880, 5.0, 'walk', 'happy', ph=0.5)
-        A.pup_side(P, 'sugarfoot', 600, 885, 5.0, 'walk', 'happy', ph=0.2, flip=True)
-        A.mandala_flower(P, 425, 520, 130, 3, 10)
-        for (x, y, r) in ((130, 330, 28), (720, 330, 28)):
-            A.star(P, x, y, r, '#fff', 'shape')
-    t = ('<div class="t" style="top:.7in"><h1 class="outline" style="font-size:%dpt;line-height:1.05">%s</h1>'
-         '<p style="font-size:13pt;margin:.2in 0 0;font-weight:700">%s</p></div>'
-         '<div class="t" style="bottom:.45in;font-size:12pt;font-weight:700">by %s</div>') % (40 if kind == 'younger' else 34, C.esc(h), C.esc(sub), C.AUTHOR)
-    return page(t, svg_page(P))
+        ink = CO.o_ink(90)
+        CO.begin(ink, ['leaf', 'dot'], rect=rect)
+        pat.mandala(ink, 425, 640, 250, 5, 14)
+        CO.sh(ink, circ(425, 640, 150), '#fff')
+        Q.fit(ink, lambda i, x, y, s: cast.pup_hug(i, x, y, s, 'happy', 'happy', 1), (300, 520, 550, 740), 'bottom')
+        for (x, y, r) in ((150, 840, 12), (700, 840, 12), (425, 360, 14)):
+            pr.heart(ink, x, y, r, 8)
+        po.stars_z(ink, 91, 8, (110, 360, 740, 440), size=(7, 12))
+        CO.end(ink)
+        tstyle = 'font-size:38pt;line-height:1.02'
+        top = '.55in'
+    t1, t2 = X['title_lines']
+    h = ('<div class="t" style="top:%s"><h1 class="outline" style="%s">%s<br>%s</h1>'
+         '<p style="font-size:13.5pt;margin:.14in 0 0;font-weight:700">%s</p></div>'
+         '<div class="t" style="top:9.55in;font-size:13pt;font-weight:700">%s<span style="display:inline-block;width:3.1in;border-bottom:1.6pt solid #111;margin-left:.1in"></span></div>'
+         '<div class="t" style="top:10.1in;font-size:12pt;font-weight:700">by %s</div>') % (
+        top, tstyle, bounce(t1, 3), bounce(t2, 3), esc(X['subtitle']), esc(X['belongs']), C.AUTHOR)
+    return page(h, ink, X['title'] + ': Tidbit and Sugarfoot together')
+
+
+def meet_page(kind):
+    younger = kind == 'younger'
+    X = T.YOUNGER if younger else T.OLDER
+    M = X['meet']
+    ink = CY.new_ink(91) if younger else CO.o_ink(91)
+    lvl = 0 if younger else 1
+    Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'happy', lvl=lvl, arms='up', wag=1), (70, 190, 420, 560), 'bottom')
+    Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=lvl, arms='chest'), (430, 200, 780, 560), 'bottom')
+    for cx in (245, 605):
+        with ink.fig(0, 0) as g:
+            g.part(rrect(cx - 130, 572, 260, 52, 22))
+    for (x, y, r) in ((100, 150, 18), (760, 160, 20), (425, 125, 24), (330, 230, 12), (520, 230, 12)):
+        pr.heart(ink, x, y, r, 8) if younger else pr.star5(ink, x, y, r * 0.8, 8)
+    for k in range(8):
+        cx = 120 + k * 87.1
+        with ink.fig(0, 0) as g:
+            g.part(circ(cx, 1010, 30) if younger else rrect(cx - 30, 982, 60, 56, 10))
+    h = ('<div class="t ttl" style="top:.5in;font-size:%dpt;line-height:1.05">%s</div>'
+         '<div class="lbl" style="position:absolute;left:1.15in;width:2.6in;top:5.76in">Tidbit</div>'
+         '<div class="lbl" style="position:absolute;left:4.75in;width:2.6in;top:5.76in">Sugarfoot</div>'
+         '<div class="sm" style="position:absolute;left:.7in;width:3.6in;top:6.4in">%s</div>'
+         '<div class="sm" style="position:absolute;left:4.3in;width:3.5in;top:6.4in">%s</div>'
+         '<div class="gu" style="position:absolute;left:1.0in;right:1.0in;top:7.55in"><b>%s</b>%s</div>'
+         '<div class="gu" style="position:absolute;left:1in;right:1in;top:8.95in"><b style="font-size:14pt;margin-bottom:0">%s</b>%s</div>') % (
+        36 if younger else 34, esc(M['head']), esc(M['tidbit']), esc(M['sugarfoot']),
+        esc(M['grownups_head']), esc(M['grownups']), esc(M['test_head']), esc(M['test_note']))
+    return page(h, ink, 'Tidbit and Sugarfoot, with a row of circles to test your colors')
+
+
+def cert_page(kind):
+    younger = kind == 'younger'
+    X = T.YOUNGER if younger else T.OLDER
+    c = X['cert']
+    if younger:
+        ink = CY.new_ink(92)
+        CY.frame_begin(ink)
+        pr.rainbow(ink, 425, 860, 300, 4, 34)
+        CY.hills(ink, 800, 870)
+        Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up'), (80, 560, 380, 910), 'bottom')
+        Q.fit(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'joy', arms='both_up'), (470, 560, 770, 910), 'bottom')
+        pr.star5(ink, 425, 720, 56, 0)
+        for (x, y, r) in ((130, 520, 16), (720, 500, 18), (425, 600, 12)):
+            pr.star5(ink, x, y, r, 8)
+        CY.frame_end(ink)
+    else:
+        ink = CO.o_ink(92)
+        CO.begin(ink, ['star', 'dot'])
+        pat.mandala(ink, 425, 730, 210, 4, 14)
+        CO.sh(ink, circ(425, 730, 120), '#fff')
+        Q.fit(ink, lambda i, x, y, s: cast.pup_hug(i, x, y, s, 'happy', 'happy', 1), (325, 640, 525, 800), 'bottom')
+        CO.end(ink)
+    with ink.fig(0, 0, outline=False) as g:
+        g.line(Path().M(150, 335).L(700, 335), w=ink.ow * 0.8)
+        g.line(Path().M(150, 480).L(470, 480).M(520, 480).L(700, 480), w=ink.ow * 0.8)
+    h = ('<div class="t" style="top:.95in"><h1 class="outline" style="font-size:56pt">%s</h1></div>'
+         '<div class="t" style="top:2.55in;font-size:15pt;font-weight:700">%s</div>'
+         '<div class="t" style="top:3.5in;font-size:15pt;font-weight:700">%s</div>'
+         '<div class="t" style="left:1.5in;width:3.4in;text-align:left;top:4.9in;font-size:12pt;font-weight:700">%s</div>'
+         '<div class="t" style="left:5.2in;width:1.8in;text-align:left;top:4.9in;font-size:12pt;font-weight:700">%s</div>') % (
+        bounce(c['head'], 4), esc(c['line1']), esc(c['line2']), esc(c['sign']), esc(c['date']))
+    return page(h, ink, 'A certificate for coloring with Tidbit and Sugarfoot')
 
 
 def copyright_page(kind):
-    younger = kind == 'younger'
-    name = 'Color with Tidbit and Sugarfoot' if younger else 'Color and Calm with Tidbit and Sugarfoot'
-    n = 3 if younger else 4
-    s = ('<div class="copy"><p><em>%s</em>, Book %d: <em>%s</em>.<br>By %s. Independently published.</p>'
-         '<p>Pictures © 2026 %s. First print edition, %s. Printed on demand, with a black-and-white interior.</p>'
-         '<p><strong>The back of every picture is blank</strong>, so markers will not soak through to the next one. Slide a sheet of paper under the page you are coloring.</p>'
-         '<p><strong>Free online, always.</strong> The characters live at %s, where everything is free to read and use, with no account and no paid version. This print book is optional. You may copy pages for personal use and for non-commercial teaching, with credit to “%s.”</p>'
-         '<p><strong>Original.</strong> The characters and the pictures are original to this site.</p>'
-         '<p>Set in Fraunces and Andika (SIL Open Font License).</p></div>') % (
-        C.esc(C.SERIES), n, C.esc(name), C.esc(C.AUTHOR), C.esc(C.AUTHOR), C.UPDATED, C.SITE, C.SITE)
+    X = T.YOUNGER if kind == 'younger' else T.OLDER
+    s = '<div class="copy">%s</div>' % T.COPYRIGHT.format(series=esc(C.SERIES), n=X['series_no'], name=esc(X['title']), author=esc(C.AUTHOR), updated=C.UPDATED, site=C.SITE)
     return page(s)
 
 
-def thanks_page(kind):
-    P = pen(5.0 if kind == 'younger' else 3.2)
-    A.peach_lilac(P, 425, 640, 5.2)
-    for (x, y, s) in ((150, 380, 3.4), (700, 330, 3.0), (610, 820, 2.4), (200, 800, 2.6)):
-        A.sparkle(P, x, y, s)
-    t = ('<div class="t" style="top:1.1in"><h1 class="outline" style="font-size:36pt;line-height:1.1">Thank you for coloring!</h1>'
-         '<p style="font-size:14pt;margin-top:.2in;font-weight:700">Draw your own friend on the back of this page, or on any blank back.</p></div>'
-         '<div class="t" style="bottom:.55in;font-size:12pt;font-weight:700">More at %s</div>') % C.SITE
-    return page(t, svg_page(P))
-
-
+# ---------------------------------------------------------------- the books
 def build_book(kind):
     younger = kind == 'younger'
-    pages = [title_page(kind), copyright_page(kind)]
-    items = YOUNGER if younger else OLDER
-    sw = YOUNGER_PAGE_SW if younger else OLDER_PAGE_SW
-    alts = []
-    for entry in items:
-        if younger:
-            cap, fn = entry
-            P = pen(sw)
-            fn(P)
-            P.raw('<rect x="0" y="985" width="850" height="115" fill="#fff"/>')
-            inner = '<div class="cap small">%s</div>' % C.esc(cap)
-        else:
-            cap, fn, phrase = entry
-            P = pen(sw)
-            fn(P)
-            # the phrase sits on a white banner, so nothing from the picture runs through the letters
-            P.raw('<rect x="0" y="928" width="850" height="172" fill="#fff"/>')
-            P.raw('<rect x="78" y="942" width="694" height="86" rx="30" fill="#fff" stroke="#111" stroke-width="%s"/>' % (P.sw * 1.1))
-            for (x, y) in ((76, 76), (774, 76), (76, 1024), (774, 1024)):
-                P.circ(x, y, 15, '#fff')
-            inner = '<div class="cap phrase" style="font-size:%dpt">%s</div>' % (27 if len(phrase) < 34 else 21, C.esc(phrase))
-        pages.append(page(inner, svg_page(P)))
+    pages = [title_page(kind), meet_page(kind)]
+    scenes = CY if younger else CO
+    for i, (fn, meta) in enumerate(zip(scenes.SCENES, scenes.META)):
+        pages.append((younger_scene_page if younger else older_scene_page)(i, fn, meta))
         pages.append(blank())
-        alts.append(cap)
-    pages.append(thanks_page(kind))
-    pages.append(blank())
+    pages += [cert_page(kind), copyright_page(kind)]
     ident = 'coloring-%s' % kind
+    X = T.YOUNGER if younger else T.OLDER
     C.write(os.path.join(C.SRC, ident + '.html'), C.doc(ident, CSS, '\n'.join(pages)))
     meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}
     rec = meta.setdefault('books', {}).setdefault(ident, {})
-    rec.update(title=('Color with Tidbit and Sugarfoot' if younger else 'Color and Calm with Tidbit and Sugarfoot'), trim_in=[8.5, 11], paper='white', pictures=len(items), pages_planned=len(pages))
+    rec.update(title=X['title'], trim_in=[8.5, 11], paper='white', pictures=len(scenes.SCENES), pages_planned=len(pages))
     C.write(os.path.join(C.OUT, 'kids.json'), json.dumps(meta, indent=1) + '\n')
-    print('%s: %d pictures, %d pages' % (ident, len(items), len(pages)))
+    print('%s: %d pictures, %d pages' % (ident, len(scenes.SCENES), len(pages)))
     return rec
-
-
-CB = {'younger': C.load_json(os.path.join(C.MS, 'coloring-younger.json')), 'older': C.load_json(os.path.join(C.MS, 'coloring-older.json'))}
-
-
-def crayon(P, x, y, s, col, rot=0):
-    P.at(x, y, s, rot=rot)
-    P.rect(-5, -34, 10, 56, col, r=1)
-    P.path('M-5 -34 L0 -48 L5 -34Z', col)
-    P.rect(-5.4, -22, 10.8, 5, '#FFFDF5', r=0.5, kind='flat')
-    P.close()
-
-
-def make_cover(kind, pages):
-    younger = kind == 'younger'
-    book = CB[kind]
-    w, h = 8.5, 11.0
-    sp = C.spine_in(pages, 'white')
-    B = C.BLEED
-    Wt, Ht = 2 * B + 2 * w + sp, h + 2 * B
-    P = A.Pen('color', sw=4.0 if younger else 3.2)
-    U = 100
-    wu, hu = Wt * U, Ht * U
-    fx, bx = (B + w + sp) * U, B * U
-    gid = C.grad(P, 'cv', [(0, '#8FD0F0'), (0.6, '#FFF1D2'), (1, '#BFE6A0')] if younger else [(0, '#6A52A0'), (0.55, '#C9A8E0'), (1, '#FFE4C4')])
-    P.raw('<rect width="%s" height="%s" fill="url(#%s)"/>' % (f(wu), f(hu), gid))
-    cols = ['#E25C4F', '#F2C14E', '#6FB36A', '#4B9CD3', '#9C83D0', '#F08DA8']
-    if younger:
-        A.sun(P, fx + 110, 600, 66); A.sky_cloud(P, fx + 690, 560, 2.2)
-        P.raw('<path d="M0 %s C%s %s %s %s %s %s V%s H0Z" fill="#A9DB84"/>' % (f(hu * .78), f(wu * .3), f(hu * .7), f(wu * .7), f(hu * .84), f(wu), f(hu * .76), f(hu)))
-        A.sugarfoot_front(P, fx + 250, 1040, 6.4, 'happy', 'smile', heart_=True)
-        A.tidbit_front(P, fx + 600, 1040, 6.4, 'happy', 'w')
-        for i, c in enumerate(cols):
-            crayon(P, fx + 130 + i * 118, 1125, 1.5, c, rot=-12 + i * 5)
-        A.puddles(P, bx + 150, 1000, 2.8, 'smile'); A.hopper(P, bx + 300, 1040, 2.8, expr='happy'); A.beep(P, bx + 450, 1040, 2.6)
-    else:
-        A.mandala_flower(P, fx + 425, 640, 280, 4, 12)
-        for (x, y, r) in ((fx + 80, 360, 18), (fx + 780, 340, 20), (fx + 140, 900, 14), (bx + 120, 260, 16), (bx + 700, 300, 14)):
-            A.star(P, x, y, r, '#FBE9A0', 'flat')
-        A.pup_side(P, 'tidbit', fx + 250, 1035, 5.0, 'walk', 'happy', ph=0.5)
-        A.pup_side(P, 'sugarfoot', fx + 620, 1040, 5.0, 'walk', 'happy', ph=0.2, flip=True)
-        for i, c in enumerate(cols):
-            crayon(P, bx + 100 + i * 100, 1110, 1.3, c, rot=-10 + i * 5)
-    bg = C.svg_wrap(P, wu, hu, 'bg')
-    nm = book['title'].replace('Color and Calm with ', 'Color and Calm with<br>').replace('Color with ', 'Color with<br>')
-    front = ('<div style="position:absolute;left:.5in;right:.5in;top:.5in;text-align:center">'
-             '<div style="font:700 12pt Andika;letter-spacing:.12em;color:#3A3350">%s &middot; BOOK %d</div>'
-             '<div style="font:800 %dpt/0.98 Fraunces,serif;color:#FFFDF5;-webkit-text-stroke:2.6px #2F3566;paint-order:stroke fill;margin-top:.12in">%s</div>'
-             '<div style="font:700 14pt/1.3 Andika;color:#2F3566;margin:.16in auto 0;width:6.6in;background:rgba(255,253,245,.85);border-radius:.22in;padding:.08in .2in">%s</div></div>'
-             '<div style="position:absolute;left:0;right:0;bottom:.3in;text-align:center"><span style="display:inline-block;background:rgba(255,253,245,.92);border-radius:.2in;padding:.05in .3in;font:700 17pt Andika;color:#2F3566">%s</span></div>'
-             ) % (C.esc(book['ages'].upper()), book['series_no'], 52 if younger else 46, nm, C.esc(book['subtitle']), C.esc(C.AUTHOR))
-    back = ('<div style="position:absolute;left:.7in;right:.7in;top:.7in;font-size:14pt;line-height:1.45;background:rgba(255,253,245,.92);border-radius:.25in;padding:.28in .35in;border:2.5px solid #E8D5A2">'
-            '<div style="font:800 20pt Fraunces,serif;margin-bottom:.12in;color:#3A3350">%s</div>%s'
-            '<p style="margin:.14in 0 0;font-size:11.5pt;color:#4A4033">%s &middot; Free to read online at %s</p></div>') % (
-        'Pick up a crayon.' if younger else 'Take a calm minute.', ''.join('<p style="margin:0 0 .1in">%s</p>' % C.esc(x) for x in book['back_cover']), C.esc(book['ages']), C.SITE)
-    html, info = C.cover_doc(book['title'], (w, h), pages, 'white', bg, front, back, '')
-    ident = 'coloring-' + kind
-    C.write(os.path.join(C.SRC, 'cover-%s.html' % ident), html)
-    meta = C.load_json(os.path.join(C.OUT, 'kids.json'), {}) or {}
-    meta['books'][ident]['cover'] = info
-    C.write(os.path.join(C.OUT, 'kids.json'), json.dumps(meta, indent=1) + '\n')
-    print('%s cover: spine %s in, %s x %s in' % (ident, info['spine_in'], info['width_in'], info['height_in']))
 
 
 def main():
     which = sys.argv[1:] or ['younger', 'older']
+    import coloring_covers as CV
     for k in which:
         rec = build_book(k)
         pages = rec.get('pages_planned') or 68
-        make_cover(k, pages)
+        CV.make_cover(k, pages)
 
 
 if __name__ == '__main__':

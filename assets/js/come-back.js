@@ -660,7 +660,7 @@
       else if (id === 'fullpath') out.push('The workpaper package');
       else { var code = id.split(':')[0].toUpperCase(); out.push(WP_TITLES[code] || 'A workpaper'); }
     });
-    if (lsGet('tol-wiring-card')) out.push('Your “how to talk to me” card');
+    if (lsGet('tol-wiring-card')) out.push('Your “how I like to be spoken to” card');
     if (lsGet('tol-wavelength-v1') || lsGet('tol-heartprint-v1')) out.push('Your Wave Code');
     var lem = json('tol-lemonade-stand-v2'); if (lem && !lem.example && lem.jobs && lem.jobs.some(function (j) { return j && j.name; })) out.push('Your Who does what? list');
     if (lsGet('tol-ten-log-v1')) out.push('Your list of things you did');

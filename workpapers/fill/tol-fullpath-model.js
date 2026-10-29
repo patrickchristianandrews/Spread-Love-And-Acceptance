@@ -108,7 +108,7 @@
 
   var NAMES = {
     'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job',
-    'WP-04': 'What keeps coming back?', 'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in'
+    'WP-04': 'What keeps coming back?', 'WP-09': 'Say it so it lands', 'WP-11': 'Calm-down plan', 'WP-13': 'The 90-second daily check-in'
   };
 
   // one: a single person on this road; group2/groupN: everyone, for two or more; work: the shared load;
@@ -1384,7 +1384,7 @@
         pattern: pat === 'A past pattern', satNo: sat === 'No' || sat === 'Not sure', who: trim(V(data, 'wp09.who')), raw: V(data, 'wp09.rawInclude') === true ? trim(V(data, 'wp09.raw')) : '' };
     }
 
-    // WP-11: the calm-down kit
+    // WP-11: the calm-down plan
     if (on['WP-11']) {
       var lines = P.list.map(function (p) { return trim(V(data, 'wp11.lines.p' + (p.i + 1) + '.line')); });
       var trig = rowsOf(data, 'wp11.triggers', ['trigger', 'body'], sizeOf(data, 'triggers')).filter(function (r) { return trim(r.trigger) || trim(r.body); });
@@ -1685,7 +1685,7 @@
     if (c.conc && c.conc.flag && !(calc.sol != null && calc.sol >= 0.7)) add(7, cap(c.conc.lines.join('; ')) + '. That is a fact about how the setup has settled, not about effort or care, and it is worth one question: which job would they hand over first?');
     if (c.wp09 && c.wp09.advice === 'pause') add(5, 'Your Say it so it lands checks suggest pausing before you answer that message' + (c.wp09.pattern ? ': it may be touching an older pattern, not just these words.' : '.'));
     if (c.wp13 && c.wp13.thanks.length) add(4, plural(c.wp13.thanks.length, 'appreciation') + ' written down in the daily check-ins. Those are worth reading again on a harder day.');
-    if (c.wp11 && c.wp11.filled && !(c.wp11.first || c.wp11.second)) add(3, 'The Calm-Down Kit is started, but no settling defaults are chosen yet. Picking two on a calm day is what makes it work in the moment.');
+    if (c.wp11 && c.wp11.filled && !(c.wp11.first || c.wp11.second)) add(3, 'Calm-down plan is started, but no settling defaults are chosen yet. Picking two on a calm day is what makes it work in the moment.');
     if (R.solo && c.notes.wiringLines) add(5, 'Your Wiring Card has ' + c.notes.wiringLines + ' of 9 lines filled in. That is the start of a short, kind way to explain yourself, whenever you want to share it.');
     if (R.solo && c.notes.weather.length >= 2) {
       var wb2 = c.notes.weather.filter(function (w) { return w.battery != null; });
@@ -2021,7 +2021,7 @@
     };
     var from = {
       I: R.solo ? 'WP-02 and your weather log' : 'workload balance (WP-01)',
-      II: R.solo ? 'your Calm-Down Kit defaults and kind no’s' : 'ownership clarity (WP-03)' + (c.wp04 ? ' and What keeps coming back? (WP-04)' : ''),
+      II: R.solo ? 'your Calm-down plan defaults and kind no’s' : 'ownership clarity (WP-03)' + (c.wp04 ? ' and What keeps coming back? (WP-04)' : ''),
       III: 'stress tank scores (WP-02)' + (c.wp11 ? ' and coming back after settling (WP-11)' : ''),
       IV: 'fact, feeling and ask (WP-09), your retuning count' + (c.notes.wiringLines ? ' and your Wiring Card' : ''),
       V: R.solo ? 'what keeps slipping' : 'appreciations (WP-13), repeat slips (WP-04) and unclaimed ' + v.tasks
@@ -2053,7 +2053,7 @@
     if (!R.solo && R.calc && (k.wb == null || k.wb < 0.7)) add(7, 'See the whole load', 'WP-01', k.wb == null ? 'Log one ordinary week of who did what, with rough minutes. No discussing it until the week is done.' : 'Log another week and compare. Then hand over one ' + v.task + ' from the busiest person.', 'I');
     if (c.wp04 && c.wp04.patterns.length) add(7, 'Fix what keeps slipping', 'WP-04, WP-03', 'Give ' + list(c.wp04.patterns.map(function (p) { return p.task; }).slice(0, 3)) + ' a new or clearer owner, then watch it for a month.', 'V');
     if (c.wp09 && (!c.wp09.filled || c.wp09.advice === 'pause' || (k.rf != null && k.rf < 0.5))) add(6, 'Say it so it lands', 'WP-09', 'Put one charged message a week through fact, feeling and ask before it goes out. Count the friction moments and how many you retuned.', 'IV');
-    if (c.wp11 && !(c.wp11.first && c.wp11.second)) add(5, 'Your calm-down kit', 'WP-11', 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', 'III');
+    if (c.wp11 && !(c.wp11.first && c.wp11.second)) add(5, 'Your calm-down plan', 'WP-11', 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', 'III');
     if (c.wp13 && (!c.wp13.filled || c.wp13.thanks.length < c.n)) add(5, c.road === 'coworkers' ? 'A short daily stand-up' : 'The 90-second daily check-in', 'WP-13', 'Every day for a week: load, one thanks, one small ask. No debating.', 'V');
     if (R.solo && !c.notes.wiringLines) add(6, 'Know your wiring', 'Wiring Card', 'Fill in the Wiring Card, then read it back and change anything that isn’t quite true. See /know-yourself.html for more.', 'IV');
     if (R.solo && c.notes.weather.length < 2) add(4, 'Notice your weather', 'Today’s Weather', 'Once a week, check the sky, the pressure and your sleep. Just notice.', 'I');
@@ -2092,7 +2092,7 @@
     'WP-03': ['WP-03 One owner per job', '/workpapers/fill/wp-03.html'],
     'WP-04': ['WP-04 What keeps coming back?', '/workpapers/fill/wp-04.html'],
     'WP-09': ['WP-09 Say it so it lands', '/workpapers/fill/wp-09.html'],
-    'WP-11': ['WP-11 The Calm-Down Kit', '/workpapers/fill/wp-11.html'],
+    'WP-11': ['WP-11 Calm-down plan', '/workpapers/fill/wp-11.html'],
     'WP-13': ['WP-13 The 90-second daily check-in', '/workpapers/fill/wp-13.html'],
     'CALC-01': ['CALC-01, Is the setup working for everyone?', '/is-the-setup-working.html'],
     NOTES: ['Make a Wiring Card', '/wiring-card.html'],
@@ -2756,7 +2756,7 @@
       when: function (F) { return F.c.wp11 && F.bat.high.length && !(F.c.wp11.first || F.c.wp11.second) ? { who: F.bat.high } : null; },
       find: function (d, F) { return (F.solo ? 'Your load is high' : list(lbl(d.who)) + (d.who.length === 1 ? '’s load is' : '’s loads are') + ' high') + ', and no settling defaults are chosen on WP-11 yet.'; },
       why: 'Choosing in the moment is hardest exactly when you need it. Two defaults picked on a calm day make the pause automatic.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Pick two settling defaults today', first: 'Choose two from the list on WP-11 (breathing 4 in and 6 out is a good first one) and write a pause line.', script: '“I need twenty minutes. I’m not leaving the conversation; I’ll be back at 7:30.”', link: linkOf('WP-11'), working: 'The next hard moment has a pause in it instead of a raised voice.', plan: { title: 'Your calm-down kit', wp: 'WP-11', do: 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', pillar: 'III' } }; } },
+      rec: function (d, F, v) { return { h: 'now', title: 'Pick two settling defaults today', first: 'Choose two from the list on WP-11 (breathing 4 in and 6 out is a good first one) and write a pause line.', script: '“I need twenty minutes. I’m not leaving the conversation; I’ll be back at 7:30.”', link: linkOf('WP-11'), working: 'The next hard moment has a pause in it instead of a raised voice.', plan: { title: 'Your calm-down plan', wp: 'WP-11', do: 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', pillar: 'III' } }; } },
     { id: 'pause-partial', pillar: 'III', src: ['WP-11'], pri: 4, title: 'Not everyone has a pause line yet',
       when: function (F) { if (!(F.n >= 2 && F.c.wp11 && F.c.wp11.filled)) return null; var miss = F.pp.filter(function (p) { return !p.pause; }); return miss.length && miss.length < F.n ? { miss: miss } : null; },
       find: function (d) { return 'Pause lines are still to write for ' + list(lbl(d.miss)) + '.'; },
@@ -2892,7 +2892,7 @@
       rec: function (d, F, v) { return { h: 'week', title: 'Fill in the Wiring Card', first: 'Tick what is true on the self-notes page, then read it back and change anything that isn’t quite right.', script: '', link: linkOf('wiring'), working: 'You can hand someone the card instead of a long explanation.', plan: { title: 'Know your wiring', wp: 'Wiring Card', do: 'Fill in the Wiring Card, then read it back and change anything that isn’t quite true. See /know-yourself.html for more.', pillar: 'IV' } }; } },
     { id: 'solo-pattern', pillar: 'II', src: ['WP-09', 'WP-11'], pri: 5, title: 'An older pattern may be in the room',
       when: function (F) { return F.c.wp09 && F.c.wp09.pattern ? { trig: F.c.wp11 ? F.c.wp11.triggers.map(function (t) { return t.trigger; }).filter(Boolean) : [] } : null; },
-      find: function (d) { return 'On WP-09 you said you may be responding to a pattern from a past conversation' + (d.trig.length ? '; your Calm-Down Kit names ' + list(d.trig.map(function (t) { return q(t); })) + ' as what tends to start it' : '') + '.'; },
+      find: function (d) { return 'On WP-09 you said you may be responding to a pattern from a past conversation' + (d.trig.length ? '; your Calm-down plan names ' + list(d.trig.map(function (t) { return q(t); })) + ' as what tends to start it' : '') + '.'; },
       why: 'Patterns are a setup, not a flaw. Once you can name one, you can plan around it instead of being surprised by it.',
       rec: function (d, F, v) { return { h: 'month', title: 'Plan around the pattern', first: 'Write what usually starts it, and one thing you will do differently next time it shows up.', script: '“This one touches an old sore spot for me, so I might need a minute.”', link: linkOf('know'), working: 'Next time, you notice the pattern before you answer.' }; } }
   ];

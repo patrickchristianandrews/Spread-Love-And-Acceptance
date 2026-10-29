@@ -122,15 +122,15 @@ Program: The Library covers HALT and hangry in depth. Today’s Weather asks abo
 ## Movement breaks
 aka: moving to reset; walk it off; physical activity for mood
 see: Micro-breaks; Walk and talk for hard topics
-go: /wp-11.html | WP-11: The Calm-Down Kit
+go: /wp-11.html | WP-11: Calm-down plan
 evidence: Research generally finds physical activity is linked with better mood.
 try: When you’re too wound up to talk, a brisk ten-minute walk around the block before coming back.
 
 Moving your body, even briefly, can help shift a tense or flat state: a short walk, stretching, dancing to one song, carrying laundry up the stairs.
 
-A slow walk is one of the calming steps suggested in the Calm-Down Kit for heated moments.
+A slow walk is one of the calming steps suggested in the calm-down plan for heated moments.
 
-Program: The Calm-Down Kit (WP-11) asks you to pick two calming steps in advance. Movement is a common choice.
+Program: Calm-down plan (WP-11) asks you to pick two calming steps in advance. Movement is a common choice.
 
 ## Walk and talk for hard topics
 aka: walking meeting; talk while walking; walk and talk

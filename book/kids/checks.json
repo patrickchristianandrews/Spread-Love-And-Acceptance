@@ -98,7 +98,7 @@
    "Andika-Italic",
    "Fraunces-ExtraBold"
   ],
-  "bytes": 901108,
+  "bytes": 1661590,
   "gray_only": true,
   "cover": {
    "size_in": [
@@ -134,9 +134,10 @@
    "Andika",
    "Andika-Bold",
    "Andika-Italic",
-   "Fraunces-ExtraBold"
+   "Fraunces-ExtraBold",
+   "Lora-Italic"
   ],
-  "bytes": 2998098,
+  "bytes": 7971410,
   "gray_only": true,
   "cover": {
    "size_in": [

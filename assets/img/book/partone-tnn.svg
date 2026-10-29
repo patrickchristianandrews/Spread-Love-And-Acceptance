@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 504" width="540" height="504" role="img" aria-labelledby="fig-partone-tnn-t fig-partone-tnn-d" font-family="Lora, Georgia, serif" fill="#2B2620">
-<title id="fig-partone-tnn-t">Then, Now and Next: the three chapters of Part One</title>
+<title id="fig-partone-tnn-t">Then, Now and Next: the first three chapters</title>
 <desc id="fig-partone-tnn-d">A timeline with three stops. Then: where your lens came from, the rules you learned at home. Now: your wiring and today’s weather, how you run and what you need. Next: who you are becoming, small steps toward what matters. An arrow carries forward only what you choose. The past is not yours to change; what you carry forward is.</desc>
 
 <rect x="1" y="1" width="538" height="502" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Then, Now, Next</text>
-<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">The three chapters of Part One, about you.</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">The first three chapters, about you.</text>
 <line x1="40" y1="148" x2="500" y2="148" stroke="#D9CBA3" stroke-width="6" stroke-linecap="round"/>
 <line x1="470" y1="148" x2="506" y2="148" stroke="#D9CBA3" stroke-width="6" stroke-linecap="round"/>
 <path d="M496 136.0 L514 148.0 L496 160.0 Z" fill="#D9CBA3"/>

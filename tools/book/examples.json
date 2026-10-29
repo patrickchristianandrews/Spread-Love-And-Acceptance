@@ -42,7 +42,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wiring-ife.html",
   "tool": "/wiring-card.html",
-  "title": "“How to talk to me” card",
+  "title": "“How I like to be spoken to” card",
   "who": "Made alone, to give to a friend",
   "relationship": "someone on their own",
   "versions": [
@@ -59,7 +59,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-selfpath-sam.html",
   "tool": "/self-path.html#steps",
-  "title": "The self path, step by step",
+  "title": "Your self-discovery path, step by step",
   "who": "A person on their own, two weeks in",
   "relationship": "someone on their own",
   "versions": [
@@ -76,7 +76,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wp11-nell.html",
   "tool": "/workpapers/fill/wp-11.html?road=self",
-  "title": "The Calm-Down Kit, just for me",
+  "title": "Calm-down plan, just for me",
   "who": "A person on their own",
   "relationship": "someone on their own",
   "versions": [
@@ -399,7 +399,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wiring-tom.html",
   "tool": "/wiring-card.html",
-  "title": "“How to talk to me” card, for work",
+  "title": "“How I like to be spoken to” card, for work",
   "who": "An autistic employee, for a new manager",
   "relationship": "a coworker and his manager",
   "versions": [
@@ -450,7 +450,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wp11-pat.html",
   "tool": "/workpapers/fill/wp-11.html",
-  "title": "The Calm-Down Kit",
+  "title": "Calm-down plan",
   "who": "A grandmother raising her 13-year-old grandson",
   "relationship": "a kinship caregiver and a teen",
   "versions": [

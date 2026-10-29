@@ -852,7 +852,7 @@ body.wpf-typing .wpf-bar{ transform: translateY(110%); }
 .wpf-lib-hint{ margin: .1em 0 .4em; }
 @media (max-width: 560px){ .wpf-bar-inner:has(.wpf-keepask) .wpf-saved{ display: none; } }
 
-/* ---------- Six gentle weeks: this week's pages, one week at a time (tol-suite.js renderFlow) ---------- */
+/* ---------- Six-week program: this week's pages, one week at a time (tol-suite.js renderFlow) ---------- */
 .ws-week, .ws-flow{ --c: #DDEFE3; }
 .ws-flow{ box-sizing: border-box; margin: 0 0 1.4em; padding: 1em 1.1em 1.1em; border-radius: 22px; background: #FFF8E6; border: 1.5px solid #EAD59E; }
 .ws-flow[hidden]{ display: none; }

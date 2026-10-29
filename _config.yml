@@ -7,6 +7,15 @@ include: [".well-known"]
 # dashboard setup docs, test screenshots and exports, a Python wheel, database schema, old manuscript drafts).
 # Nothing on the site links to any of them (checked with tools/checks/site-health.js). Jekyll leaves them out of
 # the published site; they stay in the repository. Do not list anything a page or script loads.
+# polish29: internal tooling and owner notes are not part of the site. tools/ holds the build and test scripts
+# (some of them carry owner notes and the book-making steps), _manuscripts/ the book drafts. Jekyll leaves them out of
+# the published site; they stay in the repository. The few real PAGES under tools/ stay published: the six .html files
+# directly inside tools/ (soften-a-tense-moment, soften-a-tense-moment-full, mood-arbitrage-free, mood-arbitrage-full,
+# frequency-calibration, frequency-sync-visualizer), so only the sub-folders of tools/ are listed, one by one.
+# tools/checks/site-health.js fails if _manuscripts/ or a tools/ sub-folder stops being left out, or if a published page is.
+# tools/book/ is hidden except examples.json and examples/, which the tool pages fetch (assets/js/tool-guide.js, tools-page.js).
+# tools/kids/fonts/ stays published too: the print sources in book/kids/src/ (published, and found by the chat) load those fonts.
+# Jekyll matches an entry as a path prefix, so a folder is written with a trailing slash (plain "telemetry" also hid telemetry.html).
 exclude:
   - README.md
   - paywall-integration.md
@@ -26,13 +35,46 @@ exclude:
   - print12-site-1366-light.png
   - print12-site-390-dark.png
   - print12-site-390-light.png
-  - infrastructure
-  - notes
-  - manuscript
-  - supabase
-  - telemetry
-  - shots
-  - progress-shots
-  - node_modules
+  - infrastructure/
+  - notes/
+  - manuscript/
+  - supabase/
+  - telemetry/
+  - shots/
+  - progress-shots/
+  - node_modules/
   - Gemfile
   - Gemfile.lock
+  - _manuscripts/
+  - scripts/
+  - tests/
+  - package.json
+  - package-lock.json
+  - "*.py"
+  - "*.sh"
+  - "*.md"
+  - workpapers/workpapers/
+  - "tools/book/[a-df-z_]*"
+  - "tools/book/e[^x]*"
+  - tools/brain/
+  - tools/buddies/
+  - tools/chat/
+  - tools/checks/
+  - tools/clarify/
+  - tools/collab/
+  - tools/intents/
+  - tools/journeys/
+  - "tools/kids/[a-eg-z_]*"
+  - "tools/kids/f[^o]*"
+  - tools/library/
+  - tools/logic/
+  - tools/places/
+  - tools/progress/
+  - tools/reader/
+  - tools/reading/
+  - tools/research/
+  - tools/search/
+  - tools/seo/
+  - tools/signal/
+  - tools/this-week/
+  - tools/word-games/

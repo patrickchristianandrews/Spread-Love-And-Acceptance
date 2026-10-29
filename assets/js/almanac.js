@@ -60,7 +60,7 @@
   };
   var SHEETS = {
     'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job', 'WP-04': 'What keeps coming back?',
-    'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in', suite: 'The worksheet set', fullpath: 'The full path'
+    'WP-09': 'Say it so it lands', 'WP-11': 'Calm-down plan', 'WP-13': 'The 90-second daily check-in', suite: 'The worksheet set', fullpath: 'The full path'
   };
   function tsKey(ts) { var d = new Date(+ts); return isNaN(d) ? '' : dayKey(d); }
   function prettyPath(u) { var s = String(u).replace(/^.*\//, '').replace(/\.html$/, '').replace(/-/g, ' '); return s.charAt(0).toUpperCase() + s.slice(1); }

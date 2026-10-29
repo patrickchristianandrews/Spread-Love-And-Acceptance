@@ -342,7 +342,7 @@
           <div class="sub">To WP-03 or WP-09</div>
         </div>
         <div class="field">
-          <label for="w-kit">WP-11 kit used</label>
+          <label for="w-kit">WP-11 plan used</label>
           <input type="number" id="w-kit" min="0" step="1" placeholder="—">
           <div class="sub">Times this week</div>
         </div>
@@ -499,7 +499,7 @@
         <tr><td>Fixes aren't holding</td><td>More than half of fixed gaps come back, across the recorded months. The same gaps are being patched again instead of truly closed.</td><td class="mono">WP-04</td></tr>
         <tr><td>Job list gone quiet</td><td>Six or more weeks recorded with no job list changes logged. A living agreement that never changes probably isn't being used.</td><td class="mono">WP-03 + WP-13</td></tr>
         <tr><td>The loop isn't feeding forward</td><td>Friction logged over three or more weeks, with nothing moved on to another worksheet. The daily check-in is running but going nowhere.</td><td class="mono">WP-13 + WP-09</td></tr>
-        <tr><td>Kit doing its job</td><td>The Calm-Down Kit was used in a week when leftover stress fell. Using the kit and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
+        <tr><td>Plan doing its job</td><td>The calm-down plan was used in a week when leftover stress fell. Using the plan and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
         <tr><td>Invisible work surfacing</td><td>Ownership clarity falls while the task list grows. The score drops because hidden work got named, which is the score working as it should.</td><td class="mono">WP-03 + WP-04</td></tr>
         <tr><td>The habit is holding</td><td>The daily check-in ran at least five days a week, three weeks in a row.</td><td class="mono">WP-13</td></tr>
       </tbody>
@@ -703,12 +703,12 @@
       }
     }
 
-    /* 9. kit lining up with a drop */
+    /* 9. plan lining up with a drop */
     if(ds.length>=2){
       var li=ds.length-1;
       if((ws[li].kit||0)>0 && ds[li].as!==null && ds[li-1].as!==null && ds[li].as<ds[li-1].as-0.05){
-        out.push(finding("good","the kit is doing its job \u00b7 WP-11 + WP-02",
-          "The Calm-Down Kit was used this week and leftover stress fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but using the kit and the drop line up. That's worth noticing, without assuming too much."));
+        out.push(finding("good","the plan is doing its job \u00b7 WP-11 + WP-02",
+          "The calm-down plan was used this week and leftover stress fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but using the plan and the drop line up. That's worth noticing, without assuming too much."));
       }
     }
 

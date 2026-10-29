@@ -306,3 +306,32 @@ body { font-size: 11pt; line-height: 1.55; }
 /* book20: the one plain care line in the back matter (Books 1 to 3) */
 .ps-care-line { font-size: 0.9em; margin-top: 1.4em; }
 .pe-keep { white-space: nowrap; }
+
+/* book29: "All the free tools" (two pages: tools, then workpapers and plans; one page in the workbook) */
+.ps-alltools { break-before: page; }
+.ps-alltools h1 { margin-bottom: 2mm; }
+.ps-alltools .pe-back-lede { margin-bottom: 2.4mm; font-size: 8.8pt; line-height: 1.38; }
+.ps-tg-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.6mm; }
+.ps-tg { display: grid; grid-template-columns: 1fr 1fr; gap: 0 5mm; }
+.ps-tg-c { display: flex; gap: 2.4mm; align-items: center; break-inside: avoid; padding: .6mm 0; border-bottom: .4pt dotted #CDBF98; }
+.ps-tg-c .pe-qr { flex: 0 0 11.8mm; width: 11.8mm; height: 11.8mm; background: #fff; }
+.ps-tg-c .pe-qr svg { width: 11.8mm; height: 11.8mm; display: block; }
+.ps-tg-t { display: flex; flex-direction: column; min-width: 0; }
+.ps-tg-t b { font-family: "Fraunces", serif; font-weight: 600; font-size: 8pt; line-height: 1.15; color: var(--ink); }
+.ps-tg-t b i { font-style: normal; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6pt; letter-spacing: .06em; color: var(--pc); }
+.ps-tg-d { font-size: 6.9pt; line-height: 1.2; color: var(--soft); margin-top: .3mm; }
+.ps-tg-u { font-family: "IBM Plex Mono", monospace; font-size: 5.6pt; line-height: 1.2; color: var(--pc); margin-top: .3mm; overflow-wrap: anywhere; }
+.ps-tg-u .pe-nb { white-space: normal; }
+.ps-alltools-wp .ps-tg-c { padding: 1.2mm 0; }
+.ps-alltools-wp .ps-tg-c .pe-qr, .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 13.5mm; height: 13.5mm; flex-basis: 13.5mm; }
+.ps-alltools-wp .ps-tg-t b { font-size: 8.6pt; }
+.ps-alltools-wp .ps-tg-d { font-size: 7.4pt; }
+.pk-book .ps-alltools .pe-back-lede { font-size: 7.6pt; margin-bottom: 1.6mm; }
+.pk-book .ps-tg { gap: 0 3.4mm; }
+.pk-book .ps-tg-c { gap: 1.8mm; padding: .35mm 0; }
+.pk-book .ps-tg-c .pe-qr, .pk-book .ps-tg-c .pe-qr svg { width: 10.2mm; height: 10.2mm; flex-basis: 10.2mm; }
+.pk-book .ps-tg-t b { font-size: 6.9pt; }
+.pk-book .ps-tg-d { font-size: 6pt; }
+.pk-book .ps-tg-u { font-size: 5pt; }
+.pk-book .ps-alltools-wp .ps-tg-c { padding: 1.1mm 0; }
+.pk-book .ps-alltools-wp .ps-tg-c .pe-qr, .pk-book .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 11.6mm; height: 11.6mm; flex-basis: 11.6mm; }
