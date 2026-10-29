@@ -147,3 +147,14 @@ html.tol-quiet .h18 a.h-want::after{ transition:none; }
 @media (max-width:640px){ html.h18-top .tol-pud-fab, html.h18-top .tol-breathe-btn{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; } }
 @media (min-width:641px){ html.h18-top .tol-help{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; } }
 .h18-page .tol-outline, .h18-page .tol-otp, .h18-page .tol-puddles-hi{ display:none !important; }
+
+/* the Brain Map feature (home29) */
+.h18 .h-brainsec{ display:grid; gap:1.2rem 3rem; align-items:center; padding-top:1.4rem !important; border-top:2px solid var(--h-ink) !important; }
+.h18 .h-brainsec > .h-brain-art{ display:block; max-width:520px; justify-self:center; width:100%; border-radius:18px; }
+.h18 .h-brain-art img{ display:block; width:100%; height:auto; border-radius:18px; box-shadow:0 10px 28px rgba(60,45,20,.16); }
+.h18 .h-brain-k{ margin:0 0 .35rem; font:700 .8rem/1 var(--h-ui, system-ui, sans-serif); letter-spacing:.14em; text-transform:uppercase; color:var(--h-acc); }
+.h18 .h-brain-p{ margin:.2rem 0 1rem; max-width:34rem; font:400 1.06rem/1.55 var(--h-read, Georgia, serif); color:var(--h-ink); }
+.h18 .h-brain-go{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1.2rem; margin:0; }
+@media (min-width:900px){ .h18 .h-brainsec{ grid-template-columns:minmax(0, 6fr) minmax(0, 5fr); } .h18 .h-brainsec > .h-brain-art{ justify-self:end; } }
+html body main.read.h18 .h-btn.h-btn-main{ color:#fff; background:var(--h-acc); border-color:var(--h-acc); }
+html body main.read.h18 .h-btn.h-btn-main:hover{ background:var(--h-acc-h); border-color:var(--h-acc-h); }
