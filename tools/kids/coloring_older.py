@@ -43,6 +43,34 @@ def birds(ink, pts):
         p3.bird_plain(ink, x, y, 0.8)
 
 
+
+def extras(ink, seed, box, n=6, avoid=(), kinds=('bird', 'butterfly', 'star', 'cloud', 'flower')):
+    """fill an empty zone with plain, charming decoration (clouds, birds, butterflies, stars, small flowers)"""
+    rnd = random.Random(seed)
+    placed = []
+    tries = 0
+    while len(placed) < n and tries < 300:
+        tries += 1
+        x, y = rnd.uniform(box[0], box[2]), rnd.uniform(box[1], box[3])
+        if any(a[0] - 40 <= x <= a[2] + 40 and a[1] - 40 <= y <= a[3] + 40 for a in avoid):
+            continue
+        if any(math.hypot(x - p[0], y - p[1]) < 95 for p in placed):
+            continue
+        placed.append((x, y))
+        k = kinds[len(placed) % len(kinds)]
+        if k == 'bird':
+            p3.bird_plain(ink, x, y, 0.9)
+        elif k == 'butterfly':
+            p3.butterfly_plain(ink, x, y, 0.6, rnd.uniform(-25, 25))
+        elif k == 'star':
+            pr.star5(ink, x, y, 11, 8)
+        elif k == 'cloud':
+            po.cloud_z(ink, x, y, 0.5, 240, 96, 3, rnd.choice(('scales', 'waves', 'dots')), 11)
+        else:
+            po.flower_z(ink, x, y, 0.55, 6, 30, 70, rnd.choice(('dots', 'rings')), False)
+    return placed
+
+
 # 1 -------------------------------------------------------------------------------------------
 @scene('Breathe in while the light turns. Breathe out as it passes.', alt='Tidbit and Sugarfoot on the rocks below a lighthouse at dusk')
 def s_lighthouse(ink):
@@ -93,6 +121,9 @@ def s_lighthouse(ink):
     po.grass_row(ink, 800, FL, FRt, 24, 12, 3)
     pat.fill(ink, Path().M(FL, 800).L(FRt, 800).L(FRt, 912).L(FL, 912).Z(), 'waves', 16)
     tiny(ink, 'heart', [(250, 880), (560, 860), (420, 230)])
+    extras(ink, 1, (120, 110, 560, 330), 5, avoid=[(120, 140, 400, 280), (560, 200, 740, 340)], kinds=('bird', 'star', 'butterfly', 'bird'))
+    po.flower_z(ink, 130, 770, 0.8, 8, 36, 0, 'dots', False)
+    po.flower_z(ink, 710, 790, 0.8, 8, 36, 0, 'rings', False)
     end(ink)
 
 
@@ -243,6 +274,9 @@ def s_space(ink):
     with ink.fig(0, 0, outline=False) as g:
         g.line(curve([(150, 150), (260, 120), (330, 170), (420, 130)]), w=ink.dw, dash='1 8')
     tiny(ink, 'heart', [(700, 460), (180, 720), (560, 860)])
+    p2.crescent(ink, 650, 470, 34, -20)
+    p3.hot_air_balloon(ink, 160, 640, 0.35, 170) if False else None
+    po.stars_z(ink, 66, 8, (120, 400, 740, 600), avoid=[(180, 380, 700, 700)], size=(7, 12))
     end(ink)
 
 
@@ -348,6 +382,9 @@ def s_autumn(ink):
     pr.mushroom(ink, 700, 900, 0.9)
     tiny(ink, 'heart', [(300, 300), (560, 180), (430, 910)])
     tiny(ink, 'paw', [(600, 500)])
+    extras(ink, 110, (120, 120, 740, 330), 4, avoid=[], kinds=('bird', 'cloud', 'bird', 'butterfly'))
+    for (x, y) in ((150, 880), (420, 900), (640, 880)):
+        pr.tuft(ink, x, y, 1.0)
     end(ink)
 
 
@@ -369,6 +406,8 @@ def s_winter(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'joy', lvl=1, arms='both_up', scarf=True, hat='beanie'), (160, 560, 430, 880), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', lvl=1, arms='both_up', scarf=True, hat='beanie'), (420, 560, 690, 880), 'bottom')
     tiny(ink, 'heart', [(420, 440), (160, 800), (720, 780)])
+    extras(ink, 111, (120, 330, 740, 430), 3, avoid=[], kinds=('bird', 'cloud', 'bird'))
+    po.stars_z(ink, 112, 6, (120, 120, 740, 330), size=(7, 11))
     end(ink)
 
 
@@ -388,6 +427,7 @@ def s_meadow(ink):
         p3.butterfly_plain(ink, x, y, 0.6, r)
     po.grass_row(ink, 905, FL, FRt, 24, 11, 12)
     tiny(ink, 'heart', [(500, 300), (190, 650), (730, 840)])
+    extras(ink, 12, (120, 280, 740, 520), 6, avoid=[(130, 480, 740, 700)], kinds=('bird', 'butterfly', 'cloud', 'butterfly', 'bird'))
     end(ink)
 
 
@@ -472,6 +512,9 @@ def s_balloon(ink):
     # hills far below
     po.ground_z(ink, 840, 'leaves', 20, amp=22)
     tiny(ink, 'heart', [(150, 400), (700, 460), (425, 880)])
+    extras(ink, 15, (120, 600, 740, 780), 5, avoid=[(260, 560, 600, 760)], kinds=('bird', 'butterfly', 'bird', 'star'))
+    po.tree_z(ink, 160, 850, 0.45, '#8FCB7C', 'leaves', 10)
+    po.tree_z(ink, 690, 850, 0.4, '#F5A85C', 'scales', 10)
     end(ink)
 
 
@@ -533,6 +576,9 @@ def s_picnic_o(ink):
     pr.apple(ink, 250, 870, 0.9)
     po.grass_row(ink, 905, FL, FRt, 22, 12, 18)
     tiny(ink, 'heart', [(500, 300), (130, 840), (720, 560)])
+    extras(ink, 18, (300, 130, 740, 420), 6, avoid=[], kinds=('bird', 'butterfly', 'bird', 'cloud'))
+    po.flower_z(ink, 120, 770, 0.7, 8, 34, 0, 'dots', False)
+    po.flower_z(ink, 730, 700, 0.7, 8, 34, 0, 'rings', False)
     end(ink)
 
 
@@ -571,6 +617,8 @@ def s_kite_o(ink):
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=1, arms='up'), (130, 560, 380, 890), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'wow', lvl=1, turn=0.2, tail_up=1.3), (400, 650, 740, 890), 'bottom')
     tiny(ink, 'heart', [(250, 360), (680, 440), (430, 890)])
+    extras(ink, 19, (120, 130, 740, 560), 6, avoid=[(300, 120, 560, 520)], kinds=('bird', 'butterfly', 'bird', 'star', 'cloud'))
+    p3.bird_plain(ink, 640, 300, 0.9)
     end(ink)
 
 
@@ -626,6 +674,12 @@ def s_starry(ink):
     F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'sleep', lvl=1, paws=False, tilt=6), (410, 540, 740, 800), 'bottom')
     sh(ink, blob([(FL - 20, 870), (300, 830), (520, 870), (FRt + 20, 840), (FRt + 20, FB + 20), (FL - 20, FB + 20)], k=0.6), '#fff', 'scales', 18, box=(0, 850, 900, 930))
     tiny(ink, 'heart', [(500, 440), (160, 700), (690, 690)])
+    po.stars_z(ink, 210, 10, (120, 380, 740, 580), avoid=[], size=(7, 11))
+    for (x, y) in ((140, 600), (700, 590)):
+        pr.tuft(ink, x, y + 40, 1.0)
+    p2.crescent(ink, 650, 360, 40, -20)
+    for (x, y) in ((200, 880), (600, 885)):
+        po.flower_z(ink, x, y - 30, 0.5, 6, 30, 30, 'dots', False)
     end(ink)
 
 
@@ -857,6 +911,10 @@ def s_river(ink):
     F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'happy', lvl=1, paws=True), (430, 540, 630, 720), 'bottom')
     sh(ink, blob([(FL - 20, 820), (300, 800), (520, 840), (FRt + 20, 810), (FRt + 20, FB + 20), (FL - 20, FB + 20)], k=0.6), '#fff', 'waves', 18, box=(0, 820, 900, 930))
     tiny(ink, 'heart', [(150, 640), (700, 640), (425, 880)])
+    extras(ink, 30, (120, 120, 740, 330), 5, avoid=[(130, 120, 330, 330), (480, 150, 740, 330)], kinds=('bird', 'butterfly', 'bird', 'star'))
+    p3.bird_plain(ink, 400, 190, 0.9)
+    for (x, y) in ((150, 880), (700, 880), (440, 900)):
+        pr.tuft(ink, x, y, 1.0)
     end(ink)
 
 
@@ -896,4 +954,5 @@ def s_home_o(ink):
         po.flower_z(ink, x, 900 - h, 0.9, 8, R, h, 'dots')
     tiny(ink, 'heart', [(300, 330), (560, 400), (425, 900)])
     tiny(ink, 'paw', [(130, 540)])
+    extras(ink, 132, (140, 120, 560, 330), 4, avoid=[(140, 120, 360, 280)], kinds=('bird', 'butterfly', 'bird', 'cloud'))
     end(ink)

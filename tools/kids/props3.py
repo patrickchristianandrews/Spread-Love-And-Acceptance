@@ -382,3 +382,18 @@ def house(ink, x, y, s=1.0, w=360, h=250, roof_c='#E8806F', smoke=True):
             for k in (-1, 0, 1):
                 g.part(circ(wx + k * 18, -h * 0.74 + 66, 6), c='#F7A8C2', under=False, w=ink.dw * 0.8)
     return g
+
+
+def palm(ink, x, y, s=1.0, lean=1):
+    """a cartoon palm tree (closed fronds); (x, y) the base of the trunk"""
+    with ink.fig(x, y, s, lean < 0) as g:
+        g.part(blob([(-16, 0, 'c'), (-4, -120), (20, -240), (46, -330), (66, -326), (44, -236), (28, -120), (22, 0, 'c')], k=0.8), c='#C98F5A')
+        for yy in (-60, -130, -200, -270):
+            g.line(curve([(-6 + (-yy) * -0.05, yy), (10, yy - 8), (26 + (-yy) * 0.1, yy)]), w=ink.dw * 0.7)
+        for (ang, ln) in ((-160, 120), (-120, 130), (-70, 120), (-20, 130), (20, 120)):
+            v = g.view(56, -330, 1, False, ang)
+            v.part(blob([(0, 0, 'c'), (ln * 0.35, -26), (ln * 0.7, -22), (ln, 8, 'c'), (ln * 0.7, 10), (ln * 0.35, 12)], k=1.0), c='#6FB36A')
+            v.line(Path().M(4, 0).L(ln * 0.9, 6), w=ink.dw * 0.7)
+        for (a, b) in ((50, -312), (70, -308)):
+            g.part(circ(a, b, 11), c='#B07C4D', under=True, w=ink.dw * 0.9)
+    return g

@@ -94,7 +94,7 @@
     ['tol-take-in', 'takein'], ['tol-progress-v1', 'reading'], ['tol-come-back-v1', 'reading'], ['tol-return-v1', 'reading'], ['tol-reading-v1', 'reading'],
     ['tol-focus', 'reading'], ['tol-mode-v1', 'reading'], ['tol-bb-last', 'reading'], ['tol-booktopic-v', 'reading'],
     ['tol-night-garden-v1', 'garden'], ['tol-garden-gifts', 'garden'], ['tol-learnplay-v1', 'games'], ['tol-rewards-v1', 'games'],
-    ['tol-levels-', 'games'], ['tol-arcade-v1', 'games'], ['tol-journey-v1', 'games'], ['tol-bloom-', 'games'], ['tol-xw-', 'games'],
+    ['tol-levels-', 'games'], ['tol-arcade-v1', 'games'], ['tol-coin-v', 'games'], ['tol-journey-v1', 'games'], ['tol-bloom-', 'games'], ['tol-xw-', 'games'],
     ['tol-np-', 'games'], ['tol-qw-', 'games'], ['tol-bb-count', 'games'], ['bears-dojo-', 'games'], ['tol-palcam-', 'games'],
     ['tol-buddies-v1', 'watch'], ['tol-fb-s2-teaser', 'watch'], ['tol-music-video-v1', 'watch'], ['tol-drift-v1', 'watch'],
     ['tol-br-', 'calm'], ['tol-sound-', 'calm'], ['tol-haptic', 'calm'], ['tol-sense-look', 'calm'], ['tol-mini-', 'calm'],

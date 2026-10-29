@@ -239,7 +239,7 @@
       { href: '/pause-and-play.html', code: 'All', title: 'Calm games', note: 'All the calm games in one place, with your level and your garden' },
       { href: '/recheck-drive.html', code: 'New', title: 'The Re-check Drive', note: 'A calm football game: do the small, kind things from the complacency playbook, and the ball moves toward a field goal. No clock, no way to lose' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'Wander a temple garden while Tidbit and Sugarfoot tend it, build your own bear, then step inside for something gentle and always different' },
-      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A cozy 3D coin pusher that shows helpful tips as coins drop, and medallions of every character on the site ride along. Nothing to buy' },
+      { href: '/coin-pusher.html', code: 'New', title: 'Kindness Coin Pusher', note: 'A glowing coin pusher with 50 collectibles to find, cabinet looks to earn and a tip jar of short, useful tips. Nothing to buy' },
       { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Six calm classic games with Tidbit and Sugarfoot: a maze chase, a crossing, a wagon-trail journey, a brick breaker, a catch game and a Home Run Derby' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe. No timers, nothing to lose' },

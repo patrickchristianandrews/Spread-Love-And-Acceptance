@@ -192,10 +192,10 @@ def older_scene_page(i, fn, meta):
     with ink.fig(0, 0, outline=False) as g:
         for sgn in (-1, 1):
             g.part(Q.Path().M(0, 0).L(0, 0), w=0.1) if False else None
-            g.line(curve([(425 + sgn * 330, 1000), (425 + sgn * 345, 992), (425 + sgn * 360, 1000), (425 + sgn * 375, 1008)]), w=ink.dw * 1.1)
-    with ink.fig(95, 1000, 1.0) as g:
+            g.line(curve([(425 + sgn * 305, 1000), (425 + sgn * 320, 992), (425 + sgn * 335, 1000), (425 + sgn * 350, 1008)]), w=ink.dw * 1.1)
+    with ink.fig(112, 1000, 1.0) as g:
         g.part(cast.sparkle4(0, 0, 10, 0.3), w=ink.dw * 0.9)
-    with ink.fig(755, 1000, 1.0) as g:
+    with ink.fig(738, 1000, 1.0) as g:
         g.part(cast.sparkle4(0, 0, 10, 0.3), w=ink.dw * 0.9)
     html = '<div class="prompt">%s</div>' % esc(meta['prompt'])
     return page(html, ink, meta['alt'])

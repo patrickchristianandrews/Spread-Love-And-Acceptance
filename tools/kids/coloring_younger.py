@@ -88,6 +88,28 @@ def hide(ink, kind, pts, size=1.0):
             pass
 
 
+def tufts(ink, pts, sc=1.2):
+    for (x, y) in pts:
+        pr.tuft(ink, x, y, sc)
+
+
+def bloom_row(ink, y, xs, hs=(70, 110), seed=0, cols=('#F7A8C2', '#FFE08A', '#B79CEB')):
+    """flowers standing on a ground line y: x positions xs, heights picked from hs"""
+    rnd = random.Random(seed)
+    for k, x in enumerate(xs):
+        h = rnd.uniform(*hs)
+        pr.flower(ink, x, y - h, rnd.uniform(0.8, 1.0), petals=5 + (k % 2), stem=h, c=cols[k % 3])
+
+
+def sky_bits(ink, birds=(), butter=(), stars=()):
+    for (x, y) in birds:
+        p3.bird_plain(ink, x, y, 1.0)
+    for (x, y, r) in butter:
+        p3.butterfly_plain(ink, x, y, 0.55, r)
+    for (x, y, r) in stars:
+        pr.star5(ink, x, y, r, 8)
+
+
 SCENES = []
 META = []
 
@@ -104,17 +126,21 @@ def scene(caption, game=None, banner='ribbon', alt='', badge='r'):
 @scene('Zoom! My ears have wings!', alt='Tidbit zooming across a hill under a rainbow')
 def s_zoom(ink):
     frame_begin(ink)
-    pr.rainbow(ink, 425, 720, 330, 4, 36)
-    pr.puff(ink, 150, 250, 0.9, n=4)
-    pr.puff(ink, 690, 210, 0.8, n=3)
-    pr.sun(ink, 720, 420, 38)
+    pr.rainbow(ink, 425, 700, 330, 4, 36)
+    pr.puff(ink, 150, 230, 0.9, n=4)
+    pr.puff(ink, 690, 200, 0.8, n=3)
+    pr.sun(ink, 735, 400, 40)
+    sky_bits(ink, birds=((560, 110), (260, 120), (330, 170), (470, 150)), butter=((120, 430, 15), (650, 330, -20)))
     hills(ink, 690, 790)
-    for (x, y) in ((560, 120), (260, 130), (330, 190)):
-        p3.bird_plain(ink, x, y, 1.0)
-    pr.speed_lines(ink, 150, 590, 3, 120, 44)
-    pr.dust(ink, 200, 870, 1.5, 3)
+    # a far hill with two little trees and a fence
+    pr.tree(ink, 120, 700, 0.55)
+    pr.tree(ink, 690, 690, 0.5)
+    pr.fence(ink, 220, 560, 750, 40)
+    pr.speed_lines(ink, 130, 590, 3, 120, 44)
+    pr.dust(ink, 190, 870, 1.5, 3)
     F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'run', 'happy'), (100, 400, 770, 880), 'bottom')
-    ground_deco(ink, 1, 860, 925, [(80, 380, 780, 900)], 4)
+    bloom_row(ink, 925, (110, 240, 380, 520, 650, 740), (50, 80), 3)
+    tufts(ink, [(180, 915), (460, 925), (590, 915)], 1.3)
     frame_end(ink)
 
 
@@ -252,15 +278,18 @@ def s_rocket(ink):
 def s_parade(ink):
     frame_begin(ink)
     pr.bunting(ink, [(62, 140), (250, 205), (425, 160), (610, 205), (788, 140)], 9, 52)
-    pr.puff(ink, 140, 400, 0.9, n=3)
-    pr.puff(ink, 720, 360, 0.8, n=3)
-    hills(ink, 620, 690)
-    p2.flag_pole(ink, 110, 690, 300, '#F2877E')
-    p2.flag_pole(ink, 740, 680, 280, '#8FCBF0')
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'sugarfoot', x, y, s, 'walk', 'happy', ph=0.2, hat='party', flip=True, turn=0.7), (300, 290, 790, 620), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'joy', ph=0.7, hat='crown'), (62, 640, 660, 930), 'bottom')
-    p2.drum(ink, 710, 905, 1.3)
-    p2.sprinkles(ink, 8, 6, (100, 220, 760, 310), avoid=[], kinds=('star', 'sparkle', 'heart'), size=(12, 20), minsep=90)
+    pr.puff(ink, 130, 360, 0.8, n=3)
+    pr.puff(ink, 730, 330, 0.8, n=3)
+    p2.flag_pole(ink, 110, 760, 340, '#F2877E')
+    p2.flag_pole(ink, 745, 760, 340, '#8FCBF0')
+    for (x, y, c, t) in ((190, 330, '#F2877E', -8), (660, 340, '#B79CEB', 8)):
+        pr.balloon(ink, x, y, 0.9, c, 120, t)
+    hills(ink, 760, 840)
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up', hat='crown', wag=1), (70, 330, 440, 910), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='chest', hat='party'), (400, 330, 780, 910), 'bottom')
+    p2.drum(ink, 592, 905, 1.45)
+    p2.sprinkles(ink, 8, 9, (100, 240, 760, 700), avoid=[(70, 330, 780, 910)], kinds=('star', 'sparkle', 'heart'), size=(12, 20), minsep=70)
+    tufts(ink, [(110, 925), (760, 925)], 1.3)
     frame_end(ink)
 
 
@@ -292,14 +321,20 @@ def s_bed(ink):
 @scene('Sniff slow. Smells like spring.', alt='Sugarfoot sniffing a giant flower')
 def s_sniff(ink):
     frame_begin(ink)
-    pr.sun(ink, 690, 170, 50)
-    pr.puff(ink, 170, 170, 0.8, n=3)
-    hills(ink, 760, 840)
-    pr.flower(ink, 250, 540, 3.2, petals=7, stem=380, c='#F7A8C2', cc='#FFD060')
+    pr.sun(ink, 690, 170, 52)
+    pr.puff(ink, 160, 160, 0.9, n=3)
+    pr.puff(ink, 480, 260, 0.7, n=3)
+    sky_bits(ink, birds=((340, 110), (420, 160), (600, 290)), butter=((520, 410, 20), (600, 520, -15), (110, 330, 10)))
+    hills(ink, 740, 830)
+    pr.tree(ink, 700, 740, 0.7)
+    pr.fence(ink, 360, 790, 800, 48)
+    pr.flower(ink, 250, 520, 3.2, petals=7, stem=380, c='#F7A8C2', cc='#FFD060')
+    pr.flower(ink, 90, 640, 1.5, petals=6, stem=260, c='#FFE08A', cc='#F7A8C2')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'calm', tilt=-9, arms='down'), (340, 360, 770, 900), 'bottom')
     with ink.fig(0, 0, outline=False) as g:
         g.line(curve([(520, 340), (480, 400), (530, 450), (490, 500)]), w=ink.dw * 0.7, dash='3 9')
-    ground_deco(ink, 10, 880, 935, [(320, 800, 780, 900)], 3)
+    bloom_row(ink, 925, (130, 200, 300, 790, 740), (50, 90), 5)
+    tufts(ink, [(250, 915), (330, 925)], 1.3)
     frame_end(ink)
 
 
@@ -458,17 +493,24 @@ def s_kite(ink):
 @scene('Wheee! Again! Again!', alt='Tidbit and Sugarfoot sledding in scarves')
 def s_sled(ink):
     frame_begin(ink)
-    pr.puff(ink, 170, 180, 0.9, n=4)
-    pr.puff(ink, 660, 140, 0.8, n=3)
-    for (x, y, r) in ((140, 330, 22), (690, 360, 26), (260, 470, 18), (600, 520, 20), (110, 620, 24), (720, 650, 18), (420, 300, 16)):
+    pr.puff(ink, 160, 170, 0.9, n=4)
+    pr.puff(ink, 650, 140, 0.8, n=3)
+    pr.puff(ink, 420, 300, 0.7, n=3)
+    for (x, y, r) in ((130, 330, 24), (700, 380, 28), (280, 240, 18), (560, 220, 20), (110, 520, 22), (730, 560, 20), (420, 160, 16), (330, 420, 14), (600, 430, 16)):
         pr.snowflake(ink, x, y, r, 12)
-    pr.hill(ink, [(FL - 20, 700), (300, 640), (560, 740), (FRt + 20, 700)], bottom=FB + 20, c='#FFFFFF')
-    pr.pine(ink, 110, 690, 1.7, True)
-    pr.pine(ink, 730, 700, 1.4, True)
-    pr.hill(ink, [(FL - 20, 840), (300, 800), (560, 860), (FRt + 20, 820)], bottom=FB + 20, c='#EAF4FF')
-    p3.sled(ink, 425, 900, 1.05, 400)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'joy', arms='both_up', scarf=True, hat='beanie'), (150, 330, 430, 830), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up', scarf=True, hat='beanie'), (420, 330, 700, 830), 'bottom')
+    sky_bits(ink, birds=((220, 110),))
+    pr.hill(ink, [(FL - 20, 620), (300, 560), (560, 650), (FRt + 20, 590)], bottom=FB + 20, c='#FFFFFF')
+    pr.pine(ink, 100, 620, 1.9, True)
+    pr.pine(ink, 740, 630, 1.6, True)
+    pr.pine(ink, 640, 600, 1.0, True)
+    pr.hill(ink, [(FL - 20, 800), (300, 760), (560, 820), (FRt + 20, 780)], bottom=FB + 20, c='#EAF4FF')
+    p3.sled(ink, 425, 905, 1.1, 460)
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'joy', arms='both_up', scarf=True, hat='beanie'), (80, 330, 440, 850), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up', scarf=True, hat='beanie'), (410, 330, 780, 850), 'bottom')
+    tufts(ink, [(130, 925), (730, 925)], 1.2)
+    sky_bits(ink, birds=((330, 230), (540, 330)), butter=())
+    for (x, y, r) in ((300, 540, 14), (560, 520, 12)):
+        pr.snowflake(ink, x, y, r, 5)
     frame_end(ink)
 
 
@@ -476,14 +518,17 @@ def s_sled(ink):
 @scene('Taxi! Next stop: snacks.', alt='Sugarfoot riding in a wagon pulled by Tidbit')
 def s_wagon(ink):
     frame_begin(ink)
-    pr.sun(ink, 150, 180, 54)
-    pr.puff(ink, 400, 160, 1.0, n=4)
-    p3.hot_air_balloon(ink, 650, 470, 1.4, 190)
-    hills(ink, 680, 770)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up', hat='sun'), (60, 360, 470, 780), 'bottom')
-    p3.wagon(ink, 270, 900, 1.35, 360, 110)
-    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'happy', turn=0.4), (500, 640, 790, 910), 'bottom')
-    ground_deco(ink, 21, 895, 935, [(60, 780, 790, 920)], 3, kinds=('tuft',))
+    pr.sun(ink, 150, 170, 54)
+    pr.puff(ink, 400, 150, 1.0, n=4)
+    p3.hot_air_balloon(ink, 660, 400, 1.2, 170)
+    sky_bits(ink, birds=((300, 260), (520, 250), (240, 330)), butter=((130, 450, 12),))
+    hills(ink, 640, 740)
+    pr.fence(ink, 62, 400, 700, 52)
+    pr.tree(ink, 690, 720, 0.9)
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up', hat='sun'), (60, 360, 440, 780), 'bottom')
+    p3.wagon(ink, 250, 905, 1.3, 360, 110)
+    F(ink, lambda i, x, y, s: cast.pup_side(i, 'tidbit', x, y, s, 'walk', 'happy', turn=0.4, tail_up=1.2), (470, 560, 790, 910), 'bottom')
+    bloom_row(ink, 925, (130, 560, 640, 750), (40, 70), 7)
     frame_end(ink)
 
 # 22 ------------------------------------------------------------------------------------------
@@ -507,12 +552,18 @@ def s_rain(ink):
 @scene('Blow slow. Pop fast!', alt='Sugarfoot blowing big bubbles')
 def s_bubbles(ink):
     frame_begin(ink)
-    pr.sun(ink, 700, 160, 46)
+    pr.sun(ink, 700, 150, 46)
+    pr.puff(ink, 170, 170, 0.8, n=3)
+    sky_bits(ink, birds=((330, 110), (460, 90), (250, 260)), butter=((120, 420, 12),))
     hills(ink, 740, 820)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'wow', mouth='o', arms='up', tilt=-5), (60, 380, 480, 900), 'bottom')
-    p3.wand(ink, 470, 560, 1.0, 30)
-    pr.bubbles(ink, [(520, 480, 70), (600, 330, 52), (680, 520, 40), (560, 220, 34), (700, 250, 28), (460, 360, 24), (660, 690, 34), (590, 640, 22), (740, 400, 20), (430, 200, 18)])
-    ground_deco(ink, 23, 880, 935, [(60, 780, 480, 900)], 4)
+    pr.tree(ink, 120, 740, 0.8)
+    pr.bush(ink, 700, 800, 1.2)
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'wow', mouth='o', arms='up', tilt=-5), (60, 380, 460, 910), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='both_up', tilt=5), (520, 600, 780, 910), 'bottom')
+    p3.wand(ink, 450, 590, 1.0, 30)
+    pr.bubbles(ink, [(510, 500, 70), (600, 330, 52), (690, 480, 40), (560, 230, 34), (700, 270, 28), (450, 390, 24), (440, 230, 18), (740, 380, 20), (640, 590, 22)])
+    bloom_row(ink, 925, (480, 770, 130, 320), (40, 70), 9)
+    tufts(ink, [(430, 920), (610, 925)], 1.3)
     frame_end(ink)
 
 
@@ -522,14 +573,20 @@ def s_boat(ink):
     frame_begin(ink)
     pr.sun(ink, 690, 170, 60)
     pr.puff(ink, 190, 190, 1.0, n=4)
-    for (x, y) in ((340, 130), (520, 110), (430, 200)):
-        p3.bird_plain(ink, x, y, 1.0)
-    p3.waves(ink, 560, 14, 1, 70, '#BFE0F7')
-    p3.sailboat(ink, 425, 800, 1.2, 380, True, False)
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'happy', paws=False, hat='sun'), (110, 480, 450, 800), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'joy', paws=False), (400, 520, 740, 800), 'bottom')
-    p3.sailboat(ink, 425, 800, 1.2, 380, False, True)
-    p3.waves(ink, 830, 14, 3, 50, '#BFE0F7')
+    pr.puff(ink, 500, 120, 0.7, n=3)
+    sky_bits(ink, birds=((340, 250), (270, 330), (440, 300), (600, 330)))
+    # a far island with a palm tree and a lighthouse-like tower
+    with ink.fig(0, 0) as g:
+        g.part(blob([(80, 470, 'c'), (180, 420), (330, 410), (440, 470, 'c')], k=0.8), c='#F7E8C4')
+    p3.palm(ink, 250, 440, 0.55)
+    p3.waves(ink, 470, 12, 1, 70, '#BFE0F7')
+    p3.sailboat(ink, 640, 560, 0.5, 300)
+    p3.waves(ink, 640, 14, 1, 60, '#BFE0F7')
+    p3.sailboat(ink, 425, 820, 1.35, 380, True, False)
+    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'happy', paws=False, hat='sun'), (80, 500, 450, 820), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'joy', paws=False), (400, 540, 770, 820), 'bottom')
+    p3.sailboat(ink, 425, 820, 1.35, 380, False, True)
+    p3.waves(ink, 840, 14, 2, 46, '#BFE0F7')
     frame_end(ink)
 
 # 25 ------------------------------------------------------------------------------------------
@@ -552,8 +609,11 @@ def s_treehouse(ink):
         with ink.fig(0, 0) as g:
             lf = g.view(x, y, 1.6, False, a)
             lf.part(blob([(0, 0, 'c'), (14, -12), (34, 0, 'c'), (14, 12)], k=1.0), c='#7DBB6E')
-    p3.bird_plain(ink, 300, 120, 1.0)
-    ground_deco(ink, 25, 880, 935, [(300, 800, 560, 900)], 4)
+    sky_bits(ink, birds=((300, 120), (560, 100)), butter=((690, 430, 15), (130, 400, -10)))
+    pr.bush(ink, 130, 910, 1.3)
+    pr.bush(ink, 730, 915, 1.3)
+    pr.fence(ink, 62, 250, 925, 44)
+    bloom_row(ink, 925, (300, 570, 640, 220), (40, 70), 11)
     frame_end(ink)
 
 # 26 ------------------------------------------------------------------------------------------
@@ -570,6 +630,10 @@ def s_garden(ink):
     for k in range(5):
         pr.raindrop(ink, 655 + k * 14, 770 + k * 30, 0.5)
     ground_deco(ink, 26, 900, 935, [], 3, kinds=('tuft', 'flower'))
+    sky_bits(ink, birds=((330, 110), (440, 150), (560, 290)), butter=((470, 400, 15), (150, 330, -10), (690, 600, 20)))
+    pr.puff(ink, 430, 230, 0.7, n=3)
+    pr.fence(ink, 380, 790, 800, 44)
+    pr.tree(ink, 640, 790, 0.7)
     frame_end(ink)
 
 
@@ -579,12 +643,16 @@ def s_sand(ink):
     frame_begin(ink)
     pr.sun(ink, 420, 170, 56)
     pr.puff(ink, 170, 200, 0.9, n=4)
+    pr.puff(ink, 660, 260, 0.8, n=3)
+    sky_bits(ink, birds=((250, 100), (560, 120), (330, 300), (600, 380)))
     p3.waves(ink, 380, 14, 2, 56, '#BFE0F7')
+    p3.sailboat(ink, 600, 430, 0.5, 300)
     with ink.fig(0, 0) as g:
         g.part(blob([(30, 600, 'c'), (200, 560), (425, 600), (640, 550), (840, 600, 'c'), (840, 1000, 'c'), (30, 1000, 'c')], k=0.8), c='#F7E8C4')
-    p3.sandcastle(ink, 425, 870, 1.3, 300)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up', hat='sun'), (80, 520, 340, 900), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='up'), (510, 520, 780, 900), 'bottom')
+    p3.palm(ink, 740, 620, 0.8, -1)
+    p3.sandcastle(ink, 425, 870, 1.35, 300)
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', arms='up', hat='sun'), (70, 500, 340, 900), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', arms='up'), (510, 500, 780, 900), 'bottom')
     p3.bucket(ink, 190, 935, 0.8)
     p3.shovel(ink, 670, 930, 0.9, 20)
     hide(ink, 'shell', [(260, 640), (600, 650), (130, 880), (740, 880), (440, 905)], 1.2)
