@@ -770,9 +770,13 @@ def alltools_pages(book, kind='book', epub=False):
                 sorted(ids - set(order)) or sorted(i for i in ids if i not in lines), sorted(set(order) - ids)))
     tl = [reg[i] for i in T['order_tools'] if i in reg]
     wl = [reg[i] for i in T['order_workpapers'] if i in reg]
-    nd = (kind == 'pocket') and not epub  # book30: in the narrow pocket columns the domain is said once, in the lede
-    lede = ('Every tool on the website, free, with no account. ' + ('Every address below starts with spreadloveandacceptance.com. ' if nd else '') + ('Tap a name to open it. ' if epub else 'Point your phone’s camera at a code to open it. ') + 'What you type stays on your device.')
-    wlede = ('The worksheets and plans on the website, free to fill out on screen or print. They are kept apart from the tools above, and every one has ' + ('a link' if epub else 'a code') + '.')
+    nd = kind != 'workbook' and not epub  # book30: in the two-column grids the domain is said once, in the lede, and each code shows its path
+    if nd:
+        lede = 'Every tool on the website, free, with no account. Scan a code, or type spreadloveandacceptance.com and the path under it. What you type stays on your device.'
+        wlede = 'The worksheets and plans, free to fill out on screen or print, kept apart from the tools. Scan a code, or type spreadloveandacceptance.com and the path under it.'
+    else:
+        lede = ('Every tool on the website, free, with no account. ' + ('Tap a name to open it. ' if epub else 'Point your phone’s camera at a code to open it. ') + 'What you type stays on your device.')
+        wlede = ('The worksheets and plans on the website, free to fill out on screen or print. They are kept apart from the tools above, and every one has ' + ('a link' if epub else 'a code') + '.')
     col, tint = book['color'], book['tint']
     if kind == 'workbook':
         body = ('<h1 class="pe-back-h">All the free tools</h1><p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools</h2><div class="ps-tg">%s</div>'
@@ -1028,7 +1032,7 @@ def build_book(book, where):
     for i, slug in enumerate(chs):
         e = B.entry(slug)
         num, lab = chapter_label(slug, book)
-        toc.append(B.toc_row(slug, esc(num or 'Afterword'), esc(ch_title(slug)), 'is-ch'))
+        toc.append(B.toc_row(slug, esc(num or 'Afterword'), esc(ch_title(slug)).replace('check-in', '<span class="pe-keep">check-in</span>'), 'is-ch'))  # book30: never "check-" / "in"
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
         art = s_chapter(e, book, here, where, namer, panels=True)

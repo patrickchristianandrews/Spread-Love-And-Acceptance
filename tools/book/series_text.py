@@ -328,7 +328,7 @@ def strip_inline_addresses(body):
                   lambda m: m.group(1) if 'spreadloveandacceptance.com' in m.group(2) else m.group(1) + addr, body, flags=re.S)
 
 
-SKIP_LINK = re.compile(r'class="(?:dig|book-fig-zoom)|data-u="series"')
+SKIP_LINK = re.compile(r'class="(?:dig|book-fig-zoom)|data-u="series"|data-noqr')  # book30: data-noqr, a link whose address is already printed beside it
 NO_QR_PATH = re.compile(r'^/(?:research\.html|five-pillars\.html|glossary\.html|assets/|book/[a-z0-9-]+\.html)')
 QR_HOLDERS = ('pe-use', 'ps-deeper', 'pe-noprint', 'no-print', 'pe-xref')
 
@@ -372,7 +372,7 @@ def _blocks(body):
     return sorted(out)
 
 
-WIDE_PIECE = 27  # characters of an address piece that fit one column of a "Scan to open" panel (print.css: 6.5 pt mono, 3 columns)
+WIDE_PIECE = 20  # characters of an address piece that fit one column of a "Scan to open" panel (print.css: 6.5 pt mono, 4 columns; book30: the panel shows paths, the domain is said once in its heading)
 NEAR = 1500  # characters of printed text: closer than this, two codes are on the same page or facing pages
 
 
@@ -464,12 +464,13 @@ def scan_panels(body, qrfn, classify, short_address, addr_html, esc):
         recent.extend((at, t, lab) for t, lab in items)
         if not items:
             continue
+        path = lambda t: short_address(t).replace('spreadloveandacceptance.com', '', 1) or '/'
         # finalfix15: an address with a piece too long for one column (it can break only after "/" or ".") gets two columns
-        wide = lambda t: max(len(x) for x in re.findall(r'spreadloveandacceptance\.com|/[^/?]+|\?.*|/|[^/?]+', short_address(t))) > WIDE_PIECE
+        wide = lambda t: max(len(x) for x in re.findall(r'/[^/?]+/?|\?.*|[^/?]+', short_address(t).replace('spreadloveandacceptance.com', '', 1) or '/')) > WIDE_PIECE
         lis = ''.join('<li%s>%s<span class="ps-scan-t">%s</span><span class="ps-scan-u">%s</span></li>' % (
-            ' class="ps-wide"' if wide(t) else '', qrfn(t), lab, addr_html(short_address(t))) for t, lab in items)
+            ' class="ps-wide"' if wide(t) else '', qrfn(t), lab, addr_html(path(t))) for t, lab in items)
         count += len(items)
-        inserts.append((at, '<div class="ps-scan pe-only"><p class="ps-scan-k">Scan to open</p><ul class="ps-scan-list">%s</ul></div>' % lis))
+        inserts.append((at, '<div class="ps-scan pe-only"><p class="ps-scan-k">Scan to open<span class="ps-scan-dom">, or type spreadloveandacceptance.com and the path</span></p><ul class="ps-scan-list">%s</ul></div>' % lis))
     for at, h in sorted(inserts, reverse=True):
         body = body[:at] + h + body[at:]
     return body, count

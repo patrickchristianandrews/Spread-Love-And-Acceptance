@@ -144,7 +144,7 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-scan { margin: 2.4mm 0 3.4mm; padding: 1.8mm 0 0; border-top: .5pt dashed var(--pc); break-inside: auto; background: #fff; }
 .ps-scan-k { break-after: avoid; }
 .ps-scan-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.6pt; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.4mm; }
-.ps-scan-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2mm 1.4mm; }
+.ps-scan-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2mm 2.6mm; }
 .ps-scan-list li { margin: 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; break-inside: avoid; }
 .ps-scan-list .pe-qr { margin: 0 0 .8mm; }
 .ps-scan-t { font-size: 6.9pt; line-height: 1.22; color: var(--ink); overflow-wrap: anywhere; }
@@ -264,7 +264,7 @@ body { font-size: 11pt; line-height: 1.55; }
    The codes' columns are wide enough for "spreadloveandacceptance." at this size (4 columns of 28.7 mm). */
 .ps-scan-u, .pe-use-u, .ps-addr, .bh-u, .wt-u, .pe-u, .pk-addr { overflow-wrap: normal !important; word-break: normal !important; }
 .ps-scan-u .pe-nb, .pe-use-u .pe-nb, .ps-addr .pe-nb, .bh-u .pe-nb, .wt-u .pe-nb, .pe-u .pe-nb, .pk-addr .pe-nb { white-space: nowrap !important; overflow-wrap: normal !important; }
-.ps-scan-list { column-gap: 1mm; }
+.ps-scan-list { column-gap: 2mm; }
 .ps-scan-u { font-size: 6.5pt; }
 /* an address piece longer than 24 characters ("neurodivergent-relationships") takes two columns (series_text.WIDE_PIECE) */
 .ps-scan-list li.ps-wide { grid-column: span 2; }
@@ -313,9 +313,9 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-alltools .pe-back-lede { margin-bottom: 2.4mm; font-size: 8.8pt; line-height: 1.38; }
 .ps-tg-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.6mm; }
 .ps-tg { display: grid; grid-template-columns: 1fr 1fr; gap: 0 5mm; }
-.ps-tg-c { display: flex; gap: 2.4mm; align-items: center; break-inside: avoid; padding: .5mm 0; border-bottom: .4pt dotted #CDBF98; }
-.ps-tg-c .pe-qr { flex: 0 0 13.2mm; width: 13.2mm; height: 13.2mm; background: #fff; }
-.ps-tg-c .pe-qr svg { width: 13.2mm; height: 13.2mm; display: block; }
+.ps-tg-c { display: flex; gap: 2.4mm; align-items: center; break-inside: avoid; padding: .4mm 0; border-bottom: .4pt dotted #CDBF98; }
+.ps-tg-c .pe-qr { flex: 0 0 13mm; width: 13mm; height: 13mm; background: #fff; }
+.ps-tg-c .pe-qr svg { width: 13mm; height: 13mm; display: block; }
 .ps-tg-t { display: flex; flex-direction: column; min-width: 0; }
 .ps-tg-t b { font-family: "Fraunces", serif; font-weight: 600; font-size: 8pt; line-height: 1.15; color: var(--ink); }
 .ps-tg-t b i { font-style: normal; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6pt; letter-spacing: .06em; color: var(--pc); }
@@ -328,10 +328,19 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-alltools-wp .ps-tg-d { font-size: 7.4pt; }
 .pk-book .ps-alltools .pe-back-lede { font-size: 7.6pt; margin-bottom: 1.6mm; }
 .pk-book .ps-tg { gap: 0 2mm; }
-.pk-book .ps-tg-c { gap: 1.4mm; padding: .35mm 0; }
-.pk-book .ps-tg-c .pe-qr, .pk-book .ps-tg-c .pe-qr svg { width: 12.4mm; height: 12.4mm; flex-basis: 12.4mm; }
+.pk-book .ps-tg-c { gap: 1.4mm; padding: .25mm 0; }
+.pk-book .ps-tg-c .pe-qr, .pk-book .ps-tg-c .pe-qr svg { width: 11.8mm; height: 11.8mm; flex-basis: 11.8mm; }
 .pk-book .ps-tg-t b { font-size: 6.9pt; }
 .pk-book .ps-tg-d { font-size: 6pt; }
 .pk-book .ps-tg-u { font-size: 6.5pt; letter-spacing: -.02em; }
 .pk-book .ps-alltools-wp .ps-tg-c { padding: 1.1mm 0; }
 .pk-book .ps-alltools-wp .ps-tg-c .pe-qr, .pk-book .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 12.4mm; height: 12.4mm; flex-basis: 12.4mm; }
+
+/* book30: the panel heading says the domain once; each code shows its path (6.5 pt, breaks only before a "/") */
+.ps-scan-dom { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--soft); }
+/* book30 (proofread E1-03, E1-16): the end-of-book lists a little tighter, and a list heading and its lede stay with the first entry */
+.pe-fb-wt .wt-list li { padding: 1.15mm 0; }
+.pe-fb-wt .wt-lede { break-after: avoid; }
+.pe-fb-wt .wt-list li:first-child { break-before: avoid; }
+/* "Your first month": rows a little shorter, so its codes stay on the table's page */
+.ps-month-t th, .ps-month-t td { padding: 1.4mm 2mm 1.4mm 0; }

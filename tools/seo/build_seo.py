@@ -1218,6 +1218,8 @@ def main():
     write_sitemap(report)
     write_llms(report)
     guard()
+    # the Google Tag Manager tag goes back on any page a builder rewrote (private pages stay without it)
+    subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'analytics', 'gtm.py')], check=True)
     print('pages tagged: %d; sitemap: %d urls; robots.txt, llms.txt and llms-full.txt written; app-lock head line changed on %d pages' % (len(report), len(report), locks))
 
 

@@ -21,7 +21,7 @@
 .pk-book .ps-copy-in { font-size: 7.1pt; line-height: 1.42; }
 .pk-book .ps-copy-in p { margin: 0 0 1.7mm; }
 .pk-toc h1 { font-size: 17pt !important; margin: 0 0 3mm; }
-.pk-toc .pe-toc-row a { padding: .7mm 0; }
+.pk-toc .pe-toc-row a { padding: .45mm 0; }
 .pk-toc .pe-toc-t { font-size: 9pt; }
 .pk-toc .pe-toc-s { font-size: 7.4pt; color: var(--soft); font-style: italic; }
 .pk-toc .pe-toc-l { flex-basis: 9mm; }
@@ -85,7 +85,7 @@
 .pk-online .pe-qr svg { width: 20mm; height: 20mm; }
 .pk-online p { margin: 0 !important; font-size: 7.8pt; line-height: 1.35; color: var(--soft); }
 .pk-online strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: 9pt; color: var(--ink); }
-.pk-addr { display: block; margin-top: .6mm; font-size: 6.4pt !important; overflow-wrap: anywhere; }
+.pk-addr { display: block; margin-top: .6mm; font-size: 6.5pt !important; overflow-wrap: anywhere; }
 .pk-addr .pe-nb { white-space: normal; }
 
 /* ---------- the back ---------- */
@@ -122,3 +122,7 @@
 /* finalfix15: an address breaks only after a "/" or a "." (see print.css) */
 .pk-addr { overflow-wrap: normal !important; }
 .pk-addr .pe-nb { white-space: nowrap !important; }
+
+/* book30 (proofread E1-01): the situation count sits on the section's own line, so the whole contents fits on one page */
+.pk-toc .pe-toc-s { display: inline !important; margin: 0 0 0 1.4mm !important; }
+.pk-toc .pe-toc-s::before { content: "· "; }

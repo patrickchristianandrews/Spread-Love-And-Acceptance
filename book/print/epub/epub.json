@@ -3,7 +3,7 @@
   "book-1-know-yourself-kindly": {
    "file": "book/print/epub/book-1-know-yourself-kindly.epub",
    "kind": "book",
-   "bytes": 1269739,
+   "bytes": 1269856,
    "mb": 1.21,
    "identifier": "urn:uuid:d00c2d3a-15af-5fff-88f2-45d53e666c2f",
    "chapters": 7,
@@ -21,7 +21,7 @@
   "book-2-heal-and-steady": {
    "file": "book/print/epub/book-2-heal-and-steady.epub",
    "kind": "book",
-   "bytes": 1130590,
+   "bytes": 1136915,
    "mb": 1.08,
    "identifier": "urn:uuid:b773ad2f-e4bf-5fb5-bc38-0cdc86267693",
    "chapters": 7,
@@ -57,7 +57,7 @@
   "book-4-share-the-load": {
    "file": "book/print/epub/book-4-share-the-load.epub",
    "kind": "book",
-   "bytes": 1120320,
+   "bytes": 1119472,
    "mb": 1.07,
    "identifier": "urn:uuid:7663a143-8376-5290-b9df-e8c52e039fa0",
    "chapters": 6,
@@ -75,8 +75,8 @@
   "pocket-the-logic-behind-it": {
    "file": "book/print/epub/pocket-the-logic-behind-it.epub",
    "kind": "pocket",
-   "bytes": 319174,
-   "mb": 0.3,
+   "bytes": 322162,
+   "mb": 0.31,
    "identifier": "urn:uuid:33b0bed3-99e8-53b0-8a56-024abff9a832",
    "chapters": 9,
    "figures": 0,
@@ -93,7 +93,7 @@
   "boxset-complete-series": {
    "file": "book/print/epub/boxset-complete-series.epub",
    "kind": "boxset",
-   "bytes": 4007195,
+   "bytes": 4007340,
    "mb": 3.82,
    "identifier": "urn:uuid:53207083-e866-53c9-a95c-fc8c179971bd",
    "chapters": 36,

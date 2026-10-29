@@ -92,3 +92,8 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .ps-alltools-one .ps-tg-d { font-size: 6.8pt; }
 .ps-alltools-one .ps-tg-u { font-size: 7pt; }
 .ps-alltools-one .ps-tg-h { margin-top: 2.6mm; }
+
+/* book30 (proofread E1-02, E1-30): "Week 0" on one line, shorter rows, so both "At the end" boxes stay on the planner page */
+.wb-six-t td:nth-child(1) { white-space: nowrap; width: 16mm; }
+.wb-six-t td { padding: 2.6mm 2mm; }
+.wb-six-t { margin: 3mm 0 4mm; }

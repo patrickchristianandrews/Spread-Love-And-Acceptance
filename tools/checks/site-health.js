@@ -6,7 +6,7 @@
 //   node tools/checks/site-health.js --verbose  # list every finding (default lists the first 15 per group)
 //   node tools/checks/site-health.js --warn     # also print advisories (never affect the exit code)
 //
-// Groups: js, json, undef, jsonld, links, assets, sitemap, og, manifest, sw, exclude, size, head
+// Groups: js, json, undef, jsonld, links, assets, sitemap, og, manifest, sw, exclude, size, head, gtm
 //   js        every .js file passes `node --check` (so no syntax error ships), and every inline <script>
 //             in the pages parses
 //   json      every .json and .webmanifest file parses
@@ -530,6 +530,20 @@ function checkHead() {
 
 const t0 = Date.now();
 console.log('site-health: ' + pages.length + ' pages, ' + all.length + ' files\n');
+// ---------- analytics tag ----------
+// gtm: every published page carries the owner's Google Tag Manager tag (tools/analytics/gtm.py puts it there), and the
+// private pages in tools/analytics/private-pages.json carry no analytics at all (no tag manager, no Google Analytics),
+// as the privacy policy promises.
+function checkGtm() {
+  const problems = [];
+  const r = require('child_process').spawnSync('python3', [path.join(ROOT, 'tools/analytics/gtm.py'), '--check'], { encoding: 'utf8' });
+  (r.stdout || '').split('\n').filter(l => /^(MISSING|PRIVATE)/.test(l)).forEach(l => problems.push(l));
+  if (r.status !== 0 && !problems.length) problems.push('gtm.py --check failed: ' + (r.stderr || '').trim().slice(0, 200));
+  const priv = JSON.parse(read('tools/analytics/private-pages.json'));
+  priv.pages.forEach(f => { if (exists(f) && /googletagmanager\.com\/gtag|G-NKC6CQ9S66/.test(read(f))) problems.push(f + ': private page loads Google Analytics'); });
+  report('gtm', problems, 'tag on every page but the ' + priv.pages.length + ' private ones and the fill-in worksheets');
+}
+
 if (on('js')) checkJs();
 if (on('json')) checkJson();
 if (on('undef')) checkUndef();
@@ -543,6 +557,7 @@ if (on('sw')) checkSw();
 if (on('exclude')) checkExclude();
 if (on('size')) checkSize();
 if (on('head')) checkHead();
+if (on('gtm')) checkGtm();
 if (WARN && advisories.length) { console.log('\nadvisories (do not fail the run):'); advisories.forEach(a => console.log('  ' + a)); }
 console.log('\n' + (failed ? 'FAILED: ' + failed + ' problem(s)' : 'PASSED') + ' in ' + ((Date.now() - t0) / 1000).toFixed(1) + ' s');
 process.exit(failed ? 1 : 0);
