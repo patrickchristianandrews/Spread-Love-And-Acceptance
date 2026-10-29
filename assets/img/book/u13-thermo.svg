@@ -26,7 +26,7 @@
 <rect x="62" y="522" width="24" height="20" rx="0" fill="#E9C77A"/>
 <rect x="28" y="598" width="484" height="52" rx="12" fill="#FFFFFF" stroke="#8E3B47" stroke-width="1.5" stroke-dasharray="6 5"/>
 <path d="M46 616.0 L62 632.0 M62 616.0 L46 632.0" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="76" y="630" font-size="19" font-weight="bold" fill="#8E3B47">Letting rip doesn’t empty it. It feeds it.</text>
+<text x="76" y="630" font-size="19" font-weight="bold" fill="#8E3B47">Shouting doesn’t empty it. It feeds it.</text>
 <rect x="28" y="662" width="484" height="82" rx="12" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
 <text x="46" y="694" font-size="19" font-weight="bold" fill="#3E6B4C">Once cooler: say it, don’t throw it.</text>
 <text x="46" y="722" font-size="19">Then repair any sharp moments.</text>

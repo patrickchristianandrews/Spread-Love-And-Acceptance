@@ -323,7 +323,7 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-tg-u { font-family: "IBM Plex Mono", monospace; font-size: 6.5pt; line-height: 1.18; color: var(--ink); margin-top: .3mm; overflow-wrap: normal; }
 .ps-tg-u .pe-nb { white-space: nowrap; }
 .ps-alltools-wp .ps-tg-c { padding: 1.2mm 0; }
-.ps-alltools-wp .ps-tg-c .pe-qr, .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 13.2mm; height: 13.2mm; flex-basis: 13.2mm; }
+.ps-alltools-wp .ps-tg-c .pe-qr, .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 15mm; height: 15mm; flex-basis: 15mm; }
 .ps-alltools-wp .ps-tg-t b { font-size: 8.6pt; }
 .ps-alltools-wp .ps-tg-d { font-size: 7.4pt; }
 .pk-book .ps-alltools .pe-back-lede { font-size: 7.6pt; margin-bottom: 1.6mm; }
@@ -334,12 +334,12 @@ body { font-size: 11pt; line-height: 1.55; }
 .pk-book .ps-tg-d { font-size: 6pt; }
 .pk-book .ps-tg-u { font-size: 6.5pt; letter-spacing: -.02em; }
 .pk-book .ps-alltools-wp .ps-tg-c { padding: 1.1mm 0; }
-.pk-book .ps-alltools-wp .ps-tg-c .pe-qr, .pk-book .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 12.4mm; height: 12.4mm; flex-basis: 12.4mm; }
+.pk-book .ps-alltools-wp .ps-tg-c .pe-qr, .pk-book .ps-alltools-wp .ps-tg-c .pe-qr svg { width: 14mm; height: 14mm; flex-basis: 14mm; }
 
 /* book30: the panel heading says the domain once; each code shows its path (6.5 pt, breaks only before a "/") */
 .ps-scan-dom { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--soft); }
 /* book30 (proofread E1-03, E1-16): the end-of-book lists a little tighter, and a list heading and its lede stay with the first entry */
-.pe-fb-wt .wt-list li { padding: 1.15mm 0; }
+.pe-fb-wt .wt-list li { padding: .8mm 0; }
 .pe-fb-wt .wt-lede { break-after: avoid; }
 .pe-fb-wt .wt-list li:first-child { break-before: avoid; }
 /* "Your first month": rows a little shorter, so its codes stay on the table's page */

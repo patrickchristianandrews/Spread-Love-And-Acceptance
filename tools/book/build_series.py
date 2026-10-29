@@ -918,7 +918,7 @@ SHOWCASE = [
     ('tools', 'Tools for one person, or for two', 'Every free tool in one place, starting with the ones you can use on your own.', '/tools.html', 'tools'),
     ('deep', 'The expanded version', 'Each chapter in this book has an expanded version online, with more research, more examples and more to try.', '/book/', 'book'),
     ('arcade', 'Tidbit and Sugarfoot’s arcade', 'Six calm classic games, including the Home Run Derby. Play as either pup, and there’s no game over.', '/frequency-journey.html#derby', 'pups'),
-    ('coins', 'Kindness Coin Pusher', 'A cozy 3D coin pusher. A short, useful tip slides up now and then as the coins drop.', '/coin-pusher.html', 'coin'),
+    ('coins', 'Kindness Coin Pusher', 'A glowing coin pusher with 50 collectibles to find and a tip jar of short, useful tips. Nothing to buy.', '/coin-pusher.html', 'coin'),
     ('garden', 'The Night Garden', 'A calm breathing game. A flower blooms with every slow breath, and there are fireflies to guide and a lily pond to fill.', '/night-garden.html', 'garden'),
     ('app', 'The free app', 'Put it on your phone or computer in a couple of taps. Pages you have opened work offline.', '/install.html', 'phone'),
 ]
