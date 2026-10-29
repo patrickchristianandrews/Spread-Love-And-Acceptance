@@ -367,3 +367,166 @@ def s_tea(pg):
         stem(pg, [(pot_x, cloth_top - 44), (pot_x + dx * 0.3, cloth_top - 70), (pot_x + dx * 0.8, cloth_top - 90), (pot_x + dx, cloth_top + dy + 20)], 5, 4)
     for (dx, dy) in ((-24, -110), (0, -130), (24, -106)):
         daisy(pg, pot_x + dx, cloth_top + dy, 24, 0.2, 10)
+
+
+# ================================================================ the mountain lake
+def peak(pg, apex, left, right, base, snow=64, w1=W2):
+    """a mountain with a snow cap: straight-ish slopes, a rounded top, a zigzag snow line"""
+    ax, ay = apex
+    body = Path().M(left, base).C(left + (ax - left) * 0.5, base - (base - ay) * 0.35, ax - 40, ay + 40, ax, ay).C(ax + 40, ay + 40, right - (right - ax) * 0.5, base - (base - ay) * 0.35, right, base).Z()
+    pg.shape(body, w1)
+    pg.clip(body)
+    # the snow cap
+    zig = [(ax - 160, ay + snow + 18), (ax - 100, ay + snow - 6), (ax - 62, ay + snow + 22), (ax - 22, ay + snow - 8), (ax + 14, ay + snow + 26), (ax + 52, ay + snow - 4), (ax + 96, ay + snow + 22), (ax + 160, ay + snow - 10)]
+    cap = Path().M(ax - 200, ay - 30)
+    for p in zig[:1]:
+        cap.L(*p)
+    for i in range(1, len(zig)):
+        cap.L(*zig[i])
+    cap.L(ax + 200, ay - 30).Z()
+    pg.shape(cap, W2)
+    # a ridge line down the face
+    pg.line(curve([(ax + 6, ay + snow + 20), (ax + 30, ay + (base - ay) * 0.45), (ax + 24, ay + (base - ay) * 0.8)]), W3)
+    pg.line(curve([(ax - 30, ay + snow + 30), (ax - 70, ay + (base - ay) * 0.4), (ax - 90, ay + (base - ay) * 0.7)]), W3)
+    pg.endclip()
+
+
+def s_lake(pg):
+    """a mountain lake: snow-capped peaks, pines on the shore, a rowboat and reeds"""
+    cx = CX
+    pg.circle(580, 200, 44, W2)
+    for k in range(16):
+        a = k * TAU / 16
+        pg.line(Path().M(*polar(56, a, 580, 200)).L(*polar(74 if k % 2 == 0 else 66, a, 580, 200)), W2)
+    cloud(pg, 220, 190, 190, 72)
+    cloud(pg, 640, 330, 140, 56)
+    horizon = 560
+    peak(pg, (260, 300), 60, 500, horizon)
+    peak(pg, (560, 250), 330, 800, horizon)
+    peak(pg, (430, 400), 260, 640, horizon + 4, snow=50)
+    # the lake and its ripples
+    lake = Path().M(FX, horizon + 4).L(FX + FW, horizon + 4).L(FX + FW, FY + FH).L(FX, FY + FH).Z()
+    pg.shape(lake, W2)
+    pg.clip(lake)
+    for row in range(14):
+        y = horizon + 40 + row * 30
+        x = FX + ((row * 53) % 90)
+        P = Path()
+        while x < FX + FW:
+            ln = 40 + ((row * 17 + int(x)) % 50)
+            P.M(x, y).C(x + ln * 0.3, y - 6, x + ln * 0.7, y + 6, x + ln, y)
+            x += ln + 40 + ((row * 31 + int(x)) % 70)
+        pg.line(P, W3)
+    pg.endclip()
+    # the pines along the shore
+    for (x, h, w) in ((100, 250, 110), (190, 190, 90), (40, 190, 80), (700, 230, 100), (780, 190, 86), (620, 170, 76)):
+        pine(pg, x, horizon + 24, h, w, 4)
+    # the boat
+    bx, by = 430, 760
+    pg.shape(Path().M(bx - 110, by - 24).C(bx - 70, by + 28, bx + 70, by + 28, bx + 110, by - 24).C(bx + 60, by - 14, bx - 60, by - 14, bx - 110, by - 24).Z(), W1)
+    pg.line(Path().M(bx - 96, by - 8).C(bx - 50, by + 10, bx + 50, by + 10, bx + 96, by - 8), W3)
+    pg.line(Path().M(bx - 30, by - 20).L(bx - 120, by - 84), W2)
+    pg.line(Path().M(bx + 30, by - 20).L(bx + 120, by - 84), W2)
+    pg.shape(ell(bx - 124, by - 88, 16, 7, -50), W2)
+    pg.shape(ell(bx + 124, by - 88, 16, 7, 50), W2)
+    pg.shape(rrect(bx - 18, by - 38, 36, 12, 4), W2)
+    # ripples round the boat
+    pg.line(Path().M(bx - 150, by + 20).C(bx - 130, by + 30, bx - 110, by + 30, bx - 94, by + 24), W3)
+    pg.line(Path().M(bx + 150, by + 20).C(bx + 130, by + 30, bx + 110, by + 30, bx + 94, by + 24), W3)
+    # reeds and rocks in front
+    for (x, y, w, h) in ((110, 1010, 190, 110), (740, 1020, 220, 120), (300, 1040, 120, 60)):
+        rock(pg, x, y, w, h)
+    for (x0, k) in ((70, 0), (700, 1)):
+        for i in range(6):
+            x = x0 + i * 16 + (k * 7)
+            hh = 190 + ((i * 37 + k * 11) % 90)
+            ctrl = [(x, 1030), (x + 4 * (i % 3 - 1), 1030 - hh * 0.4), (x + 10 * (1 if i % 2 else -1), 1030 - hh * 0.8), (x + 8 * (1 if i % 2 else -1), 1030 - hh)]
+            stem(pg, ctrl, 6, 3)
+            if i % 2 == 0:
+                pg.shape(ell(0, 0, 8, 26).xf(mat(ctrl[3][0], ctrl[3][1] + 4, 1, False, 0)), W2)
+
+
+# ================================================================ the hot air balloon
+def balloon_env(cx, top, mid_y, neck_y, half_w, neck_w):
+    """the envelope outline: a round top narrowing to the neck"""
+    P = Path().M(cx, top).C(cx + half_w * 0.75, top, cx + half_w, mid_y - 120, cx + half_w, mid_y)
+    P.C(cx + half_w, mid_y + 90, cx + neck_w * 1.5, neck_y - 70, cx + neck_w, neck_y)
+    P.L(cx - neck_w, neck_y)
+    P.C(cx - neck_w * 1.5, neck_y - 70, cx - half_w, mid_y + 90, cx - half_w, mid_y)
+    P.C(cx - half_w, mid_y - 120, cx - half_w * 0.75, top, cx, top).Z()
+    return P
+
+
+def balloon(pg, cx, top, size=1.0, rows=2):
+    """a hot air balloon: gores, patterned bands, ropes, a basket and a little flame"""
+    k = size
+    mid_y = top + 210 * k
+    neck_y = top + 470 * k
+    hw = 205 * k
+    nw = 46 * k
+    env = balloon_env(cx, top, mid_y, neck_y, hw, nw)
+    pg.shape(env, W1)
+    pg.clip(env)
+    n = 7
+    for i in range(1, n):
+        u = -1 + 2 * i / n
+        pts = [(cx, top), (cx + u * hw * 0.62, top + (mid_y - top) * 0.45), (cx + u * hw, mid_y), (cx + u * hw * 0.62, mid_y + (neck_y - mid_y) * 0.55), (cx + u * nw, neck_y)]
+        pg.line(curve(pts), W2)
+    # two horizontal bands with a row of diamonds and a row of dots
+    for (ya, yb) in ((top + 120 * k, top + 160 * k), (top + 290 * k, top + 330 * k)):
+        for (yy) in (ya, yb):
+            pg.line(Path().M(cx - hw * 1.1, yy + 14 * k).C(cx - hw * 0.4, yy - 12 * k, cx + hw * 0.4, yy - 12 * k, cx + hw * 1.1, yy + 14 * k), W2)
+    for j in range(n):
+        u = -1 + (2 * j + 1) / n
+        # diamonds in the upper band, small circles in the lower band
+        for (yy, kind) in ((top + 142 * k, 'd'), (top + 310 * k, 'c')):
+            ww = hw * (1 - ((yy - mid_y) / (neck_y - mid_y)) ** 2 * 0.0) / n * 0.5
+            xx = cx + u * hw * (0.98 if yy < mid_y + 50 * k else 0.82)
+            if kind == 'd':
+                pg.shape(m_diamond_s(xx, yy, 11 * k, 14 * k), W3)
+            else:
+                pg.circle(xx, yy, 7 * k, W3)
+    pg.endclip()
+    pg.line(env, W1)
+    # the throat, ropes and basket
+    by = neck_y + 120 * k
+    pg.shape(rrect(cx - 42 * k, neck_y - 6, 84 * k, 18 * k, 4), W2)
+    for (x0, x1) in ((-nw, -44 * k), (nw, 44 * k), (-nw * 0.4, -16 * k), (nw * 0.4, 16 * k)):
+        pg.line(Path().M(cx + x0, neck_y + 10 * k).L(cx + x1, by), W2)
+    pg.shape(Path().M(cx - 8 * k, neck_y + 14 * k).C(cx - 30 * k, neck_y + 54 * k, cx - 6 * k, neck_y + 72 * k, cx, neck_y + 86 * k).C(cx + 6 * k, neck_y + 72 * k, cx + 30 * k, neck_y + 54 * k, cx + 8 * k, neck_y + 14 * k).Z(), W2)
+    bask = Path().M(cx - 50 * k, by).L(cx + 50 * k, by).L(cx + 42 * k, by + 62 * k).C(cx + 40 * k, by + 70 * k, cx + 34 * k, by + 70 * k, cx + 30 * k, by + 70 * k).L(cx - 30 * k, by + 70 * k).C(cx - 34 * k, by + 70 * k, cx - 40 * k, by + 70 * k, cx - 42 * k, by + 62 * k).Z()
+    pg.shape(bask, W2)
+    pg.clip(bask)
+    for i in range(1, 5):
+        pg.line(Path().M(cx - 52 * k + i * 20 * k, by).L(cx - 52 * k + i * 20 * k, by + 72 * k), W3)
+    for j in range(1, 3):
+        pg.line(Path().M(cx - 52 * k, by + j * 23 * k).L(cx + 52 * k, by + j * 23 * k), W3)
+    pg.endclip()
+    pg.shape(rrect(cx - 54 * k, by - 6 * k, 108 * k, 12 * k, 5), W2)
+
+
+def s_balloon(pg):
+    """a big hot air balloon over a patchwork of fields, with two small balloons and clouds"""
+    cx = 410
+    cloud(pg, 170, 190, 190, 74)
+    cloud(pg, 690, 560, 170, 66)
+    cloud(pg, 150, 640, 160, 62)
+    balloon(pg, 690, 120, 0.34)
+    balloon(pg, 150, 330, 0.26)
+    balloon(pg, cx, 100, 1.0)
+    # the land below: three rolling hills with furrows, a road and a few trees
+    land = Path().M(FX, 900).C(200, 860, 360, 900, 520, 868).C(640, 846, 720, 860, FX + FW, 872).L(FX + FW, FY + FH).L(FX, FY + FH).Z()
+    pg.shape(land, W2)
+    pg.clip(land)
+    for k in range(5):
+        y0 = 890 + k * 30
+        pg.line(Path().M(FX - 10, y0 + 20).C(240, y0 - 20 + k * 6, 480, y0 + 30, FX + FW + 10, y0 - 10 + k * 8), W3)
+    for x in (130, 300, 480, 650, 740):
+        pass
+    pg.endclip()
+    pg.line(Path().M(FX, 900).C(200, 860, 360, 900, 520, 868).C(640, 846, 720, 860, FX + FW, 872), W2)
+    # the road
+    pg.shape(Path().M(380, FY + FH).C(400, 1000, 470, 980, 520, 940).C(560, 905, 600, 885, 610, 872).L(620, 872).C(612, 892, 590, 910, 560, 940).C(520, 990, 500, 1020, 520, FY + FH).Z(), W2)
+    for (x, y, h, w) in ((160, 960, 120, 76), (260, 996, 90, 60), (690, 940, 100, 66), (110, 1010, 80, 50)):
+        round_tree(pg, x, y, h, w, W2, leaf=False)
+    house(pg, 590, 1000, 100, 54, 34, door=True, chimney=False, windows=1)
