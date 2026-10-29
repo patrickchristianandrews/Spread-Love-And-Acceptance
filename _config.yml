@@ -68,6 +68,8 @@ exclude:
   - "tools/kids/[a-eg-z_]*"
   - "tools/kids/f[^o]*"
   - "book/kids/src/coloring-*.html"
+  - tools/adultcolor/
+  - "book/adult/src/"
   - tools/library/
   - tools/logic/
   - tools/places/

@@ -288,7 +288,8 @@ def main():
         shutil.copy(os.path.join(ROOT, 'tools', 'kids', f), os.path.join(src, 'kids', f))
     if changes:
         shutil.copy(changes, os.path.join(stage, 'CHANGES.md'))
-        shutil.copy(changes, os.path.join(dest, 'CHANGES.md'))
+        if os.path.abspath(changes) != os.path.abspath(os.path.join(dest, 'CHANGES.md')):
+            shutil.copy(changes, os.path.join(dest, 'CHANGES.md'))
     out = os.path.join(dest, ZIPNAME)
     if os.path.exists(out):
         os.remove(out)
