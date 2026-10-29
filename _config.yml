@@ -61,6 +61,7 @@ exclude:
   - tools/chat/
   - tools/checks/
   - tools/clarify/
+  - tools/coinpusher/
   - tools/collab/
   - tools/intents/
   - tools/journeys/
