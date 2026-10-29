@@ -469,7 +469,7 @@ def b_gate(pg):
 def b_herbs(pg):
     """four herbs in terracotta pots on a shelf, a watering can and small plants on the shelf below"""
     shelf1, shelf2 = 560, 880
-    xs = [150, 330, 510, 690]
+    xs = [172, 340, 508, 676]
     # basil
     for (x, plant) in zip(xs, ('basil', 'rosemary', 'mint', 'thyme')):
         tops = []
@@ -481,8 +481,8 @@ def b_herbs(pg):
                     t = 0.45 + 0.28 * k
                     px, py = bez_pt(ctrl, t)
                     for sg in (-1, 1):
-                        pg.shape(at(m_drop(52, 22), px, py, math.degrees(bez_tan(ctrl, t)) + sg * 60), W2) if False else draw_leaf(pg, px, py, math.degrees(bez_tan(ctrl, t)) + sg * 62, 54 - 6 * k, 21, 0.2 * sg, 2)
-                draw_leaf(pg, x + dx * 1.4, ty + 30, -90 + dx * 0.4, 56, 22, 0, 2)
+                        pg.shape(at(m_drop(52, 22), px, py, math.degrees(bez_tan(ctrl, t)) + sg * 60), W2) if False else draw_leaf(pg, px, py, math.degrees(bez_tan(ctrl, t)) + sg * 62, 46 - 5 * k, 18, 0.2 * sg, 2)
+                draw_leaf(pg, x + dx * 1.4, ty + 30, -90 + dx * 0.4, 50, 19, 0, 2)
         elif plant == 'rosemary':
             for (dx, ty) in ((-40, 300), (0, 230), (40, 310), (-14, 380), (22, 400)):
                 ctrl = [(x + dx * 0.3, shelf1 - 100), (x + dx * 0.6, shelf1 - 160), (x + dx * 1.0, ty + 120), (x + dx * 1.1, ty)]

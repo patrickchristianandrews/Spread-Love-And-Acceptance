@@ -23,7 +23,7 @@ OUT = os.path.join(ROOT, 'assets', 'js', 'chat-kb.js')
 OUT_BG = os.path.join(ROOT, 'assets', 'js', 'chat-kb-bg.js')
 
 # Pages that are not reading content, or not public.
-SKIP_FILES = {'garden-backdrop.html', 'offline.html', '404.html', 'dashboard.html', 'ask.html', 'coloring-older.html', 'coloring-younger.html'}
+SKIP_FILES = {'garden-backdrop.html', 'offline.html', '404.html', 'dashboard.html', 'ask.html', 'coloring-older.html', 'coloring-younger.html', 'coloring-adult.html', 'cover-coloring-adult.html'}
 SKIP_DIRS = {'tools', 'supabase', '.git', 'node_modules', '_site', 'assets', 'data',
              'manuscript', 'notes', 'samples', 'store', 'telemetry', 'infrastructure'}
 

@@ -23,14 +23,14 @@ PAL = ['#F4C7A5', '#E9907A', '#F2C45E', '#8DB596', '#8EC3D8', '#B7A3D6', '#F29FB
 def front_art():
     """the colored mandala, centred low on the front"""
     pg = A.Pg(palette=PAL)
-    pg.raw('<g transform="translate(425 690) scale(0.98) translate(-430 -550)">')
+    pg.raw('<g transform="translate(425 742) scale(0.9) translate(-430 -550)">')
     pg.pi = 0
     M.m_lotus(pg, corners=False)
     pg.raw('</g>')
     # a few small sparkles around the mandala
     from ac_props import sparkle
     pg.pal = None
-    for (x, y, r) in ((90, 420, 14), (770, 440, 16), (70, 960, 12), (790, 980, 14), (140, 330, 10), (720, 330, 11)):
+    for (x, y, r) in ((80, 470, 14), (775, 520, 16), (70, 990, 12), (790, 1000, 14), (160, 410, 10), (730, 410, 11)):
         sparkle(pg, x, y, r, A.W2, '#F2C45E')
     return pg.svg('A colored mandala of lotus petals').replace(' class="art"', ' class="fart"')
 

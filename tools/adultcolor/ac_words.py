@@ -64,8 +64,7 @@ def draw_letter(pg, P, kind=None, gap=14, ang=0.0, inline=6.5, w=W1):
     if kind:
         x0, y0, x1, y1 = __import__('ac_zen').bbox_of(P)
         cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
-        R = math.hypot(x1 - x0, y1 - y0) / 2 + gap
-        Q = PATTERNS[kind](cx - R, cy - R, cx + R, cy + R, gap)
+        Q = PATTERNS[kind](x0 - gap, y0 - gap, x1 + gap, y1 + gap, gap)
         if ang:
             Q = Q.xf(mmul(mat(cx, cy, 1, False, ang), mat(-cx, -cy, 1)))
         pg.line(Q, W3)
@@ -131,8 +130,8 @@ def lotus_small(pg, cx, cy, R):
 
 def w_breathe(pg):
     cx, cy = CX, 650
-    draw_arc_word(pg, 'Breathe', 176, cx, cy, 252, ['circles', None, 'waves', None, 'petals', None, 'diamonds'], gap=13, track=2)
-    lotus_small(pg, cx, cy + 20, 226)
+    draw_arc_word(pg, 'Breathe', 160, cx, cy, 282, ['circles', None, 'waves', None, 'petals', None, 'diamonds'], gap=13, track=2)
+    lotus_small(pg, cx, cy + 40, 236)
     for (x, y, r) in ((140, 330, 24), (210, 250, 14), (720, 340, 26), (650, 250, 14), (110, 440, 12), (760, 450, 12)):
         pg.circle(x, y, r, W2)
         pg.line(Path().M(x - r * 0.5, y - r * 0.2).C(x - r * 0.45, y - r * 0.5, x - r * 0.2, y - r * 0.66, x, y - r * 0.66), W3)
@@ -144,7 +143,7 @@ def w_breathe(pg):
             P.M(x, y).C(x + 24, y - 24, x + 56, y - 24, x + 80, y)
             x += 108
         pg.line(P, W2)
-    sprig_arc(pg, cx, cy + 20, 270, PI * 0.12, PI * 0.88, 13, 56, 16)
+    sprig_arc(pg, cx, cy + 40, 282, PI * 0.1, PI * 0.9, 14, 56, 16)
 
 
 def w_enough(pg):

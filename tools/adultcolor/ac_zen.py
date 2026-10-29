@@ -317,12 +317,17 @@ def bbox_of(P):
 
 
 def fill_region(pg, region, kind, g=26, ang=0.0, w=W2, pw=W3, shift=(0, 0)):
-    """a white region with a pattern clipped inside it and its outline on top"""
+    """a white region with a pattern clipped inside it and its outline on top. The pattern is made only where the region is
+    (in the pattern's own turned frame), so the file stays small."""
     x0, y0, x1, y1 = bbox_of(region)
     cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
-    R = math.hypot(x1 - x0, y1 - y0) / 2 + g
     pg.shape(region, w)
-    P = PATTERNS[kind](cx - R + shift[0], cy - R + shift[1], cx + R + shift[0], cy + R + shift[1], g)
+    if ang:
+        back = region.xf(mmul(mat(cx, cy, 1, False, -ang), mat(-cx, -cy, 1)))
+        bx0, by0, bx1, by1 = bbox_of(back)
+    else:
+        bx0, by0, bx1, by1 = x0, y0, x1, y1
+    P = PATTERNS[kind](bx0 - g + shift[0], by0 - g + shift[1], bx1 + g + shift[0], by1 + g + shift[1], g)
     if ang:
         P = _rot(P, cx, cy, ang)
     pg.clip(region)

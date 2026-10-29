@@ -72,7 +72,7 @@ def s_nook(pg):
     pg.shape(rrect(224, 372, 412, 12, 4), W2)
     pg.shape(rrect(224, 512, 412, 12, 4), W2)
     pg.shape(rrect(214, 640, 432, 36, 6), W2)   # the sill
-    for (x, y, s) in ((300, 430, 1.1), (360, 470, 1.0), (500, 440, 1.2), (560, 580, 1.0), (270, 580, 1.0), (470, 600, 0.9)):
+    for (x, y, s) in ((300, 430, 1.1), (360, 470, 1.0), (500, 440, 1.2), (560, 560, 1.0)):
         raindrop(pg, x, y, s * 1.2)
     # curtains
     curtain(pg, -1, 112, 212, 118, 800, 470)
@@ -137,7 +137,7 @@ def s_lighthouse(pg):
     cx = 570
     # sky
     pg.shape(crescent(48, 40, 22).xf(mat(190, 190, 1, False, -20)), W2)
-    for (x, y, r) in ((300, 120, 12), (120, 320, 10), (700, 140, 14), (110, 110, 9), (350, 330, 9)):
+    for (x, y, r) in ((300, 120, 12), (120, 330, 10), (700, 110, 14), (110, 110, 9), (240, 100, 9)):
         sparkle(pg, x, y, r)
     cloud(pg, 220, 420, 190, 70)
     cloud(pg, 690, 470, 150, 60)
@@ -422,22 +422,15 @@ def s_lake(pg):
     cloud(pg, 700, 400, 150, 58)
     cloud(pg, 170, 330, 140, 54)
     horizon = 560
-    mountain2(pg, 250, 290, 60, 470, horizon)
-    mountain2(pg, 600, 250, 360, 820, horizon, 80)
-    mountain2(pg, 430, 380, 240, 640, horizon, 60)
-    # foothills with a row of small pines
-    hills = Path().M(FX, horizon + 10).C(180, horizon - 40, 330, horizon - 30, 440, horizon + 2).C(560, horizon - 36, 700, horizon - 40, FX + FW, horizon + 6).L(FX + FW, horizon + 26).L(FX, horizon + 26).Z()
-    pg.shape(hills, W2)
-    pine_row(pg, FX + 24, FX + FW - 10, horizon - 6, 62, 34, 34, 1.0)
+    mountain2(pg, 230, 250, 20, 520, horizon, 78)
+    mountain2(pg, 610, 205, 330, 880, horizon, 90)
+    mountain2(pg, 430, 340, 200, 680, horizon, 66)
+    shore = Path().M(FX, horizon + 6).C(200, horizon - 10, 330, horizon - 6, 440, horizon + 8).C(560, horizon - 8, 700, horizon - 12, FX + FW, horizon + 4).L(FX + FW, horizon + 24).L(FX, horizon + 24).Z()
+    pg.shape(shore, W2)
     # the lake
     lake = Path().M(FX, horizon + 28).L(FX + FW, horizon + 28).L(FX + FW, FY + FH).L(FX, FY + FH).Z()
     pg.shape(lake, W2)
     pg.clip(lake)
-    # a reflection of the peaks
-    for (ax, ay, l, r, sn) in ((250, 290, 60, 470, 70), (600, 250, 360, 820, 80)):
-        depth = horizon - ay
-        refl = Path().M(l, horizon + 28).C(l + (ax - l) * 0.55, horizon + 28 + depth * 0.25 * 0.6, ax - 30, horizon + 28 + depth * 0.5, ax, horizon + 28 + depth * 0.62).C(ax + 30, horizon + 28 + depth * 0.5, r - (r - ax) * 0.55, horizon + 28 + depth * 0.15, r, horizon + 28).Z()
-        pg.shape(refl, W3)
     for row in range(16):
         y = horizon + 46 + row * 28
         P = Path()
@@ -449,7 +442,7 @@ def s_lake(pg):
         pg.line(P, W3)
     pg.endclip()
     # tall pines on the shore
-    for (x, h, w) in ((110, 290, 120), (210, 220, 96), (50, 220, 90), (690, 270, 112), (780, 220, 90), (610, 190, 80)):
+    for (x, h, w) in ((120, 300, 124), (215, 230, 100), (700, 290, 118), (785, 230, 96)):
         pine(pg, x, horizon + 30, h, w, 5)
     # the boat
     bx, by = 430, 770

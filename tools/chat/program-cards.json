@@ -2,6 +2,44 @@
   "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first). Pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
   "cards": [
     {
+      "id": "coloringadult",
+      "kind": "intent",
+      "first": false,
+      "newTopic": false,
+      "topic": false,
+      "keys": [],
+      "chips": [],
+      "name": "the adult coloring book",
+      "pat": "\\b(adult coloring|coloring (book|books|page|pages) for adults|coloring for adults|mandalas?|color(ing)? (to|for) (relax|calm|anxiety|stress)|something to color|printable coloring)\\b",
+      "what": [
+        "Color and Breathe is a free coloring book for grown-ups: forty designs to print and color, with mandalas, gardens, patterns, quiet scenes and a few calm words, each on its own page with a blank page behind it. It is free as a PDF (we ask for your email once, on this device, like the books), and there is an optional paperback."
+      ],
+      "how": [
+        "Open the download page and find For grown-ups.",
+        "Print it on letter paper, single-sided or double-sided, whichever you like.",
+        "Color in any order. There is no wrong color and no timer. A sheet of paper behind the page helps with markers."
+      ],
+      "links": [
+        [
+          "Color and Breathe, the adult coloring book",
+          "/book/download.html#adult-coloring"
+        ],
+        [
+          "Calm games and a place to relax",
+          "/pause-and-play.html"
+        ],
+        [
+          "Coloring books for kids",
+          "/book/download.html#kids"
+        ]
+      ],
+      "plain": [
+        "Color and Breathe is a free adult coloring book.",
+        "It has forty designs to print.",
+        "Color in any order, with no timer."
+      ]
+    },
+    {
       "id": "bookprint",
       "kind": "intent",
       "first": true,

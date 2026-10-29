@@ -24,7 +24,7 @@ PI = math.pi
 
 
 def f(x):
-    s = '%.2f' % x
+    s = '%.1f' % x          # a tenth of a unit is 0.001 in
     s = s.rstrip('0').rstrip('.') if '.' in s else s
     return '0' if s in ('-0', '') else s
 
