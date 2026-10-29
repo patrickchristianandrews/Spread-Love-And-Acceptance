@@ -51,6 +51,12 @@ else {
   if (inCb !== inArt) fail('come-back.js TOOL_PAGES differs from the pages in tool-art.js');
 }
 
+// the Tools menu area lists every tool in the registry (owner: the submenus should list every tool in that section)
+var siteSrc = fs.readFileSync(path.join(ROOT, 'assets/js/site.js'), 'utf8'), at = siteSrc.indexOf("{ id: 'tools', name: 'Tools'"), end = siteSrc.indexOf("{ id: 'workpapers', name: 'Workpapers'");
+var toolsArea = at > -1 && end > at ? siteSrc.slice(at, end) : '';
+if (!toolsArea) fail('could not find the Tools area in site.js MENU');
+reg.forEach(function (t) { if (toolsArea.indexOf("href: '" + t.href + "'") === -1) fail(t.id + ': not listed in the Tools menu area (' + t.href + ')'); });
+
 // words
 var words = ['tool-art.js', 'tool-spotlight.js'].map(function (f) { return fs.readFileSync(path.join(ROOT, 'assets/js', f), 'utf8'); });
 var visible = [];

@@ -125,9 +125,24 @@ class Pg:
         return '%s%d' % (p, Pg._U)
 
     # ---- drawing
-    def line(self, P, w=W2, dash=None, cap='round'):
+    def line(self, P, w=W2, dash=None, cap='round', color=None):
         d = P if isinstance(P, str) else pd(P)
-        self.o.append('<path d="%s" fill="none" stroke="%s" stroke-width="%s" stroke-linecap="%s" stroke-linejoin="round"%s/>' % (d, INK, f(w), cap, (' stroke-dasharray="%s"' % dash) if dash else ''))
+        self.o.append('<path d="%s" fill="none" stroke="%s" stroke-width="%s" stroke-linecap="%s" stroke-linejoin="round"%s/>' % (d, color or INK, f(w), cap, (' stroke-dasharray="%s"' % dash) if dash else ''))
+
+    def union_circles(self, cs, w=W2, below=None, inner=True):
+        """the outline of the union of circles (x, y, r): drawn black then white so only the outer boundary shows.
+        below: a y value; everything under it is cut off (a flat bottom)."""
+        if below is not None:
+            self.clip(Path().M(-50, -50).L(PW + 50, -50).L(PW + 50, below).L(-50, below).Z())
+        for (x, y, r) in cs:
+            self.o.append('<circle cx="%s" cy="%s" r="%s" fill="%s"/>' % (f(x), f(y), f(r + W2 / 2), INK))
+        for (x, y, r) in cs:
+            self.o.append('<circle cx="%s" cy="%s" r="%s" fill="#fff"/>' % (f(x), f(y), f(max(0.5, r - W2 / 2))))
+        if below is not None:
+            self.endclip()
+            xs0 = min(x - r for (x, y, r) in cs)
+            xs1 = max(x + r for (x, y, r) in cs)
+            self.line(Path().M(xs0, below).L(xs1, below), W2)
 
     def shape(self, P, w=W2, fill='#fff'):
         d = P if isinstance(P, str) else pd(P)

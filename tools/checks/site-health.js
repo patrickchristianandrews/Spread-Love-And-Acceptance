@@ -497,7 +497,7 @@ function checkExclude() {
 function checkSize() {
   const problems = [];
   const LIMIT = 5 * 1024 * 1024;
-  const OK = [/^assets\/video\//, /^assets\/audio\//, /^book\/.*\.(pdf|epub)$/i, /^assets\/js\/chat-kb\.js$/];
+  const OK = [/^assets\/video\//, /^assets\/audio\//, /^book\/.*\.(pdf|epub)$/i, /^assets\/js\/chat-kb\.js$/, /^book\/kids\/src\/coloring-[a-z]+\.html$/ /* print sources, left out of the published site by _config.yml */];
   for (const f of all) {
     const sz = fs.statSync(path.join(ROOT, f)).size;
     if (sz > LIMIT && !OK.some(r => r.test(f))) problems.push((sz / 1048576).toFixed(1) + ' MB  ' + f);

@@ -67,6 +67,7 @@ exclude:
   - tools/journeys/
   - "tools/kids/[a-eg-z_]*"
   - "tools/kids/f[^o]*"
+  - "book/kids/src/coloring-*.html"
   - tools/library/
   - tools/logic/
   - tools/places/
