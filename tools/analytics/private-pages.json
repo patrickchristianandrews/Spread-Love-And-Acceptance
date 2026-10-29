@@ -1,0 +1,14 @@
+{
+  "_note": "Pages that never load analytics (Google Tag Manager or Google Analytics). The privacy policy (legal/privacy-policy.html, 'Visit statistics') names these; keep the two in step. 'embedded' pages only load inside another page.",
+  "pages": [
+    "ask.html", "signal-translator.html",
+    "grief.html", "caregivers.html", "when-one-is-ill.html", "coming-out.html", "foster-and-kinship.html",
+    "coming-home.html", "family-rifts.html", "teens.html", "upset-right-now.html",
+    "sent-this.html", "someone-sent-you-this.html", "calm-without-pills.html", "nervous-system.html",
+    "examples.html", "week-0.html",
+    "frequency-buddies.html", "frequency-buddies-live.html", "frequency-buddies-music-video.html",
+    "frequency-buddies-music-video-maker.html", "frequency-buddies-season-2.html", "frequency-buddies-shuffle.html"
+  ],
+  "patterns": ["^workpapers/fill/"],
+  "embedded": ["garden-backdrop.html"]
+}

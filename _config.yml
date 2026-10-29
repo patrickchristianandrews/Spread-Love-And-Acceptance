@@ -9,6 +9,7 @@ include: [".well-known"]
 # the published site; they stay in the repository. Do not list anything a page or script loads.
 exclude:
   - README.md
+  - tools/analytics/
   - paywall-integration.md
   - dashboard-setup.md
   - manage-members.py
