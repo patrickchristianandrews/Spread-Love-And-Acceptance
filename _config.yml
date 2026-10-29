@@ -18,6 +18,7 @@ include: [".well-known"]
 # Jekyll matches an entry as a path prefix, so a folder is written with a trailing slash (plain "telemetry" also hid telemetry.html).
 exclude:
   - README.md
+  - tools/analytics/
   - paywall-integration.md
   - dashboard-setup.md
   - manage-members.py
