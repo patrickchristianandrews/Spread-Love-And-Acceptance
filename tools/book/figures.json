@@ -91,7 +91,7 @@
   "src": "/assets/img/book/then-stages.svg",
   "width": 540,
   "height": 794,
-  "alt": "A winding path with eight stops from birth to later life, each with the question that stage of life asks.",
+  "alt": "Eight stages, each with the question it asks. About 0 to 1: Is the world safe? Will someone come? About 2 to 3: Can I do it myself? About 4 to 5: Is it okay to start things and take up space? About 6 to 11: Am I capable? About 12 to 17: Who am I, and where do I belong? About 18 to 39: Can I be close without losing myself? About 40 to 64: What am I building, and who am I making room for? About 65 on: Has my life meant something, and can I make peace with it? The ages are rough, and the questions come back at big changes.",
   "caption": "Each stage of life asks its own question. The ages are rough, and the questions come back at big changes (after Erik Erikson).",
   "versions": [
    "short",
@@ -151,7 +151,7 @@
   "src": "/assets/img/book/next-steps.svg",
   "width": 540,
   "height": 834,
-  "alt": "Seven stepping stones from “what matters to me?” to “look back kindly,” with an arrow going around again.",
+  "alt": "Seven stepping stones, and round again. 1: What matters to me? Two or three plain words: calm, close, rested. 2: One small goal, in plain words. 3: What gets in the way? 4: A tiny, repeatable step, smaller than feels useful. 5: If ___, then I ___, plus a backup for bad days. 6: Ask for support, as information, not a demand. 7: Look back kindly, once a month. Then an arrow goes round again.",
   "caption": "A kind plan for change in seven small steps. If the plan isn’t working, change the plan, not your opinion of yourself.",
   "versions": [
    "short",
@@ -196,7 +196,7 @@
   "width": 540,
   "height": 555,
   "alt": "Two bars: one person thinks they do about 60 percent, the other about 55 percent; together they add up to 115 percent of the same work.",
-  "caption": "We each remember our own effort best. Illustrative numbers. In Ross and Sicoly’s 1979 study, partners’ estimates of their own share usually added up to more than 100 percent.",
+  "caption": "We each remember our own effort best. Illustrative numbers. In Ross and Sicoly’s 1979 study, partners’ estimates of their own share usually added up to more than 100%.",
   "versions": [
    "short",
    "full"
@@ -412,7 +412,7 @@
   "after_id_full": "ladder",
   "src": "/assets/img/book/u2-ladder.svg",
   "width": 540,
-  "height": 680,
+  "height": 740,
   "alt": "Three bands, revved up, calm and connected, and running on empty, with a line showing one afternoon moving through them.",
   "caption": "The ladder: three everyday states. You move up and down it all day. Hard talks go best from the middle band.",
   "versions": [
@@ -741,7 +741,7 @@
   "width": 540,
   "height": 865,
   "alt": "A thermometer with four levels, irritated, annoyed, angry and the hot minutes, each with what helps at that level.",
-  "caption": "Anger rises fast, and what helps depends on how hot it is. In the hot minutes, slow the body first. Letting rip feeds it.",
+  "caption": "Anger rises fast, and what helps depends on how hot it is. In the hot minutes, slow the body first. Shouting feeds it.",
   "versions": [
    "short",
    "full"

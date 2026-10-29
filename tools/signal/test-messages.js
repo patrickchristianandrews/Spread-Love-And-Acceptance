@@ -437,10 +437,10 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
    ['friend', 'I guess I’m only your friend when it suits you.', /^I miss you and I've been feeling a bit left out\. Could we find ten minutes this week\?$/],
    ['coworker', 'Must be nice to just bake while I keep this whole place running.', /^I'm feeling stretched thin keeping this whole place running\. Could we look at the admin together and share some of it\?$/],
    ['coparent', 'Stop making decisions without me.', /^For school, health and new activities, can we text each other first and decide together\?$/],
-   ['family', 'you’re not my mum so stop acting like it', /^I know you're looking after me\. I miss Mum, and I'd like to be treated more like my age\. Can we talk about it\?$/],
+   ['family', 'you’re not my mum so stop acting like it', /^I know you're looking after me\. I miss Mom, and I'd like to be treated more like my age\. Can we talk about it\?$/],
    ['family', 'You are not my mom so stop acting like it', /^I know you're looking after me\. I miss Mom, and I'd like to be treated more like my age\. Can we talk about it\?$/],
-   ['family', 'ur not my mum stop acting like it', /^I know you're looking after me\. I miss Mum, and I'd like to be treated more like my age\./],
-   ['family', 'You’re not my mum!', /^I'm not angry at you\. I'm just missing Mum today\./],
+   ['family', 'ur not my mum stop acting like it', /^I know you're looking after me\. I miss Mom, and I'd like to be treated more like my age\./],
+   ['family', 'You’re not my mum!', /^I'm not angry at you\. I'm just missing Mom today\./],
    ['family', 'So now you want to talk? After you took everything?', /^I'm still hurt that you took everything\. If we talk, I need us to start there\.$/],
    ['family', 'After you took everything you could.', /^I'm still hurt that you took everything you could\./],
    ['family', 'So now you want to talk?', /^I'm still hurt about what happened\./],
@@ -639,7 +639,7 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   chk(!/as soon as we do/.test(rw('Mum, we’ll decide about baptism ourselves.', 'family').main) && /\[and tell you when we do\]/.test(rw('Mum, we’ll decide about baptism ourselves.', 'family').main), 'the offer to tell them is optional, in brackets');
   // 4. the teen's ask stays; a bare "you're not my mum" keeps the grief line
   const nm = rw('you’re not my mum so stop acting like it', 'family').main;
-  chk(/I miss Mum/.test(nm) && /treated more like my age/.test(nm) && /talk about it\?$/.test(nm), '“not my mum, stop acting like it” keeps the ask: ' + nm);
+  chk(/I miss Mom/.test(nm) && /treated more like my age/.test(nm) && /talk about it\?$/.test(nm), '“not my mum, stop acting like it” keeps the ask: ' + nm);
   chk(/treated more like my age/.test(rw('You’re not my dad. You can’t tell me what to do.', 'family').main), '“you can’t tell me what to do” keeps the ask');
   chk(/fair for your age/.test(rc('you’re not my mum so stop acting like it', 'family').replies[0].text), 'received: the carer gets a reply to the ask');
   chk(!vd('Can I have my phone back?', 'family').text.match(/hurt|fight|blame/i), 'a plain teen ask is fine: ' + vd('Can I have my phone back?', 'family').text);

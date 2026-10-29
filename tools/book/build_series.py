@@ -592,6 +592,14 @@ def help_now(here, namer=None):
     return '', ''
 
 
+def smart(t):
+    """book30: curly quotes and apostrophes in the research notes (reference titles carry straight ones)"""
+    t = re.sub(r'(^|[\s(\[])"', lambda m: m.group(1) + '\u201c', t)
+    t = t.replace('"', '\u201d')
+    t = re.sub(r"(^|[\s(\[])'", lambda m: m.group(1) + '\u2018', t)
+    return t.replace("'", '\u2019')
+
+
 def research_short(book, here):
     notes = B.research_notes(here)
     # logicbook14: the studies an "Another way to see it" box leans on join its chapter's notes
@@ -618,7 +626,7 @@ def research_short(book, here):
             t = (r.get('title', '') or '').strip()
             t = t if re.search(r'[.?!]$', t) else t + '.'
             items.append('<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span></li>' % (
-                esc(r.get('authors', '')), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(t)))
+                esc(smart(r.get('authors', ''))), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(smart(t))))
         s += '<h2 class="pe-notes-h"><span>%s</span> %s</h2><ul class="pe-refs ps-refs">%s</ul>' % (
             esc(chapter_label(slug, book)[1]), esc(B.SHORT[slug]), ''.join(items))
     return s + '</section>'
@@ -733,12 +741,18 @@ def tools_short():
     return json.load(open(os.path.join(HERE, 'tools-short.json'), encoding='utf-8'))
 
 
-def tools_cell(r, lines, epub=False):
+def tools_cell(r, lines, epub=False, nodomain=False):
     if epub:
         return ('<div class="ps-tg-c"><div class="ps-tg-t"><b><a href="%s">%s%s</a></b><span class="ps-tg-d">%s</span></div></div>') % (
             esc(B.absolute(r['href'])), ('%s ' % esc(r['wp'])) if r.get('wp') else '', esc(r['name']), esc(lines.get(r['id'], '')))
+    # book30: a workpaper prints the short address its page lists elsewhere (/wp-02); the code opens the page itself
+    addr = B.short_address(r['href'])
+    if r.get('wp'):
+        for w in hints.WORKPAPERS:
+            if w.get('code') == r['wp'] and w.get('print'):
+                addr = 'spreadloveandacceptance.com' + w['print']
     return ('<div class="ps-tg-c">%s<div class="ps-tg-t"><b>%s%s</b><span class="ps-tg-d">%s</span><span class="ps-tg-u">%s</span></div></div>') % (
-        qr(r['href']), ('<i>%s</i> ' % esc(r['wp'])) if r.get('wp') else '', esc(r['name']), esc(lines.get(r['id'], '')), B.addr_html(B.short_address(r['href'])))
+        qr(r['href']), ('<i>%s</i> ' % esc(r['wp'])) if r.get('wp') else '', esc(r['name']), esc(lines.get(r['id'], '')), B.addr_html(addr.replace('spreadloveandacceptance.com', '', 1) if nodomain else addr))
 
 
 def alltools_pages(book, kind='book', epub=False):
@@ -756,20 +770,21 @@ def alltools_pages(book, kind='book', epub=False):
                 sorted(ids - set(order)) or sorted(i for i in ids if i not in lines), sorted(set(order) - ids)))
     tl = [reg[i] for i in T['order_tools'] if i in reg]
     wl = [reg[i] for i in T['order_workpapers'] if i in reg]
-    lede = ('Every tool on the website, free, with no account. ' + ('Tap a name to open it. ' if epub else 'Point your phone’s camera at a code to open it. ') + 'What you type stays on your device.')
-    wlede = ('The worksheets and plans on the website, free to fill out on screen or print. They are kept apart from the tools above, and every one has a code.')
+    nd = (kind == 'pocket') and not epub  # book30: in the narrow pocket columns the domain is said once, in the lede
+    lede = ('Every tool on the website, free, with no account. ' + ('Every address below starts with spreadloveandacceptance.com. ' if nd else '') + ('Tap a name to open it. ' if epub else 'Point your phone’s camera at a code to open it. ') + 'What you type stays on your device.')
+    wlede = ('The worksheets and plans on the website, free to fill out on screen or print. They are kept apart from the tools above, and every one has ' + ('a link' if epub else 'a code') + '.')
     col, tint = book['color'], book['tint']
     if kind == 'workbook':
         body = ('<h1 class="pe-back-h">All the free tools</h1><p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools</h2><div class="ps-tg">%s</div>'
                 '<h2 class="ps-tg-h">Workpapers and plans</h2><div class="ps-tg">%s</div>') % (
-            esc(lede), ''.join(tools_cell(r, lines, epub) for r in tl), ''.join(tools_cell(r, lines, epub) for r in wl))
+            esc(lede), ''.join(tools_cell(r, lines, epub, nd) for r in tl), ''.join(tools_cell(r, lines, epub, nd) for r in wl))
         return ('<section class="pe-back ps-alltools ps-alltools-one" id="alltools" style="--pc:%s;--pt:%s">%s%s</section>') % (col, tint, mark('alltools'), body)
     p1 = ('<section class="pe-back ps-alltools" id="alltools" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools</h1>'
           '<p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools: helpers you use on the site</h2><div class="ps-tg">%s</div></section>') % (
-        col, tint, mark('alltools'), esc(lede), ''.join(tools_cell(r, lines, epub) for r in tl))
+        col, tint, mark('alltools'), esc(lede), ''.join(tools_cell(r, lines, epub, nd) for r in tl))
     p2 = ('<section class="pe-back ps-alltools ps-alltools-wp" id="allworkpapers" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools, continued</h1>'
           '<p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Workpapers: pages you fill in</h2><div class="ps-tg">%s</div></section>') % (
-        col, tint, mark('allworkpapers'), esc(wlede), ''.join(tools_cell(r, lines, epub) for r in wl))
+        col, tint, mark('allworkpapers'), esc(wlede), ''.join(tools_cell(r, lines, epub, nd) for r in wl))
     return p1 + p2
 
 
@@ -813,10 +828,10 @@ def faq_page(book, namer, epub=False):
     h = ''.join('<h2 class="ps-faq-q">%s</h2>%s' % (esc(q), a) for q, a in items)
     return ('<section class="pe-back ps-faq no-bubble" data-no-bubble id="faq" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Questions people ask</h1>'
             '<p class="pe-back-lede">%s</p>%s%s</section>') % (book['color'], book['tint'], mark('faq'), esc(ST.TEXT['faq_lede']),
-                                                           _series_html(h, book, namer, epub, 'faq'), CARE_LINE if book['n'] in (1, 2, 3) else '')
+                                                           _series_html(h, book, namer, epub, 'faq'), CARE_LINE if book['n'] == 1 else '')
 
 
-# book20 (owner, 24 Oct): plain suicide guidance once per book, in the back matter only, small and plain (Books 1 to 3)
+# book20 (owner, 24 Oct): plain suicide guidance, one plain line per book. book30: the FAQ line is Book 1 only; Book 2 p60 and Book 3 p118 carry their own line in the chapter
 CARE_LINE = '<p class="ps-care-line">If you’re having thoughts of hurting yourself or not wanting to be here, please tell someone you trust today.</p>'
 
 
@@ -992,7 +1007,7 @@ def head(title, css):
 
 
 QR_SCRIPT = '''<script>
-function peQR(){ if (!window.TOLShareKit || !TOLShareKit.qr) return false; document.querySelectorAll('.pe-qr[data-qr]').forEach(function (el) { if (el.firstChild) return; var s = TOLShareKit.qr.svg(el.getAttribute('data-qr')); if (s) { s.removeAttribute('class'); s.setAttribute('aria-hidden', 'true'); el.appendChild(s); } }); return true; }
+function peQR(){ if (!window.TOLShareKit || !TOLShareKit.qr) return false; document.querySelectorAll('.pe-qr[data-qr]').forEach(function (el) { if (el.firstChild) return; var s = TOLShareKit.qr.svg(el.getAttribute('data-qr')); if (s) { s.removeAttribute('class'); s.setAttribute('aria-hidden', 'true'); if (el.closest && el.closest('.ps-tg-c')) { var n = +s.getAttribute('viewBox').split(' ')[2]; s.setAttribute('viewBox', '3 3 ' + (n - 6) + ' ' + (n - 6)); } el.appendChild(s); } }); return true; }
 window.addEventListener('beforeprint', peQR);
 window.addEventListener('load', function () { var n = 0; (function t() { if (!peQR() && ++n < 20) setTimeout(t, 300); })(); });
 </script>
@@ -1302,7 +1317,7 @@ def build_workbook(where, bw=False):
              ('Week 1', 'See the work that’s already happening.', 'WP-01 Who did what'),
              ('Week 2', 'Give every job one owner.', 'WP-03 One owner per job'),
              ('Week 3', 'Notice how much each of you is carrying.', 'WP-02 How much are you carrying?'),
-             ('Week 4', 'Talk about it kindly.', 'WP-09 Say it so it lands · WP-11 Calm-down plan'),
+             ('Week 4', 'Talk about it kindly.', 'WP-09 Before you reply: say it so it lands · WP-11 Calm-down plan'),
              ('Week 5', 'Get back in step.', 'WP-13 90-second daily check-in'),
              ('Week 6', 'Make it last.', 'WP-01 again · WP-04 What keeps coming back? (optional)')]
     front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Miss one and you just carry on '

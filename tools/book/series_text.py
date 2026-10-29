@@ -372,7 +372,7 @@ def _blocks(body):
     return sorted(out)
 
 
-WIDE_PIECE = 24  # characters of an address piece that fit one column of a "Scan to open" panel (print.css: 5.4 pt mono)
+WIDE_PIECE = 27  # characters of an address piece that fit one column of a "Scan to open" panel (print.css: 6.5 pt mono, 3 columns)
 NEAR = 1500  # characters of printed text: closer than this, two codes are on the same page or facing pages
 
 
@@ -465,7 +465,7 @@ def scan_panels(body, qrfn, classify, short_address, addr_html, esc):
         if not items:
             continue
         # finalfix15: an address with a piece too long for one column (it can break only after "/" or ".") gets two columns
-        wide = lambda t: max(len(x) for x in re.findall(r'[^/.?&=]+[/.?&=]?', short_address(t))) > WIDE_PIECE
+        wide = lambda t: max(len(x) for x in re.findall(r'spreadloveandacceptance\.com|/[^/?]+|\?.*|/|[^/?]+', short_address(t))) > WIDE_PIECE
         lis = ''.join('<li%s>%s<span class="ps-scan-t">%s</span><span class="ps-scan-u">%s</span></li>' % (
             ' class="ps-wide"' if wide(t) else '', qrfn(t), lab, addr_html(short_address(t))) for t, lab in items)
         count += len(items)

@@ -318,7 +318,7 @@
           "A fast argument floods the body",
           "A flooded brain can’t find good words",
           "Silence stops the bad ones getting out",
-          "Going quiet is braking, not punishment"
+          "Going quiet is usually braking, not punishment"
         ]
       },
       "reassurance": {
@@ -355,7 +355,7 @@
           "Input keeps coming, noise and demands and change",
           "The brain’s buffer fills up",
           "When it overflows, control goes",
-          "A meltdown is an overflow, and nobody chooses it to get something"
+          "A meltdown is an overflow, and it isn’t a way of getting something"
         ],
         "care_print": "Afterward, a repair and a plan for next time help both people."
       },
@@ -366,7 +366,7 @@
         "an.0": "A radio caught between two stations, all hiss.",
         "other": "It’s hard to be on the asking end. You can start to suspect something is being kept from you, when it may simply not have a name yet.",
         "chain": [
-          "Feelings start as signals in the body",
+          "Feelings often start as signals in the body",
           "Some people find those signals hard to read",
           "No clear signal, no clear word",
           "“I don’t know” is the honest answer"

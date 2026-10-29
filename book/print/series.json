@@ -10,33 +10,33 @@
     6,
     9
    ],
-   "pages": 162,
+   "pages": 164,
    "blank_pages": 2,
-   "bytes": 2707066,
+   "bytes": 2729514,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
-   "spine_in": 0.3648,
-   "spine_mm": 9.27,
+   "spine_in": 0.3693,
+   "spine_mm": 9.38,
    "cover_in": [
-    12.6148,
+    12.6193,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 5.13,
+     "print": 5.18,
      "royalty_rate": 0.6,
-     "how": "60% x $14.99 - ($1.00 + 162 x $0.0255)",
-     "net": 3.86,
-     "pct": 25.8
+     "how": "60% x $14.99 - ($1.00 + 164 x $0.0255)",
+     "net": 3.81,
+     "pct": 25.4
     },
     "kdp_expanded": {
-     "print": 5.13,
-     "min_price": 12.83,
-     "net": 0.87,
-     "pct": 5.8
+     "print": 5.18,
+     "min_price": 12.95,
+     "net": 0.82,
+     "pct": 5.5
     }
    },
    "pagemap": {
@@ -53,16 +53,16 @@
     "understanding-7-worth": 81,
     "understanding-14-personality": 99,
     "understanding-9-minds": 117,
-    "faq": 142,
-    "wp-tools": 143,
-    "alltools": 146,
-    "glossary": 148,
-    "ideas": 150,
-    "notes": 151,
-    "free": 156,
-    "logic": 158,
-    "series": 159,
-    "jot": 160
+    "faq": 143,
+    "wp-tools": 144,
+    "alltools": 147,
+    "glossary": 150,
+    "ideas": 152,
+    "notes": 153,
+    "free": 158,
+    "logic": 160,
+    "series": 161,
+    "jot": 162
    }
   },
   "book-2-heal-and-steady": {
@@ -76,8 +76,8 @@
     9
    ],
    "pages": 156,
-   "blank_pages": 4,
-   "bytes": 2353190,
+   "blank_pages": 3,
+   "bytes": 2367617,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
@@ -120,9 +120,9 @@
     "faq": 131,
     "wp-tools": 132,
     "alltools": 135,
-    "glossary": 137,
-    "ideas": 139,
-    "notes": 140,
+    "glossary": 138,
+    "ideas": 140,
+    "notes": 141,
     "free": 148,
     "logic": 150,
     "series": 151,
@@ -139,33 +139,33 @@
     6,
     9
    ],
-   "pages": 154,
+   "pages": 158,
    "blank_pages": 3,
-   "bytes": 2508421,
+   "bytes": 2525607,
    "pdf": "book-3-understanding-each-other.pdf",
    "cover_pdf": "cover-book-3-understanding-each-other.pdf",
    "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
-   "spine_in": 0.3468,
-   "spine_mm": 8.81,
+   "spine_in": 0.3558,
+   "spine_mm": 9.04,
    "cover_in": [
-    12.5968,
+    12.6058,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.93,
+     "print": 5.03,
      "royalty_rate": 0.6,
-     "how": "60% x $14.99 - ($1.00 + 154 x $0.0255)",
-     "net": 4.06,
-     "pct": 27.1
+     "how": "60% x $14.99 - ($1.00 + 158 x $0.0255)",
+     "net": 3.96,
+     "pct": 26.4
     },
     "kdp_expanded": {
-     "print": 4.93,
-     "min_price": 12.33,
-     "net": 1.07,
-     "pct": 7.1
+     "print": 5.03,
+     "min_price": 12.58,
+     "net": 0.97,
+     "pct": 6.5
     }
    },
    "pagemap": {
@@ -177,21 +177,21 @@
     "chapter-1": 7,
     "understanding-4-communication": 23,
     "understanding-3-seeing": 45,
-    "understanding-5-belonging": 61,
-    "understanding-15-love": 77,
-    "understanding-17-groups": 93,
-    "understanding-12-helping": 111,
-    "words": 128,
-    "faq": 129,
-    "wp-tools": 131,
-    "alltools": 134,
-    "glossary": 136,
-    "ideas": 138,
-    "notes": 139,
-    "free": 146,
-    "logic": 148,
-    "series": 149,
-    "jot": 150
+    "understanding-5-belonging": 63,
+    "understanding-15-love": 81,
+    "understanding-17-groups": 97,
+    "understanding-12-helping": 115,
+    "words": 132,
+    "faq": 133,
+    "wp-tools": 135,
+    "alltools": 138,
+    "glossary": 141,
+    "ideas": 143,
+    "notes": 144,
+    "free": 150,
+    "logic": 152,
+    "series": 153,
+    "jot": 154
    }
   },
   "book-4-share-the-load": {
@@ -204,33 +204,33 @@
     6,
     9
    ],
-   "pages": 162,
-   "blank_pages": 4,
-   "bytes": 2826968,
+   "pages": 166,
+   "blank_pages": 5,
+   "bytes": 2842671,
    "pdf": "book-4-share-the-load.pdf",
    "cover_pdf": "cover-book-4-share-the-load.pdf",
    "front_jpg": "cover-book-4-share-the-load-front.jpg",
-   "spine_in": 0.3648,
-   "spine_mm": 9.27,
+   "spine_in": 0.3738,
+   "spine_mm": 9.5,
    "cover_in": [
-    12.6148,
+    12.6238,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 5.13,
+     "print": 5.23,
      "royalty_rate": 0.6,
-     "how": "60% x $14.99 - ($1.00 + 162 x $0.0255)",
-     "net": 3.86,
-     "pct": 25.8
+     "how": "60% x $14.99 - ($1.00 + 166 x $0.0255)",
+     "net": 3.76,
+     "pct": 25.1
     },
     "kdp_expanded": {
-     "print": 5.13,
-     "min_price": 12.83,
-     "net": 0.87,
-     "pct": 5.8
+     "print": 5.23,
+     "min_price": 13.08,
+     "net": 0.77,
+     "pct": 5.1
     }
    },
    "pagemap": {
@@ -249,21 +249,21 @@
     "a-chapter-4--money": 90,
     "chapter-5": 97,
     "a-chapter-5--moving-in": 113,
-    "afterword": 119,
-    "month": 125,
-    "jobs": 127,
-    "words": 130,
-    "faq": 131,
-    "wp-tools": 133,
-    "alltools": 136,
-    "numbers": 138,
-    "glossary": 146,
-    "ideas": 149,
-    "notes": 150,
-    "free": 154,
-    "logic": 156,
-    "series": 157,
-    "jot": 158
+    "afterword": 121,
+    "month": 127,
+    "jobs": 129,
+    "words": 132,
+    "faq": 133,
+    "wp-tools": 135,
+    "alltools": 138,
+    "numbers": 141,
+    "glossary": 149,
+    "ideas": 152,
+    "notes": 153,
+    "free": 158,
+    "logic": 160,
+    "series": 161,
+    "jot": 162
    }
   },
   "workbook": {
@@ -276,33 +276,33 @@
     8.5,
     11
    ],
-   "pages": 78,
-   "blank_pages": 0,
-   "bytes": 920906,
+   "pages": 66,
+   "blank_pages": 1,
+   "bytes": 805317,
    "pdf": "workbook.pdf",
    "cover_pdf": "cover-workbook.pdf",
    "front_jpg": "cover-workbook-front.jpg",
-   "spine_in": 0.1757,
-   "spine_mm": 4.46,
+   "spine_in": 0.1486,
+   "spine_mm": 3.78,
    "cover_in": [
-    17.4257,
+    17.3986,
     11.25
    ],
    "spine_text": false,
    "costs": {
     "list_price": 9.99,
     "kdp_amazon": {
-     "print": 4.14,
+     "print": 3.65,
      "royalty_rate": 0.6,
-     "how": "60% x $9.99 - ($1.00 + 78 x $0.0402)",
-     "net": 1.85,
-     "pct": 18.5
+     "how": "60% x $9.99 - ($1.00 + 66 x $0.0402)",
+     "net": 2.34,
+     "pct": 23.4
     },
     "kdp_expanded": {
-     "print": 4.14,
-     "min_price": 10.35,
-     "net": -0.14,
-     "pct": -1.4
+     "print": 3.65,
+     "min_price": 9.13,
+     "net": 0.35,
+     "pct": 3.5
     }
    },
    "pagemap": {
@@ -312,19 +312,17 @@
     "wb-six": 5,
     "wb-wp02": 7,
     "wb-wp11": 12,
-    "wb-wp09": 17,
-    "wb-wp13": 21,
-    "wb-wp12": 30,
-    "wb-wp14": 35,
-    "wb-wp01": 40,
-    "wb-wp03": 47,
-    "wb-setup": 52,
-    "wb-wp04": 59,
-    "wb-wp15": 66,
-    "numbers": 71,
-    "alltools": 76,
-    "wb-notes": 77,
-    "series": 78
+    "wb-wp12": 17,
+    "wb-wp14": 22,
+    "wb-wp01": 27,
+    "wb-wp03": 34,
+    "wb-setup": 39,
+    "wb-wp04": 46,
+    "wb-wp15": 53,
+    "numbers": 58,
+    "alltools": 63,
+    "wb-notes": 64,
+    "series": 65
    }
   },
   "workbook-bw": {
@@ -337,16 +335,16 @@
     8.5,
     11
    ],
-   "pages": 78,
-   "blank_pages": 0,
-   "bytes": 884241,
+   "pages": 66,
+   "blank_pages": 1,
+   "bytes": 773674,
    "pdf": "workbook-bw.pdf",
    "cover_pdf": "cover-workbook-bw.pdf",
    "front_jpg": "cover-workbook-bw-front.jpg",
-   "spine_in": 0.1757,
-   "spine_mm": 4.46,
+   "spine_in": 0.1486,
+   "spine_mm": 3.78,
    "cover_in": [
-    17.4257,
+    17.3986,
     11.25
    ],
    "spine_text": false,
@@ -355,7 +353,7 @@
     "kdp_amazon": {
      "print": 2.84,
      "royalty_rate": 0.6,
-     "how": "60% x $9.99 - ($2.84 + 78 x $0)",
+     "how": "60% x $9.99 - ($2.84 + 66 x $0)",
      "net": 3.15,
      "pct": 31.5
     },
@@ -373,19 +371,17 @@
     "wb-six": 5,
     "wb-wp02": 7,
     "wb-wp11": 12,
-    "wb-wp09": 17,
-    "wb-wp13": 21,
-    "wb-wp12": 30,
-    "wb-wp14": 35,
-    "wb-wp01": 40,
-    "wb-wp03": 47,
-    "wb-setup": 52,
-    "wb-wp04": 59,
-    "wb-wp15": 66,
-    "numbers": 71,
-    "alltools": 76,
-    "wb-notes": 77,
-    "series": 78
+    "wb-wp12": 17,
+    "wb-wp14": 22,
+    "wb-wp01": 27,
+    "wb-wp03": 34,
+    "wb-setup": 39,
+    "wb-wp04": 46,
+    "wb-wp15": 53,
+    "numbers": 58,
+    "alltools": 63,
+    "wb-notes": 64,
+    "series": 65
    }
   },
   "pocket-the-logic-behind-it": {
@@ -398,33 +394,33 @@
     5,
     8
    ],
-   "pages": 78,
-   "blank_pages": 0,
-   "bytes": 1279395,
+   "pages": 80,
+   "blank_pages": 1,
+   "bytes": 1283539,
    "pdf": "pocket-the-logic-behind-it.pdf",
    "cover_pdf": "cover-pocket-the-logic-behind-it.pdf",
    "front_jpg": "cover-pocket-the-logic-behind-it-front.jpg",
-   "spine_in": 0.1757,
-   "spine_mm": 4.46,
+   "spine_in": 0.1802,
+   "spine_mm": 4.58,
    "cover_in": [
-    10.4257,
+    10.4302,
     8.25
    ],
-   "spine_text": false,
+   "spine_text": true,
    "costs": {
     "list_price": 9.99,
     "kdp_amazon": {
-     "print": 2.99,
+     "print": 3.04,
      "royalty_rate": 0.6,
-     "how": "60% x $9.99 - ($1.00 + 78 x $0.0255)",
-     "net": 3,
-     "pct": 30
+     "how": "60% x $9.99 - ($1.00 + 80 x $0.0255)",
+     "net": 2.95,
+     "pct": 29.5
     },
     "kdp_expanded": {
-     "print": 2.99,
-     "min_price": 7.48,
-     "net": 1.01,
-     "pct": 10.1
+     "print": 3.04,
+     "min_price": 7.6,
+     "net": 0.96,
+     "pct": 9.6
     }
    },
    "pagemap": {
@@ -487,9 +483,9 @@
     "ideas": 65,
     "online": 66,
     "alltools": 67,
-    "notes": 69,
-    "series": 71,
-    "jot": 72
+    "notes": 70,
+    "series": 72,
+    "jot": 73
    }
   }
  },

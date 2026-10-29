@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 680" width="540" height="680" role="img" aria-labelledby="fig-u2-ladder-t fig-u2-ladder-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 740" width="540" height="740" role="img" aria-labelledby="fig-u2-ladder-t fig-u2-ladder-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-u2-ladder-t">The ladder: three everyday states, and how a day moves through them</title>
 <desc id="fig-u2-ladder-d">Three bands. Top: revved up, fast and tense, small things feel urgent or personal. Middle: calm and connected, you can think, listen and hear hard things. Bottom: running on empty, low and slow, short of words. A line shows a grandfather minding a toddler: calm at two, revved up by four, running on empty by six. Inside the middle band, the &quot;window&quot;, you can feel strongly and still think.</desc>
 
-<rect x="1" y="1" width="538" height="678" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<rect x="1" y="1" width="538" height="738" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">The ladder: three everyday states</text>
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">You move up and down it all day.</text>
 <rect x="28" y="104" width="484" height="124" rx="0" fill="#F7DEE0"/>
@@ -28,5 +28,5 @@
 <text x="28" y="526" font-size="18" font-style="italic" fill="#5A5346">Same grandfather, same toddler. The state changed.</text>
 <rect x="28" y="540" width="484" height="46.7" rx="12" fill="#ECE2C4"/>
 <text x="270" y="573" font-size="19" font-weight="bold" text-anchor="middle">Hard talks go best from the middle band.</text>
-<text x="28" y="607.7" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Everyday words, not a medical model. A related map</tspan><tspan x="28" dy="23.04">is the “window of tolerance” (Siegel, 1999): inside</tspan><tspan x="28" dy="23.04">it, you can feel strongly and still think.</tspan></text>
+<text x="28" y="607.7" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Everyday words, not a medical model. The three states are</tspan><tspan x="28" dy="23.04">loosely inspired by polyvagal theory, whose main claims are</tspan><tspan x="28" dy="23.04">still debated. A related map is the “window of tolerance”</tspan><tspan x="28" dy="23.04">(Siegel, 1999), a clinical way of thinking, not a lab finding:</tspan><tspan x="28" dy="23.04">inside it, you can feel strongly and still think.</tspan></text>
 </svg>

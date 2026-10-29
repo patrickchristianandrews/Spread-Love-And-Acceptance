@@ -80,7 +80,7 @@
   "doi": "10.1016/S2215-0366(17)30049-4",
   "url": "https://doi.org/10.1016/S2215-0366(17)30049-4",
   "kind": "meta-analysis",
-  "finding": "In 1,713 people with ADHD and 1,529 comparison people at 23 sites (ages 4 to 63), the nucleus accumbens, amygdala, caudate, hippocampus and putamen were slightly smaller on average in the ADHD group (very small effects, about 0.1 to 0.2 of a standard deviation). The pallidum and thalamus did not differ.",
+  "finding": "In 1,713 people with ADHD and 1,529 comparison people at 23 sites (ages 4 to 63, median 14), the nucleus accumbens, amygdala, caudate, hippocampus and putamen were slightly smaller on average in the ADHD group (very small effects, about 0.1 to 0.2 of a standard deviation). The differences were clearest in children and smaller in adults. The pallidum and thalamus did not differ.",
   "strength": "strong: a very large pooled scan study. The effects are very small and the groups overlap almost completely.",
   "topics": [
    "brain-wiring",
@@ -103,8 +103,8 @@
   "doi": "10.1176/appi.ajp.2019.18091033",
   "url": "https://doi.org/10.1176/appi.ajp.2019.18091033",
   "kind": "meta-analysis",
-  "finding": "Comparing the cortex of 2,246 people with ADHD and 1,934 comparison people from 36 centers, the authors found small average differences in cortical thickness and surface area. Measures of the cortex also related, more weakly, to ADHD symptoms in people in the general population, which fits the view that ADHD sits at one end of a continuum.",
-  "strength": "strong: a large coordinated analysis. The differences are small and not found in every age group.",
+  "finding": "Comparing the cortex of 2,246 people with ADHD and 1,934 comparison people from 36 centers, the authors found small average differences in cortical surface area in children, with some thickness differences. They found no differences in thickness or surface area in adolescents or adults. In a population sample of children, surface area also related, more weakly, to attention problems, which fits the view that ADHD sits at one end of a continuum.",
+  "strength": "strong: a large coordinated analysis. The differences are small and were found in children, not in adolescents or adults.",
   "topics": [
    "brain-wiring",
    "brain-imaging",

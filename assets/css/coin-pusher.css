@@ -30,7 +30,7 @@ html[data-theme="dark"] body.is-game:has(> main.cp:not(.is-ready)){ background:#
 .cp *, .cp *::before, .cp *::after{ box-sizing:border-box; }
 .cp .sr-only{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 .cp-skip{ position:absolute; left:-9999px; top:0; z-index:50; background:var(--btn); color:var(--btn-ink); padding:.6rem 1rem; border-radius:0 0 12px 0; }
-.cp-skip:focus{ left:0; }
+.cp-skip:focus{ position:fixed; left:1rem; top:.5rem; z-index:1001; }
 
 /* the top of the page */
 .cp-head{ max-width:46rem; margin:0 auto 1rem; text-align:center; }
@@ -64,7 +64,10 @@ html[data-theme="dark"] body.is-game:has(> main.cp:not(.is-ready)){ background:#
 .cp .cp-go{ min-height:48px; padding:.6rem 1.6rem; border-radius:999px; border:0; background:var(--btn); color:var(--btn-ink); font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1.08rem; box-shadow:0 2px 0 rgba(0,0,0,.2); touch-action:manipulation; }
 .cp .cp-pill{ min-height:44px; padding:.45rem 1rem; border-radius:999px; border:1px solid var(--line); background:var(--pill); color:var(--pill-ink); font-size:.95rem; touch-action:manipulation; }
 .cp .cp-pill[aria-pressed="true"]{ border-color:var(--brass); box-shadow:inset 0 0 0 1px var(--brass); }
-.cp .cp-pill:disabled, .cp .cp-choice:disabled{ opacity:.6; cursor:default; }
+.cp .cp-pill:disabled{ opacity:.6; cursor:default; }
+/* a locked look: fade the swatch and the border, keep the words at full strength (the line says how to earn it) */
+.cp .cp-choice:disabled{ cursor:default; border-style:dashed; }
+.cp .cp-choice:disabled .cp-sw, .cp .cp-choice:disabled .cp-coinsw{ opacity:.55; }
 .cp-bar, .cp-row{ display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; align-items:center; }
 .cp-row-l{ justify-content:flex-start; }
 .cp-bar{ margin:.7rem 0 .4rem; }

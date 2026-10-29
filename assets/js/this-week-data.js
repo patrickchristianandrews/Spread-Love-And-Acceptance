@@ -110,7 +110,7 @@
         no: 'Notice what you want when you are upset: space, company, a fix or a hand.',
         wi: 'Ask, “When you are upset, do you want fixing, hugging or listening?”' },
       { t: 'Pause, then come back',
-        tr: 'Say a pause line once out loud: “I need ten minutes. I will come back at seven.” Practice it while you are calm.',
+        tr: 'Say a pause line once out loud: “I need twenty minutes. I will come back at seven-thirty.” Practice it while you are calm.',
         k: 'Episode', et: 'The Storm Over the Treehouse', en: 'Frequency Buddies, episode 1: the pals take a pause before fixing things.', eu: EP + 's1e1#episode-player',
         no: 'Notice how long your body takes to settle after you get upset.',
         wi: 'Agree on a pause line for next time, and what the return time will be.' },

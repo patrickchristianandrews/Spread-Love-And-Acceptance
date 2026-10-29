@@ -180,4 +180,4 @@ Before discussing a disagreement, naming what you both want (a calm home, happy 
 
 It changes the question from “who wins?” to “how do we get there?” Even when you disagree on the how, agreeing on the why makes the disagreement feel smaller.
 
-Program: The Check-ins opener says it out loud: “I am not against you. I do not think you meant harm. I want to sort out this one thing.”
+Program: The Check-ins opener says it out loud: “I am not against you. I am not here to blame you. I want to sort out this one thing.”

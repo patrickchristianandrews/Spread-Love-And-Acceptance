@@ -815,7 +815,8 @@
     if (!t.n) return null;
     var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
     if (alone && max > t.both) return { one: top, words: (strong(t, max, top) ? 'mostly ' : 'a little more often ') + say(top) };
-    if (t.both > 0 && t.both >= max) return { shared: true, words: 'mostly shared' };
+    // "mostly shared" needs more than half of the jobs shared (2 of 6 is not "mostly")
+    if (t.both > 0 && t.both >= max && t.both * 2 > t.n) return { shared: true, words: 'mostly shared' };
     return { even: true, words: ('spread between ' + (q.people.length === 2 ? 'you' : 'you all')) };
   }
   var SECTIONS = [['home', 'Everyday jobs'], ['think', 'Planning and remembering'], ['night', 'Nights with the baby'], ['work', 'Paid work and shifts']];
@@ -1519,7 +1520,7 @@
     if (!t.n) return null;
     var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
     if (alone && max > t.both) return { t: (strong(t, max, top) ? 'Mostly ' : 'A little more often ') + cardName(top), c: COLORS[top] };
-    if (t.both > 0 && t.both >= max) return { t: 'Mostly shared', c: 'both' };
+    if (t.both > 0 && t.both >= max && t.both * 2 > t.n) return { t: 'Mostly shared', c: 'both' };
     return { t: ('Spread between ' + (q.people.length === 2 ? 'the two of us' : 'all of us')), c: 'both' };
   }
   function cardData() {

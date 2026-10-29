@@ -109,7 +109,7 @@
     }
     return st;
   }
-  // A new sheet. On a shared road, a sheet that belongs to one person (their battery, their kit)
+  // A new sheet. On a shared road, a sheet that belongs to one person (their battery, their plan)
   // carries that person's name; other one-person sheets start with no name rather than borrowing one.
   function newEntry(code, label, person) {
     var sc = schema(code), st = WPK.blankState(sc);
@@ -1140,7 +1140,7 @@
 
   /* ------------------------------------------------------------ keep a draft on this device (opt-in) */
 
-  // Whose file this is, when the sheets show it: the one person whose own sheets (a stress tank score, a kit)
+  // Whose file this is, when the sheets show it: the one person whose own sheets (a stress tank score, a plan)
   // were filled in on this device rather than brought in. Used only for "from Diego's file" in the report.
   function deviceOwner() {
     var mine = {};
@@ -1416,7 +1416,7 @@
   }
   function entryDay(en, k) {
     var d = en.state.values.date;
-    return d && /^\d{4}-\d{2}-\d{2}$/.test(d) ? WPK.formatDate(d) : (en.workpaper === 'WP-11' ? 'Their kit' : 'Day ' + (k + 1));
+    return d && /^\d{4}-\d{2}-\d{2}$/.test(d) ? WPK.formatDate(d) : (en.workpaper === 'WP-11' ? 'Their plan' : 'Day ' + (k + 1));
   }
   // Everyone's latest load, and the shared average only once all of them are in (as in CALC-01).
   function sharedAverage(st) {

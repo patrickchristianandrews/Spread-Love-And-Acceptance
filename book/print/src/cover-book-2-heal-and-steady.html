@@ -110,7 +110,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 </div></div>
 </div>
 <script>
-function peQR(){ if (!window.TOLShareKit || !TOLShareKit.qr) return false; document.querySelectorAll('.pe-qr[data-qr]').forEach(function (el) { if (el.firstChild) return; var s = TOLShareKit.qr.svg(el.getAttribute('data-qr')); if (s) { s.removeAttribute('class'); s.setAttribute('aria-hidden', 'true'); el.appendChild(s); } }); return true; }
+function peQR(){ if (!window.TOLShareKit || !TOLShareKit.qr) return false; document.querySelectorAll('.pe-qr[data-qr]').forEach(function (el) { if (el.firstChild) return; var s = TOLShareKit.qr.svg(el.getAttribute('data-qr')); if (s) { s.removeAttribute('class'); s.setAttribute('aria-hidden', 'true'); if (el.closest && el.closest('.ps-tg-c')) { var n = +s.getAttribute('viewBox').split(' ')[2]; s.setAttribute('viewBox', '3 3 ' + (n - 6) + ' ' + (n - 6)); } el.appendChild(s); } }); return true; }
 window.addEventListener('beforeprint', peQR);
 window.addEventListener('load', function () { var n = 0; (function t() { if (!peQR() && ++n < 20) setTimeout(t, 300); })(); });
 </script>

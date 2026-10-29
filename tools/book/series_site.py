@@ -309,7 +309,7 @@ def download_html():
                 esc(_file(pk['id'], m)), esc(pk['id']), _save_name(pk['title']), _meta(m)))
     out = ['%s\n%s' % (DL_START, DL_CSS),
            '<section class="bk-dl-four" aria-labelledby="bk-dl-four-h"><h2 id="bk-dl-four-h">The books</h2>'
-           '<p>The same books as the paperbacks, page for page, as PDFs to read on a phone, tablet or computer, or to print. '
+           '<p>The same books as the paperbacks, page for page, as PDFs to keep and print. The codes and printed addresses in them are made to be scanned or typed from a printed page; on a phone or tablet, the same pages are on this website. '
            'Each chapter holds the core of the chapter, with a code to scan for the expanded version.</p>'
            '<ul class="bk-dl-books no-bubble" data-no-bubble>%s</ul></section>' % '\n'.join(rows)]
     if free:

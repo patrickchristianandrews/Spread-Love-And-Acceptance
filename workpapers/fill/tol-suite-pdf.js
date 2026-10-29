@@ -641,7 +641,7 @@
       if (!ctx) return;
       if (en.workpaper === 'WP-13') ctx.rows('daily').forEach(function (r) { if (r.thanks) items.thanks.push([r.thanks, [r.day, ctx.name(r.who)].filter(Boolean).join(', ')]); });
       if (en.workpaper === 'WP-11') {
-        // one kit per person: the name on the kit (older shared kits had a line for each person)
+        // one plan per person: the name on the plan (older shared plans had a line for each person)
         var kitName = String(s.values.name || '').trim();
         (s.tables.lines || []).forEach(function (r, i) { if (r.line) items.lines.push([sentence(r.line), kitName || (s.values['partner' + WPK.CODES[i]] || '')]); });
         [s.values.first, s.values.second].forEach(function (d) { if (d) items.defaults.push([d, kitName]); });

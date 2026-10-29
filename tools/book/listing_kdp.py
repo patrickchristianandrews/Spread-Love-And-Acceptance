@@ -121,7 +121,7 @@ L = {
     'workbook': {
         'hook': 'Every workpaper from the series, bound together on big pages with room to write.',
         'body': [
-            'Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down kit you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the math laid out.',
+            'Inside are blank copies of all ten workpapers: a quick check of how much you are carrying, a calm-down plan you make on a calm day, a self-check before you reply to something that stung, a 90-second daily check-in, a one-week log of who did what, a list that gives every job one owner, a monthly look-back, and more, plus a paper version of the setup score with the math laid out.',
             'Each one starts with a short page that says when to use it, how long it takes, who fills it in and which book explains it. Then come spare copies for the weeks ahead, a planner for the six-week program, “How the numbers work” and pages for your own notes.',
         ],
         'inside': ['10 workpapers and a paper setup score, %d blank copies in all' % sum(w[1] for w in WB), 'A short guide page before each one', 'Single sheets on one page, longer sheets over two pages', 'A six-week planner, one page of “All the free tools” with a code for each, and lined pages for notes', 'Large 8.5 × 11 in pages'],

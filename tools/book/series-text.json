@@ -19,7 +19,7 @@
     "who": "It is for anyone who shares a home, a family or a job, whether that is a couple, a family, roommates, co-parents or coworkers. Most of it also works if you are the only one reading."
    }
   },
-  "how": "Read the chapters in any order. Each holds the core of a chapter. The expanded version of every chapter, with more research, more examples and more to try, is free to read online. The code at the end of each chapter opens it on your phone.",
+  "how": "Read the chapters in any order. Each chapter here holds the core of the full chapter online. The expanded version of every chapter, with more research, more examples and more to try, is free to read online. The code at the end of each chapter opens it on your phone.",
   "others": {
    "1": "about yourself",
    "2": "about the heavy days",
@@ -256,7 +256,7 @@
  },
  "first_month": {
   "title": "Your first month, week by week",
-  "lede": "If you would like an order to follow, here is one. Each week takes a few minutes a day at most, and a missed week is fine. The <a href=\"/prog-01.html\">six-week program</a> on the website does the same at a gentler pace.",
+  "lede": "If you would like an order to follow, here is one. Each week takes a few minutes a day at most, and a missed week is fine. The <a href=\"/prog-01.html\">six-week program</a> on the website covers the same ground in a different order, with a week on talking kindly and a week on the 90-second check-in added.",
   "weeks": [
    [
     "Week 1",
@@ -296,9 +296,9 @@
     [
      "To check what they meant",
      [
-      "“When you said you were fine, did you mean it, or not really?”",
+      "“You said you were fine. I’d like to check, because I’m not sure.”",
       "“Can I check I’ve got this right?”",
-      "“What did you hear me say?”"
+      "“I want to be sure I said that clearly. What did you take from it?”"
      ]
     ],
     [
@@ -344,8 +344,8 @@
      [
       "“I’m getting wound up. Can we stop for twenty minutes and come back at eight?”",
       "“That came out sharper than I meant. Let me try again.”",
-      "“My tank is pretty full today, so I might sound angrier than I feel.”",
-      "“What did you hear me say?”"
+      "“My tank is pretty full today, so I might sound angrier than I feel. I’ll tell you if I need a break.”",
+      "“I want to be sure I said that clearly. What did you take from it?”"
      ]
     ],
     [

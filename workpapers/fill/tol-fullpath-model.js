@@ -340,7 +340,7 @@
   // The last lines of a page people settle on together: one box to tick, and an optional date to
   // come back to it. Nothing to sign.
   function closing(ctx, base, intro, personal) {
-    var solo = ctx.road.solo || personal; // WP-11 is a personal kit on every road
+    var solo = ctx.road.solo || personal; // WP-11 is a personal plan on every road
     var out = { kind: 'fields', title: solo ? 'Where I’ve landed' : 'Where we’ve landed', fields: [
       f(base + '.closing.agreed', solo ? 'I’m going with this' : 'We’re agreed on this', 'check', { optional: true }),
       f(base + '.closing.lookAgain', 'Look at this again on', 'date', { half: true, optional: true })
@@ -391,7 +391,7 @@
 
   function pageWp11(ctx) {
     var sc = schemaFor('WP-11'), blocks = [], i;
-    blocks.push({ kind: 'note', text: (ctx.road.solo ? 'This kit is all about you. The pause plan at the end is the one part you might share with someone close.' : 'Each person\u2019s kit is about themselves, and that part stays theirs. The one part to agree and share is \u201cOur pause plan\u201d: the pause word, the break, and how you come back.') + ' Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
+    blocks.push({ kind: 'note', text: (ctx.road.solo ? 'This plan is all about you. The pause plan at the end is the one part you might share with someone close.' : 'Each person\u2019s plan is about themselves, and that part stays theirs. The one part to agree and share is \u201cOur pause plan\u201d: the pause word, the break, and how you come back.') + ' Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
     blocks.push({ kind: 'fields', fields: [f('wp11.date', 'Date', 'date', { half: true })] });
     var tr = [];
     for (i = 0; i < Math.max(3, ctx.sizes.triggers || 0); i++) tr.push({ fields: [f('wp11.triggers.r' + (i + 1) + '.trigger', 'What tends to start it', 'text', { w: 2.5 }), f('wp11.triggers.r' + (i + 1) + '.body', 'Where my body feels it first', 'text', { w: 2.5 })] });
@@ -400,13 +400,13 @@
     blocks.push({ kind: 'fields', title: 'Part A: My two defaults', intro: 'Pick two now, so you don’t have to choose in the moment.', fields: [f('wp11.first', 'First default', 'radio', { options: tac, stack: true }), f('wp11.second', 'Second, if the first isn’t available', 'radio', { options: tac, stack: true })] });
     var lines = [];
     for (i = 0; i < ctx.n; i++) lines.push({ label: ctx.labels[i], fields: [f('wp11.lines.p' + (i + 1) + '.line', 'Pause line', 'textarea', { small: true })] });
-    blocks.push({ kind: 'cards', title: 'Part A: ' + (ctx.n > 1 ? 'Pause lines' : 'My pause line'), intro: ctx.road.solo ? 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and what you’ll do next: "I’m at capacity. I’m taking ten minutes, then I’ll come back to this."' : section(sc, 'lines').intro, rows: lines });
+    blocks.push({ kind: 'cards', title: 'Part A: ' + (ctx.n > 1 ? 'Pause lines' : 'My pause line'), intro: ctx.road.solo ? 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and what you’ll do next: "I’m at capacity. I’m taking twenty minutes, then I’ll come back to this."' : section(sc, 'lines').intro, rows: lines });
     var re = [];
     for (i = 0; i < Math.max(3, ctx.sizes.reentry || 0); i++) {
       var p = 'wp11.reentry.r' + (i + 1) + '.';
       re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Stress tank score before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Stress tank score after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
-    blocks.push({ kind: 'fields', title: ctx.road.solo ? 'My pause plan (yours to share, if you like)' : 'Our pause plan (agree it together, and share it)', intro: (ctx.road.solo ? 'This part is made to be shared with someone close, if you want to.' : 'Unlike the rest of the kit, this part is meant to be agreed together and shared, so a pause is never mistaken for walking out.') + ' A few words in each box is plenty.', fields: [
+    blocks.push({ kind: 'fields', title: ctx.road.solo ? 'My pause plan (yours to share, if you like)' : 'Our pause plan (agree it together, and share it)', intro: (ctx.road.solo ? 'This part is made to be shared with someone close, if you want to.' : 'Unlike the rest of the plan, this part is meant to be agreed together and shared, so a pause is never mistaken for walking out.') + ' A few words in each box is plenty.', fields: [
       f('wp11.plan.word', ctx.road.solo ? 'My pause word or signal' : 'Our pause word or signal', 'text', { half: true, optional: true, placeholder: 'e.g. Timeout, or a hand on the table' }),
       f('wp11.plan.min', 'The shortest break we take', 'text', { half: true, optional: true, placeholder: 'e.g. 20 minutes' }),
       f('wp11.plan.back', 'How we set the time to come back', 'text', { optional: true, placeholder: 'e.g. Whoever pauses names a time, within the day' }),
@@ -894,28 +894,28 @@
       set('wp09.fact', v9.fact); set('wp09.feeling', v9.feeling); set('wp09.ask', v9.ask);
       ['specific', 'saturation', 'neutral', 'pattern'].forEach(function (id) { set('wp09.filter.' + id, v9['filter.' + id]); });
     }
-    var kits = [];
-    for (var j = 0; j < n; j++) kits[j] = latest((by['WP-11'] || []).filter(function (e) { return personOf(e) === j; }));
-    if (!kits.some(Boolean)) { var any11 = latest(by['WP-11'] || []); if (any11) kits[0] = any11; }
-    if (kits.some(Boolean)) {
+    var plans = [];
+    for (var j = 0; j < n; j++) plans[j] = latest((by['WP-11'] || []).filter(function (e) { return personOf(e) === j; }));
+    if (!plans.some(Boolean)) { var any11 = latest(by['WP-11'] || []); if (any11) plans[0] = any11; }
+    if (plans.some(Boolean)) {
       got.push('WP-11');
-      kits.forEach(function (k, j) {
+      plans.forEach(function (k, j) {
         if (!k) return;
         var line = (k.state.tables.lines || [])[0];
         if (line) set('wp11.lines.p' + (j + 1) + '.line', line.line);
       });
-      // the package has one set of defaults, triggers and readings: the first kit that has them
-      var main = kits.filter(function (k) { return k && (k.state.values.first || k.state.values.second); })[0] || kits.filter(Boolean)[0];
+      // the package has one set of defaults, triggers and readings: the first plan that has them
+      var main = plans.filter(function (k) { return k && (k.state.values.first || k.state.values.second); })[0] || plans.filter(Boolean)[0];
       set('wp11.date', main.state.values.date); set('wp11.first', main.state.values.first); set('wp11.second', main.state.values.second);
       set('wp11.nextAction', main.state.values.nextAction); set('wp11.resume', main.state.values.resume);
-      // the shared pause plan: from whichever kit has it written
-      var planKit = kits.filter(function (k) { return k && (k.state.values.planWord || k.state.values.planMin || k.state.values.planBack || k.state.values.planFirst); })[0];
+      // the shared pause plan: from whichever plan has it written
+      var planKit = plans.filter(function (k) { return k && (k.state.values.planWord || k.state.values.planMin || k.state.values.planBack || k.state.values.planFirst); })[0];
       if (planKit) { var pv0 = planKit.state.values; set('wp11.plan.word', pv0.planWord); set('wp11.plan.min', pv0.planMin); set('wp11.plan.back', pv0.planBack); set('wp11.plan.first', pv0.planFirst); }
       closingFrom(main, 'wp11');
       var tr = rowsOfT(main.state, 'triggers');
       tr.forEach(function (r, i) { set('wp11.triggers.r' + (i + 1) + '.trigger', r.trigger); set('wp11.triggers.r' + (i + 1) + '.body', r.body); });
       if (tr.length > 3) sizes.triggers = tr.length;
-      var withReadings = kits.filter(function (k) { return k && rowsOfT(k.state, 'reentry').length; }), rk = withReadings[withReadings.length - 1];
+      var withReadings = plans.filter(function (k) { return k && rowsOfT(k.state, 'reentry').length; }), rk = withReadings[withReadings.length - 1];
       if (rk) {
         var re = rowsOfT(rk.state, 'reentry');
         re.forEach(function (r, i) { var p = 'wp11.reentry.r' + (i + 1) + '.'; set(p + 'time', r.time); set(p + 'tactic', r.tactic); set(p + 'before', r.before); set(p + 'after', r.after); });
@@ -1838,7 +1838,7 @@
       s.entered.push(['Second default', k.second || 'Not chosen']);
       P.list.forEach(function (p) { s.entered.push([R.solo ? 'Your pause line' : 'Pause line: ' + p.label, k.lines[p.i] || 'Not filled in']); });
       if (k.plan && k.plan.any) s.entered.push([R.solo ? 'Pause plan' : 'Our pause plan (shared)', [k.plan.word && 'pause word: ' + k.plan.word, k.plan.min && 'shortest break: ' + k.plan.min, k.plan.back && 'coming back: ' + k.plan.back, k.plan.first && 'first words back: ' + q(k.plan.first)].filter(Boolean).join('; ')]);
-      if (!R.solo && !(k.plan && k.plan.any)) s.shows.push('Our pause plan isn\u2019t agreed yet: a pause word, the shortest break, and how you come back. It is the one part of the kit made to share.');
+      if (!R.solo && !(k.plan && k.plan.any)) s.shows.push('Our pause plan isn\u2019t agreed yet: a pause word, the shortest break, and how you come back. It is the one part of the plan made to share.');
       if (k.triggers.length) s.entered.push(['What tends to start it', k.triggers.map(function (t) { return [t.trigger, t.body].filter(Boolean).join(' (felt in: ') + (t.body && t.trigger ? ')' : ''); }).join('; ')]);
       if (k.latest != null) s.shows.push('Latest reading after settling: ' + fmt(k.latest) + (k.before != null ? ' (from ' + fmt(k.before) + ')' : '') + '. ' + (k.ret === 'back' ? 'Settled enough (under 0.50): go back in, at the time you named.' : k.ret === 'again' ? 'Still a bit hot (0.50 to 0.60, or one round so far): take another round first.' : 'Still hot after two rounds (0.60 or above): put it off to a named time. “Tomorrow after dinner” is a real plan; “later” is not.'));
       var missingLines = P.list.filter(function (p) { return !k.lines[p.i]; });
@@ -3245,7 +3245,7 @@
       if (n >= 2) s.more.push('Pause lines written: ' + (F.w11 ? F.w11.lines : 0) + ' of ' + n + '.');
       if (c.wp11.triggers.length) s.more.push('What tends to start it: ' + list(c.wp11.triggers.map(function (t) { return t.trigger; }).filter(Boolean)) + '.');
       if (c.wp11.ret === 'later' && !c.wp11.resume) s.more.push('The last reading says to put the conversation off, and no time to pick it back up is written yet.');
-      s.suggests.push(c.wp11.first && c.wp11.second ? 'The kit is ready. The practice is trying it once on a calm day, so it feels normal on a hard one.' : 'The kit is half-made. Choosing the second default is the step that makes it work.');
+      s.suggests.push(c.wp11.first && c.wp11.second ? 'The plan is ready. The practice is trying it once on a calm day, so it feels normal on a hard one.' : 'The plan is half-made. Choosing the second default is the step that makes it work.');
     }
     if (code === 'WP-13' && F.w13) {
       var w13 = F.w13;

@@ -976,11 +976,11 @@
   };
 
   // "Send our pause plan" (WP-11): just this part of the sheet, as text or as a link that opens it on the
-  // other phone. The rest of the kit stays private. On screen only.
+  // other phone. The rest of the plan stays private. On screen only.
   A.sendEl = function (sec) {
     return h('div', { className: 'wpf-share wpf-send no-print tol-plain', role: 'group', 'aria-label': 'Send ' + sec.send.title.toLowerCase() }, [
       h('p', { className: 'wpf-share-h', text: 'Send it to the other person' }),
-      h('p', { className: 'wpf-help', text: 'Only these four boxes go, never the rest of your kit. The link opens it on their phone as the site\u2019s pause plan, ready to change and send back. Nothing is uploaded: the plan travels inside the link.' }),
+      h('p', { className: 'wpf-help', text: 'Only these four boxes go, never the rest of your plan. The link opens it on their phone as the site\u2019s pause plan, ready to change and send back. Nothing is uploaded: the plan travels inside the link.' }),
       h('div', { className: 'wpf-share-btns' }, [
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'send-copy', 'data-sec': sec.id, text: 'Copy as text' }),
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'send-share', 'data-sec': sec.id, 'data-share': '', 'data-share-title': sec.send.title, 'data-share-text': '', 'data-share-url': 'none', 'data-share-result': '', text: 'Share it' }),

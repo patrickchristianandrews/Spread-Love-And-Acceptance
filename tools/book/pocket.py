@@ -356,7 +356,7 @@ def notes_html(secs, S, nums, epub=False):
         t = t if re.search(r'[.?!]$', t) else t + '.'
         where = ', '.join('%s%s' % (esc(it['t']), '' if epub else ' (%s)' % S.pg(it['lens'] if it.get('lens') else 'sit-' + it['id'])) for it in its)
         rows.append('<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span> <span class="pk-ref-w">%s</span></li>' % (
-            esc(r.get('authors', '')), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(t), where))
+            esc(S.smart(r.get('authors', ''))), esc(str(r.get('year_label') or r.get('year') or 'n.d.')), esc(S.smart(t)), where))
     return ('<section class="pk-back pk-notes" id="notes">%s<h1>Research notes</h1><p class="pk-lede">The %d studies and essays these pages lean on, briefly, with the '
             'situations that use them. Each one was looked up and checked. The full list, with what each study found and how strong the finding is, is free at '
             'spreadloveandacceptance.com/research.</p><ul class="pe-refs ps-refs pk-refs">%s</ul></section>') % ('' if epub else S.mark('notes'), len(rows), ''.join(rows))
@@ -455,7 +455,7 @@ def epub_docs(S, Doc, B):
         'Cover: %s, %s, by %s' % (p['title'], p['sub'], B.AUTHOR)), body_type='cover'))
     docs.append(Doc('title.xhtml', p['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s · %s</p><h1 class="ps-title-t">%s</h1>'
-        '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt="Two smiling round friends fit two jigsaw pieces together, with a heart above them."/></p>'
+        '<p class="ps-title-s">%s</p><p class="ps-title-art"><img src="images/art-%s.png" alt=""/></p>'
         '<p class="ps-title-a">by %s</p><p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
         esc(S.SERIES_TITLE), esc(p['kicker']), esc(p['title']), esc(p['sub']), p['art'], B.AUTHOR, S.SITE)))
     cp = copyright_html(p, S)

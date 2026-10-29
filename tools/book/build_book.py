@@ -68,13 +68,13 @@ ORDER = [
     ('preface', 2, 'Preface', 'The quiet, unseen work of running a shared life, and why it deserves to be noticed',
      [('Six-week program, week 1: see the work that’s already happening', '/prog-01.html#week-1'), ('Who did what', '/workpapers/wp-01.html')]),
     ('chapter-1', 2, 'Chapter I', 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune',
-     [('Six-week program, week 5: get back in step', '/prog-01.html#week-5'), ('The 90-second daily check-in', '/workpapers/wp-13-daily-check-in.html')]),
+     [('Six-week program, week 5: get back in step', '/prog-01.html#week-5'), ('90-second daily check-in', '/workpapers/wp-13-daily-check-in.html')]),
     ('chapter-2', 2, 'Chapter II', 'A simple way to see whether the way you share the work can last',
      [('Six-week program, week 2: give every job one owner', '/prog-01.html#week-2'), ('One owner per job', '/workpapers/wp-03-one-owner-per-job.html')]),
     ('chapter-3', 2, 'Chapter III', 'How much of a reaction is leftover stress, and the seven angles people see things from',
      [('Six-week program, week 3: notice how much each of you is carrying', '/prog-01.html#week-3'), ('How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
     ('chapter-4', 2, 'Chapter IV', 'Agreeing on what fair means to you both, and letting words land before you react',
-     [('Six-week program, week 4: talk about it kindly', '/prog-01.html#week-4'), ('Say it so it lands', '/workpapers/wp-09-say-it-so-it-lands.html')]),
+     [('Six-week program, week 4: talk about it kindly', '/prog-01.html#week-4'), ('Before you reply: say it so it lands', '/workpapers/wp-09-say-it-so-it-lands.html')]),
     ('chapter-5', 2, 'Chapter V', 'A gentle monthly look back that catches what weekly check-ins miss',
      [('Six-week program, week 6: make it last', '/prog-01.html#week-6'), ('What keeps coming back? A monthly look-back', '/workpapers/wp-04-what-keeps-coming-back.html')]),
 ] + [
@@ -1105,21 +1105,28 @@ def short_address(url):
     """spreadloveandacceptance.com/friends for /friends.html#gone-quiet; the bare domain for other sites."""
     if url.startswith('/'):
         path = re.sub(r'[#?].*$', '', url)
-        path = re.sub(r'(?:/index)?\.html$', '', path)
+        path = re.sub(r'/index\.html$', '/', path)  # book30: a folder page prints with its slash (/do/)
+        path = re.sub(r'\.html$', '', path)
         q = re.search(r'\?((?:for|road)=[a-z0-9-]+)', url)  # book29: a variant of a workpaper prints its variant
         return 'spreadloveandacceptance.com' + (path if path != '/' else '') + ('?' + q.group(1) if q else '')
     m = re.match(r'https?://(?:www\.)?([^/#?]+)', url)
     return m.group(1) if m else ''
 
 
-ADDR_PART = re.compile(r'[^/.?&=]+[/.?&=]?|[/.?&=]')
+ADDR_PART = re.compile(r'spreadloveandacceptance\.com|/[^/?]+|\?.*|/|[^/?]+')  # book30: the domain is one piece; the path breaks only before a "/"
 
 
 def addr_html(addr):
-    """An address that may wrap only after a "/" or a "." (or the "?" of a query), never inside a word or at its own
-    hyphens (finalfix15: "spreadloveandacceptanc / e.com" printed when a column was narrower than the name). Each piece
-    keeps its separator at its end and can't break; a <wbr> after it is the only place a line may end."""
-    return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in ADDR_PART.findall(addr))
+    """An address that may wrap only before a "/" (or the "?" of a query), never inside a word or at its own hyphens.
+    book30: the domain is one piece, so it never splits at its dot ("spreadloveandacceptance." / "com/..."); each
+    path piece keeps its slash at its front and can't break; a <wbr> before it is the only place a line may end."""
+    parts = []
+    for x in ADDR_PART.findall(addr):
+        if x == '/' and parts:
+            parts[-1] += x  # a closing slash stays with its piece
+        else:
+            parts.append(x)
+    return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in parts)
 
 
 def print_links(body, slug, here):
@@ -1628,7 +1635,7 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <header class="read-head"><p class="read-code">Everything in one place</p><h1>Books and downloads</h1></header>
 <p class="simple-lede">Every book, PDF, worksheet, video and song you can take with you, on one page. Reading and using everything on the site is free and never needs an email. The PDFs of the books, the kids’ books, the workbook, the pocket guide and the workpapers ask for your email once on this device.</p>
 <nav class="bk-dl-jump no-bubble" data-no-bubble aria-label="On this page"><a href="#bk-dl-four-h">The four books</a><a href="#workbook">Workbook and pocket guide</a><a href="#kids">For kids</a><a href="#expanded">The expanded version</a><a href="#dl-workpapers">Workpapers</a><a href="#dl-media">Videos and music</a><a href="#dl-app">The free app</a></nav>
-<p>Pick one of the four books, page for page the same as the paperbacks, to keep on your phone, tablet or computer, or to print. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
+<p>Pick one of the four books, page for page the same as the paperbacks, to keep on your computer or to print. The codes and addresses in the PDFs are printed, not tappable, so on a phone or tablet use the same pages on this website. Each one has contents with page numbers, “What to remember” at the end of every chapter, a glossary and research notes.</p>
 <div class="bk-dl-gate no-bubble" data-no-bubble id="get">
 <h2>Your email, then your download</h2>
 <p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>

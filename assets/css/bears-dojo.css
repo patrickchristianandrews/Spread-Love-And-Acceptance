@@ -44,7 +44,7 @@ html[data-theme="dark"] .bd{
 
 .sr-only{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 .bd-skip{ position:absolute; left:-9999px; top:0; z-index:50; background:var(--btn); color:var(--btn-ink); padding:.6rem 1rem; border-radius:0 0 12px 0; font:500 15px/1.2 "Lora", Georgia, serif; }
-.bd-skip:focus{ left:0; }
+.bd-skip:focus{ position:fixed; left:1rem; top:.5rem; z-index:1001; }
 
 .bd-head{ max-width:48rem; margin:0 auto 1rem; text-align:center; }
 .bd-kicker{ margin:0; font:500 .74rem/1.2 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--soft); }

@@ -36,6 +36,17 @@ def info(w, job):
         '/Creator': CREATOR,
         '/Producer': PRODUCER,
     })
+    # book30: the language and the document title in the viewer's title bar (a screen reader reads the file in English)
+    try:
+        from pypdf.generic import BooleanObject, DictionaryObject, NameObject, TextStringObject
+        root = w._root_object
+        root[NameObject('/Lang')] = TextStringObject('en-US')
+        vp = root.get('/ViewerPreferences')
+        vp = vp.get_object() if vp is not None else DictionaryObject()
+        vp[NameObject('/DisplayDocTitle')] = BooleanObject(True)
+        root[NameObject('/ViewerPreferences')] = vp
+    except Exception:
+        pass
 
 
 def tag(path, title, author='', subject='', size=''):

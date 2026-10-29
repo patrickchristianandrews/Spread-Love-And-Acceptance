@@ -79,12 +79,12 @@ STORE_LINKS = {
 
 # alt text for the drawings on the title pages (book_art.illustration kinds)
 ART_ALT = {
-    'logic': 'Two smiling round friends fit two jigsaw pieces together, with a heart above them.',
-    'for-yourself': 'A smiling round friend holds an open book, next to a small sprout and a heart.',
-    'steady': 'A calm, smiling round friend rests inside a big heart, with two small sprouts beside it.',
-    'together': 'Three smiling round friends read an open book together, with a heart above them.',
-    'load': 'Two smiling round friends share an open book, with a heart above them.',
-    'workbook': 'A small drawing of an open workbook.',
+    'logic': '',
+    'for-yourself': '',
+    'steady': '',
+    'together': '',
+    'load': '',
+    'workbook': '',
 }
 FRIENDS = [('puddles', hints.SVG_PUDDLES, 'Professor Puddles, a cheerful raindrop in round glasses'),
            ('tidbit', hints.SVG_TIDBIT, 'Tidbit, a small, curious pup'),
@@ -531,7 +531,7 @@ def book_docs(book, where):
     for slug, h in zip(chs, both.split(sep)):
         num, lab = S.chapter_label(slug, book)
         h = h.replace('<article class="whole-ch pe-ch"', '<article epub:type="chapter" class="whole-ch pe-ch"', 1)
-        docs.append(Doc(slug + '.xhtml', '%s: %s' % (lab, B.TITLES[slug]), h, heading_shift=1, body_type='bodymatter'))
+        docs.append(Doc(slug + '.xhtml', '%s: %s' % (lab, S.ch_title(slug)), h, heading_shift=1, body_type='bodymatter'))
     # the back of the book (printfix13: Book 4's first month, job list and words, then questions people ask, as in print)
     for fname, title, h in [('month.xhtml', 'Your first month, week by week', S.month_page(book, namer, epub=True)),
                             ('jobs.xhtml', 'A list of jobs to start from', S.jobs_page(book, namer, epub=True)),
@@ -669,7 +669,7 @@ table.ps-about-t, table.bk-ex-t { table-layout: fixed; width: 100%%; }
 table.ps-about-t td, table.ps-about-t th, table.bk-ex-t td, table.bk-ex-t th { overflow-wrap: anywhere; word-break: break-word; }
 .two-ways { margin: 1em 0; padding: .6em .8em; border: 1px solid #CDBF98; border-left: 3px solid #8C7A4E; }
 .lg-two, .lg-fields { margin-top: .4em; }
-.side-note { margin: 1em 0; padding: .5em .8em; border-left: 3px solid #B7AA86; background: #F4F1E8; font-size: .9em; line-height: 1.45; }
+.side-note { margin: 1em 0; padding: .5em .8em; border-left: 3px solid #B7AA86; background: #F4F1E8; color: #2B2620; font-size: .9em; line-height: 1.45; }
 .side-note p { margin: 0; }
 .side-note .sn-h { font-weight: bold; }
 .side-note .sn-src { margin-top: .3em; font-size: .9em; }
@@ -811,7 +811,7 @@ def nav_xhtml(book, docs):
         slug = d.fname[:-6]
         if slug in B.TITLES:
             num, lab = S.chapter_label(slug, book)
-            rows.append('<li><a href="%s">%s: %s</a></li>' % (d.fname, lab, xesc(B.TITLES[slug])))
+            rows.append('<li><a href="%s">%s: %s</a></li>' % (d.fname, lab, xesc(S.ch_title(slug))))
         else:
             rows.append(li(d))
     rows += [li(d) for d in back]
@@ -1128,7 +1128,7 @@ def build_boxset(built, images):
         'Cover: %s, %s, by %s' % (bx['title'], bx['sub'], B.AUTHOR), quote=True), body_type='cover')]
     docs.append(Doc('title.xhtml', bx['title'], (
         '<section class="ps-title" epub:type="titlepage"><p class="ps-title-k">%s</p><h1 class="ps-title-t">%s</h1><p class="ps-title-s">%s</p>'
-        '<p class="ps-title-art"><img src="images/art-%s.png" alt="Five books on a shelf in the series’ colours, with two smiling round friends and a heart."/></p>'
+        '<p class="ps-title-art"><img src="images/art-%s.png" alt=""/></p>'
         '<p class="ps-title-a">by %s</p><p class="ps-title-p"><a href="%s/">spreadloveandacceptance.com</a></p></section>') % (
         B.esc(SERIES_TITLE), B.esc(bx['short_title']), B.esc(bx['sub']), bx['art'], B.AUTHOR, SITE)))
     cp = ('<section class="ps-copy" epub:type="copyright-page"><h1 class="ps-copy-h">Copyright and notes</h1>'
@@ -1176,7 +1176,7 @@ def build_boxset(built, images):
             if d.body_type == 'bodymatter':
                 chapters.append(pre_ + slug)
                 if slug in B.TITLES:
-                    rows.append((nd.fname, '%s: %s' % (S.chapter_label(slug, b)[1], B.TITLES[slug])))
+                    rows.append((nd.fname, '%s: %s' % (S.chapter_label(slug, b)[1], S.ch_title(slug))))
                 else:
                     rows.append((nd.fname, d.title))
             elif d.fname not in ('title.xhtml',):

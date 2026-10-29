@@ -174,7 +174,8 @@ ITEM = dict(list(WP.items()) + list(TL.items()))
 
 def short_path(item):
     p = item.get('print') or re.sub(r'[#?].*$', '', item['href'])
-    p = re.sub(r'(?:/index)?\.html$', '', p)
+    p = re.sub(r'/index\.html$', '/', p)  # book30: a folder page keeps its slash (/do/)
+    p = re.sub(r'\.html$', '', p)
     return p
 
 
@@ -183,8 +184,14 @@ def short_address(item):
 
 
 def addr_html(addr):
-    """An address that may wrap only after a "/" or a "." (finalfix15: the same rule as build_book.addr_html)."""
-    return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in re.findall(r'[^/.?&=]+[/.?&=]?|[/.?&=]', addr))
+    """An address that may wrap only before a "/" (book30: the domain is one piece; the same rule as build_book.addr_html)."""
+    parts = []
+    for x in re.findall(r'spreadloveandacceptance\.com|/[^/?]+|\?.*|/|[^/?]+', addr):
+        if x == '/' and parts:
+            parts[-1] += x
+        else:
+            parts.append(x)
+    return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in parts)
 
 
 def wp_label(w):

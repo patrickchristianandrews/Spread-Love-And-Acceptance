@@ -712,20 +712,20 @@
     title: 'Calm-down plan',
     plain: 'Calm-down plan',
     slug: 'The-Calm-Down-Kit',
-    purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. Everyone fills in their own kit, about themselves, and keeps it. The pause plan is the one part you agree on together and share. Fill in Part A on an ordinary day, not a hard one.',
+    purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. Everyone fills in their own plan, about themselves, and keeps it. The pause plan is the one part you agree on together and share. Fill in Part A on an ordinary day, not a hard one.',
     people: false,
     perPerson: true,
-    privateNote: 'Your kit is private; the pause plan is made to share.',
+    privateNote: 'Your plan is private; the pause plan is made to share.',
     // kept on this device as soon as something is typed (with "Forget it" in the save bar), like the shared lists
     keepByDefault: true,
     meta: [
-      { id: 'name', label: 'Whose kit is this? (your name)', type: 'text' },
+      { id: 'name', label: 'Whose plan is this? (your name)', type: 'text' },
       { id: 'date', label: 'Date', type: 'date' }
     ],
     sections: [
       {
         type: 'note', pdf: false,
-        text: 'Most of this kit is about you, and it stays yours: each person fills in their own, never someone else\'s, and nobody hands it to the other person. The one part made to agree on and share is "Our pause plan" below: the pause word, the break, and how you come back.'
+        text: 'Most of this plan is about you, and it stays yours: each person fills in their own, never someone else\'s, and nobody hands it to the other person. The one part made to agree on and share is "Our pause plan" below: the pause word, the break, and how you come back.'
       },
       {
         id: 'triggers', type: 'table', title: 'Part A: What tends to start it',
@@ -747,7 +747,7 @@
       },
       {
         id: 'lines', type: 'table', title: 'Part A: My pause line',
-        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Say how you are, how long you need, and when you\'ll be back: "I\'m at capacity. I need ten minutes. I\'ll be back at 7:15."',
+        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Say how you are, how long you need, and when you\'ll be back: "I\'m at capacity. I need twenty minutes. I\'ll be back at 7:25."',
         fixedRows: ['In my words'],
         columns: [
           { id: 'line', label: 'Pause line', type: 'textarea', w: 4 }
@@ -755,19 +755,19 @@
       },
       {
         id: 'plan', type: 'fields', title: 'Our pause plan (agree it together, and share it)',
-        intro: 'Unlike the rest of the kit, this part is meant to be agreed together, on a calm day, and shared, so a pause is never mistaken for walking out. A few words in each box is plenty.',
+        intro: 'Unlike the rest of the plan, this part is meant to be agreed together, on a calm day, and shared, so a pause is never mistaken for walking out. A few words in each box is plenty.',
         fields: [
           { id: 'planWord', label: 'Our pause word or signal', type: 'text', placeholder: 'e.g. Timeout, or a hand on the table' },
           { id: 'planMin', label: 'The shortest break we take', type: 'text', placeholder: 'e.g. 20 minutes' },
           { id: 'planBack', label: 'How we set the time to come back', type: 'text', placeholder: 'e.g. Whoever pauses names a time, within the day' },
           { id: 'planFirst', label: 'The first sentence when we come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready to listen now.' }
         ],
-        // "Send our pause plan": only these four boxes, never the rest of the kit (tol-workpaper.js, sendEl)
+        // "Send our pause plan": only these four boxes, never the rest of the plan (tol-workpaper.js, sendEl)
         send: { title: 'Our pause plan', text: wp11PlanText, link: wp11PlanLink }
       },
       {
         type: 'note', pdf: true,
-        text: 'Part B, in the moment: say your pause word or line, then do your first calming step. Nothing in this kit works by cold, pain or shock, and none of it is treatment.'
+        text: 'Part B, in the moment: say your pause word or line, then do your first calming step. Nothing in this plan works by cold, pain or shock, and none of it is treatment.'
       },
       {
         id: 'reentry', type: 'table', title: 'Part C: Coming back',
@@ -800,7 +800,7 @@
           { id: 'resume', label: 'If you put the conversation off: when you\'ll pick it back up', type: 'text' }
         ]
       },
-      // the kit is personal on every road, so its closing is in the first person
+      // the plan is personal on every road, so its closing is in the first person
       closing(null, true)
     ]
   };
@@ -1379,10 +1379,10 @@
         { id: 'date', label: 'Date', type: 'date' }
       ],
       sections: {
-        note: { text: 'This kit is all about you. The pause plan is the one part you might share with someone close.' },
+        note: { text: 'This plan is all about you. The pause plan is the one part you might share with someone close.' },
         lines: {
           title: 'Part A: My pause line',
-          intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need ten minutes. I\'ll come back to this at 7:15."',
+          intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need twenty minutes. I\'ll come back to this at 7:25."',
           columns: [{ id: 'line', label: 'Pause line', type: 'textarea', w: 4 }]
         },
         plan: { title: 'My pause plan (yours to share, if you like)', fields: [
@@ -1390,7 +1390,7 @@
           { id: 'planMin', label: 'The shortest break I take', type: 'text', placeholder: 'e.g. 20 minutes' },
           { id: 'planBack', label: 'How I set the time to come back', type: 'text', placeholder: 'e.g. I name a time, within the day' },
           { id: 'planFirst', label: 'The first sentence when I come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready now.' }
-        ], intro: 'The one part of the kit you might share with someone close: the word you\'ll use, how long a break you take, and how you come back. A few words in each box is plenty.' },
+        ], intro: 'The one part of the plan you might share with someone close: the word you\'ll use, how long a break you take, and how you come back. A few words in each box is plenty.' },
         reentry: { intro: 'Still hot? Another round. Twice? Name a new time. Settled? Pick things back up. After each round, write what you did and how you feel now.', fans: { label: 'For number fans: add stress tank scores', note: 'If you like numbers, the stress tank score (WP-02, 0 to 1) is a second opinion: under 0.50 pick things back up, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. These bands are this site\u2019s rule of thumb, not a validated clinical scale.' } },
         next: { compute: wp11Next(true) },
         after: {

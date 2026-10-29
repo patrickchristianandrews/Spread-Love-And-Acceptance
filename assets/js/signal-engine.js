@@ -148,7 +148,7 @@ const WHEN_RE = /\[a time\]|\[a day\]|\[by when\]|\b(?:on (?:your|my|the|our) wa
 /* a real time in the words, not a blank: "by Friday", "6pm", "tomorrow" */
 const WHEN_REAL = new RegExp(WHEN_RE.source.replace("\\[a time\\]|\\[a day\\]|\\[by when\\]|",""), "i");
 /* Court, custody and the children as leverage: very likely to escalate between co-parents */
-const LEGAL_RE = /\b(?:(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) (?:take you to court|see you in court|take (?:this|it|you) to (?:court|a judge)|go to court|call (?:my|a) (?:lawyer|attorney|solicitor)|get (?:a|my) (?:lawyer|attorney|solicitor)|talk to (?:my|a) (?:lawyer|attorney|solicitor)|(?:go for|fight for|file for|apply for|sue for|get) (?:full |sole |primary )?custody|take (?:the kids|the children|them|the baby|my kids|our kids) (?:away|from you)|make sure you never see (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)))|see you in court|take you to court|(?:my|our) (?:lawyer|attorney|solicitor) (?:will|'ll|is going to|says|said|is (?:drawing|filing|sending))\b|(?:talk to|hear from|call|calling) (?:my|our) (?:lawyer|attorney|solicitor)|you(?:'ll| will) (?:never|not) (?:see|get) (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)|custody)(?: again)?|you(?:'ll| will) lose (?:the kids|the children|custody|them)|(?:i'm|i am) (?:getting|calling) (?:a|my) (?:lawyer|attorney|solicitor)|(?:full|sole) custody)\b/i;
+const LEGAL_RE = /\b(?:(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) (?:take you to court|see you in court|take (?:this|it|you) to (?:court|a judge)|go to court|tell the (?:judge|court|magistrate)|call (?:my|a) (?:lawyer|attorney|solicitor)|get (?:a|my) (?:lawyer|attorney|solicitor)|talk to (?:my|a) (?:lawyer|attorney|solicitor)|(?:go for|fight for|file for|apply for|sue for|get) (?:full |sole |primary )?custody|take (?:the kids|the children|them|the baby|my kids|our kids) (?:away|from you)|make sure you never see (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)))|see you in court|take you to court|(?:my|our) (?:lawyer|attorney|solicitor) (?:will|'ll|is going to|says|said|is (?:drawing|filing|sending))\b|(?:talk to|hear from|call|calling) (?:my|our) (?:lawyer|attorney|solicitor)|you(?:'ll| will) (?:never|not) (?:see|get) (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)|custody)(?: again)?|you(?:'ll| will) lose (?:the kids|the children|custody|them)|(?:i'm|i am) (?:getting|calling) (?:a|my) (?:lawyer|attorney|solicitor)|(?:full|sole) custody)\b/i;
 const KIDS_RE = /\bi(?:'ve| have)? (?:already |just )?(?:told|explained to) (?:the kids|the children|our (?:kids|children|son|daughter)|the boys|the girls|them)\b,?\s*(?:that\s+)?(?:you(?:'re| are)? (?:not|never)\b|you(?:'re| are) the (?:reason|problem)\b|you (?:aren't|won't|will not|don't|didn't|can't|left|lied|cheated|forgot|chose|never)\b|you'll never\b|you don't care\b|what you did\b|why you\b|about (?:you|us|the divorce|the separation|what you)\b)[^.!?]*|\b(?:i'm going to|i'll|i will|i'm gonna) tell (?:the kids|the children|our (?:kids|children|son|daughter)|them) (?:what you did|why you|about you|that you (?:aren't|won't|don't|didn't|never|left|lied|cheated))\b[^.!?]*/i;
 /* A safety worry: something left on, open, unlocked or within reach */
 const SAFE_THING = "stove|oven|hob|burners?|gas|iron|curling iron|(?:hair )?straighteners?|candles?|space heater|heater|fireplace|grill|bbq|(?:front |back |side |garage |patio |kitchen )?door|(?:pool |baby |stair |back |front )?gate|garage|car seat|booster seat|seat ?belt|medicines?|medications?|meds|pills|bleach|knives|knife|lighter|matches|bath|tap|water|car";
@@ -447,6 +447,8 @@ const F = [
   /* ---------- worth keeping ---------- */
   {id:"boundary", name:"A clear, caring boundary", kind:"good", re:null,
    what:"A step you'll take to look after yourself, said calmly and with care. It may still be hard to hear, and that's not a threat."},
+  {id:"nocontact", name:"A clear request for no contact", kind:"good", re:null,
+   what:"A plain request to stop contact. It needs no softening and no promised time to talk again."},
   {id:"disclose", name:"Sharing something important about you", kind:"good", re:null,
    what:"Telling someone who you are, or what's true for you, takes courage. It may still be hard for them to hear, and that's not your fault."},
   {id:"istate", name:"I-statement", kind:"good",
@@ -1608,6 +1610,8 @@ function analyze(textIn, opts){
   if(has("blameq") && has("demand")) drop("demand", h=>inside(h,"blameq"));
   drop("critic", h=>/^you're late$/i.test(h.match) && /\b(?:when|if)\s*$/i.test(low.slice(Math.max(0,h.s-6),h.s)));
   drop("absolute", h=>/^never$/i.test(h.match) && /never\s*mind/i.test(low.slice(h.s,h.s+12)));
+  // "That never happened" denies one event; it is not an absolute to soften into "That rarely happened" (E3-08)
+  drop("absolute", h=>/^never$/i.test(h.match) && /^never happened\b/i.test(low.slice(h.s,h.s+14)) && /\b(?:that|it|this)\s+$/i.test(low.slice(Math.max(0,h.s-6),h.s)));
 
   // "I said maybe because of work": a report of an earlier answer, not a soft no now
   drop("softno", h=>/\b(?:i|we) (?:said|told you|meant|answered|was saying)(?: that)?,?\s*["“]?$/i.test(low.slice(Math.max(0,h.s-24), h.s)));
@@ -1819,6 +1823,9 @@ function analyze(textIn, opts){
     addIf("guilt", /\bif you (?:really |truly |actually )?(?:loved|cared about|respected) me,? you(?:'d| would)\b|\bi gave up (?:my (?:career|job|life|twenties|dreams)|everything) for (?:this family|you|us|the kids|this)\b|\bdespu[eé]s de todo lo que (?:hice|he hecho|hago) por ti\b/);
     addIf("withdraw", /\bwhatever,? (?:mum|mom|dad|mother|father)\b/);
     addIf("hostile", /\b(?:don't|do not|dont) (?:ever )?(?:contact|text|call|message) me (?:ever )?again\b/);
+    // ultimatums that name no harm but make a relationship the price ("If you go out with them tonight I'm leaving",
+    // "I'm not talking to you until you apologize"): pressure, flagged as an ultimatum (E3-08)
+    addIf("threat", /\bif you (?:go out|go with|go to (?:see|his|her|their|that)|see|talk to|speak to|text|call|hang out with|spend (?:any )?time with|bring|invite|visit|keep seeing)\b[^.!?]{0,70}?,?\s*(?:then )?(?:i'm|i am|i'll|i will|we're|we are)\s+(?:leaving|going to leave|leave|done|out|gone|over|finished|through)(?=\s*(?:[.!?,]|$|for good|you\b|us\b|this relationship))|\bi(?:'m| am) not (?:talking|speaking|texting) to you (?:again )?until you\b|\bi (?:won't|will not|refuse to) (?:talk|speak|text|call)(?: to you)? until you (?:apologi[sz]e|say sorry|admit|agree|give in|come around|beg|change your mind)\b/);
     addIf("stonewall", /\bi(?:'m| am) not (?:talking|discussing) (?:about )?(?:this|it|that)(?: (?:anymore|any more|again|now))?\b/);
     addIf("withdraw", /\bi (?:won't|will not|wont) bother you (?:again|anymore|any more)\b|\b(?:you're|you are) (?:obviously |clearly )?too busy for (?:me|us|your (?:old )?(?:mother|mum|mom|dad|father|family|parents|friends?))\b/);
     addIf("again", /\byou (?:keep|kept|always keep) (?:missing|forgetting|ignoring|leaving|interrupting|cancelling|canceling|breaking|losing|doing|saying|making)\b/);
@@ -1828,6 +1835,15 @@ function analyze(textIn, opts){
     if(!["swear","hostile","label","contempt","violent","legal","dxlabel","menace","sarcasm","jab","guilt","threat"].some(has)){
       const bm2 = /\bi(?:'m| am) not (?:okay|ok|comfortable|happy) (?:with (?:you |people |anyone |that|this|being)|having|lending|doing|being|going|sharing|staying|paying)\b|\bi(?:'m| am) not going to (?:discuss|talk about|argue about|lend|sign|keep (?:doing|having))\b|\bi (?:don't|do not) want to (?:talk|hear) about [^.!?]{1,30}? (?:anymore|any more)\b|\bi(?:'m| am) only going to (?:discuss|talk about|reply|answer|communicate|message)\b|\bi (?:won't|will not) (?:sign|discuss|lend|be discussing|keep)\b[^.!?]{0,40}\b(?:until|unless|anymore|any more|without)\b|\bi (?:don't|do not) (?:check|answer|reply to|read) (?:work )?(?:messages|emails|texts|my phone) (?:after|before|on|at)\b|\bplease (?:don't|do not) (?:comment on|bring up|mention)\b/.exec(lc);
       if(bm2){ push("boundary", bm2.index, bm2.index+bm2[0].length); drop("stonewall", h=>inside(h,"boundary")); drop("threat"); }
+    }
+    // a plain request for no contact ("Don't contact me", "Leave me alone", "I don't want any contact") is a boundary to respect,
+    // not a stalled argument: no softening, no promised time to talk again (E3-07)
+    if(!["swear","hostile","label","contempt","violent","legal","dxlabel","menace","sarcasm","jab","guilt","threat"].some(has)){
+      const nc = /\b(?:please )?(?:don't|do not|stop|quit) (?:contacting|contact|calling|call|texting|text|messaging|message|emailing|email|following|follow|writing to|visiting) (?:me|us)\b|\bi (?:don't|do not) want (?:any |to have any )?contact\b|\bi (?:don't|do not) want you to (?:contact|call|text|message|email|follow|visit) (?:me|us)\b|\bleave me (?:alone|be)\b/.exec(lc);
+      if(nc){ const a0 = nc.index, b0 = nc.index+nc[0].length;
+        push("nocontact", a0, b0);
+        for(const id of ["stonewall","impera","nowhen","brushoff","minimal"]) drop(id, h=>h.s<b0 && a0<h.e);
+        drop("nowhen"); drop("threat"); }
     }
     // Spanish basics: the most common sharp and kind phrases (the rewrite stays in your words)
     addIf("absolute", /(?:^|[\s¿¡])(?:siempre|nunca|jam[aá]s)\s+(?!te (?:quiero|amo)|gracias)\w+/);
@@ -2266,6 +2282,11 @@ function rewriteBase(an, opts){
   // Spanish is read at a basic level: the notes show what may land hard, and the words stay the writer's own
   if(an.lang==="es"){ const v = {id:"main", label:"Your words", why:"The checker reads Spanish at a basic level, so it doesn't rewrite it. The notes above show what may land hard.", text:an.text.trim()};
     return {main:v.text, primary:v, variants:[v], changes:[], ask:an.asks[0]||null, list:"", unchanged:true, lang:"es"}; }
+  // a plain request for no contact keeps the sender's words: no softening, no promised time to talk again
+  if(has("nocontact") && !["swear","hostile","label","contempt","violent","legal","dxlabel","menace","threat","sarcasm","jab","guilt"].some(has)){
+    const v = {id:"main", label:"Your words", why:"A clear request for no contact needs no softening and no promised time to talk again.", text:an.text.trim()};
+    return {main:v.text, primary:v, variants:[v], changes:[], ask:an.asks[0]||null, list:"", unchanged:true};
+  }
   // a silent "…" on its own: say one short line instead
   if(/^\s*(?:\.{3,}|…)\s*$/.test(text)){
     const out0 = "[Say one short line, even \"I need a minute. I'll reply tonight.\"]";
@@ -2570,7 +2591,7 @@ function rewriteBase(an, opts){
   // an absolute that slipped through a rewrite ("always", "never") becomes "often" / "rarely"
   if(has("absolute") && /\b(?:always|never)\b/i.test(main.replace(/\u201c[^\u201d]*\u201d/g,""))){
     // (what they said, in quotes, stays as they said it)
-    main = main.split(/(\u201c[^\u201d]*\u201d)/).map((seg, si)=>si % 2 ? seg : seg.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; })).join("");
+    main = main.split(/(\u201c[^\u201d]*\u201d)/).map((seg, si)=>si % 2 ? seg : seg.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b(?!\s+happened\b)/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; })).join("");
   }
   if(laterLine) main = endP(main.replace(/\s+$/,""))+" "+laterLine;
   // the plain facts, when given ("His inhaler wasn't in the bag on Sunday."), say what happened better than "Lately it's felt like you…"
@@ -3658,6 +3679,7 @@ const DIG_READ = {
      blunt:[2,"They're telling me off.","A flat \"That is incorrect\" is often heard as cold, even when the fact is fair."],
      closer:[1,"I'm being shut out.","A closed door can sting, even when the decision is fair."],
      boundary:[0,"They're looking after themselves, and they still care.","A calm limit with care in it is usually understood, even when it's hard to hear."],
+     nocontact:[0,"They need space from me.","A clear request for no contact is easiest on everyone when it gets a short, calm acknowledgment and nothing more."],
      disclose:[0,"They trust me with something important.","Sharing who you are is a reach toward someone."]},
  anxiety:{withdraw:[3,"I've upset them, and I have to fix it right now.","Guilt goes straight to worry about the relationship."], olddays:[2,"I'm letting them down.","A comparison can sound like quiet disapproval."],
      menace:[3,"I'm not safe.","A threat goes straight to fear."],
@@ -3801,7 +3823,7 @@ const RECEIVE_MEANS = [
   [["closer"], "They're saying this decision is theirs to make. It doesn't mean your view doesn't matter to them."],
   [["tic"], "They're asking you to stop something. If it's a stim or a tic, you can say so: it isn't a message to them."]
 ];
-const RECEIVE_GOOD = {boundary:"They're setting a calm limit, with care in it. It's about what they need, not a threat to you.", disclose:"They're trusting you with something important about who they are. That's a reach toward you.", repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
+const RECEIVE_GOOD = {nocontact:"They've asked for no contact. The kindest reply is a short, calm acknowledgment, with no push to talk again.", boundary:"They're setting a calm limit, with care in it. It's about what they need, not a threat to you.", disclose:"They're trusting you with something important about who they are. That's a reach toward you.", repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
 const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal","menace","harm"];
 /* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
 function turnAround(t){
@@ -3909,11 +3931,11 @@ function receiveBase(an, opts){
   // doesn't make a message sound harsh
   const lv = score(an, ["general"], an.channel);
   const light = !crossed && (lv.level[0]==="clear" || /little/i.test(lv.level[1])) && !["withdraw","olddays","sarcasm","jab","guilt","passiveag","brushoff","minimal","stonewall"].some(has);
-  const head = light ? (found.length ? ["ok","This looks mostly plain. One small part may be worth a second look."] : (has("boundary") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."] : ["ok","This looks okay. Nothing here needs decoding."])
+  const head = light ? (found.length ? ["ok","This looks mostly plain. One small part may be worth a second look."] : (has("boundary") || has("nocontact") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."] : ["ok","This looks okay. Nothing here needs decoding."])
     : crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
     : found.length && (has("withdraw") || has("olddays")) && !["jab","label","absolute","critic","sarcasm","passiveag","guilt"].some(has) ? ["hurt","This may carry some hurt. Here\u2019s a kind way to read it."]
     : found.length ? ["hurt", mild ? "This may sound a little sharper than they meant. Here\u2019s how to read it." : "This may sound harsher than they meant. Here are kinder ways to read it."]
-    : (has("boundary") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."]
+    : (has("boundary") || has("nocontact") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."]
     : ["ok","This looks okay. Nothing here needs decoding."];
   return {crossed, head, meanings: meanings.slice(0,5), literal, replies: replies.slice(0,4), found};
 }

@@ -220,7 +220,16 @@
     Array.prototype.forEach.call(el.children, function (k) { if (k !== g && !/^(SCRIPT|STYLE)$/.test(k.tagName) && !k.inert) { try { k.inert = true; kids.push(k); } catch (e) { /* ignore */ } } });
     // the game may add its own pieces later; they wait behind the card too (the card covers them)
     el.appendChild(g); el._tolGate = g;
+    // the page's own "Skip to the ... button" link would land on a control that is inert behind the card: while the card is
+    // up it points at Play instead (and goes back to its first target once Play is pressed)
+    var skips = [];
+    Array.prototype.forEach.call(D.querySelectorAll('a.cp-skip, a.bd-skip'), function (a) {
+      skips.push({ a: a, href: a.getAttribute('href'), text: a.textContent });
+      if (!b.id) b.id = 'tol-fs-play';
+      a.setAttribute('href', '#' + b.id); a.textContent = 'Skip to the Play button';
+    });
     b.addEventListener('click', function () {
+      skips.forEach(function (s) { s.a.setAttribute('href', s.href); s.a.textContent = s.text; });
       g.parentNode && g.parentNode.removeChild(g); el._tolGate = null; el.classList.remove('tol-fs-gated');
       undoInert(kids);
       enter(el, { name: name });

@@ -161,7 +161,7 @@
     // numbers, this week or over a month. 'fair-quick', 'fair-full', 'lookback-quick', 'lookback-full' -> 'split'
     { id: 'split', name: 'Fair split check', brand: 'the fair-split calculator and the 30-Day Look-Back', href: '/workpapers/calculators/is-the-setup-working-quick.html', type: 'load', also: ['plan'],
       modes: [['A quick read of this week', '/workpapers/calculators/is-the-setup-working-quick.html', 'This week', 'Quick read'], ['Every number for this week', '/is-the-setup-working.html', 'This week', 'Every number'],
-        ['A quick read over a month', '/workpapers/calculators/look-back-30-days-quick.html', 'Over a month', 'Quick read'], ['Every number over a month', '/look-back-30-days.html', 'Over a month', 'Every number']],
+        ['The 30-day look-back: a quick read over a month', '/workpapers/calculators/look-back-30-days-quick.html', 'Over a month', 'Quick read'], ['The 30-day look-back: every number over a month', '/look-back-30-days.html', 'Over a month', 'Every number']],
       does: 'Type in the totals from your worksheets, for 2 to 8 people: this week, or a month ago next to now.',
       gets: 'A plain-words read of the setup, never of a person, and one next step.',
       mins: 5, time: '5 minutes for a quick read, 15 to 20 for every number', who: ['two', 'group'], benefit: 'Know if your split can last, and whether what you changed is working, this week or over a month',
@@ -328,7 +328,7 @@
     ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box',
       sample: 'You type: “my partner never helps with bedtime.” You get: kind next steps, words you could use, and two pages to read.' },
     start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
-      sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes.’”' },
+      sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need twenty minutes.’”' },
     pauseplay: { o: 'fun calm', p: 'family partner', best: 'a short break before you talk, or playing with kids with no way to lose',
       sample: 'Five minutes of Word Bloom before a hard talk: a few words found, a slower breath, nothing to win or lose.' },
     split: { o: 'load plan', p: 'partner housemates family', best: 'checking whether your split can last, and whether last month’s changes stuck', ex: 'ex-setup-rosemary-ken' },
