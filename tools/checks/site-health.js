@@ -6,7 +6,7 @@
 //   node tools/checks/site-health.js --verbose  # list every finding (default lists the first 15 per group)
 //   node tools/checks/site-health.js --warn     # also print advisories (never affect the exit code)
 //
-// Groups: js, json, undef, jsonld, links, assets, sitemap, og, manifest, sw, exclude, size, head, gtm
+// Groups: js, json, undef, jsonld, links, assets, sitemap, og, manifest, sw, exclude, size, head, gtm, bookcodes
 //   js        every .js file passes `node --check` (so no syntax error ships), and every inline <script>
 //             in the pages parses
 //   json      every .json and .webmanifest file parses
@@ -544,6 +544,33 @@ function checkGtm() {
   report('gtm', problems, 'tag on every page but the ' + priv.pages.length + ' private ones and the fill-in worksheets');
 }
 
+// ---------- the printed books' codes ----------
+// bookcodes: the printed books point only at the permanent /go/ pages (tools/go/build_go.py). Every card the books use must
+// exist on its page, and every card's Open link must open a real page (and part). Once the books are printed these
+// addresses can never change, so this fails the run if any of them would break.
+function checkBookCodes() {
+  const problems = [];
+  if (!exists('tools/go/map.json')) { report('bookcodes', ['tools/go/map.json is missing'], ''); return; }
+  const map = JSON.parse(read('tools/go/map.json')).map;
+  const cards = new Set(Object.values(map));
+  for (const c of cards) {
+    const [p, id] = c.split('#'); const f = p.replace(/^\//, '') + '.html';
+    if (!exists(f)) { problems.push(c + ': page ' + f + ' is missing'); continue; }
+    if (!new RegExp('id="' + id + '"').test(read(f))) problems.push(c + ': card #' + id + ' is missing');
+  }
+  for (const f of ['self', 'talk', 'share', 'calm', 'ask', 'worksheets', 'read'].map(x => 'go/' + x + '.html')) {
+    if (!exists(f)) { problems.push(f + ' is missing'); continue; }
+    for (const m of read(f).matchAll(/class="go-(?:open|more)" href="([^"]+)"/g)) {
+      const u = m[1].replace(/&amp;/g, '&'); const [pq, frag] = u.split('#'); const path = pq.split('?')[0].replace(/^\//, '');
+      const cand = path === '' ? ['index.html'] : [path, path + '.html', path.replace(/\/$/, '') + '/index.html'];
+      const file = cand.find(x => x && exists(x) && !x.endsWith('/'));
+      if (!file) { problems.push(f + ': ' + u + ' opens no page'); continue; }
+      if (frag && file.endsWith('.html') && !new RegExp('id="' + frag + '(-h)?"').test(read(file))) problems.push(f + ': ' + u + ' has no #' + frag);
+    }
+  }
+  report('bookcodes', problems, cards.size + ' cards on the /go/ pages, every Open link checked');
+}
+
 if (on('js')) checkJs();
 if (on('json')) checkJson();
 if (on('undef')) checkUndef();
@@ -558,6 +585,7 @@ if (on('exclude')) checkExclude();
 if (on('size')) checkSize();
 if (on('head')) checkHead();
 if (on('gtm')) checkGtm();
+if (on('bookcodes')) checkBookCodes();
 if (WARN && advisories.length) { console.log('\nadvisories (do not fail the run):'); advisories.forEach(a => console.log('  ' + a)); }
 console.log('\n' + (failed ? 'FAILED: ' + failed + ' problem(s)' : 'PASSED') + ' in ' + ((Date.now() - t0) / 1000).toFixed(1) + ' s');
 process.exit(failed ? 1 : 0);

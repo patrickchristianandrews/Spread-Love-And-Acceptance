@@ -64,6 +64,7 @@ exclude:
   - tools/clarify/
   - tools/coinpusher/
   - tools/coloring/
+  - tools/go/
   - tools/collab/
   - tools/intents/
   - tools/journeys/
