@@ -189,27 +189,6 @@ def md_title(t):
     A('')
     A('No other authors, brands or claims like "best" or "new". Words already in the title and series are left out. [OWNER]')
     A('')
-    A('### PRIVATE UPLOAD NOTE: the KDP form question about AI use')
-    A('')
-    A('**Answer this in the KDP form. It is not printed in the book, on the cover or on the product page, and it is not shown on the site.** Keep this section out of anything readers see.')
-    A('')
-    A('KDP asks whether AI-based tools were used to create the **text**, the **images**, or **translations**. KDP\'s own definitions: content created by an AI-based tool counts as AI-generated even if you edited it afterward (it must be disclosed), and content you created yourself and only checked or improved with AI is AI-assisted (it does not need to be disclosed).')
-    A('')
-    A('Honest answers for this title, as it was made [OWNER: confirm; only you know how much you changed by hand]:')
-    A('')
-    A('| Question | Answer to choose | Why |')
-    A('|---|---|---|')
-    if t['id'] in ('picture-book', 'chapter-book'):
-        A('| Text | **Yes, AI-generated.** Pick "with editing" only if you edited it yourself | The story was drafted by an AI writing tool (Claude) from your brief, then revised in rounds against the site\'s language rules and a simulated reader review. |')
-    elif t['id'] == 'coloring-older':
-        A('| Text | **Yes, AI-generated** (the 32 calm prompts and the back cover) | The prompts were drafted by an AI writing tool from the site\'s ideas. |')
-    else:
-        A('| Text | **Yes, AI-generated** (the 32 short captions and the back cover) | Almost no text: the captions, the find-it prompts and the back cover were drafted by an AI writing tool. |')
-    A('| Images | **Yes, AI-generated** | Every picture is drawn by a program (SVG drawn by code in the style of the site\'s characters). The program was written with an AI tool and nobody drew the pictures by hand. Say so even though no image model was used: an AI-based tool created the work. |')
-    A('| Translations | **No** | English only. |')
-    A('')
-    A('The answers are seen by Amazon only. The books themselves say nothing about how they were made, so the form is the one place this is stated. Answer it truthfully.')
-    A('')
     A('### Print details')
     A('')
     A('| Field | Answer |')
@@ -287,7 +266,7 @@ def launch_steps():
     return ['## Launch steps (the same for each title; the Kindle steps only for the picture book and the chapter book)', '',
             '1. Sign in to KDP (kdp.amazon.com) and choose **Create**, then **Paperback**. Do the titles one at a time, in series order.',
             '2. **Paperback Details:** language English; title, subtitle and series name and number as in the title\'s section below; author **Christian**; description (paste the HTML block); the two reading-age numbers; the 7 keywords; the 3 categories; answer the audience questions as shown.',
-            '3. **Paperback Content:** choose **Get a free KDP ISBN**; set the print options exactly as in the title\'s table (ink and paper, trim, bleed, matte cover); upload the manuscript PDF; choose the print-ready PDF cover and upload the cover file; answer the AI-use question from the PRIVATE UPLOAD NOTE (it is a form question only); open the **Print Previewer** and fix anything it flags (it should flag nothing; the bleed, margins and fonts were checked).',
+            '3. **Paperback Content:** choose **Get a free KDP ISBN**; set the print options exactly as in the title\'s table (ink and paper, trim, bleed, matte cover); upload the manuscript PDF; choose the print-ready PDF cover and upload the cover file; open the **Print Previewer** and fix anything it flags (it should flag nothing; the bleed, margins and fonts were checked).',
             '4. **Paperback Rights & Pricing:** all territories; the list price in the title\'s table for Amazon.com, then let KDP suggest the other marketplaces; leave **Expanded distribution** off. Check that KDP\'s printing cost matches the one in the table (if it differs, KDP\'s figure wins and the royalty changes).',
             '5. **Order a proof copy** of the paperback. Check the color (picture book), the edges, the margins, the blank backs (coloring books), the spine and the barcode corner. Approve it, then **Publish**. Review takes up to a few days.',
             '6. **Kindle edition (picture book and chapter book only):** from the Bookshelf choose **Create Kindle eBook**, or **Create Kindle eBook edition** on the published paperback. Use the same title, subtitle, series, author, description, keywords and categories. Upload the **EPUB** as the manuscript and the Kindle cover JPG. Open it in **Kindle Previewer** (children\'s book view for the picture book) and check every page. Set the Kindle price from the table, leave **KDP Select** off and **DRM** off, and publish. KDP links the Kindle and paperback editions on one page when the title and author match.',
@@ -345,7 +324,6 @@ def listing():
              '- **The picture book needs premium color.** It has 40 pages, and KDP\'s standard color starts at 72. The other three are black ink, so the interiors are plain grays and black.',
              '- **The coloring books are print only.** The picture book and the chapter book also have Kindle files (EPUB).',
              '- **The text is American English** (checked by tools/kids/lint_kids.py and tools/kids/us_audit.py against the site\'s language rules: no dashes as punctuation, no semicolons, no "not X but Y" frames, no British spellings or words, no hotline, emergency or call-for-help wording, no names of experts, no names in headings).',
-             '- **One private note.** Each title has a section called "PRIVATE UPLOAD NOTE: the KDP form question about AI use". It tells you what to answer in Amazon\'s own form. Nothing in the books, the covers, the descriptions or the site mentions it.',
              '', '---', '']
     totals, sections = {}, []
     for t in TITLES:
@@ -494,7 +472,7 @@ def readme(totals):
     lines = ['Spread Love & Acceptance: the kids titles, KDP package', '=' * 62, '',
              'Read kids-CHANGES.md first: it lists what changed in this version.', '',
              'Everything here is for four titles (The Frequency Buddies Books). Every file name starts with kids-.', '',
-             'Start with the listing: kids-listing-kdp.pdf (or the same text as kids-listing-kdp.md). It has the launch steps, every KDP field, the prices, the upload file names and the private note for the KDP form.', '',
+             'Start with the listing: kids-listing-kdp.pdf (or the same text as kids-listing-kdp.md). It has the launch steps, every KDP field, the prices and the upload file names.', '',
              'Folders (one per title):']
     for t in TITLES:
         N = names(t)

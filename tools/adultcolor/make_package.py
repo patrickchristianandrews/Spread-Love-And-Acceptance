@@ -91,12 +91,11 @@ def listing(info):
     a('- **The interior is black and white.** Plain grays and black only (checked), single-sided designs with a blank page behind each, no bleed. The cover is full color, matte.')
     a('- **Print only.** There is no Kindle edition and no EPUB: a coloring book is made to be colored on paper. A Kindle-shaped cover picture is in the package for ads and previews only.')
     a('- **The text is American English** and follows the site\'s language rules (no dashes as punctuation, no semicolons, no hotline or emergency wording, no medical advice lines). The how-to page says in one plain sentence that the book is a pastime and not therapy or a diagnosis.')
-    a('- **One private note.** The section "PRIVATE UPLOAD NOTE: the KDP form question about AI use" tells you what to answer in Amazon\'s own form. Nothing in the book, the cover, the description or the site mentions it.')
     a('\n---\n')
     a('## Launch steps (first-time publisher)\n')
     a('1. Sign in to KDP (kdp.amazon.com) and choose **Create**, then **Paperback**.')
     a('2. **Paperback Details:** language English; title and subtitle as in the table below; series: type **%s** only if you want it linked (no number: this title is a companion, not a numbered book); author **%s**; paste the description (the HTML block); the 7 keywords; the 3 categories; answer the audience questions as shown.' % (T.SERIES, T.AUTHOR))
-    a('3. **Paperback Content:** choose **Get a free KDP ISBN**; print options exactly as in the Print details table (black and white, white paper, 8.5 x 11 in, no bleed, matte cover); upload `%s-interior.pdf`; choose "I have a print-ready PDF cover" and upload `%s-cover-wrap.pdf`; answer the AI-use question from the PRIVATE UPLOAD NOTE (a form question only); open the **Print Previewer** and fix anything it flags (it should flag nothing: margins, fonts and the barcode corner were checked).' % (PFX, PFX))
+    a('3. **Paperback Content:** choose **Get a free KDP ISBN**; print options exactly as in the Print details table (black and white, white paper, 8.5 x 11 in, no bleed, matte cover); upload `%s-interior.pdf`; choose "I have a print-ready PDF cover" and upload `%s-cover-wrap.pdf`; open the **Print Previewer** and fix anything it flags (it should flag nothing: margins, fonts and the barcode corner were checked).' % (PFX, PFX))
     a('4. **Paperback Rights & Pricing:** all territories; list price **$%.2f** for Amazon.com, then let KDP suggest the other marketplaces; leave **Expanded distribution** off. Check that KDP\'s printing cost matches the one below (if it differs, KDP\'s figure wins and the royalty changes).' % PRICE)
     a('5. **Order a proof copy.** Check the edges, the gutter, the blank backs, the spine and the barcode corner. Approve it, then **Publish**. Review takes up to a few days.')
     a('6. When it is live, send the Amazon link to the lead (the site\'s download page and the whole-site search can then point to it), and add the title to the series page if you want it listed there (**Add to series**).')
@@ -150,15 +149,6 @@ def listing(info):
     for i, k in enumerate(KEYWORDS):
         a('| %d | %s | %d |' % (i + 1, k, len(k)))
     a('\nNo other authors, brands or claims like "best" or "new". Words already in the title, subtitle and series are left out. [OWNER]\n')
-    a('### PRIVATE UPLOAD NOTE: the KDP form question about AI use\n')
-    a('**Answer this in the KDP form. It is not printed in the book, on the cover or on the product page, and it is not shown on the site.** Keep this section out of anything readers see.\n')
-    a('KDP asks whether AI-based tools were used to create the **text**, the **images**, or **translations**. KDP\'s own definitions: content created by an AI-based tool counts as AI-generated even if you edited it afterward (it must be disclosed), and content you created yourself and only checked or improved with AI is AI-assisted (it does not need to be disclosed).\n')
-    a('Honest answers for this title, as it was made [OWNER: confirm; only you know how much you changed by hand]:\n')
-    a('| Question | Answer to choose | Why |\n|---|---|---|')
-    a('| Text | **Yes, AI-generated** (the how-to page, the five calm words, the back cover and the description) | The short text was drafted by an AI writing tool from the site\'s ideas. |')
-    a('| Images | **Yes, AI-generated** | Every design is drawn by a program (SVG drawn by code: procedural mandalas and patterns, Bezier botanicals and scenes, letters from an open font, and the two pups from the kids books). The program was written with an AI tool and nobody drew the pictures by hand. Say so even though no image model was used: an AI-based tool created the work. |')
-    a('| Translations | **No** | English only. |')
-    a('\nThe answers are seen by Amazon only. The book says nothing about how it was made, so the form is the one place this is stated. Answer it truthfully.\n')
     a('### Print details\n')
     a('| Field | Answer |\n|---|---|')
     a('| ISBN | Choose **"Get a free KDP ISBN"** (it prints in the barcode on the back cover; nothing inside the book needs one). KDP shows "Independently published" as the imprint. |')
@@ -229,7 +219,7 @@ def readme(t):
     return '\n'.join([
         'Spread Love & Acceptance: Color and Breathe (the adult coloring book), KDP package', '=' * 72, '',
         'Read CHANGES.md first: it lists what this package contains.', '',
-        'Start with the listing: adultcolor-listing-kdp.pdf (or the same text as adultcolor-listing-kdp.md). It has the launch steps for a first-time publisher, every KDP field, the price, the printing cost estimate, the upload file names and the private note for the KDP form.', '',
+        'Start with the listing: adultcolor-listing-kdp.pdf (or the same text as adultcolor-listing-kdp.md). It has the launch steps for a first-time publisher, every KDP field, the price, the printing cost estimate and the upload file names.', '',
         'Folders:',
         '  %s/   %s-interior.pdf, %s-cover-wrap.pdf, %s-cover-front.jpg, %s-cover-front-small.jpg, %s-cover-kindle.jpg (ads only)' % ((PFX,) * 6),
         '  adultcolor-previews/   PNG pictures: contact sheets of all 40 designs, sample pages at full size, the full-wrap cover',
