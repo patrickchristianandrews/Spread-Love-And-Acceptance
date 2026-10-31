@@ -201,7 +201,6 @@ def s_treehouse_o(ink):
             g.line(Path().M(0, -60).L(0, -20), w=ink.dw)
             g.part(blob([(-14, -20, 'c'), (14, -20, 'c'), (18, 6), (10, 26, 'c'), (-10, 26, 'c'), (-18, 6)], k=0.8))
             g.line(Path().M(-6, -14).L(-8, 20).M(6, -14).L(8, 20), w=ink.dw * 0.8)
-    F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'wow', lvl=1, arms='up'), (130, 700, 300, 905), 'bottom')
     po.grass_row(ink, 900, FL, FRt, 22, 12, 5)
     tiny(ink, 'heart', [(150, 250), (610, 280), (700, 840)])
     tiny(ink, 'star', [(400, 210)])

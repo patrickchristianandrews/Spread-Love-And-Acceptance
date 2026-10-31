@@ -12,6 +12,11 @@ pink tongue. Tidbit has the perky ear, the cowlick and the heart tag. Sugarfoot 
 """
 import math
 from cute import *
+import cute as _cute
+
+# owner, Oct 31 2026: in the coloring books both pups always have both eyes open (build_coloring.py and the adult book set this)
+OPEN_EYES = False
+CLOSED_EYES = ('joy', 'sleep', 'calm', 'wink', 'yawn', 'silly', 'love')
 
 K = dict(coat='#4A413B', tan='#D9A066', tan2='#EBC08C', pink='#F6A9BB', tongue='#F08DA8', cream='#FFF3DF', green='#8CCB8A', gold='#F4C84E',
          nose='#2B2620', white='#FFFFFF', ink='#2B2620')
@@ -95,6 +100,10 @@ def pup_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, tur
     if tilt:
         g = g.view(0, 0, 1, False, tilt)
     sugar = who == 'sugarfoot'
+    _cute.PAIR['mark'] = True
+    face = expr
+    if OPEN_EYES and expr in CLOSED_EYES:
+        face = 'happy'
     head = blob([(0, -52), (34, -50), (60, -36), (75, -8), (73, 18), (57, 40), (30, 53), (0, 57), (-30, 53), (-57, 40), (-73, 18), (-75, -8), (-60, -36), (-34, -50)])
     g.part(head, c=K['coat'])
     if who == 'tidbit':
@@ -111,36 +120,36 @@ def pup_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, tur
     for sgn in (-1, 1):
         F.part(ell(sgn * 31, -26 + lift, 10, 6.4, 8 * sgn), c=K['tan'], under=False, w=g.ink.dw * 0.8)
     ex, ey = 32, 2
-    if expr == 'joy':
+    if face == 'joy':
         for sgn in (-1, 1):
             eye_happy(F, sgn * ex, ey + 3, 11)
-    elif expr in ('sleep', 'calm'):
+    elif face in ('sleep', 'calm'):
         for sgn in (-1, 1):
             eye_sleep(F, sgn * ex, ey + 2, 11, lash=sugar, side=sgn)
-    elif expr == 'wink':
+    elif face == 'wink':
         eye_open(F, -ex, ey, 12, 15, look=look)
         eye_happy(F, ex, ey + 3, 10)
-    elif expr == 'silly':
+    elif face == 'silly':
         eye_open(F, -ex, ey, 13, 16, look=(2, -1), big=True)
         F.line(Path().M(ex - 10, ey - 4).L(ex + 8, ey + 4).M(ex - 10, ey + 12).L(ex + 8, ey + 4), w=g.ink.dw * 1.25)
-    elif expr == 'love':
+    elif face == 'love':
         for sgn in (-1, 1):
             F.part(heart_path(sgn * ex, ey, 13), c='#F2877E', under=False, w=g.ink.dw * 0.9)
             F.wh(circ(sgn * ex - 5, ey - 6, 2.4))
-    elif expr == 'yawn':
+    elif face == 'yawn':
         for sgn in (-1, 1):
             eye_sleep(F, sgn * ex, ey + 2, 11, lash=False)
-    elif expr in ('wow', 'surprised'):
+    elif face in ('wow', 'surprised'):
         for sgn in (-1, 1):
             eye_open(F, sgn * ex, ey, 13, 16, look=look, big=True)
-    elif expr == 'sparkle':
+    elif face == 'sparkle':
         for sgn in (-1, 1):
             eye_open(F, sgn * ex, ey, 13, 16, look=look, big=True)
             F.wh(sparkle4(sgn * ex + 4, ey - 5, 5, 0.4))
     else:
         for sgn in (-1, 1):
             eye_open(F, sgn * ex, ey, 12, 15, look=look)
-    if sugar and lvl and expr not in ('sleep', 'calm', 'joy'):
+    if sugar and lvl and face not in ('sleep', 'calm', 'joy'):
         for sgn in (-1, 1):
             F.line(Path().M(sgn * (ex + 10), ey - 8).L(sgn * (ex + 17), ey - 14), w=g.ink.dw * 0.9)
     muz = blob([(0, 14), (18, 16), (27, 29), (20, 46), (0, 51), (-20, 46), (-27, 29), (-18, 16)])
@@ -343,7 +352,7 @@ def _leg(g, hx, hy, px, py, paw, r0=17, r1=15, toes=True):
 def pup_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0, tilt=None, mouth=None, look=(0, 0), ph=0.0, hs=None, ear_rot=None, tail_up=1.0, turn=0.7, hat=None, scarf=False, lower=0.0):
     """a pup in profile, head facing you a little. x middle of the body, y the ground. pose: walk, run, jump, sit, lie"""
     sugar = who == 'sugarfoot'
-    hs = hs if hs is not None else (0.92 if not lvl else 0.82)
+    hs = hs if hs is not None else ((1.0 if not lvl else 0.9) if OPEN_EYES else (0.92 if not lvl else 0.82))  # coloring books: the same head size as the front view
     paw = K['cream'] if sugar else K['tan']
     with ink.fig(x, y, s, flip) as g:
         if pose == 'lie':

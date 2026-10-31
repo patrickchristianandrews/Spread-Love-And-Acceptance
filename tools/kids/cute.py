@@ -674,17 +674,28 @@ def capsule(x0, y0, x1, y1, r0, r1=None):
     return P
 
 
+# owner, Oct 31 2026: Tidbit and Sugarfoot are always the same size in a picture. A scene is drawn twice (build_coloring.py):
+# the first pass ('measure') records the scale fit() picks for every pup, the second ('draw') gives every pup the smallest one.
+PAIR = {'mode': None, 'seen': [], 'force': None, 'mark': False}
+
+
 def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
     """draw fn(ink, x, y, s) so that its drawing fills box = (x0, y0, x1, y1) as much as it can (aspect kept).
     anchor: 'bottom' (sits on the bottom edge), 'center', 'top'. Returns (figure, scale)"""
     probe = Ink(ow=ink.ow, iw=ink.iw, dw=ink.dw, wob=0, wob_lo=0, step=ink.step, color=ink.color)
+    PAIR['mark'] = False
     g0 = fn(probe, 0, 0, 1.0)
+    is_pup = PAIR['mark']
     bx0, by0, bx1, by1 = g0.bb
     w, h = bx1 - bx0, by1 - by0
     x0, y0, x1, y1 = box
     s = min((x1 - x0) / w, (y1 - y0) / h)
     if maxs:
         s = min(s, maxs)
+    if is_pup and PAIR['mode'] == 'measure':
+        PAIR['seen'].append(s)
+    elif is_pup and PAIR['mode'] == 'draw' and PAIR['force']:
+        s = min(s, PAIR['force'])
     # scale changes pen-independent geometry only, so the bbox pad (outline) is nearly constant; ignore it
     cx = (x0 + x1) / 2
     if anchor == 'bottom':

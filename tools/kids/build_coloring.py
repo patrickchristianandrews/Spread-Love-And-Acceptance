@@ -25,6 +25,7 @@ import coloring_text as T  # noqa: E402
 import cute as Q  # noqa: E402
 from cute import Ink, rrect, blob, curve, Path, circ, ell, fit, heart_path, star_path, rpoly, capsule  # noqa: E402
 import cast  # noqa: E402
+cast.OPEN_EYES = True  # owner, Oct 31 2026: both eyes open in the coloring books
 import pat  # noqa: E402
 import props as pr  # noqa: E402
 import props2 as p2  # noqa: E402
@@ -158,8 +159,7 @@ def banner(ink, style, cx=425, y0=960, h=78, w=620):
 
 
 def younger_scene_page(i, fn, meta):
-    ink = CY.new_ink(i + 1)
-    fn(ink)
+    ink = paired(lambda: CY.new_ink(i + 1), fn)
     banner(ink, ('ribbon', 'bubble', 'scallop', 'plaque')[i % 4])
     html = ''
     cap = meta['caption']
@@ -186,8 +186,7 @@ def younger_scene_page(i, fn, meta):
 
 
 def older_scene_page(i, fn, meta):
-    ink = CO.o_ink(i + 1)
-    fn(ink)
+    ink = paired(lambda: CO.o_ink(i + 1), fn)
     # a small flourish each side of the prompt
     with ink.fig(0, 0, outline=False) as g:
         for sgn in (-1, 1):
@@ -307,6 +306,22 @@ def copyright_page(kind):
     X = T.YOUNGER if kind == 'younger' else T.OLDER
     s = '<div class="copy">%s</div>' % T.COPYRIGHT.format(series=esc(C.SERIES), n=X['series_no'], name=esc(X['title']), author=esc(C.AUTHOR), updated=C.UPDATED, site=C.SITE)
     return page(s)
+
+
+def paired(new_ink, fn):
+    """draw a scene so Tidbit and Sugarfoot come out the same size: a first pass measures the scale each pup would get,
+    the real pass gives both the smaller one (cute.PAIR, cute.fit)"""
+    import random as _r
+    state = _r.getstate()
+    Q.PAIR.update(mode='measure', seen=[], force=None)
+    fn(new_ink())
+    seen = Q.PAIR["seen"]
+    Q.PAIR.update(mode='draw', force=min(seen) if len(seen) >= 2 else None)
+    _r.setstate(state)
+    ink = new_ink()
+    fn(ink)
+    Q.PAIR.update(mode=None, seen=[], force=None)
+    return ink
 
 
 # ---------------------------------------------------------------- the books

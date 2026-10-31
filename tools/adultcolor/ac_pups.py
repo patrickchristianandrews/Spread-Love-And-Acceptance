@@ -8,6 +8,7 @@ from ac_botan import stem, bez_pt, bez_tan, daisy, poppy, cosmos, tulip, bellflo
 from ac_mandala import band_petals, band_scallop, band_round, circ_ring, dots, ring_at, m_petal, m_drop_out, corner_set, disk, flower
 from ac_scenes1 import draw_pup
 import cast
+cast.OPEN_EYES = True  # owner, Oct 31 2026: both eyes open in the coloring books
 
 
 def m_hammock(pg):

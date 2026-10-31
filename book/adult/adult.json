@@ -50,16 +50,11 @@
   83,
   85
  ],
- "cover": {
-  "width_in": 17.4482,
-  "height_in": 11.25,
-  "spine_in": 0.1982
- },
  "files": {
   "interior": {
    "pdf": "coloring-adult.pdf",
    "pages": 88,
-   "bytes": 2680295
+   "bytes": 2684409
   }
  }
 }
