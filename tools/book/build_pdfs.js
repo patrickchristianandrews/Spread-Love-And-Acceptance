@@ -76,6 +76,72 @@ function pageCount(buf) {
 }
 const markText = k => 'zq' + k.toLowerCase().replace(/[^a-z0-9]/g, 'x') + 'qz';
 
+// book31: the margin codes. Where each marker (.pe-mq, "zqmqx<id>qz") landed in a print: { id: { page, y (mm from the top) } }
+function mqMarks(buf) {
+  const f = path.join(TMP, 'mq.pdf');
+  fs.writeFileSync(f, buf);
+  const x = execFileSync('pdftotext', ['-bbox', f, '-'], { maxBuffer: 256 * 1024 * 1024 }).toString('utf8');
+  const out = {};
+  let page = 0, k = 25.4 / 72, size = null;
+  for (const line of x.split('\n')) {
+    const pm = /<page width="([\d.]+)" height="([\d.]+)">/.exec(line);
+    if (pm) { page++; size = size || [+pm[1] * k, +pm[2] * k]; continue; }
+    const wm = /<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="[\d.]+" yMax="[\d.]+">([^<]*)<\/word>/.exec(line);
+    if (!wm) continue;
+    const re = /zqmqx(\d+)qz/g; let m;
+    while ((m = re.exec(wm[3]))) if (!(m[1] in out)) out[m[1]] = { page, y: +wm[2] * k };
+  }
+  return { at: out, size };
+}
+
+// book31: lay the margin codes out page by page: the outside margin (right on odd pages, left on even ones), level with
+// their line, pushed down so none overlap, and pulled up from the foot of the page when they run past it
+const MQ = { outside: 29, code: 18, gap: 3.5, cap: 3.2, space: 2.4, top: 15.24, bottom: 19.05 };
+function mqLayout(mqs, at, size, pages) {
+  const byPage = {}, missing = [], squeezed = [];
+  for (const q of mqs) {
+    const a = at[q.id];
+    if (!a) { missing.push(q); continue; }
+    (byPage[a.page] = byPage[a.page] || []).push(Object.assign({ y: a.y - 1.2 }, q));
+  }
+  const H = MQ.code + MQ.cap, W = size[0], maxB = size[1] - MQ.bottom;
+  const placed = [];
+  for (const [pg, list] of Object.entries(byPage)) {
+    list.sort((a, b) => a.y - b.y);
+    let last = -1e9;
+    for (const q of list) { q.t = Math.max(q.y, MQ.top, last + MQ.space); last = q.t + H; }
+    let limit = maxB;
+    for (let i = list.length - 1; i >= 0; i--) { if (list[i].t + H > limit) list[i].t = limit - H; limit = list[i].t - MQ.space; }
+    if (list[0].t < MQ.top - 0.01) squeezed.push(+pg);
+    const odd = (+pg) % 2 === 1;
+    const x = odd ? W - MQ.outside + MQ.gap : MQ.outside - MQ.gap - MQ.code;
+    for (const q of list) placed.push(Object.assign(q, { page: +pg, x }));
+  }
+  return { placed, missing, squeezed };
+}
+
+function mqOverlayHtml(placed, size, pages) {
+  const by = {};
+  for (const q of placed) (by[q.page] = by[q.page] || []).push(q);
+  const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  let h = '<style>@page mqov{size:' + size[0].toFixed(3) + 'mm ' + size[1].toFixed(3) + 'mm;margin:0;' +
+    ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right', 'left-top', 'left-middle', 'left-bottom', 'right-top', 'right-middle', 'right-bottom']
+      .map(b => '@' + b + '{content:none;border:0}').join('') + '}' +
+    'html,body{background:transparent!important;margin:0!important;padding:0!important}main{margin:0!important;padding:0!important;max-width:none!important;width:auto!important}' +
+    '.mqov{page:mqov;position:relative;width:' + size[0].toFixed(3) + 'mm;height:' + size[1].toFixed(3) + 'mm;overflow:hidden;break-after:page;margin:0;padding:0}' +
+    '.mqov:last-child{break-after:auto}.mqc{position:absolute;width:' + MQ.code + 'mm;text-align:center;line-height:1}' +
+    '.mqc .pe-qr{display:block;width:' + MQ.code + 'mm;height:' + MQ.code + 'mm;background:#fff}.mqc .pe-qr svg{display:block;width:' + MQ.code + 'mm;height:' + MQ.code + 'mm}' +
+    '.mqt{display:block;margin-top:.7mm;font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:6.4pt;letter-spacing:0;color:#2B2620;white-space:nowrap}</style>';
+  for (let p = 1; p <= pages; p++) {
+    h += '<div class="mqov">';
+    for (const q of (by[p] || [])) {
+      h += '<div class="mqc" style="left:' + q.x.toFixed(2) + 'mm;top:' + q.t.toFixed(2) + 'mm"><span class="pe-qr" data-qr="' + esc(q.u) + '"></span><span class="mqt">' + esc(q.c) + '</span></div>';
+    }
+    h += '</div>';
+  }
+  return h;
+}
+
 // where each marker lands: { key: pageNumber }
 function findMarks(pages, keys) {
   const map = {};
@@ -272,8 +338,10 @@ async function makeBook(ctx, file, opts = {}) {
         if (!k) break;
         el = k;
       }
-      if (el) out.push(el.tagName + '.' + el.className + ': ' + (el.textContent || '').trim().slice(0, 80));
+      if (el) out.push(el.tagName + '.' + el.className + ' (' + Math.round(el.getBoundingClientRect().right) + ' of ' + W + ' px): ' + (el.textContent || '').trim().slice(0, 80));
     }
+    // book31: also name anything else that sticks out (pdftotext showed a book printed smaller with no warning)
+    document.querySelectorAll('main *').forEach(e => { const r = e.getBoundingClientRect(); if (r.width > 0 && r.right > W + 0.5 && out.length < 6) out.push(e.tagName + '.' + e.className + ' (' + Math.round(r.right) + ' of ' + W + ' px): ' + (e.textContent || '').trim().slice(0, 60)); });
     hide.forEach(e => { e.style.display = e.dataset.peDisp || ''; });
     return out;
   });
@@ -411,6 +479,9 @@ async function makeBook(ctx, file, opts = {}) {
     buf = await render(page);
     log('pass ' + pass);
   }
+  // book31: the margin codes: what each marker opens, and where it landed in the last marked print
+  const mqs = await page.evaluate(() => [...document.querySelectorAll('.pe-mq')].map(e => ({ id: e.getAttribute('data-mq'), u: e.getAttribute('data-mq-u'), c: e.getAttribute('data-mq-c') })));
+  const mqAt = mqs.length ? mqMarks(buf) : null;
   // the final copy, without the markers (they sit outside the flow, so nothing moves)
   const before = pageCount(buf);
   await page.evaluate(() => document.querySelectorAll('.pe-mark').forEach(m => m.remove()));
@@ -419,11 +490,36 @@ async function makeBook(ctx, file, opts = {}) {
   const pages = pageCount(buf);
   if (pages !== before) console.log('  warning: page count moved from %d to %d after removing markers', before, pages);
   const blanks = await page.evaluate(() => document.querySelectorAll('.pe-recto-pad.is-on, .pe-verso-pad.is-on').length);
+  // book31: draw the margin codes on a transparent overlay of the same pages (pdf_finish.py lays it over the interior)
+  let overlay = null;
+  if (mqs.length) {
+    const L = mqLayout(mqs, mqAt.at, mqAt.size, pages);
+    if (L.missing.length) console.log('  WARNING: %d margin codes not found in the print: %s', L.missing.length, L.missing.slice(0, 5).map(q => q.c + ' ' + q.u).join(', '));
+    if (L.squeezed.length) console.log('  WARNING: more margin codes than fit on page(s) %s', L.squeezed.join(', '));
+    const keepBody = await page.evaluate(() => document.body.innerHTML);
+    await page.evaluate(h => { document.body.innerHTML = '<main class="read whole" id="main">' + h + '</main>'; }, mqOverlayHtml(L.placed, mqAt.size, pages));
+    const drawn = await page.evaluate(() => {
+      if (typeof window.peQR === 'function') window.peQR();
+      let n = 0;
+      document.querySelectorAll('.mqc .pe-qr svg').forEach(s => {
+        // a two-module quiet zone inside the code (the margin around it is white paper), so the modules themselves fill more of it
+        const v = (s.getAttribute('viewBox') || '').split(/\s+/).map(Number);
+        if (v.length === 4 && v[2] > 8) { s.setAttribute('viewBox', [v[0] + 2, v[1] + 2, v[2] - 4, v[3] - 4].join(' ')); n++; }
+      });
+      return n;
+    });
+    if (drawn !== L.placed.length) console.log('  WARNING: %d of %d margin codes drawn', drawn, L.placed.length);
+    const ovBuf = await render(page);
+    const ovPages = pageCount(ovBuf);
+    if (ovPages !== pages) console.log('  WARNING: the margin-code overlay has %d pages, the book %d', ovPages, pages);
+    overlay = { buf: ovBuf, pages: [...new Set(L.placed.map(q => q.page))].sort((a, b) => a - b), codes: L.placed.map(q => ({ page: q.page, x: q.x, t: q.t, u: q.u, c: q.c })) };
+    await page.evaluate(h => { document.body.innerHTML = h; }, keepBody);
+  }
   // the covers, on their own: front, then back
   await page.evaluate(html => { const m = document.querySelector('main'); m.innerHTML = html.join('\n'); }, covers.html);
   const coverBuf = covers.html.length ? await render(page) : null;
   await page.close();
-  return { buf, coverBuf, pages, blanks, meta: covers.meta, pagemap: Object.assign({}, map, ix) };
+  return { buf, coverBuf, pages, blanks, meta: covers.meta, pagemap: Object.assign({}, map, ix), overlay };
 }
 
 // pad, join the covers, add the bookmarks and the document title (tools/book/pdf_finish.py, with pypdf)
@@ -568,14 +664,21 @@ async function runSeries(browser, ctx) {
     const outline = (meta.outline || []).map(([t, k, l]) => [t, r.pagemap[k] || 0, l]);
     const jf = path.join(TMP, job.id + '-job.json');
     const out = path.join(SERIES_OUT, job.id + '.pdf');
-    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline, kdp: true }));
+    const ov = r.overlay ? path.join(TMP, job.id + '-overlay.pdf') : null;
+    if (ov) {
+      fs.writeFileSync(ov, r.overlay.buf);
+      if (process.env.MQ_OUT) fs.writeFileSync(path.join(process.env.MQ_OUT, job.id + '-margin-codes.json'), JSON.stringify({ size_mm: [152.4, 228.6], code_mm: MQ.code, codes: r.overlay.codes }, null, 0) + '\n');
+    }
+    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline, kdp: true,
+      overlay: ov, overlay_pages: r.overlay ? r.overlay.pages : [] }));
     const f = JSON.parse(execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), jf]).toString().trim().split('\n').pop());
     const pages = f.interior_pages;
     const cov = job.cover ? await makeCover(browser, job, pages) : {};
     made.books[job.id] = Object.assign({ n: job.n, title: job.title, kind: job.kind, edition: job.edition || '', ink: job.gray ? 'black' : 'standard colour', trim_in: job.trim, pages, blank_pages: r.blanks + f.padded,
       bytes: fs.statSync(out).size, pdf: job.id + '.pdf', cover_pdf: job.cover + '.pdf', front_jpg: job.cover + '-front.jpg' }, cov,
       { costs: seriesCosts(job, pages, src.costs), pagemap: r.pagemap });
-    console.log(job.id, pages, 'pages,', 'spine', cov.spine_in, 'in,', (made.books[job.id].bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');
+    if (r.overlay) made.books[job.id].margin_codes = r.overlay.codes.length;
+    console.log(job.id, pages, 'pages,', 'spine', cov.spine_in, 'in,', (made.books[job.id].bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's' + (r.overlay ? ', ' + r.overlay.codes.length + ' margin codes' : ''));
     if ((job.min_pages && pages < job.min_pages) || (job.max_pages && pages > job.max_pages)) console.log('  WARNING: %s has %d pages; it should have %d to %d', job.id, pages, job.min_pages, job.max_pages);
   }
   made.generated = new Date().toISOString().slice(0, 10);

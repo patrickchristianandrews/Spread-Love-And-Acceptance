@@ -4,11 +4,12 @@
    the paper and the parts the series adds; the type and the boxes are the book's own.
    - Plain white pages: no cream paper and no full-page tinted panels (heavy ink shows through 55# paper).
    - Colour for headings, the character hints, the Workpaper and Tool tags and the figures.
-   - Margins: 0.75 in inside (KDP's minimum gutter at this length is 0.375 in), 0.5 in outside. No bleed.
+   - Margins: 0.6 in inside (KDP's minimum gutter is 0.5 in from 151 pages), 1.14 in outside, where the codes sit. No bleed.
    - Body text 11 pt. */
-@page { size: 6in 9in; margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
-@page :right { margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
-@page :left { margin: 15.24mm 19.05mm 19.05mm 12.7mm; }
+/* book31: 0.6 in inside, 1.14 in outside: the outside margin holds the codes (0.71 in wide, 0.14 in from the text, 0.29 in from the trim) */
+@page { size: 6in 9in; margin: 15.24mm 29mm 19.05mm 15.24mm; }
+@page :right { margin: 15.24mm 29mm 19.05mm 15.24mm; }
+@page :left { margin: 15.24mm 15.24mm 19.05mm 29mm; }
 @page pe-front { @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
 
 :root { --paper: #fff; --line: #D9CBA3; }
@@ -127,7 +128,7 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-about-t td:first-child { white-space: nowrap; color: var(--pc); }
 .ps-about-t .ps-addr { font-size: 6.6pt; white-space: nowrap; }
 .ps-about-t th:first-child { white-space: nowrap; }
-.ps-about-t td:nth-child(2) { white-space: nowrap; }
+.ps-about-t td:nth-child(2) { white-space: normal; }
 .ps-about-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt !important; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin: 2mm 0 1mm !important; }
 .ps-about-ideas { margin: 0 0 1.6mm; padding-left: 4mm; }
 .ps-about-ideas li { margin: 0 0 .8mm; }
@@ -344,3 +345,38 @@ body { font-size: 11pt; line-height: 1.55; }
 .pe-fb-wt .wt-list li:first-child { break-before: avoid; }
 /* "Your first month": rows a little shorter, so its codes stay on the table's page */
 .ps-month-t th, .ps-month-t td { padding: 1.4mm 2mm 1.4mm 0; }
+
+/* book31: "All the free tools": one large code per /go/ category page, heading the list of what is on it */
+.ps-gcs { display: block; }
+.ps-gc { display: flex; gap: 4mm; align-items: flex-start; padding: 2mm 0; border-top: .5pt solid #CDBF98; break-inside: avoid; }
+.ps-gc-q { flex: 0 0 26mm; display: flex; flex-direction: column; align-items: center; }
+.ps-gc-q .pe-qr, .ps-gc-q .pe-qr svg { width: 26mm; height: 26mm; display: block; background: #fff; }
+.ps-gc-cap { font-family: "IBM Plex Mono", monospace; font-size: 7pt; color: var(--ink); margin-top: .4mm; }
+.ps-gc-t { flex: 1 1 auto; min-width: 0; }
+.ps-gc-h { font-family: "Fraunces", serif; font-weight: 600; font-size: 11pt; line-height: 1.2; margin: 0 !important; color: var(--pc); }
+.ps-gc-a { font-family: "IBM Plex Mono", monospace; font-size: 6.8pt; color: var(--ink); margin: .3mm 0 1.2mm !important; }
+.ps-gc-l { display: none; }
+.ps-gc-list { list-style: none; padding: 0; margin: 0; }
+.ps-gc-list li { font-size: 7.8pt; line-height: 1.28; margin: 0 0 .5mm; padding: 0; }
+.ps-gc-list b { font-family: "Fraunces", serif; font-weight: 600; color: var(--ink); }
+.ps-gc-list b i { font-style: normal; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.2pt; color: var(--pc); }
+.ps-gc-d { color: var(--soft); }
+.ps-gc-d::before { content: " · "; }
+.pk-book .ps-gc { gap: 3mm; padding: 2mm 0; }
+.pk-book .ps-gc-q { flex-basis: 23mm; }
+.pk-book .ps-gc-q .pe-qr, .pk-book .ps-gc-q .pe-qr svg { width: 23mm; height: 23mm; }
+.pk-book .ps-gc-list li { font-size: 7.2pt; }
+.pk-book .ps-gc-l { font-size: 7pt; }
+
+/* book31: the margin codes. The codes themselves are drawn in the outside margin after printing (tools/book/margin_codes.py,
+   build_pdfs.js); in the text, each thing they open is named in bold */
+.pe-ch a.mq-n, .pe-back a.mq-n, .pe-ch a.mq-n *, .pe-back a.mq-n * { font-weight: 600 !important; color: inherit; }
+.ps-meet-codes { font-size: 9.2pt; line-height: 1.45; margin: 2.4mm 0 0 !important; padding: 2mm 2.6mm; border-left: 2pt solid var(--pc, #3E6B4C); }
+/* book31: the front pages keep the wider column, but nothing in them may be wider than the chapters' column either
+   (Chromium would print the whole book smaller): the about table's addresses may wrap */
+.ps-about-t .ps-about-u { white-space: normal; overflow-wrap: anywhere; }
+.ps-about-t th:last-child { overflow-wrap: anywhere; }
+/* book31: the worksheet tables in the filled-in examples fit the narrower column (a table wider than the column makes
+   Chromium print the whole book smaller): fixed columns, and long words may break */
+.bk-ex-t { table-layout: fixed; width: 100%; }
+.bk-ex-t th, .bk-ex-t td { overflow-wrap: anywhere; hyphens: auto; }

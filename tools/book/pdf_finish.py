@@ -12,6 +12,7 @@ job.json holds:
              the cover on its own
   title, author, subject      document information
   outline    [[title, interior page, level], ...]: the bookmarks (level 0 = part or section, 1 = chapter)
+  overlay, overlay_pages   (optional, book31) a PDF of the same pages holding only the margin codes, and the pages that have one
 
 The interior is padded with blank pages to an even page count, so it binds as whole sheets. In the screen
 edition the viewer's page labels match the printed page numbers: "Cover", 1, 2, 3 ... "Back cover".
@@ -102,6 +103,14 @@ def main():
     if cover is not None:
         w.append(cover, pages=(0, 1), import_outline=False)
     w.append(interior, import_outline=False)
+    # book31: the margin codes, drawn on a transparent overlay of the same pages, laid over the interior
+    if job.get('overlay'):
+        ov = PdfReader(job['overlay'])
+        o0 = 1 if cover is not None else 0
+        for i in range(min(n, len(ov.pages))):
+            if ov.pages[i].get_contents() is not None and job.get('overlay_pages') and (i + 1) in job['overlay_pages']:
+                w.pages[o0 + i].merge_page(ov.pages[i])
+                w.pages[o0 + i].compress_content_streams()
     for _ in range(pad):
         w.add_blank_page(width=w_, height=h_)
     if cover is not None and len(cover.pages) > 1:

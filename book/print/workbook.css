@@ -97,3 +97,9 @@ body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
 .wb-six-t td:nth-child(1) { white-space: nowrap; width: 16mm; }
 .wb-six-t td { padding: 2.6mm 2mm; }
 .wb-six-t { margin: 3mm 0 4mm; }
+
+/* book31: the one-page "All the free tools": the seven category codes in two columns */
+.ps-alltools-one .ps-gcs { columns: 2; column-gap: 7mm; }
+.ps-alltools-one .ps-gc { break-inside: avoid; }
+.ps-alltools-one .ps-gc-q { flex-basis: 25mm; }
+.ps-alltools-one .ps-gc-q .pe-qr, .ps-alltools-one .ps-gc-q .pe-qr svg { width: 25mm; height: 25mm; }

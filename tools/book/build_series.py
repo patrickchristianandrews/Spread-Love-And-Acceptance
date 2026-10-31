@@ -60,7 +60,7 @@ pg = B.pg
 # calculator / spine width": kdp.amazon.com/help/topic/G201953020). The same factor for the 8.5 x 11 workbook.
 PAPER_IN = 0.002252
 # column widths in CSS pixels (96 a inch), for build_pdfs.js's "wider than the text column" check
-COL_PX = {'book': round((6 - 0.75 - 0.5) * 96), 'workbook': round((8.5 - 0.75 - 0.5) * 96), 'pocket': round((5 - 15 / 25.4 - 11 / 25.4) * 96)}
+COL_PX = {'book': round((6 - 15.24 / 25.4 - 29 / 25.4) * 96), 'workbook': round((8.5 - 0.75 - 0.5) * 96), 'pocket': round((5 - 15 / 25.4 - 11 / 25.4) * 96)}
 
 # printing cost and royalty on Amazon (US, looked up October 2026). logicbook14: the owner sells on Amazon only, so the
 # cost model has Amazon's own channel and nothing else. KDP pays 60% at a list price of $9.99 and up and 50% below it
@@ -92,6 +92,7 @@ WB_CSS = '/book/print/workbook.css'
 # books-final9 (owner decision, 20 Oct 2026): every print page is American English. The sources are converted already;
 # this catches words that come from site data the books reuse (the logic library, the workpaper sheets, tool option lists).
 import us_english  # noqa: E402
+import margin_codes as MC  # noqa: E402  (book31: the codes sit in the outside margin and open the /go/ pages)
 _b_write = B.write
 
 
@@ -152,8 +153,29 @@ def unstub(url):
     return url
 
 
-def qr(url):
+def go_url(url):
+    """book31: every code opens a permanent /go/ page card (tools/go/map.json), except the Logic Behind It library, which
+    is its own single page"""
     url = unstub(url)
+    p = MC.site_path(url) or ''
+    if p.startswith(LOGIC_PAGE):
+        return url
+    g = MC.go_path(url, unstub, free_form)
+    return (SITE + g) if g else url
+
+
+def go_addr(url):
+    """the address printed beside a code: the /go/ page it opens (typed without its #card), or the page's own short address"""
+    g = go_url(url)
+    p = MC.site_path(g) or ''
+    return MC.short(p) if p.startswith('/go/') else B.short_address(url)
+
+
+hints.ADDR = lambda it: go_addr(it['href'])
+
+
+def qr(url):
+    url = go_url(url)
     QRS.append(url)
     return B.qr_slot(url)
 
@@ -268,11 +290,12 @@ def s_end(e, book, here, where, remember=None):
             if tl and tl['href'].split('#')[0] == u.split('#')[0] and ('#' not in tl['href'] or tl['href'] == u):
                 t = tl['name']
         s += '<li>%s<span class="pe-use-t"><a href="%s">%s</a>%s<span class="pe-use-u">%s</span></span></li>' % (
-            qr(u), B.absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', B.addr_html(B.short_address(u)))
+            qr(u), B.absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', B.addr_html(go_addr(u)))
     s += '</ul></div>'
     deep = B.href(e[0], True)
-    s += ('<div class="ps-deeper">%s<p><strong>Go deeper (free online)</strong> The expanded version of this chapter, with the research, more examples and more '
-          'to try: <a href="%s"><span class="ps-addr">%s</span></a></p></div>') % (qr(deep), B.absolute(deep), B.addr_html(B.short_address(deep)))
+    # book31: the code for the expanded chapter sits in the margin beside this line
+    s += ('<div class="ps-deeper"><p><strong>Go deeper (free online)</strong> <a href="%s">The expanded version of this chapter</a>, with the research, '
+          'more examples and more to try.</p></div>') % B.absolute(deep)
     s += '</aside>'
     return s
 
@@ -366,9 +389,8 @@ def logic_box(b):
     s += '<p class="lg-box-k">%s<span>%s</span></p><p class="lg-box-t">%s</p>' % (pocket.puzzle_svg(), esc(LOGIC['kicker']), esc(b['title']))
     s += row('looks', esc(b['looks'])) + row('logic', steps, ' lg-logic') + row('like', esc(b['like'])) + row('fits', esc(b['fits']))
     s += row('other', esc(b['other'])) + row('say', '<em>%s</em>' % esc(b['say']), ' lg-say') + row('step', esc(b['step']))
-    s += ('<p class="lg-box-end">More situations like this one, each in the same six parts, are free online. '
-          '<a href="%s%s"><span class="ps-addr">%s</span></a></p></aside>') % (
-        SITE, esc(url), B.addr_html(pocket.item_addr(b['id'])).replace('?', '?<wbr>'))
+    s += ('<p class="lg-box-end">More situations like this one, each in the same six parts, are free online in '
+          '<a href="%s%s">The Logic Behind It</a>.</p></aside>') % (SITE, esc(url))
     return s
 
 
@@ -499,11 +521,14 @@ def meet_page(book, found=()):
     tl = next((hints.TL[k] for (kind, k) in found if kind == 'tool' and k in hints.TL), None)
     s = '<section class="ps-meet pe-only" id="meet">%s<h1>Workpapers, tools and three friends</h1>' % mark('meet')
     s += ('<div class="ps-meet-kinds"><p>%s <strong>A workpaper</strong> is a page you fill in, on your own or together, such as “%s: %s.” '
-          'Every workpaper is free to print or to fill out on the website, and the book gives a code to scan for each one. '
+          'Every workpaper is free to print or to fill out on the website. '
           '<em>%s</em> has them all in one place, on big pages.</p>'
           '<p>%s <strong>A tool</strong> is a helper you use on the website%s. You use it and it gives you something back.</p>'
           '<p class="ps-meet-note">Workpapers and tools are kept in separate lists. Both are free and need no account, and what you '
-          'type stays on your own device.</p></div>') % (
+          'type stays on your own device.</p>'
+          '<p class="ps-meet-codes"><strong>The codes in the margin.</strong> A small code in the margin opens a free page from the books, '
+          'at the thing named in bold beside it. Under each code is its short address, such as go/self: type '
+          'spreadloveandacceptance.com/go/self to open the same page.</p></div>') % (
         hints.tag('wp', wp), esc(hints.wp_label(wp)), esc(wp['name']), esc(wb), hints.tag('tool'),
         (', such as “Tool: %s”' % esc(tl['name'])) if tl else '')
     s += '<p class="ps-meet-h">Three friends who give hints</p><ul class="bh-friends ps-friends">'
@@ -567,7 +592,7 @@ def about_page(book, namer):
         tail = B.short_address(B.href(slug)).split('/book/', 1)[-1]
         rows += '<tr><td>%s</td><td>%s</td><td><span class="ps-addr ps-about-u" data-full="%s">…/book/%s</span></td></tr>' % (
             esc(lab), esc(B.SHORT[slug]), esc(B.short_address(B.href(slug))), esc(tail))
-    s += ('<table class="ps-about-t"><thead><tr><th scope="col">Here</th><th scope="col">About</th><th scope="col">Free online at spreadloveandacceptance.com/book</th></tr></thead>'
+    s += ('<table class="ps-about-t"><thead><tr><th scope="col">Here</th><th scope="col">About</th><th scope="col">Free online at spreadloveandacceptance.<wbr>com/<wbr>book</th></tr></thead>'
           '<tbody>%s</tbody></table>') % rows
     # books-final9: one plain sentence per book (no semicolon list)
     others = ' '.join('%s, <em>%s</em>, is %s.' % ('Book %d' % b['n'], esc(b['title']), esc(ab['others'][str(b['n'])]))
@@ -616,7 +641,7 @@ def research_short(book, here):
         book['color'], book['tint'], mark('notes'))
     s += ('<div class="ps-online-box">%s<p>The %d entries these chapters draw on, briefly. Each one was looked up and checked. The full list, '
           'with what each study found, how strong the finding is and where to read it, is free online: '
-          '<span class="ps-addr">spreadloveandacceptance.com/research</span>.</p></div>') % (qr('/research.html'), n)
+          '<span class="ps-addr">spreadloveandacceptance.com/go/read</span>.</p></div>') % (qr('/research.html'), n)
     for slug in book['chapters']:
         if slug not in notes:
             continue
@@ -755,41 +780,55 @@ def tools_cell(r, lines, epub=False, nodomain=False):
         qr(r['href']), ('<i>%s</i> ' % esc(r['wp'])) if r.get('wp') else '', esc(r['name']), esc(lines.get(r['id'], '')), B.addr_html(addr.replace('spreadloveandacceptance.com', '', 1) if nodomain else addr))
 
 
+READ_ITEMS = [('The expanded chapters', 'Every chapter of the series, with the research and more to try'),
+              ('Guides for your situation', 'Couples, families, friends, work, grief and more'),
+              ('The research', 'Every study the books lean on, and how strong it is')]
+
+
 def alltools_pages(book, kind='book', epub=False):
-    """Two pages in a book (the tools, then the workpapers and plans), one page in the workbook. Every registry entry, none left out:
-    a build error says which one is missing from the short-lines file."""
+    """book31 (owner, "option 2"): "All the free tools" is one large code per /go/ category page, each heading the list of the
+    tools and worksheets on it (name and one line). Every registry entry is listed under the page its code opens; a build
+    error says which one is missing from the short-lines file or has no page."""
     reg = dict((r['id'], r) for r in registry_all())
     T = tools_short()
     lines = T['lines']
-    tools = [r for r in reg.values() if r['kind'] == 'tool']
-    wps = [r for r in reg.values() if r['kind'] != 'tool']
-    for grp, order in ((tools, T['order_tools']), (wps, T['order_workpapers'])):
-        ids = set(r['id'] for r in grp)
-        if ids != set(order) or any(i not in lines for i in ids):
-            ERRORS.append('All the free tools: tools-short.json does not match the registry (missing %s, extra %s)' % (
-                sorted(ids - set(order)) or sorted(i for i in ids if i not in lines), sorted(set(order) - ids)))
-    tl = [reg[i] for i in T['order_tools'] if i in reg]
-    wl = [reg[i] for i in T['order_workpapers'] if i in reg]
-    nd = kind != 'workbook' and not epub  # book30: in the two-column grids the domain is said once, in the lede, and each code shows its path
-    if nd:
-        lede = 'Every tool on the website, free, with no account. Scan a code, or type spreadloveandacceptance.com and the path under it. What you type stays on your device.'
-        wlede = 'The worksheets and plans, free to fill out on screen or print, kept apart from the tools. Scan a code, or type spreadloveandacceptance.com and the path under it.'
-    else:
-        lede = ('Every tool on the website, free, with no account. ' + ('Tap a name to open it. ' if epub else 'Point your phone’s camera at a code to open it. ') + 'What you type stays on your device.')
-        wlede = ('The worksheets and plans on the website, free to fill out on screen or print. They are kept apart from the tools above, and every one has ' + ('a link' if epub else 'a code') + '.')
+    order = T['order_tools'] + T['order_workpapers']
+    if set(order) != set(reg) or any(i not in lines for i in reg):
+        ERRORS.append('All the free tools: tools-short.json does not match the registry (missing %s, extra %s)' % (
+            sorted(set(reg) - set(order)) or sorted(i for i in reg if i not in lines), sorted(set(order) - set(reg))))
+    groups = {}
+    for i in order:
+        r = reg.get(i)
+        if not r:
+            continue
+        g = MC.go_path(r['href'], unstub, free_form)
+        if not g:
+            ERRORS.append('All the free tools: %s (%s) has no /go/ page in tools/go/map.json' % (r['name'], r['href']))
+            continue
+        groups.setdefault(MC.cat_of(g), []).append((r, g))
+    lede = ('Every tool and worksheet on the website, free, with no account, on seven pages. ' +
+            ('Tap a name to open it.' if epub else 'Scan a page’s code with your phone’s camera, or type its address, then pick the tool by name.') +
+            ' What you type stays on your device.')
     col, tint = book['color'], book['tint']
-    if kind == 'workbook':
-        body = ('<h1 class="pe-back-h">All the free tools</h1><p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools</h2><div class="ps-tg">%s</div>'
-                '<h2 class="ps-tg-h">Workpapers and plans</h2><div class="ps-tg">%s</div>') % (
-            esc(lede), ''.join(tools_cell(r, lines, epub, nd) for r in tl), ''.join(tools_cell(r, lines, epub, nd) for r in wl))
-        return ('<section class="pe-back ps-alltools ps-alltools-one" id="alltools" style="--pc:%s;--pt:%s">%s%s</section>') % (col, tint, mark('alltools'), body)
-    p1 = ('<section class="pe-back ps-alltools" id="alltools" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools</h1>'
-          '<p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Tools: helpers you use on the site</h2><div class="ps-tg">%s</div></section>') % (
-        col, tint, mark('alltools'), esc(lede), ''.join(tools_cell(r, lines, epub, nd) for r in tl))
-    p2 = ('<section class="pe-back ps-alltools ps-alltools-wp" id="allworkpapers" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools, continued</h1>'
-          '<p class="pe-back-lede">%s</p><h2 class="ps-tg-h">Workpapers: pages you fill in</h2><div class="ps-tg">%s</div></section>') % (
-        col, tint, mark('allworkpapers'), esc(wlede), ''.join(tools_cell(r, lines, epub, nd) for r in wl))
-    return p1 + p2
+    blocks = ''
+    for cid, title, cl in MC.cats():
+        items = groups.get(cid, [])
+        url = '/go/' + cid
+        lis = ''
+        for r, g in items:
+            nm = ('<i>%s</i> ' % esc(r['wp']) if r.get('wp') else '') + esc(r['name'])
+            if epub:
+                nm = '<a href="%s%s">%s</a>' % (SITE, esc(g), nm)
+            lis += '<li><b>%s</b><span class="ps-gc-d">%s</span></li>' % (nm, esc(lines.get(r['id'], '')))
+        if cid == 'read' and not items:
+            lis = ''.join('<li><b>%s</b><span class="ps-gc-d">%s</span></li>' % (esc(t), esc(d)) for t, d in READ_ITEMS)
+        head = ('<a href="%s%s">%s</a>' % (SITE, url, esc(title))) if epub else esc(title)
+        code = '' if epub else '<div class="ps-gc-q">%s<span class="ps-gc-cap">go/%s</span></div>' % (qr(url), cid)
+        blocks += ('<div class="ps-gc">%s<div class="ps-gc-t"><h2 class="ps-gc-h">%s</h2><p class="ps-gc-a">%s</p><p class="ps-gc-l">%s</p>'
+                   '<ul class="ps-gc-list">%s</ul></div></div>') % (code, head, 'spreadloveandacceptance.com/go/' + cid, esc(cl), lis)
+    cls = 'ps-alltools ps-alltools-one' if kind == 'workbook' else 'ps-alltools'
+    return ('<section class="pe-back %s" id="alltools" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">All the free tools</h1>'
+            '<p class="pe-back-lede">%s</p><div class="ps-gcs">%s</div></section>') % (cls, col, tint, '' if epub else mark('alltools'), esc(lede), blocks)
 
 
 def series_page(book):
@@ -820,8 +859,10 @@ def _series_html(h, book, namer, epub, key):
     h = re.sub(r'\{page:([^}]+)\}', lambda m: pg(m.group(1)), h)
     h = ST.series_links(h, key, namer, B.XREFS.add)
     if not epub:
-        h, n = ST.scan_panels(h, qr, classify, B.short_address, B.addr_html, esc)
-        SCAN_COUNT[(book['id'], key)] = n
+        # book31: the codes go in the margin, beside the first mention of each thing on the page
+        h, coded = MC.margin_pass(h, unstub, free_form)
+        QRS.extend(SITE + g for g in coded)
+        SCAN_COUNT[(book['id'], key)] = len(coded)
     return h
 
 
@@ -948,7 +989,7 @@ def showcase(book, epub=False):
         t_html = ('<a href="%s%s">%s</a>' % (SITE, link, esc(t))) if epub else esc(t)
         return ('<div class="ps-sc-card ps-sc-%s">%s<div class="ps-sc-txt">%s<p class="ps-sc-t">%s</p><p class="ps-sc-d">%s</p>'
                 '</div><p class="ps-addr">%s</p></div>') % (key, q, _sc_art(artk, c) if not epub or artk in ('puddles', 'pups') else '', t_html, esc(words),
-                                                            B.addr_html(B.short_address(link)))
+                                                            B.addr_html(go_addr(link)))
     left = ''.join(panel(x) for x in SHOWCASE[:4])
     right = ''.join(panel(x) for x in SHOWCASE[4:])
     promise = ('<div class="ps-sc-promise">%s<p><strong>Everything stays on your device.</strong> No sign-up and no account. What you type in the tools, '
@@ -970,9 +1011,12 @@ def free_page(book):
           'Scan a code with your phone’s camera.</p><ul class="ps-free-list">')
     for u, t, d in FREE_LINKS:
         s += '<li>%s<span><strong>%s</strong><span class="ps-free-d">%s</span><span class="ps-addr">%s</span></span></li>' % (
-            qr(u), esc(t), esc(d), B.addr_html(B.short_address(u)))
+            qr(u), esc(t), esc(d), B.addr_html(go_addr(u)))
     s += '</ul><p class="ps-free-note">Looking for a word? Every chapter can be searched online, and the research page lists every source.</p></section>'
     return s
+
+
+CODED_NOW = set()  # book31: the back pages of the book being built whose links got margin codes (they keep the wide outside margin)
 
 
 def page_rules(book, here_order, back_keys):
@@ -995,6 +1039,7 @@ def page_rules(book, here_order, back_keys):
     for k, label in back_keys:
         r.append('#%s{page:sb-%s}' % (k, k))
         r.append(rules('sb-' + k, label))
+
     return '<style media="print">%s</style>' % '\n'.join(r)
 
 
@@ -1036,6 +1081,10 @@ def build_book(book, where):
         # every chapter opens on a right-hand page (build_pdfs.js switches the blank page before it on or off)
         body.append('<div class="pe-recto-pad pe-only" data-for="%s"></div>' % slug)
         art = s_chapter(e, book, here, where, namer, panels=True)
+        # book31: no code boxes in the reading column; each thing gets one code in the outside margin
+        art, coded = MC.margin_pass(art, unstub, free_form)
+        QRS.extend(SITE + g for g in coded)
+        SCAN_COUNT[(book['id'], slug)] = len(coded)
         arts.append((slug, art))
         body.append(art)
     # the back of the book: built before finish_package, so their page references get markers
@@ -1097,6 +1146,8 @@ def build_book(book, where):
     title = '%s, Book %d: %s' % (SERIES_TITLE, book['n'], book['title'])
     outline = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
         {'outline': ol, 'title': title, 'author': B.AUTHOR, 'subject': book['line']}, ensure_ascii=False).replace('</', '<\\/')
+    CODED_NOW.clear()
+    CODED_NOW.update(k for k, _t, h in extra if 'pe-mq' in h)
     rules = page_rules(book, [s_ for s_ in order if s_ in here], back)
     # printfix13: no reference in this book may point to a chapter or a page that isn't there
     for err in ST.check_text(ST.printed_text(front + body_html + extra_html), book, books(), 'Book %d' % book['n']):
@@ -1277,7 +1328,7 @@ def build_workbook(where, bw=False):
         s += ('<div class="ps-online-box">%s<p><strong>Fill it out on screen, free.</strong> %s '
               '<span class="ps-addr">%s</span></p></div>') % (
             qr(fill), 'The online version does the math for you and keeps what you type on your own device.' if key in WB_SUMS
-            else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(B.short_address(fill)))
+            else 'The online version keeps a copy on your own device, and nothing is sent anywhere.', B.addr_html(go_addr(fill)))
         s += '</section>'
         for c in range(1, copies + 1):
             # the short sheets fit one page; the long ones get more room and fill two facing pages
@@ -1398,7 +1449,7 @@ def cover_html(item, trim, pages_hint=0, workbook=False, pocket=False, boxset=Fa
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not (workbook or pocket or boxset) else item['title'])
     title = item.get('short_title') or item['title']
     free_url, free_t, free_l = ('%s%s' % (SITE, LOGIC_PAGE), 'Every situation, free online', 'More than seventy, at spreadloveandacceptance.<wbr>com/<wbr>the-logic-behind-it') if pocket else (
-        '%s/book/' % SITE, 'Free to read online', 'Every chapter, plus its expanded version, at spreadloveandacceptance.com/book')
+        go_url('/book/'), 'Free to read online', 'Every chapter, plus its expanded version, at spreadloveandacceptance.com/go/read')
     extra_css = ('.cv-text { top: .92in; left: .64in; right: .38in; } .cv-sub { font-size: 10.6pt; max-width: 3.9in; } .cv-art { left: .64in; right: .38in; } '
                  '.cv-foot { left: .64in; right: .38in; bottom: .42in; } .cv-line { font-size: 8.6pt; } .cv-by { font-size: 11pt; } .cv-back-in { left: .42in; right: .45in; top: .5in; } '
                  '.cv-bk { margin-bottom: .14in; } .cv-q { font-size: 9.4pt; margin-bottom: .14in; } .cv-series { font-size: 7.6pt; line-height: 1.46; } '

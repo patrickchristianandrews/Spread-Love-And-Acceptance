@@ -520,7 +520,9 @@ def book_docs(book, where):
     hn_html, hn_toc = S.help_now(here, type('EbookNamer', (), {'ref': staticmethod(ebook_ref)}))
     if hn_html:
         docs.append(Doc('help-now.xhtml', hn_toc, hn_html))
-    meet = swap(S.meet_page(book), 'and the book gives a code to scan for each one.', 'and the book links to each one.', 'meet page')
+    # book31: the ebook has links, not margin codes
+    meet = swap(S.meet_page(book), 'Every workpaper is free to print or to fill out on the website. ', 'Every workpaper is free to print or to fill out on the website, and the book links to each one. ', 'meet page')
+    meet = re.sub(r'<p class="ps-meet-codes">.*?</p>', '', meet, flags=re.S)
     docs.append(Doc('meet.xhtml', 'Workpapers, tools and three friends', meet))
     # the chapters, numbered (figures, filled-in examples) as in print
     parts = []
@@ -730,10 +732,13 @@ figcaption { text-align: left; font-size: .88em; margin-top: .5em; }
 
 /* back of the book */
 .pe-back-lede, .pe-fb-lede, .wt-lede { font-style: italic; }
-.ps-tg-c { margin: 0 0 .7em; }
-.ps-tg-t b { font-weight: bold; }
-.ps-tg-d { display: block; font-size: .92em; }
-.ps-tg-h { font-size: 1.1em; margin: 1em 0 .5em; }
+.ps-gc { margin: 0 0 1.2em; }
+.ps-gc-h { font-size: 1.1em; margin: 1em 0 .2em; }
+.ps-gc-a { font-size: .85em; margin: 0 0 .3em; }
+.ps-gc-l { font-style: italic; margin: 0 0 .4em; }
+.ps-gc-list { padding-left: 1.2em; }
+.ps-gc-list li { margin: 0 0 .35em; }
+.ps-gc-d::before { content: " · "; }
 .ps-online-box { border: 1px solid %(acc)s; padding: .5em .8em .1em; margin: 0 0 1em; }
 .pe-notes-h { font-size: 1.05em; }
 .ps-refs { list-style: none; padding-left: 0; font-size: .9em; }
@@ -788,7 +793,23 @@ figcaption { text-align: left; font-size: .88em; margin-top: .5em; }
 '''
 
 
+def go_links(body):
+    """book31: every web link the books print a code for points to its permanent /go/ page card (tools/go/map.json), so a
+    tap and a scan land in the same place; the Logic Behind It library, research notes and book chapters keep their own links"""
+    import margin_codes as MC
+
+    def sub(m):
+        h = html.unescape(m.group(2))
+        p = MC.site_path(h) or ''
+        if not p or p.startswith('/the-logic-behind-it') or p.startswith('/go/'):
+            return m.group(0)
+        g = MC.go_path(h, S.unstub, S.free_form)
+        return (m.group(1) + html.escape(MC.SITE + g, quote=True) + m.group(3)) if g else m.group(0)
+    return re.sub(r'(<a\b[^>]*\bhref=")([^"]+)(")', sub, body)
+
+
 def xhtml(title, body, body_type='', lang='en-US'):
+    body = go_links(body)
     bt = ' epub:type="%s"' % body_type if body_type else ''
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n'
             '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="%s" lang="%s">\n'

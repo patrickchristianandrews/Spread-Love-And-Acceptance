@@ -172,6 +172,9 @@ TL = {t['key']: t for t in TOOLS}
 ITEM = dict(list(WP.items()) + list(TL.items()))
 
 
+ADDR = None  # book31: build_series.py sets this to print each item's /go/ page address in the end-of-book lists
+
+
 def short_path(item):
     p = item.get('print') or re.sub(r'[#?].*$', '', item['href'])
     p = re.sub(r'/index\.html$', '/', p)  # book30: a folder page keeps its slash (/do/)
@@ -187,8 +190,8 @@ def addr_html(addr):
     """An address that may wrap only before a "/" (book30: the domain is one piece; the same rule as build_book.addr_html)."""
     parts = []
     for x in re.findall(r'spreadloveandacceptance\.com|/[^/?]+|\?.*|/|[^/?]+', addr):
-        if x == '/' and parts:
-            parts[-1] += x
+        if (x == '/' or (parts and parts[-1].endswith('/go'))) and parts:
+            parts[-1] += x  # a closing slash stays with its piece; "/go/self" is one piece
         else:
             parts.append(x)
     return '<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in parts)
@@ -418,7 +421,7 @@ def _list_items(kind, items, found, chapter_ref):
                 return int(m.group(1)) if m else 0
             if all(_pg(r) for r in refs):
                 refs = sorted(refs, key=_pg)
-        addr = short_address(it)
+        addr = ADDR(it) if ADDR else short_address(it)  # book31: the print series prints the /go/ page each one is on
         lab = wp_label(it) if kind == 'wp' else 'Tool'
         out.append('<li><p class="wt-name"><span class="bh-k">%s</span><span class="bh-c">: </span><a href="%s" data-u="%s">%s</a>'
                    '<span class="wt-u"> %s</span></p><p class="wt-in">In: %s</p></li>' % (

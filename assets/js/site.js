@@ -690,7 +690,6 @@
       { href: '/night-garden.html', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/tools/soften-a-tense-moment.html', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { href: '/calm-without-pills.html', title: 'Calm without pills', note: 'What actually helps, and what the research says' },
-      { href: '/coloring-page.html', title: 'A coloring page, at random', note: 'One tap for a picture from the coloring books, ready to print' },
       { sub: 'Games', id: 'games', hub: '/pause-and-play.html', hubLabel: 'All the calm games',
         desc: 'Calm word games, crosswords, a coin pusher and an arcade of classics. No timers and no way to lose.',
         short: 'Word games, crosswords and a cozy arcade.' },

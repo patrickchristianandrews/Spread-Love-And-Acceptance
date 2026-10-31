@@ -3,7 +3,7 @@
   "pages": 154,
   "interior_pages": 152,
   "blank_pages": 1,
-  "bytes": 2190693,
+  "bytes": 2200863,
   "title": "Spread Love & Acceptance: For two or more (paperback text)",
   "pagemap": {
    "half": 1,
@@ -202,7 +202,7 @@
   "pages": 256,
   "interior_pages": 254,
   "blank_pages": 2,
-  "bytes": 3541175,
+  "bytes": 3551244,
   "title": "Spread Love & Acceptance: For two or more (expanded version)",
   "pagemap": {
    "half": 1,
@@ -461,7 +461,7 @@
   "pages": 504,
   "interior_pages": 502,
   "blank_pages": 3,
-  "bytes": 6360353,
+  "bytes": 6363316,
   "title": "Spread Love & Acceptance: The whole book (paperback text)",
   "pagemap": {
    "half": 1,
@@ -839,7 +839,7 @@
   "pages": 826,
   "interior_pages": 824,
   "blank_pages": 4,
-  "bytes": 9224827,
+  "bytes": 9227966,
   "title": "Spread Love & Acceptance: The whole book (expanded version)",
   "pagemap": {
    "half": 1,
@@ -1083,7 +1083,7 @@
    "ix-caregivers-caregiving": "57, 61, 93, 111, 147, 172, 178, 182, 216, 247, 254, 280, 295, 297, 353, 409–410, 600–601",
    "ix-carstensen-laura": "668",
    "ix-change": "21–23, 28, 47, 50–52, 85, 87–88, 90, 94, 97, 99, 103, 122, 133, 136, 146, 164, 182, 184, 188, 190–191, 204, 211, 280, 286, 292, 299, 301–302, 310–311, 323, 329, 335–336, 367, 411, 421, 427, 429–433, 435–437, 439–452, 462, 475–477, 479, 481, 485, 487–488, 492, 512, 514, 519–520, 529, 542, 571, 579–580, 585, 617, 632, 636–637, 639, 641, 644–646, 649–650, 653–656, 665, 669, 671, 686, 697, 706, 711, 717, 729, 736–738, 741, 744, 754",
-   "ix-check-in": "37, 156–159, 163, 167, 183, 272, 288–291, 522, 583, 594, 611, 714, 716, 735",
+   "ix-check-in": "37, 156–159, 163, 167, 183, 272, 288–291, 522, 583, 594, 714, 716, 735",
    "ix-children": "26, 31, 34, 40, 76, 83, 100, 117, 130, 143, 188, 192, 195, 203, 210, 227–230, 235, 240, 252, 266, 273, 275, 288, 296, 299, 319, 409–410, 468, 482–483, 489, 495, 516, 557, 579, 634, 641, 667",
    "ix-chores": "124, 176, 207, 245, 291, 353, 383, 448, 651, 670",
    "ix-closeness": "386, 413, 429, 656–657, 659, 661–667, 669, 671, 675–676, 735–736",
@@ -1297,7 +1297,7 @@
   "pages": 370,
   "interior_pages": 368,
   "blank_pages": 2,
-  "bytes": 4656886,
+  "bytes": 4649490,
   "title": "Spread Love & Acceptance: For one person (paperback text)",
   "pagemap": {
    "half": 1,
@@ -1613,7 +1613,7 @@
   "pages": 592,
   "interior_pages": 590,
   "blank_pages": 2,
-  "bytes": 6202200,
+  "bytes": 6194579,
   "title": "Spread Love & Acceptance: For one person (expanded version)",
   "pagemap": {
    "half": 1,
@@ -1993,7 +1993,7 @@
   "pages": 322,
   "interior_pages": 320,
   "blank_pages": 1,
-  "bytes": 4034871,
+  "bytes": 4030310,
   "title": "Spread Love & Acceptance: Understanding people (paperback text)",
   "pagemap": {
    "half": 1,
@@ -2268,7 +2268,7 @@
    "ix-who-did-what": "45",
    "ix-window-of-tolerance": "31, 41, 244",
    "ix-wired-differently": "26, 55, 115, 141, 147",
-   "ix-wiring": "26–27, 43, 55, 72, 74, 111, 115, 125, 134–135, 140–141, 144–148, 211, 213, 217–218, 245, 259–260, 262",
+   "ix-wiring": "26–27, 43, 55, 72, 74, 111, 115, 125, 134–135, 140–141, 144–148, 211, 213, 217–218, 245, 259, 262",
    "ix-work-the-workplace": "115, 147, 155–156, 188, 215",
    "ix-worry": "21, 43, 60, 79, 126, 232–234, 236–237, 241–243, 262–263",
    "ix-your-lens": "56–57, 88, 115–116, 129, 218, 253"
@@ -2278,7 +2278,7 @@
   "pages": 496,
   "interior_pages": 494,
   "blank_pages": 1,
-  "bytes": 5022141,
+  "bytes": 5017492,
   "title": "Spread Love & Acceptance: Understanding people (expanded version)",
   "pagemap": {
    "half": 1,

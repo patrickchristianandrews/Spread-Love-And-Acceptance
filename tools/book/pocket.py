@@ -8,7 +8,7 @@ print page (book/print/src/<id>.html) and its cover; tools/book/build_epub.py ca
 box set. Nothing here runs on import.
 
 Pages: title, copyright, contents, how to use this guide, three short pages on the six-part lens, then nine short
-sections (an opening page and a page per situation, each with a code to that situation online), then "Build your own"
+sections (an opening page with a code to that section online, and a page per situation), then "Build your own"
 (a page on how, and blank cards), Find it fast, more free online, research notes, the series and pages for notes.
 The owner's road-rage tip ("tailgating") stays on the website only: build() refuses it.
 """
@@ -119,7 +119,7 @@ HOW = [
     ('Dip in anywhere', 'Every page stands on its own. Use the contents, the section pages or “Find it fast” at the back to go straight to whatever’s in front of you.'),
     ('Read it with the other person', 'A page can say what’s hard to say in the moment. Hand it over, or read it together, and talk about the last two parts, the other side and the small step.'),
     ('Use it both ways', 'Some pages may explain you. Some may explain the people around you. Either way, the point is a fair view of both sides.'),
-    ('Scan for more', 'Each page has a code to the same situation on the website, free, with more pictures to choose from. The website has more than seventy situations, and a box where you can type your own.'),
+    ('Scan for more', 'Each section opens with a code to that section on the website, free, with more pictures to choose from. The website has more than seventy situations, and a box where you can type your own.'),
     ('Build your own', 'The blank cards at the back walk you through the six parts for a reaction this guide doesn’t cover. There will be plenty of those.'),
 ]
 
@@ -200,20 +200,20 @@ def sit_html(it, n, S, include_fits=True):
             '<div class="pk-part pk-like"><h3 class="pk-h">It’s like</h3><p>%(an)s</p></div>%(fits)s'
             '<div class="pk-part pk-other"><h3 class="pk-h">The other side</h3><p>%(other)s</p></div>'
             '<div class="pk-say"><p class="pk-say-q">%(say)s</p><p class="pk-step"><b>One small step</b> %(step)s</p>%(care)s</div>'
-            '<div class="pk-online">%(qr)s<p><strong>This one online</strong>Free, with more pictures to choose from.'
-            '<a href="https://spreadloveandacceptance.com%(url)s"><span class="ps-addr pk-addr">%(addr)s</span></a></p></div></article>') % {
+            '</article>') % {
         'cat': it['cat'], 'id': it['id'], 'mark': S.mark('sit-' + it['id']), 'n': n, 'cat_name': esc(c['name']), 'side': it['side'],
         'side_t': esc(SIDE_TAG[it['side']]), 't': esc(it['t']), 'looks': esc(it['looks']), 'chain': chain, 'an': esc(it['an'][0]), 'fits': fits,
-        'other': esc(it['other']), 'say': esc(it['say']), 'step': esc(it['step']), 'care': care, 'qr': S.qr(item_url(it['id'])),
-        'url': esc(item_url(it['id'])), 'addr': S.B.addr_html(item_addr(it['id'])).replace('?', '?<wbr>')}
+        'other': esc(it['other']), 'say': esc(it['say']), 'step': esc(it['step']), 'care': care}
 
 
 def sec_html(k, c, its, S, nums):
     rows = ''.join('<li><a href="#sit-%s"><span class="pk-sec-n">%d</span><span class="pk-sec-t">%s</span><span class="pe-toc-dots"></span>%s</a></li>' % (
         it['id'], nums[it['id']], esc(it['t']), S.pg('sit-' + it['id'])) for it in its)
     return ('<section class="pk-sec pk-c-%s" id="sec-%s">%s<p class="pk-sec-k">Section %d</p><h1 class="pk-sec-h">%s</h1><p class="pk-sec-b">%s</p>'
-            '<p class="pk-sec-i">%s</p><ol class="pk-sec-l">%s</ol><div class="pk-sec-art" aria-hidden="true">%s</div></section>') % (
-        c['id'], c['id'], S.mark('sec-' + c['id']), k, esc(c['name']), esc(c['blurb']), esc(SEC_INTRO.get(c['id'], '')), rows, puzzle_svg())
+            '<p class="pk-sec-i">%s</p><ol class="pk-sec-l">%s</ol><div class="pk-sec-code">%s<p><strong>This section online</strong>Every situation here, '
+            'and more, free with more pictures to choose from.<span class="ps-addr pk-addr">spreadloveandacceptance.com/the-logic-behind-it</span></p></div></section>') % (
+        c['id'], c['id'], S.mark('sec-' + c['id']), k, esc(c['name']), esc(c['blurb']), esc(SEC_INTRO.get(c['id'], '')), rows,
+        S.qr('%s#cat-%s' % (PAGE, c['id'])))  # book31: one code per section (the library's own section), not one per situation
 
 
 def puzzle_svg(color='currentColor', w=None):
@@ -466,8 +466,8 @@ def epub_docs(S, Doc, B):
     docs.append(None)  # nav.xhtml
     how = how_html(S).replace('Use the contents, the section pages or “Find it fast” at the back', 'Use the contents or “Find it fast” at the back')
     # voice18 (bookqa18 M9): an ebook has links, not codes
-    how = how.replace('<strong>Scan for more.</strong> Each page has a code to the same situation on the website,', '<strong>Tap for more.</strong> Each page links to the same situation on the website,')
-    how = how.replace('Each page has a code to the same situation on the website', 'Each page links to the same situation on the website')
+    how = how.replace('<strong>Scan for more.</strong> Each section opens with a code to that section on the website,', '<strong>Tap for more.</strong> Each page links to the same situation on the website,')
+    how = how.replace('Each section opens with a code to that section on the website', 'Each page links to the same situation on the website')
     docs.append(Doc('how.xhtml', 'How to use this guide', how))
     for key, title, h in lens_parts(S):
         docs.append(Doc(key + '.xhtml', title, h))

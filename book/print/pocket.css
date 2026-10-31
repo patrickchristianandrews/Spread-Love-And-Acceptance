@@ -126,3 +126,10 @@
 /* book30 (proofread E1-01): the situation count sits on the section's own line, so the whole contents fits on one page */
 .pk-toc .pe-toc-s { display: inline !important; margin: 0 0 0 1.4mm !important; }
 .pk-toc .pe-toc-s::before { content: "· "; }
+
+/* book31: one code per section, on the section's opening page (the library's own section online), in place of a code on every situation */
+.pk-sec-code { margin-top: auto; display: flex; gap: 3mm; align-items: center; padding-top: 2.4mm; border-top: .5pt dashed var(--pc); }
+.pk-sec-code .pe-qr, .pk-sec-code .pe-qr svg { flex: 0 0 22mm; width: 22mm; height: 22mm; background: #fff; }
+.pk-sec-code p { margin: 0 !important; font-size: 7.8pt; line-height: 1.35; color: var(--soft); }
+.pk-sec-code strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: 9pt; color: var(--ink); }
+.pk-sec-code .pk-addr { display: block; margin-top: .6mm; }

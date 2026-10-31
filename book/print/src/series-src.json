@@ -7,7 +7,7 @@
     6,
     9
    ],
-   "colPx": 456,
+   "colPx": 409,
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-1-know-yourself-kindly",
@@ -28,7 +28,7 @@
     6,
     9
    ],
-   "colPx": 456,
+   "colPx": 409,
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-2-heal-and-steady",
@@ -49,7 +49,7 @@
     6,
     9
    ],
-   "colPx": 456,
+   "colPx": 409,
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-3-understanding-each-other",
@@ -70,7 +70,7 @@
     6,
     9
    ],
-   "colPx": 456,
+   "colPx": 409,
    "paper_in": 0.002252,
    "price": 14.99,
    "cover": "cover-book-4-share-the-load",
@@ -167,7 +167,7 @@
     6,
     9
    ],
-   "colPx": 456,
+   "colPx": 409,
    "only_when_named": true
   }
  ],
