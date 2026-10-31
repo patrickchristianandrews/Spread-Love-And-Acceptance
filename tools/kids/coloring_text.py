@@ -17,8 +17,8 @@ YOUNGER = dict(
     ],
     meet=dict(
         head='Meet Tidbit and Sugarfoot',
-        tidbit='Tidbit is the quick, curious pup with the big smile. Zoom first, look second.',
-        sugarfoot='Sugarfoot is the steady, gentle pup with the long, soft ears and the best hugs.',
+        tidbit='Tidbit is the quick, curious pup with the black mask, the folded ears, the tan socks and the heart tag. Zoom first, look second.',
+        sugarfoot='Sugarfoot is the steady, gentle pup with the long, soft ears, the big white feet, the fluffy tail and the best hugs.',
         grownups_head='For grown-ups',
         grownups='Every picture has a blank page behind it, so markers stay put, and a sheet of paper under the page helps too. Color a whole page or just the part you love, and look for the find-it games.',
         test_head='Color test',
@@ -43,8 +43,8 @@ OLDER = dict(
     ],
     meet=dict(
         head='Meet Tidbit and Sugarfoot',
-        tidbit='Tidbit is the quick, curious pup with the big smile. Zoom first, look second.',
-        sugarfoot='Sugarfoot is the steady, gentle pup with the long, soft ears and the best hugs.',
+        tidbit='Tidbit is the quick, curious pup with the black mask, the folded ears, the tan socks and the heart tag. Zoom first, look second.',
+        sugarfoot='Sugarfoot is the steady, gentle pup with the long, soft ears, the big white feet, the fluffy tail and the best hugs.',
         grownups_head='Before you begin',
         grownups='Every picture has a blank page behind it, so markers stay put, and a sheet of paper under the page helps too. Take your time, color a whole scene or just one pattern, and read the short calm prompt at the bottom of each page.',
         test_head='Color test',

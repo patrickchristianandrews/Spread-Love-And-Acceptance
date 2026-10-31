@@ -7,8 +7,11 @@ lvl 0 is the younger book (bold, simple). lvl 1 is the older book: the same char
 marks and a few extra details. Pen widths come from the Ink the page was made with, so every character is on-model at every size.
 Every part also carries its real color (c=...), used when the Ink is in color mode (the covers); in line mode all parts are white.
 
-The pups follow the site's black-and-tan dachshunds: tan eyebrow dots, tan muzzle and chest, tan socks, a stripe on the tail,
-pink tongue. Tidbit has the perky ear, the cowlick and the heart tag. Sugarfoot has the long, soft ears, white socks and the round tag.
+The pups look the way they do in Frequency Buddies (assets/js/pups.js), so they never look alike (owner, Oct 31 2026).
+Tidbit: lean, a black mask with round tan dots over the eyes, a tan muzzle, small ears that fold over, tan socks, a tan chest,
+the cowlick, a green collar with the heart tag and a short stub tail.
+Sugarfoot: stocky, tan brows running into big tan cheeks with a cream muzzle, long soft drop ears with a wavy fringe, a fluffy
+white chest, big white feet with three toes, a long plume tail, and no collar.
 """
 import math
 from cute import *
@@ -68,12 +71,57 @@ def paw_toes(g, x, y, ang=0, n=2, gap=7, ln=9, w=0.8):
         g.line(Path().M(px, py).L(px - math.sin(a) * ln, py + math.cos(a) * ln), w=g.ink.dw * w)
 
 
+def toes(who):
+    """Sugarfoot's big white feet have three toes; Tidbit's tan socks have two"""
+    return 3 if who == 'sugarfoot' else 2
+
+
+def chest(g, who, cx=0, y=70, w=19, sk=1.0):
+    """the chest under the chin: Tidbit's tan shield, Sugarfoot's fluffy white blaze"""
+    if who == 'sugarfoot':
+        g.part(blob([(cx - w * 0.85, y - 10), (cx + w * 0.85, y - 10), (cx + w, y + 12 * sk), (cx + w * 0.5, y + 26 * sk), (cx + w * 0.3, y + 22 * sk),
+                     (cx, y + 38 * sk), (cx - w * 0.3, y + 22 * sk), (cx - w * 0.5, y + 26 * sk), (cx - w, y + 12 * sk)], k=1.0),
+               c=K['white'], under=False, w=g.ink.dw * 0.8)
+    else:
+        g.part(blob([(cx - w, y), (cx + w, y), (cx + w * 0.8, y + 28 * sk), (cx, y + 42 * sk), (cx - w * 0.8, y + 28 * sk)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.8)
+
+
+def pup_tail(g, who, base, ang, s=1.0, wag=0.0):
+    """Tidbit's short, happy stub; Sugarfoot's long, soft plume with a feathered edge. base is where it meets the body, ang the way it points (degrees, 0 = right, -90 = up)"""
+    m = mat(base[0], base[1], s, False, ang + wag)
+    if who == 'sugarfoot':
+        P = blob([(0, -9), (22, -14), (46, -12), (66, -4), (78, 4), (70, 10), (74, 16), (60, 16), (62, 23), (46, 20), (44, 27), (30, 20), (26, 25), (12, 15), (0, 10)], k=1.0)
+        g.part(P.xf(m), c=K['coat'])
+        g.line(curve([(14, 2), (36, 2), (58, 6)]).xf(m), w=g.ink.dw * 0.8)
+    else:
+        P = blob([(0, -8), (14, -10), (26, -7), (32, 0), (26, 7), (14, 9), (0, 8)], k=1.0)
+        g.part(P.xf(m), c=K['coat'])
+
+
 # ------------------------------------------------------------------ the pups
 def pup_ear(g, who, side, lvl=0, perk=False, rot=0.0):
-    """one ear hanging from the top corner of the head; side -1 left, +1 right; rot swings it out (degrees)"""
+    """one ear hanging from the top corner of the head; side -1 left, +1 right; rot swings it out (degrees).
+    As in Frequency Buddies: Sugarfoot has long, soft drop ears with a wavy fringe; Tidbit has small ears that fold over at the top."""
     if who == 'sugarfoot':
-        pts = [(-48, -50), (-68, -52), (-88, -38), (-100, -10), (-102, 26), (-94, 58), (-78, 74), (-63, 64), (-58, 36), (-56, 6), (-52, -24)]
-        crease = [(-70, -36), (-84, -8), (-87, 28), (-80, 56)]
+        pts = [(-48, -50), (-70, -54), (-92, -40), (-106, -10), (-110, 30), (-106, 66), (-98, 86), (-88, 80), (-80, 92), (-70, 82), (-62, 62), (-58, 30), (-56, 0), (-52, -24)]
+        crease = [(-72, -36), (-88, -8), (-92, 30), (-86, 66)]
+    elif who == 'tidbit':
+        # a folded ear: it stands up from the corner of the head, then the flap folds forward with its tip pointing down
+        pts = [(-30, -56), (-48, -68), (-70, -68), (-86, -56, 'c'), (-82, -40), (-76, -24), (-70, -8, 'c'), (-60, -18), (-50, -32), (-40, -46)]
+        P = blob(pts, k=1.0)
+        C = curve([(-36, -58), (-58, -60), (-84, -55)])
+        if perk:
+            P, C = P.xf(mmul(mat(-44, -56, 1, False, 8), mat(44, 56))), C.xf(mmul(mat(-44, -56, 1, False, 8), mat(44, 56)))
+        if rot:
+            m = mmul(mat(-44, -56, 1, False, rot * 0.5 * (1 if side < 0 else -1)), mat(44, 56))
+            P, C = P.xf(m), C.xf(m)
+        if side > 0:
+            P, C = mir(P), mir(C)
+        g.part(P, c=K['coat'])
+        g.line(C)
+        if lvl:
+            g.line(Path().M(side * 70, -40).L(side * 76, -32), w=g.ink.dw * 0.8)
+        return
     else:
         pts = [(-48, -50), (-68, -52), (-86, -40), (-96, -14), (-96, 16), (-88, 40), (-74, 48), (-62, 38), (-58, 16), (-56, -8), (-52, -30)]
         crease = [(-70, -36), (-82, -12), (-82, 18), (-76, 36)]
@@ -109,16 +157,26 @@ def pup_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, tur
     if who == 'tidbit':
         g.line(curve([(-4, -51), (-9, -64), (2, -72), (11, -65)]), w=g.ink.dw * 1.1)
         g.line(curve([(9, -51), (15, -60), (23, -59)]), w=g.ink.dw * 0.9)
-    else:
-        g.line(curve([(-1, -51), (-4, -62), (6, -67), (10, -60)]), w=g.ink.dw * 1.1)
     if lvl:
         for sgn in (-1, 1):
             for (a, b, c, d) in ((58, -22, 66, -28), (62, -6, 71, -8), (56, 36, 64, 40)):
                 g.line(Path().M(sgn * a, b).L(sgn * c, d), w=g.ink.dw * 0.8)
     F = g.view(turn * 12, 0) if turn else g
     lift = {'wow': -5, 'surprised': -6, 'happy': 0, 'sleep': 3, 'sad': 2}.get(expr, 0)
-    for sgn in (-1, 1):
-        F.part(ell(sgn * 31, -26 + lift, 10, 6.4, 8 * sgn), c=K['tan'], under=False, w=g.ink.dw * 0.8)
+    if sugar:
+        # Sugarfoot: tan brows that run down into big tan cheeks, with a black stripe down the middle of her forehead
+        F.part(blob([(0, -6), (8, -24), (24, -40 + lift), (44, -38 + lift), (58, -22), (64, 2), (60, 26), (46, 44), (24, 54), (0, 56),
+                     (-24, 54), (-46, 44), (-60, 26), (-64, 2), (-58, -22), (-44, -38 + lift), (-24, -40 + lift), (-8, -24)], k=1.0),
+               c=K['tan'], under=False, w=g.ink.dw * 0.85)
+    else:
+        # Tidbit: tan cheeks and lips, a black mask across both eyes, and a round tan dot over each eye
+        F.part(blob([(0, 6), (24, 8), (50, 6), (64, 12), (66, 22), (57, 40), (30, 53), (0, 57), (-30, 53), (-57, 40), (-66, 22), (-64, 12), (-50, 6), (-24, 8)], k=1.0),
+               c=K['tan'], under=False, w=g.ink.dw * 0.85)
+        F.part(blob([(0, -6), (12, -14), (30, -19 + lift * 0.5), (48, -15), (60, -2), (58, 14), (44, 22), (28, 22), (14, 16), (0, 14),
+                     (-14, 16), (-28, 22), (-44, 22), (-58, 14), (-60, -2), (-48, -15), (-30, -19 + lift * 0.5), (-12, -14)], k=1.0),
+               c=K['coat'], under=False, w=g.ink.dw * 0.9)
+        for sgn in (-1, 1):
+            F.part(circ(sgn * 31, -31 + lift, 7.5), c=K['tan'], under=False, w=g.ink.dw * 0.8)
     ex, ey = 32, 2
     if face == 'joy':
         for sgn in (-1, 1):
@@ -153,7 +211,7 @@ def pup_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, tur
         for sgn in (-1, 1):
             F.line(Path().M(sgn * (ex + 10), ey - 8).L(sgn * (ex + 17), ey - 14), w=g.ink.dw * 0.9)
     muz = blob([(0, 14), (18, 16), (27, 29), (20, 46), (0, 51), (-20, 46), (-27, 29), (-18, 16)])
-    F.part(muz, c=K['tan2'], under=False, w=g.ink.dw * 0.8)
+    F.part(muz, c=K['cream'] if sugar else K['tan2'], under=False, w=g.ink.dw * 0.8)
     F.blk(blob([(-10, 17), (0, 15), (10, 17), (6, 25), (0, 28), (-6, 25)], k=1.0))
     F.wh(ell(-3.8, 18.2, 2.8, 1.5, -15))
     m = mouth or ({'happy': 'tongue', 'joy': 'open', 'wow': 'o', 'surprised': 'o', 'sleep': 'smile', 'calm': 'smile', 'sparkle': 'open', 'wink': 'tongue', 'sad': 'frown', 'silly': 'tongue_big', 'love': 'open', 'yawn': 'bigopen'}.get(expr, 'smile'))
@@ -252,6 +310,8 @@ def pup_hat(g, hat, who='tidbit'):
 
 
 def collar(g, who, y=56, w=44, hang=True):
+    if who != 'tidbit':
+        return  # Sugarfoot wears no collar, as in Frequency Buddies
     band = blob([(-w, y - 4, 'c'), (-w * 0.5, y + 7), (0, y + 11), (w * 0.5, y + 7), (w, y - 4, 'c'), (w + 2, y + 11, 'c'), (w * 0.5, y + 23), (0, y + 26), (-w * 0.5, y + 23), (-w - 2, y + 11, 'c')])
     g.part(band, c=K['green'])
     if hang:
@@ -268,20 +328,16 @@ def pup_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, 
     sugar = who == 'sugarfoot'
     hs = hs if hs is not None else (0.9 if lvl else 1.0)
     with ink.fig(x, y - 175 * s, s, flip) as g:
-        bw = 1.06 if sugar else 1.0
+        bw = 1.08 if sugar else 0.95  # Sugarfoot stocky, Tidbit lean
         if tail:
-            w = wag * 14
-            tl = blob([(-46, 140), (-74 - w, 142 - w * 0.4), (-96 - w, 124 - w), (-100 - w, 98 - w * 1.2), (-88 - w, 88 - w * 1.2), (-82 - w, 108 - w), (-64, 122), (-46, 120)], k=1.0)
-            g.part(tl, c=K['coat'])
-            g.line(curve([(-92 - w, 104 - w), (-82 - w * 0.6, 122), (-66, 130)]), w=g.ink.dw)
-            g.part(blob([(-94 - w, 100 - w), (-84 - w, 112 - w * 0.6), (-76, 122), (-72, 116), (-80 - w, 104 - w)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.7) if False else None
+            pup_tail(g, who, (-46, 132), -150 if sugar else -135, 1.0, wag * 20)
         body = blob([(-34 * bw, 44), (34 * bw, 44), (50 * bw, 72), (58 * bw, 112), (56 * bw, 146), (38 * bw, 164), (0, 169), (-38 * bw, 164), (-56 * bw, 146), (-58 * bw, 112), (-50 * bw, 72)], k=1.0)
         g.part(body, c=K['coat'])
         for sgn in (-1, 1):
-            g.part(ell(sgn * 54 * bw, 162, 22, 13, sgn * -6), c=K['cream'] if sugar else K['tan'])
-            for t in (-1, 1):
+            g.part(ell(sgn * 54 * bw, 162, 25 if sugar else 22, 14 if sugar else 13, sgn * -6), c=K['cream'] if sugar else K['tan'])
+            for t in ((-1, 0, 1) if sugar else (-1, 1)):
                 g.line(Path().M(sgn * (54 + t * 8) * bw, 158).L(sgn * (54 + t * 8) * bw + sgn * 1, 168), w=g.ink.dw * 0.8)
-        g.part(blob([(-19, 70), (19, 70), (15, 98), (0, 112), (-15, 98)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.8)
+        chest(g, who, 0, 70)
         if lvl:
             for (a, b) in ((-42, 120), (-46, 134), (42, 118), (46, 134), (-30, 150), (30, 150)):
                 g.line(Path().M(a, b).L(a + (3 if a < 0 else -3), b + 6), w=g.ink.dw * 0.8)
@@ -300,17 +356,17 @@ def pup_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, 
                 leg = capsule(sgn * 36, 92, sgn * 78, 30, 14, 12)
                 g.part(leg, c=K['coat'])
                 g.part(ell(sgn * 78, 24, 16, 14), c=K['cream'] if sugar else K['tan'], under=True)
-                paw_toes(g, sgn * 78, 22, 0, 2, 8, 8, 0.8)
+                paw_toes(g, sgn * 78, 22, 0, toes(who), 8, 8, 0.8)
             elif mode == 'both_up':
                 leg = capsule(sgn * 38, 92, sgn * 82, 28, 14, 12)
                 g.part(leg, c=K['coat'])
                 g.part(ell(sgn * 82, 22, 16, 14), c=K['cream'] if sugar else K['tan'])
-                paw_toes(g, sgn * 82, 20, 0, 2, 8, 8, 0.8)
+                paw_toes(g, sgn * 82, 20, 0, toes(who), 8, 8, 0.8)
             elif mode == 'wide':
                 leg = capsule(sgn * 36, 94, sgn * 92, 70, 14, 12)
                 g.part(leg, c=K['coat'])
                 g.part(ell(sgn * 94, 70, 16, 14), c=K['cream'] if sugar else K['tan'])
-                paw_toes(g, sgn * 94, 68, sgn * 90, 2, 8, 8, 0.8)
+                paw_toes(g, sgn * 94, 68, sgn * 90, toes(who), 8, 8, 0.8)
             elif mode == 'chest':
                 leg = capsule(sgn * 34, 92, sgn * 8, 104, 14, 12)
                 g.part(leg, c=K['coat'])
@@ -318,9 +374,12 @@ def pup_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, 
             else:
                 leg = blob([(sgn * 40, 90), (sgn * 12, 90), (sgn * 10, 128), (sgn * 11, 152), (sgn * 24, 160), (sgn * 38, 152), (sgn * 41, 128)], k=1.0)
                 g.part(leg, c=K['coat'])
-                g.part(blob([(sgn * 11, 140), (sgn * 38, 140), (sgn * 38, 152), (sgn * 24, 160), (sgn * 11, 152)], k=1.0), c=K['cream'] if sugar else K['tan'], under=False, w=g.ink.dw * 0.8)
-                for t in (-1, 1):
-                    g.line(Path().M(sgn * 25 + t * 7, 148).L(sgn * 25 + t * 7, 157), w=g.ink.dw * 0.8)
+                if sugar:
+                    g.part(blob([(sgn * 8, 142), (sgn * 42, 142), (sgn * 44, 154), (sgn * 25, 162), (sgn * 6, 154)], k=1.0), c=K['cream'], under=False, w=g.ink.dw * 0.8)
+                else:
+                    g.part(blob([(sgn * 11, 124), (sgn * 39, 124), (sgn * 38, 152), (sgn * 24, 160), (sgn * 11, 152)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.8)
+                for t in ((-1, 0, 1) if sugar else (-1, 1)):
+                    g.line(Path().M(sgn * 25 + t * (7 if not sugar else 9), 150).L(sgn * 25 + t * (7 if not sugar else 9), 159), w=g.ink.dw * 0.8)
         if scarf:
             g.part(blob([(-52, 44, 'c'), (-26, 58), (0, 62), (26, 58), (52, 44, 'c'), (54, 66, 'c'), (26, 78), (0, 82), (-26, 78), (-54, 66, 'c')], k=1.0), c='#F2877E')
             g.part(blob([(14, 74, 'c'), (44, 70, 'c'), (50, 128, 'c'), (22, 134, 'c')], k=0.4), c='#F2877E')
@@ -333,8 +392,9 @@ def pup_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, 
     return g
 
 
-def _leg(g, hx, hy, px, py, paw, r0=17, r1=15, toes=True):
-    """a short chubby leg from the hip (hx, hy) to a paw whose lowest point is (px, py): a coat-colored upper leg and a sock-colored paw"""
+def _leg(g, hx, hy, px, py, paw, r0=17, r1=15, toes=True, who='tidbit'):
+    """a short chubby leg from the hip (hx, hy) to a paw whose lowest point is (px, py): a coat-colored upper leg and a sock-colored paw.
+    Tidbit wears tan socks up to the knee; Sugarfoot has a tan lower leg and a big white foot."""
     ex, ey = px, py - r1
     dx, dy = ex - hx, ey - hy
     L = math.hypot(dx, dy) or 1
@@ -342,10 +402,12 @@ def _leg(g, hx, hy, px, py, paw, r0=17, r1=15, toes=True):
     t = 0.5
     mx, my = hx + dx * t, hy + dy * t
     g.part(capsule(hx, hy, mx + ux * 4, my + uy * 4, r0, r0 * 0.95), c=K['coat'])
-    g.part(capsule(mx, my, ex, ey, r0 * 0.9, r1 + 1), c=paw)
+    g.part(capsule(mx, my, ex, ey, r0 * 0.9, r1 + 1), c=K['tan'] if who == 'sugarfoot' else paw)
+    if who == 'sugarfoot':
+        g.part(ell(ex + ux * r1 * 0.35, ey + uy * r1 * 0.35, r1 * 1.22, r1 * 0.92, math.degrees(math.atan2(uy, ux)) - 90), c=K['cream'], under=False, w=g.ink.dw * 0.85)
     if toes:
         nx, ny = -uy, ux
-        for o in (-5.5, 5.5):
+        for o in ((-7, 0, 7) if who == 'sugarfoot' else (-5.5, 5.5)):
             g.line(Path().M(ex + ux * r1 * 0.3 + nx * o, ey + uy * r1 * 0.3 + ny * o).L(ex + ux * (r1 + 0.4) + nx * o * 0.9, ey + uy * (r1 + 0.4) + ny * o * 0.9), w=g.ink.dw * 0.8)
 
 
@@ -356,19 +418,18 @@ def pup_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0
     paw = K['cream'] if sugar else K['tan']
     with ink.fig(x, y, s, flip) as g:
         if pose == 'lie':
-            tail = blob([(-108, -34), (-134, -30), (-154, -50), (-150, -70), (-136, -64), (-132, -46), (-110, -48)], k=1.0)
-            g.part(tail, c=K['coat'])
+            pup_tail(g, who, (-108, -40), -165 if sugar else -150)
             body = blob([(-116, -14), (-112, -52), (-78, -72), (-26, -74), (24, -60), (38, -26), (14, -4), (-56, -2)], k=1.0)
             g.part(body, c=K['coat'])
             g.part(ell(-70, -26, 32, 24, -10), c=K['coat'], under=True)
             g.line(curve([(-92, -36), (-76, -50), (-52, -48)]), w=g.ink.dw * 0.9)
             g.part(ell(-60, -5, 28, 9, 0), c=paw)
-            paw_toes(g, -44, -6, 90, 2, 6, 6, 0.8)
+            paw_toes(g, -44, -6, 90, toes(who), 6, 6, 0.8)
             H = g.view(70, -64, hs, False, tilt if tilt is not None else -5)
             pup_head(H, who, expr, 0, lvl, look, mouth=mouth, turn=0.4, ear_rot=14 if ear_rot is None else ear_rot, hat=hat)
             for sgn in (-1, 1):
                 g.part(ell(70 + sgn * 26, 2, 22, 13, 0), c=paw)
-                paw_toes(g, 70 + sgn * 26, -2, 90, 2, 8, 6, 0.8)
+                paw_toes(g, 70 + sgn * 26, -2, 90, toes(who), 8, 6, 0.8)
             return g
         ph = ph % 1.0
         run = pose in ('run', 'jump')
@@ -380,34 +441,35 @@ def pup_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0
             a = math.sin(ph * TAU) * 16
             legs = [(40, -50, 46 + a * 0.7, 0), (-56, -50, -50 + a * 0.7, 0), (22, -50, 14 - a * 0.7, 0), (-74, -50, -82 - a * 0.7, 0)]
         tu = tail_up
-        tail = blob([(-90, -74), (-112, -82 - 10 * tu), (-130, -106 * tu - 8), (-132, -132 * tu - 8), (-118, -142 * tu - 4), (-106, -130 * tu), (-104, -108), (-86, -92)], k=1.0)
         body = blob([(-102, -64), (-88, -106), (-46, -126), (0, -122), (42, -116), (66, -92), (70, -60), (58, -34), (22, -20), (-30, -18), (-74, -26), (-100, -42)], k=1.0)
-        g.part(tail, c=K['coat'])
-        g.line(curve([(-106, -96), (-114, -114), (-108, -128)]), w=g.ink.dw)
+        pup_tail(g, who, (-94, -86), -175 + (60 if sugar else 72) * tu)
         for L_ in legs:
-            _leg(g, *L_, paw)
+            _leg(g, *L_, paw, who=who)
         g.part(body, c=K['coat'])
-        g.part(blob([(20, -62), (56, -72), (64, -50), (44, -30), (14, -30)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.8)
+        if sugar:
+            g.part(blob([(22, -70), (58, -78), (66, -52), (54, -40), (50, -30), (42, -36), (34, -26), (28, -36), (16, -34)], k=1.0), c=K['white'], under=False, w=g.ink.dw * 0.8)
+        else:
+            g.part(blob([(20, -62), (56, -72), (64, -50), (44, -30), (14, -30)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.8)
         g.part(ell(-62, -62, 26, 28, -10), c=K['coat'], under=False, w=g.ink.dw * 0.9)
         if lvl:
             for (a_, b_) in ((-74, -84), (-44, -94), (-14, -94), (18, -88), (-26, -42), (-62, -44), (-88, -60)):
                 g.line(Path().M(a_, b_).L(a_ - 6, b_ + 7), w=g.ink.dw * 0.8)
         if pose == 'sit':
             g.part(ell(-62, -12, 34, 14), c=paw)
-            g.part(ell(28, -9, 24, 12), c=paw)
+            g.part(ell(28, -9, 26 if sugar else 24, 13 if sugar else 12), c=paw)
+            if sugar:
+                paw_toes(g, 40, -12, 90, 3, 6, 6, 0.8)
         if scarf:
             g.part(blob([(26, -96, 'c'), (60, -102), (72, -76, 'c'), (50, -58), (24, -70, 'c')], k=1.0), c='#F2877E')
             g.part(blob([(30, -72, 'c'), (52, -66, 'c'), (44, -30, 'c'), (26, -36, 'c')], k=0.4), c='#F2877E')
             g.line(Path().M(30, -52).L(46, -56), w=g.ink.dw * 0.8)
-        else:
+        elif not sugar:
             g.part(blob([(34, -92), (62, -96), (66, -72), (46, -62), (30, -72)], k=1.0), c=K['green'], under=True)
         H = g.view(66 + 14 * lower, -118 + 52 * lower, hs, False, tilt if tilt is not None else (8 if run else 4) + 26 * lower)
         er = ear_rot if ear_rot is not None else (26 if run else 6)
         pup_head(H, who, expr, 0, lvl, look, mouth=mouth, turn=turn, ear_rot=er, hat=hat)
-        if who == 'tidbit':
+        if who == 'tidbit' and not scarf:
             g.part(heart_path(52, -56, 7.5), c=K['gold'], under=False)
-        else:
-            g.part(ell(52, -56, 7, 7), c=K['cream'], under=False)
     return g
 
 
@@ -420,11 +482,11 @@ def pup_peek(ink, who, x, y, s=1.0, expr='happy', lvl=0, tilt=0.0, paws=True, lo
             for sgn in (-1, 1):
                 g.part(capsule(sgn * 70, 100, sgn * 100, 20, 16, 14), c=K['coat'])
                 g.part(ell(sgn * 102, 10, 20, 17), c=K['cream'] if sugar else K['tan'])
-                paw_toes(g, sgn * 102, 6, 0, 2, 9, 8, 0.8)
+                paw_toes(g, sgn * 102, 6, 0, toes(who), 9, 8, 0.8)
         elif paws:
             for sgn in (-1, 1):
                 g.part(ell(sgn * 40, 76, 22, 17), c=K['cream'] if sugar else K['tan'])
-                paw_toes(g, sgn * 40, 72, 0, 2, 9, 8, 0.8)
+                paw_toes(g, sgn * 40, 72, 0, toes(who), 9, 8, 0.8)
     return g
 
 
@@ -433,15 +495,14 @@ def pup_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, ki
     sugar = who == 'sugarfoot'
     paw = K['cream'] if sugar else K['tan']
     with ink.fig(x, y - 214 * s, s, flip) as g:
-        tl = blob([(-30, 120), (-62, 126), (-84, 104), (-84, 78), (-72, 74), (-68, 94), (-52, 106), (-28, 100)], k=1.0)
-        g.part(tl, c=K['coat'])
+        pup_tail(g, who, (-30, 112), -150 if sugar else -140)
         # legs
         for sgn in (-1, 1):
             up = (sgn == kick)
             if up:
                 g.part(capsule(sgn * 16, 150, sgn * 62, 176, 15, 13), c=K['coat'])
                 g.part(ell(sgn * 74, 180, 22, 14, sgn * 20), c=paw)
-                paw_toes(g, sgn * 80, 178, sgn * 80, 2, 7, 6, 0.8)
+                paw_toes(g, sgn * 80, 178, sgn * 80, toes(who), 7, 6, 0.8)
             else:
                 g.part(capsule(sgn * 18, 150, sgn * 24, 196, 16, 14), c=K['coat'])
                 g.part(ell(sgn * 32, 204, 24, 12, sgn * -4), c=paw)
@@ -449,7 +510,7 @@ def pup_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, ki
                     g.line(Path().M(sgn * (36 + t * 8), 200).L(sgn * (38 + t * 8), 209), w=g.ink.dw * 0.8)
         body = blob([(-30, 44), (30, 44), (46, 80), (48, 124), (34, 158), (0, 164), (-34, 158), (-48, 124), (-46, 80)], k=1.0)
         g.part(body, c=K['coat'])
-        g.part(blob([(-17, 72), (17, 72), (13, 100), (0, 112), (-13, 100)], k=1.0), c=K['tan'], under=False, w=g.ink.dw * 0.8)
+        chest(g, who, 0, 72, 17, 0.95)
         if scarf:
             g.part(blob([(-48, 44, 'c'), (-24, 58), (0, 62), (24, 58), (48, 44, 'c'), (50, 66, 'c'), (24, 78), (0, 82), (-24, 78), (-50, 66, 'c')], k=1.0), c='#F2877E')
         else:
@@ -457,7 +518,7 @@ def pup_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, ki
         for sgn in (-1, 1):
             g.part(capsule(sgn * 34, 92, sgn * 84, 36, 14, 12), c=K['coat'])
             g.part(ell(sgn * 86, 28, 17, 15), c=paw)
-            paw_toes(g, sgn * 86, 26, 0, 2, 8, 8, 0.8)
+            paw_toes(g, sgn * 86, 26, 0, toes(who), 8, 8, 0.8)
         pup_head(g.view(0, 0, 0.92 if lvl else 1.0, False, tilt), who, expr, 0, lvl, mouth=mouth, hat=hat)
     return g
 
