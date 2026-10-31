@@ -143,7 +143,7 @@
           why: 'Tell it how you feel, put on headphones, and slow colors move with soft tones. You get to see sound.' },
         { href: '/soundscapes.html#brain-breakers', title: 'Brain Breakers', time: 'A few minutes', cta: 'See and feel it',
           why: 'Four instrumental pieces with a visualizer and, on a phone, a little vibration, so you feel the music as well as hear it.' },
-        { href: '/book/download.html#coloring', title: 'Coloring books to print', time: 'An afternoon', cta: 'Get the coloring books',
+        { href: '/book/download.html#kids', title: 'Coloring books to print', time: 'An afternoon', cta: 'Get the coloring books',
           why: 'For hands that need something to do. Two books starring Tidbit and Sugarfoot (32 big, bright pictures for ages 3 to 7, and 32 detailed, calming scenes for ages 8 to 12), and Color and Breathe for grown-ups: 40 mandalas, gardens and quiet scenes, just below them. Or print one page at random.' },
         { href: '/sleeping-pals-cam.html', title: 'Sleeping Pals Cam', time: 'As long as you like', cta: 'Add your pets',
           why: 'Add your fur babies to the sleeping room, then layer soft sounds. Your own pets, in the picture.' },
