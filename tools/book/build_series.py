@@ -1039,6 +1039,9 @@ def page_rules(book, here_order, back_keys):
     for k, label in back_keys:
         r.append('#%s{page:sb-%s}' % (k, k))
         r.append(rules('sb-' + k, label))
+        if k not in CODED_NOW:
+            # book31: a back page with no margin codes keeps the book's earlier, wider text column
+            r.append('@page sb-%s:right{margin:15.24mm 12.7mm 19.05mm 19.05mm}@page sb-%s:left{margin:15.24mm 19.05mm 19.05mm 12.7mm}' % (k, k))
 
     return '<style media="print">%s</style>' % '\n'.join(r)
 

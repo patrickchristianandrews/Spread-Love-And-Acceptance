@@ -167,8 +167,8 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .bk-dl .bk-dl-card h2{ margin:.1rem 0 .3rem; font-size:1.25rem; }
 .bk-dl ul.bk-dl-list{ list-style:none; padding:0 !important; margin:.5rem 0 0; display:grid; gap:.5rem; }
 .bk-dl ul.bk-dl-list li{ margin:0; max-width:none; }
-.bk-dl a.bk-dl-file, .bk-dl a.bk-dl-go{ display:inline-flex; flex-direction:column; min-height:44px; padding:.45rem .9rem; border:2px solid var(--brass); border-radius:12px; text-decoration:none; color:var(--ink); font-weight:600; }
-.bk-dl a.bk-dl-file .bk-dl-m, .bk-dl a.bk-dl-go .bk-dl-m{ font-weight:400; font-size:.85rem; color:var(--ink-soft); }
+.bk-dl a.bk-dl-file{ display:inline-flex; flex-direction:column; min-height:44px; padding:.45rem .9rem; border:2px solid var(--brass); border-radius:12px; text-decoration:none; color:var(--ink); font-weight:600; }
+.bk-dl a.bk-dl-file .bk-dl-m{ font-weight:400; font-size:.85rem; color:var(--ink-soft); }
 .bk-dl a.bk-dl-file[aria-disabled="true"]::after{ content:" (enter your email above)"; font-weight:400; font-size:.8rem; color:var(--ink-soft); }
 .bk-dl a.bk-dl-read{ font-size:.9rem; margin-left:.4rem; }
 
