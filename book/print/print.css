@@ -387,3 +387,12 @@ body { font-size: 11pt; line-height: 1.55; }
 @page pe-back:left { margin: 15.24mm 19.05mm 19.05mm 12.7mm; }
 @page pe-full:right { margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
 @page pe-full:left { margin: 15.24mm 19.05mm 19.05mm 12.7mm; }
+/* book31: the meet page gained a paragraph on the margin codes, and must still fit one page */
+.ps-meet p, .ps-meet li { font-size: 9.1pt; line-height: 1.4; }
+.ps-meet .bh-friends { gap: 1.6mm !important; }
+.ps-meet-codes { font-size: 8.8pt; padding: 1.4mm 2.4mm; margin-top: 1.6mm !important; }
+.ps-maker { margin-top: 2mm; }
+.ps-maker blockquote p { font-size: 8.6pt; }
+.ps-about p, .ps-about li { font-size: 8.1pt; line-height: 1.34; margin: 0 0 1.1mm; }
+.ps-about-t td { padding: .45mm 1.4mm .45mm 0; }
+.ps-about h1 { margin-bottom: 1.8mm; }

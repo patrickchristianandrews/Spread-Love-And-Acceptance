@@ -309,13 +309,16 @@ def s_carnival(ink):
     pr.bunting(ink, [(92, 150), (260, 215), (425, 170), (590, 215), (758, 150)], 9, 50)
     # the Ferris wheel
     cx, cy, R = 425, 400, 190
+    # the stand: two legs and a crossbar, drawn first so the wheel sits in front of them
+    with ink.fig(0, 0) as g:
+        for sgn in (-1, 1):
+            g.part(rpoly([(cx + sgn * 8, cy - 6), (cx + sgn * 26, cy + 10), (cx + sgn * 128, 712), (cx + sgn * 100, 712)], 4))
+        g.part(rrect(cx - 92, 640, 184, 16, 4))
     pat.mandala(ink, cx, cy, R, 3, 14)
     for k in range(10):
         a = k * TAU / 10
         with ink.fig(cx + math.cos(a) * R, cy + math.sin(a) * R, 1.0) as g:
             g.part(blob([(-16, 0, 'c'), (16, 0, 'c'), (20, 26), (0, 38), (-20, 26)], k=0.6))
-    with ink.fig(0, 0) as g:
-        g.part(blob([(cx - 70, 700, 'c'), (cx, cy), (cx + 70, 700, 'c')], k=0.3))
     po.ground_z(ink, 720, 'dots', 16, amp=8)
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'tidbit', x, y, s, 'joy', lvl=1, arms='both_up', hat='party'), (120, 560, 400, 880), 'bottom')
     F(ink, lambda i, x, y, s: cast.pup_front(i, 'sugarfoot', x, y, s, 'happy', lvl=1, arms='chest'), (440, 560, 720, 880), 'bottom')
@@ -501,9 +504,9 @@ def s_balloon(ink):
     ink.clip_end()
     with ink.fig(0, 0, outline=False) as g:
         g.line(env, w=ink.ow)
-        g.line(Path().M(350, 570).L(310, 650).M(500, 570).L(540, 650), w=ink.ow * 0.8)
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'happy', lvl=1, paws=False), (300, 540, 428, 720), 'bottom')
-    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'joy', lvl=1, paws=False), (424, 560, 552, 720), 'bottom')
+        g.line(Path().M(352, 570).L(302, 692).M(498, 570).L(548, 692), w=ink.ow * 0.8)
+    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'sugarfoot', x, y, s, 'happy', lvl=1, paws=False), (300, 530, 428, 702), 'bottom')
+    F(ink, lambda i, x, y, s: cast.pup_peek(i, 'tidbit', x, y, s, 'joy', lvl=1, paws=False), (424, 530, 552, 702), 'bottom')
     with ink.fig(425, 690) as g:
         g.part(rrect(-135, 0, 270, 130, 16))
     sh(ink, rrect(290, 740, 270, 20, 0), '#fff', 'lattice', 14, outline=False)
