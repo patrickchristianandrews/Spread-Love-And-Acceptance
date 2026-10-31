@@ -396,3 +396,4 @@ body { font-size: 11pt; line-height: 1.55; }
 .ps-about p, .ps-about li { font-size: 8.1pt; line-height: 1.34; margin: 0 0 1.1mm; }
 .ps-about-t td { padding: .45mm 1.4mm .45mm 0; }
 .ps-about h1 { margin-bottom: 1.8mm; }
+.ps-about p, .ps-about li { font-size: 7.95pt; }

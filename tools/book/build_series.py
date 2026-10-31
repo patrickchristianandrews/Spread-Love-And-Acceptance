@@ -1197,11 +1197,11 @@ WB_ONE_PAGE = {'wp02', 'wp09'}
 WB_SUMS = {'wp01', 'wp02', 'wp03', 'wp04', 'setup'}
 # printfix13: what each sheet's opening page says where no book chapter teaches it, and how to read the answers
 WB_EXPLAINED = {
-    'wp12': ('Book 3, Chapter 1 (Why we get out of tune), and in full, free online at spreadloveandacceptance.com/workpapers/wp-12-same-moment-different-speeds',
+    'wp12': ('Book 3, Chapter 1 (Why we get out of tune), and in full, free online at spreadloveandacceptance.com/go/worksheets',
              'Look at Part B first. A gap of two or more steps on the same moment is where most friction starts, so that’s the moment for Part C. '
              'A gap in speed is about pace. It says nothing about how much either of you cares. If your answers barely differ, the friction is probably coming '
              'from somewhere else, tiredness or pressure from outside.'),
-    'wp14': ('Built on the stress tank in Book 4, Chapter 3 (Full tanks and different angles). Full instructions are free online at spreadloveandacceptance.com/workpapers/wp-14-is-it-us-or-everything-else',
+    'wp14': ('Built on the stress tank in Book 4, Chapter 3 (Full tanks and different angles). Full instructions are free online at spreadloveandacceptance.com/go/worksheets',
              'In Part B, count the tense moments that fell on heavy days. If most did, outside pressure is doing a lot of the damage, and a plan for '
              'the pressure (Part D) will help more than talking about each other. If most came on light days, the friction really does start between you, '
              'and Say it so it lands or the monthly look-back is the next thing to try.'),
@@ -1379,7 +1379,7 @@ def build_workbook(where, bw=False):
              ('Week 5', 'Get back in step.', 'WP-13 90-second daily check-in'),
              ('Week 6', 'Make it last.', 'WP-01 again · WP-04 What keeps coming back? (optional)')]
     front += ('<section class="wb-six pe-only" id="wb-six">%s<h1>Your six weeks: a planner</h1><p class="wb-lede">One small step a week. Miss one and you just carry on '
-              'where you left off. The full program is free at spreadloveandacceptance.com/prog-01.</p>'
+              'where you left off. The full program is free at spreadloveandacceptance.com/go/worksheets.</p>'
               '<table class="wb-six-t"><thead><tr><th>Week</th><th>The step</th><th>Workpapers</th><th>Start date</th><th>Done</th></tr></thead><tbody>%s</tbody></table>'
               '<p class="wb-more">When you want more after the six weeks: WP-12 Same moment, different speeds, WP-14 Is it us, or is it everything else? and WP-15 Keep your little rituals alive.</p>'
               '<p class="wb-how-h">At the end: what changed?</p><div class="pe-ws-box wb-tall"><b>One thing that is easier now</b></div>'
