@@ -12,7 +12,7 @@
    ],
    "pages": 162,
    "blank_pages": 6,
-   "bytes": 2178430,
+   "bytes": 2191078,
    "pdf": "book-1-know-yourself-kindly.pdf",
    "cover_pdf": "cover-book-1-know-yourself-kindly.pdf",
    "front_jpg": "cover-book-1-know-yourself-kindly-front.jpg",
@@ -64,7 +64,7 @@
     "series": 159,
     "jot": 160
    },
-   "margin_codes": 80
+   "margin_codes": 82
   },
   "book-2-heal-and-steady": {
    "n": 2,
@@ -78,7 +78,7 @@
    ],
    "pages": 152,
    "blank_pages": 3,
-   "bytes": 1974210,
+   "bytes": 1982292,
    "pdf": "book-2-heal-and-steady.pdf",
    "cover_pdf": "cover-book-2-heal-and-steady.pdf",
    "front_jpg": "cover-book-2-heal-and-steady-front.jpg",
@@ -129,7 +129,7 @@
     "series": 147,
     "jot": 148
    },
-   "margin_codes": 63
+   "margin_codes": 65
   },
   "book-3-understanding-each-other": {
    "n": 3,
@@ -143,7 +143,7 @@
    ],
    "pages": 156,
    "blank_pages": 8,
-   "bytes": 1999743,
+   "bytes": 1999793,
    "pdf": "book-3-understanding-each-other.pdf",
    "cover_pdf": "cover-book-3-understanding-each-other.pdf",
    "front_jpg": "cover-book-3-understanding-each-other-front.jpg",
@@ -209,7 +209,7 @@
    ],
    "pages": 156,
    "blank_pages": 4,
-   "bytes": 2309835,
+   "bytes": 2313159,
    "pdf": "book-4-share-the-load.pdf",
    "cover_pdf": "cover-book-4-share-the-load.pdf",
    "front_jpg": "cover-book-4-share-the-load-front.jpg",
@@ -282,7 +282,7 @@
    ],
    "pages": 78,
    "blank_pages": 0,
-   "bytes": 790592,
+   "bytes": 790516,
    "pdf": "workbook.pdf",
    "cover_pdf": "cover-workbook.pdf",
    "front_jpg": "cover-workbook-front.jpg",
@@ -343,7 +343,7 @@
    ],
    "pages": 78,
    "blank_pages": 0,
-   "bytes": 772816,
+   "bytes": 772738,
    "pdf": "workbook-bw.pdf",
    "cover_pdf": "cover-workbook-bw.pdf",
    "front_jpg": "cover-workbook-bw-front.jpg",
