@@ -477,6 +477,17 @@ class Fig:
         self.items.append(('line', path, w, cap, dash, fill))
         return self
 
+    def grp(self, path, c='#fff', w=None, under=True):
+        """several overlapping shapes of one color drawn as one region: one outline around the whole, none inside
+        (every subpath must wind the same way). Used for the Frequency Buddies pups (fbpups.py)"""
+        self.items.append(('grp', path, c, w, under))
+        return self
+
+    def flat(self, path, c):
+        """a soft color with no outline, only in color mode (a blush, a shadow); left out of the line art"""
+        self.items.append(('flat', path, c))
+        return self
+
     def dot(self, x, y, r, ry=None):
         self.items.append(('black', ell(x, y, r, ry if ry is not None else r)))
         return self
@@ -529,7 +540,7 @@ class Fig:
         out = ink.out
         IC = ink.inkc
         col = ink.color
-        parts = [it for it in self.items if it[0] == 'part' and it[3]]
+        parts = [it for it in self.items if (it[0] == 'part' and it[3]) or (it[0] == 'grp' and it[4])]
         if self.outline and parts:
             # the bold outer outline: every part (that is under) in black, stroked wide; the parts then go on top
             ds = ''.join(ink.d(it[1], m) for it in parts)
@@ -537,7 +548,7 @@ class Fig:
         clips = 0
         xs, ys = [], []
         for it in self.items:
-            if it[0] in ('part', 'line', 'black'):
+            if it[0] in ('part', 'line', 'black', 'grp'):
                 for pts, _c in it[1].xf(m).flatten(9.0):
                     for p in pts:
                         xs.append(p[0])
@@ -554,6 +565,15 @@ class Fig:
                 w = it[2] if it[2] else ink.dw
                 da = ' stroke-dasharray="%s"' % it[4] if it[4] else ''
                 out.append('<path d="%s" fill="%s" stroke="%s" stroke-width="%s" stroke-linecap="%s" stroke-linejoin="round"%s/>' % (ink.d(it[1], m), it[5], IC, n1(w), it[3], da))
+            elif k == 'grp':
+                w = it[3] if it[3] else iw
+                fill = it[2] if col else '#fff'
+                d = ink.d(it[1], m)
+                out.append('<path d="%s" fill="%s" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-linecap="round"/>' % (d, fill, IC, n1(w)))
+                out.append('<path d="%s" fill="%s"/>' % (d, fill))
+            elif k == 'flat':
+                if col:
+                    out.append('<path d="%s" fill="%s"/>' % (ink.d(it[1], m), it[2]))
             elif k == 'black':
                 out.append('<path d="%s" fill="%s" stroke="%s" stroke-width="0.6" stroke-linejoin="round"/>' % (ink.d(it[1], m), IC, IC))
             elif k == 'white':
@@ -619,6 +639,14 @@ class View:
 
     def line(self, path, w=None, cap='round', dash=None, fill='none'):
         self.parent.line(self._p(path), w, cap, dash, fill)
+        return self
+
+    def grp(self, path, c='#fff', w=None, under=True):
+        self.parent.grp(self._p(path), c, w, under)
+        return self
+
+    def flat(self, path, c):
+        self.parent.flat(self._p(path), c)
         return self
 
     def dot(self, x, y, r, ry=None):

@@ -7,11 +7,10 @@ lvl 0 is the younger book (bold, simple). lvl 1 is the older book: the same char
 marks and a few extra details. Pen widths come from the Ink the page was made with, so every character is on-model at every size.
 Every part also carries its real color (c=...), used when the Ink is in color mode (the covers); in line mode all parts are white.
 
-The pups look the way they do in Frequency Buddies (assets/js/pups.js), so they never look alike (owner, Oct 31 2026).
-Tidbit: lean, a black mask with round tan dots over the eyes, a tan muzzle, small ears that fold over, tan socks, a tan chest,
-the cowlick, a green collar with the heart tag and a short stub tail.
-Sugarfoot: stocky, tan brows running into big tan cheeks with a cream muzzle, long soft drop ears with a wavy fringe, a fluffy
-white chest, big white feet with three toes, a long plume tail, and no collar.
+The pups are drawn exactly as in Frequency Buddies: since Oct 31 2026 every pose below is replaced by the cartoon's own
+drawing (fbpups.py, a copy of assets/js/pups.js; see the end of this file). Tidbit: lean, black mask, round tan brow dot,
+folded ear, tan lower legs, a collar with a little silver tag, short tail. Sugarfoot: stocky, tan face, long drop ears,
+a white streak on the chest, big white toes with nails, a thicker tail, no collar.
 """
 import math
 from cute import *
@@ -541,3 +540,82 @@ def pup_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None,
         g.part(ell(-124, 76, 17, 15), c=K['tan'])
         paw_toes(g, -124, 74, -90, 2, 8, 8, 0.8)
     return _Group([f1, f2, g])
+
+
+# ================================================================== Frequency Buddies drawings (owner, Oct 31 2026)
+# "They need to look exactly like Frequency Buddies": every pose above is replaced by the cartoon's own drawing (fbpups.py, a
+# copy of assets/js/pups.js), in the cartoon's own poses: sit, run, lie, wiggle. The pups are always seen from the side, as in
+# the episodes. A front-facing pose becomes the cartoon's sit, facing the middle of the page (so two pups face each other).
+# Hats, scarves and the raincoat keep working: hats sit on the cartoon head, the scarf goes where Tidbit's collar is.
+import fbpups as _fb
+
+FB = True
+FBK = 4.4       # page units per cartoon unit at s = 1 (a sitting pup is then about as tall as the old front view)
+PAGE_CX = 425   # pages are 850 wide
+
+
+def _fb_draw(ink, who, x, y, s, pose, left, hat=None, scarf=False, coat=False, tilt=0.0, ph=0.0, t=0.0, cut=None, paws=False, k=FBK, rot=0.0, center=True):
+    """one cartoon pup: paws on (x, y) (its horizontal middle at x), facing left if left. cut (cartoon units, e.g. -22) keeps
+    only what is above that line, for a pup peeking over a ledge, with its two front paws on the ledge if paws"""
+    _cute.PAIR['mark'] = True
+    L = _fb.LOOKS[_fb.WHO[who]]
+    rec = _fb.draw(L, pose, ph=ph, t=t, tilt=tilt, scarf=scarf, coat=coat, rot=rot, pivot=(-12.0, 0.0))
+    if cut is not None:  # peeking: only the head shows over the ledge (and two paws)
+        rec.ops = rec.ops[rec.marks['head_at']:]
+    regs = [r for r in _fb.regions(rec) if not (r[0] == 'flat' and r[1].startswith('rgba(10,8,8'))]  # no grey box behind the far legs
+    x0, y0, x1, y1 = _fb.bounds(regs)
+    dx = -(x0 + x1) / 2 if center else 0.0
+    with ink.fig(x, y, s * k, left) as g:
+        _fb.emit(g, regs, dx=dx)
+        if hat:
+            hm = rec.marks['head']
+            pup_hat(View(g, mmul(mat(dx, 0), mmul(hm, mat(0, -2.4, 0.175)))), hat, who)
+        if cut is not None:
+            if paws:
+                for px in (11 + dx, 22 + dx):
+                    g.part(ell(px, cut - 1.2, 4.2, 2.6), c=L['paw'])
+                    for o in (-1.3, 1.3):
+                        g.line(Path().M(px + o, cut - 3).L(px + o, cut - 0.6), w=g.ink.dw * 0.6)
+    # a little room on each side, so two pups placed side by side never run nose into nose
+    b, p = g.bb, 8 * s * k
+    g.bb = (b[0] - p, b[1], b[2] + p, b[3])
+    return g
+
+
+def _left(x, flip=False):
+    return (x > PAGE_CX) != bool(flip)
+
+
+def _deg(tilt):
+    return math.radians(tilt or 0) * 0.6
+
+
+def fb_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, mouth=None, look=(0, 0), tail=True, arms='down', wag=0.0, hs=None, hat=None, scarf=False, coat=False):
+    return _fb_draw(ink, who, x, y, s, 'sit', _left(x, flip), hat, scarf, coat, _deg(tilt))
+
+
+def fb_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0, tilt=None, mouth=None, look=(0, 0), ph=0.0, hs=None, ear_rot=None, tail_up=1.0, turn=0.7, hat=None, scarf=False, lower=0.0):
+    p = {'walk': 'run', 'run': 'run', 'jump': 'run', 'sit': 'sit', 'lie': 'lie'}.get(pose, 'run')
+    a = 0.9 if pose in ('run', 'jump') else (ph % 1.0) * TAU * 0.5 + 0.35
+    return _fb_draw(ink, who, x, y, s, p, bool(flip), hat, scarf, False, _deg(tilt), ph=a)
+
+
+def fb_peek(ink, who, x, y, s=1.0, expr='happy', lvl=0, tilt=0.0, paws=True, look=(0, 0), mouth=None, hat=None, ears=True):
+    return _fb_draw(ink, who, x, y, s, 'sit', _left(x), hat, False, False, _deg(tilt), cut=-25.5, paws=bool(paws), k=FBK * 1.3)
+
+
+def fb_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, kick=1, hat=None, scarf=False, mouth=None):
+    return _fb_draw(ink, who, x, y, s, 'wiggle', _left(x, flip), hat, scarf, False, _deg(tilt) * 0.5, t=60 if kick >= 0 else 160)
+
+
+def fb_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, hat_b=None):
+    """Sugarfoot (left) and Tidbit (right) hugging the way they do in the episodes: face to face, close, both rearing up on
+    their hind legs and leaning in (buddies-player.js, act 'hug': gap 38.5, rot -0.34, Sugarfoot a little more, tilt 0.15)"""
+    g = 38.5 / 2 + 6
+    f1 = _fb_draw(ink, 'sugarfoot', x - g * FBK * s, y, s, 'run', False, hat_a, tilt=0.15, rot=-0.34 * 1.15, center=False)
+    f2 = _fb_draw(ink, 'tidbit', x + g * FBK * s, y, s, 'run', True, hat_b, tilt=0.15, rot=-0.34, center=False)
+    return _Group([f1, f2])
+
+
+if FB:
+    pup_front, pup_side, pup_peek, pup_dance, pup_hug = fb_front, fb_side, fb_peek, fb_dance, fb_hug
