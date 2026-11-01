@@ -217,7 +217,7 @@ def s_calm(P):
     A.flower(P, 600, 540, 4.4, '#F7A8C2', '#FAD27A', 6, stem=True, rot=-10)
     P.raw('<path d="M520 470 q60 -40 110 -10" fill="none" stroke="#7FB2E0" stroke-width="5" stroke-dasharray="3 13" stroke-linecap="round"/>')
     A.static_cloud(P, 'grumble', 200, 380, 4.4, fizz=True)
-    A.tidbit_front(P, 1290, 750, 5.2, 'calm', 'blow')
+    A.tidbit_front(P, 1200, 750, 5.2, 'calm', 'blow', flip=True)   # facing the candle
     A.candle(P, 1470, 640, 4.2, lean=1.0)
     for i, (x, y, r) in enumerate(((1440, 560, 10), (1470, 520, 14), (1520, 480, 18))):
         P.raw('<circle cx="%s" cy="%s" r="%s" fill="none" stroke="#8EC5EE" stroke-width="3.5"/>' % (x, y, r))
@@ -541,7 +541,7 @@ def pg_calm(spread_first):
     ground(P, 690, '#A9DB84')
     A.tidbit_front(P, 430, 810, 4.4, 'sleep', 'smile')
     A.flower(P, 580, 560, 4.0, '#F7A8C2', '#FAD27A', 6, stem=True, rot=-10)
-    A.tidbit_front(P, 1290, 810, 4.4, 'calm', 'blow')
+    A.tidbit_front(P, 1210, 810, 4.4, 'calm', 'blow', flip=True)   # facing the candle
     A.candle(P, 1470, 790, 3.6, lean=1.0)
     for (x, y, r) in ((1430, 690, 9), (1470, 650, 12), (1520, 610, 15)):
         P.raw('<circle cx="%s" cy="%s" r="%s" fill="none" stroke="#8EC5EE" stroke-width="3"/>' % (x, y, r))

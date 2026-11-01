@@ -422,3 +422,27 @@ def cut_above(regs, cut):
         if polys:
             res.append(r[:-1] + (polys,))
     return res
+
+
+def head_svg(who, size=64, pad=3.0, attrs='focusable="false" aria-hidden="true"'):
+    """Tidbit's or Sugarfoot's head exactly as the cartoon draws it (facing right, the cartoon's own colors, no outline),
+    as a small square SVG: the hint badges in the books (tools/book/hints.py)"""
+    rec = draw(LOOKS[WHO[who]], 'sit')
+    ops = rec.ops[rec.marks['head_at']:]
+    xs = [p[0] for op in ops for sub in op[-1] for p in sub]
+    ys = [p[1] for op in ops for sub in op[-1] for p in sub]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    k = (size - 2 * pad) / max(x1 - x0, y1 - y0)
+    ox, oy = (size - (x1 - x0) * k) / 2 - x0 * k, (size - (y1 - y0) * k) / 2 - y0 * k
+
+    def d(subs, closed):
+        return ''.join('M' + 'L'.join('%.1f %.1f' % (p[0] * k + ox, p[1] * k + oy) for p in s) + ('Z' if closed else '') for s in subs if len(s) > 1)
+
+    out = []
+    for op in ops:
+        if op[0] == 'fill':
+            out.append('<path d="%s" fill="%s"/>' % (d(op[2], True), op[1]))
+        else:
+            _, col, w, cap, lines = op
+            out.append('<path d="%s" fill="none" stroke="%s" stroke-width="%.2f" stroke-linecap="%s"/>' % (d(lines, False), col, w * k, cap))
+    return '<svg viewBox="0 0 %d %d" %s>%s</svg>' % (size, size, attrs, ''.join(out))

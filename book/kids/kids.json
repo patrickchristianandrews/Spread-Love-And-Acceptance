@@ -17,7 +17,7 @@
     "picture-book": {
      "pdf": "picture-book.pdf",
      "pages": 40,
-     "bytes": 1542368
+     "bytes": 1711978
     },
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
@@ -39,7 +39,7 @@
     "chapter-book": {
      "pdf": "chapter-book.pdf",
      "pages": 92,
-     "bytes": 891230
+     "bytes": 898617
     }
    },
    "pages_printed": 92,
@@ -94,6 +94,16 @@
     "height_in": 11.25,
     "spine_in": 0.1531
    }
+  },
+  "picture-book-screen": {
+   "files": {
+    "picture-book-screen": {
+     "pdf": "picture-book-screen.pdf",
+     "pages": 40,
+     "bytes": 1713494
+    }
+   },
+   "pages_printed": 40
   }
  }
 }

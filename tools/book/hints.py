@@ -59,40 +59,15 @@ SVG_PUDDLES = (
     '<ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/>'
     '<g transform="translate(-9 15) rotate(-20 40 10) scale(.82)"><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/>'
     '<path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></g></svg>')
-# Tidbit (pups.js "collar"): black, folded ears, round tan brow dots, tan cheeks, the big smile and a collar with a tag.
-SVG_TIDBIT = (
-    '<svg viewBox="0 0 64 64" focusable="false" aria-hidden="true">'
-    '<path d="M13.5 22C11 11 18 7 24.5 10.5L28 19.5C23 24.5 17 25 13.5 22Z" fill="#262220"/>'
-    '<path d="M50.5 22C53 11 46 7 39.5 10.5L36 19.5C41 24.5 47 25 50.5 22Z" fill="#262220"/>'
-    '<ellipse cx="32" cy="31" rx="17" ry="16" fill="#2B2620"/>'
-    '<ellipse cx="32" cy="40.5" rx="10.5" ry="7.5" fill="#C98A4F"/>'
-    '<path d="M28.6 29.5Q32 27 35.4 29.5L34.6 36.5Q32 37.6 29.4 36.5Z" fill="#2B2620"/>'
-    '<circle cx="24.5" cy="23.2" r="2.6" fill="#D69B5F"/><circle cx="39.5" cy="23.2" r="2.6" fill="#D69B5F"/>'
-    '<circle cx="25" cy="29" r="2.7" fill="#3A2418"/><circle cx="39" cy="29" r="2.7" fill="#3A2418"/>'
-    '<circle cx="25.9" cy="28" r=".95" fill="#fff"/><circle cx="39.9" cy="28" r=".95" fill="#fff"/>'
-    '<ellipse cx="32" cy="37" rx="3.7" ry="2.7" fill="#121010"/><circle cx="31" cy="36.2" r=".8" fill="#fff" opacity=".55"/>'
-    '<path d="M25.8 41.2Q32 48.6 38.2 41.2Q32 44.2 25.8 41.2Z" fill="#3A1E22"/>'
-    '<ellipse cx="32" cy="45" rx="2.6" ry="2.2" fill="#EE8FA6"/>'
-    '<ellipse cx="22.5" cy="38" rx="2.3" ry="1.3" fill="#F7A5B9" opacity=".6"/><ellipse cx="41.5" cy="38" rx="2.3" ry="1.3" fill="#F7A5B9" opacity=".6"/>'
-    '<path d="M18.5 46.5Q32 55 45.5 46.5" fill="none" stroke="#141111" stroke-width="3.4" stroke-linecap="round"/>'
-    '<circle cx="32" cy="54" r="3.1" fill="#D5D9E0" stroke="#141111" stroke-width="1"/></svg>')
-# Sugarfoot (pups.js "drop"): stockier, long drop ears, tan brows running into tan cheeks, the same fawn-tan muzzle as on the rest of the site, white chest.
-SVG_SUGARFOOT = (
-    '<svg viewBox="0 0 64 64" focusable="false" aria-hidden="true">'
-    '<ellipse cx="14.5" cy="35" rx="6.6" ry="13.5" fill="#1B1817" transform="rotate(14 14.5 35)"/>'
-    '<ellipse cx="49.5" cy="35" rx="6.6" ry="13.5" fill="#1B1817" transform="rotate(-14 49.5 35)"/>'
-    '<path d="M25 50Q32 43 39 50Q36 59 32 60Q28 59 25 50Z" fill="#F4EFE6" stroke="#D9D0C2" stroke-width=".8"/>'
-    '<ellipse cx="32" cy="30.5" rx="17.5" ry="16" fill="#252120"/>'
-    '<ellipse cx="23.8" cy="23" rx="3.8" ry="2.2" fill="#C9965F" transform="rotate(-14 23.8 23)"/>'
-    '<ellipse cx="40.2" cy="23" rx="3.8" ry="2.2" fill="#C9965F" transform="rotate(14 40.2 23)"/>'
-    '<ellipse cx="22.8" cy="36.5" rx="4.6" ry="4.2" fill="#C9965F"/><ellipse cx="41.2" cy="36.5" rx="4.6" ry="4.2" fill="#C9965F"/>'
-    '<ellipse cx="32" cy="39" rx="9.2" ry="7.2" fill="#C9965F"/>'
-    '<circle cx="25.2" cy="29.2" r="2.5" fill="#3A2418"/><circle cx="38.8" cy="29.2" r="2.5" fill="#3A2418"/>'
-    '<circle cx="26" cy="28.3" r=".85" fill="#fff"/><circle cx="39.6" cy="28.3" r=".85" fill="#fff"/>'
-    '<path d="M22.4 26.6Q25.2 25.4 28 26.6M36 26.6Q38.8 25.4 41.6 26.6" fill="none" stroke="#3A2418" stroke-width=".9" stroke-linecap="round"/>'
-    '<ellipse cx="32" cy="35.6" rx="3.9" ry="2.9" fill="#121010"/><circle cx="31" cy="34.8" r=".8" fill="#fff" opacity=".55"/>'
-    '<path d="M28 41.2Q32 44.6 36 41.2" fill="none" stroke="#3A1E22" stroke-width="1.5" stroke-linecap="round"/>'
-    '<path d="M32 38.4V41.6" stroke="#3A1E22" stroke-width="1.2" stroke-linecap="round"/></svg>')
+# Tidbit and Sugarfoot: their heads exactly as the Frequency Buddies cartoon draws them (owner, Oct 31 2026: "they need to look
+# exactly like Frequency Buddies"), made from the cartoon's own drawing (tools/kids/fbpups.py, a copy of assets/js/pups.js).
+# Tidbit: black mask, round tan brow dot, folded ear, tan cheeks. Sugarfoot: tan face, long drop ear.
+import os as _os
+import sys as _sys
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'kids'))
+import fbpups as _fbpups  # noqa: E402
+SVG_TIDBIT = _fbpups.head_svg('tidbit')
+SVG_SUGARFOOT = _fbpups.head_svg('sugarfoot')
 
 SPEAKERS = {
     'puddles': ('Professor Puddles', SVG_PUDDLES),

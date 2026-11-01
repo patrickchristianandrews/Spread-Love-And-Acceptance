@@ -262,67 +262,26 @@ def mouth(P, x, y, w, style='smile', col='#6B2A33'):
 BLACK = '#252120'
 
 
+# owner, Oct 31 2026: "they need to look exactly like Frequency Buddies". The pups were drawn facing front here (the logo's
+# style); the cartoon only shows them from the side, so a front view is now the cartoon's sitting pose (pup_side, below),
+# with the same expression, facing the middle of the picture (FRONT_CX; flip turns it the other way).
+FRONT_CX = 850
+_MOUTHS = {'w': 'grin', 'grin': 'grin', 'smile': 'smile', 'o': 'o', 'blow': 'blow', 'frown': 'frown', 'yell': 'yell', 'flat': 'flat'}
+
+
+def _front(P, who, x, y, s, expr, mouth_, flip):
+    left = (x > FRONT_CX) != bool(flip)
+    pup_side(P, who, x + (4 if left else -4) * s, y, s * 0.95, 'sit', expr, flip=left, mouth_=_MOUTHS.get(mouth_, 'grin'))
+
+
 def sugarfoot_front(P, x, y, s, expr='happy', mouth_='grin', flip=False, tail=True, heart_=False, look=(0, 0)):
-    """origin at the paws (bottom center); about 70 units tall (ear top -15, paws 40)"""
-    P.at(x, y - 40 * s, s, flip)
-    if tail:
-        P.thick('M-14 30Q-27 27-26 13', BLACK, 6)
-        P.line('M-15 28Q-24 24-23.5 15', '#C9965F', 1.5, kind='detail')
-    P.path('M-18 38C-19 26-12 17 0 17S19 26 18 38Z', BLACK)
-    P.rect(-12, 27, 8, 9, '#B97847', r=4)
-    P.rect(4, 27, 8, 9, '#B97847', r=4)
-    P.ell(-8, 36, 6, 3.8, '#F1EADF')
-    P.ell(8, 36, 6, 3.8, '#F1EADF')
-    for nx in (-10.5, -8, -5.5, 5.5, 8, 10.5):
-        P.line('M%s 36.6 l0 2' % f(nx), '#2A2422', 0.7, kind='fine' if P.mode != 'color' else 'line')
-    P.ell(0, 24, 1.8, 3.5, '#F2ECE3', kind='shape' if P.mode == 'color' else 'shape')
-    P.ell(-17, 5, 7, 14, '#1B1817', rot=18)
-    P.ell(17, 5, 7, 14, '#1B1817', rot=-18)
-    P.ell(0, 0, 17, 15.5, BLACK)
-    P.ell(0, 7, 13, 9, '#C9965F')
-    _brows_drop(P, expr)
-    for ex in (-6.5, 6.5):
-        P.ell(ex, -2, 3.7, 3.3, BLACK, kind='detail' if P.mode == 'line' else 'flat')
-        _pup_eye(P, ex, -2, 2.4, expr, look)
-    P.ell(0, 3.6, 4.2, 3, '#121010', kind='dark')
-    P.ell(-1, 2.6, 1.2, .8, '#fff', kind='detail', op=0.5)
-    P.ell(-10.5, 8, 2.6, 1.5, '#F4A2B8', kind='detail', op=0.8)
-    P.ell(10.5, 8, 2.6, 1.5, '#F4A2B8', kind='detail', op=0.8)
-    _pup_mouth(P, mouth_, 0, 8, 'drop')
-    if heart_:
-        heart(P, 0, 18.5, 0.16, '#FAD27A', '#DDA23A')
-    P.close()
+    """Sugarfoot sitting (the cartoon's own pose). Origin at the paws"""
+    _front(P, 'sugarfoot', x, y, s, expr, mouth_, flip)
 
 
 def tidbit_front(P, x, y, s, expr='happy', mouth_='w', flip=False, tail=True, look=(0, 0)):
-    """origin at the paws; leaner and a little taller than Sugarfoot (about 72 units)"""
-    P.at(x, y - 40 * s, s, flip)
-    if tail:
-        P.thick('M13 30Q21 26 22 18', BLACK, 5)
-    P.path('M-14 38C-15 28-9 19 0 19S15 28 14 38Z', BLACK)
-    P.ell(-4.5, 25.5, 3, 2.4, '#C4834A')
-    P.ell(4.5, 25.5, 3, 2.4, '#C4834A')
-    P.rect(-10, 28, 7, 8, '#C98A4F', r=3.5)
-    P.rect(3, 28, 7, 8, '#C98A4F', r=3.5)
-    P.ell(-6.5, 36, 5, 3.3, '#D99E62')
-    P.ell(6.5, 36, 5, 3.3, '#D99E62')
-    P.thick('M-11 16Q0 24 11 16', '#141111' if P.mode == 'color' else '#9a2d3b', 3.6)
-    P.line('M-11 14.6Q0 22.6 11 14.6', '#6B625E', 0.8, kind='detail')
-    heart(P, 0, 19.5, 0.13, '#FAD27A', '#DDA23A')
-    P.ell(0, 0, 15.5, 15, BLACK)
-    P.ell(0, 8, 10, 6.5, '#C4834A')
-    P.ell(0, 2.5, 3.2, 6, BLACK, kind='flat' if P.mode == 'color' else 'detail')
-    P.path('M-15.5 -5Q-14 -16 -5 -13.5Q-8 -7 -13.5 -3Z', BLACK)
-    P.path('M15.5 -5Q14 -16 5 -13.5Q8 -7 13.5 -3Z', BLACK)
-    P.line('M-13.5 -3.5Q-8.5 -7 -5.5 -12.5M13.5 -3.5Q8.5 -7 5.5 -12.5', '#B97A43', 1.2, kind='detail')
-    _brows_dot(P, expr)
-    for ex in (-6, 6):
-        _pup_eye(P, ex, -2.3, 2.4, expr, look, col='#5A3A26')
-    P.ell(0, 5.5, 3.8, 2.7, '#121010', kind='dark')
-    P.ell(-6, 8, 2.2, 1.3, '#F7A5B9', kind='detail', op=0.6)
-    P.ell(6, 8, 2.2, 1.3, '#F7A5B9', kind='detail', op=0.6)
-    _pup_mouth(P, mouth_, 0, 10, 'collar')
-    P.close()
+    """Tidbit sitting (the cartoon's own pose). Origin at the paws"""
+    _front(P, 'tidbit', x, y, s, expr, mouth_, flip)
 
 
 def _brows_drop(P, expr):
@@ -461,7 +420,8 @@ def pup_side(P, who, x, y, s, pose='stand', expr='happy', ph=0.0, wag=0.0, flip=
             P.ell(15, BY + 5.5, 3.6, 2.8, TAN, rot=math.degrees(-0.2))
         if L['collar']:
             P.thick('M9 %sQ14 %s 18 %s' % (f(BY - 11), f(BY - 3), f(BY - 5)), '#141111' if P.mode == 'color' else '#9a2d3b', 2.8)
-            heart(P, 14.6, BY - 6.4, 0.085, '#FAD27A', '#DDA23A')
+            P.rect(13.6, BY - 7.4, 2.8, 2.4, '#D5D9E0')   # the little silver tag, as in pups.js
+            P.rect(14.4, BY - 6.8, 1.2, 1.2, '#141111', kind='dark')
     P.close()
     if moving:
         leg(-12, BY + 4, a, LL)
@@ -496,7 +456,12 @@ def pup_side(P, who, x, y, s, pose='stand', expr='happy', ph=0.0, wag=0.0, flip=
         P.ell(8.5, 4.5, 8, 4.8, TAN, rot=5.7)
         P.ell(4, 2.5, 3.8, 3.6, TAN, kind='flat' if P.mode == 'color' else 'detail')
         P.ell(10, 0.6, 7.5, 2.4, BLACK, rot=4.6, kind='flat' if P.mode == 'color' else 'detail')
-        P.circ(3.4, -5.6, 2.5, '#D69B5F')
+        if expr == 'cross':
+            P.ell(3.4, -5.4, 3.1, 1.8, '#D69B5F', rot=24)
+        elif expr in ('worried', 'sad'):
+            P.ell(3.4, -5.8, 3.1, 1.8, '#D69B5F', rot=-22)
+        else:
+            P.circ(3.4, -5.6, 2.5, '#D69B5F')
     P.ell(16, 1.4, 2.9, 2.3, '#121010', kind='dark')
     if mouth_ == 'grin':
         P.path('M15 4.6Q11 10.5 6 6Q11 7.6 15 4.6Z', '#3A1E22', kind='dark')
@@ -509,14 +474,21 @@ def pup_side(P, who, x, y, s, pose='stand', expr='happy', ph=0.0, wag=0.0, flip=
         P.path('M15.5 4.2Q11 13 5.5 6Q11 8 15.5 4.2Z', '#3A1E22', kind='dark')
     elif mouth_ == 'o':
         P.ell(12.5, 7, 1.8, 2.2, '#3A1E22', kind='dark')
+    elif mouth_ == 'blow':
+        P.ell(13.2, 6.4, 1.4, 1.4, '#3A1E22', kind='dark')
+    elif mouth_ == 'flat':
+        P.line('M14.2 6.2L8 6.8', '#3A1E22', 1.3)
     if carry:
         carry(P)
     if expr in ('calm', 'sleep', 'happy-closed'):
         up = expr == 'happy-closed'
         P.line('M2.2 -1.6Q4.2 %s 6.2 -1.6' % ('-4' if up else '0.6'), '#F2E6D8' if P.mode == 'color' else '#111', 1.2)
     else:
-        P.circ(4.2, -1.6, 2.1 * (1.2 if expr == 'surprised' else 1), '#3A2418', kind='dark')
-        P.circ(4.9, -2.4, 0.75, '#fff', kind='detail' if P.mode == 'line' else 'flat')
+        dy = 0.4 if expr == 'sad' else 0
+        P.circ(4.2, -1.6 + dy, 2.1 * (1.2 if expr == 'surprised' else 1), '#3A2418', kind='dark')
+        P.circ(4.9, -2.4 + dy, 0.75, '#fff', kind='detail' if P.mode == 'line' else 'flat')
+        if expr == 'sad':
+            P.path('M5.6 1.6q-1.1 2.2 0 3.1q1.1 -0.9 0 -3.1Z', '#9ED3FF', kind='flat' if P.mode == 'color' else 'shape')
     P.ell(7, 4.5, 2.2, 1.2, '#F7A5B9', kind='detail', op=0.5)
     if L['ear'] == 'drop':
         P.open('translate(-3 -6.5) rotate(%s)' % f(math.degrees(0.35)))
