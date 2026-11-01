@@ -731,6 +731,7 @@ def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
     """draw fn(ink, x, y, s) so that its drawing fills box = (x0, y0, x1, y1) as much as it can (aspect kept).
     anchor: 'bottom' (sits on the bottom edge), 'center', 'top'. Returns (figure, scale)"""
     probe = Ink(ow=ink.ow, iw=ink.iw, dw=ink.dw, wob=0, wob_lo=0, step=ink.step, color=ink.color)
+    probe._probe = True
     PAIR['mark'] = False
     g0 = fn(probe, 0, 0, 1.0)
     is_pup = PAIR['mark']
@@ -754,8 +755,19 @@ def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
         ty = (y0 + y1) / 2 - (by0 + by1) / 2 * s
     tx = cx - (bx0 + bx1) / 2 * s
     if is_pup:
-        tx = _pup_room(ink, g0, tx, ty, s)
-    return fn(ink, tx, ty, s), s
+        # measure the pup again where it will really stand: which way a pup faces can depend on where it is on the page
+        probe2 = Ink(ow=ink.ow, iw=ink.iw, dw=ink.dw, wob=0, wob_lo=0, step=ink.step, color=ink.color)
+        probe2._probe = True
+        g1 = fn(probe2, tx, ty, s)
+        tb = getattr(g1, 'bb_true', None) or g1.bb
+        if PAIR['mode'] == 'measure':
+            PAIR.setdefault('boxes', []).append((tb[0], tb[1], tb[2], tb[3], s))
+        tx += pup_room(ink, tb[0], tb[1], tb[2], tb[3])
+    PAIR['placed'] = is_pup
+    try:
+        return fn(ink, tx, ty, s), s
+    finally:
+        PAIR['placed'] = False
 
 
 # owner, Nov 1 2026: "Tidbit and Sugarfoot shouldn't overlap ... make sure they are appropriately spaced out from each other".
@@ -769,9 +781,16 @@ def _pup_room(ink, g0, tx, ty, s):
     x0, y0, x1, y1 = tb[0] * s + tx, tb[1] * s + ty, tb[2] * s + tx, tb[3] * s + ty
     if PAIR['mode'] == 'measure':
         PAIR.setdefault('boxes', []).append((x0, y0, x1, y1, s))
+    return tx + pup_room(ink, x0, y0, x1, y1)
+
+
+def pup_room(ink, x0, y0, x1, y1):
+    """how far a pup whose drawing covers (x0, y0, x1, y1) must move sideways to keep a clear gap from every pup already on
+    this page; remembers it. Used by fit() and by every pup drawn straight at a spot (cast.py)."""
     placed = getattr(ink, '_pups', None)
     if placed is None:
         placed = ink._pups = []
+    dx = 0.0
     for _ in range(3):
         moved = False
         for (px0, py0, px1, py1) in placed:
@@ -781,14 +800,14 @@ def _pup_room(ink, g0, tx, ty, s):
             if (x0 + x1) >= (px0 + px1):
                 need = px1 + gap - x0
                 if need > 0:
-                    tx, x0, x1, moved = tx + need, x0 + need, x1 + need, True
+                    dx, x0, x1, moved = dx + need, x0 + need, x1 + need, True
             else:
                 need = x1 - (px0 - gap)
                 if need > 0:
-                    tx, x0, x1, moved = tx - need, x0 - need, x1 - need, True
+                    dx, x0, x1, moved = dx - need, x0 - need, x1 - need, True
         if not moved:
             break
     if (x0 < 40 or x1 > 810) and PAIR['mode'] != 'measure':
         SPACING.append((round(x0), round(x1)))
     placed.append((x0, y0, x1, y1))
-    return tx
+    return dx

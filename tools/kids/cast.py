@@ -618,5 +618,77 @@ def fb_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, 
     return _Group([f1, f2])
 
 
-if FB:
+# ================================================================== hand-drawn coloring pups (owner, Nov 1 2026: "redraw them new")
+# The coloring books use pupline.py: clean side-view line art made for coloring, with the cartoon's markings. Every pose
+# keeps the old call signature. Front-facing poses become sitting pups facing the middle of the page; waving poses lift
+# the near front paw; hugs are two sitting pups face to face with room between them.
+import pupline as _pl
+_pl.HAT = lambda v, hat, who: pup_hat(v, hat, who)
+
+
+def _pl_fig(ink, x, y, s, left, draw):
+    _cute.PAIR['mark'] = True
+    if not _cute.PAIR.get('placed') and not getattr(ink, '_probe', False):
+        # drawn straight at a spot, not through fit(): measure it first and keep a clear gap from the other pup
+        pr = _cute.Ink(ow=ink.ow, iw=ink.iw, dw=ink.dw, wob=0, wob_lo=0, step=ink.step, color=ink.color)
+        pr._probe = True
+        with pr.fig(x, y, s, left) as g0:
+            draw(g0)
+        b = g0.bb
+        x += _cute.pup_room(ink, b[0], b[1], b[2], b[3])
+    with ink.fig(x, y, s * 1.0, left) as g:
+        draw(g)
+    b, p = g.bb, 8 * s
+    g.bb_true = b
+    g.bb = (b[0] - p, b[1], b[2] + p, b[3])
+    return g
+
+
+def _ex(expr):
+    return 'happy' if OPEN_EYES and expr in CLOSED_EYES else expr
+
+
+def pl_front(ink, who, x, y, s=1.0, expr='happy', flip=False, tilt=0.0, lvl=0, mouth=None, look=(0, 0), tail=True, arms='down', wag=0.0, hs=None, hat=None, scarf=False, coat=False):
+    up = arms in ('up', 'both_up', 'wide')
+    return _pl_fig(ink, x, y, s, _left(x, flip), lambda g: _pl.sit(g, who, _ex(expr), paw_up=up, hat=hat, scarf=scarf, coat=coat))
+
+
+def pl_side(ink, who, x, y, s=1.0, pose='walk', expr='happy', flip=False, lvl=0, tilt=None, mouth=None, look=(0, 0), ph=0.0, hs=None, ear_rot=None, tail_up=1.0, turn=0.7, hat=None, scarf=False, lower=0.0):
+    e = _ex(expr)
+    if pose == 'sit':
+        return _pl_fig(ink, x, y, s, bool(flip), lambda g: _pl.sit(g, who, e, hat=hat, scarf=scarf))
+    if pose == 'lie':
+        return _pl_fig(ink, x, y, s, bool(flip), lambda g: _pl.lie(g, who, e, hat=hat))
+    run = pose in ('run', 'jump')
+    return _pl_fig(ink, x, y, s, bool(flip), lambda g: _pl.stand(g, who, e, ph=(0.25 if run else (ph % 1.0)), run=run, hat=hat, scarf=scarf))
+
+
+def pl_peek(ink, who, x, y, s=1.0, expr='happy', lvl=0, tilt=0.0, paws=True, look=(0, 0), mouth=None, hat=None, ears=True):
+    return _pl_fig(ink, x, y, s * 1.15, _left(x), lambda g: _pl.peek(g, who, _ex(expr), paws=bool(paws), hat=hat))
+
+
+def pl_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, kick=1, hat=None, scarf=False, mouth=None):
+    return _pl_fig(ink, x, y, s, _left(x, flip), lambda g: _pl.sit(g, who, _ex(expr), paw_up=True, hat=hat, scarf=scarf))
+
+
+def pl_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, hat_b=None):
+    """Sugarfoot (left) and Tidbit (right) sitting face to face, close but never touching"""
+    f1 = _pl_fig(ink, x - 150 * s, y, s, False, lambda g: _pl.sit(g, 'sugarfoot', _ex(expr_b), hat=hat_a))
+    f2 = _pl_fig(ink, x + 150 * s, y, s, True, lambda g: _pl.sit(g, 'tidbit', _ex(expr_a), hat=hat_b))
+    return _Group([f1, f2])
+
+
+def pl_head(g, who, expr='happy', tilt=0.0, lvl=0, look=(0, 0), mouth=None, turn=0.0, ear_rot=0.0, ears=True, hat=None):
+    """the same head as every other pose, for portraits in windows: centered on the origin, about 150 wide.
+    Sugarfoot faces right and Tidbit faces left, so side by side they look at each other."""
+    _cute.PAIR['mark'] = True
+    v = g.view(0, 0, 1, who == 'tidbit')
+    _pl.head(v, who, -18, 10, _ex(expr), s=1.3, hat=hat)
+
+
+PL = True
+if PL:
+    pup_front, pup_side, pup_peek, pup_dance, pup_hug = pl_front, pl_side, pl_peek, pl_dance, pl_hug
+    pup_head_old, pup_head = pup_head, pl_head
+elif FB:
     pup_front, pup_side, pup_peek, pup_dance, pup_hug = fb_front, fb_side, fb_peek, fb_dance, fb_hug
