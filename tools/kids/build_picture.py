@@ -288,9 +288,9 @@ def s_oops(P):
 def s_sorry(P):
     sky(P, '#CFE6FA', '#FFF1D8')
     rolling(P, 590, [('#BFE6A0', -10, 30), ('#A9DB84', 55, 26)])
-    A.tidbit_front(P, 250, 750, 4.85, 'sad', 'frown')   # face to face, with room between them (they never overlap)
-    A.pup_side(P, 'sugarfoot', 690, 745, 4.6, 'stand', 'happy', flip=True, mouth_='smile')
-    A.heart(P, 470, 420, 1.5, '#F08DA8', '#D2668A')
+    A.tidbit_front(P, 175, 750, 4.85, 'sad', 'frown')   # face to face, with room between them (they never overlap)
+    A.pup_side(P, 'sugarfoot', 715, 745, 4.6, 'stand', 'happy', flip=True, mouth_='smile')
+    A.heart(P, 440, 420, 1.5, '#F08DA8', '#D2668A')
     A.blanket(P, 1250, 745, 520, 110, 1.0, '#E0554E')
     A.hopper(P, 1040, 745, 3.4, expr='happy')
     A.nutmeg(P, 1160, 745, 3.4, expr='happy')

@@ -17,7 +17,7 @@
     "picture-book": {
      "pdf": "picture-book.pdf",
      "pages": 40,
-     "bytes": 1083618
+     "bytes": 1083790
     },
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
@@ -100,7 +100,7 @@
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
      "pages": 40,
-     "bytes": 1085163
+     "bytes": 1085335
     }
    },
    "pages_printed": 40
