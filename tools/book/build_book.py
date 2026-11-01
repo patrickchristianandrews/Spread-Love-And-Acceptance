@@ -1697,8 +1697,8 @@ DOWNLOAD_TMPL = '''<body data-no-offer data-no-learnplay data-no-pillars data-no
 <section class="bk-dl-more" id="dl-media" aria-labelledby="dl-media-h"><h2 id="dl-media-h">Videos and music</h2>
 <p>These download right away, with no email.</p>
 <ul class="bk-dl-links">
-<li><a href="/assets/video/frequency-buddies-music-video.mp4" download="Frequency Buddies - Theme Song Music Video.mp4">Frequency Buddies theme song music video</a><span>MP4 video, 17 MB</span></li>
-<li><a href="/assets/video/frequency-buddies-season-2-teaser.mp4" download="Frequency Buddies - Season 2 teaser.mp4">Frequency Buddies Season 2 teaser</a><span>MP4 video, 9 MB</span></li>
+<li><a href="/assets/video/frequency-buddies-music-video.mp4" download="Frequency Buddies - Theme Song Music Video.mp4">Frequency Buddies theme song music video</a><span>MP4 video, 14 MB</span></li>
+<li><a href="/assets/video/frequency-buddies-season-2-teaser.mp4" download="Frequency Buddies - Season 2 teaser.mp4">Frequency Buddies Season 2 teaser</a><span>MP4 video, 8 MB</span></li>
 <li><a href="/soundscapes.html">Brain Breakers music</a><span>Listen on the site, or download each track as an MP3</span></li>
 </ul></section>
 <section class="bk-dl-more" id="dl-app" aria-labelledby="dl-app-h"><h2 id="dl-app-h">The free app</h2>
