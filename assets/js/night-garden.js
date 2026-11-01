@@ -1511,15 +1511,20 @@
     var lean = L.build === 'lean', LL = lean ? 15 : 12.5, BRX = lean ? 18.5 : 18, BRY = lean ? 8.8 : 10.2, BY = lean ? -21 : -18.5;
     function leg(x0, y0, ang, len, back) {
       ctx.save(); ctx.translate(x0, y0); ctx.rotate(ang);
-      var up = len * 0.5;
-      ctx.fillStyle = L.legUp; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.8, -2, 5.6, up + 3, 2.8) : ctx.rect(-2.8, -2, 5.6, up + 3); ctx.fill();
-      ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.5, up, 5, len - up, 2.5) : ctx.rect(-2.5, up, 5, len - up); ctx.fill();
-      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(1, len, 3.9, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      // owner, Nov 1 2026: "make sure they look smooth everywhere": one soft, tapered leg (thick at the top, slimmer at the
+      // ankle) with a gently curved sock line and a round paw, instead of two stacked tubes; the far legs are a shade darker
+      // (no grey box behind them)
+      var up = len * 0.5, dk = back ? 0.22 : 0;
+      function sh(c) { if (!dk || c.charAt(0) !== '#') return c; var n = parseInt(c.slice(1), 16), k = 1 - dk; return 'rgb(' + Math.round((n >> 16) * k) + ',' + Math.round((n >> 8 & 255) * k) + ',' + Math.round((n & 255) * k) + ')'; }
+      ctx.fillStyle = sh(L.legLow); ctx.beginPath(); ctx.moveTo(-3.1, -1); ctx.quadraticCurveTo(-3.4, len * 0.5, -2.3, len - 0.6); ctx.lineTo(2.3, len - 0.6);
+      ctx.quadraticCurveTo(3.4, len * 0.5, 3.1, -1); ctx.quadraticCurveTo(0, -3.4, -3.1, -1); ctx.fill();
+      ctx.fillStyle = sh(L.legUp); ctx.beginPath(); ctx.moveTo(-3.1, -1); ctx.quadraticCurveTo(-3.3, up * 0.6, -2.9, up + 0.4); ctx.quadraticCurveTo(0, up + 1.8, 2.9, up + 0.4);
+      ctx.quadraticCurveTo(3.3, up * 0.6, 3.1, -1); ctx.quadraticCurveTo(0, -3.4, -3.1, -1); ctx.fill();
+      ctx.fillStyle = sh(L.paw); ctx.beginPath(); ctx.ellipse(1, len, 4.1, 2.6, 0, 0, Math.PI * 2); ctx.fill();
       if (L.nails) { // pale toes with little dark nails
         ctx.strokeStyle = 'rgba(0,0,0,0.16)'; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(1.2, len - 1.6); ctx.lineTo(1.2, len + 1.2); ctx.moveTo(3.2, len - 1.3); ctx.lineTo(3.2, len + 1.3); ctx.stroke();
         ctx.fillStyle = '#2A2422'; [[4.6, len + 0.8], [3.3, len + 2.1], [1.6, len + 2.4]].forEach(function (n) { ctx.beginPath(); ctx.ellipse(n[0], n[1], 0.9, 0.55, 0.5, 0, Math.PI * 2); ctx.fill(); });
       }
-      if (back) { ctx.fillStyle = 'rgba(10,8,8,0.22)'; ctx.fillRect(-4, -2, 9, len + 4); }
       ctx.restore();
     }
     var lie = pose === 'lie', bow = pose === 'bow', sit = pose === 'sit', wiggle = pose === 'wiggle', moving = pose === 'run' || wiggle;
@@ -1535,6 +1540,8 @@
     if (moving) { leg(-10, BY + 5, b * 0.8, LL, true); leg(10, BY + 5, a * 0.8, LL, true); }
     else if (sit) leg(9, -16, 0.05, LL + 2, true);
     else if (bow) leg(-11, -18, 0.05, LL + 4, true);
+    // sitting: a neck from the shoulders up into the head, behind the chest markings, so the head sits on the body smoothly (owner, Nov 1 2026)
+    if (sit) { ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(14, -29, 7.5, 10, 0.25, 0, Math.PI * 2); ctx.fill(); }
     // body
     ctx.save(); ctx.rotate(bodyTilt);
     if (lie) {
