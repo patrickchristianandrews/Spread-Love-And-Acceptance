@@ -65,6 +65,7 @@ exclude:
   - tools/coinpusher/
   - tools/coloring/
   - tools/go/
+  - tools/brand/
   - tools/collab/
   - tools/intents/
   - tools/journeys/

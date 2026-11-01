@@ -27,7 +27,7 @@ const fs = require('fs'); const { chromium } = require('playwright');
   const b = await chromium.launch({ executablePath: fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined });
   for (const j of jobs) {
     const p = await b.newPage({ viewport: { width: j.w, height: j.h } });
-    const html = j.out + '.html';   // a file page, so the file:// picture is allowed to load
+    const html = require('path').join(require('os').tmpdir(), 'logo_png_' + require('path').basename(j.out) + '.html');   // a file page (so the file:// picture may load), kept out of the site
     fs.writeFileSync(html, '<html><body style="margin:0;background:transparent"><img src="file://' + j.svg + '" style="display:block;width:' + j.w + 'px;height:' + j.h + 'px"></body></html>');
     await p.goto('file://' + html);
     const ok = await p.evaluate(() => { const im = document.querySelector('img'); return im.complete && im.naturalWidth > 0; });
