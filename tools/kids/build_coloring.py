@@ -317,13 +317,15 @@ def paired(new_ink, fn):
     fn(new_ink())
     seen = Q.PAIR["seen"]
     force = min(seen) if len(seen) >= 2 else None
-    if force:   # owner, Nov 1 2026: the pups never overlap; where the picture is tight, both are drawn a little smaller
-        force *= Q.pair_shrink(Q.PAIR['boxes'], force)
-    Q.PAIR.update(mode='draw', force=force)
+    offsets = []
+    if force:   # owner, Nov 1 2026: the pups never overlap; each first steps a little apart, and only a tight picture draws both smaller
+        f, offsets = Q.pair_plan(Q.PAIR['boxes'], force)
+        force *= f
+    Q.PAIR.update(mode='draw', force=force, offsets=offsets)
     _r.setstate(state)
     ink = new_ink()
     fn(ink)
-    Q.PAIR.update(mode=None, seen=[], force=None)
+    Q.PAIR.update(mode=None, seen=[], force=None, offsets=[])
     return ink
 
 

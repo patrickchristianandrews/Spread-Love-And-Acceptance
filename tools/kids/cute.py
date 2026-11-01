@@ -727,6 +727,47 @@ def pair_shrink(boxes, s_to, gap_min=36.0):
     return max(0.5, min(1.0, f))
 
 
+def pair_plan(boxes, s_to, gap_min=36.0, spread=70.0, lo=44.0, hi=806.0):
+    """like pair_shrink, but first lets each pup step up to `spread` outward, away from the other (never past the picture's
+    edges lo..hi), so they keep a clear gap without getting small. Only when that is not enough are both drawn smaller.
+    Returns (shrink, offsets): offsets[i] is how far the i-th pup fit() places moves sideways."""
+    base = []
+    for (x0, y0, x1, y1, s) in boxes:
+        k = s_to / s if s else 1.0
+        base.append(((x0 + x1) / 2, y1 - (y1 - y0) * k, y1, (x1 - x0) * k))
+
+    def plan(f):
+        bs = [(cx, y1 - (y1 - y0) * f, y1, w * f) for (cx, y0, y1, w) in base]
+        offs = [0.0] * len(bs)
+        ok = True
+        for i in range(len(bs)):
+            for j in range(i + 1, len(bs)):
+                a, b = (i, j) if bs[i][0] <= bs[j][0] else (j, i)
+                A, B = bs[a], bs[b]
+                if min(A[2], B[2]) - max(A[1], B[1]) <= 0:
+                    continue
+                need = (A[3] + B[3]) / 2 + max(gap_min, 0.33 * min(A[3], B[3])) - (B[0] + offs[b] - A[0] - offs[a])
+                if need <= 0:
+                    continue
+                # each steps out by half, as far as the edges and `spread` allow; the other takes up what one cannot
+                ra = max(0.0, min(spread + offs[a], A[0] + offs[a] - A[3] / 2 - lo))
+                rb = max(0.0, min(spread - offs[b], hi - (B[0] + offs[b] + B[3] / 2)))
+                da = min(ra, max(need / 2, need - rb))
+                db = min(rb, need - da)
+                offs[a] -= da
+                offs[b] += db
+                if da + db < need - 0.5:
+                    ok = False
+        return ok, offs
+
+    f = 1.0
+    while True:
+        ok, offs = plan(f)
+        if ok or f <= 0.5:
+            return f, offs
+        f = max(0.5, f - 0.03)
+
+
 def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
     """draw fn(ink, x, y, s) so that its drawing fills box = (x0, y0, x1, y1) as much as it can (aspect kept).
     anchor: 'bottom' (sits on the bottom edge), 'center', 'top'. Returns (figure, scale)"""
@@ -745,6 +786,9 @@ def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
         PAIR['seen'].append(s)
     elif is_pup and PAIR['mode'] == 'draw' and PAIR['force']:
         s = min(s, PAIR['force'])
+    shift = 0.0
+    if is_pup and PAIR['mode'] == 'draw' and PAIR.get('offsets'):
+        shift = PAIR['offsets'].pop(0)
     # scale changes pen-independent geometry only, so the bbox pad (outline) is nearly constant; ignore it
     cx = (x0 + x1) / 2
     if anchor == 'bottom':
@@ -753,7 +797,7 @@ def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
         ty = y0 - by0 * s
     else:
         ty = (y0 + y1) / 2 - (by0 + by1) / 2 * s
-    tx = cx - (bx0 + bx1) / 2 * s
+    tx = cx - (bx0 + bx1) / 2 * s + shift
     if is_pup:
         # measure the pup again where it will really stand: which way a pup faces can depend on where it is on the page
         probe2 = Ink(ow=ink.ow, iw=ink.iw, dw=ink.dw, wob=0, wob_lo=0, step=ink.step, color=ink.color)
