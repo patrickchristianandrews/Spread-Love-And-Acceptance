@@ -336,6 +336,24 @@
         g.stroke();
       } else if (!c.blink) star(g, 4.9, -2.4, 0.9, 'rgba(255,255,255,.9)');
     }
+    // owner, Nov 1 2026: Tidbit and Sugarfoot never overlap. When the dance brings them side by side on the same row,
+    // they keep about a third of a pup between them. Where the dance has them really pass each other, the push fades
+    // out smoothly and the one in front steps a little forward, so it reads as passing, with no jump.
+    function spacePups(chars) {
+      var a = chars.tidbit, b = chars.sugarfoot;
+      if (!a || !b || !a.on || !b.on || a.band || b.band || a.crowdRole || b.crowdRole) return;
+      // measured on screen: where each pup is drawn and how big
+      var za = a.z || 0, zb = b.z || 0, ka = PS * zs(za) * (a.sc || 1), kb = PS * zs(zb) * (b.sc || 1);
+      var ya = zy(za) + (a.dy || 0) - (a.lift || 0), yb = zy(zb) + (b.dy || 0) - (b.lift || 0);
+      if (Math.abs(ya - yb) > 0.7 * 28 * (ka + kb)) return;          // one well above the other: no overlap
+      var hwa = 34 * ka, hwb = 34 * kb, D = hwa + hwb + 0.66 * Math.min(hwa, hwb);   // two half pups and a third of a pup
+      var dx = (sx(b.x, zb) + (b.dx || 0)) - (sx(a.x, za) + (a.dx || 0)), r = Math.abs(dx);
+      window.__spr = [r, D];
+      if (r >= D) return;
+      var u = clamp(r / (0.35 * D), 0, 1), w = u * u * (3 - 2 * u), push = (D - r) * w / 2, dir = dx >= 0 ? 1 : -1;
+      a.x -= dir * push / (V.SP * mix(1, 0.84, za)); b.x += dir * push / (V.SP * mix(1, 0.84, zb));
+      if (w < 1 && Math.abs(za - zb) < 0.18) { var front = za <= zb ? a : b; front.z = Math.max(0, (front.z || 0) - 0.12 * (1 - w)); }
+    }
     function drawPup(g, c, t) {
       var P = window.TOLPups; if (!P || !c.on) return;
       var L = P.looks[LOOK[c.id]], s = PS * zs(c.z) * (c.sc || 1), X = sx(c.x, c.z) + (c.dx || 0), base = zy(c.z) + (c.dy || 0), Y = base - c.lift;
@@ -426,11 +444,11 @@
     var TRACK = {
       tidbit: [[0, -110, 0.16], [7.9, -110, 0.16], [8.9, -20, 0.08], [9.9, -190, 0.04], [11.2, -40, 0.1], [12.2, 260, 0.14], [13.2, -40, 0.1], [14.95, 0, 0.1], [16.3, 0, 0.1], [16.95, -430, 0.36],
         [23.3, -430, 0.36], [24.25, -150, 0.14], [27.3, -150, 0.14], [28.6, -48, 0.08], [30.56, -48, 0.08], [31.3, -90, 0.1], [34.0, -90, 0.1], [34.9, -56, 0.1], [38.9, -56, 0.1], [39.4, -90, 0.12], [41.41, -90, 0.12],
-        [45.96, -90, 0.12], [51.4, -90, 0.12], [51.6, -250, 0.2], [59.04, -250, 0.2], [60.3, -120, 0.3], [64.9, -60, 0.3], [65.6, -390, 0.08], [68.6, -390, 0.08], [69.4, -90, 0.12], [74.3, -90, 0.12], [75.9, 90, 0.04], [77.4, 90, 0.12], [79.71, 90, 0.12],
-        [84.3, 90, 0.12], [85.6, -72, 0.3], [99, -72, 0.3]],
+        [45.96, -90, 0.12], [51.4, -90, 0.12], [51.6, -250, 0.2], [59.04, -250, 0.2], [60.3, -120, 0.3], [64.9, -60, 0.3], [65.6, -390, 0.08], [67.1, -150, 0.08], [68.6, -150, 0.12], [69.4, -90, 0.12], [74.3, -90, 0.12], [75.1, -230, 0.1], [75.9, -90, 0.12], [77.4, -90, 0.12], [79.71, -90, 0.12],
+        [84.3, -90, 0.12], [85.6, -72, 0.3], [99, -72, 0.3]],
       sugarfoot: [[0, 110, 0.16], [7.9, 110, 0.16], [8.75, 430, 0.36], [16.3, 430, 0.36], [16.95, 430, 0.36], [20.3, 20, 0.12], [22.42, 20, 0.12], [24.25, 150, 0.14], [27.3, 150, 0.14], [28.6, 48, 0.08], [30.56, 48, 0.08],
-        [31.3, 90, 0.1], [34.0, 90, 0.1], [34.9, 56, 0.1], [38.9, 56, 0.1], [39.4, 90, 0.12], [45.96, 90, 0.12], [51.4, 90, 0.12], [51.6, 250, 0.2], [59.04, 250, 0.2], [60.3, 120, 0.3], [64.9, 60, 0.3], [65.6, 390, 0.26], [68.6, 390, 0.26], [69.4, 90, 0.12],
-        [74.3, 90, 0.12], [75.9, -90, 0.2], [77.4, -90, 0.12], [84.3, -90, 0.12], [85.6, 72, 0.3], [99, 72, 0.3]]
+        [31.3, 90, 0.1], [34.0, 90, 0.1], [34.9, 56, 0.1], [38.9, 56, 0.1], [39.4, 90, 0.12], [45.96, 90, 0.12], [51.4, 90, 0.12], [51.6, 250, 0.2], [59.04, 250, 0.2], [60.3, 120, 0.3], [64.9, 60, 0.3], [65.6, 390, 0.26], [67.1, 150, 0.26], [68.6, 150, 0.12], [69.4, 90, 0.12],
+        [74.3, 90, 0.12], [75.1, 230, 0.1], [75.9, 90, 0.12], [77.4, 90, 0.12], [84.3, 90, 0.12], [85.6, 72, 0.3], [99, 72, 0.3]]
     };
     // a conga line: the leader goes round the stage and everyone follows her path a moment behind
     var CONGA = [{ t0: 41.41, t1: 45.6, th0: -0.24, dir: 1, lap: 4.2 }, { t0: 79.71, t1: 84.0, th0: 0.24, dir: -1, lap: 4.3 }, { t0: 67.2, t1: 68.5, th0: Math.PI * 0.5, dir: 1, lap: 2.2, r: 330 }];
@@ -518,8 +536,9 @@
         else if (t < 39.1) { c.face = other; if (t > 34.9) { c.pose = 'wiggle'; c.eyes = 'happy'; c.tilt = 0.12 * win(t, 36.2, 38.6, 0.4, 0.4); c.sing = c.sing * (t > 36.2 && t < 38.6 ? 0.6 : 1); } }
         else if (t < 41.41) { var jq = (t - 39.1) / 0.85; c.lift = 48 * R * bump(jq); c.face = jq < 1 ? Math.cos(TAU * sio(jq)) * other : other; c.eyes = 'happy'; }
         if (cg && t >= 41.0 && t < 47.5) {
+          // owner, Nov 1 2026: the pups never run through each other, so they cheer the conga from their own spots
           var cp = congaPos(cg, t, id === 'tidbit' ? 0 : 1, { x: c.x, z: c.z });
-          if (cp) { c.x = cp.x; c.z = cp.z; if (cp.moving && cp.w > 0.3) { c.face = cp.face; c.moving = true; c.ph = t * 13; c.lift = (bf > 0.75 && bi % 4 === 3 ? 16 * R * bump((bf - 0.75) * 4) : 0); c.pose = 'run'; } }
+          if (cp) { var cw = cp.w == null ? 1 : cp.w; if (cw > 0.2) { c.face = other; c.eyes = 'happy'; c.lift = (c.lift || 0) + 14 * R * bump(bf) * cw; if (bi % 4 === 2) c.pose = 'wiggle'; } }
         }
         if (t >= 45.96 && t < 49.63) { c.face = other; c.lift += bounce(t, 10 * R); if (t > 47.8 && t < 48.8) c.pose = 'wiggle'; }
         if (t >= 49.63) { var fq = (t - 49.63) / 0.8; c.lift = 52 * R * bump(Math.min(fq, 1)); c.face = id === 'tidbit' ? 1 : -1; if (fq > 0.9) { c.pivot = 'hind'; c.rot = -0.45 * sio((fq - 0.9) * 3); c.eyes = 'happy'; } }
@@ -535,11 +554,12 @@
         else if (t < 57.65) { if (id === 'tidbit') { var yq = (t - 56.25) / 0.47; c.lift = 22 * R * bump(yq % 1); c.tilt = 0.18 * Math.sin(yq * Math.PI * 2); c.eyes = 'happy'; c.say = 'Yes!'; } }
         else if (t < 59.04) { if (id === 'sugarfoot') { c.pivot = 'hind'; c.rot = -0.28 * sio((t - 57.65) / 0.3); c.tilt = 0.1 * Math.sin((t - 57.65) * 9) * win(t, 57.7, 58.9, 0.2, 0.3); c.say = 'No, thank you!'; } else c.eyes = 'happy'; }
         else if (t < 60.4) { /* gliding back together, then onto the turntable */ }
-        if (t >= 60.4 && t < 61.9) { var ang = (t - 60.4) * 1.9 + (id === 'tidbit' ? Math.PI : 0); c.x = 120 * Math.cos(ang); c.z = 0.3 + 0.12 * Math.sin(ang); c.face = Math.sin(ang) >= 0 ? -1 : 1; c.moving = true; c.ph = t * 9; }
-        if (t >= 61.9 && t < 62.4) { c.x = mix(120 * Math.cos(1.5 * 1.9 + (id === 'tidbit' ? Math.PI : 0)), me * 60, sio((t - 61.9) / 0.5)); }
+        // on the turntable each pup twirls in its own spot (owner, Nov 1 2026: they never run through each other)
+        if (t >= 60.4 && t < 61.9) { var ang = (t - 60.4) * 3.8; c.x = me * 130; c.z = 0.3; c.face = Math.cos(ang) * (me === -1 ? 1 : -1); c.moving = true; c.ph = t * 9; }
+        if (t >= 61.9 && t < 62.4) { c.x = mix(me * 130, me * 115, sio((t - 61.9) / 0.5)); }
         if (t >= 61.6) c.face = other;
         if (t >= 62.2 && t < 63.1) { c.pose = 'bow'; }
-        if (t >= 63.1 && t < 64.15) { c.pivot = 'hind'; c.rot = -0.3 * bump((t - 63.1) / 1.05); c.tilt = 0.25 * bump((t - 63.1) / 1.05); c.eyes = 'happy'; c.x = me * mix(60, 34, bump((t - 63.1) / 1.05)); c.heart = 1; }
+        if (t >= 63.1 && t < 64.15) { c.pivot = 'hind'; c.rot = -0.3 * bump((t - 63.1) / 1.05); c.tilt = 0.25 * bump((t - 63.1) / 1.05); c.eyes = 'happy'; c.x = me * mix(115, 100, bump((t - 63.1) / 1.05)); c.heart = 1; }
         c.lift += turnUp(t) * 26;
         return c;
       }
@@ -547,15 +567,15 @@
       if (t < 69.5) {
         if (t < 64.9) { c.eyes = 'happy'; c.lift = bounce(t, 6) + turnUp(t) * 26; c.pose = 'wiggle'; }
         if (t >= 65.6 && t < 67.1) {
-          var sl = (t - 65.6) / 1.5, sx0 = id === 'tidbit' ? -390 : 390, sx1 = id === 'tidbit' ? 280 : -280;
+          var sl = (t - 65.6) / 1.5, sx0 = id === 'tidbit' ? -390 : 390, sx1 = id === 'tidbit' ? -150 : 150; // each slides toward the middle and stops short of the other
           c.face = id === 'tidbit' ? 1 : -1;
           if (sl < 0.25) { c.x = mix(sx0, mix(sx0, sx1, 0.3), sio(sl / 0.25)); c.moving = true; c.ph = t * 16; }
           else { c.x = mix(mix(sx0, sx1, 0.3), sx1, eout((sl - 0.25) / 0.75)); c.pose = 'lie'; c.eyes = 'happy'; c.slide = 1 - (sl - 0.25) / 0.75; }
         }
         var rg = CONGA[2];
         if (t >= 66.7 && t < 69.5) {
-          var cp2 = congaPos(rg, t, id === 'sugarfoot' ? 0 : 1, { x: id === 'tidbit' ? 280 : -280, z: c.z });
-          if (cp2) { c.x = cp2.x; c.z = cp2.z; c.face = cp2.face; c.moving = cp2.moving; c.ph = t * 13; c.pose = 'run'; c.eyes = 'happy'; }
+          var cp = congaPos(rg, t, id === 'sugarfoot' ? 0 : 1, { x: id === 'tidbit' ? -150 : 150, z: c.z });
+          if (cp && t >= 67.1) { var cw = cp.w == null ? 1 : cp.w; if (cw > 0.2) { c.face = other; c.eyes = 'happy'; c.lift = (c.lift || 0) + 14 * R * bump(bf) * cw; if (bi % 4 === 2) c.pose = 'wiggle'; } }
         }
         return c;
       }
@@ -569,8 +589,8 @@
         if (t >= 77.55 && t < 78.4) { c.lift = 48 * R * bump((t - 77.55) / 0.85); c.eyes = 'happy'; c.face = Math.cos(TAU * sio((t - 77.55) / 0.85)); }
         var cg2 = congaIn(t);
         if (cg2 && t >= 79.2 && t < 85.6) {
-          var cp3 = congaPos(cg2, t, id === 'tidbit' ? 0 : 1, { x: c.x, z: c.z });
-          if (cp3) { c.x = cp3.x; c.z = cp3.z; if (cp3.moving && cp3.w > 0.3) { c.face = cp3.face; c.moving = true; c.ph = t * 11; c.lift = 10 * R * bump(bf); } }
+          var cp = congaPos(cg2, t, id === 'tidbit' ? 0 : 1, { x: c.x, z: c.z });
+          if (cp) { var cw = cp.w == null ? 1 : cp.w; if (cw > 0.2) { c.face = other; c.eyes = 'happy'; c.lift = (c.lift || 0) + 14 * R * bump(bf) * cw; if (bi % 4 === 2) c.pose = 'wiggle'; } }
         }
         if (t >= 85.6) { c.face = other; c.lift += liftC(t) * 92; c.stand = liftC(t) * 92; c.eyes = 'happy'; }
         if (t >= 87.05) { var pq = (t - 87.05) / 0.5; c.pivot = 'hind'; c.rot = -0.5 * sio(pq); c.face = me === -1 ? 1 : -1; c.wagA = 1; c.tilt = -0.15 * sio(pq); }
@@ -1193,6 +1213,7 @@
         chars.tidbit = pupAt('tidbit', t); chars.sugarfoot = pupAt('sugarfoot', t);
         ['robot', 'frog', 'owl', 'squirrel', 'ducklings', 'snail', 'butterfly', 'puddles'].forEach(function (id) { chars[id] = guestAt(id, t); });
       }
+      spacePups(chars);
       ['tidbit', 'sugarfoot'].forEach(function (id) { var c = chars[id]; if (c.clip != null) c.clip += drop; });
       lights(g, t, drop, chars);
       // the band, on its riser at the back
