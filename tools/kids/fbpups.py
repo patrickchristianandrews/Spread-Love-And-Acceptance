@@ -446,3 +446,42 @@ def head_svg(who, size=64, pad=3.0, attrs='focusable="false" aria-hidden="true"'
             _, col, w, cap, lines = op
             out.append('<path d="%s" fill="none" stroke="%s" stroke-width="%.2f" stroke-linecap="%s"/>' % (d(lines, False), col, w * k, cap))
     return '<svg viewBox="0 0 %d %d" %s>%s</svg>' % (size, size, attrs, ''.join(out))
+
+
+def svg_group(who, x, y, s, left=False, head_only=False, halo=False, pose='sit'):
+    """the pup as plain SVG in the cartoon's own colors (no outline), for the logo and the app icon (tools/brand/logo_pups.py).
+    Body: paws at (x, y), centered across. head_only: the head's middle at (x, y). halo: shapes only, no colors, so the
+    parent <g> paints them (the white sticker edge behind the dark logo)"""
+    rec = draw(LOOKS[WHO[who]], pose)
+    ops = rec.ops[rec.marks['head_at']:] if head_only else rec.ops
+    ops = [op for op in ops if not (op[0] == 'fill' and op[1].startswith('rgba(10,8,8'))]   # no grey box behind the far legs
+    if head_only:
+        hm = rec.marks['head']
+        cx, cy = hm[4], hm[5]
+    else:
+        xs = [p[0] for op in ops for sub in op[-1] for p in sub]
+        cx, cy = (min(xs) + max(xs)) / 2, 0.0
+    sx = -s if left else s
+
+    def P(p):
+        return ((p[0] - cx) * sx + x, (p[1] - cy) * s + y)
+
+    def d(subs, closed):
+        return ''.join('M' + 'L'.join('%.2f %.2f' % P(p) for p in sb) + ('Z' if closed else '') for sb in subs if len(sb) > 1)
+
+    out = []
+    for op in ops:
+        if op[0] == 'fill':
+            if halo:
+                if _alpha(op[1]) >= 0.6:
+                    out.append('<path d="%s"/>' % d(op[2], True))
+            else:
+                out.append('<path d="%s" fill="%s"/>' % (d(op[2], True), op[1]))
+        else:
+            _, col, w, cap, lines = op
+            if halo:
+                if _alpha(col) >= 0.6 and w > 2:
+                    out.append('<path d="%s"/>' % d([b for b in (_buffer(l, w, cap) for l in lines) if b], True))
+            elif _alpha(col) > 0.1:
+                out.append('<path d="%s" fill="none" stroke="%s" stroke-width="%.2f" stroke-linecap="%s"/>' % (d(lines, False), col, w * s, cap))
+    return ''.join(out)
