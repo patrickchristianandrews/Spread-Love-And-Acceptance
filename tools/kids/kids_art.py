@@ -355,9 +355,76 @@ def _darken(c, k):
     return '#%02x%02x%02x' % tuple(int(v * (1 - k)) for v in (r, g, b))
 
 
+ORGANIC = True   # owner, Nov 1 2026: "shouldn't look robotic": one soft shape per pup (tools/kids/fbpups.py organic)
+
+
+def _pup_side_organic(P, who, x, y, s, pose, expr, ph, flip, tilt, carry, mouth_):
+    """the cartoon's own drawing as smooth shapes (fbpups.organic), with this book's faces drawn on top"""
+    import fbpups as FB
+    L = FB.LOOKS[FB.WHO[who]]
+    fpose = {'stand': 'run', 'run': 'run', 'walk': 'run', 'sit': 'sit', 'lie': 'lie', 'sleep': 'lie'}[pose]
+    fph = 0.0 if pose == 'stand' else (ph * 0.6 if pose == 'walk' else ph)
+    ftilt = math.radians(tilt or 0) + (0.2 if pose == 'sleep' else 0)
+    rec = FB.draw(L, fpose, ph=fph, tilt=ftilt, neck=True)
+    hm = rec.marks['head']
+    face = ('#3a2418', '#3a1e22', '#ee8fa6', '#fff', '#ffffff')
+    rec.ops = [op for op in rec.ops if not (op[0] == 'fill' and op[1].lower() in face)]
+    org = FB.organic(rec, key=('ka', who, fpose, round(fph, 3), round(ftilt, 3)))
+    if mouth_ is None:
+        mouth_ = 'smile' if pose == 'sleep' or expr in ('calm', 'sleep') else 'grin'
+    P.at(x, y, s, flip)
+
+    def d(pts):
+        return 'M' + 'L'.join('%s %s' % (f(q[0]), f(q[1])) for q in pts) + 'Z'
+    P.path(''.join(d(lp) for lp in org['outline']), BLACK)
+    for area, fam, col, pts in org['regions']:
+        if fam == 'ink':
+            P.path(d(pts), '#121010', kind='dark')
+        elif fam != 'coat':
+            P.path(d(pts), col)
+    for l in org['lines']:
+        P.line('M' + 'L'.join('%s %s' % (f(q[0]), f(q[1])) for q in l), '#B97A43', 0.7, kind='detail')
+    # the face, in the head's own place
+    P.open('matrix(%s)' % ' '.join(f(v) for v in hm))
+    if mouth_ == 'grin':
+        P.path('M15 4.6Q11 10.5 6 6Q11 7.6 15 4.6Z', '#3A1E22', kind='dark')
+        P.ell(10.5, 8.6, 2.5, 3.2, '#EE8FA6', rot=11)
+    elif mouth_ == 'smile':
+        P.line('M14.5 5.2Q11 8.6 7 6.4', '#3A1E22', 1.3)
+    elif mouth_ == 'frown':
+        P.line('M14.5 7.4Q11 4.8 7.5 7.6', '#3A1E22', 1.3)
+    elif mouth_ == 'yell':
+        P.path('M15.5 4.2Q11 13 5.5 6Q11 8 15.5 4.2Z', '#3A1E22', kind='dark')
+    elif mouth_ == 'o':
+        P.ell(12.5, 7, 1.8, 2.2, '#3A1E22', kind='dark')
+    elif mouth_ == 'blow':
+        P.ell(13.2, 6.4, 1.4, 1.4, '#3A1E22', kind='dark')
+    elif mouth_ == 'flat':
+        P.line('M14.2 6.2L8 6.8', '#3A1E22', 1.3)
+    if carry:
+        carry(P)
+    if expr in ('calm', 'sleep', 'happy-closed'):
+        up = expr == 'happy-closed'
+        P.line('M2.2 -1.6Q4.2 %s 6.2 -1.6' % ('-4' if up else '0.6'), '#F2E6D8' if P.mode == 'color' else '#111', 1.2)
+    else:
+        dy = 0.4 if expr == 'sad' else 0
+        P.circ(4.2, -1.6 + dy, 2.1 * (1.2 if expr == 'surprised' else 1), '#3A2418', kind='dark')
+        P.circ(4.9, -2.4 + dy, 0.75, '#fff', kind='detail' if P.mode == 'line' else 'flat')
+        if expr == 'sad':
+            P.path('M5.6 1.6q-1.1 2.2 0 3.1q1.1 -0.9 0 -3.1Z', '#9ED3FF', kind='flat' if P.mode == 'color' else 'shape')
+    P.ell(7, 4.5, 2.2, 1.2, '#F7A5B9', kind='detail', op=0.5)
+    P.close()
+    if pose == 'sleep':
+        for i, (zx, zy, zs) in enumerate(((30, -32, 4), (36, -40, 5), (43, -50, 6))):
+            P.line('M%s %s l%s 0 l%s %s l%s 0' % (f(zx), f(zy), f(zs), f(-zs), f(zs), f(zs)), '#7C86B8', 1.1, kind='fine')
+    P.close()
+
+
 def pup_side(P, who, x, y, s, pose='stand', expr='happy', ph=0.0, wag=0.0, flip=False, tilt=0, carry=None, mouth_=None):
     """pups.js drawPup as SVG. Origin at the paws, facing right (flip faces left). pose: 'stand', 'run', 'walk',
     'sit', 'lie', 'sleep'. About 55 units tall standing. carry: a function(P) drawn at the mouth."""
+    if ORGANIC:
+        return _pup_side_organic(P, who, x, y, s, pose, expr, ph, flip, tilt, carry, mouth_)
     L = LOOKS[who]
     TAN = L['tan']
     if mouth_ is None:

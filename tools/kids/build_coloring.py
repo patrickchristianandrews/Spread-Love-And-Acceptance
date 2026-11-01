@@ -313,10 +313,13 @@ def paired(new_ink, fn):
     the real pass gives both the smaller one (cute.PAIR, cute.fit)"""
     import random as _r
     state = _r.getstate()
-    Q.PAIR.update(mode='measure', seen=[], force=None)
+    Q.PAIR.update(mode='measure', seen=[], force=None, boxes=[])
     fn(new_ink())
     seen = Q.PAIR["seen"]
-    Q.PAIR.update(mode='draw', force=min(seen) if len(seen) >= 2 else None)
+    force = min(seen) if len(seen) >= 2 else None
+    if force:   # owner, Nov 1 2026: the pups never overlap; where the picture is tight, both are drawn a little smaller
+        force *= Q.pair_shrink(Q.PAIR['boxes'], force)
+    Q.PAIR.update(mode='draw', force=force)
     _r.setstate(state)
     ink = new_ink()
     fn(ink)

@@ -288,9 +288,9 @@ def s_oops(P):
 def s_sorry(P):
     sky(P, '#CFE6FA', '#FFF1D8')
     rolling(P, 590, [('#BFE6A0', -10, 30), ('#A9DB84', 55, 26)])
-    A.tidbit_front(P, 400, 750, 5.2, 'sad', 'frown')
-    A.pup_side(P, 'sugarfoot', 720, 745, 4.6, 'stand', 'happy', flip=True, mouth_='smile')
-    A.heart(P, 600, 410, 1.5, '#F08DA8', '#D2668A')
+    A.tidbit_front(P, 250, 750, 4.85, 'sad', 'frown')   # face to face, with room between them (they never overlap)
+    A.pup_side(P, 'sugarfoot', 690, 745, 4.6, 'stand', 'happy', flip=True, mouth_='smile')
+    A.heart(P, 470, 420, 1.5, '#F08DA8', '#D2668A')
     A.blanket(P, 1250, 745, 520, 110, 1.0, '#E0554E')
     A.hopper(P, 1040, 745, 3.4, expr='happy')
     A.nutmeg(P, 1160, 745, 3.4, expr='happy')
@@ -328,7 +328,7 @@ def s_night(P):
     P.raw('<rect x="1426" y="650" width="42" height="42" rx="4" fill="#FFE49A"/>')
     for (x, y) in ((1100, 520), (1230, 600), (1320, 520), (990, 600)):
         A.firefly(P, x, y, 2.2)
-    A.pup_side(P, 'tidbit', 330, 770, 4.8, 'walk', 'calm', ph=0.4, mouth_='smile')
+    A.pup_side(P, 'tidbit', 250, 770, 4.8, 'walk', 'calm', ph=0.4, mouth_='smile')   # a step behind Sugarfoot, not on her tail
     A.pup_side(P, 'sugarfoot', 700, 775, 4.8, 'walk', 'calm', ph=0.9, mouth_='smile')
 
 
@@ -473,7 +473,7 @@ def pg_title():
         A.sky_cloud(P, o + 150, 420, 1.3); A.sky_cloud(P, o + 470, 380, 0.9)
         rolling_p(P, 640, o)
         A.pup_side(P, 'tidbit', o + 250, 760, 4.4, 'run', 'happy', ph=0.9)
-        A.pup_side(P, 'sugarfoot', o + 640, 765, 4.2, 'stand', 'happy', flip=True)
+        A.pup_side(P, 'sugarfoot', o + 700, 765, 4.2, 'stand', 'happy', flip=True)
         A.basket(P, o + 440, 760, 2.4, full=True)
     inner = ('<div class="center" style="top:.5in"><h1 style="font-size:36pt;line-height:1.08">Tidbit and Sugarfoot&rsquo;s<br>Big Picnic</h1>'
              '<p style="font-size:13.5pt;margin-top:.15in;line-height:1.35;color:#4A4033">%s</p>'

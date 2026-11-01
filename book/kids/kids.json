@@ -17,7 +17,7 @@
     "picture-book": {
      "pdf": "picture-book.pdf",
      "pages": 40,
-     "bytes": 1711978
+     "bytes": 1083618
     },
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
@@ -39,7 +39,7 @@
     "chapter-book": {
      "pdf": "chapter-book.pdf",
      "pages": 92,
-     "bytes": 898617
+     "bytes": 810167
     }
    },
    "pages_printed": 92,
@@ -62,7 +62,7 @@
     "coloring-younger": {
      "pdf": "coloring-younger.pdf",
      "pages": 68,
-     "bytes": 1968588
+     "bytes": 1443634
     }
    },
    "pages_printed": 68,
@@ -85,7 +85,7 @@
     "coloring-older": {
      "pdf": "coloring-older.pdf",
      "pages": 68,
-     "bytes": 8331090
+     "bytes": 7681966
     }
    },
    "pages_printed": 68,
@@ -100,7 +100,7 @@
     "picture-book-screen": {
      "pdf": "picture-book-screen.pdf",
      "pages": 40,
-     "bytes": 1713494
+     "bytes": 1085163
     }
    },
    "pages_printed": 40

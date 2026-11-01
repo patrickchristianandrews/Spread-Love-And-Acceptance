@@ -4,7 +4,8 @@
 
 The logo files keep Peach and Lilac and the heart as they are; only the two pup groups are swapped for the cartoon's own
 drawing (tools/kids/fbpups.py, a copy of assets/js/pups.js), seen from the side as in the episodes: Sugarfoot on the left
-facing right, Tidbit on the right facing left, sitting nose to nose. The app icon has just their two heads, nose to nose.
+facing right, Tidbit on the right facing left, sitting face to face with clear space between them (they never overlap).
+The app icon has just their two heads, face to face, a little apart.
 
     python3 tools/brand/logo_pups.py        rewrites the SVGs in place (run again any time; it finds the groups by position)
 Then the PNG copies are made from the SVGs: tools/brand/logo_png.js.
@@ -21,11 +22,11 @@ LOGOS = ['assets/img/logo-mark.svg', 'assets/img/logo-mark-wink.svg', 'assets/im
          'assets/img/logo-stacked.svg', 'brand.html']
 ICONS = ['assets/icons/icon.svg']
 # the logo: the pups' paws on y 117, Sugarfoot left, Tidbit right (the old front-facing pups sat at x 32 and 94)
-BODY = {'32': ('sugarfoot', 28, False), '94': ('tidbit', 99, True)}
-BS, BY = 0.9, 117
+BODY = {'32': ('sugarfoot', 25, False), '94': ('tidbit', 103, True)}
+BS, BY = 0.8, 117   # facing each other with clear space between them: they never overlap (owner, Nov 1 2026)
 # the icon: two heads nose to nose
-HEAD = {'37': ('sugarfoot', 30, False), '94': ('tidbit', 98, True)}
-HS, HY = 1.8, 62
+HEAD = {'37': ('sugarfoot', 27, False), '94': ('tidbit', 101, True)}
+HS, HY = 1.5, 62   # face to face with a clear gap
 
 
 def swap(s, pat, table, build):

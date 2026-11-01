@@ -704,7 +704,27 @@ def capsule(x0, y0, x1, y1, r0, r1=None):
 
 # owner, Oct 31 2026: Tidbit and Sugarfoot are always the same size in a picture. A scene is drawn twice (build_coloring.py):
 # the first pass ('measure') records the scale fit() picks for every pup, the second ('draw') gives every pup the smallest one.
-PAIR = {'mode': None, 'seen': [], 'force': None, 'mark': False}
+PAIR = {'mode': None, 'seen': [], 'force': None, 'mark': False, 'boxes': []}
+
+
+def pair_shrink(boxes, s_to, gap_min=36.0):
+    """the measure pass saw the pups at these boxes (x0, y0, x1, y1, scale). At the shared scale s_to, how much smaller must
+    both be so that side by side they keep a clear gap? 1.0 when they already do. Each pup shrinks about its bottom middle."""
+    bs = []
+    for (x0, y0, x1, y1, s) in boxes:
+        k = s_to / s if s else 1.0
+        cx, w, h = (x0 + x1) / 2, (x1 - x0) * k, (y1 - y0) * k
+        bs.append((cx, y1 - h, y1, w))
+    f = 1.0
+    for i in range(len(bs)):
+        for j in range(i + 1, len(bs)):
+            a, b = sorted((bs[i], bs[j]))
+            if min(a[2], b[2]) - max(a[1], b[1]) <= 0:
+                continue
+            g = max(gap_min, 0.33 * min(a[3], b[3]))
+            room = (b[0] - a[0] - g) / ((a[3] + b[3]) / 2)
+            f = min(f, room)
+    return max(0.5, min(1.0, f))
 
 
 def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
@@ -733,4 +753,42 @@ def fit(ink, fn, box, anchor='bottom', maxs=None, minpad=0):
     else:
         ty = (y0 + y1) / 2 - (by0 + by1) / 2 * s
     tx = cx - (bx0 + bx1) / 2 * s
+    if is_pup:
+        tx = _pup_room(ink, g0, tx, ty, s)
     return fn(ink, tx, ty, s), s
+
+
+# owner, Nov 1 2026: "Tidbit and Sugarfoot shouldn't overlap ... make sure they are appropriately spaced out from each other".
+# Every pup fit() places on a page is remembered (ink._pups); the next one is moved sideways, away from the other, until there
+# is a clear gap between them. A move that would push a pup off the picture is logged (SPACING) so the page can be looked at.
+SPACING = []
+
+
+def _pup_room(ink, g0, tx, ty, s):
+    tb = getattr(g0, 'bb_true', None) or g0.bb
+    x0, y0, x1, y1 = tb[0] * s + tx, tb[1] * s + ty, tb[2] * s + tx, tb[3] * s + ty
+    if PAIR['mode'] == 'measure':
+        PAIR.setdefault('boxes', []).append((x0, y0, x1, y1, s))
+    placed = getattr(ink, '_pups', None)
+    if placed is None:
+        placed = ink._pups = []
+    for _ in range(3):
+        moved = False
+        for (px0, py0, px1, py1) in placed:
+            if min(y1, py1) - max(y0, py0) <= 0:
+                continue
+            gap = max(36.0, 0.33 * min(x1 - x0, px1 - px0))   # about a third of a pup: talking distance, as in the episodes
+            if (x0 + x1) >= (px0 + px1):
+                need = px1 + gap - x0
+                if need > 0:
+                    tx, x0, x1, moved = tx + need, x0 + need, x1 + need, True
+            else:
+                need = x1 - (px0 - gap)
+                if need > 0:
+                    tx, x0, x1, moved = tx - need, x0 - need, x1 - need, True
+        if not moved:
+            break
+    if (x0 < 40 or x1 > 810) and PAIR['mode'] != 'measure':
+        SPACING.append((round(x0), round(x1)))
+    placed.append((x0, y0, x1, y1))
+    return tx

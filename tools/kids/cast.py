@@ -559,14 +559,14 @@ def _fb_draw(ink, who, x, y, s, pose, left, hat=None, scarf=False, coat=False, t
     only what is above that line, for a pup peeking over a ledge, with its two front paws on the ledge if paws"""
     _cute.PAIR['mark'] = True
     L = _fb.LOOKS[_fb.WHO[who]]
-    rec = _fb.draw(L, pose, ph=ph, t=t, tilt=tilt, scarf=scarf, coat=coat, rot=rot, pivot=(-12.0, 0.0))
+    rec = _fb.draw(L, pose, ph=ph, t=t, tilt=tilt, scarf=scarf, coat=coat, rot=rot, pivot=(-12.0, 0.0), neck=True)
     if cut is not None:  # peeking: only the head shows over the ledge (and two paws)
         rec.ops = rec.ops[rec.marks['head_at']:]
-    regs = [r for r in _fb.regions(rec) if not (r[0] == 'flat' and r[1].startswith('rgba(10,8,8'))]  # no grey box behind the far legs
-    x0, y0, x1, y1 = _fb.bounds(regs)
-    dx = -(x0 + x1) / 2 if center else 0.0
+    org = _fb.organic(rec, key=(who, pose, round(ph, 3), round(t, 3), round(tilt, 3), scarf, coat, round(rot, 3), cut))   # smooth outlines, no robot joints (owner, Nov 1 2026)
+    xs = [q[0] for loop in org['outline'] for q in loop]
+    dx = -(min(xs) + max(xs)) / 2 if center else 0.0
     with ink.fig(x, y, s * k, left) as g:
-        _fb.emit(g, regs, dx=dx)
+        _fb.emit_organic(g, org, dx=dx)
         if hat:
             hm = rec.marks['head']
             pup_hat(View(g, mmul(mat(dx, 0), mmul(hm, mat(0, -2.4, 0.175)))), hat, who)
@@ -576,8 +576,9 @@ def _fb_draw(ink, who, x, y, s, pose, left, hat=None, scarf=False, coat=False, t
                     g.part(ell(px, cut - 1.2, 4.2, 2.6), c=L['paw'])
                     for o in (-1.3, 1.3):
                         g.line(Path().M(px + o, cut - 3).L(px + o, cut - 0.6), w=g.ink.dw * 0.6)
-    # a little room on each side, so two pups placed side by side never run nose into nose
+    # a little room on each side, so two pups placed side by side never run nose into nose (cute.fit then keeps a clear gap)
     b, p = g.bb, 8 * s * k
+    g.bb_true = b
     g.bb = (b[0] - p, b[1], b[2] + p, b[3])
     return g
 
@@ -611,7 +612,7 @@ def fb_dance(ink, who, x, y, s=1.0, expr='joy', flip=False, tilt=6.0, lvl=0, kic
 def fb_hug(ink, x, y, s=1.0, expr_a='happy', expr_b='sleep', lvl=0, hat_a=None, hat_b=None):
     """Sugarfoot (left) and Tidbit (right) hugging the way they do in the episodes: face to face, close, both rearing up on
     their hind legs and leaning in (buddies-player.js, act 'hug': gap 38.5, rot -0.34, Sugarfoot a little more, tilt 0.15)"""
-    g = 38.5 / 2 + 6
+    g = 38.5 / 2 + 16   # air between them: the pups never overlap, not even in a hug (owner, Nov 1 2026)
     f1 = _fb_draw(ink, 'sugarfoot', x - g * FBK * s, y, s, 'run', False, hat_a, tilt=0.15, rot=-0.34 * 1.15, center=False)
     f2 = _fb_draw(ink, 'tidbit', x + g * FBK * s, y, s, 'run', True, hat_b, tilt=0.15, rot=-0.34, center=False)
     return _Group([f1, f2])

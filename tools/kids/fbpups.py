@@ -136,7 +136,7 @@ def _q(c, x, y):
     c.moveTo(x, y)
 
 
-def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot=0.0, pivot=(0.0, 0.0)):
+def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot=0.0, pivot=(0.0, 0.0), neck=False):
     """pups.js drawPup, line for line (blink off, reduced motion: no panting, no ear flap). Returns the recorder.
     rot turns the whole pup about pivot, the way the episodes rear up for a hug (buddies-player.js: pivot 'hind')"""
     c = Rec()
@@ -228,6 +228,8 @@ def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot
         c.fillStyle = L['legLow']; c.beginPath(); c.ellipse(20, -2.5, 8, 2.8, 0, 0, math.pi * 2); c.fill()
         c.fillStyle = L['paw']; c.beginPath(); c.ellipse(28, -2.5, 3.8, 2.6, 0, 0, math.pi * 2); c.fill()
         leg(-13, -16, 0, LL + 3)
+    if neck and sit:   # the organic drawings: a neck from the shoulders up into the head, so the head is not perched on top
+        c.fillStyle = BLACK; c.beginPath(); c.ellipse(14, -29, 7.5, 10, 0.25, 0, math.pi * 2); c.fill()
     # head
     hx = 19 if lie else 18 if sit else 22 if bow else 21
     hy = -19 if lie else -38 if sit else -14 if bow else BY - 12
@@ -449,6 +451,33 @@ def head_svg(who, size=64, pad=3.0, attrs='focusable="false" aria-hidden="true"'
 
 
 def svg_group(who, x, y, s, left=False, head_only=False, halo=False, pose='sit'):
+    """the logo and the app icon: the organic version (smooth shapes, no joints), in the cartoon's own colors, no outline"""
+    rec = draw(LOOKS[WHO[who]], pose, neck=True)
+    if head_only:
+        hm = rec.marks['head']
+        cx, cy = hm[4], hm[5]
+        rec.ops = rec.ops[rec.marks['head_at']:]
+    org = organic(rec, res=20.0)
+    if not head_only:
+        xs = [q[0] for loop in org['outline'] for q in loop]
+        cx, cy = (min(xs) + max(xs)) / 2, 0.0
+    sx = -s if left else s
+
+    def d(loops):
+        return ''.join('M' + 'L'.join('%.2f %.2f' % ((p[0] - cx) * sx + x, (p[1] - cy) * s + y) for p in lp) + 'Z' for lp in loops if len(lp) > 2)
+    if halo:
+        return '<path d="%s"/>' % d(org['outline'])
+    out = ['<path d="%s" fill="#252120"/>' % d(org['outline'])]
+    for area, fam, col, pts in org['regions']:
+        out.append('<path d="%s" fill="%s"/>' % (d([pts]), '#121010' if fam == 'ink' else col))
+    for p in org['glints']:
+        out.append('<path d="%s" fill="#fff"/>' % d([p]))
+    for l in org['lines']:
+        out.append('<path d="%s" fill="none" stroke="#B97A43" stroke-width="%.2f" stroke-linecap="round"/>' % (d([l])[:-1], 0.6 * s))
+    return ''.join(out)
+
+
+def svg_group_flat(who, x, y, s, left=False, head_only=False, halo=False, pose='sit'):
     """the pup as plain SVG in the cartoon's own colors (no outline), for the logo and the app icon (tools/brand/logo_pups.py).
     Body: paws at (x, y), centered across. head_only: the head's middle at (x, y). halo: shapes only, no colors, so the
     parent <g> paints them (the white sticker edge behind the dark logo)"""
@@ -485,3 +514,168 @@ def svg_group(who, x, y, s, left=False, head_only=False, halo=False, pose='sit')
             elif _alpha(col) > 0.1:
                 out.append('<path d="%s" fill="none" stroke="%s" stroke-width="%.2f" stroke-linecap="%s"/>' % (d(lines, False), col, w * s, cap))
     return ''.join(out)
+
+
+# ------------------------------------------------------------------ the organic version (owner, Nov 1 2026: "Tidbit and Sugarfoot
+# shouldn't look robotic. Like robot dogs.")
+# Outlining every one of the cartoon's shapes made the line art look jointed: tube legs, a head bolted on. Here the same drawing
+# is painted into a fine grid, the colors are gathered into a few families (all the black coat is one, all the tans one, ...),
+# the edges are softened, and only the edges between different colors are traced, as smooth curves. So a pup is one soft
+# outline with its markings inside it: the same pup, colors and markings as the cartoon, drawn like a puppy, not a robot.
+# Needs numpy, scipy and contourpy.
+FAMILY = [
+    ('coat', '#252120', ('#252120', '#262220', '#1b1817', '#141111')),
+    ('leg', '#A45C2E', ('#a45c2e', '#b97847')),
+    ('tan', '#C9965F', ('#c4834a', '#c9965f', '#c98a4f', '#d99e62', '#d69b5f', '#b97a43', 'rgba(210,200,186,0.85)')),
+    ('cream', '#F1EADF', ('#f1eadf', '#f2ece3', '#f4efe6')),
+    ('tag', '#D5D9E0', ('#d5d9e0',)),
+    ('tongue', '#EE8FA6', ('#ee8fa6',)),
+    ('ink', '#121010', ('#121010', '#3a1e22', '#3a2418', '#2a2422')),
+    ('scarf', '#F2877E', ('#f2877e',)),
+    ('coat2', '#FFD84A', ('#ffd84a',)),
+    ('button', '#8FCBF0', ('#8fcbf0',)),
+]
+_FAM = {c: i + 1 for i, (_, _, cs) in enumerate(FAMILY) for c in cs}
+
+
+_ORG = {}
+
+
+def _simplify(pts, tol=0.05):
+    """Ramer-Douglas-Peucker on a closed loop (cartoon units): fewer points, the same curve"""
+    def rdp(a, b, seg):
+        if len(seg) < 3:
+            return [seg[0]]
+        (x1, y1), (x2, y2) = seg[0], seg[-1]
+        dx, dy = x2 - x1, y2 - y1
+        L = math.hypot(dx, dy) or 1e-9
+        i, dmax = 0, -1.0
+        for j in range(1, len(seg) - 1):
+            d = abs(dy * seg[j][0] - dx * seg[j][1] + x2 * y1 - y2 * x1) / L
+            if d > dmax:
+                i, dmax = j, d
+        if dmax <= tol:
+            return [seg[0]]
+        return rdp(a, b, seg[:i + 1]) + rdp(a, b, seg[i:])
+    if len(pts) < 8:
+        return pts
+    h = len(pts) // 2
+    out = rdp(0, 0, pts[:h + 1]) + rdp(0, 0, pts[h:] + [pts[0]])
+    return out if len(out) >= 4 else pts
+
+
+def organic(rec, res=14.0, soft=0.55, who=None, key=None):
+    """the recording as smooth regions: [(family name, color, [loop points])] largest first, plus the glints and fine lines.
+    res: grid cells per cartoon unit; soft: how much the edges are rounded (cartoon units); key: remember the result"""
+    if key is not None and key in _ORG:
+        return _ORG[key]
+    import numpy as np
+    from PIL import Image, ImageDraw
+    from scipy import ndimage
+    import contourpy
+    polys = []   # (family, [points])
+    glints, lines = [], []
+    for op in rec.ops:
+        if op[0] == 'fill':
+            col = op[1].lower()
+            if col in ('#fff', '#ffffff'):
+                glints.extend(op[2])
+                continue
+            fam = _FAM.get(col)
+            if fam is None:
+                continue          # soft overlays: blush, shading, the ear's pink
+            for p in op[2]:
+                polys.append((fam, p))
+        else:
+            _, col, w, cap, ls = op
+            col = col.lower()
+            if col.startswith('rgba(0,0,0'):
+                lines.extend(l for l in ls if len(l) > 1)      # toe lines
+                continue
+            if col == '#b97a43':
+                lines.extend(l for l in ls if len(l) > 1)      # the tan edge of Tidbit's folded ear
+                continue
+            fam = _FAM.get(col)
+            if fam is None:
+                continue
+            for l in ls:
+                b = _buffer(l, w, cap)
+                if b:
+                    polys.append((fam, b))
+    xs = [q[0] for _, p in polys for q in p]
+    ys = [q[1] for _, p in polys for q in p]
+    pad = 3.0
+    x0, y0 = min(xs) - pad, min(ys) - pad
+    W, H = int((max(xs) + pad - x0) * res) + 1, int((max(ys) + pad - y0) * res) + 1
+    im = Image.new('L', (W, H), 0)
+    dr = ImageDraw.Draw(im)
+    for fam, p in polys:   # paint in the cartoon's own order: what is on top stays on top
+        dr.polygon([((q[0] - x0) * res, (q[1] - y0) * res) for q in p], fill=fam)
+    lab = np.asarray(im)
+    n = len(FAMILY) + 1
+    sig = soft * res
+    # soften: blur each family's coverage and keep the strongest (small slivers and sharp joints melt away)
+    present = [k for k in range(n) if k == 0 or (lab == k).any()]
+    score = np.stack([ndimage.gaussian_filter((lab == k).astype(np.float32), sig if k else sig * 1.4) for k in present])
+    smooth = np.asarray(present)[score.argmax(0)]
+    regions = []
+    for k in range(1, n):
+        m = smooth == k
+        if not m.any():
+            continue
+        comp, nc = ndimage.label(m)
+        for c in range(1, nc + 1):
+            cm = comp == c
+            if cm.sum() < res * res * 0.35:    # specks
+                continue
+            cm = ndimage.binary_fill_holes(cm)
+            f = ndimage.gaussian_filter(cm.astype(np.float32), 1.0)
+            gen = contourpy.contour_generator(z=np.pad(f, 1))
+            for loop in gen.lines(0.5):
+                if len(loop) < 8:
+                    continue
+                pts = _simplify([((x - 1) / res + x0, (y - 1) / res + y0) for x, y in loop])
+                area = abs(_area(pts))
+                regions.append((area, FAMILY[k - 1][0], FAMILY[k - 1][1], pts))
+    regions.sort(key=lambda r: -r[0])
+    sil = (smooth > 0)
+    sil = ndimage.binary_fill_holes(sil)
+    f = ndimage.gaussian_filter(sil.astype(np.float32), 1.0)
+    outline = [_simplify([((x - 1) / res + x0, (y - 1) / res + y0) for x, y in loop]) for loop in contourpy.contour_generator(z=np.pad(f, 1)).lines(0.5) if len(loop) > 8]
+    out = {'regions': regions, 'outline': outline, 'glints': glints, 'lines': lines}
+    if key is not None:
+        _ORG[key] = out
+    return out
+
+
+def emit_organic(g, org, dx=0.0, fine=1.0):
+    """draw organic() into a cute.Fig: one bold outline around the whole pup, the color areas inside with a finer line"""
+    dw = g.ink.dw
+    iw = g.ink.iw * fine
+
+    def P(pts):
+        p = Path()
+        p.M(pts[0][0] + dx, pts[0][1])
+        for q in pts[1:]:
+            p.L(q[0] + dx, q[1])
+        p.Z()
+        return p
+    sil = Path()
+    for loop in org['outline']:
+        sil = sil + P(_ccw(loop))
+    g.grp(sil, c='#252120', w=iw, under=True)          # the silhouette: carries the bold outer outline
+    for area, fam, col, pts in org['regions']:
+        if fam == 'coat':
+            g.part(P(pts), c=col, under=False, w=iw * 0.9)
+        elif fam == 'ink':
+            g.blk(P(pts))
+        else:
+            g.part(P(pts), c=col, under=False, w=iw * 0.85)
+    for p in org['glints']:
+        g.wh(P(p))
+    for l in org['lines']:
+        q = Path()
+        q.M(l[0][0] + dx, l[0][1])
+        for r in l[1:]:
+            q.L(r[0] + dx, r[1])
+        g.line(q, w=dw * 0.6 * fine)
