@@ -82,6 +82,7 @@
     // sitting, the collar goes round the sitting neck (the body's own collar spot turns to the back when it tips up)
     if (sit && L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(8.5, -33); ctx.quadraticCurveTo(13.5, -25, 20, -28); ctx.stroke();
       ctx.fillStyle = '#D5D9E0'; ctx.fillRect(14.2, -27.6, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(15, -27, 1.2, 1.2); }
+    if (moving) { /* the near legs are drawn before the body (above) */ }
     else if (sit) { leg(12, -17, -0.05, LL + 3); ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-9, -6, 8.5, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-4, -2.5, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-0.5, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); }
     else if (bow) { ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.8, 2.6, 0, 0, Math.PI * 2); ctx.fill(); leg(-13, -16, 0, LL + 3); }
     // head: a little bigger than life, the way cartoons do it
