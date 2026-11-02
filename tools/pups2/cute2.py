@@ -73,21 +73,31 @@ def head(dog, mono):
     if not mono:
         for x in (200, 400): s.append('<ellipse cx="%s" cy="304" rx="20" ry="11" fill="#F08C9C" opacity="0.45"/>' % x)
     return s
-# ---- front legs, used by several poses
+# ---- one smooth silhouette: every coat part is stroked wide first, then filled, so only the outside edge shows
+def U(ds, fill, lw=5.5):
+    out = ['<path d="%s" fill="none" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-linecap="round"/>' % (d, INK, lw * 2) for d in ds]
+    out += ['<path d="%s" fill="%s"/>' % (d, fill) for d in ds]
+    return out
+def legshape(x, y0, y1, w=24, a=0):
+    """a soft leg from y0 down to y1, centred on x (rotated by a degrees about its top)"""
+    import math
+    pts = [(-w, 0), (-w - 3, (y1 - y0) * 0.5), (-w + 1, y1 - y0), (w - 1, y1 - y0), (w + 3, (y1 - y0) * 0.5), (w, 0)]
+    r = math.radians(a); ca, sa = math.cos(r), math.sin(r)
+    q = [(x + px * ca - py * sa, y0 + px * sa + py * ca) for px, py in pts]
+    return 'M%g %g C%g %g %g %g %g %g L%g %g C%g %g %g %g %g %g Z' % (q[0][0], q[0][1], q[1][0], q[1][1], q[1][0], q[2][1] - 30 * ca, q[2][0], q[2][1], q[3][0], q[3][1], q[4][0], q[3][1] - 30 * ca, q[4][0], q[4][1], q[5][0], q[5][1])
+def foot(dog, mono, x, y, a=0, dark=False, sock=True, h=84):
+    """sock and paw at the bottom of a leg ending at (x, y); a = leg angle in degrees"""
+    c = COL[dog]; f = (lambda k: '#FFFFFF') if mono else ((lambda k: darker(c[k])) if dark else (lambda k: c[k]))
+    s = []
+    g = []
+    if sock:
+        g.append(P('M-25 2 C-27 %g -25 %g -15 %g C-8 %g -3 %g 0 %g C3 %g 8 %g 15 %g C25 %g 27 %g 25 2 Z' % (-h * 0.5, -h + 12, -h + 3, -h - 1, -h + 6, -h + 2, -h + 6, -h - 1, -h + 3, -h + 12, -h * 0.5), f('sock'), 3))
+    g.append(P('M-38 4 C-40 -16 -18 -26 0 -26 C20 -26 38 -16 36 4 C36 20 18 26 0 26 C-20 26 -38 20 -38 4 Z', f('paw'), 3.4))
+    g.append(L('M-10 -8 L-9 12 M10 -8 L9 12', 2.6))
+    if dog == 'sugarfoot': g += ['<ellipse cx="%g" cy="22" rx="5" ry="3.4" fill="#2A2422"/>' % dx for dx in (-26, -9, 9, 26)]
+    return [G(g, 'translate(%g %g) rotate(%g)' % (x, y, a))]
 def darker(h, k=0.72):
     n = int(h[1:], 16); return '#%02x%02x%02x' % (int((n >> 16) * k), int((n >> 8 & 255) * k), int((n & 255) * k))
-def leg(dog, mono, x0, y0, y1, w=24, dark=False):
-    c = COL[dog]; f = (lambda k: '#FFFFFF') if mono else ((lambda k: darker(c[k])) if dark else (lambda k: c[k]))
-    d = 'M%g %g C%g %g %g %g %g %g L%g %g C%g %g %g %g %g %g Z' % (x0 - w, y0, x0 - w - 3, y0 + (y1 - y0) * 0.5, x0 - w - 2, y1 - 30, x0 - w + 1, y1, x0 + w - 1, y1, x0 + w + 2, y1 - 30, x0 + w + 3, y0 + (y1 - y0) * 0.5, x0 + w, y0)
-    sk = 'M%g %g C%g %g %g %g %g %g C%g %g %g %g %g %g L%g %g Z' % (x0 - w - 2, y1 - 74, x0 - w * 0.4, y1 - 84, x0 + w * 0.4, y1 - 84, x0 + w + 2, y1 - 74, x0 + w + 2, y1 - 40, x0 + w + 1, y1 - 20, x0 + w - 1, y1, x0 - w + 1, y1)
-    pw = 'M%g %g C%g %g %g %g %g %g C%g %g %g %g %g %g C%g %g %g %g %g %g C%g %g %g %g %g %g Z' % (
-        x0 - 38, y1 + 4, x0 - 40, y1 - 16, x0 - 18, y1 - 26, x0, y1 - 26, x0 + 20, y1 - 26, x0 + 38, y1 - 16, x0 + 36, y1 + 4,
-        x0 + 36, y1 + 20, x0 + 18, y1 + 26, x0, y1 + 26, x0 - 20, y1 + 26, x0 - 38, y1 + 20, x0 - 38, y1 + 4)
-    s = [P(d, f('leg'), 3.6), P(sk, f('sock'), 3), P(pw, f('paw'), 3.4)]
-    s.append(L('M%g %g L%g %g M%g %g L%g %g' % (x0 - 10, y1 - 8, x0 - 9, y1 + 12, x0 + 10, y1 - 8, x0 + 9, y1 + 12), 2.6))
-    if dog == 'sugarfoot':
-        for dx in (-26, -9, 9, 26): s.append('<ellipse cx="%g" cy="%g" rx="5" ry="3.4" fill="#2A2422"/>' % (x0 + dx, y1 + 22))
-    return s
 def backfoot(dog, mono, x, y):
     c = COL[dog]; f = (lambda k: '#FFFFFF') if mono else (lambda k: c[k])
     return [P('M%g %g C%g %g %g %g %g %g C%g %g %g %g %g %g C%g %g %g %g %g %g Z' % (x - 36, y, x - 38, y - 22, x - 10, y - 30, x + 6, y - 28, x + 26, y - 26, x + 38, y - 14, x + 36, y, x + 34, y + 14, x - 34, y + 16, x - 36, y), f('paw'), 3.4),
@@ -95,46 +105,57 @@ def backfoot(dog, mono, x, y):
 def chest(dog, mono, y=372):
     c = COL[dog]; f = (lambda k: '#FFFFFF') if mono else (lambda k: c[k])
     if dog == 'tidbit':
-        return [P('M232 %g C258 %g 342 %g 368 %g C374 %g 346 %g 300 %g C254 %g 226 %g 232 %g Z' % (y + 8, y - 4, y - 4, y + 8, y + 68, y + 122, y + 134, y + 122, y + 68, y + 8), f('tan'), 3.4),
-                L('M300 %g L300 %g M282 %g L284 %g M318 %g L316 %g' % (y + 98, y + 114, y + 78, y + 94, y + 78, y + 94), 2.2, INK if mono else '#9C6538')]
-    return [P('M250 %g C270 %g 330 %g 350 %g C358 %g 336 %g 300 %g C264 %g 242 %g 250 %g Z' % (y + 8, y - 2, y - 2, y + 8, y + 58, y + 114, y + 136, y + 114, y + 58, y + 8), f('tan'), 3.2),
-            P('M266 %g C280 %g 320 %g 334 %g C338 %g 322 %g 300 %g C278 %g 262 %g 266 %g Z' % (y + 10, y + 4, y + 4, y + 10, y + 54, y + 98, y + 118, y + 98, y + 54, y + 10), f('wht'), 3)]
+        return [P('M232 %g C258 %g 342 %g 368 %g C374 %g 346 %g 300 %g C254 %g 226 %g 232 %g Z' % (y + 8, y - 4, y - 4, y + 8, y + 68, y + 122, y + 134, y + 122, y + 68, y + 8), f('tan'), 3.2)]
+    return [P('M250 %g C270 %g 330 %g 350 %g C358 %g 336 %g 300 %g C264 %g 242 %g 250 %g Z' % (y + 8, y - 2, y - 2, y + 8, y + 58, y + 114, y + 136, y + 114, y + 58, y + 8), f('tan'), 3),
+            P('M266 %g C280 %g 320 %g 334 %g C338 %g 322 %g 300 %g C278 %g 262 %g 266 %g Z' % (y + 10, y + 4, y + 4, y + 10, y + 54, y + 98, y + 118, y + 98, y + 54, y + 10), f('wht'), 2.8)]
 def shade(mono, d):
-    return [] if mono else ['<path d="%s" fill="#000" opacity="0.18"/>' % d]
+    return [] if mono else ['<path d="%s" fill="#000" opacity="0.16"/>' % d]
 BODY = 'M206 372 C176 430 162 520 170 598 C176 646 228 662 300 662 C372 662 424 646 430 598 C438 520 424 430 394 372 Z'
-def tail(dog, mono, d):
-    c = COL[dog]; return [P(d, '#FFFFFF' if mono else c['blk'], 4)]
 def pup(dog, pose='sit', mono=False):
     c = COL[dog]; f = (lambda k: '#FFFFFF') if mono else (lambda k: c[k])
+    coat = f('blk'); soft = '#4A403C' if not mono else INK
     TAILD = 'M418 600 C462 590 492 552 486 512 C482 496 468 498 466 512 C466 540 446 566 414 572 Z' if dog == 'tidbit' else 'M418 596 C470 600 506 560 508 506 C510 482 494 476 488 496 C482 532 458 560 414 566 Z'
     s = []
     if pose in ('sit', 'paw'):
-        s += tail(dog, mono, TAILD) + [P(BODY, f('blk'), 5.5)] + shade(mono, 'M330 380 C380 420 410 500 410 590 C408 630 380 650 340 656 C390 640 420 600 420 560 C424 480 400 420 360 380 Z')
+        s += U([TAILD, BODY], coat)
+        s += shade(mono, 'M330 380 C380 420 410 500 410 590 C408 630 380 650 340 656 C390 640 420 600 420 560 C424 480 400 420 360 380 Z')
         s += chest(dog, mono)
+        # the front legs: only soft contour lines down the inside of each leg, then socks and paws
+        s.append(L('M276 500 C280 550 280 590 278 616 M324 500 C320 550 320 590 322 616', 3, soft))
+        s.append(L('M226 560 C224 590 226 610 228 618', 2.6, soft))
         s += backfoot(dog, mono, 186, 646) + backfoot(dog, mono, 414, 646)
-        s += leg(dog, mono, 252, 470, 636)
-        if pose == 'sit': s += leg(dog, mono, 348, 470, 636)
-        else:   # giving a paw: the right front leg bends up, paw held forward at chest height
-            s.append(G(leg(dog, mono, 0, 0, 92, 24), 'translate(346 470) rotate(-28)'))   # lifted forward, a little up
+        s += foot(dog, mono, 252, 636)
+        if pose == 'sit':
+            s.append(L('M374 560 C376 590 374 610 372 618', 2.6, soft))
+            s += foot(dog, mono, 348, 636)
+        else:   # giving a paw: the leg lifts forward from the shoulder; its outline is part of the body's own edge
+            s += U([legshape(372, 470, 552, 24, -52)], coat)
+            s.append(L('M412 520 C430 540 444 560 448 572', 2.6, soft))
+            s += foot(dog, mono, 436, 548, -52, sock=True, h=70)
         s += head(dog, mono)
     elif pose == 'lie':
-        s += tail(dog, mono, 'M436 560 C480 560 520 540 530 510 C534 494 518 490 512 504 C502 524 478 534 440 536 Z')
-        s += [P('M150 540 C140 470 190 420 300 418 C410 420 460 470 450 540 C446 586 400 606 300 606 C200 606 154 586 150 540 Z', f('blk'), 5.5)]
+        TL = 'M436 560 C480 560 520 540 530 510 C534 494 518 490 512 504 C502 524 478 534 440 536 Z'
+        LOAF = 'M150 540 C140 470 190 420 300 418 C410 420 460 470 450 540 C446 586 400 606 300 606 C200 606 154 586 150 540 Z'
+        s += U([TL, LOAF, legshape(248, 520, 602, 24), legshape(352, 520, 602, 24)], coat)
         s += shade(mono, 'M360 430 C420 450 444 500 440 550 C436 584 410 600 370 604 C420 584 432 540 428 506 C422 470 400 446 360 430 Z')
-        s += backfoot(dog, mono, 166, 592) + backfoot(dog, mono, 434, 592)
         s += chest(dog, mono, 420)
+        s += backfoot(dog, mono, 166, 592) + backfoot(dog, mono, 434, 592)
         s.append(G(head(dog, mono), 'translate(0 40)'))
-        s += leg(dog, mono, 248, 520, 614, 22) + leg(dog, mono, 352, 520, 614, 22)
+        s += foot(dog, mono, 248, 612, h=60) + foot(dog, mono, 352, 612, h=60)
+        s.append(L('M300 560 L300 610', 3, soft))
     elif pose in ('stand', 'walk'):
         sw = 14 if pose == 'walk' else 0
-        s += tail(dog, mono, 'M596 400 C636 380 660 340 652 296 C648 280 632 282 632 298 C634 332 620 360 590 372 Z')
-        far = (lambda d: d)
-        for x, a in ((326, -sw), (528, sw)):   # far legs, a shade darker
-            s.append(G(leg(dog, mono, 0, 0, 200, 22, dark=True), 'translate(%g 440) rotate(%g)' % (x, a)))
-        s += [P('M236 420 C232 360 300 330 420 330 C540 330 616 352 612 420 C608 480 560 500 470 502 L340 502 C270 500 240 470 236 420 Z', f('blk'), 5.5)]
+        TS = 'M596 400 C636 380 660 340 652 296 C648 280 632 282 632 298 C634 332 620 360 590 372 Z'
+        TORSO = 'M236 420 C232 360 300 330 420 330 C540 330 616 352 612 420 C608 480 560 500 470 502 L340 502 C270 500 240 470 236 420 Z'
+        # far legs sit behind, a shade darker, with their own clean outline
+        for x, a in ((326, -sw), (528, sw)):
+            s += U([legshape(x, 440, 640, 22, a)], darker(coat) if not mono else '#FFFFFF', 3.6)
+            s += foot(dog, mono, x - 200 * __import__('math').sin(__import__('math').radians(a)), 440 + 200 * __import__('math').cos(__import__('math').radians(a)), a, dark=True)
+        s += U([TS, TORSO, legshape(278, 440, 640, 24, sw), legshape(478, 440, 640, 24, -sw)], coat)
         s += shade(mono, 'M300 470 C380 492 500 494 590 460 C580 486 550 498 470 500 L340 500 C320 498 306 490 300 470 Z')
         s += chest(dog, mono, 362)
-        for x, a in ((278, sw), (478, -sw)): s.append(G(leg(dog, mono, 0, 0, 196, 24), 'translate(%g 444) rotate(%g)' % (x, a)))
+        import math
+        for x, a in ((278, sw), (478, -sw)): s += foot(dog, mono, x - 200 * math.sin(math.radians(a)), 440 + 200 * math.cos(math.radians(a)), a)
         s += head(dog, mono)
     return s
 def svg(parts, w=700, h=700, x0=-20, y0=30):
