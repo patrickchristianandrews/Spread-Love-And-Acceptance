@@ -49,13 +49,15 @@ v = np.stack([cv2.GaussianBlur((cls == k).astype(np.float32), (0, 0), 3.2) for k
 cls = v.argmax(0)
 cls[ADD] = 0
 dog = cv2.morphologyEx(dog.astype(np.uint8), cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (21, 21))).astype(bool)
-dogs = islands(smooth(dog, 3.0), 3000)
+dogs = islands(smooth(dog, 4.5), 3000)
 _ff = np.pad((~dogs).astype(np.uint8), 1, constant_values=1); _m = np.zeros((H + 4, W + 4), np.uint8)
 cv2.floodFill(_ff, _m, (0, 0), 2); dogs = (_ff[1:-1, 1:-1] != 2)
 regs = []
 for k in range(3):
     m = cv2.morphologyEx(((cls == k) & dogs).astype(np.uint8), cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7) if k == 1 else (5, 5))).astype(bool)
     m = islands(m, 900)
+    if k:
+        m = islands(smooth(m, 6.5), 2600)
     regs.append(m)
 
 S = []  # svg parts
@@ -138,19 +140,19 @@ def feats(color):
 # ---------- auto layer ----------
 dd = trace(dogs, 3000, 1.15, .8)
 inner = cv2.erode(dogs.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17))).astype(bool)
-fur = ''.join(trace(regs[k], 900, 1.15, .7) for k in (1, 2))
+fur = ''.join(trace(regs[k], 2600, 1.3, 1.2) for k in (1, 2))
 ZONES = ''.join([
-    '<ellipse cx="643" cy="357" rx="52" ry="56"/>', '<ellipse cx="858" cy="292" rx="55" ry="58"/>',
+    '<ellipse cx="643" cy="357" rx="45" ry="49"/>', '<ellipse cx="858" cy="292" rx="48" ry="51"/>',
     '<path d="%s" stroke="#000" stroke-width="30"/>' % NOSE,
-    '<path d="%s" stroke="#000" stroke-width="34"/>' % MOUTH])
+    '<path d="%s" stroke="#000" stroke-width="22"/>' % MOUTH])
 
 def page(color):
     o = ['<defs><clipPath id="in"><path d="%s"/></clipPath><clipPath id="dg"><path d="%s"/></clipPath>' % (trace(inner, 3000, 1.15, .8), dd),
          '<mask id="z"><rect width="%d" height="%d" fill="#fff"/><g fill="#000">%s</g></mask></defs>' % (W, H, ZONES)]
     o.append('<path d="%s" fill="%s"/>' % (dd, '#2B2426' if color else '#fff'))
     if color:
-        o.append('<g clip-path="url(#dg)"><path d="%s" fill="#D9A46A" fill-rule="evenodd"/></g>' % trace(regs[1], 900, 1.15, .7))
-        o.append('<g clip-path="url(#dg)"><path d="%s" fill="#F6EEE2" fill-rule="evenodd"/></g>' % trace(regs[2], 900, 1.15, .7))
+        o.append('<g clip-path="url(#dg)"><path d="%s" fill="#D9A46A" fill-rule="evenodd"/></g>' % trace(regs[1], 2600, 1.3, 1.2))
+        o.append('<g clip-path="url(#dg)"><path d="%s" fill="#F6EEE2" fill-rule="evenodd"/></g>' % trace(regs[2], 2600, 1.3, 1.2))
     o.append('<g clip-path="url(#in)" mask="url(#z)"><path d="%s" fill="none" stroke="%s" stroke-width="3.6" stroke-linejoin="round"/></g>' % (fur, INK))
     o.append('<path d="%s" fill="none" stroke="%s" stroke-width="6.5" stroke-linejoin="round"/>' % (dd, INK))
     o.append(feats(color))
