@@ -147,19 +147,27 @@ def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot
     LL, BRX, BRY, BY = (15, 18.5, 8.8, -21) if lean else (12.5, 18, 10.2, -18.5)
 
     def leg(x0, y0, ang, ln, back=False):
+        """pups.js leg(): one soft, tapered leg (thick at the top, slimmer at the ankle), a curved sock line and a round paw;
+        the far legs a shade darker (owner, Nov 1 2026: smooth everywhere)"""
         c.save(); c.translate(x0, y0); c.rotate(ang)
-        up = ln * 0.5
-        c.fillStyle = L['legUp']; c.beginPath(); c.roundRect(-2.8, -2, 5.6, up + 3, 2.8); c.fill()
-        c.fillStyle = L['legLow']; c.beginPath(); c.roundRect(-2.5, up, 5, ln - up, 2.5); c.fill()
-        c.fillStyle = L['paw']; c.beginPath(); c.ellipse(1, ln, 3.9, 2.5, 0, 0, math.pi * 2); c.fill()
+        up, dk = ln * 0.5, 0.22 if back else 0.0
+
+        def sh(col):
+            if not dk or not col.startswith('#'):
+                return col
+            n = int(col[1:], 16); k = 1 - dk
+            return '#%02x%02x%02x' % (round((n >> 16) * k), round((n >> 8 & 255) * k), round((n & 255) * k))
+        c.fillStyle = sh(L['legLow']); c.beginPath(); _q(c, -3.1, -1); c.quadraticCurveTo(-3.4, ln * 0.5, -2.3, ln - 0.6); c.lineTo(2.3, ln - 0.6)
+        c.quadraticCurveTo(3.4, ln * 0.5, 3.1, -1); c.quadraticCurveTo(0, -3.4, -3.1, -1); c.fill()
+        c.fillStyle = sh(L['legUp']); c.beginPath(); _q(c, -3.1, -1); c.quadraticCurveTo(-3.3, up * 0.6, -2.9, up + 0.4); c.quadraticCurveTo(0, up + 1.8, 2.9, up + 0.4)
+        c.quadraticCurveTo(3.3, up * 0.6, 3.1, -1); c.quadraticCurveTo(0, -3.4, -3.1, -1); c.fill()
+        c.fillStyle = sh(L['paw']); c.beginPath(); c.ellipse(1, ln, 4.1, 2.6, 0, 0, math.pi * 2); c.fill()
         if L['nails']:
             c.strokeStyle = 'rgba(0,0,0,0.16)'; c.lineWidth = 0.6; c.beginPath()
             _q(c, 1.2, ln - 1.6); c.lineTo(1.2, ln + 1.2); _q(c, 3.2, ln - 1.3); c.lineTo(3.2, ln + 1.3); c.stroke()
             c.fillStyle = '#2A2422'
             for n in ((4.6, ln + 0.8), (3.3, ln + 2.1), (1.6, ln + 2.4)):
                 c.beginPath(); c.ellipse(n[0], n[1], 0.9, 0.55, 0.5, 0, math.pi * 2); c.fill()
-        if back:
-            c.fillStyle = 'rgba(10,8,8,0.22)'; c.fillRect(-4, -2, 9, ln + 4)
         c.restore()
 
     lie, bow, sit, wiggle = pose == 'lie', pose == 'bow', pose == 'sit', pose == 'wiggle'
@@ -177,10 +185,13 @@ def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot
         a, b = math.sin(t / 60) * 0.6, math.sin(t / 60 + 2) * 0.6
     if moving:
         leg(-10, BY + 5, b * 0.8, LL, True); leg(10, BY + 5, a * 0.8, LL, True)
+        leg(-12, BY + 4, a, LL); leg(12, BY + 4, b, LL)   # the near legs too, before the body: they come out from under it
     elif sit:
         leg(9, -16, 0.05, LL + 2, True)
     elif bow:
         leg(-11, -18, 0.05, LL + 4, True)
+    if sit:   # pups.js: a neck from the shoulders up into the head, behind the chest markings
+        c.fillStyle = BLACK; c.beginPath(); c.ellipse(14, -29, 7.5, 10, 0.25, 0, math.pi * 2); c.fill()
     # body
     c.save(); c.rotate(bodyTilt)
     if lie:
@@ -195,7 +206,8 @@ def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot
         neck = (14, -11)
     else:
         c.fillStyle = BLACK; c.beginPath(); c.ellipse(0, BY, BRX, BRY, 0, 0, math.pi * 2); c.fill()
-        c.beginPath(); c.ellipse(12, BY - 5, 7, 8, -0.5, 0, math.pi * 2); c.fill()  # neck
+        if not sit:   # (sitting has its own neck; this one would tip up into a lump on the back)
+            c.beginPath(); c.ellipse(12, BY - 5, 7, 8, -0.5, 0, math.pi * 2); c.fill()  # neck
         if L['chest'] == 'white':
             c.fillStyle = TAN; c.beginPath(); c.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, math.pi * 2); c.fill()
             c.fillStyle = '#F2ECE3'
@@ -213,12 +225,15 @@ def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot
             c.strokeStyle = '#F2877E'; c.lineWidth = 4.2; c.lineCap = 'round'; c.beginPath(); _q(c, 9, BY - 11); c.quadraticCurveTo(14, BY - 3, 18, BY - 5); c.stroke()
             c.fillStyle = '#F2877E'; c.beginPath(); _q(c, 11.5, BY - 6); c.lineTo(15, BY - 5.5); c.lineTo(14.5, BY + 5); c.lineTo(10.5, BY + 5.5); c.closePath(); c.fill()
             c.lineCap = 'butt'
-        elif L['collar'] and not coat:
+        elif L['collar'] and not coat and not sit:
             c.strokeStyle = '#141111'; c.lineWidth = 2.8; c.beginPath(); _q(c, 9, BY - 11); c.quadraticCurveTo(14, BY - 3, 18, BY - 5); c.stroke()
             c.fillStyle = '#D5D9E0'; c.fillRect(13.6, BY - 7.4, 2.8, 2.4); c.fillStyle = '#141111'; c.fillRect(14.4, BY - 6.8, 1.2, 1.2)
     c.restore()
+    if sit and L['collar'] and not coat and not scarf:   # sitting, the collar goes round the sitting neck
+        c.strokeStyle = '#141111'; c.lineWidth = 2.8; c.beginPath(); _q(c, 8.5, -33); c.quadraticCurveTo(13.5, -25, 20, -28); c.stroke()
+        c.fillStyle = '#D5D9E0'; c.fillRect(14.2, -27.6, 2.8, 2.4); c.fillStyle = '#141111'; c.fillRect(15, -27, 1.2, 1.2)
     if moving:
-        leg(-12, BY + 4, a, LL); leg(12, BY + 4, b, LL)
+        pass
     elif sit:
         leg(12, -17, -0.05, LL + 3)
         c.fillStyle = BLACK; c.beginPath(); c.ellipse(-9, -6, 8.5, 5.5, 0, 0, math.pi * 2); c.fill()
@@ -228,8 +243,6 @@ def draw(L, pose, ph=0.0, wag=0.0, t=0.0, tilt=0.0, scarf=False, coat=False, rot
         c.fillStyle = L['legLow']; c.beginPath(); c.ellipse(20, -2.5, 8, 2.8, 0, 0, math.pi * 2); c.fill()
         c.fillStyle = L['paw']; c.beginPath(); c.ellipse(28, -2.5, 3.8, 2.6, 0, 0, math.pi * 2); c.fill()
         leg(-13, -16, 0, LL + 3)
-    if neck and sit:   # the organic drawings: a neck from the shoulders up into the head, so the head is not perched on top
-        c.fillStyle = BLACK; c.beginPath(); c.ellipse(14, -29, 7.5, 10, 0.25, 0, math.pi * 2); c.fill()
     # head
     hx = 19 if lie else 18 if sit else 22 if bow else 21
     hy = -19 if lie else -38 if sit else -14 if bow else BY - 12
