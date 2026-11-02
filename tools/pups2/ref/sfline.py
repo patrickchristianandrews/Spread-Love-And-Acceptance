@@ -2,6 +2,7 @@
 Auto: dog outline + black/tan/cream fur borders (smoothed), clipped inside the dog
 and kept away from the face features and paws. Hand: eyes, nose, mouth, ears, paws."""
 import cv2, numpy as np, potrace, sys
+
 import os; os.chdir(os.path.dirname(os.path.abspath(__file__)))
 im = cv2.imread('sugarfoot-ref.png'); H, W = im.shape[:2]
 dog = cv2.imread('sf-mask.png', 0) > 127
@@ -67,13 +68,15 @@ def P(d, w=4.2, fill='none', extra=''):
 
 def eye(cx, cy, rx, ry, cl, color):
     o = []
-    o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="#fff" stroke="%s" stroke-width="4.4"/>' % (cx, cy, rx, ry, INK))
-    # big iris that fills the eye, nudged up and right so a white crescent shows low left
-    o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="%s" stroke="%s" stroke-width="3"/>' % (cx + 4, cy - 3, rx - 7, ry - 7, '#7A4A26' if color else '#fff', INK))
-    o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="%s"/>' % (cx + 5, cy - 2, rx * .48, ry * .48, INK))
-    o.append(P('M%s %s A%s %s 0 0 1 %s %s' % (cx - rx + 2, cy - 2, rx, ry, cx + rx - 2, cy - 2), 9))
-    o.append('<circle cx="%s" cy="%s" r="%s" fill="#fff"/>' % cl)
-    o.append('<circle cx="%s" cy="%s" r="%s" fill="#fff"/>' % (cx - rx * .3, cy + ry * .4, cl[2] * .4))
+    o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="#fff" stroke="%s" stroke-width="5"/>' % (cx, cy, rx, ry, INK))
+    # iris fills almost the whole eye, white shows only as a thin rim low left
+    o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="%s" stroke="%s" stroke-width="3"/>' % (cx + 4, cy - 2, rx - 3, ry - 3, '#6B3E1E' if color else '#fff', INK))
+    if color:
+        o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="#9A5E2E"/>' % (cx + 4, cy + ry * .38, rx * .7, ry * .38))
+    o.append('<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="%s"/>' % (cx + 4, cy - 1, rx * .6, ry * .6, INK))
+    o.append(P('M%s %s A%s %s 0 0 1 %s %s' % (cx - rx + 2, cy - 4, rx, ry, cx + rx - 2, cy - 4), 10))
+    o.append('<circle cx="%s" cy="%s" r="%s" fill="#fff"/>' % (cl[0], cl[1], cl[2] * 1.15))
+    o.append('<circle cx="%s" cy="%s" r="%s" fill="#fff"/>' % (cx - rx * .35, cy + ry * .5, cl[2] * .45))
     return ''.join(o)
 
 NOSE = 'M676 487C676 462 705 448 740 448C775 448 805 461 806 488C807 516 785 540 760 551C748 557 735 557 722 551C697 540 676 515 676 487Z'
@@ -108,8 +111,8 @@ STRIPE = stripe()
 def feats(color):
     F = []
     F.append(P(STRIPE, 3.6, '#F6EEE2' if color else '#fff'))
-    F.append(eye(643, 357, 42, 46, (655, 334, 10.5), color))
-    F.append(eye(858, 292, 45, 48, (850, 277, 11.5), color))
+    F.append(eye(641, 358, 44, 52, (654, 333, 11), color))
+    F.append(eye(860, 292, 46, 53, (849, 273, 12), color))
     F.append(P(NOSE, 4, INK))
     F.append('<ellipse cx="744" cy="472" rx="22" ry="7.5" fill="#fff" transform="rotate(-4 744 472)"/>')
     F.append('<ellipse cx="712" cy="524" rx="9" ry="6" fill="#5a4c47" transform="rotate(25 712 524)"/>')
@@ -142,7 +145,7 @@ dd = trace(dogs, 3000, 1.15, .8)
 inner = cv2.erode(dogs.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17))).astype(bool)
 fur = ''.join(trace(regs[k], 2600, 1.3, 1.2) for k in (1, 2))
 ZONES = ''.join([
-    '<ellipse cx="643" cy="357" rx="45" ry="49"/>', '<ellipse cx="858" cy="292" rx="48" ry="51"/>',
+    '<ellipse cx="641" cy="358" rx="48" ry="56"/>', '<ellipse cx="860" cy="292" rx="50" ry="57"/>',
     '<path d="%s" stroke="#000" stroke-width="30"/>' % NOSE,
     '<path d="%s" stroke="#000" stroke-width="22"/>' % MOUTH])
 
