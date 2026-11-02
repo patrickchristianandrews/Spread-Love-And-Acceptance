@@ -16,6 +16,24 @@
   function line(g, pts, lw) { P(g, pts, false); g.lineWidth = lw; g.strokeStyle = OUT; g.lineCap = 'round'; g.stroke(); }
   function ell(g, x, y, rx, ry, rot, fill, lw) { g.beginPath(); g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2); g.fillStyle = fill; g.fill(); if (lw) { g.lineWidth = lw; g.strokeStyle = OUT; g.stroke(); } }
   // the show's own colors (assets/js/pups.js LOOKS)
+  function flat(g, pts, fill, alpha) { g.save(); g.globalAlpha = alpha; P(g, pts, true); g.fillStyle = fill; g.fill(); g.restore(); }
+  function flick(g, x, y, ang, len, lw, col) { var c = Math.cos(ang), s = Math.sin(ang), n = [-s, c];
+    g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + c * len * 0.5 + n[0] * len * 0.18, y + s * len * 0.5 + n[1] * len * 0.18, x + c * len, y + s * len);
+    g.lineWidth = lw; g.strokeStyle = col || OUT; g.lineCap = 'round'; g.stroke(); }
+  // a detailed eye: white rim, two-tone iris, pupil, two catchlights, an eyelid line and a soft lower lid
+  function eye(g, x, y, s, mono, irisCol, lw) {
+    ell(g, x, y, 13 * s, 14.5 * s, 0, '#FFFFFF', lw * 0.75);
+    ell(g, x + 1.5 * s, y + 1 * s, 10.4 * s, 11.6 * s, 0, mono ? OUT : '#2A170D', 0);
+    if (!mono) { ell(g, x + 1.5 * s, y + 2 * s, 8.6 * s, 9.6 * s, 0, irisCol, 0); ell(g, x + 1 * s, y + 4.5 * s, 6 * s, 5 * s, 0, '#6B4430', 0); }
+    ell(g, x + 2 * s, y + 1.5 * s, 4.8 * s, 5.6 * s, 0, OUT, 0);
+    ell(g, x + 5.5 * s, y - 4 * s, 4.2 * s, 4.2 * s, 0, '#FFFFFF', 0); ell(g, x - 2.5 * s, y + 6 * s, 1.9 * s, 1.9 * s, 0, '#FFFFFF', 0);
+    g.beginPath(); g.arc(x, y + 2 * s, 15.5 * s, Math.PI * 1.16, Math.PI * 1.84); g.lineWidth = lw * 0.9; g.strokeStyle = OUT; g.lineCap = 'round'; g.stroke();   // eyelid
+  }
+  function nose(g, x, y, s, mono, lw) {
+    shape(g, [[x - 16 * s, y + 5 * s], [x - 8 * s, y - 2 * s], [x, y - 1 * s], [x + 8 * s, y - 2 * s], [x + 16 * s, y + 5 * s], [x + 11 * s, y + 15 * s], [x, y + 18 * s], [x - 11 * s, y + 15 * s]], OUT, lw * 0.5);
+    ell(g, x - 6 * s, y + 8 * s, 3 * s, 1.8 * s, 0.4, mono ? '#FFFFFF' : '#3B3431', 0); ell(g, x + 6 * s, y + 8 * s, 3 * s, 1.8 * s, -0.4, mono ? '#FFFFFF' : '#3B3431', 0);   // nostrils
+    ell(g, x - 3 * s, y + 2.5 * s, 4 * s, 2 * s, 0, mono ? '#FFFFFF' : '#8A7F7A', 0);                                                                                       // shine
+  }
   var C = { tidbit: { coat: '#221D1B', ear: '#221D1B', tan: '#C98A52', brow: '#C98A52', sock: '#C98A52', paw: '#C98A52', nail: '#2A2422', tongue: '#EE8FA6', chin: '#D9B48C', eye: '#3A2418' },
             sugarfoot: { coat: '#252120', ear: '#252120', earIn: '#D9A38E', tan: '#D8AE82', brow: '#D8AE82', leg: '#A0562E', legLow: '#A0562E', paw: '#F2ECE3', nail: '#2A2422', tongue: '#EE8FA6', white: '#F2ECE3', eye: '#3A2418' } };
   function pup(g, who, o) {
@@ -44,11 +62,12 @@
       if (!(wave && s === 1)) { if (!sug) shape(g, [[s * 6, -14], [s * 6, -60], [s * 21, -66], [s * 36, -60], [s * 37, -14]], col(c.sock), lw * 0.75);
         shape(g, [[s * 4, -2], [s * 6, -16], [s * 22, -22], [s * 38, -16], [s * 40, -2]], col(c.paw), lw * 0.85);
         [10, 18, 27, 35].forEach(function (x) { ell(g, s * x, 0, 2.6, 1.8, 0, mono ? OUT : c.nail, 0); }); }
-      line(g, [[s * 17, -14], [s * 17, -3]], lw * 0.55); line(g, [[s * 27, -14], [s * 27, -3]], lw * 0.55);
+      [13, 21, 29].forEach(function (x) { line(g, [[s * x, -15], [s * x, -3]], lw * 0.5); }); flick(g, s * 22, -60, -1.5 + s * 0.2, 10, lw * 0.45, mono ? OUT : (sug ? '#7E4426' : '#A36B3A'));
       shape(g, [[s * 44, -2], [s * 46, -14], [s * 62, -18], [s * 76, -10], [s * 74, 0]], col(c.paw), lw * 0.85); // back feet at the sides
       line(g, [[s * 58, -12], [s * 58, -2]], lw * 0.5); line(g, [[s * 66, -12], [s * 66, -2]], lw * 0.5);
     });
     // (no collar: he has none in his photo)
+    [-1, 1].forEach(function (s) { flick(g, s * 14, -64, 1.45 + s * 0.1, 9, lw * 0.5, mono ? OUT : (sug ? '#C9BDB0' : '#A36B3A')); });   // chest fur
     // face (the show's markings)
     g.save(); g.translate(0, HY);
     if (sug) {
@@ -70,15 +89,25 @@
       shape(g, [[-22, 30], [-10, 26], [0, 30], [10, 26], [22, 30], [18, 46], [6, 56], [0, 58], [-6, 56], [-18, 46]], col(c.chin), lw * 0.7);              // lighter tan chin
       shape(g, [[-9, -34], [9, -34], [15, -10], [17, 6], [0, 10], [-17, 6], [-15, -10]], mono ? '#FFFFFF' : c.coat, lw * 0.7);                           // broad black bridge
     }
-    // eyes: the show's warm brown, big and kind, with two catchlights
-    [-1, 1].forEach(function (s) { ell(g, s * 26, -14, 13, 14.5, 0, '#FFFFFF', lw * 0.75); ell(g, s * 26 + 1.5, -13, 10.2, 11.6, 0, mono ? OUT : c.eye, 0); ell(g, s * 26 + 2, -12, 5.4, 6.2, 0, OUT, 0); ell(g, s * 26 + 5.5, -17.5, 4.2, 4.2, 0, '#FFFFFF', 0); ell(g, s * 26 - 2.5, -7, 1.9, 1.9, 0, '#FFFFFF', 0); });
-    shape(g, [[-16, 8], [0, 3], [16, 8], [11, 18], [0, 21], [-11, 18]], OUT, lw * 0.5); ell(g, -3, 8, 3, 1.8, 0, mono ? '#FFFFFF' : '#8A7F7A', 0);
-    line(g, [[0, 19], [0, 25]], lw * 0.75); line(g, [[-16, 23], [-8, 29], [0, 25], [8, 29], [16, 23]], lw * 0.75);
-    shape(g, [[-8, 28], [8, 28], [9, 40], [0, 46], [-9, 40]], col(c.tongue), lw * 0.7); line(g, [[0, 30], [0, 38]], lw * 0.4);
+    // eyes, nose, mouth: detailed
+    [-1, 1].forEach(function (s) { eye(g, s * 26, -14, 1, mono, '#4A2C1A', lw); });
+    nose(g, 0, 4, 1, mono, lw);
+    line(g, [[0, 22], [0, 28]], lw * 0.7);                                                                       // the groove under the nose
+    if (sug) {   // her open smile
+      shape(g, [[-18, 27], [-8, 31], [0, 28], [8, 31], [18, 27], [14, 40], [0, 47], [-14, 40]], mono ? '#FFFFFF' : '#5A2A2E', lw * 0.7);
+      shape(g, [[-9, 34], [9, 34], [10, 45], [0, 51], [-10, 45]], col(c.tongue), lw * 0.65); line(g, [[0, 36], [0, 45]], lw * 0.4);
+    } else {     // his calm closed smile
+      line(g, [[-20, 26], [-10, 31], [0, 28], [10, 31], [20, 26]], lw * 0.75); line(g, [[-20, 26], [-23, 23]], lw * 0.6); line(g, [[20, 26], [23, 23]], lw * 0.6);
+      line(g, [[-8, 38], [0, 40], [8, 38]], lw * 0.5);
+    }
+    [-1, 1].forEach(function (s) { [[16, 10], [20, 16], [15, 18]].forEach(function (p) { ell(g, s * p[0], p[1], 1.3, 1.3, 0, OUT, 0); }); });   // whisker dots
+    // fur: a few flicks on the head and soft tufts on the cheeks
+    [[-10, -62, -1.9], [0, -66, -1.6], [10, -62, -1.3]].forEach(function (f) { flick(g, f[0], f[1], f[2], 9, lw * 0.5, mono ? OUT : '#4A403C'); });
+    [-1, 1].forEach(function (s) { flick(g, s * 50, 40, s > 0 ? 0.9 : Math.PI - 0.9, 8, lw * 0.55); flick(g, s * 42, 48, s > 0 ? 1.2 : Math.PI - 1.2, 7, lw * 0.55); });
     if (!mono) [-1, 1].forEach(function (s) { ell(g, s * 46, 16, 7, 4.5, 0, 'rgba(238,143,166,0.4)', 0); });
     if (sug) [-1, 1].forEach(function (s) { shape(g, [[s * 30, -62], [s * 56, -72], [s * 80, -60], [s * 92, -30], [s * 86, -2], [s * 72, -8], [s * 58, -30], [s * 46, -44]], col(c.ear), lw);
-      shape(g, [[s * 60, -58], [s * 76, -54], [s * 84, -32], [s * 80, -16], [s * 70, -24], [s * 62, -40]], col(c.earIn), lw * 0.6); });
-    else [-1, 1].forEach(function (s) { shape(g, [[s * 40, -60], [s * 62, -56], [s * 78, -30], [s * 80, 8], [s * 70, 34], [s * 54, 30], [s * 48, 4], [s * 44, -28]], col(c.ear), lw); });   // soft drop ears hanging beside his face
+      shape(g, [[s * 60, -58], [s * 76, -54], [s * 84, -32], [s * 80, -16], [s * 70, -24], [s * 62, -40]], col(c.earIn), lw * 0.6); line(g, [[s * 50, -46], [s * 64, -32], [s * 74, -14]], lw * 0.5); });
+    else [-1, 1].forEach(function (s) { shape(g, [[s * 40, -60], [s * 62, -56], [s * 78, -30], [s * 80, 8], [s * 70, 34], [s * 54, 30], [s * 48, 4], [s * 44, -28]], col(c.ear), lw); line(g, [[s * 50, -40], [s * 58, -6], [s * 62, 22]], lw * 0.5); });   // soft drop ears hanging beside his face, a crease in each
     g.restore();
     if (wave && sug) { blob(g, [arm], col(c.leg), lw); }
     if (wave) { shape(g, [[18, -60], [24, -70], [40, -72], [50, -62], [46, -46], [30, -42], [20, -48]], col(c.paw), lw * 0.85);   // the lifted paw, hanging from the bent wrist

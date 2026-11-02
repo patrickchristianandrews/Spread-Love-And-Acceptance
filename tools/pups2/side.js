@@ -18,6 +18,9 @@
   function shape(g, pts, fill, lw, close) { P(g, pts, close !== false); g.fillStyle = fill; g.fill(); g.lineWidth = lw; g.strokeStyle = OUT; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke(); }
   function line(g, pts, lw) { P(g, pts, false); g.lineWidth = lw; g.strokeStyle = OUT; g.lineCap = 'round'; g.stroke(); }
   function ell(g, x, y, rx, ry, rot, fill, lw) { g.beginPath(); g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2); g.fillStyle = fill; g.fill(); if (lw) { g.lineWidth = lw; g.strokeStyle = OUT; g.stroke(); } }
+  function flick(g, x, y, ang, len, lw, col) { var c = Math.cos(ang), s = Math.sin(ang), n = [-s, c];
+    g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + c * len * 0.5 + n[0] * len * 0.18, y + s * len * 0.5 + n[1] * len * 0.18, x + c * len, y + s * len);
+    g.lineWidth = lw; g.strokeStyle = col || OUT; g.lineCap = 'round'; g.stroke(); }
   var C = { tidbit: { coat: '#221D1B', tan: '#C98A52', brow: '#C98A52', sock: '#C98A52', paw: '#C98A52', nail: '#2A2422', tongue: '#EE8FA6', chin: '#D9B48C', eye: '#3A2418' },
             sugarfoot: { coat: '#252120', ear: '#252120', earIn: '#D9A38E', tan: '#D8AE82', brow: '#D8AE82', leg: '#A0562E', legLow: '#A0562E', paw: '#F2ECE3', nail: '#2A2422', tongue: '#EE8FA6', white: '#F2ECE3', eye: '#3A2418' } };
   function color(c, mono) { return mono ? '#FFFFFF' : c; }
@@ -46,12 +49,20 @@
       ell(g, 14, -27, 10, 6.5, -0.15, color(c.brow, mono), lw * 0.7);                                                                              // tan oval brow
     }
     // nose, mouth, tongue
-    ell(g, 63, -2, 9, 7, 0.1, OUT, 0); ell(g, 60, -5, 3, 2, 0, mono ? '#FFFFFF' : '#8A7F7A', 0);
-    line(g, [[60, 8], [52, 15], [42, 14]], lw * 0.8);
-    shape(g, [[44, 15], [54, 15], [55, 27], [49, 31], [43, 25]], color(c.tongue, mono), lw * 0.75);
-    line(g, [[49, 17], [49, 24]], lw * 0.45);
+    ell(g, 64, -2, 10, 7.5, 0.1, OUT, 0); ell(g, 61, -5.5, 3.2, 2, 0, mono ? '#FFFFFF' : '#8A7F7A', 0); ell(g, 69, 0, 2.2, 1.5, 0.5, mono ? '#FFFFFF' : '#3B3431', 0);   // nose, shine, nostril
+    if (sug) {   // her open smile
+      line(g, [[60, 8], [52, 15], [42, 14]], lw * 0.8);
+      shape(g, [[44, 15], [54, 15], [55, 27], [49, 31], [43, 25]], color(c.tongue, mono), lw * 0.75); line(g, [[49, 17], [49, 24]], lw * 0.45);
+    } else {     // his calm closed smile
+      line(g, [[62, 8], [54, 14], [40, 15], [34, 12]], lw * 0.8);
+    }
     // big friendly eye
-    ell(g, 18, -10, 10.5, 11.5, 0, '#FFFFFF', lw * 0.75); ell(g, 19.5, -9.5, 8.2, 9.2, 0, mono ? OUT : C[who].eye, 0); ell(g, 20, -9, 4.4, 5, 0, OUT, 0); ell(g, 22.5, -13, 3.4, 3.4, 0, '#FFFFFF', 0); ell(g, 16.5, -5, 1.6, 1.6, 0, '#FFFFFF', 0);
+    ell(g, 18, -10, 10.5, 11.5, 0, '#FFFFFF', lw * 0.75); ell(g, 19.5, -9.5, 8.4, 9.4, 0, mono ? OUT : '#2A170D', 0);
+    if (!mono) { ell(g, 19.5, -8.8, 6.8, 7.6, 0, '#4A2C1A', 0); ell(g, 19, -6.6, 4.8, 4, 0, '#6B4430', 0); }
+    ell(g, 20.2, -8.8, 3.9, 4.5, 0, OUT, 0); ell(g, 22.6, -12.6, 3.3, 3.3, 0, '#FFFFFF', 0); ell(g, 16.8, -4.6, 1.5, 1.5, 0, '#FFFFFF', 0);
+    g.beginPath(); g.arc(18, -8, 12.5, Math.PI * 1.15, Math.PI * 1.85); g.lineWidth = lw * 0.85; g.strokeStyle = OUT; g.lineCap = 'round'; g.stroke();   // eyelid
+    [[48, 8], [52, 13], [46, 15]].forEach(function (p) { ell(g, p[0], p[1], 1.2, 1.2, 0, OUT, 0); });                                                        // whisker dots
+    [[-12, -24, -1.6], [-2, -30, -1.45], [8, -30, -1.3]].forEach(function (f) { flick(g, f[0], f[1], f[2], 6, lw * 0.5, mono ? OUT : '#4A403C'); });       // fur on the head
     // near ear
     if (sug) { shape(g, [[-34, -30], [-18, -46], [2, -44], [10, -30], [4, -12], [-8, -2], [-22, -12]], color(c.ear, mono), lw); shape(g, [[-18, -36], [-4, -38], [0, -26], [-6, -14], [-16, -22]], color(c.earIn, mono), lw * 0.6); }
     else shape(g, [[-12, -34], [-30, -22], [-36, 4], [-30, 30], [-16, 38], [-4, 24], [-2, 0], [-2, -24]], color(c.coat, mono), lw);   // soft drop ear hanging beside his face
@@ -63,7 +74,7 @@
   }
   function pawPts(fx) { return [[fx - 11, -2], [fx - 7, -14], [fx + 9, -14], [fx + 17, -6], [fx + 15, 1], [fx - 9, 1]]; }
   function sockPts(fx) { return [[fx - 10, -4], [fx - 12, -52], [fx, -60], [fx + 12, -52], [fx + 11, -4]]; }
-  function toes(g, fx, lw) { line(g, [[fx + 4, -10], [fx + 4, -1]], lw * 0.55); line(g, [[fx + 10, -10], [fx + 10, -1]], lw * 0.55); }
+  function toes(g, fx, lw) { [2, 7, 12].forEach(function (d) { line(g, [[fx + d, -11], [fx + d, -1]], lw * 0.5); }); }
   function pup(g, who, pose, o) {
     o = o || {}; var mono = !!o.mono, lw = o.lw || 3.4, c = C[who], sug = who === 'sugarfoot';
     var w = sug ? 1.06 : 1, W = function (L) { return L.map(function (p) { return [p[0] * w, p[1]]; }); };
