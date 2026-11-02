@@ -47,6 +47,8 @@
     var a = Math.sin(ph) * 0.7, b = Math.sin(ph + Math.PI) * 0.7;
     if (wiggle) { a = Math.sin(t / 60) * 0.6; b = Math.sin(t / 60 + 2) * 0.6; }
     if (moving) { leg(-10, BY + 5, b * 0.8, LL, true); leg(10, BY + 5, a * 0.8, LL, true); }
+    // the near legs too, before the body, so they come out from under it instead of sitting on top like stickers (owner, Nov 2 2026)
+    if (moving) { leg(-12, BY + 4, a, LL); leg(12, BY + 4, b, LL); }
     else if (sit) leg(9, -16, 0.05, LL + 2, true);
     else if (bow) leg(-11, -18, 0.05, LL + 4, true);
     // sitting: a neck from the shoulders up into the head, behind the chest markings, so the head sits on the body smoothly (owner, Nov 1 2026)
@@ -62,7 +64,7 @@
       else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, -7, 3.6, 3.4, 0, 0, Math.PI * 2); ctx.fill(); }
     } else {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); // neck
+      if (!sit) { ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); } // neck (sitting has its own; this one would tip up into a lump on the back)
       if (L.chest === 'white') {
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();         // throat, the same fawn brown
         ctx.fillStyle = '#F2ECE3';
@@ -73,11 +75,13 @@
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(14, BY + 0.5, 4.2, 3.4, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(15, BY + 5.5, 3.6, 2.8, -0.2, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(15.8, BY + 3, 1.1, 0, Math.PI * 2); ctx.fill();
       }
-      if (L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(9, BY - 11); ctx.quadraticCurveTo(14, BY - 3, 18, BY - 5); ctx.stroke();
+      if (L.collar && !sit) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(9, BY - 11); ctx.quadraticCurveTo(14, BY - 3, 18, BY - 5); ctx.stroke();
         ctx.fillStyle = '#D5D9E0'; ctx.fillRect(13.6, BY - 7.4, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(14.4, BY - 6.8, 1.2, 1.2); }
     }
     ctx.restore();
-    if (moving) { leg(-12, BY + 4, a, LL); leg(12, BY + 4, b, LL); }
+    // sitting, the collar goes round the sitting neck (the body's own collar spot turns to the back when it tips up)
+    if (sit && L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(8.5, -33); ctx.quadraticCurveTo(13.5, -25, 20, -28); ctx.stroke();
+      ctx.fillStyle = '#D5D9E0'; ctx.fillRect(14.2, -27.6, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(15, -27, 1.2, 1.2); }
     else if (sit) { leg(12, -17, -0.05, LL + 3); ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-9, -6, 8.5, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-4, -2.5, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-0.5, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); }
     else if (bow) { ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.8, 2.6, 0, 0, Math.PI * 2); ctx.fill(); leg(-13, -16, 0, LL + 3); }
     // head: a little bigger than life, the way cartoons do it
