@@ -19,7 +19,9 @@
 
   function who(L) { return L && L.collar ? 'tb' : 'sf'; }
   function viewFor(w, pose, o) {
-    var moving = o && o.moving;
+    var moving = o && o.moving, act = o && o.act;
+    if (act === 'turnaway' || act === 'tailtuck') return '34back';      // sulking, hiding: turned away from us
+    if (act === 'lookat' && o && o.lookUp) return 'back';
     if (pose === 'run' && moving) return 'right';
     if (pose === 'run') { // standing: talking or feeling something turns a little toward us
       var talk = o && o.talk > 0, feel = o && o.mood && o.mood !== 'happy' && o.mood !== 'calm';
@@ -84,6 +86,7 @@
   function drawMouth(g, mo, k, o, t, w) {
     var m = (o && o.mood) || 'happy', talk = o && o.talk ? o.talk : 0, mouth = o && o.mouth != null ? o.mouth : talk;
     var x = mo.x * k, y = mo.y * k, hw = mo.hw * k, side = mo.side || 0, MC = '#3A1E22', PINK = '#EE8FA6';
+    if (side < 0) { g.save(); g.translate(2 * x, 0); g.scale(-1, 1); side = -side; }
     var happy = m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud';
     var pant = happy && !mouth ? 0.22 + 0.08 * Math.sin((t || 0) / 240 + (w === 'sf' ? 1 : 0)) : 0;   // a soft happy pant at rest
     var open = Math.max(mouth, pant);
@@ -106,6 +109,7 @@
       else { g.moveTo(x - hw * 0.9, y - hw * 0.15); g.quadraticCurveTo(x, y + hw * 0.4, x + hw * 0.9, y - hw * 0.15); }
       g.stroke();
     }
+    if (mo.side < 0) g.restore();
     g.restore();
   }
   function drawLayer(g, name, lay, k, ox, oy, rotDeg, px, py) {
@@ -114,8 +118,12 @@
     else g.drawImage(im, ox + lay.x * k, oy + lay.y * k, lay.w * k, lay.h * k);
   }
   function drawPainted(g, L, pose, ph, wag, blink, t, tilt, o) {
-    var w = who(L), view = viewFor(w, pose, o), key = w + '-' + view, m = META[key]; if (!m) return;
-    var k = UNITS / m.h, ox = 4 - m.w * k / 2, oy = -m.h * k;          // paws on the ground, centred a touch forward
+    var w = who(L), view = viewFor(w, pose, o);
+    var tr = g.getTransform ? g.getTransform() : null, mirrored = !!(tr && (tr.a * tr.d - tr.b * tr.c) < 0), unflip = false;
+    if (mirrored && view === 'right' && META[w + '-left']) { view = 'left'; unflip = true; }   // facing left: the real left-facing drawing
+    var key = w + '-' + view, m = META[key]; if (!m) return;
+    if (unflip) { g.save(); g.scale(-1, 1); }
+    var k = UNITS / m.h, ox = (unflip ? -4 : 4) - m.w * k / 2, oy = -m.h * k;          // paws on the ground, centred a touch forward
     var sy = 1, dy = 0, lean = 0;
     if (pose === 'lie') { sy = 0.72; }
     if (pose === 'bow') { lean = -0.22; }
@@ -125,12 +133,12 @@
     var sq = squashFor(w, view, t || 0); if (sq !== 1) { g.scale(sq, 1 + (1 - sq) * 0.35); }
     var tk = (o && o.talk) || 0; if (tk > 0.02) { var tb = 1 + 0.025 * tk; g.scale(1 / Math.sqrt(tb), tb); }   // a little bounce on each word
     if (sy !== 1) g.scale(1, sy);
-    var s1 = Math.sin(ph), s2 = Math.sin(ph + 0.35), moving = pose === 'run' && o && o.moving;
-    var legs = moving || (pose === 'run' && Math.abs(s1) > 0.02) ? { fl1: A_LEG * s1, fl2: -A_LEG * s1, bl1: -A_LEG * s2, bl2: A_LEG * s2 } : {};
+    var s1 = Math.sin(ph), s2 = Math.sin(ph + 0.35), moving = pose === 'run' && o && o.moving, dir = unflip ? -1 : 1;
+    var legs = moving || (pose === 'run' && Math.abs(s1) > 0.02) ? { fl1: A_LEG * s1 * dir, fl2: -A_LEG * s1 * dir, bl1: -A_LEG * s2 * dir, bl2: A_LEG * s2 * dir } : {};
     var st = STATE[w] || (STATE[w] = {});
     var lift = (o && o.lift) || 0, liftV = spring(st, 'lift', lift, t || 0, 260, 14), bounce = (liftV - lift) * 0.08;   // the body lags a hop a touch
-    var headDeg = spring(st, 'head', (tilt || 0) * 57.3 * 0.8 + (moving ? -3 * Math.sin(2 * ph) : 0) - bounce * 6, t || 0, 180, 9);
-    var tailDeg = spring(st, 'tail', (wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 10, t || 0, 120, 6);
+    var headDeg = spring(st, 'head', ((tilt || 0) * 57.3 * 0.8 + (moving ? -3 * Math.sin(2 * ph) : 0) - bounce * 6) * dir, t || 0, 180, 9);
+    var tailDeg = spring(st, 'tail', ((wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 10) * dir, t || 0, 120, 6);
     if (!moving && !(o && o.talk)) { if (!st.flickAt || (t || 0) > st.flickAt + 400) st.flickAt = (t || 0) + 2500 + 4000 * Math.abs(Math.sin((t || 0) * 0.0007 + (w === 'sf' ? 1 : 0))); if ((t || 0) > st.flickAt && (t || 0) < st.flickAt + 60 && st.ears) st.ears.v += 260 * (w === 'sf' ? -1 : 1); }   // an idle ear flick now and then
     var earDeg = spring(st, 'ears', -headDeg * 0.35 + bounce * 12 + (moving ? 4 * Math.sin(2 * ph + 1) : 0) + ((o && o.ear) || 0) * 20, t || 0, 90, 5); earDeg = Math.max(-7, Math.min(7, earDeg));
     var face = null, useFace = false;   // moods are drawn on the pup's own painted head: brows, eyelids, eye rings, mouth
@@ -166,6 +174,7 @@
       drawMouth(g, m.mouth, k, o, t, w); g.restore();
     } else if (m.mouth) { g.save(); g.translate(ox, oy); drawMouth(g, m.mouth, k, o, t, w); g.restore(); }
     g.restore();
+    if (unflip) g.restore();
   }
   P.draw = function (c, L, pose, ph, wag, blink, t, tilt, o) {
     if (!ready || !META) { vector(c, L, pose, ph, wag, blink, t, tilt, o); return; }
@@ -174,6 +183,7 @@
   // where the head is, in pup space (for items carried at the mouth, speech bubbles and the like)
   P.head = function (id, pose, o) {
     var w = id === 'tidbit' ? 'tb' : 'sf', view = viewFor(w, pose, o), m = META && META[w + '-' + view]; if (!m) return { x: 21, y: -33 };
+    if (view === 'right' && o && o.mirrored && META[w + '-left']) { var ml = META[w + '-left'], kl = UNITS / ml.h, hl2 = ml.layers.head; return { x: 4 + ml.w * kl / 2 - (hl2.x + hl2.w * 0.45) * kl, y: -ml.h * kl + (hl2.y + hl2.h * 0.45) * kl, r: hl2.w * kl / 2 }; }
     var k = UNITS / m.h, ox = 4 - m.w * k / 2, oy = -m.h * k, sy = pose === 'lie' ? 0.72 : 1;
     if (m.face) return { x: ox + m.face.cx * k, y: (oy + m.face.cy * k) * sy, r: m.face.w * k / 2 };
     var hl = m.layers.head; if (hl) return { x: ox + (hl.x + hl.w * 0.55) * k, y: (oy + (hl.y + hl.h * 0.45) * k) * sy, r: hl.w * k / 2 };
