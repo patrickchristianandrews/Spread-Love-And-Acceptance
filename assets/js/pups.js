@@ -89,7 +89,8 @@
     } else {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
       if (!sit) { ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); } // neck (sitting has its own; this one would tip up into a lump on the back)
-      if (L.chest === 'white') { // Sugarfoot: a wide white bib from the throat down the chest, tan to each side of it below
+      if (sit) { /* sitting: the chest marks go on the upright chest, drawn after the body (the tipped body would put them on the back) */ }
+      else if (L.chest === 'white') { // Sugarfoot: a wide white bib from the throat down the chest, tan to each side of it below
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, BY + 5, 6.5, 4.2, -0.2, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#F4EFE6'; ctx.beginPath(); ctx.ellipse(15.8, BY - 0.5, 4.4, 9, -0.3, 0, Math.PI * 2); ctx.fill();
       }
@@ -114,6 +115,14 @@
     }
     if (wear === 'shirt' && lie) { ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(2, -10.5, 12, 6.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = WC.light; ctx.beginPath(); ctx.ellipse(12.5, -12, 3, 2, -0.4, 0, Math.PI * 2); ctx.fill(); }
     ctx.restore();
+    // sitting: the chest marks on the upright chest, under the sitting neck
+    if (sit && L.chest === 'white') {
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12.5, -11, 6, 3.6, -0.1, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#F4EFE6'; ctx.beginPath(); ctx.ellipse(16, -19, 4, 8.5, -0.1, 0, Math.PI * 2); ctx.fill();
+    } else if (sit && L.chest === 'spots') {
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16.5, -23, 2.8, 4, -0.1, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(14, -14.5, 2.3, 2.1, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(18.5, -15, 2, 1.9, 0, 0, Math.PI * 2); ctx.fill();
+    }
     // sitting, the collar goes round the sitting neck (the body's own collar spot turns to the back when it tips up)
     if (sit && L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(8.5, -33); ctx.quadraticCurveTo(13.5, -25, 20, -28); ctx.stroke();
       ctx.fillStyle = '#D5D9E0'; ctx.fillRect(14.2, -27.6, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(15, -27, 1.2, 1.2); }
