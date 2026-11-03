@@ -10,7 +10,13 @@ const [EP, SECS, OUT] = [process.argv[2], Number(process.argv[3]), process.argv[
   await p.evaluate(() => Promise.all([document.fonts.ready, window.TOLPups.ready || 0])); await p.waitForTimeout(1500);
   const ok = await p.evaluate(() => new Promise(res => { window.__done = null; const ok = TOLBuddiesPlayer.record({ captions: true, width: 1280, height: 720, bitrate: 8e6, onDone: d => { const r = new FileReader(); r.onload = () => { window.__done = r.result; }; r.readAsDataURL(d.video); }, onError: e => { window.__err = e; } }); res(ok); }));
   console.log('recording', ok);
-  await p.waitForTimeout(SECS * 1000);
+  // stop when the episode's end overlay shows, or at SECS as a hard cap
+  const t0 = Date.now();
+  while (Date.now() - t0 < SECS * 1000) {
+    await p.waitForTimeout(2000);
+    const ended = await p.evaluate(() => { const e = document.querySelector('.fb-end'); const P = TOLBuddiesPlayer._p; return !!((e && !e.hidden && getComputedStyle(e).display !== 'none') || (P && P.dir && P.dir.ended)); });
+    if (ended) { await p.waitForTimeout(2500); break; }
+  }
   await p.evaluate(() => TOLBuddiesPlayer.stopRecording());
   await p.waitForFunction(() => window.__done || window.__err, null, { timeout: 60000 });
   const d = await p.evaluate(() => window.__done || ('ERR ' + window.__err));
