@@ -61,7 +61,8 @@
   function eyelids(g, eyes, k, o, w, fx0, fy0) {
     var blink = o && o.blink, ey = o && o.eyes, m = (o && o.mood) || 'happy';
     var closed = blink || ey === 'closed' || ey === 'sleepy' || m === 'sleepy', happy = ey === 'happy' || (m === 'excited' && !(o && o.talk)), soft = ey === 'soft' || ey === 'calm' || m === 'calm';
-    var amt = closed ? 1 : soft ? 0.45 : 0; if (!amt && !happy) return;
+    var amt = closed ? 1 : soft ? 0.3 : 0;
+    if (!amt && !happy) { if (m === 'surprised') eyes.forEach(function (e) { var x = fx0 + e[0] * k, y = fy0 + e[1] * k, r = e[2] * k; g.save(); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = Math.max(1, r * 0.22); g.beginPath(); g.arc(x, y, r * 1.08, 0, Math.PI * 2); g.stroke(); g.restore(); }); return; }
     var lid = w === 'tb' ? '#2B2523' : '#C98A50', line = '#1a1412';
     eyes.forEach(function (e) {
       var x = fx0 + e[0] * k, y = fy0 + e[1] * k, r = e[2] * k * 1.15;
@@ -96,6 +97,7 @@
       g.closePath(); g.fill();
       g.clip(); g.fillStyle = PINK; g.beginPath(); g.ellipse(x + (side ? -hw * 0.25 : 0), y + oh * 0.95, ow * 0.5, oh * 0.6, 0, 0, Math.PI * 2); g.fill();
     } else if (m === 'surprised') { g.fillStyle = MC; g.beginPath(); g.ellipse(x, y + hw * 0.1, hw * 0.3, hw * 0.4, 0, 0, Math.PI * 2); g.fill(); }
+    else if (mo.painted && !(m === 'sad' || m === 'worried' || m === 'grumpy')) { /* the painting's own smile */ }
     else {
       g.strokeStyle = MC; g.lineWidth = Math.max(1, hw * 0.1); g.beginPath();
       if (m === 'sad' || m === 'worried') { g.moveTo(x - hw * 0.8, y + hw * 0.25); g.quadraticCurveTo(x, y - hw * 0.25, x + hw * 0.8, y + hw * 0.25); }
@@ -131,7 +133,7 @@
     var tailDeg = spring(st, 'tail', (wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 10, t || 0, 120, 6);
     if (!moving && !(o && o.talk)) { if (!st.flickAt || (t || 0) > st.flickAt + 400) st.flickAt = (t || 0) + 2500 + 4000 * Math.abs(Math.sin((t || 0) * 0.0007 + (w === 'sf' ? 1 : 0))); if ((t || 0) > st.flickAt && (t || 0) < st.flickAt + 60 && st.ears) st.ears.v += 260 * (w === 'sf' ? -1 : 1); }   // an idle ear flick now and then
     var earDeg = spring(st, 'ears', -headDeg * 0.35 + bounce * 12 + (moving ? 4 * Math.sin(2 * ph + 1) : 0) + ((o && o.ear) || 0) * 20, t || 0, 90, 5); earDeg = Math.max(-7, Math.min(7, earDeg));
-    var face = m.face ? faceFor(o) : null, useFace = !!face && view !== 'right';
+    var face = null, useFace = false;   // moods are drawn on the pup's own painted head: brows, eyelids, eye rings, mouth
     if (useFace) { if (st.face !== face) { st.prevFace = st.face; st.face = face; st.faceT = t || 0; } }
     var prevA = (useFace && st.prevFace && (t || 0) - st.faceT < 140) ? 1 - ((t || 0) - st.faceT) / 140 : 0;
     m.order.forEach(function (p) {
@@ -160,7 +162,7 @@
       g.restore();
     } else if (m.mouth && hl) {
       g.save(); g.translate(ox + hpx * k, oy + hpy * k); g.rotate(headDeg * D2R); g.translate(-hpx * k, -hpy * k);
-      if (m.eyes) eyelids(g, m.eyes, k, o, w, 0, 0);
+      if (m.eyes) { brows(g, m.eyes, k, o, w, 0, 0); eyelids(g, m.eyes, k, o, w, 0, 0); }
       drawMouth(g, m.mouth, k, o, t, w); g.restore();
     } else if (m.mouth) { g.save(); g.translate(ox, oy); drawMouth(g, m.mouth, k, o, t, w); g.restore(); }
     g.restore();
