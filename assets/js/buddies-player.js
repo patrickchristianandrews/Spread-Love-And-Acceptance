@@ -676,10 +676,12 @@
     function passing(c) { if (c.guest) return 0; var o = other(c); if (!o || !walking(c) || walking(o) && c.act.toX > c.act.fromX === o.act.toX > o.act.fromX) return 0; var q = clamp(1 - Math.abs(c.x - o.x) / 0.14, 0, 1); return q * q * (3 - 2 * q); }
     function walking(c) { var a = c.act; return !!(a && a.toX != null && a.toX !== a.fromX); }
     function turnTo(c, x) { if (c && !walking(c) && Math.abs(x - c.x) > 0.01) c.fx = sgn(x - c.x); }
-    function faceFor(b) {
-      var c = get(b.say); if (!c) return; var to = addressee(b), o;
-      c.tilt0 = 0;
-      if (to === 'self') { c.tilt0 = 0.14; return; } // head a little down: she's talking to herself
+    // the speaker faces whoever the line is for, and they face her, for as long as the line lasts (owner, Nov 3 2026:
+    // "they should always be facing in the direction of the person they're speaking to"); walking pals turn when they stop
+    function faceLine(who, to, first) {
+      var c = get(who); if (!c) return; var o;
+      if (first) c.tilt0 = 0;
+      if (to === 'self') { if (first) c.tilt0 = 0.14; return; } // head a little down: she's talking to herself
       if (to === 'pal') o = c.guest ? null : other(c); else if (to === 'both' || to === 'all') o = null; else o = get(to);
       if (o && o !== c) { turnTo(c, o.x); turnTo(o, c.x); return; }
       // several listeners: face the middle of the others, and they all look at her
@@ -687,6 +689,7 @@
       if (!xs.length) xs = all().filter(function (x) { return x !== c; });
       if (xs.length) { var mx = 0; xs.forEach(function (x) { mx += x.x; turnTo(x, c.x); }); turnTo(c, mx / xs.length); }
     }
+    function faceFor(b) { faceLine(b.say, addressee(b), true); }
     S.say = function (b, dur, wait) {
       var c = get(b.say);
       all().forEach(function (x) { x.talk = 0; x.talkFrom = 0; });
@@ -836,6 +839,7 @@
         if (c.talk && c.talkUntil && S.t > c.talkUntil) c.talk = 0;
         if (c.act && (c.act.name === '_place' || GESTURE[c.act.name]) && S.t - c.act.t0 >= c.act.dur) commit(c); // little gestures finish on their own
       });
+      if (S.bubble && !S.bubble.wait && S.t < S.bubble.until && S.bubble.to !== 'self') faceLine(S.bubble.who, S.bubble.to, false);
       stepParts(dt);
       if (S.flash > 0) S.flash = Math.max(0, S.flash - dt * 1.6);
       if (S.weather === 'storm' && !R && S.scene !== 'blank') { S.nextFlash -= dt; if (S.nextFlash <= 0) { if (S.bright) S.flash = 0.34; else S.glowT0 = S.t; S.nextFlash = 7 + Math.random() * 6; if (S.onSound) S.onSound('rumble'); } }
