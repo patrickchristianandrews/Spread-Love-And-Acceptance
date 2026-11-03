@@ -12,7 +12,7 @@
   function img(n) { if (!IMG[n]) { var i = new Image(); i.src = BASE + n + '.png'; IMG[n] = i; } return IMG[n]; }
   var readyP = fetch(BASE + 'meta.json').then(function (r) { return r.json(); }).then(function (m) {
     META = m; var names = [];
-    Object.keys(m).forEach(function (k) { if (m[k].layers) Object.keys(m[k].layers).forEach(function (l) { names.push(k + '-' + l); }); else names.push(k); if (m[k].ears) Object.keys(m[k].ears).forEach(function (e) { names.push(k + '-' + e); }); });
+    Object.keys(m).forEach(function (k) { if (m[k].layers) Object.keys(m[k].layers).forEach(function (l) { names.push(k + '-' + l); }); else names.push(k); if (m[k].ears) Object.keys(m[k].ears).forEach(function (e) { names.push(k + '-' + e); }); if (m[k].wag) for (var q = 0; q < m[k].wag.n; q++) { names.push(k + '-wag' + q); names.push(k + '-wagb' + q); } });
     return Promise.all(names.map(function (n) { return new Promise(function (res) { var i = img(n); if (i.complete && i.naturalWidth) return res(); i.onload = i.onerror = res; }); }));
   }).then(function () { ready = true; });
   P.ready = readyP; P.painted = true;
@@ -80,7 +80,7 @@
     var st = STATE[w] || (STATE[w] = { view: view, t0: -9e9 });
     if (st.view !== view) { st.view = view; st.t0 = t; }
     var u = (t - st.t0) / 180; if (u < 0 || u >= 1) return 1;
-    return 1 - 0.3 * Math.sin(Math.PI * u);
+    return 1 - 0.18 * Math.sin(Math.PI * u);
   }
   // the mouth, the way the show draws it: a smile at rest, a dark open mouth with a pink tongue that follows the voice,
   // an o for surprise, a down-turned line for sad or worried, a flat line for grumpy. (mx, my) and hw are in sprite pixels.
@@ -118,6 +118,13 @@
     if (rotDeg) { g.save(); g.translate(ox + px * k, oy + py * k); g.rotate(rotDeg * D2R); g.drawImage(im, (lay.x - px) * k, (lay.y - py) * k, lay.w * k, lay.h * k); g.restore(); }
     else g.drawImage(im, ox + lay.x * k, oy + lay.y * k, lay.w * k, lay.h * k);
   }
+  function drawWag(g, key, m, set, deg, k, ox, oy) {
+    var wg = m.wag, fr = wg[set], n = wg.n, u = (Math.max(-wg.max, Math.min(wg.max, deg)) + wg.max) / (2 * wg.max) * (n - 1), i = Math.floor(u), f = u - i;
+    if (i >= n - 1) { i = n - 1; f = 0; }
+    var pre = set === 'whole' ? '-wag' : '-wagb';
+    drawLayer(g, key + pre + i, fr[i], k, ox, oy, 0, 0, 0);
+    if (f > 0.02) { g.globalAlpha = f; drawLayer(g, key + pre + (i + 1), fr[i + 1], k, ox, oy, 0, 0, 0); g.globalAlpha = 1; }
+  }
   function drawPainted(g, L, pose, ph, wag, blink, t, tilt, o) {
     var w = who(L), view = viewFor(w, pose, o);
     var tr = g.getTransform ? g.getTransform() : null, mirrored = !!(tr && (tr.a * tr.d - tr.b * tr.c) < 0), unflip = false;
@@ -140,7 +147,7 @@
     var st = STATE[w] || (STATE[w] = {});
     var lift = (o && o.lift) || 0, liftV = spring(st, 'lift', lift, t || 0, 260, 14), bounce = (liftV - lift) * 0.08;   // the body lags a hop a touch
     var headDeg = spring(st, 'head', ((tilt || 0) * 57.3 * 0.8 + (moving ? 3 * Math.sin(ph) : 0) - bounce * 6) * dir, t || 0, 180, 9);
-    var tailDeg = spring(st, 'tail', ((wag || 0) * 57.3 * 0.28 + (moving ? 6 * Math.sin(ph * 0.5) : 0) + bounce * 6) * dir, t || 0, 140, 9);
+    var tailDeg = spring(st, 'tail', ((wag || 0) * 57.3 * 0.42 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 6) * dir, t || 0, 110, 8);
     if (!moving && !(o && o.talk)) { if (!st.flickAt || (t || 0) > st.flickAt + 400) st.flickAt = (t || 0) + 2500 + 4000 * Math.abs(Math.sin((t || 0) * 0.0007 + (w === 'sf' ? 1 : 0))); if ((t || 0) > st.flickAt && (t || 0) < st.flickAt + 60 && st.ears) st.ears.v += 260 * (w === 'sf' ? -1 : 1); }   // an idle ear flick now and then
     var earDeg = spring(st, 'ears', -headDeg * 0.35 + bounce * 12 + (moving ? 4 * Math.sin(2 * ph + 1) : 0) + ((o && o.ear) || 0) * 20, t || 0, 90, 5); earDeg = Math.max(-7, Math.min(7, earDeg));
     var face = null, useFace = false;   // moods are drawn on the pup's own painted head: brows, eyelids, eye rings, mouth
@@ -150,11 +157,13 @@
     if (still) {
       // standing still: the whole painting in one piece, leaning a little with the head's intent; only the tail plume moves on top
       var ln = headDeg * 0.3; g.save(); g.rotate(ln * D2R);
-      drawLayer(g, key + '-whole', m.layers.whole, k, ox, oy, 0, 0, 0);
-      if (m.layers.tail) drawLayer(g, key + '-tail', m.layers.tail, k, ox, oy, tailDeg * 0.6, m.layers.tail.px, m.layers.tail.py);
+      if (m.wag) drawWag(g, key, m, 'whole', tailDeg, k, ox, oy);
+      else { drawLayer(g, key + '-whole', m.layers.whole, k, ox, oy, 0, 0, 0); if (m.layers.tail) drawLayer(g, key + '-tail', m.layers.tail, k, ox, oy, tailDeg * 0.6, m.layers.tail.px, m.layers.tail.py); }
       headDeg = 0;
     } else m.order.forEach(function (p) {
       var lay = m.layers[p]; if (!lay) return;
+      if (m.wag && p === 'tail') return;
+      if (m.wag && p === 'body') { drawWag(g, key, m, 'body', tailDeg, k, ox, oy); return; }
       var rot = 0, px = 0, py = 0;
       if (p in legs) { rot = legs[p]; px = lay.px; py = lay.py; }
       else if (p === 'head') { rot = headDeg; px = lay.px; py = lay.py; }
