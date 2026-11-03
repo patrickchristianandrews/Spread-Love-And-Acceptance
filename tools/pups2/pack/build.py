@@ -41,26 +41,79 @@ def mirror_rig(src, dst):
 # took a slab of back with them). BACK = (x0, x1, y_back): the tail's columns and the height of the back there.
 BACK = {'tb-right': (0, 126, 100), 'sf-right': (0, 134, 118), 'tb-left': None, 'sf-left': None, 'tb-34front': (150, 240, 122), 'sf-34front': (170, 262, 136)}
 def tail_mask(a, spec):
-    x0, x1, yb = spec; m = np.zeros(a.shape, np.float32)
-    # the back line, measured: the top of the drawing in the columns just past the tail (the plain back)
-    side = x0 + 40 if x1 < a.shape[1] // 2 else x0 - 60; cols = range(x1, x1 + 40) if x1 < a.shape[1] // 2 else range(x0 - 40, x0)
-    tops = [np.where(a[:, x] > 40)[0][0] for x in cols if (a[:, x] > 40).any()]; yb = int(np.median(tops)) + 4
+    """the tail: the columns where a run sits clear above the body (the plume), plus the root, the next few columns
+    toward the body where something still rises above the back line, which is measured just past the root"""
+    x0, x1, yb = spec; x0 = max(0, x0); x1 = min(a.shape[1], x1); m = np.zeros(a.shape, np.float32); sep = []
     for x in range(x0, x1):
-        col = a[:, x] > 40; ys = np.where(col)[0]
-        if not len(ys): continue
+        ys = np.where(a[:, x] > 40)[0]
+        if len(ys) < 2: continue
         runs = np.split(ys, np.where(np.diff(ys) > 1)[0] + 1); top = runs[0]
-        if top[-1] < yb - 2: m[top, x] = 1                      # a clear gap under the tail: the top run is the tail
-        else: m[:yb - 2, x] = col[:yb - 2]                      # merged at the root: the tail is what sits above the back
-    for r in range(max(0, yb - 10), yb - 2): m[r] *= (yb - 2 - r) / 8.0     # the root fades into the back, no hard line
+        if len(runs) > 1 and top[-1] < yb + 25 and runs[1][0] - top[-1] > 3: m[top, x] = 1; sep.append(x)
+    if not sep: return m, (float(x0 + x1) / 2, float(yb))
+    cx = a.shape[1] / 2; toward = 1 if cx > max(sep) else -1; edge = max(sep) if toward > 0 else min(sep)
+    tops = [np.where(a[:, x] > 40)[0][0] for x in range(edge + toward * 26, edge + toward * 44, toward) if 0 <= x < a.shape[1] and (a[:, x] > 40).any()]
+    yb2 = int(np.median(tops)) if tops else yb
+    for k in range(1, 60):
+        x = edge + toward * k
+        if x < 0 or x >= a.shape[1]: break
+        ys = np.where(a[:, x] > 40)[0]
+        if not len(ys) or ys[0] >= yb2 - 5: break
+        m[:yb2 - 2, x] = (a[:yb2 - 2, x] > 40)
+    # the plume's own columns, tip to root: anything above the back line there is tail (a curled plume has two lobes)
+    for x in (range(x0, edge + 1) if toward > 0 else range(edge, x1)):
+        m[:yb2 - 2, x] = np.maximum(m[:yb2 - 2, x], (a[:yb2 - 2, x] > 40).astype(np.float32))
+    for r in range(max(0, yb2 - 10), yb2 - 2): m[r] *= (yb2 - 2 - r) / 8.0
     m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)); m = cv2.GaussianBlur(m, (0, 0), 1.6)
-    ys, xs = np.where(m > .5); near = np.abs(ys - (yb - 6)) < 8
-    pv = (float(xs[near].mean()), float(yb - 4)) if near.any() else (float(xs.mean()), float(ys.max()))
+    ys, xs = np.where(m > .5)
+    if not len(ys): return m, (float(x0 + x1) / 2, float(yb2))
+    near = np.abs(ys - (yb2 - 6)) < 8
+    pv = (float(xs[near].mean()), float(yb2 - 4)) if near.any() else (float(xs.mean()), float(ys.max()))
     return m, pv
+
+# younger (owner, Nov 3 2026: "same look, just younger"): a bigger head on the same neck and a slightly squatter body,
+# baked into the drawing before it is cut into layers, so every view and every layer agrees. Everything that is
+# measured in sheet pixels (the rig, the tail columns, the mouth, the eyes) is moved by the same transform.
+HEAD_UP, SQUAT, PADX, PADY = 1.18, 0.94, 30, 44
+def poly_feather(shape, pts, feather):
+    m = np.zeros(shape[:2], np.uint8); cv2.fillPoly(m, [np.array(pts, np.int32)], 255); return cv2.GaussianBlur(m.astype(np.float32) / 255, (0, 0), feather)
 SC = {'tb-left': mirror_rig('tb-right', 'tb-left'), 'sf-left': mirror_rig('sf-right', 'sf-left')}
 for L, Rr in (('tb-left', 'tb-right'), ('sf-left', 'sf-right')):
     x0, x1, yb = BACK[Rr]; ws = cv2.imread(SHEET + Rr + '.png').shape[1]; wd = cv2.imread(SHEET + L + '.png').shape; sx, sy = wd[1] / ws, wd[0] / cv2.imread(SHEET + Rr + '.png').shape[0]
     BACK[L] = (int((ws - x1) * sx), int((ws - x0) * sx), int(yb * sy))
-
+# mouth anchors and eyes, in sheet pixels: (x, y, half width, side, painted smile kept)
+# mouth anchors and eyes, in sheet pixels: (x, y, half width, side, painted smile kept)
+MOUTH = {'tb-right': (288, 76, 15, 1, True), 'sf-right': (276, 85, 20, 1, False), 'tb-34front': (88, 99, 20, .3, False), 'sf-34front': (96, 93, 26, .2, False), 'tb-front': (75, 87, 14, 0, False), 'sf-front': (86, 84, 26, 0, False)}
+EYES = {'tb-right': [(277, 43, 8)], 'sf-right': [(268, 41, 9)], 'tb-34front': [(62, 62, 9), (104, 58, 9)], 'sf-34front': [(62, 66, 11), (104, 56, 11)], 'tb-front': [(55, 48, 9), (95, 48, 9)], 'sf-front': [(62, 52, 11), (110, 52, 11)]}
+for L, Rr in (('tb-left', 'tb-right'), ('sf-left', 'sf-right')):
+    sx, sy = SC[L]; ws = cv2.imread(SHEET + Rr + '.png').shape[1]; mx, my, hw, side, painted = MOUTH[Rr]
+    MOUTH[L] = ((ws - mx) * sx, my * sy, hw * sx, -1, True); EYES[L] = [((ws - x) * sx, y * sy, r * sx) for x, y, r in EYES[Rr]]
+def youngify(name):
+    im = cv2.imread(WORK + name + '.png', cv2.IMREAD_UNCHANGED).astype(np.float32); H, W = im.shape[:2]
+    tm = tail_mask(im[..., 3], BACK[name])[0] if BACK.get(name) else None
+    rig = srig.RIGS[name]; pts, (px, py), fe = rig['parts']['head']
+    w = poly_feather(im.shape, pts, fe); head = im.copy(); head[..., 3] *= w
+    big = cv2.warpAffine(head, cv2.getRotationMatrix2D((px, py), 0, HEAD_UP), (W + 2 * PADX, H + PADY), flags=cv2.INTER_LINEAR, borderValue=(0, 0, 0, 0))
+    base = cv2.copyMakeBorder(im, PADY, 0, PADX, PADX, cv2.BORDER_CONSTANT, value=(0, 0, 0, 0))
+    big = cv2.warpAffine(head, np.float32([[HEAD_UP, 0, px - HEAD_UP * px + PADX], [0, HEAD_UP, py - HEAD_UP * py + PADY]]), (W + 2 * PADX, H + PADY), flags=cv2.INTER_LINEAR, borderValue=(0, 0, 0, 0))
+    a = big[..., 3:4] / 255; base[..., :3] = big[..., :3] * a + base[..., :3] * (1 - a); base[..., 3:4] = big[..., 3:4] + base[..., 3:4] * (1 - a)
+    H2, W2 = base.shape[:2]; base = cv2.resize(base, (W2, int(round(H2 * SQUAT))), interpolation=cv2.INTER_AREA)
+    cv2.imwrite(WORK + name + '.png', np.clip(base, 0, 255).astype(np.uint8))
+    if tm is not None:
+        tm = cv2.copyMakeBorder(tm, PADY, 0, PADX, PADX, cv2.BORDER_CONSTANT, value=0); tm = cv2.resize(tm, (W2, int(round(H2 * SQUAT))), interpolation=cv2.INTER_AREA)
+        cv2.imwrite(WORK + name + '-tm.png', (np.clip(tm, 0, 1) * 255).astype(np.uint8))
+    # the same move for everything measured on the drawing; head points also follow the head's enlargement
+    X = lambda x: x + PADX; Y = lambda y: (y + PADY) * SQUAT
+    HX = lambda x: px + (x - px) * HEAD_UP + PADX; HY = lambda y: (py + (y - py) * HEAD_UP + PADY) * SQUAT
+    parts = {}
+    for pn, (pp, pv, f) in rig['parts'].items():
+        if pn == 'head': parts[pn] = ([(HX(x), HY(y)) for x, y in pp], (X(pv[0]), Y(pv[1])), f)
+        else: parts[pn] = ([(X(x), Y(y)) for x, y in pp], (X(pv[0]), Y(pv[1])), f)
+    cl = rig.get('cutlegs'); rig2 = dict(parts=parts)
+    if cl: rig2['cutlegs'] = (Y(cl[0]), {pn: ([(X(x), Y(y)) for x, y in pp], (X(pv[0]), Y(pv[1]))) for pn, (pp, pv) in cl[1].items()})
+    srig.RIGS[name] = rig2
+    mx, my, hw, side, painted = MOUTH[name]; MOUTH[name] = (HX(mx), HY(my), hw * HEAD_UP, side, painted)
+    EYES[name] = [(HX(x), HY(y), r * HEAD_UP) for x, y, r in EYES[name]]
+for n in list(MOUTH): youngify(n)
 srig.S = WORK; srig.SP.clear()
 def up2(im):
     im = im.astype(np.float32); a = im[..., 3:4] / 255.0; solid = (a[..., 0] > 0.6).astype(np.uint8); col = im[..., :3].copy()
@@ -74,9 +127,7 @@ meta = {}
 def save(name, im):
     a = im[..., 3]; ys, xs = np.where(a > 1); y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
     cv2.imwrite(OUT + name + '.png', up2(np.clip(im[y0:y1, x0:x1], 0, 255))); return dict(x=int(x0 - PAD), y=int(y0 - PAD), w=int(x1 - x0), h=int(y1 - y0))
-MOUTH = {'tb-right': (288, 76, 15, 1, True), 'sf-right': (276, 85, 20, 1, False), 'tb-34front': (88, 99, 20, .3, False), 'sf-34front': (96, 93, 26, .2, False), 'tb-front': (75, 87, 14, 0, False), 'sf-front': (86, 84, 26, 0, False)}
-EYES = {'tb-right': [(277, 43, 8)], 'sf-right': [(268, 41, 9)], 'tb-34front': [(62, 62, 9), (104, 58, 9)], 'sf-34front': [(62, 66, 11), (104, 56, 11)], 'tb-front': [(55, 48, 9), (95, 48, 9)], 'sf-front': [(62, 52, 11), (110, 52, 11)]}
-for name in list(MOUTH) + ['tb-left', 'sf-left']:
+for name in list(MOUTH):
     sp = srig.sprite(name); im = sp.img; yy, xx = sp.yy, sp.xx; rest = im.copy(); W = sp.W
     m = dict(w=int(W - 2 * PAD), h=int(sp.base_h), scale=2, layers={}, order=[])
     if sp.cutlegs:
@@ -86,8 +137,10 @@ for name in list(MOUTH) + ['tb-left', 'sf-left']:
             L = im.copy(); L[..., 3] *= mk; r = save(name + '-' + p, L); r.update(px=int(px), py=int(py)); m['layers'][p] = r
         rest[..., 3] *= np.where(span, np.clip((belly + 6 - yy) / 6, 0, 1), 1)
     tw = None
-    if BACK.get(name):
-        bx0, bx1, byb = BACK[name]; tw, tpv = tail_mask(im[..., 3], (bx0 + PAD, bx1 + PAD, byb + PAD))
+    if os.path.exists(WORK + name + '-tm.png'):
+        tw = cv2.copyMakeBorder(cv2.imread(WORK + name + '-tm.png', 0), PAD, PAD, PAD, PAD, cv2.BORDER_CONSTANT, value=0).astype(np.float32) / 255
+        ys, xs = np.where(tw > .5); yb = int(np.percentile(ys, 92)) if len(ys) else PAD; near = np.abs(ys - (yb - 6)) < 8
+        tpv = (float(xs[near].mean()) if near.any() else float(xs.mean()), float(yb - 4))
         L = im.copy(); L[..., 3] *= tw; r = save(name + '-tail', L); r.update(px=int(tpv[0] - PAD), py=int(tpv[1] - PAD)); m['layers']['tail'] = r
         rest[..., 3] *= (1 - np.clip((tw - .4) / .3, 0, 1))
     for p in ('head',):
@@ -99,11 +152,8 @@ for name in list(MOUTH) + ['tb-left', 'sf-left']:
     whole = im.copy()   # the painting in one piece for standing still, minus the tail, which moves on top from its root
     if tw is not None: whole[..., 3] *= (1 - np.clip((tw - .4) / .3, 0, 1))
     m['layers']['whole'] = save(name + '-whole', whole)
-    if name in MOUTH:
-        mx, my, hw, side, painted = MOUTH[name]; m['mouth'] = dict(x=mx, y=my, hw=hw, side=side, painted=painted); m['eyes'] = [list(e) for e in EYES[name]]
-    else:
-        src = name.replace('left', 'right'); sx, sy = SC[name]; wsrc = meta[src]['w']; mo = meta[src]['mouth']
-        m['mouth'] = dict(x=int((wsrc - mo['x']) * sx), y=int(mo['y'] * sy), hw=int(mo['hw'] * sx), side=-1, painted=True); m['eyes'] = [[int((wsrc - x) * sx), int(y * sy), int(r * sx)] for x, y, r in meta[src]['eyes']]; m['faces'] = 'left'
+    mx, my, hw, side, painted = MOUTH[name]; m['mouth'] = dict(x=int(mx), y=int(my), hw=int(hw), side=side, painted=painted); m['eyes'] = [[int(x), int(y), int(r)] for x, y, r in EYES[name]]
+    if 'left' in name: m['faces'] = 'left'
     meta[name] = m
 for name in ('tb-back', 'sf-back', 'tb-34back', 'sf-34back'):
     im = cv2.imread(WORK + name + '.png', cv2.IMREAD_UNCHANGED); cv2.imwrite(OUT + name + '-body.png', up2(im))
