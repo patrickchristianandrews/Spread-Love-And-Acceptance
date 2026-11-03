@@ -7,7 +7,7 @@
 (function () {
   'use strict';
   var P = window.TOLPups; if (!P) return;
-  var BASE = '/assets/img/pups/', UNITS = 56, IMG = {}, META = null, ready = false, vector = P.draw;
+  var BASE = '/assets/img/pups/', UNITS = 60, IMG = {}, META = null, ready = false, vector = P.draw;
   var A_LEG = 24, D2R = Math.PI / 180;
   function img(n) { if (!IMG[n]) { var i = new Image(); i.src = BASE + n + '.png'; IMG[n] = i; } return IMG[n]; }
   var readyP = fetch(BASE + 'meta.json').then(function (r) { return r.json(); }).then(function (m) {
@@ -30,13 +30,21 @@
     if (pose === 'wiggle') return 'front';
     return 'right';
   }
+  // the face: a closed-mouth base, and how much of the open-mouth face shows over it (0..1), so the mouth moves smoothly
   function faceFor(w, o, t) {
-    if (!o) return 'happy';
+    if (!o) return { base: 'curious', open: 1 };
     var m = o.mood || 'happy', mouth = o.mouth != null ? o.mouth : (o.talk || 0);
-    if (mouth > 0.02) return mouth > 0.55 ? 'happy' : 'curious';          // the mouth flaps with the voice
-    if (m === 'surprised') return 'surprised';
-    if (m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud') return 'happy';
-    return 'curious';
+    if (mouth > 0.02) return { base: m === 'surprised' ? 'surprised' : 'curious', open: Math.min(1, Math.max(0, (mouth - 0.25) / 0.6)) };
+    if (m === 'surprised') return { base: 'surprised', open: 0 };
+    if (m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud') return { base: 'curious', open: 1 };
+    return { base: 'curious', open: 0 };
+  }
+  var STATE = {};
+  function squashFor(w, view, t) {
+    var st = STATE[w] || (STATE[w] = { view: view, t0: -9e9 });
+    if (st.view !== view) { st.view = view; st.t0 = t; }
+    var u = (t - st.t0) / 180; if (u < 0 || u >= 1) return 1;
+    return 1 - 0.3 * Math.sin(Math.PI * u);
   }
   function drawLayer(g, name, lay, k, ox, oy, rotDeg, px, py) {
     var im = IMG[name]; if (!im || !im.naturalWidth) return;
@@ -52,6 +60,7 @@
     if (pose === 'sit') { sy = 0.96; }
     g.save();
     if (lean) { g.translate(-10, 0); g.rotate(lean); g.translate(10, 0); }
+    var sq = squashFor(w, view, t || 0); if (sq !== 1) { g.scale(sq, 1 + (1 - sq) * 0.35); }
     if (sy !== 1) g.scale(1, sy);
     var s1 = Math.sin(ph), s2 = Math.sin(ph + 0.35), moving = pose === 'run' && o && o.moving;
     var legs = moving || (pose === 'run' && Math.abs(s1) > 0.02) ? { fl1: A_LEG * s1, fl2: -A_LEG * s1, bl1: -A_LEG * s2, bl2: A_LEG * s2 } : {};
@@ -68,10 +77,13 @@
       drawLayer(g, key + '-' + p, lay, k, ox, oy, rot, px, py);
     });
     if (useFace) {
-      var f = META[w + '-face-' + face], fi = IMG[w + '-face-' + face], fw = m.face.w * k, fh = f.h / f.w * fw;
-      var hl = m.layers.head, hpx = hl ? hl.px : m.face.cx, hpy = hl ? hl.py : m.face.cy;
+      var hl = m.layers.head, hpx = hl ? hl.px : m.face.cx, hpy = hl ? hl.py : m.face.cy, fw = m.face.w * k;
       g.save(); g.translate(ox + hpx * k, oy + hpy * k); g.rotate(headDeg * D2R);
-      if (fi && fi.naturalWidth) g.drawImage(fi, (m.face.cx - hpx) * k - fw / 2, (m.face.cy - hpy) * k - fh / 2, fw, fh);
+      function putFace(n, alpha) {
+        var f = META[w + '-face-' + n], fi = IMG[w + '-face-' + n]; if (!f || !fi || !fi.naturalWidth || alpha <= 0.01) return;
+        var fh = f.h / f.w * fw; g.globalAlpha = alpha; g.drawImage(fi, (m.face.cx - hpx) * k - fw / 2, (m.face.cy - hpy) * k - fh / 2, fw, fh); g.globalAlpha = 1;
+      }
+      putFace(face.base, 1); if (face.open > 0) putFace('happy', face.open);
       g.restore();
     }
     g.restore();
