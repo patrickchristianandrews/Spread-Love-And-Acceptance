@@ -37,7 +37,30 @@ def mirror_rig(src, dst):
     sx, sy = wd[1] / ws[1], wd[0] / ws[0]; X = lambda x: (ws[1] - x) * sx; Y = lambda y: y * sy; r = srig.RIGS[src]
     parts = {p: ([(X(x), Y(y)) for x, y in pts], (X(pv[0]), Y(pv[1])), fe) for p, (pts, pv, fe) in r['parts'].items()}
     belly, legs = r['cutlegs']; srig.RIGS[dst] = dict(parts=parts, cutlegs=(Y(belly), {p: ([(X(x), Y(y)) for x, y in pts], (X(pv[0]), Y(pv[1]))) for p, (pts, pv) in legs.items()})); return sx, sy
+# the tail, found from the drawing itself: everything above the back line in the tail's columns (the hand polygons
+# took a slab of back with them). BACK = (x0, x1, y_back): the tail's columns and the height of the back there.
+BACK = {'tb-right': (0, 126, 100), 'sf-right': (0, 134, 118), 'tb-left': None, 'sf-left': None, 'tb-34front': (150, 240, 122), 'sf-34front': (170, 262, 136)}
+def tail_mask(a, spec):
+    x0, x1, yb = spec; m = np.zeros(a.shape, np.float32)
+    # the back line, measured: the top of the drawing in the columns just past the tail (the plain back)
+    side = x0 + 40 if x1 < a.shape[1] // 2 else x0 - 60; cols = range(x1, x1 + 40) if x1 < a.shape[1] // 2 else range(x0 - 40, x0)
+    tops = [np.where(a[:, x] > 40)[0][0] for x in cols if (a[:, x] > 40).any()]; yb = int(np.median(tops)) + 4
+    for x in range(x0, x1):
+        col = a[:, x] > 40; ys = np.where(col)[0]
+        if not len(ys): continue
+        runs = np.split(ys, np.where(np.diff(ys) > 1)[0] + 1); top = runs[0]
+        if top[-1] < yb - 2: m[top, x] = 1                      # a clear gap under the tail: the top run is the tail
+        else: m[:yb - 2, x] = col[:yb - 2]                      # merged at the root: the tail is what sits above the back
+    for r in range(max(0, yb - 10), yb - 2): m[r] *= (yb - 2 - r) / 8.0     # the root fades into the back, no hard line
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)); m = cv2.GaussianBlur(m, (0, 0), 1.6)
+    ys, xs = np.where(m > .5); near = np.abs(ys - (yb - 6)) < 8
+    pv = (float(xs[near].mean()), float(yb - 4)) if near.any() else (float(xs.mean()), float(ys.max()))
+    return m, pv
 SC = {'tb-left': mirror_rig('tb-right', 'tb-left'), 'sf-left': mirror_rig('sf-right', 'sf-left')}
+for L, Rr in (('tb-left', 'tb-right'), ('sf-left', 'sf-right')):
+    x0, x1, yb = BACK[Rr]; ws = cv2.imread(SHEET + Rr + '.png').shape[1]; wd = cv2.imread(SHEET + L + '.png').shape; sx, sy = wd[1] / ws, wd[0] / cv2.imread(SHEET + Rr + '.png').shape[0]
+    BACK[L] = (int((ws - x1) * sx), int((ws - x0) * sx), int(yb * sy))
+
 srig.S = WORK; srig.SP.clear()
 def up2(im):
     im = im.astype(np.float32); a = im[..., 3:4] / 255.0; solid = (a[..., 0] > 0.6).astype(np.uint8); col = im[..., :3].copy()
@@ -62,17 +85,19 @@ for name in list(MOUTH) + ['tb-left', 'sf-left']:
             pts, (px, py) = legs[p]; mk = srig.poly_w(im.shape, [(x + PAD, y + PAD) for x, y in pts], 1.2) * np.clip((yy - (belly - 22)) / 16, 0, 1)
             L = im.copy(); L[..., 3] *= mk; r = save(name + '-' + p, L); r.update(px=int(px), py=int(py)); m['layers'][p] = r
         rest[..., 3] *= np.where(span, np.clip((belly + 6 - yy) / 6, 0, 1), 1)
-    for p in ('tail', 'head'):
+    tw = None
+    if BACK.get(name):
+        bx0, bx1, byb = BACK[name]; tw, tpv = tail_mask(im[..., 3], (bx0 + PAD, bx1 + PAD, byb + PAD))
+        L = im.copy(); L[..., 3] *= tw; r = save(name + '-tail', L); r.update(px=int(tpv[0] - PAD), py=int(tpv[1] - PAD)); m['layers']['tail'] = r
+        rest[..., 3] *= (1 - np.clip((tw - .4) / .3, 0, 1))
+    for p in ('head',):
         if p not in sp.w: continue
         w = np.clip((sp.w[p] - .35) / .3, 0, 1); L = im.copy(); L[..., 3] *= w; r = save(name + '-' + p, L); r.update(px=int(sp.pv[p][0] - PAD), py=int(sp.pv[p][1] - PAD)); m['layers'][p] = r
-        # the body loses what the moving layer covers, but keeps the root (near the pivot), so a swing never opens a gap
-        pvx, pvy = sp.pv[p]; dist = np.hypot(xx - pvx, yy - pvy); R = 34 if p == 'tail' else 40
-        rest[..., 3] *= (1 - np.clip((sp.w[p] - .55) / .12, 0, 1) * np.clip((dist - R) / 14, 0, 1))
+        pvx, pvy = sp.pv[p]; dist = np.hypot(xx - pvx, yy - pvy)
+        rest[..., 3] *= (1 - np.clip((sp.w[p] - .55) / .12, 0, 1) * np.clip((dist - 40) / 14, 0, 1))
     m['layers']['body'] = save(name + '-body', rest); m['order'] = [p for p in ('bl2', 'fl2', 'tail', 'body', 'bl1', 'fl1', 'head') if p in m['layers']]
-    whole = im.copy()   # the painting in one piece for standing still, minus the tail plume (its root stays), which moves on top
-    if 'tail' in sp.w:
-        pvx, pvy = sp.pv['tail']; dist = np.hypot(xx - pvx, yy - pvy)
-        whole[..., 3] *= (1 - np.clip((sp.w['tail'] - .55) / .12, 0, 1) * np.clip((dist - 34) / 14, 0, 1))
+    whole = im.copy()   # the painting in one piece for standing still, minus the tail, which moves on top from its root
+    if tw is not None: whole[..., 3] *= (1 - np.clip((tw - .4) / .3, 0, 1))
     m['layers']['whole'] = save(name + '-whole', whole)
     if name in MOUTH:
         mx, my, hw, side, painted = MOUTH[name]; m['mouth'] = dict(x=mx, y=my, hw=hw, side=side, painted=painted); m['eyes'] = [list(e) for e in EYES[name]]
