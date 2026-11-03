@@ -19,17 +19,18 @@
 
   function who(L) { return L && L.collar ? 'tb' : 'sf'; }
   function viewFor(w, pose, o) {
-    var moving = o && o.moving, act = o && o.act;
+    var moving = o && o.moving, act = o && o.act, to = o && o.to;
     if (act === 'turnaway' || act === 'tailtuck') return '34back';      // sulking, hiding: turned away from us
-    if (act === 'lookat' && o && o.lookUp) return 'back';
     if (pose === 'run' && moving) return 'right';
-    if (pose === 'run') { // standing: talking or feeling something turns a little toward us
+    // a conversation is nose to nose: the side view, turned toward the pal they're speaking to or listening to
+    var toPal = to && to !== 'self' && to !== 'both' && to !== 'all', inConv = toPal || (o && o.listening);
+    if (inConv && (pose === 'run' || pose === 'sit' || pose === 'bow')) return 'right';
+    if (pose === 'run') { // standing: talking to the room or to herself, or feeling something, turns toward us
       var talk = o && o.talk > 0, feel = o && o.mood && o.mood !== 'happy' && o.mood !== 'calm';
-      return (talk || feel || (o && o.mouth != null) || (o && o.listening)) ? '34front' : 'right';
+      return (talk || feel || (o && o.mouth != null)) ? '34front' : 'right';
     }
     if (pose === 'sit' || pose === 'bow') return '34front';
-    if (pose === 'lie') return 'front';
-    if (pose === 'wiggle') return 'front';
+    if (pose === 'lie' || pose === 'wiggle') return 'front';
     return 'right';
   }
   // the face picture (eyes, brows, cheeks; the painted mouths are cleaned off) and the mouth, which is drawn
