@@ -139,7 +139,7 @@
     var st = STATE[w] || (STATE[w] = {});
     var lift = (o && o.lift) || 0, liftV = spring(st, 'lift', lift, t || 0, 260, 14), bounce = (liftV - lift) * 0.08;   // the body lags a hop a touch
     var headDeg = spring(st, 'head', ((tilt || 0) * 57.3 * 0.8 + (moving ? -3 * Math.sin(2 * ph) : 0) - bounce * 6) * dir, t || 0, 180, 9);
-    var tailDeg = spring(st, 'tail', ((wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 10) * dir, t || 0, 120, 6);
+    var tailDeg = spring(st, 'tail', ((wag || 0) * 57.3 * 0.28 + (moving ? 6 * Math.sin(ph * 0.5) : 0) + bounce * 6) * dir, t || 0, 140, 9);
     if (!moving && !(o && o.talk)) { if (!st.flickAt || (t || 0) > st.flickAt + 400) st.flickAt = (t || 0) + 2500 + 4000 * Math.abs(Math.sin((t || 0) * 0.0007 + (w === 'sf' ? 1 : 0))); if ((t || 0) > st.flickAt && (t || 0) < st.flickAt + 60 && st.ears) st.ears.v += 260 * (w === 'sf' ? -1 : 1); }   // an idle ear flick now and then
     var earDeg = spring(st, 'ears', -headDeg * 0.35 + bounce * 12 + (moving ? 4 * Math.sin(2 * ph + 1) : 0) + ((o && o.ear) || 0) * 20, t || 0, 90, 5); earDeg = Math.max(-7, Math.min(7, earDeg));
     var face = null, useFace = false;   // moods are drawn on the pup's own painted head: brows, eyelids, eye rings, mouth
@@ -183,10 +183,15 @@
   };
   // where the head is, in pup space (for items carried at the mouth, speech bubbles and the like)
   P.head = function (id, pose, o) {
+    // where the engine's head space goes: things carried at the mouth sit at about (16, 6) in it, so put it just behind the mouth
     var w = id === 'tidbit' ? 'tb' : 'sf', view = viewFor(w, pose, o), m = META && META[w + '-' + view]; if (!m) return { x: 21, y: -33 };
-    if (view === 'right' && o && o.mirrored && META[w + '-left']) { var ml = META[w + '-left'], kl = UNITS / ml.h, hl2 = ml.layers.head; return { x: 4 + ml.w * kl / 2 - (hl2.x + hl2.w * 0.45) * kl, y: -ml.h * kl + (hl2.y + hl2.h * 0.45) * kl, r: hl2.w * kl / 2 }; }
-    var k = UNITS / m.h, ox = 4 - m.w * k / 2, oy = -m.h * k, sy = pose === 'lie' ? 0.72 : 1;
-    if (m.face) return { x: ox + m.face.cx * k, y: (oy + m.face.cy * k) * sy, r: m.face.w * k / 2 };
+    var sy = pose === 'lie' ? 0.72 : 1;
+    if (view === 'right' && o && o.mirrored && META[w + '-left']) {
+      var ml = META[w + '-left'], kl = UNITS / ml.h, oxl = -4 - ml.w * kl / 2, oyl = -ml.h * kl, mo2 = ml.mouth;
+      return { x: -(oxl + mo2.x * kl) - 15, y: (oyl + mo2.y * kl) * sy - 5, r: 14 };
+    }
+    var k = UNITS / m.h, ox = 4 - m.w * k / 2, oy = -m.h * k, mo = m.mouth;
+    if (mo) return { x: ox + mo.x * k - 15, y: (oy + mo.y * k) * sy - 5, r: 14 };
     var hl = m.layers.head; if (hl) return { x: ox + (hl.x + hl.w * 0.55) * k, y: (oy + (hl.y + hl.h * 0.45) * k) * sy, r: hl.w * k / 2 };
     return { x: ox + m.w * 0.7 * k, y: oy + m.h * 0.3 * k, r: 14 };
   };
