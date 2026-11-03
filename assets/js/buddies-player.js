@@ -1925,8 +1925,8 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '1 Nov · 1'; // shown under the player, so we can tell which version a browser has
-  var REC = '0111e'; // bump whenever the recordings are redone, so no browser plays an old copy
+  var PLAYER_VER = '3 Nov · 1'; // shown under the player, so we can tell which version a browser has
+  var REC = '0311f'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function clipMap(ep) {

@@ -145,12 +145,18 @@
     var face = null, useFace = false;   // moods are drawn on the pup's own painted head: brows, eyelids, eye rings, mouth
     if (useFace) { if (st.face !== face) { st.prevFace = st.face; st.face = face; st.faceT = t || 0; } }
     var prevA = (useFace && st.prevFace && (t || 0) - st.faceT < 140) ? 1 - ((t || 0) - st.faceT) / 140 : 0;
-    m.order.forEach(function (p) {
+    var still = !moving && m.layers.whole && !(pose === 'run' && Math.abs(s1) > 0.02);
+    if (still) {
+      // standing still: the whole painting in one piece, leaning a little with the head's intent; only the tail plume moves on top
+      var ln = headDeg * 0.3; g.save(); g.rotate(ln * D2R);
+      drawLayer(g, key + '-whole', m.layers.whole, k, ox, oy, 0, 0, 0);
+      if (m.layers.tail) drawLayer(g, key + '-tail', m.layers.tail, k, ox, oy, tailDeg * 0.6, m.layers.tail.px, m.layers.tail.py);
+      headDeg = 0;
+    } else m.order.forEach(function (p) {
       var lay = m.layers[p]; if (!lay) return;
-      if (p === 'body' && useFace && m.layers['body-nohead']) lay = m.layers['body-nohead'], p = 'body-nohead';
       var rot = 0, px = 0, py = 0;
       if (p in legs) { rot = legs[p]; px = lay.px; py = lay.py; }
-      else if (p === 'head') { rot = headDeg; px = lay.px; py = lay.py; if (useFace) return; }
+      else if (p === 'head') { rot = headDeg; px = lay.px; py = lay.py; }
       else if (p === 'tail') { rot = tailDeg; px = lay.px; py = lay.py; }
       drawLayer(g, key + '-' + p, lay, k, ox, oy, rot, px, py);
     });
@@ -174,6 +180,7 @@
       if (m.eyes) { brows(g, m.eyes, k, o, w, 0, 0); eyelids(g, m.eyes, k, o, w, 0, 0); }
       drawMouth(g, m.mouth, k, o, t, w); g.restore();
     } else if (m.mouth) { g.save(); g.translate(ox, oy); drawMouth(g, m.mouth, k, o, t, w); g.restore(); }
+    if (still) g.restore();
     g.restore();
     if (unflip) g.restore();
   }

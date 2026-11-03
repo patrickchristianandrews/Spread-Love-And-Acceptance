@@ -76,8 +76,8 @@ NEG = re.compile(r"^(not|no|never|can't|cannot|don't|won't|didn't|isn't|wasn't|a
 WH = set('what why where when who how which'.split())
 INTERJ = set("""whoa wow yay yes no oh uh-oh oops hooray wheee whee woo woohoo ta-da tada yikes eek hey hi aha ooh ow ouch
 phew boo yum yummy bingo gotcha""".split())
-MOODX = {'excited': 1.3, 'surprised': 1.3, 'silly': 1.2, 'happy': 1.1, 'proud': 1.15, 'worried': 1.0, 'grumpy': 1.05,
-         'calm': 0.8, 'sad': 0.75, 'sleepy': 0.6, '': 1.0}
+MOODX = {'excited': 1.45, 'surprised': 1.45, 'silly': 1.3, 'happy': 1.15, 'proud': 1.2, 'worried': 1.05, 'grumpy': 1.15,
+         'calm': 0.75, 'sad': 0.7, 'sleepy': 0.55, '': 1.0}
 
 
 def tokens(text):
@@ -156,10 +156,10 @@ def pick(text, mood, energy=1.0):
 STYLE = {'tidbit': {'accent': 5.6, 'stretch': 0.2, 'widen': 1.35},
          'sugarfoot': {'accent': 4.8, 'stretch': 0.18, 'widen': 1.28}}
 # per mood: pitch offset (semitones), melody widening, overall pace (>1 slower), tremble (semitones), drift over the line
-FEEL = {'excited': (1.0, 1.25, 0.97, 0.0, 0.0), 'surprised': (1.3, 1.3, 1.0, 0.0, 0.0), 'silly': (0.6, 1.3, 1.0, 0.0, 0.0),
-        'happy': (0.4, 1.15, 1.0, 0.0, 0.0), 'proud': (0.2, 1.1, 1.02, 0.0, -0.6), 'calm': (0.0, 1.0, 1.02, 0.0, -0.4),
-        'worried': (0.3, 1.05, 1.02, 0.45, 0.0), 'grumpy': (-0.7, 0.95, 1.0, 0.0, -0.8), 'sad': (-0.9, 0.85, 1.06, 0.15, -1.2),
-        'sleepy': (-1.0, 0.75, 1.08, 0.0, -1.0), '': (0.0, 1.0, 1.0, 0.0, 0.0)}
+FEEL = {'excited': (1.6, 1.45, 0.93, 0.0, 0.3), 'surprised': (2.0, 1.5, 0.97, 0.0, 0.0), 'silly': (1.0, 1.5, 0.98, 0.0, 0.0),
+        'happy': (0.7, 1.25, 0.99, 0.0, 0.0), 'proud': (0.4, 1.2, 1.03, 0.0, -0.8), 'calm': (-0.2, 0.95, 1.05, 0.0, -0.6),
+        'worried': (0.6, 1.1, 1.03, 0.7, -0.3), 'grumpy': (-1.2, 0.9, 1.0, 0.0, -1.2), 'sad': (-1.6, 0.8, 1.12, 0.3, -1.8),
+        'sleepy': (-1.6, 0.7, 1.14, 0.0, -1.4), '': (0.0, 1.0, 1.0, 0.0, 0.0)}
 
 
 def decode(path):
