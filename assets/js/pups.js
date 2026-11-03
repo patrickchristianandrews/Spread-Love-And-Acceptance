@@ -10,7 +10,7 @@
   var ctx = null;
   var LOOKS = {
     // stocky, long drop ears, tan brows running into tan cheeks, a fawn muzzle and chin, big white toes
-    drop: { build: 'stocky', ear: 'drop', legUp: '#262220', legLow: '#C98A4F', paw: '#F4EFE6', nails: true, tan: '#CF9A62', chest: 'white', muzzle: 'blaze', collar: false, brow: 'patch', tail: 'plume' },
+    drop: { build: 'stocky', ear: 'drop', legUp: '#A45C2E', legLow: '#B97847', paw: '#F1EADF', nails: true, tan: '#C9965F', chest: 'white', muzzle: 'cream', collar: false, brow: 'patch', tail: 'plume' },
     // leaner and taller, round tan brow dots, tan cheeks and lips, folded ears, tan lower legs, a collar
     collar: { build: 'lean', ear: 'drop', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'spots', muzzle: 'rottie', collar: true, brow: 'dot', tail: 'long' }
   };
@@ -57,11 +57,11 @@
     var lie = pose === 'lie', bow = pose === 'bow', sit = pose === 'sit', wiggle = pose === 'wiggle', moving = pose === 'run' || wiggle;
     var bodyTilt = sit ? -0.42 : bow ? 0.3 : 0;
     // tail: a soft plume, or a short happy stub-and-wag
-    var tlen = L.tail === 'plume' ? 16 : L.tail === 'long' ? 17 : 10;
+    var tlen = L.tail === 'plume' ? 15 : L.tail === 'long' ? 17 : 10;
     ctx.save(); ctx.translate(lie ? -18 : sit ? -12 : bow ? -13 : -16, lie ? -9 : sit ? -3 : bow ? -22 : BY - 2); ctx.rotate((bow ? -1.1 : sit ? -0.6 : -0.9) + wag);
-    if (L.tail === 'plume') { // a soft feathered plume, cream underneath (Sugarfoot)
-      ctx.fillStyle = '#F2E6D2'; ctx.beginPath(); ctx.moveTo(1, 2); ctx.quadraticCurveTo(-10, -tlen * 0.3, -9, -tlen * 0.95); ctx.quadraticCurveTo(-3, -tlen * 0.6, 3, -1); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.moveTo(-1, 0); ctx.quadraticCurveTo(-8, -tlen * 0.45, -6.5, -tlen); ctx.quadraticCurveTo(-1, -tlen * 0.7, 2, -tlen * 0.35); ctx.quadraticCurveTo(2.5, -tlen * 0.15, 2, 0); ctx.closePath(); ctx.fill();
+    if (L.tail === 'plume') { // the original soft plume
+      ctx.strokeStyle = BLACK; ctx.lineWidth = 5.5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-6, -tlen * 0.45, -5, -tlen); ctx.stroke();
+      ctx.strokeStyle = TAN; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(1, 1); ctx.quadraticCurveTo(-4, -tlen * 0.35, -3.6, -tlen * 0.75); ctx.stroke(); ctx.lineCap = 'butt';
     } else if (L.tail === 'long') { // a long thin curve, up and over (Tidbit)
       ctx.strokeStyle = BLACK; ctx.lineWidth = 3.4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-7, -tlen * 0.5, -3, -tlen); ctx.stroke(); ctx.lineCap = 'butt';
     } else {
@@ -84,15 +84,16 @@
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-12, -4, 7, 4, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.8, 2.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.3, 3.8, 2.5, 0, 0, Math.PI * 2); ctx.fill(); shoe(26, -2.5, true); shoe(23, -0.3);
-      if (L.chest === 'white') { ctx.fillStyle = '#F4EFE6'; ctx.beginPath(); ctx.ellipse(12.5, -7, 3.2, 4.4, 0, 0, Math.PI * 2); ctx.fill(); }
+      if (L.chest === 'white') { ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(12.5, -7, 1.4, 2.6, 0, 0, Math.PI * 2); ctx.fill(); }
       else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(11, -6.5, 2.4, 2.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(15, -7.5, 2.1, 2, 0, 0, Math.PI * 2); ctx.fill(); }
     } else {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
       if (!sit) { ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); } // neck (sitting has its own; this one would tip up into a lump on the back)
       if (sit) { /* sitting: the chest marks go on the upright chest, drawn after the body (the tipped body would put them on the back) */ }
-      else if (L.chest === 'white') { // Sugarfoot: a wide white bib from the throat down the chest, tan to each side of it below
-        ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, BY + 5, 6.5, 4.2, -0.2, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#F4EFE6'; ctx.beginPath(); ctx.ellipse(15.8, BY - 0.5, 4.4, 9, -0.3, 0, Math.PI * 2); ctx.fill();
+      else if (L.chest === 'white') { // Sugarfoot, as she always was: a fawn throat and a small pale streak on the chest
+        ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(15.6, BY + 1.5, 1.5, 3.4, -0.3, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, BY + 7.5, 4.5, 2.2, 0, 0, Math.PI * 2); ctx.fill();
       }
       else if (L.chest === 'spots') { // Tidbit: two tan spots on the chest and a tan throat
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16, BY - 3, 3, 4.2, -0.4, 0, Math.PI * 2); ctx.fill();
@@ -117,8 +118,8 @@
     ctx.restore();
     // sitting: the chest marks on the upright chest, under the sitting neck
     if (sit && L.chest === 'white') {
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12.5, -11, 6, 3.6, -0.1, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#F4EFE6'; ctx.beginPath(); ctx.ellipse(16, -19, 4, 8.5, -0.1, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16, -24, 3.6, 6, -0.1, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(16, -17, 1.5, 3.4, -0.1, 0, Math.PI * 2); ctx.fill();
     } else if (sit && L.chest === 'spots') {
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16.5, -23, 2.8, 4, -0.1, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(14, -14.5, 2.3, 2.1, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(18.5, -15, 2, 1.9, 0, 0, Math.PI * 2); ctx.fill();
@@ -137,15 +138,13 @@
     if (L.ear === 'drop' && !noEar) { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
-    if (L.muzzle === 'cream' || L.muzzle === 'blaze') { // Sugarfoot, from her photo: tan brows and cheeks, white muzzle and chin, a black stripe down the middle of the muzzle
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(4.5, 3, 8.8, 7.6, 0.12, 0, Math.PI * 2); ctx.fill();            // tan cheeks fill the lower face
-      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(11, 3.6, 6.2, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();          // white muzzle
-      ctx.beginPath(); ctx.ellipse(7.5, 8.6, 6.4, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();                                // white chin
-      ctx.beginPath(); ctx.ellipse(2.5, 9.8, 4.2, 3.2, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the white throat
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(10.5, 0.2, 6.5, 1.9, 0.1, 0, Math.PI * 2); ctx.fill();         // the black stripe down the top of the muzzle
+    if (L.muzzle === 'cream') {
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(5, 2.6, 9.4, 7.8, 0.12, 0, Math.PI * 2); ctx.fill();            // soft fawn fills the lower face
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(10.8, 2.6, 6.6, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();         // muzzle, the same fawn brown
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(7.5, 8.6, 7, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();             // chin, the same fawn brown
+      ctx.beginPath(); ctx.ellipse(2.5, 9.5, 4.5, 3.5, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the throat
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(4.3, -1.8, 3, 2.5, -0.1, 0, Math.PI * 2); ctx.fill();           // dark rim around the eye
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.2, -6, 3.8, 2.3, -0.25, 0, Math.PI * 2); ctx.fill();            // big tan brow
-      ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.ellipse(1.5, -4.2, 1.6, 1.1, 0, 0, Math.PI * 2); ctx.fill(); // a little grey-white at the brow's inner corner
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.4, -5.9, 3.6, 2.1, -0.25, 0, Math.PI * 2); ctx.fill();          // tan brow above it
     } else {
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(8.5, 4.5, 8, 4.8, 0.1, 0, Math.PI * 2); ctx.fill();          // tan lips and cheeks
       ctx.beginPath(); ctx.ellipse(4, 2.5, 3.8, 3.6, 0, 0, Math.PI * 2); ctx.fill();                                   // tan cheek patch
