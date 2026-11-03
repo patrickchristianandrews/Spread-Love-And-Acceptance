@@ -41,9 +41,9 @@ def stand(c, who, view, x, by, t, flip=False, hop=0, breathe=True, sh=True):
 def turn(c, who, a, b_, x, by, t, u, flip_a=False, flip_b=False):
     """a quick turn between two views: squash through the middle with a crossfade"""
     pa, pb = spr(who + '-' + a, H, flip_a), spr(who + '-' + b_, H, flip_b)
-    k = ease(u); sq = 1 - .25 * math.sin(u * math.pi)
+    sq = 1 - .7 * math.sin(u * math.pi); st = 1 + .06 * math.sin(u * math.pi)
     shadow(c, x, by, max(pa.shape[1], pb.shape[1]) * .4)
-    blit(c, squash(pa, sq, 1 + .04 * math.sin(u * math.pi)), x, by, 1 - k); blit(c, squash(pb, sq, 1 + .04 * math.sin(u * math.pi)), x, by, k)
+    blit(c, squash(pa if u < .5 else pb, sq, st), x, by)
 def pup_at(c, who, t, X0, X1, t0, t1, view, by=600, flip=False):
     u = ease(cl((t - t0) / (t1 - t0))); x = X0 + (X1 - X0) * u; walk(c, who, view, x, by, t, flip=flip); return x
 os.makedirs('clip/out3', exist_ok=True)
