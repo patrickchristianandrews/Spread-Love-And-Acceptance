@@ -14,7 +14,18 @@
     // leaner and taller, round tan brow dots, tan cheeks and lips, folded ears, tan lower legs, a collar
     collar: { build: 'lean', ear: 'drop', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'spots', muzzle: 'rottie', collar: true, brow: 'dot', tail: 'long' }
   };
+  // outfits (owner, Nov 3 2026): Tidbit always wears something purple, Sugarfoot always something pink, and the item
+  // changes from scene to scene. The player sets TOLPups.outfitKey per scene; other pages get one per page.
+  var OUTFITS = ['hat', 'cap', 'bow', 'bandana', 'necklace', 'shirt'];
+  var WEAR = { collar: { main: '#7B4FBF', light: '#B39BE0', dark: '#55329A' }, drop: { main: '#F07EA6', light: '#FAB9CF', dark: '#D45A86' } };
+  function hash(str) { var h = 0x811c9dc5; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h; }
+  function outfitFor(L, o) {
+    if (o && o.outfit) return o.outfit; if (o && o.noOutfit) return null;
+    var key = (window.TOLPups && window.TOLPups.outfitKey) || (location && location.pathname) || 'home';
+    return OUTFITS[hash(key + '|' + (L.collar ? 'tidbit' : 'sugarfoot')) % OUTFITS.length];
+  }
   function drawPup(L, pose, ph, wag, blink, t, tilt, o) {
+    var wear = outfitFor(L, o), WC = L.collar ? WEAR.collar : WEAR.drop;
     var earX = (o && o.ear) || 0, noEar = !!(o && o.noEar);
     var BLACK = '#252120', TAN = L.tan || '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';
     var lean = L.build === 'lean', LL = lean ? 15 : 12.5, BRX = lean ? 18.5 : 18, BRY = lean ? 8.8 : 10.2, BY = lean ? -21 : -18.5;
@@ -85,7 +96,16 @@
       }
       if (L.collar && !sit) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(9, BY - 11); ctx.quadraticCurveTo(14, BY - 3, 18, BY - 5); ctx.stroke();
         ctx.fillStyle = '#D5D9E0'; ctx.fillRect(13.6, BY - 7.4, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(14.4, BY - 6.8, 1.2, 1.2); }
+      if (wear === 'shirt') { // a little tee over the front of the body, with a pale collar and a sleeve
+        ctx.save(); ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.clip();
+        ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(5, BY + 0.5, BRX * 0.7, BRY + 1, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.ellipse(-6.5, BY + 1, 2.2, BRY + 1, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = WC.light; ctx.beginPath(); ctx.ellipse(4, BY - 3.5, 3.2, 2.2, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        ctx.fillStyle = WC.light; ctx.beginPath(); ctx.ellipse(13, BY - 8, 3.4, 2.4, -0.5, 0, Math.PI * 2); ctx.fill(); // the collar of the tee
+      }
     }
+    if (wear === 'shirt' && lie) { ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(2, -10.5, 12, 6.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = WC.light; ctx.beginPath(); ctx.ellipse(12.5, -12, 3, 2, -0.4, 0, Math.PI * 2); ctx.fill(); }
     ctx.restore();
     // sitting, the collar goes round the sitting neck (the body's own collar spot turns to the back when it tips up)
     if (sit && L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(8.5, -33); ctx.quadraticCurveTo(13.5, -25, 20, -28); ctx.stroke();
@@ -142,6 +162,27 @@
       ctx.strokeStyle = '#B97A43'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(-3, 2.6); ctx.quadraticCurveTo(2, 3.6, 5.6, 0.4); ctx.stroke();
       ctx.restore();
     }
+    // what she wears on her head or at her neck (the shirt is on the body)
+    if (wear === 'hat') { // a soft beanie with a pompom
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(-1.5, -9.2, 8.6, 4.8, -0.12, Math.PI, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.ellipse(-1.5, -9, 8.8, 1.7, -0.12, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.light; ctx.beginPath(); ctx.arc(-2.5, -14.2, 2.4, 0, Math.PI * 2); ctx.fill();
+    } else if (wear === 'cap') { // a ball cap, brim toward the nose
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(-1, -8.8, 8.2, 5, -0.1, Math.PI, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.ellipse(6.5, -8.6, 6.5, 1.6, -0.05, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.light; ctx.beginPath(); ctx.arc(-1, -13.4, 1.1, 0, Math.PI * 2); ctx.fill();
+    } else if (wear === 'bow') { // a bow by the ear
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.ellipse(-8.3, -8.6, 3.4, 2.1, -0.5, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(-2.5, -9.8, 3.4, 2.1, 0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.arc(-5.4, -9.3, 1.5, 0, Math.PI * 2); ctx.fill();
+    } else if (wear === 'bandana') { // a bandana knotted at the neck, the point hanging down the chest
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.moveTo(-6, 7.5); ctx.quadraticCurveTo(2, 9.5, 10, 7.5); ctx.lineTo(3, 17.5); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = WC.light; ctx.beginPath(); ctx.moveTo(-5.5, 8); ctx.quadraticCurveTo(2, 9.8, 9.5, 8); ctx.quadraticCurveTo(2, 11.2, -5.5, 8); ctx.fill();
+      ctx.fillStyle = WC.dark; ctx.beginPath(); ctx.arc(-4.5, 8.5, 1.4, 0, Math.PI * 2); ctx.fill();
+    } else if (wear === 'necklace') { // a string of beads with a heart
+      ctx.strokeStyle = WC.dark; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(-5, 7.5); ctx.quadraticCurveTo(2, 15, 9.5, 8); ctx.stroke();
+      ctx.fillStyle = WC.light; [[-3, 9.4], [0, 11], [5, 11], [8, 9.3]].forEach(function (b) { ctx.beginPath(); ctx.arc(b[0], b[1], 1, 0, Math.PI * 2); ctx.fill(); });
+      ctx.fillStyle = WC.main; ctx.beginPath(); ctx.moveTo(2.5, 15.2); ctx.bezierCurveTo(-0.5, 12.6, 0.4, 10.6, 2.5, 11.8); ctx.bezierCurveTo(4.6, 10.6, 5.5, 12.6, 2.5, 15.2); ctx.fill();
+    }
     ctx.restore();
   }
   function drawCape(L, t, col, flying) {
@@ -155,6 +196,7 @@
   }
   window.TOLPups = {
     looks: LOOKS,
+    outfits: OUTFITS, outfitKey: null,
     reduced: REDUCED,
     draw: function (c, L, pose, ph, wag, blink, t, tilt, opts) { ctx = c; drawPup(L, pose, ph, wag, blink, t, tilt, opts); },
     cape: function (c, L, t, col, flying) { ctx = c; drawCape(L, t, col, flying); }

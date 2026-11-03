@@ -531,7 +531,8 @@
     // ---------- scene state ----------
     function thState(v) { return v === 'none' ? { b: 0, r: 0, w: 0 } : v === 'frame' ? { b: 0.5, r: 0, w: 0 } : v === 'built' ? { b: 1, r: 0, w: 0 } : v === 'wrecked' ? { b: 1, r: 0, w: 1 } : { b: 1, r: 1, w: 0 }; }
     S.applyScene = function (b) {
-      S.scene = SCENES.indexOf(b.scene) >= 0 ? b.scene : 'blank'; S.hour = num(b.hour, S.hour); S.weather = WEATHER.indexOf(b.weather) >= 0 ? b.weather : 'clear';
+      S.scene = SCENES.indexOf(b.scene) >= 0 ? b.scene : 'blank'; S.hour = num(b.hour, S.hour);
+      S.sceneN = (S.sceneN || 0) + 1; if (window.TOLPups) window.TOLPups.outfitKey = (S.epId || '') + ':' + S.sceneN + ':' + S.scene; // a new outfit each scene S.weather = WEATHER.indexOf(b.weather) >= 0 ? b.weather : 'clear';
       S.ground = []; S.leaving = []; S.shoots = []; S.props = {}; S.bgKey = ''; S.wx = []; S.parts = [];
       if (S.scene === 'treehouse') S.props.treehouse = { b: 1, r: 1, w: 0 };
       S.applyProps(b.props, true);
@@ -1593,6 +1594,7 @@
   // THE DIRECTOR: plays the beats in order, waits for voices, and can jump to any beat.
   // =====================================================================================================
   function makeDirector(stage, ep, hooks) {
+    stage.epId = ep && ep.id;
     hooks = hooks || {};
     var F = flatten(ep), D = { i: 0, u: 0, dur: 0, playing: false, ended: false, voice: false, voiceEnd: null, ch: -1, music: 'none', flat: F, ep: ep, total: F.total };
     stage.ep = ep;
