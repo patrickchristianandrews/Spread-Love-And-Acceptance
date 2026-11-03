@@ -7,7 +7,7 @@
 (function () {
   'use strict';
   var P = window.TOLPups; if (!P) return;
-  var BASE = '/assets/img/pups/', UNITS = 60, IMG = {}, META = null, ready = false, vector = P.draw;
+  var BASE = '/assets/img/pups/', UNITS = 68, IMG = {}, META = null, ready = false, vector = P.draw;
   var A_LEG = 38, D2R = Math.PI / 180;   // the stride the original pups had (0.7 rad at the hip)
   function img(n) { if (!IMG[n]) { var i = new Image(); i.src = BASE + n + '.png'; IMG[n] = i; } return IMG[n]; }
   var readyP = fetch(BASE + 'meta.json').then(function (r) { return r.json(); }).then(function (m) {
@@ -115,6 +115,7 @@
   }
   function drawLayer(g, name, lay, k, ox, oy, rotDeg, px, py) {
     var im = IMG[name]; if (!im || !im.naturalWidth) return;
+    g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
     if (rotDeg) { g.save(); g.translate(ox + px * k, oy + py * k); g.rotate(rotDeg * D2R); g.drawImage(im, (lay.x - px) * k, (lay.y - py) * k, lay.w * k, lay.h * k); g.restore(); }
     else g.drawImage(im, ox + lay.x * k, oy + lay.y * k, lay.w * k, lay.h * k);
   }
@@ -139,6 +140,11 @@
     g.save();
     if (lean) { g.translate(-10, 0); g.rotate(lean); g.translate(10, 0); }
     var sq = squashFor(w, view, t || 0); if (sq !== 1) { g.scale(sq, 1 + (1 - sq) * 0.35); }
+    var moving0 = pose === 'run' && o && o.moving, tt = (t || 0) / 1000;
+    if (!moving0) {   // alive while standing: breathing from the feet up, and a slow shift of weight
+      var br = 1 + 0.012 * Math.sin(tt * 2 * Math.PI / 3.1 + (w === 'sf' ? 1.7 : 0)); g.scale(1, br);
+      g.translate(1.4 * Math.sin(tt * 2 * Math.PI / 5.3 + (w === 'sf' ? 2.1 : 0)), 0);
+    }
     var tk = (o && o.talk) || 0; if (tk > 0.02) { var tb = 1 + 0.025 * tk; g.scale(1 / Math.sqrt(tb), tb); }   // a little bounce on each word
     if (sy !== 1) g.scale(1, sy);
     var s1 = Math.sin(ph), s2 = Math.sin(ph + 0.35), moving = pose === 'run' && o && o.moving, dir = unflip ? -1 : 1;
@@ -146,7 +152,8 @@
     if (moving) { g.translate(0, -3.5 * Math.abs(s1)); g.translate(0, 0); g.rotate(-0.07 * dir); }   // the bounce and the forward lean of the old walk
     var st = STATE[w] || (STATE[w] = {});
     var lift = (o && o.lift) || 0, liftV = spring(st, 'lift', lift, t || 0, 260, 14), bounce = (liftV - lift) * 0.08;   // the body lags a hop a touch
-    var headDeg = spring(st, 'head', ((tilt || 0) * 57.3 * 0.8 + (moving ? 3 * Math.sin(ph) : 0) - bounce * 6) * dir, t || 0, 180, 9);
+    var nod = (o && o.listening && !(o.talk > 0)) ? 2.2 * Math.sin((t || 0) / 1000 * 2 * Math.PI / 1.9) : 0;   // the listener nods along
+    var headDeg = spring(st, 'head', ((tilt || 0) * 57.3 * 0.8 + (moving ? 3 * Math.sin(ph) : 0) - bounce * 6 + nod) * dir, t || 0, 150, 8);
     var tailDeg = spring(st, 'tail', ((wag || 0) * 57.3 * 0.42 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 6) * dir, t || 0, 110, 8);
     if (!moving && !(o && o.talk)) { if (!st.flickAt || (t || 0) > st.flickAt + 400) st.flickAt = (t || 0) + 2500 + 4000 * Math.abs(Math.sin((t || 0) * 0.0007 + (w === 'sf' ? 1 : 0))); if ((t || 0) > st.flickAt && (t || 0) < st.flickAt + 60 && st.ears) st.ears.v += 260 * (w === 'sf' ? -1 : 1); }   // an idle ear flick now and then
     var earDeg = spring(st, 'ears', -headDeg * 0.35 + bounce * 12 + (moving ? 4 * Math.sin(2 * ph + 1) : 0) + ((o && o.ear) || 0) * 20, t || 0, 90, 5); earDeg = Math.max(-7, Math.min(7, earDeg));
