@@ -30,14 +30,12 @@
     if (pose === 'wiggle') return 'front';
     return 'right';
   }
-  // the face: a closed-mouth base, and how much of the open-mouth face shows over it (0..1), so the mouth moves smoothly
-  function faceFor(w, o, t) {
-    if (!o) return { base: 'curious', open: 1 };
-    var m = o.mood || 'happy', mouth = o.mouth != null ? o.mouth : (o.talk || 0);
-    if (mouth > 0.02) return { base: m === 'surprised' ? 'surprised' : 'curious', open: Math.min(1, Math.max(0, (mouth - 0.25) / 0.6)) };
-    if (m === 'surprised') return { base: 'surprised', open: 0 };
-    if (m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud') return { base: 'curious', open: 1 };
-    return { base: 'curious', open: 0 };
+  // the face picture (eyes, brows, cheeks; the painted mouths are cleaned off) and the mouth, which is drawn
+  function faceFor(o) {
+    var m = (o && o.mood) || 'happy';
+    if (m === 'surprised') return 'surprised';
+    if (m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud') return 'happy';
+    return 'curious';
   }
   var STATE = {};
   function squashFor(w, view, t) {
@@ -45,6 +43,33 @@
     if (st.view !== view) { st.view = view; st.t0 = t; }
     var u = (t - st.t0) / 180; if (u < 0 || u >= 1) return 1;
     return 1 - 0.3 * Math.sin(Math.PI * u);
+  }
+  // the mouth, the way the show draws it: a smile at rest, a dark open mouth with a pink tongue that follows the voice,
+  // an o for surprise, a down-turned line for sad or worried, a flat line for grumpy. (mx, my) and hw are in sprite pixels.
+  function drawMouth(g, mo, k, o, t, w) {
+    var m = (o && o.mood) || 'happy', talk = o && o.talk ? o.talk : 0, mouth = o && o.mouth != null ? o.mouth : talk;
+    var x = mo.x * k, y = mo.y * k, hw = mo.hw * k, side = mo.side || 0, MC = '#3A1E22', PINK = '#EE8FA6';
+    var happy = m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud';
+    var pant = happy && !mouth ? 0.22 + 0.08 * Math.sin((t || 0) / 240 + (w === 'sf' ? 1 : 0)) : 0;   // a soft happy pant at rest
+    var open = Math.max(mouth, pant);
+    g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+    if (open > 0.03) {
+      var oh = hw * (0.18 + 0.55 * open), ow = hw * (0.55 + 0.15 * open);
+      g.fillStyle = MC; g.beginPath();
+      if (side) { g.moveTo(x - hw * 0.9, y - hw * 0.1); g.quadraticCurveTo(x, y - hw * 0.05 - oh * 0.15, x + hw * 0.55, y - hw * 0.12); g.quadraticCurveTo(x + hw * 0.1, y + oh * 1.3, x - hw * 0.9, y - hw * 0.1); }
+      else { g.moveTo(x - ow, y); g.quadraticCurveTo(x, y - oh * 0.3, x + ow, y); g.quadraticCurveTo(x, y + oh * 1.9, x - ow, y); }
+      g.closePath(); g.fill();
+      g.clip(); g.fillStyle = PINK; g.beginPath(); g.ellipse(x + (side ? -hw * 0.25 : 0), y + oh * 0.95, ow * 0.5, oh * 0.6, 0, 0, Math.PI * 2); g.fill();
+    } else if (m === 'surprised') { g.fillStyle = MC; g.beginPath(); g.ellipse(x, y + hw * 0.1, hw * 0.3, hw * 0.4, 0, 0, Math.PI * 2); g.fill(); }
+    else {
+      g.strokeStyle = MC; g.lineWidth = Math.max(1, hw * 0.1); g.beginPath();
+      if (m === 'sad' || m === 'worried') { g.moveTo(x - hw * 0.8, y + hw * 0.25); g.quadraticCurveTo(x, y - hw * 0.25, x + hw * 0.8, y + hw * 0.25); }
+      else if (m === 'grumpy') { g.moveTo(x - hw * 0.8, y); g.lineTo(x + hw * 0.8, y - hw * 0.05); }
+      else if (side) { g.moveTo(x - hw * 1.1, y - hw * 0.2); g.quadraticCurveTo(x - hw * 0.1, y + hw * 0.3, x + hw * 0.8, y - hw * 0.15); }
+      else { g.moveTo(x - hw * 0.9, y - hw * 0.15); g.quadraticCurveTo(x, y + hw * 0.4, x + hw * 0.9, y - hw * 0.15); }
+      g.stroke();
+    }
+    g.restore();
   }
   function drawLayer(g, name, lay, k, ox, oy, rotDeg, px, py) {
     var im = IMG[name]; if (!im || !im.naturalWidth) return;
@@ -66,7 +91,7 @@
     var legs = moving || (pose === 'run' && Math.abs(s1) > 0.02) ? { fl1: A_LEG * s1, fl2: -A_LEG * s1, bl1: -A_LEG * s2, bl2: A_LEG * s2 } : {};
     var headDeg = (tilt || 0) * 57.3 * 0.8 + (moving ? -3 * Math.sin(2 * ph) : 0);
     var tailDeg = (wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0);
-    var face = m.face ? faceFor(w, o, t) : null, useFace = !!face && view !== 'right';
+    var face = m.face ? faceFor(o) : null, useFace = !!face && view !== 'right';
     m.order.forEach(function (p) {
       var lay = m.layers[p]; if (!lay) return;
       if (p === 'body' && useFace && m.layers['body-nohead']) lay = m.layers['body-nohead'], p = 'body-nohead';
@@ -76,16 +101,18 @@
       else if (p === 'tail') { rot = tailDeg; px = lay.px; py = lay.py; }
       drawLayer(g, key + '-' + p, lay, k, ox, oy, rot, px, py);
     });
+    var hl = m.layers.head, hpx = hl ? hl.px : (m.face ? m.face.cx : 0), hpy = hl ? hl.py : (m.face ? m.face.cy : 0);
     if (useFace) {
-      var hl = m.layers.head, hpx = hl ? hl.px : m.face.cx, hpy = hl ? hl.py : m.face.cy, fw = m.face.w * k;
+      var fm = META[w + '-face-' + face], fi = IMG[w + '-face-' + face], fw = m.face.w * k, fh = fm.h / fm.w * fw;
       g.save(); g.translate(ox + hpx * k, oy + hpy * k); g.rotate(headDeg * D2R);
-      function putFace(n, alpha) {
-        var f = META[w + '-face-' + n], fi = IMG[w + '-face-' + n]; if (!f || !fi || !fi.naturalWidth || alpha <= 0.01) return;
-        var fh = f.h / f.w * fw; g.globalAlpha = alpha; g.drawImage(fi, (m.face.cx - hpx) * k - fw / 2, (m.face.cy - hpy) * k - fh / 2, fw, fh); g.globalAlpha = 1;
-      }
-      putFace(face.base, 1); if (face.open > 0) putFace('happy', face.open);
+      var fx0 = (m.face.cx - hpx) * k - fw / 2, fy0 = (m.face.cy - hpy) * k - fh / 2;
+      if (fi && fi.naturalWidth) g.drawImage(fi, fx0, fy0, fw, fh);
+      if (fm.mouth) { g.translate(fx0, fy0); drawMouth(g, fm.mouth, fw / fm.w, o, t, w); }
       g.restore();
-    }
+    } else if (m.mouth && hl) {
+      g.save(); g.translate(ox + hpx * k, oy + hpy * k); g.rotate(headDeg * D2R); g.translate(-hpx * k, -hpy * k);
+      drawMouth(g, m.mouth, k, o, t, w); g.restore();
+    } else if (m.mouth) { g.save(); g.translate(ox, oy); drawMouth(g, m.mouth, k, o, t, w); g.restore(); }
     g.restore();
   }
   P.draw = function (c, L, pose, ph, wag, blink, t, tilt, o) {
