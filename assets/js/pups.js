@@ -40,7 +40,7 @@
     var bodyTilt = sit ? -0.42 : bow ? 0.3 : 0;
     // tail: a soft plume, or a short happy stub-and-wag
     var tlen = L.tail === 'plume' ? 16 : L.tail === 'long' ? 17 : 10;
-    ctx.save(); ctx.translate(lie ? -18 : sit ? -12 : -16, lie ? -9 : sit ? -3 : bow ? -27 : BY - 2); ctx.rotate((bow ? -1.3 : sit ? -0.6 : -0.9) + wag);
+    ctx.save(); ctx.translate(lie ? -18 : sit ? -12 : bow ? -13 : -16, lie ? -9 : sit ? -3 : bow ? -22 : BY - 2); ctx.rotate((bow ? -1.1 : sit ? -0.6 : -0.9) + wag);
     if (L.tail === 'plume') { // a soft feathered plume, cream underneath (Sugarfoot)
       ctx.fillStyle = '#F2E6D2'; ctx.beginPath(); ctx.moveTo(1, 2); ctx.quadraticCurveTo(-10, -tlen * 0.3, -9, -tlen * 0.95); ctx.quadraticCurveTo(-3, -tlen * 0.6, 3, -1); ctx.closePath(); ctx.fill();
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.moveTo(-1, 0); ctx.quadraticCurveTo(-8, -tlen * 0.45, -6.5, -tlen); ctx.quadraticCurveTo(-1, -tlen * 0.7, 2, -tlen * 0.35); ctx.quadraticCurveTo(2.5, -tlen * 0.15, 2, 0); ctx.closePath(); ctx.fill();
