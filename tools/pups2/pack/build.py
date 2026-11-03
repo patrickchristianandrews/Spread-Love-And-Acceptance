@@ -23,7 +23,14 @@ def clean_mouth(name, zone, only_dark=True):
 # the painted open mouths come off (the engine draws the mouth); Tidbit's side views keep their closed smile
 clean_mouth('sf-right', (284, 84, 29, 21), only_dark=False)
 for n, z in (('tb-34front', (88, 100, 26, 10)), ('sf-34front', (96, 92, 34, 20)), ('tb-front', (75, 87, 20, 9)), ('sf-front', (86, 84, 34, 19))): clean_mouth(n, z)
-for n in ('tb-right', 'tb-left', 'sf-left'): shutil.copy(SHEET + n + '.png', WORK + n + '.png')
+for n in ('tb-right', 'tb-left', 'sf-left', 'sf-back', 'sf-34back', 'tb-back', 'tb-34back'): shutil.copy(SHEET + n + '.png', WORK + n + '.png')
+# Sugarfoot less fluffy (owner, Nov 3 2026): tighten her outline by a few pixels and smooth the fur fringe; markings unchanged
+def slim(name, px=3):
+    im = cv2.imread(WORK + name + '.png', cv2.IMREAD_UNCHANGED); a = im[..., 3].astype(np.float32) / 255
+    a = cv2.erode(a, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * px + 1, 2 * px + 1)))
+    a = cv2.GaussianBlur(a, (0, 0), 2.2); a = np.clip((a - 0.5) * 3 + 0.5, 0, 1)
+    im[..., 3] = (a * 255).astype(np.uint8); cv2.imwrite(WORK + name + '.png', im)
+for n in ('sf-right', 'sf-left', 'sf-34front', 'sf-front', 'sf-back', 'sf-34back'): slim(n)
 # left views get the right views' rig, mirrored and scaled to their own size
 def mirror_rig(src, dst):
     ws = cv2.imread(SHEET + src + '.png', cv2.IMREAD_UNCHANGED).shape; wd = cv2.imread(SHEET + dst + '.png', cv2.IMREAD_UNCHANGED).shape
@@ -67,7 +74,7 @@ for name in list(MOUTH) + ['tb-left', 'sf-left']:
         m['mouth'] = dict(x=int((wsrc - mo['x']) * sx), y=int(mo['y'] * sy), hw=int(mo['hw'] * sx), side=-1, painted=True); m['eyes'] = [[int((wsrc - x) * sx), int(y * sy), int(r * sx)] for x, y, r in meta[src]['eyes']]; m['faces'] = 'left'
     meta[name] = m
 for name in ('tb-back', 'sf-back', 'tb-34back', 'sf-34back'):
-    im = cv2.imread(SHEET + name + '.png', cv2.IMREAD_UNCHANGED); cv2.imwrite(OUT + name + '-body.png', up2(im))
+    im = cv2.imread(WORK + name + '.png', cv2.IMREAD_UNCHANGED); cv2.imwrite(OUT + name + '-body.png', up2(im))
     meta[name] = dict(w=int(im.shape[1]), h=int(im.shape[0]), scale=2, layers={'body': dict(x=0, y=0, w=int(im.shape[1]), h=int(im.shape[0]))}, order=['body'])
 json.dump(meta, open(OUT + 'meta.json', 'w'))
 subprocess.check_call([sys.executable, os.path.join(HERE, 'flip34.py')]); print('pack built:', len(os.listdir(OUT)), 'files')
