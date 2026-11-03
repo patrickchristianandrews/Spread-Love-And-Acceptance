@@ -1208,7 +1208,7 @@
       var wag = d.tailBase + Math.sin(S.t * 11 * d.wagS + (c.id === 'tidbit' ? 0 : 2)) * d.wagA * (c.id === 'tidbit' ? 1 : 0.8) * (S.reduced ? 0.7 : 1);
       var pose = d.pose === 'stand' ? 'run' : d.pose;
       // the painted pups (pups-paint.js) pick their view and face from the mood, the voice and the motion
-      var popts = { ear: d.ear, mood: c.mood, talk: c.talk ? talkAmt(c) : 0, mouth: d.mouth, eyes: d.eyes, moving: !!d.moving, who: c.id };
+      var popts = { ear: d.ear, mood: c.mood, talk: c.talk ? talkAmt(c) : 0, mouth: d.mouth, eyes: d.eyes, blink: !!d.blink, moving: !!d.moving, who: c.id, lift: d.lift || 0 };
       P.draw(g, L, pose, d.moving ? c.ph : (pose === 'run' ? Math.round(c.ph / Math.PI) * Math.PI : c.ph), wag, false, S.t * 1000, d.tilt, popts);
       // into head space: exactly where pups.js put the head
       var lean = L.build === 'lean', BY = lean ? -21 : -18.5;

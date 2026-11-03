@@ -12,7 +12,7 @@
   function img(n) { if (!IMG[n]) { var i = new Image(); i.src = BASE + n + '.png'; IMG[n] = i; } return IMG[n]; }
   var readyP = fetch(BASE + 'meta.json').then(function (r) { return r.json(); }).then(function (m) {
     META = m; var names = [];
-    Object.keys(m).forEach(function (k) { if (m[k].layers) Object.keys(m[k].layers).forEach(function (l) { names.push(k + '-' + l); }); else names.push(k); });
+    Object.keys(m).forEach(function (k) { if (m[k].layers) Object.keys(m[k].layers).forEach(function (l) { names.push(k + '-' + l); }); else names.push(k); if (m[k].ears) Object.keys(m[k].ears).forEach(function (e) { names.push(k + '-' + e); }); });
     return Promise.all(names.map(function (n) { return new Promise(function (res) { var i = img(n); if (i.complete && i.naturalWidth) return res(); i.onload = i.onerror = res; }); }));
   }).then(function () { ready = true; });
   P.ready = readyP; P.painted = true;
@@ -38,6 +38,27 @@
     return 'curious';
   }
   var STATE = {};
+  // a little spring per pup: head, ears and tail lag the body and overshoot, the way a cartoon does follow-through
+  function spring(st, key, target, t, k, damp) {
+    var sp = st[key] || (st[key] = { x: target, v: 0, t: t });
+    var dt = Math.min(0.05, Math.max(0, (t - sp.t) / 1000)); sp.t = t;
+    for (var i = 0; i < 3; i++) { var a = (target - sp.x) * k - sp.v * damp; sp.v += a * dt / 3; sp.x += sp.v * dt / 3; }
+    return sp.x;
+  }
+  function eyelids(g, eyes, k, o, w, fx0, fy0) {
+    var blink = o && o.blink, ey = o && o.eyes, m = (o && o.mood) || 'happy';
+    var closed = blink || ey === 'closed' || ey === 'sleepy' || m === 'sleepy', happy = ey === 'happy' || (m === 'excited' && !(o && o.talk)), soft = ey === 'soft' || ey === 'calm' || m === 'calm';
+    var amt = closed ? 1 : soft ? 0.45 : 0; if (!amt && !happy) return;
+    var lid = w === 'tb' ? '#2B2523' : '#C98A50', line = '#1a1412';
+    eyes.forEach(function (e) {
+      var x = fx0 + e[0] * k, y = fy0 + e[1] * k, r = e[2] * k * 1.15;
+      g.save();
+      if (happy) { g.fillStyle = lid; g.beginPath(); g.ellipse(x, y, r, r, 0, 0, Math.PI * 2); g.fill(); g.strokeStyle = line; g.lineWidth = Math.max(1, r * 0.16); g.lineCap = 'round'; g.beginPath(); g.arc(x, y + r * 0.35, r * 0.8, Math.PI * 1.12, Math.PI * 1.88); g.stroke(); }
+      else { g.fillStyle = lid; g.beginPath(); g.ellipse(x, y - r + r * amt, r, r * amt, 0, 0, Math.PI * 2); g.fill();
+        if (amt >= 0.99) { g.strokeStyle = line; g.lineWidth = Math.max(1, r * 0.14); g.lineCap = 'round'; g.beginPath(); g.moveTo(x - r * 0.75, y + r * 0.05); g.quadraticCurveTo(x, y + r * 0.35, x + r * 0.75, y + r * 0.05); g.stroke(); } }
+      g.restore();
+    });
+  }
   function squashFor(w, view, t) {
     var st = STATE[w] || (STATE[w] = { view: view, t0: -9e9 });
     if (st.view !== view) { st.view = view; st.t0 = t; }
@@ -52,6 +73,7 @@
     var happy = m === 'happy' || m === 'excited' || m === 'silly' || m === 'proud';
     var pant = happy && !mouth ? 0.22 + 0.08 * Math.sin((t || 0) / 240 + (w === 'sf' ? 1 : 0)) : 0;   // a soft happy pant at rest
     var open = Math.max(mouth, pant);
+    if (mouth > 0.02) { var vis = 0.5 + 0.5 * Math.sin((t || 0) / 95 + (w === 'sf' ? 2 : 0)); hw *= 0.78 + 0.32 * vis; }   // ah and oo: the width changes too
     g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
     if (open > 0.03) {
       var oh = hw * (0.18 + 0.55 * open), ow = hw * (0.55 + 0.15 * open);
@@ -89,8 +111,11 @@
     if (sy !== 1) g.scale(1, sy);
     var s1 = Math.sin(ph), s2 = Math.sin(ph + 0.35), moving = pose === 'run' && o && o.moving;
     var legs = moving || (pose === 'run' && Math.abs(s1) > 0.02) ? { fl1: A_LEG * s1, fl2: -A_LEG * s1, bl1: -A_LEG * s2, bl2: A_LEG * s2 } : {};
-    var headDeg = (tilt || 0) * 57.3 * 0.8 + (moving ? -3 * Math.sin(2 * ph) : 0);
-    var tailDeg = (wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0);
+    var st = STATE[w] || (STATE[w] = {});
+    var lift = (o && o.lift) || 0, liftV = spring(st, 'lift', lift, t || 0, 260, 14), bounce = (liftV - lift) * 0.08;   // the body lags a hop a touch
+    var headDeg = spring(st, 'head', (tilt || 0) * 57.3 * 0.8 + (moving ? -3 * Math.sin(2 * ph) : 0) - bounce * 6, t || 0, 180, 9);
+    var tailDeg = spring(st, 'tail', (wag || 0) * 57.3 * 0.55 + (moving ? 8 * Math.sin(ph * 0.5) : 0) + bounce * 10, t || 0, 120, 6);
+    var earDeg = spring(st, 'ears', -headDeg * 0.35 + bounce * 12 + (moving ? 4 * Math.sin(2 * ph + 1) : 0) + ((o && o.ear) || 0) * 20, t || 0, 90, 5); earDeg = Math.max(-7, Math.min(7, earDeg));
     var face = m.face ? faceFor(o) : null, useFace = !!face && view !== 'right';
     m.order.forEach(function (p) {
       var lay = m.layers[p]; if (!lay) return;
@@ -105,12 +130,19 @@
     if (useFace) {
       var fm = META[w + '-face-' + face], fi = IMG[w + '-face-' + face], fw = m.face.w * k, fh = fm.h / fm.w * fw;
       g.save(); g.translate(ox + hpx * k, oy + hpy * k); g.rotate(headDeg * D2R);
-      var fx0 = (m.face.cx - hpx) * k - fw / 2, fy0 = (m.face.cy - hpy) * k - fh / 2;
+      var fx0 = (m.face.cx - hpx) * k - fw / 2, fy0 = (m.face.cy - hpy) * k - fh / 2, fk = fw / fm.w;
       if (fi && fi.naturalWidth) g.drawImage(fi, fx0, fy0, fw, fh);
-      if (fm.mouth) { g.translate(fx0, fy0); drawMouth(g, fm.mouth, fw / fm.w, o, t, w); }
+      if (fm.ears) ['earL', 'earR'].forEach(function (en) {   // the ears again on top, swinging a little from their roots
+        var el = fm.ears[en], ei = IMG[w + '-face-' + face + '-' + en]; if (!el || !ei || !ei.naturalWidth) return;
+        var sgn = en === 'earL' ? 1 : -1;
+        g.save(); g.translate(fx0 + el.px * fk, fy0 + el.py * fk); g.rotate(earDeg * sgn * D2R); g.drawImage(ei, (el.x - el.px) * fk, (el.y - el.py) * fk, el.w * fk, el.h * fk); g.restore();
+      });
+      if (fm.eyes) eyelids(g, fm.eyes, fk, o, w, fx0, fy0);
+      if (fm.mouth) { g.translate(fx0, fy0); drawMouth(g, fm.mouth, fk, o, t, w); }
       g.restore();
     } else if (m.mouth && hl) {
       g.save(); g.translate(ox + hpx * k, oy + hpy * k); g.rotate(headDeg * D2R); g.translate(-hpx * k, -hpy * k);
+      if (m.eyes) eyelids(g, m.eyes, k, o, w, 0, 0);
       drawMouth(g, m.mouth, k, o, t, w); g.restore();
     } else if (m.mouth) { g.save(); g.translate(ox, oy); drawMouth(g, m.mouth, k, o, t, w); g.restore(); }
     g.restore();
