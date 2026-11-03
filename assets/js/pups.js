@@ -16,7 +16,7 @@
   };
   // outfits (owner, Nov 3 2026): Tidbit always wears something purple, Sugarfoot always something pink, and the item
   // changes from scene to scene. The player sets TOLPups.outfitKey per scene; other pages get one per page.
-  var OUTFITS = ['hat', 'cap', 'bow', 'bandana', 'necklace', 'shirt'];
+  var OUTFITS = ['hat', 'cap', 'bow', 'bandana', 'necklace', 'shirt', 'shoes'];
   var WEAR = { collar: { main: '#7B4FBF', light: '#B39BE0', dark: '#55329A' }, drop: { main: '#F07EA6', light: '#FAB9CF', dark: '#D45A86' } };
   function hash(str) { var h = 0x811c9dc5; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h; }
   function outfitFor(L, o) {
@@ -26,6 +26,13 @@
   }
   function drawPup(L, pose, ph, wag, blink, t, tilt, o) {
     var wear = outfitFor(L, o), WC = L.collar ? WEAR.collar : WEAR.drop;
+    function shoe(x, y, dk) { // a little sneaker over the paw: colored upper, pale sole, a lace
+      if (wear !== 'shoes') return;
+      var k = dk ? 0.78 : 1; function mul(c) { if (!dk) return c; var n = parseInt(c.slice(1), 16); return 'rgb(' + Math.round((n >> 16) * k) + ',' + Math.round((n >> 8 & 255) * k) + ',' + Math.round((n & 255) * k) + ')'; }
+      ctx.fillStyle = mul('#F4EFE6'); ctx.beginPath(); ctx.ellipse(x + 0.6, y + 1.3, 4.6, 1.7, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = mul(WC.main); ctx.beginPath(); ctx.ellipse(x + 0.3, y - 0.4, 4.3, 2.6, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = mul(WC.light); ctx.beginPath(); ctx.ellipse(x - 0.8, y - 1.6, 1.9, 1.1, 0, 0, Math.PI * 2); ctx.fill();
+    }
     var earX = (o && o.ear) || 0, noEar = !!(o && o.noEar);
     var BLACK = '#252120', TAN = L.tan || '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';
     var lean = L.build === 'lean', LL = lean ? 15 : 12.5, BRX = lean ? 18.5 : 18, BRY = lean ? 8.8 : 10.2, BY = lean ? -21 : -18.5;
@@ -40,8 +47,8 @@
       ctx.quadraticCurveTo(3.4, len * 0.5, 3.1, -1); ctx.quadraticCurveTo(0, -3.4, -3.1, -1); ctx.fill();
       ctx.fillStyle = sh(L.legUp); ctx.beginPath(); ctx.moveTo(-3.1, -1); ctx.quadraticCurveTo(-3.3, up * 0.6, -2.9, up + 0.4); ctx.quadraticCurveTo(0, up + 1.8, 2.9, up + 0.4);
       ctx.quadraticCurveTo(3.3, up * 0.6, 3.1, -1); ctx.quadraticCurveTo(0, -3.4, -3.1, -1); ctx.fill();
-      ctx.fillStyle = sh(L.paw); ctx.beginPath(); ctx.ellipse(1, len, 4.1, 2.6, 0, 0, Math.PI * 2); ctx.fill();
-      if (L.nails) { // pale toes with little dark nails
+      ctx.fillStyle = sh(L.paw); ctx.beginPath(); ctx.ellipse(1, len, 4.1, 2.6, 0, 0, Math.PI * 2); ctx.fill(); shoe(1, len, back);
+      if (L.nails && wear !== 'shoes') { // pale toes with little dark nails
         ctx.strokeStyle = 'rgba(0,0,0,0.16)'; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(1.2, len - 1.6); ctx.lineTo(1.2, len + 1.2); ctx.moveTo(3.2, len - 1.3); ctx.lineTo(3.2, len + 1.3); ctx.stroke();
         ctx.fillStyle = '#2A2422'; [[4.6, len + 0.8], [3.3, len + 2.1], [1.6, len + 2.4]].forEach(function (n) { ctx.beginPath(); ctx.ellipse(n[0], n[1], 0.9, 0.55, 0.5, 0, Math.PI * 2); ctx.fill(); });
       }
@@ -76,7 +83,7 @@
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-2, -9, 19, 8.5, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-12, -4, 7, 4, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.8, 2.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.3, 3.8, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.8, 2.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.3, 3.8, 2.5, 0, 0, Math.PI * 2); ctx.fill(); shoe(26, -2.5, true); shoe(23, -0.3);
       if (L.chest === 'white') { ctx.fillStyle = '#F4EFE6'; ctx.beginPath(); ctx.ellipse(12.5, -7, 3.2, 4.4, 0, 0, Math.PI * 2); ctx.fill(); }
       else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(11, -6.5, 2.4, 2.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(15, -7.5, 2.1, 2, 0, 0, Math.PI * 2); ctx.fill(); }
     } else {
@@ -111,8 +118,8 @@
     if (sit && L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(8.5, -33); ctx.quadraticCurveTo(13.5, -25, 20, -28); ctx.stroke();
       ctx.fillStyle = '#D5D9E0'; ctx.fillRect(14.2, -27.6, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(15, -27, 1.2, 1.2); }
     if (moving) { /* the near legs are drawn before the body (above) */ }
-    else if (sit) { leg(12, -17, -0.05, LL + 3); ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-9, -6, 8.5, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-4, -2.5, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-0.5, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); }
-    else if (bow) { ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.8, 2.6, 0, 0, Math.PI * 2); ctx.fill(); leg(-13, -16, 0, LL + 3); }
+    else if (sit) { leg(12, -17, -0.05, LL + 3); ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-9, -6, 8.5, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-4, -2.5, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-0.5, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); shoe(-0.5, -1); }
+    else if (bow) { ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.8, 2.6, 0, 0, Math.PI * 2); ctx.fill(); shoe(28, -2.5); leg(-13, -16, 0, LL + 3); }
     // head: a little bigger than life, the way cartoons do it
     var hx = lie ? 19 : sit ? 18 : bow ? 22 : 21, hy = lie ? -19 : sit ? -38 : bow ? -14 : BY - 12;
     ctx.save(); ctx.translate(hx, hy); ctx.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0) + (tilt || 0));
