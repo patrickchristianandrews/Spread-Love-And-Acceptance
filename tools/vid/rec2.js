@@ -6,8 +6,8 @@ const [EP, SECS, OUT] = [process.argv[2], Number(process.argv[3]), process.argv[
   const p = await b.newPage({ viewport: { width: 1280, height: 720 } });
   p.on('pageerror', e => console.log('PAGEERROR', e.message));
   await p.goto('http://127.0.0.1:8697/frequency-buddies.html?ep=' + EP + '#episode-player', { waitUntil: 'load', timeout: 120000 });
-  await p.waitForFunction(() => window.TOLBuddiesPlayer && window.TOLBuddiesPlayer._p && window.TOLBuddiesPlayer._p.dir && window.TOLPups && window.TOLPups.painted, null, { timeout: 90000 });
-  await p.evaluate(() => Promise.all([document.fonts.ready, window.TOLPups.ready])); await p.waitForTimeout(1500);
+  await p.waitForFunction(() => window.TOLBuddiesPlayer && window.TOLBuddiesPlayer._p && window.TOLBuddiesPlayer._p.dir && window.TOLPups, null, { timeout: 90000 });
+  await p.evaluate(() => Promise.all([document.fonts.ready, window.TOLPups.ready || 0])); await p.waitForTimeout(1500);
   const ok = await p.evaluate(() => new Promise(res => { window.__done = null; const ok = TOLBuddiesPlayer.record({ captions: true, width: 1280, height: 720, bitrate: 8e6, onDone: d => { const r = new FileReader(); r.onload = () => { window.__done = r.result; }; r.readAsDataURL(d.video); }, onError: e => { window.__err = e; } }); res(ok); }));
   console.log('recording', ok);
   await p.waitForTimeout(SECS * 1000);
