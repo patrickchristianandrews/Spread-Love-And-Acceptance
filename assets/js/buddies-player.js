@@ -698,9 +698,9 @@
       S.bubble = c ? { who: b.say, text: String(b.text || ''), to: addressee(b), t0: S.t, until: S.t + dur + 999, mood: b.mood || (c && c.mood), wait: !!wait, vdur: 0 } : null;
     };
     // the recorded voice really starts `delay` seconds from now and lasts `vdur`: words, mouth and bubble follow it
-    S.voiceStart = function (delay, vdur) {
+    S.voiceStart = function (delay, vdur, env) {
       var bb = S.bubble, c = bb && get(bb.who), at = S.t + Math.max(0, delay || 0);
-      if (bb) { bb.wait = false; bb.t0 = at; bb.vdur = vdur || 0; }
+      if (bb) { bb.wait = false; bb.t0 = at; bb.vdur = vdur || 0; bb.env = env || null; }
       if (c) { c.talk = 0; c.talkFrom = at; c.talkUntil = at + (vdur || 60); }
     };
     S.showNow = function () { var bb = S.bubble; if (bb && bb.wait) { bb.wait = false; bb.t0 = S.t; var c = get(bb.who); if (c) { c.talk = 1; c.talkUntil = S.t + 60; } } };
@@ -1188,7 +1188,16 @@
       else if (m === 'grumpy') line(g, 1.8, -6.3, 6.4, -4, '#1a1615', 1.4);
       else if (m === 'surprised') line(g, 2, -6.8, 6, -7.2, '#1a1615', 1.1);
     }
-    function talkAmt(c) { var t = S.t * 10.5 + (c.id === 'sugarfoot' ? 1.3 : 0); var v = 0.5 + 0.5 * Math.sin(t) * Math.sin(t * 0.37 + 1); return 0.25 + 0.75 * Math.abs(v); }
+    function talkAmt(c) {
+      var bb = S.bubble;
+      if (bb && bb.env && bb.who === c.id && !bb.wait) {
+        var u = (S.t - bb.t0) * 40, i = Math.floor(u), f = u - i, n = bb.env.length;
+        if (i < 0) return 0.05; if (i >= n - 1) return 0.05;
+        var a = (bb.env.charCodeAt(i) - 48) / 9, b2 = (bb.env.charCodeAt(i + 1) - 48) / 9, v = a + (b2 - a) * f;
+        return 0.05 + 0.95 * v;
+      }
+      var t = S.t * 10.5 + (c.id === 'sugarfoot' ? 1.3 : 0); var v2 = 0.5 + 0.5 * Math.sin(t) * Math.sin(t * 0.37 + 1); return 0.25 + 0.75 * Math.abs(v2);
+    }
 
     // what the pals carry is drawn after both of them, so a pal standing in front never hides it
     function later(m, it, dx, dy) { S.itemQ.push({ m: m, it: it, dx: dx, dy: dy }); }
@@ -1620,7 +1629,7 @@
           cb.start = function (delay, vdur) {
             if (D.i !== i || D.shown) return; D.shown = true;
             var lag = Math.max(0, delay || 0) + (call('latency') || 0);
-            D.vAt = D.u + lag; D.vdur = vdur || 0; stage.voiceStart(lag, vdur);
+            D.vAt = D.u + lag; D.vdur = vdur || 0; stage.voiceStart(lag, vdur, CL.envs && CL.envs[D.ep] && CL.envs[D.ep][ckey(b.say, b.text)]);
             var show = function () { if (D.i === i) call('onCaption', b.say, b.text, b); };
             if (lag > 0.02) setTimeout(show, lag * 1000); else show();
           };
@@ -1926,13 +1935,16 @@
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
   var PLAYER_VER = '3 Nov · 1'; // shown under the player, so we can tell which version a browser has
-  var REC = '0311f'; // bump whenever the recordings are redone, so no browser plays an old copy
+  var REC = '0311g'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function clipMap(ep) {
     var ce = catalogEntry(ep);
     if (ce && ce.clips === false) { CL.ready[ep] = false; return Promise.resolve(null); } // not recorded yet: the device's voice reads it
     if (!CL.maps[ep]) CL.maps[ep] = fetch(CL.base + ep + '/index.json?v=' + REC, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) { CL.ready[ep] = m || false; return m; });
+    // the loudness curve of each line, so the mouth follows the voice (env.json, 40 steps a second)
+    if (!CL.envs) CL.envs = {};
+    if (!CL.envs[ep]) { CL.envs[ep] = {}; fetch(CL.base + ep + '/env.json?v=' + REC, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { if (m) CL.envs[ep] = m; }).catch(function () {}); }
     return CL.maps[ep];
   }
   function clipBuf(ep, k) {

@@ -93,7 +93,7 @@
     var open = Math.max(mouth, pant);
     if (mouth > 0.02) { var vis = 0.5 + 0.5 * Math.sin((t || 0) / 95 + (w === 'sf' ? 2 : 0)); hw *= 0.78 + 0.32 * vis; }   // ah and oo: the width changes too
     g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
-    if (open > 0.03) {
+    if (open > 0.12) {
       var oh = hw * (0.18 + 0.55 * open), ow = hw * (0.55 + 0.15 * open);
       g.fillStyle = MC; g.beginPath();
       if (side) { g.moveTo(x - hw * 0.9, y - hw * 0.1); g.quadraticCurveTo(x, y - hw * 0.05 - oh * 0.15, x + hw * 0.55, y - hw * 0.12); g.quadraticCurveTo(x + hw * 0.1, y + oh * 1.3, x - hw * 0.9, y - hw * 0.1); }
@@ -195,10 +195,10 @@
     var sy = pose === 'lie' ? 0.72 : 1;
     if (view === 'right' && o && o.mirrored && META[w + '-left']) {
       var ml = META[w + '-left'], kl = UNITS / ml.h, oxl = -4 - ml.w * kl / 2, oyl = -ml.h * kl, mo2 = ml.mouth;
-      return { x: -(oxl + mo2.x * kl) - 15, y: (oyl + mo2.y * kl) * sy - 5, r: 14 };
+      return { x: -(oxl + mo2.x * kl) - 7, y: (oyl + mo2.y * kl) * sy + 3, r: 14 };
     }
     var k = UNITS / m.h, ox = 4 - m.w * k / 2, oy = -m.h * k, mo = m.mouth;
-    if (mo) return { x: ox + mo.x * k - 15, y: (oy + mo.y * k) * sy - 5, r: 14 };
+    if (mo) return { x: ox + mo.x * k - 7, y: (oy + mo.y * k) * sy + 3, r: 14 };   // carried things sit in the front teeth, below the mouth, so the talking shows
     var hl = m.layers.head; if (hl) return { x: ox + (hl.x + hl.w * 0.55) * k, y: (oy + (hl.y + hl.h * 0.45) * k) * sy, r: hl.w * k / 2 };
     return { x: ox + m.w * 0.7 * k, y: oy + m.h * 0.3 * k, r: 14 };
   };
