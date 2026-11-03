@@ -65,7 +65,9 @@ for name in list(MOUTH) + ['tb-left', 'sf-left']:
     for p in ('tail', 'head'):
         if p not in sp.w: continue
         w = np.clip((sp.w[p] - .35) / .3, 0, 1); L = im.copy(); L[..., 3] *= w; r = save(name + '-' + p, L); r.update(px=int(sp.pv[p][0] - PAD), py=int(sp.pv[p][1] - PAD)); m['layers'][p] = r
-        rest[..., 3] *= (1 - np.clip((sp.w[p] - .55) / .12, 0, 1))   # the body loses what the moving layer covers
+        # the body loses what the moving layer covers, but keeps the root (near the pivot), so a swing never opens a gap
+        pvx, pvy = sp.pv[p]; dist = np.hypot(xx - pvx, yy - pvy); R = 34 if p == 'tail' else 40
+        rest[..., 3] *= (1 - np.clip((sp.w[p] - .55) / .12, 0, 1) * np.clip((dist - R) / 14, 0, 1))
     m['layers']['body'] = save(name + '-body', rest); m['order'] = [p for p in ('bl2', 'fl2', 'tail', 'body', 'bl1', 'fl1', 'head') if p in m['layers']]
     if name in MOUTH:
         mx, my, hw, side, painted = MOUTH[name]; m['mouth'] = dict(x=mx, y=my, hw=hw, side=side, painted=painted); m['eyes'] = [list(e) for e in EYES[name]]
