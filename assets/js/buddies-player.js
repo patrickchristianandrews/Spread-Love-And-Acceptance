@@ -1207,13 +1207,16 @@
       g.scale(fa * S.sp * d.sx * (1 + pop * 0.6) * (1 - 0.06 * pass), S.sp * d.sy * (1 - pop) * (1 - 0.06 * pass));
       var wag = d.tailBase + Math.sin(S.t * 11 * d.wagS + (c.id === 'tidbit' ? 0 : 2)) * d.wagA * (c.id === 'tidbit' ? 1 : 0.8) * (S.reduced ? 0.7 : 1);
       var pose = d.pose === 'stand' ? 'run' : d.pose;
-      P.draw(g, L, pose, d.moving ? c.ph : (pose === 'run' ? Math.round(c.ph / Math.PI) * Math.PI : c.ph), wag, false, S.t * 1000, d.tilt, { ear: d.ear });
+      // the painted pups (pups-paint.js) pick their view and face from the mood, the voice and the motion
+      var popts = { ear: d.ear, mood: c.mood, talk: c.talk ? talkAmt(c) : 0, mouth: d.mouth, eyes: d.eyes, moving: !!d.moving, who: c.id };
+      P.draw(g, L, pose, d.moving ? c.ph : (pose === 'run' ? Math.round(c.ph / Math.PI) * Math.PI : c.ph), wag, false, S.t * 1000, d.tilt, popts);
       // into head space: exactly where pups.js put the head
       var lean = L.build === 'lean', BY = lean ? -21 : -18.5;
       var hx = pose === 'lie' ? 19 : pose === 'sit' ? 18 : pose === 'bow' ? 22 : 21, hy = pose === 'lie' ? -19 : pose === 'sit' ? -38 : pose === 'bow' ? -14 : BY - 12;
+      if (P.painted && P.head) { var hp = P.head(c.id, pose, popts); hx = hp.x; hy = hp.y; }
       var ph = d.moving ? c.ph : Math.round(c.ph / Math.PI) * Math.PI;
       g.translate(hx, hy); g.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : pose === 'bow' ? -0.15 : pose === 'lie' ? 0.05 : 0) + (d.tilt || 0));
-      drawFace(g, c, d);
+      if (!P.painted) drawFace(g, c, d);
       if (c.item && !(c.act && c.act.name === 'build')) {
         var o2 = S.chars[c.id === 'tidbit' ? 'sugarfoot' : 'tidbit'];
         if (c.shared && o2 && o2.shared && o2.item === c.item) {
