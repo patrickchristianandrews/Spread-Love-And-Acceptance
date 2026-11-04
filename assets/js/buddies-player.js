@@ -1225,13 +1225,32 @@
       var pose = d.pose === 'stand' ? 'run' : d.pose;
       // the painted pups (pups-paint.js) pick their view and face from the mood, the voice and the motion
       var popts = { ear: d.ear, mood: c.mood, talk: c.talk ? talkAmt(c) : 0, mouth: d.mouth, eyes: d.eyes, blink: !!d.blink, moving: !!d.moving, who: c.id, act: c.act && c.act.name, to: (S.bubble && S.bubble.who === c.id && !S.bubble.wait && S.t < S.bubble.until) ? S.bubble.to : null, lift: d.lift || 0, listening: !!(S.bubble && S.bubble.who !== c.id && !S.bubble.wait && S.t < S.bubble.until) };
-      P.draw(g, L, pose, d.moving ? c.ph : (pose === 'run' ? Math.round(c.ph / Math.PI) * Math.PI : c.ph), wag, false, S.t * 1000, d.tilt, popts);
+      // the legs settle from the stride they were in (c.ph eases to the nearest standing phase), never snapping
+      var drawBody = function (gg, pz) { P.draw(gg, L, pz, c.ph, wag, false, S.t * 1000, d.tilt, popts); };
+      // a change of pose (sit, lie, bow, wiggle, stand) blends over a moment instead of jumping in one frame
+      if (c.dpose !== pose) { if (c.dpose) { c.dprev = c.dpose; c.dT = S.t; } c.dpose = pose; }
+      var xk = c.dprev && !S.reduced ? clamp((S.t - c.dT) / 0.32, 0, 1) : 1; xk = xk * xk * (3 - 2 * xk);
+      // the head glides from where the last pose held it to where this one does, and both blended layers draw it in that
+      // same place, so only the body blends and the face never doubles
+      var hpos = P.headPos ? P.headPos(L, pose, c.ph) : null;
+      if (hpos && xk < 1) { var hp0 = P.headPos(L, c.dprev, c.ph); hpos = { x: mix(hp0.x, hpos.x, xk), y: mix(hp0.y, hpos.y, xk), r: mix(hp0.r, hpos.r, xk) }; }
+      if (hpos && !P.painted) popts.head = hpos;
+      if (xk < 1 && g.canvas) {
+        var W = g.canvas.width, H = g.canvas.height, XF = S.xf || (S.xf = [0, 1, 2].map(function () { return document.createElement('canvas'); }));
+        XF.forEach(function (cv) { if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; } });
+        var m0 = g.getTransform(), o0 = XF[0].getContext('2d'), o1 = XF[1].getContext('2d'), o2c = XF[2].getContext('2d');
+        [o0, o1, o2c].forEach(function (o) { o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over'; o.clearRect(0, 0, W, H); });
+        o0.setTransform(m0); drawBody(o0, c.dprev); o1.setTransform(m0); drawBody(o1, pose);
+        o2c.globalAlpha = 1 - xk; o2c.drawImage(XF[0], 0, 0); o2c.globalCompositeOperation = 'lighter'; o2c.globalAlpha = xk; o2c.drawImage(XF[1], 0, 0);
+        g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(XF[2], 0, 0); g.restore();
+      } else { c.dprev = null; drawBody(g, pose); }
       // into head space: exactly where pups.js put the head
       var lean = L.build === 'lean', BY = lean ? -21 : -18.5;
       var hx = pose === 'lie' ? 19 : pose === 'sit' ? 18 : pose === 'bow' ? 22 : 21, hy = pose === 'lie' ? -19 : pose === 'sit' ? -38 : pose === 'bow' ? -14 : BY - 12;
+      var ph = c.ph, hr = pose === 'run' ? Math.sin(ph) * 0.05 : pose === 'bow' ? -0.15 : pose === 'lie' ? 0.05 : 0;
+      if (hpos) { hx = hpos.x; hy = hpos.y; hr = hpos.r; }
       if (P.painted && P.head) { popts.mirrored = c.face < 0; var hp = P.head(c.id, pose, popts); hx = hp.x; hy = hp.y; }
-      var ph = d.moving ? c.ph : Math.round(c.ph / Math.PI) * Math.PI;
-      g.translate(hx, hy); g.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : pose === 'bow' ? -0.15 : pose === 'lie' ? 0.05 : 0) + (d.tilt || 0));
+      g.translate(hx, hy); g.rotate(hr + (d.tilt || 0));
       if (!P.painted) drawFace(g, c, d);
       if (c.item && !(c.act && c.act.name === 'build')) {
         var o2 = S.chars[c.id === 'tidbit' ? 'sugarfoot' : 'tidbit'];
@@ -1938,7 +1957,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '4 Nov · 1'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '4 Nov · 2'; // shown under the player, so we can tell which version a browser has
   var REC = '0311h'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }

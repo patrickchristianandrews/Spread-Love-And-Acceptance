@@ -24,6 +24,19 @@
     var key = (window.TOLPups && window.TOLPups.outfitKey) || (location && location.pathname) || 'home';
     return OUTFITS[hash(key + '|' + (L.collar ? 'tidbit' : 'sugarfoot')) % OUTFITS.length];
   }
+  // light from above: a soft sheen along the middle of the back, fading to nothing well before the neck, legs and tail,
+  // so the body reads as one smooth round shape and no joint ever shows a line
+  function roundShade(cx, cy, rx, ry) {
+    ctx.save(); ctx.translate(cx - rx * 0.18, cy - ry * 0.5); ctx.scale(1, 0.34);
+    var gr = ctx.createRadialGradient(0, 0, 0, 0, 0, rx * 0.68); gr.addColorStop(0, 'rgba(255,255,255,0.12)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(0, 0, rx * 0.68, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
+  // where each pose puts the head (in pup space, paws at 0,0, facing right) and how it is turned
+  function headPos(L, pose, ph) {
+    var BY = L.build === 'lean' ? -21 : -18.5;
+    return { x: pose === 'lie' ? 19 : pose === 'sit' ? 18 : pose === 'bow' ? 22 : 21, y: pose === 'lie' ? -19 : pose === 'sit' ? -38 : pose === 'bow' ? -14 : BY - 12,
+             r: pose === 'run' ? Math.sin(ph || 0) * 0.05 : pose === 'bow' ? -0.15 : pose === 'lie' ? 0.05 : 0 };
+  }
   function drawPup(L, pose, ph, wag, blink, t, tilt, o) {
     var wear = outfitFor(L, o), WC = L.collar ? WEAR.collar : WEAR.drop;
     function shoe(x, y, dk) { // a little sneaker over the paw: colored upper, pale sole, a lace
@@ -81,6 +94,7 @@
     ctx.save(); ctx.rotate(bodyTilt);
     if (lie) {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-2, -9, 19, 8.5, 0, 0, Math.PI * 2); ctx.fill();
+      roundShade(-2, -9, 19, 8.5);
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-12, -4, 7, 4, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.8, 2.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.3, 3.8, 2.5, 0, 0, Math.PI * 2); ctx.fill(); shoe(26, -2.5, true); shoe(23, -0.3);
@@ -89,6 +103,7 @@
     } else {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
       if (!sit) { ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); } // neck (sitting has its own; this one would tip up into a lump on the back)
+      roundShade(0, BY, BRX, BRY); // soft light along the back and shade underneath, so the body reads as one smooth round shape
       if (sit) { /* sitting: the chest marks go on the upright chest, drawn after the body (the tipped body would put them on the back) */ }
       else if (L.chest === 'white') { // Sugarfoot, as she always was: a fawn throat and a small pale streak on the chest
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();
@@ -131,13 +146,16 @@
     else if (sit) { leg(12, -17, -0.05, LL + 3); ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-9, -6, 8.5, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-4, -2.5, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-0.5, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); shoe(-0.5, -1); }
     else if (bow) { ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.8, 2.6, 0, 0, Math.PI * 2); ctx.fill(); shoe(28, -2.5); leg(-13, -16, 0, LL + 3); }
     // head: a little bigger than life, the way cartoons do it
-    var hx = lie ? 19 : sit ? 18 : bow ? 22 : 21, hy = lie ? -19 : sit ? -38 : bow ? -14 : BY - 12;
-    ctx.save(); ctx.translate(hx, hy); ctx.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0) + (tilt || 0));
+    // (o.head, when given, puts the head somewhere else: the player moves it smoothly from one pose's place to the next)
+    var hp = (o && o.head) || headPos(L, pose, ph);
+    ctx.save(); ctx.translate(hp.x, hp.y); ctx.rotate(hp.r + (tilt || 0));
     var R = 11;
     // the ear behind the head (drop ears hang down each side)
     if (L.ear === 'drop' && !noEar) { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
+    var hg = ctx.createRadialGradient(-2.5, -6.5, 0.5, -2.5, -6.5, 10); hg.addColorStop(0, 'rgba(255,255,255,0.13)'); hg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill(); // a soft sheen on the crown
     if (L.muzzle === 'cream' || L.muzzle === 'blaze') { // Sugarfoot, from her photo
       ctx.save(); ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.clip(); // every mark stays inside the head
       sfLowerFace(TAN, WHITE);
@@ -233,6 +251,7 @@
     reduced: REDUCED,
     draw: function (c, L, pose, ph, wag, blink, t, tilt, opts) { ctx = c; drawPup(L, pose, ph, wag, blink, t, tilt, opts); },
     cape: function (c, L, t, col, flying) { ctx = c; drawCape(L, t, col, flying); },
+    headPos: headPos,
     // repaint Sugarfoot's lower face under a new mouth (head space, below the eye line only)
     lowerFace: function (c, L) { ctx = c; c.save(); c.beginPath(); c.rect(-30, 3.6, 60, 30); c.clip(); sfLowerFace(L.tan || '#C4834A', '#F4EFE6'); c.restore(); }
   };
