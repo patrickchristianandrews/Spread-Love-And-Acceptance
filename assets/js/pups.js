@@ -138,13 +138,16 @@
     if (L.ear === 'drop' && !noEar) { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
-    if (L.muzzle === 'cream') {
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(5, 2.6, 9.4, 7.8, 0.12, 0, Math.PI * 2); ctx.fill();            // soft fawn fills the lower face
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(10.8, 2.6, 6.6, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();         // muzzle, the same fawn brown
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(7.5, 8.6, 7, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();             // chin, the same fawn brown
-      ctx.beginPath(); ctx.ellipse(2.5, 9.5, 4.5, 3.5, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the throat
+    if (L.muzzle === 'cream' || L.muzzle === 'blaze') { // Sugarfoot, from her photo: tan brows and cheeks, white muzzle and chin, a black stripe down the middle of the muzzle
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(4.5, 3, 8.8, 7.6, 0.12, 0, Math.PI * 2); ctx.fill();            // tan cheeks fill the lower face
+      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(11, 3.6, 6.2, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();          // white muzzle
+      ctx.beginPath(); ctx.ellipse(7.5, 8.6, 6.4, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();                                // white chin
+      ctx.beginPath(); ctx.ellipse(2.5, 9.8, 4.2, 3.2, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the white throat
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(10.5, 0.2, 6.5, 1.9, 0.1, 0, Math.PI * 2); ctx.fill();         // the black stripe down the top of the muzzle
+      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(6.9, -4.4, 1.1, 2.1, 0.2, 0, Math.PI * 2); ctx.fill();         // the cream stripe up between the eyes onto the forehead
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(4.3, -1.8, 3, 2.5, -0.1, 0, Math.PI * 2); ctx.fill();           // dark rim around the eye
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.4, -5.9, 3.6, 2.1, -0.25, 0, Math.PI * 2); ctx.fill();          // tan brow above it
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.2, -6, 3.8, 2.3, -0.25, 0, Math.PI * 2); ctx.fill();            // big tan brow
+      ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.ellipse(1.5, -4.2, 1.6, 1.1, 0, 0, Math.PI * 2); ctx.fill(); // a little grey-white at the brow's inner corner
     } else {
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(8.5, 4.5, 8, 4.8, 0.1, 0, Math.PI * 2); ctx.fill();          // tan lips and cheeks
       ctx.beginPath(); ctx.ellipse(4, 2.5, 3.8, 3.6, 0, 0, Math.PI * 2); ctx.fill();                                   // tan cheek patch
