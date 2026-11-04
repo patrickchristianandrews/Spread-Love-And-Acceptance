@@ -579,10 +579,10 @@ def fit_desc(d):
 # The Frequency Buddies season as one video, for video search (with a chapter for each episode)
 SEASON_VIDEO = {
     'url': SITE + '/assets/video/frequency-buddies-season-1.mp4', 'thumb': SITE + '/assets/img/frequency-buddies-season-1.jpg',
-    'name': 'Frequency Buddies · Season 1 · All five episodes', 'duration': 'PT1H11M32S', 'seconds': 4292, 'uploaded': '2026-11-04',
+    'name': 'Frequency Buddies · Season 1 · All five episodes', 'duration': 'PT1H11M47S', 'seconds': 4307, 'uploaded': '2026-11-04',
     'desc': 'Five gentle animated episodes for all ages: Tidbit and Sugarfoot set off on big little quests, hit real tough times and find their way through, together. With the theme song, captions in the picture and chapters.',
-    'chapters': [(0, 878, 'Episode 1: The Storm Over the Treehouse'), (878, 1735, 'Episode 2: Out of Tune'), (1735, 2572, 'Episode 3: The Heavy Basket'),
-                 (2572, 3415, 'Episode 4: Who Broke the Kite?'), (3415, 4292, 'Episode 5: The Longest Night')],
+    'chapters': [(0, 880, 'Episode 1: The Storm Over the Treehouse'), (880, 1744, 'Episode 2: Out of Tune'), (1744, 2584, 'Episode 3: The Heavy Basket'),
+                 (2584, 3426, 'Episode 4: Who Broke the Kite?'), (3426, 4307, 'Episode 5: The Longest Night')],
 }
 # each episode is its own video file (every file stays under the 25 MB limit some hosts have)
 EPISODE_VIDEOS = [{'url': SITE + '/assets/video/frequency-buddies-s1e%d.mp4' % (i + 1), 'thumb': SEASON_VIDEO['thumb'], 'name': 'Frequency Buddies · ' + n,
