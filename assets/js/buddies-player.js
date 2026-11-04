@@ -1155,7 +1155,9 @@
         g.save(); g.beginPath();
         if (isT) { g.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, TAU); g.ellipse(8.5, 4.5, 8, 4.8, 0.1, 0, TAU); }
         else { g.ellipse(5, 2.6, 9.4, 7.8, 0.12, 0, TAU); g.ellipse(10.8, 2.6, 6.6, 3.9, 0.06, 0, TAU); g.ellipse(7.5, 8.6, 7, 3.2, 0.12, 0, TAU); }
-        g.clip(); ell(g, 10.5, 7.4, 5.8, 3.6, TAN); ell(g, 10.5, 10.2, 6, 2.6, TAN);
+        g.clip();
+        if (isT || !window.TOLPups || !TOLPups.lowerFace) { ell(g, 10.5, 7.4, 5.8, 3.6, TAN); ell(g, 10.5, 10.2, 6, 2.6, TAN); }
+        else TOLPups.lowerFace(g, TOLPups.looks.drop); // Sugarfoot keeps her white lips and chin under every mouth
         if (isT) ell(g, 8.5, 8.4, 3.2, 1.5, 'rgba(210,200,186,0.85)', 0.15);
         ell(g, 7, 4.5, 2.2, 1.2, 'rgba(247,165,185,0.5)');
         g.restore();
@@ -1936,7 +1938,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '3 Nov · 1'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '4 Nov · 1'; // shown under the player, so we can tell which version a browser has
   var REC = '0311h'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }

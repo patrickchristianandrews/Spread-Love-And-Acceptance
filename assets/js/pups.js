@@ -138,16 +138,18 @@
     if (L.ear === 'drop' && !noEar) { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
-    if (L.muzzle === 'cream' || L.muzzle === 'blaze') { // Sugarfoot, from her photo: tan brows and cheeks, white muzzle and chin, a black stripe down the middle of the muzzle
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(4.5, 3, 8.8, 7.6, 0.12, 0, Math.PI * 2); ctx.fill();            // tan cheeks fill the lower face
-      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(11, 3.6, 6.2, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();          // white muzzle
-      ctx.beginPath(); ctx.ellipse(7.5, 8.6, 6.4, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();                                // white chin
-      ctx.beginPath(); ctx.ellipse(2.5, 9.8, 4.2, 3.2, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the white throat
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(10.5, 0.2, 6.5, 1.9, 0.1, 0, Math.PI * 2); ctx.fill();         // the black stripe down the top of the muzzle
-      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(6.9, -4.4, 1.1, 2.1, 0.2, 0, Math.PI * 2); ctx.fill();         // the cream stripe up between the eyes onto the forehead
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(4.3, -1.8, 3, 2.5, -0.1, 0, Math.PI * 2); ctx.fill();           // dark rim around the eye
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.2, -6, 3.8, 2.3, -0.25, 0, Math.PI * 2); ctx.fill();            // big tan brow
-      ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.ellipse(1.5, -4.2, 1.6, 1.1, 0, 0, Math.PI * 2); ctx.fill(); // a little grey-white at the brow's inner corner
+    if (L.muzzle === 'cream' || L.muzzle === 'blaze') { // Sugarfoot, from her photo
+      ctx.save(); ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.clip(); // every mark stays inside the head
+      sfLowerFace(TAN, WHITE);
+      // the black stripe: from the forehead between the eyes, down the top of the muzzle to the nose
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.moveTo(4.6, -14); ctx.lineTo(22, -14); ctx.lineTo(22, -0.4); ctx.lineTo(15.4, -0.3);
+      ctx.quadraticCurveTo(10.5, -0.5, 7.2, -2.2); ctx.quadraticCurveTo(5.4, -4.2, 4.6, -14); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(4.3, -1.7, 3.1, 2.6, -0.1, 0, Math.PI * 2); ctx.fill();                                // dark rim around the eye
+      ctx.beginPath(); ctx.ellipse(6.7, -0.2, 0.7, 1.5, -0.5, 0, Math.PI * 2); ctx.fill();                                // dark at the eye's front corner, into the stripe
+      // the long pale brow, slanting up and back toward the ear
+      ctx.fillStyle = '#D3A676'; ctx.beginPath(); ctx.ellipse(2.6, -5.9, 5, 1.75, -0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#EADAC2'; ctx.beginPath(); ctx.ellipse(3.1, -6.4, 3, 0.8, -0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
     } else {
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(8.5, 4.5, 8, 4.8, 0.1, 0, Math.PI * 2); ctx.fill();          // tan lips and cheeks
       ctx.beginPath(); ctx.ellipse(4, 2.5, 3.8, 3.6, 0, 0, Math.PI * 2); ctx.fill();                                   // tan cheek patch
@@ -203,6 +205,19 @@
     }
     ctx.restore();
   }
+  // Sugarfoot's lower face, without the grin: tan cheeks and tan up the sides of the muzzle, white only along the lips,
+  // beside the nose, on the chin and down the throat (with a cream edge where the tan meets the white, like her photo)
+  function sfLowerFace(TAN, WHITE) {
+    ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(4.5, 4, 8.6, 7.2, 0.12, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-3, 0.5, 4.2, 5.5, 0.3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(10.5, 2.4, 7, 3.6, 0.06, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#E6CFB2'; ctx.beginPath(); ctx.ellipse(11.6, 5.2, 6.2, 3.3, 0.08, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(14.6, 3.2, 2.9, 3, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(12, 5.8, 5.4, 2.6, 0.08, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(14.8, 3.8, 2.3, 2.4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(8, 8.8, 6.2, 3, 0.12, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(2.5, 10, 4.2, 3.2, 0, 0, Math.PI * 2); ctx.fill();
+  }
   function drawCape(L, t, col, flying) {
     var BY = L.build === 'lean' ? -21 : -18.5, f = Math.sin(t / (flying ? 70 : 170)), len = flying ? 36 : 24;
     ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(15, BY - 9);
@@ -217,6 +232,8 @@
     outfits: OUTFITS, outfitKey: null,
     reduced: REDUCED,
     draw: function (c, L, pose, ph, wag, blink, t, tilt, opts) { ctx = c; drawPup(L, pose, ph, wag, blink, t, tilt, opts); },
-    cape: function (c, L, t, col, flying) { ctx = c; drawCape(L, t, col, flying); }
+    cape: function (c, L, t, col, flying) { ctx = c; drawCape(L, t, col, flying); },
+    // repaint Sugarfoot's lower face under a new mouth (head space, below the eye line only)
+    lowerFace: function (c, L) { ctx = c; c.save(); c.beginPath(); c.rect(-30, 3.6, 60, 30); c.clip(); sfLowerFace(L.tan || '#C4834A', '#F4EFE6'); c.restore(); }
   };
 })();
