@@ -46,7 +46,7 @@ function disconnectAll() { for (const id of [...live.keys()]) disconnect(id); }
 async function connect(s) {
   if (live.get(s.id)?.client) return live.get(s.id);
   const { Client } = require('@modelcontextprotocol/sdk/client/index.js');
-  const client = new Client({ name: 'Quicksilver', version: '2.0.0' });
+  const client = new Client({ name: 'Quicksilver', version: require('../../package.json').version });
   let transport;
   if (s.transport === 'stdio') {
     const { StdioClientTransport } = require('@modelcontextprotocol/sdk/client/stdio.js');
