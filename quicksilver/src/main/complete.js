@@ -155,6 +155,7 @@ const DESCRIBE = 'Describe each image below in detail for a colleague who cannot
 const LEAD = `You are the lead of a team of AI models. Several models have independently drafted answers to the user's latest message. Your job is to produce the single best final answer:
 - Keep everything that is correct, useful and well-argued from any draft.
 - Check facts, numbers, logic and code carefully; fix mistakes and resolve contradictions using your own judgment.
+- Recompute every calculation yourself, step by step, rather than trusting a draft's figures (drafts that disagree on a number usually mean one is wrong).
 - Fill gaps the drafts missed, and cut repetition.
 - Match the format the user needs (tables, lists, code blocks, length).
 Write only the final answer, as if you wrote it yourself. Do not mention drafts, models or this process.`;
@@ -412,13 +413,57 @@ async function ensureQuicksilverStack() {
   const pool = models.list().filter((m) => m.kind === 'text').map(catalog.profileInstalled);
   if (pool.length < 2) return have ? 'stack:quicksilver' : null;
   const hw = await hardware.detect();
-  const team = catalog.compose(pool, 'general', hw, store.config().calib?.text || 1, { vision: true, speed: 10, budget: 180 });
+  // The lead answers every message, so it must be quick on this PC; bigger, slower models still
+  // join as the second opinion on hard questions.
+  const team = catalog.compose(pool, 'general', hw, store.config().calib?.text || 1, { vision: true, speed: 10, leadSpeed: 20, budget: 180 });
   if (!team || team.ids.length < 2) return have ? 'stack:quicksilver' : null;
   const local = (id) => (id ? `local:${id}` : undefined);
   const members = { drafters: team.members.drafters.map(local), judge: local(team.members.judge), vision: local(team.members.vision), mode: 'auto' };
   if (!members.vision) delete members.vision;
   if (!have || JSON.stringify(have.members) !== JSON.stringify(members)) saveStack({ id: 'quicksilver', name: 'Quicksilver', emoji: '💧', builtIn: true, autoManaged: true, builtFor: 'general', members });
   return 'stack:quicksilver';
+}
+
+// How a stack runs on this PC, in plain words: who does what, where it runs, how long answers
+// take, what it can do. Used by Home and the Compare page.
+const WHERE = { gpu: 'graphics card', split: 'graphics card + memory', cpu: 'processor', cloud: 'cloud' };
+async function explainStack(id) {
+  const st = stacks().find((s) => s.id === id);
+  if (!st) return null;
+  const hw = await hardware.detect();
+  const calib = store.config().calib?.text || 1;
+  const info = (t) => {
+    if (!t || !exists(t)) return null;
+    const p = parse(t);
+    if (p.kind === 'local') {
+      const m = models.get(p.id);
+      const prof = catalog.profileInstalled(m);
+      return { target: t, name: m.name, prof, est: catalog.estimateText(prof, hw, calib), vision: prof.vision, local: true };
+    }
+    return { target: t, name: label(t), prof: { id: t, jobs: { general: 8, coding: 8, research: 8 }, judge: 8, vision: canSee(t) }, est: { fit: 'cloud', rating: 'great', label: 'Fast', wordsPerSec: 40 }, vision: canSee(t), local: false };
+  };
+  const { members } = st;
+  const lead = info(members.judge || members.drafters?.[0]);
+  const drafters = (members.drafters || []).map(info).filter(Boolean);
+  const eyes = info(members.vision) || drafters.find((d) => d.vision) || (lead?.vision ? lead : null);
+  if (!lead) return null;
+  const all = [lead, ...drafters, eyes].filter(Boolean).filter((x, i, arr) => arr.findIndex((y) => y.target === x.target) === i);
+  const wps = (x) => Math.max(0.1, x.est.wordsPerSec || 0.1);
+  const auto = members.mode === 'auto';
+  const full = drafters.reduce((t, d) => t + 400 / wps(d), 0) + (members.judge ? 450 / wps(lead) : 0);
+  const simple = auto ? 300 / wps(lead) : full;
+  const photo = (eyes && eyes.target !== lead.target && !lead.vision ? 250 / wps(eyes) : 0) + (auto ? 300 / wps(lead) : full);
+  const same = (a, b) => Boolean(a && b && a.target === b.target);
+  const roles = (x) => [same(x, lead) && 'lead', !same(x, lead) && drafters.some((d) => same(d, x)) && 'draft', same(x, eyes) && !same(x, lead) && 'vision'].filter(Boolean);
+  const quality = Math.max(...all.map((x) => catalog.scoreFor(x.prof, 'general')));
+  return {
+    id: st.id, name: st.name, emoji: st.emoji || '🧩', auto,
+    members: all.map((x) => ({ name: x.name, roles: roles(x), where: WHERE[x.est.fit] || x.est.fit, speed: x.est.label, rating: x.est.rating, wps: Math.round(wps(x)), vision: x.vision })),
+    lead: lead.name, second: drafters.find((d) => !same(d, lead))?.name || null, eyes: eyes && !same(eyes, lead) ? eyes.name : (lead.vision ? lead.name : null),
+    times: { simple, hard: full, photo: eyes ? photo : null },
+    stars: catalog.starsFor(quality, all.length >= 2),
+    caps: catalog.capabilities(all.map((x) => x.prof), { local: all.every((x) => x.local) }),
+  };
 }
 
 // Everything you can chat with, for menus and the API server.
@@ -452,4 +497,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { warm, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack };
+module.exports = { warm, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack, explainStack };

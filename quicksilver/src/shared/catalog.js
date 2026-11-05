@@ -19,7 +19,7 @@ const TEXT_MODELS = [
   { id: 'phi-4-mini', name: 'Phi-4 Mini', maker: 'Microsoft', params: '3.8B', category: 'small', repo: 'unsloth/Phi-4-mini-instruct-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, ctx: 131072,
     blurb: 'Strong at maths, logic and step-by-step answers for a small model.', jobs: { general: 5, office: 6, research: 5, coding: 5, vision: 0, fast: 8 }, judge: 4 },
   { id: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', maker: 'Alibaba', params: '4B', category: 'small', repo: 'unsloth/Qwen3-4B-Instruct-2507-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, ctx: 262144,
-    blurb: 'The best all-rounder under 3 GB. Huge context window.', jobs: { general: 6, office: 6, research: 6, coding: 6, vision: 0, fast: 8 }, judge: 5 },
+    blurb: 'The best all-rounder under 3 GB, on par with older 8B models. Huge context window.', jobs: { general: 7, office: 7, research: 7, coding: 7, vision: 0, fast: 8 }, judge: 6 },
 
   // General purpose
   { id: 'qwen3-8b', name: 'Qwen3 8B', maker: 'Alibaba', params: '8B', category: 'general', repo: 'unsloth/Qwen3-8B-GGUF', quant: 'Q4_K_M', sizeGB: 5.0, ctx: 32768, reasoning: true,
@@ -138,7 +138,7 @@ const MEDIA_CATEGORIES = {
 
 const JOBS = {
   general: { kind: 'text', label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
-    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Use Markdown (headings, lists, tables, code blocks) when it helps. If you are unsure, say so instead of guessing.' } },
+    assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Use Markdown (headings, lists, tables, code blocks) when it helps. For arithmetic, numbers and calculations, work them out step by step before giving the result, and double-check it. If you are unsure, say so instead of guessing.' } },
   reasoning: { kind: 'text', label: 'Reasoning', icon: '🧠', pitch: 'Maths, logic, tricky questions and decisions, worked through step by step.', speed: 8, budget: 240, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'Thinker', emoji: '🧠', instructions: 'You are a careful reasoner. Work through problems step by step, state your assumptions, check each step, and verify the final answer (recompute numbers, test edge cases, look for counter-examples). Give the conclusion clearly at the end. If the question is ambiguous, say how you interpreted it.' } },
   office: { kind: 'text', label: 'Complex tasks', icon: '🧩', pitch: 'Multi-step projects, analysis, spreadsheets and long documents.', speed: 10, budget: 180, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: true, web: true, mode: 'blend',
@@ -260,7 +260,8 @@ function profileInstalled(inst) {
 // and a model that can see reads photos when nobody else in the stack can.
 // The Effort setting in each chat decides how much of the stack runs (Quick uses one model).
 
-function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10 } = {}) {
+// leadSpeed: how quick (tokens/s) the lead must be to count as fast enough; it answers every message.
+function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10, leadSpeed = Math.min(speed, 10) } = {}) {
   const ranked = pool.map((m) => ({ m, est: estimateText(m, hw, calib) })).filter((x) => x.est.fit !== 'no');
   if (!ranked.length) return null;
   const quick = (x, target) => Math.sqrt(Math.min(1, x.est.tps / target));
@@ -277,7 +278,7 @@ function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10
     if (!drafters.includes(x) && scoreFor(x.m, job) >= scoreFor(drafters[0].m, job) - 2) drafters.push(x);
   }
   const members = { drafters: drafters.map((x) => x.m.id) };
-  if (drafters.length > 1) members.judge = [...ranked].sort((a, b) => b.m.judge * quick(b, Math.min(speed, 10)) - a.m.judge * quick(a, Math.min(speed, 10)))[0].m.id;
+  if (drafters.length > 1) members.judge = [...ranked].sort((a, b) => b.m.judge * quick(b, leadSpeed) - a.m.judge * quick(a, leadSpeed))[0].m.id;
   const sees = (id) => ranked.find((x) => x.m.id === id)?.m.vision;
   if (vision && ![...members.drafters, members.judge].some(sees)) {
     const v = ranked.filter((x) => x.m.vision).sort((a, b) => scoreFor(b.m, 'vision') * quick(b, 15) - scoreFor(a.m, 'vision') * quick(a, 15))[0];
@@ -361,7 +362,7 @@ function advise(job, hw, opts = {}) {
     return { ...base, roles: j.roles, roleLabels: Object.fromEntries(j.roles.map((r) => [r, MEDIA_ROLES[r].label])), yours, mine, best };
   }
   const vision = !['coding', 'reasoning', 'open'].includes(job);
-  const tune = { vision, speed: j.speed, budget: j.budget };
+  const tune = { vision, speed: j.speed, budget: j.budget, leadSpeed: Math.max(8, j.speed) };
   const fits = (m) => !j.only || m[j.only]; // e.g. the Unfiltered stack only uses unfiltered models
   const pool = text.filter(fits);
   const mine = pool.length ? compose(pool, job, hw, calib, tune) : null;
@@ -381,4 +382,22 @@ function advise(job, hw, opts = {}) {
   };
 }
 
-module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf };
+// ---------- summaries for Home and the Compare page ----------
+// Stars (out of 5): the strongest member's score for the job, plus half a star when a second
+// model cross-checks it. Rounded to the nearest half star.
+const starsFor = (quality, team) => Math.min(5, Math.round((quality / 2 + (team ? 0.5 : 0)) * 2) / 2);
+
+// What a set of text models can do, as plain capabilities.
+function capabilities(profiles, { local = true } = {}) {
+  const max = (f) => Math.max(0, ...profiles.map(f));
+  return [
+    { key: 'see', label: 'Sees photos & screenshots', on: profiles.some((m) => m.vision) },
+    { key: 'reason', label: 'Step-by-step reasoning', on: profiles.some((m) => m.reasoning) || max((m) => scoreFor(m, 'reasoning')) >= 8 },
+    { key: 'code', label: 'Writes & fixes code', on: max((m) => scoreFor(m, 'coding')) >= 7 },
+    { key: 'long', label: 'Long documents', on: max((m) => m.ctx || 0) >= 65536 },
+    { key: 'check', label: 'Cross-checks its answers', on: new Set(profiles.map((m) => m.id)).size >= 2 },
+    { key: 'offline', label: 'Works offline', on: local },
+  ];
+}
+
+module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities };

@@ -21,7 +21,7 @@ views.stacks = {
     const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
       <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     return `<div class="page">
-      <div class="page-head"><h1>Stacks</h1><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
+      <div class="page-head"><h1>Stacks</h1><button class="btn" data-goto="compare">📊 Compare stacks</button><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
       <p class="lede">A stack makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes.</p>
       ${foundBanner()}
       <div class="section"><h2>1. Choose a stack</h2>${hwLine()}</div>
@@ -39,6 +39,7 @@ views.stacks = {
     if (!advJob) { runAdvisor('general'); return; }
     $$('[data-job]').forEach((b) => b.addEventListener('click', () => runAdvisor(b.dataset.job)));
     $('#infuse').addEventListener('click', () => infuseModal());
+    $$('.page-head [data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
     $('#found-review')?.addEventListener('click', foundModal);
     bindAdvisor();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));

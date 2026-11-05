@@ -23,10 +23,10 @@ function png(r, g, b, size = 64) {
   return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', zlib.deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
 }
 
-async function ask(content) {
+async function ask(content, maxTokens = 80) {
   const res = await fetch(`http://127.0.0.1:${PORT}/v1/chat/completions`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: [{ role: 'user', content }], max_tokens: 80, temperature: 0 }),
+    body: JSON.stringify({ messages: [{ role: 'user', content }], max_tokens: maxTokens, temperature: 0 }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
   const j = await res.json();
@@ -56,9 +56,11 @@ async function prove(m) {
     console.log(`  Q: capital of France → ${text}`);
     if (!/paris/i.test(text)) throw new Error(`${m.name} did not answer a simple question correctly`);
     if (m.pack) {
-      const sum = await ask('What is 17 × 23? Reply with just the number.');
-      console.log(`  Q: 17 × 23 → ${sum}`);
-      if (!/391/.test(sum)) throw new Error(`${m.name} got 17 × 23 wrong`);
+      // The way Quicksilver asks: work it out step by step, then answer.
+      const sum = await ask('What is 17 × 23? Work it out step by step, then give the final answer.', 300);
+      const final = sum.split('\n').filter(Boolean).pop();
+      console.log(`  Q: 17 × 23 → ${final}`);
+      if (!/391/.test(final)) throw new Error(`${m.name} got 17 × 23 wrong:\n${sum}`);
     }
     if (m.files.mmproj) {
       const img = `data:image/png;base64,${png(220, 30, 30).toString('base64')}`;

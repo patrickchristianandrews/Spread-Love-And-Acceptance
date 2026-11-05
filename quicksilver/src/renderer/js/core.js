@@ -173,6 +173,7 @@ async function refreshModels() {
   for (const d of r.downloading) S.downloads[d.id] = d;
   S.targets = await qs.call('targets:list');
   S.stacks = await qs.call('stacks:list');
+  S.overview = null; // Home's best setup and the Compare page are measured again
 }
 async function refreshProviders() { S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); }
 async function refreshEstimates() { S.est = await qs.call('catalog:estimates'); return S.est; }

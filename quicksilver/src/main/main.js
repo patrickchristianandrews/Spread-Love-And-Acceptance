@@ -70,6 +70,30 @@ handle('catalog:estimates', async () => {
     calibrated: c.text !== 1,
   };
 });
+// Home and the Compare page: the best setup for this PC, and every stack type side by side.
+handle('advisor:overview', async () => {
+  const hw = await hardware.detect();
+  const calib = store.config().calib.text;
+  const installed = models.list();
+  const nameOf = (id) => models.get(id)?.name || [...catalog.TEXT_MODELS, ...catalog.MEDIA_MODELS].find((m) => m.id === id)?.name || id;
+  const textCaps = (ids, pool) => catalog.capabilities(ids.map((id) => pool.find((m) => m.id === id)).filter(Boolean));
+  const mineProfiles = installed.filter((m) => m.kind === 'text').map(catalog.profileInstalled);
+  const jobs = Object.keys(catalog.JOBS).map((job) => {
+    const j = catalog.JOBS[job];
+    const a = catalog.advise(job, hw, { calib, installed });
+    const base = { job, kind: j.kind, label: j.label, icon: j.icon, pitch: j.pitch };
+    if (j.kind === 'media') {
+      const side = (s) => s && { roles: Object.entries(s.members).map(([role, id]) => ({ role, label: a.roleLabels[role], name: nameOf(id), sec: s.estimates[id]?.sec || null })), missingGB: s.missingGB || 0, better: s.better };
+      return { ...base, mine: side(a.mine), best: a.best?.members[a.roles[0]] ? side(a.best) : null };
+    }
+    const side = (s, pool) => s && { names: s.ids.map(nameOf), stars: catalog.starsFor(s.quality, s.ids.length >= 2), seconds: s.secondsPerAnswer, missingGB: s.missingGB || 0, better: s.better, caps: textCaps(s.ids, pool) };
+    return { ...base, mine: side(a.mine, mineProfiles), best: side(a.best, catalog.TEXT_MODELS) };
+  });
+  const quicksilver = (await complete.ensureQuicksilverStack()) ? await complete.explainStack('quicksilver') : null;
+  const yours = [];
+  for (const s of complete.stacks()) if (s.id !== 'quicksilver') { const e = await complete.explainStack(s.id); if (e) yours.push(e); }
+  return { hardware: hw, quicksilver, jobs, yours };
+});
 handle('advisor:advise', async (job) => {
   const hw = await hardware.detect();
   return { hardware: hw, ...catalog.advise(job, hw, { calib: store.config().calib.text, installed: models.list() }) };

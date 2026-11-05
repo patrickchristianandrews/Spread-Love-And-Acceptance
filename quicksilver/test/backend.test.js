@@ -319,7 +319,11 @@ async function collect(gen) {
     const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
     const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);
     assert.equal(qsStack.members.mode, 'auto'); assert.ok(qsStack.autoManaged);
-    assert.equal(qsStack.members.judge, 'local:phi-4', 'the strongest model on the PC leads');
+    assert.notEqual(qsStack.members.judge, 'local:phi-4', 'the lead must be quick here (Phi-4 does not fit this 8 GB card)');
+    const how = await complete.explainStack('quicksilver');
+    assert.ok(how.members.find((m) => m.roles.includes('lead')) && how.members.filter((m) => m.roles.includes('lead')).length === 1, 'exactly one lead');
+    assert.ok(how.times.simple < how.times.hard, 'simple questions are quicker than hard ones');
+    assert.ok(how.stars >= 3 && how.caps.find((c) => c.key === 'check').on);
     assert.ok(new Set(ids).size >= 3, 'a real team: lead, drafter and eyes');
     assert.ok(ids.some((t) => ['local:starter', 'local:gemma-3-4b'].includes(t)), 'a model that can see is on the team');
     // Your own edits are kept: no automatic rebuild.

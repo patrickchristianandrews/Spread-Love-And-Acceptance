@@ -79,15 +79,10 @@ views.home = {
     const api = S.apiStatus;
     const tile = (icon, k, v, sub, view) => `<button class="card" ${view ? `data-goto="${view}"` : ''} style="text-align:left"><div class="k" style="font-size:.8rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">${icon} ${k}</div><div style="font-size:1.5rem;font-weight:800;margin:4px 0">${v}</div><div class="small muted" style="font-weight:600">${sub}</div></button>`;
     return `<div class="page">
-      <div class="card hero" style="padding:26px 28px;margin-bottom:20px">
-        <div class="row"><div class="grow">
-          <h1 style="font-size:2.1rem">${S.data.prefs.userName ? `Welcome back, ${esc(S.data.prefs.userName)}.` : 'Quicksilver'}</h1>
-          <p style="font-size:1.12rem;font-weight:700;margin:6px 0 0;color:var(--accent)">Forms to fit your work. Private AI on your own PC, as strong as you need it.</p>
-        </div><button class="btn primary" data-nav-new style="font-size:1.05rem;padding:10px 22px">＋ New chat</button></div>
-        <div class="row" style="margin-top:14px">
-          <span class="badge b-mint">🔒 ${cloud ? 'Local by default; cloud only where you choose' : '100% on this PC: nothing leaves it'}</span>
-          <span class="badge b-lav">✨ Infuse AIs into one</span><span class="badge b-sky">✅ Built-in fact checking</span><span class="badge b-peach">🎨 Photo & video studio</span><span class="badge b-pink">📚 Private knowledge bases</span><span class="badge b-lemon">🔌 OpenAI-compatible API</span>
-        </div>
+      ${bestSetupHTML()}
+      <div class="row feature-row">
+        <span class="badge b-mint">🔒 ${cloud ? 'Local by default; cloud only where you choose' : '100% on this PC: nothing leaves it'}</span>
+        <span class="badge b-lav">✨ Infuse AIs into one</span><span class="badge b-sky">✅ Built-in fact checking</span><span class="badge b-peach">🎨 Photo & video studio</span><span class="badge b-pink">📚 Private knowledge bases</span><span class="badge b-lemon">🔌 OpenAI-compatible API</span>
       </div>
       ${text.length && text.every((m) => m.source === 'bundled') && !cloud ? `<div class="notice info grow-note" style="margin-bottom:18px"><b>💡 You're using Quicksilver's starter models.</b> They're quick and private, but on their own they're limited: smaller models know less and make more mistakes on hard questions. Quicksilver grows with you: install stronger models, or build stacks that make several models work as one, for sharper, more accurate answers. <span class="row" style="margin-top:8px"><button class="btn primary small" data-goto="stacks">Build a stack</button><button class="btn small" data-goto="models">Get more models</button></span></div>` : ''}
       ${!text.length && !cloud ? `<div class="notice info" style="margin-bottom:18px"><b>First step:</b> open the Stack Advisor. It checks this PC and downloads the best free models for your work in one click. <button class="btn primary small" data-goto="stacks" style="margin-left:8px">Open the Stack Advisor</button></div>` : ''}
@@ -113,6 +108,7 @@ views.home = {
     $$('[data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
     $$('[data-start]').forEach((b) => b.addEventListener('click', () => newChat(b.dataset.start)));
     $('[data-nav-new]')?.addEventListener('click', () => newChat());
+    bindBestSetup();
   },
 };
 
