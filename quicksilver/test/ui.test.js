@@ -24,12 +24,17 @@ let WIN = null;
     { id: 'sdxl-turbo', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo', files: { model: copy('sdxl.safetensors') }, size: 7e9 },
     { id: 'wan2.1-1.3b', name: 'Wan 2.1 1.3B', kind: 'video', catalogId: 'wan2.1-1.3b', files: { diffusion: copy('wan.st'), vae: copy('vae.st'), t5xxl: copy('t5.gguf') }, size: 7e9 },
   ]));
+  // A model "downloaded by LM Studio": added automatically at start-up.
+  const SCAN = path.join(HOME, 'lmstudio');
+  fs.mkdirSync(path.join(SCAN, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF'), { recursive: true });
+  const lms = path.join(SCAN, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF', 'Llama-3.2-3B-Instruct-Q4_K_M.gguf');
+  fs.copyFileSync(TINY, lms); fs.truncateSync(lms, 60e6);
   fs.writeFileSync(path.join(HOME, 'stacks.json'), JSON.stringify([{ id: 'office-powerhouse', name: 'Office & analysis · Powerhouse', emoji: '📊', members: { vision: 'local:gemma-3-4b', drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4' } }]));
 
   const app = await electron.launch({
     executablePath: require('electron'),
     args: ['--no-sandbox', ROOT],
-    env: { ...process.env, QUICKSILVER_HOME: HOME, QS_LLAMA_SERVER: path.join(__dirname, 'fakes', 'llama-server'), QS_SD_BIN: path.join(__dirname, 'fakes', 'sd') },
+    env: { ...process.env, QUICKSILVER_HOME: HOME, QS_LLAMA_SERVER: path.join(__dirname, 'fakes', 'llama-server'), QS_SD_BIN: path.join(__dirname, 'fakes', 'sd'), QS_SCAN_DIRS: SCAN },
   });
   const win = await app.firstWindow();
   WIN = win;
@@ -42,7 +47,8 @@ let WIN = null;
   // Home dashboard.
   await win.waitForSelector('text=Forms to fit your work.');
   await win.waitForSelector('text=Fake GPU 8GB', { timeout: 30000 });
-  console.log('✓ home');
+  await win.waitForSelector('text=and added it. Ready to use', { timeout: 30000 });
+  console.log('✓ home (model from another app added automatically)');
   await shot(win, '01-home');
 
   // Stack Advisor.
@@ -53,11 +59,11 @@ let WIN = null;
   await win.click('[data-job="office"]');
   await win.waitForSelector('.goal.on[data-job="office"]');
   await win.waitForSelector('.adv-mine [data-use]', { timeout: 30000 });
-  assert.equal(await win.locator('.adv-mine [data-use]').count(), 3, 'every installed model can be picked');
+  assert.equal(await win.locator('.adv-mine [data-use]').count(), 4, 'every installed model can be picked, including the one found in LM Studio');
   assert.ok(await win.locator('.adv-mine [data-use]:checked').count() >= 2, 'best mix pre-picked');
   await shot(win, '02-stacks');
   // Use only two of your models, with Phi leading.
-  for (const t of ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b']) if (await win.locator(`[data-use="${t}"]`).isChecked()) await win.uncheck(`[data-use="${t}"]`);
+  while (await win.locator('.adv-mine [data-use]:checked').count()) await win.locator('.adv-mine [data-use]:checked').first().uncheck();
   await win.check('[data-use="local:qwen3-8b"]');
   assert.equal(await win.locator('#adv-create').isDisabled(), true, 'one model is not a stack');
   await win.check('[data-use="local:phi-4"]');

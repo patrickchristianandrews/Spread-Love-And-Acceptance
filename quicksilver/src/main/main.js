@@ -114,6 +114,8 @@ handle('models:folder', () => shell.openPath(store.dir('models')));
 handle('models:found', () => models.findOnPC());
 handle('models:repair', (id) => { llama.stopAll(); return models.repair(id, emit); });
 handle('models:addFound', (items) => models.addFound(items, llama.readGguf));
+// At start-up: add every model found on this PC (other apps, Downloads) without asking.
+handle('models:autoAdd', async () => { const found = models.findOnPC(); return found.length ? models.addFound(found, llama.readGguf) : []; });
 
 // ---------- providers (APIs) ----------
 handle('providers:presets', () => providers.PRESETS);

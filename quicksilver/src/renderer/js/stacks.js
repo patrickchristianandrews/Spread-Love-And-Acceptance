@@ -172,7 +172,7 @@ function rowsHTML(p) {
     const on = advOn.has(x.target);
     return `<label class="pick-row ${on ? 'on' : ''}"><input type="checkbox" data-use="${esc(x.target)}" ${on ? 'checked' : ''}>
       <span class="grow"><b>${esc(x.name)}</b>${x.vision ? ' <span title="Can see photos and video">👁</span>' : ''}${x.cloud ? ' <span class="small muted">☁ cloud</span>' : ''}</span>
-      <span class="row" style="gap:4px">${on ? p.role(x).map((k) => ROLE[k]).join('') : ''}</span></label>`;
+      <span class="row roles" style="gap:4px">${on ? p.role(x).map((k) => ROLE[k]).join('') : ''}</span></label>`;
   }).join('');
 }
 
@@ -230,7 +230,14 @@ function bindAdvisor() {
     if (e.target.matches('[data-kit]')) advKit[e.target.dataset.kit] = e.target.value;
     if (r.kind === 'text') {
       const p = textPlan(r);
-      $('#adv-rows').innerHTML = rowsHTML(p);
+      // Update each row's tags in place (redrawing the list would lose focus and feel jumpy).
+      for (const x of p.rows) {
+        const row = out.querySelector(`[data-use="${CSS.escape(x.target)}"]`)?.closest('.pick-row');
+        if (!row) continue;
+        const on = advOn.has(x.target);
+        row.classList.toggle('on', on);
+        row.querySelector('.roles').innerHTML = on ? p.role(x).map((k) => ROLE[k]).join('') : '';
+      }
       $('#adv-sum').innerHTML = textSummary(p, r);
       $('#adv-create').disabled = !p.ok;
     }

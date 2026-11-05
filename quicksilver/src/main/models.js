@@ -78,6 +78,11 @@ function remove(id) {
   const m = all.find((x) => x.id === id);
   if (!m) return false;
   const root = store.dir('models');
+  if (m.source === 'imported' && m.from && m.files?.model) {
+    const ignored = new Set(store.config().foundIgnored || []);
+    ignored.add(path.resolve(m.files.model).toLowerCase());
+    store.saveConfig({ foundIgnored: [...ignored] });
+  }
   if (m.source !== 'imported') {
     for (const f of Object.values(m.files || {})) {
       // Only delete files we downloaded, and only if no other installed model shares them.
@@ -303,7 +308,7 @@ function scanOllama(root) {
 }
 
 function findOnPC() {
-  const have = new Set(list().flatMap((m) => Object.values(m.files || {})).map((f) => path.resolve(f).toLowerCase()));
+  const have = new Set([...list().flatMap((m) => Object.values(m.files || {})).map((f) => path.resolve(f).toLowerCase()), ...(store.config().foundIgnored || [])]);
   const own = path.resolve(store.dir('models')).toLowerCase();
   const seen = new Set();
   const out = [];

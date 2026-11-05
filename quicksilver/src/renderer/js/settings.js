@@ -39,6 +39,8 @@ function chatSetHTML() {
   const p = P();
   return `<div class="stack-v">
     <div class="field"><label for="c-default">Default model or stack</label><select id="c-default">${targetOptions(p.defaultTarget, { includeNone: true, noneLabel: 'Automatic' })}</select></div>
+    <label class="row"><input type="checkbox" id="c-auto" ${p.autoAddFound !== false ? 'checked' : ''}> <span><b>📦 Add models from other apps automatically</b> <span class="help">LM Studio, Jan, Ollama, GPT4All and Downloads, checked each time Quicksilver starts. Files stay where they are.</span></span></label>
+    <label class="row"><input type="checkbox" id="c-preload" ${p.preloadDefault !== false ? 'checked' : ''}> <span><b>⚡ Load my default model when Quicksilver starts</b> <span class="help">the first reply is much quicker; the model waits in memory in the background</span></span></label>
     <div class="field"><label for="c-effort">Default effort</label><span class="help">Quick uses one model with no thinking; Max runs the whole stack and always fact checks.</span><select id="c-effort">${Object.entries(EFFORTS).map(([k, l]) => `<option value="${k}" ${k === (p.effortLevel || 'thorough') ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
     <label class="row"><input type="checkbox" id="c-fact" ${p.factCheck ? 'checked' : ''}> <span><b>✅ Fact check every answer</b> <span class="help">in all chats (you can still turn it off per chat)</span></span></label>
     <div class="field"><label for="c-checker">Fact checker</label><span class="help">Automatic picks the strongest model that didn't write the answer, so the check is independent.</span><select id="c-checker">${targetOptions(p.factChecker, { includeNone: true, noneLabel: 'Automatic (recommended)' })}</select></div>
@@ -56,7 +58,7 @@ function bindChatSet() {
   $('#c-temp').addEventListener('input', (e) => { $('#c-temp-v').textContent = e.target.value; });
   $('#c-save').addEventListener('click', () => {
     Object.assign(P(), {
-      defaultTarget: $('#c-default').value, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
+      defaultTarget: $('#c-default').value, autoAddFound: $('#c-auto').checked, preloadDefault: $('#c-preload').checked, effortLevel: $('#c-effort').value, factCheck: $('#c-fact').checked, factChecker: $('#c-checker').value,
       temperature: Number($('#c-temp').value), contextSize: Number($('#c-ctx').value), maxTokens: Math.max(256, Number($('#c-max').value) || 4096),
       gpu: $('#c-gpu').value === '0' ? 0 : 'auto', sourcesPerAnswer: Number($('#c-src').value),
     });

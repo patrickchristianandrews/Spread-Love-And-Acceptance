@@ -147,6 +147,37 @@ async function init() {
 
   go({ view: 'home' });
   refreshEstimates().then(() => { if (['home', 'stacks', 'models', 'pc'].includes(S.route.view)) render(); });
+  startupModels();
+}
+
+// After the first screen: add models found on this PC, pick a default if there is none, and load
+// the default model in the background so the first reply is quick. Both can be turned off.
+async function startupModels() {
+  const p = S.data.prefs;
+  if (p.autoAddFound !== false) {
+    try {
+      const added = await qs.call('models:autoAdd');
+      if (added.length) {
+        await refreshModels();
+        S.found = [];
+        if (!targetValid(p.defaultTarget) && added.some((m) => m.kind === 'text')) {
+          // The advisor's pick for everyday use, from the models you now have.
+          const r = await qs.call('advisor:advise', 'general').catch(() => null);
+          const id = r?.mine?.members.judge || r?.mine?.members.drafters[0] || added.find((m) => m.kind === 'text').id;
+          p.defaultTarget = `local:${id}`;
+          save();
+        }
+        const apps = [...new Set(added.map((m) => m.from).filter(Boolean))].join(', ');
+        toast(`Found ${added.length} model${added.length > 1 ? 's' : ''} on this PC${apps ? ` (${apps})` : ''} and added ${added.length > 1 ? 'them' : 'it'}. Ready to use, nothing downloaded.`, 7000);
+        if (['home', 'models', 'stacks'].includes(S.route.view)) render();
+        else renderChatList();
+      }
+    } catch {}
+  }
+  if (p.preloadDefault !== false) {
+    const t = resolveTarget(null, assistantById(p.lastAssistant));
+    if (t) qs.call('models:warm', t, { contextSize: p.contextSize, gpu: p.gpu }).catch(() => {});
+  }
 }
 
 init().catch((err) => { document.body.innerHTML = `<div style="padding:40px;font:16px system-ui"><h1>Quicksilver couldn't start</h1><pre>${String(err?.stack || err).replace(/</g, '&lt;')}</pre></div>`; });
