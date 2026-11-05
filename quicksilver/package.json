@@ -1,0 +1,33 @@
+{
+  "name": "quicksilver",
+  "productName": "Quicksilver",
+  "version": "0.1.0",
+  "description": "Quicksilver: characters that take any shape. A private desktop app for role-playing with characters you create, powered by Claude.",
+  "main": "main.js",
+  "author": "Patrick Christian Andrews",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/ui.test.js",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.5.0"
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.liquid.quicksilver",
+    "productName": "Quicksilver",
+    "files": ["main.js", "preload.js", "renderer/**/*", "package.json"],
+    "win": { "target": "nsis" },
+    "mac": { "target": "dmg", "category": "public.app-category.entertainment" },
+    "linux": { "target": "AppImage", "category": "Chat" }
+  }
+}

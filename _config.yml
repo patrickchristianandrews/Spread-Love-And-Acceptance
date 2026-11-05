@@ -47,6 +47,8 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - _manuscripts/
+  # Quicksilver desktop app (Electron source), not part of the site.
+  - quicksilver/
   - scripts/
   - tests/
   - package.json
