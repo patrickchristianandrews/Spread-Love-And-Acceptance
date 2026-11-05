@@ -134,6 +134,47 @@ jobs:
             quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
 
+      # Install it and use it the way a new user would: real installer, real engine, the models that
+      # come with Quicksilver, real questions. A failure here fails the build.
+      - name: Install with the models folder and use it like a new user
+        shell: pwsh
+        timeout-minutes: 30
+        run: |
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Start-Process -Wait -FilePath $setup.FullName -ArgumentList '/S','/D=C:\QS'
+          if (!(Test-Path 'C:\QS\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          if (!(Test-Path 'C:\QS\resources\engine\llama\llama-server.exe')) { throw 'the text engine is missing' }
+          foreach ($f in 'STARTER.json','model.gguf','mmproj.gguf','qwen3-4b-instruct-2507.gguf') { if (!(Test-Path "C:\QS\resources\starter\$f")) { throw "missing resources\starter\$f" } }
+          Get-ChildItem C:\QS\resources\starter | ForEach-Object { '{0,-34} {1,8:N0} MB' -f $_.Name, ($_.Length / 1MB) }
+          Write-Host '✓ installed, and the installer copied the Quicksilver model in'
+          node test/installed.test.js C:\QS\Quicksilver.exe full install-shots
+          if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
+
+      - name: Install from the setup file alone, then uninstall
+        shell: pwsh
+        timeout-minutes: 40
+        run: |
+          New-Item -ItemType Directory -Force C:\lonely | Out-Null
+          $setup = Get-ChildItem dist\Quicksilver-Setup-*.exe | Select-Object -First 1
+          Copy-Item $setup.FullName C:\lonely\
+          Start-Process -Wait -FilePath (Join-Path C:\lonely $setup.Name) -ArgumentList '/S','/D=C:\QS2'
+          if (!(Test-Path 'C:\QS2\Quicksilver.exe')) { throw 'Quicksilver.exe was not installed' }
+          if (Test-Path 'C:\QS2\resources\starter\qwen3-4b-instruct-2507.gguf') { throw 'without the folder, the main model should not be installed' }
+          node test/installed.test.js C:\QS2\Quicksilver.exe fallback install-shots
+          if ($LASTEXITCODE -ne 0) { throw 'the installed app test failed' }
+          $un = Get-ChildItem 'C:\QS2\Uninstall*.exe' | Select-Object -First 1
+          Start-Process -Wait -FilePath $un.FullName -ArgumentList '/S'
+          for ($i = 0; $i -lt 90 -and (Test-Path 'C:\QS2\Quicksilver.exe'); $i++) { Start-Sleep 1 }
+          if (Test-Path 'C:\QS2\Quicksilver.exe') { throw 'uninstalling left the app behind' }
+          Write-Host '✓ uninstalled cleanly'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Quicksilver-install-test-screenshots
+          path: quicksilver/install-shots/
+          if-no-files-found: ignore
+
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/quicksilver-v')
         uses: softprops/action-gh-release@v2
