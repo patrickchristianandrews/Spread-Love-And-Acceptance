@@ -59,7 +59,7 @@ let WIN = null;
   await win.selectOption('#pick-model', 'stack:office-powerhouse');
   await win.setInputFiles('#file-in', { name: 'sales.csv', mimeType: 'text/csv', buffer: Buffer.from('Region,Revenue\nNorth,1200\nSouth,800\n') });
   await win.waitForSelector('.attach:has-text("sales.csv")');
-  if (/off/.test(await win.locator('#tog-fact').innerText())) await win.click('#tog-fact');
+  if ((await win.getAttribute('#tog-fact', 'aria-pressed')) !== 'true') await win.click('#tog-fact');
   await win.fill('#input', 'Which region sold more?');
   await win.keyboard.press('Enter');
   await idle();
@@ -70,6 +70,24 @@ let WIN = null;
   console.log('✓ stack chat with spreadsheet + fact check');
   await win.locator('.steps').first().evaluate((d) => { d.open = true; });
   await shot(win, '03-chat-stack');
+
+  // Infuse: fuse two models into one with Debate, from the model picker.
+  await win.selectOption('#pick-model', '__infuse');
+  await win.waitForSelector('text=Infuse AIs');
+  await win.check('.infuse-opt input[value="local:qwen3-8b"]');
+  await win.check('.infuse-opt input[value="local:phi-4"]');
+  await win.click('.infuse-mode:has-text("Debate")');
+  await win.fill('#inf-name', 'Analyst Supreme');
+  await shot(win, '13-infuse');
+  await win.click('#inf-go');
+  await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Analyst Supreme'));
+  await win.fill('#input', 'Settle this with a debate');
+  await win.keyboard.press('Enter');
+  await idle();
+  await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('FINAL from phi.gguf combining 4 drafts'), null, { timeout: 60000 });
+  await win.waitForFunction(() => !document.body.textContent.includes('checking…'), null, { timeout: 60000 });
+  console.log('✓ infuse: created from the chat, debate answer');
+  await win.selectOption('#pick-model', 'stack:office-powerhouse');
 
   // Effort: quick uses one model, no steps.
   await win.selectOption('#pick-effort', 'quick');

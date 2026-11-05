@@ -41,34 +41,38 @@ views.chat = {
     const lib = chat.library ?? a.library;
     const web = chat.web ?? a.web;
     const fact = factOn(chat, a);
+    const tools = toolsOn(chat, a);
+    const chip = (id, ic, label, on, title) => `<button class="chip-tog ${on ? 'on' : ''}" id="${id}" aria-pressed="${on}" title="${title}">${icon(ic, 16)}<span>${label}</span>${on ? icon('check', 14) : ''}</button>`;
     return `<div class="chat">
-      <div class="chat-top">
-        <span class="emoji-badge">${esc(a.emoji)}</span>
-        <select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>
-        <select id="pick-model" aria-label="Model or stack">${S.targets.length ? targetOptions(target) : '<option value="">No models yet</option>'}<option value="__get">＋ Get more models…</option></select>
-        <span class="grow"></span>
-        <button class="btn small ${lib ? 'on' : ''}" id="tog-lib" title="Search your knowledge bases and cite them">📚 Knowledge ${lib ? 'on' : 'off'}</button>
-        <button class="btn small ${web ? 'on' : ''}" id="tog-web" title="Search the web and cite sources">🌐 Web ${web ? 'on' : 'off'}</button>
-        <select id="pick-effort" aria-label="Effort" title="How hard the AI works: quicker or more thorough" style="width:auto">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e}</option>`).join('')}</select>
-        <button class="btn small ${toolsOn(chat, a) ? 'on' : ''}" id="tog-tools" title="Let the AI use your integrations (GitHub, Slack, MCP servers…)">🔌 Tools ${toolsOn(chat, a) ? 'on' : 'off'}</button>
-        <button class="btn small ${fact ? 'on' : ''}" id="tog-fact" title="After each answer, a second model checks it claim by claim">✅ Fact check ${fact ? 'on' : 'off'}</button>
-        <button class="btn small" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">⋯</button>
-      </div>
-      <div class="messages" id="messages">${chat.messages.length ? chat.messages.map((m, i) => messageHTML(chat, a, m, i)).join('') : welcomeHTML(a)}</div>
+      <header class="chat-top">
+        <div class="pickers">
+          <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
+          <label class="pill-select" title="Model or stack">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or stack">${S.targets.length ? targetOptions(target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Infuse several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
+        </div>
+        <div class="chat-title" title="${esc(chat.title)}">${esc(chat.title)}</div>
+        <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
+      </header>
+      <div class="messages" id="messages"><div class="messages-inner">${chat.messages.length ? chat.messages.map((m, i) => messageHTML(chat, a, m, i)).join('') : welcomeHTML(a)}</div></div>
       <div class="composer" id="composer">
-        <div class="composer-inner">
+        <div class="composer-card">
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
           <div id="skill-row">${skillChipHTML(chat)}</div>
           <div class="skill-pop" id="skill-pop" hidden></div>
-          <textarea id="input" rows="2" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}… (type / for skills)`)}" aria-label="Message"></textarea>
-          <div class="tools">
-            <button class="btn small" id="skill-btn" title="Use a skill (or type / )">⚡ Skills</button>
-            <label class="btn small" title="Attach photos, videos or documents">📎 Attach<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
-            <span class="small muted grow">Drop or paste photos, videos, PDFs, Word, Excel and PowerPoint files.</span>
-            <span class="small muted">${esc(targetLabel(target))}</span>
-            <button class="btn primary" id="send">${pending?.chatId === chat.id ? '■ Stop' : 'Send ➤'}</button>
+          <textarea id="input" rows="1" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}…  Type / for skills`)}" aria-label="Message"></textarea>
+          <div class="composer-bar">
+            <button class="icon-btn" id="skill-btn" title="Use a skill (or type /)" aria-label="Skills">${icon('zap')}</button>
+            <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
+            <span class="bar-sep"></span>
+            ${chip('tog-lib', 'book', 'Knowledge', lib, 'Search your knowledge bases and cite them')}
+            ${chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
+            ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
+            ${chip('tog-fact', 'shield', 'Fact check', fact, 'After each answer, a second model checks it claim by claim')}
+            <label class="pill-select small" title="Effort: quicker or more thorough">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
+            <span class="grow"></span>
+            <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
+        <div class="composer-hint">Runs on ${esc(targetLabel(target))} · Drop or paste photos, video, PDF, Word, Excel or PowerPoint</div>
       </div>
     </div>`;
   },
@@ -99,7 +103,7 @@ function attachmentsHTML(list, removable) {
 
 function stepsHTML(alt, streaming) {
   if (!alt.steps?.length) return '';
-  const roleBadge = { vision: '<span class="badge b-sky">👁 Sees</span>', draft: '<span class="badge b-lav">✏️ Drafts</span>', lead: '<span class="badge b-mint">★ Lead</span>' };
+  const roleBadge = { vision: '<span class="badge b-sky">👁 Sees</span>', draft: '<span class="badge b-lav">✏️ Drafts</span>', critique: '<span class="badge b-peach">⚔️ Debates</span>', tools: '<span class="badge b-lemon">🔌 Tools</span>', lead: '<span class="badge b-mint">★ Lead</span>' };
   return `<details class="steps" ${streaming ? 'open' : ''}><summary>🧩 How this answer was made: ${alt.steps.length} step${alt.steps.length > 1 ? 's' : ''}</summary>
     ${alt.steps.map((s) => `<div class="step">${roleBadge[s.role] || ''}<div class="grow"><b>${esc(s.label)}</b> <span class="muted small">· ${esc(s.model)}${s.ms ? ` · ${fmtSec(s.ms / 1000)}` : ''}${s.done ? '' : ' · working…'}</span>${s.error ? `<div class="small" style="color:var(--danger);font-weight:700">${esc(s.error)}</div>` : ''}
       ${s.role !== 'lead' && s.text ? `<details><summary class="small">Show</summary><pre>${esc(s.text)}</pre></details>` : ''}</div></div>`).join('')}
@@ -124,9 +128,9 @@ function messageHTML(chat, a, m, i) {
   const tools = [];
   if (m.alts.length > 1) tools.push(`<button class="tool" data-act="prev" data-id="${m.id}" aria-label="Previous answer">‹</button><span class="small muted">${m.altIndex + 1} / ${m.alts.length}</span><button class="tool" data-act="next" data-id="${m.id}" aria-label="Next answer">›</button>`);
   if (!pending) {
-    if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}">↻ Regenerate</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
-    if (alt.text && !alt.check && !checkRunning(m)) tools.push(`<button class="tool" data-act="check" data-id="${m.id}">✅ Fact check</button>`);
-    tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">Save as…</button><button class="tool" data-act="del" data-id="${m.id}">Delete</button>`);
+    if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}" title="Write a new answer">${icon('refresh', 15)} Regenerate</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
+    if (alt.text && !alt.check && !checkRunning(m)) tools.push(`<button class="tool" data-act="check" data-id="${m.id}">${icon('shield', 15)} Fact check</button>`);
+    tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">${icon('copy', 15)} Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">${icon('download', 15)} Save as…</button><button class="tool" data-act="del" data-id="${m.id}" title="Delete">${icon('trash', 15)}</button>`);
   }
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
@@ -206,6 +210,7 @@ function bindChat() {
   $('#pick-assistant').addEventListener('change', (e) => { chat.assistantId = e.target.value; S.data.prefs.lastAssistant = e.target.value; save(); render(); });
   $('#pick-model').addEventListener('change', (e) => {
     if (e.target.value === '__get') { go({ view: 'stacks' }); return; }
+    if (e.target.value === '__infuse') { e.target.value = resolveTarget(chat, a); infuseModal((st) => { chat.target = `stack:${st.id}`; save(); render(); }); return; }
     chat.target = e.target.value; save(); render();
   });
   $('#tog-lib').addEventListener('click', () => { chat.library = !(chat.library ?? a.library); save(); render(); });

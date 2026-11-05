@@ -9,36 +9,43 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
+  <div class="app" id="app">
+    <aside class="sidebar" aria-label="Navigation">
       <div class="brand">
-        <svg viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
-          <defs><linearGradient id="qsdrop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9b8ff"/><stop offset=".5" stop-color="#9fd0ff"/><stop offset="1" stop-color="#8ee6c4"/></linearGradient></defs>
-          <path d="M16 2.5C16 2.5 6 13.6 6 20a10 10 0 0 0 20 0c0-6.4-10-17.5-10-17.5z" fill="url(#qsdrop)" stroke="#3b2a8f" stroke-width="1.6"/>
+        <svg class="brand-mark" viewBox="0 0 32 32" width="34" height="34" aria-hidden="true">
+          <defs><linearGradient id="qsdrop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cbbcff"/><stop offset=".5" stop-color="#a6d3ff"/><stop offset="1" stop-color="#94e8c8"/></linearGradient></defs>
+          <path d="M16 2.5C16 2.5 6 13.6 6 20a10 10 0 0 0 20 0c0-6.4-10-17.5-10-17.5z" fill="url(#qsdrop)" stroke="#3b2a8f" stroke-width="1.7"/>
           <path d="M11.5 20.5a4.5 4.5 0 0 0 4.5 4.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
         </svg>
-        <div><div class="brand-name">Quicksilver</div><div class="brand-tag">Forms to fit your work.</div></div>
+        <div class="brand-text"><div class="brand-name">Quicksilver</div><div class="brand-tag">Forms to fit your work.</div></div>
+        <button class="icon-btn collapse-btn" id="collapse" title="Collapse the sidebar" aria-label="Collapse the sidebar"><span data-icon="left"></span></button>
       </div>
-      <button class="nav-item nav-new" data-nav="newchat"><span class="ic">＋</span>New chat</button>
-      <button class="nav-item" data-nav="home"><span class="ic">🏠</span>Home</button>
-      <button class="nav-item" data-nav="assistants"><span class="ic">🧑‍💼</span>Assistants</button>
-      <button class="nav-item" data-nav="skills"><span class="ic">⚡</span>Skills</button>
-      <button class="nav-item" data-nav="stacks"><span class="ic">🧩</span>Stacks</button>
-      <button class="nav-item" data-nav="studio"><span class="ic">🎨</span>Studio</button>
-      <button class="nav-item" data-nav="library"><span class="ic">📚</span>Knowledge</button>
-      <button class="nav-item" data-nav="integrations"><span class="ic">🔌</span>Integrations</button>
-      <button class="nav-item" data-nav="models"><span class="ic">📦</span>Models</button>
-      <button class="nav-item" data-nav="pc"><span class="ic">🖥️</span>Your PC</button>
-      <button class="nav-item" data-nav="settings"><span class="ic">⚙️</span>Settings</button>
+      <button class="nav-new" data-nav="newchat" title="New chat (Ctrl+N)"><span data-icon="plus"></span><span class="lbl">New chat</span><kbd class="lbl">Ctrl N</kbd></button>
+      <nav class="nav">
+        <button class="nav-item" data-nav="home" title="Home"><span data-icon="home"></span><span class="lbl">Home</span></button>
+        <button class="nav-item" data-nav="assistants" title="Assistants"><span data-icon="users"></span><span class="lbl">Assistants</span></button>
+        <button class="nav-item" data-nav="skills" title="Skills"><span data-icon="zap"></span><span class="lbl">Skills</span></button>
+        <button class="nav-item" data-nav="library" title="Knowledge"><span data-icon="book"></span><span class="lbl">Knowledge</span></button>
+        <div class="nav-label lbl">Create &amp; connect</div>
+        <button class="nav-item" data-nav="stacks" title="Infuse &amp; Stacks"><span data-icon="sparkle"></span><span class="lbl">Infuse</span></button>
+        <button class="nav-item" data-nav="studio" title="Studio"><span data-icon="image"></span><span class="lbl">Studio</span></button>
+        <button class="nav-item" data-nav="integrations" title="Integrations"><span data-icon="plug"></span><span class="lbl">Integrations</span></button>
+        <button class="nav-item" data-nav="models" title="Models"><span data-icon="box"></span><span class="lbl">Models</span></button>
+      </nav>
       <div class="dl-mini" id="dl-mini" hidden></div>
-      <div class="side-label">Chats</div>
-      <input class="side-search" id="chat-search" type="search" placeholder="Search chats" aria-label="Search chats">
-      <div class="chat-list" id="chat-list"></div>
+      <div class="chats-head lbl"><span class="nav-label" style="padding:0">Chats</span></div>
+      <div class="side-search-wrap lbl"><span data-icon="search"></span><input class="side-search" id="chat-search" type="search" placeholder="Search chats (Ctrl K)" aria-label="Search chats"></div>
+      <div class="chat-list lbl" id="chat-list"></div>
+      <div class="side-foot">
+        <button class="nav-item" data-nav="pc" title="Your PC"><span data-icon="cpu"></span><span class="lbl">Your PC</span></button>
+        <button class="nav-item" data-nav="settings" title="Settings"><span data-icon="settings"></span><span class="lbl">Settings</span></button>
+      </div>
     </aside>
     <main class="main" id="main"></main>
   </div>
   <div class="modal-backdrop" id="modal" hidden><div class="modal" role="dialog" aria-modal="true" id="modal-body"></div></div>
   <div class="toast" id="toast" role="status" hidden></div>
+  <script src="js/icons.js"></script>
   <script src="js/core.js"></script>
   <script src="js/skills-data.js"></script>
   <script src="js/skills.js"></script>

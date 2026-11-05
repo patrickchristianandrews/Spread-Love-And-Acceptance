@@ -81,6 +81,14 @@ async function collect(gen) {
   assert.ok(live.includes('draft'));
   console.log('✓ powerhouse stack:', roles.join(' → '), '→', r2.text);
 
+  // Infuse: debate mode adds a critique-and-revise round; consensus uses the consensus lead.
+  complete.saveStack({ id: 'infused', name: 'My Infusion', emoji: '✨', members: { drafters: ['local:qwen3-8b', 'local:phi-4'], judge: 'local:phi-4', mode: 'debate' } });
+  const rd = await collect(complete.run('stack:infused', { messages: [{ role: 'user', content: 'Debate this' }], maxTokens: 200, contextSize: 4096 }));
+  const dRoles = uniq(rd.steps).map((s) => s.role);
+  assert.deepEqual(dRoles, ['draft', 'draft', 'critique', 'critique', 'lead']);
+  assert.match(rd.text, /combining 4 drafts/);
+  console.log('✓ infuse (debate):', dRoles.join(' → '));
+
   // Balanced stack (one drafter + reviewer) and memory pool.
   complete.saveStack({ id: 'bal', name: 'Balanced', members: { drafters: ['local:qwen3-8b'], judge: 'local:phi-4' } });
   const r3 = await collect(complete.run('stack:bal', { messages: [{ role: 'user', content: 'Plan my week' }], maxTokens: 200, contextSize: 4096 }));

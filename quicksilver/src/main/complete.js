@@ -93,6 +93,18 @@ const LEAD = `You are the lead of a team of AI models. Several models have indep
 - Match the format the user needs (tables, lists, code blocks, length).
 Write only the final answer, as if you wrote it yourself. Do not mention drafts, models or this process.`;
 
+const CONSENSUS = `You are the lead of a panel of AI models that answered the user's latest message independently. Build the final answer on consensus:
+- State plainly what most of the drafts agree on, and treat that as the most reliable part.
+- Where the drafts disagree, check the point yourself and decide; if it can't be settled, say so.
+- End with a short "Where the models disagreed" section (or "The models agreed on all key points").
+Write the final answer only; do not number or quote the drafts.`;
+
+const DEBATE_LEAD = `You are the judge of a debate between AI models. Each model answered the user's latest message, then read the others' answers, criticised them and revised its own. Using the revised answers and critiques, write the single best final answer: adopt the arguments that survived criticism, correct anything shown to be wrong, and resolve remaining disagreements with your own careful judgment. Write only the final answer, as if you wrote it yourself.`;
+
+const CRITIQUE = `Other AI models answered the same question as you. Read their answers below, then:
+1. In a section "Critique", list concrete errors, gaps or weak reasoning in the other answers (and in your own), briefly.
+2. In a section "Revised answer", write your improved answer, keeping what was right and fixing what was wrong.`;
+
 const REVIEW = `You are a careful senior reviewer. Another model has drafted an answer to the user's latest message. Produce the final answer: keep what is good, fix any errors in facts, numbers, logic or code, fill important gaps, and improve clarity and structure. Write only the final answer, as if you wrote it yourself. Do not mention the draft or this process.`;
 
 function textOnly(messages, descriptions) {
@@ -201,10 +213,36 @@ async function* stack(stackDef, req) {
   if (req.signal?.aborted) return;
   if (!drafts.length && !judge) throw new Error('Every model in the stack failed. ' + (steps.find((s) => s.error)?.error || ''));
 
+  // 3b. Debate: every model reads the others' answers, critiques them and revises its own.
+  const mode = stackDef.members.mode || 'blend';
+  if (mode === 'debate' && drafts.length >= 2 && level !== 'quick' && level !== 'balanced') {
+    const revSteps = drafters.map((d, i) => ({ role: 'critique', label: `Debate: ${label(d)} critiques and revises`, model: label(d), text: '', done: false }));
+    for (const r of revSteps) yield step(r);
+    yield { type: 'status', text: 'The models are debating each other\'s answers…' };
+    const runRev = async (d, i) => {
+      const r = revSteps[i];
+      const own = draftSteps[i].text;
+      if (!own) { r.done = true; r.error = 'No first answer to revise.'; return; }
+      const others = drafts.filter((x) => x.text !== own).map((x, k) => `<answer from="model ${k + 1}">\n${x.text}\n</answer>`).join('\n\n');
+      const base = msgsFor(d);
+      const started = Date.now();
+      try {
+        r.text = await collect(d, { ...req, messages: [...base, { role: 'assistant', content: own }, { role: 'user', content: `${CRITIQUE}\n\n${others}` }] }, live(r));
+      } catch (err) { if (req.signal?.aborted) throw err; r.error = String(err.message || err); }
+      r.done = true; r.ms = Date.now() - started;
+      req.onStep?.(r);
+    };
+    const chain = (async () => { for (let i = 0; i < drafters.length; i++) if (parse(drafters[i]).kind !== 'api') await runRev(drafters[i], i); })();
+    await Promise.all([chain, ...drafters.map((d, i) => (parse(d).kind === 'api' ? runRev(d, i) : null)).filter(Boolean)]);
+    for (const r of revSteps) yield { type: 'step', step: r };
+    revSteps.forEach((r, i) => { if (r.text) drafts.push({ model: `${r.model} (after debate)`, text: r.text }); });
+    if (req.signal?.aborted) return;
+  }
+
   // 4. The lead combines (or reviews) and streams the final answer.
   const lead = judge || drafters[0];
   const base = msgsFor(lead);
-  const sys = drafts.length > 1 ? LEAD : REVIEW;
+  const sys = drafts.length > 1 ? ({ debate: DEBATE_LEAD, consensus: CONSENSUS }[mode] || LEAD) : REVIEW;
   const draftText = drafts.map((d, i) => `<draft number="${i + 1}">\n${d.text}\n</draft>`).join('\n\n');
   const last = base[base.length - 1];
   const lastText = typeof last.content === 'string' ? last.content : last.content.filter((p) => p.type === 'text').map((p) => p.text).join('\n');
@@ -218,7 +256,7 @@ async function* stack(stackDef, req) {
         : last.content,
     },
   ];
-  const s = { role: 'lead', label: drafts.length > 1 ? 'Combining the drafts' : 'Reviewing and improving', model: label(lead), text: '', done: false };
+  const s = { role: 'lead', label: drafts.length > 1 ? ({ debate: 'Judging the debate', consensus: 'Building the consensus' }[mode] || 'Combining the drafts') : 'Reviewing and improving', model: label(lead), text: '', done: false };
   yield step(s);
   yield { type: 'status', text: `${s.label} with ${label(lead)}…` };
   const started = Date.now();
@@ -284,7 +322,7 @@ async function* run(target, req) {
 function targets() {
   const out = [];
   for (const m of models.list().filter((x) => x.kind === 'text')) out.push({ target: `local:${m.id}`, label: m.name, name: m.name, group: 'On this PC', vision: Boolean(m.files.mmproj) });
-  for (const s of stacks()) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚡'} ${s.name}`, name: s.name, group: 'Stacks', stack: true });
+  for (const s of stacks()) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚡'} ${s.name}`, name: s.name, group: 'Infused AIs & stacks', stack: true });
   for (const p of providers.publicList()) for (const m of p.models || []) out.push({ target: `api:${p.id}:${m}`, label: m, name: m, group: p.name, vision: p.vision });
   return out;
 }

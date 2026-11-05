@@ -250,7 +250,10 @@ function render() {
   paintDownloads();
   $$('.nav-item[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === S.route.view));
   const v = views[S.route.view] || views.chat;
-  $('#main').innerHTML = v.html();
+  const main = $('#main');
+  main.innerHTML = v.html();
+  if (typeof paintIcons === 'function') paintIcons(main);
+  main.firstElementChild?.classList.add('enter');
   v.bind?.();
 }
 
