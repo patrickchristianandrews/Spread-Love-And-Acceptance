@@ -237,7 +237,10 @@ async function importFile(file, readGguf) {
 // Downloads), so they can be used where they are: no second download, nothing copied.
 
 function scanRoots() {
-  if (process.env.QS_SCAN_DIRS) return process.env.QS_SCAN_DIRS.split(path.delimiter).filter(Boolean).map((d) => ({ app: /ollama/i.test(d) ? 'Ollama' : 'Other apps', dir: d, ollama: /ollama/i.test(d) }));
+  if (process.env.QS_SCAN_DIRS) {
+    const appOf = (d) => (/ollama/i.test(d) ? 'Ollama' : /lm-?studio/i.test(d) ? 'LM Studio' : /[\\/]jan[\\/]?/i.test(d) ? 'Jan' : /gpt4all/i.test(d) ? 'GPT4All' : 'Other apps');
+    return process.env.QS_SCAN_DIRS.split(path.delimiter).filter(Boolean).map((d) => ({ app: appOf(d), dir: d, ollama: /ollama/i.test(d) }));
+  }
   const home = os.homedir();
   const appData = process.env.APPDATA || path.join(home, 'AppData', 'Roaming');
   const local = process.env.LOCALAPPDATA || path.join(home, 'AppData', 'Local');

@@ -26,8 +26,8 @@ views.library = {
       <div class="tabs">${kb.collections.map((x) => `<button class="tab ${x.id === kbSel ? 'active' : ''}" data-kb="${x.id}">${esc(x.emoji)} ${esc(x.name)} <span class="small muted">(${x.docs})</span></button>`).join('')}</div>
       ${c ? `
       <div class="row" style="margin-bottom:14px">
-        <button class="btn" id="kb-files">📄 Add files</button><button class="btn" id="kb-folder">📁 Add a folder</button><button class="btn" id="kb-web">🌐 Add a website</button><button class="btn" id="kb-gh">🐙 Add a GitHub repository</button>
-        <span class="grow"></span><button class="btn small primary" id="kb-save-model" title="Save a model that always answers from this knowledge">💾 Save as a model</button><button class="btn small" id="kb-rename">Rename</button><button class="btn small danger" id="kb-del">Delete knowledge base</button>
+        <button class="btn small" id="kb-files">📄 Add files</button><button class="btn small" id="kb-folder">📁 Add a folder</button><button class="btn small" id="kb-web">🌐 Add a website</button><button class="btn small" id="kb-gh">🐙 Add a GitHub repository</button>
+        <span class="grow"></span><button class="btn small primary" id="kb-save-model" title="Save a model that always answers from this knowledge">💾 Save as a model</button><button class="btn small" id="kb-rename">Rename</button><button class="btn small danger" id="kb-del">Delete</button>
       </div>
       <div class="card" style="margin-bottom:16px"><h3>🔴 Live sources</h3><p class="small muted" style="font-weight:600;margin:4px 0 10px">Searched fresh for every question, so they're always current. Turn on as many as you like; your question is sent to each one you enable.</p>
         ${[...new Set(Object.values(kb.live).map((l) => l.group))].map((g) => `<div class="label small" style="margin:8px 0 4px">${esc(g)}</div><div class="row">${Object.entries(kb.live).filter(([, l]) => l.group === g).map(([k, l]) => `<label class="btn small ${c.live?.includes(k) ? 'on' : ''}"><input type="checkbox" data-live="${k}" ${c.live?.includes(k) ? 'checked' : ''} hidden>${l.icon} ${esc(l.name)}</label>`).join('')}</div>`).join('')}
