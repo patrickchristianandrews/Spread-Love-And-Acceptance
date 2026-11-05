@@ -73,29 +73,47 @@ async function refreshModels(id) {
 // Claude's newest models take an effort level and a server-side fallback on refusal.
 const CLAUDE_5 = /claude-(opus-5|sonnet-5-5|fable-5|haiku-5-5)/;
 
+// Converts OpenAI-format messages (including tool calls and tool results) to Anthropic's format.
 function toAnthropic(messages) {
-  const system = messages.filter((m) => m.role === 'system').map((m) => (typeof m.content === 'string' ? m.content : m.content.map((p) => p.text || '').join('\n'))).join('\n\n');
-  const rest = messages.filter((m) => m.role !== 'system').map((m) => ({
-    role: m.role,
-    content: typeof m.content === 'string' ? m.content : m.content.map((p) => {
+  const text = (c) => (typeof c === 'string' ? c : (c || []).map((p) => p.text || '').join('\n'));
+  const system = messages.filter((m) => m.role === 'system').map((m) => text(m.content)).join('\n\n');
+  const out = [];
+  for (const m of messages.filter((x) => x.role !== 'system')) {
+    if (m.role === 'tool') {
+      const block = { type: 'tool_result', tool_use_id: m.tool_call_id, content: text(m.content) };
+      const last = out[out.length - 1];
+      if (last?.role === 'user' && Array.isArray(last.content) && last.content.every((c) => c.type === 'tool_result')) last.content.push(block);
+      else out.push({ role: 'user', content: [block] });
+      continue;
+    }
+    let content;
+    if (typeof m.content === 'string' || m.content == null) content = m.content ? [{ type: 'text', text: m.content }] : [];
+    else content = m.content.map((p) => {
       if (p.type === 'text') return { type: 'text', text: p.text };
       const [, media, data] = p.image_url.url.match(/^data:([^;]+);base64,(.*)$/) || [];
       return { type: 'image', source: { type: 'base64', media_type: media, data } };
-    }),
-  }));
-  return { system, messages: rest };
+    });
+    for (const tc of m.tool_calls || []) {
+      let input = {};
+      try { input = JSON.parse(tc.function.arguments || '{}'); } catch {}
+      content.push({ type: 'tool_use', id: tc.id, name: tc.function.name, input });
+    }
+    if (!content.length) content = [{ type: 'text', text: '(empty)' }];
+    out.push({ role: m.role, content });
+  }
+  return { system, messages: out };
 }
 
 const EFFORT = { quick: 'low', balanced: 'medium', thorough: 'high', max: 'max' };
 
-async function* chat(providerId, model, { messages, temperature, maxTokens, signal, effort, level }) {
+async function* chat(providerId, model, { messages, temperature, maxTokens, signal, effort, level, tools }) {
   effort = EFFORT[level] || effort;
   const p = get(providerId);
   if (!p) throw new Error('That API connection was removed. Pick another model.');
   if (p.preset === 'anthropic') {
     const { Anthropic, client } = anthropicClient(p);
     const { system, messages: msgs } = toAnthropic(messages);
-    const params = { model, max_tokens: maxTokens || 8192, system: system || undefined, messages: msgs };
+    const params = { model, max_tokens: maxTokens || 8192, system: system || undefined, messages: msgs, ...(tools?.length ? { tools: tools.map((t) => ({ name: t.function.name, description: t.function.description, input_schema: t.function.parameters })) } : {}) };
     let stream;
     if (CLAUDE_5.test(model)) {
       stream = client.beta.messages.stream({ ...params, output_config: { effort: effort || 'medium' }, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }, { signal });
@@ -109,6 +127,8 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
         if (ev.type === 'content_block_delta' && ev.delta.type === 'thinking_delta' && ev.delta.thinking) yield { type: 'reasoning', text: ev.delta.thinking };
       }
       const final = await stream.finalMessage();
+      const uses = final.content.filter((c) => c.type === 'tool_use');
+      if (uses.length) yield { type: 'tool_calls', calls: uses.map((u) => ({ id: u.id, name: u.name, arguments: JSON.stringify(u.input || {}) })) };
       if (final.stop_reason === 'refusal') throw new Error('Claude declined to answer this.');
       const secs = (Date.now() - started) / 1000;
       yield { type: 'stats', tps: secs ? final.usage.output_tokens / secs : 0, tokens: final.usage.output_tokens, finish: final.stop_reason };
@@ -124,7 +144,7 @@ async function* chat(providerId, model, { messages, temperature, maxTokens, sign
   const key = store.getSecret(keyName(p.id));
   const extra = p.preset === 'openrouter' ? { 'HTTP-Referer': 'https://quicksilver.app', 'X-Title': 'Quicksilver' } : {};
   const usesMaxCompletion = p.preset === 'openai' && /^(o\d|gpt-5)/.test(model);
-  const body = { model, messages, ...(usesMaxCompletion ? { max_completion_tokens: maxTokens, reasoning_effort: effort === 'max' ? 'high' : effort || 'medium' } : { max_tokens: maxTokens, temperature }) };
+  const body = { model, messages, ...(tools?.length ? { tools } : {}), ...(usesMaxCompletion ? { max_completion_tokens: maxTokens, reasoning_effort: effort === 'max' ? 'high' : effort || 'medium' } : { max_tokens: maxTokens, temperature }) };
   try {
     yield* oai.streamChat({ baseUrl: p.baseUrl, apiKey: key, body, signal, headers: extra });
   } catch (err) {

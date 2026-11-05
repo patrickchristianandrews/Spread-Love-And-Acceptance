@@ -24,7 +24,7 @@ views.library = {
       <div class="tabs">${kb.collections.map((x) => `<button class="tab ${x.id === kbSel ? 'active' : ''}" data-kb="${x.id}">${esc(x.emoji)} ${esc(x.name)} <span class="small muted">(${x.docs})</span></button>`).join('')}</div>
       ${c ? `
       <div class="row" style="margin-bottom:14px">
-        <button class="btn" id="kb-files">📄 Add files</button><button class="btn" id="kb-folder">📁 Add a folder</button><button class="btn" id="kb-web">🌐 Add a website</button>
+        <button class="btn" id="kb-files">📄 Add files</button><button class="btn" id="kb-folder">📁 Add a folder</button><button class="btn" id="kb-web">🌐 Add a website</button><button class="btn" id="kb-gh">🐙 Add a GitHub repository</button>
         <span class="grow"></span><button class="btn small" id="kb-rename">Rename</button><button class="btn small danger" id="kb-del">Delete knowledge base</button>
       </div>
       <div class="card" style="margin-bottom:16px"><h3>🔴 Live sources</h3><p class="small muted" style="font-weight:600;margin:4px 0 10px">Searched fresh for every question, so they're always current. Turn on as many as you like; your question is sent to each one you enable.</p>
@@ -66,6 +66,19 @@ views.library = {
         const max = Number(b.querySelector('#w-max').value);
         closeModal();
         busy(() => call('kb:website', kbSel, url, max));
+      });
+    });
+    $('#kb-gh').addEventListener('click', () => {
+      const b = openModal(`<h2>Add a GitHub repository</h2><p class="help">Imports the repository's documentation and code (up to the number of files you choose) so assistants can answer questions about it. Needs the GitHub integration for private repositories.</p>
+        <div class="stack-v"><div class="field"><label for="gh-repo">Repository</label><input id="gh-repo" placeholder="owner/name or https://github.com/owner/name" autofocus></div>
+        <div class="field"><label for="gh-max">Up to how many files</label><select id="gh-max"><option>100</option><option selected>400</option><option>1000</option></select></div></div>
+        <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="gh-go">Import</button></div>`);
+      b.querySelector('#gh-go').addEventListener('click', () => {
+        const repo = b.querySelector('#gh-repo').value.trim();
+        if (!/^(https?:\/\/github\.com\/)?[\w.-]+\/[\w.-]+\/?$/.test(repo)) { toast('Enter it as owner/name.'); return; }
+        const max = Number(b.querySelector('#gh-max').value);
+        closeModal();
+        busy(() => call('kb:github', kbSel, repo, max));
       });
     });
     $('#kb-rename').addEventListener('click', () => kbEdit(kb.collections.find((x) => x.id === kbSel)));

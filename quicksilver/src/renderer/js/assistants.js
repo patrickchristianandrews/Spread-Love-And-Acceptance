@@ -63,6 +63,7 @@ async function editAssistant(a) {
       <div class="field" style="margin-left:28px"><span class="help">Which knowledge bases (none ticked = all of them):</span><div class="row" id="as-kbs">${(kb.collections || []).map((c) => `<label class="btn small ${(v.knowledge || []).includes(c.id) ? 'on' : ''}"><input type="checkbox" value="${c.id}" ${(v.knowledge || []).includes(c.id) ? 'checked' : ''}> ${esc(c.emoji)} ${esc(c.name)}</label>`).join('') || '<span class="help">No knowledge bases yet. Create them under Knowledge.</span>'}</div>
         <label class="row" style="margin-top:6px"><input type="checkbox" id="as-strict" ${v.strict ? 'checked' : ''}> <span><b>🔒 Only answer from this knowledge</b> <span class="help">never from general memory; says "not found" instead of guessing</span></span></label></div>
       <label class="row"><input type="checkbox" id="as-web" ${v.web ? 'checked' : ''}> <span><b>🌐 Search the web</b> <span class="help">for current information (set up in Settings)</span></span></label>
+      <label class="row"><input type="checkbox" id="as-tools" ${v.tools ? 'checked' : ''}> <span><b>🔌 Use integrations</b> <span class="help">GitHub, Slack, Notion, Jira, Linear and MCP tools</span></span></label>
       <label class="row"><input type="checkbox" id="as-fact" ${v.factCheck ? 'checked' : ''}> <span><b>✅ Fact check every answer</b> <span class="help">with a second model</span></span></label>
     </div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="as-save">${a ? 'Save' : 'Create'}</button></div>`);
@@ -74,7 +75,7 @@ async function editAssistant(a) {
       name, emoji: b.querySelector('#as-emoji').value, description: b.querySelector('#as-desc').value.trim(),
       instructions: b.querySelector('#as-ins').value.trim(), target: b.querySelector('#as-target').value,
       temperature: Number(b.querySelector('#as-temp').value), library: b.querySelector('#as-lib').checked,
-      web: b.querySelector('#as-web').checked, factCheck: b.querySelector('#as-fact').checked,
+      web: b.querySelector('#as-web').checked, factCheck: b.querySelector('#as-fact').checked, tools: b.querySelector('#as-tools').checked,
       knowledge: [...b.querySelectorAll('#as-kbs input:checked')].map((x) => x.value), strict: b.querySelector('#as-strict').checked,
     };
     if (a) Object.assign(a, fields); else S.data.assistants.push({ id: uid(), ...fields });

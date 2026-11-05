@@ -207,7 +207,7 @@ const GPU_FAILURE = /decode|eval|vk::|vulkan|device lost|ErrorDeviceLost|CUDA er
 // If the graphics card fails before any text arrives, the model restarts on the processor
 // and the request is retried once.
 async function* chat(model, opts) {
-  const { messages, temperature, maxTokens, contextSize, gpu, signal, onStatus, level } = opts;
+  const { messages, temperature, maxTokens, contextSize, gpu, signal, onStatus, level, tools } = opts;
   const hasImages = messages.some((m) => Array.isArray(m.content) && m.content.some((p) => p.type === 'image_url'));
   if (hasImages && !model.mmproj) throw new Error(`${model.name} can't see images. Use a vision model or a stack with a vision member.`);
   const useGpu = cpuOnly.has(model.file) ? 0 : gpu;
@@ -219,7 +219,7 @@ async function* chat(model, opts) {
     for await (const ev of oai.streamChat({
       baseUrl: `http://127.0.0.1:${s.port}/v1`,
       // Quick effort turns off "thinking" on models that support the switch (e.g. Qwen3).
-      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
+      body: { messages, temperature, max_tokens: maxTokens, cache_prompt: true, ...(tools?.length ? { tools } : {}), ...(level === 'quick' ? { chat_template_kwargs: { enable_thinking: false }, reasoning_budget: 0 } : {}) },
       signal,
     })) {
       produced = true;

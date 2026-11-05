@@ -69,16 +69,26 @@ async function* streamChat({ baseUrl, apiKey, body, signal, headers = {} }) {
   let tokens = 0;
   let stats = null;
   let finish = null;
+  const calls = []; // tool calls arrive in pieces: { index, id, function: { name, arguments } }
   for await (const ev of sse(res)) {
     const choice = ev.choices?.[0];
     const d = choice?.delta || {};
     const reasoning = d.reasoning_content ?? d.reasoning;
     if (reasoning) { tokens++; yield { type: 'reasoning', text: reasoning }; }
     if (d.content) { tokens++; for (const part of split(d.content)) yield part; }
+    for (const tc of d.tool_calls || []) {
+      const i = tc.index ?? calls.length;
+      calls[i] ||= { id: '', name: '', arguments: '' };
+      if (tc.id) calls[i].id = tc.id;
+      if (tc.function?.name) calls[i].name += tc.function.name;
+      if (tc.function?.arguments) calls[i].arguments += tc.function.arguments;
+    }
     if (choice?.finish_reason) finish = choice.finish_reason;
     if (ev.timings) stats = { tps: ev.timings.predicted_per_second, promptTps: ev.timings.prompt_per_second, tokens: ev.timings.predicted_n };
     if (ev.usage && !stats) stats = { tokens: ev.usage.completion_tokens };
   }
+  const toolCalls = calls.filter((c) => c && c.name).map((c, i) => ({ id: c.id || `call_${Date.now().toString(36)}_${i}`, name: c.name, arguments: c.arguments || '{}' }));
+  if (toolCalls.length) yield { type: 'tool_calls', calls: toolCalls };
   const secs = (Date.now() - started) / 1000;
   yield { type: 'stats', tps: stats?.tps || (secs ? tokens / secs : 0), tokens: stats?.tokens || tokens, finish };
 }

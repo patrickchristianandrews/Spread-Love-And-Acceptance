@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('qs', {
   call,
   sendChat: (payload) => ipcRenderer.send('chat:send', payload),
   abortChat: (id) => ipcRenderer.send('chat:abort', id),
+  approve: (answer) => ipcRenderer.send('chat:approval', answer),
   onChat: on('chat:event'),
   onModelProgress: on('models:progress'),
   onModelDone: on('models:done'),

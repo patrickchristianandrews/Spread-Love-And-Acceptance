@@ -17,6 +17,22 @@ const server = http.createServer((req, res) => {
     const imgs = msgs.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
     if (imgs.length && !vision) { res.writeHead(400, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ error: { message: 'image input is not supported by this model' } })); }
     const last = msgs[msgs.length - 1];
+    // Tool use: "use <word>" asks for the first tool whose name contains <word>; a tool result is echoed back.
+    const want = (typeof last?.content === 'string' ? last.content : '').match(/use (\w+)/);
+    const tool = want && last.role === 'user' && (j.tools || []).find((t) => t.function.name.includes(want[1]));
+    if (tool && j.stream) {
+      res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+      const args = JSON.stringify({ text: 'hello from the model' });
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: { tool_calls: [{ index: 0, id: 'call_1', type: 'function', function: { name: tool.function.name, arguments: args.slice(0, 10) } }] } }] })}\n\n`);
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: { tool_calls: [{ index: 0, function: { arguments: args.slice(10) } }] } }] })}\n\n`);
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: 'tool_calls' }] })}\n\n`);
+      return res.end('data: [DONE]\n\n');
+    }
+    if (last?.role === 'tool' && j.stream) {
+      res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+      res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: `Tool said: ${last.content}` } }] })}\n\n`);
+      return res.end('data: [DONE]\n\n');
+    }
     const lastText = typeof last?.content === 'string' ? last.content : (last?.content || []).filter((p) => p.type === 'text').map((p) => p.text).join(' ');
     let reply;
     if (/Describe each image/.test(lastText)) reply = imgs.map((_, i) => `### Image ${i + 1}\nA chart showing sales rising, described by ${model}.`).join('\n\n');

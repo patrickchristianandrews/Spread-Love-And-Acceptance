@@ -102,6 +102,29 @@ let WIN = null;
   await win.waitForSelector('text=Analyze a spreadsheet');
   await shot(win, '10-skills');
 
+  // Integrations: add a real MCP server, then a chat uses its tools with an approval prompt.
+  await win.click('[data-nav="integrations"]');
+  await win.waitForSelector('text=Connectors');
+  await win.click('[data-mcp-preset="custom"]');
+  await win.fill('#m-name', 'Test MCP');
+  await win.selectOption('#m-transport', 'stdio');
+  await win.fill('#m-cmd', process.execPath);
+  await win.fill('#m-args', path.join(__dirname, 'fakes', 'mcp-server.js'));
+  await win.click('#m-save');
+  await win.waitForSelector('.badge:has-text("2 tools")', { timeout: 30000 });
+  await shot(win, '11-integrations');
+  await win.click('[data-nav="newchat"]');
+  await win.selectOption('#pick-model', 'local:qwen3-8b');
+  await win.click('#tog-tools');
+  await win.fill('#input', 'Please use save_note');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('text=Allow this action?', { timeout: 30000 });
+  await shot(win, '12-approval');
+  await win.click('[data-ap="once"]');
+  await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('saved: hello from the model'), null, { timeout: 30000 });
+  assert.match(await win.locator('.steps > summary:has-text("Used 1 tool")').innerText(), /Test MCP/);
+  console.log('✓ integrations: MCP server added, tool used in chat with approval');
+
   // Sidebar chat menu.
   await win.click('.chat-row .chat-link');
   await win.hover('.chat-row');
@@ -168,6 +191,7 @@ let WIN = null;
   console.log('✓ API server from settings');
   await shot(win, '09-settings-api');
 
+  if (errors.length) console.log('PAGE ERRORS:', errors);
   assert.deepEqual(errors, []);
   await app.close();
   fs.rmSync(HOME, { recursive: true, force: true });

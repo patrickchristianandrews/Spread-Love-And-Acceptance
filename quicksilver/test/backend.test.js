@@ -189,6 +189,57 @@ async function collect(gen) {
   apiserver.stop();
   console.log('✓ API server: auth, models, chat (stream + not), stacks by name, images');
 
+  // Tools: an MCP server (official SDK, stdio) used by a local model, with approvals.
+  const mcp = require('../src/main/mcp');
+  const toolbox = require('../src/main/tools');
+  const srv = mcp.upsert({ name: 'Test MCP', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, 'fakes', 'mcp-server.js')] });
+  const avail = await toolbox.available();
+  const echo = avail.find((t) => t.name.endsWith('_echo'));
+  const note = avail.find((t) => t.name.endsWith('_save_note'));
+  assert.ok(echo && note, 'MCP tools listed');
+  assert.equal(echo.write, false); assert.equal(note.write, true);
+  const toolEvents = [];
+  const r6 = await collect((async function* () { for await (const ev of complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Please use echo' }], useTools: true, maxTokens: 100, contextSize: 4096 })) { if (ev.type === 'tool') toolEvents.push(ev.call); yield ev; } })());
+  assert.match(r6.text, /Tool said: echo: hello from the model/);
+  assert.equal(toolEvents.at(-1).status, 'done');
+  let asked = null;
+  const r7 = await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Please use save_note' }], useTools: true, maxTokens: 100, contextSize: 4096, approve: async (q) => { asked = q; return { ok: true }; } }));
+  assert.ok(asked && /Test MCP/.test(asked.summary), 'write tool asked for approval');
+  assert.match(r7.text, /saved: hello from the model/);
+  const r8 = await collect(complete.run('local:qwen3-8b', { messages: [{ role: 'user', content: 'Please use save_note' }], useTools: true, maxTokens: 100, contextSize: 4096, approve: async () => ({ ok: false }) }));
+  assert.match(r8.text, /declined/);
+  // Tools inside a stack: the lead gathers, then the stack answers.
+  const r9 = await collect(complete.run('stack:bal', { messages: [{ role: 'user', content: 'Please use echo' }], useTools: true, maxTokens: 100, contextSize: 4096 }));
+  assert.ok(r9.steps.some((s) => s.role === 'tools'));
+  mcp.remove(srv.id);
+  console.log('✓ tools: MCP read tool, write tool with approval, denial, tools in a stack');
+
+  // GitHub connector against a simulated GitHub API.
+  const integrations = require('../src/main/integrations');
+  const realFetch = global.fetch;
+  const ghCalls = [];
+  global.fetch = async (url, opts = {}) => {
+    const u = String(url);
+    if (!u.startsWith('https://api.github.com')) return realFetch(url, opts);
+    ghCalls.push(`${opts.method || 'GET'} ${u.replace('https://api.github.com', '')}`);
+    const json = (o) => new Response(JSON.stringify(o), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    if (u.endsWith('/user')) return json({ login: 'octo' });
+    if (u.includes('/issues?')) return json([{ number: 7, state: 'open', title: 'Crash on start', user: { login: 'amy' }, comments: 2, labels: [{ name: 'bug' }] }]);
+    if (opts.method === 'POST' && u.endsWith('/issues')) return json({ number: 8, html_url: 'https://github.com/o/r/issues/8' });
+    return json({});
+  };
+  const account = await integrations.save('github', {}, 'ghp_test');
+  assert.equal(account, 'octo');
+  const ghTools = integrations.tools();
+  const listIssues = await ghTools.find((t) => t.name === 'github_list_issues').run({ repo: 'o/r' });
+  assert.match(listIssues, /#7 \[open\] Crash on start \(amy, 2 comments, labels: bug\)/);
+  const created = await toolbox.execute(ghTools.find((t) => t.name === 'github_create_issue'), { repo: 'o/r', title: 'New bug' }, { approve: async () => ({ ok: true }) });
+  assert.match(created.result, /Created issue #8/);
+  assert.ok(ghCalls.includes('POST /repos/o/r/issues'));
+  integrations.disable('github');
+  global.fetch = realFetch;
+  console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
+
   // Catalog: advisor builds three tiers on a mid-range PC; estimates are sane.
   const mid = { ramGB: 32, vramGB: 12, vramFreeGB: 11.5 };
   const adv = catalog.advise('office', mid);

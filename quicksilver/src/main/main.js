@@ -17,6 +17,8 @@ const knowledge = require('./knowledge');
 const websearch = require('./websearch');
 const media = require('./media');
 const apiserver = require('./apiserver');
+const integrations = require('./integrations');
+const mcp = require('./mcp');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'qsmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }]);
 
@@ -132,7 +134,8 @@ ipcMain.on('chat:send', async (_e, p) => {
     const cfg = store.config();
     for await (const ev of complete.run(p.target, {
       messages: p.messages, temperature: p.temperature, maxTokens: p.maxTokens, contextSize: p.contextSize, gpu: p.gpu,
-      effort: p.effort, level: p.level, signal: controller.signal,
+      effort: p.effort, level: p.level, signal: controller.signal, useTools: Boolean(p.tools),
+      approve: (q) => askApproval(p.requestId, q, controller.signal),
       onStatus: (text) => send({ type: 'status', text }),
       onStep: (step) => send({ type: 'step', step: { ...step } }),
       calib: cfg.calib,
@@ -145,6 +148,35 @@ ipcMain.on('chat:send', async (_e, p) => {
   }
 });
 ipcMain.on('chat:abort', (_e, id) => chats.get(id)?.abort());
+
+// Approvals: a tool that changes something waits here until you allow or deny it.
+const approvals = new Map();
+function askApproval(requestId, q, signal) {
+  return new Promise((resolve) => {
+    const approvalId = `a${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    approvals.set(approvalId, resolve);
+    signal?.addEventListener('abort', () => { approvals.delete(approvalId); resolve({ ok: false }); });
+    emit('chat:event', { requestId, ev: { type: 'approve', approvalId, ...q } });
+  });
+}
+ipcMain.on('chat:approval', (_e, { approvalId, ok, always }) => { approvals.get(approvalId)?.({ ok, always }); approvals.delete(approvalId); });
+
+// ---------- integrations and MCP ----------
+handle('int:list', () => integrations.list());
+handle('int:save', (id, values, token) => integrations.save(id, values, token));
+handle('int:disable', (id) => integrations.disable(id));
+handle('int:tools', async () => (await require('./tools').available()).map((t) => ({ name: t.name, description: t.description, write: Boolean(t.write), source: t.source })));
+handle('mcp:presets', () => mcp.PRESETS);
+handle('mcp:list', () => mcp.status());
+handle('mcp:save', (s, token) => mcp.upsert(s, token));
+handle('mcp:remove', (id) => mcp.remove(id));
+handle('mcp:test', (id) => mcp.testServer(id));
+handle('tools:allowed', () => store.config().toolAllow || []);
+handle('tools:forget', (name) => { store.saveConfig({ toolAllow: (store.config().toolAllow || []).filter((n) => n !== name) }); return true; });
+handle('kb:github', async (collectionId, repo, maxFiles) => {
+  const files = await integrations.githubRepoFiles(repo.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/+$/, ''), { maxFiles });
+  return knowledge.addTexts(collectionId, files.map((f) => ({ name: `${repo}/${f.path}`, path: f.url, kind: /\.(md|mdx|txt|rst|adoc)$/i.test(f.path) ? 'document' : 'code', text: f.text })));
+});
 
 // ---------- documents, library, web ----------
 handle('docs:extract', (name, bytes) => docs.extract(name, Buffer.from(bytes)));
@@ -311,5 +343,5 @@ app.whenReady().then(() => {
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('before-quit', () => { llama.stopAll(); apiserver.stop(); });
+app.on('before-quit', () => { llama.stopAll(); apiserver.stop(); mcp.disconnectAll(); });
 app.on('window-all-closed', () => { llama.stopAll(); if (process.platform !== 'darwin') app.quit(); });

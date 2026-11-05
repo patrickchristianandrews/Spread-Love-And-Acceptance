@@ -50,6 +50,7 @@ views.chat = {
         <button class="btn small ${lib ? 'on' : ''}" id="tog-lib" title="Search your knowledge bases and cite them">📚 Knowledge ${lib ? 'on' : 'off'}</button>
         <button class="btn small ${web ? 'on' : ''}" id="tog-web" title="Search the web and cite sources">🌐 Web ${web ? 'on' : 'off'}</button>
         <select id="pick-effort" aria-label="Effort" title="How hard the AI works: quicker or more thorough" style="width:auto">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e}</option>`).join('')}</select>
+        <button class="btn small ${toolsOn(chat, a) ? 'on' : ''}" id="tog-tools" title="Let the AI use your integrations (GitHub, Slack, MCP servers…)">🔌 Tools ${toolsOn(chat, a) ? 'on' : 'off'}</button>
         <button class="btn small ${fact ? 'on' : ''}" id="tog-fact" title="After each answer, a second model checks it claim by claim">✅ Fact check ${fact ? 'on' : 'off'}</button>
         <button class="btn small" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">⋯</button>
       </div>
@@ -130,6 +131,7 @@ function messageHTML(chat, a, m, i) {
   return `<div class="msg assistant" data-msg="${m.id}">
     <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
     ${stepsHTML(alt, streaming)}
+    ${toolsHTML(alt)}
     ${alt.reasoning ? `<details class="think"><summary>💭 Thinking${streaming && !alt.text ? '…' : ''}</summary><div>${esc(alt.reasoning)}</div></details>` : ''}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
     ${downloadHTML(m, alt, streaming)}
@@ -172,7 +174,8 @@ function bindChat() {
     clearTimeout(suggestTimer);
     suggestTimer = setTimeout(() => {
       const sug = !chat.pendingSkill && !m ? suggestSkill(input.value) : null;
-      if ((sug?.id || null) !== (chat.suggested || null)) { chat.suggested = sug?.id || null; $('#skill-row').innerHTML = skillChipHTML(chat); }
+      const row = $('#skill-row');
+      if (row && (sug?.id || null) !== (chat.suggested || null)) { chat.suggested = sug?.id || null; row.innerHTML = skillChipHTML(chat); }
     }, 350);
   });
   input.addEventListener('keydown', (e) => {
@@ -212,6 +215,7 @@ function bindChat() {
     chat.web = next; save(); render();
   });
   $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); });
+  $('#tog-tools').addEventListener('click', () => { chat.tools = !toolsOn(chat, a); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Integrations first.', 6000); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
   $('#messages').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id); });
@@ -407,6 +411,7 @@ async function generate(chat, rerollMsg) {
     maxTokens: Math.round(Number(a.maxTokens || p.maxTokens) * (effortOf(chat, a) === 'max' ? 1.5 : 1)),
     contextSize: ctx,
     level: effortOf(chat, a),
+    tools: toolsOn(chat, a),
     gpu: p.gpu,
     effort: p.effort,
   });
@@ -445,6 +450,13 @@ qs.onChat(({ requestId, ev }) => {
       alt.steps[ev.step.index ?? alt.steps.length] = ev.step;
       break;
     }
+    case 'tool': {
+      alt.toolCalls ||= [];
+      const i = alt.toolCalls.findIndex((t) => t.id === ev.call.id);
+      if (i >= 0) alt.toolCalls[i] = ev.call; else alt.toolCalls.push(ev.call);
+      break;
+    }
+    case 'approve': askToolApproval(ev); break;
     case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
     case 'error':
     case 'done': {
@@ -665,4 +677,32 @@ function saveAsMenu(chat, m, anchor) {
   document.body.appendChild(menu);
   menu.querySelector('button').focus();
   menu.addEventListener('click', (e) => { const f = e.target.closest('[data-f]')?.dataset.f; closeMenus(); if (f) exportAnswer(chat, m, f); });
+}
+
+// ---------- tools in chat ----------
+
+const toolsOn = (chat, a) => Boolean(chat.tools ?? a.tools ?? false);
+
+function toolsHTML(alt) {
+  const list = alt.toolCalls || [];
+  if (!list.length) return '';
+  const icon = { running: '⏳', done: '✅', error: '⚠️', denied: '🚫' };
+  return `<details class="steps"><summary>🔌 Used ${list.length} tool${list.length > 1 ? 's' : ''}: ${[...new Set(list.map((t) => t.source))].map(esc).join(', ')}</summary>
+    ${list.map((t) => `<div class="step"><span>${icon[t.status] || '•'}</span><div class="grow"><b>${esc(t.source)}</b> <code>${esc(t.name)}</code> <span class="small muted">${esc(JSON.stringify(t.args || {}).slice(0, 140))}</span>
+      ${t.result ? `<details><summary class="small">Result</summary><pre>${esc(t.result)}</pre></details>` : ''}</div></div>`).join('')}
+  </details>`;
+}
+
+function askToolApproval(ev) {
+  const b = openModal(`<h2>🔌 Allow this action?</h2>
+    <p style="font-size:1.05rem"><b>${esc(ev.summary)}</b></p>
+    <p class="help">${esc(ev.source)} will be changed. Check the details:</p>
+    <pre style="background:var(--soft);border:2px solid var(--line-soft);border-radius:10px;padding:10px;white-space:pre-wrap;max-height:300px;overflow:auto">${esc(JSON.stringify(ev.args, null, 2))}</pre>
+    <div class="modal-actions"><button class="btn danger" data-ap="deny">Deny</button><button class="btn" data-ap="always">Always allow this kind of action</button><button class="btn primary" data-ap="once" autofocus>Allow once</button></div>`);
+  b.addEventListener('click', (e) => {
+    const k = e.target.closest('[data-ap]')?.dataset.ap;
+    if (!k) return;
+    qs.approve({ approvalId: ev.approvalId, ok: k !== 'deny', always: k === 'always' });
+    closeModal();
+  });
 }

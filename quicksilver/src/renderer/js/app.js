@@ -75,6 +75,7 @@ async function init() {
   for (const d of defaultAssistants()) if (!S.data.assistants.some((a) => a.id === d.id)) S.data.assistants.push(d);
   applyPrefs();
   await Promise.all([refreshModels(), refreshProviders()]);
+  try { S.hasIntegrations = (await qs.call('int:list')).some((c) => c.enabled) || (await qs.call('mcp:list')).length > 0; } catch {}
   save();
 
   $$('.nav-item[data-nav]').forEach((b) => b.addEventListener('click', () => (b.dataset.nav === 'newchat' ? newChat() : go({ view: b.dataset.nav }))));

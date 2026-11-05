@@ -330,4 +330,11 @@ async function search(query, { k = 8, collectionIds, perSource = 3 } = {}) {
   return out;
 }
 
-module.exports = { collections, createCollection, updateCollection, deleteCollection, docs, addPaths, addWebsite, removeDoc, search, LIVE, FETCHERS };
+function addTexts(collectionId, items) {
+  load();
+  for (const it of items) addText(collectionId, it);
+  persist();
+  return { added: items.length, errors: [] };
+}
+
+module.exports = { addTexts, collections, createCollection, updateCollection, deleteCollection, docs, addPaths, addWebsite, removeDoc, search, LIVE, FETCHERS };

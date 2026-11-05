@@ -7,6 +7,7 @@ const store = require('./store');
 const models = require('./models');
 const llama = require('./llama');
 const providers = require('./providers');
+const toolbox = require('./tools');
 
 // ---------- stacks ----------
 // { id, name, emoji, members: { vision?: target, drafters: [target], judge?: target }, builtFor? }
@@ -145,6 +146,27 @@ async function* stack(stackDef, req) {
     // Members that can see keep the real images; the rest get the descriptions.
     req = { ...req, describedMessages: textOnly(messages, descriptions) };
   }
+  // Tools: the lead gathers information (and takes approved actions) first; every member then
+  // works from what it found.
+  if (req.toolList) {
+    const gatherer = judge || drafters[0];
+    const s = { role: 'tools', label: 'Using tools', model: label(gatherer), text: '', done: false };
+    yield step(s);
+    const found = [];
+    let note = '';
+    for await (const ev of agent(gatherer, { ...req, messages: req.describedMessages || messages })) {
+      if (ev.type === 'tool') { yield ev; if (ev.call.status !== 'running') found.push(`<tool name="${ev.call.name}" status="${ev.call.status}">\n${ev.call.result}\n</tool>`); }
+      else if (ev.type === 'text') note += ev.text;
+      else if (ev.type === 'status') yield ev;
+    }
+    s.text = note.trim(); s.done = true;
+    yield { type: 'step', step: s };
+    if (found.length) {
+      const add = { role: 'system', content: `Results from tools used for this request (actions listed here have already been carried out; do not repeat them):\n${found.join('\n')}` };
+      messages = [...messages.slice(0, -1), add, messages[messages.length - 1]];
+      if (req.describedMessages) req = { ...req, describedMessages: [...req.describedMessages.slice(0, -1), add, req.describedMessages[req.describedMessages.length - 1]] };
+    }
+  }
   const msgsFor = (target) => (canSee(target) || !req.describedMessages ? messages : req.describedMessages);
 
   // 2. One drafter and no lead: just stream it.
@@ -207,12 +229,52 @@ async function* stack(stackDef, req) {
   yield { type: 'step', step: s };
 }
 
+// ---------- tools (integrations and MCP) ----------
+// The model may call tools; we run them (asking first for anything that changes something),
+// feed the results back, and repeat until it answers. Up to 8 rounds.
+
+async function* agent(target, req) {
+  const list = req.toolList;
+  const defs = toolbox.schema(list);
+  let messages = [...req.messages];
+  for (let round = 0; round < 8; round++) {
+    let text = '';
+    let calls = null;
+    for await (const ev of single(target, { ...req, messages, tools: defs })) {
+      if (ev.type === 'tool_calls') { calls = ev.calls; continue; }
+      if (ev.type === 'text') text += ev.text;
+      yield ev;
+    }
+    if (!calls?.length || req.signal?.aborted) return;
+    messages = [...messages, { role: 'assistant', content: text || null, tool_calls: calls.map((c) => ({ id: c.id, type: 'function', function: { name: c.name, arguments: c.arguments } })) }];
+    for (const c of calls) {
+      const tool = list.find((t) => t.name === c.name);
+      let args = {};
+      let result;
+      try { args = JSON.parse(c.arguments || '{}'); } catch { result = { status: 'error', result: 'The tool arguments were not valid JSON. Try again with valid JSON.' }; }
+      const step = { id: c.id, name: c.name, source: tool?.source || 'Tool', args, status: 'running' };
+      yield { type: 'tool', call: { ...step } };
+      result ||= await toolbox.execute(tool, args, { approve: req.approve });
+      yield { type: 'tool', call: { ...step, status: result.status, result: result.result.slice(0, 3000) } };
+      messages.push({ role: 'tool', tool_call_id: c.id, content: result.result });
+    }
+    if (text) yield { type: 'text', text: '\n\n' };
+  }
+  yield* single(target, { ...req, messages: [...messages, { role: 'user', content: 'Please give your final answer now, without using more tools.' }] });
+}
+
 async function* run(target, req) {
+  if (req.useTools) {
+    const list = await toolbox.available();
+    if (list.length) req = { ...req, toolList: list };
+  }
   const t = parse(target);
   if (t.kind === 'stack') {
     const s = stacks().find((x) => x.id === t.id);
     if (!s) throw new Error('That stack was deleted. Pick another model.');
     yield* stack(s, req);
+  } else if (req.toolList) {
+    yield* agent(target, req);
   } else {
     yield* single(target, req);
   }
