@@ -7,8 +7,8 @@ const DEFAULT_PREFS = {
 };
 
 function defaultAssistants() {
-  const facts = { office: true, research: true };
-  return Object.entries(S.catalog.jobs).map(([job, j]) => ({
+  const facts = { office: true, research: true, learning: true };
+  return Object.entries(S.catalog.jobs).filter(([, j]) => j.assistant).map(([job, j]) => ({
     id: `as-${job}`, job, builtIn: true, name: j.assistant.name, emoji: j.assistant.emoji, description: j.pitch,
     instructions: j.assistant.instructions, target: '', temperature: j.temperature, contextSize: j.contextSize, maxTokens: j.maxTokens,
     library: j.library, web: false, factCheck: Boolean(facts[job]),
@@ -28,6 +28,26 @@ function applyPrefs() {
   if (tb) { const dark = document.documentElement.dataset.theme === 'dark'; tb.innerHTML = icon(dark ? 'sun' : 'moon'); tb.title = dark ? 'Switch to light mode' : 'Switch to dark mode'; }
   document.getElementById('app')?.classList.toggle('collapsed', Boolean(S.data.prefs.sidebarCollapsed));
   document.documentElement.dataset.size = S.data.prefs.textSize === 'normal' ? '' : S.data.prefs.textSize;
+}
+
+// ---------- online / offline ----------
+function paintNet() {
+  const off = Boolean(S.config?.offline);
+  const b = $('#net-toggle');
+  if (!b) return;
+  b.classList.toggle('off', off);
+  b.setAttribute('aria-checked', String(!off));
+  b.querySelector('.net-lbl').textContent = off ? 'Offline' : 'Online';
+  b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.';
+  document.documentElement.classList.toggle('is-offline', off);
+}
+async function toggleNet() {
+  const off = !S.config?.offline;
+  S.config = await call('config:set', { offline: off });
+  paintNet();
+  await refreshModels();
+  toast(off ? '✈ Offline: nothing leaves this PC. Models on this PC keep working; web search, cloud AIs, live sources and downloads are paused.' : '🌐 Online: web search, cloud AIs and downloads are available again.', 6000);
+  render();
 }
 
 views.home = {
@@ -84,14 +104,23 @@ async function init() {
   S.data.prefs = { ...DEFAULT_PREFS, ...S.data.prefs };
   // Keep built-in assistants up to date, but never overwrite your edits or your own assistants.
   for (const d of defaultAssistants()) if (!S.data.assistants.some((a) => a.id === d.id)) S.data.assistants.push(d);
+  // Retire built-in assistants for goals that no longer exist (their chats move to the main assistant).
+  const retired = S.data.assistants.filter((a) => a.builtIn && !S.catalog.jobs[a.job]).map((a) => a.id);
+  if (retired.length) {
+    S.data.assistants = S.data.assistants.filter((a) => !retired.includes(a.id));
+    for (const c of S.data.chats) if (retired.includes(c.assistantId)) c.assistantId = 'as-general';
+    if (retired.includes(S.data.prefs.lastAssistant)) S.data.prefs.lastAssistant = 'as-general';
+  }
   applyPrefs();
   await Promise.all([refreshModels(), refreshProviders()]);
-  try { S.hasIntegrations = (await qs.call('int:list')).some((c) => c.enabled) || (await qs.call('mcp:list')).length > 0; } catch {}
+  Promise.all([qs.call('int:list'), qs.call('mcp:list')]).then(([c, m]) => { S.hasIntegrations = c.some((x) => x.enabled) || m.length > 0; }).catch(() => {});
   save();
 
   paintIcons();
   $$('.sidebar [data-nav]').forEach((b) => b.addEventListener('click', () => (b.dataset.nav === 'newchat' ? newChat() : go({ view: b.dataset.nav }))));
   $('#theme-btn').addEventListener('click', () => { S.data.prefs.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyPrefs(); save(); if (S.route.view === 'settings') render(); });
+  paintNet();
+  $('#net-toggle').addEventListener('click', toggleNet);
   $('#collapse').addEventListener('click', () => { S.data.prefs.sidebarCollapsed = !S.data.prefs.sidebarCollapsed; applyPrefs(); save(); });
   $('#chat-search').addEventListener('input', renderChatList);
   $('#dl-mini').addEventListener('click', () => { modelsTab = 'installed'; go({ view: 'models' }); });

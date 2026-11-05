@@ -201,6 +201,26 @@ function rateBadge(est, kind = 'text') {
   return `<span class="badge rate-${est.rating}" title="${esc(where)}">${esc(est.rating === 'wont' ? est.label : est.label + extra)}</span>`;
 }
 
+// ---------- one-off AI requests (prompt writing and similar small jobs) ----------
+
+const oneShots = new Map();
+qs.onChat(({ requestId, ev }) => {
+  const o = oneShots.get(requestId);
+  if (!o) return;
+  if (ev.type === 'text') o.text += ev.text;
+  else if (ev.type === 'done' || ev.type === 'error') {
+    oneShots.delete(requestId);
+    if (ev.type === 'error') o.reject(new Error(ev.message)); else o.resolve(o.text.replace(/<think>[\s\S]*?<\/think>/g, '').trim());
+  }
+});
+function askAI(target, system, user, { temperature = 0.7, maxTokens = 400 } = {}) {
+  return new Promise((resolve, reject) => {
+    const requestId = uid();
+    oneShots.set(requestId, { text: '', resolve, reject });
+    qs.sendChat({ requestId, target, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], temperature, maxTokens, contextSize: 4096, gpu: S.data.prefs.gpu, effort: 'quick' });
+  });
+}
+
 // ---------- downloads (shared by Models, Stacks and Studio) ----------
 
 async function download(req, name) {

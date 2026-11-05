@@ -47,11 +47,34 @@ let WIN = null;
 
   // Stack Advisor.
   await win.click('[data-nav="stacks"]');
+  await win.waitForSelector('.goal.on[data-job="general"]', { timeout: 30000 });
+  await win.waitForSelector('.adv-mine', { timeout: 30000 });
+  assert.ok(await win.locator('.goal').count() >= 8, 'thinking, creating and unfiltered stack types');
   await win.click('[data-job="office"]');
-  await win.waitForSelector('text=Recommended for office & analysis', { timeout: 30000 });
-  assert.ok(await win.locator('[data-build]').count() >= 2);
-  console.log('✓ stack advisor');
+  await win.waitForSelector('.goal.on[data-job="office"]');
+  await win.waitForSelector('.adv-mine [data-use]', { timeout: 30000 });
+  assert.equal(await win.locator('.adv-mine [data-use]').count(), 3, 'every installed model can be picked');
+  assert.ok(await win.locator('.adv-mine [data-use]:checked').count() >= 2, 'best mix pre-picked');
   await shot(win, '02-stacks');
+  // Use only two of your models, with Phi leading.
+  for (const t of ['local:qwen3-8b', 'local:phi-4', 'local:gemma-3-4b']) if (await win.locator(`[data-use="${t}"]`).isChecked()) await win.uncheck(`[data-use="${t}"]`);
+  await win.check('[data-use="local:qwen3-8b"]');
+  assert.equal(await win.locator('#adv-create').isDisabled(), true, 'one model is not a stack');
+  await win.check('[data-use="local:phi-4"]');
+  await win.selectOption('#adv-lead', 'local:phi-4');
+  await win.waitForSelector('.pick-row:has([data-use="local:phi-4"]) .badge:has-text("Leads")');
+  await win.click('#adv-create');
+  await win.waitForSelector('#pick-model option[value="stack:office-mine"]:checked', { state: 'attached', timeout: 30000 });
+  // Photo & video stacks are Studio setups.
+  await win.click('[data-nav="stacks"]');
+  await win.click('[data-job="create"]');
+  await win.waitForSelector('[data-kit="image"]', { timeout: 30000 });
+  await win.click('#kit-create');
+  await win.waitForSelector('#ci-model', { timeout: 30000 });
+  await win.fill('#ci-prompt', 'a cat');
+  await win.click('[data-improve="ci-prompt"]');
+  await win.waitForFunction(() => document.querySelector('#ci-prompt').value !== 'a cat' && !document.querySelector('[data-improve="ci-prompt"]').disabled, null, { timeout: 30000 });
+  console.log('✓ stacks: types, built from installed models, Studio kit with ✨ Improve');
 
   // Chat with the powerhouse stack, a spreadsheet attached and fact check on.
   await win.click('[data-nav="newchat"]');
@@ -167,6 +190,21 @@ let WIN = null;
   await win.click('text=PubMed (medical journals)');
   await win.waitForSelector('label.btn.on:has-text("PubMed")');
   console.log('✓ knowledge bases');
+  await win.click('#kb-save-model');
+  await win.fill('#km-name', 'Clinical Reference');
+  await win.check('#km-strict');
+  await win.click('#km-save');
+  await win.waitForSelector('.card:has-text("Clinical Reference")');
+  await win.click('[data-kbm-chat]');
+  await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Clinical Reference'));
+  console.log('✓ knowledge model saved and picked in a chat');
+  await win.click('#net-toggle');
+  await win.waitForSelector('#net-toggle.off');
+  await win.waitForSelector('text=Web (offline)');
+  await shot(win, '14-offline');
+  await win.click('#net-toggle');
+  await win.waitForSelector('#net-toggle:not(.off)');
+  console.log('✓ online / offline switch');
   await shot(win, '04-knowledge');
 
   // Models, Your PC.

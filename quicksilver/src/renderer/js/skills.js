@@ -66,7 +66,7 @@ views.skills = {
 // Start a chat with a skill ready to go.
 function useSkill(id) {
   const s = skillById(id);
-  const job = { office: 'office', research: 'research', code: 'coding', vision: 'vision' }[s.category];
+  const job = { office: 'office', research: 'research', code: 'coding', writing: 'writing', creative: 'writing', learning: 'learning' }[s.category];
   const a = S.data.assistants.find((x) => x.job === job) || assistantById(S.data.prefs.lastAssistant);
   newChat(a.id);
   const chat = chatById(S.route.id);

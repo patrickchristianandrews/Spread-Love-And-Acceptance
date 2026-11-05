@@ -6,12 +6,12 @@ const drafts = {};           // chatId -> attachments waiting to be sent
 let paintQueued = false;
 
 const STARTERS = {
-  general: ['Plan a productive week around three big goals', 'Explain how compound interest works with an example', 'Draft a polite email declining a meeting'],
+  general: ['Plan a productive week around three big goals', 'What should I ask before buying a used car?', 'Explain how compound interest works with an example'],
+  writing: ['Draft a polite email declining a meeting', 'Make this paragraph clearer and more confident:', 'Write a LinkedIn post announcing our new product'],
+  research: ['Compare heat pumps vs gas boilers, with sources', 'Search my knowledge base: what does our policy say about travel?', 'Summarise the attached PDF in 10 bullet points'],
   office: ['Attach a spreadsheet and ask: what are the key trends?', 'Turn these meeting notes into action items with owners', 'Write a one-page project status report'],
-  research: ['Search my library: what does our policy say about travel?', 'Compare the pros and cons of heat pumps vs gas boilers, with sources', 'Summarise the attached PDF in 10 bullet points'],
+  learning: ['Explain photosynthesis like I\'m 12, then quiz me', 'Solve 3x + 7 = 22 step by step', 'Make me a 5-question practice test on the French Revolution'],
   coding: ['Write a Python script that renames photos by date taken', 'Review this function for bugs and edge cases', 'Explain what a REST API is with a small example'],
-  vision: ['Attach a photo: what is in this picture?', 'Attach a screenshot of a chart and extract the numbers', 'Attach a short video and describe what happens'],
-  fast: ['Give me 5 dinner ideas with what I have: eggs, rice, spinach', 'Summarise this paragraph in one sentence', 'Quick: convert 72°F to °C'],
 };
 
 function newChat(assistantId) {
@@ -65,7 +65,7 @@ views.chat = {
             <label class="icon-btn" title="Attach photos, videos or documents" aria-label="Attach">${icon('clip')}<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="bar-sep"></span>
             ${chip('tog-lib', 'book', 'Knowledge', lib, 'Search your knowledge bases and cite them')}
-            ${chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
+            ${S.config?.offline ? `<span class="chip-tog" title="Offline: switch to Online in the sidebar to search the web" style="opacity:.5">${icon('globe', 16)}<span>Web (offline)</span></span>` : chip('tog-web', 'globe', 'Web', web, 'Search the web and cite sources')}
             ${chip('tog-tools', 'plug', 'Tools', tools, 'Let the AI use your integrations (GitHub, Slack, MCP servers…)')}
             ${chip('tog-fact', 'shield', 'Fact check', fact, 'After each answer, a second model checks it claim by claim')}
             <label class="pill-select small" title="Effort: quicker or more thorough">${icon('gauge', 16)}<select id="pick-effort" aria-label="Effort">${Object.entries(EFFORTS).map(([k, e]) => `<option value="${k}" ${k === effortOf(chat, a) ? 'selected' : ''}>${e.replace(/^\S+\s/, '')}</option>`).join('')}</select>${icon('chevron', 14)}</label>
@@ -216,7 +216,7 @@ function bindChat() {
     chat.target = e.target.value; save(); render();
   });
   $('#tog-lib').addEventListener('click', () => { chat.library = !(chat.library ?? a.library); save(); render(); });
-  $('#tog-web').addEventListener('click', () => {
+  $('#tog-web')?.addEventListener('click', () => {
     const next = !(chat.web ?? a.web);
     if (next && S.config?.web?.provider === 'none') toast('Turn on a web search service in Settings → Web search first.');
     chat.web = next; save(); render();
@@ -351,14 +351,16 @@ function userContent(m, docBudget) {
 
 async function gatherSources(chat, a, query, force = {}) {
   const out = [];
-  if ((force.knowledge || (chat.library ?? a.library)) && query) {
+  // A knowledge model searches its own knowledge bases (and reports them back as it answers).
+  const own = resolveTarget(chat, a).startsWith('kbm:');
+  if (!own && (force.knowledge || (chat.library ?? a.library)) && query) {
     try {
       const r = await qs.call('kb:search', query, Number(S.data.prefs.sourcesPerAnswer) || 8, a.knowledge || []);
       for (const x of r.results) out.push({ title: x.title, text: x.text, path: x.path, url: x.url });
       if (r.failures.length) toast(`Some sources didn't respond: ${r.failures.join('; ')}`, 6000);
     } catch (err) { toast(`Knowledge: ${err.message}`); }
   }
-  if ((force.web || (chat.web ?? a.web)) && query && S.config?.web?.provider !== 'none') {
+  if ((force.web || (chat.web ?? a.web)) && query && S.config?.web?.provider !== 'none' && !S.config?.offline) {
     try { for (const r of await qs.call('web:search', query)) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
   }
   return out;
@@ -428,7 +430,8 @@ async function generate(chat, rerollMsg) {
 function paintStreaming(chat, msg) {
   if (S.route.view !== 'chat' || S.route.id !== chat.id || paintQueued) return;
   paintQueued = true;
-  requestAnimationFrame(() => {
+  const long = (msg.alts?.[msg.altIndex]?.text || '').length > 6000;
+  (long ? (fn) => setTimeout(() => requestAnimationFrame(fn), 120) : requestAnimationFrame)(() => {
     paintQueued = false;
     const el = document.querySelector(`[data-msg="${msg.id}"]`);
     if (!el) return;
@@ -465,6 +468,7 @@ qs.onChat(({ requestId, ev }) => {
       break;
     }
     case 'approve': askToolApproval(ev); break;
+    case 'sources': alt.sources = [...(alt.sources || []), ...ev.sources.map(({ title, url, path }) => ({ title, url, path }))]; pending.sources = [...(pending.sources || []), ...ev.sources]; break;
     case 'stats': alt.stats = { tps: ev.tps, tokens: ev.tokens }; if (ev.finish === 'length') toast('The answer hit the length limit. Press Continue for more.'); break;
     case 'error':
     case 'done': {

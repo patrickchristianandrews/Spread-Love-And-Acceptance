@@ -34,6 +34,7 @@ views.studio = {
     });
     $$('[data-get]').forEach((b) => b.addEventListener('click', async () => { const m = S.catalog.media.find((x) => x.id === b.dataset.get); await download({ catalogId: m.id }, m.name); render(); }));
     ({ create: bindCreate, edit: bindEdit, video: bindVideo, vedit: bindVedit, gallery: bindGallery })[studioTab]?.();
+    $$('[data-improve]').forEach((b) => b.addEventListener('click', () => improvePrompt(b)));
   },
 };
 
@@ -45,6 +46,34 @@ async function importFile(f) {
 }
 
 // ---------- shared pieces ----------
+
+// ---------- Improve: a text model turns a short idea into a detailed prompt ----------
+
+const IMPROVE = {
+  image: 'Rewrite the user\'s idea as one detailed prompt for an AI image generator: subject, setting, composition, lighting, colours and style (and camera and lens if it is a photo). Keep everything the user asked for. Reply with the prompt only, under 80 words, no quotes or labels.',
+  video: 'Rewrite the user\'s idea as one detailed prompt for an AI video generator: subject, action and motion, camera movement, setting, lighting and style. Keep everything the user asked for. Reply with the prompt only, under 70 words, no quotes or labels.',
+  edit: 'Rewrite the user\'s photo edit request as one clear, specific instruction for an AI photo editor: say exactly what to change, and that everything else stays the same. Reply with the instruction only, under 40 words, no quotes or labels.',
+};
+function improveBtn(id, kind) { return `<button type="button" class="btn small ghost" data-improve="${id}" data-kind="${kind}" title="Let AI write a more detailed prompt">✨ Improve</button>`; }
+function promptHelper() {
+  if (targetValid(S.data.prefs.promptHelper)) return S.data.prefs.promptHelper;
+  // Otherwise the quickest local text model.
+  const local = S.installed.filter((m) => m.kind === 'text').sort((a, b) => a.size - b.size)[0];
+  return local ? `local:${local.id}` : S.targets.find((t) => t.target.startsWith('api:'))?.target || '';
+}
+async function improvePrompt(btn) {
+  const box = $(`#${btn.dataset.improve}`);
+  const text = box.value.trim();
+  if (!text) { toast('Write a few words first, then press Improve.'); return; }
+  const helper = promptHelper();
+  if (!helper) { toast('Install a text model to write prompts (Stacks → Photo & video generation).', 6000); return; }
+  btn.disabled = true; btn.textContent = '✨ Writing…';
+  try {
+    const out = await askAI(helper, IMPROVE[btn.dataset.kind], text);
+    if (out) { box.value = out.replace(/^["'“]|["'”]$/g, ''); box.focus(); }
+  } catch (e) { toast(`Couldn't improve it: ${e.message}`); }
+  btn.disabled = false; btn.textContent = '✨ Improve';
+}
 
 function mediaModelOptions(kinds, filter = () => true) {
   const local = S.installed.filter((m) => kinds.includes(m.kind) && filter(S.catalog.media.find((c) => c.id === m.catalogId) || {}));
@@ -119,7 +148,7 @@ function createHTML() {
   return `<div class="studio">
     <div class="card stack-v">
       <div class="field"><label for="ci-model">Model</label><select id="ci-model">${opts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.imageModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
-      <div class="field"><label for="ci-prompt">Describe the picture</label><textarea id="ci-prompt" rows="5" placeholder="A cozy reading nook by a rainy window, warm lamp light, watercolor style">${esc(S.data.prefs.lastPrompt || '')}</textarea></div>
+      <div class="field"><label for="ci-prompt" class="row">Describe the picture<span class="grow"></span>${improveBtn('ci-prompt', 'image')}</label><textarea id="ci-prompt" rows="5" placeholder="A cozy reading nook by a rainy window, warm lamp light, watercolor style">${esc(S.data.prefs.lastPrompt || '')}</textarea></div>
       <div class="field" id="ci-neg-f"><label for="ci-neg">Avoid (optional)</label><input id="ci-neg" placeholder="blurry, text, watermark"></div>
       <div class="field"><label>Shape</label><div class="row">${Object.entries(SIZES).map(([k, [l]], i) => `<label class="btn small"><input type="radio" name="ci-size" value="${k}" ${i === 0 ? 'checked' : ''}> ${l}</label>`).join('')}</div></div>
       <details><summary class="label" style="cursor:pointer">Advanced</summary><div class="grid2" style="margin-top:10px">
@@ -218,8 +247,8 @@ function editHTML() {
     <div class="stack-v">
       <div class="card stack-v">
         <h3>🪄 Edit with AI</h3>
-        ${aiOpts.length ? `<div class="field"><label for="ai-model">Model</label><select id="ai-model">${aiOpts.map((o) => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('')}</select></div>
-          <div class="field"><label for="ai-prompt">What should change?</label><textarea id="ai-prompt" rows="3" placeholder="Make it a sunset · Remove the car · Turn it into an oil painting · Add snow"></textarea></div>
+        ${aiOpts.length ? `<div class="field"><label for="ai-model">Model</label><select id="ai-model">${aiOpts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.editModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
+          <div class="field"><label for="ai-prompt" class="row">What should change?<span class="grow"></span>${improveBtn('ai-prompt', 'edit')}</label><textarea id="ai-prompt" rows="3" placeholder="Make it a sunset · Remove the car · Turn it into an oil painting · Add snow"></textarea></div>
           <div class="field" id="ai-str-f"><label for="ai-str">How much to change: <span id="ai-str-v">0.6</span></label><input type="range" id="ai-str" min="0.1" max="1" step="0.05" value="0.6"></div>
           <label class="row"><input type="checkbox" id="mask-on" ${ed.maskOn ? 'checked' : ''}> <b>Only change the area I paint</b></label>
           ${ed.maskOn ? `<div class="row"><span class="small">Brush</span><input type="range" id="brush" min="8" max="160" value="${ed.brush}" class="grow"><button class="btn small" id="mask-clear">Clear</button></div>` : ''}
@@ -346,8 +375,8 @@ function videoHTML() {
   const jobs = Object.entries(mediaJobs).filter(([, j]) => j.label === 'Animating' && !j.done);
   return `<div class="studio">
     <div class="card stack-v">
-      <div class="field"><label for="cv-model">Model</label><select id="cv-model">${opts.map((o) => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('')}</select></div>
-      <div class="field"><label for="cv-prompt">Describe the video</label><textarea id="cv-prompt" rows="5" placeholder="Gentle waves rolling onto a sunny beach, slow camera pan"></textarea></div>
+      <div class="field"><label for="cv-model">Model</label><select id="cv-model">${opts.map((o) => `<option value="${esc(o.value)}" ${o.value === S.data.prefs.videoModel ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select></div>
+      <div class="field"><label for="cv-prompt" class="row">Describe the video<span class="grow"></span>${improveBtn('cv-prompt', 'video')}</label><textarea id="cv-prompt" rows="5" placeholder="Gentle waves rolling onto a sunny beach, slow camera pan"></textarea></div>
       <div class="field" id="cv-from-f"><label for="cv-from">Start from a photo (optional)</label><select id="cv-from"><option value="">No, create from the description</option>${imgs.slice(0, 60).map((g) => `<option value="${g.id}">${esc(g.prompt || g.title || 'Photo')}</option>`).join('')}</select></div>
       <div class="grid2">
         <div class="field"><label for="cv-shape">Shape</label><select id="cv-shape"><option value="landscape">Landscape</option><option value="tall">Vertical</option><option value="square">Square</option></select></div>
@@ -418,7 +447,7 @@ function bindVedit() {
     toast('Reading frames…');
     const r = await call('media:videoFrames', vid.id, 8);
     const g = gallery.find((x) => x.id === vid.id);
-    chatWithAttachment({ type: 'video', name: g.title || 'video', duration: r.duration, frames: r.frames }, 'What happens in this video?', S.data.assistants.find((a) => a.job === 'vision')?.id);
+    chatWithAttachment({ type: 'video', name: g.title || 'video', duration: r.duration, frames: r.frames }, 'What happens in this video?', S.data.assistants.find((a) => a.job === 'general')?.id);
   });
   $('#ve-go').addEventListener('click', async () => {
     const fade = Number($('#ve-fade').value) || 0;
@@ -471,8 +500,8 @@ document.addEventListener('click', (e) => {
     if (act === 'animate') { closeModal(); studioTab = 'video'; go({ view: 'studio' }); setTimeout(() => { const s = $('#cv-from'); if (s) s.value = g.id; }, 50); }
     if (act === 'chat') {
       closeModal();
-      if (g.kind === 'video') { const r = await call('media:videoFrames', g.id, 8); chatWithAttachment({ type: 'video', name: g.title || 'video', duration: r.duration, frames: r.frames }, 'What happens in this video?', S.data.assistants.find((a) => a.job === 'vision')?.id); }
-      else chatWithAttachment({ type: 'image', name: g.title || g.prompt || 'image', dataUrl: await shrinkImage(await qs.call('media:dataUrl', g.id)) }, 'What do you see in this picture?', S.data.assistants.find((a) => a.job === 'vision')?.id);
+      if (g.kind === 'video') { const r = await call('media:videoFrames', g.id, 8); chatWithAttachment({ type: 'video', name: g.title || 'video', duration: r.duration, frames: r.frames }, 'What happens in this video?', S.data.assistants.find((a) => a.job === 'general')?.id); }
+      else chatWithAttachment({ type: 'image', name: g.title || g.prompt || 'image', dataUrl: await shrinkImage(await qs.call('media:dataUrl', g.id)) }, 'What do you see in this picture?', S.data.assistants.find((a) => a.job === 'general')?.id);
     }
     if (act === 'export' && await call('media:export', g.id)) toast('Saved.');
     if (act === 'reveal') call('media:reveal', g.id);

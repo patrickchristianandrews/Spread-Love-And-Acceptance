@@ -2,12 +2,14 @@
 //   local:<modelId>              a model on this PC
 //   api:<providerId>:<model>     a model from a connected API
 //   stack:<stackId>              several models working together
+//   kbm:<id>                     a knowledge model: any of the above, answering from your knowledge bases
 // Events: {type:'text'|'reasoning', text} {type:'status', text} {type:'step', ...} {type:'stats', ...}
 const store = require('./store');
 const models = require('./models');
 const llama = require('./llama');
 const providers = require('./providers');
 const toolbox = require('./tools');
+const knowledge = require('./knowledge');
 
 // ---------- stacks ----------
 // { id, name, emoji, members: { vision?: target, drafters: [target], judge?: target }, builtFor? }
@@ -22,6 +24,56 @@ function saveStack(s) {
 }
 function deleteStack(id) { store.writeJSON(STACKS(), stacks().filter((s) => s.id !== id)); }
 
+// ---------- knowledge models ----------
+// { id, name, emoji, base: target, knowledge: [collectionId] (empty = all), strict, instructions, k }
+// A saved model that always searches your chosen knowledge bases first and cites them. It works
+// anywhere a model does: chats, stacks, Infuse and the API server.
+
+const KBM = () => store.file('knowledge-models.json');
+function kbModels() { return store.readJSON(KBM(), []); }
+function saveKbModel(m) {
+  if (!m?.name || !m.base) throw new Error('Give it a name and a model to answer with.');
+  if (parse(m.base).kind === 'kbm') throw new Error('Pick a normal model or stack as the base.');
+  const all = kbModels().filter((x) => x.id !== m.id);
+  all.push(m);
+  store.writeJSON(KBM(), all);
+  return m;
+}
+function deleteKbModel(id) { store.writeJSON(KBM(), kbModels().filter((m) => m.id !== id)); }
+
+const STRICT = 'IMPORTANT: Answer ONLY from the reference material provided below. Do not use general knowledge or memory. Cite every factual statement with its source number. If the material does not contain the answer, say it was not found in the knowledge base, and what kind of source would answer it.';
+const lastUserText = (messages) => {
+  const m = [...messages].reverse().find((x) => x.role === 'user');
+  return !m ? '' : typeof m.content === 'string' ? m.content : (m.content || []).filter((p) => p.type === 'text').map((p) => p.text).join('\n');
+};
+
+async function* knowledgeModel(km, req) {
+  const query = lastUserText(req.messages);
+  yield { type: 'status', text: `Searching ${km.name}'s knowledge…` };
+  let sources = [];
+  if (query) {
+    try { sources = [...(await knowledge.search(query, { k: km.k || 8, collectionIds: km.knowledge || [] }))]; } catch (err) { yield { type: 'status', text: `Knowledge search failed: ${err.message}` }; }
+  }
+  if (sources.length) yield { type: 'sources', sources: sources.map((s) => ({ title: s.title, url: s.url, path: s.path, text: (s.text || '').slice(0, 4000) })) };
+  const parts = [];
+  if (km.instructions) parts.push(km.instructions);
+  if (km.strict) parts.push(STRICT);
+  if (km.strict && !sources.length) parts.push('No reference material matched this question.');
+  if (sources.length) {
+    parts.push('Reference material for this answer follows. Use it when relevant and cite it inline with its number, like [1] or [2].' + (km.strict ? '' : ' If it does not answer the question, say so and answer from general knowledge, making clear which is which.'));
+    sources.forEach((s, i) => parts.push(`<source number="${i + 1}" title="${s.title}"${s.url ? ` url="${s.url}"` : ''}>\n${(s.text || '').slice(0, 5000)}\n</source>`));
+  }
+  const messages = [...req.messages];
+  const add = parts.join('\n\n');
+  if (add) {
+    if (messages[0]?.role === 'system') messages[0] = { ...messages[0], content: `${messages[0].content}\n\n${add}` };
+    else messages.unshift({ role: 'system', content: add });
+  }
+  yield { type: 'status', text: '' };
+  const next = { ...req, messages };
+  if (parse(km.base).kind === 'stack' || next.toolList) yield* run(km.base, next); else yield* single(km.base, next);
+}
+
 // ---------- targets ----------
 
 function parse(target) {
@@ -35,6 +87,7 @@ function label(target) {
   if (t.kind === 'local') return models.get(t.id)?.name || 'Missing model';
   if (t.kind === 'api') return `${t.model} (${providers.get(t.providerId)?.name || 'API'})`;
   if (t.kind === 'stack') return stacks().find((s) => s.id === t.id)?.name || 'Missing stack';
+  if (t.kind === 'kbm') return kbModels().find((m) => m.id === t.id)?.name || 'Missing knowledge model';
   return 'No model';
 }
 
@@ -42,6 +95,7 @@ function canSee(target) {
   const t = parse(target);
   if (t.kind === 'local') return Boolean(models.get(t.id)?.files?.mmproj);
   if (t.kind === 'api') return providers.get(t.providerId)?.vision !== false;
+  if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); return km ? canSee(km.base) : false; }
   return false;
 }
 
@@ -50,6 +104,7 @@ function exists(target) {
   if (t.kind === 'local') return Boolean(models.get(t.id));
   if (t.kind === 'api') return Boolean(providers.get(t.providerId));
   if (t.kind === 'stack') return stacks().some((s) => s.id === t.id);
+  if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); return Boolean(km && exists(km.base)); }
   return false;
 }
 
@@ -63,6 +118,12 @@ async function* single(target, req) {
     yield* llama.chat({ id: m.id, name: m.name, file: m.files.model, mmproj: m.files.mmproj }, req);
   } else if (t.kind === 'api') {
     yield* providers.chat(t.providerId, t.model, req);
+  } else if (t.kind === 'kbm') {
+    const km = kbModels().find((m) => m.id === t.id);
+    if (!km) throw new Error('That knowledge model was deleted. Pick another one.');
+    yield* knowledgeModel(km, req);
+  } else if (t.kind === 'stack') {
+    yield* run(target, req);
   } else {
     throw new Error('Choose a model first.');
   }
@@ -323,13 +384,19 @@ function targets() {
   const out = [];
   for (const m of models.list().filter((x) => x.kind === 'text')) out.push({ target: `local:${m.id}`, label: m.name, name: m.name, group: 'On this PC', vision: Boolean(m.files.mmproj) });
   for (const s of stacks()) out.push({ target: `stack:${s.id}`, label: `${s.emoji || '⚡'} ${s.name}`, name: s.name, group: 'Infused AIs & stacks', stack: true });
-  for (const p of providers.publicList()) for (const m of p.models || []) out.push({ target: `api:${p.id}:${m}`, label: m, name: m, group: p.name, vision: p.vision });
+  for (const k of kbModels()) if (exists(k.base)) out.push({ target: `kbm:${k.id}`, label: `${k.emoji || '📚'} ${k.name}`, name: k.name, group: 'Knowledge models', vision: canSee(k.base), knowledge: true });
+  const off = Boolean(store.config().offline);
+  for (const p of providers.publicList()) {
+    if (off && !require('./offline').isLocal(p.baseUrl || 'https://cloud')) continue; // cloud AIs can't answer offline
+    for (const m of p.models || []) out.push({ target: `api:${p.id}:${m}`, label: m, name: m, group: p.name, vision: p.vision });
+  }
   return out;
 }
 
 // Loads a target's first local model ahead of time, so the first reply starts quickly.
 async function warm(target, { contextSize, gpu } = {}) {
   let t = parse(target);
+  if (t.kind === 'kbm') { const km = kbModels().find((m) => m.id === t.id); if (!km) return false; return warm(km.base, { contextSize, gpu }); }
   if (t.kind === 'stack') {
     const st = stacks().find((x) => x.id === t.id);
     const first = [...(st?.members.drafters || []), st?.members.judge].find((x) => x && parse(x).kind === 'local' && exists(x));
@@ -343,4 +410,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { warm, run, targets, stacks, saveStack, deleteStack, label, exists, canSee, parse };
+module.exports = { warm, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse };

@@ -1,5 +1,6 @@
 // Every tool a model can use in a chat: built-in connectors plus MCP servers.
-// Tools that change something (write) ask for approval unless you chose "always allow".
+// Tools that change something (write) ask for approval unless you chose "always allow" for that
+// tool, or turned off asking altogether (toolAutoApprove).
 const store = require('./store');
 const integrations = require('./integrations');
 const mcp = require('./mcp');
@@ -21,7 +22,7 @@ const clip = (s, n) => (s.length > n ? `${s.slice(0, n)}\n…(truncated)` : s);
 // Runs one tool call. Returns { status: 'done'|'error'|'denied', result }.
 async function execute(tool, args, { approve } = {}) {
   if (!tool) return { status: 'error', result: 'Unknown tool.' };
-  if (tool.write && !allowed().has(tool.name)) {
+  if (tool.write && !store.config().toolAutoApprove && !allowed().has(tool.name)) {
     const answer = approve ? await approve({ tool: tool.name, source: tool.source, summary: tool.summary ? tool.summary(args) : `${tool.source}: ${tool.name}`, args }) : { ok: false };
     if (!answer?.ok) return { status: 'denied', result: 'The user declined this action. Do not retry it; continue without it and tell the user what you would have done.' };
     if (answer.always) allowAlways(tool.name);

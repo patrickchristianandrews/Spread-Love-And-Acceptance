@@ -5,6 +5,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const { pathToFileURL } = require('node:url');
 const store = require('./store');
+const offline = require('./offline'); // must load before anything that uses the network
 const catalog = require('../shared/catalog');
 const hardware = require('./hardware');
 const engines = require('./engines');
@@ -71,7 +72,7 @@ handle('catalog:estimates', async () => {
 });
 handle('advisor:advise', async (job) => {
   const hw = await hardware.detect();
-  return { hardware: hw, ...catalog.advise(job, hw, { calib: store.config().calib.text }) };
+  return { hardware: hw, ...catalog.advise(job, hw, { calib: store.config().calib.text, installed: models.list() }) };
 });
 
 // Speed test: runs the smallest installed text model and compares the real speed to the estimate.
@@ -110,6 +111,9 @@ handle('models:import', async () => {
   return models.importFile(r.filePaths[0], llama.readGguf);
 });
 handle('models:folder', () => shell.openPath(store.dir('models')));
+handle('models:found', () => models.findOnPC());
+handle('models:repair', (id) => { llama.stopAll(); return models.repair(id, emit); });
+handle('models:addFound', (items) => models.addFound(items, llama.readGguf));
 
 // ---------- providers (APIs) ----------
 handle('providers:presets', () => providers.PRESETS);
@@ -124,6 +128,9 @@ handle('models:warm', (target, opts) => complete.warm(target, opts).catch(() => 
 handle('stacks:list', () => complete.stacks());
 handle('stacks:save', (s) => complete.saveStack(s));
 handle('stacks:delete', (id) => complete.deleteStack(id));
+handle('kbm:list', () => complete.kbModels());
+handle('kbm:save', (m) => complete.saveKbModel(m));
+handle('kbm:delete', (id) => complete.deleteKbModel(id));
 
 const chats = new Map();
 ipcMain.on('chat:send', async (_e, p) => {
@@ -172,6 +179,7 @@ handle('mcp:save', (s, token) => mcp.upsert(s, token));
 handle('mcp:remove', (id) => mcp.remove(id));
 handle('mcp:test', (id) => mcp.testServer(id));
 handle('tools:allowed', () => store.config().toolAllow || []);
+handle('tools:auto', (on) => { if (on !== undefined) store.saveConfig({ toolAutoApprove: Boolean(on) }); return Boolean(store.config().toolAutoApprove); });
 handle('tools:forget', (name) => { store.saveConfig({ toolAllow: (store.config().toolAllow || []).filter((n) => n !== name) }); return true; });
 handle('kb:github', async (collectionId, repo, maxFiles) => {
   const files = await integrations.githubRepoFiles(repo.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/+$/, ''), { maxFiles });

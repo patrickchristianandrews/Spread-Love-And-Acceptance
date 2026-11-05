@@ -69,7 +69,7 @@ jobs:
           SERVER=$(find engine/llama -name llama-server.exe | head -1)
           echo "engine: $SERVER ($(cat engine/llama/VERSION.txt))"
           "$SERVER" --list-devices || true
-          "$SERVER" -m test/fixtures/tiny.gguf --host 127.0.0.1 --port 8099 -c 512 -ngl 0 --jinja > llama.log 2>&1 &
+          "$SERVER" -m test/fixtures/tiny.gguf --host 127.0.0.1 --port 8099 -c 512 -ngl 0 --jinja --cache-reuse 256 --device none > llama.log 2>&1 &
           for i in $(seq 1 60); do curl -sf http://127.0.0.1:8099/health && break; sleep 1; done
           RESPONSE=$(curl -sf http://127.0.0.1:8099/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hello"}],"max_tokens":8}')
           echo "$RESPONSE"

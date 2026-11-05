@@ -309,8 +309,10 @@ async function search(query, { k = 8, collectionIds, perSource = 3 } = {}) {
   const cols = db.collections.filter((c) => ids.has(c.id));
   const docIds = new Set(db.docs.filter((d) => ids.has(d.c)).map((d) => d.id));
   const local = bm25(query, (c) => docIds.has(c.d), k);
-  const live = new Set(cols.flatMap((c) => c.live || []));
-  const custom = cols.flatMap((c) => c.custom || []);
+  // Offline: only your stored knowledge (live sources need the internet).
+  const off = Boolean(store.config().offline);
+  const live = new Set(off ? [] : cols.flatMap((c) => c.live || []));
+  const custom = off ? [] : cols.flatMap((c) => c.custom || []);
   const remote = [];
   const failures = [];
   await Promise.all([

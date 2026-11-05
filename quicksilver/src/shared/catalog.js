@@ -55,6 +55,14 @@ const TEXT_MODELS = [
   { id: 'qwen3-coder-30b', name: 'Qwen3 Coder 30B-A3B', maker: 'Alibaba', params: '30B (3B active)', category: 'coding', repo: 'unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 18.6, activeGB: 2.0, ctx: 262144,
     blurb: 'Top open coding model that still runs fast. Handles whole codebases.', jobs: { general: 7, office: 7, research: 7, coding: 10, vision: 0, fast: 5 }, judge: 8 },
 
+  // Unfiltered: community models that follow your instructions with far fewer refusals.
+  { id: 'hermes-3-llama-3.1-8b', name: 'Hermes 3 8B', maker: 'Nous Research', params: '8B', category: 'open', repo: 'NousResearch/Hermes-3-Llama-3.1-8B-GGUF', quant: 'Q4_K_M', sizeGB: 4.9, ctx: 131072, open: true,
+    blurb: 'Highly steerable: follows your instructions and persona closely, with few refusals.', jobs: { general: 7, office: 6, research: 6, coding: 5, vision: 0, fast: 5 }, judge: 6 },
+  { id: 'dolphin-3-llama-3.1-8b', name: 'Dolphin 3.0 8B', maker: 'Cognitive Computations', params: '8B', category: 'open', repo: 'bartowski/Dolphin3.0-Llama3.1-8B-GGUF', quant: 'Q4_K_M', sizeGB: 4.9, ctx: 131072, open: true,
+    blurb: 'Uncensored general model: answers frankly and leaves the judgment to you.', jobs: { general: 7, office: 6, research: 6, coding: 6, vision: 0, fast: 5 }, judge: 5 },
+  { id: 'mistral-nemo-12b', name: 'Mistral Nemo 12B', maker: 'Mistral AI', params: '12B', category: 'open', repo: 'bartowski/Mistral-Nemo-Instruct-2407-GGUF', quant: 'Q4_K_M', sizeGB: 7.5, ctx: 131072, open: true,
+    blurb: 'Lightly filtered and great at writing and fiction, with a long memory.', jobs: { general: 7, office: 7, research: 6, coding: 6, vision: 0, fast: 4 }, judge: 6 },
+
   // Vision (see photos, scans, charts and video frames)
   { id: 'gemma-3-4b', name: 'Gemma 3 4B (vision)', maker: 'Google', params: '4B', category: 'vision', repo: 'unsloth/gemma-3-4b-it-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, mmprojGB: 0.8, vision: true, ctx: 131072,
     blurb: 'Sees photos, screenshots and documents. Small enough for most PCs.', jobs: { general: 6, office: 6, research: 5, coding: 4, vision: 7, fast: 7 }, judge: 4 },
@@ -62,7 +70,7 @@ const TEXT_MODELS = [
     blurb: 'Excellent at reading text, tables and charts in images.', jobs: { general: 6, office: 8, research: 7, coding: 5, vision: 9, fast: 4 }, judge: 5 },
   { id: 'gemma-3-12b', name: 'Gemma 3 12B (vision)', maker: 'Google', params: '12B', category: 'vision', repo: 'unsloth/gemma-3-12b-it-GGUF', quant: 'Q4_K_M', sizeGB: 7.3, mmprojGB: 0.9, vision: true, ctx: 131072,
     blurb: 'Strong all-rounder that also understands images well.', jobs: { general: 8, office: 8, research: 7, coding: 6, vision: 8, fast: 3 }, judge: 7 },
-  { id: 'mistral-small-3.2', name: 'Mistral Small 3.2 24B (vision)', maker: 'Mistral AI', params: '24B', category: 'vision', repo: 'unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, mmprojGB: 0.9, vision: true, ctx: 131072,
+  { id: 'mistral-small-3.2', name: 'Mistral Small 3.2 24B (vision)', maker: 'Mistral AI', params: '24B', category: 'vision', repo: 'unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF', quant: 'Q4_K_M', sizeGB: 14.3, mmprojGB: 0.9, vision: true, ctx: 131072, open: true,
     blurb: 'Precise, professional and sees images. Great for business documents.', jobs: { general: 9, office: 9, research: 8, coding: 8, vision: 8, fast: 2 }, judge: 8 },
   { id: 'gemma-3-27b', name: 'Gemma 3 27B (vision)', maker: 'Google', params: '27B', category: 'vision', repo: 'unsloth/gemma-3-27b-it-GGUF', quant: 'Q4_K_M', sizeGB: 16.5, mmprojGB: 0.9, vision: true, ctx: 131072,
     blurb: 'Google\'s largest open model. Top-tier vision and writing.', jobs: { general: 9, office: 9, research: 9, coding: 7, vision: 9, fast: 1 }, judge: 9 },
@@ -74,6 +82,7 @@ const TEXT_CATEGORIES = {
   reasoning: { label: 'Reasoning', icon: '🧠' },
   coding: { label: 'Coding', icon: '💻' },
   vision: { label: 'Vision (photos & video)', icon: '👁️' },
+  open: { label: 'Unfiltered', icon: '🔓' },
 };
 
 // ---------- image and video models (stable-diffusion.cpp) ----------
@@ -87,28 +96,28 @@ const FLUX_ENCODERS = {
 };
 
 const MEDIA_MODELS = [
-  { id: 'sd15', name: 'Stable Diffusion 1.5', maker: 'Stability AI / RunwayML', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 4.3, vramGB: 3, refSec: 4, defaults: { width: 512, height: 512, steps: 25, cfg: 7 },
+  { id: 'sd15', quality: 4, name: 'Stable Diffusion 1.5', maker: 'Stability AI / RunwayML', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 4.3, vramGB: 3, refSec: 4, defaults: { width: 512, height: 512, steps: 25, cfg: 7 },
     files: { model: { repo: 'stable-diffusion-v1-5/stable-diffusion-v1-5', match: '^v1-5-pruned-emaonly\\.safetensors$' } },
     blurb: 'The classic. Fast, light, endless styles. Good for older cards.', edit: 'img2img' },
-  { id: 'sdxl-turbo', name: 'SDXL Turbo', maker: 'Stability AI', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 6.9, vramGB: 6, refSec: 3, defaults: { width: 512, height: 512, steps: 4, cfg: 1 },
+  { id: 'sdxl-turbo', quality: 6, name: 'SDXL Turbo', maker: 'Stability AI', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 6.9, vramGB: 6, refSec: 3, defaults: { width: 512, height: 512, steps: 4, cfg: 1 },
     files: { model: { repo: 'stabilityai/sdxl-turbo', match: '^sd_xl_turbo_1\\.0_fp16\\.safetensors$' } },
     blurb: 'Pictures in a few seconds. Great for quick ideas and drafts.', edit: 'img2img' },
-  { id: 'sdxl', name: 'SDXL 1.0', maker: 'Stability AI', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 7.1, vramGB: 8, refSec: 25, defaults: { width: 1024, height: 1024, steps: 30, cfg: 6 },
+  { id: 'sdxl', quality: 7, name: 'SDXL 1.0', maker: 'Stability AI', kind: 'image', category: 'image', recipe: 'sd', sizeGB: 7.1, vramGB: 8, refSec: 25, defaults: { width: 1024, height: 1024, steps: 30, cfg: 6 },
     files: { model: { repo: 'stabilityai/stable-diffusion-xl-base-1.0', match: '^sd_xl_base_1\\.0\\.safetensors$' }, vae: { repo: 'madebyollin/sdxl-vae-fp16-fix', match: '^sdxl_vae\\.safetensors$' } },
     blurb: 'High-resolution, detailed images with good composition.', edit: 'img2img' },
-  { id: 'flux-schnell', name: 'FLUX.1 Schnell', maker: 'Black Forest Labs', kind: 'image', category: 'image', recipe: 'flux', sizeGB: 13.5, vramGB: 10, refSec: 20, defaults: { width: 1024, height: 1024, steps: 4, cfg: 1 },
+  { id: 'flux-schnell', quality: 9, name: 'FLUX.1 Schnell', maker: 'Black Forest Labs', kind: 'image', category: 'image', recipe: 'flux', sizeGB: 13.5, vramGB: 10, refSec: 20, defaults: { width: 1024, height: 1024, steps: 4, cfg: 1 },
     files: { diffusion: { repo: 'city96/FLUX.1-schnell-gguf', match: 'Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
     blurb: 'State-of-the-art quality in 4 steps. Follows prompts closely and can write text in images.', edit: 'img2img' },
-  { id: 'flux-kontext', name: 'FLUX.1 Kontext (photo editing)', maker: 'Black Forest Labs', kind: 'image', category: 'edit', recipe: 'kontext', sizeGB: 13.5, vramGB: 10, refSec: 60, defaults: { width: 1024, height: 1024, steps: 20, cfg: 1 },
+  { id: 'flux-kontext', quality: 8, name: 'FLUX.1 Kontext (photo editing)', maker: 'Black Forest Labs', kind: 'image', category: 'edit', recipe: 'kontext', sizeGB: 13.5, vramGB: 10, refSec: 60, defaults: { width: 1024, height: 1024, steps: 20, cfg: 1 },
     files: { diffusion: { repo: 'QuantStack/FLUX.1-Kontext-dev-GGUF', match: 'Q4_K_S\\.gguf$' }, ...FLUX_ENCODERS },
     blurb: 'Edit photos by describing the change: "make it sunset", "remove the person", "turn it into a watercolor".', edit: 'instruct' },
-  { id: 'qwen-image-edit', name: 'Qwen Image Edit', maker: 'Alibaba', kind: 'image', category: 'edit', recipe: 'qwen-image', sizeGB: 20.5, vramGB: 16, refSec: 90, defaults: { width: 1024, height: 1024, steps: 20, cfg: 2.5 },
+  { id: 'qwen-image-edit', quality: 9, name: 'Qwen Image Edit', maker: 'Alibaba', kind: 'image', category: 'edit', recipe: 'qwen-image', sizeGB: 20.5, vramGB: 16, refSec: 90, defaults: { width: 1024, height: 1024, steps: 20, cfg: 2.5 },
     files: { diffusion: { repo: 'QuantStack/Qwen-Image-Edit-GGUF', match: 'Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Qwen-Image_ComfyUI', match: 'qwen_image_vae\\.safetensors$' }, llm: { repo: 'unsloth/Qwen2.5-VL-7B-Instruct-GGUF', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'Powerful instruction editing, including changing and adding text in images.', edit: 'instruct' },
-  { id: 'wan2.1-1.3b', name: 'Wan 2.1 Text-to-Video 1.3B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 7.0, vramGB: 8, refSec: 240, defaults: { width: 832, height: 480, steps: 20, cfg: 6, frames: 33, fps: 16 },
+  { id: 'wan2.1-1.3b', quality: 6, name: 'Wan 2.1 Text-to-Video 1.3B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 7.0, vramGB: 8, refSec: 240, defaults: { width: 832, height: 480, steps: 20, cfg: 6, frames: 33, fps: 16 },
     files: { diffusion: { repo: 'Comfy-Org/Wan_2.1_ComfyUI_repackaged', match: 'wan2\\.1_t2v_1\\.3B_fp16\\.safetensors$' }, vae: { repo: 'Comfy-Org/Wan_2.1_ComfyUI_repackaged', match: 'wan_2\\.1_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'Short video clips from a description. Fits on 8 GB cards.' },
-  { id: 'wan2.2-5b', name: 'Wan 2.2 Text/Image-to-Video 5B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 12, refSec: 420, defaults: { width: 1280, height: 704, steps: 20, cfg: 5, frames: 49, fps: 24 },
+  { id: 'wan2.2-5b', quality: 8, name: 'Wan 2.2 Text/Image-to-Video 5B', maker: 'Alibaba', kind: 'video', category: 'video', recipe: 'wan', sizeGB: 9.5, vramGB: 12, refSec: 420, defaults: { width: 1280, height: 704, steps: 20, cfg: 5, frames: 49, fps: 24 },
     files: { diffusion: { repo: 'QuantStack/Wan2.2-TI2V-5B-GGUF', match: 'Q4_K_M\\.gguf$' }, vae: { repo: 'Comfy-Org/Wan_2.2_ComfyUI_Repackaged', match: 'wan2\\.2_vae\\.safetensors$' }, t5xxl: { repo: 'city96/umt5-xxl-encoder-gguf', match: 'Q4_K_M\\.gguf$' } },
     blurb: 'Higher-quality 720p clips, from text or by animating a photo.', animate: true },
 ];
@@ -119,22 +128,40 @@ const MEDIA_CATEGORIES = {
   video: { label: 'Video generation', icon: '🎬' },
 };
 
-// ---------- jobs ----------
+// ---------- stack types ----------
+// Kinds of work, not topics. Text stacks combine language models; media stacks are a kit of
+// image and video models plus a small text model that writes better prompts.
+// speed: writing speed (tokens/s) at which a model counts as quick enough for this work.
+// budget: the longest a full stacked answer should take on this PC, in seconds.
 
 const JOBS = {
-  general: { label: 'Everyday assistant', icon: '💬', pitch: 'Questions, advice, emails, plans and ideas.', temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true,
+  general: { kind: 'text', label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Use Markdown (headings, lists, tables, code blocks) when it helps. If you are unsure, say so instead of guessing.' } },
-  office: { label: 'Office & analysis', icon: '📊', pitch: 'Spreadsheets, reports, data analysis, documents and email.', temperature: 0.3, contextSize: 32768, maxTokens: 6144, library: true, web: true,
-    assistant: { name: 'Office Analyst', emoji: '📊', instructions: 'You are a senior business analyst. When given spreadsheets or data, work from the actual numbers: compute totals, averages, changes and outliers carefully and show the figures. Present results as clear Markdown tables and short bullet summaries with the key takeaway first. For documents and email, write in a crisp professional tone. Never invent numbers; if data is missing, say what is needed.' } },
-  research: { label: 'Research & reference', icon: '🔎', pitch: 'Search your files and the web, summarise and cite sources.', temperature: 0.3, contextSize: 32768, maxTokens: 6144, library: true, web: true,
+  reasoning: { kind: 'text', label: 'Reasoning', icon: '🧠', pitch: 'Maths, logic, tricky questions and decisions, worked through step by step.', speed: 8, budget: 240, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
+    assistant: { name: 'Thinker', emoji: '🧠', instructions: 'You are a careful reasoner. Work through problems step by step, state your assumptions, check each step, and verify the final answer (recompute numbers, test edge cases, look for counter-examples). Give the conclusion clearly at the end. If the question is ambiguous, say how you interpreted it.' } },
+  office: { kind: 'text', label: 'Complex tasks', icon: '🧩', pitch: 'Multi-step projects, analysis, spreadsheets and long documents.', speed: 10, budget: 180, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: true, web: true, mode: 'blend',
+    assistant: { name: 'Analyst', emoji: '🧩', instructions: 'You handle complex, multi-step work. First make a short plan, then carry it out step by step, and finish with a clear result and next steps. With spreadsheets or data, work from the actual numbers: compute totals, changes and outliers carefully and show the figures in Markdown tables. Never invent numbers; if something is missing, say what is needed.' } },
+  research: { kind: 'text', label: 'Research', icon: '🔎', pitch: 'Answers from the web and your files, with sources and fact checks.', speed: 10, budget: 150, temperature: 0.3, contextSize: 32768, maxTokens: 6144, library: true, web: true, mode: 'consensus',
     assistant: { name: 'Researcher', emoji: '🔎', instructions: 'You are a meticulous research assistant. Base answers on the reference excerpts and search results provided, cite them inline as [1], [2] matching their numbers, and say clearly when the sources do not answer the question. Separate facts from interpretation. End with a short summary.' } },
-  coding: { label: 'Coding', icon: '💻', pitch: 'Writing, fixing, reviewing and explaining code.', temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false,
-    assistant: { name: 'Code Partner', emoji: '💻', instructions: 'You are an expert software engineer. Write correct, idiomatic, complete code in fenced code blocks with the language named. Explain briefly what changed and why. Point out bugs, edge cases and security issues. Ask a short clarifying question when a request is ambiguous.' } },
-  vision: { label: 'Photos & video', icon: '📷', pitch: 'Understand photos, screenshots, scans, charts and video clips.', temperature: 0.4, contextSize: 16384, maxTokens: 4096, library: false, web: false,
-    assistant: { name: 'Vision Analyst', emoji: '📷', instructions: 'You analyse images and video frames. Describe what matters for the user\'s question, read any text exactly, extract tables and chart values, and note anything unclear. For video, describe what happens over time using the frame timestamps.' } },
-  fast: { label: 'Fast on a modest PC', icon: '⚡', pitch: 'Quick answers on laptops and older computers.', temperature: 0.6, contextSize: 8192, maxTokens: 2048, library: false, web: true,
-    assistant: { name: 'Quick Helper', emoji: '⚡', instructions: 'You are a fast, concise assistant. Keep answers short and to the point unless asked for more.' } },
+  writing: { kind: 'text', label: 'Writing', icon: '✍️', pitch: 'Emails, posts, letters and documents: drafted, rewritten and polished.', speed: 12, budget: 90, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend',
+    assistant: { name: 'Writer', emoji: '✍️', instructions: 'You are a skilled writer and editor. Match the tone the user asks for (or the tone of what they paste). Write clearly and concisely, in plain English, with no filler. When editing, keep the user\'s meaning and voice, and briefly list the main changes. For emails, include a subject line.' } },
+  open: { kind: 'text', label: 'Unfiltered', icon: '🔓', pitch: 'Models that follow your instructions with far fewer refusals: fiction, mature themes, frank answers.', speed: 12, budget: 120, temperature: 0.8, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend', only: 'open',
+    assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralise, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
+  coding: { kind: 'text', label: 'App development', icon: '💻', pitch: 'Build apps and websites: plan, write, debug and review code.', speed: 10, budget: 180, temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
+    assistant: { name: 'App Builder', emoji: '💻', instructions: 'You are an expert software engineer who builds complete apps. For new work, outline the structure first (files, components, data), then write correct, idiomatic, complete code in fenced code blocks with the file name and language. Explain briefly what changed and why. Point out bugs, edge cases and security issues. Ask a short clarifying question when a request is ambiguous.' } },
+  create: { kind: 'media', label: 'Photo & video generation', icon: '🎨', pitch: 'Pictures and short videos from a description, with AI-written prompts.', roles: ['image', 'video', 'helper'] },
+  edit: { kind: 'media', label: 'Photo & video editing', icon: '🪄', pitch: 'Change photos by describing the edit, and bring photos to life.', roles: ['edit', 'animate', 'helper'] },
 };
+
+// How good a model is at a kind of work (0-10). Writing and reasoning are derived.
+const WRITERS = /^(Meta|Google|Mistral AI)$/;
+function scoreFor(m, job) {
+  const j = m.jobs || {};
+  if (job === 'writing') return Math.min(10, (j.general ?? 5) + (WRITERS.test(m.maker || '') ? 1 : 0) - (m.category === 'coding' ? 2 : 0));
+  if (job === 'open') return m.open ? (j.general ?? 5) : 0;
+  if (job === 'reasoning') return Math.min(10, Math.round(((j.research ?? 5) + (m.judge ?? 5)) / 2) + (m.reasoning ? 2 : 0) - (m.category === 'coding' ? 1 : 0));
+  return j[job] ?? j.general ?? 5;
+}
 
 // ---------- hardware estimates ----------
 
@@ -188,83 +215,168 @@ function estimateMedia(m, hw, calib = 1) {
   return { fit, rating, label, sec };
 }
 
-// ---------- Stack Advisor ----------
-// A stack combines models: a vision model reads photos/video, two or more "drafters" answer
-// independently, and a "lead" (judge) checks the drafts and writes one final, stronger answer.
+// ---------- your installed models ----------
+// Models you added yourself (or from LM Studio, Jan, Ollama…) aren't in the catalog. They are
+// matched to a catalog model by name when possible, otherwise rated from their size.
 
-// Ranks models for a job. Speed matters more or less depending on the tier: `speedTarget` is the
-// writing speed (tokens/s) at which a model counts as fully fast enough.
-function rankFor(job, hw, opts = {}) {
-  const target = opts.speedTarget || 12;
-  return TEXT_MODELS
-    .map((m) => ({ m, est: estimateText(m, hw, opts.calib) }))
-    .filter((x) => x.est.fit !== 'no' && (!opts.vision || x.m.vision))
-    .map((x) => {
-      const speed = Math.sqrt(Math.min(1, x.est.tps / target));
-      return { ...x, score: (opts.judge ? x.m.judge : x.m.jobs[job]) * speed };
-    })
-    .sort((a, b) => b.score - a.score || a.m.sizeGB - b.m.sizeGB);
+const FAMILIES = ['gpt-oss', 'deepseek', 'hermes', 'dolphin', 'qwen', 'llama', 'phi', 'gemma', 'mistral', 'mixtral', 'granite', 'olmo', 'falcon', 'smollm', 'command', 'yi', 'glm', 'internlm', 'hermes', 'nemotron', 'exaone', 'kimi', 'minicpm'];
+const words = (s) => String(s || '').toLowerCase().replace(/\.gguf$/, '').replace(/[^a-z0-9]+/g, ' ').replace(/([a-z])(\d)/g, '$1 $2').trim().split(/\s+/).filter(Boolean);
+
+function matchCatalog(name) {
+  const have = new Set(words(name));
+  let best = null;
+  for (const m of TEXT_MODELS) {
+    const need = words(m.id);
+    if (need.every((w) => have.has(w)) && (!best || need.length > best.n)) best = { m, n: need.length };
+  }
+  return best?.m || null;
 }
 
-function family(m) { return m.id.split(/[-.]/)[0]; }
+function familyOf(m) {
+  const s = `${m.catalogId || m.id} ${m.name}`.toLowerCase();
+  return FAMILIES.find((f) => s.includes(f)) || words(m.name)[0] || m.id;
+}
 
-function advise(job, hw, opts = {}) {
-  const j = JOBS[job];
-  const calib = opts.calib || 1;
-  const needsVision = job === 'vision' || job === 'office' || job === 'research';
-  const best = rankFor(job, hw, { calib, speedTarget: 15 });
-  if (!best.length) return { job, label: j.label, stacks: [] };
+// inst: an installed model { id, name, catalogId?, size (bytes), vision?, files }
+function profileInstalled(inst) {
+  const sizeGB = (inst.size || 0) / 1e9;
+  const vision = Boolean(inst.vision || inst.files?.mmproj);
+  const c = TEXT_MODELS.find((m) => m.id === inst.catalogId) || matchCatalog(`${inst.name} ${inst.files?.model ? inst.files.model.split(/[\\/]/).pop() : ''}`);
+  const open = /dolphin|hermes|abliterat|uncensored|unfiltered|nemo|mistral/i.test(`${inst.name} ${inst.files?.model || ''}`);
+  if (c) return { ...c, id: inst.id, name: inst.name, catalogId: c.id, sizeGB: sizeGB || c.sizeGB, vision: vision || Boolean(c.vision), open: Boolean(c.open || open), known: true };
+  // Unknown model: rate it by size (a 4-bit model is about 0.6 GB per billion parameters).
+  const params = Math.max(0.5, sizeGB / 0.6);
+  const base = Math.max(2, Math.min(8, Math.round(3 + 1.1 * Math.log2(params))));
+  const coder = /coder|code/i.test(inst.name);
+  const jobs = { general: base - (coder ? 2 : 0), office: base - (coder ? 2 : 0), research: base - (coder ? 2 : 0), coding: Math.min(9, base + (coder ? 2 : 0)), vision: vision ? base : 0 };
+  return { id: inst.id, name: inst.name, maker: '', category: coder ? 'coding' : 'general', sizeGB, mmprojGB: 0, vision, open, reasoning: /think|r1|reason/i.test(inst.name), jobs, judge: Math.max(2, base - 1), known: false };
+}
 
-  const visionPick = (exclude = []) => rankFor('vision', hw, { calib, vision: true, speedTarget: 15 }).find((x) => !exclude.includes(x.m.id));
-  const stacks = [];
+// ---------- Stack Advisor ----------
+// A stack makes several models work as one: two or more answer independently (from different
+// makers, so they make different mistakes), a lead compares them and writes the final answer,
+// and a model that can see reads photos when nobody else in the stack can.
+// The Effort setting in each chat decides how much of the stack runs (Quick uses one model).
 
-  // Fast: one model, as quick as possible while still good at the job.
-  const fastList = rankFor(job, hw, { calib, speedTarget: 40 });
-  const fast = (job === 'vision' ? visionPick() : fastList[0]) || fastList[0];
-  stacks.push({ tier: 'fast', name: 'Fast', blurb: 'One model. Quickest replies.', members: { drafters: [fast.m.id] } });
-
-  // Balanced: a quick drafter, then a stronger lead reviews and improves it.
-  const leads = rankFor(job, hw, { calib, judge: true, speedTarget: 10 });
-  const lead = leads[0];
-  const balancedLead = leads.find((x) => x.m.id !== fast.m.id);
-  if (balancedLead) {
-    const members = { drafters: [fast.m.id], judge: balancedLead.m.id };
-    if (needsVision && !fast.m.vision && !balancedLead.m.vision) { const v = visionPick(); if (v) members.vision = v.m.id; }
-    stacks.push({ tier: 'balanced', name: 'Balanced', blurb: 'A quick model drafts, a stronger model checks and improves it.', members });
-  }
-
-  // Powerhouse: two different model families draft independently, the best lead combines them.
+function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10 } = {}) {
+  const ranked = pool.map((m) => ({ m, est: estimateText(m, hw, calib) })).filter((x) => x.est.fit !== 'no');
+  if (!ranked.length) return null;
+  const quick = (x, target) => Math.sqrt(Math.min(1, x.est.tps / target));
+  const byJob = [...ranked].sort((a, b) => scoreFor(b.m, job) * quick(b, speed) - scoreFor(a.m, job) * quick(a, speed) || a.m.sizeGB - b.m.sizeGB);
   const drafters = [];
-  for (const x of best) {
+  for (const x of byJob) {
     if (drafters.length >= 2) break;
-    if (drafters.some((d) => family(d) === family(x.m))) continue;
-    drafters.push(x.m);
+    if (drafters.some((d) => familyOf(d.m) === familyOf(x.m))) continue;
+    if (drafters.length && scoreFor(x.m, job) < scoreFor(drafters[0].m, job) - 3) continue; // too weak to help
+    drafters.push(x);
   }
-  if (lead && drafters.length >= 2) {
-    const members = { drafters: drafters.map((m) => m.id), judge: lead.m.id };
-    if (needsVision && !drafters.some((m) => m.vision)) { const v = visionPick(); if (v) members.vision = v.m.id; }
-    stacks.push({ tier: 'powerhouse', name: 'Powerhouse', blurb: 'Two models from different makers answer independently; the lead combines the best of both and fixes mistakes.', members });
+  for (const x of byJob) { // only one maker available: a second model of the same family still helps
+    if (drafters.length >= 2) break;
+    if (!drafters.includes(x) && scoreFor(x.m, job) >= scoreFor(drafters[0].m, job) - 2) drafters.push(x);
   }
-
-  for (const s of stacks) {
-    const ids = [...new Set([s.members.vision, ...s.members.drafters, s.members.judge].filter(Boolean))];
-    const models = ids.map((id) => TEXT_MODELS.find((m) => m.id === id));
-    s.downloadGB = models.reduce((t, m) => t + m.sizeGB + (m.mmprojGB || 0), 0);
-    // Each step runs one after another, so the wait is the sum of the steps.
-    const secFor = (id, words) => { const e = estimateText(TEXT_MODELS.find((m) => m.id === id), hw, calib); return words / Math.max(0.1, e.wordsPerSec); };
-    let sec = 0;
-    if (s.members.vision) sec += secFor(s.members.vision, 250);
-    for (const d of s.members.drafters) sec += secFor(d, 400);
-    if (s.members.judge) sec += secFor(s.members.judge, 450);
-    s.secondsPerAnswer = sec;
-    s.estimates = Object.fromEntries(ids.map((id) => [id, estimateText(TEXT_MODELS.find((m) => m.id === id), hw, calib)]));
+  const members = { drafters: drafters.map((x) => x.m.id) };
+  if (drafters.length > 1) members.judge = [...ranked].sort((a, b) => b.m.judge * quick(b, Math.min(speed, 10)) - a.m.judge * quick(a, Math.min(speed, 10)))[0].m.id;
+  const sees = (id) => ranked.find((x) => x.m.id === id)?.m.vision;
+  if (vision && ![...members.drafters, members.judge].some(sees)) {
+    const v = ranked.filter((x) => x.m.vision).sort((a, b) => scoreFor(b.m, 'vision') * quick(b, 15) - scoreFor(a.m, 'vision') * quick(a, 15))[0];
+    if (v) members.vision = v.m.id;
   }
+  const byId = (id) => ranked.find((x) => x.m.id === id);
+  // Local models take turns, so the wait is the sum of the steps.
+  const secFor = (id, n) => n / Math.max(0.1, byId(id).est.wordsPerSec);
+  const total = () => (members.vision ? secFor(members.vision, 250) : 0) + members.drafters.reduce((t, d) => t + secFor(d, 400), 0) + (members.judge ? secFor(members.judge, 450) : 0);
+  // On a slow PC, drop the slowest extra drafter while the wait is too long (always keeping two
+  // different models, or it stops being a stack).
+  while (total() > budget && members.drafters.length > 1) {
+    const drop = [...members.drafters].sort((a, b) => byId(a).est.tps - byId(b).est.tps)
+      .find((d) => new Set([...members.drafters.filter((x) => x !== d), members.judge]).size >= 2);
+    if (!drop) break;
+    members.drafters = members.drafters.filter((d) => d !== drop);
+  }
+  const sec = total();
+  const ids = [...new Set([members.vision, ...members.drafters, members.judge].filter(Boolean))];
   return {
-    job, label: j.label,
-    settings: { temperature: j.temperature, contextSize: j.contextSize, maxTokens: j.maxTokens, library: j.library, web: j.web },
-    assistant: j.assistant,
-    stacks,
+    members, ids, secondsPerAnswer: sec,
+    quality: Math.max(...ids.map((id) => scoreFor(byId(id).m, job))),
+    estimates: Object.fromEntries(ids.map((id) => [id, byId(id).est])),
+    downloadGB: ids.reduce((t, id) => t + byId(id).m.sizeGB + (byId(id).m.mmprojGB || 0), 0),
   };
 }
 
-module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, gpuBandwidth };
+// ---------- media kits (photo & video) ----------
+
+const MEDIA_ROLES = {
+  image: { label: 'Creates pictures', pick: (m) => m.category === 'image' },
+  video: { label: 'Makes videos', pick: (m) => m.category === 'video' },
+  edit: { label: 'Edits photos', pick: (m) => m.category === 'edit' },
+  animate: { label: 'Brings photos to life', pick: (m) => m.category === 'video' && m.animate },
+  helper: { label: 'Writes better prompts', text: true },
+};
+const RATE = { great: 1, good: 0.95, ok: 0.8, slow: 0.45 };
+
+function composeMedia(job, hw, calib, mediaPool, textPool) {
+  const members = {};
+  const estimates = {};
+  for (const role of JOBS[job].roles) {
+    const r = MEDIA_ROLES[role];
+    if (r.text) {
+      // A small, quick text model is plenty for writing prompts; one that can see is a bonus.
+      const t = textPool.map((m) => ({ m, est: estimateText(m, hw, calib) })).filter((x) => x.est.fit !== 'no')
+        .sort((a, b) => (scoreFor(b.m, 'writing') + (b.m.vision ? 1 : 0)) * Math.sqrt(Math.min(1, b.est.tps / 25)) - (scoreFor(a.m, 'writing') + (a.m.vision ? 1 : 0)) * Math.sqrt(Math.min(1, a.est.tps / 25)))[0];
+      if (t) { members[role] = t.m.id; estimates[t.m.id] = t.est; }
+      continue;
+    }
+    const best = mediaPool.filter(r.pick).map((m) => ({ m, est: estimateMedia(m, hw, calib) })).filter((x) => x.est.fit !== 'no')
+      .sort((a, b) => (b.m.quality || 5) * (RATE[b.est.rating] || 0.3) - (a.m.quality || 5) * (RATE[a.est.rating] || 0.3))[0];
+    if (best) { members[role] = best.m.id; estimates[best.m.id] = best.est; }
+  }
+  const ids = [...new Set(Object.values(members))];
+  const all = [...mediaPool, ...textPool];
+  const main = JOBS[job].roles[0];
+  return { members, ids, estimates, quality: members[main] ? (mediaPool.find((m) => m.id === members[main])?.quality || 5) : 0, complete: JOBS[job].roles.every((r) => members[r]), sizeGB: ids.reduce((t, id) => { const m = all.find((x) => x.id === id); return t + (m?.sizeGB || 0) + (m?.mmprojGB || 0); }, 0) };
+}
+
+// For a kind of work, two answers:
+//  mine: the best stack from the models already on this PC (nothing to download)
+//  best: the best stack this PC can run from the whole catalog
+function advise(job, hw, opts = {}) {
+  const j = JOBS[job] || JOBS.general;
+  const calib = opts.calib || 1;
+  const installed = opts.installed || [];
+  const text = installed.filter((m) => m.kind === 'text').map(profileInstalled);
+  const base = { job, kind: j.kind, label: j.label };
+  if (j.kind === 'media') {
+    // Installed media models are catalog models (matched by catalogId); keep the installed id.
+    const media = installed.filter((m) => m.kind !== 'text').map((m) => { const c = MEDIA_MODELS.find((x) => x.id === m.catalogId); return c ? { ...c, id: m.id, catalogId: c.id, name: m.name } : null; }).filter(Boolean);
+    const mine = media.some((m) => MEDIA_ROLES[j.roles[0]].pick(m)) ? composeMedia(job, hw, calib, media, text) : null;
+    // The prompt writer only needs a small model: reuse one you have, else a small download.
+    const best = composeMedia(job, hw, calib, MEDIA_MODELS, text.length ? text : TEXT_MODELS.filter((m) => m.sizeGB <= 3.5));
+    const haveCat = (id) => (media.find((m) => m.catalogId === id) || text.find((m) => m.catalogId === id))?.id || null;
+    best.have = Object.fromEntries(best.ids.map((id) => [id, text.some((m) => m.id === id) ? id : haveCat(id)]));
+    best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = MEDIA_MODELS.find((x) => x.id === id) || TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
+    best.better = !mine || best.quality > mine.quality || (best.complete && !mine.complete);
+    const yours = [...media.map((m) => ({ id: m.id, name: m.name, category: m.category, animate: Boolean(m.animate) })), ...text.map((m) => ({ id: m.id, name: m.name, category: 'text', vision: m.vision }))];
+    return { ...base, roles: j.roles, roleLabels: Object.fromEntries(j.roles.map((r) => [r, MEDIA_ROLES[r].label])), yours, mine, best };
+  }
+  const vision = !['coding', 'reasoning', 'open'].includes(job);
+  const tune = { vision, speed: j.speed, budget: j.budget };
+  const fits = (m) => !j.only || m[j.only]; // e.g. the Unfiltered stack only uses unfiltered models
+  const pool = text.filter(fits);
+  const mine = pool.length ? compose(pool, job, hw, calib, tune) : null;
+  const best = compose(TEXT_MODELS.filter(fits), job, hw, calib, tune);
+  if (best) {
+    // Already installed? Use the installed copy instead of downloading again.
+    best.have = Object.fromEntries(best.ids.map((id) => [id, text.find((m) => m.catalogId === id)?.id || null]));
+    best.missingGB = best.ids.filter((id) => !best.have[id]).reduce((t, id) => { const m = TEXT_MODELS.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
+    best.better = !mine || best.quality > mine.quality || (best.members.drafters.length > mine.members.drafters.length && best.quality >= mine.quality);
+  }
+  const yours = pool.map((m) => ({ id: m.id, name: m.name, known: m.known, vision: m.vision, score: scoreFor(m, job), judge: m.judge, sizeGB: m.sizeGB, est: estimateText(m, hw, calib) }));
+  return {
+    ...base, mode: j.mode,
+    settings: { temperature: j.temperature, contextSize: j.contextSize, maxTokens: j.maxTokens, library: j.library, web: j.web },
+    assistant: j.assistant,
+    yours, mine, best,
+  };
+}
+
+module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf };

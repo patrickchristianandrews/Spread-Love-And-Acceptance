@@ -4,8 +4,8 @@
 let intData = null;   // { connectors, mcp, presets, tools, allowed }
 
 async function refreshIntegrations() {
-  const [connectors, mcpList, presets, allowed] = await Promise.all([qs.call('int:list'), qs.call('mcp:list'), qs.call('mcp:presets'), qs.call('tools:allowed')]);
-  intData = { connectors, mcp: mcpList, presets, allowed, tools: intData?.tools || null };
+  const [connectors, mcpList, presets, allowed, auto] = await Promise.all([qs.call('int:list'), qs.call('mcp:list'), qs.call('mcp:presets'), qs.call('tools:allowed'), qs.call('tools:auto')]);
+  intData = { connectors, mcp: mcpList, presets, allowed, auto, tools: intData?.tools || null };
   S.hasIntegrations = connectors.some((c) => c.enabled) || mcpList.length > 0;
 }
 
@@ -39,7 +39,10 @@ views.integrations = {
         <button class="card" data-mcp-preset="${k}" style="text-align:left"><h3>${esc(p.name)}</h3><div class="small muted" style="font-weight:600;margin-top:4px">${esc(p.note)}</div></button>`).join('')}
       </div>
 
-      <div class="section"><h2>Always-allowed actions</h2></div>
+      <div class="section"><h2>Actions</h2></div>
+      <label class="pick-row ${intData.auto ? 'on' : ''}" style="margin-bottom:10px"><input type="checkbox" id="tools-auto" ${intData.auto ? 'checked' : ''}>
+        <span class="grow"><b>Let the AI take actions without asking</b><div class="small muted">Off: you approve each change (a new issue, a message, a file) before it happens. On: it just does it.</div></span></label>
+      <div class="label" style="margin:6px 0">Always-allowed actions</div>
       ${allowed.length ? `<div class="row">${allowed.map((n) => `<span class="badge b-peach" style="font-size:.85rem">${esc(n)} <button class="tool" data-forget="${esc(n)}" title="Ask again next time">✕</button></span>`).join('')}</div>` : '<p class="muted">None. Every action asks for approval.</p>'}
       <div class="section"><h2>Available tools</h2><button class="btn small" id="int-tools">Show all tools</button></div>
       ${intData.tools ? `<table class="list"><thead><tr><th>Tool</th><th>From</th><th>Kind</th><th>What it does</th></tr></thead><tbody>${intData.tools.map((t) => `<tr><td><code>${esc(t.name)}</code></td><td>${esc(t.source)}</td><td>${t.write ? '<span class="badge b-peach">asks first</span>' : '<span class="badge b-mint">read</span>'}</td><td class="small">${esc(t.description)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">No tools yet. Connect something above.</td></tr>'}</tbody></table>` : ''}
@@ -58,6 +61,7 @@ views.integrations = {
       await refreshIntegrations(); render();
     }));
     $$('[data-forget]').forEach((b) => b.addEventListener('click', async () => { await call('tools:forget', b.dataset.forget); await refreshIntegrations(); render(); }));
+    $('#tools-auto')?.addEventListener('change', async (e) => { intData.auto = await call('tools:auto', e.target.checked); toast(intData.auto ? 'The AI will act without asking.' : 'The AI will ask before each change.'); render(); });
     $('#int-tools').addEventListener('click', async (e) => { e.target.textContent = 'Loading…'; intData.tools = await call('int:tools'); render(); });
   },
 };

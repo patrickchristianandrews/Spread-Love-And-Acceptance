@@ -1,42 +1,46 @@
-// Stacks: several models working as one. The Stack Advisor builds them for your PC and job.
+// Stacks: several models working as one. Pick a kind of work; the Stack Advisor combines the
+// models you already have (nothing to download) and shows the best setup this PC could run.
 'use strict';
 
 let advJob = null;
 let advResult = null;
+let advOn = new Set();   // text stacks: targets ticked
+let advLead = '';        // text stacks: '' = automatic
+let advMode = 'blend';
+let advKit = {};         // media stacks: role -> target
 const ROLE = {
-  vision: '<span class="badge b-sky">👁 Sees photos & video</span>',
-  draft: '<span class="badge b-lav">✏️ Drafts an answer</span>',
-  lead: '<span class="badge b-mint">★ Lead: checks & combines</span>',
+  vision: '<span class="badge b-sky">👁 Sees photos</span>',
+  draft: '<span class="badge b-lav">✏️ Answers</span>',
+  lead: '<span class="badge b-mint">★ Leads</span>',
 };
+const ROLE_ICON = { image: '🎨', video: '🎬', edit: '🪄', animate: '✨', helper: '✍️' };
 
 views.stacks = {
   html() {
     const jobs = Object.entries(S.catalog.jobs);
+    const goal = ([k, j]) => `<button class="goal ${advJob === k ? 'on' : ''}" data-job="${k}" aria-pressed="${advJob === k}">
+      <span class="goal-ic">${j.icon}</span><span><b>${esc(j.label)}</b><span class="small muted">${esc(j.pitch)}</span></span></button>`;
     return `<div class="page">
-      <div class="page-head"><h1>Infuse &amp; Stacks</h1><button class="btn" id="new-stack">Build by role…</button><button class="btn primary" id="infuse">${icon('sparkle', 16)} Infuse AIs</button></div>
-      <div class="card hl hero" style="margin:4px 0 22px">
-        <div class="row"><div class="grow"><h2 style="margin:0">✨ Infuse several AIs into one</h2><p class="muted" style="margin:6px 0 0;font-weight:600">Pick any models (on this PC or in the cloud) and how they should work together. You get one new AI you can choose anywhere, smarter and more reliable than any of its parts.</p></div><button class="btn primary" id="infuse2">${icon('sparkle', 16)} Infuse AIs</button></div>
-      </div>
-      <p class="lede"><b>A stack makes several AI models work as one.</b> A vision model reads your photos and videos. Two or more models from different makers each draft an answer. A lead model compares the drafts, fixes mistakes and writes one final answer, so you get stronger, better-checked answers than any single model gives.</p>
-      <div class="section"><h2>🧭 Stack Advisor</h2><span class="muted small">Pick what you'll use it for. It checks your PC and builds the best stack for it.</span></div>
-      ${hwLine()}
-      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">${jobs.map(([k, j]) => `
-        <button class="card ${advJob === k ? 'hl' : ''}" data-job="${k}" style="text-align:left">
-          <div style="font-size:1.6rem">${j.icon}</div><h3>${esc(j.label)}</h3><div class="small muted" style="font-weight:600">${esc(j.pitch)}</div>
-        </button>`).join('')}
-      </div>
-      <div id="adv-out">${advResult ? advisorHTML(advResult) : advJob ? '<div class="empty">Checking your PC and ranking models…</div>' : ''}</div>
+      <div class="page-head"><h1>Stacks</h1><button class="btn" id="infuse">${icon('sparkle', 16)} Infuse any AIs, including cloud</button></div>
+      <p class="lede">A stack makes several AI models work as one: they answer separately, then a lead combines the best of each and fixes mistakes.</p>
+      ${foundBanner()}
+      <div class="section"><h2>1. Choose a stack</h2>${hwLine()}</div>
+      <div class="goal-group"><div class="label">Think &amp; work</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'text').map(goal).join('')}</div></div>
+      <div class="goal-group"><div class="label">Create</div><div class="goal-grid">${jobs.filter(([, j]) => j.kind === 'media').map(goal).join('')}</div></div>
+      <div class="section"><h2>2. Set it up</h2></div>
+      <div id="adv-out">${advResult ? advisorHTML(advResult) : '<div class="empty">Checking your PC and your models…</div>'}</div>
       <div class="section"><h2>Your stacks</h2></div>
-      ${S.stacks.length ? `<div class="cards">${S.stacks.map(stackCard).join('')}</div>` : '<p class="muted">No stacks yet. Use the Stack Advisor above, or build your own.</p>'}
+      ${yourStacksHTML()}
     </div>`;
   },
   bind() {
     if (!S.est) refreshEstimates().then(() => S.route.view === 'stacks' && render());
+    loadFound();
+    if (!advJob) { runAdvisor('general'); return; }
     $$('[data-job]').forEach((b) => b.addEventListener('click', () => runAdvisor(b.dataset.job)));
-    $$('[data-build]').forEach((b) => b.addEventListener('click', () => buildStack(Number(b.dataset.build))));
-    $('#new-stack').addEventListener('click', () => editStack(null));
     $('#infuse').addEventListener('click', () => infuseModal());
-    $('#infuse2').addEventListener('click', () => infuseModal());
+    $('#found-review')?.addEventListener('click', foundModal);
+    bindAdvisor();
     $$('[data-edit-stack]').forEach((b) => b.addEventListener('click', () => editStack(S.stacks.find((s) => s.id === b.dataset.editStack))));
     $$('[data-del-stack]').forEach((b) => b.addEventListener('click', async () => {
       if (!(await confirmBox('Delete this stack? The models stay installed.'))) return;
@@ -45,68 +49,266 @@ views.stacks = {
     $$('[data-chat-stack]').forEach((b) => b.addEventListener('click', () => {
       newChat(); const c = chatById(S.route.id); c.target = `stack:${b.dataset.chatStack}`; save(); render();
     }));
+    $$('[data-kit-open]').forEach((b) => b.addEventListener('click', () => { studioTab = b.dataset.kitOpen === 'edit' ? 'edit' : 'create'; go({ view: 'studio' }); }));
+    $$('[data-kit-del]').forEach((b) => b.addEventListener('click', () => { delete S.data.mediaKits[b.dataset.kitDel]; save(); render(); }));
   },
 };
 
 function hwLine() {
   const h = S.est?.hardware;
-  if (!h) return '<p class="muted small">Checking your PC…</p>';
-  return `<p class="small" style="font-weight:600;margin:0 0 12px">🖥️ Your PC: ${h.ramGB.toFixed(0)} GB memory · ${esc(h.gpuName || 'no graphics card')}${h.vramGB ? ` (${h.vramGB.toFixed(0)} GB video memory)` : ''} · <a href="#" data-goto-pc>see how every model runs on it</a></p>`;
+  if (!h) return '<span class="small muted">Checking your PC…</span>';
+  return `<span class="small muted" style="font-weight:600">🖥️ ${h.ramGB.toFixed(0)} GB memory · ${esc(h.gpuName || 'no graphics card')}${h.vramGB ? ` (${h.vramGB.toFixed(0)} GB)` : ''} · <a href="#" data-goto-pc>details</a></span>`;
 }
 document.addEventListener('click', (e) => { if (e.target.closest('[data-goto-pc]')) { e.preventDefault(); go({ view: 'pc' }); } });
 
-const modelName = (id) => S.catalog.text.find((m) => m.id === id)?.name || id;
+const modelName = (id) => S.installed.find((m) => m.id === id)?.name || [...S.catalog.text, ...S.catalog.media].find((m) => m.id === id)?.name || id;
 const isInstalled = (id) => S.installed.some((m) => m.id === id || m.catalogId === id);
 
-function advisorHTML(r) {
-  if (!r.stacks.length) return '<div class="notice">No model fits this PC\'s memory for this job. Try "Fast on a modest PC", close other apps, or connect a cloud API under Models → Connect an API.</div>';
-  return `<div class="section"><h2>Recommended for ${esc(r.label.toLowerCase())}</h2></div>
-    <div class="cards">${r.stacks.map((s, i) => {
-      const rows = [];
-      if (s.members.vision) rows.push(['vision', s.members.vision]);
-      for (const d of s.members.drafters) rows.push(['draft', d]);
-      if (s.members.judge) rows.push(['lead', s.members.judge]);
-      const missing = [...new Set(rows.map((x) => x[1]))].filter((id) => !isInstalled(id));
-      const missGB = missing.reduce((t, id) => { const m = S.catalog.text.find((x) => x.id === id); return t + m.sizeGB + (m.mmprojGB || 0); }, 0);
-      const best = s.tier === 'powerhouse' ? 'hl' : '';
-      return `<div class="card ${best}">
-        <div class="row"><h3 class="grow">${{ fast: '⚡', balanced: '⚖️', powerhouse: '🚀' }[s.tier]} ${esc(s.name)}</h3>${s.tier === 'powerhouse' ? '<span class="badge b-mint">Most accurate</span>' : s.tier === 'fast' ? '<span class="badge b-sky">Quickest</span>' : ''}</div>
-        <p class="small muted" style="font-weight:600;margin:6px 0 10px">${esc(s.blurb)}</p>
-        <div class="stack-v" style="gap:8px">${rows.map(([role, id]) => `<div><div>${ROLE[role]}</div><div class="row" style="margin-top:3px"><b class="grow">${esc(modelName(id))}</b>${rateBadge(s.estimates[id])}${isInstalled(id) ? '<span class="badge b-mint">✓ installed</span>' : ''}</div></div>`).join('')}</div>
-        <p class="small" style="font-weight:700;margin:12px 0">⏱ About ${fmtSec(s.secondsPerAnswer)} per full answer on your PC · ${missing.length ? `${missGB.toFixed(1)} GB to download` : 'Everything installed'}</p>
-        <button class="btn ${best ? 'primary' : ''}" data-build="${i}">${missing.length ? 'Download & build this stack' : 'Use this stack'}</button>
-      </div>`;
-    }).join('')}</div>
-    <p class="small muted">Times are estimates for a medium-length answer. Run the speed test on <a href="#" data-goto-pc>Your PC</a> to make them exact.</p>`;
+// ---------- models already on this PC from other apps ----------
+
+function loadFound(force) {
+  if (S.found !== undefined && !force) return;
+  S.found = null;
+  qs.call('models:found').then((r) => {
+    S.found = r || [];
+    if (S.found.length && ['stacks', 'models'].includes(S.route.view)) render();
+  }).catch(() => { S.found = []; });
 }
+
+function foundBanner() {
+  const f = S.found || [];
+  if (!f.length) return '';
+  const apps = [...new Set(f.map((x) => x.app))];
+  return `<div class="notice info found-banner"><span class="grow"><b>📦 Found ${f.length} model${f.length > 1 ? 's' : ''} already on this PC</b> (${esc(apps.join(', '))}). Use ${f.length > 1 ? 'them' : 'it'} here without downloading or copying anything.</span>
+    <button class="btn primary small" id="found-review">Review &amp; add</button></div>`;
+}
+
+function foundModal() {
+  const f = S.found || [];
+  const b = openModal(`<h2>📦 Models already on this PC</h2>
+    <p class="help">These were downloaded by other apps or are in your Downloads folder. Quicksilver uses them where they are: nothing is copied, and removing them here never deletes the file.</p>
+    <div class="pick-list">${f.map((m, i) => `<label class="pick-row"><input type="checkbox" data-found="${i}" checked>
+      <span class="grow"><b>${esc(m.name)}</b>${m.vision ? ' <span title="Can see photos">👁</span>' : ''}<div class="small muted">${esc(m.app)} · ${gb(m.size)} · <span title="${esc(m.path)}">${esc(m.path.length > 70 ? `…${m.path.slice(-68)}` : m.path)}</span></div></span></label>`).join('')}</div>
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="found-add">Add selected</button></div>`, { wide: true });
+  b.querySelector('#found-add').addEventListener('click', async () => {
+    const items = [...b.querySelectorAll('[data-found]:checked')].map((x) => f[Number(x.dataset.found)]);
+    if (!items.length) { closeModal(); return; }
+    const btn = b.querySelector('#found-add'); btn.disabled = true; btn.textContent = 'Adding…';
+    const added = await call('models:addFound', items);
+    closeModal();
+    await refreshModels();
+    S.found = f.filter((x) => !items.includes(x));
+    toast(added.length ? `Added ${added.length} model${added.length > 1 ? 's' : ''}. No download needed.` : 'Those files could not be read as models.');
+    if (advJob && S.route.view === 'stacks') runAdvisor(advJob); else render();
+  });
+}
+
+// ---------- the advisor ----------
 
 async function runAdvisor(job) {
-  advJob = job; advResult = null; render();
-  advResult = await call('advisor:advise', job);
-  S.est ||= await qs.call('catalog:estimates');
-  if (S.route.view === 'stacks' && advJob === job) render();
+  advJob = job; advResult = null;
+  if (S.route.view === 'stacks') render();
+  const r = await call('advisor:advise', job);
+  if (advJob !== job) return;
+  advResult = r;
+  advMode = r.mode || 'blend';
+  advLead = '';
+  advOn = new Set(r.kind === 'text' && r.mine ? r.mine.ids.map((id) => `local:${id}`) : []);
+  if (r.kind === 'text' && r.mine?.members.judge) advLead = `local:${r.mine.members.judge}`;
+  advKit = r.kind === 'media' && r.mine ? Object.fromEntries(Object.entries(r.mine.members).map(([role, id]) => [role, `local:${id}`])) : {};
+  if (S.route.view === 'stacks') render();
 }
 
-async function buildStack(i) {
+function advisorHTML(r) {
+  return `<div class="adv-grid">${r.kind === 'media' ? mineKitHTML(r) : mineTextHTML(r)}${bestHTML(r)}</div>`;
+}
+
+// ----- text stacks: tick the models you have; roles are worked out for you -----
+
+function textRows(r) {
+  const local = (r.yours || []).map((y) => ({ target: `local:${y.id}`, name: y.name, vision: y.vision, score: y.score, judge: y.judge, est: y.est }));
+  const cloud = S.targets.filter((t) => t.target.startsWith('api:')).map((t) => ({ target: t.target, name: t.label, vision: t.vision, score: 9, judge: 9, cloud: true }));
+  return [...local.sort((a, b) => b.score - a.score), ...cloud];
+}
+
+// Works out who answers, who leads and who only reads photos, from the models ticked.
+function textPlan(r) {
+  const rows = textRows(r);
+  const on = rows.filter((x) => advOn.has(x.target));
+  let lead = on.length > 1 ? (on.find((x) => x.target === advLead) || [...on].sort((a, b) => b.judge - a.judge)[0]) : null;
+  const top = Math.max(0, ...on.map((x) => x.score));
+  // A weaker model that can see only reads photos when there are enough others to answer.
+  let vision = on.length >= 3 ? on.find((x) => x.vision && x !== lead && x.score < top - 1 && !on.some((o) => o !== x && o.vision)) : null;
+  let drafters = on.filter((x) => x !== lead && x !== vision);
+  if (lead && drafters.length < 2) drafters = [...drafters, lead]; // with few models, the lead also answers
+  if (!drafters.length && vision) { drafters = [vision]; vision = null; }
+  const role = (x) => [x === vision && 'vision', drafters.includes(x) && 'draft', x === lead && 'lead'].filter(Boolean);
+  const wps = (x) => (x.cloud ? 40 : Math.max(0.1, x.est?.wordsPerSec || 0.1));
+  // Local models take turns; cloud models answer at the same time.
+  const sec = (vision ? 250 / wps(vision) : 0) + drafters.filter((x) => !x.cloud).reduce((t, x) => t + 400 / wps(x), 0)
+    + Math.max(0, ...drafters.filter((x) => x.cloud).map((x) => 400 / wps(x))) + (lead ? 450 / wps(lead) : 0);
+  const sees = on.some((x) => x.vision);
+  return { rows, on, drafters, lead, vision, role, sec, sees, ok: on.length >= 2 };
+}
+
+function mineTextHTML(r) {
+  const rows = textRows(r);
+  if (!rows.length) return `<div class="card adv-mine"><h3>🧩 Use the models you have</h3><p class="muted" style="font-weight:600">No models on this PC yet. Use the setup on the right${S.found?.length ? ', add the ones found on this PC above,' : ''} or import a .gguf file under Models.</p></div>`;
+  const p = textPlan(r);
+  return `<div class="card hl adv-mine">
+    <div class="row"><h3 class="grow">🧩 Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
+    <p class="small muted adv-help">Tick the models to combine. The best mix for ${esc(r.label.toLowerCase())} is already ticked.</p>
+    <div class="pick-list" id="adv-rows">${rowsHTML(p)}</div>
+    <div class="adv-opts">
+      <div class="field"><label for="adv-lead">Lead</label><select id="adv-lead"><option value="">Automatic: the strongest</option>${rows.map((x) => `<option value="${esc(x.target)}" ${x.target === advLead ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
+      <div class="field"><label for="adv-mode">Teamwork</label><select id="adv-mode">${Object.entries(INFUSE_MODES).map(([k, m]) => `<option value="${k}" ${k === advMode ? 'selected' : ''}>${m.icon} ${m.name} (${m.cost.toLowerCase()})</option>`).join('')}</select></div>
+    </div>
+    <div class="adv-foot"><span class="grow" id="adv-sum">${textSummary(p, r)}</span><button class="btn primary" id="adv-create" ${p.ok ? '' : 'disabled'}>Create stack</button></div>
+  </div>`;
+}
+
+function rowsHTML(p) {
+  return p.rows.map((x) => {
+    const on = advOn.has(x.target);
+    return `<label class="pick-row ${on ? 'on' : ''}"><input type="checkbox" data-use="${esc(x.target)}" ${on ? 'checked' : ''}>
+      <span class="grow"><b>${esc(x.name)}</b>${x.vision ? ' <span title="Can see photos and video">👁</span>' : ''}${x.cloud ? ' <span class="small muted">☁ cloud</span>' : ''}</span>
+      <span class="row" style="gap:4px">${on ? p.role(x).map((k) => ROLE[k]).join('') : ''}</span></label>`;
+  }).join('');
+}
+
+function textSummary(p, r) {
+  if (!p.ok) return '<span class="warn-text">Tick at least two models.</span>';
+  const eyes = !p.sees && !['coding', 'reasoning'].includes(r.job) ? ' · <span class="warn-text">none can see photos</span>' : '';
+  return `⏱ About <b>${fmtSec(p.sec)}</b> per answer on your PC${eyes}`;
+}
+
+// ----- media stacks: one installed model per role -----
+
+function mineKitHTML(r) {
+  const main = r.roles[0];
+  const pool = (role) => (r.yours || []).filter((y) => (role === 'helper' ? y.category === 'text' : role === 'animate' ? y.category === 'video' && y.animate : role === 'image' ? y.category === 'image' : y.category === role));
+  if (!r.mine) return `<div class="card adv-mine"><h3>🧩 Use the models you have</h3><p class="muted" style="font-weight:600">You don't have a model that ${esc(r.roleLabels[main].toLowerCase())} yet. Use the setup on the right, or pick one under Models → Images &amp; video.</p></div>`;
+  return `<div class="card hl adv-mine">
+    <div class="row"><h3 class="grow">🧩 Use the models you have</h3><span class="badge b-mint">Nothing to download</span></div>
+    <p class="small muted adv-help">Choose a model for each job. Studio will use these by default.</p>
+    <div class="kit-rows">${r.roles.map((role) => {
+      const opts = pool(role);
+      return `<div class="kit-row"><span class="kit-role">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>
+        <select data-kit="${role}" ${opts.length ? '' : 'disabled'}>${opts.length ? `<option value="">None</option>${opts.map((y) => `<option value="local:${esc(y.id)}" ${advKit[role] === `local:${y.id}` ? 'selected' : ''}>${esc(y.name)}</option>`).join('')}` : '<option>None installed</option>'}</select></div>`;
+    }).join('')}</div>
+    <div class="adv-foot"><span class="grow small muted">✍️ The prompt writer powers the ✨ Improve buttons in Studio.</span><button class="btn primary" id="kit-create">Use this setup</button></div>
+  </div>`;
+}
+
+// ----- the best this PC can run (from the catalog) -----
+
+function bestHTML(r) {
+  const s = r.best;
+  const media = r.kind === 'media';
+  if (!s || (media && !s.members[r.roles[0]])) return `<div class="card adv-best"><h3>🚀 Best for this PC</h3><p class="muted" style="font-weight:600">This PC doesn't have enough memory for ${esc(r.label.toLowerCase())} models.${media ? ' Studio\'s manual tools still work, or connect a cloud image API under Models.' : ' Close other apps, or connect a cloud API under Models.'}</p></div>`;
+  if (!s.better && (r.mine)) return `<div class="card adv-best ok"><h3>🚀 Best for this PC</h3><p style="font-weight:650;margin:6px 0 0">Your models are already the best fit for ${esc(r.label.toLowerCase())} on this PC. Nothing to download.</p></div>`;
+  const rows = media
+    ? r.roles.filter((role) => s.members[role]).map((role) => [`<span class="badge b-lav">${ROLE_ICON[role]} ${esc(r.roleLabels[role])}</span>`, s.members[role]])
+    : s.ids.map((id) => [[s.members.vision === id && 'vision', s.members.drafters.includes(id) && 'draft', s.members.judge === id && 'lead'].filter(Boolean).map((k) => ROLE[k]).join(''), id]);
+  return `<div class="card adv-best">
+    <div class="row"><h3 class="grow">🚀 Best for this PC</h3><span class="badge b-lav">${r.mine ? 'Upgrade' : 'Recommended'}</span></div>
+    <p class="small muted adv-help">The strongest ${esc(r.label.toLowerCase())} setup this PC can run.</p>
+    <div class="best-rows">${rows.map(([tags, id]) => `<div class="best-row"><b class="grow">${esc(modelName(id))}</b>${s.have[id] ? '<span class="have">✓ you have it</span>' : ''}<span class="row" style="gap:4px">${tags}</span></div>`).join('')}</div>
+    <div class="adv-foot"><span class="grow small" style="font-weight:700">${media ? '' : `⏱ About ${fmtSec(s.secondsPerAnswer)} per answer · `}${s.missingGB ? `${s.missingGB.toFixed(1)} GB to download` : 'Everything installed'}</span>
+    <button class="btn ${r.mine ? '' : 'primary'}" id="best-build">${s.missingGB ? 'Download & set up' : 'Set up'}</button></div>
+  </div>`;
+}
+
+function bindAdvisor() {
   const r = advResult;
-  const s = r.stacks[i];
-  const job = S.catalog.jobs[r.job];
-  const ids = [...new Set([s.members.vision, ...s.members.drafters, s.members.judge].filter(Boolean))];
-  for (const id of ids) if (!isInstalled(id) && !S.downloads[id]) await download({ catalogId: id }, modelName(id));
-  const stack = {
-    id: `${r.job}-${s.tier}`, name: `${job.label} · ${s.name}`, emoji: job.icon, builtFor: r.job, tier: s.tier,
-    members: { vision: s.members.vision ? `local:${s.members.vision}` : undefined, drafters: s.members.drafters.map((d) => `local:${d}`), judge: s.members.judge ? `local:${s.members.judge}` : undefined },
-  };
+  if (!r) return;
+  const out = $('#adv-out');
+  out.addEventListener('change', (e) => {
+    if (e.target.matches('[data-use]')) { if (e.target.checked) advOn.add(e.target.dataset.use); else advOn.delete(e.target.dataset.use); }
+    if (e.target.id === 'adv-lead') { advLead = e.target.value; if (advLead) advOn.add(advLead); }
+    if (e.target.id === 'adv-mode') advMode = e.target.value;
+    if (e.target.matches('[data-kit]')) advKit[e.target.dataset.kit] = e.target.value;
+    if (r.kind === 'text') {
+      const p = textPlan(r);
+      $('#adv-rows').innerHTML = rowsHTML(p);
+      $('#adv-sum').innerHTML = textSummary(p, r);
+      $('#adv-create').disabled = !p.ok;
+    }
+  });
+  $('#adv-create')?.addEventListener('click', () => createMine(r));
+  $('#kit-create')?.addEventListener('click', () => saveKit(r, advKit));
+  $('#best-build')?.addEventListener('click', () => createBest(r));
+}
+
+async function saveTextStack(r, stack, waiting = 0) {
   await call('stacks:save', stack);
-  // Point the matching assistant at the new stack, with the job's tuned settings.
-  let a = S.data.assistants.find((x) => x.job === r.job);
+  // Point the matching assistant at the new stack, with its tuned settings.
+  const a = S.data.assistants.find((x) => x.job === r.job);
   if (a) Object.assign(a, { target: `stack:${stack.id}`, temperature: r.settings.temperature, contextSize: r.settings.contextSize, maxTokens: r.settings.maxTokens });
   if (r.job === 'general' || !targetValid(S.data.prefs.defaultTarget)) S.data.prefs.defaultTarget = `stack:${stack.id}`;
   save();
   await refreshModels();
-  const waiting = ids.filter((id) => !isInstalled(id));
-  toast(waiting.length ? `Stack created. ${waiting.length} model${waiting.length > 1 ? 's are' : ' is'} downloading; you can chat as soon as ${waiting.length > 1 ? 'they finish' : 'it finishes'}.` : 'Stack ready. Starting a chat…');
-  if (!waiting.length && a) newChat(a.id); else render();
+  if (waiting) { toast(`Stack created. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; you can chat as soon as ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
+  toast(`${stack.name} is ready.${a ? ` ${a.name} now uses it.` : ''}`);
+  if (a) newChat(a.id); else render();
+}
+
+// Media stacks are a set of Studio defaults, saved per kind of work.
+function saveKit(r, kit, waiting = 0) {
+  const k = Object.fromEntries(Object.entries(kit).filter(([, v]) => v));
+  if (!k[r.roles[0]]) { toast(`Choose a model that ${r.roleLabels[r.roles[0]].toLowerCase()}.`); return; }
+  S.data.mediaKits ||= {};
+  S.data.mediaKits[r.job] = k;
+  const p = S.data.prefs;
+  if (k.image) p.imageModel = k.image;
+  if (k.video) p.videoModel = k.video;
+  if (k.edit) p.editModel = k.edit;
+  if (k.animate && !p.videoModel) p.videoModel = k.animate;
+  if (k.helper) p.promptHelper = k.helper;
+  save();
+  if (waiting) { toast(`Setting up ${r.label}. ${waiting} model${waiting > 1 ? 's are' : ' is'} downloading; Studio is ready when ${waiting > 1 ? 'they finish' : 'it finishes'}.`, 6000); render(); return; }
+  toast(`${r.label} is set up. Studio now uses these models.`);
+  studioTab = r.job === 'edit' ? 'edit' : 'create';
+  go({ view: 'studio' });
+}
+
+async function createMine(r) {
+  const p = textPlan(r);
+  if (!p.ok) return;
+  const job = S.catalog.jobs[r.job];
+  await saveTextStack(r, {
+    id: `${r.job}-mine`, name: job.label, emoji: job.icon, builtFor: r.job,
+    members: { drafters: p.drafters.map((x) => x.target), judge: p.lead?.target, vision: p.vision?.target, mode: advMode },
+  });
+}
+
+async function createBest(r) {
+  const s = r.best;
+  const job = S.catalog.jobs[r.job];
+  const target = (id) => `local:${s.have[id] || id}`;
+  const missing = s.ids.filter((id) => !s.have[id]);
+  for (const id of missing) if (!S.downloads[id]) await download({ catalogId: id }, modelName(id));
+  if (r.kind === 'media') { saveKit(r, Object.fromEntries(Object.entries(s.members).map(([role, id]) => [role, target(id)])), missing.length); return; }
+  await saveTextStack(r, {
+    id: `${r.job}-best`, name: `${job.label} · Best`, emoji: job.icon, builtFor: r.job,
+    members: { drafters: s.members.drafters.map(target), judge: s.members.judge ? target(s.members.judge) : undefined, vision: s.members.vision ? target(s.members.vision) : undefined, mode: r.mode },
+  }, missing.length);
+}
+
+function yourStacksHTML() {
+  const kits = Object.entries(S.data.mediaKits || {}).filter(([k]) => S.catalog.jobs[k]);
+  if (!S.stacks.length && !kits.length) return '<p class="muted">No stacks yet. Choose one above.</p>';
+  return `<div class="cards">${S.stacks.map(stackCard).join('')}${kits.map(([k, kit]) => kitCard(k, kit)).join('')}</div>`;
+}
+
+function kitCard(k, kit) {
+  const j = S.catalog.jobs[k];
+  const labels = { image: 'Creates pictures', video: 'Makes videos', edit: 'Edits photos', animate: 'Brings photos to life', helper: 'Writes prompts' };
+  return `<div class="card">
+    <div class="row"><span class="emoji-badge">${j.icon}</span><h3 class="grow">${esc(j.label)}</h3><span class="badge b-peach">Studio</span></div>
+    <div class="stack-v" style="gap:6px;margin:12px 0">${Object.entries(kit).map(([role, t]) => `<div class="row"><span class="badge b-lav">${ROLE_ICON[role]} ${labels[role]}</span><b class="small">${esc(targetLabel(t) === 'No model chosen' ? modelName(t.replace(/^local:/, '')) : targetLabel(t))}</b>${isInstalled(t.replace(/^local:/, '')) ? '' : '<span class="badge b-pink">downloading</span>'}</div>`).join('')}</div>
+    <div class="row"><button class="btn small primary" data-kit-open="${k}">Open Studio</button><button class="btn small danger" data-kit-del="${k}">Remove</button></div>
+  </div>`;
 }
 
 function stackCard(s) {

@@ -10,6 +10,9 @@ const oai = require('./oai');
 
 // ---------- GGUF header reader (layer count, context length, name) ----------
 
+// Bytes per weight for the common GGML types (block size / weights per block).
+const TYPE_BYTES = { 0: 4, 1: 2, 2: 18 / 32, 3: 20 / 32, 6: 22 / 32, 7: 24 / 32, 8: 34 / 32, 10: 84 / 256, 11: 110 / 256, 12: 144 / 256, 13: 176 / 256, 14: 210 / 256, 15: 292 / 256, 30: 2, 39: 17 / 32 };
+
 async function readGguf(file) {
   const fh = await fs.promises.open(file, 'r');
   const CHUNK = 1 << 20;
@@ -61,7 +64,7 @@ async function readGguf(file) {
     if (buf.toString('ascii', 0, 4) !== 'GGUF') throw new Error('Not a GGUF model file');
     pos = 4;
     await u32(); // version
-    await u64(); // tensor count
+    const tensorCount = await u64();
     const kvCount = await u64();
     const meta = {};
     for (let i = 0; i < kvCount; i++) {
@@ -70,13 +73,31 @@ async function readGguf(file) {
       meta[key] = await value(type);
     }
     const arch = meta['general.architecture'];
+    // Tensor list: the data of the last tensor must end inside the file, or the download was cut off.
+    let lastOff = -1; let lastN = 0; let lastType = 0;
+    for (let i = 0; i < tensorCount; i++) {
+      await str();
+      const dims = await u32();
+      let n = 1;
+      for (let d = 0; d < dims; d++) n *= await u64();
+      const type = await u32();
+      const off = await u64();
+      if (off >= lastOff) { lastOff = off; lastN = n; lastType = type; }
+    }
+    const align = Number(meta['general.alignment']) || 32;
+    const here = fileOff - (buf.length - pos);
+    const dataStart = Math.ceil(here / align) * align;
+    const size = (await fh.stat()).size;
+    const needBytes = tensorCount ? dataStart + lastOff + Math.floor(lastN * (TYPE_BYTES[lastType] || 0)) : 0;
     return {
       name: meta['general.name'],
       architecture: arch,
       layers: meta[`${arch}.block_count`],
       contextLength: meta[`${arch}.context_length`],
       isProjector: arch === 'clip' || Boolean(meta['clip.has_vision_encoder']),
-      size: (await fh.stat()).size,
+      size,
+      complete: size >= needBytes,
+      needBytes,
     };
   } finally {
     await fh.close();
@@ -116,10 +137,16 @@ async function waitReady(s, timeoutMs) {
   throw new Error('The model took too long to load.');
 }
 
+// The engine's last line is usually just "exiting due to model loading error"; the cause is
+// a few lines earlier. Pick the most specific line and drop the timestamp and source prefixes.
 function lastError(log) {
   const lines = log.join('').split('\n').map((l) => l.trim()).filter(Boolean);
-  const hit = [...lines].reverse().find((l) => /error|failed|out of memory|unable|cannot|invalid/i.test(l));
-  return hit || lines.slice(-2).join(' ');
+  const clean = (l) => l.replace(/^[\d.:]+\s+[A-Z]\s+/, '').replace(/^(srv|main|common_init_from_params|llama_model_load(_from_file_impl)?|llama_init_from_model|load_model|gguf_init_from_file(_impl)?|ggml_\w+|clip_\w+|mtmd_\w+)\s*:?\s*/i, '').trim();
+  const generic = /exiting due to|server_run|failed to load model, '|main: exiting|^error: failed to/i;
+  const specific = [...lines].reverse().filter((l) => !generic.test(l));
+  const hit = specific.find((l) => /error loading model|not within the file bounds|unexpected end|failed to (read|open|allocate|create)|out of memory|ErrorOutOfDeviceMemory|unknown model architecture|unsupported|invalid|corrupt|cannot|unable/i.test(l))
+    || [...lines].reverse().find((l) => /error|failed/i.test(l));
+  return hit ? clean(hit) : lines.slice(-2).join(' ');
 }
 
 // How many layers go on the graphics card: all if it fits, else a share, else none.
@@ -145,7 +172,9 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   const hw = await hardware.detect();
   const engine = engines.resolve('llama', hw);
   if (!engine) throw new Error('The text engine is missing. Reinstall Quicksilver, or download an engine in Settings → Engines.');
-  const info = await readGguf(model.file);
+  let info;
+  try { info = await readGguf(model.file); } catch (err) { throw damaged(model, err.message); }
+  if (!info.complete) throw damaged(model, `the file is ${(info.size / 1024 ** 3).toFixed(2)} GB but should be at least ${(info.needBytes / 1024 ** 3).toFixed(2)} GB`);
   const sizeGB = info.size / 1024 ** 3;
 
   // Make room: stop least recently used servers until this one fits alongside the rest.
@@ -160,7 +189,11 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   const ngl = gpuLayers(model, info, hw, gpu);
   const start = async (layers) => {
     const port = await freePort();
-    const args = ['-m', model.file, '--host', '127.0.0.1', '--port', String(port), '-c', String(ctx), '-ngl', String(layers), '--jinja'];
+    // --cache-reuse lets follow-up messages and stack steps reuse text the model already read.
+    const args = ['-m', model.file, '--host', '127.0.0.1', '--port', String(port), '-c', String(ctx), '-ngl', String(layers), '--jinja', '--cache-reuse', '256'];
+    // On the processor, keep the graphics card out of it completely (a broken or built-in GPU
+    // driver can otherwise still fail the load even with no layers on it).
+    if (!layers) args.push('--device', 'none');
     if (model.mmproj) args.push('--mmproj', model.mmproj);
     const proc = spawn(engine.bin, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const s = { proc, port, file: model.file, sizeGB, lastUsed: Date.now(), log: [], ctx, layers, exited: false };
@@ -181,7 +214,7 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
     return await start(ngl);
   } catch (err) {
     stop(key);
-    if (ngl > 0) {
+    if (ngl > 0 && err?.code !== 'damaged') {
       // Didn't fit on the graphics card: try again on the processor.
       onStatus?.(`Retrying ${model.name || 'model'} on the processor…`);
       try { return await start(0); } catch (e2) { stop(key); throw friendly(e2); }
@@ -192,8 +225,18 @@ async function ensure(model, { contextSize = 8192, gpu = 'auto', onStatus } = {}
   }
 }
 
+function damaged(model, why) {
+  const e = new Error(`${model.name || 'This model'}'s file is incomplete or damaged (${why}), usually because the download was cut off. Open Models → On this PC and press Repair to fix it.`);
+  e.code = 'damaged';
+  return e;
+}
+
 function friendly(err) {
   const msg = String(err?.message || err);
+  if (err?.code === 'damaged') return err;
+  if (/not within the file bounds|unexpected end|tensor data|failed to read|corrupt|invalid magic|truncat/i.test(msg)) return new Error(`The model file is incomplete or damaged (${msg}). Open Models → On this PC and press Repair to download it again.`);
+  if (/unknown model architecture|unsupported model/i.test(msg)) return new Error(`This model needs a newer engine (${msg}). Update it in Settings → Engines.`);
+  if (/failed to open|no such file|cannot open/i.test(msg)) return new Error(`Quicksilver couldn't open the model file (${msg}). If it was moved or deleted, remove it under Models and add it again.`);
   if (/out of memory|failed to allocate|ErrorOutOfDeviceMemory|cudaMalloc/i.test(msg)) return new Error('Not enough memory to load this model. Try a smaller model, close other apps, or lower the context size.');
   if (/mmproj|clip/i.test(msg)) return new Error(`The vision part of this model failed to load: ${msg}`);
   return new Error(msg);

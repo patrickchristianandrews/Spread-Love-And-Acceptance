@@ -13,8 +13,9 @@ views.models = {
     const tabs = { installed: `On this PC (${S.installed.length})`, text: 'Text & vision', media: 'Images & video', hf: 'Search Hugging Face', api: `Connect an API (${S.providers.length})` };
     return `<div class="page">
       <div class="page-head"><h1>Models</h1>
-        <button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
+        <button class="btn" id="find-models">Find models on this PC</button><button class="btn" id="import-gguf">Import a .gguf file</button><button class="btn ghost" id="open-folder">Open models folder</button></div>
       <p class="lede">Free, open models run on your PC: private, offline, no account. Ratings show how each one will run on <b>your</b> hardware. Not sure? Let the <a href="#" data-goto-stacks>Stack Advisor</a> choose.</p>
+      ${foundBanner()}
       <div class="tabs" role="tablist">${Object.entries(tabs).map(([k, l]) => `<button class="tab ${modelsTab === k ? 'active' : ''}" data-tab="${k}" role="tab">${esc(l)}</button>`).join('')}</div>
       ${({ installed: installedHTML, text: textHTML, media: mediaHTML, hf: hfHTML, api: apiHTML })[modelsTab]()}
     </div>`;
@@ -25,6 +26,13 @@ views.models = {
     $$('[data-goto-stacks]').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); go({ view: 'stacks' }); }));
     $('#import-gguf').addEventListener('click', async () => { const m = await call('models:import'); if (m) { await refreshModels(); render(); toast(`${m.name} added${m.vision ? ' (with vision)' : ''}.`); } });
     $('#open-folder').addEventListener('click', () => call('models:folder'));
+    loadFound();
+    $('#found-review')?.addEventListener('click', foundModal);
+    $('#find-models').addEventListener('click', async () => {
+      S.found = await call('models:found');
+      if (S.found.length) foundModal(); else toast('No other models found. Checked LM Studio, Jan, Ollama, GPT4All and Downloads.', 6000);
+      render();
+    });
     $$('[data-get]').forEach((b) => b.addEventListener('click', async () => {
       const m = [...S.catalog.text, ...S.catalog.media].find((x) => x.id === b.dataset.get);
       const est = S.est?.text[m.id] || S.est?.media[m.id];
@@ -35,6 +43,11 @@ views.models = {
       const m = S.installed.find((x) => x.id === b.dataset.remove);
       if (!(await confirmBox(`Remove ${m.name}?${m.source === 'imported' ? ' The file stays where it is.' : ` This frees ${gb(m.size)}.`}`, { yes: 'Remove' }))) return;
       await call('models:remove', m.id); await refreshModels(); render();
+    }));
+    $$('[data-repair]').forEach((b) => b.addEventListener('click', async () => {
+      b.disabled = true; b.textContent = 'Checking…';
+      try { const r = await call('models:repair', b.dataset.repair); S.downloads[r.id] = r; paintDownloads(); toast('Checking the files and downloading anything missing. You can keep working.'); } catch (err) { toast(err.message, 8000); }
+      render();
     }));
     $$('[data-default]').forEach((b) => b.addEventListener('click', () => { S.data.prefs.defaultTarget = b.dataset.default; save(); render(); toast('Default model set.'); }));
     $$('[data-cat]').forEach((b) => b.addEventListener('click', () => { catFilter = b.dataset.cat; render(); }));
@@ -57,7 +70,7 @@ function installedHTML() {
         return `<tr><td><b>${esc(m.name)}</b>${m.source === 'imported' ? ' <span class="badge b-lemon">imported</span>' : ''}</td><td>${gb(m.size)}</td>
           <td>${m.vision ? '<span class="badge b-sky">👁 sees images</span>' : ''}${S.catalog.text.find((c) => c.id === m.catalogId)?.reasoning ? ' <span class="badge b-lav">🧠 thinks</span>' : ''}</td>
           <td>${est ? rateBadge(est, k === 'text' ? 'text' : 'media') : '<span class="small muted">n/a</span>'}</td>
-          <td class="row" style="justify-content:flex-end">${k === 'text' ? (def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`) : ''}<button class="btn small danger" data-remove="${m.id}">Remove</button></td></tr>`;
+          <td class="row" style="justify-content:flex-end">${k === 'text' ? (def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`) : ''}${m.source !== 'imported' ? `<button class="btn small" data-repair="${m.id}" title="Check the files and download again anything missing or damaged">Repair</button>` : ''}<button class="btn small danger" data-remove="${m.id}">Remove</button></td></tr>`;
       }).join('')}</tbody></table>`;
   }).join('');
 }

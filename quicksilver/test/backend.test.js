@@ -248,20 +248,129 @@ async function collect(gen) {
   global.fetch = realFetch;
   console.log('✓ GitHub connector: connect, list issues, create issue (approved)');
 
-  // Catalog: advisor builds three tiers on a mid-range PC; estimates are sane.
+  // A cut-off download is caught before loading, with a clear "Repair" message (not an engine log line).
+  {
+    const cut = path.join(store.dir('models'), 'cut.gguf');
+    fs.copyFileSync(TINY, cut);
+    fs.truncateSync(cut, Math.floor(fs.statSync(TINY).size * 0.7));
+    models.add({ id: 'broken', name: 'Broken 8B', kind: 'text', files: { model: cut }, size: 5e9, source: 'huggingface' });
+    await assert.rejects(collect(complete.run('local:broken', { messages: [{ role: 'user', content: 'Hi' }], contextSize: 2048 })), /incomplete or damaged[\s\S]*Repair/);
+    models.remove('broken');
+    console.log('✓ damaged model file detected before loading, with a Repair hint');
+  }
+
+  // Offline mode: nothing leaves the PC, but local servers keep working.
+  {
+    const offline = require('../src/main/offline');
+    const http = require('node:http');
+    const srv = http.createServer((q, r) => r.end('local ok')).listen(0);
+    await new Promise((r) => srv.once('listening', r));
+    store.saveConfig({ offline: true });
+    assert.ok(offline.isOffline());
+    await assert.rejects(fetch('https://example.com/'), /offline/);
+    assert.equal(await (await fetch(`http://127.0.0.1:${srv.address().port}/`)).text(), 'local ok');
+    store.saveConfig({ offline: false });
+    srv.close();
+    console.log('✓ offline mode blocks the internet, keeps local servers');
+  }
+
+  // Knowledge models: a saved model that searches its knowledge first, usable like any model.
+  {
+    const kbc = knowledge.createCollection({ name: 'Handbook', emoji: '📘' });
+    knowledge.addTexts(kbc.id, [{ name: 'leave.md', text: 'Employees get 28 days of annual leave, including public holidays. Unused leave can carry over up to 5 days.' }]);
+    const km = complete.saveKbModel({ id: 'hb', name: 'Handbook Helper', emoji: '📘', base: 'local:qwen3-8b', knowledge: [kbc.id], strict: true });
+    assert.ok(complete.targets().some((t) => t.target === 'kbm:hb' && t.group === 'Knowledge models'));
+    assert.equal(complete.label('kbm:hb'), 'Handbook Helper');
+    const evs = [];
+    for await (const ev of complete.run('kbm:hb', { messages: [{ role: 'user', content: 'How many days of annual leave do employees get?' }], contextSize: 4096, maxTokens: 50 })) evs.push(ev);
+    const src = evs.find((e) => e.type === 'sources');
+    assert.ok(src && src.sources[0].title === 'leave.md', 'cites its own knowledge');
+    assert.ok(evs.some((e) => e.type === 'text'), 'answers with the base model');
+    // Works as a stack member too.
+    complete.saveStack({ id: 'kb-stack', name: 'KB stack', members: { drafters: ['kbm:hb', 'local:phi-4'], judge: 'local:phi-4' } });
+    const st = await collect(complete.run('stack:kb-stack', { messages: [{ role: 'user', content: 'Annual leave?' }], contextSize: 4096, maxTokens: 50 }));
+    assert.ok(st.text.length > 0);
+    complete.deleteStack('kb-stack');
+    assert.throws(() => complete.saveKbModel({ id: 'x', name: 'Loop', base: 'kbm:hb' }), /normal model/);
+    complete.deleteKbModel(km.id);
+    assert.ok(!complete.targets().some((t) => t.target === 'kbm:hb'));
+    console.log('✓ knowledge models: saved, cited, usable in stacks');
+  }
+
+  // Models other apps already downloaded are found and added where they are (no copy, no download).
+  {
+    const scan = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-scan-'));
+    const big = (p) => { fs.mkdirSync(path.dirname(p), { recursive: true }); fs.copyFileSync(TINY, p); fs.truncateSync(p, 60e6); return p; };
+    const lms = path.join(scan, 'lmstudio');
+    const llamaFile = big(path.join(lms, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF', 'Llama-3.2-3B-Instruct-Q4_K_M.gguf'));
+    big(path.join(lms, 'bartowski', 'Llama-3.2-3B-Instruct-GGUF', 'mmproj-f16.gguf'));
+    big(path.join(lms, 'big', 'Model-00002-of-00002.gguf')); // second part of a split model: skipped
+    fs.copyFileSync(TINY, path.join(lms, 'tiny.gguf')); // too small to be a real model: skipped
+    const oll = path.join(scan, 'ollama');
+    big(path.join(oll, 'blobs', 'sha256-feed'));
+    fs.mkdirSync(path.join(oll, 'manifests/registry.ollama.ai/library/qwen3'), { recursive: true });
+    fs.writeFileSync(path.join(oll, 'manifests/registry.ollama.ai/library/qwen3/8b'), JSON.stringify({ layers: [{ mediaType: 'application/vnd.ollama.image.model', digest: 'sha256:feed', size: 5.2e9 }] }));
+    process.env.QS_SCAN_DIRS = [lms, oll].join(path.delimiter);
+    const found = models.findOnPC();
+    assert.deepEqual(found.map((f) => f.name).sort(), ['Llama 3.2 3B Instruct', 'qwen3:8b']);
+    assert.ok(found.find((f) => f.app === 'Ollama').path.endsWith('sha256-feed'));
+    assert.ok(found.find((f) => f.name.startsWith('Llama')).vision, 'vision add-on paired');
+    const added = await models.addFound(found, llama.readGguf);
+    assert.equal(added.length, 2);
+    const q = added.find((m) => m.from === 'Ollama');
+    assert.equal(q.catalogId, 'qwen3-8b'); assert.equal(q.name, 'Qwen3 8B');
+    assert.equal(added.find((m) => m.from !== 'Ollama').catalogId, 'llama-3.2-3b');
+    assert.equal(models.findOnPC().length, 0, 'added models are not offered again');
+    models.remove(q.id);
+    assert.ok(fs.existsSync(path.join(oll, 'blobs', 'sha256-feed')), 'removing never deletes another app\'s file');
+    for (const m of added) models.remove(m.id);
+    delete process.env.QS_SCAN_DIRS;
+    fs.rmSync(scan, { recursive: true, force: true });
+    console.log('✓ finds models from LM Studio and Ollama and adds them in place');
+  }
+
+  // Catalog: goals, recognising your models, and the advisor (yours vs best for this PC).
+  assert.deepEqual(Object.keys(catalog.JOBS), ['general', 'reasoning', 'office', 'research', 'writing', 'open', 'coding', 'create', 'edit']);
+  assert.equal(catalog.matchCatalog('Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf')?.id, 'llama-3.1-8b');
+  assert.equal(catalog.matchCatalog('phi4:latest')?.id, 'phi-4');
+  assert.equal(catalog.matchCatalog('Phi-4-mini-instruct-Q4_K_M')?.id, 'phi-4-mini');
+  assert.equal(catalog.matchCatalog('Qwen2.5-7B-Instruct'), null, 'no false match');
+  const unknown = catalog.profileInstalled({ id: 'x', name: 'mystery-chat-12b', size: 7.5e9 });
+  assert.equal(unknown.known, false); assert.ok(unknown.jobs.general >= 6 && unknown.jobs.general <= 8);
   const mid = { ramGB: 32, vramGB: 12, vramFreeGB: 11.5 };
-  const adv = catalog.advise('office', mid);
-  assert.deepEqual(adv.stacks.map((x) => x.tier), ['fast', 'balanced', 'powerhouse']);
-  const power = adv.stacks[2];
+  const mine3 = [{ id: 'qwen3-8b', name: 'Qwen3 8B', kind: 'text', catalogId: 'qwen3-8b', size: 5e9 }, { id: 'imp-l', name: 'Meta-Llama-3.1-8B-Instruct', kind: 'text', size: 4.9e9 }, { id: 'g4', name: 'Gemma 3 4B', kind: 'text', catalogId: 'gemma-3-4b', size: 3.3e9, files: { mmproj: 'x' } }];
+  const adv = catalog.advise('office', mid, { installed: mine3 });
+  assert.equal(adv.yours.length, 3);
+  assert.ok(adv.mine.members.drafters.length >= 1 && adv.mine.ids.length >= 2, 'a stack from your own models');
+  assert.ok(adv.mine.ids.every((id) => mine3.some((m) => m.id === id)), 'only uses installed models');
+  assert.ok([adv.mine.members.vision, ...adv.mine.members.drafters, adv.mine.members.judge].includes('g4'), 'your vision model reads photos');
+  assert.notEqual(new Set(adv.mine.members.drafters.map((id) => catalog.familyOf(catalog.profileInstalled(mine3.find((m) => m.id === id))))).size, 1, 'drafters from different makers');
+  const power = adv.best;
   assert.equal(power.members.drafters.length, 2);
-  assert.ok([power.members.vision, ...power.members.drafters].filter(Boolean).some((id) => catalog.TEXT_MODELS.find((m) => m.id === id).vision), 'office powerhouse can see images');
+  assert.ok(power.ids.some((id) => catalog.TEXT_MODELS.find((m) => m.id === id).vision), 'best office stack can see images');
+  assert.ok(power.better && power.missingGB > 0);
+  const owned = catalog.advise('office', mid, { installed: power.ids.map((id) => ({ id: `have-${id}`, name: id, kind: 'text', catalogId: id, size: 1e9 })) });
+  assert.equal(owned.best.missingGB, 0, 'already-installed best models are not downloaded again');
+  const open = catalog.advise('open', mid, { installed: mine3 });
+  assert.equal(open.mine, null, 'none of these installed models are unfiltered');
+  assert.ok(open.best.ids.every((id) => catalog.TEXT_MODELS.find((m) => m.id === id).open));
+  const kit = catalog.advise('create', mid, { installed: [...mine3, { id: 'sdx', name: 'SDXL Turbo', kind: 'image', catalogId: 'sdxl-turbo' }] });
+  assert.equal(kit.kind, 'media');
+  assert.equal(kit.mine.members.image, 'sdx', 'your image model creates the pictures');
+  assert.ok(mine3.some((m) => m.id === kit.best.members.helper), 'prompt writer reuses a model you have');
+  assert.ok(kit.best.members.video && kit.best.better);
+  const editKit = catalog.advise('edit', { ramGB: 16, vramGB: 0 }, { installed: mine3 });
+  assert.equal(editKit.best.members.edit, undefined, 'no editing model fits a 16 GB PC without a graphics card');
   const low = catalog.advise('general', { ramGB: 8, vramGB: 0 });
-  assert.ok(low.stacks[0].members.drafters.every((id) => catalog.TEXT_MODELS.find((m) => m.id === id).sizeGB < 4));
+  assert.equal(low.mine, null);
+  assert.ok(low.best.ids.every((id) => catalog.TEXT_MODELS.find((m) => m.id === id).sizeGB < 4));
+  const slow = catalog.advise('coding', { ramGB: 16, vramGB: 0 }, { installed: [mine3[0], { id: 'n', name: 'mystery-chat-12b', kind: 'text', size: 7.5e9 }] });
+  assert.equal(new Set(slow.mine.ids).size, 2, 'slow PC keeps a two-model stack');
   const est = catalog.estimateText(catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-8b'), mid);
   assert.equal(est.fit, 'gpu'); assert.ok(est.tps > 20);
   const moe = catalog.estimateText(catalog.TEXT_MODELS.find((m) => m.id === 'qwen3-30b-a3b'), mid);
   assert.equal(moe.fit, 'split'); assert.ok(moe.tps > 5, 'MoE runs usefully even when split');
-  console.log('✓ advisor tiers:', adv.stacks.map((x) => `${x.name}[${[x.members.vision, ...x.members.drafters, x.members.judge].filter(Boolean).join(', ')}]`).join('  '));
+  console.log('✓ advisor: yours', JSON.stringify(adv.mine.members), '| best', JSON.stringify(power.members));
 
   llama.stopAll();
   fs.rmSync(HOME, { recursive: true, force: true });

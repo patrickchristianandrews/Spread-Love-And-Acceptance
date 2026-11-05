@@ -3,6 +3,8 @@
 // renames files. Downloads resume where they stopped (a .part file plus an HTTP Range request).
 const path = require('node:path');
 const fs = require('node:fs');
+const os = require('node:os');
+const crypto = require('node:crypto');
 const store = require('./store');
 const catalog = require('../shared/catalog');
 
@@ -95,10 +97,16 @@ function localPath(repo, file) {
   return path.join(store.dir('models'), repo.replace(/[\\/]/g, '__'), file);
 }
 
-async function fetchFile(repo, file, dest, onBytes, signal) {
-  if (fs.existsSync(dest)) { onBytes(fs.statSync(dest).size); return dest; }
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
+async function fetchFile(repo, file, dest, onBytes, signal, expected = 0) {
   const part = `${dest}.part`;
+  if (fs.existsSync(dest)) {
+    const have = fs.statSync(dest).size;
+    if (!expected || have === expected) { onBytes(have); return dest; }
+    // A finished file of the wrong size was cut off earlier: resume it (or start over if too big).
+    if (have < expected) fs.renameSync(dest, part); else fs.unlinkSync(dest);
+  }
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  if (expected && fs.existsSync(part) && fs.statSync(part).size > expected) fs.unlinkSync(part);
   const have = fs.existsSync(part) ? fs.statSync(part).size : 0;
   const url = `${HF}/${repo}/resolve/main/${file.split('/').map(encodeURIComponent).join('/')}?download=true`;
   const res = await fetch(url, { headers: { ...hfHeaders(), ...(have ? { Range: `bytes=${have}-` } : {}) }, signal, redirect: 'follow' });
@@ -117,6 +125,9 @@ async function fetchFile(repo, file, dest, onBytes, signal) {
   } finally {
     await new Promise((r) => out.end(r));
   }
+  // The connection can close early without an error: check the size before calling it done.
+  const want = expected || (Number(res.headers.get('content-length')) || 0) + (resume ? have : 0);
+  if (want && done < want) throw new Error(`the connection dropped at ${(done / 1024 ** 3).toFixed(2)} of ${(want / 1024 ** 3).toFixed(2)} GB. Start it again to resume where it stopped`);
   fs.renameSync(part, dest);
   return dest;
 }
@@ -141,11 +152,11 @@ function start(plan, emit) {
         doneBytes.set(item.path, b);
         pub.downloaded = [...doneBytes.values()].reduce((a, c) => a + c, 0);
         if (Date.now() - lastEmit > 250) { lastEmit = Date.now(); emit('models:progress', pub); }
-      }, controller.signal);
+      }, controller.signal, item.size || 0);
       if (item.role && !files[item.role]) files[item.role] = dest;
     }
     const size = plan.items.reduce((t, i) => t + (fs.existsSync(localPath(i.repo, i.path)) ? fs.statSync(localPath(i.repo, i.path)).size : 0), 0);
-    const entry = add({ id: plan.id, name: plan.name, kind: plan.kind, catalogId: plan.catalogId, repo: plan.repo, quant: plan.quant, files, size, vision: Boolean(files.mmproj), source: 'huggingface' });
+    const entry = add({ id: plan.id, name: plan.name, kind: plan.kind, catalogId: plan.catalogId, repo: plan.repo, quant: plan.quant, files, size, vision: Boolean(files.mmproj), source: 'huggingface', plan: plan.items.map((i) => ({ path: i.path, repo: i.repo, size: i.size })) });
     jobs.delete(plan.id);
     emit('models:done', { id: plan.id, model: entry });
   })().catch((err) => {
@@ -187,6 +198,17 @@ async function planGguf(repo, { id, name, quant, catalogId, vision } = {}) {
   return { id: id || `hf-${repo.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${pick.quant.toLowerCase()}`, name: name || `${shortName} ${pick.quant}`, kind: 'text', catalogId, repo, quant: pick.quant, items };
 }
 
+// Repair a downloaded model: compare every file with Hugging Face and download again whatever is
+// missing or the wrong size (resuming where possible). Imported files are not ours to repair.
+async function repair(id, emit) {
+  const m = get(id) || store.readJSON(REG(), []).find((x) => x.id === id);
+  if (!m) throw new Error('That model is not installed.');
+  if (m.source === 'imported') throw new Error('This model came from another app or folder, so Quicksilver can\'t re-download it. Remove it, then download it from Models.');
+  const plan = m.catalogId ? await planCatalog(m.catalogId) : m.repo ? await planGguf(m.repo, { id: m.id, name: m.name, quant: m.quant }) : null;
+  if (!plan) throw new Error('Quicksilver doesn\'t know where this model came from.');
+  return start({ ...plan, id: m.id, name: m.name }, emit);
+}
+
 // Search all of Hugging Face for GGUF models.
 async function search(query, { limit = 30 } = {}) {
   const q = encodeURIComponent(query || '');
@@ -201,7 +223,127 @@ async function importFile(file, readGguf) {
   const dir = path.dirname(file);
   const proj = fs.readdirSync(dir).find((n) => /mmproj.*\.gguf$/i.test(n));
   const files = { model: file, ...(proj ? { mmproj: path.join(dir, proj) } : {}) };
-  return add({ id: `imp-${Date.now().toString(36)}`, name: info.name || path.basename(file, '.gguf'), kind: 'text', files, size: info.size, vision: Boolean(proj), source: 'imported' });
+  return add({ id: `imp-${Date.now().toString(36)}`, ...recognise(info.name || niceName(file), file), kind: 'text', files, size: info.size, vision: Boolean(proj), source: 'imported' });
 }
 
-module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, importFile, tree };
+
+// ---------- models already on this PC (other apps, Downloads) ----------
+// Finds GGUF models that LM Studio, Jan, Ollama or GPT4All already downloaded (or that are in
+// Downloads), so they can be used where they are: no second download, nothing copied.
+
+function scanRoots() {
+  if (process.env.QS_SCAN_DIRS) return process.env.QS_SCAN_DIRS.split(path.delimiter).filter(Boolean).map((d) => ({ app: /ollama/i.test(d) ? 'Ollama' : 'Other apps', dir: d, ollama: /ollama/i.test(d) }));
+  const home = os.homedir();
+  const appData = process.env.APPDATA || path.join(home, 'AppData', 'Roaming');
+  const local = process.env.LOCALAPPDATA || path.join(home, 'AppData', 'Local');
+  const roots = [
+    { app: 'LM Studio', dir: path.join(home, '.lmstudio', 'models') },
+    { app: 'LM Studio', dir: path.join(home, '.cache', 'lm-studio', 'models') },
+    { app: 'Jan', dir: path.join(appData, 'Jan', 'data', 'llamacpp', 'models') },
+    { app: 'Jan', dir: path.join(appData, 'Jan', 'data', 'models') },
+    { app: 'Jan', dir: path.join(home, 'jan', 'models') },
+    { app: 'GPT4All', dir: path.join(local, 'nomic.ai', 'GPT4All') },
+    { app: 'Ollama', dir: process.env.OLLAMA_MODELS || path.join(home, '.ollama', 'models'), ollama: true },
+    { app: 'Downloads', dir: path.join(home, 'Downloads'), depth: 2 },
+  ];
+  // LM Studio lets you move its models folder.
+  try {
+    const cfg = JSON.parse(fs.readFileSync(path.join(home, '.lmstudio', 'settings.json'), 'utf8'));
+    if (typeof cfg.downloadsFolder === 'string') roots.unshift({ app: 'LM Studio', dir: cfg.downloadsFolder });
+  } catch {}
+  return roots;
+}
+
+function walk(dir, depth, out, budget = { n: 4000 }) {
+  if (depth < 0 || budget.n <= 0) return out;
+  let entries;
+  try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return out; }
+  for (const e of entries) {
+    if (--budget.n <= 0) break;
+    const p = path.join(dir, e.name);
+    if (e.isDirectory() && !e.name.startsWith('.') && e.name !== 'node_modules') walk(p, depth - 1, out, budget);
+    else if (e.isFile() && /\.gguf$/i.test(e.name)) out.push(p);
+  }
+  return out;
+}
+
+const niceName = (file) => path.basename(file).replace(/\.gguf$/i, '').replace(/-0*1-of-\d+$/i, '')
+  .replace(/[-_.](?:UD-)?(?:I?Q\d(?:_[A-Z0-9]+)*|F16|BF16|F32|MXFP4)$/i, '').replace(/[-_]+/g, ' ').trim();
+
+// A recognised model gets its proper name, and counts as installed for the catalog (no re-download).
+function recognise(name, file) {
+  const c = catalog.matchCatalog(`${name} ${path.basename(file)}`);
+  return c ? { name: c.name, catalogId: c.id } : { name };
+}
+
+function scanOllama(root) {
+  const found = [];
+  const manifests = path.join(root, 'manifests');
+  const files = [];
+  (function w(d, depth) {
+    if (depth < 0) return;
+    let entries; try { entries = fs.readdirSync(d, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) { const p = path.join(d, e.name); if (e.isDirectory()) w(p, depth - 1); else files.push(p); }
+  })(manifests, 5);
+  for (const f of files) {
+    try {
+      const man = JSON.parse(fs.readFileSync(f, 'utf8'));
+      const layer = (type) => man.layers?.find((l) => l.mediaType === `application/vnd.ollama.image.${type}`);
+      const model = layer('model');
+      if (!model) continue;
+      const blob = (l) => path.join(root, 'blobs', l.digest.replace(':', '-'));
+      if (!fs.existsSync(blob(model))) continue;
+      const parts = path.relative(manifests, f).split(path.sep);
+      const tag = parts.pop(); const name = parts.pop(); const ns = parts.pop();
+      const proj = layer('projector');
+      found.push({ path: blob(model), name: `${ns && ns !== 'library' ? `${ns}/` : ''}${name}:${tag}`, size: model.size || fs.statSync(blob(model)).size, app: 'Ollama', mmproj: proj && fs.existsSync(blob(proj)) ? blob(proj) : null });
+    } catch {}
+  }
+  return found;
+}
+
+function findOnPC() {
+  const have = new Set(list().flatMap((m) => Object.values(m.files || {})).map((f) => path.resolve(f).toLowerCase()));
+  const own = path.resolve(store.dir('models')).toLowerCase();
+  const seen = new Set();
+  const out = [];
+  for (const r of scanRoots()) {
+    if (!fs.existsSync(r.dir)) continue;
+    const hits = r.ollama ? scanOllama(r.dir) : walk(r.dir, r.depth ?? 6, []).flatMap((file) => {
+      const base = path.basename(file);
+      if (/mmproj/i.test(base)) return []; // vision add-on, paired below
+      if (/-0*(\d+)-of-\d+\.gguf$/i.test(base) && !/-0*1-of-\d+\.gguf$/i.test(base)) return []; // later parts of a split model
+      let size = 0; try { size = fs.statSync(file).size; } catch { return []; }
+      if (size < 50e6) return [];
+      // Pair a vision add-on that sits in the same model folder (not in a shared folder like Downloads).
+      let mmproj = null;
+      if (r.app !== 'Downloads') { try { const n = fs.readdirSync(path.dirname(file)).find((x) => /mmproj.*\.gguf$/i.test(x)); if (n) mmproj = path.join(path.dirname(file), n); } catch {} }
+      return [{ path: file, name: niceName(file), size, app: r.app, mmproj }];
+    });
+    for (const h of hits) {
+      const key = path.resolve(h.path).toLowerCase();
+      if (have.has(key) || seen.has(key) || key.startsWith(own)) continue;
+      seen.add(key);
+      out.push({ ...h, vision: Boolean(h.mmproj) });
+    }
+  }
+  return out.sort((a, b) => a.app.localeCompare(b.app) || a.name.localeCompare(b.name));
+}
+
+// Adds found models where they are. Their files are never deleted by Quicksilver.
+async function addFound(items, readGguf) {
+  const added = [];
+  for (const it of items || []) {
+    if (!it?.path || !fs.existsSync(it.path)) continue;
+    let info = null;
+    try { info = await readGguf(it.path); } catch { continue; } // not a usable GGUF
+    if (info.isProjector) continue;
+    const id = `imp-${crypto.createHash('sha1').update(path.resolve(it.path).toLowerCase()).digest('hex').slice(0, 10)}`;
+    const name = it.app === 'Ollama' ? it.name : (info.name && info.name.length > 3 && !/^(model|models)$/i.test(info.name) ? info.name : it.name);
+    const files = { model: it.path, ...(it.mmproj && fs.existsSync(it.mmproj) ? { mmproj: it.mmproj } : {}) };
+    added.push(add({ id, ...recognise(name, it.path), kind: 'text', files, size: info.size || it.size, vision: Boolean(files.mmproj), source: 'imported', from: it.app }));
+  }
+  return added;
+}
+
+module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, importFile, tree, findOnPC, addFound, repair };
