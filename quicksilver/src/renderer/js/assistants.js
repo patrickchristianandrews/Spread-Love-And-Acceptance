@@ -21,7 +21,7 @@ views.assistants = {
           <div class="row"><span class="emoji-badge">${esc(a.emoji)}</span><h3 class="grow">${esc(a.name)}</h3></div>
           <p class="desc" style="margin:10px 0">${esc(a.description || '')}</p>
           <div class="row small" style="margin-bottom:10px">
-            <span class="badge b-lav">🧠 ${esc(a.target ? targetLabel(a.target) : 'Default model')}</span>
+            <span class="badge b-lav">🧠 ${esc(a.target ? targetLabel(a.target) : 'Default model')}</span>${etaBadge(etaFor(resolveTarget(null, a), wordsForJob(a.job)), a.job === 'coding' ? 'per code answer' : 'per answer', starsOf(resolveTarget(null, a), a.job || 'general'))}
             ${a.library ? `<span class="badge b-sky">📚 ${a.knowledge?.length ? `${a.knowledge.length} knowledge base${a.knowledge.length > 1 ? 's' : ''}` : 'Knowledge'}${a.strict ? ' · 🔒 only' : ''}</span>` : ''}${a.web ? '<span class="badge b-mint">🌐 Web</span>' : ''}${a.factCheck ? '<span class="badge b-peach">✅ Fact check</span>' : ''}
           </div>
           <div class="row">

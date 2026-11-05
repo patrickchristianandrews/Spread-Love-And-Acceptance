@@ -70,6 +70,47 @@ handle('catalog:estimates', async () => {
     calibrated: c.text !== 1,
   };
 });
+// Speeds on this PC, so every screen can say how long something will take:
+// models in words per second (stacks list each member), image/video models in seconds per item.
+handle('speed:map', async () => {
+  const hw = await hardware.detect();
+  const calib = store.config().calib;
+  const wpsOf = (t) => {
+    const p = complete.parse(t);
+    if (p.kind === 'api') return 40;
+    if (p.kind !== 'local') return null;
+    const m = models.get(p.id);
+    return m ? Math.max(0.1, catalog.estimateText(catalog.profileInstalled(m), hw, calib.text).wordsPerSec || 0.1) : null;
+  };
+  // Expected quality (0-10) of each kind of output: a model's own score; for a stack, its best
+  // member's, and "team" when a second model cross-checks it.
+  const JOBS = ['general', 'reasoning', 'office', 'research', 'writing', 'coding', 'open'];
+  const scoresOf = (t) => {
+    const p = complete.parse(t);
+    if (p.kind === 'api') return Object.fromEntries(JOBS.map((j) => [j, 8]));
+    const m = p.kind === 'local' && models.get(p.id);
+    if (!m) return null;
+    const prof = catalog.profileInstalled(m);
+    return Object.fromEntries(JOBS.map((j) => [j, j === 'open' ? (prof.open ? catalog.scoreFor(prof, 'general') : catalog.scoreFor(prof, 'general') - 2) : catalog.scoreFor(prof, j)]));
+  };
+  const best = (list) => Object.fromEntries(JOBS.map((j) => [j, Math.max(0, ...list.filter(Boolean).map((s) => s[j]))]));
+  const out = { targets: {}, media: {} };
+  for (const t of complete.targets()) {
+    const p = complete.parse(t.target);
+    if (p.kind === 'local' || p.kind === 'api') out.targets[t.target] = { kind: 'model', wps: wpsOf(t.target), scores: scoresOf(t.target) };
+    else if (p.kind === 'stack') {
+      const m = complete.stacks().find((x) => x.id === p.id)?.members || {};
+      const all = [...new Set([...(m.drafters || []), m.judge, m.vision].filter(Boolean))];
+      out.targets[t.target] = { kind: 'stack', auto: m.mode === 'auto', drafters: (m.drafters || []).map(wpsOf).filter(Boolean), judge: m.judge ? wpsOf(m.judge) : null, vision: m.vision ? wpsOf(m.vision) : null, scores: best(all.map(scoresOf)), team: all.length >= 2 };
+    } else if (p.kind === 'kbm') out.targets[t.target] = { kind: 'kbm', base: complete.kbModels().find((k) => k.id === p.id)?.base };
+  }
+  for (const m of models.list().filter((x) => x.kind !== 'text')) {
+    const c = catalog.MEDIA_MODELS.find((x) => x.id === m.catalogId);
+    if (c) out.media[m.id] = { sec: catalog.estimateMedia(c, hw, calib.media).sec, kind: c.kind, category: c.category, stars: Math.round(c.quality || 5) / 2, frames: c.defaults?.frames || null };
+  }
+  return out;
+});
+
 // Home and the Compare page: the best setup for this PC, and every stack type side by side.
 handle('advisor:overview', async () => {
   const hw = await hardware.detect();

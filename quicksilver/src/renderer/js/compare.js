@@ -57,9 +57,31 @@ function bestSetupHTML() {
       <div class="bs-col"><h4>How it works</h4>${flow.map(([ic, t, d, sec]) => `<div class="bs-flow"><span class="bs-ic">${ic}</span><div class="grow"><b>${t}</b><div class="small">${d}</div></div>${timeChip(sec, '')}</div>`).join('')}</div>
       <div class="bs-col"><h4>What it can do here</h4>${capsHTML(q.caps)}</div>
     </div>
+    ${typicalHTML()}
     ${upgradeHTML}
     <div class="bs-actions"><button class="btn" data-goto="compare">📊 Compare all stacks</button><button class="btn ghost" data-goto="stacks">Customize</button></div>
   </div>`;
+}
+
+// "Typical on this PC": how long each kind of output takes and how good it should be.
+function typicalHTML() {
+  const t = targetValid(S.data.prefs.defaultTarget) ? S.data.prefs.defaultTarget : resolveTarget(null, assistantById(S.data.prefs.lastAssistant));
+  const pick = (pref, cat) => (pref && S.speed?.media?.[pref.replace(/^local:/, '')] ? pref : Object.entries(S.speed?.media || {}).find(([, m]) => cat(m))?.[0]);
+  const media = (pref, cat) => { const id = pick(pref, cat); return id ? S.speed.media[id.replace(/^local:/, '')] : null; };
+  const pic = media(S.data.prefs.imageModel, (m) => m.category === 'image');
+  const vid = media(S.data.prefs.videoModel, (m) => m.kind === 'video');
+  const edit = media(S.data.prefs.editModel, (m) => m.category === 'edit') || pic;
+  const items = [
+    ['💬', 'Chat reply', etaFor(t, WORDS.chat), starsOf(t, 'general')],
+    ['🧠', 'Hard question', etaFor(t, WORDS.hard, { hard: true }), starsOf(t, 'reasoning')],
+    ['✍️', 'Email or post', etaFor(t, WORDS.writing), starsOf(t, 'writing')],
+    ['💻', 'Code', etaFor(t, WORDS.code, { hard: true }), starsOf(t, 'coding')],
+    ['📄', 'Report', etaFor(t, WORDS.document, { hard: true }), starsOf(t, 'office')],
+    ['🖼️', 'Picture', pic?.sec ?? null, pic?.stars ?? null, !pic],
+    ['🪄', 'Photo edit', edit?.sec ?? null, edit?.stars ?? null, !edit],
+    ['🎬', 'Video clip', vid?.sec ?? null, vid?.stars ?? null, !vid],
+  ];
+  return `<div class="typical"><span class="lbl">Typical on this PC</span>${items.map(([ic, name, sec, stars, missing]) => `<span class="typ" title="${missing ? 'Get a model for this in Stacks or Studio' : 'Estimated time and expected quality on this PC'}">${ic} ${name} ${missing ? '<span class="muted">· get a model</span>' : `<span class="muted">⏱ ${etaLabel(sec)}${stars != null ? ` · ${starText(stars)}` : ''}</span>`}</span>`).join('')}</div>`;
 }
 
 function bindBestSetup() {

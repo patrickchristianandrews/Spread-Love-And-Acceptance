@@ -174,8 +174,45 @@ async function refreshModels() {
   S.targets = await qs.call('targets:list');
   S.stacks = await qs.call('stacks:list');
   S.overview = null; // Home's best setup and the Compare page are measured again
+  await refreshSpeeds();
 }
-async function refreshProviders() { S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); }
+async function refreshProviders() { S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); refreshSpeeds(); }
+
+// ---------- how long things take on this PC ----------
+// Typical answer lengths (words) for each kind of job.
+const WORDS = { chat: 300, hard: 500, writing: 450, code: 700, research: 500, complex: 600, reasoning: 500, document: 900, slides: 700, sheet: 500, chart: 300, check: 350, prompt: 80 };
+async function refreshSpeeds() { try { S.speed = await qs.call('speed:map'); } catch { S.speed = null; } }
+const HARD_RE = /\b(why|how does|how do|prove|calculate|compute|solve|compare|analy[sz]e|evaluate|step[- ]by[- ]step|debug|code|function|script|error|bug|plan|strategy|pros and cons|trade-?offs?|explain|summari[sz]e|review|translate)\b/i;
+const looksHard = (text) => HARD_RE.test(text || '') || (text || '').length > 500 || /```|\d+\s*[-+*/^×÷]\s*\d+/.test(text || '');
+// Seconds for a target to write `words`, or null if unknown. Smart stacks answer simple
+// messages with the lead alone; hard ones run every drafter plus the lead.
+function etaFor(target, words = WORDS.chat, { hard = false } = {}) {
+  const s = S.speed?.targets?.[target];
+  if (!s) return null;
+  if (s.kind === 'kbm') { const b = etaFor(s.base, words, { hard }); return b == null ? null : b + 1.5; }
+  if (s.kind === 'model') return s.wps ? words / s.wps : null;
+  const lead = s.judge || s.drafters[0];
+  if (!lead) return null;
+  if (s.auto && !hard) return words / lead;
+  return s.drafters.reduce((t, w) => t + words / w, 0) + (s.judge ? (words * 1.1) / s.judge : 0);
+}
+const etaLabel = (sec) => (sec == null ? '' : `~${fmtSec(sec)}`);
+// Expected quality of an output (out of 5 stars) for a kind of work, on this target.
+function starsOf(target, job = 'general') {
+  const s = S.speed?.targets?.[target];
+  if (!s) return null;
+  if (s.kind === 'kbm') return starsOf(s.base, job);
+  const q = s.scores?.[job];
+  if (q == null) return null;
+  return Math.max(0.5, Math.min(5, Math.round((q / 2 + (s.team ? 0.5 : 0)) * 2) / 2));
+}
+const starText = (n) => (n == null ? '' : `★ ${Number.isInteger(n) ? n : n.toFixed(1)}`);
+const etaBadge = (sec, what = '', stars = null) => (sec == null && stars == null ? '' : `<span class="badge b-lav eta" title="Estimated on this PC: time and expected quality (out of 5)">${sec != null ? `⏱ ${etaLabel(sec)}${what ? ` ${what}` : ''}` : ''}${sec != null && stars != null ? ' · ' : ''}${stars != null ? starText(stars) : ''}</span>`);
+const SKILL_JOB = { code: 'coding', writing: 'writing', creative: 'writing', office: 'office', research: 'research', vision: 'general' };
+// How many words a job usually needs, from an assistant's kind of work or a skill's output.
+const wordsForJob = (job) => S.catalog?.jobs?.[job]?.words || WORDS.chat;
+const wordsForSkill = (s) => ({ docx: WORDS.document, pptx: WORDS.slides, xlsx: WORDS.sheet, chart: WORDS.chart }[s?.output] || (s?.category === 'code' ? WORDS.code : WORDS.writing));
+function mediaEta(target) { const id = String(target || '').replace(/^local:/, ''); return S.speed?.media?.[id]?.sec ?? null; }
 async function refreshEstimates() { S.est = await qs.call('catalog:estimates'); return S.est; }
 
 const assistantById = (id) => S.data.assistants.find((a) => a.id === id) || S.data.assistants[0];
@@ -192,12 +229,12 @@ function resolveTarget(chat, assistant) {
 function targetOptions(selected, { includeNone = false, noneLabel = 'Default model' } = {}) {
   const groups = {};
   for (const t of S.targets) (groups[t.group] ||= []).push(t);
-  return `${includeNone ? `<option value="">${esc(noneLabel)}</option>` : ''}${Object.entries(groups).map(([g, list]) => `<optgroup label="${esc(g)}">${list.map((t) => `<option value="${esc(t.target)}" ${t.target === selected ? 'selected' : ''}>${esc(t.label)}${t.vision ? ' 👁' : ''}</option>`).join('')}</optgroup>`).join('')}`;
+  return `${includeNone ? `<option value="">${esc(noneLabel)}</option>` : ''}${Object.entries(groups).map(([g, list]) => `<optgroup label="${esc(g)}">${list.map((t) => `<option value="${esc(t.target)}" ${t.target === selected ? 'selected' : ''}>${esc(t.label)}${t.vision ? ' 👁' : ''}${etaFor(t.target) != null ? ` · ${etaLabel(etaFor(t.target))}` : ''}${starsOf(t.target) != null ? ` · ${starText(starsOf(t.target))}` : ''}</option>`).join('')}</optgroup>`).join('')}`;
 }
 
 function rateBadge(est, kind = 'text') {
   if (!est) return '';
-  const extra = est.rating === 'wont' ? '' : kind === 'text' ? ` · ~${Math.max(1, Math.round(est.wordsPerSec))} words/s` : ` · ~${fmtSec(est.sec)} each`;
+  const extra = est.rating === 'wont' ? '' : kind === 'text' ? ` · ~${Math.max(1, Math.round(est.wordsPerSec))} words/s · ⏱ ~${fmtSec(WORDS.chat / Math.max(0.1, est.wordsPerSec))} per answer` : ` · ⏱ ~${fmtSec(est.sec)} each`;
   const where = { gpu: 'on graphics card', split: 'card + memory', cpu: 'on processor' }[est.fit] || '';
   return `<span class="badge rate-${est.rating}" title="${esc(where)}">${esc(est.rating === 'wont' ? est.label : est.label + extra)}</span>`;
 }

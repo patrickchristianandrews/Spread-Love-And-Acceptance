@@ -79,13 +79,23 @@ views.chat = {
             <button class="send-btn ${pending?.chatId === chat.id ? 'stop' : ''}" id="send" title="${pending?.chatId === chat.id ? 'Stop' : 'Send (Enter)'}" aria-label="${pending?.chatId === chat.id ? 'Stop' : 'Send'}">${icon(pending?.chatId === chat.id ? 'stop' : 'send', 20)}</button>
           </div>
         </div>
-        <div class="composer-hint">Runs on ${esc(targetLabel(target))} · Drop or paste photos, video, PDF, Word, Excel or PowerPoint</div>
+        <div class="composer-hint">Runs on ${esc(targetLabel(target))}${chatEtaHint(target, a)} · Drop or paste photos, video, PDF, Word, Excel or PowerPoint</div>
       </div>
       </div>${factPanelHTML(chat)}</div>
     </div>`;
   },
   bind: bindChat,
 };
+
+// "⏱ ~6 s per answer (hard questions ~20 s)", for the model or stack this chat runs on.
+function chatEtaHint(target, a) {
+  const words = wordsForJob(a.job);
+  const easy = etaFor(target, words);
+  if (easy == null) return '';
+  const hard = etaFor(target, Math.max(words, WORDS.hard), { hard: true });
+  const st = starsOf(target, a.job || 'general');
+  return ` · ⏱ ${etaLabel(easy)} per answer${hard != null && hard > easy * 1.4 ? ` (hard questions ${etaLabel(hard)})` : ''}${st != null ? ` · ${starText(st)} expected quality` : ''}`;
+}
 
 function welcomeHTML(a) {
   const starters = STARTERS[a.id] || STARTERS[a.job] || STARTERS.general;
@@ -131,6 +141,8 @@ function messageHTML(chat, a, m, i) {
   const alt = m.alts[m.altIndex] || {};
   const streaming = pending?.msgId === m.id;
   const isLast = i === chat.messages.length - 1;
+  const left = streaming && alt.eta ? alt.eta.sec - (Date.now() - alt.eta.start) / 1000 : null;
+  const etaNow = left == null ? '' : `<span class="badge b-lav eta live" title="Estimated on this PC">⏱ ${left > 2 ? `~${fmtSec(left)} left` : 'almost done'}</span>`;
   const body = alt.error ? esc(alt.error)
     : !alt.text && streaming ? `<span class="status-line">${esc(alt.status || 'Thinking…')}</span>`
     : markdown(alt.text || '');
@@ -142,7 +154,7 @@ function messageHTML(chat, a, m, i) {
     tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">${icon('copy', 15)} Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">${icon('download', 15)} Save as…</button><button class="tool" data-act="del" data-id="${m.id}" title="Delete">${icon('trash', 15)}</button>`);
   }
   return `<div class="msg assistant" data-msg="${m.id}">
-    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
+    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${etaNow}${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
     ${stepsHTML(alt, streaming)}
     ${toolsHTML(alt)}
     ${alt.reasoning ? `<details class="think"><summary>💭 Thinking${streaming && !alt.text ? '…' : ''}</summary><div>${esc(alt.reasoning)}</div></details>` : ''}
@@ -398,6 +410,12 @@ async function generate(chat, rerollMsg) {
   else { upTo = chat.messages.length; msg = { id: uid(), role: 'assistant', alts: [{ text: '', target }], altIndex: 0 }; chat.messages.push(msg); }
   const alt = msg.alts[msg.altIndex];
   alt.status = 'Getting ready…';
+  {
+    const ask = (msg && chat.messages.slice(0, chat.messages.indexOf(msg)).reverse().find((m) => m.role === 'user')) || [...chat.messages].reverse().find((m) => m.role === 'user');
+    const hard = looksHard(ask?.text) || (effortOf(chat, a) === 'max');
+    const sec = effortOf(chat, a) === 'quick' ? etaFor(target, wordsForJob(a.job)) : etaFor(target, hard ? Math.max(wordsForJob(a.job), WORDS.hard) : wordsForJob(a.job), { hard });
+    alt.eta = sec == null ? null : { start: Date.now(), sec };
+  }
   const requestId = uid();
   pending = { requestId, chatId: chat.id, msgId: msg.id };
   chat.updated = now();
@@ -452,6 +470,13 @@ function paintStreaming(chat, msg) {
     scrollDown(false);
   });
 }
+
+setInterval(() => {
+  if (!pending || S.route.view !== 'chat' || S.route.id !== pending.chatId) return;
+  const chat = chatById(pending.chatId);
+  const msg = chat?.messages.find((m) => m.id === pending.msgId);
+  if (msg?.alts[msg.altIndex]?.eta) paintStreaming(chat, msg);
+}, 1000);
 
 qs.onChat(({ requestId, ev }) => {
   if (!pending || pending.requestId !== requestId) return;
@@ -612,6 +637,7 @@ function checkHTML(m, alt) {
   if (ch.error) { kind = 'pink'; label = 'Fact check failed'; }
   else if (ch.running) { kind = 'run'; label = `Fact checking…${n.ok + n.warn + n.bad ? ` ${n.ok + n.warn + n.bad} claims so far` : ''}`; }
   else label = `${p.verdict || 'Checked'}${p.confidence != null ? ` · ${p.confidence}%` : ''}`;
+  if (ch.running && !(n.ok + n.warn + n.bad) && etaFor(ch.target, WORDS.check) != null) label += ` (${etaLabel(etaFor(ch.target, WORDS.check))})`;
   const flags = !ch.running && !ch.error ? `${n.bad ? `<span class="fc-n bad">${n.bad} ❌</span>` : ''}${n.warn ? `<span class="fc-n warn">${n.warn} ⚠️</span>` : ''}${!n.bad && !n.warn && n.ok ? `<span class="fc-n ok">${n.ok} ✅</span>` : ''}` : '';
   return `<button class="fact-chip k-${kind} ${active}" data-act="factopen" data-id="${m.id}" title="Open the fact check beside the chat">
     ${ch.running ? '<span class="fc-spin"></span>' : icon('shield', 15)}<span>${esc(label)}</span>${flags}${icon('left', 14).replace('class="ico"', 'class="ico fc-arrow"')}

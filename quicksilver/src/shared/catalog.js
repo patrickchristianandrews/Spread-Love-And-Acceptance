@@ -137,19 +137,19 @@ const MEDIA_CATEGORIES = {
 // budget: the longest a full stacked answer should take on this PC, in seconds.
 
 const JOBS = {
-  general: { kind: 'text', label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
+  general: { kind: 'text', words: 300, label: 'Everyday', icon: '⚡', pitch: 'Quick, reliable answers for questions, advice and small tasks.', speed: 25, budget: 60, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: true, mode: 'blend',
     assistant: { name: 'Quicksilver', emoji: '💧', instructions: 'You are Quicksilver, a capable, honest assistant running privately on the user\'s computer. Give clear, direct, well-organised answers. Use Markdown (headings, lists, tables, code blocks) when it helps. For arithmetic, numbers and calculations, work them out step by step before giving the result, and double-check it. If you are unsure, say so instead of guessing.' } },
-  reasoning: { kind: 'text', label: 'Reasoning', icon: '🧠', pitch: 'Maths, logic, tricky questions and decisions, worked through step by step.', speed: 8, budget: 240, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
+  reasoning: { kind: 'text', words: 500, label: 'Reasoning', icon: '🧠', pitch: 'Maths, logic, tricky questions and decisions, worked through step by step.', speed: 8, budget: 240, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'Thinker', emoji: '🧠', instructions: 'You are a careful reasoner. Work through problems step by step, state your assumptions, check each step, and verify the final answer (recompute numbers, test edge cases, look for counter-examples). Give the conclusion clearly at the end. If the question is ambiguous, say how you interpreted it.' } },
-  office: { kind: 'text', label: 'Complex tasks', icon: '🧩', pitch: 'Multi-step projects, analysis, spreadsheets and long documents.', speed: 10, budget: 180, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: true, web: true, mode: 'blend',
+  office: { kind: 'text', words: 600, label: 'Complex tasks', icon: '🧩', pitch: 'Multi-step projects, analysis, spreadsheets and long documents.', speed: 10, budget: 180, temperature: 0.3, contextSize: 32768, maxTokens: 8192, library: true, web: true, mode: 'blend',
     assistant: { name: 'Analyst', emoji: '🧩', instructions: 'You handle complex, multi-step work. First make a short plan, then carry it out step by step, and finish with a clear result and next steps. With spreadsheets or data, work from the actual numbers: compute totals, changes and outliers carefully and show the figures in Markdown tables. Never invent numbers; if something is missing, say what is needed.' } },
-  research: { kind: 'text', label: 'Research', icon: '🔎', pitch: 'Answers from the web and your files, with sources and fact checks.', speed: 10, budget: 150, temperature: 0.3, contextSize: 32768, maxTokens: 6144, library: true, web: true, mode: 'consensus',
+  research: { kind: 'text', words: 500, label: 'Research', icon: '🔎', pitch: 'Answers from the web and your files, with sources and fact checks.', speed: 10, budget: 150, temperature: 0.3, contextSize: 32768, maxTokens: 6144, library: true, web: true, mode: 'consensus',
     assistant: { name: 'Researcher', emoji: '🔎', instructions: 'You are a meticulous research assistant. Base answers on the reference excerpts and search results provided, cite them inline as [1], [2] matching their numbers, and say clearly when the sources do not answer the question. Separate facts from interpretation. End with a short summary.' } },
-  writing: { kind: 'text', label: 'Writing', icon: '✍️', pitch: 'Emails, posts, letters and documents: drafted, rewritten and polished.', speed: 12, budget: 90, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend',
+  writing: { kind: 'text', words: 450, label: 'Writing', icon: '✍️', pitch: 'Emails, posts, letters and documents: drafted, rewritten and polished.', speed: 12, budget: 90, temperature: 0.7, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend',
     assistant: { name: 'Writer', emoji: '✍️', instructions: 'You are a skilled writer and editor. Match the tone the user asks for (or the tone of what they paste). Write clearly and concisely, in plain English, with no filler. When editing, keep the user\'s meaning and voice, and briefly list the main changes. For emails, include a subject line.' } },
-  open: { kind: 'text', label: 'Unfiltered', icon: '🔓', pitch: 'Models that follow your instructions with far fewer refusals: fiction, mature themes, frank answers.', speed: 12, budget: 120, temperature: 0.8, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend', only: 'open',
+  open: { kind: 'text', words: 400, label: 'Unfiltered', icon: '🔓', pitch: 'Models that follow your instructions with far fewer refusals: fiction, mature themes, frank answers.', speed: 12, budget: 120, temperature: 0.8, contextSize: 16384, maxTokens: 4096, library: false, web: false, mode: 'blend', only: 'open',
     assistant: { name: 'Unfiltered', emoji: '🔓', instructions: 'You are a direct, candid assistant. Answer fully and frankly. Do not moralise, lecture or add disclaimers the user did not ask for, and do not water answers down. Follow the user\'s instructions on tone, style, persona and content, including for fiction and mature themes.' } },
-  coding: { kind: 'text', label: 'App development', icon: '💻', pitch: 'Build apps and websites: plan, write, debug and review code.', speed: 10, budget: 180, temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
+  coding: { kind: 'text', words: 700, label: 'App development', icon: '💻', pitch: 'Build apps and websites: plan, write, debug and review code.', speed: 10, budget: 180, temperature: 0.2, contextSize: 32768, maxTokens: 8192, library: false, web: false, mode: 'debate',
     assistant: { name: 'App Builder', emoji: '💻', instructions: 'You are an expert software engineer who builds complete apps. For new work, outline the structure first (files, components, data), then write correct, idiomatic, complete code in fenced code blocks with the file name and language. Explain briefly what changed and why. Point out bugs, edge cases and security issues. Ask a short clarifying question when a request is ambiguous.' } },
   create: { kind: 'media', label: 'Photo & video generation', icon: '🎨', pitch: 'Pictures and short videos from a description, with AI-written prompts.', roles: ['image', 'video', 'helper'] },
   edit: { kind: 'media', label: 'Photo & video editing', icon: '🪄', pitch: 'Change photos by describing the edit, and bring photos to life.', roles: ['edit', 'animate', 'helper'] },
@@ -161,7 +161,7 @@ function scoreFor(m, job) {
   const j = m.jobs || {};
   if (job === 'writing') return Math.min(10, (j.general ?? 5) + (WRITERS.test(m.maker || '') ? 1 : 0) - (m.category === 'coding' ? 2 : 0));
   if (job === 'open') return m.open ? (j.general ?? 5) : 0;
-  if (job === 'reasoning') return Math.min(10, Math.round(((j.research ?? 5) + (m.judge ?? 5)) / 2) + (m.reasoning ? 2 : 0) - (m.category === 'coding' ? 1 : 0));
+  if (job === 'reasoning') return Math.min(10, Math.round(((j.research ?? 5) + (m.judge ?? 5)) / 2) + (m.reasoning ? 1 : 0) - (m.category === 'coding' ? 1 : 0));
   return j[job] ?? j.general ?? 5;
 }
 
@@ -285,9 +285,11 @@ function compose(pool, job, hw, calib, { vision = true, budget = 150, speed = 10
     if (v) members.vision = v.m.id;
   }
   const byId = (id) => ranked.find((x) => x.m.id === id);
-  // Local models take turns, so the wait is the sum of the steps.
+  // Local models take turns, so the wait is the sum of the steps. Answers are longer for some
+  // kinds of work (code, documents) than others (a chat reply).
+  const words = JOBS[job]?.words || 400;
   const secFor = (id, n) => n / Math.max(0.1, byId(id).est.wordsPerSec);
-  const total = () => (members.vision ? secFor(members.vision, 250) : 0) + members.drafters.reduce((t, d) => t + secFor(d, 400), 0) + (members.judge ? secFor(members.judge, 450) : 0);
+  const total = () => (members.vision ? secFor(members.vision, 250) : 0) + members.drafters.reduce((t, d) => t + secFor(d, words), 0) + (members.judge ? secFor(members.judge, words * 1.1) : 0);
   // On a slow PC, drop the slowest extra drafter while the wait is too long (always keeping two
   // different models, or it stops being a stack).
   while (total() > budget && members.drafters.length > 1) {

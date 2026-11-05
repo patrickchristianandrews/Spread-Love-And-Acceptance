@@ -450,7 +450,8 @@ async function explainStack(id) {
   const all = [lead, ...drafters, eyes].filter(Boolean).filter((x, i, arr) => arr.findIndex((y) => y.target === x.target) === i);
   const wps = (x) => Math.max(0.1, x.est.wordsPerSec || 0.1);
   const auto = members.mode === 'auto';
-  const full = drafters.reduce((t, d) => t + 400 / wps(d), 0) + (members.judge ? 450 / wps(lead) : 0);
+  // Same answer lengths as everywhere else in the app: a chat reply ~300 words, a hard answer ~500.
+  const full = drafters.reduce((t, d) => t + 500 / wps(d), 0) + (members.judge ? 550 / wps(lead) : 0);
   const simple = auto ? 300 / wps(lead) : full;
   const photo = (eyes && eyes.target !== lead.target && !lead.vision ? 250 / wps(eyes) : 0) + (auto ? 300 / wps(lead) : full);
   const same = (a, b) => Boolean(a && b && a.target === b.target);

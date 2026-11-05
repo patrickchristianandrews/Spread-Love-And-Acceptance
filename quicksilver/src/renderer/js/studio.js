@@ -91,7 +91,7 @@ function jobBox(jobId) {
   const j = mediaJobs[jobId];
   if (!j) return '';
   const pct = Math.round((j.progress || 0) * 100);
-  return `<div class="progress-box" data-job="${jobId}"><div class="row"><span class="grow jt">${esc(j.error || j.status || 'Starting…')}</span>${!j.done && !j.error ? `<button class="btn small" data-stop-job="${jobId}">Stop</button>` : ''}</div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+  return `<div class="progress-box" data-job="${jobId}"><div class="row"><span class="grow jt">${esc(j.error || j.status || 'Starting…')}</span>${j.sec && !j.done && !j.error ? '<span class="badge b-lav jeta">⏱</span>' : ''}${!j.done && !j.error ? `<button class="btn small" data-stop-job="${jobId}">Stop</button>` : ''}</div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
 }
 
 function paintJob(jobId) {
@@ -113,10 +113,25 @@ qs.onMedia(async (ev) => {
 });
 document.addEventListener('click', (e) => { const b = e.target.closest('[data-stop-job]'); if (b) qs.call('media:stop', b.dataset.stopJob); });
 
-function startJob(req, label) {
+// "⏱ About 20 s per picture on your PC · ★ 4.5" for the chosen model (× how many).
+function mediaEtaText(target, what, times = 1) {
+  const m = S.speed?.media?.[String(target || '').replace(/^local:/, '')];
+  if (!m) return '';
+  return `⏱ About ${fmtSec(m.sec * times)}${times > 1 ? ` for ${times}` : ` per ${what}`} on your PC · ${starText(m.stars)} expected quality`;
+}
+setInterval(() => {
+  // Keep the countdowns on running jobs moving.
+  for (const [id, j] of Object.entries(mediaJobs)) {
+    if (j.done || j.error || !j.sec) continue;
+    const el = document.querySelector(`[data-job="${id}"] .jeta`);
+    if (el) { const left = j.sec - (Date.now() - j.start) / 1000; el.textContent = left > 3 ? `~${fmtSec(left)} left` : 'almost done'; }
+  }
+}, 1000);
+
+function startJob(req, label, sec = null) {
   const jobId = uid();
   return new Promise((resolve) => {
-    mediaJobs[jobId] = { status: 'Starting…', progress: 0, label, resolve };
+    mediaJobs[jobId] = { status: 'Starting…', progress: 0, label, resolve, sec, start: Date.now() };
     qs.call('media:generate', jobId, req).catch((err) => { mediaJobs[jobId].error = err.message; resolve(null); });
     if (S.route.view === 'studio') render();
   });
@@ -158,12 +173,15 @@ function createHTML() {
         <div class="field"><label for="ci-count">How many</label><select id="ci-count"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
       </div></details>
       <button class="btn primary" id="ci-go">🎨 Create</button>
+      <p class="eta-line" id="ci-eta">${mediaEtaText($('#ci-model')?.value || S.data.prefs.imageModel || opts[0]?.value, 'picture')}</p>
     </div>
     <div class="stack-v">${jobs.map(([id]) => jobBox(id)).join('')}${resultsHTML('image') || '<div class="canvas-wrap"><div class="empty">Your pictures will appear here.</div></div>'}</div>
   </div>`;
 }
 
 function bindCreate() {
+  const upd = () => { const n = Number($('#ci-count')?.value) || 1; if ($('#ci-eta')) $('#ci-eta').textContent = mediaEtaText($('#ci-model').value, 'picture', n); };
+  $('#ci-model')?.addEventListener('change', upd); $('#ci-count')?.addEventListener('change', upd); if ($('#ci-model')) upd();
   $('#ci-go')?.addEventListener('click', async () => {
     const model = $('#ci-model').value;
     const prompt = $('#ci-prompt').value.trim();
@@ -183,7 +201,7 @@ function bindCreate() {
     const [width, height] = sizeFor(spec, preset);
     const seed = $('#ci-seed').value;
     for (let i = 0; i < count; i++) {
-      await startJob({ modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value), seed: seed === '' ? '' : Number(seed) + i }, 'Creating');
+      await startJob({ modelId: inst.id, mode: 'generate', prompt, negative: $('#ci-neg').value, width, height, steps: Number($('#ci-steps').value) || undefined, cfg: $('#ci-cfg').value === '' ? undefined : Number($('#ci-cfg').value), seed: seed === '' ? '' : Number(seed) + i }, 'Creating', mediaEta(model));
     }
   });
 }
@@ -252,7 +270,8 @@ function editHTML() {
           <div class="field" id="ai-str-f"><label for="ai-str">How much to change: <span id="ai-str-v">0.6</span></label><input type="range" id="ai-str" min="0.1" max="1" step="0.05" value="0.6"></div>
           <label class="row"><input type="checkbox" id="mask-on" ${ed.maskOn ? 'checked' : ''}> <b>Only change the area I paint</b></label>
           ${ed.maskOn ? `<div class="row"><span class="small">Brush</span><input type="range" id="brush" min="8" max="160" value="${ed.brush}" class="grow"><button class="btn small" id="mask-clear">Clear</button></div>` : ''}
-          <button class="btn primary" id="ai-go">🪄 Apply AI edit</button>` : `<p class="small muted" style="font-weight:600">Download an editing model (FLUX.1 Kontext is best, or any image model for style changes) under Models → Images & video.</p><button class="btn small" data-goto-media>Get an editing model</button>`}
+          <button class="btn primary" id="ai-go">🪄 Apply AI edit</button>
+          <p class="eta-line" id="ai-eta">${mediaEtaText(aiOpts.find((o) => o.value === S.data.prefs.editModel)?.value || aiOpts[0]?.value, 'edit')}</p>` : `<p class="small muted" style="font-weight:600">Download an editing model (FLUX.1 Kontext is best, or any image model for style changes) under Models → Images & video.</p><button class="btn small" data-goto-media>Get an editing model</button>`}
       </div>
       <div class="card stack-v">
         <h3>🛠 Adjust</h3>
@@ -294,6 +313,7 @@ function drawPreview() {
 }
 
 function bindEdit() {
+  $('#ai-model')?.addEventListener('change', (e) => { if ($('#ai-eta')) $('#ai-eta').textContent = mediaEtaText(e.target.value, 'edit'); });
   $$('[data-pick-edit]').forEach((b) => b.addEventListener('click', async () => { await loadEditor(b.dataset.pickEdit); render(); }));
   $('[data-goto-media]')?.addEventListener('click', () => { modelsTab = 'media'; go({ view: 'models' }); });
   if (!ed.img) return;
@@ -361,7 +381,7 @@ function bindEdit() {
     const inst = S.installed.find((x) => `local:${x.id}` === model);
     const r64 = (v) => Math.max(256, Math.round(Math.min(v, 1536) / 64) * 64);
     const k = Math.min(1, 1280 / Math.max(full.width, full.height));
-    const item = await startJob({ modelId: inst.id, mode: 'edit', prompt, imageId: base.id, strength: Number($('#ai-str').value), maskDataUrl, width: r64(full.width * k), height: r64(full.height * k) }, 'Editing');
+    const item = await startJob({ modelId: inst.id, mode: 'edit', prompt, imageId: base.id, strength: Number($('#ai-str').value), maskDataUrl, width: r64(full.width * k), height: r64(full.height * k) }, 'Editing', mediaEta($('#ai-model').value));
     if (item) { await loadEditor(item.id); render(); }
   });
 }
@@ -386,14 +406,18 @@ function videoHTML() {
         <div class="field"><label for="cv-steps">Steps</label><input id="cv-steps" type="number" min="4" max="60" placeholder="auto"></div>
         <div class="field"><label for="cv-seed">Seed</label><input id="cv-seed" type="number" placeholder="random"></div>
       </div></details>
-      <p class="small muted" style="font-weight:600">Video takes several minutes even on a strong graphics card. See <a href="#" data-goto-pc>Your PC</a> for an estimate.</p>
       <button class="btn primary" id="cv-go">🎬 Create video</button>
+      <p class="eta-line" id="cv-eta">${mediaEtaText(opts.find((o) => o.value === S.data.prefs.videoModel)?.value || opts[0]?.value, 'clip (about 2 seconds)')}</p>
     </div>
     <div class="stack-v">${jobs.map(([id]) => jobBox(id)).join('')}${resultsHTML('video') || '<div class="canvas-wrap"><div class="empty">Your videos will appear here.</div></div>'}</div>
   </div>`;
 }
 
 function bindVideo() {
+  // A clip's time grows with its length (frames).
+  const clipSec = () => { const m = S.speed?.media?.[String($('#cv-model')?.value || '').replace(/^local:/, '')]; return m ? m.sec * (Number($('#cv-len')?.value) || 33) / (m.frames || 33) : null; };
+  const upd = () => { const sec = clipSec(); const m = S.speed?.media?.[String($('#cv-model')?.value || '').replace(/^local:/, '')]; if ($('#cv-eta')) $('#cv-eta').textContent = sec == null ? '' : `⏱ About ${fmtSec(sec)} for this clip on your PC · ${starText(m.stars)} expected quality`; };
+  $('#cv-model')?.addEventListener('change', upd); $('#cv-len')?.addEventListener('change', upd); if ($('#cv-model')) upd();
   $('#cv-go')?.addEventListener('click', async () => {
     const prompt = $('#cv-prompt').value.trim();
     if (!prompt) { toast('Describe the video first.'); return; }
@@ -404,7 +428,7 @@ function bindVideo() {
     const d = spec.defaults;
     const shape = $('#cv-shape').value;
     const [width, height] = shape === 'tall' ? [d.height, d.width] : shape === 'square' ? [d.height, d.height] : [d.width, d.height];
-    await startJob({ modelId: inst.id, mode: from ? 'animate' : 'generate', prompt, imageId: from || undefined, width, height, frames: Number($('#cv-len').value), steps: Number($('#cv-steps').value) || undefined, seed: $('#cv-seed').value === '' ? '' : Number($('#cv-seed').value) }, 'Animating');
+    await startJob({ modelId: inst.id, mode: from ? 'animate' : 'generate', prompt, imageId: from || undefined, width, height, frames: Number($('#cv-len').value), steps: Number($('#cv-steps').value) || undefined, seed: $('#cv-seed').value === '' ? '' : Number($('#cv-seed').value) }, 'Animating', clipSec());
   });
 }
 
