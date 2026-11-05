@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quicksilver</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="30" height="30"><defs><linearGradient id="drop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#b8c4d6"/><stop offset=".7" stop-color="#6f7f99"/><stop offset="1" stop-color="#5ee7f0"/></linearGradient></defs><path d="M16 2.5C16 2.5 6 13.6 6 20a10 10 0 0 0 20 0c0-6.4-10-17.5-10-17.5z" fill="url(#drop)"/><path d="M11.5 20.5a4.5 4.5 0 0 0 4.5 4.5" stroke="#fff" stroke-opacity=".75" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-text"><span class="brand-name">Quicksilver</span><span class="brand-tag">private AI that takes any shape</span></span>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item new-chat" data-nav="newchat">+ New chat</button>
+        <button class="nav-item" data-nav="home">Characters &amp; assistants</button>
+        <button class="nav-item" data-nav="advisor">Stack Advisor</button>
+        <button class="nav-item" data-nav="hub">Model Hub</button>
+      </nav>
+      <div class="dl-mini" id="dl-mini" hidden></div>
+
+      <div class="side-heading">Recent chats</div>
+      <div class="recent" id="recent"></div>
+
+      <button class="nav-item settings-btn" data-nav="settings">Settings</button>
+    </aside>
+
+    <main class="main" id="main"></main>
+  </div>
+
+  <div class="modal-backdrop" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" id="modal-body"></div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

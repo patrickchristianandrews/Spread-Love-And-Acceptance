@@ -1,0 +1,84 @@
+{
+  "name": "quicksilver",
+  "productName": "Quicksilver",
+  "version": "1.0.0",
+  "description": "Quicksilver: private AI that takes any shape. Run free AI models on your own PC (no account, no key), with characters, assistants and a Stack Advisor that picks the best model for the job.",
+  "main": "main.js",
+  "author": "Patrick Christian Andrews",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/ui.test.js",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.5.0",
+    "node-llama-cpp": "^3.22.2"
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.liquid.quicksilver",
+    "productName": "Quicksilver",
+    "copyright": "Copyright © 2026 Patrick Christian Andrews",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "engine.js",
+      "catalog.js",
+      "renderer/**/*",
+      "build/icon.png",
+      "package.json",
+      "!node_modules/@node-llama-cpp/*cuda*/**",
+      "!node_modules/node-llama-cpp/llama/llama.cpp/**",
+      "!node_modules/node-llama-cpp/llama/gitRelease.bundle"
+    ],
+    "asarUnpack": [
+      "node_modules/node-llama-cpp/bins/**",
+      "node_modules/node-llama-cpp/llama/**",
+      "node_modules/@node-llama-cpp/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "artifactName": "Quicksilver-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Quicksilver",
+      "runAfterFinish": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.png",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png",
+      "category": "Utility"
+    }
+  },
+  "homepage": "https://github.com/patrickchristianandrews/Spread-Love-And-Acceptance"
+}
