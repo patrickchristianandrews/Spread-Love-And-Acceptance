@@ -65,9 +65,16 @@ let WIN = null;
   await idle();
   await win.waitForFunction(() => document.querySelector('.msg.assistant .bubble')?.textContent.includes('FINAL from'), null, { timeout: 60000 });
   assert.match(await win.locator('.steps > summary').innerText(), /3 steps/);
-  await win.waitForSelector('text=checked by', { timeout: 60000 });
-  await win.waitForFunction(() => !document.body.textContent.includes('checking…'), null, { timeout: 60000 });
-  console.log('✓ stack chat with spreadsheet + fact check');
+  await win.waitForSelector('.fact-chip', { timeout: 60000 });
+  await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
+  assert.equal(await win.locator('.msg.assistant .fp-claims').count(), 0, 'full check stays out of the chat');
+  await win.click('.fact-chip');
+  await win.waitForSelector('#fact-panel .fp-verdict');
+  assert.match(await win.locator('#fact-panel').innerText(), /Checked by/);
+  await shot(win, '03b-fact-panel');
+  await win.keyboard.press('Escape');
+  await win.waitForSelector('#fact-panel', { state: 'detached' });
+  console.log('✓ stack chat with spreadsheet + fact check (chip + side panel)');
   await win.locator('.steps').first().evaluate((d) => { d.open = true; });
   await shot(win, '03-chat-stack');
 
@@ -85,7 +92,7 @@ let WIN = null;
   await win.keyboard.press('Enter');
   await idle();
   await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('FINAL from phi.gguf combining 4 drafts'), null, { timeout: 60000 });
-  await win.waitForFunction(() => !document.body.textContent.includes('checking…'), null, { timeout: 60000 });
+  await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
   console.log('✓ infuse: created from the chat, debate answer');
   await win.selectOption('#pick-model', 'stack:office-powerhouse');
 
@@ -98,7 +105,7 @@ let WIN = null;
   console.log('✓ quick effort');
 
   // Skills: "/" picker, the chip, the skill applied to the request, the file button.
-  await win.waitForFunction(() => !document.body.textContent.includes('checking…'), null, { timeout: 60000 });
+  await win.waitForFunction(() => !document.querySelector('.fact-chip.k-run'), null, { timeout: 60000 });
   await win.fill('#input', '/presen');
   await win.waitForSelector('#skill-pop .skill-opt.hot:has-text("Create a presentation")');
   await win.keyboard.press('Enter');

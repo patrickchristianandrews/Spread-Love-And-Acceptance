@@ -52,6 +52,7 @@ views.chat = {
         <div class="chat-title" title="${esc(chat.title)}">${esc(chat.title)}</div>
         <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
       </header>
+      <div class="chat-body" id="chat-body"><div class="chat-col">
       <div class="messages" id="messages"><div class="messages-inner">${chat.messages.length ? chat.messages.map((m, i) => messageHTML(chat, a, m, i)).join('') : welcomeHTML(a)}</div></div>
       <div class="composer" id="composer">
         <div class="composer-card">
@@ -74,6 +75,7 @@ views.chat = {
         </div>
         <div class="composer-hint">Runs on ${esc(targetLabel(target))} · Drop or paste photos, video, PDF, Word, Excel or PowerPoint</div>
       </div>
+      </div>${factPanelHTML(chat)}</div>
     </div>`;
   },
   bind: bindChat,
@@ -224,6 +226,7 @@ function bindChat() {
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
   $('#messages').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id); });
+  $('#chat-body').addEventListener('click', (e) => { const b = e.target.closest('[data-fp]'); if (b) factPanelAction(chat, b.dataset.fp, b.dataset.id); });
   $('#att-row').addEventListener('click', (e) => {
     const x = e.target.closest('[data-unattach]');
     if (x) { drafts[chat.id].splice(Number(x.dataset.unattach), 1); $('#att-row').innerHTML = attachmentsHTML(drafts[chat.id], true); }
@@ -495,7 +498,8 @@ function messageAction(chat, act, id) {
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
   else if (act === 'dl') exportAnswer(chat, m, document.querySelector(`[data-act="dl"][data-id="${id}"]`)?.dataset.fmt);
   else if (act === 'saveas') saveAsMenu(chat, m, document.querySelector(`[data-act="saveas"][data-id="${id}"]`));
-  else if (act === 'check' || act === 'recheck') { const alt = m.alts[m.altIndex]; delete alt.check; factCheck(chat, m, alt); }
+  else if (act === 'check' || act === 'recheck') { const alt = m.alts[m.altIndex]; delete alt.check; factPanel = { chatId: chat.id, msgId: m.id }; factCheck(chat, m, alt); }
+  else if (act === 'factopen') { factPanel = factPanel?.msgId === m.id && !S.data.prefs.factPanelPinned ? null : { chatId: chat.id, msgId: m.id }; paintFactPanel(chat); paintAll(chat); }
   else if (act === 'del') confirmBox('Delete this message?').then((ok) => { if (ok) { chat.messages.splice(idx, 1); save(); render(); } });
   else if (act === 'edit') {
     const b = openModal(`<h2>Edit message</h2><textarea id="edit-text" rows="8">${esc(m.text)}</textarea>
@@ -569,6 +573,7 @@ function factCheck(chat, msg, alt, sources) {
   const src = (sources || []).map((s, k) => `<source number="${k + 1}" title="${s.title}"${s.url ? ` url="${s.url}"` : ''}>\n${(s.text || '').slice(0, 4000)}\n</source>`).join('\n');
   const user = `## Question\n${qText || '(no text)'}\n${media.length ? `\n(The user also attached: ${media.join(', ')}. You can't see these; judge claims about them as "can't verify" unless the answer quotes them consistently.)\n` : ''}${files ? `\n## Files the user provided\n${files}\n` : ''}${src ? `\n## Sources\n${src}\n` : ''}\n## Answer to check\n${alt.text}`;
   alt.check = { target: checker, text: '', running: true };
+  if (S.data.prefs.factPanelPinned || factPanel?.chatId === chat.id) factPanel = { chatId: chat.id, msgId: msg.id };
   const requestId = uid();
   checks.set(requestId, { chatId: chat.id, msgId: msg.id, alt });
   if (S.route.view === 'chat' && S.route.id === chat.id) render();
@@ -583,22 +588,126 @@ function parseCheck(text) {
   return { verdict: v, confidence: c ? Number(c) : null, body, kind };
 }
 
+const checkCounts = (text = '') => ({ ok: (text.match(/✅/g) || []).length, warn: (text.match(/⚠️?/g) || []).length, bad: (text.match(/❌/g) || []).length });
+
+// Under the answer: one small chip. The full check opens in the side panel.
 function checkHTML(m, alt) {
   const ch = alt.check;
   if (!ch) return '';
   const p = parseCheck(ch.text || '');
-  const counts = { ok: (ch.text.match(/✅/g) || []).length, warn: (ch.text.match(/⚠️/g) || []).length, bad: (ch.text.match(/❌/g) || []).length };
-  return `<details class="card" style="padding:10px 14px;border-color:var(--line)" ${ch.running || p.kind === 'pink' ? 'open' : ''}>
-    <summary class="row" style="cursor:pointer;list-style:none">
-      <b>✅ Fact check</b>
-      ${p.verdict ? `<span class="badge b-${p.kind}">${esc(p.verdict)}${p.confidence != null ? ` · ${p.confidence}% confident` : ''}</span>` : ''}
-      ${ch.text ? `<span class="small muted">${counts.ok} ✅ · ${counts.warn} ⚠️ · ${counts.bad} ❌</span>` : ''}
-      <span class="small muted grow">checked by ${esc(targetLabel(ch.target))}${ch.running ? ' · checking…' : ''}</span>
-      ${!ch.running ? `<button class="tool" data-act="recheck" data-id="${m.id}">Check again</button>` : ''}
-    </summary>
-    <div class="md" style="margin-top:8px">${ch.error ? `<span style="color:var(--danger);font-weight:700">${esc(ch.error)}</span>` : ch.text ? markdown(p.body) : `<span class="status-line">${esc(ch.status || 'Checking each claim…')}</span>`}</div>
-  </details>`;
+  const n = checkCounts(ch.text);
+  const active = factPanel?.msgId === m.id ? 'active' : '';
+  let kind = p.kind, label;
+  if (ch.error) { kind = 'pink'; label = 'Fact check failed'; }
+  else if (ch.running) { kind = 'run'; label = `Fact checking…${n.ok + n.warn + n.bad ? ` ${n.ok + n.warn + n.bad} claims so far` : ''}`; }
+  else label = `${p.verdict || 'Checked'}${p.confidence != null ? ` · ${p.confidence}%` : ''}`;
+  const flags = !ch.running && !ch.error ? `${n.bad ? `<span class="fc-n bad">${n.bad} ❌</span>` : ''}${n.warn ? `<span class="fc-n warn">${n.warn} ⚠️</span>` : ''}${!n.bad && !n.warn && n.ok ? `<span class="fc-n ok">${n.ok} ✅</span>` : ''}` : '';
+  return `<button class="fact-chip k-${kind} ${active}" data-act="factopen" data-id="${m.id}" title="Open the fact check beside the chat">
+    ${ch.running ? '<span class="fc-spin"></span>' : icon('shield', 15)}<span>${esc(label)}</span>${flags}${icon('left', 14).replace('class="ico"', 'class="ico fc-arrow"')}
+  </button>`;
 }
+
+let factPanel = null; // { chatId, msgId } of the check shown beside the chat
+
+const checkedMsgs = (chat) => chat.messages.filter((m) => m.role === 'assistant' && m.alts[m.altIndex]?.check);
+
+function factPanelMsg(chat) {
+  const list = checkedMsgs(chat);
+  if (factPanel?.chatId === chat.id) { const m = list.find((x) => x.id === factPanel.msgId); if (m) return m; }
+  return S.data.prefs.factPanelPinned ? list[list.length - 1] || null : null;
+}
+
+function claimsHTML(body) {
+  const [claimsPart, corrPart] = body.split(/^#{1,4}\s*Corrections?\s*$/im);
+  const claims = [];
+  for (const line of claimsPart.split('\n')) {
+    const mm = line.match(/^\s*(?:[-*]|\d+\.)\s*(✅|⚠️?|❌)\s*(.+)$/);
+    if (!mm) continue;
+    const [claim, ...why] = mm[2].split(/\s+[—–-]\s+/);
+    claims.push({ k: mm[1] === '✅' ? 'ok' : mm[1] === '❌' ? 'bad' : 'warn', claim: claim.replace(/^["“]|["”]$/g, ''), why: why.join(' — ') });
+  }
+  if (!claims.length) return `<div class="md">${markdown(body)}</div>`;
+  const order = { bad: 0, warn: 1, ok: 2 };
+  const tag = { ok: 'Correct', warn: 'Unsure', bad: 'Wrong' };
+  const corr = (corrPart || '').trim();
+  return `${corr && !/^none needed\.?$/i.test(corr) ? `<div class="fp-corr"><b>${icon('edit', 15)} Corrections</b><div class="md">${markdown(corr)}</div></div>` : ''}
+    <div class="fp-claims">${claims.map((c, i) => ({ ...c, i })).sort((x, y) => order[x.k] - order[y.k] || x.i - y.i).map((c) => `<div class="fp-claim ${c.k}">
+      <span class="fp-tag">${tag[c.k]}</span>
+      <div class="fp-c">${inlineMd(esc(c.claim))}</div>
+      ${c.why ? `<div class="fp-why">${inlineMd(esc(c.why))}</div>` : ''}
+    </div>`).join('')}</div>`;
+}
+
+function factPanelHTML(chat) {
+  const m = factPanelMsg(chat);
+  if (!m) return '';
+  const ch = m.alts[m.altIndex].check;
+  const p = parseCheck(ch.text || '');
+  const n = checkCounts(ch.text);
+  const pinned = Boolean(S.data.prefs.factPanelPinned);
+  const list = checkedMsgs(chat);
+  const at = list.indexOf(m);
+  const q = [...chat.messages.slice(0, chat.messages.indexOf(m))].reverse().find((x) => x.role === 'user');
+  const conf = p.confidence ?? null;
+  return `<aside class="fact-panel" id="fact-panel" aria-label="Fact check">
+    <div class="fp-head">
+      <span class="fp-title">${icon('shield', 18)} Fact check</span>
+      ${list.length > 1 ? `<span class="fp-nav"><button class="icon-btn sm" data-fp="prev" ${at <= 0 ? 'disabled' : ''} title="Earlier check" aria-label="Earlier check">‹</button><span class="small muted">${at + 1} / ${list.length}</span><button class="icon-btn sm" data-fp="next" ${at >= list.length - 1 ? 'disabled' : ''} title="Later check" aria-label="Later check">›</button></span>` : ''}
+      <span class="grow"></span>
+      <button class="icon-btn sm ${pinned ? 'on' : ''}" data-fp="pin" aria-pressed="${pinned}" title="${pinned ? 'Kept open: follows each new answer' : 'Keep open for every answer'}" aria-label="Keep open">${icon('pin', 16)}</button>
+      <button class="icon-btn sm" data-fp="close" title="Close (Esc)" aria-label="Close">${icon('x', 16)}</button>
+    </div>
+    <div class="fp-scroll">
+      ${q?.text ? `<button class="fp-q" data-fp="jump" data-id="${m.id}" title="Show this answer in the chat"><span class="small muted">Checking the answer to</span><span class="fp-qt">${esc(q.text)}</span></button>` : ''}
+      ${ch.error ? `<div class="notice" style="color:var(--danger);font-weight:700">${esc(ch.error)}</div>` : `
+      <div class="fp-verdict k-${ch.running && !p.verdict ? 'run' : p.kind}">
+        <div class="fp-v">${ch.running && !p.verdict ? '<span class="status-line">Reading the answer…</span>' : esc(p.verdict || 'Checked')}</div>
+        ${conf != null ? `<div class="fp-meter" title="${conf}% confident"><i style="width:${Math.max(0, Math.min(100, conf))}%"></i></div><div class="small">${conf}% confident</div>` : ''}
+      </div>
+      <div class="fp-counts"><span class="ok"><b>${n.ok}</b> correct</span><span class="warn"><b>${n.warn}</b> unsure</span><span class="bad"><b>${n.bad}</b> wrong</span></div>
+      ${ch.text ? claimsHTML(p.body) : `<span class="status-line">${esc(ch.status || 'Checking each claim…')}</span>`}
+      ${ch.running && ch.text ? '<span class="status-line small" style="margin-top:8px">Still checking…</span>' : ''}`}
+    </div>
+    <div class="fp-foot">
+      <span class="small muted grow" title="A different model from the one that answered">Checked by <b>${esc(targetLabel(ch.target))}</b></span>
+      ${!ch.running ? `<button class="btn small" data-fp="recheck" data-id="${m.id}">${icon('refresh', 15)} Check again</button>` : ''}
+    </div>
+  </aside>`;
+}
+
+function paintFactPanel(chat) {
+  if (S.route.view !== 'chat' || S.route.id !== chat.id) return;
+  const body = $('#chat-body');
+  if (!body) return;
+  const old = $('#fact-panel');
+  const keep = old?.querySelector('.fp-scroll')?.scrollTop || 0;
+  const html = factPanelHTML(chat);
+  if (old) { if (html) { old.outerHTML = html; $('#fact-panel .fp-scroll').scrollTop = keep; } else old.remove(); }
+  else if (html) body.insertAdjacentHTML('beforeend', html);
+}
+
+// Updates every chip so the "open" highlight follows the panel.
+function paintAll(chat) {
+  $$('.fact-chip').forEach((b) => b.classList.toggle('active', factPanel?.msgId === b.dataset.id));
+}
+
+function factPanelAction(chat, act, id) {
+  const list = checkedMsgs(chat);
+  const cur = factPanelMsg(chat);
+  if (act === 'close') { factPanel = null; if (S.data.prefs.factPanelPinned) { S.data.prefs.factPanelPinned = false; save(); } }
+  else if (act === 'pin') { S.data.prefs.factPanelPinned = !S.data.prefs.factPanelPinned; if (cur) factPanel = { chatId: chat.id, msgId: cur.id }; save(); toast(S.data.prefs.factPanelPinned ? 'Fact check stays open and follows each new answer.' : 'Fact check opens when you click a result.'); }
+  else if (act === 'prev' || act === 'next') { const m = list[list.indexOf(cur) + (act === 'next' ? 1 : -1)]; if (m) { factPanel = { chatId: chat.id, msgId: m.id }; document.querySelector(`[data-msg="${m.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
+  else if (act === 'jump') { const el = document.querySelector(`[data-msg="${id}"]`); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }); el?.classList.add('flash'); setTimeout(() => el?.classList.remove('flash'), 1200); return; }
+  else if (act === 'recheck') { messageAction(chat, 'recheck', id); return; }
+  paintFactPanel(chat);
+  paintAll(chat);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || !$('#fact-panel') || !$('#modal').hidden || !$('#skill-pop')?.hidden) return;
+  const chat = chatById(S.route.id);
+  if (chat) factPanelAction(chat, 'close');
+});
 
 qs.onChat(({ requestId, ev }) => {
   const c = checks.get(requestId);
@@ -614,11 +723,13 @@ qs.onChat(({ requestId, ev }) => {
     ch.running = false;
     checks.delete(requestId);
     save();
-    // Only repaint this message, so typing (and the skill picker) isn't interrupted.
+    // Only repaint this message and the panel, so typing (and the skill picker) isn't interrupted.
     paintStreaming(chat, msg);
+    paintFactPanel(chat);
     return;
   }
   paintStreaming(chat, msg);
+  paintFactPanel(chat);
 });
 
 // Start loading the chat's model in the background while you type.
