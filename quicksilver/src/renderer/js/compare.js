@@ -89,6 +89,59 @@ function bindBestSetup() {
   $$('[data-upgrade]').forEach((b) => b.addEventListener('click', () => { go({ view: 'stacks' }); runAdvisor(b.dataset.upgrade); }));
 }
 
+// ---------- live preview while you build an AI (stack, Infuse, knowledge model) ----------
+// members: { drafters: [target], judge?: target, vision?: target, mode?: 'blend'|'debate'|'consensus'|'auto' }
+const PREVIEW_JOBS = [['general', '💬', 'Chat'], ['reasoning', '🧠', 'Reasoning'], ['writing', '✍️', 'Writing'], ['coding', '💻', 'Code'], ['research', '🔎', 'Research']];
+
+function teamStats(members) {
+  const info = (t) => { const s = t && S.speed?.targets?.[t]; return s?.kind === 'model' ? s : null; };
+  const drafters = (members.drafters || []).filter(info);
+  const judge = info(members.judge) ? members.judge : null;
+  const lead = judge || drafters[0];
+  if (!lead) return null;
+  const vision = info(members.vision) ? members.vision : null;
+  const all = [...new Set([...drafters, judge, vision].filter(Boolean))];
+  const w = (t) => Math.max(0.1, info(t).wps || 0.1);
+  const debate = members.mode === 'debate' && drafters.length > 1;
+  const time = (words, hard = false) => {
+    if (members.mode === 'auto' && !hard) return words / w(lead);
+    const round = drafters.reduce((t, d) => t + words / w(d), 0);
+    return round + (debate ? round : 0) + (judge ? (words * 1.1) / w(judge) : 0);
+  };
+  const team = all.length >= 2;
+  const stars = (job) => Math.max(0.5, Math.min(5, Math.round((Math.max(0, ...all.map((t) => info(t).scores?.[job] ?? 0)) / 2 + (team ? 0.5 : 0)) * 2) / 2));
+  const sees = all.some((t) => info(t).vision);
+  const photo = sees && !info(lead).vision ? 250 / w(vision || all.find((t) => info(t).vision)) : 0;
+  const caps = [
+    ['Sees photos & screenshots', sees],
+    ['Step-by-step reasoning', stars('reasoning') >= 4],
+    ['Writes & fixes code', stars('coding') >= 3.5],
+    ['Long documents', Math.max(...all.map((t) => info(t).ctx || 0)) >= 65536],
+    ['Cross-checks its answers', team],
+    ['Works offline', all.every((t) => info(t).local)],
+  ];
+  return { all, lead, drafters, judge, vision, time, stars, photo, caps, info, w };
+}
+
+function teamPreviewHTML(members, { title = 'How this AI will work on your PC' } = {}) {
+  const t = teamStats(members);
+  if (!t) return '<div class="preview muted">Pick models to see how fast and how good this AI will be on your PC.</div>';
+  const role = (x) => (x === t.lead ? 'leads' : x === t.vision && !t.drafters.includes(x) ? 'reads photos' : 'answers');
+  return `<div class="preview">
+    <div class="pv-title">🔮 ${title}</div>
+    <div class="pv-times">
+      <span class="typ">💬 Chat reply <span class="muted">⏱ ${etaLabel(t.time(WORDS.chat))}</span></span>
+      <span class="typ">🧠 Hard question <span class="muted">⏱ ${etaLabel(t.time(WORDS.hard, true))}</span></span>
+      <span class="typ">💻 Code <span class="muted">⏱ ${etaLabel(t.time(WORDS.code, true))}</span></span>
+      <span class="typ">📄 Report <span class="muted">⏱ ${etaLabel(t.time(WORDS.document, true))}</span></span>
+      ${t.photo ? `<span class="typ">📷 Photos <span class="muted">+${etaLabel(t.photo)} to read them</span></span>` : ''}
+    </div>
+    <div class="pv-stars">${PREVIEW_JOBS.map(([job, ic, label]) => `<span class="pv-star">${ic} ${label} ${starsHTML(t.stars(job))}</span>`).join('')}</div>
+    <div class="caps">${t.caps.map(([label, on]) => `<span class="cap ${on ? 'on' : 'off'}">${on ? '✓' : '✕'} ${esc(label)}</span>`).join('')}</div>
+    <div class="pv-team small muted">${t.all.map((x) => `<b>${esc(t.info(x).name || targetLabel(x))}</b> ${role(x)} (~${Math.round(t.w(x))} words/s)`).join(' · ')}</div>
+  </div>`;
+}
+
 // ---------- Compare page ----------
 
 views.compare = {

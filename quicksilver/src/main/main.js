@@ -97,7 +97,10 @@ handle('speed:map', async () => {
   const out = { targets: {}, media: {} };
   for (const t of complete.targets()) {
     const p = complete.parse(t.target);
-    if (p.kind === 'local' || p.kind === 'api') out.targets[t.target] = { kind: 'model', wps: wpsOf(t.target), scores: scoresOf(t.target) };
+    if (p.kind === 'local' || p.kind === 'api') {
+      const m = p.kind === 'local' && models.get(p.id);
+      out.targets[t.target] = { kind: 'model', wps: wpsOf(t.target), scores: scoresOf(t.target), vision: Boolean(t.vision), local: p.kind === 'local', ctx: m ? catalog.profileInstalled(m).ctx || 8192 : 131072, name: t.label };
+    }
     else if (p.kind === 'stack') {
       const m = complete.stacks().find((x) => x.id === p.id)?.members || {};
       const all = [...new Set([...(m.drafters || []), m.judge, m.vision].filter(Boolean))];

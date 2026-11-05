@@ -570,3 +570,11 @@ select optgroup { font-weight: 800; color: var(--muted); }
 
 /* The model picker also shows time and quality, so give it room. */
 #pick-model { max-width: 380px; }
+
+/* ---------- live preview while building an AI ---------- */
+.preview { margin-top: 14px; padding: 14px 16px; border-radius: 14px; border: 1.5px dashed var(--accent-line); background: var(--accent-tint); display: flex; flex-direction: column; gap: 10px; }
+.preview.muted { color: var(--muted); font-weight: 650; border-style: dashed; }
+.pv-title { font-weight: 800; color: var(--accent); font-size: .92rem; }
+.pv-times, .pv-stars { display: flex; flex-wrap: wrap; gap: 8px; }
+.pv-star { display: inline-flex; gap: 6px; align-items: center; font-size: .86rem; font-weight: 700; padding: 4px 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line-soft); }
+.pv-team { line-height: 1.5; }

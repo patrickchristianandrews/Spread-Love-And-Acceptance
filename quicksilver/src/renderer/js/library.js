@@ -159,7 +159,18 @@ function kbmEdit(m, preselect) {
       <label class="row"><input type="checkbox" id="km-strict" ${v.strict ? 'checked' : ''}> <span><b>🔒 Only answer from this knowledge</b> <span class="help">never from general memory; says "not found" instead of guessing</span></span></label>
       <div class="field"><label for="km-inst">Instructions (optional)</label><textarea id="km-inst" rows="3" placeholder="e.g. You are a clinical reference assistant. Answer concisely for doctors and always give the guideline year.">${esc(v.instructions || '')}</textarea></div>
     </div>
+    <div id="km-preview"></div>
     <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="km-save">Save model</button></div>`);
+  const kmPreview = () => {
+    const base = b.querySelector('#km-base').value;
+    const sec = etaFor(base);
+    b.querySelector('#km-preview').innerHTML = sec == null ? '' : `<div class="preview"><div class="pv-title">🔮 How this knowledge model will work on your PC</div>
+      <div class="pv-times"><span class="typ">🔎 Search your knowledge <span class="muted">⏱ ~1 s</span></span><span class="typ">💬 Answer with sources <span class="muted">⏱ ${etaLabel(etaFor(base, WORDS.research))}</span></span></div>
+      <div class="pv-stars">${PREVIEW_JOBS.map(([job, ic, label]) => (starsOf(base, job) != null ? `<span class="pv-star">${ic} ${label} ${starsHTML(starsOf(base, job))}</span>` : '')).join('')}</div>
+      <div class="small muted">Grounded in your files, so answers are only as complete as the knowledge you add.</div></div>`;
+  };
+  b.querySelector('#km-base').addEventListener('change', kmPreview);
+  kmPreview();
   b.querySelector('#km-kbs').addEventListener('change', (e) => e.target.closest('label')?.classList.toggle('on', e.target.checked));
   b.querySelector('#km-save').addEventListener('click', async () => {
     const name = b.querySelector('#km-name').value.trim();

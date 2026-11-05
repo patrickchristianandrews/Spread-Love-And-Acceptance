@@ -169,9 +169,12 @@ function mineTextHTML(r) {
       <div class="field"><label for="adv-lead">Lead</label><select id="adv-lead"><option value="">Automatic: the strongest</option>${rows.map((x) => `<option value="${esc(x.target)}" ${x.target === advLead ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
       <div class="field"><label for="adv-mode">Teamwork</label><select id="adv-mode">${Object.entries(INFUSE_MODES).map(([k, m]) => `<option value="${k}" ${k === advMode ? 'selected' : ''}>${m.icon} ${m.name} (${m.cost.toLowerCase()})</option>`).join('')}</select></div>
     </div>
+    <div id="adv-preview">${p.ok ? teamPreviewHTML(planMembers(p)) : ''}</div>
     <div class="adv-foot"><span class="grow" id="adv-sum">${textSummary(p, r)}</span><button class="btn primary" id="adv-create" ${p.ok ? '' : 'disabled'}>Create stack</button></div>
   </div>`;
 }
+
+const planMembers = (p) => ({ drafters: p.drafters.map((x) => x.target), judge: p.lead?.target, vision: p.vision?.target, mode: advMode });
 
 function rowsHTML(p) {
   return p.rows.map((x) => {
@@ -245,6 +248,7 @@ function bindAdvisor() {
         row.querySelector('.roles').innerHTML = on ? p.role(x).map((k) => ROLE[k]).join('') : '';
       }
       $('#adv-sum').innerHTML = textSummary(p, r);
+      $('#adv-preview').innerHTML = p.ok ? teamPreviewHTML(planMembers(p)) : '';
       $('#adv-create').disabled = !p.ok;
     }
   });
@@ -351,7 +355,14 @@ function editStack(s) {
       ${[0, 1, 2].map((i) => `<div class="field"><label>${ROLE.draft} ${i ? '(optional)' : ''}</label><select id="st-d${i}">${opts(v.members.drafters?.[i], i ? 'None' : 'Choose a model')}</select></div>`).join('')}
       <div class="field"><label>${ROLE.lead}</label><span class="help">Reads the drafts, fixes mistakes and writes the final answer. Pick your strongest model.</span><select id="st-lead">${opts(v.members.judge, 'None (use the first drafter only)')}</select></div>
     </div>
-    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="st-save">Save stack</button></div>`);
+    <div id="st-preview"></div>
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="st-save">Save stack</button></div>`, { wide: true });
+  const preview = () => {
+    const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
+    b.querySelector('#st-preview').innerHTML = teamPreviewHTML({ drafters, judge: b.querySelector('#st-lead').value || undefined, vision: b.querySelector('#st-vision').value || undefined, mode: v.members.mode });
+  };
+  b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
+  preview();
   b.querySelector('#st-save').addEventListener('click', async () => {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
     const name = b.querySelector('#st-name').value.trim();
@@ -390,12 +401,25 @@ function infuseModal(onCreated) {
         <div class="field"><label for="inf-name">4. Name your infused AI</label><input id="inf-name" placeholder="e.g. Analyst Supreme"></div>
       </div>
     </div>
+    <div id="inf-preview"></div>
     <div class="modal-actions"><span class="small muted grow" id="inf-count">Pick 2 to 4 AIs.</span><button class="btn" data-close>Cancel</button><button class="btn primary" id="inf-go">${icon('sparkle', 16)} Infuse</button></div>`, { wide: true });
   const picked = () => [...b.querySelectorAll('.infuse-opt input:checked')].map((x) => x.value);
   b.querySelector('.infuse-pick').addEventListener('change', () => {
     const n = picked().length;
     b.querySelector('#inf-count').textContent = n < 2 ? 'Pick 2 to 4 AIs.' : n > 4 ? 'Four is the most that helps; extra AIs mostly add time.' : `${n} AIs selected.`;
   });
+  // Live preview: speed, quality and abilities of the AI you're about to make.
+  const preview = () => {
+    const drafters = picked();
+    const el = b.querySelector('#inf-preview');
+    if (drafters.length < 2) { el.innerHTML = '<div class="preview muted">Pick 2 to 4 AIs to see how fast and how good the infused AI will be on your PC.</div>'; return; }
+    const judge = b.querySelector('#inf-lead').value || [...drafters].sort((x, y) => strengthOf(y) - strengthOf(x))[0];
+    const sees = (t) => S.targets.find((x) => x.target === t)?.vision;
+    const vision = drafters.some(sees) ? undefined : S.targets.find((t) => t.vision && !t.stack)?.target;
+    el.innerHTML = teamPreviewHTML({ drafters, judge, vision, mode: b.querySelector('input[name="im"]:checked').value }, { title: 'How your infused AI will work on this PC' });
+  };
+  b.querySelector('.stack-v').addEventListener('change', preview); // this window's own fields (the modal frame is shared)
+  preview();
   b.querySelector('#inf-go').addEventListener('click', async () => {
     const drafters = picked();
     if (drafters.length < 2 || drafters.length > 4) { toast('Pick between 2 and 4 AIs.'); return; }
