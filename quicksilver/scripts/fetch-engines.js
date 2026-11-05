@@ -6,28 +6,19 @@
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
-const { ENGINES, pickAssets } = require('../src/shared/engine-spec');
-const { downloadTo, extract } = require('../src/main/engines');
+const { ENGINES } = require('../src/shared/engine-spec');
+const { downloadTo, extract, findRelease } = require('../src/main/engines');
 
 const platform = (process.argv.find((a) => a.startsWith('--platform=')) || '').split('=')[1] || process.argv[process.argv.indexOf('--platform') + 1] || process.platform;
 const root = path.join(__dirname, '..', 'engine');
-
-async function latest(repo) {
-  const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'quicksilver-build' };
-  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-  const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
-  if (!res.ok) throw new Error(`${repo}: HTTP ${res.status}`);
-  return res.json();
-}
 
 (async () => {
   for (const [kind, spec] of Object.entries(ENGINES)) {
     const variant = spec.bundled[platform];
     const v = spec.variants[platform]?.[variant];
     if (!v) { console.log(`skip ${kind}: nothing for ${platform}`); continue; }
-    const release = await latest(spec.repo);
-    console.log(`${kind}: ${spec.repo} ${release.tag_name} (${variant})`);
-    const assets = pickAssets(release.assets, v);
+    const { release, assets } = await findRelease(spec.repo, v, process.env.GITHUB_TOKEN);
+    console.log(`${kind}: ${spec.repo} ${release.tag_name} (${variant}): ${assets.map((a) => a.name).join(', ')}`);
     const dest = path.join(root, kind);
     fs.rmSync(dest, { recursive: true, force: true });
     for (const a of assets) {

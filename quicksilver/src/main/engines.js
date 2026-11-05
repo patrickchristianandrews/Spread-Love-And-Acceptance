@@ -73,12 +73,23 @@ function available(kind) {
 
 const downloads = new Map();
 
-async function githubLatest(repo) {
-  const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {
-    headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'Quicksilver' },
-  });
-  if (!res.ok) throw new Error(`Could not check ${repo} releases (HTTP ${res.status}).`);
-  return res.json();
+// The newest release that actually contains the build we need. ("latest" alone isn't enough:
+// llama.cpp tags version markers with no binaries, and publishes builds as numbered releases.)
+async function findRelease(repo, variant, token) {
+  const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'Quicksilver', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+  let seen = [];
+  for (let page = 1; page <= 3; page++) {
+    const res = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=30&page=${page}`, { headers });
+    if (!res.ok) throw new Error(`Could not check ${repo} releases (HTTP ${res.status}).`);
+    const list = await res.json();
+    for (const release of list) {
+      if (release.draft) continue;
+      if (!seen.length && release.assets?.length > 1) seen = release.assets.map((a) => a.name);
+      try { return { release, assets: pickAssets(release.assets || [], variant) }; } catch { /* no match in this one */ }
+    }
+    if (list.length < 30) break;
+  }
+  throw new Error(`No recent ${repo} release has a ${variant.label} build. Newest files: ${seen.slice(0, 40).join(', ')}`);
 }
 
 async function downloadTo(url, dest, onProgress, signal) {
@@ -121,8 +132,7 @@ async function install(kind, variant, onProgress) {
   if (downloads.has(key)) return downloads.get(key).promise;
   const controller = new AbortController();
   const promise = (async () => {
-    const release = await githubLatest(spec.repo);
-    const assets = pickAssets(release.assets, v);
+    const { release, assets } = await findRelease(spec.repo, v);
     const target = path.join(runtimeDir(), key);
     const tmpTarget = `${target}.tmp`;
     fs.rmSync(tmpTarget, { recursive: true, force: true });
@@ -155,4 +165,4 @@ function version(bin) {
   try { return fs.readFileSync(v, 'utf8').trim(); } catch { return ''; }
 }
 
-module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, extract };
+module.exports = { installed, resolve, available, install, cancelInstall, remove, version, bundledDir, downloadTo, extract, findRelease };
