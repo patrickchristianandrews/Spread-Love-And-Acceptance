@@ -1,11 +1,9 @@
-// Downloads the starter model that ships inside the installer, so Quicksilver works the moment
-// it's installed (no download, no setup, works offline).
-//
-// First choice: Qwen3-VL 2B Instruct (Alibaba, Apache 2.0): quick on any PC and it can see photos.
-// Fallback:     Qwen3 1.7B (Apache 2.0), text only, if no vision build fits.
-// A Windows installer can't be larger than about 2 GB, so the model files must stay under LIMIT.
-//
-// Writes starter/STARTER.json, the model files and the model's licence.
+// Downloads the models that come with Quicksilver, so it works the moment it's installed:
+//   starter/ (inside the installer)  Qwen3-VL 2B: quick on any PC, sees photos   (Apache 2.0)
+//   pack/    (next to the installer) Qwen3 4B Instruct 2507: the brain           (Apache 2.0)
+// Together they make the built-in "Quicksilver" model (a stack with smart routing).
+// The 4B model is too big for a Windows installer (about 2 GB at most), so it ships in a folder
+// beside it; the installer copies it in. Writes starter/STARTER.json and the licences.
 // Usage: node scripts/fetch-starter.js
 const path = require('node:path');
 const fs = require('node:fs');
@@ -15,64 +13,71 @@ process.env.QUICKSILVER_HOME ||= fs.mkdtempSync(path.join(os.tmpdir(), 'qs-start
 const models = require('../src/main/models');
 const { downloadTo } = require('../src/main/engines');
 
-const LIMIT = 1.7e9;
-const QUANTS = ['Q4_K_M', 'Q4_K_S', 'IQ4_XS', 'Q4_0'];
-const PROJ_ORDER = [/q8_0/i, /(^|[-_.])f16/i, /bf16/i];
-const CANDIDATES = [
-  { catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', vision: true, licenseRepo: 'Qwen/Qwen3-VL-2B-Instruct',
-    repos: ['Qwen/Qwen3-VL-2B-Instruct-GGUF', 'ggml-org/Qwen3-VL-2B-Instruct-GGUF', 'unsloth/Qwen3-VL-2B-Instruct-GGUF'] },
-  { catalogId: 'qwen3-1.7b', name: 'Qwen3 1.7B', vision: false, licenseRepo: 'Qwen/Qwen3-1.7B',
-    repos: ['unsloth/Qwen3-1.7B-GGUF', 'Qwen/Qwen3-1.7B-GGUF'] },
-];
-const out = path.join(__dirname, '..', 'starter');
 const HF = 'https://huggingface.co';
+const ROOT = path.join(__dirname, '..');
+const QUANTS = ['Q4_K_M', 'Q4_K_S', 'IQ4_XS'];
+const PROJ_ORDER = [/q8_0/i, /(^|[-_.])f16/i, /bf16/i];
 
-async function choose() {
-  for (const c of CANDIDATES) {
-    for (const repo of c.repos) {
-      try {
-        const { options } = await models.ggufOptions(repo);
-        const files = await models.tree(repo);
-        const projs = files.filter((f) => /mmproj.*\.gguf$/i.test(f.path))
-          .sort((a, b) => PROJ_ORDER.findIndex((r) => r.test(a.path)) - PROJ_ORDER.findIndex((r) => r.test(b.path)));
-        console.log(`${repo}: ${options.map((o) => `${o.quant} ${(o.size / 1e9).toFixed(2)}GB`).join(', ')}${projs.length ? ` | mmproj: ${projs.map((p) => `${path.basename(p.path)} ${(p.size / 1e9).toFixed(2)}GB`).join(', ')}` : ''}`);
-        for (const q of QUANTS) {
-          const opt = options.find((o) => o.quant.replace(/^UD-/, '') === q && o.files.length === 1);
-          if (!opt) continue;
-          if (!c.vision) { if (opt.size <= LIMIT) return { c, repo, quant: q, model: opt.files[0] }; continue; }
-          const proj = projs.find((p) => PROJ_ORDER.some((r) => r.test(p.path)) && opt.size + p.size <= LIMIT);
-          if (proj) return { c, repo, quant: q, model: opt.files[0], mmproj: proj };
-        }
-        console.log(`  nothing in ${repo} fits under ${(LIMIT / 1e9).toFixed(1)} GB`);
-      } catch (err) {
-        console.log(`${repo}: ${err.message}`);
+const MODELS = [
+  { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', vision: true, where: 'starter', limit: 1.7e9, file: 'model.gguf',
+    licenseRepo: 'Qwen/Qwen3-VL-2B-Instruct', repos: ['Qwen/Qwen3-VL-2B-Instruct-GGUF', 'ggml-org/Qwen3-VL-2B-Instruct-GGUF', 'unsloth/Qwen3-VL-2B-Instruct-GGUF'] },
+  { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', vision: false, where: 'pack', limit: 3e9, file: 'qwen3-4b-instruct-2507.gguf', pack: true,
+    licenseRepo: 'Qwen/Qwen3-4B-Instruct-2507', repos: ['unsloth/Qwen3-4B-Instruct-2507-GGUF', 'Qwen/Qwen3-4B-Instruct-2507-GGUF', 'bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF'] },
+];
+
+async function choose(m) {
+  for (const repo of m.repos) {
+    try {
+      const { options } = await models.ggufOptions(repo);
+      const files = await models.tree(repo);
+      const projs = files.filter((f) => /mmproj.*\.gguf$/i.test(f.path))
+        .sort((a, b) => PROJ_ORDER.findIndex((r) => r.test(a.path)) - PROJ_ORDER.findIndex((r) => r.test(b.path)));
+      console.log(`${repo}: ${options.map((o) => `${o.quant} ${(o.size / 1e9).toFixed(2)}GB`).join(', ')}${projs.length ? ` | mmproj: ${projs.map((p) => `${path.basename(p.path)} ${(p.size / 1e9).toFixed(2)}GB`).join(', ')}` : ''}`);
+      for (const q of QUANTS) {
+        const opt = options.find((o) => o.quant.replace(/^UD-/, '') === q && o.files.length === 1);
+        if (!opt) continue;
+        if (!m.vision) { if (opt.size <= m.limit) return { repo, quant: q, model: opt.files[0] }; continue; }
+        const proj = projs.find((p) => PROJ_ORDER.some((r) => r.test(p.path)) && opt.size + p.size <= m.limit);
+        if (proj) return { repo, quant: q, model: opt.files[0], mmproj: proj };
       }
+      console.log(`  nothing in ${repo} fits under ${(m.limit / 1e9).toFixed(1)} GB`);
+    } catch (err) {
+      console.log(`${repo}: ${err.message}`);
     }
   }
-  throw new Error('No starter model could be found on Hugging Face.');
+  throw new Error(`${m.name} could not be found on Hugging Face.`);
+}
+
+async function get(repo, f, dest) {
+  process.stdout.write(`  ${repo}/${f.path} (${(f.size / 1e9).toFixed(2)} GB)… `);
+  await downloadTo(`${HF}/${repo}/resolve/main/${f.path.split('/').map(encodeURIComponent).join('/')}`, dest);
+  const size = fs.statSync(dest).size;
+  if (f.size && size !== f.size) throw new Error(`${path.basename(dest)} is ${size} bytes, expected ${f.size}`);
+  console.log('ok');
 }
 
 (async () => {
-  const pick = await choose();
-  fs.rmSync(out, { recursive: true, force: true });
-  fs.mkdirSync(out, { recursive: true });
-  const get = async (f, name) => {
-    process.stdout.write(`  ${pick.repo}/${f.path} (${(f.size / 1e9).toFixed(2)} GB)… `);
-    await downloadTo(`${HF}/${pick.repo}/resolve/main/${f.path.split('/').map(encodeURIComponent).join('/')}`, path.join(out, name));
-    const size = fs.statSync(path.join(out, name)).size;
-    if (f.size && size !== f.size) throw new Error(`${name} is ${size} bytes, expected ${f.size}`);
-    console.log('ok');
-  };
-  console.log(`starter: ${pick.c.name} ${pick.quant} from ${pick.repo}`);
-  await get(pick.model, 'model.gguf');
-  if (pick.mmproj) await get(pick.mmproj, 'mmproj.gguf');
-  try {
-    await downloadTo(`${HF}/${pick.c.licenseRepo}/resolve/main/LICENSE`, path.join(out, 'LICENSE.txt'));
-  } catch {
-    fs.writeFileSync(path.join(out, 'LICENSE.txt'), `${pick.c.name} by Alibaba Cloud (Qwen), licensed under the Apache License, Version 2.0.\nhttps://www.apache.org/licenses/LICENSE-2.0\n`);
+  for (const d of ['starter', 'pack']) { fs.rmSync(path.join(ROOT, d), { recursive: true, force: true }); fs.mkdirSync(path.join(ROOT, d), { recursive: true }); }
+  const entries = [];
+  const licences = [];
+  for (const m of MODELS) {
+    const pick = await choose(m);
+    console.log(`${m.name}: ${pick.quant} from ${pick.repo}`);
+    const dir = path.join(ROOT, m.where);
+    await get(pick.repo, pick.model, path.join(dir, m.file));
+    if (pick.mmproj) await get(pick.repo, pick.mmproj, path.join(dir, 'mmproj.gguf'));
+    entries.push({ id: m.id, catalogId: m.catalogId, name: m.name, repo: pick.repo, quant: pick.quant, files: { model: m.file, ...(pick.mmproj ? { mmproj: 'mmproj.gguf' } : {}) }, ...(m.pack ? { pack: true } : {}) });
+    let text;
+    try {
+      const tmp = path.join(os.tmpdir(), `licence-${m.id}.txt`);
+      await downloadTo(`${HF}/${m.licenseRepo}/resolve/main/LICENSE`, tmp);
+      text = fs.readFileSync(tmp, 'utf8');
+    } catch { text = 'Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0\n'; }
+    licences.push(`==== ${m.name} (${m.licenseRepo}) by Alibaba Cloud (Qwen) ====\n\n${text}`);
   }
-  const meta = { catalogId: pick.c.catalogId, name: pick.c.name, vision: Boolean(pick.mmproj), repo: pick.repo, quant: pick.quant, license: 'Apache-2.0', files: { model: 'model.gguf', ...(pick.mmproj ? { mmproj: 'mmproj.gguf' } : {}) } };
-  fs.writeFileSync(path.join(out, 'STARTER.json'), JSON.stringify(meta, null, 2));
-  const total = fs.readdirSync(out).reduce((t, n) => t + fs.statSync(path.join(out, n)).size, 0);
-  console.log(`starter ready: ${meta.name} (${(total / 1e9).toFixed(2)} GB)`);
+  fs.writeFileSync(path.join(ROOT, 'starter', 'STARTER.json'), JSON.stringify({ models: entries }, null, 2));
+  fs.writeFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), licences.join('\n\n'));
+  fs.copyFileSync(path.join(ROOT, 'starter', 'MODEL-LICENCES.txt'), path.join(ROOT, 'pack', 'MODEL-LICENCES.txt'));
+  const size = (d) => fs.readdirSync(path.join(ROOT, d)).reduce((t, n) => t + fs.statSync(path.join(ROOT, d, n)).size, 0);
+  console.log(`inside the installer: ${(size('starter') / 1e9).toFixed(2)} GB · next to it: ${(size('pack') / 1e9).toFixed(2)} GB`);
 })().catch((e) => { console.error(e); process.exit(1); });

@@ -78,7 +78,7 @@ function remove(id) {
   const m = all.find((x) => x.id === id);
   if (!m) return false;
   const root = store.dir('models');
-  if (m.source === 'bundled') store.saveConfig({ starterRemoved: true });
+  if (m.source === 'bundled') store.saveConfig({ starterRemoved: [...removedStarters(), m.id] });
   if (m.source === 'imported' && m.from && m.files?.model) {
     const ignored = new Set(store.config().foundIgnored || []);
     ignored.add(path.resolve(m.files.model).toLowerCase());
@@ -234,20 +234,37 @@ async function importFile(file, readGguf) {
 }
 
 
-// ---------- the starter model that ships inside the installer ----------
-// dir holds STARTER.json plus the files (see scripts/fetch-starter.js). Registered on first run,
-// and again after an update moves the app; never if you removed it.
+// ---------- the models that come with Quicksilver ----------
+// dir holds STARTER.json plus the files (see scripts/fetch-starter.js):
+//   { models: [{ id, catalogId, name, files: { model, mmproj? }, pack? }] }
+// The small model is inside the installer; "pack" models are too big for it, so they ship next to
+// the installer (the installer copies them into dir) or are downloaded on first run.
+// Each is registered once; one you remove stays removed.
+const removedStarters = () => { const r = store.config().starterRemoved; return new Set(r === true ? ['starter'] : Array.isArray(r) ? r : []); };
+
 function registerStarter(dir) {
   const metaFile = dir && path.join(dir, 'STARTER.json');
-  if (!metaFile || !fs.existsSync(metaFile) || store.config().starterRemoved) return null;
+  const out = { added: [], missing: [] };
+  if (!metaFile || !fs.existsSync(metaFile)) return out;
   const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
-  const files = { model: path.join(dir, meta.files.model), ...(meta.files.mmproj ? { mmproj: path.join(dir, meta.files.mmproj) } : {}) };
-  if (!Object.values(files).every((f) => fs.existsSync(f))) return null;
-  const known = store.readJSON(REG(), []).find((m) => m.id === 'starter');
-  if (known && known.files?.model === files.model) return null;
-  const size = Object.values(files).reduce((t, f) => t + fs.statSync(f).size, 0);
-  const entry = add({ id: 'starter', name: meta.name, kind: 'text', catalogId: meta.catalogId, files, size, vision: Boolean(files.mmproj), source: 'bundled' });
-  return known ? null : entry; // only announce it the first time
+  const entries = meta.models || [{ id: 'starter', catalogId: meta.catalogId, name: meta.name, files: meta.files }]; // 2.3 format
+  const removed = removedStarters();
+  const reg = store.readJSON(REG(), []);
+  for (const e of entries) {
+    if (removed.has(e.id)) continue;
+    const files = Object.fromEntries(Object.entries(e.files).map(([role, f]) => [role, path.join(dir, f)]));
+    if (!Object.values(files).every((f) => fs.existsSync(f))) {
+      // Not shipped with this copy: fetch it from the catalog, unless you already have it.
+      if (e.pack && !reg.some((m) => m.catalogId === e.catalogId && Object.values(m.files || {}).every((f) => fs.existsSync(f)))) out.missing.push({ catalogId: e.catalogId, name: e.name });
+      continue;
+    }
+    const known = reg.find((m) => m.id === e.id);
+    if (known && known.files?.model === files.model) continue;
+    const size = Object.values(files).reduce((t, f) => t + fs.statSync(f).size, 0);
+    const entry = add({ id: e.id, name: e.name, kind: 'text', catalogId: e.catalogId, files, size, vision: Boolean(files.mmproj), source: 'bundled' });
+    if (!known) out.added.push(entry);
+  }
+  return out;
 }
 
 // ---------- models already on this PC (other apps, Downloads) ----------

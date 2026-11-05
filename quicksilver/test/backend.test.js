@@ -297,22 +297,58 @@ async function collect(gen) {
     console.log('✓ knowledge models: saved, cited, usable in stacks');
   }
 
-  // The starter model inside the installer: registered on first run, announced once, never deleted.
+  // The models that come with Quicksilver, and the built-in Quicksilver model (a stack of them).
   {
     const sd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-starter-'));
     fs.copyFileSync(TINY, path.join(sd, 'model.gguf')); fs.copyFileSync(TINY, path.join(sd, 'mmproj.gguf'));
-    fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', vision: true, files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } }));
-    const first = models.registerStarter(sd);
-    assert.equal(first.id, 'starter'); assert.equal(first.source, 'bundled'); assert.ok(first.vision);
-    assert.equal(models.registerStarter(sd), null, 'announced only once');
-    assert.ok(complete.targets().some((t) => t.target === 'local:starter' && t.vision));
+    fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ models: [
+      { id: 'starter', catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } },
+      { id: 'starter-brain', catalogId: 'qwen3-4b', name: 'Qwen3 4B Instruct 2507', files: { model: 'brain.gguf' }, pack: true },
+    ] }));
+    // Installed without the "Quicksilver models" folder: the small model works, the brain is fetched.
+    let r = models.registerStarter(sd);
+    assert.deepEqual(r.added.map((m) => m.id), ['starter']); assert.ok(r.added[0].vision);
+    assert.deepEqual(r.missing.map((m) => m.catalogId), ['qwen3-4b']);
+    // Quicksilver's team is picked from every model on the PC (here: three test models + the starter).
+    assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
+    // The installer copied the brain in (or it finished downloading).
+    fs.copyFileSync(TINY, path.join(sd, 'brain.gguf'));
+    r = models.registerStarter(sd);
+    assert.deepEqual(r.added.map((m) => m.id), ['starter-brain']); assert.equal(r.missing.length, 0);
+    assert.equal(await complete.ensureQuicksilverStack(), 'stack:quicksilver');
+    const qsStack = complete.stacks().find((x) => x.id === 'quicksilver');
+    const ids = [...qsStack.members.drafters, qsStack.members.judge, qsStack.members.vision].filter(Boolean);
+    assert.equal(qsStack.members.mode, 'auto'); assert.ok(qsStack.autoManaged);
+    assert.equal(qsStack.members.judge, 'local:phi-4', 'the strongest model on the PC leads');
+    assert.ok(new Set(ids).size >= 3, 'a real team: lead, drafter and eyes');
+    assert.ok(ids.some((t) => ['local:starter', 'local:gemma-3-4b'].includes(t)), 'a model that can see is on the team');
+    // Your own edits are kept: no automatic rebuild.
+    complete.saveStack({ ...qsStack, autoManaged: false, members: { ...qsStack.members, drafters: ['local:qwen3-8b', 'local:starter-brain'] } });
+    await complete.ensureQuicksilverStack();
+    assert.deepEqual(complete.stacks().find((x) => x.id === 'quicksilver').members.drafters, ['local:qwen3-8b', 'local:starter-brain']);
+    complete.saveStack({ ...qsStack });
+    assert.deepEqual(models.registerStarter(sd).added, [], 'announced only once');
+    // Smart routing: simple → one answer from the brain; hard → both draft, the brain combines.
+    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Hi! Recommend a good sci-fi film.' }] }), 'quick');
+    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'Why do leaves change colour in autumn?' }] }), 'thorough');
+    assert.equal(complete.autoLevel({ messages: [{ role: 'user', content: 'What is 128 * 46?' }] }), 'thorough');
+    const easy = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Hello!' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
+    assert.equal(easy.steps.length, 0, 'a simple message gets one direct answer');
+    const hard = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Compare solar and wind power.' }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
+    const roles = [...new Map(hard.steps.map((x) => [x.index, x.role])).values()];
+    assert.ok(roles.includes('draft') && roles.includes('lead'), 'a hard one: drafted, then the lead checks and combines');
+    const quick = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Compare solar and wind power.' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
+    assert.equal(quick.steps.length, 0, 'Quick effort is always one model');
+    // Kept safe: never deleted, never repaired from the internet, stays removed.
     await assert.rejects(models.repair('starter', () => {}), /came with Quicksilver/);
     models.remove('starter');
     assert.ok(fs.existsSync(path.join(sd, 'model.gguf')), 'the bundled file is never deleted');
-    assert.equal(models.registerStarter(sd), null, 'stays removed');
-    store.saveConfig({ starterRemoved: false });
+    assert.deepEqual(models.registerStarter(sd).added, [], 'stays removed');
+    complete.deleteStack('quicksilver');
+    models.remove('starter-brain');
+    store.saveConfig({ starterRemoved: [], quicksilverRemoved: false });
     fs.rmSync(sd, { recursive: true, force: true });
-    console.log('✓ starter model: registered on first run, kept safe, stays removed');
+    console.log('✓ Quicksilver model: bundled models, background brain, smart routing, kept safe');
   }
 
   // Models other apps already downloaded are found and added where they are (no copy, no download).

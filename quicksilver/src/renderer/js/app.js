@@ -6,13 +6,33 @@ const DEFAULT_PREFS = {
   gpu: 'auto', effort: 'medium', effortLevel: 'thorough', theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
+// More ready-made assistants for everyday uses. Each borrows the settings of the stack type that
+// suits it (job), and runs on your default model unless you pick another.
+const EXTRA_ASSISTANTS = [
+  { id: 'as-tutor', job: 'reasoning', name: 'Tutor', emoji: '🎓', description: 'Homework help and step-by-step explanations, with quizzes and practice questions.', temperature: 0.4, factCheck: true,
+    instructions: 'You are a patient, encouraging tutor. Explain ideas step by step at the learner\'s level, using simple examples. For maths and science, show each step and check the final answer. Help the learner understand rather than just giving answers: end with a quick check question, and offer practice questions.' },
+  { id: 'as-translator', job: 'writing', name: 'Translator', emoji: '🌍', description: 'Natural translations between languages, in the tone you need.', temperature: 0.2,
+    instructions: 'You are a professional translator. Translate faithfully and naturally, keeping meaning, tone and formatting. If the target language is not given, translate into English (or from English into the language the user names). Note any phrase with no direct equivalent in a short line after the translation.' },
+  { id: 'as-career', job: 'writing', name: 'Career Coach', emoji: '💼', description: 'CVs, cover letters, interview practice and salary conversations.', temperature: 0.5,
+    instructions: 'You are an experienced career coach and recruiter. Give specific, practical advice. Rewrite CVs and cover letters with strong, measurable achievements. For interview practice, ask one question at a time, then give honest feedback and a better example answer.' },
+  { id: 'as-trip', job: 'general', name: 'Trip Planner', emoji: '✈️', description: 'Day-by-day itineraries, budgets and packing lists for any trip.', temperature: 0.6, web: true,
+    instructions: 'You are a well-travelled trip planner. Ask for dates, budget and interests if missing, then give a day-by-day itinerary with realistic travel times, rough costs, booking tips and a short packing list. Flag anything that needs checking closer to the date (opening hours, prices, visas).' },
+  { id: 'as-ideas', job: 'general', name: 'Brainstormer', emoji: '💡', description: 'Lots of fresh ideas, fast: names, gifts, plans, posts and projects.', temperature: 0.95,
+    instructions: 'You are an energetic creative partner. Give many varied ideas quickly (at least 10 unless asked otherwise), from safe to bold, grouped into themes. Then pick your top three and say why. Build on the user\'s favourites when they reply.' },
+];
+
 function defaultAssistants() {
-  const facts = { office: true, research: true, learning: true };
-  return Object.entries(S.catalog.jobs).filter(([, j]) => j.assistant).map(([job, j]) => ({
+  const facts = { office: true, research: true };
+  const fromJobs = Object.entries(S.catalog.jobs).filter(([, j]) => j.assistant).map(([job, j]) => ({
     id: `as-${job}`, job, builtIn: true, name: j.assistant.name, emoji: j.assistant.emoji, description: j.pitch,
     instructions: j.assistant.instructions, target: '', temperature: j.temperature, contextSize: j.contextSize, maxTokens: j.maxTokens,
     library: j.library, web: false, factCheck: Boolean(facts[job]),
   }));
+  const extras = EXTRA_ASSISTANTS.filter((x) => S.catalog.jobs[x.job]).map((x) => {
+    const j = S.catalog.jobs[x.job];
+    return { builtIn: true, target: '', contextSize: j.contextSize, maxTokens: j.maxTokens, library: false, factCheck: false, ...x, web: false };
+  });
+  return [...fromJobs, ...extras];
 }
 
 function paintIcons(root = document) {
@@ -69,6 +89,7 @@ views.home = {
           <span class="badge b-lav">✨ Infuse AIs into one</span><span class="badge b-sky">✅ Built-in fact checking</span><span class="badge b-peach">🎨 Photo & video studio</span><span class="badge b-pink">📚 Private knowledge bases</span><span class="badge b-lemon">🔌 OpenAI-compatible API</span>
         </div>
       </div>
+      ${text.length && text.every((m) => m.source === 'bundled') && !cloud ? `<div class="notice info grow-note" style="margin-bottom:18px"><b>💡 You're using Quicksilver's starter models.</b> They're quick and private, but on their own they're limited: smaller models know less and make more mistakes on hard questions. Quicksilver grows with you: install stronger models, or build stacks that make several models work as one, for sharper, more accurate answers. <span class="row" style="margin-top:8px"><button class="btn primary small" data-goto="stacks">Build a stack</button><button class="btn small" data-goto="models">Get more models</button></span></div>` : ''}
       ${!text.length && !cloud ? `<div class="notice info" style="margin-bottom:18px"><b>First step:</b> open the Stack Advisor. It checks this PC and downloads the best free models for your work in one click. <button class="btn primary small" data-goto="stacks" style="margin-left:8px">Open the Stack Advisor</button></div>` : ''}
       <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">
         ${tile('💬', 'Models', text.length, text.length ? `${text.filter((m) => m.vision).length} can see images` : 'none installed yet', 'models')}
@@ -80,7 +101,7 @@ views.home = {
       </div>
       <div class="section"><h2>Start something</h2></div>
       <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">
-        ${S.data.assistants.slice(0, 6).map((a) => `<button class="card" data-start="${a.id}" style="text-align:left"><div class="row"><span class="emoji-badge">${esc(a.emoji)}</span><h3 class="grow">${esc(a.name)}</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">${esc(a.description)}</p></button>`).join('')}
+        ${S.data.assistants.map((a) => `<button class="card" data-start="${a.id}" style="text-align:left"><div class="row"><span class="emoji-badge">${esc(a.emoji)}</span><h3 class="grow">${esc(a.name)}</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">${esc(a.description)}</p></button>`).join('')}
         <button class="card" data-goto="studio" style="text-align:left"><div class="row"><span class="emoji-badge">🎨</span><h3>Create an image or video</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Generate, edit with AI, trim and convert.</p></button>
         <button class="card" data-goto="library" style="text-align:left"><div class="row"><span class="emoji-badge">📚</span><h3>Connect your knowledge</h3></div><p class="small muted" style="font-weight:600;margin:8px 0 0">Files, websites and PubMed, isolated per assistant and cited.</p></button>
       </div>
@@ -139,6 +160,7 @@ async function init() {
     toast(`${model.name} is ready.`);
     if (!targetValid(S.data.prefs.defaultTarget) && model.kind === 'text') { S.data.prefs.defaultTarget = `local:${model.id}`; save(); }
     // Load the default model in the background so the first reply is quick.
+    if (model.kind === 'text') await setUpQuicksilver(false).catch(() => {}); // a new model can join Quicksilver's team
     if (model.kind === 'text') qs.call('models:warm', S.data.prefs.defaultTarget || `local:${model.id}`, { contextSize: S.data.prefs.contextSize, gpu: S.data.prefs.gpu }).catch(() => {});
     if (!$('#modal').hidden) return;
     render();
@@ -150,20 +172,36 @@ async function init() {
   startupModels();
 }
 
+// The built-in Quicksilver model: a stack of the models that come with the app. If the bigger
+// "brain" model wasn't shipped next to the installer, it downloads in the background; until then
+// the small model answers on its own.
+async function setUpQuicksilver(firstLook) {
+  const p = S.data.prefs;
+  const r = await qs.call('models:starter');
+  if (r.added.length || r.stack) await refreshModels();
+  const before = p.defaultTarget;
+  if (r.stack && (!targetValid(p.defaultTarget) || p.defaultTarget === 'local:starter')) p.defaultTarget = r.stack;
+  else if (!targetValid(p.defaultTarget) && targetValid('local:starter')) p.defaultTarget = 'local:starter';
+  if (p.defaultTarget !== before) save();
+  if (firstLook && r.added.length) {
+    toast(r.stack ? '👋 Meet Quicksilver: two AI models working as one, right on your PC. It sees photos, thinks harder when a question needs it, and nothing leaves this computer. Try an idea below.'
+      : '👋 Quicksilver is ready to chat, privately on your PC, and it can see photos. Try an idea below.', 10000);
+  }
+  if (firstLook && r.missing.length && !S.config?.offline) {
+    for (const m of r.missing) if (!S.downloads[m.catalogId]) download({ catalogId: m.catalogId }, m.name).catch(() => {});
+    toast(`Finishing Quicksilver in the background (${r.missing.map((m) => m.name).join(', ')}). You can chat right away.`, 8000);
+  }
+  if (r.stack && !before?.startsWith('stack:quicksilver') && p.defaultTarget === r.stack && !firstLook) toast('💧 Quicksilver is fully ready: your models now work together as one.', 8000);
+  if (['home', 'chat'].includes(S.route.view) && (r.added.length || p.defaultTarget !== before)) render();
+  return r;
+}
+
 // After the first screen: add models found on this PC, pick a default if there is none, and load
 // the default model in the background so the first reply is quick. Both can be turned off.
 async function startupModels() {
   const p = S.data.prefs;
   // The model that comes with Quicksilver: ready on first launch, nothing to download.
-  try {
-    const starter = await qs.call('models:starter');
-    if (starter) {
-      await refreshModels();
-      if (!targetValid(p.defaultTarget)) { p.defaultTarget = 'local:starter'; save(); }
-      toast(`👋 Quicksilver comes with ${starter.name}: private, quick on any PC${starter.vision ? ', and it can see photos' : ''}. Try an idea below, or open Stacks when you want more power.`, 9000);
-      if (['home', 'chat'].includes(S.route.view)) render();
-    }
-  } catch {}
+  try { await setUpQuicksilver(true); } catch {}
   if (p.autoAddFound !== false) {
     try {
       const added = await qs.call('models:autoAdd');
@@ -177,6 +215,7 @@ async function startupModels() {
           p.defaultTarget = `local:${id}`;
           save();
         }
+        await setUpQuicksilver(false).catch(() => {});
         const apps = [...new Set(added.map((m) => m.from).filter(Boolean))].join(', ');
         toast(`Found ${added.length} model${added.length > 1 ? 's' : ''} on this PC${apps ? ` (${apps})` : ''} and added ${added.length > 1 ? 'them' : 'it'}. Ready to use, nothing downloaded.`, 7000);
         if (['home', 'models', 'stacks'].includes(S.route.view)) render();

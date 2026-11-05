@@ -76,10 +76,10 @@ jobs:
           echo "$RESPONSE" | grep -q '"choices"' || { cat llama.log; exit 1; }
           taskkill //F //IM llama-server.exe || true
 
-      - name: Download the starter model (ships inside the installer)
+      - name: Download the models that come with Quicksilver
         run: node scripts/fetch-starter.js
 
-      - name: Prove the starter model answers and sees images on the processor
+      - name: Prove each bundled model answers correctly (and sees images) on the processor
         run: node scripts/prove-starter.js "$(find engine/llama -name llama-server.exe | head -1)"
 
       - name: Check the image engine starts
@@ -108,6 +108,11 @@ jobs:
           npx electron-builder "${ARGS[@]}"
           # A Windows installer can't be larger than about 2 GB.
           for f in dist/*.exe; do s=$(stat -c %s "$f"); echo "$f: $((s / 1048576)) MB"; [ "$s" -lt 2100000000 ] || { echo "::error::$f is too big for a Windows installer"; exit 1; }; done
+          # Quicksilver's full model ships next to the installer, which copies it in.
+          mkdir -p "dist/Quicksilver models"
+          cp pack/* "dist/Quicksilver models/"
+          VERSION=$(node -p "require('./package.json').version")
+          printf 'Installing Quicksilver\r\n\r\n1. Unzip everything into one folder.\r\n2. Run Quicksilver-Setup-%s.exe. Keep the "Quicksilver models" folder next to it:\r\n   the installer copies the full Quicksilver model from there, so it works offline right away.\r\n\r\nIf you only have the setup file, that is fine too: Quicksilver starts with its small model\r\nand downloads the rest in the background the first time it runs.\r\n' "$VERSION" > "dist/READ ME FIRST.txt"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
@@ -123,7 +128,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Quicksilver-Windows-installer
-          path: quicksilver/dist/*.exe
+          path: |
+            quicksilver/dist/*.exe
+            quicksilver/dist/Quicksilver models/
+            quicksilver/dist/READ ME FIRST.txt
           if-no-files-found: error
 
       - name: Publish release

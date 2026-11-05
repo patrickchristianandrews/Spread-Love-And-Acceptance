@@ -8,8 +8,8 @@ const zlib = require('node:zlib');
 const { spawn } = require('node:child_process');
 
 const server = process.argv[2];
-const dir = path.join(__dirname, '..', 'starter');
-const meta = JSON.parse(fs.readFileSync(path.join(dir, 'STARTER.json'), 'utf8'));
+const ROOT = path.join(__dirname, '..');
+const { models } = JSON.parse(fs.readFileSync(path.join(ROOT, 'starter', 'STARTER.json'), 'utf8'));
 const PORT = 8098;
 
 // A plain 64×64 PNG of one colour, built by hand (no image library needed).
@@ -26,16 +26,18 @@ function png(r, g, b, size = 64) {
 async function ask(content) {
   const res = await fetch(`http://127.0.0.1:${PORT}/v1/chat/completions`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: [{ role: 'user', content }], max_tokens: 60, temperature: 0 }),
+    body: JSON.stringify({ messages: [{ role: 'user', content }], max_tokens: 80, temperature: 0 }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
   const j = await res.json();
   return j.choices[0].message.content.trim();
 }
 
-(async () => {
-  const args = ['-m', path.join(dir, meta.files.model), '--host', '127.0.0.1', '--port', String(PORT), '-c', '4096', '-ngl', '0', '--device', 'none', '--jinja', '--cache-reuse', '256'];
-  if (meta.files.mmproj) args.push('--mmproj', path.join(dir, meta.files.mmproj));
+// Loads one model on the processor (like the slowest PC would) and checks its answers.
+async function prove(m) {
+  const dir = path.join(ROOT, m.pack ? 'pack' : 'starter');
+  const args = ['-m', path.join(dir, m.files.model), '--host', '127.0.0.1', '--port', String(PORT), '-c', '4096', '-ngl', '0', '--device', 'none', '--jinja', '--cache-reuse', '256'];
+  if (m.files.mmproj) args.push('--mmproj', path.join(dir, m.files.mmproj));
   const log = [];
   const proc = spawn(server, args, { windowsHide: true });
   proc.stdout.on('data', (d) => log.push(String(d)));
@@ -44,27 +46,36 @@ async function ask(content) {
   try {
     const t0 = Date.now();
     for (;;) {
-      if (exited) throw new Error('the engine stopped while loading the starter model');
-      if (Date.now() - t0 > 300000) throw new Error('the starter model took too long to load');
+      if (exited) throw new Error(`the engine stopped while loading ${m.name}`);
+      if (Date.now() - t0 > 300000) throw new Error(`${m.name} took too long to load`);
       try { if ((await fetch(`http://127.0.0.1:${PORT}/health`)).ok) break; } catch {}
       await new Promise((r) => setTimeout(r, 1000));
     }
-    console.log(`${meta.name} loaded in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+    console.log(`${m.name} loaded in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
     const text = await ask('In one sentence, what is the capital of France?');
-    console.log(`Q: capital of France → ${text}`);
-    if (!/paris/i.test(text)) throw new Error('the starter model did not answer a simple question correctly');
-    if (meta.files.mmproj) {
+    console.log(`  Q: capital of France → ${text}`);
+    if (!/paris/i.test(text)) throw new Error(`${m.name} did not answer a simple question correctly`);
+    if (m.pack) {
+      const sum = await ask('What is 17 × 23? Reply with just the number.');
+      console.log(`  Q: 17 × 23 → ${sum}`);
+      if (!/391/.test(sum)) throw new Error(`${m.name} got 17 × 23 wrong`);
+    }
+    if (m.files.mmproj) {
       const img = `data:image/png;base64,${png(220, 30, 30).toString('base64')}`;
       const seen = await ask([{ type: 'text', text: 'What colour is this image? Answer with one word.' }, { type: 'image_url', image_url: { url: img } }]);
-      console.log(`Q: colour of a red image → ${seen}`);
-      if (!/red/i.test(seen)) throw new Error('the starter model could not see the image');
+      console.log(`  Q: colour of a red image → ${seen}`);
+      if (!/red/i.test(seen)) throw new Error(`${m.name} could not see the image`);
     }
-    console.log('starter model works');
   } catch (err) {
     console.error(log.join('').split('\n').slice(-40).join('\n'));
-    console.error(`FAILED: ${err.message}`);
-    process.exitCode = 1;
+    throw err;
   } finally {
     proc.kill();
+    await new Promise((r) => setTimeout(r, 1500));
   }
-})();
+}
+
+(async () => {
+  for (const m of models) await prove(m);
+  console.log('every model that comes with Quicksilver works');
+})().catch((err) => { console.error(`FAILED: ${err.message}`); process.exit(1); });

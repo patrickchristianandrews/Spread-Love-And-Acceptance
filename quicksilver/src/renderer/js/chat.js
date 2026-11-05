@@ -10,7 +10,13 @@ const STARTERS = {
   writing: ['Draft a polite email declining a meeting', 'Make this paragraph clearer and more confident:', 'Write a LinkedIn post announcing our new product'],
   research: ['Compare heat pumps vs gas boilers, with sources', 'Search my knowledge base: what does our policy say about travel?', 'Summarise the attached PDF in 10 bullet points'],
   office: ['Attach a spreadsheet and ask: what are the key trends?', 'Turn these meeting notes into action items with owners', 'Write a one-page project status report'],
-  learning: ['Explain photosynthesis like I\'m 12, then quiz me', 'Solve 3x + 7 = 22 step by step', 'Make me a 5-question practice test on the French Revolution'],
+  reasoning: ['A bat and a ball cost $1.10; the bat costs $1 more. How much is the ball?', 'Should I lease or buy a car? Walk me through the numbers', 'Find the flaw in this argument:'],
+  open: ['Write a dark, twisty short story opening', 'Give me brutally honest feedback on this:', 'Explain the arguments on both sides of a controversial topic, frankly'],
+  'as-tutor': ['Explain photosynthesis like I\'m 12, then quiz me', 'Solve 3x + 7 = 22 step by step', 'Make me a 5-question practice test on the French Revolution'],
+  'as-translator': ['Translate into Spanish, friendly tone:', 'What does this mean in plain English?', 'Translate this email into French and keep it formal:'],
+  'as-career': ['Improve my CV bullet points:', 'Practice a job interview for a project manager role with me', 'How should I ask for a raise?'],
+  'as-trip': ['Plan 4 days in Lisbon on a mid-range budget', 'A cheap weekend road trip from Chicago', 'Packing list for a week of hiking in Scotland'],
+  'as-ideas': ['Gift ideas for my dad who loves fishing and history', '20 names for a cozy coffee shop', 'Fun weekend activities with two kids on a rainy day'],
   coding: ['Write a Python script that renames photos by date taken', 'Review this function for bugs and edge cases', 'Explain what a REST API is with a small example'],
 };
 
@@ -82,7 +88,7 @@ views.chat = {
 };
 
 function welcomeHTML(a) {
-  const starters = STARTERS[a.job] || STARTERS.general;
+  const starters = STARTERS[a.id] || STARTERS[a.job] || STARTERS.general;
   const none = !S.targets.length;
   return `<div class="welcome">
     <div class="emoji-badge" style="width:72px;height:72px;font-size:2.4rem;margin:0 auto 12px;border-radius:20px">${esc(a.emoji)}</div>
@@ -91,6 +97,7 @@ function welcomeHTML(a) {
     ${none ? `<div class="notice info" style="text-align:left;margin-top:16px"><b>Let's get you set up.</b> Quicksilver runs AI on your own PC. The <b>Stack Advisor</b> checks your computer and downloads the best free models for the job, in one click. No account or key needed.
       <div class="row" style="margin-top:10px"><button class="btn primary" data-goto="stacks">Open the Stack Advisor</button><button class="btn" data-goto="models">Browse models</button></div></div>` : ''}
     <div class="starters">${starters.map((s) => `<button class="starter" data-starter="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+    ${S.installed.some((m) => m.kind === 'text') && S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled') ? '<p class="small muted grow-tip">💡 The starter models are a great start but limited on their own. Answers get sharper as you add models or build stacks (<a href="#" data-goto="stacks">Stacks</a> · <a href="#" data-goto="models">Models</a>).</p>' : ''}
   </div>`;
 }
 

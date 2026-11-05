@@ -10,6 +10,8 @@ const llama = require('./llama');
 const providers = require('./providers');
 const toolbox = require('./tools');
 const knowledge = require('./knowledge');
+const hardware = require('./hardware');
+const catalog = require('../shared/catalog');
 
 // ---------- stacks ----------
 // { id, name, emoji, members: { vision?: target, drafters: [target], judge?: target }, builtFor? }
@@ -22,7 +24,10 @@ function saveStack(s) {
   store.writeJSON(STACKS(), all);
   return s;
 }
-function deleteStack(id) { store.writeJSON(STACKS(), stacks().filter((s) => s.id !== id)); }
+function deleteStack(id) {
+  if (id === 'quicksilver') store.saveConfig({ quicksilverRemoved: true });
+  store.writeJSON(STACKS(), stacks().filter((s) => s.id !== id));
+}
 
 // ---------- knowledge models ----------
 // { id, name, emoji, base: target, knowledge: [collectionId] (empty = all), strict, instructions, k }
@@ -181,11 +186,27 @@ function textOnly(messages, descriptions) {
   });
 }
 
+// Smart routing for stacks in "auto" mode (like the built-in Quicksilver model): simple messages
+// and photos get one direct answer from the lead (photos are read by the vision member first);
+// hard ones (maths, code, analysis, long inputs) get every drafter plus the lead combining them.
+const HARD = /\b(why|how does|how do|prove|calculate|compute|solve|compare|analy[sz]e|evaluate|step[- ]by[- ]step|debug|code|function|script|error|bug|plan|strategy|pros and cons|trade-?offs?|explain|summari[sz]e|review|translate)\b/i;
+function autoLevel(req) {
+  if (hasImages(req.messages)) return 'quick';
+  const text = lastUserText(req.messages);
+  const hard = HARD.test(text) || text.length > 500 || /```|\d+\s*[-+*/^×÷]\s*\d+/.test(text);
+  return hard ? 'thorough' : 'quick';
+}
+
 // Effort: quick = first drafter only; balanced = first drafter + lead review;
-// thorough and max = every drafter + the lead combining them.
+// thorough and max = every drafter + the lead combining them. "auto" stacks pick for themselves
+// unless you ask for Quick (always one model) or Max (always the full stack).
 async function* stack(stackDef, req) {
   const { members } = stackDef;
-  const level = req.level || 'thorough';
+  let level = req.level || 'thorough';
+  if (members.mode === 'auto' && level !== 'quick') {
+    level = level === 'max' ? 'thorough' : autoLevel(req);
+    if (level === 'thorough') yield { type: 'status', text: 'A harder one: thinking it through with two models…' };
+  }
   let drafters = (members.drafters || []).filter(exists);
   let judge = members.judge && exists(members.judge) ? members.judge : null;
   if (level === 'quick') { drafters = drafters.slice(0, 1).length ? drafters.slice(0, 1) : [judge].filter(Boolean); judge = null; }
@@ -379,6 +400,27 @@ async function* run(target, req) {
   }
 }
 
+// ---------- the built-in Quicksilver model ----------
+// The best team this PC can field from every model you have (the ones that come with Quicksilver,
+// ones you download, ones found in LM Studio, Ollama and so on): the strongest model leads and
+// writes the answer, the next best from a different maker drafts alongside it on hard questions,
+// and the best model that can see reads photos. Smart routing keeps simple messages quick.
+// Rebuilt whenever your models change, unless you edit it yourself; never rebuilt if you delete it.
+async function ensureQuicksilverStack() {
+  const have = stacks().find((s) => s.id === 'quicksilver');
+  if (store.config().quicksilverRemoved || (have && have.autoManaged === false)) return have ? 'stack:quicksilver' : null;
+  const pool = models.list().filter((m) => m.kind === 'text').map(catalog.profileInstalled);
+  if (pool.length < 2) return have ? 'stack:quicksilver' : null;
+  const hw = await hardware.detect();
+  const team = catalog.compose(pool, 'general', hw, store.config().calib?.text || 1, { vision: true, speed: 10, budget: 180 });
+  if (!team || team.ids.length < 2) return have ? 'stack:quicksilver' : null;
+  const local = (id) => (id ? `local:${id}` : undefined);
+  const members = { drafters: team.members.drafters.map(local), judge: local(team.members.judge), vision: local(team.members.vision), mode: 'auto' };
+  if (!members.vision) delete members.vision;
+  if (!have || JSON.stringify(have.members) !== JSON.stringify(members)) saveStack({ id: 'quicksilver', name: 'Quicksilver', emoji: '💧', builtIn: true, autoManaged: true, builtFor: 'general', members });
+  return 'stack:quicksilver';
+}
+
 // Everything you can chat with, for menus and the API server.
 function targets() {
   const out = [];
@@ -410,4 +452,4 @@ async function warm(target, { contextSize, gpu } = {}) {
   return true;
 }
 
-module.exports = { warm, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse };
+module.exports = { warm, run, targets, stacks, saveStack, deleteStack, kbModels, saveKbModel, deleteKbModel, label, exists, canSee, parse, autoLevel, ensureQuicksilverStack };

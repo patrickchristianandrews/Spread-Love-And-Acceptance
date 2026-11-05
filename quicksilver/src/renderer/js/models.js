@@ -60,7 +60,9 @@ views.models = {
 function installedHTML() {
   if (!S.installed.length) return `<div class="notice info">Nothing installed yet. Start with the <a href="#" data-goto-stacks>Stack Advisor</a>, or browse <b>Text & vision</b>.</div>`;
   const kinds = { text: '💬 Text & vision', image: '🎨 Images', video: '🎬 Video' };
-  return Object.entries(kinds).map(([k, label]) => {
+  const onlyStarter = S.installed.filter((m) => m.kind === 'text').every((m) => m.source === 'bundled');
+  const note = onlyStarter ? '<div class="notice info" style="margin-bottom:12px"><b>💡 Only the starter models so far.</b> They are limited on their own; download stronger ones under <b>Text &amp; vision</b>, or let the <a href="#" data-goto-stacks>Stack Advisor</a> pick a team for your PC. Quicksilver adds new models to its team automatically.</div>' : '';
+  return note + Object.entries(kinds).map(([k, label]) => {
     const list = S.installed.filter((m) => m.kind === k);
     if (!list.length) return '';
     return `<div class="section"><h2>${label}</h2></div><table class="list"><thead><tr><th>Model</th><th>Size</th><th>Abilities</th><th>On your PC</th><th></th></tr></thead><tbody>

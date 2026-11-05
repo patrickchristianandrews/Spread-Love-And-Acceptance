@@ -355,7 +355,7 @@ function editStack(s) {
     const drafters = [0, 1, 2].map((i) => b.querySelector(`#st-d${i}`).value).filter(Boolean);
     const name = b.querySelector('#st-name').value.trim();
     if (!name || !drafters.length) { toast('Give it a name and at least one drafter.'); return; }
-    await call('stacks:save', { ...(s || {}), id: s?.id || uid(), name, emoji: b.querySelector('#st-emoji').value, members: { vision: b.querySelector('#st-vision').value || undefined, drafters, judge: b.querySelector('#st-lead').value || undefined } });
+    await call('stacks:save', { ...(s || {}), autoManaged: false, id: s?.id || uid(), name, emoji: b.querySelector('#st-emoji').value, members: { vision: b.querySelector('#st-vision').value || undefined, drafters, judge: b.querySelector('#st-lead').value || undefined } });
     closeModal(); await refreshModels(); render(); toast('Stack saved.');
   });
 }

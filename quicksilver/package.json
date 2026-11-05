@@ -1,7 +1,7 @@
 {
   "name": "quicksilver",
   "productName": "Quicksilver",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Quicksilver: forms to fit your work. Private AI on your own PC: multi-model stacks, fact checking, knowledge bases, a photo & video studio and an OpenAI-compatible API.",
   "main": "src/main/main.js",
   "author": {
@@ -75,7 +75,8 @@
       "license": "build/license.txt",
       "deleteAppDataOnUninstall": false,
       "uninstallDisplayName": "Quicksilver",
-      "menuCategory": false
+      "menuCategory": false,
+      "include": "build/installer.nsh"
     },
     "mac": {
       "target": "dmg",
