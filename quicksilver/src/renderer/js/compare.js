@@ -59,7 +59,7 @@ function bestSetupHTML() {
     </div>
     ${typicalHTML()}
     ${upgradeHTML}
-    <div class="bs-actions"><button class="btn" data-goto="compare">📊 Compare all stacks</button><button class="btn ghost" data-goto="stacks">Customize</button></div>
+    <div class="bs-actions"><button class="btn" data-goto="compare">📊 Compare all stacks</button><button class="btn" data-upgrades>💡 Cheap upgrades for this PC</button><button class="btn ghost" data-goto="stacks">Customize</button></div>
   </div>`;
 }
 
@@ -86,6 +86,7 @@ function typicalHTML() {
 
 function bindBestSetup() {
   loadOverview();
+  $$('[data-upgrades]').forEach((b) => b.addEventListener('click', () => { go({ view: 'pc' }); setTimeout(() => document.getElementById('upgrades')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300); }));
   $$('[data-upgrade]').forEach((b) => b.addEventListener('click', () => { go({ view: 'stacks' }); runAdvisor(b.dataset.upgrade); }));
 }
 

@@ -174,6 +174,7 @@ async function refreshModels() {
   S.targets = await qs.call('targets:list');
   S.stacks = await qs.call('stacks:list');
   S.overview = null; // Home's best setup and the Compare page are measured again
+  S.upgrades = null;
   await refreshSpeeds();
 }
 async function refreshProviders() { S.providers = await qs.call('providers:list'); S.targets = await qs.call('targets:list'); refreshSpeeds(); }

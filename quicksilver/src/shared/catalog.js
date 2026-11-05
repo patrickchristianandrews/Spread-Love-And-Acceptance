@@ -384,6 +384,63 @@ function advise(job, hw, opts = {}) {
   };
 }
 
+// ---------- low-cost upgrades ----------
+// "What if this PC had…": re-runs the same estimates on upgraded hardware and reports the
+// difference you'd notice. Prices are rough US ranges and change over time.
+const UPGRADES = [
+  { id: 'ram32', icon: '🧠', name: 'Memory (RAM) to 32 GB', cost: 'about $40–100',
+    note: 'The easiest upgrade: most desktops and many laptops have a free or swappable slot. Match your PC\'s memory type (DDR4 or DDR5).',
+    applies: (hw) => !hw.unifiedMemory && hw.ramGB < 30, apply: (hw) => ({ ...hw, ramGB: 32 }) },
+  { id: 'ram64', icon: '🧠', name: 'Memory (RAM) to 64 GB', cost: 'about $80–180',
+    note: 'Lets bigger "mixture-of-experts" models run from memory. Match your PC\'s memory type (DDR4 or DDR5).',
+    applies: (hw) => !hw.unifiedMemory && hw.ramGB >= 30 && hw.ramGB < 60, apply: (hw) => ({ ...hw, ramGB: 64 }) },
+  { id: 'gpu12', icon: '🎮', name: 'A 12 GB graphics card (for example a used RTX 3060 12 GB)', cost: 'about $200–280 used',
+    note: 'Desktops only. Needs a free full-length (PCIe x16) slot and about a 550 W power supply.',
+    applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 11.5, apply: (hw) => ({ ...hw, vramGB: 12, vramFreeGB: 11.5, gpuName: '12 GB graphics card' }) },
+  { id: 'gpu16', icon: '🎮', name: 'A 16 GB graphics card (for example RTX 4060 Ti 16 GB or Radeon RX 7600 XT)', cost: 'about $330–450',
+    note: 'Desktops only. Fits most 14B models entirely on the card, the sweet spot for quality and speed.',
+    applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 15.5, apply: (hw) => ({ ...hw, vramGB: 16, vramFreeGB: 15.4, gpuName: '16 GB graphics card' }) },
+  { id: 'gpu24', icon: '🚀', name: 'A 24 GB graphics card (for example a used RTX 3090)', cost: 'about $650–850 used', bigger: true,
+    note: 'Not low-cost, but the biggest jump: 30B-class models fully on the card. Desktops only; needs a 750 W+ power supply.',
+    applies: (hw) => !hw.unifiedMemory && (hw.vramGB || 0) < 23, apply: (hw) => ({ ...hw, vramGB: 24, vramFreeGB: 23.4, gpuName: '24 GB graphics card' }) },
+];
+
+function upgradeAdvice(hw, { calib = 1, installed = [] } = {}) {
+  const sum = (a, job) => {
+    if (!a) return null;
+    const s = a.best;
+    const mine = a.mine;
+    const leadId = mine && (mine.members.judge || mine.members.drafters[0]);
+    const lead = leadId && mine.estimates[leadId];
+    return {
+      stars: s ? starsFor(s.quality, s.ids.length >= 2) : null,
+      names: s ? s.ids.map((id) => TEXT_MODELS.find((m) => m.id === id)?.name || id) : [],
+      seconds: s?.secondsPerAnswer ?? null,
+      chat: lead?.wordsPerSec ? JOBS[job].words / lead.wordsPerSec : null,
+      mineStars: mine ? starsFor(mine.quality, mine.ids.length >= 2) : null,
+    };
+  };
+  const look = (h) => ({ general: sum(advise('general', h, { calib, installed }), 'general'), coding: sum(advise('coding', h, { calib, installed }), 'coding') });
+  const now = look(hw);
+  const fastNow = new Set(TEXT_MODELS.filter((m) => ['great', 'good'].includes(estimateText(m, hw, calib).rating)).map((m) => m.id));
+  const out = [];
+  for (const u of UPGRADES) {
+    if (!u.applies(hw)) continue;
+    const h2 = u.apply(hw);
+    const then = look(h2);
+    const newlyFast = TEXT_MODELS.filter((m) => !fastNow.has(m.id) && ['great', 'good'].includes(estimateText(m, h2, calib).rating))
+      .sort((a, b) => scoreFor(b, 'general') - scoreFor(a, 'general')).slice(0, 5).map((m) => m.name);
+    const gain = (then.general.stars || 0) - (now.general.stars || 0) + (then.coding.stars || 0) - (now.coding.stars || 0)
+      + (now.general.chat && then.general.chat ? Math.min(2, Math.log2(now.general.chat / then.general.chat)) : 0) + newlyFast.length * 0.15;
+    out.push({ id: u.id, icon: u.icon, name: u.name, cost: u.cost, note: u.note, bigger: Boolean(u.bigger), now, then, newlyFast, gain: Math.round(gain * 100) / 100 });
+  }
+  // Best value first: the most noticeable difference among the low-cost ones.
+  out.sort((a, b) => (a.bigger - b.bigger) || b.gain - a.gain);
+  const top = out.find((u) => !u.bigger && u.gain > 0.3);
+  if (top) top.bestValue = true;
+  return out;
+}
+
 // ---------- summaries for Home and the Compare page ----------
 // Stars (out of 5): the strongest member's score for the job, plus half a star when a second
 // model cross-checks it. Rounded to the nearest half star.
@@ -402,4 +459,4 @@ function capabilities(profiles, { local = true } = {}) {
   ];
 }
 
-module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities };
+module.exports = { TEXT_MODELS, TEXT_CATEGORIES, MEDIA_MODELS, MEDIA_CATEGORIES, JOBS, estimateText, estimateMedia, advise, compose, gpuBandwidth, profileInstalled, matchCatalog, scoreFor, familyOf, starsFor, capabilities, upgradeAdvice };

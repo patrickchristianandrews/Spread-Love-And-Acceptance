@@ -578,3 +578,14 @@ select optgroup { font-weight: 800; color: var(--muted); }
 .pv-times, .pv-stars { display: flex; flex-wrap: wrap; gap: 8px; }
 .pv-star { display: inline-flex; gap: 6px; align-items: center; font-size: .86rem; font-weight: 700; padding: 4px 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line-soft); }
 .pv-team { line-height: 1.5; }
+
+/* ---------- low-cost upgrades ---------- */
+.upg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; margin-bottom: 8px; }
+.upg.best { border-color: var(--mint-line); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mint-line) 40%, transparent), var(--sh-1); }
+.upg.bigger { opacity: .92; }
+.upg-ic { font-size: 1.5rem; }
+.upg h3 { font-size: 1rem; line-height: 1.35; }
+.upg-cost { font-weight: 800; color: var(--accent); margin: 6px 0 4px; }
+.upg-list { margin: 8px 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: .9rem; font-weight: 600; }
+.upg-list .up { color: var(--mint-ink); background: var(--mint); border-radius: 999px; padding: 0 7px; font-size: .78rem; font-weight: 800; }
+.upg-note { margin: 6px 0 0; }

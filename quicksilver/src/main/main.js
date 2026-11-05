@@ -70,6 +70,12 @@ handle('catalog:estimates', async () => {
     calibrated: c.text !== 1,
   };
 });
+// Low-cost upgrades and the difference each would make on this PC.
+handle('upgrades:advise', async () => {
+  const hw = await hardware.detect();
+  return { hardware: hw, upgrades: catalog.upgradeAdvice(hw, { calib: store.config().calib.text, installed: models.list() }) };
+});
+
 // Speeds on this PC, so every screen can say how long something will take:
 // models in words per second (stacks list each member), image/video models in seconds per item.
 handle('speed:map', async () => {
