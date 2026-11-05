@@ -33,7 +33,7 @@ views.home = {
     const api = S.apiStatus;
     const tile = (icon, k, v, sub, view) => `<button class="card" ${view ? `data-goto="${view}"` : ''} style="text-align:left"><div class="k" style="font-size:.8rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">${icon} ${k}</div><div style="font-size:1.5rem;font-weight:800;margin:4px 0">${v}</div><div class="small muted" style="font-weight:600">${sub}</div></button>`;
     return `<div class="page">
-      <div class="card" style="background:linear-gradient(120deg,#e9e2ff 0%,#dcecff 55%,#d6f5e7 100%);border-color:#c6b8ff;padding:26px 28px;margin-bottom:20px">
+      <div class="card" style="background:linear-gradient(120deg,#e7eaff 0%,#e0edf8 55%,#d9f3f2 100%);border-color:#c5c9f5;padding:26px 28px;margin-bottom:20px">
         <div class="row"><div class="grow">
           <h1 style="font-size:2.1rem">${S.data.prefs.userName ? `Welcome back, ${esc(S.data.prefs.userName)}.` : 'Quicksilver'}</h1>
           <p style="font-size:1.12rem;font-weight:700;margin:6px 0 0;color:var(--lav-ink)">Forms to fit your work. Private AI on your own PC, as strong as you need it.</p>
