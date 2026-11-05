@@ -4,7 +4,9 @@
   "version": "2.0.0",
   "description": "Quicksilver: forms to fit your work. Private AI on your own PC: multi-model stacks, fact checking, knowledge bases, a photo & video studio and an OpenAI-compatible API.",
   "main": "src/main/main.js",
-  "author": "Patrick Christian Andrews",
+  "author": {
+    "name": "Patrick Christian Andrews"
+  },
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
@@ -55,7 +57,9 @@
         }
       ],
       "icon": "build/icon.png",
-      "artifactName": "Quicksilver-Setup-${version}.${ext}"
+      "artifactName": "Quicksilver-Setup-${version}.${ext}",
+      "legalTrademarks": "Quicksilver",
+      "requestedExecutionLevel": "asInvoker"
     },
     "nsis": {
       "oneClick": false,
@@ -64,7 +68,11 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Quicksilver",
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "license": "build/license.txt",
+      "deleteAppDataOnUninstall": false,
+      "uninstallDisplayName": "Quicksilver",
+      "menuCategory": false
     },
     "mac": {
       "target": "dmg",
