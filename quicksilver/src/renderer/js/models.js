@@ -67,10 +67,10 @@ function installedHTML() {
       ${list.map((m) => {
         const est = k === 'text' ? S.est?.text[m.catalogId] : S.est?.media[m.catalogId];
         const def = S.data.prefs.defaultTarget === `local:${m.id}`;
-        return `<tr><td><b>${esc(m.name)}</b>${m.source === 'imported' ? ' <span class="badge b-lemon">imported</span>' : ''}</td><td>${gb(m.size)}</td>
+        return `<tr><td><b>${esc(m.name)}</b>${m.source === 'imported' ? ` <span class="badge b-lemon">${esc(m.from ? `from ${m.from}` : 'imported')}</span>` : m.source === 'bundled' ? ' <span class="badge b-mint">included</span>' : ''}</td><td>${gb(m.size)}</td>
           <td>${m.vision ? '<span class="badge b-sky">👁 sees images</span>' : ''}${S.catalog.text.find((c) => c.id === m.catalogId)?.reasoning ? ' <span class="badge b-lav">🧠 thinks</span>' : ''}</td>
           <td>${est ? rateBadge(est, k === 'text' ? 'text' : 'media') : '<span class="small muted">n/a</span>'}</td>
-          <td class="row" style="justify-content:flex-end">${k === 'text' ? (def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`) : ''}${m.source !== 'imported' ? `<button class="btn small" data-repair="${m.id}" title="Check the files and download again anything missing or damaged">Repair</button>` : ''}<button class="btn small danger" data-remove="${m.id}">Remove</button></td></tr>`;
+          <td class="row" style="justify-content:flex-end">${k === 'text' ? (def ? '<span class="badge b-mint">default</span>' : `<button class="btn small" data-default="local:${m.id}">Make default</button>`) : ''}${!['imported', 'bundled'].includes(m.source) ? `<button class="btn small" data-repair="${m.id}" title="Check the files and download again anything missing or damaged">Repair</button>` : ''}<button class="btn small danger" data-remove="${m.id}">Remove</button></td></tr>`;
       }).join('')}</tbody></table>`;
   }).join('');
 }

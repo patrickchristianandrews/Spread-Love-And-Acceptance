@@ -154,6 +154,16 @@ async function init() {
 // the default model in the background so the first reply is quick. Both can be turned off.
 async function startupModels() {
   const p = S.data.prefs;
+  // The model that comes with Quicksilver: ready on first launch, nothing to download.
+  try {
+    const starter = await qs.call('models:starter');
+    if (starter) {
+      await refreshModels();
+      if (!targetValid(p.defaultTarget)) { p.defaultTarget = 'local:starter'; save(); }
+      toast(`👋 Quicksilver comes with ${starter.name}: private, quick on any PC${starter.vision ? ', and it can see photos' : ''}. Try an idea below, or open Stacks when you want more power.`, 9000);
+      if (['home', 'chat'].includes(S.route.view)) render();
+    }
+  } catch {}
   if (p.autoAddFound !== false) {
     try {
       const added = await qs.call('models:autoAdd');

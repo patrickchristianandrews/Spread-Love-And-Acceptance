@@ -25,7 +25,7 @@ Quicksilver is a private AI workstation for Windows. Like liquid quicksilver, it
 ## Install on Windows
 
 1. Download **Quicksilver-Windows-installer** from the latest run of the **Quicksilver Windows installer** workflow (repository → Actions), or from Releases.
-2. Unzip it and run `Quicksilver-Setup-2.2.0.exe`. Until the installer is code-signed, Windows SmartScreen may warn you: choose **More info → Run anyway**.
+2. Unzip it and run `Quicksilver-Setup-2.3.0.exe`. Until the installer is code-signed, Windows SmartScreen may warn you: choose **More info → Run anyway**.
 3. Open Quicksilver, go to **Stacks**, pick a job and press **Download & build this stack**.
 
 The installer includes the llama.cpp engine (text and vision, using Vulkan on NVIDIA, AMD and Intel cards, or the processor) and the stable-diffusion.cpp engine (images and video). On NVIDIA cards you can download the faster CUDA engines in **Settings → Engines**.

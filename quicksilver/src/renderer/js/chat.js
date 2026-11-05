@@ -6,7 +6,7 @@ const drafts = {};           // chatId -> attachments waiting to be sent
 let paintQueued = false;
 
 const STARTERS = {
-  general: ['Plan a productive week around three big goals', 'What should I ask before buying a used car?', 'Explain how compound interest works with an example'],
+  general: ['📷 Attach a photo of your fridge: what could I cook tonight?', 'Explain black holes like I\'m 12, then quiz me', 'Write a funny birthday message for my brother who loves fishing', 'Plan a cheap weekend away with three ideas for each day'],
   writing: ['Draft a polite email declining a meeting', 'Make this paragraph clearer and more confident:', 'Write a LinkedIn post announcing our new product'],
   research: ['Compare heat pumps vs gas boilers, with sources', 'Search my knowledge base: what does our policy say about travel?', 'Summarise the attached PDF in 10 bullet points'],
   office: ['Attach a spreadsheet and ask: what are the key trends?', 'Turn these meeting notes into action items with owners', 'Write a one-page project status report'],

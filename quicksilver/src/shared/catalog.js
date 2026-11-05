@@ -64,6 +64,8 @@ const TEXT_MODELS = [
     blurb: 'Lightly filtered and great at writing and fiction, with a long memory.', jobs: { general: 7, office: 7, research: 6, coding: 6, vision: 0, fast: 4 }, judge: 6 },
 
   // Vision (see photos, scans, charts and video frames)
+  { id: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', maker: 'Alibaba', params: '2B', category: 'vision', repo: 'Qwen/Qwen3-VL-2B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 1.1, mmprojGB: 0.45, vision: true, ctx: 262144,
+    blurb: 'Comes with Quicksilver. Small and quick on any PC, and it sees photos, screenshots and charts.', jobs: { general: 5, office: 5, research: 4, coding: 4, vision: 6, fast: 9 }, judge: 3 },
   { id: 'gemma-3-4b', name: 'Gemma 3 4B (vision)', maker: 'Google', params: '4B', category: 'vision', repo: 'unsloth/gemma-3-4b-it-GGUF', quant: 'Q4_K_M', sizeGB: 2.5, mmprojGB: 0.8, vision: true, ctx: 131072,
     blurb: 'Sees photos, screenshots and documents. Small enough for most PCs.', jobs: { general: 6, office: 6, research: 5, coding: 4, vision: 7, fast: 7 }, judge: 4 },
   { id: 'qwen2.5-vl-7b', name: 'Qwen2.5 VL 7B (vision)', maker: 'Alibaba', params: '7B', category: 'vision', repo: 'unsloth/Qwen2.5-VL-7B-Instruct-GGUF', quant: 'Q4_K_M', sizeGB: 4.7, mmprojGB: 1.4, vision: true, ctx: 32768,

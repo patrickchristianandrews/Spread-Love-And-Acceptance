@@ -78,12 +78,13 @@ function remove(id) {
   const m = all.find((x) => x.id === id);
   if (!m) return false;
   const root = store.dir('models');
+  if (m.source === 'bundled') store.saveConfig({ starterRemoved: true });
   if (m.source === 'imported' && m.from && m.files?.model) {
     const ignored = new Set(store.config().foundIgnored || []);
     ignored.add(path.resolve(m.files.model).toLowerCase());
     store.saveConfig({ foundIgnored: [...ignored] });
   }
-  if (m.source !== 'imported') {
+  if (m.source !== 'imported' && m.source !== 'bundled') {
     for (const f of Object.values(m.files || {})) {
       // Only delete files we downloaded, and only if no other installed model shares them.
       const shared = all.some((o) => o.id !== id && Object.values(o.files || {}).includes(f));
@@ -209,6 +210,7 @@ async function repair(id, emit) {
   const m = get(id) || store.readJSON(REG(), []).find((x) => x.id === id);
   if (!m) throw new Error('That model is not installed.');
   if (m.source === 'imported') throw new Error('This model came from another app or folder, so Quicksilver can\'t re-download it. Remove it, then download it from Models.');
+  if (m.source === 'bundled') throw new Error('This model came with Quicksilver. If it stopped working, reinstall Quicksilver.');
   const plan = m.catalogId ? await planCatalog(m.catalogId) : m.repo ? await planGguf(m.repo, { id: m.id, name: m.name, quant: m.quant }) : null;
   if (!plan) throw new Error('Quicksilver doesn\'t know where this model came from.');
   return start({ ...plan, id: m.id, name: m.name }, emit);
@@ -231,6 +233,22 @@ async function importFile(file, readGguf) {
   return add({ id: `imp-${Date.now().toString(36)}`, ...recognise(info.name || niceName(file), file), kind: 'text', files, size: info.size, vision: Boolean(proj), source: 'imported' });
 }
 
+
+// ---------- the starter model that ships inside the installer ----------
+// dir holds STARTER.json plus the files (see scripts/fetch-starter.js). Registered on first run,
+// and again after an update moves the app; never if you removed it.
+function registerStarter(dir) {
+  const metaFile = dir && path.join(dir, 'STARTER.json');
+  if (!metaFile || !fs.existsSync(metaFile) || store.config().starterRemoved) return null;
+  const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+  const files = { model: path.join(dir, meta.files.model), ...(meta.files.mmproj ? { mmproj: path.join(dir, meta.files.mmproj) } : {}) };
+  if (!Object.values(files).every((f) => fs.existsSync(f))) return null;
+  const known = store.readJSON(REG(), []).find((m) => m.id === 'starter');
+  if (known && known.files?.model === files.model) return null;
+  const size = Object.values(files).reduce((t, f) => t + fs.statSync(f).size, 0);
+  const entry = add({ id: 'starter', name: meta.name, kind: 'text', catalogId: meta.catalogId, files, size, vision: Boolean(files.mmproj), source: 'bundled' });
+  return known ? null : entry; // only announce it the first time
+}
 
 // ---------- models already on this PC (other apps, Downloads) ----------
 // Finds GGUF models that LM Studio, Jan, Ollama or GPT4All already downloaded (or that are in
@@ -354,4 +372,4 @@ async function addFound(items, readGguf) {
   return added;
 }
 
-module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, importFile, tree, findOnPC, addFound, repair };
+module.exports = { list, get, add, remove, start, cancel, active, planCatalog, planGguf, ggufOptions, search, importFile, tree, findOnPC, addFound, repair, registerStarter };

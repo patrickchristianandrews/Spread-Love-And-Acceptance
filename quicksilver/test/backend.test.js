@@ -297,6 +297,24 @@ async function collect(gen) {
     console.log('✓ knowledge models: saved, cited, usable in stacks');
   }
 
+  // The starter model inside the installer: registered on first run, announced once, never deleted.
+  {
+    const sd = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-starter-'));
+    fs.copyFileSync(TINY, path.join(sd, 'model.gguf')); fs.copyFileSync(TINY, path.join(sd, 'mmproj.gguf'));
+    fs.writeFileSync(path.join(sd, 'STARTER.json'), JSON.stringify({ catalogId: 'qwen3-vl-2b', name: 'Qwen3-VL 2B', vision: true, files: { model: 'model.gguf', mmproj: 'mmproj.gguf' } }));
+    const first = models.registerStarter(sd);
+    assert.equal(first.id, 'starter'); assert.equal(first.source, 'bundled'); assert.ok(first.vision);
+    assert.equal(models.registerStarter(sd), null, 'announced only once');
+    assert.ok(complete.targets().some((t) => t.target === 'local:starter' && t.vision));
+    await assert.rejects(models.repair('starter', () => {}), /came with Quicksilver/);
+    models.remove('starter');
+    assert.ok(fs.existsSync(path.join(sd, 'model.gguf')), 'the bundled file is never deleted');
+    assert.equal(models.registerStarter(sd), null, 'stays removed');
+    store.saveConfig({ starterRemoved: false });
+    fs.rmSync(sd, { recursive: true, force: true });
+    console.log('✓ starter model: registered on first run, kept safe, stays removed');
+  }
+
   // Models other apps already downloaded are found and added where they are (no copy, no download).
   {
     const scan = fs.mkdtempSync(path.join(os.tmpdir(), 'qs-scan-'));

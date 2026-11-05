@@ -115,6 +115,8 @@ handle('models:found', () => models.findOnPC());
 handle('models:repair', (id) => { llama.stopAll(); return models.repair(id, emit); });
 handle('models:addFound', (items) => models.addFound(items, llama.readGguf));
 // At start-up: add every model found on this PC (other apps, Downloads) without asking.
+// The starter model inside the installer (resources/starter), or QS_STARTER_DIR for tests.
+handle('models:starter', () => models.registerStarter(process.env.QS_STARTER_DIR || (app.isPackaged ? path.join(process.resourcesPath, 'starter') : path.join(__dirname, '..', '..', 'starter'))));
 handle('models:autoAdd', async () => { const found = models.findOnPC(); return found.length ? models.addFound(found, llama.readGguf) : []; });
 
 // ---------- providers (APIs) ----------

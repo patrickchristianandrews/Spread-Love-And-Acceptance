@@ -1,7 +1,7 @@
 {
   "name": "quicksilver",
   "productName": "Quicksilver",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Quicksilver: forms to fit your work. Private AI on your own PC: multi-model stacks, fact checking, knowledge bases, a photo & video studio and an OpenAI-compatible API.",
   "main": "src/main/main.js",
   "author": {
@@ -91,6 +91,13 @@
       {
         "from": "engine",
         "to": "engine",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "starter",
+        "to": "starter",
         "filter": [
           "**/*"
         ]
