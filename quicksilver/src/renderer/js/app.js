@@ -51,14 +51,15 @@ function applyPrefs() {
 }
 
 // ---------- online / offline ----------
+// The switch is in two places (beside the model in chats, and in the sidebar); both always match.
 function paintNet() {
   const off = Boolean(S.config?.offline);
-  const b = $('#net-toggle');
-  if (!b) return;
-  b.classList.toggle('off', off);
-  b.setAttribute('aria-checked', String(!off));
-  b.querySelector('.net-lbl').textContent = off ? 'Offline' : 'Online';
-  b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.';
+  for (const b of [$('#net-toggle'), $('#net-pill')].filter(Boolean)) {
+    b.classList.toggle('off', off);
+    b.setAttribute('aria-checked', String(!off));
+    (b.querySelector('.net-lbl') || b.querySelector('span:nth-child(2)')).textContent = off ? 'Offline' : 'Online';
+    b.title = off ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.';
+  }
   document.documentElement.classList.toggle('is-offline', off);
 }
 async function toggleNet() {

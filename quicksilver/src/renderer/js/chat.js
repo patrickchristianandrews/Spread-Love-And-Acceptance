@@ -54,6 +54,7 @@ views.chat = {
         <div class="pickers">
           <label class="pill-select" title="Assistant"><span class="pill-emoji">${esc(a.emoji)}</span><select id="pick-assistant" aria-label="Assistant">${S.data.assistants.map((x) => `<option value="${x.id}" ${x.id === a.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>${icon('chevron', 16)}</label>
           <label class="pill-select" title="Model or stack">${icon(target.startsWith('stack:') ? 'layers' : 'cpu', 16)}<select id="pick-model" aria-label="Model or stack">${S.targets.length ? targetOptions(target) : '<option value="">No models yet</option>'}<option value="__infuse">✨ Infuse several AIs…</option><option value="__get">＋ Get more models…</option></select>${icon('chevron', 16)}</label>
+          <button class="net-pill ${S.config?.offline ? 'off' : ''}" id="net-pill" role="switch" aria-checked="${!S.config?.offline}" title="${S.config?.offline ? 'Offline: nothing leaves this PC. Click to go online.' : 'Online: web search, cloud AIs and downloads are available. Click to go offline.'}"><span class="net-dot"></span><span>${S.config?.offline ? 'Offline' : 'Online'}</span><span class="net-sw"><i></i></span></button>
         </div>
         <div class="chat-title" title="${esc(chat.title)}">${esc(chat.title)}</div>
         <button class="icon-btn" id="chat-more" title="Pin, rename, export or delete this chat" aria-label="More options">${icon('more')}</button>
@@ -243,6 +244,7 @@ function bindChat() {
   $('#pick-effort').addEventListener('change', (e) => { chat.effort = e.target.value; save(); render(); });
   $('#tog-tools').addEventListener('click', () => { chat.tools = !toolsOn(chat, a); save(); render(); if (chat.tools && !S.hasIntegrations) toast('Connect GitHub, Slack, Notion, Jira, Linear or an MCP server under Integrations first.', 6000); });
   $('#tog-fact').addEventListener('click', () => { chat.factCheck = !factOn(chat, a); save(); render(); });
+  $('#net-pill').addEventListener('click', toggleNet);
   $('#chat-more').addEventListener('click', (e) => { e.stopPropagation(); chatMenu(e.currentTarget, chat); });
   $('#messages').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b) messageAction(chat, b.dataset.act, b.dataset.id); });
   $('#chat-body').addEventListener('click', (e) => { const b = e.target.closest('[data-fp]'); if (b) factPanelAction(chat, b.dataset.fp, b.dataset.id); });

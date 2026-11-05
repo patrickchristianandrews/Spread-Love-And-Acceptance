@@ -204,8 +204,10 @@ let WIN = null;
   await win.click('[data-kbm-chat]');
   await win.waitForFunction(() => document.querySelector('#pick-model option:checked')?.textContent.includes('Clinical Reference'));
   console.log('✓ knowledge model saved and picked in a chat');
-  await win.click('#net-toggle');
+  // The switch beside the model and the one in the sidebar always match.
+  await win.click('#net-pill');
   await win.waitForSelector('#net-toggle.off');
+  await win.waitForSelector('#net-pill.off');
   await win.waitForSelector('text=Web (offline)');
   await shot(win, '14-offline');
   await win.click('#net-toggle');
