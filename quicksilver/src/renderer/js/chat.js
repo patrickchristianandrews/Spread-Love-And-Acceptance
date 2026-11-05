@@ -57,8 +57,11 @@ views.chat = {
       <div class="composer" id="composer">
         <div class="composer-inner">
           <div class="attach-row" id="att-row">${attachmentsHTML(drafts[chat.id] || [], true)}</div>
-          <textarea id="input" rows="2" placeholder="Message ${esc(a.name)}… (Enter to send, Shift+Enter for a new line)" aria-label="Message"></textarea>
+          <div id="skill-row">${skillChipHTML(chat)}</div>
+          <div class="skill-pop" id="skill-pop" hidden></div>
+          <textarea id="input" rows="2" placeholder="${esc(chat.pendingSkill ? skillById(chat.pendingSkill)?.hint || 'Add details…' : `Message ${a.name}… (type / for skills)`)}" aria-label="Message"></textarea>
           <div class="tools">
+            <button class="btn small" id="skill-btn" title="Use a skill (or type / )">⚡ Skills</button>
             <label class="btn small" title="Attach photos, videos or documents">📎 Attach<input type="file" id="file-in" multiple hidden accept="image/*,video/*,.pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.pptx,.txt,.md,.json,.html,.htm,.xml,.js,.ts,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sql"></label>
             <span class="small muted grow">Drop or paste photos, videos, PDFs, Word, Excel and PowerPoint files.</span>
             <span class="small muted">${esc(targetLabel(target))}</span>
@@ -122,13 +125,14 @@ function messageHTML(chat, a, m, i) {
   if (!pending) {
     if (isLast) tools.push(`<button class="tool" data-act="regen" data-id="${m.id}">↻ Regenerate</button><button class="tool" data-act="continue" data-id="${m.id}">Continue</button>`);
     if (alt.text && !alt.check && !checkRunning(m)) tools.push(`<button class="tool" data-act="check" data-id="${m.id}">✅ Fact check</button>`);
-    tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">Copy</button><button class="tool" data-act="del" data-id="${m.id}">Delete</button>`);
+    tools.push(`<button class="tool" data-act="copy" data-id="${m.id}">Copy</button><button class="tool" data-act="saveas" data-id="${m.id}">Save as…</button><button class="tool" data-act="del" data-id="${m.id}">Delete</button>`);
   }
   return `<div class="msg assistant" data-msg="${m.id}">
-    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
+    <div class="who-line"><span>${esc(a.emoji)} ${esc(a.name)}</span>${alt.skillId && skillById(alt.skillId) ? `<span class="badge b-peach">⚡ ${esc(skillById(alt.skillId).name)}</span>` : ''}${alt.target ? `<span class="badge b-lav">${esc(targetLabel(alt.target))}</span>` : ''}${alt.stats?.tps ? `<span class="badge b-mint">${Math.round(alt.stats.tps * 0.75)} words/s</span>` : ''}</div>
     ${stepsHTML(alt, streaming)}
     ${alt.reasoning ? `<details class="think"><summary>💭 Thinking${streaming && !alt.text ? '…' : ''}</summary><div>${esc(alt.reasoning)}</div></details>` : ''}
     <div class="bubble md ${streaming ? 'streaming' : ''} ${alt.error ? 'error' : ''}">${body}</div>
+    ${downloadHTML(m, alt, streaming)}
     ${checkHTML(m, alt)}
     ${alt.sources?.length ? `<div class="sources card" style="padding:10px 12px"><b class="small">Sources</b>${alt.sources.map((s, k) => `<div class="src"><span class="cite">${k + 1}</span>${s.url ? `<a href="${esc(s.url)}">${esc(s.title || s.url)}</a>` : `<span>📄 ${esc(s.title)}</span>`}</div>`).join('')}</div>` : ''}
     <div class="msg-tools">${tools.join('')}</div>
@@ -149,8 +153,50 @@ function bindChat() {
   input.value = chat.draft || '';
   const grow = () => { input.style.height = 'auto'; input.style.height = `${Math.min(input.scrollHeight, 260)}px`; };
   grow();
-  input.addEventListener('input', () => { chat.draft = input.value; grow(); save(); });
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendOrStop(); } });
+  const pop = $('#skill-pop');
+  const openPop = (filter) => { pop.innerHTML = skillPickerHTML(filter); pop.hidden = false; };
+  const closePop = () => { pop.hidden = true; };
+  const pickSkill = (id) => {
+    chat.pendingSkill = id;
+    if (/^\/\S*$/.test(input.value)) input.value = '';
+    chat.draft = input.value; chat.suggested = null; closePop(); save();
+    $('#skill-row').innerHTML = skillChipHTML(chat);
+    input.placeholder = skillById(id)?.hint || 'Add details…';
+    input.focus();
+  };
+  let suggestTimer = null;
+  input.addEventListener('input', () => {
+    chat.draft = input.value; grow(); save();
+    const m = input.value.match(/^\/(\S*)$/);
+    if (m) openPop(m[1]); else closePop();
+    clearTimeout(suggestTimer);
+    suggestTimer = setTimeout(() => {
+      const sug = !chat.pendingSkill && !m ? suggestSkill(input.value) : null;
+      if ((sug?.id || null) !== (chat.suggested || null)) { chat.suggested = sug?.id || null; $('#skill-row').innerHTML = skillChipHTML(chat); }
+    }, 350);
+  });
+  input.addEventListener('keydown', (e) => {
+    if (!pop.hidden && (e.key === 'Enter' || e.key === 'Tab')) { const hot = pop.querySelector('.hot'); if (hot) { e.preventDefault(); pickSkill(hot.dataset.pickSkill); return; } }
+    if (!pop.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      e.preventDefault();
+      const opts = [...pop.querySelectorAll('.skill-opt')];
+      const i = opts.findIndex((o) => o.classList.contains('hot'));
+      opts[i]?.classList.remove('hot');
+      const next = opts[(i + (e.key === 'ArrowDown' ? 1 : -1) + opts.length) % opts.length];
+      next?.classList.add('hot'); next?.scrollIntoView({ block: 'nearest' });
+      return;
+    }
+    if (e.key === 'Escape' && !pop.hidden) { closePop(); return; }
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendOrStop(); }
+  });
+  pop.addEventListener('click', (e) => { const b = e.target.closest('[data-pick-skill]'); if (b) pickSkill(b.dataset.pickSkill); });
+  $('#skill-btn').addEventListener('click', () => { if (pop.hidden) { openPop(''); input.focus(); } else closePop(); });
+  $('#skill-row').addEventListener('click', (e) => {
+    if (e.target.closest('[data-skill-clear]')) { chat.pendingSkill = null; save(); $('#skill-row').innerHTML = skillChipHTML(chat); input.placeholder = `Message ${a.name}… (type / for skills)`; }
+    const use = e.target.closest('[data-skill-use]');
+    if (use) pickSkill(use.dataset.skillUse);
+    if (e.target.closest('[data-skill-dismiss]')) { chat.suggested = null; chat.dismissed = [...(chat.dismissed || []), use?.dataset.skillUse]; $('#skill-row').innerHTML = skillChipHTML(chat); }
+  });
   $('#send').addEventListener('click', sendOrStop);
   $$('[data-goto]').forEach((b) => b.addEventListener('click', () => go({ view: b.dataset.goto })));
   $$('[data-starter]').forEach((b) => b.addEventListener('click', () => { input.value = b.dataset.starter; chat.draft = input.value; input.focus(); grow(); }));
@@ -192,7 +238,8 @@ function bindChat() {
       return;
     }
     if (!resolveTarget(chat, a)) { toast('Get a model first: open the Stack Advisor.'); go({ view: 'stacks' }); return; }
-    chat.messages.push({ id: uid(), role: 'user', text, attachments: atts });
+    chat.messages.push({ id: uid(), role: 'user', text, attachments: atts, skillId: chat.pendingSkill || undefined });
+    chat.pendingSkill = null; chat.suggested = null;
     drafts[chat.id] = [];
     if (chat.title === 'New chat') chat.title = (text || atts[0]?.name || 'New chat').replace(/\s+/g, ' ').slice(0, 60);
     chat.draft = '';
@@ -290,16 +337,16 @@ function userContent(m, docBudget) {
   return parts;
 }
 
-async function gatherSources(chat, a, query) {
+async function gatherSources(chat, a, query, force = {}) {
   const out = [];
-  if ((chat.library ?? a.library) && query) {
+  if ((force.knowledge || (chat.library ?? a.library)) && query) {
     try {
       const r = await qs.call('kb:search', query, Number(S.data.prefs.sourcesPerAnswer) || 8, a.knowledge || []);
       for (const x of r.results) out.push({ title: x.title, text: x.text, path: x.path, url: x.url });
       if (r.failures.length) toast(`Some sources didn't respond: ${r.failures.join('; ')}`, 6000);
     } catch (err) { toast(`Knowledge: ${err.message}`); }
   }
-  if ((chat.web ?? a.web) && query && S.config?.web?.provider !== 'none') {
+  if ((force.web || (chat.web ?? a.web)) && query && S.config?.web?.provider !== 'none') {
     try { for (const r of await qs.call('web:search', query)) out.push({ title: r.title, url: r.url, text: r.text || r.snippet }); } catch (err) { toast(`Web search: ${err.message}`, 6000); }
   }
   return out;
@@ -337,13 +384,16 @@ async function generate(chat, rerollMsg) {
 
   const p = S.data.prefs;
   const lastUser = [...chat.messages.slice(0, upTo)].reverse().find((m) => m.role === 'user');
-  if ((chat.library ?? a.library) || (chat.web ?? a.web)) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
-  const sources = await gatherSources(chat, a, lastUser?.text || '');
+  const skill = lastUser?.skillId ? skillById(lastUser.skillId) : null;
+  if (skill) { alt.skillId = skill.id; alt.forceFact = Boolean(skill.tools?.factCheck); }
+  const force = skill?.tools || {};
+  if ((chat.library ?? a.library) || (chat.web ?? a.web) || force.web || force.knowledge) { alt.status = 'Searching sources…'; paintStreaming(chat, msg); }
+  const sources = await gatherSources(chat, a, lastUser?.text || skill?.name || '', force);
   alt.sources = sources.map(({ title, url, path }) => ({ title, url, path }));
   pending.sources = sources;
   const ctx = Number(a.contextSize || p.contextSize) || 16384;
   const docBudget = Math.max(4000, Math.floor((ctx * 3 * 0.6) / Math.max(1, chat.messages.slice(0, upTo).reduce((n, m) => n + (m.attachments || []).filter((x) => x.type === 'doc').length, 0))));
-  const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library))) }];
+  const messages = [{ role: 'system', content: systemPrompt(a, sources, Boolean(a.strict && (chat.library ?? a.library))) + (skill ? `\n\n${skillPrompt(skill)}` : '') }];
   for (const m of chat.messages.slice(0, upTo)) {
     if (m.role === 'user') messages.push({ role: 'user', content: userContent(m, docBudget) });
     else { const t = msgText(m).trim(); if (t) messages.push({ role: 'assistant', content: t }); }
@@ -410,7 +460,7 @@ qs.onChat(({ requestId, ev }) => {
       chat.updated = now();
       save();
       if (S.route.view === 'chat') render(); else renderChatList();
-      if (ev.type === 'done' && !ev.aborted && alt.text && factOn(chat, assistantById(chat.assistantId))) factCheck(chat, msg, alt, sourcesFull);
+      if (ev.type === 'done' && !ev.aborted && alt.text && (alt.forceFact || factOn(chat, assistantById(chat.assistantId)))) factCheck(chat, msg, alt, sourcesFull);
       return;
     }
     default: break;
@@ -426,6 +476,8 @@ function messageAction(chat, act, id) {
   else if (act === 'regen') generate(chat, m);
   else if (act === 'continue') { chat.messages.push({ id: uid(), role: 'user', text: 'Continue.', attachments: [] }); generate(chat, null); }
   else if (act === 'copy') { navigator.clipboard?.writeText(msgText(m)); toast('Copied.'); }
+  else if (act === 'dl') exportAnswer(chat, m, document.querySelector(`[data-act="dl"][data-id="${id}"]`)?.dataset.fmt);
+  else if (act === 'saveas') saveAsMenu(chat, m, document.querySelector(`[data-act="saveas"][data-id="${id}"]`));
   else if (act === 'check' || act === 'recheck') { const alt = m.alts[m.altIndex]; delete alt.check; factCheck(chat, m, alt); }
   else if (act === 'del') confirmBox('Delete this message?').then((ok) => { if (ok) { chat.messages.splice(idx, 1); save(); render(); } });
   else if (act === 'edit') {
@@ -545,7 +597,8 @@ qs.onChat(({ requestId, ev }) => {
     ch.running = false;
     checks.delete(requestId);
     save();
-    if (S.route.view === 'chat' && S.route.id === chat.id) render();
+    // Only repaint this message, so typing (and the skill picker) isn't interrupted.
+    paintStreaming(chat, msg);
     return;
   }
   paintStreaming(chat, msg);
@@ -559,4 +612,57 @@ function warmUp(chat, a) {
   if (!target || warmed.has(key) || target.startsWith('api:')) return;
   warmed.add(key);
   qs.call('models:warm', target, { contextSize: Number(a.contextSize || S.data.prefs.contextSize) || 16384, gpu: S.data.prefs.gpu }).catch(() => warmed.delete(key));
+}
+
+// ---------- skills in chat ----------
+
+function skillChipHTML(chat) {
+  const s = chat.pendingSkill && skillById(chat.pendingSkill);
+  if (s) return `<div class="row" style="margin-bottom:2px"><span class="badge b-peach" style="font-size:.9rem;padding:4px 10px">⚡ ${esc(s.icon)} ${esc(s.name)} <button class="tool" data-skill-clear title="Stop using this skill" style="padding:0 4px">✕</button></span><span class="small muted">${esc(s.description)}</span></div>`;
+  const sug = chat.suggested && !(chat.dismissed || []).includes(chat.suggested) && skillById(chat.suggested);
+  if (sug) return `<div class="row" style="margin-bottom:2px"><span class="small muted">Suggested skill:</span><button class="btn small" data-skill-use="${esc(sug.id)}">⚡ ${esc(sug.icon)} ${esc(sug.name)}</button><button class="tool" data-skill-dismiss data-skill-use="${esc(sug.id)}">No thanks</button></div>`;
+  return '';
+}
+
+const DL_LABEL = { pptx: '⬇ Download PowerPoint', docx: '⬇ Download Word document', xlsx: '⬇ Download Excel', chart: '' };
+function downloadHTML(m, alt, streaming) {
+  const s = alt.skillId && skillById(alt.skillId);
+  if (!s || streaming || !alt.text || !DL_LABEL[s.output]) return '';
+  if (s.output === 'xlsx' && !/^\s*\|.*\|\s*$/m.test(alt.text)) return '';
+  return `<div class="row"><button class="btn primary" data-act="dl" data-fmt="${s.output}" data-id="${m.id}">${DL_LABEL[s.output]}</button><span class="small muted">${s.output === 'pptx' ? 'Slides with speaker notes, tables and charts.' : s.output === 'docx' ? 'Headings, lists and tables, ready to edit.' : 'The table as an Excel workbook.'}</span></div>`;
+}
+
+function answerTitle(chat, m) {
+  const t = msgText(m).match(/^#\s+(.+)$/m)?.[1];
+  return (t || chat.title || 'Quicksilver').replace(/[*_`]/g, '').slice(0, 80);
+}
+
+async function exportAnswer(chat, m, fmt) {
+  const text = msgText(m);
+  const title = answerTitle(chat, m);
+  if (fmt === 'xlsx') {
+    const lines = text.split('\n');
+    const start = lines.findIndex((l, i) => /^\s*\|.*\|\s*$/.test(l) && /^\s*\|?\s*:?-{2,}/.test(lines[i + 1] || ''));
+    if (start < 0) { toast('No table in this answer.'); return; }
+    const cells = (l) => l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map((c) => c.trim().replace(/\*\*/g, ''));
+    const rows = [cells(lines[start])];
+    for (let i = start + 2; i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i]); i++) rows.push(cells(lines[i]));
+    if (await call('file:saveXlsx', `${title}.xlsx`, rows)) toast('Saved as an Excel workbook.');
+    return;
+  }
+  const html = document.querySelector(`[data-msg="${m.id}"] .bubble`)?.innerHTML || '';
+  if (await call('export:file', fmt, { markdown: text, html, title })) toast('Saved. Opening the folder…');
+}
+
+function saveAsMenu(chat, m, anchor) {
+  closeMenus();
+  const r = anchor.getBoundingClientRect();
+  const menu = document.createElement('div');
+  menu.className = 'menu';
+  menu.style.top = `${Math.min(r.bottom + 4, window.innerHeight - 230)}px`;
+  menu.style.left = `${Math.max(8, r.left)}px`;
+  menu.innerHTML = '<button data-f="docx">📄 Word document</button><button data-f="pptx">🖥️ PowerPoint</button><button data-f="pdf">📕 PDF</button><button data-f="xlsx">📊 Excel (first table)</button><button data-f="md">⬇ Markdown</button>';
+  document.body.appendChild(menu);
+  menu.querySelector('button').focus();
+  menu.addEventListener('click', (e) => { const f = e.target.closest('[data-f]')?.dataset.f; closeMenus(); if (f) exportAnswer(chat, m, f); });
 }

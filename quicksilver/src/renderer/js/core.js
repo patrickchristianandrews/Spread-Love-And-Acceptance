@@ -103,6 +103,7 @@ function markdown(text) {
       const nl = part.indexOf('\n');
       const lang = nl >= 0 ? part.slice(0, nl).trim() : '';
       const code = nl >= 0 ? part.slice(nl + 1) : part;
+      if (lang === 'chart') { const c = chartHTML(code); if (c) { out.push(c); return; } }
       out.push(`<pre><span class="bar-top"><span>${esc(lang || 'code')}</span><button class="copy">Copy</button></span><code>${esc(code.replace(/\n$/, ''))}</code></pre>`);
       return;
     }
@@ -310,3 +311,80 @@ function chatMenu(anchor, chat) {
 function closeMenus() { $$('.menu').forEach((m) => m.parentNode.removeChild(m)); }
 document.addEventListener('click', (e) => { if (!e.target.closest('.menu') && !e.target.closest('[data-chat-menu]')) closeMenus(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
+
+// ---------- charts (```chart JSON blocks become SVG charts) ----------
+
+const CHART_COLORS = ['#7b5cff', '#4f8fe0', '#3fbf86', '#e8834a', '#d6467a', '#d9b22b', '#2fb9c6', '#8a6d3b'];
+const chartStore = {};
+
+function chartHTML(json) {
+  let spec;
+  try { spec = JSON.parse(json); } catch { return ''; }
+  if (!Array.isArray(spec.labels) || !Array.isArray(spec.series) || !spec.series.length) return '';
+  const id = `c${uid()}`;
+  chartStore[id] = spec;
+  const W = 640; const H = 340; const P = { l: 56, r: 16, t: 40, b: 56 };
+  const t = esc(spec.title || '');
+  const type = spec.type || 'bar';
+  let body = '';
+  if (type === 'pie' || type === 'doughnut') {
+    const data = spec.series[0].data.map(Number);
+    const total = data.reduce((a, b) => a + Math.max(0, b), 0) || 1;
+    let ang = -Math.PI / 2;
+    const cx = 200; const cy = 190; const rr = 120;
+    data.forEach((v, i) => {
+      const a2 = ang + (Math.max(0, v) / total) * Math.PI * 2;
+      const large = a2 - ang > Math.PI ? 1 : 0;
+      body += `<path d="M${cx},${cy} L${cx + rr * Math.cos(ang)},${cy + rr * Math.sin(ang)} A${rr},${rr} 0 ${large} 1 ${cx + rr * Math.cos(a2)},${cy + rr * Math.sin(a2)} Z" fill="${CHART_COLORS[i % 8]}" stroke="#fff" stroke-width="2"><title>${esc(spec.labels[i])}: ${v}</title></path>`;
+      ang = a2;
+    });
+    if (type === 'doughnut') body += `<circle cx="${cx}" cy="${cy}" r="${rr * 0.55}" fill="#fff"/>`;
+    body += spec.labels.map((l, i) => `<rect x="360" y="${70 + i * 26}" width="14" height="14" rx="3" fill="${CHART_COLORS[i % 8]}"/><text x="382" y="${82 + i * 26}" font-size="13" fill="#16122a">${esc(l)} (${Math.round((Number(data[i]) / total) * 100)}%)</text>`).join('');
+  } else {
+    const all = spec.series.flatMap((s) => s.data.map(Number)).filter(Number.isFinite);
+    const max = Math.max(0, ...all); const min = Math.min(0, ...all);
+    const span = max - min || 1;
+    const x0 = P.l; const x1 = W - P.r; const y0 = P.t; const y1 = H - P.b;
+    const y = (v) => y1 - ((v - min) / span) * (y1 - y0);
+    const n = spec.labels.length;
+    for (let k = 0; k <= 4; k++) { const v = min + (span * k) / 4; body += `<line x1="${x0}" x2="${x1}" y1="${y(v)}" y2="${y(v)}" stroke="#d7cff2"/><text x="${x0 - 6}" y="${y(v) + 4}" font-size="11" text-anchor="end" fill="#3d3858">${Math.abs(v) >= 1000 ? `${(v / 1000).toFixed(1)}k` : Math.round(v * 100) / 100}</text>`; }
+    const step = (x1 - x0) / n;
+    spec.labels.forEach((l, i) => { body += `<text x="${x0 + step * (i + 0.5)}" y="${y1 + 18}" font-size="11" text-anchor="middle" fill="#3d3858">${esc(String(l).slice(0, 14))}</text>`; });
+    if (type === 'bar') {
+      const bw = (step * 0.8) / spec.series.length;
+      spec.series.forEach((s, si) => s.data.forEach((v, i) => { const yy = y(Math.max(0, v)); const h = Math.abs(y(v) - y(0)); body += `<rect x="${x0 + step * i + step * 0.1 + bw * si}" y="${yy}" width="${bw - 2}" height="${Math.max(1, h)}" rx="3" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${v}</title></rect>`; }));
+    } else {
+      spec.series.forEach((s, si) => {
+        const pts = s.data.map((v, i) => `${x0 + step * (i + 0.5)},${y(Number(v))}`).join(' ');
+        if (type === 'area') body += `<polygon points="${x0 + step * 0.5},${y(0)} ${pts} ${x0 + step * (n - 0.5)},${y(0)}" fill="${CHART_COLORS[si % 8]}" opacity=".25"/>`;
+        body += `<polyline points="${pts}" fill="none" stroke="${CHART_COLORS[si % 8]}" stroke-width="3" stroke-linejoin="round"/>`;
+        s.data.forEach((v, i) => { body += `<circle cx="${x0 + step * (i + 0.5)}" cy="${y(Number(v))}" r="4" fill="${CHART_COLORS[si % 8]}"><title>${esc(s.name)} · ${esc(spec.labels[i])}: ${v}</title></circle>`; });
+      });
+    }
+    if (spec.series.length > 1) body += spec.series.map((s, si) => `<rect x="${x0 + si * 130}" y="${H - 22}" width="12" height="12" rx="3" fill="${CHART_COLORS[si % 8]}"/><text x="${x0 + si * 130 + 18}" y="${H - 12}" font-size="12" fill="#16122a">${esc(s.name)}</text>`).join('');
+  }
+  return `<figure class="chart" data-chart="${id}"><svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${t || 'Chart'}" font-family="Segoe UI, system-ui, sans-serif"><rect width="${W}" height="${H}" fill="#fff"/>${t ? `<text x="${W / 2}" y="24" font-size="16" font-weight="700" text-anchor="middle" fill="#16122a">${t}</text>` : ''}${body}</svg>
+    <figcaption class="table-tools"><button class="tool" data-chart-png="${id}">Save as image</button><button class="tool" data-chart-xlsx="${id}">Save data to Excel</button></figcaption></figure>`;
+}
+
+document.addEventListener('click', async (e) => {
+  const png = e.target.closest('[data-chart-png]');
+  const xl = e.target.closest('[data-chart-xlsx]');
+  if (!png && !xl) return;
+  const id = (png || xl).dataset.chartPng || (png || xl).dataset.chartXlsx;
+  const spec = chartStore[id];
+  if (xl) {
+    const rows = [['', ...spec.series.map((s) => s.name || 'Value')], ...spec.labels.map((l, i) => [l, ...spec.series.map((s) => s.data[i])])];
+    if (await call('file:saveXlsx', `${spec.title || 'chart'}.xlsx`, rows)) toast('Chart data saved to Excel.');
+    return;
+  }
+  const svg = document.querySelector(`[data-chart="${id}"] svg`);
+  const img = new Image();
+  img.onload = async () => {
+    const c = document.createElement('canvas'); c.width = 1280; c.height = 680;
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const item = await call('media:saveDataUrl', c.toDataURL('image/png'), { title: spec.title || 'Chart' });
+    if (item && await call('media:export', item.id)) toast('Chart saved.');
+  };
+  img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(svg))}`;
+});

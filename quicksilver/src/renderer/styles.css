@@ -245,3 +245,10 @@ table.list tr:last-child td { border-bottom: none; }
   .studio { grid-template-columns: 1fr; }
   .page { padding: 20px 18px 50px; }
 }
+
+/* skills */
+.skill-pop { border: 2px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: var(--shadow); max-height: 300px; overflow-y: auto; padding: 4px; }
+.skill-opt { display: flex; gap: 10px; align-items: center; width: 100%; background: none; border: 1.5px solid transparent; border-radius: 9px; padding: 7px 10px; text-align: left; }
+.skill-opt:hover, .skill-opt.hot { background: var(--accent-soft); border-color: var(--accent); }
+figure.chart { margin: 0 0 .8em; border: 2px solid var(--line-soft); border-radius: 10px; overflow: hidden; background: #fff; }
+figure.chart svg { display: block; width: 100%; height: auto; }

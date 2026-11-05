@@ -79,7 +79,31 @@ let WIN = null;
   await win.waitForFunction(() => [...document.querySelectorAll('.msg.assistant .bubble')].pop()?.textContent.includes('Answer from qwen.gguf'), null, { timeout: 60000 });
   console.log('✓ quick effort');
 
+  // Skills: "/" picker, the chip, the skill applied to the request, the file button.
+  await win.waitForFunction(() => !document.body.textContent.includes('checking…'), null, { timeout: 60000 });
+  await win.fill('#input', '/presen');
+  await win.waitForSelector('#skill-pop .skill-opt.hot:has-text("Create a presentation")');
+  await win.keyboard.press('Enter');
+  await win.waitForSelector('#skill-row:has-text("Create a presentation")');
+  await win.fill('#input', 'Our Q3 results for the board');
+  await win.keyboard.press('Enter');
+  await idle();
+  await win.waitForSelector('[data-act="dl"][data-fmt="pptx"]', { timeout: 60000 });
+  await win.waitForSelector('.who-line .badge:has-text("Create a presentation")');
+  // Suggestions: typing a matching phrase offers the skill.
+  await win.fill('#input', 'can you summarize this article');
+  await win.waitForSelector('#skill-row button:has-text("Summarize")', { timeout: 5000 });
+  await win.fill('#input', '');
+  // Charts render from ```chart blocks.
+  const svg = await win.evaluate(() => markdown('```chart\n{"type":"bar","title":"Sales","labels":["N","S"],"series":[{"name":"Rev","data":[3,5]}]}\n```').includes('<svg'));
+  assert.ok(svg);
+  console.log('✓ skills: picker, applied, download, suggestion, charts');
+  await win.click('[data-nav="skills"]');
+  await win.waitForSelector('text=Analyze a spreadsheet');
+  await shot(win, '10-skills');
+
   // Sidebar chat menu.
+  await win.click('.chat-row .chat-link');
   await win.hover('.chat-row');
   await win.click('.chat-row .chat-more');
   await win.click('.menu [data-m="pin"]');

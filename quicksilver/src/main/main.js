@@ -267,6 +267,20 @@ handle('file:saveXlsx', async (name, rows) => {
   await wb.xlsx.writeFile(r.filePath);
   return true;
 });
+handle('export:file', async (format, { markdown, html, title }) => {
+  const ext = { docx: 'docx', pptx: 'pptx', pdf: 'pdf', md: 'md' }[format];
+  const names = { docx: 'Word document', pptx: 'PowerPoint presentation', pdf: 'PDF', md: 'Markdown' };
+  const safe = String(title || 'Quicksilver').replace(/[^\w .-]/g, '').trim().slice(0, 80) || 'Quicksilver';
+  const r = await dialog.showSaveDialog(win, { defaultPath: `${safe}.${ext}`, filters: [{ name: names[format], extensions: [ext] }] });
+  if (r.canceled || !r.filePath) return false;
+  const exporters = require('./exporters');
+  if (format === 'docx') await exporters.toDocx(markdown, r.filePath, { title });
+  else if (format === 'pptx') await exporters.toPptx(markdown, r.filePath, { title });
+  else if (format === 'pdf') await exporters.toPdf(html, r.filePath, { title });
+  else fs.writeFileSync(r.filePath, markdown);
+  shell.showItemInFolder(r.filePath);
+  return true;
+});
 handle('shell:open', (url) => { if (/^https?:\/\//.test(url)) shell.openExternal(url); });
 
 // ---------- window ----------
