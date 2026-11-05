@@ -321,7 +321,7 @@ function createWindow() {
     width: 1440, height: 920, minWidth: 900, minHeight: 600,
     title: 'Quicksilver',
     icon: path.join(__dirname, '..', '..', 'build', 'icon.png'),
-    backgroundColor: '#f6f3ff',
+    backgroundColor: '#0b1020',
     webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true },
   });
   win.setMenuBarVisibility(false);

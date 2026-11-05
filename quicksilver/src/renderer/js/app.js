@@ -3,7 +3,7 @@
 
 const DEFAULT_PREFS = {
   userName: '', about: '', textSize: 'normal', defaultTarget: '', temperature: 0.6, contextSize: 16384, maxTokens: 4096,
-  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
+  gpu: 'auto', effort: 'medium', effortLevel: 'thorough', theme: 'dark', factCheck: false, factChecker: '', lastAssistant: 'as-general', sourcesPerAnswer: 8,
 };
 
 function defaultAssistants() {
@@ -19,7 +19,13 @@ function paintIcons(root = document) {
   root.querySelectorAll('[data-icon]').forEach((el) => { if (!el.firstChild) el.innerHTML = icon(el.dataset.icon); });
 }
 
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+systemDark.addEventListener?.('change', () => S.data && applyPrefs());
 function applyPrefs() {
+  const t = S.data.prefs.theme || 'dark';
+  document.documentElement.dataset.theme = t === 'system' ? (systemDark.matches ? 'dark' : 'light') : t;
+  const tb = document.getElementById('theme-btn');
+  if (tb) { const dark = document.documentElement.dataset.theme === 'dark'; tb.innerHTML = icon(dark ? 'sun' : 'moon'); tb.title = dark ? 'Switch to light mode' : 'Switch to dark mode'; }
   document.getElementById('app')?.classList.toggle('collapsed', Boolean(S.data.prefs.sidebarCollapsed));
   document.documentElement.dataset.size = S.data.prefs.textSize === 'normal' ? '' : S.data.prefs.textSize;
 }
@@ -33,10 +39,10 @@ views.home = {
     const api = S.apiStatus;
     const tile = (icon, k, v, sub, view) => `<button class="card" ${view ? `data-goto="${view}"` : ''} style="text-align:left"><div class="k" style="font-size:.8rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">${icon} ${k}</div><div style="font-size:1.5rem;font-weight:800;margin:4px 0">${v}</div><div class="small muted" style="font-weight:600">${sub}</div></button>`;
     return `<div class="page">
-      <div class="card" style="background:linear-gradient(120deg,#e7eaff 0%,#e0edf8 55%,#d9f3f2 100%);border-color:#c5c9f5;padding:26px 28px;margin-bottom:20px">
+      <div class="card hero" style="padding:26px 28px;margin-bottom:20px">
         <div class="row"><div class="grow">
           <h1 style="font-size:2.1rem">${S.data.prefs.userName ? `Welcome back, ${esc(S.data.prefs.userName)}.` : 'Quicksilver'}</h1>
-          <p style="font-size:1.12rem;font-weight:700;margin:6px 0 0;color:var(--lav-ink)">Forms to fit your work. Private AI on your own PC, as strong as you need it.</p>
+          <p style="font-size:1.12rem;font-weight:700;margin:6px 0 0;color:var(--accent)">Forms to fit your work. Private AI on your own PC, as strong as you need it.</p>
         </div><button class="btn primary" data-nav-new style="font-size:1.05rem;padding:10px 22px">＋ New chat</button></div>
         <div class="row" style="margin-top:14px">
           <span class="badge b-mint">🔒 ${cloud ? 'Local by default; cloud only where you choose' : '100% on this PC: nothing leaves it'}</span>
@@ -85,6 +91,7 @@ async function init() {
 
   paintIcons();
   $$('.sidebar [data-nav]').forEach((b) => b.addEventListener('click', () => (b.dataset.nav === 'newchat' ? newChat() : go({ view: b.dataset.nav }))));
+  $('#theme-btn').addEventListener('click', () => { S.data.prefs.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyPrefs(); save(); if (S.route.view === 'settings') render(); });
   $('#collapse').addEventListener('click', () => { S.data.prefs.sidebarCollapsed = !S.data.prefs.sidebarCollapsed; applyPrefs(); save(); });
   $('#chat-search').addEventListener('input', renderChatList);
   $('#dl-mini').addEventListener('click', () => { modelsTab = 'installed'; go({ view: 'models' }); });

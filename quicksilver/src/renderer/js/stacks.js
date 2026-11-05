@@ -14,7 +14,7 @@ views.stacks = {
     const jobs = Object.entries(S.catalog.jobs);
     return `<div class="page">
       <div class="page-head"><h1>Infuse &amp; Stacks</h1><button class="btn" id="new-stack">Build by role…</button><button class="btn primary" id="infuse">${icon('sparkle', 16)} Infuse AIs</button></div>
-      <div class="card hl" style="margin:4px 0 22px;background:linear-gradient(120deg,#e8eaff,#e1eef8 55%,#dbf4f1)">
+      <div class="card hl hero" style="margin:4px 0 22px">
         <div class="row"><div class="grow"><h2 style="margin:0">✨ Infuse several AIs into one</h2><p class="muted" style="margin:6px 0 0;font-weight:600">Pick any models (on this PC or in the cloud) and how they should work together. You get one new AI you can choose anywhere, smarter and more reliable than any of its parts.</p></div><button class="btn primary" id="infuse2">${icon('sparkle', 16)} Infuse AIs</button></div>
       </div>
       <p class="lede"><b>A stack makes several AI models work as one.</b> A vision model reads your photos and videos. Two or more models from different makers each draft an answer. A lead model compares the drafts, fixes mistakes and writes one final answer, so you get stronger, better-checked answers than any single model gives.</p>

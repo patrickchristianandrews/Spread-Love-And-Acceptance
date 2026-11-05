@@ -24,11 +24,13 @@ function generalHTML() {
   return `<div class="stack-v">
     <div class="field"><label for="g-name">Your name</label><input id="g-name" value="${esc(P().userName)}" placeholder="Optional"></div>
     <div class="field"><label for="g-about">About you</label><span class="help">Optional. Shared with your assistants so answers fit you (for example your role, company or preferences).</span><textarea id="g-about" rows="3">${esc(P().about)}</textarea></div>
+    <div class="field"><label>Appearance</label><div class="row">${[['dark', 'Dark'], ['light', 'Light'], ['system', 'Match Windows']].map(([k, l]) => `<button class="btn small ${(P().theme || 'dark') === k ? 'on' : ''}" data-theme-set="${k}">${l}</button>`).join('')}</div></div>
     <div class="field"><label>Text size</label><div class="row">${[['normal', 'Normal'], ['large', 'Large'], ['xl', 'Extra large']].map(([k, l]) => `<button class="btn small ${P().textSize === k ? 'on' : ''}" data-textsize="${k}">${l}</button>`).join('')}</div></div>
     <div><button class="btn primary" id="g-save">Save</button></div>
   </div>`;
 }
 function bindGeneral() {
+  $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => { P().theme = b.dataset.themeSet; applyPrefs(); save(); render(); }));
   $$('[data-textsize]').forEach((b) => b.addEventListener('click', () => { P().textSize = b.dataset.textsize; applyPrefs(); save(); render(); }));
   $('#g-save').addEventListener('click', () => { P().userName = $('#g-name').value.trim(); P().about = $('#g-about').value.trim(); save(); toast('Saved.'); });
 }
