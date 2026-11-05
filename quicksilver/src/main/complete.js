@@ -221,7 +221,10 @@ async function* stack(stackDef, req) {
   // 1. Vision: if there are images and not every member can see, a vision model describes them.
   const everyone = [...drafters, judge].filter(Boolean);
   if (hasImages(messages) && !everyone.every(canSee)) {
-    const vision = (members.vision && exists(members.vision) && members.vision) || everyone.find(canSee);
+    // Look across the whole stack, not just the members this route uses: a quick route may have
+    // left out the member that can see (e.g. the Quicksilver model's 2B, which reads photos).
+    const vision = (members.vision && exists(members.vision) && members.vision) || everyone.find(canSee)
+      || [...(members.drafters || []), members.judge].filter((t) => t && exists(t)).find(canSee);
     if (!vision) throw new Error('This chat has images, but no model in the stack can see. Add a vision model to the stack.');
     const imgs = messages.flatMap((m) => (Array.isArray(m.content) ? m.content.filter((p) => p.type === 'image_url') : []));
     const s = { role: 'vision', label: 'Looking at the images', model: label(vision), text: '', done: false };

@@ -343,6 +343,12 @@ async function collect(gen) {
     assert.ok(roles.includes('draft') && roles.includes('lead'), 'a hard one: drafted, then the lead checks and combines');
     const quick = await collect(complete.run('stack:quicksilver', { messages: [{ role: 'user', content: 'Compare solar and wind power.' }], contextSize: 2048, maxTokens: 30, level: 'quick' }));
     assert.equal(quick.steps.length, 0, 'Quick effort is always one model');
+    // A photo with only the shipped pair (the 2B that sees is a drafter, not a separate vision
+    // member): the quick route must still find it to read the picture. Caught by the install test.
+    complete.saveStack({ id: 'pair', name: 'Pair', members: { drafters: ['local:starter-brain', 'local:starter'], judge: 'local:starter-brain', mode: 'auto' } });
+    const pic = await collect(complete.run('stack:pair', { messages: [{ role: 'user', content: [{ type: 'text', text: 'What colour is this?' }, img] }], contextSize: 2048, maxTokens: 30, level: 'thorough' }));
+    assert.ok(pic.steps.some((x) => x.role === 'vision') && pic.text.length > 0, 'the photo is read by the member that can see');
+    complete.deleteStack('pair');
     // Kept safe: never deleted, never repaired from the internet, stays removed.
     await assert.rejects(models.repair('starter', () => {}), /came with Quicksilver/);
     models.remove('starter');
